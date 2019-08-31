@@ -47,7 +47,7 @@ later. NULL file compression can be managed with <b>r.null -z</b>.
 
 <h3>External maps</h3>
 From the <a href="r.external.html">r.external</a> documentation: GDAL-linked 
-(r.external) maps do not have or use a NULL bitmap, hence r.null cannot 
+(<em>r.external</em>) maps do not have or use a NULL bitmap, hence <em>r.null</em> cannot 
 manipulate them directly. Here NULL cells are those whose value matches 
 the value reported by the GDALGetRasterNoDataValue() function. To apply the 
 GDAL-linked the user need to either create a MASK (e.g. with r.mask) and 
