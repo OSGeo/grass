@@ -2,10 +2,11 @@
 
 <em>i.band</em> allows assigning a band reference information to a
 single raster map or to a list of specified raster maps. Band
-reference can be defined by <b>band</b> option. Already assigned
-band reference can be removed by <b>-r</b> flag. This module also
-allows printing detailed band reference information already assigned
-to a raster map by <b>-p</b> flag.
+reference can be defined by <b>band</b> option. Already assigned band
+reference can be removed from a specified raster map
+by <b>operation=remove</b>. The module also allows printing detailed
+band reference information already assigned to a raster map
+by <b>operation=print</b>.
 
 <p>
 Either a single raster map or a list of raster maps can be given
@@ -50,26 +51,25 @@ i.band map=T33UVR_20180506T100031_B01,T33UVR_20180506T100031_B02 band=S2_1,S2_2
 <h3>Remove band reference from a list of raster maps</h3>
 
 <div class="code"><pre>
-i.band -r map=T33UVR_20180506T100031_B01,T33UVR_20180506T100031_B02
+i.band map=T33UVR_20180506T100031_B01,T33UVR_20180506T100031_B02 operation=remove
 </pre></div>
 
 <h3>Print band reference information about single raster map</h3>
 
 <div class="code"><pre>
-i.band -p map=T33UVR_20180506T100031_B01
+i.band map=T33UVR_20180506T100031_B01 operation=print
 </pre></div>
 
 <h3>Print extended band reference information for a list of raster map</h3>
 
 <div class="code"><pre>
-i.band -p map=T33UVR_20180506T100031_B01,T33UVR_20180506T100031_B02
+i.band map=T33UVR_20180506T100031_B01,T33UVR_20180506T100031_B02 operation=print
 </pre></div>
 
 <h2>KNOWN ISSUES</h2>
 
 <em>i.band</em> allows managing band references only related to 2D
-raster maps. Support for 3D raster maps and even for vector maps would
-be nice to implemented.
+raster maps.
 
 <h2>SEE ALSO</h2>
 

@@ -5,8 +5,8 @@
 # MODULE:       i.band
 # AUTHOR(S):    Martin Landa <landa.martin gmail com>
 #
-# PURPOSE:      Assigns band reference information to a single raster map or
-#               a list of raster maps
+# PURPOSE:      Manages band reference information assigned to a single
+#               raster map or to a list of raster maps.
 #
 # COPYRIGHT:    (C) 2019 by mundialis GmbH & Co.KG, and the GRASS Development Team
 #
@@ -17,7 +17,7 @@
 #############################################################################
 
 #%module
-#% description: Assigns band reference information to a single raster map or to a list of raster maps.
+#% description: Manages band reference information assigned to a single raster map or to a list of raster maps.
 #% keyword: general
 #% keyword: imagery
 #% keyword: band reference
@@ -29,21 +29,18 @@
 #% key: band
 #% type: string
 #% key_desc: name
-#% description: Name of band reference identifier (example: S2_1,S2_2,...)
+#% description: Name of band reference identifier (example: S2_1)
 #% required: no
 #% multiple: yes
 #%end
-#%flag
-#% key: r
-#% description: Dissociate band reference from a raster map(s) (overrides other options)
-#%end
-#%flag
-#% key: p
-#% description: Print detailed band reference information assigned to a raster map(s) and exit
-#%end
-#%rules
-#% required:-p,-r,band
-#%end
+#%option
+#% key: operation
+#% type: string
+#% required: yes
+#% multiple: no
+#% options: add,remove,print
+#% description: Operation to be performed
+#% answer: add
 
 import sys
 
@@ -96,14 +93,18 @@ def manage_map_band_reference(name, band_ref):
 
 def main():
     maps = options['map'].split(',')
-    if not flags['r']:
+    if options['operation'] == 'add':
+        if not options['band']:
+            gs.fatal(_("Operation {}: required parameter <{}> not set").format(
+                options['operation'], 'band')
+            )
         bands = options['band'].split(',')
         if len(bands) > 1 and len(bands) != len(maps):
             gs.fatal(_("Number of maps differs from number of bands"))
     else:
         bands = [None]
 
-    if flags['p']:
+    if options['operation'] == 'print':
         from grass.bandref import BandReferenceReader
         band_reader = BandReferenceReader()
     else:
@@ -112,7 +113,7 @@ def main():
     ret = 0
     for i in range(len(maps)):
         band_ref = bands[i] if multi_bands else bands[0]
-        if flags['p']:
+        if options['operation'] == 'print':
             print_map_band_reference(maps[i], band_reader)
         else:
             if manage_map_band_reference(maps[i], band_ref) != 0:
