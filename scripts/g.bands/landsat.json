@@ -39,7 +39,7 @@
             "7": {
                 "wavelength (µm)": "2.08-2.35",
                 "spatial resolution (meters)": 30,
-                "tag": "Mid-Infrared"
+                "tag": "Short-wave infrared"
             }
         }
     },
