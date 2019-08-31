@@ -29,7 +29,7 @@
             "5": {
                 "wavelength (µm)": "1.55-1.75",
                 "spatial resolution (meters)": 30,
-                "tag": "Near-Infrared"
+                "tag": "Short-wave infrared"
             },
             "6": {
                 "wavelength (µm)": "10.40-12.50",
