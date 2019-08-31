@@ -1,4 +1,48 @@
 {
+    "Landsat5": {
+        "description": "The Landsat 5 bands",
+        "shortcut": "L5",
+        "instruments": "Thematic Mapper (TM) optical and infrared",
+        "launched": "March 1, 1984",
+        "source": "https://www.usgs.gov/land-resources/nli/landsat/landsat-5",
+        "bands": {
+            "1": {
+                "wavelength (µm)": "0.45-0.52",
+                "spatial resolution (meters)": 30,
+                "tag": "Visible (Blue)"
+            },
+            "2": {
+                "wavelength (µm)": "0.52-0.60",
+                "spatial resolution (meters)": 30,
+                "tag": "Visible (Green)"
+            },
+            "3": {
+                "wavelength (µm)": "0.63-0.69",
+                "spatial resolution (meters)": 30,
+                "tag": "Visible (Red)"
+            },
+            "4": {
+                "wavelength (µm)": "0.76-0.90",
+                "spatial resolution (meters)": 30,
+                "tag": "Near-Infrared"
+            },
+            "5": {
+                "wavelength (µm)": "1.55-1.75",
+                "spatial resolution (meters)": 30,
+                "tag": "Near-Infrared"
+            },
+            "6": {
+                "wavelength (µm)": "10.40-12.50",
+                "spatial resolution (meters)": 60,
+                "tag": "Thermal"
+            },
+            "7": {
+                "wavelength (µm)": "2.08-2.35",
+                "spatial resolution (meters)": 30,
+                "tag": "Mid-Infrared"
+            }
+        }
+    },
     "Landsat7": {
         "description": "The Landsat 7 bands",
         "shortcut": "L7",
