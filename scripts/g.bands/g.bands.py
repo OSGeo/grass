@@ -5,7 +5,7 @@
 # MODULE:       g.bands
 # AUTHOR(S):    Martin Landa <landa.martin gmail com>
 #
-# PURPOSE:      Prints band reference information of multispectral data.
+# PURPOSE:      Prints available band reference information used for multispectral data.
 #
 # COPYRIGHT:    (C) 2019 by mundialis GmbH & Co.KG, and the GRASS Development Team
 #
@@ -16,17 +16,16 @@
 #############################################################################
 
 #%module
-#% description: Prints band reference information of multispectral data.
+#% description: Prints available band reference information used for multispectral data.
 #% keyword: general
 #% keyword: imagery
+#% keyword: band reference
 #% keyword: image collections
-#% keyword: bands
 #%end
 #%option
-#% key: band
+#% key: pattern
 #% type: string
-#% key_desc: name
-#% description: Name of band reference identifier (example: S2, S2_1)
+#% description: Band reference search pattern (examples: L, S2, .*_2, S2_1)
 #% required: no
 #% multiple: no
 #%end
@@ -44,12 +43,14 @@ def main():
 
     band = None
     kwargs = {}
-    if ',' in options['band']:
+    if ',' in options['pattern']:
         gs.fatal("Multiple values not supported")
-    if '_' in options['band']:
-        kwargs['shortcut'], kwargs['band'] = options['band'].split('_')
+    if '_' in options['pattern']:
+        # full band identifier specified
+        kwargs['shortcut'], kwargs['band'] = options['pattern'].split('_')
     else:
-        kwargs['shortcut'] = options['band']
+        # pattern
+        kwargs['shortcut'] = options['pattern']
     kwargs['extended'] = flags['e']
 
     try:

@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import glob
+import re
 from collections import OrderedDict
 
 import grass.script as gs
@@ -100,9 +101,13 @@ class BandReferenceReader:
         found = False
         for root in self.config.values():
             for item in root.values():
-                if shortcut and \
-                   item['shortcut'][0:len(shortcut)].upper() != shortcut.upper():
-                    continue
+                try:
+                    if shortcut and re.match(shortcut, item['shortcut']) is None:
+                        continue
+                except re.error as e:
+                    raise BandReferenceReaderError(
+                        "Invalid shortcut: {}".format(e)
+                    )
 
                 found = True
                 if band and band not in item['bands']:

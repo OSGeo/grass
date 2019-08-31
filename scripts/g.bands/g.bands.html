@@ -1,23 +1,18 @@
 <h2>DESCRIPTION</h2>
 
-Prints band references information related to image collections.
+Prints available band references information of multispectral data
+defined by GRASS GIS.
 
 <p>
-Band reference (a shortcut or fully defined band reference identifier)
-is specified by <b>band</b> option. Extended metadata is printed only
-when <b>-e</b> flag is given.
+Band references to be printed can be filtered by a search pattern (or
+fully defined band reference identifier) which can be specified
+by <b>pattern</b> option. For pattern syntax
+see <a href="https://docs.python.org/3/library/re.html#regular-expression-syntax">Regular
+expression operations</a> documentation. By default, <em>g.bands</em>
+prints all available band references.
 
-<h3>Image collections</h3>
-
-Image collections are the common data type to reference time series of
-multi band data. It is used in many frameworks
-(see <a href="https://developers.google.com/earth-engine/tutorial_api_04">Google
-Earth Engine API</a> for example) to address multi spectral satellite
-images series. GRASS supports a multi-band raster layer approach
-basically with the imagery group concept
-(<em><a href="i.group.html">i.group</a></em>). A new band reference
-concept is designed in order to support image collections in GRASS
-GIS.
+<p>
+Extended metadata is printed only when <b>-e</b> flag is given.
 
 <h2>NOTES</h2>
 
@@ -31,6 +26,18 @@ see <em><a href="t.register.html#support-for-band-references">t.register</a></em
 <em><a href="t.info.html#space-time-dataset-with-band-references-assigned">t.info</a></em>
 and <em><a href="t.rast.mapcalc.html#band-reference-filtering">t.rast.mapcalc</a></em>
 modules for examples.
+
+<h3>Image collections</h3>
+
+Image collections are the common data type to reference time series of
+multi band data. It is used in many frameworks
+(see <a href="https://developers.google.com/earth-engine/tutorial_api_04">Google
+Earth Engine API</a> for example) to address multi spectral satellite
+images series. GRASS supports a multi-band raster layer approach
+basically with the imagery group concept
+(<em><a href="i.group.html">i.group</a></em>). A new band reference
+concept is designed in order to support image collections in GRASS
+GIS.
 
 <h3>Band reference registry files</h3>
 
@@ -84,11 +91,11 @@ only <tt>description</tt> and <tt>instruments</tt> attributes are
 defined). List of bands is defined by a <tt>bands</tt> attribute. Each
 band is defined by an identifier ("1", "2" in example above). List of
 attributes describing each band is not pre-defined or limited. In
-example above each band is described by a <tt>central widthlength
-(nm)</tt> and <tt>bandwidth (nm)</tt>.
+example above each band is described by a <tt>central wavelength
+(nm)</tt>, <tt>bandwidth (nm)</tt>, and a <tt>tag</tt>.
 
 <p>
-Band reference identifier defined by <b>band</b> option is given by
+Band reference identifier defined by <b>pattern</b> option is given by
 a <i>shortcut</i> in order to print band reference information for
 whole series or by specific <i>shortcut</i>_<i>band</i>
 identifier.
@@ -127,11 +134,24 @@ Only band identifiers related to Sentinel-2 satellite will be
 printed.
 
 <div class="code"><pre>
-g.bands band=S2
+g.bands pattern=S2
 
 S2_1 Visible (Coastal/Aerosol)
 ...
 S2_12 SWIR 2
+</pre></div>
+
+<h3>Filter band references by a regular expression</h3>
+
+Print all available 2nd bands:
+
+<div class="code"><pre>
+g.bands pattern=.*_2
+
+S2_2 Visible (Blue)
+L7_2 Visible (Green)
+L8_2 Visible (Blue)
+...
 </pre></div>
 
 <h3>Print extended metadata for specified band identifier</h3>
@@ -140,7 +160,7 @@ Extended metadata related to the first band of Sentinel-2 satellite
 will be printed.
 
 <div class="code"><pre>
-g.bands -e band=S2_1
+g.bands -e pattern=S2_1
 
 description: The Sentinel-2 A/B bands
 shortcut: S2

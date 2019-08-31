@@ -20,8 +20,8 @@
 #% description: Assigns band reference information to a single raster map or to a list of raster maps.
 #% keyword: general
 #% keyword: imagery
+#% keyword: band reference
 #% keyword: image collections
-#% keyword: bands
 #%end
 #%option G_OPT_R_MAPS
 #%end
