@@ -29,6 +29,15 @@
 #% required: no
 #% multiple: no
 #%end
+#%option
+#% key: operation
+#% type: string
+#% required: yes
+#% multiple: no
+#% options: print
+#% description: Operation to be performed
+#% answer: print
+#%end
 #%flag
 #% key: e
 #% description: Print extended metadata information
@@ -53,11 +62,12 @@ def main():
         kwargs['shortcut'] = options['pattern']
     kwargs['extended'] = flags['e']
 
-    try:
-        reader = BandReferenceReader()
-        reader.print_info(**kwargs)
-    except BandReferenceReaderError as e:
-        gs.fatal(e)
+    if options['operation'] == 'print':
+        try:
+            reader = BandReferenceReader()
+            reader.print_info(**kwargs)
+        except BandReferenceReaderError as e:
+            gs.fatal(e)
 
     return 0
 
