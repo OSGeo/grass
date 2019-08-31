@@ -2018,7 +2018,7 @@ class ProcessModelFile:
         pos = size = None
         posAttr = node.get('pos', None)
         if posAttr:
-            posVal = map(int, posAttr.split(','))
+            posVal = list(map(int, posAttr.split(',')))
             try:
                 pos = (posVal[0], posVal[1])
             except:
@@ -2026,7 +2026,7 @@ class ProcessModelFile:
 
         sizeAttr = node.get('size', None)
         if sizeAttr:
-            sizeVal = map(int, sizeAttr.split(','))
+            sizeVal = list(map(int, sizeAttr.split(',')))
             try:
                 size = (sizeVal[0], sizeVal[1])
             except:

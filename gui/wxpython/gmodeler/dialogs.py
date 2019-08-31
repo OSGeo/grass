@@ -577,7 +577,7 @@ class ModelLoopDialog(ModelItemDialog):
 
         cond = dialog.GetDSeries()
         if not cond:
-            cond = 'map in %s' % map(lambda x: str(x), dialog.GetMapLayers())
+            cond = 'map in {}'.format(list(map(str, dialog.GetMapLayers())))
 
         self.condText.SetValue(cond)
 

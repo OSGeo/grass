@@ -1209,7 +1209,7 @@ class PlotCanvas(wx.Panel):
         else:
             # on Linux, we need to correct the font size by a certain factor if wx.GCDC is used,
             # to make text the same size as if wx.GCDC weren't used
-            screenppi = map(float, wx.ScreenDC().GetPPI())
+            screenppi = list(map(float, wx.ScreenDC().GetPPI()))
             ppi = dc.GetPPI()
             self._fontScale = (screenppi[
                                0] / ppi[0] * self._pointSize[0] + screenppi[1] / ppi[1] * self._pointSize[1]) / 2.0
