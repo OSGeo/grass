@@ -111,10 +111,13 @@ gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 # initialize global vars
 TMPLOC = None
 SRCGISRC = None
+TGTGISRC = None
 GISDBASE = None
 
 
 def cleanup():
+    if TGTGISRC:
+        os.environ['GISRC'] = str(TGTGISRC)
     # remove temp location
     if TMPLOC:
         grass.try_rmdir(os.path.join(GISDBASE, TMPLOC))
@@ -123,7 +126,7 @@ def cleanup():
 
 
 def main():
-    global TMPLOC, SRCGISRC, GISDBASE
+    global TMPLOC, SRCGISRC, TGTGISRC, GISDBASE
     overwrite = grass.overwrite()
 
     # list formats and exit
@@ -192,7 +195,7 @@ def main():
 
     tgtmapset = grassenv['MAPSET']
     GISDBASE = grassenv['GISDBASE']
-    tgtgisrc = os.environ['GISRC']
+    TGTGISRC = os.environ['GISRC']
     SRCGISRC = grass.tempfile()
 
     TMPLOC = 'temp_import_location_' + str(os.getpid())
@@ -232,7 +235,7 @@ def main():
 
     if options['extent'] == 'region':
         # switch to target location
-        os.environ['GISRC'] = str(tgtgisrc)
+        os.environ['GISRC'] = str(TGTGISRC)
 
         # v.in.region in tgt
         vreg = 'vreg_' + str(os.getpid())
@@ -264,7 +267,7 @@ def main():
         output = grass.list_grouped('vector')['PERMANENT'][0]
 
     # switch to target location
-    os.environ['GISRC'] = str(tgtgisrc)
+    os.environ['GISRC'] = str(TGTGISRC)
 
     # check if map exists
     if not grass.overwrite() and \
