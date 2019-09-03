@@ -73,7 +73,7 @@ from gui_core.gselect import Select
 from core.gcmd import RunCommand, GError, GMessage
 from gui_core.dialogs import SymbolDialog
 from gui_core.wrap import SpinCtrl, Button, TextCtrl, BitmapButton, \
-    StaticText, StaticBox, Rect, EmptyBitmap, TextEntryDialog
+    StaticText, StaticBox, Rect, EmptyBitmap, TextEntryDialog, ListCtrl
 from psmap.utils import *
 from psmap.instructions import *
 
@@ -201,11 +201,11 @@ class PenStyleComboBox(OwnerDrawnComboBox):
         return -1  # default - will be measured from text width
 
 
-class CheckListCtrl(wx.ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
+class CheckListCtrl(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
     """List control for managing order and labels of vector maps in legend"""
 
     def __init__(self, parent):
-        wx.ListCtrl.__init__(
+        ListCtrl.__init__(
             self, parent, id=wx.ID_ANY, style=wx.LC_REPORT | wx.LC_SINGLE_SEL |
             wx.BORDER_SUNKEN | wx.LC_VRULES | wx.LC_HRULES)
         CheckListCtrlMixin.__init__(self)
