@@ -9660,7 +9660,7 @@ msgstr "Coupure des polygones (passe 1 : sélection des points de coupure) ..."
 #: ../lib/vector/Vlib/break_polygons.c:286
 #: ../lib/vector/Vlib/break_polygons.c:552
 msgid "Breaking polygons (pass 2: break at selected points)..."
-msgstr "Coupure dex polygones (passe 2 : coupure aux points sélectionnés) ..."
+msgstr "Coupure des polygones (passe 2 : coupure aux points sélectionnés) ..."
 
 #: ../lib/vector/Vlib/break_polygons.c:398
 #: ../lib/vector/Vlib/break_polygons.c:650

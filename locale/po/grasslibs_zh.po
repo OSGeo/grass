@@ -237,7 +237,7 @@ msgstr ""
 #: ../lib/arraystats/class.c:19
 #, c-format
 msgid "Unknown algorithm '%s'"
-msgstr ""
+msgstr "未知算法 '%s'"
 
 #: ../lib/arraystats/class.c:42
 msgid "Discont algorithm currently not available because of bugs"
