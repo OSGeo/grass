@@ -350,7 +350,7 @@ class LayerList(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         items = self._map.GetListOfLayers()
         try:
             result = items[self._index]
@@ -358,6 +358,9 @@ class LayerList(object):
             raise StopIteration
         self._index += 1
         return result
+
+    def next(self):
+        return self.__next__()
 
     def GetSelectedLayers(self, checkedOnly=True):
         # hidden and selected vs checked and selected
