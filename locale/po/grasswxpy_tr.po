@@ -1328,7 +1328,7 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:747
 #: ../gui/wxpython/animation/controller.py:295
 msgid "Invalid input"
-msgstr ""
+msgstr "Geçersiz girdi"
 
 #: ../gui/wxpython/wxplot/dialogs.py:665 ../gui/wxpython/wxplot/base.py:519
 #: ../gui/wxpython/wxplot/base.py:586
@@ -13405,7 +13405,7 @@ msgstr ""
 #: ../gui/wxpython/vnet/dialogs.py:1648
 #: ../gui/wxpython/gmodeler/preferences.py:707
 msgid "Name:"
-msgstr ""
+msgstr "Adı:"
 
 #: ../gui/wxpython/gui_core/gselect.py:1565
 msgid "Choose file"
@@ -15572,7 +15572,7 @@ msgstr ""
 #: ../gui/wxpython/animation/data.py:144
 #, python-format
 msgid "Animation %d"
-msgstr ""
+msgstr "Animasyon %d"
 
 #: ../gui/wxpython/animation/nviztask.py:45 ../gui/wxpython/lmgr/frame.py:1432
 #, python-format
@@ -15693,7 +15693,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:104
 msgid "Simple mode"
-msgstr ""
+msgstr "Basit mod"
 
 #: ../gui/wxpython/animation/dialogs.py:109
 msgid "Frame duration:"
@@ -15702,7 +15702,7 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:110
 #: ../gui/wxpython/animation/dialogs.py:151
 msgid "ms"
-msgstr ""
+msgstr "ms"
 
 #: ../gui/wxpython/animation/dialogs.py:143
 msgid "Temporal mode"
@@ -15710,7 +15710,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:148
 msgid "Time unit:"
-msgstr ""
+msgstr "Zaman birimi:"
 
 #: ../gui/wxpython/animation/dialogs.py:150
 msgid "Duration of time unit:"
@@ -15718,27 +15718,27 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:222
 msgid "year"
-msgstr ""
+msgstr "yıl"
 
 #: ../gui/wxpython/animation/dialogs.py:223
 msgid "month"
-msgstr ""
+msgstr "ay"
 
 #: ../gui/wxpython/animation/dialogs.py:224
 msgid "day"
-msgstr ""
+msgstr "gün"
 
 #: ../gui/wxpython/animation/dialogs.py:225
 msgid "hour"
-msgstr ""
+msgstr "saat"
 
 #: ../gui/wxpython/animation/dialogs.py:226
 msgid "minute"
-msgstr ""
+msgstr "dakika"
 
 #: ../gui/wxpython/animation/dialogs.py:227
 msgid "second"
-msgstr ""
+msgstr "saniye"
 
 #: ../gui/wxpython/animation/dialogs.py:292
 msgid "Animation speed is too high."
@@ -16139,7 +16139,7 @@ msgstr ""
 #: ../gui/wxpython/animation/controller.py:234
 #, python-format
 msgid "Maximum number of animations is %s."
-msgstr ""
+msgstr "En büyük animasyon sayısı: %s."
 
 #: ../gui/wxpython/animation/controller.py:443
 msgid "Failed to display legend."
