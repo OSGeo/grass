@@ -1034,10 +1034,7 @@ class GListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin,
 
         idx = 0
         for item in data:
-            if wxPythonPhoenix:
-                index = self.InsertItem(idx, str(item[0]))
-            else:
-                index = self.InsertStringItem(idx, str(item[0]))
+            index = self.InsertStringItem(idx, str(item[0]))
             for i in range(1, self.GetColumnCount()):
                 self.SetStringItem(index, i, item[i])
             idx += 1
