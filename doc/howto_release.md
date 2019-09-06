@@ -101,7 +101,7 @@ Example:
 ```bash
 7
 8
-0RC1
+1RC1
 2019
 ```
 
@@ -123,7 +123,7 @@ Preparation:
 MAJOR=`cat include/VERSION | head -1 | tail -1`
 MINOR=`cat include/VERSION | head -2 | tail -1`
 RELEASE=`cat include/VERSION | head -3 | tail -1`
-VERSION=${MAJOR}_${MINOR}_${RELEASE}
+VERSION=${MAJOR}.${MINOR}.${RELEASE}
 echo $VERSION
 
 # Create Changelog file on release branch:
@@ -185,7 +185,7 @@ Example:
 ```bash
 7
 8
-0dev
+1dev
 2019
 ```
 
