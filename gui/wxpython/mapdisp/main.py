@@ -560,10 +560,12 @@ class MapApp(wx.App):
     def OnExit(self):
         if __name__ == "__main__":
             # stop the timer
-            # self.timer.Stop()
+            if self.timer.IsRunning:
+                self.timer.Stop()
             # terminate thread
             for f in six.itervalues(monFile):
                 try_remove(f)
+        return True
 
     def watcher(self):
         """Redraw, if new layer appears (check's timestamp of
