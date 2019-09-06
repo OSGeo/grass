@@ -92,21 +92,17 @@ git status
 
 ### Update VERSION file to release version number
 
-TODO: probably better done in GH interface?!
+Directly edit in GH interface:
+
+https://github.com/OSGeo/grass/blob/releasebranch_7_8/include/VERSION
+
+Example:
 
 ```bash
-vim include/VERSION
-
-#example:
 7
 8
 0RC1
 2019
-```
-
-Cleanup:
-```bash
-rm -f include/VERSION~
 ```
 
 ~~Update OSGeo4W setup.hint file~~
@@ -118,7 +114,7 @@ rm -f include/VERSION~
 
 See https://help.github.com/en/articles/creating-releases
 
-Done in GH interface.
+Preparation:
 
 ### Changelog and tagging etc
 
@@ -129,11 +125,6 @@ MINOR=`cat include/VERSION | head -2 | tail -1`
 RELEASE=`cat include/VERSION | head -3 | tail -1`
 VERSION=${MAJOR}_${MINOR}_${RELEASE}
 echo $VERSION
-
-git checkout -b release_GRASS_GIS_$VERSION
-git add include/VERSION
-git commit -m"GRASS GIS $VERSION" include/VERSION
-git push origin release_GRASS_GIS_$VERSION
 
 # Create Changelog file on release branch:
 python tools/gitlog2changelog.py
@@ -149,16 +140,26 @@ echo $RELEASETAG
 ### Tag release (on GitHub)
 
 ```bash
-echo "grass_$VERSION"
+echo "$VERSION"
 ```
 
-Do this in https://github.com/OSGeo/grass/releases/new
+Done in GH interface:
+
+https://github.com/OSGeo/grass/releases/new
 
 ### Packaging of source code tarball
 
-TODO: add checkout of code via release tag
+TODO: add checkout of code via release tag (?)
 
 ```bash
+# update from GH
+#  assumptions:
+#  - own fork as "origin"
+#  - remote repo as "upstream"
+
+git fetch --all --prune && git checkout releasebranch_7_8 && \
+ git merge upstream/releasebranch_7_8 && git push origin releasebranch_7_8
+
 # create source package (in the source directory):
 echo grass-${VERSION}
 
@@ -175,23 +176,17 @@ md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 
 ### Reset include/VERSION file to git version:
 
-TODO: probably better done in GH interface
+Directly edit in GH interface:
+
+https://github.com/OSGeo/grass/blob/releasebranch_7_8/include/VERSION
+
+Example:
 
 ```bash
-vim include/VERSION
-
-#example
 7
 8
 0dev
 2019
-
-rm -f include/VERSION~
-git checkout -b back_to_git_dev
-git add include/VERSION
-git commit -m"back to git" include/VERSION
-git push origin back_to_git_dev
-# open PR and merge
 ```
 
 ### Upload source code tarball to OSGeo servers
