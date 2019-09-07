@@ -156,7 +156,7 @@ class DMonMap(Map):
             else:
                 # clean overlays after erase
                 self.oldOverlays = []
-                overlays = self._giface.GetMapDisplay().decorations.keys()
+                overlays = list(self._giface.GetMapDisplay().decorations.keys())
                 for each in overlays:
                     self._giface.GetMapDisplay().RemoveOverlay(each)
 
