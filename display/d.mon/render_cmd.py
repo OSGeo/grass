@@ -5,6 +5,7 @@ import tempfile
 
 from grass.script import core as grass
 from grass.script import task as gtask
+from grass.exceptions import CalledModuleError
 
 # read environment variables from file
 def read_env_file(env_file):
@@ -39,8 +40,8 @@ def render(cmd, mapfile):
         env['GRASS_RENDER_FILE'] = mapfile
     try:
         grass.run_command(cmd[0], env=env, **cmd[1])
-    except Exception as e:
-        grass.debug(1, "Unable to render: {0}".format(e))
+    except CalledModuleError as e:
+        grass.debug("Unable to render: {0}".format(e), 1)
 
 # update cmd file
 def update_cmd_file(cmd_file, cmd, mapfile):
