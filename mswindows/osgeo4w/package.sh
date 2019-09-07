@@ -43,7 +43,7 @@ fi
 export OSGEO4W_ROOT_MSYS="/c/OSGeo4W${OSGEO4W_POSTFIX}"
 export OSGEO4W_ROOT="C:\\\OSGeo4W${OSGEO4W_POSTFIX}"
 
-export PATH=/usr/bin:/mingw${MINGW_POSTFIX}/bin/:$OSGEO4W_ROOT_MSYS/bin:$PWD/mswindows/osgeo4w/lib:$PWD/mswindows/osgeo4w
+export PATH=$OSGEO4W_ROOT_MSYS/bin:$PWD/mswindows/osgeo4w/lib:$PWD/mswindows/osgeo4w:/usr/bin:/mingw${MINGW_POSTFIX}/bin
 
 # Force Python3
 # alias python=python3
