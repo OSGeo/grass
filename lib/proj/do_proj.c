@@ -49,6 +49,144 @@ do {\
 
 static double METERS_in = 1.0, METERS_out = 1.0;
 
+#ifdef HAVE_PROJ_H
+#if PROJ_VERSION_MAJOR >= 6
+int get_pj_area(double *xmin, double *xmax, double *ymin, double *ymax)
+{
+    struct Cell_head window;
+
+    G_unset_window();
+    G_get_window(&window);
+    *xmin = window.west;
+    *xmax = window.east;
+    *ymin = window.south;
+    *ymax = window.north;
+
+    if (window.proj != PROJECTION_LL) {
+	/* transform to ll equivalent */
+	double estep, nstep;
+	double x[85], y[85];
+	int i;
+	const char *projstr = NULL;
+	char *indef = NULL;
+	/* projection information of current location */
+	struct Key_Value *in_proj_info, *in_unit_info;
+	struct pj_info iproj, oproj, tproj;	/* proj parameters  */
+
+	/* read current projection info */
+	if ((in_proj_info = G_get_projinfo()) == NULL) {
+	    G_warning(_("Can't get projection info of current location"));
+	    
+	    return 0;
+	}
+
+	if ((in_unit_info = G_get_projunits()) == NULL) {
+	    G_warning(_("Can't get projection units of current location"));
+	    
+	    return 0;
+	}
+
+	if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0) {
+	    G_fatal_error(_("Can't get projection key values of current location"));
+	    
+	    return 0;
+	}
+
+	G_free_key_value(in_proj_info);
+	G_free_key_value(in_unit_info);
+
+	oproj.pj = NULL;
+	tproj.def = NULL;
+
+	if (proj_get_type(iproj.pj) == PJ_TYPE_BOUND_CRS) {
+	    PJ *source_crs;
+	    
+	    source_crs = proj_get_source_crs(NULL, iproj.pj);
+	    if (source_crs)
+		projstr = proj_as_proj_string(NULL, source_crs, PJ_PROJ_5, NULL);
+	    if (projstr)
+		indef = G_store(projstr);
+	    
+	    if (source_crs)
+		proj_destroy(source_crs);
+	}
+
+	if (indef == NULL)
+	    indef = G_store(iproj.def);
+
+	G_asprintf(&tproj.def, "+proj=pipeline +step +inv %s",
+		   indef);
+	tproj.pj = proj_create(PJ_DEFAULT_CTX, tproj.def);
+	if (tproj.pj == NULL) {
+	    G_warning(_("proj_create() failed for '%s'"), tproj.def);
+	    G_free(indef);
+	    G_free(tproj.def);
+	    proj_destroy(tproj.pj);
+
+	    return 0;
+	}
+	projstr = proj_as_proj_string(NULL, tproj.pj, PJ_PROJ_5, NULL);
+	if (projstr == NULL) {
+	    G_warning(_("proj_create() failed for '%s'"), tproj.def);
+	    G_free(indef);
+	    G_free(tproj.def);
+	    proj_destroy(tproj.pj);
+
+	    return 0;
+	}
+	G_free(indef);
+
+	estep = (window.west + window.east) / 21.;
+	nstep = (window.north + window.south) / 21.;
+	for (i = 0; i < 20; i++) {
+	    x[i] = window.west + estep * (i + 1);
+	    y[i] = window.north;
+
+	    x[i + 20] = window.west + estep * (i + 1);
+	    y[i + 20] = window.south;
+
+	    x[i + 40] = window.west;
+	    y[i + 40] = window.south + nstep * (i + 1);
+
+	    x[i + 60] = window.east;
+	    y[i + 60] = window.south + nstep * (i + 1);
+	}
+	x[80] = window.west;
+	y[80] = window.north;
+	x[81] = window.west;
+	y[81] = window.south;
+	x[82] = window.east;
+	y[82] = window.north;
+	x[83] = window.east;
+	y[83] = window.south;
+	x[84] = (window.west + window.east) / 2.;
+	y[84] = (window.north + window.south) / 2.;
+
+	GPJ_transform_array(&iproj, &oproj, &tproj, PJ_FWD, x, y, NULL, 85);
+
+	proj_destroy(tproj.pj);
+	G_free(tproj.def);
+	*xmin = *xmax = x[84];
+	*ymin = *ymax = y[84];
+	for (i = 0; i < 84; i++) {
+	    if (*xmin > x[i])
+		*xmin = x[i];
+	    if (*xmax < x[i])
+		*xmax = x[i];
+	    if (*ymin > y[i])
+		*ymin = y[i];
+	    if (*ymax < y[i])
+		*ymax = y[i];
+	}
+    }
+    G_debug(1, "get_pj_area(): xmin %g, xmax %g, ymin %g, ymax %g",
+            *xmin, *xmax, *ymin, *ymax);
+
+    return 1;
+}
+#endif
+#endif
+
 /**
  * \brief Create a PROJ transformation object to transform coordinates 
  *        from an input SRS to an output SRS 
@@ -91,9 +229,6 @@ int GPJ_init_transform(const struct pj_info *info_in,
                        const struct pj_info *info_out,
 		       struct pj_info *info_trans)
 {
-    char *insrid = NULL, *outsrid = NULL;
-    const char *projstr;
-
     if (info_in->pj == NULL)
 	G_fatal_error(_("Input coordinate system is NULL"));
 
@@ -111,23 +246,10 @@ int GPJ_init_transform(const struct pj_info *info_in,
     info_trans->zone = 0;
     sprintf(info_trans->proj, "pipeline");
 
-    /* PROJ6+: EPSG must uppercase EPSG */
-    if (info_in->srid) {
-	if (strncmp(info_in->srid, "epsg", 4) == 0)
-	    insrid = G_store_upper(info_in->srid);
-	else
-	    insrid = G_store(info_in->srid);
-    }
-
-    if (info_out->pj && info_out->srid) {
-	if (strncmp(info_out->srid, "epsg", 4) == 0)
-	    outsrid = G_store_upper(info_out->srid);
-	else
-	    outsrid = G_store(info_out->srid);
-    }
-
     /* user-provided pipeline */
     if (info_trans->def) {
+	const char *projstr;
+
 	/* create a pj from user-defined transformation pipeline */
 	info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
 	if (info_trans->pj == NULL) {
@@ -167,35 +289,87 @@ int GPJ_init_transform(const struct pj_info *info_in,
     /* if no output CRS is defined, 
      * assume info_out to be ll equivalent of info_in */
     else if (info_out->pj == NULL) {
+	const char *projstr = NULL;
+	char *indef = NULL;
+	PJ *tmppj;
+	
+	/* Even Rouault:
+	 * if info_in->def contains a +towgs84/+nadgrids clause, 
+	 * this pipeline would apply it, whereas you probably only want 
+	 * the reverse projection, and no datum shift.
+	 * The easiest would probably to mess up with the PROJ string.
+	 * Otherwise with the PROJ API, you could 
+	 * instanciate a PJ object from the string, 
+	 * check if it is a BoundCRS with proj_get_source_crs(), 
+	 * and in that case, take the source CRS with proj_get_source_crs(),
+	 * and do the inverse transform on it */
+
+	tmppj = proj_create(NULL, info_in->def);
+	if (tmppj && proj_get_type(tmppj) == PJ_TYPE_BOUND_CRS) {
+	    PJ *source_crs;
+	    
+	    source_crs = proj_get_source_crs(NULL, tmppj);
+	    if (source_crs)
+		projstr = proj_as_proj_string(NULL, source_crs, PJ_PROJ_5, NULL);
+	    if (projstr)
+		indef = G_store(projstr);
+	    
+	    if (source_crs)
+		proj_destroy(source_crs);
+	}
+	if (tmppj)
+	    proj_destroy(tmppj);
+
+	if (indef == NULL)
+	    indef = G_store(info_in->def);
+
 	/* what about axis order?
 	 * is it always enu? 
 	 * probably yes, as long as there is no +proj=axisswap step */
 	G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s",
-		   info_in->def);
+		   indef);
 	info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
 	if (info_trans->pj == NULL) {
 	    G_warning(_("proj_create() failed for '%s'"), info_trans->def);
+	    G_free(indef);
 
 	    return -1;
 	}
 	projstr = proj_as_proj_string(NULL, info_trans->pj, PJ_PROJ_5, NULL);
 	if (projstr == NULL) {
 	    G_warning(_("proj_create() failed for '%s'"), info_trans->def);
+	    G_free(indef);
 
 	    return -1;
 	}
+	G_free(indef);
     }
     /* input and output CRS are available */
     else if (info_in->def && info_out->pj && info_out->def) {
 	char *indef = NULL, *outdef = NULL;
+	char *insrid = NULL, *outsrid = NULL;
 	int use_insrid = 0, use_outsrid = 0;
-	PJ *source_crs, *target_crs, *op;
-	PJ_OPERATION_FACTORY_CONTEXT *operation_ctx;
-	PJ_OBJ_LIST *op_list;
-	PJ_PROJ_INFO pj_info;
+	PJ *source_crs, *target_crs;
+	PJ_AREA *pj_area = NULL;
+	double xmin, xmax, ymin, ymax; 
 	const char *area_of_use;
 	double e, w, s, n;
-	int i, op_count;
+	int op_count = 0;
+
+	/* PROJ6+: EPSG must uppercase EPSG */
+	if (info_in->srid) {
+	    if (strncmp(info_in->srid, "epsg", 4) == 0)
+		insrid = G_store_upper(info_in->srid);
+	    else
+		insrid = G_store(info_in->srid);
+	}
+
+	if (info_out->pj && info_out->srid) {
+	    if (strncmp(info_out->srid, "epsg", 4) == 0)
+		outsrid = G_store_upper(info_out->srid);
+	    else
+		outsrid = G_store(info_out->srid);
+	}
 
 	if (insrid) {
 	    G_asprintf(&indef, "%s", insrid);
@@ -213,26 +387,39 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	    G_asprintf(&outdef, "%s", info_out->def);
 	}
 
-	G_asprintf(&(info_trans->def), "%s to %s",
-		   indef, outdef);
-
-	G_debug(1, "trying %s", info_trans->def);
-
 	/* check number of operations */
 	source_crs = proj_create(NULL, indef);
 	target_crs = proj_create(NULL, outdef);
-	operation_ctx = proj_create_operation_factory_context(NULL, NULL);
 	
+	/* get pj_area */
+	if (get_pj_area(&xmin, &xmax, &ymin, &ymax)) {
+	    pj_area = proj_area_create();
+	    proj_area_set_bbox(pj_area, xmin, ymin, xmax, ymax);
+	}
+
 	if (source_crs && target_crs) {
+	    PJ_OPERATION_FACTORY_CONTEXT *operation_ctx;
+	    PJ_OBJ_LIST *op_list;
+	    PJ *op;
+
+	    operation_ctx = proj_create_operation_factory_context(NULL, NULL);
+	    /* constrain by area ? */
 	    op_list = proj_create_operations(NULL,
 					     source_crs,
 					     target_crs,
 					     operation_ctx);
-	    op_count = proj_list_get_count(op_list);
+
+	    op_count = 0;
+	    if (op_list)
+		op_count = proj_list_get_count(op_list);
 	    if (op_count > 1) {
+		int i;
+
 		G_warning(_("Found %d possible transformations"), op_count);
 		for (i = 0; i < op_count; i++) {
 		    const char *str;
+		    const char *projstr;
+		    PJ_PROJ_INFO pj_info;
 
 		    op = proj_list_get(NULL, op_list, i);
 		    projstr = proj_as_proj_string(NULL, op,
@@ -268,6 +455,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
 			G_important_message(_("PROJ string:"));
 			G_important_message("%s", projstr);
 		    }
+		    proj_destroy(op);
 		}
 		G_important_message("************************");
 
@@ -276,18 +464,29 @@ int GPJ_init_transform(const struct pj_info *info_in,
 			            indef, outdef);
 		G_important_message(_("Please provide the appropriate PROJ string with the %s option"),
 		                    "pipeline");
-
-		return -1;
+		G_important_message("************************");
 	    }
+
+	    if (op_list)
+		proj_list_destroy(op_list);
+	    proj_operation_factory_context_destroy(operation_ctx);
 	}
+	if (source_crs)
+	    proj_destroy(source_crs);
+	if (target_crs)
+	    proj_destroy(target_crs);
 
 	/* try proj_create_crs_to_crs() */
+	G_debug(1, "trying %s to %s", indef, outdef);
+
 	info_trans->pj = proj_create_crs_to_crs(PJ_DEFAULT_CTX,
 						indef,
 						outdef,
-						NULL);
+						pj_area);
 
 	if (info_trans->pj) {
+	    const char *projstr = NULL;
+
 	    projstr = proj_as_proj_string(NULL, info_trans->pj,
 					  PJ_PROJ_5, NULL);
 	    if (projstr == NULL) {
@@ -300,12 +499,20 @@ int GPJ_init_transform(const struct pj_info *info_in,
 		G_debug(1, "trying %s to %s", indef, outdef);
 
 		/* try proj_create_crs_to_crs() */
+		proj_destroy(info_trans->pj);
+		info_trans->pj = NULL;
 		info_trans->pj = proj_create_crs_to_crs(PJ_DEFAULT_CTX,
 							indef,
 							outdef,
 							NULL);
 	    }
 	    else {
+		if (op_count > 1) {
+		    G_important_message(_("Selected pipeline:"));
+		    G_important_message(_("%s"), projstr);
+		    G_important_message("************************");
+		}
+
 		/* PROJ will do the unit conversion if set up from srid
 		 * -> disable unit conversion for GPJ_transform */
 		/* ugly hack */
@@ -319,6 +526,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	}
 
 	if (info_trans->pj) {
+	    const char *projstr;
 	    PJ *tmppj = NULL;
 	    
 	    G_debug(1, "proj_create_crs_to_crs() succeeded with PROJ%d",
@@ -342,6 +550,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
 			      info_trans->def);
 		}
 		else {
+		    proj_destroy(info_trans->pj);
 		    info_trans->pj = tmppj;
 		    projstr = proj_as_proj_string(NULL, info_trans->pj,
 						    PJ_PROJ_5, NULL);
@@ -351,6 +560,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
 		G_debug(1, "proj_create_crs_to_crs() pipeline: %s", info_trans->def);
 	    }
 	    else {
+		proj_destroy(info_trans->pj);
 		info_trans->pj = NULL;
 	    }
 	}
@@ -358,6 +568,8 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	if (info_trans->pj == NULL) {
 	    G_debug(1, "proj_create_crs_to_crs() failed with PROJ%d for input \"%s\", output \"%s\"",
 	            PROJ_VERSION_MAJOR, indef, outdef);
+
+	    G_warning("GPJ_init_transform(): falling back to proj_create()");
 
 	    if (insrid) {
 		G_free(indef);
@@ -374,6 +586,15 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	    info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
 	}
 
+	if (pj_area)
+	    proj_area_destroy(pj_area);
+
+	if (insrid)
+	    G_free(insrid);
+	if (outsrid)
+	    G_free(outsrid);
+	G_free(indef);
+	G_free(outdef);
     }
     if (info_trans->pj == NULL) {
 	G_warning(_("proj_create() failed for '%s'"), info_trans->def);
@@ -385,21 +606,6 @@ int GPJ_init_transform(const struct pj_info *info_in,
     info_trans->meters = 1.;
     info_trans->zone = 0;
     sprintf(info_trans->proj, "pipeline");
-
-    /* PROJ5: EPSG must lowercase epsg */
-    if (info_in->srid && *info_in->srid) {
-	if (strncmp(info_in->srid, "EPSG", 4) == 0)
-	    insrid = G_store_lower(info_in->srid);
-	else
-	    insrid = G_store(info_in->srid);
-    }
-
-    if (info_out->pj && info_out->srid) {
-	if (strncmp(info_out->srid, "EPSG", 4) == 0)
-	    outsrid = G_store_lower(info_out->srid);
-	else
-	    outsrid = G_store(info_out->srid);
-    }
 
     /* user-provided pipeline */
     if (info_trans->def) {
@@ -425,6 +631,22 @@ int GPJ_init_transform(const struct pj_info *info_in,
     }
     else if (info_in->def && info_out->pj && info_out->def) {
 	char *indef = NULL, *outdef = NULL;
+	char *insrid = NULL, *outsrid = NULL;
+
+	/* PROJ5: EPSG must lowercase epsg */
+	if (info_in->srid) {
+	    if (strncmp(info_in->srid, "EPSG", 4) == 0)
+		insrid = G_store_lower(info_in->srid);
+	    else
+		insrid = G_store(info_in->srid);
+	}
+
+	if (info_out->pj && info_out->srid) {
+	    if (strncmp(info_out->srid, "EPSG", 4) == 0)
+		outsrid = G_store_lower(info_out->srid);
+	    else
+		outsrid = G_store(info_out->srid);
+	}
 
 	info_trans->pj = NULL;
 
@@ -474,6 +696,12 @@ int GPJ_init_transform(const struct pj_info *info_in,
 
 	    info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
 	}
+	if (insrid)
+	    G_free(insrid);
+	if (outsrid)
+	    G_free(outsrid);
+	G_free(indef);
+	G_free(outdef);
     }
     if (info_trans->pj == NULL) {
 	G_warning(_("proj_create() failed for '%s'"), info_trans->def);
