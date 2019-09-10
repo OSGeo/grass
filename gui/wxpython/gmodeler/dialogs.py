@@ -707,10 +707,12 @@ class ModelListCtrl(ListCtrl,
 
     def OnBeginEdit(self, event):
         """Editing of item started"""
-        if self.columnNotEditable and event.m_col in self.columnNotEditable:
+        column = event.GetColumn()
+
+        if self.columnNotEditable and column in self.columnNotEditable:
             event.Veto()
             self.SetItemState(
-                event.m_itemIndex,
+                event.GetIndex(),
                 wx.LIST_STATE_SELECTED,
                 wx.LIST_STATE_SELECTED | wx.LIST_STATE_FOCUSED)
         else:
