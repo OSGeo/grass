@@ -45,7 +45,6 @@
 import sys
 
 import grass.script as gs
-from grass.pygrass.raster import RasterRow
 from grass.exceptions import GrassError, OpenError
 
 def print_map_band_reference(name, band_reader):
@@ -53,6 +52,8 @@ def print_map_band_reference(name, band_reader):
 
     :param str name: raster map name
     """
+    from grass.pygrass.raster import RasterRow
+
     try:
         with RasterRow(name) as rast:
             band_ref = rast.info.band_reference
@@ -72,6 +73,8 @@ def manage_map_band_reference(name, band_ref):
 
     :return int: return code
     """
+    from grass.pygrass.raster import RasterRow
+
     try:
         with RasterRow(name) as rast:
             if band_ref:
