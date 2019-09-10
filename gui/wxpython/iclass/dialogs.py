@@ -493,8 +493,8 @@ class CategoryListCtrl(wx.ListCtrl,
         return indices
 
     def OnEdit(self, event):
-        currentItem = event.m_itemIndex
-        currentCol = event.m_col
+        currentItem = event.GetIndex()
+        currentCol = event.GetColumn()
         if currentCol == 1:
             col = self.OnGetItemText(currentItem, currentCol)
             col = map(int, col.split(':'))
