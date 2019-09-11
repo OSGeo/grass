@@ -473,7 +473,7 @@ def main():
                     flags='n',
                     stderr=subprocess.PIPE,
                     env=new_env)
-                stderr = p.communicate()[1].decode()
+                stderr = grass.decode(p.communicate()[1])
                 if "No NULL cells found" in stderr:
                     grass.run_command('g.copy', raster='%s,%sfilled' % (input, prefix), overwrite=True)
                     p.returncode = 0
@@ -494,7 +494,7 @@ def main():
                     flags='n',
                     stderr=subprocess.PIPE,
                     env=new_env)
-                stderr = p.communicate()[1].decode()
+                stderr = grass.decode(p.communicate()[1])
                 if "No NULL cells found" in stderr:
                     grass.run_command('g.copy', raster='%s,%sfilled' % (input, prefix), overwrite=True)
                     p.returncode = 0

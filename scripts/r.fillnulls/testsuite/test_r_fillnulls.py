@@ -3,6 +3,7 @@ Created on Sun Jun 07 21:57:07 2018
 
 @author: Sanjeet Bhatti
 """
+import os
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -13,7 +14,8 @@ from grass.script.core import run_command
 class TestRFillNulls(TestCase):
     """Test r.fillnulls script"""
 
-    module = '../r.fillnulls.py'
+    module_dir = os.path.dirname(os.path.dirname(__file__))
+    module = os.path.join(module_dir, 'r.fillnulls.py')
     mapName = 'elevation'
     expression = 'elevation_filt = if(elevation > 130, \
     null(), elevation)'
@@ -27,11 +29,11 @@ class TestRFillNulls(TestCase):
         self.runModule('g.region', res=200, raster=self.mapName, flags='ap')
         run_command('r.mapcalc', expression=self.expression)
 
-    def tearDown(cls):
+    def tearDown(self):
         """Remove temporary region"""
-        cls.runModule('g.remove', flags='f', type='raster',
-                      name=(cls.mapNameCalc, cls.mapComplete))
-        cls.del_temp_region()
+        self.runModule('g.remove', flags='f', type='raster',
+                       name=(self.mapNameCalc, self.mapComplete))
+        self.del_temp_region()
 
     def test_rst(self):
         module = SimpleModule(self.module, input=self.mapNameCalc,
