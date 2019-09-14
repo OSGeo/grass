@@ -400,7 +400,6 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	if (source_crs && target_crs) {
 	    PJ_OPERATION_FACTORY_CONTEXT *operation_ctx;
 	    PJ_OBJ_LIST *op_list;
-	    PJ *op;
 
 	    operation_ctx = proj_create_operation_factory_context(NULL, NULL);
 	    /* constrain by area ? */
@@ -420,8 +419,20 @@ int GPJ_init_transform(const struct pj_info *info_in,
 		    const char *str;
 		    const char *projstr;
 		    PJ_PROJ_INFO pj_info;
+		    PJ *op, *op_norm;
 
 		    op = proj_list_get(NULL, op_list, i);
+		    op_norm = proj_normalize_for_visualization(PJ_DEFAULT_CTX, op);
+
+		    if (!op_norm) {
+			G_warning(_("proj_normalize_for_visualization() failed for operation %d"),
+				  i + 1);
+		    }
+		    else {
+			proj_destroy(op);
+			op = op_norm;
+		    }
+
 		    projstr = proj_as_proj_string(NULL, op,
 				      PJ_PROJ_5, NULL);
 		    pj_info = proj_pj_info(op);
