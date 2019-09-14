@@ -475,7 +475,7 @@ def get_available_temporal_mapsets():
 ###############################################################################
 
 
-def init(raise_fatal_error=False):
+def init(raise_fatal_error=False, skip_db_version_check=False):
     """This function set the correct database backend from GRASS environmental
        variables and creates the grass temporal database structure for raster,
        vector and raster3d maps as well as for the space-time datasets strds,
@@ -516,6 +516,10 @@ def init(raise_fatal_error=False):
                                   exception will be raised in case a fatal
                                   error occurs in the init process, otherwise
                                   sys.exit(1) will be called.
+        :param skip_db_version_check: Set this True to skip mismatch temporal
+                                      database version check.
+                                      Recommended to be used only for
+                                      upgrade_temporal_database().
     """
     # We need to set the correct database backend and several global variables
     # from the GRASS mapset specific environment variables of g.gisenv and t.connect
@@ -663,8 +667,11 @@ def init(raise_fatal_error=False):
                    " created automatically.\n"
 
     if db_exists is True:
-        # Check the version of the temporal database
         dbif.close()
+        if  skip_db_version_check is True:
+            return
+
+        # Check the version of the temporal database
         dbif.connect()
         metadata = get_tgis_metadata(dbif)
         dbif.close()
@@ -838,6 +845,61 @@ def create_temporal_database(dbif):
     metadata["tgis_db_version"] = tgis_db_version
     metadata["creation_time"] = datetime.today()
     _create_tgis_metadata_table(metadata, dbif)
+
+    dbif.close()
+
+###############################################################################
+
+
+def upgrade_temporal_database(dbif):
+    """This function will upgrade the temporal database if needed.
+
+       It will update all tables and triggers that are requested by
+       currently supported TGIS DB version.
+
+       :param dbif: The database interface to be used
+    """
+    global tgis_database_string
+    global tgis_db_version
+
+    metadata = get_tgis_metadata(dbif)
+
+    msgr = get_tgis_message_interface()
+    if metadata is None:
+        msgr.fatal(_("Unable to receive temporal database metadata.\n"
+                     "Current temporal database info:%(info)s") % (
+                         {"info": get_database_info_string()}))
+    upgrade_db_from = None
+    for entry in metadata:
+        if "tgis_db_version" in entry and entry[1] != str(tgis_db_version):
+            upgrade_db_from = entry[1]
+            break
+
+    if upgrade_db_from is None:
+        msgr.message(_("Temporal database is up-to-date. Operation canceled"))
+        dbif.close()
+        return
+
+    template_path = get_sql_template_path()
+    try:
+        upgrade_db_sql = open(os.path.join(
+            template_path,
+            "upgrade_db_%s_to_%s.sql" % (upgrade_db_from, tgis_db_version)),
+            'r').read()
+    except FileNotFoundError:
+        msgr.fatal(_("Unsupported TGIS DB upgrade scenario: from version %s to %s") % \
+                   (upgrade_db_from, tgis_db_version))
+
+    # re-create raster views
+    raster_views_sql = open(
+        os.path.join(template_path, "raster_views.sql"),
+        'r').read()
+
+    msgr.message(
+        _("Upgrading temporal database <%s> from version %s to %s...") % \
+        (tgis_database_string, upgrade_db_from, tgis_db_version))
+    dbif.execute_transaction(upgrade_db_sql)
+    dbif.execute_transaction(raster_views_sql)
 
     dbif.close()
 
