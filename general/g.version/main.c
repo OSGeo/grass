@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
     extended = G_define_flag();
     extended->key = 'e';
     extended->label = _("Print also extended info for additional libraries");
-    extended->description = _("GDAL/OGR, PROJ.4, GEOS");
+    extended->description = _("GDAL/OGR, PROJ, GEOS");
     extended->guisection = _("Additional info");
 
     shell = G_define_flag();
@@ -200,15 +200,15 @@ int main(int argc, char *argv[])
 #endif
         if (strlen(proj) == 3) {
             if (shell->answer)
-                fprintf(stdout, "proj4=%c.%c.%c\n", proj[0], proj[1], proj[2]); 
+                fprintf(stdout, "proj=%c.%c.%c\n", proj[0], proj[1], proj[2]); 
             else
-                fprintf(stdout, "PROJ.4: %c.%c.%c\n", proj[0], proj[1], proj[2]); 
+                fprintf(stdout, "PROJ: %c.%c.%c\n", proj[0], proj[1], proj[2]); 
         }
         else {
             if (shell->answer)
-                fprintf(stdout, "proj4=%s\n", proj);
+                fprintf(stdout, "proj=%s\n", proj);
             else
-                fprintf(stdout, "PROJ.4: %s\n", proj);
+                fprintf(stdout, "PROJ: %s\n", proj);
         }
 #ifdef HAVE_GDAL
         if (shell->answer)
