@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 '''
 ctypesgencore.parser.ctypesparser contains a class, CtypesParser, which is a

@@ -1803,7 +1803,7 @@ msgstr "Barra degli strumenti della digitalizzazione"
 
 #: ../gui/wxpython/iclass/frame.py:390
 msgid "Plots"
-msgstr ""
+msgstr "Grafici"
 
 #: ../gui/wxpython/iclass/frame.py:410
 msgid "Preview Display"
@@ -2065,7 +2065,7 @@ msgstr "Percorso al file delle firme spettrali:"
 
 #: ../gui/wxpython/iclass/dialogs.py:732
 msgid "Export training areas"
-msgstr ""
+msgstr "Esporta le aree di addestramento"
 
 #: ../gui/wxpython/iclass/dialogs.py:779 ../gui/wxpython/iscatt/dialogs.py:283
 msgid "Enter name of new vector map:"
@@ -3608,7 +3608,7 @@ msgstr "Strumenti personalizzati"
 #: ../gui/wxpython/core/toolboxes.py:519
 #, python-format
 msgid "List of addons cannot be obtained because g.extension failed. Details: %s"
-msgstr ""
+msgstr "La lista degli addons non può essere ottenuta a causa di un errore di g.extension. Dettagli: %s"
 
 #: ../gui/wxpython/core/toolboxes.py:576
 msgid "Addons"
@@ -3683,7 +3683,7 @@ msgstr "Livello di debug per Wx {0}."
 #: ../gui/wxpython/core/debug.py:53
 #, python-brace-format
 msgid "WARNING: Ignoring unsupported wx debug level (must be >=0 and <=5). {0}\n"
-msgstr ""
+msgstr "ATTENZIONE: Livello di wx debug non supportato (dev'essere >=0 e <=5). {0}\n"
 
 #: ../gui/wxpython/core/settings.py:505
 msgid "Segment break"
@@ -4077,9 +4077,9 @@ msgid "Delete selected mapset"
 msgstr "Elimina il mapset selezionato"
 
 #: ../gui/wxpython/gis_set.py:258
-#, fuzzy, python-format
+#, python-format
 msgid "GRASS GIS %s Startup%s"
-msgstr "Avvio%s di GRASS GIS %s"
+msgstr ""
 
 #: ../gui/wxpython/gis_set.py:263
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:257
@@ -11772,9 +11772,8 @@ msgid "Not enough points for line"
 msgstr "Non ci sono abbastanza punti per linea"
 
 #: ../gui/wxpython/startup/guiutils.py:51
-#, fuzzy
 msgid "Name for the new mapset:"
-msgstr "Inserisci il nome per il nuovo mapset:"
+msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:150
 #, python-brace-format
@@ -13144,7 +13143,7 @@ msgstr "Licenza"
 
 #: ../gui/wxpython/gui_core/ghelp.py:85
 msgid "Citation"
-msgstr ""
+msgstr "Citazione"
 
 #: ../gui/wxpython/gui_core/ghelp.py:86
 msgid "Authors"
@@ -13185,7 +13184,7 @@ msgstr "Revisione del codice"
 
 #: ../gui/wxpython/gui_core/ghelp.py:176
 msgid "Build Date"
-msgstr ""
+msgstr "Data di compilazione"
 
 #: ../gui/wxpython/gui_core/ghelp.py:230 ../gui/wxpython/gui_core/ghelp.py:487
 msgid "Language"
@@ -13456,7 +13455,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/gselect.py:894
 msgid "No table linked to layer <{}>."
-msgstr ""
+msgstr "Nessuna tabella collegata al layer <{}>"
 
 #: ../gui/wxpython/gui_core/gselect.py:1407
 msgid "Output settings"
@@ -13610,7 +13609,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/gselect.py:2750
 msgid "No vector map selected"
-msgstr ""
+msgstr "Nessuna mappa vettoriale selezionata"
 
 #: ../gui/wxpython/gui_core/widgets.py:115
 msgid " (...)"
@@ -14265,7 +14264,7 @@ msgstr "Nessuno sotto gruppo selezionato."
 
 #: ../gui/wxpython/gui_core/dialogs.py:1439
 msgid "Use fully-qualified map names"
-msgstr ""
+msgstr "Usare nomi della mappa completo"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1465
 msgid "Map type:"
@@ -14496,10 +14495,13 @@ msgid ""
 "\n"
 "Details: {error}"
 msgstr ""
+"Impossibile scrivere il file '{filePath}'.\n"
+"\n"
+"Dettagli: {error}"
 
 #: ../gui/wxpython/gui_core/goutput.py:502
 msgid "Command log saved to '{}'"
-msgstr ""
+msgstr "Output dei comandi salvati in '{}'"
 
 #: ../gui/wxpython/psmap/toolbars.py:79
 msgid "Full extent"
@@ -16423,19 +16425,16 @@ msgid "Set title for the plot"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:287
-#, fuzzy
 msgid "Set label for X axis"
-msgstr "Imposta etichetta"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:292
-#, fuzzy
 msgid "Set label for Y axis"
-msgstr "Imposta etichetta"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:304
-#, fuzzy
 msgid "Labels"
-msgstr "Etichetta"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:311
 msgid "Path for output CSV file with plotted data"
@@ -16446,9 +16445,8 @@ msgid "CVS path"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:323
-#, fuzzy
 msgid "Do you want the CSV header?"
-msgstr "Si vuole salvare i cambiamenti?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:364 ../gui/wxpython/tplot/frame.py:842
 #: ../gui/wxpython/tplot/frame.py:846 ../gui/wxpython/tplot/frame.py:867
@@ -16518,14 +16516,13 @@ msgid "Problem getting data from vector temporal dataset. Empty list of values."
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:802
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{pa} already exists, do you want to overwrite?"
-msgstr "Il vettoriale %s esiste già. Si vuole sovrascriverlo?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:804
-#, fuzzy
 msgid "File exists"
-msgstr "Il file esiste già"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:809
 msgid "Please change name of output CSV file or "
@@ -18476,7 +18473,7 @@ msgstr "La mappa di tipo {elem} <{name}> esiste già nel mapset <{mapset}>. Vuoi
 #: ../gui/wxpython/datacatalog/tree.py:302
 #, python-brace-format
 msgid "GRASS locations in {0}"
-msgstr ""
+msgstr "Le Location di GRASS in {0}"
 
 #: ../gui/wxpython/datacatalog/tree.py:583
 #, python-brace-format
@@ -18660,7 +18657,7 @@ msgstr "Imposta istruzione SQL a quella di default"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:135
 msgid "Apply SQL statement"
-msgstr ""
+msgstr "Applica istruzione SQL"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:137
 msgid "Close the dialog"
@@ -19415,7 +19412,7 @@ msgstr "vuoto"
 #: ../gui/wxpython/gmodeler/model.py:1891
 #, python-brace-format
 msgid "Details: unsupported tag name '{0}'."
-msgstr ""
+msgstr "Dettagli: nome del tag '{0}' non supportato"
 
 #: ../gui/wxpython/gmodeler/model.py:2804
 msgid "Model parameters"
@@ -19459,7 +19456,7 @@ msgstr "Si sta ridisegnando il modello...."
 
 #: ../gui/wxpython/gmodeler/frame.py:324
 msgid "Model computation finished"
-msgstr ""
+msgstr "Esecuzione del modello finito"
 
 #: ../gui/wxpython/gmodeler/frame.py:337
 msgid "Do you want to save changes in the model?"
@@ -19476,7 +19473,7 @@ msgstr "Esci dal Modellizzatore Grafico"
 #: ../gui/wxpython/gmodeler/frame.py:406
 #, python-format
 msgid "%d intermediate maps deleted from current mapset"
-msgstr ""
+msgstr "%d le mappe intermediare eliminate dal mapset corrente"
 
 #: ../gui/wxpython/gmodeler/frame.py:415
 msgid "No intermediate data to delete."
@@ -20865,20 +20862,20 @@ msgstr "questo potrebbe non funzionare per più bande"
 msgid "Failed to copy map: action is allowed only within the same location."
 msgstr "Impossibile copiare la mappa: l'azione è permessa solo all'interno della stessa location."
 
-#~ msgid "Repository (leave empty to use the official one)"
-#~ msgstr "Repository (lasciare vuoto per utilizzare quello ufficiale)"
+msgid "Repository (leave empty to use the official one)"
+msgstr "Repository (lasciare vuoto per utilizzare quello ufficiale)"
 
-#~ msgid "&Fetch"
-#~ msgstr "&Trova"
+msgid "&Fetch"
+msgstr "&Trova"
 
-#~ msgid "Fetch list of available modules from GRASS Addons SVN repository"
-#~ msgstr "Trova lista dei moduli disponibile dal repository svn GRASS Addons"
+msgid "Fetch list of available modules from GRASS Addons SVN repository"
+msgstr "Trova lista dei moduli disponibile dal repository svn GRASS Addons"
+
+msgid "Please provide an order value (1 if 4 Fiducials, 2 if 8 Fiducials)"
+msgstr "Fornire il valore dell'ordine (1 se 4 punti fiduciali, 2 se 8 punti fiduciali)"
 
 #~ msgid "Creates a raster map from LAS LiDAR points using univariate statistics."
 #~ msgstr "Crea un raster da punti LAS LiDAR usando statistiche univariate"
 
 #~ msgid "Converts LAS LiDAR point clouds to a GRASS vector map with libLAS."
 #~ msgstr "Converte nuvole di punti LAS LiDAR in un vettoriale GRASS usando libLAS."
-
-#~ msgid "Please provide an order value (1 if 4 Fiducials, 2 if 8 Fiducials)"
-#~ msgstr "Fornire il valore dell'ordine (1 se 4 punti fiduciali, 2 se 8 punti fiduciali)"

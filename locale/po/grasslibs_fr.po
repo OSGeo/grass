@@ -275,9 +275,9 @@ msgid "Unable to read range file for <%s>"
 msgstr "Impossible de lire le fichier de plage pour <%s>"
 
 #: ../lib/raster/range.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read stats file for <%s>"
-msgstr "Impossible de lire le fichier de plage pour <%s>"
+msgstr ""
 
 #: ../lib/raster/range.c:368 ../lib/raster/range.c:374
 #: ../lib/raster/range.c:406 ../lib/raster/range.c:420
@@ -287,9 +287,9 @@ msgstr "Impossible d'écrire le fichier de plage pour <%s>"
 
 #: ../lib/raster/range.c:450 ../lib/raster/range.c:464
 #: ../lib/raster/range.c:482 ../lib/raster/range.c:487
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write stats file for <%s>"
-msgstr "Impossible d'écrire le fichier de plage pour <%s>"
+msgstr ""
 
 #: ../lib/raster/raster_metadata.c:109
 #, c-format
@@ -655,9 +655,9 @@ msgid "Unable to create dependency file in <%s@%s>"
 msgstr "Impossible de créer le fichier de dépendances dans <%s@%s>"
 
 #: ../lib/raster/vrt.c:83
-#, fuzzy, c-format
+#, c-format
 msgid "Tile raster map <%s> not found"
-msgstr "Carte raster 3D <%s> non trouvée"
+msgstr ""
 
 #: ../lib/raster/vrt.c:86
 msgid "A virtual raster can not contain itself"
@@ -933,19 +933,19 @@ msgid "Raster library not initialized. Programmer forgot to call Rast_init()."
 msgstr "Librairie raster non initialisée. Le développeur a oublié d'appeler Rast_init()."
 
 #: ../lib/raster/init.c:109
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown compression method <%s>, using default %s"
-msgstr "Méthode de compression <%s> inconnue, utilisation de ZLIB par défaut"
+msgstr ""
 
 #: ../lib/raster/init.c:113
-#, fuzzy, c-format
+#, c-format
 msgid "No compression is not supported for GRASS raster maps, using default %s"
-msgstr "Aucune compression n'est pas supporté par GRASS pour les cartes raster, utilisation de ZLIB par défaut"
+msgstr ""
 
 #: ../lib/raster/init.c:120
-#, fuzzy, c-format
+#, c-format
 msgid "This GRASS version does not support %s compression, using default %s"
-msgstr "Cette version de GRASS ne supporte pas la compression %s, utilisation de ZLB par défaut"
+msgstr ""
 
 #: ../lib/raster/null_val.c:64
 msgid "EmbedGivenNulls: wrong data type"
@@ -978,9 +978,8 @@ msgid "Output window changed while maps are open for write. Map name <%s>"
 msgstr "La fenêtre de sortie a été modifiée pendant l'écriture des cartes. Carte <%s>"
 
 #: ../lib/ogsf/gsd_img_tif.c:63 ../lib/ogsf/gsd_img_ppm.c:50
-#, fuzzy
 msgid "Unable to get image of current GL screen"
-msgstr "Impossible de définir la transformation géographique"
+msgstr ""
 
 #: ../lib/ogsf/gsd_img_tif.c:69 ../lib/ogsf/gk2.c:216
 #: ../lib/ogsf/gsd_img_ppm.c:55 ../lib/ogsf/gsd_img_ppm.c:101
@@ -1129,9 +1128,8 @@ msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
 msgstr "Non concordance des points de surfaces de coupe. Vérifiez les résolutions."
 
 #: ../lib/ogsf/gsd_img_ppm.c:96
-#, fuzzy
 msgid "Unable to write view"
-msgstr "Impossible d'écrire les lignes"
+msgstr ""
 
 #: ../lib/ogsf/gsd_legend.c:246
 #, c-format
@@ -2819,9 +2817,8 @@ msgid "color"
 msgstr "couleur"
 
 #: ../lib/python/script/setup.py:229
-#, fuzzy
 msgid "Cleaning up default sqlite database ..."
-msgstr "Nettoyage des fichiers temporaires ..."
+msgstr ""
 
 #: ../lib/python/script/setup.py:247 ../lib/init/grass.py:1844
 msgid "Cleaning up temporary files..."
@@ -3413,7 +3410,7 @@ msgstr "impossible d'écrire dans le fichier <%s> de catégories du raster"
 
 #: ../lib/imagery/iscatt_core.c:526
 msgid "Unable to read from category raster condition file."
-msgstr "Impossible de lire le fichier de catégories du raster."
+msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:533
 msgid "Invalid size of category raster conditions file."
@@ -3426,7 +3423,7 @@ msgstr "Données non cohérentes. La valeur calculée pour le graphique est en d
 #: ../lib/imagery/iscatt_core.c:745
 #, c-format
 msgid "Unable to find raster <%s>"
-msgstr "Impossible de lire le raster <%s>"
+msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:755
 #, c-format
@@ -3446,7 +3443,7 @@ msgstr "Impossible de lire la plage de valeurs du raster <%s>"
 #: ../lib/imagery/iscatt_core.c:803
 #, c-format
 msgid "Unable to open category raster condition file <%s>"
-msgstr "Impossible d'ouvrir le fichier <%s> de catégories du raster"
+msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:817
 msgid "Corrupted category raster conditions file (fseek failed)"
@@ -3591,9 +3588,8 @@ msgid "exit after creation of location or mapset. Only with -c flag"
 msgstr "quitter après la création du secteur ou du jeu de cartes. Uniquement avec l'argument -c"
 
 #: ../lib/init/grass.py:375
-#, fuzzy
 msgid "force removal of .gislock if exists (use with care!). Only with --text flag"
-msgstr "force la suppression de .gislock si il existe (utiliser avec précausion). Uniquement avec l'argument -text"
+msgstr ""
 
 #: ../lib/init/grass.py:376
 msgid "use text based interface (skip welcome screen)"
@@ -3709,9 +3705,9 @@ msgid "The APPDATA variable points to directory which does not exist, ask your o
 msgstr "La variable APPDATA pointe vers un répertoire qui n'existe pas, demandez à votre administrateur système"
 
 #: ../lib/init/grass.py:444
-#, fuzzy, python-format
+#, python-format
 msgid "Failed to create configuration directory '%s' with error: %s"
-msgstr "Impossible de renommer le répertoire '%s' en '%s'"
+msgstr ""
 
 #: ../lib/init/grass.py:487
 #, python-format
@@ -3825,43 +3821,41 @@ msgid "Mapset <{mapset}> or Location <{location}> is invalid for an unknown reas
 msgstr "Le jeu de données <{mapset}> où le Secteur <{location}> est invalide pour une raison inconnue"
 
 #: ../lib/init/grass.py:963
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unable to create new location because the location <{location}> already exists."
-msgstr "Échec de création du nouveau secteur. Le secteur <%s> existe déjà."
+msgstr ""
 
 #: ../lib/init/grass.py:967
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unable to create new location <{location}> because <{path}> is a file."
-msgstr "Échec de création du nouveau secteur. Le secteur <%s> existe déjà."
+msgstr ""
 
 #: ../lib/init/grass.py:970
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unable to create new location <{location}> because the directory <{path}> already exists."
-msgstr "Échec de création du nouveau secteur. Le secteur <%s> existe déjà."
+msgstr ""
 
 #: ../lib/init/grass.py:974
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unable to create new location in the directory <{path}> for an unknown reason."
-msgstr "Échec de création du nouveau secteur. Le secteur <%s> existe déjà."
+msgstr ""
 
 #: ../lib/init/grass.py:1021
 msgid "Mapset <{}> already exists. Ignoring the request to create it. Note that this warning may become an error in future versions."
 msgstr ""
 
 #: ../lib/init/grass.py:1049
-#, fuzzy
 msgid "Creating new GRASS GIS location <{}>..."
-msgstr "Création d'un nouveau secteur/jeu de carte du SIG GRASS"
+msgstr ""
 
 #: ../lib/init/grass.py:1055
-#, fuzzy
 msgid "Creating new GRASS GIS mapset <{}>..."
-msgstr "Création d'un nouveau secteur/jeu de carte du SIG GRASS"
+msgstr ""
 
 #: ../lib/init/grass.py:1060
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unable to create new mapset <{mapset}> because <{path}> is a file."
-msgstr "Impossible de créer la nouvelle table d'entité PostGIS"
+msgstr ""
 
 #: ../lib/init/grass.py:1066
 msgid "The mapset <{}> is missing the WIND file (computational region). It will be fixed now. Note that this warning may become an error in future versions."
@@ -3877,7 +3871,7 @@ msgid "Invalid user interface specified - <%s>. Use the --help option to see val
 msgstr "Interface utilisateur spécifiée invalide - <%s>. Utilisez l'option --help pour voir les noms d'interfaces valides."
 
 #: ../lib/init/grass.py:1135
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Error in GUI startup. See messages above (if any) and if necessary, please report this error to the GRASS developers.\n"
 "On systems with package manager, make sure you have the right GUI package, probably named grass-gui, installed.\n"
@@ -3886,12 +3880,6 @@ msgid ""
 "     {cmd_name} --help\n"
 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 msgstr ""
-"Erreur au démarrage de l'interface graphique. Voir le message ci-dessous et si nécessaire, merci de rapporter cette erreur aux eéveloppeurs de GRASS.\n"
-"Sur les systèmes avec un gestionnaire de paquets, assurez-vous d'avoir installé le bon paquet pour l'interface graphique, il est prObablement appelé grass-gui.\n"
-"Pour lancer GRASS en mode texte utiliser l'option -text.\n"
-"Utiliser '--help' pour plus d'options\n"
-"    {cmd_name} --help\n"
-"Voir également : https://grass.osgeo.org/{cmd_name}/manuals/help.html"
 
 #: ../lib/init/grass.py:1147
 msgid ""
@@ -4098,7 +4086,7 @@ msgid "Only one argument (e.g. EPSG) is needed for --tmp-location, mapset name <
 msgstr ""
 
 #: ../lib/init/grass.py:2120
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Unable to start GRASS GIS. You have the choice to:\n"
 " - Launch the graphical user interface with the '--gui' switch\n"
@@ -4113,27 +4101,15 @@ msgid ""
 "     {cmd_name} --help\n"
 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 msgstr ""
-"Impossible de lancer GRASS. Vous avez le choix de :\n"
-"- Lancer l'interface graphique avec l'option '-gui'\n"
-"{cmd_name} -gui\n"
-"- Lancer avec le chemin vers le secteur/jeu de cartes en argument\n"
-"{cmd_name} /chemin/vers/secteur/jeu_de_cartes\n"
-"- Créer un nouveau secteur avec '-c' et lancer dans son jeu de cartes PERMANENT\n"
-"{cmd_name} -c EPSG:nombre /chemin/vers/secteur\n"
-"{cmd_name} -c fichier_geo /chemin/vers/secteur\n"
-"- Créer manuellement le fichier GISRC ({gisrcrc})\n"
-"- Utiliser '--help' pour plus d'options\n"
-"{cmd_name} --help\n"
-"Voir également : https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 
 #: ../lib/init/grass.py:2138
 msgid "Starting GRASS GIS..."
 msgstr "Démarrage du SIG GRASS ..."
 
 #: ../lib/init/grass.py:2159
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<{0}> requested, but not available. Run GRASS in text mode (--text) or install missing package (usually 'grass-gui')."
-msgstr "<{0}> demandé, mais non disponible. Lancez GRASS en mode texte (-text) ou installez le paquet manquant (habituellement 'grass-gui')."
+msgstr ""
 
 #: ../lib/init/grass.py:2224
 #, python-format
@@ -5003,19 +4979,19 @@ msgid "Bug in UI description. Missing option key"
 msgstr ""
 
 #: ../lib/gis/parser.c:359
-#, fuzzy, c-format
+#, c-format
 msgid "Bug in UI description. Option key <%s> is not valid"
-msgstr "BUG dans les descriptions, l'option '%s' dans  <%s> n'existe pas"
+msgstr ""
 
 #: ../lib/gis/parser.c:361
-#, fuzzy, c-format
+#, c-format
 msgid "Bug in UI description. Description for option <%s> missing"
-msgstr "BUG dans les descriptions, l'option '%s' dans  <%s> n'existe pas"
+msgstr ""
 
 #: ../lib/gis/parser.c:413
-#, fuzzy, c-format
+#, c-format
 msgid "Bug in UI description. Option '%s' in <%s> does not exist"
-msgstr "BUG dans les descriptions, l'option '%s' dans  <%s> n'existe pas"
+msgstr ""
 
 #: ../lib/gis/parser.c:537
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
@@ -6469,9 +6445,8 @@ msgid "Seek offset out of range"
 msgstr "Index de recherche en dehors des limites"
 
 #: ../lib/gis/cmprzstd.c:80 ../lib/gis/cmprzstd.c:95 ../lib/gis/cmprzstd.c:169
-#, fuzzy
 msgid "GRASS needs to be compiled with ZSTD for ZSTD compression"
-msgstr "GRASS doit être compilé avec BZIP2 pour utiliser la compression BZIP2"
+msgstr ""
 
 #: ../lib/gis/cmprzstd.c:134 ../lib/gis/cmprzstd.c:196
 #, c-format
@@ -6497,9 +6472,8 @@ msgid "no description"
 msgstr "pas de description"
 
 #: ../lib/gis/color_rules.c:292
-#, fuzzy
 msgid "Unable to open color rule"
-msgstr "Impossible de charger les règles de couleurs <%s>"
+msgstr ""
 
 #: ../lib/gis/color_rules.c:341 ../lib/gis/color_rules.c:352
 #: ../lib/gis/color_rules.c:356 ../lib/gis/color_rules.c:360
@@ -6512,9 +6486,8 @@ msgid "range: %g to %g"
 msgstr ""
 
 #: ../lib/gis/color_rules.c:368
-#, fuzzy
 msgid "Unable to open color descriptions"
-msgstr "Impossible d'ouvrir %s en écriture"
+msgstr ""
 
 #: ../lib/gis/mapset_msc.c:90
 #, c-format
@@ -6590,14 +6563,14 @@ msgid "Option <%s> requires <%s>"
 msgstr "L'option <%s> nécessite <%s>"
 
 #: ../lib/gis/parser_dependencies.c:305
-#, fuzzy, c-format
+#, c-format
 msgid "Option <%s> requires all of %s"
-msgstr "L'option %s requiert toutes les options %s"
+msgstr ""
 
 #: ../lib/gis/parser_dependencies.c:332
-#, fuzzy, c-format
+#, c-format
 msgid "Option <%s> is mutually exclusive with all of %s"
-msgstr "L'option %s est mutuellement exclusive avec toutes les options %s"
+msgstr ""
 
 #: ../lib/gis/parser_dependencies.c:358
 #, c-format
@@ -7040,9 +7013,9 @@ msgid "Spatial index format version %d.%d is not supported by this release. Plea
 msgstr "La version %d.%d du format d'index spatial n'est pas supportée par cette version. Merci de reconstruire la topologie."
 
 #: ../lib/vector/diglib/plus_line.c:262 ../lib/vector/diglib/plus_line.c:302
-#, fuzzy, c-format
+#, c-format
 msgid "Attempt to delete not registered line %d from node %d"
-msgstr "Tentative de supprimer l'île %d non enregistrée de la zone %d"
+msgstr ""
 
 #: ../lib/vector/diglib/cindex_rw.c:156
 #, c-format
@@ -8812,8 +8785,8 @@ msgstr[1] "%d primitives enregistrées"
 #, c-format
 msgid "One vertex registered"
 msgid_plural "%d vertices registered"
-msgstr[0] "Un sommet enregistré"
-msgstr[1] "%d sommets enregistrés"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../lib/vector/Vlib/build_sfa.c:668
 #, c-format
@@ -9687,7 +9660,7 @@ msgstr "Coupure des polygones (passe 1 : sélection des points de coupure) ..."
 #: ../lib/vector/Vlib/break_polygons.c:286
 #: ../lib/vector/Vlib/break_polygons.c:552
 msgid "Breaking polygons (pass 2: break at selected points)..."
-msgstr "Coupure dex polygones (passe 2 : coupure aux points sélectionnés) ..."
+msgstr "Coupure des polygones (passe 2 : coupure aux points sélectionnés) ..."
 
 #: ../lib/vector/Vlib/break_polygons.c:398
 #: ../lib/vector/Vlib/break_polygons.c:650
@@ -9780,23 +9753,21 @@ msgid "Invalid zone %s specified"
 msgstr "La zone spécifiée %s est invalide"
 
 #: ../lib/proj/get_proj.c:243
-#, fuzzy
 msgid "Unable to initialise PROJ with the following parameter list:"
-msgstr "Impossible d'initialiser proj.4 avec la liste de paramètres suivants :"
+msgstr ""
 
 #: ../lib/proj/get_proj.c:252
-#, fuzzy, c-format
+#, c-format
 msgid "The PROJ error message: %s"
-msgstr "Message d'erreur: %s"
+msgstr ""
 
 #: ../lib/proj/get_proj.c:360
 msgid "Option input overflowed option table"
 msgstr "Les options d'entrée débordent les options du tableau"
 
 #: ../lib/proj/get_proj.c:388
-#, fuzzy
 msgid "Unable to initialize pj"
-msgstr "Impossible d'initialiser pj cause: %s"
+msgstr ""
 
 #: ../lib/proj/get_proj.c:396
 #, c-format
@@ -9901,33 +9872,31 @@ msgid "Input coordinate system is NULL"
 msgstr ""
 
 #: ../lib/proj/do_proj.c:104
-#, fuzzy, c-format
+#, c-format
 msgid "proj_create() failed for '%s'"
-msgstr "pj_transform() a échoué: %s"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:114
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create latlong equivalent for '%s'"
-msgstr "Impossible de créer le fichier d'histogramme pour <%s>"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:164
-#, fuzzy
 msgid "No input projection"
-msgstr "Projection inconnue"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:167 ../lib/proj/do_proj.c:336
 msgid "No transformation object"
 msgstr ""
 
 #: ../lib/proj/do_proj.c:221 ../lib/proj/do_proj.c:446
-#, fuzzy, c-format
+#, c-format
 msgid "proj_trans() failed: %s"
-msgstr "pj_transform() a échoué: %s"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:247
-#, fuzzy
 msgid "No output projection"
-msgstr "Impossible de définir la projection"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:276 ../lib/proj/do_proj.c:499
 #: ../lib/proj/do_proj.c:626 ../lib/proj/do_proj.c:790
@@ -9936,9 +9905,9 @@ msgid "pj_transform() failed: %s"
 msgstr "pj_transform() a échoué: %s"
 
 #: ../lib/proj/do_proj.c:584 ../lib/proj/do_proj.c:747
-#, fuzzy, c-format
+#, c-format
 msgid "proj_trans() failed: %d"
-msgstr "pj_transform() a échoué: %s"
+msgstr ""
 
 #: ../lib/lidar/zones.c:476 ../lib/lidar/zones.c:513
 #, c-format
@@ -10270,45 +10239,105 @@ msgstr "Impossible d'ouvrir le raster <%s>"
 msgid "Absurd polygon."
 msgstr "Polygone absurde."
 
-#~ msgid "Missing WIND file"
-#~ msgstr "Fichier WIND manquant"
+msgid "Missing WIND file"
+msgstr "Fichier WIND manquant"
 
-#~ msgid ""
-#~ "GISDBASE, LOCATION_NAME and MAPSET variables not set properly.\n"
-#~ "Interactive startup needed."
-#~ msgstr ""
-#~ "Les variables GISDBASE, LOCATION_NAME et MAPSET ne sont aps définies correctement.\n"
-#~ "Démarrage interactif nécessaire."
+msgid ""
+"GISDBASE, LOCATION_NAME and MAPSET variables not set properly.\n"
+"Interactive startup needed."
+msgstr ""
+"Les variables GISDBASE, LOCATION_NAME et MAPSET ne sont aps définies correctement.\n"
+"Démarrage interactif nécessaire."
 
-#~ msgid "BUG in option name, '%s' is not valid"
-#~ msgstr "BUG dans le nom de l'option, '%s' n'est pas valide"
+msgid "BUG in option name, '%s' is not valid"
+msgstr "BUG dans le nom de l'option, '%s' n'est pas valide"
 
-#~ msgid "Default locale settings are missing. GRASS running with C locale."
-#~ msgstr "Les paramètres de locale par défaut sont manquants. Utilisation de la locale C."
+msgid "Default locale settings are missing. GRASS running with C locale."
+msgstr "Les paramètres de locale par défaut sont manquants. Utilisation de la locale C."
 
-#~ msgid "Unable to initialise PROJ.4 with the following parameter list:"
-#~ msgstr "Impossible d'initialiser proj.4 avec la liste de paramètres suivants :"
+msgid "Unable to initialise PROJ.4 with the following parameter list:"
+msgstr "Impossible d'initialiser proj.4 avec la liste de paramètres suivants :"
 
-#~ msgid "The error message: %s"
-#~ msgstr "Message d'erreur: %s"
+msgid "The error message: %s"
+msgstr "Message d'erreur: %s"
 
-#~ msgid "Unknown compression method <%s>, using default ZLIB"
-#~ msgstr "Méthode de compression <%s> inconnue, utilisation de ZLIB par défaut"
+msgid "Unknown compression method <%s>, using default ZLIB"
+msgstr "Méthode de compression <%s> inconnue, utilisation de ZLIB par défaut"
 
-#~ msgid "No compression is not supported for GRASS raster maps, using default ZLIB"
-#~ msgstr "Aucune compression n'est pas supporté par GRASS pour les cartes raster, utilisation de ZLIB par défaut"
+msgid "No compression is not supported for GRASS raster maps, using default ZLIB"
+msgstr "Aucune compression n'est pas supporté par GRASS pour les cartes raster, utilisation de ZLIB par défaut"
 
-#~ msgid "This GRASS version does not support %s compression, using default ZLIB"
-#~ msgstr "Cette version de GRASS ne supporte pas la compression %s, utilisation de ZLB par défaut"
+msgid "This GRASS version does not support %s compression, using default ZLIB"
+msgstr "Cette version de GRASS ne supporte pas la compression %s, utilisation de ZLB par défaut"
 
-#~ msgid "BUG in descriptions, option '%s' in <%s> does not exist"
-#~ msgstr "BUG dans les descriptions, l'option '%s' dans  <%s> n'existe pas"
+msgid "BUG in descriptions, option '%s' in <%s> does not exist"
+msgstr "BUG dans les descriptions, l'option '%s' dans  <%s> n'existe pas"
 
-#~ msgid "Unable to read find raster <%s>"
-#~ msgstr "Impossible de lire le raster <%s>"
+msgid "Unable to read find raster <%s>"
+msgstr "Impossible de lire le raster <%s>"
 
-#~ msgid "Unable allocate PNG structure"
-#~ msgstr "Allocation de structure PNG impossible"
+msgid "Unable allocate PNG structure"
+msgstr "Allocation de structure PNG impossible"
+
+msgid "force removal of .gislock if exists (use with care!). Only with -text flag"
+msgstr "force la suppression de .gislock si il existe (utiliser avec précausion). Uniquement avec l'argument -text"
+
+msgid "Failed to create new location. The location <%s> already exists."
+msgstr "Échec de création du nouveau secteur. Le secteur <%s> existe déjà."
+
+msgid ""
+"Error in GUI startup. See messages above (if any) and if necessary, please report this error to the GRASS developers.\n"
+"On systems with package manager, make sure you have the right GUI package, probably named grass-gui, installed.\n"
+"To run GRASS GIS in text mode use the -text flag.\n"
+"Use '--help' for further options\n"
+"     {cmd_name} --help\n"
+"See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
+msgstr ""
+"Erreur au démarrage de l'interface graphique. Voir le message ci-dessous et si nécessaire, merci de rapporter cette erreur aux eéveloppeurs de GRASS.\n"
+"Sur les systèmes avec un gestionnaire de paquets, assurez-vous d'avoir installé le bon paquet pour l'interface graphique, il est prObablement appelé grass-gui.\n"
+"Pour lancer GRASS en mode texte utiliser l'option -text.\n"
+"Utiliser '--help' pour plus d'options\n"
+"    {cmd_name} --help\n"
+"Voir également : https://grass.osgeo.org/{cmd_name}/manuals/help.html"
+
+msgid ""
+"Unable to start GRASS GIS. You have the choice to:\n"
+" - Launch the graphical user interface with the '-gui' switch\n"
+"     {cmd_name} -gui\n"
+" - Launch with path to the location/mapset as an argument\n"
+"     {cmd_name} /path/to/location/mapset`\n"
+" - Create a location with '-c' and launch in its PERMANENT mapset\n"
+"     {cmd_name} -c EPSG:number /path/to/location\n"
+"     {cmd_name} -c geofile /path/to/location\n"
+" - Create manually the GISRC file ({gisrcrc})\n"
+" - Use '--help' for further options\n"
+"     {cmd_name} --help\n"
+"See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
+msgstr ""
+"Impossible de lancer GRASS. Vous avez le choix de :\n"
+"- Lancer l'interface graphique avec l'option '-gui'\n"
+"{cmd_name} -gui\n"
+"- Lancer avec le chemin vers le secteur/jeu de cartes en argument\n"
+"{cmd_name} /chemin/vers/secteur/jeu_de_cartes\n"
+"- Créer un nouveau secteur avec '-c' et lancer dans son jeu de cartes PERMANENT\n"
+"{cmd_name} -c EPSG:nombre /chemin/vers/secteur\n"
+"{cmd_name} -c fichier_geo /chemin/vers/secteur\n"
+"- Créer manuellement le fichier GISRC ({gisrcrc})\n"
+"- Utiliser '--help' pour plus d'options\n"
+"{cmd_name} --help\n"
+"Voir également : https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
+
+msgid "Creating new GRASS GIS location/mapset..."
+msgstr "Création d'un nouveau secteur/jeu de carte du SIG GRASS"
+
+msgid "<{0}> requested, but not available. Run GRASS in text mode (-text) or install missing package (usually 'grass-gui')."
+msgstr "<{0}> demandé, mais non disponible. Lancez GRASS en mode texte (-text) ou installez le paquet manquant (habituellement 'grass-gui')."
+
+msgid "Option %s requires all of %s"
+msgstr "L'option %s requiert toutes les options %s"
+
+msgid "Option %s is mutually exclusive with all of %s"
+msgstr "L'option %s est mutuellement exclusive avec toutes les options %s"
 
 #~ msgid ""
 #~ "Unable to fetch interface description for command '%(cmd)s'.\n"
@@ -10318,66 +10347,6 @@ msgstr "Polygone absurde."
 #~ "Impossible de récupérer la description de l'interface pour la commande '%(cmd)s'.\n"
 #~ "\n"
 #~ "Détails: %(det)s"
-
-#~ msgid "force removal of .gislock if exists (use with care!). Only with -text flag"
-#~ msgstr "force la suppression de .gislock si il existe (utiliser avec précausion). Uniquement avec l'argument -text"
-
-#~ msgid "Failed to create new location. The location <%s> already exists."
-#~ msgstr "Échec de création du nouveau secteur. Le secteur <%s> existe déjà."
-
-#~ msgid ""
-#~ "Error in GUI startup. See messages above (if any) and if necessary, please report this error to the GRASS developers.\n"
-#~ "On systems with package manager, make sure you have the right GUI package, probably named grass-gui, installed.\n"
-#~ "To run GRASS GIS in text mode use the -text flag.\n"
-#~ "Use '--help' for further options\n"
-#~ "     {cmd_name} --help\n"
-#~ "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
-#~ msgstr ""
-#~ "Erreur au démarrage de l'interface graphique. Voir le message ci-dessous et si nécessaire, merci de rapporter cette erreur aux eéveloppeurs de GRASS.\n"
-#~ "Sur les systèmes avec un gestionnaire de paquets, assurez-vous d'avoir installé le bon paquet pour l'interface graphique, il est prObablement appelé grass-gui.\n"
-#~ "Pour lancer GRASS en mode texte utiliser l'option -text.\n"
-#~ "Utiliser '--help' pour plus d'options\n"
-#~ "    {cmd_name} --help\n"
-#~ "Voir également : https://grass.osgeo.org/{cmd_name}/manuals/help.html"
-
-#~ msgid ""
-#~ "Unable to start GRASS GIS. You have the choice to:\n"
-#~ " - Launch the graphical user interface with the '-gui' switch\n"
-#~ "     {cmd_name} -gui\n"
-#~ " - Launch with path to the location/mapset as an argument\n"
-#~ "     {cmd_name} /path/to/location/mapset`\n"
-#~ " - Create a location with '-c' and launch in its PERMANENT mapset\n"
-#~ "     {cmd_name} -c EPSG:number /path/to/location\n"
-#~ "     {cmd_name} -c geofile /path/to/location\n"
-#~ " - Create manually the GISRC file ({gisrcrc})\n"
-#~ " - Use '--help' for further options\n"
-#~ "     {cmd_name} --help\n"
-#~ "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
-#~ msgstr ""
-#~ "Impossible de lancer GRASS. Vous avez le choix de :\n"
-#~ "- Lancer l'interface graphique avec l'option '-gui'\n"
-#~ "{cmd_name} -gui\n"
-#~ "- Lancer avec le chemin vers le secteur/jeu de cartes en argument\n"
-#~ "{cmd_name} /chemin/vers/secteur/jeu_de_cartes\n"
-#~ "- Créer un nouveau secteur avec '-c' et lancer dans son jeu de cartes PERMANENT\n"
-#~ "{cmd_name} -c EPSG:nombre /chemin/vers/secteur\n"
-#~ "{cmd_name} -c fichier_geo /chemin/vers/secteur\n"
-#~ "- Créer manuellement le fichier GISRC ({gisrcrc})\n"
-#~ "- Utiliser '--help' pour plus d'options\n"
-#~ "{cmd_name} --help\n"
-#~ "Voir également : https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
-
-#~ msgid "Creating new GRASS GIS location/mapset..."
-#~ msgstr "Création d'un nouveau secteur/jeu de carte du SIG GRASS"
-
-#~ msgid "<{0}> requested, but not available. Run GRASS in text mode (-text) or install missing package (usually 'grass-gui')."
-#~ msgstr "<{0}> demandé, mais non disponible. Lancez GRASS en mode texte (-text) ou installez le paquet manquant (habituellement 'grass-gui')."
-
-#~ msgid "Option %s requires all of %s"
-#~ msgstr "L'option %s requiert toutes les options %s"
-
-#~ msgid "Option %s is mutually exclusive with all of %s"
-#~ msgstr "L'option %s est mutuellement exclusive avec toutes les options %s"
 
 #~ msgid "Unable to seek"
 #~ msgstr "Recherche impossible"

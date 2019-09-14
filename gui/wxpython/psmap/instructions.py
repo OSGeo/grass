@@ -1442,7 +1442,7 @@ class Scalebar(InstructionObject):
                     else:
                         instr['scalebar'] = 'f'
                 elif line.startswith('where'):
-                    instr['where'] = map(float, line.split()[1:3])
+                    instr['where'] = list(map(float, line.split()[1:3]))
                 elif line.startswith('length'):
                     instr['length'] = float(line.split()[1])
                 elif line.startswith('units'):
@@ -1550,7 +1550,7 @@ class RasterLegend(InstructionObject):
         for line in text:
             try:
                 if line.startswith('where'):
-                    instr['where'] = map(float, line.split()[1:3])
+                    instr['where'] = list(map(float, line.split()[1:3]))
                 elif line.startswith('font '):
                     instr['font'] = line.split()[1]
                 elif line.startswith('fontsize'):
@@ -1716,7 +1716,7 @@ class VectorLegend(InstructionObject):
         for line in text:
             try:
                 if line.startswith('where'):
-                    instr['where'] = map(float, line.split()[1:3])
+                    instr['where'] = list(map(float, line.split()[1:3]))
                 elif line.startswith('font '):
                     instr['font'] = line.split()[1]
                 elif line.startswith('fontsize'):

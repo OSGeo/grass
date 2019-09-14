@@ -217,15 +217,28 @@ NDVI = (NIR - Red) / (NIR + Red)
 </pre></div>
 
 <p>
-<b>NDWI: Normalized Difference Water Index</b>
+<b>NDWI: Normalized Difference Water Index</b> (after McFeeters, 1996)
 
-(after McFeeters, 1996)
+<p>
+This index is suitable to detect water bodies.
 
 <div class="code"><pre>
 ndwi( greenchan, nirchan )
 
 NDWI = (green - NIR) / (green + NIR)
 </pre></div>
+
+<p>
+The water content of leaves can be estimated with another NDWI (after 
+Gao, 1996):
+
+<div class="code"><pre>
+ndwi( greenchan, nirchan )
+
+NDWI = (NIR - SWIR) / (NIR + SWIR)
+</pre></div>
+
+This index is important for monitoring vegetation health (not implemented).
 
 <p>
 <b>PVI: Perpendicular Vegetation Index</b>
@@ -340,10 +353,12 @@ r.univar -e gemi
 
 <h3>Calculation of GVI</h3>
 
-The calculation of GVI from the reflectance values is done as follows:
+The calculation of GVI (Green Vegetation Index - Tasseled Cap) from the
+reflectance values is done as follows:
 
 <div class="code"><pre>
 g.region raster=band.3 -p
+# assuming Landsat-7
 i.vi blue=band.1 green=band.2 red=band.3 nir=band.4 band5=band.5 band7=band.7 viname=gvi output=gvi
 r.univar -e gvi
 </pre></div>

@@ -52,6 +52,29 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         self.reset(ident)
         self.map_counter = 0
 
+        # SpaceTimeRasterDataset related only
+        self.band_reference = None
+
+    def get_name(self, band_reference=True):
+        """Get dataset name including band reference filter if enabled.
+
+        :param bool band_reference: True to return dataset name
+        including band reference filter if defined
+        (eg. "landsat.L8_1") otherwise dataset name is returned only
+        (eg. "landsat").
+
+        :return str: dataset name
+
+        """
+        dataset_name = super(AbstractSpaceTimeDataset, self).get_name()
+
+        if band_reference and self.band_reference:
+            return '{}.{}'.format(
+                dataset_name, self.band_reference
+            )
+
+        return dataset_name
+
     def create_map_register_name(self):
         """Create the name of the map register table of this space time
             dataset
@@ -1447,6 +1470,68 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return obj_list
 
+    def _update_where_statement_by_band_reference(self, where):
+        """Update given SQL WHERE statement by band reference.
+
+        Call this method only when self.band_reference is defined.
+
+        :param str where: SQL WHERE statement to be updated
+
+        :return: updated SQL WHERE statement
+        """
+        def leading_zero(value):
+            try:
+                if value.startswith('0'):
+                    return value.lstrip('0')
+                else:
+                    return '{0:02d}'.format(int(value))
+            except ValueError:
+                return value
+
+            return None
+
+        # initialized WHERE statement
+        if where:
+            where += " AND "
+        else:
+            where = ""
+
+        # be case-insensitive
+        if '_' in self.band_reference:
+            # fully-qualified band reference
+            where += "band_reference IN ('{}'".format(
+                self.band_reference.upper()
+            )
+
+            # be zero-padding less sensitive
+            shortcut, identifier = self.band_reference.split('_', -1)
+            identifier_zp = leading_zero(identifier)
+            if identifier_zp:
+                where += ", '{fl}_{zp}'".format(
+                    fl=shortcut.upper(),
+                    zp=identifier_zp.upper()
+                )
+
+            # close WHERE statement
+            where += ')'
+        else:
+            # shortcut or band identifier given
+            shortcut_identifier = leading_zero(self.band_reference)
+            if shortcut_identifier:
+                where += "{br} LIKE '{si}\_%' {esc} OR {br} LIKE '%\_{si}' {esc} OR " \
+                    "{br} LIKE '{orig}\_%' {esc} OR {br} LIKE '%\_{orig}' {esc}".format(
+                        br="band_reference",
+                        si=shortcut_identifier,
+                        orig=self.band_reference.upper(),
+                        esc="ESCAPE '\\'"
+                )
+            else:
+                where += "band_reference = '{}'".format(
+                    self.band_reference
+                )
+
+        return where
+
     def get_registered_maps(self, columns=None, where=None, order=None,
                             dbif=None):
         """Return SQL rows of all registered maps.
@@ -1484,6 +1569,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             else:
                 sql = "SELECT * FROM %s  WHERE %s.id IN (SELECT id FROM %s)" % \
                       (map_view, map_view, self.get_map_register())
+
+            # filter by band reference identifier
+            if self.band_reference:
+                where = self._update_where_statement_by_band_reference(where)
 
             if where is not None and where != "":
                 sql += " AND (%s)" % (where.split(";")[0])

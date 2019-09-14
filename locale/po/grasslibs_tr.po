@@ -272,9 +272,9 @@ msgid "Unable to read range file for <%s>"
 msgstr ""
 
 #: ../lib/raster/range.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read stats file for <%s>"
-msgstr "<%s> için aralık dosyası açılamıyor"
+msgstr ""
 
 #: ../lib/raster/range.c:368 ../lib/raster/range.c:374
 #: ../lib/raster/range.c:406 ../lib/raster/range.c:420
@@ -284,9 +284,9 @@ msgstr ""
 
 #: ../lib/raster/range.c:450 ../lib/raster/range.c:464
 #: ../lib/raster/range.c:482 ../lib/raster/range.c:487
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write stats file for <%s>"
-msgstr "<%s> için aralık dosyası açılamıyor"
+msgstr ""
 
 #: ../lib/raster/raster_metadata.c:109
 #, c-format
@@ -652,9 +652,9 @@ msgid "Unable to create dependency file in <%s@%s>"
 msgstr ""
 
 #: ../lib/raster/vrt.c:83
-#, fuzzy, c-format
+#, c-format
 msgid "Tile raster map <%s> not found"
-msgstr "<%s> 3B raster haritası bulunamadı"
+msgstr ""
 
 #: ../lib/raster/vrt.c:86
 msgid "A virtual raster can not contain itself"
@@ -1125,9 +1125,8 @@ msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
 msgstr ""
 
 #: ../lib/ogsf/gsd_img_ppm.c:96
-#, fuzzy
 msgid "Unable to write view"
-msgstr "Veritanı bağlantısı yazılamıyor"
+msgstr ""
 
 #: ../lib/ogsf/gsd_legend.c:246
 #, c-format
@@ -3667,9 +3666,9 @@ msgid "The APPDATA variable points to directory which does not exist, ask your o
 msgstr ""
 
 #: ../lib/init/grass.py:444
-#, fuzzy, python-format
+#, python-format
 msgid "Failed to create configuration directory '%s' with error: %s"
-msgstr "'%s' dizini '%s' olarak yeniden adlandırılamıyor"
+msgstr ""
 
 #: ../lib/init/grass.py:487
 #, python-format
@@ -6348,9 +6347,8 @@ msgid "no description"
 msgstr ""
 
 #: ../lib/gis/color_rules.c:292
-#, fuzzy
 msgid "Unable to open color rule"
-msgstr "%s okuma için açılamıyor"
+msgstr ""
 
 #: ../lib/gis/color_rules.c:341 ../lib/gis/color_rules.c:352
 #: ../lib/gis/color_rules.c:356 ../lib/gis/color_rules.c:360
@@ -6363,9 +6361,8 @@ msgid "range: %g to %g"
 msgstr ""
 
 #: ../lib/gis/color_rules.c:368
-#, fuzzy
 msgid "Unable to open color descriptions"
-msgstr "%s yazma için açılamıyor"
+msgstr ""
 
 #: ../lib/gis/mapset_msc.c:90
 #, c-format
@@ -6827,11 +6824,11 @@ msgstr ""
 
 #: ../lib/db/dbmi_base/error.c:91
 msgid "dbmi: Protocol error"
-msgstr ""
+msgstr "dbmi: Protokol hatası"
 
 #: ../lib/db/dbmi_base/error.c:136
 msgid "dbmi: Out of Memory"
-msgstr ""
+msgstr "dbmi: Yetersiz Bellek"
 
 #: ../lib/db/dbmi_base/error.c:149
 #, c-format
@@ -9584,23 +9581,21 @@ msgid "Invalid zone %s specified"
 msgstr "%s geçersiz zonu belirlendi"
 
 #: ../lib/proj/get_proj.c:243
-#, fuzzy
 msgid "Unable to initialise PROJ with the following parameter list:"
-msgstr "Takip eden parametreler,  PROJ.4 ile başlamak için yetersiz:"
+msgstr ""
 
 #: ../lib/proj/get_proj.c:252
-#, fuzzy, c-format
+#, c-format
 msgid "The PROJ error message: %s"
-msgstr "Hata mesajı:%s"
+msgstr ""
 
 #: ../lib/proj/get_proj.c:360
 msgid "Option input overflowed option table"
 msgstr ""
 
 #: ../lib/proj/get_proj.c:388
-#, fuzzy
 msgid "Unable to initialize pj"
-msgstr "<%s> katmanı açılamıyor"
+msgstr ""
 
 #: ../lib/proj/get_proj.c:396
 #, c-format
@@ -9710,14 +9705,13 @@ msgid "proj_create() failed for '%s'"
 msgstr ""
 
 #: ../lib/proj/do_proj.c:114
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create latlong equivalent for '%s'"
-msgstr "<%s> tablosu oluşturulamıyor"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:164
-#, fuzzy
 msgid "No input projection"
-msgstr "Bilinmeyen projeksiyon"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:167 ../lib/proj/do_proj.c:336
 msgid "No transformation object"
@@ -9729,9 +9723,8 @@ msgid "proj_trans() failed: %s"
 msgstr ""
 
 #: ../lib/proj/do_proj.c:247
-#, fuzzy
 msgid "No output projection"
-msgstr "Bilinmeyen projeksiyon"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:276 ../lib/proj/do_proj.c:499
 #: ../lib/proj/do_proj.c:626 ../lib/proj/do_proj.c:790
@@ -9837,8 +9830,8 @@ msgstr "Geçersiz renk adı"
 msgid "Example: income < 1000 and inhab >= 10000"
 msgstr "Örnek:  income < 1000 and inhab >= 10000"
 
-#~ msgid "Unable to initialise PROJ.4 with the following parameter list:"
-#~ msgstr "Takip eden parametreler,  PROJ.4 ile başlamak için yetersiz:"
+msgid "Unable to initialise PROJ.4 with the following parameter list:"
+msgstr "Takip eden parametreler,  PROJ.4 ile başlamak için yetersiz:"
 
-#~ msgid "The error message: %s"
-#~ msgstr "Hata mesajı:%s"
+msgid "The error message: %s"
+msgstr "Hata mesajı:%s"

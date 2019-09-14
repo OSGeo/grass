@@ -390,14 +390,14 @@ class ScrolledPanel(SP.ScrolledPanel):
         pass
 
 
-class NumTextCtrl(wx.TextCtrl):
+class NumTextCtrl(TextCtrl):
     """Class derived from wx.TextCtrl for numerical values only"""
 
     def __init__(self, parent, **kwargs):
         ##        self.precision = kwargs.pop('prec')
-        wx.TextCtrl.__init__(self, parent=parent,
-                             validator=NTCValidator(flag='DIGIT_ONLY'),
-                             **kwargs)
+        TextCtrl.__init__(self, parent=parent,
+                          validator=NTCValidator(flag='DIGIT_ONLY'),
+                          **kwargs)
 
     def SetValue(self, value):
         super(NumTextCtrl, self).SetValue(str(value))
@@ -1034,10 +1034,7 @@ class GListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin,
 
         idx = 0
         for item in data:
-            if wxPythonPhoenix:
-                index = self.InsertItem(idx, str(item[0]))
-            else:
-                index = self.InsertStringItem(idx, str(item[0]))
+            index = self.InsertStringItem(idx, str(item[0]))
             for i in range(1, self.GetColumnCount()):
                 self.SetStringItem(index, i, item[i])
             idx += 1

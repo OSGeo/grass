@@ -89,6 +89,16 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
     first_input = open_old_stds(input_name_list[0], type, dbif)
 
+    # skip sampling when only one dataset specified (with different
+    # band filters)
+    input_name_list_uniq = []
+    for input_name in input_name_list:
+        ds = open_old_stds(input_name, type, dbif)
+        ds_name = ds.get_name(band_reference=False)
+        if ds_name not in input_name_list_uniq:
+            input_name_list_uniq.append(ds_name)
+    do_sampling = len(input_name_list_uniq) > 1
+
     # All additional inputs in reverse sorted order to avoid
     # wrong name substitution
     input_name_list = input_name_list[1:]
@@ -110,10 +120,11 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
     map_matrix = []
     id_list = []
     sample_map_list = []
-    # First entry is the first dataset id
-    id_list.append(first_input.get_name())
 
-    if len(input_list) > 0:
+    if len(input_list) > 0 and do_sampling:
+        # First entry is the first dataset id
+        id_list.append(first_input.get_name())
+
         has_samples = False
         for dataset in input_list:
             list = dataset.sample_by_dataset(stds=first_input,
@@ -163,21 +174,26 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
             map_matrix.append(copy.copy(map_name_list))
 
             id_list.append(dataset.get_name())
+
     else:
-        list = first_input.get_registered_maps_as_objects(dbif=dbif)
+        input_list.insert(0, first_input)
+        for dataset in input_list:
+            list = dataset.get_registered_maps_as_objects(dbif=dbif)
 
-        if list is None:
-            dbif.close()
-            msgr.message(_("No maps registered in input dataset"))
-            return 0
+            if list is None:
+                dbif.close()
+                msgr.message(_("No maps registered in input dataset"))
+                return 0
 
-        map_name_list = []
-        for map in list:
-            map_name_list.append(map.get_name())
-            sample_map_list.append(map)
+            map_name_list = []
+            for map in list:
+                map_name_list.append(map.get_name())
+                sample_map_list.append(map)
 
-        # Attach the map names
-        map_matrix.append(copy.copy(map_name_list))
+            # Attach the map names
+            map_matrix.append(copy.copy(map_name_list))
+
+            id_list.append(dataset.get_name())
 
     # Needed for map registration
     map_list = []

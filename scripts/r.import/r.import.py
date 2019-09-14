@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ############################################################################
 #
@@ -132,11 +132,14 @@ from grass.exceptions import CalledModuleError
 # initialize global vars
 TMPLOC = None
 SRCGISRC = None
+TGTGISRC = None
 GISDBASE = None
 TMP_REG_NAME = None
 
 
 def cleanup():
+    if TGTGISRC:
+        os.environ['GISRC'] = str(TGTGISRC)
     # remove temp location
     if TMPLOC:
         grass.try_rmdir(os.path.join(GISDBASE, TMPLOC))
@@ -149,7 +152,7 @@ def cleanup():
 
 
 def main():
-    global TMPLOC, SRCGISRC, GISDBASE, TMP_REG_NAME
+    global TMPLOC, SRCGISRC, TGTGISRC, GISDBASE, TMP_REG_NAME
 
     GDALdatasource = options['input']
     output = options['output']
@@ -203,7 +206,7 @@ def main():
 
     tgtmapset = grassenv['MAPSET']
     GISDBASE = grassenv['GISDBASE']
-    tgtgisrc = os.environ['GISRC']
+    TGTGISRC = os.environ['GISRC']
     SRCGISRC = grass.tempfile()
 
     TMPLOC = 'temp_import_location_' + str(os.getpid())
@@ -262,7 +265,7 @@ def main():
             grass.fatal(_("Input contains GCPs, rectification is required"))
 
     # switch to target location
-    os.environ['GISRC'] = str(tgtgisrc)
+    os.environ['GISRC'] = str(TGTGISRC)
 
     region = grass.region()
 
@@ -319,6 +322,9 @@ def main():
         try:
             grass.run_command('v.proj', input=vreg, output=vreg,
                               location=tgtloc, mapset=tgtmapset, quiet=True)
+            # test if v.proj created a valid area
+            if grass.vector_info_topo(vreg)['areas'] != 1:
+                rass.fatal(_("Please check the 'extent' parameter"))
         except CalledModuleError:
             grass.fatal(_("Unable to reproject to source location"))
 
@@ -335,7 +341,7 @@ def main():
         grass.run_command('g.remove', type='vector', name=vreg,
                           flags='f', quiet=True)
 
-        os.environ['GISRC'] = str(tgtgisrc)
+        os.environ['GISRC'] = str(TGTGISRC)
         grass.run_command('g.remove', type='vector', name=vreg,
                           flags='f', quiet=True)
 

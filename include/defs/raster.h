@@ -35,6 +35,12 @@ int Rast__check_for_auto_masking(void);
 void Rast_suppress_masking(void);
 void Rast_unsuppress_masking(void);
 
+/* bands.c */
+int Rast_has_band_reference(const char *, const char *);
+int Rast_read_band_reference(const char *, const char *, char **, char **);
+int Rast_write_band_reference(const char *, const char *, const char *);
+int Rast_remove_band_reference(const char *);
+
 /* cats.c */
 int Rast_read_cats(const char *, const char *, struct Categories *);
 int Rast_read_vector_cats(const char *, const char *, struct Categories *);

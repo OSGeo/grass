@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     struct line_cats *Cats;
     struct ilist *BList;
     char *desc;
-    int verbose;
+    int verbose, overwrite;
 
     struct field_info *Fi = NULL;
     int table_type;
@@ -146,6 +146,8 @@ int main(int argc, char *argv[])
     
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    overwrite = G_check_overwrite(argc, argv);
 
     for (input = 0; input < 2; input++) {
 	type[input] = Vect_option_to_types(type_opt[input]);
@@ -247,6 +249,20 @@ int main(int argc, char *argv[])
 			  Fi->database, Fi->driver);
 	}
         db_set_error_handler_driver(driver);
+	if (db_table_exists(Fi->driver,
+			    Vect_subst_var(Fi->database, &Out),
+			    Fi->table)) {
+	    if (overwrite) {
+                G_warning(_("Table <%s> already exists and will be overwritten"),
+                          Fi->table);
+		db_set_string(&stmt, Fi->table);
+		db_drop_table(driver, &stmt);
+	    }
+	    else {
+		G_fatal_error(_("Table <%s> already exists, use '%s'"),
+			      Fi->table, "--overwrite");
+	    }
+	}
     }
     else {
 	driver = NULL;

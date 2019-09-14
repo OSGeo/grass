@@ -29,7 +29,7 @@ from core.gcmd import RunCommand, GError
 from core.debug import Debug
 from core.settings import UserSettings
 from gui_core.wrap import SpinCtrl, Button, StaticText, \
-    StaticBox, Menu
+    StaticBox, Menu, ListCtrl
 
 
 class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
@@ -554,7 +554,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         return True
 
 
-class CategoryListCtrl(wx.ListCtrl,
+class CategoryListCtrl(ListCtrl,
                        listmix.ListCtrlAutoWidthMixin,
                        listmix.TextEditMixin):
 
@@ -563,7 +563,7 @@ class CategoryListCtrl(wx.ListCtrl,
         """List of layers/categories"""
         self.parent = parent
 
-        wx.ListCtrl.__init__(self, parent, id, pos, size, style)
+        ListCtrl.__init__(self, parent, id, pos, size, style)
 
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         listmix.TextEditMixin.__init__(self)
@@ -775,7 +775,7 @@ class VDigitDuplicatesDialog(wx.Dialog):
 
 
 class CheckListFeature(
-        wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCtrlMixin):
+        ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCtrlMixin):
 
     def __init__(self, parent, data,
                  pos=wx.DefaultPosition, log=None):
@@ -784,8 +784,7 @@ class CheckListFeature(
         self.parent = parent
         self.data = data
 
-        wx.ListCtrl.__init__(self, parent, wx.ID_ANY,
-                             style=wx.LC_REPORT)
+        ListCtrl.__init__(self, parent, wx.ID_ANY, style=wx.LC_REPORT)
 
         listmix.CheckListCtrlMixin.__init__(self)
 

@@ -201,7 +201,7 @@ def shutil_which(cmd, mode=os.F_OK | os.X_OK, path=None):
             # we assume that PATHEXT contains always '.py'
             pathext.insert(0, '.py')
         # See if the given file matches any of the expected path extensions.
-        # This will allow us to short circuit when given "python.exe".
+        # This will allow us to short circuit when given "python3.exe".
         # If it does match, only test that one, otherwise we have to try
         # others.
         if any(cmd.lower().endswith(ext) for ext in pathext):
@@ -261,6 +261,12 @@ def get_real_command(cmd):
         # so, lets remove extension
         if os.path.splitext(cmd)[1] == '.py':
             cmd = cmd[:-3]
+        # PATHEXT is necessary to check on Windows (force lowercase)
+        pathext = list(map(lambda x: x.lower(),
+                           os.environ['PATHEXT'].split(os.pathsep)))
+        if '.py' not in pathext:
+            # we assume that PATHEXT contains always '.py'
+            os.environ['PATHEXT'] = '.py;' + os.environ['PATHEXT']
         full_path = shutil_which(cmd + '.py')
         if full_path:
             return full_path
@@ -800,7 +806,7 @@ def parser():
     "flags" are Python booleans.
 
     Overview table of parser standard options:
-    https://grass.osgeo.org/grass77/manuals/parser_standard_options.html
+    https://grass.osgeo.org/grass79/manuals/parser_standard_options.html
     """
     if not os.getenv("GISBASE"):
         print("You must be in GRASS GIS to run this program.", file=sys.stderr)

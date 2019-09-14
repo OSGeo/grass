@@ -40,7 +40,7 @@ from gui_core.gselect import Select, ElementSelect
 from gmodeler.model import *
 from lmgr.menudata import LayerManagerMenuData
 from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl, \
-    Menu
+    Menu, ListCtrl
 
 from grass.script import task as gtask
 
@@ -577,7 +577,7 @@ class ModelLoopDialog(ModelItemDialog):
 
         cond = dialog.GetDSeries()
         if not cond:
-            cond = 'map in %s' % map(lambda x: str(x), dialog.GetMapLayers())
+            cond = 'map in {}'.format(list(map(str, dialog.GetMapLayers())))
 
         self.condText.SetValue(cond)
 
@@ -671,7 +671,7 @@ class ModelConditionDialog(ModelItemDialog):
                 'else': self.itemListElse.GetItems()}
 
 
-class ModelListCtrl(wx.ListCtrl,
+class ModelListCtrl(ListCtrl,
                     listmix.ListCtrlAutoWidthMixin,
                     listmix.TextEditMixin):
 
@@ -686,7 +686,7 @@ class ModelListCtrl(wx.ListCtrl,
         self.frame = frame
         self.columnNotEditable = columnsNotEditable
 
-        wx.ListCtrl.__init__(self, parent, id=id, style=style, **kwargs)
+        ListCtrl.__init__(self, parent, id=id, style=style, **kwargs)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         listmix.TextEditMixin.__init__(self)
 

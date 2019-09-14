@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Shellscript to verify r.solute.transport calculation, this calculation is based on
 # the example 1.1 and 1.2 at page 175 of the following book:
 #	title = "Str{\"o}mungs und Transportmodellierung",

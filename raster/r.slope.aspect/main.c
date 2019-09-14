@@ -439,7 +439,7 @@ int main(int argc, char *argv[])
        |________|________|________|          
        |c4      |c5      |c6      |
        |        |        |        |
-       |  east  | ns_med |  west  |
+       |  west  | ns_med |  east  |
        |        |        |        |
        |________|________|________|
        |c7      |c8      |c9      |
@@ -589,7 +589,7 @@ int main(int argc, char *argv[])
 	    west = Rast_col_to_easting(0.5, &window);
 	    V = G_distance(east, north, east, south) * 4 / (factor * zfactor);
 	    H = G_distance(east, ns_med, west, ns_med) * 4 / (factor * zfactor);
-	    /*        ____________________________
+	    /* ____________________________
 	       |c1      |c2      |c3      |
 	       |        |        |        |
 	       |        |  north |        |        
@@ -597,7 +597,7 @@ int main(int argc, char *argv[])
 	       |________|________|________|          
 	       |c4      |c5      |c6      |
 	       |        |        |        |
-	       |  east  | ns_med |  west  |
+	       |  west  | ns_med |  east  |
 	       |        |        |        |
 	       |________|________|________|
 	       |c7      |c8      |c9      |

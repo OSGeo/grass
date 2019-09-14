@@ -20,7 +20,7 @@ import grass.lib.raster as libraster
 #
 from grass.pygrass import utils
 from grass.pygrass.gis.region import Region
-from grass.pygrass.errors import must_be_open
+from grass.pygrass.errors import must_be_open, must_be_in_current_mapset
 from grass.pygrass.shell.conversion import dict2html
 from grass.pygrass.shell.show import raw_figure
 
@@ -156,6 +156,53 @@ class Info(object):
     def mtype(self):
         return RTYPE_STR[libraster.Rast_map_type(self.name, self.mapset)]
 
+    def _get_band_reference(self):
+        """Get band reference identifier.
+
+        :return str: band identifier (eg. S2_1) or None
+        """
+        band_ref = None
+        p_filename = ctypes.c_char_p()
+        p_band_ref = ctypes.c_char_p()
+        ret = libraster.Rast_read_band_reference(self.name, self.mapset,
+                                                 ctypes.byref(p_filename),
+                                                 ctypes.byref(p_band_ref))
+        if ret:
+            band_ref = utils.decode(p_band_ref.value)
+            libgis.G_free(p_filename)
+            libgis.G_free(p_band_ref)
+
+        return band_ref
+
+    @must_be_in_current_mapset
+    def _set_band_reference(self, band_reference):
+        """Set/Unset band reference identifier.
+
+        :param str band_reference: band reference to assign or None to remove (unset)
+        """
+        if band_reference:
+            # assign
+            from grass.bandref import BandReferenceReader, BandReferenceReaderError
+            reader = BandReferenceReader()
+            # determine filename (assuming that band_reference is unique!)
+            try:
+                filename = reader.find_file(band_reference)
+            except BandReferenceReaderError as e:
+                fatal("{}".format(e))
+                raise
+            if not filename:
+                fatal("Band reference <{}> not found".format(band_reference))
+                raise
+
+            # write band reference
+            libraster.Rast_write_band_reference(self.name,
+                                                filename,
+                                                band_reference)
+        else:
+            libraster.Rast_remove_band_reference(self.name)
+
+    band_reference = property(fget=_get_band_reference, fset=_set_band_reference)
+
     def _get_units(self):
         return libraster.Rast_read_units(self.name, self.mapset)
 
@@ -224,6 +271,12 @@ class RasterAbstractBase(object):
         ..
         """
         self.mapset = mapset
+        if not mapset:
+            # note that @must_be_in_current_mapset requires mapset to be set
+            mapset = libgis.G_find_raster(name, mapset)
+            if mapset is not None:
+                self.mapset = utils.decode(mapset)
+
         self._name = name
         # Private attribute `_fd` that return the file descriptor of the map
         self._fd = None

@@ -161,6 +161,10 @@ int G_asprintf(char **, const char *, ...)
 int G_rasprintf(char **, size_t *,const char *, ...)
     __attribute__ ((format(printf, 3, 4)));
 
+/* bands.c */
+int G__read_band_reference(FILE *, struct Key_Value **);
+int G__write_band_reference(FILE *, const char *, const char *);
+
 /* basename.c */
 char *G_basename(char *, const char *);
 size_t G_get_num_decimals(const char *);
