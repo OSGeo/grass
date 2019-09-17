@@ -328,15 +328,21 @@ def register_maps_in_space_time_dataset(
                                      increment=increment, mult=count,
                                      interval=interval)
 
-        # Set the band reference
-        if band_reference:
-            # Band reference defined in input file
-            # -> update raster metadata
-            # -> write band identifier to GRASS data base
-            map.set_band_reference(band_reference)
+        # Set band reference (only raster type supported)
+        if type == "rast" or type == "raster":
+            # Set the band reference
+            if band_reference:
+                # Band reference defined in input file
+                # -> update raster metadata
+                # -> write band identifier to GRASS data base
+                map.set_band_reference(band_reference)
+            else:
+                # Try to read band reference from GRASS data base if defined
+                map.read_band_reference_from_grass()
         else:
-            # Try to read band reference from GRASS data base if defined
-            map.read_band_reference_from_grass()
+            if band_reference:
+                msgr.warning(_("Band references can be assigned only to raster maps. "
+                               "Type <%s> is not supported") % (type))
 
         if is_in_db:
             #  Gather the SQL update statement
