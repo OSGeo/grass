@@ -341,7 +341,7 @@ def register_maps_in_space_time_dataset(
                 map.read_band_reference_from_grass()
         else:
             if band_reference:
-                msgr.warning(_("Band references can be assigned only to raster maps. "
+                msgr.warning(_("Band references can only be assigned to raster maps"
                                "Type <%s> is not supported") % (type))
 
         if is_in_db:
