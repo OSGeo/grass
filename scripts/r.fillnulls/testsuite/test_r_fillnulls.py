@@ -15,7 +15,7 @@ class TestRFillNulls(TestCase):
     """Test r.fillnulls script"""
 
     module_dir = os.path.dirname(os.path.dirname(__file__))
-    module = os.path.join(module_dir, 'r.fillnulls.py')
+    module = os.path.join(module_dir, 'r.fillnulls')
     mapName = 'elevation'
     expression = 'elevation_filt = if(elevation > 130, \
     null(), elevation)'
