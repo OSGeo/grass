@@ -27,6 +27,14 @@ from core.globalvar import gtk3, wxPythonPhoenix
 if wxPythonPhoenix:
     import wx.adv
 
+if wxPythonPhoenix:
+    ComboPopup = wx.ComboPopup
+    wxComboCtrl = wx.ComboCtrl
+else:
+    import wx.combo
+    ComboPopup = wx.combo.ComboPopup
+    wxComboCtrl = wx.combo.ComboCtrl
+
 
 def BitmapFromImage(image, depth=-1):
     if wxPythonPhoenix:
@@ -453,3 +461,13 @@ class ColourSelect(csel.ColourSelect):
             csel.ColourSelect.SetToolTip(self, tipString=tip)
         else:
             csel.ColourSelect.SetToolTipString(self, tip)
+
+class ComboCtrl(wxComboCtrl):
+    def __init__(self, *args, **kwargs):
+        wxComboCtrl.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            wxComboCtrl.SetToolTip(self, tipString=tip)
+        else:
+            wxComboCtrl.SetToolTipString(self, tip)
