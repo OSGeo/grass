@@ -37,6 +37,7 @@ import string
 import six
 from math import ceil
 from time import strftime, localtime
+from io import open
 
 import wx
 import grass.script as grass
@@ -135,7 +136,7 @@ class Instruction:
         self.filename = filename
         # open file
         try:
-            file = open(filename, 'r')
+            file = open(filename, encoding='Latin_1', errors='ignore')
         except IOError:
             GError(message=_("Unable to open file\n%s") % filename)
             return
@@ -926,24 +927,6 @@ class Text(InstructionObject):
                 string.Template("    xoffset $xoffset\n    yoffset $yoffset\n"). substitute(
                     self.instruction))
         instr += "    end"
-        try:
-            instr = instr.encode('latin1')
-        except UnicodeEncodeError as err:
-            try:
-                pos = str(err).split('position')[1].split(':')[0].strip()
-            except IndexError:
-                pos = ''
-            if pos:
-                message = _("Characters on position %s are not supported "
-                            "by ISO-8859-1 (Latin 1) encoding "
-                            "which is required by module ps.map.") % pos
-            else:
-                message = _("Not all characters are supported "
-                            "by ISO-8859-1 (Latin 1) encoding "
-                            "which is required by module ps.map.")
-            GMessage(message=message)
-            return ''
-
         return instr
 
     def Read(self, instruction, text, **kwargs):
@@ -963,7 +946,7 @@ class Text(InstructionObject):
                         instr['XY'] = False
                         instr['east'], instr['north'] = float(e), float(n)
 
-                    instr['text'] = line.split(None, 3)[3].decode('latin_1')
+                    instr['text'] = line.split(None, 3)[3]
 
                 elif sub == 'font':
                     instr['font'] = line.split(None, 1)[1]
@@ -1996,23 +1979,6 @@ class VProperties(InstructionObject):
             "    label $label\n    lpos $lpos\n").substitute(dic)
 
         vInstruction += "    end"
-        try:
-            vInstruction = vInstruction.encode('Latin_1')
-        except UnicodeEncodeError as err:
-            try:
-                pos = str(err).split('position')[1].split(':')[0].strip()
-            except IndexError:
-                pos = ''
-            if pos:
-                message = _("Characters on position %s are not supported "
-                            "by ISO-8859-1 (Latin 1) encoding "
-                            "which is required by module ps.map.") % pos
-            else:
-                message = _("Not all characters are supported "
-                            "by ISO-8859-1 (Latin 1) encoding "
-                            "which is required by module ps.map.")
-            GMessage(message=message)
-            return ''
         return vInstruction
 
     def Read(self, instruction, text, **kwargs):
@@ -2106,7 +2072,7 @@ class VProperties(InstructionObject):
             if line.startswith('lpos'):
                 instr['lpos'] = int(line.split()[1])
             elif line.startswith('label'):
-                instr['label'] = line.split(None, 1)[1].decode('latin_1')
+                instr['label'] = line.split(None, 1)[1]
             elif line.startswith('layer'):
                 instr['layer'] = line.split()[1]
             elif line.startswith('masked'):
