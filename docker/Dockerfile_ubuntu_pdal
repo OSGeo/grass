@@ -243,7 +243,7 @@ ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:$GISBASE/lib"
 ADD testdata/test_grass_session.py /scripts
 ADD testdata/simple.laz /tmp
 # simple test: just scan the LAZ file
-/usr/bin/python3 /scripts/test_grass_session.py
+RUN /usr/bin/python3 /scripts/test_grass_session.py
 
 WORKDIR /grassdb
 VOLUME /grassdb
