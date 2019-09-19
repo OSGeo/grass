@@ -52,13 +52,6 @@ import six
 import wx
 
 from core import globalvar
-if globalvar.wxPythonPhoenix:
-    ComboPopup = wx.ComboPopup
-    ComboCtrl = wx.ComboCtrl
-else:
-    import wx.combo
-    ComboPopup = wx.combo.ComboPopup
-    ComboCtrl = wx.combo.ComboCtrl
 import wx.lib.buttons as buttons
 import wx.lib.filebrowsebutton as filebrowse
 
@@ -79,7 +72,7 @@ from core.settings import UserSettings
 from core.debug import Debug
 from gui_core.vselect import VectorSelectBase
 from gui_core.wrap import TreeCtrl, Button, StaticText, StaticBox, \
-    TextCtrl, Panel
+    TextCtrl, Panel, ComboPopup, ComboCtrl
 
 from grass.pydispatch.signal import Signal
 
