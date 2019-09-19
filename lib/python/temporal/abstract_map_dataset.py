@@ -1054,6 +1054,25 @@ class AbstractMapDataset(AbstractDataset):
 
         return statement
 
+    def read_band_reference_from_grass(self):
+        """Read the band identifier of this map from the map metadata
+           in the GRASS file system based spatial database and
+           set the internal band identifier that should be insert/updated
+           in the temporal database.
+
+           Currently only implemented in RasterDataset. Otherwise
+           silently pass.
+        """
+        pass
+
+    def set_band_reference(self, band_reference):
+        """Set band reference identifier
+
+           Currently only implemented in RasterDataset. Otherwise
+           report a warning.
+        """
+        self.msgr.warning(_("Band references can only be assigned to raster maps"))
+
 ###############################################################################
 
 if __name__ == "__main__":
