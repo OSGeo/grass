@@ -190,7 +190,7 @@ char *get_pj_type_string(PJ *pj)
 
     switch (proj_get_type(pj)) {
     case PJ_TYPE_UNKNOWN:
-	G_asprintf(&pj_type, "unkown");
+	G_asprintf(&pj_type, "unknown");
 	break;
     case PJ_TYPE_ELLIPSOID:
 	G_asprintf(&pj_type, "ellipsoid");
@@ -244,7 +244,7 @@ char *get_pj_type_string(PJ *pj)
 	G_asprintf(&pj_type, "compound crs");
 	break;
     case PJ_TYPE_TEMPORAL_CRS:
-	G_asprintf(&pj_type, "temporal");
+	G_asprintf(&pj_type, "temporal crs");
 	break;
     case PJ_TYPE_ENGINEERING_CRS:
 	G_asprintf(&pj_type, "engineering crs");
@@ -435,8 +435,8 @@ int GPJ_init_transform(const struct pj_info *info_in,
 
 	/* remove any +towgs84/+nadgrids clause, see above
 	 * does not always remove +towgs84=0.000,0.000,0.000 ??? */
-	G_debug(0, "source proj string: %s", info_in->def);
-	G_debug(0, "source type: %s", get_pj_type_string(info_in->pj));
+	G_debug(1, "source proj string: %s", info_in->def);
+	G_debug(1, "source type: %s", get_pj_type_string(info_in->pj));
 	indefcrs = info_in->def;
 	source_crs = proj_get_source_crs(NULL, info_in->pj);
 	if (source_crs) {
@@ -445,15 +445,15 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	    projstr = proj_as_proj_string(NULL, source_crs, PJ_PROJ_5, NULL);
 	    if (projstr) {
 		indefcrs = G_store(projstr);
-		G_debug(0, "Input CRS definition converted from '%s' to '%s'",
+		G_debug(1, "Input CRS definition converted from '%s' to '%s'",
 		        info_in->def, indefcrs);
 	    }
 	    proj_destroy(source_crs);
 	    source_crs = NULL;
 	}
 
-	G_debug(0, "target proj string: %s", info_out->def);
-	G_debug(0, "target type: %s", get_pj_type_string(info_out->pj));
+	G_debug(1, "target proj string: %s", info_out->def);
+	G_debug(1, "target type: %s", get_pj_type_string(info_out->pj));
 	outdefcrs = info_out->def;
 	target_crs = proj_get_source_crs(NULL, info_out->pj);
 	if (target_crs) {
@@ -462,7 +462,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	    projstr = proj_as_proj_string(NULL, target_crs, PJ_PROJ_5, NULL);
 	    if (projstr) {
 		outdefcrs = G_store(projstr);
-		G_debug(0, "Output CRS definition converted from '%s' to '%s'",
+		G_debug(1, "Output CRS definition converted from '%s' to '%s'",
 		        info_out->def, outdefcrs);
 	    }
 	    proj_destroy(target_crs);
