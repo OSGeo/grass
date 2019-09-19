@@ -1232,7 +1232,7 @@ class MapFramePanel(wx.Panel):
 
                 self.select.SetElementList(type=stype)
                 self.mapText.SetLabel(self.mapOrRegionText[0])
-                self.select.SetToolTipString(
+                self.select.SetToolTip(
                     _("Region is set to match this map,\nraster or vector map must be added later"))
 
             if scaleType == 1:
@@ -1244,7 +1244,7 @@ class MapFramePanel(wx.Panel):
                 stype = 'region'
                 self.select.SetElementList(type=stype)
                 self.mapText.SetLabel(self.mapOrRegionText[1])
-                self.select.SetToolTipString("")
+                self.select.SetToolTip("")
 
             for each in self.mapSizer.GetChildren():
                 each.GetWindow().Enable()
@@ -2230,8 +2230,8 @@ class VPropertiesDialog(PsmapDialog):
                 "Database connection is not defined in DB file."))
         text = StaticText(panel, id=wx.ID_ANY, label=_("Select layer:"))
         self.layerChoice = wx.Choice(
-            panel, id=wx.ID_ANY, choices=map(
-                str, self.layers), size=self.spinCtrlSize)
+            panel, id=wx.ID_ANY, choices=[str(each) for each in self.layers],
+            size=self.spinCtrlSize)
 
         self.layerChoice.SetStringSelection(self.currLayer)
 

@@ -243,7 +243,25 @@ class PsMapFrame(wx.Frame):
     def InstructionFile(self):
         """Creates mapping instructions"""
 
-        return str(self.instruction)
+        text = str(self.instruction)
+        try:
+            text = text.encode('Latin_1')
+        except UnicodeEncodeError as err:
+            try:
+                pos = str(err).split('position')[1].split(':')[0].strip()
+            except IndexError:
+                pos = ''
+            if pos:
+                message = _("Characters on position %s are not supported "
+                            "by ISO-8859-1 (Latin 1) encoding "
+                            "which is required by module ps.map.") % pos
+            else:
+                message = _("Not all characters are supported "
+                            "by ISO-8859-1 (Latin 1) encoding "
+                            "which is required by module ps.map.")
+            GMessage(message=message)
+            return ''
+        return text
 
     def OnPSFile(self, event):
         """Generate PostScript"""
@@ -282,8 +300,11 @@ class PsMapFrame(wx.Frame):
     def PSFile(self, filename=None, pdf=False):
         """Create temporary instructions file and run ps.map with output = filename"""
         instrFile = grass.tempfile()
-        instrFileFd = open(instrFile, mode='w')
-        instrFileFd.write(self.InstructionFile())
+        instrFileFd = open(instrFile, mode='wb')
+        content = self.InstructionFile()
+        if not content:
+            return
+        instrFileFd.write(content)
         instrFileFd.flush()
         instrFileFd.close()
 
@@ -470,8 +491,11 @@ class PsMapFrame(wx.Frame):
         filename = self.getFile(
             wildcard="*.psmap|*.psmap|Text file(*.txt)|*.txt|All files(*.*)|*.*")
         if filename:
-            instrFile = open(filename, "w")
-            instrFile.write(self.InstructionFile())
+            instrFile = open(filename, "wb")
+            content = self.InstructionFile()
+            if not content:
+                return
+            instrFile.write(content)
             instrFile.close()
 
     def OnLoadFile(self, event):
@@ -928,8 +952,11 @@ class PsMapFrame(wx.Frame):
     def getInitMap(self):
         """Create default map frame when no map is selected, needed for coordinates in map units"""
         instrFile = grass.tempfile()
-        instrFileFd = open(instrFile, mode='w')
-        instrFileFd.write(self.InstructionFile())
+        instrFileFd = open(instrFile, mode='wb')
+        content = self.InstructionFile()
+        if not content:
+            return
+        instrFileFd.write(content)
         instrFileFd.flush()
         instrFileFd.close()
 
