@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-# osgeo4w-setup -g -k -a x86_64 -q -P gdal proj geos fftw libjpeg liblas-devel libpng libpq libtiff libxdr pdcurses regex-devel sqlite3 zstd-devel zstd laszip2
+# osgeo4w-setup -g -k -a x86_64 -q -P gdal-dev proj-dev geos fftw libjpeg liblas-devel libpng libpq libtiff libxdr pdcurses regex-devel sqlite3 zstd-devel zstd laszip2
 
 set -e
 
@@ -65,6 +65,7 @@ fetchenv() {
 
 fetchenv $OSGEO4W_ROOT_MSYS/bin/o4w_env.bat
 fetchenv $OSGEO4W_ROOT_MSYS/bin/py3_env.bat
+fetchenv $OSGEO4W_ROOT_MSYS/bin/gdal-dev-env.bat
 
 ! [ -f $OSGEO4W_ROOT_MSYS/etc/ini/msys.bat.off ] || mv $OSGEO4W_ROOT_MSYS/etc/ini/msys.bat.off $OSGEO4W_ROOT_MSYS/etc/ini/msys.bat
 
@@ -171,7 +172,6 @@ cp -uv $DLLS dist.$conf_host/bin
 
 mkdir -p mswindows/osgeo4w/lib
 cp -uv $OSGEO4W_ROOT_MSYS/lib/libpq.lib mswindows/osgeo4w/lib/pq.lib
-cp -uv $OSGEO4W_ROOT_MSYS/lib/proj_i.lib mswindows/osgeo4w/lib/proj.lib
 cp -uv $OSGEO4W_ROOT_MSYS/lib/sqlite3_i.lib mswindows/osgeo4w/lib/sqlite3.lib
 
 if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
@@ -199,9 +199,9 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-fftw \
 		--with-freetype \
 		--with-freetype-includes=/mingw${MINGW_POSTFIX}/include/freetype2 \
-		--with-proj-share=$OSGEO4W_ROOT_MSYS/share/proj \
-		--with-proj-includes=$OSGEO4W_ROOT_MSYS/include \
-		--with-proj-libs=$PWD/mswindows/osgeo4w/lib \
+		--with-proj-share=$OSGEO4W_ROOT_MSYS/apps/proj-dev/share/proj \
+		--with-proj-includes=$OSGEO4W_ROOT_MSYS/apps/proj-dev/include \
+		--with-proj-libs=$OSGEO4W_ROOT_MSYS/apps/proj-dev/lib \
 		--with-postgres \
 		--with-postgres-includes=$OSGEO4W_ROOT_MSYS/include \
 		--with-postgres-libs=$PWD/mswindows/osgeo4w/lib \

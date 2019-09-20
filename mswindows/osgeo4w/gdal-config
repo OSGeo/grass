@@ -1,10 +1,10 @@
 #!/bin/sh
 
 
-CONFIG_LIBS="$OSGEO4W_ROOT_MSYS/lib/gdal_i.lib"
+CONFIG_LIBS="$OSGEO4W_ROOT_MSYS/apps/gdal-dev/lib/gdal_i.lib"
 CONFIG_DEP_LIBS="$OSGEO4W_ROOT_MSYS/lib/libpng13.lib $OSGEO4W_ROOT_MSYS/lib/zlib.lib"
 CONFIG_PREFIX="$OSGEO4W_ROOT_MSYS"
-CONFIG_CFLAGS="-I$OSGEO4W_ROOT_MSYS/include"
+CONFIG_CFLAGS="-I$OSGEO4W_ROOT_MSYS/apps/gdal-dev/include -I$OSGEO4W_ROOT_MSYS/include"
 CONFIG_OGR_ENABLED=yes
 usage()
 {
