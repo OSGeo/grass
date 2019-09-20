@@ -240,11 +240,10 @@ ENV GRASSBIN "/usr/local/bin/grass"
 ENV PYTHONPATH "${PYTHONPATH}:$GISBASE/etc/python/"
 ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:$GISBASE/lib"
 
-## deactivated test as it fails on https://cloud.docker.com (works locally)
-#ADD testdata/test_grass_session.py /scripts
-#ADD testdata/simple.laz /tmp
-## simple test: just scan the LAZ file
-#RUN /usr/bin/python3 /scripts/test_grass_session.py
+ADD testdata/test_grass_session.py /scripts
+ADD testdata/simple.laz /tmp
+# simple test: just scan the LAZ file
+RUN /usr/bin/python3 /scripts/test_grass_session.py
 
 WORKDIR /grassdb
 VOLUME /grassdb
