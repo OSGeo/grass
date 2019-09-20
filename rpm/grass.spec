@@ -7,7 +7,7 @@
 
 Name:		grass
 Version:	7.8.0
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
 
 %if 0%{?rhel}
@@ -56,8 +56,11 @@ BuildRequires:	postgresql-devel
 %else
 BuildRequires:	libpq-devel
 %endif
-BuildRequires:  proj-devel
-%if (0%{?fedora} < 30)
+BuildRequires:	proj-devel
+%if (0%{?fedora} >= 30)
+BuildRequires:	proj-datumgrid
+BuildRequires:	proj-datumgrid-world
+%else
 BuildRequires:	proj-epsg
 BuildRequires:	proj-nad
 %endif
@@ -91,7 +94,10 @@ BuildRequires:	libzstd-devel
 Requires:	libzstd
 
 Requires:	geos
-%if (0%{?fedora} < 30)
+%if (0%{?fedora} >= 30)
+Requires:	proj-datumgrid
+Requires:	proj-datumgrid-world
+%else
 Requires:	proj-epsg
 Requires:	proj-nad
 %endif
@@ -240,11 +246,11 @@ do
 done
 
 # create symlink to unversioned name
-ln -s %{name}%{shortver} %{buildroot}%{_bindir}/%{name}
+ln -s %{_bindir}/%{name}%{shortver} %{buildroot}%{_bindir}/%{name}
 
 # symlink docs from GISBASE to standard system location
 mkdir -p %{buildroot}%{_docdir}
-# append shortver to destination ? man pages are unversioned
+# append shortver to destination since man pages are unversioned
 ln -s %{_libdir}/%{name}%{shortver}/docs %{buildroot}%{_docdir}/%{name}%{shortver}
 
 # Make desktop, appdata and icon files available on the system
@@ -322,6 +328,10 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
+* Fri Sep 20 2019 Markus Neteler <neteler@mundialis.de> - 7.8.0-3
+- added missing proj-datumgrid and proj-datumgrid-world for >= F30
+- fix create symlink to unversioned name
+
 * Sat Sep 14 2019 Elliot C. Lee <elliot.c.lee@gmail.com> - 7.8.0-2
 - patch for upstream package and SPEC file
 
