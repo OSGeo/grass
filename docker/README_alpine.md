@@ -11,7 +11,7 @@ $ sudo docker build --build-arg GRASS_VERSION=7.9 \
                     --build-arg PYTHON_VERSION=3  \
                     --build-arg PROJ_VERSION=5.2.0 \
                     --build-arg PROJ_DATUMGRID_VERSION=1.8 \
-                    .
+                    --file Dockerfile_alpine .
 ```
 
 View the images available using `sudo docker images` and open a bash terminal with:
