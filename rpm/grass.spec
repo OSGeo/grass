@@ -240,7 +240,7 @@ do
 done
 
 # create symlink to unversioned name
-ln -s %{name}%{shortver} %{buildroot}%{_bindir}/%{name}
+ln -s %{_bindir}/%{name}%{shortver} %{buildroot}%{_bindir}/%{name}
 
 # symlink docs from GISBASE to standard system location
 mkdir -p %{buildroot}%{_docdir}
