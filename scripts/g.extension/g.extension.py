@@ -964,46 +964,48 @@ def install_private_extension_xml(url, mlist):
                 tnode = node
                 break
 
-        # create new node for task
-        tnode = etree.Element('task', attrib={'name': name})
-        dnode = etree.Element('description')
-        dnode.text = desc
-        tnode.append(dnode)
-        knode = etree.Element('keywords')
-        knode.text = (',').join(keywords)
-        tnode.append(knode)
+        if tnode == None:
+            # create new node for task
+            tnode = etree.Element('task', attrib={'name': name})
+            dnode = etree.Element('description')
+            dnode.text = desc
+            tnode.append(dnode)
+            knode = etree.Element('keywords')
+            knode.text = (',').join(keywords)
+            tnode.append(knode)
 
-        # create binary
-        bnode = etree.Element('binary')
-        list_of_binary_files = []
-        for file_name in os.listdir(url):
-            file_type = os.path.splitext(file_name)[-1]
-            file_n = os.path.splitext(file_name)[0]
-            html_path = os.path.join(options['prefix'], 'docs', 'html')
-            c_path = os.path.join(options['prefix'], 'bin')
-            py_path = os.path.join(options['prefix'], 'scripts')
-            # html or image file
-            if file_type in ['.html', '.jpg', '.png'] \
-                    and file_n in os.listdir(html_path):
-                list_of_binary_files.append(os.path.join(html_path, file_name))
-            # c file
-            elif file_type in ['.c'] and file_name in os.listdir(c_path):
-                list_of_binary_files.append(os.path.join(c_path, file_n))
-            # python file
-            elif file_type in ['.py'] and file_name in os.listdir(py_path):
-                list_of_binary_files.append(os.path.join(py_path, file_n))
-        # man file
-        man_path = os.path.join(options['prefix'], 'docs', 'man', 'man1')
-        if name + '.1' in os.listdir(man_path):
-            list_of_binary_files.append(os.path.join(man_path, name + '.1'))
-        # add binaries to xml file
-        for binary_file_name in list_of_binary_files:
-            fnode = etree.Element('file')
-            fnode.text = binary_file_name
-            bnode.append(fnode)
-        tnode.append(bnode)
-        tree.append(tnode)
-
+            # create binary
+            bnode = etree.Element('binary')
+            list_of_binary_files = []
+            for file_name in os.listdir(url):
+                file_type = os.path.splitext(file_name)[-1]
+                file_n = os.path.splitext(file_name)[0]
+                html_path = os.path.join(options['prefix'], 'docs', 'html')
+                c_path = os.path.join(options['prefix'], 'bin')
+                py_path = os.path.join(options['prefix'], 'scripts')
+                # html or image file
+                if file_type in ['.html', '.jpg', '.png'] \
+                        and file_n in os.listdir(html_path):
+                    list_of_binary_files.append(os.path.join(html_path, file_name))
+                # c file
+                elif file_type in ['.c'] and file_name in os.listdir(c_path):
+                    list_of_binary_files.append(os.path.join(c_path, file_n))
+                # python file
+                elif file_type in ['.py'] and file_name in os.listdir(py_path):
+                    list_of_binary_files.append(os.path.join(py_path, file_n))
+            # man file
+            man_path = os.path.join(options['prefix'], 'docs', 'man', 'man1')
+            if name + '.1' in os.listdir(man_path):
+                list_of_binary_files.append(os.path.join(man_path, name + '.1'))
+            # add binaries to xml file
+            for binary_file_name in list_of_binary_files:
+                fnode = etree.Element('file')
+                fnode.text = binary_file_name
+                bnode.append(fnode)
+            tnode.append(bnode)
+            tree.append(tnode)
+        else:
+            grass.warning("Addons extist in metadata file; not updated!")
     write_xml_modules(xml_file, tree)
 
     return mlist
