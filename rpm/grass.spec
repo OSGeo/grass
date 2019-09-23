@@ -7,7 +7,7 @@
 
 Name:		grass
 Version:	7.9.0
-Release:	3%{?dist}
+Release:	4%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
 
 %if 0%{?rhel}
@@ -90,7 +90,9 @@ BuildRequires:	sqlite-devel
 BuildRequires:	subversion
 BuildRequires:	unixODBC-devel
 BuildRequires:	zlib-devel
+BuildRequires:	bzip2-devel
 BuildRequires:	libzstd-devel
+Requires:	bzip2-libs
 Requires:	libzstd
 
 Requires:	geos
@@ -195,6 +197,7 @@ CXXFLAGS="-std=c++98 ${CFLAGS}"
 	--with-postgres-includes=%{_includedir}/pgsql \
 	--with-cairo-ldflags=-lfontconfig \
 	--with-freetype-includes=%{_includedir}/freetype2 \
+	--with-bzlib \
 	--with-zstd \
 	--with-proj-share=%{_datadir}/proj
 
@@ -328,6 +331,9 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
+* Mon Sep 23 2019 Markus Metz <metz@mundialis.de> - 7.8.0-4
+- enable bzip2 compression
+
 * Fri Sep 20 2019 Markus Neteler <neteler@mundialis.de> - 7.8.0-3
 - added missing proj-datumgrid and proj-datumgrid-world for >= F30
 - fix create symlink to unversioned name
