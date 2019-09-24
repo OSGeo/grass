@@ -12,6 +12,10 @@ ARG PDAL_VERSION=1.8.0
 ARG PROJ_VERSION=4.9.3
 ARG PROJ_DATUMGRID_VERSION=1.8
 ARG LAZ_PERF_VERSION=1.3.0
+ARG SOURCE_GIT_URL=https://github.com
+ARG SOURCE_GIT_REMOTE=OSGeo
+ARG SOURCE_GIT_REPO=grass
+ARG SOURCE_GIT_BRANCH=master
 
 SHELL ["/bin/bash", "-c"]
 
@@ -154,10 +158,6 @@ RUN wget \
     make install
 
 # download grass gis source from git
-ARG SOURCE_GIT_URL=https://github.com
-ARG SOURCE_GIT_REMOTE=OSGeo
-ARG SOURCE_GIT_REPO=grass
-ARG SOURCE_GIT_BRANCH=master
 WORKDIR /src
 # TODO change to COPY
 ADD https://api.github.com/repos/$SOURCE_GIT_REMOTE/$SOURCE_GIT_REPO/git/refs/heads/$SOURCE_GIT_BRANCH version.json
