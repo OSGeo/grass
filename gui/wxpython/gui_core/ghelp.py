@@ -9,7 +9,7 @@ Classes:
  - ghelp::HelpWindow
  - ghelp::HelpPanel
 
-(C) 2008-2015 by the GRASS Development Team
+(C) 2008-2019 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -155,7 +155,7 @@ class AboutWindow(wx.Frame):
                           flag=wx.ALIGN_RIGHT)
 
         infoGridSizer.Add(HyperLinkCtrl(parent=infoTxt, id=wx.ID_ANY,
-                                        label='http://grass.osgeo.org'),
+                                        label='https://grass.osgeo.org'),
                           pos=(row, 1),
                           flag=wx.ALIGN_LEFT)
 
@@ -165,8 +165,9 @@ class AboutWindow(wx.Frame):
                           pos=(row, 0),
                           flag=wx.ALIGN_RIGHT)
 
-        infoGridSizer.Add(StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                     label=vInfo.get('revision', '?')),
+        infoGridSizer.Add(HyperLinkCtrl(parent=infoTxt, id=wx.ID_ANY,
+                                        label=vInfo.get('revision', '?'),
+                                        URL='https://github.com/OSGeo/grass.git'),
                           pos=(row, 1),
                           flag=wx.ALIGN_LEFT)
 
