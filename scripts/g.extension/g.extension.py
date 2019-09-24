@@ -1005,7 +1005,7 @@ def install_private_extension_xml(url, mlist):
             tnode.append(bnode)
             tree.append(tnode)
         else:
-            grass.warning("Addons extist in metadata file; not updated!")
+            grass.warning("Addons already exist in metadata file; not updated!")
     write_xml_modules(xml_file, tree)
 
     return mlist
