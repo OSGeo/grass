@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM debian:10.1
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Bettge"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,bettge@mundialis.de"
@@ -9,7 +9,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ARG GRASS_VERSION=7.8
 ARG GRASS_SHORT_VERSION=78
 ARG PDAL_VERSION=1.8.0
-ARG PROJ_VERSION=4.9.3
+ARG PROJ_VERSION=5.2.0
 ARG PROJ_DATUMGRID_VERSION=1.8
 ARG LAZ_PERF_VERSION=1.3.0
 ARG SOURCE_GIT_URL=https://github.com
@@ -33,7 +33,6 @@ RUN apt-get update && apt-get upgrade -y && \
     gcc \
     gdal-bin \
     git \
-    language-pack-en-base \
     libbz2-dev \
     libcairo2 \
     libcairo2-dev \
@@ -86,10 +85,10 @@ RUN echo LANG="en_US.UTF-8" > /etc/default/locale
 
 ## install the latest projection library for GRASS GIS
 WORKDIR /src
-RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz && \
-    tar xzvf proj-${PROJ_VERSION}.tar.gz && \
+RUN wget -q http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz && \
+    tar xzf proj-${PROJ_VERSION}.tar.gz && \
     cd /src/proj-${PROJ_VERSION}/ && \
-    wget http://download.osgeo.org/proj/proj-datumgrid-${PROJ_DATUMGRID_VERSION}.zip && \
+    wget -q http://download.osgeo.org/proj/proj-datumgrid-${PROJ_DATUMGRID_VERSION}.zip && \
     cd nad && \
     unzip ../proj-datumgrid-${PROJ_DATUMGRID_VERSION}.zip && \
     cd .. && \
@@ -100,7 +99,7 @@ RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz && \
 ## install laz-perf
 RUN apt-get install cmake
 WORKDIR /src
-RUN wget https://github.com/hobu/laz-perf/archive/${LAZ_PERF_VERSION}.tar.gz -O laz-perf-${LAZ_PERF_VERSION}.tar.gz && \
+RUN wget -q https://github.com/hobu/laz-perf/archive/${LAZ_PERF_VERSION}.tar.gz -O laz-perf-${LAZ_PERF_VERSION}.tar.gz && \
     tar -zxf laz-perf-${LAZ_PERF_VERSION}.tar.gz && \
     cd laz-perf-${LAZ_PERF_VERSION} && \
     mkdir build && \
@@ -113,22 +112,22 @@ RUN wget https://github.com/hobu/laz-perf/archive/${LAZ_PERF_VERSION}.tar.gz -O 
 WORKDIR /src
 RUN mkdir vdatum && \
     cd vdatum && \
-    wget http://download.osgeo.org/proj/vdatum/usa_geoid2012.zip && unzip -j -u usa_geoid2012.zip -d /usr/share/proj; \
-    wget http://download.osgeo.org/proj/vdatum/usa_geoid2009.zip && unzip -j -u usa_geoid2009.zip -d /usr/share/proj; \
-    wget http://download.osgeo.org/proj/vdatum/usa_geoid2003.zip && unzip -j -u usa_geoid2003.zip -d /usr/share/proj; \
-    wget http://download.osgeo.org/proj/vdatum/usa_geoid1999.zip && unzip -j -u usa_geoid1999.zip -d /usr/share/proj; \
-    wget http://download.osgeo.org/proj/vdatum/vertcon/vertconc.gtx && mv vertconc.gtx /usr/share/proj; \
-    wget http://download.osgeo.org/proj/vdatum/vertcon/vertcone.gtx && mv vertcone.gtx /usr/share/proj; \
-    wget http://download.osgeo.org/proj/vdatum/vertcon/vertconw.gtx && mv vertconw.gtx /usr/share/proj; \
-    wget http://download.osgeo.org/proj/vdatum/egm96_15/egm96_15.gtx && mv egm96_15.gtx /usr/share/proj; \
-    wget http://download.osgeo.org/proj/vdatum/egm08_25/egm08_25.gtx && mv egm08_25.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2012.zip && unzip -j -u usa_geoid2012.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2009.zip && unzip -j -u usa_geoid2009.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2003.zip && unzip -j -u usa_geoid2003.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid1999.zip && unzip -j -u usa_geoid1999.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertconc.gtx && mv vertconc.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertcone.gtx && mv vertcone.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertconw.gtx && mv vertconw.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/egm96_15/egm96_15.gtx && mv egm96_15.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/egm08_25/egm08_25.gtx && mv egm08_25.gtx /usr/share/proj; \
     cd .. && \
     rm -rf vdatum
 
 ## install pdal
 ENV NUMTHREADS=4
 WORKDIR /src
-RUN wget \
+RUN wget -q \
  https://github.com/PDAL/PDAL/releases/download/${PDAL_VERSION}/PDAL-${PDAL_VERSION}-src.tar.gz && \
     tar xfz PDAL-${PDAL_VERSION}-src.tar.gz && \
     cd /src/PDAL-${PDAL_VERSION}-src && \
