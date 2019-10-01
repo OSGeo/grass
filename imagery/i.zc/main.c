@@ -37,11 +37,11 @@ int main(int argc, char *argv[])
     CELL *cell_row;
     float Width;
 
-    int i, j;			/* Loop control variables */
+    size_t i, j;			/* Loop control variables */
     int or, oc;			/* Original dimensions of image */
     int rows, cols;		/* Smallest powers of 2 >= number of rows & columns */
-    int size;			/* the length of one side */
-    long totsize;		/* the Total number of data points */
+    size_t size;			/* the length of one side */
+    size_t totsize;		/* the Total number of data points */
     double *data[2];		/* Data structure containing real & complex values of FFT */
     struct GModule *module;
     struct Option *input_map, *output_map, *width, *threshold, *orientations;
@@ -135,6 +135,13 @@ int main(int argc, char *argv[])
     totsize = size * size;
 
     G_message(_("Power 2 values : %d rows %d columns"), rows, cols);
+    /* for del2g() below, size * size must fit into a 32bit signed integer
+     * max value of a 32bit signed integer is 2^31 - 1
+     * size, being a power of 2, must thus be not larger than 
+     * 2^15 because 2^16 * 2^16 = 2^32 > 2^31 - 1 */
+    if (size > 32768)
+	G_fatal_error(_("The computational region is too large. "
+	                "Please reduce the number of rows and/or columns to <= 32768."));
 
     /* Allocate appropriate memory for the structure containing
        the real and complex components of the FFT.  DATA[0] will
