@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("resample"));
+    G_add_keyword(_("nearest neighbor"));
     module->description =
 	_("GRASS raster map layer data resampling capability.");
 
