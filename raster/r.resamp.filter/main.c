@@ -395,6 +395,18 @@ int main(int argc, char *argv[])
     G_add_keyword(_("resample"));
     G_add_keyword(_("kernel filter"));
     G_add_keyword(_("filter"));
+    G_add_keyword(_("convolution"));
+    G_add_keyword(_("FIR"));
+    G_add_keyword(_("bartlett"));
+    G_add_keyword(_("blackman"));
+    G_add_keyword(_("box"));
+    G_add_keyword(_("gauss"));
+    G_add_keyword(_("hamming"));
+    G_add_keyword(_("hann"));
+    G_add_keyword(_("hermite"));
+    G_add_keyword(_("lanczos"));
+    G_add_keyword(_("sinc"));
+
     module->description =
 	_("Resamples raster map layers using an analytic kernel.");
 
