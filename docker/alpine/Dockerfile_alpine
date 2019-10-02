@@ -230,13 +230,16 @@ RUN pip install grass-session
 # set GRASSBIN
 ENV GRASSBIN="/usr/local/bin/grass"
 
-# =====================
+# ===========================
 # TEST grass-session and PDAL
-# =====================
-#ADD testdata/test_grass_session.py /scripts
-#ADD testdata/simple.laz /tmp
+# ===========================
+
+WORKDIR /tmp
+RUN wget -q https://raw.githubusercontent.com/OSGeo/grass/master/docker/testdata/simple.laz -O simple.laz
+WORKDIR /scripts
+RUN wget -q https://raw.githubusercontent.com/OSGeo/grass/master/docker/testdata/test_grass_session.py -O test_grass_session.py
 ## just scan the LAZ file
-#RUN /usr/bin/python3 /scripts/test_grass_session.py
+RUN /usr/bin/python3 /scripts/test_grass_session.py
 
 # ========
 # FINALIZE
