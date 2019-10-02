@@ -1,6 +1,6 @@
 # Docker GRASS GIS (Debian linux)
 
-Dockerfile with an [Alpine Linux](https://www.debian.org/) image with [GRASS GIS](https://grass.osgeo.org/), [PDAL](https://pdal.io) support and [grass-session](https://github.com/zarch/grass-session/).
+Dockerfile with an [Debian Linux](https://www.debian.org/) image with [GRASS GIS](https://grass.osgeo.org/), [PDAL](https://pdal.io) support and [grass-session](https://github.com/zarch/grass-session/).
 
 Download size of this image is of approximately 2.6 GB.
 
