@@ -21,6 +21,7 @@ ENV GRASS_CONFIG="\
       --with-cxx \
       --with-proj --with-proj-share=/usr/share/proj \
       --with-gdal \
+      --with-pdal \
       --with-python \
       --with-geos \
       --with-sqlite \
@@ -66,6 +67,7 @@ ENV PACKAGES="\
       geos \
       gnutls \
       gtk+3.0 \
+      laszip \
       libbz2 \
       libjpeg-turbo \
       libpng \
@@ -74,6 +76,7 @@ ENV PACKAGES="\
       ncurses \
       openjpeg \
       openblas \
+      pdal \
       py3-numpy \
       py3-pillow \
       py3-six \
@@ -99,12 +102,14 @@ ENV PACKAGES="\
       geos-dev \
       gnutls-dev \
       gtk+3.0-dev \
+      laszip-dev \
       libc6-compat \
       libjpeg-turbo-dev \
       libpng-dev \
       make \
       openjpeg-dev \
       openblas-dev \
+      pdal-dev \
       postgresql-dev \
       python3-dev \
       py3-numpy-dev \
@@ -154,15 +159,15 @@ RUN echo "Install main packages";\
     # compile wxPython, unfortunately there is no Alpine package (yet) - compilation is slow, though!
     $PYTHONBIN -m pip install -U pathlib2 wxPython && \
     #
-    # install the latest projection library for GRASS GIS
+    # install the latest (and compatible) projection library for GRASS GIS
     #
     echo "Install PROJ-$PROJ_VERSION";\
-    echo "  => Dowload proj-$PROJ_VERSION";\
-    wget http://download.osgeo.org/proj/proj-$PROJ_VERSION.tar.gz && \
+    echo "  => Downloading proj-$PROJ_VERSION";\
+    wget -q http://download.osgeo.org/proj/proj-$PROJ_VERSION.tar.gz && \
     tar xzvf proj-$PROJ_VERSION.tar.gz && \
     cd /src/proj-$PROJ_VERSION/ && \
-    echo "  => Dowload datumgrid-$PROJ_DATUMGRID_VERSION" &&\
-    wget http://download.osgeo.org/proj/proj-datumgrid-$PROJ_DATUMGRID_VERSION.zip && \
+    echo "  => Downloading datumgrid-$PROJ_DATUMGRID_VERSION" &&\
+    wget -q http://download.osgeo.org/proj/proj-datumgrid-$PROJ_DATUMGRID_VERSION.zip && \
     cd nad && \
     unzip ../proj-datumgrid-$PROJ_DATUMGRID_VERSION.zip && \
     cd .. && \
@@ -177,8 +182,8 @@ RUN echo "Install main packages";\
     # Checkout and install GRASS GIS
     #
     echo "Install GRASS GIS";\
-    echo "  => Dowload grass-$GRASS_VERSION";\
-    wget https://grass.osgeo.org/grass`echo $GRASS_VERSION | tr -d .`/source/snapshot/grass-$GRASS_VERSION.git_src_snapshot_latest.tar.gz && \
+    echo "  => Downloading grass-$GRASS_VERSION";\
+    wget -q https://grass.osgeo.org/grass`echo $GRASS_VERSION | tr -d .`/source/snapshot/grass-$GRASS_VERSION.git_src_snapshot_latest.tar.gz && \
     # unpack source code package and remove tarball archive:
     mkdir /src/grass_build && \
     tar xfz grass-$GRASS_VERSION.git_src_snapshot_latest.tar.gz --strip=1 -C /src/grass_build && \
@@ -235,6 +240,18 @@ RUN pip install grass-session
 # set GRASSBIN
 ENV GRASSBIN="/usr/local/bin/grass"
 
+# ===========================
+# TEST grass-session and PDAL
+# ===========================
+
+WORKDIR /tmp
+RUN wget -q https://raw.githubusercontent.com/OSGeo/grass/master/docker/testdata/simple.laz -O simple.laz
+WORKDIR /scripts
+RUN wget -q https://raw.githubusercontent.com/OSGeo/grass/master/docker/testdata/test_grass_session.py -O test_grass_session.py
+## just scan the LAZ file
+# TODO: fix test
+#RUN /usr/bin/python3 /scripts/test_grass_session.py
+
 # ========
 # FINALIZE
 # ========
@@ -248,7 +265,7 @@ VOLUME /grassdb
 ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     LC_ALL="en_US.UTF-8"
 
-# debug
-RUN $GRASSBIN --config svn_revision version
+# show installed version
+RUN $GRASSBIN --tmp-location EPSG:4326 --exec g.version -rge
 
 CMD [$GRASSBIN, "--version"]

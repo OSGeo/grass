@@ -57,6 +57,7 @@ RUN apt-get update && apt-get upgrade -y && \
     libsqlite3-dev \
     libtiff-dev \
     libzstd-dev \
+    locales \
     make \
     mesa-common-dev \
     moreutils \
@@ -79,8 +80,7 @@ RUN apt-get update && apt-get upgrade -y && \
     vim \
     wget \
     zip \
-    zlib1g-dev \
-    locales
+    zlib1g-dev
 
 RUN echo LANG="en_US.UTF-8" > /etc/default/locale
 RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
@@ -241,11 +241,12 @@ ENV GRASSBIN "/usr/local/bin/grass"
 ENV PYTHONPATH "${PYTHONPATH}:$GISBASE/etc/python/"
 ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:$GISBASE/lib"
 
-## TODO check path
-#ADD testdata/test_grass_session.py /scripts
-#ADD testdata/simple.laz /tmp
-## simple test: just scan the LAZ file
-#RUN /usr/bin/python3 /scripts/test_grass_session.py
+WORKDIR /tmp
+RUN wget -q https://raw.githubusercontent.com/OSGeo/grass/master/docker/testdata/simple.laz -O simple.laz
+WORKDIR /scripts
+RUN wget -q https://raw.githubusercontent.com/OSGeo/grass/master/docker/testdata/test_grass_session.py -O test_grass_session.py
+## just scan the LAZ file
+RUN /usr/bin/python3 /scripts/test_grass_session.py
 
 WORKDIR /grassdb
 VOLUME /grassdb

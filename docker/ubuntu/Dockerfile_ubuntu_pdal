@@ -88,10 +88,10 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
 
 ## install the latest projection library for GRASS GIS
 WORKDIR /src
-RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz && \
-    tar xzvf proj-${PROJ_VERSION}.tar.gz && \
+RUN wget -q http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz && \
+    tar xzf proj-${PROJ_VERSION}.tar.gz && \
     cd /src/proj-${PROJ_VERSION}/ && \
-    wget http://download.osgeo.org/proj/proj-datumgrid-${PROJ_DATUMGRID_VERSION}.zip && \
+    wget -q http://download.osgeo.org/proj/proj-datumgrid-${PROJ_DATUMGRID_VERSION}.zip && \
     cd nad && \
     unzip ../proj-datumgrid-${PROJ_DATUMGRID_VERSION}.zip && \
     cd .. && \
@@ -102,7 +102,7 @@ RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz && \
 ## install laz-perf
 RUN apt-get install cmake
 WORKDIR /src
-RUN wget https://github.com/hobu/laz-perf/archive/${LAZ_PERF_VERSION}.tar.gz -O laz-perf-${LAZ_PERF_VERSION}.tar.gz && \
+RUN wget -q https://github.com/hobu/laz-perf/archive/${LAZ_PERF_VERSION}.tar.gz -O laz-perf-${LAZ_PERF_VERSION}.tar.gz && \
     tar -zxf laz-perf-${LAZ_PERF_VERSION}.tar.gz && \
     cd laz-perf-${LAZ_PERF_VERSION} && \
     mkdir build && \
@@ -115,22 +115,22 @@ RUN wget https://github.com/hobu/laz-perf/archive/${LAZ_PERF_VERSION}.tar.gz -O 
 WORKDIR /src
 RUN mkdir vdatum && \
     cd vdatum && \
-    wget http://download.osgeo.org/proj/vdatum/usa_geoid2012.zip && unzip -j -u usa_geoid2012.zip -d /usr/share/proj; \
-    wget http://download.osgeo.org/proj/vdatum/usa_geoid2009.zip && unzip -j -u usa_geoid2009.zip -d /usr/share/proj; \
-    wget http://download.osgeo.org/proj/vdatum/usa_geoid2003.zip && unzip -j -u usa_geoid2003.zip -d /usr/share/proj; \
-    wget http://download.osgeo.org/proj/vdatum/usa_geoid1999.zip && unzip -j -u usa_geoid1999.zip -d /usr/share/proj; \
-    wget http://download.osgeo.org/proj/vdatum/vertcon/vertconc.gtx && mv vertconc.gtx /usr/share/proj; \
-    wget http://download.osgeo.org/proj/vdatum/vertcon/vertcone.gtx && mv vertcone.gtx /usr/share/proj; \
-    wget http://download.osgeo.org/proj/vdatum/vertcon/vertconw.gtx && mv vertconw.gtx /usr/share/proj; \
-    wget http://download.osgeo.org/proj/vdatum/egm96_15/egm96_15.gtx && mv egm96_15.gtx /usr/share/proj; \
-    wget http://download.osgeo.org/proj/vdatum/egm08_25/egm08_25.gtx && mv egm08_25.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2012.zip && unzip -j -u usa_geoid2012.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2009.zip && unzip -j -u usa_geoid2009.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2003.zip && unzip -j -u usa_geoid2003.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid1999.zip && unzip -j -u usa_geoid1999.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertconc.gtx && mv vertconc.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertcone.gtx && mv vertcone.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertconw.gtx && mv vertconw.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/egm96_15/egm96_15.gtx && mv egm96_15.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/egm08_25/egm08_25.gtx && mv egm08_25.gtx /usr/share/proj; \
     cd .. && \
     rm -rf vdatum
 
 ## install pdal
 ENV NUMTHREADS=4
 WORKDIR /src
-RUN wget \
+RUN wget -q \
  https://github.com/PDAL/PDAL/releases/download/${PDAL_VERSION}/PDAL-${PDAL_VERSION}-src.tar.gz && \
     tar xfz PDAL-${PDAL_VERSION}-src.tar.gz && \
     cd /src/PDAL-${PDAL_VERSION}-src && \
@@ -221,8 +221,8 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK 1
 # Create generic GRASS GIS binary name regardless of version number
 RUN ln -sf `find /usr/local/bin -name "grass??" | sort | tail -n 1` /usr/local/bin/grass
 
-# TODO rename when 'code_revision' is available
-RUN grass --config svn_revision version
+# show GRASS GIS, PROJ, GDAL etc versions
+RUN grass --tmp-location EPSG:4326 --exec g.version -rge
 
 # Reduce the image size
 RUN apt-get autoremove -y
@@ -242,11 +242,12 @@ ENV GRASSBIN "/usr/local/bin/grass"
 ENV PYTHONPATH "${PYTHONPATH}:$GISBASE/etc/python/"
 ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:$GISBASE/lib"
 
-## TODO check path
-#ADD testdata/test_grass_session.py /scripts
-#ADD testdata/simple.laz /tmp
-## simple test: just scan the LAZ file
-#RUN /usr/bin/python3 /scripts/test_grass_session.py
+WORKDIR /tmp
+RUN wget -q https://raw.githubusercontent.com/OSGeo/grass/master/docker/testdata/simple.laz -O simple.laz
+WORKDIR /scripts
+RUN wget -q https://raw.githubusercontent.com/OSGeo/grass/master/docker/testdata/test_grass_session.py -O test_grass_session.py
+## just scan the LAZ file
+RUN /usr/bin/python3 /scripts/test_grass_session.py
 
 WORKDIR /grassdb
 VOLUME /grassdb
