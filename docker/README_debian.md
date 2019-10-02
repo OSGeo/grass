@@ -1,4 +1,4 @@
-# Docker GRASS GIS (Debian linux)
+# Docker GRASS GIS (Debian Linux)
 
 Dockerfile with an [Debian Linux](https://www.debian.org/) image with [GRASS GIS](https://grass.osgeo.org/), [PDAL](https://pdal.io) support and [grass-session](https://github.com/zarch/grass-session/).
 
