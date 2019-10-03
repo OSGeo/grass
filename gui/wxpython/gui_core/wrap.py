@@ -42,6 +42,11 @@ def BitmapFromImage(image, depth=-1):
     else:
         return wx.BitmapFromImage(image, depth=depth)
 
+def ImageFromBitmap(bitmap):
+    if wxPythonPhoenix:
+        return bitmap.ConvertToImage()
+    else:
+        return wx.ImageFromBitmap(bitmap)
 
 def EmptyBitmap(width, height, depth=-1):
     if wxPythonPhoenix:
