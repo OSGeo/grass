@@ -52,8 +52,8 @@ fetchenv() {
     dstenv=$(mktemp /tmp/dstenv.XXXXXXXXXX)
     diffenv=$(mktemp /tmp/diffenv.XXXXXXXXXX)
     args="$@"
-    cmd.exe /c set >$srcenv
-    cmd.exe /c "call `cygpath -w $batch` $args \>nul 2\>nul \& set" >$dstenv
+    cmd.exe //c set >$srcenv
+    cmd.exe //c "call `cygpath -w $batch` $args \>nul 2\>nul \& set" >$dstenv
     diff -u $srcenv $dstenv | sed -f mswindows/osgeo4w/envdiff.sed >$diffenv
     . $diffenv
     PATH=$PATH:/usr/bin:/mingw${MINGW_POSTFIX}/bin/:$PWD/mswindows/osgeo4w/lib:$PWD/mswindows/osgeo4w:/c/windows32/system32:/c/windows:/c/windows32/system32:/c/windows
