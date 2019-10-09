@@ -1,0 +1,7 @@
+docker
+!docker/testdata
+.git
+.gitignore
+.github
+.travis
+.travis.yml
