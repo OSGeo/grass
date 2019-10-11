@@ -166,6 +166,7 @@ cp -uv $DLLS dist.$conf_host/bin
 
 mkdir -p mswindows/osgeo4w/lib
 cp -uv $OSGEO4W_ROOT_MSYS/lib/libpq.lib mswindows/osgeo4w/lib/pq.lib
+cp -uv $OSGEO4W_ROOT_MSYS/lib/proj_i.lib mswindows/osgeo4w/lib/proj.lib
 
 if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 	if [ -e include/Make/Platform.make ] ; then
@@ -194,7 +195,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-freetype-includes=/mingw${MINGW_POSTFIX}/include/freetype2 \
 		--with-proj-share=$OSGEO4W_ROOT_MSYS/share/proj \
 		--with-proj-includes=$OSGEO4W_ROOT_MSYS/include \
-		--with-proj-libs=$OSGEO4W_ROOT_MSYS/lib \
+		--with-proj-libs=$PWD/mswindows/osgeo4w/lib \
 		--with-postgres \
 		--with-postgres-includes=$OSGEO4W_ROOT_MSYS/include \
 		--with-postgres-libs=$PWD/mswindows/osgeo4w/lib \
