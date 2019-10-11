@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       r.cats
+ * MODULE:       r.category (formerly r.cats)
  *
  * AUTHOR(S):    Michael Shapiro - CERL
  *		 Hamish Bowman, Dunedin, New Zealand  (label creation opts)
@@ -9,7 +9,7 @@
  * PURPOSE:      Prints category values and labels associated with
  *		 user-specified raster map layers.
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2019 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -280,7 +280,7 @@ int main(int argc, char *argv[])
     }
     else {
 	if (map_type != CELL_TYPE)
-	    G_warning(_("The map is floating point! Ignoring cats list, using vals list"));
+	    G_warning(_("The map is floating point! Ignoring cats list, using values list"));
 	else {			/* integer map */
 
 	    for (i = 0; parm.cats->answers[i]; i++)
@@ -297,7 +297,7 @@ int main(int argc, char *argv[])
 	}
     }
     if (parm.vals->answer == NULL)
-	G_fatal_error(_("vals argument is required for floating point map!"));
+	G_fatal_error(_("Parameter 'values' is required for floating point map!"));
     for (i = 0; parm.vals->answers[i]; i++)
 	if (!scan_vals(parm.vals->answers[i], &dx)) {
 	    G_usage();
