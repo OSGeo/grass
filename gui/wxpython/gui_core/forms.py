@@ -658,7 +658,7 @@ class TaskFrame(wx.Frame):
             flag=wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT,
             border=30)
         # abort key bindings
-        abortId = wx.Window.NewControlId()
+        abortId = wx.NewIdRef()
         self.Bind(wx.EVT_MENU, self.OnAbort, id=abortId)
         accelTableList.append((wx.ACCEL_CTRL, ord('S'), abortId))
         # set accelerator table
