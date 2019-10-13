@@ -172,6 +172,7 @@ cp -uv $DLLS dist.$conf_host/bin
 mkdir -p mswindows/osgeo4w/lib
 cp -uv $OSGEO4W_ROOT_MSYS/lib/libpq.lib mswindows/osgeo4w/lib/pq.lib
 cp -uv $OSGEO4W_ROOT_MSYS/lib/proj_i.lib mswindows/osgeo4w/lib/proj.lib
+cp -uv $OSGEO4W_ROOT_MSYS/lib/sqlite3_i.lib mswindows/osgeo4w/lib/sqlite3.lib
 
 if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 	if [ -e include/Make/Platform.make ] ; then
@@ -180,7 +181,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 	fi
 
 	log remove old logs
-	rm -f mswindows/osgeo4w/package.log.[0-9][0-9][0-9]
+	rm -f mswindows/osgeo4w/package.log.*
 
 	log configure
 	./configure \
@@ -207,6 +208,8 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-gdal=$PWD/mswindows/osgeo4w/gdal-config \
 		--with-geos=$PWD/mswindows/osgeo4w/geos-config \
 		--with-sqlite \
+		--with-sqlite-includes=$OSGEO4W_ROOT_MSYS/include \
+		--with-sqlite-libs=$PWD/mswindows/osgeo4w/lib \
 		--with-regex \
 		--with-nls \
 		--with-zstd \
