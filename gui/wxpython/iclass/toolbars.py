@@ -73,14 +73,13 @@ class IClassMapToolbar(BaseToolbar):
         self._default = self.pan
 
         # add tool to toggle active map window
-        self.togglemapid = wx.NewId()
-        self.togglemap = wx.Choice(parent=self, id=self.togglemapid,
+        self.togglemap = wx.Choice(parent=self, id=wx.ID_ANY,
                                    choices=[_('Training'), _('Preview')])
 
         self.InsertControl(9, self.togglemap)
 
         self.SetToolShortHelp(
-            self.togglemapid, '%s %s %s' %
+            self.togglemap.GetId(), '%s %s %s' %
             (_('Set map canvas for '),
              BaseIcons["zoomBack"].GetLabel(),
              _('/ Zoom to map')))

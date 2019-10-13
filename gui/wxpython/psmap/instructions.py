@@ -46,6 +46,7 @@ from grass.script.task import cmdlist_to_tuple
 from core.gcmd import RunCommand, GError, GMessage, GWarning
 from core.utils import GetCmdString
 from dbmgr.vinfo import VectorDBInfo
+from gui_core.wrap import NewId
 from psmap.utils import *
 
 
@@ -199,7 +200,7 @@ class Instruction:
                     elif instruction in ('text', 'eps', 'point', 'line', 'rectangle'):
                         kwargs['mapInstruction'] = map
                     elif instruction in ('vpoints', 'vlines', 'vareas'):
-                        kwargs['id'] = wx.NewId()
+                        kwargs['id'] = NewId()
                         kwargs['vectorMapNumber'] = vectorMapNumber
                         vectorMapNumber += 1
                     elif instruction == 'paper':
@@ -384,7 +385,7 @@ class Instruction:
 
         page = self.FindInstructionByType('page')
         if not page:
-            page = PageSetup(wx.NewId())
+            page = PageSetup(NewId())
             self.AddInstruction(page)
         else:
             page['Orientation'] = orientation
@@ -438,7 +439,7 @@ class Instruction:
             if i in ('text', 'vProperties', 'image', 'northArrow',
                      'point', 'line', 'rectangle') or not instr:
 
-                id = wx.NewId()  # !vProperties expect subtype
+                id = NewId()  # !vProperties expect subtype
                 if i == 'vProperties':
                     id = kwargs['id']
                     newInstr = myInstrDict[i](id, subType=instruction[1:])
@@ -468,7 +469,7 @@ class Instruction:
 
     def SetRegion(self, regionInstruction):
         """Sets region from file comment or sets current region in case of no comment"""
-        map = MapFrame(wx.NewId())
+        map = MapFrame(NewId())
         self.AddInstruction(map)
         if regionInstruction:
             cmd = cmdlist_to_tuple(regionInstruction.strip('# ').split())
