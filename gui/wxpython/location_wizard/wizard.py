@@ -55,7 +55,7 @@ from core.utils import cmp
 from core.gcmd import RunCommand, GError, GMessage, GWarning
 from gui_core.widgets import GenericValidator
 from gui_core.wrap import SpinCtrl, SearchCtrl, StaticText, \
-    TextCtrl, Button, CheckBox, StaticBox
+    TextCtrl, Button, CheckBox, StaticBox, NewId
 from location_wizard.base import BaseClass
 from location_wizard.dialogs import SelectTransformDialog
 
@@ -915,7 +915,7 @@ class ProjParamsPage(TitledPage):
             for paramgrp in self.parent.projections[
                     self.parent.projpage.proj][1]:
                 # get parameters
-                id = wx.NewId()
+                id = NewId()
                 param = self.pparam[id] = {
                     'type': self.parent.paramdesc[
                         paramgrp[0]][0], 'proj4': self.parent.paramdesc[

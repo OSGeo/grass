@@ -63,7 +63,7 @@ from core.debug import Debug
 from dbmgr.dialogs import ModifyTableRecord, AddColumnDialog
 from core.settings import UserSettings
 from gui_core.wrap import SpinCtrl, Button, TextCtrl, ListCtrl, CheckBox, \
-    StaticText, StaticBox, Menu
+    StaticText, StaticBox, Menu, NewId
 from core.utils import cmp
 
 if sys.version_info.major >= 3:
@@ -441,20 +441,20 @@ class VirtualAttributeList(ListCtrl,
         popupMenu = Menu()
 
         if not hasattr(self, "popupID"):
-            self.popupId = {'sortAsc': wx.NewId(),
-                            'sortDesc': wx.NewId(),
-                            'calculate': wx.NewId(),
-                            'area': wx.NewId(),
-                            'length': wx.NewId(),
-                            'compact': wx.NewId(),
-                            'fractal': wx.NewId(),
-                            'perimeter': wx.NewId(),
-                            'ncats': wx.NewId(),
-                            'slope': wx.NewId(),
-                            'lsin': wx.NewId(),
-                            'lazimuth': wx.NewId(),
-                            'calculator': wx.NewId(),
-                            'stats': wx.NewId()}
+            self.popupId = {'sortAsc': NewId(),
+                            'sortDesc': NewId(),
+                            'calculate': NewId(),
+                            'area': NewId(),
+                            'length': NewId(),
+                            'compact': NewId(),
+                            'fractal': NewId(),
+                            'perimeter': NewId(),
+                            'ncats': NewId(),
+                            'slope': NewId(),
+                            'lsin': NewId(),
+                            'lazimuth': NewId(),
+                            'calculator': NewId(),
+                            'stats': NewId()}
 
         popupMenu.Append(self.popupId['sortAsc'], text=_("Sort ascending"))
         popupMenu.Append(self.popupId['sortDesc'], text=_("Sort descending"))
@@ -470,7 +470,7 @@ class VirtualAttributeList(ListCtrl,
 
         if not self.pages['manageTable']:
             popupMenu.AppendSeparator()
-            self.popupId['addCol'] = wx.NewId()
+            self.popupId['addCol'] = NewId()
             popupMenu.Append(self.popupId['addCol'], text=_("Add column"))
             if not self.dbMgrData['editable']:
                 popupMenu.Enable(self.popupId['addCol'], False)
@@ -1373,17 +1373,17 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
     def OnDataRightUp(self, event):
         """Table description area, context menu"""
         if not hasattr(self, "popupDataID1"):
-            self.popupDataID1 = wx.NewId()
-            self.popupDataID2 = wx.NewId()
-            self.popupDataID3 = wx.NewId()
-            self.popupDataID4 = wx.NewId()
-            self.popupDataID5 = wx.NewId()
-            self.popupDataID6 = wx.NewId()
-            self.popupDataID7 = wx.NewId()
-            self.popupDataID8 = wx.NewId()
-            self.popupDataID9 = wx.NewId()
-            self.popupDataID10 = wx.NewId()
-            self.popupDataID11 = wx.NewId()
+            self.popupDataID1 = NewId()
+            self.popupDataID2 = NewId()
+            self.popupDataID3 = NewId()
+            self.popupDataID4 = NewId()
+            self.popupDataID5 = NewId()
+            self.popupDataID6 = NewId()
+            self.popupDataID7 = NewId()
+            self.popupDataID8 = NewId()
+            self.popupDataID9 = NewId()
+            self.popupDataID10 = NewId()
+            self.popupDataID11 = NewId()
 
             self.Bind(wx.EVT_MENU, self.OnDataItemEdit, id=self.popupDataID1)
             self.Bind(wx.EVT_MENU, self.OnDataItemAdd, id=self.popupDataID2)
@@ -2576,9 +2576,9 @@ class DbMgrTablesPage(DbMgrNotebookBase):
     def OnTableRightUp(self, event):
         """Table description area, context menu"""
         if not hasattr(self, "popupTableID"):
-            self.popupTableID1 = wx.NewId()
-            self.popupTableID2 = wx.NewId()
-            self.popupTableID3 = wx.NewId()
+            self.popupTableID1 = NewId()
+            self.popupTableID2 = NewId()
+            self.popupTableID3 = NewId()
             self.Bind(
                 wx.EVT_MENU,
                 self.OnTableItemDelete,

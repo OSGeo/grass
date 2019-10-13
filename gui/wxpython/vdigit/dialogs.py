@@ -29,7 +29,7 @@ from core.gcmd import RunCommand, GError
 from core.debug import Debug
 from core.settings import UserSettings
 from gui_core.wrap import SpinCtrl, Button, StaticText, \
-    StaticBox, Menu, ListCtrl
+    StaticBox, Menu, ListCtrl, NewId
 
 
 class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
@@ -273,9 +273,9 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         """Mouse right button up
         """
         if not hasattr(self, "popupID1"):
-            self.popupID1 = wx.NewId()
-            self.popupID2 = wx.NewId()
-            self.popupID3 = wx.NewId()
+            self.popupID1 = NewId()
+            self.popupID2 = NewId()
+            self.popupID3 = NewId()
             self.Bind(wx.EVT_MENU, self.OnItemDelete, id=self.popupID1)
             self.Bind(wx.EVT_MENU, self.OnItemDeleteAll, id=self.popupID2)
             self.Bind(wx.EVT_MENU, self.OnReload, id=self.popupID3)

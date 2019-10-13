@@ -33,7 +33,7 @@ from core.menutree import TreeModel, ModuleNode
 from gui_core.widgets import GListCtrl, SearchModuleWidget
 from gui_core.treeview import CTreeView
 from core.toolboxes import toolboxesOutdated
-from gui_core.wrap import Button, StaticBox, TextCtrl, Menu
+from gui_core.wrap import Button, StaticBox, TextCtrl, Menu, NewId
 
 
 class InstallExtensionWindow(wx.Frame):
@@ -231,7 +231,7 @@ class InstallExtensionWindow(wx.Frame):
         if not hasattr(self, "popupID"):
             self.popupID = dict()
             for key in ('install', 'help'):
-                self.popupID[key] = wx.NewId()
+                self.popupID[key] = NewId()
 
         data = node.data
         if data and 'command' in data:

@@ -31,7 +31,7 @@ from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
 from gui_core.forms import GUI
 from gui_core.dialogs import SetOpacityDialog
-from gui_core.wrap import CheckListBox, Menu
+from gui_core.wrap import CheckListBox, Menu, NewId
 from core.utils import GetLayerNameFromCmd
 from core.gcmd import GError
 from core.layerlist import LayerList
@@ -149,7 +149,7 @@ class SimpleLayerManager(wx.Panel):
         labels = [_("Copy map names to clipboard (top to bottom)"),
                   _("Copy map names to clipboard (bottom to top)")]
         for label, text in zip(labels, texts):
-            id = wx.NewId()
+            id = NewId()
             self.Bind(
                 wx.EVT_MENU,
                 lambda evt,

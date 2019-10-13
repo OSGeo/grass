@@ -111,8 +111,7 @@ class SwipeMainToolbar(BaseToolbar):
         self.InitToolbar(self._toolbarData())
 
         # add tool to toggle active map window
-        self.toggleModeId = wx.NewId()
-        self.toggleMode = wx.Choice(parent=self, id=self.toggleModeId)
+        self.toggleMode = wx.Choice(parent=self)
         for label, cdata in zip(
                 [_('Swipe mode'),
                  _('Mirror mode')],
@@ -128,7 +127,7 @@ class SwipeMainToolbar(BaseToolbar):
         self.InsertControl(3, self.toggleMode)
 
         help = _("Choose view mode")
-        self.SetToolShortHelp(self.toggleModeId, help)
+        self.SetToolShortHelp(self.toggleMode.GetId(), help)
         # realize the toolbar
         self.Realize()
 

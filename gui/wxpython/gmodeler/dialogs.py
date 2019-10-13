@@ -40,7 +40,7 @@ from gui_core.gselect import Select, ElementSelect
 from gmodeler.model import *
 from lmgr.menudata import LayerManagerMenuData
 from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl, \
-    Menu, ListCtrl
+    Menu, ListCtrl, NewId
 
 from grass.script import task as gtask
 
@@ -836,9 +836,9 @@ class VariableListCtrl(ModelListCtrl):
     def OnRightUp(self, event):
         """Mouse right button up"""
         if not hasattr(self, "popupID1"):
-            self.popupID1 = wx.NewId()
-            self.popupID2 = wx.NewId()
-            self.popupID3 = wx.NewId()
+            self.popupID1 = NewId()
+            self.popupID2 = NewId()
+            self.popupID3 = NewId()
             self.Bind(wx.EVT_MENU, self.OnRemove, id=self.popupID1)
             self.Bind(wx.EVT_MENU, self.OnRemoveAll, id=self.popupID2)
             self.Bind(wx.EVT_MENU, self.OnReload, id=self.popupID3)
@@ -1007,8 +1007,8 @@ class ItemListCtrl(ModelListCtrl):
 
         if not hasattr(self, "popupId"):
             self.popupID = dict()
-            self.popupID['remove'] = wx.NewId()
-            self.popupID['reload'] = wx.NewId()
+            self.popupID['remove'] = NewId()
+            self.popupID['reload'] = NewId()
             self.Bind(wx.EVT_MENU, self.OnRemove, id=self.popupID['remove'])
             self.Bind(wx.EVT_MENU, self.OnReload, id=self.popupID['reload'])
 

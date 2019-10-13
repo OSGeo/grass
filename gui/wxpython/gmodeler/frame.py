@@ -64,7 +64,7 @@ from gmodeler.giface import GraphicalModelerGrassInterface
 from gmodeler.model import *
 from gmodeler.dialogs import *
 from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl, \
-    Menu, StockCursor, EmptyBitmap
+    Menu, StockCursor, EmptyBitmap, NewId
 from gui_core.wrap import TextEntryDialog as wxTextEntryDialog
 
 wxModelDone, EVT_MODEL_DONE = NewEvent()
@@ -1489,7 +1489,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             for key in ('remove', 'enable', 'addPoint',
                         'delPoint', 'intermediate', 'display', 'props', 'id',
                         'label', 'comment'):
-                self.popupID[key] = wx.NewId()
+                self.popupID[key] = NewId()
 
         # record coordinates
         self.x = x
