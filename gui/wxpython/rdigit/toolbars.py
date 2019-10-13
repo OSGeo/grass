@@ -47,9 +47,8 @@ class RDigitToolbar(BaseToolbar):
         self._giface = giface
         self.InitToolbar(self._toolbarData())
 
-        self._mapSelectionComboId = wx.NewId()
         self._mapSelectionCombo = wx.ComboBox(
-            self, id=self._mapSelectionComboId, value=_("Select raster map"),
+            self, id=wx.ID_ANY, value=_("Select raster map"),
             choices=[],
             size=(120, -1))
         self._mapSelectionCombo.Bind(wx.EVT_COMBOBOX, self.OnMapSelection)
@@ -57,7 +56,6 @@ class RDigitToolbar(BaseToolbar):
         self.InsertControl(0, self._mapSelectionCombo)
         self._previousMap = self._mapSelectionCombo.GetValue()
 
-        self._colorId = wx.NewId()
         self._color = csel.ColourSelect(parent=self, colour=wx.GREEN,
                                         size=(30, 30))
         self._color.Bind(
@@ -68,11 +66,10 @@ class RDigitToolbar(BaseToolbar):
         self.InsertControl(4, self._color)
 
         self._cellValues = set(['1'])
-        self._valueComboId = wx.NewId()
         # validator does not work with combobox, SetBackgroundColor is not
         # working
         self._valueCombo = wx.ComboBox(
-            self, id=self._valueComboId, choices=list(
+            self, id=wx.ID_ANY, choices=list(
                 self._cellValues), size=(
                 80, -1), validator=FloatValidator())
         self._valueCombo.Bind(
@@ -86,11 +83,10 @@ class RDigitToolbar(BaseToolbar):
         self.InsertControl(6, labelValue)
         self.InsertControl(7, self._valueCombo)
 
-        self._widthValueId = wx.NewId()
         # validator does not work with combobox, SetBackgroundColor is not
         # working
         self._widthValue = TextCtrl(
-            self, id=self._widthValueId, value='0', size=(
+            self, id=wx.ID_ANY, value='0', size=(
                 80, -1), validator=FloatValidator())
         self._widthValue.Bind(wx.EVT_TEXT,
                               lambda evt: self._widthValueChanged())

@@ -991,32 +991,32 @@ class DataCatalogTree(LocationMapTree):
         genv = gisenv()
         currentLocation, currentMapset = self._isCurrent(genv)
 
-        item = wx.MenuItem(menu, wx.NewId(), _("&Cut"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Cut"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnMoveMap, item)
         if not currentMapset:
             item.Enable(False)
 
-        item = wx.MenuItem(menu, wx.NewId(), _("&Copy"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCopyMap, item)
 
-        item = wx.MenuItem(menu, wx.NewId(), _("Copy &name"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy &name"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCopyName, item)
 
-        item = wx.MenuItem(menu, wx.NewId(), _("&Paste"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Paste"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnPasteMap, item)
         if not(currentMapset and self.copy_layer):
             item.Enable(False)
 
-        item = wx.MenuItem(menu, wx.NewId(), _("&Delete"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteMap, item)
         item.Enable(currentMapset)
 
-        item = wx.MenuItem(menu, wx.NewId(), _("&Rename"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameMap, item)
         item.Enable(currentMapset and len(self.selected_layer) == 1)
@@ -1026,13 +1026,13 @@ class DataCatalogTree(LocationMapTree):
         if not isinstance(self._giface, StandaloneGrassInterface):
             if all([each.label == genv['LOCATION_NAME'] for each in self.selected_location]):
                 if len(self.selected_layer) > 1:
-                    item = wx.MenuItem(menu, wx.NewId(), _("&Display layers"))
+                    item = wx.MenuItem(menu, wx.ID_ANY, _("&Display layers"))
                 else:
-                    item = wx.MenuItem(menu, wx.NewId(), _("&Display layer"))
+                    item = wx.MenuItem(menu, wx.ID_ANY, _("&Display layer"))
                 menu.AppendItem(item)
                 self.Bind(wx.EVT_MENU, self.OnDisplayLayer, item)
 
-        item = wx.MenuItem(menu, wx.NewId(), _("Show &metadata"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Show &metadata"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnMetadata, item)
 
@@ -1045,13 +1045,13 @@ class DataCatalogTree(LocationMapTree):
         genv = gisenv()
         currentLocation, currentMapset = self._isCurrent(genv)
 
-        item = wx.MenuItem(menu, wx.NewId(), _("&Paste"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Paste"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnPasteMap, item)
         if not(currentMapset and self.copy_layer):
             item.Enable(False)
 
-        item = wx.MenuItem(menu, wx.NewId(), _("&Switch mapset"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Switch mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnSwitchLocationMapset, item)
         if (self.selected_location[0].label == genv['LOCATION_NAME']
@@ -1063,7 +1063,7 @@ class DataCatalogTree(LocationMapTree):
     def _popupMenuElement(self):
         """Create popup menu for elements"""
         menu = Menu()
-        item = wx.MenuItem(menu, wx.NewId(), _("&Paste"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Paste"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnPasteMap, item)
         genv = gisenv()
@@ -1077,7 +1077,7 @@ class DataCatalogTree(LocationMapTree):
     def _popupMenuEmpty(self):
         """Create empty popup when multiple different types of items are selected"""
         menu = Menu()
-        item = wx.MenuItem(menu, wx.NewId(), _("No available options"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("No available options"))
         menu.AppendItem(item)
         item.Enable(False)
         self.PopupMenu(menu)

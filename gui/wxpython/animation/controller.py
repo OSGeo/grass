@@ -44,7 +44,7 @@ class AnimationController(wx.EvtHandler):
         self.temporalMode = None
         self.animationData = []
 
-        self.timer = wx.Timer(self, id=wx.NewId())
+        self.timer = wx.Timer(self, id=wx.ID_ANY)
 
         self.animations = animations
         self.bitmapPool = bitmapPool

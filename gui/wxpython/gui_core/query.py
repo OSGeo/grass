@@ -19,7 +19,7 @@ import six
 
 from core.gcmd import DecodeString
 from gui_core.treeview import TreeListView
-from gui_core.wrap import Button, StaticText, Menu
+from gui_core.wrap import Button, StaticText, Menu, NewId
 from core.treemodel import TreeModel, DictNode
 
 from grass.pydispatch.signal import Signal
@@ -153,7 +153,7 @@ class QueryDialog(wx.Dialog):
 
         ids = []
         for text in texts:
-            id = wx.NewId()
+            id = NewId()
             ids.append(id)
             self.Bind(
                 wx.EVT_MENU,

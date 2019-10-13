@@ -73,7 +73,7 @@ from gui_core.gselect import Select
 from core.gcmd import RunCommand, GError, GMessage
 from gui_core.dialogs import SymbolDialog
 from gui_core.wrap import SpinCtrl, Button, TextCtrl, BitmapButton, \
-    StaticText, StaticBox, Rect, EmptyBitmap, TextEntryDialog, ListCtrl
+    StaticText, StaticBox, Rect, EmptyBitmap, TextEntryDialog, ListCtrl, NewId
 from psmap.utils import *
 from psmap.instructions import *
 
@@ -841,7 +841,7 @@ class MapFramePanel(wx.Panel):
         if self.id is not None:
             self.mapFrameDict = self.instruction[self.id].GetInstruction()
         else:
-            self.id = wx.NewId()
+            self.id = NewId()
             mapFrame = MapFrame(self.id)
             self.mapFrameDict = mapFrame.GetInstruction()
             self.mapFrameDict['rect'] = rect
@@ -1337,7 +1337,7 @@ class MapFramePanel(wx.Panel):
                         if raster:
                             raster['raster'] = mapFrameDict['map']
                         else:
-                            raster = Raster(wx.NewId())
+                            raster = Raster(NewId())
                             raster['raster'] = mapFrameDict['map']
                             raster['isRaster'] = True
                             self.instruction.AddInstruction(raster)
@@ -1374,10 +1374,10 @@ class MapFramePanel(wx.Panel):
                                     mapFrameDict['map'].split('@')) + ')'
 
                                 if not vector:
-                                    vector = Vector(wx.NewId())
+                                    vector = Vector(NewId())
                                     vector['list'] = []
                                     self.instruction.AddInstruction(vector)
-                                id = wx.NewId()
+                                id = NewId()
                                 vector['list'].insert(
                                     0, [mapFrameDict['map'], topoType, id, 1, label])
                                 vProp = VProperties(id, topoType)
@@ -1548,7 +1548,7 @@ class RasterPanel(wx.Panel):
             self.id = id
             self.rasterDict = self.instruction[self.id].GetInstruction()
         else:
-            self.id = wx.NewId()
+            self.id = NewId()
             raster = Raster(self.id)
             self.rasterDict = raster.GetInstruction()
 
@@ -1686,7 +1686,7 @@ class VectorPanel(wx.Panel):
             self.id = id
             self.vectorList = deepcopy(self.instruction[id]['list'])
         else:
-            self.id = wx.NewId()
+            self.id = NewId()
             self.vectorList = []
 
         vLegend = self.instruction.FindInstructionByType('vectorLegend')
@@ -1865,7 +1865,7 @@ class VectorPanel(wx.Panel):
             idx = self.vectorType.GetSelection()
             ttype = self.topologyTypeList[idx]
             record = "%s - %s" % (vmap, ttype)
-            id = wx.NewId()
+            id = NewId()
             lpos = 1
             label = mapname + mapset
             self.vectorList.insert(0, [vmap, ttype, id, lpos, label])
@@ -3345,7 +3345,7 @@ class LegendDialog(PsmapDialog):
             self.rasterLegend = self.instruction[self.id[0]]
             self.rLegendDict = self.rasterLegend.GetInstruction()
         else:
-            self.id[0] = wx.NewId()
+            self.id[0] = NewId()
             self.rasterLegend = RasterLegend(self.id[0])
             self.rLegendDict = self.rasterLegend.GetInstruction()
             self.rLegendDict['where'] = currPage['Left'], currPage['Top']
@@ -3354,7 +3354,7 @@ class LegendDialog(PsmapDialog):
         if self.id[1] is not None:
             self.vLegendDict = self.instruction[self.id[1]].GetInstruction()
         else:
-            self.id[1] = wx.NewId()
+            self.id[1] = NewId()
             vectorLegend = VectorLegend(self.id[1])
             self.vLegendDict = vectorLegend.GetInstruction()
             self.vLegendDict['where'] = currPage['Left'], currPage['Top']
@@ -4493,7 +4493,7 @@ class MapinfoDialog(PsmapDialog):
             self.mapinfo = self.instruction[self.id]
             self.mapinfoDict = self.mapinfo.GetInstruction()
         else:
-            self.id = wx.NewId()
+            self.id = NewId()
             self.mapinfo = Mapinfo(self.id)
             self.mapinfoDict = self.mapinfo.GetInstruction()
             page = self.instruction.FindInstructionByType(
@@ -4769,7 +4769,7 @@ class ScalebarDialog(PsmapDialog):
             self.scalebar = self.instruction[id]
             self.scalebarDict = self.scalebar.GetInstruction()
         else:
-            self.id = wx.NewId()
+            self.id = NewId()
             self.scalebar = Scalebar(self.id)
             self.scalebarDict = self.scalebar.GetInstruction()
             page = self.instruction.FindInstructionByType(
@@ -5155,7 +5155,7 @@ class TextDialog(PsmapDialog):
         if self.id is not None:
             self.textDict = self.instruction[id].GetInstruction()
         else:
-            self.id = wx.NewId()
+            self.id = NewId()
             text = Text(self.id)
             self.textDict = text.GetInstruction()
             page = self.instruction.FindInstructionByType(
@@ -5733,7 +5733,7 @@ class ImageDialog(PsmapDialog):
             self.imageObj = self.instruction[self.id]
             self.imageDict = self.instruction[id].GetInstruction()
         else:
-            self.id = wx.NewId()
+            self.id = NewId()
             self.imageObj = self._newObject()
             self.imageDict = self.imageObj.GetInstruction()
             page = self.instruction.FindInstructionByType(
@@ -6292,7 +6292,7 @@ class PointDialog(PsmapDialog):
             self.pointObj = self.instruction[self.id]
             self.pointDict = self.instruction[id].GetInstruction()
         else:
-            self.id = wx.NewId()
+            self.id = NewId()
             self.pointObj = Point(self.id)
             self.pointDict = self.pointObj.GetInstruction()
             self.pointDict['where'] = coordinates
@@ -6714,7 +6714,7 @@ class RectangleDialog(PsmapDialog):
             self.rectObj = self.instruction[self.id]
             self.rectDict = self.rectObj.GetInstruction()
         else:
-            self.id = wx.NewId()
+            self.id = NewId()
             if type == 'rectangle':
                 self.rectObj = Rectangle(self.id)
             else:
@@ -6914,7 +6914,7 @@ class LabelsDialog(PsmapDialog):
         if self.id is not None:
             self.labels = self.instruction[self.id]
         else:
-            self.id = wx.NewId()
+            self.id = NewId()
             self.labels = Labels(self.id)
         self.labelsDict = self.labels.GetInstruction()
         self.panel = self._labelPanel()
