@@ -60,10 +60,15 @@ fetchenv() {
     rm -f $srcenv $dstenv $diffenv
 }
 
+# Avoid GRASS' old msys
+! [ -f $OSGEO4W_ROOT_MSYS/etc/ini/msys.bat ] || mv $OSGEO4W_ROOT_MSYS/etc/ini/msys.bat $OSGEO4W_ROOT_MSYS/etc/ini/msys.bat.off
+
 fetchenv $OSGEO4W_ROOT_MSYS/bin/o4w_env.bat
 fetchenv $OSGEO4W_ROOT_MSYS/bin/py3_env.bat
 
-PATH=/mingw64/lib/ccache/bin:$PATH
+! [ -f $OSGEO4W_ROOT_MSYS/etc/ini/msys.bat.off ] || mv $OSGEO4W_ROOT_MSYS/etc/ini/msys.bat.off $OSGEO4W_ROOT_MSYS/etc/ini/msys.bat
+
+PATH=/mingw${MINGW_POSTFIX}/lib/ccache/bin:$PATH
 
 T0=$(date +%s)
 LT=$T0
