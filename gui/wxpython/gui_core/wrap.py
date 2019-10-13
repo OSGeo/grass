@@ -35,6 +35,11 @@ else:
     ComboPopup = wx.combo.ComboPopup
     wxComboCtrl = wx.combo.ComboCtrl
 
+if wxPythonPhoenix:
+    from wx import NewIdRef as NewId
+else:
+    from wx import NewId
+
 
 def BitmapFromImage(image, depth=-1):
     if wxPythonPhoenix:

@@ -90,7 +90,7 @@ from core import globalvar
 from core.gcmd import GMessage, GError
 from core.debug import Debug
 from gui_core.wrap import Button, SearchCtrl, StaticText, StaticBox, \
-    TextCtrl, Menu, Rect, EmptyBitmap, ListCtrl
+    TextCtrl, Menu, Rect, EmptyBitmap, ListCtrl, NewId
 
 
 class NotebookController:
@@ -958,8 +958,8 @@ class GListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin,
             return
 
         if not hasattr(self, "popupDataID1"):
-            self.popupDataID1 = wx.NewId()
-            self.popupDataID2 = wx.NewId()
+            self.popupDataID1 = NewId()
+            self.popupDataID2 = NewId()
 
             self.Bind(wx.EVT_MENU, self.OnSelectAll, id=self.popupDataID1)
             self.Bind(wx.EVT_MENU, self.OnSelectNone, id=self.popupDataID2)

@@ -33,7 +33,7 @@ from gui_core import gselect
 from gui_core.widgets import SimpleValidator
 from iclass.statistics import Statistics, BandStatistics
 from gui_core.wrap import CheckBox, Button, StaticText, \
-    StaticBox, TextCtrl, Menu
+    StaticBox, TextCtrl, Menu, NewId
 
 import grass.script as grass
 
@@ -533,7 +533,7 @@ class CategoryListCtrl(wx.ListCtrl,
             self.rightClickedItemIdx = item
 
         if not hasattr(self, "popupZoomtoAreas"):
-            self.popupZoomtoAreas = wx.NewId()
+            self.popupZoomtoAreas = NewId()
             self.Bind(
                 wx.EVT_MENU,
                 self.OnZoomToAreasByCat,

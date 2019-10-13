@@ -106,7 +106,7 @@ from gui_core.widgets import FloatValidator, GNotebook, FormNotebook, FormListbo
 from core.giface import Notification
 from gui_core.widgets import LayersList
 from gui_core.wrap import BitmapFromImage, Button, StaticText, StaticBox, SpinCtrl, \
-    CheckBox, BitmapButton, TextCtrl
+    CheckBox, BitmapButton, TextCtrl, NewId
 from core.debug import Debug
 
 wxUpdateDialog, EVT_DIALOG_UPDATE = NewEvent()
@@ -658,7 +658,7 @@ class TaskFrame(wx.Frame):
             flag=wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT,
             border=30)
         # abort key bindings
-        abortId = wx.NewIdRef()
+        abortId = NewId()
         self.Bind(wx.EVT_MENU, self.OnAbort, id=abortId)
         accelTableList.append((wx.ACCEL_CTRL, ord('S'), abortId))
         # set accelerator table

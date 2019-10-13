@@ -22,7 +22,7 @@ import wx
 from core.debug import Debug
 from core.settings import UserSettings
 from mapwin.buffered import BufferedMapWindow
-from gui_core.wrap import Rect
+from gui_core.wrap import Rect, NewId
 
 
 EVT_MY_MOUSE_EVENTS = wx.NewEventType()
@@ -48,7 +48,7 @@ class SwipeBufferedWindow(BufferedMapWindow):
         self.imageId = 99
         self.movingSash = False
         self._mode = 'swipe'
-        self.lineid = wx.NewId()
+        self.lineid = NewId()
 
     def _bindMouseEvents(self):
         """Binds wx mouse events and custom mouse events"""

@@ -42,7 +42,7 @@ from core.utils import PilImageToWxImage
 from gui_core.forms import GUI
 from gui_core.dialogs import HyperlinkDialog
 from gui_core.ghelp import ShowAboutDialog
-from gui_core.wrap import ClientDC, PseudoDC, Rect, StockCursor, EmptyBitmap
+from gui_core.wrap import ClientDC, PseudoDC, Rect, StockCursor, EmptyBitmap, NewId
 from psmap.menudata import PsMapMenuData
 from gui_core.toolbars import ToolSwitcher
 
@@ -154,7 +154,7 @@ class PsMapFrame(wx.Frame):
         # open dialogs
         self.openDialogs = dict()
 
-        self.pageId = wx.NewId()
+        self.pageId = NewId()
         # current page of flatnotebook
         self.currentPage = 0
         # canvas for draft mode
@@ -980,7 +980,7 @@ class PsMapFrame(wx.Frame):
             id = None
 
         if not id:
-            id = wx.NewId()
+            id = NewId()
             initMap = InitMap(id)
             self.instruction.AddInstruction(initMap)
         self.instruction[id].SetInstruction(
@@ -1287,11 +1287,11 @@ class PsMapBufferedWindow(wx.Window):
         self.SetClientSize((700, 510))  # ?
         self._buffer = EmptyBitmap(*self.GetClientSize())
 
-        self.idBoxTmp = wx.NewId()
-        self.idZoomBoxTmp = wx.NewId()
-        self.idResizeBoxTmp = wx.NewId()
+        self.idBoxTmp = NewId()
+        self.idZoomBoxTmp = NewId()
+        self.idResizeBoxTmp = NewId()
         # ids of marks for moving line vertices
-        self.idLinePointsTmp = (wx.NewId(), wx.NewId())
+        self.idLinePointsTmp = (NewId(), NewId())
 
         self.resizeBoxSize = wx.Size(8, 8)
         self.showResizeHelp = False  # helper for correctly working statusbar
@@ -2191,7 +2191,7 @@ class PsMapBufferedWindow(wx.Window):
         :param lineCoords: coordinates of line start, end points (wx.Point, wx.Point)
         """
         if drawid is None:
-            drawid = wx.NewId()
+            drawid = NewId()
         bb = bb.Get()
         pdc.BeginDrawing()
         pdc.RemoveId(drawid)

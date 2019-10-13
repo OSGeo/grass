@@ -29,7 +29,7 @@ from core.utils import ListOfCatsToRange
 from core.globalvar import QUERYLAYER
 from vdigit.dialogs import VDigitCategoryDialog, VDigitZBulkDialog, VDigitDuplicatesDialog
 from gui_core import gselect
-from gui_core.wrap import PseudoDC
+from gui_core.wrap import PseudoDC, NewId
 
 
 class VDigitWindow(BufferedMapWindow):
@@ -332,7 +332,7 @@ class VDigitWindow(BufferedMapWindow):
         vertex.
         """
         self.polycoords.append(self.Pixel2Cell(self.mouse['begin']))
-        self.moveInfo['id'].append(wx.NewId())
+        self.moveInfo['id'].append(NewId())
         self.DrawLines(pdc=self.pdcTmp)
 
     def OnLeftDownMoveLine(self, event):

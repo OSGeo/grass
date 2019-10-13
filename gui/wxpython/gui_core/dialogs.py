@@ -53,7 +53,7 @@ from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, MapV
 from core.settings import UserSettings
 from core.debug import Debug
 from gui_core.wrap import SpinCtrl, TextCtrl, Button, CheckListBox, \
-    StaticText, StaticBox, Menu
+    StaticText, StaticBox, Menu, NewId
 
 
 class SimpleDialog(wx.Dialog):
@@ -1571,9 +1571,9 @@ class MapLayersDialogBase(wx.Dialog):
     def OnMenu(self, event):
         """Table description area, context menu"""
         if not hasattr(self, "popupID1"):
-            self.popupDataID1 = wx.NewId()
-            self.popupDataID2 = wx.NewId()
-            self.popupDataID3 = wx.NewId()
+            self.popupDataID1 = NewId()
+            self.popupDataID2 = NewId()
+            self.popupDataID3 = NewId()
 
             self.Bind(wx.EVT_MENU, self.OnSelectAll, id=self.popupDataID1)
             self.Bind(wx.EVT_MENU, self.OnSelectInvert, id=self.popupDataID2)
