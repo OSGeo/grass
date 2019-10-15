@@ -63,7 +63,6 @@ def main():
     set_gui_path()
 
     from core.settings import UserSettings
-    from core.globalvar import CheckWxVersion
     from core.giface import StandaloneGrassInterface
     from iclass.frame import IClassMapFrame
 
@@ -106,8 +105,6 @@ def main():
 
     # launch application
     app = wx.App()
-    if not CheckWxVersion([2, 9]):
-        wx.InitAllImageHandlers()
 
     # show main frame
     giface = StandaloneGrassInterface()

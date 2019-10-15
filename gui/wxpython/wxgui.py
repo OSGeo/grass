@@ -32,7 +32,6 @@ from grass.script.core import set_raise_on_error
 from core import globalvar
 from core.utils import registerPid, unregisterPid
 
-
 import wx
 try:
     import wx.lib.agw.advancedsplash as SC
@@ -59,9 +58,6 @@ class GMApp(wx.App):
 
         :return: True
         """
-        if not globalvar.CheckWxVersion([2, 9]):
-            wx.InitAllImageHandlers()
-
         # create splash screen
         introImagePath = os.path.join(globalvar.IMGDIR, "splash_screen.png")
         introImage = wx.Image(introImagePath, wx.BITMAP_TYPE_PNG)

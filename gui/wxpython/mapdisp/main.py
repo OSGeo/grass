@@ -495,9 +495,6 @@ class DMonFrame(MapFrame):
 class MapApp(wx.App):
 
     def OnInit(self):
-        if not globalvar.CheckWxVersion([2, 9]):
-            wx.InitAllImageHandlers()
-
         grass.set_raise_on_error(True)
         # actual use of StandaloneGrassInterface not yet tested
         # needed for adding functionality in future

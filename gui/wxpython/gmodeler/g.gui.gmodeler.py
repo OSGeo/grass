@@ -46,12 +46,9 @@ def main():
     set_gui_path()
 
     from core.giface import StandaloneGrassInterface
-    from core.globalvar import CheckWxVersion
     from gmodeler.frame import ModelFrame
 
     app = wx.App()
-    if not CheckWxVersion([2, 9]):
-        wx.InitAllImageHandlers()
     frame = ModelFrame(parent=None, giface=StandaloneGrassInterface())
     if options['file']:
         frame.LoadModelFile(options['file'])

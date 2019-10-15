@@ -706,8 +706,6 @@ class HelpWindow(HtmlWindow):
         in the Panel.
         """
         self.parent = parent
-        if not globalvar.CheckWxVersion([2, 9]):
-            wx.InitAllImageHandlers()
         HtmlWindow.__init__(self, parent=parent, **kwargs)
 
         self.loaded = False
