@@ -1009,7 +1009,7 @@ class PsMapFrame(wx.Frame):
 
     def DialogDataChanged(self, id):
         ids = id
-        if isinstance(id, int):
+        if isinstance(id, int) or isinstance(id, wx.WindowIDRef):
             ids = [id]
         for id in ids:
             itype = self.instruction[id].type
