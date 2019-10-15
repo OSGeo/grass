@@ -182,16 +182,12 @@ RUN echo "Install main packages";\
     # Checkout and install GRASS GIS
     #
     echo "Install GRASS GIS";\
-    echo "  => Downloading grass-$GRASS_VERSION";\
-    wget -q https://grass.osgeo.org/grass`echo $GRASS_VERSION | tr -d .`/source/snapshot/grass-$GRASS_VERSION.git_src_snapshot_latest.tar.gz && \
-    # unpack source code package and remove tarball archive:
-    mkdir /src/grass_build && \
-    tar xfz grass-$GRASS_VERSION.git_src_snapshot_latest.tar.gz --strip=1 -C /src/grass_build && \
-    rm -f grass-$GRASS_VERSION.git_src_snapshot_latest.tar.gz; \
-    #
-    # Configure compile and install GRASS GIS
-    #
-    echo "  => Configure and compile grass";\
+    echo "  => Downloading grass"
+
+COPY . /src/grass_build/
+
+# Configure compile and install GRASS GIS
+RUN echo "  => Configure and compile grass";\
     cd /src/grass_build && \
     /src/grass_build/configure $GRASS_CONFIG && \
     make -j $NUMTHREADS && \
@@ -245,9 +241,9 @@ ENV GRASSBIN="/usr/local/bin/grass"
 # ===========================
 
 WORKDIR /tmp
-RUN wget -q https://raw.githubusercontent.com/OSGeo/grass/master/docker/testdata/simple.laz -O simple.laz
+COPY docker/testdata/simple.laz .
 WORKDIR /scripts
-RUN wget -q https://raw.githubusercontent.com/OSGeo/grass/master/docker/testdata/test_grass_session.py -O test_grass_session.py
+COPY docker/testdata/test_grass_session.py .
 ## just scan the LAZ file
 # TODO: fix test
 #RUN /usr/bin/python3 /scripts/test_grass_session.py
@@ -266,6 +262,8 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     LC_ALL="en_US.UTF-8"
 
 # show installed version
-RUN $GRASSBIN --tmp-location EPSG:4326 --exec g.version -rge
+RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
+    pdal --version && \
+    python3 --version
 
 CMD [$GRASSBIN, "--version"]
