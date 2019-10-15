@@ -59,7 +59,6 @@ from grass.script.setup import set_gui_path
 set_gui_path()
 
 from core.settings import UserSettings
-from core.globalvar import CheckWxVersion
 from core.giface import StandaloneGrassInterface
 from mapwin.base import MapWindowProperties
 from mapwin.buffered import BufferedMapWindow
@@ -302,9 +301,6 @@ def main():
     test = options['test']
 
     app = wx.App()
-    if not CheckWxVersion([2, 9]):
-        wx.InitAllImageHandlers()
-
     map_ = Map()
 
     if options['raster']:

@@ -52,7 +52,6 @@ def main():
     set_gui_path()
 
     from core.settings import UserSettings
-    from core.globalvar import CheckWxVersion
     from core.giface import StandaloneGrassInterface
     from gcp.manager import GCPWizard
 
@@ -63,8 +62,6 @@ def main():
         os.environ['GRASS_RENDER_IMMEDIATE'] = 'cairo'
 
     app = wx.App()
-    if not CheckWxVersion([2, 9]):
-        wx.InitAllImageHandlers()
 
     wizard = GCPWizard(parent=None, giface=StandaloneGrassInterface())
 
