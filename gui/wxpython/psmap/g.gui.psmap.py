@@ -43,12 +43,9 @@ def main():
     from grass.script.setup import set_gui_path
     set_gui_path()
 
-    from core.globalvar import CheckWxVersion
     from psmap.frame import PsMapFrame
 
     app = wx.App()
-    if not CheckWxVersion([2, 9]):
-        wx.InitAllImageHandlers()
     frame = PsMapFrame(parent=None)
     frame.Show()
 

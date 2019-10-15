@@ -2548,7 +2548,6 @@ def __test():
     class MyApp(wx.App):
 
         def OnInit(self):
-            wx.InitAllImageHandlers()
             frame = TestFrame(None, -1, "PlotCanvas")
             # frame.Show(True)
             self.SetTopWindow(frame)
