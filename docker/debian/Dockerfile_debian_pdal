@@ -6,16 +6,10 @@ LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,bettge@mundialis.de
 ENV DEBIAN_FRONTEND noninteractive
 
 # define versions to be used
-ARG GRASS_VERSION=7.8
-ARG GRASS_SHORT_VERSION=78
 ARG PDAL_VERSION=1.8.0
 ARG PROJ_VERSION=5.2.0
 ARG PROJ_DATUMGRID_VERSION=1.8
 ARG LAZ_PERF_VERSION=1.3.0
-ARG SOURCE_GIT_URL=https://github.com
-ARG SOURCE_GIT_REMOTE=OSGeo
-ARG SOURCE_GIT_REPO=grass
-ARG SOURCE_GIT_BRANCH=releasebranch_7_8
 
 SHELL ["/bin/bash", "-c"]
 
@@ -158,11 +152,9 @@ RUN wget -q \
     make -j $NUMTHREADS && \
     make install
 
-# download grass gis source from git
+# copy grass gis source
 WORKDIR /src
-# TODO change to COPY
-ADD https://api.github.com/repos/$SOURCE_GIT_REMOTE/$SOURCE_GIT_REPO/git/refs/heads/$SOURCE_GIT_BRANCH version.json
-RUN git clone -b ${SOURCE_GIT_BRANCH} --single-branch ${SOURCE_GIT_URL}/${SOURCE_GIT_REMOTE}/${SOURCE_GIT_REPO}.git grass_build
+COPY . /src/grass_build/
 WORKDIR /src/grass_build
 
 # Set environmental variables for GRASS GIS compilation, without debug symbols
@@ -219,9 +211,12 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK 1
 
 # Create generic GRASS GIS binary name regardless of version number
 RUN ln -sf `find /usr/local/bin -name "grass??" | sort | tail -n 1` /usr/local/bin/grass
+RUN ln -sf `find /usr/local -type d -name "grass??" | sort | tail -n 1` /usr/local/grass
 
 # show GRASS GIS, PROJ, GDAL etc versions
-RUN grass --tmp-location EPSG:4326 --exec g.version -rge
+RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
+    pdal --version && \
+    python3 --version
 
 # Reduce the image size
 RUN apt-get autoremove -y
@@ -236,15 +231,15 @@ RUN pip3 install grass-session
 RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.in.pdal
 
 # add GRASS GIS envs for python usage
-ENV GISBASE "/usr/local/grass${GRASS_SHORT_VERSION}/"
+ENV GISBASE "/usr/local/grass/"
 ENV GRASSBIN "/usr/local/bin/grass"
 ENV PYTHONPATH "${PYTHONPATH}:$GISBASE/etc/python/"
 ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:$GISBASE/lib"
 
 WORKDIR /tmp
-RUN wget -q https://raw.githubusercontent.com/OSGeo/grass/master/docker/testdata/simple.laz -O simple.laz
+COPY docker/testdata/simple.laz .
 WORKDIR /scripts
-RUN wget -q https://raw.githubusercontent.com/OSGeo/grass/master/docker/testdata/test_grass_session.py -O test_grass_session.py
+COPY docker/testdata/test_grass_session.py .
 ## just scan the LAZ file
 RUN /usr/bin/python3 /scripts/test_grass_session.py
 

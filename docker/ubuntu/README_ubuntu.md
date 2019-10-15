@@ -4,19 +4,42 @@ Dockerfile with an [Ubuntu Linux](https://ubuntu.com/) image with [GRASS GIS](ht
 
 Download size of this image is of approximately 2.6 GB.
 
-Build the docker with:
+Clone this repository and change directory:
 
 ```bash
-$ sudo docker build --build-arg GRASS_VERSION=7.8 \
-                    --build-arg PYTHON_VERSION=3  \
-                    --build-arg PROJ_VERSION=4.9.3 \
-                    --build-arg PROJ_DATUMGRID_VERSION=1.8 \
-                    --file Dockerfile_ubuntu_pdal .
+$ git clone https://github.com/OSGeo/grass.git
+$ cd grass
+```
+
+__Build the docker with__:
+
+```bash
+$ docker build \
+         --file docker/ubuntu/Dockerfile_ubuntu_pdal \
+         --tag grass-py3-pdal:latest-ubuntu .
 ```
 
 View the images available using `sudo docker images` and open a bash terminal with:
 
 ```bash
-$ sudo docker run -i -t 15550df91610 /bin/bash
+$ docker run -it grass-py3-pdal:latest-ubuntu /bin/bash
+bash-5.0#
+```
+
+__To build a stable version__:
+
+change to the releasebranch or tag you want to build:
+```bash
+$ git checkout remotes/origin/releasebranch_7_8
+```
+
+and build and enter with:
+
+```bash
+$ docker build \
+         -f docker/ubuntu/Dockerfile_ubuntu_pdal \
+         -t grass-py3-pdal:stable-ubuntu .
+
+$ docker run -it grass-py3-pdal:stable-ubuntu /bin/bash
 bash-5.0#
 ```
