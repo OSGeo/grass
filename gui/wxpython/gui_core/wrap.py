@@ -23,7 +23,7 @@ try:
 except ImportError:
     import wx.lib.customtreectrl as CT
 
-from core.globalvar import gtk3, wxPythonPhoenix
+from core.globalvar import gtk3, wxPythonPhoenix, CheckWxVersion
 if wxPythonPhoenix:
     import wx.adv
 
@@ -35,7 +35,7 @@ else:
     ComboPopup = wx.combo.ComboPopup
     wxComboCtrl = wx.combo.ComboCtrl
 
-if wxPythonPhoenix:
+if wxPythonPhoenix and CheckWxVersion([4, 0, 3, 0]):
     from wx import NewIdRef as NewId
 else:
     from wx import NewId
