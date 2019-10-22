@@ -411,7 +411,7 @@ class PsMapFrame(wx.Frame):
             busy = wx.BusyInfo(
                 _("Generating preview, wait please"),
                 parent=self)
-            wx.Yield()
+            wx.GetApp().Yield()
             try:
                 im = PILImage.open(event.userData['filename'])
                 if self.instruction[self.pageId]['Orientation'] == 'Landscape':

@@ -3440,7 +3440,7 @@ class NvizToolWindow(FN.FlatNotebook):
         if not self.mapWindow.init:
             return
 
-        wx.Yield()
+        wx.GetApp().Yield()
 
         # find attribute row
         attrb = self.__GetWindowName(self.win['surface'], event.GetId())

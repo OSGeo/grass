@@ -211,7 +211,7 @@ class Animation:
                     height=size[1])
                 self.currentFrame += 1
 
-                wx.Yield()
+                wx.GetApp().Yield()
                 toolWin.UpdateFrameIndex(
                     index=self.currentFrame, goToFrame=False)
             else:
