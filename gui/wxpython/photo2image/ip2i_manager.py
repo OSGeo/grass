@@ -1022,7 +1022,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
             busy = wx.BusyInfo(_("Rectifying images, please wait..."),
                                parent=self)
-            wx.Yield()
+            wx.GetApp().Yield()
 
             ret, msg = RunCommand('i.rectify',
                                   parent=self,
@@ -1044,7 +1044,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
             busy = wx.BusyInfo(_("Writing output image to group, please wait..."),
                                parent=self)
-            wx.Yield()
+            wx.GetApp().Yield()
 
             ret1, msg1 = RunCommand('i.group',
                                   parent=self,

@@ -1552,7 +1552,7 @@ class VectorColorTable(ColorTable):
         busy = wx.BusyInfo(
             _("Please wait, loading data from attribute table..."),
             parent=self)
-        wx.Yield()
+        wx.GetApp().Yield()
 
         columns = self.properties['sourceColumn']
         if self.properties['loadColumn']:
