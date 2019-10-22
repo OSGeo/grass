@@ -541,7 +541,7 @@ class AnimationController(wx.EvtHandler):
         busy = wx.BusyInfo(
             _("Preparing export, please wait..."),
             parent=self.frame)
-        wx.Yield()
+        wx.GetApp().Yield()
         lastBitmaps = {}
         fgcolor = UserSettings.Get(
             group='animation',
@@ -623,7 +623,7 @@ class AnimationController(wx.EvtHandler):
         pilImages = [WxImageToPil(image) for image in images]
         busy = wx.BusyInfo(_("Exporting animation, please wait..."),
                            parent=self.frame)
-        wx.Yield()
+        wx.GetApp().Yield()
         try:
             if exportInfo['method'] == 'sequence':
                 filename = os.path.join(

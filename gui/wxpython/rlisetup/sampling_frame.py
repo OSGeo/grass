@@ -260,7 +260,7 @@ class RLiSetupMapPanel(wx.Panel):
         tmpraster = "rast_" + pname
         tmpvector = "vect_" + pname
         wx.BeginBusyCursor()
-        wx.Yield()
+        wx.GetApp().Yield()
         RunCommand('r.in.poly', input=polyfile.name, output=tmpraster,
                    rows=region_settings['rows'], overwrite=True)
 

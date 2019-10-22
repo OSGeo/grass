@@ -701,7 +701,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
         self._busy = wx.BusyInfo(_("Please wait, exporting image..."),
                                  parent=self)
-        wx.Yield()
+        wx.GetApp().Yield()
 
         self.Map.ChangeMapSize((width, height))
         renderMgr = self.Map.GetRenderMgr()

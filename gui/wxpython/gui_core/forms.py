@@ -2525,7 +2525,7 @@ class CmdPanel(wx.Panel):
             # calling LoadPage() is strangely time-consuming (only first call)
             # FIXME: move to helpPage.__init__()
             if not self.manualTab.IsLoaded():
-                wx.Yield()
+                wx.GetApp().Yield()
                 self.manualTab.LoadPage()
 
         self.Layout()
