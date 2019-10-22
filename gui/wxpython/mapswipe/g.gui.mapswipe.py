@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 ############################################################################
 #
 # MODULE:    Map Swipe
@@ -57,7 +57,6 @@ def main():
     set_gui_path()
 
     from core.settings import UserSettings
-    from core.globalvar import CheckWxVersion
     from core.giface import StandaloneGrassInterface
     from mapswipe.frame import SwipeMapFrame
 
@@ -78,8 +77,6 @@ def main():
                 gscript.fatal(_("Raster map <%s> not found") % mapName)
 
     app = wx.App()
-    if not CheckWxVersion([2, 9]):
-        wx.InitAllImageHandlers()
 
     frame = SwipeMapFrame(parent=None, giface=StandaloneGrassInterface())
 

@@ -156,7 +156,7 @@ class DMonMap(Map):
             else:
                 # clean overlays after erase
                 self.oldOverlays = []
-                overlays = self._giface.GetMapDisplay().decorations.keys()
+                overlays = list(self._giface.GetMapDisplay().decorations.keys())
                 for each in overlays:
                     self._giface.GetMapDisplay().RemoveOverlay(each)
 
@@ -350,7 +350,7 @@ class LayerList(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         items = self._map.GetListOfLayers()
         try:
             result = items[self._index]
@@ -358,6 +358,9 @@ class LayerList(object):
             raise StopIteration
         self._index += 1
         return result
+
+    def next(self):
+        return self.__next__()
 
     def GetSelectedLayers(self, checkedOnly=True):
         # hidden and selected vs checked and selected
@@ -492,9 +495,6 @@ class DMonFrame(MapFrame):
 class MapApp(wx.App):
 
     def OnInit(self):
-        if not globalvar.CheckWxVersion([2, 9]):
-            wx.InitAllImageHandlers()
-
         grass.set_raise_on_error(True)
         # actual use of StandaloneGrassInterface not yet tested
         # needed for adding functionality in future
@@ -560,10 +560,12 @@ class MapApp(wx.App):
     def OnExit(self):
         if __name__ == "__main__":
             # stop the timer
-            # self.timer.Stop()
+            if self.timer.IsRunning:
+                self.timer.Stop()
             # terminate thread
             for f in six.itervalues(monFile):
                 try_remove(f)
+        return True
 
     def watcher(self):
         """Redraw, if new layer appears (check's timestamp of

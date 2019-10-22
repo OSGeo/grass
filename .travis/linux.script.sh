@@ -22,6 +22,7 @@ export CC="ccache $CC"
             --with-netcdf \
             --with-blas \
             --with-sqlite \
+            --with-zstd \
             --enable-largefile \
             --with-freetype-includes=/usr/include/freetype2/ \
             --with-postgres-includes=/usr/include/postgresql/ \

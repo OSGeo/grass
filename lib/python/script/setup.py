@@ -24,17 +24,17 @@ Usage::
     # query GRASS itself for its GISBASE
     # (with fixes for specific platforms)
     # needs to be edited by the user
-    grass7bin = 'grass77'
+    grass7bin = 'grass79'
     if sys.platform.startswith('win'):
         # MS Windows
-        grass7bin = r'C:\OSGeo4W\bin\grass77.bat'
+        grass7bin = r'C:\OSGeo4W\bin\grass79.bat'
         # uncomment when using standalone WinGRASS installer
-        # grass7bin = r'C:\Program Files (x86)\GRASS GIS 7.2.0\grass77.bat'
+        # grass7bin = r'C:\Program Files (x86)\GRASS GIS 7.9.0\grass79.bat'
         # this can be avoided if GRASS executable is added to PATH
     elif sys.platform == 'darwin':
         # Mac OS X
         # TODO: this have to be checked, maybe unix way is good enough
-        grass7bin = '/Applications/GRASS/GRASS-7.7.app/'
+        grass7bin = '/Applications/GRASS/GRASS-7.9.app/'
 
     # query GRASS GIS itself for its GISBASE
     startcmd = [grass7bin, '--config', 'path']
@@ -81,7 +81,7 @@ Usage::
     gsetup.cleanup()
 
 
-(C) 2010-2012 by the GRASS Development Team
+(C) 2010-2019 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -188,9 +188,9 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
     # Set GRASS_PYTHON and PYTHONPATH to find GRASS Python modules
     if not os.getenv('GRASS_PYTHON'):
         if sys.platform == 'win32':
-            os.environ['GRASS_PYTHON'] = "python.exe"
+            os.environ['GRASS_PYTHON'] = "python3.exe"
         else:
-            os.environ['GRASS_PYTHON'] = "python"
+            os.environ['GRASS_PYTHON'] = "python3"
     
     path = os.getenv('PYTHONPATH')
     etcpy = os.path.join(gisbase, 'etc', 'python')

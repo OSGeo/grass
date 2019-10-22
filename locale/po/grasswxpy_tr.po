@@ -1328,7 +1328,7 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:747
 #: ../gui/wxpython/animation/controller.py:295
 msgid "Invalid input"
-msgstr ""
+msgstr "Geçersiz girdi"
 
 #: ../gui/wxpython/wxplot/dialogs.py:665 ../gui/wxpython/wxplot/base.py:519
 #: ../gui/wxpython/wxplot/base.py:586
@@ -3991,9 +3991,9 @@ msgid "Delete selected mapset"
 msgstr "Seçilen harita takımını sil"
 
 #: ../gui/wxpython/gis_set.py:258
-#, fuzzy, python-format
+#, python-format
 msgid "GRASS GIS %s Startup%s"
-msgstr "GRASS CBS - Harita Görüntüsü"
+msgstr ""
 
 #: ../gui/wxpython/gis_set.py:263
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:257
@@ -11647,9 +11647,8 @@ msgid "Not enough points for line"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:51
-#, fuzzy
 msgid "Name for the new mapset:"
-msgstr "Yeni harita takımı için ad gir:"
+msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:150
 #, python-brace-format
@@ -13406,7 +13405,7 @@ msgstr ""
 #: ../gui/wxpython/vnet/dialogs.py:1648
 #: ../gui/wxpython/gmodeler/preferences.py:707
 msgid "Name:"
-msgstr ""
+msgstr "Adı:"
 
 #: ../gui/wxpython/gui_core/gselect.py:1565
 msgid "Choose file"
@@ -15573,7 +15572,7 @@ msgstr ""
 #: ../gui/wxpython/animation/data.py:144
 #, python-format
 msgid "Animation %d"
-msgstr ""
+msgstr "Animasyon %d"
 
 #: ../gui/wxpython/animation/nviztask.py:45 ../gui/wxpython/lmgr/frame.py:1432
 #, python-format
@@ -15694,7 +15693,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:104
 msgid "Simple mode"
-msgstr ""
+msgstr "Basit mod"
 
 #: ../gui/wxpython/animation/dialogs.py:109
 msgid "Frame duration:"
@@ -15703,7 +15702,7 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:110
 #: ../gui/wxpython/animation/dialogs.py:151
 msgid "ms"
-msgstr ""
+msgstr "ms"
 
 #: ../gui/wxpython/animation/dialogs.py:143
 msgid "Temporal mode"
@@ -15711,7 +15710,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:148
 msgid "Time unit:"
-msgstr ""
+msgstr "Zaman birimi:"
 
 #: ../gui/wxpython/animation/dialogs.py:150
 msgid "Duration of time unit:"
@@ -15719,27 +15718,27 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:222
 msgid "year"
-msgstr ""
+msgstr "yıl"
 
 #: ../gui/wxpython/animation/dialogs.py:223
 msgid "month"
-msgstr ""
+msgstr "ay"
 
 #: ../gui/wxpython/animation/dialogs.py:224
 msgid "day"
-msgstr ""
+msgstr "gün"
 
 #: ../gui/wxpython/animation/dialogs.py:225
 msgid "hour"
-msgstr ""
+msgstr "saat"
 
 #: ../gui/wxpython/animation/dialogs.py:226
 msgid "minute"
-msgstr ""
+msgstr "dakika"
 
 #: ../gui/wxpython/animation/dialogs.py:227
 msgid "second"
-msgstr ""
+msgstr "saniye"
 
 #: ../gui/wxpython/animation/dialogs.py:292
 msgid "Animation speed is too high."
@@ -16140,7 +16139,7 @@ msgstr ""
 #: ../gui/wxpython/animation/controller.py:234
 #, python-format
 msgid "Maximum number of animations is %s."
-msgstr ""
+msgstr "En büyük animasyon sayısı: %s."
 
 #: ../gui/wxpython/animation/controller.py:443
 msgid "Failed to display legend."
@@ -16247,9 +16246,8 @@ msgid "Set label for Y axis"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:304
-#, fuzzy
 msgid "Labels"
-msgstr "Etiket ekle"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:311
 msgid "Path for output CSV file with plotted data"
@@ -16260,9 +16258,8 @@ msgid "CVS path"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:323
-#, fuzzy
 msgid "Do you want the CSV header?"
-msgstr "<%s> GRASS mevkisini oluşturmak istiyormusun?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:364 ../gui/wxpython/tplot/frame.py:842
 #: ../gui/wxpython/tplot/frame.py:846 ../gui/wxpython/tplot/frame.py:867
@@ -16332,14 +16329,13 @@ msgid "Problem getting data from vector temporal dataset. Empty list of values."
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:802
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{pa} already exists, do you want to overwrite?"
-msgstr "<%s> bölge dosyası zaten var. Üzerine yazılmasını istermisin?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:804
-#, fuzzy
 msgid "File exists"
-msgstr "Dosya zaten var"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:809
 msgid "Please change name of output CSV file or "
@@ -20636,9 +20632,8 @@ msgstr "Vektörden hacime"
 msgid "Sites to vector"
 msgstr "Noktadan vektöre"
 
-#, fuzzy
 msgid "Raster map calculator."
-msgstr "3B raster harita Hesaplayıcı"
+msgstr ""
 
 #, fuzzy
 msgid "V&olumes"
@@ -20683,5 +20678,5 @@ msgstr "Raster haritanın boş değer içermeyen hücrelerinden tek değişkenli
 msgid "Digitize"
 msgstr "Sayısallaştırma"
 
-#~ msgid "&Fetch"
-#~ msgstr "&Getir"
+msgid "&Fetch"
+msgstr "&Getir"

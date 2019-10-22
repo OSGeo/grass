@@ -445,7 +445,7 @@ def convert_xml_to_utf8(xml_text):
 
     # modify: fetch encoding from the interface description text(xml)
     # e.g. <?xml version="1.0" encoding="GBK"?>
-    pattern = re.compile('<\?xml[^>]*\Wencoding="([^"]*)"[^>]*\?>')
+    pattern = re.compile(b'<\?xml[^>]*\Wencoding="([^"]*)"[^>]*\?>')
     m = re.match(pattern, xml_text)
     if m is None:
         return xml_text.encode("utf-8") if xml_text else None
@@ -453,10 +453,11 @@ def convert_xml_to_utf8(xml_text):
     enc = m.groups()[0]
 
     # modify: change the encoding to "utf-8", for correct parsing
-    p = re.compile('encoding="' + enc + '"', re.IGNORECASE)
-    xml_text_utf8 = p.sub('encoding="utf-8"', xml_text)
+    xml_text_utf8 = xml_text.decode(enc.decode('ascii')).encode("utf-8")
+    p = re.compile(b'encoding="' + enc + b'"', re.IGNORECASE)
+    xml_text_utf8 = p.sub(b'encoding="utf-8"', xml_text_utf8)
 
-    return xml_text_utf8.encode("utf-8")
+    return xml_text_utf8
 
 
 def get_interface_description(cmd):
@@ -494,13 +495,13 @@ def get_interface_description(cmd):
 
         if p.returncode != 0:
             raise ScriptError(_("Unable to fetch interface description for command '<{cmd}>'."
-                                "\n\nDetails: <{det}>".format(cmd=cmd, det=decode(cmderr))))
+                                "\n\nDetails: <{det}>").format(cmd=cmd, det=decode(cmderr)))
 
     except OSError as e:
         raise ScriptError(_("Unable to fetch interface description for command '<{cmd}>'."
-                            "\n\nDetails: <{det}>".format(cmd=cmd, det=e)))
+                            "\n\nDetails: <{det}>").format(cmd=cmd, det=e))
 
-    desc = convert_xml_to_utf8(decode(cmdout))
+    desc = convert_xml_to_utf8(cmdout)
     desc = desc.replace(b'grass-interface.dtd',
                         os.path.join(os.getenv('GISBASE'), 'gui', 'xml',
                                      'grass-interface.dtd').encode('utf-8'))

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ############################################################################
 #
@@ -129,6 +129,7 @@
 
 
 from __future__ import print_function
+import fileinput
 import os
 import sys
 import re
@@ -963,46 +964,48 @@ def install_private_extension_xml(url, mlist):
                 tnode = node
                 break
 
-        # create new node for task
-        tnode = etree.Element('task', attrib={'name': name})
-        dnode = etree.Element('description')
-        dnode.text = desc
-        tnode.append(dnode)
-        knode = etree.Element('keywords')
-        knode.text = (',').join(keywords)
-        tnode.append(knode)
+        if tnode == None:
+            # create new node for task
+            tnode = etree.Element('task', attrib={'name': name})
+            dnode = etree.Element('description')
+            dnode.text = desc
+            tnode.append(dnode)
+            knode = etree.Element('keywords')
+            knode.text = (',').join(keywords)
+            tnode.append(knode)
 
-        # create binary
-        bnode = etree.Element('binary')
-        list_of_binary_files = []
-        for file_name in os.listdir(url):
-            file_type = os.path.splitext(file_name)[-1]
-            file_n = os.path.splitext(file_name)[0]
-            html_path = os.path.join(options['prefix'], 'docs', 'html')
-            c_path = os.path.join(options['prefix'], 'bin')
-            py_path = os.path.join(options['prefix'], 'scripts')
-            # html or image file
-            if file_type in ['.html', '.jpg', '.png'] \
-                    and file_n in os.listdir(html_path):
-                list_of_binary_files.append(os.path.join(html_path, file_name))
-            # c file
-            elif file_type in ['.c'] and file_name in os.listdir(c_path):
-                list_of_binary_files.append(os.path.join(c_path, file_n))
-            # python file
-            elif file_type in ['.py'] and file_name in os.listdir(py_path):
-                list_of_binary_files.append(os.path.join(py_path, file_n))
-        # man file
-        man_path = os.path.join(options['prefix'], 'docs', 'man', 'man1')
-        if name + '.1' in os.listdir(man_path):
-            list_of_binary_files.append(os.path.join(man_path, name + '.1'))
-        # add binaries to xml file
-        for binary_file_name in list_of_binary_files:
-            fnode = etree.Element('file')
-            fnode.text = binary_file_name
-            bnode.append(fnode)
-        tnode.append(bnode)
-        tree.append(tnode)
-
+            # create binary
+            bnode = etree.Element('binary')
+            list_of_binary_files = []
+            for file_name in os.listdir(url):
+                file_type = os.path.splitext(file_name)[-1]
+                file_n = os.path.splitext(file_name)[0]
+                html_path = os.path.join(options['prefix'], 'docs', 'html')
+                c_path = os.path.join(options['prefix'], 'bin')
+                py_path = os.path.join(options['prefix'], 'scripts')
+                # html or image file
+                if file_type in ['.html', '.jpg', '.png'] \
+                        and file_n in os.listdir(html_path):
+                    list_of_binary_files.append(os.path.join(html_path, file_name))
+                # c file
+                elif file_type in ['.c'] and file_name in os.listdir(c_path):
+                    list_of_binary_files.append(os.path.join(c_path, file_n))
+                # python file
+                elif file_type in ['.py'] and file_name in os.listdir(py_path):
+                    list_of_binary_files.append(os.path.join(py_path, file_n))
+            # man file
+            man_path = os.path.join(options['prefix'], 'docs', 'man', 'man1')
+            if name + '.1' in os.listdir(man_path):
+                list_of_binary_files.append(os.path.join(man_path, name + '.1'))
+            # add binaries to xml file
+            for binary_file_name in list_of_binary_files:
+                fnode = etree.Element('file')
+                fnode.text = binary_file_name
+                bnode.append(fnode)
+            tnode.append(bnode)
+            tree.append(tnode)
+        else:
+            grass.warning("Addons already exist in metadata file; not updated!")
     write_xml_modules(xml_file, tree)
 
     return mlist
@@ -1023,7 +1026,7 @@ def install_extension_win(name):
                "grass-%(major)s.%(minor)s.%(patch)s" % \
                {'platform': platform,
                 'major': version[0], 'minor': version[1],
-                'patch': version[2]}
+                'patch': 'dev'}
 
     # resolve ZIP URL
     source, url = resolve_source_code(url='{0}/{1}.zip'.format(base_url, name))
@@ -1040,6 +1043,21 @@ def install_extension_win(name):
     download_source_code(source=source, url=url, name=name,
                          outdev=outdev, directory=srcdir, tmpdir=TMPDIR)
 
+    # change shebang from python to python3
+    pyfiles = []
+    for r, d, f in os.walk(srcdir):
+        for file in f:
+            if file.endswith('.py'):
+                pyfiles.append(os.path.join(r, file))
+
+    for filename in pyfiles:
+        with fileinput.FileInput(filename, inplace=True) as file:
+            for line in file:
+                print(line.replace(
+                    "#!/usr/bin/env python\n",
+                    "#!/usr/bin/env python3\n"
+                ), end='')
+
     # copy Addons copy tree to destination directory
     move_extracted_files(extract_dir=srcdir, target_dir=options['prefix'],
                          files=os.listdir(srcdir))
@@ -1048,7 +1066,7 @@ def install_extension_win(name):
 
 
 def download_source_code_svn(url, name, outdev, directory=None):
-    """Download source code from a Subversion reporsitory
+    """Download source code from a Subversion repository
 
     .. note:
         Stdout is passed to to *outdev* while stderr is will be just printed.
@@ -1076,7 +1094,7 @@ def download_source_code_svn(url, name, outdev, directory=None):
 
 
 def download_source_code_official_github(url, name, outdev, directory=None):
-    """Download source code from a official GitHub reporsitory
+    """Download source code from a official GitHub repository
 
     .. note:
         Stdout is passed to to *outdev* while stderr is will be just printed.
@@ -1272,6 +1290,22 @@ def install_extension_std_platforms(name, source, url):
     download_source_code(source=source, url=url, name=name,
                          outdev=outdev, directory=srcdir, tmpdir=TMPDIR)
     os.chdir(srcdir)
+
+    # change shebang from python to python3
+    pyfiles = []
+    # r=root, d=directories, f = files
+    for r, d, f in os.walk(srcdir):
+        for file in f:
+            if file.endswith('.py'):
+                pyfiles.append(os.path.join(r, file))
+
+    for filename in pyfiles:
+        with fileinput.FileInput(filename, inplace=True) as file:
+            for line in file:
+                print(line.replace(
+                    "#!/usr/bin/env python\n",
+                    "#!/usr/bin/env python3\n"
+                ), end='')
 
     dirs = {
         'bin': os.path.join(TMPDIR, name, 'bin'),

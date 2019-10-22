@@ -26,7 +26,7 @@ from core.debug import Debug
 from icons.icon import MetaIcon
 from collections import defaultdict
 from core.globalvar import IMGDIR
-from gui_core.wrap import ToolBar, Menu, BitmapButton
+from gui_core.wrap import ToolBar, Menu, BitmapButton, NewId
 
 from grass.pydispatch.signal import Signal
 
@@ -138,7 +138,7 @@ class BaseToolbar(ToolBar):
         bmpDisabled = wx.NullBitmap
         tool = -1
         if label:
-            tool = vars(self)[label] = wx.NewId()
+            tool = vars(self)[label] = NewId()
             Debug.msg(3, "CreateTool(): tool=%d, label=%s bitmap=%s" %
                       (tool, label, bitmap))
             if pos < 0:

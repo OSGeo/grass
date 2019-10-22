@@ -43,7 +43,7 @@ from core.settings import UserSettings
 from gui_core.gselect import Select
 from gui_core.widgets import FloatValidator
 from gui_core.wrap import SpinCtrl, CheckBox, TextCtrl, Button, \
-    BitmapButton, StaticText, StaticBox, Choice, RadioButton
+    BitmapButton, StaticText, StaticBox, Choice, RadioButton, EmptyImage
 
 from animation.utils import TemporalMode, getRegisteredMaps, getNameAndLayer, getCpuCount
 from animation.data import AnimationData, AnimLayer
@@ -1085,7 +1085,7 @@ class ExportDialog(wx.Dialog):
 
         # image
         self.imageBox = wx.BoxSizer(wx.HORIZONTAL)
-        filetype, ltype = GetImageHandlers(wx.EmptyImage(10, 10))
+        filetype, ltype = GetImageHandlers(EmptyImage(10, 10))
         self.browse = filebrowse.FileBrowseButton(
             parent=panel, id=wx.ID_ANY, fileMask=filetype,
             labelText=_("Image file:"),
@@ -1368,7 +1368,7 @@ class ExportDialog(wx.Dialog):
 
     def ChangeFormat(self, index):
         for i, panel in enumerate(self.formatPanels):
-            self.formatPanelSizer.Show(item=panel, show=(i == index))
+            self.formatPanelSizer.Show(window=panel, show=(i == index))
         self.formatPanelSizer.Layout()
 
     def OnFont(self, event):

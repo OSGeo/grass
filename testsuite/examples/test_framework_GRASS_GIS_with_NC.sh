@@ -112,7 +112,7 @@ if [ "$COMPILE" = "yes" ] ; then
    ## compile current source code from scratch
    cd $GRASSSRC
    make distclean -j$GCCTHREADS
-   svn update
+   git pull
    ./$CONFIGURE ...  # configure meta script containing all the compiler flags
    make -j$GCCTHREADS
 fi

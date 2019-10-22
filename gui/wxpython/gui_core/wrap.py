@@ -17,14 +17,28 @@ This program is free software under the GNU General Public License
 
 import wx
 import wx.lib.buttons as buttons
+import wx.lib.colourselect as csel
 try:
     import wx.lib.agw.customtreectrl as CT
 except ImportError:
     import wx.lib.customtreectrl as CT
 
-from core.globalvar import gtk3, wxPythonPhoenix
+from core.globalvar import gtk3, wxPythonPhoenix, CheckWxVersion
 if wxPythonPhoenix:
     import wx.adv
+
+if wxPythonPhoenix:
+    ComboPopup = wx.ComboPopup
+    wxComboCtrl = wx.ComboCtrl
+else:
+    import wx.combo
+    ComboPopup = wx.combo.ComboPopup
+    wxComboCtrl = wx.combo.ComboCtrl
+
+if wxPythonPhoenix and CheckWxVersion([4, 0, 3, 0]):
+    from wx import NewIdRef as NewId
+else:
+    from wx import NewId
 
 
 def BitmapFromImage(image, depth=-1):
@@ -33,6 +47,11 @@ def BitmapFromImage(image, depth=-1):
     else:
         return wx.BitmapFromImage(image, depth=depth)
 
+def ImageFromBitmap(bitmap):
+    if wxPythonPhoenix:
+        return bitmap.ConvertToImage()
+    else:
+        return wx.ImageFromBitmap(bitmap)
 
 def EmptyBitmap(width, height, depth=-1):
     if wxPythonPhoenix:
@@ -439,3 +458,26 @@ class TextEntryDialog(wx.TextEntryDialog):
         else:
             super(TextEntryDialog, self).__init__(parent=parent, message=message, caption=caption,
                                                   defaultValue=value, style=style, pos=pos)
+
+
+class ColourSelect(csel.ColourSelect):
+    """Wrapper around wx.lib.colourselect.ColourSelect to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        csel.ColourSelect.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            csel.ColourSelect.SetToolTip(self, tipString=tip)
+        else:
+            csel.ColourSelect.SetToolTipString(self, tip)
+
+class ComboCtrl(wxComboCtrl):
+    def __init__(self, *args, **kwargs):
+        wxComboCtrl.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            wxComboCtrl.SetToolTip(self, tipString=tip)
+        else:
+            wxComboCtrl.SetToolTipString(self, tip)

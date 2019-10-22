@@ -96,7 +96,7 @@ static void usage(FILE *fp, int markers)
                 fprintf(fp, "%s\n", st->module_info.description);
         }
     }
-    if (extensive &&& st->module_info.keywords) {
+    if (extensive && st->module_info.keywords) {
 	fprintf(fp, "\n");
 	if (markers)
 	    fprintf(fp, "{{{KEYWORDS}}}\n");
@@ -185,10 +185,18 @@ static void usage(FILE *fp, int markers)
 
     /* Print help info for flags */
 
-    fprintf(fp, "\n");
-    if (markers)
-	fprintf(fp, "{{{FLAGS}}}\n");
-    fprintf(fp, "%s\n", _("Flags:"));
+    /* Show section only when there are flags.
+     * There are always the standard flags if we are printing those.
+     * There is no use case for the markers, so no way to decide if
+     * the marker for flags is mandatory and should be empty if it is
+     * okay for it to be missing like in the current implementation.
+     */
+    if (st->n_flags || standard) {
+	fprintf(fp, "\n");
+	if (markers)
+	    fprintf(fp, "{{{FLAGS}}}\n");
+	fprintf(fp, "%s\n", _("Flags:"));
+    }
 
     if (st->n_flags) {
 	flag = &st->first_flag;
