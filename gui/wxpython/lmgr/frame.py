@@ -1441,7 +1441,7 @@ class GMFrame(wx.Frame):
         # the really busy part starts here (mapset change is fast)
         busy = wx.BusyInfo(_("Please wait, loading workspace..."),
                            parent=self)
-        wx.Yield()
+        wx.GetApp().Yield()
 
         #
         # load layer manager window properties
@@ -1612,7 +1612,7 @@ class GMFrame(wx.Frame):
 
         busy = wx.BusyInfo(_("Please wait, loading workspace..."),
                            parent=self)
-        wx.Yield()
+        wx.GetApp().Yield()
 
         maptree = None
         for layer in ProcessGrcFile(filename).read(self):
