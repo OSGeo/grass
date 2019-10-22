@@ -1239,7 +1239,7 @@ class GMFrame(wx.Frame):
                                 "%s: %s\n"
                                 # "%s: %s (%s)\n"
                                 "GDAL: %s\n"
-                                "PROJ.4: %s\n"
+                                "PROJ: %s\n"
                                 "GEOS: %s\n"
                                 "SQLite: %s\n"
                                 "Python: %s\n"
@@ -1257,7 +1257,7 @@ class GMFrame(wx.Frame):
                                                 # ', 1)[0],
                                                 vInfo.get(
                                                     'gdal', '?'), vInfo.get(
-                                                    'proj4', '?'), vInfo.get(
+                                                    'proj', '?'), vInfo.get(
                                                     'geos', '?'), vInfo.get(
                                                     'sqlite', '?'),
                                                 platform.python_version(),
@@ -1797,7 +1797,7 @@ class GMFrame(wx.Frame):
         dlg.Show()
 
     def OnInstallExtension(self, event):
-        """Install extension from GRASS Addons SVN repository"""
+        """Install extension from GRASS Addons repository"""
         from modules.extensions import InstallExtensionWindow
         win = InstallExtensionWindow(
             self, giface=self._giface, size=(650, 550))

@@ -47,7 +47,7 @@ from core.gcmd import GWarning, GError, RunCommand
 from icons.icon import MetaIcon
 from web_services.dialogs import SaveWMSLayerDialog
 from gui_core.widgets import MapValidator
-from gui_core.wrap import Menu, GenBitmapButton, TextCtrl
+from gui_core.wrap import Menu, GenBitmapButton, TextCtrl, NewId
 from lmgr.giface import LayerManagerGrassInterfaceForMapDisplay
 from core.giface import Notification
 
@@ -444,7 +444,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     'null', 'zoom1', 'color', 'colori', 'hist', 'univar', 'prof',
                     'properties', 'sql', 'copy', 'report', 'export-pg',
                     'export-attr', 'pack'):
-                self.popupID[key] = wx.NewId()
+                self.popupID[key] = NewId()
 
         # get current mapset
         currentMapset = grass.gisenv()['MAPSET']

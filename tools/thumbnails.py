@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # thumbnails.py: Create thumbnail images of the GRASS color tables
 #

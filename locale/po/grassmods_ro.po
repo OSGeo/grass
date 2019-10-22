@@ -5252,9 +5252,8 @@ msgstr ""
 #: ../display/d.grid/plot.c:605 ../display/d.where/main.c:151
 #: ../general/g.region/printwindow.c:265 ../general/g.region/printwindow.c:501
 #: ../general/g.region/printwindow.c:593 ../vector/v.proj/main.c:292
-#, fuzzy
 msgid "Unable to initialize coordinate transformation"
-msgstr "Nu s-a putut închide harta"
+msgstr ""
 
 #: ../ps/ps.map/ps_clrtbl.c:35 ../ps/ps.map/ps_fclrtbl.c:46
 #, c-format
@@ -5849,18 +5848,16 @@ msgid "Traces paths from starting points following input directions."
 msgstr ""
 
 #: ../raster/r.path/main.c:157
-#, fuzzy
 msgid "Name of input direction"
-msgstr "Numele hărții vectoriale de intrare (A)"
+msgstr ""
 
 #: ../raster/r.path/main.c:159
 msgid "Direction in degrees CCW from east, or bitmask encoded"
 msgstr ""
 
 #: ../raster/r.path/main.c:164
-#, fuzzy
 msgid "Format of the input direction map"
-msgstr "Numele rasterului sursă pentru altitudine "
+msgstr ""
 
 #: ../raster/r.path/main.c:170
 msgid "auto-detect direction format"
@@ -5879,19 +5876,16 @@ msgid "bitmask encoded directions (e.g. r.cost -b)"
 msgstr ""
 
 #: ../raster/r.path/main.c:179
-#, fuzzy
 msgid "Name of input raster values to be used for output"
-msgstr "Numele stratului care va fi folosit pentru ALBASTRU"
+msgstr ""
 
 #: ../raster/r.path/main.c:185
-#, fuzzy
 msgid "Name for output raster path map"
-msgstr "Nume de ieșire pentru harta raster pantă "
+msgstr ""
 
 #: ../raster/r.path/main.c:190
-#, fuzzy
 msgid "Name for output vector path map"
-msgstr "Nume pentru harta vectorială de ieșire"
+msgstr ""
 
 #: ../raster/r.path/main.c:272 ../raster/r.drain/main.c:244
 #, c-format
@@ -5927,29 +5921,27 @@ msgid "Starting vector map <%s> contains no points in the current region"
 msgstr ""
 
 #: ../raster/r.path/main.c:359
-#, fuzzy
 msgid "No start point(s) specified"
-msgstr "Nici o hartă raster de intrare specificată"
+msgstr ""
 
 #: ../raster/r.path/main.c:369
-#, fuzzy, c-format
+#, c-format
 msgid "Reading raster values map <%s> ..."
-msgstr "Citirea hărții raster <%s>..."
+msgstr ""
 
 #: ../raster/r.path/main.c:382 ../raster/r.path/main.c:445
 #: ../raster/r.path/main.c:462
-#, fuzzy
 msgid "Unable to write to tempfile"
-msgstr "Imposibil de deschis tempfile"
+msgstr ""
 
 #: ../raster/r.path/main.c:390 ../raster/r.info/main.c:134
 msgid "Unable to read range file"
 msgstr ""
 
 #: ../raster/r.path/main.c:393
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid directions map <%s>"
-msgstr "Hartă nevalidă <%s>"
+msgstr ""
 
 #: ../raster/r.path/main.c:398
 msgid "Directional degrees can not be > 360"
@@ -5981,24 +5973,23 @@ msgid "Input direction format assumed to be bitmask encoded with Knight's move"
 msgstr ""
 
 #: ../raster/r.path/main.c:429
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to detect format of input direction map <%s>"
-msgstr "Imposibil de obținut informații despre proiecție pentru harta de intrare"
+msgstr ""
 
 #: ../raster/r.path/main.c:432
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid directions format '%s'"
-msgstr "Culoare nevalidă: %s"
+msgstr ""
 
 #: ../raster/r.path/main.c:434
-#, fuzzy, c-format
+#, c-format
 msgid "Reading direction map <%s> ..."
-msgstr "Citirea hărții raster <%s>..."
+msgstr ""
 
 #: ../raster/r.path/main.c:481
-#, fuzzy
 msgid "Processing start points..."
-msgstr "Procesarea liniilor..."
+msgstr ""
 
 #: ../raster/r.path/main.c:491 ../vector/v.buffer/main.c:414
 #: ../vector/v.in.ogr/main.c:912 ../vector/v.overlay/main.c:227
@@ -6006,9 +5997,9 @@ msgid "Unable to create temporary vector map"
 msgstr "Imposibil de creat fișierul temporar"
 
 #: ../raster/r.path/main.c:497 ../raster/r.path/main.c:513
-#, fuzzy, c-format
+#, c-format
 msgid "No path at row %d, col %d"
-msgstr "Conversia datelor a eșuat la rândul %d, coloana %d"
+msgstr ""
 
 #: ../raster/r.path/main.c:502 ../vector/v.overlay/line_area.c:256
 #: ../vector/v.overlay/area_area.c:109
@@ -6021,9 +6012,8 @@ msgid "Writing output raster map..."
 msgstr ""
 
 #: ../raster/r.path/main.c:640
-#, fuzzy
 msgid "Unable to increase point list"
-msgstr "Imposibil de creat %s"
+msgstr ""
 
 #: ../raster/r.path/main.c:740 ../raster/r.path/main.c:771
 #: ../raster/r.path/main.c:897 ../raster/r.path/main.c:1005
@@ -6042,14 +6032,13 @@ msgid "No path from row %d, col %d"
 msgstr ""
 
 #: ../raster/r.path/main.c:845
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid direction %d"
-msgstr "Metodă nevalidă: %s"
+msgstr ""
 
 #: ../raster/r.path/main.c:934
-#, fuzzy
 msgid "Path is leaving the current region"
-msgstr "Nu sunt [%ld] celule în regiunea curentă"
+msgstr ""
 
 #: ../raster/r.profile/main.c:54 ../raster/r.transect/main.c:104
 #: ../display/d.profile/main.c:192 ../raster3d/r3.cross.rast/main.c:229
@@ -6510,9 +6499,9 @@ msgstr ""
 #: ../vector/v.proj/main.c:343 ../vector/v.proj/main.c:355
 #: ../vector/v.proj/main.c:370 ../vector/v.proj/main.c:385
 #: ../vector/v.proj/main.c:466 ../vector/v.proj/main.c:471
-#, fuzzy, c-format
+#, c-format
 msgid "Error in %s (projection of input coordinate pair)"
-msgstr "Încarca data..."
+msgstr ""
 
 #: ../raster/r.regression.multi/main.c:61
 msgid "Matrix is unsolvable"
@@ -6858,9 +6847,8 @@ msgid "Name for output raster map to contain walking costs"
 msgstr ""
 
 #: ../raster/r.walk/main.c:227 ../raster/r.cost/main.c:183
-#, fuzzy
 msgid "Name of input raster map solving equal costs"
-msgstr "Numele rasterului sursă pentru altitudine "
+msgstr ""
 
 #: ../raster/r.walk/main.c:229 ../raster/r.cost/main.c:185
 msgid "Helper variable to pick a direction if two directions have equal cumulative costs (smaller is better)"
@@ -7014,9 +7002,8 @@ msgid "No start points"
 msgstr ""
 
 #: ../raster/r.walk/main.c:408 ../raster/r.cost/main.c:348
-#, fuzzy
 msgid "No stop points"
-msgstr "puncte vectoriale"
+msgstr ""
 
 #: ../raster/r.walk/main.c:412 ../raster/r.cost/main.c:352
 #, c-format
@@ -7136,9 +7123,9 @@ msgid "Specified starting location outside database window"
 msgstr ""
 
 #: ../raster/r.walk/main.c:932 ../raster/r.cost/main.c:797
-#, fuzzy, c-format
+#, c-format
 msgid "Number of duplicate stop points: %d"
-msgstr "Numărul punctelor de interpolare"
+msgstr ""
 
 #: ../raster/r.walk/main.c:946 ../raster/r.cost/main.c:811
 msgid "Finding cost path..."
@@ -9573,9 +9560,9 @@ msgstr "OOPS: coloane schimbate din %d în %d"
 #: ../raster/r.horizon/main.c:849 ../raster/r.horizon/main.c:867
 #: ../raster/r.horizon/main.c:1203 ../raster/r.horizon/main.c:1223
 #: ../raster/r.proj/main.c:450 ../raster/r.proj/main.c:541
-#, fuzzy, c-format
+#, c-format
 msgid "Error in %s"
-msgstr "Eroare: %s"
+msgstr ""
 
 #: ../raster/r.horizon/main.c:1176
 #, c-format
@@ -12027,9 +12014,8 @@ msgid "Names of 2-%d input raster maps"
 msgstr "Numele a două 2-%d hărți raster de intrare"
 
 #: ../raster/r.cross/main.c:89
-#, fuzzy
 msgid "Non-NULL data only"
-msgstr "Doar datele nenule"
+msgstr ""
 
 #: ../raster/r.cross/main.c:102
 #, c-format
@@ -12086,9 +12072,9 @@ msgid "Reading raster map <%s> using weight %f..."
 msgstr ""
 
 #: ../raster/r.series/main.c:274 ../raster/r.series/main.c:334
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open input raster <%s>"
-msgstr "Imposibil de a deschide fișierul de intrare <%s>"
+msgstr ""
 
 #: ../raster/r.series/main.c:311
 msgid "input= and weights= must have the same number of values"
@@ -13048,9 +13034,9 @@ msgid "<%s> is a GDAL-linked map"
 msgstr ""
 
 #: ../raster/r.compress/main.c:320
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> is a virtual raster map"
-msgstr "<%s> există deja în mapsetul curent"
+msgstr ""
 
 #: ../raster/r.compress/main.c:324
 #, c-format
@@ -13660,9 +13646,8 @@ msgid "No header in the report"
 msgstr ""
 
 #: ../raster/r.kappa/main.c:113
-#, fuzzy
 msgid "Print Matrix only"
-msgstr "Doar printează"
+msgstr ""
 
 #: ../raster/r.kappa/prt_label.c:17
 #, c-format
@@ -13925,27 +13910,25 @@ msgid "mosaic"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:79
-#, fuzzy
 msgid "virtual raster"
-msgstr "raster"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:81
 msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:84
-#, fuzzy
 msgid "Name of input raster files"
-msgstr "Numele a două 2-%d hărți raster de intrare"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:90 ../imagery/i.group/main.c:74
 msgid "Input file with one raster map name per line"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:147 ../raster/r.buildvrt/main.c:200
-#, fuzzy, c-format
+#, c-format
 msgid "Input raster map <%s> not found"
-msgstr "Harta raster 3D <%s> nu a fost găsită"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:150 ../raster/r.buildvrt/main.c:203
 msgid "Input and output raster map can not be identical"
@@ -13961,9 +13944,8 @@ msgid "Only one raster map name found in input file"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:188
-#, fuzzy
 msgid "Only one raster map name found"
-msgstr "Harta raster 3D <%s> nu a fost găsită"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:260
 msgid "Input maptypes are different"
@@ -13984,9 +13966,9 @@ msgid "Unable to create fcell/%s file"
 msgstr ""
 
 #: ../raster/r.buildvrt/link.c:35
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create cell_misc/%s/vrt file"
-msgstr "Imposibil de creat fișierul setări"
+msgstr ""
 
 #: ../raster/r.buildvrt/link.c:66 ../raster/r.external/link.c:160
 #, c-format
@@ -15971,9 +15953,8 @@ msgid "Resolution of output raster map"
 msgstr ""
 
 #: ../raster/r.proj/main.c:209 ../vector/v.proj/main.c:119
-#, fuzzy
 msgid "PROJ pipeline for coordinate transformation"
-msgstr "Nu s-a putut închide harta"
+msgstr ""
 
 #: ../raster/r.proj/main.c:214
 msgid "List raster maps in input mapset and exit"
@@ -18204,9 +18185,8 @@ msgid "For USLE. All non-NULL and non-zero cells are considered as blocking terr
 msgstr ""
 
 #: ../raster/r.watershed/front/main.c:123
-#, fuzzy
 msgid "Name of input raster map with percentages for flow accumulation."
-msgstr "Numele stratului care va fi folosit pentru ALBASTRU"
+msgstr ""
 
 #: ../raster/r.watershed/front/main.c:129
 msgid "Minimum size of exterior watershed basin"
@@ -23017,14 +22997,12 @@ msgid "Adjust region cells to cleanly align with this raster map"
 msgstr ""
 
 #: ../general/g.region/main.c:346
-#, fuzzy
 msgid "Number of cells to add to each side of the current region extent"
-msgstr "Crează poligon vectorial în funcție de extinderea regiunii curente."
+msgstr ""
 
 #: ../general/g.region/main.c:348
-#, fuzzy
 msgid "A negative number shrinks the current region extent"
-msgstr "Crează poligon vectorial în funcție de extinderea regiunii curente."
+msgstr ""
 
 #: ../general/g.region/main.c:358
 msgid "Save current region settings in named region file"
@@ -23481,9 +23459,8 @@ msgid "No output format specified, define one of flags -%c, -%c, or -%c"
 msgstr ""
 
 #: ../general/g.proj/output.c:134
-#, fuzzy
 msgid "Unable to convert projection information to PROJ format"
-msgstr "Imposibil de obținut informații despre proiecție pentru harta de intrare"
+msgstr ""
 
 #: ../general/g.proj/output.c:180
 msgid "Unable to convert to WKT"
@@ -24486,9 +24463,8 @@ msgid "Found %d clumps"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:26
-#, fuzzy
 msgid "Name of input imagery group or raster maps"
-msgstr "Numele a două 2-%d hărți raster de intrare"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:33
 msgid "Suffix for output bands with modified band values"
@@ -25350,9 +25326,9 @@ msgid "Name for output raster map holding reject threshold results"
 msgstr ""
 
 #: ../imagery/i.maxlik/main.c:106
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> does not match the current mapset"
-msgstr "<%s> există deja în mapsetul curent"
+msgstr ""
 
 #: ../imagery/i.maxlik/invert.c:28
 #, c-format
@@ -28356,9 +28332,8 @@ msgid "Viewpoint height not given, using calculated value %.0f"
 msgstr ""
 
 #: ../misc/m.nviz.image/main.c:244
-#, fuzzy
 msgid "Failed to write image"
-msgstr "Imposibil de deschis tempfile"
+msgstr ""
 
 #: ../misc/m.nviz.image/main.c:246
 msgid "Unsupported output format"
@@ -29908,7 +29883,7 @@ msgstr ""
 #: ../db/drivers/dbf/db.c:94
 #, c-format
 msgid "Unable to create DBF database: %s"
-msgstr "Imposibil de creat baza de date DBF: %s"
+msgstr ""
 
 #: ../db/drivers/dbf/db.c:102
 #, c-format
@@ -31007,9 +30982,9 @@ msgstr ""
 
 #: ../vector/v.out.ogr/main.c:682 ../vector/v.out.ogr/main.c:757
 #: ../vector/v.to.db/main.c:268
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create column <%s>"
-msgstr "Imposibil de utilizat coloana <%s>"
+msgstr ""
 
 #: ../vector/v.out.ogr/main.c:763
 #, c-format
@@ -32044,9 +32019,9 @@ msgid "Generate n points for each individual area (requires restrict parameter)"
 msgstr ""
 
 #: ../vector/v.random/main.c:199
-#, fuzzy, c-format
+#, c-format
 msgid "Number of points must be > 0 (%ld given)"
-msgstr "Numărul de puncte trebuie să fie > 0 (%d dat)"
+msgstr ""
 
 #: ../vector/v.random/main.c:215 ../vector/v.drape/main.c:150
 #: ../vector/v.buffer/main.c:347
@@ -32078,9 +32053,9 @@ msgid "Generating points..."
 msgstr "Generarea punctelor..."
 
 #: ../vector/v.random/main.c:530 ../vector/v.random/main.c:677
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to insert new row: %s"
-msgstr "Imposibil de inserat rândul: %s"
+msgstr ""
 
 #: ../vector/v.random/main.c:702 ../vector/v.db.select/main.c:208
 msgid "Unable to open select cursor"
@@ -32093,9 +32068,9 @@ msgid "Unable to fetch data from table <%s>"
 msgstr ""
 
 #: ../vector/v.random/main.c:742
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to update row: %s"
-msgstr "Imposibil de inserat rândul: %s"
+msgstr ""
 
 #: ../vector/v.support/main.c:41
 msgid "Updates vector map metadata."
@@ -35233,14 +35208,13 @@ msgid "Projection of layer <%s> is different from projection of layer <%s>"
 msgstr ""
 
 #: ../vector/v.in.ogr/clean.c:19
-#, fuzzy
 msgid "Converting OSM lines..."
-msgstr "Convertire ... "
+msgstr ""
 
 #: ../vector/v.in.ogr/clean.c:118
-#, fuzzy, c-format
+#, c-format
 msgid "Number of OSM line splits: %d"
-msgstr "Număr de linii:"
+msgstr ""
 
 #: ../vector/v.in.ogr/clean.c:119 ../vector/v.overlay/area_area.c:154
 msgid "Merging lines..."
@@ -35333,9 +35307,9 @@ msgid "Number of columns differ"
 msgstr ""
 
 #: ../vector/v.patch/main.c:273
-#, fuzzy, c-format
+#, c-format
 msgid "No column <%s> in input map <%s>"
-msgstr "Coloana <%s> nu se găsește în tabelul <%s>"
+msgstr ""
 
 #: ../vector/v.patch/main.c:284
 msgid "Column types differ"
@@ -40084,9 +40058,8 @@ msgid "If new >= 0, attributes is not copied"
 msgstr ""
 
 #: ../vector/v.extract/main.c:151
-#, fuzzy
 msgid "Name of attribute column for dissolving areas"
-msgstr "Numele coloanei de atribute folosită pentru înălțime"
+msgstr ""
 
 #: ../vector/v.extract/main.c:152
 msgid "Preserves category values"
@@ -40098,14 +40071,14 @@ msgid "Options <%s>, <%s>, <%s> and <%s> options are exclusive. Please specify o
 msgstr ""
 
 #: ../vector/v.extract/main.c:221
-#, fuzzy, c-format
+#, c-format
 msgid "Searching for column <%s> in table <%s>..."
-msgstr "Coloana <%s> nu se găsește în tabelul <%s>"
+msgstr ""
 
 #: ../vector/v.extract/main.c:253
-#, fuzzy, c-format
+#, c-format
 msgid "Column <%s> does not exist for layer %d"
-msgstr "Coloana '%s' nu există"
+msgstr ""
 
 #: ../vector/v.extract/main.c:268
 #, c-format
@@ -41390,9 +41363,9 @@ msgid "Existing column <%s> has the wrong type"
 msgstr ""
 
 #: ../vector/v.to.db/main.c:203
-#, fuzzy, c-format
+#, c-format
 msgid "Values in column <%s> will be overwritten"
-msgstr "Harta vectorială <%s> există deja și va fi scrisă peste"
+msgstr ""
 
 #: ../vector/v.to.db/main.c:322
 #, c-format
@@ -42565,9 +42538,8 @@ msgid "Frame <%s> already found. An existing frame can be overwritten by '%s' fl
 msgstr ""
 
 #: ../scripts/r.grow/r.grow.py:129
-#, fuzzy
 msgid "Output can be written only to the current mapset"
-msgstr "Grupul <%s> nu se găsește în mapsetul curent"
+msgstr ""
 
 #: ../scripts/r.grow/r.grow.py:139
 msgid "Growing failed. Removing temporary maps."
@@ -44345,17 +44317,17 @@ msgstr "Convertește un fișier cu liste de situri GRASS în hartă vectorială.
 msgid "%ld categories"
 msgstr "%ld categorii"
 
-#~ msgid "column '%s', type 'string': unknown width -> stored as varchar(250) some data may be lost"
-#~ msgstr "coloana '%s', tip 'string': lățime necunoscută -> stocată ca varchar(250) anumite date pot fi pierdute"
+msgid "column '%s', type 'string': unknown width -> stored as varchar(250) some data may be lost"
+msgstr "coloana '%s', tip 'string': lățime necunoscută -> stocată ca varchar(250) anumite date pot fi pierdute"
 
-#~ msgid "Table should contain only two columns"
-#~ msgstr "Tabelul trebuie să conțină doar două coloane"
+msgid "Table should contain only two columns"
+msgstr "Tabelul trebuie să conțină doar două coloane"
 
-#~ msgid "Non-zero data only"
-#~ msgstr "Doar datele nenule"
+msgid "Non-zero data only"
+msgstr "Doar datele nenule"
 
-#~ msgid "Number of points must be > 0 (%d given)"
-#~ msgstr "Numărul de puncte trebuie să fie > 0 (%d dat)"
+msgid "Number of points must be > 0 (%d given)"
+msgstr "Numărul de puncte trebuie să fie > 0 (%d dat)"
 
-#~ msgid "Unable create DBF database: %s"
-#~ msgstr "Imposibil de creat baza de date DBF: %s"
+msgid "Unable create DBF database: %s"
+msgstr "Imposibil de creat baza de date DBF: %s"

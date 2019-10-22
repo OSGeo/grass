@@ -298,14 +298,14 @@ DETAILED PROCEDURE :
 
 7. Send the updated .po files to a GRASS Development Team member.
    If possible, please send diffs against CVS:
-   svn diff grasslibs_LANG.po > grasslibs_LANG_po.diff
-   svn diff grassmods_LANG.po > grassmods_LANG_po.diff
-   svn diff grasswxpy_LANG.po > grasswxpy_LANG_po.diff
+   git diff grasslibs_LANG.po > grasslibs_LANG_po.diff
+   git diff grassmods_LANG.po > grassmods_LANG_po.diff
+   git diff grasswxpy_LANG.po > grasswxpy_LANG_po.diff
 
    If you updated .c files with _() macros as explained
-   above, please send C file diffs against SVN:
+   above, please send C file diffs against git:
    
-   svn diff file.c > file.diff
+   git diff file.c > file.diff
    
    Thanks for submitting.
 

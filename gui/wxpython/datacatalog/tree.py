@@ -255,8 +255,7 @@ class LocationMapTree(TreeView):
 
     def __init__(
             self, parent, model=None, style=wx.TR_HIDE_ROOT | wx.TR_EDIT_LABELS
-            | wx.TR_LINES_AT_ROOT | wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT |
-            wx.TR_SINGLE):
+            | wx.TR_LINES_AT_ROOT | wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT | wx.TR_MULTIPLE):
         """Location Map Tree constructor."""
         self._model = TreeModel(DataCatalogNode)
         self._orig_model = self._model
@@ -422,53 +421,68 @@ class LocationMapTree(TreeView):
 
     def _initVariables(self):
         """Init variables."""
-        self.selected_layer = None
-        self.selected_type = None
-        self.selected_mapset = None
-        self.selected_location = None
+        self.selected_layer = []
+        self.selected_type = []
+        self.selected_mapset = []
+        self.selected_location = []
+        self.mixed = False
 
     def GetControl(self):
         """Returns control itself."""
         return self
 
-    def DefineItems(self, item):
+    def DefineItems(self, selected):
         """Set selected items."""
-        self.selected_layer = None
-        self.selected_type = None
-        self.selected_mapset = None
-        self.selected_location = None
-
-        type = item.data['type']
-        if type in ('raster', 'raster_3d', 'vector'):
-            self.selected_layer = item
-            type = 'element'
-            item = item.parent
-
-        if type == 'element':
-            self.selected_type = item
-            type = 'mapset'
-            item = item.parent
-
-        if type == 'mapset':
-            self.selected_mapset = item
-            type = 'location'
-            item = item.parent
-
-        if type == 'location':
-            self.selected_location = item
+        self._initVariables()
+        mixed = []
+        for item in selected:
+            type = item.data['type']
+            if type in ('raster', 'raster_3d', 'vector'):
+                self.selected_layer.append(item)
+                self.selected_type.append(item.parent)
+                self.selected_mapset.append(item.parent.parent)
+                self.selected_location.append(item.parent.parent.parent)
+                mixed.append('layer')
+            elif type == 'element':
+                self.selected_layer.append(None)
+                self.selected_type.append(item)
+                self.selected_mapset.append(item.parent)
+                self.selected_location.append(item.parent.parent)
+                mixed.append('element')
+            elif type == 'mapset':
+                self.selected_layer.append(None)
+                self.selected_type.append(None)
+                self.selected_mapset.append(item)
+                self.selected_location.append(item.parent)
+                mixed.append('mapset')
+            elif type == 'location':
+                self.selected_layer.append(None)
+                self.selected_type.append(None)
+                self.selected_mapset.append(None)
+                self.selected_location.append(item)
+                mixed.append('location')
+        self.mixed = False
+        if len(set(mixed)) > 1:
+            self.mixed = True
 
     def OnSelChanged(self, event):
         self.selected_layer = None
 
     def OnRightClick(self, node):
         """Display popup menu."""
-        self.DefineItems(node)
-        if self.selected_layer:
+        self.DefineItems(self.GetSelected())
+        if self.mixed:
+            self._popupMenuEmpty()
+            return
+
+        if self.selected_layer[0]:
             self._popupMenuLayer()
-        elif self.selected_mapset and not self.selected_type:
+        elif self.selected_mapset[0] and not self.selected_type[0] and len(self.selected_mapset) == 1:
             self._popupMenuMapset()
-        elif self.selected_type:
+        elif self.selected_type[0] and len(self.selected_type) == 1:
             self._popupMenuElement()
+        else:
+            self._popupMenuEmpty()
 
     def OnDoubleClick(self, node):
         """Double click on item/node.
@@ -477,8 +491,8 @@ class LocationMapTree(TreeView):
         expand/collapse node.
         """
         if not isinstance(self._giface, StandaloneGrassInterface):
-            self.DefineItems(node)
-            if self.selected_layer:
+            self.DefineItems([node])
+            if self.selected_layer[0] is not None:
                 # display selected layer and return
                 self.DisplayLayer()
                 return
@@ -576,42 +590,48 @@ class DataCatalogTree(LocationMapTree):
     def OnMoveMap(self, event):
         """Move layer or mapset (just save it temporarily, copying is done by paste)"""
         self.copy_mode = False
-        self.copy_layer = self.selected_layer
-        self.copy_type = self.selected_type
-        self.copy_mapset = self.selected_mapset
-        self.copy_location = self.selected_location
-        label = _("Map <{layer}> marked for moving.").format(layer=self.copy_layer.label)
+        self.copy_layer = self.selected_layer[:]
+        self.copy_type = self.selected_type[:]
+        self.copy_mapset = self.selected_mapset[:]
+        self.copy_location = self.selected_location[:]
+        if len(self.copy_layer) > 1:
+            label = _("{c} maps marked for moving.").format(c=len(self.selected_layer))
+        else:
+            label = _("Map <{layer}> marked for moving.").format(layer=self.copy_layer[0].label)
         self.showNotification.emit(message=label)
 
     def OnCopyMap(self, event):
         """Copy layer or mapset (just save it temporarily, copying is done by paste)"""
         self.copy_mode = True
-        self.copy_layer = self.selected_layer
-        self.copy_type = self.selected_type
-        self.copy_mapset = self.selected_mapset
-        self.copy_location = self.selected_location
-        label = _("Map <{layer}> marked for copying.").format(layer=self.copy_layer.label)
+        self.copy_layer = self.selected_layer[:]
+        self.copy_type = self.selected_type[:]
+        self.copy_mapset = self.selected_mapset[:]
+        self.copy_location = self.selected_location[:]
+        if len(self.copy_layer) > 1:
+            label = _("{c} maps marked for copying.").format(c=len(self.selected_layer))
+        else:
+            label = _("Map <{layer}> marked for copying.").format(layer=self.copy_layer[0].label)
         self.showNotification.emit(message=label)
 
     def OnRenameMap(self, event):
         """Rename layer with dialog"""
-        old_name = self.selected_layer.label
+        old_name = self.selected_layer[0].label
         gisrc, env = gscript.create_environment(
             gisenv()['GISDBASE'],
-            self.selected_location.label, mapset=self.selected_mapset.label)
+            self.selected_location[0].label, mapset=self.selected_mapset[0].label)
         new_name = self._getNewMapName(
             _('New name'),
             _('Rename map'),
             old_name,
             env=env,
-            mapset=self.selected_mapset.label,
-            element=self.selected_type.label)
+            mapset=self.selected_mapset[0].label,
+            element=self.selected_type[0].label)
         if new_name:
             self.Rename(old_name, new_name)
 
     def OnStartEditLabel(self, node, event):
         """Start label editing"""
-        self.DefineItems(node)
+        self.DefineItems([node])
         Debug.msg(1, "Start label edit {name}".format(name=node.label))
         label = _("Editing {name}").format(name=node.label)
         self.showNotification.emit(message=label)
@@ -631,20 +651,20 @@ class DataCatalogTree(LocationMapTree):
         string = old + ',' + new
         gisrc, env = gscript.create_environment(
             gisenv()['GISDBASE'],
-            self.selected_location.label, self.selected_mapset.label)
+            self.selected_location[0].label, self.selected_mapset[0].label)
         label = _("Renaming map <{name}>...").format(name=string)
         self.showNotification.emit(message=label)
-        if self.selected_type.label == 'vector':
+        if self.selected_type[0].label == 'vector':
             renamed, cmd = self._runCommand('g.rename', vector=string, env=env)
-        elif self.selected_type.label == 'raster':
+        elif self.selected_type[0].label == 'raster':
             renamed, cmd = self._runCommand('g.rename', raster=string, env=env)
         else:
             renamed, cmd = self._runCommand(
                 'g.rename', raster3d=string, env=env)
         if renamed == 0:
-            self.selected_layer.label = new
-            self.selected_layer.data['name'] = new
-            self.RefreshNode(self.selected_layer)
+            self.selected_layer[0].label = new
+            self.selected_layer[0].data['name'] = new
+            self.RefreshNode(self.selected_layer[0])
             self.showNotification.emit(
                 message=_("{cmd} -- completed").format(cmd=cmd))
             Debug.msg(1, "LAYER RENAMED TO: " + new)
@@ -659,106 +679,110 @@ class DataCatalogTree(LocationMapTree):
                 GMessage(_("No map selected for moving."), parent=self)
             return
 
-        gisrc, env = gscript.create_environment(
-                        gisenv()['GISDBASE'], self.selected_location.label, mapset=self.selected_mapset.label)
-        gisrc2, env2 = gscript.create_environment(
-                        gisenv()['GISDBASE'], self.copy_location.label, mapset=self.copy_mapset.label)
-        new_name = self.copy_layer.label
-        if self.selected_location == self.copy_location:
-            # within one mapset
-            if self.selected_mapset == self.copy_mapset:
-                # ignore when just moves map
-                if self.copy_mode is False:
-                    return
-                new_name = self._getNewMapName(_('New name'), _('Select new name'),
-                                               self.copy_layer.label, env=env,
-                                               mapset=self.selected_mapset.label,
-                                               element=self.copy_type.label)
-                if not new_name:
-                    return
-            # within one location, different mapsets
-            else:
-                if map_exists(new_name, element=self.copy_type.label, env=env,
-                              mapset=self.selected_mapset.label):
-                    new_name = self._getNewMapName(_('New name'), _('Select new name'),
-                                                   self.copy_layer.label, env=env,
-                                                   mapset=self.selected_mapset.label,
-                                                   element=self.copy_type.label)
+        for i in range(len(self.copy_layer)):
+            gisrc, env = gscript.create_environment(
+                            gisenv()['GISDBASE'], self.selected_location[0].label, mapset=self.selected_mapset[0].label)
+            gisrc2, env2 = gscript.create_environment(
+                            gisenv()['GISDBASE'], self.copy_location[i].label, mapset=self.copy_mapset[i].label)
+            new_name = self.copy_layer[i].label
+            if self.selected_location[0] == self.copy_location[i]:
+                # within one mapset
+                if self.selected_mapset[0] == self.copy_mapset[i]:
+                    # ignore when just moves map
+                    if self.copy_mode is False:
+                        return
+                    new_name = self._getNewMapName(_('New name for <{n}>').format(n=self.copy_layer[i].label),
+                                                   _('Select new name'),
+                                                   self.copy_layer[i].label, env=env,
+                                                   mapset=self.selected_mapset[0].label,
+                                                   element=self.copy_type[i].label)
                     if not new_name:
                         return
-
-            string = self.copy_layer.label + '@' + self.copy_mapset.label + ',' + new_name
-            pasted = 0
-            if self.copy_mode:
-                label = _("Copying <{name}>...").format(name=string)
-            else:
-                label = _("Moving <{name}>...").format(name=string)
-            self.showNotification.emit(message=label)
-            if self.copy_type.label == 'vector':
-                pasted, cmd = self._runCommand('g.copy', vector=string, env=env)
-                node = 'vector'
-            elif self.copy_type.label == 'raster':
-                pasted, cmd = self._runCommand('g.copy', raster=string, env=env)
-                node = 'raster'
-            else:
-                pasted, cmd = self._runCommand('g.copy', raster_3d=string, env=env)
-                node = 'raster_3d'
-            if pasted == 0:
-                self.InsertLayer(name=new_name, mapset_node=self.selected_mapset,
-                                 element_name=node)
-                Debug.msg(1, "COPIED TO: " + new_name)
-                if self.copy_mode:
-                    self.showNotification.emit(message=_("g.copy completed").format(cmd=cmd))
+                # within one location, different mapsets
                 else:
-                    self.showNotification.emit(message=_("g.copy completed").format(cmd=cmd))
-
-                # remove old
-                if not self.copy_mode:
-                    self._removeMapAfterCopy(env2)
-
-            gscript.try_remove(gisrc)
-            gscript.try_remove(gisrc2)
-            # expand selected mapset
-            self.ExpandNode(self.selected_mapset, recursive=True)
-            self._initVariablesCatalog()
-        else:
-            if self.copy_type.label == 'raster_3d':
-                GError(_("Reprojection is not implemented for 3D rasters"), parent=self)
-                return
-            if map_exists(new_name, element=self.copy_type.label, env=env,
-                          mapset=self.selected_mapset.label):
-                new_name = self._getNewMapName(_('New name'), _('Select new name'),
-                                               self.copy_layer.label, env=env,
-                                               mapset=self.selected_mapset.label,
-                                               element=self.copy_type.label)
-                if not new_name:
+                    if map_exists(new_name, element=self.copy_type[i].label, env=env,
+                                  mapset=self.selected_mapset[0].label):
+                        new_name = self._getNewMapName(_('New name for <{n}>').format(n=self.copy_layer[i].label),
+                                                       _('Select new name'),
+                                                       self.copy_layer[i].label, env=env,
+                                                       mapset=self.selected_mapset[0].label,
+                                                       element=self.copy_type[i].label)
+                        if not new_name:
+                            return
+    
+                string = self.copy_layer[i].label + '@' + self.copy_mapset[i].label + ',' + new_name
+                pasted = 0
+                if self.copy_mode:
+                    label = _("Copying <{name}>...").format(name=string)
+                else:
+                    label = _("Moving <{name}>...").format(name=string)
+                self.showNotification.emit(message=label)
+                if self.copy_type[i].label == 'vector':
+                    pasted, cmd = self._runCommand('g.copy', vector=string, env=env)
+                    node = 'vector'
+                elif self.copy_type[i].label == 'raster':
+                    pasted, cmd = self._runCommand('g.copy', raster=string, env=env)
+                    node = 'raster'
+                else:
+                    pasted, cmd = self._runCommand('g.copy', raster_3d=string, env=env)
+                    node = 'raster_3d'
+                if pasted == 0:
+                    self.InsertLayer(name=new_name, mapset_node=self.selected_mapset[0],
+                                     element_name=node)
+                    Debug.msg(1, "COPIED TO: " + new_name)
+                    if self.copy_mode:
+                        self.showNotification.emit(message=_("g.copy completed"))
+                    else:
+                        self.showNotification.emit(message=_("g.copy completed"))
+    
+                    # remove old
+                    if not self.copy_mode:
+                        self._removeMapAfterCopy(self.copy_layer[i], self.copy_type[i], env2)
+    
+                gscript.try_remove(gisrc)
+                gscript.try_remove(gisrc2)
+                # expand selected mapset
+            else:
+                if self.copy_type[i].label == 'raster_3d':
+                    GError(_("Reprojection is not implemented for 3D rasters"), parent=self)
                     return
-            gisdbase = gisenv()['GISDBASE']
-            callback = lambda: self._onDoneReprojection(iEnv=env2, iGisrc=gisrc2, oGisrc=gisrc)
-            dlg = CatalogReprojectionDialog(self, self._giface, gisdbase, self.copy_location.label,
-                                            self.copy_mapset.label, self.copy_layer.label, env2,
-                                            gisdbase, self.selected_location.label, self.selected_mapset.label,
-                                            new_name, self.copy_type.label, env, callback)
-            dlg.ShowModal()
-
-    def _onDoneReprojection(self, iEnv, iGisrc, oGisrc):
-        self.InsertLayer(name=self.copy_layer.label, mapset_node=self.selected_mapset,
-                         element_name=self.copy_type.label)
-        if not self.copy_mode:
-            self._removeMapAfterCopy(iEnv)
-        gscript.try_remove(iGisrc)
-        gscript.try_remove(oGisrc)
-        self.ExpandNode(self.selected_mapset, recursive=True)
+                if map_exists(new_name, element=self.copy_type[i].label, env=env,
+                              mapset=self.selected_mapset[0].label):
+                    new_name = self._getNewMapName(_('New name'), _('Select new name'),
+                                                   self.copy_layer[i].label, env=env,
+                                                   mapset=self.selected_mapset[0].label,
+                                                   element=self.copy_type[i].label)
+                    if not new_name:
+                        continue
+                gisdbase = gisenv()['GISDBASE']
+                callback = lambda gisrc2=gisrc2, gisrc=gisrc, cLayer=self.copy_layer[i], \
+                                  cType=self.copy_type[i], cMode=self.copy_mode, name=new_name: \
+                                  self._onDoneReprojection(env2, gisrc2, gisrc, cLayer, cType, cMode, name)
+                dlg = CatalogReprojectionDialog(self, self._giface, gisdbase, self.copy_location[i].label,
+                                                self.copy_mapset[i].label, self.copy_layer[i].label, env2,
+                                                gisdbase, self.selected_location[0].label, self.selected_mapset[0].label,
+                                                new_name, self.copy_type[i].label, env, callback)
+                dlg.ShowModal()
+        self.ExpandNode(self.selected_mapset[0], recursive=True)
         self._initVariablesCatalog()
 
-    def _removeMapAfterCopy(self, env):
-        removed, cmd = self._runCommand('g.remove', type=self.copy_type.label,
-                                        name=self.copy_layer.label, flags='f', env=env)
+    def _onDoneReprojection(self, iEnv, iGisrc, oGisrc, cLayer, cType, cMode, name):
+        self.InsertLayer(name=name, mapset_node=self.selected_mapset[0],
+                         element_name=cType.label)
+        if not cMode:
+            self._removeMapAfterCopy(cLayer, cType, iEnv)
+        gscript.try_remove(iGisrc)
+        gscript.try_remove(oGisrc)
+        self.ExpandNode(self.selected_mapset[0], recursive=True)
+
+    def _removeMapAfterCopy(self, cLayer, cType, env):
+        removed, cmd = self._runCommand('g.remove', type=cType.label,
+                                        name=cLayer.label, flags='f', env=env)
         if removed == 0:
-            self._model.RemoveNode(self.copy_layer)
-            self.RefreshNode(self.copy_type, recursive=True)
-            Debug.msg(1, "LAYER " + self.copy_layer.label + " DELETED")
-            self.showNotification.emit(message=_("g.remove completed").format(cmd=cmd))
+            self._model.RemoveNode(cLayer)
+            self.RefreshNode(cType, recursive=True)
+            Debug.msg(1, "LAYER " + cLayer.label + " DELETED")
+            self.showNotification.emit(message=_("g.remove completed"))
 
     def InsertLayer(self, name, mapset_node, element_name):
         """Insert layer into model and refresh tree"""
@@ -779,73 +803,67 @@ class DataCatalogTree(LocationMapTree):
 
     def OnDeleteMap(self, event):
         """Delete layer or mapset"""
-        name = self.selected_layer.label
-        gisrc, env = gscript.create_environment(
-            gisenv()['GISDBASE'],
-            self.selected_location.label, self.selected_mapset.label)
-        if self._confirmDialog(
-                question=_(
-                    "Do you really want to delete map <{m}> of type <{etype}> from mapset "
-                    "<{mapset}> in location <{loc}>?").format(
-                    m=name, mapset=self.selected_mapset.label,
-                    etype=self.selected_type.label,
-                    loc=self.selected_location.label),
-                title=_('Delete map')) == wx.ID_YES:
-            label = _("Deleting {name}...").format(name=name)
+        names = [self.selected_layer[i].label + '@' + self.selected_mapset[i].label
+                 for i in range(len(self.selected_layer))]
+        if len(names) < 10:
+            question = _("Do you really want to delete map(s) <{m}>?").format(m=', '.join(names))
+        else:
+            question = _("Do you really want to delete {n} maps?").format(n=len(names))
+        if self._confirmDialog(question, title=_('Delete map')) == wx.ID_YES:
+            label = _("Deleting {name}...").format(name=names)
             self.showNotification.emit(message=label)
+            for i in range(len(self.selected_layer)):
+                gisrc, env = gscript.create_environment(
+                    gisenv()['GISDBASE'],
+                    self.selected_location[i].label, self.selected_mapset[i].label)
+                removed, cmd = self._runCommand(
+                        'g.remove', flags='f', type=self.selected_type[i].label,
+                        name=self.selected_layer[i].label, env=env)
+                if removed == 0:
+                    self._model.RemoveNode(self.selected_layer[i])
+                    self.RefreshNode(self.selected_type[i], recursive=True)
+                    Debug.msg(1, "LAYER " + self.selected_layer[i].label + " DELETED")
 
-            removed, cmd = self._runCommand(
-                'g.remove', flags='f', type=self.selected_type.label, name=name, env=env)
-            if removed == 0:
-                self._model.RemoveNode(self.selected_layer)
-                self.RefreshNode(self.selected_type, recursive=True)
-                Debug.msg(1, "LAYER " + name + " DELETED")
-                self.showNotification.emit(
-                    message=_("g.remove completed").format(cmd=cmd))
+                    # remove map layer from layer tree if exists
+                    if not isinstance(self._giface, StandaloneGrassInterface):
+                        name = self.selected_layer[i].label + '@' + self.selected_mapset[i].label
+                        layers = self._giface.GetLayerList().GetLayersByName(name)
+                        for layer in layers:
+                            self._giface.GetLayerList().DeleteLayer(layer)
 
-                # remove map layer from layer tree if exists
-                if not isinstance(self._giface, StandaloneGrassInterface):
-                    name = self.selected_layer.label + '@' + self.selected_mapset.label
-                    layers = self._giface.GetLayerList().GetLayersByName(name)
-                    for layer in layers:
-                        self._giface.GetLayerList().DeleteLayer(layer)
-
-        gscript.try_remove(gisrc)
+                gscript.try_remove(gisrc)
+            self.UnselectAll()
+            self.showNotification.emit(message=_("g.remove completed"))
 
     def OnDisplayLayer(self, event):
         """Display layer in current graphics view"""
         self.DisplayLayer()
-        
+
     def DisplayLayer(self):
         """Display selected layer in current graphics view"""
-        layerName = []
-        if self.selected_location.label == gisenv(
-        )['LOCATION_NAME'] and self.selected_mapset:
-            string = self.selected_layer.label + '@' + self.selected_mapset.label
-            layerName.append(string)
-            label = _("Displaying {name}...").format(name=string)
-            self.showNotification.emit(message=label)
-            self._giface.lmgr.AddMaps(
-                layerName, self.selected_type.label, True)
+        all_names = []
+        names = {'raster': [], 'vector': [], 'raster3d': []}
+        for i in range(len(self.selected_layer)):
+            name = self.selected_layer[i].label + '@' + self.selected_mapset[i].label
+            names[self.selected_type[i].label].append(name)
+            all_names.append(name)
+        #if self.selected_location[0].label == gisenv()['LOCATION_NAME'] and self.selected_mapset[0]:
+        for ltype in names:
+            if names[ltype]:
+                self._giface.lmgr.AddMaps(list(reversed(names[ltype])), ltype, True)
 
-            if len(self._giface.GetLayerList()) == 1:
-                # zoom to map if there is only one map layer
-                self._giface.GetMapWindow().ZoomToMap()
+        if len(self._giface.GetLayerList()) == 1:
+            # zoom to map if there is only one map layer
+            self._giface.GetMapWindow().ZoomToMap()
 
-            label = "d." + self.selected_type.label[:4] + " --q map=" + string + \
-                    _(" -- completed. Go to Layers tab for further operations.")
-            self.showNotification.emit(message=label)
-            Debug.msg(1, "LAYER " + self.selected_layer.label + " DISPLAYED")
-        else:
-            GError(
-                _("Failed to display layer: not in current mapset or invalid layer"),
-                parent=self)
+        Debug.msg(1, "Displayed layer(s): " + str(all_names))
+
 
     def OnBeginDrag(self, node, event):
         """Just copy necessary data"""
-        self.DefineItems(node)
+        self.DefineItems(self.GetSelected())
         if self.selected_layer and not (self._restricted and gisenv()[
-                                        'LOCATION_NAME'] != self.selected_location.label):
+                                        'LOCATION_NAME'] != self.selected_location[0].label):
             event.Allow()
             self.OnCopyMap(event)
             Debug.msg(1, "DRAG")
@@ -856,8 +874,8 @@ class DataCatalogTree(LocationMapTree):
         """Copy layer into target"""
         self.copy_mode = wx.GetMouseState().ControlDown()
         if node:
-            self.DefineItems(node)
-            if self._restricted and gisenv()['MAPSET'] != self.selected_mapset.label:
+            self.DefineItems([node])
+            if self._restricted and gisenv()['MAPSET'] != self.selected_mapset[0].label:
                 GMessage(_("To move or copy maps to other mapsets, unlock editing of other mapsets"),
                          parent=self)
                 event.Veto()
@@ -869,37 +887,41 @@ class DataCatalogTree(LocationMapTree):
 
     def OnSwitchLocationMapset(self, event):
         genv = gisenv()
-        if self.selected_location.label == genv['LOCATION_NAME']:
-            self.changeMapset.emit(mapset=self.selected_mapset.label)
+        if self.selected_location[0].label == genv['LOCATION_NAME']:
+            self.changeMapset.emit(mapset=self.selected_mapset[0].label)
         else:
-            self.changeLocation.emit(mapset=self.selected_mapset.label, location=self.selected_location.label)
+            self.changeLocation.emit(mapset=self.selected_mapset[0].label, location=self.selected_location[0].label)
         self.ExpandCurrentMapset()
 
     def OnMetadata(self, event):
         """Show metadata of any raster/vector/3draster"""
         def done(event):
-            gscript.try_remove(gisrc)
+            gscript.try_remove(event.userData)
 
-        if self.selected_type.label == 'raster':
-            cmd = ['r.info']
-        elif self.selected_type.label == 'vector':
-            cmd = ['v.info']
-        elif self.selected_type.label == 'raster_3d':
-            cmd = ['r3.info']
-        cmd.append('map=%s@%s' % (self.selected_layer.label, self.selected_mapset.label))
+        for i in range(len(self.selected_layer)):
+            if self.selected_type[i].label == 'raster':
+                cmd = ['r.info']
+            elif self.selected_type[i].label == 'vector':
+                cmd = ['v.info']
+            elif self.selected_type[i].label == 'raster_3d':
+                cmd = ['r3.info']
+            cmd.append('map=%s@%s' % (self.selected_layer[i].label, self.selected_mapset[i].label))
 
-        gisrc, env = gscript.create_environment(
-            gisenv()['GISDBASE'],
-            self.selected_location.label, self.selected_mapset.label)
-        # print output to command log area
-        # temp gisrc file must be deleted onDone
-        self._giface.RunCmd(cmd, env=env, onDone=done)
+            gisrc, env = gscript.create_environment(
+                gisenv()['GISDBASE'],
+                self.selected_location[i].label, self.selected_mapset[i].label)
+            # print output to command log area
+            # temp gisrc file must be deleted onDone
+            self._giface.RunCmd(cmd, env=env, onDone=done, userData=gisrc)
 
     def OnCopyName(self, event):
         """Copy layer name to clipboard"""
         if wx.TheClipboard.Open():
             do = wx.TextDataObject()
-            do.SetText('%s@%s' % (self.selected_layer.label, self.selected_mapset.label))
+            text = []
+            for i in range(len(self.selected_layer)):
+                text.append('%s@%s' % (self.selected_layer[i].label, self.selected_mapset[i].label))
+            do.SetText(','.join(text))
             wx.TheClipboard.SetData(do)
             wx.TheClipboard.Close()
 
@@ -947,11 +969,18 @@ class DataCatalogTree(LocationMapTree):
 
     def _isCurrent(self, genv):
         if self._restricted:
-            currentMapset = currentLocation = False
-            if self.selected_location.label == genv['LOCATION_NAME']:
-                currentLocation = True
-                if self.selected_mapset.label == genv['MAPSET']:
-                    currentMapset = True
+            currentMapset = currentLocation = True
+            for i in range(len(self.selected_location)):
+                if self.selected_location[i].label != genv['LOCATION_NAME']:
+                    currentLocation = False
+                    currentMapset = False
+                    break
+            if currentMapset:
+                for i in range(len(self.selected_mapset)):
+                    if self.selected_mapset[i].label != genv['MAPSET']:
+                        currentMapset = False
+                        break
+
             return currentLocation, currentMapset
         else:
             return True, True
@@ -962,45 +991,48 @@ class DataCatalogTree(LocationMapTree):
         genv = gisenv()
         currentLocation, currentMapset = self._isCurrent(genv)
 
-        item = wx.MenuItem(menu, wx.NewId(), _("&Cut"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Cut"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnMoveMap, item)
         if not currentMapset:
             item.Enable(False)
 
-        item = wx.MenuItem(menu, wx.NewId(), _("&Copy"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCopyMap, item)
 
-        item = wx.MenuItem(menu, wx.NewId(), _("Copy &name"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy &name"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCopyName, item)
 
-        item = wx.MenuItem(menu, wx.NewId(), _("&Paste"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Paste"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnPasteMap, item)
         if not(currentMapset and self.copy_layer):
             item.Enable(False)
 
-        item = wx.MenuItem(menu, wx.NewId(), _("&Delete"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteMap, item)
         item.Enable(currentMapset)
 
-        item = wx.MenuItem(menu, wx.NewId(), _("&Rename"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameMap, item)
-        item.Enable(currentMapset)
+        item.Enable(currentMapset and len(self.selected_layer) == 1)
 
         menu.AppendSeparator()
 
-        if not isinstance(self._giface, StandaloneGrassInterface) and \
-           self.selected_location.label == genv['LOCATION_NAME']:
-            item = wx.MenuItem(menu, wx.NewId(), _("&Display layer"))
-            menu.AppendItem(item)
-            self.Bind(wx.EVT_MENU, self.OnDisplayLayer, item)
+        if not isinstance(self._giface, StandaloneGrassInterface):
+            if all([each.label == genv['LOCATION_NAME'] for each in self.selected_location]):
+                if len(self.selected_layer) > 1:
+                    item = wx.MenuItem(menu, wx.ID_ANY, _("&Display layers"))
+                else:
+                    item = wx.MenuItem(menu, wx.ID_ANY, _("&Display layer"))
+                menu.AppendItem(item)
+                self.Bind(wx.EVT_MENU, self.OnDisplayLayer, item)
 
-        item = wx.MenuItem(menu, wx.NewId(), _("Show &metadata"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Show &metadata"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnMetadata, item)
 
@@ -1013,17 +1045,17 @@ class DataCatalogTree(LocationMapTree):
         genv = gisenv()
         currentLocation, currentMapset = self._isCurrent(genv)
 
-        item = wx.MenuItem(menu, wx.NewId(), _("&Paste"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Paste"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnPasteMap, item)
         if not(currentMapset and self.copy_layer):
             item.Enable(False)
 
-        item = wx.MenuItem(menu, wx.NewId(), _("&Switch mapset"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Switch mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnSwitchLocationMapset, item)
-        if (self.selected_location.label == genv['LOCATION_NAME']
-                and self.selected_mapset.label == genv['MAPSET']):
+        if (self.selected_location[0].label == genv['LOCATION_NAME']
+                and self.selected_mapset[0].label == genv['MAPSET']):
             item.Enable(False)
         self.PopupMenu(menu)
         menu.Destroy()
@@ -1031,7 +1063,7 @@ class DataCatalogTree(LocationMapTree):
     def _popupMenuElement(self):
         """Create popup menu for elements"""
         menu = Menu()
-        item = wx.MenuItem(menu, wx.NewId(), _("&Paste"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Paste"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnPasteMap, item)
         genv = gisenv()
@@ -1039,5 +1071,14 @@ class DataCatalogTree(LocationMapTree):
         if not(currentMapset and self.copy_layer):
             item.Enable(False)
 
+        self.PopupMenu(menu)
+        menu.Destroy()
+
+    def _popupMenuEmpty(self):
+        """Create empty popup when multiple different types of items are selected"""
+        menu = Menu()
+        item = wx.MenuItem(menu, wx.ID_ANY, _("No available options"))
+        menu.AppendItem(item)
+        item.Enable(False)
         self.PopupMenu(menu)
         menu.Destroy()

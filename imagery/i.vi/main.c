@@ -161,6 +161,7 @@ int main(int argc, char *argv[])
     opt.blue->description = _("Range: [0.0;1.0]");
     opt.blue->guisection = _("Optional inputs");
 
+    /* TODO: the naming is suboptimal as specific to Landsat-7 */
     opt.chan5 = G_define_standard_option(G_OPT_R_INPUT);
     opt.chan5->key = "band5";
     opt.chan5->required = NO;
@@ -169,6 +170,7 @@ int main(int argc, char *argv[])
     opt.chan5->description = _("Range: [0.0;1.0]");
     opt.chan5->guisection = _("Optional inputs");
 
+    /* TODO: the naming is suboptimal as specific to Landsat-7 */
     opt.chan7 = G_define_standard_option(G_OPT_R_INPUT);
     opt.chan7->key = "band7";
     opt.chan7->required = NO;

@@ -42,17 +42,25 @@ def open_old_stds(name, type, dbif=None):
        :return: New stds object
 
     """
-    mapset = get_current_mapset()
     msgr = get_tgis_message_interface()
 
-    # Check if the dataset name contains the mapset as well
+    # Check if the dataset name contains the mapset and the band reference as well
     if name.find("@") < 0:
-        id = name + "@" + mapset
+        mapset = get_current_mapset()
     else:
-        id = name
+        name, mapset = name.split('@')
+    band_ref = None
+    if name.find(".") > -1:
+        try:
+            name, band_ref = name.split('.')
+        except ValueError:
+            msgr.fatal("Invalid name of the space time dataset. Only one dot allowed.")
+    id = name + "@" + mapset
 
     if type == "strds" or type == "rast" or type == "raster":
         sp = dataset_factory("strds", id)
+        if band_ref:
+            sp.set_band_reference(band_ref)
     elif type == "str3ds" or type == "raster3d" or type == "rast3d" or type == "raster_3d":
         sp = dataset_factory("str3ds", id)
     elif type == "stvds" or type == "vect" or type == "vector":
@@ -67,7 +75,6 @@ def open_old_stds(name, type, dbif=None):
         msgr.fatal(_("Space time %(sp)s dataset <%(name)s> not found") %
                    {'sp': sp.get_new_map_instance(None).get_type(),
                     'name': name})
-
     # Read content from temporal database
     sp.select(dbif)
     if connected:
@@ -108,6 +115,10 @@ def check_new_stds(name, type, dbif=None, overwrite=False):
         id = name
 
     if type == "strds" or type == "rast" or type == "raster":
+        if name.find('.') > -1:
+            # a dot is used as a separator for band reference filtering
+            msgr.fatal(_("Illegal dataset name <{}>. "
+                         "Character '.' not allowed.").format(name))
         sp = dataset_factory("strds", id)
     elif type == "str3ds" or type == "raster3d" or type == "rast3d "or type == "raster_3d":
         sp = dataset_factory("str3ds", id)

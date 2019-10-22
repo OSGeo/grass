@@ -32,8 +32,12 @@ from grass.script.core import set_raise_on_error
 from core import globalvar
 from core.utils import registerPid, unregisterPid
 
-
 import wx
+# import adv and html before wx.App is created, otherwise
+# we get annoying "Debug: Adding duplicate image handler for 'Windows bitmap file'"
+# during start up, remove when not needed
+import wx.adv
+import wx.html
 try:
     import wx.lib.agw.advancedsplash as SC
 except ImportError:
@@ -59,9 +63,6 @@ class GMApp(wx.App):
 
         :return: True
         """
-        if not globalvar.CheckWxVersion([2, 9]):
-            wx.InitAllImageHandlers()
-
         # create splash screen
         introImagePath = os.path.join(globalvar.IMGDIR, "splash_screen.png")
         introImage = wx.Image(introImagePath, wx.BITMAP_TYPE_PNG)

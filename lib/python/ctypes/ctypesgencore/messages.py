@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 ctypesgencore.messages contains functions to display status, error, or warning

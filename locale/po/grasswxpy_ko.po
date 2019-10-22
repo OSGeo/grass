@@ -4007,9 +4007,9 @@ msgid "Delete selected mapset"
 msgstr "선택된 지도세트를 삭제합니다"
 
 #: ../gui/wxpython/gis_set.py:258
-#, fuzzy, python-format
+#, python-format
 msgid "GRASS GIS %s Startup%s"
-msgstr "GRASS GIS %s 시작 %s"
+msgstr ""
 
 #: ../gui/wxpython/gis_set.py:263
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:257

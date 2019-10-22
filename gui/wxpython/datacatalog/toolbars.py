@@ -45,8 +45,7 @@ class DataCatalogToolbar(BaseToolbar):
         BaseToolbar.__init__(self, parent)
 
         self.InitToolbar(self._toolbarData())
-        self.filterId = wx.NewId()
-        self.filter = TextCtrl(parent=self, id=self.filterId)
+        self.filter = TextCtrl(parent=self)
         self.filter.SetSize((120, self.filter.GetBestSize()[1]))
         self.filter.Bind(wx.EVT_TEXT,
                          lambda event: self.parent.Filter(
@@ -57,7 +56,7 @@ class DataCatalogToolbar(BaseToolbar):
                  "Use prefix 'r:', 'v:' and 'r3:'"
                  "to show only raster, vector or 3D raster data, respectively. "
                  "Use Python regular expressions to refine your search.")
-        self.SetToolShortHelp(self.filterId, help)
+        self.SetToolShortHelp(self.filter.GetId(), help)
         # realize the toolbar
         self.Realize()
 

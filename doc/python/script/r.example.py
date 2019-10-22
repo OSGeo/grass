@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #%module
 #% description: Selects values from raster above value of mean plus standard deviation

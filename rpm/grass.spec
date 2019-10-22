@@ -2,21 +2,22 @@
 # https://fedoraproject.org/wiki/Changes/No_more_automagic_Python_bytecompilation_phase_2
 %global _python_bytecompile_extra 1
 
-%global shortver 76
+%global shortver 79
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:		grass
-Version:	7.6.0
-Release:	2%{?dist}
+Version:	7.9.0
+Release:	4%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
 
 %if 0%{?rhel}
-Group:		Applications/Engineering
 %endif
 License:	GPLv2+
 URL:		https://grass.osgeo.org
 Source0:	https://grass.osgeo.org/%{name}%{shortver}/source/%{name}-%{version}.tar.gz
 Source2:	%{name}-config.h
+
+Patch1: grass-7.8.0-buildroot.patch
 
 BuildRequires:	bison
 BuildRequires:	blas-devel
@@ -35,9 +36,6 @@ BuildRequires:	lapack-devel
 %if (0%{?rhel} > 6 || 0%{?fedora})
 BuildRequires:	libappstream-glib
 %endif
-%if 0%{?fedora}
-BuildRequires:	liblas-devel => 1.8.0-12
-%endif
 BuildRequires:	libpng-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libXmu-devel
@@ -51,32 +49,37 @@ BuildRequires:	mysql-devel
 %if (0%{?rhel} > 6 || 0%{?fedora})
 BuildRequires:	netcdf-devel
 %endif
-BuildRequires:	python < 3.0
-BuildRequires:	python2-numpy
+BuildRequires:	python3
+BuildRequires:	python3-numpy
 %if 0%{?rhel} && 0%{?rhel} <= 7
 BuildRequires:	postgresql-devel
 %else
 BuildRequires:	libpq-devel
 %endif
 BuildRequires:	proj-devel
+%if (0%{?fedora} >= 30)
+BuildRequires:	proj-datumgrid
+BuildRequires:	proj-datumgrid-world
+%else
 BuildRequires:	proj-epsg
 BuildRequires:	proj-nad
+%endif
 %if (0%{?rhel} <= 6 && !0%{?fedora})
 # argparse is included in python2.7+ but not python2.6
 BuildRequires:  python-argparse
 %endif
-BuildRequires:	python2-dateutil
-BuildRequires:	python2-devel
-Requires:  python2-matplotlib
+BuildRequires:	python3-dateutil
+BuildRequires:	python3-devel
+Requires:	python3-matplotlib
 ##?
-#Requires:  python2-matplotlib-wx
+#Requires:  python3-matplotlib-wx
 %if (0%{?rhel} > 6 || 0%{?fedora})
 %if 0%{?rhel} > 6
 # EPEL7
 BuildRequires:	python-pillow
 %else
 # Fedora
-BuildRequires:  python2-pillow
+BuildRequires:  python3-pillow
 %endif
 %else
 # EPEL6
@@ -87,18 +90,25 @@ BuildRequires:	sqlite-devel
 BuildRequires:	subversion
 BuildRequires:	unixODBC-devel
 BuildRequires:	zlib-devel
+BuildRequires:	bzip2-devel
 BuildRequires:	libzstd-devel
+Requires:	bzip2-libs
 Requires:	libzstd
 
 Requires:	geos
+%if (0%{?fedora} >= 30)
+Requires:	proj-datumgrid
+Requires:	proj-datumgrid-world
+%else
 Requires:	proj-epsg
 Requires:	proj-nad
-Requires:	python2
-Requires:	python2-numpy
+%endif
+Requires:	python3
+Requires:	python3-numpy
 %if 0%{?rhel}
 Requires:	wxPython
 %else
-Requires:	python2-wxpython
+Requires:	python3-wxpython4
 %endif
 
 
@@ -120,14 +130,12 @@ agencies and environmental consulting companies.
 
 %package libs
 Summary:	GRASS GIS runtime libraries
-Group:		Applications/Engineering
 
 %description libs
 GRASS GIS runtime libraries
 
 %package gui
 Summary:	GRASS GIS GUI
-Group:		Applications/Engineering
 Requires:	%{name}%{?isa} = %{version}-%{release}
 
 %description gui
@@ -135,7 +143,6 @@ GRASS GIS GUI
 
 %package devel
 Summary:	GRASS GIS development headers
-Group:		Applications/Engineering
 Requires:	%{name}-libs%{?_isa} = %{version}-%{release}
 
 %description devel
@@ -144,21 +151,18 @@ GRASS GIS development headers
 %prep
 %setup -q
 
+%patch1 -p1
+
 # Correct mysql_config query
 sed -i -e 's/--libmysqld-libs/--libs/g' configure
 
 # Fixup shebangs
-# in future python3 will be supported
-find -type f | xargs sed -i -e 's,#!/usr/bin/env python,#!%{__python2},'
-sed -i -e 's,python,%{__python2},g' include/Make/Platform.make.in
 find -name \*.pl | xargs sed -i -e 's,#!/usr/bin/env perl,#!%{__perl},'
 
 %build
 # Package is not ready for -Werror=format-security or the C++11 standard
 CFLAGS="$(echo ${RPM_OPT_FLAGS} | sed -e 's/ -Werror=format-security//')"
 CXXFLAGS="-std=c++98 ${CFLAGS}"
-# enforce python2 during build process
-export GRASS_PYTHON="/usr/bin/python2"
 %configure \
 	--with-cxx \
 	--with-tiff \
@@ -184,9 +188,6 @@ export GRASS_PYTHON="/usr/bin/python2"
 %if (0%{?rhel} > 6 || 0%{?fedora})
 	--with-netcdf=%{_bindir}/nc-config \
 %endif
-%if 0%{?fedora}
-	--with-liblas=%{_bindir}/liblas-config \
-%endif
 	--with-mysql-includes=%{_includedir}/mysql \
 %if (0%{?fedora} >= 27)
 	--with-mysql-libs=%{_libdir} \
@@ -196,46 +197,38 @@ export GRASS_PYTHON="/usr/bin/python2"
 	--with-postgres-includes=%{_includedir}/pgsql \
 	--with-cairo-ldflags=-lfontconfig \
 	--with-freetype-includes=%{_includedir}/freetype2 \
+	--with-bzlib \
 	--with-zstd \
 	--with-proj-share=%{_datadir}/proj
 
-%if (0%{?rhel} > 6 || 0%{?fedora})
 make %{?_smp_mflags}
-%else
-# EPEL6: the HTML parser is too strict in Python 6, hence a few manual pages will not be generated
-make %{?_smp_mflags} || echo "EPEL6: ignoring failed manual pages"
-%endif
 
 # by default, grass will be installed to /usr/grass-%%{version}
 # this is not FHS compliant: hide grass-%%{version} in %%{libdir}
 %install
 %make_install \
+	DESTDIR=%{buildroot}%{_libdir} \
 	prefix=%{buildroot}%{_libdir} \
-	UNIX_BIN=%{buildroot}%{_bindir}
+	UNIX_BIN=%{buildroot}%{_bindir} \
+	GISBASE_RUNTIME=%{_libdir}/%{name}%{shortver}
 
 # libraries and headers are in GISBASE = %%{_libdir}/%%{name}
 # keep them in GISBASE
 
 # fix paths:
-
 # Change GISBASE in startup script
-sed -i -e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}%{shortver}|g' \
-	%{buildroot}%{_bindir}/%{name}%{shortver}
-# fix GRASS_HOME and RUN_GISBASE in Platform.make
-sed -i -e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}%{shortver}|g' \
-	%{buildroot}%{_libdir}/%{name}-%{version}/include/Make/Platform.make
-# fix ARCH_DISTDIR in Grass.make
-sed -i -e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}%{shortver}|g' \
-	%{buildroot}%{_libdir}/%{name}-%{version}/include/Make/Grass.make
-# fix ARCH_BINDIR in Grass.make
-sed -i -e 's|%{buildroot}%{_bindir}|%{_bindir}|g' \
-	%{buildroot}%{_libdir}/%{name}-%{version}/include/Make/Grass.make
-# fix GISDBASE in demolocation
-sed -i -e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}%{shortver}|g' \
-	%{buildroot}%{_libdir}/%{name}-%{version}/demolocation/.grassrc%{shortver}
-# Correct font path
-sed -i -e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}%{shortver}|' \
-	%{buildroot}%{_libdir}/%{name}-%{version}/etc/fontcap
+for I in %{buildroot}%{_bindir}/%{name}%{shortver} \
+	%{buildroot}%{_libdir}/%{name}%{shortver}/include/Make/Platform.make \
+	%{buildroot}%{_libdir}/%{name}%{shortver}/include/Make/Grass.make \
+	%{buildroot}%{_libdir}/%{name}%{shortver}/demolocation/.grassrc%{shortver} \
+	%{buildroot}%{_libdir}/%{name}%{shortver}/etc/fontcap; do
+	sed -i \
+		-e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}%{shortver}|g' \
+		-e 's|%{buildroot}%{_libdir}/%{name}%{shortver}|%{_libdir}/%{name}%{shortver}|g' \
+		-e 's|%{buildroot}%{_bindir}|%{_bindir}|g' \
+		$I
+done
+
 # fix paths in grass.pc
 sed -i -e 's|%{_prefix}/%{name}-%{version}|%{_libdir}/%{name}%{shortver}|g' \
 	%{name}.pc
@@ -244,33 +237,35 @@ mkdir -p %{buildroot}%{_libdir}/pkgconfig
 install -p -m 644 %{name}.pc %{buildroot}%{_libdir}/pkgconfig
 
 # Create multilib header
-mv %{buildroot}%{_libdir}/%{name}-%{version}/include/%{name}/config.h \
-   %{buildroot}%{_libdir}/%{name}-%{version}/include/%{name}/config-%{cpuarch}.h
-install -p -m 644 %{SOURCE2} %{buildroot}%{_libdir}/%{name}-%{version}/include/%{name}/config.h
+mv %{buildroot}%{_libdir}/%{name}%{shortver}/include/%{name}/config.h \
+   %{buildroot}%{_libdir}/%{name}%{shortver}/include/%{name}/config-%{cpuarch}.h
+install -p -m 644 %{SOURCE2} %{buildroot}%{_libdir}/%{name}%{shortver}/include/%{name}/config.h
 
 # Make man pages available on the system, convert to utf8 and avoid name conflict
 mkdir -p %{buildroot}%{_mandir}/man1
-for man in $(ls %{buildroot}%{_libdir}/%{name}-%{version}/docs/man/man1/*.1)
+for man in $(ls %{buildroot}%{_libdir}/%{name}%{shortver}/docs/man/man1/*.1)
 do
 	iconv -f iso8859-1 -t utf8 $man > %{buildroot}%{_mandir}/man1/$(basename $man)"%{name}"
 done
 
+# create symlink to unversioned name
+ln -s %{_bindir}/%{name}%{shortver} %{buildroot}%{_bindir}/%{name}
+
 # symlink docs from GISBASE to standard system location
 mkdir -p %{buildroot}%{_docdir}
-# append shortver to destination ? man pages are unversioned
+# append shortver to destination since man pages are unversioned
 ln -s %{_libdir}/%{name}%{shortver}/docs %{buildroot}%{_docdir}/%{name}%{shortver}
 
 # Make desktop, appdata and icon files available on the system
-mv %{buildroot}%{_libdir}/%{name}-%{version}/share/* %{buildroot}%{_datadir}
+mv %{buildroot}%{_libdir}/%{name}%{shortver}/share/* %{buildroot}%{_datadir}
 desktop-file-validate %{buildroot}/%{_datadir}/applications/*.desktop
-# EPEL6 fails on appstream-util
-appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/org.osgeo.%{name}.appdata.xml || echo "Ignoring appstream-util failure"
+appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/org.osgeo.%{name}.appdata.xml
 
 # Cleanup: nothing to do
 #rm -rf %%{buildroot}%%{_prefix}/%%{name}-%%{version}
 
 # Finally move entire tree to shortver subdir
-mv %{buildroot}%{_libdir}/%{name}-%{version} %{buildroot}%{_libdir}/%{name}%{shortver}
+#mv %{buildroot}%{_libdir}/%{name}-%{version} %{buildroot}%{_libdir}/%{name}%{shortver}
 
 # rpm macro for version checking (not from buildroot!)
 mkdir -p ${RPM_BUILD_ROOT}%{macrosdir}
@@ -284,21 +279,17 @@ cat >  %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf<<EOF
 %{_libdir}/%{name}%{shortver}/lib
 EOF
 
+%if 0%{?rhel} && 0%{?rhel} <= 7
 %post
-%if 0%{?rhel}
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
-%endif
 
 %postun
-%if 0%{?rhel}
 if [ $1 -eq 0 ] ; then
 	/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 	/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 fi
-%endif
 
 %posttrans
-%if 0%{?rhel}
 /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
@@ -340,11 +331,53 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
+* Mon Sep 23 2019 Markus Metz <metz@mundialis.de> - 7.8.0-4
+- enable bzip2 compression
+
+* Fri Sep 20 2019 Markus Neteler <neteler@mundialis.de> - 7.8.0-3
+- added missing proj-datumgrid and proj-datumgrid-world for >= F30
+- fix create symlink to unversioned name
+
+* Sat Sep 14 2019 Elliot C. Lee <elliot.c.lee@gmail.com> - 7.8.0-2
+- patch for upstream package and SPEC file
+
+* Fri Sep 13 2019 Markus Neteler <neteler@mundialis.de> - 7.8.0-1
+- new upstream version of GRASS GIS 7.8.0
+- dropped outdated liblas dependency
+
+* Wed Aug 14 2019 Markus Neteler <neteler@mundialis.de> - 7.8.0-RC1
+- test version of GRASS GIS 7.8.0RC1 with Python 3 support
+- removal of no longer required Python 2/3 shebang update
+
+* Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 7.6.0-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
+* Mon Mar 18 2019 Orion Poplawski <orion@nwra.com> - 7.6.0-5
+- Rebuild for netcdf 4.6.3
+
+* Sun Feb 17 2019 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 7.6.0-4
+- Rebuild for readline 8.0
+
+* Mon Feb 04 2019 Devrim Gündüz <devrim@gunduz.org> - 7.6.0-3
+- Rebuild for new GeOS and Proj
+
+* Fri Feb 01 2019 Fedora Release Engineering <releng@fedoraproject.org> - 7.6.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
+* Thu Jan 17 2019 Markus Neteler <neteler@mundialis.de> - 7.6.0-1
+- new upstream version GRASS GIS 7.6.0
+
+* Fri Jan 04 2019 Markus Neteler <neteler@mundialis.de> - 7.4.4-1
+- new upstream version GRASS GIS 7.4.4
+
+* Tue Nov 27 2018 Markus Neteler <neteler@mundialis.de> - 7.4.3-1
+- new upstream version GRASS GIS 7.4.3
+
 * Tue Nov 06 2018 Markus Neteler <neteler@mundialis.de> - 7.4.2-2
 - fix to include libgrass_*.so files in grass-libs.rpm
 
 * Sun Oct 28 2018 Markus Neteler <neteler@mundialis.de> - 7.4.2-1
-- new upstream version 7.4.2
+- new upstream version GRASS GIS 7.4.2
 
 * Sun Sep 09 2018 Pavel Raiskup <praiskup@redhat.com> - 7.4.1-8
 - Clean up of PostgreSQL support (PR#4)
@@ -371,25 +404,29 @@ fi
 - new upstream version 7.4.1
 - do not fail on EPEL6 with appstream-util
 
-* Wed Apr 25 2018 Markus Neteler <neteler@mundialis.de> - 7.4.0-5
+* Wed Apr 25 2018 Markus Neteler <neteler@mundialis.de> - 7.4.0-2
 - add /etc/ld.so.conf.d/grass-*.conf to find libs by Daniele Viganò <daniele@vigano.me> (RHBZ #1571441)
 
-* Mon Mar 26 2018 Markus Neteler <neteler@mundialis.de> - 7.4.0-4
-- Update Python 2 dependency declarations to new packaging standards
-  (author: Iryna Shcherbina <ishcherb@redhat.com> for 7.2.3-2)
-  (See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3)
-- SPEC cleanup with fix of dependencies between packages (review #1539116)
-- appdata.xml file into '/usr/share/metainfo'
-- use icon cache scriplets only on EPEL
+* Mon Apr 09 2018 Markus Neteler <neteler@mundialis.de> - 7.4.0-1
+- New upstream version 7.4.0
 
-* Thu Feb 22 2018 Markus Neteler <neteler@mundialis.de> - 7.4.0-3
+* Mon Mar 26 2018 Iryna Shcherbina <ishcherb@redhat.com> - 7.2.3-2
+- Update Python 2 dependency declarations to new packaging standards
+  (See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3)
+
+* Thu Mar 22 2018 Markus Neteler <neteler@mundialis.de> - 7.2.3-1
+- new upstream version 7.2.3
+- selected backport of major SPEC file cleanup from 7.4.0 done by Markus Metz <metz@mundialis.de>
+- Fix grass-devel which needs include/grass and include/Make dirs done by Markus Metz <metz@mundialis.de
 - store binaries in /usr/lib[64]/grass74/
 
-* Sun Jan 28 2018 Markus Neteler <neteler@mundialis.de> - 7.4.0-2
+* Sun Jan 28 2018 Markus Neteler <neteler@mundialis.de> - 7.2.2-2
 - fix for EPEL in r.random.surface to avoid variable collision with GDAL
+- SPEC cleanup with fix of dependencies between packages (review #1539116)
+- appdata.xml file also go into '/usr/share/metainfo'
+- use icon cache scriplets only on EPEL
 
-* Mon Jan 15 2018 Markus Metz <metz@mundialis.de> - 7.4.0-1
-- New upstream version 7.4.0
+* Mon Jan 15 2018 Markus Metz <metz@mundialis.de> - 7.2.2-1
 - Major cleanup of SPEC file
 - Fix grass-devel which needs include/grass and include/Make dirs
 

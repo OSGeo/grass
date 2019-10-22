@@ -93,7 +93,7 @@ Providing GRASS module interface to a script
 
 ::
 
-    #!/usr/bin/env python
+    #!/usr/bin/env python3
 
     #%module
     #% description: Adds the values of two rasters (A + B)

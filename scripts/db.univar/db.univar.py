@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ############################################################################
 #
@@ -177,14 +177,19 @@ def main():
         sys.stdout.write(
             "Arithmetic mean of absolute values: %.15g\n" %
             (sum3 / N))
-        sys.stdout.write("Variance: %.15g\n" % ((sum2 - sum * sum / N) / N))
-        sys.stdout.write(
-            "Standard deviation: %.15g\n" %
-            (math.sqrt((sum2 - sum * sum / N) / N)))
-        sys.stdout.write(
-            "Coefficient of variation: %.15g\n" %
-            ((math.sqrt((sum2 - sum * sum / N) / N)) /
-             (math.sqrt(sum * sum) / N)))
+        if not ((sum2 - sum * sum / N) / N) < 0:
+            sys.stdout.write("Variance: %.15g\n" % ((sum2 - sum * sum / N) / N))
+            sys.stdout.write(
+                "Standard deviation: %.15g\n" %
+                (math.sqrt((sum2 - sum * sum / N) / N)))
+            sys.stdout.write(
+                "Coefficient of variation: %.15g\n" %
+                ((math.sqrt((sum2 - sum * sum / N) / N)) /
+                 (math.sqrt(sum * sum) / N)))
+        else:
+            sys.stdout.write("Variance: 0\n")
+            sys.stdout.write("Standard deviation: 0\n")
+            sys.stdout.write("Coefficient of variation: 0\n")
         sys.stdout.write("Sum: %.15g\n" % sum)
     else:
         sys.stdout.write("n=%d\n" % N)
@@ -193,15 +198,20 @@ def main():
         sys.stdout.write("range=%.15g\n" % (maxv - minv))
         sys.stdout.write("mean=%.15g\n" % (sum / N))
         sys.stdout.write("mean_abs=%.15g\n" % (sum3 / N))
-        sys.stdout.write("variance=%.15g\n" % ((sum2 - sum * sum / N) / N))
-        sys.stdout.write(
-            "stddev=%.15g\n" %
-            (math.sqrt(
-                (sum2 - sum * sum / N) / N)))
-        sys.stdout.write(
-            "coeff_var=%.15g\n" %
-            ((math.sqrt((sum2 - sum * sum / N) / N)) /
-             (math.sqrt(sum * sum) / N)))
+        if not ((sum2 - sum * sum / N) / N) < 0:
+            sys.stdout.write("variance=%.15g\n" % ((sum2 - sum * sum / N) / N))
+            sys.stdout.write(
+                "stddev=%.15g\n" %
+                (math.sqrt(
+                    (sum2 - sum * sum / N) / N)))
+            sys.stdout.write(
+                "coeff_var=%.15g\n" %
+                ((math.sqrt((sum2 - sum * sum / N) / N)) /
+                 (math.sqrt(sum * sum) / N)))
+        else:
+            sys.stdout.write("variance=0\n")
+            sys.stdout.write("stddev=0\n")
+            sys.stdout.write("coeff_var=0\n")
         sys.stdout.write("sum=%.15g\n" % sum)
 
     if not extend:

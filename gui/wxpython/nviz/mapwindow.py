@@ -210,9 +210,9 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.fly = self.InitFly()
 
         # timer for flythrough
-        self.timerFly = wx.Timer(self, id=wx.NewId())
+        self.timerFly = wx.Timer(self)
         # timer for animations
-        self.timerAnim = wx.Timer(self, id=wx.NewId())
+        self.timerAnim = wx.Timer(self)
         self.animation = Animation(mapWindow=self, timer=self.timerAnim)
 
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)

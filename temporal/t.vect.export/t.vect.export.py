@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 ############################################################################
 #
@@ -56,10 +56,10 @@
 #% key: format
 #% type: string
 #% label: The export format of a single vector map
-#% description: Supported are GML via v.out.ogr and the GRASS package format of v.pack
+#% description: Supported are GML and GPKG via v.out.ogr and the GRASS package format of v.pack
 #% required: no
 #% multiple: no
-#% options: GML,pack
+#% options: GML,GPKG,pack
 #% answer: GML
 #%end
 
@@ -84,7 +84,7 @@ def main():
 
     # Make sure the temporal database exists
     tgis.init()
-    # Export the space time raster dataset
+    # Export the space time vector dataset
     tgis.export_stds(
         _input, output, compression, directory, where, _format, "stvds")
 

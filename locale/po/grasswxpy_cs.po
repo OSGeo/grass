@@ -4011,9 +4011,9 @@ msgid "Delete selected mapset"
 msgstr "Odstranit vybraný mapset"
 
 #: ../gui/wxpython/gis_set.py:258
-#, fuzzy, python-format
+#, python-format
 msgid "GRASS GIS %s Startup%s"
-msgstr "Spuštění GRASS GISu %s %s"
+msgstr ""
 
 #: ../gui/wxpython/gis_set.py:263
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:257
@@ -11696,9 +11696,8 @@ msgid "Not enough points for line"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:51
-#, fuzzy
 msgid "Name for the new mapset:"
-msgstr "Vložte jméno nové mapsetu:"
+msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:150
 #, python-brace-format
@@ -16304,19 +16303,16 @@ msgid "Set title for the plot"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:287
-#, fuzzy
 msgid "Set label for X axis"
-msgstr "Nastavit popisek"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:292
-#, fuzzy
 msgid "Set label for Y axis"
-msgstr "Nastavit popisek"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:304
-#, fuzzy
 msgid "Labels"
-msgstr "Popisek"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:311
 msgid "Path for output CSV file with plotted data"
@@ -16327,9 +16323,8 @@ msgid "CVS path"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:323
-#, fuzzy
 msgid "Do you want the CSV header?"
-msgstr "Chcete uložit změny v modelu?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:364 ../gui/wxpython/tplot/frame.py:842
 #: ../gui/wxpython/tplot/frame.py:846 ../gui/wxpython/tplot/frame.py:867
@@ -16399,14 +16394,13 @@ msgid "Problem getting data from vector temporal dataset. Empty list of values."
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:802
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{pa} already exists, do you want to overwrite?"
-msgstr "Vektorová vrstva <%s> již existuje. Přejete si ji přepsat?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:804
-#, fuzzy
 msgid "File exists"
-msgstr "Soubor již existuje"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:809
 msgid "Please change name of output CSV file or "
@@ -20779,9 +20773,8 @@ msgstr "Převod vektorové vrstvy na volume"
 msgid "Sites to vector"
 msgstr "Vytvoření vektorové vrstvy z bodů (sites, GRASS 5.x)"
 
-#, fuzzy
 msgid "Raster map calculator."
-msgstr "3D rastrový kalkulátor"
+msgstr ""
 
 msgid "V&olumes"
 msgstr "&3D rastr"
@@ -20824,8 +20817,8 @@ msgstr "Porovnává bitové vzory s rastrovou mapou."
 msgid "Calculates univariate statistics from the non-null cells for each registered raster3d map of a space time raster3d dataset."
 msgstr "Spočítá univariantní statistiku z ne-nullových 3D buněk 3D rastrové vrstvy."
 
-#~ msgid "&Fetch"
-#~ msgstr "&Stáhnout"
+msgid "&Fetch"
+msgstr "&Stáhnout"
 
-#~ msgid "Fetch list of available modules from GRASS Addons SVN repository"
-#~ msgstr "Stáhnout seznam dostupných modulů z GRASS Addons SVN repozitáře"
+msgid "Fetch list of available modules from GRASS Addons SVN repository"
+msgstr "Stáhnout seznam dostupných modulů z GRASS Addons SVN repozitáře"

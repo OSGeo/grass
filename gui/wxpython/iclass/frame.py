@@ -1482,7 +1482,6 @@ def test():
     import core.render as render
 
     app = wx.App()
-    wx.InitAllImageHandlers()
 
     frame = IClassMapFrame()
     frame.Show()

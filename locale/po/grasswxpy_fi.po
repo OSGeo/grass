@@ -11633,9 +11633,8 @@ msgid "Not enough points for line"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:51
-#, fuzzy
 msgid "Name for the new mapset:"
-msgstr "Luo uusi karttajoukko"
+msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:150
 #, python-brace-format
@@ -16243,9 +16242,8 @@ msgid "CVS path"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:323
-#, fuzzy
 msgid "Do you want the CSV header?"
-msgstr "Haluatko luoda uuden karttajoukon?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:364 ../gui/wxpython/tplot/frame.py:842
 #: ../gui/wxpython/tplot/frame.py:846 ../gui/wxpython/tplot/frame.py:867

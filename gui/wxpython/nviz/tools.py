@@ -52,8 +52,8 @@ from modules.colorrules import ThematicVectorTable
 from core.settings import UserSettings
 from gui_core.widgets import ScrolledPanel, NumTextCtrl, FloatSlider, SymbolButton
 from gui_core.gselect import Select
-from gui_core.wrap import SpinCtrl, PseudoDC, ToggleButton, Button, \
-    TextCtrl, ToggleButton, StaticText, StaticBox, CheckListBox
+from gui_core.wrap import Window, SpinCtrl, PseudoDC, ToggleButton, Button, \
+    TextCtrl, ToggleButton, StaticText, StaticBox, CheckListBox, ColourSelect
 from core.debug import Debug
 try:
     from nviz.mapwindow import wxUpdateProperties, wxUpdateView,\
@@ -555,7 +555,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 group='nviz', key='animation', subkey='fps'),
             min=1, max=50)
         self.win['anim']['fps'] = fps.GetId()
-        fps.SetToolTipString(
+        fps.SetToolTip(
             _("Frames are recorded with given frequency (FPS). "))
 
         record.Bind(wx.EVT_BUTTON, self.OnRecord)
@@ -923,11 +923,11 @@ class NvizToolWindow(FN.FlatNotebook):
                       pos=(3, 2))
 
         # color
-        color = csel.ColourSelect(panel, id=wx.ID_ANY,
-                                  size=globalvar.DIALOG_COLOR_SIZE)
+        color = ColourSelect(panel, id=wx.ID_ANY,
+                             size=globalvar.DIALOG_COLOR_SIZE)
         color.SetName("colour")
         color.Bind(csel.EVT_COLOURSELECT, self.OnSurfaceWireColor)
-        color.SetToolTipString(_("Change wire color"))
+        color.SetToolTip(_("Change wire color"))
         self.win['surface']['draw']['wire-color'] = color.GetId()
         gridSizer.Add(
             color,
@@ -3087,7 +3087,7 @@ class NvizToolWindow(FN.FlatNotebook):
 
         text.SetName('text')
         if tooltip:
-            text.SetToolTipString(tooltip)
+            text.SetToolTip(tooltip)
         if bind[2]:
             text.Bind(wx.EVT_TEXT_ENTER, bind[2])
             text.Bind(wx.EVT_KILL_FOCUS, bind[2])
@@ -5215,7 +5215,7 @@ class NvizToolWindow(FN.FlatNotebook):
         """Update animation page"""
         # wrap help text according to tool window
         help = self.FindWindowById(self.win['anim']['help'])
-        width = help.GetGrandParent().GetSizeTuple()[0]
+        width = help.GetGrandParent().GetSize()[0]
         help.Wrap(width - 15)
         anim = self.mapWindow.GetAnimation()
         if anim.Exists():
@@ -5718,7 +5718,7 @@ class NvizToolWindow(FN.FlatNotebook):
             win.SetSelection(self.page[name]['id'])
 
 
-class PositionWindow(wx.Window):
+class PositionWindow(Window):
     """Abstract position control window, see subclasses
     ViewPostionWindow and LightPositionWindow"""
 
@@ -5727,7 +5727,7 @@ class PositionWindow(wx.Window):
         self.mapWindow = mapwindow
         self.quick = True
 
-        wx.Window.__init__(self, parent, id, **kwargs)
+        Window.__init__(self, parent, id, **kwargs)
 
         self.SetBackgroundColour("WHITE")
 
@@ -5804,7 +5804,7 @@ class ViewPositionWindow(PositionWindow):
     def __init__(self, parent, mapwindow, id=wx.ID_ANY,
                  **kwargs):
         PositionWindow.__init__(self, parent, mapwindow, id, **kwargs)
-        self.SetToolTipString(
+        self.SetToolTip(
             _("Adjusts the distance and direction of the image viewpoint"))
         self.data = self.mapWindow.view
         self.PostDraw()
@@ -5840,8 +5840,8 @@ class LightPositionWindow(PositionWindow):
     def __init__(self, parent, mapwindow, id=wx.ID_ANY,
                  **kwargs):
         PositionWindow.__init__(self, parent, mapwindow, id, **kwargs)
-        self.SetToolTipString(_("Adjusts the light direction. "
-                                "Click and drag the puck to change the light direction."))
+        self.SetToolTip(_("Adjusts the light direction. "
+                          "Click and drag the puck to change the light direction."))
 
         self.data = self.mapWindow.light
         self.quick = False
