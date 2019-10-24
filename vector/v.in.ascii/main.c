@@ -71,6 +71,9 @@ int main(int argc, char *argv[])
     G_add_keyword(_("import"));
     G_add_keyword("ASCII");
     G_add_keyword(_("level1"));
+    G_add_keyword(_("area"));
+    G_add_keyword(_("line"));
+    G_add_keyword(_("point"));
 
     module->description =
 	_("Creates a vector map from an ASCII points file or ASCII vector file.");
