@@ -109,7 +109,8 @@ class DisplayDriver:
         progress = gprogress
 
         G_gisinit('wxvdigit')
-        locale.setlocale(locale.LC_NUMERIC, 'C')
+        if sys.platform != 'win32':
+            locale.setlocale(locale.LC_NUMERIC, 'C')
         G_set_error_routine(errfunc)
         G_set_percent_routine(perfunc)
         # G_set_fatal_error(FATAL_RETURN)

@@ -97,11 +97,7 @@ class MetaIcon:
                     image.Rescale(size[0], size[1])
                     bmp = image.ConvertToBitmap()
                 elif self.imagepath:
-                    # weird error on Windows with non-english locale
-                    try:
-                        bmp = wx.Bitmap(name=self.imagepath)
-                    except wx.wxAssertionError:
-                        return bmp
+                    bmp = wx.Bitmap(name=self.imagepath)
 
         return bmp
 
