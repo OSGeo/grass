@@ -141,7 +141,8 @@ class Nviz(object):
 
     def Init(self):
         """Initialize window"""
-        locale.setlocale(locale.LC_NUMERIC, 'C')
+        if sys.platform != 'win32':
+            locale.setlocale(locale.LC_NUMERIC, 'C')
         G_unset_window()
         Rast_unset_window()
         Rast__init_window()
