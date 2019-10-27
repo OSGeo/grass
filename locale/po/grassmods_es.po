@@ -36766,7 +36766,7 @@ msgid "Incompatible column types"
 msgstr "Tipos de columnas incompatibles"
 
 #: ../vector/v.distance/main.c:674
-msgid "No categories for 'from' for slected type and layer"
+msgid "No categories for 'from' for selected type and layer"
 msgstr "No hay categorías para 'from' para tipo y capa seleccionados"
 
 #: ../vector/v.distance/main.c:702
