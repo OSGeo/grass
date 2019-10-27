@@ -1,11 +1,40 @@
 How the GRASS Webserver and related infrastructure works
 
 written by M. Neteler
-Last changed: June 2019
+Last changed: Oct 2019
 
 
 Related Wiki documents:
 * https://grass.osgeo.org/wiki/GRASS_Migration_to_OSGeo (historical document)
+
+== GRASS Source code repository ==
+
+Maintainer: Markus Neteler, Martin Landa, OSGeo-SAC, http://wiki.osgeo.org/wiki/SAC
+
+Important update April 2019: The source code is now managed on GitHub (rather than in SVN).
+The new GitHub repositories are:
+
+* GRASS GIS core (7.x): https://github.com/OSGeo/grass
+* GRASS GIS legacy (3.x-6.x): https://github.com/OSGeo/grass-legacy
+* GRASS GIS Add-ons: https://github.com/OSGeo/grass-addons
+* GRASS GIS promotional material: https://github.com/OSGeo/grass-promo
+* GRASS GIS Website (future site): https://github.com/OSGeo/grass-website 
+
+* Github mirror at OSGeo: https://git.osgeo.org/gitea/grass_gis/grass
+* Git usage: https://trac.osgeo.org/grass/wiki/HowToGit
+
+Still trac at OSGeo is used for tickets: https://trac.osgeo.org/grass
+
+For easier linking in the Trac Wiki, some macro definitions are used for manual page refs (G7:modulename)
+* https://trac.osgeo.org/grass/wiki/InterMapTxt
+
+ZIP file download support in trac (was needed for g.extension) - on trac.osgeo.org:
+/var/www/trac/grass/conf/trac.ini
+[browser]
+downloadable_paths = /grass-addons/grass7/*/*,/sandbox/*/*
+
+Statistics:
+https://trac.osgeo.org/grass/stats/code
 
 == GRASS Web server ==
 
@@ -137,25 +166,6 @@ Web based client: See http://grasswiki.osgeo.org/wiki/IRC
    - Luca ("doktoreas")
    - Soeren ("huhabla")
    - Brad ("bdouglas")
-
-
-== GRASS Source code repository ==
-
-Maintainer: Markus Neteler, Martin Landa, OSGeo-SAC, http://wiki.osgeo.org/wiki/SAC
-
-* https://trac.osgeo.org/grass/browser
-* SVN: https://trac.osgeo.org/grass/wiki/HowToSVN
-
-Trac Wiki Macro definitions for manual pages G7:modulename
-* https://trac.osgeo.org/grass/wiki/InterMapTxt
-
-ZIP file download support in trac (needed for g.extension) - on trac.osgeo.org:
-/var/www/trac/grass/conf/trac.ini
-[browser]
-downloadable_paths = /grass-addons/grass7/*/*,/sandbox/*/*
-
-Statistics:
-https://trac.osgeo.org/grass/stats/code
 
 == GRASS Bugtracker ==
 
