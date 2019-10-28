@@ -545,8 +545,8 @@ int main(int argc, char *argv[])
 
     Rast_get_d_row_nomask(elevation_fd, elev_cell[2] + 1, 0);
     if (Wrap) {
-	elev_cell[2][0] = elev_cell[1][Rast_window_cols() - 1];
-	elev_cell[2][Rast_window_cols() + 1] = elev_cell[2][2];
+	elev_cell[2][0] = elev_cell[1][Rast_window_cols()];
+	elev_cell[2][Rast_window_cols() + 1] = elev_cell[2][1];
     }
 
     G_verbose_message(_("Percent complete..."));
@@ -592,8 +592,8 @@ int main(int argc, char *argv[])
 	    Rast_set_d_null_value(elev_cell[2], ncols + 2);
 	    
 	if (Wrap) {
-	    elev_cell[2][0] = elev_cell[2][Rast_window_cols() + 1];
-	    elev_cell[2][Rast_window_cols() + 1] = elev_cell[2][0];
+	    elev_cell[2][0] = elev_cell[2][Rast_window_cols()];
+	    elev_cell[2][Rast_window_cols() + 1] = elev_cell[2][1];
 	}
 
 	pc1 = elev_cell[0];
