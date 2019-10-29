@@ -24898,6 +24898,7 @@ msgid_plural "%d classes found"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: ../imagery/i.gensig/means.c:26
 msgid "Calculating class means..."

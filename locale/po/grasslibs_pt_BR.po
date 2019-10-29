@@ -204,7 +204,7 @@ msgstr ""
 #: ../lib/temporal/lib/connect.c:110
 #, c-format
 msgid "Mapset <%s> does not exist."
-msgstr ""
+msgstr "Mapset <1%s> não existe."
 
 #: ../lib/rowio/setup.c:61 ../lib/rowio/setup.c:67 ../lib/segment/open.c:118
 #: ../lib/rst/interp_float/segmen2d_parallel.c:78
@@ -4733,11 +4733,11 @@ msgstr ""
 
 #: ../lib/gis/cmprlz4.c:121
 msgid "LZ4 compression error"
-msgstr ""
+msgstr "Erro na compactação LZ4"
 
 #: ../lib/gis/cmprlz4.c:177
 msgid "LZ4 decompression error"
-msgstr ""
+msgstr "Erro na descompactação LZ4"
 
 #: ../lib/gis/cmprlz4.c:186 ../lib/gis/cmprbzip.c:219 ../lib/gis/cmprzstd.c:206
 #: ../lib/gis/cmprzlib.c:215
@@ -5497,7 +5497,7 @@ msgstr ""
 
 #: ../lib/gis/myname.c:46
 msgid "This location has no description."
-msgstr ""
+msgstr "Location não possui descrição."
 
 #: ../lib/gis/adj_cellhd.c:57
 #, c-format
@@ -5981,12 +5981,12 @@ msgstr ""
 #: ../lib/gis/list.c:83
 #, c-format
 msgid "no %s files available in current mapset\n"
-msgstr ""
+msgstr "Arquivos %s não estão disponíveis no mapset atual\n"
 
 #: ../lib/gis/list.c:86
 #, c-format
 msgid "no %s files available in mapset <%s>\n"
-msgstr ""
+msgstr "arquivos %s não estão disponíveis no mapset <%s>\n"
 
 #: ../lib/gis/list.c:132
 #, c-format
@@ -5995,7 +5995,7 @@ msgstr ""
 
 #: ../lib/gis/list.c:204
 msgid "G_list: Unknown element type"
-msgstr ""
+msgstr "G_list: Tipo de elemento desconhecido"
 
 #: ../lib/gis/error.c:362
 msgid "WARNING: "
@@ -6309,9 +6309,9 @@ msgid "Invalid compressed field: %s"
 msgstr ""
 
 #: ../lib/gis/seek.c:54 ../lib/gis/seek.c:60
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to seek: %s"
-msgstr "Impossível executar o comando"
+msgstr ""
 
 #: ../lib/gis/seek.c:58
 msgid "Seek offset out of range"

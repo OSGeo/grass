@@ -9271,7 +9271,7 @@ msgstr "Coordenadas de cuadrícula E y N de mapa de los puntos iniciales"
 #: ../raster/r.spreadpath/main.c:161
 #, c-format
 msgid "Reading the input map -%s- and -%s- and creating some temporary files..."
-msgstr "leyendo mapa de entrada -%s y -%s- y creando algunos archivos temporales..."
+msgstr ""
 
 #: ../raster/r.spreadpath/main.c:266
 msgid "Finding the least cost paths ..."
@@ -11361,9 +11361,8 @@ msgstr ""
 #: ../raster/r.watershed/seg/sseg_open.c:23
 #: ../raster/r.watershed/seg/dseg_open.c:24
 #: ../raster/r.watershed/seg/cseg_open.c:23
-#, fuzzy
 msgid "File name is invalid"
-msgstr "Formato de marca de tiempo no válido"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:25 ../raster/r.stream.extract/dseg.c:25
 #: ../raster/r.stream.extract/bseg.c:25 ../raster/r.stream.extract/seg.c:26
@@ -11371,9 +11370,8 @@ msgstr "Formato de marca de tiempo no válido"
 #: ../raster/r.watershed/seg/sseg_open.c:27
 #: ../raster/r.watershed/seg/dseg_open.c:28
 #: ../raster/r.watershed/seg/cseg_open.c:27
-#, fuzzy
 msgid "File write error"
-msgstr "No se puede escribir en el archivo"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:29 ../raster/r.stream.extract/dseg.c:29
 #: ../raster/r.stream.extract/bseg.c:29 ../raster/r.stream.extract/seg.c:30
@@ -11381,9 +11379,8 @@ msgstr "No se puede escribir en el archivo"
 #: ../raster/r.watershed/seg/sseg_open.c:31
 #: ../raster/r.watershed/seg/dseg_open.c:32
 #: ../raster/r.watershed/seg/cseg_open.c:31
-#, fuzzy
 msgid "Illegal parameters are passed"
-msgstr "valores del parámetro no válidos"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:33 ../raster/r.stream.extract/dseg.c:33
 #: ../raster/r.stream.extract/bseg.c:33 ../raster/r.stream.extract/seg.c:34
@@ -11391,9 +11388,8 @@ msgstr "valores del parámetro no válidos"
 #: ../raster/r.watershed/seg/sseg_open.c:35
 #: ../raster/r.watershed/seg/dseg_open.c:36
 #: ../raster/r.watershed/seg/cseg_open.c:35
-#, fuzzy
 msgid "File could not be re-opened"
-msgstr "La tabla auxiliar no se pudo eliminar"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:37 ../raster/r.stream.extract/dseg.c:37
 #: ../raster/r.stream.extract/bseg.c:37 ../raster/r.stream.extract/seg.c:38
@@ -11401,9 +11397,8 @@ msgstr "La tabla auxiliar no se pudo eliminar"
 #: ../raster/r.watershed/seg/sseg_open.c:39
 #: ../raster/r.watershed/seg/dseg_open.c:40
 #: ../raster/r.watershed/seg/cseg_open.c:39
-#, fuzzy
 msgid "Prepared file could not be read"
-msgstr "La tabla auxiliar no se pudo eliminar"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:68 ../raster/r.stream.extract/cseg.c:77
 #: ../raster/r.stream.extract/dseg.c:68 ../raster/r.stream.extract/dseg.c:77
@@ -24311,9 +24306,8 @@ msgid "Name of altitude corrected surface temperature raster map [K]"
 msgstr "Nombre de mapa ráster de temperatura superficial corregida por altitud [K]"
 
 #: ../imagery/i.eb.hsebal01/main.c:141
-#, fuzzy
 msgid "Name of the actual vapour pressure (e_act) map [KPa]"
-msgstr "Nombre de mapa ráster de esfuerzo de cizalla (shear stress) [Pa]"
+msgstr ""
 
 #: ../imagery/i.eb.hsebal01/main.c:150
 msgid "Value of the height independent friction velocity (u*) [m/s]"
@@ -24960,11 +24954,11 @@ msgid "Training map has no classes"
 msgstr "El mapa training no tiene clases."
 
 #: ../imagery/i.gensig/get_train.c:74
-#, fuzzy, c-format
+#, c-format
 msgid "One class found"
 msgid_plural "%d classes found"
-msgstr[0] "1 clase encontrada"
-msgstr[1] "1 clase encontrada"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../imagery/i.gensig/means.c:26
 msgid "Calculating class means..."
@@ -36767,7 +36761,7 @@ msgstr "Tipos de columnas incompatibles"
 
 #: ../vector/v.distance/main.c:674
 msgid "No categories for 'from' for selected type and layer"
-msgstr "No hay categorías para 'from' para tipo y capa seleccionados"
+msgstr ""
 
 #: ../vector/v.distance/main.c:702
 msgid "Finding nearest features..."
@@ -45854,26 +45848,26 @@ msgstr "Semilla aleatoria (SEED_MIN >= valor >= SEED_MAX), predeterminado [rando
 msgid "GDAL datatype: %s, range: %g - %g"
 msgstr "Tipo de datos GDAL: %s, rango: %g - %g"
 
-#~ msgid "Unable to create segment file"
-#~ msgstr "No ha sido posible crear archivo de segmentos"
+msgid "Unable to create segment file"
+msgstr "No ha sido posible crear archivo de segmentos"
 
-#~ msgid "Illegal configuration parameter(s)"
-#~ msgstr "Parámetro(s) de configuración no admitido"
+msgid "Illegal configuration parameter(s)"
+msgstr "Parámetro(s) de configuración no admitido"
 
-#~ msgid "Unable to re-open segment file"
-#~ msgstr "No ha sido posible reabrir archivo de segmentos"
+msgid "Unable to re-open segment file"
+msgstr "No ha sido posible reabrir archivo de segmentos"
 
-#~ msgid "dseg_open(): unable to create segment file"
-#~ msgstr "dseg_open(): o ha sido posible crear archivo de segmentos"
+msgid "dseg_open(): unable to create segment file"
+msgstr "dseg_open(): o ha sido posible crear archivo de segmentos"
 
-#~ msgid "Iillegal configuration parameter(s)"
-#~ msgstr "Parámetro(s) de configuración no admitido"
+msgid "Iillegal configuration parameter(s)"
+msgstr "Parámetro(s) de configuración no admitido"
 
-#~ msgid "Unable to re-open file '%s'"
-#~ msgstr "No ha sido posible reabrir archivo '%s'"
+msgid "Unable to re-open file '%s'"
+msgstr "No ha sido posible reabrir archivo '%s'"
 
-#~ msgid "Can not initialize temporary file"
-#~ msgstr "No se puede inicializar archivo temporal"
+msgid "Can not initialize temporary file"
+msgstr "No se puede inicializar archivo temporal"
 
-#~ msgid "eading the input map -%s- and -%s- and creating some temporary files..."
-#~ msgstr "leyendo mapa de entrada -%s y -%s- y creando algunos archivos temporales..."
+msgid "eading the input map -%s- and -%s- and creating some temporary files..."
+msgstr "leyendo mapa de entrada -%s y -%s- y creando algunos archivos temporales..."
