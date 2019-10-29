@@ -2911,15 +2911,12 @@ msgid "<required>"
 msgstr "<obligatoire>"
 
 #: ../lib/python/script/task.py:499 ../lib/python/script/task.py:503
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Unable to fetch interface description for command '<{cmd}>'.\n"
 "\n"
 "Details: <{det}>"
 msgstr ""
-"Impossible de récupérer la description de l'interface pour la commande '%(cmd)s'.\n"
-"\n"
-"Détails: %(det)s"
 
 #: ../lib/python/script/task.py:526
 #, python-brace-format
@@ -6448,9 +6445,9 @@ msgid "Invalid compressed field: %s"
 msgstr "Champ compressé invalide : %s"
 
 #: ../lib/gis/seek.c:54 ../lib/gis/seek.c:60
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to seek: %s"
-msgstr "Recherche impossible"
+msgstr ""
 
 #: ../lib/gis/seek.c:58
 msgid "Seek offset out of range"
@@ -10351,17 +10348,17 @@ msgstr "L'option %s requiert toutes les options %s"
 msgid "Option %s is mutually exclusive with all of %s"
 msgstr "L'option %s est mutuellement exclusive avec toutes les options %s"
 
-#~ msgid ""
-#~ "Unable to fetch interface description for command '%(cmd)s'.\n"
-#~ "\n"
-#~ "Details: %(det)s"
-#~ msgstr ""
-#~ "Impossible de récupérer la description de l'interface pour la commande '%(cmd)s'.\n"
-#~ "\n"
-#~ "Détails: %(det)s"
+msgid ""
+"Unable to fetch interface description for command '%(cmd)s'.\n"
+"\n"
+"Details: %(det)s"
+msgstr ""
+"Impossible de récupérer la description de l'interface pour la commande '%(cmd)s'.\n"
+"\n"
+"Détails: %(det)s"
 
-#~ msgid "Unable to seek"
-#~ msgstr "Recherche impossible"
+msgid "Unable to seek"
+msgstr "Recherche impossible"
 
 #~ msgid "options: arch,build,compiler,path,revision,svn_revision,version"
 #~ msgstr "options : arch, build, compilateur, path, révision, révision_svn, version"
