@@ -11352,11 +11352,8 @@ msgstr "Trop de points dans la pile %lld, devrait être %lld"
 #: ../raster/r.watershed/seg/sseg_open.c:23
 #: ../raster/r.watershed/seg/dseg_open.c:24
 #: ../raster/r.watershed/seg/cseg_open.c:23
-#, fuzzy
 msgid "File name is invalid"
 msgstr ""
-"\n"
-"Veuillez donner un nom à ce fichier :"
 
 #: ../raster/r.stream.extract/cseg.c:25 ../raster/r.stream.extract/dseg.c:25
 #: ../raster/r.stream.extract/bseg.c:25 ../raster/r.stream.extract/seg.c:26
@@ -11364,9 +11361,8 @@ msgstr ""
 #: ../raster/r.watershed/seg/sseg_open.c:27
 #: ../raster/r.watershed/seg/dseg_open.c:28
 #: ../raster/r.watershed/seg/cseg_open.c:27
-#, fuzzy
 msgid "File write error"
-msgstr "Impossible d'écrire le fichier temporaire"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:29 ../raster/r.stream.extract/dseg.c:29
 #: ../raster/r.stream.extract/bseg.c:29 ../raster/r.stream.extract/seg.c:30
@@ -11377,27 +11373,23 @@ msgstr "Impossible d'écrire le fichier temporaire"
 msgid "Illegal parameters are passed"
 msgstr ""
 
-# c-format
 #: ../raster/r.stream.extract/cseg.c:33 ../raster/r.stream.extract/dseg.c:33
 #: ../raster/r.stream.extract/bseg.c:33 ../raster/r.stream.extract/seg.c:34
 #: ../raster/r.watershed/seg/bseg_open.c:36
 #: ../raster/r.watershed/seg/sseg_open.c:35
 #: ../raster/r.watershed/seg/dseg_open.c:36
 #: ../raster/r.watershed/seg/cseg_open.c:35
-#, fuzzy
 msgid "File could not be re-opened"
-msgstr "couche vecteur <%s> introuvable"
+msgstr ""
 
-# c-format
 #: ../raster/r.stream.extract/cseg.c:37 ../raster/r.stream.extract/dseg.c:37
 #: ../raster/r.stream.extract/bseg.c:37 ../raster/r.stream.extract/seg.c:38
 #: ../raster/r.watershed/seg/bseg_open.c:40
 #: ../raster/r.watershed/seg/sseg_open.c:39
 #: ../raster/r.watershed/seg/dseg_open.c:40
 #: ../raster/r.watershed/seg/cseg_open.c:39
-#, fuzzy
 msgid "Prepared file could not be read"
-msgstr "couche vecteur <%s> introuvable"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:68 ../raster/r.stream.extract/cseg.c:77
 #: ../raster/r.stream.extract/dseg.c:68 ../raster/r.stream.extract/dseg.c:77
@@ -45126,17 +45118,17 @@ msgstr "Créer une carte raster 3D depuis des points LIDAR LAS"
 msgid "%ld categories"
 msgstr "%ld catégories"
 
-#~ msgid "Unable to create segment file"
-#~ msgstr "Impossible de créer le fichier segment"
+msgid "Unable to create segment file"
+msgstr "Impossible de créer le fichier segment"
 
-#~ msgid "Illegal configuration parameter(s)"
-#~ msgstr "Configuration de paramètre(s) non autorisée(s)"
+msgid "Illegal configuration parameter(s)"
+msgstr "Configuration de paramètre(s) non autorisée(s)"
 
-#~ msgid "Unable to re-open segment file"
-#~ msgstr "Impossible de ré-ouvrir le fichier segment"
+msgid "Unable to re-open segment file"
+msgstr "Impossible de ré-ouvrir le fichier segment"
 
-#~ msgid "dseg_open(): unable to create segment file"
-#~ msgstr "dseg_open() : impossible de créer le fichier segment"
+msgid "dseg_open(): unable to create segment file"
+msgstr "dseg_open() : impossible de créer le fichier segment"
 
-#~ msgid "Unable to re-open file '%s'"
-#~ msgstr "Impossible de ré-ouvrir le fichier '%s'"
+msgid "Unable to re-open file '%s'"
+msgstr "Impossible de ré-ouvrir le fichier '%s'"

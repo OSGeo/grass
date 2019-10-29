@@ -11357,9 +11357,8 @@ msgstr ""
 #: ../raster/r.watershed/seg/sseg_open.c:23
 #: ../raster/r.watershed/seg/dseg_open.c:24
 #: ../raster/r.watershed/seg/cseg_open.c:23
-#, fuzzy
 msgid "File name is invalid"
-msgstr "Il valore inferiore non è valido"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:25 ../raster/r.stream.extract/dseg.c:25
 #: ../raster/r.stream.extract/bseg.c:25 ../raster/r.stream.extract/seg.c:26
@@ -11367,9 +11366,8 @@ msgstr "Il valore inferiore non è valido"
 #: ../raster/r.watershed/seg/sseg_open.c:27
 #: ../raster/r.watershed/seg/dseg_open.c:28
 #: ../raster/r.watershed/seg/cseg_open.c:27
-#, fuzzy
 msgid "File write error"
-msgstr "Non è possibile scrivere sul file"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:29 ../raster/r.stream.extract/dseg.c:29
 #: ../raster/r.stream.extract/bseg.c:29 ../raster/r.stream.extract/seg.c:30
@@ -11377,9 +11375,8 @@ msgstr "Non è possibile scrivere sul file"
 #: ../raster/r.watershed/seg/sseg_open.c:31
 #: ../raster/r.watershed/seg/dseg_open.c:32
 #: ../raster/r.watershed/seg/cseg_open.c:31
-#, fuzzy
 msgid "Illegal parameters are passed"
-msgstr "Valori del parametro non validi"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:33 ../raster/r.stream.extract/dseg.c:33
 #: ../raster/r.stream.extract/bseg.c:33 ../raster/r.stream.extract/seg.c:34
@@ -24920,11 +24917,11 @@ msgid "Training map has no classes"
 msgstr "La mappa di allenamento non ha classi"
 
 #: ../imagery/i.gensig/get_train.c:74
-#, fuzzy, c-format
+#, c-format
 msgid "One class found"
 msgid_plural "%d classes found"
-msgstr[0] "Trovata 1 classe"
-msgstr[1] "Trovata 1 classe"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../imagery/i.gensig/means.c:26
 msgid "Calculating class means..."
@@ -44858,5 +44855,5 @@ msgstr "Impossibile leggere il file georeferenziato %s né con GDAL né con OGR"
 msgid "GDAL datatype: %s, range: %g - %g"
 msgstr "Tipo di dati GDAL: %s, campo di variazione: %g - %g"
 
-#~ msgid "Unable to re-open file '%s'"
-#~ msgstr "Impossibile riaprile il file '%s'"
+msgid "Unable to re-open file '%s'"
+msgstr "Impossibile riaprile il file '%s'"
