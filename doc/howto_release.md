@@ -92,7 +92,7 @@ git status
 
 ### Update VERSION file to release version number
 
-Directly edit in GH interface:
+Directly edit VERSION file in GH interface:
 
 https://github.com/OSGeo/grass/blob/releasebranch_7_8/include/VERSION
 
@@ -112,13 +112,20 @@ Example:
 
 ### Create release tag
 
-See https://help.github.com/en/articles/creating-releases
+(see https://help.github.com/en/articles/creating-releases)
 
 Preparation:
 
 ### Changelog and tagging etc
 
 ```bash
+# update from GH
+#  assumptions:
+#  - own fork as "origin"
+#  - remote repo as "upstream"
+git fetch --all --prune && git checkout releasebranch_7_8 && \
+ git merge upstream/releasebranch_7_8 && git push origin releasebranch_7_8
+
 # create version env var for convenience:
 MAJOR=`cat include/VERSION | head -1 | tail -1`
 MINOR=`cat include/VERSION | head -2 | tail -1`
@@ -126,12 +133,7 @@ RELEASE=`cat include/VERSION | head -3 | tail -1`
 VERSION=${MAJOR}.${MINOR}.${RELEASE}
 echo $VERSION
 
-# Create Changelog file on release branch:
-python tools/gitlog2changelog.py
-mv ChangeLog ChangeLog_$VERSION
-head ChangeLog_$VERSION
-gzip ChangeLog_$VERSION
-
+# RELEASETAG variable not really needed any more:
 TODAY=`date +"%Y%m%d"`
 RELEASETAG=release_${TODAY}_grass_${MAJOR}_${MINOR}_${RELEASE}
 echo $RELEASETAG
@@ -143,7 +145,7 @@ echo $RELEASETAG
 echo "$VERSION"
 ```
 
-Done in GH interface:
+To be done in GH interface:
 
 https://github.com/OSGeo/grass/releases/new
 
@@ -152,14 +154,6 @@ https://github.com/OSGeo/grass/releases/new
 TODO: add checkout of code via release tag (?)
 
 ```bash
-# update from GH
-#  assumptions:
-#  - own fork as "origin"
-#  - remote repo as "upstream"
-
-git fetch --all --prune && git checkout releasebranch_7_8 && \
- git merge upstream/releasebranch_7_8 && git push origin releasebranch_7_8
-
 # create source package (in the source directory):
 echo grass-${VERSION}
 
@@ -174,9 +168,19 @@ rmdir ./grass-${VERSION}
 md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 ```
 
+
+Create Changelog file on release branch:
+
+```bash
+python tools/gitlog2changelog.py
+mv ChangeLog ChangeLog_$VERSION
+head ChangeLog_$VERSION
+gzip ChangeLog_$VERSION
+```
+
 ### Reset include/VERSION file to git version:
 
-Directly edit in GH interface:
+Directly edit VERSION file in GH interface:
 
 https://github.com/OSGeo/grass/blob/releasebranch_7_8/include/VERSION
 
@@ -187,6 +191,16 @@ Example:
 8
 1dev
 2019
+```
+
+Reset local copy to GH:
+```bash
+# update from GH
+#  assumptions:
+#  - own fork as "origin"
+#  - remote repo as "upstream"
+git fetch --all --prune && git checkout releasebranch_7_8 && \
+ git merge upstream/releasebranch_7_8 && git push origin releasebranch_7_8
 ```
 
 ### Upload source code tarball to OSGeo servers
