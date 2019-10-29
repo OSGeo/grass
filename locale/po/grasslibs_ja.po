@@ -6323,9 +6323,9 @@ msgid "Invalid compressed field: %s"
 msgstr ""
 
 #: ../lib/gis/seek.c:54 ../lib/gis/seek.c:60
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to seek: %s"
-msgstr "シークできません"
+msgstr ""
 
 #: ../lib/gis/seek.c:58
 msgid "Seek offset out of range"
@@ -9890,5 +9890,5 @@ msgstr "エラーメッセージ: %s"
 msgid "BUG in descriptions, option '%s' in <%s> does not exist"
 msgstr "説明内のバグ, <%s>内のオプション '%s' は存在しません"
 
-#~ msgid "Unable to seek"
-#~ msgstr "シークできません"
+msgid "Unable to seek"
+msgstr "シークできません"
