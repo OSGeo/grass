@@ -11355,9 +11355,8 @@ msgstr ""
 #: ../raster/r.watershed/seg/sseg_open.c:27
 #: ../raster/r.watershed/seg/dseg_open.c:28
 #: ../raster/r.watershed/seg/cseg_open.c:27
-#, fuzzy
 msgid "File write error"
-msgstr "Αδυναμία ανοίγματος προσωρινού αρχείου"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:29 ../raster/r.stream.extract/dseg.c:29
 #: ../raster/r.stream.extract/bseg.c:29 ../raster/r.stream.extract/seg.c:30
@@ -11365,9 +11364,8 @@ msgstr "Αδυναμία ανοίγματος προσωρινού αρχείο�
 #: ../raster/r.watershed/seg/sseg_open.c:31
 #: ../raster/r.watershed/seg/dseg_open.c:32
 #: ../raster/r.watershed/seg/cseg_open.c:31
-#, fuzzy
 msgid "Illegal parameters are passed"
-msgstr "Λάθος παράμετροι"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:33 ../raster/r.stream.extract/dseg.c:33
 #: ../raster/r.stream.extract/bseg.c:33 ../raster/r.stream.extract/seg.c:34

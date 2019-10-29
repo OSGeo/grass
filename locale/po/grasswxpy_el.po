@@ -1325,7 +1325,7 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:747
 #: ../gui/wxpython/animation/controller.py:295
 msgid "Invalid input"
-msgstr ""
+msgstr "Μη έγκυρη εισαγωγή"
 
 #: ../gui/wxpython/wxplot/dialogs.py:665 ../gui/wxpython/wxplot/base.py:519
 #: ../gui/wxpython/wxplot/base.py:586
@@ -15543,16 +15543,16 @@ msgstr "3D προβολή"
 
 #: ../gui/wxpython/animation/data.py:66
 msgid "No animation name selected."
-msgstr ""
+msgstr "Δεν έχει επιλεγεί κινούμενο σχέδιο"
 
 #: ../gui/wxpython/animation/data.py:132
 msgid "No workspace file selected."
-msgstr ""
+msgstr "Δεν έχει επιλεγεί αρχείου χώρου εργασίας"
 
 #: ../gui/wxpython/animation/data.py:135
 #, python-format
 msgid "File %s not found"
-msgstr ""
+msgstr "Το αρχείο %s δεν βρέθηκε"
 
 #: ../gui/wxpython/animation/data.py:144
 #, python-format
@@ -15645,7 +15645,7 @@ msgstr ""
 #: ../gui/wxpython/animation/controller.py:598
 #, python-format
 msgid "%(from)s %(dash)s %(to)s"
-msgstr ""
+msgstr "%(από) %(παύλα) %(σε) "
 
 #: ../gui/wxpython/animation/frame.py:613
 #, python-format
@@ -15850,7 +15850,7 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:891
 #: ../gui/wxpython/animation/controller.py:262
 msgid "More animations are using one window. Please select different window for each animation."
-msgstr ""
+msgstr "Πολλά κινούμενα εικονίδια σε ένα παράθυρο. Παρακαλώ διαλέξτε διαφορετικό παράθυρο για κάθε ένα."
 
 #: ../gui/wxpython/animation/dialogs.py:992
 msgid "Add time stamp"
@@ -16122,32 +16122,32 @@ msgstr ""
 #: ../gui/wxpython/animation/controller.py:234
 #, python-format
 msgid "Maximum number of animations is %s."
-msgstr ""
+msgstr "Ο μέγιστος αριθμός κινουμένων είναι: %s. "
 
 #: ../gui/wxpython/animation/controller.py:443
 msgid "Failed to display legend."
-msgstr ""
+msgstr "Σφάλμα κατά την προβολή υπομνήματος"
 
 #: ../gui/wxpython/animation/controller.py:475
 msgid "Inconsistent number of maps, please check input data."
-msgstr ""
+msgstr "Ο αριθμός των χαρτών δεν ταιριάζει, ελέγξτε τα δεδομένα."
 
 #: ../gui/wxpython/animation/controller.py:505
 msgid "No animation to export."
-msgstr ""
+msgstr "Δεν υπάρχει κινούμενο σχέδιο για εξαγωγή"
 
 #: ../gui/wxpython/animation/controller.py:542
 msgid "Preparing export, please wait..."
-msgstr ""
+msgstr "Προετοιμασία για εξαγωγή, παρακαλώ περιμένετε..."
 
 #: ../gui/wxpython/animation/controller.py:605
 #, python-format
 msgid "%(start)s %(unit)s"
-msgstr ""
+msgstr "%(αρχή) %(μονάδα)ες "
 
 #: ../gui/wxpython/animation/controller.py:624
 msgid "Exporting animation, please wait..."
-msgstr ""
+msgstr "Εξαγωγή κινούμενου σχεδίου, παρακαλώ περιμένετε..."
 
 #: ../gui/wxpython/icons/icon.py:40
 #, python-format
@@ -16157,7 +16157,7 @@ msgstr ""
 #: ../gui/wxpython/icons/icon.py:58
 #, python-format
 msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."
-msgstr ""
+msgstr "Αδυναμία φόρτωσης του θέματος (εικονίδια). Αιτία:  %s. Κλείσιμο του wxGUI.."
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:138
 msgid "With stvds you have to set 'attr' option"
@@ -16777,9 +16777,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1402
-#, fuzzy
 msgid "Proceed with opening of the workspace?"
-msgstr "Παρακαλώ περιμένετε, φορτώνεται η Επιφάνεια Εργασίας..."
+msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1442 ../gui/wxpython/lmgr/frame.py:1613
 msgid "Please wait, loading workspace..."

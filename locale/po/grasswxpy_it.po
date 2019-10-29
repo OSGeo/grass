@@ -13438,11 +13438,11 @@ msgid "GSelect: invalid item: %s"
 msgstr "GSelect: elemento invalido: %s"
 
 #: ../gui/wxpython/gui_core/gselect.py:766
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Temporal GIS error:\n"
 "%s"
-msgstr "Risoluzione temporale: %s"
+msgstr ""
 
 #: ../gui/wxpython/gui_core/gselect.py:771
 #, python-format
@@ -16983,9 +16983,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1402
-#, fuzzy
 msgid "Proceed with opening of the workspace?"
-msgstr "Attendere, sto caricando l'ambiente di lavoro..."
+msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1442 ../gui/wxpython/lmgr/frame.py:1613
 msgid "Please wait, loading workspace..."
@@ -20874,8 +20873,8 @@ msgstr "Trova lista dei moduli disponibile dal repository svn GRASS Addons"
 msgid "Please provide an order value (1 if 4 Fiducials, 2 if 8 Fiducials)"
 msgstr "Fornire il valore dell'ordine (1 se 4 punti fiduciali, 2 se 8 punti fiduciali)"
 
-#~ msgid "Creates a raster map from LAS LiDAR points using univariate statistics."
-#~ msgstr "Crea un raster da punti LAS LiDAR usando statistiche univariate"
+msgid "Creates a raster map from LAS LiDAR points using univariate statistics."
+msgstr "Crea un raster da punti LAS LiDAR usando statistiche univariate"
 
-#~ msgid "Converts LAS LiDAR point clouds to a GRASS vector map with libLAS."
-#~ msgstr "Converte nuvole di punti LAS LiDAR in un vettoriale GRASS usando libLAS."
+msgid "Converts LAS LiDAR point clouds to a GRASS vector map with libLAS."
+msgstr "Converte nuvole di punti LAS LiDAR in un vettoriale GRASS usando libLAS."

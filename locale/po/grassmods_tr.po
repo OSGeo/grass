@@ -11346,9 +11346,8 @@ msgstr ""
 #: ../raster/r.watershed/seg/sseg_open.c:23
 #: ../raster/r.watershed/seg/dseg_open.c:24
 #: ../raster/r.watershed/seg/cseg_open.c:23
-#, fuzzy
 msgid "File name is invalid"
-msgstr "Alt değer geçerli değil"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:25 ../raster/r.stream.extract/dseg.c:25
 #: ../raster/r.stream.extract/bseg.c:25 ../raster/r.stream.extract/seg.c:26
@@ -11356,9 +11355,8 @@ msgstr "Alt değer geçerli değil"
 #: ../raster/r.watershed/seg/sseg_open.c:27
 #: ../raster/r.watershed/seg/dseg_open.c:28
 #: ../raster/r.watershed/seg/cseg_open.c:27
-#, fuzzy
 msgid "File write error"
-msgstr "Dosyaya yazılamıyor"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:29 ../raster/r.stream.extract/dseg.c:29
 #: ../raster/r.stream.extract/bseg.c:29 ../raster/r.stream.extract/seg.c:30

@@ -13456,11 +13456,11 @@ msgid "GSelect: invalid item: %s"
 msgstr "GSelect : objet %s invalide"
 
 #: ../gui/wxpython/gui_core/gselect.py:766
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Temporal GIS error:\n"
 "%s"
-msgstr "Résolution temporelle : %s"
+msgstr ""
 
 #: ../gui/wxpython/gui_core/gselect.py:771
 #, python-format
@@ -17007,9 +17007,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1402
-#, fuzzy
 msgid "Proceed with opening of the workspace?"
-msgstr "Patientez, chargement de l'environnement de travail ..."
+msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1442 ../gui/wxpython/lmgr/frame.py:1613
 msgid "Please wait, loading workspace..."
@@ -21116,20 +21115,20 @@ msgstr "Merci de fournir une valeur d'ordre (1 si 4 fiduciaux, 2 si 8 fiduciaux)
 msgid "Please provide an output files extension (used by i.rectify)"
 msgstr "Merci de fournir une extention de fichier (utilisé par i.rectify)"
 
-#~ msgid "Creates a raster map from LAS LiDAR points using univariate statistics."
-#~ msgstr "Créer une carte raster à partir de statistiques univariées sur des points LIDAR LAS."
+msgid "Creates a raster map from LAS LiDAR points using univariate statistics."
+msgstr "Créer une carte raster à partir de statistiques univariées sur des points LIDAR LAS."
 
-#~ msgid "Converts LAS LiDAR point clouds to a GRASS vector map with libLAS."
-#~ msgstr "Convertir des nuages de points LIDAR LAS vers une carte vecteur GRASS avec libLAS"
+msgid "Converts LAS LiDAR point clouds to a GRASS vector map with libLAS."
+msgstr "Convertir des nuages de points LIDAR LAS vers une carte vecteur GRASS avec libLAS"
+
+msgid "Simplified raster map calculator"
+msgstr "Calculatrice raster simplifiée"
+
+msgid "Calculates a new raster map from a simple r.mapcalc expression."
+msgstr "Calculer une nouvelle carte raster depuis une expression r.mapcalc simple."
+
+msgid "Raster map calculator."
+msgstr "Calculatrice raster."
 
 #~ msgid "Code revision"
 #~ msgstr "Révision du code"
-
-#~ msgid "Simplified raster map calculator"
-#~ msgstr "Calculatrice raster simplifiée"
-
-#~ msgid "Calculates a new raster map from a simple r.mapcalc expression."
-#~ msgstr "Calculer une nouvelle carte raster depuis une expression r.mapcalc simple."
-
-#~ msgid "Raster map calculator."
-#~ msgstr "Calculatrice raster."

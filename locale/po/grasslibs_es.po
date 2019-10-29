@@ -2917,14 +2917,12 @@ msgid "<required>"
 msgstr "<required>"
 
 #: ../lib/python/script/task.py:499 ../lib/python/script/task.py:503
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Unable to fetch interface description for command '<{cmd}>'.\n"
 "\n"
 "Details: <{det}>"
 msgstr ""
-"No se puede recuperar la descripción para el comando '%(cmd)s':\n"
-"Detalles:%(det)s"
 
 #: ../lib/python/script/task.py:526
 #, python-brace-format
@@ -6383,9 +6381,9 @@ msgid "Invalid compressed field: %s"
 msgstr ""
 
 #: ../lib/gis/seek.c:54 ../lib/gis/seek.c:60
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to seek: %s"
-msgstr "No ha sido posible buscar"
+msgstr ""
 
 #: ../lib/gis/seek.c:58
 msgid "Seek offset out of range"
@@ -10208,13 +10206,13 @@ msgstr "La opción %s necesita todas las %s"
 msgid "Option %s is mutually exclusive with all of %s"
 msgstr "La opción %s es mutuamente excluyente con todas las %s"
 
-#~ msgid ""
-#~ "Unable to fetch interface description for command '%(cmd)s'.\n"
-#~ "\n"
-#~ "Details: %(det)s"
-#~ msgstr ""
-#~ "No se puede recuperar la descripción para el comando '%(cmd)s':\n"
-#~ "Detalles:%(det)s"
+msgid ""
+"Unable to fetch interface description for command '%(cmd)s'.\n"
+"\n"
+"Details: %(det)s"
+msgstr ""
+"No se puede recuperar la descripción para el comando '%(cmd)s':\n"
+"Detalles:%(det)s"
 
-#~ msgid "Unable to seek"
-#~ msgstr "No ha sido posible buscar"
+msgid "Unable to seek"
+msgstr "No ha sido posible buscar"
