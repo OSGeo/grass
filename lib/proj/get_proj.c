@@ -241,6 +241,12 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     G_free(datum);
 
 #ifdef HAVE_PROJ_H
+#if PROJ_VERSION_MAJOR >= 6
+    /* without type=crs, PROJ6 does not recognize what this is, 
+     * a crs or some kind of coordinate operation, falling through to
+     * PJ_TYPE_OTHER_COORDINATE_OPERATION */
+    alloc_options("type=crs");
+#endif
     pjc = proj_context_create();
     if (!(pj = proj_create_argv(pjc, nopt, opt_in))) {
 #else
@@ -398,6 +404,12 @@ int pj_get_string(struct pj_info *info, char *str)
     }
 
 #ifdef HAVE_PROJ_H
+#if PROJ_VERSION_MAJOR >= 6
+    /* without type=crs, PROJ6 does not recognize what this is, 
+     * a crs or some kind of coordinate operation, falling through to
+     * PJ_TYPE_OTHER_COORDINATE_OPERATION */
+    alloc_options("type=crs");
+#endif
     pjc = proj_context_create();
     if (!(pj = proj_create_argv(pjc, nopt, opt_in))) {
 	G_warning(_("Unable to initialize pj cause: %s"),
