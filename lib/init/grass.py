@@ -1175,7 +1175,7 @@ def load_env(grass_env_file):
         elif v.startswith('"') and v.endswith('"'):
             v = v.strip('"')
         elif v.startswith("'") or v.endswith("'") or v.startswith('"') or v.endswith('"'):
-            # multi-line variable
+            # ignore multi-line variables
             continue
         if expand:
             v = os.path.expanduser(os.path.expandvars(v.replace('\$', '\0')).replace('\0', '$'))
