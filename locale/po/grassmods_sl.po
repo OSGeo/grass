@@ -41426,7 +41426,7 @@ msgstr "Nepoznan tip"
 
 #: ../vector/v.distance/main.c:674
 #, fuzzy
-msgid "No categories for 'from' for slected type and layer"
+msgid "No categories for 'from' for selected type and layer"
 msgstr "%d kategorij naloženih iz tabele\n"
 
 #: ../vector/v.distance/main.c:702

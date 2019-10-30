@@ -11344,11 +11344,8 @@ msgstr ""
 #: ../raster/r.watershed/seg/sseg_open.c:23
 #: ../raster/r.watershed/seg/dseg_open.c:24
 #: ../raster/r.watershed/seg/cseg_open.c:23
-#, fuzzy
 msgid "File name is invalid"
 msgstr ""
-"\n"
-"Por favor nomeie este arquivo:"
 
 #: ../raster/r.stream.extract/cseg.c:25 ../raster/r.stream.extract/dseg.c:25
 #: ../raster/r.stream.extract/bseg.c:25 ../raster/r.stream.extract/seg.c:26
@@ -11356,9 +11353,8 @@ msgstr ""
 #: ../raster/r.watershed/seg/sseg_open.c:27
 #: ../raster/r.watershed/seg/dseg_open.c:28
 #: ../raster/r.watershed/seg/cseg_open.c:27
-#, fuzzy
 msgid "File write error"
-msgstr "Não consegui escrever o arquivo temporário."
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:29 ../raster/r.stream.extract/dseg.c:29
 #: ../raster/r.stream.extract/bseg.c:29 ../raster/r.stream.extract/seg.c:30
@@ -11375,9 +11371,8 @@ msgstr ""
 #: ../raster/r.watershed/seg/sseg_open.c:35
 #: ../raster/r.watershed/seg/dseg_open.c:36
 #: ../raster/r.watershed/seg/cseg_open.c:35
-#, fuzzy
 msgid "File could not be re-opened"
-msgstr "mapa vetorial <%s> não encontrado"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:37 ../raster/r.stream.extract/dseg.c:37
 #: ../raster/r.stream.extract/bseg.c:37 ../raster/r.stream.extract/seg.c:38
@@ -11385,9 +11380,8 @@ msgstr "mapa vetorial <%s> não encontrado"
 #: ../raster/r.watershed/seg/sseg_open.c:39
 #: ../raster/r.watershed/seg/dseg_open.c:40
 #: ../raster/r.watershed/seg/cseg_open.c:39
-#, fuzzy
 msgid "Prepared file could not be read"
-msgstr "mapa vetorial <%s> não encontrado"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:68 ../raster/r.stream.extract/cseg.c:77
 #: ../raster/r.stream.extract/dseg.c:68 ../raster/r.stream.extract/dseg.c:77
@@ -36642,7 +36636,7 @@ msgid "Incompatible column types"
 msgstr ""
 
 #: ../vector/v.distance/main.c:674
-msgid "No categories for 'from' for slected type and layer"
+msgid "No categories for 'from' for selected type and layer"
 msgstr ""
 
 #: ../vector/v.distance/main.c:702

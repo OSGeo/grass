@@ -6311,9 +6311,9 @@ msgid "Invalid compressed field: %s"
 msgstr ""
 
 #: ../lib/gis/seek.c:54 ../lib/gis/seek.c:60
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to seek: %s"
-msgstr "<%s> vektörü kapatılamıyor"
+msgstr ""
 
 #: ../lib/gis/seek.c:58
 msgid "Seek offset out of range"

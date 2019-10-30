@@ -11363,9 +11363,8 @@ msgstr ""
 #: ../raster/r.watershed/seg/sseg_open.c:27
 #: ../raster/r.watershed/seg/dseg_open.c:28
 #: ../raster/r.watershed/seg/cseg_open.c:27
-#, fuzzy
 msgid "File write error"
-msgstr "Imposibil de deschis tempfile"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:29 ../raster/r.stream.extract/dseg.c:29
 #: ../raster/r.stream.extract/bseg.c:29 ../raster/r.stream.extract/seg.c:30
@@ -36688,7 +36687,7 @@ msgid "Incompatible column types"
 msgstr ""
 
 #: ../vector/v.distance/main.c:674
-msgid "No categories for 'from' for slected type and layer"
+msgid "No categories for 'from' for selected type and layer"
 msgstr ""
 
 #: ../vector/v.distance/main.c:702

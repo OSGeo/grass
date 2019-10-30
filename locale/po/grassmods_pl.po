@@ -11366,9 +11366,8 @@ msgstr ""
 #: ../raster/r.watershed/seg/sseg_open.c:23
 #: ../raster/r.watershed/seg/dseg_open.c:24
 #: ../raster/r.watershed/seg/cseg_open.c:23
-#, fuzzy
 msgid "File name is invalid"
-msgstr "Dolna wartość jest niepoprawna"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:25 ../raster/r.stream.extract/dseg.c:25
 #: ../raster/r.stream.extract/bseg.c:25 ../raster/r.stream.extract/seg.c:26
@@ -11376,9 +11375,8 @@ msgstr "Dolna wartość jest niepoprawna"
 #: ../raster/r.watershed/seg/sseg_open.c:27
 #: ../raster/r.watershed/seg/dseg_open.c:28
 #: ../raster/r.watershed/seg/cseg_open.c:27
-#, fuzzy
 msgid "File write error"
-msgstr "Nie można zapisać do pliku"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:29 ../raster/r.stream.extract/dseg.c:29
 #: ../raster/r.stream.extract/bseg.c:29 ../raster/r.stream.extract/seg.c:30
@@ -11386,9 +11384,8 @@ msgstr "Nie można zapisać do pliku"
 #: ../raster/r.watershed/seg/sseg_open.c:31
 #: ../raster/r.watershed/seg/dseg_open.c:32
 #: ../raster/r.watershed/seg/cseg_open.c:31
-#, fuzzy
 msgid "Illegal parameters are passed"
-msgstr "Niewłaściwe wartosci parametru."
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:33 ../raster/r.stream.extract/dseg.c:33
 #: ../raster/r.stream.extract/bseg.c:33 ../raster/r.stream.extract/seg.c:34
@@ -11396,9 +11393,8 @@ msgstr "Niewłaściwe wartosci parametru."
 #: ../raster/r.watershed/seg/sseg_open.c:35
 #: ../raster/r.watershed/seg/dseg_open.c:36
 #: ../raster/r.watershed/seg/cseg_open.c:35
-#, fuzzy
 msgid "File could not be re-opened"
-msgstr "Nie można otworzyć rastra <%s>"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:37 ../raster/r.stream.extract/dseg.c:37
 #: ../raster/r.stream.extract/bseg.c:37 ../raster/r.stream.extract/seg.c:38
@@ -11406,9 +11402,8 @@ msgstr "Nie można otworzyć rastra <%s>"
 #: ../raster/r.watershed/seg/sseg_open.c:39
 #: ../raster/r.watershed/seg/dseg_open.c:40
 #: ../raster/r.watershed/seg/cseg_open.c:39
-#, fuzzy
 msgid "Prepared file could not be read"
-msgstr "Nie można otworzyć rastra <%s>"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:68 ../raster/r.stream.extract/cseg.c:77
 #: ../raster/r.stream.extract/dseg.c:68 ../raster/r.stream.extract/dseg.c:77
@@ -24912,12 +24907,13 @@ msgid "Training map has no classes"
 msgstr "Mapa testowa nie posiada żadnych klas"
 
 #: ../imagery/i.gensig/get_train.c:74
-#, fuzzy, c-format
+#, c-format
 msgid "One class found"
 msgid_plural "%d classes found"
-msgstr[0] "znaleziono 1 klasę"
-msgstr[1] "znaleziono 1 klasę"
-msgstr[2] "znaleziono 1 klasę"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: ../imagery/i.gensig/means.c:26
 msgid "Calculating class means..."
@@ -36768,7 +36764,7 @@ msgid "Incompatible column types"
 msgstr ""
 
 #: ../vector/v.distance/main.c:674
-msgid "No categories for 'from' for slected type and layer"
+msgid "No categories for 'from' for selected type and layer"
 msgstr ""
 
 #: ../vector/v.distance/main.c:702
