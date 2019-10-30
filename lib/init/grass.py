@@ -1160,7 +1160,7 @@ def load_env(grass_env_file):
     if not os.access(grass_env_file, os.R_OK):
         return
 
-    export_re = re.compile('^export[ \t]([a-zA-Z_]+[a-zA-Z0-9_]*)=(.*)$')
+    export_re = re.compile('^export[ \t]+([a-zA-Z_]+[a-zA-Z0-9_]*)=(.*)$')
 
     for line in readfile(grass_env_file).split(os.linesep):
         m = export_re.match(line)
