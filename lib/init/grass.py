@@ -1160,12 +1160,25 @@ def load_env(grass_env_file):
     if not os.access(grass_env_file, os.R_OK):
         return
 
-    for line in readfile(grass_env_file).split(os.linesep):
-        try:
-            k, v = map(lambda x: x.strip(), line.strip().split(' ', 1)[1].split('=', 1))
-        except:
-            continue
+    export_re = re.compile('^export[ \t]([a-zA-Z_]+[a-zA-Z0-9_]*)=(.*)$')
 
+    for line in readfile(grass_env_file).split(os.linesep):
+        m = export_re.match(line)
+        if not m:
+            continue
+        k = m[1]
+        v = m[2]
+        expand = True
+        if v.startswith("'") and v.endswith("'"):
+            v = v.strip("'")
+            expand = False
+        elif v.startswith('"') and v.endswith('"'):
+            v = v.strip('"')
+        elif v.startswith("'") or v.endswith("'") or v.startswith('"') or v.endswith('"'):
+            # multi-line variable
+            continue
+        if expand:
+            v = os.path.expanduser(os.path.expandvars(v.replace('\$', '\0')).replace('\0', '$'))
         debug("Environmental variable set {0}={1}".format(k, v))
         os.environ[k] = v
 
