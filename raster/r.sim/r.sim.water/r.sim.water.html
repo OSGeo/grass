@@ -152,7 +152,7 @@ Using the North Carolina full sample dataset:
 
 <div class="code"><pre>
 # set computational region
-g.region rast=elev_lid792_1m -p
+g.region raster=elev_lid792_1m -p
 
 # compute dx, dy
 r.slope.aspect elevation=elev_lid792_1m dx=elev_lid792_dx dy=elev_lid792_dy
@@ -167,7 +167,7 @@ usage of <a href="d.mon.html">d.mon</a> module
 which are not needed when working in GUI):
 
 <div class="code"><pre>
-# increase the computational region
+# increase the computational region by 350 meters
 g.region e=e+350
 # initiate the rendering
 d.mon start=cairo output=r_sim_water_water_depth.png
