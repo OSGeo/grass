@@ -14,7 +14,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
 {
     struct Map_info Map;
     struct line_pnts *Points;
-    int i, field;
+    int i, j, field;
     struct cat_list *cat_list = NULL;
     int fd;			/* for raster map */
     int nareas, nlines;		/* number of converted features */
@@ -73,6 +73,16 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
 	if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
 	    G_fatal_error(_("Column type (%s) not supported (did you mean 'labelcolumn'?)"),
 			  db_sqltype_name(ctype));
+
+	/* remove null values */
+	j = 0;
+	for (i = 0; i < cvarr.n_values; i++) {
+	    if (!cvarr.value[i].isNull) {
+		cvarr.value[j] = cvarr.value[i];
+		j++;
+	    }
+	}
+	nrec = cvarr.n_values = j;
 
 	if (nrec < 0)
 	    G_fatal_error(_("No records selected from table <%s>"),
