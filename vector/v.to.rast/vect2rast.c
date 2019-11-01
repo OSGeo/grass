@@ -74,16 +74,6 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
 	    G_fatal_error(_("Column type (%s) not supported (did you mean 'labelcolumn'?)"),
 			  db_sqltype_name(ctype));
 
-	/* remove null values */
-	j = 0;
-	for (i = 0; i < cvarr.n_values; i++) {
-	    if (!cvarr.value[i].isNull) {
-		cvarr.value[j] = cvarr.value[i];
-		j++;
-	    }
-	}
-	nrec = cvarr.n_values = j;
-
 	if (nrec < 0)
 	    G_fatal_error(_("No records selected from table <%s>"),
 			  Fi->table);
@@ -92,6 +82,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
 
 	db_close_database_shutdown_driver(Driver);
 
+	j = 0;
 	for (i = 0; i < cvarr.n_values; i++) {
 	    if (ctype == DB_C_TYPE_INT) {
 		G_debug(3, "cat = %d val = %d", cvarr.value[i].cat,
@@ -101,6 +92,16 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
 		G_debug(3, "cat = %d val = %f", cvarr.value[i].cat,
 			cvarr.value[i].val.d);
 	    }
+	    /* check for null values */
+	    if (!cat_list || Vect_cat_in_cat_list(cvarr.value[i].cat, cat_list)) {
+		if (cvarr.value[i].isNull) {
+		    j++;
+		}
+	    }
+	}
+	if (j) {
+	    G_important_message(_("%d of %d records in column <%s> are empty and replaced with 0 (zero)"),
+	                          j, nrec, column);
 	}
 	
 	switch (ctype) {
