@@ -48,8 +48,6 @@ from gui_core.widgets import GenericValidator, StaticWrapText
 from gui_core.wrap import Button, ListCtrl, StaticText, StaticBox, \
     TextCtrl
 
-sys.stderr = codecs.getwriter('utf8')(sys.stderr)
-
 
 class GRASSStartup(wx.Frame):
     exit_success = 0
