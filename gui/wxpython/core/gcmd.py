@@ -773,6 +773,9 @@ def GetDefaultEncoding(forceUTF8=False):
     if forceUTF8 and (enc is None or enc == 'UTF8'):
         return 'UTF-8'
 
+    if enc is None:
+        enc = locale.getpreferredencoding()
+
     Debug.msg(1, "GetSystemEncoding(): %s" % enc)
     return enc
 
