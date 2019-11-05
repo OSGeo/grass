@@ -110,6 +110,10 @@ typedef struct viewOptions_
     /* points that are farther than this distance from the viewpoint are
        not visible  */
 
+    float horizontal_angle_min;
+    float horizontal_angle_max;
+    /* exclude points outside of the angle range  */
+
     OutputMode outputMode;
     /* The mode the viewshed is output; 
        - in angle mode, the values recorded are   {NODATA, INVISIBLE, angle}

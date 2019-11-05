@@ -151,6 +151,8 @@ int main(int argc, char *argv[])
     viewOptions.doCurv = FALSE;
     viewOptions.doRefr = FALSE;
     viewOptions.refr_coef = 1.0/7.0;
+    viewOptions.horizontal_angle_min = 0;
+    viewOptions.horizontal_angle_max = 360;
 
     parse_args(argc, argv, &vpRow, &vpCol, &viewOptions, &memSizeBytes,
 	       &region);
@@ -530,6 +532,19 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     maxDistOpt->answer = infdist;
     maxDistOpt->guisection = _("Settings");
 
+    /* angle range */
+    struct Option *direction;
+
+    direction = G_define_option();
+    direction->key = "direction_range";
+    direction->type = TYPE_DOUBLE;
+    direction->required = NO;
+    direction->key_desc = "min,max";
+    direction->options = "0-360";
+    direction->description =
+	_("Minimum and maximum horizontal angle limiting viewshed (0 is East, counterclockwise)");
+    direction->guisection = _("Settings");
+
     /* atmospheric refraction coeff. 1/7 for visual, 0.325 for radio waves, ... */
     /* in future we might calculate this based on the physics, for now we
        just fudge by the 1/7th approximation.
@@ -607,6 +622,10 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     viewOptions->maxDist = atof(maxDistOpt->answer);
     if (viewOptions->maxDist < 0 && viewOptions->maxDist != INFINITY_DISTANCE) {
 	G_fatal_error(_("A negative max distance value is not allowed"));
+    }
+    if (direction->answer) {
+        viewOptions->horizontal_angle_min = atof(direction->answers[0]);
+        viewOptions->horizontal_angle_max = atof(direction->answers[1]);
     }
 
     viewOptions->doCurv = curvature->answer;
