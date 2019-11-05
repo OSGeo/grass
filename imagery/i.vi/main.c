@@ -100,6 +100,7 @@ int main(int argc, char *argv[])
     /* Define the different options */
     opt.red = G_define_standard_option(G_OPT_R_INPUT);
     opt.red->key = "red";
+    opt.red->required = NO;
     opt.red->label =
 	_("Name of input red channel surface reflectance map");
     opt.red->description = _("Range: [0.0;1.0]");
