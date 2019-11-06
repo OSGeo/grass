@@ -150,6 +150,14 @@ To be done in GH interface:
 
 https://github.com/OSGeo/grass/releases/new
 
+Tag version | target (examples):
+  7.8.1RC1  | releasebranch_7_8
+
+Add release desciption (re-use existing texts as possible)
+
+If RC, then check
+[x] This is a pre-release
+
 ### Packaging of source code tarball
 
 TODO: add checkout of code via release tag (?)
@@ -193,6 +201,8 @@ Example:
 1dev
 2019
 ```
+
+Commit as "back to dev"
 
 Reset local copy to GH:
 ```bash
