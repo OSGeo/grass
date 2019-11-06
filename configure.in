@@ -691,6 +691,7 @@ PROJINC=
 PROJLIB=
 PROJSHARE=
 PROJ4API=0
+PROJMAJOR=4
 
 # With PROJ includes directory
 
@@ -704,11 +705,22 @@ if test $PROJ4API = 0 ; then
     LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_MINOR,External PROJ minor,proj_ver_minor,$PROJINC,0)
     LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_PATCH,External PROJ patch,proj_ver_patch,$PROJINC,0)
     AC_MSG_RESULT([found PROJ version "${proj_ver_major}.${proj_ver_minor}.${proj_ver_patch}"])
+    PROJMAJOR=${proj_ver_major}
     # minimum required PROJ 5+ version to use the new PROJ API: 5.1.0
     if test ${proj_ver_major} = 5 && test `expr ${proj_ver_minor} \< 1` = 1 ; then
 	AC_MSG_WARN([At least PROJ version "5.1.0" is required for the new API ])
 	PROJ4API=1
     fi
+else
+    LOC_CHECK_VERSION_INT(proj_api.h,PJ_VERSION,External PROJ.4,proj_ver,$PROJINC,0)
+    if test `expr ${proj_ver} \>= 600` = 1 ; then
+	PROJMAJOR=6
+    elif test `expr ${proj_ver} \>= 500` = 1 ; then
+	PROJMAJOR=5
+    elif test `expr ${proj_ver} \>= 400` = 1 ; then
+	PROJMAJOR=4
+    fi
+    AC_MSG_RESULT([found PROJ version "${proj_ver}"])
 fi
 
 if test $PROJ4API = 0 ; then
@@ -749,14 +761,17 @@ if test -z "$PROJSHARE" ; then
     PROJSHARE=/usr/share/proj
 fi
 
-# LOC_CHECK_SHARE does not work when cross compiling
-if test "$cross_compiling" = "yes" ; then
-    AC_MSG_CHECKING([for epsg])
-    AC_MSG_RESULT([unknown (cross-compiling)])
-else
-    LOC_CHECK_SHARE(epsg,External PROJ,$PROJSHARE,[
-    AC_MSG_WARN([*** Unable to locate PROJ data files.])
-    ])
+# check if share/proj/epsg exists only for PROJ < 6
+if test `expr ${PROJMAJOR} \< 6` = 1 ; then
+    # LOC_CHECK_SHARE does not work when cross compiling
+    if test "$cross_compiling" = "yes" ; then
+	AC_MSG_CHECKING([for epsg])
+	AC_MSG_RESULT([unknown (cross-compiling)])
+    else
+	LOC_CHECK_SHARE(epsg,External PROJ,$PROJSHARE,[
+	AC_MSG_WARN([*** Unable to locate PROJ data files.])
+	])
+    fi
 fi
 
 AC_SUBST(PROJINC)
