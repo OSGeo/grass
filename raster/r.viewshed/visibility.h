@@ -112,6 +112,7 @@ typedef struct viewOptions_
 
     float horizontal_angle_min;
     float horizontal_angle_max;
+    int doDirection;
     /* exclude points outside of the angle range  */
 
     OutputMode outputMode;

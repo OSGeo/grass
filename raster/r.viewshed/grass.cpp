@@ -309,8 +309,9 @@ init_event_list_in_memory(AEvent * eventList, char *rastName,
 						   hd->nodata_value);
 		continue;
 	    }
-	    if (!is_point_inside_angle(*vp, i, j, viewOptions.horizontal_angle_min,
-				       viewOptions.horizontal_angle_max)) {
+	    if (viewOptions.doDirection &&
+		    !is_point_inside_angle(*vp, i, j, viewOptions.horizontal_angle_min,
+					   viewOptions.horizontal_angle_max)) {
 		continue;
 	    }
 
@@ -537,8 +538,9 @@ AMI_STREAM < AEvent > *init_event_list(char *rastName, Viewpoint * vp,
 		add_result_to_io_visibilitygrid(visgrid, &visCell);
 		continue;
 	    }
-	    if (!is_point_inside_angle(*vp, i, j, viewOptions.horizontal_angle_min,
-				       viewOptions.horizontal_angle_max)) {
+	    if (viewOptions.doDirection &&
+		    !is_point_inside_angle(*vp, i, j, viewOptions.horizontal_angle_min,
+					   viewOptions.horizontal_angle_max)) {
 		continue;
 	    }
 	    /* if point is outside maxDist, do NOT include it as an

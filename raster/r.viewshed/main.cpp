@@ -623,9 +623,11 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     if (viewOptions->maxDist < 0 && viewOptions->maxDist != INFINITY_DISTANCE) {
 	G_fatal_error(_("A negative max distance value is not allowed"));
     }
+    viewOptions->doDirection = 0;
     if (direction->answer) {
         viewOptions->horizontal_angle_min = atof(direction->answers[0]);
         viewOptions->horizontal_angle_max = atof(direction->answers[1]);
+        viewOptions->doDirection = 1;
     }
 
     viewOptions->doCurv = curvature->answer;
