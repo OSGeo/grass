@@ -282,6 +282,11 @@ MemoryVisibilityGrid *viewshed_in_memory(char *inputfname, GridHeader * hd,
 	if (!is_nodata(visgrid->grid->hd, data[1][i]) &&
 	    !is_point_outside_max_dist(*vp, *hd, sn.row, sn.col,
 				       viewOptions.maxDist)) {
+	    if (viewOptions.doDirection &&
+		    !is_point_inside_angle(*vp, sn.row, sn.col,
+					   viewOptions.horizontal_angle_min,
+					   viewOptions.horizontal_angle_max))
+		continue;
 	    /*calculate Distance to VP and Gradient, store them into sn */
 	    /* need either 3 elevation values or 
 	     * 3 gradients calculated from 3 elevation values */
@@ -527,6 +532,11 @@ IOVisibilityGrid *viewshed_external(char *inputfname, GridHeader * hd,
 	if (!is_nodata(visgrid->hd, data[1][i]) &&
 	    !is_point_outside_max_dist(*vp, *hd, sn.row, sn.col,
 				       viewOptions.maxDist)) {
+	    if (viewOptions.doDirection &&
+		    !is_point_inside_angle(*vp, sn.row, sn.col,
+					   viewOptions.horizontal_angle_min,
+					   viewOptions.horizontal_angle_max))
+		continue;
 	    /*calculate Distance to VP and Gradient, store them into sn */
 	    /* need either 3 elevation values or 
 	     * 3 gradients calculated from 3 elevation values */
