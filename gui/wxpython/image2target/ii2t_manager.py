@@ -1527,7 +1527,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                 if line[0] == '#' or line == '':
                     continue
                 line = line.replace('\n', '').strip()
-                coords = map(float, line.split())
+                coords = list(map(float, line.split()))
                 if coords[6] == 1:
                     check = True
                     self.GCPcount += 1
@@ -1663,7 +1663,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
             busy = wx.BusyInfo(_("Rectifying images, please wait..."),
                                parent=self)
-            wx.Yield()
+            wx.GetApp().Yield()
 
             ret, msg = RunCommand('i.ortho.rectify',
                                   parent=self,
@@ -1708,7 +1708,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                 busy = wx.BusyInfo(
                     _("Rectifying vector map <%s>, please wait...") %
                     vect, parent=self)
-                wx.Yield()
+                wx.GetApp().Yield()
 
                 ret, msg = RunCommand('v.rectify',
                                       parent=self,

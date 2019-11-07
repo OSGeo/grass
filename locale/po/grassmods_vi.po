@@ -5249,9 +5249,8 @@ msgstr ""
 #: ../display/d.grid/plot.c:605 ../display/d.where/main.c:151
 #: ../general/g.region/printwindow.c:265 ../general/g.region/printwindow.c:501
 #: ../general/g.region/printwindow.c:593 ../vector/v.proj/main.c:292
-#, fuzzy
 msgid "Unable to initialize coordinate transformation"
-msgstr "Không thể đóng bản đồ"
+msgstr ""
 
 #: ../ps/ps.map/ps_clrtbl.c:35 ../ps/ps.map/ps_fclrtbl.c:46
 #, c-format
@@ -5846,18 +5845,16 @@ msgid "Traces paths from starting points following input directions."
 msgstr ""
 
 #: ../raster/r.path/main.c:157
-#, fuzzy
 msgid "Name of input direction"
-msgstr "Tên của bản đồ vector điểm đầu vào"
+msgstr ""
 
 #: ../raster/r.path/main.c:159
 msgid "Direction in degrees CCW from east, or bitmask encoded"
 msgstr ""
 
 #: ../raster/r.path/main.c:164
-#, fuzzy
 msgid "Format of the input direction map"
-msgstr "'Endian' của bản đồ vector đầu vào"
+msgstr ""
 
 #: ../raster/r.path/main.c:170
 msgid "auto-detect direction format"
@@ -5876,19 +5873,16 @@ msgid "bitmask encoded directions (e.g. r.cost -b)"
 msgstr ""
 
 #: ../raster/r.path/main.c:179
-#, fuzzy
 msgid "Name of input raster values to be used for output"
-msgstr "Tên của lớp đầu ra dùng làm XANH"
+msgstr ""
 
 #: ../raster/r.path/main.c:185
-#, fuzzy
 msgid "Name for output raster path map"
-msgstr "Tên của bản đồ raster đầu ra"
+msgstr ""
 
 #: ../raster/r.path/main.c:190
-#, fuzzy
 msgid "Name for output vector path map"
-msgstr "Tên của bản đồ raster đầu ra"
+msgstr ""
 
 #: ../raster/r.path/main.c:272 ../raster/r.drain/main.c:244
 #, c-format
@@ -5934,9 +5928,8 @@ msgstr ""
 
 #: ../raster/r.path/main.c:382 ../raster/r.path/main.c:445
 #: ../raster/r.path/main.c:462
-#, fuzzy
 msgid "Unable to write to tempfile"
-msgstr "Không thể đọc bản đồ vec-tơ"
+msgstr ""
 
 #: ../raster/r.path/main.c:390 ../raster/r.info/main.c:134
 msgid "Unable to read range file"
@@ -6016,9 +6009,8 @@ msgid "Writing output raster map..."
 msgstr ""
 
 #: ../raster/r.path/main.c:640
-#, fuzzy
 msgid "Unable to increase point list"
-msgstr "Không thể tạo tập tin <%s>"
+msgstr ""
 
 #: ../raster/r.path/main.c:740 ../raster/r.path/main.c:771
 #: ../raster/r.path/main.c:897 ../raster/r.path/main.c:1005
@@ -6037,14 +6029,13 @@ msgid "No path from row %d, col %d"
 msgstr ""
 
 #: ../raster/r.path/main.c:845
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid direction %d"
-msgstr "Khoảng cách không hợp lệ"
+msgstr ""
 
 #: ../raster/r.path/main.c:934
-#, fuzzy
 msgid "Path is leaving the current region"
-msgstr "Không có [%ld] ô trong vùng hiện tại"
+msgstr ""
 
 #: ../raster/r.profile/main.c:54 ../raster/r.transect/main.c:104
 #: ../display/d.profile/main.c:192 ../raster3d/r3.cross.rast/main.c:229
@@ -6505,9 +6496,9 @@ msgstr ""
 #: ../vector/v.proj/main.c:343 ../vector/v.proj/main.c:355
 #: ../vector/v.proj/main.c:370 ../vector/v.proj/main.c:385
 #: ../vector/v.proj/main.c:466 ../vector/v.proj/main.c:471
-#, fuzzy, c-format
+#, c-format
 msgid "Error in %s (projection of input coordinate pair)"
-msgstr "Đang đọc các đầu vào..."
+msgstr ""
 
 #: ../raster/r.regression.multi/main.c:61
 msgid "Matrix is unsolvable"
@@ -6853,9 +6844,8 @@ msgid "Name for output raster map to contain walking costs"
 msgstr ""
 
 #: ../raster/r.walk/main.c:227 ../raster/r.cost/main.c:183
-#, fuzzy
 msgid "Name of input raster map solving equal costs"
-msgstr "Tên của lớp đầu ra dùng làm XANH"
+msgstr ""
 
 #: ../raster/r.walk/main.c:229 ../raster/r.cost/main.c:185
 msgid "Helper variable to pick a direction if two directions have equal cumulative costs (smaller is better)"
@@ -7009,9 +6999,8 @@ msgid "No start points"
 msgstr ""
 
 #: ../raster/r.walk/main.c:408 ../raster/r.cost/main.c:348
-#, fuzzy
 msgid "No stop points"
-msgstr "Đang trích các điểm..."
+msgstr ""
 
 #: ../raster/r.walk/main.c:412 ../raster/r.cost/main.c:352
 #, c-format
@@ -7129,9 +7118,9 @@ msgid "Specified starting location outside database window"
 msgstr ""
 
 #: ../raster/r.walk/main.c:932 ../raster/r.cost/main.c:797
-#, fuzzy, c-format
+#, c-format
 msgid "Number of duplicate stop points: %d"
-msgstr "Tên của bản đồ vector điểm đầu vào"
+msgstr ""
 
 #: ../raster/r.walk/main.c:946 ../raster/r.cost/main.c:811
 msgid "Finding cost path..."
@@ -9558,9 +9547,9 @@ msgstr ""
 #: ../raster/r.horizon/main.c:849 ../raster/r.horizon/main.c:867
 #: ../raster/r.horizon/main.c:1203 ../raster/r.horizon/main.c:1223
 #: ../raster/r.proj/main.c:450 ../raster/r.proj/main.c:541
-#, fuzzy, c-format
+#, c-format
 msgid "Error in %s"
-msgstr "Lỗi: %s"
+msgstr ""
 
 #: ../raster/r.horizon/main.c:1176
 #, c-format
@@ -11351,9 +11340,8 @@ msgstr ""
 #: ../raster/r.watershed/seg/sseg_open.c:27
 #: ../raster/r.watershed/seg/dseg_open.c:28
 #: ../raster/r.watershed/seg/cseg_open.c:27
-#, fuzzy
 msgid "File write error"
-msgstr "Không thể ghi vào tập tin"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:29 ../raster/r.stream.extract/dseg.c:29
 #: ../raster/r.stream.extract/bseg.c:29 ../raster/r.stream.extract/seg.c:30
@@ -11370,9 +11358,8 @@ msgstr ""
 #: ../raster/r.watershed/seg/sseg_open.c:35
 #: ../raster/r.watershed/seg/dseg_open.c:36
 #: ../raster/r.watershed/seg/cseg_open.c:35
-#, fuzzy
 msgid "File could not be re-opened"
-msgstr "Không thể bỏ bảng phụ (auxiliar table)"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:37 ../raster/r.stream.extract/dseg.c:37
 #: ../raster/r.stream.extract/bseg.c:37 ../raster/r.stream.extract/seg.c:38
@@ -11380,9 +11367,8 @@ msgstr "Không thể bỏ bảng phụ (auxiliar table)"
 #: ../raster/r.watershed/seg/sseg_open.c:39
 #: ../raster/r.watershed/seg/dseg_open.c:40
 #: ../raster/r.watershed/seg/cseg_open.c:39
-#, fuzzy
 msgid "Prepared file could not be read"
-msgstr "Không thể bỏ bảng phụ (auxiliar table)"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:68 ../raster/r.stream.extract/cseg.c:77
 #: ../raster/r.stream.extract/dseg.c:68 ../raster/r.stream.extract/dseg.c:77
@@ -12054,9 +12040,9 @@ msgid "Reading raster map <%s> using weight %f..."
 msgstr ""
 
 #: ../raster/r.series/main.c:274 ../raster/r.series/main.c:334
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open input raster <%s>"
-msgstr "Không thể tạo bản đồ raster <%s>"
+msgstr ""
 
 #: ../raster/r.series/main.c:311
 msgid "input= and weights= must have the same number of values"
@@ -13900,9 +13886,8 @@ msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:84
-#, fuzzy
 msgid "Name of input raster files"
-msgstr "Tên của bản đồ vector điểm đầu vào"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:90 ../imagery/i.group/main.c:74
 msgid "Input file with one raster map name per line"
@@ -13949,9 +13934,9 @@ msgid "Unable to create fcell/%s file"
 msgstr ""
 
 #: ../raster/r.buildvrt/link.c:35
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create cell_misc/%s/vrt file"
-msgstr "Không thể đọc bản đồ vec-tơ"
+msgstr ""
 
 #: ../raster/r.buildvrt/link.c:66 ../raster/r.external/link.c:160
 #, c-format
@@ -15932,9 +15917,8 @@ msgid "Resolution of output raster map"
 msgstr ""
 
 #: ../raster/r.proj/main.c:209 ../vector/v.proj/main.c:119
-#, fuzzy
 msgid "PROJ pipeline for coordinate transformation"
-msgstr "Không thể đóng bản đồ"
+msgstr ""
 
 #: ../raster/r.proj/main.c:214
 msgid "List raster maps in input mapset and exit"
@@ -18163,9 +18147,8 @@ msgid "For USLE. All non-NULL and non-zero cells are considered as blocking terr
 msgstr ""
 
 #: ../raster/r.watershed/front/main.c:123
-#, fuzzy
 msgid "Name of input raster map with percentages for flow accumulation."
-msgstr "Tên của lớp đầu ra dùng làm XANH"
+msgstr ""
 
 #: ../raster/r.watershed/front/main.c:129
 msgid "Minimum size of exterior watershed basin"
@@ -24418,9 +24401,8 @@ msgid "Found %d clumps"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:26
-#, fuzzy
 msgid "Name of input imagery group or raster maps"
-msgstr "Tên bản đồ raster đầu vào"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:33
 msgid "Suffix for output bands with modified band values"
@@ -24831,7 +24813,6 @@ msgstr ""
 msgid "One class found"
 msgid_plural "%d classes found"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../imagery/i.gensig/means.c:26
 msgid "Calculating class means..."
@@ -28287,9 +28268,8 @@ msgid "Viewpoint height not given, using calculated value %.0f"
 msgstr ""
 
 #: ../misc/m.nviz.image/main.c:244
-#, fuzzy
 msgid "Failed to write image"
-msgstr "Không thể ghi vào tập tin"
+msgstr ""
 
 #: ../misc/m.nviz.image/main.c:246
 msgid "Unsupported output format"
@@ -30908,9 +30888,9 @@ msgstr ""
 
 #: ../vector/v.out.ogr/main.c:682 ../vector/v.out.ogr/main.c:757
 #: ../vector/v.to.db/main.c:268
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create column <%s>"
-msgstr "Không thể tạo bản đồ raster <%s>"
+msgstr ""
 
 #: ../vector/v.out.ogr/main.c:763
 #, c-format
@@ -31959,9 +31939,9 @@ msgid "Generating points..."
 msgstr ""
 
 #: ../vector/v.random/main.c:530 ../vector/v.random/main.c:677
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to insert new row: %s"
-msgstr "Không thể tạo tập tin <%s>"
+msgstr ""
 
 #: ../vector/v.random/main.c:702 ../vector/v.db.select/main.c:208
 msgid "Unable to open select cursor"
@@ -31974,9 +31954,9 @@ msgid "Unable to fetch data from table <%s>"
 msgstr ""
 
 #: ../vector/v.random/main.c:742
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to update row: %s"
-msgstr "Không thể tạo bản đồ raster <%s>"
+msgstr ""
 
 #: ../vector/v.support/main.c:41
 msgid "Updates vector map metadata."
@@ -35094,9 +35074,8 @@ msgid "Projection of layer <%s> is different from projection of layer <%s>"
 msgstr ""
 
 #: ../vector/v.in.ogr/clean.c:19
-#, fuzzy
 msgid "Converting OSM lines..."
-msgstr "Đang chuyển đổi..."
+msgstr ""
 
 #: ../vector/v.in.ogr/clean.c:118
 #, c-format
@@ -36567,7 +36546,7 @@ msgid "Incompatible column types"
 msgstr ""
 
 #: ../vector/v.distance/main.c:674
-msgid "No categories for 'from' for slected type and layer"
+msgid "No categories for 'from' for selected type and layer"
 msgstr ""
 
 #: ../vector/v.distance/main.c:702
@@ -39846,9 +39825,8 @@ msgid "If new >= 0, attributes is not copied"
 msgstr ""
 
 #: ../vector/v.extract/main.c:151
-#, fuzzy
 msgid "Name of attribute column for dissolving areas"
-msgstr "Cột thuộc tính dùng để trình bày chủ đề (phải là dạng số)"
+msgstr ""
 
 #: ../vector/v.extract/main.c:152
 msgid "Preserves category values"

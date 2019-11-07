@@ -260,6 +260,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("resample"));
+    G_add_keyword(_("univariate statistics"));
+    G_add_keyword(_("aggregation"));
     module->description =
 	_("Resamples raster map layers to a coarser grid using aggregation.");
 

@@ -106,7 +106,7 @@ from gui_core.widgets import FloatValidator, GNotebook, FormNotebook, FormListbo
 from core.giface import Notification
 from gui_core.widgets import LayersList
 from gui_core.wrap import BitmapFromImage, Button, StaticText, StaticBox, SpinCtrl, \
-    CheckBox, BitmapButton, TextCtrl
+    CheckBox, BitmapButton, TextCtrl, NewId
 from core.debug import Debug
 
 wxUpdateDialog, EVT_DIALOG_UPDATE = NewEvent()
@@ -658,7 +658,7 @@ class TaskFrame(wx.Frame):
             flag=wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT,
             border=30)
         # abort key bindings
-        abortId = wx.NewId()
+        abortId = NewId()
         self.Bind(wx.EVT_MENU, self.OnAbort, id=abortId)
         accelTableList.append((wx.ACCEL_CTRL, ord('S'), abortId))
         # set accelerator table
@@ -2525,7 +2525,7 @@ class CmdPanel(wx.Panel):
             # calling LoadPage() is strangely time-consuming (only first call)
             # FIXME: move to helpPage.__init__()
             if not self.manualTab.IsLoaded():
-                wx.Yield()
+                wx.GetApp().Yield()
                 self.manualTab.LoadPage()
 
         self.Layout()

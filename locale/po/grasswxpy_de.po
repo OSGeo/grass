@@ -4041,9 +4041,9 @@ msgid "Delete selected mapset"
 msgstr "Ausgewähltes Mapset löschen"
 
 #: ../gui/wxpython/gis_set.py:258
-#, fuzzy, python-format
+#, python-format
 msgid "GRASS GIS %s Startup%s"
-msgstr "GRASS GIS %s Ebenen-Manager"
+msgstr ""
 
 #: ../gui/wxpython/gis_set.py:263
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:257
@@ -11726,9 +11726,8 @@ msgid "Not enough points for line"
 msgstr "Nicht genügend Punkte für Linie"
 
 #: ../gui/wxpython/startup/guiutils.py:51
-#, fuzzy
 msgid "Name for the new mapset:"
-msgstr "Geben Sie ein Namen für das neue Mapset ein:"
+msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:150
 #, python-brace-format
@@ -16368,19 +16367,16 @@ msgid "Set title for the plot"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:287
-#, fuzzy
 msgid "Set label for X axis"
-msgstr "Beschriftung setzen"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:292
-#, fuzzy
 msgid "Set label for Y axis"
-msgstr "Beschriftung setzen"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:304
-#, fuzzy
 msgid "Labels"
-msgstr "Label"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:311
 msgid "Path for output CSV file with plotted data"
@@ -16391,9 +16387,8 @@ msgid "CVS path"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:323
-#, fuzzy
 msgid "Do you want the CSV header?"
-msgstr "Wollen Sie die Änderungen im Modell speichern?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:364 ../gui/wxpython/tplot/frame.py:842
 #: ../gui/wxpython/tplot/frame.py:846 ../gui/wxpython/tplot/frame.py:867
@@ -16463,14 +16458,13 @@ msgid "Problem getting data from vector temporal dataset. Empty list of values."
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:802
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{pa} already exists, do you want to overwrite?"
-msgstr "Datei <%s> existiert bereits. Wollen Sie die Datei überschreiben?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:804
-#, fuzzy
 msgid "File exists"
-msgstr "Die Datei existiert bereits."
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:809
 msgid "Please change name of output CSV file or "
@@ -16929,9 +16923,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1402
-#, fuzzy
 msgid "Proceed with opening of the workspace?"
-msgstr "Bitte warten Sie, ich lade das Projekt..."
+msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1442 ../gui/wxpython/lmgr/frame.py:1613
 msgid "Please wait, loading workspace..."
@@ -20765,8 +20758,8 @@ msgstr "Vektorkarte <%(name)s> (%(type)s) erfolgreich entfernt"
 msgid "Add default servers"
 msgstr "Schleife / Serie hinzufügen"
 
-#~ msgid "&Fetch"
-#~ msgstr "&Abrufen"
+msgid "&Fetch"
+msgstr "&Abrufen"
 
-#~ msgid "Fetch list of available modules from GRASS Addons SVN repository"
-#~ msgstr "Abruf der Modulliste vom GRASS-Addons SVN-Repository"
+msgid "Fetch list of available modules from GRASS Addons SVN repository"
+msgstr "Abruf der Modulliste vom GRASS-Addons SVN-Repository"

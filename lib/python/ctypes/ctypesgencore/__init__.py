@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 Ctypesgencore is the module that contains the main body of ctypesgen - in fact,

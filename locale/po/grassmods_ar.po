@@ -41139,7 +41139,7 @@ msgstr "نوع غير معروف"
 
 #: ../vector/v.distance/main.c:674
 #, fuzzy
-msgid "No categories for 'from' for slected type and layer"
+msgid "No categories for 'from' for selected type and layer"
 msgstr "%d فئات محملة من الجدول\n"
 
 #: ../vector/v.distance/main.c:702

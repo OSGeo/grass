@@ -611,7 +611,7 @@ class IClassMapFrame(DoubleMapFrame):
             return
 
         wx.BeginBusyCursor()
-        wx.Yield()
+        wx.GetApp().Yield()
 
         # close, build, copy and open again the temporary vector
         digitClass = self.GetFirstWindow().GetDigit()
@@ -763,7 +763,7 @@ class IClassMapFrame(DoubleMapFrame):
         :param bool withTable: true if attribute table is required
         """
         wx.BeginBusyCursor()
-        wx.Yield()
+        wx.GetApp().Yield()
 
         # close, build, copy and open again the temporary vector
         digitClass = self.GetFirstWindow().GetDigit()
@@ -1482,7 +1482,6 @@ def test():
     import core.render as render
 
     app = wx.App()
-    wx.InitAllImageHandlers()
 
     frame = IClassMapFrame()
     frame.Show()

@@ -33,7 +33,7 @@ from core.menutree import TreeModel, ModuleNode
 from gui_core.widgets import GListCtrl, SearchModuleWidget
 from gui_core.treeview import CTreeView
 from core.toolboxes import toolboxesOutdated
-from gui_core.wrap import Button, StaticBox, TextCtrl, Menu
+from gui_core.wrap import Button, StaticBox, TextCtrl, Menu, NewId
 
 
 class InstallExtensionWindow(wx.Frame):
@@ -113,7 +113,7 @@ class InstallExtensionWindow(wx.Frame):
         # self.btnFetch = Button(parent=self.panel, id=wx.ID_ANY,
         #                        label=_("&Fetch"))
         # self.btnFetch.SetToolTip(_("Fetch list of available modules "
-        #                            "from GRASS Addons SVN repository"))
+        #                            "from GRASS Addons repository"))
         self.btnClose = Button(parent=self.panel, id=wx.ID_CLOSE)
         self.btnInstall = Button(parent=self.panel, id=wx.ID_ANY,
                                  label=_("&Install"))
@@ -209,7 +209,7 @@ class InstallExtensionWindow(wx.Frame):
         """Fetch list of available extensions"""
         wx.BeginBusyCursor()
         self.SetStatusText(
-            _("Fetching list of modules from GRASS-Addons SVN (be patient)..."), 0)
+            _("Fetching list of modules from GRASS-Addons (be patient)..."), 0)
         try:
             self.thread.Run(
                 callable=self.modelBuilder.Load,
@@ -231,7 +231,7 @@ class InstallExtensionWindow(wx.Frame):
         if not hasattr(self, "popupID"):
             self.popupID = dict()
             for key in ('install', 'help'):
-                self.popupID[key] = wx.NewId()
+                self.popupID[key] = NewId()
 
         data = node.data
         if data and 'command' in data:

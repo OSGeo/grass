@@ -28,6 +28,7 @@ import wx
 from core import globalvar
 from core.debug import Debug
 from gui_core.toolbars import ToolSwitcher
+from gui_core.wrap import NewId
 
 from grass.script import core as grass
 
@@ -127,7 +128,7 @@ class MapFrameBase(wx.Frame):
         )
         accelTable = []
         for handler, entry, kdb in shortcuts_table:
-            wxId = wx.NewId()
+            wxId = NewId()
             self.Bind(wx.EVT_MENU, handler, id=wxId)
             accelTable.append((entry, kdb, wxId))
 

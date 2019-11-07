@@ -38,7 +38,7 @@ import grass.script as grass
 
 from gui_core.dialogs import SavedRegion
 from gui_core.wrap import DragImage, PseudoDC, EmptyBitmap, BitmapFromImage, \
-    Window, Menu, Rect
+    Window, Menu, Rect, NewId
 from core.gcmd import RunCommand, GException, GError, GMessage
 from core.debug import Debug
 from core.settings import UserSettings
@@ -247,7 +247,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         menu = Menu()
 
         if not hasattr(self, "popupCopyCoordinates"):
-            self.popupCopyCoordinates = wx.NewId()
+            self.popupCopyCoordinates = NewId()
             self.Bind(
                 wx.EVT_MENU,
                 self.OnCopyCoordinates,
@@ -257,7 +257,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             _("Copy coordinates to clipboard"))
         menu.AppendSeparator()
         if not hasattr(self, "popupShowAllToolbars"):
-            self.popupShowAllToolbars = wx.NewId()
+            self.popupShowAllToolbars = NewId()
             self.Bind(
                 wx.EVT_MENU,
                 self.OnShowAllToolbars,
@@ -266,7 +266,7 @@ class BufferedMapWindow(MapWindowBase, Window):
                     if self._giface.AreAllToolbarsShown() else
                     _("Show toolbars"))
         if not hasattr(self, "popupShowStatusbar"):
-            self.popupShowStatusbar = wx.NewId()
+            self.popupShowStatusbar = NewId()
             self.Bind(
                 wx.EVT_MENU,
                 self.OnShowStatusbar,
@@ -278,14 +278,14 @@ class BufferedMapWindow(MapWindowBase, Window):
         idlist = self.pdc.FindObjects(pos[0], pos[1], self.hitradius)
         if self.overlays and idlist and [i for i in idlist if i in list(self.overlays.keys())]:  # legend, scale bar, north arrow, dtext
             menu.AppendSeparator()
-            removeId = wx.NewId()
+            removeId = NewId()
             self.Bind(wx.EVT_MENU,
                       lambda evt: self.overlayRemoved.emit(overlayId=idlist[0]),
                       id=removeId)
             menu.Append(removeId, self.overlays[idlist[0]].removeLabel)
 
             if self.overlays[idlist[0]].name == 'legend':
-                resizeLegendId = wx.NewId()
+                resizeLegendId = NewId()
                 self.Bind(wx.EVT_MENU,
                           lambda evt: self.overlays[idlist[0]].StartResizing(),
                           id=resizeLegendId)
@@ -303,7 +303,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             elif pdctype == 'clear':
                 drawid = None
             else:
-                drawid = wx.NewId()
+                drawid = NewId()
 
         # TODO: find better solution
         if not pen:
@@ -701,7 +701,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
         self._busy = wx.BusyInfo(_("Please wait, exporting image..."),
                                  parent=self)
-        wx.Yield()
+        wx.GetApp().Yield()
 
         self.Map.ChangeMapSize((width, height))
         renderMgr = self.Map.GetRenderMgr()

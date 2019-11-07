@@ -244,10 +244,42 @@ static int update_list(int count)
 	break;
     case 2:			/* straight or bent line */
 	if (tl != 0 && br != 0) {	/* slanted line (\) */
+		if (value_flag) {
+			/* only CELL supported */
+			if (data_type == CELL_TYPE) {
+				int mc_val = ((CELL *) middle)[col];
+				int br_val = ((CELL *) bottom)[col + 1];
+				int tl_val = ((CELL *) top)[col - 1];
+				if (tl_val != mc_val) {
+					v_list[col].left = end_line(v_list[col].left, 1);
+					v_list[col].left = start_line(0);
+				}
+				if (mc_val != br_val) {
+					v_list[col].left = end_line(v_list[col].left, 1);
+					v_list[col].left = start_line(0);
+				}
+			}
+		}
 	    v_list[col + 1].left = v_list[col].left;
 	    v_list[col].left = NULL;
 	}
 	else if (tr != 0 && bl != 0) {	/* slanted line (/) */
+		if (value_flag) {
+			/* only CELL supported */
+			if (data_type == CELL_TYPE) {
+				int mc_val = ((CELL *) middle)[col];
+				int bl_val = ((CELL *) bottom)[col - 1];
+				int tr_val = ((CELL *) top)[col + 1];
+				if (tr_val != mc_val) {
+					v_list[col].right = end_line(v_list[col].right, 1);
+					v_list[col].right = start_line(0);
+				}
+				if (mc_val != bl_val) {
+					v_list[col].right = end_line(v_list[col].right, 1);
+					v_list[col].right = start_line(0);
+				}
+			}
+		}
 	    v_list[col - 1].right = v_list[col].right;
 	    v_list[col].right = NULL;
 	}

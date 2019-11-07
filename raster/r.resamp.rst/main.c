@@ -147,6 +147,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("resample"));
+    G_add_keyword(_("splines"));
+    G_add_keyword(_("RST"));
     module->description =
 	_("Reinterpolates and optionally computes topographic analysis from "
 	  "input raster map to a new raster map (possibly with "

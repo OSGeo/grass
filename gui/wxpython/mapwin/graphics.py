@@ -20,6 +20,7 @@ from copy import copy
 
 import wx
 
+from gui_core.wrap import NewId
 
 
 class GraphicsSet:
@@ -405,7 +406,7 @@ class GraphicsSetItem:
                            "brushName": brushName,
                            "hide": hide,
                            "label": label}
-        self.id = wx.NewId()
+        self.id = NewId()
 
     def AddProperty(self, propName):
         """Adds new property, to set it, call SetPropertyVal afterwards.

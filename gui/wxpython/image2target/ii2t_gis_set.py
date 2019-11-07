@@ -108,7 +108,7 @@ class GRASSStartup(wx.Frame):
         versionFile.close()
         try:
             grassVersion, grassRevision = versionLine.split(' ', 1)
-            if grassVersion.endswith('svn'):
+            if grassVersion.endswith('dev'):
                 grassRevisionStr = ' (%s)' % grassRevision
             else:
                 grassRevisionStr = ''
@@ -578,7 +578,7 @@ class GRASSStartup(wx.Frame):
                              read=True)
 
         wx.BeginBusyCursor()
-        wx.Yield()
+        wx.GetApp().Yield()
         if mapName in vectors:
             # vector detected
             returncode, error = RunCommand(
@@ -1153,8 +1153,6 @@ class StartUp(wx.App):
     """Start-up application"""
 
     def OnInit(self):
-        if not globalvar.CheckWxVersion([2, 9]):
-            wx.InitAllImageHandlers()
         StartUp = GRASSStartup()
         StartUp.CenterOnScreen()
         self.SetTopWindow(StartUp)

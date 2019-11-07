@@ -2,11 +2,11 @@ FROM alpine:edge
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
-LABEL authors="Pietro Zambelli"
-LABEL maintainer="peter.zamb@gmail.com"
+LABEL authors="Markus Neteler"
+LABEL maintainer="neteler@osgeo.org"
 
 # PACKAGES VERSIONS
-ARG GRASS_VERSION=7.7
+ARG GRASS_VERSION=7.9
 ARG PYTHON_VERSION=3
 ARG PROJ_VERSION=5.2.0
 ARG PROJ_DATUMGRID_VERSION=1.8
@@ -15,12 +15,13 @@ ARG PROJ_DATUMGRID_VERSION=1.8
 # CONFIG VARIABLES
 # ================
 
-# set configuration options
+# set configuration options, with wxGUI
 ENV GRASS_CONFIG="\
       --enable-largefile \
       --with-cxx \
       --with-proj --with-proj-share=/usr/share/proj \
       --with-gdal \
+      --with-pdal \
       --with-python \
       --with-geos \
       --with-sqlite \
@@ -28,6 +29,7 @@ ENV GRASS_CONFIG="\
       --with-zstd \
       --with-cairo --with-cairo-ldflags=-lfontconfig \
       --with-fftw \
+      --with-wxwidgets \
       --with-postgres --with-postgres-includes='/usr/include/postgresql' \
       --without-freetype \
       --without-openmp \
@@ -64,6 +66,8 @@ ENV PACKAGES="\
       gettext \
       geos \
       gnutls \
+      gtk+3.0 \
+      laszip \
       libbz2 \
       libjpeg-turbo \
       libpng \
@@ -72,14 +76,16 @@ ENV PACKAGES="\
       ncurses \
       openjpeg \
       openblas \
+      pdal \
       py3-numpy \
       py3-pillow \
       py3-six \
       postgresql \
-      proj4 \
       sqlite \
       sqlite-libs \
       tiff \
+      wxgtk-base \
+      wxgtk \
       zstd \
       zstd-libs \
     " \
@@ -95,20 +101,26 @@ ENV PACKAGES="\
       gdal-dev \
       geos-dev \
       gnutls-dev \
+      gtk+3.0-dev \
+      laszip-dev \
       libc6-compat \
       libjpeg-turbo-dev \
       libpng-dev \
       make \
       openjpeg-dev \
       openblas-dev \
+      pdal-dev \
       postgresql-dev \
-      proj4-dev \
+      python3-dev \
+      py3-numpy-dev \
       sqlite-dev \
       tar \
       tiff-dev \
       unzip \
       vim \
       wget \
+      wxgtk-base-dev \
+      wxgtk-dev \
       zip \
       zstd-dev \
     "
@@ -144,15 +156,18 @@ RUN echo "Install main packages";\
             --virtual .build-deps $GRASS_BUILD_PACKAGES; \
     # echo LANG="en_US.UTF-8" > /etc/default/locale;
     #
-    # install the latest projection library for GRASS GIS
+    # compile wxPython, unfortunately there is no Alpine package (yet) - compilation is slow, though!
+    $PYTHONBIN -m pip install -U pathlib2 wxPython && \
     #
-    echo "Install PROJ4";\
-    echo "  => Dowload proj-$PROJ_VERSION";\
-    wget http://download.osgeo.org/proj/proj-$PROJ_VERSION.tar.gz && \
+    # install the latest (and compatible) projection library for GRASS GIS
+    #
+    echo "Install PROJ-$PROJ_VERSION";\
+    echo "  => Downloading proj-$PROJ_VERSION";\
+    wget -q http://download.osgeo.org/proj/proj-$PROJ_VERSION.tar.gz && \
     tar xzvf proj-$PROJ_VERSION.tar.gz && \
     cd /src/proj-$PROJ_VERSION/ && \
-    echo "  => Dowload datumgrid-$PROJ_DATUMGRID_VERSION" &&\
-    wget http://download.osgeo.org/proj/proj-datumgrid-$PROJ_DATUMGRID_VERSION.zip && \
+    echo "  => Downloading datumgrid-$PROJ_DATUMGRID_VERSION" &&\
+    wget -q http://download.osgeo.org/proj/proj-datumgrid-$PROJ_DATUMGRID_VERSION.zip && \
     cd nad && \
     unzip ../proj-datumgrid-$PROJ_DATUMGRID_VERSION.zip && \
     cd .. && \
@@ -167,16 +182,12 @@ RUN echo "Install main packages";\
     # Checkout and install GRASS GIS
     #
     echo "Install GRASS GIS";\
-    echo "  => Dowload grass-$GRASS_VERSION";\
-    wget https://grass.osgeo.org/grass`echo $GRASS_VERSION | tr -d .`/source/snapshot/grass-$GRASS_VERSION.svn_src_snapshot_latest.tar.gz && \
-    # unpack source code package and remove tarball archive:
-    mkdir /src/grass_build && \
-    tar xfz grass-$GRASS_VERSION.svn_src_snapshot_latest.tar.gz --strip=1 -C /src/grass_build && \
-    rm -f grass-$GRASS_VERSION.svn_src_snapshot_latest.tar.gz; \
-    #
-    # Configure compile and install GRASS GIS
-    #
-    echo "  => Configure and compile grass";\
+    echo "  => Downloading grass"
+
+COPY . /src/grass_build/
+
+# Configure compile and install GRASS GIS
+RUN echo "  => Configure and compile grass";\
     cd /src/grass_build && \
     /src/grass_build/configure $GRASS_CONFIG && \
     make -j $NUMTHREADS && \
@@ -195,11 +206,11 @@ RUN echo "Install main packages";\
     rm -rf /var/cache/apk/*; \
     rm -rf /root/.cache; \
     # Remove unnecessary grass files
-    rm -rf /usr/local/grass77/demolocation; \
-    rm -rf /usr/local/grass77/docs; \
-    rm -rf /usr/local/grass77/fonts; \
-    rm -rf /usr/local/grass77/gui; \
-    rm -rf /usr/local/grass77/share;
+    rm -rf /usr/local/grass79/demolocation; \
+    rm -rf /usr/local/grass79/docs; \
+    rm -rf /usr/local/grass79/fonts; \
+    rm -rf /usr/local/grass79/gui; \
+    rm -rf /usr/local/grass79/share;
 
 
 # Unset environmental variables to avoid later compilation issues
@@ -225,6 +236,18 @@ RUN pip install grass-session
 # set GRASSBIN
 ENV GRASSBIN="/usr/local/bin/grass"
 
+# ===========================
+# TEST grass-session and PDAL
+# ===========================
+
+WORKDIR /tmp
+COPY docker/testdata/simple.laz .
+WORKDIR /scripts
+COPY docker/testdata/test_grass_session.py .
+## just scan the LAZ file
+# TODO: fix test
+#RUN /usr/bin/python3 /scripts/test_grass_session.py
+
 # ========
 # FINALIZE
 # ========
@@ -238,7 +261,9 @@ VOLUME /grassdb
 ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     LC_ALL="en_US.UTF-8"
 
-# debug
-RUN $GRASSBIN --config revision version
+# show installed version
+RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
+    pdal --version && \
+    python3 --version
 
 CMD [$GRASSBIN, "--version"]

@@ -27,18 +27,18 @@ import wx.lib.mixins.listctrl as listmix
 
 from core.gcmd import GMessage, GError, GWarning
 from core.gcmd import RunCommand
-from gui_core.wrap import Button
+from gui_core.wrap import Button, ListCtrl
 
 import grass.script as grass
 from grass.pydispatch.signal import Signal
 
 
-class VectorSelectList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
+class VectorSelectList(ListCtrl, listmix.ListCtrlAutoWidthMixin):
     """Widget for managing vector features selected from map display
     """
 
     def __init__(self, parent):
-        wx.ListCtrl.__init__(
+        ListCtrl.__init__(
             self,
             parent=parent,
             id=wx.ID_ANY,

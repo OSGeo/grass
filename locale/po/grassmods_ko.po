@@ -5248,9 +5248,8 @@ msgstr "현재 로케이션의 투영 키값을 얻을 수 없습니다"
 #: ../display/d.grid/plot.c:605 ../display/d.where/main.c:151
 #: ../general/g.region/printwindow.c:265 ../general/g.region/printwindow.c:501
 #: ../general/g.region/printwindow.c:593 ../vector/v.proj/main.c:292
-#, fuzzy
 msgid "Unable to initialize coordinate transformation"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../ps/ps.map/ps_clrtbl.c:35 ../ps/ps.map/ps_fclrtbl.c:46
 #, c-format
@@ -5845,18 +5844,16 @@ msgid "Traces paths from starting points following input directions."
 msgstr ""
 
 #: ../raster/r.path/main.c:157
-#, fuzzy
 msgid "Name of input direction"
-msgstr "입력 벡터 선 지도의 이름"
+msgstr ""
 
 #: ../raster/r.path/main.c:159
 msgid "Direction in degrees CCW from east, or bitmask encoded"
 msgstr ""
 
 #: ../raster/r.path/main.c:164
-#, fuzzy
 msgid "Format of the input direction map"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster/r.path/main.c:170
 msgid "auto-detect direction format"
@@ -5875,19 +5872,16 @@ msgid "bitmask encoded directions (e.g. r.cost -b)"
 msgstr ""
 
 #: ../raster/r.path/main.c:179
-#, fuzzy
 msgid "Name of input raster values to be used for output"
-msgstr "보고에 쓰일 래스터 지도의 이름"
+msgstr ""
 
 #: ../raster/r.path/main.c:185
-#, fuzzy
 msgid "Name for output raster path map"
-msgstr "출력 래스터 지도의 이름"
+msgstr ""
 
 #: ../raster/r.path/main.c:190
-#, fuzzy
 msgid "Name for output vector path map"
-msgstr "출력 벡터 지도 이름"
+msgstr ""
 
 #: ../raster/r.path/main.c:272 ../raster/r.drain/main.c:244
 #, c-format
@@ -5927,15 +5921,14 @@ msgid "No start point(s) specified"
 msgstr ""
 
 #: ../raster/r.path/main.c:369
-#, fuzzy, c-format
+#, c-format
 msgid "Reading raster values map <%s> ..."
-msgstr "래스터 지도 <%s>를 읽는 중입니다..."
+msgstr ""
 
 #: ../raster/r.path/main.c:382 ../raster/r.path/main.c:445
 #: ../raster/r.path/main.c:462
-#, fuzzy
 msgid "Unable to write to tempfile"
-msgstr "출력할 래스터맵"
+msgstr ""
 
 #: ../raster/r.path/main.c:390 ../raster/r.info/main.c:134
 msgid "Unable to read range file"
@@ -5976,9 +5969,9 @@ msgid "Input direction format assumed to be bitmask encoded with Knight's move"
 msgstr ""
 
 #: ../raster/r.path/main.c:429
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to detect format of input direction map <%s>"
-msgstr "3차원 래스터 지도 <%s>의 범위를 읽을 수 없습니다"
+msgstr ""
 
 #: ../raster/r.path/main.c:432
 #, c-format
@@ -5986,14 +5979,13 @@ msgid "Invalid directions format '%s'"
 msgstr ""
 
 #: ../raster/r.path/main.c:434
-#, fuzzy, c-format
+#, c-format
 msgid "Reading direction map <%s> ..."
-msgstr "벡터 지도 <%s>를 검색하는 중입니다..."
+msgstr ""
 
 #: ../raster/r.path/main.c:481
-#, fuzzy
 msgid "Processing start points..."
-msgstr "점을 추출하는 중입니다..."
+msgstr ""
 
 #: ../raster/r.path/main.c:491 ../vector/v.buffer/main.c:414
 #: ../vector/v.in.ogr/main.c:912 ../vector/v.overlay/main.c:227
@@ -6016,9 +6008,8 @@ msgid "Writing output raster map..."
 msgstr "출력 래스터 지도를 쓰는 중입니다..."
 
 #: ../raster/r.path/main.c:640
-#, fuzzy
 msgid "Unable to increase point list"
-msgstr "파일 <%s>를 생성할 수 없습니다"
+msgstr ""
 
 #: ../raster/r.path/main.c:740 ../raster/r.path/main.c:771
 #: ../raster/r.path/main.c:897 ../raster/r.path/main.c:1005
@@ -6037,14 +6028,13 @@ msgid "No path from row %d, col %d"
 msgstr ""
 
 #: ../raster/r.path/main.c:845
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid direction %d"
-msgstr "잘못된 입력 타원체"
+msgstr ""
 
 #: ../raster/r.path/main.c:934
-#, fuzzy
 msgid "Path is leaving the current region"
-msgstr "현재 지역 설정을 사용합니다..."
+msgstr ""
 
 #: ../raster/r.profile/main.c:54 ../raster/r.transect/main.c:104
 #: ../display/d.profile/main.c:192 ../raster3d/r3.cross.rast/main.c:229
@@ -6505,9 +6495,9 @@ msgstr "메모리가 부족합니다"
 #: ../vector/v.proj/main.c:343 ../vector/v.proj/main.c:355
 #: ../vector/v.proj/main.c:370 ../vector/v.proj/main.c:385
 #: ../vector/v.proj/main.c:466 ../vector/v.proj/main.c:471
-#, fuzzy, c-format
+#, c-format
 msgid "Error in %s (projection of input coordinate pair)"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster/r.regression.multi/main.c:61
 msgid "Matrix is unsolvable"
@@ -6855,9 +6845,8 @@ msgid "Name for output raster map to contain walking costs"
 msgstr ""
 
 #: ../raster/r.walk/main.c:227 ../raster/r.cost/main.c:183
-#, fuzzy
 msgid "Name of input raster map solving equal costs"
-msgstr "보고에 쓰일 래스터 지도의 이름"
+msgstr ""
 
 #: ../raster/r.walk/main.c:229 ../raster/r.cost/main.c:185
 msgid "Helper variable to pick a direction if two directions have equal cumulative costs (smaller is better)"
@@ -7011,9 +7000,8 @@ msgid "No start points"
 msgstr ""
 
 #: ../raster/r.walk/main.c:408 ../raster/r.cost/main.c:348
-#, fuzzy
 msgid "No stop points"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster/r.walk/main.c:412 ../raster/r.cost/main.c:352
 #, c-format
@@ -7131,9 +7119,9 @@ msgid "Specified starting location outside database window"
 msgstr ""
 
 #: ../raster/r.walk/main.c:932 ../raster/r.cost/main.c:797
-#, fuzzy, c-format
+#, c-format
 msgid "Number of duplicate stop points: %d"
-msgstr "입력 벡터점 지도의 이름"
+msgstr ""
 
 #: ../raster/r.walk/main.c:946 ../raster/r.cost/main.c:811
 msgid "Finding cost path..."
@@ -9560,9 +9548,9 @@ msgstr ""
 #: ../raster/r.horizon/main.c:849 ../raster/r.horizon/main.c:867
 #: ../raster/r.horizon/main.c:1203 ../raster/r.horizon/main.c:1223
 #: ../raster/r.proj/main.c:450 ../raster/r.proj/main.c:541
-#, fuzzy, c-format
+#, c-format
 msgid "Error in %s"
-msgstr "자료를 쓰면서 오류가 발생했습니다"
+msgstr ""
 
 #: ../raster/r.horizon/main.c:1176
 #, c-format
@@ -11344,9 +11332,8 @@ msgstr ""
 #: ../raster/r.watershed/seg/sseg_open.c:23
 #: ../raster/r.watershed/seg/dseg_open.c:24
 #: ../raster/r.watershed/seg/cseg_open.c:23
-#, fuzzy
 msgid "File name is invalid"
-msgstr "타임스탬프의 서식이 잘못됐습니다"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:25 ../raster/r.stream.extract/dseg.c:25
 #: ../raster/r.stream.extract/bseg.c:25 ../raster/r.stream.extract/seg.c:26
@@ -11354,9 +11341,8 @@ msgstr "타임스탬프의 서식이 잘못됐습니다"
 #: ../raster/r.watershed/seg/sseg_open.c:27
 #: ../raster/r.watershed/seg/dseg_open.c:28
 #: ../raster/r.watershed/seg/cseg_open.c:27
-#, fuzzy
 msgid "File write error"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:29 ../raster/r.stream.extract/dseg.c:29
 #: ../raster/r.stream.extract/bseg.c:29 ../raster/r.stream.extract/seg.c:30
@@ -11364,9 +11350,8 @@ msgstr "출력할 격자지도"
 #: ../raster/r.watershed/seg/sseg_open.c:31
 #: ../raster/r.watershed/seg/dseg_open.c:32
 #: ../raster/r.watershed/seg/cseg_open.c:31
-#, fuzzy
 msgid "Illegal parameters are passed"
-msgstr "무효한 매개변수값"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:33 ../raster/r.stream.extract/dseg.c:33
 #: ../raster/r.stream.extract/bseg.c:33 ../raster/r.stream.extract/seg.c:34
@@ -11374,9 +11359,8 @@ msgstr "무효한 매개변수값"
 #: ../raster/r.watershed/seg/sseg_open.c:35
 #: ../raster/r.watershed/seg/dseg_open.c:36
 #: ../raster/r.watershed/seg/cseg_open.c:35
-#, fuzzy
 msgid "File could not be re-opened"
-msgstr "보조 테이블을 삭제할 수 없었습니다"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:37 ../raster/r.stream.extract/dseg.c:37
 #: ../raster/r.stream.extract/bseg.c:37 ../raster/r.stream.extract/seg.c:38
@@ -11384,9 +11368,8 @@ msgstr "보조 테이블을 삭제할 수 없었습니다"
 #: ../raster/r.watershed/seg/sseg_open.c:39
 #: ../raster/r.watershed/seg/dseg_open.c:40
 #: ../raster/r.watershed/seg/cseg_open.c:39
-#, fuzzy
 msgid "Prepared file could not be read"
-msgstr "보조 테이블을 삭제할 수 없었습니다"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:68 ../raster/r.stream.extract/cseg.c:77
 #: ../raster/r.stream.extract/dseg.c:68 ../raster/r.stream.extract/dseg.c:77
@@ -12058,9 +12041,9 @@ msgid "Reading raster map <%s> using weight %f..."
 msgstr ""
 
 #: ../raster/r.series/main.c:274 ../raster/r.series/main.c:334
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open input raster <%s>"
-msgstr "입력 파일 <%s>를 열 수 없습니다"
+msgstr ""
 
 #: ../raster/r.series/main.c:311
 msgid "input= and weights= must have the same number of values"
@@ -12970,9 +12953,9 @@ msgid "<%s> is a GDAL-linked map - can't (un)compress"
 msgstr "<%s>는 GDAL과 연결된 지도입니다 - 압축/해제를 할 수 없습니다"
 
 #: ../raster/r.compress/main.c:145
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> is a virtual raster map - can't (un)compress"
-msgstr "<%s>는 GDAL과 연결된 지도입니다 - 압축/해제를 할 수 없습니다"
+msgstr ""
 
 #: ../raster/r.compress/main.c:219
 msgid "DONE: uncompressed file is %lu %s (%.2f%) smaller"
@@ -13020,9 +13003,9 @@ msgid "<%s> is a GDAL-linked map"
 msgstr ""
 
 #: ../raster/r.compress/main.c:320
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> is a virtual raster map"
-msgstr "<%s>는 잘못된 파일 이름입니다"
+msgstr ""
 
 #: ../raster/r.compress/main.c:324
 #, c-format
@@ -13632,9 +13615,8 @@ msgid "No header in the report"
 msgstr "헤더 없는 보고서"
 
 #: ../raster/r.kappa/main.c:113
-#, fuzzy
 msgid "Print Matrix only"
-msgstr "자료형을 출력합니다"
+msgstr ""
 
 #: ../raster/r.kappa/prt_label.c:17
 #, c-format
@@ -13897,32 +13879,29 @@ msgid "mosaic"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:79
-#, fuzzy
 msgid "virtual raster"
-msgstr "3차원 래스터"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:81
 msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:84
-#, fuzzy
 msgid "Name of input raster files"
-msgstr "입력 좌표 파일의 이름"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:90 ../imagery/i.group/main.c:74
 msgid "Input file with one raster map name per line"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:147 ../raster/r.buildvrt/main.c:200
-#, fuzzy, c-format
+#, c-format
 msgid "Input raster map <%s> not found"
-msgstr "3차원 래스터 지도 <%s>를 찾을 수 없습니다"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:150 ../raster/r.buildvrt/main.c:203
-#, fuzzy
 msgid "Input and output raster map can not be identical"
-msgstr "입력과 출력 로케이션은 같을 수 없습니다"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:155 ../raster/r.buildvrt/main.c:208
 #, c-format
@@ -13930,14 +13909,12 @@ msgid "Input map <%s@%s> is all NULL, skipping"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:177
-#, fuzzy
 msgid "Only one raster map name found in input file"
-msgstr "입력 파일 <%2$s> 안에 지도 이름 %1$s를 찾을 수 없습니다"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:188
-#, fuzzy
 msgid "Only one raster map name found"
-msgstr "3차원 래스터 지도 <%s>를 찾을 수 없습니다"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:260
 msgid "Input maptypes are different"
@@ -13958,9 +13935,9 @@ msgid "Unable to create fcell/%s file"
 msgstr ""
 
 #: ../raster/r.buildvrt/link.c:35
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create cell_misc/%s/vrt file"
-msgstr "cell_misc/%s/f_format 파일을 생성할 수 없습니다"
+msgstr ""
 
 #: ../raster/r.buildvrt/link.c:66 ../raster/r.external/link.c:160
 #, c-format
@@ -15941,9 +15918,8 @@ msgid "Resolution of output raster map"
 msgstr ""
 
 #: ../raster/r.proj/main.c:209 ../vector/v.proj/main.c:119
-#, fuzzy
 msgid "PROJ pipeline for coordinate transformation"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster/r.proj/main.c:214
 msgid "List raster maps in input mapset and exit"
@@ -16369,9 +16345,8 @@ msgid "The band number and \".csv\" will be appended to the file prefix"
 msgstr ""
 
 #: ../raster/r.in.gdal/main.c:189 ../vector/v.in.ogr/main.c:220
-#, fuzzy
 msgid "GDAL configuration options"
-msgstr "설정 파일"
+msgstr ""
 
 #: ../raster/r.in.gdal/main.c:190 ../raster/r.in.gdal/main.c:197
 #: ../vector/v.in.ogr/main.c:221 ../vector/v.in.ogr/main.c:228
@@ -18175,9 +18150,8 @@ msgid "For USLE. All non-NULL and non-zero cells are considered as blocking terr
 msgstr ""
 
 #: ../raster/r.watershed/front/main.c:123
-#, fuzzy
 msgid "Name of input raster map with percentages for flow accumulation."
-msgstr "보고에 쓰일 래스터 지도의 이름"
+msgstr ""
 
 #: ../raster/r.watershed/front/main.c:129
 msgid "Minimum size of exterior watershed basin"
@@ -24439,9 +24413,8 @@ msgid "Found %d clumps"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:26
-#, fuzzy
 msgid "Name of input imagery group or raster maps"
-msgstr "입력 위상색인 래스터 지도의 이름"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:33
 msgid "Suffix for output bands with modified band values"
@@ -25301,9 +25274,9 @@ msgid "Name for output raster map holding reject threshold results"
 msgstr ""
 
 #: ../imagery/i.maxlik/main.c:106
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> does not match the current mapset"
-msgstr "현재 지도세트 안에서 그룹 <%s>를 찾을 수 없습니다"
+msgstr ""
 
 #: ../imagery/i.maxlik/invert.c:28
 #, c-format
@@ -28307,9 +28280,8 @@ msgid "Viewpoint height not given, using calculated value %.0f"
 msgstr ""
 
 #: ../misc/m.nviz.image/main.c:244
-#, fuzzy
 msgid "Failed to write image"
-msgstr "파일로 쓸 수 없습니다"
+msgstr ""
 
 #: ../misc/m.nviz.image/main.c:246
 msgid "Unsupported output format"
@@ -30928,9 +30900,9 @@ msgstr ""
 
 #: ../vector/v.out.ogr/main.c:682 ../vector/v.out.ogr/main.c:757
 #: ../vector/v.to.db/main.c:268
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create column <%s>"
-msgstr "열 <%s>를 추가할 수 없습니다"
+msgstr ""
 
 #: ../vector/v.out.ogr/main.c:763
 #, c-format
@@ -31979,9 +31951,9 @@ msgid "Generating points..."
 msgstr ""
 
 #: ../vector/v.random/main.c:530 ../vector/v.random/main.c:677
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to insert new row: %s"
-msgstr "새 행을 삽입할 수 없습니다: '%s'"
+msgstr ""
 
 #: ../vector/v.random/main.c:702 ../vector/v.db.select/main.c:208
 msgid "Unable to open select cursor"
@@ -31994,9 +31966,9 @@ msgid "Unable to fetch data from table <%s>"
 msgstr ""
 
 #: ../vector/v.random/main.c:742
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to update row: %s"
-msgstr "행을 삽입할 수 없습니다: %s"
+msgstr ""
 
 #: ../vector/v.support/main.c:41
 msgid "Updates vector map metadata."
@@ -35074,9 +35046,9 @@ msgid ""
 msgstr ""
 
 #: ../vector/v.in.ogr/proj.c:73 ../vector/v.external/proj.c:73
-#, fuzzy, c-format
+#, c-format
 msgid "No projection information available for layer <%s>"
-msgstr "투영정보가 갱신되지 않을 겁니다"
+msgstr ""
 
 #: ../vector/v.in.ogr/proj.c:81 ../vector/v.external/proj.c:81
 #, c-format
@@ -35114,9 +35086,8 @@ msgid "Projection of layer <%s> is different from projection of layer <%s>"
 msgstr ""
 
 #: ../vector/v.in.ogr/clean.c:19
-#, fuzzy
 msgid "Converting OSM lines..."
-msgstr "선을 합치는 중..."
+msgstr ""
 
 #: ../vector/v.in.ogr/clean.c:118
 #, c-format
@@ -35214,9 +35185,9 @@ msgid "Number of columns differ"
 msgstr ""
 
 #: ../vector/v.patch/main.c:273
-#, fuzzy, c-format
+#, c-format
 msgid "No column <%s> in input map <%s>"
-msgstr "테이블 <%2$s> 내에 알려지지 않은 열 <%1$s>"
+msgstr ""
 
 #: ../vector/v.patch/main.c:284
 msgid "Column types differ"
@@ -36587,7 +36558,7 @@ msgid "Incompatible column types"
 msgstr ""
 
 #: ../vector/v.distance/main.c:674
-msgid "No categories for 'from' for slected type and layer"
+msgid "No categories for 'from' for selected type and layer"
 msgstr ""
 
 #: ../vector/v.distance/main.c:702
@@ -39866,9 +39837,8 @@ msgid "If new >= 0, attributes is not copied"
 msgstr ""
 
 #: ../vector/v.extract/main.c:151
-#, fuzzy
 msgid "Name of attribute column for dissolving areas"
-msgstr "삭제할 속성 열의 이름"
+msgstr ""
 
 #: ../vector/v.extract/main.c:152
 msgid "Preserves category values"
@@ -39880,9 +39850,9 @@ msgid "Options <%s>, <%s>, <%s> and <%s> options are exclusive. Please specify o
 msgstr ""
 
 #: ../vector/v.extract/main.c:221
-#, fuzzy, c-format
+#, c-format
 msgid "Searching for column <%s> in table <%s>..."
-msgstr "테이블 <%2$s> 내에 알려지지 않은 열 <%1$s>"
+msgstr ""
 
 #: ../vector/v.extract/main.c:253
 #, c-format
@@ -41139,9 +41109,9 @@ msgid "Missing column name for input column number %d"
 msgstr ""
 
 #: ../vector/v.to.db/main.c:180
-#, fuzzy, c-format
+#, c-format
 msgid "Missing column name for table column number %d"
-msgstr "레이어 <%s>의 데이터베이스 연결을 위한 열의 자료형과 이름을 출력합니다:"
+msgstr ""
 
 #: ../vector/v.to.db/main.c:194
 #, c-format
@@ -41154,9 +41124,9 @@ msgid "Existing column <%s> has the wrong type"
 msgstr ""
 
 #: ../vector/v.to.db/main.c:203
-#, fuzzy, c-format
+#, c-format
 msgid "Values in column <%s> will be overwritten"
-msgstr "래스터 지도 <%s>가 이미 존재하지만 덮어 씁니다"
+msgstr ""
 
 #: ../vector/v.to.db/main.c:322
 #, c-format
@@ -44304,68 +44274,68 @@ msgstr "전체 지도를 한 번에 처리할 수 없습니다. '%s' 옵션을 1
 msgid "Scale Y labels cannot be used with thisrange of data (%f, %f)"
 msgstr "축척 Y 꼬리표는 자료의 범위 (%f ,%f)와 함께 사용할 수 없습니다"
 
-#~ msgid "Unable to re-open segment file"
-#~ msgstr "분절 파일을 다시 열 수 없습니다"
+msgid "column '%s', type 'string': unknown width -> stored as varchar(250) some data may be lost"
+msgstr "열 '%s', 유형 'string': 알려지지 않은 폭 -> varchar(250)으로 저장되고 일부 자료를 잃을 수 있습니다"
 
-#~ msgid "dseg_open(): unable to create segment file"
-#~ msgstr "dseg_open(): 분절 파일을 생성할 수 없습니다"
+msgid "Unabel to read segment file"
+msgstr "분절 파일을 읽을 수 없습니다"
 
-#~ msgid "Unable to re-open file '%s'"
-#~ msgstr "파일 '%s'를 다시 열 수 없습니다"
+msgid "Unable create DBF database: %s"
+msgstr "DBF 데이터베이스를 생성할 수 없습니다: %s"
 
-#~ msgid "Can not initialize temporary file"
-#~ msgstr "임시 파일을 초기화할 수 없습니다"
+msgid "Unable to create PROJ_EPSG file: %s"
+msgstr "PROJ_EPSG 파일을 생성할 수 없습니다: %s"
 
-#~ msgid "column '%s', type 'string': unknown width -> stored as varchar(250) some data may be lost"
-#~ msgstr "열 '%s', 유형 'string': 알려지지 않은 폭 -> varchar(250)으로 저장되고 일부 자료를 잃을 수 있습니다"
+msgid "Error in pj_do_proj6"
+msgstr "pj_do_proj6 내에 오류"
 
-#~ msgid "Unabel to read segment file"
-#~ msgstr "분절 파일을 읽을 수 없습니다"
+msgid "East-West (ewres: %f) and North-South (nwres: %f) resolution differ significantly. Did you assign %s= and %s= correctly?"
+msgstr "동-서(ewres: %f)와 남-북(nsres: %f)의 해상도가 많이 다릅니다. %s=와 %s=를 바르게 입력하셨나요?"
 
-#~ msgid "Unable create DBF database: %s"
-#~ msgstr "DBF 데이터베이스를 생성할 수 없습니다: %s"
+msgid "Error in pj_do_proj (can't re-projection GCP %i)"
+msgstr "pj_do_proj 내에 오류 (GCP %i를 재투영할 수 없습니다)"
 
-#~ msgid "Unable to create PROJ_EPSG file: %s"
-#~ msgstr "PROJ_EPSG 파일을 생성할 수 없습니다: %s"
+msgid "Error in pj_do_proj"
+msgstr "pj_do_proj 내에 오류"
 
-#~ msgid "Error in pj_do_proj6"
-#~ msgstr "pj_do_proj6 내에 오류"
+msgid "Error in pj_do_proj (projection of input coordinate pair)"
+msgstr "pj_do_proj 내에 오류 (입력 좌표쌍의 투영)"
 
-#~ msgid "East-West (ewres: %f) and North-South (nwres: %f) resolution differ significantly. Did you assign %s= and %s= correctly?"
-#~ msgstr "동-서(ewres: %f)와 남-북(nsres: %f)의 해상도가 많이 다릅니다. %s=와 %s=를 바르게 입력하셨나요?"
+msgid "Could not read georeferenced file %s using either OGR nor GDAL"
+msgstr "OGR 또는 GDAL을 이용해서 지리 참조 파일 %s를 읽을 수 없었습니다"
 
-#~ msgid "Error in pj_do_proj (can't re-projection GCP %i)"
-#~ msgstr "pj_do_proj 내에 오류 (GCP %i를 재투영할 수 없습니다)"
+msgid "Error in pj_do_proj1"
+msgstr "pj_do_proj1 내에 오류"
 
-#~ msgid "Error in pj_do_proj"
-#~ msgstr "pj_do_proj 내에 오류"
+msgid "Error in pj_do_proj2"
+msgstr "pj_do_proj2 내에 오류"
 
-#~ msgid "eading the input map -%s- and -%s- and creating some temporary files..."
-#~ msgstr "입력 지도 -%s-와 -%s-를 읽으면서 임시 파일을 생성하는 중입니다..."
+msgid "Error in pj_do_proj3"
+msgstr "pj_do_proj3 내에 오류"
 
-#~ msgid "Error in pj_do_proj (projection of input coordinate pair)"
-#~ msgstr "pj_do_proj 내에 오류 (입력 좌표쌍의 투영)"
+msgid "Error in pj_do_proj5"
+msgstr "pj_do_proj5 내에 오류"
 
-#~ msgid "Could not read georeferenced file %s using either OGR nor GDAL"
-#~ msgstr "OGR 또는 GDAL을 이용해서 지리 참조 파일 %s를 읽을 수 없었습니다"
+msgid "If overlapping is not desired, the data need to be cleaned."
+msgstr "중첩을 원하지 않으면 자료를 정리할 필요가 있습니다."
 
-#~ msgid "Error in pj_do_proj1"
-#~ msgstr "pj_do_proj1 내에 오류"
+msgid "OGR projection for layer <%s> can not be converted to proj4"
+msgstr "레이어 <%s>를 위한 OGR 투영을 proj4로 변환할 수 없습니다"
 
-#~ msgid "Error in pj_do_proj2"
-#~ msgstr "pj_do_proj2 내에 오류"
+msgid "Error in pj_do_transform"
+msgstr "pj_do_transform 내에 오류"
 
-#~ msgid "Error in pj_do_proj3"
-#~ msgstr "pj_do_proj3 내에 오류"
+msgid "Unable to re-open segment file"
+msgstr "분절 파일을 다시 열 수 없습니다"
 
-#~ msgid "Error in pj_do_proj5"
-#~ msgstr "pj_do_proj5 내에 오류"
+msgid "dseg_open(): unable to create segment file"
+msgstr "dseg_open(): 분절 파일을 생성할 수 없습니다"
 
-#~ msgid "If overlapping is not desired, the data need to be cleaned."
-#~ msgstr "중첩을 원하지 않으면 자료를 정리할 필요가 있습니다."
+msgid "Unable to re-open file '%s'"
+msgstr "파일 '%s'를 다시 열 수 없습니다"
 
-#~ msgid "OGR projection for layer <%s> can not be converted to proj4"
-#~ msgstr "레이어 <%s>를 위한 OGR 투영을 proj4로 변환할 수 없습니다"
+msgid "Can not initialize temporary file"
+msgstr "임시 파일을 초기화할 수 없습니다"
 
-#~ msgid "Error in pj_do_transform"
-#~ msgstr "pj_do_transform 내에 오류"
+msgid "eading the input map -%s- and -%s- and creating some temporary files..."
+msgstr "입력 지도 -%s-와 -%s-를 읽으면서 임시 파일을 생성하는 중입니다..."

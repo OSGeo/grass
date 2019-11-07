@@ -204,7 +204,7 @@ msgstr ""
 #: ../lib/temporal/lib/connect.c:110
 #, c-format
 msgid "Mapset <%s> does not exist."
-msgstr ""
+msgstr "Mapset <1%s> não existe."
 
 #: ../lib/rowio/setup.c:61 ../lib/rowio/setup.c:67 ../lib/segment/open.c:118
 #: ../lib/rst/interp_float/segmen2d_parallel.c:78
@@ -270,9 +270,9 @@ msgid "Unable to read range file for <%s>"
 msgstr ""
 
 #: ../lib/raster/range.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read stats file for <%s>"
-msgstr "G_spawn: não consegui abrir o arquivo %s"
+msgstr ""
 
 #: ../lib/raster/range.c:368 ../lib/raster/range.c:374
 #: ../lib/raster/range.c:406 ../lib/raster/range.c:420
@@ -282,9 +282,9 @@ msgstr ""
 
 #: ../lib/raster/range.c:450 ../lib/raster/range.c:464
 #: ../lib/raster/range.c:482 ../lib/raster/range.c:487
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write stats file for <%s>"
-msgstr "impossível escrever arquivo f_format para mapas CELL"
+msgstr ""
 
 #: ../lib/raster/raster_metadata.c:109
 #, c-format
@@ -650,9 +650,9 @@ msgid "Unable to create dependency file in <%s@%s>"
 msgstr ""
 
 #: ../lib/raster/vrt.c:83
-#, fuzzy, c-format
+#, c-format
 msgid "Tile raster map <%s> not found"
-msgstr "Mapa raster <%s> não encontrado"
+msgstr ""
 
 #: ../lib/raster/vrt.c:86
 msgid "A virtual raster can not contain itself"
@@ -1123,9 +1123,8 @@ msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
 msgstr ""
 
 #: ../lib/ogsf/gsd_img_ppm.c:96
-#, fuzzy
 msgid "Unable to write view"
-msgstr "impossível escrever arquivo f_format para mapas CELL"
+msgstr ""
 
 #: ../lib/ogsf/gsd_legend.c:246
 #, c-format
@@ -4734,11 +4733,11 @@ msgstr ""
 
 #: ../lib/gis/cmprlz4.c:121
 msgid "LZ4 compression error"
-msgstr ""
+msgstr "Erro na compactação LZ4"
 
 #: ../lib/gis/cmprlz4.c:177
 msgid "LZ4 decompression error"
-msgstr ""
+msgstr "Erro na descompactação LZ4"
 
 #: ../lib/gis/cmprlz4.c:186 ../lib/gis/cmprbzip.c:219 ../lib/gis/cmprzstd.c:206
 #: ../lib/gis/cmprzlib.c:215
@@ -5498,7 +5497,7 @@ msgstr ""
 
 #: ../lib/gis/myname.c:46
 msgid "This location has no description."
-msgstr ""
+msgstr "Location não possui descrição."
 
 #: ../lib/gis/adj_cellhd.c:57
 #, c-format
@@ -5982,12 +5981,12 @@ msgstr ""
 #: ../lib/gis/list.c:83
 #, c-format
 msgid "no %s files available in current mapset\n"
-msgstr ""
+msgstr "Arquivos %s não estão disponíveis no mapset atual\n"
 
 #: ../lib/gis/list.c:86
 #, c-format
 msgid "no %s files available in mapset <%s>\n"
-msgstr ""
+msgstr "arquivos %s não estão disponíveis no mapset <%s>\n"
 
 #: ../lib/gis/list.c:132
 #, c-format
@@ -5996,7 +5995,7 @@ msgstr ""
 
 #: ../lib/gis/list.c:204
 msgid "G_list: Unknown element type"
-msgstr ""
+msgstr "G_list: Tipo de elemento desconhecido"
 
 #: ../lib/gis/error.c:362
 msgid "WARNING: "
@@ -6310,9 +6309,9 @@ msgid "Invalid compressed field: %s"
 msgstr ""
 
 #: ../lib/gis/seek.c:54 ../lib/gis/seek.c:60
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to seek: %s"
-msgstr "Impossível executar o comando"
+msgstr ""
 
 #: ../lib/gis/seek.c:58
 msgid "Seek offset out of range"
@@ -6346,9 +6345,8 @@ msgid "no description"
 msgstr ""
 
 #: ../lib/gis/color_rules.c:292
-#, fuzzy
 msgid "Unable to open color rule"
-msgstr "não consegui abrir %s para leitura"
+msgstr ""
 
 #: ../lib/gis/color_rules.c:341 ../lib/gis/color_rules.c:352
 #: ../lib/gis/color_rules.c:356 ../lib/gis/color_rules.c:360
@@ -6361,9 +6359,8 @@ msgid "range: %g to %g"
 msgstr ""
 
 #: ../lib/gis/color_rules.c:368
-#, fuzzy
 msgid "Unable to open color descriptions"
-msgstr "não consegui abrir %s para escrita"
+msgstr ""
 
 #: ../lib/gis/mapset_msc.c:90
 #, c-format
@@ -9595,9 +9592,8 @@ msgid "Option input overflowed option table"
 msgstr ""
 
 #: ../lib/proj/get_proj.c:388
-#, fuzzy
 msgid "Unable to initialize pj"
-msgstr "não foi possível abrir o arquivo %s em %s"
+msgstr ""
 
 #: ../lib/proj/get_proj.c:396
 #, c-format
@@ -9707,14 +9703,13 @@ msgid "proj_create() failed for '%s'"
 msgstr ""
 
 #: ../lib/proj/do_proj.c:114
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create latlong equivalent for '%s'"
-msgstr "Impossível criar novo processo"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:164
-#, fuzzy
 msgid "No input projection"
-msgstr "Projeção desconhecida"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:167 ../lib/proj/do_proj.c:336
 msgid "No transformation object"
@@ -9726,9 +9721,8 @@ msgid "proj_trans() failed: %s"
 msgstr ""
 
 #: ../lib/proj/do_proj.c:247
-#, fuzzy
 msgid "No output projection"
-msgstr "Projeção desconhecida"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:276 ../lib/proj/do_proj.c:499
 #: ../lib/proj/do_proj.c:626 ../lib/proj/do_proj.c:790

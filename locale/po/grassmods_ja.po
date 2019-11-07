@@ -5242,9 +5242,8 @@ msgstr ""
 #: ../ps/ps.map/do_geogrid.c:432 ../ps/ps.map/do_geogrid.c:439
 #: ../ps/ps.map/do_geogrid.c:444 ../ps/ps.map/do_geogrid.c:453
 #: ../ps/ps.map/do_geogrid.c:458
-#, fuzzy
 msgid "Error in GPJ_transform"
-msgstr "pj_do_transform にエラー"
+msgstr ""
 
 #: ../ps/ps.map/do_geogrid.c:284 ../raster/r.sun/main.c:787
 #: ../raster/r.horizon/main.c:542 ../display/d.grid/plot.c:564
@@ -5260,9 +5259,8 @@ msgstr "現在のロケーションの投影キー値を取得できません"
 #: ../display/d.grid/plot.c:605 ../display/d.where/main.c:151
 #: ../general/g.region/printwindow.c:265 ../general/g.region/printwindow.c:501
 #: ../general/g.region/printwindow.c:593 ../vector/v.proj/main.c:292
-#, fuzzy
 msgid "Unable to initialize coordinate transformation"
-msgstr "マップを閉じれません"
+msgstr ""
 
 #: ../ps/ps.map/ps_clrtbl.c:35 ../ps/ps.map/ps_fclrtbl.c:46
 #, c-format
@@ -5857,28 +5855,24 @@ msgid "Traces paths from starting points following input directions."
 msgstr ""
 
 #: ../raster/r.path/main.c:157
-#, fuzzy
 msgid "Name of input direction"
-msgstr "指定するベクトルマップ (A) 名"
+msgstr ""
 
 #: ../raster/r.path/main.c:159
-#, fuzzy
 msgid "Direction in degrees CCW from east, or bitmask encoded"
-msgstr "度で東からCCWまで測定"
+msgstr ""
 
 #: ../raster/r.path/main.c:164
-#, fuzzy
 msgid "Format of the input direction map"
-msgstr "入力するベクトルマップのエンディアン"
+msgstr ""
 
 #: ../raster/r.path/main.c:170
 msgid "auto-detect direction format"
 msgstr ""
 
 #: ../raster/r.path/main.c:171
-#, fuzzy
 msgid "degrees CCW from East"
-msgstr "度で東からCCWまで測定"
+msgstr ""
 
 #: ../raster/r.path/main.c:172
 msgid "degrees CCW from East divided by 45 (e.g. r.watershed directions)"
@@ -5889,19 +5883,16 @@ msgid "bitmask encoded directions (e.g. r.cost -b)"
 msgstr ""
 
 #: ../raster/r.path/main.c:179
-#, fuzzy
 msgid "Name of input raster values to be used for output"
-msgstr "<%s>に対応させるラスターマップ"
+msgstr ""
 
 #: ../raster/r.path/main.c:185
-#, fuzzy
 msgid "Name for output raster path map"
-msgstr "出力ラスターマップ名"
+msgstr ""
 
 #: ../raster/r.path/main.c:190
-#, fuzzy
 msgid "Name for output vector path map"
-msgstr "出力するベクトルマップ名"
+msgstr ""
 
 #: ../raster/r.path/main.c:272 ../raster/r.drain/main.c:244
 #, c-format
@@ -5937,29 +5928,27 @@ msgid "Starting vector map <%s> contains no points in the current region"
 msgstr ""
 
 #: ../raster/r.path/main.c:359
-#, fuzzy
 msgid "No start point(s) specified"
-msgstr "開始点がありません"
+msgstr ""
 
 #: ../raster/r.path/main.c:369
-#, fuzzy, c-format
+#, c-format
 msgid "Reading raster values map <%s> ..."
-msgstr "ラスターマップ <%s> を読込中..."
+msgstr ""
 
 #: ../raster/r.path/main.c:382 ../raster/r.path/main.c:445
 #: ../raster/r.path/main.c:462
-#, fuzzy
 msgid "Unable to write to tempfile"
-msgstr "ファイルに書き込めません"
+msgstr ""
 
 #: ../raster/r.path/main.c:390 ../raster/r.info/main.c:134
 msgid "Unable to read range file"
 msgstr ""
 
 #: ../raster/r.path/main.c:393
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid directions map <%s>"
-msgstr "不正な入力 <%s=%s>"
+msgstr ""
 
 #: ../raster/r.path/main.c:398
 msgid "Directional degrees can not be > 360"
@@ -5983,33 +5972,31 @@ msgid "Input direction format assumed to be bitmask encoded without Knight's mov
 msgstr ""
 
 #: ../raster/r.path/main.c:422
-#, fuzzy
 msgid "Input direction format assumed to be degrees CCW from East"
-msgstr "度で東からCCWまで測定"
+msgstr ""
 
 #: ../raster/r.path/main.c:426
 msgid "Input direction format assumed to be bitmask encoded with Knight's move"
 msgstr ""
 
 #: ../raster/r.path/main.c:429
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to detect format of input direction map <%s>"
-msgstr "ベクトルマップ <%s> を作成できません"
+msgstr ""
 
 #: ../raster/r.path/main.c:432
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid directions format '%s'"
-msgstr "不正な color: %s"
+msgstr ""
 
 #: ../raster/r.path/main.c:434
-#, fuzzy, c-format
+#, c-format
 msgid "Reading direction map <%s> ..."
-msgstr "ラスターマップ <%s> を読込中..."
+msgstr ""
 
 #: ../raster/r.path/main.c:481
-#, fuzzy
 msgid "Processing start points..."
-msgstr "エリアを処理中、、、"
+msgstr ""
 
 #: ../raster/r.path/main.c:491 ../vector/v.buffer/main.c:414
 #: ../vector/v.in.ogr/main.c:912 ../vector/v.overlay/main.c:227
@@ -6017,9 +6004,9 @@ msgid "Unable to create temporary vector map"
 msgstr ""
 
 #: ../raster/r.path/main.c:497 ../raster/r.path/main.c:513
-#, fuzzy, c-format
+#, c-format
 msgid "No path at row %d, col %d"
-msgstr "データ変換は行 %d, 列 %d で失敗しました  "
+msgstr ""
 
 #: ../raster/r.path/main.c:502 ../vector/v.overlay/line_area.c:256
 #: ../vector/v.overlay/area_area.c:109
@@ -6032,9 +6019,8 @@ msgid "Writing output raster map..."
 msgstr ""
 
 #: ../raster/r.path/main.c:640
-#, fuzzy
 msgid "Unable to increase point list"
-msgstr "入力を読めません： %s"
+msgstr ""
 
 #: ../raster/r.path/main.c:740 ../raster/r.path/main.c:771
 #: ../raster/r.path/main.c:897 ../raster/r.path/main.c:1005
@@ -6053,14 +6039,13 @@ msgid "No path from row %d, col %d"
 msgstr ""
 
 #: ../raster/r.path/main.c:845
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid direction %d"
-msgstr "無効なメソッドです: %s"
+msgstr ""
 
 #: ../raster/r.path/main.c:934
-#, fuzzy
 msgid "Path is leaving the current region"
-msgstr "現在の領域を表示"
+msgstr ""
 
 #: ../raster/r.profile/main.c:54 ../raster/r.transect/main.c:104
 #: ../display/d.profile/main.c:192 ../raster3d/r3.cross.rast/main.c:229
@@ -6521,9 +6506,9 @@ msgstr "メモリーが足りません"
 #: ../vector/v.proj/main.c:343 ../vector/v.proj/main.c:355
 #: ../vector/v.proj/main.c:370 ../vector/v.proj/main.c:385
 #: ../vector/v.proj/main.c:466 ../vector/v.proj/main.c:471
-#, fuzzy, c-format
+#, c-format
 msgid "Error in %s (projection of input coordinate pair)"
-msgstr "pj_do_proj (入力座標ペアの投影) におけるエラー"
+msgstr ""
 
 #: ../raster/r.regression.multi/main.c:61
 msgid "Matrix is unsolvable"
@@ -6869,9 +6854,8 @@ msgid "Name for output raster map to contain walking costs"
 msgstr ""
 
 #: ../raster/r.walk/main.c:227 ../raster/r.cost/main.c:183
-#, fuzzy
 msgid "Name of input raster map solving equal costs"
-msgstr "フリクションコストを含む入力ラスターマップ名 "
+msgstr ""
 
 #: ../raster/r.walk/main.c:229 ../raster/r.cost/main.c:185
 msgid "Helper variable to pick a direction if two directions have equal cumulative costs (smaller is better)"
@@ -7025,9 +7009,8 @@ msgid "No start points"
 msgstr "開始点がありません"
 
 #: ../raster/r.walk/main.c:408 ../raster/r.cost/main.c:348
-#, fuzzy
 msgid "No stop points"
-msgstr "開始点がありません"
+msgstr ""
 
 #: ../raster/r.walk/main.c:412 ../raster/r.cost/main.c:352
 #, c-format
@@ -7145,9 +7128,9 @@ msgid "Specified starting location outside database window"
 msgstr "指定された開始場所はデータベースウィンドウ外にあります"
 
 #: ../raster/r.walk/main.c:932 ../raster/r.cost/main.c:797
-#, fuzzy, c-format
+#, c-format
 msgid "Number of duplicate stop points: %d"
-msgstr "ポイントの数: %d"
+msgstr ""
 
 #: ../raster/r.walk/main.c:946 ../raster/r.cost/main.c:811
 msgid "Finding cost path..."
@@ -7316,9 +7299,8 @@ msgid "\"-\" to read rules from stdin"
 msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:149 ../vector/v.colors/main.c:137
-#, fuzzy
 msgid "List available rules with description then exit"
-msgstr "使用可能なルールの一覧表示"
+msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:150 ../vector/v.colors/main.c:138
 msgid "If a color rule is given, only this rule is listed"
@@ -9575,9 +9557,9 @@ msgstr "OOPS: 列は %d から %d に変更しました  "
 #: ../raster/r.horizon/main.c:849 ../raster/r.horizon/main.c:867
 #: ../raster/r.horizon/main.c:1203 ../raster/r.horizon/main.c:1223
 #: ../raster/r.proj/main.c:450 ../raster/r.proj/main.c:541
-#, fuzzy, c-format
+#, c-format
 msgid "Error in %s"
-msgstr "エラー: %s  "
+msgstr ""
 
 #: ../raster/r.horizon/main.c:1176
 #, c-format
@@ -11359,9 +11341,8 @@ msgstr ""
 #: ../raster/r.watershed/seg/sseg_open.c:23
 #: ../raster/r.watershed/seg/dseg_open.c:24
 #: ../raster/r.watershed/seg/cseg_open.c:23
-#, fuzzy
 msgid "File name is invalid"
-msgstr "不正なローワー値です"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:25 ../raster/r.stream.extract/dseg.c:25
 #: ../raster/r.stream.extract/bseg.c:25 ../raster/r.stream.extract/seg.c:26
@@ -11369,9 +11350,8 @@ msgstr "不正なローワー値です"
 #: ../raster/r.watershed/seg/sseg_open.c:27
 #: ../raster/r.watershed/seg/dseg_open.c:28
 #: ../raster/r.watershed/seg/cseg_open.c:27
-#, fuzzy
 msgid "File write error"
-msgstr "ファイルに書き込めません"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:29 ../raster/r.stream.extract/dseg.c:29
 #: ../raster/r.stream.extract/bseg.c:29 ../raster/r.stream.extract/seg.c:30
@@ -11379,9 +11359,8 @@ msgstr "ファイルに書き込めません"
 #: ../raster/r.watershed/seg/sseg_open.c:31
 #: ../raster/r.watershed/seg/dseg_open.c:32
 #: ../raster/r.watershed/seg/cseg_open.c:31
-#, fuzzy
 msgid "Illegal parameters are passed"
-msgstr "無効なパラメータ値"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:33 ../raster/r.stream.extract/dseg.c:33
 #: ../raster/r.stream.extract/bseg.c:33 ../raster/r.stream.extract/seg.c:34
@@ -11389,9 +11368,8 @@ msgstr "無効なパラメータ値"
 #: ../raster/r.watershed/seg/sseg_open.c:35
 #: ../raster/r.watershed/seg/dseg_open.c:36
 #: ../raster/r.watershed/seg/cseg_open.c:35
-#, fuzzy
 msgid "File could not be re-opened"
-msgstr "Auxiliarテーブルはドロップできませんでした"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:37 ../raster/r.stream.extract/dseg.c:37
 #: ../raster/r.stream.extract/bseg.c:37 ../raster/r.stream.extract/seg.c:38
@@ -11399,9 +11377,8 @@ msgstr "Auxiliarテーブルはドロップできませんでした"
 #: ../raster/r.watershed/seg/sseg_open.c:39
 #: ../raster/r.watershed/seg/dseg_open.c:40
 #: ../raster/r.watershed/seg/cseg_open.c:39
-#, fuzzy
 msgid "Prepared file could not be read"
-msgstr "Auxiliarテーブルはドロップできませんでした"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:68 ../raster/r.stream.extract/cseg.c:77
 #: ../raster/r.stream.extract/dseg.c:68 ../raster/r.stream.extract/dseg.c:77
@@ -11617,9 +11594,8 @@ msgid "Distance filter remains flat before beginning exponent"
 msgstr "指数計算開始前で距離フィルターが平坦なまま残っています"
 
 #: ../raster/r.random.surface/main.c:102 ../raster/r.random.cells/main.c:77
-#, fuzzy
 msgid "Random seed, default [random]"
-msgstr "乱数シード (SEED_MIN >= value >= SEED_MAX) (デフォルト [random])"
+msgstr ""
 
 #: ../raster/r.random.surface/main.c:108
 msgid "Maximum cell value of distribution"
@@ -12016,9 +11992,8 @@ msgid "Names of 2-%d input raster maps"
 msgstr "入力するラスターマップ(2 から %d) "
 
 #: ../raster/r.cross/main.c:89
-#, fuzzy
 msgid "Non-NULL data only"
-msgstr "値0を無視する "
+msgstr ""
 
 #: ../raster/r.cross/main.c:102
 #, c-format
@@ -12075,9 +12050,9 @@ msgid "Reading raster map <%s> using weight %f..."
 msgstr ""
 
 #: ../raster/r.series/main.c:274 ../raster/r.series/main.c:334
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open input raster <%s>"
-msgstr "指定されたファイル <%s> を開けません"
+msgstr ""
 
 #: ../raster/r.series/main.c:311
 msgid "input= and weights= must have the same number of values"
@@ -13037,9 +13012,9 @@ msgid "<%s> is a GDAL-linked map"
 msgstr ""
 
 #: ../raster/r.compress/main.c:320
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> is a virtual raster map"
-msgstr "<%s> は浮動小数点値ラスターマップです"
+msgstr ""
 
 #: ../raster/r.compress/main.c:324
 #, c-format
@@ -13649,9 +13624,8 @@ msgid "No header in the report"
 msgstr ""
 
 #: ../raster/r.kappa/main.c:113
-#, fuzzy
 msgid "Print Matrix only"
-msgstr "出力のみ "
+msgstr ""
 
 #: ../raster/r.kappa/prt_label.c:17
 #, c-format
@@ -13918,55 +13892,50 @@ msgid "mosaic"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:79
-#, fuzzy
 msgid "virtual raster"
-msgstr "3Dラスター "
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:81
 msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:84
-#, fuzzy
 msgid "Name of input raster files"
-msgstr "入力ラスターマップ名"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:90 ../imagery/i.group/main.c:74
 msgid "Input file with one raster map name per line"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:147 ../raster/r.buildvrt/main.c:200
-#, fuzzy, c-format
+#, c-format
 msgid "Input raster map <%s> not found"
-msgstr "3D ラスターマップ <%s> は見つかりませんでした"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:150 ../raster/r.buildvrt/main.c:203
-#, fuzzy
 msgid "Input and output raster map can not be identical"
-msgstr "入力と出力で同一のロケーションは指定出来ません"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:155 ../raster/r.buildvrt/main.c:208
-#, fuzzy, c-format
+#, c-format
 msgid "Input map <%s@%s> is all NULL, skipping"
-msgstr "入力マップ  <%s@%s> (ロケーション <%s>) "
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:177
 msgid "Only one raster map name found in input file"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:188
-#, fuzzy
 msgid "Only one raster map name found"
-msgstr "ラスターマップが見つかりません。"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:260
 msgid "Input maptypes are different"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:262 ../raster/r.buildvrt/main.c:264
-#, fuzzy
 msgid "Input ns resolutions are different"
-msgstr "入力と出力で同一のロケーションは指定出来ません"
+msgstr ""
 
 #: ../raster/r.buildvrt/link.c:13 ../raster/r.external/link.c:87
 #, c-format
@@ -13979,9 +13948,9 @@ msgid "Unable to create fcell/%s file"
 msgstr ""
 
 #: ../raster/r.buildvrt/link.c:35
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create cell_misc/%s/vrt file"
-msgstr "一時ファイルが作成できません "
+msgstr ""
 
 #: ../raster/r.buildvrt/link.c:66 ../raster/r.external/link.c:160
 #, c-format
@@ -15965,9 +15934,8 @@ msgid "Resolution of output raster map"
 msgstr ""
 
 #: ../raster/r.proj/main.c:209 ../vector/v.proj/main.c:119
-#, fuzzy
 msgid "PROJ pipeline for coordinate transformation"
-msgstr "マップを閉じれません"
+msgstr ""
 
 #: ../raster/r.proj/main.c:214
 msgid "List raster maps in input mapset and exit"
@@ -16393,15 +16361,13 @@ msgid "The band number and \".csv\" will be appended to the file prefix"
 msgstr ""
 
 #: ../raster/r.in.gdal/main.c:189 ../vector/v.in.ogr/main.c:220
-#, fuzzy
 msgid "GDAL configuration options"
-msgstr "設定ファイル"
+msgstr ""
 
 #: ../raster/r.in.gdal/main.c:190 ../raster/r.in.gdal/main.c:197
 #: ../vector/v.in.ogr/main.c:221 ../vector/v.in.ogr/main.c:228
-#, fuzzy
 msgid "Comma-separated list of key=value pairs"
-msgstr "値リストを区切るカンマ"
+msgstr ""
 
 #: ../raster/r.in.gdal/main.c:196 ../vector/v.in.ogr/main.c:227
 msgid "GDAL dataset open options"
@@ -16565,9 +16531,9 @@ msgid "* Output projection for GCP table: %s"
 msgstr "* GCPテーブルの出力投影: %s"
 
 #: ../raster/r.in.gdal/main.c:852
-#, fuzzy, c-format
+#, c-format
 msgid "Error in %s (can't re-project GCP %i)"
-msgstr "pj_do_proj 実行中にエラー(GCP %i を再投影できません)"
+msgstr ""
 
 #: ../raster/r.in.gdal/main.c:875 ../raster/r.in.gdal/proj.c:85
 #: ../raster/r.external/proj.c:85 ../vector/v.in.lidar/main.c:507
@@ -18248,9 +18214,8 @@ msgid "For USLE. All non-NULL and non-zero cells are considered as blocking terr
 msgstr ""
 
 #: ../raster/r.watershed/front/main.c:123
-#, fuzzy
 msgid "Name of input raster map with percentages for flow accumulation."
-msgstr "フリクションコストを含む入力ラスターマップ名 "
+msgstr ""
 
 #: ../raster/r.watershed/front/main.c:129
 msgid "Minimum size of exterior watershed basin"
@@ -19787,9 +19752,8 @@ msgstr "記号を読み込んでいます"
 #: ../display/d.grid/plot.c:761 ../display/d.grid/plot.c:768
 #: ../display/d.grid/plot.c:773 ../display/d.grid/plot.c:783
 #: ../display/d.grid/plot.c:788 ../display/d.where/where.c:63
-#, fuzzy
 msgid "Error in GPJ_transform()"
-msgstr "pj_do_transform にエラー"
+msgstr ""
 
 #: ../display/d.grid/plot.c:378
 msgid "Geo-grid option only available for LL projection, use without -g/-w"
@@ -23054,9 +23018,8 @@ msgid "Number of cells to add to each side of the current region extent"
 msgstr ""
 
 #: ../general/g.region/main.c:348
-#, fuzzy
 msgid "A negative number shrinks the current region extent"
-msgstr "現在の領域の範囲を表示"
+msgstr ""
 
 #: ../general/g.region/main.c:358
 msgid "Save current region settings in named region file"
@@ -23513,9 +23476,8 @@ msgid "No output format specified, define one of flags -%c, -%c, or -%c"
 msgstr ""
 
 #: ../general/g.proj/output.c:134
-#, fuzzy
 msgid "Unable to convert projection information to PROJ format"
-msgstr "投影を情報 PROJ.4 フォーマットで出力  "
+msgstr ""
 
 #: ../general/g.proj/output.c:180
 msgid "Unable to convert to WKT"
@@ -23539,9 +23501,9 @@ msgid "Unable to translate EPSG code"
 msgstr "EPSG コードを翻訳できません"
 
 #: ../general/g.proj/input.c:284
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read georeferenced file <%s> using GDAL library"
-msgstr "OGR と GDAL のどちらを使用しても地理参照ファイル %s を読み込めませんでした"
+msgstr ""
 
 #: ../general/g.proj/input.c:289
 #, c-format
@@ -24527,9 +24489,8 @@ msgid "Found %d clumps"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:26
-#, fuzzy
 msgid "Name of input imagery group or raster maps"
-msgstr "入力画像サブグループ名"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:33
 msgid "Suffix for output bands with modified band values"
@@ -24936,11 +24897,10 @@ msgid "Training map has no classes"
 msgstr "トレーニングマップにクラスはありません"
 
 #: ../imagery/i.gensig/get_train.c:74
-#, fuzzy, c-format
+#, c-format
 msgid "One class found"
 msgid_plural "%d classes found"
-msgstr[0] "1クラスが見つかりました"
-msgstr[1] "1クラスが見つかりました"
+msgstr[0] ""
 
 #: ../imagery/i.gensig/means.c:26
 msgid "Calculating class means..."
@@ -25390,9 +25350,9 @@ msgid "Name for output raster map holding reject threshold results"
 msgstr ""
 
 #: ../imagery/i.maxlik/main.c:106
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> does not match the current mapset"
-msgstr "<%s> はすでに現存のマップセットです"
+msgstr ""
 
 #: ../imagery/i.maxlik/invert.c:28
 #, c-format
@@ -28399,9 +28359,8 @@ msgid "Viewpoint height not given, using calculated value %.0f"
 msgstr "視点の高さが指定されない場合の計算値 %.0f"
 
 #: ../misc/m.nviz.image/main.c:244
-#, fuzzy
 msgid "Failed to write image"
-msgstr "ファイルに書き込めません"
+msgstr ""
 
 #: ../misc/m.nviz.image/main.c:246
 msgid "Unsupported output format"
@@ -31020,9 +30979,9 @@ msgstr ""
 
 #: ../vector/v.out.ogr/main.c:682 ../vector/v.out.ogr/main.c:757
 #: ../vector/v.to.db/main.c:268
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create column <%s>"
-msgstr "ファイルが作成できません <%s>"
+msgstr ""
 
 #: ../vector/v.out.ogr/main.c:763
 #, c-format
@@ -32037,9 +31996,9 @@ msgid "Generate n points for each individual area (requires restrict parameter)"
 msgstr ""
 
 #: ../vector/v.random/main.c:199
-#, fuzzy, c-format
+#, c-format
 msgid "Number of points must be > 0 (%ld given)"
-msgstr "ポイントの数: %d"
+msgstr ""
 
 #: ../vector/v.random/main.c:215 ../vector/v.drape/main.c:150
 #: ../vector/v.buffer/main.c:347
@@ -32071,9 +32030,9 @@ msgid "Generating points..."
 msgstr ""
 
 #: ../vector/v.random/main.c:530 ../vector/v.random/main.c:677
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to insert new row: %s"
-msgstr "行: %s を挿入できません"
+msgstr ""
 
 #: ../vector/v.random/main.c:702 ../vector/v.db.select/main.c:208
 msgid "Unable to open select cursor"
@@ -32086,9 +32045,9 @@ msgid "Unable to fetch data from table <%s>"
 msgstr ""
 
 #: ../vector/v.random/main.c:742
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to update row: %s"
-msgstr "行: %s を挿入できません"
+msgstr ""
 
 #: ../vector/v.support/main.c:41
 msgid "Updates vector map metadata."
@@ -35170,9 +35129,9 @@ msgid ""
 msgstr ""
 
 #: ../vector/v.in.ogr/proj.c:73 ../vector/v.external/proj.c:73
-#, fuzzy, c-format
+#, c-format
 msgid "No projection information available for layer <%s>"
-msgstr "投影情報はアップデートされません"
+msgstr ""
 
 #: ../vector/v.in.ogr/proj.c:81 ../vector/v.external/proj.c:81
 #, c-format
@@ -35210,14 +35169,13 @@ msgid "Projection of layer <%s> is different from projection of layer <%s>"
 msgstr ""
 
 #: ../vector/v.in.ogr/clean.c:19
-#, fuzzy
 msgid "Converting OSM lines..."
-msgstr "変換中 ...   "
+msgstr ""
 
 #: ../vector/v.in.ogr/clean.c:118
-#, fuzzy, c-format
+#, c-format
 msgid "Number of OSM line splits: %d"
-msgstr "ポイントの数: %d"
+msgstr ""
 
 #: ../vector/v.in.ogr/clean.c:119 ../vector/v.overlay/area_area.c:154
 msgid "Merging lines..."
@@ -35310,9 +35268,9 @@ msgid "Number of columns differ"
 msgstr ""
 
 #: ../vector/v.patch/main.c:273
-#, fuzzy, c-format
+#, c-format
 msgid "No column <%s> in input map <%s>"
-msgstr "テーブル <%s> に列 <%s> が見つかりません"
+msgstr ""
 
 #: ../vector/v.patch/main.c:284
 msgid "Column types differ"
@@ -36683,7 +36641,7 @@ msgid "Incompatible column types"
 msgstr "不適合の列型"
 
 #: ../vector/v.distance/main.c:674
-msgid "No categories for 'from' for slected type and layer"
+msgid "No categories for 'from' for selected type and layer"
 msgstr ""
 
 #: ../vector/v.distance/main.c:702
@@ -39991,14 +39949,12 @@ msgid "If new >= 0, attributes is not copied"
 msgstr ""
 
 #: ../vector/v.extract/main.c:151
-#, fuzzy
 msgid "Name of attribute column for dissolving areas"
-msgstr "query'オプションに使用される属性列名"
+msgstr ""
 
 #: ../vector/v.extract/main.c:152
-#, fuzzy
 msgid "Preserves category values"
-msgstr "カテゴリー値の使用"
+msgstr ""
 
 #: ../vector/v.extract/main.c:169
 #, c-format
@@ -40006,14 +39962,14 @@ msgid "Options <%s>, <%s>, <%s> and <%s> options are exclusive. Please specify o
 msgstr ""
 
 #: ../vector/v.extract/main.c:221
-#, fuzzy, c-format
+#, c-format
 msgid "Searching for column <%s> in table <%s>..."
-msgstr "テーブル <%s> に列 <%s> が見つかりません"
+msgstr ""
 
 #: ../vector/v.extract/main.c:253
-#, fuzzy, c-format
+#, c-format
 msgid "Column <%s> does not exist for layer %d"
-msgstr "グループ <%s> は存在しません"
+msgstr ""
 
 #: ../vector/v.extract/main.c:268
 #, c-format
@@ -41276,9 +41232,9 @@ msgid "Existing column <%s> has the wrong type"
 msgstr ""
 
 #: ../vector/v.to.db/main.c:203
-#, fuzzy, c-format
+#, c-format
 msgid "Values in column <%s> will be overwritten"
-msgstr "ベクトルマップ <%s> は既に存在し上書きされます"
+msgstr ""
 
 #: ../vector/v.to.db/main.c:322
 #, c-format
@@ -42451,9 +42407,8 @@ msgid "Frame <%s> already found. An existing frame can be overwritten by '%s' fl
 msgstr ""
 
 #: ../scripts/r.grow/r.grow.py:129
-#, fuzzy
 msgid "Output can be written only to the current mapset"
-msgstr "現在のマップセットにグループが存在しないといけません。"
+msgstr ""
 
 #: ../scripts/r.grow/r.grow.py:139
 msgid "Growing failed. Removing temporary maps."
@@ -45092,59 +45047,59 @@ msgstr "ファイルロケーションへのパス"
 msgid "%ld categories"
 msgstr "%ld カテゴリー"
 
-#~ msgid "Seed (%d) larger than maximum (%d)"
-#~ msgstr "シード [%d] は最大値 [%d] より大きい"
+msgid "Seed (%d) larger than maximum (%d)"
+msgstr "シード [%d] は最大値 [%d] より大きい"
 
-#~ msgid " seed is set to %d"
-#~ msgstr " シードは %d にセットされました"
+msgid " seed is set to %d"
+msgstr " シードは %d にセットされました"
 
-#~ msgid "Seed (%d) smaller than minimum (%d)"
-#~ msgstr "シード [%d] が最小値 [%d] より小さい"
+msgid "Seed (%d) smaller than minimum (%d)"
+msgstr "シード [%d] が最小値 [%d] より小さい"
 
-#~ msgid "RAN1: j == %d shouldn't happen"
-#~ msgstr "RAN1: j == %d は起こり得ません"
+msgid "RAN1: j == %d shouldn't happen"
+msgstr "RAN1: j == %d は起こり得ません"
 
-#~ msgid "Trying to open with OGR..."
-#~ msgstr "OGR で開いています...  "
+msgid "Trying to open with OGR..."
+msgstr "OGR で開いています...  "
 
-#~ msgid "...succeeded."
-#~ msgstr "...成功しました.  "
+msgid "...succeeded."
+msgstr "...成功しました.  "
 
-#~ msgid "Trying to open with GDAL..."
-#~ msgstr "GDALを用いて開いています...  "
+msgid "Trying to open with GDAL..."
+msgstr "GDALを用いて開いています...  "
 
-#~ msgid "Error in pj_do_proj"
-#~ msgstr "pj_do_proj の誤差 "
+msgid "Error in pj_do_proj"
+msgstr "pj_do_proj の誤差 "
 
-#~ msgid "Error in pj_do_proj1"
-#~ msgstr "pj_do_proj1 におけるエラー  "
+msgid "Error in pj_do_proj1"
+msgstr "pj_do_proj1 におけるエラー  "
 
-#~ msgid "Error in pj_do_proj2"
-#~ msgstr "pj_do_proj2 におけるエラー"
+msgid "Error in pj_do_proj2"
+msgstr "pj_do_proj2 におけるエラー"
 
-#~ msgid "Error in pj_do_proj3"
-#~ msgstr "pj_do_proj3 におけるエラー "
+msgid "Error in pj_do_proj3"
+msgstr "pj_do_proj3 におけるエラー "
 
-#~ msgid "Error in pj_do_proj5"
-#~ msgstr "pj_do_proj5 におけるエラー  "
+msgid "Error in pj_do_proj5"
+msgstr "pj_do_proj5 におけるエラー  "
 
-#~ msgid "Error in pj_do_proj6"
-#~ msgstr "pj_do_proj6 におけるエラー  "
+msgid "Error in pj_do_proj6"
+msgstr "pj_do_proj6 におけるエラー  "
 
-#~ msgid "Non-zero data only"
-#~ msgstr "値0を無視する "
+msgid "Non-zero data only"
+msgstr "値0を無視する "
 
-#~ msgid "Error in pj_do_proj (can't re-projection GCP %i)"
-#~ msgstr "pj_do_proj 実行中にエラー(GCP %i を再投影できません)"
+msgid "Error in pj_do_proj (can't re-projection GCP %i)"
+msgstr "pj_do_proj 実行中にエラー(GCP %i を再投影できません)"
 
-#~ msgid "Error in pj_do_proj (projection of input coordinate pair)"
-#~ msgstr "pj_do_proj (入力座標ペアの投影) におけるエラー"
+msgid "Error in pj_do_proj (projection of input coordinate pair)"
+msgstr "pj_do_proj (入力座標ペアの投影) におけるエラー"
 
-#~ msgid "Error in pj_do_transform"
-#~ msgstr "pj_do_transform にエラー"
+msgid "Error in pj_do_transform"
+msgstr "pj_do_transform にエラー"
 
-#~ msgid "Could not read georeferenced file %s using either OGR nor GDAL"
-#~ msgstr "OGR と GDAL のどちらを使用しても地理参照ファイル %s を読み込めませんでした"
+msgid "Could not read georeferenced file %s using either OGR nor GDAL"
+msgstr "OGR と GDAL のどちらを使用しても地理参照ファイル %s を読み込めませんでした"
 
-#~ msgid "Random seed (SEED_MIN >= value >= SEED_MAX) (default [random])"
-#~ msgstr "乱数シード (SEED_MIN >= value >= SEED_MAX) (デフォルト [random])"
+msgid "Random seed (SEED_MIN >= value >= SEED_MAX) (default [random])"
+msgstr "乱数シード (SEED_MIN >= value >= SEED_MAX) (デフォルト [random])"

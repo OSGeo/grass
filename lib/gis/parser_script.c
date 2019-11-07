@@ -27,7 +27,7 @@ void G__script(void)
     char *type;
 
     fprintf(fp,
-	    "#!/usr/bin/env python\n");
+	    "#!/usr/bin/env python3\n");
     fprintf(fp,
 	    "############################################################################\n");
     fprintf(fp, "#\n");

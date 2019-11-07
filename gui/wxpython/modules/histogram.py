@@ -32,7 +32,7 @@ from gui_core.preferences import DefaultFontDialog
 from core.debug import Debug
 from core.gcmd import GError
 from gui_core.toolbars import BaseToolbar, BaseIcons
-from gui_core.wrap import PseudoDC, Menu, EmptyBitmap
+from gui_core.wrap import PseudoDC, Menu, EmptyBitmap, NewId
 
 
 class BufferedWindow(wx.Window):
@@ -100,7 +100,7 @@ class BufferedWindow(wx.Window):
             elif pdctype == 'clear':
                 drawid is None
             else:
-                drawid = wx.NewId()
+                drawid = NewId()
         else:
             pdc.SetId(drawid)
 
@@ -190,7 +190,7 @@ class BufferedWindow(wx.Window):
         """
         busy = wx.BusyInfo(_("Please wait, exporting image..."),
                            parent=self)
-        wx.Yield()
+        wx.GetApp().Yield()
 
         self.Map.ChangeMapSize((width, height))
         ibuffer = EmptyBitmap(max(1, width), max(1, height))

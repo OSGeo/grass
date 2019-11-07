@@ -63,7 +63,7 @@ Build using the downloaded source code (in the directory with the
 source code):
 
 ```
-    docker build -t grassgis77 .
+    docker build -t grassgis79 .
 ```
 
 A test run (assuming you have existing GRASS GIS location; it can be downloaded from
@@ -71,24 +71,24 @@ A test run (assuming you have existing GRASS GIS location; it can be downloaded 
 
 ```
 # case 1: launching in the grassdata directory in which the location is stored:
-docker run -it --rm --user=$(id -u):$(id -g) --volume $(pwd):/data --env HOME=/data/ grassgis77 \
-    grass --text nc_spm_08_grass7/user1 --exec g.region -p
+docker run -it --rm --user=$(id -u):$(id -g) --volume $(pwd):/data --env HOME=/data/ grassgis79 \
+    grass --text nc_basic_spm_grass7/user1 --exec g.region -p
 
 # case 2: launching anywhere
-docker run -it --rm --user=$(id -u):$(id -g) --volume /your/test/grassdata/:/data --env HOME=/data/ grassgis77 \
-    grass /data/nc_basic_spm/PERMANENT --exec g.region -p
+docker run -it --rm --user=$(id -u):$(id -g) --volume /your/test/grassdata/:/data --env HOME=/data/ grassgis79 \
+    grass /data/nc_basic_spm_grass7/PERMANENT --exec g.region -p
 ```
 
-Note that the first `grassgis77` is the name of the image while the second
+Note that the first `grassgis79` is the name of the image while the second
 `grass` is the name of the executable.
 
 To run the tests (again assuming local location):
 
 ```
     docker run -it --rm --user=$(id -u):$(id -g) --volume /your/test/grassdata/:/data --env HOME=/data/ -w /code/grass \
-        grassgis77 grass /data/nc_basic_spm/PERMANENT --exec \
+        grassgis79 grass /data/nc_basic_spm_grass7/PERMANENT --exec \
             python -m grass.gunittest.main \
-                --location nc_basic_spm --location-type nc
+                --location nc_basic_spm_grass7 --location-type nc
 ```
 
 Note: If you compiled locally before building the Docker image, you may

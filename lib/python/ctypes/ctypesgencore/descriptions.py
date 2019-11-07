@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 ctypesgencore.descriptions contains classes to represent a description of a

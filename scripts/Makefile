@@ -18,11 +18,13 @@ SUBDIRS = \
 	db.out.ogr \
 	db.test \
 	db.univar \
+	g.bands \
 	g.extension \
 	g.extension.all \
 	g.manual \
 	g.search.modules \
 	i.colors.enhance \
+	i.band \
 	i.image.mosaic \
 	i.in.spotvgt \
 	i.oif \

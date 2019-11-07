@@ -3996,9 +3996,9 @@ msgid "Delete selected mapset"
 msgstr "Apagar mapset seleccionado"
 
 #: ../gui/wxpython/gis_set.py:258
-#, fuzzy, python-format
+#, python-format
 msgid "GRASS GIS %s Startup%s"
-msgstr "GRASS GIS - Visualización de mapas"
+msgstr ""
 
 #: ../gui/wxpython/gis_set.py:263
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:257
@@ -11646,9 +11646,8 @@ msgid "Not enough points for line"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:51
-#, fuzzy
 msgid "Name for the new mapset:"
-msgstr "Insira nome para novo mapset:"
+msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:150
 #, python-brace-format
@@ -16244,9 +16243,8 @@ msgid "Set label for Y axis"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:304
-#, fuzzy
 msgid "Labels"
-msgstr "Adicionar etiquetas"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:311
 msgid "Path for output CSV file with plotted data"
@@ -16257,9 +16255,8 @@ msgid "CVS path"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:323
-#, fuzzy
 msgid "Do you want the CSV header?"
-msgstr "Pretende criar uma GRASS location <%s>?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:364 ../gui/wxpython/tplot/frame.py:842
 #: ../gui/wxpython/tplot/frame.py:846 ../gui/wxpython/tplot/frame.py:867
@@ -16329,9 +16326,9 @@ msgid "Problem getting data from vector temporal dataset. Empty list of values."
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:802
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{pa} already exists, do you want to overwrite?"
-msgstr "El archivo de entorno de trabajo <%s> ya existe. ¿Quiere sobrescribirlo?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:804
 msgid "File exists"
@@ -16789,9 +16786,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1402
-#, fuzzy
 msgid "Proceed with opening of the workspace?"
-msgstr "Por favor aguarde, a carregar workspace..."
+msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1442 ../gui/wxpython/lmgr/frame.py:1613
 msgid "Please wait, loading workspace..."
@@ -20586,9 +20582,8 @@ msgstr "Vectorial para volume"
 msgid "Sites to vector"
 msgstr "Pontos ('sites' ) para vectorial"
 
-#, fuzzy
 msgid "Raster map calculator."
-msgstr "Calculador de mapa raster 3D"
+msgstr ""
 
 #, fuzzy
 msgid "V&olumes"

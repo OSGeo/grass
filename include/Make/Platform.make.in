@@ -212,7 +212,7 @@ CAIRO_HAS_XRENDER         = @CAIRO_HAS_XRENDER@
 CAIRO_HAS_XRENDER_SURFACE = @CAIRO_HAS_XRENDER_SURFACE@
 
 #Python
-PYTHON              = python
+PYTHON              = python3
 
 #regex
 REGEXINCPATH        = @REGEXINCPATH@

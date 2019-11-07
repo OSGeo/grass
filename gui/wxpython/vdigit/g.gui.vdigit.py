@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 ############################################################################
 #
 # MODULE:    g.gui.vdigit
@@ -50,7 +50,6 @@ def main():
     from grass.script.setup import set_gui_path
     set_gui_path()
 
-    from core.globalvar import CheckWxVersion
     from core.render import Map
     from mapdisp.frame import MapFrame
     from mapdisp.main import DMonGrassInterface
@@ -108,8 +107,6 @@ def main():
         os.environ['GRASS_RENDER_IMMEDIATE'] = 'cairo'
 
     app = wx.App()
-    if not CheckWxVersion([2, 9]):
-        wx.InitAllImageHandlers()
     frame = VDigitMapFrame(options['map'])
     frame.Show()
 

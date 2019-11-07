@@ -4024,9 +4024,9 @@ msgid "Delete selected mapset"
 msgstr "Șterge mapset selectat"
 
 #: ../gui/wxpython/gis_set.py:258
-#, fuzzy, python-format
+#, python-format
 msgid "GRASS GIS %s Startup%s"
-msgstr "GRASS GIS - Fereastra de vizualizare"
+msgstr ""
 
 #: ../gui/wxpython/gis_set.py:263
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:257
@@ -11709,9 +11709,8 @@ msgid "Not enough points for line"
 msgstr "Nu sunt suficiente puncte pentru linie"
 
 #: ../gui/wxpython/startup/guiutils.py:51
-#, fuzzy
 msgid "Name for the new mapset:"
-msgstr "Introduceți nume pentru mapset nou:"
+msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:150
 #, python-brace-format
@@ -16352,19 +16351,16 @@ msgid "Set title for the plot"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:287
-#, fuzzy
 msgid "Set label for X axis"
-msgstr "Rând paral cu axa:"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:292
-#, fuzzy
 msgid "Set label for Y axis"
-msgstr "Rând paral cu axa:"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:304
-#, fuzzy
 msgid "Labels"
-msgstr "Etichetă"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:311
 msgid "Path for output CSV file with plotted data"
@@ -16375,9 +16371,8 @@ msgid "CVS path"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:323
-#, fuzzy
 msgid "Do you want the CSV header?"
-msgstr "Doriți să salvați modificările din model?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:364 ../gui/wxpython/tplot/frame.py:842
 #: ../gui/wxpython/tplot/frame.py:846 ../gui/wxpython/tplot/frame.py:867
@@ -16447,14 +16442,13 @@ msgid "Problem getting data from vector temporal dataset. Empty list of values."
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:802
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{pa} already exists, do you want to overwrite?"
-msgstr "Fișierul <%s> există deja. Doriți să suprascrieți fișierul?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:804
-#, fuzzy
 msgid "File exists"
-msgstr "Fișierul există deja"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:809
 msgid "Please change name of output CSV file or "
@@ -16913,9 +16907,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1402
-#, fuzzy
 msgid "Proceed with opening of the workspace?"
-msgstr "Vă rugăm să așteptați, încărcarea spațiului de lucru..."
+msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1442 ../gui/wxpython/lmgr/frame.py:1613
 msgid "Please wait, loading workspace..."
@@ -20838,9 +20831,8 @@ msgstr "Vector în volume"
 msgid "Sites to vector"
 msgstr "Situri în vector"
 
-#, fuzzy
 msgid "Raster map calculator."
-msgstr "Calculator raster"
+msgstr ""
 
 msgid "V&olumes"
 msgstr "V&olume"
@@ -20886,8 +20878,8 @@ msgstr "Calculează statistici univariate din celulele 3D nenule ale hărții ra
 msgid "Digitize"
 msgstr "Digitizează"
 
-#~ msgid "&Fetch"
-#~ msgstr "&Obține"
+msgid "&Fetch"
+msgstr "&Obține"
 
-#~ msgid "Fetch list of available modules from GRASS Addons SVN repository"
-#~ msgstr "Obțina lista modulelor disponibile de la GRASS Addons SVN"
+msgid "Fetch list of available modules from GRASS Addons SVN repository"
+msgstr "Obțina lista modulelor disponibile de la GRASS Addons SVN"

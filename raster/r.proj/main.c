@@ -468,23 +468,23 @@ int main(int argc, char **argv)
 
     G_message(" ");
     G_message(_("Input:"));
-    G_message(_("Cols: %d (%d)"), incellhd.cols, icols);
-    G_message(_("Rows: %d (%d)"), incellhd.rows, irows);
-    G_message(_("North: %f (%f)"), incellhd.north, inorth);
-    G_message(_("South: %f (%f)"), incellhd.south, isouth);
-    G_message(_("West: %f (%f)"), incellhd.west, iwest);
-    G_message(_("East: %f (%f)"), incellhd.east, ieast);
+    G_message(_("Cols: %d (original: %d)"), incellhd.cols, icols);
+    G_message(_("Rows: %d (original: %d)"), incellhd.rows, irows);
+    G_message(_("North: %f (original: %f)"), incellhd.north, inorth);
+    G_message(_("South: %f (original: %f)"), incellhd.south, isouth);
+    G_message(_("West: %f (original: %f)"), incellhd.west, iwest);
+    G_message(_("East: %f (original: %f)"), incellhd.east, ieast);
     G_message(_("EW-res: %f"), incellhd.ew_res);
     G_message(_("NS-res: %f"), incellhd.ns_res);
     G_message(" ");
 
     G_message(_("Output:"));
-    G_message(_("Cols: %d (%d)"), outcellhd.cols, ocols);
-    G_message(_("Rows: %d (%d)"), outcellhd.rows, orows);
-    G_message(_("North: %f (%f)"), outcellhd.north, onorth);
-    G_message(_("South: %f (%f)"), outcellhd.south, osouth);
-    G_message(_("West: %f (%f)"), outcellhd.west, owest);
-    G_message(_("East: %f (%f)"), outcellhd.east, oeast);
+    G_message(_("Cols: %d (original: %d)"), outcellhd.cols, ocols);
+    G_message(_("Rows: %d (original: %d)"), outcellhd.rows, orows);
+    G_message(_("North: %f (original: %f)"), outcellhd.north, onorth);
+    G_message(_("South: %f (original: %f)"), outcellhd.south, osouth);
+    G_message(_("West: %f (original: %f)"), outcellhd.west, owest);
+    G_message(_("East: %f (original: %f)"), outcellhd.east, oeast);
     G_message(_("EW-res: %f"), outcellhd.ew_res);
     G_message(_("NS-res: %f"), outcellhd.ns_res);
     G_message(" ");

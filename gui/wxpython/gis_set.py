@@ -579,7 +579,7 @@ class GRASSStartup(wx.Frame):
                              read=True)
 
         wx.BeginBusyCursor()
-        wx.Yield()
+        wx.GetApp().Yield()
         if vectors:
             # vector detected
             returncode, error = RunCommand(
@@ -1147,8 +1147,6 @@ class StartUp(wx.App):
     """Start-up application"""
 
     def OnInit(self):
-        if not globalvar.CheckWxVersion([2, 9]):
-            wx.InitAllImageHandlers()
         StartUp = GRASSStartup()
         StartUp.CenterOnScreen()
         self.SetTopWindow(StartUp)

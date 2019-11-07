@@ -888,7 +888,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                 if line[0] == '#' or line == '':
                     continue
                 line = line.replace('\n', '').strip()
-                coords = map(float, line.split())
+                coords = list(map(float, line.split()))
                 if coords[4] == 1:
                     check = True
                     self.GCPcount += 1
@@ -1022,7 +1022,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
             busy = wx.BusyInfo(_("Rectifying images, please wait..."),
                                parent=self)
-            wx.Yield()
+            wx.GetApp().Yield()
 
             ret, msg = RunCommand('i.rectify',
                                   parent=self,
@@ -1044,7 +1044,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
             busy = wx.BusyInfo(_("Writing output image to group, please wait..."),
                                parent=self)
-            wx.Yield()
+            wx.GetApp().Yield()
 
             ret1, msg1 = RunCommand('i.group',
                                   parent=self,

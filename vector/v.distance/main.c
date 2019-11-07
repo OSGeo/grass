@@ -671,7 +671,7 @@ int main(int argc, char *argv[])
 		nfcats);
 
 	if (nfcats == 0)
-	    G_fatal_error(_("No categories for 'from' for slected type and layer"));
+	    G_fatal_error(_("No categories for 'from' for selected type and layer"));
 
 	/* Sort by cats and remove duplicates */
 	qsort((void *)Near, nfcats, sizeof(NEAR), cmp_near);
