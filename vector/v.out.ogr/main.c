@@ -723,7 +723,11 @@ int main(int argc, char *argv[])
 		    ogr_ftype = OFTString;
 		    break;
 		case DB_C_TYPE_DATETIME:
+#if GDAL_VERSION_NUM >= 1320
+		    ogr_ftype = OFTDateTime;
+#else
 		    ogr_ftype = OFTString;
+#endif
 		    break;
 		}
 		G_debug(2, "ogr_ftype = %d", ogr_ftype);
