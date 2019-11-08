@@ -33,6 +33,11 @@ from core import globalvar
 from core.utils import registerPid, unregisterPid
 
 import wx
+# import adv and html before wx.App is created, otherwise
+# we get annoying "Debug: Adding duplicate image handler for 'Windows bitmap file'"
+# during start up, remove when not needed
+import wx.adv
+import wx.html
 try:
     import wx.lib.agw.advancedsplash as SC
 except ImportError:
@@ -94,7 +99,7 @@ class GMApp(wx.App):
                     parent=None,
                     id=wx.ID_ANY)
 
-        wx.Yield()
+        wx.GetApp().Yield()
 
         # create and show main frame
         from lmgr.frame import GMFrame

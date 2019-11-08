@@ -639,8 +639,8 @@ class RenderMapMgr(wx.EvtHandler):
                                   mask='%s' % ",".join(masks),
                                   opacity='%s' % ",".join(opacities),
                                   bgcolor=bgcolor,
-                                  width=self.Map.width,
-                                  height=self.Map.height,
+                                  width=self._env['GRASS_RENDER_WIDTH'],
+                                  height=self._env['GRASS_RENDER_HEIGHT'],
                                   output=self.Map.mapfile,
                                   env=self._env)
             if ret != 0:

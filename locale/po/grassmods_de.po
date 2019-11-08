@@ -11350,9 +11350,8 @@ msgstr ""
 #: ../raster/r.watershed/seg/sseg_open.c:23
 #: ../raster/r.watershed/seg/dseg_open.c:24
 #: ../raster/r.watershed/seg/cseg_open.c:23
-#, fuzzy
 msgid "File name is invalid"
-msgstr "Format des Zeitstempels ist ungültig"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:25 ../raster/r.stream.extract/dseg.c:25
 #: ../raster/r.stream.extract/bseg.c:25 ../raster/r.stream.extract/seg.c:26
@@ -11360,9 +11359,8 @@ msgstr "Format des Zeitstempels ist ungültig"
 #: ../raster/r.watershed/seg/sseg_open.c:27
 #: ../raster/r.watershed/seg/dseg_open.c:28
 #: ../raster/r.watershed/seg/cseg_open.c:27
-#, fuzzy
 msgid "File write error"
-msgstr "Kann nicht in die Datei schreiben."
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:29 ../raster/r.stream.extract/dseg.c:29
 #: ../raster/r.stream.extract/bseg.c:29 ../raster/r.stream.extract/seg.c:30
@@ -11370,9 +11368,8 @@ msgstr "Kann nicht in die Datei schreiben."
 #: ../raster/r.watershed/seg/sseg_open.c:31
 #: ../raster/r.watershed/seg/dseg_open.c:32
 #: ../raster/r.watershed/seg/cseg_open.c:31
-#, fuzzy
 msgid "Illegal parameters are passed"
-msgstr "Ungültige Parameterwerte."
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:33 ../raster/r.stream.extract/dseg.c:33
 #: ../raster/r.stream.extract/bseg.c:33 ../raster/r.stream.extract/seg.c:34
@@ -11380,9 +11377,8 @@ msgstr "Ungültige Parameterwerte."
 #: ../raster/r.watershed/seg/sseg_open.c:35
 #: ../raster/r.watershed/seg/dseg_open.c:36
 #: ../raster/r.watershed/seg/cseg_open.c:35
-#, fuzzy
 msgid "File could not be re-opened"
-msgstr "Hilfstabelle konnte nicht gelöscht werden."
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:37 ../raster/r.stream.extract/dseg.c:37
 #: ../raster/r.stream.extract/bseg.c:37 ../raster/r.stream.extract/seg.c:38
@@ -11390,9 +11386,8 @@ msgstr "Hilfstabelle konnte nicht gelöscht werden."
 #: ../raster/r.watershed/seg/sseg_open.c:39
 #: ../raster/r.watershed/seg/dseg_open.c:40
 #: ../raster/r.watershed/seg/cseg_open.c:39
-#, fuzzy
 msgid "Prepared file could not be read"
-msgstr "Hilfstabelle konnte nicht gelöscht werden."
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:68 ../raster/r.stream.extract/cseg.c:77
 #: ../raster/r.stream.extract/dseg.c:68 ../raster/r.stream.extract/dseg.c:77
@@ -24294,9 +24289,8 @@ msgid "Name of altitude corrected surface temperature raster map [K]"
 msgstr ""
 
 #: ../imagery/i.eb.hsebal01/main.c:141
-#, fuzzy
 msgid "Name of the actual vapour pressure (e_act) map [KPa]"
-msgstr "Name der Vektorkarte mit 'first pulse' Daten"
+msgstr ""
 
 #: ../imagery/i.eb.hsebal01/main.c:150
 msgid "Value of the height independent friction velocity (u*) [m/s]"
@@ -24943,11 +24937,11 @@ msgid "Training map has no classes"
 msgstr "Trainingskarte hat keine Klassen."
 
 #: ../imagery/i.gensig/get_train.c:74
-#, fuzzy, c-format
+#, c-format
 msgid "One class found"
 msgid_plural "%d classes found"
-msgstr[0] "1 Klasse gefunden."
-msgstr[1] "1 Klasse gefunden."
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../imagery/i.gensig/means.c:26
 msgid "Calculating class means..."
@@ -36739,7 +36733,7 @@ msgid "Incompatible column types"
 msgstr "Inkompatible Spaltentypen."
 
 #: ../vector/v.distance/main.c:674
-msgid "No categories for 'from' for slected type and layer"
+msgid "No categories for 'from' for selected type and layer"
 msgstr ""
 
 #: ../vector/v.distance/main.c:702

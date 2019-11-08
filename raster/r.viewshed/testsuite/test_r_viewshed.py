@@ -60,6 +60,16 @@ class TestViewshed(TestCase):
         self.assertRasterMinMax(map=self.viewshed, refmin=0, refmax=180,
             msg="Viewing angle above the ground must be between 0 and 180 deg")
 
+    def test_direction(self):
+        """Test direction range
+        """
+        obs_elev = '1.75'
+        self.assertModule('r.viewshed', input='elevation',
+            coordinates=(634720,216180), output=self.viewshed,
+            observer_elevation=obs_elev, direction_range=[270, 90])
+        minmax = 'null_cells=1998900\nmin=74.90344\nmax=180'
+        self.assertRasterFitsUnivar(raster=self.viewshed, reference=minmax, precision=1e-5)
+
 
 class TestViewshedAgainstReference(TestCase):
     """

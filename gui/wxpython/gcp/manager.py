@@ -1599,7 +1599,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
             busy = wx.BusyInfo(_("Rectifying images, please wait..."),
                                parent=self)
-            wx.Yield()
+            wx.GetApp().Yield()
 
             ret, msg = RunCommand('i.rectify',
                                   parent=self,
@@ -1644,7 +1644,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                 busy = wx.BusyInfo(
                     _("Rectifying vector map <%s>, please wait...") %
                     vect, parent=self)
-                wx.Yield()
+                wx.GetApp().Yield()
 
                 ret, msg = RunCommand('v.rectify',
                                       parent=self,

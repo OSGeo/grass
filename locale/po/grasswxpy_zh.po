@@ -16831,9 +16831,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1402
-#, fuzzy
 msgid "Proceed with opening of the workspace?"
-msgstr "请稍候，工作区加载中..."
+msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1442 ../gui/wxpython/lmgr/frame.py:1613
 msgid "Please wait, loading workspace..."

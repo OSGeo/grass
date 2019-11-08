@@ -190,7 +190,7 @@ class BufferedWindow(wx.Window):
         """
         busy = wx.BusyInfo(_("Please wait, exporting image..."),
                            parent=self)
-        wx.Yield()
+        wx.GetApp().Yield()
 
         self.Map.ChangeMapSize((width, height))
         ibuffer = EmptyBitmap(max(1, width), max(1, height))

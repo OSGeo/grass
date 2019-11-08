@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-# osgeo4w-setup -g -k -a x86_64 -q -P gdal-dev proj-dev geos fftw libjpeg liblas-devel libpng libpq libtiff libxdr pdcurses regex-devel sqlite3 zstd-devel zstd laszip2
+# osgeo4w-setup -g -k -a x86_64 -q -P gdal-dev proj-dev geos fftw libjpeg liblas-devel libpng libpq libtiff libxdr pdcurses regex-devel sqlite3 zstd-devel zstd laszip2 python3-core python3-six
 
 set -e
 
@@ -167,13 +167,6 @@ else
 	conf_opts=
 fi
 
-mkdir -p dist.$conf_host/bin
-cp -uv $DLLS dist.$conf_host/bin
-
-mkdir -p mswindows/osgeo4w/lib
-cp -uv $OSGEO4W_ROOT_MSYS/lib/libpq.lib mswindows/osgeo4w/lib/pq.lib
-cp -uv $OSGEO4W_ROOT_MSYS/lib/sqlite3_i.lib mswindows/osgeo4w/lib/sqlite3.lib
-
 if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 	if [ -e include/Make/Platform.make ] ; then
 	    log make distclean
@@ -182,6 +175,14 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 
 	log remove old logs
 	rm -f mswindows/osgeo4w/package.log.*
+
+	mkdir -p dist.$conf_host/bin
+	cp -uv $DLLS dist.$conf_host/bin
+
+	mkdir -p mswindows/osgeo4w/lib
+	cp -uv $OSGEO4W_ROOT_MSYS/lib/libpq.lib mswindows/osgeo4w/lib/pq.lib
+	cp -uv $OSGEO4W_ROOT_MSYS/lib/proj_i.lib mswindows/osgeo4w/lib/proj.lib
+	cp -uv $OSGEO4W_ROOT_MSYS/lib/sqlite3_i.lib mswindows/osgeo4w/lib/sqlite3.lib
 
 	log configure
 	./configure \

@@ -344,7 +344,7 @@ void check_create_import_opts(struct Option *opt, char *element, FILE *fp)
     int has_import = 0;
     char **tokens;
 
-    tokens = G_tokenize(opt->answer, "+");
+    tokens = G_tokenize(opt->answer, "@");
     while (tokens[i]) {
         G_chop(tokens[i]);
         i++;

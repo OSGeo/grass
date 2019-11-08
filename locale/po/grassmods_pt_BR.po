@@ -483,7 +483,7 @@ msgstr ""
 #: ../vector/v.sample/main.c:77 ../vector/v.neighbors/main.c:53
 #: ../visualization/ximgview/main.c:292
 msgid "raster"
-msgstr ""
+msgstr "raster"
 
 #: ../locale/scriptstrings/t.rast.extract_to_translate.c:5
 #: ../locale/scriptstrings/t.support_to_translate.c:4
@@ -775,7 +775,7 @@ msgstr ""
 #: ../vector/v.generalize/main.c:76 ../vector/v.external/main.c:52
 #: ../vector/v.to.db/main.c:38 ../visualization/ximgview/main.c:293
 msgid "vector"
-msgstr ""
+msgstr "vetor"
 
 #: ../locale/scriptstrings/v.db.addtable_to_translate.c:3
 #: ../locale/scriptstrings/db.droptable_to_translate.c:3
@@ -1442,7 +1442,7 @@ msgstr ""
 #: ../vector/v.generalize/main.c:233 ../vector/v.generalize/main.c:236
 #: ../vector/v.to.db/parse.c:45
 msgid "Selection"
-msgstr ""
+msgstr "Seleção"
 
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:8
 #: ../locale/scriptstrings/t.rast3d.list_to_translate.c:13
@@ -5513,15 +5513,15 @@ msgstr "Rótulos de texto: 'fontsize' definido, ignorando 'size'"
 
 #: ../doc/raster/r.example/main.c:84 ../doc/vector/v.example/main.c:51
 msgid "keyword2"
-msgstr ""
+msgstr "palavra-chave2"
 
 #: ../doc/raster/r.example/main.c:85 ../doc/vector/v.example/main.c:52
 msgid "keyword3"
-msgstr ""
+msgstr "palavra-chave3"
 
 #: ../doc/raster/r.example/main.c:86
 msgid "My first raster module"
-msgstr ""
+msgstr "Meu primeiro módulo raster"
 
 #: ../doc/raster/r.example/main.c:105 ../raster/r.walk/main.c:460
 #: ../raster/r.walk/main.c:486 ../raster/r.walk/main.c:491
@@ -5578,7 +5578,7 @@ msgstr "Mapa raster <%s> não encontrado"
 
 #: ../doc/vector/v.example/main.c:53
 msgid "My first vector module"
-msgstr ""
+msgstr "Meu primeiro módulo vetorial"
 
 #: ../doc/vector/v.example/main.c:75 ../raster/r.walk/main.c:453
 #: ../raster/r.cost/main.c:368 ../raster/r.carve/main.c:158
@@ -5676,7 +5676,7 @@ msgstr ""
 #: ../vector/v.external/main.c:232 ../vector/v.to.db/main.c:67
 #, c-format
 msgid "Unable to open vector map <%s>"
-msgstr ""
+msgstr "Não foi possível abrir mapa vetorial <%s>"
 
 #: ../doc/vector/v.example/main.c:100 ../raster/r.path/main.c:240
 #: ../raster/r.volume/main.c:155 ../raster/r.random/random.c:63
@@ -5729,7 +5729,7 @@ msgstr ""
 #: ../vector/v.external/main.c:184 ../scripts/v.what.strds/v.what.strds.py:217
 #, c-format, python-format
 msgid "Unable to create vector map <%s>"
-msgstr ""
+msgstr "Não foi possível criar mapa vetorial <%s>"
 
 #: ../doc/vector/v.example/main.c:109 ../display/d.vect.thematic/plot1.c:105
 #: ../display/d.vect.chart/plot.c:38 ../display/d.vect/shape.c:38
@@ -5758,7 +5758,7 @@ msgstr ""
 #: ../vector/v.edit/select.c:509
 #, c-format
 msgid "Unable to start driver <%s>"
-msgstr ""
+msgstr "Não foi possível iniciar o driver <%s>"
 
 #: ../doc/vector/v.example/main.c:142 ../db/db.columns/main.c:62
 #: ../db/db.describe/main.c:67 ../vector/v.out.vtk/writeVTK.c:655
@@ -5773,12 +5773,12 @@ msgstr ""
 #: ../scripts/db.univar/db.univar.py:112
 #, c-format, python-format
 msgid "Unable to describe table <%s>"
-msgstr ""
+msgstr "Não foi possível descrever a tabela <%s>"
 
 #: ../doc/vector/v.example/main.c:175
 #, c-format
 msgid "Unable to get attribute data for cat %d"
-msgstr ""
+msgstr "Não foi possível obter atributos para cat %d"
 
 #: ../doc/vector/v.example/main.c:184
 #, c-format
@@ -5788,7 +5788,7 @@ msgstr ""
 #: ../doc/vector/v.example/main.c:217
 #, c-format
 msgid "Unable to copy attribute table to vector map <%s>"
-msgstr ""
+msgstr "Não foi possível copiar a tabela de atributos para o mapa vetorial <%s>"
 
 #: ../raster/r.surf.area/main.c:79
 msgid "area estimation"
@@ -11340,11 +11340,8 @@ msgstr ""
 #: ../raster/r.watershed/seg/sseg_open.c:23
 #: ../raster/r.watershed/seg/dseg_open.c:24
 #: ../raster/r.watershed/seg/cseg_open.c:23
-#, fuzzy
 msgid "File name is invalid"
 msgstr ""
-"\n"
-"Por favor nomeie este arquivo:"
 
 #: ../raster/r.stream.extract/cseg.c:25 ../raster/r.stream.extract/dseg.c:25
 #: ../raster/r.stream.extract/bseg.c:25 ../raster/r.stream.extract/seg.c:26
@@ -11352,9 +11349,8 @@ msgstr ""
 #: ../raster/r.watershed/seg/sseg_open.c:27
 #: ../raster/r.watershed/seg/dseg_open.c:28
 #: ../raster/r.watershed/seg/cseg_open.c:27
-#, fuzzy
 msgid "File write error"
-msgstr "Não consegui escrever o arquivo temporário."
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:29 ../raster/r.stream.extract/dseg.c:29
 #: ../raster/r.stream.extract/bseg.c:29 ../raster/r.stream.extract/seg.c:30
@@ -11371,9 +11367,8 @@ msgstr ""
 #: ../raster/r.watershed/seg/sseg_open.c:35
 #: ../raster/r.watershed/seg/dseg_open.c:36
 #: ../raster/r.watershed/seg/cseg_open.c:35
-#, fuzzy
 msgid "File could not be re-opened"
-msgstr "mapa vetorial <%s> não encontrado"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:37 ../raster/r.stream.extract/dseg.c:37
 #: ../raster/r.stream.extract/bseg.c:37 ../raster/r.stream.extract/seg.c:38
@@ -11381,9 +11376,8 @@ msgstr "mapa vetorial <%s> não encontrado"
 #: ../raster/r.watershed/seg/sseg_open.c:39
 #: ../raster/r.watershed/seg/dseg_open.c:40
 #: ../raster/r.watershed/seg/cseg_open.c:39
-#, fuzzy
 msgid "Prepared file could not be read"
-msgstr "mapa vetorial <%s> não encontrado"
+msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:68 ../raster/r.stream.extract/cseg.c:77
 #: ../raster/r.stream.extract/dseg.c:68 ../raster/r.stream.extract/dseg.c:77
@@ -13085,7 +13079,7 @@ msgstr ""
 #: ../vector/v.out.postgis/args.c:61 ../vector/v.out.postgis/args.c:67
 #: ../vector/v.out.postgis/args.c:73 ../vector/v.out.postgis/args.c:79
 msgid "Creation"
-msgstr ""
+msgstr "Criação"
 
 #: ../raster/r.out.gdal/main.c:156
 msgid "Do not write non-standard metadata"
@@ -15005,7 +14999,7 @@ msgstr ""
 #: ../raster/r.external.out/main.c:264 ../vector/v.external.out/args.c:39
 #: ../vector/v.out.postgis/args.c:52
 msgid "Creation options"
-msgstr ""
+msgstr "Opções de criação"
 
 #: ../raster/r.external.out/main.c:271 ../raster/r.in.gdal/main.c:224
 #: ../raster/r.external/main.c:95 ../vector/v.external.out/args.c:62
@@ -36644,7 +36638,7 @@ msgid "Incompatible column types"
 msgstr ""
 
 #: ../vector/v.distance/main.c:674
-msgid "No categories for 'from' for slected type and layer"
+msgid "No categories for 'from' for selected type and layer"
 msgstr ""
 
 #: ../vector/v.distance/main.c:702
@@ -39549,7 +39543,7 @@ msgstr ""
 #: ../vector/v.out.postgis/table.c:27
 #, c-format
 msgid "No database connection for layer <%s>"
-msgstr ""
+msgstr "Camada <%s> não possui conexão com banco de dados"
 
 #: ../vector/v.out.postgis/table.c:50
 #, c-format
@@ -39633,19 +39627,19 @@ msgstr ""
 
 #: ../vector/v.out.postgis/args.c:25
 msgid "Name for output PostGIS datasource"
-msgstr ""
+msgstr "Nome do banco de dados PostGIS de saída"
 
 #: ../vector/v.out.postgis/args.c:27
 msgid "Starts with 'PG' prefix, eg. 'PG:dbname=grass'"
-msgstr ""
+msgstr "Inicie com o prefixo 'PG', ex. 'PG:dbname=grass'"
 
 #: ../vector/v.out.postgis/args.c:35
 msgid "Name for output PostGIS layer"
-msgstr ""
+msgstr "Nome da camada PostGIS de saída"
 
 #: ../vector/v.out.postgis/args.c:37
 msgid "If not specified, input name is used"
-msgstr ""
+msgstr "Caso não especificado, será utilizado nome da entrada"
 
 #: ../vector/v.out.postgis/args.c:44
 msgid "Name for output vector map defined as a link to the PostGIS feature table"
@@ -39665,7 +39659,7 @@ msgstr ""
 
 #: ../vector/v.out.postgis/args.c:66
 msgid "Do not export attribute table"
-msgstr ""
+msgstr "Não exportar tabela de atributos"
 
 #: ../vector/v.out.postgis/args.c:72
 msgid "Export PostGIS topology instead of simple features"

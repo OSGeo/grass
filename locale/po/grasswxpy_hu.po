@@ -1571,7 +1571,7 @@ msgstr ""
 
 #: ../gui/wxpython/wxplot/base.py:487
 msgid "Left Mouse Down at Point:"
-msgstr ""
+msgstr "Bal egérgomb a ponton"
 
 #: ../gui/wxpython/wxplot/base.py:536
 msgid "This feature is not yet functional"
@@ -1704,7 +1704,7 @@ msgstr ""
 
 #: ../gui/wxpython/iclass/toolbars.py:40 ../gui/wxpython/iclass/dialogs.py:282
 msgid "Class manager"
-msgstr ""
+msgstr "Osztály kezelő"
 
 #: ../gui/wxpython/iclass/toolbars.py:43 ../gui/wxpython/iclass/dialogs.py:46
 #: ../gui/wxpython/iscatt/toolbars.py:46
@@ -1874,7 +1874,7 @@ msgstr ""
 
 #: ../gui/wxpython/iclass/frame.py:1103
 msgid "results"
-msgstr ""
+msgstr "eredmények"
 
 #: ../gui/wxpython/iclass/frame.py:1109
 msgid "No imagery group selected."
@@ -1975,15 +1975,15 @@ msgstr ""
 
 #: ../gui/wxpython/iclass/dialogs.py:94
 msgid "Name of imagery group:"
-msgstr ""
+msgstr "Képcsoport neve:"
 
 #: ../gui/wxpython/iclass/dialogs.py:109
 msgid "Name of imagery subgroup:"
-msgstr ""
+msgstr "Kép alcsoport neve:"
 
 #: ../gui/wxpython/iclass/dialogs.py:184
 msgid "Please choose a subgroup."
-msgstr ""
+msgstr "Kérjük válasszon egy alcsoportot"
 
 #: ../gui/wxpython/iclass/dialogs.py:188
 #, python-format
@@ -2070,7 +2070,7 @@ msgstr ""
 #: ../gui/wxpython/iclass/dialogs.py:837
 #, python-format
 msgid "Vector <%s> exists"
-msgstr ""
+msgstr "<%s> vektor létezik"
 
 #: ../gui/wxpython/iclass/statistics.py:30
 msgid "Loading imagery lib failed"
@@ -13185,16 +13185,16 @@ msgstr "Nincs kiválasztott térkép réteg. A művelet megszakadt."
 #: ../gui/wxpython/gui_core/vselect.py:298
 #, python-format
 msgid "Failed to query vector map(s) <%s>."
-msgstr ""
+msgstr "Sikertelen vektortérkép(ek) lekérdezés <%s>. "
 
 #: ../gui/wxpython/gui_core/vselect.py:323
 msgid "No features selected"
-msgstr ""
+msgstr "Nincsenek kiválasztott elemek"
 
 #: ../gui/wxpython/gui_core/vselect.py:347
 #, python-format
 msgid "Vector map <%s> was created"
-msgstr ""
+msgstr "<%s> vektortérképet létrehoztam"
 
 #: ../gui/wxpython/gui_core/vselect.py:350
 #, python-format
@@ -13203,6 +13203,9 @@ msgid ""
 "\n"
 "Reason: %s"
 msgstr ""
+"Nem tudtam új vektortérképet létrehozni.\n"
+"\n"
+"Ok: %s"
 
 #: ../gui/wxpython/gui_core/toolbars.py:37
 msgid "Display map"
@@ -13496,7 +13499,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/widgets.py:115
 msgid " (...)"
-msgstr ""
+msgstr " (...)"
 
 #: ../gui/wxpython/gui_core/widgets.py:856
 #, python-format
@@ -15747,7 +15750,7 @@ msgstr "ms"
 
 #: ../gui/wxpython/animation/dialogs.py:143
 msgid "Temporal mode"
-msgstr ""
+msgstr "Idő mód"
 
 #: ../gui/wxpython/animation/dialogs.py:148
 msgid "Time unit:"
@@ -15825,7 +15828,7 @@ msgstr ""
 msgid ""
 "For 3D animation, please select only one space-time dataset\n"
 "or one series of map layers."
-msgstr ""
+msgstr "A 3D animációhoz válasszon csak egy tér-idő datállományt vagy a térképi rétegek egy sorozatát."
 
 #: ../gui/wxpython/animation/dialogs.py:479
 #: ../gui/wxpython/lmgr/layertree.py:111
@@ -15878,11 +15881,11 @@ msgstr "K-Ny:"
 
 #: ../gui/wxpython/animation/dialogs.py:687
 msgid "Only one series or space-time dataset is accepted for 3D mode."
-msgstr ""
+msgstr "Csak egy sorozat vagy tér-idő adatállomány fogadható el a 3D módhoz."
 
 #: ../gui/wxpython/animation/dialogs.py:695
 msgid "No map series or space-time dataset added."
-msgstr ""
+msgstr "Nincs térkép sorozat vagy tér-idő adatállomány."
 
 #: ../gui/wxpython/animation/dialogs.py:723
 msgid "Region information is not complete"
@@ -15916,11 +15919,11 @@ msgstr "Időbélyeg hozzáadás"
 
 #: ../gui/wxpython/animation/dialogs.py:1034
 msgid "Add time stamp, image or text decoration by one of the buttons above."
-msgstr ""
+msgstr "Adjon időbélyeget, képet vagy szöveges dekorációt a fenti gombok egyikével."
 
 #: ../gui/wxpython/animation/dialogs.py:1036
 msgid "Add image or text decoration by one of the buttons above."
-msgstr ""
+msgstr "Adjon képet vagy szöveges dekorációt a fenti gombok egyikével."
 
 #: ../gui/wxpython/animation/dialogs.py:1057
 msgid "Font settings:"
@@ -15948,7 +15951,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1155
 msgid "image sequence"
-msgstr ""
+msgstr "képsorozat"
 
 #: ../gui/wxpython/animation/dialogs.py:1155
 msgid "animated GIF"
@@ -16048,31 +16051,31 @@ msgstr "Időbélyeg"
 
 #: ../gui/wxpython/animation/dialogs.py:1617
 msgid "Add space-time dataset layer"
-msgstr ""
+msgstr "Tér-idő adatállomány réteg hozzáadás"
 
 #: ../gui/wxpython/animation/dialogs.py:1642
 msgid "Multiple raster maps"
-msgstr ""
+msgstr "Több rasztertérkép"
 
 #: ../gui/wxpython/animation/dialogs.py:1643
 msgid "Multiple vector maps"
-msgstr ""
+msgstr "Több vektortérkép"
 
 #: ../gui/wxpython/animation/dialogs.py:1644
 msgid "Multiple 3D raster maps"
-msgstr ""
+msgstr "Több 3D rasztertérkép"
 
 #: ../gui/wxpython/animation/dialogs.py:1645
 msgid "Space time raster dataset"
-msgstr ""
+msgstr "Tér-idő raszter adatállomány"
 
 #: ../gui/wxpython/animation/dialogs.py:1646
 msgid "Space time vector dataset"
-msgstr ""
+msgstr "Tér-idő vektor adatállomány"
 
 #: ../gui/wxpython/animation/dialogs.py:1647
 msgid "Space time 3D raster dataset"
-msgstr ""
+msgstr "Tér-idő 3D raszter adatállomány"
 
 #: ../gui/wxpython/animation/dialogs.py:1686
 msgid "Input data type:"
@@ -16109,7 +16112,7 @@ msgstr "Idő"
 
 #: ../gui/wxpython/animation/dialogs.py:1981
 msgid "Absolute time format:"
-msgstr ""
+msgstr "Abszolút idő formátum:"
 
 #: ../gui/wxpython/animation/dialogs.py:2001
 msgid "Click and then press key up or down to preview different date and time formats. Type custom format string."
@@ -16213,12 +16216,12 @@ msgstr "Animáció exportálás, kérem várjon..."
 #: ../gui/wxpython/icons/icon.py:40
 #, python-format
 msgid "Unknown iconset '%s', using default 'grass'...\n"
-msgstr ""
+msgstr "Ismeretlen ikonkészlet '%s', alapértelmezett 'grass'-t használom...\n"
 
 #: ../gui/wxpython/icons/icon.py:58
 #, python-format
 msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."
-msgstr ""
+msgstr "Nem tudom betölteni az ikon témát. Ok: %s. Kilépés a wxGUI-ból..."
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:138
 msgid "With stvds you have to set 'attr' option"
@@ -16835,9 +16838,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1402
-#, fuzzy
 msgid "Proceed with opening of the workspace?"
-msgstr "Menteni akarja a munkaterületen történt változásokat?"
+msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1442 ../gui/wxpython/lmgr/frame.py:1613
 msgid "Please wait, loading workspace..."
@@ -18340,7 +18342,7 @@ msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:604
 msgid "Rename map"
-msgstr ""
+msgstr "Térkép átnevezés"
 
 #: ../gui/wxpython/datacatalog/tree.py:616
 #, python-brace-format
@@ -18384,7 +18386,7 @@ msgstr ""
 #: ../gui/wxpython/datacatalog/tree.py:711
 #: ../gui/wxpython/datacatalog/tree.py:713
 msgid "g.copy completed"
-msgstr ""
+msgstr "g.copy-t befejeztem"
 
 #: ../gui/wxpython/datacatalog/tree.py:726
 msgid "Reprojection is not implemented for 3D rasters"
@@ -18393,7 +18395,7 @@ msgstr ""
 #: ../gui/wxpython/datacatalog/tree.py:761
 #: ../gui/wxpython/datacatalog/tree.py:804
 msgid "g.remove completed"
-msgstr ""
+msgstr "g.remove-t befejeztem"
 
 #: ../gui/wxpython/datacatalog/tree.py:788
 #, python-brace-format
@@ -19989,7 +19991,7 @@ msgstr "Számítási régió mentése névvel bíró régióba"
 
 #: ../gui/wxpython/mapdisp/frame.py:1537
 msgid "Raster Digitizer Toolbar"
-msgstr ""
+msgstr "Raszter digitalizáló eszköztár"
 
 #: ../gui/wxpython/mapdisp/gprint.py:154
 msgid ""
@@ -20028,7 +20030,7 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:420
 msgid "Render"
-msgstr ""
+msgstr "Rajzolás"
 
 #: ../gui/wxpython/mapdisp/statusbar.py:424
 msgid "Enable/disable auto-rendering"

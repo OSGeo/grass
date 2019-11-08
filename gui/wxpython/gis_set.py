@@ -48,8 +48,6 @@ from gui_core.widgets import GenericValidator, StaticWrapText
 from gui_core.wrap import Button, ListCtrl, StaticText, StaticBox, \
     TextCtrl
 
-sys.stderr = codecs.getwriter('utf8')(sys.stderr)
-
 
 class GRASSStartup(wx.Frame):
     exit_success = 0
@@ -579,7 +577,7 @@ class GRASSStartup(wx.Frame):
                              read=True)
 
         wx.BeginBusyCursor()
-        wx.Yield()
+        wx.GetApp().Yield()
         if vectors:
             # vector detected
             returncode, error = RunCommand(
