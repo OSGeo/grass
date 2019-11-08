@@ -48,6 +48,10 @@
 #  Nedkov, R. (2017). ORTHOGONAL TRANSFORMATION OF SEGMENTED IMAGES FROM THE SATELLITE SENTINEL-2.
 #  Comptes rendus de l'Académie bulgare des sciences. 70. 687-692.
 #
+#  Worldview-2 Tasseled Cap coefficients
+#  https://www.researchgate.net/publication/263369074_Presentation_of_the_Kauth-Thomas_transform_for_WorldView-2_reflectance_data
+#  Yarbrough, Lance & , Navulur & , Ravi. (2014). Presentation of the Kauth–Thomas transform for WorldView-2 reflectance data.
+#  Remote Sensing Letters. 5. DOI: 10.1080/2150704X.2014.885148.
 #############################################################################
 
 #%Module
@@ -56,11 +60,13 @@
 #% keyword: transformation
 #% keyword: Landsat
 #% keyword: MODIS
+#% keyword: Worldview
+#% keyword: Sentinel
 #% keyword: Tasseled Cap transformation
 #%end
 
 #%option G_OPT_R_INPUTS
-#% description: For Landsat4-7: bands 1, 2, 3, 4, 5, 7; for Landsat8: bands 2, 3, 4, 5, 6, 7; for MODIS: bands 1, 2, 3, 4, 5, 6, 7; for Sentinel-2: bands 1 to 12, 8A
+#% description: For Landsat4-7: bands 1, 2, 3, 4, 5, 7; for Landsat8: bands 2, 3, 4, 5, 6, 7; for MODIS: bands 1, 2, 3, 4, 5, 6, 7; for Sentinel-2: bands 1 to 12, 8A; for Worldview-2: bands 1, 2, 3, 4, 5, 6, 7, 8
 #%end
 
 #%option G_OPT_R_BASENAME_OUTPUT
@@ -73,7 +79,7 @@
 #% description: Satellite sensor
 #% required: yes
 #% multiple: no
-#% options: landsat4_tm,landsat5_tm,landsat7_etm,landsat8_oli,modis,sentinel2
+#% options: landsat4_tm,landsat5_tm,landsat7_etm,landsat8_oli,modis,sentinel2,worldview2
 #%end
 
 import grass.script as grass
@@ -81,7 +87,10 @@ import grass.script as grass
 
 # weights for 6 Landsat bands: TM4, TM5, TM7, OLI
 # MODIS: Red, NIR1, Blue, Green, NIR2, SWIR1, SWIR2
-# Sentinel-2: B1 to B12, B8A
+# Sentinel-2: B1 ... B12, B8A
+# Worldview-2: B1 ... B8 (PAN not used)
+#
+## entries: 1. Brightness, 2. Greeness, 3. Wetness and shadows, 4. Haze
 parms = [[(0.3037, 0.2793, 0.4743, 0.5585, 0.5082, 0.1863),  # Landsat TM4
           (-0.2848, -0.2435, -0.5435, 0.7243, 0.0840, -0.1800),
           (0.1509, 0.1973, 0.3279, 0.3406, -0.7112, -0.4572)],
@@ -102,13 +111,16 @@ parms = [[(0.3037, 0.2793, 0.4743, 0.5585, 0.5082, 0.1863),  # Landsat TM4
           (0.1147, 0.2489, 0.2408, 0.3132, -0.3122, -0.6416, -0.5087)],
          [(0.0356, 0.0822, 0.1360, 0.2611, 0.2964, 0.3338, 0.3877, 0.3895, 0.0949, 0.0009, 0.3882, 0.1366, 0.4750), # Sentinel-2
           (-0.0635, -0.1128, -0.1680, -0.3480, -0.3303, 0.0852, 0.3302, 0.3165, 0.0467, -0.0009, -0.4578, -0.4064, 0.3625),
-          (0.0649, 0.1363, 0.2802, 0.3072, 0.5288, 0.1379, -0.0001, -0.0807, -0.0302, 0.0003, -0.4064, -0.5602, -0.1389)]]
-
+          (0.0649, 0.1363, 0.2802, 0.3072, 0.5288, 0.1379, -0.0001, -0.0807, -0.0302, 0.0003, -0.4064, -0.5602, -0.1389)],
+         [(-0.060436,0.012147,0.125846,0.313039,0.412175,0.482758,-0.160654,0.673510), # WV-2
+          (-0.140110,-0.206224,-0.215854,-0.314441,-0.410892,0.095786,0.600549,0.503672),
+          (-0.270951,-0.317080,-0.317263,-0.242544,-0.256463,-0.096550,-0.742535,0.202430),
+          (0.546979,0.392244,0.232894,-0.151027,-0.540102,0.327952,-0.243740,0.106010)]]
 
 # satellite information
 satellites = ['landsat4_tm', 'landsat5_tm', 'landsat7_etm', 'landsat8_oli',
-              'modis', 'sentinel2']
-used_bands = [6, 6, 6, 6, 7, 13]
+              'modis', 'sentinel2', 'worldview2']
+used_bands = [6, 6, 6, 6, 7, 13, 8]
 
 # components information
 ordinals = ["first", "second", "third", "fourth"]
@@ -134,6 +146,17 @@ def calc1bands7(out, bands, k1, k2, k3, k4, k5, k6, k7):
                 '$in7band')
     grass.mapcalc(equation, out=out, k1=k1, k2=k2, k3=k3, k4=k4, k5=k5, k6=k6,
                   k7=k7, **bands)
+
+
+def calc1bands8(out, bands, k1, k2, k3, k4, k5, k6, k7, k8):
+    """
+    Tasseled cap transformation equation for Worldview-2 bands
+    """
+    equation = ('$out = $k1 * $in1band + $k2 * $in2band + $k3 * $in3band + '
+                '$k4 * $in4band + $k5 * $in5band + $k6 * $in6band + $k7 * '
+                '$in7band + $k8 * $in8band')
+    grass.mapcalc(equation, out=out, k1=k1, k2=k2, k3=k3, k4=k4, k5=k5, k6=k6,
+                  k7=k7, k8=k8, **bands)
 
 
 def calc1bands13(out, bands, k1, k2, k3, k4, k5, k6, k7, k8, k9, k10, k11, k12, k13):
