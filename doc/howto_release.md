@@ -124,8 +124,8 @@ Preparation:
 #  assumptions:
 #  - own fork as "origin"
 #  - remote repo as "upstream"
-git fetch --all --prune && git checkout master && \
- git merge upstream/master && git push origin master
+git fetch --all --prune && git checkout releasebranch_7_8 && \
+ git merge upstream/releasebranch_7_8 && git push origin releasebranch_7_8
 
 # create version env var for convenience:
 MAJOR=`cat include/VERSION | head -1 | tail -1`
@@ -163,6 +163,13 @@ If RC, then check
 TODO: add checkout of code via release tag (?)
 
 ```bash
+# update again from GH to fetch tag
+#  assumptions:
+#  - own fork as "origin"
+#  - remote repo as "upstream"
+git fetch --all --prune && git checkout releasebranch_7_8 && \
+ git merge upstream/releasebranch_7_8 && git push origin releasebranch_7_8
+
 # create source package (in the source directory):
 echo grass-${VERSION}
 
@@ -210,8 +217,8 @@ Reset local copy to GH:
 #  assumptions:
 #  - own fork as "origin"
 #  - remote repo as "upstream"
-git fetch --all --prune && git checkout master && \
- git merge upstream/master && git push origin master
+git fetch --all --prune && git checkout releasebranch_7_8 && \
+ git merge upstream/releasebranch_7_8 && git push origin releasebranch_7_8
 ```
 
 ### Upload source code tarball to OSGeo servers
@@ -236,6 +243,9 @@ scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
 # generate link to "latest" source code
 ssh neteler@$SERVER1 "cd $SERVER1DIR ; rm -f grass-$MAJOR.$MINOR-latest.tar.gz"
 ssh neteler@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.gz grass-$MAJOR.$MINOR-latest.tar.gz"
+
+# verify
+echo "https://$SERVER1/grass$MAJOR$MINOR/source/"
 
 # update winGRASS related files: Update the winGRASS version
 vim grass-addons/tools/wingrass-packager/grass_packager_release.bat
