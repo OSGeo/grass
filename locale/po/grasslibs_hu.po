@@ -650,9 +650,9 @@ msgid "Unable to create dependency file in <%s@%s>"
 msgstr ""
 
 #: ../lib/raster/vrt.c:83
-#, fuzzy, c-format
+#, c-format
 msgid "Tile raster map <%s> not found"
-msgstr "<%s> 3D raszter térképet nem találom"
+msgstr ""
 
 #: ../lib/raster/vrt.c:86
 msgid "A virtual raster can not contain itself"
@@ -1123,9 +1123,8 @@ msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
 msgstr ""
 
 #: ../lib/ogsf/gsd_img_ppm.c:96
-#, fuzzy
 msgid "Unable to write view"
-msgstr "%s-t nem tudom eltávolítani"
+msgstr ""
 
 #: ../lib/ogsf/gsd_legend.c:246
 #, c-format
@@ -6335,9 +6334,8 @@ msgid "no description"
 msgstr ""
 
 #: ../lib/gis/color_rules.c:292
-#, fuzzy
 msgid "Unable to open color rule"
-msgstr "Nem tudom törölni a vektor térképet"
+msgstr ""
 
 #: ../lib/gis/color_rules.c:341 ../lib/gis/color_rules.c:352
 #: ../lib/gis/color_rules.c:356 ../lib/gis/color_rules.c:360
@@ -9574,9 +9572,9 @@ msgid "Unable to initialise PROJ with the following parameter list:"
 msgstr ""
 
 #: ../lib/proj/get_proj.c:252
-#, fuzzy, c-format
+#, c-format
 msgid "The PROJ error message: %s"
-msgstr "A hibaüzenet: %s"
+msgstr ""
 
 #: ../lib/proj/get_proj.c:360
 msgid "Option input overflowed option table"
@@ -9744,5 +9742,5 @@ msgstr ""
 msgid "Unable to access table <%s>"
 msgstr ""
 
-#~ msgid "The error message: %s"
-#~ msgstr "A hibaüzenet: %s"
+msgid "The error message: %s"
+msgstr "A hibaüzenet: %s"

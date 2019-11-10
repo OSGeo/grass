@@ -5231,9 +5231,8 @@ msgstr ""
 #: ../display/d.grid/plot.c:605 ../display/d.where/main.c:151
 #: ../general/g.region/printwindow.c:265 ../general/g.region/printwindow.c:501
 #: ../general/g.region/printwindow.c:593 ../vector/v.proj/main.c:292
-#, fuzzy
 msgid "Unable to initialize coordinate transformation"
-msgstr "Αδυναμία ανοίγματος προσωρινού αρχείου"
+msgstr ""
 
 #: ../ps/ps.map/ps_clrtbl.c:35 ../ps/ps.map/ps_fclrtbl.c:46
 #, c-format
@@ -5828,18 +5827,16 @@ msgid "Traces paths from starting points following input directions."
 msgstr ""
 
 #: ../raster/r.path/main.c:157
-#, fuzzy
 msgid "Name of input direction"
-msgstr "Όνομα εισαγώμενου διανυσματικού χάρτη "
+msgstr ""
 
 #: ../raster/r.path/main.c:159
 msgid "Direction in degrees CCW from east, or bitmask encoded"
 msgstr ""
 
 #: ../raster/r.path/main.c:164
-#, fuzzy
 msgid "Format of the input direction map"
-msgstr "Όνομα εισαγώμενου διανυσματικού χάρτη "
+msgstr ""
 
 #: ../raster/r.path/main.c:170
 msgid "auto-detect direction format"
@@ -5858,19 +5855,16 @@ msgid "bitmask encoded directions (e.g. r.cost -b)"
 msgstr ""
 
 #: ../raster/r.path/main.c:179
-#, fuzzy
 msgid "Name of input raster values to be used for output"
-msgstr "Όνομα εισαγώμενου ράστερ χάρτη (blue)"
+msgstr ""
 
 #: ../raster/r.path/main.c:185
-#, fuzzy
 msgid "Name for output raster path map"
-msgstr "Όνομα εξαγόμενου ράστερ χάρτη"
+msgstr ""
 
 #: ../raster/r.path/main.c:190
-#, fuzzy
 msgid "Name for output vector path map"
-msgstr "Όνομα εξαγόμενου ράστερ χάρτη"
+msgstr ""
 
 #: ../raster/r.path/main.c:272 ../raster/r.drain/main.c:244
 #, c-format
@@ -5916,9 +5910,8 @@ msgstr ""
 
 #: ../raster/r.path/main.c:382 ../raster/r.path/main.c:445
 #: ../raster/r.path/main.c:462
-#, fuzzy
 msgid "Unable to write to tempfile"
-msgstr "Αδυναμία ανάγνωσης διανυσματικού χάρτη"
+msgstr ""
 
 #: ../raster/r.path/main.c:390 ../raster/r.info/main.c:134
 msgid "Unable to read range file"
@@ -5959,19 +5952,19 @@ msgid "Input direction format assumed to be bitmask encoded with Knight's move"
 msgstr ""
 
 #: ../raster/r.path/main.c:429
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to detect format of input direction map <%s>"
-msgstr "Αδυναμία δημιουργίας raster χάρτη <%s>."
+msgstr ""
 
 #: ../raster/r.path/main.c:432
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid directions format '%s'"
-msgstr "Λάθος συντεταγμένες"
+msgstr ""
 
 #: ../raster/r.path/main.c:434
-#, fuzzy, c-format
+#, c-format
 msgid "Reading direction map <%s> ..."
-msgstr "Λάθος συντεταγμένες"
+msgstr ""
 
 #: ../raster/r.path/main.c:481
 msgid "Processing start points..."
@@ -5998,9 +5991,8 @@ msgid "Writing output raster map..."
 msgstr ""
 
 #: ../raster/r.path/main.c:640
-#, fuzzy
 msgid "Unable to increase point list"
-msgstr "Αδυναμία δημιουργίας πίνακα <%s>"
+msgstr ""
 
 #: ../raster/r.path/main.c:740 ../raster/r.path/main.c:771
 #: ../raster/r.path/main.c:897 ../raster/r.path/main.c:1005
@@ -6483,9 +6475,9 @@ msgstr "Εκτός μνήμης"
 #: ../vector/v.proj/main.c:343 ../vector/v.proj/main.c:355
 #: ../vector/v.proj/main.c:370 ../vector/v.proj/main.c:385
 #: ../vector/v.proj/main.c:466 ../vector/v.proj/main.c:471
-#, fuzzy, c-format
+#, c-format
 msgid "Error in %s (projection of input coordinate pair)"
-msgstr "Χάρτης επαναφόρτισης σε  m^3/s"
+msgstr ""
 
 #: ../raster/r.regression.multi/main.c:61
 msgid "Matrix is unsolvable"
@@ -6831,9 +6823,8 @@ msgid "Name for output raster map to contain walking costs"
 msgstr ""
 
 #: ../raster/r.walk/main.c:227 ../raster/r.cost/main.c:183
-#, fuzzy
 msgid "Name of input raster map solving equal costs"
-msgstr "Όνομα εισαγώμενου ράστερ χάρτη (intensity)"
+msgstr ""
 
 #: ../raster/r.walk/main.c:229 ../raster/r.cost/main.c:185
 msgid "Helper variable to pick a direction if two directions have equal cumulative costs (smaller is better)"
@@ -7107,9 +7098,9 @@ msgid "Specified starting location outside database window"
 msgstr ""
 
 #: ../raster/r.walk/main.c:932 ../raster/r.cost/main.c:797
-#, fuzzy, c-format
+#, c-format
 msgid "Number of duplicate stop points: %d"
-msgstr "Αριθμός γραμμών που θα εμφανίζονται στο υπόμνημα."
+msgstr ""
 
 #: ../raster/r.walk/main.c:946 ../raster/r.cost/main.c:811
 msgid "Finding cost path..."
@@ -9540,9 +9531,9 @@ msgstr ""
 #: ../raster/r.horizon/main.c:849 ../raster/r.horizon/main.c:867
 #: ../raster/r.horizon/main.c:1203 ../raster/r.horizon/main.c:1223
 #: ../raster/r.proj/main.c:450 ../raster/r.proj/main.c:541
-#, fuzzy, c-format
+#, c-format
 msgid "Error in %s"
-msgstr "Σφάλμα κατά την ανάγνωση του εύρους για [%s]"
+msgstr ""
 
 #: ../raster/r.horizon/main.c:1176
 #, c-format
@@ -12029,9 +12020,9 @@ msgid "Reading raster map <%s> using weight %f..."
 msgstr ""
 
 #: ../raster/r.series/main.c:274 ../raster/r.series/main.c:334
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open input raster <%s>"
-msgstr "Αδυναμία ανοίγματος βάσης δεδομενων <%s>"
+msgstr ""
 
 #: ../raster/r.series/main.c:311
 msgid "input= and weights= must have the same number of values"
@@ -13875,18 +13866,17 @@ msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:84
-#, fuzzy
 msgid "Name of input raster files"
-msgstr "Όνομα εισαγώμενου ράστερ χάρτη "
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:90 ../imagery/i.group/main.c:73
 msgid "Input file with one raster map name per line"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:147 ../raster/r.buildvrt/main.c:200
-#, fuzzy, c-format
+#, c-format
 msgid "Input raster map <%s> not found"
-msgstr "Ο 3Δ ράστερ χάρτης <%s> δεν βρέθηκε"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:150 ../raster/r.buildvrt/main.c:203
 msgid "Input and output raster map can not be identical"
@@ -13902,9 +13892,8 @@ msgid "Only one raster map name found in input file"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:188
-#, fuzzy
 msgid "Only one raster map name found"
-msgstr "Ο 3Δ ράστερ χάρτης <%s> δεν βρέθηκε"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:260
 msgid "Input maptypes are different"
@@ -13925,9 +13914,9 @@ msgid "Unable to create fcell/%s file"
 msgstr ""
 
 #: ../raster/r.buildvrt/link.c:35
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create cell_misc/%s/vrt file"
-msgstr "Αδυναμία ανάγνωσης διανυσματικού χάρτη"
+msgstr ""
 
 #: ../raster/r.buildvrt/link.c:66 ../raster/r.external/link.c:160
 #, c-format
@@ -15916,9 +15905,8 @@ msgid "Resolution of output raster map"
 msgstr ""
 
 #: ../raster/r.proj/main.c:209 ../vector/v.proj/main.c:119
-#, fuzzy
 msgid "PROJ pipeline for coordinate transformation"
-msgstr "Αδυναμία ανοίγματος προσωρινού αρχείου"
+msgstr ""
 
 #: ../raster/r.proj/main.c:214
 msgid "List raster maps in input mapset and exit"
@@ -18149,9 +18137,8 @@ msgid "For USLE. All non-NULL and non-zero cells are considered as blocking terr
 msgstr ""
 
 #: ../raster/r.watershed/front/main.c:123
-#, fuzzy
 msgid "Name of input raster map with percentages for flow accumulation."
-msgstr "Όνομα εισαγώμενου ράστερ χάρτη (saturation)"
+msgstr ""
 
 #: ../raster/r.watershed/front/main.c:129
 msgid "Minimum size of exterior watershed basin"
@@ -23435,9 +23422,9 @@ msgid "Unable to translate EPSG code"
 msgstr ""
 
 #: ../general/g.proj/input.c:284
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read georeferenced file <%s> using GDAL library"
-msgstr "Αδυναμία ανάγνωσης αρχείου υπογραφής <%s>"
+msgstr ""
 
 #: ../general/g.proj/input.c:289
 #, c-format
@@ -24414,9 +24401,8 @@ msgid "Found %d clumps"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:26
-#, fuzzy
 msgid "Name of input imagery group or raster maps"
-msgstr "Όνομα εισαγώμενου ράστερ χάρτη "
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:33
 msgid "Suffix for output bands with modified band values"
@@ -28275,9 +28261,8 @@ msgid "Viewpoint height not given, using calculated value %.0f"
 msgstr ""
 
 #: ../misc/m.nviz.image/main.c:244
-#, fuzzy
 msgid "Failed to write image"
-msgstr "Αδυναμία ανοίγματος προσωρινού αρχείου"
+msgstr ""
 
 #: ../misc/m.nviz.image/main.c:246
 msgid "Unsupported output format"
@@ -31936,9 +31921,9 @@ msgid "Generate n points for each individual area (requires restrict parameter)"
 msgstr ""
 
 #: ../vector/v.random/main.c:199
-#, fuzzy, c-format
+#, c-format
 msgid "Number of points must be > 0 (%ld given)"
-msgstr "Αριθμός γραμμών που θα εμφανίζονται στο υπόμνημα."
+msgstr ""
 
 #: ../vector/v.random/main.c:215 ../vector/v.drape/main.c:150
 #: ../vector/v.buffer/main.c:347
@@ -31970,9 +31955,9 @@ msgid "Generating points..."
 msgstr ""
 
 #: ../vector/v.random/main.c:530 ../vector/v.random/main.c:677
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to insert new row: %s"
-msgstr "Αδυναμία εκκίνησης του οδηγού <%s>"
+msgstr ""
 
 #: ../vector/v.random/main.c:702 ../vector/v.db.select/main.c:208
 msgid "Unable to open select cursor"
@@ -31985,9 +31970,9 @@ msgid "Unable to fetch data from table <%s>"
 msgstr ""
 
 #: ../vector/v.random/main.c:742
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to update row: %s"
-msgstr "Αδυναμία ανοίγματος βάσης δεδομενων <%s>"
+msgstr ""
 
 #: ../vector/v.support/main.c:41
 msgid "Updates vector map metadata."
@@ -39900,9 +39885,8 @@ msgid "If new >= 0, attributes is not copied"
 msgstr ""
 
 #: ../vector/v.extract/main.c:151
-#, fuzzy
 msgid "Name of attribute column for dissolving areas"
-msgstr "Όνομα του δεύτερου ράστερ χάρτη για blending"
+msgstr ""
 
 #: ../vector/v.extract/main.c:152
 msgid "Preserves category values"
@@ -41195,9 +41179,9 @@ msgid "Values in column <%s> will be overwritten"
 msgstr ""
 
 #: ../vector/v.to.db/main.c:268
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create column <%s>"
-msgstr "Αδυναμία δημιουργίας raster χάρτη <%s>."
+msgstr ""
 
 #: ../vector/v.to.db/main.c:322
 #, c-format
@@ -44210,5 +44194,5 @@ msgstr "Είτε 'from_table' ή 'select' επιλογή πρέπει να δω�
 msgid "Cache size (MiB)"
 msgstr "Cache size (MiB)"
 
-#~ msgid "column '%s', type 'string': unknown width -> stored as varchar(250) some data may be lost"
-#~ msgstr "στήλη '%s', τύπος 'string': άγνωστο εύρος -> σωσμένο ως varchar(250) ορισμένα  δεδομένα μπορεί να χαθούν"
+msgid "column '%s', type 'string': unknown width -> stored as varchar(250) some data may be lost"
+msgstr "στήλη '%s', τύπος 'string': άγνωστο εύρος -> σωσμένο ως varchar(250) ορισμένα  δεδομένα μπορεί να χαθούν"

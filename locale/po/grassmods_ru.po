@@ -804,7 +804,7 @@ msgstr ""
 #: ../vector/v.distance/main.c:124 ../vector/v.vect.stats/main.c:131
 #: ../vector/v.to.db/main.c:39
 msgid "attribute table"
-msgstr ""
+msgstr "таблица атрибутов"
 
 #: ../locale/scriptstrings/v.db.addtable_to_translate.c:4
 #: ../locale/scriptstrings/db.droptable_to_translate.c:2
@@ -833,7 +833,7 @@ msgstr ""
 #: ../vector/v.in.db/main.c:54 ../vector/v.vect.stats/main.c:132
 #: ../vector/v.to.db/main.c:40
 msgid "database"
-msgstr ""
+msgstr "база данных"
 
 #: ../locale/scriptstrings/v.db.addtable_to_translate.c:5
 msgid "Name of new attribute table (default: vector map name)"
@@ -5224,9 +5224,8 @@ msgstr ""
 #: ../display/d.grid/plot.c:605 ../display/d.where/main.c:151
 #: ../general/g.region/printwindow.c:265 ../general/g.region/printwindow.c:501
 #: ../general/g.region/printwindow.c:593 ../vector/v.proj/main.c:292
-#, fuzzy
 msgid "Unable to initialize coordinate transformation"
-msgstr "Невозможно закрыть слой"
+msgstr ""
 
 #: ../ps/ps.map/ps_clrtbl.c:35 ../ps/ps.map/ps_fclrtbl.c:46
 #, c-format
@@ -5735,7 +5734,7 @@ msgstr ""
 #: ../vector/v.edit/select.c:509
 #, c-format
 msgid "Unable to start driver <%s>"
-msgstr ""
+msgstr "Невозможно запустить драйвер <%s>"
 
 #: ../doc/vector/v.example/main.c:142 ../db/db.columns/main.c:62
 #: ../db/db.describe/main.c:67 ../vector/v.out.vtk/writeVTK.c:655
@@ -5750,7 +5749,7 @@ msgstr ""
 #: ../scripts/db.univar/db.univar.py:112
 #, c-format, python-format
 msgid "Unable to describe table <%s>"
-msgstr ""
+msgstr "Невозможно описать таблицу <%s>"
 
 #: ../doc/vector/v.example/main.c:175
 #, c-format
@@ -5821,18 +5820,16 @@ msgid "Traces paths from starting points following input directions."
 msgstr ""
 
 #: ../raster/r.path/main.c:157
-#, fuzzy
 msgid "Name of input direction"
-msgstr "Имя исходного точечного векторного слоя"
+msgstr ""
 
 #: ../raster/r.path/main.c:159
 msgid "Direction in degrees CCW from east, or bitmask encoded"
 msgstr ""
 
 #: ../raster/r.path/main.c:164
-#, fuzzy
 msgid "Format of the input direction map"
-msgstr "Endian исходного векторного слоя"
+msgstr ""
 
 #: ../raster/r.path/main.c:170
 msgid "auto-detect direction format"
@@ -5851,19 +5848,16 @@ msgid "bitmask encoded directions (e.g. r.cost -b)"
 msgstr ""
 
 #: ../raster/r.path/main.c:179
-#, fuzzy
 msgid "Name of input raster values to be used for output"
-msgstr "Имя выходного слоя используемого для СИНЕГО"
+msgstr ""
 
 #: ../raster/r.path/main.c:185
-#, fuzzy
 msgid "Name for output raster path map"
-msgstr "Имя выходного растрового слоя"
+msgstr ""
 
 #: ../raster/r.path/main.c:190
-#, fuzzy
 msgid "Name for output vector path map"
-msgstr "Имя выходного растрового слоя"
+msgstr ""
 
 #: ../raster/r.path/main.c:272 ../raster/r.drain/main.c:244
 #, c-format
@@ -5909,9 +5903,8 @@ msgstr ""
 
 #: ../raster/r.path/main.c:382 ../raster/r.path/main.c:445
 #: ../raster/r.path/main.c:462
-#, fuzzy
 msgid "Unable to write to tempfile"
-msgstr "Невозможно прочитать векторный слой"
+msgstr ""
 
 #: ../raster/r.path/main.c:390 ../raster/r.info/main.c:134
 msgid "Unable to read range file"
@@ -5991,9 +5984,8 @@ msgid "Writing output raster map..."
 msgstr ""
 
 #: ../raster/r.path/main.c:640
-#, fuzzy
 msgid "Unable to increase point list"
-msgstr "Невозможно создать файл <%s>"
+msgstr ""
 
 #: ../raster/r.path/main.c:740 ../raster/r.path/main.c:771
 #: ../raster/r.path/main.c:897 ../raster/r.path/main.c:1005
@@ -6012,9 +6004,9 @@ msgid "No path from row %d, col %d"
 msgstr ""
 
 #: ../raster/r.path/main.c:845
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid direction %d"
-msgstr "Неверное расстояние"
+msgstr ""
 
 #: ../raster/r.path/main.c:934
 msgid "Path is leaving the current region"
@@ -6476,9 +6468,9 @@ msgstr ""
 #: ../vector/v.proj/main.c:343 ../vector/v.proj/main.c:355
 #: ../vector/v.proj/main.c:370 ../vector/v.proj/main.c:385
 #: ../vector/v.proj/main.c:466 ../vector/v.proj/main.c:471
-#, fuzzy, c-format
+#, c-format
 msgid "Error in %s (projection of input coordinate pair)"
-msgstr "Чтение ввода..."
+msgstr ""
 
 #: ../raster/r.regression.multi/main.c:61
 msgid "Matrix is unsolvable"
@@ -6824,9 +6816,8 @@ msgid "Name for output raster map to contain walking costs"
 msgstr ""
 
 #: ../raster/r.walk/main.c:227 ../raster/r.cost/main.c:183
-#, fuzzy
 msgid "Name of input raster map solving equal costs"
-msgstr "Имя выходного слоя используемого для СИНЕГО"
+msgstr ""
 
 #: ../raster/r.walk/main.c:229 ../raster/r.cost/main.c:185
 msgid "Helper variable to pick a direction if two directions have equal cumulative costs (smaller is better)"
@@ -6980,9 +6971,8 @@ msgid "No start points"
 msgstr ""
 
 #: ../raster/r.walk/main.c:408 ../raster/r.cost/main.c:348
-#, fuzzy
 msgid "No stop points"
-msgstr "Импорт путевых точек"
+msgstr ""
 
 #: ../raster/r.walk/main.c:412 ../raster/r.cost/main.c:352
 #, c-format
@@ -7103,9 +7093,9 @@ msgid "Specified starting location outside database window"
 msgstr ""
 
 #: ../raster/r.walk/main.c:932 ../raster/r.cost/main.c:797
-#, fuzzy, c-format
+#, c-format
 msgid "Number of duplicate stop points: %d"
-msgstr "Имя исходного точечного векторного слоя"
+msgstr ""
 
 #: ../raster/r.walk/main.c:946 ../raster/r.cost/main.c:811
 msgid "Finding cost path..."
@@ -9544,9 +9534,9 @@ msgstr ""
 #: ../raster/r.horizon/main.c:849 ../raster/r.horizon/main.c:867
 #: ../raster/r.horizon/main.c:1203 ../raster/r.horizon/main.c:1223
 #: ../raster/r.proj/main.c:450 ../raster/r.proj/main.c:541
-#, fuzzy, c-format
+#, c-format
 msgid "Error in %s"
-msgstr "Ошибка: %s"
+msgstr ""
 
 #: ../raster/r.horizon/main.c:1176
 #, c-format
@@ -12051,9 +12041,9 @@ msgid "Reading raster map <%s> using weight %f..."
 msgstr ""
 
 #: ../raster/r.series/main.c:274 ../raster/r.series/main.c:334
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open input raster <%s>"
-msgstr "Невозможно создать растровый слой <%s>"
+msgstr ""
 
 #: ../raster/r.series/main.c:311
 msgid "input= and weights= must have the same number of values"
@@ -13897,9 +13887,8 @@ msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:84
-#, fuzzy
 msgid "Name of input raster files"
-msgstr "Имя исходного точечного векторного слоя"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:90 ../imagery/i.group/main.c:73
 msgid "Input file with one raster map name per line"
@@ -13946,9 +13935,9 @@ msgid "Unable to create fcell/%s file"
 msgstr ""
 
 #: ../raster/r.buildvrt/link.c:35
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create cell_misc/%s/vrt file"
-msgstr "Невозможно прочитать векторный слой"
+msgstr ""
 
 #: ../raster/r.buildvrt/link.c:66 ../raster/r.external/link.c:160
 #, c-format
@@ -15941,9 +15930,8 @@ msgid "Resolution of output raster map"
 msgstr ""
 
 #: ../raster/r.proj/main.c:209 ../vector/v.proj/main.c:119
-#, fuzzy
 msgid "PROJ pipeline for coordinate transformation"
-msgstr "Невозможно закрыть слой"
+msgstr ""
 
 #: ../raster/r.proj/main.c:214
 msgid "List raster maps in input mapset and exit"
@@ -18176,9 +18164,8 @@ msgid "For USLE. All non-NULL and non-zero cells are considered as blocking terr
 msgstr ""
 
 #: ../raster/r.watershed/front/main.c:123
-#, fuzzy
 msgid "Name of input raster map with percentages for flow accumulation."
-msgstr "Имя выходного слоя используемого для СИНЕГО"
+msgstr ""
 
 #: ../raster/r.watershed/front/main.c:129
 msgid "Minimum size of exterior watershed basin"
@@ -19247,7 +19234,7 @@ msgstr ""
 #: ../db/db.tables/main.c:50
 #, c-format
 msgid "Unable to open database <%s>"
-msgstr ""
+msgstr "Невозможно открыть базу данных <%s>"
 
 #: ../display/d.vect.thematic/main.c:312
 #, c-format
@@ -24465,9 +24452,8 @@ msgid "Found %d clumps"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:26
-#, fuzzy
 msgid "Name of input imagery group or raster maps"
-msgstr "Название вводного растрового слоя"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:33
 msgid "Suffix for output bands with modified band values"
@@ -28326,9 +28312,8 @@ msgid "Viewpoint height not given, using calculated value %.0f"
 msgstr ""
 
 #: ../misc/m.nviz.image/main.c:244
-#, fuzzy
 msgid "Failed to write image"
-msgstr "Ошибка записи в файл"
+msgstr ""
 
 #: ../misc/m.nviz.image/main.c:246
 msgid "Unsupported output format"
@@ -29014,7 +28999,7 @@ msgstr ""
 #: ../db/db.drivers/main.c:72 ../db/db.connect/main.c:45
 #: ../db/db.login/main.c:41
 msgid "connection settings"
-msgstr ""
+msgstr "настройки соединения"
 
 #: ../db/db.drivers/main.c:73
 msgid "Lists all database drivers."
@@ -29024,7 +29009,7 @@ msgstr ""
 #: ../db/db.describe/main.c:50 ../db/db.select/main.c:53
 #, c-format
 msgid "Table <%s> not found in database <%s> using driver <%s>"
-msgstr ""
+msgstr "Таблица <%s> не найдена в базе данных <%s> используя драйвер <%s>"
 
 #: ../db/db.columns/main.c:101
 msgid "List all columns for a given table."
@@ -32071,9 +32056,9 @@ msgid "Generating points..."
 msgstr ""
 
 #: ../vector/v.random/main.c:530 ../vector/v.random/main.c:677
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to insert new row: %s"
-msgstr "Невозможно создать файл <%s>"
+msgstr ""
 
 #: ../vector/v.random/main.c:702 ../vector/v.db.select/main.c:208
 msgid "Unable to open select cursor"
@@ -32086,9 +32071,9 @@ msgid "Unable to fetch data from table <%s>"
 msgstr ""
 
 #: ../vector/v.random/main.c:742
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to update row: %s"
-msgstr "Невозможно создать растровый слой <%s>"
+msgstr ""
 
 #: ../vector/v.support/main.c:41
 msgid "Updates vector map metadata."
@@ -35236,9 +35221,8 @@ msgid "Projection of layer <%s> is different from projection of layer <%s>"
 msgstr ""
 
 #: ../vector/v.in.ogr/clean.c:19
-#, fuzzy
 msgid "Converting OSM lines..."
-msgstr "Преобразование..."
+msgstr ""
 
 #: ../vector/v.in.ogr/clean.c:118
 #, c-format
@@ -40090,9 +40074,8 @@ msgid "If new >= 0, attributes is not copied"
 msgstr ""
 
 #: ../vector/v.extract/main.c:151
-#, fuzzy
 msgid "Name of attribute column for dissolving areas"
-msgstr "Поле, используемое для тематического отображения (должно быть числовым)"
+msgstr ""
 
 #: ../vector/v.extract/main.c:152
 msgid "Preserves category values"
@@ -41407,9 +41390,9 @@ msgid "Values in column <%s> will be overwritten"
 msgstr ""
 
 #: ../vector/v.to.db/main.c:268
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create column <%s>"
-msgstr "Невозможно создать растровый слой <%s>"
+msgstr ""
 
 #: ../vector/v.to.db/main.c:322
 #, c-format

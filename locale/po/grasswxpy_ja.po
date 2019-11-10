@@ -4049,9 +4049,9 @@ msgid "Delete selected mapset"
 msgstr "マップセットを削除"
 
 #: ../gui/wxpython/gis_set.py:258
-#, fuzzy, python-format
+#, python-format
 msgid "GRASS GIS %s Startup%s"
-msgstr "GRASS GIS - マップ ディスプレイ "
+msgstr ""
 
 #: ../gui/wxpython/gis_set.py:263
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:257
@@ -11742,9 +11742,8 @@ msgid "Not enough points for line"
 msgstr "線分として構成できない点列"
 
 #: ../gui/wxpython/startup/guiutils.py:51
-#, fuzzy
 msgid "Name for the new mapset:"
-msgstr "新しいマップセット名："
+msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:150
 #, python-brace-format
@@ -16362,19 +16361,16 @@ msgid "Set title for the plot"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:285
-#, fuzzy
 msgid "Set label for X axis"
-msgstr "ラベル設定"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:290
-#, fuzzy
 msgid "Set label for Y axis"
-msgstr "ラベル設定"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:302
-#, fuzzy
 msgid "Labels"
-msgstr "ラベル "
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:309
 msgid "Path for output CSV file with plotted data"
@@ -16385,9 +16381,8 @@ msgid "CVS path"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:321
-#, fuzzy
 msgid "Do you want the CSV header?"
-msgstr "変更を保存しますか? "
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:363 ../gui/wxpython/tplot/frame.py:842
 #: ../gui/wxpython/tplot/frame.py:846 ../gui/wxpython/tplot/frame.py:867
@@ -16457,14 +16452,13 @@ msgid "Problem getting data from vector temporal dataset. Empty list of values."
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:802
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{pa} already exists, do you want to overwrite?"
-msgstr "ファイル <%s> は既に存在します．上書きしてよろしいですか?  "
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:804
-#, fuzzy
 msgid "File exists"
-msgstr "ファイルはすでに存在します"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:809
 msgid "Please change name of output CSV file or "
