@@ -271,9 +271,9 @@ msgid "Unable to read range file for <%s>"
 msgstr ""
 
 #: ../lib/raster/range.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read stats file for <%s>"
-msgstr "ഡ്രയ്വ്വർ തുടങ്ങാൻ സാധിക്കുന്നില്ല <%s>"
+msgstr ""
 
 #: ../lib/raster/range.c:368 ../lib/raster/range.c:374
 #: ../lib/raster/range.c:406 ../lib/raster/range.c:420
@@ -283,9 +283,9 @@ msgstr ""
 
 #: ../lib/raster/range.c:450 ../lib/raster/range.c:464
 #: ../lib/raster/range.c:482 ../lib/raster/range.c:487
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write stats file for <%s>"
-msgstr "ഡ്രയ്വ്വർ തുടങ്ങാൻ സാധിക്കുന്നില്ല <%s>"
+msgstr ""
 
 #: ../lib/raster/raster_metadata.c:109
 #, c-format
@@ -651,9 +651,9 @@ msgid "Unable to create dependency file in <%s@%s>"
 msgstr ""
 
 #: ../lib/raster/vrt.c:83
-#, fuzzy, c-format
+#, c-format
 msgid "Tile raster map <%s> not found"
-msgstr "റാസ്റ്റെർ മാപ്പ് <%s> കണ്മാനില്ല"
+msgstr ""
 
 #: ../lib/raster/vrt.c:86
 msgid "A virtual raster can not contain itself"
@@ -1124,9 +1124,8 @@ msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
 msgstr ""
 
 #: ../lib/ogsf/gsd_img_ppm.c:96
-#, fuzzy
 msgid "Unable to write view"
-msgstr "വെക്റ്റർ മാപ്പ് വായിക്കാൻ പട്ടുന്നില്ല"
+msgstr ""
 
 #: ../lib/ogsf/gsd_legend.c:246
 #, c-format
@@ -6336,9 +6335,8 @@ msgid "no description"
 msgstr ""
 
 #: ../lib/gis/color_rules.c:292
-#, fuzzy
 msgid "Unable to open color rule"
-msgstr "ഫയൽ തുറക്കൻ പറ്റുന്നില്ല %s"
+msgstr ""
 
 #: ../lib/gis/color_rules.c:341 ../lib/gis/color_rules.c:352
 #: ../lib/gis/color_rules.c:356 ../lib/gis/color_rules.c:360
@@ -6351,9 +6349,8 @@ msgid "range: %g to %g"
 msgstr ""
 
 #: ../lib/gis/color_rules.c:368
-#, fuzzy
 msgid "Unable to open color descriptions"
-msgstr "വെക്റ്റർ അടയ്ക്കാൻ പറ്റുന്നില്ല <%s>"
+msgstr ""
 
 #: ../lib/gis/mapset_msc.c:90
 #, c-format
@@ -9572,14 +9569,13 @@ msgid "Invalid zone %s specified"
 msgstr "തെറ്റായ സോൺ %s നൽകിയിരിക്കുന്നു"
 
 #: ../lib/proj/get_proj.c:243
-#, fuzzy
 msgid "Unable to initialise PROJ with the following parameter list:"
-msgstr "തന്നിരിക്കുന്ന വിവരങ്ങൾ കൊൻണ്ട് പ്രൊജ്4 ആരൻബിക്കാൻ പറ്റുന്നില്ല"
+msgstr ""
 
 #: ../lib/proj/get_proj.c:252
-#, fuzzy, c-format
+#, c-format
 msgid "The PROJ error message: %s"
-msgstr "തെറ്റായ സന്ദേശം: %s"
+msgstr ""
 
 #: ../lib/proj/get_proj.c:360
 msgid "Option input overflowed option table"
@@ -9693,33 +9689,31 @@ msgid "Input coordinate system is NULL"
 msgstr ""
 
 #: ../lib/proj/do_proj.c:104
-#, fuzzy, c-format
+#, c-format
 msgid "proj_create() failed for '%s'"
-msgstr "pj_transform() പാഴായി പ്പോയി: %s"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:114
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create latlong equivalent for '%s'"
-msgstr "ടേബിൾ ഉണ്ടാക്കാൻ പറ്റുന്നില്ല <%s>"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:164
-#, fuzzy
 msgid "No input projection"
-msgstr "പ്രൊജക്ഷന്റെ വിവരങ്ങൾ നല്കുക"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:167 ../lib/proj/do_proj.c:336
 msgid "No transformation object"
 msgstr ""
 
 #: ../lib/proj/do_proj.c:221 ../lib/proj/do_proj.c:446
-#, fuzzy, c-format
+#, c-format
 msgid "proj_trans() failed: %s"
-msgstr "pj_transform() പാഴായി പ്പോയി: %s"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:247
-#, fuzzy
 msgid "No output projection"
-msgstr "പ്രൊജക്ഷൻ വിവരങ്ങൾ പുറതു വിടുക്ക"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:276 ../lib/proj/do_proj.c:499
 #: ../lib/proj/do_proj.c:626 ../lib/proj/do_proj.c:790
@@ -9728,9 +9722,9 @@ msgid "pj_transform() failed: %s"
 msgstr "pj_transform() പാഴായി പ്പോയി: %s"
 
 #: ../lib/proj/do_proj.c:584 ../lib/proj/do_proj.c:747
-#, fuzzy, c-format
+#, c-format
 msgid "proj_trans() failed: %d"
-msgstr "pj_transform() പാഴായി പ്പോയി: %s"
+msgstr ""
 
 #: ../lib/lidar/zones.c:476 ../lib/lidar/zones.c:513
 #, c-format
@@ -9792,8 +9786,8 @@ msgstr "തരം അക്കമായിരിക്കണം"
 msgid "Illegal TimeStamp string"
 msgstr "അസാധുവായ ടൈംസ്റ്റാമ്പ്"
 
-#~ msgid "Unable to initialise PROJ.4 with the following parameter list:"
-#~ msgstr "തന്നിരിക്കുന്ന വിവരങ്ങൾ കൊൻണ്ട് പ്രൊജ്4 ആരൻബിക്കാൻ പറ്റുന്നില്ല"
+msgid "Unable to initialise PROJ.4 with the following parameter list:"
+msgstr "തന്നിരിക്കുന്ന വിവരങ്ങൾ കൊൻണ്ട് പ്രൊജ്4 ആരൻബിക്കാൻ പറ്റുന്നില്ല"
 
-#~ msgid "The error message: %s"
-#~ msgstr "തെറ്റായ സന്ദേശം: %s"
+msgid "The error message: %s"
+msgstr "തെറ്റായ സന്ദേശം: %s"

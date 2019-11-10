@@ -11677,9 +11677,8 @@ msgid "Not enough points for line"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:51
-#, fuzzy
 msgid "Name for the new mapset:"
-msgstr "പുതിയ മാപ്പ്സെറ്റിൻടേ പേർ എഴുതുക"
+msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:150
 #, python-brace-format
@@ -16268,9 +16267,8 @@ msgid "Set label for Y axis"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:302
-#, fuzzy
 msgid "Labels"
-msgstr "ഒരു പ്രവൃത്തിയെയോ ഒരു പ്രസ്താവനയെയോ സൂചിപ്പിക്കാന്‍ ഉപയോഗിക്കുന്ന വാക്കോ ചിഹ്നങ്ങളോ ചേർക്കുക"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:309
 msgid "Path for output CSV file with plotted data"
@@ -16281,9 +16279,8 @@ msgid "CVS path"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:321
-#, fuzzy
 msgid "Do you want the CSV header?"
-msgstr "പുതിയ മാപ്പ്സെറ്റ് ഉണ്ടാക്കാൻ പറ്റുനില്ല: %s"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:363 ../gui/wxpython/tplot/frame.py:842
 #: ../gui/wxpython/tplot/frame.py:846 ../gui/wxpython/tplot/frame.py:867
@@ -16353,9 +16350,9 @@ msgid "Problem getting data from vector temporal dataset. Empty list of values."
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:802
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{pa} already exists, do you want to overwrite?"
-msgstr "ഈ പേരിലുള്ള വർക്സ്പേസ്<%s> നിലവുണ്ട്. നിങ്ങൾക്ക് ഇതിൽ തന്നെ സംഭരിച്ചു വെക്കണമൊ?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:804
 msgid "File exists"

@@ -4036,9 +4036,9 @@ msgid "Delete selected mapset"
 msgstr "Șterge mapset selectat"
 
 #: ../gui/wxpython/gis_set.py:258
-#, fuzzy, python-format
+#, python-format
 msgid "GRASS GIS %s Startup%s"
-msgstr "GRASS GIS - Fereastra de vizualizare"
+msgstr ""
 
 #: ../gui/wxpython/gis_set.py:263
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:257
@@ -11729,9 +11729,8 @@ msgid "Not enough points for line"
 msgstr "Nu sunt suficiente puncte pentru linie"
 
 #: ../gui/wxpython/startup/guiutils.py:51
-#, fuzzy
 msgid "Name for the new mapset:"
-msgstr "Introduceți nume pentru mapset nou:"
+msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:150
 #, python-brace-format
@@ -16365,19 +16364,16 @@ msgid "Set title for the plot"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:285
-#, fuzzy
 msgid "Set label for X axis"
-msgstr "Rând paral cu axa:"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:290
-#, fuzzy
 msgid "Set label for Y axis"
-msgstr "Rând paral cu axa:"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:302
-#, fuzzy
 msgid "Labels"
-msgstr "Etichetă"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:309
 msgid "Path for output CSV file with plotted data"
@@ -16388,9 +16384,8 @@ msgid "CVS path"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:321
-#, fuzzy
 msgid "Do you want the CSV header?"
-msgstr "Doriți să salvați modificările din model?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:363 ../gui/wxpython/tplot/frame.py:842
 #: ../gui/wxpython/tplot/frame.py:846 ../gui/wxpython/tplot/frame.py:867
@@ -16460,14 +16455,13 @@ msgid "Problem getting data from vector temporal dataset. Empty list of values."
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:802
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{pa} already exists, do you want to overwrite?"
-msgstr "Fișierul <%s> există deja. Doriți să suprascrieți fișierul?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:804
-#, fuzzy
 msgid "File exists"
-msgstr "Fișierul există deja"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:809
 msgid "Please change name of output CSV file or "

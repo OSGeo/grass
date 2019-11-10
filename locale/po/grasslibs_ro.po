@@ -269,9 +269,9 @@ msgid "Unable to read range file for <%s>"
 msgstr ""
 
 #: ../lib/raster/range.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read stats file for <%s>"
-msgstr "Nu s-a putut crea tabelul <%s>"
+msgstr ""
 
 #: ../lib/raster/range.c:368 ../lib/raster/range.c:374
 #: ../lib/raster/range.c:406 ../lib/raster/range.c:420
@@ -281,9 +281,9 @@ msgstr ""
 
 #: ../lib/raster/range.c:450 ../lib/raster/range.c:464
 #: ../lib/raster/range.c:482 ../lib/raster/range.c:487
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write stats file for <%s>"
-msgstr "Nu s-a putut crea tabelul <%s>"
+msgstr ""
 
 #: ../lib/raster/raster_metadata.c:109
 #, c-format
@@ -649,9 +649,9 @@ msgid "Unable to create dependency file in <%s@%s>"
 msgstr ""
 
 #: ../lib/raster/vrt.c:83
-#, fuzzy, c-format
+#, c-format
 msgid "Tile raster map <%s> not found"
-msgstr "rasterul 3D <%s> nu a fost găsit"
+msgstr ""
 
 #: ../lib/raster/vrt.c:86
 msgid "A virtual raster can not contain itself"
@@ -972,9 +972,8 @@ msgid "Output window changed while maps are open for write. Map name <%s>"
 msgstr ""
 
 #: ../lib/ogsf/gsd_img_tif.c:63 ../lib/ogsf/gsd_img_ppm.c:50
-#, fuzzy
 msgid "Unable to get image of current GL screen"
-msgstr "Nu s-a putut citi intervalul pentru rasterul <%s> "
+msgstr ""
 
 #: ../lib/ogsf/gsd_img_tif.c:69 ../lib/ogsf/gk2.c:216
 #: ../lib/ogsf/gsd_img_ppm.c:55 ../lib/ogsf/gsd_img_ppm.c:101
@@ -1123,9 +1122,8 @@ msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
 msgstr ""
 
 #: ../lib/ogsf/gsd_img_ppm.c:96
-#, fuzzy
 msgid "Unable to write view"
-msgstr "Nu s-a putut crea tabelul <%s>"
+msgstr ""
 
 #: ../lib/ogsf/gsd_legend.c:246
 #, c-format
@@ -6341,9 +6339,8 @@ msgid "no description"
 msgstr ""
 
 #: ../lib/gis/color_rules.c:292
-#, fuzzy
 msgid "Unable to open color rule"
-msgstr "Nu s-a putut deschide %s pentru citire"
+msgstr ""
 
 #: ../lib/gis/color_rules.c:341 ../lib/gis/color_rules.c:352
 #: ../lib/gis/color_rules.c:356 ../lib/gis/color_rules.c:360
@@ -6356,9 +6353,8 @@ msgid "range: %g to %g"
 msgstr ""
 
 #: ../lib/gis/color_rules.c:368
-#, fuzzy
 msgid "Unable to open color descriptions"
-msgstr "Nu s-a putut deschide %s pentru scriere"
+msgstr ""
 
 #: ../lib/gis/mapset_msc.c:90
 #, c-format
@@ -9708,14 +9704,13 @@ msgid "proj_create() failed for '%s'"
 msgstr ""
 
 #: ../lib/proj/do_proj.c:114
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create latlong equivalent for '%s'"
-msgstr "Nu s-a putut crea tabelul <%s>"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:164
-#, fuzzy
 msgid "No input projection"
-msgstr "Proiecţie necunoscută"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:167 ../lib/proj/do_proj.c:336
 msgid "No transformation object"
@@ -9727,9 +9722,8 @@ msgid "proj_trans() failed: %s"
 msgstr ""
 
 #: ../lib/proj/do_proj.c:247
-#, fuzzy
 msgid "No output projection"
-msgstr "Proiecţie necunoscută"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:276 ../lib/proj/do_proj.c:499
 #: ../lib/proj/do_proj.c:626 ../lib/proj/do_proj.c:790

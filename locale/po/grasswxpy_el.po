@@ -1337,7 +1337,7 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:746
 #: ../gui/wxpython/animation/controller.py:295
 msgid "Invalid input"
-msgstr ""
+msgstr "Μη έγκυρη εισαγωγή"
 
 #: ../gui/wxpython/wxplot/dialogs.py:664 ../gui/wxpython/wxplot/base.py:517
 #: ../gui/wxpython/wxplot/base.py:584
@@ -11652,9 +11652,8 @@ msgid "Not enough points for line"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:51
-#, fuzzy
 msgid "Name for the new mapset:"
-msgstr "Όνομα εξαγώμενου χάρτη raster"
+msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:150
 #, python-brace-format
@@ -15557,16 +15556,16 @@ msgstr "3D προβολή"
 
 #: ../gui/wxpython/animation/data.py:66
 msgid "No animation name selected."
-msgstr ""
+msgstr "Δεν έχει επιλεγεί κινούμενο σχέδιο"
 
 #: ../gui/wxpython/animation/data.py:132
 msgid "No workspace file selected."
-msgstr ""
+msgstr "Δεν έχει επιλεγεί αρχείου χώρου εργασίας"
 
 #: ../gui/wxpython/animation/data.py:135
 #, python-format
 msgid "File %s not found"
-msgstr ""
+msgstr "Το αρχείο %s δεν βρέθηκε"
 
 #: ../gui/wxpython/animation/data.py:144
 #, python-format
@@ -15659,7 +15658,7 @@ msgstr ""
 #: ../gui/wxpython/animation/controller.py:598
 #, python-format
 msgid "%(from)s %(dash)s %(to)s"
-msgstr ""
+msgstr "%(από) %(παύλα) %(σε) "
 
 #: ../gui/wxpython/animation/frame.py:610
 #, python-format
@@ -15864,7 +15863,7 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:890
 #: ../gui/wxpython/animation/controller.py:262
 msgid "More animations are using one window. Please select different window for each animation."
-msgstr ""
+msgstr "Πολλά κινούμενα εικονίδια σε ένα παράθυρο. Παρακαλώ διαλέξτε διαφορετικό παράθυρο για κάθε ένα."
 
 #: ../gui/wxpython/animation/dialogs.py:991
 msgid "Add time stamp"
@@ -16136,32 +16135,32 @@ msgstr ""
 #: ../gui/wxpython/animation/controller.py:234
 #, python-format
 msgid "Maximum number of animations is %s."
-msgstr ""
+msgstr "Ο μέγιστος αριθμός κινουμένων είναι: %s. "
 
 #: ../gui/wxpython/animation/controller.py:443
 msgid "Failed to display legend."
-msgstr ""
+msgstr "Σφάλμα κατά την προβολή υπομνήματος"
 
 #: ../gui/wxpython/animation/controller.py:475
 msgid "Inconsistent number of maps, please check input data."
-msgstr ""
+msgstr "Ο αριθμός των χαρτών δεν ταιριάζει, ελέγξτε τα δεδομένα."
 
 #: ../gui/wxpython/animation/controller.py:505
 msgid "No animation to export."
-msgstr ""
+msgstr "Δεν υπάρχει κινούμενο σχέδιο για εξαγωγή"
 
 #: ../gui/wxpython/animation/controller.py:542
 msgid "Preparing export, please wait..."
-msgstr ""
+msgstr "Προετοιμασία για εξαγωγή, παρακαλώ περιμένετε..."
 
 #: ../gui/wxpython/animation/controller.py:605
 #, python-format
 msgid "%(start)s %(unit)s"
-msgstr ""
+msgstr "%(αρχή) %(μονάδα)ες "
 
 #: ../gui/wxpython/animation/controller.py:624
 msgid "Exporting animation, please wait..."
-msgstr ""
+msgstr "Εξαγωγή κινούμενου σχεδίου, παρακαλώ περιμένετε..."
 
 #: ../gui/wxpython/icons/icon.py:38
 #, python-format
@@ -16171,7 +16170,7 @@ msgstr ""
 #: ../gui/wxpython/icons/icon.py:56
 #, python-format
 msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."
-msgstr ""
+msgstr "Αδυναμία φόρτωσης του θέματος (εικονίδια). Αιτία:  %s. Κλείσιμο του wxGUI.."
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:138
 msgid "With stvds you have to set 'attr' option"
@@ -16255,9 +16254,8 @@ msgid "CVS path"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:321
-#, fuzzy
 msgid "Do you want the CSV header?"
-msgstr "Θέλετε να αποθηκευσετε τις αλλαγές στο μοντέλο;"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:363 ../gui/wxpython/tplot/frame.py:842
 #: ../gui/wxpython/tplot/frame.py:846 ../gui/wxpython/tplot/frame.py:867
@@ -16327,14 +16325,13 @@ msgid "Problem getting data from vector temporal dataset. Empty list of values."
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:802
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{pa} already exists, do you want to overwrite?"
-msgstr "Το αρχείο <%s> υπάρχει. Θέλετε να γίνει αντικατάσταση του αρχείου;"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:804
-#, fuzzy
 msgid "File exists"
-msgstr "Το αρχείο υπάρχει."
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:809
 msgid "Please change name of output CSV file or "

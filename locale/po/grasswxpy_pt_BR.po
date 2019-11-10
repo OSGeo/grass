@@ -11696,9 +11696,8 @@ msgid "Not enough points for line"
 msgstr "Pontos insuficientes para linha"
 
 #: ../gui/wxpython/startup/guiutils.py:51
-#, fuzzy
 msgid "Name for the new mapset:"
-msgstr "Insira nome para novo mapset:"
+msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:150
 #, python-brace-format
@@ -12037,11 +12036,11 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:525 ../gui/wxpython/animation/toolbars.py:42
 msgid "Pause"
-msgstr ""
+msgstr "Pausar"
 
 #: ../gui/wxpython/nviz/tools.py:527 ../gui/wxpython/animation/toolbars.py:39
 msgid "Stop"
-msgstr ""
+msgstr "Parar"
 
 #: ../gui/wxpython/nviz/tools.py:544
 msgid "Total number of frames :"
@@ -13448,7 +13447,7 @@ msgstr ""
 #: ../gui/wxpython/vnet/dialogs.py:1643
 #: ../gui/wxpython/gmodeler/preferences.py:706
 msgid "Name:"
-msgstr ""
+msgstr "Nome:"
 
 #: ../gui/wxpython/gui_core/gselect.py:1561
 msgid "Choose file"
@@ -15537,7 +15536,7 @@ msgstr ""
 #: ../gui/wxpython/lmgr/layertree.py:2001
 #, python-format
 msgid "Map <%s> not found."
-msgstr ""
+msgstr "Mapa <%s> não encontrado."
 
 #: ../gui/wxpython/mapswipe/frame.py:674 ../gui/wxpython/mapdisp/frame.py:896
 msgid "No raster or vector map layer selected for querying."
@@ -15601,7 +15600,7 @@ msgstr "Visualização 3D"
 
 #: ../gui/wxpython/animation/data.py:66
 msgid "No animation name selected."
-msgstr ""
+msgstr "Nome da animação não selecionado."
 
 #: ../gui/wxpython/animation/data.py:132
 msgid "No workspace file selected."
@@ -15629,60 +15628,60 @@ msgstr ""
 #: ../gui/wxpython/animation/nviztask.py:55
 #, python-format
 msgid "No 3d view information in workspace file <%s>."
-msgstr ""
+msgstr "Sem informação sobre visualização 3d no arquivo da área de trabalho <%s>."
 
 #: ../gui/wxpython/animation/nviztask.py:287
 msgid "Please add only one layer in the list."
-msgstr ""
+msgstr "Favor adicionar apenas uma camada a lista."
 
 #: ../gui/wxpython/animation/nviztask.py:294
 msgid "No map series nor space-time dataset is added."
-msgstr ""
+msgstr "Não foi adicionado série de mapas ou conjunto de dados espaço-temporal."
 
 #: ../gui/wxpython/animation/toolbars.py:30
 msgid "Change animation speed"
-msgstr ""
+msgstr "Alterar velocidade da animação"
 
 #: ../gui/wxpython/animation/toolbars.py:33
 msgid "Play forward"
-msgstr ""
+msgstr "Tocar para frente"
 
 #: ../gui/wxpython/animation/toolbars.py:36
 msgid "Play back"
-msgstr ""
+msgstr "Tocar para trás"
 
 #: ../gui/wxpython/animation/toolbars.py:45
 msgid "Repeat"
-msgstr ""
+msgstr "Repetir"
 
 #: ../gui/wxpython/animation/toolbars.py:48
 msgid "Play back and forward"
-msgstr ""
+msgstr "Tocar para frente e para trás"
 
 #: ../gui/wxpython/animation/toolbars.py:51
 #: ../gui/wxpython/animation/toolbars.py:52
 #: ../gui/wxpython/animation/dialogs.py:327
 msgid "Add new animation"
-msgstr ""
+msgstr "Adicionar nova animação"
 
 #: ../gui/wxpython/animation/toolbars.py:55
 #: ../gui/wxpython/animation/toolbars.py:56
 msgid "Add, edit or remove animation"
-msgstr ""
+msgstr "Criar editar ou remover animação"
 
 #: ../gui/wxpython/animation/toolbars.py:59
 #: ../gui/wxpython/animation/toolbars.py:60
 #: ../gui/wxpython/animation/dialogs.py:910
 msgid "Export animation"
-msgstr ""
+msgstr "Exportar animação"
 
 #: ../gui/wxpython/animation/toolbars.py:68
 msgid "Add space-time dataset or series of map layers"
-msgstr ""
+msgstr "Adicionar conjunto de dados espaço-temporais ou uma série de camadas"
 
 #: ../gui/wxpython/animation/toolbars.py:69
 msgid "Add space-time dataset or series of map layers for animation"
-msgstr ""
+msgstr "Adicionar conjunto de dados espaço-temporais ou uma série de camadas para a animação"
 
 #: ../gui/wxpython/animation/frame.py:51
 msgid "GRASS GIS Animation tool"
@@ -15732,15 +15731,15 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:56
 msgid "Adjust speed of animation"
-msgstr ""
+msgstr "Ajuste de velocidade da animação"
 
 #: ../gui/wxpython/animation/dialogs.py:103
 msgid "Simple mode"
-msgstr ""
+msgstr "Modo simplificado"
 
 #: ../gui/wxpython/animation/dialogs.py:108
 msgid "Frame duration:"
-msgstr ""
+msgstr "Duração do frame"
 
 #: ../gui/wxpython/animation/dialogs.py:109
 #: ../gui/wxpython/animation/dialogs.py:150
@@ -15749,7 +15748,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:142
 msgid "Temporal mode"
-msgstr ""
+msgstr "Modo temporal"
 
 #: ../gui/wxpython/animation/dialogs.py:147
 msgid "Time unit:"
@@ -15761,63 +15760,63 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:221
 msgid "year"
-msgstr ""
+msgstr "ano"
 
 #: ../gui/wxpython/animation/dialogs.py:222
 msgid "month"
-msgstr ""
+msgstr "mês"
 
 #: ../gui/wxpython/animation/dialogs.py:223
 msgid "day"
-msgstr ""
+msgstr "dia"
 
 #: ../gui/wxpython/animation/dialogs.py:224
 msgid "hour"
-msgstr ""
+msgstr "hora"
 
 #: ../gui/wxpython/animation/dialogs.py:225
 msgid "minute"
-msgstr ""
+msgstr "minuto"
 
 #: ../gui/wxpython/animation/dialogs.py:226
 msgid "second"
-msgstr ""
+msgstr "segundo"
 
 #: ../gui/wxpython/animation/dialogs.py:291
 msgid "Animation speed is too high."
-msgstr ""
+msgstr "Velocidade da animação está muito alta."
 
 #: ../gui/wxpython/animation/dialogs.py:329
 msgid "Edit animation"
-msgstr ""
+msgstr "Editar animação"
 
 #: ../gui/wxpython/animation/dialogs.py:347
 msgid "Advanced"
-msgstr ""
+msgstr "Avançado"
 
 #: ../gui/wxpython/animation/dialogs.py:378
 msgid "top left"
-msgstr ""
+msgstr "superior esquerdo"
 
 #: ../gui/wxpython/animation/dialogs.py:379
 msgid "top right"
-msgstr ""
+msgstr "superior direito"
 
 #: ../gui/wxpython/animation/dialogs.py:380
 msgid "bottom left"
-msgstr ""
+msgstr "inferior esquerdo"
 
 #: ../gui/wxpython/animation/dialogs.py:381
 msgid "bottom right"
-msgstr ""
+msgstr "inferior direito"
 
 #: ../gui/wxpython/animation/dialogs.py:397
 msgid "Select 2D or 3D view"
-msgstr ""
+msgstr "Selecionar visualização 2D ou 3D"
 
 #: ../gui/wxpython/animation/dialogs.py:412
 msgid "Window position:"
-msgstr ""
+msgstr "Posição da janela:"
 
 #: ../gui/wxpython/animation/dialogs.py:422
 msgid "View mode:"
@@ -15864,19 +15863,19 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:577
 msgid "Zoom value:"
-msgstr ""
+msgstr "Zoom"
 
 #: ../gui/wxpython/animation/dialogs.py:578
 msgid "N-S/E-W distances in map units used to gradually reduce region."
-msgstr ""
+msgstr "N-S/E-W distâncias em unidades do mapa utilizadas para reduzir gradualmente a região."
 
 #: ../gui/wxpython/animation/dialogs.py:585
 msgid "N-S:"
-msgstr ""
+msgstr "N-S"
 
 #: ../gui/wxpython/animation/dialogs.py:588
 msgid "E-W:"
-msgstr ""
+msgstr "E-W"
 
 #: ../gui/wxpython/animation/dialogs.py:686
 msgid "Only one series or space-time dataset is accepted for 3D mode."
@@ -15910,7 +15909,7 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:890
 #: ../gui/wxpython/animation/controller.py:262
 msgid "More animations are using one window. Please select different window for each animation."
-msgstr ""
+msgstr "Mais animações estão utilizando uma janela. Favor selecionar janelas diferentes para cada animação."
 
 #: ../gui/wxpython/animation/dialogs.py:991
 msgid "Add time stamp"
@@ -16157,7 +16156,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/utils.py:182
 msgid "The number of maps in space-time datasets has to be the same."
-msgstr ""
+msgstr "O número de mapas no conjunto de dados espaço-temporal deve ser o mesmo."
 
 #: ../gui/wxpython/animation/utils.py:186
 msgid "The temporal type (absolute/relative) of space-time datasets has to be the same."
@@ -16182,23 +16181,23 @@ msgstr ""
 #: ../gui/wxpython/animation/controller.py:234
 #, python-format
 msgid "Maximum number of animations is %s."
-msgstr ""
+msgstr "Número máximo de animações são %s."
 
 #: ../gui/wxpython/animation/controller.py:443
 msgid "Failed to display legend."
-msgstr ""
+msgstr "Não foi possível mostrar a legenda."
 
 #: ../gui/wxpython/animation/controller.py:475
 msgid "Inconsistent number of maps, please check input data."
-msgstr ""
+msgstr "Número inconsistente de mapas, favor verificar dados de entrada."
 
 #: ../gui/wxpython/animation/controller.py:505
 msgid "No animation to export."
-msgstr ""
+msgstr "Sem animação para exportar"
 
 #: ../gui/wxpython/animation/controller.py:542
 msgid "Preparing export, please wait..."
-msgstr ""
+msgstr "Preparando exportação, aguarde..."
 
 #: ../gui/wxpython/animation/controller.py:605
 #, python-format
@@ -16207,7 +16206,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/controller.py:624
 msgid "Exporting animation, please wait..."
-msgstr ""
+msgstr "Exportando animação, aguarde..."
 
 #: ../gui/wxpython/icons/icon.py:38
 #, python-format
@@ -16289,9 +16288,8 @@ msgid "Set label for Y axis"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:302
-#, fuzzy
 msgid "Labels"
-msgstr "Adicionar etiquetas"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:309
 msgid "Path for output CSV file with plotted data"
@@ -16302,9 +16300,8 @@ msgid "CVS path"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:321
-#, fuzzy
 msgid "Do you want the CSV header?"
-msgstr "Pretende criar uma GRASS location <%s>?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:363 ../gui/wxpython/tplot/frame.py:842
 #: ../gui/wxpython/tplot/frame.py:846 ../gui/wxpython/tplot/frame.py:867
@@ -16374,9 +16371,9 @@ msgid "Problem getting data from vector temporal dataset. Empty list of values."
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:802
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{pa} already exists, do you want to overwrite?"
-msgstr "Arquivo de área de trabalho <%s> já existe. ¿Quer sobreescrever este arquivo?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:804
 msgid "File exists"
