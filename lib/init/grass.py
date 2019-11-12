@@ -1196,6 +1196,14 @@ def load_env(grass_env_file):
         os.environ['LD_LIBRARY_PATH'] = libpath + os.pathsep + isislibpath + os.pathsep + isis3rdparty
 
 
+def install_notranslation():
+    # If locale is not supported, _ function might be missing
+    # This function just installs _ as a pass-through function
+    # See trac #3875 for details
+    import builtins
+    builtins.__dict__['_'] = lambda x: x
+
+
 def set_language(grass_config_dir):
     # This function is used to override system default language and locale
     # Such override can be requested only from wxGUI
@@ -1244,11 +1252,12 @@ def set_language(grass_config_dir):
             # it would be too drastic to exit
             # sys.exit("Fix system locale settings and then try again.")
             locale.setlocale(locale.LC_ALL, 'C')
-            sys.stderr.write("Default locale settings are missing. GRASS running with C locale.")
+            sys.stderr.write("Default locale settings are missing. GRASS running with C locale.\n")
 
         language, encoding = locale.getdefaultlocale()
         if not language:
-            sys.stderr.write("Default locale settings are missing. GRASS running with C locale.")
+            sys.stderr.write("Default locale settings are missing. GRASS running with C locale.\n")
+            install_notranslation()
             return
 
     else:
@@ -1281,6 +1290,7 @@ def set_language(grass_config_dir):
                             " en_US.UTF-8 locale and restart GRASS.\n"
                             "Also consider upgrading your Python version"
                             " to one containing fix for Python Issue 30755.\n")
+                        install_notranslation()
                         return
                     # en_US locale might be missing, still all messages in
                     # GRASS are already in en_US language.
@@ -1307,6 +1317,7 @@ def set_language(grass_config_dir):
                             "If you observe UnicodeError in Python,"
                             " install en_US.UTF-8"
                             " locale and restart GRASS.\n")
+                        install_notranslation()
                         return
                 else:
                     # The last attempt...
@@ -1325,6 +1336,7 @@ def set_language(grass_config_dir):
                         # language
                         os.environ['LANGUAGE'] = language
                         os.environ['LANG'] = language
+                        install_notranslation()
                         return
 
     # Set up environment for subprocesses

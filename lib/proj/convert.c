@@ -423,7 +423,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 		     struct Key_Value **projunits, OGRSpatialReferenceH hSRS1,
 		     int datumtrans)
 {
-    struct Key_Value *temp_projinfo;
+    struct Key_Value *temp_projinfo, *temp_projinfo_ext;
     char *pszProj4 = NULL, *pszRemaining;
     char *pszProj = NULL;
     const char *pszProjCS = NULL;
@@ -432,6 +432,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
     struct gpj_datum dstruct;
     const char *ograttr;
     OGRSpatialReferenceH hSRS;
+    int use_proj_extension;
 
     *projinfo = NULL;
     *projunits = NULL;
@@ -449,6 +450,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
     OSRMorphFromESRI(hSRS);
 
     *projinfo = G_create_key_value();
+    use_proj_extension = 0;
 
     /* use proj4 definition from EXTENSION attribute if existing */
     ograttr = OSRGetAttrValue(hSRS, "EXTENSION", 0);
@@ -501,6 +503,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 
 		/* the original hSRS1 is left as is, ok? */
 		hSRS = hSRS2;
+		use_proj_extension = 1;
 	    }
 	    G_free(proj4ext);
 	}
@@ -542,6 +545,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
     /*      extra work to "GRASSify" the result.                            */
     /* -------------------------------------------------------------------- */
     temp_projinfo = G_create_key_value();
+    temp_projinfo_ext = G_create_key_value();
 
     /* Create "local" copy of proj4 string so we can modify and free it
      * using GRASS functions */
@@ -581,19 +585,16 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 	    pszProj = pszValue;
 	}
 
-	/* discard @null nadgrids */
-	if (G_strcasecmp(pszToken, "nadgrids") == 0 &&
-	    G_strcasecmp(pszValue, "@null") == 0)
-	    continue;
-
 	/* Ellipsoid and datum handled separately below */
 	if (G_strcasecmp(pszToken, "ellps") == 0
 	    || G_strcasecmp(pszToken, "a") == 0
 	    || G_strcasecmp(pszToken, "b") == 0
 	    || G_strcasecmp(pszToken, "es") == 0
 	    || G_strcasecmp(pszToken, "rf") == 0
-	    || G_strcasecmp(pszToken, "datum") == 0)
+	    || G_strcasecmp(pszToken, "datum") == 0) {
+	    G_set_key_value(pszToken, pszValue, temp_projinfo_ext);
 	    continue;
+	}
 
 	/* We will handle units separately */
 	if (G_strcasecmp(pszToken, "to_meter") == 0)
@@ -641,11 +642,16 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
     /* -------------------------------------------------------------------- */
 
     {
-	const char *pszDatumNameConst = OSRGetAttrValue(hSRS, "DATUM", 0);
+	const char *pszDatumNameConst;
 	struct datum_list *list, *listhead;
 	char *dum1, *dum2, *pszDatumName;
 	int paramspresent =
 	    GPJ__get_datum_params(temp_projinfo, &dum1, &dum2);
+
+	if (!use_proj_extension)
+	    pszDatumNameConst = OSRGetAttrValue(hSRS, "DATUM", 0);
+	else
+	    pszDatumNameConst = G_find_key_value("datum", temp_projinfo_ext);
 
 	if (pszDatumNameConst) {
 	    /* Need to make a new copy of the string so we don't mess
@@ -740,7 +746,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 	GPJ_free_datum(&dstruct);
 	G_free(datum);
     }
-    else {
+    else if (!use_proj_extension) {
 	/* If we can't determine the ellipsoid from the datum, derive it
 	 * directly from "SPHEROID" parameters in WKT */
 	const char *pszSemiMajor = OSRGetAttrValue(hSRS, "SPHEROID", 1);
@@ -799,6 +805,18 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 	}
 
     }
+    else if (use_proj_extension) {
+	double a, es, rf;
+
+	if (GPJ__get_ellipsoid_params(temp_projinfo_ext, &a, &es, &rf)) {
+	    char parmstr[100];
+
+	    sprintf(parmstr, "%.16g", a);
+	    G_set_key_value("a", parmstr, *projinfo);
+	    sprintf(parmstr, "%.16g", es);
+	    G_set_key_value("es", parmstr, *projinfo);
+	}
+    }
 
     /* -------------------------------------------------------------------- */
     /*      Finally append the detailed projection parameters to the end    */
@@ -813,6 +831,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 
 	G_free_key_value(temp_projinfo);
     }
+    G_free_key_value(temp_projinfo_ext);
 
     G_free(pszProj4);
 
