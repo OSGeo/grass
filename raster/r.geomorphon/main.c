@@ -501,7 +501,7 @@ int main(int argc, char **argv)
 	for (i = 0; i < 5; ++i) {
 	    multiple_output[i].forms_buffer = Rast_allocate_buf(CELL_TYPE);
 	    strcpy(multiple_output[i].name, prefix);
-	    strcat(multiple_output[11].name, postfixes[i]);
+	    strcat(multiple_output[i].name, postfixes[i]);
 	    multiple_output[i].fd =
 		Rast_open_new(multiple_output[i].name, CELL_TYPE);
 	}
