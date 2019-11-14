@@ -264,7 +264,7 @@ def main():
     outf.close()
 
     try:
-        grass.run_command('r.import', input=bilfile, out=tileout)
+        grass.run_command('r.import', input=bilfile, out=tileout, resample='bilinear')
     except:
         grass.fatal(_("Unable to import data"))
 
