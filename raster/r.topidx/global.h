@@ -6,8 +6,10 @@
 #define	atbv(i,j)		atb[i][j]
 #define	is_cv_null(i,j)		Rast_is_d_null_value(&cv(i,j))
 #define	is_atbv_null(i,j)	Rast_is_d_null_value(&atbv(i,j))
+#define is_atbv_unprocessed(i,j) (atbv(i,j) == UNPROCESSED)
 
 #define	ZERO			0.0000001
+#define	UNPROCESSED		-1.7976931348623157e+308
 
 #ifdef _MAIN_C_
 #define GLOBAL
