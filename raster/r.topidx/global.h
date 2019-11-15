@@ -1,3 +1,5 @@
+#include <float.h>
+
 #include <grass/gis.h>
 #include <grass/raster.h>
 
@@ -8,8 +10,11 @@
 #define	is_atbv_null(i,j)	Rast_is_d_null_value(&atbv(i,j))
 #define is_atbv_unprocessed(i,j) (atbv(i,j) == UNPROCESSED)
 
+#ifndef DBL_MAX
+#define DBL_MAX 1.797693E308  /* DBL_MAX approximation */
+#endif
 #define	ZERO			0.0000001
-#define	UNPROCESSED		-1.7976931348623157e+308
+#define	UNPROCESSED		-DBL_MAX
 
 #ifdef _MAIN_C_
 #define GLOBAL
