@@ -113,6 +113,9 @@ class WMSGdalDrv(WMSBase):
         block_size_y = etree.SubElement(gdal_wms, "BlockSizeY")
         block_size_y.text = str(self.tile_size['rows'])
 
+        user_password = etree.SubElement(gdal_wms, "UserPwd")
+        user_password.text = "%s:%s" % (self.params['username'], self.params['password'])
+
         xml_file = self._tempfile()
 
         etree.ElementTree(gdal_wms).write(xml_file)
