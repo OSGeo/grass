@@ -1753,6 +1753,8 @@ PROMPT_COMMAND=grass_prompt\n""".format(
             mask2d_test=mask2d_test, mask3d_test=mask3d_test
             ))
 
+    f.write("export HOME=\"%s\"\n" % userhome)  # restore user home path
+
     # read other settings (aliases, ...) since environmental variables
     # have been already set by load_env(), see #3462
     for env_file in [os.path.join(userhome, ".grass.bashrc"),
@@ -1766,7 +1768,6 @@ PROMPT_COMMAND=grass_prompt\n""".format(
                 f.write(line + '\n')
 
     f.write("export PATH=\"%s\"\n" % os.getenv('PATH'))
-    f.write("export HOME=\"%s\"\n" % userhome)  # restore user home path
     f.close()
 
     process = Popen([gpath("etc", "run"), os.getenv('SHELL')])
