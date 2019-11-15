@@ -285,9 +285,8 @@ class WMSBase(object):
         # save to file
         if capfile_output:
             try:
-                temp = open(capfile_output, "w")
-                temp.write(cap.read())
-                temp.close()
+                with open(capfile_output, "w") as temp:
+                    temp.write(grass.decode(cap.read()))
                 return
             except IOError as error:
                 grass.fatal(_("Unabble to open file '%s'.\n%s\n" % (cap_file, error)))
