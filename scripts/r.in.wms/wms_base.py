@@ -261,7 +261,7 @@ class WMSBase(object):
                 grass.fatal(msg)
 
         grass.debug('Fetching capabilities OK')
-        return cap
+        return grass.decode(cap)
 
     def _fetchDataFromServer(self, url, username=None, password=None):
         """!Fetch data from server
@@ -286,7 +286,7 @@ class WMSBase(object):
         if capfile_output:
             try:
                 with open(capfile_output, "w") as temp:
-                    temp.write(grass.decode(cap.read()))
+                    temp.write(cap.read())
                 return
             except IOError as error:
                 grass.fatal(_("Unabble to open file '%s'.\n%s\n" % (cap_file, error)))
