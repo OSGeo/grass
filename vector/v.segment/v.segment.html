@@ -14,8 +14,7 @@ The offsets can be percent values of the line length. If the offsets are
 negative, they start from the end node of the line. -0 means the end of the
 line.
 
-<h3>EXAMPLE</h3>
-
+<p>
 The user could send to <tt>stdin</tt> something like:
 <div class="code"><pre>
 P 1 356 24.56
@@ -48,11 +47,13 @@ that distance can be used as the along-line offset.
 
 <h2>EXAMPLES</h2>
 
-The examples may be used in the North Carolina sample location.
-<p>
+The examples are based on the North Carolina sample location.
 
-Example: Extract line segment from 400m to 5000m from beginning 
+<h3>Extraction of a line segment</h3>
+
+Extract line segment from 400m to 5000m from beginning
 of line 1:
+
 <div class="code"><pre>
 # extract lines from railroad map:
 v.extract railroads out=myrr cats=1
@@ -84,9 +85,11 @@ Extract line segment from 400m to 5000m from beginning
 of line 1
 </center>
 
-<p>
-Example: Create parallel 1km long line segments along first 8km of 
-track, offset 500m to the left of the tracks.
+<h3>Parallel line segments</h3>
+
+Creation of parallel, 1km long line segments along the first 8km of
+track, offset 500m to the left of the tracks:
+
 <div class="code"><pre>
 v.segment myrailroads out=myrailroads_segl_side &lt;&lt; EOF
 L 1 1 1000 2000 -500
@@ -99,8 +102,10 @@ d.vect myrailroads disp=shape,dir
 d.vect -c myrailroads_segl_side width=2
 </pre></div>
 
-<p>
-Example: A series of points, spaced every 2km along the tracks
+<h3>Points equidistant along the tracks</h3>
+
+Creation of a series of points, spaced every 2km along the tracks:
+
 <div class="code"><pre>
 v.segment myrailroads out=myrailroads_pt2km &lt;&lt; EOF
 P 1 1 1000
@@ -117,8 +122,11 @@ d.vect myrailroads_pt2km icon=basic/circle color=blue fcolor=blue size=5
 A series of points, spaced every 2km along the tracks
 </center>
 
-<p>
-Example: A series of points, spaced every 2km along the tracks, offset 500m to the right
+<h3>Points equidistant along and offset the tracks</h3>
+
+Creation of a series of points, spaced every 2km along the tracks,
+offset 500m to the right:
+
 <div class="code"><pre>
 v.segment myrailroads out=myrailroads_pt2kmO500m &lt;&lt; EOF
 P 1 1 1000 500
@@ -135,9 +143,10 @@ d.vect myrailroads_pt2kmO500m icon=basic/circle color=aqua fcolor=aqua size=5
 A series of points, spaced every 2km along the tracks, offset 500m to the right
 </center>
 
-<p>
-Example: A series of points, spaced every 10% of the line's length along the
-tracks from the end of the line up to the middle point, offset 500m to the right
+<h3>Points equidistant in percent along and offset the tracks</h3>
+
+Creation of a series of points, spaced every 10% of the line's length along the
+tracks from the end of the line up to the middle point, offset 500m to the right:
 
 <div class="code"><pre>
 v.segment myrailroads out=myrailroads_pt10pctO500m &lt;&lt; EOF
