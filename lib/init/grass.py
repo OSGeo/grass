@@ -692,8 +692,8 @@ def set_browser():
         else:
             # the usual suspects
             browsers = ["xdg-open", "x-www-browser", "htmlview", "konqueror", "mozilla",
-                        "mozilla-firefox", "firefox", "iceweasel", "opera",
-                        "netscape", "dillo", "lynx", "links", "w3c"]
+                        "mozilla-firefox", "firefox", "iceweasel", "opera", "google-chrome",
+                        "chromium", "netscape", "dillo", "lynx", "links", "w3c"]
             for b in browsers:
                 if find_exe(b):
                     browser = b
