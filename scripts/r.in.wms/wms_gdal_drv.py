@@ -148,6 +148,7 @@ class WMSGdalDrv(WMSBase):
         # print xml file content for debug level 1
         file = open(xml_file, "r")
         grass.debug("WMS request XML:\n%s" % file.read(), 1)
+        file.close()
 
         if self.proxy:
             gdal.SetConfigOption('GDAL_HTTP_PROXY', str(self.proxy))
