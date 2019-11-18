@@ -113,8 +113,9 @@ class WMSGdalDrv(WMSBase):
         block_size_y = etree.SubElement(gdal_wms, "BlockSizeY")
         block_size_y.text = str(self.tile_size['rows'])
 
-        user_password = etree.SubElement(gdal_wms, "UserPwd")
-        user_password.text = "%s:%s" % (self.params['username'], self.params['password'])
+        if self.params['username'] and self.params['password']:
+            user_password = etree.SubElement(gdal_wms, "UserPwd")
+            user_password.text = "%s:%s" % (self.params['username'], self.params['password'])
 
         xml_file = self._tempfile()
 
@@ -140,10 +141,13 @@ class WMSGdalDrv(WMSBase):
                             "geographic projection, \n try 'WMS_GRASS' driver or use WMS version 1.1.1."))
 
         self._debug("_download", "started")
-
         temp_map = self._tempfile()
 
         xml_file = self._createXML()
+
+        # print xml file content for debug level 1
+        file = open(xml_file, "r")
+        grass.debug("WMS request xml:\n%s" % file.read(), 1)
 
         if self.proxy:
             gdal.SetConfigOption('GDAL_HTTP_PROXY', str(self.proxy))
