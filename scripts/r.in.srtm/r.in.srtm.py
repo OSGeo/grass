@@ -150,19 +150,13 @@ def main():
     global tile, tmpdir, in_temp
 
     in_temp = False
-    
+
     # to support SRTM water body
     swbd = False
 
     input = options['input']
     output = options['output']
     one = flags['1']
-
-    # are we in LatLong location?
-    s = grass.read_command("g.proj", flags='j')
-    kv = grass.parse_key_val(s)
-    if not '+proj' in kv.keys() or kv['+proj'] != 'longlat':
-        grass.fatal(_("This module only operates in LatLong locations"))
 
     # use these from now on:
     infile = input
@@ -270,7 +264,7 @@ def main():
     outf.close()
 
     try:
-        grass.run_command('r.in.gdal', input=bilfile, out=tileout)
+        grass.run_command('r.import', input=bilfile, out=tileout, resample='bilinear')
     except:
         grass.fatal(_("Unable to import data"))
 
@@ -283,6 +277,7 @@ def main():
 
     grass.message(_("Done: generated map ") + tileout)
     grass.message(_("(Note: Holes in the data can be closed with 'r.fillnulls' using splines)"))
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()
