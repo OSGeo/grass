@@ -2205,7 +2205,10 @@ class CheckListMapset(
         for mapset in self.parent.all_mapsets_ordered:
             # unclear why this is needed,
             # wrap.ListrCtrl should do the job but it doesn't in this case
-            index = self.InsertStringItem(self.GetItemCount(), mapset)
+            if wxPythonPhoenix:
+                index = self.InsertItem(self.GetItemCount(), mapset)
+            else:
+                index = self.InsertStringItem(self.GetItemCount(), mapset)
             mapsetPath = os.path.join(locationPath,
                                       mapset)
             stat_info = os.stat(mapsetPath)
