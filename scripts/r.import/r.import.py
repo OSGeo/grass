@@ -351,8 +351,10 @@ def main():
         if flags['e']:
             continue
 
-        if options['extent'] == 'input':
+        if options['extent'] == 'input' or tgtres == 'value':
             grass.use_temp_region()
+
+        if options['extent'] == 'input':
             grass.run_command('g.region', n=n, s=s, e=e, w=w)
 
         res = None
@@ -384,7 +386,7 @@ def main():
         if grass.raster_info(outfile)['min'] is None:
             grass.fatal(_("The reprojected raster <%s> is empty") % outfile)
 
-        if options['extent'] == 'input':
+        if options['extent'] == 'input' or tgtres == 'value':
             grass.del_temp_region()
 
     if flags['e']:
