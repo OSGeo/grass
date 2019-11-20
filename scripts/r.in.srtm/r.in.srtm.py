@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#
+
 ############################################################################
 #
 # MODULE:    r_in_aster.py
@@ -9,7 +9,7 @@
 #            Luca Delucchi
 # PURPOSE:   import of SRTM hgt files into GRASS
 #
-# COPYRIGHT:	(C) 2004, 2006 by the GRASS Development Team
+# COPYRIGHT:	(C) 2004-2019 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
@@ -26,6 +26,7 @@
 # March 2018: Added capabilities to import SRTM SWBD
 #             Removed unzip dependencies, now it use Python zipfile library
 #             by Luca Delucchi
+# Nov 2019: use r.import for reprojection by Anika Bettge
 #########################
 # Derived from:
 # ftp://e0srp01u.ecs.nasa.gov/srtm/version1/Documentation/Notes_for_ARCInfo_users.txt
@@ -52,18 +53,27 @@
 #
 #########################
 
-#%Module
+#%module
 #% description: Imports SRTM HGT files into raster map.
 #% keyword: raster
 #% keyword: import
 #% keyword: SRTM
-#%End
+#%end
 #%option G_OPT_F_INPUT
 #% description: Name of SRTM input tile (file without .hgt.zip extension)
 #%end
 #%option G_OPT_R_OUTPUT
 #% description: Name for output raster map (default: input tile)
-#% required : no
+#% required: no
+#%end
+#%option
+#% key: resample
+#% type: string
+#% required: no
+#% multiple: no
+#% options: nearest,bilinear,bicubic,lanczos,bilinear_f,bicubic_f,lanczos_f
+#% description: Resampling method to use for reprojection
+#% descriptions: nearest;nearest neighbor;bilinear;bilinear interpolation;bicubic;bicubic interpolation;lanczos;lanczos filter;bilinear_f;bilinear interpolation with fallback;bicubic_f;bicubic interpolation with fallback;lanczos_f;lanczos filter with fallback
 #%end
 #%flag
 #% key: 1
@@ -158,6 +168,20 @@ def main():
     output = options['output']
     one = flags['1']
 
+    if options['resample']:
+        method = options['resample']
+    else:
+        method = 'nearest'  # default for longlat
+
+    # are we in LatLong location?
+    s = grass.read_command("g.proj", flags='j')
+    kv = grass.parse_key_val(s)
+    if not '+proj' in kv.keys() or kv['+proj'] != 'longlat':
+        # not in longlat and not user choice
+        if not options['resample']:
+            method = 'bilinear_f'
+        grass.message(_("Resampling method switched from 'nearest' to '%s'" % method))
+
     # use these from now on:
     infile = input
     while infile[-4:].lower() in ['.hgt', '.zip', '.raw']:
@@ -216,7 +240,7 @@ def main():
         # unzip & rename data file:
         grass.message(_("Extracting '%s'...") % infile)
         try:
-            zf=zfile.ZipFile(zipfile)
+            zf = zfile.ZipFile(zipfile)
             zf.extractall()
         except:
             grass.fatal(_("Unable to unzip file."))
@@ -264,7 +288,8 @@ def main():
     outf.close()
 
     try:
-        grass.run_command('r.import', input=bilfile, out=tileout, resample='bilinear')
+        # TODO: suppress the here confusing proj mismatch warnings
+        grass.run_command('r.import', quiet=True, input=bilfile, output=tileout, resample=method)
     except:
         grass.fatal(_("Unable to import data"))
 
