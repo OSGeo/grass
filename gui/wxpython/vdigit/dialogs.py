@@ -242,8 +242,8 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
             self.cats[self.fid][layerOld].remove(catOld)
         except:
             event.Veto()
-            self.list.SetStringItem(itemIndex, 0, str(layerNew))
-            self.list.SetStringItem(itemIndex, 1, str(catNew))
+            self.list.SetItem(itemIndex, 0, str(layerNew))
+            self.list.SetItem(itemIndex, 1, str(catNew))
             dlg = wx.MessageDialog(
                 self, _(
                     "Unable to add new layer/category <%(layer)s/%(category)s>.\n"
@@ -583,9 +583,9 @@ class CategoryListCtrl(ListCtrl,
         for layer in cats.keys():
             catsList = cats[layer]
             for cat in catsList:
-                index = self.InsertStringItem(self.GetItemCount(), str(catsList[0]))
-                self.SetStringItem(index, 0, str(layer))
-                self.SetStringItem(index, 1, str(cat))
+                index = self.InsertItem(self.GetItemCount(), str(catsList[0]))
+                self.SetItem(index, 0, str(layer))
+                self.SetItem(index, 1, str(cat))
                 self.SetItemData(index, i)
                 itemData[i] = (str(layer), str(cat))
                 i = i + 1
@@ -802,8 +802,8 @@ class CheckListFeature(
         self.InsertColumn(1, _('Layer (Categories)'))
 
         for item in data:
-            index = self.InsertStringItem(self.GetItemCount(), str(item[0]))
-            self.SetStringItem(index, 1, str(item[1]))
+            index = self.InsertItem(self.GetItemCount(), str(item[0]))
+            self.SetItem(index, 1, str(item[1]))
 
         # enable all items by default
         for item in range(self.GetItemCount()):

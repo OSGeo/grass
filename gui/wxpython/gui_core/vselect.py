@@ -57,8 +57,8 @@ class VectorSelectList(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         if 'Category' not in item:
             return
 
-        pos = self.InsertStringItem(0, str(item['Category']))
-        self.SetStringItem(pos, 1, str(item['Type']))
+        pos = self.InsertItem(0, str(item['Category']))
+        self.SetItem(pos, 1, str(item['Type']))
         self.dictIndex[str(item['Category'])] = pos
 
     def RemoveItem(self, item):
