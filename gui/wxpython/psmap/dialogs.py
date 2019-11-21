@@ -3653,9 +3653,9 @@ class LegendDialog(PsmapDialog):
                 key=lambda x: x[3])
 
             for vector in vectors:
-                index = self.vectorListCtrl.InsertStringItem(
+                index = self.vectorListCtrl.InsertItem(
                     self.vectorListCtrl.GetItemCount(), vector[0].split('@')[0])
-                self.vectorListCtrl.SetStringItem(index, 1, vector[4])
+                self.vectorListCtrl.SetItem(index, 1, vector[4])
                 self.vectorListCtrl.SetItemData(index, index)
                 self.vectorListCtrl.CheckItem(index, True)
                 if vector[3] == 0:
@@ -4153,7 +4153,7 @@ class LegendDialog(PsmapDialog):
                 style=wx.OK | wx.CANCEL | wx.CENTRE)
             if dlg.ShowModal() == wx.ID_OK:
                 new = dlg.GetValue()
-                self.vectorListCtrl.SetStringItem(idx, 1, new)
+                self.vectorListCtrl.SetItem(idx, 1, new)
             dlg.Destroy()
 
     def OnSpan(self, event):
@@ -4462,9 +4462,9 @@ class LegendDialog(PsmapDialog):
                 key=lambda x: x[3])
             self.vectorListCtrl.DeleteAllItems()
             for vector in vectors:
-                index = self.vectorListCtrl.InsertStringItem(
+                index = self.vectorListCtrl.InsertItem(
                     self.vectorListCtrl.GetItemCount(), vector[0].split('@')[0])
-                self.vectorListCtrl.SetStringItem(index, 1, vector[4])
+                self.vectorListCtrl.SetItem(index, 1, vector[4])
                 self.vectorListCtrl.SetItemData(index, index)
                 self.vectorListCtrl.CheckItem(index, True)
                 if vector[3] == 0:

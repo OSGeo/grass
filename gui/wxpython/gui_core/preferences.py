@@ -2203,28 +2203,23 @@ class CheckListMapset(
             gisenv['LOCATION_NAME'])
 
         for mapset in self.parent.all_mapsets_ordered:
-            # unclear why this is needed,
-            # wrap.ListrCtrl should do the job but it doesn't in this case
-            if wxPythonPhoenix:
-                index = self.InsertItem(self.GetItemCount(), mapset)
-            else:
-                index = self.InsertStringItem(self.GetItemCount(), mapset)
+            index = self.InsertItem(self.GetItemCount(), mapset)
             mapsetPath = os.path.join(locationPath,
                                       mapset)
             stat_info = os.stat(mapsetPath)
             if havePwd:
                 try:
-                    self.SetStringItem(
+                    self.SetItem(
                         index, 1, "%s" %
                         pwd.getpwuid(
                             stat_info.st_uid)[0])
                 except KeyError:
-                    self.SetStringItem(index, 1, "nobody")
+                    self.SetItem(index, 1, "nobody")
                 # FIXME: get group name
                 ### self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid)
             else:
                 # FIXME: no pwd under MS Windows (owner: 0, group: 0)
-                self.SetStringItem(index, 1, "%-8s" % stat_info.st_uid)
+                self.SetItem(index, 1, "%-8s" % stat_info.st_uid)
                 ### self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid)
 
         self.SetColumnWidth(col=0, width=wx.LIST_AUTOSIZE)

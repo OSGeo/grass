@@ -33,7 +33,7 @@ from gui_core import gselect
 from gui_core.widgets import SimpleValidator
 from iclass.statistics import Statistics, BandStatistics
 from gui_core.wrap import CheckBox, Button, StaticText, \
-    StaticBox, TextCtrl, Menu, NewId
+    StaticBox, TextCtrl, Menu, NewId, ListCtrl
 
 import grass.script as grass
 
@@ -370,7 +370,7 @@ class IClassCategoryManagerDialog(wx.Dialog):
         return self.catList
 
 
-class CategoryListCtrl(wx.ListCtrl,
+class CategoryListCtrl(ListCtrl,
                        listmix.ListCtrlAutoWidthMixin,
                        listmix.TextEditMixin):
     """Widget for controling list of classes (categories).
@@ -390,7 +390,7 @@ class CategoryListCtrl(wx.ListCtrl,
         :param stats_data: StatisticsData instance (defined in statistics.py)
         :param id: wx id
         """
-        wx.ListCtrl.__init__(
+        ListCtrl.__init__(
             self, parent, id, style=wx.LC_REPORT | wx.LC_VIRTUAL | wx.LC_HRULES |
             wx.LC_VRULES)
         self.columns = ((_('Class name'), 'name'),
