@@ -2727,10 +2727,10 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         # add item to the list of table columns
         tlist = self.FindWindowById(self.layerPage[self.selLayer]['tableData'])
 
-        index = tlist.InsertStringItem(tlist.GetItemCount(), str(name))
-        tlist.SetStringItem(index, 0, str(name))
-        tlist.SetStringItem(index, 1, str(ctype))
-        tlist.SetStringItem(index, 2, str(length))
+        index = tlist.InsertItem(tlist.GetItemCount(), str(name))
+        tlist.SetItem(index, 0, str(name))
+        tlist.SetItem(index, 1, str(ctype))
+        tlist.SetItem(index, 2, str(length))
 
         self.AddColumn(name, ctype, length)
 
@@ -2917,10 +2917,10 @@ class TableListCtrl(ListCtrl,
 
         i = 0
         for column in self.columns:
-            index = self.InsertStringItem(i, str(column))
-            self.SetStringItem(index, 0, str(column))
-            self.SetStringItem(index, 1, str(self.table[column]['type']))
-            self.SetStringItem(index, 2, str(self.table[column]['length']))
+            index = self.InsertItem(i, str(column))
+            self.SetItem(index, 0, str(column))
+            self.SetItem(index, 1, str(self.table[column]['type']))
+            self.SetItem(index, 2, str(self.table[column]['length']))
             self.SetItemData(index, i)
             itemData[i] = (str(column),
                            str(self.table[column]['type']),
@@ -2975,16 +2975,16 @@ class LayerListCtrl(ListCtrl,
 
         i = 0
         for layer in self.layers.keys():
-            index = self.InsertStringItem(i, str(layer))
-            self.SetStringItem(index, 0, str(layer))
+            index = self.InsertItem(i, str(layer))
+            self.SetItem(index, 0, str(layer))
             database = str(self.layers[layer]['database'])
             driver = str(self.layers[layer]['driver'])
             table = str(self.layers[layer]['table'])
             key = str(self.layers[layer]['key'])
-            self.SetStringItem(index, 1, driver)
-            self.SetStringItem(index, 2, database)
-            self.SetStringItem(index, 3, table)
-            self.SetStringItem(index, 4, key)
+            self.SetItem(index, 1, driver)
+            self.SetItem(index, 2, database)
+            self.SetItem(index, 3, table)
+            self.SetItem(index, 4, key)
             self.SetItemData(index, i)
             itemData[i] = (str(layer),
                            driver,

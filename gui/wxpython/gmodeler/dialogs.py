@@ -757,11 +757,11 @@ class VariableListCtrl(ModelListCtrl):
         self.DeleteAllItems()
         i = 0
         for name, vtype, value, desc in six.itervalues(self.itemDataMap):
-            index = self.InsertStringItem(i, name)
-            self.SetStringItem(index, 0, name)
-            self.SetStringItem(index, 1, vtype)
-            self.SetStringItem(index, 2, value)
-            self.SetStringItem(index, 3, desc)
+            index = self.InsertItem(i, name)
+            self.SetItem(index, 0, name)
+            self.SetItem(index, 1, vtype)
+            self.SetItem(index, 2, value)
+            self.SetItem(index, 3, desc)
             self.SetItemData(index, i)
             i += 1
 
@@ -776,11 +776,11 @@ class VariableListCtrl(ModelListCtrl):
                 return _("Variable <%s> already exists in the model. "
                          "Adding variable failed.") % name
 
-        index = self.InsertStringItem(self.GetItemCount(), name)
-        self.SetStringItem(index, 0, name)
-        self.SetStringItem(index, 1, vtype)
-        self.SetStringItem(index, 2, value)
-        self.SetStringItem(index, 3, desc)
+        index = self.InsertItem(self.GetItemCount(), name)
+        self.SetItem(index, 0, name)
+        self.SetItem(index, 1, vtype)
+        self.SetItem(index, 2, value)
+        self.SetItem(index, 3, desc)
         self.SetItemData(index, self.itemCount)
 
         self.itemDataMap[self.itemCount] = [name, vtype, value, desc]
@@ -942,20 +942,20 @@ class ItemListCtrl(ModelListCtrl):
         i = 0
         if len(self.columns) == 2:
             for name, desc in six.itervalues(self.itemDataMap):
-                index = self.InsertStringItem(i, str(i))
-                self.SetStringItem(index, 0, name)
-                self.SetStringItem(index, 1, desc)
+                index = self.InsertItem(i, str(i))
+                self.SetItem(index, 0, name)
+                self.SetItem(index, 1, desc)
                 self.SetItemData(index, i)
                 if checked[i]:
                     self.CheckItem(index, True)
                 i += 1
         else:
             for name, inloop, param, desc in six.itervalues(self.itemDataMap):
-                index = self.InsertStringItem(i, str(i))
-                self.SetStringItem(index, 0, name)
-                self.SetStringItem(index, 1, inloop)
-                self.SetStringItem(index, 2, param)
-                self.SetStringItem(index, 3, desc)
+                index = self.InsertItem(i, str(i))
+                self.SetItem(index, 0, name)
+                self.SetItem(index, 1, inloop)
+                self.SetItem(index, 2, param)
+                self.SetItem(index, 3, desc)
                 self.SetItemData(index, i)
                 i += 1
 

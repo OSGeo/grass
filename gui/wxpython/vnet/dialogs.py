@@ -56,7 +56,7 @@ from gui_core.widgets import GNotebook
 from gui_core.goutput import GConsoleWindow
 from gui_core.gselect import Select, LayerSelect, ColumnSelect
 from gui_core.wrap import SpinCtrl, Button, BitmapButton, StaticText, \
-    StaticBox, TextCtrl
+    StaticBox, TextCtrl, ListCtrl
 
 from vnet.widgets import PointsList
 from vnet.toolbars import MainToolbar, PointListToolbar, AnalysisToolbar
@@ -1901,12 +1901,12 @@ class DefGlobalTurnsDialog(wx.Dialog):
 
 
 class TurnAnglesList(
-        wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEditMixin):
+        ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEditMixin):
     """Virtual editable table with global turns"""
 
     def __init__(self, parent, data, id=wx.ID_ANY,
                  style=wx.LC_REPORT | wx.LC_VIRTUAL, **kwargs):
-        wx.ListCtrl.__init__(self, parent, id, style=style, **kwargs)
+        ListCtrl.__init__(self, parent, id, style=style, **kwargs)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         listmix.TextEditMixin.__init__(self)
 

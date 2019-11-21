@@ -55,7 +55,7 @@ from core.utils import cmp
 from core.gcmd import RunCommand, GError, GMessage, GWarning
 from gui_core.widgets import GenericValidator
 from gui_core.wrap import SpinCtrl, SearchCtrl, StaticText, \
-    TextCtrl, Button, CheckBox, StaticBox, NewId
+    TextCtrl, Button, CheckBox, StaticBox, NewId, ListCtrl
 from location_wizard.base import BaseClass
 from location_wizard.dialogs import SelectTransformDialog
 
@@ -576,13 +576,13 @@ class ProjectionsPage(TitledPage):
         event.Skip()
 
 
-class ItemList(wx.ListCtrl,
+class ItemList(ListCtrl,
                listmix.ListCtrlAutoWidthMixin,
                listmix.ColumnSorterMixin):
     """Generic list (for projections, ellipsoids, etc.)"""
 
     def __init__(self, parent, columns, data=None):
-        wx.ListCtrl.__init__(self, parent=parent, id=wx.ID_ANY,
+        ListCtrl.__init__(self, parent=parent, id=wx.ID_ANY,
                              style=wx.LC_REPORT |
                              wx.LC_VIRTUAL |
                              wx.LC_HRULES |

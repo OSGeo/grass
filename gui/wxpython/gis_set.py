@@ -1113,8 +1113,8 @@ class GListBox(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         idx = 0
         count = self.GetItemCount()
         for item in choices:
-            index = self.InsertStringItem(count + idx, item)
-            self.SetStringItem(index, 0, item)
+            index = self.InsertItem(count + idx, item)
+            self.SetItem(index, 0, item)
 
             if idx in disabled:
                 self.SetItemTextColour(idx, wx.Colour(150, 150, 150))
