@@ -258,13 +258,13 @@ class ListCtrl(wx.ListCtrl):
     def __init__(self, *args, **kwargs):
         wx.ListCtrl.__init__(self, *args, **kwargs)
 
-    def InsertStringItem(self, index, label, imageIndex=-1):
+    def InsertItem(self, index, label, imageIndex=-1):
         if wxPythonPhoenix:
             return wx.ListCtrl.InsertItem(self, index=index, label=label, imageIndex=imageIndex)
         else:
             return wx.ListCtrl.InsertStringItem(self, index=index, label=label, imageIndex=imageIndex)
 
-    def SetStringItem(self, index, column, label, imageId=-1):
+    def SetItem(self, index, column, label, imageId=-1):
         if wxPythonPhoenix:
             return wx.ListCtrl.SetItem(self, index=index, column=column, label=label, imageId=imageId)
         else:
