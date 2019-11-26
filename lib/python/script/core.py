@@ -326,6 +326,52 @@ def make_command(prog, flags="", overwrite=False, quiet=False, verbose=False,
 
 
 def handle_errors(returncode, result, args, kwargs):
+    """Error handler for :func:`run_command()` and similar functions
+
+    The function returns *result* if *returncode* is equal to 0,
+    otherwise it reports errors based on the current settings.
+
+    The functions which are using this function to handle errors,
+    can be typically called with an *errors* parameter.
+    This function can handle one of the following values: raise,
+    fatal, status, exit, and ignore. The value raise is a default.
+
+    If *kwargs* dictionary contains key ``errors``, the value is used
+    to determine the behavior on error.
+    The value ``errors="raise"`` is a default in which case a
+    ``CalledModuleError`` exception is raised.
+
+    For ``errors="fatal"``, the function calls :func:`fatal()`
+    which has its own rules on what happens next.
+
+    For ``errors="status"``, the *returncode* will be returned.
+    This is useful, e.g., for cases when the exception-based error
+    handling mechanism is not desirable or the return code has some
+    meaning not necessarily interpreted as an error by the caller.
+
+    For ``errors="exit"``, ``sys.exit()`` is called with the
+    *returncode*, so it behaves similarly to a Bash script with
+    ``set -e``. No additional error message or exception is produced.
+    This might be useful for a simple script where error message
+    produced by the called module provides sufficient information about
+    what happened to the end user.
+
+    Finally, for ``errors="ignore"``, the value of *result* will be
+    passed in any case regardless of the *returncode*.
+    """
+    def get_module_and_code(args, kwargs):
+        """Get module name and formatted command"""
+        # TODO: construction of the whole command is far from perfect
+        args = make_command(*args, **kwargs)
+        # Since we are in error handler, let's be extra cautious
+        # about an empty command.
+        if args:
+            module = args[0]
+        else:
+            module = None
+        code = ' '.join(args)
+        return module, code
+
     if returncode == 0:
         return result
     handler = kwargs.get('errors', 'raise')
@@ -333,14 +379,18 @@ def handle_errors(returncode, result, args, kwargs):
         return result
     elif handler.lower() == 'status':
         return returncode
+    elif handler.lower() == 'fatal':
+        module, code = get_module_and_code(args, kwargs)
+        fatal(_("Module {module} ({code}) failed with"
+                " non-zero return code {returncode}").format(
+                module=module, code=code, returncode=returncode))
     elif handler.lower() == 'exit':
-        sys.exit(1)
+        sys.exit(returncode)
     else:
-        # TODO: construction of the whole command is far from perfect
-        args = make_command(*args, **kwargs)
-        code = ' '.join(args)
-        raise CalledModuleError(module=None, code=code,
+        module, code = get_module_and_code(args, kwargs)
+        raise CalledModuleError(module=module, code=code,
                                 returncode=returncode)
+
 
 def start_command(prog, flags="", overwrite=False, quiet=False,
                   verbose=False, superquiet=False, **kwargs):
@@ -398,26 +448,34 @@ def run_command(*args, **kwargs):
 
     This function passes all arguments to ``start_command()``,
     then waits for the process to complete. It is similar to
-    ``subprocess.check_call()``, but with the ``make_command()``
-    interface.
-
-    For backward compatibility, the function returns exit code
-    by default but only if it is equal to zero. An exception is raised
-    in case of an non-zero return code.
+    ``subprocess.check_call()``, but with the :func:`make_command()`
+    interface. By default, an exception is raised in case of a non-zero
+    return code by default.
 
     >>> run_command('g.region', raster='elevation')
-    0
 
     See :func:`start_command()` for details about parameters and usage.
 
-    ..note::
-        You should ignore the return value of this function unless, you
-        change the default behavior using *errors* parameter.
+    The behavior on error can be changed using *errors* parameter
+    which is passed to the :func:`handle_errors()` function.
 
-    :param *args: unnamed arguments passed to ``start_command()``
-    :param **kwargs: named arguments passed to ``start_command()``
+    :param *args: unnamed arguments passed to :func:`start_command()`
+    :param **kwargs: named arguments passed to :func:`start_command()`
+    :param str errors: passed to :func:`handle_errors()`
 
-    :returns: 0 with default parameters for backward compatibility only
+    .. versionchanged:: 8.0
+        Before 8.0, the function was returning 0 when no error occurred
+        for backward compatibility with code which was checking that
+        value. Now the function returns None, unless ``errors="status"``
+        is specified.
+    .. versionchanged:: 7.2
+        In 7.0.0, this function was returning the error code. However,
+        it was rarely checked especially outside of the core code.
+        Additionally, :func:`read_command()` needed a mechanism to
+        report errors as it was used more and more in context which
+        required error handling, Thus, exceptions were introduced as a
+        more expected default behavior for Python programmers. The
+        change was backported to 7.0 series.
 
     :raises: ``CalledModuleError`` when module returns non-zero return code
     """
@@ -438,7 +496,7 @@ def run_command(*args, **kwargs):
             sys.stderr.write(stderr)
     else:
         returncode = ps.wait()
-    return handle_errors(returncode, returncode, args, kwargs)
+    return handle_errors(returncode, result=None, args=args, kwargs=kwargs)
 
 
 def pipe_command(*args, **kwargs):
@@ -480,6 +538,9 @@ def feed_command(*args, **kwargs):
 def read_command(*args, **kwargs):
     """Passes all arguments to pipe_command, then waits for the process to
     complete, returning its stdout (i.e. similar to shell `backticks`).
+
+    The behavior on error can be changed using *errors* parameter
+    which is passed to the :func:`handle_errors()` function.
 
     :param list args: list of unnamed arguments (see start_command() for details)
     :param list kwargs: list of named arguments (see start_command() for details)
@@ -558,6 +619,9 @@ def write_command(*args, **kwargs):
     0
 
     See ``start_command()`` for details about parameters and usage.
+
+    The behavior on error can be changed using *errors* parameter
+    which is passed to the :func:`handle_errors()` function.
 
     :param *args: unnamed arguments passed to ``start_command()``
     :param **kwargs: named arguments passed to ``start_command()``
