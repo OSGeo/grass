@@ -1179,7 +1179,7 @@ def load_env(grass_env_file):
             debug("Ignore multi-line environmental variable {0}".format(k))
             continue
         if expand:
-            v = os.path.expanduser(os.path.expandvars(v.replace('\$', '\0')).replace('\0', '$'))
+            v = os.path.expanduser(os.path.expandvars(v.replace('\\$', '\0')).replace('\0', '$'))
         debug("Environmental variable set {0}={1}".format(k, v))
         os.environ[k] = v
 
