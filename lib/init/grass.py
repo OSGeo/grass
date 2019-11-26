@@ -1160,27 +1160,49 @@ def load_env(grass_env_file):
     if not os.access(grass_env_file, os.R_OK):
         return
 
+    # Regular expression for lines starting with "export var=val" (^export
+    # lines below). Environment variables should start with a-zA-Z or _.
+    # \1 and \2 are a variable name and its value, respectively.
     export_re = re.compile('^export[ \t]+([a-zA-Z_]+[a-zA-Z0-9_]*)=(.*?)[ \t]*$')
 
     for line in readfile(grass_env_file).split(os.linesep):
+        # match ^export lines
         m = export_re.match(line)
+        # if not ^export lines, skip
         if not m:
             continue
+
+        # k is the variable name and v is its value
         k = m[1]
         v = m[2]
+        # let's try to expand any $var's in v
         expand = True
         if v.startswith("'") and v.endswith("'"):
+            # we're parsing
+            #   export var='value'
+            # and need to strip out starting and ending quotes from the value
             v = v.strip("'")
+            # we don't want to expand any $var's inside 'value' because they
+            # are within single quotes
             expand = False
         elif v.startswith('"') and v.endswith('"'):
+            # in this case, we're parsing
+            #   export var="value"
+            # and again need to strip out starting and ending quotes from the
+            # value
             v = v.strip('"')
+            # we'll keep expand=True to expand $var's inside "value" because
+            # they are within double quotes
         elif v.startswith("'") or v.endswith("'") or v.startswith('"') or v.endswith('"'):
-            # ignore multi-line variables
-            debug("Ignore multi-line environmental variable {0}".format(k))
+            # here, let's try to ignore unmatching single/double quotes, which
+            # might be a multi-line variable or just a user error
+            debug("Ignoring multi-line environmental variable {0}".format(k))
             continue
         if expand:
+            # finally, expand $var's within a non-single quoted value
             v = os.path.expanduser(os.path.expandvars(v.replace('\\$', '\0')).replace('\0', '$'))
         debug("Environmental variable set {0}={1}".format(k, v))
+        # create a new environment variable
         os.environ[k] = v
 
     # Allow for mixed ISIS-GRASS Environment
@@ -1753,6 +1775,8 @@ PROMPT_COMMAND=grass_prompt\n""".format(
             mask2d_test=mask2d_test, mask3d_test=mask3d_test
             ))
 
+    # this line was moved here from below .grass.bashrc to allow ~ and $HOME in
+    # .grass.bashrc
     f.write("export HOME=\"%s\"\n" % userhome)  # restore user home path
 
     # read other settings (aliases, ...) since environmental variables
