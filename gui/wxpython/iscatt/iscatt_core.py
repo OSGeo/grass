@@ -155,7 +155,7 @@ class Core:
         return self.cat_rast_updater
 
     def UpdateCategoryWithPolygons(self, cat_id, scatts_pols, value):
-        start_time = time.clock()
+        start_time = time.process_time()
 
         if cat_id not in self.scatts_dt.GetCategories():
             raise GException(_("Select category for editing."))

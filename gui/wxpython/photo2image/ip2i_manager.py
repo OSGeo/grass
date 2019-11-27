@@ -1474,14 +1474,14 @@ class GCP(MapFrame, ColumnSorterMixin):
         """Adjust Map Windows after GCP Map Display has been resized
         """
         # re-render image on idle
-        self.resize = time.clock()
+        self.resize = time.process_time()
         super(MapFrame, self).OnSize(event)
 
     def OnIdle(self, event):
         """GCP Map Display resized, adjust Map Windows
         """
         if self.GetMapToolbar():
-            if self.resize and self.resize + 0.2 < time.clock():
+            if self.resize and self.resize + 0.2 < time.process_time():
                 srcwidth, srcheight = self.SrcMapWindow.GetSize()
                 tgtwidth, tgtheight = self.TgtMapWindow.GetSize()
                 srcwidth = (srcwidth + tgtwidth) / 2

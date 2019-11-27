@@ -253,11 +253,11 @@ class SwipeMapFrame(DoubleMapFrame):
 
     def OnSize(self, event):
         Debug.msg(4, "SwipeMapFrame.OnSize()")
-        self.resize = time.clock()
+        self.resize = time.process_time()
         super(SwipeMapFrame, self).OnSize(event)
 
     def OnIdle(self, event):
-        if self.resize and time.clock() - self.resize > 0.2:
+        if self.resize and time.process_time() - self.resize > 0.2:
             w1 = self.GetFirstWindow()
             w2 = self.GetSecondWindow()
 

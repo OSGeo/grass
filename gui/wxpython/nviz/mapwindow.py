@@ -1141,7 +1141,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         :param render: re-render map composition
         :type render: bool
         """
-        start = time.clock()
+        start = time.process_time()
 
         self.resize = False
 
@@ -1184,7 +1184,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 self._display.Start2D()
                 self.DrawImages()
 
-        stop = time.clock()
+        stop = time.process_time()
 
         if self.render['quick'] is False:
             if sys.platform != 'darwin':
