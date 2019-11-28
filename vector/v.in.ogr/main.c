@@ -63,7 +63,7 @@ int create_spatial_filter(ds_t Ogr_ds, OGRGeometryH *,
 
 struct OGR_iterator
 {
-    ds_t *Ogr_ds;
+    ds_t Ogr_ds;
     char *dsn;
     int nlayers;
     int has_nonempty_layers;
@@ -76,7 +76,7 @@ struct OGR_iterator
 };
 
 void OGR_iterator_init(struct OGR_iterator *OGR_iter,
-                       ds_t *Ogr_ds, char *dsn, int nlayers,
+                       ds_t Ogr_ds, char *dsn, int nlayers,
 		       int ogr_interleaved_reading);
 
 void OGR_iterator_reset(struct OGR_iterator *OGR_iter);
@@ -805,7 +805,7 @@ int main(int argc, char *argv[])
 
     n_features = (GIntBig *)G_malloc(nlayers * sizeof(GIntBig));
 
-    OGR_iterator_init(&OGR_iter, &Ogr_ds, dsn, navailable_layers,
+    OGR_iterator_init(&OGR_iter, Ogr_ds, dsn, navailable_layers,
 		      ogr_interleaved_reading);
 
     /* check if input id 3D and if we need a tmp vector */
@@ -1800,14 +1800,14 @@ int main(int argc, char *argv[])
 
 	Vect_get_map_box(&Map, &box);
 	
-	if (abs(box.E) > abs(box.W))
-	    xmax = abs(box.E);
+	if (fabs(box.E) > fabs(box.W))
+	    xmax = fabs(box.E);
 	else
-	    xmax = abs(box.W);
-	if (abs(box.N) > abs(box.S))
-	    ymax = abs(box.N);
+	    xmax = fabs(box.W);
+	if (fabs(box.N) > fabs(box.S))
+	    ymax = fabs(box.N);
 	else
-	    ymax = abs(box.S);
+	    ymax = fabs(box.S);
 
 	if (xmax < ymax)
 	    xmax = ymax;
@@ -1996,7 +1996,7 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-void OGR_iterator_init(struct OGR_iterator *OGR_iter, ds_t *Ogr_ds,
+void OGR_iterator_init(struct OGR_iterator *OGR_iter, ds_t Ogr_ds,
                        char *dsn, int nlayers,
 		       int ogr_interleaved_reading)
 {
@@ -2024,7 +2024,7 @@ void OGR_iterator_init(struct OGR_iterator *OGR_iter, ds_t *Ogr_ds,
 void OGR_iterator_reset(struct OGR_iterator *OGR_iter)
 {
 #if GDAL_VERSION_NUM >= 2020000
-    GDALDatasetResetReading(*(OGR_iter->Ogr_ds));
+    GDALDatasetResetReading(OGR_iter->Ogr_ds);
 #endif
     OGR_iter->requested_layer = -1;
     OGR_iter->curr_layer = -1;
@@ -2043,7 +2043,7 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter,
 	/* reset OGR reading */
 	if (!OGR_iter->ogr_interleaved_reading) {
 	    OGR_iter->curr_layer = layer;
-	    OGR_iter->Ogr_layer = ds_getlayerbyindex(*(OGR_iter->Ogr_ds), OGR_iter->curr_layer);
+	    OGR_iter->Ogr_layer = ds_getlayerbyindex(OGR_iter->Ogr_ds, OGR_iter->curr_layer);
 	    OGR_iter->Ogr_featuredefn = OGR_L_GetLayerDefn(OGR_iter->Ogr_layer);
 	    OGR_L_ResetReading(OGR_iter->Ogr_layer);
 	}
@@ -2052,32 +2052,32 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter,
 
 	    /* clear filters */
 	    for (i = 0; i < OGR_iter->nlayers; i++) {
-		OGR_iter->Ogr_layer = ds_getlayerbyindex(*(OGR_iter->Ogr_ds), i);
+		OGR_iter->Ogr_layer = ds_getlayerbyindex(OGR_iter->Ogr_ds, i);
 		OGR_L_SetSpatialFilter(OGR_iter->Ogr_layer, NULL);
 		OGR_L_SetAttributeFilter(OGR_iter->Ogr_layer, NULL);
 	    }
 
 #if GDAL_VERSION_NUM >= 2020000
-	    GDALDatasetResetReading(*(OGR_iter->Ogr_ds));
+	    GDALDatasetResetReading(OGR_iter->Ogr_ds);
 #else
 	    /* need to re-open OGR DSN in order to start reading from the beginning
 	     * NOTE: any constraints are lost */
-	    OGR_DS_Destroy(*(OGR_iter->Ogr_ds));
-	    *(OGR_iter->Ogr_ds) = OGROpen(OGR_iter->dsn, FALSE, NULL);
-	    if (*(OGR_iter->Ogr_ds) == NULL)
+	    OGR_DS_Destroy(OGR_iter->Ogr_ds);
+	    OGR_iter->Ogr_ds = OGROpen(OGR_iter->dsn, FALSE, NULL);
+	    if (OGR_iter->Ogr_ds == NULL)
 		G_fatal_error(_("Unable to re-open data source <%s>"), OGR_iter->dsn);
-	    OGR_iter->Ogr_layer = OGR_DS_GetLayer(*(OGR_iter->Ogr_ds), layer);
+	    OGR_iter->Ogr_layer = OGR_DS_GetLayer(OGR_iter->Ogr_ds, layer);
 	    OGR_iter->curr_layer = 0;
 	    OGR_iter->has_nonempty_layers = 0;
 #endif
-	    OGR_iter->Ogr_layer = ds_getlayerbyindex(*(OGR_iter->Ogr_ds), layer);
+	    OGR_iter->Ogr_layer = ds_getlayerbyindex(OGR_iter->Ogr_ds, layer);
 	    OGR_iter->Ogr_featuredefn = OGR_L_GetLayerDefn(OGR_iter->Ogr_layer);
 	    OGR_L_SetSpatialFilter(OGR_iter->Ogr_layer, poSpatialFilter);
 	    if (OGR_L_SetAttributeFilter(OGR_iter->Ogr_layer, attr_filter) != OGRERR_NONE)
 		G_fatal_error(_("Error setting attribute filter '%s'"),
 		              attr_filter);
 #if GDAL_VERSION_NUM < 2020000
-	    OGR_iter->Ogr_layer = OGR_DS_GetLayer(*(OGR_iter->Ogr_ds), OGR_iter->curr_layer);
+	    OGR_iter->Ogr_layer = OGR_DS_GetLayer(OGR_iter->Ogr_ds, OGR_iter->curr_layer);
 #endif
 	}
 	OGR_iter->requested_layer = layer;
@@ -2105,9 +2105,9 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter,
 #if GDAL_VERSION_NUM >= 2020000
 	while (1) {
 	    OGR_iter->Ogr_layer = NULL;
-	    Ogr_feature = GDALDatasetGetNextFeature(*(OGR_iter->Ogr_ds),
-							&(OGR_iter->Ogr_layer),
-							NULL, NULL, NULL);
+	    Ogr_feature = GDALDatasetGetNextFeature(OGR_iter->Ogr_ds,
+						    &(OGR_iter->Ogr_layer),
+						    NULL, NULL, NULL);
 
 	    if (Ogr_feature == NULL) {
 		OGR_iter->Ogr_layer = NULL;
@@ -2151,7 +2151,7 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter,
 		    }
 		}
 		G_debug(3, "advancing to layer %d ...", OGR_iter->curr_layer);
-		OGR_iter->Ogr_layer = OGR_DS_GetLayer(*(OGR_iter->Ogr_ds), OGR_iter->curr_layer);
+		OGR_iter->Ogr_layer = OGR_DS_GetLayer(OGR_iter->Ogr_ds, OGR_iter->curr_layer);
 		OGR_iter->Ogr_featuredefn = OGR_L_GetLayerDefn(OGR_iter->Ogr_layer);
 	    }
 	}
