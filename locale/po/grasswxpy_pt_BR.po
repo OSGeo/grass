@@ -12016,11 +12016,11 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:526 ../gui/wxpython/animation/toolbars.py:42
 msgid "Pause"
-msgstr ""
+msgstr "Pausar"
 
 #: ../gui/wxpython/nviz/tools.py:528 ../gui/wxpython/animation/toolbars.py:39
 msgid "Stop"
-msgstr ""
+msgstr "Parar"
 
 #: ../gui/wxpython/nviz/tools.py:545
 msgid "Total number of frames :"
@@ -15523,7 +15523,7 @@ msgstr ""
 #: ../gui/wxpython/lmgr/layertree.py:2001
 #, python-format
 msgid "Map <%s> not found."
-msgstr ""
+msgstr "Mapa <%s> não encontrado."
 
 #: ../gui/wxpython/mapswipe/frame.py:674 ../gui/wxpython/mapdisp/frame.py:897
 msgid "No raster or vector map layer selected for querying."
@@ -15615,35 +15615,35 @@ msgstr ""
 #: ../gui/wxpython/animation/nviztask.py:55
 #, python-format
 msgid "No 3d view information in workspace file <%s>."
-msgstr ""
+msgstr "Sem informação sobre visualização 3d no arquivo da área de trabalho <%s>."
 
 #: ../gui/wxpython/animation/nviztask.py:287
 msgid "Please add only one layer in the list."
-msgstr ""
+msgstr "Favor adicionar apenas uma camada a lista."
 
 #: ../gui/wxpython/animation/nviztask.py:294
 msgid "No map series nor space-time dataset is added."
-msgstr ""
+msgstr "Não foi adicionado série de mapas ou conjunto de dados espaço-temporal."
 
 #: ../gui/wxpython/animation/toolbars.py:30
 msgid "Change animation speed"
-msgstr ""
+msgstr "Alterar velocidade da animação"
 
 #: ../gui/wxpython/animation/toolbars.py:33
 msgid "Play forward"
-msgstr ""
+msgstr "Tocar para frente"
 
 #: ../gui/wxpython/animation/toolbars.py:36
 msgid "Play back"
-msgstr ""
+msgstr "Tocar para trás"
 
 #: ../gui/wxpython/animation/toolbars.py:45
 msgid "Repeat"
-msgstr ""
+msgstr "Repetir"
 
 #: ../gui/wxpython/animation/toolbars.py:48
 msgid "Play back and forward"
-msgstr ""
+msgstr "Tocar para frente e para trás"
 
 #: ../gui/wxpython/animation/toolbars.py:51
 #: ../gui/wxpython/animation/toolbars.py:52
@@ -15654,21 +15654,21 @@ msgstr "Adicionar nova animação"
 #: ../gui/wxpython/animation/toolbars.py:55
 #: ../gui/wxpython/animation/toolbars.py:56
 msgid "Add, edit or remove animation"
-msgstr ""
+msgstr "Criar editar ou remover animação"
 
 #: ../gui/wxpython/animation/toolbars.py:59
 #: ../gui/wxpython/animation/toolbars.py:60
 #: ../gui/wxpython/animation/dialogs.py:911
 msgid "Export animation"
-msgstr ""
+msgstr "Exportar animação"
 
 #: ../gui/wxpython/animation/toolbars.py:68
 msgid "Add space-time dataset or series of map layers"
-msgstr ""
+msgstr "Adicionar conjunto de dados espaço-temporais ou uma série de camadas"
 
 #: ../gui/wxpython/animation/toolbars.py:69
 msgid "Add space-time dataset or series of map layers for animation"
-msgstr ""
+msgstr "Adicionar conjunto de dados espaço-temporais ou uma série de camadas para a animação"
 
 #: ../gui/wxpython/animation/frame.py:53
 msgid "GRASS GIS Animation tool"
@@ -15896,7 +15896,7 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:891
 #: ../gui/wxpython/animation/controller.py:262
 msgid "More animations are using one window. Please select different window for each animation."
-msgstr ""
+msgstr "Mais animações estão utilizando uma janela. Favor selecionar janelas diferentes para cada animação."
 
 #: ../gui/wxpython/animation/dialogs.py:992
 msgid "Add time stamp"
@@ -16143,7 +16143,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/utils.py:185
 msgid "The number of maps in space-time datasets has to be the same."
-msgstr ""
+msgstr "O número de mapas no conjunto de dados espaço-temporal deve ser o mesmo."
 
 #: ../gui/wxpython/animation/utils.py:189
 msgid "The temporal type (absolute/relative) of space-time datasets has to be the same."
@@ -16168,15 +16168,15 @@ msgstr ""
 #: ../gui/wxpython/animation/controller.py:234
 #, python-format
 msgid "Maximum number of animations is %s."
-msgstr ""
+msgstr "Número máximo de animações são %s."
 
 #: ../gui/wxpython/animation/controller.py:443
 msgid "Failed to display legend."
-msgstr ""
+msgstr "Não foi possível mostrar a legenda."
 
 #: ../gui/wxpython/animation/controller.py:475
 msgid "Inconsistent number of maps, please check input data."
-msgstr ""
+msgstr "Número inconsistente de mapas, favor verificar dados de entrada."
 
 #: ../gui/wxpython/animation/controller.py:505
 msgid "No animation to export."
