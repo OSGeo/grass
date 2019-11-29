@@ -1279,9 +1279,12 @@ int main(int argc, char *argv[])
             Ogr_featuredefn = OGR_iter.Ogr_featuredefn;
 #if GDAL_VERSION_NUM >= 1110000
             for (i = 0; i < OGR_FD_GetGeomFieldCount(Ogr_featuredefn); i++) {
+		int destroy_geometry = 0;
+
                 if (igeom > -1 && i != igeom)
                     continue; /* use only geometry defined via param.geom */
-            
+
+		/* Ogr_geometry from OGR_F_GetGeomFieldRef() should not be modified. */
                 Ogr_geometry = OGR_F_GetGeomFieldRef(Ogr_feature, i);
 #else
                 Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
@@ -1291,8 +1294,11 @@ int main(int argc, char *argv[])
 		    if (OGR_G_HasCurveGeometry(Ogr_geometry, 1)) {
 			G_debug(2, "Approximating curves in a '%s'",
 			        OGR_G_GetGeometryName(Ogr_geometry));
+
+			Ogr_geometry = OGR_G_GetLinearGeometry(Ogr_geometry, 0, NULL);
+			/* The ownership of the returned geometry belongs to the caller. */
+			destroy_geometry = 1;
 		    }
-		    Ogr_geometry = OGR_G_GetLinearGeometry(Ogr_geometry, 0, NULL);
 		}
 #endif
                 if (Ogr_geometry == NULL) {
@@ -1307,7 +1313,9 @@ int main(int argc, char *argv[])
                     geom(Ogr_geometry, Out, layer + 1, cat, min_area, type,
                          flag.no_clean->answer);
 #if GDAL_VERSION_NUM >= 2000000
-		    OGR_G_DestroyGeometry(Ogr_geometry);
+		    /* destroy non-curve version of a curve geometry */
+		    if (destroy_geometry)
+			OGR_G_DestroyGeometry(Ogr_geometry);
 #endif
                 }
 #if GDAL_VERSION_NUM >= 1110000              
