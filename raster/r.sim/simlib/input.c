@@ -268,6 +268,16 @@ void init_grids_sediment()
         erod(si);
 }
 
+void alloc_walkers(int max_walkers)
+{
+    G_debug(1, "beginning memory allocation for walkers");
+
+    w = (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));
+    vavg = (struct point2D *)G_calloc(max_walkers, sizeof(struct point2D));
+    if (outwalk != NULL)
+        stack = (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));
+}
+
 /* ************************************************************** */
 /*                         GRASS input procedures, allocations    */
 /* *************************************************************** */
@@ -283,6 +293,7 @@ void init_grids_sediment()
 int input_data(void)
 {
     int rows = my, cols = mx; /* my and mx are global variables */
+    int max_walkers;
     double unitconv = 0.000000278;	/* mm/hr to m/s */
     int if_rain = 0;
 
@@ -359,7 +370,10 @@ int input_data(void)
         gama = read_double_raster_map(rows, cols, wdepth, 1.0);
         copy_matrix_undef_double_to_float_values(rows, cols, gama, zz);
     }
-    
+    /* allocate walkers */
+    max_walkers = maxwa + mx * my;
+    alloc_walkers(max_walkers);
+
     /* Array for gradient checking */
     slope = create_double_matrix(rows, cols, 0.0);
     

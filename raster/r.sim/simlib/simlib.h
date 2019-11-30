@@ -84,6 +84,7 @@ int input_data(void);
 int grad_check(void);
 void main_loop(void);
 int output_data(int, double);
+void free_walkers();
 
 struct options
 {
