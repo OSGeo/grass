@@ -56,6 +56,18 @@ struct _points
     int is_open; /* Set to 1 if open, 0 if closed */
 };
 
+struct point2D
+{
+    double x;
+    double y;
+};
+struct point3D
+{
+    double x;
+    double y;
+    double m;
+};
+
 extern struct _points points;
 extern void erod(double **);
 extern int output_et(void);
@@ -86,8 +98,9 @@ extern double **gama, **gammas, **si, **inf, **sigma;
 extern float **dc, **tau, **er, **ct, **trap;
 extern float **dif;
 
-extern double vavg[MAXW][2], stack[MAXW][3], w[MAXW][3]; 
-extern int iflag[MAXW];
+extern struct point3D *w;
+extern struct point3D *stack;
+extern struct point2D *vavg;
 
 extern double hbeta;
 extern double hhmax, sisum, vmean;

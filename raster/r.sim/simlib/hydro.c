@@ -33,6 +33,8 @@
  */
 
 struct _points points;
+struct point2D;
+struct point3D;
 
 char *elevin;
 char *dxin;
@@ -85,10 +87,11 @@ double **gama, **gammas, **si, **inf, **sigma;
 float **dc, **tau, **er, **ct, **trap;
 float **dif;
 
-/* suspected BUG below: fist array subscripts go from 1 to MAXW
- * correct: from 0 to MAXW - 1, e.g for (lw = 0; lw < MAXW; lw++) */
-double vavg[MAXW][2], stack[MAXW][3], w[MAXW][3]; 
-int iflag[MAXW];
+
+/* int iflag[MAXW];*/
+struct point3D *w;
+struct point3D *stack;
+struct point2D *vavg;
 
 double hbeta;
 double hhmax, sisum, vmean;
@@ -197,24 +200,22 @@ void main_loop(void)
 		    /*G_debug(2, " gen,gen2,wei,wei2,mgen3,nmult: %f %f %f %f %d %d",gen,gen2,wei,wei2,mgen3,nmult);
 		     */
 		    for (iw = 1; iw <= mgen + 1; iw++) {	/* assign walkers */
+			w[lw].x = x + stepx * (simwe_rand() - 0.5);
+			w[lw].y = y + stepy * (simwe_rand() - 0.5);
+			w[lw].m = wei;
 
-			if (lw >= MAXW)  /* max valid value is MAXW - 1, not MAXW */
-			    G_fatal_error(_("nwalk (%d) > maxw (%d)!"), lw, MAXW);
-
-			w[lw][0] = x + stepx * (simwe_rand() - 0.5);
-			w[lw][1] = y + stepy * (simwe_rand() - 0.5);
-			w[lw][2] = wei;
-
-			walkwe += w[lw][2];
-			vavg[lw][0] = v1[k][l];
-			vavg[lw][1] = v2[k][l];
-			if (w[lw][0] >= xmin && w[lw][1] >= ymin &&
-			    w[lw][0] <= xmax && w[lw][1] <= ymax) {
+			walkwe += w[lw].m;
+			vavg[lw].x = v1[k][l];
+			vavg[lw].y = v2[k][l];
+			/* deactivated as unused, what was iflag for?
+			if (w[lw].x >= xmin && w[lw].y >= ymin &&
+			    w[lw].x <= xmax && w[lw].y <= ymax) {
 			    iflag[lw] = 0;
 			}
 			else {
 			    iflag[lw] = 1;
 			}
+			*/
 			lw++;
 		    }
 		}		/*DEFined area */
@@ -279,15 +280,15 @@ void main_loop(void)
 #else
         for (lw = 0; lw < nwalk; lw++) {
 #endif
-		if (w[lw][2] > EPS) {	/* check the walker weight */
+		if (w[lw].m > EPS) {	/* check the walker weight */
 		    ++nwalka;
-		    l = (int)((w[lw][0] + stxm) / stepx) - mx - 1;
-		    k = (int)((w[lw][1] + stym) / stepy) - my - 1;
+		    l = (int)((w[lw].x + stxm) / stepx) - mx - 1;
+		    k = (int)((w[lw].y + stym) / stepy) - my - 1;
 
 		    if (l > mx - 1 || k > my - 1 || k < 0 || l < 0) {
 
 			G_debug(2, " k,l=%d,%d", k, l);
-			printf("    lw,w=%d %f %f", lw, w[lw][1], w[lw][2]);
+			printf("    lw,w=%d %f %f", lw, w[lw].y, w[lw].m);
 			G_debug(2, "    stxym=%f %f", stxm, stym);
 			printf("    step=%f %f", stepx, stepy);
 			G_debug(2, "    m=%d %d", my, mx);
@@ -299,20 +300,20 @@ void main_loop(void)
 			if (infil != NULL) {	/* infiltration part */
 			    if (inf[k][l] - si[k][l] > 0.) {
 
-				decr = pow(addac * w[lw][2], 3. / 5.);	/* decreasing factor in m */
+				decr = pow(addac * w[lw].m, 3. / 5.);	/* decreasing factor in m */
 				if (inf[k][l] > decr) {
 				    inf[k][l] -= decr;	/* decrease infilt. in cell and eliminate the walker */
-				    w[lw][2] = 0.;
+				    w[lw].m = 0.;
 				}
 				else {
-				    w[lw][2] -= pow(inf[k][l], 5. / 3.) / addac;	/* use just proportional part of the walker weight */
+				    w[lw].m -= pow(inf[k][l], 5. / 3.) / addac;	/* use just proportional part of the walker weight */
 				    inf[k][l] = 0.;
 
 				}
 			    }
 			}
 
-			gama[k][l] += (addac * w[lw][2]);	/* add walker weigh to water depth or conc. */
+			gama[k][l] += (addac * w[lw].m);	/* add walker weigh to water depth or conc. */
 
 			d1 = gama[k][l] * conn;
 #if defined(_OPENMP)
@@ -325,8 +326,8 @@ void main_loop(void)
 
 			if (hhc > hhmax && wdepth == NULL) {	/* increased diffusion if w.depth > hhmax */
 			    dif[k][l] = (halpha + 1) * deldif;
-			    velx = vavg[lw][0];
-			    vely = vavg[lw][1];
+			    velx = vavg[lw].x;
+			    vely = vavg[lw].y;
 			}
 			else {
 			    dif[k][l] = deldif;
@@ -345,29 +346,29 @@ void main_loop(void)
 			    }
 			}
 
-			w[lw][0] += (velx + dif[k][l] * gaux);	/* move the walker */
-			w[lw][1] += (vely + dif[k][l] * gauy);
+			w[lw].x += (velx + dif[k][l] * gaux);	/* move the walker */
+			w[lw].y += (vely + dif[k][l] * gauy);
 
 			if (hhc > hhmax && wdepth == NULL) {
-			    vavg[lw][0] = hbeta * (vavg[lw][0] + v1[k][l]);
-			    vavg[lw][1] = hbeta * (vavg[lw][1] + v2[k][l]);
+			    vavg[lw].x = hbeta * (vavg[lw].x + v1[k][l]);
+			    vavg[lw].y = hbeta * (vavg[lw].y + v2[k][l]);
 			}
 
-			if (w[lw][0] <= xmin || w[lw][1] <= ymin || w[lw][0]
-			    >= xmax || w[lw][1] >= ymax) {
-			    w[lw][2] = 1e-10;	/* eliminate walker if it is out of area */
+			if (w[lw].x <= xmin || w[lw].y <= ymin || w[lw].x
+			    >= xmax || w[lw].y >= ymax) {
+			    w[lw].m = 1e-10;	/* eliminate walker if it is out of area */
 			}
 			else {
 			    if (wdepth != NULL) {
-				l = (int)((w[lw][0] + stxm) / stepx) - mx - 1;
-				k = (int)((w[lw][1] + stym) / stepy) - my - 1;
-				w[lw][2] *= sigma[k][l];
+				l = (int)((w[lw].x + stxm) / stepx) - mx - 1;
+				k = (int)((w[lw].y + stym) / stepy) - my - 1;
+				w[lw].m *= sigma[k][l];
 			    }
 
 			}	/* else */
 		    }		/*DEFined area */
 		    else {
-			w[lw][2] = 1e-10;	/* eliminate walker if it is out of area */
+			w[lw].m = 1e-10;	/* eliminate walker if it is out of area */
 		    }
 		}
             } /* lw loop */
@@ -380,19 +381,19 @@ void main_loop(void)
                 
                 for (lw = 0; lw < nwalk; lw++) {
                     /* Compute the  elevation raster map index */
-                    l = (int)((w[lw][0] + stxm) / stepx) - mx - 1;
-                    k = (int)((w[lw][1] + stym) / stepy) - my - 1;
+                    l = (int)((w[lw].x + stxm) / stepx) - mx - 1;
+                    k = (int)((w[lw].y + stym) / stepy) - my - 1;
                     
 		    /* Check for correct elevation raster map index */
 		    if(l < 0 || l >= mx || k < 0 || k >= my)
 			 continue;
 
-                    if (w[lw][2] > EPS && zz[k][l] != UNDEF) {
+                    if (w[lw].m > EPS && zz[k][l] != UNDEF) {
 
                         /* Save the 3d position of the walker */
-                        stack[nstack][0] = mixx / conv + w[lw][0] / conv;
-                        stack[nstack][1] = miyy / conv + w[lw][1] / conv;
-                        stack[nstack][2] = zz[k][l];
+                        stack[nstack].x = mixx / conv + w[lw].x / conv;
+                        stack[nstack].y = miyy / conv + w[lw].y / conv;
+                        stack[nstack].m = zz[k][l];
 
                         nstack++;
                     }
