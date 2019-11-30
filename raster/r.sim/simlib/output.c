@@ -12,6 +12,14 @@
 
 #include <grass/waterglobs.h>
 
+void free_walkers()
+{
+    G_free(w);
+    G_free(vavg);
+    if (outwalk != NULL)
+        G_free(stack);
+}
+
 
 static void output_walker_as_vector(int tt_minutes, int ndigit, struct TimeStamp *timestamp);
 
@@ -49,9 +57,9 @@ void output_walker_as_vector(int tt_minutes, int ndigit, struct TimeStamp *times
 	Cats = Vect_new_cats_struct();
 
 	for (i = 0; i < nstack; i++) {
-	    x = stack[i][0];
-	    y = stack[i][1];
-	    z = stack[i][2];
+	    x = stack[i].x;
+	    y = stack[i].y;
+	    z = stack[i].m;
 
 	    Vect_reset_line(Points);
 	    Vect_reset_cats(Cats);
@@ -759,6 +767,7 @@ int output_et()
 	Rast_free_colors(&colors);
 	/*  } */
     }
+    free_walkers();
 
     return 1;
 }
