@@ -54,7 +54,7 @@ from core.settings import UserSettings
 from photo2image.ip2i_mapdisplay import MapFrame
 from core.giface import Notification
 from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, \
-    TextCtrl, Menu, ListCtrl
+    TextCtrl, Menu, ListCtrl, BitmapFromImage
 
 from location_wizard.wizard import TitledPage as TitledPage
 
@@ -487,8 +487,8 @@ class GCP(MapFrame, ColumnSorterMixin):
         # CheckListCtrlMixin must set an ImageList first
         self.il = self.list.GetImageList(wx.IMAGE_LIST_SMALL)
 
-        SmallUpArrow = wx.BitmapFromImage(getSmallUpArrowImage())
-        SmallDnArrow = wx.BitmapFromImage(getSmallDnArrowImage())
+        SmallUpArrow = BitmapFromImage(getSmallUpArrowImage())
+        SmallDnArrow = BitmapFromImage(getSmallDnArrowImage())
         self.sm_dn = self.il.Add(SmallDnArrow)
         self.sm_up = self.il.Add(SmallUpArrow)
 

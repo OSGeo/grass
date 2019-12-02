@@ -32,7 +32,7 @@ from gui_core.preferences import DefaultFontDialog
 from core.debug import Debug
 from core.gcmd import GError
 from gui_core.toolbars import BaseToolbar, BaseIcons
-from gui_core.wrap import PseudoDC, Menu, EmptyBitmap, NewId
+from gui_core.wrap import PseudoDC, Menu, EmptyBitmap, NewId, BitmapFromImage
 
 
 class BufferedWindow(wx.Window):
@@ -121,7 +121,7 @@ class BufferedWindow(wx.Window):
         if pdctype == 'image':
             bg = wx.TRANSPARENT_BRUSH
             pdc.SetBackground(bg)
-            bitmap = wx.BitmapFromImage(img)
+            bitmap = BitmapFromImage(img)
             w, h = bitmap.GetSize()
             pdc.DrawBitmap(
                 bitmap, coords[0],
