@@ -228,7 +228,7 @@ int poly_count(OGRGeometryH hGeom, int line2boundary)
 
 /* Write geometry to output map */
 int
-geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
+geom(OGRGeometryH hGeomAny, struct Map_info *Map, int field, int cat,
      double min_area, int type, int mk_centr)
 {
     int i, valid_isles, j, np, nr, ret, otype;
@@ -236,6 +236,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
     static struct line_pnts *Points;
     struct line_pnts **IPoints;
     static struct line_cats *BCats, *Cats;
+    OGRGeometryH hGeom;
     OGRwkbGeometryType eType;
     OGRGeometryH hRing;
     double x, y;
@@ -253,6 +254,18 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
     Vect_reset_cats(Cats);
     Vect_reset_cats(BCats);
     Vect_cat_set(Cats, field, cat);
+
+    hGeom = hGeomAny;
+
+#if GDAL_VERSION_NUM >= 2000000
+    if (OGR_G_HasCurveGeometry(hGeom, 1)) {
+	G_debug(2, "Approximating curves in a '%s'",
+		OGR_G_GetGeometryName(hGeom));
+
+	/* The ownership of the returned geometry belongs to the caller. */
+	hGeom = OGR_G_GetLinearGeometry(hGeom, 0, NULL);
+    }
+#endif
 
     eType = wkbFlatten(OGR_G_GetGeometryType(hGeom));
 
@@ -457,6 +470,10 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
     else {
 	G_warning(_("Skipping unsupported geometry type '%s'"), OGR_G_GetGeometryName(hGeom));
     }
+
+    /* destroy non-curve version of a curve geometry */
+    if (hGeom != hGeomAny)
+	OGR_G_DestroyGeometry(hGeom);
 
     return 0;
 }

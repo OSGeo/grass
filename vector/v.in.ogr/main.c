@@ -40,7 +40,7 @@ int n_polygons;
 int n_polygon_boundaries;
 double split_distance;
 
-int geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
+int geom(OGRGeometryH hGeomAny, struct Map_info *Map, int field, int cat,
 	 double min_area, int type, int mk_centr);
 int centroid(OGRGeometryH hGeom, CENTR * Centr, struct spatial_index * Sindex,
 	     int field, int cat, double min_area, int type);
@@ -1279,8 +1279,6 @@ int main(int argc, char *argv[])
             Ogr_featuredefn = OGR_iter.Ogr_featuredefn;
 #if GDAL_VERSION_NUM >= 1110000
             for (i = 0; i < OGR_FD_GetGeomFieldCount(Ogr_featuredefn); i++) {
-		int destroy_geometry = 0;
-
                 if (igeom > -1 && i != igeom)
                     continue; /* use only geometry defined via param.geom */
 
@@ -1288,18 +1286,6 @@ int main(int argc, char *argv[])
                 Ogr_geometry = OGR_F_GetGeomFieldRef(Ogr_feature, i);
 #else
                 Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
-#endif                
-#if GDAL_VERSION_NUM >= 2000000
-                if (Ogr_geometry != NULL) {
-		    if (OGR_G_HasCurveGeometry(Ogr_geometry, 1)) {
-			G_debug(2, "Approximating curves in a '%s'",
-			        OGR_G_GetGeometryName(Ogr_geometry));
-
-			Ogr_geometry = OGR_G_GetLinearGeometry(Ogr_geometry, 0, NULL);
-			/* The ownership of the returned geometry belongs to the caller. */
-			destroy_geometry = 1;
-		    }
-		}
 #endif
                 if (Ogr_geometry == NULL) {
                     nogeom++;
@@ -1312,11 +1298,6 @@ int main(int argc, char *argv[])
 
                     geom(Ogr_geometry, Out, layer + 1, cat, min_area, type,
                          flag.no_clean->answer);
-#if GDAL_VERSION_NUM >= 2000000
-		    /* destroy non-curve version of a curve geometry */
-		    if (destroy_geometry)
-			OGR_G_DestroyGeometry(Ogr_geometry);
-#endif
                 }
 #if GDAL_VERSION_NUM >= 1110000              
             }
