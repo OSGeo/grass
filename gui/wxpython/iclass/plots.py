@@ -17,7 +17,7 @@ for details.
 
 import wx
 
-import gui_core.wxlibplot as plot
+import wx.lib.plot as plot
 import wx.lib.scrolledpanel as scrolled
 from core.gcmd import GError
 
@@ -146,7 +146,7 @@ class PlotPanel(scrolled.ScrolledPanel):
 
     def EnableZoom(self, type, enable=True):
         for canvas in self.canvasList:
-            canvas.SetEnableZoom(enable)
+            canvas.enableZoom = enable
 
         #canvas.zoom = type
 
@@ -177,8 +177,8 @@ class PlotPanel(scrolled.ScrolledPanel):
         for band in self.bandList:
             canvas = plot.PlotCanvas(self.canvasPanel)
             canvas.SetMinSize((-1, 140))
-            canvas.SetFontSizeTitle(10)
-            canvas.SetFontSizeAxis(8)
+            canvas.fontSizeTitle = 10
+            canvas.fontSizeAxis = 8
             self.canvasList.append(canvas)
 
             self.canvasSizer.Add(
@@ -218,7 +218,7 @@ class PlotPanel(scrolled.ScrolledPanel):
     def DrawCoincidencePlots(self):
         """Draw coincidence plots"""
         for bandIdx in range(len(self.bandList)):
-            self.canvasList[bandIdx].SetYSpec(type='none')
+            self.canvasList[bandIdx].ySpec = 'none'
             lines = []
             level = 0.5
             lines.append(self.DrawInvisibleLine(level))
@@ -267,7 +267,7 @@ class PlotPanel(scrolled.ScrolledPanel):
         self.histogramLines = []
         for bandIdx in range(len(self.bandList)):
             self.canvasList[bandIdx].Clear()
-            self.canvasList[bandIdx].SetYSpec(type='auto')
+            self.canvasList[bandIdx].ySpec = 'auto'
             histgramLine = self.CreateHistogramLine(
                 bandValues=statistics.bands[bandIdx])
 
