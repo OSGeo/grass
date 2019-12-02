@@ -56,7 +56,7 @@ from gui_core.widgets import GNotebook
 from gui_core.goutput import GConsoleWindow
 from gui_core.gselect import Select, LayerSelect, ColumnSelect
 from gui_core.wrap import SpinCtrl, Button, BitmapButton, StaticText, \
-    StaticBox, TextCtrl, ListCtrl
+    StaticBox, TextCtrl, ListCtrl, BitmapFromImage
 
 from vnet.widgets import PointsList
 from vnet.toolbars import MainToolbar, PointListToolbar, AnalysisToolbar
@@ -403,7 +403,7 @@ class VNETDialog(wx.Dialog):
                         "grass",
                         "layer-vector-add.png"))
                 icon.Rescale(18, 18)
-                icon = wx.BitmapFromImage(icon)
+                icon = BitmapFromImage(icon)
                 self.addToTreeBtn = BitmapButton(
                     parent=selPanels[dataSel[0]],
                     bitmap=icon, size=globalvar.DIALOG_COLOR_SIZE)

@@ -73,7 +73,8 @@ from gui_core.gselect import Select
 from core.gcmd import RunCommand, GError, GMessage
 from gui_core.dialogs import SymbolDialog
 from gui_core.wrap import SpinCtrl, Button, TextCtrl, BitmapButton, \
-    StaticText, StaticBox, Rect, EmptyBitmap, TextEntryDialog, ListCtrl, NewId
+    StaticText, StaticBox, Rect, EmptyBitmap, TextEntryDialog, ListCtrl, NewId, \
+    BitmapFromImage
 from psmap.utils import *
 from psmap.instructions import *
 
@@ -5821,7 +5822,7 @@ class ImageDialog(PsmapDialog):
         self.previewSize = (150, 150)
         img = wx.EmptyImage(*self.previewSize)
         panel.image['preview'] = wx.StaticBitmap(
-            panel, wx.ID_ANY, wx.BitmapFromImage(img))
+            panel, wx.ID_ANY, BitmapFromImage(img))
         vSizer.Add(
             panel.image['preview'],
             proportion=0,

@@ -28,7 +28,8 @@ from wx.lib.mixins.listctrl import CheckListCtrlMixin, ColumnSorterMixin, \
     ListCtrlAutoWidthMixin, TextEditMixin
 
 from core import globalvar
-from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl, ListCtrl
+from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl, ListCtrl, \
+    BitmapFromImage
 
 if sys.version_info.major >= 3:
     basestring = str
@@ -113,8 +114,8 @@ class PointsList(ListCtrl,
         self.il = self.GetImageList(wx.IMAGE_LIST_SMALL)
 
         # images for column sorting
-        SmallUpArrow = wx.BitmapFromImage(self.getSmallUpArrowImage())
-        SmallDnArrow = wx.BitmapFromImage(self.getSmallDnArrowImage())
+        SmallUpArrow = BitmapFromImage(self.getSmallUpArrowImage())
+        SmallDnArrow = BitmapFromImage(self.getSmallDnArrowImage())
         self.sm_dn = self.il.Add(SmallDnArrow)
         self.sm_up = self.il.Add(SmallUpArrow)
 
