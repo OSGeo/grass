@@ -75,14 +75,14 @@ int main(int argc, char *argv[])
     int infd_bluechan, infd_chan5chan, infd_chan7chan;
     int outfd;
     char *bluechan, *greenchan, *redchan, *nirchan, *chan5chan, *chan7chan;
-    DCELL *inrast_redchan, *inrast_nirchan, *inrast_greenchan;
-    DCELL *inrast_bluechan, *inrast_chan5chan, *inrast_chan7chan;
-    DCELL *outrast;
+    FCELL *inrast_redchan, *inrast_nirchan, *inrast_greenchan;
+    FCELL *inrast_bluechan, *inrast_chan5chan, *inrast_chan7chan;
+    FCELL *outrast;
     RASTER_MAP_TYPE data_type_redchan;
     RASTER_MAP_TYPE data_type_nirchan, data_type_greenchan;
     RASTER_MAP_TYPE data_type_bluechan;
     RASTER_MAP_TYPE data_type_chan5chan, data_type_chan7chan;
-    DCELL msavip1, msavip2, msavip3, dnbits;
+    FCELL msavip1, msavip2, msavip3, dnbits;
     CELL val1, val2;
 
     G_gisinit(argv[0]);
@@ -329,18 +329,18 @@ int main(int argc, char *argv[])
     ncols = Rast_window_cols();
 
     /* Create New raster files */
-    outfd = Rast_open_new(result, DCELL_TYPE);
-    outrast = Rast_allocate_d_buf();
+    outfd = Rast_open_new(result, FCELL_TYPE);
+    outrast = Rast_allocate_f_buf();
 
     /* Process pixels */
     for (row = 0; row < nrows; row++)
     {
-	DCELL d_bluechan;
-	DCELL d_greenchan;
-	DCELL d_redchan;
-	DCELL d_nirchan;
-	DCELL d_chan5chan;
-	DCELL d_chan7chan;
+	FCELL d_bluechan;
+	FCELL d_greenchan;
+	FCELL d_redchan;
+	FCELL d_nirchan;
+	FCELL d_chan5chan;
+	FCELL d_chan7chan;
 
 	G_percent(row, nrows, 2);
 
@@ -453,13 +453,13 @@ int main(int argc, char *argv[])
 		}
 	    }
 
-	    if (Rast_is_d_null_value(&d_redchan) ||
-		((nirchan) && Rast_is_d_null_value(&d_nirchan)) ||
-		((greenchan) && Rast_is_d_null_value(&d_greenchan)) ||
-		((bluechan) && Rast_is_d_null_value(&d_bluechan)) ||
-		((chan5chan) && Rast_is_d_null_value(&d_chan5chan)) ||
-		((chan7chan) && Rast_is_d_null_value(&d_chan7chan))) {
-		Rast_set_d_null_value(&outrast[col], 1);
+	    if (Rast_is_f_null_value(&d_redchan) ||
+		((nirchan) && Rast_is_f_null_value(&d_nirchan)) ||
+		((greenchan) && Rast_is_f_null_value(&d_greenchan)) ||
+		((bluechan) && Rast_is_f_null_value(&d_bluechan)) ||
+		((chan5chan) && Rast_is_f_null_value(&d_chan5chan)) ||
+		((chan7chan) && Rast_is_f_null_value(&d_chan7chan))) {
+		Rast_set_f_null_value(&outrast[col], 1);
 	    }
 	    else {
 		/* calculate simple_ratio        */
@@ -469,7 +469,7 @@ int main(int argc, char *argv[])
 		/* calculate ndvi                    */
 		if (!strcasecmp(viflag, "ndvi")) {
 		    if (d_redchan + d_nirchan < 0.001)  /* TODO: why this? */
-			Rast_set_d_null_value(&outrast[col], 1);
+			Rast_set_f_null_value(&outrast[col], 1);
 		    else
 			outrast[col] = nd_vi(d_redchan, d_nirchan);
 		}
@@ -520,7 +520,7 @@ int main(int argc, char *argv[])
 		    outrast[col] = va_ri(d_redchan, d_greenchan, d_bluechan);
 	    }
 	}
-	Rast_put_d_row(outfd, outrast);
+	Rast_put_f_row(outfd, outrast);
     }
     G_percent(1, 1, 1);
       
