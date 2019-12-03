@@ -106,23 +106,6 @@ def _debug(level, message):
     gcore.debug(message, level)
 
 
-def _encode_string(string):
-    """Encode a unicode *string* using the system encoding
-
-    If it is not possible to use system encoding, UTF-8 is used.
-    """
-    try:
-        from core.gcmd import EncodeString
-        return EncodeString(string)
-    except ImportError:
-        # This is the case when we have errors during compilation but
-        # the environment is not complete (compilation, custom setups
-        # of GRASS environmet) and we cannot import wx correctly.
-        # UTF-8 is pretty good guess for most cases (and should work for
-        # Mac OS X where wx 32 vs 64 bit issue is happaning).
-        return string.encode('utf-8')
-
-
 def toolboxesOutdated():
     """Removes auto-generated menudata.xml
     to let gui regenerate it next time it starts."""
