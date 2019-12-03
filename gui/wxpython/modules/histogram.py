@@ -88,6 +88,8 @@ class BufferedWindow(wx.Window):
         self.Map.region = self.Map.GetRegion()
         self.Map.SetRegion()
 
+        self._finishRenderingInfo = None
+
         self.Bind(wx.EVT_ERASE_BACKGROUND, lambda x: None)
 
     def Draw(self, pdc, img=None, drawid=None,
@@ -96,7 +98,7 @@ class BufferedWindow(wx.Window):
         """
         if drawid is None:
             if pdctype == 'image':
-                drawid = imagedict[img]
+                drawid = self.imagedict[img]
             elif pdctype == 'clear':
                 drawid is None
             else:
@@ -188,23 +190,23 @@ class BufferedWindow(wx.Window):
         file. See the wx.Windows docs for wx.Bitmap::SaveFile for the
         details
         """
-        busy = wx.BusyInfo(_("Please wait, exporting image..."),
-                           parent=self)
         wx.GetApp().Yield()
-
+        self._finishRenderingInfo = (FileName, FileType, width, height)
+        self.Map.GetRenderMgr().updateMap.connect(self._finishSaveToFile)
         self.Map.ChangeMapSize((width, height))
-        ibuffer = EmptyBitmap(max(1, width), max(1, height))
         self.Map.Render(force=True, windres=True)
+
+    def _finishSaveToFile(self):
         img = self.GetImage()
         self.Draw(self.pdc, img, drawid=99)
+        FileName, FileType, width, height = self._finishRenderingInfo
+        ibuffer = EmptyBitmap(max(1, width), max(1, height))
         dc = wx.BufferedDC(None, ibuffer)
         dc.Clear()
-        # probably does nothing, removed from wxPython 2.9
-        # self.PrepareDC(dc)
         self.pdc.DrawToDC(dc)
         ibuffer.SaveFile(FileName, FileType)
-
-        del busy
+        self.Map.GetRenderMgr().updateMap.disconnect(self._finishSaveToFile)
+        self._finishRenderingInfo = None
 
     def GetImage(self):
         """Converts files to wx.Image
