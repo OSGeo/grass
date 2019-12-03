@@ -567,7 +567,7 @@ class TransList(wx.VListBox):
     def OnMeasureItem(self, n):
         height = 0
         if self._getItemText(n) is None:
-            return
+            return height
         for line in self._getItemText(n).splitlines():
             w, h = self.GetTextExtent(line)
             height += h
