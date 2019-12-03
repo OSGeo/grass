@@ -41,8 +41,8 @@ class TestReport(TestCase):
         self.assertModule('i.vi', red=self.red, nir=self.nir,
                           output=map_output, viname='ipvi')
         self.assertRasterMinMax(map=map_output, refmin=0.0454545454545,
-                                refmax=0.906666666667,
-                                msg="ipvi in degrees must be between 0.0454545454545  and 0.906666666667")
+                                refmax=0.9066667,
+                                msg="ipvi in degrees must be between 0.0454545 and 0.9066667")
 
     def test_vinamendwi(self):
         """Testing viname ndwi"""
