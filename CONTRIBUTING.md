@@ -150,10 +150,10 @@ git push origin new-feature
 
 ### Pull request
 
-When you push, GitHub will respond back in in command line to tell
+When you push, GitHub will respond back in the command line to tell
 you what URL to use to create a pull request. You can follow that URL
 or you can go any time later to your fork on GitHub, display the
-branch `new-feature`, and GitHub will show you are button to create
+branch `new-feature`, and GitHub will show you button to create
 a pull request.
 
 ### After creating a pull request
