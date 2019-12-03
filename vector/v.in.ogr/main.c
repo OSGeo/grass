@@ -30,6 +30,7 @@
 #include <gdal_version.h>	/* needed for OFTDate */
 #include <cpl_conv.h>
 #include "global.h"
+#include "pavl.h"
 
 #ifndef MAX
 #  define MIN(a,b)      ((a<b) ? a : b)
@@ -40,9 +41,9 @@ int n_polygons;
 int n_polygon_boundaries;
 double split_distance;
 
-int geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
+int geom(OGRGeometryH hGeomAny, struct Map_info *Map, int field, int cat,
 	 double min_area, int type, int mk_centr);
-int centroid(OGRGeometryH hGeom, CENTR * Centr, struct spatial_index * Sindex,
+int centroid(OGRGeometryH hGeomAny, CENTR * Centr, struct spatial_index * Sindex,
 	     int field, int cat, double min_area, int type);
 int poly_count(OGRGeometryH hGeom, int line2boundary);
 
@@ -106,6 +107,25 @@ int cmp_col_idx(const void *a, const void *b)
     struct grass_col_info *cb = (struct grass_col_info *)b;
 
     return (ca->idx - cb->idx);
+}
+
+struct fid_cat
+{
+    grass_int64 fid;
+    int cat;
+};
+
+static int cmp_fid_cat(const void *a, const void *b)
+{
+    struct fid_cat *aa = (struct fid_cat *)a;
+    struct fid_cat *bb = (struct fid_cat *)b;
+
+    return (aa->fid < bb->fid ? -1 : (aa->fid > bb->fid));
+}
+
+static void free_fid_cat(void *p)
+{
+    G_free(p);
 }
 
 int main(int argc, char *argv[])
@@ -182,6 +202,8 @@ int main(int argc, char *argv[])
     int ncentr, n_overlaps;
     int failed_centr, err_boundaries, err_centr_out, err_centr_dupl;
     struct bound_box box;
+    struct pavl_table **fid_cat_tree;
+    struct fid_cat *new_fid_cat, find_fid_cat;
 
     xmin = ymin = 1.0;
     xmax = ymax = 0.0;
@@ -1233,6 +1255,7 @@ int main(int argc, char *argv[])
     sqlbuf = NULL;
     sqlbufsize = 0;
     OGR_iterator_reset(&OGR_iter);
+    fid_cat_tree = G_malloc(nlayers * sizeof(struct pavl_table *));
     for (layer = 0; layer < nlayers; layer++) {
 	layer_id = layers[layer];
 	/* Import features */
@@ -1242,6 +1265,9 @@ int main(int argc, char *argv[])
 
 	G_important_message(_("Importing %lld features (OGR layer <%s>)..."),
 			    n_features[layer], layer_names[layer]);
+
+	/* balanced binary search tree to map FIDs to cats */
+	fid_cat_tree[layer] = pavl_create(cmp_fid_cat, NULL);
 
 	driver = NULL;
 	if (!flag.notab->answer) {
@@ -1273,7 +1299,19 @@ int main(int argc, char *argv[])
 	                                         layer_names[layer],
 						 poSpatialFilter[layer],
 						 attr_filter)) != NULL) {
+	    grass_int64 ogr_fid;
+
 	    G_percent(feature_count++, n_features[layer], 1);	/* show something happens */
+
+	    /* get feature ID */
+	    ogr_fid = OGR_F_GetFID(Ogr_feature);
+	    if (ogr_fid != OGRNullFID) {
+		/* map feature id to cat */
+		new_fid_cat = G_malloc(sizeof(struct fid_cat));
+		new_fid_cat->fid = ogr_fid;
+		new_fid_cat->cat = cat;
+		pavl_insert(fid_cat_tree[layer], new_fid_cat);
+	    }
 
             /* Geometry */
             Ogr_featuredefn = OGR_iter.Ogr_featuredefn;
@@ -1281,19 +1319,11 @@ int main(int argc, char *argv[])
             for (i = 0; i < OGR_FD_GetGeomFieldCount(Ogr_featuredefn); i++) {
                 if (igeom > -1 && i != igeom)
                     continue; /* use only geometry defined via param.geom */
-            
+
+		/* Ogr_geometry from OGR_F_GetGeomFieldRef() should not be modified. */
                 Ogr_geometry = OGR_F_GetGeomFieldRef(Ogr_feature, i);
 #else
                 Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
-#endif                
-#if GDAL_VERSION_NUM >= 2000000
-                if (Ogr_geometry != NULL) {
-		    if (OGR_G_HasCurveGeometry(Ogr_geometry, 1)) {
-			G_debug(2, "Approximating curves in a '%s'",
-			        OGR_G_GetGeometryName(Ogr_geometry));
-		    }
-		    Ogr_geometry = OGR_G_GetLinearGeometry(Ogr_geometry, 0, NULL);
-		}
 #endif
                 if (Ogr_geometry == NULL) {
                     nogeom++;
@@ -1306,9 +1336,6 @@ int main(int argc, char *argv[])
 
                     geom(Ogr_geometry, Out, layer + 1, cat, min_area, type,
                          flag.no_clean->answer);
-#if GDAL_VERSION_NUM >= 2000000
-		    OGR_G_DestroyGeometry(Ogr_geometry);
-#endif
                 }
 #if GDAL_VERSION_NUM >= 1110000              
             }
@@ -1603,6 +1630,8 @@ int main(int argc, char *argv[])
 	/* Go through all layers and find centroids for each polygon */
 	OGR_iterator_reset(&OGR_iter);
 	for (layer = 0; layer < nlayers; layer++) {
+	    int do_fid_warning = 1;
+
 	    G_message("%s", separator);
 	    G_message(_("Finding centroids for OGR layer <%s>..."), layer_names[layer]);
 	    layer_id = layers[layer];
@@ -1621,13 +1650,34 @@ int main(int argc, char *argv[])
 						     layer_names[layer],
 						     poSpatialFilter[layer],
 						     attr_filter)) != NULL) {
+		int area_cat;
+
 		G_percent(feature_count++, n_features[layer], 2);
+
+		area_cat = ++cat;
 
 		/* Category */
 		if (key_idx[layer] > -1)
-		    cat = OGR_F_GetFieldAsInteger(Ogr_feature, key_idx[layer]);
-		else
-		    cat++;
+		    area_cat = OGR_F_GetFieldAsInteger(Ogr_feature, key_idx[layer]);
+		else {
+		    /* get feature ID */
+		    grass_int64 ogr_fid = OGR_F_GetFID(Ogr_feature);
+
+		    if (ogr_fid != OGRNullFID) {
+			find_fid_cat.fid = ogr_fid;
+			/* the order of features might have changed from 
+			 * the first pass through the features: 
+			 * find cat for FID as assigned in the first pass */
+			if ((new_fid_cat = pavl_find(fid_cat_tree[layer], &find_fid_cat)) != NULL) {
+			    area_cat = new_fid_cat->cat;
+			    if (do_fid_warning && area_cat != cat) {
+				G_warning(_("The order of features in input layer <%s> has changed"),
+					  layer_names[layer]);
+				do_fid_warning = 0;
+			    }
+			}
+		    }
+		}
 
 		/* Geometry */
 #if GDAL_VERSION_NUM >= 1110000
@@ -1641,22 +1691,16 @@ int main(int argc, char *argv[])
 		    Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
 #endif
 		    if (Ogr_geometry != NULL) {
-#if GDAL_VERSION_NUM >= 2000000
-			Ogr_geometry = OGR_G_GetLinearGeometry(Ogr_geometry, 0, NULL);
-		    }
-		    if (Ogr_geometry != NULL) {
-#endif
-			centroid(Ogr_geometry, Centr, &si, layer + 1, cat,
+			centroid(Ogr_geometry, Centr, &si, layer + 1, area_cat,
 				 min_area, type);
-#if GDAL_VERSION_NUM >= 2000000
-			OGR_G_DestroyGeometry(Ogr_geometry);
-#endif
 		    }
 #if GDAL_VERSION_NUM >= 1110000
 		}
 #endif
 		OGR_F_Destroy(Ogr_feature);
 	    }
+	    /* search tree is no longer needed */
+	    pavl_destroy(fid_cat_tree[layer], free_fid_cat);
 	    G_percent(1, 1, 1);
 	}
 
@@ -1735,6 +1779,7 @@ int main(int argc, char *argv[])
     }
 
     ds_close(Ogr_ds);
+    G_free(fid_cat_tree);
 
     if (use_tmp_vect) {
 	/* Copy temporary vector to output vector */
