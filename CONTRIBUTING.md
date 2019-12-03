@@ -72,7 +72,7 @@ git checkout master
 * Download updates from all branches from all remotes:
 
 ```
-git fetch --all
+git fetch upstream
 ```
 
 * Update your local master branch to match master in the main repository:
