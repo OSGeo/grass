@@ -58,7 +58,7 @@ def CheckWxVersion(version):
     """Check wx version"""
     ver = wx.__version__
     try:
-        split_ver = ver.split('.')
+        split_ver = ver.split('.')[0:3]
         parsed_version = list(map(int, split_ver))
     except ValueError:
         # wxPython 4.0.0aX
