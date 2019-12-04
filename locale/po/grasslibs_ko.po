@@ -4717,14 +4717,14 @@ msgstr ""
 #: ../lib/gis/cmprzstd.c:176 ../lib/gis/cmprzlib.c:100
 #: ../lib/gis/cmprzlib.c:179 ../lib/gis/compress.c:335
 msgid "No source buffer"
-msgstr ""
+msgstr "원천 버퍼가 없습니다"
 
 #: ../lib/gis/cmprlz4.c:92 ../lib/gis/cmprlz4.c:159 ../lib/gis/cmprbzip.c:107
 #: ../lib/gis/cmprbzip.c:186 ../lib/gis/cmprzstd.c:105
 #: ../lib/gis/cmprzstd.c:179 ../lib/gis/cmprzlib.c:103
 #: ../lib/gis/cmprzlib.c:182
 msgid "No destination buffer"
-msgstr ""
+msgstr "목적 버퍼가 없습니다"
 
 #: ../lib/gis/cmprlz4.c:99 ../lib/gis/cmprlz4.c:166 ../lib/gis/cmprbzip.c:114
 #: ../lib/gis/cmprbzip.c:193 ../lib/gis/cmprzstd.c:112

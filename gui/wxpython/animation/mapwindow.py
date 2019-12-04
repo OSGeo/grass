@@ -17,7 +17,7 @@ This program is free software under the GNU General Public License
 
 import wx
 from core.debug import Debug
-from gui_core.wrap import PseudoDC, EmptyBitmap, Rect
+from gui_core.wrap import PseudoDC, EmptyBitmap, Rect, BitmapFromImage
 from .utils import ComputeScaledRect
 
 
@@ -145,7 +145,7 @@ class AnimationWindow(BufferedWindow):
             im.Rescale(params['width'], params['height'])
             self.x = params['x']
             self.y = params['y']
-            bitmap = wx.BitmapFromImage(im)
+            bitmap = BitmapFromImage(im)
             if self._overlay:
                 im = wx.ImageFromBitmap(self.bitmap_overlay)
                 im.Rescale(
@@ -154,7 +154,7 @@ class AnimationWindow(BufferedWindow):
                     im.GetHeight() *
                     params['scale'])
                 self._setOverlay(
-                    wx.BitmapFromImage(im),
+                    BitmapFromImage(im),
                     xperc=self.perc[0],
                     yperc=self.perc[1])
         else:

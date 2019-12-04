@@ -74,7 +74,10 @@ is_point_outside_max_dist(Viewpoint vp, GridHeader hd,
 			  dimensionType row, dimensionType col,
 			  float maxDist);
 
-
+/*determines if the point at row,col is within min and max angle (in 0-360, 0 is east, CCW) */
+int is_point_inside_angle(Viewpoint vp,
+                         dimensionType row, dimensionType col,
+                         float minAngle, float maxAngle);
 
 /*sort the event list by the angle around the viewpoint) */
 void sort_event_list(AMI_STREAM < AEvent > **eventList);

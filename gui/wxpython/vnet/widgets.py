@@ -28,13 +28,14 @@ from wx.lib.mixins.listctrl import CheckListCtrlMixin, ColumnSorterMixin, \
     ListCtrlAutoWidthMixin, TextEditMixin
 
 from core import globalvar
-from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl
+from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl, ListCtrl, \
+    BitmapFromImage
 
 if sys.version_info.major >= 3:
     basestring = str
 
 
-class PointsList(wx.ListCtrl,
+class PointsList(ListCtrl,
                  CheckListCtrlMixin,
                  ListCtrlAutoWidthMixin,
                  ColumnSorterMixin):
@@ -79,7 +80,7 @@ class PointsList(wx.ListCtrl,
         @endcode
         """
 
-        wx.ListCtrl.__init__(self, parent, id, pos, size, style)
+        ListCtrl.__init__(self, parent, id, pos, size, style)
 
         # Mixin settings
         CheckListCtrlMixin.__init__(self)
@@ -113,8 +114,8 @@ class PointsList(wx.ListCtrl,
         self.il = self.GetImageList(wx.IMAGE_LIST_SMALL)
 
         # images for column sorting
-        SmallUpArrow = wx.BitmapFromImage(self.getSmallUpArrowImage())
-        SmallDnArrow = wx.BitmapFromImage(self.getSmallDnArrowImage())
+        SmallUpArrow = BitmapFromImage(self.getSmallUpArrowImage())
+        SmallDnArrow = BitmapFromImage(self.getSmallDnArrowImage())
         self.sm_dn = self.il.Add(SmallDnArrow)
         self.sm_up = self.il.Add(SmallUpArrow)
 
@@ -240,7 +241,7 @@ class PointsList(wx.ListCtrl,
         self.itemDataMap[key][colNum] = cellVal
         if not isinstance(cellVal, basestring):
             cellVal = str(cellVal)
-        self.SetStringItem(index, colNum, cellVal)
+        self.SetItem(index, colNum, cellVal)
 
     def EditCellKey(self, key, colName, cellData):
         """Changes value in list using index (changes during sorting)"""
@@ -260,7 +261,7 @@ class PointsList(wx.ListCtrl,
         if index != -1:
             if not isinstance(cellVal, basestring):
                 cellVal = str(cellVal)
-            self.SetStringItem(index, colNum, cellVal)
+            self.SetItem(index, colNum, cellVal)
 
     def _findIndex(self, key):
         """Find index for key"""
@@ -286,7 +287,7 @@ class PointsList(wx.ListCtrl,
             return
 
         key = self.GetItemData(self.selected)
-        wx.ListCtrl.DeleteItem(self, self.selected)
+        ListCtrl.DeleteItem(self, self.selected)
 
         del self.itemDataMap[key]
         self.selIdxs.pop(key)
@@ -300,7 +301,7 @@ class PointsList(wx.ListCtrl,
         for newkey in range(key, len(self.itemDataMap)):
             index = self.FindItemData(-1, newkey + 1)
             self.itemDataMap[newkey][0] = newkey
-            self.SetStringItem(index, 0, str(newkey + 1))
+            self.SetItem(index, 0, str(newkey + 1))
             self.SetItemData(index, newkey)
 
         # update selected
@@ -394,7 +395,7 @@ class PointsList(wx.ListCtrl,
                         value = editedCell[1]
                         if not isinstance(editedCell[1], basestring):
                             value = str(editedCell[1])
-                        self.SetStringItem(index, editedCell[0], value)
+                        self.SetItem(index, editedCell[0], value)
                         self.itemDataMap[key][editedCell[0]] = editedCell[1]
                         changed = True
                     i += 1

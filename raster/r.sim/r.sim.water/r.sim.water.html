@@ -21,9 +21,20 @@ to determine the direction and magnitude of water flow velocity. To include a
 predefined direction of flow, map algebra can be used to replace terrain-derived
 partial derivatives with pre-defined partial derivatives in selected grid cells such 
 as man-made channels, ditches or culverts. Equations (2) and (3) from 
-<a href="http://www4.ncsu.edu/~hmitaso/gmslab/reports/cerl99/rep99.html">this report</a>
+<a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/reports/cerl99/rep99.html">this report</a>
 can be used to compute partial derivates of the predefined flow using its direction given
 by aspect and slope.
+
+<p>
+<div align="center" style="margin: 10px;">
+<img style="margin: 0.5em;" src="r_sim_water.png" alt="r.sim.water generated depth map"><br>
+<i >
+    Figure: Simulated water flow in a rural area
+    showing the areas with highest water depth
+    highlighting streams, pooling, and wet areas
+    during a rainfall event.
+</i>
+</div>
 
 <p>
 The module automatically converts horizontal distances from feet to metric system using
@@ -137,26 +148,46 @@ for large, cutting-edge applications using high performance computing.
 
 <h2>EXAMPLE</h2>
 
-Spearfish region:
+Using the North Carolina full sample dataset:
 
 <div class="code"><pre>
-g.region raster=elevation.10m -p
-r.slope.aspect elevation=elevation.10m dx=elev_dx dy=elev_dy
+# set computational region
+g.region raster=elev_lid792_1m -p
 
-# synthetic maps
-r.mapcalc "rain    = if(elevation.10m, 5.0, null())"
-r.mapcalc "manning = if(elevation.10m, 0.05, null())"
-r.mapcalc "infilt  = if(elevation.10m, 0.0, null())"
+# compute dx, dy
+r.slope.aspect elevation=elev_lid792_1m dx=elev_lid792_dx dy=elev_lid792_dy
 
-# simulate
-r.sim.water elevation=elevation.10m dx=elev_dx dy=elev_dy rain=rain man=manning infil=infilt nwalkers=5000000 depth=depth
+# simulate (this may take a minute or two)
+r.sim.water elevation=elev_lid792_1m dx=elev_lid792_dx dy=elev_lid792_dy depth=water_depth disch=water_discharge nwalk=10000 rain_value=100 niter=5
+</pre></div>
+
+Now, let's visualize the result using rendering to a file
+(note the further management of computational region and
+usage of <a href="d.mon.html">d.mon</a> module
+which are not needed when working in GUI):
+
+<div class="code"><pre>
+# increase the computational region by 350 meters
+g.region e=e+350
+# initiate the rendering
+d.mon start=cairo output=r_sim_water_water_depth.png
+# render raster, legend, etc.
+d.rast map=water_depth_1m
+d.legend raster=water_depth_1m title="Water depth [m]" label_step=0.10 font=sans at=20,80,70,75
+d.barscale at=67,10 length=250 segment=5 font=sans
+d.northarrow at=90,25
+# finish the rendering
+d.mon stop=cairo
 </pre></div>
 
 <p>
-<center>
-<img src="r_sim_water.png" alt="r.sim.water generated depth map"><br>
-<i>Figure: Water depth map in the Spearfish (SD) area</i>
-</center>
+<div align="center" style="margin: 10px;">
+<img style="margin: 0.5em;" src="r_sim_water_water_depth.png" alt="r.sim.water generated depth map"><br>
+<i >
+    Figure: Simulated water depth map in the rural area of
+    the North Carolina sample dataset.
+</i>
+</div>
 
 
 <h2>ERROR MESSAGES</h2>
@@ -173,7 +204,7 @@ then a lower <b>nwalkers</b> parameter value has to be selected.
 
 <ul>
 <li> Mitasova, H., Thaxton, C., Hofierka, J., McLaughlin, R., Moore, A., Mitas L., 2004,
-<a href="http://www4.ncsu.edu/~hmitaso/gmslab/papers/II.6.8_Mitasova_044.pdf">
+<a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/II.6.8_Mitasova_044.pdf">
 Path sampling method for modeling overland water flow, sediment transport 
 and short term terrain evolution in Open Source GIS.</a>  
 In: C.T. Miller, M.W. Farthing, V.G. Gray, G.F. Pinder eds., 
@@ -181,7 +212,7 @@ Proceedings of the XVth International Conference on Computational Methods in Wat
 Resources (CMWR XV), June 13-17 2004, Chapel Hill, NC, USA, Elsevier, pp. 1479-1490.
 
 <li> Mitasova H, Mitas, L., 2000,
-<a href="http://www4.ncsu.edu/~hmitaso/gmslab/gisc00/duality.html">Modeling spatial
+<a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/gisc00/duality.html">Modeling spatial
 processes in multiscale framework: exploring duality between particles and fields,</a>
 plenary talk at GIScience2000 conference, Savannah, GA. 
 
@@ -189,7 +220,7 @@ plenary talk at GIScience2000 conference, Savannah, GA.
 for effective erosion prevention. Water Resources Research, 34(3), 505-516.
 
 <li> Mitasova, H., Mitas, L., 2001,
-<a href="http://www4.ncsu.edu/~hmitaso/gmslab/papers/LLEmiterev1.pdf">
+<a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/LLEmiterev1.pdf">
 Multiscale soil erosion simulations for land use management,</a>
 In: Landscape erosion and landscape evolution modeling, Harmon R. and Doe W. eds., 
 Kluwer Academic/Plenum Publishers, pp. 321-347.
@@ -203,7 +234,7 @@ GRASS users conference 2002 - Trento, Italy, 11-13 September 2002.
 Simulating aspects of a flash flood using the Monte Carlo method and
 GRASS GIS: a case study of the Mal&aacute; Svinka Basin (Slovakia),
 Open Geosciences. Volume 7, Issue 1, ISSN (Online) 2391-5447, DOI:
-<a href="http://dx.doi.org/10.1515/geo-2015-0013">10.1515/geo-2015-0013</a>,
+<a href="https://doi.org/10.1515/geo-2015-0013">10.1515/geo-2015-0013</a>,
 April 2015
 
 <li> Neteler, M. and Mitasova, H., 2008,
@@ -235,4 +266,7 @@ Chris Thaxton<br>
 North Carolina State University<br>
 <i><a href="mailto:csthaxto@unity.ncsu.edu">csthaxto@unity.ncsu.edu</a></i>
 
-<p><i>Last changed: $Date$</i>
+<!--
+<p>
+<i>Last changed: $Date$</i>
+-->

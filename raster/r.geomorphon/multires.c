@@ -17,6 +17,6 @@ int pattern_matching(int *pattern)
 	    test = (binary << i) | (binary >> (8 - i));
 	result = (result < test) ? result : test;
     }
-    return (result & source == source) ? 1 : 0;
+    return ((result & source) == source) ? 1 : 0;
 
 }

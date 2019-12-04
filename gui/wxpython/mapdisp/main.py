@@ -51,7 +51,7 @@ from core.settings import UserSettings
 
 from grass.script.utils import try_remove
 from grass.script import core as grass
-from grass.script.task import cmdtuple_to_list
+from grass.script.task import cmdtuple_to_list, cmdlist_to_tuple
 from grass.pydispatch.signal import Signal
 
 # for standalone app
@@ -215,23 +215,10 @@ class DMonMap(Map):
                 classLayer = MapLayer
                 args['ltype'] = ltype
 
-                mapLayer = classLayer(name=name,
-                                      cmd=cmd,
-                                      Map=None,
-                                      hidden=True,
-                                      render=False,
-                                      mapfile=mapFile,
-                                      **args)
-                mapLayer.GetRenderMgr().updateProgress.connect(self.GetRenderMgr().ReportProgress)
-                if render_env:
-                    mapLayer.GetRenderMgr().UpdateRenderEnv(render_env)
-                    render_env = dict()
-
                 exists = False
                 for i, layer in enumerate(existingLayers):
                     if layer.GetCmd(
-                            string=True) == mapLayer.GetCmd(
-                            string=True):
+                            string=True) == utils.GetCmdString(cmdlist_to_tuple(cmd)):
                         exists = True
 
                         if layersOrder[i] == -1:
@@ -248,6 +235,18 @@ class DMonMap(Map):
                         break
                 if exists:
                     continue
+
+                mapLayer = classLayer(name=name,
+                                      cmd=cmd,
+                                      Map=None,
+                                      hidden=True,
+                                      render=False,
+                                      mapfile=mapFile,
+                                      **args)
+                mapLayer.GetRenderMgr().updateProgress.connect(self.GetRenderMgr().ReportProgress)
+                if render_env:
+                    mapLayer.GetRenderMgr().UpdateRenderEnv(render_env)
+                    render_env = dict()
 
                 newLayer = self._addLayer(mapLayer)
 

@@ -5,7 +5,7 @@ via command line interface.
 
 <p><em>v.edit</em> supports only "simple" vector features: points,
 centroids, lines and boundaries. Currently, only 2D vector features
-(except of tool <b>zbulk</b>) are supported.
+(except of <b>tool=zbulk</b>) are supported.
 
 <p>Provides editing features' geometry. Attribute data connected to the
 vector map are not modified at all.
@@ -413,8 +413,8 @@ v.edit map=roads tool=select bbox=598260,4919730,605100,4926240 query=length thr
 
 <h3>Fix height of contours</h3>
 
-Intput vector map contains 2D lines representing contours. Height can
-be assign to the contours using tool <b>zbulk</b>. First of all 2D
+Input vector map contains 2D lines representing contours. Height can
+be assign to the contours using <b>tool=zbulk</b>. First of all 2D
 lines need to be converted to 3D lines:
 
 <div class="code"><pre>
@@ -451,5 +451,7 @@ Original author: Wolf Bergenheim - independent developer<br>
 Initial updates: Jachym Cepicky, Mendel University of Agriculture and Forestry in Brno, Czech Republic<br>
 Major update by Martin Landa, FBK-irst (formerly ITC-irst), Trento, Italy
 
+<!--
 <p>
 <i>Last changed: $Date$</i>
+-->

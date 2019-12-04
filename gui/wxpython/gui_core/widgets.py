@@ -1034,9 +1034,9 @@ class GListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin,
 
         idx = 0
         for item in data:
-            index = self.InsertStringItem(idx, str(item[0]))
+            index = self.InsertItem(idx, str(item[0]))
             for i in range(1, self.GetColumnCount()):
-                self.SetStringItem(index, i, item[i])
+                self.SetItem(index, i, item[i])
             idx += 1
 
         # check by default only on one item

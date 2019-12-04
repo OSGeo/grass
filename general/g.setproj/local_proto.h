@@ -2,7 +2,7 @@
 /* exit codes */
 #define SP_FATAL     1		/* [ G_fatal_error () returns 1 ] */
 #define SP_NOCHANGE  2
-#define SP_UNKOWN    3
+#define SP_UNKNOWN   3
 
 /* $GISBASE-relative locations of parameter files */
 #define STP1927PARAMS "/etc/proj/state27"
