@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # utilities for generating HTML indices
-# (c) 2003-2015 by the GRASS Development Team, Markus Neteler, Glynn Clements, Luca Delucchi
+# (c) 2003-2019 by the GRASS Development Team, Markus Neteler, Glynn Clements, Luca Delucchi
 
 import sys
 import os
@@ -122,6 +122,10 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
         <h3>&nbsp;Addons</h3>
         <ul>
         <li class="box"><a href="https://grass.osgeo.org/grass7/manuals/addons/">Addons manual pages</a></li>
+       </ul>
+        <h3>&nbsp;Programmer's Manual</h3>
+        <ul>
+        <li class="box"><a href="https://grass.osgeo.org/programming7/">Programmer's Manual</a></li>
        </ul>
       </td>
     </tr>
