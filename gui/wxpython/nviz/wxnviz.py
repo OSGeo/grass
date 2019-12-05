@@ -59,7 +59,7 @@ except (ImportError, WindowsError) as e:
 
 from core.debug import Debug
 from core.utils import autoCropImageFromFile
-from core.gcmd import EncodeString, DecodeString
+from core.gcmd import DecodeString
 from core.globalvar import wxPythonPhoenix
 from gui_core.wrap import Rect
 import grass.script as grass
@@ -1847,7 +1847,6 @@ class Nviz(object):
         """
         widthOrig = self.width
         heightOrig = self.height
-        filename = EncodeString(filename)
 
         self.ResizeWindow(width, height)
         GS_clear(Nviz_get_bgcolor(self.data))
