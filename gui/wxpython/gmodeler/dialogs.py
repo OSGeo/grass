@@ -33,7 +33,7 @@ import wx.lib.mixins.listctrl as listmix
 from core import globalvar
 from core import utils
 from gui_core.widgets import SearchModuleWidget, SimpleValidator
-from core.gcmd import GError, EncodeString
+from core.gcmd import GError
 from gui_core.dialogs import SimpleDialog, MapLayersDialogForModeler
 from gui_core.prompt import GPromptSTC
 from gui_core.gselect import Select, ElementSelect
@@ -274,10 +274,7 @@ class ModelSearchDialog(wx.Dialog):
         if len(line) == 0:
             cmd = list()
         else:
-            try:
-                cmd = utils.split(str(line))
-            except UnicodeError:
-                cmd = utils.split(EncodeString((line)))
+            cmd = utils.split(str(line))
         return cmd
 
     def GetCmd(self):
