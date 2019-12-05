@@ -363,8 +363,6 @@ class WSDialogBase(wx.Dialog):
         """Update layer name to web service panel
         """
         lname = event.GetString()
-        lname = lname.encode('ascii', 'replace')
-
         for v in six.itervalues(self.ws_panels):
             v['panel'].SetOutputLayerName(lname.strip())
 
