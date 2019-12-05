@@ -29,7 +29,7 @@ if __name__ == '__main__':
     from grass.script.setup import set_gui_path
     set_gui_path()
 
-from core.gcmd import EncodeString, GError
+from core.gcmd import GError
 from gui_core.pystc import PyStc
 from core import globalvar
 from core.menutree import MenuTreeModelBuilder
@@ -89,9 +89,9 @@ def module_template():
 #
 #%s
 """ % ('#' * 72,
-            EncodeString(properties['name']),
-            EncodeString(properties['author']),
-            EncodeString('\n# '.join(properties['description'].splitlines())),
+            properties['name'],
+            properties['author'],
+            '\n# '.join(properties['description'].splitlines()),
             time.asctime(),
             '#' * 72))
 
@@ -101,7 +101,7 @@ def module_template():
 #%%module
 #%% description: %s
 #%%end
-""" % (EncodeString(' '.join(properties['description'].splitlines()))))
+""" % (' '.join(properties['description'].splitlines())))
 
     # import modules
     output.write(
