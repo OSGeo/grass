@@ -637,7 +637,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         """Scale map image so that it is the same size as the Window
         """
         # re-render image on idle
-        self.resize = time.clock()
+        self.resize = grass.clock()
 
     def OnIdle(self, event):
         """Only re-render a composite map image from GRASS during
@@ -646,7 +646,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
         # use OnInternalIdle() instead ?
 
-        if self.resize and self.resize + 0.2 < time.clock():
+        if self.resize and self.resize + 0.2 < grass.clock():
             Debug.msg(3, "BufferedWindow.OnSize():")
 
             # set size of the input image

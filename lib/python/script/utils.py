@@ -24,6 +24,7 @@ import shutil
 import locale
 import shlex
 import re
+import time
 
 
 if sys.version_info.major == 3:
@@ -451,3 +452,13 @@ def set_path(modulename, dirname=None, path='.'):
                               "(current dir '%s')." % (pathname, os.getcwd()))
 
         sys.path.insert(0, path)
+
+def clock():
+    """
+    Return time counter to measure performance for chunks of code.
+    Uses time.clock() for Py < 3.3, time.perf_counter() for Py >= 3.3.
+    Should be used only as difference between the calls.
+    """
+    if sys.version_info > (3,2):
+        return time.perf_counter()
+    return time.clock()
