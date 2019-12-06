@@ -20,6 +20,8 @@
 #% description: Creates a MASK for limiting raster operation.
 #% keyword: raster
 #% keyword: mask
+#% keyword: null data
+#% keyword: no-data
 #% overwrite: yes
 #%end
 #%option G_OPT_R_INPUT
