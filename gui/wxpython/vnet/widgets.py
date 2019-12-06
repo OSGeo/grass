@@ -436,7 +436,7 @@ class PointsList(ListCtrl,
                 'small_up_arrow.png'),
             'rb')
         try:
-            img = wx.ImageFromStream(stream)
+            img = wx.Image(stream)
         finally:
             stream.close()
         return img
@@ -449,7 +449,7 @@ class PointsList(ListCtrl,
                 'small_down_arrow.png'),
             'rb')
         try:
-            img = wx.ImageFromStream(stream)
+            img = wx.Image(stream)
         finally:
             stream.close()
         return img
