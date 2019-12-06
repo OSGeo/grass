@@ -79,7 +79,7 @@ maptype = 'raster'
 def getSmallUpArrowImage():
     stream = open(os.path.join(globalvar.IMGDIR, 'small_up_arrow.png'), 'rb')
     try:
-        img = wx.ImageFromStream(stream)
+        img = wx.Image(stream)
     finally:
         stream.close()
     return img
@@ -88,7 +88,7 @@ def getSmallUpArrowImage():
 def getSmallDnArrowImage():
     stream = open(os.path.join(globalvar.IMGDIR, 'small_down_arrow.png'), 'rb')
     try:
-        img = wx.ImageFromStream(stream)
+        img = wx.Image(stream)
     finally:
         stream.close()
     stream.close()
@@ -2174,7 +2174,7 @@ class GCPList(ListCtrl,
                         _('Forward error'),
                         _('Backward error')):
                 info.SetText(lbl)
-                self.InsertColumnInfo(idx_col, info)
+                self.InsertColumn(idx_col, info)
                 idx_col += 1
 
     def LoadData(self):
@@ -2682,11 +2682,10 @@ class GrSettingsDialog(wx.Dialog):
             parent=panel, id=wx.ID_ANY,
             label=_("Highlight RMS error > M + SD * factor:"))
         rmslabel.SetToolTip(
-            wx.ToolTip(
                 _(
                     "Highlight GCPs with an RMS error larger than \n"
                     "mean + standard deviation * given factor. \n"
-                    "Recommended values for this factor are between 1 and 2.")))
+                    "Recommended values for this factor are between 1 and 2."))
         rmsgridSizer.Add(
             rmslabel,
             flag=wx.ALIGN_CENTER_VERTICAL,
