@@ -2,7 +2,7 @@ FROM ubuntu:18.04
 
 LABEL authors="Vaclav Petras,Markus Neteler"
 LABEL maintainer="wenzeslaus@gmail.com,neteler@osgeo.org"
- 
+
 # system environment
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -43,18 +43,22 @@ RUN apt-get update \
         g++ \
         gettext \
         gdal-bin \
+        language-pack-en-base \
         libfftw3-bin \
         make \
         ncurses-bin \
         netcdf-bin \
         proj-bin \
         proj-data \
-        python \
-        python-dev \
-        python-numpy \
-        python-pil \
-        python-ply \
-        python-six \
+        python3 \
+        python3-dateutil \
+        python3-dev \
+        python3-numpy \
+        python3-pil \
+        python3-pip \
+        python3-ply \
+        python3-six \
+        python3-wxgtk4.0 \
         sqlite3 \
         subversion \
         unixodbc-dev \
