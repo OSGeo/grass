@@ -23,8 +23,8 @@
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 
-/* Finder function for datum conversion lookup tables */
-#define FINDERFUNC set_proj_lib
+/* Finder function for datum transformation grids */
+#define FINDERFUNC set_proj_share
 #define PERMANENT "PERMANENT"
 #define MAX_PARGS 100
 
@@ -486,15 +486,24 @@ int GPJ_get_equivalent_latlong(struct pj_info *pjnew, struct pj_info *pjold)
 }
 #endif
 
-/* set_proj_lib()
- * 'finder function' for use with PROJ.4 pj_set_finder() function */
+/* set_proj_share()
+ * 'finder function' for use with PROJ.4 pj_set_finder() function
+ * this is used to find grids, usually in /usr/share/proj
+ * GRASS no longer provides copies of proj grids in GRIDDIR
+ * -> do not use gisbase/GRIDDIR */
 
-const char *set_proj_lib(const char *name)
+const char *set_proj_share(const char *name)
 {
-    const char *gisbase = G_gisbase();
     static char *buf = NULL;
-    static size_t buf_len;
-    size_t len = strlen(gisbase) + sizeof(GRIDDIR) + strlen(name) + 1;
+    const char *projshare;
+    static size_t buf_len = 0;
+    size_t len;
+
+    projshare = getenv("GRASS_PROJSHARE");
+    if (!projshare)
+	return NULL;
+
+    len = strlen(projshare) + strlen(name) + 2;
 
     if (buf_len < len) {
 	if (buf != NULL)
@@ -503,7 +512,7 @@ const char *set_proj_lib(const char *name)
 	buf = G_malloc(buf_len);
     }
 
-    sprintf(buf, "%s%s/%s", gisbase, GRIDDIR, name);
+    sprintf(buf, "%s/%s", projshare, name);
 
     return buf;
 }
