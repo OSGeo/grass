@@ -195,7 +195,7 @@ def main():
     img_extensions = ['png', 'jpg', 'gif']
     img_patterns = ['*.' + extension for extension in img_extensions]
     imgs = []
-    for filename in os.listdir(html_dir):
+    for filename in sorted(os.listdir(html_dir)):
         if file_matches(filename, img_patterns):
             imgs.append(filename)
 
