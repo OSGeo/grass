@@ -145,7 +145,7 @@ class Formatter:
                   os.path.basename(self.filename).replace(".html", "") +
                   " 1 \"\" \"GRASS " +
                   version +
-                  "\" \"Grass User's Manual\"")
+                  "\" \"GRASS GIS User's Manual\"")
 
     def pp_tr(self, content):
         content = clean(content)
