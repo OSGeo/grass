@@ -209,7 +209,8 @@ def main():
     TGTGISRC = os.environ['GISRC']
     SRCGISRC = grass.tempfile()
 
-    TMPLOC = 'temp_import_location_' + str(os.getpid())
+    # thread safe TMPLOC creation
+    TMPLOC = 'temp_import_location_' + str(os.getpid()) + grass.tempname(8).replace('tmp_', '')
 
     f = open(SRCGISRC, 'w')
     f.write('MAPSET: PERMANENT\n')
