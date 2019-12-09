@@ -162,9 +162,6 @@ class Popen(subprocess.Popen):
 
     def __init__(self, args, **kwargs):
         if is_mswindows:
-            # encoding not needed for Python3
-            # args = list(map(EncodeString, args))
-
             # The Windows shell (cmd.exe) requires some special characters to
             # be escaped by preceding them with 3 carets (^^^). cmd.exe /?
             # mentions <space> and &()[]{}^=;!'+,`~. A quick test revealed that

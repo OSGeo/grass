@@ -57,7 +57,7 @@ from core import utils
 from core.render import Map
 from gui_core.gselect import Select, LocationSelect, MapsetSelect
 from gui_core.dialogs import GroupDialog
-from core.gcmd import RunCommand, GMessage, GError, GWarning, EncodeString
+from core.gcmd import RunCommand, GMessage, GError, GWarning
 from core.settings import UserSettings
 from gcp.mapdisplay import MapFrame
 from core.giface import Notification
@@ -82,7 +82,7 @@ maptype = 'raster'
 def getSmallUpArrowImage():
     stream = open(os.path.join(globalvar.IMGDIR, 'small_up_arrow.png'), 'rb')
     try:
-        img = wx.ImageFromStream(stream)
+        img = wx.Image(stream)
     finally:
         stream.close()
     return img
@@ -91,7 +91,7 @@ def getSmallUpArrowImage():
 def getSmallDnArrowImage():
     stream = open(os.path.join(globalvar.IMGDIR, 'small_down_arrow.png'), 'rb')
     try:
-        img = wx.ImageFromStream(stream)
+        img = wx.Image(stream)
     finally:
         stream.close()
     stream.close()
@@ -323,7 +323,7 @@ class GCPWizard(object):
         self.gisrc_dict['LOCATION_NAME'] = location
         self.gisrc_dict['MAPSET'] = mapset
 
-        self.source_gisrc = EncodeString(utils.GetTempfile())
+        self.source_gisrc = utils.GetTempfile()
 
         try:
             f = open(self.source_gisrc, mode='w')

@@ -1557,19 +1557,18 @@ class BufferedMapWindow(MapWindowBase, Window):
                 self.digit:
             self._onLeftUp(event)
 
-        elif (self.mouse['use'] == 'pointer' and
-                self.dragid and int(self.dragid) >= 0):
-            # end drag of overlay decoration
-
-            if self.overlays and self.dragid in self.overlays:
-                self.overlays[
-                    self.dragid].coords = self.pdc.GetIdBounds(
-                    self.dragid)
-            elif self.dragid in self.textdict:
-                self.textdict[self.dragid]['bbox'] = self.pdc.GetIdBounds(self.dragid)
-            else:
-                pass
-            self.dragid = None
+        elif self.mouse['use'] == 'pointer':
+            if self.dragid and int(self.dragid) >= 0:
+                # end drag of overlay decoration
+                if self.overlays and self.dragid in self.overlays:
+                    self.overlays[
+                        self.dragid].coords = self.pdc.GetIdBounds(
+                        self.dragid)
+                elif self.dragid in self.textdict:
+                    self.textdict[self.dragid]['bbox'] = self.pdc.GetIdBounds(self.dragid)
+                else:
+                    pass
+                self.dragid = None
 
             self.mouseLeftUpPointer.emit(x=coordinates[0], y=coordinates[1])
 
