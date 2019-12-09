@@ -33,7 +33,7 @@ void Rast_make_random_colors(struct Colors *colors, CELL min, CELL max)
 	G_fatal_error(_("Rast_make_random_colors: min (%d) > max (%d)"),
 		      min, max);
 
-    /* FIXME - allow seed to be specified for repeatability */
+    /* You can set GRASS_RANDOM_SEED for repeatability */
     G_srand48_auto();
 
     count = MAX_COLORS - DEVIATION + G_lrand48() % DEVIATION;

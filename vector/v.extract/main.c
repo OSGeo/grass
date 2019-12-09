@@ -382,7 +382,7 @@ int main(int argc, char **argv)
 			  opt.type->answer, ucat_count);
 	
 	/* Initialise random number generator */
-	/* FIXME - allow seed to be specified for repeatability */
+	/* You can set GRASS_RANDOM_SEED for repeatability */
 	G_math_srand_auto();
 
 	/* Fill cat_array with list of valid random numbers */

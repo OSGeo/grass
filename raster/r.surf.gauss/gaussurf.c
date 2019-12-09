@@ -32,7 +32,7 @@ int gaussurf(char *out,		/* Name of raster maps to be opened.    */
 
 	/****** INITIALISE RANDOM NUMBER GENERATOR ******/
 
-    /* FIXME - allow seed to be specified for repeatability */
+    /* You can set GRASS_RANDOM_SEED for repeatability */
     G_math_srand_auto();
 
 	/****** OPEN CELL FILES AND GET CELL DETAILS ******/
