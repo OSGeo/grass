@@ -22,7 +22,7 @@ int pj_get_string(struct pj_info *, char *);
 #ifndef HAVE_PROJ_H
 int GPJ_get_equivalent_latlong(struct pj_info *, struct pj_info *);
 #endif
-const char *set_proj_lib(const char *);
+const char *set_proj_share(const char *);
 int pj_print_proj_params(const struct pj_info *, const struct pj_info *);
 
 /* convert.c */
