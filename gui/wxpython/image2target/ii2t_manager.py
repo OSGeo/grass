@@ -57,12 +57,12 @@ from core import utils
 from core.render import Map
 from gui_core.gselect import Select, LocationSelect, MapsetSelect
 from gui_core.dialogs import GroupDialog
-from core.gcmd import RunCommand, GMessage, GError, GWarning, EncodeString
+from core.gcmd import RunCommand, GMessage, GError, GWarning
 from core.settings import UserSettings
 from gcp.mapdisplay import MapFrame
 from core.giface import Notification
 from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, \
-    CheckListBox, TextCtrl, Menu
+    CheckListBox, TextCtrl, Menu, ListCtrl, BitmapFromImage
 
 from location_wizard.wizard import TitledPage as TitledPage
 
@@ -323,7 +323,7 @@ class GCPWizard(object):
         self.gisrc_dict['LOCATION_NAME'] = location
         self.gisrc_dict['MAPSET'] = mapset
 
-        self.source_gisrc = EncodeString(utils.GetTempfile())
+        self.source_gisrc = utils.GetTempfile()
 
         try:
             f = open(self.source_gisrc, mode='w')
@@ -1094,8 +1094,8 @@ class GCP(MapFrame, ColumnSorterMixin):
         # CheckListCtrlMixin must set an ImageList first
         self.il = self.list.GetImageList(wx.IMAGE_LIST_SMALL)
 
-        SmallUpArrow = wx.BitmapFromImage(getSmallUpArrowImage())
-        SmallDnArrow = wx.BitmapFromImage(getSmallDnArrowImage())
+        SmallUpArrow = BitmapFromImage(getSmallUpArrowImage())
+        SmallDnArrow = BitmapFromImage(getSmallDnArrowImage())
         self.sm_dn = self.il.Add(SmallDnArrow)
         self.sm_up = self.il.Add(SmallUpArrow)
 
@@ -1236,7 +1236,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         for newkey in range(key, len(self.mapcoordlist)):
             index = self.list.FindItemData(-1, newkey + 1)
             self.mapcoordlist[newkey][0] = newkey
-            self.list.SetStringItem(index, 0, str(newkey))
+            self.list.SetItem(index, 0, str(newkey))
             self.list.SetItemData(index, newkey)
 
         # update selected
@@ -1271,9 +1271,9 @@ class GCP(MapFrame, ColumnSorterMixin):
         index = self.list.GetSelected()
         key = self.list.GetItemData(index)
         for i in range(1, 7):
-            self.list.SetStringItem(index, i, '0.0')
-        self.list.SetStringItem(index, 7, '')
-        self.list.SetStringItem(index, 8, '')
+            self.list.SetItem(index, i, '0.0')
+        self.list.SetItem(index, 7, '')
+        self.list.SetItem(index, 8, '')
         self.list.CheckItem(index, False)
 
         # GCP number, source E, source N, target E, target N, fwd error, bkwd
@@ -1388,15 +1388,15 @@ class GCP(MapFrame, ColumnSorterMixin):
                 return
 
         if coordtype == 'source':
-            self.list.SetStringItem(index, 1, str(coord0))
-            self.list.SetStringItem(index, 2, str(coord1))
+            self.list.SetItem(index, 1, str(coord0))
+            self.list.SetItem(index, 2, str(coord1))
             self.mapcoordlist[key][1] = coord[0]
             self.mapcoordlist[key][2] = coord[1]
             self.pointsToDrawSrc.GetItem(key - 1).SetCoords([coord0, coord1])
 
         elif coordtype == 'target':
-            self.list.SetStringItem(index, 4, str(coord0))
-            self.list.SetStringItem(index, 5, str(coord1))
+            self.list.SetItem(index, 4, str(coord0))
+            self.list.SetItem(index, 5, str(coord1))
             self.mapcoordlist[key][4] = coord[0]
             self.mapcoordlist[key][5] = coord[1]
             #ADD ELEVATION FROM MAP AS HEIGHT PARAMETER
@@ -1423,12 +1423,12 @@ class GCP(MapFrame, ColumnSorterMixin):
                                   coordinates=[coord[0],coord[1]],
                                   stdout_=PIPE)
                 self.mapcoordlist[key][6] = rwhat.outputs.stdout.split('|')[3].rstrip('\n')
-                self.list.SetStringItem(index, 6, str(self.mapcoordlist[key][6]))
+                self.list.SetItem(index, 6, str(self.mapcoordlist[key][6]))
 
             self.pointsToDrawTgt.GetItem(key - 1).SetCoords([coord0, coord1])
 
-        self.list.SetStringItem(index, 7, '0')
-        self.list.SetStringItem(index, 8, '0')
+        self.list.SetItem(index, 7, '0')
+        self.list.SetItem(index, 8, '0')
         self.mapcoordlist[key][7] = 0.0
         self.mapcoordlist[key][8] = 0.0
 
@@ -1895,8 +1895,8 @@ class GCP(MapFrame, ColumnSorterMixin):
             key = self.list.GetItemData(index)
             if self.list.IsChecked(index):
                 fwd_err, bkw_err = errlist[GCPcount].split()
-                self.list.SetStringItem(index, 7, fwd_err)
-                self.list.SetStringItem(index, 8, bkw_err)
+                self.list.SetItem(index, 7, fwd_err)
+                self.list.SetItem(index, 8, bkw_err)
                 self.mapcoordlist[key][7] = float(fwd_err)
                 self.mapcoordlist[key][8] = float(bkw_err)
                 self.list.SetItemTextColour(index, wx.BLACK)
@@ -1911,8 +1911,8 @@ class GCP(MapFrame, ColumnSorterMixin):
                 sum_fwd_err += float(fwd_err)
                 GCPcount += 1
             else:
-                self.list.SetStringItem(index, 7, '')
-                self.list.SetStringItem(index, 8, '')
+                self.list.SetItem(index, 7, '')
+                self.list.SetItem(index, 8, '')
                 self.mapcoordlist[key][7] = 0.0
                 self.mapcoordlist[key][8] = 0.0
                 self.list.SetItemTextColour(index, wx.BLACK)
@@ -2174,7 +2174,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         pass
 
 
-class GCPList(wx.ListCtrl,
+class GCPList(ListCtrl,
               CheckListCtrlMixin,
               ListCtrlAutoWidthMixin):
 
@@ -2183,7 +2183,7 @@ class GCPList(wx.ListCtrl,
                  style=wx.LC_REPORT | wx.SUNKEN_BORDER | wx.LC_HRULES |
                  wx.LC_SINGLE_SEL):
 
-        wx.ListCtrl.__init__(self, parent, id, pos, size, style)
+        ListCtrl.__init__(self, parent, id, pos, size, style)
 
         self.gcp = gcp  # GCP class
         self.render = True
@@ -2381,13 +2381,13 @@ class GCPList(wx.ListCtrl,
             else:
                 for i in range(len(values)):
                     if values[i] != coords[i]:
-                        self.SetStringItem(index, i + 1, values[i])
+                        self.SetItem(index, i + 1, values[i])
                         changed = True
 
                 if changed:
                     # reset RMS and update mapcoordlist
-                    self.SetStringItem(index, 7, '')
-                    self.SetStringItem(index, 8, '')
+                    self.SetItem(index, 7, '')
+                    self.SetItem(index, 8, '')
                     key = self.GetItemData(index)
                     self.gcp.mapcoordlist[key] = [key,
                                                   float(values[0]),

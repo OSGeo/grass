@@ -1,7 +1,7 @@
 set ICON=%OSGEO4W_ROOT%\apps\grass\grass@POSTFIX@\gui\icons\grass_osgeo.ico
 set BATCH=%OSGEO4W_ROOT%\bin\@GRASS_EXECUTABLE@.bat
 textreplace -std -t "%BATCH%"
-textreplace -std -t "%OSGEO4W_ROOT%"\apps\grass\grass-@POSTFIX@\etc\fontcap
+textreplace -std -t "%OSGEO4W_ROOT%"\apps\grass\grass@POSTFIX@\etc\fontcap
 
 if not %OSGEO4W_MENU_LINKS%==0 xxmklink "%OSGEO4W_STARTMENU%\GRASS GIS @VERSION@.lnk" "%BATCH%"  "--gui" \ "Launch GRASS GIS @VERSION@" 1 "%ICON%" 
 if not %OSGEO4W_DESKTOP_LINKS%==0 xxmklink "%OSGEO4W_DESKTOP%\GRASS GIS @VERSION@.lnk" "%BATCH%"  "--gui" \ "Launch GRASS GIS @VERSION@" 1 "%ICON%" 

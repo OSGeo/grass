@@ -19,7 +19,7 @@ void initialize(void)
 		Rast_set_d_null_value(&atbv(i, j), 1);
 	    }
 	    else {
-		atbv(i, j) = -10.0;
+		atbv(i, j) = UNPROCESSED;
 	    }
 	}
     }
@@ -55,7 +55,7 @@ void calculate_atanb(void)
 		    continue;
 
 		/* skip squares already done */
-		if (is_atbv_null(i, j) || atbv(i, j) >= ZERO)
+		if (is_atbv_null(i, j) || !is_atbv_unprocessed(i,j))
 		    continue;
 
 		/* check the 8 possible flow directions for
@@ -66,47 +66,47 @@ void calculate_atanb(void)
 			(is_cv_null(i - 1, j - 1) ||
 			 cv(i - 1, j - 1) > cv(i, j)) &&
 			!is_atbv_null(i - 1, j - 1) &&
-			atbv(i - 1, j - 1) < ZERO)
+			is_atbv_unprocessed(i - 1, j - 1))
 			continue;
 
 		    if ((is_cv_null(i - 1, j) ||
 			 cv(i - 1, j) > cv(i, j)) &&
-			!is_atbv_null(i - 1, j) && atbv(i - 1, j) < ZERO)
+			!is_atbv_null(i - 1, j) && is_atbv_unprocessed(i - 1, j))
 			continue;
 
 		    if (j + 1 < window.cols &&
 			(is_cv_null(i - 1, j + 1) ||
 			 cv(i - 1, j + 1) > cv(i, j)) &&
 			!is_atbv_null(i - 1, j + 1) &&
-			atbv(i - 1, j + 1) < ZERO)
+			is_atbv_unprocessed(i - 1, j + 1))
 			continue;
 		}
 		if (j > 0 &&
 		    (is_cv_null(i, j - 1) ||
 		     cv(i, j - 1) > cv(i, j)) &&
-		    !is_atbv_null(i, j - 1) && atbv(i, j - 1) < ZERO)
+		    !is_atbv_null(i, j - 1) && is_atbv_unprocessed(i, j - 1))
 		    continue;
 		if (j + 1 < window.cols &&
 		    (is_cv_null(i, j + 1) ||
 		     cv(i, j + 1) > cv(i, j)) &&
-		    !is_atbv_null(i, j + 1) && atbv(i, j + 1) < ZERO)
+		    !is_atbv_null(i, j + 1) && is_atbv_unprocessed(i, j + 1))
 		    continue;
 		if (i + 1 < window.rows) {
 		    if (j > 0 &&
 			(is_cv_null(i + 1, j - 1) ||
 			 cv(i + 1, j - 1) > cv(i, j)) &&
 			!is_atbv_null(i + 1, j - 1) &&
-			atbv(i + 1, j - 1) < ZERO)
+			is_atbv_unprocessed(i + 1, j - 1))
 			continue;
 		    if ((is_cv_null(i + 1, j) ||
 			 cv(i + 1, j) > cv(i, j)) &&
-			!is_atbv_null(i + 1, j) && atbv(i + 1, j) < ZERO)
+			!is_atbv_null(i + 1, j) && is_atbv_unprocessed(i + 1, j))
 			continue;
 		    if (j + 1 < window.cols &&
 			(is_cv_null(i + 1, j + 1) ||
 			 cv(i + 1, j + 1) > cv(i, j)) &&
 			!is_atbv_null(i + 1, j + 1) &&
-			atbv(i + 1, j + 1) < ZERO)
+			is_atbv_unprocessed(i + 1, j + 1))
 			continue;
 		}
 		/* find the outflow directions and calculate 
