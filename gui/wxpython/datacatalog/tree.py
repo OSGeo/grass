@@ -32,6 +32,7 @@ from core.treemodel import TreeModel, DictNode
 from gui_core.treeview import TreeView
 from gui_core.wrap import Menu
 from datacatalog.dialogs import CatalogReprojectionDialog
+from icons.icon import MetaIcon
 
 from grass.pydispatch.signal import Signal
 
@@ -251,6 +252,14 @@ class DataCatalogNode(DictNode):
         return True
 
 
+class CatalogModel(TreeModel):
+    def __init__(self, nodeClass):
+        super(TreeModel, self).__init__(nodeClass)
+        
+    def GetNodeImage(node):
+        node.data['type']
+        
+
 class LocationMapTree(TreeView):
 
     def __init__(
@@ -272,6 +281,8 @@ class LocationMapTree(TreeView):
         self.parent = parent
         self.contextMenu.connect(self.OnRightClick)
         self.itemActivated.connect(self.OnDoubleClick)
+        self._iconTypes = ['grassdb', 'location', 'mapset', 'raster', 'vector', 'raster_3d']
+        self._initImages()
 
         self._initVariables()
 
@@ -300,7 +311,7 @@ class LocationMapTree(TreeView):
         grassdata_node = self._model.AppendNode(
             parent=self._model.root, label=_('GRASS locations in {0}').format(
                 genv['GISDBASE']), data=dict(
-                type='grassdata'))
+                type='grassdb'))
         for location in locations:
             results[location] = dict()
             varloc = self._model.AppendNode(
@@ -427,6 +438,21 @@ class LocationMapTree(TreeView):
         self.selected_location = []
         self.mixed = False
 
+    def _initImages(self):
+        bmpsize = (16, 16)
+        icons = {
+            'grassdb': MetaIcon(img='grassdb').GetBitmap(bmpsize),
+            'location': MetaIcon(img='location').GetBitmap(bmpsize),
+            'mapset': MetaIcon(img='mapset').GetBitmap(bmpsize),
+            'raster': MetaIcon(img='raster').GetBitmap(bmpsize),
+            'vector': MetaIcon(img='vector').GetBitmap(bmpsize),
+            'raster_3d': MetaIcon(img='raster3d').GetBitmap(bmpsize)
+            }
+        il = wx.ImageList(bmpsize[0], bmpsize[1], mask=False)
+        for each in self._iconTypes:
+            il.Add(icons[each])
+        self.AssignImageList(il)
+        
     def GetControl(self):
         """Returns control itself."""
         return self
@@ -531,6 +557,14 @@ class LocationMapTree(TreeView):
             return locationItem[0], None
 
         return locationItem[0], mapsetItem[0]
+        
+    def OnGetItemImage(self, index, which=wx.TreeItemIcon_Normal, column=0):
+        node = self._model.GetNodeByIndex(index)
+        try:
+            return self._iconTypes.index(node.data['type'])
+        except ValueError:
+            return 0
+        
 
     def ExpandCurrentMapset(self):
         """Expand current mapset"""
