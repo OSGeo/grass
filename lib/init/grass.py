@@ -1173,8 +1173,8 @@ def load_env(grass_env_file):
             continue
 
         # k is the variable name and v is its value
-        k = m[1]
-        v = m[2]
+        k = m.group(1)
+        v = m.group(2)
         # let's try to expand any $var's in v
         expand = True
         if v.startswith("'") and v.endswith("'"):
