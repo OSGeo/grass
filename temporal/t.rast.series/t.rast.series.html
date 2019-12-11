@@ -12,16 +12,31 @@ ordered by <b>start_time</b>.
 <b>r.series</b>. It supports a subset of the aggregation methods of
 <b>r.series</b>.
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
-Estimate average temperature for the whole time series
+<h3>Estimate the average temperature for the whole time series</h3>
+
+Here the entire stack of input maps is considered:
 
 <div class="code"><pre>
-t.rast.series input=tempmean_monthly output=tempmean_general method=average
+t.rast.series input=tempmean_monthly output=tempmean_average method=average
 </pre></div>
 
-Estimate average temperature for all January maps in the time series, the 
-so-called climatology
+<h3>Estimate the average temperature for a subset of the time series</h3>
+
+Here the stack of input maps is limited to a certain period of time:
+
+<div class="code"><pre>
+t.rast.series input=tempmean_daily output=tempmean_season method=average \
+  where="start_time >= '2012-06' and start_time <= '2012-08'"
+</pre></div>
+
+<h3>Climatology: single month in a multi-annual time series</h3>
+
+By considering only a single month in a multi-annual time series the so-called
+climatology can be computed.
+
+Estimate average temperature for all January maps in the time series:
 
 <div class="code"><pre>
 t.rast.series input=tempmean_monthly \
@@ -70,5 +85,8 @@ done
 
 S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
 
-<p><i>Last changed: $Date$</i>
+<!--
+<p>
+<i>Last changed: $Date$</i>
+-->
 

@@ -23,8 +23,8 @@
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 
-/* Finder function for datum conversion lookup tables */
-#define FINDERFUNC set_proj_lib
+/* Finder function for datum transformation grids */
+#define FINDERFUNC set_proj_share
 #define PERMANENT "PERMANENT"
 #define MAX_PARGS 100
 
@@ -241,6 +241,12 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     G_free(datum);
 
 #ifdef HAVE_PROJ_H
+#if PROJ_VERSION_MAJOR >= 6
+    /* without type=crs, PROJ6 does not recognize what this is, 
+     * a crs or some kind of coordinate operation, falling through to
+     * PJ_TYPE_OTHER_COORDINATE_OPERATION */
+    alloc_options("type=crs");
+#endif
     pjc = proj_context_create();
     if (!(pj = proj_create_argv(pjc, nopt, opt_in))) {
 #else
@@ -398,6 +404,12 @@ int pj_get_string(struct pj_info *info, char *str)
     }
 
 #ifdef HAVE_PROJ_H
+#if PROJ_VERSION_MAJOR >= 6
+    /* without type=crs, PROJ6 does not recognize what this is, 
+     * a crs or some kind of coordinate operation, falling through to
+     * PJ_TYPE_OTHER_COORDINATE_OPERATION */
+    alloc_options("type=crs");
+#endif
     pjc = proj_context_create();
     if (!(pj = proj_create_argv(pjc, nopt, opt_in))) {
 	G_warning(_("Unable to initialize pj cause: %s"),
@@ -474,15 +486,24 @@ int GPJ_get_equivalent_latlong(struct pj_info *pjnew, struct pj_info *pjold)
 }
 #endif
 
-/* set_proj_lib()
- * 'finder function' for use with PROJ.4 pj_set_finder() function */
+/* set_proj_share()
+ * 'finder function' for use with PROJ.4 pj_set_finder() function
+ * this is used to find grids, usually in /usr/share/proj
+ * GRASS no longer provides copies of proj grids in GRIDDIR
+ * -> do not use gisbase/GRIDDIR */
 
-const char *set_proj_lib(const char *name)
+const char *set_proj_share(const char *name)
 {
-    const char *gisbase = G_gisbase();
     static char *buf = NULL;
-    static size_t buf_len;
-    size_t len = strlen(gisbase) + sizeof(GRIDDIR) + strlen(name) + 1;
+    const char *projshare;
+    static size_t buf_len = 0;
+    size_t len;
+
+    projshare = getenv("GRASS_PROJSHARE");
+    if (!projshare)
+	return NULL;
+
+    len = strlen(projshare) + strlen(name) + 2;
 
     if (buf_len < len) {
 	if (buf != NULL)
@@ -491,7 +512,7 @@ const char *set_proj_lib(const char *name)
 	buf = G_malloc(buf_len);
     }
 
-    sprintf(buf, "%s%s/%s", gisbase, GRIDDIR, name);
+    sprintf(buf, "%s/%s", projshare, name);
 
     return buf;
 }

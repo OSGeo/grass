@@ -692,8 +692,8 @@ def set_browser():
         else:
             # the usual suspects
             browsers = ["xdg-open", "x-www-browser", "htmlview", "konqueror", "mozilla",
-                        "mozilla-firefox", "firefox", "iceweasel", "opera",
-                        "netscape", "dillo", "lynx", "links", "w3c"]
+                        "mozilla-firefox", "firefox", "iceweasel", "opera", "google-chrome",
+                        "chromium", "netscape", "dillo", "lynx", "links", "w3c"]
             for b in browsers:
                 if find_exe(b):
                     browser = b
@@ -1160,13 +1160,49 @@ def load_env(grass_env_file):
     if not os.access(grass_env_file, os.R_OK):
         return
 
+    # Regular expression for lines starting with "export var=val" (^export
+    # lines below). Environment variables should start with a-zA-Z or _.
+    # \1 and \2 are a variable name and its value, respectively.
+    export_re = re.compile('^export[ \t]+([a-zA-Z_]+[a-zA-Z0-9_]*)=(.*?)[ \t]*$')
+
     for line in readfile(grass_env_file).split(os.linesep):
-        try:
-            k, v = map(lambda x: x.strip(), line.strip().split(' ', 1)[1].split('=', 1))
-        except:
+        # match ^export lines
+        m = export_re.match(line)
+        # if not ^export lines, skip
+        if not m:
             continue
 
+        # k is the variable name and v is its value
+        k = m.group(1)
+        v = m.group(2)
+        # let's try to expand any $var's in v
+        expand = True
+        if v.startswith("'") and v.endswith("'"):
+            # we're parsing
+            #   export var='value'
+            # and need to strip out starting and ending quotes from the value
+            v = v.strip("'")
+            # we don't want to expand any $var's inside 'value' because they
+            # are within single quotes
+            expand = False
+        elif v.startswith('"') and v.endswith('"'):
+            # in this case, we're parsing
+            #   export var="value"
+            # and again need to strip out starting and ending quotes from the
+            # value
+            v = v.strip('"')
+            # we'll keep expand=True to expand $var's inside "value" because
+            # they are within double quotes
+        elif v.startswith("'") or v.endswith("'") or v.startswith('"') or v.endswith('"'):
+            # here, let's try to ignore unmatching single/double quotes, which
+            # might be a multi-line variable or just a user error
+            debug("Ignoring multi-line environmental variable {0}".format(k))
+            continue
+        if expand:
+            # finally, expand $var's within a non-single quoted value
+            v = os.path.expanduser(os.path.expandvars(v.replace('\\$', '\0')).replace('\0', '$'))
         debug("Environmental variable set {0}={1}".format(k, v))
+        # create a new environment variable
         os.environ[k] = v
 
     # Allow for mixed ISIS-GRASS Environment
@@ -1180,6 +1216,14 @@ def load_env(grass_env_file):
         isislibpath = os.getenv('ISIS_LIB')
         isis3rdparty = os.getenv('ISIS_3RDPARTY')
         os.environ['LD_LIBRARY_PATH'] = libpath + os.pathsep + isislibpath + os.pathsep + isis3rdparty
+
+
+def install_notranslation():
+    # If locale is not supported, _ function might be missing
+    # This function just installs _ as a pass-through function
+    # See trac #3875 for details
+    import builtins
+    builtins.__dict__['_'] = lambda x: x
 
 
 def set_language(grass_config_dir):
@@ -1230,11 +1274,12 @@ def set_language(grass_config_dir):
             # it would be too drastic to exit
             # sys.exit("Fix system locale settings and then try again.")
             locale.setlocale(locale.LC_ALL, 'C')
-            sys.stderr.write("Default locale settings are missing. GRASS running with C locale.")
+            sys.stderr.write("Default locale settings are missing. GRASS running with C locale.\n")
 
         language, encoding = locale.getdefaultlocale()
         if not language:
-            sys.stderr.write("Default locale settings are missing. GRASS running with C locale.")
+            sys.stderr.write("Default locale settings are missing. GRASS running with C locale.\n")
+            install_notranslation()
             return
 
     else:
@@ -1267,6 +1312,7 @@ def set_language(grass_config_dir):
                             " en_US.UTF-8 locale and restart GRASS.\n"
                             "Also consider upgrading your Python version"
                             " to one containing fix for Python Issue 30755.\n")
+                        install_notranslation()
                         return
                     # en_US locale might be missing, still all messages in
                     # GRASS are already in en_US language.
@@ -1293,6 +1339,7 @@ def set_language(grass_config_dir):
                             "If you observe UnicodeError in Python,"
                             " install en_US.UTF-8"
                             " locale and restart GRASS.\n")
+                        install_notranslation()
                         return
                 else:
                     # The last attempt...
@@ -1311,6 +1358,7 @@ def set_language(grass_config_dir):
                         # language
                         os.environ['LANGUAGE'] = language
                         os.environ['LANG'] = language
+                        install_notranslation()
                         return
 
     # Set up environment for subprocesses
@@ -1739,6 +1787,10 @@ PROMPT_COMMAND=grass_prompt\n""".format(
             mask2d_test=mask2d_test, mask3d_test=mask3d_test
             ))
 
+    # this line was moved here from below .grass.bashrc to allow ~ and $HOME in
+    # .grass.bashrc
+    f.write("export HOME=\"%s\"\n" % userhome)  # restore user home path
+
     # read other settings (aliases, ...) since environmental variables
     # have been already set by load_env(), see #3462
     for env_file in [os.path.join(userhome, ".grass.bashrc"),
@@ -1752,7 +1804,6 @@ PROMPT_COMMAND=grass_prompt\n""".format(
                 f.write(line + '\n')
 
     f.write("export PATH=\"%s\"\n" % os.getenv('PATH'))
-    f.write("export HOME=\"%s\"\n" % userhome)  # restore user home path
     f.close()
 
     process = Popen([gpath("etc", "run"), os.getenv('SHELL')])

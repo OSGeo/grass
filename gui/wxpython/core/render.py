@@ -40,7 +40,7 @@ from grass.exceptions import CalledModuleError
 
 from core import utils
 from core.ws import RenderWMSMgr
-from core.gcmd import GException, GError, RunCommand, EncodeString
+from core.gcmd import GException, GError, RunCommand
 from core.debug import Debug
 from core.settings import UserSettings
 from core.gthread import gThread
@@ -639,8 +639,8 @@ class RenderMapMgr(wx.EvtHandler):
                                   mask='%s' % ",".join(masks),
                                   opacity='%s' % ",".join(opacities),
                                   bgcolor=bgcolor,
-                                  width=self.Map.width,
-                                  height=self.Map.height,
+                                  width=self._env['GRASS_RENDER_WIDTH'],
+                                  height=self._env['GRASS_RENDER_HEIGHT'],
                                   output=self.Map.mapfile,
                                   env=self._env)
             if ret != 0:
@@ -1297,8 +1297,7 @@ class Map(object):
         renderMgr = layer.GetRenderMgr()
         Debug.msg(
             1, "Map.AddLayer(): ltype={0}, command={1}".format(
-                ltype, EncodeString(layer.GetCmd(
-                    string=True))))
+                ltype, layer.GetCmd(string=True)))
         if renderMgr:
             if layer.type == 'wms':
                 renderMgr.dataFetched.connect(self.renderMgr.ReportProgress)
@@ -1360,7 +1359,7 @@ class Map(object):
 
     def SetLayers(self, layers):
         self.layers = layers
-        Debug.msg(5, "Map.SetLayers(): layers={0}".format([EncodeString(layer.GetCmd(string=True)) for layer in layers]))
+        Debug.msg(5, "Map.SetLayers(): layers={0}".format([layer.GetCmd(string=True) for layer in layers]))
 
     def ChangeLayer(self, layer, render=False, **kargs):
         """Change map layer properties
@@ -1510,9 +1509,7 @@ class Map(object):
 
         renderMgr = overlay.GetRenderMgr()
         Debug.msg(
-            1, "Map.AddOverlay(): cmd={0}".format(EncodeString(
-                overlay.GetCmd(
-                    string=True))))
+            1, "Map.AddOverlay(): cmd={0}".format(overlay.GetCmd(string=True)))
         if renderMgr:
             renderMgr.updateProgress.connect(self.renderMgr.ReportProgress)
             renderMgr.renderingFailed.connect(self.renderMgr.RenderingFailed)

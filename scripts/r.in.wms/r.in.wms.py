@@ -79,7 +79,7 @@ This program is free software under the GNU General Public License
 #% key: wms_version
 #% type:string
 #% description: WMS standard version
-#% options: 1.1.1,1.3.0
+#% options: 1.1.0,1.1.1,1.3.0
 #% answer: 1.1.1
 #% guisection: Request
 #%end

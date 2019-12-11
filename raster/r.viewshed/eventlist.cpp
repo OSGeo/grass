@@ -605,7 +605,20 @@ int is_point_outside_max_dist(Viewpoint vp, GridHeader hd,
     return 0;
 }
 
+int is_point_inside_angle(Viewpoint vp,
+                         dimensionType row, dimensionType col,
+                         float minAngle, float maxAngle)
+{
+    double ang;
 
+    ang = atan2(vp.row -row, col - vp.col) * 180 / M_PI;
+    if (ang < 0)
+        ang += 360;
+    /* all angles are in range 0-360) */
+    if (minAngle < maxAngle)
+        return minAngle <= ang && ang <= maxAngle;
+    return minAngle <= ang || ang <= maxAngle;
+}
 
 /* ------------------------------------------------------------ 
    //note: this is expensive because distance is not stored in the event

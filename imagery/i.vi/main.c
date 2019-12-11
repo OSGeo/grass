@@ -75,14 +75,14 @@ int main(int argc, char *argv[])
     int infd_bluechan, infd_chan5chan, infd_chan7chan;
     int outfd;
     char *bluechan, *greenchan, *redchan, *nirchan, *chan5chan, *chan7chan;
-    DCELL *inrast_redchan, *inrast_nirchan, *inrast_greenchan;
-    DCELL *inrast_bluechan, *inrast_chan5chan, *inrast_chan7chan;
-    DCELL *outrast;
+    FCELL *inrast_redchan, *inrast_nirchan, *inrast_greenchan;
+    FCELL *inrast_bluechan, *inrast_chan5chan, *inrast_chan7chan;
+    FCELL *outrast;
     RASTER_MAP_TYPE data_type_redchan;
     RASTER_MAP_TYPE data_type_nirchan, data_type_greenchan;
     RASTER_MAP_TYPE data_type_bluechan;
     RASTER_MAP_TYPE data_type_chan5chan, data_type_chan7chan;
-    DCELL msavip1, msavip2, msavip3, dnbits;
+    FCELL msavip1, msavip2, msavip3, dnbits;
     CELL val1, val2;
 
     G_gisinit(argv[0]);
@@ -98,12 +98,6 @@ int main(int argc, char *argv[])
 			    "and some indices require additional bands.");
 
     /* Define the different options */
-    opt.red = G_define_standard_option(G_OPT_R_INPUT);
-    opt.red->key = "red";
-    opt.red->label =
-	_("Name of input red channel surface reflectance map");
-    opt.red->description = _("Range: [0.0;1.0]");
-
     opt.output = G_define_standard_option(G_OPT_R_OUTPUT);
 
     opt.viname = G_define_option();
@@ -137,13 +131,21 @@ int main(int argc, char *argv[])
     opt.viname->answer = "ndvi";
     opt.viname->key_desc = _("type");
 
+    opt.red = G_define_standard_option(G_OPT_R_INPUT);
+    opt.red->key = "red";
+    opt.red->required = NO;
+    opt.red->label =
+	_("Name of input red channel surface reflectance map");
+    opt.red->description = _("Range: [0.0;1.0]");
+    opt.red->guisection = _("Inputs");
+	
     opt.nir = G_define_standard_option(G_OPT_R_INPUT);
     opt.nir->key = "nir";
     opt.nir->required = NO;
     opt.nir->label =
 	_("Name of input nir channel surface reflectance map");
     opt.nir->description = _("Range: [0.0;1.0]");
-    opt.nir->guisection = _("Optional inputs");
+    opt.nir->guisection = _("Inputs");
 
     opt.green = G_define_standard_option(G_OPT_R_INPUT);
     opt.green->key = "green";
@@ -151,7 +153,7 @@ int main(int argc, char *argv[])
     opt.green->label =
 	_("Name of input green channel surface reflectance map");
     opt.green->description = _("Range: [0.0;1.0]");
-    opt.green->guisection = _("Optional inputs");
+    opt.green->guisection = _("Inputs");
 
     opt.blue = G_define_standard_option(G_OPT_R_INPUT);
     opt.blue->key = "blue";
@@ -159,7 +161,7 @@ int main(int argc, char *argv[])
     opt.blue->label =
 	_("Name of input blue channel surface reflectance map");
     opt.blue->description = _("Range: [0.0;1.0]");
-    opt.blue->guisection = _("Optional inputs");
+    opt.blue->guisection = _("Inputs");
 
     /* TODO: the naming is suboptimal as specific to Landsat-7 */
     opt.chan5 = G_define_standard_option(G_OPT_R_INPUT);
@@ -168,7 +170,7 @@ int main(int argc, char *argv[])
     opt.chan5->label =
 	_("Name of input 5th channel surface reflectance map");
     opt.chan5->description = _("Range: [0.0;1.0]");
-    opt.chan5->guisection = _("Optional inputs");
+    opt.chan5->guisection = _("Inputs");
 
     /* TODO: the naming is suboptimal as specific to Landsat-7 */
     opt.chan7 = G_define_standard_option(G_OPT_R_INPUT);
@@ -177,7 +179,7 @@ int main(int argc, char *argv[])
     opt.chan7->label =
 	_("Name of input 7th channel surface reflectance map");
     opt.chan7->description = _("Range: [0.0;1.0]");
-    opt.chan7->guisection = _("Optional inputs");
+    opt.chan7->guisection = _("Inputs");
 
     opt.sl_slope = G_define_option();
     opt.sl_slope->key = "soil_line_slope";
@@ -327,18 +329,18 @@ int main(int argc, char *argv[])
     ncols = Rast_window_cols();
 
     /* Create New raster files */
-    outfd = Rast_open_new(result, DCELL_TYPE);
-    outrast = Rast_allocate_d_buf();
+    outfd = Rast_open_new(result, FCELL_TYPE);
+    outrast = Rast_allocate_f_buf();
 
     /* Process pixels */
     for (row = 0; row < nrows; row++)
     {
-	DCELL d_bluechan;
-	DCELL d_greenchan;
-	DCELL d_redchan;
-	DCELL d_nirchan;
-	DCELL d_chan5chan;
-	DCELL d_chan7chan;
+	FCELL d_bluechan;
+	FCELL d_greenchan;
+	FCELL d_redchan;
+	FCELL d_nirchan;
+	FCELL d_chan5chan;
+	FCELL d_chan7chan;
 
 	G_percent(row, nrows, 2);
 
@@ -451,13 +453,13 @@ int main(int argc, char *argv[])
 		}
 	    }
 
-	    if (Rast_is_d_null_value(&d_redchan) ||
-		((nirchan) && Rast_is_d_null_value(&d_nirchan)) ||
-		((greenchan) && Rast_is_d_null_value(&d_greenchan)) ||
-		((bluechan) && Rast_is_d_null_value(&d_bluechan)) ||
-		((chan5chan) && Rast_is_d_null_value(&d_chan5chan)) ||
-		((chan7chan) && Rast_is_d_null_value(&d_chan7chan))) {
-		Rast_set_d_null_value(&outrast[col], 1);
+	    if (Rast_is_f_null_value(&d_redchan) ||
+		((nirchan) && Rast_is_f_null_value(&d_nirchan)) ||
+		((greenchan) && Rast_is_f_null_value(&d_greenchan)) ||
+		((bluechan) && Rast_is_f_null_value(&d_bluechan)) ||
+		((chan5chan) && Rast_is_f_null_value(&d_chan5chan)) ||
+		((chan7chan) && Rast_is_f_null_value(&d_chan7chan))) {
+		Rast_set_f_null_value(&outrast[col], 1);
 	    }
 	    else {
 		/* calculate simple_ratio        */
@@ -467,7 +469,7 @@ int main(int argc, char *argv[])
 		/* calculate ndvi                    */
 		if (!strcasecmp(viflag, "ndvi")) {
 		    if (d_redchan + d_nirchan < 0.001)  /* TODO: why this? */
-			Rast_set_d_null_value(&outrast[col], 1);
+			Rast_set_f_null_value(&outrast[col], 1);
 		    else
 			outrast[col] = nd_vi(d_redchan, d_nirchan);
 		}
@@ -518,7 +520,7 @@ int main(int argc, char *argv[])
 		    outrast[col] = va_ri(d_redchan, d_greenchan, d_bluechan);
 	    }
 	}
-	Rast_put_d_row(outfd, outrast);
+	Rast_put_f_row(outfd, outrast);
     }
     G_percent(1, 1, 1);
       

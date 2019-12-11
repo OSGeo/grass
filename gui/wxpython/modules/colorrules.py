@@ -46,7 +46,7 @@ from core.debug import Debug as Debug
 from core.settings import UserSettings
 from gui_core.widgets import ColorTablesComboBox
 from gui_core.wrap import SpinCtrl, PseudoDC, TextCtrl, Button, StaticText, \
-    StaticBox, EmptyBitmap
+    StaticBox, EmptyBitmap, BitmapFromImage
 
 
 class RulesPanel:
@@ -1552,7 +1552,7 @@ class VectorColorTable(ColorTable):
         busy = wx.BusyInfo(
             _("Please wait, loading data from attribute table..."),
             parent=self)
-        wx.Yield()
+        wx.GetApp().Yield()
 
         columns = self.properties['sourceColumn']
         if self.properties['loadColumn']:
@@ -1983,7 +1983,7 @@ class BufferedWindow(wx.Window):
         if pdctype == 'image' and img:
             bg = wx.TRANSPARENT_BRUSH
             pdc.SetBackground(bg)
-            bitmap = wx.BitmapFromImage(img)
+            bitmap = BitmapFromImage(img)
             w, h = bitmap.GetSize()
             pdc.DrawBitmap(bitmap, 0, 0, True)  # draw the composite map
 

@@ -328,7 +328,7 @@ def register_maps_in_space_time_dataset(
                                      increment=increment, mult=count,
                                      interval=interval)
 
-        # Set the band reference
+        # Set the band reference (only raster type supported)
         if band_reference:
             # Band reference defined in input file
             # -> update raster metadata

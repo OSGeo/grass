@@ -73,7 +73,8 @@ from gui_core.gselect import Select
 from core.gcmd import RunCommand, GError, GMessage
 from gui_core.dialogs import SymbolDialog
 from gui_core.wrap import SpinCtrl, Button, TextCtrl, BitmapButton, \
-    StaticText, StaticBox, Rect, EmptyBitmap, TextEntryDialog, ListCtrl, NewId
+    StaticText, StaticBox, Rect, EmptyBitmap, TextEntryDialog, ListCtrl, NewId, \
+    BitmapFromImage
 from psmap.utils import *
 from psmap.instructions import *
 
@@ -3653,9 +3654,9 @@ class LegendDialog(PsmapDialog):
                 key=lambda x: x[3])
 
             for vector in vectors:
-                index = self.vectorListCtrl.InsertStringItem(
+                index = self.vectorListCtrl.InsertItem(
                     self.vectorListCtrl.GetItemCount(), vector[0].split('@')[0])
-                self.vectorListCtrl.SetStringItem(index, 1, vector[4])
+                self.vectorListCtrl.SetItem(index, 1, vector[4])
                 self.vectorListCtrl.SetItemData(index, index)
                 self.vectorListCtrl.CheckItem(index, True)
                 if vector[3] == 0:
@@ -4153,7 +4154,7 @@ class LegendDialog(PsmapDialog):
                 style=wx.OK | wx.CANCEL | wx.CENTRE)
             if dlg.ShowModal() == wx.ID_OK:
                 new = dlg.GetValue()
-                self.vectorListCtrl.SetStringItem(idx, 1, new)
+                self.vectorListCtrl.SetItem(idx, 1, new)
             dlg.Destroy()
 
     def OnSpan(self, event):
@@ -4462,9 +4463,9 @@ class LegendDialog(PsmapDialog):
                 key=lambda x: x[3])
             self.vectorListCtrl.DeleteAllItems()
             for vector in vectors:
-                index = self.vectorListCtrl.InsertStringItem(
+                index = self.vectorListCtrl.InsertItem(
                     self.vectorListCtrl.GetItemCount(), vector[0].split('@')[0])
-                self.vectorListCtrl.SetStringItem(index, 1, vector[4])
+                self.vectorListCtrl.SetItem(index, 1, vector[4])
                 self.vectorListCtrl.SetItemData(index, index)
                 self.vectorListCtrl.CheckItem(index, True)
                 if vector[3] == 0:
@@ -5821,7 +5822,7 @@ class ImageDialog(PsmapDialog):
         self.previewSize = (150, 150)
         img = wx.EmptyImage(*self.previewSize)
         panel.image['preview'] = wx.StaticBitmap(
-            panel, wx.ID_ANY, wx.BitmapFromImage(img))
+            panel, wx.ID_ANY, BitmapFromImage(img))
         vSizer.Add(
             panel.image['preview'],
             proportion=0,

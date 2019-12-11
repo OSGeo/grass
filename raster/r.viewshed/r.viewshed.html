@@ -84,6 +84,12 @@ visibility using option <b>max_distance</b>.  The value entered is in the
 same units as the cell size of the raster.
 
 <p>
+The user can limit view horizontally by specifying a minimum and maximum directions
+using option <b>direction_range</b>.  The angles are in degrees, CCW, East is 0.
+The angles should be between 0 and 360, e.g. direction_range=0,180 (north view),
+or direction_range=270,90 (east view).
+
+<p>
 Main memory usage: By default <em>r.viewshed</em> assumes it has
 500MB of main memory, and sets up its internal data structures so that
 it does not require more than this amount of RAM.  The user can set
@@ -239,5 +245,7 @@ and Combinatorics (ALENEX/ANALCO 2007)</em>.</li>
 <p>William Richard (Bowdoin College): <tt>willster3021@gmail.com </tt>
 <p>Markus Metz
 
+<!--
 <p>
 <i>Last changed: $Date$</i>
+-->

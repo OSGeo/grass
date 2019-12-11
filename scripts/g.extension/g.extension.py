@@ -672,6 +672,8 @@ def install_extension(source, url, xmlurl):
         return
 
     ret = 0
+    installed_modules = []
+    tmp_dir = None
     for module in mlist:
         if sys.platform == "win32":
             ret += install_extension_win(module)
@@ -1026,7 +1028,7 @@ def install_extension_win(name):
                "grass-%(major)s.%(minor)s.%(patch)s" % \
                {'platform': platform,
                 'major': version[0], 'minor': version[1],
-                'patch': 'dev'}
+                'patch': version[2]}
 
     # resolve ZIP URL
     source, url = resolve_source_code(url='{0}/{1}.zip'.format(base_url, name))
@@ -1536,14 +1538,16 @@ def remove_extension_xml(modules):
 # check links in CSS
 
 
-def check_style_files(fil):
+def check_style_file(name):
     """Ensures that a specified HTML documentation support file exists
 
     If the file, e.g. a CSS file does not exist, the file is copied from
     the distribution.
+
+    If the files are missing, a warning is issued.
     """
-    dist_file = os.path.join(os.getenv('GISBASE'), 'docs', 'html', fil)
-    addons_file = os.path.join(options['prefix'], 'docs', 'html', fil)
+    dist_file = os.path.join(os.getenv('GISBASE'), 'docs', 'html', name)
+    addons_file = os.path.join(options['prefix'], 'docs', 'html', name)
 
     if os.path.isfile(addons_file):
         return
@@ -1551,7 +1555,12 @@ def check_style_files(fil):
     try:
         shutil.copyfile(dist_file, addons_file)
     except OSError as error:
-        grass.fatal(_("Unable to create '%s': %s") % (addons_file, error))
+        grass.warning(
+            _("Unable to create '{filename}': {error}."
+              " Is the GRASS GIS documentation package installed?"
+              " Installation continues,"
+              " but documentation may not look right.").format(
+              filename=addons_file, error=error))
 
 
 def create_dir(path):
@@ -1575,8 +1584,8 @@ def check_dirs():
     create_dir(os.path.join(options['prefix'], 'bin'))
     create_dir(os.path.join(options['prefix'], 'docs', 'html'))
     create_dir(os.path.join(options['prefix'], 'docs', 'rest'))
-    check_style_files('grass_logo.png')
-    check_style_files('grassdocs.css')
+    check_style_file('grass_logo.png')
+    check_style_file('grassdocs.css')
     create_dir(os.path.join(options['prefix'], 'etc'))
     create_dir(os.path.join(options['prefix'], 'docs', 'man', 'man1'))
     create_dir(os.path.join(options['prefix'], 'scripts'))

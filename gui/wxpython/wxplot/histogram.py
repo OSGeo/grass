@@ -20,7 +20,7 @@ import sys
 import wx
 
 import grass.script as grass
-import gui_core.wxlibplot as plot
+import wx.lib.plot as plot
 from gui_core.wrap import StockCursor
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from wxplot.base import BasePlotFrame, PlotIcons

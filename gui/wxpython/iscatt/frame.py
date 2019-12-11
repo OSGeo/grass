@@ -33,7 +33,7 @@ from core.gcmd import GException, GError, RunCommand
 
 from gui_core.gselect import Select
 from gui_core.dialogs import SetOpacityDialog
-from gui_core.wrap import StaticBox, Menu
+from gui_core.wrap import StaticBox, Menu, ListCtrl
 from iscatt.controllers import ScattsManager
 from iscatt.toolbars import MainToolbar, EditingToolbar, CategoryToolbar
 from iscatt.iscatt_core import idScattToidBands
@@ -406,13 +406,13 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         return self.scatt_mgr
 
 
-class CategoryListCtrl(wx.ListCtrl,
+class CategoryListCtrl(ListCtrl,
                        listmix.ListCtrlAutoWidthMixin):
                        # listmix.TextEditMixin):
 
     def __init__(self, parent, cats_mgr, sel_cats_in_iscatt, id=wx.ID_ANY):
 
-        wx.ListCtrl.__init__(
+        ListCtrl.__init__(
             self, parent, id, style=wx.LC_REPORT | wx.LC_VIRTUAL | wx.LC_HRULES |
             wx.LC_VRULES | wx.LC_SINGLE_SEL | wx.LC_NO_HEADER)
         self.columns = ((_('Class name'), 'name'), )

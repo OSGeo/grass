@@ -40,9 +40,7 @@ from location_wizard.dialogs import RegionDef
 from gui_core.dialogs import TextEntryDialog
 from gui_core.widgets import GenericValidator, StaticWrapText
 from gui_core.wrap import Button, ListCtrl, StaticText, \
-    StaticBox, TextCtrl
-
-sys.stderr = codecs.getwriter('utf8')(sys.stderr)
+    StaticBox, TextCtrl, BitmapFromImage
 
 
 class GRASSStartup(wx.Frame):
@@ -97,7 +95,7 @@ class GRASSStartup(wx.Frame):
                                                      type=wx.BITMAP_TYPE_PNG))
         except:
             self.hbitmap = wx.StaticBitmap(
-                self.panel, wx.ID_ANY, wx.BitmapFromImage(
+                self.panel, wx.ID_ANY, BitmapFromImage(
                     wx.EmptyImage(530, 150)))
 
         # labels
@@ -578,7 +576,7 @@ class GRASSStartup(wx.Frame):
                              read=True)
 
         wx.BeginBusyCursor()
-        wx.Yield()
+        wx.GetApp().Yield()
         if mapName in vectors:
             # vector detected
             returncode, error = RunCommand(
@@ -1121,8 +1119,8 @@ class GListBox(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         idx = 0
         count = self.GetItemCount()
         for item in choices:
-            index = self.InsertStringItem(count + idx, item)
-            self.SetStringItem(index, 0, item)
+            index = self.InsertItem(count + idx, item)
+            self.SetItem(index, 0, item)
 
             if idx in disabled:
                 self.SetItemTextColour(idx, wx.Colour(150, 150, 150))

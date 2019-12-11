@@ -24836,11 +24836,11 @@ msgid "Training map has no classes"
 msgstr ""
 
 #: ../imagery/i.gensig/get_train.c:74
-#, fuzzy, c-format
+#, c-format
 msgid "One class found"
 msgid_plural "%d classes found"
-msgstr[0] "Tauluja ei löytynyt"
-msgstr[1] "Tauluja ei löytynyt"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../imagery/i.gensig/means.c:26
 msgid "Calculating class means..."
@@ -36612,7 +36612,7 @@ msgid "Incompatible column types"
 msgstr ""
 
 #: ../vector/v.distance/main.c:674
-msgid "No categories for 'from' for slected type and layer"
+msgid "No categories for 'from' for selected type and layer"
 msgstr ""
 
 #: ../vector/v.distance/main.c:702

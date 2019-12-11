@@ -172,7 +172,7 @@ g.remove -f type=vector name=vdistance_vectors_raw
 v.db.addtable map=vdistance_vectors column="length DOUBLE"
 v.to.db map=vdistance_vectors option=length column=length
 
-# calculcate statistics. Use v.univar.sh for extended statistics.
+# calculate statistics
 v.univar vdistance_vectors column=length
 </pre></div>
 
@@ -235,5 +235,7 @@ Improved processing speed: Markus Metz<br>
 Distance from any feature to any feature: Markus Metz<br>
 New table without the -p flag: Huidae Cho
 
+<!--
 <p>
 <i>Last changed: $Date$</i>
+-->

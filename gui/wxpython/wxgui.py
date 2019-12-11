@@ -99,7 +99,7 @@ class GMApp(wx.App):
                     parent=None,
                     id=wx.ID_ANY)
 
-        wx.Yield()
+        wx.GetApp().Yield()
 
         # create and show main frame
         from lmgr.frame import GMFrame

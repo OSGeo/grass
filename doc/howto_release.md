@@ -77,6 +77,7 @@ find . -name '*.rej'  | xargs rm
 find . -name '*.o'    | xargs rm
 find . -name '*.pyc'  | xargs rm
 find . -name 'OBJ.*'  | xargs rm -r
+find . -name '__pycache__' | xargs rm -r
 rm -f gui/wxpython/menustrings.py gui/wxpython/build_ext.pyc gui/wxpython/xml/menudata.xml gui/wxpython/xml/module_tree_menudata.xml
 chmod -R a+r *
 ```
@@ -92,7 +93,7 @@ git status
 
 ### Update VERSION file to release version number
 
-Directly edit in GH interface:
+Directly edit VERSION file in GH interface:
 
 https://github.com/OSGeo/grass/blob/releasebranch_7_8/include/VERSION
 
@@ -112,13 +113,20 @@ Example:
 
 ### Create release tag
 
-See https://help.github.com/en/articles/creating-releases
+(see https://help.github.com/en/articles/creating-releases)
 
 Preparation:
 
 ### Changelog and tagging etc
 
 ```bash
+# update from GH
+#  assumptions:
+#  - own fork as "origin"
+#  - remote repo as "upstream"
+git fetch --all --prune && git checkout releasebranch_7_8 && \
+ git merge upstream/releasebranch_7_8 && git push origin releasebranch_7_8
+
 # create version env var for convenience:
 MAJOR=`cat include/VERSION | head -1 | tail -1`
 MINOR=`cat include/VERSION | head -2 | tail -1`
@@ -126,12 +134,7 @@ RELEASE=`cat include/VERSION | head -3 | tail -1`
 VERSION=${MAJOR}.${MINOR}.${RELEASE}
 echo $VERSION
 
-# Create Changelog file on release branch:
-python tools/gitlog2changelog.py
-mv ChangeLog ChangeLog_$VERSION
-head ChangeLog_$VERSION
-gzip ChangeLog_$VERSION
-
+# RELEASETAG variable not really needed any more:
 TODAY=`date +"%Y%m%d"`
 RELEASETAG=release_${TODAY}_grass_${MAJOR}_${MINOR}_${RELEASE}
 echo $RELEASETAG
@@ -143,20 +146,27 @@ echo $RELEASETAG
 echo "$VERSION"
 ```
 
-Done in GH interface:
+To be done in GH interface:
 
 https://github.com/OSGeo/grass/releases/new
+
+Tag version | target (examples):
+  7.8.1RC1  | releasebranch_7_8
+
+Add release desciption (re-use existing texts as possible)
+
+If RC, then check
+[x] This is a pre-release
 
 ### Packaging of source code tarball
 
 TODO: add checkout of code via release tag (?)
 
 ```bash
-# update from GH
+# update again from GH to fetch tag
 #  assumptions:
 #  - own fork as "origin"
 #  - remote repo as "upstream"
-
 git fetch --all --prune && git checkout releasebranch_7_8 && \
  git merge upstream/releasebranch_7_8 && git push origin releasebranch_7_8
 
@@ -174,9 +184,19 @@ rmdir ./grass-${VERSION}
 md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 ```
 
+
+Create Changelog file on release branch:
+
+```bash
+python tools/gitlog2changelog.py
+mv ChangeLog ChangeLog_$VERSION
+head ChangeLog_$VERSION
+gzip ChangeLog_$VERSION
+```
+
 ### Reset include/VERSION file to git version:
 
-Directly edit in GH interface:
+Directly edit VERSION file in GH interface:
 
 https://github.com/OSGeo/grass/blob/releasebranch_7_8/include/VERSION
 
@@ -187,6 +207,18 @@ Example:
 8
 1dev
 2019
+```
+
+Commit as "back to dev"
+
+Reset local copy to GH:
+```bash
+# update from GH
+#  assumptions:
+#  - own fork as "origin"
+#  - remote repo as "upstream"
+git fetch --all --prune && git checkout releasebranch_7_8 && \
+ git merge upstream/releasebranch_7_8 && git push origin releasebranch_7_8
 ```
 
 ### Upload source code tarball to OSGeo servers
@@ -211,6 +243,9 @@ scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
 # generate link to "latest" source code
 ssh neteler@$SERVER1 "cd $SERVER1DIR ; rm -f grass-$MAJOR.$MINOR-latest.tar.gz"
 ssh neteler@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.gz grass-$MAJOR.$MINOR-latest.tar.gz"
+
+# verify
+echo "https://$SERVER1/grass$MAJOR$MINOR/source/"
 
 # update winGRASS related files: Update the winGRASS version
 vim grass-addons/tools/wingrass-packager/grass_packager_release.bat

@@ -162,9 +162,6 @@ class Popen(subprocess.Popen):
 
     def __init__(self, args, **kwargs):
         if is_mswindows:
-            # encoding not needed for Python3
-            # args = list(map(EncodeString, args))
-
             # The Windows shell (cmd.exe) requires some special characters to
             # be escaped by preceding them with 3 carets (^^^). cmd.exe /?
             # mentions <space> and &()[]{}^=;!'+,`~. A quick test revealed that
@@ -772,6 +769,9 @@ def GetDefaultEncoding(forceUTF8=False):
     enc = locale.getdefaultlocale()[1]
     if forceUTF8 and (enc is None or enc == 'UTF8'):
         return 'UTF-8'
+
+    if enc is None:
+        enc = locale.getpreferredencoding()
 
     Debug.msg(1, "GetSystemEncoding(): %s" % enc)
     return enc
