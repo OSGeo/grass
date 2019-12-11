@@ -20,7 +20,7 @@ from gui_core.toolbars import BaseToolbar
 from icons.icon import MetaIcon
 from gui_core.widgets import FloatValidator
 import wx.lib.colourselect as csel
-from gui_core.wrap import TextCtrl, StaticText
+from gui_core.wrap import TextCtrl, StaticText, ColourSelect
 
 
 rdigitIcons = {'area': MetaIcon(img='polygon-create',
@@ -56,12 +56,11 @@ class RDigitToolbar(BaseToolbar):
         self.InsertControl(0, self._mapSelectionCombo)
         self._previousMap = self._mapSelectionCombo.GetValue()
 
-        self._color = csel.ColourSelect(parent=self, colour=wx.GREEN,
-                                        size=(30, 30))
+        self._color = ColourSelect(parent=self, colour=wx.GREEN, size=(30, 30))
         self._color.Bind(
             csel.EVT_COLOURSELECT,
             lambda evt: self._changeDrawColor())
-        self._color.SetToolTipString(
+        self._color.SetToolTip(
             _("Set drawing color (not raster cell color)"))
         self.InsertControl(4, self._color)
 

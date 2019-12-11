@@ -35,6 +35,42 @@ from grass.script.core import get_commands
 from core.debug import Debug
 
 
+def parse_version_string(version):
+    """Parse version number, return three numbers as list
+
+    >>> parse_version_string("4.0.1")
+    [4, 0, 1]
+    >>> parse_version_string("4.0.0aX")
+    [4, 0, 0]
+    >>> parse_version_string("4.0.7.post2")
+    [4, 0, 7]
+    """
+    try:
+        # max: get only first three parts from wxPython 4.0.7.post2
+        maxsplit = 2
+        split_ver = version.split(".", maxsplit)
+        parsed_version = list(map(int, split_ver))
+    except ValueError:
+        # remove last part of wxPython 4.0.0aX
+        for i, c in enumerate(split_ver[-1]):
+            if not c.isdigit():
+                break
+        parsed_version = list(map(int, split_ver[:-1])) + [int(split_ver[-1][:i])]
+    return parsed_version
+
+
+def version_as_string(version):
+    """Return version list or tuple as text
+
+    >>> version_as_string([1, 2, 3])
+    '1.2.3'
+    >>> version_as_string((1, 2, 3, 4))
+    '1.2.3.4'
+    """
+    texts = [str(i) for i in version]
+    return ".".join(texts)
+
+
 def CheckWxPhoenix():
     if 'phoenix' in wx.version():
         return True
@@ -44,15 +80,7 @@ def CheckWxPhoenix():
 def CheckWxVersion(version):
     """Check wx version"""
     ver = wx.__version__
-    try:
-        split_ver = ver.split('.')
-        parsed_version = list(map(int, split_ver))
-    except ValueError:
-        # wxPython 4.0.0aX
-        for i, c in enumerate(split_ver[-1]):
-            if not c.isdigit():
-                break
-        parsed_version = list(map(int, split_ver[:-1])) + [int(split_ver[-1][:i])]
+    parsed_version = parse_version_string(ver)
 
     if parsed_version < version:
         return False
@@ -81,12 +109,11 @@ def CheckForWx(forceVersion=os.getenv('GRASS_WXVERSION', None)):
             wxversion.select(forceVersion)
         wxversion.ensureMinimal(str(minVersion[0]) + '.' + str(minVersion[1]))
         import wx
-        version = wx.__version__
+        version = parse_version_string(wx.__version__)
 
-        if map(int, version.split('.')) < minVersion:
+        if version < minVersion:
             raise ValueError(
-                'Your wxPython version is %s.%s.%s.%s' %
-                tuple(version.split('.')))
+                "Your wxPython version is {}".format(wx.__version__))
 
     except ImportError as e:
         print('ERROR: wxGUI requires wxPython. %s' % str(e),
@@ -95,8 +122,9 @@ def CheckForWx(forceVersion=os.getenv('GRASS_WXVERSION', None)):
               ' the command line or in Python.', file=sys.stderr)
         sys.exit(1)
     except (ValueError, wxversion.VersionError) as e:
-        print('ERROR: wxGUI requires wxPython >= %d.%d.%d.%d. ' % tuple(
-              minVersion) + '%s.' % (str(e)), file=sys.stderr)
+        message = "ERROR: wxGUI requires wxPython >= {version}: {error}".format(
+            version=version_as_string(minVersion), error=e)
+        print(message, file=sys.stderr)
         sys.exit(1)
     except locale.Error as e:
         print("Unable to set locale:", e, file=sys.stderr)
