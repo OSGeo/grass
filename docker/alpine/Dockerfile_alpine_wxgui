@@ -6,10 +6,7 @@ LABEL authors="Markus Neteler"
 LABEL maintainer="neteler@osgeo.org"
 
 # PACKAGES VERSIONS
-ARG GRASS_VERSION=7.8
 ARG PYTHON_VERSION=3
-ARG PROJ_VERSION=5.2.0
-ARG PROJ_DATUMGRID_VERSION=1.8
 
 # ================
 # CONFIG VARIABLES
@@ -81,6 +78,8 @@ ENV PACKAGES="\
       py3-pillow \
       py3-six \
       postgresql \
+      proj-datumgrid \
+      proj-util \
       sqlite \
       sqlite-libs \
       tiff \
@@ -111,6 +110,7 @@ ENV PACKAGES="\
       openblas-dev \
       pdal-dev \
       postgresql-dev \
+      proj-dev \
       python3-dev \
       py3-numpy-dev \
       sqlite-dev \
@@ -159,26 +159,6 @@ RUN echo "Install main packages";\
     # compile wxPython, unfortunately there is no Alpine package (yet) - compilation is slow, though!
     $PYTHONBIN -m pip install -U pathlib2 wxPython && \
     #
-    # install the latest (and compatible) projection library for GRASS GIS
-    #
-    echo "Install PROJ-$PROJ_VERSION";\
-    echo "  => Downloading proj-$PROJ_VERSION";\
-    wget -q http://download.osgeo.org/proj/proj-$PROJ_VERSION.tar.gz && \
-    tar xzvf proj-$PROJ_VERSION.tar.gz && \
-    cd /src/proj-$PROJ_VERSION/ && \
-    echo "  => Downloading datumgrid-$PROJ_DATUMGRID_VERSION" &&\
-    wget -q http://download.osgeo.org/proj/proj-datumgrid-$PROJ_DATUMGRID_VERSION.zip && \
-    cd nad && \
-    unzip ../proj-datumgrid-$PROJ_DATUMGRID_VERSION.zip && \
-    cd .. && \
-    echo "  => configure" &&\
-    ./configure --prefix=/usr/ && \
-    echo "  => compile" &&\
-    make && \
-    echo "  => install" &&\
-    make install && \
-    ldconfig /etc/ld.so.conf.d; \
-    #
     # Checkout and install GRASS GIS
     #
     echo "Install GRASS GIS";\
@@ -207,7 +187,6 @@ RUN echo "  => Configure and compile grass";\
     rm -rf /root/.cache; \
     # Remove unnecessary grass files
     rm -rf /usr/local/grass78/demolocation; \
-    rm -rf /usr/local/grass78/docs; \
     rm -rf /usr/local/grass78/fonts; \
     rm -rf /usr/local/grass78/gui; \
     rm -rf /usr/local/grass78/share;
