@@ -6,8 +6,8 @@
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:		grass
-Version:	7.8.0
-Release:	4%{?dist}
+Version:	7.8.2
+Release:	1%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
 
 %if 0%{?rhel}
@@ -17,7 +17,7 @@ URL:		https://grass.osgeo.org
 Source0:	https://grass.osgeo.org/%{name}%{shortver}/source/%{name}-%{version}.tar.gz
 Source2:	%{name}-config.h
 
-Patch1: grass-7.8.0-buildroot.patch
+Patch1:		grass-7.8.0-buildroot.diff
 
 BuildRequires:	bison
 BuildRequires:	blas-devel
@@ -50,7 +50,12 @@ BuildRequires:	mysql-devel
 BuildRequires:	netcdf-devel
 %endif
 BuildRequires:	python3
+%if 0%{?rhel} > 6
+# EPEL7
+BuildRequires:	python36-numpy
+%else
 BuildRequires:	python3-numpy
+%endif
 %if 0%{?rhel} && 0%{?rhel} <= 7
 BuildRequires:	postgresql-devel
 %else
@@ -68,11 +73,13 @@ BuildRequires:	proj-nad
 # argparse is included in python2.7+ but not python2.6
 BuildRequires:  python-argparse
 %endif
+%if 0%{?rhel} > 6
+# EPEL7
+BuildRequires:	python36-dateutil
+%else
 BuildRequires:	python3-dateutil
+%endif
 BuildRequires:	python3-devel
-Requires:	python3-matplotlib
-##?
-#Requires:  python3-matplotlib-wx
 %if (0%{?rhel} > 6 || 0%{?fedora})
 %if 0%{?rhel} > 6
 # EPEL7
@@ -92,9 +99,9 @@ BuildRequires:	unixODBC-devel
 BuildRequires:	zlib-devel
 BuildRequires:	bzip2-devel
 BuildRequires:	libzstd-devel
+
 Requires:	bzip2-libs
 Requires:	libzstd
-
 Requires:	geos
 %if (0%{?fedora} >= 30)
 Requires:	proj-datumgrid
@@ -104,13 +111,29 @@ Requires:	proj-epsg
 Requires:	proj-nad
 %endif
 Requires:	python3
+%if 0%{?rhel} > 6
+# EPEL7
+Requires:	python36-numpy
+%else
 Requires:	python3-numpy
+%endif
+%if 0%{?rhel} > 6
+# EPEL7
+#Requires:  python3-matplotlib-wx
+%else
+Requires:	python3-matplotlib
+%endif
+%if 0%{?rhel} > 6
+# EPEL7
+Requires:	python36-dateutil
+%else
+Requires:	python3-dateutil
+%endif
 %if 0%{?rhel}
 Requires:	wxPython
 %else
 Requires:	python3-wxpython4
 %endif
-
 
 %if "%{_lib}" == "lib"
 %global cpuarch 32
@@ -331,6 +354,16 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
+* Thu Dec 12 2019 Markus Neteler <neteler@mundialis.de> - 7.8.2
+- new upstream version GRASS GIS 7.8.2
+
+* Thu Oct 24 2019 Markus Neteler <neteler@mundialis.de> - 7.8.1
+- new upstream version GRASS GIS 7.8.1
+- it supports GDAL 3 and PROJ 6
+
+* Thu Oct 24 2019 Markus Neteler <neteler@mundialis.de> - 7.8.0-5
+- fix EPEL7 support
+
 * Mon Sep 23 2019 Markus Metz <metz@mundialis.de> - 7.8.0-4
 - enable bzip2 compression
 
