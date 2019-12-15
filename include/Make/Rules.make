@@ -23,6 +23,7 @@ $(ARCH_INCDIR)/%.h: %.h
 
 ifneq ($(MINGW),)
 ifdef CROSS_COMPILING
+# host system is not MS Windows when cross-compiling
 mkpath = $(1):$(2)
 else
 ifeq ($(wildcard $(TOOLSDIR)/g.echo$(EXE)),)

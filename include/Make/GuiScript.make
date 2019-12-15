@@ -20,6 +20,7 @@ endif
 PYFILES  := $(patsubst %,$(SCRIPTDIR)/g.gui.%$(SCRIPTEXT),$(MODULES))
 
 guiscript: $(IMGDST) $(PYFILES) $(BATFILES)
+# we cannot use cross-compiled g.parser for generating html files
 ifndef CROSS_COMPILING
 	$(MAKE) $(CMDHTML)
 	-rm -f g.gui.*.tmp.html
