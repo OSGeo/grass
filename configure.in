@@ -64,7 +64,7 @@ AC_SUBST(BINDIR)
 
 AC_PATH_PROG(pwd, pwd, pwd)
 
-if test "$MINGW32" = yes ; then
+if test "$MINGW32" = yes -a "$cross_compiling" != yes ; then
   winpwd="pwd -W"
 else
   winpwd="$pwd"
