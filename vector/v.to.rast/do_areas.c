@@ -120,13 +120,27 @@ int sort_areas(struct Map_info *Map, struct line_pnts *Points,
 	else {
 	    Vect_read_line(Map, NULL, Cats, centroid);
 	    if (field > 0) {
-		if (Vect_cats_in_constraint(Cats, field, cat_list)) {
+		if (cat_list) {
+		    int j;
+
+		    for (j = 0; j < Cats->n_cats; j++) {
+			if (Cats->field[j] == field &&
+			    Vect_cat_in_cat_list(Cats->cat[j], cat_list)) {
+				cat = Cats->cat[j];
+				break;
+			}
+		    }
+		}
+		else
 		    Vect_cat_get(Cats, field, &cat);
+
+		if (ISNULL(&cat)) {
+		    G_debug(2, _("Area %d is not in layer %d and/or does not fulfill where requirements"),
+		            i, field);
+		    continue;
+		}
+		else
 		    nareas_selected++;
-		}
-		else {
-		    G_debug(2, _("Area centroid without category"));
-		}
 	    }
 	    else {
 		/* field < 1, process all areas with centroid */
