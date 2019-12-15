@@ -58,8 +58,8 @@ r""" <link rel="stylesheet" href="grassdocs.css" type="text/css">
 <h2>GRASS GIS ${grass_version} Reference Manual</h2>
 
 <p><b>Geographic Resources Analysis Support System</b>, commonly
-referred to as <a href="http://grass.osgeo.org">GRASS</a>, is a <a
-href="http://en.wikipedia.org/wiki/Geographic_information_system">Geographic
+referred to as <a href="https://grass.osgeo.org">GRASS GIS</a>, is a <a
+href="https://en.wikipedia.org/wiki/Geographic_information_system">Geographic
 Information System</a> (GIS) used for geospatial data management and
 analysis, image processing, graphics/maps production, spatial
 modeling, and visualization. GRASS is currently used in academic and
@@ -68,7 +68,7 @@ agencies and environmental consulting companies.</p>
 
 <p>This reference manual details the use of modules distributed with
 Geographic Resources Analysis Support System (GRASS), an open source
-(<a href="http://www.gnu.org/licenses/gpl.html">GNU GPLed</a>), image
+(<a href="https://www.gnu.org/licenses/gpl.html">GNU GPLed</a>), image
 processing and geographic information system (GIS).</p>
 
 """)
@@ -91,7 +91,7 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
       </ul>
       <p>
       <ul>
-       <li class="box"><span><a href="http://grasswiki.osgeo.org/wiki/Faq">FAQ - Frequently Asked Questions</a> (Wiki)</span></li>
+       <li class="box"><span><a href="https://grasswiki.osgeo.org/wiki/Faq">FAQ - Frequently Asked Questions</a> (Wiki)</span></li>
       </ul>
       <p>
       <ul>
@@ -183,8 +183,8 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
       </td>
       <td width="33%" valign="top" class="box"><h3>&nbsp;Python</h3>
        <ul>
-        <li class="box"><a href="http://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/index.html">GRASS GIS Python library documentation</a></li>
-        <li class="box"><a href="http://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/pygrass_index.html">PyGRASS documentation</a></li>
+        <li class="box"><a href="https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/index.html">GRASS GIS Python library documentation</a></li>
+        <li class="box"><a href="https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/pygrass_index.html">PyGRASS documentation</a></li>
        </ul>
       </td>
     </tr>
@@ -194,7 +194,21 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
 #"
 
 footer_tmpl = string.Template(\
-r"""<hr class="header">
+r"""<a name="wxGUI"></a>
+<h3>wxGUI: Graphical user interface</h3>
+<table><tbody>
+<tr><td valign="top"><a href="wxGUI.html">wxGUI Graphical User Interface</a></td> <td>wxGUI Graphical User Interface</td></tr>
+<tr><td valign="top"><a href="wxGUI.nviz.html">3D visualization suite</a></td>    <td>wxGUI.nviz 3D visualization suite</td></tr>
+</tbody></table>
+<p>
+<a name="further"></a>
+<h3>Further pages</h3>
+<table><tbody>
+<tr><td valign="top"><a href="variables.html">Variables</a></td> <td>Variables</td></tr>
+</tbody></table>
+
+<p>
+<hr class="header">
 <p>
 <a href="${index_url}">Main index</a> |
 <a href="topics.html">Topics index</a> |
@@ -204,7 +218,7 @@ r"""<hr class="header">
 </p>
 <p>
 &copy; 2003-${year}
-<a href="http://grass.osgeo.org">GRASS Development Team</a>,
+<a href="https://grass.osgeo.org">GRASS Development Team</a>,
 GRASS GIS ${grass_version} Reference Manual
 </p>
 
@@ -241,8 +255,8 @@ r"""
 <li class="toc"><a class="toc" href="full_index.html#r3">3D raster commands (r3.*)</a></li>
 <li class="toc"><a class="toc" href="full_index.html#t">Temporal commands (t.*)</a></li>
 <li class="toc"><a class="toc" href="full_index.html#v">Vector commands (v.*)</a></li>
-<li class="toc"><a class="toc" href="wxGUI.html">wxGUI Graphical User Interface</a></li>
-<li class="toc"><a class="toc" href="wxGUI.nviz.html">3D visualization suite</a></li>
+<li class="toc"><a class="toc" href="full_index.html#wxGUI">wxGUI Graphical User Interface</a></li>
+<li class="toc"><a class="toc" href="full_index.html#further">Further pages</a></li>
 </ul>
 </div>
 """
@@ -334,7 +348,7 @@ headerpso_tmpl = \
 r"""
 <link rel="stylesheet" href="grassdocs.css" type="text/css">
 <link rel="stylesheet" href="parser_standard_options.css" type="text/css">
-<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="jquery.fixedheadertable.min.js"></script>
 <script type="text/javascript" src="parser_standard_options.js"></script>
 </head>
