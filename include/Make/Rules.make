@@ -22,11 +22,15 @@ $(ARCH_INCDIR)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
 ifneq ($(MINGW),)
+ifdef CROSS_COMPILING
+mkpath = $(1):$(2)
+else
 ifeq ($(wildcard $(TOOLSDIR)/g.echo$(EXE)),)
 # dummy path until g.echo.exe gets compiled and is needed
 mkpath = $(1);$(2)
 else
 mkpath = $(shell $(TOOLSDIR)/g.echo$(EXE) $(1));$(2)
+endif
 endif
 else
 mkpath = $(1):$(2)
