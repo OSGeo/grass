@@ -131,16 +131,15 @@ int sort_areas(struct Map_info *Map, struct line_pnts *Points,
 			}
 		    }
 		}
-		else
+		else {
 		    Vect_cat_get(Cats, field, &cat);
-
-		if (ISNULL(&cat)) {
-		    G_debug(2, _("Area %d is not in layer %d and/or does not fulfill where requirements"),
-		            i, field);
-		    continue;
+		    if (cat < 0)
+			SETNULL(&cat);
 		}
-		else
+
+		if (!ISNULL(&cat)) {
 		    nareas_selected++;
+		}
 	    }
 	    else {
 		/* field < 1, process all areas with centroid */
