@@ -80,6 +80,7 @@ ENV PACKAGES="\
       proj-util \
       sqlite \
       sqlite-libs \
+      subversion \
       tiff \
       zstd \
       zstd-libs \
