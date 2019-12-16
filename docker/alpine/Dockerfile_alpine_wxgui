@@ -82,6 +82,7 @@ ENV PACKAGES="\
       proj-util \
       sqlite \
       sqlite-libs \
+      subversion \
       tiff \
       wxgtk-base \
       wxgtk \
