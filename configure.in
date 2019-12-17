@@ -37,6 +37,19 @@ AC_PROG_CC
 LOC_EXEEXT
 AC_SUBST(MINGW32)
 
+# Set WINDRES
+
+if test "$MINGW32" = yes ; then
+  WINDRES=${WINDRES-windres}
+else
+  WINDRES=
+fi
+
+AC_SUBST(WINDRES)
+
+# Check for custom PKG_CONFIG
+PKG_CONFIG=${PKG_CONFIG-pkg-config}
+
 # Check for full floating-point support, including Infinity and NaN
 IEEEFLAG=
 LOC_CHECK_FP_INF_NAN([],
@@ -1658,14 +1671,14 @@ if test -n "$USE_X11"; then
 	pkgs="$pkgs cairo-xlib cairo-xlib-xrender"
 fi
 for pkg in $pkgs ; do
-    if pkg-config --exists $pkg ; then
+    if $PKG_CONFIG --exists $pkg ; then
         cairo="$cairo $pkg"
     fi
 done
 
 # With Cairo includes directory
 #FIXME: somehow quote dirs with spaces in $cairo ?
-CAIROINC=`pkg-config --cflags $cairo`
+CAIROINC=`$PKG_CONFIG --cflags $cairo`
 
 LOC_CHECK_INC_PATH(cairo,cairo,CAIROINC)
 
@@ -1673,7 +1686,7 @@ LOC_CHECK_INCLUDES(cairo.h,Cairo,$CAIROINC)
 
 # With Cairo library directory
 
-CAIROLIB=`pkg-config --libs $cairo`
+CAIROLIB=`$PKG_CONFIG --libs $cairo`
 
 LOC_CHECK_LIB_PATH(cairo,cairo,CAIROLIB)
 LOC_CHECK_LDFLAGS(cairo,cairo,CAIROLIB)
