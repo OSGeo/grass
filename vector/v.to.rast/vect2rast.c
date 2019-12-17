@@ -64,7 +64,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
 	/* Note do not check if the column exists in the table because it may be expression */
 
 	if ((nrec =
-	     db_select_CatValArray(Driver, Fi->table, Fi->key, column, NULL,
+	     db_select_CatValArray(Driver, Fi->table, Fi->key, column, where,
 				   &cvarr)) == -1)
 	    G_fatal_error(_("Column <%s> not found"), column);
 	G_debug(3, "nrec = %d", nrec);
