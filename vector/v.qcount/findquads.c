@@ -29,7 +29,7 @@ COOR *find_quadrats(int n, double r, struct Cell_head window)
     if (quads == NULL)
 	G_fatal_error("cannot allocate memory for quadrats");
 
-    /* FIXME - allow seed to be specified for repeatability */
+    /* You can set GRASS_RANDOM_SEED for repeatability */
     G_srand48_auto();
 
     e_max = window.east - r;

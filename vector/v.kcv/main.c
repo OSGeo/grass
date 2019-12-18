@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
     if (np < 2)
 	G_fatal_error(_("'%s' must be > 1"), npart_opt->key);
 
-    /* FIXME - allow seed to be specified for repeatability */
+    /* You can set GRASS_RANDOM_SEED for repeatability */
     G_srand48_auto();
 
     Points = Vect_new_line_struct();

@@ -39,7 +39,16 @@ int do_lines(struct Map_info *Map, struct line_pnts *Points,
 	type = Vect_read_line(Map, Points, Cats, index);
 	cat = -1;
 	if (field > 0) {
-	    if (Vect_cats_in_constraint(Cats, field, cat_list)) {
+	    if (cat_list) {
+		for (j = 0; j < Cats->n_cats; j++) {
+		    if (Cats->field[j] == field &&
+			Vect_cat_in_cat_list(Cats->cat[j], cat_list)) {
+			    cat = Cats->cat[j];
+			    break;
+		    }
+		}
+	    }
+	    else {
 		Vect_cat_get(Cats, field, &cat);
 	    }
 	}

@@ -120,12 +120,25 @@ int sort_areas(struct Map_info *Map, struct line_pnts *Points,
 	else {
 	    Vect_read_line(Map, NULL, Cats, centroid);
 	    if (field > 0) {
-		if (Vect_cats_in_constraint(Cats, field, cat_list)) {
-		    Vect_cat_get(Cats, field, &cat);
-		    nareas_selected++;
+		if (cat_list) {
+		    int j;
+
+		    for (j = 0; j < Cats->n_cats; j++) {
+			if (Cats->field[j] == field &&
+			    Vect_cat_in_cat_list(Cats->cat[j], cat_list)) {
+				cat = Cats->cat[j];
+				break;
+			}
+		    }
 		}
 		else {
-		    G_debug(2, _("Area centroid without category"));
+		    Vect_cat_get(Cats, field, &cat);
+		    if (cat < 0)
+			SETNULL(&cat);
+		}
+
+		if (!ISNULL(&cat)) {
+		    nareas_selected++;
 		}
 	    }
 	    else {
