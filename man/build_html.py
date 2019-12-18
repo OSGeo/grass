@@ -204,6 +204,15 @@ r"""<a name="wxGUI"></a>
 <a name="further"></a>
 <h3>Further pages</h3>
 <table><tbody>
+<tr><td valign="top"><a href="databaseintro.html">database intro</a></td> <td>database intro</td></tr>
+<tr><td valign="top"><a href="imageryintro.html">imagery intro</a></td> <td>imagery intro</td></tr>
+<tr><td valign="top"><a href="projectionintro.html">projection intro</a></td> <td>projection intro</td></tr>
+<tr><td valign="top"><a href="raster3dintro.html">raster3D intro</a></td> <td>raster3D intro</td></tr>
+<tr><td valign="top"><a href="rasterintro.html">raster intro</a></td> <td>raster intro</td></tr>
+<tr><td valign="top"><a href="temporalintro.html">temporal intro</a></td> <td>temporal intro</td></tr>
+<tr><td valign="top"><a href="vectorintro.html">vector intro</a></td> <td>vector intro</td></tr>
+<tr><td valign="top"> </td> <td> </td></tr>
+<tr><td valign="top"><a href="sql.html">SQL</a></td> <td>SQL</td></tr>
 <tr><td valign="top"><a href="variables.html">Variables</a></td> <td>Variables</td></tr>
 </tbody></table>
 
