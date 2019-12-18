@@ -62,7 +62,7 @@ def profile_function(func):
     """Profiling function provided by the temporal framework"""
     do_profiling = os.getenv("GRASS_TGIS_PROFILE")
 
-    if do_profiling is "True" or do_profiling is "1":
+    if do_profiling == "True" or do_profiling == "1":
         import cProfile, pstats
         try:
             import StringIO as io
@@ -579,7 +579,7 @@ def init(raise_fatal_error=False):
             enable_timestamp_write = False
             msgr.warning("TGIS_DISABLE_TIMESTAMP_WRITE is True")
 
-    if driver_string is not None and driver_string is not "":
+    if driver_string is not None and driver_string != "":
         driver_string = decode(driver_string)
         if driver_string == "sqlite":
             tgis_backend = driver_string
