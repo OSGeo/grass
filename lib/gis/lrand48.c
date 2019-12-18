@@ -72,6 +72,7 @@ long G_srand48_auto(void)
 {
     unsigned long seed;
     char *grass_random_seed = getenv("GRASS_RANDOM_SEED");
+    if(!grass_random_seed) grass_random_seed = getenv("SOURCE_DATE_EPOCH");
     if(grass_random_seed) {
         seed = strtoull(grass_random_seed, NULL, 10);
     } else {  

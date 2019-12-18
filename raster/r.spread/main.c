@@ -335,7 +335,7 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
 
-    /* FIXME - allow seed to be specified for repeatability */
+    /* You can set GRASS_RANDOM_SEED for repeatability */
     G_srand48_auto();
 
     display = 0;
