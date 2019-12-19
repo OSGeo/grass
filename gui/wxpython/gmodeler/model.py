@@ -258,7 +258,7 @@ class Model(object):
         for data in self.GetData():
             if prompt == data.GetPrompt():
                 mapName = data.GetValue()
-                if not mapName or mapName[0] is '%':
+                if not mapName or mapName[0] == '%':
                     continue  # skip variables
                 maps.append(mapName)
 

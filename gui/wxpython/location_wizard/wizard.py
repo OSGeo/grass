@@ -1303,7 +1303,7 @@ class EllipsePage(TitledPage):
         try:
             self.ellipse, self.ellipsedesc = self.ellipselist.Search(
                 index=[0, 1], pattern=event.GetString())
-            if self.scope is 'earth':
+            if self.scope == 'earth':
                 self.ellipseparams = self.parent.ellipsoids[self.ellipse][1]
             else:
                 self.ellipseparams = self.parent.planetary_ellipsoids[
