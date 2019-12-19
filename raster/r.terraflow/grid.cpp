@@ -31,10 +31,10 @@ grid::grid(dimension_type giMin, dimension_type gjMin,
   iMin(giMin-1), jMin(gjMin-1), label(glabel), size(gsize) {
   width = jMax - jMin + 2;
   height = iMax - iMin + 2;
-  assert(width*height*sizeof(gridElement) < getAvailableMemory());
-  data = new gridElement[width*height];
+  assert((size_t)width*height*sizeof(gridElement) < getAvailableMemory());
+  data = new gridElement[(size_t)width*height];
   assert(data);
-  memset(data, 0, width*height*sizeof(gridElement));
+  memset(data, 0, (size_t)width*height*sizeof(gridElement));
 }
 
 
@@ -60,7 +60,7 @@ grid::load(AMI_STREAM<plateauType> &str) {
 	dimension_type pti, ptj;
 	pti = pt->i - iMin;
 	ptj = pt->j - jMin;
-	gridElement *datap = data + pti * width + ptj;
+	gridElement *datap = data + (size_t)pti * width + ptj;
 	datap->dir = pt->dir;
 	datap->depth = DEPTH_INITIAL;			/* initial depth */
 	datap->valid = 1;
@@ -80,7 +80,7 @@ grid::save(AMI_STREAM<waterType> &str) {
   GRID_DEBUG cout << "saving grid" << endl;
 
   for(dimension_type i=1; i<height-1; i++) {
-    gridElement *rowp = data + i * width;
+    gridElement *rowp = data + (size_t)i * width;
     for(dimension_type j=1; j<width-1; j++) {
       gridElement *datap = rowp + j;
       if(datap->valid) {
@@ -104,8 +104,8 @@ grid::print() {
   for(int j=0; j<height; j++) {
     printf("%3d ", j + iMin);
     for(int i=0; i<width; i++) {
-      if(data[i+width*j].valid) {
-	cout << " " << directionSymbol(data[i+width*j].dir);
+      if(data[i + (size_t)width * j].valid) {
+	cout << " " << directionSymbol(data[i + (size_t)width * j].dir);
       } else {
 	cout << " .";
       }

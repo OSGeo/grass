@@ -210,7 +210,7 @@ fillstr2sweepstr(AMI_STREAM<waterWindowBaseType>* fillStream) {
   if (stats)
     stats->comment("creating sweep stream from fill output stream");
   
-  assert(fillStream->stream_len() == nrows * ncols);
+  assert(fillStream->stream_len() == (off_t)nrows * ncols);
   
   /* create the sweep stream */
   sweepstr = new AMI_STREAM<sweepItem>();
