@@ -37,7 +37,6 @@ import os
 import sys
 import six
 import shutil
-import time
 from copy import copy
 
 import wx
@@ -2149,14 +2148,14 @@ class GCP(MapFrame, ColumnSorterMixin):
         """Adjust Map Windows after GCP Map Display has been resized
         """
         # re-render image on idle
-        self.resize = time.clock()
+        self.resize = grass.clock()
         super(MapFrame, self).OnSize(event)
 
     def OnIdle(self, event):
         """GCP Map Display resized, adjust Map Windows
         """
         if self.GetMapToolbar():
-            if self.resize and self.resize + 0.2 < time.clock():
+            if self.resize and self.resize + 0.2 < grass.clock():
                 srcwidth, srcheight = self.SrcMapWindow.GetSize()
                 tgtwidth, tgtheight = self.TgtMapWindow.GetSize()
                 srcwidth = (srcwidth + tgtwidth) / 2

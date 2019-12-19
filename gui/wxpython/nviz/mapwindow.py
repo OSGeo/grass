@@ -1141,7 +1141,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         :param render: re-render map composition
         :type render: bool
         """
-        start = time.clock()
+        start = grass.clock()
 
         self.resize = False
 
@@ -1184,7 +1184,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 self._display.Start2D()
                 self.DrawImages()
 
-        stop = time.clock()
+        stop = grass.clock()
 
         if self.render['quick'] is False:
             if sys.platform != 'darwin':
@@ -1306,7 +1306,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         item = self.tree.GetFirstChild(self.tree.root)[0]
         self._GetDataLayers(item, listOfItems)
 
-        start = time.time()
+        start = grass.clock()
 
         while(len(listOfItems) > 0):
             item = listOfItems.pop()
@@ -1339,7 +1339,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 GError(parent=self,
                        message=e.value)
 
-        stop = time.time()
+        stop = grass.clock()
 
         Debug.msg(1, "GLWindow.LoadDataLayers(): time = %f" % (stop - start))
 
@@ -1356,7 +1356,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             item = self.tree.GetFirstChild(self.tree.root)[0]
             self._GetDataLayers(item, listOfItems)
 
-        start = time.time()
+        start = grass.clock()
 
         update = False
         layersTmp = self.layers[:]
@@ -1389,7 +1389,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.lmgr.nviz.UpdateSettings()
             self.UpdateView(None)
 
-        stop = time.time()
+        stop = grass.clock()
 
         Debug.msg(1, "GLWindow.UnloadDataLayers(): time = %f" % (stop - start))
 
