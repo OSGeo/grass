@@ -1865,7 +1865,7 @@ class GdalSelect(wx.Panel):
         self.changingSizer.Show(
             self.protocolPanel, show=(
             sourceType == 'pro'))
-        self.changingSizer.Show(self.dbPanel, show=(sourceType is 'db'))
+        self.changingSizer.Show(self.dbPanel, show=(sourceType == 'db'))
 
         self.changingSizer.Layout()
 

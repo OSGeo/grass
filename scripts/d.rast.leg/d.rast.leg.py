@@ -141,7 +141,7 @@ def main():
         lmap = map
 
     kv = grass.raster_info(map=lmap)
-    if kv['datatype'] is 'CELL':
+    if kv['datatype'] == 'CELL':
         leg_at = None
     else:
         leg_at = '%f,95,5,10' % VSpacing

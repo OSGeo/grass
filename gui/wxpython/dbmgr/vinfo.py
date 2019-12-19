@@ -167,7 +167,7 @@ class VectorDBInfo(VectorDBInfoBase):
 
         table = self.layers[layer]["table"]  # get table desc
         # select values (only one record)
-        if where is None or where is '':
+        if where is None or where == '':
             sql = "SELECT %s FROM %s" % (cols, table)
         else:
             sql = "SELECT %s FROM %s WHERE %s" % (cols, table, where)

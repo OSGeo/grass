@@ -2292,7 +2292,7 @@ class TemporalAlgebraParser(object):
                             # Do not register empty maps if not required
                             # In case of a null map continue, do not register null maps
 
-                            if map_i.get_type() is "raster" or map_i.get_type() is "raster3d":
+                            if map_i.get_type() == "raster" or map_i.get_type() == "raster3d":
                                 if map_i.metadata.get_min() is None and \
                                    map_i.metadata.get_max() is None:
                                     if not self.register_null:
