@@ -28,7 +28,7 @@ def read_po_files(inputdirpath):
     originalpath = os.getcwd()
     os.chdir(inputdirpath)
     languages = {}
-    for pofile in glob.glob("*.po"):
+    for pofile in sorted(glob.glob("*.po")):
         lang = pofile.split('_')[1:]
         # check if are two definitions like pt_br
         if len(lang) == 2:
