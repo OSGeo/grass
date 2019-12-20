@@ -113,7 +113,7 @@ def file_matches(filename, patterns):
 
 def get_files(directory, patterns, exclude_patterns):
     files = []
-    for filename in os.listdir(directory):
+    for filename in sorted(os.listdir(directory)):
         if file_matches(filename, patterns):
             if not file_matches(filename, exclude_patterns):
                 files.append(filename)
@@ -168,7 +168,7 @@ def main():
                                                "Manual: Manual gallery" % grass_version))
         output.write(header_graphical_index_tmpl)
         output.write('<ul class="img-list">\n')
-        for image, html_file in img_html_files.items():
+        for image, html_file in sorted(img_html_files.items()):
             name = get_module_name(html_file)
             title = title_from_names(name, image)
             output.write(
