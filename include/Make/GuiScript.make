@@ -20,9 +20,12 @@ endif
 PYFILES  := $(patsubst %,$(SCRIPTDIR)/g.gui.%$(SCRIPTEXT),$(MODULES))
 
 guiscript: $(IMGDST) $(PYFILES) $(BATFILES)
+# we cannot use cross-compiled g.parser for generating html files
+ifndef CROSS_COMPILING
 	$(MAKE) $(CMDHTML)
 	-rm -f g.gui.*.tmp.html
 	$(MAKE) $(GUIHTML)
+endif
 
 $(HTMLDIR)/g.gui.%.html: g.gui.%.html g.gui.%.tmp.html | $(HTMLDIR)
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) MODULE_TOPDIR=$(MODULE_TOPDIR) \
