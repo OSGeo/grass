@@ -72,7 +72,7 @@ def _check_raise(value, path, type):
              if value is empty return environmental variable
     :rtype: str
     """
-    if value is '':
+    if value == '':
         from grass.pygrass.utils import getenv
         return getenv(type)
     if is_valid(value, path, type):
