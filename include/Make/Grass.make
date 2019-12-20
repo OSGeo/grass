@@ -81,7 +81,6 @@ VECT_CFLAGS =  $(GDALCFLAGS) $(GEOSCFLAGS)
 
 # Object with _fmode which must be linked to each executable on Windows
 ifdef MINGW
-WINDRES = windres
 FMODE_OBJ = $(BASE_LIBDIR)/fmode.o
 # if fmode.o causes trouble, try:
 # FMODE_OBJ = /lib/binmode.o

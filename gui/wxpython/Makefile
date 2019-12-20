@@ -28,10 +28,12 @@ PYDSTDIRS := $(patsubst %,$(DSTDIR)/%,animation core datacatalog dbmgr gcp gmode
 DSTDIRS := $(patsubst %,$(DSTDIR)/%,icons scripts xml)
 
 default: $(DSTFILES)
+ifndef CROSS_COMPILING
 	-$(MAKE) $(DSTDIR)/xml/module_items.xml
 	-$(MAKE) xml/menudata.xml
 	-$(MAKE) xml/module_tree_menudata.xml
 	-$(MAKE) menustrings.py
+endif
 	$(MAKE) parsubdirs
 
 
