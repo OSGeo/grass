@@ -129,7 +129,7 @@ LDFLAGS="-lcurses" \
 
 make clean default
 
-BUILD_ARCH=`sed -n '/^ARCH[ \t]*=/{s/^.*=[ \]*//; p}' include/Make/Platform.make`
+BUILD_ARCH=`sed -n '/^ARCH[ \t]*=/{s/^.*=[ \t]*//; p}' include/Make/Platform.make`
 for i in \
 	config.log \
 	include/Make/Platform.make \
@@ -181,7 +181,7 @@ PKG_CONFIG=$MXE_BIN-pkg-config \
 
 make clean default
 
-ARCH=`sed -n '/^ARCH[ \t]*=/{s/^.*=[ \]*//; p}' include/Make/Platform.make`
+ARCH=`sed -n '/^ARCH[ \t]*=/{s/^.*=[ \t]*//; p}' include/Make/Platform.make`
 for i in \
 	config.log \
 	include/Make/Platform.make \
@@ -284,7 +284,7 @@ done
 ################################################################################
 # Post-compile process
 
-VERSION=`sed -n '/^INST_DIR/{s/^INST_DIR.*grass//; p}' include/Make/Platform.make`
+VERSION=`sed -n '/^INST_DIR[ \t]*=/{s/^INST_DIR.*grass//; p}' include/Make/Platform.make`
 
 rm -f $DIST/grass$VERSION.tmp
 cp -a bin.$ARCH/grass$VERSION.py $DIST/etc
