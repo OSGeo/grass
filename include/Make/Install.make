@@ -113,7 +113,6 @@ real-install: | $(INST_DIR) $(UNIX_BIN)
 	-rm $(INST_DIR)/$(GRASSMAKE)
 	$(MAKE) $(INST_DIR)/$(GRASSMAKE)
 
-	-$(INSTALL) config.status $(INST_DIR)/config.status
 	-$(CHMOD) -R a+rX $(INST_DIR) 2>/dev/null
 
 ifneq ($(findstring darwin,$(ARCH)),)
