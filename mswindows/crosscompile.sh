@@ -125,7 +125,7 @@ LDFLAGS="-lcurses" \
 --with-liblas \
 --with-bzlib \
 --with-pdal \
-> /dev/stdout
+>> /dev/stdout
 
 make clean default
 
@@ -177,7 +177,7 @@ PKG_CONFIG=$MXE_BIN-pkg-config \
 --with-bzlib \
 --with-gdal=$MXE_SHARED/bin/gdal-config \
 --with-opengl=windows \
-> /dev/stdout
+>> /dev/stdout
 
 make clean default
 
