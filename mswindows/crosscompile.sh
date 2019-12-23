@@ -22,7 +22,8 @@
 # cd ~/usr/src
 # git clone https://github.com/OSGeo/grass.git
 # cd grass
-# mswindows/crosscompile.sh --mxe=$HOME/usr/src/mxe --pull --package > crosscompile.log 2>&1
+# mswindows/crosscompile.sh --mxe=$HOME/usr/src/mxe --pull --package \
+#      > crosscompile.log 2>&1
 #
 
 # stop on errors
