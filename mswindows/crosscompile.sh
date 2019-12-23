@@ -30,37 +30,38 @@ set -e
 
 # default paths, but can be overriden from the command line
 MXE=${MXE-$HOME/usr/local/src/mxe}
-FREETYPE_INC=${FREETYPE_INC-/usr/include/freetype2}
+FREETYPE_INCLUDE=${FREETYPE_INCLUDE-/usr/include/freetype2}
 
 # process options
-pull=0
-package=0
+PULL=0
+PACKAGE=0
 for opt; do
 	case $opt in
 	-h|--help)
 		cat<<'EOT'
 Usage: crosscompile.sh [OPTIONS]
 
--h, --help               display this help message
-    --mxe=PATH           MXE path (default: $HOME/usr/local/src/mxe)
-    --freetype-inc=PATH  FreeType include path (default: /usr/include/freetype2)
-    --pull               update the current branch
-    --package            package the cross-compiled build as
-                         grass79-x86_64-w64-mingw32-YYYYMMDD.zip
+-h, --help                   display this help message
+    --mxe=PATH               MXE path (default: $HOME/usr/local/src/mxe)
+    --freetype-include=PATH  FreeType include path
+                             (default: /usr/include/freetype2)
+    --pull                   update the current branch
+    --package                package the cross-compiled build as
+                             grass79-x86_64-w64-mingw32-YYYYMMDD.zip
 EOT
 		exit
 		;;
 	--pull)
-		pull=1
+		PULL=1
 		;;
 	--package)
-		package=1
+		PACKAGE=1
 		;;
 	--mxe=*)
-		MXE=`echo $opt | sed 's/^--mxe=//'`
+		MXE=`echo $opt | sed 's/^[^=]*=//'`
 		;;
-	--freetype-inc=*)
-		FREETYPE_INC=`echo $opt | sed 's/^--freetype-inc=//'`
+	--freetype-include=*)
+		FREETYPE_INCLUDE=`echo $opt | sed 's/^[^=]*=//'`
 		;;
 	*)
 		echo "$opt: unknown option"
@@ -81,8 +82,8 @@ if [ ! -e $MXE ]; then
 	echo "$MXE: not found"
 	errors=1
 fi
-if [ ! -e $FREETYPE_INC ]; then
-	echo "$FREETYPE_INC: not found"
+if [ ! -e $FREETYPE_INCLUDE ]; then
+	echo "$FREETYPE_INCLUDE: not found"
 	errors=1
 fi
 if [ $errors -eq 1 ]; then
@@ -90,7 +91,7 @@ if [ $errors -eq 1 ]; then
 fi
 
 # update the current branch if requested
-if [ $pull -eq 1 ]; then
+if [ $PULL -eq 1 ]; then
 	if [ ! -e .git ]; then
 		echo "not a git repository"
 		exit 1
@@ -115,7 +116,7 @@ LDFLAGS="-lcurses" \
 --with-sqlite \
 --with-motif \
 --with-freetype \
---with-freetype-includes=$FREETYPE_INC \
+--with-freetype-includes=$FREETYPE_INCLUDE \
 --with-readline \
 --with-python \
 --with-wxwidgets \
@@ -337,7 +338,7 @@ EOT
 unix2dos $DIST/grass$VERSION.bat
 
 # package if requested
-if [ $package -eq 1 ]; then
+if [ $PACKAGE -eq 1 ]; then
 	DATE=`date +%Y%m%d`
 	rm -f grass
 	ln -s $DIST grass
