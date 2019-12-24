@@ -87,11 +87,11 @@ if [ ! -d $FREETYPE_INCLUDE ]; then
 	echo "$FREETYPE_INCLUDE: not found"
 	errors=1
 fi
-if [ $errors -eq 1 ]; then
-	exit 1
-fi
 if [ $UPDATE -eq 1 -a ! -d .git ]; then
 	echo "not a git repository"
+	errors=1
+fi
+if [ $errors -eq 1 ]; then
 	exit 1
 fi
 
