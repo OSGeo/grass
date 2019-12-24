@@ -22,7 +22,7 @@
 # cd ~/usr/src
 # git clone https://github.com/OSGeo/grass.git
 # cd grass
-# mswindows/crosscompile.sh --mxe=$HOME/usr/src/mxe --pull --package \
+# mswindows/crosscompile.sh --mxe=$HOME/usr/src/mxe --update --package \
 #      > crosscompile.log 2>&1
 #
 
@@ -34,10 +34,10 @@ MXE=${MXE-$HOME/usr/local/src/mxe}
 FREETYPE_INCLUDE=${FREETYPE_INCLUDE-/usr/include/freetype2}
 
 # process options
-PULL=0
+UPDATE=0
 PACKAGE=0
 for opt; do
-	case $opt in
+	case "$opt" in
 	-h|--help)
 		cat<<'EOT'
 Usage: crosscompile.sh [OPTIONS]
@@ -46,23 +46,23 @@ Usage: crosscompile.sh [OPTIONS]
     --mxe=PATH               MXE path (default: $HOME/usr/local/src/mxe)
     --freetype-include=PATH  FreeType include path
                              (default: /usr/include/freetype2)
-    --pull                   update the current branch
+    --update                 update the current branch
     --package                package the cross-compiled build as
                              grass79-x86_64-w64-mingw32-YYYYMMDD.zip
 EOT
 		exit
-		;;
-	--pull)
-		PULL=1
-		;;
-	--package)
-		PACKAGE=1
 		;;
 	--mxe=*)
 		MXE=`echo $opt | sed 's/^[^=]*=//'`
 		;;
 	--freetype-include=*)
 		FREETYPE_INCLUDE=`echo $opt | sed 's/^[^=]*=//'`
+		;;
+	--update)
+		UPDATE=1
+		;;
+	--package)
+		PACKAGE=1
 		;;
 	*)
 		echo "$opt: unknown option"
@@ -92,7 +92,7 @@ if [ $errors -eq 1 ]; then
 fi
 
 # update the current branch if requested
-if [ $PULL -eq 1 ]; then
+if [ $UPDATE -eq 1 ]; then
 	if [ ! -e .git ]; then
 		echo "not a git repository"
 		exit 1
