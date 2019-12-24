@@ -197,7 +197,7 @@ for i in \
 	include/Make/Doxyfile_arch_latex \
 	error.log \
 ; do
-	cp -a $i $i.$BUILD_ARCH
+	cp -a $i $i.$ARCH
 done
 
 ################################################################################
