@@ -26,9 +26,11 @@ build_program_in_subdir(
 #   r3.in.lidar
 #   DEPENDS grass_gis grass_raster3d )
 
+if(NOT MSVC)
 build_program_in_subdir(
   r3.in.v5d
   DEPENDS grass_gis grass_raster3d )
+endif()
 
 build_program_in_subdir(
   r3.info
@@ -59,9 +61,11 @@ build_program_in_subdir(
   r3.out.bin
   DEPENDS grass_gis grass_raster3d )
 
+if(NOT MSVC)
 build_program_in_subdir(
   r3.out.v5d
   DEPENDS grass_gis grass_raster3d )
+endif()
 
 build_program_in_subdir(
   r3.retile

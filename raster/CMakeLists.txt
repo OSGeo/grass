@@ -91,10 +91,11 @@ build_program_in_subdir(
   r.gwflow
   DEPENDS grass_gis grass_raster grass_gpde)
 
+if(NOT MSVC)
 build_program_in_subdir(
   r.horizon
   DEPENDS grass_gis grass_raster grass_gproj)
-
+endif()
 build_program_in_subdir(
   r.in.ascii
   DEPENDS grass_gis grass_raster)
@@ -122,16 +123,17 @@ build_program_in_subdir(
 
 build_program_in_subdir(
   r.in.png
-  DEPENDS grass_gis grass_raster)
+  DEPENDS grass_gis grass_raster LIBPNG)
 
 build_program_in_subdir(
   r.in.poly
   DEPENDS grass_gis grass_raster)
 
+if(NOT MSVC)
 build_program_in_subdir(
   r.in.xyz
   DEPENDS grass_gis grass_raster)
-
+endif()
 build_program_in_subdir(
   r.info
   DEPENDS grass_gis grass_raster)
@@ -152,8 +154,9 @@ build_program_in_subdir(
 # build_program_in_subdir(
 #   r.li
 #   DEPENDS grass_gis grass_raster)
-
+if(NOT MSVC)
 add_subdirectory(r.mapcalc)
+endif()
 
 build_program_in_subdir(
   r.mfilter
@@ -374,11 +377,11 @@ build_program_in_subdir(
  build_program_in_subdir(
    r.stream.extract
    DEPENDS grass_gis grass_raster grass_segment grass_vector)
-
+   if(NOT MSVC)
 build_program_in_subdir(
   r.sun 
  DEPENDS grass_gis grass_raster grass_gproj)
-
+endif()
 build_program_in_subdir(
   r.sunhours
  DEPENDS grass_gis grass_raster grass_gproj)
@@ -419,13 +422,14 @@ build_program_in_subdir(
   r.surf.random
  DEPENDS grass_gis grass_raster grass_gmath )
 
+if(NOT MSVC)
 #REVIEW: EXTRA_CFLAGS = -DUSER=\"$(USER)\" -DNODATA_FIX -DELEV_FLOAT -Wno-sign-compare
  build_program_in_subdir(
    r.terraflow
    DEPENDS grass_gis grass_raster grass_iostream
    SRC_REGEX "*.cpp"
    DEFS "-DUSER=USER;-DNODATA_FIX;-DELEV_FLOAT")
-
+endif()
 
 build_program_in_subdir(
   r.texture
@@ -478,11 +482,13 @@ build_program_in_subdir(
  DEPENDS grass_gis grass_raster)
 
 #REVIEW: EXTRA_CFLAGS = -DUSER=\"$(USER)\" -Wno-sign-compare
+if(NOT MSVC)
  build_program_in_subdir(
    r.viewshed
    DEPENDS grass_gis grass_raster grass_iostream
    SRC_REGEX "*.cpp"
    DEFS "-DUSER=USER")
+endif()
 
 build_program_in_subdir(
   r.volume

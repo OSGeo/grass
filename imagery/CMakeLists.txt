@@ -35,10 +35,11 @@ build_program_in_subdir(
   i.landsat.toar
   DEPENDS grass_imagery grass_raster grass_vector grass_gis)
 
+if(NOT MSVC)
 build_program_in_subdir(
   i.landsat.acca
   DEPENDS grass_imagery grass_raster grass_vector grass_gis)
-
+endif()
 build_program_in_subdir(
   i.maxlik
   DEPENDS grass_imagery grass_raster grass_vector grass_gis)
