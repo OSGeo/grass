@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.3)
 project(GRASSGIS)
 
 set(BUILD_SHARED_LIBS ON)
+if(MSVC)
+  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+endif()
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/find_scripts;${CMAKE_MODULE_PATH}")
 
@@ -248,6 +251,10 @@ endmacro()
 add_subdirectory(thirdparty)
 
 include(cmake/scripts.cmake)
+
+if(MSVC)
+add_definitions(-D_USE_MATH_DEFINES=1)
+endif()
 
 add_subdirectory(include)
 
