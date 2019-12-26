@@ -31,7 +31,10 @@ endif()
 set(GRASS_VERSION_DATE 20160402)
 
 build_module(NAME grass_gis SOURCES "${gislib_SRCS}"
-  DEPENDS grass_datetime ZLIB LIBM 
+  DEPENDS grass_datetime ZLIB 
   OPTIONAL_DEPENDS PTHREAD BZIP2 ICONV
   DEFS "-DGRASS_VERSION_DATE=${GRASS_VERSION_DATE}"
   )
+if(UNIX)
+  target_link_libraries(grass_gis LIBM)
+endif()
