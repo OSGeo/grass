@@ -18,14 +18,16 @@ set(gislib_SRCS
   cmprrle.c                 find_rast.c               key_value3.c              mkstemp.c                 plot.c                    spawn.c                   wr_cellhd.c
   cmprzlib.c                find_rast3d.c             key_value4.c              myname.c                  pole_in_poly.c            strings.c                 writ_zeros.c
   color_rules.c             find_vect.c               legal_name.c              named_colr.c              popen.c                   tempfile.c                xdr.c
-  color_str.c                                  line_dist.c               nl_to_spaces.c            progrm_nme.c              timestamp.c               zero.c
+  color_str.c               compress.c                line_dist.c               nl_to_spaces.c            progrm_nme.c              timestamp.c               zero.c
   commas.c                  geodesic.c                list.c                    nme_in_mps.c              proj1.c                   token.c                   zone.c
-  compress.c                geodist.c                 ll_format.c               open.c                    proj2.c                   trim_dec.c
+  geodist.c                 ll_format.c               open.c                    proj2.c                   trim_dec.c                parser_json.c             cmprzstd.c 
+  compress.c band_reference.c
   )
 
 if(MINGW)
   list(APPEND gislib_SRCS "fmode.c")
 endif()
+
 set(GRASS_VERSION_DATE 20160402)
 
 build_module(NAME grass_gis SOURCES "${gislib_SRCS}"

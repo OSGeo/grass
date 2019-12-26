@@ -27,7 +27,7 @@
 # neta: Vlib
 
 #add_executable(vectorascii )
-build_library_in_subdir(rtree HEADERS "rtree.h")
+build_library_in_subdir(rtree HEADERS "rtree.h" DEPENDS grass_gis)
 
 add_subdirectory(dglib)
 add_subdirectory(diglib)
@@ -37,7 +37,7 @@ build_library_in_subdir(Vlib
   DEPENDS grass_gis grass_raster grass_rtree
   grass_graph grass_dig2 grass_dbmibase
   grass_btree2 grass_dbmiclient
-  grass_linkm grass_gproj
+  grass_linkm grass_gproj POSTGRES
   )
 
 add_subdirectory(vedit)
