@@ -150,8 +150,6 @@ include(CheckCSourceCompiles)
 
 set(CMAKE_REQUIRED_FLAGS ${CMAKE_C_FLAGS})
 
-unset(HAVE_LONG_LONG_INT CACHE)
-
 CHECK_C_SOURCE_COMPILES("
 int main(int argc, char *argv[])
 {

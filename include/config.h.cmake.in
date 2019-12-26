@@ -80,9 +80,6 @@
 /* define gid_t type */
 typedef @GID_TYPE@ gid_t;
 
-/* define off_t type */
-typedef @OFF_TYPE@ off_t;
-
 /* define uid_t type */
 typedef @UID_TYPE@ uid_t;
 
