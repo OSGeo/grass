@@ -8,7 +8,11 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/find_scripts;${CMAKE_MODULE_PATH}")
 
 #TODO
 option(WITH_CAIRO "Build with cairo support ." ON)
+if(WIN32)
+option(WITH_X11 "Build with X11 support ." OFF)
+else()
 option(WITH_X11 "Build with X11 support ." ON)
+endif()
 option(WITH_OPENGL "Build with opengl support ." ON)
 option(WITH_SQLITE "enable sqlite support" ON)
 option(WITH_POSTGRES "enable postgres support" OFF)
@@ -42,6 +46,13 @@ set(BUILD_ARCH "x86_64")
 
 file(STRINGS "include/VERSION" GRASS_VERSION_STRINGS)
 list(LENGTH GRASS_VERSION_STRINGS GRASS_VERSION_FILE_LENGTH)
+
+if(WIN32)
+set(CMAKE_C_FLAGS "/D_CRT_SECURE_NO_WARNINGS")
+if(CMAKE_C_FLAGS)
+set(CMAKE_C_FLAGS "${GRASS_C_FLAGS} ${CMAKE_C_FLAGS}")
+endif()
+endif()
 
 if(GRASS_VERSION_FILE_LENGTH LESS 3 )
   message(FATAL_ERROR "include/VERSION is not a valid file")
