@@ -314,6 +314,9 @@ typedef @PID_TYPE@ pid_t;
 #define S_ISDIR(mode)  (((mode) & S_IFMT) == S_IFDIR)
 #endif
 
-#endif
+#include <BaseTsd.h>
+typedef SSIZE_T ssize_t;
+
+#endif //_MSC_VER
 
 #endif /* _config_h */
