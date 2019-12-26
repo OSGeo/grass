@@ -20,6 +20,7 @@
 #include <string.h>
 #include <math.h>
 #include "test_raster3d_lib.h"
+#include <winsock.h>
 
 /* *************************************************************** */
 /* Compute the difference between two time steps ***************** */
