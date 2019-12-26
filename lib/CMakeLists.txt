@@ -1,12 +1,10 @@
 
-#order is relevant:
-
-
 build_library_in_subdir(datetime)
 
 add_subdirectory(gis)
 
-build_library_in_subdir(driver DEPENDS grass_gis FREETYPE ICONV ZLIB)
+build_library_in_subdir(driver 
+DEPENDS grass_gis FREETYPE ICONV ZLIB)
 
 add_subdirectory(proj)
 
@@ -36,17 +34,28 @@ build_library_in_subdir(gmath
 
 build_library_in_subdir(linkm)
 
-
-
+file(GLOB pngdriver_SRCS "./pngdriver/*.c")
+list(APPEND pngdriver_SRCS "./driver/init.c")
 build_library_in_subdir(pngdriver
+SOURCES ${pngdriver_SRCS}
   DEPENDS grass_driver LIBPNG ZLIB
   INCLUDES "./driver"
   )
+
+file(GLOB psdriver_SRCS "./psdriver/*.c")
+list(APPEND psdriver_SRCS "./driver/init.c")
 build_library_in_subdir(psdriver
+SOURCES ${psdriver_SRCS}
   DEPENDS grass_driver
-  )
+    INCLUDES "./driver"
+ )
+
+file(GLOB htmldriver_SRCS "./htmldriver/*.c")
+list(APPEND htmldriver_SRCS "./driver/init.c")
 build_library_in_subdir(htmldriver
+  SOURCES ${htmldriver_SRCS}
   DEPENDS grass_driver
+    INCLUDES "./driver"
   )
 
 set(_grass_display_DEFS)
@@ -62,7 +71,7 @@ if(WITH_CAIRO)
     list(APPEND _cairodriver_DEPENDS X11)
   endif()
 
- file(GLOB cairodriver_SRCS "./cairodriver/*.c")
+  file(GLOB cairodriver_SRCS "./cairodriver/*.c")
   list(APPEND cairodriver_SRCS "./driver/init.c")
   build_library_in_subdir(cairodriver
     DEPENDS ${_cairodriver_DEPENDS}
