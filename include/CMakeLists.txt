@@ -1,4 +1,5 @@
 include(CheckIncludeFile)
+include(CheckFunctionExists) #TODO: use CheckSymbolExists
 check_include_file(limits.h HAVE_LIMITS_H)
 check_include_file(termio.h HAVE_TERMIO_H)
 check_include_file(termios.h HAVE_TERMIOS_H)
@@ -22,7 +23,6 @@ check_include_file(f2c.h HAVE_F2C_H)
 check_include_file(cblas.h HAVE_CBLAS_H)
 check_include_file(clapack.h HAVE_CLAPACK_H)
 check_include_file(langinfo.h HAVE_LANGINFO_H)
-
 if(TARGET FREETYPE)
   #check_include_file(ft2build.h HAVE_FT2BUILD_H)
   set(HAVE_FT2BUILD_H 1)
@@ -41,6 +41,12 @@ if(NOT HAVE_FFTW3_H)
   check_include_file(fftw.h HAVE_FFTW_H)
 endif()
 
+set(HAVE_ZLIB_H 0)
+if(TARGET LIBJPEG)
+  set(HAVE_ZLIB_H 1)
+  #check_include_file(zlib.h HAVE_ZLIB_H)
+endif()
+
 set(HAVE_JPEGLIB_H 0)
 if(TARGET LIBJPEG)
   set(HAVE_JPEGLIB_H 1)
@@ -50,7 +56,6 @@ endif()
 set(HAVE_PNG_H 0)
 if(TARGET LIBPNG)
   set(HAVE_PNG_H 1)
-  #check_include_file(png.h HAVE_PNG_H)
 endif()
 
 set(HAVE_TIFFIO_H 0)
@@ -112,12 +117,12 @@ set(USE_NLS 0)
 set(USE_G_SOCKS 0)
 set(RETSIGTYPE_RESULT "int")
 
-set(gid_t 0)
-set(uid_t 0)
-set(off_t 0)
-
-
-
+if(MSVC)
+set(GID_TYPE int)
+set(UID_TYPE int)
+set(PID_TYPE int)
+set(OFF_TYPE off_t)
+endif()
 
 set(_OE_SOCKETS 0)
 set(USE_DELTA_FOR_TZ 0)
@@ -239,6 +244,8 @@ endforeach()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in
   "${CMAKE_CURRENT_BINARY_DIR}/grass/version.h")
+
+message("Creating ${CMAKE_BINARY_DIR}/grass/config.h")
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake.in
   "${CMAKE_CURRENT_BINARY_DIR}/grass/config.h")
