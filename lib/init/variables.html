@@ -53,7 +53,8 @@ into GRASS, store them in:<br>
 <h2>Setting GRASS gisenv variables</h2>
 
 Use <em><a href="g.gisenv.html">g.gisenv</a></em> within GRASS. This permanently
-predefines GRASS variables in the <tt>.grass7/rc</tt> file.
+predefines GRASS variables in the <tt>$HOME/.grass7/rc</tt> file after the
+current GRASS session is closed.
 <br><br>
 Usage:
 <div class="code"><pre>
@@ -82,8 +83,9 @@ PERMANENT
     startup script.</dd>
   
   <dt>GISRC</dt>
-  <dd>name of <tt>.grass7/rc</tt> file. Defines the system wide value
-    while in a GRASS session.</dd>
+  <dd>name of <tt>$HOME/.grass7/rc</tt> file. Defines the system wide value
+    when starting a GRASS session. Within a GRASS session, a temporary copy
+    of this file will be used.</dd>
   
   <dt>GRASS_ADDON_PATH</dt>
   <dd>[grass startup script, g.extension]<br>
@@ -111,9 +113,12 @@ PERMANENT
   <dd>[libraster]<br>
     the compression method for new raster maps can be set with the
     environment variable GRASS_COMPRESSOR. Supported methods are RLE, 
-    ZLIB, LZ4, and BZIP2 if GRASS has been compiled with BZIP2 support. 
-    The default is ZLIB which can be changed with e.g. 
-    <tt>GRASS_COMPRESSOR=LZ4</tt></dd>
+    ZLIB, LZ4, BZIP2, and ZSTD. The default is ZSTD if available, 
+    otherwise ZLIB, which can be changed with e.g. 
+    <tt>GRASS_COMPRESSOR=ZSTD</tt></dd>, granted that GRASS has been 
+    compiled with the requested compressor. Compressors that are always 
+    available are RLE, ZLIB, and LZ4. The compressors BZIP2 and ZSTD 
+    must be enabled when configuring GRASS for compilation.
 
   <dt>GRASS_DB_ENCODING</dt>
   <dd>[various modules, wxGUI]<br>
@@ -391,7 +396,7 @@ PERMANENT
   <dd>tells the display library which driver to use; possible
   values: <em><a href="cairodriver.html">cairo</a></em>, <em><a href="pngdriver.html">png</a></em>, <em><a href="psdriver.html">ps</a></em>,
     <em><a href="htmldriver.html">html</a></em>
-    or <em>default</em><br>Default display driver
+    or <em>default</em>.<br>Default display driver
     is <em><a href="cairodriver.html">cairo</a></em> (if available)
     otherwise <em><a href="pngdriver.html">png</a></em>.
   </dd>
@@ -573,5 +578,7 @@ Note: On MS Windows the files are stored in <tt>%APPDATA%</tt>.
   <a href="g.parser.html">g.parser</a>
 </em>
 
+<!--
 <p>
 <i>Last changed: $Date$</i>
+-->

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 ############################################################################
 #
@@ -6,11 +6,17 @@
 # AUTHOR(S):    Soeren Gebbert
 #
 # PURPOSE:      Export a space time vector dataset.as GRASS specific archive file
-# COPYRIGHT:    (C) 2011-2014 by the GRASS Development Team
+# COPYRIGHT:    (C) 2011-2017 by the GRASS Development Team
 #
-#               This program is free software under the GNU General Public
-#               License (version 2). Read the file COPYING that comes with GRASS
-#               for details.
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
 #
 #############################################################################
 
@@ -50,10 +56,10 @@
 #% key: format
 #% type: string
 #% label: The export format of a single vector map
-#% description: Supported are GML via v.out.ogr and the GRASS package format of v.pack
+#% description: Supported are GML and GPKG via v.out.ogr and the GRASS package format of v.pack
 #% required: no
 #% multiple: no
-#% options: GML,pack
+#% options: GML,GPKG,pack
 #% answer: GML
 #%end
 
@@ -78,7 +84,7 @@ def main():
 
     # Make sure the temporal database exists
     tgis.init()
-    # Export the space time raster dataset
+    # Export the space time vector dataset
     tgis.export_stds(
         _input, output, compression, directory, where, _format, "stvds")
 

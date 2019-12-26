@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 ############################################################################
 #
 # MODULE:	r.unpack
@@ -14,7 +14,7 @@
 #############################################################################
 
 #%module
-#% description: Imports a raster map as GRASS GIS specific archive file (packed with r.pack)
+#% description: Imports a GRASS GIS specific raster archive file (packed with r.pack) as a raster map
 #% keyword: raster
 #% keyword: import
 #% keyword: copying
@@ -48,10 +48,6 @@ import atexit
 
 from grass.script.utils import diff_files, try_rmdir
 from grass.script import core as grass
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 
 def cleanup():

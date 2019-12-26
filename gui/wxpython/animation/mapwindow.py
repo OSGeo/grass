@@ -17,8 +17,8 @@ This program is free software under the GNU General Public License
 
 import wx
 from core.debug import Debug
-from gui_core.wrap import PseudoDC, EmptyBitmap
-from utils import ComputeScaledRect
+from gui_core.wrap import PseudoDC, EmptyBitmap, Rect, BitmapFromImage
+from .utils import ComputeScaledRect
 
 
 class BufferedWindow(wx.Window):
@@ -44,8 +44,8 @@ class BufferedWindow(wx.Window):
         wx.Window.__init__(self, *args, **kwargs)
 
         Debug.msg(2, "BufferedWindow.__init__()")
-        wx.EVT_PAINT(self, self.OnPaint)
-        wx.EVT_SIZE(self, self.OnSize)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
         # OnSize called to make sure the buffer is initialized.
         # This might result in OnSize getting called twice on some
         # platforms at initialization, but little harm done.
@@ -145,7 +145,7 @@ class AnimationWindow(BufferedWindow):
             im.Rescale(params['width'], params['height'])
             self.x = params['x']
             self.y = params['y']
-            bitmap = wx.BitmapFromImage(im)
+            bitmap = BitmapFromImage(im)
             if self._overlay:
                 im = wx.ImageFromBitmap(self.bitmap_overlay)
                 im.Rescale(
@@ -154,7 +154,7 @@ class AnimationWindow(BufferedWindow):
                     im.GetHeight() *
                     params['scale'])
                 self._setOverlay(
-                    wx.BitmapFromImage(im),
+                    BitmapFromImage(im),
                     xperc=self.perc[0],
                     yperc=self.perc[1])
         else:
@@ -177,7 +177,7 @@ class AnimationWindow(BufferedWindow):
         self._pdc.BeginDrawing()
         self._pdc.SetId(1)
         self._pdc.DrawBitmap(bmp=self._overlay, x=x, y=y)
-        self._pdc.SetIdBounds(1, wx.Rect(x, y, self._overlay.GetWidth(),
+        self._pdc.SetIdBounds(1, Rect(x, y, self._overlay.GetWidth(),
                                          self._overlay.GetHeight()))
         self._pdc.EndDrawing()
 

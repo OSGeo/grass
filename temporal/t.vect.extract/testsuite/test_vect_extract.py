@@ -50,9 +50,9 @@ class TestVectorExtraction(TestCase):
         self.assertModule("t.vect.extract", input="A", output="B", 
                           where="start_time > '2001-06-01'", overwrite=True)
 
-        tinfo_string="""start_time=2001-07-01 00:00:00
-        end_time=2003-07-01 00:00:00
-        granularity=3 months
+        tinfo_string="""start_time='2001-07-01 00:00:00'
+        end_time='2003-07-01 00:00:00'
+        granularity='3 months'
         map_time=interval
         number_of_maps=8
         primitives=160

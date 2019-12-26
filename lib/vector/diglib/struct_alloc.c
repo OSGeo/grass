@@ -73,7 +73,10 @@ int dig_node_alloc_line(struct P_node * node, int add)
 
     G_debug(5, "dig_node_alloc_line(): add = %d", add);
 
-    num = node->n_lines + add;
+    if (node->n_lines + add <= node->alloc_lines)
+	return 0;
+
+    num = node->alloc_lines + add;
 
     p = G_realloc(node->lines, num * sizeof(plus_t));
     if (p == NULL)

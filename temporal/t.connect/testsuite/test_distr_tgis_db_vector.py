@@ -175,9 +175,9 @@ class TestRasterExtraction(TestCase):
         tinfo_string = """id=A@testvect1
                                     name=A
                                     mapset=testvect1
-                                    start_time=2001-01-01 00:00:00
-                                    end_time=2001-04-01 00:00:00
-                                    granularity=1 month"""
+                                    start_time='2001-01-01 00:00:00'
+                                    end_time='2001-04-01 00:00:00'
+                                    granularity='1 month'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="stvds", input="A@testvect1")
@@ -188,9 +188,9 @@ class TestRasterExtraction(TestCase):
         tinfo_string = """id=A@testvect2
                                     name=A
                                     mapset=testvect2
-                                    start_time=2001-01-01 00:00:00
-                                    end_time=2001-07-01 00:00:00
-                                    granularity=2 months"""
+                                    start_time='2001-01-01 00:00:00'
+                                    end_time='2001-07-01 00:00:00'
+                                    granularity='2 months'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="stvds", input="A@testvect2")
@@ -201,9 +201,9 @@ class TestRasterExtraction(TestCase):
         tinfo_string = """id=A@testvect3
                                     name=A
                                     mapset=testvect3
-                                    start_time=2001-01-01 00:00:00
-                                    end_time=2001-10-01 00:00:00
-                                    granularity=3 months"""
+                                    start_time='2001-01-01 00:00:00'
+                                    end_time='2001-10-01 00:00:00'
+                                    granularity='3 months'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="stvds", input="A@testvect3")
@@ -214,9 +214,9 @@ class TestRasterExtraction(TestCase):
         tinfo_string = """id=A@testvect4
                                     name=A
                                     mapset=testvect4
-                                    start_time=2001-01-01 00:00:00
-                                    end_time=2002-01-01 00:00:00
-                                    granularity=4 months"""
+                                    start_time='2001-01-01 00:00:00'
+                                    end_time='2002-01-01 00:00:00'
+                                    granularity='4 months'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="stvds", input="A@testvect4")
@@ -229,8 +229,8 @@ class TestRasterExtraction(TestCase):
                                 name=a1
                                 mapset=testvect1
                                 temporal_type=absolute
-                                start_time=2001-01-01 00:00:00
-                                end_time=2001-02-01 00:00:00 """
+                                start_time='2001-01-01 00:00:00'
+                                end_time='2001-02-01 00:00:00'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="vector", input="a1@testvect1")
@@ -241,8 +241,8 @@ class TestRasterExtraction(TestCase):
                                 name=a1
                                 mapset=testvect2
                                 temporal_type=absolute
-                                start_time=2001-01-01 00:00:00
-                                end_time=2001-03-01 00:00:00 """
+                                start_time='2001-01-01 00:00:00'
+                                end_time='2001-03-01 00:00:00'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="vector", input="a1@testvect2")
@@ -253,8 +253,8 @@ class TestRasterExtraction(TestCase):
                                 name=a1
                                 mapset=testvect3
                                 temporal_type=absolute
-                                start_time=2001-01-01 00:00:00
-                                end_time=2001-04-01 00:00:00 """
+                                start_time='2001-01-01 00:00:00'
+                                end_time='2001-04-01 00:00:00'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="vector", input="a1@testvect3")
@@ -265,8 +265,8 @@ class TestRasterExtraction(TestCase):
                                 name=a1
                                 mapset=testvect4
                                 temporal_type=absolute
-                                start_time=2001-01-01 00:00:00
-                                end_time=2001-05-01 00:00:00 """
+                                start_time='2001-01-01 00:00:00'
+                                end_time='2001-05-01 00:00:00'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="vector", input="a1@testvect4")

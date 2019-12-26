@@ -72,6 +72,25 @@
 #define RELDIR "?"
 #endif
 
+/* GDAL < 2.3 does not define HAVE_LONG_LONG when compiled with 
+ * Visual Studio as for OSGeo4W, even though long long is available,
+ * and GIntBig falls back to long which is on Windows always 4 bytes.
+ * This patch ensures that GIntBig is defined as long long (8 bytes)
+ * if GDAL is compiled with Visual Studio and GRASS is compiled with 
+ * MinGW. This patch must be applied before other GDAL/OGR headers are
+ * included, as done by gprojects.h and vector.h */
+#if defined(__MINGW32__) && HAVE_GDAL
+# include <gdal_version.h>
+# if GDAL_VERSION_NUM < 2030000
+#  include <cpl_config.h>
+   /* HAVE_LONG_LONG_INT comes from GRASS
+    * HAVE_LONG_LONG comes from GDAL */
+#  if HAVE_LONG_LONG_INT && !defined(HAVE_LONG_LONG)
+#   define HAVE_LONG_LONG 1
+#  endif
+# endif
+#endif
+
 /* adj_cellhd.c */
 void G_adjust_Cell_head(struct Cell_head *, int, int);
 void G_adjust_Cell_head3(struct Cell_head *, int, int, int);
@@ -142,6 +161,10 @@ int G_asprintf(char **, const char *, ...)
 int G_rasprintf(char **, size_t *,const char *, ...)
     __attribute__ ((format(printf, 3, 4)));
 
+/* bands.c */
+int G__read_band_reference(FILE *, struct Key_Value **);
+int G__write_band_reference(FILE *, const char *, const char *);
+
 /* basename.c */
 char *G_basename(char *, const char *);
 size_t G_get_num_decimals(const char *);
@@ -159,7 +182,9 @@ void G_clicker(void);
 /* color_rules.c */
 char *G_color_rules_options(void);
 char *G_color_rules_descriptions(void);
+char *G_color_rules_description_type(void);
 void G_list_color_rules(FILE *);
+void G_list_color_rules_description_type(FILE *, char *);
 int G_find_color_rule(const char *);
 
 /* color_str.c */
@@ -172,10 +197,12 @@ void G_remove_commas(char *);
 /* compress.c */
 int G_compressor_number(char *);
 char *G_compressor_name(int);
+int G_default_compressor(void);
 int G_check_compressor(int);
 int G_write_compressed(int, unsigned char *, int, int);
 int G_write_unompressed(int, unsigned char *, int);
 int G_read_compressed(int, int, unsigned char *, int, int);
+int G_compress_bound(int, int);
 int G_compress(unsigned char *, int, unsigned char *, int, int);
 int G_expand(unsigned char *, int, unsigned char *, int, int);
 
@@ -217,6 +244,14 @@ G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst,
 		int dst_sz);
 int
 G_bz2_expand(unsigned char *src, int src_sz, unsigned char *dst,
+	      int dst_sz);
+
+/* cmprzstd.c : ZSTD, compression similar to ZLIB's DEFLATE but faster */
+int
+G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
+		int dst_sz);
+int
+G_zstd_expand(unsigned char *src, int src_sz, unsigned char *dst,
 	      int dst_sz);
 
 /* add more compression methods here */
@@ -475,6 +510,8 @@ void G_free_ls_filter(void *);
 /* make_loc.c */
 int G_make_location(const char *, struct Cell_head *, const struct Key_Value *,
 		    const struct Key_Value *);
+int G_make_location_epsg(const char *, struct Cell_head *, const struct Key_Value *,
+			 const struct Key_Value *, const struct Key_Value *);
 int G_compare_projections(const struct Key_Value *, const struct Key_Value *,
 			  const struct Key_Value *, const struct Key_Value *);
 

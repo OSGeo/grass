@@ -368,10 +368,15 @@ int main(int argc, char *argv[])
 			 *   the point will appear outside the window.
 			 *   So, for these edges, bring the point inside the window
 			 */
-			if (drow == window.rows)
-			    drow--;
-			if (dcol == window.cols)
-			    dcol--;
+			if (north == window.south)
+			    drow = window.rows - 1;
+			if (east == window.east)
+			    dcol = window.cols - 1;
+
+			if (drow < 0)
+			    drow = -1;
+			if (dcol < 0)
+			    dcol = -1;
 
 			if (!done) {
 			    cache[point_cnt].row = (int)drow;
@@ -557,7 +562,9 @@ static int by_row(const void *ii, const void *jj)
 {
     const struct order *i = ii, *j = jj;
 
-    return i->row - j->row;
+    if (i->row < j->row)
+	return -1;
+    return (i->row > j->row);
 }
 
 

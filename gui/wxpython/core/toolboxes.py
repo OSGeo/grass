@@ -12,6 +12,8 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import copy
@@ -32,7 +34,7 @@ else:
 
 import grass.script.task as gtask
 import grass.script.core as gcore
-from grass.script.utils import try_remove
+from grass.script.utils import try_remove, decode
 from grass.exceptions import ScriptError, CalledModuleError
 
 
@@ -81,25 +83,6 @@ def _getUserMainMenuFile():
     return userMainMenuFile
 
 
-def _(string):
-    """Get translated version of a string"""
-    # is attribute initialized to actual value?
-    if _.translate is None:
-        try:
-            # if not get the translate function named _
-            from core.utils import _ as actual_translate
-            # assign the imported function to translade attribute
-            _.translate = actual_translate
-        except ImportError:
-            # speak English if there is a problem with import of wx
-            def noop_traslate(string):
-                return string
-            _.translate = noop_traslate
-    return _.translate(string)
-
-# attribute translate of function _
-_.translate = None
-
 # TODO: this should be part of some reader object
 _MESSAGES = []
 
@@ -121,23 +104,6 @@ def _debug(level, message):
     """Show debug message"""
     # this has interface as originally used GUI Debug but uses grass.script
     gcore.debug(message, level)
-
-
-def _encode_string(string):
-    """Encode a unicode *string* using the system encoding
-
-    If it is not possible to use system encoding, UTF-8 is used.
-    """
-    try:
-        from core.gcmd import EncodeString
-        return EncodeString(string)
-    except ImportError:
-        # This is the case when we have errors during compilation but
-        # the environment is not complete (compilation, custom setups
-        # of GRASS environmet) and we cannot import wx correctly.
-        # UTF-8 is pretty good guess for most cases (and should work for
-        # Mac OS X where wx 32 vs 64 bit issue is happaning).
-        return string.encode('utf-8')
 
 
 def toolboxesOutdated():
@@ -417,7 +383,7 @@ def _expandToolboxes(node, toolboxes):
     ...   </toolbox>
     ... </toolboxes>''')
     >>> _expandToolboxes(menu, toolboxes)
-    >>> print etree.tostring(menu)
+    >>> print(etree.tostring(menu))
     <toolbox name="Raster">
       <label>&amp;Raster</label>
       <items>
@@ -478,7 +444,7 @@ def _expandUserToolboxesItem(node, toolboxes):
     >>> toolboxes = etree.fromstring('<toolboxes><toolbox name="UserToolbox"><items><module-item name="g.region"/></items></toolbox></toolboxes>')
     >>> _expandUserToolboxesItem(tree, toolboxes)
     >>> etree.tostring(tree)
-    '<toolbox><items><toolbox name="GeneratedUserToolboxesList"><label>Custom toolboxes</label><items><toolbox name="UserToolbox"><items><module-item name="g.region" /></items></toolbox></items></toolbox></items></toolbox>'
+    b'<toolbox><items><toolbox name="GeneratedUserToolboxesList"><label>Custom toolboxes</label><items><toolbox name="UserToolbox"><items><module-item name="g.region" /></items></toolbox></items></toolbox></items></toolbox>'
     """
     tboxes = toolboxes.findall('.//toolbox')
 
@@ -489,9 +455,9 @@ def _expandUserToolboxesItem(node, toolboxes):
             'toolbox', attrib={
                 'name': 'GeneratedUserToolboxesList'})
         items.insert(idx, el)
-        label = etree.SubElement(el, tag='label')
+        label = etree.SubElement(el, 'label')
         label.text = _("Custom toolboxes")
-        it = etree.SubElement(el, tag='items')
+        it = etree.SubElement(el, 'items')
         for toolbox in tboxes:
             it.append(copy.deepcopy(toolbox))
         items.remove(n)
@@ -503,7 +469,7 @@ def _removeUserToolboxesItem(root):
     >>> tree = etree.fromstring('<toolbox><items><user-toolboxes-list/></items></toolbox>')
     >>> _removeUserToolboxesItem(tree)
     >>> etree.tostring(tree)
-    '<toolbox><items /></toolbox>'
+    b'<toolbox><items /></toolbox>'
     """
     for n in root.findall('./items/user-toolboxes-list'):
         items = root.find('./items')
@@ -521,7 +487,7 @@ def _getAddons():
 
     flist = []
     for line in output.splitlines():
-        if not line.startswith('executables'):
+        if not line.startswith('name'):
             continue
         for fexe in line.split('=', 1)[1].split(','):
             flist.append(fexe)
@@ -570,13 +536,13 @@ def _expandAddonsItem(node):
         # attib={'name': 'AddonsList'}
         el = etree.Element('menu')
         items.insert(idx, el)
-        label = etree.SubElement(el, tag='label')
+        label = etree.SubElement(el, 'label')
         label.text = _("Addons")
-        it = etree.SubElement(el, tag='items')
+        it = etree.SubElement(el, 'items')
         for addon in addons:
-            addonItem = etree.SubElement(it, tag='module-item')
+            addonItem = etree.SubElement(it, 'module-item')
             addonItem.attrib = {'name': addon}
-            addonLabel = etree.SubElement(addonItem, tag='label')
+            addonLabel = etree.SubElement(addonItem, 'label')
             addonLabel.text = addon
         items.remove(n)
 
@@ -588,7 +554,7 @@ def _expandItems(node, items, itemTag):
     >>> items = etree.fromstring('<module-items><module-item name="g.region"><module>g.region</module><description>GRASS region management</description></module-item></module-items>')
     >>> _expandItems(tree, items, 'module-item')
     >>> etree.tostring(tree)
-    '<items><module-item name="g.region"><module>g.region</module><description>GRASS region management</description></module-item></items>'
+    b'<items><module-item name="g.region"><module>g.region</module><description>GRASS region management</description></module-item></items>'
     """
     for moduleItem in node.findall('.//' + itemTag):
         itemName = moduleItem.get('name')
@@ -622,20 +588,20 @@ def _expandRuntimeModules(node, loadMetadata=True):
     ...                         '</items>')
     >>> _expandRuntimeModules(tree)
     >>> etree.tostring(tree)
-    '<items><module-item name="g.region"><module>g.region</module><description>Manages the boundary definitions for the geographic region.</description><keywords>general,settings</keywords></module-item></items>'
+    b'<items><module-item name="g.region"><module>g.region</module><description>Manages the boundary definitions for the geographic region.</description><keywords>general,settings,computational region,extent,resolution,level1</keywords></module-item></items>'
     >>> tree = etree.fromstring('<items>'
     ...                         '<module-item name="m.proj"></module-item>'
     ...                         '</items>')
     >>> _expandRuntimeModules(tree)
     >>> etree.tostring(tree)
-    '<items><module-item name="m.proj"><module>m.proj</module><description>Converts coordinates from one projection to another (cs2cs frontend).</description><keywords>miscellaneous,projection</keywords></module-item></items>'
+    b'<items><module-item name="m.proj"><module>m.proj</module><description>Converts coordinates from one projection to another (cs2cs frontend).</description><keywords>miscellaneous,projection,transformation</keywords></module-item></items>'
     """
     hasErrors = False
     modules = node.findall('.//module-item')
     for module in modules:
         name = module.get('name')
         if module.find('module') is None:
-            n = etree.SubElement(parent=module, tag='module')
+            n = etree.SubElement(module, 'module')
             n.text = name
 
         if module.find('description') is None:
@@ -643,9 +609,9 @@ def _expandRuntimeModules(node, loadMetadata=True):
                 desc, keywords = _loadMetadata(name)
             else:
                 desc, keywords = '', ''
-            n = etree.SubElement(parent=module, tag='description')
+            n = etree.SubElement(module, 'description')
             n.text = _escapeXML(desc)
-            n = etree.SubElement(parent=module, tag='keywords')
+            n = etree.SubElement(module, 'keywords')
             n.text = _escapeXML(','.join(keywords))
             if loadMetadata and not desc:
                 hasErrors = True
@@ -690,13 +656,13 @@ def _addHandlers(node):
     """Add missing handlers to modules"""
     for n in node.findall('.//module-item'):
         if n.find('handler') is None:
-            handlerNode = etree.SubElement(parent=n, tag='handler')
+            handlerNode = etree.SubElement(n, 'handler')
             handlerNode.text = 'OnMenuCmd'
 
     # e.g. g.region -p
     for n in node.findall('.//wxgui-item'):
         if n.find('command') is not None:
-            handlerNode = etree.SubElement(parent=n, tag='handler')
+            handlerNode = etree.SubElement(n, 'handler')
             handlerNode.text = 'RunMenuCmd'
 
 
@@ -707,7 +673,7 @@ def _convertTag(node, old, new):
     >>> _convertTag(tree, 'toolbox', 'menu')
     >>> _convertTag(tree, 'module-item', 'menuitem')
     >>> etree.tostring(tree)
-    '<toolboxes><menu><items><menuitem /></items></menu></toolboxes>'
+    b'<toolboxes><menu><items><menuitem /></items></menu></toolboxes>'
     """
     for n in node.findall('.//%s' % old):
         n.tag = new
@@ -720,7 +686,7 @@ def _convertTagAndRemoveAttrib(node, old, new):
     >>> _convertTagAndRemoveAttrib(tree, 'toolbox', 'menu')
     >>> _convertTagAndRemoveAttrib(tree, 'module-item', 'menuitem')
     >>> etree.tostring(tree)
-    '<toolboxes><menu><items><menuitem /></items></menu></toolboxes>'
+    b'<toolboxes><menu><items><menuitem /></items></menu></toolboxes>'
     """
     for n in node.findall('.//%s' % old):
         n.tag = new
@@ -733,7 +699,7 @@ def _convertTree(root):
     >>> tree = etree.fromstring('<toolbox name="MainMenu"><label>Main menu</label><items><toolbox><label>Raster</label><items><module-item name="g.region"><module>g.region</module></module-item></items></toolbox></items></toolbox>')
     >>> _convertTree(tree)
     >>> etree.tostring(tree)
-    '<menudata><menubar><menu><label>Raster</label><items><menuitem><command>g.region</command></menuitem></items></menu></menubar></menudata>'
+    b'<menudata><menubar><menu><label>Raster</label><items><menuitem><command>g.region</command></menuitem></items></menu></menubar></menudata>'
     """
     root.attrib = {}
     label = root.find('label')
@@ -764,9 +730,9 @@ def _getXMLString(root):
     :return: XML as string
     """
     xml = etree.tostring(root, encoding='UTF-8')
-    return xml.replace("<?xml version='1.0' encoding='UTF-8'?>\n",
-                       "<?xml version='1.0' encoding='UTF-8'?>\n"
-                       "<!--This is an auto-generated file-->\n")
+    return xml.replace(b"<?xml version='1.0' encoding='UTF-8'?>\n",
+                       b"<?xml version='1.0' encoding='UTF-8'?>\n"
+                       b"<!--This is an auto-generated file-->\n")
 
 
 def do_doctest_gettext_workaround():
@@ -865,10 +831,10 @@ def module_test():
             sys.stdout.write(line)
             someDiff = True
     if someDiff:
-        print "Difference between files."
+        print("Difference between files.")
         return 1
     else:
-        print "OK"
+        print("OK")
         return 0
 
 
@@ -876,8 +842,8 @@ def validate_file(filename):
     try:
         etree.parse(filename)
     except ETREE_EXCEPTIONS as error:
-        print "XML file <{name}> is not well formed: {error}".format(
-            name=filename, error=error)
+        print("XML file <{name}> is not well formed: {error}".format(
+            name=filename, error=error))
         return 1
     return 0
 
@@ -895,7 +861,7 @@ def main():
     tree = createTree(distributionRootFile=mainFile, userRootFile=None,
                       userDefined=False)
     root = tree.getroot()
-    sys.stdout.write(_getXMLString(root))
+    sys.stdout.write(decode(_getXMLString(root), encoding='UTF-8'))
 
     return 0
 

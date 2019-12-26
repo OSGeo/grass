@@ -11,7 +11,8 @@ int init_vars(int argc, char *argv[])
 {
     int r, c;
     int ele_fd, wat_fd, fd = -1;
-    int seg_rows, seg_cols, num_cseg_total, num_open_segs, num_open_array_segs;
+    int seg_rows, seg_cols, num_cseg_total, num_open_segs,
+	num_open_array_segs;
     double memory_divisor, heap_mem, seg_factor, disk_space;
 
     /* int page_block, num_cseg; */
@@ -31,7 +32,7 @@ int init_vars(int argc, char *argv[])
 
     G_gisinit(argv[0]);
     /* input */
-    ele_flag = pit_flag = run_flag = ril_flag = 0;
+    ele_flag = pit_flag = run_flag = ril_flag  = rtn_flag = 0;
     /* output */
     wat_flag = asp_flag = tci_flag = spi_flag = atanb_flag = 0;
     bas_flag = seg_flag = haf_flag = 0;
@@ -77,11 +78,13 @@ int init_vars(int argc, char *argv[])
 	    haf_flag++;
 	else if (sscanf(argv[r], "flow=%s", run_name) == 1)
 	    run_flag++;
+	else if (sscanf(argv[r], "retention=%s", rtn_name) == 1)
+	    rtn_flag++;
 	else if (sscanf(argv[r], "ar=%s", arm_name) == 1)
 	    arm_flag++;
 	/* slope length
-	else if (sscanf(argv[r], "slope_length=%s", sl_name) == 1)
-	    sl_flag++; */
+	   else if (sscanf(argv[r], "slope_length=%s", sl_name) == 1)
+	   sl_flag++; */
 	else if (sscanf(argv[r], "slope_steepness=%s", sg_name) == 1)
 	    sg_flag++;
 	else if (sscanf(argv[r], "length_slope=%s", ls_name) == 1)
@@ -96,7 +99,7 @@ int init_vars(int argc, char *argv[])
 	    }
 	}
 	/* slope deposition
-	else if (sscanf (argv[r], "sd=%[^\n]", dep_name) == 1) dep_flag++; */
+	   else if (sscanf (argv[r], "sd=%[^\n]", dep_name) == 1) dep_flag++; */
 	else if (sscanf(argv[r], "-%d", &sides) == 1) {
 	    if (sides != 4)
 		usage(argv[0]);
@@ -136,10 +139,10 @@ int init_vars(int argc, char *argv[])
     if (tci_flag || spi_flag)
 	atanb_flag = 1;
 
-    G_message(n_("SECTION 1 beginning: Initiating Variables. %d section total.", 
-        "SECTION 1 beginning: Initiating Variables. %d sections total.", 
-        tot_parts),
-	      tot_parts);
+    G_message(n_
+	      ("SECTION 1 beginning: Initiating Variables. %d section total.",
+	       "SECTION 1 beginning: Initiating Variables. %d sections total.",
+	       tot_parts), tot_parts);
 
     this_mapset = G_mapset();
     /* for sd factor
@@ -173,7 +176,7 @@ int init_vars(int argc, char *argv[])
     if (segs_mb < 3.0) {
 	segs_mb = 3;
 	G_warning(_("Maximum memory to be used was smaller than 3 MB,"
-	            " set to 3 MB."));
+		    " set to 3 MB."));
     }
 
     /* balance segment files */
@@ -219,7 +222,7 @@ int init_vars(int argc, char *argv[])
 	    disk_space += 8;
 	}
     }
-    
+
     /* KB -> MB */
     memory_divisor = memory_divisor * seg_factor / 1024.;
     disk_space = disk_space * seg_factor / 1024.;
@@ -249,24 +252,32 @@ int init_vars(int argc, char *argv[])
 
     disk_space *= num_cseg_total;
     if (disk_space < 1024.0)
-	G_verbose_message(_("Will need up to %.2f MB of disk space"), disk_space);
+	G_verbose_message(_("Will need up to %.2f MB of disk space"),
+			  disk_space);
     else
 	G_verbose_message(_("Will need up to %.2f GB (%.0f MB) of disk space"),
-	           disk_space / 1024.0, disk_space);
+			  disk_space / 1024.0, disk_space);
 
     if (er_flag) {
 	cseg_open(&r_h, seg_rows, seg_cols, num_open_segs);
 	cseg_read_cell(&r_h, ele_name, "");
     }
-    
+
+    if (rtn_flag) {
+	bseg_open(&rtn, seg_rows, seg_cols, num_open_segs);
+    }
+
     /* read elevation input and mark NULL/masked cells */
 
     /* scattered access: alt, watalt, bitflags, asp */
-    seg_open(&watalt, nrows, ncols, seg_rows, seg_cols, num_open_segs * 2, sizeof(WAT_ALT));
-    seg_open(&aspflag, nrows, ncols, seg_rows, seg_cols, num_open_segs * 4, sizeof(ASP_FLAG));
+    seg_open(&watalt, nrows, ncols, seg_rows, seg_cols, num_open_segs * 2,
+	     sizeof(WAT_ALT));
+    seg_open(&aspflag, nrows, ncols, seg_rows, seg_cols, num_open_segs * 4,
+	     sizeof(ASP_FLAG));
 
     if (atanb_flag) {
-	seg_open(&atanb, nrows, ncols, seg_rows, seg_cols, num_open_segs, sizeof(A_TANB));
+	seg_open(&atanb, nrows, ncols, seg_rows, seg_cols, num_open_segs,
+		 sizeof(A_TANB));
 	Rast_set_d_null_value(&sca_tanb.sca, 1);
 	Rast_set_d_null_value(&sca_tanb.tanb, 1);
     }
@@ -280,7 +291,7 @@ int init_vars(int argc, char *argv[])
     afbuf = G_malloc(ncols * sizeof(ASP_FLAG));
 
     if (ele_map_type == FCELL_TYPE || ele_map_type == DCELL_TYPE)
-	ele_scale = 1000; 	/* should be enough to do the trick */
+	ele_scale = 1000;	/* should be enough to do the trick */
 
     /* initial flow accumulation */
     if (run_flag) {
@@ -300,7 +311,8 @@ int init_vars(int argc, char *argv[])
     /* read elevation input and mark NULL/masked cells */
     G_message("SECTION 1a: Mark masked and NULL cells");
     MASK_flag = 0;
-    do_points = (GW_LARGE_INT) nrows * ncols;
+    do_points = (GW_LARGE_INT) nrows *ncols;
+
     for (r = 0; r < nrows; r++) {
 	G_percent(r, nrows, 1);
 	Rast_get_row(ele_fd, elebuf, r, ele_map_type);
@@ -310,7 +322,7 @@ int init_vars(int argc, char *argv[])
 	    Rast_get_row(wat_fd, watbuf, r, wat_map_type);
 	    watptr = watbuf;
 	}
-	
+
 	for (c = 0; c < ncols; c++) {
 
 	    afbuf[c].flag = 0;
@@ -328,15 +340,15 @@ int init_vars(int argc, char *argv[])
 	    }
 	    else {
 		if (ele_map_type == CELL_TYPE) {
-		    alt_value = *((CELL *)ptr);
+		    alt_value = *((CELL *) ptr);
 		}
 		else if (ele_map_type == FCELL_TYPE) {
-		    dvalue = *((FCELL *)ptr);
+		    dvalue = *((FCELL *) ptr);
 		    dvalue *= ele_scale;
 		    alt_value = ele_round(dvalue);
 		}
 		else if (ele_map_type == DCELL_TYPE) {
-		    dvalue = *((DCELL *)ptr);
+		    dvalue = *((DCELL *) ptr);
 		    dvalue *= ele_scale;
 		    alt_value = ele_round(dvalue);
 		}
@@ -344,17 +356,17 @@ int init_vars(int argc, char *argv[])
 		/* flow accumulation */
 		if (run_flag) {
 		    if (Rast_is_null_value(watptr, wat_map_type)) {
-			wat_value = 0;    /* ok ? */
+			wat_value = 0;	/* ok ? */
 		    }
 		    else {
 			if (wat_map_type == CELL_TYPE) {
-			    wat_value = *((CELL *)watptr);
+			    wat_value = *((CELL *) watptr);
 			}
 			else if (wat_map_type == FCELL_TYPE) {
-			    wat_value = *((FCELL *)watptr);
+			    wat_value = *((FCELL *) watptr);
 			}
 			else if (wat_map_type == DCELL_TYPE) {
-			    wat_value = *((DCELL *)watptr);
+			    wat_value = *((DCELL *) watptr);
 			}
 		    }
 		}
@@ -373,25 +385,53 @@ int init_vars(int argc, char *argv[])
 		watptr = G_incr_void_ptr(watptr, wat_size);
 	    }
 	}
-	seg_put_row(&watalt, (char *) wabuf, r);
+	seg_put_row(&watalt, (char *)wabuf, r);
 	seg_put_row(&aspflag, (char *)afbuf, r);
-	
+
 	if (er_flag) {
 	    cseg_put_row(&r_h, alt_value_buf, r);
 	}
     }
-    G_percent(nrows, nrows, 1);    /* finish it */
+    G_percent(nrows, nrows, 1);	/* finish it */
     Rast_close(ele_fd);
     G_free(wabuf);
     G_free(afbuf);
-    
+
     if (run_flag) {
 	Rast_close(wat_fd);
 	G_free(watbuf);
     }
 
     MASK_flag = (do_points < nrows * ncols);
-    
+
+    /* read retention map to adjust flow distribution (AG) */
+    if (rtn_flag) {
+	char rtn_value;
+
+	fd = Rast_open_old(rtn_name, "");
+	buf = Rast_allocate_c_buf();
+	for (r = 0; r < nrows; r++) {
+	    G_percent(r, nrows, 1);
+	    Rast_get_c_row(fd, buf, r);
+	    for (c = 0; c < ncols; c++) {
+		block_value = buf[c];
+		if (Rast_is_c_null_value(&block_value))
+		    block_value = 100;
+		else {
+		    if (block_value < 0)
+			block_value = 0;
+		    if (block_value > 100)
+			block_value = 100;
+		}
+		rtn_value = block_value;
+		bseg_put(&rtn, &rtn_value, r, c);
+	    }
+	}
+	G_percent(nrows, nrows, 1);	/* finish it */
+	Rast_close(fd);
+	G_free(buf);
+    }
+
     /* do RUSLE */
     if (er_flag) {
 	if (ob_flag) {
@@ -409,7 +449,7 @@ int init_vars(int argc, char *argv[])
 		    }
 		}
 	    }
-	    G_percent(nrows, nrows, 1);    /* finish it */
+	    G_percent(nrows, nrows, 1);	/* finish it */
 	    Rast_close(fd);
 	    G_free(buf);
 	}
@@ -418,7 +458,7 @@ int init_vars(int argc, char *argv[])
 	    dseg_open(&ril, seg_rows, seg_cols, num_open_segs);
 	    dseg_read_cell(&ril, ril_name, "");
 	}
-	
+
 	/* dseg_open(&slp, SROW, SCOL, num_open_segs); */
 
 	dseg_open(&s_l, seg_rows, seg_cols, num_open_segs);
@@ -440,7 +480,7 @@ int init_vars(int argc, char *argv[])
 	num_open_array_segs = num_cseg_total;
     if (num_open_array_segs < 1)
 	num_open_array_segs = 1;
-    
+
     seg_open(&astar_pts, 1, do_points, 1, seg_cols, num_open_array_segs,
 	     sizeof(POINT));
 
@@ -449,19 +489,20 @@ int init_vars(int argc, char *argv[])
     G_debug(1, "heap memory %.2f MB", heap_mem);
     /* columns per segment */
     /* larger is faster */
-    seg_cols = seg_rows * seg_rows;
+    seg_cols = seg_rows * seg_rows * seg_rows;
     num_cseg_total = do_points / seg_cols;
     if (do_points % seg_cols > 0)
 	num_cseg_total++;
     /* no need to have more segments open than exist */
-    num_open_array_segs = (1 << 20) * heap_mem / (seg_cols * sizeof(HEAP_PNT));
+    num_open_array_segs =
+	(1 << 20) * heap_mem / (seg_cols * sizeof(HEAP_PNT));
     if (num_open_array_segs > num_cseg_total)
 	num_open_array_segs = num_cseg_total;
     if (num_open_array_segs < 2)
 	num_open_array_segs = 2;
 
     G_debug(1, "A* search heap open segments %d, total %d",
-            num_open_array_segs, num_cseg_total);
+	    num_open_array_segs, num_cseg_total);
     /* the search heap will not hold more than 5% of all points at any given time ? */
     /* chances are good that the heap will fit into one large segment */
     seg_open(&search_heap, 1, do_points + 1, 1, seg_cols,
@@ -490,8 +531,7 @@ int init_vars(int argc, char *argv[])
 		if (er_flag)
 		    dseg_put(&s_l, &half_res, r, c);
 		asp_value = af.asp;
-		if (r == 0 || c == 0 || r == nrows - 1 ||
-		    c == ncols - 1) {
+		if (r == 0 || c == 0 || r == nrows - 1 || c == ncols - 1) {
 		    /* dseg_get(&wat, &wat_value, r, c); */
 		    seg_get(&watalt, (char *)&wa, r, c);
 		    wat_value = wa.wat;
@@ -558,8 +598,8 @@ int init_vars(int argc, char *argv[])
 		    }
 		}
 
-	    }  /* end non-NULL cell */
-	}  /* end column */
+	    }			/* end non-NULL cell */
+	}			/* end column */
     }
     G_percent(r, nrows, 1);	/* finish it */
 

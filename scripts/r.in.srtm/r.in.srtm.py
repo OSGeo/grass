@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 ############################################################################
 #
@@ -6,6 +6,7 @@
 # AUTHOR(S): Markus Neteler 11/2003 neteler AT itc it
 #            Hamish Bowman
 #            Glynn Clements
+#            Luca Delucchi
 # PURPOSE:   import of SRTM hgt files into GRASS
 #
 # COPYRIGHT:	(C) 2004, 2006 by the GRASS Development Team
@@ -22,6 +23,9 @@
 # April 2006: links updated from ftp://e0dps01u.ecs.nasa.gov/srtm/
 #             to current links below
 # October 2008: Converted to Python by Glynn Clements
+# March 2018: Added capabilities to import SRTM SWBD
+#             Removed unzip dependencies, now it use Python zipfile library
+#             by Luca Delucchi
 #########################
 # Derived from:
 # ftp://e0srp01u.ecs.nasa.gov/srtm/version1/Documentation/Notes_for_ARCInfo_users.txt
@@ -52,6 +56,7 @@
 #% description: Imports SRTM HGT files into raster map.
 #% keyword: raster
 #% keyword: import
+#% keyword: SRTM
 #%End
 #%option G_OPT_F_INPUT
 #% description: Name of SRTM input tile (file without .hgt.zip extension)
@@ -71,6 +76,23 @@ NROWS 3601
 NCOLS 3601
 NBANDS 1
 NBITS 16
+BANDROWBYTES 7202
+TOTALROWBYTES 7202
+BANDGAPBYTES 0
+PIXELTYPE SIGNEDINT
+NODATA -32768
+ULXMAP %s
+ULYMAP %s
+XDIM 0.000277777777777778
+YDIM 0.000277777777777778
+"""
+
+swbd1sec = """BYTEORDER M
+LAYOUT BIL
+NROWS 3601
+NCOLS 3601
+NBANDS 1
+NBITS 8
 BANDROWBYTES 7202
 TOTALROWBYTES 7202
 BANDGAPBYTES 0
@@ -112,10 +134,7 @@ import shutil
 import atexit
 import grass.script as grass
 from grass.exceptions import CalledModuleError
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+import zipfile as zfile
 
 
 def cleanup():
@@ -131,6 +150,9 @@ def main():
     global tile, tmpdir, in_temp
 
     in_temp = False
+    
+    # to support SRTM water body
+    swbd = False
 
     input = options['input']
     output = options['output']
@@ -144,7 +166,7 @@ def main():
 
     # use these from now on:
     infile = input
-    while infile[-4:].lower() in ['.hgt', '.zip']:
+    while infile[-4:].lower() in ['.hgt', '.zip', '.raw']:
         infile = infile[:-4]
     (fdir, tile) = os.path.split(infile)
 
@@ -153,18 +175,18 @@ def main():
     else:
         tileout = output
 
-    zipfile = infile + ".hgt.zip"
-    hgtfile = os.path.join(fdir, tile[:7] + ".hgt")
-    if os.path.isfile(zipfile):
-        # check if we have unzip
-        if not grass.find_program('unzip'):
-            grass.fatal(_('The "unzip" program is required, please install it first'))
+    if '.hgt' in input:
+        suff = '.hgt'
+    else:
+        suff = '.raw'
+        swbd = True
 
+    zipfile = "{im}{su}.zip".format(im=infile, su=suff)
+    hgtfile = "{im}{su}".format(im=infile, su=suff)
+
+    if os.path.isfile(zipfile):
         # really a ZIP file?
-        # make it quiet in a safe way (just in case -qq isn't portable)
-        tenv = os.environ.copy()
-        tenv['UNZIP'] = '-qq'
-        if grass.call(['unzip', '-t', zipfile], env=tenv) != 0:
+        if not zfile.is_zipfile(zipfile):
             grass.fatal(_("'%s' does not appear to be a valid zip file.") % zipfile)
 
         is_zip = True
@@ -178,24 +200,31 @@ def main():
     tmpdir = grass.tempfile()
     grass.try_remove(tmpdir)
     os.mkdir(tmpdir)
-
     if is_zip:
-        shutil.copyfile(zipfile, os.path.join(tmpdir, tile + ".hgt.zip"))
+        shutil.copyfile(zipfile, os.path.join(tmpdir,
+                                              "{im}{su}.zip".format(im=tile,
+                                                                    su=suff)))
     else:
-        shutil.copyfile(hgtfile, os.path.join(tmpdir, tile + ".hgt"))
-
+        shutil.copyfile(hgtfile, os.path.join(tmpdir,
+                                              "{im}{su}".format(im=tile[:7],
+                                                                su=suff)))
     # change to temporary directory
     os.chdir(tmpdir)
     in_temp = True
 
-    zipfile = tile + ".hgt.zip"
-    hgtfile = tile[:7] + ".hgt"
+
+    zipfile = "{im}{su}.zip".format(im=tile, su=suff)
+    hgtfile = "{im}{su}".format(im=tile[:7], su=suff)
+
     bilfile = tile + ".bil"
 
     if is_zip:
         # unzip & rename data file:
         grass.message(_("Extracting '%s'...") % infile)
-        if grass.call(['unzip', zipfile], env=tenv) != 0:
+        try:
+            zf=zfile.ZipFile(zipfile)
+            zf.extractall()
+        except:
             grass.fatal(_("Unable to unzip file."))
 
     grass.message(_("Converting input file to BIL..."))
@@ -221,19 +250,22 @@ def main():
 
     if not one:
         tmpl = tmpl3sec
+    elif swbd:
+        grass.message(_("Attempting to import 1-arcsec SWBD data"))
+        tmpl = swbd1sec
     else:
-        grass.message(_("Attempting to import 1-arcsec data."))
+        grass.message(_("Attempting to import 1-arcsec data"))
         tmpl = tmpl1sec
 
     header = tmpl % (ulxmap, ulymap)
     hdrfile = tile + '.hdr'
-    outf = file(hdrfile, 'w')
+    outf = open(hdrfile, 'w')
     outf.write(header)
     outf.close()
 
     # create prj file: To be precise, we would need EGS96! But who really cares...
     prjfile = tile + '.prj'
-    outf = file(prjfile, 'w')
+    outf = open(prjfile, 'w')
     outf.write(proj)
     outf.close()
 
@@ -243,7 +275,8 @@ def main():
         grass.fatal(_("Unable to import data"))
 
     # nice color table
-    grass.run_command('r.colors', map=tileout, color='srtm')
+    if not swbd:
+        grass.run_command('r.colors', map=tileout, color='srtm')
 
     # write cmd history:
     grass.raster_history(tileout)

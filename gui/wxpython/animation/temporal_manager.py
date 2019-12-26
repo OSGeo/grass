@@ -17,13 +17,14 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
+from __future__ import print_function
+
 import os
 import datetime
 
 import grass.script as grass
 import grass.temporal as tgis
 from core.gcmd import GException
-from core.utils import _
 from core.settings import UserSettings
 from animation.utils import validateTimeseriesName, TemporalType
 
@@ -373,14 +374,14 @@ def test():
 
     try:
         warn = temp.EvaluateInputData()
-        print warn
+        print(warn)
     except GException as e:
-        print e
+        print(e)
         return
 
-    print '///////////////////////////'
+    print('///////////////////////////')
     gran = temp.GetGranularity()
-    print "granularity: " + str(gran)
+    print("granularity: " + str(gran))
     pprint(temp.GetLabelsAndMaps())
 
 

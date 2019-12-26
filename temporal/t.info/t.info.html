@@ -137,6 +137,31 @@ t.info input=2009_01_tempmean type=raster
  +----------------------------------------------------------------------------+
 </pre></div>
 
+<h3>Space time dataset with band references assigned</h3>
+
+This information is printed only when band references have been assigned
+to registered raster maps by <em><a href="i.band.html">i.band</a></em>
+or <em><a href="t.register.html#support-for-band-references">t.register</a></em> module.
+
+<div class="code"><pre>
+t.info input=test
+...
++-------------------- Metadata information ----------------------------------+
+...
+ | Number of registered bands:. 13
+...
+</pre></div>
+
+Similarly for temporal maps information:
+
+<div class="code"><pre>
+t.info input=T33UYP_20190331T094039_B01 type=raster
+...
+ +-------------------- Metadata information ----------------------------------+
+ | Band reference:............. S2_1
+...
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -152,5 +177,8 @@ t.info input=2009_01_tempmean type=raster
 
 S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
 
-<p><i>Last changed: $Date$</i>
+<!--
+<p>
+<i>Last changed: $Date$</i>
+-->
 

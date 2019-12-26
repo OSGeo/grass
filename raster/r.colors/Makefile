@@ -13,7 +13,9 @@ include $(MODULE_TOPDIR)/include/Make/Multi.make
 default: multi thumbnails
 
 thumbnails: $(BIN)/r.mapcalc$(EXE) $(BIN)/r.colors$(EXE) $(HTMLDIR)/colortables
+ifndef CROSS_COMPILING
 	-$(call run_grass, $(GRASS_HOME)/tools/thumbnails.py)
+endif
 
 $(HTMLDIR)/colortables: $(HTMLDIR)
 	$(MKDIR) $@

@@ -23,6 +23,10 @@ import wx
 if __name__ == "__main__":
     sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
+# i18n is taken care of in the grass library code.
+# So we need to import it before any of the GUI code.
+from grass.script import core as gcore
+
 from gui_core.mapdisp import SingleMapFrame
 from mapwin.buffered import BufferedMapWindow
 from mapwin.base import MapWindowProperties
@@ -30,9 +34,6 @@ from mapdisp import statusbar as sb
 from core.render import Map
 from core.debug import Debug
 from core.gcmd import RunCommand, GError
-from core.utils import _
-
-from grass.script import core as gcore
 
 from toolbars import ExampleMapToolbar, ExampleMiscToolbar, ExampleMainToolbar
 from dialogs import ExampleMapDialog

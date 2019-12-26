@@ -8,8 +8,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-# i18N
-import gettext
 import getpass
 from datetime import datetime
 from .core import get_current_mapset
@@ -119,7 +117,7 @@ class RasterDataset(AbstractMapDataset):
             >>> rmap.get_temporal_extent_as_tuple()
             (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
             >>> rmap.get_name()
-            u'strds_map_test_case'
+            'strds_map_test_case'
             >>> rmap.get_mapset() == mapset
             True
             >>> rmap.get_temporal_type()
@@ -305,6 +303,45 @@ class RasterDataset(AbstractMapDataset):
 
         return True
 
+    def read_band_reference_from_grass(self):
+        """Read the band identifier of this map from the map metadata
+           in the GRASS file system based spatial database and
+           set the internal band identifier that should be insert/updated
+           in the temporal database.
+
+           :return: True if success, False on error
+        """
+
+        check, band_ref = self.ciface.read_raster_band_reference(self.get_name(),
+                                                                 self.get_mapset())
+
+        if check < 1:
+            self.msgr.error(_("Unable to read band reference file "
+                              "for raster map <%s>" % (self.get_map_id())))
+            return False
+
+        self.metadata.set_band_reference(band_ref)
+
+        return True
+
+    def write_band_reference_to_grass(self):
+        """Write the band identifier of this map into the map metadata in
+           the GRASS file system based spatial database.
+
+           Internally the libgis API functions are used for writing
+
+           :return: True if success, False on error
+        """
+        check = self.ciface.write_raster_band_reference(self.get_name(),
+                                                        self.get_mapset(),
+                                                        self.metadata.get_band_reference())
+        if check == -1:
+            self.msgr.error(_("Unable to write band identifier for raster map <%s>"
+                            % (self.get_name())))
+            return False
+
+        return True
+
     def map_exists(self):
         """Return True in case the map exists in the grass spatial database
 
@@ -356,9 +393,28 @@ class RasterDataset(AbstractMapDataset):
             self.metadata.set_rows(rows)
             self.metadata.set_number_of_cells(ncells)
 
+            # Fill band reference if defined
+            check, band_ref = self.ciface.read_raster_band_reference(self.get_name(),
+                                                                     self.get_mapset())
+            if check > 0:
+                self.metadata.set_band_reference(band_ref)
+
             return True
 
         return False
+
+    def set_band_reference(self, band_reference):
+        """Set band reference identifier
+
+        Metadata is updated in order to propagate band identifier into
+        temporal DB.
+
+        File-based band identifier stored in GRASS data base.
+
+        :param str band_reference: band reference identifier (eg. S2_1)
+        """
+        self.metadata.set_band_reference(band_reference)
+        self.write_band_reference_to_grass()
 
 ###############################################################################
 
@@ -452,7 +508,7 @@ class Raster3DDataset(AbstractMapDataset):
             >>> r3map.get_temporal_extent_as_tuple()
             (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
             >>> r3map.get_name()
-            u'str3ds_map_test_case'
+            'str3ds_map_test_case'
             >>> r3map.get_mapset() == mapset
             True
             >>> r3map.get_temporal_type()
@@ -797,7 +853,7 @@ class VectorDataset(AbstractMapDataset):
             >>> vmap.get_temporal_extent_as_tuple()
             (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
             >>> vmap.get_name()
-            u'stvds_map_test_case'
+            'stvds_map_test_case'
             >>> vmap.get_mapset() == mapset
             True
             >>> vmap.get_temporal_type()
@@ -1049,6 +1105,13 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
     """
     def __init__(self, ident):
         AbstractSpaceTimeDataset.__init__(self, ident)
+
+    def set_band_reference(self, band_reference):
+        """Set band reference identifier
+
+        :param str band_reference: band reference identifier (eg. S2_1)
+        """
+        self.band_reference = band_reference
 
     def is_stds(self):
         """Return True if this class is a space time dataset

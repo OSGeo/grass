@@ -22,7 +22,6 @@ import wx
 from icons.icon import MetaIcon
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from core.gcmd import RunCommand
-from core.utils import _
 
 
 class PointListToolbar(BaseToolbar):

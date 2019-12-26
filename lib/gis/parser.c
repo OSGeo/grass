@@ -94,7 +94,6 @@ enum opt_error {
     REPLACED      = 5
 };
 
-#define KEYLENGTH 64
 
 #define MAX_MATCHES 50
 
@@ -120,7 +119,6 @@ static void split_opts(void);
 static void check_multiple_opts(void);
 static int check_overwrite(void);
 static void define_keywords(void);
-static void split_gisprompt(const char *, char *, char *, char *);
 static int module_gui_wx(void);
 static void append_error(const char *);
 static const char *get_renamed_option(const char *);
@@ -326,6 +324,7 @@ int G_parser(int argc, char **argv)
     int i;
     struct Option *opt;
     char force_gui = FALSE;
+    int print_json = 0;
 
     err = NULL;
     need_first_opt = 1;
@@ -344,6 +343,9 @@ int G_parser(int argc, char **argv)
     G_basename(tmp_name, "exe");
     st->pgm_name = tmp_name;
 
+    if (!st->module_info.label && !st->module_info.description)
+        G_warning(_("Bug in UI description. Missing module description"));
+
     /* Stash default answers */
 
     opt = &st->first_option;
@@ -351,8 +353,12 @@ int G_parser(int argc, char **argv)
 	if (opt->required)
 	    st->has_required = 1;
 
+        if (!opt->key)
+            G_warning(_("Bug in UI description. Missing option key"));
 	if (!valid_option_name(opt->key))
-	    G_warning(_("BUG in option name, '%s' is not valid"), opt->key);
+	    G_warning(_("Bug in UI description. Option key <%s> is not valid"), opt->key);
+        if (!opt->label && !opt->description)
+            G_warning(_("Bug in UI description. Description for option <%s> missing"), opt->key ? opt->key : "?");
 
 	/* Parse options */
 	if (opt->options) {
@@ -404,7 +410,7 @@ int G_parser(int argc, char **argv)
 			j++;
 		    }
 		    if (!found) {
-			G_warning(_("BUG in descriptions, option '%s' in <%s> does not exist"),
+			G_warning(_("Bug in UI description. Option '%s' in <%s> does not exist"),
 				  tokens[i], opt->key);
 		    }
 		    else {
@@ -506,6 +512,12 @@ int G_parser(int argc, char **argv)
 		strcmp(ptr, "-help") == 0 || strcmp(ptr, "--help") == 0) {
 		G_usage();
 		exit(EXIT_SUCCESS);
+	    }
+
+	    /* JSON print option */
+	    if (strcmp(ptr, "--json") == 0) {
+		print_json = 1;
+		continue;
 	    }
 
 	    /* Overwrite option */
@@ -622,6 +634,12 @@ int G_parser(int argc, char **argv)
             }
         }
 	return -1;
+    }
+
+    /* Print the JSON definition of the command and exit */
+    if(print_json == 1) {
+        G__json();
+        exit(EXIT_SUCCESS);
     }
 
     if (!st->suppress_overwrite) {
@@ -867,7 +885,7 @@ int G__uses_new_gisprompt(void)
 	opt = &st->first_option;
 	while (opt) {
 	    if (opt->gisprompt) {
-		split_gisprompt(opt->gisprompt, age, element, desc);
+		G__split_gisprompt(opt->gisprompt, age, element, desc);
 		if (strcmp(age, "new") == 0)
 		    return 1;
 	    }
@@ -1561,7 +1579,7 @@ int check_overwrite(void)
     opt = &st->first_option;
     while (opt) {
 	if (opt->answer && opt->gisprompt) {
-	    split_gisprompt(opt->gisprompt, age, element, desc);
+	    G__split_gisprompt(opt->gisprompt, age, element, desc);
 
 	    if (strcmp(age, "new") == 0) {
 		int i;
@@ -1613,7 +1631,7 @@ int check_overwrite(void)
     return (error);
 }
 
-void split_gisprompt(const char *gisprompt, char *age, char *element,
+void G__split_gisprompt(const char *gisprompt, char *age, char *element,
 			    char *desc)
 {
     const char *ptr1;

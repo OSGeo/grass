@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
 	*ingeo,			/* Input geo-referenced file readable by 
 				 * GDAL or OGR                              */
 #endif
+	*listcodes,		/* list codes of given authority */
 	*datum,			/* datum to add (or replace existing datum) */
 	*dtrans;		/* index to datum transform option          */
     struct GModule *module;
@@ -159,6 +160,14 @@ int main(int argc, char *argv[])
     inepsg->description = _("EPSG projection code");
 #endif
 
+    listcodes = G_define_option();
+    listcodes->key = "list_codes";
+    listcodes->type = TYPE_STRING;
+    listcodes->required = NO;
+    listcodes->options = get_authority_names();
+    listcodes->guisection = _("Print");
+    listcodes->description = _("List codes for given authority, e.g. EPSG, and exit");
+
     datum = G_define_option();
     datum->key = "datum";
     datum->type = TYPE_STRING;
@@ -207,6 +216,12 @@ int main(int argc, char *argv[])
 
     /* Initialisation & Validation */
 
+    /* list codes for given authority */
+    if (listcodes->answer) {
+	list_codes(listcodes->answer);
+	exit(EXIT_SUCCESS);
+    }
+
 #ifdef HAVE_OGR
     /* -e implies -w */
     if (esristyle->answer && !printwkt->answer)
@@ -233,6 +248,7 @@ int main(int argc, char *argv[])
     }
 
     epsg = inepsg->answer;
+    projinfo = projunits = projepsg = NULL;
 
     /* Input */
     /* We can only have one input source, hence if..else construct */
@@ -292,7 +308,7 @@ int main(int argc, char *argv[])
 		      create->key);
 
     if (printinfo->answer || shellinfo->answer)
-        print_projinfo(shellinfo->answer, epsg);
+        print_projinfo(shellinfo->answer);
     else if (datuminfo->answer)
 	print_datuminfo();
     else if (printproj4->answer)
@@ -302,7 +318,7 @@ int main(int argc, char *argv[])
 	print_wkt(esristyle->answer, dontprettify->answer);
 #endif
     else if (location->answer)
-	create_location(location->answer, epsg);
+	create_location(location->answer);
     else if (create->answer)
 	modify_projinfo();
     else
@@ -316,21 +332,13 @@ int main(int argc, char *argv[])
 		      printinfo->key, shellinfo->key, printproj4->key);
 #endif
 
-#ifdef HAVE_OGR
-    if (create->answer && epsg) {
-#else
-    if (create->answer){ 
-#endif
-	/* preserve epsg code for user records only (not used by grass's pj routines) */
-        create_epsg(location->answer, epsg);
-    }
-
-
     /* Tidy Up */
     if (projinfo != NULL)
 	G_free_key_value(projinfo);
     if (projunits != NULL)
 	G_free_key_value(projunits);
+    if (projepsg != NULL)
+	G_free_key_value(projepsg);
 
     exit(EXIT_SUCCESS);
 

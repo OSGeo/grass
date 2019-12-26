@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ############################################################################
 #
@@ -63,8 +63,8 @@
 #% key: snap
 #% type: double
 #% label: Snapping threshold for boundaries (map units)
-#% description: '-1' for no snap
-#% answer: 1e-13
+#% description: A suitable threshold is estimated during import
+#% answer: -1
 #% guisection: Output
 #%end
 #%option
@@ -104,17 +104,16 @@ import atexit
 import grass.script as grass
 from grass.exceptions import CalledModuleError
 
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
-
 # initialize global vars
 TMPLOC = None
 SRCGISRC = None
+TGTGISRC = None
 GISDBASE = None
 
 
 def cleanup():
+    if TGTGISRC:
+        os.environ['GISRC'] = str(TGTGISRC)
     # remove temp location
     if TMPLOC:
         grass.try_rmdir(os.path.join(GISDBASE, TMPLOC))
@@ -123,7 +122,7 @@ def cleanup():
 
 
 def main():
-    global TMPLOC, SRCGISRC, GISDBASE
+    global TMPLOC, SRCGISRC, TGTGISRC, GISDBASE
     overwrite = grass.overwrite()
 
     # list formats and exit
@@ -161,26 +160,6 @@ def main():
         return grass.run_command('g.proj', epsg=options['epsg'],
                                  datum_trans=options['datum_trans'])
 
-    grassenv = grass.gisenv()
-    tgtloc = grassenv['LOCATION_NAME']
-    tgtmapset = grassenv['MAPSET']
-    GISDBASE = grassenv['GISDBASE']
-    tgtgisrc = os.environ['GISRC']
-    SRCGISRC = grass.tempfile()
-
-    TMPLOC = 'temp_import_location_' + str(os.getpid())
-
-    f = open(SRCGISRC, 'w')
-    f.write('MAPSET: PERMANENT\n')
-    f.write('GISDBASE: %s\n' % GISDBASE)
-    f.write('LOCATION_NAME: %s\n' % TMPLOC)
-    f.write('GUI: text\n')
-    f.close()
-
-    tgtsrs = grass.read_command('g.proj', flags='j', quiet=True)
-
-    # create temp location from input without import
-    grass.verbose(_("Creating temporary location for <%s>...") % OGRdatasource)
     if layers:
         vopts['layer'] = layers
     if output:
@@ -201,6 +180,33 @@ def main():
         except CalledModuleError:
             grass.fatal(_("Unable to import <%s>") % OGRdatasource)
 
+    grassenv = grass.gisenv()
+    tgtloc = grassenv['LOCATION_NAME']
+
+    # make sure target is not xy
+    if grass.parse_command('g.proj', flags='g')['name'] == 'xy_location_unprojected':
+        grass.fatal(
+            _("Coordinate reference system not available for current location <%s>") %
+            tgtloc)
+
+    tgtmapset = grassenv['MAPSET']
+    GISDBASE = grassenv['GISDBASE']
+    TGTGISRC = os.environ['GISRC']
+    SRCGISRC = grass.tempfile()
+
+    TMPLOC = 'temp_import_location_' + str(os.getpid())
+
+    f = open(SRCGISRC, 'w')
+    f.write('MAPSET: PERMANENT\n')
+    f.write('GISDBASE: %s\n' % GISDBASE)
+    f.write('LOCATION_NAME: %s\n' % TMPLOC)
+    f.write('GUI: text\n')
+    f.close()
+
+    tgtsrs = grass.read_command('g.proj', flags='j', quiet=True)
+
+    # create temp location from input without import
+    grass.verbose(_("Creating temporary location for <%s>...") % OGRdatasource)
     try:
         grass.run_command('v.in.ogr', input=OGRdatasource,
                           location=TMPLOC, flags='i', quiet=True, overwrite=overwrite, **vopts)
@@ -216,18 +222,6 @@ def main():
             kwargs['datum_trans'] = options['datum_trans']
         grass.run_command('g.proj', flags='c', epsg=options['epsg'], **kwargs)
 
-    # switch to target location
-    os.environ['GISRC'] = str(tgtgisrc)
-
-    # make sure target is not xy
-    if grass.parse_command('g.proj', flags='g')['name'] == 'xy_location_unprojected':
-        grass.fatal(
-            _("Coordinate reference system not available for current location <%s>") %
-            tgtloc)
-
-    # switch to temp location
-    os.environ['GISRC'] = str(SRCGISRC)
-
     # print projection at verbose level
     grass.verbose(grass.read_command('g.proj', flags='p').rstrip(os.linesep))
 
@@ -237,7 +231,7 @@ def main():
 
     if options['extent'] == 'region':
         # switch to target location
-        os.environ['GISRC'] = str(tgtgisrc)
+        os.environ['GISRC'] = str(TGTGISRC)
 
         # v.in.region in tgt
         vreg = 'vreg_' + str(os.getpid())
@@ -269,7 +263,7 @@ def main():
         output = grass.list_grouped('vector')['PERMANENT'][0]
 
     # switch to target location
-    os.environ['GISRC'] = str(tgtgisrc)
+    os.environ['GISRC'] = str(TGTGISRC)
 
     # check if map exists
     if not grass.overwrite() and \

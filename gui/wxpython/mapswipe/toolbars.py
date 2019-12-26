@@ -19,8 +19,8 @@ This program is free software under the GNU General Public License
 import wx
 
 from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.wrap import Menu
 from icons.icon import MetaIcon
-from core.utils import _
 
 
 swipeIcons = {
@@ -111,8 +111,7 @@ class SwipeMainToolbar(BaseToolbar):
         self.InitToolbar(self._toolbarData())
 
         # add tool to toggle active map window
-        self.toggleModeId = wx.NewId()
-        self.toggleMode = wx.Choice(parent=self, id=self.toggleModeId)
+        self.toggleMode = wx.Choice(parent=self)
         for label, cdata in zip(
                 [_('Swipe mode'),
                  _('Mirror mode')],
@@ -128,7 +127,7 @@ class SwipeMainToolbar(BaseToolbar):
         self.InsertControl(3, self.toggleMode)
 
         help = _("Choose view mode")
-        self.SetToolShortHelp(self.toggleModeId, help)
+        self.SetToolShortHelp(self.toggleMode.GetId(), help)
         # realize the toolbar
         self.Realize()
 
@@ -148,7 +147,7 @@ class SwipeMainToolbar(BaseToolbar):
 
     def OnToolMenu(self, event):
         """Menu for additional tools"""
-        toolMenu = wx.Menu()
+        toolMenu = Menu()
 
         for label, itype, handler, desc in (
             (_("Switch orientation"),

@@ -2,7 +2,8 @@
 #define BIGNEG	-9999999
 
 int
-overland_cells_recursive(int row, int col, CELL basin_num, CELL haf_num, CELL * hih_ele)
+overland_cells_recursive(int row, int col, CELL basin_num, CELL haf_num,
+			 CELL * hih_ele)
 {
     int r, rr, c, cc;
     CELL new_ele, new_max_ele;
@@ -26,15 +27,15 @@ overland_cells_recursive(int row, int col, CELL basin_num, CELL haf_num, CELL * 
 	}
     }
     /*
-    if (arm_flag) {
-	if (new_max_ele == BIGNEG) {
-	    cseg_get(&alt, hih_ele, row, col);
-	}
-	else {
-	    *hih_ele = new_max_ele;
-	}
-    }
-    */
+       if (arm_flag) {
+       if (new_max_ele == BIGNEG) {
+       cseg_get(&alt, hih_ele, row, col);
+       }
+       else {
+       *hih_ele = new_max_ele;
+       }
+       }
+     */
 
     return 0;
 }
@@ -72,7 +73,10 @@ overland_cells(int row, int col, CELL basin_num, CELL haf_num, CELL * hih_ele)
 		    if (aspect == drain[rr][cc]) {
 			if (top >= ocs_alloced) {
 			    ocs_alloced += bas_thres;
-			    ocs = (OC_STACK *)G_realloc(ocs, ocs_alloced * sizeof(OC_STACK));
+			    ocs =
+				(OC_STACK *) G_realloc(ocs,
+						       ocs_alloced *
+						       sizeof(OC_STACK));
 			}
 			ocs[top].row = r;
 			ocs[top].col = c;
@@ -83,19 +87,19 @@ overland_cells(int row, int col, CELL basin_num, CELL haf_num, CELL * hih_ele)
 		}
 	    }
 	}
-	
+
     }
 
     /*
-    if (arm_flag) {
-	if (new_max_ele == BIGNEG) {
-	    cseg_get(&alt, hih_ele, row, col);
-	}
-	else {
-	    *hih_ele = new_max_ele;
-	}
-    }
-    */
+       if (arm_flag) {
+       if (new_max_ele == BIGNEG) {
+       cseg_get(&alt, hih_ele, row, col);
+       }
+       else {
+       *hih_ele = new_max_ele;
+       }
+       }
+     */
 
     return 0;
 }

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 ############################################################################
 #
@@ -20,6 +20,8 @@
 #% description: Creates a MASK for limiting raster operation.
 #% keyword: raster
 #% keyword: mask
+#% keyword: null data
+#% keyword: no-data
 #% overwrite: yes
 #%end
 #%option G_OPT_R_INPUT
@@ -71,11 +73,8 @@ import sys
 import atexit
 
 import grass.script as grass
+from grass.script.utils import encode
 from grass.exceptions import CalledModuleError
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 
 def cleanup():
@@ -141,7 +140,8 @@ def main():
                 output='MASK',
                 overwrite=True,
                 rules='-')
-            p.stdin.write("%s = 1" % maskcats)
+            res = "%s = 1" % maskcats
+            p.stdin.write(encode(res))
             p.stdin.close()
             p.wait()
         elif vector:

@@ -20,7 +20,7 @@ int init_vars(int argc, char *argv[])
 
     G_gisinit(argv[0]);
     /* input */
-    ele_flag = pit_flag = run_flag = ril_flag = 0;
+    ele_flag = pit_flag = run_flag = ril_flag = rtn_flag = 0;
     /* output */
     wat_flag = asp_flag = tci_flag = spi_flag = atanb_flag = 0;
     bas_flag = seg_flag = haf_flag = 0;
@@ -67,11 +67,13 @@ int init_vars(int argc, char *argv[])
 	    haf_flag++;
 	else if (sscanf(argv[r], "flow=%s", run_name) == 1)
 	    run_flag++;
+	else if (sscanf(argv[r], "retention=%s", rtn_name) == 1)
+	    rtn_flag++;
 	else if (sscanf(argv[r], "ar=%s", arm_name) == 1)
 	    arm_flag++;
 	/* slope length
-	else if (sscanf(argv[r], "sl=%[^\n]", sl_name) == 1)
-	    sl_flag++; */
+	   else if (sscanf(argv[r], "sl=%[^\n]", sl_name) == 1)
+	   sl_flag++; */
 	else if (sscanf(argv[r], "length_slope=%s", ls_name) == 1)
 	    ls_flag++;
 	else if (sscanf(argv[r], "slope_steepness=%s", sg_name) == 1)
@@ -85,7 +87,7 @@ int init_vars(int argc, char *argv[])
 	    }
 	}
 	/* slope deposition
-	else if (sscanf (argv[r], "sd=%[^\n]", dep_name) == 1) dep_flag++; */
+	   else if (sscanf (argv[r], "sd=%[^\n]", dep_name) == 1) dep_flag++; */
 	else if (sscanf(argv[r], "-%d", &sides) == 1) {
 	    if (sides != 4)
 		usage(argv[0]);
@@ -150,14 +152,14 @@ int init_vars(int argc, char *argv[])
     wat =
 	(DCELL *) G_malloc(sizeof(DCELL) *
 			   size_array(&wat_seg, nrows, ncols));
-    
+
     sca = tanb = NULL;
     atanb_flag = 0;
     if (tci_flag || spi_flag) {
 	sca = (DCELL *) G_malloc(sizeof(DCELL) *
-			         size_array(&wat_seg, nrows, ncols));
+				 size_array(&wat_seg, nrows, ncols));
 	tanb = (DCELL *) G_malloc(sizeof(DCELL) *
-			         size_array(&wat_seg, nrows, ncols));
+				  size_array(&wat_seg, nrows, ncols));
 	atanb_flag = 1;
     }
 
@@ -166,7 +168,8 @@ int init_vars(int argc, char *argv[])
 
     if (er_flag) {
 	r_h =
-	    (CELL *) G_malloc(sizeof(CELL) * size_array(&r_h_seg, nrows, ncols));
+	    (CELL *) G_malloc(sizeof(CELL) *
+			      size_array(&r_h_seg, nrows, ncols));
     }
 
     swale = flag_create(nrows, ncols);
@@ -181,7 +184,7 @@ int init_vars(int argc, char *argv[])
     elebuf = Rast_allocate_buf(ele_map_type);
 
     if (ele_map_type == FCELL_TYPE || ele_map_type == DCELL_TYPE)
-	ele_scale = 1000; 	/* should be enough to do the trick */
+	ele_scale = 1000;	/* should be enough to do the trick */
     if (flat_flag)
 	ele_scale = 10000;
 
@@ -210,16 +213,16 @@ int init_vars(int argc, char *argv[])
 	    }
 	    else {
 		if (ele_map_type == CELL_TYPE) {
-		    alt_value = *((CELL *)ptr);
+		    alt_value = *((CELL *) ptr);
 		    alt_value *= ele_scale;
 		}
 		else if (ele_map_type == FCELL_TYPE) {
-		    dvalue = *((FCELL *)ptr);
+		    dvalue = *((FCELL *) ptr);
 		    dvalue *= ele_scale;
 		    alt_value = ele_round(dvalue);
 		}
 		else if (ele_map_type == DCELL_TYPE) {
-		    dvalue = *((DCELL *)ptr);
+		    dvalue = *((DCELL *) ptr);
 		    dvalue *= ele_scale;
 		    alt_value = ele_round(dvalue);
 		}
@@ -265,6 +268,42 @@ int init_vars(int argc, char *argv[])
 	G_free(dbuf);
     }
 
+    /* read retention map to adjust flow distribution (AG) */
+    rtn = NULL;
+    if (rtn_flag) {
+	rtn = (char *) G_malloc(sizeof(char) *
+                           size_array(&rtn_seg, nrows, ncols));
+        buf = Rast_allocate_c_buf();
+        fd = Rast_open_old(rtn_name, "");
+        for (r = 0; r < nrows; r++) {
+            Rast_get_c_row(fd, buf, r);
+            for (c = 0; c < ncols; c++) {
+                if (MASK_flag) {
+                    block_value = FLAG_GET(worked, r, c);
+                    if (!block_value) {
+                        block_value = buf[c];
+                    }
+		    else
+			block_value = 100;
+                }
+                else
+                    block_value = buf[c];
+
+                if (!Rast_is_c_null_value(&block_value)) {
+		    if (block_value < 0)
+			block_value = 0;
+		    if (block_value > 100)
+			block_value = 100;
+                    rtn[SEG_INDEX(rtn_seg, r, c)] = block_value;
+		}
+                else
+                    rtn[SEG_INDEX(rtn_seg, r, c)] = 100;
+            }
+        }
+        Rast_close(fd);
+        G_free(buf);
+    }
+
     /* overland blocking map; this is also creating streams... */
     if (ob_flag) {
 	buf = Rast_allocate_c_buf();
@@ -302,7 +341,7 @@ int init_vars(int argc, char *argv[])
 			       sizeof(double));
     }
 
-    astar_pts = (int *) G_malloc((do_points + 1) * sizeof(int));
+    astar_pts = (int *)G_malloc((do_points + 1) * sizeof(int));
 
     /* heap_index will track astar_pts in ternary min-heap */
     /* heap_index is one-based */
@@ -330,8 +369,7 @@ int init_vars(int argc, char *argv[])
 		asp_value = asp[seg_idx];
 		if (er_flag)
 		    s_l[seg_idx] = half_res;
-		if (r == 0 || c == 0 || r == nrows - 1 ||
-		    c == ncols - 1) {
+		if (r == 0 || c == 0 || r == nrows - 1 || c == ncols - 1) {
 		    wat_value = wat[seg_idx];
 		    if (wat_value > 0)
 			wat[seg_idx] = -wat_value;

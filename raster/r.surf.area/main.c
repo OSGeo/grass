@@ -44,8 +44,8 @@
 
 /* Modified by Eric G. Miller to work with FP rasters and to handle
  * NULL value cells.  I'm not too sure how bad the surface area
- * calculation will get if there are alot of NULL cells mixed around.
- * Added function prototypes and removed a couple unneccessary typedefs
+ * calculation will get if there are a lot of NULL cells mixed around.
+ * Added function prototypes and removed a couple unnecessary typedefs
  * Added the add_null_area() function.
  * 2000-10-17
  */

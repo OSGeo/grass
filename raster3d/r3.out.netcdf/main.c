@@ -158,9 +158,12 @@ static void write_netcdf_header(int ncid, RASTER3D_Region * region,
 	ukv = G_get_projunits();
 
 	pj_get_kv(&pjinfo, pkv, ukv);
-	proj4 = pj_get_def(pjinfo.pj, 0);
+	proj4 = pjinfo.def;
+#ifdef HAVE_PROJ_H
+	proj_destroy(pjinfo.pj);
+#else
 	pj_free(pjinfo.pj);
-
+#endif
 #ifdef HAVE_OGR
 	/* We support the CF suggestion crs_wkt and the gdal spatil_ref attribute */
 	if ((retval =
@@ -182,8 +185,6 @@ static void write_netcdf_header(int ncid, RASTER3D_Region * region,
 	    G_asprintf(&proj4mod, "%s +to_meter=%s", proj4, unfact);
 	else
 	    proj4mod = G_store(proj4);
-
-	pj_dalloc(proj4);
 
 	if ((retval =
 	     nc_put_att_text(ncid, crs_varid, "crs_proj4", strlen(proj4mod),
@@ -585,6 +586,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("export"));
+    G_add_keyword(_("output"));
     G_add_keyword(_("netCDF"));
     G_add_keyword(_("voxel"));
     module->description = _("Export a 3D raster map as netCDF file.");

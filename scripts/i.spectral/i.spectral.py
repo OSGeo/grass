@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ############################################################################
 #
@@ -33,6 +33,10 @@
 #% keyword: multispectral
 #%End
 #%option G_OPT_I_GROUP
+#% required : no
+#% guisection: Input
+#%end
+#%option G_OPT_I_SUBGROUP
 #% required : no
 #% guisection: Input
 #%end
@@ -78,10 +82,6 @@ import os
 import atexit
 from grass.script.utils import try_rmdir
 from grass.script import core as gcore
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 
 def cleanup():
@@ -192,12 +192,13 @@ def draw_linegraph(what):
     colors = colors[0:len(what)]
 
     gcore.run_command('d.linegraph', x_file=xfile, y_file=yfiles,
-                      y_color=colors, title='Spectral signatures',
-                      x_title='Bands', y_title='DN Value')
+                      y_color=colors, title=_("Spectral signatures"),
+                      x_title=_("Bands"), y_title=_("DN Value"))
 
 
 def main():
     group = options['group']
+    subgroup = options['subgroup']
     raster = options['raster']
     output = options['output']
     coords = options['coordinates']
@@ -226,7 +227,10 @@ def main():
     # get data from group listing and set the x-axis labels
     if group:
         # Parse the group list output
-        s = gcore.read_command('i.group', flags='g', group=group, quiet=True)
+        if subgroup:
+            s = gcore.read_command('i.group', flags='g', group=group, subgroup=subgroup, quiet=True)
+        else:
+            s = gcore.read_command('i.group', flags='g', group=group, quiet=True)
         rastermaps = s.splitlines()
     else:
         # get data from list of files and set the x-axis labels

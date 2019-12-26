@@ -166,7 +166,9 @@ int display_area(struct Map_info *Map, struct cat_list *Clist, const struct Cell
 
 	/* z height colors */
 	if (zcolors) {
-	    if (Rast_get_d_color(&Points->z[0], &red, &grn, &blu, zcolors) == 1)
+            double zval = (box.B + box.T) / 2; /* midpoint of area bounding box z */
+            G_debug(3, "area=%d -> zval=%f", area, zval);
+	    if (Rast_get_d_color(&zval, &red, &grn, &blu, zcolors) == 1)
 		custom_rgb = TRUE;
 	    else
 		custom_rgb = FALSE;

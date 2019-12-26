@@ -11,12 +11,13 @@ Classes:
  - frame::ItemPanel
  - frame::PythonPanel
 
-(C) 2010-2014 by the GRASS Development Team
+(C) 2010-2018 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
+@author Python parameterization Ondrej Pesek <pesej.ondrek gmail.com>
 """
 
 import os
@@ -27,6 +28,7 @@ import tempfile
 import copy
 import re
 import random
+import six
 
 import wx
 from wx.lib import ogl
@@ -38,19 +40,20 @@ if globalvar.wxPythonPhoenix:
         import wx.lib.agw.flatnotebook as FN
 else:
     import wx.lib.flatnotebook as FN
-
-from core.utils import _
+from wx.lib.newevent import NewEvent
+    
 from gui_core.widgets import GNotebook
 from core.gconsole        import GConsole, \
     EVT_CMD_RUN, EVT_CMD_DONE, EVT_CMD_PREPARE
 from gui_core.goutput import GConsoleWindow
 from core.debug import Debug
 from core.gcmd import GMessage, GException, GWarning, GError, RunCommand
-from gui_core.dialogs import GetImageHandlers, TextEntryDialog
+from gui_core.dialogs import GetImageHandlers
+from gui_core.dialogs import TextEntryDialog as CustomTextEntryDialog
 from gui_core.ghelp import ShowAboutDialog
 from gui_core.preferences import PreferencesBaseDialog
 from core.settings import UserSettings
-from gui_core.menu import Menu
+from gui_core.menu import Menu as Menubar
 from gmodeler.menudata import ModelerMenuData
 from gui_core.forms import GUI
 from gmodeler.preferences import PreferencesDialog, PropertiesDialog
@@ -60,6 +63,11 @@ from gui_core.pystc import PyStc
 from gmodeler.giface import GraphicalModelerGrassInterface
 from gmodeler.model import *
 from gmodeler.dialogs import *
+from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl, \
+    Menu, StockCursor, EmptyBitmap, NewId
+from gui_core.wrap import TextEntryDialog as wxTextEntryDialog
+
+wxModelDone, EVT_MODEL_DONE = NewEvent()
 
 from grass.script.utils import try_remove
 from grass.script import core as grass
@@ -82,12 +90,13 @@ class ModelFrame(wx.Frame):
         self.searchDialog = None  # module search dialog
         self.baseTitle = title
         self.modelFile = None    # loaded model
+        self.start_time = None
         self.modelChanged = False
         self.randomness = 40  # random layout
 
         self.cursors = {
-            "default": wx.StockCursor(wx.CURSOR_ARROW),
-            "cross": wx.StockCursor(wx.CURSOR_CROSS),
+            "default": StockCursor(wx.CURSOR_ARROW),
+            "cross": StockCursor(wx.CURSOR_CROSS),
         }
 
         wx.Frame.__init__(self, parent=parent, id=id, title=title, **kwargs)
@@ -99,7 +108,7 @@ class ModelFrame(wx.Frame):
                     'grass.ico'),
                 wx.BITMAP_TYPE_ICO))
 
-        self.menubar = Menu(
+        self.menubar = Menubar(
             parent=self,
             model=ModelerMenuData().GetModel(
                 separators=True))
@@ -148,7 +157,8 @@ class ModelFrame(wx.Frame):
         # rewrite default method to avoid hiding progress bar
         self._gconsole.Bind(EVT_CMD_DONE, self.OnCmdDone)
         self.Bind(EVT_CMD_PREPARE, self.OnCmdPrepare)
-
+        self.Bind(EVT_MODEL_DONE, self.OnModelDone)
+        
         self.notebook.AddPage(page=self.canvas, text=_('Model'), name='model')
         self.notebook.AddPage(
             page=self.itemPanel,
@@ -288,11 +298,37 @@ class ModelFrame(wx.Frame):
 
     def OnCmdDone(self, event):
         """Command done (or aborted)"""
-        self.goutput.GetProgressBar().SetValue(0)
+        def time_elapsed(etime):
+            try:
+                ctime = time.time() - etime
+                if ctime < 60:
+                    stime = _("%d sec") % int(ctime)
+                else:
+                    mtime = int(ctime / 60)
+                    stime = _("%(min)d min %(sec)d sec") % {
+                        'min': mtime, 'sec': int(ctime - (mtime * 60))}
+            except KeyError:
+                # stopped deamon
+                stime = _("unknown")
+
+            return stime
+        
+        self.goutput.GetProgressBar().SetValue(0)            
+        self.goutput.WriteCmdLog('({}) {} ({})'.format(
+            str(time.ctime()), _("Command finished"), time_elapsed(event.time)),
+            notification=event.notification)
+
         try:
             action = self.GetModel().GetItems()[event.pid]
             if hasattr(action, "task"):
                 action.Update(running=True)
+            if event.pid == self._gconsole.cmdThread.GetId() - 1 and self.start_time:
+                self.goutput.WriteCmdLog('({}) {} ({})'.format(
+                    str(time.ctime()), _("Model computation finished"), time_elapsed(self.start_time)),
+                                         notification=event.notification)
+                event = wxModelDone()
+                wx.PostEvent(self, event)
+                
         except IndexError:
             pass
 
@@ -350,12 +386,28 @@ class ModelFrame(wx.Frame):
         dlg.Init(properties)
         if dlg.ShowModal() == wx.ID_OK:
             self.ModelChanged()
-            for key, value in dlg.GetValues().iteritems():
+            for key, value in six.iteritems(dlg.GetValues()):
                 properties[key] = value
             for action in self.model.GetItems(objType=ModelAction):
                 action.GetTask().set_flag('overwrite', properties['overwrite'])
 
         dlg.Destroy()
+
+    def _deleteIntermediateData(self):
+        """Delete intermediate data"""
+        rast, vect, rast3d, msg = self.model.GetIntermediateData()
+        if rast:
+            self._gconsole.RunCmd(['g.remove', '-f', 'type=raster',
+                                   'name=%s' % ','.join(rast)])
+        if rast3d:
+            self._gconsole.RunCmd(['g.remove', '-f', 'type=raster_3d',
+                                   'name=%s' % ','.join(rast3d)])
+        if vect:
+            self._gconsole.RunCmd(['g.remove', '-f', 'type=vector',
+                                   'name=%s' % ','.join(vect)])
+                
+        self.SetStatusText(_("%d intermediate maps deleted from current mapset") %
+                           int(len(rast) + len(rast3d) + len(vect)))
 
     def OnDeleteData(self, event):
         """Delete intermediate data"""
@@ -375,24 +427,9 @@ class ModelFrame(wx.Frame):
             style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
 
         ret = dlg.ShowModal()
-        if ret == wx.ID_YES:
-            dlg.Destroy()
-
-            if rast:
-                self._gconsole.RunCmd(['g.remove', '-f', 'type=raster',
-                                       'name=%s' % ','.join(rast)])
-            if rast3d:
-                self._gconsole.RunCmd(['g.remove', '-f', 'type=raster_3d',
-                                       'name=%s' % ','.join(rast3d)])
-            if vect:
-                self._gconsole.RunCmd(['g.remove', '-f', 'type=vector',
-                                       'name=%s' % ','.join(vect)])
-
-            self.SetStatusText(_("%d maps deleted from current mapset") %
-                               int(len(rast) + len(rast3d) + len(vect)))
-            return
-
         dlg.Destroy()
+        if ret == wx.ID_YES:
+            self._deleteIntermediateData()
 
     def OnModelNew(self, event):
         """Create new model"""
@@ -580,15 +617,14 @@ class ModelFrame(wx.Frame):
 
     def OnRunModel(self, event):
         """Run entire model"""
-        self.model.Run(self._gconsole, self.OnDone, parent=self)
+        self.start_time = time.time()
+        self.model.Run(self._gconsole, self.OnModelDone, parent=self)
 
-    def OnDone(self, event):
+    def OnModelDone(self, event):
         """Computation finished
-
-        .. todo::
-            not called -- must be fixed
         """
         self.SetStatusText('', 0)
+        
         # restore original files
         if hasattr(self.model, "fileInput"):
             for finput in self.model.fileInput:
@@ -602,6 +638,25 @@ class ModelFrame(wx.Frame):
                 finally:
                     fd.close()
             del self.model.fileInput
+
+        # delete intermediate data
+        self._deleteIntermediateData()
+
+        # display data if required
+        for data in self.model.GetData():
+            if not data.HasDisplay():
+                continue
+
+            # remove existing map layers first
+            layers =  self._giface.GetLayerList().GetLayersByName(data.GetValue())
+            if layers:
+                for layer in layers:
+                    self._giface.GetLayerList().DeleteLayer(layer)
+                
+            # add new map layer
+            self._giface.GetLayerList().AddLayer(
+                ltype=data.GetPrompt(), name=data.GetValue(), checked=True,
+                cmd=data.GetDisplayCmd())
 
     def OnValidateModel(self, event, showMsg=True):
         """Validate entire model"""
@@ -649,7 +704,7 @@ class ModelFrame(wx.Frame):
                 ymaxImg = ymax
         size = wx.Size(int(xmaxImg - xminImg) + 50,
                        int(ymaxImg - yminImg) + 50)
-        bitmap = wx.EmptyBitmap(width=size.width, height=size.height)
+        bitmap = EmptyBitmap(width=size.width, height=size.height)
 
         filetype, ltype = GetImageHandlers(wx.ImageFromBitmap(bitmap))
 
@@ -677,10 +732,8 @@ class ModelFrame(wx.Frame):
             dc.SetBackground(wx.WHITE_BRUSH)
             dc.SetBackgroundMode(wx.SOLID)
 
-            dc.BeginDrawing()
             self.canvas.GetDiagram().Clear(dc)
             self.canvas.GetDiagram().Redraw(dc)
-            dc.EndDrawing()
 
             bitmap.SaveFile(path, fileType)
             self.SetStatusText(_("Model exported to <%s>") % path)
@@ -830,7 +883,7 @@ class ModelFrame(wx.Frame):
 
     def OnAddComment(self, event):
         """Add comment to the model"""
-        dlg = TextEntryDialog(
+        dlg = CustomTextEntryDialog(
             parent=self,
             message=_("Comment:"),
             caption=_("Add comment"),
@@ -1071,7 +1124,7 @@ class ModelFrame(wx.Frame):
         :return: False on failure
         """
         self.ModelChanged(False)
-        tmpfile = tempfile.TemporaryFile(mode='w+b')
+        tmpfile = tempfile.TemporaryFile(mode='w+')
         try:
             WriteModelFile(fd=tmpfile, model=self.model)
         except Exception:
@@ -1397,7 +1450,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             dlg.Destroy()
 
     def OnBeginDragLeft(self, x, y, keys=0, attachment=0):
-        """Drag shape (begining)"""
+        """Drag shape (beginning)"""
         self.frame.ModelChanged()
         if self._previousHandler:
             self._previousHandler.OnBeginDragLeft(x, y, keys, attachment)
@@ -1434,9 +1487,9 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         if not hasattr(self, "popupID"):
             self.popupID = dict()
             for key in ('remove', 'enable', 'addPoint',
-                        'delPoint', 'intermediate', 'props', 'id',
+                        'delPoint', 'intermediate', 'display', 'props', 'id',
                         'label', 'comment'):
-                self.popupID[key] = wx.NewId()
+                self.popupID[key] = NewId()
 
         # record coordinates
         self.x = x
@@ -1446,7 +1499,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         shape = self.GetShape()
         self._onSelectShape(shape)
 
-        popupMenu = wx.Menu()
+        popupMenu = Menu()
         popupMenu.Append(self.popupID['remove'], text=_('Remove'))
         self.frame.Bind(wx.EVT_MENU, self.OnRemove, id=self.popupID['remove'])
         if isinstance(shape, ModelAction) or isinstance(shape, ModelLoop):
@@ -1496,19 +1549,37 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             if len(shape.GetLineControlPoints()) == 2:
                 popupMenu.Enable(self.popupID['delPoint'], False)
 
-        if isinstance(shape, ModelData) and '@' not in shape.GetValue():
+        if isinstance(shape, ModelData):
             popupMenu.AppendSeparator()
-            popupMenu.Append(
-                self.popupID['intermediate'],
-                text=_('Intermediate'),
-                kind=wx.ITEM_CHECK)
-            if self.GetShape().IsIntermediate():
-                popupMenu.Check(self.popupID['intermediate'], True)
+            if '@' not in shape.GetValue() and \
+               len(self.GetShape().GetRelations('from')) > 0:
+                popupMenu.Append(
+                    self.popupID['intermediate'],
+                    text=_('Intermediate'),
+                    kind=wx.ITEM_CHECK)
+                if self.GetShape().IsIntermediate():
+                    popupMenu.Check(self.popupID['intermediate'], True)
 
-            self.frame.Bind(
-                wx.EVT_MENU,
-                self.OnIntermediate,
-                id=self.popupID['intermediate'])
+                self.frame.Bind(
+                    wx.EVT_MENU,
+                    self.OnIntermediate,
+                    id=self.popupID['intermediate'])
+
+            if self.frame._giface.GetMapDisplay():
+                popupMenu.Append(
+                    self.popupID['display'],
+                    text=_('Display'),
+                    kind=wx.ITEM_CHECK)
+                if self.GetShape().HasDisplay():
+                    popupMenu.Check(self.popupID['display'], True)
+
+                self.frame.Bind(
+                    wx.EVT_MENU,
+                    self.OnHasDisplay,
+                    id=self.popupID['display'])
+
+                if self.GetShape().IsIntermediate():
+                    popupMenu.Enable(self.popupID['display'], False)
 
         if isinstance(shape, ModelData) or \
                 isinstance(shape, ModelAction) or \
@@ -1539,11 +1610,11 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
 
     def OnSetLabel(self, event):
         shape = self.GetShape()
-        dlg = wx.TextEntryDialog(
+        dlg = wxTextEntryDialog(
             parent=self.frame,
             message=_("Label:"),
             caption=_("Set label"),
-            defaultValue=shape.GetLabel())
+            value=shape.GetLabel())
         if dlg.ShowModal() == wx.ID_OK:
             label = dlg.GetValue()
             shape.SetLabel(label)
@@ -1554,7 +1625,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
 
     def OnSetComment(self, event):
         shape = self.GetShape()
-        dlg = TextEntryDialog(
+        dlg = CustomTextEntryDialog(
             parent=self.frame, message=_("Comment:"),
             caption=_("Set comment"),
             defaultValue=shape.GetComment(),
@@ -1614,6 +1685,29 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         shape.SetIntermediate(event.IsChecked())
         self.frame.canvas.Refresh()
 
+    def OnHasDisplay(self, event):
+        """Mark data to be displayed"""
+        self.frame.ModelChanged()
+        shape = self.GetShape()
+        shape.SetHasDisplay(event.IsChecked())
+        self.frame.canvas.Refresh()
+
+        try:
+            if event.IsChecked():
+                # add map layer to display
+                self.frame._giface.GetLayerList().AddLayer(
+                    ltype=shape.GetPrompt(), name=shape.GetValue(), checked=True,
+                    cmd=shape.GetDisplayCmd())
+            else:
+                # remove map layer(s) from display
+                layers = self.frame._giface.GetLayerList().GetLayersByName(shape.GetValue())
+                for layer in layers:
+                    self.frame._giface.GetLayerList().DeleteLayer(layer)
+                    
+        except GException as e:
+            GError(parent=self,
+                   message='{}'.format(e))
+
     def OnRemove(self, event):
         """Remove shape
         """
@@ -1631,7 +1725,7 @@ class VariablePanel(wx.Panel):
 
         wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
 
-        self.listBox = wx.StaticBox(
+        self.listBox = StaticBox(
             parent=self, id=wx.ID_ANY, label=" %s " %
             _("List of variables - right-click to delete"))
 
@@ -1645,9 +1739,9 @@ class VariablePanel(wx.Panel):
             frame=self.parent)
 
         # add new category
-        self.addBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                                   label=" %s " % _("Add new variable"))
-        self.name = wx.TextCtrl(parent=self, id=wx.ID_ANY)
+        self.addBox = StaticBox(parent=self, id=wx.ID_ANY,
+                                label=" %s " % _("Add new variable"))
+        self.name = TextCtrl(parent=self, id=wx.ID_ANY)
         wx.CallAfter(self.name.SetFocus)
         self.type = wx.Choice(parent=self, id=wx.ID_ANY,
                               choices=[_("integer"),
@@ -1660,12 +1754,12 @@ class VariablePanel(wx.Panel):
                                        _("file"),
                                        _("dir")])
         self.type.SetSelection(2)  # string
-        self.value = wx.TextCtrl(parent=self, id=wx.ID_ANY)
-        self.desc = wx.TextCtrl(parent=self, id=wx.ID_ANY)
+        self.value = TextCtrl(parent=self, id=wx.ID_ANY)
+        self.desc = TextCtrl(parent=self, id=wx.ID_ANY)
 
         # buttons
-        self.btnAdd = wx.Button(parent=self, id=wx.ID_ADD)
-        self.btnAdd.SetToolTipString(_("Add new variable to the model"))
+        self.btnAdd = Button(parent=self, id=wx.ID_ADD)
+        self.btnAdd.SetToolTip(_("Add new variable to the model"))
         self.btnAdd.Enable(False)
 
         # bindings
@@ -1684,28 +1778,28 @@ class VariablePanel(wx.Panel):
 
         addSizer = wx.StaticBoxSizer(self.addBox, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
-        gridSizer.Add(wx.StaticText(parent=self, id=wx.ID_ANY,
-                                    label="%s:" % _("Name")),
+        gridSizer.Add(StaticText(parent=self, id=wx.ID_ANY,
+                                 label="%s:" % _("Name")),
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(0, 0))
         gridSizer.Add(self.name,
                       pos=(0, 1),
                       flag=wx.EXPAND)
-        gridSizer.Add(wx.StaticText(parent=self, id=wx.ID_ANY,
-                                    label="%s:" % _("Data type")),
+        gridSizer.Add(StaticText(parent=self, id=wx.ID_ANY,
+                                 label="%s:" % _("Data type")),
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(0, 2))
         gridSizer.Add(self.type,
                       pos=(0, 3))
-        gridSizer.Add(wx.StaticText(parent=self, id=wx.ID_ANY,
-                                    label="%s:" % _("Default value")),
+        gridSizer.Add(StaticText(parent=self, id=wx.ID_ANY,
+                                 label="%s:" % _("Default value")),
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(1, 0))
         gridSizer.Add(self.value,
                       pos=(1, 1), span=(1, 3),
                       flag=wx.EXPAND)
-        gridSizer.Add(wx.StaticText(parent=self, id=wx.ID_ANY,
-                                    label="%s:" % _("Description")),
+        gridSizer.Add(StaticText(parent=self, id=wx.ID_ANY,
+                                 label="%s:" % _("Description")),
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(2, 0))
         gridSizer.Add(self.desc,
@@ -1755,7 +1849,7 @@ class VariablePanel(wx.Panel):
     def UpdateModelVariables(self):
         """Update model variables"""
         variables = dict()
-        for values in self.list.GetData().itervalues():
+        for values in six.itervalues(self.list.GetData()):
             name = values[0]
             variables[name] = {'type': str(values[1])}
             if values[2]:
@@ -1786,7 +1880,7 @@ class ItemPanel(wx.Panel):
 
         wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
 
-        self.listBox = wx.StaticBox(
+        self.listBox = StaticBox(
             parent=self, id=wx.ID_ANY, label=" %s " %
             _("List of items - right-click to delete"))
 
@@ -1803,9 +1897,9 @@ class ItemPanel(wx.Panel):
                 3],
             frame=self.parent)
 
-        self.btnMoveUp = wx.Button(parent=self, id=wx.ID_UP)
-        self.btnMoveDown = wx.Button(parent=self, id=wx.ID_DOWN)
-        self.btnRefresh = wx.Button(parent=self, id=wx.ID_REFRESH)
+        self.btnMoveUp = Button(parent=self, id=wx.ID_UP)
+        self.btnMoveDown = Button(parent=self, id=wx.ID_DOWN)
+        self.btnRefresh = Button(parent=self, id=wx.ID_REFRESH)
 
         self.btnMoveUp.Bind(wx.EVT_BUTTON, self.OnMoveItemsUp)
         self.btnMoveDown.Bind(wx.EVT_BUTTON, self.OnMoveItemsDown)
@@ -1886,18 +1980,18 @@ class PythonPanel(wx.Panel):
 
         self.filename = None  # temp file to run
 
-        self.bodyBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                                    label=" %s " % _("Python script"))
+        self.bodyBox = StaticBox(parent=self, id=wx.ID_ANY,
+                                 label=" %s " % _("Python script"))
         self.body = PyStc(parent=self, statusbar=self.parent.GetStatusBar())
 
-        self.btnRun = wx.Button(parent=self, id=wx.ID_ANY, label=_("&Run"))
-        self.btnRun.SetToolTipString(_("Run python script"))
+        self.btnRun = Button(parent=self, id=wx.ID_ANY, label=_("&Run"))
+        self.btnRun.SetToolTip(_("Run python script"))
         self.Bind(wx.EVT_BUTTON, self.OnRun, self.btnRun)
-        self.btnSaveAs = wx.Button(parent=self, id=wx.ID_SAVEAS)
-        self.btnSaveAs.SetToolTipString(_("Save python script to file"))
+        self.btnSaveAs = Button(parent=self, id=wx.ID_SAVEAS)
+        self.btnSaveAs.SetToolTip(_("Save python script to file"))
         self.Bind(wx.EVT_BUTTON, self.OnSaveAs, self.btnSaveAs)
-        self.btnRefresh = wx.Button(parent=self, id=wx.ID_REFRESH)
-        self.btnRefresh.SetToolTipString(_("Refresh python script based on the model.\n"
+        self.btnRefresh = Button(parent=self, id=wx.ID_REFRESH)
+        self.btnRefresh.SetToolTip(_("Refresh python script based on the model.\n"
                                            "It will discards all local changes."))
         self.Bind(wx.EVT_BUTTON, self.OnRefresh, self.btnRefresh)
 
@@ -1943,9 +2037,17 @@ class PythonPanel(wx.Panel):
             mode = stat.S_IMODE(os.lstat(self.filename)[stat.ST_MODE])
             os.chmod(self.filename, mode | stat.S_IXUSR)
 
-        self.parent._gconsole.RunCmd(
-            [fd.name],
-            skipInterface=True, onDone=self.OnDone)
+        for item in self.parent.GetModel().GetItems():
+            if len(item.GetParameterizedParams()['params']) + len(
+                    item.GetParameterizedParams()['flags']) > 0:
+                self.parent._gconsole.RunCmd(
+                    [fd.name, '--ui'],
+                    skipInterface=False, onDone=self.OnDone)
+                break
+        else:
+            self.parent._gconsole.RunCmd(
+                [fd.name],
+                skipInterface=True, onDone=self.OnDone)
 
         event.Skip()
 
@@ -2034,7 +2136,7 @@ class PythonPanel(wx.Panel):
             if ret == wx.ID_NO:
                 return False
 
-        fd = tempfile.TemporaryFile()
+        fd = tempfile.TemporaryFile(mode='r+')
         WritePythonFile(fd, self.parent.GetModel())
         fd.seek(0)
         self.body.SetText(fd.read())

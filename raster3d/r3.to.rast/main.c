@@ -135,7 +135,7 @@ void set_params()
 }
 
 /* ************************************************************************* */
-/* Write the slices to seperate raster maps ******************************** */
+/* Write the slices to separate raster maps ******************************** */
 
 /* ************************************************************************* */
 /* coefficients are used only when needed, otherwise the original values

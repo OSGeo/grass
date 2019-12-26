@@ -9,7 +9,7 @@ Classes:
  - ghelp::HelpWindow
  - ghelp::HelpPanel
 
-(C) 2008-2015 by the GRASS Development Team
+(C) 2008-2019 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -23,6 +23,12 @@ import platform
 import re
 import textwrap
 import sys
+import six
+
+if sys.version_info.major == 2:
+    _unichr = unichr
+else:
+    _unichr = chr
 
 import wx
 from wx.html import HtmlWindow
@@ -39,9 +45,9 @@ if __name__ == '__main__':
     set_gui_path()
 
 from core import globalvar
-from core.utils import _
 from core.gcmd import GError, DecodeString
 from gui_core.widgets import FormNotebook, ScrolledPanel
+from gui_core.wrap import Button, StaticText, TextCtrl
 from core.debug import Debug
 
 
@@ -86,7 +92,7 @@ class AboutWindow(wx.Frame):
         wx.CallAfter(self.aboutNotebook.Refresh)
 
         # buttons
-        self.btnClose = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
+        self.btnClose = Button(parent=self.panel, id=wx.ID_CLOSE)
         self.btnClose.Bind(wx.EVT_BUTTON, self.OnCloseWindow)
 
         self._doLayout()
@@ -131,47 +137,48 @@ class AboutWindow(wx.Frame):
         infoLabel = 'GRASS GIS %s' % vInfo.get('version', _('unknown version'))
         if 'x86_64' in vInfo.get('build_platform', ''):
             infoLabel += ' (64bit)'
-        info = wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                             label=infoLabel + os.linesep)
+        info = StaticText(parent=infoTxt, id=wx.ID_ANY,
+                          label=infoLabel + os.linesep)
         info.SetFont(wx.Font(13, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
         info.SetForegroundColour(wx.Colour(35, 142, 35))
         infoSizer.Add(info, proportion=0,
                       flag=wx.BOTTOM | wx.ALIGN_CENTER, border=1)
 
-        team = wx.StaticText(parent=infoTxt, label=_grassDevTeam(1999) + '\n')
+        team = StaticText(parent=infoTxt, label=_grassDevTeam(1999) + '\n')
         infoSizer.Add(team, proportion=0,
                       flag=wx.BOTTOM | wx.ALIGN_CENTER, border=1)
 
         row = 0
-        infoGridSizer.Add(wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                        label=_('Official GRASS site:')),
+        infoGridSizer.Add(StaticText(parent=infoTxt, id=wx.ID_ANY,
+                                     label=_('Official GRASS site:')),
                           pos=(row, 0),
                           flag=wx.ALIGN_RIGHT)
 
         infoGridSizer.Add(HyperLinkCtrl(parent=infoTxt, id=wx.ID_ANY,
-                                        label='http://grass.osgeo.org'),
+                                        label='https://grass.osgeo.org'),
                           pos=(row, 1),
                           flag=wx.ALIGN_LEFT)
 
         row += 2
-        infoGridSizer.Add(wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                        label='%s:' % _('Code Revision')),
+        infoGridSizer.Add(StaticText(parent=infoTxt, id=wx.ID_ANY,
+                                     label='%s:' % _('Code Revision')),
                           pos=(row, 0),
                           flag=wx.ALIGN_RIGHT)
 
-        infoGridSizer.Add(wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                        label=vInfo.get('revision', '?')),
+        infoGridSizer.Add(HyperLinkCtrl(parent=infoTxt, id=wx.ID_ANY,
+                                        label=vInfo.get('revision', '?'),
+                                        URL='https://github.com/OSGeo/grass.git'),
                           pos=(row, 1),
                           flag=wx.ALIGN_LEFT)
 
         row += 1
-        infoGridSizer.Add(wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                        label='%s:' % _('Build Date')),
+        infoGridSizer.Add(StaticText(parent=infoTxt, id=wx.ID_ANY,
+                                     label='%s:' % _('Build Date')),
                           pos=(row, 0),
                           flag=wx.ALIGN_RIGHT)
 
         infoGridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=infoTxt, id=wx.ID_ANY, label=vInfo.get(
                     'build_date', '?')), pos=(
                 row, 1), flag=wx.ALIGN_LEFT)
@@ -190,24 +197,24 @@ class AboutWindow(wx.Frame):
         #                   flag = wx.ALIGN_LEFT)
 
         row += 2
-        infoGridSizer.Add(wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                        label='Python:'),
+        infoGridSizer.Add(StaticText(parent=infoTxt, id=wx.ID_ANY,
+                                     label='Python:'),
                           pos=(row, 0),
                           flag=wx.ALIGN_RIGHT)
 
-        infoGridSizer.Add(wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                        label=platform.python_version()),
+        infoGridSizer.Add(StaticText(parent=infoTxt, id=wx.ID_ANY,
+                                     label=platform.python_version()),
                           pos=(row, 1),
                           flag=wx.ALIGN_LEFT)
 
         row += 1
-        infoGridSizer.Add(wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                        label='wxPython:'),
+        infoGridSizer.Add(StaticText(parent=infoTxt, id=wx.ID_ANY,
+                                     label='wxPython:'),
                           pos=(row, 0),
                           flag=wx.ALIGN_RIGHT)
 
-        infoGridSizer.Add(wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                        label=wx.__version__),
+        infoGridSizer.Add(StaticText(parent=infoTxt, id=wx.ID_ANY,
+                                     label=wx.__version__),
                           pos=(row, 1),
                           flag=wx.ALIGN_LEFT)
 
@@ -219,8 +226,8 @@ class AboutWindow(wx.Frame):
             flag=wx.EXPAND | wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL)
 
         row += 2
-        infoGridSizer.Add(wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                        label="%s:" % _('Language')),
+        infoGridSizer.Add(StaticText(parent=infoTxt, id=wx.ID_ANY,
+                                     label="%s:" % _('Language')),
                           pos=(row, 0),
                           flag=wx.ALIGN_RIGHT)
         self.langUsed = grass.gisenv().get('LANG', None)
@@ -231,8 +238,8 @@ class AboutWindow(wx.Frame):
                 self.langUsed = _('unknown')
             else:
                 self.langUsed = u'%s.%s' % (loc[0], loc[1])
-        infoGridSizer.Add(wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                        label=self.langUsed),
+        infoGridSizer.Add(StaticText(parent=infoTxt, id=wx.ID_ANY,
+                                     label=self.langUsed),
                           pos=(row, 1),
                           flag=wx.ALIGN_LEFT)
 
@@ -253,7 +260,7 @@ class AboutWindow(wx.Frame):
 
         # put text into a scrolling panel
         copyrightwin = ScrolledPanel(self.aboutNotebook)
-        copyrighttxt = wx.TextCtrl(
+        copyrighttxt = TextCtrl(
             copyrightwin, id=wx.ID_ANY, value=copytext,
         style=wx.TE_MULTILINE | wx.TE_READONLY)
         copyrightwin.SetAutoLayout(True)
@@ -277,7 +284,7 @@ class AboutWindow(wx.Frame):
             license = _('%s file missing') % 'GPL.TXT'
         # put text into a scrolling panel
         licensewin = ScrolledPanel(self.aboutNotebook)
-        licensetxt = wx.TextCtrl(
+        licensetxt = TextCtrl(
             licensewin, id=wx.ID_ANY, value=license,
         style=wx.TE_MULTILINE | wx.TE_READONLY)
         licensewin.SetAutoLayout(True)
@@ -303,7 +310,7 @@ class AboutWindow(wx.Frame):
 
         # put text into a scrolling panel
         window = ScrolledPanel(self.aboutNotebook)
-        stat_text = wx.TextCtrl(
+        stat_text = TextCtrl(
             window, id=wx.ID_ANY, value=text,
         style=wx.TE_MULTILINE | wx.TE_READONLY)
         window.SetAutoLayout(True)
@@ -321,13 +328,12 @@ class AboutWindow(wx.Frame):
         # credits
         authfile = os.path.join(os.getenv("GISBASE"), "AUTHORS")
         if os.path.exists(authfile):
-            authorsFile = open(authfile, 'r')
-            authors = unicode(''.join(authorsFile.readlines()), "utf-8")
-            authorsFile.close()
+            with codecs.open(authfile, encoding='utf-8', mode='r') as authorsFile:
+                authors = ''.join(authorsFile.readlines())
         else:
             authors = _('%s file missing') % 'AUTHORS'
         authorwin = ScrolledPanel(self.aboutNotebook)
-        authortxt = wx.TextCtrl(
+        authortxt = TextCtrl(
             authorwin, id=wx.ID_ANY, value=authors,
         style=wx.TE_MULTILINE | wx.TE_READONLY)
         authorwin.SetAutoLayout(True)
@@ -385,7 +391,7 @@ class AboutWindow(wx.Frame):
         contribwin.sizer = wx.BoxSizer(wx.VERTICAL)
 
         if not contribs:
-            contribtxt = wx.StaticText(
+            contribtxt = StaticText(
                 contribwin,
                 id=wx.ID_ANY,
                 label=_('%s file missing') %
@@ -399,8 +405,8 @@ class AboutWindow(wx.Frame):
                 items = (_('Name'), _('E-mail'), _('Country'), _('OSGeo_ID'))
             contribBox = wx.FlexGridSizer(cols=len(items), vgap=5, hgap=5)
             for item in items:
-                text = wx.StaticText(parent=contribwin, id=wx.ID_ANY,
-                                     label=item)
+                text = StaticText(parent=contribwin, id=wx.ID_ANY,
+                                  label=item)
                 text.SetFont(
                     wx.Font(
                         10,
@@ -413,7 +419,7 @@ class AboutWindow(wx.Frame):
             for vals in sorted(contribs, key=lambda x: x[0]):
                 for item in vals:
                     contribBox.Add(
-                        wx.StaticText(
+                        StaticText(
                             parent=contribwin,
                             id=wx.ID_ANY,
                             label=item))
@@ -429,7 +435,7 @@ class AboutWindow(wx.Frame):
         """Translators info"""
         translatorsfile = os.path.join(os.getenv("GISBASE"), "translators.csv")
         if os.path.exists(translatorsfile):
-            translatorsFile = open(translatorsfile, 'r')
+            translatorsFile = codecs.open(translatorsfile, encoding='utf-8', mode='r')
             translators = dict()
             errLines = list()
             for line in translatorsFile.readlines()[1:]:
@@ -459,7 +465,7 @@ class AboutWindow(wx.Frame):
         translatorswin.sizer = wx.BoxSizer(wx.VERTICAL)
 
         if not translators:
-            translatorstxt = wx.StaticText(
+            translatorstxt = StaticText(
                 translatorswin,
                 id=wx.ID_ANY,
                 label=_('%s file missing') %
@@ -469,39 +475,37 @@ class AboutWindow(wx.Frame):
         else:
             translatorsBox = wx.FlexGridSizer(cols=4, vgap=5, hgap=5)
             languages = sorted(translators.keys())
-            tname = wx.StaticText(parent=translatorswin, id=wx.ID_ANY,
-                                  label=_('Name'))
+            tname = StaticText(parent=translatorswin, id=wx.ID_ANY,
+                               label=_('Name'))
             tname.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
             translatorsBox.Add(tname)
-            temail = wx.StaticText(parent=translatorswin, id=wx.ID_ANY,
-                                   label=_('E-mail'))
+            temail = StaticText(parent=translatorswin, id=wx.ID_ANY,
+                                label=_('E-mail'))
             temail.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
             translatorsBox.Add(temail)
-            tlang = wx.StaticText(parent=translatorswin, id=wx.ID_ANY,
-                                  label=_('Language'))
+            tlang = StaticText(parent=translatorswin, id=wx.ID_ANY,
+                               label=_('Language'))
             tlang.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
             translatorsBox.Add(tlang)
-            tnat = wx.StaticText(parent=translatorswin, id=wx.ID_ANY,
-                                 label=_('Nation'))
+            tnat = StaticText(parent=translatorswin, id=wx.ID_ANY,
+                              label=_('Nation'))
             tnat.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
             translatorsBox.Add(tnat)
             for lang in languages:
                 for translator in translators[lang]:
                     name, email = translator
                     translatorsBox.Add(
-                        wx.StaticText(
+                        StaticText(
                             parent=translatorswin,
                             id=wx.ID_ANY,
-                            label=unicode(
-                                name,
-                                "utf-8")))
+                            label=name))
                     translatorsBox.Add(
-                        wx.StaticText(
+                        StaticText(
                             parent=translatorswin,
                             id=wx.ID_ANY,
                             label=email))
                     translatorsBox.Add(
-                        wx.StaticText(
+                        StaticText(
                             parent=translatorswin,
                             id=wx.ID_ANY,
                             label=lang))
@@ -514,7 +518,7 @@ class AboutWindow(wx.Frame):
                         translatorsBox.Add(flagBitmap)
                     else:
                         translatorsBox.Add(
-                            wx.StaticText(
+                            StaticText(
                                 parent=translatorswin,
                                 id=wx.ID_ANY,
                                 label=lang))
@@ -547,35 +551,35 @@ class AboutWindow(wx.Frame):
     def _langBox(self, par, k, v):
         """Return box"""
         langBox = wx.FlexGridSizer(cols=4, vgap=5, hgap=5)
-        tkey = wx.StaticText(parent=par, id=wx.ID_ANY,
-                             label=k.upper())
+        tkey = StaticText(parent=par, id=wx.ID_ANY,
+                          label=k.upper())
         langBox.Add(tkey)
         try:
-            tgood = wx.StaticText(parent=par, id=wx.ID_ANY,
-                                  label=_("%d translated" % v['good']))
+            tgood = StaticText(parent=par, id=wx.ID_ANY,
+                               label=_("%d translated" % v['good']))
             tgood.SetForegroundColour(wx.Colour(35, 142, 35))
             langBox.Add(tgood)
         except:
-            tgood = wx.StaticText(parent=par, id=wx.ID_ANY,
-                                  label="")
+            tgood = StaticText(parent=par, id=wx.ID_ANY,
+                               label="")
             langBox.Add(tgood)
         try:
-            tfuzzy = wx.StaticText(parent=par, id=wx.ID_ANY,
-                                   label=_("   %d fuzzy" % v['fuzzy']))
+            tfuzzy = StaticText(parent=par, id=wx.ID_ANY,
+                                label=_("   %d fuzzy" % v['fuzzy']))
             tfuzzy.SetForegroundColour(wx.Colour(255, 142, 0))
             langBox.Add(tfuzzy)
         except:
-            tfuzzy = wx.StaticText(parent=par, id=wx.ID_ANY,
-                                   label="")
+            tfuzzy = StaticText(parent=par, id=wx.ID_ANY,
+                                label="")
             langBox.Add(tfuzzy)
         try:
-            tbad = wx.StaticText(parent=par, id=wx.ID_ANY,
-                                 label=_("   %d untranslated" % v['bad']))
+            tbad = StaticText(parent=par, id=wx.ID_ANY,
+                              label=_("   %d untranslated" % v['bad']))
             tbad.SetForegroundColour(wx.Colour(255, 0, 0))
             langBox.Add(tbad)
         except:
-            tbad = wx.StaticText(parent=par, id=wx.ID_ANY,
-                                 label="")
+            tbad = StaticText(parent=par, id=wx.ID_ANY,
+                              label="")
             langBox.Add(tbad)
         return langBox
 
@@ -593,7 +597,7 @@ class AboutWindow(wx.Frame):
         # else:
         # panel.Collapse(True)
         pageSizer = wx.BoxSizer(wx.VERTICAL)
-        for k, v in js.iteritems():
+        for k, v in six.iteritems(js):
             if k != 'total' and k != 'name':
                 box = self._langBox(win, k, v)
                 pageSizer.Add(box, proportion=1,
@@ -626,8 +630,8 @@ class AboutWindow(wx.Frame):
         if not jsStats:
             Debug.msg(5, _("File <%s> not found") % fname)
             statsSizer = wx.BoxSizer(wx.VERTICAL)
-            statstext = wx.StaticText(self.statswin, id=wx.ID_ANY,
-                                      label=_('%s file missing') % fname)
+            statstext = StaticText(self.statswin, id=wx.ID_ANY,
+                                   label=_('%s file missing') % fname)
             statsSizer.Add(statstext, proportion=1,
                            flag=wx.EXPAND | wx.ALL, border=3)
         else:
@@ -702,8 +706,6 @@ class HelpWindow(HtmlWindow):
         in the Panel.
         """
         self.parent = parent
-        if not globalvar.CheckWxVersion([2, 9]):
-            wx.InitAllImageHandlers()
         HtmlWindow.__init__(self, parent=parent, **kwargs)
 
         self.loaded = False
@@ -753,7 +755,7 @@ class HelpWindow(HtmlWindow):
         try:
             contents = []
             skip = False
-            for l in file(htmlFile, "rb").readlines():
+            for l in open(htmlFile, "rb").readlines():
                 if "DESCRIPTION" in l:
                     skip = False
                 if not skip:
@@ -796,10 +798,10 @@ class HelpPanel(wx.Panel):
 
         self.content = HelpWindow(self, command, text, skipDescription)
 
-        self.btnNext = wx.Button(parent=self, id=wx.ID_ANY,
+        self.btnNext = Button(parent=self, id=wx.ID_ANY,
                                  label=_("&Next"))
         self.btnNext.Enable(False)
-        self.btnPrev = wx.Button(parent=self, id=wx.ID_ANY,
+        self.btnPrev = Button(parent=self, id=wx.ID_ANY,
                                  label=_("&Previous"))
         self.btnPrev.Enable(False)
 
@@ -924,7 +926,7 @@ def _grassDevTeam(start):
         end = date.today().year
 
     return '%(c)s %(start)s-%(end)s by the GRASS Development Team' % {
-        'c': unichr(169), 'start': start, 'end': end}
+        'c': _unichr(169), 'start': start, 'end': end}
 
 
 def main():

@@ -12,6 +12,7 @@ This program is free software under the GNU General Public License
 """
 
 import sys
+import six
 import numpy as np
 from multiprocessing import Process, Queue
 
@@ -107,13 +108,13 @@ def ComputeScatts(region, scatt_conds, bands, n_bands,
 
 def _memmapToFileNames(data):
 
-    for k, v in data.iteritems():
+    for k, v in six.iteritems(data):
         if 'np_vals' in v:
             data[k]['np_vals'] = v['np_vals'].filename()
 
 
 def _fileNamesToMemmap(data):
-    for k, v in data.iteritems():
+    for k, v in six.iteritems(data):
         if 'np_vals' in v:
             data[k]['np_vals'] = np.memmap(filename=v['np_vals'])
 
@@ -186,7 +187,7 @@ def _regionToCellHead(region):
                     'nsres': 'ns_res',
                     'ewres': 'ew_res'}
 
-    for k, v in region.iteritems():
+    for k, v in six.iteritems(region):
         if k in ["rows", "cols", "cells", "zone"]:  # zone added in r65224
             v = int(v)
         else:
@@ -221,11 +222,11 @@ def _getComputationStruct(cats, cats_rasts, cats_type, n_bands):
     refs = []
     cats_rasts_core = []
 
-    for cat_id, scatt_ids in cats.iteritems():
+    for cat_id, scatt_ids in six.iteritems(cats):
         cat_c_id = I_sc_add_cat(pointer(sccats))
         cats_rasts_core.append(cats_rasts[cat_id])
 
-        for scatt_id, dt in scatt_ids.iteritems():
+        for scatt_id, dt in six.iteritems(scatt_ids):
             # if key is missing condition is always True (full scatter plor is
             # computed)
             vals = dt['np_vals']

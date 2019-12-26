@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 ############################################################################
 #
@@ -6,11 +6,17 @@
 # AUTHOR(S):	Soeren Gebbert
 #
 # PURPOSE:	List registered maps of a space time raster dataset
-# COPYRIGHT:	(C) 2011-2014, Soeren Gebbert and the GRASS Development Team
+# COPYRIGHT:	(C) 2011-2017, Soeren Gebbert and the GRASS Development Team
 #
-#		This program is free software under the GNU General Public
-#		License (version 2). Read the file COPYING that comes with GRASS
-#		for details.
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
 #
 #############################################################################
 
@@ -33,7 +39,7 @@
 #% guisection: Formatting
 #% required: no
 #% multiple: yes
-#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,ewres,cols,rows,number_of_cells,min,max
+#% options: id,name,band_reference,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,ewres,cols,rows,number_of_cells,min,max
 #% answer: start_time
 #%end
 
@@ -44,7 +50,7 @@
 #% guisection: Selection
 #% required: no
 #% multiple: yes
-#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,ewres,cols,rows,number_of_cells,min,max
+#% options: id,name,band_reference,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,ewres,cols,rows,number_of_cells,min,max
 #% answer: name,mapset,start_time,end_time
 #%end
 

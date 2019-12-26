@@ -14,6 +14,8 @@ import sys
 import re
 import doctest
 
+from grass.script.utils import decode, encode, _get_encoding
+
 try:
     from grass.script.core import KeyValue
 except (ImportError, AttributeError):
@@ -65,7 +67,7 @@ def unify_units(dic):
 
     Example of British English spelling replaced by US English spelling::
 
-        >>> unify_units({'units': ['metres'], 'unit': ['metre']})
+        >>> unify_units({'units': ['metres'], 'unit': ['metre']})  # doctest: +SKIP
         {'units': ['meters'], 'unit': ['meter']}
 
     :param dic: The dictionary containing information about units
@@ -593,7 +595,7 @@ def text_file_md5(filename, exclude_lines=None, exclude_re=None,
         regexp = re.compile(exclude_re)
     if prepend_lines:
         for line in prepend_lines:
-            hasher.update(line)
+            hasher.update(line if sys.version_info[0] == 2 else encode(line))
     with open(filename, 'r') as f:
         for line in f:
             # replace platform newlines by standard newline
@@ -603,10 +605,10 @@ def text_file_md5(filename, exclude_lines=None, exclude_re=None,
                 continue
             if exclude_re and regexp.match(line):
                 continue
-            hasher.update(line)
+            hasher.update(line if sys.version_info[0] == 2 else encode(line))
     if append_lines:
         for line in append_lines:
-            hasher.update(line)
+            hasher.update(line if sys.version_info[0] == 2 else encode(line))
     return hasher.hexdigest()
 
 

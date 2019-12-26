@@ -983,17 +983,24 @@ static void buffer_lines(struct line_pnts *area_outer, struct line_pnts **area_i
    \brief Creates buffer around line.
 
    See also Vect_line_buffer().
+   
+   Shape of buffer endings is managed by two parameters - round and cap.
+   Setting round=1, cap=1 gives "classical" buffer, while
+   round=0, cap=1 gives square end, but cap=0 – butt.
+   See v.buffer manual or SVG stroke-linecap for examples.
+   
+   To get "classical" buffer, set db equal to da, and dalpha to 0.
 
    \param Points input line geometry
    \param da distance along major axis
    \param db distance along minor axis
    \param dalpha angle between 0x and major axis
-   \param round make corners round
-   \param caps add caps at line ends
+   \param round make corners round (0 - square, not 0 - round)
+   \param caps add caps at line ends (0 - butt, not 0 - caps)
    \param tol maximum distance between theoretical arc and output segments
    \param[out] oPoints output polygon outer border (ccw order)
-   \param[out] inner_count number of holes
    \param[out] iPoints array of output polygon's holes (cw order)
+   \param[out] inner_count number of holes
  */
 void Vect_line_buffer2(const struct line_pnts *Points, double da, double db,
 		       double dalpha, int round, int caps, double tol,

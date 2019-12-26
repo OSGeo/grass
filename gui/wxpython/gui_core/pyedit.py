@@ -13,7 +13,10 @@ for details.
 import sys
 import os
 import stat
-from StringIO import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 import time
 
 import wx
@@ -26,8 +29,7 @@ if __name__ == '__main__':
     from grass.script.setup import set_gui_path
     set_gui_path()
 
-from core.utils import _
-from core.gcmd import EncodeString, GError
+from core.gcmd import GError
 from gui_core.pystc import PyStc
 from core import globalvar
 from core.menutree import MenuTreeModelBuilder
@@ -46,7 +48,7 @@ from core.debug import Debug
 
 def script_template():
     """The most simple script which runs and gives something"""
-    return r"""#!/usr/bin/env python
+    return r"""#!/usr/bin/env python3
 
 import grass.script as gscript
 
@@ -73,7 +75,7 @@ def module_template():
     output = StringIO()
     # header
     output.write(
-        r"""#!/usr/bin/env python
+        r"""#!/usr/bin/env python3
 #
 #%s
 #
@@ -87,9 +89,9 @@ def module_template():
 #
 #%s
 """ % ('#' * 72,
-            EncodeString(properties['name']),
-            EncodeString(properties['author']),
-            EncodeString('\n# '.join(properties['description'].splitlines())),
+            properties['name'],
+            properties['author'],
+            '\n# '.join(properties['description'].splitlines()),
             time.asctime(),
             '#' * 72))
 
@@ -99,7 +101,7 @@ def module_template():
 #%%module
 #%% description: %s
 #%%end
-""" % (EncodeString(' '.join(properties['description'].splitlines()))))
+""" % (' '.join(properties['description'].splitlines())))
 
     # import modules
     output.write(
@@ -142,7 +144,7 @@ if __name__ == "__main__":
 
 def script_example():
     """Example of a simple script"""
-    return r"""#!/usr/bin/env python
+    return r"""#!/usr/bin/env python3
 
 import grass.script as gscript
 
@@ -163,7 +165,7 @@ if __name__ == "__main__":
 
 def module_example():
     """Example of a GRASS module"""
-    return r"""#!/usr/bin/env python
+    return r"""#!/usr/bin/env python3
 
 #%module
 #% description: Adds the values of two rasters (A + B)
@@ -206,7 +208,7 @@ if __name__ == "__main__":
 
 def module_error_handling_example():
     """Example of a GRASS module"""
-    return r"""#!/usr/bin/env python
+    return r"""#!/usr/bin/env python3
 
 #%module
 #% description: Selects values from raster above value of mean plus standard deviation

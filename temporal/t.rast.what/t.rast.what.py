@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 ############################################################################
 #
@@ -8,12 +8,17 @@
 # PURPOSE:      Sample a space time raster dataset at specific vector point
 #               coordinates and write the output to stdout using different
 #               layouts
+# COPYRIGHT:    (C) 2015-2017 by the GRASS Development Team
 #
-# COPYRIGHT:    (C) 2015 by the GRASS Development Team
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
 #
-#               This program is free software under the GNU General Public
-#               License (version 2). Read the file COPYING that comes with GRASS
-#               for details.
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
 #
 #############################################################################
 
@@ -392,31 +397,40 @@ def one_point_per_col_output(separator, output_files, output_time_list,
         if first is True:
             if write_header is True:
                 out_str = "start%(sep)send"%({"sep":separator})
+
+                # Define different separator for coordinates and sites
+                if separator == ',':
+                    coor_sep = ';'
+                else:
+                    coor_sep = ','
+
                 for row in matrix:
                     if vcat:
                         cat = row[0]
                         x = row[1]
                         y = row[2]
-                        out_str += "{sep}{cat}{sep}{x:10.10f};" \
+                        out_str += "{sep}{cat}{csep}{x:10.10f}{csep}" \
                                   "{y:10.10f}".format(cat=cat, x=float(x),
                                                            y=float(y),
-                                                           sep=separator)
+                                                           sep=separator,
+                                                           csep=coor_sep)
                         if site_input:
                             site = row[3]
-                            out_str += "{sep}{site}".format(sep=separator,
+                            out_str += "{sep}{site}".format(sep=coor_sep,
                                                             site=site)
                     else:
                         x = row[0]
                         y = row[1]
-                        out_str += "{sep}{x:10.10f};" \
+                        out_str += "{sep}{x:10.10f}{csep}" \
                                    "{y:10.10f}".format(x=float(x), y=float(y),
-                                                       sep=separator)
+                                                       sep=separator,
+                                                       csep=coor_sep)
                         if site_input:
                             site = row[2]
-                            out_str += "{sep}{site}".format(sep=separator,
+                            out_str += "{sep}{site}".format(sep=coor_sep,
                                                             site=site)
 
-            out_file.write(out_str + "\n")
+                out_file.write(out_str + "\n")
 
         first = False
 
@@ -495,13 +509,17 @@ def one_point_per_timerow_output(separator, output_files, output_time_list,
                 else:
                     matrix.append(cols[:2])
 
-            matrix[i] = matrix[i] + cols[3:]
+            if vcat:
+                matrix[i] = matrix[i] + cols[4:]
+            else:
+                matrix[i] = matrix[i] + cols[3:]
 
         first = False
 
         in_file.close()
 
-    out_file.write(header + "\n")
+    if write_header:
+        out_file.write(header + "\n")
 
     gscript.verbose(_("Writing the output file <%s>"%(output)))
     for row in matrix:

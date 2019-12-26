@@ -75,7 +75,6 @@ class TestTemporalRasterAlgebra(TestCase):
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
-        maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 2)
         self.assertEqual(D.metadata.get_max_max(), 3)
@@ -114,7 +113,8 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(D.get_granularity(),  u'1 day')
 
     def test_simple_arith_hash_1(self):
-        """Simple arithmetic test including the hash operator
+        """Simple arithmetic test including the hash operator using the granularity option
+        for map name creation
 
         R = A + (A {#, equal,l} A)
 
@@ -128,11 +128,23 @@ class TestTemporalRasterAlgebra(TestCase):
         r4 = a4 + 1
 
         """
-        tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
+        tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True, time_suffix="gran")
         tra.parse(expression='R = A + (A {#, equal,l} A)', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
+        # r_2001_01_01
+        # r_2001_01_02
+        # r_2001_01_03
+        # r_2001_01_04
+
+        maps = D.get_registered_maps_as_objects()
+        count = 1
+        for map in maps:
+            map_name = "r_2001_01_0%i"%count
+            self.assertEqual(map.get_name(), map_name)
+            count += 1
+
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 2)
         self.assertEqual(D.metadata.get_max_max(), 5)
@@ -142,7 +154,7 @@ class TestTemporalRasterAlgebra(TestCase):
 
 
     def test_simple_arith_td_1(self):
-        """Simple arithmetic test
+        """Simple arithmetic test with time suffix option
 
         R = A + td(A)
 
@@ -156,11 +168,25 @@ class TestTemporalRasterAlgebra(TestCase):
         r4 = a4 + 1
 
         """
-        tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
+        tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True, time_suffix="time")
         tra.parse(expression='R = A + td(A)', basename="r", overwrite=True)
+
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
+        maps = D.get_registered_maps_as_objects()
+
+        # Test for map names resulting from the time suffix option
+        #r_2001_01_01T00_00_00
+        #r_2001_01_02T00_00_00
+        #r_2001_01_03T00_00_00
+        #r_2001_01_04T00_00_00
+        count = 1
+        for map in maps:
+            map_name = "r_2001_01_0%iT00_00_00"%count
+            self.assertEqual(map.get_name(), map_name)
+            count += 1
+
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 2)
         self.assertEqual(D.metadata.get_max_max(), 5)

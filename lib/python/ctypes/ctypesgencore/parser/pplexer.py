@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 '''Preprocess a C source file using gcc and convert the result into
    a token stream
@@ -76,22 +76,19 @@ def sub(s):
 class StringLiteral(str):
 
     def __new__(cls, value):
-        assert value[0] == '"' and value[-1] == '"'
         # Unescaping probably not perfect but close enough.
         try:
-            value = value[1:-1].decode('string_escape')
+            value = re.sub(r'\\x([0-9a-fA-F])(?![0-9a-fA-F])',
+                           r'\\x0\\1', value[1:-1])
         except ValueError as e:
-            try:
-                value = re.sub(r'\\x([0-9a-fA-F])(?![0-9a-fA-F])',
-                               r'\x0\1',
-                               value[1:-1]).decode('string_escape')
-            except ValueError as e:
-                raise ValueError("invalid \\x escape in %s" % value)
+            raise ValueError("invalid \\x escape in %s" % value)
+
         return str.__new__(cls, value)
 
 # --------------------------------------------------------------------------
 # Token declarations
 # --------------------------------------------------------------------------
+
 
 punctuators = {
     # value: (regex, type)
@@ -155,6 +152,7 @@ def punctuator_regex(punctuators):
         punctuator_regexes.sort(key=lambda a: -len(a))
     return '(%s)' % '|'.join(punctuator_regexes)
 
+
 # Process line-number directives from the preprocessor
 # See http://docs.freebsd.org/info/cpp/cpp.info.Output.html
 DIRECTIVE = r'\#\s+(\d+)\s+"([^"]+)"[ \d]*\n'
@@ -171,6 +169,7 @@ def t_ANY_directive(t):
 def t_ANY_punctuator(t):
     t.type = punctuators[t.value][1]
     return t
+
 
 IDENTIFIER = sub('{L}({L}|{D})*')
 
@@ -210,6 +209,7 @@ def t_DEFINE_identifier(t):
         t.type = 'IDENTIFIER'
     return t
 
+
 FLOAT_LITERAL = sub(r"(?P<p1>{D}+)?(?P<dp>[.]?)(?P<p2>(?(p1){D}*|{D}+))"
                     r"(?P<exp>(?:[Ee][+-]?{D}+)?)(?P<suf>{FS}?)(?!\w)")
 
@@ -239,6 +239,7 @@ def t_ANY_float(t):
 
     return t
 
+
 INT_LITERAL = sub(r"(?P<p1>(?:0x{H}+)|(?:{D}+))(?P<suf>{IS})")
 
 
@@ -264,6 +265,7 @@ def t_ANY_int(t):
 
     return t
 
+
 CHARACTER_CONSTANT = sub(r"L?'(\\.|[^\\'])+'")
 
 
@@ -271,6 +273,7 @@ CHARACTER_CONSTANT = sub(r"L?'(\\.|[^\\'])+'")
 def t_ANY_character_constant(t):
     t.type = 'CHARACTER_CONSTANT'
     return t
+
 
 STRING_LITERAL = sub(r'L?"(\\.|[^\\"])*"')
 
@@ -310,6 +313,7 @@ def t_INITIAL_pp_define(t):
 def t_DEFINE_newline(t):
     t.type = 'PP_END_DEFINE'
     t.lexer.begin("INITIAL")
+    t.lexer.lineno += 1
     del t.lexer.macro_params
 
     # Damage control in case the token immediately after the #define failed
@@ -337,5 +341,6 @@ def t_DEFINE_error(t):
     t.value = t.value[0]
     t.lexer.lexpos += 1  # Skip it if it's an error in a #define
     return t
+
 
 t_ANY_ignore = ' \t\v\f\r'

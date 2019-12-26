@@ -288,9 +288,8 @@ int main(int argc, char *argv[])
     tol_opt->key = "tolerance";
     tol_opt->type = TYPE_DOUBLE;
     tol_opt->required = NO;
-    tol_opt->answer = "0.01";
     tol_opt->description =
-	_("Maximum distance between theoretical arc and polygon segments as multiple of buffer");
+	_("Maximum distance between theoretical arc and polygon segments as multiple of buffer (default 0.01)");
     tol_opt->guisection = _("Distance");
 
     straight_flag = G_define_flag();
@@ -358,9 +357,12 @@ int main(int argc, char *argv[])
     if (bufcol_opt->answer && field == -1)
 	G_fatal_error(_("The bufcol option requires a valid layer."));
 
-    tolerance = atof(tol_opt->answer);
-    if (tolerance <= 0)
-	G_fatal_error(_("The tolerance must be > 0."));
+    tolerance = 0.01;
+    if (tol_opt->answer) {
+	tolerance = atof(tol_opt->answer);
+	if (tolerance <= 0)
+	    G_fatal_error(_("The tolerance must be > 0."));
+    }
 
     if (adjust_tolerance(&tolerance))
 	G_warning(_("The tolerance was reset to %g"), tolerance);
@@ -385,6 +387,18 @@ int main(int argc, char *argv[])
 
 	unit_tolerance = fabs(tolerance * MIN(da, db));
 	G_verbose_message(_("The tolerance in map units = %g"), unit_tolerance);
+
+	if (use_geos) {
+	    if (distb_opt->answer)
+		G_warning(_("Option '%s' is not available with GEOS buffering"),
+			  distb_opt->key);
+	    if (dalpha != 0)
+		G_warning(_("Option '%s' is not available with GEOS buffering"),
+			  angle_opt->key);
+	    if (tol_opt->answer)
+		G_warning(_("Option '%s' is not available with GEOS buffering"),
+			  tol_opt->key);
+	}
     }
 
     if (Vect_open_new(&Out, out_opt->answer, WITHOUT_Z) < 0)
@@ -652,12 +666,26 @@ int main(int argc, char *argv[])
 		G_debug(2, _("The tolerance in map units: %g"),
 			unit_tolerance);
 	    }
+
+	    if (da <= 0) {
+		G_warning(_("Distances must be positive, ignoring distance %g"), da);
+		continue;
+	    }
 	    
 	    Vect_line_prune(Points);
 	    if (ltype & GV_POINTS || Points->n_points == 1) {
-		Vect_point_buffer2(Points->x[0], Points->y[0], da, db, dalpha,
-				   !(straight_flag->answer), unit_tolerance,
-				   &(arr_bc_pts.oPoints));
+		if (straight_flag->answer) {
+			arr_bc_pts.oPoints = Vect_new_line_struct();
+		        Vect_append_point(arr_bc_pts.oPoints, Points->x[0] + da, Points->y[0] + da, 0);
+		        Vect_append_point(arr_bc_pts.oPoints, Points->x[0] + da, Points->y[0] - da, 0);
+		        Vect_append_point(arr_bc_pts.oPoints, Points->x[0] - da, Points->y[0] - da, 0);
+		        Vect_append_point(arr_bc_pts.oPoints, Points->x[0] - da, Points->y[0] + da, 0);
+  		        Vect_append_point(arr_bc_pts.oPoints, arr_bc_pts.oPoints->x[0], arr_bc_pts.oPoints->y[0], arr_bc_pts.oPoints->z[0]);
+		} else {
+			Vect_point_buffer2(Points->x[0], Points->y[0], da, db, dalpha,
+					   !(straight_flag->answer), unit_tolerance,
+					   &(arr_bc_pts.oPoints));
+		}
 
 		Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints, BCats);
 		line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, CCats);

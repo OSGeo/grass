@@ -10,7 +10,7 @@
  ** int nrows, ncols;
  **     opens the structure flag.  
  **     The flag structure will be a two dimensional array of bits the
- **     size of nrows by ncols.  Will initalize flags to zero (unset).
+ **     size of nrows by ncols.  Will initialize flags to zero (unset).
  **
  ** flag_destroy(flags)
  ** FLAG *flags;

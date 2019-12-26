@@ -33,6 +33,8 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import copy
@@ -49,7 +51,6 @@ from core.toolboxes import expandAddons as expAddons
 from core.toolboxes import getMessages as getToolboxMessages
 from core.toolboxes import clearMessages as clearToolboxMessages
 from core.gcmd import GError
-from core.utils import _
 
 if not os.getenv("GISBASE"):
     sys.exit("GRASS is not running. Exiting...")
@@ -275,7 +276,7 @@ if __name__ == "__main__":
     elif action == 'commands':
         menudata.PrintCommands(sys.stdout)
     elif action == 'dump':
-        print menudata.model
+        print(menudata.model)
     else:
         import grass.script.core as gscore
         gscore.fatal("Unknown value for parameter action: " % action)

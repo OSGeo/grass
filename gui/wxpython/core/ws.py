@@ -19,6 +19,7 @@ This program is free software under the GNU General Public License
 import sys
 import copy
 import time
+import six
 
 import wx
 from wx.lib.newevent import NewEvent
@@ -30,7 +31,6 @@ from grass.exceptions import CalledModuleError
 from core import utils
 from core.debug import Debug
 from core.gthread import gThread
-from core.utils import _
 
 try:
     haveGdal = True
@@ -196,7 +196,11 @@ class RenderWMSMgr(wx.EvtHandler):
             if len(r) < 2:
                 continue
             try:
-                if r[0] in ['cols', 'rows']:
+                if r[0] in ['e-w resol3', 'n-s resol3', 'rows3', 'cols3',
+                            'depths']:
+                    # ignore 3D region values (causing problems in latlong locations)
+                    continue
+                if r[0] in ['cols', 'rows', 'zone', 'proj']:
                     region[r[0]] = int(r[1])
                 else:
                     region[r[0]] = float(r[1])
@@ -209,7 +213,7 @@ class RenderWMSMgr(wx.EvtHandler):
         """Create string for GRASS_REGION env variable from  dict created by _getRegionDict.
         """
         regionStr = ''
-        for k, v in region.iteritems():
+        for k, v in six.iteritems(region):
             item = k + ': ' + str(v)
             if regionStr:
                 regionStr += '; '
@@ -352,7 +356,7 @@ class GDALRasterMerger:
         if sXsize < 1 or sYsize < 1:
             return
 
-        for sBandNnum, tBandNum in sTBands.iteritems():
+        for sBandNnum, tBandNum in six.iteritems(sTBands):
             bandData = sDataset.GetRasterBand(sBandNnum).ReadRaster(
                 sXoff, sYoff, sXsize, sYsize, tXsize, tYsize, gdal.GDT_Byte)
             self.tDataset.GetRasterBand(tBandNum).WriteRaster(

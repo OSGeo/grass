@@ -17,18 +17,27 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com> (menu customization)
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import getopt
 import atexit
 
-from core import globalvar
-from core.utils import _, registerPid, unregisterPid
-
+# i18n is taken care of in the grass library code.
+# So we need to import it before any of the GUI code.
 from grass.exceptions import Usage
 from grass.script.core import set_raise_on_error
 
+from core import globalvar
+from core.utils import registerPid, unregisterPid
+
 import wx
+# import adv and html before wx.App is created, otherwise
+# we get annoying "Debug: Adding duplicate image handler for 'Windows bitmap file'"
+# during start up, remove when not needed
+import wx.adv
+import wx.html
 try:
     import wx.lib.agw.advancedsplash as SC
 except ImportError:
@@ -54,9 +63,6 @@ class GMApp(wx.App):
 
         :return: True
         """
-        if not globalvar.CheckWxVersion([2, 9]):
-            wx.InitAllImageHandlers()
-
         # create splash screen
         introImagePath = os.path.join(globalvar.IMGDIR, "splash_screen.png")
         introImage = wx.Image(introImagePath, wx.BITMAP_TYPE_PNG)
@@ -93,7 +99,7 @@ class GMApp(wx.App):
                     parent=None,
                     id=wx.ID_ANY)
 
-        wx.Yield()
+        wx.GetApp().Yield()
 
         # create and show main frame
         from lmgr.frame import GMFrame
@@ -108,10 +114,10 @@ class GMApp(wx.App):
 
 def printHelp():
     """ Print program help"""
-    print >> sys.stderr, "Usage:"
-    print >> sys.stderr, " python wxgui.py [options]"
-    print >> sys.stderr, "%sOptions:" % os.linesep
-    print >> sys.stderr, " -w\t--workspace file\tWorkspace file to load"
+    print("Usage:", file=sys.stderr)
+    print(" python wxgui.py [options]", file=sys.stderr)
+    print("%sOptions:" % os.linesep, file=sys.stderr)
+    print(" -w\t--workspace file\tWorkspace file to load", file=sys.stderr)
     sys.exit(1)
 
 
@@ -146,8 +152,8 @@ def main(argv=None):
         except getopt.error as msg:
             raise Usage(msg)
     except Usage as err:
-        print >> sys.stderr, err.msg
-        print >> sys.stderr, "for help use --help"
+        print(err.msg, file=sys.stderr)
+        print(sys.stderr, "for help use --help", file=sys.stderr)
         printHelp()
 
     workspaceFile = process_opt(opts, args)

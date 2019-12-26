@@ -38,7 +38,7 @@ from gui_core.forms import GUI
 from mapdisp.frame import MapFrame
 from core.render import Map
 from wxplot.histogram import HistogramPlotFrame
-from core.utils import GetLayerNameFromCmd, ltype2command, _
+from core.utils import GetLayerNameFromCmd, ltype2command
 from wxplot.profile import ProfileFrame
 from core.debug import Debug
 from core.settings import UserSettings, GetDisplayVectSettings
@@ -47,7 +47,7 @@ from core.gcmd import GWarning, GError, RunCommand
 from icons.icon import MetaIcon
 from web_services.dialogs import SaveWMSLayerDialog
 from gui_core.widgets import MapValidator
-from gui_core.wrap import Menu, GenBitmapButton
+from gui_core.wrap import Menu, GenBitmapButton, TextCtrl, NewId
 from lmgr.giface import LayerManagerGrassInterfaceForMapDisplay
 from core.giface import Notification
 
@@ -204,7 +204,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # here (with initial auto-generated names) we use just the
         # number, not the whole name for simplicity
-        self.mapdisplay.SetTitleWithName(self.displayIndex + 1)
+        self.mapdisplay.SetTitleWithName(str(self.displayIndex + 1))
 
         # show new display
         if showMapDisplay is True:
@@ -444,7 +444,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     'null', 'zoom1', 'color', 'colori', 'hist', 'univar', 'prof',
                     'properties', 'sql', 'copy', 'report', 'export-pg',
                     'export-attr', 'pack'):
-                self.popupID[key] = wx.NewId()
+                self.popupID[key] = NewId()
 
         # get current mapset
         currentMapset = grass.gisenv()['MAPSET']
@@ -2132,7 +2132,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             layer=self.GetLayerInfo(
                 item,
                 key='maplayer'),
-            type=type,
+            ltype=type,
             command=cmdlist,
             name=layerName,
             active=chk,
@@ -2255,6 +2255,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         height = 25
         if sys.platform in ('win32', 'darwin'):
             height = 40
-        ctrl = wx.TextCtrl(self, id=wx.ID_ANY, value='', pos=wx.DefaultPosition, size=(
+        ctrl = TextCtrl(self, id=wx.ID_ANY, value='', pos=wx.DefaultPosition, size=(
             self.GetSize()[0] - 100, height), style=wx.TE_PROCESS_ENTER | wx.TE_DONTWRAP)
         return ctrl

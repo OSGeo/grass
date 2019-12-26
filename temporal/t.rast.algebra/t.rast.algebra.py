@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 ############################################################################
 #
@@ -8,11 +8,17 @@
 # PURPOSE:      Provide temporal raster algebra to perform spatial an temporal operations
 #               for space time datasets by topological relationships to other space time
 #               datasets.
-# COPYRIGHT:    (C) 2014 by the GRASS Development Team
+# COPYRIGHT:    (C) 2014-2017 by the GRASS Development Team
 #
-#		This program is free software under the GNU General Public
-#		License (version 2). Read the file COPYING that comes with GRASS
-#		for details.
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
 #
 #############################################################################
 
@@ -37,6 +43,15 @@
 #% label: Basename of the new generated output maps
 #% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
 #% required: yes
+#%end
+
+#%option
+#% key: suffix
+#% type: string
+#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+#% answer: num
+#% required: no
+#% multiple: no
 #%end
 
 #%option
@@ -79,6 +94,7 @@ def main():
     expression = options['expression']
     basename = options['basename']
     nprocs = options["nprocs"]
+    time_suffix = options["suffix"]
     spatial = flags["s"]
     register_null = flags["n"]
     granularity = flags["g"]
@@ -99,7 +115,7 @@ def main():
                                          spatial=spatial,
                                          nprocs=nprocs,
                                          register_null=register_null,
-                                         dry_run=dry_run)
+                                         dry_run=dry_run, time_suffix=time_suffix)
 
     if granularity:
         if not p.setup_common_granularity(expression=expression,  lexer = tgis.TemporalRasterAlgebraLexer()):

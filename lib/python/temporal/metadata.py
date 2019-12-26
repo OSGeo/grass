@@ -22,8 +22,6 @@ for details.
 :authors: Soeren Gebbert
 """
 from __future__ import print_function
-# i18N
-import gettext
 from .base import SQLDatabaseInterface
 from .core import init
 
@@ -319,11 +317,27 @@ class RasterMetadata(RasterMetadataBase):
     """
     def __init__(self, ident=None, datatype=None,
                  cols=None, rows=None, number_of_cells=None, nsres=None,
-                 ewres=None, min=None, max=None):
+                 ewres=None, min=None, max=None, band_reference=None):
 
         RasterMetadataBase.__init__(self, "raster_metadata", ident, datatype,
                                     cols, rows, number_of_cells, nsres,
                                     ewres, min, max)
+
+        self.set_band_reference(band_reference)
+
+    def set_band_reference(self, band_reference):
+        """Set the band reference identifier"""
+        self.D["band_reference"] = band_reference
+
+    def get_band_reference(self):
+        """Get the band reference identifier
+           :return: None if not found"""
+        if "band_reference" in self.D:
+            return self.D["band_reference"]
+        else:
+            return None
+
+    band_reference = property(fget=get_band_reference, fset=set_band_reference)
 
     def print_info(self):
         """Print information about this class in human readable style"""
@@ -331,9 +345,15 @@ class RasterMetadata(RasterMetadataBase):
         #      0123456789012345678901234567890
         RasterMetadataBase.print_info(self)
 
+        # band reference section (raster specific only)
+        print(" | Band reference:............. " + str(self.get_band_reference()))
+
     def print_shell_info(self):
         """Print information about this class in shell style"""
         RasterMetadataBase.print_shell_info(self)
+
+        # band reference section (raster specific only)
+        print("band_reference=" + str(self.get_band_reference()))
 
 ###############################################################################
 
@@ -1003,6 +1023,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
              | Maximum value min:.......... None
              | Maximum value max:.......... None
              | Aggregation type:........... None
+             | Number of registered bands:. None
              | Number of registered maps:.. None
              |
              | Title:
@@ -1038,6 +1059,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         self.D["ewres_min"] = None
         self.D["ewres_max"] = None
         self.D["aggregation_type"] = aggregation_type
+        self.D["number_of_bands"] = None
 
     def set_aggregation_type(self, aggregation_type):
         """Set the aggregation type of the dataset (mean, min, max, ...)"""
@@ -1132,6 +1154,15 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         else:
             return None
 
+    def get_number_of_bands(self):
+        """Get the number of registered bands
+           :return: None if not found
+        """
+        if "number_of_bands" in self.D:
+            return self.D["number_of_bands"]
+        else:
+            return None
+
     nsres_min = property(fget=get_nsres_min)
     nsres_max = property(fget=get_nsres_max)
     ewres_min = property(fget=get_ewres_min)
@@ -1142,6 +1173,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
     max_max = property(fget=get_max_max)
     aggregation_type = property(fset=set_aggregation_type,
                                 fget=get_aggregation_type)
+    number_of_bands = property(fget=get_number_of_bands)
 
     def print_info(self):
         """Print information about this class in human readable style"""
@@ -1155,11 +1187,14 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         print(" | Maximum value min:.......... " + str(self.get_max_min()))
         print(" | Maximum value max:.......... " + str(self.get_max_max()))
         print(" | Aggregation type:........... " + str(self.get_aggregation_type()))
+        print(" | Number of registered bands:. " + str(self.get_number_of_bands()))
+
         STDSMetadataBase.print_info(self)
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
         print("aggregation_type=" + str(self.get_aggregation_type()))
+        print("number_of_bands=" + str(self.get_number_of_bands()))
         STDSMetadataBase.print_shell_info(self)
         print("nsres_min=" + str(self.get_nsres_min()))
         print("nsres_max=" + str(self.get_nsres_max()))

@@ -276,13 +276,18 @@ MM_err MM_register::register_deallocation(size_t sz) {
 
  
 /* ************************************************************ */
+/* these overloaded operators must only be used by this memory manager
+ * risk of invalid free if these operators are defined outside the MM_register class
+ * e.g. GDAL allocating memory with something else than new as defined here
+ * but then using delete as defined here 
+ */
 #ifdef GRASS_MM_USE_EXCEPTION_SPECIFIER
-void* operator new[] (size_t sz) throw (std::bad_alloc) {
+void* MM_register::operator new[] (size_t sz) throw (std::bad_alloc) {
 #else
-void* operator new[] (size_t sz) {
+void* MM_register::operator new[] (size_t sz) {
 #endif /* GRASS_MM_USE_EXCEPTION_SPECIFIER */
   void *p;
-  
+
   MM_DEBUG cout << "new: sz=" << sz << ", register " 
 		<< sz+SIZE_SPACE << "B ,"; 
 
@@ -320,7 +325,7 @@ void* operator new[] (size_t sz) {
     assert(0);
     exit (1);
   }
-  
+
   *((size_t *) p) = sz;
   
   MM_DEBUG cout << "ptr=" << (void*) (((char *) p) + SIZE_SPACE) << endl;
@@ -332,12 +337,12 @@ void* operator new[] (size_t sz) {
  
 /* ************************************************************ */
 #ifdef GRASS_MM_USE_EXCEPTION_SPECIFIER
-void* operator new (size_t sz) throw (std::bad_alloc) {
+void* MM_register::operator new (size_t sz) throw (std::bad_alloc) {
 #else
-void* operator new (size_t sz) {
+void* MM_register::operator new (size_t sz) {
 #endif /* GRASS_MM_USE_EXCEPTION_SPECIFIER */
   void *p;
-  
+
   MM_DEBUG cout << "new: sz=" << sz << ", register " 
 		<< sz+SIZE_SPACE << "B ,"; 
 
@@ -375,7 +380,7 @@ void* operator new (size_t sz) {
     assert(0);
     exit (1);
   }
-  
+
   *((size_t *) p) = sz;
   
   MM_DEBUG cout << "ptr=" << (void*) (((char *) p) + SIZE_SPACE) << endl;
@@ -388,13 +393,13 @@ void* operator new (size_t sz) {
 
 /* ---------------------------------------------------------------------- */
 #ifdef GRASS_MM_USE_EXCEPTION_SPECIFIER
-void operator delete (void *ptr) throw() {
+void MM_register::operator delete (void *ptr) throw() {
 #else
-void operator delete (void *ptr) noexcept {
+void MM_register::operator delete (void *ptr) noexcept {
 #endif /* GRASS_MM_USE_EXCEPTION_SPECIFIER */
   size_t sz;
   void *p;
-  
+
   MM_DEBUG cout << "delete: ptr=" << ptr << ","; 
 
   if (!ptr) {
@@ -411,6 +416,9 @@ void operator delete (void *ptr) noexcept {
   }
   
   assert(ptr);
+
+  /* causes invalid free if ptr has not been allocated with new as 
+   * defined above */
   p = ((char *)ptr) - SIZE_SPACE; // the base of memory
   sz = *((size_t *)p);
   
@@ -432,9 +440,9 @@ void operator delete (void *ptr) noexcept {
 
 /* ---------------------------------------------------------------------- */
 #ifdef GRASS_MM_USE_EXCEPTION_SPECIFIER
-void operator delete[] (void *ptr) throw() {
+void MM_register::operator delete[] (void *ptr) throw() {
 #else
-void operator delete[] (void *ptr) noexcept {
+void MM_register::operator delete[] (void *ptr) noexcept {
 #endif /* GRASS_MM_USE_EXCEPTION_SPECIFIER */
   size_t sz;
   void *p;
@@ -450,6 +458,9 @@ void operator delete[] (void *ptr) noexcept {
     return;
   }
    assert(ptr);
+
+  /* causes invalid free if ptr has not been allocated with new as 
+   * defined above */
    p = ((char *)ptr) - SIZE_SPACE; // the base of memory
    sz = *((size_t *)p);
 

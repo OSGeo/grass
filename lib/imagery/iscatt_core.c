@@ -252,7 +252,7 @@ int I_insert_patch_to_cat_rast(const char *patch_rast,
 
     f_cat_rast = fopen(cat_rast, "rb+");
     if (!f_cat_rast) {
-	G_warning(_("Unable to open category raster condtions file <%s>."),
+	G_warning(_("Unable to open category raster conditions file <%s>."),
 		  cat_rast);
 	return -1;
     }
@@ -438,7 +438,7 @@ static void update_cat_scatt_plts(struct rast_row *bands_rows,
    \brief Computes scatter plots data from bands_rows.
 
    \param scatt_conds pointer to scScatts struct of type SC_SCATT_CONDITIONS, 
-   			       where are selected areas (condtitions) stored
+   			       where are selected areas (conditions) stored
    \param f_cats_rasts_conds file which stores selected areas (conditions) from
                             mapwindow see I_create_cat_rast and I_insert_patch_to_cat_rast
    \param bands_rows data arrays of raster rows from analyzed raster bands 
@@ -511,7 +511,7 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
 	else {
 	    scatts_bands = scatts_conds->scatts_bands;
 
-        /* check conditions from category raster condtitions file
+        /* check conditions from category raster conditions file
            (see I_create_cat_rast) */
 	    if (f_cats_rasts_conds[i_cat]) {
 		n_pixs =
@@ -523,7 +523,7 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
 		    G_free(rast_pixs);
 		    G_free(belongs_pix);
 		    G_warning(_
-			      ("Unable to read from category raster condtition file."));
+			      ("Unable to read from category raster condition file."));
 		    return -1;
 		}
 		if (n_pixs != n_pixs) {
@@ -541,7 +541,7 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
 		}
 	    }
 
-	    /* check condtions defined in scatter plots */
+	    /* check conditions defined in scatter plots */
 	    for (i_scatt = 0; i_scatt < scatts_conds->n_a_scatts; i_scatt++) {
 		b_1_rast_row = bands_rows[scatts_bands[i_scatt * 2]];
 		b_2_rast_row = bands_rows[scatts_bands[i_scatt * 2 + 1]];
@@ -742,7 +742,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 		free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
 					 bands_ids, NULL, NULL,
 					 scatt_conds->n_a_cats);
-		G_warning(_("Unbale to read find raster <%s>"),
+		G_warning(_("Unable to find raster <%s>"),
 			  bands[band_id]);
 		return -1;
 	    }
@@ -752,7 +752,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 		free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
 					 bands_ids, NULL, NULL,
 					 scatt_conds->n_a_cats);
-		G_warning(_("Unbale to open raster <%s>"), bands[band_id]);
+		G_warning(_("Unable to open raster <%s>"), bands[band_id]);
 		return -1;
 	    }
 
@@ -800,7 +800,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 					 f_cats_rasts_conds,
 					 scatt_conds->n_a_cats);
 		G_warning(_
-			  ("Unable to open category raster condtition file <%s>"),
+			  ("Unable to open category raster condition file <%s>"),
 			  bands[band_id]);
 		return -1;
 	    }

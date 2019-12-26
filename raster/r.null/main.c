@@ -58,7 +58,9 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("map management"));
     G_add_keyword(_("null data"));
+    G_add_keyword(_("no-data"));
     module->description = _("Manages NULL-values of given raster map.");
 
     parms.map = G_define_standard_option(G_OPT_R_MAP);
@@ -132,7 +134,11 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Raster map <%s> is a reclass of map <%s@%s>. "
 			"Consider to generate a copy with r.mapcalc. Exiting."),
 		      name, rname, rmapset);
-
+    if (G_find_file2_misc("cell_misc", "vrt", name, "")) {
+        G_fatal_error(_("<%s> is a virtual raster map. "
+	                "Consider to generate a copy with r.mapcalc. Exiting."),
+		      name);
+    }
 
     if (strcmp(mapset, G_mapset()) != 0)
 	G_fatal_error(_("Raster map <%s> is not in your mapset <%s>"),

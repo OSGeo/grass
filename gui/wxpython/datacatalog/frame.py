@@ -6,7 +6,7 @@
 Classes:
  - datacatalog::DataCatalogFrame
 
-(C) 2014-2016 by Tereza Fiedlerova, and the GRASS Development Team
+(C) 2014-2018 by Tereza Fiedlerova, and the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -21,11 +21,11 @@ import sys
 
 import wx
 
-from core.utils import _
 from core.globalvar import ICONDIR
 from core.gcmd import RunCommand, GMessage
 from datacatalog.tree import DataCatalogTree
 from datacatalog.toolbars import DataCatalogToolbar
+from gui_core.wrap import Button
 
 
 class DataCatalogFrame(wx.Frame):
@@ -62,8 +62,8 @@ class DataCatalogFrame(wx.Frame):
                                                                    mapset=mapset))
 
         # buttons
-        self.btnClose = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
-        self.btnClose.SetToolTipString(_("Close GRASS GIS Data Catalog"))
+        self.btnClose = Button(parent=self.panel, id=wx.ID_CLOSE)
+        self.btnClose.SetToolTip(_("Close GRASS GIS Data Catalog"))
         self.btnClose.SetDefault()
 
         # events

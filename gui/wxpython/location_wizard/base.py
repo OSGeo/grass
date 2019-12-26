@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 """
 
 import wx
+from gui_core.wrap import StaticText, TextCtrl, Button, CheckBox
 
 
 class BaseClass(wx.Object):
@@ -30,10 +31,10 @@ class BaseClass(wx.Object):
         """Make aligned label"""
         if not parent:
             parent = self
-        label = wx.StaticText(parent=parent, id=wx.ID_ANY, label=text,
+        label = StaticText(parent=parent, id=wx.ID_ANY, label=text,
                               style=style)
         if tooltip:
-            label.SetToolTipString(tooltip)
+            label.SetToolTip(tooltip)
         return label
 
     def MakeTextCtrl(self, text='', size=(100, -1),
@@ -41,10 +42,10 @@ class BaseClass(wx.Object):
         """Generic text control"""
         if not parent:
             parent = self
-        textCtrl = wx.TextCtrl(parent=parent, id=wx.ID_ANY, value=text,
+        textCtrl = TextCtrl(parent=parent, id=wx.ID_ANY, value=text,
                                size=size, style=style)
         if tooltip:
-            textCtrl.SetToolTipString(tooltip)
+            textCtrl.SetToolTip(tooltip)
         return textCtrl
 
     def MakeButton(self, text, id=wx.ID_ANY, size=(-1, -1),
@@ -52,10 +53,10 @@ class BaseClass(wx.Object):
         """Generic button"""
         if not parent:
             parent = self
-        button = wx.Button(parent=parent, id=id, label=text,
+        button = Button(parent=parent, id=id, label=text,
                            size=size)
         if tooltip:
-            button.SetToolTipString(tooltip)
+            button.SetToolTip(tooltip)
         return button
 
     def MakeCheckBox(self, text, id=wx.ID_ANY, size=(-1, -1),
@@ -63,8 +64,8 @@ class BaseClass(wx.Object):
         """Generic checkbox"""
         if not parent:
             parent = self
-        chbox = wx.CheckBox(parent=parent, id=id, label=text,
+        chbox = CheckBox(parent=parent, id=id, label=text,
                              size=size)
         if tooltip:
-            chbox.SetToolTipString(tooltip)
+            chbox.SetToolTip(tooltip)
         return chbox

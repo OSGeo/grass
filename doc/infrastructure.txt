@@ -1,17 +1,46 @@
 How the GRASS Webserver and related infrastructure works
 
 written by M. Neteler
-Last changed: $Date$
+Last changed: Oct 2019
 
 
 Related Wiki documents:
-* http://grass.osgeo.org/wiki/GRASS_Migration_to_OSGeo (historical document)
+* https://grass.osgeo.org/wiki/GRASS_Migration_to_OSGeo (historical document)
+
+== GRASS Source code repository ==
+
+Maintainer: Markus Neteler, Martin Landa, OSGeo-SAC, http://wiki.osgeo.org/wiki/SAC
+
+Important update April 2019: The source code is now managed on GitHub (rather than in SVN).
+The new GitHub repositories are:
+
+* GRASS GIS core (7.x): https://github.com/OSGeo/grass
+* GRASS GIS legacy (3.x-6.x): https://github.com/OSGeo/grass-legacy
+* GRASS GIS Add-ons: https://github.com/OSGeo/grass-addons
+* GRASS GIS promotional material: https://github.com/OSGeo/grass-promo
+* GRASS GIS Website (future site): https://github.com/OSGeo/grass-website 
+
+* Github mirror at OSGeo: https://git.osgeo.org/gitea/grass_gis/grass
+* Git usage: https://trac.osgeo.org/grass/wiki/HowToGit
+
+Still trac at OSGeo is used for tickets: https://trac.osgeo.org/grass
+
+For easier linking in the Trac Wiki, some macro definitions are used for manual page refs (G7:modulename)
+* https://trac.osgeo.org/grass/wiki/InterMapTxt
+
+ZIP file download support in trac (was needed for g.extension) - on trac.osgeo.org:
+/var/www/trac/grass/conf/trac.ini
+[browser]
+downloadable_paths = /grass-addons/grass7/*/*,/sandbox/*/*
+
+Statistics:
+https://trac.osgeo.org/grass/stats/code
 
 == GRASS Web server ==
 
 Maintainer: M. Neteler
 
-* http://grass.osgeo.org
+* https://grass.osgeo.org
 ** Shared virtual OSGeo machine (osgeo6) hosted at Oregon State University Open Source Lab
    (server: osgeo6.osgeo.osuosl.org)
 ** OSGeo SAC page: http://wiki.osgeo.org/wiki/SAC_Service_Status
@@ -20,21 +49,19 @@ Maintainer: M. Neteler
 ** Software:
 *** OS: Debian Wheezy
 *** Apache Server with PHP
-** Further addresses: http://www.grass-gis.org
-*** points through Apache rewrite engine to http://grass.osgeo.org
 
 * Backup:
-** VERIFY 2010: grass.osgeo.org is backup'ed via rsync to XXXX: http://wiki.osgeo.org/wiki/SAC:Backups#download.osgeo.org
+** VERIFY 2010: grass.osgeo.org is backup'ed by OSGeo SAC: http://wiki.osgeo.org/wiki/SAC:Backups
 ** Wiki backup, via rsync to http://josef.fsv.cvut.cz/WIKI/grass-osgeo/index.php/Main_Page
 
 * Web pages:
-** CMSMS: http://grass.osgeo.org/home/imprint/
+** CMSMS: https://grass.osgeo.org/home/imprint/
 ** mirrored from Wroclav university via httrack (tier-1),
    then offered as rsync mirror (tier-2) to other mirror sites
 ** RSS feed: offered by CMSMS
 
 * Weekly snapshots (generated Saturday morning California time):
-** Source code tarball of SVN HEAD
+** Source code tarball of git (GitHub) https://github.com/OSGeo/grass
 ** Linux binary snapshot is compiled
 *** GRASS is compiled with GDAL, PROJ, SQLite, MySQL, PostgreSQL, FFTW, C++ support
 *** binary tar.gz and manuals are moved into Web space
@@ -42,12 +69,12 @@ Maintainer: M. Neteler
 * GRASS user manual HTML:
 ** generated during compilation of weekly Linux binary snapshot
 
-* GRASS programmer's manual (http://grass.osgeo.org/programming7/)
+* GRASS programmer's manual (https://grass.osgeo.org/programming7/)
 ** HTML: cronjob run Wednesday morning California time
 ** HTML: cronjob run Saturday morning California time
 ** disabled: PDF: cronjob run Saturday morning California time
 
-* i18N translation statistics (http://grass.osgeo.org/development/translations/#statistics)
+* i18N translation statistics (https://grass.osgeo.org/development/translations/#statistics)
 ** generated during compilation of Linux binary snapshot, stats of
    (cd locale; make) are extracted into text file
 ** text file parsed by PHP page and shown as table
@@ -66,7 +93,7 @@ Maintainer: M. Neteler
 
 * Web statistics
 ** See URL at http://wiki.osgeo.org/wiki/Project_Stats
-** OSGeo: awstats (http://grass.osgeo.org/stats/awstats.pl)
+** OSGeo: awstats (https://grass.osgeo.org/stats/awstats.pl)
 *** configuration at: /etc/awstats/awstats.grass.osgeo.org.conf
 ***                   /etc/httpd/conf.d/sites/grass.osgeo.org.conf
 ***                   /etc/apache2/includes/grass.osgeo.org.inc
@@ -84,12 +111,12 @@ Maintainer: Markus Neteler
 
 Available lists:
 
-* at OSGeo.org (http://lists.osgeo.org/mailman/listinfo):
+* at OSGeo.org (https://lists.osgeo.org/mailman/listinfo):
    grass-abm 	 	Integration of GRASS with JAVA based agent based modeling (ABM)
    grass-announce 	GRASS announcements
    grass-commit 	Mailing list to distribute GRASS-CVS commits
    grass-dev 		GRASS GIS Development mailing list
-   grass-es 		La lista de correo de GRASS GIS en español
+   grass-es 		La lista de correo de GRASS GIS en espaÃ±ol
    grass-psc 		GRASS-PSC: GRASS Project Steering Committee
    grass-stats 		GRASS and statistical software
    grass-translations 	Translation of GRASS (i18N)
@@ -140,31 +167,29 @@ Web based client: See http://grasswiki.osgeo.org/wiki/IRC
    - Soeren ("huhabla")
    - Brad ("bdouglas")
 
-
-== GRASS Source code repository ==
-
-Maintainer: Markus Neteler, Martin Landa, OSGeo-SAC, http://wiki.osgeo.org/wiki/SAC
-
-* https://trac.osgeo.org/grass/browser
-* SVN: https://trac.osgeo.org/grass/wiki/HowToSVN
-
-Trac Wiki Macro definitions for manual pages G7:modulename
-* https://trac.osgeo.org/grass/wiki/InterMapTxt
-
-ZIP file download support in trac (needed for g.extension) - on trac.osgeo.org:
-/var/www/trac/grass/conf/trac.ini
-[browser]
-downloadable_paths = /grass-addons/grass7/*/*,/sandbox/*/*
-
-Statistics:
-https://trac.osgeo.org/grass/stats/code
-
 == GRASS Bugtracker ==
+
+Future bugtracker
+  * https://github.com/OSGeo/grass
 
 Current bugtracker (Jan 2008 - today):
   * https://trac.osgeo.org/grass/report
   * Trac
   * posts new bugs and comments to grass-dev list
+  * Settings:
+
+tracsvn (OSGeo server) (Dec 2007 - 2019)
+/var/www/trac/env/grass/conf/trac.ini
+  downloadable_paths = /grass-addons/grass7/*/*,/sandbox/*/*
+  path = /var/www/grass/htdocs
+  link = https://grass.osgeo.org/
+  src = site/grasslogo_vector_small.png
+  smtp_always_cc = grass-dev@lists.osgeo.org
+  smtp_replyto = grass-dev@lists.osgeo.org
+  url = https://grass.osgeo.org
+  .dir = /var/www/svn/repos/grass
+  base_url = https://trac.osgeo.org/grass/
+  database = postgres://postgres@/trac_grass
 
 Old bugtracker (Jan 2007 - Dec 2008):
   * http://wald.intevation.org/tracker/?group_id=21
@@ -190,24 +215,31 @@ Details:
 Installed with g.extension
 Manuals: https://grass.osgeo.org/grass7/manuals/addons/
 
+The redirect to the latest directory is defined on grass.osgeo.org:
+  /etc/apache2/includes/grass.osgeo.org.inc
+
 Procedure building of binaries (Windows):
   Addons module are compiled on build server, currently at the CTU in Prague)
   and publishing their manual pages on publishing server, i.e. grass.osgeo.org.
   A new compilation is triggered everytime when a commit is done in the Addons-SVN.
 
-Procedure of granting write access to Addons DVN repo:
+Procedure of granting write access to Addons repo:
 * Request procedure: https://trac.osgeo.org/grass/wiki/HowToContribute#WriteaccesstotheGRASS-Addons-SVNrepository
 * Adding OSGeo-ID:   https://www.osgeo.org/cgi-bin/auth/ldap_group.py?group=grass_addons
 * Adding contributor: https://trac.osgeo.org/grass/browser/grass-addons/contributors.csv (via SVN commit)
 * Confirm request in grass-psc and give instructions concerning code style etc (see archive for examples)
+
+XML file for g.extension: https://grass.osgeo.org/addons/grass7/modules.xml
+- generated in grass-addons/tools/addons/grass-addons-publish.sh
 
 == GRASS Travis CI ==
 
 Maintainer: Martin Landa
 
 * https://travis-ci.org/GRASS-GIS
-* https://github.com/GRASS-GIS/grass-ci
-* https://svn.osgeo.org/grass/grass-addons/tools/grass-ci/
+* https://github.com/OSGeo/grass
+* OLD: https://github.com/GRASS-GIS/grass-ci
+* https://github.com/OSGeo/grass-addons/tree/master/tools/grass-ci/
 
 Travis CI control files:
  trunk/.travis/
@@ -216,13 +248,25 @@ Travis CI control files:
    linux.script.sh
 
 Maintenance script:
-* https://svn.osgeo.org/grass/grass-addons/tools/grass-ci/grass-ci.sh
+* https://github.com/OSGeo/grass-addons/tree/master/tools/grass-ci/grass-ci.sh
+
+The github update is run as a cronjob on server "geo102" (CTU, CZ).
 
 == GRASS Coverity Scan ==
 
 Maintainer: Markus Neteler
 
 * https://scan.coverity.com/projects/grass?tab=overview
+
+
+== Transifex translation management ==
+
+i18N gettext messages:
+
+* Dashboard: https://www.transifex.com/grass-gis/
+* URL to fetch files:
+** https://www.transifex.com/grass-gis/grass7/content/
+** Use: "Auto update resources" button
 
 == OLD: GRASS Quality Control ==
 

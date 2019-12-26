@@ -18,8 +18,8 @@ int sg_factor(void)
 	    seg_get(&aspflag, (char *)&af, r, c);
 	    if (FLAG_GET(af.flag, NULLFLAG))
 		continue;
-	    
-	    seg_get(&watalt, (char *) &wa, r, c);
+
+	    seg_get(&watalt, (char *)&wa, r, c);
 	    low_elev = wa.ele;
 	    cseg_get(&r_h, &hih_elev, r, c);
 	    dseg_get(&s_l, &length, r, c);

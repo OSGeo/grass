@@ -19,7 +19,7 @@ import unittest
 
 from grass.pygrass.modules import Module
 from grass.exceptions import CalledModuleError
-from grass.script import shutil_which
+from grass.script import shutil_which, text_to_string, encode
 
 from .gmodules import call_module, SimpleModule
 from .checkers import (check_text_ellipsis,
@@ -28,11 +28,12 @@ from .checkers import (check_text_ellipsis,
 from .utils import safe_repr
 from .gutils import is_map_in_mapset
 
-
-if sys.version_info[0] == 2:
-    import StringIO
+pyversion = sys.version_info[0]
+if pyversion == 2:
+    from StringIO import StringIO
 else:
     from io import StringIO
+    unicode = str
 
 
 class TestCase(unittest.TestCase):
@@ -183,9 +184,9 @@ class TestCase(unittest.TestCase):
 
         See :func:`check_text_ellipsis` for details of behavior.
         """
-        self.assertTrue(isinstance(actual, str), (
+        self.assertTrue(isinstance(actual, (str, unicode)), (
                         'actual argument is not a string'))
-        self.assertTrue(isinstance(reference, str), (
+        self.assertTrue(isinstance(reference, (str, unicode)), (
                         'reference argument is not a string'))
         if os.linesep != '\n' and os.linesep in actual:
             actual = actual.replace(os.linesep, '\n')
@@ -672,13 +673,15 @@ class TestCase(unittest.TestCase):
         """
         diff = self._get_unique_name('compute_difference_raster_' + name_part
                                      + '_' + first + '_minus_' + second)
-        call_module('r.mapcalc',
-                    stdin='"{d}" = "{f}" - "{s}"'.format(d=diff,
-                                                         f=first,
-                                                         s=second))
+        expression = '"{diff}" = "{first}" - "{second}"'.format(
+            diff=diff,
+            first=first,
+            second=second
+        )
+        call_module('r.mapcalc', stdin=expression.encode("utf-8"))
         return diff
 
-    # TODO: name of map generation is repeted three times
+    # TODO: name of map generation is repeated three times
     # TODO: this method is almost the same as the one for 2D
     def _compute_difference_raster3d(self, first, second, name_part):
         """Compute difference of two rasters (first - second)
@@ -726,7 +729,7 @@ class TestCase(unittest.TestCase):
         # hash is the easiest way how to get a valid vector name
         # TODO: introduce some function which will make file valid
         hasher = hashlib.md5()
-        hasher.update(filename)
+        hasher.update(encode(filename))
         namehash = hasher.hexdigest()
         vector = self._get_unique_name('import_ascii_vector_' + name_part
                                        + '_' + namehash)
@@ -1019,7 +1022,7 @@ class TestCase(unittest.TestCase):
         stdmsg = ("There is a difference between vectors when compared as"
                   " ASCII files.\n")
 
-        output = StringIO.StringIO()
+        output = StringIO()
         # TODO: there is a diff size constant which we can use
         # we are setting it unlimited but we can just set it large
         maxlines = 100
@@ -1146,8 +1149,8 @@ class TestCase(unittest.TestCase):
             module.run()
             self.grass_modules.append(module.name)
         except CalledModuleError:
-            print(module.outputs.stdout)
-            print(module.outputs.stderr)
+            print(text_to_string(module.outputs.stdout))
+            print(text_to_string(module.outputs.stderr))
             # TODO: message format
             # TODO: stderr?
             stdmsg = ('Running <{m.name}> module ended'
@@ -1159,8 +1162,8 @@ class TestCase(unittest.TestCase):
                           errors=module.outputs.stderr
                       ))
             self.fail(self._formatMessage(msg, stdmsg))
-        print(module.outputs.stdout)
-        print(module.outputs.stderr)
+        print(text_to_string(module.outputs.stdout))
+        print(text_to_string(module.outputs.stderr))
         # log these to final report
         # TODO: always or only if the calling test method failed?
         # in any case, this must be done before self.fail()
@@ -1180,11 +1183,11 @@ class TestCase(unittest.TestCase):
             module.run()
             self.grass_modules.append(module.name)
         except CalledModuleError:
-            print(module.outputs.stdout)
-            print(module.outputs.stderr)
+            print(text_to_string(module.outputs.stdout))
+            print(text_to_string(module.outputs.stderr))
         else:
-            print(module.outputs.stdout)
-            print(module.outputs.stderr)
+            print(text_to_string(module.outputs.stdout))
+            print(text_to_string(module.outputs.stderr))
             stdmsg = ('Running <%s> ended with zero (successful) return code'
                       ' when expecting module to fail' % module.get_python())
             self.fail(self._formatMessage(msg, stdmsg))

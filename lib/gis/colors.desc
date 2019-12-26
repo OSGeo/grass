@@ -23,10 +23,13 @@ grey.eq: histogram-equalized grey scale
 grey.log: histogram logarithmic transformed grey scale
 gyr: green through yellow to red
 haxby: relative colors for bathymetry or topography
+inferno: perceptually uniform sequential color table inferno
 kelvin: blue to red for temperature in Kelvin scale
+magma: perceptually uniform sequential color table magma
 ndvi: Normalized Difference Vegetation Index colors
 ndwi: Normalized Difference Water Index colors
 oranges: white to orange
+plasma: perceptually uniform sequential color table plasma
 population: color table covering human population classification breaks
 population_dens: color table covering human population density classification breaks
 precipitation: precipitation color table (0..2000mm)

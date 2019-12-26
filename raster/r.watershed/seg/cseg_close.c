@@ -5,9 +5,7 @@
 
 int cseg_close(CSEG * cseg)
 {
-    Segment_release(&(cseg->seg));
-    close(cseg->fd);
-    unlink(cseg->filename);
+    Segment_close(&(cseg->seg));
     if (cseg->name) {
 	G_free(cseg->name);
 	cseg->name = NULL;

@@ -1,0 +1,87 @@
+AVNIR
+=====
+  see https://doi.org/10.1109/IGARSS.2007.4423393
+  files
+    AVNIR.csv
+
+Landsat
+=======
+ see https://landsat.usgs.gov/spectral-characteristics-viewer
+ files
+   etmplus.csv
+   landsat_8.csv
+
+geoeye
+======
+  see https://apollomapping.com/blog/new-documents-atmospheric-correction-digitalglobe-satellites-2
+  files
+    geoeye1.csv
+
+ikonos
+======
+  see https://web.archive.org/web/20150331094259/https://www.digitalglobe.com/sites/default/files/DigitalGlobe_Spectral_Response_1.pdf
+  files
+    ikonos.csv
+
+pleiades
+========
+  see https://trac.osgeo.org/grass/ticket/3054
+  files
+    pleiades1a.csv
+    pleiades1b.csv
+
+PRISM
+=====
+  see ?
+  files
+    PRISM-B.csv
+    PRISM-F.csv
+    PRISM-N.csv
+
+quickbird
+=========
+  see https://apollomapping.com/blog/new-documents-atmospheric-correction-digitalglobe-satellites-2
+  files
+    quickbird2.csv
+
+rapideye
+========
+  see https://resa.planet.com/files/2014-06/Spectral_Response_Curves.pdf
+  files
+    rapideye.csv
+
+sentinel
+========
+  see https://sentinels.copernicus.eu/documents/247904/685211/S2-SRF_COPE-GSEG-EOPG-TN-15-0007_3.0.xlsx
+    updates on https://sentinels.copernicus.eu/web/sentinel/home
+    go to Home › User Guides › Sentinel-2 MSI › S2-MSI Document Library
+  files
+    sentinel_2A_msi.csv
+
+spot
+====
+  see https://trac.osgeo.org/grass/ticket/3054
+  files
+    spot6.csv
+    spot7.csv
+    VGT1_spot4.csv
+    VGT2_spot5.csv
+
+worldview2
+==========
+  see https://apollomapping.com/blog/new-documents-atmospheric-correction-digitalglobe-satellites-2
+  files
+    worldview2.csv
+
+worldview3
+==========
+  see ?
+  files
+    worldview3.csv
+
+worldview4
+==========
+  see https://www.digitalglobe.com/resources/technical-information -> https://dg-cms-uploads-production.s3.amazonaws.com/uploads/document/file/242/relative_spectral_response_WV4.pdf
+  files
+    worldview4.csv
+

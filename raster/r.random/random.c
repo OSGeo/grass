@@ -116,7 +116,6 @@ int execute_random(struct rr_state *theState)
 
     G_percent(0, theState->nRand, 2);
 
-    init_rand();
     nc = (theState->use_nulls) ? theState->nCells :
 	theState->nCells - theState->nNulls;
     nt = theState->nRand;	/* Number of points to generate */
@@ -141,7 +140,7 @@ int execute_random(struct rr_state *theState)
 		    do_check = 0;
 	    }
 
-	    if (do_check && make_rand() % nc < nt) {
+	    if (do_check && G_lrand48() % nc < nt) {
 		nt--;
 		if (is_null_value(theState->buf, col))
 		    cpvalue(&theState->nulls, 0, &theState->buf, col);

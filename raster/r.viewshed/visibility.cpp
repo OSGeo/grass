@@ -401,11 +401,13 @@ save_io_visibilitygrid(IOVisibilityGrid * visgrid,
 
     if (viewOptions.outputMode == OUTPUT_BOOL)
 	save_io_visibilitygrid_to_GRASS(visgrid, viewOptions.outputfname,
-					CELL_TYPE, booleanVisibilityOutput);
+					CELL_TYPE, booleanVisibilityOutput,
+					OUTPUT_BOOL);
 
     else if (viewOptions.outputMode == OUTPUT_ANGLE)
 	save_io_visibilitygrid_to_GRASS(visgrid, viewOptions.outputfname,
-					FCELL_TYPE, angleVisibilityOutput);
+					FCELL_TYPE, angleVisibilityOutput,
+					OUTPUT_ANGLE);
     else
 	/* elevation  output */
 	save_io_vis_and_elev_to_GRASS(visgrid, viewOptions.inputfname,

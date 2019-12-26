@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # generates HTML man pages docs/html/<category>.html
-# (c) The GRASS Development Team, Markus Neteler, Glynn Clements 2003, 2004, 2005, 2006, 2009
+# (c) The GRASS Development Team, Markus Neteler, Glynn Clements 2003, 2004, 2005, 2006, 2009, 2019
 
 import sys
 import os
@@ -25,9 +25,9 @@ if len(sys.argv) > 3:
 
 filename = modclass + ".html"
 
-f = open(filename + ".tmp", 'wb')
+f = open(filename + ".tmp", 'w')
 
-write_html_header(f, "GRASS GIS %s Reference Manual: %s" % (grass_version, modclass))
+write_html_header(f, "%s modules - GRASS GIS %s Reference Manual" % (modclass.capitalize(), grass_version))
 modclass_lower = modclass.lower()
 modclass_visible = modclass
 if modclass_lower not in no_intro_page_classes:

@@ -12,6 +12,8 @@
  */
 
 #include <stdio.h>
+#include <errno.h>
+#include <string.h>
 #include <sys/types.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -49,12 +51,12 @@ void G_fseek(FILE *fp, off_t offset, int whence)
 {
 #ifdef HAVE_FSEEKO
     if (fseeko(fp, offset, whence) != 0)
-	G_fatal_error(_("Unable to seek"));
+	G_fatal_error(_("Unable to seek: %s"), strerror(errno));
 #else
     long loff = (long) offset;
     if ((off_t) loff != offset)
 	G_fatal_error(_("Seek offset out of range"));
     if (fseek(fp, loff, whence) != 0)
-	G_fatal_error(_("Unable to seek"));
+	G_fatal_error(_("Unable to seek: %s"), strerror(errno));
 #endif     
 }

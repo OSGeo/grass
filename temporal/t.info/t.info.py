@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 ############################################################################
 #
@@ -6,11 +6,17 @@
 # AUTHOR(S):    Soeren Gebbert
 #
 # PURPOSE:      Print information about a space-time dataset
-# COPYRIGHT:    (C) 2011-2014 by the GRASS Development Team
+# COPYRIGHT:    (C) 2011-2017 by the GRASS Development Team
 #
-#       This program is free software under the GNU General Public
-#       License (version 2). Read the file COPYING that comes with GRASS
-#       for details.
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
 #
 #############################################################################
 
@@ -71,7 +77,7 @@ def main():
 
     rows = tgis.get_tgis_metadata(dbif)
 
-    if system and not shellstyle:
+    if system and not shellstyle and not history:
         #      0123456789012345678901234567890
         print(" +------------------- Temporal DBMI backend information ----------------------+")
         print(" | DBMI Python interface:...... " + str(dbif.get_dbmi().__name__))
@@ -84,7 +90,7 @@ def main():
                 print(" | %s .......... %s"%(row[0], row[1]))
         print(" +----------------------------------------------------------------------------+")
         return
-    elif system:
+    elif system and not history:
         print("dbmi_python_interface=\'" + str(dbif.get_dbmi().__name__) + "\'")
         print("dbmi_string=\'" + str(tgis.get_tgis_database_string()) + "\'")
         print("sql_template_path=\'" + str(tgis.get_sql_template_path()) + "\'")
@@ -99,7 +105,7 @@ def main():
     if name.find("@") >= 0:
         id_ = name
     else:
-        id_ = name + "@" + grass.encode(grass.gisenv()["MAPSET"])
+        id_ = name + "@" + grass.gisenv()["MAPSET"]
 
     dataset = tgis.dataset_factory(type_, id_)
 
@@ -108,7 +114,7 @@ def main():
 
     dataset.select(dbif)
 
-    if history == True and type in ["strds", "stvds", "str3ds"]:
+    if history == True and type_ in ["strds", "stvds", "str3ds"]:
         dataset.print_history()
         return
 

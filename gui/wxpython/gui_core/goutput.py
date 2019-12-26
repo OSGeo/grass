@@ -37,9 +37,9 @@ from core.gconsole   import GConsole, \
     EVT_CMD_OUTPUT, EVT_CMD_PROGRESS, EVT_CMD_RUN, EVT_CMD_DONE, \
     Notification
 from gui_core.prompt import GPromptSTC
-from gui_core.wrap import Button, ToggleButton
+from gui_core.wrap import Button, ToggleButton, StaticText, \
+    StaticBox
 from core.settings import UserSettings
-from core.utils import _
 from gui_core.widgets import SearchModuleWidget
 
 
@@ -145,14 +145,14 @@ class GConsoleWindow(wx.SplitterWindow):
 
         if self._gcstyle & GC_PROMPT:
             cmdLabel = _("Command prompt")
-            self.outputBox = wx.StaticBox(
+            self.outputBox = StaticBox(
                 parent=self.panelOutput,
                 id=wx.ID_ANY,
                 label=" %s " %
                 _("Output window"))
 
-            self.cmdBox = wx.StaticBox(parent=self.panelOutput, id=wx.ID_ANY,
-                                       label=" %s " % cmdLabel)
+            self.cmdBox = StaticBox(parent=self.panelOutput, id=wx.ID_ANY,
+                                    label=" %s " % cmdLabel)
 
         # buttons
         self.btnOutputClear = Button(
@@ -172,6 +172,7 @@ class GConsoleWindow(wx.SplitterWindow):
             size=self.btnCmdClear.GetSize())
         self.btnCmdProtocol.SetToolTip(_("Toggle to save list of executed commands into "
                                          "a file; content saved when switching off."))
+        self.cmdFileProtocol = None
 
         if not self._gcstyle & GC_PROMPT:
             self.btnCmdClear.Hide()
@@ -202,7 +203,7 @@ class GConsoleWindow(wx.SplitterWindow):
             promptSizer.Add(self.cmdPrompt, proportion=1,
                             flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP,
                             border=3)
-            helpText = wx.StaticText(
+            helpText = StaticText(
                 self.panelPrompt, id=wx.ID_ANY,
                 label="Press Tab to display command help, Ctrl+Space to autocomplete")
             helpText.SetForegroundColour(
@@ -431,7 +432,7 @@ class GConsoleWindow(wx.SplitterWindow):
 
             try:
                 output = open(path, "w")
-                output.write(EncodeString(text))
+                output.write(text)
             except IOError as e:
                 GError(
                     _("Unable to write file '%(path)s'.\n\nDetails: %(error)s") % {
@@ -483,24 +484,23 @@ class GConsoleWindow(wx.SplitterWindow):
 
     def CmdProtocolSave(self):
         """Save list of manually entered commands into a text log file"""
-        if not hasattr(self, 'cmdFileProtocol'):
+        if self.cmdFileProtocol is None:
             return  # it should not happen
 
         try:
-            output = open(self.cmdFileProtocol, "a")
-            cmds = self.cmdPrompt.GetCommands()
-            output.write('\n'.join(cmds))
-            if len(cmds) > 0:
-                output.write('\n')
+            with open(self.cmdFileProtocol, "a") as output:
+                cmds = self.cmdPrompt.GetCommands()
+                output.write(os.linesep.join(cmds))
+                if len(cmds) > 0:
+                    output.write(os.linesep)
         except IOError as e:
-            GError(_("Unable to write file '%(filePath)s'.\n\nDetails: %(error)s") %
-                   {'filePath': self.cmdFileProtocol, 'error': e})
-        finally:
-            output.close()
+            GError(_("Unable to write file '{filePath}'.\n\nDetails: {error}").format(
+                filePath=self.cmdFileProtocol, error=e))
 
-        message = _("Command log saved to '%s'") % self.cmdFileProtocol
-        self.showNotification.emit(message=message)
-        del self.cmdFileProtocol
+        self.showNotification.emit(
+            message=_("Command log saved to '{}'".format(self.cmdFileProtocol))
+        )
+        self.cmdFileProtocol = None
 
     def OnCmdProtocol(self, event=None):
         """Save commands into file"""
@@ -572,7 +572,7 @@ class GStc(stc.StyledTextCtrl):
         self.SetUndoCollection(True)
         self.SetReadOnly(True)
 
-        # remember position of line begining (used for '\r')
+        # remember position of line beginning (used for '\r')
         self.linePos = -1
 
         #
@@ -629,7 +629,7 @@ class GStc(stc.StyledTextCtrl):
             group='appearance',
             key='outputfont',
             subkey='size')
-        if typesize is None or typesize <= 0:
+        if typesize is None or int(typesize) <= 0:
             typesize = 10
         typesize = float(typesize)
 

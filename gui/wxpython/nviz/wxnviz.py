@@ -22,6 +22,8 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <KratochAnna seznam.cz> (Google SoC 2011)
 """
 
+from __future__ import print_function
+
 import sys
 import locale
 import struct
@@ -35,22 +37,29 @@ except ImportError:
         "standard Python distribution). See the Numeric Python site "
         "(http://numpy.scipy.org) for information on downloading source or "
         "binaries.")
-    print >> sys.stderr, "wxnviz.py: " + msg
+    print("wxnviz.py: " + msg, file=sys.stderr)
 
 import wx
 
 from ctypes import *
 
-from grass.lib.gis import *
-from grass.lib.raster3d import *
-from grass.lib.vector import *
-from grass.lib.ogsf import *
-from grass.lib.nviz import *
-from grass.lib.raster import *
+try:
+    WindowsError
+except NameError:
+    WindowsError = OSError
+try:
+    from grass.lib.gis import *
+    from grass.lib.raster3d import *
+    from grass.lib.vector import *
+    from grass.lib.ogsf import *
+    from grass.lib.nviz import *
+    from grass.lib.raster import *
+except (ImportError, WindowsError) as e:
+    print("wxnviz.py: {}".format(e), file=sys.stderr)
 
 from core.debug import Debug
-from core.utils import _, autoCropImageFromFile
-from core.gcmd import EncodeString
+from core.utils import autoCropImageFromFile
+from core.gcmd import DecodeString
 from core.globalvar import wxPythonPhoenix
 from gui_core.wrap import Rect
 import grass.script as grass
@@ -63,9 +72,11 @@ def print_error(msg, type):
     """Redirect stderr"""
     global log
     if log:
+        if sys.version_info.major >= 3:
+            msg = DecodeString(msg.data)
         log.write(msg)
     else:
-        print msg
+        print(msg)
 
     return 0
 
@@ -78,7 +89,7 @@ def print_progress(value):
             progress.SetRange(100)
         progress.SetValue(value)
     else:
-        print value
+        print(value)
 
     return 0
 
@@ -130,7 +141,8 @@ class Nviz(object):
 
     def Init(self):
         """Initialize window"""
-        locale.setlocale(locale.LC_NUMERIC, 'C')
+        if sys.platform != 'win32':
+            locale.setlocale(locale.LC_NUMERIC, 'C')
         G_unset_window()
         Rast_unset_window()
         Rast__init_window()
@@ -825,7 +837,7 @@ class Nviz(object):
         else:
             nsurfs = c_int()
             surf_list = GS_get_surf_list(byref(nsurfs))
-            for i in xrange(nsurfs.value):
+            for i in range(nsurfs.value):
                 id = surf_list[i]
                 GS_set_wire_color(id, color)
 
@@ -1835,7 +1847,6 @@ class Nviz(object):
         """
         widthOrig = self.width
         heightOrig = self.height
-        filename = EncodeString(filename)
 
         self.ResizeWindow(width, height)
         GS_clear(Nviz_get_bgcolor(self.data))

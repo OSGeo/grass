@@ -9,7 +9,7 @@
    specific triangle edge is intersected, but on a broader sense with
    the horizontal, vertical, and diagonal seams in the grid, then
    the intersections are ordered.  If quadstrips are used for drawing 
-   rather than tmesh, triangulation is not consistant; for diagonal
+   rather than tmesh, triangulation is not consistent; for diagonal
    intersections, the proper diagonal to intersect would need to be
    determined according to the algorithm used by qstrip (look at nearby
    normals). It may be faster to go ahead and find the intersections 
@@ -1328,7 +1328,7 @@ int XY_intersect_plane(float *intersect, float *plane)
    \brief Define plane 
 
    \param p1,p2,p3 three point on plane
-   \param[out] plane plane defintion
+   \param[out] plane plane definition
 
    \return 1
  */

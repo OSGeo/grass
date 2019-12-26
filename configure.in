@@ -37,6 +37,19 @@ AC_PROG_CC
 LOC_EXEEXT
 AC_SUBST(MINGW32)
 
+# Set WINDRES
+
+if test "$MINGW32" = yes ; then
+  WINDRES=${WINDRES-windres}
+else
+  WINDRES=
+fi
+
+AC_SUBST(WINDRES)
+
+# Check for custom PKG_CONFIG
+PKG_CONFIG=${PKG_CONFIG-pkg-config}
+
 # Check for full floating-point support, including Infinity and NaN
 IEEEFLAG=
 LOC_CHECK_FP_INF_NAN([],
@@ -64,7 +77,7 @@ AC_SUBST(BINDIR)
 
 AC_PATH_PROG(pwd, pwd, pwd)
 
-if test "$MINGW32" = yes ; then
+if test "$MINGW32" = yes -a "$cross_compiling" != yes ; then
   winpwd="pwd -W"
 else
   winpwd="$pwd"
@@ -126,14 +139,12 @@ changequote(,)
 LIB_VER=`echo ${GRASS_VERSION_NUMBER} | sed 's/^\([0-9.]*\).*$/\1/'`
 changequote([,])
 
-GRASS_VERSION_SVN="exported"
-AC_PATH_PROG(SVN_VERSION, svnversion, no)
-if test "$SVN_VERSION" != "no" ; then
-   GRASS_VERSION_SVN=`$SVN_VERSION -c | cut -f2 -d:`
-   if test "$GRASS_VERSION_SVN" = "exported" -o "$GRASS_VERSION_SVN" = "Unversioned directory" ; then
-      GRASS_VERSION_SVN="exported"
-   else
-      GRASS_VERSION_SVN="r$GRASS_VERSION_SVN"
+GRASS_VERSION_GIT="exported"
+AC_PATH_PROG(GIT, git, no)
+if test "$GIT" != "no" ; then
+   GRASS_VERSION_GIT=`$GIT rev-parse --short HEAD 2>/dev/null`
+   if test -z "$GRASS_VERSION_GIT"; then
+      GRASS_VERSION_GIT="exported"
    fi
 fi
 
@@ -143,7 +154,7 @@ AC_SUBST(GRASS_VERSION_MINOR)
 AC_SUBST(GRASS_VERSION_RELEASE)
 AC_SUBST(GRASS_VERSION_NUMBER)
 AC_SUBST(GRASS_VERSION_DATE)
-AC_SUBST(GRASS_VERSION_SVN)
+AC_SUBST(GRASS_VERSION_GIT)
 AC_SUBST(NAME_VER)
 AC_SUBST(LIB_VER)
 
@@ -216,7 +227,7 @@ AC_SUBST(MACOSX_SDK)
 if test -n "$MACOSX_APP" ; then
     INSTDIR='${prefix}'"/GRASS-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.app/Contents/MacOS"
 else
-    INSTDIR='${prefix}'"/grass-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE}"
+    INSTDIR='${prefix}'"/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}"
 fi
 
 AC_SUBST(INSTDIR)
@@ -268,6 +279,7 @@ LOC_ARG_WITH(pthread, POSIX threads, no)
 LOC_ARG_WITH(openmp, OpenMP, no)
 LOC_ARG_WITH(opencl, OpenCL, no)
 LOC_ARG_WITH(bzlib, BZIP2, no)
+LOC_ARG_WITH(zstd, Zstandard)
 
 AC_ARG_WITH(gdal,
 [  --with-gdal[=path/gdal-config]
@@ -317,6 +329,9 @@ LOC_ARG_WITH_LIB(zlib, zlib)
 
 LOC_ARG_WITH_INC(bzlib, BZIP2)
 LOC_ARG_WITH_LIB(bzlib, BZIP2)
+
+LOC_ARG_WITH_INC(zstd, ZSTD)
+LOC_ARG_WITH_LIB(zstd, ZSTD)
 
 LOC_ARG_WITH_INC(readline, Readline)
 LOC_ARG_WITH_LIB(readline, Readline)
@@ -485,6 +500,14 @@ AC_DEFINE(HAVE_LONG_LONG_INT)
 AC_MSG_RESULT(no)
 ])
 
+AC_MSG_CHECKING(for int64_t)
+AC_TRY_COMPILE([#include <sys/types.h>],[int64_t x;],[
+AC_MSG_RESULT(yes)
+AC_DEFINE(HAVE_INT64_T)
+],[
+AC_MSG_RESULT(no)
+])
+
 AC_MSG_CHECKING(for W11)
 case "$enable_w11" in
 	yes|no)	AC_MSG_RESULT("$enable_w11")	;;
@@ -600,94 +623,159 @@ AC_SUBST(ZLIB)
 
 # bzip2 support
 
+BZIP2LIBPATH=
+BZIP2INCPATH=
+BZIP2LIB=
+
 LOC_CHECK_USE(bzlib,bzlib,USE_BZIP2)
 
 if test -n "$USE_BZIP2"; then
 
-BZLIBLIBPATH=
-BZLIBINCPATH=
-BZLIB=
-
 # With bzip2 includes directory
 
-LOC_CHECK_INC_PATH(bzlib,bzlib,BZLIBINCPATH)
+LOC_CHECK_INC_PATH(bzlib,bzlib,BZIP2INCPATH)
 
-LOC_CHECK_INCLUDES(bzlib.h,bzlib,$BZLIBINCPATH)
+LOC_CHECK_INCLUDES(bzlib.h,bzlib,$BZIP2INCPATH)
 
 # With bzip2 library directory
 
-LOC_CHECK_LIB_PATH(bzlib,bzlib,BZLIBLIBPATH)
+LOC_CHECK_LIB_PATH(bzlib,bzlib,BZIP2LIBPATH)
 
-LOC_CHECK_LIBS(bz2,BZ2_bzBuffToBuffCompress,bzlib,$BZLIBLIBPATH,BZLIB,,,)
+LOC_CHECK_LIBS(bz2,BZ2_bzBuffToBuffCompress,bzlib,$BZIP2LIBPATH,BZIP2LIB,,,)
 
 #
 
 fi # $USE_BZIP2
 
-AC_SUBST(BZLIBINCPATH)
-AC_SUBST(BZLIBLIBPATH)
-AC_SUBST(BZLIB)
+AC_SUBST(BZIP2INCPATH)
+AC_SUBST(BZIP2LIBPATH)
+AC_SUBST(BZIP2LIB)
 
 # Done checking bzip2
+
+# zstd support
+
+ZSTDLIBPATH=
+ZSTDINCPATH=
+ZSTDLIB=
+
+LOC_CHECK_USE(zstd,zstd,USE_ZSTD)
+
+if test -n "$USE_ZSTD"; then
+
+# With zstd includes directory
+
+LOC_CHECK_INC_PATH(zstd,zstd,ZSTDINCPATH)
+LOC_CHECK_INCLUDES(zstd.h,zstd,$ZSTDINCPATH)
+
+# With zstd library directory
+
+LOC_CHECK_LIB_PATH(zstd,zstd,ZSTDLIBPATH)
+
+LOC_CHECK_LIBS(zstd,ZSTD_compress,zstd,$ZSTDLIBPATH,ZSTDLIB,,,)
+
+#
+
+fi # $USE_ZSTD
+
+AC_SUBST(ZSTDINCPATH)
+AC_SUBST(ZSTDLIBPATH)
+AC_SUBST(ZSTDLIB)
+
+# Done checking zstd
 
 # Mandatory PROJ dependency
 
 PROJINC=
 PROJLIB=
 PROJSHARE=
+PROJ4API=0
+PROJMAJOR=4
 
 # With PROJ includes directory
 
-LOC_CHECK_INC_PATH(proj,External PROJ.4,PROJINC)
+LOC_CHECK_INC_PATH(proj,External PROJ,PROJINC)
 
-LOC_CHECK_INCLUDES(proj_api.h,External PROJ.4,$PROJINC)
+# PROJ version check: if proj.h exists, it must be proj 5+
+LOC_CHECK_INCLUDES(proj.h,External PROJ,$PROJINC,PROJ4API=1)
 
-# PROJ version check
-
-if test "$cross_compiling" = yes; then
-    AC_MSG_WARN([*** Cannot check PROJ.4 version (cross-compiling).])
+if test $PROJ4API = 0 ; then
+    LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_MAJOR,External PROJ major,proj_ver_major,$PROJINC,0)
+    LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_MINOR,External PROJ minor,proj_ver_minor,$PROJINC,0)
+    LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_PATCH,External PROJ patch,proj_ver_patch,$PROJINC,0)
+    AC_MSG_RESULT([found PROJ version "${proj_ver_major}.${proj_ver_minor}.${proj_ver_patch}"])
+    PROJMAJOR=${proj_ver_major}
+    # minimum required PROJ 5+ version to use the new PROJ API: 5.1.0
+    if test ${proj_ver_major} = 5 && test `expr ${proj_ver_minor} \< 1` = 1 ; then
+	AC_MSG_WARN([At least PROJ version "5.1.0" is required for the new API ])
+	PROJ4API=1
+    fi
 else
     LOC_CHECK_VERSION_INT(proj_api.h,PJ_VERSION,External PROJ.4,proj_ver,$PROJINC,0)
-
-    if test `expr "$proj_ver" \< 446` = 1 ; then
-        AC_MSG_ERROR([*** PROJ.4.4.6 or later is required.])
+    if test `expr ${proj_ver} \>= 600` = 1 ; then
+	PROJMAJOR=6
+    elif test `expr ${proj_ver} \>= 500` = 1 ; then
+	PROJMAJOR=5
+    elif test `expr ${proj_ver} \>= 400` = 1 ; then
+	PROJMAJOR=4
     fi
+    AC_MSG_RESULT([found PROJ version "${proj_ver}"])
 fi
 
-# With PROJ library directory
+if test $PROJ4API = 0 ; then
+    AC_MSG_RESULT([using new PROJ version 5+ API])
 
-LOC_CHECK_LIB_PATH(proj,External PROJ.4,PROJLIB)
+    # With PROJ library directory
 
-LOC_CHECK_LIBS(proj,pj_get_def,External PROJ.4,$PROJLIB,PROJLIB,,,)
+    LOC_CHECK_LIB_PATH(proj,External PROJ,PROJLIB)
+    LOC_CHECK_LIBS(proj,proj_pj_info,External PROJ,$PROJLIB,PROJLIB,,,)
+else
+    AC_MSG_RESULT([using old PROJ version 4 API])
+    AC_DEFINE(USE_PROJ4API)
+
+    LOC_CHECK_INCLUDES(proj_api.h,External PROJ,$PROJINC)
+    # PROJ version check for v4.x
+
+    if test "$cross_compiling" = yes; then
+	AC_MSG_WARN([*** Cannot check PROJ.4 version (cross-compiling).])
+    else
+	LOC_CHECK_VERSION_INT(proj_api.h,PJ_VERSION,External PROJ.4,proj_ver,$PROJINC,0)
+
+	if test `expr ${proj_ver} \< 446` = 1 ; then
+	    AC_MSG_ERROR([*** PROJ.4.4.6 or later is required.])
+	fi
+    fi
+
+    # With PROJ library directory
+
+    LOC_CHECK_LIB_PATH(proj,External PROJ.4,PROJLIB)
+    LOC_CHECK_LIBS(proj,pj_get_def,External PROJ.4,$PROJLIB,PROJLIB,,,)
+fi
 
 # With PROJ share directory
 
-LOC_CHECK_SHARE_PATH(proj,External PROJ.4,PROJSHARE)
+LOC_CHECK_SHARE_PATH(proj,External PROJ,PROJSHARE)
 if test -z "$PROJSHARE" ; then
-    AC_MSG_WARN([*** External PROJ.4 directory not specified; default will be used])
+    AC_MSG_WARN([*** External PROJ directory not specified; default will be used])
     PROJSHARE=/usr/share/proj
 fi
 
-# LOC_CHECK_SHARE does not work when cross compiling
-if test "$cross_compiling" = "yes" ; then
-    AC_MSG_CHECKING([for epsg])
-    AC_MSG_RESULT([unknown (cross-compiling)])
-else
-    LOC_CHECK_SHARE(epsg,External PROJ.4,$PROJSHARE,[
-    AC_MSG_WARN([*** Unable to locate PROJ data files.])
-    ])
+# check if share/proj/epsg exists only for PROJ < 6
+if test `expr ${PROJMAJOR} \< 6` = 1 ; then
+    # LOC_CHECK_SHARE does not work when cross compiling
+    if test "$cross_compiling" = "yes" ; then
+	AC_MSG_CHECKING([for epsg])
+	AC_MSG_RESULT([unknown (cross-compiling)])
+    else
+	LOC_CHECK_SHARE(epsg,External PROJ,$PROJSHARE,[
+	AC_MSG_WARN([*** Unable to locate PROJ data files.])
+	])
+    fi
 fi
 
 AC_SUBST(PROJINC)
 AC_SUBST(PROJLIB)
 AC_SUBST(PROJSHARE)
-
-# nad2bin needs to be in path for installing datum gridshift files
-
-AC_PATH_PROG(NAD2BIN, nad2bin, no)
-if test "$NAD2BIN" = "no"; then
-    AC_MSG_ERROR([*** Unable to locate nad2bin (needs to be in PATH).])
-fi
 
 # Done checking PROJ
 
@@ -850,6 +938,7 @@ else
   LIBS="$LIBS $LIBLAS_LIBS"
   CFLAGS="$CFLAGS $LIBLAS_CFLAGS"
   CPPFLAGS="$CPPFLAGS $LIBLAS_INC"
+  AC_CHECK_HEADERS(liblas/capi/liblas.h)
   AC_TRY_LINK([#include <liblas/capi/liblas.h>],[LASReader_Create("foo");],,[
   AC_TRY_LINK([#include <liblas/capi/liblas.h>],[LASReader_Create("foo");],LAS_LIBS="$LAS_LIBS",[
   AC_MSG_ERROR([*** Unable to locate libLAS library.])
@@ -1002,7 +1091,7 @@ else
   fi
   
   if test "$GEOS_CONFIG" != "" ; then
-    GEOS_LIBS=`"$GEOS_CONFIG" --libs`
+    GEOS_LIBS=`"$GEOS_CONFIG" --clibs`
     GEOS_CFLAGS=`"$GEOS_CONFIG" --cflags`
     USE_GEOS=1
   fi
@@ -1582,14 +1671,14 @@ if test -n "$USE_X11"; then
 	pkgs="$pkgs cairo-xlib cairo-xlib-xrender"
 fi
 for pkg in $pkgs ; do
-    if pkg-config --exists $pkg ; then
+    if $PKG_CONFIG --exists $pkg ; then
         cairo="$cairo $pkg"
     fi
 done
 
 # With Cairo includes directory
 #FIXME: somehow quote dirs with spaces in $cairo ?
-CAIROINC=`pkg-config --cflags $cairo`
+CAIROINC=`$PKG_CONFIG --cflags $cairo`
 
 LOC_CHECK_INC_PATH(cairo,cairo,CAIROINC)
 
@@ -1597,7 +1686,7 @@ LOC_CHECK_INCLUDES(cairo.h,Cairo,$CAIROINC)
 
 # With Cairo library directory
 
-CAIROLIB=`pkg-config --libs $cairo`
+CAIROLIB=`$PKG_CONFIG --libs $cairo`
 
 LOC_CHECK_LIB_PATH(cairo,cairo,CAIROLIB)
 LOC_CHECK_LDFLAGS(cairo,cairo,CAIROLIB)
@@ -1936,4 +2025,12 @@ LOC_MSG_USE(Regex support,USE_REGEX)
 LOC_MSG_USE(SQLite support,USE_SQLITE)
 LOC_MSG_USE(TIFF support,USE_TIFF)
 LOC_MSG_USE(X11 support,USE_X11)
+LOC_MSG_USE(Zstandard support,USE_ZSTD)
+LOC_MSG()
+# remove when the new PROJ API is stable
+if test $PROJ4API = 0 ; then
+AC_MSG_RESULT([  using new PROJ 5+ API])
+else
+AC_MSG_RESULT([  using old PROJ 4 API])
+fi
 LOC_MSG()

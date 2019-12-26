@@ -3,8 +3,8 @@ GRASS GIS Python library documentation
 
 Python, a widely used general-purpose, high-level programming language 
 provides a powerful scripting interface. Being easy-to-use yet 
-powerful, it enables users to efficiently exploit the capabilities of 
-the GRASS GIS software. Python scripts for GRASS GIS can be written at 
+powerful, it enables users to efficiently exploit the capabilities
+of the `GRASS GIS` software. Python scripts for GRASS GIS can be written at 
 high level (GRASS GIS modules) as well as at low level (GRASS GIS 
 libraries) through a dedicated interface. The graphical user interface 
 and the GRASS GIS Temporal Framework are entirely written in Python.
@@ -37,3 +37,4 @@ Contents:
    gunittest_testing
    pydispatch
 
+.. _GRASS GIS: https://grass.osgeo.org/

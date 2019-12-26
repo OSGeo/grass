@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("export"));
+    G_add_keyword(_("output"));
     module->description = _("Exports a GRASS raster to a binary MAT-File.");
 
     /* Define the different options */
@@ -294,7 +295,7 @@ int main(int argc, char *argv[])
 	G_calloc((Rast_window_rows() + 1) * (Rast_window_cols() + 1),
 		 Rast_cell_size(map_type));
 
-    G_debug(1, "mem alloc is %d bytes\n",	/* I think _cols()+1 is unneeded? */
+    G_debug(1, "mem alloc is %zu bytes\n",	/* I think _cols()+1 is unneeded? */
 	    Rast_cell_size(map_type) * (Rast_window_rows() +
 				       1) * (Rast_window_cols() + 1));
 

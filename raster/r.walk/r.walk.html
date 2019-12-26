@@ -17,7 +17,7 @@ represent friction costs.
 
 <p>
 This function is similar to <em><a href="r.cost.html">r.cost</a></em>,
-but in addiction to a friction map, it considers an anisotropic travel
+but in addition to a friction map, it considers an anisotropic travel
 time due to the different walking speed associated with downhill and
 uphill movements.
 
@@ -92,11 +92,14 @@ algorithm, that find an optimum solution (for more details see
 
 <a name="move"></a>
 <h2>Movement Direction</h2>
-<p>The movement direction surface is created to record the sequence of
-movements that created the cost accumulation surface. Without it 
-<em><a href="r.drain.html">r.drain</a></em> would not correctly create a path from an end point 
-back to the start point. The direction of each cell points towards 
-the next cell. The directions are recorded as degrees CCW from East:
+<p>
+The movement direction surface is created to record the sequence of
+movements that created the cost accumulation surface. This movement 
+direction surface can be used by <em><a href="r.path.html">r.path</a></em> 
+to recover a path from an end point back to the start point. 
+The direction of each cell points towards the next cell. 
+The directions are recorded as degrees CCW from East:
+
 <div class="code"><pre>
        112.5      67.5         i.e. a cell with the value 135 
 157.5  135   90   45   22.5    means the next cell is to the north-west
@@ -108,12 +111,9 @@ the next cell. The directions are recorded as degrees CCW from East:
 <p>
 Once <em>r.walk</em> computes the cumulative cost map as a linear
 combination of friction cost (from friction map) and the altitude and
-distance covered (from the digital elevation
-model), <em><a href="r.drain.html">r.drain</a></em> can be used to
-find the minimum cost path. Make sure to use the <b>-d</b> flag and
-the movement direction raster map when
-running <em><a href="r.drain.html">r.drain</a></em> to ensure the path
-is computed according to the proper movement directions.
+distance covered (from the digital elevation model), the associated 
+movement direction map can be used by <em><a href="r.path.html">r.path</a></em> 
+to find the minimum cost path.
 
 <p>
 <em>r.walk</em>, like most all GRASS raster programs, is also made to 
@@ -135,7 +135,7 @@ while taking into account the topography and landcover.
 g.region swwake_30m -p
 
 # create friction map based on land cover
-r.recode landclass96 out=friction &lt;&lt; EOF
+r.recode landclass96 out=friction rules=- &lt;&lt; EOF
 1:3:0.1:0.1
 4:5:10.:10.
 6:6:1000.0:1000.0
@@ -167,9 +167,10 @@ r.contour walkcost output=walkcost step=1000
 
 <em>
 <a href="r.cost.html">r.cost</a>,
-<a href="r.drain.html">r.drain</a>,
+<a href="r.path.html">r.path</a>,
 <a href="r.in.ascii.html">r.in.ascii</a>,
 <a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.recode.html">r.recode</a>,
 <a href="r.out.ascii.html">r.out.ascii</a>
 </em>
 
@@ -193,7 +194,10 @@ In collaboration with: Franchi Matteo, Vaglia Beatrice, Bartucca Luisa, Fava Val
 Roberto Flor and Markus Neteler
 
 <p><b>Updated for GRASS GIS 7:</b><br>
-Markus Metz
+Markus Metz<br>
+Multiple path directions sponsored by <a href="https://www.mundialis.de">mundialis</a>
 
+<!--
 <p>
 <i>Last changed: $Date$</i>
+-->

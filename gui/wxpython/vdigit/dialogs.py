@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 
 import sys
 import copy
+import six
 
 import wx
 import wx.lib.mixins.listctrl as listmix
@@ -27,8 +28,8 @@ import wx.lib.mixins.listctrl as listmix
 from core.gcmd import RunCommand, GError
 from core.debug import Debug
 from core.settings import UserSettings
-from core.utils import _
-from gui_core.wrap import SpinCtrl
+from gui_core.wrap import SpinCtrl, Button, StaticText, \
+    StaticBox, Menu, ListCtrl, NewId
 
 
 class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
@@ -74,7 +75,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
                            style=style, **kwargs)
 
         # list of categories
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=self, id=wx.ID_ANY, label=" %s " %
             _("List of categories - right-click to delete"))
         listSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
@@ -85,13 +86,13 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
                                      wx.LC_HRULES |
                                      wx.LC_VRULES)
         # sorter
-        self.fid = self.cats.keys()[0]
+        self.fid = list(self.cats.keys())[0]
         self.itemDataMap = self.list.Populate(self.cats[self.fid])
         listmix.ColumnSorterMixin.__init__(self, 2)
         self.fidMulti = wx.Choice(parent=self, id=wx.ID_ANY,
                                   size=(150, -1))
         self.fidMulti.Bind(wx.EVT_CHOICE, self.OnFeature)
-        self.fidText = wx.StaticText(parent=self, id=wx.ID_ANY)
+        self.fidText = StaticText(parent=self, id=wx.ID_ANY)
         if len(self.cats.keys()) == 1:
             self.fidMulti.Show(False)
             self.fidText.SetLabel(str(self.fid))
@@ -106,21 +107,21 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         listSizer.Add(self.list, proportion=1, flag=wx.EXPAND)
 
         # add new category
-        box = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                           label=" %s " % _("Add new category"))
+        box = StaticBox(parent=self, id=wx.ID_ANY,
+                        label=" %s " % _("Add new category"))
         addSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         flexSizer = wx.FlexGridSizer(cols=5, hgap=5, vgap=5)
         flexSizer.AddGrowableCol(3)
 
-        layerNewTxt = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                    label="%s:" % _("Layer"))
+        layerNewTxt = StaticText(parent=self, id=wx.ID_ANY,
+                                 label="%s:" % _("Layer"))
         self.layerNew = wx.Choice(parent=self, id=wx.ID_ANY, size=(75, -1),
                                   choices=layers)
         if len(layers) > 0:
             self.layerNew.SetSelection(0)
 
-        catNewTxt = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                  label="%s:" % _("Category"))
+        catNewTxt = StaticText(parent=self, id=wx.ID_ANY,
+                               label="%s:" % _("Category"))
 
         try:
             newCat = max(self.cats[self.fid][1]) + 1
@@ -128,7 +129,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
             newCat = 1
         self.catNew = SpinCtrl(parent=self, id=wx.ID_ANY, size=(75, -1),
                                initial=newCat, min=0, max=1e9)
-        btnAddCat = wx.Button(self, wx.ID_ADD)
+        btnAddCat = Button(self, wx.ID_ADD)
         flexSizer.Add(layerNewTxt, proportion=0,
                       flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(self.layerNew, proportion=0,
@@ -147,12 +148,12 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
             border=5)
 
         # buttons
-        btnApply = wx.Button(self, wx.ID_APPLY)
-        btnApply.SetToolTipString(_("Apply changes"))
-        btnCancel = wx.Button(self, wx.ID_CANCEL)
-        btnCancel.SetToolTipString(_("Ignore changes and close dialog"))
-        btnOk = wx.Button(self, wx.ID_OK)
-        btnOk.SetToolTipString(_("Apply changes and close dialog"))
+        btnApply = Button(self, wx.ID_APPLY)
+        btnApply.SetToolTip(_("Apply changes"))
+        btnCancel = Button(self, wx.ID_CANCEL)
+        btnCancel.SetToolTip(_("Ignore changes and close dialog"))
+        btnOk = Button(self, wx.ID_OK)
+        btnOk.SetToolTip(_("Apply changes and close dialog"))
         btnOk.SetDefault()
 
         # sizers
@@ -171,8 +172,8 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
                       flag=wx.EXPAND | wx.ALIGN_CENTER |
                       wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
         fidSizer = wx.BoxSizer(wx.HORIZONTAL)
-        fidSizer.Add(wx.StaticText(parent=self, id=wx.ID_ANY,
-                                   label=_("Feature id:")),
+        fidSizer.Add(StaticText(parent=self, id=wx.ID_ANY,
+                                label=_("Feature id:")),
                      proportion=0, border=5,
                      flag=wx.ALIGN_CENTER_VERTICAL)
         fidSizer.Add(self.fidMulti, proportion=0,
@@ -241,8 +242,8 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
             self.cats[self.fid][layerOld].remove(catOld)
         except:
             event.Veto()
-            self.list.SetStringItem(itemIndex, 0, str(layerNew))
-            self.list.SetStringItem(itemIndex, 1, str(catNew))
+            self.list.SetItem(itemIndex, 0, str(layerNew))
+            self.list.SetItem(itemIndex, 1, str(catNew))
             dlg = wx.MessageDialog(
                 self, _(
                     "Unable to add new layer/category <%(layer)s/%(category)s>.\n"
@@ -272,15 +273,15 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         """Mouse right button up
         """
         if not hasattr(self, "popupID1"):
-            self.popupID1 = wx.NewId()
-            self.popupID2 = wx.NewId()
-            self.popupID3 = wx.NewId()
+            self.popupID1 = NewId()
+            self.popupID2 = NewId()
+            self.popupID3 = NewId()
             self.Bind(wx.EVT_MENU, self.OnItemDelete, id=self.popupID1)
             self.Bind(wx.EVT_MENU, self.OnItemDeleteAll, id=self.popupID2)
             self.Bind(wx.EVT_MENU, self.OnReload, id=self.popupID3)
 
         # generate popup-menu
-        menu = wx.Menu()
+        menu = Menu()
         menu.Append(self.popupID1, _("Delete selected"))
         if self.list.GetFirstSelected() == -1:
             menu.Enable(self.popupID1, False)
@@ -413,7 +414,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         newfid = -1
 
         # add/delete new category
-        for action, catsCurr in check.iteritems():
+        for action, catsCurr in six.iteritems(check):
             for layer in catsCurr[0].keys():
                 catList = []
                 for cat in catsCurr[0][layer]:
@@ -525,7 +526,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         self.cats_orig = copy.deepcopy(self.cats)
 
         # polulate list
-        self.fid = self.cats.keys()[0]
+        self.fid = list(self.cats.keys())[0]
         self.itemDataMap = self.list.Populate(self.cats[self.fid],
                                               update=True)
 
@@ -553,7 +554,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         return True
 
 
-class CategoryListCtrl(wx.ListCtrl,
+class CategoryListCtrl(ListCtrl,
                        listmix.ListCtrlAutoWidthMixin,
                        listmix.TextEditMixin):
 
@@ -562,7 +563,7 @@ class CategoryListCtrl(wx.ListCtrl,
         """List of layers/categories"""
         self.parent = parent
 
-        wx.ListCtrl.__init__(self, parent, id, pos, size, style)
+        ListCtrl.__init__(self, parent, id, pos, size, style)
 
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         listmix.TextEditMixin.__init__(self)
@@ -582,9 +583,9 @@ class CategoryListCtrl(wx.ListCtrl,
         for layer in cats.keys():
             catsList = cats[layer]
             for cat in catsList:
-                index = self.InsertStringItem(self.GetItemCount(), str(catsList[0]))
-                self.SetStringItem(index, 0, str(layer))
-                self.SetStringItem(index, 1, str(cat))
+                index = self.InsertItem(self.GetItemCount(), str(catsList[0]))
+                self.SetItem(index, 0, str(layer))
+                self.SetItem(index, 1, str(cat))
                 self.SetItemData(index, i)
                 itemData[i] = (str(layer), str(cat))
                 i = i + 1
@@ -617,13 +618,13 @@ class VDigitZBulkDialog(wx.Dialog):
 
         border = wx.BoxSizer(wx.VERTICAL)
 
-        txt = wx.StaticText(
+        txt = StaticText(
             parent=self,
             label=_("%d lines selected for z bulk-labeling") %
             nselected)
         border.Add(txt, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=self,
             id=wx.ID_ANY,
             label=" %s " %
@@ -633,8 +634,8 @@ class VDigitZBulkDialog(wx.Dialog):
         flexSizer.AddGrowableCol(0)
 
         # starting value
-        txt = wx.StaticText(parent=self,
-                            label=_("Starting value"))
+        txt = StaticText(parent=self,
+                         label=_("Starting value"))
         self.value = SpinCtrl(parent=self, id=wx.ID_ANY, size=(150, -1),
                               initial=0,
                               min=-1e6, max=1e6)
@@ -645,8 +646,8 @@ class VDigitZBulkDialog(wx.Dialog):
             flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE)
 
         # step
-        txt = wx.StaticText(parent=self,
-                            label=_("Step"))
+        txt = StaticText(parent=self,
+                         label=_("Step"))
         self.step = SpinCtrl(parent=self, id=wx.ID_ANY, size=(150, -1),
                              initial=0,
                              min=0, max=1e6)
@@ -664,8 +665,8 @@ class VDigitZBulkDialog(wx.Dialog):
         border.Add(sizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=0)
 
         # buttons
-        btnCancel = wx.Button(self, wx.ID_CANCEL)
-        btnOk = wx.Button(self, wx.ID_OK)
+        btnCancel = Button(self, wx.ID_CANCEL)
+        btnOk = Button(self, wx.ID_OK)
         btnOk.SetDefault()
 
         # sizers
@@ -731,8 +732,8 @@ class VDigitDuplicatesDialog(wx.Dialog):
             id += 1
 
         # buttons
-        btnCancel = wx.Button(self, wx.ID_CANCEL)
-        btnOk = wx.Button(self, wx.ID_OK)
+        btnCancel = Button(self, wx.ID_CANCEL)
+        btnOk = Button(self, wx.ID_OK)
         btnOk.SetDefault()
 
         # sizers
@@ -774,7 +775,7 @@ class VDigitDuplicatesDialog(wx.Dialog):
 
 
 class CheckListFeature(
-        wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCtrlMixin):
+        ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCtrlMixin):
 
     def __init__(self, parent, data,
                  pos=wx.DefaultPosition, log=None):
@@ -783,8 +784,7 @@ class CheckListFeature(
         self.parent = parent
         self.data = data
 
-        wx.ListCtrl.__init__(self, parent, wx.ID_ANY,
-                             style=wx.LC_REPORT)
+        ListCtrl.__init__(self, parent, wx.ID_ANY, style=wx.LC_REPORT)
 
         listmix.CheckListCtrlMixin.__init__(self)
 
@@ -802,8 +802,8 @@ class CheckListFeature(
         self.InsertColumn(1, _('Layer (Categories)'))
 
         for item in data:
-            index = self.InsertStringItem(self.GetItemCount(), str(item[0]))
-            self.SetStringItem(index, 1, str(item[1]))
+            index = self.InsertItem(self.GetItemCount(), str(item[0]))
+            self.SetItem(index, 1, str(item[1]))
 
         # enable all items by default
         for item in range(self.GetItemCount()):

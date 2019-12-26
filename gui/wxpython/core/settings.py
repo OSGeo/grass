@@ -19,13 +19,15 @@ This program is free software under the GNU General Public License
 @author Luca Delucchi <lucadeluge gmail.com> (language choice)
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import copy
 
 from core import globalvar
 from core.gcmd import GException, GError
-from core.utils import GetSettingsPath, PathJoin, rgb2str, _
+from core.utils import GetSettingsPath, PathJoin, rgb2str
 
 
 class Settings:
@@ -46,7 +48,7 @@ class Settings:
         try:
             self.ReadSettingsFile()
         except GException as e:
-            print >> sys.stderr, e.value
+            print(e.value, file=sys.stderr)
 
         # define internal settings
         self._internalSettings()  # -> self.internalSettings
@@ -188,6 +190,9 @@ class Settings:
                 'autoZooming': {
                     'enabled': False
                 },
+                'showCompExtent': {
+                    'enabled': True
+                },
                 'statusbarMode': {
                     'selection': 0
                 },
@@ -314,6 +319,9 @@ class Settings:
                     'face': {
                         'enabled': True
                     },
+                },
+                'randomColors': {
+                    'enabled': False,
                 },
             },
             #
@@ -850,9 +858,9 @@ class Settings:
         """Define internal settings (based on user settings)
         """
         self.internalSettings = {}
-        for group in self.userSettings.keys():
+        for group in list(self.userSettings.keys()):
             self.internalSettings[group] = {}
-            for key in self.userSettings[group].keys():
+            for key in list(self.userSettings[group].keys()):
                 self.internalSettings[group][key] = {}
 
         # self.internalSettings['general']["mapsetPath"]['value'] = self.GetMapsetPath()
@@ -997,11 +1005,12 @@ class Settings:
                     self.Append(settings, group, key, subkey, value)
                     idx += 2
         except ValueError as e:
-            print >>sys.stderr, _(
+            print(_(
                 "Error: Reading settings from file <%(file)s> failed.\n"
                 "\t\tDetails: %(detail)s\n"
                 "\t\tLine: '%(line)s'\n") % {
-                'file': filename, 'detail': e, 'line': line}
+                'file': filename, 'detail': e, 'line': line},
+                file=sys.stderr)
             fd.close()
 
         fd.close()
@@ -1021,9 +1030,9 @@ class Settings:
 
         try:
             file = open(self.filePath, "w")
-            for group in settings.keys():
-                for key in settings[group].keys():
-                    subkeys = settings[group][key].keys()
+            for group in list(settings.keys()):
+                for key in list(settings[group].keys()):
+                    subkeys = list(settings[group][key].keys())
                     file.write('%s%s%s%s' % (group, self.sep, key, self.sep))
                     for idx in range(len(subkeys)):
                         value = settings[group][key][subkeys[idx]]
@@ -1033,7 +1042,7 @@ class Settings:
                                     '%s%s%s%s%s' %
                                     (os.linesep, group, self.sep, key, self.sep))
                             file.write('%s%s' % (subkeys[idx], self.sep))
-                            kvalues = settings[group][key][subkeys[idx]].keys()
+                            kvalues = list(settings[group][key][subkeys[idx]].keys())
                             srange = range(len(kvalues))
                             for sidx in srange:
                                 svalue = self._parseValue(
@@ -1134,8 +1143,8 @@ class Settings:
                     return settings[group][key][subkey]
 
         except KeyError:
-            print >> sys.stderr, "Settings: unable to get value '%s:%s:%s'\n" % (
-                group, key, subkey)
+            print("Settings: unable to get value '%s:%s:%s'\n" % (
+                group, key, subkey), file=sys.stderr)
 
     def Set(self, group, value, key=None, subkey=None, settings_type='user'):
         """Set value of key/subkey
@@ -1206,8 +1215,9 @@ class Settings:
                 if overwrite or (not overwrite and not hasValue):
                     dict[group][key][subkey[0]][subkey[1]] = value
             except TypeError:
-                print >> sys.stderr, _("Unable to parse settings '%s'") % value + \
-                    ' (' + group + ':' + key + ':' + subkey[0] + ':' + subkey[1] + ')'
+                print(_("Unable to parse settings '%s'") % value +
+                      ' (' + group + ':' + key + ':' + subkey[0] +
+                      ':' + subkey[1] + ')', file=sys.stderr)
         else:
             if subkey not in dict[group][key]:
                 hasValue = False
@@ -1216,8 +1226,9 @@ class Settings:
                 if overwrite or (not overwrite and not hasValue):
                     dict[group][key][subkey] = value
             except TypeError:
-                print >> sys.stderr, _("Unable to parse settings '%s'") % value + \
-                    ' (' + group + ':' + key + ':' + subkey + ')'
+                print(_("Unable to parse settings '%s'") % value +
+                      ' (' + group + ':' + key + ':' + subkey + ')',
+                      file=sys.stderr)
 
     def GetDefaultSettings(self):
         """Get default user settings"""
@@ -1285,5 +1296,9 @@ def GetDisplayVectSettings():
                             key='showType', subkey=[ftype, 'enabled']):
             types.append(ftype)
     settings.append('type=%s' % ','.join(types))
+
+    if UserSettings.Get(group='vectorLayer',
+                        key='randomColors', subkey='enabled'):
+        settings.append('-c')
 
     return settings

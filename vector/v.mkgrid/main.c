@@ -51,8 +51,8 @@ int main(int argc, char *argv[])
     struct Option *vectname, *grid, *coord, *box, *angle, *position_opt,
                   *breaks, *type_opt;
     struct GModule *module;
-    struct Flag *hex_flag, *ha_flag;
-    int otype, ptype, ltype;
+    struct Flag *hex_flag, *ha_flag, *diag_flag;
+    int otype, ptype, ltype, diag;
     char *desc;
 
     struct line_pnts *Points;
@@ -145,6 +145,13 @@ int main(int argc, char *argv[])
     ha_flag->description =
 	_("Allow asymmetric hexagons");
 
+    diag_flag = G_define_flag();
+    diag_flag->key = 'd';
+    diag_flag->label =
+	_("EXPERIMENTAL: Add diagonals to rectangular lines");
+    diag_flag->description =
+	_("Applies only to lines for rectangles");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -164,7 +171,13 @@ int main(int argc, char *argv[])
 
     ptype = (otype & GV_POINTS);
     ltype = (otype & GV_LINES);
-    
+
+    diag = (otype == GV_LINE && !hex_flag->answer && diag_flag->answer);
+    if (diag) {
+	ptype = 0;
+	ltype = GV_LINE;
+	hex_flag->answer = 0;
+    }
 
     /* get the current window  */
     G_get_window(&window);
@@ -366,6 +379,7 @@ int main(int argc, char *argv[])
 			      db_get_string(&sql));
 	    }
 	}
+	db_commit_transaction(Driver);
     }
     else {
 	if (grid_info.width != grid_info.height) {
@@ -410,7 +424,7 @@ int main(int argc, char *argv[])
 
 	if (ltype) {
 	    /* create areas */
-	    write_grid(&grid_info, &Map, nbreaks, ltype);
+	    write_grid(&grid_info, &Map, nbreaks, ltype, diag);
 	}
 
 	/* Create a grid of label points at the centres of the grid cells */
@@ -466,10 +480,10 @@ int main(int argc, char *argv[])
 		    attCount++;
 	        }
 	    }
+	    db_commit_transaction(Driver);
             G_percent(1, 1, 1);
 	}
     }
-    db_commit_transaction(Driver);
 
     db_close_database_shutdown_driver(Driver);
 

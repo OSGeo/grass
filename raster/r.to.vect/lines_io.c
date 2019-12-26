@@ -175,9 +175,9 @@ static int write_ln(struct COOR *begin, struct COOR *end,	/* start and end point
 	/* this should NEVER happen */
 	if ((p = move(p)) == NULL)
 	    G_fatal_error(_("write_line: line terminated unexpectedly\n"
-			    "  previous (%d) point %p (%d,%d,%d) %p %p"),
-			  direction, last, last->row, last->col, last->node,
-			  last->fptr, last->bptr);
+			    "  previous (%d) point %d (%d,%d,%d) %p %p"),
+			  direction, i, last->row, last->col, last->node,
+			  (void *)last->fptr, (void *)last->bptr);
 
 	y = cell_head.north - ((double)p->row + 0.5) * cell_head.ns_res;
 	x = cell_head.west + ((double)p->col + 0.5) * cell_head.ew_res;

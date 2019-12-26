@@ -18,11 +18,13 @@ SUBDIRS = \
 	db.out.ogr \
 	db.test \
 	db.univar \
+	g.bands \
 	g.extension \
 	g.extension.all \
 	g.manual \
 	g.search.modules \
 	i.colors.enhance \
+	i.band \
 	i.image.mosaic \
 	i.in.spotvgt \
 	i.oif \
@@ -33,12 +35,14 @@ SUBDIRS = \
 	r.blend \
 	r.buffer.lowmem \
 	r.colors.stddev \
+	r.drain \
 	r.fillnulls \
 	r.grow \
-    r.import \
+	r.import \
 	r.in.aster \
 	r.in.srtm \
 	r.in.wms \
+	r.mapcalc.simple \
 	r.mask \
 	r.out.xyz \
 	r.pack \
@@ -51,6 +55,7 @@ SUBDIRS = \
 	r3.in.xyz \
 	v.build.all \
 	v.centroids \
+	v.clip \
 	v.db.addcolumn \
 	v.db.addtable \
 	v.db.join \

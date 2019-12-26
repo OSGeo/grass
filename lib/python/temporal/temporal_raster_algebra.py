@@ -59,8 +59,6 @@ try:
 except:
     pass
 
-# i18N
-import gettext
 from .temporal_raster_base_algebra import TemporalRasterBaseAlgebraParser,\
     TemporalRasterAlgebraLexer
 import grass.pygrass.modules as pymod
@@ -72,11 +70,12 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
     """The temporal raster algebra class"""
 
     def __init__(self, pid=None, run=False, debug=True, spatial=False,
-                 register_null=False, dry_run=False, nprocs=1):
+                 register_null=False, dry_run=False, nprocs=1, time_suffix=None):
 
         TemporalRasterBaseAlgebraParser.__init__(self, pid=pid, run=run, debug=debug,
                                                  spatial=spatial, register_null=register_null,
-                                                 dry_run=dry_run, nprocs=nprocs)
+                                                 dry_run=dry_run, nprocs=nprocs,
+                                                 time_suffix=time_suffix)
 
         if spatial is True:
             self.m_mapcalc = pymod.Module('r.mapcalc', region="union", run_=False)
@@ -99,7 +98,7 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
 
         self.lexer = TemporalRasterAlgebraLexer()
         self.lexer.build()
-        self.parser = yacc.yacc(module=self, debug=self.debug)
+        self.parser = yacc.yacc(module=self, debug=self.debug, write_tables=False)
 
         self.overwrite = overwrite
         self.count = 0

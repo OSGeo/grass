@@ -43,6 +43,8 @@ int main(int argc, char *argv[])
     int ilayer, use_ogr;
     char buf[GPATH_MAX], *dsn, *layer;
     const char *output;
+    struct Cell_head cellhd;
+    ds_t Ogr_ds;
     
     G_gisinit(argv[0]);
     
@@ -62,7 +64,7 @@ int main(int argc, char *argv[])
     use_ogr = TRUE;
     G_debug(1, "GRASS_VECTOR_OGR defined? %s",
             getenv("GRASS_VECTOR_OGR") ? "yes" : "no");
-    if(options.dsn->answer &&
+    if (options.dsn->answer &&
        G_strncasecmp(options.dsn->answer, "PG:", 3) == 0) {
         /* -> PostgreSQL */
 #if defined HAVE_OGR && defined HAVE_POSTGRES
@@ -136,22 +138,41 @@ int main(int argc, char *argv[])
                       options.output->key, output);
     }
 
-    /* check projection match */
-    if (!flags.override->answer) {
-        /* here must be used original dsn since check_projection() is
-         * using GDAL library */
-        char dsn_ogr[DB_SQL_MAX];
-
-        if (!use_ogr && G_strncasecmp(options.dsn->answer, "PG:", 3) == 0) {
-            /* make dsn OGR-compatible */
-            strcpy(dsn_ogr, "PG:");
-            strcat(dsn_ogr, dsn);
-        }
-        else {
-            sprintf(dsn_ogr, "%s", dsn);
-        }
-        check_projection(dsn_ogr, ilayer);
+    /* open OGR DSN */
+    Ogr_ds = NULL;
+    if (strlen(options.dsn->answer) > 0) {
+#if GDAL_VERSION_NUM >= 2020000
+	Ogr_ds = GDALOpenEx(options.dsn->answer, GDAL_OF_VECTOR, NULL, NULL, NULL);
+#else
+	Ogr_ds = OGROpen(dsn, FALSE, NULL);
+#endif
     }
+    if (Ogr_ds == NULL)
+	G_fatal_error(_("Unable to open data source <%s>"), dsn);
+
+    G_get_window(&cellhd);
+
+    cellhd.north = 1.;
+    cellhd.south = 0.;
+    cellhd.west = 0.;
+    cellhd.east = 1.;
+    cellhd.top = 1.;
+    cellhd.bottom = 0.;
+    cellhd.rows = 1;
+    cellhd.rows3 = 1;
+    cellhd.cols = 1;
+    cellhd.cols3 = 1;
+    cellhd.depths = 1;
+    cellhd.ns_res = 1.;
+    cellhd.ns_res3 = 1.;
+    cellhd.ew_res = 1.;
+    cellhd.ew_res3 = 1.;
+    cellhd.tb_res = 1.;
+
+    /* check projection match */
+    check_projection(&cellhd, Ogr_ds, ilayer, NULL, NULL, 0,
+                     flags.override->answer, flags.proj->answer);
+    ds_close(Ogr_ds);
     
     /* create new vector map */
     putenv("GRASS_VECTOR_EXTERNAL_IGNORE=1");

@@ -10,6 +10,7 @@
 */
 
 #include <unistd.h>
+#include <stdio.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
@@ -57,7 +58,7 @@ struct Key_Value *G_get_projunits(void)
 */
 struct Key_Value *G_get_projinfo(void)
 {
-    struct Key_Value *in_proj_keys;
+    struct Key_Value *in_proj_keys, *in_epsg_keys;
     char path[GPATH_MAX];
 
     G_file_name(path, "", PROJECTION_FILE, PERMANENT);
@@ -69,6 +70,16 @@ struct Key_Value *G_get_projinfo(void)
 	return NULL;
     }
     in_proj_keys = G_read_key_value_file(path);
+    
+    /* TODO: do not restrict to EPSG as the only authority */
+    if ((in_epsg_keys = G_get_projepsg()) != NULL) {
+	const char *epsgstr = G_find_key_value("epsg", in_epsg_keys);
+	char buf[4096];
+	
+	sprintf(buf, "EPSG:%s", epsgstr);
+	G_set_key_value("init", buf, in_proj_keys);
+	G_free_key_value(in_epsg_keys);
+    }
 
     return in_proj_keys;
 }
@@ -80,7 +91,7 @@ struct Key_Value *G_get_projinfo(void)
   G_free_key_value().
   
   \return pointer to Key_Value structure with key/value pairs
-  \return NULL when EPSG code is defined for location
+  \return NULL when EPSG code is not defined for location
 */
 struct Key_Value *G_get_projepsg(void)
 {

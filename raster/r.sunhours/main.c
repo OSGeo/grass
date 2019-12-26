@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     struct Key_Value *in_proj_info, *in_unit_info;
     struct pj_info iproj;	/* input map proj parameters  */
     struct pj_info oproj;	/* output map proj parameters  */
-
+    struct pj_info tproj;	/* transformation parameters  */
     char *elev_name, *azimuth_name, *sunhour_name;
     int elev_fd, azimuth_fd, sunhour_fd;
     double ha, ha_cos, s_gamma, s_elevation, s_azimuth;
@@ -224,12 +224,11 @@ int main(int argc, char *argv[])
 	G_free_key_value(in_proj_info);
 	G_free_key_value(in_unit_info);
 
-	/*  output projection to lat/long w/ same ellipsoid as input */
-	oproj.zone = 0;
-	oproj.meters = 1.;
-	sprintf(oproj.proj, "ll");
-	if ((oproj.pj = pj_latlong_from_proj(iproj.pj)) == NULL)
-	    G_fatal_error(_("Unable to update lat/long projection parameters"));
+	oproj.pj = NULL;
+	tproj.def = NULL;
+
+	if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
+	    G_fatal_error(_("Unable to initialize coordinate transformation"));
     }
 
     /* always init pd */
@@ -292,8 +291,10 @@ int main(int argc, char *argv[])
 	    north_ll = (window.north + window.south) / 2;
 	    east_ll = (window.east + window.west) / 2;
 	    if (do_reproj) {
-		if (pj_do_proj(&east_ll, &north_ll, &iproj, &oproj) < 0)
-		    G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
+		if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
+				  &east_ll, &north_ll, NULL) < 0)
+		    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+				   "GPJ_transform()");
 	    }
 	    pd.timezone = east_ll / 15.;
 	    pd.time_updated = 1;
@@ -386,9 +387,10 @@ int main(int argc, char *argv[])
 
 	    if (do_reproj) {
 		north_ll = north;
-
-		if (pj_do_proj(&east_ll, &north_ll, &iproj, &oproj) < 0)
-		    G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
+		if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
+				  &east_ll, &north_ll, NULL) < 0)
+		    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+				   "GPJ_transform()");
 	    }
 
 	    /* geocentric latitude */

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 ############################################################################
 #
 # MODULE:       v.db.reconnect.all
@@ -55,10 +55,6 @@ import string
 
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 # substitute variables (gisdbase, location_name, mapset)
 
@@ -284,5 +280,5 @@ def main():
 
 if __name__ == "__main__":
     options, flags = gscript.parser()
-    nuldev = file(os.devnull, 'w')
+    nuldev = open(os.devnull, 'w')
     sys.exit(main())

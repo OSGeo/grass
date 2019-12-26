@@ -88,7 +88,7 @@ int null_distance(const char *name1, const char *name2, int *zerro_row, int *zer
     int nrows, ncols, row, col;
     void *cell1, *cell2;
 
-    /* NOTE: no need to controll, if the map exists. it should be checked in edge.c */
+    /* NOTE: no need to control, if the map exists. it should be checked in edge.c */
     mapset = G_find_raster2(name1, "");
     maptype1 = Rast_map_type(name1, mapset);
     mapd1 = Rast_open_old(name1, mapset);

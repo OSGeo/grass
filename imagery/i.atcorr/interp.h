@@ -3,25 +3,25 @@
 
 struct InterpStruct
 {
-	float romix; 
-	float rorayl; 
-	float roaero;
-	float phaa; 
-	float phar; 
-	float tsca;
-	float tray; 
-	float trayp; 
-	float taer;
-	float taerp; 
-	float dtott; 
-	float utott;
-	float astot; 
-	float asray; 
-	float asaer;
-	float utotr; 
-	float utota; 
-	float dtotr;
-	float dtota;
+	double romix; 
+	double rorayl; 
+	double roaero;
+	double phaa; 
+	double phar; 
+	double tsca;
+	double tray; 
+	double trayp; 
+	double taer;
+	double taerp; 
+	double dtott; 
+	double utott;
+	double astot; 
+	double asray; 
+	double asaer;
+	double utotr; 
+	double utota; 
+	double dtotr;
+	double dtota;
 };
 
 /*
@@ -29,8 +29,8 @@ To estimate the different atmospheric functions r(mS,mv,fS,fv), T(q) and S at an
 wavelength from the 10 discret computations (subroutine DISCOM).
  */
 void interp (const int iaer, const int idatmp, 
-			 const float wl, const float taer55, 
-			 const float taer55p, const float xmud, 
+			 const double wl, const double taer55, 
+			 const double taer55p, const double xmud, 
 			 InterpStruct& is);
 
 #endif /* INTERP_H */

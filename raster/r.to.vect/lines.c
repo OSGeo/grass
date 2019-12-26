@@ -16,9 +16,9 @@
  *
  * Algorithm was modified by Olga Waupotitsch
  * USA CERL on nov, 1993
- * because the previous implementation was incosistent
+ * because the previous implementation was inconsistent
  * stopped in the middle of map, because it tried to continue
- * a line wich was presumed to have been started earlier
+ * a line which was presumed to have been started earlier
  * but in fact was not started.
  * also the write_line() complained that the lines end unexpectedly
  *
@@ -244,10 +244,42 @@ static int update_list(int count)
 	break;
     case 2:			/* straight or bent line */
 	if (tl != 0 && br != 0) {	/* slanted line (\) */
+		if (value_flag) {
+			/* only CELL supported */
+			if (data_type == CELL_TYPE) {
+				int mc_val = ((CELL *) middle)[col];
+				int br_val = ((CELL *) bottom)[col + 1];
+				int tl_val = ((CELL *) top)[col - 1];
+				if (tl_val != mc_val) {
+					v_list[col].left = end_line(v_list[col].left, 1);
+					v_list[col].left = start_line(0);
+				}
+				if (mc_val != br_val) {
+					v_list[col].left = end_line(v_list[col].left, 1);
+					v_list[col].left = start_line(0);
+				}
+			}
+		}
 	    v_list[col + 1].left = v_list[col].left;
 	    v_list[col].left = NULL;
 	}
 	else if (tr != 0 && bl != 0) {	/* slanted line (/) */
+		if (value_flag) {
+			/* only CELL supported */
+			if (data_type == CELL_TYPE) {
+				int mc_val = ((CELL *) middle)[col];
+				int bl_val = ((CELL *) bottom)[col - 1];
+				int tr_val = ((CELL *) top)[col + 1];
+				if (tr_val != mc_val) {
+					v_list[col].right = end_line(v_list[col].right, 1);
+					v_list[col].right = start_line(0);
+				}
+				if (mc_val != bl_val) {
+					v_list[col].right = end_line(v_list[col].right, 1);
+					v_list[col].right = start_line(0);
+				}
+			}
+		}
 	    v_list[col - 1].right = v_list[col].right;
 	    v_list[col].right = NULL;
 	}
@@ -333,13 +365,13 @@ static int update_list(int count)
 		    v_list[col - 1].right = new_ptr1;
 	    }
 	    else {		/* lower-left */
-		/* if the non-zero neigbours are adjacent */
+		/* if the non-zero neighbors are adjacent */
 		if (mr && br)
 		    h_ptr = start_line(1);
 		else if ((br && bc) || (bl && bc))
 		    v_list[col].center = start_line(1);
 		else
-		    /* the non-zero neigbours are not adjacent */
+		    /* the non-zero neighbors are not adjacent */
 		{		/* starting in middle of line */
 		    new_ptr1 = get_ptr();
 		    new_ptr2 = get_ptr();

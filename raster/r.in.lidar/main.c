@@ -362,6 +362,11 @@ int main(int argc, char *argv[])
         set_region_flag->answer = '\0';
     }
 
+    /* Trim option is used only for trimmean method */
+    if (trim_opt->answer != NULL && strcmp(method_opt->answer, "trimmean") != 0) {
+        G_fatal_error(_("Trim option can be used only with trimmean method"));
+    }
+
     struct StringList infiles;
 
     if (file_list_opt->answer) {
@@ -593,7 +598,7 @@ int main(int argc, char *argv[])
 
     if (!scan_flag->answer) {
         if (!check_rows_cols_fit_to_size_t(rows, cols))
-		G_fatal_error(_("Unable to process the hole map at once. "
+		G_fatal_error(_("Unable to process the whole map at once. "
                         "Please set the '%s' option to some value lower than 100."),
 				percent_opt->key);
         point_binning_memory_test(&point_binning, rows, cols, rtype);

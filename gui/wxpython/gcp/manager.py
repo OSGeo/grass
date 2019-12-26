@@ -26,10 +26,12 @@ This program is free software under the GNU General Public License
 @author Support for GraphicsSet added by Stepan Turek <stepan.turek seznam.cz> (2012)
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import shutil
-import time
+import six
 from copy import copy
 
 import wx
@@ -38,23 +40,25 @@ import wx.lib.colourselect as csel
 
 from core import globalvar
 if globalvar.wxPythonPhoenix:
-    from wx.adv import Wizard as wiz
+    from wx import adv as wiz
+    from wx.adv import Wizard
 else:
-    import wx.wizard as wiz
+    from wx import wizard as wiz
+    from wx.wizard import Wizard
 
 import grass.script as grass
 
 
 from core import utils
 from core.render import Map
-from core.utils import _
 from gui_core.gselect import Select, LocationSelect, MapsetSelect
 from gui_core.dialogs import GroupDialog
-from core.gcmd import RunCommand, GMessage, GError, GWarning, EncodeString
+from core.gcmd import RunCommand, GMessage, GError, GWarning
 from core.settings import UserSettings
 from gcp.mapdisplay import MapFrame
 from core.giface import Notification
-from gui_core.wrap import SpinCtrl
+from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, \
+    CheckListBox, TextCtrl, Menu, ListCtrl, BitmapFromImage
 
 from location_wizard.wizard import TitledPage as TitledPage
 
@@ -74,7 +78,7 @@ maptype = 'raster'
 def getSmallUpArrowImage():
     stream = open(os.path.join(globalvar.IMGDIR, 'small_up_arrow.png'), 'rb')
     try:
-        img = wx.ImageFromStream(stream)
+        img = wx.Image(stream)
     finally:
         stream.close()
     return img
@@ -83,7 +87,7 @@ def getSmallUpArrowImage():
 def getSmallDnArrowImage():
     stream = open(os.path.join(globalvar.IMGDIR, 'small_down_arrow.png'), 'rb')
     try:
-        img = wx.ImageFromStream(stream)
+        img = wx.Image(stream)
     finally:
         stream.close()
     stream.close()
@@ -291,7 +295,7 @@ class GCPWizard(object):
         self.gisrc_dict['LOCATION_NAME'] = location
         self.gisrc_dict['MAPSET'] = mapset
 
-        self.source_gisrc = EncodeString(utils.GetTempfile())
+        self.source_gisrc = utils.GetTempfile()
 
         try:
             f = open(self.source_gisrc, mode='w')
@@ -369,7 +373,7 @@ class LocationPage(TitledPage):
 
         # location
         self.sizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_('Select source location:')),
@@ -390,7 +394,7 @@ class LocationPage(TitledPage):
 
         # mapset
         self.sizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_('Select source mapset:')),
@@ -503,10 +507,10 @@ class GroupPage(TitledPage):
         #
         # group
         self.sizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self,
                 id=wx.ID_ANY,
-                label=_('Select group:')),
+                label=_('Select/create group:')),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
             pos=(
@@ -514,13 +518,13 @@ class GroupPage(TitledPage):
                 1))
         self.cb_group = wx.ComboBox(parent=self, id=wx.ID_ANY,
                                     choices=self.groupList, size=(350, -1),
-                                    style=wx.CB_DROPDOWN | wx.CB_READONLY)
+                                    style=wx.CB_DROPDOWN)
         self.sizer.Add(self.cb_group, flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5, pos=(1, 2))
 
         # create group
         self.sizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_('Create group if none exists')),
@@ -530,11 +534,11 @@ class GroupPage(TitledPage):
                 2,
                 1))
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.btn_mkgroup = wx.Button(
+        self.btn_mkgroup = Button(
             parent=self,
             id=wx.ID_ANY,
             label=_("Create/edit group..."))
-        self.btn_vgroup = wx.Button(
+        self.btn_vgroup = Button(
             parent=self,
             id=wx.ID_ANY,
             label=_("Add vector map to group..."))
@@ -554,7 +558,7 @@ class GroupPage(TitledPage):
 
         # extension
         self.sizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_('Extension for output maps:')),
@@ -563,7 +567,7 @@ class GroupPage(TitledPage):
             pos=(
                 3,
                 1))
-        self.ext_txt = wx.TextCtrl(
+        self.ext_txt = TextCtrl(
             parent=self, id=wx.ID_ANY, value="", size=(
                 350, -1))
         self.ext_txt.SetValue(self.extension)
@@ -588,6 +592,8 @@ class GroupPage(TitledPage):
 
     def OnMkGroup(self, event):
         """Create new group in source location/mapset"""
+        if self.xygroup == '':
+            self.xygroup = self.cb_group.GetValue()
         dlg = GroupDialog(parent=self, defaultGroup=self.xygroup)
         dlg.DisableSubgroupEdit()
         dlg.ShowModal()
@@ -603,6 +609,10 @@ class GroupPage(TitledPage):
 
     def OnVGroup(self, event):
         """Add vector maps to group"""
+
+        if self.xygroup == '':
+            self.xygroup = self.cb_group.GetValue()
+
         dlg = VectGroup(parent=self,
                         id=wx.ID_ANY,
                         grassdb=self.grassdatabase,
@@ -706,7 +716,7 @@ class DispMapPage(TitledPage):
         # layout
         #
         self.sizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_('Select source map to display:')),
@@ -732,7 +742,7 @@ class DispMapPage(TitledPage):
                 2))
 
         self.sizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_('Select target raster map to display:')),
@@ -755,7 +765,7 @@ class DispMapPage(TitledPage):
                 2))
 
         self.sizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_('Select target vector map to display:')),
@@ -808,7 +818,7 @@ class DispMapPage(TitledPage):
                 p = RunCommand('g.region', 'vector=src_map')
 
             if p.returncode == 0:
-                print 'returncode = ', str(p.returncode)
+                print('returncode = ', str(p.returncode))
                 self.parent.Map.region = self.parent.Map.GetRegion()
         except:
             pass
@@ -1054,8 +1064,8 @@ class GCP(MapFrame, ColumnSorterMixin):
         # CheckListCtrlMixin must set an ImageList first
         self.il = self.list.GetImageList(wx.IMAGE_LIST_SMALL)
 
-        SmallUpArrow = wx.BitmapFromImage(getSmallUpArrowImage())
-        SmallDnArrow = wx.BitmapFromImage(getSmallDnArrowImage())
+        SmallUpArrow = BitmapFromImage(getSmallUpArrowImage())
+        SmallDnArrow = BitmapFromImage(getSmallDnArrowImage())
         self.sm_dn = self.il.Add(SmallDnArrow)
         self.sm_up = self.il.Add(SmallUpArrow)
 
@@ -1194,7 +1204,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         for newkey in range(key, len(self.mapcoordlist)):
             index = self.list.FindItemData(-1, newkey + 1)
             self.mapcoordlist[newkey][0] = newkey
-            self.list.SetStringItem(index, 0, str(newkey))
+            self.list.SetItem(index, 0, str(newkey))
             self.list.SetItemData(index, newkey)
 
         # update selected
@@ -1230,9 +1240,9 @@ class GCP(MapFrame, ColumnSorterMixin):
         key = self.list.GetItemData(index)
 
         for i in range(1, 5):
-            self.list.SetStringItem(index, i, '0.0')
-        self.list.SetStringItem(index, 5, '')
-        self.list.SetStringItem(index, 6, '')
+            self.list.SetItem(index, i, '0.0')
+        self.list.SetItem(index, 5, '')
+        self.list.SetItem(index, 6, '')
         self.list.CheckItem(index, False)
 
         # GCP number, source E, source N, target E, target N, fwd error, bkwd
@@ -1253,7 +1263,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                    "ucolor": "unused"}
         wpx = UserSettings.Get(group='gcpman', key='symbol', subkey='width')
 
-        for k, v in colours.iteritems():
+        for k, v in six.iteritems(colours):
             col = UserSettings.Get(group='gcpman', key='symbol', subkey=k)
             self.pointsToDrawSrc.GetPen(v).SetColour(wx.Colour(
                 col[0], col[1], col[2], 255))  # TODO GetPen neni to spatne?
@@ -1347,21 +1357,21 @@ class GCP(MapFrame, ColumnSorterMixin):
                 return
 
         if coordtype == 'source':
-            self.list.SetStringItem(index, 1, str(coord0))
-            self.list.SetStringItem(index, 2, str(coord1))
+            self.list.SetItem(index, 1, str(coord0))
+            self.list.SetItem(index, 2, str(coord1))
             self.mapcoordlist[key][1] = coord[0]
             self.mapcoordlist[key][2] = coord[1]
             self.pointsToDrawSrc.GetItem(key - 1).SetCoords([coord0, coord1])
 
         elif coordtype == 'target':
-            self.list.SetStringItem(index, 3, str(coord0))
-            self.list.SetStringItem(index, 4, str(coord1))
+            self.list.SetItem(index, 3, str(coord0))
+            self.list.SetItem(index, 4, str(coord1))
             self.mapcoordlist[key][3] = coord[0]
             self.mapcoordlist[key][4] = coord[1]
             self.pointsToDrawTgt.GetItem(key - 1).SetCoords([coord0, coord1])
 
-        self.list.SetStringItem(index, 5, '0')
-        self.list.SetStringItem(index, 6, '0')
+        self.list.SetItem(index, 5, '0')
+        self.list.SetItem(index, 6, '0')
         self.mapcoordlist[key][5] = 0.0
         self.mapcoordlist[key][6] = 0.0
 
@@ -1454,7 +1464,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                 if line[0] == '#' or line == '':
                     continue
                 line = line.replace('\n', '').strip()
-                coords = map(float, line.split())
+                coords = list(map(float, line.split()))
                 if coords[4] == 1:
                     check = True
                     self.GCPcount += 1
@@ -1586,9 +1596,9 @@ class GCP(MapFrame, ColumnSorterMixin):
             else:
                 flags = "a"
 
-            busy = wx.BusyInfo(message=_("Rectifying images, please wait..."),
+            busy = wx.BusyInfo(_("Rectifying images, please wait..."),
                                parent=self)
-            wx.Yield()
+            wx.GetApp().Yield()
 
             ret, msg = RunCommand('i.rectify',
                                   parent=self,
@@ -1600,11 +1610,11 @@ class GCP(MapFrame, ColumnSorterMixin):
                                   method=self.gr_method,
                                   flags=flags)
 
-            busy.Destroy()
+            del busy
 
             # provide feedback on failure
             if ret != 0:
-                print >> sys.stderr, msg
+                print(msg, file=sys.stderr)
 
         elif maptype == 'vector':
             # loop through all vectors in VREF
@@ -1631,9 +1641,9 @@ class GCP(MapFrame, ColumnSorterMixin):
                 ret = msg = ''
 
                 busy = wx.BusyInfo(
-                    message=_("Rectifying vector map <%s>, please wait...") %
+                    _("Rectifying vector map <%s>, please wait...") %
                     vect, parent=self)
-                wx.Yield()
+                wx.GetApp().Yield()
 
                 ret, msg = RunCommand('v.rectify',
                                       parent=self,
@@ -1644,11 +1654,11 @@ class GCP(MapFrame, ColumnSorterMixin):
                                       group=self.xygroup,
                                       order=self.gr_order)
 
-                busy.Destroy()
+                del busy
 
                 # provide feedback on failure
                 if ret != 0:
-                    print >> sys.stderr, msg
+                    print(msg, file=sys.stderr)
 
         self.grwiz.SwitchEnv('target')
 
@@ -1662,7 +1672,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         if returncode == 0:
             self.VectGRList.append(self.outname)
-            print '*****vector list = ' + str(self.VectGRList)
+            print('*****vector list = ' + str(self.VectGRList))
         else:
             self._giface.WriteError(
                 _('Georectification of vector map <%s> failed') %
@@ -1820,8 +1830,8 @@ class GCP(MapFrame, ColumnSorterMixin):
             key = self.list.GetItemData(index)
             if self.list.IsChecked(index):
                 fwd_err, bkw_err = errlist[GCPcount].split()
-                self.list.SetStringItem(index, 5, fwd_err)
-                self.list.SetStringItem(index, 6, bkw_err)
+                self.list.SetItem(index, 5, fwd_err)
+                self.list.SetItem(index, 6, bkw_err)
                 self.mapcoordlist[key][5] = float(fwd_err)
                 self.mapcoordlist[key][6] = float(bkw_err)
                 self.list.SetItemTextColour(index, wx.BLACK)
@@ -1836,8 +1846,8 @@ class GCP(MapFrame, ColumnSorterMixin):
                 sum_fwd_err += float(fwd_err)
                 GCPcount += 1
             else:
-                self.list.SetStringItem(index, 5, '')
-                self.list.SetStringItem(index, 6, '')
+                self.list.SetItem(index, 5, '')
+                self.list.SetItem(index, 6, '')
                 self.mapcoordlist[key][5] = 0.0
                 self.mapcoordlist[key][6] = 0.0
                 self.list.SetItemTextColour(index, wx.BLACK)
@@ -2054,7 +2064,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         """Popup Zoom menu
         """
         point = wx.GetMousePosition()
-        zoommenu = wx.Menu()
+        zoommenu = Menu()
         # Add items to the menu
 
         zoomsource = wx.MenuItem(zoommenu, wx.ID_ANY, _(
@@ -2076,14 +2086,14 @@ class GCP(MapFrame, ColumnSorterMixin):
         """Adjust Map Windows after GCP Map Display has been resized
         """
         # re-render image on idle
-        self.resize = time.clock()
+        self.resize = grass.clock()
         super(MapFrame, self).OnSize(event)
 
     def OnIdle(self, event):
         """GCP Map Display resized, adjust Map Windows
         """
         if self.GetMapToolbar():
-            if self.resize and self.resize + 0.2 < time.clock():
+            if self.resize and self.resize + 0.2 < grass.clock():
                 srcwidth, srcheight = self.SrcMapWindow.GetSize()
                 tgtwidth, tgtheight = self.TgtMapWindow.GetSize()
                 srcwidth = (srcwidth + tgtwidth) / 2
@@ -2101,7 +2111,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         pass
 
 
-class GCPList(wx.ListCtrl,
+class GCPList(ListCtrl,
               CheckListCtrlMixin,
               ListCtrlAutoWidthMixin):
 
@@ -2110,7 +2120,7 @@ class GCPList(wx.ListCtrl,
                  style=wx.LC_REPORT | wx.SUNKEN_BORDER | wx.LC_HRULES |
                  wx.LC_SINGLE_SEL):
 
-        wx.ListCtrl.__init__(self, parent, id, pos, size, style)
+        ListCtrl.__init__(self, parent, id, pos, size, style)
 
         self.gcp = gcp  # GCP class
         self.render = True
@@ -2163,7 +2173,7 @@ class GCPList(wx.ListCtrl,
                         _('Forward error'),
                         _('Backward error')):
                 info.SetText(lbl)
-                self.InsertColumnInfo(idx_col, info)
+                self.InsertColumn(idx_col, info)
                 idx_col += 1
 
     def LoadData(self):
@@ -2302,13 +2312,13 @@ class GCPList(wx.ListCtrl,
             else:
                 for i in range(len(values)):
                     if values[i] != coords[i]:
-                        self.SetStringItem(index, i + 1, values[i])
+                        self.SetItem(index, i + 1, values[i])
                         changed = True
 
                 if changed:
                     # reset RMS and update mapcoordlist
-                    self.SetStringItem(index, 5, '')
-                    self.SetStringItem(index, 6, '')
+                    self.SetItem(index, 5, '')
+                    self.SetItem(index, 6, '')
                     key = self.GetItemData(index)
                     self.gcp.mapcoordlist[key] = [key,
                                                   float(values[0]),
@@ -2381,17 +2391,17 @@ class VectGroup(wx.Dialog):
         #
         # buttons
         #
-        self.btnCancel = wx.Button(parent=self,
+        self.btnCancel = Button(parent=self,
                                    id=wx.ID_CANCEL)
-        self.btnOK = wx.Button(parent=self,
+        self.btnOK = Button(parent=self,
                                id=wx.ID_OK)
         self.btnOK.SetDefault()
 
         #
         # list of vector maps
         #
-        self.listMap = wx.CheckListBox(parent=self, id=wx.ID_ANY,
-                                       choices=vectlist)
+        self.listMap = CheckListBox(parent=self, id=wx.ID_ANY,
+                                    choices=vectlist)
 
         if os.path.isfile(self.vgrpfile):
             f = open(self.vgrpfile)
@@ -2417,7 +2427,7 @@ class VectGroup(wx.Dialog):
 
         box = wx.BoxSizer(wx.HORIZONTAL)
         box.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_('Select vector map(s) to add to group:')),
@@ -2460,6 +2470,11 @@ class VectGroup(wx.Dialog):
                 '@' +
                 self.xymapset)
 
+        dirname = os.path.dirname(self.vgrpfile)
+
+        if not os.path.exists(dirname):
+            os.makedirs(dirname)
+
         f = open(self.vgrpfile, mode='w')
         try:
             for vect in vgrouplist:
@@ -2481,7 +2496,7 @@ class EditGCP(wx.Dialog):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel, id=wx.ID_ANY, label=" %s %s " %
             (_("Ground Control Point No."), str(gcpno)))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
@@ -2489,10 +2504,10 @@ class EditGCP(wx.Dialog):
         # source coordinates
         gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
 
-        self.xcoord = wx.TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
-        self.ycoord = wx.TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
-        self.ecoord = wx.TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
-        self.ncoord = wx.TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
+        self.xcoord = TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
+        self.ycoord = TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
+        self.ecoord = TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
+        self.ncoord = TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
 
         # swap source N, target E
         tmp_coord = data[1]
@@ -2506,8 +2521,8 @@ class EditGCP(wx.Dialog):
                            (_("target E:"), self.ecoord),
                            (_("source N:"), self.ycoord),
                            (_("target N:"), self.ncoord)):
-            label = wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                  label=label)
+            label = StaticText(parent=panel, id=wx.ID_ANY,
+                               label=label)
             gridSizer.Add(label,
                           flag=wx.ALIGN_CENTER_VERTICAL,
                           pos=(row, col))
@@ -2534,8 +2549,8 @@ class EditGCP(wx.Dialog):
         #
         # buttons
         #
-        self.btnCancel = wx.Button(panel, wx.ID_CANCEL)
-        self.btnOk = wx.Button(panel, wx.ID_OK)
+        self.btnCancel = Button(panel, wx.ID_CANCEL)
+        self.btnOk = Button(panel, wx.ID_OK)
         self.btnOk.SetDefault()
 
         btnSizer = wx.StdDialogButtonSizer()
@@ -2604,19 +2619,19 @@ class GrSettingsDialog(wx.Dialog):
         self.__CreateRectificationPage(notebook)
 
         # buttons
-        btnSave = wx.Button(self, wx.ID_SAVE)
-        btnApply = wx.Button(self, wx.ID_APPLY)
-        btnClose = wx.Button(self, wx.ID_CLOSE)
+        btnSave = Button(self, wx.ID_SAVE)
+        btnApply = Button(self, wx.ID_APPLY)
+        btnClose = Button(self, wx.ID_CLOSE)
         btnApply.SetDefault()
 
         # bindings
         btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
-        btnApply.SetToolTipString(_("Apply changes for the current session"))
+        btnApply.SetToolTip(_("Apply changes for the current session"))
         btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
-        btnSave.SetToolTipString(
+        btnSave.SetToolTip(
             _("Apply and save changes to user settings file (default for next sessions)"))
         btnClose.Bind(wx.EVT_BUTTON, self.OnClose)
-        btnClose.SetToolTipString(_("Close dialog"))
+        btnClose.SetToolTip(_("Close dialog"))
 
         # sizers
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -2662,15 +2677,14 @@ class GrSettingsDialog(wx.Dialog):
                 0))
 
         # RMS forward error threshold
-        rmslabel = wx.StaticText(
+        rmslabel = StaticText(
             parent=panel, id=wx.ID_ANY,
             label=_("Highlight RMS error > M + SD * factor:"))
         rmslabel.SetToolTip(
-            wx.ToolTip(
                 _(
                     "Highlight GCPs with an RMS error larger than \n"
                     "mean + standard deviation * given factor. \n"
-                    "Recommended values for this factor are between 1 and 2.")))
+                    "Recommended values for this factor are between 1 and 2."))
         rmsgridSizer.Add(
             rmslabel,
             flag=wx.ALIGN_CENTER_VERTICAL,
@@ -2679,8 +2693,8 @@ class GrSettingsDialog(wx.Dialog):
                 0))
         sdfactor = UserSettings.Get(
             group='gcpman', key='rms', subkey='sdfactor')
-        self.rmsWin = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
-                                  size=(70, -1), style=wx.TE_NOHIDESEL)
+        self.rmsWin = TextCtrl(parent=panel, id=wx.ID_ANY,
+                               size=(70, -1), style=wx.TE_NOHIDESEL)
         self.rmsWin.SetValue("%s" % str(sdfactor))
         if (self.parent.highest_only == True):
             self.rmsWin.Disable()
@@ -2690,8 +2704,8 @@ class GrSettingsDialog(wx.Dialog):
         rmsgridSizer.AddGrowableCol(1)
         sizer.Add(rmsgridSizer, flag=wx.EXPAND | wx.ALL, border=5)
 
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s " % _("Symbol settings"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s " % _("Symbol settings"))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
 
@@ -2699,7 +2713,7 @@ class GrSettingsDialog(wx.Dialog):
         # general symbol color
         #
         row = 0
-        label = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Color:"))
+        label = StaticText(parent=panel, id=wx.ID_ANY, label=_("Color:"))
         gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
         col = UserSettings.Get(group='gcpman', key='symbol', subkey='color')
         colWin = csel.ColourSelect(parent=panel, id=wx.ID_ANY,
@@ -2716,7 +2730,7 @@ class GrSettingsDialog(wx.Dialog):
         # symbol color for high forward RMS error
         #
         row += 1
-        label = wx.StaticText(
+        label = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Color for high RMS error:"))
@@ -2736,7 +2750,7 @@ class GrSettingsDialog(wx.Dialog):
         # symbol color for selected GCP
         #
         row += 1
-        label = wx.StaticText(
+        label = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Color for selected GCP:"))
@@ -2756,7 +2770,7 @@ class GrSettingsDialog(wx.Dialog):
         # symbol color for unused GCP
         #
         row += 1
-        label = wx.StaticText(
+        label = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Color for unused GCPs:"))
@@ -2789,7 +2803,7 @@ class GrSettingsDialog(wx.Dialog):
         # symbol size
         #
         row += 1
-        label = wx.StaticText(
+        label = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Symbol size:"))
@@ -2811,7 +2825,7 @@ class GrSettingsDialog(wx.Dialog):
         # symbol width
         #
         row += 1
-        label = wx.StaticText(
+        label = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Line width:"))
@@ -2863,7 +2877,7 @@ class GrSettingsDialog(wx.Dialog):
         self.tgtvectselection.GetElementList()
 
         sizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_('Select source map to display:')),
@@ -2877,7 +2891,7 @@ class GrSettingsDialog(wx.Dialog):
             border=5)
         self.srcselection.SetValue(src_map)
         sizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_('Select target raster map to display:')),
@@ -2891,7 +2905,7 @@ class GrSettingsDialog(wx.Dialog):
             border=5)
         self.tgtrastselection.SetValue(tgt_map['raster'])
         sizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_('Select target vector map to display:')),
@@ -2942,7 +2956,7 @@ class GrSettingsDialog(wx.Dialog):
         # interpolation method
         gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_('Select interpolation method:')),
@@ -2968,14 +2982,14 @@ class GrSettingsDialog(wx.Dialog):
 
         # extension
         sizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_('Extension for output maps:')),
             proportion=0,
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5)
-        self.ext_txt = wx.TextCtrl(
+        self.ext_txt = TextCtrl(
             parent=panel, id=wx.ID_ANY, value="", size=(
                 350, -1))
         self.ext_txt.SetValue(self.parent.extension)

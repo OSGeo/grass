@@ -44,8 +44,7 @@ int main(int argc, char *argv[])
     const char *output;
     const char *mapset;
     int non_zero;
-    struct Range range;
-    CELL ncats, max_cats;
+    CELL ncats;
     int primary;
     struct Categories pcats;
     struct Colors pcolr;
@@ -87,7 +86,7 @@ int main(int argc, char *argv[])
 
     flag.z = G_define_flag();
     flag.z->key = 'z';
-    flag.z->description = _("Non-zero data only");
+    flag.z->description = _("Non-NULL data only");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -106,13 +105,6 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Raster map <%s> not found"), name);
 	names[nfiles] = name;
 	fd[nfiles] = Rast_open_old(name, mapset);
-	Rast_read_range(name, mapset, &range);
-	ncats = range.max - range.min;
-
-	if (nfiles == 0 || ncats > max_cats) {
-	    primary = nfiles;
-	    max_cats = ncats;
-	}
     }
 
     if (nfiles <= 1)
@@ -130,6 +122,7 @@ int main(int argc, char *argv[])
     Rast_init_cats(buf, &pcats);
 
     /* first step is cross product, but un-ordered */
+    primary = 0;
     result = cross(fd, non_zero, primary, outfd);
 
     /* print message STEP mesage */
@@ -143,16 +136,15 @@ int main(int argc, char *argv[])
     if (result <= 0)
 	exit(0);
 
-
     /* build the renumbering/reclass and the new cats file */
-    qsort(reclass, result + 1, sizeof(RECLASS), cmp);
-    table = (CELL *) G_calloc(result + 1, sizeof(CELL));
+    qsort(reclass, result, sizeof(RECLASS), cmp);
+    table = (CELL *) G_calloc(result, sizeof(CELL));
     for (i = 0; i < nfiles; i++) {
 	mapset = G_find_raster2(names[i], "");
 	Rast_read_cats(names[i], mapset, &labels[i]);
     }
 
-    for (ncats = 0; ncats <= result; ncats++) {
+    for (ncats = 0; ncats < result; ncats++) {
 	table[reclass[ncats].result] = ncats;
 	set_cat(ncats, reclass[ncats].cat, &pcats);
     }
@@ -176,7 +168,7 @@ int main(int argc, char *argv[])
 	Rast_write_colors(output, G_mapset(), &pcolr);
     }
 
-    G_message(_("%ld categories"), (long)result);
+    G_message(_("%d categories"), result);
     exit(EXIT_SUCCESS);
 }
 

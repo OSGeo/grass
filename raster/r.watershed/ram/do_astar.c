@@ -12,6 +12,7 @@ int do_astar(void)
     CELL alt_val, alt_nbr[8];
     CELL is_in_list, is_worked, flat_is_done, nbr_flat_is_done;
     int index_doer, index_up;
+
     /* sides
      * |7|1|4|
      * |2| |3|
@@ -47,7 +48,8 @@ int do_astar(void)
 
     if (flat_flag) {
 	alt_bak =
-	    (CELL *) G_malloc(sizeof(CELL) * size_array(&alt_seg, nrows, ncols));
+	    (CELL *) G_malloc(sizeof(CELL) *
+			      size_array(&alt_seg, nrows, ncols));
 	flat_done = flag_create(nrows, ncols);
 	flat_is_done = 0;
 
@@ -103,7 +105,7 @@ int do_astar(void)
 		is_in_list = FLAG_GET(in_list, upr, upc);
 		is_worked = FLAG_GET(worked, upr, upc);
 		skip_diag = 0;
-		
+
 		alt_nbr[ct_dir] = alt[index_up];
 		if (flat_flag && !is_in_list && !is_worked) {
 		    alt_val = alt_bak[index_doer];
@@ -126,7 +128,7 @@ int do_astar(void)
 			alt_nbr[ct_dir] = alt[index_up];
 		    }
 		}
-		
+
 		/* avoid diagonal flow direction bias */
 		if (!is_worked) {
 		    slope[ct_dir] =
@@ -174,8 +176,8 @@ int do_astar(void)
 			}
 		    }
 		}
-	    }    /* end if in region */
-	}    /* end sides */
+	    }			/* end if in region */
+	}			/* end sides */
 	FLAG_SET(worked, r, c);
     }
     G_percent(count, do_points, 1);	/* finish it */
@@ -317,8 +319,7 @@ int drop_pt(void)
     return 0;
 }
 
-double
-get_slope(int r, int c, int downr, int downc, CELL ele, CELL downe)
+double get_slope(int r, int c, int downr, int downc, CELL ele, CELL downe)
 {
     double slope;
 

@@ -21,7 +21,6 @@ import os
 import math
 import wx
 
-from core.utils import _
 import core.units as units
 from core.gcmd import RunCommand
 from core.giface import Notification

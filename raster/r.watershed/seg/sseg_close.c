@@ -5,8 +5,7 @@
 
 int seg_close(SSEG * sseg)
 {
-    Segment_release(&(sseg->seg));
-    close(sseg->fd);
-    unlink(sseg->filename);
+    Segment_close(&(sseg->seg));
+
     return 0;
 }

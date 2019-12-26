@@ -43,7 +43,7 @@ void G__usage_html(void)
     fprintf(stdout,
 	    "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
     fprintf(stdout, "<html>\n<head>\n");
-    fprintf(stdout, "<title>GRASS GIS manual: %s</title>\n", st->pgm_name);
+    fprintf(stdout, "<title>%s - GRASS GIS manual</title>\n", st->pgm_name);
     fprintf(stdout,
 	    "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n");
     fprintf(stdout,

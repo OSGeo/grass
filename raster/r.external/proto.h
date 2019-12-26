@@ -11,7 +11,6 @@ struct band_info
     GDALDataType gdal_type;
     int has_null;
     double null_val;
-    double range[2];
     struct Colors colors;
 };
 
@@ -38,7 +37,7 @@ void list_formats(void);
 void list_bands(struct Cell_head *, GDALDatasetH);
 
 /* proj.c */
-void check_projection(struct Cell_head *, GDALDatasetH, int);
+void check_projection(struct Cell_head *, GDALDatasetH, char *, int, int, int);
 
 /* window.c */
 void setup_window(struct Cell_head *, GDALDatasetH, int *);

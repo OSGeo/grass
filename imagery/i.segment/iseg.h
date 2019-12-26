@@ -22,10 +22,13 @@
 
 #ifdef HAVE_LONG_LONG_INT
 #define LARGEINT long long
+#define PRI_LONG "lld"
 #elif defined HAVE_LARGEFILES
 #define LARGEINT off_t
+#define PRI_LONG PRI_OFF_T
 #else
 #define LARGEINT long
+#define PRI_LONG "ld"
 #endif
 
 /* methods */
@@ -80,6 +83,7 @@ struct globals
 
     /* region growing */
     int min_segment_size;	/* smallest number of pixels/cells allowed in a final segment */
+    int *new_id;
 
     /* inactive options for region growing */
     double radio_weight;	/* weighing factor radiometric - shape */
@@ -110,7 +114,7 @@ struct globals
 
     /* region growing internal structure */
     struct RG_TREE *reg_tree;   /* search tree with region stats */
-    int min_reg_size;		/* minimum region size */
+    LARGEINT min_reg_size;	/* minimum region size */
     struct reg_stats rs, rs_i, rs_k;
     struct ngbr_stats ns;
 

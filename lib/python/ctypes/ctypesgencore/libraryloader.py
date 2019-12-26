@@ -36,6 +36,7 @@ import glob
 import os.path
 import re
 import sys
+import platform
 
 import ctypes
 import ctypes.util
@@ -136,6 +137,7 @@ class DarwinLibraryLoader(LibraryLoader):
 
         dirs.extend(self.other_dirs)
         dirs.append(".")
+        dirs.append(os.path.dirname(__file__))
 
         if hasattr(sys, 'frozen') and sys.frozen == 'macosx_app':
             dirs.append(os.path.join(
@@ -171,13 +173,28 @@ class PosixLibraryLoader(LibraryLoader):
                 directories.extend(os.environ[name].split(os.pathsep))
         directories.extend(self.other_dirs)
         directories.append(".")
+        directories.append(os.path.dirname(__file__))
 
         try:
             directories.extend([dir.strip() for dir in open('/etc/ld.so.conf')])
         except IOError:
             pass
 
-        directories.extend(['/lib', '/usr/lib', '/lib64', '/usr/lib64'])
+        unix_lib_dirs_list = ['/lib', '/usr/lib', '/lib64', '/usr/lib64']
+        if sys.platform.startswith('linux'):
+            # Try and support multiarch work in Ubuntu
+            # https://wiki.ubuntu.com/MultiarchSpec
+            bitage = platform.architecture()[0]
+            if bitage.startswith('32'):
+                # Assume Intel/AMD x86 compat
+                unix_lib_dirs_list += ['/lib/i386-linux-gnu', '/usr/lib/i386-linux-gnu']
+            elif bitage.startswith('64'):
+                # Assume Intel/AMD x86 compat
+                unix_lib_dirs_list += ['/lib/x86_64-linux-gnu', '/usr/lib/x86_64-linux-gnu']
+            else:
+                # guess...
+                unix_lib_dirs_list += glob.glob('/lib/*linux-gnu')
+        directories.extend(unix_lib_dirs_list)
 
         cache = {}
         lib_re = re.compile(r'lib(.*)\.s[ol]')
@@ -236,12 +253,37 @@ class _WindowsLibrary(object):
 class WindowsLibraryLoader(LibraryLoader):
     name_formats = ["%s.dll", "lib%s.dll"]
 
+    def load_library(self, libname):
+        try:
+            result = LibraryLoader.load_library(self, libname)
+        except ImportError:
+            result = None
+            if os.path.sep not in libname:
+                for name in self.name_formats:
+                    try:
+                        result = getattr(ctypes.cdll, name % libname)
+                        if result:
+                            break
+                    except WindowsError:
+                        result = None
+            if result is None:
+                try:
+                    result = getattr(ctypes.cdll, libname)
+                except WindowsError:
+                    result = None
+            if result is None:
+                raise ImportError("%s not found." % libname)
+        return result
+
     def load(self, path):
         return _WindowsLibrary(path)
 
     def getplatformpaths(self, libname):
         if os.path.sep not in libname:
             for name in self.name_formats:
+                dll_in_current_dir = os.path.abspath(name % libname)
+                if os.path.exists(dll_in_current_dir):
+                    yield dll_in_current_dir
                 path = ctypes.util.find_library(name % libname)
                 if path:
                     yield path
@@ -261,7 +303,16 @@ loader = loaderclass.get(sys.platform, PosixLibraryLoader)()
 
 
 def add_library_search_dirs(other_dirs):
-    loader.other_dirs = other_dirs
+    """
+    Add libraries to search paths.
+    If library paths are relative, convert them to absolute with respect to this
+    file's directory
+    """
+    THIS_DIR = os.path.dirname(__file__)
+    for F in other_dirs:
+        if not os.path.isabs(F):
+            F = os.path.abspath(os.path.join(THIS_DIR, F))
+        loader.other_dirs.append(F)
 
 load_library = loader.load_library
 

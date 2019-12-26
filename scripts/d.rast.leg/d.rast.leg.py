@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ############################################################################
 #
@@ -64,10 +64,6 @@
 import sys
 import os
 import grass.script as grass
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 
 def make_frame(f, b, t, l, r):
@@ -145,7 +141,7 @@ def main():
         lmap = map
 
     kv = grass.raster_info(map=lmap)
-    if kv['datatype'] is 'CELL':
+    if kv['datatype'] == 'CELL':
         leg_at = None
     else:
         leg_at = '%f,95,5,10' % VSpacing

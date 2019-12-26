@@ -29,7 +29,6 @@ import codecs
 import getpass
 
 from core import globalvar
-from core.utils import _
 import wx
 import wx.lib.mixins.listctrl as listmix
 
@@ -40,10 +39,8 @@ from core.utils import GetListOfLocations, GetListOfMapsets
 from location_wizard.dialogs import RegionDef
 from gui_core.dialogs import TextEntryDialog
 from gui_core.widgets import GenericValidator, StaticWrapText
-from gui_core.wrap import Button
-from gui_core.wrap import ListCtrl
-
-sys.stderr = codecs.getwriter('utf8')(sys.stderr)
+from gui_core.wrap import Button, ListCtrl, StaticText, \
+    StaticBox, TextCtrl, BitmapFromImage
 
 
 class GRASSStartup(wx.Frame):
@@ -98,7 +95,7 @@ class GRASSStartup(wx.Frame):
                                                      type=wx.BITMAP_TYPE_PNG))
         except:
             self.hbitmap = wx.StaticBitmap(
-                self.panel, wx.ID_ANY, wx.BitmapFromImage(
+                self.panel, wx.ID_ANY, BitmapFromImage(
                     wx.EmptyImage(530, 150)))
 
         # labels
@@ -109,7 +106,7 @@ class GRASSStartup(wx.Frame):
         versionFile.close()
         try:
             grassVersion, grassRevision = versionLine.split(' ', 1)
-            if grassVersion.endswith('svn'):
+            if grassVersion.endswith('dev'):
                 grassRevisionStr = ' (%s)' % grassRevision
             else:
                 grassRevisionStr = ''
@@ -117,17 +114,17 @@ class GRASSStartup(wx.Frame):
             grassVersion = versionLine
             grassRevisionStr = ''
 
-        self.gisdbase_box = wx.StaticBox(
+        self.gisdbase_box = StaticBox(
             parent=self.panel, id=wx.ID_ANY, label=" %s " %
             _("1. Select GRASS GIS database directory"))
-        self.location_box = wx.StaticBox(
+        self.location_box = StaticBox(
             parent=self.panel, id=wx.ID_ANY, label=" %s " %
             _("2. Select GRASS Location"))
-        self.mapset_box = wx.StaticBox(
+        self.mapset_box = StaticBox(
             parent=self.panel, id=wx.ID_ANY, label=" %s " %
             _("3. Select GRASS Mapset"))
 
-        self.lmessage = wx.StaticText(parent=self.panel)
+        self.lmessage = StaticText(parent=self.panel)
         # It is not clear if all wx versions supports color, so try-except.
         # The color itself may not be correct for all platforms/system settings
         # but in http://xoomer.virgilio.it/infinity77/wxPython/Widgets/wx.SystemSettings.html
@@ -141,7 +138,7 @@ class GRASSStartup(wx.Frame):
         self.location_panel = wx.Panel(parent=self.panel)
         self.mapset_panel = wx.Panel(parent=self.panel)
 
-        self.ldbase = wx.StaticText(
+        self.ldbase = StaticText(
             parent=self.gisdbase_panel, id=wx.ID_ANY,
             label=_("GRASS GIS database directory contains Locations."))
 
@@ -207,7 +204,7 @@ class GRASSStartup(wx.Frame):
         self.delete_mapset_button.SetToolTip(_("Delete selected mapset"))
 
         # textinputs
-        self.tgisdbase = wx.TextCtrl(
+        self.tgisdbase = TextCtrl(
             parent=self.gisdbase_panel, id=wx.ID_ANY, value="", size=(
                 300, -1), style=wx.TE_PROCESS_ENTER)
 
@@ -579,7 +576,7 @@ class GRASSStartup(wx.Frame):
                              read=True)
 
         wx.BeginBusyCursor()
-        wx.Yield()
+        wx.GetApp().Yield()
         if mapName in vectors:
             # vector detected
             returncode, error = RunCommand(
@@ -1122,8 +1119,8 @@ class GListBox(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         idx = 0
         count = self.GetItemCount()
         for item in choices:
-            index = self.InsertStringItem(count + idx, item)
-            self.SetStringItem(index, 0, item)
+            index = self.InsertItem(count + idx, item)
+            self.SetItem(index, 0, item)
 
             if idx in disabled:
                 self.SetItemTextColour(idx, wx.Colour(150, 150, 150))
@@ -1154,8 +1151,6 @@ class StartUp(wx.App):
     """Start-up application"""
 
     def OnInit(self):
-        if not globalvar.CheckWxVersion([2, 9]):
-            wx.InitAllImageHandlers()
         StartUp = GRASSStartup()
         StartUp.CenterOnScreen()
         self.SetTopWindow(StartUp)

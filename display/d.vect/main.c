@@ -129,7 +129,7 @@ int main(int argc, char **argv)
     rgbcol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     rgbcol_opt->key = "rgb_column";
     rgbcol_opt->guisection = _("Colors");
-    rgbcol_opt->label = _("Colorize features according color definition column");
+    rgbcol_opt->label = _("Colorize features according to color definition column");
     rgbcol_opt->description = _("Color definition in R:G:B form");
     
     zcol_opt = G_define_standard_option(G_OPT_M_COLR);

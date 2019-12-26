@@ -18,6 +18,7 @@
 #include <grass/config.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/gprojects.h>
 #include <grass/glocale.h>
 
 #include "R.h"
@@ -104,6 +105,7 @@ static void load_library(void)
 {
     static const char *const candidates[] = {
 # ifdef __unix__
+	"libgdal.so.26", /* GDAL 3.0 */
 	"libgdal.so.20",
 	"libgdal.so.1",
 	"libgdal.1.1.so",
@@ -114,6 +116,9 @@ static void load_library(void)
 	"libgdal1.7.0.so",
 # endif
 # ifdef _WIN32
+	"gdal300.dll",
+	"gdal204.dll",        
+	"gdal203.dll",        
 	"gdal202.dll",        
 	"gdal201.dll",
 	"gdal200.dll",
@@ -357,7 +362,7 @@ static struct state
 {
     int initialized;
     struct GDAL_Options opts;
-    struct Key_Value *projinfo, *projunits;
+    struct Key_Value *projinfo, *projunits, *projepsg;
     char *srswkt;
 } state;
 
@@ -431,12 +436,10 @@ struct GDAL_link *Rast_create_gdal_link(const char *name,
 	read_gdal_options();
 	st->projinfo = G_get_projinfo();
 	st->projunits = G_get_projunits();
-#if 0
-	/* We cannot use GPJ_grass_to_wkt() here because that would create a
-	   circular dependency between libgis and libgproj */
+	st->projepsg = G_get_projepsg();
 	if (st->projinfo && st->projunits)
-	    st->srswkt = GPJ_grass_to_wkt(st->projinfo, st->projunits);
-#endif
+	    st->srswkt = GPJ_grass_to_wkt2(st->projinfo, st->projunits,
+	                                   st->projepsg, 0, 0);
 	G_initialize_done(&st->initialized);
     }
 

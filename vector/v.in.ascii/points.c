@@ -48,12 +48,17 @@ static int is_double(char *str)
  * minncolumns: minimum number of columns
  * nrows: number of rows
  * column_type: column types
+ * column_sample: values which was used to decide the type or NULLs
  * column_length: column lengths (string only)
+ *
+ * If the who whole column is empty, column_sample will contain NULL
+ * for that given column.
  */
 
 int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
 		   int *rowlength, int *ncolumns, int *minncolumns,
-		   int *nrows, int **column_type, int **column_length,
+		   int *nrows, int **column_type, char ***column_sample,
+		   int **column_length,
 		   int skip_lines, int xcol, int ycol, int zcol, int catcol, 
 		   int region_flag, int ignore_flag)
 {
@@ -64,6 +69,7 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
     int ncols = 0;		/* number of columns */
     int minncols = -1;
     int *coltype = NULL;	/* column types */
+    char **colsample = NULL;	/* column samples */
     int *collen = NULL;		/* column lengths */
     char **tokens;
     int ntokens;		/* number of tokens */
@@ -131,6 +137,7 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
 		          row, buf);
 	    }
 	    else {
+		G_warning(_("Expected %d columns, found %d columns"), ncols, ntokens);
 		G_fatal_error(_("Broken row %d: '%s'"), row, buf);
 	    }
 	}
@@ -141,6 +148,7 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
 		continue;
 	    }
 	    else {
+		G_warning(_("ntokens: %d, xcol: %d, ycol: %d, zcol: %d"), xcol, ycol, zcol);
 		G_fatal_error(_("Broken row %d: '%s'"), row, buf);
 	    }
 	}
@@ -151,9 +159,12 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
 
 	if (ntokens > ncols) {
 	    coltype = (int *)G_realloc(coltype, ntokens * sizeof(int));
+	    colsample = (char **)G_realloc(colsample, ntokens * sizeof(char *));
 	    collen = (int *)G_realloc(collen, ntokens * sizeof(int));
 	    for (i = ncols; i < ntokens; i++) {
 		coltype[i] = DB_C_TYPE_INT;	/* default type */
+		/* We store a value later if column is not empty. */
+		colsample[i] = NULL;
 		collen[i] = 0;
 	    }
 	    ncols = ntokens;
@@ -244,6 +255,9 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
 
 	    len = strlen(tokens[i]); 
 	    /* do not guess column type for missing values */ 
+	    /* continue here ensures that we preserve NULLs in
+	     * colsample for (completely) empty columns (which, however,
+	     * should probably default to string rather than int). */
 	    if (len == 0) 
 		continue;
 
@@ -252,16 +266,30 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
 		    is_double(tokens[i]));
 
 	    if (is_int(tokens[i])) {
+		/* We store the first encountered value for integers.
+		 * Rest is for consistency. */
+		if (!colsample[i] || coltype[i] != DB_C_TYPE_INT) {
+		    G_free(colsample[i]);
+		    colsample[i] = G_store(tokens[i]);
+		}
 		continue;	/* integer */
 	    }
 	    if (is_double(tokens[i])) {	/* double */
 		if (coltype[i] == DB_C_TYPE_INT) {
 		    coltype[i] = DB_C_TYPE_DOUBLE;
+		    G_free(colsample[i]);
+		    colsample[i] = G_store(tokens[i]);
 		}
 		continue;
 	    }
 	    /* string */
-	    coltype[i] = DB_C_TYPE_STRING;
+	    if (coltype[i] != DB_C_TYPE_STRING) {
+		/* Only set type if not already set to store the field
+		 * only once and to show the first encountered item. */
+		coltype[i] = DB_C_TYPE_STRING;
+		G_free(colsample[i]);
+		colsample[i] = G_store(tokens[i]);
+	    }
 	    if (len > collen[i])
 		collen[i] = len;
 	}
@@ -287,6 +315,7 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
     *ncolumns = ncols;
     *minncolumns = minncols;
     *column_type = coltype;
+    *column_sample = colsample;
     *column_length = collen;
     *nrows = row - 1;		/* including skipped lines */
 

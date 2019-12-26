@@ -25,20 +25,22 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
+import six
 
 import wx
 import wx.lib.mixins.listctrl as listmix
 
 from core import globalvar
 from core import utils
-from core.utils import _
 from gui_core.widgets import SearchModuleWidget, SimpleValidator
-from core.gcmd import GError, EncodeString
+from core.gcmd import GError
 from gui_core.dialogs import SimpleDialog, MapLayersDialogForModeler
 from gui_core.prompt import GPromptSTC
 from gui_core.gselect import Select, ElementSelect
 from gmodeler.model import *
 from lmgr.menudata import LayerManagerMenuData
+from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl, \
+    Menu, ListCtrl, NewId
 
 from grass.script import task as gtask
 
@@ -99,7 +101,7 @@ class ModelDataDialog(SimpleDialog):
         """Do layout"""
         if self.etype:
             self.dataSizer.Add(
-                wx.StaticText(
+                StaticText(
                     parent=self.panel,
                     id=wx.ID_ANY,
                     label=_("Type of element:")),
@@ -108,8 +110,8 @@ class ModelDataDialog(SimpleDialog):
                 border=1)
             self.dataSizer.Add(self.typeSelect,
                                proportion=0, flag=wx.ALL, border=1)
-        self.dataSizer.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                         label=_("Name of element:")),
+        self.dataSizer.Add(StaticText(parent=self.panel, id=wx.ID_ANY,
+                                      label=_("Name of element:")),
                            proportion=0, flag=wx.ALL, border=1)
         self.dataSizer.Add(self.element, proportion=0,
                            flag=wx.EXPAND | wx.ALL, border=1)
@@ -188,10 +190,10 @@ class ModelSearchDialog(wx.Dialog):
         self._command = None
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
-        self.cmdBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                   label=" %s " % _("Command"))
-        self.labelBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                     label=" %s " % _("Label and comment"))
+        self.cmdBox = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                                label=" %s " % _("Command"))
+        self.labelBox = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                                  label=" %s " % _("Label and comment"))
 
         # menu data for search widget and prompt
         menuModel = LayerManagerMenuData()
@@ -208,14 +210,14 @@ class ModelSearchDialog(wx.Dialog):
             lambda name: self.cmd_prompt.SetTextAndFocus(name + ' '))
         wx.CallAfter(self.cmd_prompt.SetFocus)
 
-        self.label = wx.TextCtrl(parent=self.panel, id=wx.ID_ANY)
-        self.comment = wx.TextCtrl(
+        self.label = TextCtrl(parent=self.panel, id=wx.ID_ANY)
+        self.comment = TextCtrl(
             parent=self.panel,
             id=wx.ID_ANY,
             style=wx.TE_MULTILINE)
 
-        self.btnCancel = wx.Button(self.panel, wx.ID_CANCEL)
-        self.btnOk = wx.Button(self.panel, wx.ID_OK)
+        self.btnCancel = Button(self.panel, wx.ID_CANCEL)
+        self.btnOk = Button(self.panel, wx.ID_OK)
         self.btnOk.SetDefault()
 
         self.Bind(wx.EVT_BUTTON, self.OnOk, self.btnOk)
@@ -231,12 +233,12 @@ class ModelSearchDialog(wx.Dialog):
                      flag=wx.EXPAND)
         labelSizer = wx.StaticBoxSizer(self.labelBox, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
-        gridSizer.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                    label=_("Label:")),
+        gridSizer.Add(StaticText(parent=self.panel, id=wx.ID_ANY,
+                                 label=_("Label:")),
                       flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
         gridSizer.Add(self.label, pos=(0, 1), flag=wx.EXPAND)
-        gridSizer.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                    label=_("Comment:")),
+        gridSizer.Add(StaticText(parent=self.panel, id=wx.ID_ANY,
+                                 label=_("Comment:")),
                       flag=wx.ALIGN_CENTER_VERTICAL, pos=(1, 0))
         gridSizer.Add(self.comment, pos=(1, 1), flag=wx.EXPAND)
         gridSizer.AddGrowableRow(1)
@@ -272,10 +274,7 @@ class ModelSearchDialog(wx.Dialog):
         if len(line) == 0:
             cmd = list()
         else:
-            try:
-                cmd = utils.split(str(line))
-            except UnicodeError:
-                cmd = utils.split(EncodeString((line)))
+            cmd = utils.split(str(line))
         return cmd
 
     def GetCmd(self):
@@ -353,18 +352,18 @@ class ModelRelationDialog(wx.Dialog):
 
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
-        self.fromBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                    label=" %s " % _("From"))
-        self.toBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                  label=" %s " % _("To"))
+        self.fromBox = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                                 label=" %s " % _("From"))
+        self.toBox = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                               label=" %s " % _("To"))
 
         self.option = wx.ComboBox(parent=self.panel, id=wx.ID_ANY,
                                   style=wx.CB_READONLY,
                                   choices=options)
         self.option.Bind(wx.EVT_COMBOBOX, self.OnOption)
 
-        self.btnCancel = wx.Button(self.panel, wx.ID_CANCEL)
-        self.btnOk = wx.Button(self.panel, wx.ID_OK)
+        self.btnCancel = Button(self.panel, wx.ID_CANCEL)
+        self.btnOk = Button(self.panel, wx.ID_OK)
         self.btnOk.Enable(False)
 
         self._layout()
@@ -397,20 +396,20 @@ class ModelRelationDialog(wx.Dialog):
 
     def _layoutShape(self, shape, sizer):
         if isinstance(shape, ModelData):
-            sizer.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                    label=_("Data: %s") % shape.GetLog()),
+            sizer.Add(StaticText(parent=self.panel, id=wx.ID_ANY,
+                                 label=_("Data: %s") % shape.GetLog()),
                       proportion=1, flag=wx.EXPAND | wx.ALL,
                       border=5)
         elif isinstance(shape, ModelAction):
             gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
-            gridSizer.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                        label=_("Command:")),
+            gridSizer.Add(StaticText(parent=self.panel, id=wx.ID_ANY,
+                                     label=_("Command:")),
                           pos=(0, 0))
-            gridSizer.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                        label=shape.GetLabel()),
+            gridSizer.Add(StaticText(parent=self.panel, id=wx.ID_ANY,
+                                     label=shape.GetLabel()),
                           pos=(0, 1))
-            gridSizer.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                        label=_("Option:")),
+            gridSizer.Add(StaticText(parent=self.panel, id=wx.ID_ANY,
+                                     label=_("Option:")),
                           flag=wx.ALIGN_CENTER_VERTICAL,
                           pos=(1, 0))
             gridSizer.Add(self.option,
@@ -483,10 +482,10 @@ class ModelItemDialog(wx.Dialog):
 
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
-        self.condBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                    label=" %s " % _("Condition"))
-        self.condText = wx.TextCtrl(parent=self.panel, id=wx.ID_ANY,
-                                    value=shape.GetLabel())
+        self.condBox = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                                 label=" %s " % _("Condition"))
+        self.condText = TextCtrl(parent=self.panel, id=wx.ID_ANY,
+                                 value=shape.GetLabel())
 
         self.itemList = ItemCheckListCtrl(parent=self.panel,
                                           columns=[_("Label"),
@@ -496,8 +495,8 @@ class ModelItemDialog(wx.Dialog):
 
         self.itemList.Populate(self.parent.GetModel().GetItems())
 
-        self.btnCancel = wx.Button(parent=self.panel, id=wx.ID_CANCEL)
-        self.btnOk = wx.Button(parent=self.panel, id=wx.ID_OK)
+        self.btnCancel = Button(parent=self.panel, id=wx.ID_CANCEL)
+        self.btnOk = Button(parent=self.panel, id=wx.ID_OK)
         self.btnOk.SetDefault()
 
     def _layout(self):
@@ -517,12 +516,12 @@ class ModelLoopDialog(ModelItemDialog):
         ModelItemDialog.__init__(self, parent, shape, title,
                                  style=style, **kwargs)
 
-        self.listBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                    label=" %s " % _("List of items in loop"))
+        self.listBox = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                                 label=" %s " % _("List of items in loop"))
 
-        self.btnSeries = wx.Button(parent=self.panel, id=wx.ID_ANY,
+        self.btnSeries = Button(parent=self.panel, id=wx.ID_ANY,
                                    label=_("Series"))
-        self.btnSeries.SetToolTipString(
+        self.btnSeries.SetToolTip(
             _("Define map series as condition for the loop"))
         self.btnSeries.Bind(wx.EVT_BUTTON, self.OnSeries)
 
@@ -575,7 +574,7 @@ class ModelLoopDialog(ModelItemDialog):
 
         cond = dialog.GetDSeries()
         if not cond:
-            cond = 'map in %s' % map(lambda x: str(x), dialog.GetMapLayers())
+            cond = 'map in {}'.format(list(map(str, dialog.GetMapLayers())))
 
         self.condText.SetValue(cond)
 
@@ -591,13 +590,13 @@ class ModelConditionDialog(ModelItemDialog):
         ModelItemDialog.__init__(self, parent, shape, title,
                                  style=style, **kwargs)
 
-        self.listBoxIf = wx.StaticBox(
+        self.listBoxIf = StaticBox(
             parent=self.panel, id=wx.ID_ANY, label=" %s " %
             _("List of items in 'if' block"))
         self.itemListIf = self.itemList
         self.itemListIf.SetName('IfBlockList')
 
-        self.listBoxElse = wx.StaticBox(
+        self.listBoxElse = StaticBox(
             parent=self.panel, id=wx.ID_ANY, label=" %s " %
             _("List of items in 'else' block"))
         self.itemListElse = ItemCheckListCtrl(parent=self.panel,
@@ -669,7 +668,7 @@ class ModelConditionDialog(ModelItemDialog):
                 'else': self.itemListElse.GetItems()}
 
 
-class ModelListCtrl(wx.ListCtrl,
+class ModelListCtrl(ListCtrl,
                     listmix.ListCtrlAutoWidthMixin,
                     listmix.TextEditMixin):
 
@@ -684,7 +683,7 @@ class ModelListCtrl(wx.ListCtrl,
         self.frame = frame
         self.columnNotEditable = columnsNotEditable
 
-        wx.ListCtrl.__init__(self, parent, id=id, style=style, **kwargs)
+        ListCtrl.__init__(self, parent, id=id, style=style, **kwargs)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         listmix.TextEditMixin.__init__(self)
 
@@ -705,10 +704,12 @@ class ModelListCtrl(wx.ListCtrl,
 
     def OnBeginEdit(self, event):
         """Editing of item started"""
-        if self.columnNotEditable and event.m_col in self.columnNotEditable:
+        column = event.GetColumn()
+
+        if self.columnNotEditable and column in self.columnNotEditable:
             event.Veto()
             self.SetItemState(
-                event.m_itemIndex,
+                event.GetIndex(),
                 wx.LIST_STATE_SELECTED,
                 wx.LIST_STATE_SELECTED | wx.LIST_STATE_FOCUSED)
         else:
@@ -743,7 +744,7 @@ class VariableListCtrl(ModelListCtrl):
         """Populate the list"""
         self.itemDataMap = dict()
         i = 0
-        for name, values in data.iteritems():
+        for name, values in six.iteritems(data):
             self.itemDataMap[i] = [name, values['type'],
                                    values.get('value', ''),
                                    values.get('description', '')]
@@ -752,12 +753,12 @@ class VariableListCtrl(ModelListCtrl):
         self.itemCount = len(self.itemDataMap.keys())
         self.DeleteAllItems()
         i = 0
-        for name, vtype, value, desc in self.itemDataMap.itervalues():
-            index = self.InsertStringItem(i, name)
-            self.SetStringItem(index, 0, name)
-            self.SetStringItem(index, 1, vtype)
-            self.SetStringItem(index, 2, value)
-            self.SetStringItem(index, 3, desc)
+        for name, vtype, value, desc in six.itervalues(self.itemDataMap):
+            index = self.InsertItem(i, name)
+            self.SetItem(index, 0, name)
+            self.SetItem(index, 1, vtype)
+            self.SetItem(index, 2, value)
+            self.SetItem(index, 3, desc)
             self.SetItemData(index, i)
             i += 1
 
@@ -767,16 +768,16 @@ class VariableListCtrl(ModelListCtrl):
         :return: None on success
         :return: error string
         """
-        for iname, ivtype, ivalue, idesc in self.itemDataMap.itervalues():
+        for iname, ivtype, ivalue, idesc in six.itervalues(self.itemDataMap):
             if iname == name:
                 return _("Variable <%s> already exists in the model. "
                          "Adding variable failed.") % name
 
-        index = self.InsertStringItem(self.GetItemCount(), name)
-        self.SetStringItem(index, 0, name)
-        self.SetStringItem(index, 1, vtype)
-        self.SetStringItem(index, 2, value)
-        self.SetStringItem(index, 3, desc)
+        index = self.InsertItem(self.GetItemCount(), name)
+        self.SetItem(index, 0, name)
+        self.SetItem(index, 1, vtype)
+        self.SetItem(index, 2, value)
+        self.SetItem(index, 3, desc)
         self.SetItemData(index, self.itemCount)
 
         self.itemDataMap[self.itemCount] = [name, vtype, value, desc]
@@ -832,15 +833,15 @@ class VariableListCtrl(ModelListCtrl):
     def OnRightUp(self, event):
         """Mouse right button up"""
         if not hasattr(self, "popupID1"):
-            self.popupID1 = wx.NewId()
-            self.popupID2 = wx.NewId()
-            self.popupID3 = wx.NewId()
+            self.popupID1 = NewId()
+            self.popupID2 = NewId()
+            self.popupID3 = NewId()
             self.Bind(wx.EVT_MENU, self.OnRemove, id=self.popupID1)
             self.Bind(wx.EVT_MENU, self.OnRemoveAll, id=self.popupID2)
             self.Bind(wx.EVT_MENU, self.OnReload, id=self.popupID3)
 
         # generate popup-menu
-        menu = wx.Menu()
+        menu = Menu()
         menu.Append(self.popupID1, _("Delete selected"))
         menu.Append(self.popupID2, _("Delete all"))
         if self.GetFirstSelected() == -1:
@@ -937,21 +938,21 @@ class ItemListCtrl(ModelListCtrl):
         self.DeleteAllItems()
         i = 0
         if len(self.columns) == 2:
-            for name, desc in self.itemDataMap.itervalues():
-                index = self.InsertStringItem(i, str(i))
-                self.SetStringItem(index, 0, name)
-                self.SetStringItem(index, 1, desc)
+            for name, desc in six.itervalues(self.itemDataMap):
+                index = self.InsertItem(i, str(i))
+                self.SetItem(index, 0, name)
+                self.SetItem(index, 1, desc)
                 self.SetItemData(index, i)
                 if checked[i]:
                     self.CheckItem(index, True)
                 i += 1
         else:
-            for name, inloop, param, desc in self.itemDataMap.itervalues():
-                index = self.InsertStringItem(i, str(i))
-                self.SetStringItem(index, 0, name)
-                self.SetStringItem(index, 1, inloop)
-                self.SetStringItem(index, 2, param)
-                self.SetStringItem(index, 3, desc)
+            for name, inloop, param, desc in six.itervalues(self.itemDataMap):
+                index = self.InsertItem(i, str(i))
+                self.SetItem(index, 0, name)
+                self.SetItem(index, 1, inloop)
+                self.SetItem(index, 2, param)
+                self.SetItem(index, 3, desc)
                 self.SetItemData(index, i)
                 i += 1
 
@@ -1003,13 +1004,13 @@ class ItemListCtrl(ModelListCtrl):
 
         if not hasattr(self, "popupId"):
             self.popupID = dict()
-            self.popupID['remove'] = wx.NewId()
-            self.popupID['reload'] = wx.NewId()
+            self.popupID['remove'] = NewId()
+            self.popupID['reload'] = NewId()
             self.Bind(wx.EVT_MENU, self.OnRemove, id=self.popupID['remove'])
             self.Bind(wx.EVT_MENU, self.OnReload, id=self.popupID['reload'])
 
         # generate popup-menu
-        menu = wx.Menu()
+        menu = Menu()
         menu.Append(self.popupID['remove'], _("Delete selected"))
         if self.GetFirstSelected() == -1:
             menu.Enable(self.popupID['remove'], False)

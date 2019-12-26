@@ -311,8 +311,6 @@ viewer positioning, and lighting.
 
 - GS_set_SDsurf()
 
-- GS_set_swap_func()
-
 - GS_set_trans()
 
 - GS_set_twist()

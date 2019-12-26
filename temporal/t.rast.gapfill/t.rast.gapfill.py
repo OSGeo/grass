@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 ############################################################################
 #
@@ -6,11 +6,17 @@
 # AUTHOR(S):    Soeren Gebbert
 #
 # PURPOSE:      Replace gaps in a space time raster dataset with interpolated raster maps.
-# COPYRIGHT:    (C) 2012 by the GRASS Development Team
+# COPYRIGHT:    (C) 2012-2017 by the GRASS Development Team
 #
-#               This program is free software under the GNU General Public
-#               License (version 2). Read the file COPYING that comes with GRASS
-#               for details.
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
 #
 #############################################################################
 
@@ -20,6 +26,7 @@
 #% keyword: interpolation
 #% keyword: raster
 #% keyword: time
+#% keyword: no-data filling
 #%end
 
 #%option G_OPT_STRDS_INPUT
@@ -82,7 +89,7 @@ def main():
     nprocs = options["nprocs"]
     tsuffix = options["suffix"]
 
-    mapset = grass.encode(grass.gisenv()["MAPSET"])
+    mapset = grass.gisenv()["MAPSET"]
 
     # Make sure the temporal database exists
     tgis.init()
@@ -115,7 +122,7 @@ def main():
             if sp.get_temporal_type() == 'absolute' and tsuffix in ['gran', 'time']:
                 _id = "{ba}@{ma}".format(ba=base, ma=mapset)
             else:
-                map_name = tgis.create_numeric_suffic(base, num + count, tsuffix)
+                map_name = tgis.create_numeric_suffix(base, num + count, tsuffix)
                 _id = "{name}@{ma}".format(name=map_name, ma=mapset)
             _map.set_id(_id)
 
@@ -176,7 +183,7 @@ def main():
                 new_id = "{ba}_{su}@{ma}".format(ba=new_map.get_name(),
                                                  su=suffix, ma=mapset)
             else:
-                map_name = tgis.create_numeric_suffic(new_map.get_name(),
+                map_name = tgis.create_numeric_suffix(new_map.get_name(),
                                                       count, tsuffix)
                 new_id = "{name}@{ma}".format(name=map_name, ma=mapset)
 

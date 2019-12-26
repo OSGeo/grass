@@ -85,13 +85,6 @@
     <description>User GUI preferences (display font, commands, digitizer, etc.)</description>
     <wx-id>ID_PREFERENCES</wx-id>
   </wxgui-item>
-  <wxgui-item name="RasterMapCalculator">
-    <label>Raster map calculator</label>
-    <handler>OnMapCalculator</handler>
-    <related-module>r.mapcalc</related-module>
-    <description>Raster map calculator</description>
-    <keywords>raster,algebra</keywords>
-  </wxgui-item>
   <wxgui-item name="Histogram">
     <label>Histogram</label>
     <handler>OnHistogram</handler>
@@ -334,7 +327,7 @@
     <label>Install extension from addons</label>
     <handler>OnInstallExtension</handler>
     <related-module>g.extension</related-module>
-    <description>Installs new extension from GRASS AddOns SVN repository.</description>
+    <description>Installs new extension from GRASS AddOns repository.</description>
     <keywords>general,installation,extensions</keywords>
   </wxgui-item>
   <wxgui-item name="ManageExtension">
@@ -393,5 +386,17 @@
     <related-module>g.gui.iclass</related-module>
     <description>Generates spectral signatures by allowing the user to outline training areas.</description>
     <keywords>general,gui,imagery,classification,signatures</keywords>
+  </wxgui-item>
+  <wxgui-item name="ManagingGCPsfor3DCorrection">
+    <label>Managing GCPs for 3D correction</label>
+    <command>g.gui.image2target</command>
+    <description>Georectifies a map and allows managing GCP for 3D correction.</description>
+    <keywords>general,gui,imagery,GCP,georectification,orthophoto</keywords>
+  </wxgui-item>
+  <wxgui-item name="CorrectsScanningDistortions">
+    <label>Corrects scanning distortions</label>
+    <command>g.gui.photo2image</command>
+    <description>Corrects scanning distortions of a scanned aerial photo.</description>
+    <keywords>general,gui,imagery,georectification,orthophoto</keywords>
   </wxgui-item>
 </wxgui-items>

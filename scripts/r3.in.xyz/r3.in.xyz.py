@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 ############################################################################
 #
 # MODULE:       r3.in.xyz
@@ -173,10 +173,6 @@ import os
 import atexit
 from grass.script import core as grass
 from grass.exceptions import CalledModuleError
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 
 def cleanup():

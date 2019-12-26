@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 MODULE:    m.proj
@@ -10,7 +10,7 @@ AUTHOR(S): M. Hamish Bowman, Dept. Marine Science, Otago University,
 PURPOSE:   cs2cs reprojection frontend for a list of coordinates.
            Replacement for m.proj2 from GRASS 5
 
-COPYRIGHT: (c) 2006-2014 Hamish Bowman, and the GRASS Development Team
+COPYRIGHT: (c) 2006-2019 Hamish Bowman, and the GRASS Development Team
            This program is free software under the GNU General Public
            License (>=v2). Read the file COPYING that comes with GRASS
            for details.
@@ -90,17 +90,19 @@ COPYRIGHT: (c) 2006-2014 Hamish Bowman, and the GRASS Development Team
 #% description: Include column names in output file
 #% guisection: Output
 #%end
-
+#%rules
+#% required: coordinates, input
+#% exclusive: coordinates, input
+#% exclusive: proj_in, -i
+#% exclusive: proj_out, -o
+#% exclusive: -i, -o
+#%end
 
 import sys
 import os
 import threading
-from grass.script.utils import separator, parse_key_val
+from grass.script.utils import separator, parse_key_val, encode, decode
 from grass.script import core as gcore
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 
 class TrThread(threading.Thread):
@@ -117,6 +119,7 @@ class TrThread(threading.Thread):
             if not line:
                 break
             line = line.replace(self.ifs, ' ')
+            line = encode(line)
             self.outf.write(line)
             self.outf.flush()
 
@@ -141,25 +144,6 @@ def main():
         gcore.fatal(_(
             "cs2cs program not found, install PROJ.4 first: \
             http://proj.maptools.org"))
-
-    # check for overenthusiasm
-    if proj_in and ll_in:
-        gcore.fatal(_("Choose only one input parameter method"))
-
-    if proj_out and ll_out:
-        gcore.fatal(_("Choose only one output parameter method"))
-
-    if ll_in and ll_out:
-        gcore.fatal(_("Choose only one auto-projection parameter method"))
-
-    if output and not gcore.overwrite() and os.path.exists(output):
-        gcore.fatal(_("Output file already exists"))
-
-    if not coords and not input:
-        gcore.fatal(_("One of <coordinates> and <input> must be given"))
-    if coords and input:
-        gcore.fatal(_(
-            "Options <coordinates> and <input> are mutually exclusive"))
 
     # parse field separator
     # FIXME: input_x,y needs to split on multiple whitespace between them
@@ -231,7 +215,7 @@ def main():
         fd = open(tmpfile, "w")
         fd.write("%s%s%s\n" % (x, ifs, y))
         fd.close()
-        inf = file(tmpfile)
+        inf = open(tmpfile)
     else:
         if input == '-':
             infile = None
@@ -240,7 +224,7 @@ def main():
             infile = input
             if not os.path.exists(infile):
                 gcore.fatal(_("Unable to read input data"))
-            inf = file(infile)
+            inf = open(infile)
             gcore.debug("input file=[%s]" % infile)
 
     # set up output file
@@ -279,7 +263,7 @@ def main():
             outf.write("x%sy%sz\n" % (ofs, ofs))
         for line in p.stdout:
             try:
-                xy, z = line.split(' ', 1)
+                xy, z = decode(line).split(' ', 1)
                 x, y = xy.split('\t')
             except ValueError:
                 gcore.fatal(line)
@@ -290,7 +274,7 @@ def main():
         if include_header:
             outf.write("input_x%sinput_y%sx%sy%sz\n" % (ofs, ofs, ofs, ofs))
         for line in p.stdout:
-            inXYZ, x, rest = line.split('\t')
+            inXYZ, x, rest = decode(line).split('\t')
             inX, inY = inXYZ.split(' ')[:2]
             y, z = rest.split(' ', 1)
             outf.write('%s%s%s%s%s%s%s%s%s\n' %

@@ -76,9 +76,8 @@ double dig_distance2_point_to_line(double x, double y, double z,	/* point */
 	tpz = z1;
     }
     else {
-	t = (dx * (x - x1) + dy * (y - y1) + dz * (z - z1)) / (dx * dx +
-							       dy * dy +
-							       dz * dz);
+	t = (dx * (x - x1) + dy * (y - y1) + dz * (z - z1)) / 
+	    (dx * dx + dy * dy + dz * dz);
 
 	if (t <= 0.0) {		/* go to x1,y1,z1 */
 	    if (t < 0.0) {

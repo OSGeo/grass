@@ -164,6 +164,7 @@ int matrix_inverse(MATRIX *a, MATRIX *res, int percents)
 
     for (i = 0; i < n; i++) {
 	int found = 0;
+	double c;
 
 	if (percents)
 	    G_percent(i, n, 1);
@@ -177,14 +178,16 @@ int matrix_inverse(MATRIX *a, MATRIX *res, int percents)
 	}
 	if (!found)
 	    return 0;
-	double c = (double)1.0 / a->a[i][i];
+
+	c = (double)1.0 / a->a[i][i];
 
 	matrix_row_scalar(i, c, a);
 	matrix_row_scalar(i, c, res);
 	for (j = 0; j < n; j++) {
 	    if (i == j)
 		continue;
-	    double c = -a->a[j][i];
+
+	    c = -a->a[j][i];
 
 	    if (c == 0.0)
 		continue;

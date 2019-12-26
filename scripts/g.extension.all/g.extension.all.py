@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ############################################################################
 #
@@ -46,10 +46,6 @@ except ImportError:
 
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 
 def get_extensions():

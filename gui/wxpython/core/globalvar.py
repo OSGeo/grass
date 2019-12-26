@@ -11,6 +11,8 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import locale
@@ -26,24 +28,47 @@ ICONDIR = os.path.join(GUIDIR, "icons")
 IMGDIR = os.path.join(GUIDIR, "images")
 SYMBDIR = os.path.join(IMGDIR, "symbols")
 
+# i18n is taken care of in the grass library code.
+# So we need to import it before any of the GUI code.
+from grass.script.core import get_commands
+
 from core.debug import Debug
 
-# cannot import from the core.utils module to avoid cross dependencies
-try:
-    # intended to be used also outside this module
-    import gettext
-    _ = gettext.translation(
-        'grasswxpy',
-        os.path.join(
-            os.getenv("GISBASE"),
-            'locale')).ugettext
-except IOError:
-    # using no translation silently
-    def null_gettext(string):
-        return string
-    _ = null_gettext
 
-from grass.script.core import get_commands
+def parse_version_string(version):
+    """Parse version number, return three numbers as list
+
+    >>> parse_version_string("4.0.1")
+    [4, 0, 1]
+    >>> parse_version_string("4.0.0aX")
+    [4, 0, 0]
+    >>> parse_version_string("4.0.7.post2")
+    [4, 0, 7]
+    """
+    try:
+        # max: get only first three parts from wxPython 4.0.7.post2
+        maxsplit = 2
+        split_ver = version.split(".", maxsplit)
+        parsed_version = list(map(int, split_ver))
+    except ValueError:
+        # remove last part of wxPython 4.0.0aX
+        for i, c in enumerate(split_ver[-1]):
+            if not c.isdigit():
+                break
+        parsed_version = list(map(int, split_ver[:-1])) + [int(split_ver[-1][:i])]
+    return parsed_version
+
+
+def version_as_string(version):
+    """Return version list or tuple as text
+
+    >>> version_as_string([1, 2, 3])
+    '1.2.3'
+    >>> version_as_string((1, 2, 3, 4))
+    '1.2.3.4'
+    """
+    texts = [str(i) for i in version]
+    return ".".join(texts)
 
 
 def CheckWxPhoenix():
@@ -55,15 +80,7 @@ def CheckWxPhoenix():
 def CheckWxVersion(version):
     """Check wx version"""
     ver = wx.__version__
-    try:
-        split_ver = ver.split('.')
-        parsed_version = list(map(int, split_ver))
-    except ValueError:
-        # wxPython 4.0.0aX
-        for i, c in enumerate(split_ver[-1]):
-            if not c.isdigit():
-                break
-        parsed_version = list(map(int, split_ver[:-1])) + [int(split_ver[-1][:i])]
+    parsed_version = parse_version_string(ver)
 
     if parsed_version < version:
         return False
@@ -92,24 +109,25 @@ def CheckForWx(forceVersion=os.getenv('GRASS_WXVERSION', None)):
             wxversion.select(forceVersion)
         wxversion.ensureMinimal(str(minVersion[0]) + '.' + str(minVersion[1]))
         import wx
-        version = wx.__version__
+        version = parse_version_string(wx.__version__)
 
-        if map(int, version.split('.')) < minVersion:
+        if version < minVersion:
             raise ValueError(
-                'Your wxPython version is %s.%s.%s.%s' %
-                tuple(version.split('.')))
+                "Your wxPython version is {}".format(wx.__version__))
 
     except ImportError as e:
-        print >> sys.stderr, 'ERROR: wxGUI requires wxPython. %s' % str(e)
-        print >> sys.stderr, ('You can still use GRASS GIS modules in'
-                              ' the command line or in Python.')
+        print('ERROR: wxGUI requires wxPython. %s' % str(e),
+              file=sys.stderr)
+        print('You can still use GRASS GIS modules in'
+              ' the command line or in Python.', file=sys.stderr)
         sys.exit(1)
     except (ValueError, wxversion.VersionError) as e:
-        print >> sys.stderr, 'ERROR: wxGUI requires wxPython >= %d.%d.%d.%d. ' % tuple(
-            minVersion) + '%s.' % (str(e))
+        message = "ERROR: wxGUI requires wxPython >= {version}: {error}".format(
+            version=version_as_string(minVersion), error=e)
+        print(message, file=sys.stderr)
         sys.exit(1)
     except locale.Error as e:
-        print >> sys.stderr, "Unable to set locale:", e
+        print("Unable to set locale:", e, file=sys.stderr)
         os.environ['LC_ALL'] = ''
 
 if not os.getenv("GRASS_WXBUNDLED"):

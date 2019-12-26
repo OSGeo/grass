@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 @package frame
@@ -18,6 +18,8 @@ This program is free software under the GNU General Public License
 @author Luca Delucchi
 @author start stvds support Matej Krejci
 """
+import os
+import six
 from itertools import cycle
 import numpy as np
 
@@ -25,7 +27,6 @@ import wx
 from grass.pygrass.modules import Module
 
 import grass.script as grass
-from core.utils import _
 from functools import reduce
 
 try:
@@ -43,7 +44,6 @@ except ImportError as e:
     raise ImportError(_('The Temporal Plot Tool needs the "matplotlib" '
                         '(python-matplotlib) package to be installed. {0}').format(e))
 
-from core.utils import _
 
 import grass.temporal as tgis
 from core.gcmd import GMessage, GError, GException, RunCommand
@@ -59,7 +59,10 @@ try:
     import wx.lib.agw.flatnotebook as FN
 except ImportError:
     import wx.lib.flatnotebook as FN
+import wx.lib.filebrowsebutton as filebrowse
+
 from gui_core.widgets import GNotebook
+from gui_core.wrap import TextCtrl, Button, StaticText
 
 ALPHA = 0.5
 COLORS = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
@@ -100,6 +103,7 @@ class TplotFrame(wx.Frame):
         self._giface = giface
         self.datasetsV = None
         self.datasetsR = None
+        self.overwrite = False
         # self.vectorDraw=False
         # self.rasterDraw=False
         self.init()
@@ -120,6 +124,7 @@ class TplotFrame(wx.Frame):
         self.plotNameListR = []
         self.plotNameListV = []
         self.poi = None
+        self.csvpath = None
 
     def __del__(self):
         """Close the database interface and stop the messenger and C-interface
@@ -152,7 +157,6 @@ class TplotFrame(wx.Frame):
         self.canvas = FigCanvas(self.mainPanel, wx.ID_ANY, self.fig)
         # axes are initialized later
         self.axes2d = None
-        self.axes3d = None
 
         # Create the navigation toolbar, tied to the canvas
         #
@@ -173,7 +177,7 @@ class TplotFrame(wx.Frame):
         # ------------ITEMS IN NOTEBOOK PAGE (RASTER)------------------------
 
         self.controlPanelRaster = wx.Panel(parent=self.ntb, id=wx.ID_ANY)
-        self.datasetSelectLabelR = wx.StaticText(
+        self.datasetSelectLabelR = StaticText(
             parent=self.controlPanelRaster,
             id=wx.ID_ANY,
             label=_(
@@ -185,21 +189,21 @@ class TplotFrame(wx.Frame):
         self.datasetSelectR = gselect.Select(
             parent=self.controlPanelRaster, id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE, type='strds', multiple=True)
-        self.coor = wx.StaticText(parent=self.controlPanelRaster, id=wx.ID_ANY,
-                                  label=_('X and Y coordinates separated by '
-                                          'comma:'))
+        self.coor = StaticText(parent=self.controlPanelRaster, id=wx.ID_ANY,
+                               label=_('X and Y coordinates separated by '
+                                       'comma:'))
         try:
             self._giface.GetMapWindow()
             self.coorval = gselect.CoordinatesSelect(
                 parent=self.controlPanelRaster, giface=self._giface)
         except:
-            self.coorval = wx.TextCtrl(parent=self.controlPanelRaster,
+            self.coorval = TextCtrl(parent=self.controlPanelRaster,
                                        id=wx.ID_ANY,
                                        size=globalvar.DIALOG_TEXTCTRL_SIZE,
                                        validator=CoordinatesValidator())
 
-        self.coorval.SetToolTipString(_("Coordinates can be obtained for example"
-                                        " by right-clicking on Map Display."))
+        self.coorval.SetToolTip(_("Coordinates can be obtained for example"
+                                  " by right-clicking on Map Display."))
         self.controlPanelSizerRaster = wx.BoxSizer(wx.VERTICAL)
         # self.controlPanelSizer.Add(wx.StaticText(self.panel, id=wx.ID_ANY,
         # label=_("Select space time raster dataset(s):")),
@@ -218,7 +222,7 @@ class TplotFrame(wx.Frame):
 
         # ------------ITEMS IN NOTEBOOK PAGE (VECTOR)------------------------
         self.controlPanelVector = wx.Panel(parent=self.ntb, id=wx.ID_ANY)
-        self.datasetSelectLabelV = wx.StaticText(
+        self.datasetSelectLabelV = StaticText(
             parent=self.controlPanelVector, id=wx.ID_ANY,
             label=_(
                 'Vector temporal '
@@ -233,22 +237,22 @@ class TplotFrame(wx.Frame):
                                  self.OnVectorSelected)
 
         self.attribute = gselect.ColumnSelect(parent=self.controlPanelVector)
-        self.attributeLabel = wx.StaticText(parent=self.controlPanelVector,
-                                            id=wx.ID_ANY,
-                                            label=_('Select attribute column'))
+        self.attributeLabel = StaticText(parent=self.controlPanelVector,
+                                         id=wx.ID_ANY,
+                                         label=_('Select attribute column'))
         # TODO fix the category selection as done for coordinates
         try:
             self._giface.GetMapWindow()
             self.cats = gselect.VectorCategorySelect(
                 parent=self.controlPanelVector, giface=self._giface)
         except:
-            self.cats = wx.TextCtrl(
+            self.cats = TextCtrl(
                 parent=self.controlPanelVector,
                 id=wx.ID_ANY,
                 size=globalvar.DIALOG_TEXTCTRL_SIZE)
-        self.catsLabel = wx.StaticText(parent=self.controlPanelVector,
-                                       id=wx.ID_ANY,
-                                       label=_('Select category of vector(s)'))
+        self.catsLabel = StaticText(parent=self.controlPanelVector,
+                                    id=wx.ID_ANY,
+                                    label=_('Select category of vector(s)'))
 
         self.controlPanelSizerVector = wx.BoxSizer(wx.VERTICAL)
         # self.controlPanelSizer.Add(wx.StaticText(self.panel, id=wx.ID_ANY,
@@ -268,16 +272,77 @@ class TplotFrame(wx.Frame):
         self.controlPanelSizerVector.Fit(self)
         self.ntb.AddPage(page=self.controlPanelVector, text=_('STVDS'),
                          name='STVDS')
+        
+        # ------------ITEMS IN NOTEBOOK PAGE (LABELS)------------------------
+        self.controlPanelLabels = wx.Panel(parent=self.ntb, id=wx.ID_ANY)
+        self.titleLabel = StaticText(parent=self.controlPanelLabels,
+                                     id=wx.ID_ANY,
+                                     label=_('Set title for the plot'))
+        self.title = TextCtrl(parent=self.controlPanelLabels, id=wx.ID_ANY,
+                              size=globalvar.DIALOG_TEXTCTRL_SIZE)
+        self.xLabel = StaticText(parent=self.controlPanelLabels,
+                                 id=wx.ID_ANY,
+                                 label=_('Set label for X axis'))
+        self.x = TextCtrl(parent=self.controlPanelLabels, id=wx.ID_ANY,
+                          size=globalvar.DIALOG_TEXTCTRL_SIZE)
+        self.yLabel = StaticText(parent=self.controlPanelLabels,
+                                 id=wx.ID_ANY,
+                                 label=_('Set label for Y axis'))
+        self.y = TextCtrl(parent=self.controlPanelLabels, id=wx.ID_ANY,
+                          size=globalvar.DIALOG_TEXTCTRL_SIZE)
+        self.controlPanelSizerLabels = wx.BoxSizer(wx.VERTICAL)
+        self.controlPanelSizerLabels.Add(self.titleLabel, flag=wx.EXPAND)
+        self.controlPanelSizerLabels.Add(self.title, flag=wx.EXPAND)
+        self.controlPanelSizerLabels.Add(self.xLabel, flag=wx.EXPAND)
+        self.controlPanelSizerLabels.Add(self.x, flag=wx.EXPAND)
+        self.controlPanelSizerLabels.Add(self.yLabel, flag=wx.EXPAND)
+        self.controlPanelSizerLabels.Add(self.y, flag=wx.EXPAND)
+        self.controlPanelLabels.SetSizer(self.controlPanelSizerLabels)
+        self.controlPanelSizerLabels.Fit(self)
+        self.ntb.AddPage(page=self.controlPanelLabels, text=_('Labels'),
+                         name='Labels')
+
+        # ------------ITEMS IN NOTEBOOK PAGE (EXPORT)------------------------
+        self.controlPanelExport = wx.Panel(parent=self.ntb, id=wx.ID_ANY)
+        self.csvLabel = StaticText(parent=self.controlPanelExport,
+                                   id=wx.ID_ANY,
+                                   label=_('Path for output CSV file '
+                                           'with plotted data'))
+        self.csvButton = filebrowse.FileBrowseButton(parent=self.controlPanelExport,
+                                                     id=wx.ID_ANY,
+                                                     size=globalvar.DIALOG_GSELECT_SIZE,
+                                                     labelText='',
+                                                     dialogTitle=_('CVS path'),
+                                                     buttonText=_('Browse'),
+                                                     startDirectory=os.getcwd(),
+                                                     fileMode=wx.FD_SAVE)
+        self.headerLabel = StaticText(parent=self.controlPanelExport,
+                                      id=wx.ID_ANY,
+                                      label=_('Do you want the CSV header?'))
+        self.headerCheck = wx.CheckBox(parent=self.controlPanelExport,
+                                         id=wx.ID_ANY)
+        self.controlPanelSizerCheck = wx.BoxSizer(wx.HORIZONTAL)
+        self.controlPanelSizerCheck.Add(self.headerCheck)
+        self.controlPanelSizerCheck.Add(self.headerLabel)
+        self.controlPanelSizerExport = wx.BoxSizer(wx.VERTICAL)
+        self.controlPanelSizerExport.Add(self.csvLabel)
+        self.controlPanelSizerExport.Add(self.csvButton)
+        self.controlPanelSizerExport.Add(self.controlPanelSizerCheck)
+        self.controlPanelExport.SetSizer(self.controlPanelSizerExport)
+        self.controlPanelSizerCheck.Fit(self)
+        self.controlPanelSizerExport.Fit(self)
+        self.ntb.AddPage(page=self.controlPanelExport, text=_('Export'),
+                         name='Export')
 
         # ------------Buttons on the bottom(draw,help)------------
         self.vButtPanel = wx.Panel(self.mainPanel, id=wx.ID_ANY)
         self.vButtSizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.drawButton = wx.Button(self.vButtPanel, id=wx.ID_ANY,
-                                    label=_("Draw"))
+        self.drawButton = Button(self.vButtPanel, id=wx.ID_ANY,
+                                 label=_("Draw"))
         self.drawButton.Bind(wx.EVT_BUTTON, self.OnRedraw)
-        self.helpButton = wx.Button(self.vButtPanel, id=wx.ID_ANY,
-                                    label=_("Help"))
+        self.helpButton = Button(self.vButtPanel, id=wx.ID_ANY,
+                                 label=_("Help"))
         self.helpButton.Bind(wx.EVT_BUTTON, self.OnHelp)
         self.vButtSizer.Add(self.drawButton)
         self.vButtSizer.Add(self.helpButton)
@@ -381,6 +446,8 @@ class TplotFrame(wx.Frame):
         """Get a list of categories for a vector map"""
         vdb = grass.read_command('v.category', input=mapp, option='print')
         categories = vdb.splitlines()
+        if not cats:
+            return categories
         for cat in cats:
             if str(cat) not in categories:
                 GMessage(message=_("Category {ca} is not on vector map"
@@ -541,6 +608,9 @@ class TplotFrame(wx.Frame):
         self.yticksNames = []
         self.yticksPos = []
         self.plots = []
+        self.drawTitle = self.title.GetValue()
+        self.drawX = self.x.GetValue()
+        self.drawY = self.y.GetValue()
 
         if self.datasetsR:
             self.lookUp = LookUp(self.timeDataR, self.invconvert)
@@ -558,7 +628,40 @@ class TplotFrame(wx.Frame):
         self.canvas.draw()
         DataCursor(self.plots, self.lookUp, InfoFormat, self.convert)
 
+    def _setLabels(self, x):
+        """Function to set the right labels"""
+        if self.drawX != '':
+            self.axes2d.set_xlabel(self.drawX)
+        else:
+            if self.temporalType == 'absolute':
+                self.axes2d.set_xlabel(_("Temporal resolution: %s" %  x ))
+            else:
+                self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
+        if self.drawY != '':
+            self.axes2d.set_ylabel(self.drawY)
+        else:
+            self.axes2d.set_ylabel(', '.join(self.yticksNames))
+        if self.drawTitle != '':
+            self.axes2d.set_title(self.drawTitle)
+
+    def _writeCSV(self, x, y):
+        """Used to write CSV file of plotted data"""
+        import csv
+        if isinstance(y[0], list):
+            zipped = list(zip(x, *y))
+        else:
+            zipped = list(zip(x, y))
+        with open(self.csvpath, "wb") as fi:
+            writer = csv.writer(fi)
+            if self.header:
+                head = ["Time"]
+                head.extend(self.yticksNames)
+                writer.writerow(head)
+            writer.writerows(zipped)
+        
     def drawR(self):
+        ycsv = []
+        xcsv = []
         for i, name in enumerate(self.datasetsR):
             name = name[0]
             # just name; with mapset it would be long
@@ -566,12 +669,13 @@ class TplotFrame(wx.Frame):
             self.yticksPos.append(1)  # TODO
             xdata = []
             ydata = []
-            for keys, values in self.timeDataR[name].iteritems():
+            for keys, values in six.iteritems(self.timeDataR[name]):
                 if keys in ['temporalType', 'granularity', 'validTopology',
                             'unit', 'temporalDataType']:
                     continue
                 xdata.append(self.convert(values['start_datetime']))
                 ydata.append(values['value'])
+                xcsv.append(values['start_datetime'])
 
             if len(ydata) == ydata.count(None):
                 GError(parent=self, showTraceback=False,
@@ -580,23 +684,22 @@ class TplotFrame(wx.Frame):
                 return
             self.lookUp.AddDataset(yranges=ydata, xranges=xdata,
                                    datasetName=name)
-            color = self.colors.next()
+            color = next(self.colors)
             self.plots.append(self.axes2d.plot(xdata, ydata, marker='o',
                                                color=color,
                                                label=self.plotNameListR[i])[0])
+            if self.csvpath:
+                ycsv.append(ydata)
 
-        if self.temporalType == 'absolute':
-            self.axes2d.set_xlabel(
-                _("Temporal resolution: %s" % self.timeDataR[name]['granularity']))
-        else:
-            self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
-        self.axes2d.set_ylabel(', '.join(self.yticksNames))
-
+        if self.csvpath:
+            self._writeCSV(xcsv, ycsv)
+        self._setLabels(self.timeDataR[name]['granularity'])
         # legend
         handles, labels = self.axes2d.get_legend_handles_labels()
         self.axes2d.legend(loc=0)
 
     def drawVCats(self):
+        ycsv = []
         for i, name in enumerate(self.plotNameListV):
             # just name; with mapset it would be long
             labelname = name.replace('+', ' ')
@@ -606,23 +709,29 @@ class TplotFrame(wx.Frame):
             self.yticksPos.append(1)  # TODO
             xdata = []
             ydata = []
-            for keys, values in self.timeDataV[
-                    name_cat[0]][
-                    name_cat[1]].iteritems():
+            xcsv = []
+            for keys, values in six.iteritems(self.timeDataV[name_cat[0]]
+                                                            [name_cat[1]]):
                 if keys in ['temporalType', 'granularity', 'validTopology',
                             'unit', 'temporalDataType']:
                     continue
                 xdata.append(self.convert(values['start_datetime']))
-                ydata.append(values['value'])
+                if values['value'] == '':
+                    ydata.append(None)
+                else:
+                    ydata.append(values['value'])
+                xcsv.append(values['start_datetime'])
 
             if len(ydata) == ydata.count(None):
                 GError(parent=self, showTraceback=False,
-                       message=_("Problem getting data from raster temporal"
-                                 " dataset. Empty list of values."))
-                return
+                       message=_("Problem getting data from vector temporal"
+                                 " dataset. Empty list of values for cat "
+                                 "{ca}.".format(ca=name_cat[1].replace('cat',
+                                                                       ''))))
+                continue
             self.lookUp.AddDataset(yranges=ydata, xranges=xdata,
                                    datasetName=name)
-            color = self.colors.next()
+            color = next(self.colors)
 
             self.plots.append(
                 self.axes2d.plot(
@@ -631,13 +740,12 @@ class TplotFrame(wx.Frame):
                     marker='o',
                     color=color,
                     label=labelname)[0])
-        # ============================
-        if self.temporalType == 'absolute':
-            self.axes2d.set_xlabel(
-                _("Temporal resolution: %s" % self.timeDataV[name]['granularity']))
-        else:
-            self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
-        self.axes2d.set_ylabel(', '.join(self.yticksNames))
+            if self.csvpath:
+                ycsv.append(ydata)
+
+        if self.csvpath:
+            self._writeCSV(xcsv, ycsv)
+        self._setLabels(self.timeDataV[name]['granularity'])
 
         # legend
         handles, labels = self.axes2d.get_legend_handles_labels()
@@ -645,37 +753,39 @@ class TplotFrame(wx.Frame):
         self.listWhereConditions = []
 
     def drawV(self):
+        ycsv = []
         for i, name in enumerate(self.plotNameListV):
             # just name; with mapset it would be long
             self.yticksNames.append(self.attribute.GetValue())
             self.yticksPos.append(0)  # TODO
             xdata = []
             ydata = []
-            for keys, values in self.timeDataV[name].iteritems():
+            xcsv = []
+            for keys, values in six.iteritems(self.timeDataV[name]):
                 if keys in ['temporalType', 'granularity', 'validTopology',
                             'unit', 'temporalDataType']:
                     continue
                 xdata.append(self.convert(values['start_datetime']))
                 ydata.append(values['value'])
+                xcsv.append(values['start_datetime'])
 
             if len(ydata) == ydata.count(None):
                 GError(parent=self, showTraceback=False,
-                       message=_("Problem getting data from raster temporal"
+                       message=_("Problem getting data from vector temporal"
                                  " dataset. Empty list of values."))
                 return
             self.lookUp.AddDataset(yranges=ydata, xranges=xdata,
                                    datasetName=name)
-            color = self.colors.next()
+            color = next(self.colors)
 
             self.plots.append(self.axes2d.plot(xdata, ydata, marker='o',
                                                color=color, label=name)[0])
-        # ============================
-        if self.temporalType == 'absolute':
-            self.axes2d.set_xlabel(
-                _("Temporal resolution: %s" % self.timeDataV[name]['granularity']))
-        else:
-            self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
-        self.axes2d.set_ylabel(', '.join(self.yticksNames))
+            if self.csvpath:
+                ycsv.append(ydata)
+
+        if self.csvpath:
+            self._writeCSV(xcsv, ycsv)
+        self._setLabels(self.timeDataV[name]['granularity'])
 
         # legend
         handles, labels = self.axes2d.get_legend_handles_labels()
@@ -684,6 +794,19 @@ class TplotFrame(wx.Frame):
 
     def OnRedraw(self, event=None):
         """Required redrawing."""
+        self.csvpath = self.csvButton.GetValue()
+        self.header = self.headerCheck.IsChecked()
+        if (os.path.exists(self.csvpath) and not self.overwrite):
+            dlg = wx.MessageDialog(self, _("{pa} already exists, do you want "
+                                   "to overwrite?".format(pa=self.csvpath)),
+                                   _("File exists"), 
+                                   wx.OK | wx.CANCEL | wx.ICON_QUESTION)
+            if dlg.ShowModal() != wx.ID_OK:
+                dlg.Destroy()
+                GError(parent=self, showTraceback=False,
+                       message=_("Please change name of output CSV file or "))
+                return
+            dlg.Destroy()
         self.init()
         datasetsR = self.datasetSelectR.GetValue().strip()
         datasetsV = self.datasetSelectV.GetValue().strip()
@@ -786,8 +909,8 @@ class TplotFrame(wx.Frame):
         tDict = tgis.tlist_grouped(type=typ, group_type=True, dbif=self.dbif)
         # nested list with '(map, mapset, etype)' items
         allDatasets = [[[(map, mapset, etype) for map in maps]
-                        for etype, maps in etypesDict.iteritems()]
-                       for mapset, etypesDict in tDict.iteritems()]
+                        for etype, maps in six.iteritems(etypesDict)]
+                       for mapset, etypesDict in six.iteritems(tDict)]
         # flatten this list
         if allDatasets:
             allDatasets = reduce(lambda x, y: x + y, reduce(lambda x, y: x + y,
@@ -839,9 +962,9 @@ class TplotFrame(wx.Frame):
         """Function to show help"""
         RunCommand(prog='g.manual', quiet=True, entry='g.gui.tplot')
 
-    def SetDatasets(self, rasters, vectors, coors, cats, attr):
+    def SetDatasets(self, rasters, vectors, coors, cats, attr, title, xlabel,
+                    ylabel, csvfile, head, overwrite):
         """Set the data
-        #TODO
         :param list rasters: a list of temporal raster dataset's name
         :param list vectors: a list of temporal vector dataset's name
         :param list coors: a list with x/y coordinates
@@ -882,6 +1005,16 @@ class TplotFrame(wx.Frame):
         if self.datasetsR:
             self.datasetSelectR.SetValue(
                 ','.join(map(lambda x: x[0] + '@' + x[1], self.datasetsR)))
+        if title:
+            self.title.SetValue(title)
+        if xlabel:
+            self.x.SetValue(xlabel)
+        if ylabel:
+            self.y.SetValue(ylabel)
+        if csvfile:
+            self.csvpath = csvfile
+        self.header = head
+        self.overwrite = overwrite
         self._redraw()
 
     def OnVectorSelected(self, event):
@@ -935,7 +1068,7 @@ class LookUp:
 
     def GetInformation(self, x):
         values = {}
-        for key, value in self.data.iteritems():
+        for key, value in six.iteritems(self.data):
             if value[x]:
                 values[key] = [self.convert(x), value[x]]
 
@@ -948,7 +1081,7 @@ class LookUp:
 def InfoFormat(timeData, values):
     """Formats information about dataset"""
     text = []
-    for key, val in values.iteritems():
+    for key, val in six.iteritems(values):
         etype = timeData[key]['temporalDataType']
         if etype == 'strds':
             text.append(_("Space time raster dataset: %s") % key)
@@ -1051,7 +1184,7 @@ class DataCursor(object):
                 x = xData[np.argmin(abs(xData - x))]
 
             info = self.lookUp.GetInformation(x)
-            ys = zip(*info[1].values())[1]
+            ys = list(zip(*info[1].values()))[1]
             if not info:
                 return
             # Update the annotation in the current axis..

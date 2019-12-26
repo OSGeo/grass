@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #############################################################################
 #
 # MODULE:       Languages information and statistics (Python)
@@ -14,18 +14,21 @@
 #
 #############################################################################
 
+from __future__ import print_function
+
 import os, sys
 import subprocess
 import json
 import glob
 import codecs
 
+
 def read_po_files(inputdirpath):
     """Return a dictionary with for each language the list of *.po files"""
     originalpath = os.getcwd()
     os.chdir(inputdirpath)
     languages = {}
-    for pofile in glob.glob("*.po"):
+    for pofile in sorted(glob.glob("*.po")):
         lang = pofile.split('_')[1:]
         # check if are two definitions like pt_br
         if len(lang) == 2:
@@ -33,8 +36,8 @@ def read_po_files(inputdirpath):
         lang = lang[0].split('.')[0]
 
         # if keys is not in languages add it and the file's name
-        if not languages.has_key(lang):
-            languages[lang] = [pofile,]
+        if lang not in languages:
+            languages[lang] = [pofile, ]
         # add only files name
         else:
             languages[lang].append(pofile)
@@ -46,29 +49,30 @@ def read_msgfmt_statistics(msg, lgood, lfuzzy, lbad):
     """Return a dictionary, and the good, fuzzy and bad values from a string"""
     langdict = {}
     # split the output
-    out = msg.split(',')
+    out = msg.split(b',')
     # TODO maybe check using regex
     # check for each answer
     for o in out:
         o = o.lower().strip()
         # each answer is written into dictionary and
         # the value add to variable for the sum
-        if 'untranslated' in o:
-            val = int(o.split(' ')[0])
+        if b'untranslated' in o:
+            val = int(o.split(b' ')[0])
             langdict['bad'] = val
             lbad += val
-        elif 'fuzzy' in o:
-            val = int(o.split(' ')[0])
+        elif b'fuzzy' in o:
+            val = int(o.split(b' ')[0])
             langdict['fuzzy'] = val
             lfuzzy += val
         else:
-            val = int(o.split(' ')[0])
+            val = int(o.split(b' ')[0])
             langdict['good'] = val
             lgood += val
     return langdict, lgood, lfuzzy, lbad
 
+
 def langDefinition(fil):
-    f = codecs.open(fil,encoding = 'utf-8', errors='replace', mode = 'r')
+    f = codecs.open(fil, encoding='utf-8', errors='replace', mode='r')
     for l in f.readlines():
         if '"Language-Team:' in l:
             lang = l.split(' ')[1:-1]
@@ -81,6 +85,7 @@ def langDefinition(fil):
     else:
         return ""
 
+
 def get_stats(languages, directory):
     """Return a dictionary with the statistic for each language"""
     # output dictionary to transform in json file
@@ -91,10 +96,10 @@ def get_stats(languages, directory):
     # all the information about each lang
     output['langs'] = {}
     # for each language
-    for lang, pofilelist in languages.iteritems():
+    for lang, pofilelist in languages.items():
         output['langs'][lang] = {}
         output['langs'][lang]['total'] = {}
-        output['langs'][lang]['name'] = langDefinition(os.path.join(directory,pofilelist[0]))
+        output['langs'][lang]['name'] = langDefinition(os.path.join(directory, pofilelist[0]))
         # variables to create sum for each language
         lgood = 0
         lfuzzy = 0
@@ -106,13 +111,13 @@ def get_stats(languages, directory):
             # run msgfmt for statistics
             # TODO check if it's working on windows
             process = subprocess.Popen(['msgfmt', '--statistics',
-                                os.path.join(directory,flang)],
-                                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                                        os.path.join(directory,flang)],
+                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             msg = process.communicate()[1].strip()
             # check if some errors occurs
-            if msg.find('error') != -1:
+            if msg.find(b'error') != -1:
                 # TODO CHECK IF grass.warning()
-                print "WARNING: file <%s> has some problems: <%s>" % (flang, msg)
+                print("WARNING: file <%s> has some problems: <%s>" % (flang, msg))
                 continue
             output['langs'][lang][fpref], lgood, lfuzzy, lbad = \
             read_msgfmt_statistics(msg, lgood, lfuzzy, lbad)
@@ -128,16 +133,17 @@ def writejson(stats, outfile):
     # load dictionary into json format
     fjson = json.dumps(stats, sort_keys=True, indent=4)
     # write a string with pretty style
-    outjson = os.linesep.join([l.rstrip() for l in  fjson.splitlines()])
+    outjson = os.linesep.join([l.rstrip() for l in fjson.splitlines()])
     # write out file
-    fout = open(outfile,'w')
+    fout = open(outfile, 'w')
     fout.write(outjson)
     fout.write(os.linesep)
     fout.close()
     try:
         os.remove("messages.mo")
     except:
-	pass
+        pass
+
 
 def main(in_dirpath, out_josonpath):
     languages = read_po_files(in_dirpath)
@@ -150,5 +156,5 @@ def main(in_dirpath, out_josonpath):
 
 if __name__ == "__main__":
     directory = 'po/'
-    outfile = os.path.join(os.environ['GISBASE'],'translation_status.json')
+    outfile = os.path.join(os.environ['GISBASE'], 'translation_status.json')
     sys.exit(main(directory, outfile))

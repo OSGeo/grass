@@ -1,10 +1,10 @@
 /*! \mainpage GRASS GIS 7 Programmer's Manual
 <!-- * doxygenized from "GRASS 5 Programmer's Manual"
        by M. Neteler 2/2004
-     * updated 8/2005, 2006-2008, 2010-2011
+     * updated 8/2005, 2006-2008, 2010-2011, 2017, 2018, 2019
   -->
 
-<a href="http://grass.osgeo.org">GRASS GIS</a> (<b>Geographic
+<a href="https://grass.osgeo.org">GRASS GIS</a> (<b>Geographic
 Resources Analysis Support System</b>) is an open source, free
 software <em>Geographical Information System</em> (GIS) with raster,
 topological %vector, image processing, and graphics production
@@ -23,7 +23,7 @@ Team</a>, an international team of programmers, GRASS module authors
 are cited within their module's source code and the contributed manual
 pages.
 
-&copy; 2000-2017 by the GRASS Development Team
+&copy; 2000-2019 by the GRASS Development Team
 
 This manual is published under <a
 href="http://www.fsf.org/copyleft/fdl.html">GNU Free Documentation
@@ -33,12 +33,12 @@ the <a href="http://www.osgeo.org">Open Source Geospatial
 Foundation</a>, who provides the GRASS main infrastructure.
 
 Main web site: <a
-href="http://grass.osgeo.org">http://grass.osgeo.org</a>
+href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 
 <i>Note: Missing entries below still need to be documented in Doxygen format.</i>
 
 <!-- original:
-  http://trac.osgeo.org/grass/browser/grass-web/trunk/images/grass7_arch.odp
+  https://github.com/OSGeo/grass/blob/master/doc/grass7_arch.odg
 -->
 \image html "grass7_arch.png" "GRASS 7 Architecture"
 
@@ -51,7 +51,7 @@ href="http://grass.osgeo.org">http://grass.osgeo.org</a>
  - gis: \ref gislib
  - raster: \ref rasterlib
  - vector: \ref vectorlib
- - Temporal GIS API: See http://grass.osgeo.org/grass73/manuals/libpython/temporal_framework.html
+ - Temporal GIS API: See https://grass.osgeo.org/grass79/manuals/libpython/temporal_framework.html
 
 \section libs Further libraries
 
@@ -112,7 +112,7 @@ href="http://grass.osgeo.org">http://grass.osgeo.org</a>
 
 \subsection pythonlibs Python API
 
- - python:	See GRASS GIS Python library (http://grass.osgeo.org/grass73/manuals/libpython/)
+ - python:	See GRASS GIS Python library (https://grass.osgeo.org/grass79/manuals/libpython/)
 
 \subsection projlibs Projection Libraries
 
@@ -185,7 +185,7 @@ as follows:
 </dl>
 
 <!-- original: 
-  http://trac.osgeo.org/grass/browser/grass-web/trunk/images/loc_struct.odg
+  https://raw.githubusercontent.com/OSGeo/grass/master/doc/help_loc_structure.odg
 -->
 \image html "loc_struct.png" "Diagram of GRASS file structure"
 

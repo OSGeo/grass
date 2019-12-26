@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 ############################################################################
 #
 # MODULE:    g.gui.iclass
@@ -63,9 +63,7 @@ def main():
     set_gui_path()
 
     from core.settings import UserSettings
-    from core.globalvar import CheckWxVersion
     from core.giface import StandaloneGrassInterface
-    from core.utils import _
     from iclass.frame import IClassMapFrame
 
     group_name = subgroup_name = map_name = trainingmap_name = None
@@ -107,8 +105,6 @@ def main():
 
     # launch application
     app = wx.App()
-    if not CheckWxVersion([2, 9]):
-        wx.InitAllImageHandlers()
 
     # show main frame
     giface = StandaloneGrassInterface()

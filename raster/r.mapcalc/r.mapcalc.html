@@ -75,7 +75,7 @@ and in the history file for <em>result</em>.
     is <a href="t.rast.algebra.html">t.rast.algebra</a>.
     The <em>region</em> option of <em>r.mapcalc</em>
     was implemented to address this requirement.
-    It allows to compute and use a region based on
+    It allows computing and using a region based on
     all raster maps in an expression. Three modes are supported:
 </p>
 <ul>
@@ -333,12 +333,14 @@ acos(x)                 inverse cosine of x (result is in degrees)      F
 asin(x)                 inverse sine of x (result is in degrees)        F
 atan(x)                 inverse tangent of x (result is in degrees)     F
 atan(x,y)               inverse tangent of y/x (result is in degrees)   F
+ceil(x)                 the smallest integral value not less than x     *
 cos(x)                  cosine of x (x is in degrees)                   F
 double(x)               convert x to double-precision floating point    F
 eval([x,y,...,]z)       evaluate values of listed expr, pass results to z
 exp(x)                  exponential function of x                       F
 exp(x,y)                x to the power y                                F
 float(x)                convert x to single-precision floating point    F
+floor(x)                the largest integral value not greater than x   *
 graph(x,x1,y1[x2,y2..]) convert the x to a y based on points in a graph F
 graph2(x,x1[,x2,..],y1[,y2..])
                         alternative form of graph()                     F
@@ -725,7 +727,7 @@ random_int   = rand(-100,100)
 # write result as double precision floating point map (DCELL)
 random_dcell = rand(-100.0,100.0)
 
-# write result as double precision floating point map (FCELL)
+# write result as single precision floating point map (FCELL)
 random_fcell = float(rand(-100.0,100.0))
 </pre></div>
 
@@ -803,7 +805,8 @@ NULL cells. It is left to the user to utilize the <tt>isnull()</tt> function.
 <a href="r.bitpattern.html">r.bitpattern</a>,
 <a href="r.blend.html">r.blend</a>,
 <a href="r.colors.html">r.colors</a>,
-<a href="r.fillnulls.html">r.fillnulls</a>
+<a href="r.fillnulls.html">r.fillnulls</a>,
+<a href="r.mapcalc.simple.html">r.mapcalc.simple</a>
 </em>
 
 
@@ -827,5 +830,7 @@ Michael Shapiro, U.S.Army Construction Engineering
 Research Laboratory
 <p>Glynn Clements
 
+<!--
 <p>
 <i>Last changed: $Date$</i>
+-->

@@ -78,7 +78,7 @@ static void write_line_forward(struct Map_info *Out, struct line_pnts *LPoints,
 			       double dmax, dbDriver *driver,
 			       struct field_info *Fi)
 {
-    if (vertex == GV_VERTEX || vertex == GV_NODE) {	/* use line vertices */
+    if (vertex != 0) {	/* use line vertices */
 	double along;
 	int vert;
 
@@ -86,14 +86,17 @@ static void write_line_forward(struct Map_info *Out, struct line_pnts *LPoints,
 	for (vert = 0; vert < LPoints->n_points; vert++) {
 	    G_debug(3, "vert = %d", vert);
 
-	    if (vertex == GV_VERTEX ||
-		(vertex == GV_NODE &&
-		 (vert == 0 || vert == LPoints->n_points - 1))) {
-		if (vert == LPoints->n_points - 1)
-		    along = Vect_line_length(LPoints);
-		write_point(Out, LPoints->x[vert], LPoints->y[vert],
-			    LPoints->z[vert], cat, along, driver, Fi);
-	    }
+            if (vertex == GV_NODE && (vert > 0 && vert < LPoints->n_points - 1))
+                continue;
+            if (vertex == GV_START && vert > 0)
+                return;
+            if (vertex == GV_END && vert < LPoints->n_points - 1)
+                continue;
+            
+            if (vert == LPoints->n_points - 1)
+                along = Vect_line_length(LPoints);
+            write_point(Out, LPoints->x[vert], LPoints->y[vert],
+                        LPoints->z[vert], cat, along, driver, Fi);
 
 	    if (vert < LPoints->n_points - 1) {
 		double dx, dy, dz, len;

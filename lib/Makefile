@@ -6,6 +6,7 @@ include $(MODULE_TOPDIR)/include/Make/Vars.make
 SUBDIRS = \
 	datetime \
 	gis \
+	proj \
 	raster \
 	external \
 	gmath \
@@ -21,7 +22,6 @@ SUBDIRS = \
 	display \
 	db \
 	fonts \
-	proj \
 	vector \
 	imagery \
 	cluster \

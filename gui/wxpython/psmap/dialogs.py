@@ -53,10 +53,12 @@ from core import globalvar
 
 if globalvar.wxPythonPhoenix:
     import wx.adv
-    from wx.adv import OwnerDrawnComboBox
+    from wx.adv import OwnerDrawnComboBox, ODCB_PAINTING_CONTROL, ODCB_PAINTING_SELECTED
+    from wx.adv import BitmapComboBox
 else:
     import wx.combo
-    from wx.combo import OwnerDrawnComboBox
+    from wx.combo import OwnerDrawnComboBox, ODCB_PAINTING_CONTROL, ODCB_PAINTING_SELECTED
+    from wx.combo import BitmapComboBox
 
 if globalvar.wxPythonPhoenix:
     from wx import Validator as Validator
@@ -65,12 +67,14 @@ else:
 
 import grass.script as grass
 
-from core.utils import _, PilImageToWxImage
+from core.utils import PilImageToWxImage
 from dbmgr.vinfo import VectorDBInfo
 from gui_core.gselect import Select
 from core.gcmd import RunCommand, GError, GMessage
 from gui_core.dialogs import SymbolDialog
-from gui_core.wrap import SpinCtrl
+from gui_core.wrap import SpinCtrl, Button, TextCtrl, BitmapButton, \
+    StaticText, StaticBox, Rect, EmptyBitmap, TextEntryDialog, ListCtrl, NewId, \
+    BitmapFromImage
 from psmap.utils import *
 from psmap.instructions import *
 
@@ -148,7 +152,7 @@ class PenStyleComboBox(OwnerDrawnComboBox):
             # painting the control, but there is no valid item selected yet
             return
 
-        r = wx.Rect(*rect)  # make a copy
+        r = Rect(*rect)  # make a copy
         r.Deflate(3, 5)
 
         penStyle = wx.SOLID
@@ -175,9 +179,9 @@ class PenStyleComboBox(OwnerDrawnComboBox):
         background area of each item."""
         # If the item is selected, or its item # iseven, or we are painting the
         # combo control itself, then use the default rendering.
-        if (item & 1 == 0 or flags & (wx.combo.ODCB_PAINTING_CONTROL |
-                                      wx.combo.ODCB_PAINTING_SELECTED)):
-            wx.combo.OwnerDrawnComboBox.OnDrawBackground(
+        if (item & 1 == 0 or flags & (ODCB_PAINTING_CONTROL |
+                                      ODCB_PAINTING_SELECTED)):
+            OwnerDrawnComboBox.OnDrawBackground(
                 self, dc, rect, item, flags)
             return
 
@@ -198,11 +202,11 @@ class PenStyleComboBox(OwnerDrawnComboBox):
         return -1  # default - will be measured from text width
 
 
-class CheckListCtrl(wx.ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
+class CheckListCtrl(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
     """List control for managing order and labels of vector maps in legend"""
 
     def __init__(self, parent):
-        wx.ListCtrl.__init__(
+        ListCtrl.__init__(
             self, parent, id=wx.ID_ANY, style=wx.LC_REPORT | wx.LC_SINGLE_SEL |
             wx.BORDER_SUNKEN | wx.LC_VRULES | wx.LC_HRULES)
         CheckListCtrlMixin.__init__(self)
@@ -227,7 +231,7 @@ class PsmapDialog(wx.Dialog):
 
     def AddUnits(self, parent, dialogDict):
         parent.units = dict()
-        parent.units['unitsLabel'] = wx.StaticText(
+        parent.units['unitsLabel'] = StaticText(
             parent, id=wx.ID_ANY, label=_("Units:"))
         choices = self.unitConv.getPageUnitsNames()
         parent.units['unitsCtrl'] = wx.Choice(
@@ -238,17 +242,17 @@ class PsmapDialog(wx.Dialog):
     def AddPosition(self, parent, dialogDict):
         if not hasattr(parent, "position"):
             parent.position = dict()
-        parent.position['comment'] = wx.StaticText(parent, id=wx.ID_ANY, label=_(
+        parent.position['comment'] = StaticText(parent, id=wx.ID_ANY, label=_(
             "Position of the top left corner\nfrom the top left edge of the paper"))
-        parent.position['xLabel'] = wx.StaticText(
+        parent.position['xLabel'] = StaticText(
             parent, id=wx.ID_ANY, label=_("X:"))
-        parent.position['yLabel'] = wx.StaticText(
+        parent.position['yLabel'] = StaticText(
             parent, id=wx.ID_ANY, label=_("Y:"))
-        parent.position['xCtrl'] = wx.TextCtrl(
+        parent.position['xCtrl'] = TextCtrl(
             parent, id=wx.ID_ANY, value=str(
                 dialogDict['where'][0]), validator=TCValidator(
                 flag='DIGIT_ONLY'))
-        parent.position['yCtrl'] = wx.TextCtrl(
+        parent.position['yCtrl'] = TextCtrl(
             parent, id=wx.ID_ANY, value=str(
                 dialogDict['where'][1]), validator=TCValidator(
                 flag='DIGIT_ONLY'))
@@ -267,7 +271,7 @@ class PsmapDialog(wx.Dialog):
     def AddExtendedPosition(self, panel, gridBagSizer, dialogDict):
         """Add widgets for setting position relative to paper and to map"""
         panel.position = dict()
-        positionLabel = wx.StaticText(
+        positionLabel = StaticText(
             panel, id=wx.ID_ANY, label=_("Position is given:"))
         panel.position['toPaper'] = wx.RadioButton(
             panel, id=wx.ID_ANY, label=_("relative to paper"), style=wx.RB_GROUP)
@@ -296,7 +300,7 @@ class PsmapDialog(wx.Dialog):
             border=0)
 
         # first box - paper coordinates
-        box1 = wx.StaticBox(parent=panel, id=wx.ID_ANY, label="")
+        box1 = StaticBox(parent=panel, id=wx.ID_ANY, label="")
         sizerP = wx.StaticBoxSizer(box1, wx.VERTICAL)
         self.gridBagSizerP = wx.GridBagSizer(hgap=5, vgap=5)
 
@@ -338,14 +342,14 @@ class PsmapDialog(wx.Dialog):
                 1, 1), flag=wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, border=0)
 
         # second box - map coordinates
-        box2 = wx.StaticBox(parent=panel, id=wx.ID_ANY, label="")
+        box2 = StaticBox(parent=panel, id=wx.ID_ANY, label="")
         sizerM = wx.StaticBoxSizer(box2, wx.VERTICAL)
         self.gridBagSizerM = wx.GridBagSizer(hgap=5, vgap=5)
 
-        eastingLabel = wx.StaticText(panel, id=wx.ID_ANY, label="E:")
-        northingLabel = wx.StaticText(panel, id=wx.ID_ANY, label="N:")
-        panel.position['eCtrl'] = wx.TextCtrl(panel, id=wx.ID_ANY, value="")
-        panel.position['nCtrl'] = wx.TextCtrl(panel, id=wx.ID_ANY, value="")
+        eastingLabel = StaticText(panel, id=wx.ID_ANY, label="E:")
+        northingLabel = StaticText(panel, id=wx.ID_ANY, label="N:")
+        panel.position['eCtrl'] = TextCtrl(panel, id=wx.ID_ANY, value="")
+        panel.position['nCtrl'] = TextCtrl(panel, id=wx.ID_ANY, value="")
         east, north = PaperMapCoordinates(
             mapInstr=self.instruction[self.mapId],
             x=dialogDict['where'][0],
@@ -392,9 +396,9 @@ class PsmapDialog(wx.Dialog):
 
 # parent.font['colorCtrl'].SetColour(convertRGB(dialogDict['color']))
 
-        parent.font['fontLabel'] = wx.StaticText(
+        parent.font['fontLabel'] = StaticText(
             parent, id=wx.ID_ANY, label=_("Font:"))
-        parent.font['fontSizeLabel'] = wx.StaticText(
+        parent.font['fontSizeLabel'] = StaticText(
             parent, id=wx.ID_ANY, label=_("Font size:"))
         fontChoices = [
             'Times-Roman',
@@ -420,7 +424,7 @@ class PsmapDialog(wx.Dialog):
         parent.font['fontSizeCtrl'].SetValue(dialogDict['fontsize'])
 
         if color:
-            parent.font['colorLabel'] = wx.StaticText(
+            parent.font['colorLabel'] = StaticText(
                 parent, id=wx.ID_ANY, label=_("Choose color:"))
             parent.font['colorCtrl'] = wx.ColourPickerCtrl(
                 parent, id=wx.ID_ANY)
@@ -462,21 +466,21 @@ class PsmapDialog(wx.Dialog):
 
     def _layout(self, panel):
         # buttons
-        btnCancel = wx.Button(self, wx.ID_CANCEL)
-        btnOK = wx.Button(self, wx.ID_OK)
+        btnCancel = Button(self, wx.ID_CANCEL)
+        btnOK = Button(self, wx.ID_OK)
         btnOK.SetDefault()
         if self.apply:
-            btnApply = wx.Button(self, wx.ID_APPLY)
+            btnApply = Button(self, wx.ID_APPLY)
 
         # bindigs
         btnOK.Bind(wx.EVT_BUTTON, self.OnOK)
-        btnOK.SetToolTipString(_("Close dialog and apply changes"))
+        btnOK.SetToolTip(_("Close dialog and apply changes"))
         #btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
-        btnCancel.SetToolTipString(_("Close dialog and ignore changes"))
+        btnCancel.SetToolTip(_("Close dialog and ignore changes"))
         btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
         if self.apply:
             btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
-            btnApply.SetToolTipString(_("Apply changes"))
+            btnApply.SetToolTip(_("Apply changes"))
 
         # sizers
         btnSizer = wx.StdDialogButtonSizer()
@@ -601,13 +605,13 @@ class PageSetupDialog(PsmapDialog):
         size = (110, -1)
         # sizers
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        pageBox = wx.StaticBox(
+        pageBox = StaticBox(
             self,
             id=wx.ID_ANY,
             label=" %s " %
             _("Page size"))
         pageSizer = wx.StaticBoxSizer(pageBox, wx.VERTICAL)
-        marginBox = wx.StaticBox(
+        marginBox = StaticBox(
             self, id=wx.ID_ANY, label=" %s " %
             _("Margins"))
         marginSizer = wx.StaticBoxSizer(marginBox, wx.VERTICAL)
@@ -622,7 +626,7 @@ class PageSetupDialog(PsmapDialog):
         self.hBoxDict = {}
         for i, item in enumerate(self.cat[:3]):
             hBox = wx.BoxSizer(wx.HORIZONTAL)
-            stText = wx.StaticText(
+            stText = StaticText(
                 self, id=wx.ID_ANY, label=self.catsLabels[item] + ':')
             choice = wx.Choice(
                 self,
@@ -642,9 +646,9 @@ class PageSetupDialog(PsmapDialog):
         #staticText + TextCtrl
         for item in self.cat[3:]:
             hBox = wx.BoxSizer(wx.HORIZONTAL)
-            label = wx.StaticText(
+            label = StaticText(
                 self, id=wx.ID_ANY, label=self.catsLabels[item] + ':')
-            textctrl = wx.TextCtrl(self, id=wx.ID_ANY, size=size, value='')
+            textctrl = TextCtrl(self, id=wx.ID_ANY, size=size, value='')
             hBox.Add(
                 label,
                 proportion=1,
@@ -664,10 +668,10 @@ class PageSetupDialog(PsmapDialog):
                 0, wx.GROW | wx.RIGHT | wx.LEFT, 5)
         # OK button
         btnSizer = wx.StdDialogButtonSizer()
-        self.btnOk = wx.Button(self, wx.ID_OK)
+        self.btnOk = Button(self, wx.ID_OK)
         self.btnOk.SetDefault()
         btnSizer.AddButton(self.btnOk)
-        btn = wx.Button(self, wx.ID_CANCEL)
+        btn = Button(self, wx.ID_CANCEL)
         btnSizer.AddButton(btn)
         btnSizer.Realize()
 
@@ -838,7 +842,7 @@ class MapFramePanel(wx.Panel):
         if self.id is not None:
             self.mapFrameDict = self.instruction[self.id].GetInstruction()
         else:
-            self.id = wx.NewId()
+            self.id = NewId()
             mapFrame = MapFrame(self.id)
             self.mapFrameDict = mapFrame.GetInstruction()
             self.mapFrameDict['rect'] = rect
@@ -880,7 +884,7 @@ class MapFramePanel(wx.Panel):
         """Do layout"""
         border = wx.BoxSizer(wx.VERTICAL)
 
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=self,
             id=wx.ID_ANY,
             label=" %s " %
@@ -889,7 +893,7 @@ class MapFramePanel(wx.Panel):
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         # scale options
-        frameText = wx.StaticText(
+        frameText = StaticText(
             self, id=wx.ID_ANY, label=_("Map frame options:"))
         scaleChoices = [_("fit frame to match selected map"),
                         _("fit frame to match saved region"),
@@ -909,7 +913,7 @@ class MapFramePanel(wx.Panel):
             border=0)
 
         # map and region selection
-        self.staticBox = wx.StaticBox(
+        self.staticBox = StaticBox(
             parent=self, id=wx.ID_ANY, label=" %s " %
             _("Map selection"))
         sizerM = wx.StaticBoxSizer(self.staticBox, wx.HORIZONTAL)
@@ -930,7 +934,7 @@ class MapFramePanel(wx.Panel):
             dc.GetTextExtent(
                 self.mapOrRegionText[0])[0], dc.GetTextExtent(
                 self.mapOrRegionText[1])[0])
-        self.mapText = wx.StaticText(
+        self.mapText = StaticText(
             self, id=wx.ID_ANY, label=self.mapOrRegionText[0],
             size=(width, -1))
         self.select = Select(
@@ -977,7 +981,7 @@ class MapFramePanel(wx.Panel):
             border=0)
 
         # map scale and center
-        boxC = wx.StaticBox(
+        boxC = StaticBox(
             parent=self,
             id=wx.ID_ANY,
             label=" %s " %
@@ -985,18 +989,18 @@ class MapFramePanel(wx.Panel):
         sizerC = wx.StaticBoxSizer(boxC, wx.HORIZONTAL)
         self.centerSizer = wx.FlexGridSizer(rows=2, cols=5, hgap=5, vgap=5)
 
-        centerText = wx.StaticText(self, id=wx.ID_ANY, label=_("Center:"))
-        self.eastingText = wx.StaticText(self, id=wx.ID_ANY, label=_("E:"))
-        self.northingText = wx.StaticText(self, id=wx.ID_ANY, label=_("N:"))
-        self.eastingTextCtrl = wx.TextCtrl(
+        centerText = StaticText(self, id=wx.ID_ANY, label=_("Center:"))
+        self.eastingText = StaticText(self, id=wx.ID_ANY, label=_("E:"))
+        self.northingText = StaticText(self, id=wx.ID_ANY, label=_("N:"))
+        self.eastingTextCtrl = TextCtrl(
             self, id=wx.ID_ANY, style=wx.TE_RIGHT,
             validator=TCValidator(flag='DIGIT_ONLY'))
-        self.northingTextCtrl = wx.TextCtrl(
+        self.northingTextCtrl = TextCtrl(
             self, id=wx.ID_ANY, style=wx.TE_RIGHT,
             validator=TCValidator(flag='DIGIT_ONLY'))
-        scaleText = wx.StaticText(self, id=wx.ID_ANY, label=_("Scale:"))
-        scalePrefixText = wx.StaticText(self, id=wx.ID_ANY, label=_("1 :"))
-        self.scaleTextCtrl = wx.TextCtrl(
+        scaleText = StaticText(self, id=wx.ID_ANY, label=_("Scale:"))
+        scalePrefixText = StaticText(self, id=wx.ID_ANY, label=_("1 :"))
+        self.scaleTextCtrl = TextCtrl(
             self, id=wx.ID_ANY, value="", style=wx.TE_RIGHT,
             validator=TCValidator('DIGIT_ONLY'))
 
@@ -1058,7 +1062,7 @@ class MapFramePanel(wx.Panel):
         # resolution
         flexSizer = wx.FlexGridSizer(rows=1, cols=2, hgap=5, vgap=5)
 
-        resolutionText = wx.StaticText(
+        resolutionText = StaticText(
             self, id=wx.ID_ANY, label=_("Map max resolution (dpi):"))
         self.resolutionSpin = SpinCtrl(
             self, id=wx.ID_ANY, min=1, max=1000, initial=300)
@@ -1092,7 +1096,7 @@ class MapFramePanel(wx.Panel):
 
         # border
         # GTC Line around legend or map frame
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=self,
             id=wx.ID_ANY,
             label=" %s " %
@@ -1108,9 +1112,9 @@ class MapFramePanel(wx.Panel):
         else:
             self.borderCheck.SetValue(False)
 
-        self.borderColorText = wx.StaticText(
+        self.borderColorText = StaticText(
             self, id=wx.ID_ANY, label=_("border color:"))
-        self.borderWidthText = wx.StaticText(
+        self.borderWidthText = StaticText(
             self, id=wx.ID_ANY, label=_("border width (pts):"))
         self.borderColourPicker = wx.ColourPickerCtrl(self, id=wx.ID_ANY)
         self.borderWidthCtrl = SpinCtrl(
@@ -1229,7 +1233,7 @@ class MapFramePanel(wx.Panel):
 
                 self.select.SetElementList(type=stype)
                 self.mapText.SetLabel(self.mapOrRegionText[0])
-                self.select.SetToolTipString(
+                self.select.SetToolTip(
                     _("Region is set to match this map,\nraster or vector map must be added later"))
 
             if scaleType == 1:
@@ -1241,7 +1245,7 @@ class MapFramePanel(wx.Panel):
                 stype = 'region'
                 self.select.SetElementList(type=stype)
                 self.mapText.SetLabel(self.mapOrRegionText[1])
-                self.select.SetToolTipString("")
+                self.select.SetToolTip("")
 
             for each in self.mapSizer.GetChildren():
                 each.GetWindow().Enable()
@@ -1334,7 +1338,7 @@ class MapFramePanel(wx.Panel):
                         if raster:
                             raster['raster'] = mapFrameDict['map']
                         else:
-                            raster = Raster(wx.NewId())
+                            raster = Raster(NewId())
                             raster['raster'] = mapFrameDict['map']
                             raster['isRaster'] = True
                             self.instruction.AddInstruction(raster)
@@ -1371,10 +1375,10 @@ class MapFramePanel(wx.Panel):
                                     mapFrameDict['map'].split('@')) + ')'
 
                                 if not vector:
-                                    vector = Vector(wx.NewId())
+                                    vector = Vector(NewId())
                                     vector['list'] = []
                                     self.instruction.AddInstruction(vector)
-                                id = wx.NewId()
+                                id = NewId()
                                 vector['list'].insert(
                                     0, [mapFrameDict['map'], topoType, id, 1, label])
                                 vProp = VProperties(id, topoType)
@@ -1545,7 +1549,7 @@ class RasterPanel(wx.Panel):
             self.id = id
             self.rasterDict = self.instruction[self.id].GetInstruction()
         else:
-            self.id = wx.NewId()
+            self.id = NewId()
             raster = Raster(self.id)
             self.rasterDict = raster.GetInstruction()
 
@@ -1558,7 +1562,7 @@ class RasterPanel(wx.Panel):
 
         # choose raster map
 
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=self,
             id=wx.ID_ANY,
             label=" %s " %
@@ -1683,7 +1687,7 @@ class VectorPanel(wx.Panel):
             self.id = id
             self.vectorList = deepcopy(self.instruction[id]['list'])
         else:
-            self.id = wx.NewId()
+            self.id = NewId()
             self.vectorList = []
 
         vLegend = self.instruction.FindInstructionByType('vectorLegend')
@@ -1704,7 +1708,7 @@ class VectorPanel(wx.Panel):
 
         # choose vector map
 
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=self,
             id=wx.ID_ANY,
             label=" %s " %
@@ -1712,7 +1716,7 @@ class VectorPanel(wx.Panel):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        text = wx.StaticText(self, id=wx.ID_ANY, label=_("Map:"))
+        text = StaticText(self, id=wx.ID_ANY, label=_("Map:"))
         self.select = Select(self, id=wx.ID_ANY,  # size = globalvar.DIALOG_GSELECT_SIZE,
                              type='vector', multiple=False,
                              updateOnPopup=True, onPopup=None)
@@ -1727,7 +1731,7 @@ class VectorPanel(wx.Panel):
             majorDimension=3,
             style=wx.RA_SPECIFY_COLS)
 
-        self.AddVector = wx.Button(self, id=wx.ID_ANY, label=_("Add"))
+        self.AddVector = Button(self, id=wx.ID_ANY, label=_("Add"))
 
         gridBagSizer.Add(
             text, pos=(0, 0),
@@ -1752,7 +1756,7 @@ class VectorPanel(wx.Panel):
 
         # manage vector layers
 
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=self,
             id=wx.ID_ANY,
             label=" %s " %
@@ -1760,15 +1764,15 @@ class VectorPanel(wx.Panel):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        text = wx.StaticText(self, id=wx.ID_ANY, label=_(
+        text = StaticText(self, id=wx.ID_ANY, label=_(
             "The topmost vector map overlaps the others"))
         self.listbox = wx.ListBox(
             self, id=wx.ID_ANY, choices=[],
             style=wx.LB_SINGLE | wx.LB_NEEDED_SB)
-        self.btnUp = wx.Button(self, id=wx.ID_ANY, label=_("Up"))
-        self.btnDown = wx.Button(self, id=wx.ID_ANY, label=_("Down"))
-        self.btnDel = wx.Button(self, id=wx.ID_ANY, label=_("Delete"))
-        self.btnProp = wx.Button(self, id=wx.ID_ANY, label=_("Properties..."))
+        self.btnUp = Button(self, id=wx.ID_ANY, label=_("Up"))
+        self.btnDown = Button(self, id=wx.ID_ANY, label=_("Down"))
+        self.btnDel = Button(self, id=wx.ID_ANY, label=_("Delete"))
+        self.btnProp = Button(self, id=wx.ID_ANY, label=_("Properties..."))
 
         self.updateListBox(selected=0)
 
@@ -1862,7 +1866,7 @@ class VectorPanel(wx.Panel):
             idx = self.vectorType.GetSelection()
             ttype = self.topologyTypeList[idx]
             record = "%s - %s" % (vmap, ttype)
-            id = wx.NewId()
+            id = NewId()
             lpos = 1
             label = mapname + mapset
             self.vectorList.insert(0, [vmap, ttype, id, lpos, label])
@@ -2169,7 +2173,7 @@ class VPropertiesDialog(PsmapDialog):
         # data type
         self.checkType1 = self.checkType2 = None
         if self.type in ('lines', 'points'):
-            box = wx.StaticBox(
+            box = StaticBox(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=" %s " %
@@ -2213,7 +2217,7 @@ class VPropertiesDialog(PsmapDialog):
                 border=5)
 
         # layer selection
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -2221,14 +2225,14 @@ class VPropertiesDialog(PsmapDialog):
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         self.gridBagSizerL = wx.GridBagSizer(hgap=5, vgap=5)
 
-        self.warning = wx.StaticText(panel, id=wx.ID_ANY, label="")
+        self.warning = StaticText(panel, id=wx.ID_ANY, label="")
         if not self.connection:
-            self.warning = wx.StaticText(panel, id=wx.ID_ANY, label=_(
+            self.warning = StaticText(panel, id=wx.ID_ANY, label=_(
                 "Database connection is not defined in DB file."))
-        text = wx.StaticText(panel, id=wx.ID_ANY, label=_("Select layer:"))
+        text = StaticText(panel, id=wx.ID_ANY, label=_("Select layer:"))
         self.layerChoice = wx.Choice(
-            panel, id=wx.ID_ANY, choices=map(
-                str, self.layers), size=self.spinCtrlSize)
+            panel, id=wx.ID_ANY, choices=[str(each) for each in self.layers],
+            size=self.spinCtrlSize)
 
         self.layerChoice.SetStringSelection(self.currLayer)
 
@@ -2240,7 +2244,7 @@ class VPropertiesDialog(PsmapDialog):
         self.radioWhere = wx.RadioButton(
             panel, id=wx.ID_ANY, label="SELECT * FROM %s WHERE" %
             table, style=wx.RB_GROUP)
-        self.textCtrlWhere = wx.TextCtrl(panel, id=wx.ID_ANY, value="")
+        self.textCtrlWhere = TextCtrl(panel, id=wx.ID_ANY, value="")
 
         if self.connection:
             cols = self.mapDBInfo.GetColumns(
@@ -2252,8 +2256,8 @@ class VPropertiesDialog(PsmapDialog):
 
         self.radioCats = wx.RadioButton(
             panel, id=wx.ID_ANY, label="Choose categories ")
-        self.textCtrlCats = wx.TextCtrl(panel, id=wx.ID_ANY, value="")
-        self.textCtrlCats.SetToolTipString(
+        self.textCtrlCats = TextCtrl(panel, id=wx.ID_ANY, value="")
+        self.textCtrlCats.SetToolTip(
             _("list of categories (e.g. 1,3,5-7)"))
 
         if 'cats' in self.vPropertiesDict:
@@ -2303,7 +2307,7 @@ class VPropertiesDialog(PsmapDialog):
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # mask
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -2335,7 +2339,7 @@ class VPropertiesDialog(PsmapDialog):
         border = wx.BoxSizer(wx.VERTICAL)
 
         #colors - outline
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -2347,7 +2351,7 @@ class VPropertiesDialog(PsmapDialog):
             panel, id=wx.ID_ANY, label=_("draw outline"))
         self.outlineCheck.SetValue(self.vPropertiesDict['color'] != 'none')
 
-        widthText = wx.StaticText(panel, id=wx.ID_ANY, label=_("Width (pts):"))
+        widthText = StaticText(panel, id=wx.ID_ANY, label=_("Width (pts):"))
         if fs:
             self.widthSpin = fs.FloatSpin(
                 panel,
@@ -2372,7 +2376,7 @@ class VPropertiesDialog(PsmapDialog):
         else:
             self.widthSpin.SetValue(1)
 
-        colorText = wx.StaticText(panel, id=wx.ID_ANY, label=_("Color:"))
+        colorText = StaticText(panel, id=wx.ID_ANY, label=_("Color:"))
         self.colorPicker = wx.ColourPickerCtrl(panel, id=wx.ID_ANY)
         if self.vPropertiesDict['color'] != 'none':
             self.colorPicker.SetColour(
@@ -2407,7 +2411,7 @@ class VPropertiesDialog(PsmapDialog):
         self.Bind(wx.EVT_CHECKBOX, self.OnOutline, self.outlineCheck)
 
         #colors - fill
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -2491,7 +2495,7 @@ class VPropertiesDialog(PsmapDialog):
         border = wx.BoxSizer(wx.VERTICAL)
 
         #colors - outline
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -2510,7 +2514,7 @@ class VPropertiesDialog(PsmapDialog):
         self.outlineCheck.SetToolTipString(
             _("No effect for fill color from table column"))
 
-        widthText = wx.StaticText(panel, id=wx.ID_ANY, label=_("Width (pts):"))
+        widthText = StaticText(panel, id=wx.ID_ANY, label=_("Width (pts):"))
 
         if fs:
             self.outWidthSpin = fs.FloatSpin(
@@ -2533,7 +2537,7 @@ class VPropertiesDialog(PsmapDialog):
         else:
             self.outWidthSpin.SetValue(1)
 
-        colorText = wx.StaticText(panel, id=wx.ID_ANY, label=_("Color:"))
+        colorText = StaticText(panel, id=wx.ID_ANY, label=_("Color:"))
         self.colorPicker = wx.ColourPickerCtrl(panel, id=wx.ID_ANY)
         if self.vPropertiesDict['hcolor'] != 'none':
             self.colorPicker.SetColour(
@@ -2568,7 +2572,7 @@ class VPropertiesDialog(PsmapDialog):
         self.Bind(wx.EVT_CHECKBOX, self.OnOutline, self.outlineCheck)
 
         #colors - fill
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -2576,7 +2580,7 @@ class VPropertiesDialog(PsmapDialog):
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         self.gridBagSizerF = wx.GridBagSizer(hgap=5, vgap=2)
 
-        fillText = wx.StaticText(
+        fillText = StaticText(
             panel, id=wx.ID_ANY, label=_("Color of lines:"))
 
         self.colorPickerRadio = wx.RadioButton(
@@ -2649,7 +2653,7 @@ class VPropertiesDialog(PsmapDialog):
         border = wx.BoxSizer(wx.VERTICAL)
 
         # symbology
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -2662,14 +2666,14 @@ class VPropertiesDialog(PsmapDialog):
             style=wx.RB_GROUP)
         self.symbolRadio.SetValue(bool(self.vPropertiesDict['symbol']))
 
-        self.symbolName = wx.StaticText(panel, id=wx.ID_ANY)
+        self.symbolName = StaticText(panel, id=wx.ID_ANY)
         self.symbolName.SetLabel(self.vPropertiesDict['symbol'])
         bitmap = wx.Bitmap(
             os.path.join(
                 globalvar.SYMBDIR,
                 self.vPropertiesDict['symbol']) +
             '.png')
-        self.symbolButton = wx.BitmapButton(panel, id=wx.ID_ANY, bitmap=bitmap)
+        self.symbolButton = BitmapButton(panel, id=wx.ID_ANY, bitmap=bitmap)
 
         self.epsRadio = wx.RadioButton(
             panel, id=wx.ID_ANY, label=_("eps file:"))
@@ -2723,7 +2727,7 @@ class VPropertiesDialog(PsmapDialog):
 
         # size
 
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -2739,7 +2743,7 @@ class VPropertiesDialog(PsmapDialog):
         self.sizecolumnRadio = wx.RadioButton(
             panel, id=wx.ID_ANY, label=_("size from map table column:"))
         self.sizeColChoice = self.getColsChoice(panel)
-        self.scaleText = wx.StaticText(panel, id=wx.ID_ANY, label=_("scale:"))
+        self.scaleText = StaticText(panel, id=wx.ID_ANY, label=_("scale:"))
         self.scaleSpin = SpinCtrl(
             panel, id=wx.ID_ANY, min=1, max=25, initial=1)
 
@@ -2800,7 +2804,7 @@ class VPropertiesDialog(PsmapDialog):
         self.Bind(wx.EVT_RADIOBUTTON, self.OnSize, self.sizecolumnRadio)
 
         # rotation
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -2881,7 +2885,7 @@ class VPropertiesDialog(PsmapDialog):
         border = wx.BoxSizer(wx.VERTICAL)
 
         # width
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -2889,7 +2893,7 @@ class VPropertiesDialog(PsmapDialog):
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        widthText = wx.StaticText(
+        widthText = StaticText(
             panel, id=wx.ID_ANY, label=_("Set width (pts):"))
         if fs:
             self.widthSpin = fs.FloatSpin(
@@ -2935,7 +2939,7 @@ class VPropertiesDialog(PsmapDialog):
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # style
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -2943,7 +2947,7 @@ class VPropertiesDialog(PsmapDialog):
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        styleText = wx.StaticText(
+        styleText = StaticText(
             panel, id=wx.ID_ANY, label=_("Choose line style:"))
         penStyles = ["solid", "dashed", "dotted", "dashdotted"]
         self.styleCombo = PenStyleComboBox(
@@ -2956,7 +2960,7 @@ class VPropertiesDialog(PsmapDialog):
 ##                                    "The first block of repeated zeros or ones represents 'draw', "\
 ##                                    "the second block represents 'blank'. An even number of blocks "\
 # "will repeat the pattern, an odd number of blocks will alternate the pattern."))
-        linecapText = wx.StaticText(
+        linecapText = StaticText(
             panel, id=wx.ID_ANY, label=_("Choose linecap:"))
         self.linecapChoice = wx.Choice(
             panel, id=wx.ID_ANY, choices=[
@@ -3006,7 +3010,7 @@ class VPropertiesDialog(PsmapDialog):
         border = wx.BoxSizer(wx.VERTICAL)
 
         # pattern
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -3024,11 +3028,11 @@ class VPropertiesDialog(PsmapDialog):
             startDirectory=self.patternPath, initialValue='',
             fileMask="Encapsulated PostScript (*.eps)|*.eps|All files (*.*)|*.*",
             fileMode=wx.FD_OPEN)
-        self.patWidthText = wx.StaticText(
+        self.patWidthText = StaticText(
             panel, id=wx.ID_ANY, label=_("pattern line width (pts):"))
         self.patWidthSpin = SpinCtrl(
             panel, id=wx.ID_ANY, min=1, max=25, initial=1)
-        self.patScaleText = wx.StaticText(
+        self.patScaleText = StaticText(
             panel, id=wx.ID_ANY, label=_("pattern scale factor:"))
         self.patScaleSpin = SpinCtrl(
             panel, id=wx.ID_ANY, min=1, max=25, initial=1)
@@ -3342,7 +3346,7 @@ class LegendDialog(PsmapDialog):
             self.rasterLegend = self.instruction[self.id[0]]
             self.rLegendDict = self.rasterLegend.GetInstruction()
         else:
-            self.id[0] = wx.NewId()
+            self.id[0] = NewId()
             self.rasterLegend = RasterLegend(self.id[0])
             self.rLegendDict = self.rasterLegend.GetInstruction()
             self.rLegendDict['where'] = currPage['Left'], currPage['Top']
@@ -3351,7 +3355,7 @@ class LegendDialog(PsmapDialog):
         if self.id[1] is not None:
             self.vLegendDict = self.instruction[self.id[1]].GetInstruction()
         else:
-            self.id[1] = wx.NewId()
+            self.id[1] = NewId()
             vectorLegend = VectorLegend(self.id[1])
             self.vLegendDict = vectorLegend.GetInstruction()
             self.vLegendDict['where'] = currPage['Left'], currPage['Top']
@@ -3404,7 +3408,7 @@ class LegendDialog(PsmapDialog):
             border=5)
 
         # choose raster
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -3422,7 +3426,7 @@ class LegendDialog(PsmapDialog):
 
         rasterType = getRasterType(map=self.currRaster)
 
-        self.rasterCurrent = wx.StaticText(
+        self.rasterCurrent = StaticText(
             panel, id=wx.ID_ANY, label=_("%(rast)s: type %(type)s") %
             {'rast': self.currRaster, 'type': rasterType})
         self.rasterSelect = Select(
@@ -3468,7 +3472,7 @@ class LegendDialog(PsmapDialog):
 
         # type of legend
 
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -3503,7 +3507,7 @@ class LegendDialog(PsmapDialog):
             mainSizer=border)
 
         # advanced settings
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -3536,20 +3540,20 @@ class LegendDialog(PsmapDialog):
             self.minim, self.maxim = 0, 0
         self.range = wx.CheckBox(panel, id=wx.ID_ANY, label=_("range"))
         self.range.SetValue(self.rLegendDict['range'])
-        self.minText = wx.StaticText(
+        self.minText = StaticText(
             panel,
             id=wx.ID_ANY,
             label="min (%s)" %
             self.minim)
-        self.maxText = wx.StaticText(
+        self.maxText = StaticText(
             panel,
             id=wx.ID_ANY,
             label="max (%s)" %
             self.maxim)
-        self.min = wx.TextCtrl(
+        self.min = TextCtrl(
             panel, id=wx.ID_ANY, value=str(
                 self.rLegendDict['min']))
-        self.max = wx.TextCtrl(
+        self.max = TextCtrl(
             panel, id=wx.ID_ANY, value=str(
                 self.rLegendDict['max']))
 
@@ -3628,7 +3632,7 @@ class LegendDialog(PsmapDialog):
             border=5)
 
         # vector maps, their order, labels
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -3636,7 +3640,7 @@ class LegendDialog(PsmapDialog):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        vectorText = wx.StaticText(panel, id=wx.ID_ANY, label=_(
+        vectorText = StaticText(panel, id=wx.ID_ANY, label=_(
             "Choose vector maps and their order in legend"))
 
         self.vectorListCtrl = CheckListCtrl(panel)
@@ -3650,9 +3654,9 @@ class LegendDialog(PsmapDialog):
                 key=lambda x: x[3])
 
             for vector in vectors:
-                index = self.vectorListCtrl.InsertStringItem(
+                index = self.vectorListCtrl.InsertItem(
                     self.vectorListCtrl.GetItemCount(), vector[0].split('@')[0])
-                self.vectorListCtrl.SetStringItem(index, 1, vector[4])
+                self.vectorListCtrl.SetItem(index, 1, vector[4])
                 self.vectorListCtrl.SetItemData(index, index)
                 self.vectorListCtrl.CheckItem(index, True)
                 if vector[3] == 0:
@@ -3663,9 +3667,9 @@ class LegendDialog(PsmapDialog):
             self.vectorListCtrl.SetColumnWidth(0, wx.LIST_AUTOSIZE)
         self.vectorListCtrl.SetColumnWidth(1, wx.LIST_AUTOSIZE)
 
-        self.btnUp = wx.Button(panel, id=wx.ID_ANY, label=_("Up"))
-        self.btnDown = wx.Button(panel, id=wx.ID_ANY, label=_("Down"))
-        self.btnLabel = wx.Button(panel, id=wx.ID_ANY, label=_("Edit label"))
+        self.btnUp = Button(panel, id=wx.ID_ANY, label=_("Up"))
+        self.btnDown = Button(panel, id=wx.ID_ANY, label=_("Down"))
+        self.btnLabel = Button(panel, id=wx.ID_ANY, label=_("Edit label"))
 
         gridBagSizer.Add(
             vectorText, pos=(
@@ -3702,7 +3706,7 @@ class LegendDialog(PsmapDialog):
 
         # border
         # GTC  Line around legend or map frame
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -3765,7 +3769,7 @@ class LegendDialog(PsmapDialog):
         border = mainSizer
 
         # size and position
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -3791,13 +3795,13 @@ class LegendDialog(PsmapDialog):
             border=0)
 
         hBox = wx.BoxSizer(wx.HORIZONTAL)
-        posBox = wx.StaticBox(
+        posBox = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
             _("Position"))
         posSizer = wx.StaticBoxSizer(posBox, wx.VERTICAL)
-        sizeBox = wx.StaticBox(
+        sizeBox = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -3828,24 +3832,24 @@ class LegendDialog(PsmapDialog):
             border=5)
 
         # size
-        width = wx.StaticText(panel, id=wx.ID_ANY, label=_("Width:"))
+        width = StaticText(panel, id=wx.ID_ANY, label=_("Width:"))
         if legendDict['width']:
             w = self.unitConv.convert(
                 value=float(legendDict['width']),
                 fromUnit='inch', toUnit=legendDict['unit'])
         else:
             w = ''
-        panel.widthCtrl = wx.TextCtrl(
+        panel.widthCtrl = TextCtrl(
             panel, id=wx.ID_ANY, value=str(w),
             validator=TCValidator("DIGIT_ONLY"))
-        panel.widthCtrl.SetToolTipString(
+        panel.widthCtrl.SetToolTip(
             _("Leave the edit field empty, to use default values."))
 
         if legendType == 'raster':
             ##            panel.defaultSize = wx.CheckBox(panel, id = wx.ID_ANY, label = _("Use default size"))
             # panel.defaultSize.SetValue(legendDict['defaultSize'])
 
-            panel.heightOrColumnsLabel = wx.StaticText(
+            panel.heightOrColumnsLabel = StaticText(
                 panel, id=wx.ID_ANY, label=_("Height:"))
             if legendDict['height']:
                 h = self.unitConv.convert(
@@ -3853,7 +3857,7 @@ class LegendDialog(PsmapDialog):
                     fromUnit='inch', toUnit=legendDict['unit'])
             else:
                 h = ''
-            panel.heightOrColumnsCtrl = wx.TextCtrl(
+            panel.heightOrColumnsCtrl = TextCtrl(
                 panel, id=wx.ID_ANY, value=str(h),
                 validator=TCValidator("DIGIT_ONLY"))
 
@@ -3878,14 +3882,14 @@ class LegendDialog(PsmapDialog):
                 border=5)
 
         if legendType == 'vector':
-            panel.widthCtrl.SetToolTipString(
+            panel.widthCtrl.SetToolTip(
                 _("Width of the color symbol (for lines)\nin front of the legend text"))
             # columns
             minVect, maxVect = 0, 0
             if self.vectorId:
                 minVect = 1
                 maxVect = min(10, len(self.instruction[self.vectorId]['list']))
-            cols = wx.StaticText(panel, id=wx.ID_ANY, label=_("Columns:"))
+            cols = StaticText(panel, id=wx.ID_ANY, label=_("Columns:"))
             panel.colsCtrl = SpinCtrl(
                 panel,
                 id=wx.ID_ANY,
@@ -3896,9 +3900,9 @@ class LegendDialog(PsmapDialog):
             # span
             panel.spanRadio = wx.CheckBox(
                 panel, id=wx.ID_ANY, label=_("column span:"))
-            panel.spanTextCtrl = wx.TextCtrl(panel, id=wx.ID_ANY, value='')
-            panel.spanTextCtrl.SetToolTipString(_("Column separation distance between the left edges\n"
-                                                  "of two columns in a multicolumn legend"))
+            panel.spanTextCtrl = TextCtrl(panel, id=wx.ID_ANY, value='')
+            panel.spanTextCtrl.SetToolTip(_("Column separation distance between the left edges\n"
+                                            "of two columns in a multicolumn legend"))
             if legendDict['span']:
                 panel.spanRadio.SetValue(True)
                 s = self.unitConv.convert(
@@ -3940,7 +3944,7 @@ class LegendDialog(PsmapDialog):
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # font
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -4072,7 +4076,7 @@ class LegendDialog(PsmapDialog):
                     toUnit=self.rLegendDict['unit'])
             else:
                 h = ''
-            self.panelRaster.heightOrColumnsCtrl = wx.TextCtrl(
+            self.panelRaster.heightOrColumnsCtrl = TextCtrl(
                 self.panelRaster, id=wx.ID_ANY, value=str(h),
                 validator=TCValidator("DIGIT_ONLY"))
             self.panelRaster.heightOrColumnsCtrl.Enable(enabledSize)
@@ -4142,15 +4146,15 @@ class LegendDialog(PsmapDialog):
         if self.vectorListCtrl.GetFirstSelected() != -1:
             idx = self.vectorListCtrl.GetFirstSelected()
             default = self.vectorListCtrl.GetItem(idx, 1).GetText()
-            dlg = wx.TextEntryDialog(
+            dlg = TextEntryDialog(
                 self,
                 message=_("Edit legend label:"),
                 caption=_("Edit label"),
-                defaultValue=default,
+                value=default,
                 style=wx.OK | wx.CANCEL | wx.CENTRE)
             if dlg.ShowModal() == wx.ID_OK:
                 new = dlg.GetValue()
-                self.vectorListCtrl.SetStringItem(idx, 1, new)
+                self.vectorListCtrl.SetItem(idx, 1, new)
             dlg.Destroy()
 
     def OnSpan(self, event):
@@ -4459,9 +4463,9 @@ class LegendDialog(PsmapDialog):
                 key=lambda x: x[3])
             self.vectorListCtrl.DeleteAllItems()
             for vector in vectors:
-                index = self.vectorListCtrl.InsertStringItem(
+                index = self.vectorListCtrl.InsertItem(
                     self.vectorListCtrl.GetItemCount(), vector[0].split('@')[0])
-                self.vectorListCtrl.SetStringItem(index, 1, vector[4])
+                self.vectorListCtrl.SetItem(index, 1, vector[4])
                 self.vectorListCtrl.SetItemData(index, index)
                 self.vectorListCtrl.CheckItem(index, True)
                 if vector[3] == 0:
@@ -4490,7 +4494,7 @@ class MapinfoDialog(PsmapDialog):
             self.mapinfo = self.instruction[self.id]
             self.mapinfoDict = self.mapinfo.GetInstruction()
         else:
-            self.id = wx.NewId()
+            self.id = NewId()
             self.mapinfo = Mapinfo(self.id)
             self.mapinfoDict = self.mapinfo.GetInstruction()
             page = self.instruction.FindInstructionByType(
@@ -4511,7 +4515,7 @@ class MapinfoDialog(PsmapDialog):
         border = wx.BoxSizer(wx.VERTICAL)
 
         # position
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -4547,7 +4551,7 @@ class MapinfoDialog(PsmapDialog):
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # font
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -4582,7 +4586,7 @@ class MapinfoDialog(PsmapDialog):
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # colors
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -4766,7 +4770,7 @@ class ScalebarDialog(PsmapDialog):
             self.scalebar = self.instruction[id]
             self.scalebarDict = self.scalebar.GetInstruction()
         else:
-            self.id = wx.NewId()
+            self.id = NewId()
             self.scalebar = Scalebar(self.id)
             self.scalebarDict = self.scalebar.GetInstruction()
             page = self.instruction.FindInstructionByType(
@@ -4789,7 +4793,7 @@ class ScalebarDialog(PsmapDialog):
         #
         # position
         #
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -4845,7 +4849,7 @@ class ScalebarDialog(PsmapDialog):
         #
         # size
         #
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -4853,17 +4857,17 @@ class ScalebarDialog(PsmapDialog):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        lengthText = wx.StaticText(panel, id=wx.ID_ANY, label=_("Length:"))
-        heightText = wx.StaticText(panel, id=wx.ID_ANY, label=_("Height:"))
+        lengthText = StaticText(panel, id=wx.ID_ANY, label=_("Length:"))
+        heightText = StaticText(panel, id=wx.ID_ANY, label=_("Height:"))
 
-        self.lengthTextCtrl = wx.TextCtrl(
+        self.lengthTextCtrl = TextCtrl(
             panel, id=wx.ID_ANY, validator=TCValidator('DIGIT_ONLY'))
-        self.lengthTextCtrl.SetToolTipString(
+        self.lengthTextCtrl.SetToolTip(
             _("Scalebar length is given in map units"))
 
-        self.heightTextCtrl = wx.TextCtrl(
+        self.heightTextCtrl = TextCtrl(
             panel, id=wx.ID_ANY, validator=TCValidator('DIGIT_ONLY'))
-        self.heightTextCtrl.SetToolTipString(
+        self.heightTextCtrl.SetToolTip(
             _("Scalebar height is real height on paper"))
 
         choices = [_('default')] + self.unitConv.getMapUnitsNames()
@@ -4935,7 +4939,7 @@ class ScalebarDialog(PsmapDialog):
         #
         # style
         #
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -4943,15 +4947,15 @@ class ScalebarDialog(PsmapDialog):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        sbTypeText = wx.StaticText(panel, id=wx.ID_ANY, label=_("Type:"))
-        self.sbCombo = wx.combo.BitmapComboBox(panel, style=wx.CB_READONLY)
+        sbTypeText = StaticText(panel, id=wx.ID_ANY, label=_("Type:"))
+        self.sbCombo = BitmapComboBox(panel, style=wx.CB_READONLY)
         # only temporary, images must be moved away
         imagePath = os.path.join(
             globalvar.IMGDIR, "scalebar-fancy.png"), os.path.join(
             globalvar.IMGDIR, "scalebar-simple.png")
         for item, path in zip(['fancy', 'simple'], imagePath):
             if not os.path.exists(path):
-                bitmap = wx.EmptyBitmap(0, 0)
+                bitmap = EmptyBitmap(0, 0)
             else:
                 bitmap = wx.Bitmap(path)
             self.sbCombo.Append(item='', bitmap=bitmap, clientData=item[0])
@@ -4961,21 +4965,21 @@ class ScalebarDialog(PsmapDialog):
         elif self.scalebarDict['scalebar'] == 's':
             self.sbCombo.SetSelection(1)
 
-        sbSegmentsText = wx.StaticText(
+        sbSegmentsText = StaticText(
             panel, id=wx.ID_ANY, label=_("Number of segments:"))
         self.sbSegmentsCtrl = SpinCtrl(
             panel, id=wx.ID_ANY, min=1, max=30, initial=4)
         self.sbSegmentsCtrl.SetValue(self.scalebarDict['segment'])
 
-        sbLabelsText1 = wx.StaticText(
+        sbLabelsText1 = StaticText(
             panel, id=wx.ID_ANY, label=_("Label every "))
-        sbLabelsText2 = wx.StaticText(panel, id=wx.ID_ANY, label=_("segments"))
+        sbLabelsText2 = StaticText(panel, id=wx.ID_ANY, label=_("segments"))
         self.sbLabelsCtrl = SpinCtrl(
             panel, id=wx.ID_ANY, min=1, max=30, initial=1)
         self.sbLabelsCtrl.SetValue(self.scalebarDict['numbers'])
 
         # font
-        fontsizeText = wx.StaticText(
+        fontsizeText = StaticText(
             panel, id=wx.ID_ANY, label=_("Font size:"))
         self.fontsizeCtrl = SpinCtrl(
             panel, id=wx.ID_ANY, min=4, max=30, initial=10)
@@ -5152,7 +5156,7 @@ class TextDialog(PsmapDialog):
         if self.id is not None:
             self.textDict = self.instruction[id].GetInstruction()
         else:
-            self.id = wx.NewId()
+            self.id = NewId()
             text = Text(self.id)
             self.textDict = text.GetInstruction()
             page = self.instruction.FindInstructionByType(
@@ -5187,14 +5191,14 @@ class TextDialog(PsmapDialog):
         border = wx.BoxSizer(wx.VERTICAL)
 
         # text entry
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
             _("Text"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
 
-        textLabel = wx.StaticText(panel, id=wx.ID_ANY, label=_("Enter text:"))
+        textLabel = StaticText(panel, id=wx.ID_ANY, label=_("Enter text:"))
         self.textCtrl = ExpandoTextCtrl(
             panel, id=wx.ID_ANY, value=self.textDict['text'])
 
@@ -5211,7 +5215,7 @@ class TextDialog(PsmapDialog):
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # font
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -5261,7 +5265,7 @@ class TextDialog(PsmapDialog):
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # text effects
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -5281,7 +5285,7 @@ class TextDialog(PsmapDialog):
             panel, id=wx.ID_ANY)
         self.effect['highlightWidth'] = SpinCtrl(
             panel, id=wx.ID_ANY, size=self.spinCtrlSize, min=0, max=5, initial=1)
-        self.effect['highlightWidthLabel'] = wx.StaticText(
+        self.effect['highlightWidthLabel'] = StaticText(
             panel, id=wx.ID_ANY, label=_("Width (pts):"))
 
         self.effect['borderCtrl'] = wx.CheckBox(
@@ -5289,7 +5293,7 @@ class TextDialog(PsmapDialog):
         self.effect['borderColor'] = wx.ColourPickerCtrl(panel, id=wx.ID_ANY)
         self.effect['borderWidth'] = SpinCtrl(
             panel, id=wx.ID_ANY, size=self.spinCtrlSize, min=1, max=25, initial=1)
-        self.effect['borderWidthLabel'] = wx.StaticText(
+        self.effect['borderWidthLabel'] = StaticText(
             panel, id=wx.ID_ANY, label=_("Width (pts):"))
 
         # set values
@@ -5378,7 +5382,7 @@ class TextDialog(PsmapDialog):
 
         border = wx.BoxSizer(wx.VERTICAL)
 
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -5390,16 +5394,16 @@ class TextDialog(PsmapDialog):
         self.AddExtendedPosition(panel, gridBagSizer, self.textDict)
 
         # offset
-        box3 = wx.StaticBox(
+        box3 = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
             _("Offset"))
         sizerO = wx.StaticBoxSizer(box3, wx.VERTICAL)
         gridBagSizerO = wx.GridBagSizer(hgap=5, vgap=5)
-        self.xoffLabel = wx.StaticText(
+        self.xoffLabel = StaticText(
             panel, id=wx.ID_ANY, label=_("horizontal (pts):"))
-        self.yoffLabel = wx.StaticText(
+        self.yoffLabel = StaticText(
             panel, id=wx.ID_ANY, label=_("vertical (pts):"))
         self.xoffCtrl = SpinCtrl(
             panel, id=wx.ID_ANY, size=(50, -1),
@@ -5435,7 +5439,7 @@ class TextDialog(PsmapDialog):
             flag=wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND,
             border=0)
         # reference point
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -5489,7 +5493,7 @@ class TextDialog(PsmapDialog):
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # rotation
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -5730,7 +5734,7 @@ class ImageDialog(PsmapDialog):
             self.imageObj = self.instruction[self.id]
             self.imageDict = self.instruction[id].GetInstruction()
         else:
-            self.id = wx.NewId()
+            self.id = NewId()
             self.imageObj = self._newObject()
             self.imageDict = self.imageObj.GetInstruction()
             page = self.instruction.FindInstructionByType(
@@ -5775,7 +5779,7 @@ class ImageDialog(PsmapDialog):
         #
         # choose image
         #
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -5818,13 +5822,13 @@ class ImageDialog(PsmapDialog):
         self.previewSize = (150, 150)
         img = wx.EmptyImage(*self.previewSize)
         panel.image['preview'] = wx.StaticBitmap(
-            panel, wx.ID_ANY, wx.BitmapFromImage(img))
+            panel, wx.ID_ANY, BitmapFromImage(img))
         vSizer.Add(
             panel.image['preview'],
             proportion=0,
             flag=wx.EXPAND | wx.BOTTOM,
             border=5)
-        panel.image['sizeInfo'] = wx.StaticText(parent=panel, id=wx.ID_ANY)
+        panel.image['sizeInfo'] = StaticText(parent=panel, id=wx.ID_ANY)
         vSizer.Add(
             panel.image['sizeInfo'],
             proportion=0,
@@ -5834,7 +5838,7 @@ class ImageDialog(PsmapDialog):
         hSizer.Add(vSizer, proportion=0, flag=wx.EXPAND, border=0)
         sizer.Add(hSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
 
-        epsInfo = wx.StaticText(parent=panel, id=wx.ID_ANY,
+        epsInfo = StaticText(parent=panel, id=wx.ID_ANY,
                                 label=_("Note: only EPS format supported"))
         sizer.Add(
             epsInfo,
@@ -5847,7 +5851,7 @@ class ImageDialog(PsmapDialog):
         #
         # rotation
         #
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -5856,7 +5860,7 @@ class ImageDialog(PsmapDialog):
 
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        scaleLabel = wx.StaticText(
+        scaleLabel = StaticText(
             parent=panel, id=wx.ID_ANY, label=_("Scale:"))
         if fs:
             panel.image['scale'] = fs.FloatSpin(
@@ -5865,7 +5869,7 @@ class ImageDialog(PsmapDialog):
             panel.image['scale'].SetFormat("%f")
             panel.image['scale'].SetDigits(1)
         else:
-            panel.image['scale'] = wx.TextCtrl(
+            panel.image['scale'] = TextCtrl(
                 panel, id=wx.ID_ANY, size=self.spinCtrlSize,
                 validator=TCValidator(flag='DIGIT_ONLY'))
 
@@ -5889,7 +5893,7 @@ class ImageDialog(PsmapDialog):
             pos=(0, 1),
             flag=wx.ALIGN_CENTER_VERTICAL)
 
-        rotLabel = wx.StaticText(
+        rotLabel = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Rotation angle (deg):"))
@@ -5947,7 +5951,7 @@ class ImageDialog(PsmapDialog):
         #
         # set position
         #
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -6082,7 +6086,7 @@ class ImageDialog(PsmapDialog):
 
     def DrawWarningText(self, warning):
         """Draw text on preview window"""
-        buffer = wx.EmptyBitmap(*self.previewSize)
+        buffer = EmptyBitmap(*self.previewSize)
         dc = wx.MemoryDC()
         dc.SelectObject(buffer)
         dc.SetBrush(wx.Brush(wx.Colour(250, 250, 250)))
@@ -6098,7 +6102,7 @@ class ImageDialog(PsmapDialog):
         """Draw bitmap, center it if smaller than preview size"""
         if bitmap.GetWidth() <= self.previewSize[
                 0] and bitmap.GetHeight() <= self.previewSize[1]:
-            buffer = wx.EmptyBitmap(*self.previewSize)
+            buffer = EmptyBitmap(*self.previewSize)
             dc = wx.MemoryDC()
             dc.SelectObject(buffer)
             dc.SetBrush(dc.GetBrush())
@@ -6122,7 +6126,7 @@ class ImageDialog(PsmapDialog):
 
     def ClearPreview(self):
         """Clear preview window"""
-        buffer = wx.EmptyBitmap(*self.previewSize)
+        buffer = EmptyBitmap(*self.previewSize)
         dc = wx.MemoryDC()
         dc.SelectObject(buffer)
         dc.SetBrush(wx.WHITE_BRUSH)
@@ -6254,8 +6258,8 @@ class NorthArrowDialog(ImageDialog):
         return os.path.join(gisbase, 'etc', 'paint', 'decorations')
 
     def _addConvergence(self, panel, gridBagSizer):
-        convergence = wx.Button(parent=panel, id=wx.ID_ANY,
-                                label=_("Compute convergence"))
+        convergence = Button(parent=panel, id=wx.ID_ANY,
+                             label=_("Compute convergence"))
         gridBagSizer.Add(convergence, pos=(1, 2),
                          flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
         convergence.Bind(wx.EVT_BUTTON, self.OnConvergence)
@@ -6289,7 +6293,7 @@ class PointDialog(PsmapDialog):
             self.pointObj = self.instruction[self.id]
             self.pointDict = self.instruction[id].GetInstruction()
         else:
-            self.id = wx.NewId()
+            self.id = NewId()
             self.pointObj = Point(self.id)
             self.pointDict = self.pointObj.GetInstruction()
             self.pointDict['where'] = coordinates
@@ -6322,7 +6326,7 @@ class PointDialog(PsmapDialog):
         #
         # choose image
         #
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -6332,23 +6336,23 @@ class PointDialog(PsmapDialog):
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel, id=wx.ID_ANY, label=_("Select symbol:")), pos=(
                 0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
 
-        self.symbolLabel = wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=self.pointDict['symbol'])
+        self.symbolLabel = StaticText(parent=panel, id=wx.ID_ANY,
+                                      label=self.pointDict['symbol'])
         gridSizer.Add(self.symbolLabel, pos=(0, 1),
                       flag=wx.ALIGN_CENTER_VERTICAL)
         bitmap = wx.Bitmap(os.path.join(globalvar.SYMBDIR,
                                         self.pointDict['symbol']) + '.png')
-        self.symbolButton = wx.BitmapButton(panel, id=wx.ID_ANY, bitmap=bitmap)
+        self.symbolButton = BitmapButton(panel, id=wx.ID_ANY, bitmap=bitmap)
         self.symbolButton.Bind(wx.EVT_BUTTON, self.OnSymbolSelection)
 
         gridSizer.Add(
             self.symbolButton, pos=(0, 2),
             flag=wx.ALIGN_CENTER_VERTICAL)
-        self.noteLabel = wx.StaticText(
+        self.noteLabel = StaticText(
             parent=panel, id=wx.ID_ANY, label=_(
                 "Note: Selected symbol is not displayed\n"
                 "in draft mode (only in preview mode)"))
@@ -6371,7 +6375,7 @@ class PointDialog(PsmapDialog):
         #
 
         # outline
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -6380,7 +6384,7 @@ class PointDialog(PsmapDialog):
 
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        outlineLabel = wx.StaticText(
+        outlineLabel = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Outline color:"))
@@ -6407,7 +6411,7 @@ class PointDialog(PsmapDialog):
             self.outlineTranspCtrl, pos=(
                 0, 2), flag=wx.ALIGN_CENTER_VERTICAL)
 
-        fillLabel = wx.StaticText(
+        fillLabel = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Fill color:"))
@@ -6445,7 +6449,7 @@ class PointDialog(PsmapDialog):
         #
 
         # size
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -6454,7 +6458,7 @@ class PointDialog(PsmapDialog):
 
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        sizeLabel = wx.StaticText(
+        sizeLabel = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Size (pt):"))
@@ -6471,7 +6475,7 @@ class PointDialog(PsmapDialog):
                 0, 1), flag=wx.ALIGN_CENTER_VERTICAL)
 
         # rotation
-        rotLabel = wx.StaticText(
+        rotLabel = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Rotation angle (deg):"))
@@ -6531,7 +6535,7 @@ class PointDialog(PsmapDialog):
         #
         # set position
         #
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -6711,7 +6715,7 @@ class RectangleDialog(PsmapDialog):
             self.rectObj = self.instruction[self.id]
             self.rectDict = self.rectObj.GetInstruction()
         else:
-            self.id = wx.NewId()
+            self.id = NewId()
             if type == 'rectangle':
                 self.rectObj = Rectangle(self.id)
             else:
@@ -6731,7 +6735,7 @@ class RectangleDialog(PsmapDialog):
         border = wx.BoxSizer(wx.VERTICAL)
 
         # color
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -6739,7 +6743,7 @@ class RectangleDialog(PsmapDialog):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        outlineLabel = wx.StaticText(
+        outlineLabel = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Outline color:"))
@@ -6771,7 +6775,7 @@ class RectangleDialog(PsmapDialog):
 
         # fill color only in rectangle
         if self.objectType == ('rectangle',):
-            fillLabel = wx.StaticText(
+            fillLabel = StaticText(
                 parent=panel, id=wx.ID_ANY, label=_("Fill color:"))
             self.fillColorCtrl = wx.ColourPickerCtrl(panel, id=wx.ID_ANY)
             self.fillTranspCtrl = wx.CheckBox(
@@ -6800,14 +6804,14 @@ class RectangleDialog(PsmapDialog):
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         # width
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
             _("Line style"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
-        widthLabel = wx.StaticText(
+        widthLabel = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Line width:"))
@@ -6911,7 +6915,7 @@ class LabelsDialog(PsmapDialog):
         if self.id is not None:
             self.labels = self.instruction[self.id]
         else:
-            self.id = wx.NewId()
+            self.id = NewId()
             self.labels = Labels(self.id)
         self.labelsDict = self.labels.GetInstruction()
         self.panel = self._labelPanel()
@@ -6923,7 +6927,7 @@ class LabelsDialog(PsmapDialog):
 
         border = wx.BoxSizer(wx.VERTICAL)
 
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel, id=wx.ID_ANY, label=" %s " %
             _("Vector label files created beforehand by v.label module"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
@@ -6940,11 +6944,11 @@ class LabelsDialog(PsmapDialog):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        helpText = wx.StaticText(
+        helpText = StaticText(
             panel, id=wx.ID_ANY,
             label=_("You can select multiple label files."))
         helpText.SetForegroundColour(
-            wx.SystemSettings_GetColour(
+            wx.SystemSettings.GetColour(
                 wx.SYS_COLOUR_GRAYTEXT))
         sizer.Add(
             helpText,

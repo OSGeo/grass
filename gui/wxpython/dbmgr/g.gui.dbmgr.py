@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 ############################################################################
 #
 # MODULE:    g.gui.dbmgr
@@ -39,7 +39,6 @@ def main():
     from grass.script.setup import set_gui_path
     set_gui_path()
 
-    from core.utils import _
     from dbmgr.manager import AttributeManager
 
     mapName = gscript.find_file(options['map'], element='vector')['fullname']

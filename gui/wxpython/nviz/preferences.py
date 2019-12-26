@@ -24,9 +24,9 @@ import wx.lib.colourselect as csel
 
 from core import globalvar
 from core.settings import UserSettings
-from core.utils import _
 from gui_core.preferences import PreferencesBaseDialog
-from gui_core.wrap import SpinCtrl
+from gui_core.wrap import SpinCtrl, Button, CheckBox, StaticText, \
+    StaticBox
 
 
 class NvizPreferencesDialog(PreferencesBaseDialog):
@@ -58,7 +58,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
 
         self.SetMinSize(self.GetBestSize())
         self.SetSize(self.size)
-        self.btnDefault.SetToolTipString(
+        self.btnDefault.SetToolTip(
             _("Revert settings to default, changes are not applied"))
 
     def _createViewPage(self, notebook):
@@ -70,8 +70,8 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
 
         pageSizer = wx.BoxSizer(wx.VERTICAL)
 
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s " % (_("View")))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s " % (_("View")))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=3, hgap=3)
         row = 0
@@ -82,11 +82,11 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
             key='view',
             subkey='persp',
             settings_type='internal')
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Perspective:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Perspective:")),
                       pos=(row, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel, id=wx.ID_ANY, label=_("value:")), pos=(
                 row, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
@@ -99,7 +99,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel, id=wx.ID_ANY, label=_("step:")), pos=(
                 row, 3), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
@@ -114,11 +114,11 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
 
         # position
         posvals = UserSettings.Get(group='nviz', key='view', subkey='position')
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Position:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Position:")),
                       pos=(row, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel, id=wx.ID_ANY, label=_("x:")), pos=(
                 row, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
@@ -131,7 +131,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel, id=wx.ID_ANY, label="y:"), pos=(
                 row, 3), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
@@ -153,11 +153,11 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
             key='view',
             subkey='twist',
             settings_type='internal')
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Twist:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Twist:")),
                       pos=(row, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel, id=wx.ID_ANY, label=_("value:")), pos=(
                 row, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
@@ -172,11 +172,11 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
 
         # z-exag
         zvals = UserSettings.Get(group='nviz', key='view', subkey='z-exag')
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Z-exag:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Z-exag:")),
                       pos=(row, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel, id=wx.ID_ANY, label=_("value:")), pos=(
                 row, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
@@ -194,14 +194,14 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=3)
 
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s " % (_("Image Appearance")))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s " % (_("Image Appearance")))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=3, hgap=3)
 
         # background color
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Background color:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Background color:")),
                       pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
 
         color = csel.ColourSelect(
@@ -237,14 +237,14 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                          text=" %s " % _("Fly-through"))
         pageSizer = wx.BoxSizer(wx.VERTICAL)
         # fly throuhg mode
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s " % (_("Fly-through mode")))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s " % (_("Fly-through mode")))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=3, hgap=3)
 
         # move exag
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Move exag:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Move exag:")),
                       pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
 
         moveExag = SpinCtrl(
@@ -256,8 +256,8 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         gridSizer.Add(moveExag, pos=(0, 1))
 
         # turn exag
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Turn exag:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Turn exag:")),
                       pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL)
 
         turnExag = SpinCtrl(
@@ -288,19 +288,19 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
 
         pageSizer = wx.BoxSizer(wx.VERTICAL)
 
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s " % (_("Light")))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s " % (_("Light")))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=3, hgap=3)
 
         # position
         posvals = UserSettings.Get(
             group='nviz', key='light', subkey='position')
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Position:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Position:")),
                       pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel, id=wx.ID_ANY, label=_("x:")), pos=(
                 0, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
@@ -313,7 +313,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel, id=wx.ID_ANY, label="y:"), pos=(
                 0, 3), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
@@ -326,7 +326,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel, id=wx.ID_ANY, label=_("z:")), pos=(
                 0, 5), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
@@ -341,8 +341,8 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         # brightness
         brightval = UserSettings.Get(
             group='nviz', key='light', subkey='bright')
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Brightness:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Brightness:")),
                       pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL)
 
         bright = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
@@ -355,8 +355,8 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
 
         # ambient
         ambval = UserSettings.Get(group='nviz', key='light', subkey='ambient')
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Ambient:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Ambient:")),
                       pos=(2, 0), flag=wx.ALIGN_CENTER_VERTICAL)
 
         amb = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
@@ -368,8 +368,8 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         # light color
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Color:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Color:")),
                       pos=(3, 0), flag=wx.ALIGN_CENTER_VERTICAL)
 
         color = csel.ColourSelect(
@@ -401,14 +401,14 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
 
         # draw
 
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s " % (_("Draw")))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s " % (_("Draw")))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=3, hgap=3)
 
         # mode
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_("Mode:")),
@@ -429,7 +429,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
 
         # fine
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_("Fine mode:")),
@@ -441,7 +441,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
             group='nviz', key='surface', subkey=[
                 'draw', 'res-fine'])
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_("resolution:")),
@@ -460,7 +460,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
 
         # coarse
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_("Coarse mode:")),
@@ -472,7 +472,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
             group='nviz', key='surface', subkey=[
                 'draw', 'res-coarse'])
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_("resolution:")),
@@ -490,7 +490,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                       pos=(2, 2))
         # style
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_("style:")),
@@ -511,7 +511,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                       pos=(3, 2))
         # wire color
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_("wire color:")),
@@ -548,15 +548,15 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         pageSizer = wx.BoxSizer(wx.VERTICAL)
 
         # vector lines
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s " % (_("Vector lines")))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s " % (_("Vector lines")))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=3, hgap=3)
 
         row = 0
         # icon size
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Width:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Width:")),
                       pos=(row, 0), flag=wx.ALIGN_CENTER_VERTICAL)
 
         iwidth = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
@@ -570,8 +570,8 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         # icon color
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Color:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Color:")),
                       pos=(row, 4), flag=wx.ALIGN_CENTER_VERTICAL)
         icolor = csel.ColourSelect(panel, id=wx.ID_ANY,
                                    size=globalvar.DIALOG_COLOR_SIZE)
@@ -588,23 +588,23 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                       border=5)
 
         # vector points
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s " % (_("Vector points")))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s " % (_("Vector points")))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=3, hgap=5)
 
         row = 0
         # icon size
-        autosize = wx.CheckBox(parent=panel, label=_("Automatic size"))
-        autosize.SetToolTipString(_("Icon size is set automatically based on landscape dimensions."))
+        autosize = CheckBox(parent=panel, label=_("Automatic size"))
+        autosize.SetToolTip(_("Icon size is set automatically based on landscape dimensions."))
         gridSizer.Add(autosize, pos=(row, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         self.winId['nviz:vector:points:autosize'] = autosize.GetId()
         autosize.SetValue(UserSettings.Get(group='nviz', key='vector',
                                            subkey=['points', 'autosize']))
 
         row += 1
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Size:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Size:")),
                       pos=(row, 0), flag=wx.ALIGN_CENTER_VERTICAL)
 
         isize = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
@@ -619,8 +619,8 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
 
         # icon symbol
         row += 1
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Marker:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Marker:")),
                       pos=(row, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         isym = wx.Choice(
             parent=panel, id=wx.ID_ANY, size=(100, -1),
@@ -636,8 +636,8 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
 
         # icon color
         row += 1
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Color:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Color:")),
                       pos=(row, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         icolor = csel.ColourSelect(panel, id=wx.ID_ANY,
                                    size=globalvar.DIALOG_COLOR_SIZE)

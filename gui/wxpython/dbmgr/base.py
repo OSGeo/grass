@@ -36,6 +36,7 @@ import tempfile
 import copy
 import types
 import math
+import functools
 
 from core import globalvar
 import wx
@@ -51,16 +52,22 @@ else:
 import wx.lib.scrolledpanel as scrolled
 
 import grass.script as grass
+from grass.script.utils import decode
 
 from dbmgr.sqlbuilder import SQLBuilderSelect, SQLBuilderUpdate
 from core.gcmd import RunCommand, GException, GError, GMessage, GWarning
-from core.utils import ListOfCatsToRange, _
+from core.utils import ListOfCatsToRange
 from gui_core.dialogs import CreateNewVector
 from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue, CreateDbInfoDesc
 from core.debug import Debug
 from dbmgr.dialogs import ModifyTableRecord, AddColumnDialog
 from core.settings import UserSettings
-from gui_core.wrap import SpinCtrl
+from gui_core.wrap import SpinCtrl, Button, TextCtrl, ListCtrl, CheckBox, \
+    StaticText, StaticBox, Menu, NewId
+from core.utils import cmp
+
+if sys.version_info.major >= 3:
+    unicode = str
 
 
 class Log:
@@ -77,7 +84,7 @@ class Log:
             self.parent.SetStatusText(text_string.strip())
 
 
-class VirtualAttributeList(wx.ListCtrl,
+class VirtualAttributeList(ListCtrl,
                            listmix.ListCtrlAutoWidthMixin,
                            listmix.ColumnSorterMixin):
     """Support virtual list class for Attribute Table Manager (browse page)
@@ -98,7 +105,7 @@ class VirtualAttributeList(wx.ListCtrl,
 
         self.sqlFilter = {}
 
-        wx.ListCtrl.__init__(self, parent=parent, id=wx.ID_ANY,
+        ListCtrl.__init__(self, parent=parent, id=wx.ID_ANY,
                              style=wx.LC_REPORT | wx.LC_HRULES | wx.LC_VRULES |
                              wx.LC_VIRTUAL | wx.LC_SORT_ASCENDING)
 
@@ -268,7 +275,7 @@ class VirtualAttributeList(wx.ListCtrl,
             # but we need strip to get rid of the ending newline
             # which on windows leaves \r in a last empty attribute table cell
             # and causes error
-            record = outFile.readline().strip().replace('\n', '')
+            record = decode(outFile.readline().strip()).replace('\n', '')
 
             if not record:
                 break
@@ -332,7 +339,7 @@ class VirtualAttributeList(wx.ListCtrl,
             cat = i + 1
 
         for value in record:
-            if self.columns[columns[j]]['ctype'] != types.StringType:
+            if self.columns[columns[j]]['ctype'] != str:
                 try:
                     # casting disabled (2009/03)
                     # self.itemDataMap[i].append(self.columns[columns[j]]['ctype'](value))
@@ -431,28 +438,28 @@ class VirtualAttributeList(wx.ListCtrl,
         """Column heading right mouse button -> pop-up menu"""
         self._col = event.GetColumn()
 
-        popupMenu = wx.Menu()
+        popupMenu = Menu()
 
         if not hasattr(self, "popupID"):
-            self.popupId = {'sortAsc': wx.NewId(),
-                            'sortDesc': wx.NewId(),
-                            'calculate': wx.NewId(),
-                            'area': wx.NewId(),
-                            'length': wx.NewId(),
-                            'compact': wx.NewId(),
-                            'fractal': wx.NewId(),
-                            'perimeter': wx.NewId(),
-                            'ncats': wx.NewId(),
-                            'slope': wx.NewId(),
-                            'lsin': wx.NewId(),
-                            'lazimuth': wx.NewId(),
-                            'calculator': wx.NewId(),
-                            'stats': wx.NewId()}
+            self.popupId = {'sortAsc': NewId(),
+                            'sortDesc': NewId(),
+                            'calculate': NewId(),
+                            'area': NewId(),
+                            'length': NewId(),
+                            'compact': NewId(),
+                            'fractal': NewId(),
+                            'perimeter': NewId(),
+                            'ncats': NewId(),
+                            'slope': NewId(),
+                            'lsin': NewId(),
+                            'lazimuth': NewId(),
+                            'calculator': NewId(),
+                            'stats': NewId()}
 
         popupMenu.Append(self.popupId['sortAsc'], text=_("Sort ascending"))
         popupMenu.Append(self.popupId['sortDesc'], text=_("Sort descending"))
         popupMenu.AppendSeparator()
-        subMenu = wx.Menu()
+        subMenu = Menu()
         popupMenu.AppendMenu(self.popupId['calculate'], _(
             "Calculate (only numeric columns)"), subMenu)
         popupMenu.Append(
@@ -463,7 +470,7 @@ class VirtualAttributeList(wx.ListCtrl,
 
         if not self.pages['manageTable']:
             popupMenu.AppendSeparator()
-            self.popupId['addCol'] = wx.NewId()
+            self.popupId['addCol'] = NewId()
             popupMenu.Append(self.popupId['addCol'], text=_("Add column"))
             if not self.dbMgrData['editable']:
                 popupMenu.Enable(self.popupId['addCol'], False)
@@ -639,12 +646,14 @@ class VirtualAttributeList(wx.ListCtrl,
 
     def SortItems(self, sorter=cmp):
         """Sort items"""
+        wx.BeginBusyCursor()
         items = list(self.itemDataMap.keys())
-        items.sort(self.Sorter)
+        items.sort(key=functools.cmp_to_key(self.Sorter))
         self.itemIndexMap = items
 
         # redraw the list
         self.Refresh()
+        wx.EndBusyCursor()
 
     def Sorter(self, key1, key2):
         colName = self.GetColumn(self._col).GetText()
@@ -659,9 +668,9 @@ class VirtualAttributeList(wx.ListCtrl,
             item2 = self.itemDataMap[key2][self._col]
 
         if isinstance(
-                item1, types.StringType) or isinstance(
-                item2, types.StringTypes):
-            cmpVal = locale.strcoll(str(item1), str(item2))
+                item1, str) or isinstance(
+                item2, unicode):
+            cmpVal = locale.strcoll(GetUnicodeValue(item1), GetUnicodeValue(item2))
         else:
             cmpVal = cmp(item1, item2)
 
@@ -678,6 +687,9 @@ class VirtualAttributeList(wx.ListCtrl,
     def GetSortImages(self):
         """Used by the ColumnSorterMixin, see wx/lib/mixins/listctrl.py"""
         return (self.sm_dn, self.sm_up)
+
+    def OnGetItemImage(self, item):
+        return -1
 
     def IsEmpty(self):
         """Check if list if empty"""
@@ -1117,7 +1129,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         #   controls that are placed IN the wx.StaticBox, or it will freeze
         #   on the Mac
 
-        listBox = wx.StaticBox(
+        listBox = StaticBox(
             parent=panel, id=wx.ID_ANY, label=" %s " %
             _("Attribute data - right-click to edit/manage records"))
         listSizer = wx.StaticBoxSizer(listBox, wx.VERTICAL)
@@ -1149,8 +1161,8 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         sqlQueryPanel = wx.Panel(parent=panel, id=wx.ID_ANY)
 
         # attribute data
-        sqlBox = wx.StaticBox(parent=sqlQueryPanel, id=wx.ID_ANY,
-                              label=" %s " % _("SQL Query"))
+        sqlBox = StaticBox(parent=sqlQueryPanel, id=wx.ID_ANY,
+                           label=" %s " % _("SQL Query"))
 
         sqlSizer = wx.StaticBoxSizer(sqlBox, wx.VERTICAL)
 
@@ -1182,11 +1194,11 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         sqlNtb.AddPage(page=simpleSqlPanel,
                        text=_('Simple'))
 
-        btnApply = wx.Button(
+        btnApply = Button(
             parent=simpleSqlPanel,
             id=wx.ID_APPLY,
             name='btnApply')
-        btnApply.SetToolTipString(
+        btnApply.SetToolTip(
             _("Apply SELECT statement and reload data records"))
         btnApply.Bind(wx.EVT_BUTTON, self.OnApplySqlStatement)
 
@@ -1204,16 +1216,16 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                                  size=(55, -1),
                                  choices=['=', '!=', '<', '<=', '>', '>='])
         sqlWhereCond.SetSelection(0)
-        sqlWhereValue = wx.TextCtrl(
+        sqlWhereValue = TextCtrl(
             parent=whereSimpleSqlPanel,
             id=wx.ID_ANY,
             value="",
             style=wx.TE_PROCESS_ENTER)
-        sqlWhereValue.SetToolTipString(
+        sqlWhereValue.SetToolTip(
             _("Example: %s") %
             "MULTILANE = 'no' AND OBJECTID < 10")
 
-        sqlLabel = wx.StaticText(
+        sqlLabel = StaticText(
             parent=simpleSqlPanel,
             id=wx.ID_ANY,
             label="SELECT * FROM %s WHERE " %
@@ -1223,19 +1235,19 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         sqlNtb.AddPage(page=advancedSqlPanel,
                        text=_('Builder'))
 
-        btnSqlBuilder = wx.Button(
+        btnSqlBuilder = Button(
             parent=advancedSqlPanel,
             id=wx.ID_ANY,
             label=_("SQL Builder"))
         btnSqlBuilder.Bind(wx.EVT_BUTTON, self.OnBuilder)
 
-        sqlStatement = wx.TextCtrl(
+        sqlStatement = TextCtrl(
             parent=advancedSqlPanel,
             id=wx.ID_ANY,
             value="SELECT * FROM %s" %
             self.dbMgrData['mapDBInfo'].layers[layer]['table'],
             style=wx.TE_PROCESS_ENTER)
-        sqlStatement.SetToolTipString(
+        sqlStatement.SetToolTip(
             _("Example: %s") %
             "SELECT * FROM roadsmajor WHERE MULTILANE = 'no' AND OBJECTID < 10")
         sqlWhereValue.Bind(wx.EVT_TEXT_ENTER, self.OnApplySqlStatement)
@@ -1361,17 +1373,17 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
     def OnDataRightUp(self, event):
         """Table description area, context menu"""
         if not hasattr(self, "popupDataID1"):
-            self.popupDataID1 = wx.NewId()
-            self.popupDataID2 = wx.NewId()
-            self.popupDataID3 = wx.NewId()
-            self.popupDataID4 = wx.NewId()
-            self.popupDataID5 = wx.NewId()
-            self.popupDataID6 = wx.NewId()
-            self.popupDataID7 = wx.NewId()
-            self.popupDataID8 = wx.NewId()
-            self.popupDataID9 = wx.NewId()
-            self.popupDataID10 = wx.NewId()
-            self.popupDataID11 = wx.NewId()
+            self.popupDataID1 = NewId()
+            self.popupDataID2 = NewId()
+            self.popupDataID3 = NewId()
+            self.popupDataID4 = NewId()
+            self.popupDataID5 = NewId()
+            self.popupDataID6 = NewId()
+            self.popupDataID7 = NewId()
+            self.popupDataID8 = NewId()
+            self.popupDataID9 = NewId()
+            self.popupDataID10 = NewId()
+            self.popupDataID11 = NewId()
 
             self.Bind(wx.EVT_MENU, self.OnDataItemEdit, id=self.popupDataID1)
             self.Bind(wx.EVT_MENU, self.OnDataItemAdd, id=self.popupDataID2)
@@ -1402,7 +1414,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         tlist = self.FindWindowById(self.layerPage[self.selLayer]['data'])
         # generate popup-menu
-        menu = wx.Menu()
+        menu = Menu()
         menu.Append(self.popupDataID1, _("Edit selected record"))
         selected = tlist.GetFirstSelected()
         if not self.dbMgrData[
@@ -1776,7 +1788,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         else:
             fn = tlist.GetItems
 
-        cats = map(int, fn())
+        cats = list(map(int, fn()))
 
         digitToolbar = None
         if 'vdigit' in self.mapdisplay.toolbars:
@@ -1978,7 +1990,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
             if digitToolbar and digitToolbar.GetLayer() and digitToolbar.GetLayer(
             ).GetName() == self.dbMgrData['vectName']:
                 display = self.mapdisplay.GetMapWindow().GetDisplay()
-                display.SetSelected(map(int, cats), layer=self.selLayer)
+                display.SetSelected(list(map(int, cats)), layer=self.selLayer)
                 self.mapdisplay.MapWindow.UpdateMap(
                     render=True, renderVector=True)
 
@@ -2272,8 +2284,8 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         #
         # dbInfo
         #
-        dbBox = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                             label=" %s " % _("Database connection"))
+        dbBox = StaticBox(parent=panel, id=wx.ID_ANY,
+                          label=" %s " % _("Database connection"))
         dbSizer = wx.StaticBoxSizer(dbBox, wx.VERTICAL)
         dbSizer.Add(
             CreateDbInfoDesc(
@@ -2288,7 +2300,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         # table description
         #
         table = self.dbMgrData['mapDBInfo'].layers[layer]['table']
-        tableBox = wx.StaticBox(
+        tableBox = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -2303,17 +2315,17 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         self.layerPage[layer]['tableData'] = tlist.GetId()
 
         # manage columns (add)
-        addBox = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                              label=" %s " % _("Add column"))
+        addBox = StaticBox(parent=panel, id=wx.ID_ANY,
+                           label=" %s " % _("Add column"))
         addSizer = wx.StaticBoxSizer(addBox, wx.HORIZONTAL)
 
-        column = wx.TextCtrl(parent=panel, id=wx.ID_ANY, value='',
-                             size=(150, -1), style=wx.TE_PROCESS_ENTER)
+        column = TextCtrl(parent=panel, id=wx.ID_ANY, value='',
+                          size=(150, -1), style=wx.TE_PROCESS_ENTER)
         column.Bind(wx.EVT_TEXT, self.OnTableAddColumnName)
         column.Bind(wx.EVT_TEXT_ENTER, self.OnTableItemAdd)
         self.layerPage[layer]['addColName'] = column.GetId()
         addSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_("Column")),
@@ -2332,7 +2344,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         ctype.Bind(wx.EVT_CHOICE, self.OnTableChangeType)
         self.layerPage[layer]['addColType'] = ctype.GetId()
         addSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_("Type")),
@@ -2348,7 +2360,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         length.Enable(False)
         self.layerPage[layer]['addColLength'] = length.GetId()
         addSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_("Length")),
@@ -2358,7 +2370,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
                      flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
                      border=5)
 
-        btnAddCol = wx.Button(parent=panel, id=wx.ID_ANY, label=_("Add"))
+        btnAddCol = Button(parent=panel, id=wx.ID_ANY, label=_("Add"))
         btnAddCol.Bind(wx.EVT_BUTTON, self.OnTableItemAdd)
         btnAddCol.Enable(False)
         self.layerPage[layer]['addColButton'] = btnAddCol.GetId()
@@ -2366,8 +2378,8 @@ class DbMgrTablesPage(DbMgrNotebookBase):
                      border=3)
 
         # manage columns (rename)
-        renameBox = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                                 label=" %s " % _("Rename column"))
+        renameBox = StaticBox(parent=panel, id=wx.ID_ANY,
+                              label=" %s " % _("Rename column"))
         renameSizer = wx.StaticBoxSizer(renameBox, wx.HORIZONTAL)
 
         columnFrom = wx.ComboBox(
@@ -2377,7 +2389,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         columnFrom.SetSelection(0)
         self.layerPage[layer]['renameCol'] = columnFrom.GetId()
         renameSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_("Column")),
@@ -2387,13 +2399,13 @@ class DbMgrTablesPage(DbMgrNotebookBase):
                         flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
                         border=5)
 
-        columnTo = wx.TextCtrl(parent=panel, id=wx.ID_ANY, value='',
-                               size=(150, -1), style=wx.TE_PROCESS_ENTER)
+        columnTo = TextCtrl(parent=panel, id=wx.ID_ANY, value='',
+                            size=(150, -1), style=wx.TE_PROCESS_ENTER)
         columnTo.Bind(wx.EVT_TEXT, self.OnTableRenameColumnName)
         columnTo.Bind(wx.EVT_TEXT_ENTER, self.OnTableItemChange)
         self.layerPage[layer]['renameColTo'] = columnTo.GetId()
         renameSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_("To")),
@@ -2403,7 +2415,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
                         flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
                         border=5)
 
-        btnRenameCol = wx.Button(
+        btnRenameCol = Button(
             parent=panel,
             id=wx.ID_ANY,
             label=_("&Rename"))
@@ -2564,9 +2576,9 @@ class DbMgrTablesPage(DbMgrNotebookBase):
     def OnTableRightUp(self, event):
         """Table description area, context menu"""
         if not hasattr(self, "popupTableID"):
-            self.popupTableID1 = wx.NewId()
-            self.popupTableID2 = wx.NewId()
-            self.popupTableID3 = wx.NewId()
+            self.popupTableID1 = NewId()
+            self.popupTableID2 = NewId()
+            self.popupTableID3 = NewId()
             self.Bind(
                 wx.EVT_MENU,
                 self.OnTableItemDelete,
@@ -2578,7 +2590,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
             self.Bind(wx.EVT_MENU, self.OnTableReload, id=self.popupTableID3)
 
         # generate popup-menu
-        menu = wx.Menu()
+        menu = Menu()
         menu.Append(self.popupTableID1, _("Drop selected column"))
         if self.FindWindowById(self.layerPage[self.selLayer][
                                'tableData']).GetFirstSelected() == -1:
@@ -2715,10 +2727,10 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         # add item to the list of table columns
         tlist = self.FindWindowById(self.layerPage[self.selLayer]['tableData'])
 
-        index = tlist.InsertStringItem(tlist.GetItemCount(), str(name))
-        tlist.SetStringItem(index, 0, str(name))
-        tlist.SetStringItem(index, 1, str(ctype))
-        tlist.SetStringItem(index, 2, str(length))
+        index = tlist.InsertItem(tlist.GetItemCount(), str(name))
+        tlist.SetItem(index, 0, str(name))
+        tlist.SetItem(index, 1, str(ctype))
+        tlist.SetItem(index, 2, str(length))
 
         self.AddColumn(name, ctype, length)
 
@@ -2764,8 +2776,8 @@ class DbMgrLayersPage(wx.Panel):
         panelList = wx.Panel(parent=splitterWin, id=wx.ID_ANY)
 
         panelListSizer = wx.BoxSizer(wx.VERTICAL)
-        layerBox = wx.StaticBox(parent=panelList, id=wx.ID_ANY,
-                                label=" %s " % _("List of layers"))
+        layerBox = StaticBox(parent=panelList, id=wx.ID_ANY,
+                             label=" %s " % _("List of layers"))
         layerSizer = wx.StaticBoxSizer(layerBox, wx.VERTICAL)
 
         self.layerList = self._createLayerDesc(panelList)
@@ -2836,7 +2848,7 @@ class DbMgrLayersPage(wx.Panel):
         self.layerList.Update(self.dbMgrData['mapDBInfo'].layers)
         self.layerList.Populate(update=True)
         # update selected widgets
-        listOfLayers = map(str, self.dbMgrData['mapDBInfo'].layers.keys())
+        listOfLayers = list(map(str, self.dbMgrData['mapDBInfo'].layers.keys()))
         # delete layer page
         self.manageLayerBook.deleteLayer.SetItems(listOfLayers)
         if len(listOfLayers) > 0:
@@ -2865,7 +2877,7 @@ class DbMgrLayersPage(wx.Panel):
         pass
 
 
-class TableListCtrl(wx.ListCtrl,
+class TableListCtrl(ListCtrl,
                     listmix.ListCtrlAutoWidthMixin):
     #                    listmix.TextEditMixin):
     """Table description list"""
@@ -2876,9 +2888,9 @@ class TableListCtrl(wx.ListCtrl,
         self.parent = parent
         self.table = table
         self.columns = columns
-        wx.ListCtrl.__init__(self, parent, id, pos, size,
-                             style=wx.LC_REPORT | wx.LC_HRULES | wx.LC_VRULES |
-                             wx.BORDER_NONE)
+        ListCtrl.__init__(self, parent, id, pos, size,
+                          style=wx.LC_REPORT | wx.LC_HRULES | wx.LC_VRULES |
+                          wx.BORDER_NONE)
 
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         # listmix.TextEditMixin.__init__(self)
@@ -2905,10 +2917,10 @@ class TableListCtrl(wx.ListCtrl,
 
         i = 0
         for column in self.columns:
-            index = self.InsertStringItem(i, str(column))
-            self.SetStringItem(index, 0, str(column))
-            self.SetStringItem(index, 1, str(self.table[column]['type']))
-            self.SetStringItem(index, 2, str(self.table[column]['length']))
+            index = self.InsertItem(i, str(column))
+            self.SetItem(index, 0, str(column))
+            self.SetItem(index, 1, str(self.table[column]['type']))
+            self.SetItem(index, 2, str(self.table[column]['length']))
             self.SetItemData(index, i)
             itemData[i] = (str(column),
                            str(self.table[column]['type']),
@@ -2920,7 +2932,7 @@ class TableListCtrl(wx.ListCtrl,
         return itemData
 
 
-class LayerListCtrl(wx.ListCtrl,
+class LayerListCtrl(ListCtrl,
                     listmix.ListCtrlAutoWidthMixin):
                     # listmix.ColumnSorterMixin):
                     # listmix.TextEditMixin):
@@ -2932,9 +2944,9 @@ class LayerListCtrl(wx.ListCtrl,
 
         self.parent = parent
         self.layers = layers
-        wx.ListCtrl.__init__(self, parent, id, pos, size,
-                             style=wx.LC_REPORT | wx.LC_HRULES | wx.LC_VRULES |
-                             wx.BORDER_NONE)
+        ListCtrl.__init__(self, parent, id, pos, size,
+                          style=wx.LC_REPORT | wx.LC_HRULES | wx.LC_VRULES |
+                          wx.BORDER_NONE)
 
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         # listmix.TextEditMixin.__init__(self)
@@ -2963,16 +2975,16 @@ class LayerListCtrl(wx.ListCtrl,
 
         i = 0
         for layer in self.layers.keys():
-            index = self.InsertStringItem(i, str(layer))
-            self.SetStringItem(index, 0, str(layer))
+            index = self.InsertItem(i, str(layer))
+            self.SetItem(index, 0, str(layer))
             database = str(self.layers[layer]['database'])
             driver = str(self.layers[layer]['driver'])
             table = str(self.layers[layer]['table'])
             key = str(self.layers[layer]['key'])
-            self.SetStringItem(index, 1, driver)
-            self.SetStringItem(index, 2, database)
-            self.SetStringItem(index, 3, table)
-            self.SetStringItem(index, 4, key)
+            self.SetItem(index, 1, driver)
+            self.SetItem(index, 2, database)
+            self.SetItem(index, 3, table)
+            self.SetItem(index, 4, key)
             self.SetItemData(index, i)
             itemData[i] = (str(layer),
                            driver,
@@ -3061,43 +3073,43 @@ class LayerBook(wx.Notebook):
 
         # layer description
 
-        layerBox = wx.StaticBox(parent=self.addPanel, id=wx.ID_ANY,
-                                label=" %s " % (_("Layer description")))
+        layerBox = StaticBox(parent=self.addPanel, id=wx.ID_ANY,
+                             label=" %s " % (_("Layer description")))
         layerSizer = wx.StaticBoxSizer(layerBox, wx.VERTICAL)
 
         #
         # list of layer widgets (label, value)
         #
         self.addLayerWidgets = {'layer':
-                                (wx.StaticText(parent=self.addPanel, id=wx.ID_ANY,
-                                               label='%s:' % _("Layer")),
+                                (StaticText(parent=self.addPanel, id=wx.ID_ANY,
+                                            label='%s:' % _("Layer")),
                                  SpinCtrl(parent=self.addPanel, id=wx.ID_ANY, size=(65, -1),
                                           initial=maxLayer + 1,
                                           min=1, max=1e6)),
                                 'driver':
-                                    (wx.StaticText(parent=self.addPanel, id=wx.ID_ANY,
-                                                   label='%s:' % _("Driver")),
+                                    (StaticText(parent=self.addPanel, id=wx.ID_ANY,
+                                                label='%s:' % _("Driver")),
                                      wx.Choice(parent=self.addPanel, id=wx.ID_ANY, size=(200, -1),
                                                choices=self.listOfDrivers)),
                                 'database':
-                                    (wx.StaticText(parent=self.addPanel, id=wx.ID_ANY,
-                                                   label='%s:' % _("Database")),
-                                     wx.TextCtrl(parent=self.addPanel, id=wx.ID_ANY,
-                                                 value='',
-                                                 style=wx.TE_PROCESS_ENTER)),
+                                    (StaticText(parent=self.addPanel, id=wx.ID_ANY,
+                                                label='%s:' % _("Database")),
+                                     TextCtrl(parent=self.addPanel, id=wx.ID_ANY,
+                                              value='',
+                                              style=wx.TE_PROCESS_ENTER)),
                                 'table':
-                                    (wx.StaticText(parent=self.addPanel, id=wx.ID_ANY,
-                                                   label='%s:' % _("Table")),
+                                    (StaticText(parent=self.addPanel, id=wx.ID_ANY,
+                                                label='%s:' % _("Table")),
                                      wx.Choice(parent=self.addPanel, id=wx.ID_ANY, size=(200, -1),
                                                choices=self.defaultTables)),
                                 'key':
-                                    (wx.StaticText(parent=self.addPanel, id=wx.ID_ANY,
-                                                   label='%s:' % _("Key column")),
+                                    (StaticText(parent=self.addPanel, id=wx.ID_ANY,
+                                                label='%s:' % _("Key column")),
                                      wx.Choice(parent=self.addPanel, id=wx.ID_ANY, size=(200, -1),
                                                choices=self.defaultColumns)),
                                 'addCat':
-                                    (wx.CheckBox(parent=self.addPanel, id=wx.ID_ANY,
-                                                 label=_("Insert record for each category into table")),
+                                    (CheckBox(parent=self.addPanel, id=wx.ID_ANY,
+                                              label=_("Insert record for each category into table")),
                                      None),
                                 }
 
@@ -3118,42 +3130,42 @@ class LayerBook(wx.Notebook):
             wx.EVT_CHOICE, self.OnTableChanged)
 
         # tooltips
-        self.addLayerWidgets['addCat'][0].SetToolTipString(
+        self.addLayerWidgets['addCat'][0].SetToolTip(
             _("You need to add categories " "by v.category module."))
 
         # table description
-        tableBox = wx.StaticBox(parent=self.addPanel, id=wx.ID_ANY,
-                                label=" %s " % (_("Table description")))
+        tableBox = StaticBox(parent=self.addPanel, id=wx.ID_ANY,
+                             label=" %s " % (_("Table description")))
         tableSizer = wx.StaticBoxSizer(tableBox, wx.VERTICAL)
 
         #
         # list of table widgets
         #
         keyCol = UserSettings.Get(group='atm', key='keycolumn', subkey='value')
-        self.tableWidgets = {'table': (wx.StaticText(parent=self.addPanel, id=wx.ID_ANY,
-                                                     label='%s:' % _("Table name")),
-                                       wx.TextCtrl(parent=self.addPanel, id=wx.ID_ANY,
-                                                   value='',
-                                                   style=wx.TE_PROCESS_ENTER)),
-                             'key': (wx.StaticText(parent=self.addPanel, id=wx.ID_ANY,
-                                                   label='%s:' % _("Key column")),
-                                     wx.TextCtrl(parent=self.addPanel, id=wx.ID_ANY,
-                                                 value=keyCol,
-                                                 style=wx.TE_PROCESS_ENTER))}
+        self.tableWidgets = {'table': (StaticText(parent=self.addPanel, id=wx.ID_ANY,
+                                                  label='%s:' % _("Table name")),
+                                       TextCtrl(parent=self.addPanel, id=wx.ID_ANY,
+                                                value='',
+                                                style=wx.TE_PROCESS_ENTER)),
+                             'key': (StaticText(parent=self.addPanel, id=wx.ID_ANY,
+                                                label='%s:' % _("Key column")),
+                                     TextCtrl(parent=self.addPanel, id=wx.ID_ANY,
+                                              value=keyCol,
+                                              style=wx.TE_PROCESS_ENTER))}
         # events
         self.tableWidgets['table'][1].Bind(
             wx.EVT_TEXT_ENTER, self.OnCreateTable)
         self.tableWidgets['key'][1].Bind(wx.EVT_TEXT_ENTER, self.OnCreateTable)
 
-        btnTable = wx.Button(self.addPanel, wx.ID_ANY, _("&Create table"),
+        btnTable = Button(self.addPanel, wx.ID_ANY, _("&Create table"),
                              size=(125, -1))
         btnTable.Bind(wx.EVT_BUTTON, self.OnCreateTable)
 
-        btnLayer = wx.Button(self.addPanel, wx.ID_ANY, _("&Add layer"),
+        btnLayer = Button(self.addPanel, wx.ID_ANY, _("&Add layer"),
                              size=(125, -1))
         btnLayer.Bind(wx.EVT_BUTTON, self.OnAddLayer)
 
-        btnDefault = wx.Button(self.addPanel, wx.ID_ANY, _("&Set default"),
+        btnDefault = Button(self.addPanel, wx.ID_ANY, _("&Set default"),
                                size=(125, -1))
         btnDefault.Bind(wx.EVT_BUTTON, self.OnSetDefault)
 
@@ -3259,13 +3271,13 @@ class LayerBook(wx.Notebook):
         self.deletePanel = wx.Panel(parent=self, id=wx.ID_ANY)
         self.AddPage(page=self.deletePanel, text=_("Remove layer"))
 
-        label = wx.StaticText(parent=self.deletePanel, id=wx.ID_ANY,
-                              label='%s:' % _("Layer to remove"))
+        label = StaticText(parent=self.deletePanel, id=wx.ID_ANY,
+                           label='%s:' % _("Layer to remove"))
 
         self.deleteLayer = wx.ComboBox(
             parent=self.deletePanel, id=wx.ID_ANY, size=(100, -1),
             style=wx.CB_SIMPLE | wx.CB_READONLY,
-            choices=map(str, self.mapDBInfo.layers.keys()))
+            choices=list(map(str, self.mapDBInfo.layers.keys())))
         self.deleteLayer.SetSelection(0)
         self.deleteLayer.Bind(wx.EVT_COMBOBOX, self.OnChangeLayer)
 
@@ -3275,7 +3287,7 @@ class LayerBook(wx.Notebook):
         except ValueError:
             tableName = ''
 
-        self.deleteTable = wx.CheckBox(
+        self.deleteTable = CheckBox(
             parent=self.deletePanel,
             id=wx.ID_ANY,
             label=_('Drop also linked attribute table (%s)') %
@@ -3285,7 +3297,7 @@ class LayerBook(wx.Notebook):
             self.deleteLayer.Enable(False)
             self.deleteTable.Enable(False)
 
-        btnDelete = wx.Button(
+        btnDelete = Button(
             self.deletePanel, wx.ID_DELETE, _("&Remove layer"),
             size=(125, -1))
         btnDelete.Bind(wx.EVT_BUTTON, self.OnDeleteLayer)
@@ -3335,34 +3347,34 @@ class LayerBook(wx.Notebook):
         # list of layer widgets (label, value)
         #
         self.modifyLayerWidgets = {'layer':
-                                   (wx.StaticText(parent=self.modifyPanel, id=wx.ID_ANY,
-                                                  label='%s:' % _("Layer")),
+                                   (StaticText(parent=self.modifyPanel, id=wx.ID_ANY,
+                                               label='%s:' % _("Layer")),
                                     wx.ComboBox(parent=self.modifyPanel, id=wx.ID_ANY,
                                                 size=(100, -1),
                                                 style=wx.CB_SIMPLE | wx.CB_READONLY,
-                                                choices=map(str,
-                                                            self.mapDBInfo.layers.keys()))),
+                                                choices=list(map(str,
+                                                            self.mapDBInfo.layers.keys())))),
                                    'driver':
-                                       (wx.StaticText(parent=self.modifyPanel, id=wx.ID_ANY,
-                                                      label='%s:' % _("Driver")),
+                                       (StaticText(parent=self.modifyPanel, id=wx.ID_ANY,
+                                                   label='%s:' % _("Driver")),
                                         wx.Choice(parent=self.modifyPanel, id=wx.ID_ANY,
                                                   size=(200, -1),
                                                   choices=self.listOfDrivers)),
                                    'database':
-                                       (wx.StaticText(parent=self.modifyPanel, id=wx.ID_ANY,
-                                                      label='%s:' % _("Database")),
-                                        wx.TextCtrl(parent=self.modifyPanel, id=wx.ID_ANY,
-                                                    value='', size=(350, -1),
-                                                    style=wx.TE_PROCESS_ENTER)),
+                                       (StaticText(parent=self.modifyPanel, id=wx.ID_ANY,
+                                                   label='%s:' % _("Database")),
+                                        TextCtrl(parent=self.modifyPanel, id=wx.ID_ANY,
+                                                 value='', size=(350, -1),
+                                                 style=wx.TE_PROCESS_ENTER)),
                                    'table':
-                                       (wx.StaticText(parent=self.modifyPanel, id=wx.ID_ANY,
-                                                      label='%s:' % _("Table")),
+                                       (StaticText(parent=self.modifyPanel, id=wx.ID_ANY,
+                                                   label='%s:' % _("Table")),
                                         wx.Choice(parent=self.modifyPanel, id=wx.ID_ANY,
                                                   size=(200, -1),
                                                   choices=self.defaultTables)),
                                    'key':
-                                       (wx.StaticText(parent=self.modifyPanel, id=wx.ID_ANY,
-                                                      label='%s:' % _("Key column")),
+                                       (StaticText(parent=self.modifyPanel, id=wx.ID_ANY,
+                                                   label='%s:' % _("Key column")),
                                         wx.Choice(parent=self.modifyPanel, id=wx.ID_ANY,
                                                   size=(200, -1),
                                                   choices=self.defaultColumns))}
@@ -3404,7 +3416,7 @@ class LayerBook(wx.Notebook):
         # self.modifyLayerWidgets['database'][1].Bind(wx.EVT_TEXT_ENTER, self.OnDatabaseChanged)
         # self.modifyLayerWidgets['table'][1].Bind(wx.EVT_CHOICE, self.OnTableChanged)
 
-        btnModify = wx.Button(
+        btnModify = Button(
             self.modifyPanel, wx.ID_DELETE, _("&Modify layer"),
             size=(125, -1))
         btnModify.Bind(wx.EVT_BUTTON, self.OnModifyLayer)
@@ -3780,17 +3792,17 @@ class FieldStatistics(wx.Frame):
 
         self.sp = scrolled.ScrolledPanel(parent=self.panel, id=wx.ID_ANY, size=(
             250, 150), style=wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER, name="Statistics")
-        self.text = wx.TextCtrl(
+        self.text = TextCtrl(
             parent=self.sp,
             id=wx.ID_ANY,
             style=wx.TE_MULTILINE | wx.TE_READONLY)
         self.text.SetBackgroundColour("white")
 
         # buttons
-        self.btnClipboard = wx.Button(parent=self.panel, id=wx.ID_COPY)
-        self.btnClipboard.SetToolTipString(
+        self.btnClipboard = Button(parent=self.panel, id=wx.ID_COPY)
+        self.btnClipboard.SetToolTip(
             _("Copy statistics the clipboard (Ctrl+C)"))
-        self.btnCancel = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
+        self.btnCancel = Button(parent=self.panel, id=wx.ID_CLOSE)
         self.btnCancel.SetDefault()
 
         # bindings
@@ -3913,7 +3925,7 @@ class FieldStatistics(wx.Frame):
             GWarning(parent=self.parent,
                      message=_("Unable to calculte standard deviation."))
         varSum = 0
-        for var in dataVar.splitlines():
+        for var in decode(dataVar).splitlines():
             varSum += float(var)
         stddev = math.sqrt(varSum / count)
 

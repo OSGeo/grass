@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ############################################################################
 #
@@ -58,15 +58,14 @@ import grass.script as grass
 from grass.script.setup import set_gui_path
 set_gui_path()
 
-from core.utils import _
 from core.settings import UserSettings
-from core.globalvar import CheckWxVersion
 from core.giface import StandaloneGrassInterface
 from mapwin.base import MapWindowProperties
 from mapwin.buffered import BufferedMapWindow
 from core.render import Map
 from rlisetup.sampling_frame import RLiSetupMapPanel
 from mapdisp.main import LayerList
+from gui_core.wrap import StaticText
 
 
 class MapdispGrassInterface(StandaloneGrassInterface):
@@ -102,7 +101,7 @@ class TextShower(object):
         self._cf = wx.Frame(parent=parent, title=title)
         self._cp = wx.Panel(parent=self._cf, id=wx.ID_ANY)
         self._cs = wx.BoxSizer(wx.VERTICAL)
-        self._cl = wx.StaticText(
+        self._cl = StaticText(
             parent=self._cp,
             id=wx.ID_ANY,
             label="No text set yet")
@@ -302,9 +301,6 @@ def main():
     test = options['test']
 
     app = wx.App()
-    if not CheckWxVersion([2, 9]):
-        wx.InitAllImageHandlers()
-
     map_ = Map()
 
     if options['raster']:

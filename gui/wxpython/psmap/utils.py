@@ -28,7 +28,6 @@ except ImportError:
 
 import grass.script as grass
 from core.gcmd import RunCommand
-from core.utils import _
 
 
 class Rect2D(wx.Rect2D):
@@ -175,9 +174,9 @@ def convertRGB(rgb):
         return str(rgb.Red()) + ':' + str(rgb.Green()) + ':' + str(rgb.Blue())
     # transform a GRASS named color or an r:g:b string into a wx.Colour tuple
     else:
-        color = (grass.parse_color(rgb)[0] * 255,
-                 grass.parse_color(rgb)[1] * 255,
-                 grass.parse_color(rgb)[2] * 255)
+        color = (int(grass.parse_color(rgb)[0] * 255),
+                 int(grass.parse_color(rgb)[1] * 255),
+                 int(grass.parse_color(rgb)[2] * 255))
         color = wx.Colour(*color)
         if color.IsOk():
             return color
@@ -385,14 +384,13 @@ def GetMapBounds(filename, portrait=True):
     if not portrait:
         orient = 'r'
     try:
-        bb = map(
-            float,
-            grass.read_command(
-                'ps.map',
-                flags='b' +
-                orient,
-                quiet=True,
-                input=filename).strip().split('=')[1].split(','))
+        bb = list(map(float,
+                    grass.read_command(
+                    'ps.map',
+                    flags='b' +
+                    orient,
+                    quiet=True,
+                    input=filename).strip().split('=')[1].split(',')))
     except (grass.ScriptError, IndexError):
         GError(message=_("Unable to run `ps.map -b`"))
         return None

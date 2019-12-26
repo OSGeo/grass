@@ -110,7 +110,6 @@ int main(int argc, char *argv[])
 	_("If accumulation is larger than d8cut, SFD is used instead of MFD."
 	  " Applies only if no accumulation map is given.");
     input.d8cut->required = NO;
-    input.d8cut->answer = "infinity";
     input.d8cut->type = TYPE_DOUBLE;
 
     input.mont_exp = G_define_option();
@@ -170,16 +169,16 @@ int main(int argc, char *argv[])
     /***********************/
 
     /* input maps exist ? */
-    if (!G_find_raster(input.ele->answer, ""))
+    if (!G_find_raster2(input.ele->answer, ""))
 	G_fatal_error(_("Raster map <%s> not found"), input.ele->answer);
 
     if (input.acc->answer) {
-	if (!G_find_raster(input.acc->answer, ""))
+	if (!G_find_raster2(input.acc->answer, ""))
 	    G_fatal_error(_("Raster map <%s> not found"), input.acc->answer);
     }
 
     if (input.depression->answer) {
-	if (!G_find_raster(input.depression->answer, ""))
+	if (!G_find_raster2(input.depression->answer, ""))
 	    G_fatal_error(_("Raster map <%s> not found"), input.depression->answer);
 	have_depressions = 1;
     }
@@ -192,7 +191,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Threshold must be > 0 but is %f"), threshold);
 
     /* d8cut */
-    if (strcmp(input.d8cut->answer, "infinity") == 0) {
+    if (!input.d8cut->answer) {
 	d8cut = DBL_MAX;
     }
     else {
@@ -387,7 +386,7 @@ int main(int argc, char *argv[])
     /* the search heap will not hold more than 5% of all points at any given time ? */
     /* chances are good that the heap will fit into one large segment */
     seg_open(&search_heap, 1, n_points + 1, 1, seg_cols,
-	     num_open_array_segs, sizeof(HEAP_PNT), 1);
+	     num_open_array_segs, sizeof(HEAP_PNT), 0);
 
     /********************/
     /*    processing    */

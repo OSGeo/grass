@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 ############################################################################
@@ -122,15 +122,14 @@ def get_module_image(module, images):
             return image
         if basename == module:
             return image
-    return sorted(candidates,
-                  lambda first, second: cmp(len(first), len(second)))[0]
+    return sorted(candidates, key=len)[0]
 
 
 def generate_page_for_category(short_family, module_family, imgs, year,
                                skip_no_image=False):
     filename = module_family + "_graphical.html"
 
-    output = open(filename + ".tmp", 'wb')
+    output = open(filename + ".tmp", 'w')
 
     output.write(header1_tmpl.substitute(
         title="GRASS GIS %s Reference "
@@ -196,7 +195,7 @@ def main():
     img_extensions = ['png', 'jpg', 'gif']
     img_patterns = ['*.' + extension for extension in img_extensions]
     imgs = []
-    for filename in os.listdir(html_dir):
+    for filename in sorted(os.listdir(html_dir)):
         if file_matches(filename, img_patterns):
             imgs.append(filename)
 
@@ -230,7 +229,7 @@ def main():
 
     for short_family, module_family in families:
         generate_page_for_category(short_family, module_family, imgs,
-                                   year=year, skip_no_image=True)
+                                   year=year, skip_no_image=False)
 
 
 if __name__ == '__main__':

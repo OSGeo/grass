@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ############################################################################
 #
@@ -59,10 +59,6 @@ import webbrowser
 
 from grass.script.utils import basename
 from grass.script import core as grass
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 
 def start_browser(entry):

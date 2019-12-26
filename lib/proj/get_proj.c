@@ -5,9 +5,9 @@
    \brief GProj library - Functions for re-projecting point data
 
    \author Original Author unknown, probably Soil Conservation Service,
-   Eric Miller, Paul Kelly
+   Eric Miller, Paul Kelly, Markus Metz
 
-   (C) 2003-2008 by the GRASS Development Team
+   (C) 2003-2008, 2018 by the GRASS Development Team
  
    This program is free software under the GNU General Public
    License (>=v2). Read the file COPYING that comes with GRASS
@@ -23,15 +23,17 @@
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 
-/* Finder function for datum conversion lookup tables */
-#define FINDERFUNC set_proj_lib
+/* Finder function for datum transformation grids */
+#define FINDERFUNC set_proj_share
 #define PERMANENT "PERMANENT"
 #define MAX_PARGS 100
 
 static void alloc_options(char *);
 
 static char *opt_in[MAX_PARGS];
-static int nopt1;
+static int nopt;
+
+/* TODO: rename pj_ to GPJ_ to avoid symbol clash with PROJ lib */
 
 /**
  * \brief Create a pj_info struct Co-ordinate System definition from a set of
@@ -52,7 +54,7 @@ static int nopt1;
  *          2 if "default" 3-parameter datum shift values from datum.table
  *            were used
  *          3 if an unrecognised datum name was passed on to PROJ.4 (and
- *            initialization was successful
+ *            initialization was successful)
  *          1 otherwise
  **/
 
@@ -64,13 +66,22 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     double a, es, rf;
     int returnval = 1;
     char buffa[300], factbuff[50];
-    char proj_in[50], *datum, *params;
+    int deflen;
+    char proj_in[250], *datum, *params;
+#ifdef HAVE_PROJ_H
+    PJ *pj;
+    PJ_CONTEXT *pjc;
+#else
     projPJ *pj;
+#endif
 
     proj_in[0] = '\0';
     info->zone = 0;
     info->meters = 1.0;
     info->proj[0] = '\0';
+    info->def = NULL;
+    info->pj = NULL;
+    info->srid = NULL;
 
     str = G_find_key_value("meters", in_units_keys);
     if (str != NULL) {
@@ -88,11 +99,20 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     }
     if (strlen(info->proj) <= 0)
 	sprintf(info->proj, "ll");
+    str = G_find_key_value("init", in_proj_keys);
+    if (str != NULL) {
+	info->srid = G_store(str);
+    }
 
-    nopt1 = 0;
+    nopt = 0;
     for (i = 0; i < in_proj_keys->nitems; i++) {
 	/* the name parameter is just for grasses use */
 	if (strcmp(in_proj_keys->key[i], "name") == 0) {
+	    continue;
+
+	    /* init is here ignored */
+	}
+	else if (strcmp(in_proj_keys->key[i], "init") == 0) {
 	    continue;
 
 	    /* zone handled separately at end of loop */
@@ -220,23 +240,60 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     }
     G_free(datum);
 
+#ifdef HAVE_PROJ_H
+#if PROJ_VERSION_MAJOR >= 6
+    /* without type=crs, PROJ6 does not recognize what this is, 
+     * a crs or some kind of coordinate operation, falling through to
+     * PJ_TYPE_OTHER_COORDINATE_OPERATION */
+    alloc_options("type=crs");
+#endif
+    pjc = proj_context_create();
+    if (!(pj = proj_create_argv(pjc, nopt, opt_in))) {
+#else
     /* Set finder function for locating datum conversion tables PK */
     pj_set_finder(FINDERFUNC);
 
-    if (!(pj = pj_init(nopt1, opt_in))) {
+    if (!(pj = pj_init(nopt, opt_in))) {
+#endif
 	strcpy(buffa,
-	       _("Unable to initialise PROJ.4 with the following parameter list:"));
-	for (i = 0; i < nopt1; i++) {
+	       _("Unable to initialise PROJ with the following parameter list:"));
+	for (i = 0; i < nopt; i++) {
 	    char err[50];
 
 	    sprintf(err, " +%s", opt_in[i]);
 	    strcat(buffa, err);
 	}
 	G_warning("%s", buffa);
-	G_warning(_("The error message: %s"), pj_strerrno(pj_errno));
+#ifndef HAVE_PROJ_H
+	G_warning(_("The PROJ error message: %s"), pj_strerrno(pj_errno));
+#endif
 	return -1;
     }
+
+#ifdef HAVE_PROJ_H
+    int perr = proj_errno(pj);
+
+    if (perr)
+	G_fatal_error("PROJ 5 error %d", perr);
+#endif
+    
     info->pj = pj;
+
+    deflen = 0;
+    for (i = 0; i < nopt; i++)
+	deflen += strlen(opt_in[i]) + 2;
+
+    info->def = G_malloc(deflen + 1);
+
+    sprintf(buffa,  "+%s ", opt_in[0]);
+    strcpy(info->def, buffa);
+    G_free(opt_in[0]);
+
+    for (i = 1; i < nopt; i++) {
+	sprintf(buffa,  "+%s ", opt_in[i]);
+	strcat(info->def, buffa);
+	G_free(opt_in[i]);
+    }
 
     return returnval;
 }
@@ -246,23 +303,51 @@ static void alloc_options(char *buffa)
     int nsize;
 
     nsize = strlen(buffa);
-    opt_in[nopt1++] = (char *)G_malloc(nsize + 1);
-    sprintf(opt_in[nopt1 - 1], "%s", buffa);
+    opt_in[nopt++] = (char *)G_malloc(nsize + 1);
+    sprintf(opt_in[nopt - 1], "%s", buffa);
     return;
 }
 
+/**
+ * \brief Create a pj_info struct Co-ordinate System definition from a 
+ *        string with a sequence of key=value pairs
+ * 
+ * This function takes a GRASS- or PROJ style co-ordinate system definition 
+ * and processes it to create a pj_info representation for use in 
+ * re-projecting with pj_do_proj(). In addition to the parameters passed 
+ * to it it may also make reference to the system ellipse.table and 
+ * datum.table files if necessary.
+ * 
+ * \param info Pointer to a pj_info struct (which must already exist) into 
+ *        which the co-ordinate system definition will be placed
+ * \param str input string with projection definition
+ * \param in_units_keys PROJ_UNITS-style key-value pairs
+ * 
+ * \return -1 on error (unable to initialise PROJ.4)
+ *          1 on success
+ **/
+
 int pj_get_string(struct pj_info *info, char *str)
 {
-    char *opt_in[MAX_PARGS];
     char *s;
-    int nopt = 0;
-    int nsize;
+    int i, nsize;
     char zonebuff[50], buffa[300];
+    int deflen;
+#ifdef HAVE_PROJ_H
+    PJ *pj;
+    PJ_CONTEXT *pjc;
+#else
     projPJ *pj;
+#endif
 
     info->zone = 0;
     info->proj[0] = '\0';
     info->meters = 1.0;
+    info->def = NULL;
+    info->srid = NULL;
+    info->pj = NULL;
+    
+    nopt = 0;
 
     if ((str == NULL) || (str[0] == '\0')) {
 	/* Null Pointer or empty string is supplied for parameters, 
@@ -270,9 +355,7 @@ int pj_get_string(struct pj_info *info, char *str)
 	 * parameter and call pj_init PK */
 	sprintf(info->proj, "ll");
 	sprintf(buffa, "proj=latlong ellps=WGS84");
-	nsize = strlen(buffa);
-	opt_in[nopt] = (char *)G_malloc(nsize + 1);
-	sprintf(opt_in[nopt++], "%s", buffa);
+	alloc_options(buffa);
     }
     else {
 	/* Parameters have been provided; parse through them but don't
@@ -299,6 +382,10 @@ int pj_get_string(struct pj_info *info, char *str)
 			sscanf(zonebuff, "%d", &(info->zone));
 		    }
 
+		    if (strncmp(s, "init=", 5) == 0) {
+			info->srid = G_store(s + 6);
+		    }
+
 		    if (strncmp("proj=", s, 5) == 0) {
 			sprintf(info->proj, "%s", s + 5);
 			if (strcmp(info->proj, "ll") == 0)
@@ -309,15 +396,27 @@ int pj_get_string(struct pj_info *info, char *str)
 		    else {
 			sprintf(buffa, "%s", s);
 		    }
-		    nsize = strlen(buffa);
-		    opt_in[nopt] = (char *)G_malloc(nsize + 1);
-		    sprintf(opt_in[nopt++], "%s", buffa);
+		    alloc_options(buffa);
 		}
 	    }
 	    s = 0;
 	}
     }
 
+#ifdef HAVE_PROJ_H
+#if PROJ_VERSION_MAJOR >= 6
+    /* without type=crs, PROJ6 does not recognize what this is, 
+     * a crs or some kind of coordinate operation, falling through to
+     * PJ_TYPE_OTHER_COORDINATE_OPERATION */
+    alloc_options("type=crs");
+#endif
+    pjc = proj_context_create();
+    if (!(pj = proj_create_argv(pjc, nopt, opt_in))) {
+	G_warning(_("Unable to initialize pj cause: %s"),
+	          proj_errno_string(proj_context_errno(pjc)));
+	return -1;
+    }
+#else
     /* Set finder function for locating datum conversion tables PK */
     pj_set_finder(FINDERFUNC);
 
@@ -326,11 +425,32 @@ int pj_get_string(struct pj_info *info, char *str)
 		  pj_strerrno(pj_errno));
 	return -1;
     }
+#endif
     info->pj = pj;
+
+    deflen = 0;
+    for (i = 0; i < nopt; i++)
+	deflen += strlen(opt_in[i]) + 2;
+
+    info->def = G_malloc(deflen + 1);
+
+    sprintf(buffa,  "+%s ", opt_in[0]);
+    strcpy(info->def, buffa);
+    G_free(opt_in[0]);
+
+    for (i = 1; i < nopt; i++) {
+	sprintf(buffa,  "+%s ", opt_in[i]);
+	strcat(info->def, buffa);
+	G_free(opt_in[i]);
+    }
 
     return 1;
 }
 
+#ifndef HAVE_PROJ_H
+/* GPJ_get_equivalent_latlong(): only available with PROJ 4 API
+ * with the new PROJ 5+ API, use pjold directly with PJ_FWD/PJ_INV transformation
+*/
 /**
  * \brief Define a latitude / longitude co-ordinate system with the same
  *        ellipsoid and datum parameters as an existing projected system
@@ -349,24 +469,41 @@ int pj_get_string(struct pj_info *info, char *str)
 
 int GPJ_get_equivalent_latlong(struct pj_info *pjnew, struct pj_info *pjold)
 {
+    char *deftmp;
+
     pjnew->meters = 1.;
     pjnew->zone = 0;
+    pjnew->def = NULL;
     sprintf(pjnew->proj, "ll");
     if ((pjnew->pj = pj_latlong_from_proj(pjold->pj)) == NULL)
 	return -1;
-    else
-	return 1;
+
+    deftmp = pj_get_def(pjnew->pj, 1);
+    pjnew->def = G_store(deftmp);
+    pj_dalloc(deftmp);
+
+    return 1;
 }
+#endif
 
-/* set_proj_lib()
- * 'finder function' for use with PROJ.4 pj_set_finder() function */
+/* set_proj_share()
+ * 'finder function' for use with PROJ.4 pj_set_finder() function
+ * this is used to find grids, usually in /usr/share/proj
+ * GRASS no longer provides copies of proj grids in GRIDDIR
+ * -> do not use gisbase/GRIDDIR */
 
-const char *set_proj_lib(const char *name)
+const char *set_proj_share(const char *name)
 {
-    const char *gisbase = G_gisbase();
     static char *buf = NULL;
-    static size_t buf_len;
-    size_t len = strlen(gisbase) + sizeof(GRIDDIR) + strlen(name) + 1;
+    const char *projshare;
+    static size_t buf_len = 0;
+    size_t len;
+
+    projshare = getenv("GRASS_PROJSHARE");
+    if (!projshare)
+	return NULL;
+
+    len = strlen(projshare) + strlen(name) + 2;
 
     if (buf_len < len) {
 	if (buf != NULL)
@@ -375,7 +512,7 @@ const char *set_proj_lib(const char *name)
 	buf = G_malloc(buf_len);
     }
 
-    sprintf(buf, "%s%s/%s", gisbase, GRIDDIR, name);
+    sprintf(buf, "%s/%s", projshare, name);
 
     return buf;
 }
@@ -387,8 +524,8 @@ const char *set_proj_lib(const char *name)
  * \param iproj 'Input' co-ordinate system
  * \param oproj 'Output' co-ordinate system
  * 
- * \return 1 on success, -1 on error (i.e. if PROJ.4 pj_get_def() function
- *         returned NULL for either co-ordinate system)
+ * \return 1 on success, -1 on error (i.e. if the PROJ-style definition 
+ *         is NULL for either co-ordinate system)
  **/
 
 int pj_print_proj_params(const struct pj_info *iproj, const struct pj_info *oproj)
@@ -396,11 +533,10 @@ int pj_print_proj_params(const struct pj_info *iproj, const struct pj_info *opro
     char *str;
 
     if (iproj) {
-	str = pj_get_def(iproj->pj, 1);
+	str = iproj->def;
 	if (str != NULL) {
 	    fprintf(stderr, "%s: %s\n", _("Input Projection Parameters"),
 		    str);
-	    pj_dalloc(str);
 	    fprintf(stderr, "%s: %.16g\n", _("Input Unit Factor"),
 		    iproj->meters);
 	}
@@ -409,11 +545,10 @@ int pj_print_proj_params(const struct pj_info *iproj, const struct pj_info *opro
     }
 
     if (oproj) {
-	str = pj_get_def(oproj->pj, 1);
+	str = oproj->def;
 	if (str != NULL) {
 	    fprintf(stderr, "%s: %s\n", _("Output Projection Parameters"),
 		    str);
-	    pj_dalloc(str);
 	    fprintf(stderr, "%s: %.16g\n", _("Output Unit Factor"),
 		    oproj->meters);
 	}

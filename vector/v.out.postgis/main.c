@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("export"));
+    G_add_keyword(_("output"));
     G_add_keyword(_("PostGIS"));
     G_add_keyword(_("simple features"));
     G_add_keyword(_("topology"));
@@ -138,6 +139,9 @@ int main(int argc, char *argv[])
     /* copy attributes (must be done before checking output type
        otherwise attributes are not copied) */
     field = Vect_get_field_number(&In, params.layer->answer);
+
+    /* BUG: this works only if the input vector uses for its attributes
+     * the same PG connection to be used for the output */
     if (!flags.table->answer)
         Vect_copy_map_dblinks(&In, &Out, TRUE);
 

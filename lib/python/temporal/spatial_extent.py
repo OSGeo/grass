@@ -34,8 +34,6 @@ for details.
 :authors: Soeren Gebbert
 """
 from __future__ import print_function
-# i18N
-import gettext
 from .base import SQLDatabaseInterface
 from .core import init
 from datetime import datetime

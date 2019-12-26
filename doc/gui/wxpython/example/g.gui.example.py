@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 ############################################################################
 #
 # MODULE:    g.gui.iclass
@@ -33,6 +33,9 @@ import os
 import sys
 import wx
 
+
+# i18n is taken care of in the grass library code.
+# So we need to import it before any of the GUI code.
 import grass.script.core as gcore
 
 if __name__ == '__main__':
@@ -42,7 +45,7 @@ if __name__ == '__main__':
 
 from core.globalvar import CheckWxVersion
 from core.giface import StandaloneGrassInterface
-from core.utils import _, GuiModuleMain
+from core.utils import GuiModuleMain
 from core.settings import UserSettings
 from example.frame import ExampleMapFrame
 

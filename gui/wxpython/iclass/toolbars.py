@@ -18,13 +18,15 @@ for details.
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
+from __future__ import print_function
+
 import wx
 
-from core.utils import _
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
 from iclass.dialogs import IClassMapDialog, ContrastColor
 from gui_core.forms import GUI
+from gui_core.wrap import StaticText
 
 import grass.script as grass
 
@@ -71,14 +73,13 @@ class IClassMapToolbar(BaseToolbar):
         self._default = self.pan
 
         # add tool to toggle active map window
-        self.togglemapid = wx.NewId()
-        self.togglemap = wx.Choice(parent=self, id=self.togglemapid,
+        self.togglemap = wx.Choice(parent=self, id=wx.ID_ANY,
                                    choices=[_('Training'), _('Preview')])
 
         self.InsertControl(9, self.togglemap)
 
         self.SetToolShortHelp(
-            self.togglemapid, '%s %s %s' %
+            self.togglemap.GetId(), '%s %s %s' %
             (_('Set map canvas for '),
              BaseIcons["zoomBack"].GetLabel(),
              _('/ Zoom to map')))
@@ -152,7 +153,7 @@ class IClassToolbar(BaseToolbar):
         self.choice.Bind(wx.EVT_CHOICE, self.OnSelectCategory)
 
         # stupid workaround to insert small space between controls
-        self.InsertControl(4, wx.StaticText(self, id=wx.ID_ANY, label=' '))
+        self.InsertControl(4, StaticText(self, id=wx.ID_ANY, label=' '))
 
         self.combo = wx.ComboBox(self, id=wx.ID_ANY, size=(130, -1),
                                  style=wx.TE_PROCESS_ENTER)
@@ -193,7 +194,7 @@ class IClassToolbar(BaseToolbar):
                                      ))
 
     def OnMotion(self, event):
-        print self.choice.GetStringSelection()
+        print(self.choice.GetStringSelection())
 
     def OnSelectCategory(self, event):
         idx = self.choice.GetSelection()

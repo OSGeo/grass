@@ -147,7 +147,10 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("surface"));
     G_add_keyword(_("interpolation"));
+    G_add_keyword(_("splines"));
+    G_add_keyword(_("RST"));
     G_add_keyword(_("3D"));
+    G_add_keyword(_("no-data filling"));
     module->label = _("Performs surface interpolation from vector points map by splines.");
     module->description =
 	_("Spatial approximation and topographic analysis from given "
@@ -279,7 +282,8 @@ int main(int argc, char *argv[])
     parm.rsm->key = "smooth";
     parm.rsm->type = TYPE_DOUBLE;
     parm.rsm->required = NO;
-    parm.rsm->description = _("Smoothing parameter");
+    parm.rsm->label = _("Smoothing parameter");
+    parm.rsm->description = _("Smoothing is by default 0.5 unless smooth_column is specified");
     parm.rsm->guisection = _("Parameters");
 
     parm.scol = G_define_option();
@@ -692,8 +696,21 @@ int main(int argc, char *argv[])
     if (mcurv != NULL)
 	ddisk += disk;
     ddisk += sddisk;
-    G_verbose_message(_("Processing all selected output files "
-			"will require %d bytes of disk space for temp files"), ddisk);
+
+    G_message(_("Processing all selected output files will require"));
+    if (ddisk > 1024) {
+	if (ddisk > 1024 * 1024) {
+	    if (ddisk > 1024 * 1024 * 1024) {
+		G_message(_("%.2f GB of disk space for temp files."), ddisk / (1024. * 1024. * 1024.));
+	    }
+	    else
+		G_message(_("%.2f MB of disk space for temp files."), ddisk / (1024. * 1024.));
+	}
+	else
+	    G_message(_("%.2f KB of disk space for temp files."), ddisk / 1024.);
+    }
+    else
+	G_message(_("%d bytes of disk space for temp files."), (int)ddisk);
 
     deltx = xmax - xmin;
     delty = ymax - ymin;

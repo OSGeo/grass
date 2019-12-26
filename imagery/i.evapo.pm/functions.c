@@ -17,7 +17,7 @@ extern DCELL f_d(DCELL);
 #define Tko 293.16		/* [K]                   reference temperature at sea level */
 #define eta 0.0065		/* [K/m]                 constant lapse rate */
 #define Ao 0			/* [m]                   altitude at sea level */
-#define g 9.81			/* [m/s]                 gravitational accelleration */
+#define g 9.81			/* [m/s]                 gravitational acceleration */
 #define R 287			/* [J/kg*K]              specific gas constant */
 #define Zw 2			/* [m]                   height of  wind measurements */
 #define Zh 2			/* [m]                   height of  humidity measurements */

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 ############################################################################
 #
@@ -7,11 +7,17 @@
 #
 # PURPOSE:      Converts a space time raster dataset into a space time vector dataset.
 #
-# COPYRIGHT:    (C) 2015 by the GRASS Development Team
+# COPYRIGHT:    (C) 2015-2017 by the GRASS Development Team
 #
-#               This program is free software under the GNU General Public
-#               License (version 2). Read the file COPYING that comes with GRASS
-#               for details.
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
 #
 #############################################################################
 
@@ -204,7 +210,7 @@ def main(options, flags):
             suffix = tgis.create_time_suffix(map)
             map_name = "{ba}_{su}".format(ba=base, su=suffix)
         else:
-            map_name = tgis.create_numeric_suffic(base, count, time_suffix)
+            map_name = tgis.create_numeric_suffix(base, count, time_suffix)
         new_map = tgis.open_new_map_dataset(map_name, None, type="vector",
                                             temporal_extent=map.get_temporal_extent(),
                                             overwrite=overwrite, dbif=dbif)

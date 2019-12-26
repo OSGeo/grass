@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 ############################################################################
 #
@@ -60,16 +60,12 @@
 #% description: Value to write for "grown" cells
 #%end
 
-import sys
 import os
 import atexit
 import math
+
 import grass.script as grass
 from grass.exceptions import CalledModuleError
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 
 # what to do in case of user break:
@@ -84,7 +80,6 @@ def main():
     global temp_dist, temp_val
 
     input = options['input']
-    output = options['output']
     radius = float(options['radius'])
     metric = options['metric']
     old = options['old']
@@ -94,7 +89,7 @@ def main():
     tmp = str(os.getpid())
 
     temp_dist = "r.grow.tmp.%s.dist" % tmp
-    
+
     shrink = False
     if radius < 0.0:
         shrink = True
@@ -122,7 +117,17 @@ def main():
     if not grass.find_file(input)['file']:
         grass.fatal(_("Raster map <%s> not found") % input)
 
-    if shrink == False:
+    # Workaround for r.mapcalc bug #3475
+    # Mapcalc will fail if output is a fully qualified map name
+    out_name = options['output'].split('@')
+    if len(out_name) == 2:
+        if out_name[1] != grass.gisenv()['MAPSET']:
+            grass.fatal(_("Output can be written only to the current mapset"))
+        output = out_name[0]
+    else:
+        output = out_name[0]
+
+    if shrink is False:
         try:
             grass.run_command('r.grow.distance', input=input, metric=metric,
                               distance=temp_dist, value=temp_val)
@@ -149,6 +154,7 @@ def main():
 
     # write cmd history:
     grass.raster_history(output)
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

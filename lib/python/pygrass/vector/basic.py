@@ -381,7 +381,7 @@ class Cats(object):
     to the C line_cats struct.
 
     >>> cats = Cats()
-    >>> for cat in xrange(100, 110): cats.set(cat, layer=cat-50)
+    >>> for cat in range(100, 110): cats.set(cat, layer=cat-50)
     >>> cats.n_cats
     10
     >>> cats.cat

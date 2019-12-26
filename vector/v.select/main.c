@@ -6,8 +6,9 @@
  *               Glynn Clements <glynn gclements.plus.com>
  *               Markus Neteler <neteler itc.it>
  *               Martin Landa <landa.martin gmail.com> (GEOS support)
+ *               Huidae Cho <grass4u gmail.com> (reverse flag fix)
  * PURPOSE:      Select features from one map by features in another map.
- * COPYRIGHT:    (C) 2003-2017 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2017, 2019 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -41,6 +42,7 @@ int main(int argc, char *argv[])
     struct GFlag flag;
     struct Map_info In[2], Out;
     struct field_info *IFi;
+    int nlines, nareas;
 
     G_gisinit(argv[0]);
 
@@ -112,25 +114,15 @@ int main(int argc, char *argv[])
     }
 
     /* Alloc space for input lines array */
-    ALines = (int *)G_calloc(Vect_get_num_lines(&(In[0])) + 1, sizeof(int));
-    AAreas = NULL;
-    if (flag.reverse->answer)
-	AAreas = (int *)G_calloc(Vect_get_num_areas(&(In[0])) + 1, sizeof(int));
+    nlines = Vect_get_num_lines(&(In[0]));
+    nareas = Vect_get_num_areas(&(In[0]));
+
+    ALines = (int *)G_calloc(nlines + 1, sizeof(int));
+    AAreas = (int *)G_calloc(nareas + 1, sizeof(int));
 
     /* Read field info */
     IFi = Vect_get_field(&(In[0]), ifield[0]);
 
-    /* Open output */
-    if (Vect_open_new(&Out, parm.output->answer, Vect_is_3d(&(In[0]))) < 0)
-	G_fatal_error(_("Unable to create vector map <%s>"),
-			parm.output->answer);
-
-    Vect_set_map_name(&Out, _("Output from v.select"));
-    Vect_set_person(&Out, G_whoami());
-    Vect_copy_head_data(&(In[0]), &Out);
-    Vect_hist_copy(&(In[0]), &Out);
-    Vect_hist_command(&Out);
-    
     /* Select features */
 #ifdef HAVE_GEOS
     nfound = select_lines(&(In[0]), itype[0], ifield[0],
@@ -150,46 +142,71 @@ int main(int argc, char *argv[])
     finishGEOS();
 #endif
 
-    if (nfound != 0) {
-
-    native = Vect_maptype(&Out) == GV_FORMAT_NATIVE;
-
-    nfields = Vect_cidx_get_num_fields(&(In[0]));
-    cats = (int **)G_malloc(nfields * sizeof(int *));
-    ncats = (int *)G_malloc(nfields * sizeof(int));
-    fields = (int *)G_malloc(nfields * sizeof(int));
-
-    /* Write lines */
-    if (!flag.table->answer && !native) {
-	/* Copy attributes for OGR output */
-	Vect_copy_map_dblinks(&(In[0]), &Out, TRUE);
-    }
-    
-    write_lines(&(In[0]), IFi, ALines, AAreas,
-		&Out, flag.table->answer ? 1 : 0, flag.reverse->answer ? 1 : 0,
-		nfields, fields, ncats, cats);
-
-    /* Copy tables */
-    if (!flag.table->answer && native) {
-	copy_tabs(&(In[0]), &Out,
-		  nfields, fields, ncats, cats);
+    if (!flag.reverse->answer) {
+	G_free(AAreas);
+	AAreas = NULL;
     }
 
-    /* print info about skipped features & close input maps */
-    for (iopt = 0; iopt < 2; iopt++) {
-        if (nskipped[iopt] > 0) {
-            G_warning(_("%d features from <%s> without category skipped"),
-                      nskipped[iopt], Vect_get_full_name(&(In[iopt])));
-        }
-        Vect_close(&(In[iopt]));
+
+    if ((!flag.reverse->answer && nfound > 0) ||
+	(flag.reverse->answer && nlines + nareas - nfound > 0)) {
+        /* Open output */
+        if (Vect_open_new(&Out, parm.output->answer, Vect_is_3d(&(In[0]))) < 0)
+	    G_fatal_error(_("Unable to create vector map <%s>"),
+	    		    parm.output->answer);
+
+        Vect_set_map_name(&Out, _("Output from v.select"));
+        Vect_set_person(&Out, G_whoami());
+        Vect_copy_head_data(&(In[0]), &Out);
+        Vect_hist_copy(&(In[0]), &Out);
+        Vect_hist_command(&Out);
+
+	native = Vect_maptype(&Out) == GV_FORMAT_NATIVE;
+
+	nfields = Vect_cidx_get_num_fields(&(In[0]));
+	cats = (int **)G_malloc(nfields * sizeof(int *));
+	ncats = (int *)G_malloc(nfields * sizeof(int));
+	fields = (int *)G_malloc(nfields * sizeof(int));
+
+	/* Write lines */
+	if (!flag.table->answer && !native) {
+	    /* Copy attributes for OGR output */
+	    Vect_copy_map_dblinks(&(In[0]), &Out, TRUE);
+	}
+	
+	write_lines(&(In[0]), IFi, ALines, AAreas,
+		    &Out, flag.table->answer ? 1 : 0, flag.reverse->answer ? 1 : 0,
+		    nfields, fields, ncats, cats);
+
+	/* Copy tables */
+	if (!flag.table->answer && native) {
+	    copy_tabs(&(In[0]), &Out,
+		      nfields, fields, ncats, cats);
+	}
+
+	/* print info about skipped features & close input maps */
+	for (iopt = 0; iopt < 2; iopt++) {
+	    if (nskipped[iopt] > 0) {
+		G_warning(_("%d features from <%s> without category skipped"),
+			  nskipped[iopt], Vect_get_full_name(&(In[iopt])));
+	    }
+	    Vect_set_release_support(&In[iopt]);
+	    Vect_close(&(In[iopt]));
+	}
+
+	Vect_build(&Out);
+	nfound = Vect_get_num_lines(&Out);
+	Vect_set_release_support(&Out);
+	Vect_close(&Out);
+
+	G_done_msg(_("%d features written to output."), nfound);
     }
-
-    Vect_build(&Out);
-    Vect_close(&Out);
-
-    G_done_msg(_("%d features written to output."), Vect_get_num_lines(&Out));
-    } else {
-    G_done_msg(_("No features found !"));
+    else {
+	Vect_set_release_support(&In[0]);
+	Vect_set_release_support(&In[1]);
+	Vect_close(&In[0]);
+	Vect_close(&In[1]);
+	G_done_msg(_("No features found !"));
     }
 
     exit(EXIT_SUCCESS);

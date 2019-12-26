@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 """
 import os
 import signal
+import six
 from math import ceil
 from itertools import cycle
 import numpy as np
@@ -40,14 +41,14 @@ except ImportError as e:
                         '(python-matplotlib) package to be installed. {0}').format(e))
 
 import grass.script as grass
-from core.utils import _
 
 import grass.temporal as tgis
 from core.gcmd import GError, GException, RunCommand
 from gui_core import gselect
+from gui_core.wrap import Button, StaticText
 from core import globalvar
 
-ALPHA = 0.5
+ALPHA = 1
 COLORS = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
 
 
@@ -132,9 +133,9 @@ class TimelineFrame(wx.Frame):
         self.datasetSelect = gselect.Select(parent=self.panel, id=wx.ID_ANY,
                                             size=globalvar.DIALOG_GSELECT_SIZE,
                                             type='stds', multiple=True)
-        self.drawButton = wx.Button(self.panel, id=wx.ID_ANY, label=_("Draw"))
+        self.drawButton = Button(self.panel, id=wx.ID_ANY, label=_("Draw"))
         self.drawButton.Bind(wx.EVT_BUTTON, self.OnRedraw)
-        self.helpButton = wx.Button(self.panel, id=wx.ID_ANY, label=_("Help"))
+        self.helpButton = Button(self.panel, id=wx.ID_ANY, label=_("Help"))
         self.helpButton.Bind(wx.EVT_BUTTON, self.OnHelp)
         self.view3dCheck = wx.CheckBox(
             self.panel, id=wx.ID_ANY,
@@ -145,8 +146,8 @@ class TimelineFrame(wx.Frame):
                                         "(matplotlib >= 1.0.0)"))
             self.view3dCheck.Disable()
 
-        gridSizer.Add(wx.StaticText(self.panel, id=wx.ID_ANY,
-                                    label=_("Select space time dataset(s):")),
+        gridSizer.Add(StaticText(self.panel, id=wx.ID_ANY,
+                                 label=_("Select space time dataset(s):")),
                       pos=(0, 0), flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(self.datasetSelect, pos=(1, 0), flag=wx.EXPAND)
         gridSizer.Add(self.drawButton, pos=(1, 1), flag=wx.EXPAND)
@@ -284,7 +285,7 @@ class TimelineFrame(wx.Frame):
             startY = self.timeData[name]['south']
             dY = self.timeData[name]['north'] - np.array(startY)
 
-            color = colors.next()
+            color = next(colors)
             plots.append(self.axes3d.bar3d(startX, startY, startZ, dX, dY, dZ,
                                            color=color, alpha=ALPHA))
 
@@ -332,9 +333,9 @@ class TimelineFrame(wx.Frame):
             # TODO: mixed
             if mapType == 'interval':
                 end = convert(self.timeData[name]['end_datetime'])
-                lookUpData = zip(start, end)
+                lookUpData = list(zip(start, end))
                 duration = end - np.array(start)
-                barData = zip(start, duration)
+                barData = list(zip(start, duration))
                 lookUp.AddDataset(type_='bar', yrange=(i - 0.1, i + 0.1),
                                   xranges=lookUpData, datasetName=name)
 
@@ -346,7 +347,7 @@ class TimelineFrame(wx.Frame):
                     yrange=i,
                     xranges=pointData,
                     datasetName=name)
-            color = colors.next()
+            color = next(colors)
             if mapType == 'interval':
                 plots.append(
                     self.axes2d.broken_barh(
@@ -355,6 +356,7 @@ class TimelineFrame(wx.Frame):
                             i - 0.1,
                             0.2),
                         facecolors=color,
+                        edgecolor='black',
                         alpha=ALPHA))
             else:
                 plots.append(
@@ -380,6 +382,7 @@ class TimelineFrame(wx.Frame):
         xlim = self.axes2d.get_xlim()
         padding = ceil((xlim[1] - xlim[0]) / 20.)
         self.axes2d.set_xlim(xlim[0] - padding, xlim[1] + padding)
+        self.axes2d.set_axisbelow(True)
 
         self.canvas.draw()
         DataCursor(plots, lookUp, InfoFormat)
@@ -442,8 +445,8 @@ class TimelineFrame(wx.Frame):
         tDict = tgis.tlist_grouped('stds', group_type=True, dbif=self.dbif)
         # nested list with '(map, mapset, etype)' items
         allDatasets = [[[(map, mapset, etype) for map in maps]
-                        for etype, maps in etypesDict.iteritems()]
-                       for mapset, etypesDict in tDict.iteritems()]
+                        for etype, maps in six.iteritems(etypesDict)]
+                       for mapset, etypesDict in six.iteritems(tDict)]
         # flatten this list
         if allDatasets:
             allDatasets = reduce(

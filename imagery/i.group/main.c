@@ -35,14 +35,17 @@ static int remove_group_files(char group[INAME_LEN], char **rasters, int k);
 static int remove_subgroup_files(char group[INAME_LEN],
 				 char subgroup[INAME_LEN], char **rasters,
 				 int k);
-static void print_subgroups(char *group, int simple);
+static void print_subgroups(const char *group, const char *mapset, int simple);
 
 int main(int argc, char *argv[])
 {
     char group[GNAME_MAX], mapset[GMAPSET_MAX];
+    char xgroup[GNAME_MAX];
+    char **rasters = NULL;
     int m, k = 0;
+    int can_edit;
 
-    struct Option *grp, *rast, *sgrp;
+    struct Option *grp, *rast, *rastf, *sgrp;
     struct Flag *r, *l, *s, *simple_flag;
     struct GModule *module;
 
@@ -66,6 +69,11 @@ int main(int argc, char *argv[])
     rast->required = NO;	/* -l flag */
     rast->description = _("Name of raster map(s) to include in group");
     rast->guisection = _("Maps");
+
+    rastf = G_define_standard_option(G_OPT_F_INPUT);
+    rastf->key = "file";
+    rastf->description = _("Input file with one raster map name per line");
+    rastf->required = NO;
 
     r = G_define_flag();
     r->key = 'r';
@@ -97,30 +105,56 @@ int main(int argc, char *argv[])
     if ((simple_flag->answer && !s->answer) && !l->answer)
 	l->answer = TRUE;
 
-    /* Determine number of files to include */
+    /* Determine number of raster maps to include */
     if (rast->answers) {
 	for (m = 0; rast->answers[m]; m++) {
 	    k = m;
 	}
 	k++;
+	rasters = rast->answers;
+    }
+    /* process the input maps from the file */
+    else if (rastf->answer) {
+	FILE *in;
+    
+	m = 10;
+	rasters = G_malloc(m * sizeof(char *));
+	in = fopen(rastf->answer, "r");
+	if (!in)
+	    G_fatal_error(_("Unable to open input file <%s>"), rastf->answer);
+    
+	for (;;) {
+	    char buf[GNAME_MAX];
+	    char *name;
+
+	    if (!G_getl2(buf, sizeof(buf), in))
+		break;
+
+	    name = G_chop(buf);
+
+	    /* Ignore empty lines */
+	    if (!*name)
+		continue;
+
+	    if (m <= k) {
+		m += 10;
+		rasters = G_realloc(rasters, m * sizeof(char *));
+	    }
+	    rasters[k] = G_store(name);
+	    k++;
+	}
+	fclose(in);
     }
 
     if (k < 1 && !(l->answer || s->answer))	/* remove if input is requirement */
 	G_fatal_error(_("No input raster map(s) specified"));
 
-    /* check if current mapset:  (imagery libs are very lacking in this dept)
-       - abort if not,
-       - remove @mapset part if it is
+    /* Get groups mapset. Remove @mapset if group contains
      */
-    if (G_name_is_fully_qualified(grp->answer, group, mapset)) {
-	if (strcmp(mapset, G_mapset()))
-	    G_fatal_error(_("Group must exist in the current mapset"));
-    }
-    else {
-	strcpy(group, grp->answer);	/* FIXME for buffer overflow (have the parser check that?) */
-    }
-
-    if (r->answer) {
+    strcpy(xgroup, grp->answer);
+    can_edit = G_unqualified_name(xgroup, G_mapset(), group, mapset) != -1;
+    
+    if (r->answer && can_edit) {
 	/* Remove files from Group */
 
 	if (I_find_group(group) == 0) {
@@ -131,28 +165,25 @@ int main(int argc, char *argv[])
 	if (sgrp->answer) {
 	    G_verbose_message(_("Removing raster maps from subgroup <%s>..."),
 			      sgrp->answer);
-	    remove_subgroup_files(group, sgrp->answer, rast->answers, k);
+	    remove_subgroup_files(group, sgrp->answer, rasters, k);
 	}
 	else {
 	    G_verbose_message(_("Removing raster maps from group <%s>..."),
 			      group);
-	    remove_group_files(group, rast->answers, k);
+	    remove_group_files(group, rasters, k);
 	}
     }
     else {
 	if (l->answer || s->answer) {
 	    /* List raster maps in group */
+        if (!I_find_group2(group, mapset))
+            G_fatal_error(_("Group <%s> not found"), group);
 
 	    struct Ref ref;
 
-	    if (I_find_group(group) == 0) {
-		G_fatal_error(_
-			      ("Specified group does not exist in current mapset"));
-	    }
-
 	    if (sgrp->answer) {
 		/* list subgroup files */
-		I_get_subgroup_ref(group, sgrp->answer, &ref);
+		I_get_subgroup_ref2(group, sgrp->answer, mapset, &ref);
 		if (simple_flag->answer) {
 		    G_message(_
 			      ("Subgroup <%s> of group <%s> references the following raster maps:"),
@@ -163,11 +194,11 @@ int main(int argc, char *argv[])
 		    I_list_subgroup(group, sgrp->answer, &ref, stdout);
 	    }
 	    else if (s->answer) {
-		print_subgroups(group, simple_flag->answer);
+		print_subgroups(group, mapset, simple_flag->answer);
 	    }
 	    else {
 		/* list group files */
-		I_get_group_ref(group, &ref);
+		I_get_group_ref2(group, mapset, &ref);
 		if (simple_flag->answer) {
 		    G_message(_
 			      ("Group <%s> references the following raster maps:"),
@@ -179,6 +210,10 @@ int main(int argc, char *argv[])
 	    }
 	}
 	else {
+        if (!can_edit) {
+            /* GTC Group refers to an image group */
+            G_fatal_error(_("Only groups from the current mapset can be edited"));
+        }
 	    /* Create or update Group REF */
 	    if (I_find_group(group) == 0)
 		G_verbose_message(_
@@ -188,16 +223,16 @@ int main(int argc, char *argv[])
 	    if (sgrp->answer) {
 		G_verbose_message(_("Adding raster maps to group <%s>..."),
 				  group);
-		add_or_update_group(group, rast->answers, k);
+		add_or_update_group(group, rasters, k);
 
 		G_verbose_message(_("Adding raster maps to subgroup <%s>..."),
 				  sgrp->answer);
-		add_or_update_subgroup(group, sgrp->answer, rast->answers, k);
+		add_or_update_subgroup(group, sgrp->answer, rasters, k);
 	    }
 	    else {
 		G_verbose_message(_("Adding raster maps to group <%s>..."),
 				  group);
-		add_or_update_group(group, rast->answers, k);
+		add_or_update_group(group, rasters, k);
 	    }
 	}
     }
@@ -406,14 +441,14 @@ static int remove_subgroup_files(char group[INAME_LEN],
     return 0;
 }
 
-static void print_subgroups(char *group, int simple)
+static void print_subgroups(const char *group, const char *mapset, int simple)
 {
     int subgs_num, i;
     int len, tot_len;
     int max;
     char **subgs;
 
-    subgs = I_list_subgroups(group, &subgs_num);
+    subgs = I_list_subgroups2(group, mapset, &subgs_num);
     if (simple)
 	for (i = 0; i < subgs_num; i++)
 	    fprintf(stdout, "%s\n", subgs[i]);

@@ -57,6 +57,7 @@ long calc_solar_position(double longitude, double latitude, double timezone,
     struct Key_Value *in_proj_info, *in_unit_info;	/* projection information of input map */
     struct pj_info iproj;	/* input map proj parameters  */
     struct pj_info oproj;	/* output map proj parameters  */
+    struct pj_info tproj;	/* transformation parameters  */
     extern struct Cell_head window;
     int inside;
 
@@ -112,20 +113,20 @@ long calc_solar_position(double longitude, double latitude, double timezone,
 		iproj.meters, iproj.zone, iproj.proj);
 	G_debug(1, "IN coord: longitude: %f, latitude: %f", longitude,
 		latitude);
-	/* see src/include/projects.h, struct PJconsts */
-	
-	/* set output projection to lat/long for solpos */
-	oproj.zone = 0;
-	oproj.meters = 1.;
-	sprintf(oproj.proj, "ll");
-	if ((oproj.pj = pj_latlong_from_proj(iproj.pj)) == NULL)
-	    G_fatal_error("Unable to set up lat/long projection parameters");
+
+	oproj.pj = NULL;
+	tproj.def = NULL;
+
+	if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
+	    G_fatal_error(_("Unable to initialize coordinate transformation"));
 
 	/* XX do the transform 
 	 *               outx        outy    in_info  out_info */
-	if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0) {
-	    G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
-	}
+
+	if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
+			  &longitude, &latitude, NULL) < 0)
+	    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+			   "GPJ_transform()");
 
 	G_debug(1, "Transformation to lat/long:");
 	G_debug(1, "OUT: longitude: %f, latitude: %f", longitude,

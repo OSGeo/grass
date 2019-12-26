@@ -77,6 +77,7 @@ class Info(object):
         self.c_mapinfo = ctypes.pointer(libvect.Map_info())
         self._topo_level = 1
         self._class_name = 'Vector'
+        self._mode = 'r'
         self.overwrite = False
         self.date_fmt = '%a %b  %d %H:%M:%S %Y'
 
@@ -86,6 +87,17 @@ class Info(object):
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.close()
+
+    def _get_mode(self):
+        return self._mode
+
+    def _set_mode(self, mode):
+        if mode.upper() not in 'RW':
+            str_err = _("Mode type: {0} not supported ('r', 'w')")
+            raise ValueError(str_err.format(mode))
+        self._mode = mode
+
+    mode = property(fget=_get_mode, fset=_set_mode)
 
     def _get_name(self):
         """Private method to obtain the Vector name"""
@@ -115,51 +127,51 @@ class Info(object):
 
     def _get_organization(self):
         """Private method to obtain the Vector organization"""
-        return libvect.Vect_get_organization(self.c_mapinfo)
+        return utils.decode(libvect.Vect_get_organization(self.c_mapinfo))
 
     def _set_organization(self, org):
         """Private method to change the Vector organization"""
-        libvect.Vect_set_organization(self.c_mapinfo, ctypes.c_char_p(org))
+        libvect.Vect_set_organization(self.c_mapinfo, org)
 
     organization = property(fget=_get_organization, fset=_set_organization,
                             doc="Set or obtain the Vector organization")
 
     def _get_date(self):
         """Private method to obtain the Vector date"""
-        return libvect.Vect_get_date(self.c_mapinfo)
+        return utils.decode(libvect.Vect_get_date(self.c_mapinfo))
 
     def _set_date(self, date):
         """Private method to change the Vector date"""
-        return libvect.Vect_set_date(self.c_mapinfo, ctypes.c_char_p(date))
+        return libvect.Vect_set_date(self.c_mapinfo, date)
 
     date = property(fget=_get_date, fset=_set_date,
                     doc="Set or obtain the Vector date")
 
     def _get_person(self):
         """Private method to obtain the Vector person"""
-        return libvect.Vect_get_person(self.c_mapinfo)
+        return utils.decode(libvect.Vect_get_person(self.c_mapinfo))
 
     def _set_person(self, person):
         """Private method to change the Vector person"""
-        libvect.Vect_set_person(self.c_mapinfo, ctypes.c_char_p(person))
+        libvect.Vect_set_person(self.c_mapinfo, person)
 
     person = property(fget=_get_person, fset=_set_person,
                       doc="Set or obtain the Vector author")
 
     def _get_title(self):
         """Private method to obtain the Vector title"""
-        return libvect.Vect_get_map_name(self.c_mapinfo)
+        return utils.decode(libvect.Vect_get_map_name(self.c_mapinfo))
 
     def _set_title(self, title):
         """Private method to change the Vector title"""
-        libvect.Vect_set_map_name(self.c_mapinfo, ctypes.c_char_p(title))
+        libvect.Vect_set_map_name(self.c_mapinfo, title)
 
     title = property(fget=_get_title, fset=_set_title,
                      doc="Set or obtain the Vector title")
 
     def _get_map_date(self):
         """Private method to obtain the Vector map date"""
-        date_str = libvect.Vect_get_map_date(self.c_mapinfo)
+        date_str = utils.decode(libvect.Vect_get_map_date(self.c_mapinfo))
         try:
             return datetime.datetime.strptime(date_str, self.date_fmt)
         except:
@@ -168,7 +180,7 @@ class Info(object):
     def _set_map_date(self, datetimeobj):
         """Private method to change the Vector map date"""
         date_str = datetimeobj.strftime(self.date_fmt)
-        libvect.Vect_set_map_date(self.c_mapinfo, ctypes.c_char_p(date_str))
+        libvect.Vect_set_map_date(self.c_mapinfo, date_str)
 
     map_date = property(fget=_get_map_date, fset=_set_map_date,
                         doc="Set or obtain the Vector map date")
@@ -186,11 +198,11 @@ class Info(object):
 
     def _get_comment(self):
         """Private method to obtain the Vector comment"""
-        return libvect.Vect_get_comment(self.c_mapinfo)
+        return utils.decode(libvect.Vect_get_comment(self.c_mapinfo))
 
     def _set_comment(self, comm):
         """Private method to set the Vector comment"""
-        return libvect.Vect_set_comment(self.c_mapinfo, ctypes.c_char_p(comm))
+        return libvect.Vect_set_comment(self.c_mapinfo, comm)
 
     comment = property(fget=_get_comment, fset=_set_comment,
                        doc="Set or obtain the Vector comment")
@@ -322,26 +334,27 @@ class Info(object):
         See more examples in the documentation of the ``read`` and ``write``
         methods
         """
+        self.mode = mode if mode else self.mode
         with_z = libvect.WITH_Z if with_z else libvect.WITHOUT_Z
         # check if map exists or not
-        if not self.exist() and mode != 'w':
+        if not self.exist() and self.mode != 'w':
             raise OpenError("Map <%s> not found." % self._name)
         if libvect.Vect_set_open_level(self._topo_level) != 0:
             raise OpenError("Invalid access level.")
         # update the overwrite attribute
         self.overwrite = overwrite if overwrite is not None else self.overwrite
         # check if the mode is valid
-        if mode not in ('r', 'rw', 'w'):
+        if self.mode not in ('r', 'rw', 'w'):
             raise ValueError("Mode not supported. Use one of: 'r', 'rw', 'w'.")
 
         # check if the map exist
-        if self.exist() and mode in ('r', 'rw'):
+        if self.exist() and self.mode in ('r', 'rw'):
             # open in READ mode
-            if mode == 'r':
+            if self.mode == 'r':
                 openvect = libvect.Vect_open_old2(self.c_mapinfo, self.name,
                                                   self.mapset, str(layer))
             # open in READ and WRITE mode
-            elif mode == 'rw':
+            elif self.mode == 'rw':
                 openvect = libvect.Vect_open_update2(self.c_mapinfo, self.name,
                                                      self.mapset, str(layer))
 
@@ -349,11 +362,11 @@ class Info(object):
             self.dblinks = DBlinks(self.c_mapinfo)
 
         # If it is opened in write mode
-        if mode == 'w':
+        if self.mode == 'w':
             openvect = libvect.Vect_open_new(self.c_mapinfo, self.name, with_z)
             self.dblinks = DBlinks(self.c_mapinfo)
 
-        if mode in ('w', 'rw') and tab_cols:
+        if self.mode in ('w', 'rw') and tab_cols:
             # create a link
             link = Link(layer,
                         link_name if link_name else self.name,

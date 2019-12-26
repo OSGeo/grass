@@ -446,9 +446,8 @@ try:
 except:
     pass
 
-# i18N
-import gettext
 import os
+import sys
 import copy
 from datetime import datetime
 import grass.pygrass.modules as pymod
@@ -462,9 +461,17 @@ from .space_time_datasets import RasterDataset
 from .factory import dataset_factory
 from .open_stds import open_new_stds, open_old_stds
 from .temporal_operator import TemporalOperatorParser
-from spatio_temporal_relationships import SpatioTemporalTopologyBuilder
-from .datetime_math import time_delta_to_relative_time
-from abstract_space_time_dataset import AbstractSpaceTimeDataset
+from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
+from .datetime_math import time_delta_to_relative_time, string_to_datetime
+from .abstract_space_time_dataset import AbstractSpaceTimeDataset
+from .temporal_granularity import compute_absolute_time_granularity
+
+from .datetime_math import create_suffix_from_datetime
+from .datetime_math import create_time_suffix
+from .datetime_math import create_numeric_suffix
+
+if sys.version_info[0] >= 3:
+    unicode = str
 
 ##############################################################################
 
@@ -751,7 +758,7 @@ class TemporalAlgebraParser(object):
         )
 
     def __init__(self, pid=None, run=True, debug=False, spatial=False,
-                 register_null=False, dry_run=False, nprocs=1):
+                 register_null=False, dry_run=False, nprocs=1, time_suffix=None):
         self.run = run
         self.dry_run = dry_run              # Compute the processes and output but Do not start the processes
         self.process_chain_dict = {}        # This dictionary stores all processes, as well as the maps to register and remove
@@ -777,6 +784,7 @@ class TemporalAlgebraParser(object):
         self.m_copy = pymod.Module('g.copy')
         self.nprocs = nprocs
         self.use_granularity = False
+        self.time_suffix = time_suffix
 
         # Topology lists
         self.temporal_topology_list = ["EQUAL", "FOLLOWS", "PRECEDES", "OVERLAPS", "OVERLAPPED", \
@@ -887,7 +895,7 @@ class TemporalAlgebraParser(object):
         """
         self.lexer = TemporalAlgebraLexer()
         self.lexer.build()
-        self.parser = yacc.yacc(module=self, debug=self.debug)
+        self.parser = yacc.yacc(module=self, debug=self.debug, write_tables=False)
 
         self.overwrite = overwrite
         self.count = 0
@@ -1152,7 +1160,7 @@ class TemporalAlgebraParser(object):
 
         :return: List of maps.
         """
-        if isinstance(input, str):
+        if isinstance(input, unicode) or isinstance(input, str):
             # Check for mapset in given stds input.
             if input.find("@") >= 0:
                 id_input = input
@@ -1965,17 +1973,10 @@ class TemporalAlgebraParser(object):
             # Get value for function name from dictionary.
             tfuncval = tfuncdict[tfunc]
             # Check if value has to be transferred to datetime object for comparison.
-            if tfunc in ["START_DATE", "END_DATE"]:
-                timeobj = datetime.strptime(value.replace("\"",""), '%Y-%m-%d')
+            if tfunc in ["START_DATE", "END_DATE", "START_TIME", "END_TIME",
+                         "START_DATETIME", "END_DATETIME"]:
+                timeobj = string_to_datetime(value.replace("\"",""))
                 value = timeobj.date()
-                boolname = self.eval_datetime_str(tfuncval, comp_op, value)
-            elif tfunc in ["START_TIME", "END_TIME"]:
-                timeobj = datetime.strptime(value.replace("\"",""), '%H:%M:%S')
-                value = timeobj.time()
-                boolname = self.eval_datetime_str(tfuncval, comp_op, value)
-            elif tfunc in ["START_DATETIME", "END_DATETIME"]:
-                timeobj = datetime.strptime(value.replace("\"",""), '%Y-%m-%d %H:%M:%S')
-                value = timeobj
                 boolname = self.eval_datetime_str(tfuncval, comp_op, value)
             else:
                 boolname = eval(str(tfuncval) + comp_op + str(value))
@@ -2167,11 +2168,13 @@ class TemporalAlgebraParser(object):
 ###########################################################################
 
     def p_statement_assign(self, t):
-        # The expression should always return a list of maps.
+        # The expression should always return a list of maps
+        # This function starts all the work and is the last one that is called from the parser
         """
         statement : stds EQUALS expr
 
         """
+
         if self.run:
             dbif, connected = init_dbif(self.dbif)
             map_type = None
@@ -2180,6 +2183,17 @@ class TemporalAlgebraParser(object):
                 count = 0
                 register_list = []
                 if num > 0:
+
+                    # Compute the granularity for suffix creation
+                    granularity = None
+                    if len(t[3]) > 0 and self.time_suffix == 'gran':
+                        map_i = t[3][0]
+                        if map_i.is_time_absolute() is True:
+                            granularity = compute_absolute_time_granularity(t[3])
+
+                    # compute the size of the numerical suffix
+                    num = len(t[3])
+                    leadzero = len(str(num))
 
                     if self.dry_run is False:
                         process_queue = pymod.ParallelModuleQueue(int(self.nprocs))
@@ -2196,7 +2210,7 @@ class TemporalAlgebraParser(object):
                         else:
                             map_type_2 = map_i.get_type()
                             if map_type != map_type_2:
-                                self.msgr.fatal(_("Maps that should be registered in the "\
+                                self.msgr.fatal(_("Maps that should be registered in the "
                                                   "resulting space time dataset have different types."))
                         count += 1
 
@@ -2208,8 +2222,21 @@ class TemporalAlgebraParser(object):
                         map_b.select(dbif)
                         map_b_extent = map_b.get_temporal_extent_as_tuple()
                         if map_a_extent != map_b_extent:
+
                             # Create new map with basename
-                            newident = self.basename + "_" + str(count)
+                            newident = create_numeric_suffix(self.basename, count, "%0" + str(leadzero))
+
+                            if map_i.is_time_absolute() is True and self.time_suffix and \
+                                            granularity is not None and self.time_suffix == 'gran':
+                                suffix = create_suffix_from_datetime(map_i.temporal_extent.get_start_time(),
+                                                                     granularity)
+                                newident = "{ba}_{su}".format(ba=self.basename, su=suffix)
+                            # If set use the time suffix to create the map name
+                            elif map_i.is_time_absolute() is True and self.time_suffix and \
+                                            self.time_suffix == 'time':
+                                suffix = create_time_suffix(map_i)
+                                newident = "{ba}_{su}".format(ba=self.basename, su=suffix)
+
                             map_result = map_i.get_new_instance(newident + "@" + self.mapset)
 
                             if map_result.map_exists() and self.overwrite == False:
@@ -2261,12 +2288,11 @@ class TemporalAlgebraParser(object):
                         start, end = map_i.get_temporal_extent_as_tuple()
                         self.process_chain_dict["register"].append((map_i.get_name(), str(start), str(end)))
 
-                        # Check if temporal extents have changed and a new map was created
                         if hasattr(map_i, "is_new") is True:
                             # Do not register empty maps if not required
                             # In case of a null map continue, do not register null maps
 
-                            if map_i.get_type() is "raster" or map_i.get_type() is "raster3d":
+                            if map_i.get_type() == "raster" or map_i.get_type() == "raster3d":
                                 if map_i.metadata.get_min() is None and \
                                    map_i.metadata.get_max() is None:
                                     if not self.register_null:

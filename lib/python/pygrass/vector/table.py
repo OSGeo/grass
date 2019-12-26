@@ -27,11 +27,12 @@ except:
 import grass.lib.vector as libvect
 from grass.pygrass.gis import Mapset
 from grass.pygrass.errors import DBError
-from grass.pygrass.utils import table_exist
+from grass.pygrass.utils import table_exist, decode
 from grass.script.db import db_table_in_vector
 from grass.script.core import warning
 
 from grass.pygrass.vector import sql
+from grass.lib.ctypes_preamble import String
 
 # For test purposes
 test_vector_name = "table_doctest_map"
@@ -79,13 +80,13 @@ class Filters(object):
 
     >>> filter = Filters('table')
     >>> filter.get_sql()
-    u'SELECT * FROM table;'
+    'SELECT * FROM table;'
     >>> filter.where("area<10000").get_sql()
-    u'SELECT * FROM table WHERE area<10000;'
+    'SELECT * FROM table WHERE area<10000;'
     >>> filter.select("cat", "area").get_sql()
-    u'SELECT cat, area FROM table WHERE area<10000;'
+    'SELECT cat, area FROM table WHERE area<10000;'
     >>> filter.order_by("area").limit(10).get_sql()
-    u'SELECT cat, area FROM table WHERE area<10000 ORDER BY area LIMIT 10;'
+    'SELECT cat, area FROM table WHERE area<10000 ORDER BY area LIMIT 10;'
 
     """
     def __init__(self, tname):
@@ -185,7 +186,7 @@ class Columns(object):
     >>> cols_sqlite = Columns(test_vector_name,
     ...                       sqlite3.connect(get_path(path)))
     >>> cols_sqlite.tname
-    u'table_doctest_map'
+    'table_doctest_map'
 
     For a postgreSQL table:
 
@@ -305,12 +306,12 @@ class Columns(object):
         >>> cols_sqlite = Columns(test_vector_name,
         ...                       sqlite3.connect(get_path(path)))
         >>> cols_sqlite.sql_descr()                   # doctest: +ELLIPSIS
-        u'cat INTEGER, name varchar(50), value double precision'
+        'cat INTEGER, name varchar(50), value double precision'
         >>> import psycopg2 as pg                         # doctest: +SKIP
         >>> cols_pg = Columns(test_vector_name,
         ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
         >>> cols_pg.sql_descr()                 # doctest: +ELLIPSIS +SKIP
-        u'cat INTEGER, name varchar(50), value double precision'
+        'cat INTEGER, name varchar(50), value double precision'
         """
         if remove:
             return ', '.join(['%s %s' % (key, val) for key, val in self.items()
@@ -327,15 +328,15 @@ class Columns(object):
         >>> cols_sqlite = Columns(test_vector_name,
         ...                       sqlite3.connect(get_path(path)))
         >>> cols_sqlite.types()                       # doctest: +ELLIPSIS
-        [u'INTEGER', u'varchar(50)', u'double precision']
+        ['INTEGER', 'varchar(50)', 'double precision']
         >>> import psycopg2 as pg                         # doctest: +SKIP
         >>> cols_pg = Columns(test_vector_name,
         ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
         >>> cols_pg.types()                     # doctest: +ELLIPSIS +SKIP
-        [u'INTEGER', u'varchar(50)', u'double precision']
+        ['INTEGER', 'varchar(50)', 'double precision']
 
         """
-        return self.odict.values()
+        return list(self.odict.values())
 
     def names(self, remove=None, unicod=True):
         """Return a list with the column names.
@@ -346,19 +347,19 @@ class Columns(object):
         >>> cols_sqlite = Columns(test_vector_name,
         ...                       sqlite3.connect(get_path(path)))
         >>> cols_sqlite.names()                      # doctest: +ELLIPSIS
-        [u'cat', u'name', u'value']
+        ['cat', 'name', 'value']
         >>> import psycopg2 as pg                         # doctest: +SKIP
         >>> cols_pg = Columns(test_vector_name,       # doctest: +SKIP
         ...                   pg.connect('host=localhost dbname=grassdb'))
         >>> cols_pg.names()                     # doctest: +ELLIPSIS +SKIP
-        [u'cat', u'name', u'value']
+        ['cat', 'name', 'value']
 
         """
         if remove:
-            nams = self.odict.keys()
+            nams = list(self.odict.keys())
             nams.remove(remove)
         else:
-            nams = self.odict.keys()
+            nams = list(self.odict.keys())
         if unicod:
             return nams
         else:
@@ -372,15 +373,15 @@ class Columns(object):
         >>> cols_sqlite = Columns(test_vector_name,
         ...                       sqlite3.connect(get_path(path)))
         >>> cols_sqlite.items()                       # doctest: +ELLIPSIS
-        [(u'cat', u'INTEGER'), (u'name', u'varchar(50)'), (u'value', u'double precision')]
+        [('cat', 'INTEGER'), ('name', 'varchar(50)'), ('value', 'double precision')]
         >>> import psycopg2 as pg                         # doctest: +SKIP
         >>> cols_pg = Columns(test_vector_name,
         ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
         >>> cols_pg.items()                     # doctest: +ELLIPSIS +SKIP
-        [(u'cat', u'INTEGER'), (u'name', u'varchar(50)'), (u'value', u'double precision')]
+        [('cat', 'INTEGER'), ('name', 'varchar(50)'), ('value', 'double precision')]
 
         """
-        return self.odict.items()
+        return list(self.odict.items())
 
     def add(self, col_name, col_type):
         """Add a new column to the table.
@@ -508,7 +509,7 @@ class Columns(object):
         >>> cols_sqlite.cast('n_pizzas', 'float8')  # doctest: +ELLIPSIS
         Traceback (most recent call last):
           ...
-        DBError: SQLite does not support to cast columns.
+        grass.exceptions.DBError: SQLite does not support to cast columns.
         >>> import psycopg2 as pg                         # doctest: +SKIP
         >>> cols_pg = Columns(test_vector_name,
         ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
@@ -635,49 +636,49 @@ class Link(object):
                      doc="Set and obtain layer number")
 
     def _get_name(self):
-        return self.c_fieldinfo.contents.name
+        return decode(self.c_fieldinfo.contents.name)
 
     def _set_name(self, name):
-        self.c_fieldinfo.contents.name = name
+        self.c_fieldinfo.contents.name = String(name)
 
     name = property(fget=_get_name, fset=_set_name,
                     doc="Set and obtain name vale")
 
     def _get_table(self):
-        return self.c_fieldinfo.contents.table
+        return decode(self.c_fieldinfo.contents.table)
 
     def _set_table(self, new_name):
-        self.c_fieldinfo.contents.table = new_name
+        self.c_fieldinfo.contents.table = String(new_name)
 
     table_name = property(fget=_get_table, fset=_set_table,
                           doc="Set and obtain table name value")
 
     def _get_key(self):
-        return self.c_fieldinfo.contents.key
+        return decode(self.c_fieldinfo.contents.key)
 
     def _set_key(self, key):
-        self.c_fieldinfo.contents.key = key
+        self.c_fieldinfo.contents.key = String(key)
 
     key = property(fget=_get_key, fset=_set_key,
                    doc="Set and obtain cat value")
 
     def _get_database(self):
-        return self.c_fieldinfo.contents.database
+        return decode(self.c_fieldinfo.contents.database)
 
     def _set_database(self, database):
-        self.c_fieldinfo.contents.database = database
+        self.c_fieldinfo.contents.database = String(database)
 
     database = property(fget=_get_database, fset=_set_database,
                         doc="Set and obtain database value")
 
     def _get_driver(self):
-        return self.c_fieldinfo.contents.driver
+        return decode(self.c_fieldinfo.contents.driver)
 
     def _set_driver(self, driver):
         if driver not in ('sqlite', 'pg'):
             str_err = "Driver not supported, use: %s." % ", ".join(DRIVERS)
             raise TypeError(str_err)
-        self.c_fieldinfo.contents.driver = driver
+        self.c_fieldinfo.contents.driver = String(driver)
 
     driver = property(fget=_get_driver, fset=_set_driver,
                       doc="Set and obtain driver value. The drivers supported \
@@ -741,12 +742,13 @@ class Link(object):
         ...             link.table_name)              # doctest: +ELLIPSIS
         <sqlite3.Cursor object at ...>
         >>> cur.fetchone()     #doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-        (1, u'point', 1.0)
+        (1, 'point', 1.0)
         >>> cur.close()
         >>> conn.close()
 
         """
-        if self.driver == 'sqlite':
+        driver = self.driver
+        if driver == 'sqlite':
             import sqlite3
             # Numpy is using some custom integer data types to efficiently
             # pack data into memory. Since these types aren't familiar to
@@ -759,7 +761,7 @@ class Link(object):
             if not os.path.exists(dbdirpath):
                 os.mkdir(dbdirpath)
             return sqlite3.connect(dbpath)
-        elif self.driver == 'pg':
+        elif driver == 'pg':
             try:
                 import psycopg2
                 psycopg2.paramstyle = 'qmark'
@@ -780,10 +782,10 @@ class Link(object):
         ...             'sqlite')
         >>> table = link.table()
         >>> table.filters.select('cat', 'name', 'value')
-        Filters(u'SELECT cat, name, value FROM table_doctest_map;')
+        Filters('SELECT cat, name, value FROM table_doctest_map;')
         >>> cur = table.execute()
         >>> cur.fetchone()
-        (1, u'point', 1.0)
+        (1, 'point', 1.0)
         >>> cur.close()
 
         """
@@ -956,7 +958,7 @@ class Table(object):
     >>> tab_sqlite = Table(name=test_vector_name,
     ...                    connection=sqlite3.connect(get_path(path)))
     >>> tab_sqlite.name
-    u'table_doctest_map'
+    'table_doctest_map'
     >>> import psycopg2                                   # doctest: +SKIP
     >>> tab_pg = Table(test_vector_name,
     ...                psycopg2.connect('host=localhost dbname=grassdb',
@@ -1002,7 +1004,7 @@ class Table(object):
         >>> tab_sqlite = Table(name=test_vector_name,
         ...                    connection=sqlite3.connect(get_path(path)))
         >>> tab_sqlite
-        Table(u'table_doctest_map')
+        Table('table_doctest_map')
 
         """
         return "Table(%r)" % (self.name)
@@ -1075,10 +1077,10 @@ class Table(object):
         >>> tab_sqlite = Table(name=test_vector_name,
         ...                    connection=sqlite3.connect(get_path(path)))
         >>> tab_sqlite.filters.select('cat', 'name').order_by('value')
-        Filters(u'SELECT cat, name FROM table_doctest_map ORDER BY value;')
+        Filters('SELECT cat, name FROM table_doctest_map ORDER BY value;')
         >>> cur = tab_sqlite.execute()
         >>> cur.fetchone()     #doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-         (1, u'point')
+         (1, 'point')
 
         """
         try:

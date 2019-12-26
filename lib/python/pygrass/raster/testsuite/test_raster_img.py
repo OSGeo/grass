@@ -1,24 +1,22 @@
 # -*- coding: utf-8
 import numpy as np
 import unittest
-import ctypes
-from unittest import skip
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
-from grass.pygrass.raster import RasterRow
 from grass.pygrass.raster import raster2numpy_img
 from grass.pygrass.gis.region import Region
 from grass.script.core import tempfile
 
-has_PyQt4=False
+has_PyQt4 = False
 try:
     from PyQt4.QtCore import *
     from PyQt4.QtGui import *
-    has_PyQt4=True
+    has_PyQt4 = True
 except:
     pass
+
 
 class RasterRowImgTestCase(TestCase):
 
@@ -29,8 +27,9 @@ class RasterRowImgTestCase(TestCase):
         """Create test raster map and region"""
         cls.use_temp_region()
         cls.runModule("g.region", n=60, s=0, e=40, w=0, res=0.1)
-        cls.runModule("r.mapcalc", expression="%s = if(row() >= 10 && row() <= 60, null(), row()  + (10.0 * col()))"%(cls.name),
-                                   overwrite=True)
+        cls.runModule("r.mapcalc",
+            expression="%s = if(row() >= 10 && row() <= 60, null(), row()  + (10.0 * col()))" % (cls.name),
+            overwrite=True)
         cls.runModule("r.colors", map=cls.name, color="elevation")
 
     @classmethod
@@ -56,7 +55,7 @@ class RasterRowImgTestCase(TestCase):
 
         image = QImage(a.data, region.cols, region.rows,
                        QImage.Format_ARGB32)
-        #image.save("data/a.png")
+        # image.save("data/a.png")
         image.save(tmpfile)
         self.assertFilesEqualMd5(tmpfile, "data/a.png")
 
@@ -73,14 +72,14 @@ class RasterRowImgTestCase(TestCase):
         tmpfile = tmpfile + ".png"
 
         # With array as argument
-        array = np.ndarray((region.rows*region.cols*4), np.uint8)
+        array = np.ndarray((region.rows * region.cols * 4), np.uint8)
 
         raster2numpy_img(rastname=self.name, region=region,
                          color="ARGB", array=array)
 
         image = QImage(array.data,
                        region.cols, region.rows, QImage.Format_ARGB32)
-        #image.save("data/b.png")
+        # image.save("data/b.png")
         image.save(tmpfile)
         self.assertFilesEqualMd5(tmpfile, "data/b.png")
 
@@ -97,14 +96,14 @@ class RasterRowImgTestCase(TestCase):
         tmpfile = tmpfile + ".png"
 
         # With array as argument
-        array = np.ndarray((region.rows*region.cols*4), np.uint8)
+        array = np.ndarray((region.rows * region.cols * 4), np.uint8)
 
         raster2numpy_img(rastname=self.name, region=region,
                          color="ARGB", array=array)
 
         image = QImage(array.data,
                        region.cols, region.rows, QImage.Format_ARGB32)
-        #image.save("data/c.png")
+        # image.save("data/c.png")
         image.save(tmpfile)
         self.assertFilesEqualMd5(tmpfile, "data/c.png")
 
@@ -121,14 +120,14 @@ class RasterRowImgTestCase(TestCase):
         tmpfile = tmpfile + ".png"
 
         # With array as argument
-        array = np.ndarray((region.rows*region.cols*4), np.uint8)
+        array = np.ndarray((region.rows * region.cols * 4), np.uint8)
 
         raster2numpy_img(rastname=self.name, region=region,
                          color="RGB", array=array)
 
         image = QImage(array.data,
                        region.cols, region.rows, QImage.Format_RGB32)
-        #image.save("data/d.png")
+        # image.save("data/d.png")
         image.save(tmpfile)
         self.assertFilesEqualMd5(tmpfile, "data/d.png")
 
@@ -149,7 +148,7 @@ class RasterRowImgTestCase(TestCase):
 
         image = QImage(array.data,
                        region.cols, region.rows, QImage.Format_RGB32)
-        #image.save("data/e.png")
+        # image.save("data/e.png")
         image.save(tmpfile)
         self.assertFilesEqualMd5(tmpfile, "data/e.png")
 
@@ -162,7 +161,7 @@ class RasterRowImgTestCase(TestCase):
 
         a = raster2numpy_img(self.name, region)
 
-        self.assertEqual(len(a), region.rows * region.cols*4)
+        self.assertEqual(len(a), region.rows * region.cols * 4)
 
     def test_resampling_to_numpy_img_2(self):
 
@@ -173,7 +172,7 @@ class RasterRowImgTestCase(TestCase):
 
         a = raster2numpy_img(self.name, region)
 
-        self.assertEqual(len(a), region.rows * region.cols*4)
+        self.assertEqual(len(a), region.rows * region.cols * 4)
 
     def test_resampling_to_numpy_img_3(self):
 
@@ -184,7 +183,7 @@ class RasterRowImgTestCase(TestCase):
 
         a = raster2numpy_img(self.name, region, color="GRAY1")
 
-        self.assertEqual(len(a), region.rows * region.cols*1)
+        self.assertEqual(len(a), region.rows * region.cols * 1)
 
     def test_resampling_to_numpy_img_4(self):
 
@@ -195,7 +194,7 @@ class RasterRowImgTestCase(TestCase):
 
         a = raster2numpy_img(self.name, region, color="GRAY2")
 
-        self.assertEqual(len(a), region.rows * region.cols*1)
+        self.assertEqual(len(a), region.rows * region.cols * 1)
 
 if __name__ == '__main__':
     test()

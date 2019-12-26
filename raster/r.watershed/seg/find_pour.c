@@ -10,7 +10,7 @@ int find_pourpts(void)
     char is_swale;
 
     ocs_alloced = 2 * bas_thres;
-    ocs = (OC_STACK *)G_malloc(ocs_alloced * sizeof(OC_STACK));
+    ocs = (OC_STACK *) G_malloc(ocs_alloced * sizeof(OC_STACK));
 
     basin_num = 0;
     Rast_set_c_null_value(&no_basin, 1);
@@ -42,7 +42,7 @@ int find_pourpts(void)
 		    else {
 			stream_length = 0.0;
 		    }
-		    seg_get(&watalt, (char *) &wa, row, col);
+		    seg_get(&watalt, (char *)&wa, row, col);
 		    old_elev = wa.ele;
 		}
 		basin_num =

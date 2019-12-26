@@ -78,7 +78,6 @@ int main(int argc, char *argv[])
     char buf[GNAME_MAX];
     int nrows, row;
     int ncols, col;
-    int overwrite=0;
 
     double zmult, scale, altitude, azimuth;
     double north, east, south, west, ns_med;
@@ -112,9 +111,10 @@ int main(int argc, char *argv[])
     module->label = _("Creates shaded relief map from an elevation map (DEM).");
     
     parm.elevation = G_define_standard_option(G_OPT_R_INPUT);
-
+    parm.elevation->description = _("Name of input raster (typically elevation) map");
+    
     parm.relief = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.relief->label = _("Name for output shaded relief map");
+    parm.relief->description = _("Name for output shaded relief map");
 
     parm.altitude = G_define_option();
     parm.altitude->key = "altitude";
@@ -168,34 +168,13 @@ int main(int argc, char *argv[])
     degrees_to_radians = M_PI / 180.0;
     radians_to_degrees = 180. / M_PI;
 
-    /* Check due to default output map = input.shade map */
-    overwrite = G_check_overwrite(argc, argv);
-
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     elev_name = parm.elevation->answer;
-    if (parm.relief->answer) {
-	sr_name = parm.relief->answer;
-    }
-    else {
-	char xname[GNAME_MAX], xmapset[GNAME_MAX];
-	
-	if (G_name_is_fully_qualified(elev_name, xname, xmapset))
-	    sprintf(buf, "%s.shade", xname);
-	else
-	    sprintf(buf, "%s.shade", elev_name);
-	sr_name = G_store(buf);
-    }
+    sr_name = parm.relief->answer;
 
     G_check_input_output_name(elev_name, sr_name, G_FATAL_EXIT);
-    if (G_find_raster2(sr_name, G_mapset())) {
-        if (overwrite)
-            G_warning(_("Raster map <%s> already exists and will be overwritten"),
-			 sr_name);
-	    else
-            G_fatal_error(_("Raster map <%s> already exists"), sr_name);
-    }
 
     if (sscanf(parm.altitude->answer, "%lf", &altitude) != 1 || altitude < 0.0) {
 	G_fatal_error(_("%s=%s - must be a non-negative number"),

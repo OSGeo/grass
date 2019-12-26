@@ -16,11 +16,11 @@ for details.
 
 import wx
 
-from core.utils import _
 from gui_core.toolbars import BaseToolbar
 from icons.icon import MetaIcon
 from gui_core.widgets import FloatValidator
 import wx.lib.colourselect as csel
+from gui_core.wrap import TextCtrl, StaticText, ColourSelect
 
 
 rdigitIcons = {'area': MetaIcon(img='polygon-create',
@@ -31,6 +31,7 @@ rdigitIcons = {'area': MetaIcon(img='polygon-create',
                                  label=_('Digitize point')),
                'save': MetaIcon(img='save', label=_("Save raster map")),
                'undo': MetaIcon(img='undo', label=_("Undo")),
+               'help': MetaIcon(img='help', label=_("Raster Digitizer manual")),
                'quit': MetaIcon(img='quit', label=_("Quit raster digitizer"))}
 
 
@@ -38,16 +39,16 @@ class RDigitToolbar(BaseToolbar):
     """RDigit toolbar
     """
 
-    def __init__(self, parent, controller, toolSwitcher):
+    def __init__(self, parent, giface, controller, toolSwitcher):
         """RDigit toolbar constructor
         """
         BaseToolbar.__init__(self, parent, toolSwitcher)
         self._controller = controller
+        self._giface = giface
         self.InitToolbar(self._toolbarData())
 
-        self._mapSelectionComboId = wx.NewId()
         self._mapSelectionCombo = wx.ComboBox(
-            self, id=self._mapSelectionComboId, value=_("Select raster map"),
+            self, id=wx.ID_ANY, value=_("Select raster map"),
             choices=[],
             size=(120, -1))
         self._mapSelectionCombo.Bind(wx.EVT_COMBOBOX, self.OnMapSelection)
@@ -55,22 +56,19 @@ class RDigitToolbar(BaseToolbar):
         self.InsertControl(0, self._mapSelectionCombo)
         self._previousMap = self._mapSelectionCombo.GetValue()
 
-        self._colorId = wx.NewId()
-        self._color = csel.ColourSelect(parent=self, colour=wx.GREEN,
-                                        size=(30, 30))
+        self._color = ColourSelect(parent=self, colour=wx.GREEN, size=(30, 30))
         self._color.Bind(
             csel.EVT_COLOURSELECT,
             lambda evt: self._changeDrawColor())
-        self._color.SetToolTipString(
+        self._color.SetToolTip(
             _("Set drawing color (not raster cell color)"))
         self.InsertControl(4, self._color)
 
         self._cellValues = set(['1'])
-        self._valueComboId = wx.NewId()
         # validator does not work with combobox, SetBackgroundColor is not
         # working
         self._valueCombo = wx.ComboBox(
-            self, id=self._valueComboId, choices=list(
+            self, id=wx.ID_ANY, choices=list(
                 self._cellValues), size=(
                 80, -1), validator=FloatValidator())
         self._valueCombo.Bind(
@@ -80,24 +78,22 @@ class RDigitToolbar(BaseToolbar):
                               lambda evt: self._cellValueChanged())
         self._valueCombo.SetSelection(0)
         self._cellValueChanged()
-        self.InsertControl(
-            6, wx.StaticText(
-                self, label=" %s" %
-                _("Cell value:")))
+        labelValue = StaticText(self, label=" %s" % _("Cell value:"))
+        self.InsertControl(6, labelValue)
         self.InsertControl(7, self._valueCombo)
 
-        self._widthValueId = wx.NewId()
         # validator does not work with combobox, SetBackgroundColor is not
         # working
-        self._widthValue = wx.TextCtrl(
-            self, id=self._widthValueId, value='0', size=(
+        self._widthValue = TextCtrl(
+            self, id=wx.ID_ANY, value='0', size=(
                 80, -1), validator=FloatValidator())
         self._widthValue.Bind(wx.EVT_TEXT,
                               lambda evt: self._widthValueChanged())
         self._widthValueChanged()
-        self._widthValue.SetToolTipString(
+        self._widthValue.SetToolTip(
             _("Width of currently digitized line or diameter of a digitized point in map units."))
-        self.InsertControl(8, wx.StaticText(self, label=" %s" % _("Width:")))
+        labelWidth = StaticText(self, label=" %s" % _("Width:"))
+        self.InsertControl(8, labelWidth)
         self.InsertControl(9, self._widthValue)
 
         for tool in (self.area, self.line, self.point):
@@ -107,6 +103,11 @@ class RDigitToolbar(BaseToolbar):
         self._default = self.area
         # realize the toolbar
         self.Realize()
+        # workaround Mac bug
+        for t in (self._mapSelectionCombo, self._color, self._valueCombo,
+                  self._widthValue, labelValue, labelWidth):
+            t.Hide()
+            t.Show()
 
     def _toolbarData(self):
         """Toolbar data"""
@@ -126,6 +127,8 @@ class RDigitToolbar(BaseToolbar):
               lambda event: self._controller.Undo()),
              ('save', rdigitIcons['save'],
               lambda event: self._controller.Save()),
+             ('help', rdigitIcons['help'],
+              lambda event: self._giface.Help('wxGUI.rdigit')),
              ('quit', rdigitIcons['quit'],
               lambda event: self._controller.Stop())))
 

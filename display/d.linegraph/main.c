@@ -374,7 +374,7 @@ int main(int argc, char **argv)
     secondary_width_opt = G_define_option();
     secondary_width_opt->key = "secondary_width";
     secondary_width_opt->description = _("Width of point symbol lines");
-    secondary_width_opt->type = TYPE_INTEGER;
+    secondary_width_opt->type = TYPE_DOUBLE;
     secondary_width_opt->required = NO;
     secondary_width_opt->multiple = YES;
     secondary_width_opt->answer = "0.1";
@@ -969,7 +969,7 @@ int main(int argc, char **argv)
         }
         if (tic_unit != 1 && scale_y_labels)
             G_fatal_error(_("Scale Y labels cannot be used with this"
-                            "range of data (%f, %f)"), min_y, max_y);
+                            " range of data (%f, %f)"), min_y, max_y);
         /* Y-AXIS LOOP */
         for (i = (int)min_y; i <= (int)max_y; i += tic_unit) {
             if (rem(i, tic_every) == 0.0) {

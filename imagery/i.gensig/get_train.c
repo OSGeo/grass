@@ -71,10 +71,7 @@ int get_training_classes(struct files *files, struct Signature *S)
     files->ncats = n;
     files->training_cats = list;
 
-    if (files->ncats == 1)
-	G_message(_("1 class found"));
-    else
-	G_message(_("%d classes found"), files->ncats);
+    G_message(n_("One class found", "%d classes found", files->ncats), files->ncats);
 
     return 0;
 }

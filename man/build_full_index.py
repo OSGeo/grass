@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # generates docs/html/full_index.html
 # (c) The GRASS Development Team, Markus Neteler, Glynn Clements 2003, 2004, 2005, 2006, 2009
@@ -38,7 +38,7 @@ classes.sort(key=lambda tup: tup[0])
 
 #begin full index:
 filename = "full_index.html"
-f = open(filename + ".tmp", 'wb')
+f = open(filename + ".tmp", 'w')
 
 write_html_header(f, "GRASS GIS %s Reference Manual: Full index" % grass_version, body_width="80%")
 

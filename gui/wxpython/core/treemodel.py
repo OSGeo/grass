@@ -15,6 +15,7 @@ This program is free software under the GNU General Public License
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
+import six
 
 
 class TreeModel(object):
@@ -174,7 +175,7 @@ class DictNode(object):
     def nprint(self, text, indent=0):
         text.append(indent * ' ' + self.label)
         if self.data:
-            for key, value in self.data.iteritems():
+            for key, value in six.iteritems(self.data):
                 text.append(
                     "%(indent)s* %(key)s : %(value)s" %
                     {'indent': (indent + 2) * ' ', 'key': key, 'value': value})

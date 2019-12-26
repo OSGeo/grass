@@ -40,7 +40,9 @@ int compute_covariances(struct files *files, struct Signature *S)
 		cell2 = files->band_cell[b2];
 		for (col = 0; col < ncols; col++) {
 		    n = class[col];
-		    if (n < 0)
+		    if (n < 0 ||
+			Rast_is_d_null_value(&cell1[col]) ||
+			Rast_is_d_null_value(&cell2[col]))
 			continue;
 		    S->sig[n].var[b1][b2] +=
 			(cell1[col] - S->sig[n].mean[b1]) * (cell2[col] -

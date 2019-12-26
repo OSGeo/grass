@@ -15,10 +15,13 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com>
 """
 
+from __future__ import print_function
+
 import os
 
 from grass.pydispatch.signal import Signal
 from core.giface import Notification
+from core.utils import GetLayerNameFromCmd
 
 
 class Layer(object):
@@ -117,6 +120,26 @@ class LayerList(object):
         self._tree.forceCheck = True
         self._tree.CheckItem(layer._layer, checked=checked)
 
+    def SelectLayer(self, layer, select=True):
+        "Select or unselect layer"
+        self._tree.SelectItem(layer._layer, select)
+
+    def ChangeLayer(self, layer, **kwargs):
+        "Change layer (cmd, ltype, opacity)"
+        if 'cmd' in kwargs:
+            layer._pydata[0]['cmd'] = kwargs['cmd']
+            layerName, found = GetLayerNameFromCmd(kwargs['cmd'], fullyQualified=True)
+            if found:
+                layer._pydata[0]['label'] = layerName
+        if 'ltype' in kwargs:
+            layer._pydata[0]['type'] = kwargs['ltype']
+        if 'opacity' in kwargs:
+            layer._pydata[0]['maplayer'].SetOpacity(kwargs['opacity'])
+
+        self._tree.ChangeLayer(layer._layer)
+        self._tree.SetItemIcon(layer._layer)
+        self._tree.SetItemText(layer._layer, self._tree._getLayerName(layer._layer))
+
     def IsLayerChecked(self, layer):
         """Returns True if layer is checked, False otherwise"""
         return self._tree.IsItemChecked(layer._layer)
@@ -139,8 +162,8 @@ class LayerList(object):
         Avoid using this method, it might be removed in the future.
         """
         if key == 'name':
-            print "giface.GetLayerByData(): Do not with use key='name',"
-            " use GetLayersByName instead."
+            print("giface.GetLayerByData(): Do not with use key='name',"
+                  " use GetLayersByName instead.")
         item = self._tree.FindItemByData(key=key, value=value)
         if item is None:
             return None

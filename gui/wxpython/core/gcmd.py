@@ -25,6 +25,8 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import time
@@ -33,36 +35,26 @@ import signal
 import traceback
 import locale
 import subprocess
-if sys.platform == 'win32':
+from threading import Thread
+import wx
+
+is_mswindows = sys.platform == 'win32'
+if is_mswindows:
     from win32file import ReadFile, WriteFile
     from win32pipe import PeekNamedPipe
     import msvcrt
 else:
     import select
     import fcntl
-from threading import Thread
 
-import wx
+from core.debug import Debug
+from core.globalvar import SCT_EXT
 
 from grass.script import core as grass
+from grass.script.utils import decode, encode
 
-from core import globalvar
-from core.debug import Debug
-
-# cannot import from the core.utils module to avoid cross dependencies
-try:
-    # intended to be used also outside this module
-    import gettext
-    _ = gettext.translation(
-        'grasswxpy',
-        os.path.join(
-            os.getenv("GISBASE"),
-            'locale')).ugettext
-except IOError:
-    # using no translation silently
-    def null_gettext(string):
-        return string
-    _ = null_gettext
+if sys.version_info.major == 2:
+    bytes = str
 
 
 def DecodeString(string):
@@ -75,10 +67,9 @@ def DecodeString(string):
     if not string:
         return string
 
-    if _enc:
+    if _enc and isinstance(string, bytes):
         Debug.msg(5, "DecodeString(): enc=%s" % _enc)
         return string.decode(_enc)
-
     return string
 
 
@@ -91,11 +82,9 @@ def EncodeString(string):
     """
     if not string:
         return string
-
     if _enc:
         Debug.msg(5, "EncodeString(): enc=%s" % _enc)
         return string.encode(_enc)
-
     return string
 
 
@@ -172,9 +161,7 @@ class Popen(subprocess.Popen):
     """Subclass subprocess.Popen"""
 
     def __init__(self, args, **kwargs):
-        if subprocess.mswindows:
-            args = map(EncodeString, args)
-
+        if is_mswindows:
             # The Windows shell (cmd.exe) requires some special characters to
             # be escaped by preceding them with 3 carets (^^^). cmd.exe /?
             # mentions <space> and &()[]{}^=;!'+,`~. A quick test revealed that
@@ -228,7 +215,7 @@ class Popen(subprocess.Popen):
 
     def kill(self):
         """Try to kill running process"""
-        if subprocess.mswindows:
+        if is_mswindows:
             import win32api
             handle = win32api.OpenProcess(1, 0, self.pid)
             return (0 != win32api.TerminateProcess(handle, 0))
@@ -243,13 +230,14 @@ class Popen(subprocess.Popen):
             if not self.stdin:
                 return None
 
+            import pywintypes
             try:
                 x = msvcrt.get_osfhandle(self.stdin.fileno())
                 (errCode, written) = WriteFile(x, input)
             except ValueError:
                 return self._close('stdin')
-            except (subprocess.pywintypes.error, Exception) as why:
-                if why[0] in (109, errno.ESHUTDOWN):
+            except (pywintypes.error, Exception) as why:
+                if why.winerror in (109, errno.ESHUTDOWN):
                     return self._close('stdin')
                 raise
 
@@ -260,6 +248,7 @@ class Popen(subprocess.Popen):
             if conn is None:
                 return None
 
+            import pywintypes
             try:
                 x = msvcrt.get_osfhandle(conn.fileno())
                 (read, nAvail, nMessage) = PeekNamedPipe(x, 0)
@@ -269,8 +258,8 @@ class Popen(subprocess.Popen):
                     (errCode, read) = ReadFile(x, nAvail, None)
             except ValueError:
                 return self._close(which)
-            except (subprocess.pywintypes.error, Exception) as why:
-                if why[0] in (109, errno.ESHUTDOWN):
+            except (pywintypes.error, Exception) as why:
+                if why.winerror in (109, errno.ESHUTDOWN):
                     return self._close(which)
                 raise
 
@@ -340,7 +329,7 @@ def recv_some(p, t=.1, e=1, tr=5, stderr=0):
             else:
                 break
         elif r:
-            y.append(r)
+            y.append(decode(r))
         else:
             time.sleep(max((x - time.time()) / tr, 0))
     return ''.join(y)
@@ -583,7 +572,7 @@ class CommandThread(Thread):
         # changing from one chdir to get_real_command function
         args = self.cmd
         if sys.platform == 'win32':
-            if os.path.splitext(args[0])[1] == globalvar.SCT_EXT:
+            if os.path.splitext(args[0])[1] == SCT_EXT:
                 args[0] = args[0][:-3]
             # using Python executable to run the module if it is a script
             # expecting at least module name at first position
@@ -603,7 +592,7 @@ class CommandThread(Thread):
 
         except OSError as e:
             self.error = str(e)
-            print >> sys.stderr, e
+            print(e, file=sys.stderr)
             return 1
 
         if self.stdin:  # read stdin if requested ...
@@ -618,14 +607,14 @@ class CommandThread(Thread):
         if self.stdout:
             # make module stdout/stderr non-blocking
             out_fileno = self.module.stdout.fileno()
-            if not subprocess.mswindows:
+            if not is_mswindows:
                 flags = fcntl.fcntl(out_fileno, fcntl.F_GETFL)
                 fcntl.fcntl(out_fileno, fcntl.F_SETFL, flags | os.O_NONBLOCK)
 
         if self.stderr:
             # make module stdout/stderr non-blocking
             out_fileno = self.module.stderr.fileno()
-            if not subprocess.mswindows:
+            if not is_mswindows:
                 flags = fcntl.fcntl(out_fileno, fcntl.F_GETFL)
                 fcntl.fcntl(out_fileno, fcntl.F_SETFL, flags | os.O_NONBLOCK)
 
@@ -723,11 +712,11 @@ def RunCommand(prog, flags="", overwrite=False, quiet=False,
     ps = grass.start_command(prog, flags, overwrite, quiet, verbose, **kwargs)
 
     if stdin:
-        ps.stdin.write(stdin)
+        ps.stdin.write(encode(stdin))
         ps.stdin.close()
         ps.stdin = None
 
-    stdout, stderr = map(DecodeString, ps.communicate())
+    stdout, stderr = list(map(DecodeString, ps.communicate()))
 
     if parent:  # restore previous settings
         os.environ['GRASS_MESSAGE_FORMAT'] = messageFormat
@@ -780,6 +769,9 @@ def GetDefaultEncoding(forceUTF8=False):
     enc = locale.getdefaultlocale()[1]
     if forceUTF8 and (enc is None or enc == 'UTF8'):
         return 'UTF-8'
+
+    if enc is None:
+        enc = locale.getpreferredencoding()
 
     Debug.msg(1, "GetSystemEncoding(): %s" % enc)
     return enc

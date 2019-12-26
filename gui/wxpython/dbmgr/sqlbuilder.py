@@ -24,17 +24,20 @@ This program is free software under the GNU General Public License
 @author Refactoring, SQLBUilderUpdate by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
 """
 
+from __future__ import print_function
+
 import os
 import sys
+import six
 
 from core import globalvar
-from core.utils import _
 import wx
 
 from grass.pydispatch.signal import Signal
 
 from core.gcmd import RunCommand, GError, GMessage
 from dbmgr.vinfo import CreateDbInfoDesc, VectorDBInfo, GetUnicodeValue
+from gui_core.wrap import Button, TextCtrl, StaticText, StaticBox
 
 import grass.script as grass
 
@@ -44,7 +47,7 @@ class SQLBuilder(wx.Frame):
     Base class for classes, which builds SQL statements.
     """
 
-    def __init__(self, parent, title, vectmap, modeChoices, id=wx.ID_ANY,
+    def __init__(self, parent, title, vectmap, modeChoices=[], id=wx.ID_ANY,
                  layer=1):
         wx.Frame.__init__(self, parent, id, title)
 
@@ -66,6 +69,7 @@ class SQLBuilder(wx.Frame):
         self.layer = layer
         self.dbInfo = VectorDBInfo(self.vectmap)
         self.tablename = self.dbInfo.GetTable(self.layer)
+                
         self.driver, self.database = self.dbInfo.GetDbSettings(self.layer)
 
         self.colvalues = []     # array with unique values in selected column
@@ -85,33 +89,34 @@ class SQLBuilder(wx.Frame):
         self.SetClientSize(self.panel.GetSize())
         self.CenterOnParent()
 
-    def _doLayout(self, modeChoices):
+    def _doLayout(self, modeChoices, showDbInfo=False):
         """Do dialog layout"""
 
         self.pagesizer = wx.BoxSizer(wx.VERTICAL)
 
         # dbInfo
-        databasebox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                   label=" %s " % _("Database connection"))
-        databaseboxsizer = wx.StaticBoxSizer(databasebox, wx.VERTICAL)
-        databaseboxsizer.Add(
-            CreateDbInfoDesc(
-                self.panel,
-                self.dbInfo,
-                layer=self.layer),
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=3)
-
+        if showDbInfo:
+            databasebox = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                                    label=" %s " % _("Database connection"))
+            databaseboxsizer = wx.StaticBoxSizer(databasebox, wx.VERTICAL)
+            databaseboxsizer.Add(
+                CreateDbInfoDesc(
+                    self.panel,
+                    self.dbInfo,
+                    layer=self.layer),
+                proportion=1,
+                flag=wx.EXPAND | wx.ALL,
+                border=3)
+        
         #
         # text areas
         #
         # sql box
-        sqlbox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                              label=" %s " % _("Query"))
+        sqlbox = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                           label=" %s " % _("Query"))
         sqlboxsizer = wx.StaticBoxSizer(sqlbox, wx.VERTICAL)
 
-        self.text_sql = wx.TextCtrl(parent=self.panel, id=wx.ID_ANY,
+        self.text_sql = TextCtrl(parent=self.panel, id=wx.ID_ANY,
                                     value='', size=(-1, 50),
                                     style=wx.TE_MULTILINE)
 
@@ -123,13 +128,12 @@ class SQLBuilder(wx.Frame):
         #
         # buttons
         #
-        self.btn_clear = wx.Button(parent=self.panel, id=wx.ID_CLEAR)
-        self.btn_clear.SetToolTipString(_("Set SQL statement to default"))
-        self.btn_apply = wx.Button(parent=self.panel, id=wx.ID_APPLY)
-        self.btn_apply.SetToolTipString(
-            _("Apply SQL statement in Attribute Table Manager"))
-        self.btn_close = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
-        self.btn_close.SetToolTipString(_("Close the dialog"))
+        self.btn_clear = Button(parent=self.panel, id=wx.ID_CLEAR)
+        self.btn_clear.SetToolTip(_("Set SQL statement to default"))
+        self.btn_apply = Button(parent=self.panel, id=wx.ID_APPLY)
+        self.btn_apply.SetToolTip(_("Apply SQL statement"))
+        self.btn_close = Button(parent=self.panel, id=wx.ID_CLOSE)
+        self.btn_close.SetToolTip(_("Close the dialog"))
 
         self.btn_logic = {'is': ['=', ],
                           'isnot': ['!=', ],
@@ -145,8 +149,8 @@ class SQLBuilder(wx.Frame):
                           'prc': ['%', ]}
 
         self.btn_logicpanel = wx.Panel(parent=self.panel, id=wx.ID_ANY)
-        for key, value in self.btn_logic.iteritems():
-            btn = wx.Button(parent=self.btn_logicpanel, id=wx.ID_ANY,
+        for key, value in six.iteritems(self.btn_logic):
+            btn = Button(parent=self.btn_logicpanel, id=wx.ID_ANY,
                             label=value[0])
             self.btn_logic[key].append(btn.GetId())
 
@@ -215,8 +219,8 @@ class SQLBuilder(wx.Frame):
         #
         self.hsizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        columnsbox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                  label=" %s " % _("Columns"))
+        columnsbox = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                               label=" %s " % _("Columns"))
         columnsizer = wx.StaticBoxSizer(columnsbox, wx.VERTICAL)
         self.list_columns = wx.ListBox(
             parent=self.panel,
@@ -227,24 +231,25 @@ class SQLBuilder(wx.Frame):
         columnsizer.Add(self.list_columns, proportion=1,
                         flag=wx.EXPAND)
 
-        modesizer = wx.BoxSizer(wx.VERTICAL)
-
-        self.mode = wx.RadioBox(parent=self.panel, id=wx.ID_ANY,
-                                label=" %s " % _("Interactive insertion"),
-                                choices=modeChoices,
-                                style=wx.RA_SPECIFY_COLS,
-                                majorDimension=1)
-
-        self.mode.SetSelection(1)  # default 'values'
-        modesizer.Add(self.mode, proportion=1,
-                      flag=wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, border=5)
+        if modeChoices:
+            modesizer = wx.BoxSizer(wx.VERTICAL)
+            
+            self.mode = wx.RadioBox(parent=self.panel, id=wx.ID_ANY,
+                                    label=" %s " % _("Interactive insertion"),
+                                    choices=modeChoices,
+                                    style=wx.RA_SPECIFY_COLS,
+                                    majorDimension=1)
+            
+            self.mode.SetSelection(1)  # default 'values'
+            modesizer.Add(self.mode, proportion=1,
+                          flag=wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, border=5)
 
         # self.list_columns.SetMinSize((-1,130))
         # self.list_values.SetMinSize((-1,100))
 
         self.valuespanel = wx.Panel(parent=self.panel, id=wx.ID_ANY)
-        valuesbox = wx.StaticBox(parent=self.valuespanel, id=wx.ID_ANY,
-                                 label=" %s " % _("Values"))
+        valuesbox = StaticBox(parent=self.valuespanel, id=wx.ID_ANY,
+                              label=" %s " % _("Values"))
         valuesizer = wx.StaticBoxSizer(valuesbox, wx.VERTICAL)
         self.list_values = wx.ListBox(parent=self.valuespanel, id=wx.ID_ANY,
                                       choices=self.colvalues,
@@ -253,14 +258,14 @@ class SQLBuilder(wx.Frame):
                        flag=wx.EXPAND)
         self.valuespanel.SetSizer(valuesizer)
 
-        self.btn_unique = wx.Button(parent=self.valuespanel, id=wx.ID_ANY,
+        self.btn_unique = Button(parent=self.valuespanel, id=wx.ID_ANY,
                                     label=_("Get all values"))
         self.btn_unique.Enable(False)
-        self.btn_uniquesample = wx.Button(
+        self.btn_uniquesample = Button(
             parent=self.valuespanel,
             id=wx.ID_ANY,
             label=_("Get sample"))
-        self.btn_uniquesample.SetToolTipString(
+        self.btn_uniquesample.SetToolTip(
             _("Get first 256 unique values as sample"))
         self.btn_uniquesample.Enable(False)
 
@@ -275,12 +280,12 @@ class SQLBuilder(wx.Frame):
 
         # go to
         gotosizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.goto = wx.TextCtrl(
+        self.goto = TextCtrl(
             parent=self.valuespanel,
             id=wx.ID_ANY,
             style=wx.TE_PROCESS_ENTER)
-        gotosizer.Add(wx.StaticText(parent=self.valuespanel, id=wx.ID_ANY,
-                                    label=_("Go to:")), proportion=0,
+        gotosizer.Add(StaticText(parent=self.valuespanel, id=wx.ID_ANY,
+                                 label=_("Go to:")), proportion=0,
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, border=5)
         gotosizer.Add(self.goto, proportion=1,
                       flag=wx.EXPAND)
@@ -296,13 +301,15 @@ class SQLBuilder(wx.Frame):
                                          label=_("Close dialog on apply"))
         self.close_onapply.SetValue(True)
 
-        self.pagesizer.Add(databaseboxsizer,
-                           flag=wx.ALL | wx.EXPAND, border=5)
-        self.pagesizer.Add(
-            modesizer,
-            proportion=0,
-            flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
-            border=5)
+        if showDbInfo:
+            self.pagesizer.Add(databaseboxsizer,
+                               flag=wx.ALL | wx.EXPAND, border=5)
+        if modeChoices:
+            self.pagesizer.Add(
+                modesizer,
+                proportion=0,
+                flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
+                border=5)
         self.pagesizer.Add(
             self.hsizer,
             proportion=1,
@@ -325,13 +332,14 @@ class SQLBuilder(wx.Frame):
         #
         # bindings
         #
-        self.mode.Bind(wx.EVT_RADIOBOX, self.OnMode)
+        if modeChoices:
+            self.mode.Bind(wx.EVT_RADIOBOX, self.OnMode)
         # self.text_sql.Bind(wx.EVT_ACTIVATE, self.OnTextSqlActivate)TODO
 
         self.btn_unique.Bind(wx.EVT_BUTTON, self.OnUniqueValues)
         self.btn_uniquesample.Bind(wx.EVT_BUTTON, self.OnSampleValues)
 
-        for key, value in self.btn_logic.iteritems():
+        for key, value in six.iteritems(self.btn_logic):
             self.FindWindowById(value[1]).Bind(wx.EVT_BUTTON, self.OnAddMark)
 
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
@@ -355,10 +363,12 @@ class SQLBuilder(wx.Frame):
 
         self.list_values.Clear()
 
+        sql = "SELECT DISTINCT {column} FROM {table} ORDER BY {column}".format(
+            column=column, table=self.tablename)
+        if justsample:
+            sql += " LIMIT {}".format(255)
         data = grass.db_select(
-            sql="SELECT %s FROM %s" %
-            (column,
-             self.tablename),
+            sql=sql,
             database=self.database,
             driver=self.driver,
             sep='{_sep_}')
@@ -369,17 +379,16 @@ class SQLBuilder(wx.Frame):
             self.dbInfo.GetTable(self.layer))[column]
 
         i = 0
-        for item in sorted(set(map(lambda x: desc['ctype'](x[0]), data))):
-            if justsample and i > 255:
-                break
-
-            if desc['type'] != 'character':
-                item = str(item)
+        items = []
+        for item in data: #sorted(set(map(lambda x: desc['ctype'](x[0]), data))):
+            if desc['type'] not in ('character', 'text'):
+                items.append(str(item[0]))
             else:
-                item = GetUnicodeValue(item)
-            self.list_values.Append(item)
+                items.append(u"'{}'".format(GetUnicodeValue(item[0])))
             i += 1
 
+        self.list_values.AppendItems(items)
+        
     def OnSampleValues(self, event):
         """Get sample values"""
         self.OnUniqueValues(None, True)
@@ -411,9 +420,6 @@ class SQLBuilder(wx.Frame):
             self.dbInfo.GetTable(
                 self.layer))[column]['type']
 
-        if ctype == 'character':
-            value = "'%s'" % value
-
         self._add(element='value', value=value)
 
     def OnGoTo(self, event):
@@ -424,7 +430,12 @@ class SQLBuilder(wx.Frame):
         gotoText = event.GetString()
         lenLimit = len(gotoText)
         found = idx = 0
+        string = False
         for item in self.list_values.GetItems():
+            if idx == 0 and item.startswith("'"):
+                string = True
+            if string:
+                item = item[1:-1] # strip "'"
             if item[:lenLimit] == gotoText:
                 found = idx
                 break
@@ -443,7 +454,7 @@ class SQLBuilder(wx.Frame):
                 self.btn_arithmeticpanel.IsShown():
             btns = self.btn_arithmetic
 
-        for key, value in btns.iteritems():
+        for key, value in six.iteritems(btns):
             if event.GetId() == value[1]:
                 mark = value[0]
                 break
@@ -483,13 +494,13 @@ class SQLBuilderSelect(SQLBuilder):
         SQLBuilder._doLayout(self, modeChoices)
 
         self.text_sql.SetValue("SELECT * FROM %s" % self.tablename)
-        self.text_sql.SetToolTipString(
+        self.text_sql.SetToolTip(
             _("Example: %s") %
             "SELECT * FROM roadsmajor WHERE MULTILANE = 'no' OR OBJECTID < 10")
 
-        self.btn_verify = wx.Button(parent=self.panel, id=wx.ID_ANY,
+        self.btn_verify = Button(parent=self.panel, id=wx.ID_ANY,
                                     label=_("Verify"))
-        self.btn_verify.SetToolTipString(_("Verify SQL statement"))
+        self.btn_verify.SetToolTip(_("Verify SQL statement"))
 
         self.buttonsizer.Insert(1, self.btn_verify)
 
@@ -648,8 +659,8 @@ class SQLBuilderUpdate(SQLBuilder):
 
         self.btn_arithmeticpanel = wx.Panel(parent=self.panel, id=wx.ID_ANY)
 
-        for key, value in self.btn_arithmetic.iteritems():
-            btn = wx.Button(parent=self.btn_arithmeticpanel, id=wx.ID_ANY,
+        for key, value in six.iteritems(self.btn_arithmetic):
+            btn = Button(parent=self.btn_arithmeticpanel, id=wx.ID_ANY,
                             label=value[0])
             self.btn_arithmetic[key].append(btn.GetId())
 
@@ -689,8 +700,8 @@ class SQLBuilderUpdate(SQLBuilder):
 
         self.funcpanel = wx.Panel(parent=self.panel, id=wx.ID_ANY)
         self._initSqlFunctions()
-        funcsbox = wx.StaticBox(parent=self.funcpanel, id=wx.ID_ANY,
-                                label=" %s " % _("Functions"))
+        funcsbox = StaticBox(parent=self.funcpanel, id=wx.ID_ANY,
+                             label=" %s " % _("Functions"))
         funcsizer = wx.StaticBoxSizer(funcsbox, wx.VERTICAL)
         self.list_func = wx.ListBox(parent=self.funcpanel, id=wx.ID_ANY,
                                     choices=self.sqlFuncs['sqlite'].keys(),
@@ -705,7 +716,7 @@ class SQLBuilderUpdate(SQLBuilder):
                            proportion=1, flag=wx.EXPAND)
 
         self.list_func.Bind(wx.EVT_LISTBOX, self.OnAddFunc)
-        for key, value in self.btn_arithmetic.iteritems():
+        for key, value in six.iteritems(self.btn_arithmetic):
             self.FindWindowById(value[1]).Bind(wx.EVT_BUTTON, self.OnAddMark)
         self.mode.SetSelection(0)
         self.OnMode(None)
@@ -835,9 +846,55 @@ class SQLBuilderUpdate(SQLBuilder):
             'TRIM': ['TRIM (,)']
         }
 
+class SQLBuilderWhere(SQLBuilder):
+    """Class for building SELECT SQL WHERE statement"""
+
+    def __init__(self, parent, vectmap, id=wx.ID_ANY,
+                 layer=1):
+
+        title = _("GRASS SQL Builder (%(type)s) - <%(map)s>") % \
+                {'type': "WHERE", 'map': vectmap}
+
+        super(SQLBuilderWhere, self).__init__(
+            parent, title, vectmap, id=wx.ID_ANY, 
+            layer=layer)
+        
+    def OnClear(self, event):
+        self.text_sql.SetValue('')
+        
+    def OnApply(self, event):
+        self.parent.SetValue(self.text_sql.GetValue())
+
+        if self.close_onapply.IsChecked():
+            self.Destroy()
+
+        event.Skip()
+
+    def _add(self, element, value):
+        """Add element to the query
+
+        :param element: element to add (column, value)
+        """
+        sqlstr = self.text_sql.GetValue()
+        inspoint = self.text_sql.GetInsertionPoint()
+
+        newsqlstr = ''
+        if inspoint > 0 and sqlstr[inspoint-1] != ' ':
+            newsqlstr += ' '
+        newsqlstr += value
+        if inspoint < len(sqlstr):
+            newsqlstr += ' ' if sqlstr[inspoint] != ' ' else ''
+        
+        if newsqlstr:
+            self.text_sql.SetValue(sqlstr[:inspoint] + newsqlstr + sqlstr[inspoint:])
+            self.text_sql.SetInsertionPoint(inspoint + len(newsqlstr))
+                    
+        wx.CallAfter(self.text_sql.SetFocus)
+
+        
 if __name__ == "__main__":
     if len(sys.argv) not in [3, 4]:
-        print >>sys.stderr, __doc__
+        print(__doc__, file=sys.stderr)
         sys.exit()
 
     if len(sys.argv) == 3:
@@ -850,7 +907,7 @@ if __name__ == "__main__":
     elif sys.argv[1] == 'update':
         sqlBuilder = SQLBuilderUpdate
     else:
-        print >>sys.stderr, __doc__
+        print(__doc__, file=sys.stderr)
         sys.exit()
 
     app = wx.App(0)

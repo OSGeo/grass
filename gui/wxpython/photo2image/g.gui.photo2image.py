@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ############################################################################
 #
@@ -80,9 +80,8 @@ def main():
     set_gui_path()
 
     from core.settings import UserSettings
-    from core.globalvar import CheckWxVersion
     from core.giface import StandaloneGrassInterface
-    from iphoto2image.ip2i_manager import GCPWizard
+    from photo2image.ip2i_manager import GCPWizard
 
     driver = UserSettings.Get(group='display', key='driver', subkey='type')
     if driver == 'png':
@@ -116,8 +115,6 @@ def main():
         gscript.fatal(_("Please provive an output files extension (used by i.rectify)"))
 
     app = wx.App()
-    if not CheckWxVersion([2, 9]):
-        wx.InitAllImageHandlers()
 
     wizard = GCPWizard(parent=None, giface=StandaloneGrassInterface(), group=group, 
             raster=raster, raster1=raster, camera=camera, order=order, extension=extension)

@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 
 import wx
 import tempfile
+import six
 
 from grass.pydispatch.signal import Signal
 
@@ -24,11 +25,11 @@ from core.gcmd import RunCommand, GMessage, GError
 from core.debug import Debug
 from mapwin.buffered import BufferedMapWindow
 from core.settings import UserSettings
-from core.utils import ListOfCatsToRange, _
+from core.utils import ListOfCatsToRange
 from core.globalvar import QUERYLAYER
 from vdigit.dialogs import VDigitCategoryDialog, VDigitZBulkDialog, VDigitDuplicatesDialog
 from gui_core import gselect
-from gui_core.wrap import PseudoDC
+from gui_core.wrap import PseudoDC, NewId
 
 
 class VDigitWindow(BufferedMapWindow):
@@ -277,9 +278,9 @@ class VDigitWindow(BufferedMapWindow):
         dbInfo = gselect.VectorDBInfo(vectorName)
         sqlfile = tempfile.NamedTemporaryFile(mode="w")
         for fid in fids:
-            for layer, cats in self.digit.GetLineCats(fid).iteritems():
+            for layer, cats in six.iteritems(self.digit.GetLineCats(fid)):
                 table = dbInfo.GetTable(layer)
-                for attrb, item in vdigit['geomAttr'].iteritems():
+                for attrb, item in six.iteritems(vdigit['geomAttr']):
                     val = -1
                     if attrb == 'length':
                         val = self.digit.GetLineLength(fid)
@@ -331,7 +332,7 @@ class VDigitWindow(BufferedMapWindow):
         vertex.
         """
         self.polycoords.append(self.Pixel2Cell(self.mouse['begin']))
-        self.moveInfo['id'].append(wx.NewId())
+        self.moveInfo['id'].append(NewId())
         self.DrawLines(pdc=self.pdcTmp)
 
     def OnLeftDownMoveLine(self, event):

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 ############################################################################
 #
@@ -6,6 +6,7 @@
 # AUTHOR(S):    Markus Neteler
 #               Converted to Python by Glynn Clements
 #               Key column added by Martin Landa <landa.martin gmail.com>
+#               Table index added by Markus Metz
 # PURPOSE:      interface to db.execute to creates and add a new table to given vector map
 # COPYRIGHT:    (C) 2005, 2007, 2008, 2011  by Markus Neteler & the GRASS Development Team
 #
@@ -55,11 +56,8 @@
 import sys
 import os
 import grass.script as grass
+from grass.script.utils import decode
 from grass.exceptions import CalledModuleError
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 
 def main():
@@ -97,8 +95,10 @@ def main():
     driver = kv['driver']
     schema = kv['schema']
 
+    database2 = database.replace('$MAP/', map_name + '/')
+
     # maybe there is already a table linked to the selected layer?
-    nuldev = file(os.devnull, 'w')
+    nuldev = open(os.devnull, 'w')
     try:
         grass.vector_db(map_name, stderr=nuldev)[int(layer)]
         grass.fatal(_("There is already a table linked to layer <%s>") % layer)
@@ -106,21 +106,21 @@ def main():
         pass
 
     # maybe there is already a table with that name?
-    tables = grass.read_command('db.tables', flags='p', database=database, driver=driver,
+    tables = grass.read_command('db.tables', flags='p', database=database2, driver=driver,
                                 stderr=nuldev)
+    tables = decode(tables)
 
     if not table in tables.splitlines():
         colnames = []
+        column_def = []
         if columns:
             column_def = []
-            for x in ' '.join(columns.lower().split()).split(','):
-                colname = x.split()[0]
+            for x in ' '.join(columns.split()).split(','):
+                colname = x.lower().split()[0]
                 if colname in colnames:
                     grass.fatal(_("Duplicate column name '%s' not allowed") % colname)
                 colnames.append(colname)
                 column_def.append(x)
-        else:
-            column_def = []
 
         # if not existing, create it:
         if not key in colnames:
@@ -132,13 +132,14 @@ def main():
         sql = "CREATE TABLE %s (%s)" % (table, column_def)
         try:
             grass.run_command('db.execute',
-                              database=database, driver=driver, sql=sql)
+                              database=database2, driver=driver, sql=sql)
         except CalledModuleError:
             grass.fatal(_("Unable to create table <%s>") % table)
 
     # connect the map to the DB:
     if schema:
         table = '{schema}.{table}'.format(schema=schema, table=table)
+    grass.verbose(_("Connecting new table to vector map <%s>...") % map_name)
     grass.run_command('v.db.connect', quiet=True,
                       map=map_name, database=database, driver=driver,
                       layer=layer, table=table, key=key)

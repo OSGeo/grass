@@ -22,7 +22,6 @@ import copy
 from grass.script.utils import parse_key_val
 from grass.script import core as gcore
 
-from core.utils import _
 from core.gcmd import GException
 from animation.nviztask import NvizTask
 from animation.utils import validateMapNames, getRegisteredMaps, \

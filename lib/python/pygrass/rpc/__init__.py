@@ -314,15 +314,15 @@ class DataProvider(RPCServerBase):
             >>> provider = DataProvider()
             >>> ret = provider.get_vector_table_as_dict(name=test_vector_name)
             >>> ret["table"]
-            {1: [1, u'point', 1.0], 2: [2, u'line', 2.0], 3: [3, u'centroid', 3.0]}
+            {1: [1, 'point', 1.0], 2: [2, 'line', 2.0], 3: [3, 'centroid', 3.0]}
             >>> ret["columns"]
-            Columns([(u'cat', u'INTEGER'), (u'name', u'varchar(50)'), (u'value', u'double precision')])
+            Columns([('cat', 'INTEGER'), ('name', 'varchar(50)'), ('value', 'double precision')])
             >>> ret = provider.get_vector_table_as_dict(name=test_vector_name,
             ...                                           where="value > 1")
             >>> ret["table"]
-            {2: [2, u'line', 2.0], 3: [3, u'centroid', 3.0]}
+            {2: [2, 'line', 2.0], 3: [3, 'centroid', 3.0]}
             >>> ret["columns"]
-            Columns([(u'cat', u'INTEGER'), (u'name', u'varchar(50)'), (u'value', u'double precision')])
+            Columns([('cat', 'INTEGER'), ('name', 'varchar(50)'), ('value', 'double precision')])
             >>> provider.get_vector_table_as_dict(name="no_map",
             ...                                   where="value > 1")
             >>> provider.stop()

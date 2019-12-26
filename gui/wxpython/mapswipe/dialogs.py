@@ -20,14 +20,13 @@ import wx.lib.scrolledpanel as SP
 import wx.lib.colourselect as csel
 
 from core import globalvar
-from core.utils import _
 from gui_core import gselect
 from gui_core.widgets import SimpleValidator
 from gui_core.preferences import PreferencesBaseDialog
 from core.gcmd import GMessage
 from core.layerlist import LayerList
 from core.settings import UserSettings
-from gui_core.wrap import SpinCtrl
+from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox
 from gui_core.simplelmgr import SimpleLayerManager, SIMPLE_LMGR_RASTER, \
     SIMPLE_LMGR_VECTOR, SIMPLE_LMGR_RGB, SIMPLE_LMGR_TB_LEFT, SIMPLE_LMGR_TB_RIGHT
 
@@ -60,10 +59,10 @@ class SwipeMapDialog(wx.Dialog):
         self._firstPanel = self._createSimplePanel()
         self._secondPanel = self._createAdvancedPanel()
 
-        self.btnSwitch = wx.Button(self)
-        self.btnCancel = wx.Button(self, id=wx.ID_CANCEL)
-        self.btnApply = wx.Button(self, id=wx.ID_APPLY)
-        self.btnOK = wx.Button(self, id=wx.ID_OK)
+        self.btnSwitch = Button(self)
+        self.btnCancel = Button(self, id=wx.ID_CANCEL)
+        self.btnApply = Button(self, id=wx.ID_APPLY)
+        self.btnOK = Button(self, id=wx.ID_OK)
         self.btnOK.SetDefault()
 
         self.btnSwitch.Bind(wx.EVT_BUTTON, self.OnSwitchMode)
@@ -80,6 +79,10 @@ class SwipeMapDialog(wx.Dialog):
             self._secondRaster.SetValue(second)
 
         self._layout()
+
+    def UnInit(self):
+        self._firstLmgr.UnInit()
+        self._secondLmgr.UnInit()
 
     def _layout(self):
         """Do layout"""
@@ -125,7 +128,7 @@ class SwipeMapDialog(wx.Dialog):
             validator=SimpleValidator(
                 callback=self.ValidatorCallback))
         sizer.Add(
-            wx.StaticText(
+            StaticText(
                 panel,
                 label=_("Name of top/left raster map:")),
             proportion=0,
@@ -134,7 +137,7 @@ class SwipeMapDialog(wx.Dialog):
         sizer.Add(self._firstRaster, proportion=0,
                   flag=wx.EXPAND | wx.ALL, border=1)
         sizer.Add(
-            wx.StaticText(
+            StaticText(
                 panel,
                 label=_("Name of bottom/right raster map:")),
             proportion=0,
@@ -269,13 +272,13 @@ class PreferencesDialog(PreferencesBaseDialog):
         notebook.AddPage(page=panel, text=_("Mirror mode"))
 
         border = wx.BoxSizer(wx.VERTICAL)
-        box = wx.StaticBox(parent=panel, label=" %s " % _("Mirrored cursor"))
+        box = StaticBox(parent=panel, label=" %s " % _("Mirrored cursor"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
         row = 0
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 label=_("Color:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
@@ -296,7 +299,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         row += 1
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 label=_("Shape:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
@@ -322,7 +325,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         row += 1
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 label=_("Line width:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
@@ -345,7 +348,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         row += 1
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 label=_("Size:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,

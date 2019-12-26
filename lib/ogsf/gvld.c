@@ -23,7 +23,7 @@
 
 #include "mc33_table.h"
 
-/* usefull macros */
+/* useful macros */
 #define READ() gvl_read_char(pos[i]++, gvl->isosurf[i]->data)
 
 /*!
@@ -563,7 +563,7 @@ int gvld_slice(geovol * gvl, int ndx)
     stepy = (slice->y2 - slice->y1) / f_cols;
     stepz = (slice->z2 - slice->z1) / f_rows;
 
-    /* set x,y intially to first slice pt */
+    /* set x,y initially to first slice pt */
     x = (slice->x1);
     y = (slice->y1);
 

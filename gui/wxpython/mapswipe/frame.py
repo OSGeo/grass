@@ -17,7 +17,6 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import wx
-import time
 
 import grass.script as grass
 
@@ -29,7 +28,6 @@ from core.render import Map
 from mapdisp import statusbar as sb
 from core.debug import Debug
 from core.gcmd import GError, GMessage
-from core.utils import _
 from core.layerlist import LayerListToRendererConverter
 from gui_core.query import QueryDialog, PrepareQueryResults
 
@@ -254,11 +252,11 @@ class SwipeMapFrame(DoubleMapFrame):
 
     def OnSize(self, event):
         Debug.msg(4, "SwipeMapFrame.OnSize()")
-        self.resize = time.clock()
+        self.resize = grass.clock()
         super(SwipeMapFrame, self).OnSize(event)
 
     def OnIdle(self, event):
-        if self.resize and time.clock() - self.resize > 0.2:
+        if self.resize and grass.clock() - self.resize > 0.2:
             w1 = self.GetFirstWindow()
             w2 = self.GetSecondWindow()
 
@@ -766,6 +764,8 @@ class SwipeMapFrame(DoubleMapFrame):
     def OnCloseWindow(self, event):
         self.GetFirstMap().Clean()
         self.GetSecondMap().Clean()
+        self._mgr.UnInit()
+        self._inputDialog.UnInit()
         self.Destroy()
 
 

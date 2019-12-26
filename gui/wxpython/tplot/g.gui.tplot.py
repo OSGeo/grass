@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 ############################################################################
 #
 # MODULE:    g.gui.tplot.py
@@ -27,6 +27,11 @@
 #% keywords: temporal
 #%end
 
+#%flag
+#% key: h
+#% description: Set the header of CSV file, to be used with csv option
+#%end
+
 #%option G_OPT_STVDS_INPUTS
 #% key: stvds
 #% required: no
@@ -49,7 +54,6 @@
 #% required: no
 #%end
 
-
 #%option
 #% key: attr
 #% label: Name of attribute
@@ -59,8 +63,36 @@
 
 #%option G_OPT_F_OUTPUT
 #% required: no
-#% label: Name for output file
-#% description: Add extension to specify format (.png, .pdf, .svg)
+#% label: Name for output graphical file
+#% description: Full path for output file containing the plot, ddd extension to specify format (.png, .pdf, .svg)
+#%end
+
+#%option G_OPT_F_OUTPUT
+#% key: csv
+#% required: no
+#% label: Name for output CSV file
+#% description: Full path for the CSV file containing the plotted data
+#%end
+
+#%option
+#% key: title
+#% label: Title for plot
+#% description: The title for the output plot
+#% required: no
+#%end
+
+#%option
+#% key: xlabel
+#% label: Label for x axis
+#% description: The x axis label for the output plot
+#% required: no
+#%end
+
+#%option
+#% key: ylabel
+#% label: Label for y axis
+#% description: The y axis label for the output plot
+#% required: no
 #%end
 
 #%option
@@ -82,7 +114,6 @@ def main():
     from grass.script.setup import set_gui_path
     set_gui_path()
 
-    from core.utils import _
     from core.giface import StandaloneGrassInterface
     try:
         from tplot.frame import TplotFrame
@@ -112,9 +143,22 @@ def main():
         elif not coords and not cats:
             gscript.warning(_("With stvds you have to use 'coordinates' or "
                               "'cats' option"))
+    title = None
+    if options['title']:
+        title = options['title']
+    xlabel = None
+    if options['xlabel']:
+        xlabel = options['xlabel']
+    ylabel = None
+    if options['ylabel']:
+        ylabel = options['ylabel']
+    csvfile = None
+    if options['csv']:
+        csvfile = options['csv']
     app = wx.App()
     frame = TplotFrame(parent=None, giface=StandaloneGrassInterface())
-    frame.SetDatasets(rasters, vectors, coords, cats, attr)
+    frame.SetDatasets(rasters, vectors, coords, cats, attr, title, xlabel,
+                      ylabel, csvfile, flags['h'], gscript .overwrite)
     if output:
         frame.OnRedraw()
         if options['size']:

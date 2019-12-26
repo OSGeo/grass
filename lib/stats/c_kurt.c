@@ -26,6 +26,7 @@ void c_kurt(DCELL * result, DCELL * values, int n, const void *closure)
     ave = sum / count;
 
     sumsq = 0;
+    sumqt = 0;
 
     for (i = 0; i < n; i++) {
 	DCELL d;
@@ -46,7 +47,7 @@ void c_kurt(DCELL * result, DCELL * values, int n, const void *closure)
 void w_kurt(DCELL * result, DCELL(*values)[2], int n, const void *closure)
 {
     DCELL sum, ave, sumsq, sumqt, var;
-    int count;
+    DCELL count;
     int i;
 
     sum = 0.0;
@@ -68,6 +69,7 @@ void w_kurt(DCELL * result, DCELL(*values)[2], int n, const void *closure)
     ave = sum / count;
 
     sumsq = 0;
+    sumqt = 0;
 
     for (i = 0; i < n; i++) {
 	DCELL d;

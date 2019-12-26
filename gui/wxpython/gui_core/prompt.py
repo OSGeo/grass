@@ -33,7 +33,6 @@ from grass.pydispatch.signal import Signal
 from core import globalvar
 from core import utils
 from core.gcmd import EncodeString, DecodeString
-from core.utils import _
 
 
 class GPrompt(object):
@@ -111,19 +110,15 @@ class GPrompt(object):
         if not cmdString:
             return
 
-        self.commands.append(cmdString)  # trace commands
-
         # parse command into list
         try:
             cmd = utils.split(str(cmdString))
         except UnicodeError:
             cmd = utils.split(EncodeString((cmdString)))
-        cmd = map(DecodeString, cmd)
+        cmd = list(map(DecodeString, cmd))
 
         self.promptRunCmd.emit(cmd=cmd)
 
-        # add command to history & clean prompt
-        # self.UpdateCmdHistory(cmd)
         self.OnCmdErase(None)
         self.ShowStatusText('')
 
@@ -300,6 +295,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         """
         # add command to history
         self.cmdbuffer.append(cmd)
+        # update also traced commands
+        self.commands.append(cmd)
 
         # keep command history to a managable size
         if len(self.cmdbuffer) > 200:

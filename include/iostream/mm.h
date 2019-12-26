@@ -86,7 +86,7 @@ enum MM_stream_usage {
 
 
 
-// Declarations of a very simple memory manager desgined to work with
+// Declarations of a very simple memory manager designed to work with
 // BTEs that rely on the underlying OS to manage physical memory.
 class MM_register {
 private:
@@ -132,18 +132,20 @@ public:
  
   void print();
 
-  friend class mm_register_init;
+  // make these members of MM_register
 #ifdef GRASS_MM_USE_EXCEPTION_SPECIFIER
-  friend void * operator new(size_t) throw (std::bad_alloc);
-  friend void * operator new[] (size_t) throw (std::bad_alloc);
-  friend void operator delete(void *) throw();
-  friend void operator delete[](void *) throw();
+  void * operator new(size_t) throw (std::bad_alloc);
+  void * operator new[] (size_t) throw (std::bad_alloc);
+  void operator delete(void *) throw();
+  void operator delete[](void *) throw();
 #else
-  friend void * operator new(size_t);
-  friend void * operator new[] (size_t);
-  friend void operator delete(void *) noexcept;
-  friend void operator delete[](void *) noexcept;
+  void * operator new(size_t);
+  void * operator new[] (size_t);
+  void operator delete(void *) noexcept;
+  void operator delete[](void *) noexcept;
 #endif /* GRASS_MM_USE_EXCEPTION_SPECIFIER */
+
+  friend class mm_register_init;
 };
 
 

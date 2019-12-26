@@ -106,8 +106,11 @@ dig_build_area_with_line(struct Plus_head *plus, plus_t first_line, int side,
 	    dig_angle_next_line(plus, prev_line, GV_RIGHT, GV_BOUNDARY, NULL);
 	G_debug(3, "next_line = %d", next_line);
 
-	if (next_line == 0)
+	if (next_line == 0) {
+	    G_debug(3, "Cannot build area, no next line for line %d",
+	            prev_line);
 	    return (-1);	/* Not found */
+	}
 
 	/* Check if adjacent lines do not have the same angle */
 	if (!dig_node_angle_check(plus, next_line, GV_BOUNDARY)) {
@@ -168,7 +171,7 @@ dig_build_area_with_line(struct Plus_head *plus, plus_t first_line, int side,
  *
  * Then for each line in area, update line (right,left) info.
  *
- * Neither islands nor centroids area filled.
+ * Neither islands nor centroids are filled.
  *
  * \param[in] plus pointer to Plus_head structure
  * \param[in] n_lines number of lines
@@ -210,7 +213,7 @@ int dig_add_area(struct Plus_head *plus, int n_lines, plus_t * lines,
 	Area->lines[i] = line;
 	Line = plus->Line[abs(line)];
 	topo = (struct P_topo_b *)Line->topo;
-	if (line < 0) {		/* revers direction -> area on left */
+	if (line < 0) {		/* reverse direction -> area on left */
 	    if (topo->left != 0) {
 		G_warning(_("Line %d already has area/isle %d to left"), line,
 			  topo->left);
@@ -303,7 +306,7 @@ int dig_area_add_isle(struct Plus_head *plus, int area, int isle)
  */
 int dig_area_del_isle(struct Plus_head *plus, int area, int isle)
 {
-    int i, mv;
+    int i;
     struct P_area *Area;
 
     G_debug(3, "dig_area_del_isle(): area = %d isle = %d", area, isle);
@@ -312,24 +315,23 @@ int dig_area_del_isle(struct Plus_head *plus, int area, int isle)
     if (Area == NULL)
 	G_fatal_error(_("Attempt to delete isle from dead area"));
 
-    mv = 0;
-    for (i = 0; i < Area->n_isles; i++) {
-	if (mv) {
-	    Area->isles[i - 1] = Area->isles[i];
-	}
-	else {
-	    if (Area->isles[i] == isle)
-		mv = 1;
-	}
-    }
+    /* find index of the isle */
+    i = 0;
+    while (i < Area->n_isles && Area->isles[i] != isle)
+	i++;
 
-    if (mv) {
-	Area->n_isles--;
-    }
-    else {
+    if (i == Area->n_isles) {
 	G_fatal_error(_("Attempt to delete not registered isle %d from area %d"),
 		      isle, area);
     }
+
+    i++;
+    while (i < Area->n_isles) {
+	Area->isles[i - 1] = Area->isles[i];
+	i++;
+    }
+
+    Area->n_isles--;
 
     return 0;
 }
@@ -338,7 +340,7 @@ int dig_area_del_isle(struct Plus_head *plus, int area, int isle)
  * \brief Delete area from Plus_head structure
  *
  *  This function deletes area from the topo structure and resets references
- *  to this area in lines, isles (within) to 0. 
+ *  to this area in boundaries, isles (within), and the centroid (if any) to 0.
  *  Possible new area is not created by this function, so that
  *  old boundaries participating in this area are left without area information
  *  even if form new area.
@@ -445,7 +447,7 @@ int dig_del_area(struct Plus_head *plus, int area)
 
 
 /*!
- * \brief Find number line of next angle to follow an line
+ * \brief Find line number of next angle to follow a line
  *
  * Assume that lines are sorted in increasing angle order and angles
  * of points and degenerated lines are set to -9 (ignored).
@@ -456,16 +458,15 @@ int dig_del_area(struct Plus_head *plus, int area)
  * \param[in] type line type (GV_LINE, GV_BOUNDARY or both)
  * \param[in] angle
  *
- * \return line number of next angle to follow an line (negative if connected by end node)
- *               (number of current line may be return if dangle - this is used in build)
+ * \return line number of next angle to follow a line (negative if connected by end node)
+ *               (number of current line may be returned if dangle - this is used in build)
  * \return 0 on error or not found
  */
 int
 dig_angle_next_line(struct Plus_head *plus, plus_t current_line, int side,
 		    int type, float *angle)
 {
-    int i, next;
-    int current;
+    int next;
     int line;
     plus_t node;
     struct P_node *Node;
@@ -519,6 +520,8 @@ dig_angle_next_line(struct Plus_head *plus, plus_t current_line, int side,
     G_debug(3, "  n_lines = %d", Node->n_lines);
     /* avoid loop when not debugging */
     if (debug_level > 2) {
+	int i;
+
 	for (i = 0; i < Node->n_lines; i++) {
 	    G_debug(3, "  i = %d line = %d angle = %f", i, Node->lines[i],
 		    Node->angles[i]);
@@ -526,12 +529,15 @@ dig_angle_next_line(struct Plus_head *plus, plus_t current_line, int side,
     }
 
     /* first find index for that line */
-    next = -1;
-    for (current = 0; current < Node->n_lines; current++) {
-	if (Node->lines[current] == current_line)
-	    next = current;
+    next = Node->n_lines - 1;
+    while (next >= 0 && Node->lines[next] != current_line) {
+	next--;
     }
+
     if (next == -1) {
+	/* internal error, should not happen */
+	G_fatal_error("dig_angle_next_line(): line %d not found at its own node %d",
+	              current_line, node);
 	if (angle)
 	    *angle = -9.;
 	return 0;		/* not found */
@@ -562,21 +568,22 @@ dig_angle_next_line(struct Plus_head *plus, plus_t current_line, int side,
 		continue;
 	}
 
-	line = abs(Node->lines[next]);
-	Line = plus->Line[line];
+	line = Node->lines[next];
+	Line = plus->Line[abs(line)];
         
 	if (Line->type & type) {	/* line found */
 	    G_debug(3, "  this one");
 	    if (angle)
 		*angle = Node->angles[next];
-	    return (Node->lines[next]);
+	    return line;
 	}
 
 	/* input line reached, this must be last, because current_line may be correct return value (dangle) */
-	if (Node->lines[next] == current_line)
+	if (line == current_line)
 	    break;
     }
-    G_debug(3, "  Line NOT found at node %d", (int)node);
+    G_debug(3, "  No next line for line %d at node %d",
+            current_line, (int)node);
     if (angle)
 	*angle = -9.;
 
@@ -584,7 +591,7 @@ dig_angle_next_line(struct Plus_head *plus, plus_t current_line, int side,
 }
 
 /*!
- * \brief Checks if angles of adjacent lines differ.
+ * \brief Check if angles of adjacent lines differ.
  *
  * Negative line number for end point. Assume that lines are sorted
  * in increasing angle order and angles of points and degenerated
@@ -662,7 +669,7 @@ int dig_node_angle_check(struct Plus_head *plus, plus_t line, int type)
  * The order of input lines is expected to be counter clockwise.
  * Then for each line in isle, update line (right,left) info.
  *
- *  Area number the island is within is not filled.
+ * Area number the island is within is not filled.
  *
  * \param[in] plus pointer to Plus_head structure
  * \param[in] n_lines number of lines

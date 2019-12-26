@@ -60,9 +60,9 @@ class TestAggregationAbsolute(TestCase):
                           sampling=["overlaps","overlapped","during"],
                           nprocs=2, flags="n")
 
-        tinfo_string="""start_time=2001-01-15 00:00:00
-                        end_time=2001-04-25 00:00:00
-                        granularity=2 days
+        tinfo_string="""start_time='2001-01-15 00:00:00'
+                        end_time='2001-04-25 00:00:00'
+                        granularity='2 days'
                         aggregation_type=average
                         number_of_maps=50
                         map_time=interval
@@ -84,9 +84,9 @@ class TestAggregationAbsolute(TestCase):
                           method="maximum", sampling=["contains"],
                           file_limit=0, nprocs=3)
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                        end_time=2001-04-01 00:00:00
-                        granularity=1 month
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                        end_time='2001-04-01 00:00:00'
+                        granularity='1 month'
                         map_time=interval
                         aggregation_type=maximum
                         number_of_maps=3
@@ -125,9 +125,9 @@ class TestAggregationAbsolute(TestCase):
                           method="minimum", sampling=["contains"],
                           nprocs=4, offset=10, suffix='num%02')
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                        end_time=2001-05-01 00:00:00
-                        granularity=2 months
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                        end_time='2001-05-01 00:00:00'
+                        granularity='2 months'
                         map_time=interval
                         aggregation_type=minimum
                         number_of_maps=2
@@ -158,9 +158,9 @@ class TestAggregationAbsolute(TestCase):
                           file_limit=0, nprocs=9, offset=100,
                           suffix='num%03')
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                        end_time=2001-04-01 00:00:00
-                        granularity=3 months
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                        end_time='2001-04-01 00:00:00'
+                        granularity='3 months'
                         map_time=interval
                         aggregation_type=sum
                         number_of_maps=1

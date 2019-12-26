@@ -23,6 +23,7 @@ import os
 import sys
 from copy import deepcopy
 import wx
+import six
 
 
 from core.gcmd import GException, GError, GMessage, RunCommand, GWarning
@@ -366,7 +367,7 @@ class ScattsManager:
     def SetPlotsMode(self, mode):
 
         self.plot_mode = mode
-        for scatt in self.plots.itervalues():
+        for scatt in six.itervalues(self.plots):
             if scatt['scatt']:
                 scatt['scatt'].SetMode(mode)
 
@@ -374,7 +375,7 @@ class ScattsManager:
 
     def ActivateSelectionPolygonMode(self, activate):
         self.pol_sel_mode[0] = activate
-        for scatt in self.plots.itervalues():
+        for scatt in six.itervalues(self.plots):
             if not scatt['scatt']:
                 continue
             scatt['scatt'].SetSelectionPolygonMode(activate)
@@ -387,7 +388,7 @@ class ScattsManager:
 
     def ProcessSelectionPolygons(self, process_mode):
         scatts_polygons = {}
-        for scatt_id, scatt in self.plots.iteritems():
+        for scatt_id, scatt in six.iteritems(self.plots):
             if not scatt['scatt']:
                 continue
             coords = scatt['scatt'].GetCoords()
@@ -419,7 +420,7 @@ class ScattsManager:
         if not sel_cat_id:
             return
 
-        for scatt in self.plots.itervalues():
+        for scatt in six.itervalues(self.plots):
             if scatt['scatt']:
                 scatt['scatt'].SetEmpty()
 
@@ -544,7 +545,7 @@ class PlotsRenderingManager:
             else:
                 ellipses_dt = {}
 
-            for c in scatt_dt.iterkeys():
+            for c in six.iterkeys(scatt_dt):
                 try:
                     self.cat_ids.remove(c)
                     scatt_dt[c]['render'] = True
@@ -700,7 +701,7 @@ class CategoriesManager:
         render = False
         update_cat_rast = []
 
-        for k, v in attrs_dict.iteritems():
+        for k, v in six.iteritems(attrs_dict):
             if not render and k in ['color', 'opacity', 'show', 'nstd']:
                 render = True
             if k in ['color', 'name']:
@@ -975,7 +976,7 @@ class IMapDispConnection:
 
     def RenderCatRast(self, cat_id):
 
-        if not cat_id in self.added_cats_rasts.iterkeys():
+        if not cat_id in six.iterkeys(self.added_cats_rasts):
             cat_rast = self.scatt_mgr.core.GetCatRast(cat_id)
 
             cat_name = self.cats_mgr.GetCategoryAttrs(cat_id)['name']

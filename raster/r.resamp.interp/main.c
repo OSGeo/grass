@@ -76,6 +76,10 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("resample"));
     G_add_keyword(_("interpolation"));
+    G_add_keyword(_("nearest neighbor"));
+    G_add_keyword(_("bilinear"));
+    G_add_keyword(_("bicubic"));
+    G_add_keyword(_("lanczos"));
     module->description =
 	_("Resamples raster map to a finer grid using interpolation.");
 

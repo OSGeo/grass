@@ -19,13 +19,26 @@ This program is free software under the GNU General Public License
 import os
 
 import wx
+import six
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
-from core.utils import normalize_whitespace, _
+from core.utils import normalize_whitespace
 from core.settings import UserSettings
 from core.gcmd import EncodeString, GetDefaultEncoding
 from nviz.main import NvizSettings
 
 from grass.script import core as gcore
+
+
+def get_database_location_mapset():
+    """Returns GRASS database, location, and mapset as a tuple"""
+    gisenv = gcore.gisenv()
+    return (gisenv['GISDBASE'],
+            gisenv['LOCATION_NAME'],
+            gisenv['MAPSET'])
 
 
 class ProcessWorkspaceFile:
@@ -94,6 +107,9 @@ class ProcessWorkspaceFile:
 
     def __processFile(self):
         """Process workspace file"""
+
+        self.__processSession()
+        
         #
         # layer manager
         #
@@ -101,7 +117,7 @@ class ProcessWorkspaceFile:
         if node_lm is not None:
             posAttr = node_lm.get('dim', '')
             if posAttr:
-                posVal = map(int, posAttr.split(','))
+                posVal = list(map(int, posAttr.split(',')))
                 try:
                     self.layerManager['pos'] = (posVal[0], posVal[1])
                     self.layerManager['size'] = (posVal[2], posVal[3])
@@ -121,7 +137,7 @@ class ProcessWorkspaceFile:
             # window position and size
             posAttr = display.get('dim', '')
             if posAttr:
-                posVal = map(int, posAttr.split(','))
+                posVal = list(map(int, posAttr.split(',')))
                 try:
                     pos = (posVal[0], posVal[1])
                     size = (posVal[2], posVal[3])
@@ -175,6 +191,17 @@ class ProcessWorkspaceFile:
             self.__processLayers(display)
             # process nviz_state
             self.__processNvizState(display)
+
+    def __processSession(self):
+        session = self.root.find('session')
+        if session is None:
+            self.database = None
+            self.location = None
+            self.mapset = None
+            return
+        self.database = self.__filterValue(self.__getNodeText(session, 'database'))
+        self.location = self.__filterValue(self.__getNodeText(session, 'location'))
+        self.mapset = self.__filterValue(self.__getNodeText(session, 'mapset'))
 
     def __processLayers(self, node, inGroup=-1):
         """Process layers/groups of selected display
@@ -797,6 +824,8 @@ class WriteWorkspaceFile(object):
     """Generic class for writing workspace file"""
 
     def __init__(self, lmgr, file):
+        self.outfile = file
+        file = StringIO()
         self.file = file
         self.lmgr = lmgr
         self.indent = 0
@@ -811,6 +840,19 @@ class WriteWorkspaceFile(object):
         self.file.write('%s<gxw>\n' % (' ' * self.indent))
 
         self.indent = + 4
+
+        database, location, mapset = get_database_location_mapset()
+
+        file.write('{indent}<session>\n'.format(indent=' ' * self.indent))
+        self.indent += 4
+        file.write('{indent}<database>{database}</database>\n'.format(
+            indent=' ' * self.indent, database=database))
+        file.write('{indent}<location>{location}</location>\n'.format(
+            indent=' ' * self.indent, location=location))
+        file.write('{indent}<mapset>{mapset}</mapset>\n'.format(
+            indent=' ' * self.indent, mapset=mapset))
+        self.indent -= 4
+        file.write('{indent}</session>\n'.format(indent=' ' * self.indent))
 
         # layer manager
         windowPos = self.lmgr.GetPosition()
@@ -856,7 +898,7 @@ class WriteWorkspaceFile(object):
                        'extent="%f,%f,%f,%f,%f,%f" '
                        'tbres="%f" '  # needed only for animation tool
                        'viewMode="%s" >\n' % (' ' * self.indent,
-                                              dispName.encode('utf8'),
+                                              dispName,
                                               int(mapdisp.mapWindowProperties.autoRender),
                                               mapdisp.statusbarManager.GetMode(),
                                               int(mapdisp.mapWindowProperties.showRegion),
@@ -916,6 +958,9 @@ class WriteWorkspaceFile(object):
         self.indent = - 4
         file.write('%s</gxw>\n' % (' ' * self.indent))
 
+        self.outfile.write(EncodeString(file.getvalue()))
+        file.close()
+
     def __filterValue(self, value):
         """Make value XML-valid"""
         value = value.replace('<', '&lt;')
@@ -942,13 +987,13 @@ class WriteWorkspaceFile(object):
                     string=True)
                 self.file.write(
                     '%s<layer type="%s" name="%s" checked="%d">\n' %
-                    (' ' * self.indent, type, EncodeString(cmd), checked))
+                    (' ' * self.indent, type, cmd, checked))
                 self.file.write('%s</layer>\n' % (' ' * self.indent))
             elif type == 'group':
                 name = mapTree.GetItemText(item)
                 self.file.write(
                     '%s<group name="%s" checked="%d">\n' %
-                    (' ' * self.indent, EncodeString(name), checked))
+                    (' ' * self.indent, name, checked))
                 self.indent += 4
                 subItem = mapTree.GetFirstChild(item)[0]
                 self.__writeLayer(mapTree, subItem)
@@ -965,7 +1010,7 @@ class WriteWorkspaceFile(object):
                     name = name.split('(', -1)[0].strip()
                 self.file.write(
                     '%s<layer type="%s" name="%s" checked="%d" opacity="%f">\n' %
-                    (' ' * self.indent, type, EncodeString(name), checked, opacity))
+                    (' ' * self.indent, type, name, checked, opacity))
 
                 self.indent += 4
                 # selected ?
@@ -976,7 +1021,7 @@ class WriteWorkspaceFile(object):
                     '%s<task name="%s">\n' %
                     (' ' * self.indent, cmd[0]))
                 self.indent += 4
-                for key, val in cmd[1].iteritems():
+                for key, val in six.iteritems(cmd[1]):
                     if key == 'flags':
                         for f in val:
                             self.file.write('%s<flag name="%s" />\n' %
@@ -990,7 +1035,7 @@ class WriteWorkspaceFile(object):
                         self.indent += 4
                         self.file.write(
                             '%s<value>%s</value>\n' %
-                            (' ' * self.indent, EncodeString(self.__filterValue(val))))
+                            (' ' * self.indent, self.__filterValue(val)))
                         self.indent -= 4
                         self.file.write(
                             '%s</parameter>\n' %
@@ -1003,7 +1048,7 @@ class WriteWorkspaceFile(object):
                     self.file.write('%s<vdigit>\n' % (' ' * self.indent))
                     if 'geomAttr' in vdigit:
                         self.indent += 4
-                        for type, val in vdigit['geomAttr'].iteritems():
+                        for type, val in six.iteritems(vdigit['geomAttr']):
                             units = ''
                             if val['units'] != 'mu':
                                 units = ' units="%s"' % val['units']
@@ -1038,13 +1083,13 @@ class WriteWorkspaceFile(object):
         self.indent += 4
         self.file.write('%s<surface>\n' % (' ' * self.indent))
         self.indent += 4
-        for attrb in data.iterkeys():
+        for attrb in six.iterkeys(data):
             if len(data[attrb]) < 1:  # skip empty attributes
                 continue
             if attrb == 'object':
                 continue
 
-            for name in data[attrb].iterkeys():
+            for name in six.iterkeys(data[attrb]):
                 # surface attribute
                 if attrb == 'attribute':
                     if data[attrb][name]['map'] is None:
@@ -1064,7 +1109,7 @@ class WriteWorkspaceFile(object):
             if attrb == 'draw':
                 self.file.write('%s<%s' % (' ' * self.indent, attrb))
                 if 'mode' in data[attrb]:
-                    for tag, value in data[attrb]['mode']['desc'].iteritems():
+                    for tag, value in six.iteritems(data[attrb]['mode']['desc']):
                         self.file.write(' %s="%s"' % (tag, value))
                 self.file.write('>\n')  # <draw ...>
 
@@ -1121,14 +1166,14 @@ class WriteWorkspaceFile(object):
         self.indent += 4
         self.file.write('%s<volume>\n' % (' ' * self.indent))
         self.indent += 4
-        for attrb in data.iterkeys():
+        for attrb in six.iterkeys(data):
             if len(data[attrb]) < 1:  # skip empty attributes
                 continue
             if attrb == 'object':
                 continue
 
             if attrb == 'attribute':
-                for name in data[attrb].iterkeys():
+                for name in six.iterkeys(data[attrb]):
                     # surface attribute
                     if data[attrb][name]['map'] is None:
                         continue
@@ -1211,10 +1256,10 @@ class WriteWorkspaceFile(object):
             if attrb == 'isosurface':
                 for isosurface in data[attrb]:
                     self.file.write('%s<%s>\n' % (' ' * self.indent, attrb))
-                    for name in isosurface.iterkeys():
+                    for name in six.iterkeys(isosurface):
                         self.indent += 4
                         self.file.write('%s<%s>\n' % (' ' * self.indent, name))
-                        for att in isosurface[name].iterkeys():
+                        for att in six.iterkeys(isosurface[name]):
                             if isosurface[name][att] is True:
                                 val = '1'
                             elif isosurface[name][att] is False:
@@ -1242,10 +1287,10 @@ class WriteWorkspaceFile(object):
             if attrb == 'slice':
                 for slice_ in data[attrb]:
                     self.file.write('%s<%s>\n' % (' ' * self.indent, attrb))
-                    for name in slice_.iterkeys():
+                    for name in six.iterkeys(slice_):
                         self.indent += 4
                         self.file.write('%s<%s>\n' % (' ' * self.indent, name))
-                        for att in slice_[name].iterkeys():
+                        for att in six.iterkeys(slice_[name]):
                             if att in ('map', 'update'):
                                 continue
                             val = slice_[name][att]
@@ -1275,7 +1320,7 @@ class WriteWorkspaceFile(object):
         :param data: Nviz layer properties
         """
         self.indent += 4
-        for attrb in data.iterkeys():
+        for attrb in six.iterkeys(data):
             if len(data[attrb]) < 1:  # skip empty attributes
                 continue
 
@@ -1292,7 +1337,7 @@ class WriteWorkspaceFile(object):
                                                            attrb,
                                                            marker))
             self.indent += 4
-            for name in data[attrb].iterkeys():
+            for name in six.iterkeys(data[attrb]):
                 if name in ('object', 'marker'):
                     continue
                 if name == 'mode':
@@ -1318,14 +1363,14 @@ class WriteWorkspaceFile(object):
                     self.file.write('%s</%s>\n' % ((' ' * self.indent, name)))
                 elif name == 'thematic':
                     self.file.write('%s<%s ' % (' ' * self.indent, name))
-                    for key in data[attrb][name].iterkeys():
+                    for key in six.iterkeys(data[attrb][name]):
                         if key.startswith('use'):
                             self.file.write(
                                 '%s="%s" ' %
                                 (key, int(data[attrb][name][key])))
                     self.file.write('>\n')
                     self.indent += 4
-                    for key, value in data[attrb][name].iteritems():
+                    for key, value in six.iteritems(data[attrb][name]):
                         if key.startswith('use'):
                             continue
                         if value is None:
@@ -1573,7 +1618,7 @@ class WriteWorkspaceFile(object):
             else:
                 self.file.write('%s<parameter name="%s">\n' % (' ' * self.indent, prm.split("=", 1)[0]))
                 self.indent += 4
-                self.file.write('%s<value>%s</value>\n' % (' ' * self.indent, EncodeString(prm.split("=", 1)[1])))
+                self.file.write('%s<value>%s</value>\n' % (' ' * self.indent, prm.split("=", 1)[1]))
                 self.indent -= 4
                 self.file.write('%s</parameter>\n' % (' ' * self.indent))
         self.indent -= 4

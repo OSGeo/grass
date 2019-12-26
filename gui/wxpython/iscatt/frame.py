@@ -17,8 +17,12 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
+
+from __future__ import print_function
+
 import os
 import sys
+import six
 
 import wx
 import wx.lib.scrolledpanel as scrolled
@@ -29,6 +33,7 @@ from core.gcmd import GException, GError, RunCommand
 
 from gui_core.gselect import Select
 from gui_core.dialogs import SetOpacityDialog
+from gui_core.wrap import StaticBox, Menu, ListCtrl
 from iscatt.controllers import ScattsManager
 from iscatt.toolbars import MainToolbar, EditingToolbar, CategoryToolbar
 from iscatt.iscatt_core import idScattToidBands
@@ -136,8 +141,8 @@ class IClassIScattPanel(wx.Panel, ManageBusyCursorMixin):
         self.catsPanel.SetMinSize((-1, 100))
         self.catsPanel.SetInitialSize((-1, 150))
 
-        box_capt = wx.StaticBox(parent=self.catsPanel, id=wx.ID_ANY,
-                                label=' %s ' % _("Classes"),)
+        box_capt = StaticBox(parent=self.catsPanel, id=wx.ID_ANY,
+                             label=' %s ' % _("Classes"),)
         catsSizer = wx.StaticBoxSizer(box_capt, wx.VERTICAL)
 
         self.toolbars['categoryToolbar'] = self._createCategoryToolbar(
@@ -257,7 +262,7 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         self.scatt_mgr.cursorPlotMove.connect(self.CursorPlotMove)
 
     def SetBusy(self, busy):
-        for scatt in self.scatts.itervalues():
+        for scatt in six.itervalues(self.scatts):
             scatt.UpdateCur(busy)
 
     def CursorPlotMove(self, x, y, scatt_id):
@@ -333,8 +338,8 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
 
     def OnClose(self, event):
         """Close dialog"""
-        # TODO
-        print "closed"
+        # TODO: why todo here, why print? just delete?
+        print("closed")
         self.scatt_mgr.CleanUp()
         self.Destroy()
 
@@ -401,13 +406,13 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         return self.scatt_mgr
 
 
-class CategoryListCtrl(wx.ListCtrl,
+class CategoryListCtrl(ListCtrl,
                        listmix.ListCtrlAutoWidthMixin):
                        # listmix.TextEditMixin):
 
     def __init__(self, parent, cats_mgr, sel_cats_in_iscatt, id=wx.ID_ANY):
 
-        wx.ListCtrl.__init__(
+        ListCtrl.__init__(
             self, parent, id, style=wx.LC_REPORT | wx.LC_VIRTUAL | wx.LC_HRULES |
             wx.LC_VRULES | wx.LC_SINGLE_SEL | wx.LC_NO_HEADER)
         self.columns = ((_('Class name'), 'name'), )
@@ -566,68 +571,59 @@ class CategoryListCtrl(wx.ListCtrl,
         cat_id = cats[cat_idx]
         showed = self.cats_mgr.GetCategoryAttrs(cat_id)['show']
 
-        menu = wx.Menu()
+        menu = Menu()
 
-        item_id = wx.NewId()
-        menu.Append(item_id, text=_("Rename class"))
-        self.Bind(wx.EVT_MENU, self.OnRename, id=item_id)
+        item = menu.Append(wx.ID_ANY, text=_("Rename class"))
+        self.Bind(wx.EVT_MENU, self.OnRename, item)
 
-        item_id = wx.NewId()
-        menu.Append(item_id, text=_("Set color"))
-        self.Bind(wx.EVT_MENU, self.OnSetColor, id=item_id)
+        item = menu.Append(wx.ID_ANY, text=_("Set color"))
+        self.Bind(wx.EVT_MENU, self.OnSetColor, item)
 
-        item_id = wx.NewId()
-        menu.Append(item_id, text=_("Change opacity level"))
-        self.Bind(wx.EVT_MENU, self.OnPopupOpacityLevel, id=item_id)
+        item = menu.Append(item_id, text=_("Change opacity level"))
+        self.Bind(wx.EVT_MENU, self.OnPopupOpacityLevel, item)
 
         if showed:
             text = _("Hide")
         else:
             text = _("Show")
 
-        item_id = wx.NewId()
-        menu.Append(item_id, text=text)
+        item = menu.Append(wx.ID_ANY, text=text)
         self.Bind(
             wx.EVT_MENU,
             lambda event: self._setCatAttrs(
                 cat_id=cat_id,
                 attrs={
                     'show': not showed}),
-            id=item_id)
+            item)
 
         menu.AppendSeparator()
 
-        item_id = wx.NewId()
-        menu.Append(item_id, text=_("Move to top"))
-        self.Bind(wx.EVT_MENU, self.OnMoveTop, id=item_id)
+        item = menu.Append(wx.ID_ANY, text=_("Move to top"))
+        self.Bind(wx.EVT_MENU, self.OnMoveTop, item)
         if cat_idx == 0:
-            menu.Enable(item_id, False)
+            menu.Enable(item.GetId(), False)
 
-        item_id = wx.NewId()
-        menu.Append(item_id, text=_("Move to bottom"))
-        self.Bind(wx.EVT_MENU, self.OnMoveBottom, id=item_id)
+        item = menu.Append(wx.ID_ANY, text=_("Move to bottom"))
+        self.Bind(wx.EVT_MENU, self.OnMoveBottom, item)
         if cat_idx == len(cats) - 1:
-            menu.Enable(item_id, False)
+            menu.Enable(item.GetId(), False)
 
         menu.AppendSeparator()
 
-        item_id = wx.NewId()
-        menu.Append(item_id, text=_("Move category up"))
-        self.Bind(wx.EVT_MENU, self.OnMoveUp, id=item_id)
+        item = menu.Append(wx.ID_ANY, text=_("Move category up"))
+        self.Bind(wx.EVT_MENU, self.OnMoveUp, item)
         if cat_idx == 0:
-            menu.Enable(item_id, False)
+            menu.Enable(item.GetId(), False)
 
-        item_id = wx.NewId()
-        menu.Append(item_id, text=_("Move category down"))
-        self.Bind(wx.EVT_MENU, self.OnMoveDown, id=item_id)
+        item = menu.Append(wx.ID_ANY, text=_("Move category down"))
+        self.Bind(wx.EVT_MENU, self.OnMoveDown, item)
         if cat_idx == len(cats) - 1:
-            menu.Enable(item_id, False)
+            menu.Enable(item.GetId(), False)
 
         menu.AppendSeparator()
 
-        item_id = wx.NewId()
-        menu.Append(item_id, text=_("Export class raster"))
-        self.Bind(wx.EVT_MENU, self.OnExportCatRast, id=item_id)
+        item = menu.Append(wx.ID_ANY, text=_("Export class raster"))
+        self.Bind(wx.EVT_MENU, self.OnExportCatRast, item)
 
         self.PopupMenu(menu)
         menu.Destroy()

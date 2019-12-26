@@ -25,7 +25,6 @@ This program is free software under the GNU General Public License
 from core.gcmd import RunCommand
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
-from core.utils import _
 
 
 class LMWorkspaceToolbar(BaseToolbar):
@@ -59,6 +58,7 @@ class LMWorkspaceToolbar(BaseToolbar):
         }
         return self._getToolbarData((('newdisplay', icons["newdisplay"],
                                       self.parent.OnNewDisplay),
+                                     (None, ),
                                      ('workspaceNew', icons["workspaceNew"],
                                       self.parent.OnWorkspaceNew),
                                      ('workspaceOpen', icons["workspaceOpen"],

@@ -1,5 +1,5 @@
 """
-@package iphoto2image.ip2i_mapdisplay
+@package photo2image.ip2i_mapdisplay
 
 @brief Display to manage ground control points with two toolbars, one
 for various display management functions, one for manipulating GCPs.
@@ -27,9 +27,9 @@ from mapdisp.toolbars import MapToolbar
 from gcp.toolbars import GCPDisplayToolbar, GCPManToolbar
 from mapdisp.gprint import PrintOptions
 from core.gcmd import GMessage
-from core.utils import _
 from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from gui_core.mapdisp import SingleMapFrame
+from gui_core.wrap import Menu
 from core.settings import UserSettings
 from mapwin.buffered import BufferedMapWindow
 from mapwin.base import MapWindowProperties
@@ -420,7 +420,7 @@ class MapFrame(SingleMapFrame):
         Print options and output menu for map display
         """
         point = wx.GetMousePosition()
-        printmenu = wx.Menu()
+        printmenu = Menu()
         # Add items to the menu
         setup = wx.MenuItem(printmenu, wx.ID_ANY, _('Page setup'))
         printmenu.AppendItem(setup)
@@ -466,7 +466,7 @@ class MapFrame(SingleMapFrame):
         """Popup Zoom menu
         """
         point = wx.GetMousePosition()
-        zoommenu = wx.Menu()
+        zoommenu = Menu()
         # Add items to the menu
 
         zoomwind = wx.MenuItem(zoommenu, wx.ID_ANY, _(

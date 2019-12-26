@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 ############################################################################
 #
 # MODULE:    Animation
@@ -65,8 +65,6 @@ def main():
     from grass.script.setup import set_gui_path
     set_gui_path()
 
-    from core.globalvar import CheckWxVersion
-    from core.utils import _
     from core.giface import StandaloneGrassInterface
     from core.layerlist import LayerList
     from animation.frame import AnimationFrame, MAX_COUNT
@@ -125,8 +123,6 @@ def main():
         layerList.AddLayer(layer)
 
     app = wx.App()
-    if not CheckWxVersion([2, 9]):
-        wx.InitAllImageHandlers()
 
     frame = AnimationFrame(parent=None, giface=StandaloneGrassInterface())
     frame.CentreOnScreen()

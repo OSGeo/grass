@@ -391,6 +391,8 @@ int build_topo(struct Map_info *Map, int build)
                 Vect__execute_pg(pg_info->conn, "ROLLBACK");
                 return 0;
             }
+
+            Vect__define_topo_relation(pg_info, area, area);
         }
     }
 

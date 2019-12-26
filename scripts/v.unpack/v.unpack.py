@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 ############################################################################
 #
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Imports a vector map as GRASS GIS specific archive file (packed with v.pack)
+#% description: Imports a GRASS GIS specific vector archive file (packed with v.pack) as a vector map
 #% keyword: vector
 #% keyword: import
 #% keyword: copying
@@ -42,7 +42,6 @@
 #% guisection: Print
 #%end
 
-
 import os
 import sys
 import shutil
@@ -53,10 +52,6 @@ from grass.script.utils import diff_files, try_rmdir
 from grass.script import core as grass
 from grass.script import db as grassdb
 from grass.exceptions import CalledModuleError
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 
 def cleanup():

@@ -15,8 +15,7 @@ This program is free software under the GNU General Public License
 """
 
 import wx
-from utils import Orientation, ReplayMode
-from core.utils import _
+from .utils import Orientation, ReplayMode
 
 
 class Animation(wx.EvtHandler):

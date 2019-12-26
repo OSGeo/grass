@@ -1,7 +1,7 @@
-"""Setup and initialization functions
+"""Setup, initialization, and clean-up functions
 
-Function can be used in Python scripts to setup a GRASS environment
-without starting an actual GRASS session.
+Functions can be used in Python scripts to setup a GRASS environment
+and session without using grassXY.
 
 Usage::
 
@@ -24,17 +24,17 @@ Usage::
     # query GRASS itself for its GISBASE
     # (with fixes for specific platforms)
     # needs to be edited by the user
-    grass7bin = 'grass73'
+    grass7bin = 'grass79'
     if sys.platform.startswith('win'):
         # MS Windows
-        grass7bin = r'C:\OSGeo4W\bin\grass73.bat'
+        grass7bin = r'C:\OSGeo4W\bin\grass79.bat'
         # uncomment when using standalone WinGRASS installer
-        # grass7bin = r'C:\Program Files (x86)\GRASS GIS 7.2.0\grass73.bat'
+        # grass7bin = r'C:\Program Files (x86)\GRASS GIS 7.9.0\grass79.bat'
         # this can be avoided if GRASS executable is added to PATH
     elif sys.platform == 'darwin':
         # Mac OS X
         # TODO: this have to be checked, maybe unix way is good enough
-        grass7bin = '/Applications/GRASS/GRASS-7.2.app/'
+        grass7bin = '/Applications/GRASS/GRASS-7.9.app/'
 
     # query GRASS GIS itself for its GISBASE
     startcmd = [grass7bin, '--config', 'path']
@@ -77,17 +77,18 @@ Usage::
     for vect in gscript.list_strings(type='vector'):
         print vect
 
-    # delete the rcfile
-    os.remove(rcfile)
+    # clean up at the end
+    gsetup.cleanup()
 
 
-(C) 2010-2012 by the GRASS Development Team
+(C) 2010-2019 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 @author Martin Landa <landa.martin gmail.com>
 @author Vaclav Petras <wenzeslaus gmail.com>
+@author Markus Metz
 """
 
 # TODO: this should share code from lib/init/grass.py
@@ -98,6 +99,9 @@ for details.
 import os
 import sys
 import tempfile as tmpfile
+
+
+windows = sys.platform == 'win32'
 
 
 def write_gisrc(dbase, location, mapset):
@@ -117,21 +121,19 @@ def set_gui_path():
         sys.path.insert(0, gui_path)
 
 
-# TODO: there should be a function to do the clean up
-# (unset the GISRC and delete the file)
 def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
     """Initialize system variables to run GRASS modules
 
-    This function is for running GRASS GIS without starting it
-    explicitly. No GRASS modules shall be called before call of this
-    function but any module or user script can be called afterwards
-    as if it would be called in an actual GRASS session. GRASS Python
-    libraries are usable as well in general but the ones using
-    C libraries through ``ctypes`` are not (which is caused by
-    library path not being updated for the current process
-    which is a common operating system limitation).
+    This function is for running GRASS GIS without starting it with the 
+    standard script grassXY. No GRASS modules shall be called before 
+    call of this function but any module or user script can be called 
+    afterwards because a GRASS session has been set up. GRASS Python 
+    libraries are usable as well in general but the ones using C 
+    libraries through ``ctypes`` are not (which is caused by library 
+    path not being updated for the current process which is a common 
+    operating system limitation).
 
-    To create a (fake) GRASS session a ``gisrc`` file is created.
+    To create a GRASS session a ``gisrc`` file is created.
     Caller is responsible for deleting the ``gisrc`` file.
 
     Basic usage::
@@ -142,8 +144,8 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
                                    "/home/john/grassdata",
                                    "nc_spm_08", "user1")
         # ... use GRASS modules here
-        # remove the session's gisrc file to end the session
-        os.remove(gisrc)
+        # end the session
+        gscript.setup.finish()
 
     :param gisbase: path to GRASS installation
     :param dbase: path to GRASS database (default: '')
@@ -152,7 +154,8 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
     
     :returns: path to ``gisrc`` file (to be deleted later)
     """
-    # TODO: why we don't set GISBASE?
+    # Set GISBASE
+    os.environ['GISBASE'] = gisbase
     mswin = sys.platform.startswith('win')
     # define PATH
     os.environ['PATH'] += os.pathsep + os.path.join(gisbase, 'bin')
@@ -172,20 +175,22 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
     os.environ['GRASS_ADDON_BASE'] = addon_base
     if not mswin:
         os.environ['PATH'] += os.pathsep + os.path.join(addon_base, 'scripts')
+    os.environ['PATH'] += os.pathsep + os.path.join(addon_base, 'bin')
 
     # define LD_LIBRARY_PATH
     if '@LD_LIBRARY_PATH_VAR@' not in os.environ:
         os.environ['@LD_LIBRARY_PATH_VAR@'] = ''
     os.environ['@LD_LIBRARY_PATH_VAR@'] += os.pathsep + os.path.join(gisbase, 'lib')
 
+    # TODO: lock the mapset?
     os.environ['GIS_LOCK'] = str(os.getpid())
 
     # Set GRASS_PYTHON and PYTHONPATH to find GRASS Python modules
     if not os.getenv('GRASS_PYTHON'):
         if sys.platform == 'win32':
-            os.environ['GRASS_PYTHON'] = "python.exe"
+            os.environ['GRASS_PYTHON'] = "python3.exe"
         else:
-            os.environ['GRASS_PYTHON'] = "python"
+            os.environ['GRASS_PYTHON'] = "python3"
     
     path = os.getenv('PYTHONPATH')
     etcpy = os.path.join(gisbase, 'etc', 'python')
@@ -203,3 +208,67 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
 
     os.environ['GISRC'] = write_gisrc(dbase, location, mapset)
     return os.environ['GISRC']
+
+
+# clean-up functions when terminating a GRASS session
+# these fns can only be called within a valid GRASS session
+def clean_default_db():
+    # clean the default db if it is sqlite
+    from grass.script import db as gdb
+    from grass.script import core as gcore
+
+    conn = gdb.db_connection()
+    if conn and conn['driver'] == 'sqlite':
+        # check if db exists
+        gisenv = gcore.gisenv()
+        database = conn['database']
+        database = database.replace('$GISDBASE', gisenv['GISDBASE'])
+        database = database.replace('$LOCATION_NAME', gisenv['LOCATION_NAME'])
+        database = database.replace('$MAPSET', gisenv['MAPSET'])
+        if os.path.exists(database):
+            gcore.message(_("Cleaning up default sqlite database ..."))
+            gcore.start_command('db.execute', sql = 'VACUUM')
+	    # give it some time to start
+            import time
+            time.sleep(0.1)
+
+
+def call(cmd, **kwargs):
+    import subprocess
+    """Wrapper for subprocess.call to deal with platform-specific issues"""
+    if windows:
+        kwargs['shell'] = True
+    return subprocess.call(cmd, **kwargs)
+
+
+def clean_temp():
+    from grass.script import core as gcore
+
+    gcore.message(_("Cleaning up temporary files..."))
+    nul = open(os.devnull, 'w')
+    gisbase = os.environ['GISBASE']
+    call([os.path.join(gisbase, "etc", "clean_temp")], stdout=nul)
+    nul.close()
+
+
+def finish():
+    """Terminate the GRASS session and clean up
+
+    GRASS commands can no longer be used after this function has been
+    called
+    
+    Basic usage::
+        import grass.script as gscript
+
+        gscript.setup.cleanup()
+    """
+
+    clean_default_db()
+    clean_temp()
+    # TODO: unlock the mapset?
+    # unset the GISRC and delete the file
+    from grass.script import utils as gutils
+    gutils.try_remove(os.environ['GISRC'])
+    os.environ.pop('GISRC')
+    # remove gislock env var (not the gislock itself
+    os.environ.pop('GIS_LOCK')

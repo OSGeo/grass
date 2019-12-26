@@ -3,27 +3,27 @@
 
 struct AbstraStruct
 {
-	float dtwava; /* downward absorption water vapor dtwava */
-	float dtozon; /* downward absorption ozone       dtozon */
-	float dtdica; /* downward absorption carbon diox dtdica */
-	float dtoxyg; /* downward absorption oxygen      dtoxyg */
-	float dtniox; /* downward absorption nitrous oxi dtniox */
-	float dtmeth; /* downward absorption methane     dtmeth */
-	float dtmoca; /* downward absorption carbon mono dtmoca */
-	float utwava; /* upward absorption water vapor   utwava */
-	float utozon; /* upward absorption ozone         utozon */
-	float utdica; /* upward absorption carbon diox   utdica */
-	float utoxyg; /* upward absorption oxygen        utoxyg */
-	float utniox; /* upward   absorption nitrous oxi utniox */
-	float utmeth; /* upward   absorption methane     utmeth */
-	float utmoca; /* upward   absorption carbon mono utmoca */
-	float ttwava; /* total(on the two paths ) absorption water vapor ttwava */
-	float ttozon; /* total(on the two paths ) absorption ozone       ttozon */
-	float ttdica; /* total(on the two paths ) absorption carbon diox ttdica */
-	float ttoxyg; /* total(on the two paths ) absorption oxygen      ttoxyg */
-	float ttniox; /* total    absorption nitrous oxi ttniox */
-	float ttmeth; /* total    absorption methane     ttmeth */
-	float ttmoca; /* total    absorption carbon mono ttmoca */
+	double dtwava; /* downward absorption water vapor dtwava */
+	double dtozon; /* downward absorption ozone       dtozon */
+	double dtdica; /* downward absorption carbon diox dtdica */
+	double dtoxyg; /* downward absorption oxygen      dtoxyg */
+	double dtniox; /* downward absorption nitrous oxi dtniox */
+	double dtmeth; /* downward absorption methane     dtmeth */
+	double dtmoca; /* downward absorption carbon mono dtmoca */
+	double utwava; /* upward absorption water vapor   utwava */
+	double utozon; /* upward absorption ozone         utozon */
+	double utdica; /* upward absorption carbon diox   utdica */
+	double utoxyg; /* upward absorption oxygen        utoxyg */
+	double utniox; /* upward   absorption nitrous oxi utniox */
+	double utmeth; /* upward   absorption methane     utmeth */
+	double utmoca; /* upward   absorption carbon mono utmoca */
+	double ttwava; /* total(on the two paths ) absorption water vapor ttwava */
+	double ttozon; /* total(on the two paths ) absorption ozone       ttozon */
+	double ttdica; /* total(on the two paths ) absorption carbon diox ttdica */
+	double ttoxyg; /* total(on the two paths ) absorption oxygen      ttoxyg */
+	double ttniox; /* total    absorption nitrous oxi ttniox */
+	double ttmeth; /* total    absorption methane     ttmeth */
+	double ttmoca; /* total    absorption carbon mono ttmoca */
 };
 
 struct AtmosModel;
@@ -36,9 +36,9 @@ The total transmission is put equal to the simple product of each ones. The spec
 equal to 10 cm-1.
 iinf*/
 void abstra (const AtmosModel& atms, const Altitude& alt,
-			 const float wl, const float xmus, const float xmuv,
-			 const float uw, const float uo3, float& uwus, float& uo3us,
-			 const float uwpl, const float uo3pl, const float uwusp,
-			 const float uo3usp, AbstraStruct& as );
+			 const double wl, const double xmus, const double xmuv,
+			 const double uw, const double uo3, double& uwus, double& uo3us,
+			 const double uwpl, const double uo3pl, const double uwusp,
+			 const double uo3usp, AbstraStruct& as );
 
 #endif /* ABSTRA_H */

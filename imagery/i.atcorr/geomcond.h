@@ -61,23 +61,33 @@
 /*                                                                        */
 /*         16      worldview2        * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
-/*         17      quickbird2       * enter month,day,hh.ddd,long.,lat.   */
+/*         17      quickbird2        * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
-/*         18      Landsat 8        * enter month,day,hh.ddd,long.,lat.   */
+/*         18      Landsat 8         * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
-/*         19      geoeye1          * enter month,day,hh.ddd,long.,lat.   */
+/*         19      geoeye1           * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
-/*         20      spot6            * enter month,day,hh.ddd,long.,lat.   */
+/*         20      spot6             * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
-/*         21      spot7            * enter month,day,hh.ddd,long.,lat.   */
+/*         21      spot7             * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
-/*         22      pleiades1a       * enter month,day,hh.ddd,long.,lat.   */
+/*         22      pleiades1a        * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
-/*         23      pleiades1b       * enter month,day,hh.ddd,long.,lat.   */
+/*         23      pleiades1b        * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
-/*         24      worldview3       * enter month,day,hh.ddd,long.,lat.   */
+/*         24      worldview3        * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
-/*         25      sentinel2a       * enter month,day,hh.ddd,long.,lat.   */
+/*         25      sentinel2a        * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         26      sentinel2b        * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         27      planetscope0c0d   * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         28      planetscope0e     * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         29      planetscope0f10   * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         30      worldview4        * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
 /*     note:       for hrv and tm experiments long. and lat. are the      */
 /*                 coordinates of the scene center.                       */
@@ -93,39 +103,39 @@ struct GeomCond
 	long int igeom;	/* geometrical conditions */
 
 	/* primary */
-	float asol;
-	float phi0;
-	float avis;
-	float phiv;
+	double asol;
+	double phi0;
+	double avis;
+	double phiv;
 	long int month;
 	long int jday;
-	float xlon;
-	float xlat;
+	double xlon;
+	double xlat;
 
 	/* some vars */
-	float phi;
-	float phirad;
-	float xmus; 
-	float xmuv; 
-	float xmup; 
-	float xmud;
-	float adif;
+	double phi;
+	double phirad;
+	double xmus; 
+	double xmuv; 
+	double xmup; 
+	double xmud;
+	double adif;
 
-    float dsol;
+    double dsol;
 
 	void  print();
 
 private:
 	/* conversion routines */
-	void possol(float tu);
-	void landsat(float tu);
-	void posobs(float tu, int nc, int nl);
-	void posnoa(float tu, int nc, float xlonan, float campm, float hna);
+	void possol(double tu);
+	void landsat(double tu);
+	void posobs(double tu, int nc, int nl);
+	void posnoa(double tu, int nc, double xlonan, double campm, double hna);
 
 	void day_number(long int ia, long int& j);
-	void pos_fft (long int j, float tu);
+	void pos_fft (long int j, double tu);
 
-	float varsol();	/* returns dsol as in fortran proggie */
+	double varsol();	/* returns dsol as in fortran proggie */
 	void parse();
 public:
 	static GeomCond Parse();

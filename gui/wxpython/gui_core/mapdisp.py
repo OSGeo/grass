@@ -21,13 +21,14 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
+import six
 
 import wx
 
 from core import globalvar
 from core.debug import Debug
-from core.utils import _
 from gui_core.toolbars import ToolSwitcher
+from gui_core.wrap import NewId
 
 from grass.script import core as grass
 
@@ -127,7 +128,7 @@ class MapFrameBase(wx.Frame):
         )
         accelTable = []
         for handler, entry, kdb in shortcuts_table:
-            wxId = wx.NewId()
+            wxId = NewId()
             self.Bind(wx.EVT_MENU, handler, id=wxId)
             accelTable.append((entry, kdb, wxId))
 
@@ -333,7 +334,7 @@ class MapFrameBase(wx.Frame):
 
     def StatusbarEnableLongHelp(self, enable=True):
         """Enable/disable toolbars long help"""
-        for toolbar in self.toolbars.itervalues():
+        for toolbar in six.itervalues(self.toolbars):
             toolbar.EnableLongHelp(enable)
 
     def IsStandalone(self):

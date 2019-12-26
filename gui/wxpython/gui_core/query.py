@@ -15,10 +15,11 @@ This program is free software under the GNU General Public License
 """
 import os
 import wx
+import six
 
-from core.utils import _
 from core.gcmd import DecodeString
 from gui_core.treeview import TreeListView
+from gui_core.wrap import Button, StaticText, Menu, NewId
 from core.treemodel import TreeModel, DictNode
 
 from grass.pydispatch.signal import Signal
@@ -39,7 +40,7 @@ class QueryDialog(wx.Dialog):
         self.panel = wx.Panel(self, id=wx.ID_ANY)
         self.mainSizer = wx.BoxSizer(wx.VERTICAL)
 
-        helpText = wx.StaticText(self.panel, wx.ID_ANY, label=_(
+        helpText = StaticText(self.panel, wx.ID_ANY, label=_(
             "Right click to copy selected values to clipboard."))
         helpText.SetForegroundColour(
             wx.SystemSettings.GetColour(
@@ -63,9 +64,9 @@ class QueryDialog(wx.Dialog):
             flag=wx.EXPAND | wx.ALL,
             border=5)
 
-        close = wx.Button(self.panel, id=wx.ID_CLOSE)
+        close = Button(self.panel, id=wx.ID_CLOSE)
         close.Bind(wx.EVT_BUTTON, lambda event: self.Close())
-        copy = wx.Button(
+        copy = Button(
             self.panel,
             id=wx.ID_ANY,
             label=_("Copy all to clipboard"))
@@ -121,7 +122,7 @@ class QueryDialog(wx.Dialog):
         if not nodes:
             return
 
-        menu = wx.Menu()
+        menu = Menu()
         texts = []
         if len(nodes) > 1:
             values = []
@@ -152,7 +153,7 @@ class QueryDialog(wx.Dialog):
 
         ids = []
         for text in texts:
-            id = wx.NewId()
+            id = NewId()
             ids.append(id)
             self.Bind(
                 wx.EVT_MENU,
@@ -209,7 +210,6 @@ class QueryDialog(wx.Dialog):
 
 def QueryTreeBuilder(data, column):
     """Builds tree model from query results.
-    Convert to unicode.
 
     :param data: query results as a dictionary
     :param column: column name
@@ -217,17 +217,13 @@ def QueryTreeBuilder(data, column):
     :return: tree model
     """
     def addNode(parent, data, model):
-        for k, v in data.iteritems():
-            if isinstance(v, str):
-                k = DecodeString(k)
+        for k, v in six.iteritems(data):
             if isinstance(v, dict):
                 node = model.AppendNode(parent=parent, label=k)
                 addNode(parent=node, data=v, model=model)
             else:
-                if not isinstance(v, basestring):
+                if not isinstance(v, six.string_types):
                     v = str(v)
-                elif isinstance(v, str):
-                    v = DecodeString(v)
                 node = model.AppendNode(parent=parent, label=k,
                                         data={column: v})
 

@@ -170,14 +170,16 @@ int main(int argc, char *argv[])
     opt.max->type = TYPE_DOUBLE;
     opt.max->required = NO;
     opt.max->answer = "-1";
-    opt.max->description = _("Maximum distance or -1 for no limit");
+    opt.max->label = _("Maximum distance or -1 for no limit");
+    opt.max->description = _("Map units, meters for ll");
 
     opt.min = G_define_option();
     opt.min->key = "dmin";
     opt.min->type = TYPE_DOUBLE;
     opt.min->required = NO;
     opt.min->answer = "-1";
-    opt.min->description = _("Minimum distance or -1 for no limit");
+    opt.min->label = _("Minimum distance or -1 for no limit");
+    opt.min->description = _("Map units, meters for ll");
 
     opt.upload = G_define_option();
     opt.upload->key = "upload";
@@ -422,13 +424,12 @@ int main(int argc, char *argv[])
     n_max_steps = 1;
     max_map = max;
     if (max != 0) {
-	struct bound_box fbox, tbox;
 	double dx, dy, dz;
 
 	Vect_get_map_box(&From, &fbox);
-	Vect_get_map_box(&To, &tbox);
+	Vect_get_map_box(&To, &box);
 
-	Vect_box_extend(&fbox, &tbox);
+	Vect_box_extend(&fbox, &box);
 
 	dx = fbox.E - fbox.W;
 	dy = fbox.N - fbox.S;
@@ -459,8 +460,8 @@ int main(int argc, char *argv[])
 	/* max 9 steps from testing */
 	if (n_max_steps > 9)
 	    n_max_steps = 9;
-	if (n_max_steps < 2)
-	    n_max_steps = 2;
+	if (n_max_steps < 3)
+	    n_max_steps = 3;
 	if (n_max_steps > nto)
 	    n_max_steps = nto;
 
@@ -468,6 +469,9 @@ int main(int argc, char *argv[])
 	G_debug(2, "maximum reasonable search distance = %g", max_map);
 	G_debug(2, "n 'to' features = %d", nto);
 	G_debug(2, "n_max_steps = %d", n_max_steps);
+
+	if (!geodesic)
+	    max_map = max;
     }
 
     if (min > max)
@@ -486,7 +490,7 @@ int main(int argc, char *argv[])
 	    /* for 9 steps, this would be max / [128, 64, 32, 16, 8, 4, 2] */
 	    max_step[curr_step] = max_map / (2 << (n_max_steps - 1 - curr_step));
 	}
-	/* last step always max */
+	/* last step always max_map */
 	max_step[n_max_steps - 1] = max_map;
 	j = 1;
 	for (i = 1; i < n_max_steps; i++) {
@@ -496,6 +500,9 @@ int main(int argc, char *argv[])
 	    }
 	}
 	n_max_steps = j;
+	for (i = 0; i < n_max_steps; i++) {
+	    G_debug(2, "max step %d: %g", i, max_step[i]);
+	}
     }
     else {
 	max_step = G_malloc(sizeof(double));
@@ -664,7 +671,7 @@ int main(int argc, char *argv[])
 		nfcats);
 
 	if (nfcats == 0)
-	    G_fatal_error(_("No categories for 'from' for slected type and layer"));
+	    G_fatal_error(_("No categories for 'from' for selected type and layer"));
 
 	/* Sort by cats and remove duplicates */
 	qsort((void *)Near, nfcats, sizeof(NEAR), cmp_near);
@@ -697,7 +704,7 @@ int main(int argc, char *argv[])
 	near = NULL;
 	nlines = Vect_get_num_lines(&From);
 
-	G_percent(0, 0, 4);
+	G_percent(0, nlines, 4);
 	for (fline = 1; fline <= nlines; fline++) {
 	    int tmp_tcat;
 	    double tmp_min = (min < 0 ? 0 : min);
@@ -981,6 +988,7 @@ int main(int argc, char *argv[])
 	near = NULL;
 
 	G_message(_("Finding nearest features for areas..."));
+	G_percent(0, nfromareas, 2);
 	for (area = 1; area <= nfromareas; area++) {
 	    int tmp_tcat;
 	    double tmp_min = (min < 0 ? 0 : min);
@@ -1138,7 +1146,7 @@ int main(int argc, char *argv[])
 
 		/* For each area in box check the distance */
 		for (i = 0; i < aList->n_values; i++) {
-		    int tmp_tcat, poly;
+		    int poly;
 
 		    tarea = aList->id[i];
 		    G_debug(4, "%d: 'to' area id %d", i, tarea);
@@ -1597,6 +1605,8 @@ int main(int argc, char *argv[])
 	    }
 	}
 	else if (update_table) {	/* update table */
+	    int do_update = 0;
+
 	    /* check if exists in table */
 	    cex =
 		(int *)bsearch((void *)&(Near[i].from_cat), catexist,
@@ -1619,9 +1629,11 @@ int main(int argc, char *argv[])
 		db_append_string(&stmt, buf2);
 
 		if (Near[i].count == 0) {	/* no nearest found */
+		    /* really clear existing records if no nearest found ? */
 		    db_append_string(&stmt, " null");
 		}
 		else {
+		    do_update = 1;
 		    switch (Upload[j].upload) {
 		    case CAT:
 			if (Near[i].to_cat > 0)
@@ -1686,14 +1698,16 @@ int main(int argc, char *argv[])
 		}
 		j++;
 	    }
-	    sprintf(buf2, " where %s = %d", Fi->key, Near[i].from_cat);
-	    db_append_string(&stmt, buf2);
-	    G_debug(2, "SQL: %s", db_get_string(&stmt));
-	    if (db_execute_immediate(driver, &stmt) == DB_OK) {
-		update_ok++;
-	    }
-	    else {
-		update_err++;
+	    if (do_update) {
+		sprintf(buf2, " where %s = %d", Fi->key, Near[i].from_cat);
+		db_append_string(&stmt, buf2);
+		G_debug(2, "SQL: %s", db_get_string(&stmt));
+		if (db_execute_immediate(driver, &stmt) == DB_OK) {
+		    update_ok++;
+		}
+		else {
+		    update_err++;
+		}
 	    }
 	}
     }
@@ -1738,9 +1752,9 @@ int main(int argc, char *argv[])
 	    G_done_msg(_("%d records updated."), update_ok);
 
 	    G_free(catexist);
+	    Vect_set_db_updated(&From);
 	}
 
-	Vect_set_db_updated(&From);
     }
 
     Vect_close(&From);
@@ -1748,7 +1762,6 @@ int main(int argc, char *argv[])
 	if (create_table) {
 	    dbConnection connection;
 
-	    db_set_default_connection();
 	    db_get_connection(&connection);
 	    Vect_map_add_dblink(Outp, 1, NULL, opt.table->answer, "cat",
 				connection.databaseName,

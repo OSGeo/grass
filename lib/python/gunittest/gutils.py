@@ -10,6 +10,7 @@ for details.
 """
 
 from grass.script.core import start_command, PIPE
+from grass.script.utils import decode
 
 from .gmodules import call_module
 from .checkers import text_to_keyvalue
@@ -49,7 +50,7 @@ def is_map_in_mapset(name, type, mapset=None):
                             element=type, file=name, mapset=mapset,
                             stdout=PIPE, stderr=PIPE)
     output, errors = process.communicate()
-    info = text_to_keyvalue(output, sep='=')
+    info = text_to_keyvalue(decode(output), sep='=')
     # file is the key questioned in grass.script.core find_file()
     # return code should be equivalent to checking the output
     if info['file']:

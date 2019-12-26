@@ -67,22 +67,22 @@ int I_get_group_elev(char *group, char *elev, char *mapset_elev, char *tl,
     }
 
     err=fgets(buf, IN_BUF, fd);
-    if(err==NULL) G_fatal_error(_("Unable to read elevation paramter file"));
+    if(err==NULL) G_fatal_error(_("Unable to read elevation parameter file"));
     sscanf(buf, "elevation layer :%s\n", elev);
     err=fgets(buf, IN_BUF, fd);
-    if(err==NULL) G_fatal_error(_("Unable to read elevation paramter file"));
+    if(err==NULL) G_fatal_error(_("Unable to read elevation parameter file"));
     sscanf(buf, "mapset elevation:%s\n", mapset_elev);
     err=fgets(buf, IN_BUF, fd);
-    if(err==NULL) G_fatal_error(_("Unable to read elevation paramter file"));
+    if(err==NULL) G_fatal_error(_("Unable to read elevation parameter file"));
     sscanf(buf, "location        :%s\n", tl);
     err=fgets(buf, IN_BUF, fd);
-    if(err==NULL) G_fatal_error(_("Unable to read elevation paramter file"));
+    if(err==NULL) G_fatal_error(_("Unable to read elevation parameter file"));
     sscanf(buf, "math expression :%s\n", math_exp);
     err=fgets(buf, IN_BUF, fd);
-    if(err==NULL) G_fatal_error(_("Unable to read elevation paramter file"));
+    if(err==NULL) G_fatal_error(_("Unable to read elevation parameter file"));
     sscanf(buf, "units           :%s\n", units);
     err=fgets(buf, IN_BUF, fd);
-    if(err==NULL) G_fatal_error(_("Unable to read elevation paramter file"));
+    if(err==NULL) G_fatal_error(_("Unable to read elevation parameter file"));
     sscanf(buf, "no data values  :%s\n", nd);
     fclose(fd);
 

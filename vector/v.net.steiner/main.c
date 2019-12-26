@@ -595,7 +595,7 @@ int main(int argc, char **argv)
     /* Calculate true costs, which may be lower than MST if steiner points were not used */
 
     if (nsp < nterms - 2) {
-        G_message(_("Spanning tree costs on complet graph = %f\n"
+        G_message(_("Spanning tree costs on complete graph = %f\n"
             "(may be higher than resulting Steiner tree costs!!!)"),
 		cost);
     }

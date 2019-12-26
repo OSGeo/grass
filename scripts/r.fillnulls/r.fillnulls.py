@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 ############################################################################
 #
@@ -14,7 +14,7 @@
 # PURPOSE:      fills NULL (no data areas) in raster maps
 #               The script respects a user mask (MASK) if present.
 #
-# COPYRIGHT:    (C) 2001-2016 by the GRASS Development Team
+# COPYRIGHT:    (C) 2001-2018 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -26,8 +26,11 @@
 #%module
 #% description: Fills no-data areas in raster maps using spline interpolation.
 #% keyword: raster
+#% keyword: surface
 #% keyword: elevation
 #% keyword: interpolation
+#% keyword: splines
+#% keyword: no-data filling
 #%end
 #%option G_OPT_R_INPUT
 #%end
@@ -94,18 +97,24 @@
 #% answer: 0.01
 #% guisection: Spline options
 #%end
+#%option
+#% key: memory
+#% type: integer
+#% required: no
+#% multiple: no
+#% label: Maximum memory to be used (in MB)
+#% description: Cache size for raster rows
+#% answer: 300
+#%end
 
 
 import sys
 import os
 import atexit
+import subprocess
 
 import grass.script as grass
 from grass.exceptions import CalledModuleError
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 tmp_rmaps = list()
 tmp_vmaps = list()
@@ -138,6 +147,7 @@ def main():
     segmax = int(options['segmax'])
     npmin = int(options['npmin'])
     lambda_ = float(options['lambda'])
+    memory = options['memory']
     quiet = True  # FIXME
     mapset = grass.gisenv()['MAPSET']
     unique = str(os.getpid())  # Shouldn't we use temp name?
@@ -245,7 +255,7 @@ def main():
             file=cats_file_name,
             quiet=quiet)
         cat_list = list()
-        cats_file = file(cats_file_name)
+        cats_file = open(cats_file_name)
         for line in cats_file:
             cat_list.append(line.rstrip('\n'))
         cats_file.close()
@@ -340,8 +350,11 @@ def main():
 
             # Avoid v.surf.rst warnings
             if pointsnumber < segmax:
-                npmin = pointsnumber + 1
-                segmax = pointsnumber
+                use_npmin = pointsnumber
+                use_segmax = pointsnumber * 2
+            else:
+                use_npmin = npmin
+                use_segmax = segmax
 
             # launch v.surf.rst
             tmp_rmaps.append(holename + '_dem')
@@ -349,7 +362,7 @@ def main():
                 grass.run_command('v.surf.rst', quiet=quiet,
                                   input=holename, elev=holename + '_dem',
                                   tension=tension, smooth=smooth,
-                                  segmax=segmax, npmin=npmin)
+                                  segmax=use_segmax, npmin=use_npmin)
             except CalledModuleError:
                 # GTC Hole is NULL area in a raster map
                 grass.fatal(_("Failed to fill hole %s") % cat)
@@ -440,16 +453,54 @@ def main():
         reg = grass.region()
         # launch r.resamp.bspline
         tmp_rmaps.append(prefix + 'filled')
+        # If there are no NULL cells, r.resamp.bslpine call
+        # will end with an error although for our needs it's fine
+        # Only problem - this state must be read from stderr
+        new_env = dict(os.environ)
+        new_env['LC_ALL'] = 'C'
         if usermask:
-            grass.run_command('r.resamp.bspline', input=input, mask=usermask,
-                              output=prefix + 'filled', method=method,
-                              ew_step=3 * reg['ewres'], ns_step=3 * reg['nsres'],
-                              lambda_=lambda_, flags='n')
+            try:
+                p = grass.core.start_command(
+                    'r.resamp.bspline',
+                    input=input,
+                    mask=usermask,
+                    output=prefix + 'filled',
+                    method=method,
+                    ew_step=3 * reg['ewres'],
+                    ns_step=3 * reg['nsres'],
+                    lambda_=lambda_,
+                    memory=memory,
+                    flags='n',
+                    stderr=subprocess.PIPE,
+                    env=new_env)
+                stderr = grass.decode(p.communicate()[1])
+                if "No NULL cells found" in stderr:
+                    grass.run_command('g.copy', raster='%s,%sfilled' % (input, prefix), overwrite=True)
+                    p.returncode = 0
+                    grass.warning(_("Input map <%s> has no holes. Copying to output without modification.") % (input,))
+            except CalledModuleError as e:
+                grass.fatal(_("Failure during bspline interpolation. Error message: %s") % stderr)
         else:
-            grass.run_command('r.resamp.bspline', input=input,
-                              output=prefix + 'filled', method=method,
-                              ew_step=3 * reg['ewres'], ns_step=3 * reg['nsres'],
-                              lambda_=lambda_, flags='n')
+            try:
+                p = grass.core.start_command(
+                    'r.resamp.bspline',
+                    input=input,
+                    output=prefix + 'filled',
+                    method=method,
+                    ew_step=3 * reg['ewres'],
+                    ns_step=3 * reg['nsres'],
+                    lambda_=lambda_,
+                    memory=memory,
+                    flags='n',
+                    stderr=subprocess.PIPE,
+                    env=new_env)
+                stderr = grass.decode(p.communicate()[1])
+                if "No NULL cells found" in stderr:
+                    grass.run_command('g.copy', raster='%s,%sfilled' % (input, prefix), overwrite=True)
+                    p.returncode = 0
+                    grass.warning(_("Input map <%s> has no holes. Copying to output without modification.") % (input,))
+            except CalledModuleError as e:
+                grass.fatal(_("Failure during bspline interpolation. Error message: %s") % stderr)
 
     # restoring user's mask, if present:
     if usermask:
@@ -488,6 +539,7 @@ def main():
         grass.message(outlist)
 
     grass.message(_("Done."))
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

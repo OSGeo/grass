@@ -37,6 +37,7 @@
 
 #include <cstdlib>
 #include <map>
+#include <cmath>
 
 extern "C"
 {
@@ -49,12 +50,20 @@ extern "C"
 #include "transform.h"
 #include "6s.h"
 
-/* TICache: create 1 meter bins for altitude in km */
-/* 10m bins are also ok */
-/* BIN_ALT = 1000 / <bin size in meters> */
-#define BIN_ALT 1000.
-/* TICache: create 1 km bins for visibility */
-#define BIN_VIS 1.
+/* MODIS surface reflectance (MOD09) uses pre-computed 6S parameters
+ * for 10 aerosol optical depths. Here we use finer grain. */
+
+/* TICache: create bins for altitude and visibility */
+/* altitude range: appr. 0 - 9000
+ * bin 10: change between bins is 0.05 - 0.16%
+ * bin 100: change between bins is 0.5 - 1.5% 
+ * bin 1000: change between bins is 6 - 13%*/
+#define BIN_ALT 10	/* unit is meters */
+/* visibility range: 0 - 50000
+ * bin 10: change between bins is 0.004 - 0.16%
+ * bin 100: change between bins is 0.01 - 1.6% 
+ * bin 1000: change between bins is 0.1 - 13%*/
+#define BIN_VIS 100	/* unit is meters */
 
 /* uncomment to disable cache usage */
 /* #define _NO_OPTIMIZE_ */
@@ -76,8 +85,8 @@ struct Options
     /* flags */
     struct Flag *oint;		/* output data as integer */
     struct Flag *irad;		/* treat input values as reflectance instead of radiance values */
-    struct Flag *etmafter;	/* treat input data as a satelite image of type etm+ taken after July 1, 2000 */
-    struct Flag *etmbefore;	/* treat input data as a satelite image of type etm+ taken before July 1, 2000 */
+    struct Flag *etmafter;	/* treat input data as a satellite image of type etm+ taken after July 1, 2000 */
+    struct Flag *etmbefore;	/* treat input data as a satellite image of type etm+ taken before July 1, 2000 */
 };
 
 struct ScaleRange
@@ -95,7 +104,6 @@ struct RBitem
 
 /* function prototypes */
 static void adjust_region(const char *);
-static CELL round_c(FCELL);
 static void write_fp_to_cell(int, FCELL *);
 static void process_raster(int, InputMask, ScaleRange, int, int, int, bool,
 			   ScaleRange);
@@ -108,7 +116,7 @@ static void read_scale(Option *, ScaleRange &);
 /* 
    Adjust the region to that of the input raster.
    Atmospheric corrections should be done on the whole
-   satelite image, not just portions.
+   satellite image, not just portions.
  */
 static void adjust_region(const char *name)
 {
@@ -129,6 +137,25 @@ static CELL round_c(FCELL x)
     return (CELL) (-(-x + .5));
 }
 
+/* round height, input and output unit is meters */
+static int round_h(double x)
+{
+    x /= BIN_ALT;
+    x = floor(x + 0.5);
+    x *= BIN_ALT;
+
+    return x;
+}
+
+/* round visibility, input unit is km, output unit is meters */
+static int round_v(double x)
+{
+    x *= 1000. / BIN_VIS;
+    x = floor(x + 0.5);
+    x *= BIN_VIS;
+
+    return x;
+}
 
 /* Converts the buffer to cell and write it to disk */
 static void write_fp_to_cell(int ofd, FCELL *buf)
@@ -178,15 +205,12 @@ class TICache
     unsigned int tree_size;
 
   private:
-    struct RBitem set_alt_vis(float alt, float vis)
+    struct RBitem set_alt_vis(double alt, double vis)
     {
 	struct RBitem rbitem;
 
-	/* although alt and vis are already rounded,
-	 * the + 0.5 is needed for fp representation errors */
-	/* alt has been converted to kilometers */
-	rbitem.alt = (int) (alt * BIN_ALT + 0.5);
-	/* vis should be kilometers */
+	/* alt and vis must be in meters */
+	rbitem.alt = (alt < 0 ? (int) (alt - 0.5) : (int) (alt + 0.5));
 	rbitem.vis = (int) (vis + 0.5);
 	
 	return rbitem;
@@ -198,7 +222,7 @@ class TICache
 	RBTree = rbtree_create(compare_hv, sizeof(struct RBitem));
 	tree_size = 0;
     }
-    int search(float alt, float vis, TransformInput *ti)
+    int search(double alt, double vis, TransformInput *ti)
     {
 	struct RBitem search_ti = set_alt_vis(alt, vis);
 	struct RBitem *found_ti;
@@ -213,7 +237,7 @@ class TICache
 
     }
 
-    void add(TransformInput ti, float alt, float vis)
+    void add(TransformInput ti, double alt, double vis)
     {
 	struct RBitem insert_ti = set_alt_vis(alt, vis);
 
@@ -248,8 +272,8 @@ static void process_raster(int ifd, InputMask imask, ScaleRange iscale,
     FCELL *buf;			/* buffer for the input values */
     FCELL *alt = NULL;		/* buffer for the elevation values */
     FCELL *vis = NULL;		/* buffer for the visibility values */
-    FCELL prev_alt = -1.f;
-    FCELL prev_vis = -1.f;
+    int cur_alt = -100000;
+    int cur_vis = -100000;
     int row, col, nrows, ncols;
     /* switch on optimization automatically if elevation and/or visibility map is given */
     bool optimize = (ialt_fd >= 0 || ivis_fd >= 0);
@@ -300,80 +324,77 @@ static void process_raster(int ifd, InputMask imask, ScaleRange iscale,
 		continue;
 	    }
 	    if (ialt_fd >= 0) {
-		if (alt[col] < 0)
-		    alt[col] = 0; /* on or below sea level, all the same for 6S */
-		else
-		    alt[col] /= 1000.0f;	/* converting to km from input which should be in meter */
-
-		/* round to nearest altitude bin */
-		/* rounding result: watch out for fp representation error */
-		alt[col] = ((int) (alt[col] * BIN_ALT + 0.5)) / BIN_ALT;
+		alt[col] = round_h(alt[col]); /* in meters */
 	    }
 	    if (ivis_fd >= 0) {
-		if (vis[col] < 0)
-		    vis[col] = 0; /* negative visibility is invalid, print a WARNING ? */
-
-		/* round to nearest visibility bin */
-		/* rounding result: watch out for fp representation error */
-		vis[col] = ((int) (vis[col] + 0.5));
+		if (vis[col] < 0) {
+		     /* negative visibility is invalid */
+		    G_warning(_("Negative visibility!"));
+		    vis[col] = 0;
+		}
+		if (vis[col] < 5.0) {
+		     /* too low visibility, text comes from 6S main.f L109-113 */
+		    G_warning(_("The visibility must be better than 5.0km, "
+				"for smaller values calculations might be no more valid!"));
+		}
+		vis[col] = round_v(vis[col]); /* from km to meters */
 	    }
 
-	    /* check if both maps are active and if whether any value has changed */
+	    /* check if altitude or visibility has changed */
 	    if ((ialt_fd >= 0) && (ivis_fd >= 0) &&
-		((prev_vis != vis[col]) || (prev_alt != alt[col]))) {
-		prev_alt = alt[col];	/* update new values */
-		prev_vis = vis[col];
+		((cur_vis != vis[col]) || (cur_alt != alt[col]))) {
+		cur_alt = alt[col];
+		cur_vis = vis[col];
 		if (optimize) {
-		    int in_cache = ticache.search(alt[col], vis[col], &ti);
+		    int in_cache = ticache.search(cur_alt, cur_vis, &ti);
 
 		    if (!in_cache) {
-			pre_compute_hv(alt[col], vis[col]);	/* re-compute transformation inputs */
+			pre_compute_hv(alt[col] / 1000., vis[col] / 1000.);	/* re-compute transformation inputs */
 			ti = compute();	/* ... */
 
-			ticache.add(ti, alt[col], vis[col]);
+			ticache.add(ti, cur_alt, cur_vis);
 		    }
 		}
 		else {
-		    pre_compute_hv(alt[col], vis[col]);	/* re-compute transformation inputs */
+		    pre_compute_hv(alt[col] / 1000., vis[col] / 1000.);	/* re-compute transformation inputs */
 		    ti = compute();	/* ... */
 		}
 	    }
-	    else {		/* only one of the maps is being used */
-
-		if ((ivis_fd >= 0) && (prev_vis != vis[col])) {
-		    prev_vis = vis[col];	/* keep track of previous visibility */
+	    else {
+		if ((ivis_fd >= 0) && (cur_vis != vis[col])) {
+		    cur_vis = vis[col];
 
 		    if (optimize) {
-			int in_cache = ticache.search(0, vis[col], &ti);
+			int in_cache = ticache.search(cur_alt, cur_vis, &ti);
 
 			if (!in_cache) {
-			    pre_compute_v(vis[col]);	/* re-compute transformation inputs */
+			    pre_compute_v(vis[col] / 1000.);	/* re-compute transformation inputs */
 			    ti = compute();	/* ... */
 
-			    ticache.add(ti, 0, vis[col]);
+			    ticache.add(ti, cur_alt, cur_vis);
 			}
 		    }
 		    else {
-			pre_compute_v(vis[col]);	/* re-compute transformation inputs */
+			pre_compute_v(vis[col] / 1000.);	/* re-compute transformation inputs */
 			ti = compute();	/* ... */
 		    }
 		}
 
-		if ((ialt_fd >= 0) && (prev_alt != alt[col])) {
-		    prev_alt = alt[col];	/* keep track of previous altitude */
+		if ((ialt_fd >= 0) && (cur_alt != alt[col])) {
+		    cur_alt = alt[col];
 
 		    if (optimize) {
-			int in_cache = ticache.search(alt[col], 0, &ti);
+			int in_cache = ticache.search(alt[col], cur_vis, &ti);
 
 			if (!in_cache) {
-			    pre_compute_h(alt[col]);	/* re-compute transformation inputs */
+			    pre_compute_h(alt[col] / 1000.);	/* re-compute transformation inputs */
 			    ti = compute();	/* ... */
 
-			    ticache.add(ti, alt[col], 0);
+			    ticache.add(ti, cur_alt, cur_vis);
 			}
 		    }
 		    else {
-			pre_compute_h(alt[col]);	/* re-compute transformation inputs */
+			pre_compute_h(alt[col] / 1000.);	/* re-compute transformation inputs */
 			ti = compute();	/* ... */
 		    }
 		}
@@ -381,15 +402,17 @@ static void process_raster(int ifd, InputMask imask, ScaleRange iscale,
 	    G_debug(3, "Computed r%d (%d), c%d (%d)", row, nrows, col, ncols);
 	    /* transform from iscale.[min,max] to [0,1] */
 	    buf[col] =
-		(buf[col] - iscale.min) / ((float)iscale.max -
-					   (float)iscale.min);
+		(buf[col] - iscale.min) / ((double)iscale.max -
+					   (double)iscale.min);
 	    buf[col] = transform(ti, imask, buf[col]);
+	    if (Rast_is_f_null_value(&buf[col]))
+		G_fatal_error(_("Numerical instability in 6S"));
 	    /* transform from [0,1] to oscale.[min,max] */
 	    buf[col] =
-		buf[col] * ((float)oscale.max - (float)oscale.min) +
+		buf[col] * ((double)oscale.max - (double)oscale.min) +
 		oscale.min;
 
-	    if (oint && (buf[col] > (float)oscale.max))
+	    if (oint && (buf[col] > (double)oscale.max))
 		G_warning(_("The output data will overflow. Reflectance > 100%%"));
 	}
 
@@ -469,7 +492,7 @@ static struct Options define_options(void)
     opts.iscl->type = TYPE_INTEGER;
     opts.iscl->key_desc = "min,max";
     opts.iscl->required = NO;
-    opts.iscl->answer = "0,255";
+    opts.iscl->answer = G_store("0,255");
     opts.iscl->description = _("Input range");
     opts.iscl->guisection = _("Input");
 
@@ -495,7 +518,7 @@ static struct Options define_options(void)
     opts.oscl->key = "rescale";
     opts.oscl->type = TYPE_INTEGER;
     opts.oscl->key_desc = "min,max";
-    opts.oscl->answer = "0,255";
+    opts.oscl->answer = G_store("0,255");
     opts.oscl->required = NO;
     opts.oscl->description = _("Rescale output raster map");
     opts.oscl->guisection = _("Output");
@@ -598,7 +621,7 @@ int main(int argc, char *argv[])
 			  opts.ivis->answer);
     }
 
-    /* open a floating point raster or not? */
+    /* open a doubleing point raster or not? */
     if (opts.oint->answer) {
 	if ((oimg_fd = Rast_open_new(opts.oimg->answer, CELL_TYPE)) < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"),

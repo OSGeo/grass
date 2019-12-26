@@ -17,20 +17,30 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-import locale
+from __future__ import print_function
 
+import locale
+import six
+
+import os
+import sys
 import wx
 
 from core.debug import Debug
 from core.settings import UserSettings
-from core.utils import _
+from core.gcmd import DecodeString
+from gui_core.wrap import Rect
 
+try:
+    WindowsError
+except NameError:
+    WindowsError = OSError
 try:
     from grass.lib.gis import *
     from grass.lib.vector import *
     from grass.lib.vedit import *
-except ImportError:
-    pass
+except (ImportError, WindowsError) as e:
+    print("wxdigit.py: {}".format(e), file=sys.stderr)
 
 log = None
 progress = None
@@ -41,9 +51,11 @@ def print_error(msg, type):
     """Redirect stderr"""
     global log
     if log:
+        if sys.version_info.major >= 3:
+            msg = DecodeString(msg.data)
         log.write(msg + os.linesep)
     else:
-        print msg
+        print(msg)
     global last_error
     last_error += ' ' + msg
 
@@ -97,7 +109,8 @@ class DisplayDriver:
         progress = gprogress
 
         G_gisinit('wxvdigit')
-        locale.setlocale(locale.LC_NUMERIC, 'C')
+        if sys.platform != 'win32':
+            locale.setlocale(locale.LC_NUMERIC, 'C')
         G_set_error_routine(errfunc)
         G_set_percent_routine(perfunc)
         # G_set_fatal_error(FATAL_RETURN)
@@ -334,19 +347,21 @@ class DisplayDriver:
                     pdc.SetPen(pen)
                     pdc.SetIdBounds(
                         dcId - 1,
-                        wx.Rect(
+                        Rect(
                             point_beg.x,
                             point_beg.y,
                             0,
                             0))
-                    pdc.SetIdBounds(dcId, wx.RectPP(point_beg, point_end))
+                    pdc.SetIdBounds(dcId, Rect(point_beg.x, point_beg.y,
+                                               point_end.x - point_beg.x,
+                                               point_end.y - point_beg.y))
                     pdc.DrawLine(point_beg.x, point_beg.y,
                                  point_end.x, point_end.y)
                     i += 1
                     dcId += 2
                 pdc.SetIdBounds(
                     dcId - 1,
-                    wx.Rect(
+                    Rect(
                         robj.point[
                             robj.npoints - 1].x,
                         robj.point[
@@ -889,7 +904,7 @@ class DisplayDriver:
                 points.x[idx],
                 points.y[idx],
                 points.z[idx])
-            rect = wx.Rect(vx, vy, 0, 0)
+            rect = Rect(vx, vy, 0, 0)
             self.dc.SetIdBounds(DCid, rect)
             DCid += 2
 
@@ -1174,7 +1189,7 @@ class DisplayDriver:
             catsDict[layer].append(cats.cat[i])
 
         catsStr = ''
-        for l, c in catsDict.iteritems():
+        for l, c in six.iteritems(catsDict):
             catsStr = '%d: (%s)' % (l, ','.join(map(str, c)))
 
         return catsStr

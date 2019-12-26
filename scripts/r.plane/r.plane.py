@@ -1,9 +1,10 @@
-#!/usr/bin/env python
-#
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 ############################################################################
 #
 # MODULE:	r.plane for GRASS 5.7; based on r.plane for GRASS 5
-# AUTHOR(S):	CERL?; updated to GRASS 5.7 by Michael Barton
+# AUTHOR(S):	1994, Stefan Jäger, University of Heidelberg/USGS
+#               updated to GRASS 5.7 by Michael Barton
 #               Dec 2004: Alessandro Frigeri & Ivan Marchesini
 #               Modified to produce floating and double values maps
 #               Converted to Python by Glynn Clements
@@ -66,19 +67,21 @@ import math
 import string
 import grass.script as gscript
 
-# i18N
-import os
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
-
 
 def main():
     name = options['output']
     type = options['type']
     dip = float(options['dip'])
     az = float(options['azimuth'])
-    ea = float(options['easting'])
-    no = float(options['northing'])
+    try:
+        ea = float(options['easting'])
+        no = float(options['northing'])
+    except ValueError:
+        try:
+            ea = float(gscript.utils.float_or_dms(options['easting']))
+            no = float(gscript.utils.float_or_dms(options['northing']))
+        except:
+            gscript.fatal(_("Input coordinates seems to be invalid"))
     el = float(options['elevation'])
 
     # reg = gscript.region()

@@ -25,11 +25,11 @@ import grass.script as grass
 from core import globalvar
 from core.gcmd import GError, RunCommand
 from core.giface import StandaloneGrassInterface
-from core.utils import _
 from gui_core.gselect import Select
 from gui_core.forms import GUI
 from gui_core.widgets import IntegerValidator
-from gui_core.wrap import Button, TextCtrl
+from gui_core.wrap import Button, TextCtrl, StaticText, \
+    StaticBox
 from core.settings import UserSettings
 
 
@@ -138,14 +138,14 @@ class MapCalcFrame(wx.Frame):
         # from selection
         self.lastMapName = ''
 
-        self.operatorBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                        label=" %s " % _('Operators'))
-        self.outputBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                      label=" %s " % _('Output'))
-        self.operandBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                       label=" %s " % _('Operands'))
-        self.expressBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                       label=" %s " % _('Expression'))
+        self.operatorBox = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                                     label=" %s " % _('Operators'))
+        self.outputBox = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                                   label=" %s " % _('Output'))
+        self.operandBox = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                                    label=" %s " % _('Operands'))
+        self.expressBox = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                                    label=" %s " % _('Expression'))
 
         #
         # Buttons
@@ -244,14 +244,14 @@ class MapCalcFrame(wx.Frame):
         #
         # Text area
         #
-        self.text_mcalc = wx.TextCtrl(
+        self.text_mcalc = TextCtrl(
             parent=self.panel, id=wx.ID_ANY, size=(-1, 75),
             style=wx.TE_MULTILINE)
         wx.CallAfter(self.text_mcalc.SetFocus)
 
         #
         # Map and function insertion text and ComboBoxes
-        self.newmaplabel = wx.StaticText(parent=self.panel, id=wx.ID_ANY)
+        self.newmaplabel = StaticText(parent=self.panel, id=wx.ID_ANY)
         if self.rast3d:
             self.newmaplabel.SetLabel(
                 _('Name for new 3D raster map to create'))
@@ -263,7 +263,7 @@ class MapCalcFrame(wx.Frame):
             parent=self.panel, id=wx.ID_ANY, size=(
                 250, -1), type=element, multiple=False,
                 fullyQualified=False)
-        self.mapsellabel = wx.StaticText(parent=self.panel, id=wx.ID_ANY)
+        self.mapsellabel = StaticText(parent=self.panel, id=wx.ID_ANY)
         if self.rast3d:
             self.mapsellabel.SetLabel(_('Insert existing 3D raster map'))
         else:
@@ -271,8 +271,8 @@ class MapCalcFrame(wx.Frame):
         self.mapselect = Select(
             parent=self.panel, id=wx.ID_ANY, size=(
                 250, -1), type=element, multiple=False)
-        self.functlabel = wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                        label=_('Insert mapcalc function'))
+        self.functlabel = StaticText(parent=self.panel, id=wx.ID_ANY,
+                                     label=_('Insert mapcalc function'))
         self.function = wx.ComboBox(
             parent=self.panel, id=wx.ID_ANY, size=(250, -1),
             choices=sorted(self.funct_dict.keys()),
@@ -290,7 +290,7 @@ class MapCalcFrame(wx.Frame):
         self.randomSeed = wx.CheckBox(
             parent=self.panel,
             label=_("Generate random seed for rand()"))
-        self.randomSeedStaticText = wx.StaticText(
+        self.randomSeedStaticText = StaticText(
             parent=self.panel, label=_("Seed:"))
         self.randomSeedText = TextCtrl(parent=self.panel, size=(100, -1),
                                        validator=IntegerValidator())
@@ -568,6 +568,8 @@ class MapCalcFrame(wx.Frame):
         self._addSomething(item)
 
         win.ChangeValue('')  # reset
+        # Map selector likes to keep focus. Set it back to expression input area
+        wx.CallAfter(self.text_mcalc.SetFocus)
 
     def OnUpdateStatusBar(self, event):
         """Update statusbar text"""
@@ -619,8 +621,17 @@ class MapCalcFrame(wx.Frame):
         except:
             pass
 
-        newmcalcstr += what + ' ' + mcalcstr[position:]
-
+        newmcalcstr += what
+        
+        # Do not add extra space if there is already one
+        try:
+            if newmcalcstr[-1] != ' ' and mcalcstr[position] != ' ':
+                newmcalcstr += ' '
+        except:
+            newmcalcstr += ' '
+        
+        newmcalcstr += mcalcstr[position:]
+        
         self.text_mcalc.SetValue(newmcalcstr)
         if len(what) > 0:
             match = re.search(pattern="\(.*\)", string=what)
@@ -628,6 +639,11 @@ class MapCalcFrame(wx.Frame):
                 position_offset += match.start() + 1
             else:
                 position_offset += len(what)
+                try:
+                    if newmcalcstr[position + position_offset] == ' ':
+                        position_offset += 1
+                except:
+                    pass
 
         self.text_mcalc.SetInsertionPoint(position + position_offset)
         self.text_mcalc.Update()

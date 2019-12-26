@@ -29,8 +29,9 @@ class NumpyTestCase(TestCase):
         """Create test raster map and region"""
         cls.use_temp_region()
         cls.runModule("g.region", n=40, s=0, e=60, w=0, res=1)
-        cls.runModule("r.mapcalc", expression="%s = float(row() + (10.0 * col()))"%(cls.name),
-                                   overwrite=True)
+        cls.runModule("r.mapcalc",
+            expression="%s = float(row() + (10.0 * col()))" % (cls.name),
+            overwrite=True)
         cls.numpy_obj = raster2numpy(cls.name)
 
     @classmethod

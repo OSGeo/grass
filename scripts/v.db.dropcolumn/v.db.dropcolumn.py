@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ############################################################################
 #
@@ -43,10 +43,6 @@ import string
 import grass.script as grass
 from grass.exceptions import CalledModuleError
 
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
-
 
 def main():
     map = options['map']
@@ -89,14 +85,19 @@ def main():
                 if f[0] == column:
                     continue
                 colnames.append(f[0])
-                coltypes.append("%s %s" % (f[0], f[1]))
+                # see db_sqltype_name() for type names
+                if f[1] == "CHARACTER":
+                    # preserve field length for sql type "CHARACTER"
+                    coltypes.append("%s %s(%s)" % (f[0], f[1], f[2]))
+                else:
+                    coltypes.append("%s %s" % (f[0], f[1]))
 
             colnames = ", ".join(colnames)
             coltypes = ", ".join(coltypes)
 
             cmds = [
                 "BEGIN TRANSACTION",
-                "CREATE TEMPORARY TABLE ${table}_backup(${coldef})",
+                "CREATE TEMPORARY TABLE ${table}_backup (${coldef})",
                 "INSERT INTO ${table}_backup SELECT ${colnames} FROM ${table}",
                 "DROP TABLE ${table}",
                 "CREATE TABLE ${table}(${coldef})",

@@ -164,7 +164,7 @@ enum History_field
     HIST_MAPSET,
     /*! \brief User who creater raster map */
     HIST_CREATOR,
-    /*! \brief Map type (always "raster") */
+    /*! \brief Map type ("raster", "reclass", "GDAL-link", or "virtual") */
     HIST_MAPTYPE,
     /*! \brief Description of original data source (two lines) */
     HIST_DATSRC_1,
@@ -215,11 +215,19 @@ struct Histogram
     } *list;
 };
 
+struct R_stats
+{
+    DCELL sum;
+    DCELL sumsq;
+    grass_int64 count;
+};
+
 struct Range
 {
     CELL min;
     CELL max;
     int first_time;		/* whether or not range was updated */
+    struct R_stats rstats;
 };
 
 struct FPRange
@@ -227,6 +235,7 @@ struct FPRange
     DCELL min;
     DCELL max;
     int first_time;		/* whether or not range was updated */
+    struct R_stats rstats;
 };
 
 struct FP_stats {
@@ -240,6 +249,7 @@ struct FP_stats {
 };
 
 struct GDAL_link;
+struct R_vrt;
 
 /*** prototypes ***/
 #include <grass/defs/raster.h>

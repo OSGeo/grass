@@ -89,17 +89,6 @@ int main(int argc, char **argv)
     if ((p = strchr(group.name, '@')))
 	*p = 0;
 
-    /* get and check the group reference files */
-    /* Skip if you are creating the group right now */
-    if (strcmp(moduletorun, "i.group") != 0){
-    	if (!I_get_group_ref(group.name, &group.group_ref))
-		G_fatal_error(_("Pre-selected group <%s> not found"), group.name);
-	    I_get_group_ref(group.name, &group.group_ref);
-
-	    if (group.group_ref.nfiles <= 0)
-		G_fatal_error(_("Group [%s] contains no files"), group.name);
-    }
-
     I_put_group(group.name);
     /*-----------------------------*/
     /* END of group validity check */

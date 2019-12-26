@@ -21,13 +21,13 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
+import six
 import math
 
 if __name__ == '__main__':
     import os
     import sys
 
-from core.utils import _
 
 
 class BaseUnits:
@@ -79,7 +79,7 @@ class BaseUnits:
 
         :return: index
         """
-        for k, u in self._units[type].iteritems():
+        for k, u in six.iteritems(self._units[type]):
             if u['key'] == key:
                 return k
         return 0

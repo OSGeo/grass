@@ -57,7 +57,7 @@ void read_png(void)
     png_ptr =
 	png_create_read_struct(PNG_LIBPNG_VER_STRING, &jbuf, NULL, NULL);
     if (!png_ptr)
-        G_fatal_error(_("Unable allocate PNG structure"));
+        G_fatal_error(_("Unable to allocate PNG structure"));
 
     info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr)

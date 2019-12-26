@@ -125,7 +125,7 @@ parse_args(int argc, char *argv[]) {
   d8cut->label = _("Routing using SFD (D8) direction");
   d8cut->description = 
     _("If flow accumulation is larger than this value it is routed using "
-      "SFD (D8) direction (meaningfull only for MFD flow). "
+      "SFD (D8) direction (meaningful only for MFD flow). "
       "If no answer is given it defaults to infinity.");
 
   /* main memory */
@@ -408,7 +408,7 @@ setSinkWatershedColorTable(char* cellname) {
 
 
 
-/* print the largest interm file that will be generated during
+/* print the largest interim file that will be generated during
    r.terraflow */
 void
 printMaxSortSize(long nodata_count) {
@@ -548,7 +548,7 @@ main(int argc, char *argv[]) {
   long nodata_count;
   elstr = cell2stream<elevation_type>(opt->elev_grid, elevation_type_max,
 									  &nodata_count);
-  /* print the largest interm file that will be generated */
+  /* print the largest interim file that will be generated */
   printMaxSortSize(nodata_count);
   
 

@@ -190,9 +190,9 @@ class TestTextToKeyValue(TestCase):
         # although it does not support stripping (we don't merge separators)
         keyvals = text_to_keyvalue("a 1 2 3", sep=' ', val_sep=' ')
         self.assertDictEqual({'a': [1, 2, 3]}, keyvals)
-        
+
     #def test_projection_files(self):
-        
+
 # obtained by r.univar elevation -g
 # floats removed
 R_UNIVAR_KEYVAL = """n=2025000
@@ -354,7 +354,7 @@ class TestMd5Sums(TestCase):
             for line in CORRECT_LINES:
                 # \n should be converted to platform newline
                 f.write(line + '\n')
-        with open(cls.correct_file_name_unix_nl, 'wb') as f:
+        with open(cls.correct_file_name_unix_nl, 'w') as f:
             for line in CORRECT_LINES:
                 # binary mode will write pure \n
                 f.write(line + '\n')

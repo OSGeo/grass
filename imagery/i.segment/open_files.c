@@ -31,20 +31,6 @@ int open_files(struct globals *globals)
     flag_clear_all(globals->null_flag);
     flag_clear_all(globals->candidate_flag);
 
-    G_debug(1, "Checking image group...");
-
-    /* ****** open the input rasters ******* */
-
-    if (!I_get_group_ref(globals->image_group, &globals->Ref))
-	G_fatal_error(_("Group <%s> not found in the current mapset"),
-		      globals->image_group);
-
-    if (globals->Ref.nfiles <= 0)
-	G_fatal_error(_("Group <%s> contains no raster maps"),
-		      globals->image_group);
-
-    /* Read Imagery Group */
-
     in_fd = G_malloc(globals->Ref.nfiles * sizeof(int));
     inbuf = (DCELL **) G_malloc(globals->Ref.nfiles * sizeof(DCELL *));
     fp_range = G_malloc(globals->Ref.nfiles * sizeof(struct FPRange));
@@ -71,6 +57,14 @@ int open_files(struct globals *globals)
 	    G_fatal_error(_("No min/max found in raster map <%s>"),
 			  globals->Ref.file[n].name);
 	Rast_get_fp_range_min_max(&(fp_range[n]), &min[n], &max[n]);
+	if (Rast_is_d_null_value(&min[n])) {
+	    G_fatal_error(_("Input map <%s> is all NULL"),
+			  globals->Ref.file[n].name);
+	}
+	if (min[n] == max[n]) {
+	    G_fatal_error(_("Input map <%s> is a constant of value %g"),
+			  globals->Ref.file[n].name, min[n]);
+	}
 
 	G_debug(1, "Range for layer %d: min = %f, max = %f",
 		    n, min[n], max[n]);
@@ -522,7 +516,8 @@ static int read_seed(struct globals *globals, SEGMENT *seeds_seg, struct rc *Ri,
 static int manage_memory(int srows, int scols, struct globals *globals)
 {
     double reg_size_mb, segs_mb;
-    int reg_size_count, nseg, nseg_total;
+    LARGEINT reg_size_count;
+    int nseg, nseg_total;
     
     segs_mb = globals->mb;
     if (globals->method == ORM_RG) {
@@ -541,6 +536,8 @@ static int manage_memory(int srows, int scols, struct globals *globals)
 
 	/* calculate number of region stats that can be kept in memory */
 	reg_size_count = (globals->mb - segs_mb) / reg_size_mb;
+	if (reg_size_count < 1)
+	    reg_size_count = 1;
 	globals->min_reg_size = 3;
 	if (reg_size_count < (double) globals->notnullcells / globals->min_reg_size) {
 	    globals->min_reg_size = (double) globals->notnullcells / reg_size_count;
@@ -549,13 +546,16 @@ static int manage_memory(int srows, int scols, struct globals *globals)
 	    reg_size_count = (double) globals->notnullcells / globals->min_reg_size;
 	    /* recalculate segs_mb */
 	    segs_mb = globals->mb - reg_size_count * reg_size_mb;
+	    if (segs_mb < 10)
+		segs_mb = 10;
 	}
 
-	G_verbose_message(_("Regions with at least %d cells are stored in memory"),
+	G_verbose_message(_("Regions with at least %"PRI_LONG" cells are stored in memory"),
 			  globals->min_reg_size);
     }
 
     /* calculate number of segments in memory */
+    /* nseg: integer overflow possible with large segs_mb */
     if (globals->bounds_map != NULL) {
 	/* input bands, segment ids, bounds map */
 	if (globals->method == ORM_MS) {

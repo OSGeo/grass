@@ -24,6 +24,7 @@ import shutil
 import locale
 import shlex
 import re
+import time
 
 
 if sys.version_info.major == 3:
@@ -42,6 +43,8 @@ def float_or_dms(s):
 
     :return: float value
     """
+    if s[-1] in ['E', 'W', 'N', 'S']:
+        s = s[:-1]
     return sum(float(x) / 60 ** n for (n, x) in enumerate(s.split(':')))
 
 
@@ -163,12 +166,13 @@ def _get_encoding():
     return encoding
 
 
-def decode(bytes_):
+def decode(bytes_, encoding=None):
     """Decode bytes with default locale and return (unicode) string
 
     No-op if parameter is not bytes (assumed unicode string).
 
     :param bytes bytes_: the bytes to decode
+    :param encoding: encoding to be used, default value is None
 
     Example
     -------
@@ -183,18 +187,28 @@ def decode(bytes_):
     if isinstance(bytes_, unicode):
         return bytes_
     if isinstance(bytes_, bytes):
-        enc = _get_encoding()
+        if encoding is None:
+            enc = _get_encoding()
+        else:
+            enc = encoding
         return bytes_.decode(enc)
-    return unicode(bytes_)
+    # if something else than text
+    if sys.version_info.major >= 3:
+        # only text should be used
+        raise TypeError("can only accept types str and bytes")
+    else:
+        # for backwards compatibility
+        return unicode(bytes_)
 
 
-def encode(string):
+def encode(string, encoding=None):
     """Encode string with default locale and return bytes with that encoding
 
     No-op if parameter is bytes (assumed already encoded).
     This ensures garbage in, garbage out.
 
     :param str string: the string to encode
+    :param encoding: encoding to be used, default value is None
 
     Example
     -------
@@ -208,10 +222,32 @@ def encode(string):
     """
     if isinstance(string, bytes):
         return string
+    # this also tests str in Py3:
     if isinstance(string, unicode):
-        enc = _get_encoding()
+        if encoding is None:
+            enc = _get_encoding()
+        else:
+            enc = encoding
         return string.encode(enc)
-    return bytes(string)
+    # if something else than text
+    if sys.version_info.major >= 3:
+        # only text should be used
+        raise TypeError("can only accept types str and bytes")
+    else:
+        # for backwards compatibility
+        return bytes(string)
+
+
+def text_to_string(text, encoding=None):
+    """Convert text to str. Useful when passing text into environments,
+       in Python 2 it needs to be bytes on Windows, in Python 3 in needs unicode.
+    """
+    if sys.version[0] == '2':
+        # Python 2
+        return encode(text, encoding=encoding)
+    else:
+        # Python 3
+        return decode(text, encoding=encoding)
 
 
 def parse_key_val(s, sep='=', dflt=None, val_type=None, vsep=None):
@@ -416,3 +452,13 @@ def set_path(modulename, dirname=None, path='.'):
                               "(current dir '%s')." % (pathname, os.getcwd()))
 
         sys.path.insert(0, path)
+
+def clock():
+    """
+    Return time counter to measure performance for chunks of code.
+    Uses time.clock() for Py < 3.3, time.perf_counter() for Py >= 3.3.
+    Should be used only as difference between the calls.
+    """
+    if sys.version_info > (3,2):
+        return time.perf_counter()
+    return time.clock()

@@ -19,6 +19,9 @@ This program is free software under the GNU General Public License
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
+
+from __future__ import print_function
+
 import os
 import wx
 import copy
@@ -26,6 +29,10 @@ import datetime
 import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.scrolledpanel as SP
 import wx.lib.colourselect as csel
+try:
+    from wx.adv import HyperlinkCtrl
+except ImportError:
+    from wx import HyperlinkCtrl
 
 from core.gcmd import GMessage, GError, GException
 from core import globalvar
@@ -33,10 +40,10 @@ from gui_core.dialogs import MapLayersDialog, GetImageHandlers
 from gui_core.preferences import PreferencesBaseDialog
 from gui_core.forms import GUI
 from core.settings import UserSettings
-from core.utils import _
 from gui_core.gselect import Select
 from gui_core.widgets import FloatValidator
-from gui_core.wrap import SpinCtrl
+from gui_core.wrap import SpinCtrl, CheckBox, TextCtrl, Button, \
+    BitmapButton, StaticText, StaticBox, Choice, RadioButton, EmptyImage
 
 from animation.utils import TemporalMode, getRegisteredMaps, getNameAndLayer, getCpuCount
 from animation.data import AnimationData, AnimLayer
@@ -96,14 +103,14 @@ class SpeedDialog(wx.Dialog):
         #
         # simple mode
         #
-        self.nontemporalBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                                           label=' %s ' % _("Simple mode"))
+        self.nontemporalBox = StaticBox(parent=self, id=wx.ID_ANY,
+                                        label=' %s ' % _("Simple mode"))
         box = wx.StaticBoxSizer(self.nontemporalBox, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        labelDuration = wx.StaticText(
+        labelDuration = StaticText(
             self, id=wx.ID_ANY, label=_("Frame duration:"))
-        labelUnits = wx.StaticText(self, id=wx.ID_ANY, label=_("ms"))
+        labelUnits = StaticText(self, id=wx.ID_ANY, label=_("ms"))
         self.spinDuration = SpinCtrl(
             self,
             id=wx.ID_ANY,
@@ -135,16 +142,16 @@ class SpeedDialog(wx.Dialog):
         #
         # temporal mode
         #
-        self.temporalBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                                        label=' %s ' % _("Temporal mode"))
+        self.temporalBox = StaticBox(parent=self, id=wx.ID_ANY,
+                                     label=' %s ' % _("Temporal mode"))
         box = wx.StaticBoxSizer(self.temporalBox, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        labelTimeUnit = wx.StaticText(
+        labelTimeUnit = StaticText(
             self, id=wx.ID_ANY, label=_("Time unit:"))
-        labelDuration = wx.StaticText(
+        labelDuration = StaticText(
             self, id=wx.ID_ANY, label=_("Duration of time unit:"))
-        labelUnits = wx.StaticText(self, id=wx.ID_ANY, label=_("ms"))
+        labelUnits = StaticText(self, id=wx.ID_ANY, label=_("ms"))
         self.spinDurationTemp = SpinCtrl(
             self, id=wx.ID_ANY, min=self.minimumDuration, max=10000,
             initial=self.defaultSpeed)
@@ -180,9 +187,9 @@ class SpeedDialog(wx.Dialog):
             flag=wx.EXPAND | wx.ALL,
             border=5)
 
-        self.btnOk = wx.Button(self, wx.ID_OK)
-        self.btnApply = wx.Button(self, wx.ID_APPLY)
-        self.btnCancel = wx.Button(self, wx.ID_CANCEL)
+        self.btnOk = Button(self, wx.ID_OK)
+        self.btnApply = Button(self, wx.ID_APPLY)
+        self.btnCancel = Button(self, wx.ID_CANCEL)
         self.btnOk.SetDefault()
 
         self.btnOk.Bind(wx.EVT_BUTTON, self.OnOk)
@@ -349,8 +356,8 @@ class InputDialog(wx.Dialog):
             border=3)
 
         # buttons
-        self.btnOk = wx.Button(self, wx.ID_OK)
-        self.btnCancel = wx.Button(self, wx.ID_CANCEL)
+        self.btnOk = Button(self, wx.ID_OK)
+        self.btnCancel = Button(self, wx.ID_CANCEL)
         self.btnOk.SetDefault()
         self.btnOk.Bind(wx.EVT_BUTTON, self.OnOk)
         # button sizer
@@ -378,10 +385,10 @@ class InputDialog(wx.Dialog):
                 _("bottom right")])
         self.windowChoice.SetSelection(self.animationData.windowIndex)
 
-        self.nameCtrl = wx.TextCtrl(
+        self.nameCtrl = TextCtrl(
             panel, id=wx.ID_ANY, value=self.animationData.name)
 
-        self.nDChoice = wx.Choice(panel, id=wx.ID_ANY)
+        self.nDChoice = Choice(panel, id=wx.ID_ANY)
         mode = self.animationData.viewMode
         index = 0
         for i, (viewMode, viewModeName) in enumerate(
@@ -391,19 +398,19 @@ class InputDialog(wx.Dialog):
                 index = i
 
         self.nDChoice.SetSelection(index)
-        self.nDChoice.SetToolTipString(_("Select 2D or 3D view"))
+        self.nDChoice.SetToolTip(_("Select 2D or 3D view"))
         self.nDChoice.Bind(wx.EVT_CHOICE, self.OnViewMode)
 
         gridSizer = wx.FlexGridSizer(cols=2, hgap=5, vgap=5)
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 panel,
                 id=wx.ID_ANY,
                 label=_("Name:")),
             flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(self.nameCtrl, proportion=1, flag=wx.EXPAND)
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 panel,
                 id=wx.ID_ANY,
                 label=_("Window position:")),
@@ -413,7 +420,7 @@ class InputDialog(wx.Dialog):
             proportion=1,
             flag=wx.ALIGN_RIGHT)
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 panel,
                 id=wx.ID_ANY,
                 label=_("View mode:")),
@@ -429,7 +436,7 @@ class InputDialog(wx.Dialog):
         label = _(
             "For 3D animation, please select only one space-time dataset\n"
             "or one series of map layers.")
-        self.warning3DLayers = wx.StaticText(panel, label=label)
+        self.warning3DLayers = StaticText(panel, label=label)
         self.warning3DLayers.SetForegroundColour(
             wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
         mainSizer.Add(
@@ -472,7 +479,7 @@ class InputDialog(wx.Dialog):
 
         self.legend = wx.CheckBox(panel, label=_("Show raster legend"))
         self.legend.SetValue(bool(self.animationData.legendCmd))
-        self.legendBtn = wx.Button(panel, label=_("Set options"))
+        self.legendBtn = Button(panel, label=_("Set options"))
         self.legend.Bind(wx.EVT_CHECKBOX, self.OnLegend)
         self.legendBtn.Bind(wx.EVT_BUTTON, self.OnLegendProperties)
 
@@ -492,8 +499,8 @@ class InputDialog(wx.Dialog):
 
     def _create3DPanel(self, parent):
         panel = wx.Panel(parent, id=wx.ID_ANY)
-        dataStBox = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                                 label=' %s ' % _("3D view parameters"))
+        dataStBox = StaticBox(parent=panel, id=wx.ID_ANY,
+                              label=' %s ' % _("3D view parameters"))
         dataBoxSizer = wx.StaticBoxSizer(dataStBox, wx.VERTICAL)
 
         # workspace file
@@ -511,7 +518,7 @@ class InputDialog(wx.Dialog):
             fileMask="GRASS Workspace File (*.gxw)|*.gxw")
         if self.animationData.workspaceFile:
             self.fileSelector.SetValue(self.animationData.workspaceFile)
-        self.paramLabel = wx.StaticText(
+        self.paramLabel = StaticText(
             panel, wx.ID_ANY, label=_("Parameter for animation:"))
         self.paramChoice = wx.Choice(
             panel, id=wx.ID_ANY, choices=self.animationData.nvizParameters)
@@ -549,13 +556,13 @@ class InputDialog(wx.Dialog):
         panel = wx.Panel(parent=parent)
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel, label=" %s " %
             _("Animate region change (2D view only)"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
-        gridSizer.Add(wx.StaticText(panel, label=_("Start region:")),
+        gridSizer.Add(StaticText(panel, label=_("Start region:")),
                       pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         self.stRegion = Select(parent=panel, type='region', size=(200, -1))
         if self.animationData.startRegion:
@@ -564,25 +571,25 @@ class InputDialog(wx.Dialog):
             self.stRegion, pos=(0, 1),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
 
-        self.endRegRadio = wx.RadioButton(
+        self.endRegRadio = RadioButton(
             panel, label=_("End region:"), style=wx.RB_GROUP)
         gridSizer.Add(self.endRegRadio, pos=(1, 0), flag=wx.EXPAND)
         self.endRegion = Select(parent=panel, type='region', size=(200, -1))
         gridSizer.Add(
             self.endRegion, pos=(1, 1),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
-        self.zoomRadio = wx.RadioButton(panel, label=_("Zoom value:"))
-        self.zoomRadio.SetToolTipString(_("N-S/E-W distances in map units used to "
-                                          "gradually reduce region."))
+        self.zoomRadio = RadioButton(panel, label=_("Zoom value:"))
+        self.zoomRadio.SetToolTip(_("N-S/E-W distances in map units used to "
+                                    "gradually reduce region."))
         gridSizer.Add(self.zoomRadio, pos=(2, 0), flag=wx.EXPAND)
 
         zoomSizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.zoomNS = wx.TextCtrl(panel, validator=FloatValidator())
-        self.zoomEW = wx.TextCtrl(panel, validator=FloatValidator())
-        zoomSizer.Add(wx.StaticText(panel, label=_("N-S:")), proportion=0,
+        self.zoomNS = TextCtrl(panel, validator=FloatValidator())
+        self.zoomEW = TextCtrl(panel, validator=FloatValidator())
+        zoomSizer.Add(StaticText(panel, label=_("N-S:")), proportion=0,
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT, border=3)
         zoomSizer.Add(self.zoomNS, proportion=1, flag=wx.LEFT, border=3)
-        zoomSizer.Add(wx.StaticText(panel, label=_("E-W:")), proportion=0,
+        zoomSizer.Add(StaticText(panel, label=_("E-W:")), proportion=0,
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT, border=3)
         zoomSizer.Add(self.zoomEW, proportion=1, flag=wx.LEFT, border=3)
         gridSizer.Add(
@@ -732,9 +739,13 @@ class InputDialog(wx.Dialog):
             self.animationData.endRegion = None
             self.animationData.zoomRegionValue = None
 
+    def UnInit(self):
+        self.simpleLmgr.UnInit()
+
     def OnOk(self, event):
         try:
             self._update()
+            self.UnInit()
             self.EndModal(wx.ID_OK)
         except (GException, ValueError, IOError) as e:
             GError(
@@ -758,7 +769,7 @@ class EditDialog(wx.Dialog):
 
     def _layout(self):
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=self,
             id=wx.ID_ANY,
             label=" %s " %
@@ -773,11 +784,11 @@ class EditDialog(wx.Dialog):
             style=wx.LB_SINGLE | wx.LB_NEEDED_SB)
         self.listbox.Bind(wx.EVT_LISTBOX_DCLICK, self.OnEdit)
 
-        self.addButton = wx.Button(self, id=wx.ID_ANY, label=_("Add"))
+        self.addButton = Button(self, id=wx.ID_ANY, label=_("Add"))
         self.addButton.Bind(wx.EVT_BUTTON, self.OnAdd)
-        self.editButton = wx.Button(self, id=wx.ID_ANY, label=_("Edit"))
+        self.editButton = Button(self, id=wx.ID_ANY, label=_("Edit"))
         self.editButton.Bind(wx.EVT_BUTTON, self.OnEdit)
-        self.removeButton = wx.Button(self, id=wx.ID_ANY, label=_("Remove"))
+        self.removeButton = Button(self, id=wx.ID_ANY, label=_("Remove"))
         self.removeButton.Bind(wx.EVT_BUTTON, self.OnRemove)
 
         self._updateListBox()
@@ -799,8 +810,8 @@ class EditDialog(wx.Dialog):
                       flag=wx.EXPAND | wx.ALL, border=5)
 
         # buttons
-        self.btnOk = wx.Button(self, wx.ID_OK)
-        self.btnCancel = wx.Button(self, wx.ID_CANCEL)
+        self.btnOk = Button(self, wx.ID_OK)
+        self.btnCancel = Button(self, wx.ID_CANCEL)
         self.btnOk.SetDefault()
         self.btnOk.Bind(wx.EVT_BUTTON, self.OnOk)
         # button sizer
@@ -844,6 +855,7 @@ class EditDialog(wx.Dialog):
         dlg = InputDialog(parent=self, mode='add', animationData=animData)
         dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_CANCEL:
+            dlg.UnInit()
             dlg.Destroy()
             return
         dlg.Destroy()
@@ -860,6 +872,7 @@ class EditDialog(wx.Dialog):
         dlg = InputDialog(parent=self, mode='edit', animationData=animData)
         dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_CANCEL:
+            dlg.UnInit()
             dlg.Destroy()
             return
         dlg.Destroy()
@@ -930,9 +943,9 @@ class ExportDialog(wx.Dialog):
         mainSizer.Add(notebook, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
 
-        self.btnExport = wx.Button(self, wx.ID_OK)
+        self.btnExport = Button(self, wx.ID_OK)
         self.btnExport.SetLabel(_("Export"))
-        self.btnCancel = wx.Button(self, wx.ID_CANCEL)
+        self.btnCancel = Button(self, wx.ID_CANCEL)
         self.btnExport.SetDefault()
 
         self.btnExport.Bind(wx.EVT_BUTTON, self.OnExport)
@@ -990,7 +1003,7 @@ class ExportDialog(wx.Dialog):
         for buttonName, buttonLabel in zip(buttonNames, buttonLabels):
             if buttonName == 'time' and self.temporal == TemporalMode.NONTEMPORAL:
                 continue
-            btn = wx.Button(
+            btn = Button(
                 panel,
                 id=wx.ID_ANY,
                 name=buttonName,
@@ -1009,7 +1022,7 @@ class ExportDialog(wx.Dialog):
                 flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                 border=0)
             i += 1
-        removeButton = wx.Button(panel, id=wx.ID_ANY, label=_("Remove"))
+        removeButton = Button(panel, id=wx.ID_ANY, label=_("Remove"))
         removeButton.Bind(wx.EVT_BUTTON, self.OnRemove)
         gridBagSizer.Add(
             removeButton,
@@ -1031,7 +1044,7 @@ class ExportDialog(wx.Dialog):
         else:
             label = _("Add image or text decoration by one of the buttons above.")
 
-        label = wx.StaticText(panel, id=wx.ID_ANY, label=label)
+        label = StaticText(panel, id=wx.ID_ANY, label=label)
         label.Wrap(400)
         self.informBox.Add(
             label,
@@ -1047,18 +1060,18 @@ class ExportDialog(wx.Dialog):
         # font
         self.fontBox = wx.BoxSizer(wx.HORIZONTAL)
         self.fontBox.Add(
-            wx.StaticText(
+            StaticText(
                 panel,
                 id=wx.ID_ANY,
                 label=_("Font settings:")),
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT,
             border=5)
-        self.sampleLabel = wx.StaticText(
+        self.sampleLabel = StaticText(
             panel, id=wx.ID_ANY, label=_("Sample text"))
         self.fontBox.Add(self.sampleLabel, proportion=1,
                          flag=wx.ALIGN_CENTER | wx.RIGHT | wx.LEFT, border=5)
-        fontButton = wx.Button(panel, id=wx.ID_ANY, label=_("Set font"))
+        fontButton = Button(panel, id=wx.ID_ANY, label=_("Set font"))
         fontButton.Bind(wx.EVT_BUTTON, self.OnFont)
         self.fontBox.Add(
             fontButton,
@@ -1072,7 +1085,7 @@ class ExportDialog(wx.Dialog):
 
         # image
         self.imageBox = wx.BoxSizer(wx.HORIZONTAL)
-        filetype, ltype = GetImageHandlers(wx.EmptyImage(10, 10))
+        filetype, ltype = GetImageHandlers(EmptyImage(10, 10))
         self.browse = filebrowse.FileBrowseButton(
             parent=panel, id=wx.ID_ANY, fileMask=filetype,
             labelText=_("Image file:"),
@@ -1089,14 +1102,14 @@ class ExportDialog(wx.Dialog):
         # text
         self.textBox = wx.BoxSizer(wx.HORIZONTAL)
         self.textBox.Add(
-            wx.StaticText(
+            StaticText(
                 panel,
                 id=wx.ID_ANY,
                 label=_("Text:")),
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT,
             border=5)
-        self.textCtrl = wx.TextCtrl(panel, id=wx.ID_ANY)
+        self.textCtrl = TextCtrl(panel, id=wx.ID_ANY)
         self.textCtrl.Bind(wx.EVT_TEXT, self.OnText)
         self.textBox.Add(self.textCtrl, proportion=1, flag=wx.EXPAND)
         self.hidevbox.Add(self.textBox, proportion=0, flag=wx.EXPAND)
@@ -1111,7 +1124,7 @@ class ExportDialog(wx.Dialog):
 
     def _positionWidget(self, panel):
         grid = wx.GridBagSizer(vgap=5, hgap=5)
-        label = wx.StaticText(
+        label = StaticText(
             panel, id=wx.ID_ANY, label=_(
                 "Placement as percentage of"
                 " screen coordinates (X: 0, Y: 0 is top left):"))
@@ -1134,9 +1147,9 @@ class ExportDialog(wx.Dialog):
                 temp))
 
         grid.Add(label, pos=(0, 0), span=(1, 4), flag=wx.EXPAND)
-        grid.Add(wx.StaticText(panel, id=wx.ID_ANY, label=_("X:")), pos=(1, 0),
+        grid.Add(StaticText(panel, id=wx.ID_ANY, label=_("X:")), pos=(1, 0),
                  flag=wx.ALIGN_CENTER_VERTICAL)
-        grid.Add(wx.StaticText(panel, id=wx.ID_ANY, label=_("Y:")), pos=(1, 2),
+        grid.Add(StaticText(panel, id=wx.ID_ANY, label=_("Y:")), pos=(1, 2),
                  flag=wx.ALIGN_CENTER_VERTICAL)
         grid.Add(self.spinX, pos=(1, 1))
         grid.Add(self.spinY, pos=(1, 3))
@@ -1156,7 +1169,7 @@ class ExportDialog(wx.Dialog):
             lambda event: self.ChangeFormat(
                 event.GetSelection()))
         hSizer.Add(
-            wx.StaticText(
+            StaticText(
                 panel,
                 id=wx.ID_ANY,
                 label=_("Export to:")),
@@ -1183,11 +1196,11 @@ class ExportDialog(wx.Dialog):
 
         # panel for image sequence
         imSeqPanel = wx.Panel(parent=panel, id=wx.ID_ANY)
-        prefixLabel = wx.StaticText(
+        prefixLabel = StaticText(
             imSeqPanel, id=wx.ID_ANY, label=_("File prefix:"))
-        self.prefixCtrl = wx.TextCtrl(
+        self.prefixCtrl = TextCtrl(
             imSeqPanel, id=wx.ID_ANY, value=_("animation_"))
-        formatLabel = wx.StaticText(
+        formatLabel = StaticText(
             imSeqPanel, id=wx.ID_ANY, label=_("File format:"))
         imageTypes = ['PNG', 'JPEG', 'GIF', 'TIFF', 'PPM', 'BMP']
         self.imSeqFormatChoice = wx.Choice(imSeqPanel, choices=imageTypes)
@@ -1278,7 +1291,7 @@ class ExportDialog(wx.Dialog):
             warning = _(
                 "Program 'ffmpeg' was not found.\nPlease install it first "
                 "and make sure\nit's in the PATH variable.")
-            warningLabel = wx.StaticText(parent=aviPanel, label=warning)
+            warningLabel = StaticText(parent=aviPanel, label=warning)
             warningLabel.SetForegroundColour(wx.RED)
         self.aviBrowse = filebrowse.FileBrowseButton(
             parent=aviPanel,
@@ -1289,16 +1302,16 @@ class ExportDialog(wx.Dialog):
             buttonText=_("Browse"),
             startDirectory=os.getcwd(),
             fileMode=wx.FD_SAVE)
-        encodingLabel = wx.StaticText(
+        encodingLabel = StaticText(
             parent=aviPanel,
             id=wx.ID_ANY,
             label=_("Video codec:"))
-        self.encodingText = wx.TextCtrl(
+        self.encodingText = TextCtrl(
             parent=aviPanel, id=wx.ID_ANY, value='mpeg4')
-        optionsLabel = wx.StaticText(
+        optionsLabel = StaticText(
             parent=aviPanel, label=_("Additional options:"))
-        self.optionsText = wx.TextCtrl(parent=aviPanel)
-        self.optionsText.SetToolTipString(
+        self.optionsText = TextCtrl(parent=aviPanel)
+        self.optionsText.SetToolTip(
             _(
                 "Consider adding '-sameq' or '-qscale 1' "
                 "if not satisfied with video quality. "
@@ -1334,7 +1347,7 @@ class ExportDialog(wx.Dialog):
         fpsSizer = wx.BoxSizer(wx.HORIZONTAL)
         fps = 1000 / self.timeTick
         fpsSizer.Add(
-            wx.StaticText(
+            StaticText(
                 panel,
                 id=wx.ID_ANY,
                 label=_("Current frame rate: %.2f fps") %
@@ -1355,7 +1368,7 @@ class ExportDialog(wx.Dialog):
 
     def ChangeFormat(self, index):
         for i, panel in enumerate(self.formatPanels):
-            self.formatPanelSizer.Show(item=panel, show=(i == index))
+            self.formatPanelSizer.Show(window=panel, show=(i == index))
         self.formatPanelSizer.Layout()
 
     def OnFont(self, event):
@@ -1632,7 +1645,7 @@ class AddTemporalLayerDialog(wx.Dialog):
         else:
             bitmap = wx.ArtProvider.GetBitmap(
                 id=wx.ART_MISSING_IMAGE, client=wx.ART_TOOLBAR)
-        self.addManyMapsButton = wx.BitmapButton(self, bitmap=bitmap)
+        self.addManyMapsButton = BitmapButton(self, bitmap=bitmap)
         self.addManyMapsButton.Bind(wx.EVT_BUTTON, self._onAddMaps)
 
         types = [('raster', _("Multiple raster maps")),
@@ -1650,10 +1663,10 @@ class AddTemporalLayerDialog(wx.Dialog):
         for type_, text in types:
             self.tchoice.Append(text, clientData=type_)
 
-        self.editBtn = wx.Button(parent=self, label='Set properties')
+        self.editBtn = Button(parent=self, label='Set properties')
 
-        self.okBtn = wx.Button(parent=self, id=wx.ID_OK)
-        self.cancelBtn = wx.Button(parent=self, id=wx.ID_CANCEL)
+        self.okBtn = Button(parent=self, id=wx.ID_OK)
+        self.cancelBtn = Button(parent=self, id=wx.ID_CANCEL)
 
         self.okBtn.Bind(wx.EVT_BUTTON, self._onOK)
         self.editBtn.Bind(wx.EVT_BUTTON, self._onProperties)
@@ -1679,7 +1692,7 @@ class AddTemporalLayerDialog(wx.Dialog):
         bodySizer = wx.BoxSizer(wx.VERTICAL)
         typeSizer = wx.BoxSizer(wx.HORIZONTAL)
         selectSizer = wx.BoxSizer(wx.HORIZONTAL)
-        typeSizer.Add(wx.StaticText(self, label=_("Input data type:")),
+        typeSizer.Add(StaticText(self, label=_("Input data type:")),
                       flag=wx.ALIGN_CENTER_VERTICAL)
         typeSizer.AddStretchSpacer()
         typeSizer.Add(self.tchoice)
@@ -1859,7 +1872,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         row = 0
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 label=_("Background color:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
@@ -1880,7 +1893,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         row += 1
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 label=_("Number of parallel processes:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
@@ -1909,7 +1922,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         row += 1
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 label=_("Text foreground color:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
@@ -1930,7 +1943,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         row += 1
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 label=_("Text background color:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
@@ -1972,7 +1985,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         row = 0
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 label=_("Absolute time format:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
@@ -1984,7 +1997,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.tempFormat.SetValue(self._initFormat)
         self.winId['animation:temporal:format'] = self.tempFormat.GetId()
         gridSizer.Add(self.tempFormat, pos=(row, 1), flag=wx.ALIGN_RIGHT)
-        self.infoTimeLabel = wx.StaticText(parent=panel)
+        self.infoTimeLabel = StaticText(parent=panel)
         self.tempFormat.Bind(
             wx.EVT_COMBOBOX,
             lambda evt: self._setTimeFormat(
@@ -2003,7 +2016,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         self._setTimeFormat(self.tempFormat.GetValue())
 
         row += 1
-        link = wx.HyperlinkCtrl(
+        link = HyperlinkCtrl(
             panel, id=wx.ID_ANY,
             label=_("Learn more about formatting options"),
             url="http://docs.python.org/2/library/datetime.html#"
@@ -2018,9 +2031,9 @@ class PreferencesDialog(PreferencesBaseDialog):
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
 
         row += 2
-        noDataCheck = wx.CheckBox(
+        noDataCheck = CheckBox(
             panel, label=_("Display instances with no data"))
-        noDataCheck.SetToolTipString(
+        noDataCheck.SetToolTip(
             _(
                 "When animating instant-based data which have irregular timestamps "
                 "you can display 'no data frame' (checked option) or "
@@ -2098,8 +2111,8 @@ def testExport():
     dlg = ExportDialog(parent=None, temporal=TemporalMode.TEMPORAL,
                        timeTick=200)
     if dlg.ShowModal() == wx.ID_OK:
-        print dlg.GetDecorations()
-        print dlg.GetExportInformation()
+        print(dlg.GetDecorations())
+        print(dlg.GetExportInformation())
         dlg.Destroy()
     else:
         dlg.Destroy()
@@ -2112,7 +2125,7 @@ def testTemporalLayer():
     dlg = AddTemporalLayerDialog(parent=frame, layer=layer)
     if dlg.ShowModal() == wx.ID_OK:
         layer = dlg.GetLayer()
-        print layer.name, layer.cmd, layer.mapType
+        print(layer.name, layer.cmd, layer.mapType)
         dlg.Destroy()
     else:
         dlg.Destroy()

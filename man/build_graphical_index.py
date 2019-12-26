@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 ############################################################################
@@ -6,7 +6,7 @@
 # MODULE:    build_graphical_index
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 # PURPOSE:   Build graphical index
-# COPYRIGHT: (C) 2015 by Vaclav Petras and the GRASS Development Team
+# COPYRIGHT: (C) 2015-2019 by Vaclav Petras and the GRASS Development Team
 #
 #        This program is free software under the GNU General Public
 #        License (>=v2). Read the file COPYING that comes with GRASS
@@ -102,10 +102,10 @@ index_items = [
     ('postscript_graphical.html', std_img_name('cartography'), 'Cartography'),
     ('wxGUI_graphical.html', std_img_name('gui'), 'GUI'),
     ('wxGUI.nviz.html', std_img_name('3dview'), '3D view'),
-    ('https://grass.osgeo.org/grass73/manuals/libpython/index.html', std_img_name('python'), 'Python'),
+    ('https://grass.osgeo.org/grass79/manuals/libpython/index.html', std_img_name('python'), 'Python'),
     ('https://grass.osgeo.org/programming7/', std_img_name('c'), 'C library'),
     ('manual_gallery.html', std_img_name('gallery'), 'Gallery'),
-    ('http://grass.osgeo.org/grass72/manuals/addons/', std_img_name('addons'), 'Addons'),
+    ('https://grass.osgeo.org/grass7/manuals/addons/', std_img_name('addons'), 'Addons'),
 ]
 
 

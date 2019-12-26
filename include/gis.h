@@ -67,6 +67,13 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #  define HOST_NEWLINE "\n"
 #endif
 
+/*! \brief Generate warning if function return value is unused */
+#if __GNUC__ && (__GNUC__ >= 3 && __GNUC_MINOR__ >= 4)
+#   define WARN_UNUSED_RESULT __attribute__ ((warn_unused_result))
+#else
+#   define WARN_UNUSED_RESULT
+#endif
+
 /*!
   \brief List of units
 */
@@ -291,6 +298,7 @@ typedef enum
     G_OPT_STRDS_INPUT,          /*!< old input space time raster dataset */
     G_OPT_STRDS_INPUTS,         /*!< old input space time raster datasets */
     G_OPT_STRDS_OUTPUT,         /*!< new output space time raster dataset */
+    G_OPT_STRDS_OUTPUTS,        /*!< new output space time raster datasets */
     G_OPT_STR3DS_INPUT,         /*!< old input space time raster3d dataset */
     G_OPT_STR3DS_INPUTS,        /*!< old input space time raster3d datasets */
     G_OPT_STR3DS_OUTPUT,        /*!< new output space time raster3d dataset */
@@ -580,6 +588,23 @@ struct Popen {
 typedef int CELL;
 typedef double DCELL;
 typedef float FCELL;
+
+/* 64 bit signed integer */
+#if HAVE_INT64_T
+#include <sys/types.h>
+typedef int64_t grass_int64;
+#elif defined(__MINGW32__)
+typedef __int64 grass_int64;
+#elif HAVE_LONG_LONG_INT
+typedef long long int grass_int64;
+#elif HAVE_LARGEFILES
+typedef off_t grass_int64;
+#else
+#error "no 64 bit integer available"
+#endif
+
+/* LCELL = large CELL, proposed new raster data type */
+typedef grass_int64 LCELL;
 
 struct _Color_Value_
 {

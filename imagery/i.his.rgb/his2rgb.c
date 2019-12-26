@@ -2,7 +2,7 @@
 /******************************************************************************
 NAME:                         HIS2RGB
  
-PURPOSE    To proces hue,intensity,saturation bands to red,green,blue.
+PURPOSE    To process hue,intensity,saturation bands to red,green,blue.
  
 ALGORITHM:
    Get hue, intensity, saturation from input buffer

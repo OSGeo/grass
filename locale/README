@@ -123,11 +123,11 @@ GENERAL TRANSLATION PROCEDURE (no programming required)
  see also: https://grasswiki.osgeo.org/wiki/GRASS_messages_translation#Get_the_translated_po_files
 
 [1] .pot files are auto-generated on grass.osgeo.org and
-    stored in https://grass.osgeo.org/grass72/binary/linux/snapshot/transifex/
-     --> cronjob: /home/neteler/cronjobs/cron_grass72_releasebranch_72_build_bins.sh
+    stored in https://grass.osgeo.org/grass77/binary/linux/snapshot/transifex/
+     --> cronjob: /home/neteler/cronjobs/cron_grass77_releasebranch_72_build_bins.sh
 
 [2] Transifex job copies daily from [1] to here: 
-	https://www.transifex.com/grass-gis/grass72/
+	https://www.transifex.com/grass-gis/grass77/
 
 [3] Translators work in Transifex,
 
@@ -298,14 +298,14 @@ DETAILED PROCEDURE :
 
 7. Send the updated .po files to a GRASS Development Team member.
    If possible, please send diffs against CVS:
-   svn diff grasslibs_LANG.po > grasslibs_LANG_po.diff
-   svn diff grassmods_LANG.po > grassmods_LANG_po.diff
-   svn diff grasswxpy_LANG.po > grasswxpy_LANG_po.diff
+   git diff grasslibs_LANG.po > grasslibs_LANG_po.diff
+   git diff grassmods_LANG.po > grassmods_LANG_po.diff
+   git diff grasswxpy_LANG.po > grasswxpy_LANG_po.diff
 
    If you updated .c files with _() macros as explained
-   above, please send C file diffs against SVN:
+   above, please send C file diffs against git:
    
-   svn diff file.c > file.diff
+   git diff file.c > file.diff
    
    Thanks for submitting.
 

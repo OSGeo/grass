@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ############################################################################
 #
@@ -118,9 +118,8 @@ def main():
     set_gui_path()
 
     from core.settings import UserSettings
-    from core.globalvar import CheckWxVersion
     from core.giface import StandaloneGrassInterface
-    from iimage2target.ii2t_manager import GCPWizard
+    from image2target.ii2t_manager import GCPWizard
 
     driver = UserSettings.Get(group='display', key='driver', subkey='type')
     if driver == 'png':
@@ -170,8 +169,6 @@ def main():
 
 
     app = wx.App()
-    if not CheckWxVersion([2, 9]):
-        wx.InitAllImageHandlers()
 
 #    wizard = GCPWizard(parent=None, giface=StandaloneGrassInterface(), 
 #            srcloc=src_loc,srcmpt=src_mpt,srcgrp=src_grp,srcras=src_ras,

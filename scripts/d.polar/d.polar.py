@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 ############################################################################
 #
@@ -51,10 +51,6 @@ import glob
 import shutil
 from grass.script.utils import try_remove, basename
 from grass.script import core as gcore
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 
 def raster_map_required(name):

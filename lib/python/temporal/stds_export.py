@@ -17,7 +17,7 @@ Usage:
     tgis.export_stds(input, output, compression, directory, where, format_, type_)
 
 
-(C) 2012-2013 by the GRASS Development Team
+(C) 2012-2019 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -25,8 +25,6 @@ for details.
 :authors: Soeren Gebbert
 """
 
-# i18N
-import gettext
 import shutil
 import os
 import tarfile
@@ -176,6 +174,34 @@ def _export_vector_maps_as_gml(rows, tar, list_file, new_cwd, fs):
 ############################################################################
 
 
+def _export_vector_maps_as_gpkg(rows, tar, list_file, new_cwd, fs):
+    for row in rows:
+        name = row["name"]
+        start = row["start_time"]
+        end = row["end_time"]
+        layer = row["layer"]
+        if not layer:
+            layer = 1
+        if not end:
+            end = start
+        string = "%s%s%s%s%s\n" % (name, fs, start, fs, end)
+        # Write the filename, the start_time and the end_time
+        list_file.write(string)
+        # Export the vector map with v.out.ogr
+        try:
+            gscript.run_command("v.out.ogr", input=name, output=(name + ".gpkg"),
+                                layer=layer, format="GPKG")
+        except CalledModuleError:
+            shutil.rmtree(new_cwd)
+            tar.close()
+            gscript.fatal(_("Unable to export vector map <%s> as "
+                            "GPKG with v.out.ogr" % name))
+
+        tar.add(name + ".gpkg")
+
+############################################################################
+
+
 def _export_vector_maps(rows, tar, list_file, new_cwd, fs):
     for row in rows:
         name = row["name"]
@@ -261,6 +287,8 @@ def export_stds(input, output, compression, directory, where, format_="pack",
                        this is the default setting
               - "GML" GML file export format, only for vector maps,
                       v.out.ogr export option
+              - "GPKG" GPKG file export format, only for vector maps,
+                      v.out.ogr export option
 
         :param type_: The space time dataset type
 
@@ -311,6 +339,8 @@ def export_stds(input, output, compression, directory, where, format_="pack",
         elif type_ == "stvds":
             if format_ == "GML":
                 _export_vector_maps_as_gml(rows, tar, list_file, new_cwd, fs)
+            elif format_ == "GPKG":
+                _export_vector_maps_as_gpkg(rows, tar, list_file, new_cwd, fs)
             else:
                 _export_vector_maps(rows, tar, list_file, new_cwd, fs)
         elif type_ == "str3ds":

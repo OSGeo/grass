@@ -106,13 +106,13 @@
  * Node Buffer Utilities
  */
 #define DGL_NODEBUFFER_SHIFT_v2(pgrp,o)		((dglInt32_t*)((pgrp)->pNodeBuffer + (o)))
-#define DGL_NODEBUFFER_OFFSET_v2(pgrp,p)		((dglInt32_t)(p - (dglInt32_t *)(pgrp)->pNodeBuffer))
+#define DGL_NODEBUFFER_OFFSET_v2(pgrp,p)		((dglInt32_t)((dglByte_t *)p - (dglByte_t *)(pgrp)->pNodeBuffer))
 
 /*
  * Edge Buffer Utilities
  */
 #define DGL_EDGEBUFFER_SHIFT_v2(pgrp,o)		((dglInt32_t*)((pgrp)->pEdgeBuffer + (o)))
-#define DGL_EDGEBUFFER_OFFSET_v2(pgrp,pl)		((dglInt32_t)(pl - (dglInt32_t *)(pgrp)->pEdgeBuffer))
+#define DGL_EDGEBUFFER_OFFSET_v2(pgrp,pl)		((dglInt32_t)((dglByte_t *)pl - (dglByte_t *)(pgrp)->pEdgeBuffer))
 
 
 

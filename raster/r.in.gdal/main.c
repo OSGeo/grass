@@ -29,22 +29,56 @@
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 
-#include "gdal.h"
-#include "ogr_srs_api.h"
+#include <gdal.h>
+#include <cpl_conv.h>
 
 #undef MIN
 #undef MAX
 #define MIN(a,b)      ((a) < (b) ? (a) : (b))
 #define MAX(a,b)      ((a) > (b) ? (a) : (b))
 
+void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
+                      char *outloc, int create_only, int override,
+		      int check_only);
 static void ImportBand(GDALRasterBandH hBand, const char *output,
 		       struct Ref *group_ref, int *rowmap, int *colmap,
 		       int col_offset);
 static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
-			     struct pj_info *iproj, struct pj_info *oproj);
+			     struct pj_info *iproj, struct pj_info *oproj,
+			     struct pj_info *tproj);
 static int dump_rat(GDALRasterBandH hBand, char *outrat, int nBand);
 static void error_handler_ds(void *p);
 static int l1bdriver;
+
+static GDALDatasetH opends(char *dsname, const char **doo, GDALDriverH *hDriver)
+{
+    GDALDatasetH hDS = NULL;
+
+#if GDAL_VERSION_NUM >= 2000000
+    hDS = GDALOpenEx(dsname, GDAL_OF_RASTER | GDAL_OF_READONLY, NULL,
+                     doo, NULL);
+#else
+    hDS = GDALOpen(dsname, GA_ReadOnly);
+#endif
+    if (hDS == NULL)
+        G_fatal_error(_("Unable to open datasource <%s>"), dsname);
+    G_add_error_handler(error_handler_ds, hDS);
+    
+    *hDriver = GDALGetDatasetDriver(hDS);	/* needed for AVHRR data */
+    /* L1B - NOAA/AVHRR data must be treated differently */
+    /* for hDriver names see gdal/frmts/gdalallregister.cpp */
+    G_debug(3, "GDAL Driver: %s", GDALGetDriverShortName(*hDriver));
+    if (strcmp(GDALGetDriverShortName(*hDriver), "L1B") != 0)
+	l1bdriver = 0;
+    else {
+	l1bdriver = 1;		/* AVHRR found, needs north south flip */
+	G_warning(_("Input seems to be NOAA/AVHRR data which needs to be "
+	            "georeferenced with thin plate spline transformation "
+		    "(%s or %s)."), "i.rectify -t", "gdalwarp -tps");
+    }
+
+    return hDS;
+}
 
 /************************************************************************/
 /*                                main()                                */
@@ -56,30 +90,28 @@ int main(int argc, char *argv[])
     char *input;
     char *output;
     char *title;
-    struct Cell_head cellhd, loc_wind, cur_wind;
+    struct Cell_head cellhd, cur_wind;
     struct Key_Value *proj_info = NULL, *proj_units = NULL;
-    struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
     GDALDatasetH hDS;
     GDALDriverH hDriver;
     GDALRasterBandH hBand;
     double adfGeoTransform[6];
     int n_bands;
     int force_imagery = FALSE;
-    char error_msg[8096];
-    int projcomp_error = 0;
     int overwrite;
     int offset = 0;
     char *suffix;
     int num_digits = 0;
     int croptoregion, *rowmapall, *colmapall, *rowmap, *colmap, col_offset;
     int roff, coff;
+    char **doo;
 
     struct GModule *module;
     struct
     {
 	struct Option *input, *output, *target, *title, *outloc, *band,
 	              *memory, *offset, *num_digits, *map_names_file,
-	              *rat;
+	              *rat, *cfg, *doo;
     } parm;
     struct Flag *flag_o, *flag_e, *flag_k, *flag_f, *flag_l, *flag_c, *flag_p,
         *flag_j, *flag_a, *flag_r;
@@ -92,6 +124,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("import"));
+    G_add_keyword(_("create location"));
     module->description =
 	_("Imports raster data into a GRASS raster map using GDAL library.");
 
@@ -115,7 +148,9 @@ int main(int argc, char *argv[])
     parm.memory->key = "memory";
     parm.memory->type = TYPE_INTEGER;
     parm.memory->required = NO;
+#if GDAL_VERSION_NUM < 1800
     parm.memory->options = "0-2047";
+#endif
     parm.memory->answer = "300";
     parm.memory->label = _("Maximum memory to be used (in MB)");
     parm.memory->description = _("Cache size for raster rows");
@@ -176,6 +211,20 @@ int main(int argc, char *argv[])
     parm.rat->label = _("File prefix for raster attribute tables");
     parm.rat->description = _("The band number and \".csv\" will be appended to the file prefix");
     parm.rat->key_desc = "file";
+
+    parm.cfg = G_define_option();
+    parm.cfg->key = "gdal_config";
+    parm.cfg->type = TYPE_STRING;
+    parm.cfg->required = NO;
+    parm.cfg->label = _("GDAL configuration options");
+    parm.cfg->description = _("Comma-separated list of key=value pairs");
+
+    parm.doo = G_define_option();
+    parm.doo->key = "gdal_doo";
+    parm.doo->type = TYPE_STRING;
+    parm.doo->required = NO;
+    parm.doo->label = _("GDAL dataset open options");
+    parm.doo->description = _("Comma-separated list of key=value pairs");
 
     flag_o = G_define_flag();
     flag_o->key = 'o';
@@ -239,7 +288,13 @@ int main(int argc, char *argv[])
     flag_p->guisection = _("Print");
     flag_p->suppress_required = YES;
     G_option_requires(flag_p, parm.input, NULL);
-    
+
+    /* 1. list supported formats */
+    /* 2. print input bands */
+    /* 3. open input */
+    /* 4. check projection / create location */ 
+    /* 5. open output */
+
     /* The parser checks if the map already exists in current mapset, this is
      * wrong if location options is used, so we switch out the check and do it
      * in the module after the parser */
@@ -247,6 +302,46 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    /* -------------------------------------------------------------------- */
+    /*      Fire up the engines.                                            */
+    /* -------------------------------------------------------------------- */
+    GDALAllRegister();
+
+    /* -------------------------------------------------------------------- */
+    /*      List supported formats and exit.                                */
+    /*         code from GDAL 1.2.5  gcore/gdal_misc.cpp                    */
+    /*         Copyright (c) 1999, Frank Warmerdam                          */
+    /* -------------------------------------------------------------------- */
+    if (flag_f->answer) {
+	int iDr;
+
+	G_message(_("Supported formats:"));
+	for (iDr = 0; iDr < GDALGetDriverCount(); iDr++) {
+	    const char *pszRWFlag;
+
+	    hDriver = GDALGetDriver(iDr);
+
+#ifdef GDAL_DCAP_RASTER
+            /* Starting with GDAL 2.0, vector drivers can also be returned */
+            /* Only keep raster drivers */
+            if (!GDALGetMetadataItem(hDriver, GDAL_DCAP_RASTER, NULL))
+                continue;
+#endif
+
+	    if (GDALGetMetadataItem(hDriver, GDAL_DCAP_CREATE, NULL))
+		pszRWFlag = "rw+";
+	    else if (GDALGetMetadataItem(hDriver, GDAL_DCAP_CREATECOPY, NULL))
+		pszRWFlag = "rw";
+	    else
+		pszRWFlag = "ro";
+
+	    fprintf(stdout, " %s (%s): %s\n",
+		    GDALGetDriverShortName(hDriver),
+		    pszRWFlag, GDALGetDriverLongName(hDriver));
+	}
+	exit(EXIT_SUCCESS);
+    }
 
     input = parm.input->answer;
 
@@ -274,13 +369,14 @@ int main(int argc, char *argv[])
     if (flag_l->answer && G_projection() != PROJECTION_LL)
 	G_fatal_error(_("The '-l' flag only works in Lat/Lon locations"));
 
-    if(num_digits < 0)
+    if (num_digits < 0)
         G_fatal_error(_("The number of digits for band numbering must be equal or greater than 0"));
 
     /* Allocate the suffix string */
-    if(num_digits > 0) {
+    if (num_digits > 0) {
         suffix = G_calloc( num_digits + 1, sizeof(char));
-    } else {
+    }
+    else {
         /* Band number length should not exceed 64 digits */
         suffix = G_calloc(65, sizeof(char));
     }
@@ -291,70 +387,137 @@ int main(int argc, char *argv[])
 	croptoregion = 0; 
     }
 
-    /* -------------------------------------------------------------------- */
-    /*      Fire up the engines.                                            */
-    /* -------------------------------------------------------------------- */
-    GDALAllRegister();
     /* default GDAL memory cache size appears to be only 40 MiB, slowing down r.in.gdal */
     if (parm.memory->answer && *parm.memory->answer) {
-	   /* TODO: GDALGetCacheMax() overflows at 2GiB, implement use of GDALSetCacheMax64() */
-           GDALSetCacheMax(atol(parm.memory->answer) * 1024 * 1024);
-           G_verbose_message(_("Using memory cache size: %.1f MiB"), GDALGetCacheMax()/1024.0/1024.0);
+	G_verbose_message(_("Using memory cache size: %s MiB"), parm.memory->answer);
+	CPLSetConfigOption("GDAL_CACHEMAX", parm.memory->answer);
     }
 
-    /* -------------------------------------------------------------------- */
-    /*      List supported formats and exit.                                */
-    /*         code from GDAL 1.2.5  gcore/gdal_misc.cpp                    */
-    /*         Copyright (c) 1999, Frank Warmerdam                          */
-    /* -------------------------------------------------------------------- */
-    if (flag_f->answer) {
-	int iDr;
+    /* GDAL configuration options */
+    if (parm.cfg->answer) {
+	char **tokens, *tok, *key, *value;
+	int i, ntokens;
 
-	G_message(_("Supported formats:"));
-	for (iDr = 0; iDr < GDALGetDriverCount(); iDr++) {
-	    GDALDriverH hDriver = GDALGetDriver(iDr);
-	    const char *pszRWFlag;
-
-#ifdef GDAL_DCAP_RASTER
-            /* Starting with GDAL 2.0, vector drivers can also be returned */
-            /* Only keep raster drivers */
-            if (!GDALGetMetadataItem(hDriver, GDAL_DCAP_RASTER, NULL))
-                continue;
-#endif
-
-	    if (GDALGetMetadataItem(hDriver, GDAL_DCAP_CREATE, NULL))
-		pszRWFlag = "rw+";
-	    else if (GDALGetMetadataItem(hDriver, GDAL_DCAP_CREATECOPY, NULL))
-		pszRWFlag = "rw";
-	    else
-		pszRWFlag = "ro";
-
-	    fprintf(stdout, " %s (%s): %s\n",
-		    GDALGetDriverShortName(hDriver),
-		    pszRWFlag, GDALGetDriverLongName(hDriver));
+	tokens = G_tokenize(parm.cfg->answer, ",");
+	ntokens = G_number_of_tokens(tokens);
+	for (i = 0; i < ntokens; i++) {
+	    G_debug(1, "%d=[%s]", i, tokens[i]);
+	    tok = G_store(tokens[i]);
+	    G_squeeze(tok);
+	    key = tok;
+	    value = strstr(tok, "=");
+	    if (value) {
+		*value = '\0';
+		value++;
+		CPLSetConfigOption(key, value);
+	    }
+	    G_free(tok);
 	}
-	exit(EXIT_SUCCESS);
+	G_free_tokens(tokens);
+    }
+
+    /* GDAL dataset open options */
+    doo = NULL;
+    if (parm.doo->answer) {
+	char **tokens;
+	int i, ntokens;
+
+	tokens = G_tokenize(parm.doo->answer, ",");
+	ntokens = G_number_of_tokens(tokens);
+	doo = G_malloc(sizeof(char *) * (ntokens + 1));
+	for (i = 0; i < ntokens; i++) {
+	    G_debug(1, "%d=[%s]", i, tokens[i]);
+	    doo[i] = G_store(tokens[i]);
+	}
+	G_free_tokens(tokens);
+	doo[ntokens] = NULL;
     }
 
     /* -------------------------------------------------------------------- */
-    /*      Open the file.                                                  */
+    /*      Open the dataset.                                               */
     /* -------------------------------------------------------------------- */
-    hDS = GDALOpen(input, GA_ReadOnly);
-    if (hDS == NULL)
-        G_fatal_error(_("Unable to open datasource <%s>"), input);
-    G_add_error_handler(error_handler_ds, hDS);
+
+    hDS = opends(input, (const char **)doo, &hDriver);
+
+    /* does the driver support subdatasets? */
+    /* test for capability GDAL_DMD_SUBDATASETS */
     
-    hDriver = GDALGetDatasetDriver(hDS);	/* needed for AVHRR data */
-    /* L1B - NOAA/AVHRR data must be treated differently */
-    /* for hDriver names see gdal/frmts/gdalallregister.cpp */
-    G_debug(3, "GDAL Driver: %s", GDALGetDriverShortName(hDriver));
-    if (strcmp(GDALGetDriverShortName(hDriver), "L1B") != 0)
-	l1bdriver = 0;
-    else {
-	l1bdriver = 1;		/* AVHRR found, needs north south flip */
-	G_warning(_("Input seems to be NOAA/AVHRR data which needs to be "
-	            "georeferenced with thin plate spline transformation "
-		    "(%s or %s)."), "i.rectify -t", "gdalwarp -tps");
+    /* does the dataset include subdatasets? */
+    {
+	char **sds = GDALGetMetadata(hDS, "SUBDATASETS");
+
+	if (sds && *sds) {
+	    int i;
+
+	    G_warning(_("Input contains subdatasets which may need to "
+	                "be imported separately by name:"));
+	    /* list subdatasets */
+	    for (i = 0; sds[i] != NULL; i++) {
+		char *sdsi = G_store(sds[i]);
+		char *p = sdsi;
+
+		while (*p != '=' && *p != '\0')
+		    p++;
+		if (*p == '=')
+		    p++;
+		if ((i & 1) == 0) {
+		    fprintf(stderr, "Subdataset %d:\n", i + 1);
+		    fprintf(stderr, "  Name: %s\n", p);
+		}
+		else {
+		    char *sdsdim, *sdsdesc, *sdstype;
+		    int sdsdlen;
+
+		    sdsdim = sdsdesc = sdstype = NULL;
+		    sdsdlen = strlen(sdsi);
+		    while (*p != '[' && *p != '\0')
+			p++;
+		    if (*p == '[') {
+			p++;
+			sdsdim = p;
+			while (*p != ']' && *p != '\0')
+			    p++;
+			if (*p == ']') {
+			    *p = '\0';
+			    p++;
+			}
+		    }
+		    while (*p == ' ' && *p != '\0')
+			p++;
+		    sdsdesc = p;
+		    if (*p != '\0') {
+			p = sdsi + sdsdlen - 1;
+
+			if (*p == ')') {
+			    *p = '\0';
+			    p--;
+			    while (*p != '(')
+				p--;
+			    if (*p == '(') {
+				sdstype = p + 1;
+			    p--;
+			    while (*p == ' ')
+				p--;
+			    }
+			    p++;
+			    if (*p == ' ')
+				*p = '\0';
+			}
+		    }
+		    if (sdsdesc && *sdsdesc)
+			fprintf(stderr, "  Description: %s\n", sdsdesc);
+		    if (sdsdim && *sdsdim)
+			fprintf(stderr, "  Dimension: %s\n", sdsdim);
+		    if (sdstype && *sdstype)
+			fprintf(stderr, "  Data type: %s\n", sdstype);
+		}
+		G_free(sdsi);
+	    }
+	}
+    }
+
+    if (GDALGetRasterCount(hDS) == 0) {
+	G_fatal_error(_("No raster bands found in <%s>"), input);
     }
 
     if (flag_p->answer) {
@@ -390,9 +553,14 @@ int main(int argc, char *argv[])
 
     if (GDALGetGeoTransform(hDS, adfGeoTransform) == CE_None) {
 	if (adfGeoTransform[2] != 0.0 || adfGeoTransform[4] != 0.0 ||
-	    adfGeoTransform[1] <= 0.0 || adfGeoTransform[5] >= 0.0)
+	    adfGeoTransform[1] <= 0.0 || adfGeoTransform[5] >= 0.0) {
+	    G_debug(0, "adfGeoTransform[2] %g", adfGeoTransform[2]);
+	    G_debug(0, "adfGeoTransform[4] %g", adfGeoTransform[4]);
+	    G_debug(0, "adfGeoTransform[1] %g", adfGeoTransform[1]);
+	    G_debug(0, "adfGeoTransform[5] %g", adfGeoTransform[5]);
 	    G_fatal_error(_("Input raster map is flipped or rotated - cannot import. "
 			    "You may use 'gdalwarp' to transform the map to North-up."));
+	    }
 	cellhd.north = adfGeoTransform[3];
 	cellhd.ns_res = fabs(adfGeoTransform[5]);
 	cellhd.ns_res3 = fabs(adfGeoTransform[5]);
@@ -444,170 +612,8 @@ int main(int argc, char *argv[])
 	    "with r.region before going any further."));
     }
 
-    /* -------------------------------------------------------------------- */
-    /*      Fetch the projection in GRASS form.                             */
-    /* -------------------------------------------------------------------- */
-    proj_info = NULL;
-    proj_units = NULL;
-
-    /* -------------------------------------------------------------------- */
-    /*      Do we need to create a new location?                            */
-    /* -------------------------------------------------------------------- */
-    if (parm.outloc->answer != NULL) {
-	/* Convert projection information non-interactively as we can't
-	 * assume the user has a terminal open */
-	if (GPJ_wkt_to_grass(&cellhd, &proj_info,
-			     &proj_units, GDALGetProjectionRef(hDS), 0) < 0) {
-	    G_fatal_error(_("Unable to convert input map projection to GRASS "
-			    "format; cannot create new location."));
-	}
-	else {
-	    if (0 != G_make_location(parm.outloc->answer, &cellhd,
-				     proj_info, proj_units)) {
-		G_fatal_error(_("Unable to create new location <%s>"),
-			      parm.outloc->answer);
-	    }
-	    G_message(_("Location <%s> created"), parm.outloc->answer);
-	}
-
-        /* If the c flag is set, clean up? and exit here */
-        if (flag_c->answer) {
-            exit(EXIT_SUCCESS);
-        }
-    }
-    else {
-	/* Projection only required for checking so convert non-interactively */
-	if (GPJ_wkt_to_grass(&cellhd, &proj_info,
-			     &proj_units, GDALGetProjectionRef(hDS), 0) < 0)
-	    G_warning(_("Unable to convert input raster map projection information to "
-		       "GRASS format for checking"));
-	else {
-            void (*msg_fn)(const char *, ...);
-
-	    /* -------------------------------------------------------------------- */
-	    /*      Does the projection of the current location match the           */
-	    /*      dataset?                                                        */
-	    /* -------------------------------------------------------------------- */
-	    G_get_default_window(&loc_wind);
-	    if (loc_wind.proj != PROJECTION_XY) {
-		loc_proj_info = G_get_projinfo();
-		loc_proj_units = G_get_projunits();
-	    }
-
-	    if (flag_o->answer) {
-		cellhd.proj = loc_wind.proj;
-		cellhd.zone = loc_wind.zone;
-		G_warning(_("Over-riding projection check"));
-	    }
-	    else if (loc_wind.proj != cellhd.proj
-		     || (projcomp_error = G_compare_projections(loc_proj_info,
-								loc_proj_units,
-								proj_info,
-								proj_units)) < 0) {
-		int i_value;
-
-		strcpy(error_msg,
-		       _("Projection of dataset does not"
-			 " appear to match current location.\n\n"));
-
-		/* TODO: output this info sorted by key: */
-		if (loc_proj_info != NULL) {
-		    strcat(error_msg, _("Location PROJ_INFO is:\n"));
-		    for (i_value = 0;
-			 loc_proj_info != NULL &&
-			 i_value < loc_proj_info->nitems; i_value++)
-			sprintf(error_msg + strlen(error_msg), "%s: %s\n",
-				loc_proj_info->key[i_value],
-				loc_proj_info->value[i_value]);
-		    strcat(error_msg, "\n");
-		}
-
-		if (proj_info != NULL) {
-		    strcat(error_msg, _("Dataset PROJ_INFO is:\n"));
-		    for (i_value = 0;
-			 proj_info != NULL && i_value < proj_info->nitems;
-			 i_value++)
-			sprintf(error_msg + strlen(error_msg), "%s: %s\n",
-				proj_info->key[i_value],
-				proj_info->value[i_value]);
-		    strcat(error_msg, "\nERROR: ");
-		    switch (projcomp_error) {
-		    case -1:
-			strcat(error_msg, "proj\n");
-			break;
-		    case -2:
-			strcat(error_msg, "units\n");
-			break;
-		    case -3:
-			strcat(error_msg, "datum\n");
-			break;
-		    case -4:
-			strcat(error_msg, "ellps\n");
-			break;
-		    case -5:
-			strcat(error_msg, "zone\n");
-			break;
-		    case -6:
-			strcat(error_msg, "south\n");
-			break;
-		    case -7:
-			strcat(error_msg, "x_0\n");
-			break;
-		    case -8:
-			strcat(error_msg, "y_0\n");
-			break;
-		    }
-		}
-		else {
-		    strcat(error_msg, _("Import dataset PROJ_INFO is:\n"));
-		    if (cellhd.proj == PROJECTION_XY)
-			sprintf(error_msg + strlen(error_msg),
-				"cellhd.proj = %d (unreferenced/unknown)\n",
-				cellhd.proj);
-		    else if (cellhd.proj == PROJECTION_LL)
-			sprintf(error_msg + strlen(error_msg),
-				"cellhd.proj = %d (lat/long)\n", cellhd.proj);
-		    else if (cellhd.proj == PROJECTION_UTM)
-			sprintf(error_msg + strlen(error_msg),
-				"cellhd.proj = %d (UTM), zone = %d\n",
-				cellhd.proj, cellhd.zone);
-		    else
-			sprintf(error_msg + strlen(error_msg),
-				"cellhd.proj = %d (unknown), zone = %d\n",
-				cellhd.proj, cellhd.zone);
-		}
-		strcat(error_msg,
-		       _("\nIn case of no significant differences in the projection definitions,"
-			 " use the -o flag to ignore them and use"
-			 " current location definition.\n"));
-		strcat(error_msg,
-		       _("Consider generating a new location from the input dataset using "
-			"the 'location' parameter.\n"));
-
-                if (flag_j->answer)
-                    msg_fn = G_message;
-                else
-                    msg_fn = G_fatal_error;
-                msg_fn(error_msg);
-                if (flag_j->answer)
-                    exit(EXIT_FAILURE);
-	    }
-	    else {
-                if (flag_j->answer)
-                    msg_fn = G_message;
-                else
-                    msg_fn = G_verbose_message;            
-                msg_fn(_("Projection of input dataset and current location "
-                         "appear to match"));
-                if (flag_j->answer)
-                    exit(EXIT_SUCCESS);
-	    }
-	}
-    }
-
-    if (GDALGetRasterCount(hDS) > 1)
-	G_message(_("Importing %d raster bands..."),
-		  GDALGetRasterCount(hDS));
+    check_projection(&cellhd, hDS, parm.outloc->answer, flag_c->answer,
+                     flag_o->answer, flag_j->answer);
 
     /* -------------------------------------------------------------------- */
     /*      Set the active window to match the available data.              */
@@ -647,9 +653,12 @@ int main(int argc, char *argv[])
 	if (first == -1)
 	    G_fatal_error(_("Input raster does not overlap current "
 			    "computational region. Nothing to import."));
+
+	G_debug(1, "first row in cur wind %d, first row in source %d", first, rowmapall[first]);
 	rowmap = &rowmapall[first];
 	/* crop window */
 	if (first != 0 || last != cur_wind.rows - 1) {
+	    G_debug(1, "Cropping NS extents");
 	    cur_wind.north -= first * cur_wind.ns_res;
 	    cur_wind.south += (cur_wind.rows - 1 - last) * cur_wind.ns_res;
 	    cur_wind.rows = last - first + 1;
@@ -674,10 +683,13 @@ int main(int argc, char *argv[])
 	if (first == -1)
 	    G_fatal_error(_("Input raster does not overlap current "
 			    "computational region. Nothing to import."));
-	col_offset = first;
+
+	G_debug(1, "first col in cur wind %d, first col in source %d", first, colmapall[first]);
+	col_offset = colmapall[first];
 	colmap = &colmapall[first];
 	/* crop window */
 	if (first != 0 || last != cur_wind.cols - 1) {
+	    G_debug(1, "Cropping EW extents");
 	    cur_wind.west += first * cur_wind.ew_res;
 	    cur_wind.east -= (cur_wind.cols - 1 - last) * cur_wind.ew_res;
 	    cur_wind.cols = last - first + 1;
@@ -706,6 +718,11 @@ int main(int argc, char *argv[])
     if (parm.band->answer != NULL) {
 	while (parm.band->answers[n_bands])
 	    n_bands++;
+    }
+
+    if (GDALGetRasterCount(hDS) > 1 && n_bands != 1) {
+	G_message(_("Importing %d raster bands..."),
+		  (n_bands > 1 ? n_bands : GDALGetRasterCount(hDS)));
     }
 
     if ((GDALGetRasterCount(hDS) > 1 && n_bands != 1)
@@ -740,7 +757,7 @@ int main(int argc, char *argv[])
     /* -------------------------------------------------------------------- */
     else {
 	struct Ref ref;
-	char szBandName[512];
+	char szBandName[1024];
 	int nBand = 0;
 	char colornamebuf[512], colornamebuf2[512];
 	FILE *map_names_file = NULL;
@@ -840,8 +857,9 @@ int main(int argc, char *argv[])
 	    struct Control_Points sPoints;
 	    const GDAL_GCP *pasGCPs = GDALGetGCPs(hDS);
 	    int iGCP;
-	    struct pj_info iproj,	/* input map proj parameters    */
-	      oproj;		/* output map proj parameters   */
+	    struct pj_info iproj,	/* input map proj parameters */
+	                   oproj,	/* output map proj parameters */
+	                   tproj;	/* transformation parameters */
 	    int create_target;
 	    struct Cell_head gcpcellhd;
 	    double emin, emax, nmin, nmax;
@@ -886,7 +904,7 @@ int main(int argc, char *argv[])
 
 	    if (parm.target->answer && !create_target) {
 		SetupReprojector(GDALGetGCPProjection(hDS),
-				 parm.target->answer, &iproj, &oproj);
+				 parm.target->answer, &iproj, &oproj, &tproj);
 		G_message(_("Re-projecting GCPs table:"));
 		G_message(_("* Input projection for GCP table: %s"),
 			  iproj.proj);
@@ -909,10 +927,12 @@ int main(int argc, char *argv[])
 		/* If desired, do GCPs transformation to other projection */
 		if (parm.target->answer) {
 		    /* re-project target GCPs */
-		    if (pj_do_proj(&(sPoints.e2[iGCP]), &(sPoints.n2[iGCP]),
-				   &iproj, &oproj) < 0)
-			G_fatal_error(_("Error in pj_do_proj (can't "
-					"re-projection GCP %i)"), iGCP);
+		    if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
+				      &(sPoints.e2[iGCP]),
+				      &(sPoints.n2[iGCP]), NULL) < 0)
+			G_fatal_error(_("Error in %s (can't "
+					"re-project GCP %i)"), 
+				       "GPJ_transform()", iGCP);
 		}
 
 		/* figure out legal e, w, n, s values for new target location */
@@ -1021,11 +1041,12 @@ int main(int argc, char *argv[])
 /************************************************************************/
 
 static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
-			     struct pj_info *iproj, struct pj_info *oproj)
+			     struct pj_info *iproj, struct pj_info *oproj,
+			     struct pj_info *tproj)
 {
     struct Cell_head cellhd;
     struct Key_Value *proj_info = NULL, *proj_units = NULL;
-    char errbuf[256];
+    char errbuf[1024];
     int permissions;
     char target_mapset[GMAPSET_MAX];
     struct Key_Value *out_proj_info,	/* projection information of    */
@@ -1058,6 +1079,9 @@ static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
 	    G_fatal_error(_("Unable to get projection units of target location"));
 	if (pj_get_kv(oproj, out_proj_info, out_unit_info) < 0)
 	    G_fatal_error(_("Unable to get projection key values of target location"));
+	tproj->def = NULL;
+	if (GPJ_init_transform(iproj, oproj, tproj) < 0)
+	    G_fatal_error(_("Unable to initialize coordinate transformation"));
     }
     else {			/* can't access target mapset */
 	/* access to mapset PERMANENT in target location is not required */
@@ -1150,8 +1174,8 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     map_cols = 0;
     use_cell_gdal = 1;
 
-    for (indx = col_offset; indx < ncols; indx++) {
-	if (indx > 0 && colmap[indx] != colmap[indx - 1] + 1) {
+    for (indx = 0; indx < ncols; indx++) {
+	if (indx != colmap[indx] - col_offset) {
 	    map_cols = 1;
 	    use_cell_gdal = 0;
 	}
@@ -1163,6 +1187,8 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	    break;
 	}
     }
+    G_debug(1, "need column mapping: %d", map_cols);
+    G_debug(1, "use cell_gdal: %d", use_cell_gdal);
     dfNoData = GDALGetRasterNoDataValue(hBand, &bNoDataEnabled);
     if (bNoDataEnabled && !nullFlags) {
 	nullFlags = (char *)G_malloc(sizeof(char) * ncols);

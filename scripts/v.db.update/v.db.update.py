@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 ############################################################################
 #
@@ -20,6 +20,8 @@
 #% keyword: vector
 #% keyword: attribute table
 #% keyword: database
+#% keyword: attribute update
+#% keyword: type casting
 #%end
 #%option G_OPT_V_MAP
 #%end
@@ -53,10 +55,6 @@
 import sys
 import os
 import grass.script as grass
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 
 def main():

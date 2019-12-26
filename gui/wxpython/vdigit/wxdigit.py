@@ -26,6 +26,9 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
+from __future__ import print_function
+
+import six
 import grass.script.core as grass
 
 from grass.pydispatch.signal import Signal
@@ -33,17 +36,19 @@ from grass.pydispatch.signal import Signal
 from core.gcmd import GError
 from core.debug import Debug
 from core.settings import UserSettings
-from core.utils import _
 from vdigit.wxdisplay import DisplayDriver, GetLastError
 
+try:
+    WindowsError
+except NameError:
+    WindowsError = OSError
 try:
     from grass.lib.gis import *
     from grass.lib.vector import *
     from grass.lib.vedit import *
     from grass.lib.dbmi import *
-except ImportError:
-    pass
-
+except (ImportError, WindowsError) as e:
+    print("wxdigit.py: {}".format(e), file=sys.stderr)
 
 class VDigitError:
 
@@ -1762,7 +1767,7 @@ class IVDigit:
                 Vect_cidx_get_cat_by_index(self.poMapInfo, i, j,
                                            byref(cat), byref(type), byref(id))
                 if field in self.cats:
-                    if cat > self.cats[field]:
+                    if self.cats[field] is None or cat.value > self.cats[field]:
                         self.cats[field] = cat.value
                 else:
                     self.cats[field] = cat.value
@@ -1773,7 +1778,7 @@ class IVDigit:
                 self.cats[field])
 
         # set default values
-        for field, cat in self.cats.iteritems():
+        for field, cat in six.iteritems(self.cats):
             if cat is None:
                 self.cats[field] = 0  # first category 1
             Debug.msg(

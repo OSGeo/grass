@@ -167,9 +167,9 @@ class testRaster3dExtraction(TestCase):
         tinfo_string = """id=A@test3d1
                                     name=A
                                     mapset=test3d1
-                                    start_time=2001-01-01 00:00:00
-                                    end_time=2001-04-01 00:00:00
-                                    granularity=1 month"""
+                                    start_time='2001-01-01 00:00:00'
+                                    end_time='2001-04-01 00:00:00'
+                                    granularity='1 month'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="str3ds", input="A@test3d1")
@@ -180,9 +180,9 @@ class testRaster3dExtraction(TestCase):
         tinfo_string = """id=A@test3d2
                                     name=A
                                     mapset=test3d2
-                                    start_time=2001-01-01 00:00:00
-                                    end_time=2001-07-01 00:00:00
-                                    granularity=2 months"""
+                                    start_time='2001-01-01 00:00:00'
+                                    end_time='2001-07-01 00:00:00'
+                                    granularity='2 months'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="str3ds", input="A@test3d2")
@@ -193,9 +193,9 @@ class testRaster3dExtraction(TestCase):
         tinfo_string = """id=A@test3d3
                                     name=A
                                     mapset=test3d3
-                                    start_time=2001-01-01 00:00:00
-                                    end_time=2001-10-01 00:00:00
-                                    granularity=3 months"""
+                                    start_time='2001-01-01 00:00:00'
+                                    end_time='2001-10-01 00:00:00'
+                                    granularity='3 months'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="str3ds", input="A@test3d3")
@@ -206,9 +206,9 @@ class testRaster3dExtraction(TestCase):
         tinfo_string = """id=A@test3d4
                                     name=A
                                     mapset=test3d4
-                                    start_time=2001-01-01 00:00:00
-                                    end_time=2002-01-01 00:00:00
-                                    granularity=4 months"""
+                                    start_time='2001-01-01 00:00:00'
+                                    end_time='2002-01-01 00:00:00'
+                                    granularity='4 months'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="str3ds", input="A@test3d4")
@@ -221,8 +221,8 @@ class testRaster3dExtraction(TestCase):
                                 name=a1
                                 mapset=test3d1
                                 temporal_type=absolute
-                                start_time=2001-01-01 00:00:00
-                                end_time=2001-02-01 00:00:00 """
+                                start_time='2001-01-01 00:00:00'
+                                end_time='2001-02-01 00:00:00'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="raster_3d", input="a1@test3d1")
@@ -233,8 +233,8 @@ class testRaster3dExtraction(TestCase):
                                 name=a1
                                 mapset=test3d2
                                 temporal_type=absolute
-                                start_time=2001-01-01 00:00:00
-                                end_time=2001-03-01 00:00:00 """
+                                start_time='2001-01-01 00:00:00'
+                                end_time='2001-03-01 00:00:00'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="raster_3d", input="a1@test3d2")
@@ -245,8 +245,8 @@ class testRaster3dExtraction(TestCase):
                                 name=a1
                                 mapset=test3d3
                                 temporal_type=absolute
-                                start_time=2001-01-01 00:00:00
-                                end_time=2001-04-01 00:00:00 """
+                                start_time='2001-01-01 00:00:00'
+                                end_time='2001-04-01 00:00:00'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="raster_3d", input="a1@test3d3")
@@ -257,8 +257,8 @@ class testRaster3dExtraction(TestCase):
                                 name=a1
                                 mapset=test3d4
                                 temporal_type=absolute
-                                start_time=2001-01-01 00:00:00
-                                end_time=2001-05-01 00:00:00 """
+                                start_time='2001-01-01 00:00:00'
+                                end_time='2001-05-01 00:00:00'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="raster_3d", input="a1@test3d4")

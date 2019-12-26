@@ -516,7 +516,10 @@ def writeGifPillow(filename, images, duration=0.1, repeat=True):
 
     """
     loop = 0 if repeat else 1
-    images[0].save(filename, save_all=True, append_images=images[1:], loop=loop, duration=duration * 1000)
+    quantized = []
+    for im in images:
+        quantized.append(im.quantize())
+    quantized[0].save(filename, save_all=True, append_images=quantized[1:], loop=loop, duration=duration * 1000)
 
 
 def writeGifVisvis(filename, images, duration=0.1, repeat=True, dither=False,

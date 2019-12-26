@@ -54,7 +54,7 @@ static int ci_search_cat(struct Cat_index *ci, int first, int cat)
     hi = ci->n_cats - 1;
     if (first > hi)
 	return -1;
-    
+
     /* deferred test for equality */
     while (lo < hi) {
 	mid = (lo + hi) >> 1;
@@ -384,6 +384,9 @@ void Vect_cidx_find_all(const struct Map_info *Map, int layer, int type_mask,
 	return;
     }
     ci = &(Map->plus.cidx[field_index]);
+
+    if ((type_mask & GV_AREA) && type_mask != GV_AREA)
+	G_fatal_error(_("Mixing IDs of areas and primitives"));
 
     idx = Vect_cidx_find_next(Map, field_index, cat,
 			      type_mask, 0, &type, &line);

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ############################################################################
 #
@@ -71,11 +71,6 @@ import sys
 
 import grass.script as gscript
 
-# i18N
-import os
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
-
 try:
     # new for python 2.6, in 2.5 it may be easy_install'd.
     import multiprocessing as mp
@@ -134,6 +129,14 @@ def main():
     if flags['s']:
         do_mp = False
 
+    check = True
+    for m in [red, green, blue]:
+        ex = gscript.find_file(m)
+        if ex['name'] == '':
+            check = False
+            gscript.warning("Raster map <{}> not found ".format(m))
+    if not check:
+        gscript.fatal("At least one of the input raster map was not found")
     # 90 or 98? MAX value controls brightness
     # think of percent (0-100), must be positive or 0
     # must be more than "2" ?

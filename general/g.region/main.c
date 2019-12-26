@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     int print_flag = 0;
     int flat_flag; 
     int set_flag;
-    double x;
+    double x, xs, ys, zs;
     int ival;
     int row_flag = 0, col_flag = 0;
     struct Cell_head window, temp_window;
@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     const char *name;
     const char *mapset;
     char **rast_ptr, **vect_ptr;
+    int pix;
 
     struct GModule *module;
     struct
@@ -55,7 +56,7 @@ int main(int argc, char *argv[])
 	    *north, *south, *east, *west, *top, *bottom,
 	    *res, *nsres, *ewres, *res3, *tbres, *rows, *cols,
 	    *save, *region, *raster, *raster3d, *align,
-	    *zoom, *vect;
+	    *zoom, *vect, *grow;
     } parm;
 
     G_gisinit(argv[0]);
@@ -335,6 +336,18 @@ int main(int argc, char *argv[])
     parm.align->gisprompt = "old,cell,raster";
     parm.align->guisection = _("Bounds");
 
+    parm.grow = G_define_option();
+    parm.grow->key = "grow";
+    parm.grow->key_desc = "value";
+    parm.grow->required = NO;
+    parm.grow->multiple = NO;
+    parm.grow->type = TYPE_INTEGER;
+    parm.grow->label =
+	_("Number of cells to add to each side of the current region extent");
+    parm.grow->description =
+	_("A negative number shrinks the current region extent");
+    parm.grow->guisection = _("Bounds");
+
     parm.save = G_define_option();
     parm.save->key = "save";
     parm.save->key_desc = "name";
@@ -353,7 +366,7 @@ int main(int argc, char *argv[])
                       parm.raster3d, parm.vect, parm.north, parm.south, parm.east,
                       parm.west, parm.top, parm.bottom, parm.rows, parm.cols,
                       parm.res, parm.res3, parm.nsres, parm.ewres, parm.tbres,
-                      parm.zoom, parm.align, parm.save, NULL);
+                      parm.zoom, parm.align, parm.save, parm.grow, NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -775,7 +788,44 @@ int main(int argc, char *argv[])
 	Rast_get_cellhd(name, mapset, &temp_window);
 	Rast_align_window(&window, &temp_window);
     }
-
+    
+    /* grow by number of cells */
+    if ((value = parm.grow->answer)){
+        if (sscanf(value, "%i", &pix)){
+            xs = window.ns_res * pix;
+            if (window.north + xs > window.south - xs){
+                if (G_projection() == PROJECTION_LL && (
+                    window.north + xs <= 90.0 + 0.5 * window.ns_res ||
+                    window.south - xs >= -90.0 - 0.5 * window.ns_res)) {
+                    G_warning(_("'%s' option not used with <%s> because a coordinate would become invalid"), 
+		              parm.grow->key, "latitude");
+                } else {
+                    window.north += xs;
+                    window.south -= xs;
+                }
+            } else {
+                G_warning(_("'%s' option not used with <%s> because <%s> would become minor than <%s>"),
+		          parm.grow->key, "latitude", "north", "south");
+            }
+            ys = window.ew_res * pix;
+            if (window.east + ys > window.west - ys){
+                window.west -= ys;
+                window.east += ys;
+            } else {
+                G_warning(_("'%s' option not used with <%s> because <%s> would become minor than <%s>"),
+		          parm.grow->key, "longitude", "east", "west");
+            }
+            zs = window.tb_res * pix;
+            if (window.top + zs > window.bottom - zs){
+                window.top += zs;
+                window.bottom -= zs;
+            } else {
+                G_warning(_("'%s' option not used with <%s> because <%s> would become minor than <%s>"),
+		          parm.grow->key, "3D", "top", "bottom");
+            }
+        }
+    }
+	
     /* save= */
     if ((name = parm.save->answer)) {
 	temp_window = window;

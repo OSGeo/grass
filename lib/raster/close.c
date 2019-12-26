@@ -39,6 +39,33 @@
 static int close_old(int);
 static int close_new(int, int);
 
+static void sync_and_close(int fd, char *element, char *name)
+{
+    /* from man 2 write:
+     * A successful return from write() does not make any guarantee 
+     * that data has been committed to disk.  On some filesystems, 
+     * including NFS, it does not even guarantee that space has 
+     * successfully been reserved for the data.  In this case, some 
+     * errors might be delayed until a future write(2), fsync(2), or 
+     * even close(2).  The only way to be sure is to call fsync(2) 
+     * after you are done writing all your data.
+     */
+
+#ifndef __MINGW32__
+    if (fsync(fd)) {
+	G_warning(_("Unable to flush file %s for raster map %s: %s"),
+	            element, name, strerror(errno));
+    }
+    /* for MS Windows, try fdopen(int, char *) + fflush(FILE *) + fclose(FILE *)
+     * flcose() closes the underlying file descriptor, thus no need to 
+     * call close(fd) afterwards */
+#endif
+    if (close(fd)) {
+	G_warning(_("Unable to close file %s for raster map %s: %s"),
+	            element, name, strerror(errno));
+    }
+}
+
 static void write_fp_format(int fd);
 
 /*!
@@ -152,6 +179,8 @@ static int close_old(int fd)
 
     if (fcb->gdal)
 	Rast_close_gdal_link(fcb->gdal);
+    if (fcb->vrt)
+	Rast_close_vrt(fcb->vrt);
 
     if (fcb->null_bits)
 	G_free(fcb->null_bits);
@@ -174,7 +203,8 @@ static int close_old(int fd)
     if (fcb->map_type != CELL_TYPE) {
 	Rast_quant_free(&fcb->quant);
     }
-    close(fcb->data_fd);
+    if (fcb->data_fd >= 0)
+	close(fcb->data_fd);
 
     return 1;
 }
@@ -370,8 +400,11 @@ static int close_new(int fd, int ok)
 	    Rast__write_null_row_ptrs(fd, fcb->null_fd);
 	}
 
-	if (fcb->null_fd >= 0)
-	    close(fcb->null_fd);
+	if (fcb->null_fd >= 0) {
+	    sync_and_close(fcb->null_fd,
+			   (fcb->null_row_ptr ? NULLC_FILE : NULL_FILE),
+			   fcb->name);
+	}
 	fcb->null_fd = -1;
 
 	/* create path : full null file name */
@@ -433,11 +466,16 @@ static int close_new(int fd, int ok)
     }				/* ok */
     /* NOW CLOSE THE FILE DESCRIPTOR */
 
-    close(fcb->data_fd);
+    sync_and_close(fcb->data_fd,
+                   (fcb->map_type == CELL_TYPE ? "cell" : "fcell"),
+		   fcb->name);
     fcb->open_mode = -1;
 
-    if (fcb->null_fd >= 0)
-	close(fcb->null_fd);
+    if (fcb->null_fd >= 0) {
+	sync_and_close(fcb->null_fd,
+	               (fcb->null_row_ptr ? NULLC_FILE : NULL_FILE),
+		       fcb->name);
+    }
     fcb->null_fd = -1;
 
     if (fcb->data != NULL)

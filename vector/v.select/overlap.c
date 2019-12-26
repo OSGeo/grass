@@ -40,43 +40,17 @@ void add_aarea(struct Map_info *In, int aarea, int *ALines, int *AAreas)
 
 /* Returns 1 if line1 from Map1 overlaps area2 from Map2,
  *         0 otherwise */
-int line_overlap_area(struct line_pnts *LPoints, struct Map_info *AMap,
-		      int area)
+int line_overlap_area(struct line_pnts *LPoints, struct line_pnts *OPoints,
+		      struct line_pnts **IPoints, int nisles)
 {
-    int i, nisles, isle;
-    static struct line_pnts *APoints = NULL;
-    static struct line_pnts **IPoints = NULL;
-    static int isles_alloc = 0;
+    int i, isle;
 
-    G_debug(4, "line_overlap_area area = %d", area);
-
-    if (!APoints) {
-	APoints = Vect_new_line_struct();
-	isles_alloc = 10;
-	IPoints = G_malloc(isles_alloc * sizeof(struct line_pnts *));
-	for (i = 0; i < isles_alloc; i++)
-	    IPoints[i] = Vect_new_line_struct();
-    }
-
-    Vect_get_area_points(AMap, area, APoints);
-    nisles = Vect_get_area_num_isles(AMap, area);
-
-    if (nisles >= isles_alloc) {
-	IPoints = G_realloc(IPoints, (nisles + 10) * sizeof(struct line_pnts *));
-	for (i = isles_alloc; i < nisles + 10; i++)
-	    IPoints[i] = Vect_new_line_struct();
-	isles_alloc = nisles + 10;
-    }
-
-    for (i = 0; i < nisles; i++) {
-	isle = Vect_get_area_isle(AMap, area, i);
-	Vect_get_isle_points(AMap, isle, IPoints[i]);
-    }
+    G_debug(4, "line_overlap_area area");
 
     /* Try if any of line vertices is within area */
     for (i = 0; i < LPoints->n_points; i++) {
 
-	if (Vect_point_in_poly(LPoints->x[i], LPoints->y[i], APoints)) {
+	if (Vect_point_in_poly(LPoints->x[i], LPoints->y[i], OPoints)) {
 	    int inside = 1;
 	    
 	    for (isle = 0; isle < nisles; isle++) {
@@ -99,13 +73,12 @@ int line_overlap_area(struct line_pnts *LPoints, struct Map_info *AMap,
     /* Try intersections of line with area/isles boundary */
     /* Outer boundary */
 
-    if (Vect_line_check_intersection2(LPoints, APoints, 0)) {
+    if (Vect_line_check_intersection2(LPoints, OPoints, 0)) {
 	G_debug(4, "  -> line intersects outer area boundary");
 	return 1;
     }
 
     for (i = 0; i < nisles; i++) {
-
 	if (Vect_line_check_intersection2(LPoints, IPoints[i], 0)) {
 	    G_debug(4, "  -> line intersects area island boundary");
 	    return 1;

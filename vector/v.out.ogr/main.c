@@ -27,7 +27,7 @@
 
 #include "local_proto.h"
 
-#include "ogr_srs_api.h"
+#include <ogr_srs_api.h>
 
 int main(int argc, char *argv[])
 {
@@ -64,8 +64,8 @@ int main(int argc, char *argv[])
     /* OGR */
     int drn;
     OGRFieldType ogr_ftype = OFTInteger;
-    OGRDataSourceH Ogr_ds;
-    OGRSFDriverH Ogr_driver;
+    ds_t hDS;
+    dr_t hDriver;
     OGRLayerH Ogr_layer;
     OGRFieldDefnH Ogr_field;
     OGRFeatureDefnH Ogr_featuredefn;
@@ -74,6 +74,7 @@ int main(int argc, char *argv[])
     char **papszDSCO = NULL, **papszLCO = NULL;
     int num_types;
     char *dsn;
+    int outer_ring_ccw;
     
     G_gisinit(argv[0]);
 
@@ -81,16 +82,23 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("export"));
+    G_add_keyword(_("output"));
     G_add_keyword("OGR");
+    G_add_keyword(_("output"));
 
     module->label =
 	_("Exports a vector map layer to any of the supported OGR vector formats.");
-    module->description = _("By default a vector map layer is exported to Esri Shapefile format.");
+    module->description = _("By default a vector map layer is exported to OGC GeoPackage format.");
     module->overwrite = TRUE;
     
     /* parse & read options */
     parse_args(argc, argv, &options, &flags);
-    
+
+    if (flags.list->answer) {
+	list_formats();
+	exit(EXIT_SUCCESS);
+    }
+
     /* check for weird options */
     if (G_strncasecmp(options.dsn->answer, "PG:", 3) == 0 &&
         strcmp(options.format->answer, "PostgreSQL") != 0)
@@ -122,6 +130,7 @@ int main(int argc, char *argv[])
        Centroids, Boundaries and Kernels always have to be exported
        explicitly, using the "type=" option.
      */
+    field = 0;
     if (!flags.new->answer) {
 	/* open input vector (topology required) */
 	Vect_set_open_level(2);
@@ -183,9 +192,8 @@ int main(int argc, char *argv[])
 		G_warning(_("Unable to determine input map's vector feature type(s)."));
             }
 	}
+	field = Vect_get_field_number(&In, options.field->answer);
     }
-
-    field = Vect_get_field_number(&In, options.field->answer);
 
     /* check output feature type */
     otype = Vect_option_to_types(options.type);
@@ -255,23 +263,16 @@ int main(int argc, char *argv[])
     G_get_default_window(&cellhd);
     Ogr_projection = NULL;
     if (cellhd.proj != PROJECTION_XY) {
-        const char *epsg;
+	struct Key_Value *projinfo, *projunits, *projepsg;
 
-        Ogr_projection = NULL;
-        /* try EPSG code first */
-        epsg = G_database_epsg_code();
-        if (!epsg) {
-            struct Key_Value *projinfo, *projunits;
-            
-            projinfo = G_get_projinfo();
-            projunits = G_get_projunits();
-            Ogr_projection = GPJ_grass_to_osr(projinfo, projunits);
-        }
-        else {
-            Ogr_projection = OSRNewSpatialReference(NULL);
-            if (OSRImportFromEPSG(Ogr_projection, atoi(epsg)) != OGRERR_NONE)
-                G_fatal_error(_("Unknown EPSG code %s"), epsg);
-        }
+	projinfo = G_get_projinfo();
+	projunits = G_get_projunits();
+	projepsg = G_get_projepsg();
+	Ogr_projection = GPJ_grass_to_osr2(projinfo, projunits, projepsg);
+
+	if (Ogr_projection ==  NULL)
+	    G_fatal_error(_("Unable to create OGR spatial reference"));
+
 	if (flags.esristyle->answer &&
 	    (strcmp(options.format->answer, "ESRI_Shapefile") == 0))
 	    OSRMorphToESRI(Ogr_projection);
@@ -279,7 +280,7 @@ int main(int argc, char *argv[])
 
     dsn = NULL;
     if (options.dsn->answer)
-        dsn = get_datasource_name(options.dsn->answer, TRUE);
+        dsn = G_store(options.dsn->answer);
 
     /* create new OGR layer in datasource */
     if (flags.new->answer) {
@@ -446,55 +447,95 @@ int main(int argc, char *argv[])
     G_debug(1, "Requested to export %d features", num_to_export);
 
     /* Open OGR DSN */
-    G_debug(2, "driver count = %d", OGRGetDriverCount());
+#if GDAL_VERSION_NUM >= 2020000
+    G_debug(2, "driver count = %d", GDALGetDriverCount());
     drn = -1;
-    for (i = 0; i < OGRGetDriverCount(); i++) {
-	Ogr_driver = OGRGetDriver(i);
-	G_debug(2, "driver %d : %s", i, OGR_Dr_GetName(Ogr_driver));
+    for (i = 0; i < GDALGetDriverCount(); i++) {
+	hDriver = GDALGetDriver(i);
+	G_debug(2, "driver %d : %s", i, GDALGetDriverShortName(hDriver));
 	/* chg white space to underscore in OGR driver names */
-	sprintf(buf, "%s", OGR_Dr_GetName(Ogr_driver));
+	sprintf(buf, "%s", GDALGetDriverShortName(hDriver));
 	G_strchg(buf, ' ', '_');
 	if (strcmp(buf, options.format->answer) == 0) {
 	    drn = i;
 	    G_debug(2, " -> driver = %d", drn);
 	}
     }
-    if (drn == -1)
-	G_fatal_error(_("OGR driver <%s> not found"), options.format->answer);
-    Ogr_driver = OGRGetDriver(drn);
-    
-    if (flags.append->answer) {
-	G_debug(1, "Append to OGR layer");
-	Ogr_ds = OGR_Dr_Open(Ogr_driver, dsn, TRUE);
-	
-	if (Ogr_ds == NULL) {
-	    G_debug(1, "Create OGR data source");
-	    Ogr_ds = OGR_Dr_CreateDataSource(Ogr_driver, dsn,
-					     papszDSCO);
+#else
+    G_debug(2, "driver count = %d", OGRGetDriverCount());
+    drn = -1;
+    for (i = 0; i < OGRGetDriverCount(); i++) {
+	hDriver = OGRGetDriver(i);
+	G_debug(2, "driver %d : %s", i, OGR_Dr_GetName(hDriver));
+	/* chg white space to underscore in OGR driver names */
+	sprintf(buf, "%s", OGR_Dr_GetName(hDriver));
+	G_strchg(buf, ' ', '_');
+	if (strcmp(buf, options.format->answer) == 0) {
+	    drn = i;
+	    G_debug(2, " -> driver = %d", drn);
 	}
     }
+#endif
+    if (drn == -1)
+	G_fatal_error(_("OGR driver <%s> not found"), options.format->answer);
+    hDriver = get_driver(drn);
+
+    if (flags.append->answer) {
+	G_debug(1, "Append to OGR layer");
+#if GDAL_VERSION_NUM >= 2020000
+	hDS = GDALOpenEx(dsn, GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL, NULL, NULL);
+
+	if (hDS == NULL) {
+	    G_debug(1, "Create OGR data source");
+	    hDS = GDALCreate(hDriver, dsn, 0, 0, 0, GDT_Unknown, papszDSCO);
+	}
+#else
+	hDS = OGR_Dr_Open(hDriver, dsn, TRUE);
+
+	if (hDS == NULL) {
+	    G_debug(1, "Create OGR data source");
+	    hDS = OGR_Dr_CreateDataSource(hDriver, dsn, papszDSCO);
+	}
+#endif	
+    }
     else {
+#if GDAL_VERSION_NUM >= 2020000
 	if (flags.update->answer) {
 	    G_debug(1, "Update OGR data source");
-	    Ogr_ds = OGR_Dr_Open(Ogr_driver, dsn, TRUE);
+	    hDS = GDALOpenEx(dsn, GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL, NULL, NULL);
 	}
 	else {
 	    G_debug(1, "Create OGR data source");
-	    Ogr_ds = OGR_Dr_CreateDataSource(Ogr_driver, dsn,
-					     papszDSCO);
+	    hDS = GDALCreate(hDriver, dsn, 0, 0, 0, GDT_Unknown, papszDSCO);
 	}
+#else
+	if (flags.update->answer) {
+	    G_debug(1, "Update OGR data source");
+	    hDS = OGR_Dr_Open(hDriver, dsn, TRUE);
+	}
+	else {
+	    G_debug(1, "Create OGR data source");
+	    hDS = OGR_Dr_CreateDataSource(hDriver, dsn, papszDSCO);
+	}
+#endif
     }
 	
     CSLDestroy(papszDSCO);
-    if (Ogr_ds == NULL)
+    if (hDS == NULL)
 	G_fatal_error(_("Unable to open OGR data source '%s'"),
 		      options.dsn->answer);
     
     /* check if OGR layer exists */
     overwrite = G_check_overwrite(argc, argv);
     found = FALSE;
-    for (i = 0; i < OGR_DS_GetLayerCount(Ogr_ds); i++) {
-	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
+#if GDAL_VERSION_NUM >= 2020000
+    for (i = 0; i < GDALDatasetGetLayerCount(hDS); i++) {
+	Ogr_layer = GDALDatasetGetLayer(hDS, i);
+#else
+    for (i = 0; i < OGR_DS_GetLayerCount(hDS); i++) {
+	Ogr_layer = OGR_DS_GetLayer(hDS, i);
+
+#endif
 	Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
 	if (G_strcasecmp(OGR_FD_GetName(Ogr_field), options.layer->answer))
 	    continue;
@@ -507,10 +548,15 @@ int main(int argc, char *argv[])
 	else if (overwrite) {
 	    G_warning(_("OGR layer <%s> already exists and will be overwritten"),
 		      options.layer->answer);
-	    OGR_DS_DeleteLayer(Ogr_ds, i);
+#if GDAL_VERSION_NUM >= 2020000
+	    GDALDatasetDeleteLayer(hDS, i);
+#else
+	    OGR_DS_DeleteLayer(hDS, i);
+#endif
 	    break;
 	}
     }
+
     if (flags.append->answer && !found) {
 	G_warning(_("OGR layer <%s> doesn't exists, "
 		    "creating new OGR layer instead"),
@@ -582,11 +628,21 @@ int main(int argc, char *argv[])
     }
 
     G_debug(1, "Create OGR layer");
+#if GDAL_VERSION_NUM >= 2020000
     if (flags.append->answer)
-	Ogr_layer = OGR_DS_GetLayerByName(Ogr_ds, options.layer->answer);
+	Ogr_layer = GDALDatasetGetLayerByName(hDS, options.layer->answer);
     else 
-	Ogr_layer = OGR_DS_CreateLayer(Ogr_ds, options.layer->answer, Ogr_projection, wkbtype,
+	Ogr_layer = GDALDatasetCreateLayer(hDS, options.layer->answer,
+	                                   Ogr_projection, wkbtype,
+					   papszLCO);
+#else
+    if (flags.append->answer)
+	Ogr_layer = OGR_DS_GetLayerByName(hDS, options.layer->answer);
+    else 
+	Ogr_layer = OGR_DS_CreateLayer(hDS, options.layer->answer,
+	                               Ogr_projection, wkbtype,
 				       papszLCO);
+#endif
     
     CSLDestroy(papszLCO);
     if (Ogr_layer == NULL) {
@@ -624,86 +680,94 @@ int main(int argc, char *argv[])
 	    
 	    if (create_field) {
 		Ogr_field = OGR_Fld_Create(GV_KEY_COLUMN, OFTInteger);
-		OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
+		if (OGR_L_CreateField(Ogr_layer, Ogr_field, 0) != OGRERR_NONE)
+		    G_fatal_error(_("Unable to create column <%s>"),
+		                  GV_KEY_COLUMN);
 		OGR_Fld_Destroy(Ogr_field);
 	    }
 	    
 	    doatt = 0;
-	 }
-	 else {
-	     Driver = db_start_driver_open_database(Fi->driver, Fi->database);
-	     if (!Driver)
-		 G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+	}
+	else {
+	    Driver = db_start_driver_open_database(Fi->driver, Fi->database);
+	    if (!Driver)
+		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			       Fi->database, Fi->driver);
 
-	     db_set_string(&dbstring, Fi->table);
-	     if (db_describe_table(Driver, &dbstring, &Table) != DB_OK)
-		 G_fatal_error(_("Unable to describe table <%s>"), Fi->table);
+	    db_set_string(&dbstring, Fi->table);
+	    if (db_describe_table(Driver, &dbstring, &Table) != DB_OK)
+		G_fatal_error(_("Unable to describe table <%s>"), Fi->table);
 
-	     ncol = db_get_table_number_of_columns(Table);
-	     G_debug(2, "ncol = %d", ncol);
-	     colctype = G_malloc(ncol * sizeof(int));
-	     colname = G_malloc(ncol * sizeof(char *));
-	     keycol = -1;
-	     for (i = 0; i < ncol; i++) {
-		 Column = db_get_table_column(Table, i);
-		 colname[i] =  G_store(db_get_column_name(Column));
-		 colsqltype = db_get_column_sqltype(Column);
-		 colctype[i] = db_sqltype_to_Ctype(colsqltype);
-		 colwidth = db_get_column_length(Column);
-		 G_debug(3, "col %d: %s sqltype=%d ctype=%d width=%d",
-			 i, colname[i], colsqltype, colctype[i], colwidth);
+	    ncol = db_get_table_number_of_columns(Table);
+	    G_debug(2, "ncol = %d", ncol);
+	    colctype = G_malloc(ncol * sizeof(int));
+	    colname = G_malloc(ncol * sizeof(char *));
+	    keycol = -1;
+	    for (i = 0; i < ncol; i++) {
+		Column = db_get_table_column(Table, i);
+		colname[i] =  G_store(db_get_column_name(Column));
+		colsqltype = db_get_column_sqltype(Column);
+		colctype[i] = db_sqltype_to_Ctype(colsqltype);
+		colwidth = db_get_column_length(Column);
+		G_debug(3, "col %d: %s sqltype=%d ctype=%d width=%d",
+			i, colname[i], colsqltype, colctype[i], colwidth);
 		 
-		 switch (colctype[i]) {
-		 case DB_C_TYPE_INT:
-		     ogr_ftype = OFTInteger;
-		     break;
-		 case DB_C_TYPE_DOUBLE:
-		     ogr_ftype = OFTReal;
-		     break;
-		 case DB_C_TYPE_STRING:
-		     ogr_ftype = OFTString;
-		     break;
-		 case DB_C_TYPE_DATETIME:
-		     ogr_ftype = OFTString;
-		     break;
-		 }
-		 G_debug(2, "ogr_ftype = %d", ogr_ftype);
+		switch (colctype[i]) {
+		case DB_C_TYPE_INT:
+		    ogr_ftype = OFTInteger;
+		    break;
+		case DB_C_TYPE_DOUBLE:
+		    ogr_ftype = OFTReal;
+		    break;
+		case DB_C_TYPE_STRING:
+		    ogr_ftype = OFTString;
+		    break;
+		case DB_C_TYPE_DATETIME:
+#if GDAL_VERSION_NUM >= 1320
+		    ogr_ftype = OFTDateTime;
+#else
+		    ogr_ftype = OFTString;
+#endif
+		    break;
+		}
+		G_debug(2, "ogr_ftype = %d", ogr_ftype);
 
-		 strcpy(key1, Fi->key);
-		 G_tolcase(key1);
-		 strcpy(key2, colname[i]);
-		 G_tolcase(key2);
-		 if (strcmp(key1, key2) == 0)
-		     keycol = i;
-		 G_debug(2, "%s x %s -> %s x %s -> keycol = %d", Fi->key,
-			 colname[i], key1, key2, keycol);
+		strcpy(key1, Fi->key);
+		G_tolcase(key1);
+		strcpy(key2, colname[i]);
+		G_tolcase(key2);
+		if (strcmp(key1, key2) == 0)
+		    keycol = i;
+		G_debug(2, "%s x %s -> %s x %s -> keycol = %d", Fi->key,
+			colname[i], key1, key2, keycol);
 
-		 if (flags.nocat->answer &&
-		     strcmp(Fi->key, colname[i]) == 0)
-		     /* skip export of 'cat' field */
-		     continue;
+		if (flags.nocat->answer &&
+		    strcmp(Fi->key, colname[i]) == 0)
+		    /* skip export of 'cat' field */
+		    continue;
 
-		 if (flags.append->answer) {
-		     Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
-		     if (OGR_FD_GetFieldIndex(Ogr_field, colname[i]) > -1)
-			 /* skip existing fields */
-			 continue;
-		     else
-			 G_warning(_("New attribute column <%s> added to the table"),
+		if (flags.append->answer) {
+		    Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
+		    if (OGR_FD_GetFieldIndex(Ogr_field, colname[i]) > -1)
+			/* skip existing fields */
+			continue;
+		    else
+			G_warning(_("New attribute column <%s> added to the table"),
 				   colname[i]);
-		 }
+		}
 		 
-		 Ogr_field = OGR_Fld_Create(colname[i], ogr_ftype);
-		 if (ogr_ftype == OFTString && colwidth > 0)
-		     OGR_Fld_SetWidth(Ogr_field, colwidth);
-		 OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
+		Ogr_field = OGR_Fld_Create(colname[i], ogr_ftype);
+		if (ogr_ftype == OFTString && colwidth > 0)
+		    OGR_Fld_SetWidth(Ogr_field, colwidth);
+		if (OGR_L_CreateField(Ogr_layer, Ogr_field, 0) != OGRERR_NONE)
+		    G_fatal_error(_("Unable to create column <%s>"),
+		                  colname[i]);
 		 
-		 OGR_Fld_Destroy(Ogr_field);
-	     }
-	     if (keycol == -1)
-		 G_fatal_error(_("Key column <%s> not found"), Fi->key);
-	 }
+		OGR_Fld_Destroy(Ogr_field);
+	    }
+	    if (keycol == -1)
+		G_fatal_error(_("Key column <%s> not found"), Fi->key);
+	}
     }
     
     Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
@@ -712,7 +776,22 @@ int main(int argc, char *argv[])
 
     if (OGR_L_TestCapability(Ogr_layer, OLCTransactions))
 	OGR_L_StartTransaction(Ogr_layer);
-    
+
+    /* export polygons oriented according to OGC simple features standard 1.2.1
+     * outer rings are oriented counter-clockwise (CCW)
+     * inner rings are oriented clockwise (CW) */
+    outer_ring_ccw = 1;
+    /* some formats expect outer rings to be CW and inner rings to be CCW:
+     * ESRI Shapefile, PGeo, FileGDB, OpenFileGDB (all ESRI) */
+    if (strcmp(options.format->answer, "ESRI_Shapefile") == 0 ||
+        strcmp(options.format->answer, "PGeo") == 0 ||
+        strcmp(options.format->answer, "FileGDB") == 0 ||
+        strcmp(options.format->answer, "OpenFileGDB") == 0) {
+	outer_ring_ccw = 0;
+    }
+    G_debug(1, "Format \"%s\", outer ring %s",
+            options.format->answer, (outer_ring_ccw ? "CCW" : "CW"));
+
     /* Lines (run always to count features of different type) */
     if (otype & (GV_POINTS | GV_LINES | GV_KERNEL | GV_FACE)) {
         G_message(n_("Exporting %d feature...",
@@ -739,7 +818,7 @@ int main(int argc, char *argv[])
                                Ogr_featuredefn, Ogr_layer,
                                Fi, Driver, ncol, colctype, 
                                colname, doatt, flags.nocat->answer ? TRUE : FALSE,
-                               &n_noatt, &n_nocat);
+                               &n_noatt, &n_nocat, outer_ring_ccw);
     }
 
     /*
@@ -759,7 +838,7 @@ int main(int argc, char *argv[])
     if (OGR_L_TestCapability(Ogr_layer, OLCTransactions))
 	OGR_L_CommitTransaction(Ogr_layer);
 
-    OGR_DS_Destroy(Ogr_ds);
+    ds_close(hDS);
 
     Vect_close(&In);
 

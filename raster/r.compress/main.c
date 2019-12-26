@@ -30,7 +30,7 @@
  *
  * The normal G_open_cell(), and Rast_put_row() do the compression
  * This program must only check that the file is not a reclass file and
- * is not a GDAL-linked map.
+ * is not a GDAL-linked map or a GRASS VRT.
  *
  * The only trick is to preserve the support files
  *
@@ -141,6 +141,10 @@ static int process(char *name, int uncompress)
 	G_warning(_("<%s> is a GDAL-linked map - can't (un)compress"), name);
 	return 1;
     }
+    if (G_find_file2_misc("cell_misc", "vrt", name, G_mapset())) {
+	G_warning(_("<%s> is a virtual raster map - can't (un)compress"), name);
+	return 1;
+    }
 
     map_type = Rast_map_type(name, G_mapset());
 
@@ -231,8 +235,17 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
     struct Cell_head cellhd;
     int new, old, nrows, row;
     void *rast;
+    char *cname;
 
     Rast_get_cellhd(name, G_mapset(), &cellhd);
+    cname = getenv("GRASS_COMPRESSOR");
+    if (cname && *cname) {
+       if (G_compressor_number(cname) < 1)
+           cname = G_compressor_name(G_default_compressor());
+       else
+           cname = G_compressor_name(G_compressor_number(cname));
+    } else
+           cname = G_compressor_name(G_default_compressor());
 
     /* check if already compressed/decompressed */
     if (uncompress) {
@@ -248,10 +261,10 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
 	    G_warning(_("[%s] already compressed"), name);
 	    return 1;
 	    */
-	    G_message(_("Re-compressing <%s>"), name);
+	    G_message(_("Re-compressing <%s> with method %s..."), name, cname);
 	}
 	else
-	    G_message(_("Compressing <%s>"), name);
+	    G_message(_("Compressing <%s> with method %s..."), name, cname);
     }
 
     Rast_set_window(&cellhd);
@@ -312,6 +325,10 @@ static int pprint(char *name, int shell_style)
         G_message(_("<%s> is a GDAL-linked map"), name);
         return 1;
     }
+    if (G_find_file2_misc("cell_misc", "vrt", name, G_mapset())) {
+        G_message(_("<%s> is a virtual raster map"), name);
+        return 1;
+    }
     if (Rast_is_reclass(name, G_mapset(), rname, rmapset) > 0) {
         G_message(_("<%s> is a reclass file of map <%s> in mapset <%s>"),
                   name, rname, rmapset);
@@ -349,7 +366,8 @@ static int pprint(char *name, int shell_style)
 
 	if (G_find_file2_misc("cell_misc", NULLC_FILE, name, G_mapset())) {
 	    G_message(_("<%s> has a compressed NULL file"), name);
-	} else {
+	}
+	else {
 	    G_message(_("<%s> has an uncompressed NULL file"), name);
 	}
     }

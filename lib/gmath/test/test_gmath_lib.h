@@ -41,7 +41,7 @@ typedef struct
     int cols;			/*number of cols */
     int quad;			/*is the matrix quadratic (1-quadratic, 0 not)*/
     int type;			/*the type of the les, normal == 0, sparse == 1 */
-    int bandwith;		/*the bandwith of the matrix (0 < bandwidth <= cols)*/
+    int bandwidth;		/*the bandwidth of the matrix (0 < bandwidth <= cols)*/
     int symm;			/*0 if matrix unsymmetric, 1 if symmetric*/
 } G_math_les;
 
@@ -55,7 +55,7 @@ typedef struct
     int cols;			/*number of cols */
     int quad;			/*is the matrix quadratic (1-quadratic, 0 not)*/
     int type;			/*the type of the les, normal == 0, sparse == 1 */
-    int bandwith;		/*the bandwith of the matrix (0 < bandwidth <= cols)*/
+    int bandwidth;		/*the bandwidth of the matrix (0 < bandwidth <= cols)*/
     int symm;			/*0 if matrix unsymmetric, 1 if symmetric*/
 } G_math_f_les;
 

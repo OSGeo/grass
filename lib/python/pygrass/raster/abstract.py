@@ -20,7 +20,7 @@ import grass.lib.raster as libraster
 #
 from grass.pygrass import utils
 from grass.pygrass.gis.region import Region
-from grass.pygrass.errors import must_be_open
+from grass.pygrass.errors import must_be_open, must_be_in_current_mapset
 from grass.pygrass.shell.conversion import dict2html
 from grass.pygrass.shell.show import raw_figure
 
@@ -31,9 +31,9 @@ from grass.pygrass.raster.raster_type import TYPE as RTYPE, RTYPE_STR
 from grass.pygrass.raster.category import Category
 from grass.pygrass.raster.history import History
 
-test_raster_name="abstract_test_map"
+test_raster_name = "abstract_test_map"
 
-## Define global variables to not exceed the 80 columns
+# Define global variables to not exceed the 80 columns
 INDXOUTRANGE = "The index (%d) is out of range, have you open the map?."
 INFO = """{name}@{mapset}
 rows: {rows}
@@ -64,7 +64,7 @@ class Info(object):
         """
         self.name = name
         self.mapset = mapset
-        self.c_region = ctypes.pointer(libgis.Cell_head())
+        self.c_region = ctypes.pointer(libraster.struct_Cell_head())
         self.c_range = None
 
     def _get_range(self):
@@ -156,6 +156,53 @@ class Info(object):
     def mtype(self):
         return RTYPE_STR[libraster.Rast_map_type(self.name, self.mapset)]
 
+    def _get_band_reference(self):
+        """Get band reference identifier.
+
+        :return str: band identifier (eg. S2_1) or None
+        """
+        band_ref = None
+        p_filename = ctypes.c_char_p()
+        p_band_ref = ctypes.c_char_p()
+        ret = libraster.Rast_read_band_reference(self.name, self.mapset,
+                                                 ctypes.byref(p_filename),
+                                                 ctypes.byref(p_band_ref))
+        if ret:
+            band_ref = utils.decode(p_band_ref.value)
+            libgis.G_free(p_filename)
+            libgis.G_free(p_band_ref)
+
+        return band_ref
+
+    @must_be_in_current_mapset
+    def _set_band_reference(self, band_reference):
+        """Set/Unset band reference identifier.
+
+        :param str band_reference: band reference to assign or None to remove (unset)
+        """
+        if band_reference:
+            # assign
+            from grass.bandref import BandReferenceReader, BandReferenceReaderError
+            reader = BandReferenceReader()
+            # determine filename (assuming that band_reference is unique!)
+            try:
+                filename = reader.find_file(band_reference)
+            except BandReferenceReaderError as e:
+                fatal("{}".format(e))
+                raise
+            if not filename:
+                fatal("Band reference <{}> not found".format(band_reference))
+                raise
+
+            # write band reference
+            libraster.Rast_write_band_reference(self.name,
+                                                filename,
+                                                band_reference)
+        else:
+            libraster.Rast_remove_band_reference(self.name)
+
+    band_reference = property(fget=_get_band_reference, fset=_set_band_reference)
+
     def _get_units(self):
         return libraster.Rast_read_units(self.name, self.mapset)
 
@@ -217,25 +264,31 @@ class RasterAbstractBase(object):
 
         >>> ele = RasterAbstractBase(test_raster_name)
         >>> ele.name
-        u'abstract_test_map'
+        'abstract_test_map'
         >>> ele.exist()
         True
 
         ..
         """
         self.mapset = mapset
+        if not mapset:
+            # note that @must_be_in_current_mapset requires mapset to be set
+            mapset = libgis.G_find_raster(name, mapset)
+            if mapset is not None:
+                self.mapset = utils.decode(mapset)
+
         self._name = name
-        ## Private attribute `_fd` that return the file descriptor of the map
+        # Private attribute `_fd` that return the file descriptor of the map
         self._fd = None
-        ## Private attribute `_rows` that return the number of rows
+        # Private attribute `_rows` that return the number of rows
         # in active window, When the class is instanced is empty and it is set
         # when you open the file, using Rast_window_rows()
         self._rows = None
-        ## Private attribute `_cols` that return the number of rows
+        # Private attribute `_cols` that return the number of rows
         # in active window, When the class is instanced is empty and it is set
         # when you open the file, using Rast_window_cols()
         self._cols = None
-        #self.region = Region()
+        # self.region = Region()
         self.hist = History(self.name, self.mapset)
         self.cats = Category(self.name, self.mapset)
         self.info = Info(self.name, self.mapset)
@@ -259,7 +312,6 @@ class RasterAbstractBase(object):
     def _set_mtype(self, mtype):
         """Private method to change the Raster type"""
         if mtype.upper() not in ('CELL', 'FCELL', 'DCELL'):
-            #fatal(_("Raser type: {0} not supported".format(mtype) ) )
             str_err = "Raster type: {0} not supported ('CELL','FCELL','DCELL')"
             raise ValueError(_(str_err).format(mtype))
         self._mtype = mtype
@@ -327,18 +379,18 @@ class RasterAbstractBase(object):
     def __getitem__(self, key):
         """Return the row of Raster object, slice allowed."""
         if isinstance(key, slice):
-            #import pdb; pdb.set_trace()
-            #Get the start, stop, and step from the slice
+            # Get the start, stop, and step from the slice
             return (self.get_row(ii) for ii in range(*key.indices(len(self))))
         elif isinstance(key, tuple):
             x, y = key
             return self.get(x, y)
         elif isinstance(key, int):
+            if not self.is_open():
+                raise IndexError("Can not operate on a closed map. Call open() first.")
             if key < 0:  # Handle negative indices
                 key += self._rows
             if key >= self._rows:
-                fatal(INDXOUTRANGE.format(key))
-                raise IndexError
+                raise IndexError("The row index {0} is out of range [0, {1}).".format(key, self._rows))
             return self.get_row(key)
         else:
             fatal("Invalid argument type.")
@@ -404,7 +456,7 @@ class RasterAbstractBase(object):
         >>> ele = RasterAbstractBase(test_raster_name)
         >>> name = ele.name_mapset().split("@")
         >>> name
-        [u'abstract_test_map']
+        ['abstract_test_map']
 
         """
         if name is None:
@@ -533,8 +585,8 @@ class RasterAbstractBase(object):
     @must_be_open
     def get_cats(self):
         """Return a category object"""
-        cat = Category()
-        cat.read(self)
+        cat = Category(name=self.name, mapset=self.mapset)
+        cat.read()
         return cat
 
     @must_be_open
@@ -555,11 +607,10 @@ class RasterAbstractBase(object):
 if __name__ == "__main__":
 
     import doctest
-    from grass.pygrass import utils
     from grass.pygrass.modules import Module
     Module("g.region", n=40, s=0, e=40, w=0, res=10)
-    Module("r.mapcalc", expression="%s = row() + (10 * col())"%(test_raster_name),
-                             overwrite=True)
+    Module("r.mapcalc", expression="%s = row() + (10 * col())" % (test_raster_name),
+        overwrite=True)
 
     doctest.testmod()
 

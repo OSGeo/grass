@@ -82,6 +82,7 @@ off_t V2__write_area_pg(struct Map_info *, const struct line_pnts **, int,
                         const struct line_cats *);
 int V2__update_area_pg(struct Map_info *, const struct line_pnts **, int,
                        int);
+int Vect__define_topo_relation(const struct Format_info_pg *, int, int);    
 
 int Vect__insert_face_pg(struct Map_info *, int);
 

@@ -17,17 +17,18 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
+import six
 
 import wx
 
-import gui_core.wxlibplot as plot
+import wx.lib.plot as plot
 from core.globalvar import ICONDIR
 from core.settings import UserSettings
 from wxplot.dialogs import TextDialog, OptDialog
 from core.render import Map
 from icons.icon import MetaIcon
 from gui_core.toolbars import BaseIcons
-from core.utils import _
+from gui_core.wrap import Menu
 
 import grass.script as grass
 
@@ -104,7 +105,7 @@ class BasePlotFrame(wx.Frame):
         self.client = plot.PlotCanvas(self)
 
         # define the function for drawing pointLabels
-        self.client.SetPointLabelFunc(self.DrawPointLabel)
+        self.client.pointLabelFunc = self.DrawPointLabel
 
         # Create mouse event for showing cursor coords in status bar
         self.client.canvas.Bind(wx.EVT_LEFT_DOWN, self.OnMouseLeftDown)
@@ -127,12 +128,12 @@ class BasePlotFrame(wx.Frame):
         for assigning colors to images in imagery groups"""
 
         self.colorDict = {}
-        for clr in grass.named_colors.iterkeys():
+        for clr in six.iterkeys(grass.named_colors):
             if clr == 'white':
                 continue
-            r = grass.named_colors[clr][0] * 255
-            g = grass.named_colors[clr][1] * 255
-            b = grass.named_colors[clr][2] * 255
+            r = int(grass.named_colors[clr][0] * 255)
+            g = int(grass.named_colors[clr][1] * 255)
+            b = int(grass.named_colors[clr][2] * 255)
             self.colorDict[clr] = (r, g, b, 255)
 
     def InitPlotOpts(self, plottype):
@@ -186,19 +187,19 @@ class BasePlotFrame(wx.Frame):
         self.zoom = False  # zooming disabled
         self.drag = False  # draging disabled
         # vertical and horizontal scrollbars
-        self.client.SetShowScrollbars(True)
+        self.client.showScrollbars = True
 
         # x and y axis set to normal (non-log)
-        self.client.setLogScale((False, False))
+        self.client.logScale = (False, False)
         if self.properties['x-axis']['prop']['type']:
-            self.client.SetXSpec(self.properties['x-axis']['prop']['type'])
+            self.client.xSpec = self.properties['x-axis']['prop']['type']
         else:
-            self.client.SetXSpec('auto')
+            self.client.xSpec = 'auto'
 
         if self.properties['y-axis']['prop']['type']:
-            self.client.SetYSpec(self.properties['y-axis']['prop']['type'])
+            self.client.ySpec = self.properties['y-axis']['prop']['type']
         else:
-            self.client.SetYSpec('auto')
+            self.client.ySpec = 'auto'
 
     def InitRasterOpts(self, rasterList, plottype):
         """Initialize or update raster dictionary for plotting
@@ -336,26 +337,24 @@ class BasePlotFrame(wx.Frame):
         """Set plot and text options
         """
         self.client.SetFont(self.properties['font']['wxfont'])
-        self.client.SetFontSizeTitle(
-            self.properties['font']['prop']['titleSize'])
-        self.client.SetFontSizeAxis(
-            self.properties['font']['prop']['axisSize'])
+        self.client.fontSizeTitle = self.properties['font']['prop']['titleSize']
+        self.client.fontSizeAxis = self.properties['font']['prop']['axisSize']
 
-        self.client.SetEnableZoom(self.zoom)
-        self.client.SetEnableDrag(self.drag)
+        self.client.enableZoom = self.zoom
+        self.client.enableDrag = self.drag
 
         #
         # axis settings
         #
         if self.properties['x-axis']['prop']['type'] == 'custom':
-            self.client.SetXSpec('min')
+            self.client.xSpec = 'min'
         else:
-            self.client.SetXSpec(self.properties['x-axis']['prop']['type'])
+            self.client.xSpec = self.properties['x-axis']['prop']['type']
 
         if self.properties['y-axis']['prop']['type'] == 'custom':
-            self.client.SetYSpec('min')
+            self.client.ySpec = 'min'
         else:
-            self.client.SetYSpec(self.properties['y-axis']['prop'])
+            self.client.ySpec = self.properties['y-axis']['prop']['type']
 
         if self.properties['x-axis']['prop']['type'] == 'custom' and self.properties[
                 'x-axis']['prop']['min'] < self.properties['x-axis']['prop']['max']:
@@ -375,32 +374,28 @@ class BasePlotFrame(wx.Frame):
 
         if self.properties['x-axis']['prop']['log'] == True:
             self.properties['x-axis']['axis'] = None
-            self.client.SetXSpec('min')
+            self.client.xSpec = 'min'
         if self.properties['y-axis']['prop']['log'] == True:
             self.properties['y-axis']['axis'] = None
-            self.client.SetYSpec('min')
+            self.client.ySpec = 'min'
 
-        self.client.setLogScale((self.properties['x-axis']['prop']['log'],
-                                 self.properties['y-axis']['prop']['log']))
+        self.client.logScale = (self.properties['x-axis']['prop']['log'],
+                                self.properties['y-axis']['prop']['log'])
 
         #
         # grid settings
         #
-        self.client.SetEnableGrid(self.properties['grid']['enabled'])
-
-        self.client.SetGridColour(
-            wx.Colour(
-                self.properties['grid']['color'][0],
-                self.properties['grid']['color'][1],
-                self.properties['grid']['color'][2],
-                255))
+        self.client.enableGrid = self.properties['grid']['enabled']
+        gridpen = wx.Pen(colour=wx.Colour(self.properties['grid']['color'][0],
+                                          self.properties['grid']['color'][1],
+                                          self.properties['grid']['color'][2], 255))
+        self.client.gridPen = gridpen
 
         #
         # legend settings
         #
-        self.client.SetFontSizeLegend(
-            self.properties['font']['prop']['legendSize'])
-        self.client.SetEnableLegend(self.properties['legend']['enabled'])
+        self.client.fontSizeLegend = self.properties['font']['prop']['legendSize']
+        self.client.enableLegend = self.properties['legend']['enabled']
 
     def DrawPlot(self, plotlist):
         """Draw line and point plot from list plot elements.
@@ -412,14 +407,14 @@ class BasePlotFrame(wx.Frame):
                                       ylabel)
 
         if self.properties['x-axis']['prop']['type'] == 'custom':
-            self.client.SetXSpec('min')
+            self.client.xSpec = 'min'
         else:
-            self.client.SetXSpec(self.properties['x-axis']['prop']['type'])
+            self.client.xSpec = self.properties['x-axis']['prop']['type']
 
         if self.properties['y-axis']['prop']['type'] == 'custom':
-            self.client.SetYSpec('min')
+            self.client.ySpec = 'min'
         else:
-            self.client.SetYSpec(self.properties['y-axis']['prop']['type'])
+            self.client.ySpec = self.properties['y-axis']['prop']['type']
 
         self.client.Draw(self.plot, self.properties['x-axis']['axis'],
                          self.properties['y-axis']['axis'])
@@ -453,16 +448,16 @@ class BasePlotFrame(wx.Frame):
         """
         self.zoom = True
         self.drag = False
-        self.client.SetEnableZoom(self.zoom)
-        self.client.SetEnableDrag(self.drag)
+        self.client.enableZoom = self.zoom
+        self.client.enableDrag = self.drag
 
     def OnDrag(self, event):
         """Enable dragging and disable zooming
         """
         self.zoom = False
         self.drag = True
-        self.client.SetEnableDrag(self.drag)
-        self.client.SetEnableZoom(self.zoom)
+        self.client.enableDrag = self.drag
+        self.client.enableZoom = self.zoom
 
     def OnRedraw(self, event):
         """Redraw the plot window. Unzoom to original size
@@ -489,7 +484,7 @@ class BasePlotFrame(wx.Frame):
     def OnMotion(self, event):
         """Indicate when mouse is outside the plot area
         """
-        if self.client.GetEnablePointLabel() is True:
+        if self.client.enablePointLabel:
             # make up dict with info for the pointLabel
             # I've decided to mark the closest point on the closest curve
             dlst = self.client.GetClosestPoint(
@@ -512,7 +507,7 @@ class BasePlotFrame(wx.Frame):
         """Popup menu for plot and text options
         """
         point = wx.GetMousePosition()
-        popt = wx.Menu()
+        popt = Menu()
         # Add items to the menu
         settext = wx.MenuItem(popt, wx.ID_ANY, _('Text settings'))
         popt.AppendItem(settext)
@@ -559,7 +554,7 @@ class BasePlotFrame(wx.Frame):
         self.ylabel = dlg.ylabel
 
         if self.plot:
-            self.plot.setTitle(dlg.ptitle)
+            self.plot.title = dlg.ptitle
 
         self.OnRedraw(event=None)
 
@@ -567,14 +562,12 @@ class BasePlotFrame(wx.Frame):
         x, y = self._getPlotLabels()
 
         self.client.SetFont(self.properties['font']['wxfont'])
-        self.client.SetFontSizeTitle(
-            self.properties['font']['prop']['titleSize'])
-        self.client.SetFontSizeAxis(
-            self.properties['font']['prop']['axisSize'])
+        self.client.fontSizeTitle = self.properties['font']['prop']['titleSize']
+        self.client.fontSizeAxis = self.properties['font']['prop']['axisSize']
 
         if self.plot:
-            self.plot.setXLabel(x)
-            self.plot.setYLabel(y)
+            self.plot.xLabel = x
+            self.plot.yLabel = y
 
     def PlotText(self, event):
         """Set custom text values for profile title and axis labels.
@@ -606,7 +599,7 @@ class BasePlotFrame(wx.Frame):
         """Print options and output menu
         """
         point = wx.GetMousePosition()
-        printmenu = wx.Menu()
+        printmenu = Menu()
         for title, handler in ((_("Page setup"), self.OnPageSetup),
                                (_("Print preview"), self.OnPrintPreview),
                                (_("Print display"), self.OnDoPrint)):

@@ -42,6 +42,9 @@ See the "Location Wizard"&nbsp;<img src="circle_4.png" alt="[(4)]"> to
 easily create a new LOCATION from scratch from a geocoded file, by
 defining the parameters or by selecting the corresponding EPSG projection
 code.
+<p>
+See&nbsp;<img src="circle_5.png" alt="[(5)]"> to directly download a
+sample LOCATION into the DATABASE. 
 
 <h3><img src="circle_3.png" alt="[(3)]">&nbsp;Selecting the MAPSET (a subproject)</h3>
 
@@ -58,7 +61,15 @@ projections. You can also create new LOCATION easily from a georeferenced
 data file (e.g., SHAPE file or GeoTIFF, see below).  Find below also some
 rules to define the default raster resolution for a new LOCATION.
 
-<h3><img src="circle_5.png" alt="[(5)]">&nbsp;Start GRASS</h3>
+<h3><img src="circle_5.png" alt="[(5)]">&nbsp;Download a sample LOCATION</h3>
+
+In the "Location Wizard" there is also a Download button that allows you to
+directly download a ready-to-use LOCATION into the DATABASE. You can
+choose among different sample LOCATIONS that are currently available at the
+<a href="https://grass.osgeo.org/download/sample-data/">Download</a>
+section in the GRASS GIS website.
+
+<h3><img src="circle_6.png" alt="[(6)]">&nbsp;Start GRASS</h3>
 
 Once you have selected an existing LOCATION/MAPSET or defined a new
 one, you can enter GRASS. The graphical user interface 
@@ -75,9 +86,9 @@ definitions. It can be used to store the base cartography in it as
 "PERMANENT" is visible to all users accessing a LOCATION.
 <p>
 
-<!-- original drawing: doc/help_loc_structure.odg -->
+<!-- original drawing: ../../doc/grass_database.svg -->
 <center>
-  <img src="help_loc_struct.png" alt="[GRASS GIS Location structure]"><br>
+  <img src="grass_database.png" alt="[GRASS GIS Location structure]" style="padding:5px;" border="1"><br>
   <i>Fig. 1: GRASS GIS 7 location structure</i>
 </center>
 
@@ -156,7 +167,7 @@ After defining new LOCATION, wxGUI starts automatically.
 If data were already imported, you can add them into the Layer Manager now
 and display them. If your LOCATION is empty you can import your data from 
 the menu: Go to "File" -&gt; "Import raster/vector data" (see also the
-related Wiki page on <a href="http://grasswiki.osgeo.org/wiki/Importing_data">Importing data</a>).
+related Wiki page on <a href="https://grasswiki.osgeo.org/wiki/Importing_data">Importing data</a>).
 
 <h2>5. Text-based startup and location creation</h2>
 
@@ -169,13 +180,13 @@ For a first time startup, the following steps have to be followed:
      without entering the new location:
 <ul>
     <li>Using an EPSG code:<br>
-        &nbsp;<tt>grass73 -e -c EPSG:32630 /home/user/grassdata/mylocation</tt></li>
+        &nbsp;<tt>grass79 -e -c EPSG:32630 /home/user/grassdata/mylocation</tt></li>
     <li>Using a georeferenced raster or vector file:<br>
-        &nbsp;<tt>grass73 -e -c MyGeoReferenceFile.tif /home/user/grassdata/mylocation</tt></li>
+        &nbsp;<tt>grass79 -e -c MyGeoReferenceFile.tif /home/user/grassdata/mylocation</tt></li>
 </ul></li>
 <li> Create new mapset within the new location and launch GRASS GIS within
      that mapset: <br>
-        &nbsp;<tt>grass73 -c /home/user/grassdata/mylocation/mymapset</tt>
+        &nbsp;<tt>grass79 -c /home/user/grassdata/mylocation/mymapset</tt>
 </ol>
 
 
@@ -195,5 +206,7 @@ Please have a look at the GRASS GIS web site for tutorials and books:
 <p>
  <a href="http://epsg.io/">List of EPSG codes</a> (Database of worldwide coordinate systems)
 
+<!--
 <p>
 <i>Last changed: $Date$</i>
+-->

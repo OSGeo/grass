@@ -68,7 +68,7 @@ int read_rules(FILE * fp)
 	if (!G_getl2(buf, 1024, fp))
 	    return nrules;
 
-	G_debug(5, "buf = [%s], strlen(buf)=%d", buf, strlen(buf));
+	G_debug(5, "buf = [%s], strlen(buf)=%zu", buf, strlen(buf));
 
 	for (n = 0; buf[n]; n++)
 	    if (buf[n] == ',')

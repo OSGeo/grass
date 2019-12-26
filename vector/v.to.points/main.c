@@ -8,7 +8,7 @@
  *               
  * PURPOSE:      Create points along lines 
  *               
- * COPYRIGHT:    (C) 2002-2017 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2019 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
@@ -76,8 +76,8 @@ int main(int argc, char **argv)
     opt.use->key = "use";
     opt.use->type = TYPE_STRING;
     opt.use->required = NO;
-    opt.use->description = _("Use line nodes or vertices only");
-    opt.use->options = "node,vertex";
+    opt.use->description = _("Use line nodes (start/end) or vertices only");
+    opt.use->options = "node,start,end,vertex";
 
     opt.dmax = G_define_option();
     opt.dmax->key = "dmax";
@@ -114,12 +114,32 @@ int main(int argc, char **argv)
 
     vertex_type = 0;
     if (opt.use->answer) {
-        if (opt.use->answer[0] == 'n')
+        switch (opt.use->answer[0]) {
+        case 'n':
             vertex_type = GV_NODE;
-        else
+            break;
+        case 's':
+            vertex_type = GV_START;
+            break;
+        case 'e':
+            vertex_type = GV_END;
+            break;
+        default:
             vertex_type = GV_VERTEX;
+            break;
+        }
     }
-    
+
+    if (flag.inter->answer && vertex_type != GV_VERTEX) {
+        G_warning(_("Flag -%c ignored (requires %s=%s)"), flag.inter->key,
+                  opt.use->key, "vertex");
+        flag.inter->answer = FALSE;
+    }
+    if (flag.reverse->answer && (vertex_type == GV_START || vertex_type == GV_END)) {
+        G_warning(_("Flag -%c ignored (reason %s=%s)"), flag.reverse->key,
+                  opt.use->key, opt.use->answer);
+        flag.reverse->answer = FALSE;
+    }
     Vect_check_input_output_name(opt.input->answer, opt.output->answer,
 				 G_FATAL_EXIT);
 

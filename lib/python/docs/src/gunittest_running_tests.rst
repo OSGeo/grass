@@ -89,7 +89,7 @@ Example Bash script to run be used as a cron job
     REPORTS=".../testreports"
     GRASSSRC=".../grass-src"
     # here we suppose default compilation settings of GRASS and no make install
-    GRASSBIN="$GRASSSRC/bin.../grass73"
+    GRASSBIN="$GRASSSRC/bin.../grass79"
     GRASSDIST="$GRASSSRC/dist..."
     
     # necessary hardcoded GRASS paths
@@ -117,7 +117,7 @@ Example Bash script to run be used as a cron job
     # compile current source code from scratch
     cd $GRASSSRC
     make distclean -j4
-    svn up
+    git pull
     ./configure ...  # or a script containing all the flags
     make -j4
 

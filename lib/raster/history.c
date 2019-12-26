@@ -213,8 +213,8 @@ void Rast_format_history(struct History *hist, int field, const char *fmt, ...)
  *
  * This routine initializes the <i>hist</i> structure, recording the
  * date, user, module name and the raster map <i>name</i>
- * structure. The <i>type</i> is an anachronism from earlier versions
- * of GRASS and should be specified as "raster".
+ * structure. The <i>type</i> can be "raster", "reclass", "GDAL-link",
+ * or "virtual".
  *
  * <b>Note:</b> This routine only initializes the data structure. It
  * does not write the history file.

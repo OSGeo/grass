@@ -25,8 +25,8 @@ notes).
 
 <h3>Binning</h3>
 
-The main different of <em>r.in.lidar</em> in comparison to
-<em><a href="r.in.lidar.html">r.in.lidar</a></em> is that
+The main difference between <em>r.in.lidar</em> and
+<em><a href="v.in.lidar.html">v.in.lidar</a></em> is that
 <em>r.in.lidar</em> creates a raster instead of just importing the
 points into GRASS GIS. However, <em>r.in.lidar</em> does not merely
 rasterizes the points from the point cloud. <em>r.in.lidar</em>
@@ -360,6 +360,11 @@ the number of data points.
 The default map <b>type</b>=<tt>FCELL</tt> is intended as compromise between
 preserving data precision and limiting system resource consumption.
 
+<h3>Trim option</h3>
+<p>
+Trim option value is used only when calculating trimmed mean values.
+Attempt to use it with other statistical methods will result in an error.
+
 <h2>EXAMPLES</h2>
 
 Simple example of binning of point from a LAS file into a newly created
@@ -615,4 +620,7 @@ Vaclav Petras,
 <br>
 based on <em>r.in.xyz</em> by Hamish Bowman and Volker Wichmann<br>
 
-<p><i>Last changed: $Date$</i>
+<!--
+<p>
+<i>Last changed: $Date$</i>
+-->

@@ -7,7 +7,7 @@ int levels_reg(struct Region *region)
     int wd, ht;
     struct Region region_buff;
 
-    /* save region stucture */
+    /* save region structure */
     copy_reg(region, &region_buff);
 
     D = 0;

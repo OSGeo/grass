@@ -68,7 +68,10 @@ static int cmp_area(const void *pa, const void *pb)
     AREA_CAT *p1 = (AREA_CAT *) pa;
     AREA_CAT *p2 = (AREA_CAT *) pb;
 
-    return (p1->area_cat - p2->area_cat);
+    if (p1->area_cat < p2->area_cat)
+	return -1;
+
+    return (p1->area_cat > p2->area_cat);
 }
 
 int main(int argc, char *argv[])
@@ -82,7 +85,11 @@ int main(int argc, char *argv[])
      *area_opt,			/* area vector */
      *point_type_opt,		/* point type */
      *point_field_opt,		/* point layer */
+     *point_cats_opt,		/* point cats */
+     *point_where_opt,		/* point where */
      *area_field_opt,		/* area layer */
+     *area_cats_opt,		/* area cats */
+     *area_where_opt,		/* area where */
      *method_opt,		/* stats method */
      *point_column_opt,		/* point column for stats */
      *count_column_opt,		/* area column for point count */
@@ -92,6 +99,8 @@ int main(int argc, char *argv[])
     char *fs;
     struct Map_info PIn, AIn;
     int point_type, point_field, area_field;
+    struct cat_list *acat_list = NULL;
+    struct cat_list *pcat_list = NULL;
     struct line_pnts *Points;
     struct line_cats *ACats, *PCats;
     AREA_CAT *Area_cat;
@@ -130,12 +139,12 @@ int main(int argc, char *argv[])
 
     point_opt = G_define_standard_option(G_OPT_V_INPUT);
     point_opt->key = "points";
-    point_opt->description = _("Name of existing vector map with points");
+    point_opt->label = _("Name of existing vector map with points");
     /* point_opt->guisection = _("Required"); */
-
+      
     area_opt = G_define_standard_option(G_OPT_V_INPUT);
     area_opt->key = "areas";
-    area_opt->description = _("Name of existing vector map with areas");
+    area_opt->label = _("Name of existing vector map with areas");
     /* area_opt->guisection = _("Required"); */
 
     point_type_opt = G_define_standard_option(G_OPT_V_TYPE);
@@ -144,14 +153,37 @@ int main(int argc, char *argv[])
     point_type_opt->answer = "point";
     point_type_opt->label = _("Feature type");
     point_type_opt->required = NO;
+    point_type_opt->guisection = _("Selection");
 
     point_field_opt = G_define_standard_option(G_OPT_V_FIELD);
     point_field_opt->key = "points_layer";
     point_field_opt->label = _("Layer number for points map");
+    point_field_opt->guisection = _("Selection");
+
+    point_cats_opt = G_define_standard_option(G_OPT_V_CATS);
+    point_cats_opt->key = "points_cats";
+    point_cats_opt->label = _("Category values for points map");
+    point_cats_opt->guisection = _("Selection");
+    
+    point_where_opt = G_define_standard_option(G_OPT_DB_WHERE);
+    point_where_opt->key = "points_where";
+    point_where_opt->label = _("WHERE conditions of SQL statement without 'where' keyword for points map");;
+    point_where_opt->guisection = _("Selection");
 
     area_field_opt = G_define_standard_option(G_OPT_V_FIELD);
     area_field_opt->key = "areas_layer";
     area_field_opt->label = _("Layer number for area map");
+    area_field_opt->guisection = _("Selection");
+
+    area_cats_opt = G_define_standard_option(G_OPT_V_CATS);
+    area_cats_opt->key = "areas_cats";
+    area_cats_opt->label = _("Category values for area map");
+    area_cats_opt->guisection = _("Selection");
+    
+    area_where_opt = G_define_standard_option(G_OPT_DB_WHERE);
+    area_where_opt->key = "areas_where";
+    area_where_opt->label = _("WHERE conditions of SQL statement without 'where' keyword for area map");;
+    area_where_opt->guisection = _("Selection");
 
     method_opt = G_define_option();
     method_opt->key = "method";
@@ -171,51 +203,54 @@ int main(int argc, char *argv[])
 
     point_column_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     point_column_opt->key = "points_column";
-    point_column_opt->required = NO;
-    point_column_opt->multiple = NO;
     point_column_opt->label =
 	_("Column name of points map to use for statistics");
     point_column_opt->description = _("Column of points map must be numeric");
 
-    count_column_opt = G_define_option();
+    count_column_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     count_column_opt->key = "count_column";
     count_column_opt->type = TYPE_STRING;
-    count_column_opt->required = NO;
-    count_column_opt->multiple = NO;
     count_column_opt->label = _("Column name to upload points count");
     count_column_opt->description =
 	_("Column to hold points count, must be of type integer, will be created if not existing");
 
-    stats_column_opt = G_define_option();
+    stats_column_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     stats_column_opt->key = "stats_column";
-    stats_column_opt->type = TYPE_STRING;
-    stats_column_opt->required = NO;
-    stats_column_opt->multiple = NO;
     stats_column_opt->label = _("Column name to upload statistics");
     stats_column_opt->description =
 	_("Column to hold statistics, must be of type double, will be created if not existing");
 
     fs_opt = G_define_standard_option(G_OPT_F_SEP);
-
+    fs_opt->guisection = _("Print");
+    
     print_flag = G_define_flag();
     print_flag->key = 'p';
     print_flag->label =
 	_("Print output to stdout, do not update attribute table");
     print_flag->description = _("First column is always area category");
+    print_flag->guisection = _("Print");
 
+    /* GUI dependencies */
+    G_asprintf((char **) &(point_opt->guidependency), "%s,%s,%s",
+               point_field_opt->key, point_where_opt->key, point_column_opt->key);
+    G_asprintf((char **) &(point_field_opt->guidependency), "%s,%s",
+               point_where_opt->key, point_column_opt->key);
+    G_asprintf((char **) &(area_opt->guidependency), "%s,%s,%s,%s",
+               area_field_opt->key, area_where_opt->key,
+               count_column_opt->key, stats_column_opt->key);
+    G_asprintf((char **) &(area_field_opt->guidependency), "%s,%s,%s",
+               area_where_opt->key, count_column_opt->key, stats_column_opt->key);
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     point_type = Vect_option_to_types(point_type_opt);
 
-    point_field = atoi(point_field_opt->answer);
-    area_field = atoi(area_field_opt->answer);
-
-    if (print_flag->answer)
+    fs = NULL;
+    if (print_flag->answer) {
 	/* get field separator */
-	    fs = G_option_to_separator(fs_opt);
-    else
-	    fs = NULL;
+	fs = G_option_to_separator(fs_opt);
+    }
 
     /* check for stats */
     if (method_opt->answer) {
@@ -251,6 +286,20 @@ int main(int argc, char *argv[])
     Vect_set_open_level(2);
     if (Vect_open_old(&AIn, area_opt->answer, mapset) < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), area_opt->answer);
+
+    point_field = atoi(point_field_opt->answer);
+    pcat_list = NULL;
+    if (point_field > 0)
+	pcat_list = Vect_cats_set_constraint(&PIn, point_field,
+	                                     point_where_opt->answer,
+                                             point_cats_opt->answer);
+
+    area_field = atoi(area_field_opt->answer);
+    acat_list = NULL;
+    if (area_field > 0)
+	acat_list = Vect_cats_set_constraint(&AIn, area_field,
+	                                     area_where_opt->answer,
+                                             area_cats_opt->answer);
 
     method = -1;
     use_catno = 0;
@@ -395,7 +444,7 @@ int main(int argc, char *argv[])
 	    db_column_Ctype(Pdriver, PFi->table, point_column_opt->answer);
 
 	if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
-	    G_fatal_error(_("column for points vector must be numeric"));
+	    G_fatal_error(_("points_column <%s> of points vector <%s> must be numeric"), point_column_opt->answer, PFi->table);
 
 	db_CatValArray_init(&cvarr);
 	nrec = db_select_CatValArray(Pdriver, PFi->table, PFi->key,
@@ -426,6 +475,11 @@ int main(int argc, char *argv[])
 
 	if (ACats->n_cats <= 0)
 	    continue;
+
+	if (area_field > 0 
+	    && !Vect_cats_in_constraint(ACats, area_field, acat_list))
+	    continue;
+
 	for (i = 0; i < ACats->n_cats; i++) {
 
 	    if (ACats->field[i] == area_field) {
@@ -489,6 +543,10 @@ int main(int argc, char *argv[])
 	if (ACats->n_cats <= 0)
 	    continue;
 
+	if (area_field > 0 
+	    && !Vect_cats_in_constraint(ACats, area_field, acat_list))
+	    continue;
+
 	/* select points by box */
 	Vect_get_area_box(&AIn, area, &box);
 	box.T = PORT_DOUBLE_MAX;
@@ -505,6 +563,10 @@ int main(int argc, char *argv[])
 
 	    ptype = Vect_read_line(&PIn, Points, PCats, pline);
 	    if (!(ptype & point_type))
+		continue;
+
+	    if (point_field > 0 
+		&& !Vect_cats_in_constraint(PCats, point_field, pcat_list))
 		continue;
 
 	    /* point in area */

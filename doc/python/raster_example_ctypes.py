@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 Sample Python script to access raster data using GRASS Ctypes
@@ -64,7 +64,7 @@ print "Current region is %d rows x %d columns" % (rows, cols)
 
 # iterate through map rows
 print "Map data:"
-for row_n in xrange(rows):
+for row_n in range(rows):
     # read a row of raster data into memory, then print it
     Rast_get_row(in_fd, in_rast, row_n, data_type)
     print row_n, in_rast[0:cols]

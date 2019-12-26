@@ -32,8 +32,8 @@ void parse_args(int argc, char **argv,
     options->format->type = TYPE_STRING;
     options->format->required = YES;
     options->format->multiple = NO;
-    options->format->answer = "ESRI_Shapefile";
     options->format->options = OGR_list_write_drivers();
+    options->format->answer = default_driver();
     options->format->description = _("Data format to write");
     
     options->layer = G_define_option();
@@ -116,7 +116,7 @@ void parse_args(int argc, char **argv,
 
     flags->multi = G_define_flag();
     flags->multi->key = 'm';
-    flags->multi->description =
+    flags->multi->description = 
 	_("Export vector data as multi-features");
     flags->multi->guisection = _("Creation");
 
@@ -126,6 +126,12 @@ void parse_args(int argc, char **argv,
 	_("Create a new empty layer in defined OGR datasource "
 	  "and exit. Nothing is read from input.");
     flags->new->guisection = _("Creation");
+
+    flags->list = G_define_flag();
+    flags->list->key = 'l';
+    flags->list->description = 
+	_("List supported output formats and exit");
+    flags->list->suppress_required = YES;
 
     G_option_requires(flags->append, options->layer, NULL);
     

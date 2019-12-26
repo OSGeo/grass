@@ -76,7 +76,7 @@ class RasterRenameTestCase(TestCase):
                 self.fail(msg)
 
     def test_overwrite_existing_raster(self):
-        """Test that existing raster is overriden if desired"""
+        """Test that existing raster is overridden if desired"""
         runivar_source = SimpleModule('r.univar', flags='g', map='rename_3')
         self.runModule(runivar_source, expecting_stdout=True)
         original_runivar_source = text_to_keyvalue(runivar_source.outputs.stdout,

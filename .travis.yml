@@ -2,17 +2,23 @@
 #         Rainer M. Krug, Rainer@krugs.de (osx)
 
 language: c
+cache: ccache
 
 matrix:
    include:
       - os: linux
-        dist: trusty
+        dist: xenial
         compiler: gcc
         sudo: required
+        env:
+            CC=gcc
+
       - os: linux
-        dist: trusty
+        dist: xenial
         compiler: clang
         sudo: required
+        env:
+            CC=clang
 
 env:
   global:
@@ -27,6 +33,9 @@ install:
 script:
   - ./.travis/$TRAVIS_OS_NAME.script.sh
 
+after_success:
+  - bash < (curl -s https://codecov.io/bash)
+
 notifications:
         email:
             recipients:
@@ -35,3 +44,5 @@ notifications:
                 - wenzeslaus@gmail.com
             on_success: change
             on_failure: always
+        irc: "chat.freenode.net#grass"
+

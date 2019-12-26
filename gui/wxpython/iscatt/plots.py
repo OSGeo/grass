@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
 import wx
+import six
 import numpy as np
 from math import ceil
 from multiprocessing import Process, Queue
@@ -24,6 +25,7 @@ from copy import deepcopy
 from iscatt.core_c import MergeArrays, ApplyColormap
 from iscatt.dialogs import ManageBusyCursorMixin
 from core.settings import UserSettings
+from gui_core.wrap import Menu
 
 try:
     import matplotlib
@@ -550,7 +552,7 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
 
 def _rendDtMemmapsToFiles(rend_dt):
 
-    for k, v in rend_dt.iteritems():
+    for k, v in six.iteritems(rend_dt):
         if 'dt' in v:
             rend_dt[k]['sh'] = v['dt'].shape
             rend_dt[k]['dt'] = v['dt'].filename
@@ -558,7 +560,7 @@ def _rendDtMemmapsToFiles(rend_dt):
 
 def _rendDtFilesToMemmaps(rend_dt):
 
-    for k, v in rend_dt.iteritems():
+    for k, v in six.iteritems(rend_dt):
         if 'dt' in v:
             rend_dt[k]['dt'] = np.memmap(filename=v['dt'], shape=v['sh'])
             del rend_dt[k]['sh']
@@ -613,7 +615,7 @@ class ScatterPlotContextMenu:
             return
 
         if event.button == 3:
-            menu = wx.Menu()
+            menu = Menu()
             menu_items = [["zoom_to_extend", _("Zoom to scatter plot extend"),
                            lambda event: self.plot.ZoomToExtend()]]
 
@@ -765,7 +767,7 @@ class PolygonDrawer:
         self.line.set_visible(vis)  # don't use the pol visibility state
 
     def get_ind_under_point(self, event):
-        'get the index of the vertex under point if within treshold'
+        'get the index of the vertex under point if within threshold'
 
         # display coords
         xy = np.asarray(self.pol.xy)
@@ -834,7 +836,7 @@ class PolygonDrawer:
             coords.append(tup)
 
         self.pol.xy = coords
-        self.line.set_data(zip(*self.pol.xy))
+        self.line.set_data(list(zip(*self.pol.xy)))
 
         self.Redraw()
 
@@ -854,7 +856,7 @@ class PolygonDrawer:
                     list(self.pol.xy[:i + 1]) +
                     [(event.xdata, event.ydata)] +
                     list(self.pol.xy[i + 1:]))
-                self.line.set_data(zip(*self.pol.xy))
+                self.line.set_data(list(zip(*self.pol.xy)))
                 break
 
         self.Redraw()
@@ -872,7 +874,7 @@ class PolygonDrawer:
                 list(self.pol.xy[1:]) +
                 [(event.xdata, event.ydata)])
 
-        self.line.set_data(zip(*self.pol.xy))
+        self.line.set_data(list(zip(*self.pol.xy)))
 
         self.Redraw()
 
@@ -901,7 +903,7 @@ class PolygonDrawer:
         elif self.moving_ver_idx == len(self.pol.xy) - 1:
             self.pol.xy[0] = x, y
 
-        self.line.set_data(zip(*self.pol.xy))
+        self.line.set_data(list(zip(*self.pol.xy)))
 
         self.canvas.restore_region(self.background)
 

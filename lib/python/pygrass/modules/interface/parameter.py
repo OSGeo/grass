@@ -22,7 +22,7 @@ def _check_value(param, value):
 
     def raiseexcpet(exc, param, ptype, value):
         """Function to modifa the error message"""
-        msg = req % (param.name, param.typedesc, ptype, value, exc.message)
+        msg = req % (param.name, param.typedesc, ptype, value, str(exc))
         if isinstance(exc, ValueError):
             raise ValueError(msg)
         elif isinstance(exc, TypeError):
@@ -200,7 +200,7 @@ class Parameter(object):
             ...                            multiple='no', type='integer',
             ...                            values=[2, 4, 6, 8], default=8))
             >>> param.get_bash()
-            u'int_number=8'
+            'int_number=8'
 
         ..
         """
@@ -220,7 +220,7 @@ class Parameter(object):
             ...                            multiple='no', type='integer',
             ...                            values=[2, 4, 6, 8], default=8))
             >>> param.get_python()
-            u'int_number=8'
+            'int_number=8'
 
         ..
         """

@@ -32,6 +32,11 @@ FILE *I_fopen_group_ref_old(const char *group)
     return I_fopen_group_file_old(group, "REF");
 }
 
+FILE *I_fopen_group_ref_old2(const char *group, const char *mapset)
+{
+    return I_fopen_group_file_old2(group, mapset, "REF");
+}
+
 /*
    FILE *
    I_fopen_group_ref_append (
@@ -53,3 +58,12 @@ FILE *I_fopen_subgroup_ref_old(const char *group, const char *subgroup)
     fd = I_fopen_subgroup_file_old(group, subgroup, "REF");
     return fd;
 }
+
+FILE *I_fopen_subgroup_ref_old2(const char *group, const char *subgroup, const char *mapset)
+{
+    FILE *fd;
+
+    fd = I_fopen_subgroup_file_old2(group, subgroup, mapset, "REF");
+    return fd;
+}
+

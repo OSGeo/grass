@@ -27,8 +27,8 @@ class Segment(object):
     def nseg(self):
         rows = self.rows()
         cols = self.cols()
-        return ((rows + self.srows - 1) / self.srows) * \
-               ((cols + self.scols - 1) / self.scols)
+        return int(((rows + self.srows - 1) / self.srows) *
+                   ((cols + self.scols - 1) / self.scols))
 
     def segments_in_mem(self):
         if self.maxmem > 0 and self.maxmem < 100:
@@ -47,7 +47,6 @@ class Segment(object):
         self.val = RTYPE[mapobj.mtype]['grass def']()
         size = ctypes.sizeof(RTYPE[mapobj.mtype]['ctypes'])
         file_name = libgis.G_tempfile()
-        #import pdb; pdb.set_trace()
         libseg.Segment_open(self.c_seg, file_name,
                             self.rows(), self.cols(),
                             self.srows, self.scols,
@@ -62,7 +61,7 @@ class Segment(object):
         """
         if file_name == '':
             file_name = libgis.G_tempfile()
-        mapobj.temp_file = file(file_name, 'w')
+        mapobj.temp_file = open(file_name, 'w')
         size = ctypes.sizeof(RTYPE[mapobj.mtype]['ctypes'])
         if fill:
             libseg.Segment_format(mapobj.temp_file.fileno(), self.rows(),

@@ -1,6 +1,6 @@
 
 /*******************************************************************************
-r.sun: This program was writen by Jaro Hofierka in Summer 1993 and re-engineered
+r.sun: This program was written by Jaro Hofierka in Summer 1993 and re-engineered
 in 1996-1999. In cooperation with Marcel Suri and Thomas Huld from JRC in Ispra
 a new version of r.sun was prepared using ESRA solar radiation formulas.
 See manual pages for details.
@@ -29,6 +29,11 @@ email: hofierka@geomodel.sk,marcel.suri@jrc.it,suri@geomodel.sk Thomas.Huld@jrc.
 /*v. 2.0 July 2002, NULL data handling, JH */
 /*v. 2.1 January 2003, code optimization by Thomas Huld, JH */
 /*v. 3.0 February 2006, several changes (shadowing algorithm, earth's curvature JH */
+/*v. 4.0 December 2016, OpenMP support Stanislav Zubal, Michal Lacko */
+
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,6 +48,7 @@ email: hofierka@geomodel.sk,marcel.suri@jrc.it,suri@geomodel.sk Thomas.Huld@jrc.
 
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/gmath.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 #include "sunradstruct.h"
@@ -103,8 +109,7 @@ char *str_step;
 
 
 struct Cell_head cellhd;
-struct pj_info iproj;
-struct pj_info oproj;
+struct pj_info iproj, oproj, tproj;
 struct History hist;
 
 
@@ -122,7 +127,11 @@ void joules2(struct SunGeometryConstDay *sunGeom,
 	     struct SolarRadVar *sunRadVar,
 	     struct GridGeometry *gridGeom,
 	     unsigned char *horizonpointer, double latitude,
-	     double longitude);
+	     double longitude,            
+	     double *Pbeam_e,
+	     double *Pdiff_e,
+	     double *Prefl_e,
+	     double *Pinsol_t);
 
 
 void calculate(double singleSlope, double singleAspect,
@@ -213,6 +222,8 @@ int main(int argc, char *argv[])
     double singleAlbedo;
     double singleLinke;
 
+    int threads;
+
     struct GModule *module;
     struct
     {
@@ -220,7 +231,7 @@ int main(int argc, char *argv[])
 	    *lin, *albedo, *longin, *alb, *latin, *coefbh, *coefdh,
 	    *incidout, *beam_rad, *insol_time, *diff_rad, *refl_rad,
 	    *glob_rad, *day, *step, *declin, *ltime, *dist, *horizon,
-	    *horizonstep, *numPartitions, *civilTime;
+	    *horizonstep, *numPartitions, *civilTime, *threads;
     }
     parm;
 
@@ -469,6 +480,15 @@ int main(int argc, char *argv[])
     parm.ltime->options = "0-24";
     parm.ltime->guisection = _("Time");
 
+    parm.threads = G_define_option();
+    parm.threads->key = "nprocs";
+    parm.threads->type = TYPE_INTEGER;
+    parm.threads->answer = "1";
+    parm.threads->options = "1-1000";
+    parm.threads->required = NO;
+    parm.threads->description =
+	_("Number of threads which will be used for parallel computing");
+
     /*
      * parm.startTime = G_define_option();
      * parm.startTime->key = "start_time";
@@ -550,6 +570,20 @@ int main(int argc, char *argv[])
     longin = parm.longin->answer;
 
     civiltime = parm.civilTime->answer;
+
+    sscanf(parm.threads->answer, "%d", &threads);
+    if (threads < 1)
+    {
+      G_warning(_("<%d> is not valid number of threads. Number of threads will be set to <%d>"),
+      threads, abs(threads));
+      threads = abs(threads);
+    }
+#if defined(_OPENMP)
+    omp_set_num_threads(threads);
+#else
+    threads = 1;
+#endif
+    G_message(_("Number of threads <%d>"), threads);
 
     if (civiltime != NULL) {
 	setUseCivilTime(TRUE);
@@ -755,12 +789,11 @@ int main(int argc, char *argv[])
 	G_free_key_value(in_proj_info);
 	G_free_key_value(in_unit_info);
 
-	/* Set output projection to latlong w/ same ellipsoid */
-	oproj.zone = 0;
-	oproj.meters = 1.;
-	sprintf(oproj.proj, "ll");
-	if ((oproj.pj = pj_latlong_from_proj(iproj.pj)) == NULL)
-	    G_fatal_error(_("Unable to set up lat/long projection parameters"));
+	oproj.pj = NULL;
+	tproj.def = NULL;
+
+	if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
+	    G_fatal_error(_("Unable to initialize coordinate transformation"));
     }
 
     if ((latin != NULL || longin != NULL) && (G_projection() == PROJECTION_LL))
@@ -790,7 +823,6 @@ int INPUT_part(int offset, double *zmax)
 {
     int finalRow, rowrevoffset;
     int numRows;
-    int numDigits;
     FCELL *cell1 = NULL, *cell2 = NULL;
     FCELL *cell3 = NULL, *cell4 = NULL, *cell5 = NULL, *cell6 = NULL, *cell7 =
 	NULL;
@@ -801,9 +833,8 @@ int INPUT_part(int offset, double *zmax)
 	fd7 = -1, row, row_rev;
     static int *fd_shad;
     int fr1 = -1, fr2 = -1;
-    int l, i, j;
+    int i, j;
     char *shad_filename;
-    char formatString[10];
     double angle_deg = 0.;
 
     finalRow = m - offset - m / numPartitions;
@@ -816,12 +847,10 @@ int INPUT_part(int offset, double *zmax)
     cell1 = Rast_allocate_f_buf();
 
     if (z == NULL) {
-	z = (float **)G_malloc(sizeof(float *) * (numRows));
-
-
-	for (l = 0; l < numRows; l++) {
-	    z[l] = (float *)G_malloc(sizeof(float) * (n));
-	}
+	if (!(z = G_alloc_fmatrix(numRows, n))) 
+        {
+            G_fatal_error(_("Out of memory"));
+        }
     }
 
     fd1 = Rast_open_old(elevin, "");
@@ -829,11 +858,10 @@ int INPUT_part(int offset, double *zmax)
     if (slopein != NULL) {
 	cell3 = Rast_allocate_f_buf();
 	if (s == NULL) {
-	    s = (float **)G_malloc(sizeof(float *) * (numRows));
-
-	    for (l = 0; l < numRows; l++) {
-		s[l] = (float *)G_malloc(sizeof(float) * (n));
-	    }
+            if (!(s = G_alloc_fmatrix(numRows, n))) 
+            {
+                G_fatal_error(_("Out of memory"));
+            }
 	}
 	fd3 = Rast_open_old(slopein, "");
 
@@ -843,11 +871,10 @@ int INPUT_part(int offset, double *zmax)
 	cell2 = Rast_allocate_f_buf();
 
 	if (o == NULL) {
-	    o = (float **)G_malloc(sizeof(float *) * (numRows));
-
-	    for (l = 0; l < numRows; l++) {
-		o[l] = (float *)G_malloc(sizeof(float) * (n));
-	    }
+	    if (!(o = G_alloc_fmatrix(numRows, n))) 
+            {
+                G_fatal_error(_("Out of memory"));
+            }
 	}
 	fd2 = Rast_open_old(aspin, "");
 
@@ -856,10 +883,10 @@ int INPUT_part(int offset, double *zmax)
     if (linkein != NULL) {
 	cell4 = Rast_allocate_f_buf();
 	if (li == NULL) {
-	    li = (float **)G_malloc(sizeof(float *) * (numRows));
-	    for (l = 0; l < numRows; l++)
-		li[l] = (float *)G_malloc(sizeof(float) * (n));
-
+            if (!(li = G_alloc_fmatrix(numRows, n))) 
+            {
+                G_fatal_error(_("Out of memory"));
+            }
 	}
 	fd4 = Rast_open_old(linkein, "");
     }
@@ -867,9 +894,10 @@ int INPUT_part(int offset, double *zmax)
     if (albedo != NULL) {
 	cell5 = Rast_allocate_f_buf();
 	if (a == NULL) {
-	    a = (float **)G_malloc(sizeof(float *) * (numRows));
-	    for (l = 0; l < numRows; l++)
-		a[l] = (float *)G_malloc(sizeof(float) * (n));
+            if (!(a = G_alloc_fmatrix(numRows, n))) 
+            {
+                G_fatal_error(_("Out of memory"));
+            }
 	}
 	fd5 = Rast_open_old(albedo, "");
     }
@@ -877,18 +905,22 @@ int INPUT_part(int offset, double *zmax)
     if (latin != NULL) {
 	cell6 = Rast_allocate_f_buf();
 	if (latitudeArray == NULL) {
-	    latitudeArray = (float **)G_malloc(sizeof(float *) * (numRows));
-	    for (l = 0; l < numRows; l++)
-		latitudeArray[l] = (float *)G_malloc(sizeof(float) * (n));
+            if (!(latitudeArray = G_alloc_fmatrix(numRows, n))) 
+            {
+                G_fatal_error(_("Out of memory"));
+            }
 	}
 	fd6 = Rast_open_old(latin, "");
     }
 
     if (longin != NULL) {
 	cell7 = Rast_allocate_f_buf();
-	longitudeArray = (float **)G_malloc(sizeof(float *) * (numRows));
-	for (l = 0; l < numRows; l++)
-	    longitudeArray[l] = (float *)G_malloc(sizeof(float) * (n));
+	if (longitudeArray == NULL) {
+            if (!(longitudeArray = G_alloc_fmatrix(numRows, n))) 
+            {
+                G_fatal_error(_("Out of memory"));
+            }
+	}
 
 	fd7 = Rast_open_old(longin, "");
     }
@@ -896,9 +928,10 @@ int INPUT_part(int offset, double *zmax)
     if (coefbh != NULL) {
 	rast1 = Rast_allocate_f_buf();
 	if (cbhr == NULL) {
-	    cbhr = (float **)G_malloc(sizeof(float *) * (numRows));
-	    for (l = 0; l < numRows; l++)
-		cbhr[l] = (float *)G_malloc(sizeof(float) * (n));
+            if (!(cbhr = G_alloc_fmatrix(numRows, n))) 
+            {
+                G_fatal_error(_("Out of memory"));
+            }
 	}
 	fr1 = Rast_open_old(coefbh, "");
     }
@@ -906,9 +939,10 @@ int INPUT_part(int offset, double *zmax)
     if (coefdh != NULL) {
 	rast2 = Rast_allocate_f_buf();
 	if (cdhr == NULL) {
-	    cdhr = (float **)G_malloc(sizeof(float *) * (numRows));
-	    for (l = 0; l < numRows; l++)
-		cdhr[l] = (float *)G_malloc(sizeof(float) * (n));
+            if (!(cdhr = G_alloc_fmatrix(numRows, n))) 
+            {
+                G_fatal_error(_("Out of memory"));
+            }
 	}
 	fr2 = Rast_open_old(coefdh, "");
     }
@@ -916,11 +950,11 @@ int INPUT_part(int offset, double *zmax)
     if (useHorizonData()) {
 	if (horizonarray == NULL) {
 	    horizonarray =
-		(unsigned char *)G_malloc(sizeof(char) * arrayNumInt *
-					  numRows * n);
+		(unsigned char *)G_calloc(arrayNumInt *
+					  numRows * n, sizeof(char));
 
-	    horizonbuf = (FCELL **) G_malloc(sizeof(FCELL *) * arrayNumInt);
-	    fd_shad = (int *)G_malloc(sizeof(int) * arrayNumInt);
+	    horizonbuf = (FCELL **) G_calloc(arrayNumInt, sizeof(FCELL *) );
+	    fd_shad = (int *)G_calloc(arrayNumInt, sizeof(int));
 	}
 	/*
 	 * if(ttime != NULL)
@@ -1298,7 +1332,11 @@ void joules2(struct SunGeometryConstDay *sunGeom,
 	     struct SunGeometryVarSlope *sunSlopeGeom,
 	     struct SolarRadVar *sunRadVar,
 	     struct GridGeometry *gridGeom, unsigned char *horizonpointer,
-	     double latitude, double longitude)
+	     double latitude, double longitude,
+	     double *Pbeam_e,
+	     double *Pdiff_e,
+	     double *Prefl_e,
+	     double *Pinsol_t)
 {
 
     double s0, dfr, dfr_rad;
@@ -1310,10 +1348,6 @@ void joules2(struct SunGeometryConstDay *sunGeom,
     double bh;
     double rr;
 
-    beam_e = 0.;
-    diff_e = 0.;
-    refl_e = 0.;
-    insol_t = 0.;
 
 
     com_par(sunGeom, sunVarGeom, gridGeom, latitude, longitude);
@@ -1326,21 +1360,21 @@ void joules2(struct SunGeometryConstDay *sunGeom,
 	if (sunVarGeom->solarAltitude > 0.) {
 	    if ((!sunVarGeom->isShadow) && (s0 > 0.)) {
 		ra = brad(s0, &bh, sunVarGeom, sunSlopeGeom, sunRadVar);	/* beam radiation */
-		beam_e += ra;
+		*Pbeam_e += ra;
 	    }
 	    else {
-		beam_e = 0.;
+		*Pbeam_e = 0.;
 		bh = 0.;
 	    }
 
 	    if ((diff_rad != NULL) || (glob_rad != NULL)) {
 		dra = drad(s0, bh, &rr, sunVarGeom, sunSlopeGeom, sunRadVar);	/* diffuse rad. */
-		diff_e += dra;
+		*Pdiff_e += dra;
 	    }
 	    if ((refl_rad != NULL) || (glob_rad != NULL)) {
 		if ((diff_rad == NULL) && (glob_rad == NULL))
 		    drad(s0, bh, &rr, sunVarGeom, sunSlopeGeom, sunRadVar);
-		refl_e += rr;	/* reflected rad. */
+		*Prefl_e += rr;	/* reflected rad. */
 	    }
 	}			/* solarAltitude */
     }
@@ -1377,9 +1411,9 @@ void joules2(struct SunGeometryConstDay *sunGeom,
 	    if (sunVarGeom->solarAltitude > 0.) {
 
 		if ((!sunVarGeom->isShadow) && (s0 > 0.)) {
-		    insol_t += dfr;
+		    *Pinsol_t += dfr;
 		    ra = brad(s0, &bh, sunVarGeom, sunSlopeGeom, sunRadVar);
-		    beam_e += dfr * ra;
+		    *Pbeam_e += dfr * ra;
 		    ra = 0.;
 		}
 		else {
@@ -1389,7 +1423,7 @@ void joules2(struct SunGeometryConstDay *sunGeom,
 		    dra =
 			drad(s0, bh, &rr, sunVarGeom, sunSlopeGeom,
 			     sunRadVar);
-		    diff_e += dfr * dra;
+		    *Pdiff_e += dfr * dra;
 		    dra = 0.;
 		}
 		if ((refl_rad != NULL) || (glob_rad != NULL)) {
@@ -1397,7 +1431,7 @@ void joules2(struct SunGeometryConstDay *sunGeom,
 			drad(s0, bh, &rr, sunVarGeom, sunSlopeGeom,
 			     sunRadVar);
 		    }
-		    refl_e += dfr * rr;
+		    *Prefl_e += dfr * rr;
 		    rr = 0.;
 		}
 	    }			/* illuminated */
@@ -1657,7 +1691,7 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     double dayRad;
     double latid_l, cos_u, cos_v, sin_u, sin_v;
     double sin_phi_l, tan_lam_l;
-    double zmax;
+    double zmax = 0;
     double longitTime = 0.;
     double locTimeOffset;
     double latitude, longitude;
@@ -1685,9 +1719,9 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 
 
     if (incidout != NULL) {
-	lumcl = (float **)G_malloc(sizeof(float *) * (m));
+	lumcl = (float **)G_calloc((m), sizeof(float *));
 	for (l = 0; l < m; l++) {
-	    lumcl[l] = (float *)G_malloc(sizeof(float) * (n));
+	    lumcl[l] = (float *)G_calloc((n), sizeof(float *));
 	}
 	for (j = 0; j < m; j++) {
 	    for (i = 0; i < n; i++)
@@ -1696,9 +1730,9 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     }
 
     if (beam_rad != NULL) {
-	beam = (float **)G_malloc(sizeof(float *) * (m));
+	beam = (float **)G_calloc((m), sizeof(float *));
 	for (l = 0; l < m; l++) {
-	    beam[l] = (float *)G_malloc(sizeof(float) * (n));
+	    beam[l] = (float *)G_calloc((n), sizeof(float *));
 	}
 
 	for (j = 0; j < m; j++) {
@@ -1708,9 +1742,9 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     }
 
     if (insol_time != NULL) {
-	insol = (float **)G_malloc(sizeof(float *) * (m));
+	insol = (float **)G_calloc((m), sizeof(float *));
 	for (l = 0; l < m; l++) {
-	    insol[l] = (float *)G_malloc(sizeof(float) * (n));
+	    insol[l] = (float *)G_calloc((n), sizeof(float *));
 	}
 
 	for (j = 0; j < m; j++) {
@@ -1720,9 +1754,9 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     }
 
     if (diff_rad != NULL) {
-	diff = (float **)G_malloc(sizeof(float *) * (m));
+	diff = (float **)G_calloc((m), sizeof(float *));
 	for (l = 0; l < m; l++) {
-	    diff[l] = (float *)G_malloc(sizeof(float) * (n));
+	    diff[l] = (float *)G_calloc((n), sizeof(float *));
 	}
 
 	for (j = 0; j < m; j++) {
@@ -1732,9 +1766,9 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     }
 
     if (refl_rad != NULL) {
-	refl = (float **)G_malloc(sizeof(float *) * (m));
+	refl = (float **)G_calloc((m), sizeof(float *));
 	for (l = 0; l < m; l++) {
-	    refl[l] = (float *)G_malloc(sizeof(float) * (n));
+	    refl[l] = (float *)G_calloc((n), sizeof(float *));
 	}
 
 	for (j = 0; j < m; j++) {
@@ -1744,9 +1778,9 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     }
 
     if (glob_rad != NULL) {
-	globrad = (float **)G_malloc(sizeof(float *) * (m));
+	globrad = (float **)G_calloc((m), sizeof(float *));
 	for (l = 0; l < m; l++) {
-	    globrad[l] = (float *)G_malloc(sizeof(float) * (n));
+	    globrad[l] = (float *)G_calloc((n), sizeof(float *));
 	}
 
 	for (j = 0; j < m; j++) {
@@ -1777,7 +1811,7 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     else {
 	setTimeOffset(0.);
     }
-
+    int shadowoffset_base = shadowoffset;
     for (j = 0; j < m; j++) {
 	G_percent(j, m - 1, 2);
 
@@ -1788,10 +1822,12 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 
 	}
 	sunVarGeom.zmax = zmax;
-
-
+        shadowoffset_base = (j % (numRows)) * n * arrayNumInt;
+    #pragma omp parallel firstprivate(q1,tan_lam_l,z1,i,shadowoffset,longitTime,coslat,coslatsq,func,latitude,longitude,sin_phi_l,latid_l,sin_u,cos_u,sin_v,cos_v,lum, gridGeom,sunGeom,sunVarGeom,sunSlopeGeom,sunRadVar, elevin,aspin,slopein,civiltime,linkein,albedo,latin,coefbh,coefdh,incidout,longin,horizon,beam_rad,insol_time,diff_rad,refl_rad,glob_rad,mapset,per,decimals,str_step )
+    {
+      #pragma omp for schedule(dynamic) 
 	for (i = 0; i < n; i++) {
-
+            shadowoffset = shadowoffset_base + (arrayNumInt * i);
 	    if (useCivilTime()) {
 		/* sun travels 15deg per hour, so 1 TZ every 15 deg and 15 TZs * 24hrs = 360deg */
 		longitTime = -longitudeArray[arrayOffset][i] / 15.;
@@ -1853,9 +1889,10 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 			longitude = gridGeom.xp;
 			latitude = gridGeom.yp;
 
-			if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0) {
-			    G_fatal_error("Error in pj_do_proj");
-			}
+			if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
+					  &longitude, &latitude, NULL) < 0)
+			    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+					   "GPJ_transform()");
 
 			lat_max = AMAX1(lat_max, latitude);
 			lat_min = AMIN1(lat_min, latitude);
@@ -1922,27 +1959,31 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 		    }
 		    else lumcl[j][i] = UNDEFZ;
 		}
+ 
+ 		double Pbeam_e = 0.;
+ 		double Pdiff_e = 0.;
+ 		double Prefl_e = 0.;
+ 		double Pinsol_t = 0.;
 
 		if (someRadiation) {
 		    joules2(&sunGeom, &sunVarGeom, &sunSlopeGeom, &sunRadVar,
 			    &gridGeom, horizonarray + shadowoffset, latitude,
-			    longitude);
+  			    longitude, &Pbeam_e, &Pdiff_e, &Prefl_e, &Pinsol_t);
 		    if (beam_rad != NULL)
-			beam[j][i] = (float)beam_e;
+ 			beam[j][i] = (float)Pbeam_e;
 		    if (insol_time != NULL)
-			insol[j][i] = (float)insol_t;
+ 			insol[j][i] = (float)Pinsol_t;
 		    /*  G_debug(3,"\n %f",insol[j][i]); */
 		    if (diff_rad != NULL)
-			diff[j][i] = (float)diff_e;
+ 			diff[j][i] = (float)Pdiff_e;
 		    if (refl_rad != NULL)
-			refl[j][i] = (float)refl_e;
+ 			refl[j][i] = (float)Prefl_e;
 		    if (glob_rad != NULL)
-			globrad[j][i] = (float)(beam_e + diff_e + refl_e);
+ 			globrad[j][i] = (float)(Pbeam_e + Pdiff_e + Prefl_e);
 		}
 
 	    }			/* undefs */
-	    shadowoffset += arrayNumInt;
-	}
+	}}
 	arrayOffset++;
     }
 

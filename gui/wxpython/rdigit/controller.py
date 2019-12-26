@@ -304,6 +304,8 @@ class RDigitController(wx.EvtHandler):
             _("Save raster map changes"),
             wx.YES_NO)
         if dlg.ShowModal() == wx.ID_YES:
+            if self._drawing:
+                self._finish()
             self._thread.Run(callable=self._exportRaster,
                              ondone=lambda event: self._updateAndQuit())
         else:
@@ -311,6 +313,9 @@ class RDigitController(wx.EvtHandler):
 
     def Save(self):
         """Saves current edits to a raster map"""
+        if self._drawing:
+            self._finish()
+
         self._thread.Run(callable=self._exportRaster,
                          ondone=lambda event: self._update())
 
@@ -468,9 +473,6 @@ class RDigitController(wx.EvtHandler):
             return
         self._running = True
 
-        if self._drawing:
-            self._finish()
-
         if len(self._all) < 1:
             new = self._editedRaster
             if '@' in self._editedRaster:
@@ -589,7 +591,7 @@ class RDigitController(wx.EvtHandler):
         :return: output raster map name as a result of digitization
         """
         output = 'x' + str(uuid.uuid4())[:8]
-        asciiFile = tempfile.NamedTemporaryFile(delete=False)
+        asciiFile = tempfile.NamedTemporaryFile(mode='w', delete=False)
         asciiFile.write('\n'.join(text))
         asciiFile.close()
 

@@ -73,6 +73,9 @@ class DBconnection(object):
     """Define a class to share common methods between TestCase."""
     path = os.path.join(tmp.gettempdir(), randstr(prefix='temp', suffix='.db'))
     connection = sqlite3.connect(get_path(path))
+    for t in (np.int8, np.int16, np.int32, np.int64, np.uint8,
+              np.uint16, np.uint32, np.uint64):
+        sqlite3.register_adapter(t, int)
     columns = [('cat', 'INTEGER PRIMARY KEY'),
                ('cint', 'INT'),
                ('creal', 'REAL'),

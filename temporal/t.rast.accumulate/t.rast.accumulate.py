@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 ############################################################################
 #
@@ -6,11 +6,17 @@
 # AUTHOR(S):    Soeren Gebbert
 #
 # PURPOSE:      Compute cyclic accumulations of a space time raster dataset
-# COPYRIGHT:    (C) 2013 - 2014 by the GRASS Development Team
+# COPYRIGHT:    (C) 2013-2017 by the GRASS Development Team
 #
-#               This program is free software under the GNU General Public
-#               License (version 2). Read the file COPYING that comes with GRASS
-#               for details.
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
 #
 #############################################################################
 
@@ -390,7 +396,7 @@ def main():
                 suffix = tgis.create_time_suffix(map)
                 output_map_name = "{ba}_{su}".format(ba=base, su=suffix)
             else:
-                output_map_name = tgis.create_numeric_suffic(base, count, time_suffix)
+                output_map_name = tgis.create_numeric_suffix(base, count, time_suffix)
 
             output_map_id = map.build_id(output_map_name, mapset)
             output_map = input_strds.get_new_map_instance(output_map_id)

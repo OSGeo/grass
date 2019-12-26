@@ -18,7 +18,7 @@ from grass.gunittest.gmodules import SimpleModule
 
 import os
 
-FULL_TOOLBOXES_OUTPUT = """\
+FULL_TOOLBOXES_OUTPUT = u"""\
 Hydrology (HY)
 * r.stream.basins
 * r.stream.channel
@@ -45,7 +45,7 @@ class TestToolboxesMetadata(TestCase):
         module = SimpleModule('g.extension', flags='lt', url=self.url)
         self.assertModule(module)
         stdout = module.outputs.stdout
-        self.assertLooksLike(stdout, FULL_TOOLBOXES_OUTPUT)
+        self.assertMultiLineEqual(stdout, FULL_TOOLBOXES_OUTPUT)
 
 
 if __name__ == '__main__':

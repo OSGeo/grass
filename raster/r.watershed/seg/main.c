@@ -36,7 +36,7 @@ int ocs_alloced;
 double half_res, diag, max_length, dep_slope;
 int bas_thres, tot_parts;
 SSEG astar_pts;
-BSEG s_b;
+BSEG s_b, rtn;
 CSEG dis, alt, bas, haf, r_h, dep;
 SSEG watalt, aspflag;
 DSEG slp, s_l, s_g, l_s, ril;
@@ -49,9 +49,10 @@ char drain[3][3] = { {7, 6, 5}, {8, 0, 4}, {1, 2, 3} };
 char updrain[3][3] = { {3, 2, 1}, {4, 0, 8}, {5, 6, 7} };
 int nextdr[8] = { 1, -1, 0, 0, -1, 1, 1, -1 };
 int nextdc[8] = { 0, 0, -1, 1, 1, -1, 1, -1 };
+
 char ele_name[GNAME_MAX], pit_name[GNAME_MAX];
 char run_name[GNAME_MAX], ob_name[GNAME_MAX];
-char ril_name[GNAME_MAX], dep_name[GNAME_MAX];
+char ril_name[GNAME_MAX], rtn_name[GNAME_MAX], dep_name[GNAME_MAX];
 const char *this_mapset;
 char seg_name[GNAME_MAX], bas_name[GNAME_MAX], haf_name[GNAME_MAX],
     thr_name[8];
@@ -61,7 +62,7 @@ char wat_name[GNAME_MAX], asp_name[GNAME_MAX];
 char tci_name[GNAME_MAX], spi_name[GNAME_MAX];
 char arm_name[GNAME_MAX], dis_name[GNAME_MAX];
 char ele_flag, pit_flag, run_flag, dis_flag, ob_flag;
-char wat_flag, asp_flag, arm_flag, ril_flag, dep_flag;
+char wat_flag, asp_flag, arm_flag, ril_flag, dep_flag, rtn_flag;
 char bas_flag, seg_flag, haf_flag, er_flag, tci_flag, spi_flag, atanb_flag;
 char st_flag, sb_flag, sg_flag, sl_flag, ls_flag;
 FILE *fp;
@@ -71,7 +72,7 @@ FILE *fp;
 int main(int argc, char *argv[])
 {
     int num_open_segs;
-    
+
     zero = 0;
     one = 1;
     d_zero = 0.0;

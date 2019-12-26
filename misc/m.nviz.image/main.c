@@ -18,6 +18,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include <grass/gis.h>
 #include <grass/colors.h>
@@ -25,8 +26,6 @@
 #include <grass/nviz.h>
 
 #include "local_proto.h"
-
-static void swap_gl();
 
 int main(int argc, char *argv[])
 {
@@ -71,10 +70,15 @@ int main(int argc, char *argv[])
     G_asprintf(&output_name, "%s.%s", params->output->answer,
 	       params->format->answer);
 
+    if (access(output_name, F_OK) == 0) {
+	if (G_check_overwrite(argc, argv))
+	    G_warning(_("File <%s> already exists and will be overwritten"), output_name);
+	else
+	    G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"), params->output->key, output_name);
+    }
+
     GS_libinit();
     GVL_libinit();
-
-    GS_set_swap_func(swap_gl);
 
     /* define render window */
     offscreen = Nviz_new_render_window();
@@ -236,7 +240,9 @@ int main(int argc, char *argv[])
     if (strcmp(params->format->answer, "tif") == 0)
 	ret = write_img(output_name, FORMAT_TIF);
 
-    if (!ret)
+    if (ret == 1)
+	G_fatal_error(_("Failed to write image"));
+    else if (ret == 2)
 	G_fatal_error(_("Unsupported output format"));
 
     G_done_msg(_("File <%s> created."), output_name);
@@ -248,9 +254,4 @@ int main(int argc, char *argv[])
     G_free((void *)params);
 
     exit(EXIT_SUCCESS);
-}
-
-void swap_gl()
-{
-    return;
 }

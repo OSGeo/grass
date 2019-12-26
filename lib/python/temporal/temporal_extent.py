@@ -20,8 +20,6 @@ for details.
 :authors: Soeren Gebbert
 """
 from __future__ import print_function
-# i18N
-import gettext
 from .base import SQLDatabaseInterface
 from .core import init
 from datetime import datetime
@@ -58,8 +56,8 @@ class TemporalExtent(SQLDatabaseInterface):
          | Start time:................. 2001-01-01 00:00:00
          | End time:................... 2005-01-01 00:00:00
         >>> A.print_shell_info()
-        start_time=2001-01-01 00:00:00
-        end_time=2005-01-01 00:00:00
+        start_time='2001-01-01 00:00:00'
+        end_time='2005-01-01 00:00:00'
         >>> # relative time
         >>> A = TemporalExtent(table="raster_absolute_time",
         ... ident="soil@PERMANENT", start_time=0, end_time=1 )
@@ -73,8 +71,8 @@ class TemporalExtent(SQLDatabaseInterface):
          | Start time:................. 0
          | End time:................... 1
         >>> A.print_shell_info()
-        start_time=0
-        end_time=1
+        start_time='0'
+        end_time='1'
 
     """
     def __init__(self, table=None, ident=None, start_time=None, end_time=None):
@@ -1038,8 +1036,8 @@ class TemporalExtent(SQLDatabaseInterface):
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
-        print("start_time=" + str(self.get_start_time()))
-        print("end_time=" + str(self.get_end_time()))
+        print("start_time='{}'".format(str(self.get_start_time())))
+        print("end_time='{}'".format(str(self.get_end_time())))
 
 ###############################################################################
 
@@ -1119,9 +1117,9 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
              | Granularity:................ 1 days
              | Temporal type of maps:...... interval
             >>> A.print_shell_info()
-            start_time=2001-01-01 00:00:00
-            end_time=2005-01-01 00:00:00
-            granularity=1 days
+            start_time='2001-01-01 00:00:00'
+            end_time='2005-01-01 00:00:00'
+            granularity='1 days'
             map_time=interval
 
     """
@@ -1188,7 +1186,7 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
     def print_shell_info(self):
         """Print information about this class in shell style"""
         AbsoluteTemporalExtent.print_shell_info(self)
-        print("granularity=" + str(self.get_granularity()))
+        print("granularity='{}'".format(str(self.get_granularity())))
         print("map_time=" + str(self.get_map_time()))
 
 ###############################################################################
@@ -1243,8 +1241,8 @@ class RelativeTemporalExtent(TemporalExtent):
              | End time:................... 1
              | Relative time unit:......... years
             >>> A.print_shell_info()
-            start_time=0
-            end_time=1
+            start_time='0'
+            end_time='1'
             unit=years
 
     """
@@ -1367,8 +1365,8 @@ class STDSRelativeTime(RelativeTemporalExtent):
              | Granularity:................ 5
              | Temporal type of maps:...... interval
             >>> A.print_shell_info()
-            start_time=0
-            end_time=1
+            start_time='0'
+            end_time='1'
             unit=years
             granularity=5
             map_time=interval

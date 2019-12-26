@@ -16,8 +16,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-# i18N
-import gettext
 from datetime import datetime
 import grass.script as gscript
 from .core import get_tgis_message_interface, init_dbif, get_current_mapset
@@ -68,6 +66,8 @@ def register_maps_in_space_time_dataset(
     """
     start_time_in_file = False
     end_time_in_file = False
+    band_reference_in_file = False
+
     msgr = get_tgis_message_interface()
 
     # Make sure the arguments are of type string
@@ -145,16 +145,29 @@ def register_maps_in_space_time_dataset(
 
             line_list = line.split(fs)
 
-            # Detect start and end time
+            # Detect start and end time (and band reference)
             if len(line_list) == 2:
                 start_time_in_file = True
                 end_time_in_file = False
+                band_reference_in_file = False
             elif len(line_list) == 3:
                 start_time_in_file = True
+                # Check if last column is an end time or a band reference
+                time_object = check_datetime_string(line_list[2])
+                if not sp.is_time_relative() and isinstance(time_object, datetime):
+                    end_time_in_file = True
+                    band_reference_in_file = False
+                else:
+                    end_time_in_file = False
+                    band_reference_in_file = True
+            elif len(line_list) == 4:
+                start_time_in_file = True
                 end_time_in_file = True
+                band_reference_in_file = True
             else:
                 start_time_in_file = False
                 end_time_in_file = False
+                band_reference_in_file = False
 
             mapname = line_list[0].strip()
             row = {}
@@ -165,6 +178,10 @@ def register_maps_in_space_time_dataset(
 
             if start_time_in_file and not end_time_in_file:
                 row["start"] = line_list[1].strip()
+
+            if band_reference_in_file:
+                idx = 3 if end_time_in_file else 2
+                row["band_reference"] = line_list[idx].strip().upper() # case-insensitive
 
             row["id"] = AbstractMapDataset.build_id(mapname, mapset)
 
@@ -203,6 +220,12 @@ def register_maps_in_space_time_dataset(
             start = maplist[count]["start"]
         if "end" in maplist[count]:
             end = maplist[count]["end"]
+
+        # Use the band reference from file
+        if "band_reference" in maplist[count]:
+            band_reference = maplist[count]["band_reference"]
+        else:
+            band_reference = None
 
         is_in_db = False
 
@@ -304,6 +327,16 @@ def register_maps_in_space_time_dataset(
                                      map=map, start=start, end=end, unit=unit,
                                      increment=increment, mult=count,
                                      interval=interval)
+
+        # Set the band reference (only raster type supported)
+        if band_reference:
+            # Band reference defined in input file
+            # -> update raster metadata
+            # -> write band identifier to GRASS data base
+            map.set_band_reference(band_reference)
+        else:
+            # Try to read band reference from GRASS data base if defined
+            map.read_band_reference_from_grass()
 
         if is_in_db:
             #  Gather the SQL update statement

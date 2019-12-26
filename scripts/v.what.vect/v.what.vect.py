@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 ############################################################################
 #
@@ -52,7 +52,7 @@
 #%option
 #% key: dmax
 #% type: double
-#% description: Maximum query distance in map units
+#% description: Maximum query distance in map units (meters for ll)
 #% answer: 0.0
 #% required: no
 #%end

@@ -57,6 +57,35 @@ struct dblinks *Vect_new_dblinks_struct(void)
     return p;
 }
 
+static int name2sql(char *name)
+{
+    char *s = name;
+    int ret;
+    
+    if (!s)
+	return 0;
+    
+    /* sql-compliant name must start with letter */
+    if (!((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z'))) {
+	G_warning(_("Name <%s> is not SQL compliant. Must start with a letter."),
+		  name);
+	return 0;
+    }
+
+    ret = 1;
+    /* convert illegal characters to underscore */
+    for (s++; *s; s++) {
+	if (!((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z') ||
+	      (*s >= '0' && *s <= '9') || *s == '_')) {
+	    G_debug(2, "Character '%c' not allowed.", *s);
+	    *s = '_';
+	    ret++;
+	}
+    }
+    
+    return ret;
+}
+
 /*!
   \brief Reset dblinks structure (number of fields)
 
@@ -275,7 +304,11 @@ int Vect_add_dblink(struct dblinks *p, int number, const char *name,
     if (name != NULL) {
 	p->field[p->n_fields].name = G_store(name);
 	/* replace all spaces with underscore, otherwise dbln can't be read */
-	G_strchg(p->field[p->n_fields].name, ' ', '_');
+	/* G_strchg(p->field[p->n_fields].name, ' ', '_'); */
+	if (!name2sql(p->field[p->n_fields].name)) {
+	    G_free(p->field[p->n_fields].name);
+	    p->field[p->n_fields].name = NULL;
+	}
     }
     else
 	p->field[p->n_fields].name = NULL;
@@ -359,13 +392,27 @@ struct field_info *Vect_default_field_info(struct Map_info *Map,
 
     fi->number = field;
 
+    /* Field name */
+    fi->name = NULL;
+    if (field_name && *field_name) {
+	fi->name = G_store(field_name);
+	if (!name2sql(fi->name)) {
+	    G_free(fi->name);
+	    fi->name = NULL;
+	}
+    }
+
     /* Table name */
     if (type == GV_1TABLE) {
 	sprintf(buf, "%s", Map->name);
     }
     else {
-	if (field_name != NULL && strlen(field_name) > 0)
-	    sprintf(buf, "%s_%s", Map->name, field_name);
+	if (fi->name != NULL && strlen(fi->name) > 0) {
+	    sprintf(buf, "%s_%s", Map->name, fi->name);
+	    if (!name2sql(buf)) {
+		sprintf(buf, "%s_%d", Map->name, field);
+	    }
+	}
 	else
 	    sprintf(buf, "%s_%d", Map->name, field);
     }
@@ -378,10 +425,8 @@ struct field_info *Vect_default_field_info(struct Map_info *Map,
 	fi->table = G_store(buf);
     }
 
-    /* Field name */
-    if (field_name)
-	fi->name = G_store(field_name);
-    else
+    /* Field name still empty */
+    if (!fi->name)
 	fi->name = G_store(buf);
 
     fi->key = G_store(GV_KEY_COLUMN);	/* Should be: id/fid/gfid/... ? */

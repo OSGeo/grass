@@ -8,9 +8,10 @@ import ctypes
 from operator import itemgetter
 
 import grass.lib.raster as libraster
+from grass.exceptions import ImplementationError
 
 from grass.pygrass.errors import GrassError
-
+from grass.pygrass.utils import decode
 from grass.pygrass.raster.raster_type import TYPE as RTYPE
 
 
@@ -65,7 +66,6 @@ class Category(list):
 
     def _set_mtype(self, mtype):
         if mtype.upper() not in ('CELL', 'FCELL', 'DCELL'):
-            #fatal(_("Raser type: {0} not supported".format(mtype) ) )
             raise ValueError(_("Raster type: {0} not supported".format(mtype)))
         self._mtype = mtype
         self._gtype = RTYPE[self.mtype]['grass type']
@@ -146,11 +146,11 @@ class Category(list):
         """
         min_cat = ctypes.pointer(RTYPE[self.mtype]['grass def']())
         max_cat = ctypes.pointer(RTYPE[self.mtype]['grass def']())
-        lab = libraster.Rast_get_ith_cat(ctypes.byref(self.c_cats),
-                                         index,
-                                         ctypes.cast(min_cat, ctypes.c_void_p),
-                                         ctypes.cast(max_cat, ctypes.c_void_p),
-                                         self._gtype)
+        lab = decode(libraster.Rast_get_ith_cat(ctypes.byref(self.c_cats),
+                                                index,
+                                                ctypes.cast(min_cat, ctypes.c_void_p),
+                                                ctypes.cast(max_cat, ctypes.c_void_p),
+                                                self._gtype))
         # Manage C function Errors
         if lab == '':
             raise GrassError(_("Error executing: Rast_get_ith_cat"))
@@ -270,8 +270,8 @@ class Category(list):
         """Not implemented yet.
         void Rast_set_cats_fmt()
         """
-        #TODO: add
-        pass
+        # TODO: add
+        raise ImplementationError("set_cats_fmt() is not implemented yet.")
 
     def read_rules(self, filename, sep=':'):
         """Copy categories from a rules file, default separetor is ':', the
@@ -300,7 +300,6 @@ class Category(list):
                     label, min_cat, max_cat = cat
                 else:
                     raise TypeError("Row length is greater than 3")
-                #import pdb; pdb.set_trace()
                 self.append((label, min_cat, max_cat))
 
     def write_rules(self, filename, sep=':'):

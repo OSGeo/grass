@@ -18,6 +18,8 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
+from __future__ import print_function
+
 import sys
 
 import wx
@@ -27,7 +29,6 @@ from wx.py.version import VERSION
 import grass.script as grass
 from grass.script.utils import try_remove
 
-from core.utils import _
 from gui_core.wrap import Button
 
 
@@ -65,7 +66,7 @@ class PyShellWindow(wx.Panel):
         self._layout()
 
     def _displayhook(self, value):
-        print value  # do not modify __builtin__._
+        print(value)  # do not modify __builtin__._
 
     def _layout(self):
         sizer = wx.BoxSizer(wx.VERTICAL)

@@ -55,9 +55,9 @@ class TestRasterContour(TestCase):
 
         #self.assertModule("t.info",  type="stvds", flags="g",  input="result")
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                        end_time=2002-04-01 00:00:00
-                        granularity=3 months
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                        end_time='2002-04-01 00:00:00'
+                        granularity='3 months'
                         map_time=interval
                         number_of_maps=5
                         lines=28
@@ -76,9 +76,9 @@ class TestRasterContour(TestCase):
 
         #self.assertModule("t.info",  type="stvds", flags="g",  input="result")
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                        end_time=2002-01-01 00:00:00
-                        granularity=3 months
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                        end_time='2002-01-01 00:00:00'
+                        granularity='3 months'
                         map_time=interval
                         number_of_maps=4
                         lines=28
@@ -98,9 +98,9 @@ class TestRasterContour(TestCase):
 
         #self.assertModule("t.info",  type="stvds", flags="g",  input="result")
 
-        tinfo_string="""start_time=2001-04-01 00:00:00
-                        end_time=2002-01-01 00:00:00
-                        granularity=3 months
+        tinfo_string="""start_time='2001-04-01 00:00:00'
+                        end_time='2002-01-01 00:00:00'
+                        granularity='3 months'
                         map_time=interval
                         number_of_maps=3
                         lines=21
@@ -119,9 +119,9 @@ class TestRasterContour(TestCase):
 
         #self.assertModule("t.info",  type="stvds", flags="g",  input="result")
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                        end_time=2002-01-01 00:00:00
-                        granularity=3 months
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                        end_time='2002-01-01 00:00:00'
+                        granularity='3 months'
                         map_time=interval
                         number_of_maps=4
                         lines=28
@@ -140,9 +140,9 @@ class TestRasterContour(TestCase):
 
         #self.assertModule("t.info",  type="stvds", flags="g",  input="result")
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                        end_time=2002-01-01 00:00:00
-                        granularity=3 months
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                        end_time='2002-01-01 00:00:00'
+                        granularity='3 months'
                         map_time=interval
                         number_of_maps=4
                         lines=28
@@ -162,9 +162,9 @@ class TestRasterContour(TestCase):
 
         #self.assertModule("t.info",  type="stvds", flags="g",  input="result")
 
-        tinfo_string="""start_time=2001-04-01 00:00:00
-                        end_time=2002-01-01 00:00:00
-                        granularity=3 months
+        tinfo_string="""start_time='2001-04-01 00:00:00'
+                        end_time='2002-01-01 00:00:00'
+                        granularity='3 months'
                         map_time=interval
                         number_of_maps=3
                         lines=21

@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
@@ -40,13 +41,14 @@
 int patch(struct Map_info *, struct Map_info *, int, int *,
 	  struct Map_info *);
 int copy_records(dbDriver * driver_in, dbString * table_name_in,
-		 dbDriver * driver_out, dbString * table_name_out, int, int);
+		 dbDriver * driver_out, dbString * table_name_out,
+		 char *, int, int);
 int max_cat(struct Map_info *Map, int layer);
 
 int main(int argc, char *argv[])
 {
     int i, ret;
-    char *in_name, *out_name, *bbox_name;
+    char *in_name, *out_name, *meta_name, *bbox_name;
     struct GModule *module;
     struct Option *old, *new, *bbox;
     struct Flag *append, *table_flag, *no_topo;
@@ -62,6 +64,8 @@ int main(int argc, char *argv[])
     int keycol = -1;
     int maxcat = 0;
     int out_is_3d = WITHOUT_Z;
+    char colnames[4096];
+    double snap = -1;
 
     G_gisinit(argv[0]);
 
@@ -139,6 +143,7 @@ int main(int argc, char *argv[])
     table_out = NULL;
     fi_in = NULL;
     fi_out = NULL;
+    *colnames = '\0';
     /* Check input table structures */
     if (do_table) {
 	if (append->answer) {
@@ -168,6 +173,12 @@ int main(int argc, char *argv[])
 	    }
 	    Vect_close(&OutMap);
 	}
+
+	/* Get map name the table columns are derived from */
+	if (append->answer)
+	    meta_name = out_name;
+	else
+	    meta_name = old->answers[0];
 
 	i = 0;
 	while (old->answers[i]) {
@@ -207,43 +218,95 @@ int main(int argc, char *argv[])
 		db_close_database_shutdown_driver(driver_in);
 	    }
 
-	    /* Check the structure */
+	    /* Get the output table structure */
+	    if (i == 0 ) {
+		int ncols, col;
+
+		ncols = db_get_table_number_of_columns(table_out);
+
+		for (col = 0; col < ncols; col++) {
+		    dbColumn *column_out;
+
+		    column_out = db_get_table_column(table_out, col);
+		    if (col == 0)
+			strcpy(colnames, db_get_column_name(column_out));
+		    else {
+			char tmpbuf[4096];
+
+			sprintf(tmpbuf, ",%s", db_get_column_name(column_out));
+			strcat(colnames, tmpbuf);
+		    }
+		}
+	    }
+
+	    /* Check the table structure */
 	    if (i > 0 || append->answer) {
 		int ncols, col;
 
 		if (!table_in ||
 		    (table_out && !table_in) || (!table_out && table_in)) {
-		    G_fatal_error(_("Missing table"));
+		    G_fatal_error(_("Missing table for <%s>"), in_name);
 		}
 
 		if (G_strcasecmp(fi_in->key, key) != 0) {
-		    G_fatal_error(_("Key columns differ"));
+		    G_fatal_error(
+			_("Key (category) column names differ:"
+			  " <%s> from <%s> and <%s> from <%s>"),
+			fi_in->key, in_name,
+			key, meta_name);
 		}
 
 		ncols = db_get_table_number_of_columns(table_out);
 
 		if (ncols != db_get_table_number_of_columns(table_in)) {
-		    G_fatal_error(_("Number of columns differ"));
+		    G_fatal_error(
+			_("Number of columns differ:"
+			  " %d in <%s> and %d in <%s>"),
+			db_get_table_number_of_columns(table_in),
+			in_name, ncols, meta_name);
 		}
 
 		for (col = 0; col < ncols; col++) {
+		    int col2, colmatch;
 		    dbColumn *column_out, *column_in;
 		    int ctype_in, ctype_out;
 
-		    column_in = db_get_table_column(table_in, col);
 		    column_out = db_get_table_column(table_out, col);
+		    col2 = 0;
+		    colmatch = -1;
+		    column_in = NULL;
+		    /* find column with same name */
+		    while (colmatch < 0 && col2 < ncols) {
+			column_in = db_get_table_column(table_in, col2);
 
-		    if (G_strcasecmp(db_get_column_name(column_in),
-				     db_get_column_name(column_out)) != 0) {
-			G_fatal_error(_("Column names differ"));
+			if (G_strcasecmp(db_get_column_name(column_in),
+					 db_get_column_name(column_out)) == 0) {
+			    colmatch = col2;
+			}
+			col2++;
 		    }
+		    if (colmatch < 0) {
+			G_fatal_error(_("No column <%s> in input map <%s>"),
+			              db_get_column_name(column_out),
+				      in_name);
+		    }
+
 		    ctype_in =
 			db_sqltype_to_Ctype(db_get_column_sqltype(column_in));
 		    ctype_out =
 			db_sqltype_to_Ctype(db_get_column_sqltype
 					    (column_out));
 		    if (ctype_in != ctype_out) {
-			G_fatal_error(_("Column types differ"));
+			G_fatal_error(
+			    _("Column types differ: "
+			      " <%s> from <%s> is <%s> and"
+			      " <%s> from <%s> is <%s>"),
+			    db_get_column_name(column_in),
+			    in_name,
+			    db_sqltype_name(db_get_column_sqltype(column_in)),
+			    db_get_column_name(column_out),
+			    meta_name,
+			    db_sqltype_name(db_get_column_sqltype(column_out)));
 		    }
 		    if (ctype_in == DB_C_TYPE_STRING &&
 			db_get_column_length(column_in) !=
@@ -396,7 +459,8 @@ int main(int argc, char *argv[])
 
 		db_set_string(&table_name_in, fi_in->table);
 		copy_records(driver_in, &table_name_in,
-			     driver_out, &table_name_out, keycol, add_cat);
+			     driver_out, &table_name_out,
+			     colnames, keycol, add_cat);
 
 		if (driver_in != driver_out)
 		    db_close_database_shutdown_driver(driver_in);
@@ -418,6 +482,108 @@ int main(int argc, char *argv[])
     if (!no_topo->answer) {
 	if (append->answer)
 	    Vect_build_partial(&OutMap, GV_BUILD_NONE);
+
+	Vect_build_partial(&OutMap, GV_BUILD_BASE);
+
+	if (Vect_get_num_primitives(&OutMap, GV_BOUNDARY) > 0) {
+	    int nmodif;
+	    struct bound_box box;
+	    double xmax, ymax, min_snap, max_snap;
+	    int exp;
+	    char *separator = "-----------------------------------------------------";
+
+	    Vect_get_map_box(&OutMap, &box);
+
+	    if (abs(box.E) > abs(box.W))
+		xmax = abs(box.E);
+	    else
+		xmax = abs(box.W);
+	    if (abs(box.N) > abs(box.S))
+		ymax = abs(box.N);
+	    else
+		ymax = abs(box.S);
+
+	    if (xmax < ymax)
+		xmax = ymax;
+
+	    /* double precision ULP */
+	    min_snap = frexp(xmax, &exp);
+	    exp -= 52;
+	    min_snap = ldexp(min_snap, exp);
+	    /* human readable */
+	    min_snap = log10(min_snap);
+	    if (min_snap < 0)
+		min_snap = (int)min_snap;
+	    else
+		min_snap = (int)min_snap + 1;
+
+	    /* single precision ULP */
+	    max_snap = frexp(xmax, &exp);
+	    exp -= 23;
+	    max_snap = ldexp(max_snap, exp);
+	    /* human readable */
+	    max_snap = log10(max_snap);
+	    if (max_snap < 0)
+		max_snap = (int)max_snap;
+	    else
+		max_snap = (int)max_snap + 1;
+
+	    snap = (min_snap + max_snap) / 2 - 1.5;
+	    snap = pow(10, snap);
+
+	    if (snap >= 0) {
+		G_message("%s", separator);
+		G_message(_("Snapping boundaries (threshold = %.3e)..."), snap);
+		Vect_snap_lines(&OutMap, GV_BOUNDARY, snap, NULL);
+	    }
+
+	    G_message("%s", separator);
+	    G_message(_("Breaking polygons..."));
+	    Vect_break_polygons(&OutMap, GV_BOUNDARY, NULL);
+
+	    G_message("%s", separator);
+	    G_message(_("Removing duplicates..."));
+	    Vect_remove_duplicates(&OutMap, GV_BOUNDARY, NULL);
+
+	    /* in non-pathological cases, the bulk of the cleaning is now done */
+
+	    /* Vect_clean_small_angles_at_nodes() can change the geometry so that new intersections
+	     * are created. We must call Vect_break_lines(), Vect_remove_duplicates()
+	     * and Vect_clean_small_angles_at_nodes() until no more small angles are found */
+	    do {
+		G_message("%s", separator);
+		G_message(_("Breaking boundaries..."));
+		Vect_break_lines(&OutMap, GV_BOUNDARY, NULL);
+
+		G_message("%s", separator);
+		G_message(_("Removing duplicates..."));
+		Vect_remove_duplicates(&OutMap, GV_BOUNDARY, NULL);
+
+		G_message("%s", separator);
+		G_message(_("Cleaning boundaries at nodes..."));
+		nmodif =
+		    Vect_clean_small_angles_at_nodes(&OutMap, GV_BOUNDARY, NULL);
+	    } while (nmodif > 0);
+
+	    /* merge boundaries */
+	    G_message("%s", separator);
+	    G_message(_("Merging boundaries..."));
+	    Vect_merge_lines(&OutMap, GV_BOUNDARY, NULL, NULL);
+
+	    G_message("%s", separator);
+	    G_message(_("Removing dangles..."));
+	    Vect_remove_dangles(&OutMap, GV_BOUNDARY, -1.0, NULL);
+
+	    G_message("%s", separator);
+	    Vect_build_partial(&OutMap, GV_BUILD_ALL);
+
+	    G_message(_("Removing bridges..."));
+	    Vect_remove_bridges(&OutMap, NULL, &nmodif, NULL);
+
+	    /* Boundaries are hopefully clean, build areas */
+	    G_message("%s", separator);
+	    Vect_build_partial(&OutMap, GV_BUILD_NONE);
+	}
 	Vect_build(&OutMap);
     }
     Vect_close(&OutMap);
@@ -444,17 +610,22 @@ int main(int argc, char *argv[])
 
 int copy_records(dbDriver * driver_in, dbString * table_name_in,
 		 dbDriver * driver_out, dbString * table_name_out,
-		 int keycol, int add_cat)
+		 char *colnames, int keycol, int add_cat)
 {
     int ncols, col;
     dbCursor cursor;
     dbString value_str, sql;
     dbTable *table_in;
+    char tmpbuf[4096];
 
     db_init_string(&value_str);
     db_init_string(&sql);
 
-    db_set_string(&sql, "select * from ");
+    if (colnames && *colnames)
+	sprintf(tmpbuf, "select %s from ", colnames);
+    else
+	sprintf(tmpbuf, "select * from ");
+    db_set_string(&sql, tmpbuf);
     db_append_string(&sql, db_get_string(table_name_in));
 
     if (db_open_select_cursor(driver_in, &sql, &cursor, DB_SEQUENTIAL) !=

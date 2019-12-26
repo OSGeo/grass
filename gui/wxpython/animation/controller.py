@@ -17,9 +17,9 @@ import os
 import wx
 
 from core.gcmd import GException, GError, GMessage
-from core.utils import _
 from grass.imaging import writeAvi, writeGif, writeIms, writeSwf
 from core.settings import UserSettings
+from gui_core.wrap import EmptyImage, ImageFromBitmap
 
 from animation.temporal_manager import TemporalManager
 from animation.dialogs import InputDialog, EditDialog, ExportDialog
@@ -44,7 +44,7 @@ class AnimationController(wx.EvtHandler):
         self.temporalMode = None
         self.animationData = []
 
-        self.timer = wx.Timer(self, id=wx.NewId())
+        self.timer = wx.Timer(self, id=wx.ID_ANY)
 
         self.animations = animations
         self.bitmapPool = bitmapPool
@@ -252,6 +252,7 @@ class AnimationController(wx.EvtHandler):
             animationData=animData)
         dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_CANCEL:
+            dlg.UnInit()
             dlg.Destroy()
             return
         dlg.Destroy()
@@ -324,7 +325,6 @@ class AnimationController(wx.EvtHandler):
         self._updateAnimations(
             activeIndices=indices,
             mapNamesDict=mapNamesDict)
-        wx.Yield()
         self._updateBitmapData()
         # if running:
         #     self.PauseAnimation(False)
@@ -539,9 +539,9 @@ class AnimationController(wx.EvtHandler):
 
         images = []
         busy = wx.BusyInfo(
-            message=_("Preparing export, please wait..."),
+            _("Preparing export, please wait..."),
             parent=self.frame)
-        wx.Yield()
+        wx.GetApp().Yield()
         lastBitmaps = {}
         fgcolor = UserSettings.Get(
             group='animation',
@@ -552,7 +552,7 @@ class AnimationController(wx.EvtHandler):
             key='font',
             subkey='bgcolor')
         for frameIndex in range(frameCount):
-            image = wx.EmptyImage(*size)
+            image = EmptyImage(*size)
             image.Replace(0, 0, 0, 255, 255, 255)
             # collect bitmaps of all windows and paste them into the one
             for i in animWinIndex:
@@ -569,14 +569,14 @@ class AnimationController(wx.EvtHandler):
                     bitmap = self.bitmapProvider.GetBitmap(frameId)
                     lastBitmaps[i] = bitmap
 
-                im = wx.ImageFromBitmap(lastBitmaps[i])
+                im = ImageFromBitmap(lastBitmaps[i])
 
                 # add legend if used
                 legend = legends[i]
                 if legend:
                     legendBitmap = self.bitmapProvider.LoadOverlay(legend)
                     x, y = self.mapwindows[i].GetOverlayPos()
-                    legImage = wx.ImageFromBitmap(legendBitmap)
+                    legImage = ImageFromBitmap(legendBitmap)
                     # not so nice result, can we handle the transparency
                     # otherwise?
                     legImage.ConvertAlphaToMask()
@@ -621,9 +621,9 @@ class AnimationController(wx.EvtHandler):
 
         # export
         pilImages = [WxImageToPil(image) for image in images]
-        busy = wx.BusyInfo(message=_("Exporting animation, please wait..."),
+        busy = wx.BusyInfo(_("Exporting animation, please wait..."),
                            parent=self.frame)
-        wx.Yield()
+        wx.GetApp().Yield()
         try:
             if exportInfo['method'] == 'sequence':
                 filename = os.path.join(

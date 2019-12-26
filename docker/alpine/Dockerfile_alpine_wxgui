@@ -1,0 +1,249 @@
+FROM alpine:edge
+
+# Based on:
+# https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
+LABEL authors="Markus Neteler"
+LABEL maintainer="neteler@osgeo.org"
+
+# PACKAGES VERSIONS
+ARG PYTHON_VERSION=3
+
+# ================
+# CONFIG VARIABLES
+# ================
+
+# set configuration options, with wxGUI
+ENV GRASS_CONFIG="\
+      --enable-largefile \
+      --with-cxx \
+      --with-proj --with-proj-share=/usr/share/proj \
+      --with-gdal \
+      --with-pdal \
+      --with-python \
+      --with-geos \
+      --with-sqlite \
+      --with-bzlib \
+      --with-zstd \
+      --with-cairo --with-cairo-ldflags=-lfontconfig \
+      --with-fftw \
+      --with-wxwidgets \
+      --with-postgres --with-postgres-includes='/usr/include/postgresql' \
+      --without-freetype \
+      --without-openmp \
+      --without-opengl \
+      --without-nls \
+      --without-mysql \
+      --without-odbc \
+      --without-openmp \
+      --without-ffmpeg \
+      "
+
+# Set environmental variables for GRASS GIS compilation, without debug symbols
+ENV MYCFLAGS="-O2 -std=gnu99 -m64" \
+    MYLDFLAGS="-s -Wl,--no-undefined -lblas" \
+    # CXX stuff:
+    LD_LIBRARY_PATH="/usr/local/lib" \
+    LDFLAGS="$MYLDFLAGS" \
+    CFLAGS="$MYCFLAGS" \
+    CXXFLAGS="$MYCXXFLAGS" \
+    NUMTHREADS=2
+
+
+# List of packages to be installed
+ENV PACKAGES="\
+      attr \
+      bash \
+      bison \
+      bzip2 \
+      cairo \
+      fftw \
+      flex \
+      freetype \
+      gdal \
+      gettext \
+      geos \
+      gnutls \
+      gtk+3.0 \
+      laszip \
+      libbz2 \
+      libjpeg-turbo \
+      libpng \
+      musl \
+      musl-utils \
+      ncurses \
+      openjpeg \
+      openblas \
+      pdal \
+      py3-numpy \
+      py3-pillow \
+      py3-six \
+      postgresql \
+      proj-datumgrid \
+      proj-util \
+      sqlite \
+      sqlite-libs \
+      subversion \
+      tiff \
+      wxgtk-base \
+      wxgtk \
+      zstd \
+      zstd-libs \
+    " \
+    # These packages are required to compile GRASS GIS.
+    GRASS_BUILD_PACKAGES="\
+      build-base \
+      bzip2-dev \
+      cairo-dev \
+      fftw-dev \
+      freetype-dev \
+      g++ \
+      gcc \
+      gdal-dev \
+      geos-dev \
+      gnutls-dev \
+      gtk+3.0-dev \
+      laszip-dev \
+      libc6-compat \
+      libjpeg-turbo-dev \
+      libpng-dev \
+      make \
+      openjpeg-dev \
+      openblas-dev \
+      pdal-dev \
+      postgresql-dev \
+      proj-dev \
+      python3-dev \
+      py3-numpy-dev \
+      sqlite-dev \
+      tar \
+      tiff-dev \
+      unzip \
+      vim \
+      wget \
+      wxgtk-base-dev \
+      wxgtk-dev \
+      zip \
+      zstd-dev \
+    "
+
+# ====================
+# INSTALL DEPENDENCIES
+# ====================
+
+WORKDIR /src
+
+ENV PYTHONBIN=python$PYTHON_VERSION
+
+RUN echo "Install Python";\
+    apk add --no-cache $PYTHONBIN && \
+    $PYTHONBIN -m ensurepip && \
+    rm -r /usr/lib/python*/ensurepip && \
+    pip$PYTHON_VERSION install --upgrade pip setuptools && \
+    if [ ! -e /usr/bin/pip ]; then ln -s pip$PYTHON_VERSION /usr/bin/pip ; fi && \
+    if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/$PYTHONBIN /usr/bin/python; fi && \
+    rm -r /root/.cache
+
+# Add the packages
+RUN echo "Install main packages";\
+    apk update; \
+    apk add --no-cache \
+            --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+            --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
+            $PACKAGES; \
+    # Add packages just for the GRASS build process
+    apk add --no-cache \
+            --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+            --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
+            --virtual .build-deps $GRASS_BUILD_PACKAGES; \
+    # echo LANG="en_US.UTF-8" > /etc/default/locale;
+    #
+    # compile wxPython, unfortunately there is no Alpine package (yet) - compilation is slow, though!
+    $PYTHONBIN -m pip install -U pathlib2 wxPython && \
+    #
+    # Checkout and install GRASS GIS
+    #
+    echo "Install GRASS GIS";\
+    echo "  => Downloading grass"
+
+COPY . /src/grass_build/
+
+# Configure compile and install GRASS GIS
+RUN echo "  => Configure and compile grass";\
+    cd /src/grass_build && \
+    /src/grass_build/configure $GRASS_CONFIG && \
+    make -j $NUMTHREADS && \
+    make install && \
+    ldconfig /etc/ld.so.conf.d; \
+    #
+    # enable simple grass command regardless of version number
+    #
+    ln -s `find /usr/local/bin -name "grass*"` /usr/local/bin/grass; \
+    #
+    # Reduce the image size
+    #
+    rm -rf /src/*; \
+    # remove build dependencies and any leftover apk cache
+    apk del --no-cache --purge .build-deps; \
+    rm -rf /var/cache/apk/*; \
+    rm -rf /root/.cache; \
+    # Remove unnecessary grass files
+    rm -rf /usr/local/grass79/demolocation; \
+    rm -rf /usr/local/grass79/fonts; \
+    rm -rf /usr/local/grass79/gui; \
+    rm -rf /usr/local/grass79/share;
+
+
+# Unset environmental variables to avoid later compilation issues
+ENV INTEL="" \
+    MYCFLAGS="" \
+    MYLDFLAGS="" \
+    MYCXXFLAGS="" \
+    LD_LIBRARY_PATH="" \
+    LDFLAGS="" \
+    CFLAGS="" \
+    CXXFLAGS="" \
+    # set SHELL var to avoid /bin/sh fallback in interactive GRASS GIS sessions in docker
+    SHELL="/bin/bash"
+
+
+# =====================
+# INSTALL GRASS-SESSION
+# =====================
+
+# install external Python API
+RUN pip install grass-session
+
+# set GRASSBIN
+ENV GRASSBIN="/usr/local/bin/grass"
+
+# ===========================
+# TEST grass-session and PDAL
+# ===========================
+
+WORKDIR /tmp
+COPY docker/testdata/simple.laz .
+WORKDIR /scripts
+COPY docker/testdata/test_grass_session.py .
+## just scan the LAZ file
+# TODO: fix test
+#RUN /usr/bin/python3 /scripts/test_grass_session.py
+
+# ========
+# FINALIZE
+# ========
+
+# Data workdir
+WORKDIR /grassdb
+VOLUME /grassdb
+
+# GRASS GIS specific
+# allow work with MAPSETs that are not owned by current user
+ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
+    LC_ALL="en_US.UTF-8"
+
+# show installed version
+RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
+    pdal --version && \
+    python3 --version
+
+CMD [$GRASSBIN, "--version"]

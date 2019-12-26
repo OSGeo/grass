@@ -3,7 +3,7 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 
-out1 = """East: 634243
+out1 = u"""East: 634243
 North: 226193
 ------------------------------------------------------------------
 Map: test_vector 
@@ -24,7 +24,7 @@ Category: 4
 """
 
 
-out2 = """East: 634243
+out2 = u"""East: 634243
 North: 226193
 ------------------------------------------------------------------
 Map: test_vector 
@@ -70,7 +70,7 @@ text : yyy
 number : 8.09
 """
 
-out3 = """East=634243
+out3 = u"""East=634243
 North=226193
 
 Map=test_vector
@@ -112,7 +112,7 @@ text=yyy
 number=8.09
 """
 
-out4 = """East=634243
+out4 = u"""East=634243
 North=226193
 
 Map=test_vector
@@ -139,7 +139,7 @@ text=Petrášová
 number=6
 """
 
-out5 = """East=634243
+out5 = u"""East=634243
 North=226193
 
 Map=test_vector
@@ -195,7 +195,7 @@ class TestMultiLayerMap(TestCase):
         self.vwhat.flags['a'].value = True
         self.assertModule(self.vwhat)
         try:
-            json.loads(self.vwhat.outputs.stdout, encoding='utf-8')
+            json.loads(self.vwhat.outputs.stdout)
         except ValueError:
             self.fail(msg="No JSON object could be decoded:\n" + self.vwhat.outputs.stdout)
 

@@ -1408,7 +1408,7 @@ see if they are integer, and if they are, the integer mechanism is
 used)
  - fp_lookup - a lookup table for floating point numbers is added. It
 orders the end points of fp intervals into array with a pointer to a
-color rule for each inteval, and the binary search is then used when
+color rule for each interval, and the binary search is then used when
 looking up colors instead of linearly searching through all color
 rules.
 

@@ -27,7 +27,7 @@ void G__script(void)
     char *type;
 
     fprintf(fp,
-	    "#!/usr/bin/env python\n");
+	    "#!/usr/bin/env python3\n");
     fprintf(fp,
 	    "############################################################################\n");
     fprintf(fp, "#\n");
@@ -62,9 +62,11 @@ void G__script(void)
     if (st->module_info.description)
 	fprintf(fp, "#%% description: %s\n", st->module_info.description);
     if (st->module_info.keywords) {
-	fprintf(fp, "#%% keyword: ");
-	G__print_keywords(fp, NULL);
-	fprintf(fp, "\n");
+	int i;
+
+	for(i = 0; i < st->n_keys; i++) {
+	    fprintf(fp, "#%% keyword: %s\n", st->module_info.keywords[i]);
+	}
     }
     fprintf(fp, "#%%end\n");
 

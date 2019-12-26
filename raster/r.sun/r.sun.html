@@ -224,7 +224,7 @@ END OF WE DON'T KNOW
 
 <h3>Extraction of shadow maps</h3>
 A map of shadows can be extracted from the solar incidence angle map
-(incidout). Areas with zero values are shadowed. This will not work
+(incidout). Areas with NULL values are shadowed. This will not work
 if the <em>-p</em> flag has been used.
 
 <h3>Large maps and out of memory problems</h3>
@@ -259,7 +259,7 @@ North Carolina example (considering also cast shadows):
 g.region raster=elevation -p
 
 # calculate horizon angles (to speed up the subsequent r.sun calculation)
-r.horizon elevation=elevation step=30 bufferzone=200 basename=horangle \
+r.horizon elevation=elevation step=30 bufferzone=200 output=horangle \
     maxdistance=5000
 
 # slope + aspect
@@ -380,5 +380,7 @@ Thomas Huld, JRC, Italy <br>
 <a href="MAILTO:suri@geomodel.sk">suri@geomodel.sk</a>
 </address>
 
+<!--
 <p>
-<i>Last changed: $Date$</i> 
+<i>Last changed: $Date$</i>
+--> 

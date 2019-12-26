@@ -29,7 +29,7 @@ SetCompressorDictSize 128
 !endif
 !define BINARY_REVISION "1"
 !define VERSION_NUMBER "@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@"
-!define GRASS_BASE "GRASS GIS @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@"
+!define GRASS_BASE "GRASS GIS @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@"
 !if ${INSTALLER_TYPE} == "Release"
         !define GRASS_COMMAND "grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@"
 !else
@@ -497,6 +497,7 @@ Var /GLOBAL ARCHIVE_NAME2010
     Var /GLOBAL ARCHIVE_NAME2012
 !endif
 Var /GLOBAL ARCHIVE_NAME2013
+Var /GLOBAL ARCHIVE_NAME2015
 Var /GLOBAL EXTENDED_ARCHIVE_NAME
 Var /GLOBAL ORIGINAL_UNTAR_FOLDER
 Var /GLOBAL CUSTOM_UNTAR_FOLDER
@@ -656,7 +657,7 @@ Section "GRASS" SecGRASS
 	;Create the Desktop Shortcut
 	SetShellVarContext current
 	
-	CreateShortCut "$DESKTOP\${GRASS_BASE}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-gui"\
+	CreateShortCut "$DESKTOP\${GRASS_BASE}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "--gui"\
 	"$INSTALL_DIR\gui\icons\grass.ico" "" SW_SHOWNORMAL "" "Launch GRASS GIS ${VERSION_NUMBER}"
 	
 	;Create the Windows Start Menu Shortcuts
@@ -664,7 +665,7 @@ Section "GRASS" SecGRASS
 	
 	CreateDirectory "$SMPROGRAMS\${GRASS_BASE}"
 	
-	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\${GRASS_BASE}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-gui"\
+	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\${GRASS_BASE}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "--gui"\
 	"$INSTALL_DIR\gui\icons\grass.ico" "" SW_SHOWNORMAL "" "Launch GRASS GIS ${VERSION_NUMBER}"
 	
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\Uninstall ${GRASS_BASE}.lnk" "$INSTALL_DIR\Uninstall-GRASS.exe" ""\
@@ -818,6 +819,7 @@ Function DownloadInstallMSRuntime
             NSISdl::download "$HTTP_PATH/msvcrt2012/$ARCHIVE_NAME2012" "$TEMP\$ARCHIVE_NAME2012"
         !endif
 	NSISdl::download "$HTTP_PATH/msvcrt2013/$ARCHIVE_NAME2013" "$TEMP\$ARCHIVE_NAME2013"
+	NSISdl::download "$HTTP_PATH/msvcrt2015/$ARCHIVE_NAME2015" "$TEMP\$ARCHIVE_NAME2015"
 
 	Pop $0
 	StrCmp $0 "success" download_ok download_failed
@@ -834,6 +836,7 @@ Function DownloadInstallMSRuntime
             untgz::extract "-d" "$TEMP\$ORIGINAL_UNTAR_FOLDER" "-zbz2" "$TEMP\$ARCHIVE_NAME2012"
         !endif
         untgz::extract "-d" "$TEMP\$ORIGINAL_UNTAR_FOLDER" "-zbz2" "$TEMP\$ARCHIVE_NAME2013"
+        untgz::extract "-d" "$TEMP\$ORIGINAL_UNTAR_FOLDER" "-zbz2" "$TEMP\$ARCHIVE_NAME2015"
 	Pop $0
 	StrCmp $0 "success" untar_ok untar_failed
 	
@@ -861,6 +864,8 @@ Function DownloadInstallMSRuntime
 	    ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2010_x86.exe" /q' 
 	    DetailPrint "Installing vcredist_2013_x86.exe ..."
 	    ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2013_x86.exe" /q'
+	    DetailPrint "Installing vcredist_2015_x86.exe ..."
+	    ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2015_x86.exe" /q'
         !else
             DetailPrint "Installing vcredist_2008_x64.exe ..."
 	    ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist-2008-sp1-x64.exe" /q'
@@ -871,6 +876,8 @@ Function DownloadInstallMSRuntime
 	    ;ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist-2012-x64.exe" /q' 
 	    DetailPrint "Installing vcredist_2013_x64.exe ..."
 	    ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist-2013-x64.exe" /q'
+	    DetailPrint "Installing vcredist_2015_x64.exe ..."
+	    ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2015_x64.exe" /q'
         !endif
 	DetailPrint "Copying runtime files ..."
 	CopyFiles "$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\*.dll" "$INSTALL_DIR\extrabin"
@@ -891,17 +898,19 @@ Section "Important Microsoft Runtime DLLs" SecMSRuntime
 	
 	StrCpy $HTTP_PATH "http://download.osgeo.org/osgeo4w/${PLATFORM}/release/msvcrt/"
         !if ${PLATFORM} == "x86_64"
-            StrCpy $ARCHIVE_NAME "msvcrt-1.0.1-8.tar.bz2"
+            StrCpy $ARCHIVE_NAME "msvcrt-1.0.1-9.tar.bz2"
             StrCpy $ARCHIVE_NAME2008 "msvcrt2008-1.0.0-1.tar.bz2"
             StrCpy $ARCHIVE_NAME2010 "msvcrt2010-1.0.0-1.tar.bz2"
             StrCpy $ARCHIVE_NAME2012 "msvcrt2012-1.0.0-1.tar.bz2"
             StrCpy $ARCHIVE_NAME2013 "msvcrt2013-1.0.0-1.tar.bz2"
+            StrCpy $ARCHIVE_NAME2015 "msvcrt2015-1.0-1.tar.bz2"
         !else
-            StrCpy $ARCHIVE_NAME "msvcrt-1.0.1-13.tar.bz2"
+            StrCpy $ARCHIVE_NAME "msvcrt-1.0.1-14.tar.bz2"
             ;StrCpy $ARCHIVE_NAME2005 "msvcrt2005-1.0-1.tar.bz2"
             StrCpy $ARCHIVE_NAME2008 "msvcrt2008-1.0-1.tar.bz2"
             StrCpy $ARCHIVE_NAME2010 "msvcrt2010-1.0-1.tar.bz2"
             StrCpy $ARCHIVE_NAME2013 "msvcrt2013-1.0-1.tar.bz2"
+            StrCpy $ARCHIVE_NAME2015 "msvcrt2015-1.0-1.tar.bz2"
         !endif
 	StrCpy $EXTENDED_ARCHIVE_NAME "Microsoft Visual C++ Redistributable Packages"
 	StrCpy $ORIGINAL_UNTAR_FOLDER "install_msruntime"

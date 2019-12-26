@@ -6,6 +6,8 @@
  *               Brad Douglas <rez touchofmadness.com>, Markus Neteler <neteler itc.it>,
  *               Glynn Clements <glynn gclements.plus.com>, Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>, Paul Kelly <paul-grass stjohnspoint.co.uk>
+ *               Paolo Zatelli <paolo.zatelli unitn.it>
+ *
  * PURPOSE:      combines a series of GRASS raster maps into a single MPEG-1
  * COPYRIGHT:    (C) 1999-2006, 2011 by the GRASS Development Team
  *
@@ -101,6 +103,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("export"));
+    G_add_keyword(_("output"));
     G_add_keyword(_("animation"));
 
     module->description =
@@ -140,6 +143,9 @@ int main(int argc, char **argv)
 	exit(EXIT_FAILURE);
 
     parse_command(viewopts, vfiles, &numviews, &frames);
+
+    /* output file */
+    strcpy(outfile, out->answer);
 
     r_out = 0;
     if (conv->answer)

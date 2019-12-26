@@ -11,8 +11,8 @@ PyGRASS uses 3 different raster classes, that respect the 3 different
 approaches of GRASS-C API. The classes use a standardized interface to
 keep methods consistent between them. The read access is row wise for
 :ref:`RasterRow-label` and :ref:`RasterRowIO-label` and additionally
-cached in the RowIO class. Both classes write sequentially.  RowIO is
-row cached, :ref:`RasterSegment-label` is tile cached for reading and
+cached in the RowIO class. Only the first class writes sequentially.
+RowIO is row cached, :ref:`RasterSegment-label` is tile cached for reading and
 writing; therefore, random access is possible.  Hence RasterRow and
 RasterRowIO should be used for fast (cached) row read access and
 RasterRow for fast sequential writing.  RasterSegment should be used
@@ -76,13 +76,26 @@ added to the file as the last row. ::
 
     >>> raster = reload(raster)
     >>> elev = raster.RasterRow('elevation')
-    >>> # the cols attribute is set from the current region only when the map is open
-    >>> elev.cols
+    >>> # the private _cols attribute is set from the current region only when the map is open
+    >>> # the .info.cols attribute is set to total number of map cols only when the map is open
+    >>> # cols in .info.cols equals the number reported by r.info module
+    >>> elev._cols
+    >>> elev.info.cols
+    0
     >>> elev.open()
     >>> elev.is_open()
     True
-    >>> elev.cols
+    >>> elev._cols
+    200
+    >>> elev.info.cols
     1500
+    >>> elev._rows
+    300
+    >>> # number of available rows/cols also can be determined by len()
+    >>> len(elev)
+    300
+    >>> len(elev[0])
+    200
     >>> # we can read the elevation map, row by row
     >>> for row in elev[:5]: print(row[:3])
     [ 141.99613953  141.27848816  141.37904358]

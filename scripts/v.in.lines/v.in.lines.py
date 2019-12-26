@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 ############################################################################
 #
@@ -41,10 +41,6 @@ import string
 from grass.script.utils import separator, try_remove
 from grass.script import core as grass
 
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
-
 
 def cleanup():
     try_remove(tmp)
@@ -77,7 +73,7 @@ def main():
 
     if not infile:
         # read from stdin and write to tmpfile (v.in.mapgen wants a real file)
-        outf = file(tmp, 'w')
+        outf = open(tmp, 'w')
         for line in inf:
             if len(line.lstrip()) == 0 or line[0] == '#':
                 continue
@@ -90,8 +86,8 @@ def main():
         if fs == ' ':
             runfile = infile
         else:
-            inf = file(infile)
-            outf = file(tmp, 'w')
+            inf = open(infile)
+            outf = open(tmp, 'w')
 
             for line in inf:
                 if len(line.lstrip()) == 0 or line[0] == '#':
@@ -103,7 +99,7 @@ def main():
             runfile = tmp
 
     # check that there are at least two columns (three if -z is given)
-    inf = file(runfile)
+    inf = open(runfile)
     for line in inf:
         if len(line.lstrip()) == 0 or line[0] == '#':
             continue

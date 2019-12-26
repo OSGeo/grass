@@ -10,6 +10,17 @@ tied to a set of attribute layers stored in a database (road names,
 site ID, geologic type, etc.). As a general rule these can exist in 2D
 or 3D space and are independent of the GIS's computation region.
 
+<h3>Attribute management</h3>
+
+The default database driver used by GRASS GIS 7 is SQLite. GRASS GIS 
+handles multiattribute vector data by default. The <em>db.*</em> set of
+commands  provides basic SQL support for attribute management, while the
+<em>v.db.*</em> set of commands operates on vector maps.
+
+<p>
+Note: The list of available database drivers can vary in various binary
+distributions of GRASS GIS, for details see
+<a href="sql.html">SQL support in GRASS GIS</a>.
 
 <h3>Vector data import and export</h3>
 
@@ -55,7 +66,7 @@ with <a href="v.support.html">v.support</a>.
 GRASS vector map processing is always performed on the full map.
 If this is not desired, the input map has to be clipped to the
 current region beforehand (<a href="v.in.region.html">v.in.region</a>,
-<a href="v.overlay.html">v.overlay</a>,<a href="v.select.html">v.select</a>).
+<a href="v.overlay.html">v.overlay</a>, <a href="v.select.html">v.select</a>).
 
 <h3>Vector model and topology</h3>
 
@@ -199,10 +210,12 @@ default. Using <em>layer=-1</em> one can access all layers.
 </li>
 
 <li><b>SQL support</b><br>
-The DBF driver provides only very limited SQL support (as DBF is not an
-SQL DB) while the other DBMS backends (such as SQLite, PostgreSQL, MySQL
-etc) provide full SQL support since the SQL commands are sent directly
-to the DBMI. SQL commands can be directly executed with
+By default, SQLite is used as the attribute database. Also other
+supported DBMS backends (such as SQLite, PostgreSQL, MySQL etc.)
+provide full SQL support as the SQL statements are sent directly
+to GRASS' database management interface (DBMI). Only the DBF driver
+provides just very limited SQL support (as DBF is not an SQL DB).
+SQL commands can be directly executed with
 <a href="db.execute.html">db.execute</a>,
 <a href="db.select.html">db.select</a> and the other db.* modules.
 </li>
@@ -377,7 +390,6 @@ a point cloud.
 <ul>
   <li><a href="rasterintro.html">Introduction to raster data processing</a></li>
   <li><a href="raster3dintro.html">Introduction to 3D raster data (voxel) processing</a></li>
-  <li><a href="vectorintro.html">Introduction to vector data processing</a></li>
   <li><a href="imageryintro.html">Introduction to image processing</a></li>
   <li><a href="temporalintro.html">Introduction into temporal data processing</a></li>
   <li><a href="databaseintro.html">Introduction to database management</a></li>

@@ -14,11 +14,28 @@ manual</a> for details.
 <div class="code"><pre>
 # example for connecting to a PostgreSQL server:
 db.connect driver=pg database=mydb
-db.login user=myname pass=secret host=myserver.osgeo.org
+db.login user=myname password=secret host=myserver.osgeo.org  # port=5432
 db.connect -p
 db.tables -p
 </pre></div>
 
+<h3>Username and password</h3>
+
+From the <a href="https://www.postgresql.org/docs/10/static/libpq-pgpass.html">PostgresQL manual</a>:
+<p>
+The file <em>.pgpass</em> in a user's home directory can contain 
+passwords to be used if the connection requires a password (and no 
+password has been specified otherwise). On Microsoft Windows the file 
+is named <em>%APPDATA%\postgresql\pgpass.conf</em> (where 
+<em>%APPDATA%</em> refers to the Application Data subdirectory in the 
+user's profile). Alternatively, a password file can be specified using 
+the connection parameter passfile or the environment variable 
+PGPASSFILE.
+
+This file should contain lines of the following format:
+<div class="code"><pre>
+hostname:port:database:username:password
+</pre></div>
 
 <h2>Supported SQL commands</h2>
 
@@ -131,5 +148,7 @@ GIS vector format converter and library, e.g. ArcInfo or SHAPE to PostGIS.<br>
 driver documentation</a></li>
 </ul>
 
+<!--
 <p>
 <i>Last changed: $Date$</i>
+-->

@@ -14,7 +14,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
 {
     struct Map_info Map;
     struct line_pnts *Points;
-    int i, field;
+    int i, j, field;
     struct cat_list *cat_list = NULL;
     int fd;			/* for raster map */
     int nareas, nlines;		/* number of converted features */
@@ -64,7 +64,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
 	/* Note do not check if the column exists in the table because it may be expression */
 
 	if ((nrec =
-	     db_select_CatValArray(Driver, Fi->table, Fi->key, column, NULL,
+	     db_select_CatValArray(Driver, Fi->table, Fi->key, column, where,
 				   &cvarr)) == -1)
 	    G_fatal_error(_("Column <%s> not found"), column);
 	G_debug(3, "nrec = %d", nrec);
@@ -82,6 +82,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
 
 	db_close_database_shutdown_driver(Driver);
 
+	j = 0;
 	for (i = 0; i < cvarr.n_values; i++) {
 	    if (ctype == DB_C_TYPE_INT) {
 		G_debug(3, "cat = %d val = %d", cvarr.value[i].cat,
@@ -91,6 +92,16 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
 		G_debug(3, "cat = %d val = %f", cvarr.value[i].cat,
 			cvarr.value[i].val.d);
 	    }
+	    /* check for null values */
+	    if (!cat_list || Vect_cat_in_cat_list(cvarr.value[i].cat, cat_list)) {
+		if (cvarr.value[i].isNull) {
+		    j++;
+		}
+	    }
+	}
+	if (j) {
+	    G_important_message(_("%d of %d records in column <%s> are empty and replaced with 0 (zero)"),
+	                          j, nrec, column);
 	}
 	
 	switch (ctype) {

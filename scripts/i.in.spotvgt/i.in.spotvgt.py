@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ############################################################################
 #
@@ -53,10 +53,6 @@ import string
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
 
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
-
 
 vrt = """<VRTDataset rasterXSize="$XSIZE" rasterYSize="$YSIZE">
  <SRS>GEOGCS[&quot;wgs84&quot;,DATUM[&quot;WGS_1984&quot;,SPHEROID[&quot;wgs84&quot;,6378137,298.257223563],TOWGS84[0.000,0.000,0.000]],PRIMEM[&quot;Greenwich&quot;,0],UNIT[&quot;degree&quot;,0.0174532925199433]]</SRS>
@@ -77,7 +73,7 @@ vrt = """<VRTDataset rasterXSize="$XSIZE" rasterYSize="$YSIZE">
 
 
 def create_VRT_file(projfile, vrtfile, infile):
-    fh = file(projfile)
+    fh = open(projfile)
     kv = {}
     for l in fh:
         f = l.rstrip('\r\n').split()
@@ -104,7 +100,7 @@ def create_VRT_file(projfile, vrtfile, infile):
     s = t.substitute(NORTHCORNER=north_corner, WESTCORNER=west_corner,
                      XSIZE=xsize, YSIZE=ysize, RESOLUTION=map_proj_res,
                      FILENAME=infile)
-    outf = file(vrtfile, 'w')
+    outf = open(vrtfile, 'w')
     outf.write(s)
     outf.close()
 

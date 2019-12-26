@@ -227,8 +227,8 @@ class PointFinder(AbstractFinder):
             ...                                          type="centroid",
             ...                                          maxdist=1.5)
             >>> result                   #doctest: +NORMALIZE_WHITESPACE
-            [Centoid(2.500000, 2.500000),
-             Centoid(3.500000, 3.500000)]
+            [Centroid(2.500000, 2.500000),
+             Centroid(3.500000, 3.500000)]
 
             >>> test_vect.find_by_point.geos(point=Point(20,20), maxdist=0)
 
@@ -419,7 +419,7 @@ class BboxFinder(AbstractFinder):
              Boundary([Point(1.000000, 1.000000), Point(1.000000, 3.000000),
                        Point(3.000000, 3.000000), Point(3.000000, 1.000000),
                        Point(1.000000, 1.000000)]),
-             Centoid(2.500000, 2.500000)]
+             Centroid(2.500000, 2.500000)]
 
             >>> bbox = Bbox(north=5, south=-1, east=3, west=-1)
             >>> result = test_vect.find_by_bbox.geos(bbox=bbox,

@@ -54,7 +54,7 @@ class GeometryAttrsTestCase(TestCase):
         with self.assertRaises(ValueError) as cm:
             self.attrs['not_existing_column_name']
 
-        self.assertTrue(u"not_existing_column_name" in cm.exception.message)
+        self.assertTrue(u"not_existing_column_name" in str(cm.exception))
 
 
     def test_setitem(self):

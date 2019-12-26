@@ -27,7 +27,9 @@
  *                 Glynn Clements <glynn gclements.plus.com>, Soeren Gebbert <soeren.gebbert gmx.de>
  *               Updated for calculation errors and directional surface generation
  *                 Colin Nielsen <colin.nielsen gmail com>
- *               Updated for GRASS 7
+ *               Use min heap instead of btree (faster, less memory)
+ *               multiple directions with bitmask encoding
+ *               avoid circular paths
  *                 Markus Metz
  * PURPOSE:      anisotropic movements on cost surfaces
  * COPYRIGHT:    (C) 1999-2015 by the GRASS Development Team
@@ -36,7 +38,7 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
- *****************************************************************************/
+ ***************************************************************************/
 
 /*********************************************************************
  *
@@ -108,21 +110,40 @@
 #include <grass/glocale.h>
 #include "cost.h"
 #include "stash.h"
+#include "flag.h"
 
 #define SEGCOLSIZE 	64
 
 struct Cell_head window;
 
-struct start_pt *head_start_pt = NULL;
-struct start_pt *head_end_pt = NULL;
+struct rc
+{
+    int r;
+    int c;
+};
+
+static struct rc *stop_pnts = NULL;
+static int n_stop_pnts = 0;
+static int stop_pnts_alloc = 0;
+
+int cmp_rc(struct rc *a, struct rc *b)
+{
+    if (a->r == b->r)
+	return (a->c - b->c);
+
+    return (a->r - b->r);
+}
+
+void add_stop_pnt(int r, int c);
 
 int main(int argc, char *argv[])
 {
-    const char *cum_cost_layer, *move_dir_layer;
+    const char *cum_cost_layer, *move_dir_layer, *nearest_layer;
     const char *cost_layer, *dtm_layer;
     const char *dtm_mapset, *cost_mapset, *search_mapset;
-    void *dtm_cell, *cost_cell, *cum_cell, *dir_cell, *cell2 = NULL;
-    SEGMENT cost_seg, dir_seg;
+    void *dtm_cell, *cost_cell, *cum_cell, *dir_cell, *cell2 = NULL, *nearest_cell;
+    SEGMENT cost_seg, dir_seg, solve_seg;
+    int have_solver;
     double *value;
     char buf[400];
     extern struct Cell_head window;
@@ -131,14 +152,14 @@ int main(int argc, char *argv[])
     double min_cost, old_min_cost;
     FCELL cur_dir;
     double zero = 0.0;
-    int col = 0, row = 0, nrows = 0, ncols = 0;
+    int col, row, nrows, ncols;
     int maxcost, par_number;
-    int nseg;
+    int nseg, nbytes;
     int maxmem;
     int segments_in_memory;
-    int cost_fd, cum_fd, dtm_fd, dir_fd;
-    int have_stop_points = 0, dir = 0;
-    double my_dtm, my_cost, check_dtm;
+    int cost_fd, cum_fd, dtm_fd, dir_fd, nearest_fd;
+    int dir = 0;
+    double my_dtm, my_cost, check_dtm, nearest;
     double null_cost, dnullval;
     double a, b, c, d, lambda, slope_factor;
     int srows, scols;
@@ -149,25 +170,31 @@ int main(int argc, char *argv[])
     long n_processed = 0;
     long total_cells;
     struct GModule *module;
-    struct Flag *flag2, *flag3, *flag4, *flag5;
+    struct Flag *flag2, *flag3, *flag4, *flag5, *flag6;
     struct Option *opt1, *opt2, *opt3, *opt4, *opt5, *opt6, *opt7, *opt8;
-    struct Option *opt9, *opt10, *opt11, *opt12, *opt13, *opt14, *opt15;
+    struct Option *opt9, *opt10, *opt11, *opt12, *opt13, *opt14, *opt15, *opt16;
+    struct Option *opt_solve;
     struct cost *pres_cell;
-    struct start_pt *pres_start_pt = NULL;
-    struct start_pt *pres_stop_pt = NULL;
+    struct start_pt *head_start_pt = NULL;
+    struct start_pt *next_start_pt;
     struct cc {
 	double dtm;		/* elevation model */
 	double cost_in;		/* friction costs */
 	double cost_out;	/* cumulative costs */
+	double nearest;		/* nearest start point */
     } costs;
+    FLAG *visited;
 
     void *ptr1, *ptr2;
     RASTER_MAP_TYPE dtm_data_type, cost_data_type, cum_data_type =
-	DCELL_TYPE, dir_data_type = FCELL_TYPE;
+	DCELL_TYPE, dir_data_type = FCELL_TYPE,
+	nearest_data_type = CELL_TYPE;	/* output nearest type */
     struct History history;
     double peak = 0.0;
-    int dtm_dsize, cost_dsize;
+    int dtm_dsize, cost_dsize, nearest_size;
     double disk_mb, mem_mb, pq_mb;
+    int dir_bin;
+    DCELL mysolvedir[2], solvedir[2];
 
     /* Definition for dimension and region check */
     struct Cell_head dtm_cellhd, cost_cellhd;
@@ -194,6 +221,21 @@ int main(int argc, char *argv[])
 
     opt1 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt1->description = _("Name for output raster map to contain walking costs");
+
+    opt_solve = G_define_standard_option(G_OPT_R_INPUT);
+    opt_solve->key = "solver";
+    opt_solve->required = NO;
+    opt_solve->label =
+	_("Name of input raster map solving equal costs");
+    opt_solve->description =
+	_("Helper variable to pick a direction if two directions have equal cumulative costs (smaller is better)");
+
+    opt16 = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt16->key = "nearest";
+    opt16->required = NO;
+    opt16->description =
+	_("Name for output raster map with nearest start point");
+    opt16->guisection = _("Optional outputs");
 
     opt11 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt11->key = "outdir";
@@ -312,6 +354,11 @@ int main(int argc, char *argv[])
     flag5->key = 'i';
     flag5->description = _("Print info about disk space and memory requirements and exit");
 
+    flag6 = G_define_flag();
+    flag6->key = 'b';
+    flag6->description = _("Create bitmask encoded directions");
+    flag6->guisection = _("Optional outputs");
+
     /* Parse options */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -343,6 +390,8 @@ int main(int argc, char *argv[])
 
     start_with_raster_vals = flag4->answer;
 
+    dir_bin = flag6->answer;
+
     {
 	int count = 0;
 
@@ -357,13 +406,16 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Must specify exactly one of start_points, start_rast or coordinate"));
     }
 
-    if (opt3->answers)
-	if (!process_answers(opt3->answers, &head_start_pt, &pres_start_pt))
+    if (opt3->answers) {
+	head_start_pt = process_start_coords(opt3->answers, head_start_pt);
+	if (!head_start_pt)
 	    G_fatal_error(_("No start points"));
+    }
 
-    if (opt4->answers)
-	have_stop_points =
-	    process_answers(opt4->answers, &head_end_pt, &pres_stop_pt);
+    if (opt4->answers) {
+	if (!process_stop_coords(opt4->answers))
+	    G_fatal_error(_("No stop points"));
+    }
 
     if (sscanf(opt5->answer, "%d", &maxcost) != 1 || maxcost < 0)
 	G_fatal_error(_("Inappropriate maximum cost: %d"), maxcost);
@@ -410,6 +462,14 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Vector map <%s> not found"), opt7->answer);
     }
 
+    have_solver = 0;
+    if (dir && opt_solve->answer) {
+	search_mapset = G_find_raster2(opt_solve->answer, "");
+	if (search_mapset == NULL)
+	    G_fatal_error(_("Raster map <%s> not found"), opt_solve->answer);
+	have_solver = 1;
+    }
+
     if (!Rast_is_d_null_value(&null_cost)) {
 	if (null_cost < 0.0) {
 	    G_warning(_("Assigning negative cost to null cell. Null cells excluded."));
@@ -420,10 +480,11 @@ int main(int argc, char *argv[])
 	keep_nulls = 0;		/* handled automagically... */
     }
 
-    dtm_layer = opt12->answer;
-    cost_layer = opt2->answer;
     cum_cost_layer = opt1->answer;
+    cost_layer = opt2->answer;
     move_dir_layer = opt11->answer;
+    dtm_layer = opt12->answer;
+    nearest_layer = opt16->answer;
 
     /* Find number of rows and columns in window */
     nrows = Rast_window_rows();
@@ -480,7 +541,7 @@ int main(int argc, char *argv[])
     G_debug(1, " NS resolution %s (%g)", buf, window.ns_res);
 
     /* this is most probably the limitation of r.walk for large datasets
-     * segment size needs to be reduced to avoid unecessary disk IO
+     * segment size needs to be reduced to avoid unnecessary disk IO
      * but it doesn't make sense to go down to 1
      * so use 64 segment rows and cols for <= 200 million cells
      * for larger regions, 32 segment rows and cols
@@ -500,26 +561,21 @@ int main(int argc, char *argv[])
     maxmem -= pq_mb;
     if (maxmem < 10)
 	maxmem = 10;
-    if (dir == TRUE) {
-	disk_mb = (double) nrows * ncols * 28. / 1048576.;
-	segments_in_memory = maxmem / 
-	                     ((double) srows * scols * (28. / 1048576.));
-	if (segments_in_memory < 4)
-	    segments_in_memory = 4;
-	if (segments_in_memory > nseg)
-	    segments_in_memory = nseg;
-	mem_mb = (double) srows * scols * (28. / 1048576.) * segments_in_memory;
-    }
-    else {
-	disk_mb = (double) nrows * ncols * 24. / 1048576.;
-	segments_in_memory = maxmem / 
-	                     ((double) srows * scols * (24. / 1048576.));
-	if (segments_in_memory < 4)
-	    segments_in_memory = 4;
-	if (segments_in_memory > nseg)
-	    segments_in_memory = nseg;
-	mem_mb = (double) srows * scols * (24. / 1048576.) * segments_in_memory;
-    }
+
+    nbytes = 24;
+    if (dir == TRUE)
+	nbytes += 4;
+    if (have_solver)
+	nbytes += 16;
+
+    disk_mb = (double) nrows * ncols * nbytes / 1048576.;
+    segments_in_memory = maxmem / 
+			 ((double) srows * scols * (nbytes / 1048576.));
+    if (segments_in_memory < 4)
+	segments_in_memory = 4;
+    if (segments_in_memory > nseg)
+	segments_in_memory = nseg;
+    mem_mb = (double) srows * scols * (nbytes / 1048576.) * segments_in_memory;
 
     if (flag5->answer) {
 	fprintf(stdout, _("Will need at least %.2f MB of disk space"), disk_mb);
@@ -554,6 +610,33 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Can not create temporary file"));
     }
 
+    if (have_solver) {
+	int sfd, dsize;
+	void *cell;
+
+	if (Segment_open(&solve_seg, G_tempfile(), nrows, ncols, srows, scols,
+		         sizeof(DCELL) * 2, segments_in_memory) != 1)
+	    G_fatal_error(_("Can not create temporary file"));
+
+	sfd = Rast_open_old(opt_solve->answer, "");
+	cell = Rast_allocate_buf(DCELL_TYPE);
+	Rast_set_d_null_value(&solvedir[1], 1); 
+	dsize = Rast_cell_size(DCELL_TYPE);
+	for (row = 0; row < nrows; row++) {
+	    G_percent(row, nrows, 2);
+	    Rast_get_d_row(sfd, cell, row);
+	    ptr2 = cell;
+	    for (col = 0; col < ncols; col++) {
+		solvedir[0] = *(DCELL *)ptr2;
+		if (Segment_put(&solve_seg, solvedir, row, col) < 0)
+		    G_fatal_error(_("Can not write to temporary file"));
+		ptr2 = G_incr_void_ptr(ptr2, dsize);
+	    }
+	}
+	Rast_close(sfd);
+	G_free(cell);
+    }
+
     /* Write the dtm and cost layers in the segmented file */
     G_message(_("Reading raster maps <%s> and <%s>, initializing output..."),
 	      G_fully_qualified_name(dtm_layer, dtm_mapset),
@@ -566,6 +649,7 @@ int main(int argc, char *argv[])
 
 	Rast_set_d_null_value(&dnullval, 1);
 	costs.cost_out = dnullval;
+	costs.nearest = 0;
 
 	total_cells = nrows * ncols;
 
@@ -629,7 +713,8 @@ int main(int argc, char *argv[])
 		}
 
 		costs.dtm = p_dtm;
-		Segment_put(&cost_seg, &costs, row, col);
+		if (Segment_put(&cost_seg, &costs, row, col) < 0)
+		    G_fatal_error(_("Can not write to temporary file"));
 		ptr1 = G_incr_void_ptr(ptr1, cost_dsize);
 		ptr2 = G_incr_void_ptr(ptr2, dtm_dsize);
 	    }
@@ -640,17 +725,20 @@ int main(int argc, char *argv[])
     }
 
     if (dir == 1) {
+	FCELL fnullval;
+
 	G_message(_("Initializing directional output..."));
+	Rast_set_f_null_value(&fnullval, 1);
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
 	    for (col = 0; col < ncols; col++) {
-		Segment_put(&dir_seg, &dnullval, row, col);
+		if (Segment_put(&dir_seg, &fnullval, row, col) < 0)
+		    G_fatal_error(_("Can not write to temporary file"));
 	    }
 	}
 	G_percent(1, 1, 1);
     }
-
-    /*   Scan the existing cum_cost_layer searching for starting points.
+    /*   Scan the start_points layer searching for starting points.
      *   Create a heap of starting points ordered by increasing costs.
      */
     init_heap();
@@ -661,8 +749,7 @@ int main(int argc, char *argv[])
 	struct line_pnts *Points;
 	struct line_cats *Cats;
 	struct bound_box box;
-	struct start_pt *new_start_pt;
-	int type, got_one = 0;
+	int cat, type, npoints = 0;
 
 	Points = Vect_new_line_struct();
 	Cats = Vect_new_cats_struct();
@@ -693,33 +780,28 @@ int main(int argc, char *argv[])
 	    }
 	    if (!Vect_point_in_box(Points->x[0], Points->y[0], 0, &box))
 		continue;
-	    got_one = 1;
+            npoints++;
 
 	    col = (int)Rast_easting_to_col(Points->x[0], &window);
 	    row = (int)Rast_northing_to_row(Points->y[0], &window);
 
-	    new_start_pt =
+	    next_start_pt =
 		(struct start_pt *)(G_malloc(sizeof(struct start_pt)));
 
-	    new_start_pt->row = row;
-	    new_start_pt->col = col;
-	    new_start_pt->next = NULL;
-
-	    if (head_start_pt == NULL) {
-		head_start_pt = new_start_pt;
-		pres_start_pt = new_start_pt;
-		new_start_pt->next = NULL;
-	    }
-	    else {
-		pres_start_pt->next = new_start_pt;
-		pres_start_pt = new_start_pt;
-	    }
+	    next_start_pt->row = row;
+	    next_start_pt->col = col;
+	    Vect_cat_get(Cats, 1, &cat);
+	    next_start_pt->value = cat;
+	    next_start_pt->next = head_start_pt;
+	    head_start_pt = next_start_pt;
 	}
 
+	if (npoints < 1)
+	    G_fatal_error(_("No start points found in vector map <%s>"), Vect_get_full_name(&In));
+        else
+            G_verbose_message(n_("%d point found", "%d points found", npoints), npoints);
+        
 	Vect_close(&In);
-
-	if (!got_one)
-	    G_fatal_error(_("No start points found in vector <%s>"), opt7->answer);
     }
 
     /* read vector with stop points */
@@ -728,7 +810,6 @@ int main(int argc, char *argv[])
 	struct line_pnts *Points;
 	struct line_cats *Cats;
 	struct bound_box box;
-	struct start_pt *new_start_pt;
 	int type;
 
 	G_message(_("Reading vector map <%s> with stop points..."), opt8->answer);
@@ -759,32 +840,16 @@ int main(int argc, char *argv[])
 	    }
 	    if (!Vect_point_in_box(Points->x[0], Points->y[0], 0, &box))
 		continue;
-	    have_stop_points = 1;
 
 	    col = (int)Rast_easting_to_col(Points->x[0], &window);
 	    row = (int)Rast_northing_to_row(Points->y[0], &window);
 
-	    new_start_pt =
-		(struct start_pt *)(G_malloc(sizeof(struct start_pt)));
-
-	    new_start_pt->row = row;
-	    new_start_pt->col = col;
-	    new_start_pt->next = NULL;
-
-	    if (head_end_pt == NULL) {
-		head_end_pt = new_start_pt;
-		pres_stop_pt = new_start_pt;
-		new_start_pt->next = NULL;
-	    }
-	    else {
-		pres_stop_pt->next = new_start_pt;
-		pres_stop_pt = new_start_pt;
-	    }
+	    add_stop_pnt(row, col);
 	}
 
 	Vect_close(&In);
 
-	if (!have_stop_points)
+	if (!stop_pnts)
 	    G_fatal_error(_("No stop points found in vector <%s>"), opt8->answer);
     }
 
@@ -800,8 +865,9 @@ int main(int argc, char *argv[])
 	if (search_mapset == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), opt9->answer);
 
-	fd = Rast_open_old(opt9->answer, "");
+	fd = Rast_open_old(opt9->answer, search_mapset);
 	data_type2 = Rast_get_map_type(fd);
+	nearest_data_type = data_type2;
 	dsize2 = Rast_cell_size(data_type2);
 	cell2 = Rast_allocate_buf(data_type2);
 	if (!cell2)
@@ -817,19 +883,24 @@ int main(int argc, char *argv[])
 		if (!Rast_is_null_value(ptr2, data_type2)) {
 		    double cellval;
 
-		    Segment_get(&cost_seg, &costs, row, col);
+		    if (Segment_get(&cost_seg, &costs, row, col) < 0)
+			G_fatal_error(_("Can not read from temporary file"));
 
+		    cellval = Rast_get_d_value(ptr2, data_type2);
 		    if (start_with_raster_vals == 1) {
-			cellval = Rast_get_d_value(ptr2, data_type2);
-			insert(cellval, row, col);
+                        insert(cellval, row, col);
 			costs.cost_out = cellval;
-			Segment_put(&cost_seg, &costs, row, col);
+			costs.nearest = cellval;
+			if (Segment_put(&cost_seg, &costs, row, col) < 0)
+			    G_fatal_error(_("Can not write to temporary file"));
 		    }
 		    else {
 			value = &zero;
 			insert(zero, row, col);
 			costs.cost_out = *value;
-			Segment_put(&cost_seg, &costs, row, col);
+			costs.nearest = cellval;
+			if (Segment_put(&cost_seg, &costs, row, col) < 0)
+			    G_fatal_error(_("Can not write to temporary file"));
 		    }
 		    got_one = 1;
 		}
@@ -845,25 +916,45 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("No start points"));
     }
 
-    /*  If the starting points are given on the command line start a linked
-     *  list of cells ordered by increasing costs
-     */
+    /*  Insert start points into min heap */
     if (head_start_pt) {
-	struct start_pt *top_start_pt = NULL;
 
-	top_start_pt = head_start_pt;
-	while (top_start_pt != NULL) {
+	next_start_pt = head_start_pt;
+	while (next_start_pt != NULL) {
 	    value = &zero;
-	    if (top_start_pt->row < 0 || top_start_pt->row >= nrows
-		|| top_start_pt->col < 0 || top_start_pt->col >= ncols)
+	    if (next_start_pt->row < 0 || next_start_pt->row >= nrows
+		|| next_start_pt->col < 0 || next_start_pt->col >= ncols)
 		G_fatal_error(_("Specified starting location outside database window"));
-	    insert(zero, top_start_pt->row, top_start_pt->col);
-	    Segment_get(&cost_seg, &costs, top_start_pt->row,
-			top_start_pt->col);
+	    insert(zero, next_start_pt->row, next_start_pt->col);
+	    if (Segment_get(&cost_seg, &costs, next_start_pt->row,
+			next_start_pt->col) < 0)
+		G_fatal_error(_("Can not read from temporary file"));
 	    costs.cost_out = *value;
-	    Segment_put(&cost_seg, &costs, top_start_pt->row,
-			top_start_pt->col);
-	    top_start_pt = top_start_pt->next;
+	    costs.nearest = next_start_pt->value;
+
+	    if (Segment_put(&cost_seg, &costs, next_start_pt->row,
+			next_start_pt->col) < 0)
+		G_fatal_error(_("Can not write to temporary file"));
+	    next_start_pt = next_start_pt->next;
+	}
+    }
+
+    if (n_stop_pnts > 1) {
+	int i, j;
+	
+	/* prune stop points */
+	j = 1;
+	for (i = 1; i < n_stop_pnts; i++) {
+	    if (stop_pnts[i].r != stop_pnts[j - 1].r ||
+	        stop_pnts[i].c != stop_pnts[j - 1].c) {
+		stop_pnts[j].r = stop_pnts[i].r;
+		stop_pnts[j].c = stop_pnts[i].c;
+		j++;
+	    }
+	}
+	if (n_stop_pnts > j) {
+	    G_message(_("Number of duplicate stop points: %d"), n_stop_pnts - j);
+	    n_stop_pnts = j;
 	}
     }
 
@@ -878,6 +969,7 @@ int main(int argc, char *argv[])
     G_debug(1, "nrows x ncols: %d", nrows * ncols);
     G_message(_("Finding cost path..."));
     n_processed = 0;
+    visited = flag_create(nrows, ncols);
 
     pres_cell = get_lowest();
     while (pres_cell != NULL) {
@@ -901,7 +993,8 @@ int main(int argc, char *argv[])
 	    break;
 
 	/* If I've already been updated, delete me */
-	Segment_get(&cost_seg, &costs, pres_cell->row, pres_cell->col);
+	if (Segment_get(&cost_seg, &costs, pres_cell->row, pres_cell->col) < 0)
+	    G_fatal_error(_("Can not read from temporary file"));
 	old_min_cost = costs.cost_out;
 	if (!Rast_is_d_null_value(&old_min_cost)) {
 	    if (pres_cell->min_cost > old_min_cost) {
@@ -910,7 +1003,6 @@ int main(int argc, char *argv[])
 		continue;
 	    }
 	}
-
 	my_dtm = costs.dtm;
 	if (Rast_is_d_null_value(&my_dtm)) {
 	    delete(pres_cell);
@@ -923,6 +1015,19 @@ int main(int argc, char *argv[])
 	    pres_cell = get_lowest();
 	    continue;
 	}
+	if (FLAG_GET(visited, pres_cell->row, pres_cell->col)) {
+	    delete(pres_cell);
+	    pres_cell = get_lowest();
+	    continue;
+	}
+	FLAG_SET(visited, pres_cell->row, pres_cell->col);
+
+	if (have_solver) {
+	    if (Segment_get(&solve_seg, mysolvedir, pres_cell->row, pres_cell->col) < 0)
+		G_fatal_error(_("Can not read from temporary file"));
+	}
+
+	nearest = costs.nearest;
 
 	row = pres_cell->row;
 	col = pres_cell->col;
@@ -948,7 +1053,7 @@ int main(int argc, char *argv[])
 	 * 202.5 225   270  315   337.5
 	 *       247.5      292.5
 	 * 
-	 * X = present cell, directions for neighbors:
+	 * X = current cell:
 	 * 
 	 *       292.5      247.5 
 	 * 337.5 315   270  225    202.5
@@ -957,75 +1062,134 @@ int main(int argc, char *argv[])
 	 *        67.5      112.5
 	 */
 
+	/* drainage directions bitmask encoded CW from North
+	 * drainage directions are set for each neighbor and must be 
+	 * read as from neighbor to current cell
+	 * 
+	 * bit positions, zero-based, from neighbor to current cell
+	 * 
+	 *     X = neighbor                X = current cell
+	 * 
+	 *      15       8                   11      12 
+	 *    14 6   7   0  9              10 2   3   4 13
+	 *       5   X   1                    1   X   5
+	 *    13 4   3   2 10               9 0   7   6 14
+	 *      12      11                    8      15
+	 */
+
 	for (neighbor = 1; neighbor <= total_reviewed; neighbor++) {
 	    switch (neighbor) {
 	    case 1:
+		row = pres_cell->row;
 		col = pres_cell->col - 1;
 		cur_dir = 360.0;
+		if (dir_bin)
+		    cur_dir = 1;
 		break;
 	    case 2:
+		row = pres_cell->row;
 		col = pres_cell->col + 1;
 		cur_dir = 180.0;
+		if (dir_bin)
+		    cur_dir = 5;
 		break;
 	    case 3:
 		row = pres_cell->row - 1;
 		col = pres_cell->col;
 		cur_dir = 270.0;
+		if (dir_bin)
+		    cur_dir = 3;
 		break;
 	    case 4:
 		row = pres_cell->row + 1;
+		col = pres_cell->col;
 		cur_dir = 90.0;
+		if (dir_bin)
+		    cur_dir = 7;
 		break;
 	    case 5:
 		row = pres_cell->row - 1;
 		col = pres_cell->col - 1;
 		cur_dir = 315.0;
+		if (dir_bin)
+		    cur_dir = 2;
 		break;
 	    case 6:
+		row = pres_cell->row - 1;
 		col = pres_cell->col + 1;
 		cur_dir = 225.0;
+		if (dir_bin)
+		    cur_dir = 4;
 		break;
 	    case 7:
 		row = pres_cell->row + 1;
+		col = pres_cell->col + 1;
 		cur_dir = 135.0;
+		if (dir_bin)
+		    cur_dir = 6;
 		break;
 	    case 8:
+		row = pres_cell->row + 1;
 		col = pres_cell->col - 1;
 		cur_dir = 45.0;
+		if (dir_bin)
+		    cur_dir = 0;
 		break;
 	    case 9:
 		row = pres_cell->row - 2;
 		col = pres_cell->col - 1;
 		cur_dir = 292.5;
+		if (dir_bin)
+		    cur_dir = 11;
 		break;
 	    case 10:
+		row = pres_cell->row - 2;
 		col = pres_cell->col + 1;
 		cur_dir = 247.5;
+		if (dir_bin)
+		    cur_dir = 12;
 		break;
 	    case 11:
 		row = pres_cell->row + 2;
+		col = pres_cell->col + 1;
 		cur_dir = 112.5;
+		if (dir_bin)
+		    cur_dir = 15;
 		break;
 	    case 12:
+		row = pres_cell->row + 2;
 		col = pres_cell->col - 1;
 		cur_dir = 67.5;
+		if (dir_bin)
+		    cur_dir = 8;
 		break;
 	    case 13:
 		row = pres_cell->row - 1;
 		col = pres_cell->col - 2;
 		cur_dir = 337.5;
+		if (dir_bin)
+		    cur_dir = 10;
 		break;
 	    case 14:
+		row = pres_cell->row - 1;
 		col = pres_cell->col + 2;
 		cur_dir = 202.5;
+		if (dir_bin)
+		    cur_dir = 13;
 		break;
 	    case 15:
 		row = pres_cell->row + 1;
+		col = pres_cell->col + 2;
 		cur_dir = 157.5;
+		if (dir_bin)
+		    cur_dir = 14;
 		break;
 	    case 16:
+		row = pres_cell->row + 1;
 		col = pres_cell->col - 2;
 		cur_dir = 22.5;
+		if (dir_bin)
+		    cur_dir = 9;
 		break;
 	    }
 
@@ -1034,8 +1198,11 @@ int main(int argc, char *argv[])
 	    if (col < 0 || col >= ncols)
 		continue;
 
+	    /* skip already processed neighbors here ? */
+
 	    min_cost = dnullval;
-	    Segment_get(&cost_seg, &costs, row, col);
+	    if (Segment_get(&cost_seg, &costs, row, col) < 0)
+		G_fatal_error(_("Can not read from temporary file"));
 
 	    switch (neighbor) {
 	    case 1:
@@ -1320,38 +1487,115 @@ int main(int argc, char *argv[])
 		break;
 	    }
 
+	    /* skip if costs could not be calculated */
 	    if (Rast_is_d_null_value(&min_cost))
 		continue;
 
-	    Segment_get(&cost_seg, &costs, row, col);
+	    if (Segment_get(&cost_seg, &costs, row, col) < 0)
+		G_fatal_error(_("Can not read from temporary file"));
 	    old_min_cost = costs.cost_out;
 
 	    /* add to list */
 	    if (Rast_is_d_null_value(&old_min_cost)) {
 		costs.cost_out = min_cost;
-		Segment_put(&cost_seg, &costs, row, col);
+		costs.nearest = nearest;
+		if (Segment_put(&cost_seg, &costs, row, col) < 0)
+		    G_fatal_error(_("Can not write to temporary file"));
 		insert(min_cost, row, col);
 		if (dir == 1) {
-		    Segment_put(&dir_seg, &cur_dir, row, col);
+		    if (dir_bin)
+			cur_dir = (1 << (int)cur_dir);
+		    if (Segment_put(&dir_seg, &cur_dir, row, col) < 0)
+			G_fatal_error(_("Can not write to temporary file"));
+		}
+		if (have_solver) {
+		    if (Segment_get(&solve_seg, solvedir, row, col) < 0)
+			G_fatal_error(_("Can not read from temporary file"));
+		    solvedir[1] = mysolvedir[0];
+		    if (Segment_put(&solve_seg, solvedir, row, col) < 0)
+			G_fatal_error(_("Can not write to temporary file"));
 		}
 	    }
 	    /* update with lower costs */
 	    else if (old_min_cost > min_cost) {
 		costs.cost_out = min_cost;
-		Segment_put(&cost_seg, &costs, row, col);
+		costs.nearest = nearest;
+		if (Segment_put(&cost_seg, &costs, row, col) < 0)
+		    G_fatal_error(_("Can not write to temporary file"));
 		insert(min_cost, row, col);
 		if (dir == 1) {
-		    Segment_put(&dir_seg, &cur_dir, row, col);
+		    if (dir_bin)
+			cur_dir = (1 << (int)cur_dir);
+		    if (Segment_put(&dir_seg, &cur_dir, row, col) < 0)
+			G_fatal_error(_("Can not write to temporary file"));
+		}
+		if (have_solver) {
+		    if (Segment_get(&solve_seg, solvedir, row, col) < 0)
+			G_fatal_error(_("Can not read from temporary file"));
+		    solvedir[1] = mysolvedir[0];
+		    if (Segment_put(&solve_seg, solvedir, row, col) < 0)
+			G_fatal_error(_("Can not write to temporary file"));
+		}
+	    }
+	    else if (old_min_cost == min_cost &&
+	             (dir_bin || have_solver) && 
+		     !(FLAG_GET(visited, row, col))) {
+		FCELL old_dir;
+		int dir_inv[16] = { 4, 5, 6, 7, 0, 1, 2, 3,
+		                   12, 13, 14, 15, 8, 9, 10, 11 };
+		int dir_fwd;
+		int equal = 1;
+		
+		/* only update neighbors that have not yet been processed,
+		 * otherwise we might get circular paths */
+
+		if (have_solver) {
+		    if (Segment_get(&solve_seg, solvedir, row, col) < 0)
+			G_fatal_error(_("Can not read from temporary file"));
+		    equal = (solvedir[1] == mysolvedir[0]);
+		    if (solvedir[1] > mysolvedir[0]) {
+			solvedir[1] = mysolvedir[0];
+			if (Segment_put(&solve_seg, solvedir, row, col) < 0)
+			    G_fatal_error(_("Can not write to temporary file"));
+
+			costs.nearest = nearest;
+			if (Segment_put(&cost_seg, &costs, row, col) < 0)
+			    G_fatal_error(_("Can not write to temporary file"));
+
+			if (dir == 1) {
+			    if (dir_bin)
+				cur_dir = (1 << (int)cur_dir);
+			    if (Segment_put(&dir_seg, &cur_dir, row, col) < 0)
+				G_fatal_error(_("Can not write to temporary file"));
+			}
+		    }
+		}
+
+		if (dir_bin && equal) {
+		    /* this can create circular paths:
+		     * set only if current cell does not point to neighbor
+		     * does not avoid longer circular paths */
+		    if (Segment_get(&dir_seg, &old_dir, pres_cell->row, pres_cell->col) < 0)
+			G_fatal_error(_("Can not read from temporary file"));
+		    dir_fwd = (1 << dir_inv[(int)cur_dir]);
+		    if (!((int)old_dir & dir_fwd)) {
+			if (Segment_get(&dir_seg, &old_dir, row, col) < 0)
+			    G_fatal_error(_("Can not read from temporary file"));
+			cur_dir = ((1 << (int)cur_dir) | (int)old_dir);
+			if (Segment_put(&dir_seg, &cur_dir, row, col) < 0)
+			    G_fatal_error(_("Can not write to temporary file"));
+		    }
 		}
 	    }
 	}
 
-	if (have_stop_points && time_to_stop(pres_cell->row, pres_cell->col))
+	if (stop_pnts && time_to_stop(pres_cell->row, pres_cell->col))
 	    break;
 
 	ct = pres_cell;
 	delete(pres_cell);
 	pres_cell = get_lowest();
+
 	if (ct == pres_cell)
 	    G_warning(_("Error, ct == pres_cell"));
     }
@@ -1359,18 +1603,38 @@ int main(int argc, char *argv[])
 
     /* free heap */
     free_heap();
-    
+    flag_destroy(visited);
+
+    if (have_solver) {
+	Segment_close(&solve_seg);
+    }
+
     /* Open cumulative cost layer for writing */
     cum_fd = Rast_open_new(cum_cost_layer, cum_data_type);
     cum_cell = Rast_allocate_buf(cum_data_type);
 
+    /* Open nearest start point layer */
+    if (nearest_layer) {
+	nearest_fd = Rast_open_new(nearest_layer, nearest_data_type);
+	nearest_cell = Rast_allocate_buf(nearest_data_type);
+    }
+    else {
+	nearest_fd = -1;
+	nearest_cell = NULL;
+    }
+    nearest_size = Rast_cell_size(nearest_data_type);
+
     /* Copy segmented map to output map */
     G_message(_("Writing output raster map <%s>... "), cum_cost_layer);
+    if (nearest_layer) {
+	G_message(_("Writing raster map with nearest start point <%s>..."), nearest_layer);
+    }
 
     cell2 = Rast_allocate_buf(dtm_data_type);
     {
 	void *p;
 	void *p2;
+	void *p3;
 	int cum_dsize = Rast_cell_size(cum_data_type);
 
 	Rast_set_null_value(cell2, ncols, dtm_data_type);
@@ -1382,19 +1646,29 @@ int main(int argc, char *argv[])
 
 	    p = cum_cell;
 	    p2 = cell2;
+	    p3 = nearest_cell;
 	    for (col = 0; col < ncols; col++) {
 		if (keep_nulls) {
 		    if (Rast_is_null_value(p2, dtm_data_type)) {
 			Rast_set_null_value(p, 1, cum_data_type);
 			p = G_incr_void_ptr(p, cum_dsize);
 			p2 = G_incr_void_ptr(p2, dtm_dsize);
+			if (nearest_layer) {
+			    Rast_set_null_value(p3, 1, nearest_data_type);
+			    p3 = G_incr_void_ptr(p3, nearest_size);
+			}
+
 			continue;
 		    }
 		}
-		Segment_get(&cost_seg, &costs, row, col);
+		if (Segment_get(&cost_seg, &costs, row, col) < 0)
+		    G_fatal_error(_("Can not read from temporary file"));
 		min_cost = costs.cost_out;
+		nearest = costs.nearest;
 		if (Rast_is_d_null_value(&min_cost)) {
 		    Rast_set_null_value((p), 1, cum_data_type);
+		    if (nearest_layer)
+			Rast_set_null_value(p3, 1, nearest_data_type);
 		}
 		else {
 		    if (min_cost > peak)
@@ -1411,15 +1685,35 @@ int main(int argc, char *argv[])
 			*(DCELL *)p = (DCELL)(min_cost);
 			break;
 		    }
+
+		    if (nearest_layer) {
+			switch (nearest_data_type) {
+			case CELL_TYPE:
+			    *(CELL *)p3 = (CELL)(nearest);
+			    break;
+			case FCELL_TYPE:
+			    *(FCELL *)p3 = (FCELL)(nearest);
+			    break;
+			case DCELL_TYPE:
+			    *(DCELL *)p3 = (DCELL)(nearest);
+			    break;
+			}
+		    }
 		}
 		p = G_incr_void_ptr(p, cum_dsize);
 		p2 = G_incr_void_ptr(p2, dtm_dsize);
+		if (nearest_layer)
+		    p3 = G_incr_void_ptr(p3, nearest_size);
 	    }
 	    Rast_put_row(cum_fd, cum_cell, cum_data_type);
+	    if (nearest_layer)
+		Rast_put_row(nearest_fd, nearest_cell, nearest_data_type);
 	}
 	G_percent(1, 1, 1);
 	G_free(cum_cell);
 	G_free(cell2);
+	if (nearest_layer)
+	    G_free(nearest_cell);
     }
 
     if (dir == 1) {
@@ -1433,7 +1727,8 @@ int main(int argc, char *argv[])
 	for (row = 0; row < nrows; row++) {
 	    p = dir_cell;
 	    for (col = 0; col < ncols; col++) {
-		Segment_get(&dir_seg, &cur_dir, row, col);
+		if (Segment_get(&dir_seg, &cur_dir, row, col) < 0)
+		    G_fatal_error(_("Can not read from temporary file"));
 		*((FCELL *) p) = cur_dir;
 		p = G_incr_void_ptr(p, dir_size);
 	    }
@@ -1453,6 +1748,8 @@ int main(int argc, char *argv[])
     Rast_close(cum_fd);
     if (dir == 1)
 	Rast_close(dir_fd);
+    if (nearest_layer)
+	Rast_close(nearest_fd);
 
     /* writing history file */
     Rast_short_history(cum_cost_layer, "raster", &history);
@@ -1463,6 +1760,27 @@ int main(int argc, char *argv[])
 	Rast_short_history(move_dir_layer, "raster", &history);
 	Rast_command_history(&history);
 	Rast_write_history(move_dir_layer, &history);
+    }
+
+    if (nearest_layer) {
+	Rast_short_history(nearest_layer, "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history(nearest_layer, &history);
+	if (opt9->answer) {
+	    struct Colors colors;
+	    Rast_read_colors(opt9->answer, "", &colors);
+	    Rast_write_colors(nearest_layer, G_mapset(), &colors);
+	}
+	else {
+	    struct Colors colors;
+	    struct Range range;
+	    CELL min, max;
+	    
+	    Rast_read_range(nearest_layer, G_mapset(), &range);
+	    Rast_get_range_min_max(&range, &min, &max);
+	    Rast_make_random_colors(&colors, min, max);
+	    Rast_write_colors(nearest_layer, G_mapset(), &colors);
+	}
     }
 
     /* Create colours for output map */
@@ -1479,16 +1797,13 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-int
-process_answers(char **answers, struct start_pt **points,
-		struct start_pt **top_start_pt)
+struct start_pt *
+process_start_coords(char **answers, struct start_pt *top_start_pt)
 {
     int col, row;
     double east, north;
     struct start_pt *new_start_pt;
-    int got_one = 0;
-
-    *points = NULL;
+    int point_no = 0;
 
     if (!answers)
 	return (0);
@@ -1505,8 +1820,6 @@ process_answers(char **answers, struct start_pt **points,
 		      east, north);
 	    continue;
 	}
-	else
-	    got_one = 1;
 
 	row = (window.north - north) / window.ns_res;
 	col = (east - window.west) / window.ew_res;
@@ -1515,39 +1828,90 @@ process_answers(char **answers, struct start_pt **points,
 
 	new_start_pt->row = row;
 	new_start_pt->col = col;
-	new_start_pt->next = NULL;
-
-	if (*points == NULL) {
-	    *points = new_start_pt;
-	    *top_start_pt = new_start_pt;
-	    new_start_pt->next = NULL;
-	}
-	else {
-	    (*top_start_pt)->next = new_start_pt;
-	    *top_start_pt = new_start_pt;
-	}
+	new_start_pt->value = ++point_no;
+	new_start_pt->next = top_start_pt;
+	top_start_pt = new_start_pt;
     }
-    return (got_one);
+
+    return top_start_pt;
+}
+
+int process_stop_coords(char **answers)
+{
+    int col, row;
+    double east, north;
+
+    if (!answers)
+	return 0;
+
+    for (; *answers != NULL; answers += 2) {
+	if (!G_scan_easting(*answers, &east, G_projection()))
+	    G_fatal_error(_("Illegal x coordinate <%s>"), *answers);
+	if (!G_scan_northing(*(answers + 1), &north, G_projection()))
+	    G_fatal_error(_("Illegal y coordinate <%s>"), *(answers + 1));
+
+	if (east < window.west || east > window.east ||
+	    north < window.south || north > window.north) {
+	    G_warning(_("Warning, ignoring point outside window: %g, %g"),
+		      east, north);
+	    continue;
+	}
+
+	row = (window.north - north) / window.ns_res;
+	col = (east - window.west) / window.ew_res;
+
+	add_stop_pnt(row, col);
+    }
+
+    return (stop_pnts != NULL);
+}
+
+void add_stop_pnt(int r, int c)
+{
+    int i;
+    struct rc sp;
+
+    if (n_stop_pnts == stop_pnts_alloc) {
+	stop_pnts_alloc += 100;
+	stop_pnts = (struct rc *)G_realloc(stop_pnts, stop_pnts_alloc * sizeof(struct rc));
+    }
+
+    sp.r = r;
+    sp.c = c;
+    i = n_stop_pnts;
+    while (i > 0 && cmp_rc(stop_pnts + i - 1, &sp) > 0) {
+	stop_pnts[i] = stop_pnts[i - 1];
+	i--;
+    }
+    stop_pnts[i] = sp;
+
+    n_stop_pnts++;
 }
 
 int time_to_stop(int row, int col)
 {
-    static int total = 0;
+    int lo, mid, hi;
+    struct rc sp;
     static int hits = 0;
-    struct start_pt *points;
 
-    if (total == 0) {
-	for (points = head_end_pt;
-	     points != NULL; points = points->next, total++) ;
+    sp.r = row;
+    sp.c = col;
+
+    lo = 0;
+    hi = n_stop_pnts - 1;
+
+    /* bsearch with deferred test for equality
+     * slightly more efficient for worst case: no match */
+    while (lo < hi) {
+	mid = lo + ((hi - lo) >> 1);
+	if (cmp_rc(stop_pnts + mid, &sp) < 0)
+	    lo = mid + 1;
+	else
+	    hi = mid;
+    }
+    if (cmp_rc(stop_pnts + lo, &sp) == 0) {
+	return (++hits == n_stop_pnts);
     }
 
-    for (points = head_end_pt; points != NULL; points = points->next)
-
-	if (points->row == row && points->col == col) {
-	    hits++;
-	    if (hits == total)
-		return (1);
-	}
-
-    return (0);
+    return 0;
 }

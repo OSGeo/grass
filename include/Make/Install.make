@@ -113,7 +113,6 @@ real-install: | $(INST_DIR) $(UNIX_BIN)
 	-rm $(INST_DIR)/$(GRASSMAKE)
 	$(MAKE) $(INST_DIR)/$(GRASSMAKE)
 
-	-$(INSTALL) config.status $(INST_DIR)/config.status
 	-$(CHMOD) -R a+rX $(INST_DIR) 2>/dev/null
 
 ifneq ($(findstring darwin,$(ARCH)),)
@@ -199,7 +198,7 @@ srcdist: distclean
 	@ # do not include the debian control files:
 	-mv ./grass-$(GRASS_VERSION_NUMBER)/debian .
 	@ #we use -h to get the linked files into as real files:
-	tar cvfzh grass-$(GRASS_VERSION_NUMBER).tar.gz ./grass-$(GRASS_VERSION_NUMBER)/* --exclude=.svn
+	tar cvfzh grass-$(GRASS_VERSION_NUMBER).tar.gz ./grass-$(GRASS_VERSION_NUMBER)/* --exclude=.git
 	@ # restore src code location:
 	-mv ./grass-$(GRASS_VERSION_NUMBER)/* .
 	-rmdir ./grass-$(GRASS_VERSION_NUMBER)

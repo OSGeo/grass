@@ -30,6 +30,7 @@ static int new_argc;
 static void do_opt(const struct Option *opt)
 {
     char *buf;
+
     if (!opt->answer)
 	return;
     buf = G_malloc(strlen(opt->key) + 1 + strlen(opt->answer) + 1);
@@ -40,7 +41,7 @@ static void do_opt(const struct Option *opt)
 int main(int argc, char *argv[])
 {
     char command[GPATH_MAX];
-    int err, ret;
+    int ret;
     struct Option *opt1;
     struct Option *opt2;
     struct Option *opt3;
@@ -59,6 +60,7 @@ int main(int argc, char *argv[])
     struct Option *opt16;
     struct Option *opt17;
     struct Option *opt18;
+    struct Option *opt19;
     struct Flag *flag_sfd;
     struct Flag *flag_flow;
     struct Flag *flag_seg;
@@ -73,7 +75,13 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("hydrology"));
     G_add_keyword(_("watershed"));
-    module->description = _("Calculates hydrological parameters and RUSLE factors.");
+    G_add_keyword(_("accumulation"));
+    G_add_keyword(_("drainage"));
+    G_add_keyword(_("stream network"));
+    G_add_keyword(_("stream power index"));
+    G_add_keyword(_("topographic index"));
+    module->description =
+	_("Calculates hydrological parameters and RUSLE factors.");
 
     opt1 = G_define_standard_option(G_OPT_R_ELEV);
     opt1->guisection = _("Inputs");
@@ -81,13 +89,15 @@ int main(int argc, char *argv[])
     opt2 = G_define_standard_option(G_OPT_R_INPUT);
     opt2->key = "depression";
     opt2->label = _("Name of input depressions raster map");
-    opt2->description = _("All non-NULL and non-zero cells are considered as real depressions");
+    opt2->description =
+	_("All non-NULL and non-zero cells are considered as real depressions");
     opt2->required = NO;
     opt2->guisection = _("Inputs");
 
     opt3 = G_define_standard_option(G_OPT_R_INPUT);
     opt3->key = "flow";
-    opt3->description = _("Name of input raster representing amount of overland flow per cell");
+    opt3->description =
+	_("Name of input raster representing amount of overland flow per cell");
     opt3->required = NO;
     opt3->guisection = _("Inputs");
 
@@ -107,18 +117,23 @@ int main(int argc, char *argv[])
     opt5->required = NO;
     opt5->guisection = _("Inputs");
 
+    opt19 = G_define_standard_option(G_OPT_R_INPUT);
+    opt19->key = "retention";
+    opt19->description =
+        _("Name of input raster map with percentages for flow accumulation.");
+    opt19->required = NO;
+    opt19->guisection = _("Inputs");
+
     opt6 = G_define_option();
     opt6->key = "threshold";
-    opt6->description =
-	_("Minimum size of exterior watershed basin");
+    opt6->description = _("Minimum size of exterior watershed basin");
     opt6->required = NO;
     opt6->type = TYPE_INTEGER;
     opt6->guisection = _("Inputs");
 
     opt7 = G_define_option();
     opt7->key = "max_slope_length";
-    opt7->label =
-	_("Maximum length of surface flow in map units");
+    opt7->label = _("Maximum length of surface flow in map units");
     opt7->description = _("For USLE");
     opt7->required = NO;
     opt7->type = TYPE_DOUBLE;
@@ -126,10 +141,8 @@ int main(int argc, char *argv[])
 
     opt8 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt8->key = "accumulation";
-    opt8->label =
-	_("Name for output accumulation raster map");
-    opt8->description =
-    _("Number of cells that drain through each cell");
+    opt8->label = _("Name for output accumulation raster map");
+    opt8->description = _("Number of cells that drain through each cell");
     opt8->required = NO;
     opt8->guisection = _("Outputs");
 
@@ -142,14 +155,14 @@ int main(int argc, char *argv[])
 
     opt18 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt18->key = "spi";
-    opt18->label =
-	_("Stream power index a * tan(b)");
+    opt18->label = _("Name for output stream power index a * tan(b)");
     opt18->required = NO;
     opt18->guisection = _("Outputs");
 
     opt9 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt9->key = "drainage";
-    opt9->description = _("Name for output drainage direction raster map");
+    opt9->label = _("Name for output drainage direction raster map");
+    opt9->description = _("Directions numbered from 1 to 8");
     opt9->required = NO;
     opt9->guisection = _("Outputs");
 
@@ -168,16 +181,14 @@ int main(int argc, char *argv[])
     opt12 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt12->key = "half_basin";
     opt12->label = _("Name for output half basins raster map");
-    opt12->description =
-	_("Each half-basin is given a unique value");
+    opt12->description = _("Each half-basin is given a unique value");
     opt12->required = NO;
     opt12->guisection = _("Outputs");
 
     opt13 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt13->key = "length_slope";
     opt13->label = _("Name for output slope length raster map");
-    opt13->description =
-	_("Slope length and steepness (LS) factor for USLE");
+    opt13->description = _("Slope length and steepness (LS) factor for USLE");
     opt13->required = NO;
     opt13->guisection = _("Outputs");
 
@@ -217,8 +228,7 @@ int main(int argc, char *argv[])
 
     flag_seg = G_define_flag();
     flag_seg->key = 'm';
-    flag_seg->label =
-	_("Enable disk swap memory option: Operation is slow");
+    flag_seg->label = _("Enable disk swap memory option: Operation is slow");
     flag_seg->description =
 	_("Only needed if memory requirements exceed available RAM; see manual on how to calculate memory requirements");
 
@@ -231,27 +241,22 @@ int main(int argc, char *argv[])
 
     flag_flat = G_define_flag();
     flag_flat->key = 'b';
-    flag_flat->label =
-	_("Beautify flat areas");
+    flag_flat->label = _("Beautify flat areas");
     flag_flat->description =
 	_("Flow direction in flat areas is modified to look prettier");
 
-    if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
-
-
-    /* Check option combinations */
+    /* Some options requires threshold */
+    G_option_requires(opt10, opt6, NULL);
+    G_option_requires(opt11, opt6, NULL);
+    G_option_requires(opt12, opt6, NULL);
+    G_option_requires(opt13, opt6, NULL);
+    G_option_requires(opt14, opt6, NULL);
 
     /* Check for some output map */
-    if ((opt8->answer == NULL)
-	&& (opt9->answer == NULL)
-	&& (opt10->answer == NULL)
-	&& (opt11->answer == NULL)
-	&& (opt12->answer == NULL)
-	&& (opt14->answer == NULL)
-	&& (opt15->answer == NULL)) {
-	G_fatal_error(_("Sorry, you must choose an output map."));
-    }
+    G_option_required(opt8, opt17, opt18, opt9, opt10, opt11, opt12, opt13, opt14, NULL);
+      
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
 
     /* basin threshold */
     if (opt6->answer) {
@@ -259,31 +264,9 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("The basin threshold must be a positive number."));
     }
 
-    err = 0;
-    /* basin and basin threshold */
-    err += (opt10->answer != NULL && opt6->answer == NULL);
-    /* stream and basin threshold */
-    err += (opt11->answer != NULL && opt6->answer == NULL);
-    /* half_basin and basin threshold */
-    err += (opt12->answer != NULL && opt6->answer == NULL);
-    /* LS factor and basin threshold */
-    err += (opt13->answer != NULL && opt6->answer == NULL);
-    /* S factor and basin threshold */
-    err += (opt14->answer != NULL && opt6->answer == NULL);
-
-    if (err) {
-	G_message(_("Sorry, if any of the following options are set:\n"
-		    "    basin, stream, half_basin, length_slope, or slope_steepness\n"
-		    "    you MUST provide a value for the basin "
-		    "threshold parameter."));
-	G_usage();
-	exit(EXIT_FAILURE);
-    }
-
     /* Build command line */
     sprintf(command, "%s/etc/r.watershed/%s",
-	    G_gisbase(),
-	    flag_seg->answer ? "seg" : "ram");
+	    G_gisbase(), flag_seg->answer ? "seg" : "ram");
     new_argv[new_argc++] = command;
 
     if (flag_sfd->answer)
@@ -306,6 +289,7 @@ int main(int argc, char *argv[])
     do_opt(opt3);
     do_opt(opt4);
     do_opt(opt5);
+    do_opt(opt19);
     do_opt(opt6);
     do_opt(opt7);
     do_opt(opt8);
@@ -323,9 +307,10 @@ int main(int argc, char *argv[])
     new_argv[new_argc++] = NULL;
 
     G_debug(1, "Mode: %s", flag_seg->answer ? "Segmented" : "All in RAM");
-/*    if (flag_seg->answer)
-       G_message(_("Using memory cache size: %.1f MB"), atof(opt16->answer));
-*/
+    /*
+    if (flag_seg->answer)
+        G_message(_("Using memory cache size: %.1f MB"), atof(opt16->answer));
+     */
     ret = G_vspawn_ex(new_argv[0], new_argv);
 
     if (ret != EXIT_SUCCESS)
@@ -350,7 +335,7 @@ int main(int argc, char *argv[])
 		   opt1->answer, flag_seg->answer, flag_sfd->answer);
     if (opt10->answer)
 	write_hist(opt10->answer,
-		   "Watershed basins", opt1->answer, flag_seg->answer, 
+		   "Watershed basins", opt1->answer, flag_seg->answer,
 		   flag_sfd->answer);
     if (opt11->answer)
 	write_hist(opt11->answer,
@@ -358,7 +343,7 @@ int main(int argc, char *argv[])
 		   flag_seg->answer, flag_sfd->answer);
     if (opt12->answer)
 	write_hist(opt12->answer,
-		   "Watershed half-basins", opt1->answer, flag_seg->answer, 
+		   "Watershed half-basins", opt1->answer, flag_seg->answer,
 		   flag_sfd->answer);
     if (opt13->answer)
 	write_hist(opt13->answer,
@@ -373,7 +358,8 @@ int main(int argc, char *argv[])
 }
 
 /* record map history info */
-static void write_hist(char *map_name, char *title, char *source_name, int mode, int sfd)
+static void write_hist(char *map_name, char *title, char *source_name,
+		       int mode, int sfd)
 {
     struct History history;
 
@@ -381,10 +367,10 @@ static void write_hist(char *map_name, char *title, char *source_name, int mode,
 
     Rast_short_history(map_name, "raster", &history);
     Rast_set_history(&history, HIST_DATSRC_1, source_name);
-    Rast_append_format_history(
-	&history, "Processing mode: %s", sfd ? "SFD (D8)" : "MFD");
-    Rast_append_format_history(
-	&history, "Memory mode: %s", mode ? "Segmented" : "All in RAM");
+    Rast_append_format_history(&history, "Processing mode: %s",
+			       sfd ? "SFD (D8)" : "MFD");
+    Rast_append_format_history(&history, "Memory mode: %s",
+			       mode ? "Segmented" : "All in RAM");
     Rast_command_history(&history);
 
     Rast_write_history(map_name, &history);

@@ -45,7 +45,7 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct Option *bg_color_opt, *fg_color_opt, *coords, *fsize, *barstyle,
             *text_placement, *length_opt, *segm_opt, *units_opt, *label_opt,
-            *width_scale_opt;
+            *width_scale_opt, *font, *path, *charset;
     struct Flag *feet, *no_text, *n_symbol;
     struct Cell_head W;
     double east, north;
@@ -173,6 +173,13 @@ int main(int argc, char **argv)
     width_scale_opt->options = "0.5-100";
     width_scale_opt->description = _("Scale factor to change bar width");
 
+    font = G_define_option();
+    font->key = "font";
+    font->type = TYPE_STRING;
+    font->required = NO;
+    font->description = _("Font name");
+    font->guisection = _("Text");
+
     fsize = G_define_option();
     fsize->key = "fontsize";
     fsize->type = TYPE_DOUBLE;
@@ -182,7 +189,22 @@ int main(int argc, char **argv)
     fsize->description = _("Font size");
     fsize->guisection = _("Text");
 
-     G_option_exclusive(feet, units_opt, NULL);
+    path = G_define_standard_option(G_OPT_F_INPUT);
+    path->key = "path";
+    path->required = NO;
+    path->description = _("Path to font file");
+    path->gisprompt = "old,font,file";
+    path->guisection = _("Font settings");
+
+    charset = G_define_option();
+    charset->key = "charset";
+    charset->type = TYPE_STRING;
+    charset->required = NO;
+    charset->description =
+	_("Text encoding (only applicable to TrueType fonts)");
+    charset->guisection = _("Text");
+
+    G_option_exclusive(feet, units_opt, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -316,6 +338,13 @@ int main(int argc, char **argv)
 
 
     D_open_driver();
+
+    if (font->answer)
+	D_font(font->answer);
+    else if (path->answer)
+	D_font(path->answer);
+    if (charset->answer)
+	D_encoding(charset->answer);
 
     D_setup(0);
 

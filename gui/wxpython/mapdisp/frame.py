@@ -33,7 +33,7 @@ import wx.aui
 from mapdisp.toolbars import MapToolbar, NvizIcons
 from mapdisp.gprint import PrintOptions
 from core.gcmd import GError, GMessage, RunCommand
-from core.utils import ListOfCatsToRange, GetLayerNameFromCmd, _
+from core.utils import ListOfCatsToRange, GetLayerNameFromCmd
 from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from core.debug import Debug
 from core.settings import UserSettings
@@ -48,6 +48,7 @@ from mapwin.analysis import ProfileController, MeasureDistanceController, \
 from gui_core.forms import GUI
 from core.giface import Notification
 from gui_core.vselect import VectorSelectBase, VectorSelectHighlighter
+from gui_core.wrap import Menu
 from mapdisp import statusbar as sb
 
 import grass.script as grass
@@ -256,7 +257,7 @@ class MapFrame(SingleMapFrame):
         """
         gisenv = grass.gisenv()
         title = _("GRASS GIS Map Display: %(name)s - %(loc)s/%(mapset)s") % {
-            'name': str(name),
+            'name': name,
             'loc': gisenv["LOCATION_NAME"],
             'mapset': gisenv["MAPSET"]}
 
@@ -806,7 +807,7 @@ class MapFrame(SingleMapFrame):
         """
         Print options and output menu for map display
         """
-        printmenu = wx.Menu()
+        printmenu = Menu()
         # Add items to the menu
         setup = wx.MenuItem(printmenu, wx.ID_ANY, _('Page setup'))
         printmenu.AppendItem(setup)
@@ -848,10 +849,9 @@ class MapFrame(SingleMapFrame):
         elif self.page:
             pgnum = self.layerbook.GetPageIndex(self.page)
             if pgnum > -1:
-                self.layerbook.RemovePage(pgnum)
+                self._mgr.UnInit()
+                self.layerbook.DeletePage(pgnum)
         Debug.msg(2, "MapFrame.OnCloseWindow(): function ends")
-        self._mgr.UnInit()
-        self.Destroy()
 
     def Query(self, x, y):
         """Query selected layers.
@@ -999,7 +999,9 @@ class MapFrame(SingleMapFrame):
         """Highlight category from query."""
         if len(vectQuery) > 0:
             self._highlighter_layer.SetLayer(vectQuery[0]['Layer'])
-            self._highlighter_layer.SetMap(vectQuery[0]['Map'])
+            self._highlighter_layer.SetMap(
+                vectQuery[0]['Map'] + '@' + vectQuery[0]['Mapset']
+            )
             tmp = list()
             for i in vectQuery:
                 tmp.append(i['Category'])
@@ -1061,17 +1063,14 @@ class MapFrame(SingleMapFrame):
 
         pattern = [
             "d.vect",
-            "map=%s" %
-            name,
-            "color=%s" %
-            colorStr,
-            "fill_color=%s" %
-            colorStr,
-            "width=%d" %
-            UserSettings.Get(
+            "map=%s" % name,
+            "color=%s" % colorStr,
+            "fill_color=%s" % colorStr,
+            "width=%d" % UserSettings.Get(
                 group='atm',
                 key='highlight',
-                subkey='width')]
+                subkey='width')
+        ]
         if icon != '':
             pattern.append('icon=%s' % icon)
         if size > 0:
@@ -1384,7 +1383,7 @@ class MapFrame(SingleMapFrame):
     def OnZoomMenu(self, event):
         """Popup Zoom menu
         """
-        zoommenu = wx.Menu()
+        zoommenu = Menu()
 
         for label, handler in (
             (_('Zoom to default region'),
@@ -1503,7 +1502,7 @@ class MapFrame(SingleMapFrame):
         self.rdigit = RDigitController(self._giface,
                                        mapWindow=self.GetMapWindow())
         self.toolbars['rdigit'] = RDigitToolbar(
-            parent=self, controller=self.rdigit,
+            parent=self, giface=self._giface, controller=self.rdigit,
             toolSwitcher=self._toolSwitcher)
         # connect signals
         self.rdigit.newRasterCreated.connect(
@@ -1558,6 +1557,7 @@ class MapFrame(SingleMapFrame):
         self.GetMap().layerAdded.disconnect(self._updateRDigitLayers)
         self.GetMap().layerRemoved.disconnect(self._updateRDigitLayers)
         self.GetMap().layerChanged.disconnect(self._updateRDigitLayers)
+        self._toolSwitcher.toggleToolChanged.disconnect(self.toolbars['rdigit'].CheckSelectedTool)
 
         self.RemoveToolbar('rdigit', destroy=True)
         self.rdigit = None

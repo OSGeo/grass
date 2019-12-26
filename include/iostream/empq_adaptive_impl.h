@@ -75,7 +75,7 @@ EMPQueueAdaptive<T,Key>::EMPQueueAdaptive(size_t inMem) {
 		    << ( (float)inMem/ (1<< 20)) << "MB" << endl;
   
   initPQ(inMem);
-};
+}
 
 
 //------------------------------------------------------------
@@ -97,7 +97,7 @@ EMPQueueAdaptive<T,Key>::EMPQueueAdaptive() {
 
   initPQ(mm_avail);
 
-};
+}
 
 
 //------------------------------------------------------------
@@ -160,7 +160,7 @@ EMPQueueAdaptive<T,Key>::initPQ(size_t initMem) {
   im = new MinMaxHeap<T>(pqsize);
   assert(im);
   em = NULL;
-};
+}
 
 
 template<class T, class Key> 
@@ -177,7 +177,7 @@ EMPQueueAdaptive<T,Key>::~EMPQueueAdaptive() {
 	delete em; 
 	break;
   }
-};
+}
 
 
 
@@ -200,7 +200,7 @@ EMPQueueAdaptive<T,Key>::maxlen() const {
 	break;
   }
   return m;
-};
+}
 
 
 
@@ -225,7 +225,7 @@ EMPQueueAdaptive<T,Key>::is_empty() const {
 	break;
   }
   return v;
-};
+}
 
 
 //return true if full
@@ -273,7 +273,7 @@ EMPQueueAdaptive<T,Key>::min(T& elt) {
 	break;
   }
   return v;
-};
+}
 
 /* switch over to using an external priority queue */
 template<class T, class Key> 
@@ -332,7 +332,7 @@ EMPQueueAdaptive<T,Key>::extract_all_min(T& elt) {
 	break;
   }
   return v;
-};
+}
 
 //return the nb of elements in the structure 
 template<class T, class Key> 
@@ -384,7 +384,7 @@ EMPQueueAdaptive<T,Key>::extract_min(T& elt) {
 	  break;
     }
 	return v;
-};
+}
  
 
 
@@ -418,7 +418,7 @@ EMPQueueAdaptive<T,Key>::insert(const T& elt) {
 	break;
   }
   return v;
-};
+}
 
 template<class T, class Key> 
 void
@@ -507,6 +507,6 @@ EMPQueueAdaptive<T,Key>::makeExternal() {
 #ifndef NDEBUG
   assert(sizeCheck == size());
 #endif
-};
+}
 
 #endif

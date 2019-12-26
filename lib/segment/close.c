@@ -8,7 +8,7 @@
  *
  * \author GRASS GIS Development Team
  *
- * \date 2012
+ * \date 2018
  */
 
 #include <unistd.h>
@@ -35,12 +35,19 @@ int Segment_close(SEGMENT *SEG)
     if (SEG->open != 1)
 	return -1;
 
-    Segment_release(SEG);
-    close(SEG->fd);
-    unlink(SEG->fname);
+    if (SEG->cache) {
+	G_free(SEG->cache);
+    }
+    else {
+	Segment_release(SEG);
+	close(SEG->fd);
+	unlink(SEG->fname);
 
-    SEG->fd = -1;
-    SEG->fname = NULL;
+	SEG->fd = -1;
+	SEG->fname = NULL;
+    }
+
+    SEG->open = 0;
 
     return 1;
 }

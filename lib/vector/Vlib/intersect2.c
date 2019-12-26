@@ -85,6 +85,8 @@ static int debug_level = -1;
 #if 0
 static int ident(double x1, double y1, double x2, double y2, double thresh);
 #endif
+static int snap_cross(int asegment, double *adistance, int bsegment,
+		      double *bdistance, double *xc, double *yc);
 static int cross_seg(int i, int j, int b);
 static int find_cross(int i, int j, int b);
 
@@ -107,6 +109,27 @@ static int *use_cross = NULL;
 
 static double rethresh = 0.000001;	/* TODO */
 
+static double d_ulp(double a, double b)
+{
+    double fa = fabs(a);
+    double fb = fabs(b);
+    double dmax, result;
+    int exp;
+    
+    dmax = fa;
+    if (dmax < fb)
+	dmax = fb;
+
+    /* unit in the last place (ULP):
+     * smallest representable difference
+     * shift of the exponent
+     * float: 23, double: 52, middle: 37.5 */
+    result = frexp(dmax, &exp);
+    exp -= 38;
+    result = ldexp(result, exp);
+
+    return result;
+}
 
 static void add_cross(int asegment, double adistance, int bsegment,
 		      double bdistance, double x, double y)
@@ -178,11 +201,79 @@ static int ident(double x1, double y1, double x2, double y2, double thresh)
 /* shared by Vect_line_intersection, Vect_line_check_intersection, cross_seg, find_cross */
 static struct line_pnts *APnts, *BPnts, *ABPnts[2], *IPnts;
 
+/* Snap breaks to nearest vertices within RE threshold */
+/* Calculate distances along segments */
+static int snap_cross(int asegment, double *adistance, int bsegment,
+		      double *bdistance, double *xc, double *yc)
+{
+    int seg;
+    double x, y;
+    double dist, curdist, dthresh;
+
+    /* 1. of A seg */
+    seg = asegment;
+    curdist = dist2(*xc, *yc, APnts->x[seg], APnts->y[seg]);
+    x = APnts->x[seg];
+    y = APnts->y[seg];
+
+    *adistance = curdist;
+
+    /* 2. of A seg */
+    dist = dist2(*xc, *yc, APnts->x[seg + 1], APnts->y[seg + 1]);
+    if (dist < curdist) {
+	curdist = dist;
+	x = APnts->x[seg + 1];
+	y = APnts->y[seg + 1];
+    }
+
+    /* 1. of B seg */
+    seg = bsegment;
+    dist = dist2(*xc, *yc, BPnts->x[seg], BPnts->y[seg]);
+    *bdistance = dist;
+
+    if (dist < curdist) {
+	curdist = dist;
+	x = BPnts->x[seg];
+	y = BPnts->y[seg];
+    }
+    /* 2. of B seg */
+    dist = dist2(*xc, *yc, BPnts->x[seg + 1], BPnts->y[seg + 1]);
+    if (dist < curdist) {
+	curdist = dist;
+	x = BPnts->x[seg + 1];
+	y = BPnts->y[seg + 1];
+    }
+
+    /* the threshold should not be too small, otherwise we get 
+     * too many tiny new segments
+     * the threshold should not be too large, otherwise we might 
+     * introduce new crossings 
+     * the smallest difference representable with 
+     * single precision floating point works well with pathological input
+     * regular input is not affected */
+    dthresh = d_ulp(x, y);
+    if (curdist < dthresh * dthresh) {	/* was rethresh * rethresh */
+	*xc = x;
+	*yc = y;
+
+	/* Update distances along segments */
+	seg = asegment;
+	*adistance = dist2(*xc, *yc, APnts->x[seg], APnts->y[seg]);
+	seg = bsegment;
+	*bdistance = dist2(*xc, *yc, BPnts->x[seg], BPnts->y[seg]);
+
+	return 1;
+    }
+
+    return 0;
+}
+
 /* break segments */
 static int cross_seg(int i, int j, int b)
 {
     double x1, y1, z1, x2, y2, z2;
     double y1min, y1max, y2min, y2max;
+    double adist, bdist;
     int ret;
 
     y1min = APnts->y[i];
@@ -230,7 +321,11 @@ static int cross_seg(int i, int j, int b)
 	G_debug(2, "  -> %d x %d: intersection type = %d", i, j, ret);
 	if (ret == 1) {		/* one intersection on segment A */
 	    G_debug(3, "    in %f, %f ", x1, y1);
-	    add_cross(i, 0.0, j, 0.0, x1, y1);
+	    /* snap intersection only once */
+	    snap_cross(i, &adist, j, &bdist, &x1, &y1);
+	    add_cross(i, adist, j, bdist, x1, y1);
+	    if (APnts == BPnts)
+		add_cross(j, bdist, i, adist, x1, y1);
 	}
 	else if (ret == 2 || ret == 3 || ret == 4 || ret == 5) {
 	    /*  partial overlap; a broken in one, b broken in one
@@ -238,8 +333,14 @@ static int cross_seg(int i, int j, int b)
 	     *  or b contains a; b is broken in 2 points (but 1 may be end) 
 	     *  or identical */
 	    G_debug(3, "    in %f, %f; %f, %f", x1, y1, x2, y2);
-	    add_cross(i, 0.0, j, 0.0, x1, y1);
-	    add_cross(i, 0.0, j, 0.0, x2, y2);
+	    snap_cross(i, &adist, j, &bdist, &x1, &y1);
+	    add_cross(i, adist, j, bdist, x1, y1);
+	    if (APnts == BPnts)
+		add_cross(j, bdist, i, adist, x1, y1);
+	    snap_cross(i, &adist, j, &bdist, &x2, &y2);
+	    add_cross(i, adist, j, bdist, x2, y2);
+	    if (APnts == BPnts)
+		add_cross(j, bdist, i, adist, x2, y2);
 	}
     }
     return 1;			/* keep going */
@@ -495,12 +596,12 @@ static int boq_load(struct boq *q, struct line_pnts *Pnts,
 	    box.T = z1;
 	    box.B = z2;
 	}
-	box.W -= rethresh;
-	box.S -= rethresh;
-	box.B -= rethresh;
-	box.E += rethresh;
-	box.N += rethresh;
-	box.T += rethresh;
+	box.W -= d_ulp(box.W, box.W);
+	box.S -= d_ulp(box.S, box.S);
+	box.B -= d_ulp(box.B, box.B);
+	box.E += d_ulp(box.E, box.E);
+	box.N += d_ulp(box.N, box.N);
+	box.T += d_ulp(box.T, box.T);
 
 	if (!Vect_box_overlap(abbox, &box))
 	    continue;
@@ -581,20 +682,19 @@ static int boq_load(struct boq *q, struct line_pnts *Pnts,
 int
 Vect_line_intersection2(struct line_pnts *APoints,
 		        struct line_pnts *BPoints,
-		        struct bound_box *ABox,
-		        struct bound_box *BBox,
+		        struct bound_box *pABox,
+		        struct bound_box *pBBox,
 		        struct line_pnts ***ALines,
 		        struct line_pnts ***BLines,
 		        int *nalines, int *nblines, int with_z)
 {
     int i, j, k, l, nl, last_seg, seg, last;
     int n_alive_cross;
-    double dist, curdist, last_x, last_y, last_z;
-    double x, y;
+    double dist, last_x, last_y, last_z;
     struct line_pnts **XLines, *Points;
     struct line_pnts *Points1, *Points2;	/* first, second points */
     int seg1, seg2, vert1, vert2;
-    struct bound_box abbox;
+    struct bound_box ABox, BBox, abbox;
     struct boq bo_queue;
     struct qitem qi, *found;
     struct RB_TREE *bo_ta, *bo_tb;
@@ -633,7 +733,7 @@ Vect_line_intersection2(struct line_pnts *APoints,
      *  for example: equator length is 40.075,695 km (8 digits), units are m (+3) 
      *  and we want precision in mm (+ 3) = 14 -> minimum rethresh may be around 0.001
      *  ?Maybe all nonsense? 
-     *  Use rounding error of the unit in the least place ? 
+     *  Use rounding error of the unit in the last place ? 
      *  max of fabs(x), fabs(y)
      *  rethresh = pow(2, log2(max) - 53) */
 
@@ -681,33 +781,46 @@ Vect_line_intersection2(struct line_pnts *APoints,
      *  we have to break both A and B  at once i.e. in one Vect_line_intersection () call.
      */
 
-    if (!same && !Vect_box_overlap(ABox, BBox)) {
+    /* don't modify original bboxes: make a copy of the bboxes */
+    ABox = *pABox;
+    BBox = *pBBox;
+    if (!with_z) {
+	ABox.T = BBox.T = PORT_DOUBLE_MAX;
+	ABox.B = BBox.B = -PORT_DOUBLE_MAX;
+    }
+
+    if (!same && !Vect_box_overlap(&ABox, &BBox)) {
 	return 0;
     }
 
     /* overlap box of A line and B line */
-    abbox = *ABox;
+    abbox = BBox;
     if (!same) {
-	if (abbox.N > BBox->N)
-	    abbox.N = BBox->N;
-	if (abbox.S < BBox->S)
-	    abbox.S = BBox->S;
-	if (abbox.E > BBox->E)
-	    abbox.E = BBox->E;
-	if (abbox.W < BBox->W)
-	    abbox.W = BBox->W;
-	if (abbox.T > BBox->T)
-	    abbox.T = BBox->T;
-	if (abbox.B < BBox->B)
-	    abbox.B = BBox->B;
+	if (abbox.N > ABox.N)
+	    abbox.N = ABox.N;
+	if (abbox.S < ABox.S)
+	    abbox.S = ABox.S;
+	if (abbox.E > ABox.E)
+	    abbox.E = ABox.E;
+	if (abbox.W < ABox.W)
+	    abbox.W = ABox.W;
+
+	if (with_z) {
+	    if (abbox.T > BBox.T)
+		abbox.T = BBox.T;
+	    if (abbox.B < BBox.B)
+		abbox.B = BBox.B;
+	}
     }
 
-    abbox.N += rethresh;
-    abbox.S -= rethresh;
-    abbox.E += rethresh;
-    abbox.W -= rethresh;
-    abbox.T += rethresh;
-    abbox.B -= rethresh;
+    abbox.N += d_ulp(abbox.N, abbox.N);
+    abbox.S -= d_ulp(abbox.S, abbox.S);
+    abbox.E += d_ulp(abbox.E, abbox.E);
+    abbox.W -= d_ulp(abbox.W, abbox.W);
+    if (with_z) {
+	abbox.T += d_ulp(abbox.T, abbox.T);
+	abbox.B -= d_ulp(abbox.B, abbox.B);
+    }
 
     if (APnts->n_points < 2 || BPnts->n_points < 2) {
 	G_fatal_error("Intersection with points is not yet supported");
@@ -788,61 +901,6 @@ Vect_line_intersection2(struct line_pnts *APoints,
     /* Lines do not cross each other */
     if (n_cross == 0) {
 	return 0;
-    }
-
-    /* Snap breaks to nearest vertices within RE threshold */
-    /* Calculate distances along segments */
-    for (i = 0; i < n_cross; i++) {
-
-	/* 1. of A seg */
-	seg = cross[i].segment[0];
-	curdist =
-	    dist2(cross[i].x, cross[i].y, APnts->x[seg], APnts->y[seg]);
-	x = APnts->x[seg];
-	y = APnts->y[seg];
-
-	cross[i].distance[0] = curdist;
-
-	/* 2. of A seg */
-	dist =
-	    dist2(cross[i].x, cross[i].y, APnts->x[seg + 1],
-		  APnts->y[seg + 1]);
-	if (dist < curdist) {
-	    curdist = dist;
-	    x = APnts->x[seg + 1];
-	    y = APnts->y[seg + 1];
-	}
-
-	/* 1. of B seg */
-	seg = cross[i].segment[1];
-	dist =
-	    dist2(cross[i].x, cross[i].y, BPnts->x[seg], BPnts->y[seg]);
-	cross[i].distance[1] = dist;
-
-	if (dist < curdist) {
-	    curdist = dist;
-	    x = BPnts->x[seg];
-	    y = BPnts->y[seg];
-	}
-	/* 2. of B seg */
-	dist = dist2(cross[i].x, cross[i].y, BPnts->x[seg + 1], BPnts->y[seg + 1]);
-	if (dist < curdist) {
-	    curdist = dist;
-	    x = BPnts->x[seg + 1];
-	    y = BPnts->y[seg + 1];
-	}
-	if (curdist < rethresh * rethresh) {
-	    cross[i].x = x;
-	    cross[i].y = y;
-
-	    /* Update distances along segments */
-	    seg = cross[i].segment[0];
-	    cross[i].distance[0] =
-		dist2(APnts->x[seg], APnts->y[seg], cross[i].x, cross[i].y);
-	    seg = cross[i].segment[1];
-	    cross[i].distance[1] =
-		dist2(BPnts->x[seg], BPnts->y[seg], cross[i].x, cross[i].y);
-	}
     }
 
     /* l = 1 ~ line A, l = 2 ~ line B */
@@ -1285,7 +1343,7 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
 			   APoints->z[0], with_z, NULL, NULL, NULL, &dist,
 			   NULL, NULL);
 
-	if (dist <= rethresh) {
+	if (dist <= d_ulp(APoints->x[0], APoints->y[0])) {
 	    if (0 >
 		Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0], &APoints->y[0],
 				      &APoints->z[0], 1))
@@ -1302,7 +1360,7 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
 			   BPoints->z[0], with_z, NULL, NULL, NULL, &dist,
 			   NULL, NULL);
 
-	if (dist <= rethresh) {
+	if (dist <= d_ulp(BPoints->x[0], BPoints->y[0])) {
 	    if (0 >
 		Vect_copy_xyz_to_pnts(IPnts, &BPoints->x[0], &BPoints->y[0],
 				      &BPoints->z[0], 1))
@@ -1317,6 +1375,10 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
 
     dig_line_box(APoints, &ABox);
     dig_line_box(BPoints, &BBox);
+    if (!with_z) {
+	ABox.T = BBox.T = PORT_DOUBLE_MAX;
+	ABox.B = BBox.B = -PORT_DOUBLE_MAX;
+    }
 
     if (!Vect_box_overlap(&ABox, &BBox)) {
 	return 0;
@@ -1332,17 +1394,21 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
 	abbox.E = ABox.E;
     if (abbox.W < ABox.W)
 	abbox.W = ABox.W;
-    if (abbox.T > ABox.T)
-	abbox.T = ABox.T;
-    if (abbox.B < ABox.B)
-	abbox.B = ABox.B;
 
-    abbox.N += rethresh;
-    abbox.S -= rethresh;
-    abbox.E += rethresh;
-    abbox.W -= rethresh;
-    abbox.T += rethresh;
-    abbox.B -= rethresh;
+    abbox.N += d_ulp(abbox.N, abbox.N);
+    abbox.S -= d_ulp(abbox.S, abbox.S);
+    abbox.E += d_ulp(abbox.E, abbox.E);
+    abbox.W -= d_ulp(abbox.W, abbox.W);
+
+    if (with_z) {
+	if (abbox.T > ABox.T)
+	    abbox.T = ABox.T;
+	if (abbox.B < ABox.B)
+	    abbox.B = ABox.B;
+
+	abbox.T += d_ulp(abbox.T, abbox.T);
+	abbox.B -= d_ulp(abbox.B, abbox.B);
+    }
 
     /* initialize queue */
     bo_queue.count = 0;

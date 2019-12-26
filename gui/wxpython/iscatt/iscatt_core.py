@@ -19,8 +19,7 @@ This program is free software under the GNU General Public License
 """
 import os
 import sys
-
-import time
+import six
 
 import numpy as np
 
@@ -114,7 +113,7 @@ class Core:
 
         arr = self.scatt_conds_dt.GetValuesArr(cat_id, scatt_id)
 
-        for k, v in bbox.iteritems():
+        for k, v in six.iteritems(bbox):
             bbox[k] = self._validExtend(v)
 
         arr[bbox['btm_y']: bbox['up_y'], bbox['btm_x']: bbox['up_x']] = value
@@ -154,12 +153,10 @@ class Core:
         return self.cat_rast_updater
 
     def UpdateCategoryWithPolygons(self, cat_id, scatts_pols, value):
-        start_time = time.clock()
-
         if cat_id not in self.scatts_dt.GetCategories():
             raise GException(_("Select category for editing."))
 
-        for scatt_id, coords in scatts_pols.iteritems():
+        for scatt_id, coords in six.iteritems(scatts_pols):
 
             if self.scatt_conds_dt.AddScattPlot(cat_id, scatt_id) < 0:
                 return False
@@ -426,7 +423,7 @@ class AnalyzedData:
 
 
 class ScattPlotsCondsData:
-    """Data structure for selected areas in scatter plot(condtions).
+    """Data structure for selected areas in scatter plot(conditions).
     """
 
     def __init__(self, an_data):
@@ -471,7 +468,7 @@ class ScattPlotsCondsData:
         if cat_id not in self.cats.keys():
             return False
 
-        for scatt in self.cats[cat_id].itervalues():
+        for scatt in six.itervalues(self.cats[cat_id]):
             grass.try_remove(scatt['np_vals'])
             del scatt['np_vals']
 
@@ -552,7 +549,7 @@ class ScattPlotsCondsData:
     def GetData(self, requested_dt):
 
         cats = {}
-        for cat_id, scatt_ids in requested_dt.iteritems():
+        for cat_id, scatt_ids in six.iteritems(requested_dt):
             if cat_id not in cats:
                 cats[cat_id] = {}
             for scatt_id in scatt_ids:
@@ -567,7 +564,7 @@ class ScattPlotsCondsData:
 
     def SetData(self, cats):
 
-        for cat_id, scatt_ids in cats.iteritems():
+        for cat_id, scatt_ids in six.iteritems(cats):
             for scatt_id in scatt_ids:
                 # if key is missing condition is always True (full scatter plor
                 # is computed)
@@ -577,7 +574,7 @@ class ScattPlotsCondsData:
 
     def GetScatt(self, scatt_id, cats_ids=None):
         scatts = {}
-        for cat_id in self.cats.iterkeys():
+        for cat_id in six.iterkeys(self.cats):
             if cats_ids and cat_id not in cats_ids:
                 continue
             if scatt_id not in self.cats[cat_id]:
@@ -644,7 +641,7 @@ class ScattPlotsData(ScattPlotsCondsData):
             return False
 
         self.scatts_ids.append(scatt_id)
-        for cat_id in self.cats.iterkeys():
+        for cat_id in six.iterkeys(self.cats):
             ScattPlotsCondsData.AddScattPlot(self, cat_id, scatt_id)
             self.cats[cat_id][scatt_id]['ellipse'] = None
 
@@ -657,7 +654,7 @@ class ScattPlotsData(ScattPlotsCondsData):
 
         self.scatts_ids.remove(scatt_id)
 
-        for cat_id in self.cats.iterkeys():
+        for cat_id in six.iterkeys(self.cats):
             ScattPlotsCondsData.DeleteScattPlot(self, cat_id, scatt_id)
 
         return True
@@ -667,7 +664,7 @@ class ScattPlotsData(ScattPlotsCondsData):
             return False
 
         scatts = {}
-        for cat_id in self.cats.iterkeys():
+        for cat_id in six.iterkeys(self.cats):
             if cat_id == 0:
                 continue
             nstd = styles[cat_id]['nstd']
@@ -740,9 +737,9 @@ class ScattPlotsData(ScattPlotsCondsData):
     def CleanUp(self):
 
         ScattPlotsCondsData.CleanUp(self)
-        for tmp in self.cats_rasts_conds.itervalues():
+        for tmp in six.itervalues(self.cats_rasts_conds):
             grass.try_remove(tmp)
-        for tmp in self.cats_rasts.itervalues():
+        for tmp in six.itervalues(self.cats_rasts):
             RunCommand("g.remove", flags='f',
                        type='raster', name=tmp,
                        getErrorMsg=True)
@@ -762,7 +759,7 @@ class ScattPlotsData(ScattPlotsCondsData):
         max_cat_id = max(self.cats_rasts_conds.keys())
 
         cats_rasts_conds = [''] * (max_cat_id + 1)
-        for i_cat_id, i_rast in self.cats_rasts_conds.iteritems():
+        for i_cat_id, i_rast in six.iteritems(self.cats_rasts_conds):
             cats_rasts_conds[i_cat_id] = i_rast
 
         return cats_rasts_conds
@@ -771,7 +768,7 @@ class ScattPlotsData(ScattPlotsCondsData):
         max_cat_id = max(self.cats_rasts.keys())
 
         cats_rasts = [''] * (max_cat_id + 1)
-        for i_cat_id, i_rast in self.cats_rasts.iteritems():
+        for i_cat_id, i_rast in six.iteritems(self.cats_rasts):
             cats_rasts[i_cat_id] = i_rast
 
         return cats_rasts

@@ -3,6 +3,7 @@ MODULE_TOPDIR = ..
 SUBDIRS = \
 	r.basins.fill \
 	r.buffer \
+	r.buildvrt \
 	r.carve \
 	r.category \
 	r.circle \
@@ -18,11 +19,12 @@ SUBDIRS = \
 	r.cross \
 	r.describe \
 	r.distance \
-	r.drain \
 	r.external \
 	r.external.out \
 	r.fill.dir \
+	r.fill.stats \
 	r.flow \
+	r.geomorphon \
 	r.grow.distance \
 	r.gwflow \
 	r.his \
@@ -60,6 +62,7 @@ SUBDIRS = \
 	r.out.vtk \
 	r.param.scale \
 	r.patch \
+	r.path \
 	r.profile \
 	r.proj \
 	r.quant \

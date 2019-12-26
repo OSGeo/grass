@@ -55,9 +55,9 @@ class TestRasterToVector(TestCase):
 
         #self.assertModule("t.info",  type="stvds", flags="g",  input="result")
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                        end_time=2002-04-01 00:00:00
-                        granularity=3 months
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                        end_time='2002-04-01 00:00:00'
+                        granularity='3 months'
                         map_time=interval
                         number_of_maps=5
                         points=384
@@ -74,9 +74,9 @@ class TestRasterToVector(TestCase):
                           
         #self.assertModule("t.info",  type="stvds", flags="g",  input="result")
         
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                        end_time=2002-04-01 00:00:00
-                        granularity=3 months
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                        end_time='2002-04-01 00:00:00'
+                        granularity='3 months'
                         map_time=interval
                         number_of_maps=5
                         boundaries=4
@@ -98,9 +98,9 @@ class TestRasterToVector(TestCase):
                           
         #self.assertModule("t.info",  type="stvds", flags="g",  input="result")
         
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                        end_time=2002-01-01 00:00:00
-                        granularity=3 months
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                        end_time='2002-01-01 00:00:00'
+                        granularity='3 months'
                         map_time=interval
                         number_of_maps=4
                         boundaries=4
@@ -121,9 +121,9 @@ class TestRasterToVector(TestCase):
 
         #self.assertModule("t.info",  type="stvds", flags="g",  input="result")
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                        end_time=2002-01-01 00:00:00
-                        granularity=3 months
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                        end_time='2002-01-01 00:00:00'
+                        granularity='3 months'
                         number_of_maps=4
                         points=384
                         primitives=384"""

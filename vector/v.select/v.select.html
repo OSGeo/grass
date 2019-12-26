@@ -5,7 +5,7 @@ map by features from another one.
 
 <p>Supported operators (without GEOS; using GRASS' own algorithm):
 <ul>
-  <li><b>overlap</b> - features partially or completely overlap
+  <li><b>overlap</b> - features partially or completely overlap (GEOS equivalent: intersects)
 </ul>
 
 Supported operators (internally using
@@ -13,7 +13,7 @@ Supported operators (internally using
 <ul>
   <li><b>equals</b> - features are spatially equals</li>
   <li><b>disjoint</b> - features do not spatially intersect</li>
-  <li><b>intersects</b> - features spatially intersect</li>
+  <li><b>intersects</b> - features spatially intersect (equivalent to native 'overlap')</li>
   <li><b>touches</b> - features spatially touches</li>
   <li><b>crosses</b> - features spatially crosses</li>
   <li><b>within</b> - feature A is completely inside feature B</li>
@@ -62,12 +62,12 @@ d.vect map=zipcodes_wake fill_color=0:128:0
 d.vect map=boxgrid fill_color=85:130:176
 v.select ainput=boxgrid binput=zipcodes_wake output=v_select_OVERLAP operator=overlap
 d.vect map=v_select_OVERLAP
-d.vect map=zipcodes_wake type=boundary color=50:50:50
+d.vect map=zipcodes_wake type=boundary color=255:255:50
 </pre></div>
 
 <center>
 <img src="v_select_op_overlap.png" alt="v.select with OVERLAP operator"><br>
-v.select with OVERLAP operator: selected grid boxes shown in grey
+v.select with OVERLAP operator: selected grid boxes shown in yellow (using GRASS method)
 </center>
 
 <h3>OVERLAPS features spatially overlap (using GEOS)</h3>
@@ -79,11 +79,11 @@ d.vect map=zipcodes_wake fill_color=0:128:0
 d.vect map=boxgrid fill_color=85:130:176
 v.select ainput=boxgrid binput=zipcodes_wake output=v_select_OVERLAPS operator=overlaps
 d.vect map=v_select_OVERLAPS
-d.vect map=zipcodes_wake type=boundary color=50:50:50
+d.vect map=zipcodes_wake type=boundary color=255:255:50
 </pre></div>
 <center>
 <img src="v_select_op_overlaps.png" alt="v.select with OVERLAPS operator"><br>
-v.select with OVERLAPS operator: selected grid boxes shown in grey
+v.select with OVERLAPS operator: selected grid boxes shown in yellow (using GEOS method)
 </center>
 
 
@@ -96,12 +96,12 @@ d.vect map=zipcodes_wake fill_color=0:128:0
 d.vect map=boxgrid fill_color=85:130:176
 v.select ainput=boxgrid binput=zipcodes_wake output=v_select_DISJOINT operator=disjoint
 d.vect map=v_select_DISJOINT
-d.vect map=zipcodes_wake type=boundary color=50:50:50
+d.vect map=zipcodes_wake type=boundary color=255:255:50
 </pre></div>
 
 <center>
 <img src="v_select_op_disjoint.png" alt="v.select with DISJOINT operator"><br>
-v.select with DISJOINT operator: selected grid boxes shown in grey
+v.select with DISJOINT operator: selected grid boxes shown in yellow
 </center>
 
 
@@ -114,12 +114,12 @@ d.vect map=zipcodes_wake fill_color=0:128:0
 v.extract input=zipcodes_wake where=ZIPCODE_ID=35 output=zipcodeID35
 v.select ainput=zipcodes_wake binput=zipcodeID35 output=v_select_EQUALS operator=equals
 d.vect map=v_select_EQUALS
-d.vect map=zipcodes_wake type=boundary color=50:50:50
+d.vect map=zipcodes_wake type=boundary color=255:255:50
 </pre></div>
 
 <center>
 <img src="v_select_op_equals.png" alt="v.select with EQUALS operator"><br>
-v.select with EQUALS operator: selected grid boxes shown in grey
+v.select with EQUALS operator: selected grid boxes shown in yellow
 </center>
 
 
@@ -132,12 +132,12 @@ d.vect map=zipcodes_wake fill_color=0:128:0
 d.vect map=boxgrid fill_color=85:130:176
 v.select ainput=zipcodes_wake binput=boxgrid output=v_select_INTERSECTS operator=intersects
 d.vect map=v_select_INTERSECTS
-d.vect map=boxgrid type=boundary color=50:50:50
+d.vect map=boxgrid type=boundary color=255:255:50
 </pre></div>
 
 <center>
 <img src="v_select_op_intersects.png" alt="v.select with INTERSECTS operator"><br>
-v.select with INTERSECTS operator: selected grid boxes shown in grey
+v.select with INTERSECTS operator: selected grid boxes shown in yellow
 </center>
 
 
@@ -150,12 +150,12 @@ d.vect map=zipcodes_wake fill_color=0:128:0
 d.vect map=zipcodeID35 fill_color=85:130:176
 v.select ainput=zipcodes_wake binput=zipcodeID35 output=v_select_TOUCHES operator=touches
 d.vect map=v_select_TOUCHES
-d.vect map=zipcodes_wake type=boundary color=50:50:50
+d.vect map=zipcodes_wake type=boundary color=255:255:50
 </pre></div>
 
 <center>
 <img src="v_select_op_touches.png" alt="v.select with TOUCHES operator"><br>
-v.select with TOUCHES operator: selected polygons shown in grey (blue: input polygon)
+v.select with TOUCHES operator: selected polygons shown in yellow (blue: input polygon)
 </center>
 
 
@@ -168,13 +168,13 @@ d.vect map=zipcodes_wake fill_color=0:128:0
 d.vect map=busroute1 color=200:27:27 width=3
 v.select ainput=zipcodes_wake binput=busroute1 output=v_select_CROSSES operator=crosses
 d.vect map=v_select_CROSSES
-d.vect map=zipcodes_wake type=boundary color=50:50:50
+d.vect map=zipcodes_wake type=boundary color=255:255:50
 d.vect map=busroute1 color=200:27:27 width=3
 </pre></div>
 
 <center>
 <img src="v_select_op_crosses.png" alt="v.select with CROSSES operator"><br>
-v.select with CROSSES operator: selected polygons shown in grey (red: input lines)
+v.select with CROSSES operator: selected polygons shown in yellow (red: input lines)
 </center>
 
 
@@ -191,7 +191,7 @@ d.vect map=v_select_WITHIN
 
 <center>
 <img src="v_select_op_within.png" alt="v.select with WITHIN operator"><br>
-v.select with WITHIN operator: selected polygons shown in grey (blue: input polygons)
+v.select with WITHIN operator: selected polygons shown in yellow (blue: input polygons)
 </center>
 
 
@@ -211,7 +211,7 @@ d.vect map=v_select_CONTAINS
 
 <center>
 <img src="v_select_op_contains_pol.png" alt="v.select with CONTAINS operator"><br>
-v.select with CONTAINS operator: selected polygon shown in grey (blue: input polygon, not visible)
+v.select with CONTAINS operator: selected polygon shown in yellow (blue: input polygon, not visible)
 </center>
 
 <h4>CONTAINS with points</h4>
@@ -227,7 +227,7 @@ d.vect map=hospitals fill_color=195:31:31 icon=basic/cross3 size=10
 
 <center>
 <img src="v_select_op_contains_pnts.png" alt="v.select with CONTAINS operator"><br>
-v.select with CONTAINS operator: selected polygons shown in grey (red: input points)
+v.select with CONTAINS operator: selected polygons shown in yellow (red: input points)
 </center>
 
 
@@ -302,6 +302,7 @@ speed-up is desired.
 
 <em>
 <a href="v.category.html">v.category</a>,
+<a href="v.clip.html">v.clip</a>,
 <a href="v.overlay.html">v.overlay</a>,
 <a href="v.extract.html">v.extract</a>
 </em>
@@ -318,5 +319,7 @@ GEOS support by Martin Landa, Czech Technical University in Prague, Czech Republ
 
 ZIP code examples by Carol X. Garzon-Lopez, Trento, Italy
 
+<!--
 <p>
 <i>Last changed: $Date$</i>
+-->

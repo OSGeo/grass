@@ -69,7 +69,7 @@ static int continue_stream(CELL stream_id, int r_max, int c_max,
 
 	/* debug */
 	if (n_stream_nodes != *stream_no)
-	    G_warning(_("Stream_no %d and n_stream_nodes %lld out of sync"),
+	    G_warning(_("Stream_no %d and n_stream_nodes %"PRI_OFF_T" out of sync"),
 		      *stream_no, n_stream_nodes);
 
 	stream_node[*stream_no].n_alloc += 2;
@@ -665,7 +665,7 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
 
 	    /* debug */
 	    if (n_stream_nodes != stream_no)
-		G_warning(_("Stream_no %d and n_stream_nodes %lld out of sync"),
+		G_warning(_("Stream_no %d and n_stream_nodes %"PRI_OFF_T" out of sync"),
 			  stream_no, n_stream_nodes);
 	}
 
@@ -697,7 +697,7 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
     }
     G_percent(1, 1, 2);
     if (workedon)
-	G_warning(_("MFD: A * path already processed when setting drainage direction: %lld of %lld cells"),
+	G_warning(_("MFD: A * path already processed when setting drainage direction: %"PRI_OFF_T" of %"PRI_OFF_T" cells"),
 		  workedon, n_points);
 
     G_free(dist_to_nbr);
@@ -705,8 +705,8 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
     G_free(ele_nbr);
     G_free(flag_nbr);
 
-    G_debug(1, "%lld outlets", n_outlets);
-    G_debug(1, "%lld nodes", n_stream_nodes);
+    G_debug(1, "%"PRI_OFF_T" outlets", n_outlets);
+    G_debug(1, "%"PRI_OFF_T" nodes", n_stream_nodes);
     G_debug(1, "%d streams", stream_no);
 
     return 1;

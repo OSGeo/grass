@@ -237,6 +237,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("surface"));
     G_add_keyword(_("interpolation"));
     G_add_keyword(_("RST"));
+    G_add_keyword(_("3D"));
+    G_add_keyword(_("no-data filling"));
     module->description =
 	_("Interpolates point data to a 3D raster map using "
 	  "regularized spline with tension (RST) algorithm.");
@@ -637,7 +639,7 @@ int main(int argc, char *argv[])
 		}
 	    }
 	} else
-	  G_warning(_("Unable to create <%s> raster map without cross_input raster map being specified"), cellout);
+	  G_warning(_("Unable to create 'cross_output' raster map without 'cross_input' raster map being specified"));
 	ertot = 0.;
         
 	out_cond1 = (outz != NULL) || (gradient != NULL) || (aspect1 != NULL)

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 Created on Thu Aug  9 14:04:12 2012
@@ -7,7 +7,7 @@ Created on Thu Aug  9 14:04:12 2012
 """
 # utilities for generating REST indices
 # utilities for generating HTML indices
-# (c) 2003-2006, 2009-2012 by the GRASS Development Team, Markus Neteler, Glynn Clements, Luca Delucchi
+# (c) 2003-2019 by the GRASS Development Team, Markus Neteler, Glynn Clements, Luca Delucchi
 
 import sys
 import os
@@ -46,8 +46,8 @@ GRASS GIS ${grass_version} Reference Manual
 --------------------------------------------------------------------
 
 **Geographic Resources Analysis Support System**, commonly
-referred to as `GRASS <http://grass.osgeo.org>`_, is a `Geographic
-Information System <http://en.wikipedia.org/wiki/Geographic_information_system>`_ 
+referred to as `GRASS GIS <https://grass.osgeo.org>`_, is a `Geographic
+Information System <https://en.wikipedia.org/wiki/Geographic_information_system>`_
 (GIS) used for geospatial data management and analysis, image processing, 
 graphics/maps production, spatial modeling, and visualization. GRASS is 
 currently used in academic and commercial settings around the world, as 
@@ -55,7 +55,7 @@ well as by many governmental agencies and environmental consulting companies.
 
 This reference manual details the use of modules distributed with
 Geographic Resources Analysis Support System (GRASS), an open source
-(`GNU GPLed <http://www.gnu.org/licenses/gpl.html>`_), image
+(`GNU GPLed <https://www.gnu.org/licenses/gpl.html>`_), image
 processing and geographic information system (GIS).
 """)
 
@@ -167,7 +167,7 @@ r"""
 --------------
 
 :doc:`Manual main page <index>` \| :doc:`Full Index <full_index>`
- 2003-2017 `GRASS Development Team <http://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
+ 2003-2019 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
 """)
 
 cmd1_tmpl = string.Template(\
@@ -265,13 +265,13 @@ def check_for_desc_override(basename):
     return desc_override.get(basename)
 
 def read_file(name):
-    f = open(name, 'rb')
+    f = open(name, 'r')
     s = f.read()
     f.close()
     return s
 
 def write_file(name, contents):
-    f = open(name, 'wb')
+    f = open(name, 'w')
     f.write(contents)
     f.close()
 

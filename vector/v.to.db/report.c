@@ -1,3 +1,4 @@
+#include <math.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include "global.h"
@@ -57,17 +58,35 @@ int report(void)
 	break;
 
     case O_COMPACT:
+	/* perimeter / perimeter of equivalent circle
+	 *   perimeter of equivalent circle: 2.0 * sqrt(M_PI * area) */
 	if (G_verbose() > G_verbose_min())
 	    fprintf(stdout, "cat%scompact\n", options.fs);
-	for (i = 0; i < vstat.rcat; i++)
+	for (i = 0; i < vstat.rcat; i++) {
+	    Values[i].d1 = Values[i].d2 / (2.0 * sqrt(M_PI * Values[i].d1));
 	    fprintf(stdout, "%d%s%.15g\n", Values[i].cat, options.fs, Values[i].d1);
+	}
 	break;
 
     case O_FD:
+	/* 2.0 * log(perimeter) / log(area) 
+	 * this is neither
+	 *   log(perimeter) / log(perimeter of equivalent circle)
+	 *   perimeter of equivalent circle: 2 * sqrt(M_PI * area)
+	 * nor
+	 *   log(area of equivalent circle) / log(area)
+	 *   area of equivalent circle: (perimeter / (2 * sqrt(M_PI))^2
+	 * 
+	 * avoid division by zero: 
+	 * 2.0 * log(1 + perimeter) / log(1 + area) */
 	if (G_verbose() > G_verbose_min())
 	    fprintf(stdout, "cat%sfd\n", options.fs);
-	for (i = 0; i < vstat.rcat; i++)
+	for (i = 0; i < vstat.rcat; i++) {
+	    if (Values[i].d1 == 1) /* log(1) == 0 */
+		Values[i].d1 += 0.000001;
+	    Values[i].d1 = 2.0 * log(Values[i].d2) / log(Values[i].d1);
 	    fprintf(stdout, "%d%s%.15g\n", Values[i].cat, options.fs, Values[i].d1);
+	}
 	break;
 
     case O_PERIMETER:

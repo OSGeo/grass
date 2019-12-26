@@ -12,6 +12,8 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
+from __future__ import print_function
+
 import sys
 from datetime import datetime
 
@@ -120,17 +122,17 @@ def doc_test():
 def module_test():
     grass_commands = gcore.get_commands()[0]
     if not 'g.region' in grass_commands:
-        print "No g.region"
+        print("No g.region")
         return 1
     if not 'm.proj' in grass_commands:
-        print "No m.proj"
+        print("No m.proj")
         return 1
     if not 't.rast.univar' in grass_commands:
-        print "No t.rast.univar"
+        print("No t.rast.univar")
         return 1
-    print get_module_metadata('g.region')
-    print get_module_metadata('m.proj')
-    print get_module_metadata('t.rast.univar')
+    print(get_module_metadata('g.region'))
+    print(get_module_metadata('m.proj'))
+    print(get_module_metadata('t.rast.univar'))
 
 
 def main():

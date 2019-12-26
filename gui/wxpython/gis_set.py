@@ -22,28 +22,31 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
-import shutil
 import copy
 import platform
 import codecs
 import getpass
 
+# i18n is taken care of in the grass library code.
+# So we need to import it before any of the GUI code.
+from grass.script import core as grass
+
 from core import globalvar
-from core.utils import _
 import wx
 import wx.lib.mixins.listctrl as listmix
 
-from grass.script import core as grass
-
 from core.gcmd import GMessage, GError, DecodeString, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets
+from startup.utils import (
+    get_lockfile_if_present, get_possible_database_path, create_mapset)
+import startup.utils as sutils
+from startup.guiutils import SetSessionMapset, NewMapsetDialog
+import startup.guiutils as sgui
 from location_wizard.dialogs import RegionDef
 from gui_core.dialogs import TextEntryDialog
 from gui_core.widgets import GenericValidator, StaticWrapText
-from gui_core.wrap import Button
-from gui_core.wrap import ListCtrl
-
-sys.stderr = codecs.getwriter('utf8')(sys.stderr)
+from gui_core.wrap import Button, ListCtrl, StaticText, StaticBox, \
+    TextCtrl, BitmapFromImage
 
 
 class GRASSStartup(wx.Frame):
@@ -60,7 +63,7 @@ class GRASSStartup(wx.Frame):
         # GRASS variables
         #
         self.gisbase = os.getenv("GISBASE")
-        self.grassrc = self._readGisRC()
+        self.grassrc = sgui.read_gisrc()
         self.gisdbase = self.GetRCValue("GISDBASE")
 
         #
@@ -98,36 +101,25 @@ class GRASSStartup(wx.Frame):
                                                      type=wx.BITMAP_TYPE_PNG))
         except:
             self.hbitmap = wx.StaticBitmap(
-                self.panel, wx.ID_ANY, wx.BitmapFromImage(
+                self.panel, wx.ID_ANY, BitmapFromImage(
                     wx.EmptyImage(530, 150)))
 
         # labels
         # crashes when LOCATION doesn't exist
         # get version & revision
-        versionFile = open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER"))
-        versionLine = versionFile.readline().rstrip('\n')
-        versionFile.close()
-        try:
-            grassVersion, grassRevision = versionLine.split(' ', 1)
-            if grassVersion.endswith('svn'):
-                grassRevisionStr = ' (%s)' % grassRevision
-            else:
-                grassRevisionStr = ''
-        except ValueError:
-            grassVersion = versionLine
-            grassRevisionStr = ''
+        grassVersion, grassRevisionStr = sgui.GetVersion()
 
-        self.gisdbase_box = wx.StaticBox(
+        self.gisdbase_box = StaticBox(
             parent=self.panel, id=wx.ID_ANY, label=" %s " %
             _("1. Select GRASS GIS database directory"))
-        self.location_box = wx.StaticBox(
+        self.location_box = StaticBox(
             parent=self.panel, id=wx.ID_ANY, label=" %s " %
             _("2. Select GRASS Location"))
-        self.mapset_box = wx.StaticBox(
+        self.mapset_box = StaticBox(
             parent=self.panel, id=wx.ID_ANY, label=" %s " %
             _("3. Select GRASS Mapset"))
 
-        self.lmessage = wx.StaticText(parent=self.panel)
+        self.lmessage = StaticText(parent=self.panel)
         # It is not clear if all wx versions supports color, so try-except.
         # The color itself may not be correct for all platforms/system settings
         # but in http://xoomer.virgilio.it/infinity77/wxPython/Widgets/wx.SystemSettings.html
@@ -141,7 +133,7 @@ class GRASSStartup(wx.Frame):
         self.location_panel = wx.Panel(parent=self.panel)
         self.mapset_panel = wx.Panel(parent=self.panel)
 
-        self.ldbase = wx.StaticText(
+        self.ldbase = StaticText(
             parent=self.gisdbase_panel, id=wx.ID_ANY,
             label=_("GRASS GIS database directory contains Locations."))
 
@@ -211,7 +203,7 @@ class GRASSStartup(wx.Frame):
         self.delete_mapset_button.SetToolTip(_("Delete selected mapset"))
 
         # textinputs
-        self.tgisdbase = wx.TextCtrl(
+        self.tgisdbase = TextCtrl(
             parent=self.gisdbase_panel, id=wx.ID_ANY, value="", size=(
                 300, -1), style=wx.TE_PROCESS_ENTER)
 
@@ -253,8 +245,16 @@ class GRASSStartup(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
     def _set_properties(self, version, revision):
-        """Set frame properties"""
-        self.SetTitle(_("GRASS GIS %s startup%s") % (version, revision))
+        """Set frame properties
+
+        :param version: Version in the form of X.Y.Z
+        :param revision: Version control revision with leading space
+
+        *revision* should be an empty string in case of release and
+        otherwise it needs a leading space to be separated from the rest
+        of the title.
+        """
+        self.SetTitle(_("GRASS GIS %s Startup%s") % (version, revision))
         self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"),
                              wx.BITMAP_TYPE_ICO))
 
@@ -285,7 +285,7 @@ class GRASSStartup(wx.Frame):
 
         self.OnSetDatabase(None)
         location = self.GetRCValue("LOCATION_NAME")
-        if location == "<UNKNOWN>":
+        if location == "<UNKNOWN>" or location is None:
             return
         if not os.path.isdir(os.path.join(self.gisdbase, location)):
             location = None
@@ -462,28 +462,6 @@ class GRASSStartup(wx.Frame):
         sizer.SetSizeHints(self)
         self.Layout()
 
-    def _readGisRC(self):
-        """Read variables from $HOME/.grass7/rc file
-        """
-        grassrc = {}
-
-        gisrc = os.getenv("GISRC")
-
-        if gisrc and os.path.isfile(gisrc):
-            try:
-                rc = open(gisrc, "r")
-                for line in rc.readlines():
-                    try:
-                        key, val = line.split(":", 1)
-                    except ValueError as e:
-                        sys.stderr.write(
-                            _('Invalid line in GISRC file (%s):%s\n' % (e, line)))
-                    grassrc[key.strip()] = DecodeString(val.strip())
-            finally:
-                rc.close()
-
-        return grassrc
-
     def _showWarning(self, text):
         """Displays a warning, hint or info message to the user.
 
@@ -532,29 +510,7 @@ class GRASSStartup(wx.Frame):
         # only if nothing is set (<UNKNOWN> comes from init script)
         if self.GetRCValue("LOCATION_NAME") != "<UNKNOWN>":
             return
-        home = os.path.expanduser('~')
-        # try some common directories for grassdata
-        # always assuming grassdata (lowercase)
-        # home for Linux
-        # Documents and My Documents for Windows
-        # potential translations (old Windows and some Linux)
-        # but ~ and ~/Documents should cover most of the cases
-        candidates = [
-            os.path.join(home, "grassdata"),
-            os.path.join(home, "Documents", "grassdata"),
-            os.path.join(home, "My Documents", "grassdata"),
-        ]
-        try:
-            # here goes everything which has potential unicode issues
-            candidates.append(os.path.join(home, _("Documents"), "grassdata"))
-            candidates.append(os.path.join(home, _("My Documents"), "grassdata"))
-        except UnicodeDecodeError:
-            # just ignore the errors if it doesn't work
-            pass
-        path = None
-        for candidate in candidates:
-            if os.path.exists(candidate):
-                path = candidate
+        path = get_possible_database_path()
         if path:
             try:
                 self.tgisdbase.SetValue(path)
@@ -608,22 +564,7 @@ class GRASSStartup(wx.Frame):
                 defineRegion.Destroy()
 
             if gWizard.user_mapset:
-                dlg = TextEntryDialog(
-                    parent=self,
-                    message=_("New mapset:"),
-                    caption=_("Create new mapset"),
-                    defaultValue=self._getDefaultMapsetName(),
-                    validator=GenericValidator(
-                        grass.legal_name,
-                        self._nameValidationFailed
-                    ),
-                    style=wx.OK | wx.CANCEL | wx.HELP
-                )
-                help = dlg.FindWindowById(wx.ID_HELP)
-                help.Bind(wx.EVT_BUTTON, self.OnHelp)
-                if dlg.ShowModal() == wx.ID_OK:
-                    mapsetName = dlg.GetValue()
-                    self.CreateNewMapset(mapsetName)
+                self.OnCreateMapset(event)
 
     def ImportFile(self, filePath):
         """Tries to import file as vector or raster.
@@ -636,7 +577,7 @@ class GRASSStartup(wx.Frame):
                              read=True)
 
         wx.BeginBusyCursor()
-        wx.Yield()
+        wx.GetApp().Yield()
         if vectors:
             # vector detected
             returncode, error = RunCommand(
@@ -700,8 +641,8 @@ class GRASSStartup(wx.Frame):
                     newmapset, style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
             else:
                 try:
-                    os.rename(os.path.join(self.gisdbase, location, mapset),
-                              os.path.join(self.gisdbase, location, newmapset))
+                    sutils.rename_mapset(self.gisdbase, location,
+                                         mapset, newmapset)
                     self.OnSelectLocation(None)
                     self.lbmapsets.SetSelection(
                         self.listOfMapsets.index(newmapset))
@@ -743,8 +684,8 @@ class GRASSStartup(wx.Frame):
                     newlocation, style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
             else:
                 try:
-                    os.rename(os.path.join(self.gisdbase, location),
-                              os.path.join(self.gisdbase, newlocation))
+                    sutils.rename_location(self.gisdbase,
+                                           location, newlocation)
                     self.UpdateLocations(self.gisdbase)
                     self.lblocations.SetSelection(
                         self.listOfLocations.index(newlocation))
@@ -784,7 +725,7 @@ class GRASSStartup(wx.Frame):
 
         if dlg.ShowModal() == wx.ID_YES:
             try:
-                shutil.rmtree(os.path.join(self.gisdbase, location, mapset))
+                sutils.delete_mapset(self.gisdbase, location, mapset)
                 self.OnSelectLocation(None)
                 self.lbmapsets.SetSelection(0)
             except:
@@ -812,7 +753,7 @@ class GRASSStartup(wx.Frame):
 
         if dlg.ShowModal() == wx.ID_YES:
             try:
-                shutil.rmtree(os.path.join(self.gisdbase, location))
+                sutils.delete_location(self.gisdbase, location)
                 self.UpdateLocations(self.gisdbase)
                 self.lblocations.SetSelection(0)
                 self.OnSelectLocation(None)
@@ -889,12 +830,7 @@ class GRASSStartup(wx.Frame):
             for line in ret.splitlines():
                 self.listOfMapsetsSelectable += line.split(' ')
         else:
-            RunCommand("g.gisenv",
-                       set="GISDBASE=%s" % self.gisdbase)
-            RunCommand("g.gisenv",
-                       set="LOCATION_NAME=%s" % locationName)
-            RunCommand("g.gisenv",
-                       set="MAPSET=PERMANENT")
+            self.SetLocation(self.gisdbase, locationName, "PERMANENT")
             # first run only
             self.listOfMapsetsSelectable = copy.copy(self.listOfMapsets)
 
@@ -902,9 +838,8 @@ class GRASSStartup(wx.Frame):
         idx = 0
         for mapset in self.listOfMapsets:
             if mapset not in self.listOfMapsetsSelectable or \
-                    os.path.isfile(os.path.join(self.gisdbase,
-                                                locationName,
-                                                mapset, ".gislock")):
+                    get_lockfile_if_present(self.gisdbase,
+                                            locationName, mapset):
                 disabled.append(idx)
             idx += 1
 
@@ -936,9 +871,8 @@ class GRASSStartup(wx.Frame):
 
         for mapset in self.listOfMapsets:
             if mapset not in self.listOfMapsetsSelectable or \
-                    os.path.isfile(os.path.join(self.gisdbase,
-                                                locationName,
-                                                mapset, ".gislock")):
+                    get_lockfile_if_present(self.gisdbase,
+                                            locationName, mapset):
                 disabled.append(idx)
             idx += 1
 
@@ -1009,14 +943,12 @@ class GRASSStartup(wx.Frame):
 
     def OnCreateMapset(self, event):
         """Create new mapset"""
-        dlg = TextEntryDialog(
+        dlg = NewMapsetDialog(
             parent=self,
-            message=_('Enter name for new mapset:'),
-            caption=_('Create new mapset'),
-            defaultValue=self._getDefaultMapsetName(),
-            validator=GenericValidator(
-                grass.legal_name,
-                self._nameValidationFailed))
+            default=self._getDefaultMapsetName(),
+            validation_failed_handler=self._nameValidationFailed,
+            help_hanlder=self.OnHelp,
+        )
         if dlg.ShowModal() == wx.ID_OK:
             mapset = dlg.GetValue()
             return self.CreateNewMapset(mapset=mapset)
@@ -1049,20 +981,7 @@ class GRASSStartup(wx.Frame):
         try:
             self.gisdbase = self.tgisdbase.GetValue()
             location = self.listOfLocations[self.lblocations.GetSelection()]
-            os.mkdir(os.path.join(self.gisdbase, location, mapset))
-            # copy WIND file and its permissions from PERMANENT and set
-            # permissions to u+rw,go+r
-            shutil.copy(
-                os.path.join(
-                    self.gisdbase,
-                    location,
-                    'PERMANENT',
-                    'WIND'),
-                os.path.join(
-                    self.gisdbase,
-                    location,
-                    mapset))
-            # os.chmod(os.path.join(database,location,mapset,'WIND'), 0644)
+            create_mapset(self.gisdbase, location, mapset)
             self.OnSelectLocation(None)
             self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
             self.bstart.SetFocus()
@@ -1080,8 +999,8 @@ class GRASSStartup(wx.Frame):
         location = self.listOfLocations[self.lblocations.GetSelection()]
         mapset = self.listOfMapsets[self.lbmapsets.GetSelection()]
 
-        lockfile = os.path.join(dbase, location, mapset, '.gislock')
-        if os.path.isfile(lockfile):
+        lockfile = get_lockfile_if_present(dbase, location, mapset)
+        if lockfile:
             dlg = wx.MessageDialog(
                 parent=self,
                 message=_(
@@ -1124,12 +1043,7 @@ class GRASSStartup(wx.Frame):
         self.ExitSuccessfully()
 
     def SetLocation(self, dbase, location, mapset):
-        RunCommand("g.gisenv",
-                   set="GISDBASE=%s" % dbase)
-        RunCommand("g.gisenv",
-                   set="LOCATION_NAME=%s" % location)
-        RunCommand("g.gisenv",
-                   set="MAPSET=%s" % mapset)
+        SetSessionMapset(dbase, location, mapset)
 
     def _getDefaultMapsetName(self):
         """Returns default name for mapset."""
@@ -1199,8 +1113,8 @@ class GListBox(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         idx = 0
         count = self.GetItemCount()
         for item in choices:
-            index = self.InsertStringItem(count + idx, item)
-            self.SetStringItem(index, 0, item)
+            index = self.InsertItem(count + idx, item)
+            self.SetItem(index, 0, item)
 
             if idx in disabled:
                 self.SetItemTextColour(idx, wx.Colour(150, 150, 150))
@@ -1231,8 +1145,6 @@ class StartUp(wx.App):
     """Start-up application"""
 
     def OnInit(self):
-        if not globalvar.CheckWxVersion([2, 9]):
-            wx.InitAllImageHandlers()
         StartUp = GRASSStartup()
         StartUp.CenterOnScreen()
         self.SetTopWindow(StartUp)

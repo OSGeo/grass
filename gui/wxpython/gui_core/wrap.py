@@ -17,10 +17,28 @@ This program is free software under the GNU General Public License
 
 import wx
 import wx.lib.buttons as buttons
+import wx.lib.colourselect as csel
+try:
+    import wx.lib.agw.customtreectrl as CT
+except ImportError:
+    import wx.lib.customtreectrl as CT
 
-from core.globalvar import gtk3, wxPythonPhoenix
+from core.globalvar import gtk3, wxPythonPhoenix, CheckWxVersion
 if wxPythonPhoenix:
     import wx.adv
+
+if wxPythonPhoenix:
+    ComboPopup = wx.ComboPopup
+    wxComboCtrl = wx.ComboCtrl
+else:
+    import wx.combo
+    ComboPopup = wx.combo.ComboPopup
+    wxComboCtrl = wx.combo.ComboCtrl
+
+if wxPythonPhoenix and CheckWxVersion([4, 0, 3, 0]):
+    from wx import NewIdRef as NewId
+else:
+    from wx import NewId
 
 
 def BitmapFromImage(image, depth=-1):
@@ -29,6 +47,11 @@ def BitmapFromImage(image, depth=-1):
     else:
         return wx.BitmapFromImage(image, depth=depth)
 
+def ImageFromBitmap(bitmap):
+    if wxPythonPhoenix:
+        return bitmap.ConvertToImage()
+    else:
+        return wx.ImageFromBitmap(bitmap)
 
 def EmptyBitmap(width, height, depth=-1):
     if wxPythonPhoenix:
@@ -70,6 +93,19 @@ class Window(wx.Window):
                 wx.Window.SetToolTipString(self, tip)
 
 
+class Panel(wx.Panel):
+    """Wrapper around wx.Panel to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        wx.Panel.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            wx.Panel.SetToolTip(self, tipString=tip)
+        else:
+            wx.Panel.SetToolTipString(self, tip)
+
+
 class SpinCtrl(wx.SpinCtrl):
     """Wrapper around wx.SpinCtrl to have more control
     over the widget on different platforms"""
@@ -97,6 +133,32 @@ class Button(wx.Button):
             wx.Button.SetToolTip(self, tipString=tip)
         else:
             wx.Button.SetToolTipString(self, tip)
+
+
+class RadioButton(wx.RadioButton):
+    """Wrapper around wx.RadioButton to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        wx.RadioButton.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            wx.RadioButton.SetToolTip(self, tipString=tip)
+        else:
+            wx.RadioButton.SetToolTipString(self, tip)
+
+
+class BitmapButton(wx.BitmapButton):
+    """Wrapper around wx.BitmapButton to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        wx.BitmapButton.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            wx.BitmapButton.SetToolTip(self, tipString=tip)
+        else:
+            wx.BitmapButton.SetToolTipString(self, tip)
 
 
 class GenBitmapButton(buttons.GenBitmapButton):
@@ -151,6 +213,19 @@ class StaticBox(wx.StaticBox):
             wx.StaticBox.SetToolTipString(self, tip)
 
 
+class CheckListBox(wx.CheckListBox):
+    """Wrapper around wx.CheckListBox to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        wx.CheckListBox.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            wx.CheckListBox.SetToolTip(self, tipString=tip)
+        else:
+            wx.CheckListBox.SetToolTipString(self, tip)
+
+
 class TextCtrl(wx.TextCtrl):
     """Wrapper around wx.TextCtrl to have more control
     over the widget on different platforms/wxpython versions"""
@@ -183,13 +258,13 @@ class ListCtrl(wx.ListCtrl):
     def __init__(self, *args, **kwargs):
         wx.ListCtrl.__init__(self, *args, **kwargs)
 
-    def InsertStringItem(self, index, label, imageIndex=-1):
+    def InsertItem(self, index, label, imageIndex=-1):
         if wxPythonPhoenix:
             return wx.ListCtrl.InsertItem(self, index=index, label=label, imageIndex=imageIndex)
         else:
             return wx.ListCtrl.InsertStringItem(self, index=index, label=label, imageIndex=imageIndex)
 
-    def SetStringItem(self, index, column, label, imageId=-1):
+    def SetItem(self, index, column, label, imageId=-1):
         if wxPythonPhoenix:
             return wx.ListCtrl.SetItem(self, index=index, column=column, label=label, imageId=imageId)
         else:
@@ -215,6 +290,19 @@ class TreeCtrl(wx.TreeCtrl):
             return wx.TreeCtrl.GetPyData(self, item)
 
 
+class CustomTreeCtrl(CT.CustomTreeCtrl):
+    """Wrapper around wx.lib.agw.customtreectrl to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        CT.CustomTreeCtrl.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            CT.CustomTreeCtrl.SetToolTip(self, tipString=tip)
+        else:
+            CT.CustomTreeCtrl.SetToolTipString(self, tip)
+
+
 class ToolBar(wx.ToolBar):
     """Wrapper around wx.ToolBar to have more control
     over the widget on different platforms/wxpython versions"""
@@ -225,7 +313,7 @@ class ToolBar(wx.ToolBar):
                      shortHelpString='', longHelpString='', clientData=None):
         if wxPythonPhoenix:
             return wx.ToolBar.AddTool(self, toolId=toolId, label=label, bitmap=bitmap, bmpDisabled=bmpDisabled,
-                                      kind=kind, shortHelpString=shortHelpString, longHelpString=longHelpString,
+                                      kind=kind, shortHelp=shortHelpString, longHelp=longHelpString,
                                       clientData=clientData)
         else:
             return wx.ToolBar.AddLabelTool(self, toolId, label, bitmap, bmpDisabled, kind,
@@ -274,6 +362,12 @@ class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
     def __init__(self, *args, **kwargs):
         super(PseudoDC, self).__init__(*args, **kwargs)
 
+    def DrawLinePoint(self, pt1, pt2):
+        if wxPythonPhoenix:
+            super(PseudoDC, self).DrawLine(pt1, pt2)
+        else:
+            super(PseudoDC, self).DrawLinePoint(pt1, pt2)
+
     def DrawRectangleRect(self, rect):
         if wxPythonPhoenix:
             super(PseudoDC, self).DrawRectangle(rect=rect)
@@ -287,6 +381,19 @@ class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
     def EndDrawing(self):
         if not wxPythonPhoenix:
             super(PseudoDC, self).EndDrawing()
+
+
+class ClientDC(wx.ClientDC):
+    """Wrapper around wx.ClientDC to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        super(ClientDC, self).__init__(*args, **kwargs)
+
+    def GetFullMultiLineTextExtent(self, string, font=None):
+        if wxPythonPhoenix:
+            return super(ClientDC, self).GetFullMultiLineTextExtent(string, font)
+        else:
+            return super(ClientDC, self).GetMultiLineTextExtent(string, font)
 
 
 class Rect(wx.Rect):
@@ -306,3 +413,71 @@ class Rect(wx.Rect):
             return wx.Rect.Contains(self, rect=rect)
         else:
             return wx.Rect.ContainsRect(self, rect)
+
+    def OffsetXY(self, dx, dy):
+        if wxPythonPhoenix:
+            return wx.Rect.Offset(self, dx, dy)
+        else:
+            return wx.Rect.OffsetXY(self, dx, dy)
+
+
+class CheckBox(wx.CheckBox):
+    """Wrapper around wx.CheckBox to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        wx.CheckBox.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            wx.CheckBox.SetToolTip(self, tipString=tip)
+        else:
+            wx.CheckBox.SetToolTipString(self, tip)
+
+
+class Choice(wx.Choice):
+    """Wrapper around wx.Choice to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        wx.Choice.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            wx.Choice.SetToolTip(self, tipString=tip)
+        else:
+            wx.Choice.SetToolTipString(self, tip)
+
+
+class TextEntryDialog(wx.TextEntryDialog):
+    """Wrapper around wx.TextEntryDialog to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, parent, message, caption="Please enter text", value="",
+                 style=wx.OK | wx.CANCEL | wx.CENTRE, pos=wx.DefaultPosition):
+        if wxPythonPhoenix:
+            super(TextEntryDialog, self).__init__(parent=parent, message=message, caption=caption,
+                                                  value=value, style=style, pos=pos)
+        else:
+            super(TextEntryDialog, self).__init__(parent=parent, message=message, caption=caption,
+                                                  defaultValue=value, style=style, pos=pos)
+
+
+class ColourSelect(csel.ColourSelect):
+    """Wrapper around wx.lib.colourselect.ColourSelect to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        csel.ColourSelect.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            csel.ColourSelect.SetToolTip(self, tipString=tip)
+        else:
+            csel.ColourSelect.SetToolTipString(self, tip)
+
+class ComboCtrl(wxComboCtrl):
+    def __init__(self, *args, **kwargs):
+        wxComboCtrl.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            wxComboCtrl.SetToolTip(self, tipString=tip)
+        else:
+            wxComboCtrl.SetToolTipString(self, tip)

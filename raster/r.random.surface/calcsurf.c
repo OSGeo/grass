@@ -93,14 +93,14 @@ void CalcSurface(void)
 	    if (ODD(Row)) {
 		for (Col = Cs - 1; Col >= 0; Col--) {
 		    G_percent(Count++, MapCount, 1);
-		    Surface[Row][Col] =
+		    RSurface[Row][Col] =
 			MakePP(Row, Col, OutRows, OutCols, Randoms, BigF);
 		}
 	    }
 	    else {
 		for (Col = 0; Col < Cs; Col++) {
 		    G_percent(Count++, MapCount, 1);
-		    Surface[Row][Col] =
+		    RSurface[Row][Col] =
 			MakePP(Row, Col, OutRows, OutCols, Randoms, BigF);
 		}
 	    }
@@ -113,10 +113,10 @@ void CalcSurface(void)
 	    if (ODD(Row)) {
 		for (Col = Cs - 1; Col >= 0; Col--) {
 		    if (CellBuffer[Col] == 0)
-			Surface[Row][Col] = 0.0;
+			RSurface[Row][Col] = 0.0;
 		    else {
 			G_percent(Count++, MapCount, 1);
-			Surface[Row][Col] =
+			RSurface[Row][Col] =
 			    MakePP(Row, Col, OutRows, OutCols, Randoms, BigF);
 		    }
 		}
@@ -124,10 +124,10 @@ void CalcSurface(void)
 	    else {
 		for (Col = 0; Col < Cs; Col++) {
 		    if (CellBuffer[Col] == 0)
-			Surface[Row][Col] = 0.0;
+			RSurface[Row][Col] = 0.0;
 		    else {
 			G_percent(Count++, MapCount, 1);
-			Surface[Row][Col] =
+			RSurface[Row][Col] =
 			    MakePP(Row, Col, OutRows, OutCols, Randoms, BigF);
 		    }
 		}

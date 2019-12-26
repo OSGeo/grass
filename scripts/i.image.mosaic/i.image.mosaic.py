@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # written by Markus Neteler 18. August 1998 / 20. Jan. 1999
 #            neteler geog.uni-hannover.de
@@ -35,11 +35,6 @@
 from __future__ import print_function
 
 import grass.script as gscript
-
-# i18N
-import os
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 
 def copy_colors(fh, map, offset):

@@ -20,33 +20,24 @@ import glob
 import shlex
 import re
 import inspect
+import six
 
 from grass.script import core as grass
 from grass.script import task as gtask
 from grass.exceptions import OpenError
 
-from core import globalvar
 from core.gcmd import RunCommand
 from core.debug import Debug
+from core.globalvar import ETCDIR, wxPythonPhoenix
 
-try:
-    # intended to be used also outside this module
-    import gettext
-    _ = gettext.translation(
-        'grasswxpy',
-        os.path.join(
-            os.getenv("GISBASE"),
-            'locale')).ugettext
-except IOError:
-    # using no translation silently
-    def null_gettext(string):
-        return string
-    _ = null_gettext
+def cmp(a, b):
+    """cmp function"""
+    return ((a > b) - (a < b))
 
 
 def normalize_whitespace(text):
     """Remove redundant whitespace from a string"""
-    return string.join(string.split(text), ' ')
+    return (' ').join(text.split())
 
 
 def split(s):
@@ -254,7 +245,7 @@ def ListOfCatsToRange(cats):
     catstr = ''
 
     try:
-        cats = map(int, cats)
+        cats = list(map(int, cats))
     except:
         return catstr
 
@@ -324,7 +315,7 @@ def ListOfMapsets(get='ordered'):
 
 def ListSortLower(list):
     """Sort list items (not case-sensitive)"""
-    list.sort(cmp=lambda x, y: cmp(x.lower(), y.lower()))
+    list.sort(key=lambda x: x.lower())
 
 
 def GetVectorNumberOfLayers(vector):
@@ -518,44 +509,20 @@ def PathJoin(*args):
     return path
 
 
-def ReadEpsgCodes(path):
-    """Read EPSG code from the file
-
-    :param path: full path to the file with EPSG codes
-
-    Raise OpenError on failure.
+def ReadEpsgCodes():
+    """Read EPSG codes with g.proj
 
     :return: dictionary of EPSG code
     """
     epsgCodeDict = dict()
-    try:
-        try:
-            f = open(path, "r")
-        except IOError:
-            raise OpenError(_("failed to open '{0}'").format(path))
 
-        code = None
-        for line in f.readlines():
-            line = line.strip()
-            if len(line) < 1:
-                continue
+    ret = RunCommand('g.proj',
+                     read=True,
+                     list_codes="EPSG")
 
-            if line[0] == '#':
-                descr = line[1:].strip()
-            elif line[0] == '<':
-                code, params = line.split(" ", 1)
-                try:
-                    code = int(code.replace('<', '').replace('>', ''))
-                except ValueError as e:
-                    raise OpenError('{0}'.format(e))
-
-            if code is not None:
-                epsgCodeDict[code] = (descr, params)
-                code = None
-
-        f.close()
-    except Exception as e:
-        raise OpenError('{0}'.format(e))
+    for line in ret.splitlines():
+        code, descr, params = line.split("|")
+        epsgCodeDict[int(code)] = (descr, params)
 
     return epsgCodeDict
 
@@ -731,7 +698,7 @@ def _parseFormats(output, writableOnly=False):
         else:
             formats['file'].append(name)
 
-    for items in formats.itervalues():
+    for items in six.itervalues(formats):
         items.sort()
 
     return formats
@@ -800,33 +767,35 @@ rasterFormatExtension = {
     'Northwood Classified Grid Format .grc/.tab': '',
     'ARC Digitized Raster Graphics': 'arc',
     'Magellan topo (.blx)': 'blx',
-    'SAGA GIS Binary Grid (.sdat)': 'sdat'
+    'SAGA GIS Binary Grid (.sdat)': 'sdat',
+    'GeoPackage (.gpkg)': 'gpkg'
 }
 
 
 vectorFormatExtension = {
     'ESRI Shapefile': 'shp',
+    'GeoPackage': 'gpkg',
     'UK .NTF': 'ntf',
     'SDTS': 'ddf',
-            'DGN': 'dgn',
-            'VRT': 'vrt',
-            'REC': 'rec',
-            'BNA': 'bna',
-            'CSV': 'csv',
-            'GML': 'gml',
-            'GPX': 'gpx',
-            'KML': 'kml',
-            'GMT': 'gmt',
-            'PGeo': 'mdb',
-            'XPlane': 'dat',
-            'AVCBin': 'adf',
-            'AVCE00': 'e00',
-            'DXF': 'dxf',
-            'Geoconcept': 'gxt',
-            'GeoRSS': 'xml',
-            'GPSTrackMaker': 'gtm',
-            'VFK': 'vfk',
-            'SVG': 'svg',
+    'DGN': 'dgn',
+    'VRT': 'vrt',
+    'REC': 'rec',
+    'BNA': 'bna',
+    'CSV': 'csv',
+    'GML': 'gml',
+    'GPX': 'gpx',
+    'KML': 'kml',
+    'GMT': 'gmt',
+    'PGeo': 'mdb',
+    'XPlane': 'dat',
+    'AVCBin': 'adf',
+    'AVCE00': 'e00',
+    'DXF': 'dxf',
+    'Geoconcept': 'gxt',
+    'GeoRSS': 'xml',
+    'GPSTrackMaker': 'gtm',
+    'VFK': 'vfk',
+    'SVG': 'svg'
 }
 
 
@@ -834,7 +803,7 @@ def GetSettingsPath():
     """Get full path to the settings directory
     """
     try:
-        verFd = open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER"))
+        verFd = open(os.path.join(ETCDIR, "VERSIONNUMBER"))
         version = int(verFd.readlines()[0].split(' ')[0].split('.')[0])
     except (IOError, ValueError, TypeError, IndexError) as e:
         sys.exit(
@@ -917,7 +886,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
     else:
         expCmd = 'export'
 
-    for key, value in environ.iteritems():
+    for key, value in six.iteritems(environ):
         fd.write('%s %s=%s\n' % (expCmd, key, value))
 
     # write also skipped lines
@@ -1091,7 +1060,7 @@ def PilImageToWxImage(pilImage, copyAlpha=True):
                 pilImageCopyRGBA,
                 "tostring"))
         # Create layer and insert alpha values.
-        if globalvar.wxPythonPhoenix:
+        if wxPythonPhoenix:
             wxImage.SetAlpha(fn()[3::4])
         else:
             wxImage.SetAlphaData(fn()[3::4])

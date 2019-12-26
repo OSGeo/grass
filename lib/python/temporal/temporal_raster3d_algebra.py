@@ -18,8 +18,6 @@ try:
 except:
     pass
 
-# i18N
-import gettext
 from .temporal_raster_base_algebra import TemporalRasterBaseAlgebraParser,\
     TemporalRasterAlgebraLexer
 import grass.pygrass.modules as pymod
@@ -56,7 +54,7 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
 
         self.lexer = TemporalRasterAlgebraLexer()
         self.lexer.build()
-        self.parser = yacc.yacc(module=self, debug=self.debug)
+        self.parser = yacc.yacc(module=self, debug=self.debug, write_tables=False)
 
         self.overwrite = overwrite
         self.count = 0

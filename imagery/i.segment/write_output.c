@@ -34,6 +34,8 @@ int write_ids(struct globals *globals)
 		Segment_get(&globals->rid_seg, (void *) &rid, row, col);
 
 		if (rid > 0) {
+		    if (globals->method == ORM_RG)
+			rid = globals->new_id[rid];
 		    outbuf[col] = rid;
 		    if (maxid < rid)
 			maxid = rid;

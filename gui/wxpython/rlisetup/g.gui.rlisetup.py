@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 ############################################################################
 #
 # MODULE:    g.gui.rlisetup
@@ -38,12 +38,9 @@ def main():
     set_gui_path()
 
     from core.giface import StandaloneGrassInterface
-    from core.globalvar import CheckWxVersion
     from rlisetup.frame import RLiSetupFrame
 
     app = wx.App()
-    if not CheckWxVersion([2, 9]):
-        wx.InitAllImageHandlers()
     frame = RLiSetupFrame(parent=None, giface=StandaloneGrassInterface())
     frame.Show()
     frame.CenterOnScreen()

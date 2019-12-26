@@ -54,9 +54,9 @@ class TestRasterExtraction(TestCase):
                           indicator="C", start="2001-01-01", cycle="12 months",
                           basename='result', range=(1,8))
         tinfo_string="""semantic_type=mean
-        start_time=2001-01-01 00:00:00
-        end_time=2009-05-01 00:00:00
-        granularity=1 month
+        start_time='2001-01-01 00:00:00'
+        end_time='2009-05-01 00:00:00'
+        granularity='1 month'
         map_time=interval
         number_of_maps=100"""
         info = SimpleModule("t.info", flags="g", type="strds", input="B")
@@ -64,9 +64,9 @@ class TestRasterExtraction(TestCase):
                                   precision=2, sep="=")
 
         tinfo_string="""semantic_type=mean
-        start_time=2001-01-01 00:00:00
-        end_time=2009-05-01 00:00:00
-        granularity=1 month
+        start_time='2001-01-01 00:00:00'
+        end_time='2009-05-01 00:00:00'
+        granularity='1 month'
         map_time=interval
         number_of_maps=100"""
         info = SimpleModule("t.info", flags="g", type="strds", input="C")
@@ -78,9 +78,9 @@ class TestRasterExtraction(TestCase):
                           indicator="C", start="2001-01-01", stop='2008-12-31',
                           cycle="12 months", basename='result', range=(1,8))
         tinfo_string="""semantic_type=mean
-        start_time=2001-01-01 00:00:00
-        end_time=2009-01-01 00:00:00
-        granularity=1 month
+        start_time='2001-01-01 00:00:00'
+        end_time='2009-01-01 00:00:00'
+        granularity='1 month'
         map_time=interval
         number_of_maps=96"""
         info = SimpleModule("t.info", flags="g", type="strds", input="B")
@@ -88,9 +88,9 @@ class TestRasterExtraction(TestCase):
                                   precision=2, sep="=")
 
         tinfo_string="""semantic_type=mean
-        start_time=2001-01-01 00:00:00
-        end_time=2009-01-01 00:00:00
-        granularity=1 month
+        start_time='2001-01-01 00:00:00'
+        end_time='2009-01-01 00:00:00'
+        granularity='1 month'
         map_time=interval
         number_of_maps=96"""
         info = SimpleModule("t.info", flags="g", type="strds", input="C")

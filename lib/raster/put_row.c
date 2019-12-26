@@ -354,7 +354,7 @@ static void put_data(int fd, char *null_buf, const CELL * cell,
     if (compressed) {
 	int nbytes = count_bytes(wk, n, len);
 	unsigned char *compressed_buf;
-	int total;
+	int total, cmax;
 
 	if (fcb->nbytes < nbytes)
 	    fcb->nbytes = nbytes;
@@ -364,7 +364,12 @@ static void put_data(int fd, char *null_buf, const CELL * cell,
 	    trim_bytes(wk, n, len, len - nbytes);
 
 	total = nbytes * n;
-	compressed_buf = G_malloc(total + 1);
+	/* get upper bound of compressed size */
+	if (fcb->cellhd.compressed == 1)
+	    cmax = total;
+	else
+	    cmax = G_compress_bound(total, fcb->cellhd.compressed);
+	compressed_buf = G_malloc(cmax + 1);
 
 	compressed_buf[0] = work_buf[0] = nbytes;
 
@@ -372,7 +377,7 @@ static void put_data(int fd, char *null_buf, const CELL * cell,
 	if (fcb->cellhd.compressed == 1)
 	    nwrite = rle_compress(compressed_buf + 1, work_buf + 1, n, nbytes);
 	else {
-	    nwrite = G_compress(work_buf + 1, total, compressed_buf + 1, total,
+	    nwrite = G_compress(work_buf + 1, total, compressed_buf + 1, cmax,
 	                        fcb->cellhd.compressed);
 	}
 
@@ -500,13 +505,16 @@ static void write_null_bits_compressed(const unsigned char *flags,
     struct fileinfo *fcb = &R__.fileinfo[fd];
     unsigned char *compressed_buf;
     ssize_t nwrite;
+    size_t cmax;
 
     fcb->null_row_ptr[row] = lseek(fcb->null_fd, 0L, SEEK_CUR);
 
-    compressed_buf = G_malloc(size + 1);
+    /* get upper bound of compressed size */
+    cmax = G_compress_bound(size, 3);
+    compressed_buf = G_malloc(cmax);
 
     /* compress null bits file with LZ4, see lib/gis/compress.h */
-    nwrite = G_lz4_compress(flags, size, compressed_buf, size);
+    nwrite = G_compress(flags, size, compressed_buf, cmax, 3);
 
     if (nwrite > 0 && nwrite < size) {
 	if (write(fcb->null_fd, compressed_buf, nwrite) != nwrite)

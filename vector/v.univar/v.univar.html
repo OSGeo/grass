@@ -31,9 +31,11 @@ between features are used. Depending on the selected vector
 	between areas)</li>
 </ul>
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
-The example is based on the North Carolina sample dataset:
+The examples are based on the North Carolina sample dataset.
+
+<h3>Example dataset preparation</h3>
 
 <div class="code"><pre>
 g.region raster=elevation -p
@@ -43,7 +45,7 @@ v.what.rast map=samples rast=elevation column=heights
 v.db.select map=samples
 </pre></div>
 
-Calculate height attribute statistics:
+<h3>Calculate height attribute statistics</h3>
 
 <div class="code"><pre>
 v.univar -e samples column=heights type=point
@@ -70,7 +72,7 @@ median (even number of cells): 106.518
 90th percentile: 135.023
 </pre></div>
 
-Compare to statistics of original raster map:
+<h3>Compare to statistics of original raster map</h3>
 
 <div class="code"><pre>
 r.univar -e elevation
@@ -96,10 +98,10 @@ median (even number of cells): 108.88
 90th percentile: 138.66
 </pre></div>
 
-Calculate distance between sampling points statistics:
+<h3>Calculate statistic of distance between sampling points</h3>
 
 <div class="code"><pre>
-v.univar -d samples column=heights type=point
+v.univar -d samples type=point
 
 number of primitives: 100
 number of non zero distances: 4851
@@ -125,8 +127,9 @@ skewness: 0.238688
 <a href="db.univar.html">db.univar</a>,
 <a href="r.univar.html">r.univar</a>,
 <a href="v.db.univar.html">v.db.univar</a>,
-<a href="v.neighbors.html">v.neighbors</a>
-<a href="v.distance.html">v.distance</a>
+<a href="v.distance.html">v.distance</a>,
+<a href="v.neighbors.html">v.neighbors</a>,
+<a href="v.qcount.html">v.qcount</a>
 </em>
 
 
@@ -138,5 +141,7 @@ extended by:<br>
 Hamish Bowman, University of Otago, New Zealand<br>
 Martin Landa 
 
+<!--
 <p>
 <i>Last changed: $Date$</i>
+-->

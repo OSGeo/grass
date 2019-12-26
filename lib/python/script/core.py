@@ -25,30 +25,19 @@ import atexit
 import subprocess
 import shutil
 import codecs
+import string
+import random
+import pipes
 import types as python_types
 
-from .utils import KeyValue, parse_key_val, basename, encode
+from .utils import KeyValue, parse_key_val, basename, encode, decode
 from grass.exceptions import ScriptError, CalledModuleError
 
-# i18N
-import gettext
-gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'))
-
-try:
-    # python2
-    import __builtin__
-    from os import environ
-except ImportError:
-    # python3
-    import builtins as __builtin__
-    from os import environb as environ
+# PY2/PY3 compat
+if sys.version_info.major > 2:
     unicode = str
-__builtin__.__dict__['_'] = __builtin__.__dict__['_'].__self__.lgettext
-
 
 # subprocess wrapper that uses shell on Windows
-
-
 class Popen(subprocess.Popen):
     _builtin_exts = set(['.com', '.exe', '.bat', '.cmd'])
 
@@ -92,18 +81,31 @@ _popen_args = ["bufsize", "executable", "stdin", "stdout", "stderr",
 
 
 def _make_val(val):
-    """Convert value to bytes"""
-    if isinstance(val, bytes):
-        return val
-    if isinstance(val, (str, unicode)):
-        return encode(val)
+    """Convert value to unicode"""
+    if isinstance(val, (bytes, str, unicode)):
+        return decode(val)
     if isinstance(val, (int, float)):
-        return encode(str(val))
+        return unicode(val)
     try:
-        return b",".join(map(_make_val, iter(val)))
+        return ",".join(map(_make_val, iter(val)))
     except TypeError:
         pass
-    return bytes(val)
+    return unicode(val)
+
+
+def _make_unicode(val, enc):
+    """Convert value to unicode with given encoding
+
+    :param val: value to be converted
+    :param enc: encoding to be used
+    """
+    if val is None or enc is None:
+        return val
+    else:
+        if enc == 'default':
+            return decode(val)
+        else:
+            return decode(val, encoding=enc)
 
 
 def get_commands():
@@ -147,7 +149,7 @@ def get_commands():
 
     return set(cmd), scripts
 
-
+# TODO: Please replace this function with shutil.which() before 8.0 comes out
 # replacement for which function from shutil (not available in all versions)
 # from http://hg.python.org/cpython/file/6860263c05b3/Lib/shutil.py#l1068
 # added because of Python scripts running Python scripts on MS Windows
@@ -192,16 +194,17 @@ def shutil_which(cmd, mode=os.F_OK | os.X_OK, path=None):
         if not os.curdir in path:
             path.insert(0, os.curdir)
 
-        # PATHEXT is necessary to check on Windows.
-        pathext = os.environ.get("PATHEXT", "").split(os.pathsep)
-        map(lambda x: x.lower(), pathext) # force lowercase
-        if '.py' not in pathext:          # we assume that PATHEXT contains always '.py'
+        # PATHEXT is necessary to check on Windows (force lowercase)
+        pathext = list(map(lambda x: x.lower(),
+                           os.environ.get("PATHEXT", "").split(os.pathsep)))
+        if '.py' not in pathext:
+            # we assume that PATHEXT contains always '.py'
             pathext.insert(0, '.py')
         # See if the given file matches any of the expected path extensions.
-        # This will allow us to short circuit when given "python.exe".
+        # This will allow us to short circuit when given "python3.exe".
         # If it does match, only test that one, otherwise we have to try
         # others.
-        if any(cmd.lower().endswith(ext.lower()) for ext in pathext):
+        if any(cmd.lower().endswith(ext) for ext in pathext):
             files = [cmd]
         else:
             files = [cmd + ext for ext in pathext]
@@ -221,6 +224,8 @@ def shutil_which(cmd, mode=os.F_OK | os.X_OK, path=None):
                     return name
     return None
 
+if sys.version_info.major > 2:
+    shutil_which = shutil.which
 
 # Added because of scripts calling scripts on MS Windows.
 # Module name (here cmd) differs from the file name (does not have extension).
@@ -256,6 +261,12 @@ def get_real_command(cmd):
         # so, lets remove extension
         if os.path.splitext(cmd)[1] == '.py':
             cmd = cmd[:-3]
+        # PATHEXT is necessary to check on Windows (force lowercase)
+        pathext = list(map(lambda x: x.lower(),
+                           os.environ['PATHEXT'].split(os.pathsep)))
+        if '.py' not in pathext:
+            # we assume that PATHEXT contains always '.py'
+            os.environ['PATHEXT'] = '.py;' + os.environ['PATHEXT']
         full_path = shutil_which(cmd + '.py')
         if full_path:
             return full_path
@@ -263,7 +274,7 @@ def get_real_command(cmd):
     return cmd
 
 
-def make_command(prog, flags=b"", overwrite=False, quiet=False, verbose=False,
+def make_command(prog, flags="", overwrite=False, quiet=False, verbose=False,
                  superquiet=False, errors=None, **options):
     """Return a list of strings suitable for use as the args parameter to
     Popen() or call(). Example:
@@ -284,38 +295,83 @@ def make_command(prog, flags=b"", overwrite=False, quiet=False, verbose=False,
     """
     args = [_make_val(prog)]
     if overwrite:
-        args.append(b"--o")
+        args.append("--o")
     if quiet:
-        args.append(b"--q")
+        args.append("--q")
     if verbose:
-        args.append(b"--v")
+        args.append("--v")
     if superquiet:
-        args.append(b"--qq")
+        args.append("--qq")
     if flags:
         flags = _make_val(flags)
-        if b'-' in flags:
+        if '-' in flags:
             raise ScriptError("'-' is not a valid flag")
-        args.append(b"-" + bytes(flags))
+        args.append("-" + flags)
     for opt, val in options.items():
         if opt in _popen_args:
             continue
         # convert string to bytes
-        opt = encode(opt)
-        if val != None:
-            if opt.startswith(b'_'):
+        if val is not None:
+            if opt.startswith('_'):
                 opt = opt[1:]
                 warning(_("To run the module <%s> add underscore at the end"
                     " of the option <%s> to avoid conflict with Python"
                     " keywords. Underscore at the beginning is"
                     " depreciated in GRASS GIS 7.0 and will be removed"
                     " in version 7.1.") % (prog, opt))
-            elif opt.endswith(b'_'):
+            elif opt.endswith('_'):
                 opt = opt[:-1]
-            args.append(opt + b'=' + _make_val(val))
+            args.append(opt + '=' + _make_val(val))
     return args
 
 
 def handle_errors(returncode, result, args, kwargs):
+    """Error handler for :func:`run_command()` and similar functions
+
+    The function returns *result* if *returncode* is equal to 0,
+    otherwise it reports errors based on the current settings.
+
+    The functions which are using this function to handle errors,
+    can be typically called with an *errors* parameter.
+    This function can handle one of the following values: raise,
+    fatal, status, exit, and ignore. The value raise is a default.
+
+    If *kwargs* dictionary contains key ``errors``, the value is used
+    to determine the behavior on error.
+    The value ``errors="raise"`` is a default in which case a
+    ``CalledModuleError`` exception is raised.
+
+    For ``errors="fatal"``, the function calls :func:`fatal()`
+    which has its own rules on what happens next.
+
+    For ``errors="status"``, the *returncode* will be returned.
+    This is useful, e.g., for cases when the exception-based error
+    handling mechanism is not desirable or the return code has some
+    meaning not necessarily interpreted as an error by the caller.
+
+    For ``errors="exit"``, ``sys.exit()`` is called with the
+    *returncode*, so it behaves similarly to a Bash script with
+    ``set -e``. No additional error message or exception is produced.
+    This might be useful for a simple script where error message
+    produced by the called module provides sufficient information about
+    what happened to the end user.
+
+    Finally, for ``errors="ignore"``, the value of *result* will be
+    passed in any case regardless of the *returncode*.
+    """
+    def get_module_and_code(args, kwargs):
+        """Get module name and formatted command"""
+        # TODO: construction of the whole command is far from perfect
+        args = make_command(*args, **kwargs)
+        # Since we are in error handler, let's be extra cautious
+        # about an empty command.
+        if args:
+            module = args[0]
+        else:
+            module = None
+        code = ' '.join(args)
+        return module, code
+
     if returncode == 0:
         return result
     handler = kwargs.get('errors', 'raise')
@@ -323,15 +379,20 @@ def handle_errors(returncode, result, args, kwargs):
         return result
     elif handler.lower() == 'status':
         return returncode
+    elif handler.lower() == 'fatal':
+        module, code = get_module_and_code(args, kwargs)
+        fatal(_("Module {module} ({code}) failed with"
+                " non-zero return code {returncode}").format(
+                module=module, code=code, returncode=returncode))
     elif handler.lower() == 'exit':
-        sys.exit(1)
+        sys.exit(returncode)
     else:
-        # TODO: construction of the whole command is far from perfect
-        args = make_command(*args, **kwargs)
-        raise CalledModuleError(module=None, code=repr(args),
+        module, code = get_module_and_code(args, kwargs)
+        raise CalledModuleError(module=module, code=code,
                                 returncode=returncode)
 
-def start_command(prog, flags=b"", overwrite=False, quiet=False,
+
+def start_command(prog, flags="", overwrite=False, quiet=False,
                   verbose=False, superquiet=False, **kwargs):
     """Returns a Popen object with the command created by make_command.
     Accepts any of the arguments which Popen() accepts apart from "args"
@@ -360,22 +421,24 @@ def start_command(prog, flags=b"", overwrite=False, quiet=False,
 
     :return: Popen object
     """
+    if 'encoding' in kwargs.keys():
+        encoding = kwargs.pop('encoding')
+
     options = {}
     popts = {}
     for opt, val in kwargs.items():
         if opt in _popen_args:
             popts[opt] = val
         else:
-            if isinstance(val, unicode):
-                val = encode(val)
             options[opt] = val
 
     args = make_command(prog, flags, overwrite, quiet, verbose, **options)
 
     if debug_level() > 0:
-        sys.stderr.write("D1/%d: %s.start_command(): %s\n" % (debug_level(),
-                                                              __name__,
-                                                              ' '.join(args)))
+        sys.stderr.write("D1/{}: {}.start_command(): {}\n".format(
+            debug_level(), __name__,
+            ' '.join(args))
+        )
         sys.stderr.flush()
     return Popen(args, **popts)
 
@@ -385,40 +448,55 @@ def run_command(*args, **kwargs):
 
     This function passes all arguments to ``start_command()``,
     then waits for the process to complete. It is similar to
-    ``subprocess.check_call()``, but with the ``make_command()``
-    interface.
-
-    For backward compatibility, the function returns exit code
-    by default but only if it is equal to zero. An exception is raised
-    in case of an non-zero return code.
+    ``subprocess.check_call()``, but with the :func:`make_command()`
+    interface. By default, an exception is raised in case of a non-zero
+    return code by default.
 
     >>> run_command('g.region', raster='elevation')
-    0
 
     See :func:`start_command()` for details about parameters and usage.
 
-    ..note::
-        You should ignore the return value of this function unless, you
-        change the default behavior using *errors* parameter.
+    The behavior on error can be changed using *errors* parameter
+    which is passed to the :func:`handle_errors()` function.
 
-    :param *args: unnamed arguments passed to ``start_command()``
-    :param **kwargs: named arguments passed to ``start_command()``
+    :param *args: unnamed arguments passed to :func:`start_command()`
+    :param **kwargs: named arguments passed to :func:`start_command()`
+    :param str errors: passed to :func:`handle_errors()`
 
-    :returns: 0 with default parameters for backward compatibility only
+    .. versionchanged:: 8.0
+        Before 8.0, the function was returning 0 when no error occurred
+        for backward compatibility with code which was checking that
+        value. Now the function returns None, unless ``errors="status"``
+        is specified.
+    .. versionchanged:: 7.2
+        In 7.0.0, this function was returning the error code. However,
+        it was rarely checked especially outside of the core code.
+        Additionally, :func:`read_command()` needed a mechanism to
+        report errors as it was used more and more in context which
+        required error handling, Thus, exceptions were introduced as a
+        more expected default behavior for Python programmers. The
+        change was backported to 7.0 series.
 
     :raises: ``CalledModuleError`` when module returns non-zero return code
     """
+    encoding = 'default'
+    if 'encoding' in kwargs:
+        encoding = kwargs['encoding']
+
     if _capture_stderr and 'stderr' not in kwargs.keys():
         kwargs['stderr'] = PIPE
     ps = start_command(*args, **kwargs)
     if _capture_stderr:
         stdout, stderr = ps.communicate()
+        if encoding is not None:
+            stdout = _make_unicode(stdout, encoding)
+            stderr = _make_unicode(stderr, encoding)
         returncode = ps.poll()
         if returncode:
             sys.stderr.write(stderr)
     else:
         returncode = ps.wait()
-    return handle_errors(returncode, returncode, args, kwargs)
+    return handle_errors(returncode, result=None, args=args, kwargs=kwargs)
 
 
 def pipe_command(*args, **kwargs):
@@ -461,15 +539,25 @@ def read_command(*args, **kwargs):
     """Passes all arguments to pipe_command, then waits for the process to
     complete, returning its stdout (i.e. similar to shell `backticks`).
 
+    The behavior on error can be changed using *errors* parameter
+    which is passed to the :func:`handle_errors()` function.
+
     :param list args: list of unnamed arguments (see start_command() for details)
     :param list kwargs: list of named arguments (see start_command() for details)
 
     :return: stdout
     """
+    encoding = 'default'
+    if 'encoding' in kwargs:
+        encoding = kwargs['encoding']
+
     if _capture_stderr and 'stderr' not in kwargs.keys():
         kwargs['stderr'] = PIPE
     process = pipe_command(*args, **kwargs)
     stdout, stderr = process.communicate()
+    if encoding is not None:
+        stdout = _make_unicode(stdout, encoding)
+        stderr = _make_unicode(stderr, encoding)
     returncode = process.poll()
     if _capture_stderr and returncode:
         sys.stderr.write(stderr)
@@ -532,6 +620,9 @@ def write_command(*args, **kwargs):
 
     See ``start_command()`` for details about parameters and usage.
 
+    The behavior on error can be changed using *errors* parameter
+    which is passed to the :func:`handle_errors()` function.
+
     :param *args: unnamed arguments passed to ``start_command()``
     :param **kwargs: named arguments passed to ``start_command()``
 
@@ -539,12 +630,22 @@ def write_command(*args, **kwargs):
 
     :raises: ``CalledModuleError`` when module returns non-zero return code
     """
+    encoding = 'default'
+    if 'encoding' in kwargs:
+        encoding = kwargs['encoding']
     # TODO: should we delete it from kwargs?
     stdin = kwargs['stdin']
+    if encoding is None or encoding == 'default':
+        stdin = encode(stdin)
+    else:
+        stdin = encode(stdin, encoding=encoding)
     if _capture_stderr and 'stderr' not in kwargs.keys():
         kwargs['stderr'] = PIPE
     process = feed_command(*args, **kwargs)
     unused, stderr = process.communicate(stdin)
+    if encoding is not None:
+        unused = _make_unicode(unused, encoding)
+        stderr = _make_unicode(stderr, encoding)
     returncode = process.poll()
     if _capture_stderr and returncode:
         sys.stderr.write(stderr)
@@ -738,14 +839,15 @@ def _parse_opts(lines):
             break
         try:
             [var, val] = line.split(b'=', 1)
+            [var, val] = [decode(var), decode(val)]
         except:
             raise SyntaxError("invalid output from g.parser: %s" % line)
 
-        if var.startswith(b'flag_'):
+        if var.startswith('flag_'):
             flags[var[5:]] = bool(int(val))
-        elif var.startswith(b'opt_'):
+        elif var.startswith('opt_'):
             options[var[4:]] = val
-        elif var in [b'GRASS_OVERWRITE', b'GRASS_VERBOSE']:
+        elif var in ['GRASS_OVERWRITE', 'GRASS_VERBOSE']:
             os.environ[var] = val
         else:
             raise SyntaxError("invalid output from g.parser: %s" % line)
@@ -768,15 +870,15 @@ def parser():
     "flags" are Python booleans.
 
     Overview table of parser standard options:
-    https://grass.osgeo.org/grass73/manuals/parser_standard_options.html
+    https://grass.osgeo.org/grass79/manuals/parser_standard_options.html
     """
     if not os.getenv("GISBASE"):
         print("You must be in GRASS GIS to run this program.", file=sys.stderr)
         sys.exit(1)
 
-    cmdline = [basename(encode(sys.argv[0]))]
-    cmdline += [b'"' + encode(arg) + b'"' for arg in sys.argv[1:]]
-    environ[b'CMDLINE'] = b' '.join(cmdline)
+    cmdline = [basename(sys.argv[0])]
+    cmdline += [pipes.quote(a) for a in sys.argv[1:]]
+    os.environ['CMDLINE'] = ' '.join(cmdline)
 
     argv = sys.argv[:]
     name = argv[0]
@@ -820,6 +922,30 @@ def tempdir():
     os.mkdir(tmp)
 
     return tmp
+
+
+def tempname(length, lowercase=False):
+    """Generate a GRASS and SQL compliant random name starting with tmp_
+    followed by a random part of length "length"
+
+    :param int length: length of the random part of the name to generate
+    :param bool lowercase: use only lowercase characters to generate name
+    :returns: String with a random name of length "length" starting with a letter
+    :rtype: str
+
+    :Example:
+
+    >>> tempname(12)
+    'tmp_MxMa1kAS13s9'
+    """
+
+    chars = string.ascii_lowercase + string.digits
+    if not lowercase:
+        chars += string.ascii_uppercase
+    random_part = ''.join(random.choice(chars) for _ in range(length))
+    randomname = 'tmp_' + random_part
+
+    return randomname
 
 
 def _compare_projection(dic):
@@ -1270,7 +1396,7 @@ def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
 
     :return: directory of mapsets/elements
     """
-    if isinstance(type, python_types.StringTypes) or len(type) == 1:
+    if isinstance(type, str) or len(type) == 1:
         types = [type]
         store_types = False
     else:

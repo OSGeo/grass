@@ -27,8 +27,10 @@ _NUMOF = {"areas": libvect.Vect_get_num_areas,
           "holes": libvect.Vect_get_num_holes,
           "islands": libvect.Vect_get_num_islands,
           "kernels": libvect.Vect_get_num_kernels,
-          "points": libvect.Vect_get_num_lines,
-          "lines": libvect.Vect_get_num_lines,
+          "points": (libvect.Vect_get_num_primitives, libvect.GV_POINT),
+          "lines": (libvect.Vect_get_num_primitives, libvect.GV_LINE),
+          "centroids": (libvect.Vect_get_num_primitives, libvect.GV_CENTROID),
+          "boundaries": (libvect.Vect_get_num_primitives, libvect.GV_BOUNDARY),
           "nodes": libvect.Vect_get_num_nodes,
           "updated_lines": libvect.Vect_get_num_updated_lines,
           "updated_nodes": libvect.Vect_get_num_updated_nodes,
@@ -86,7 +88,7 @@ class Vector(Info):
         return self
 
     @must_be_open
-    def next(self):
+    def __next__(self):
         """::
 
             >>> test_vect = Vector(test_vector_name)
@@ -101,6 +103,10 @@ class Vector(Info):
         """
         return read_next_line(self.c_mapinfo, self.table, self.writeable,
                               is2D=not self.is_3D())
+
+    @must_be_open
+    def next(self):
+        return self.__next__()
 
     @must_be_open
     def rewind(self):
@@ -155,7 +161,7 @@ class Vector(Info):
 
             >>> new.table.conn.commit()
             >>> new.table.execute().fetchall()
-            [(1, u'pub'), (2, u'resturant')]
+            [(1, 'pub'), (2, 'resturant')]
 
         close the vector map ::
 
@@ -171,9 +177,9 @@ class Vector(Info):
             >>> new.read(2)
             Point(1.000000, 1.000000)
             >>> new.read(1).attrs['name']
-            u'pub'
+            'pub'
             >>> new.read(2).attrs['name']
-            u'resturant'
+            'resturant'
             >>> new.close()
             >>> new.remove()
 
@@ -343,8 +349,9 @@ class VectorTopo(Vector):
 
         :param vtype: the name of type to query; the supported values are:
                       *areas*, *dblinks*, *faces*, *holes*, *islands*,
-                      *kernels*, *line_points*, *lines*, *nodes*, *points*,
-                      *update_lines*, *update_nodes*, *volumes*
+                      *kernels*, *points*, *lines*, *centroids*, *boundaries*,
+                      *nodes*, *line_points*, *update_lines*, *update_nodes*,
+                      *volumes*
         :type vtype: str
 
             >>> test_vect = VectorTopo(test_vector_name)
@@ -356,7 +363,7 @@ class VectorTopo(Vector):
             >>> test_vect.number_of("holes")
             0
             >>> test_vect.number_of("lines")
-            21
+            3
             >>> test_vect.number_of("nodes")
             15
             >>> test_vect.number_of("pizza")
@@ -370,7 +377,11 @@ class VectorTopo(Vector):
         ..
         """
         if vtype in _NUMOF.keys():
-            return _NUMOF[vtype](self.c_mapinfo)
+            if isinstance(_NUMOF[vtype], tuple):
+                fn, ptype = _NUMOF[vtype]
+                return fn(self.c_mapinfo, ptype)
+            else:
+                return _NUMOF[vtype](self.c_mapinfo)
         else:
             keys = "', '".join(sorted(_NUMOF.keys()))
             raise ValueError("vtype not supported, use one of: '%s'" % keys)
@@ -510,11 +521,11 @@ class VectorTopo(Vector):
         >>> feature1.length()
         4.0
         >>> test_vect.read(-1)
-        Centoid(7.500000, 3.500000)
+        Centroid(7.500000, 3.500000)
         >>> len(test_vect)
         21
         >>> test_vect.read(21)
-        Centoid(7.500000, 3.500000)
+        Centroid(7.500000, 3.500000)
         >>> test_vect.read(22)                             #doctest: +ELLIPSIS
         Traceback (most recent call last):
           ...
@@ -566,7 +577,7 @@ class VectorTopo(Vector):
             >>> test_vect.write(point1, cat=2, attrs=('resturant',))
             >>> test_vect.table.conn.commit()  # save changes in the DB
             >>> test_vect.table_to_dict()
-            {1: [1, u'pub'], 2: [2, u'resturant']}
+            {1: [1, 'pub'], 2: [2, 'resturant']}
             >>> test_vect.close()
 
         Now rewrite one point of the vector map: ::
@@ -651,16 +662,16 @@ class VectorTopo(Vector):
             >>> test_vect.open('r')
 
             >>> test_vect.table_to_dict()
-            {1: [1, u'point', 1.0], 2: [2, u'line', 2.0], 3: [3, u'centroid', 3.0]}
+            {1: [1, 'point', 1.0], 2: [2, 'line', 2.0], 3: [3, 'centroid', 3.0]}
 
             >>> test_vect.table_to_dict(where="value > 2")
-            {3: [3, u'centroid', 3.0]}
+            {3: [3, 'centroid', 3.0]}
 
             >>> test_vect.table_to_dict(where="value > 0")
-            {1: [1, u'point', 1.0], 2: [2, u'line', 2.0], 3: [3, u'centroid', 3.0]}
+            {1: [1, 'point', 1.0], 2: [2, 'line', 2.0], 3: [3, 'centroid', 3.0]}
 
             >>> test_vect.table.filters.get_sql()
-            u'SELECT cat,name,value FROM vector_doctest_map WHERE value > 0 ORDER BY cat;'
+            'SELECT cat,name,value FROM vector_doctest_map WHERE value > 0 ORDER BY cat;'
 
         """
 
@@ -766,7 +777,7 @@ class VectorTopo(Vector):
             ...                                         feature_type="blub")
             Traceback (most recent call last):
             ...
-            GrassError: Unsupported feature type <blub>, supported are <point,line,boundary,centroid>
+            grass.exceptions.GrassError: Unsupported feature type <blub>, supported are <point,line,boundary,centroid>
 
             >>> test_vect.close()
 

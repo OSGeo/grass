@@ -30,7 +30,7 @@
 #include <stdlib.h>
 #include <grass/imagery.h>
 
-static int get_ref(const char *, const char *, struct Ref *);
+static int get_ref(const char *, const char *, const char *, struct Ref *);
 static int set_color(const char *, const char *, const char *, struct Ref *);
 static int put_ref(const char *, const char *, const struct Ref *);
 
@@ -113,7 +113,26 @@ int I_put_subgroup(const char *group, const char *subgroup)
 
 int I_get_group_ref(const char *group, struct Ref *ref)
 {
-    return get_ref(group, "", ref);
+    return get_ref(group, "", NULL, ref);
+}
+
+
+/*!
+ * \brief read group REF file
+ *
+ * Reads the contents of the REF file for the specified <b>group</b> into
+ * the <b>ref</b> structure.
+ * Returns 1 if successful; 0 otherwise (but no error messages are printed).
+ *
+ *  \param group
+ *  \param mapset
+ *  \param ref
+ *  \return int
+ */
+
+int I_get_group_ref2(const char *group, const char *mapset, struct Ref *ref)
+{
+    return get_ref(group, "", mapset, ref);
 }
 
 
@@ -134,10 +153,33 @@ int I_get_group_ref(const char *group, struct Ref *ref)
 int I_get_subgroup_ref(const char *group,
 		       const char *subgroup, struct Ref *ref)
 {
-    return get_ref(group, subgroup, ref);
+    return get_ref(group, subgroup, NULL, ref);
 }
 
-static int get_ref(const char *group, const char *subgroup, struct Ref *ref)
+
+/*!
+ * \brief read subgroup REF file
+ *
+ * Reads the contents of the REF file for the
+ * specified <b>subgroup</b> of the specified <b>group</b> into the
+ * <b>ref</b> structure.
+ * Returns 1 if successful; 0 otherwise (but no error messages are printed).
+ *
+ *  \param group
+ *  \param subgroup
+ *  \param mapset
+ *  \param ref
+ *  \return int
+ */
+int I_get_subgroup_ref2(const char *group,
+		       const char *subgroup, const char *mapset,
+               struct Ref *ref)
+{
+    return get_ref(group, subgroup, mapset, ref);
+}
+
+
+static int get_ref(const char *group, const char *subgroup, const char *gmapset, struct Ref *ref)
 {
     int n;
     char buf[1024];
@@ -146,12 +188,15 @@ static int get_ref(const char *group, const char *subgroup, struct Ref *ref)
     FILE *fd;
 
     I_init_group_ref(ref);
+    
+    if (gmapset == NULL || *gmapset == 0)
+        gmapset = G_mapset();
 
     G_suppress_warnings(1);
     if (*subgroup == 0)
-	fd = I_fopen_group_ref_old(group);
+	fd = I_fopen_group_ref_old2(group, gmapset);
     else
-	fd = I_fopen_subgroup_ref_old(group, subgroup);
+	fd = I_fopen_subgroup_ref_old2(group, subgroup, gmapset);
     G_suppress_warnings(0);
     if (!fd)
 	return 0;

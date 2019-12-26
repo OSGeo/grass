@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import sys
 import re
 from ghtml import HTMLParser, HTMLParseError
@@ -69,9 +69,10 @@ def main():
     s = s.lstrip()
 
     # write groff
-    outf = open(sys.argv[2], 'w')
-    outf.write(s)
-    outf.close()
+    with open(sys.argv[2], 'wb') as outf:
+        if sys.version_info.major >= 3:
+            s = s.encode('UTF-8')
+        outf.write(s)
 
 if __name__ == "__main__":
     main()

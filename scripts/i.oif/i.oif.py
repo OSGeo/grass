@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ############################################################################
 #
@@ -44,10 +44,6 @@ import sys
 import os
 from grass.script.utils import parse_key_val
 from grass.script import core as grass
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 
 def oifcalc(sdev, corr, k1, k2, k3):
@@ -156,7 +152,7 @@ def main():
         for v, p in oif:
             sys.stdout.write(fmt % (p + (v,)))
     else:
-        outf = file(output, 'w')
+        outf = open(output, 'w')
         for v, p in oif:
             outf.write(fmt % (p + (v,)))
         outf.close()

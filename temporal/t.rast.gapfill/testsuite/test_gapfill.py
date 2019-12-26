@@ -56,9 +56,9 @@ class TestRasterToVector(TestCase):
 
         #self.assertModule("t.info",  type="strds", flags="g",  input="A")
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                                end_time=2002-01-01 00:00:00
-                                granularity=1 month
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                                end_time='2002-01-01 00:00:00'
+                                granularity='1 month'
                                 map_time=interval
                                 number_of_maps=12
                                 min_min=100.0
@@ -94,9 +94,9 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
 
         #self.assertModule("t.info",  type="strds", flags="g",  input="A")
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                                end_time=2002-01-01 00:00:00
-                                granularity=1 month
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                                end_time='2002-01-01 00:00:00'
+                                granularity='1 month'
                                 map_time=interval
                                 number_of_maps=10
                                 min_min=100.0
@@ -129,9 +129,9 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
 
         #self.assertModule("t.info",  type="strds", flags="g",  input="A")
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                                end_time=2002-01-01 00:00:00
-                                granularity=1 month
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                                end_time='2002-01-01 00:00:00'
+                                granularity='1 month'
                                 map_time=interval
                                 number_of_maps=5
                                 min_min=100.0
@@ -159,9 +159,9 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
 
         #self.assertModule("t.info",  type="strds", flags="g",  input="A")
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                                end_time=2002-01-01 00:00:00
-                                granularity=1 month
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                                end_time='2002-01-01 00:00:00'
+                                granularity='1 month'
                                 map_time=interval
                                 number_of_maps=3
                                 min_min=100.0
@@ -187,9 +187,9 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
 
         #self.assertModule("t.info",  type="strds", flags="g",  input="A")
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                                end_time=2002-01-01 00:00:00
-                                granularity=1 month
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                                end_time='2002-01-01 00:00:00'
+                                granularity='1 month'
                                 map_time=interval
                                 number_of_maps=12
                                 min_min=100.0
@@ -225,9 +225,9 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
 
         #self.assertModule("t.info",  type="strds", flags="g",  input="A")
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                                end_time=2002-01-01 00:00:00
-                                granularity=1 month
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                                end_time='2002-01-01 00:00:00'
+                                granularity='1 month'
                                 map_time=interval
                                 number_of_maps=12
                                 min_min=100.0

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 from __future__ import (nested_scopes, generators, division, absolute_import,
@@ -12,6 +12,12 @@ import fnmatch
 
 import grass.lib.gis as libgis
 from grass.pygrass.errors import GrassError
+from grass.script.utils import encode, decode
+from grass.pygrass.utils import getenv
+from grass.pygrass.gis.region import Region
+
+test_vector_name = "Gis_test_vector"
+test_raster_name = "Gis_test_raster"
 
 libgis.G_gisinit('')
 
@@ -66,7 +72,7 @@ def _check_raise(value, path, type):
              if value is empty return environmental variable
     :rtype: str
     """
-    if value is '':
+    if value == '':
         from grass.pygrass.utils import getenv
         return getenv(type)
     if is_valid(value, path, type):
@@ -175,7 +181,7 @@ class Gisdbase(object):
         ..
         """
         return sorted([loc for loc in listdir(self.name)
-                       if libgis.G_is_location(join(self.name, loc))])
+                       if libgis.G_is_location(encode(join(self.name, loc)))])
 
 
 class Location(object):
@@ -254,7 +260,7 @@ class Location(object):
         mapsets = [mapset for mapset in self]
         if permissions:
             mapsets = [mapset for mapset in mapsets
-                       if libgis.G_mapset_permissions(mapset)]
+                       if libgis.G_mapset_permissions(encode(mapset))]
         if pattern:
             return fnmatch.filter(mapsets, pattern)
         return mapsets
@@ -357,7 +363,7 @@ class Mapset(object):
         for el in clist:
             el_name = ct.cast(el, ct.c_char_p).value
             if el_name:
-                elist.append(el_name)
+                elist.append(decode(el_name))
             else:
                 if pattern:
                     return fnmatch.filter(elist, pattern)
@@ -365,9 +371,9 @@ class Mapset(object):
 
     def is_current(self):
         """Check if the MAPSET is the working MAPSET"""
-        return (self.name == libgis.G_getenv('MAPSET') and
-                self.location == libgis.G_getenv('LOCATION_NAME') and
-                self.gisdbase == libgis.G_getenv('GISDBASE'))
+        return (self.name == getenv('MAPSET') and
+                self.location == getenv('LOCATION_NAME') and
+                self.gisdbase == getenv('GISDBASE'))
 
     def current(self):
         """Set the mapset as current"""
@@ -402,11 +408,11 @@ class VisibleMapset(object):
 
     def read(self):
         """Return the mapsets in the search path"""
-        with open(self.spath, "a+") as f:
+        with open(self.spath, "ab+") as f:
             lines = f.readlines()
             if lines:
-                return [l.strip() for l in lines]
-        lns = ['PERMANENT', ]
+                return [decode(l.strip()) for l in lines]
+        lns = [u'PERMANENT', ]
         self._write(lns)
         return lns
 
@@ -416,9 +422,9 @@ class VisibleMapset(object):
         :param mapsets: a list of mapset's names
         :type mapsets: list
         """
-        with open(self.spath, "w+") as f:
-            ms = self.location.mapsets()
-            f.write('%s' % '\n'.join([m for m in mapsets if m in ms]))
+        with open(self.spath, "wb+") as f:
+            ms = [decode(m) for m in self.location.mapsets()]
+            f.write(b'\n'.join([encode(m) for m in mapsets if m in ms]))
 
     def add(self, mapset):
         """Add a mapset to the search path
@@ -448,8 +454,9 @@ class VisibleMapset(object):
         :param mapsets: a list of mapset's names
         :type mapsets: list
         """
-        ms = self.location.mapsets()
-        final = self.read()
+        ms = [decode(m) for m in self.location.mapsets()]
+        final = [decode(m) for m in self.read()]
+        mapsets = [decode(m) for m in mapsets]
         final.extend([m for m in mapsets if m in ms and m not in final])
         self._write(final)
 
@@ -463,9 +470,6 @@ if __name__ == "__main__":
     import doctest
     from grass.pygrass import utils
     from grass.script.core import run_command
-
-    test_vector_name = "Gis_test_vector"
-    test_raster_name = "Gis_test_raster"
 
     utils.create_test_vector_map(test_vector_name)
     run_command("g.region", n=50, s=0, e=60, w=0, res=1)

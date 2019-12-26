@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 '''Preprocess a C source file using gcc and convert the result into
    a token stream
@@ -147,17 +147,18 @@ class PreprocessorParser(object):
         """Parse a file and save its output"""
 
         cmd = self.options.cpp
+        cmd += " -U __GNUC__ -dD"
+
+        # This fixes Issue #6 where OS X 10.6+ adds a C extension that breaks
+        # the parser.  Blocks shouldn't be needed for ctypesgen support anyway.
         if sys.platform == 'darwin':
             cmd += " -U __BLOCKS__"
-        cmd += " -U __GNUC__"
-        if sys.platform.startswith('freebsd'):
-            cmd += " -D __GNUCLIKE_BUILTIN_STDARG"
-        cmd += " -dD"
+
         for path in self.options.include_search_paths:
             cmd += " -I%s" % path
         for define in self.defines:
             cmd += ' "-D%s"' % define
-        cmd += " " + filename.replace('\\', '/')
+        cmd += ' "' + filename + '"'
 
         self.cparser.handle_status(cmd)
 
@@ -166,6 +167,7 @@ class PreprocessorParser(object):
 
         pp = subprocess.Popen(cmd,
                               shell=True,
+                              universal_newlines=True,
                               stdout=subprocess.PIPE,
                               stderr=subprocess.PIPE)
         ppout, pperr = pp.communicate()
@@ -207,7 +209,7 @@ class PreprocessorParser(object):
             self.cparser.handle_status("Saving preprocessed headers to %s." %
                                        self.options.save_preprocessed_headers)
             try:
-                f = file(self.options.save_preprocessed_headers, "w")
+                f = open(self.options.save_preprocessed_headers, "w")
                 f.write(text)
                 f.close()
             except IOError:

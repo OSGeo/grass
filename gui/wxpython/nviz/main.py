@@ -24,7 +24,7 @@ try:
     from nviz import mapwindow
     from nviz import tools
     from nviz import workspace
-    import wxnviz
+    from nviz import wxnviz
     haveNviz = True
 except (ImportError, NameError) as err:
     haveNviz = False

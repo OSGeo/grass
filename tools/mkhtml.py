@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ############################################################################
 #
@@ -21,6 +21,7 @@ import os
 import string
 import re
 from datetime import datetime
+import locale
 
 try:
     # Python 2 import
@@ -34,13 +35,45 @@ except:
     import urllib.parse as urlparse
 
 
+if sys.version_info[0] == 2:
+    PY2 = True
+else:
+    PY2 = False
+
+
+if not PY2:
+    unicode = str
+
+
+def _get_encoding():
+    encoding = locale.getdefaultlocale()[1]
+    if not encoding:
+        encoding = 'UTF-8'
+    return encoding
+
+
+def decode(bytes_):
+    """Decode bytes with default locale and return (unicode) string
+
+    No-op if parameter is not bytes (assumed unicode string).
+
+    :param bytes bytes_: the bytes to decode
+    """
+    if isinstance(bytes_, unicode):
+        return bytes_
+    if isinstance(bytes_, bytes):
+        enc = _get_encoding()
+        return bytes_.decode(enc)
+    return unicode(bytes_)
+
+
 pgm = sys.argv[1]
 
 src_file = "%s.html" % pgm
 tmp_file = "%s.tmp.html" % pgm
 
-trunk_url = "https://trac.osgeo.org/grass/browser/grass/trunk/"
-addons_url = "https://trac.osgeo.org/grass/browser/grass-addons/"
+trunk_url = "https://github.com/OSGeo/grass/tree/master/"
+addons_url = "https://github.com/OSGeo/grass-addons/tree/master/"
 
 header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -119,7 +152,10 @@ def read_file(name):
         f = open(name, 'rb')
         s = f.read()
         f.close()
-        return s
+        if PY2:
+            return s
+        else:
+            return decode(s)
     except IOError:
         return ""
 
@@ -127,6 +163,7 @@ def read_file(name):
 def create_toc(src_data):
     class MyHTMLParser(HTMLParser):
         def __init__(self):
+            HTMLParser.__init__(self)
             self.reset()
             self.idx = 1
             self.tag_curr = ''
@@ -204,6 +241,7 @@ def write_toc(data):
                 fd.write('%s</ul></li>\n' % (' ' * indent))
                 in_h3 = False
 
+        text = text.replace(u'\xa0', u' ')
         fd.write('%s<li class="toc"><a href="#%s" class="toc">%s</a>' % \
                      (' ' * indent, escape_href(text), text))
         first = False
@@ -291,7 +329,7 @@ def to_title(name):
 
 
 index_titles = {}
-for key, name in index_names.iteritems():
+for key, name in index_names.items():
     index_titles[key] = to_title(name)
 
 # process footer
@@ -343,7 +381,7 @@ if sys.platform == 'win32':
 
 if index_name:
     sys.stdout.write(sourcecode.substitute(URL_SOURCE=url_source, PGM=pgm,
-                                           URL_LOG=url_source.replace('browser',  'log')))
+                                           URL_LOG=url_source.replace('grass/tree',  'grass/commits')))
     sys.stdout.write(footer_index.substitute(INDEXNAME=index_name,
                                              INDEXNAMECAP=index_name_cap,
                                              YEAR=year, GRASS_VERSION=grass_version))

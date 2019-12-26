@@ -103,7 +103,9 @@ cut -d&lt;the_field_separator_character&gt; -f&lt;comma-separated_list_of_column
 
 <h3>Example 1a) - standard format mode</h3>
 Sample ASCII polygon vector map for 'standard' format mode. 
-The two areas will be assigned categories 20 and 21. 
+The two areas will be assigned categories 20 and 21. For details on the structure of
+standard format data files see the second reference at the bottom of this page.
+
 <p><div class="code"><pre>
 echo "ORGANIZATION: GRASS Development Team
 DIGIT DATE:   1/9/2005
@@ -286,6 +288,7 @@ cat $MAPSET/group/$GROUP/POINTS | v.in.ascii in=- out=$GROUP_gcp separator=space
 <em>
 <a href="db.execute.html">db.execute</a>,
 <a href="r.in.ascii.html">r.in.ascii</a>,
+<a href="r.in.poly.html">r.in.poly</a>,
 <a href="r.in.xyz.html">r.in.xyz</a>,
 <a href="v.build.html">v.build</a>,
 <a href="v.build.polylines.html">v.build.polylines</a>,
@@ -294,6 +297,8 @@ cat $MAPSET/group/$GROUP/POINTS | v.in.ascii in=- out=$GROUP_gcp separator=space
 <a href="v.db.connect.html">v.db.connect</a>,
 <a href="v.import.html">v.import</a>,
 <a href="v.info.html">v.info</a>,
+<a href="v.in.lines.html">v.in.lines</a>,
+<a href="v.in.mapgen.html">v.in.mapgen</a>,
 <a href="v.out.ascii.html">v.out.ascii</a>
 </em>
 
@@ -306,4 +311,7 @@ James Westervelt, U.S.Army Construction Engineering
 Research Laboratory<br>
 Radim Blazek, ITC-Irst, Trento, Italy
 
-<p><i>Last changed: $Date$</i>
+<!--
+<p>
+<i>Last changed: $Date$</i>
+-->

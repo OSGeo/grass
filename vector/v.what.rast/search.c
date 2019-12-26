@@ -5,7 +5,10 @@ int by_row(const void *ii, const void *jj)
 {
     const struct order *i = ii, *j = jj;
 
-    return i->row - j->row;
+    if (i->row < j->row)
+	return -1;
+
+    return (i->row > j->row);
 }
 
 /* for qsort, order list by cat */
@@ -13,7 +16,10 @@ int by_cat(const void *ii, const void *jj)
 {
     const struct order *i = ii, *j = jj;
 
-    return i->cat - j->cat;
+    if (i->cat < j->cat)
+	return -1;
+
+    return (i->cat > j->cat);
 }
 
 /* for bsearch, find cat */

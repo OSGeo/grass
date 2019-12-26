@@ -10,12 +10,12 @@
 #include <grass/glocale.h>
 #include <grass/raster.h>
 #include <grass/segment.h>	/* segmentation library */
-#include <grass/rbtree.h>	/* Red Black Tree library functions */
+#include "pavl.h"
 #include "iseg.h"
 
 int remove_small_clumps(struct globals *globals);
 
-/* standard gauss funtion:
+/* standard gauss function:
  * a * exp(-(x - m)^2 / (2 * stddev^2)
  * a is not needed because the sum of weights is calculated for each 
  * sampling window
@@ -193,7 +193,7 @@ int mean_shift(struct globals *globals)
     }
     if (do_adaptive) {
 	/* bandwidth is now standard deviation for adaptive bandwidth 
-	 * using a gaussian function with range bandwith used as 
+	 * using a gaussian function with range bandwidth used as 
 	 * bandwidth for the gaussian function
 	 * the aim is to produce similar but improved results with 
 	 * adaptive bandwidth
@@ -209,7 +209,7 @@ int mean_shift(struct globals *globals)
 	G_message(_("Range bandwidth: %g"), hspec);
     }
 
-    G_debug(4, "Starting to process %ld candidate cells",
+    G_debug(4, "Starting to process %"PRI_LONG" candidate cells",
 	    globals->candidate_count);
 
     t = 0;
@@ -289,7 +289,7 @@ int mean_shift(struct globals *globals)
 		hspecad2 = hspec2;
 		
 		if (do_adaptive) {
-		    /* adapt initial range bandwith */
+		    /* adapt initial range bandwidth */
 		    
 		    ka2 = hspec2; 	/* OTB: conductance parameter */
 		    
@@ -392,7 +392,7 @@ int mean_shift(struct globals *globals)
 	    }
 	}
 	G_percent(1, 1, 1);
-	G_message(_("Changes > threshold: %d, largest change: %g"), n_changes, sqrt(maxdiff2));
+	G_message(_("Changes > threshold: %"PRI_LONG", largest change: %g"), n_changes, sqrt(maxdiff2));
     }
     if (n_changes > 1)
 	G_message(_("Mean shift stopped at %d due to reaching max iteration limit, more changes may be possible"), t);
@@ -418,6 +418,11 @@ static int cmp_rc(const void *first, const void *second)
     return (a->row - b->row);
 }
 
+static void free_item(void *p)
+{
+    G_free(p);
+}
+
 static int find_best_neighbour(struct globals *globals, int row, int col,
                                int this_id, struct NB_TREE *nbtree,
 			       int *reg_size, struct ngbr_stats **Rbest,
@@ -425,11 +430,11 @@ static int find_best_neighbour(struct globals *globals, int row, int col,
 {
     int rown, coln, n, count;
     int neighbors[8][2];
-    struct rc next, ngbr_rc;
+    struct rc next, ngbr_rc, *pngbr_rc;
     struct rclist rilist;
     int no_check;
     int ngbr_id;
-    struct RB_TREE *visited;
+    struct pavl_table *visited;
     struct ngbr_stats Ri, Rk, *Rfound;
     double sim, best_sim;
     int best_n_id;
@@ -441,10 +446,13 @@ static int find_best_neighbour(struct globals *globals, int row, int col,
     nbtree_clear(nbtree);
     FLAG_UNSET(globals->candidate_flag, row, col);
 
-    visited = rbtree_create(cmp_rc, sizeof(struct rc));
+    visited = pavl_create(cmp_rc, NULL);
     ngbr_rc.row = row;
     ngbr_rc.col = col;
-    rbtree_insert(visited, &ngbr_rc);
+    pngbr_rc = G_malloc(sizeof(struct rc));
+    *pngbr_rc = ngbr_rc;
+    pavl_insert(visited, pngbr_rc);
+    pngbr_rc = NULL;
 
     /* breadth-first search */
     next.row = row;
@@ -470,9 +478,12 @@ static int find_best_neighbour(struct globals *globals, int row, int col,
 
 	    ngbr_rc.row = rown;
 	    ngbr_rc.col = coln;
+	    if (pngbr_rc == NULL)
+		pngbr_rc = G_malloc(sizeof(struct rc));
+	    *pngbr_rc = ngbr_rc;
 
-	    if (!no_check && !rbtree_find(visited, &ngbr_rc)) {
-		rbtree_insert(visited, &ngbr_rc);
+	    if (!no_check && pavl_insert(visited, pngbr_rc) == NULL) {
+		pngbr_rc = NULL;
 
 		/* get neighbor ID */
 		Segment_get(&globals->rid_seg, (void *) &ngbr_id, rown, coln);
@@ -518,7 +529,9 @@ static int find_best_neighbour(struct globals *globals, int row, int col,
     } while (rclist_drop(&rilist, &next));   /* while there are cells to check */
 
     rclist_destroy(&rilist);
-    rbtree_destroy(visited);
+    if (pngbr_rc)
+	G_free(pngbr_rc);
+    pavl_destroy(visited, free_item);
     G_free(Ri.mean);
     G_free(Rk.mean);
     
@@ -534,8 +547,8 @@ static int check_reg_size(struct globals *globals, int minsize, int row, int col
     int this_id;
     int ngbr_id;
     LARGEINT reg_size;
-    struct RB_TREE *visited;
-    struct rc next, ngbr_rc;
+    struct pavl_table *visited;
+    struct rc next, ngbr_rc, *pngbr_rc;
     struct rclist rilist;
     int no_check;
     
@@ -544,10 +557,13 @@ static int check_reg_size(struct globals *globals, int minsize, int row, int col
 
     FLAG_UNSET(globals->candidate_flag, row, col);
 
-    visited = rbtree_create(cmp_rc, sizeof(struct rc));
+    visited = pavl_create(cmp_rc, NULL);
     ngbr_rc.row = row;
     ngbr_rc.col = col;
-    rbtree_insert(visited, &ngbr_rc);
+    pngbr_rc = G_malloc(sizeof(struct rc));
+    *pngbr_rc = ngbr_rc;
+    pavl_insert(visited, pngbr_rc);
+    pngbr_rc = NULL;
 
     /* get this ID */
     Segment_get(&globals->rid_seg, (void *) &this_id, row, col);
@@ -573,9 +589,12 @@ static int check_reg_size(struct globals *globals, int minsize, int row, int col
 
 	    ngbr_rc.row = rown;
 	    ngbr_rc.col = coln;
+	    if (pngbr_rc == NULL)
+		pngbr_rc = G_malloc(sizeof(struct rc));
+	    *pngbr_rc = ngbr_rc;
 
-	    if (!no_check && !rbtree_find(visited, &ngbr_rc)) {
-		rbtree_insert(visited, &ngbr_rc);
+	    if (!no_check && pavl_insert(visited, pngbr_rc) == NULL) {
+		pngbr_rc = NULL;
 
 		/* get neighbour ID */
 		Segment_get(&globals->rid_seg, (void *) &ngbr_id, rown, coln);
@@ -590,7 +609,9 @@ static int check_reg_size(struct globals *globals, int minsize, int row, int col
     } while (rclist_drop(&rilist, &next));   /* while there are cells to check */
 
     rclist_destroy(&rilist);
-    rbtree_destroy(visited);
+    if (pngbr_rc)
+	G_free(pngbr_rc);
+    pavl_destroy(visited, free_item);
 
     return reg_size;
 }

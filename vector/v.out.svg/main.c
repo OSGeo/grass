@@ -76,6 +76,7 @@ int main(int argc, char *argv[])
     module->description = _("Exports a vector map to SVG file.");
     G_add_keyword(_("vector"));
     G_add_keyword(_("export"));
+    G_add_keyword(_("output"));
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 

@@ -17,7 +17,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-#include <proj_api.h>
 
 #include <grass/gis.h>
 #include <grass/gprojects.h>
@@ -28,10 +27,10 @@
 
 static int check_xy(int shell);
 
-void print_projinfo(int shell, const char *force_epsg)
+/* print projection information gathered from one of the possible inputs */
+void print_projinfo(int shell)
 {
     int i;
-    char path[GPATH_MAX];
 
     if (check_xy(shell))
 	return;
@@ -40,28 +39,20 @@ void print_projinfo(int shell, const char *force_epsg)
 	fprintf(stdout,
 		"-PROJ_INFO-------------------------------------------------\n");
     for (i = 0; i < projinfo->nitems; i++) {
+	if (strcmp(projinfo->key[i], "init") == 0)
+	    continue;
 	if (shell)
 	    fprintf(stdout, "%s=%s\n", projinfo->key[i], projinfo->value[i]);
 	else
 	    fprintf(stdout, "%-11s: %s\n", projinfo->key[i], projinfo->value[i]);
     }
 
-    /* EPSG code is preserved for historical metadata interest only:
-	the contents of this file are not used by pj_*() routines at all */
-    G_file_name(path, "", "PROJ_EPSG", "PERMANENT");
-    if (access(path, F_OK) == 0) {
+    if (projepsg) {
         const char *epsg_value, *epsg_key;
-        struct Key_Value *in_epsg_key;
-        
-        if (force_epsg) {
-            epsg_key = "epsg";
-            epsg_value = force_epsg;
-        }
-        else {
-            in_epsg_key = G_read_key_value_file(path);
-            epsg_key = in_epsg_key->key[0];
-            epsg_value = in_epsg_key->value[0];
-        }
+
+	epsg_key = projepsg->key[0];
+	epsg_value = projepsg->value[0];
+
 	if (!shell) {
 	    fprintf(stdout,
 		"-PROJ_EPSG-------------------------------------------------\n");
@@ -69,21 +60,20 @@ void print_projinfo(int shell, const char *force_epsg)
 	}
 	else
 	    fprintf(stdout, "%s=%s\n", epsg_key, epsg_value);
-
-        if (!force_epsg)
-            G_free_key_value(in_epsg_key);
     }
  
-    if (!shell)
-	fprintf(stdout,
-		"-PROJ_UNITS------------------------------------------------\n");
-    for (i = 0; i < projunits->nitems; i++) {
-	if (shell)
-	    fprintf(stdout, "%s=%s\n",
-		    projunits->key[i], projunits->value[i]);
-	else
-	    fprintf(stdout, "%-11s: %s\n",
-		    projunits->key[i], projunits->value[i]);
+    if (projunits) {
+	if (!shell)
+	    fprintf(stdout,
+		    "-PROJ_UNITS------------------------------------------------\n");
+	for (i = 0; i < projunits->nitems; i++) {
+	    if (shell)
+		fprintf(stdout, "%s=%s\n",
+			projunits->key[i], projunits->value[i]);
+	    else
+		fprintf(stdout, "%-11s: %s\n",
+			projunits->key[i], projunits->value[i]);
+	}
     }
     
     return;
@@ -143,10 +133,13 @@ void print_proj4(int dontprettify)
 	return;
 
     if (pj_get_kv(&pjinfo, projinfo, projunits) == -1)
-        G_fatal_error(_("Unable to convert projection information to PROJ.4 format"));
-    proj4 = pj_get_def(pjinfo.pj, 0);
+        G_fatal_error(_("Unable to convert projection information to PROJ format"));
+    proj4 = pjinfo.def;
+#ifdef HAVE_PROJ_H
+    proj_destroy(pjinfo.pj);
+#else
     pj_free(pjinfo.pj);
-
+#endif
     /* GRASS-style PROJ.4 strings don't include a unit factor as this is
      * handled separately in GRASS - must include it here though */
     unfact = G_find_key_value("meters", projunits);
@@ -154,7 +147,6 @@ void print_proj4(int dontprettify)
 	G_asprintf(&proj4mod, "%s +to_meter=%s", proj4, unfact);
     else
 	proj4mod = G_store(proj4);
-    pj_dalloc(proj4);
 
     for (i = proj4mod; *i; i++) {
 	/* Don't print the first space */

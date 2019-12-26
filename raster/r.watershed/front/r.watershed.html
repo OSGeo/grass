@@ -73,6 +73,12 @@ represent the amount of overland flow each cell contributes to surface
 flow. If omitted, a value of one (1) is assumed.
 
 <p>
+Raster <b>retention</b> map specifies correction factors per cell for 
+flow distribution. This map indicates the percentage of overland flow 
+units leaving each cell. Values should be between zero and 100. If 
+omitted, a value of 100 is assumed.
+
+<p>
 Input Raster map or value containing the percent of disturbed land
 (i.e., croplands, and construction sites) where the raster or input
 value of 17 equals 17%.  If no map or value is
@@ -103,14 +109,14 @@ This input is used for the RUSLE calculations and is a sensitive
 parameter.
 
 <p>
-Output <b>accumulation</b> map contains the absolute value of each
-cell in this output map is the amount of overland flow that traverses
-the cell. This value will be the number of upland cells plus one if no
-overland flow map is given. If the overland flow map is given, the
-value will be in overland flow units. Negative numbers indicate that
-those cells possibly have surface runoff from outside of the current
-geographic region. Thus, any cells with negative values cannot have
-their surface runoff and sedimentation yields calculated accurately.
+Output <b>accumulation</b> map contains the absolute value of the
+amount of overland flow that traverses each cell. This value will be
+the number of upland cells plus one if no overland flow map is given.
+If the overland flow map is given, the value will be in overland flow
+units. Negative numbers indicate that those cells possibly have surface
+runoff from outside of the current geographic region. Thus, any cells
+with negative values cannot have their surface runoff and sedimentation
+yields calculated accurately.
 
 <p>
 Output <b>tci</b> raster map contains topographic index TCI,
@@ -138,6 +144,16 @@ geographic region.
 <p>
 Output <b>drainage</b> raster map contains drainage direction.
 Provides the &quot;aspect&quot; for each cell measured CCW from East.
+
+<div align="center" style="margin: 10px">
+<a href="r_watershed_drainage.png">
+<img src="r_watershed_drainage.png" width="200" height="200" alt="drainage" border="0">
+</a><br>
+<i>Figure: Drainage is 8 directions numbered counter-clockwise
+starting from 1 in north-east direction
+(<a href="https://idea.isnew.info/how-to-import-arcgis-flow-direction-into-grass-gis.html">source</a>)</i>
+</div>
+
 Multiplying positive values by 45 will give the direction in degrees
 that the surface runoff will travel from that cell.  The value 0
 (zero) indicates that the cell is a depression area (defined by the
@@ -222,7 +238,7 @@ single flow direction (SFD, D8) and multiple flow direction
 with lower elevation, using slope towards neighbouring cells as a
 weighing factor for proportional distribution. The A<sup>T</sup>
 least-cost path is always included. As a result, depressions and
-obstacles are traversed with a gracefull flow convergence before the
+obstacles are traversed with a graceful flow convergence before the
 overflow. The convergence factor causes flow accumulation to converge
 more strongly with higher values. The supported range is 1 to 10,
 recommended is a convergence factor of 5 (Holmgren, 1994). If many
@@ -356,12 +372,13 @@ identified through their ultimate outlet points. These points are all
 cells in the stream segments output with negative drainage direction.
 These points can be used as start points
 for <em><a href="r.water.outlet.html">r.water.outlet</a></em> or
-<em><a href="v.net.iso.html">v.net.iso<a/></em>.
+<em><a href="v.net.iso.html">v.net.iso</a></em>.
 
 <p>
 To create <i>river mile</i> segmentation from a vectorized streams
 map, try
-the <em><a href="v.net.iso.html">v.net.iso<a/></em> or <em><a href="v.lrs.segment.html">v.lrs.segment</a></em>
+the <em><a href="v.net.iso.html">v.net.iso</a></em>
+or <em><a href="v.lrs.segment.html">v.lrs.segment</a></em>
 modules.
 
 <p>
@@ -376,6 +393,28 @@ segments output serves as a guide where to place the outlet point used
 as input to <em><a href="r.water.outlet.html">r.water.outlet</a></em>.
 The basin threshold must have been sufficiently small to isolate a
 stream network and subbasins within the larger basin.
+
+<p>
+Given that the <b>drainage</b> is 8 directions numbered
+counter-clockwise starting from 1 in north-east direction,
+multiplying the output
+by 45 (by <tt>45.</tt> to get a double precision floating point raster
+map in <em><a href="r.mapcalc.html">r.mapcalc</a></em>) gives
+the directions in degrees. For most applications, zeros
+which indicate depressions specified by <b>depression</b>
+and negative values which indicate runoff leaving the region
+should be replaced by NULL (<tt>null()</tt> in
+<em><a href="r.mapcalc.html">r.mapcalc</a></em>).
+The following command performs these replacements:
+
+<div class="code"><pre>
+r.mapcalc "drainage_degrees = if(drainage > 0, 45. * drainage, null())"
+</pre></div>
+
+Alternatively, the user can use the <b>-a</b> flag or later the
+<tt>abs()</tt> function in
+<em><a href="r.mapcalc.html">r.mapcalc</a></em> if the runoff is leaving
+the region.
 
 <h2>EXAMPLES</h2>
 
@@ -544,6 +583,10 @@ Charles Ehlschlaeger, U.S. Army Construction Engineering Research Laboratory
 <br>
 Faster sorting algorithm and MFD support:
 Markus Metz &lt;markus.metz.giswork at gmail.com&gt;
+<br>
+Retention for flow distribution by Andreas Gericke (IGB Berlin)
 
+<!--
 <p>
 <i>Last changed: $Date$</i>
+-->

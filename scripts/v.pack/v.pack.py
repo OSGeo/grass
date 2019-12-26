@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 ############################################################################
 #
@@ -42,10 +42,6 @@ import atexit
 from grass.script.utils import try_rmdir, try_remove
 from grass.script import core as grass
 from grass.script import vector as vector
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 
 def cleanup():

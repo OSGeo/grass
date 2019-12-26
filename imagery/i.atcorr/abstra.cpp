@@ -7,7 +7,7 @@
 #include "altitude.h"
 
 void
-wava6 (float a[8], const long int inu)
+wava6 (double a[8], const long int inu)
 {
 
 
@@ -344,7 +344,7 @@ wava6 (float a[8], const long int inu)
 }	/* wava6 */
 
 void
-wava5 (float a[8], const long int inu)
+wava5 (double a[8], const long int inu)
 {
 
 
@@ -677,7 +677,7 @@ wava5 (float a[8], const long int inu)
 }	/* wava5 */
 
 void
-wava4 (float a[8], const long int inu)
+wava4 (double a[8], const long int inu)
 {
 
 
@@ -1007,7 +1007,7 @@ wava4 (float a[8], const long int inu)
 }	/* wava4 */
 
 void
-wava3 (float a[8], const long int inu)
+wava3 (double a[8], const long int inu)
 {
 
 
@@ -1321,7 +1321,7 @@ wava3 (float a[8], const long int inu)
 }	/* wava3 */
 
 void
-wava2 (float a[8], const long int inu)
+wava2 (double a[8], const long int inu)
 {
 
 
@@ -1637,7 +1637,7 @@ wava2 (float a[8], const long int inu)
 }	/* wava2 */
 
 void
-wava1 (float a[8], const long int inu)
+wava1 (double a[8], const long int inu)
 {
 
 
@@ -1952,7 +1952,7 @@ wava1 (float a[8], const long int inu)
 }	/* wava1 */
 
 
-void dica3 (float a[8], const long int inu)
+void dica3 (double a[8], const long int inu)
 {
 
 
@@ -2256,7 +2256,7 @@ void dica3 (float a[8], const long int inu)
 }	/* dica3 */
 
 
-void dica2 (float a[8], const long int inu)
+void dica2 (double a[8], const long int inu)
 {
 
 
@@ -2562,7 +2562,7 @@ void dica2 (float a[8], const long int inu)
 }	/* dica2 */
 
 
-void dica1 (float a[8], const long int inu)
+void dica1 (double a[8], const long int inu)
 {
 
 
@@ -2873,7 +2873,7 @@ void dica1 (float a[8], const long int inu)
 
 
 void
-ozon1 (float a[8], const long int inu)
+ozon1 (double a[8], const long int inu)
 {
 
 
@@ -3172,7 +3172,7 @@ ozon1 (float a[8], const long int inu)
 
 
 void
-niox6 (float a[8], const long int inu)
+niox6 (double a[8], const long int inu)
 {
 
 
@@ -3503,7 +3503,7 @@ niox6 (float a[8], const long int inu)
 }	/* niox6 */
 
 void
-niox5 (float a[8], const long int inu)
+niox5 (double a[8], const long int inu)
 {
 
 
@@ -3834,7 +3834,7 @@ niox5 (float a[8], const long int inu)
 }	/* niox5 */
 
 void
-niox4 (float a[8], const long int inu)
+niox4 (double a[8], const long int inu)
 {
 
 
@@ -4166,7 +4166,7 @@ niox4 (float a[8], const long int inu)
 }	/* niox4 */
 
 void
-niox3 (float a[8], const long int inu)
+niox3 (double a[8], const long int inu)
 {
 
 
@@ -4461,7 +4461,7 @@ niox3 (float a[8], const long int inu)
 }	/* niox3 */
 
 void
-niox2 (float a[8], const long int inu)
+niox2 (double a[8], const long int inu)
 {
 
 
@@ -4751,7 +4751,7 @@ niox2 (float a[8], const long int inu)
 }	/* niox2 */
 
 void
-niox1 (float a[8], const long int inu)
+niox1 (double a[8], const long int inu)
 {
 
 
@@ -5054,7 +5054,7 @@ niox1 (float a[8], const long int inu)
 
 
 void
-meth6 (float a[8], const long int inu)
+meth6 (double a[8], const long int inu)
 {
 
 
@@ -5386,7 +5386,7 @@ meth6 (float a[8], const long int inu)
 }	/* meth6 */
 
 void
-meth5 (float a[8], const long int inu)
+meth5 (double a[8], const long int inu)
 {
 
 
@@ -5715,7 +5715,7 @@ meth5 (float a[8], const long int inu)
 }	/* meth5 */
 
 void
-meth4 (float a[8], const long int inu)
+meth4 (double a[8], const long int inu)
 {
 
 
@@ -6045,7 +6045,7 @@ meth4 (float a[8], const long int inu)
 }	/* meth4 */
 
 void
-meth3 (float a[8], const long int inu)
+meth3 (double a[8], const long int inu)
 {
 
 
@@ -6339,7 +6339,7 @@ meth3 (float a[8], const long int inu)
 }	/* meth3 */
 
 void
-meth2 (float a[8], const long int inu)
+meth2 (double a[8], const long int inu)
 {
 
 
@@ -6633,7 +6633,7 @@ meth2 (float a[8], const long int inu)
 }	/* meth2 */
 
 void
-meth1 (float a[8], const long int inu)
+meth1 (double a[8], const long int inu)
 {
 
 
@@ -6936,7 +6936,7 @@ meth1 (float a[8], const long int inu)
 
 
 void
-moca6 (float a[8], const long int inu)
+moca6 (double a[8], const long int inu)
 {
 
 
@@ -7267,7 +7267,7 @@ moca6 (float a[8], const long int inu)
 }	/* moca6 */
 
 void
-moca5 (float a[8], const long int inu)
+moca5 (double a[8], const long int inu)
 {
 
 
@@ -7597,7 +7597,7 @@ moca5 (float a[8], const long int inu)
 }	/* moca5 */
 
 
-void moca4 (float a[8], const long int inu)
+void moca4 (double a[8], const long int inu)
 {
     static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 10180.f, 10190.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 10190.f, 10200.f,
@@ -7927,7 +7927,7 @@ void moca4 (float a[8], const long int inu)
 }	/* moca4 */
 
 void
-moca3 (float a[8], const long int inu)
+moca3 (double a[8], const long int inu)
 {
 
 
@@ -8233,7 +8233,7 @@ moca3 (float a[8], const long int inu)
 }	/* moca3 */
 
 void
-moca2 (float a[8], const long int inu)
+moca2 (double a[8], const long int inu)
 {
 
 
@@ -8530,7 +8530,7 @@ moca2 (float a[8], const long int inu)
 }	/* moca2 */
 
 void
-moca1 (float a[8], const long int inu)
+moca1 (double a[8], const long int inu)
 {
 
 
@@ -8840,7 +8840,7 @@ moca1 (float a[8], const long int inu)
 
 
 void
-oxyg6 (float a[8], const long int inu)
+oxyg6 (double a[8], const long int inu)
 {
 
 
@@ -9167,7 +9167,7 @@ oxyg6 (float a[8], const long int inu)
     for(int i = 0; i < 8; i++) a[i] = acr[i + (inu << 3) - 8];
 }	/* oxyg6 */
 
-void oxyg5 (float a[8], const long int inu)
+void oxyg5 (double a[8], const long int inu)
 {
     static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 12740.f, 12750.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 12750.f, 12760.f,
@@ -9499,7 +9499,7 @@ void oxyg5 (float a[8], const long int inu)
 }	/* oxyg5 */
 
 void
-oxyg4 (float a[8], const long int inu)
+oxyg4 (double a[8], const long int inu)
 {
 
 
@@ -9828,7 +9828,7 @@ oxyg4 (float a[8], const long int inu)
 }	/* oxyg4 */
 
 void
-oxyg3 (float a[8], const long int inu)
+oxyg3 (double a[8], const long int inu)
 {
     static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 7620.f, 7630.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 7630.f, 7640.f, 0.f,
@@ -10146,28 +10146,28 @@ oxyg3 (float a[8], const long int inu)
 
 
 void abstra (const AtmosModel& atms, const Altitude& alt,
-	     const float wl, const float xmus, const float xmuv,
-	     const float uw, const float uo3, float& uwus, float& uo3us,
-	     const float uwpl, const float uo3pl, const float uwusp,
-	     const float uo3usp, AbstraStruct& as )
+	     const double wl, const double xmus, const double xmuv,
+	     const double uw, const double uo3, double& uwus, double& uo3us,
+	     const double uwpl, const double uo3pl, const double uwusp,
+	     const double uo3usp, AbstraStruct& as )
 { 
     // transmittance calculation for ozone, water vapor,
     // carbon dioxyde and oxygen.
 	 
-    float tnu[10][3],a[8],rm[34],r2[34],r3[34],tp[34],rat[10];
-    float rmpl[34],r2pl[34],r3pl[34],ratpl[10];
-    float dtcont,utcont,ttcont;
-    float v,te2,phi,psi,uu,u,up,uud,uut,uuu;
-    float ud,ut,upd,upt,udp,updp,udtp,updtp;
-    float ds2,uupl,upl,uppl,ah2o;
-    float xh,xi,xd,ako3,test1,test2,test3,udt,atest;
-    float updt,tt,y,utt,uptt,tn;
-    float ds,te,roair;
+    double tnu[10][3],a[8],rm[34],r2[34],r3[34],tp[34],rat[10];
+    double rmpl[34],r2pl[34],r3pl[34],ratpl[10];
+    double dtcont,utcont,ttcont;
+    double v,te2,phi,psi,uu,u,up,uud,uut,uuu;
+    double ud,ut,upd,upt,udp,updp,udtp,updtp;
+    double ds2,uupl,upl,uppl,ah2o;
+    double xh,xi,xd,ako3,test1,test2,test3,udt,atest;
+    double updt,tt,y,utt,uptt,tn;
+    double ds,te,roair;
     double ptest, ptest1;
     int iv,id,idgaz,inu = 0,n,nh;
 
     int ivli[6] = { 2500,5060,7620,10180,12740,15300 };
-    float co3[102] = {
+    double co3[102] = {
 	4.50e-03, 8.00e-03, 1.07e-02, 1.10e-02, 1.27e-02, 1.71e-02,
 	2.00e-02, 2.45e-02, 3.07e-02, 3.84e-02, 4.78e-02, 5.67e-02,
 	6.54e-02, 7.62e-02, 9.15e-02, 1.00e-01, 1.09e-01, 1.20e-01,
@@ -10187,7 +10187,7 @@ void abstra (const AtmosModel& atms, const Altitude& alt,
 	1.57e+01, 1.20e+01, 1.00e+01, 8.80e+00, 8.30e+00, 8.60e+00
     };
 
-    float cch2o[15] = {
+    double cch2o[15] = {
 	0.00,0.19,0.15,0.12,0.10,
 	0.09,0.10,0.12,0.15,0.17,
 	0.20,0.24,0.28,0.33,0.00
@@ -10236,22 +10236,22 @@ void abstra (const AtmosModel& atms, const Altitude& alt,
     }
 		
     /* constants determination */
-    const float p0 = 1013.25f;
-    const float g = 98.1f;
+    const double p0 = 1013.25f;
+    const double g = 98.1f;
 
-    const float t0 = 250.f;
+    const double t0 = 250.f;
  
     /* volumic mass in kilogrammes per m3 */
     ds = 0;
     te = 0;
     roair = 0;
-    const float air = 0.028964 / 0.0224;
-    const float roco2 = 0.044 / 0.0224;
-    const float rmo2 = 0.032 / 0.0224;
-    const float rmo3 = 0.048 / 0.0224;
-    const float rmn2o = 0.044 / 0.0224;
-    const float rmch4 = 0.016 / 0.0224;
-    const float rmco  = 0.028 / 0.0224;
+    const double air = 0.028964 / 0.0224;
+    const double roco2 = 0.044 / 0.0224;
+    const double rmo2 = 0.032 / 0.0224;
+    const double rmo3 = 0.048 / 0.0224;
+    const double rmn2o = 0.044 / 0.0224;
+    const double rmch4 = 0.016 / 0.0224;
+    const double rmco  = 0.028 / 0.0224;
 	
     uwus = 1.424;
     uo3us = .344;
@@ -10270,7 +10270,7 @@ void abstra (const AtmosModel& atms, const Altitude& alt,
 	rat[9] = uw / uwus;
     }
  
-    v = (float)(1e+04 / wl);
+    v = (double)(1e+04 / wl);
     iv = (int)(v / 5);
     iv = iv * 5;
     id = ((iv - 2500) / 10) / 256 + 1;
@@ -10361,8 +10361,8 @@ void abstra (const AtmosModel& atms, const Altitude& alt,
 	    tp[k] = (atms.t[k] + atms.t[k + 1]) / 2.f;
 	    te = tp[k] - t0;
 	    te2 = te * te;
-	    phi = (float)exp(a[2] * te + a[3] * te2);
-	    psi = (float)exp(a[4] * te + a[5] * te2);
+	    phi = (double)exp(a[2] * te + a[3] * te2);
+	    psi = (double)exp(a[4] * te + a[5] * te2);
 	    if(idgaz == 1) rm[k] = atms.wh[k] / (roair * 1000);
 	    if(idgaz == 2) rm[k] = 3.3e-04f * roco2 / air;
 	    if(idgaz == 3) rm[k] = 0.20947f * rmo2 / air;
@@ -10418,15 +10418,14 @@ void abstra (const AtmosModel& atms, const Altitude& alt,
 	}
 	else
 	{
-            int k;
 	    for(k = 0; k < 33; k++)
 	    {
 		roair = air * 273.16f * alt.plane_sim.ppl[k] / (1013.25f * alt.plane_sim.tpl[k]);
 		tp[k]  =  (alt.plane_sim.tpl[k] + alt.plane_sim.tpl[k + 1]) / 2;
 		te = tp[k] - t0;
 		te2 = te * te;
-		phi = (float)exp(a[2] * te + a[3] * te2);
-		psi = (float)exp(a[4] * te + a[5] * te2);
+		phi = (double)exp(a[2] * te + a[3] * te2);
+		psi = (double)exp(a[4] * te + a[5] * te2);
 		if(idgaz == 1) rmpl[k] = alt.plane_sim.whpl[k] / (roair * 1000);
 		if(idgaz == 2) rmpl[k] = 3.3e-04f * roco2 / air;
 		if(idgaz == 3) rmpl[k] = 0.20947f * rmo2 / air;
@@ -10510,11 +10509,11 @@ void abstra (const AtmosModel& atms, const Altitude& alt,
 	    {
 		xi = (v - 2350) / 50 + 1;
 		nh = (int)(xi + 1.001f);
-		xh = xi - float(nh);
+		xh = xi - double(nh);
 		ah2o = cch2o[nh-1] + xh * (cch2o[nh-1]-cch2o[nh-2]);
-		dtcont = (float)exp(-ah2o * uud);
-		utcont = (float)exp(-ah2o * uuu);
-		ttcont = (float)exp(-ah2o * uut);
+		dtcont = (double)exp(-ah2o * uud);
+		utcont = (double)exp(-ah2o * uuu);
+		ttcont = (double)exp(-ah2o * uut);
 	    }
 
 	    if (!((idgaz == 1) || (iv < 13000))) 
@@ -10530,7 +10529,7 @@ void abstra (const AtmosModel& atms, const Altitude& alt,
 		}
 
 		n = (int)(xi + 1.001);
-		xd = xi-float(n);
+		xd = xi-double(n);
 		ako3 = co3[n-1] + xd * (co3[n-1] - co3[n-2]);
 		test1 = ako3 * uud;
 		test2 = ako3 * uuu;
@@ -10542,9 +10541,9 @@ void abstra (const AtmosModel& atms, const Altitude& alt,
 		if(test2 > 86.0) test2 = 86.0;
 		if(test3 > 86.0) test3 = 86.0;
 	 
-		tnu[3][0] = (float)exp(-test1);
-		tnu[3][1] = (float)exp(-test2);
-		tnu[3][2] = (float)exp(-test3);
+		tnu[3][0] = (double)exp(-test1);
+		tnu[3][1] = (double)exp(-test2);
+		tnu[3][2] = (double)exp(-test3);
 
 		continue;
 	    }
@@ -10568,9 +10567,9 @@ void abstra (const AtmosModel& atms, const Altitude& alt,
 	updt = upd;
 	if(ud == 0 && upd == 0.) updt = 1;
 	tt = 1 + 4 * (a[0] / atest) * ((ud * ud) / updt);
-	y = (float)(-tn * (sqrt(tt) - 1));
-	if(idgaz == 1) y = (float)(-a[0] * ud / sqrt(1 + (a[0] / atest) * (ud * ud / updt)));
-	tnu[idgaz-1][0] = (float)exp(y);
+	y = (double)(-tn * (sqrt(tt) - 1));
+	if(idgaz == 1) y = (double)(-a[0] * ud / sqrt(1 + (a[0] / atest) * (ud * ud / updt)));
+	tnu[idgaz-1][0] = (double)exp(y);
 		
 			
 	/* upward path modified to take account for plane content */
@@ -10584,9 +10583,9 @@ void abstra (const AtmosModel& atms, const Altitude& alt,
 	updtp = updp;
 	if(udp == 0 && updp == 0.) updtp = 1;
 	tt = 1 + 4 * (a[0] / atest) * ((udp * udp) / updtp);
-	y = (float)(-tn * (sqrt(tt) - 1));
-	if(idgaz == 1) y = (float)(-a[0] * udp / sqrt(1 + (a[0] / atest) * (udp * udp / updtp)));
-	tnu[idgaz-1][1] = (float)exp(y);
+	y = (double)(-tn * (sqrt(tt) - 1));
+	if(idgaz == 1) y = (double)(-a[0] * udp / sqrt(1 + (a[0] / atest) * (udp * udp / updtp)));
+	tnu[idgaz-1][1] = (double)exp(y);
 
 	/* total(down + up) path modified on the way up */
 	ut = u / xmus + upl / xmuv;
@@ -10597,26 +10596,26 @@ void abstra (const AtmosModel& atms, const Altitude& alt,
 	uptt = upt;
 	if(ut == 0 && upt == 0.) uptt = 1;
 	tt = 1 + 4 * (a[0] / atest) * ((ut * ut) / uptt);
-	y = (float)(-tn * (sqrt(tt) - 1));
-	if(idgaz == 1) y = (float)(-a[0] * ut / sqrt(1 + (a[0] / atest) * (ut * ut / uptt)));
-	tnu[idgaz-1][2] = (float)exp(y);
+	y = (double)(-tn * (sqrt(tt) - 1));
+	if(idgaz == 1) y = (double)(-a[0] * ut / sqrt(1 + (a[0] / atest) * (ut * ut / uptt)));
+	tnu[idgaz-1][2] = (double)exp(y);
     }   
 
     ptest1 = tnu[0][0] * dtcont;
     ptest = ptest1;
-    if (ptest > 1e-10) as.dtwava = (float)ptest;
+    if (ptest > 1e-10) as.dtwava = (double)ptest;
     else as.dtwava = 0;
 	
     ptest1 = tnu[0][1] * utcont;
     ptest = ptest1;
 
-    if (ptest > 1e-10) as.utwava = (float)ptest;
+    if (ptest > 1e-10) as.utwava = (double)ptest;
     else as.utwava = 0;
 	
     ptest1 = tnu[0][2] * ttcont;
     ptest = ptest1;
 
-    if (ptest > 1e-10) as.ttwava = (float)ptest;
+    if (ptest > 1e-10) as.ttwava = (double)ptest;
     else as.ttwava = 0;
 	
     as.dtdica = tnu[1][0];

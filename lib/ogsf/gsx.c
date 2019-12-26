@@ -19,7 +19,6 @@
 #include <grass/ogsf.h>
 
 void (*Cxl_func) ();
-void (*Swap_func) ();
 
 static int Cxl = 0;
 
@@ -53,18 +52,6 @@ void GS_set_cancel(int c)
 void GS_set_cxl_func(void (*f) (void))
 {
     Cxl_func = f;
-
-    return;
-}
-
-/*!
-   \brief Set swap function
-
-   \param pointer to function
- */
-void GS_set_swap_func(void (*f) (void))
-{
-    Swap_func = f;
 
     return;
 }

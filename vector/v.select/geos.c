@@ -10,31 +10,31 @@
 static int relate_geos(struct Map_info *, const GEOSGeometry *,
 		       int, int, const char *, int);
 
-int line_relate_geos(struct Map_info *BIn, const GEOSGeometry * AGeom,
-		     int bline, int operator, const char *relate)
+int line_relate_geos(struct Map_info *AIn, const GEOSGeometry *BGeom,
+		     int aline, int operator, const char *relate)
 {
-    return relate_geos(BIn, AGeom, bline, operator, relate, 0);
+    return relate_geos(AIn, BGeom, aline, operator, relate, 0);
 }
 
-int area_relate_geos(struct Map_info *BIn, const GEOSGeometry * AGeom,
-		     int barea, int operator, const char *relate)
+int area_relate_geos(struct Map_info *AIn, const GEOSGeometry *BGeom,
+		     int aarea, int operator, const char *relate)
 {
-    return relate_geos(BIn, AGeom, barea, operator, relate, 1);
+    return relate_geos(AIn, BGeom, aarea, operator, relate, 1);
 }
 
-int relate_geos(struct Map_info *BIn, const GEOSGeometry * AGeom,
-		int bfid, int operator, const char *relate, int area)
+int relate_geos(struct Map_info *AIn, const GEOSGeometry *BGeom,
+		int afid, int operator, const char *relate, int area)
 {
-    GEOSGeometry *BGeom = NULL;
+    GEOSGeometry *AGeom = NULL;
     int found;
 
     found = 0;
     if (area)
-	BGeom = Vect_read_area_geos(BIn, bfid);
+	AGeom = Vect_read_area_geos(AIn, afid);
     else
-	BGeom = Vect_read_line_geos(BIn, bfid, NULL);
+	AGeom = Vect_read_line_geos(AIn, afid, NULL);
 
-    if (!BGeom)
+    if (!AGeom)
 	return 0;
 
     /* 
@@ -115,8 +115,8 @@ int relate_geos(struct Map_info *BIn, const GEOSGeometry * AGeom,
 	break;
     }
 
-    if (BGeom)
-	GEOSGeom_destroy(BGeom);
+    if (AGeom)
+	GEOSGeom_destroy(AGeom);
 
     return found;
 }

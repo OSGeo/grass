@@ -23,7 +23,11 @@
 
 #include "local_proto.h"
 
+#ifdef HAVE_PROJ_H
+#include <proj.h>
+#else
 #include <proj_api.h>
+#endif
 
 #ifdef HAVE_GDAL
 #include <gdal_version.h>
@@ -95,12 +99,12 @@ int main(int argc, char *argv[])
     extended = G_define_flag();
     extended->key = 'e';
     extended->label = _("Print also extended info for additional libraries");
-    extended->description = _("GDAL/OGR, PROJ.4, GEOS");
+    extended->description = _("GDAL/OGR, PROJ, GEOS");
     extended->guisection = _("Additional info");
 
     shell = G_define_flag();
     shell->key = 'g';
-    shell->description = _("Print info in shell script style (including SVN revision number)");
+    shell->description = _("Print info in shell script style (including Git reference commit)");
     shell->guisection = _("Shell");
 
     if (G_parser(argc, argv))
@@ -109,7 +113,7 @@ int main(int argc, char *argv[])
     if (shell->answer) {
 	fprintf(stdout, "version=%s\n", GRASS_VERSION_NUMBER);
 	fprintf(stdout, "date=%s\n", GRASS_VERSION_DATE);
-	fprintf(stdout, "revision=%s\n", GRASS_VERSION_SVN);
+	fprintf(stdout, "revision=%s\n", GRASS_VERSION_GIT);
 	fprintf(stdout, "build_date=%d-%02d-%02d\n", YEAR, MONTH, DAY);
 	fprintf(stdout, "build_platform=%s\n", ARCH);
         fprintf(stdout, "build_off_t_size=%lu\n", sizeof(off_t));
@@ -187,18 +191,24 @@ int main(int argc, char *argv[])
 
     if (extended->answer) {
         char *proj = NULL;
+#ifdef HAVE_PROJ_H
+        G_asprintf(&proj, "%d%d%d", PROJ_VERSION_MAJOR,
+	                            PROJ_VERSION_MINOR,
+				    PROJ_VERSION_PATCH);
+#else
         G_asprintf(&proj, "%d", PJ_VERSION);
+#endif
         if (strlen(proj) == 3) {
             if (shell->answer)
-                fprintf(stdout, "proj4=%c.%c.%c\n", proj[0], proj[1], proj[2]); 
+                fprintf(stdout, "proj=%c.%c.%c\n", proj[0], proj[1], proj[2]); 
             else
-                fprintf(stdout, "PROJ.4: %c.%c.%c\n", proj[0], proj[1], proj[2]); 
+                fprintf(stdout, "PROJ: %c.%c.%c\n", proj[0], proj[1], proj[2]); 
         }
         else {
             if (shell->answer)
-                fprintf(stdout, "proj4=%s\n", proj);
+                fprintf(stdout, "proj=%s\n", proj);
             else
-                fprintf(stdout, "PROJ.4: %s\n", proj);
+                fprintf(stdout, "PROJ: %s\n", proj);
         }
 #ifdef HAVE_GDAL
         if (shell->answer)

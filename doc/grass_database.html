@@ -206,7 +206,8 @@ The startup windows provides these functions:
     <li>Selecting the Mapset (a subproject or task).
         Creating a new Mapset requires only name.
     <li>The <em>Location Wizard</em> for creating new Locations
-        based for example, on existing georeferenced file or EPDS code.
+        based for example, on existing georeferenced file or EPSG code.
+    <li>Download a sample Location from the Internet.
     <li>Start GRASS GIS once you have selected an existing Location and Mapset
         or defined a new one. The graphical user interface
         <a href="wxGUI.html">wxGUI</a> will open and provide you with a
@@ -221,7 +222,7 @@ from the command line. For example, the following will start
 in a given Mapset with only command line interface:
 
 <div class="code"><pre>
-grass73 -text ~/grassdata/mylocation/mymapset
+grass79 --text ~/grassdata/mylocation/mymapset
 </pre></div>
 
 And the following will create the given Location with projection given
@@ -229,7 +230,7 @@ by the EPSG code and it will start the default interface
 (GUI or command line):
 
 <div class="code"><pre>
-grass73 -c EPSG:5514:3 ~/grassdata/mylocation
+grass79 -c EPSG:5514:3 ~/grassdata/mylocation
 </pre></div>
 
 See <a href="grass7.html"><em>grass</em></a> command manual for more details.
@@ -291,5 +292,7 @@ the <em>File</em> menu in <em>Layer Manager</em> or
 <a href="v.proj.html">v.proj</a>,
 </em>
 
+<!--
 <p>
 <i>Last changed: $Date$</i>
+-->

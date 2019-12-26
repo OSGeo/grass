@@ -20,10 +20,10 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
+import six
 import time
 import copy
 import math
-import types
 
 from threading import Thread
 
@@ -43,7 +43,7 @@ from nviz.workspace import NvizSettings
 from nviz.animation import Animation
 from nviz import wxnviz
 from core.globalvar import CheckWxVersion
-from core.utils import str2rgb, _
+from core.utils import str2rgb
 from core.giface import Notification
 
 wxUpdateProperties, EVT_UPDATE_PROP = NewEvent()
@@ -210,9 +210,9 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.fly = self.InitFly()
 
         # timer for flythrough
-        self.timerFly = wx.Timer(self, id=wx.NewId())
+        self.timerFly = wx.Timer(self)
         # timer for animations
-        self.timerAnim = wx.Timer(self, id=wx.NewId())
+        self.timerAnim = wx.Timer(self)
         self.animation = Animation(mapWindow=self, timer=self.timerAnim)
 
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
@@ -237,7 +237,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             wx.CallLater(3000, self._warningDepthBuffer)
 
         # cplanes cannot be initialized now
-        wx.CallAfter(self.InitCPlanes)
+        wx.CallLater(1000, self.InitCPlanes)
 
     def _warningDepthBuffer(self):
         if not self.initView:
@@ -483,7 +483,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             and then to textures so that they can be rendered by OpenGL.
             Updates self.imagelist"""
         # update images (legend and text)
-        for oid, overlay in self.overlays.iteritems():
+        for oid, overlay in six.iteritems(self.overlays):
             if not overlay.IsShown() or overlay.name in ('barscale', 'northarrow'):
                 continue
             if oid not in [t.GetId() for t in self.imagelist]:  # new
@@ -1141,7 +1141,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         :param render: re-render map composition
         :type render: bool
         """
-        start = time.clock()
+        start = grass.clock()
 
         self.resize = False
 
@@ -1184,7 +1184,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 self._display.Start2D()
                 self.DrawImages()
 
-        stop = time.clock()
+        stop = grass.clock()
 
         if self.render['quick'] is False:
             if sys.platform != 'darwin':
@@ -1306,7 +1306,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         item = self.tree.GetFirstChild(self.tree.root)[0]
         self._GetDataLayers(item, listOfItems)
 
-        start = time.time()
+        start = grass.clock()
 
         while(len(listOfItems) > 0):
             item = listOfItems.pop()
@@ -1339,7 +1339,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 GError(parent=self,
                        message=e.value)
 
-        stop = time.time()
+        stop = grass.clock()
 
         Debug.msg(1, "GLWindow.LoadDataLayers(): time = %f" % (stop - start))
 
@@ -1356,7 +1356,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             item = self.tree.GetFirstChild(self.tree.root)[0]
             self._GetDataLayers(item, listOfItems)
 
-        start = time.time()
+        start = grass.clock()
 
         update = False
         layersTmp = self.layers[:]
@@ -1389,7 +1389,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.lmgr.nviz.UpdateSettings()
             self.UpdateView(None)
 
-        stop = time.time()
+        stop = grass.clock()
 
         Debug.msg(1, "GLWindow.UnloadDataLayers(): time = %f" % (stop - start))
 
@@ -1484,11 +1484,11 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     if sec1 == 'position':
                         data[sec][sec1]['update'] = None
                         continue
-                    if isinstance(data[sec][sec1], types.DictType):
+                    if isinstance(data[sec][sec1], dict):
                         for sec2 in data[sec][sec1].keys():
                             if sec2 not in ('all', 'init', 'id'):
                                 data[sec][sec1][sec2]['update'] = None
-                    elif isinstance(data[sec][sec1], types.ListType):
+                    elif isinstance(data[sec][sec1], list):
                         for i in range(len(data[sec][sec1])):
                             for sec2 in data[sec][sec1][i].keys():
                                 data[sec][sec1][i][sec2]['update'] = None
@@ -1931,7 +1931,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 elif attrb == 'transp':
                     self._display.UnsetSurfaceTransp(id)
             else:
-                if isinstance(value, types.StringType):
+                if isinstance(value, str):
                     if len(value) == 0:  # ignore empty values (TODO: warning)
                         continue
                     if map and not grass.find_file(value, element='cell')[
@@ -2047,7 +2047,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     elif attrb == 'transp':
                         self._display.UnsetIsosurfaceTransp(id, isosurfId)
                 else:
-                    if isinstance(value, types.StringType):
+                    if isinstance(value, str):
                         if len(value) == 0:  # ignore empty values (TODO: warning)
                             continue
                         if map and not grass.find_file(value, element='grid3')[
@@ -2623,9 +2623,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             cmd += subcmd
 
         # output
+        width, height = self.GetClientSize()
         subcmd = 'output=nviz_output '
         subcmd += 'format=ppm '
-        subcmd += 'size=%d,%d ' % self.GetClientSize()
+        subcmd += 'size=%d,%d ' % (width, height)
         cmd += subcmd
 
         return cmd

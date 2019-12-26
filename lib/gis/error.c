@@ -72,11 +72,12 @@ jmp_buf *G_fatal_longjmp(int enable)
 
 static void vfprint_error(int type, const char *template, va_list ap)
 {
-    char buffer[2000];		/* G_asprintf does not work */
+    char *buffer = NULL;
 
-    vsprintf(buffer, template, ap);
+    G_vasprintf(&buffer, template, ap);
 
     print_error(buffer, type);
+    G_free(buffer);
 }
 
 /*!

@@ -375,6 +375,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("export"));
+    G_add_keyword(_("output"));
     G_add_keyword(_("voxel"));
     G_add_keyword("VTK");
     module->description =
@@ -417,8 +418,7 @@ int main(int argc, char *argv[])
         fp = fopen(param.output->answer, "w");
         if (fp == NULL) {
             perror(param.output->answer);
-            G_usage();
-            exit(EXIT_FAILURE);
+            G_fatal_error(_("Unable to open file <%s>"), param.output->answer);
         }
     } else
         fp = stdout;

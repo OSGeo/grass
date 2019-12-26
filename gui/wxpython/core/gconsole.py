@@ -20,12 +20,19 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com> (refactoring)
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import re
 import time
 import threading
-import Queue
+
+if sys.version_info.major == 2:
+    import Queue
+else:
+    import queue as Queue
+
 import codecs
 import locale
 
@@ -39,7 +46,6 @@ from grass.pydispatch.signal import Signal
 
 from core import globalvar
 from core.gcmd import CommandThread, GError, GException
-from core.utils import _
 from gui_core.forms import GUI
 from core.debug import Debug
 from core.settings import UserSettings
@@ -395,8 +401,13 @@ class GConsole(wx.EvtHandler):
         else:
             enc = locale.getdefaultlocale()[1]
             if enc:
-                sys.stdout = codecs.getwriter(enc)(sys.__stdout__)
-                sys.stderr = codecs.getwriter(enc)(sys.__stderr__)
+                if sys.version_info.major == 2:
+                    sys.stdout = codecs.getwriter(enc)(sys.__stdout__)
+                    sys.stderr = codecs.getwriter(enc)(sys.__stderr__)
+                else:
+                    # https://stackoverflow.com/questions/4374455/how-to-set-sys-stdout-encoding-in-python-3
+                    sys.stdout = codecs.getwriter(enc)(sys.__stdout__.detach())
+                    sys.stderr = codecs.getwriter(enc)(sys.__stderr__.detach())
             else:
                 sys.stdout = sys.__stdout__
                 sys.stderr = sys.__stderr__
@@ -540,7 +551,7 @@ class GConsole(wx.EvtHandler):
                             GUI(parent=self._guiparent,
                                 giface=self._giface).ParseCommand(command)
                         except GException as e:
-                            print >> sys.stderr, e
+                            print(e, file=sys.stderr)
 
                         return
 
@@ -586,7 +597,7 @@ class GConsole(wx.EvtHandler):
                     for line in sfile.readlines():
                         if len(line) < 2:
                             continue
-                        if line[0] is '#' and line[1] is '%':
+                        if line[0] == '#' and line[1] == '%':
                             skipInterface = False
                             break
                     sfile.close()
@@ -694,7 +705,7 @@ class GConsole(wx.EvtHandler):
         try:
             task = GUI(show=None).ParseCommand(event.cmd)
         except GException as e:
-            print >> sys.stderr, e
+            print(e, file=sys.stderr)
             task = None
             return
 

@@ -1,10 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 ############################################################################
 #
 # MODULE:	g.search.modules
 # AUTHOR(S):	Jachym Cepicky <jachym.cepicky gmail.com>
 # PURPOSE:	g.search.modules in grass modules using keywords
-# COPYRIGHT:	(C) 2015-2016 by the GRASS Development Team
+# COPYRIGHT:	(C) 2015-2019 by the GRASS Development Team
 #
 #		This program is free software under the GNU General
 #		Public License (>=v2). Read the file COPYING that
@@ -61,16 +61,14 @@
 #% description: JSON format
 #% guisection: Output
 #%end
+
 from __future__ import print_function
 import os
 import sys
 
 from grass.script.utils import diff_files, try_rmdir
 from grass.script import core as grass
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+from grass.exceptions import CalledModuleError
 
 try:
     import xml.etree.ElementTree as etree
@@ -202,6 +200,25 @@ def _search_module(keywords, logical_and=False, invert=False, manpages=False,
 
     items = menudata.findall('module-item')
 
+    # add installed addons to modules list
+    if os.getenv("GRASS_ADDON_BASE"):
+        filename_addons = os.path.join(os.getenv("GRASS_ADDON_BASE"), 'modules.xml')
+        if os.path.isfile(filename_addons):
+            addon_menudata_file = open(filename_addons, 'r')
+            addon_menudata = etree.parse(addon_menudata_file)
+            addon_menudata_file.close()
+            addon_items = addon_menudata.findall('task')
+            items.extend(addon_items)
+
+    # add system-wide installed addons to modules list
+    filename_addons_s = os.path.join(os.getenv("GISBASE"), 'modules.xml')
+    if os.path.isfile(filename_addons_s):
+        addon_menudata_file_s = open(filename_addons_s, 'r')
+        addon_menudata_s = etree.parse(addon_menudata_file_s)
+        addon_menudata_file_s.close()
+        addon_items_s = addon_menudata_s.findall('task')
+        items.extend(addon_items_s)
+
     found_modules = []
     for item in items:
         name = item.attrib['name']
@@ -222,7 +239,10 @@ def _search_module(keywords, logical_and=False, invert=False, manpages=False,
                 keyword_found = _basic_search(keyword, name, description,
                                               module_keywords)
 
-            if not keyword_found and manpages:
+            # meta-modules (i.sentinel, r.modis, ...) do not have descriptions
+            # and keywords, but they have a manpage
+            # TODO change the handling of meta-modules
+            if (description and module_keywords) and not keyword_found and manpages:
                 keyword_found = _manpage_search(keyword, name)
 
             if keyword_found:
@@ -250,7 +270,7 @@ def _search_module(keywords, logical_and=False, invert=False, manpages=False,
                 }
             })
 
-    return found_modules
+    return sorted(found_modules, key=lambda k: k['name'])
 
 
 def _basic_search(pattern, name, description, module_keywords):
@@ -259,11 +279,13 @@ def _basic_search(pattern, name, description, module_keywords):
     This lowercases the strings before searching in them, so the pattern
     string should be lowercased too.
     """
-    if name.lower().find(pattern) > -1 or\
-       description.lower().find(pattern) > -1 or\
-       module_keywords.lower().find(pattern) > -1:
-
-        return True
+    if (name and description and module_keywords):
+        if name.lower().find(pattern) > -1 or\
+           description.lower().find(pattern) > -1 or\
+           module_keywords.lower().find(pattern) > -1:
+           return True
+        else:
+            return False
     else:
         return False
 
@@ -282,8 +304,11 @@ def _exact_search(keyword, module_keywords):
 
 
 def _manpage_search(pattern, name):
-
-    manpage = grass.read_command('g.manual', flags='m', entry=name)
+    try:
+        manpage = grass.read_command('g.manual', flags='m', entry=name)
+    except CalledModuleError:
+        # in case man page is missing
+        return False
 
     return manpage.lower().find(pattern) > -1
 

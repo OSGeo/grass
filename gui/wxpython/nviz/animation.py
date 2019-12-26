@@ -20,7 +20,6 @@ import copy
 import wx
 
 from grass.pydispatch.signal import Signal
-from core.utils import _
 
 
 class Animation:
@@ -180,7 +179,7 @@ class Animation:
         :param prefix: file prefix
         :param format: index of image file format
         """
-        w, h = self.mapWindow.GetClientSizeTuple()
+        size = self.mapWindow.GetClientSize()
         toolWin = self.mapWindow.GetToolWin()
 
         formatter = ':04.0f'
@@ -208,11 +207,11 @@ class Animation:
                 self.mapWindow.SaveToFile(
                     FileName=filepath,
                     FileType=self.formats[format],
-                    width=w,
-                    height=h)
+                    width=size[0],
+                    height=size[1])
                 self.currentFrame += 1
 
-                wx.Yield()
+                wx.GetApp().Yield()
                 toolWin.UpdateFrameIndex(
                     index=self.currentFrame, goToFrame=False)
             else:

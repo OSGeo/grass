@@ -26,14 +26,14 @@ import time
 
 from .core import *
 from grass.exceptions import CalledModuleError
-from .utils import float_or_dms, parse_key_val
+from .utils import float_or_dms, parse_key_val, try_remove
 
 
 if sys.version_info.major == 3:
     unicode = str
 
 
-def raster_history(map):
+def raster_history(map, overwrite=False):
     """Set the command history for a raster map to the command used to
     invoke the script (interface to `r.support`).
 
@@ -45,7 +45,15 @@ def raster_history(map):
     """
     current_mapset = gisenv()['MAPSET']
     if find_file(name=map)['mapset'] == current_mapset:
-        run_command('r.support', map=map, history=os.environ['CMDLINE'])
+        if overwrite == True:
+            historyfile = tempfile()
+            f = open(historyfile, 'w')
+            f.write(os.environ['CMDLINE'])
+            f.close()
+            run_command('r.support', map=map, loadhistory=historyfile)
+            try_remove(historyfile)
+        else:
+            run_command('r.support', map=map, history=os.environ['CMDLINE'])
         return True
 
     warning(_("Unable to write history for <%(map)s>. "

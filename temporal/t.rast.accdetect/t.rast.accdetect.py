@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 ############################################################################
 #
@@ -6,11 +6,17 @@
 # AUTHOR(S):    Soeren Gebbert
 #
 # PURPOSE:      Detect accumulation pattern in temporally accumulated space time raster datasets created by t.rast.accumulate.
-# COPYRIGHT:    (C) 2013 - 2014 by the GRASS Development Team
+# COPYRIGHT:    (C) 2013-2017  by the GRASS Development Team
 #
-#               This program is free software under the GNU General Public
-#               License (version 2). Read the file COPYING that comes with GRASS
-#               for details.
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
 #
 #############################################################################
 
@@ -150,7 +156,7 @@ def main():
     minimum = options["minimum"]
     maximum = options["maximum"]
     occurrence = options["occurrence"]
-    range = options["range"]
+    range_ = options["range"]
     indicator = options["indicator"]
     staend = options["staend"]
     register_null = flags["n"]
@@ -185,7 +191,7 @@ def main():
     # The occurrence space time raster dataset
     if occurrence:
         if not minimum or not maximum:
-            if not range:
+            if not range_:
                 dbif.close()
                 grass.fatal(_("You need to set the range to compute the occurrence"
                               " space time raster dataset"))
@@ -302,7 +308,7 @@ def main():
         input_maps = input_strds.get_registered_maps_as_objects(where=where,
                                                                 dbif=dbif)
 
-        print len(input_maps)
+        grass.debug(len(input_maps))
 
         input_topo = tgis.SpatioTemporalTopologyBuilder()
         input_topo.build(input_maps, input_maps)
@@ -314,14 +320,14 @@ def main():
 
         count = compute_occurrence(occurrence_maps, input_strds, input_maps,
                                    start, base, count, time_suffix, mapset,
-                                   where, reverse, range, minimum_strds,
+                                   where, reverse, range_, minimum_strds,
                                    maximum_strds, dbif)
 
         # Indicator computation is based on the occurrence so we need to start it after
         # the occurrence cycle
         if indicator:
             num_maps = len(input_maps)
-            for i in xrange(num_maps):
+            for i in range(num_maps):
                 if reverse:
                     map = input_maps[num_maps - i - 1]
                 else:
@@ -335,7 +341,7 @@ def main():
                     suffix = tgis.create_time_suffix(map)
                     indicator_map_name = "{ba}_indicator_{su}".format(ba=base, su=suffix)
                 else:
-                    indicator_map_name = tgis.create_numeric_suffic(base + "_indicator",
+                    indicator_map_name = tgis.create_numeric_suffix(base + "_indicator",
                                                                     indi_count, time_suffix)
                 indicator_map_id = dummy.build_id(indicator_map_name, mapset)
                 indicator_map = input_strds.get_new_map_instance(indicator_map_id)
@@ -402,7 +408,7 @@ def main():
                 expression = "%s = if(isnull(%s), %s, %s)"%(indicator_map_name,
                                                             prev_map, subexpr1,
                                                             subexpr3)
-                print expression
+                grass.debug(expression)
                 grass.mapcalc(expression, overwrite=True)
 
                 map_start, map_end = map.get_temporal_extent_as_tuple()
@@ -486,7 +492,7 @@ def create_strds_register_maps(in_strds, out_strds, out_maps, register_null,
 ############################################################################
 
 def compute_occurrence(occurrence_maps, input_strds, input_maps, start, base,
-                       count, tsuffix, mapset, where, reverse, range,
+                       count, tsuffix, mapset, where, reverse, range_,
                        minimum_strds, maximum_strds, dbif):
 
     if minimum_strds:
@@ -505,7 +511,7 @@ def compute_occurrence(occurrence_maps, input_strds, input_maps, start, base,
 
     # Aggregate
     num_maps = len(input_maps)
-    for i in xrange(num_maps):
+    for i in range(num_maps):
         if reverse:
             map = input_maps[num_maps - i - 1]
         else:
@@ -528,7 +534,7 @@ def compute_occurrence(occurrence_maps, input_strds, input_maps, start, base,
             suffix = tgis.create_time_suffix(map)
             occurrence_map_name = "{ba}_{su}".format(ba=base, su=suffix)
         else:
-            occurrence_map_name = tgis.create_numeric_suffic(base, count, tsuffix)
+            occurrence_map_name = tgis.create_numeric_suffix(base, count, tsuffix)
 
         occurrence_map_id = map.build_id(occurrence_map_name, mapset)
         occurrence_map = input_strds.get_new_map_instance(occurrence_map_id)
@@ -544,7 +550,7 @@ def compute_occurrence(occurrence_maps, input_strds, input_maps, start, base,
                              " database, use overwrite flag to overwrite.") %
                             (occurrence_map.get_map_id()))
 
-        range_vals = range.split(",")
+        range_vals = range_.split(",")
         min = range_vals[0]
         max = range_vals[1]
 
@@ -566,7 +572,7 @@ def compute_occurrence(occurrence_maps, input_strds, input_maps, start, base,
                                                                 map.get_name(),
                                                                 min, map.get_name(),
                                                                 max, days)
-        print expression
+        grass.debug(expression)
         grass.mapcalc(expression, overwrite=True)
 
         map_start, map_end = map.get_temporal_extent_as_tuple()

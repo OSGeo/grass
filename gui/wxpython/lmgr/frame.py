@@ -42,10 +42,11 @@ if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
     sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
 
 from grass.script import core as grass
+from grass.script.utils import decode
 
-from core.gcmd import RunCommand, GError, GMessage, EncodeString
+from core.gcmd import RunCommand, GError, GMessage
 from core.settings import UserSettings, GetDisplayVectSettings
-from core.utils import SetAddOnPath, GetLayerNameFromCmd, command2ltype, _
+from core.utils import SetAddOnPath, GetLayerNameFromCmd, command2ltype
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
@@ -64,7 +65,7 @@ from lmgr.pyshell import PyShellWindow
 from lmgr.giface import LayerManagerGrassInterface
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
-from gui_core.wrap import Menu
+from gui_core.wrap import Menu, TextEntryDialog
 
 
 class GMFrame(wx.Frame):
@@ -975,15 +976,6 @@ class GMFrame(wx.Frame):
 
         if not filename:
             return False
-        try:
-            filename_encoded = EncodeString(filename)
-        except UnicodeEncodeError:
-            GError(
-                parent=self, message=_(
-                    "Due to the limitations of your operating system, "
-                    "the script path cannot contain certain non-ascii characters. "
-                    "Please rename the script or move it to a different location."))
-            return
 
         if not os.path.exists(filename):
             GError(parent=self,
@@ -1019,7 +1011,7 @@ class GMFrame(wx.Frame):
         addonPath = os.getenv('GRASS_ADDON_PATH', [])
         if addonPath:
             addonPath = addonPath.split(os.pathsep)
-        dirName = os.path.dirname(filename_encoded)
+        dirName = os.path.dirname(filename)
         if dirName not in addonPath:
             addonPath.append(dirName)
             dlg = wx.MessageDialog(
@@ -1082,6 +1074,10 @@ class GMFrame(wx.Frame):
                              parent=self,
                              flags='c',
                              mapset=mapset)
+            # ensure that DB connection is defined
+            ret += RunCommand('db.connect',
+                              parent=self,
+                              flags='c')
             if ret == 0:
                 GMessage(parent=self,
                          message=_("Current mapset is <%s>.") % mapset)
@@ -1112,7 +1108,7 @@ class GMFrame(wx.Frame):
             # renamed (it just uses the numbers)
             dispId = 1
             for display in self.GetMapDisplay(onlyCurrent=False):
-                display.SetTitleWithName(dispId)  # TODO: signal ?
+                display.SetTitleWithName(str(dispId))  # TODO: signal ?
                 dispId += 1
 
     def OnChangeCWD(self, event=None, cmd=None):
@@ -1224,22 +1220,23 @@ class GMFrame(wx.Frame):
             osgeo4w = ''
 
         self._gconsole.WriteCmdLog(_("System Info"))
-        # platform from UTF-8 conversion was added because of the Fedora 19 release
+        # platform decoding was added because of the Fedora 19 release
         # which has the name "Schrödinger’s cat" (umlaut and special ' character)
         # which appears in the platform.platform() string
+        platform_ = decode(platform.platform())
         self._gconsole.WriteLog("%s: %s\n"
                                 "%s: %s\n"
                                 "%s: %s\n"
                                 "%s: %s\n"
                                 # "%s: %s (%s)\n"
                                 "GDAL: %s\n"
-                                "PROJ.4: %s\n"
+                                "PROJ: %s\n"
                                 "GEOS: %s\n"
                                 "SQLite: %s\n"
                                 "Python: %s\n"
                                 "wxPython: %s\n"
                                 "%s: %s%s\n" % (_("GRASS version"), vInfo.get('version', _('unknown version')),
-                                                _("GRASS SVN revision"), vInfo.get(
+                                                _("Code revision"), vInfo.get(
                                                     'revision', '?'),
                                                 _("Build date"), vInfo.get(
                                                     'build_date', '?'),
@@ -1251,12 +1248,12 @@ class GMFrame(wx.Frame):
                                                 # ', 1)[0],
                                                 vInfo.get(
                                                     'gdal', '?'), vInfo.get(
-                                                    'proj4', '?'), vInfo.get(
+                                                    'proj', '?'), vInfo.get(
                                                     'geos', '?'), vInfo.get(
                                                     'sqlite', '?'),
                                                 platform.python_version(),
                                                 wx.__version__,
-                                                _("Platform"), platform.platform().decode('utf8', 'replace'), osgeo4w),
+                                                _("Platform"), platform_, osgeo4w),
                                 notification=Notification.MAKE_VISIBLE)
         self._gconsole.WriteCmdLog(' ')
 
@@ -1373,6 +1370,41 @@ class GMFrame(wx.Frame):
         self.workspaceFile = filename
         self._setTitle()
 
+    def _tryToSwitchMapsetFromWorkspaceFile(self, gxwXml):
+        returncode, errors = RunCommand('g.mapset',
+                      dbase=gxwXml.database,
+                      location=gxwXml.location,
+                      mapset=gxwXml.mapset,
+                      getErrorMsg=True,
+                      )
+        if returncode != 0:
+            # TODO: use the function from grass.py
+            reason = _("Most likely the database, location or mapset"
+                       " does not exist")
+            details = errors
+            message = _("Unable to change to location and mapset"
+                        " specified in the workspace.\n"
+                        "Reason: {reason}\nDetails: {details}\n\n"
+                        "Do you want to proceed with opening"
+                        " the workspace anyway?"
+                        ).format(**locals())
+            dlg = wx.MessageDialog(
+                parent=self, message=message, caption=_(
+                    "Proceed with opening of the workspace?"),
+                style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
+            dlg.CenterOnParent()
+            if dlg.ShowModal() in [wx.ID_NO, wx.ID_CANCEL]:
+                return False
+        else:
+            # TODO: copy from ChangeLocation function
+            GMessage(
+                parent=self,
+                message=_("Current location is <%(loc)s>.\n"
+                          "Current mapset is <%(mapset)s>.") %
+                          {'loc': gxwXml.location,
+                           'mapset': gxwXml.mapset})
+        return True
+
     def LoadWorkspaceFile(self, filename):
         """Load layer tree definition stored in GRASS Workspace XML file (gxw)
 
@@ -1391,11 +1423,16 @@ class GMFrame(wx.Frame):
                     "Reading workspace file <%s> failed.\n"
                     "Invalid file, unable to parse XML document.") %
                 filename)
-            return
+            return False
 
-        busy = wx.BusyInfo(message=_("Please wait, loading workspace..."),
+        if gxwXml.database and gxwXml.location and gxwXml.mapset:
+            if not self._tryToSwitchMapsetFromWorkspaceFile(gxwXml):
+                return False
+
+        # the really busy part starts here (mapset change is fast)
+        busy = wx.BusyInfo(_("Please wait, loading workspace..."),
                            parent=self)
-        wx.Yield()
+        wx.GetApp().Yield()
 
         #
         # load layer manager window properties
@@ -1501,8 +1538,7 @@ class GMFrame(wx.Frame):
             else:
                 maptree.SelectItem(layer, select=False)
 
-
-        busy.Destroy()
+        del busy
 
         # set render property again when all layers are loaded
         for i, display in enumerate(gxwXml.displays):
@@ -1565,9 +1601,9 @@ class GMFrame(wx.Frame):
         if not self.currentPage:
             self.NewDisplay()
 
-        busy = wx.BusyInfo(message=_("Please wait, loading workspace..."),
+        busy = wx.BusyInfo(_("Please wait, loading workspace..."),
                            parent=self)
-        wx.Yield()
+        wx.GetApp().Yield()
 
         maptree = None
         for layer in ProcessGrcFile(filename).read(self):
@@ -1579,7 +1615,7 @@ class GMFrame(wx.Frame):
                                        lcmd=layer['cmd'],
                                        lgroup=layer['group'])
 
-            busy.Destroy()
+        del busy
 
         if maptree:
             # reverse list of map layers
@@ -1662,7 +1698,7 @@ class GMFrame(wx.Frame):
             return False
 
         try:
-            mfile = open(filename, "w")
+            mfile = open(filename, "wb")
             tmpfile.seek(0)
             for line in tmpfile.readlines():
                 mfile.write(line)
@@ -1712,10 +1748,10 @@ class GMFrame(wx.Frame):
     def OnRenameDisplay(self, event):
         """Change Map Display name"""
         name = self.notebookLayers.GetPageText(self.currentPageNum)
-        dlg = wx.TextEntryDialog(
+        dlg = TextEntryDialog(
             self, message=_("Enter new name:"),
             caption=_("Rename Map Display"),
-            defaultValue=name)
+            value=name)
         if dlg.ShowModal() == wx.ID_OK:
             name = dlg.GetValue()
             self.notebookLayers.SetPageText(
@@ -1752,7 +1788,7 @@ class GMFrame(wx.Frame):
         dlg.Show()
 
     def OnInstallExtension(self, event):
-        """Install extension from GRASS Addons SVN repository"""
+        """Install extension from GRASS Addons repository"""
         from modules.extensions import InstallExtensionWindow
         win = InstallExtensionWindow(
             self, giface=self._giface, size=(650, 550))
@@ -2093,6 +2129,18 @@ class GMFrame(wx.Frame):
                 self.GetMapDisplay().SetSize((w, h))
             except:
                 pass
+
+        # set default properties
+        mapdisplay.SetProperties(render=UserSettings.Get(
+            group='display', key='autoRendering', subkey='enabled'),
+                                 mode=UserSettings.Get(
+            group='display', key='statusbarMode', subkey='selection'),
+                                 alignExtent=UserSettings.Get(
+            group='display', key='alignExtent', subkey='enabled'),
+                                 constrainRes=UserSettings.Get(
+            group='display', key='compResolution', subkey='enabled'),
+                                 showCompExtent=UserSettings.Get(
+            group='display', key='showCompExtent', subkey='enabled'))
 
         self.displayIndex += 1
 

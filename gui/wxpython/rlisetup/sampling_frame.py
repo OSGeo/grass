@@ -36,7 +36,6 @@ try:
 except ImportError:
     pass
 
-from core.utils import _
 from core.giface import StandaloneGrassInterface
 from mapwin.base import MapWindowProperties
 from mapwin.buffered import BufferedMapWindow
@@ -47,7 +46,7 @@ from core.gcmd import GMessage
 from grass.pydispatch.signal import Signal
 from grass.pydispatch.errors import DispatcherKeyError
 
-from functions import SamplingType, checkMapExists
+from .functions import SamplingType, checkMapExists
 
 
 class Circle:
@@ -261,7 +260,7 @@ class RLiSetupMapPanel(wx.Panel):
         tmpraster = "rast_" + pname
         tmpvector = "vect_" + pname
         wx.BeginBusyCursor()
-        wx.Yield()
+        wx.GetApp().Yield()
         RunCommand('r.in.poly', input=polyfile.name, output=tmpraster,
                    rows=region_settings['rows'], overwrite=True)
 

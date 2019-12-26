@@ -1,29 +1,30 @@
 
 /****************************************************************************
  *
- * MODULE:       i.vi
- * AUTHOR(S):    Baburao Kamble baburaokamble@gmail.com
- *		 Yann Chemin - yann.chemin@gmail.com
- *		 Nikos Alexandris - nik@nikosalexandris.net
- * PURPOSE:      Calculates 15 vegetation indices
- * 		 based on biophysical parameters.
+ * MODULE:      i.vi
+ * AUTHOR(S):   Baburao Kamble baburaokamble@gmail.com
+ *              Yann Chemin - yann.chemin@gmail.com
+ *              Nikos Alexandris - nik@nikosalexandris.net
+ * PURPOSE:     Calculates 16 vegetation and related indices
+ *              based on biophysical parameters.
  *
- * COPYRIGHT:    (C) 2002-2013 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2019 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
  *   	    	 for details.
  *
- * Remark:
- *		 These are generic indices that use red and nir for most of them.
- *               Those can be any use by standard satellite having V and IR.
- *		 However arvi uses red, nir and blue;
- *		 GVI uses B,G,R,NIR, chan5 and chan 7 of landsat;
- *		 and GARI uses B,G,R and NIR.
+ * Remarks:
+ *           These are generic indices that use red and nir for most of them.
+ *           Those can be any use by standard satellite having V and IR.
+ *           However, arvi uses red, nir and blue;
+ *           GVI uses B,G,R,NIR, chan5 and chan 7 of landsat;
+ *           and GARI uses B,G,R and NIR.
  *
- * Changelog:	 Added EVI on 20080718 (Yann)
- * 		 Added VARI on 20081014 (Yann)
- * 		 Added EVI2 on 20130208 (NikosA)
+ * Changelog:   Added EVI on 20080718 (Yann)
+ *              Added VARI on 20081014 (Yann)
+ *              Added EVI2 on 20130208 (NikosA)
+ *              Added NDWI on 20190711 (neteler)
  *
  *****************************************************************************/
 
@@ -37,6 +38,7 @@
 
 double s_r(double redchan, double nirchan);
 double nd_vi(double redchan, double nirchan);
+double nd_wi(double greenchan, double nirchan);
 double ip_vi(double redchan, double nirchan);
 double d_vi(double redchan, double nirchan);
 double e_vi(double bluechan, double redchan, double nirchan);
@@ -73,14 +75,14 @@ int main(int argc, char *argv[])
     int infd_bluechan, infd_chan5chan, infd_chan7chan;
     int outfd;
     char *bluechan, *greenchan, *redchan, *nirchan, *chan5chan, *chan7chan;
-    DCELL *inrast_redchan, *inrast_nirchan, *inrast_greenchan;
-    DCELL *inrast_bluechan, *inrast_chan5chan, *inrast_chan7chan;
-    DCELL *outrast;
+    FCELL *inrast_redchan, *inrast_nirchan, *inrast_greenchan;
+    FCELL *inrast_bluechan, *inrast_chan5chan, *inrast_chan7chan;
+    FCELL *outrast;
     RASTER_MAP_TYPE data_type_redchan;
     RASTER_MAP_TYPE data_type_nirchan, data_type_greenchan;
     RASTER_MAP_TYPE data_type_bluechan;
     RASTER_MAP_TYPE data_type_chan5chan, data_type_chan7chan;
-    DCELL msavip1, msavip2, msavip3, dnbits;
+    FCELL msavip1, msavip2, msavip3, dnbits;
     CELL val1, val2;
 
     G_gisinit(argv[0]);
@@ -89,18 +91,13 @@ int main(int argc, char *argv[])
     G_add_keyword(_("imagery"));
     G_add_keyword(_("vegetation index"));
     G_add_keyword(_("biophysical parameters"));
+    G_add_keyword(_("NDVI"));
     module->label =
 	_("Calculates different types of vegetation indices.");
     module->description = _("Uses red and nir bands mostly, "
 			    "and some indices require additional bands.");
 
     /* Define the different options */
-    opt.red = G_define_standard_option(G_OPT_R_INPUT);
-    opt.red->key = "red";
-    opt.red->label =
-	_("Name of input red channel surface reflectance map");
-    opt.red->description = _("Range: [0.0;1.0]");
-
     opt.output = G_define_standard_option(G_OPT_R_OUTPUT);
 
     opt.viname = G_define_option();
@@ -111,7 +108,7 @@ int main(int argc, char *argv[])
     desc = NULL;
     G_asprintf(&desc,
 	       "arvi;%s;dvi;%s;evi;%s;evi2;%s;gvi;%s;gari;%s;gemi;%s;ipvi;%s;msavi;%s;"
-	       "msavi2;%s;ndvi;%s;pvi;%s;savi;%s;sr;%s;vari;%s;wdvi;%s",
+	       "msavi2;%s;ndvi;%s;ndwi;%s;pvi;%s;savi;%s;sr;%s;vari;%s;wdvi;%s",
 	       _("Atmospherically Resistant Vegetation Index"),
 	       _("Difference Vegetation Index"),
 	       _("Enhanced Vegetation Index"),
@@ -123,23 +120,32 @@ int main(int argc, char *argv[])
 	       _("Modified Soil Adjusted Vegetation Index"),
 	       _("second Modified Soil Adjusted Vegetation Index"),
 	       _("Normalized Difference Vegetation Index"),
+	       _("Normalized Difference Water Index"),
 	       _("Perpendicular Vegetation Index"),
 	       _("Soil Adjusted Vegetation Index"),
 	       _("Simple Ratio"),
 	       _("Visible Atmospherically Resistant Index"),
 	       _("Weighted Difference Vegetation Index"));
     opt.viname->descriptions = desc;
-    opt.viname->options = "arvi,dvi,evi,evi2,gvi,gari,gemi,ipvi,msavi,msavi2,ndvi,pvi,savi,sr,vari,wdvi";
+    opt.viname->options = "arvi,dvi,evi,evi2,gvi,gari,gemi,ipvi,msavi,msavi2,ndvi,ndwi,pvi,savi,sr,vari,wdvi";
     opt.viname->answer = "ndvi";
     opt.viname->key_desc = _("type");
 
+    opt.red = G_define_standard_option(G_OPT_R_INPUT);
+    opt.red->key = "red";
+    opt.red->required = NO;
+    opt.red->label =
+	_("Name of input red channel surface reflectance map");
+    opt.red->description = _("Range: [0.0;1.0]");
+    opt.red->guisection = _("Inputs");
+	
     opt.nir = G_define_standard_option(G_OPT_R_INPUT);
     opt.nir->key = "nir";
     opt.nir->required = NO;
     opt.nir->label =
 	_("Name of input nir channel surface reflectance map");
     opt.nir->description = _("Range: [0.0;1.0]");
-    opt.nir->guisection = _("Optional inputs");
+    opt.nir->guisection = _("Inputs");
 
     opt.green = G_define_standard_option(G_OPT_R_INPUT);
     opt.green->key = "green";
@@ -147,7 +153,7 @@ int main(int argc, char *argv[])
     opt.green->label =
 	_("Name of input green channel surface reflectance map");
     opt.green->description = _("Range: [0.0;1.0]");
-    opt.green->guisection = _("Optional inputs");
+    opt.green->guisection = _("Inputs");
 
     opt.blue = G_define_standard_option(G_OPT_R_INPUT);
     opt.blue->key = "blue";
@@ -155,23 +161,25 @@ int main(int argc, char *argv[])
     opt.blue->label =
 	_("Name of input blue channel surface reflectance map");
     opt.blue->description = _("Range: [0.0;1.0]");
-    opt.blue->guisection = _("Optional inputs");
+    opt.blue->guisection = _("Inputs");
 
+    /* TODO: the naming is suboptimal as specific to Landsat-7 */
     opt.chan5 = G_define_standard_option(G_OPT_R_INPUT);
     opt.chan5->key = "band5";
     opt.chan5->required = NO;
     opt.chan5->label =
 	_("Name of input 5th channel surface reflectance map");
     opt.chan5->description = _("Range: [0.0;1.0]");
-    opt.chan5->guisection = _("Optional inputs");
+    opt.chan5->guisection = _("Inputs");
 
+    /* TODO: the naming is suboptimal as specific to Landsat-7 */
     opt.chan7 = G_define_standard_option(G_OPT_R_INPUT);
     opt.chan7->key = "band7";
     opt.chan7->required = NO;
     opt.chan7->label =
 	_("Name of input 7th channel surface reflectance map");
     opt.chan7->description = _("Range: [0.0;1.0]");
-    opt.chan7->guisection = _("Optional inputs");
+    opt.chan7->guisection = _("Inputs");
 
     opt.sl_slope = G_define_option();
     opt.sl_slope->key = "soil_line_slope";
@@ -229,6 +237,9 @@ int main(int argc, char *argv[])
 
     if (!strcasecmp(viflag, "ndvi") && (!(opt.red->answer) || !(opt.nir->answer)) )
 	G_fatal_error(_("ndvi index requires red and nir maps"));
+
+    if (!strcasecmp(viflag, "ndwi") && (!(opt.green->answer) || !(opt.nir->answer)) )
+	G_fatal_error(_("ndwi index requires green and nir maps"));
 
     if (!strcasecmp(viflag, "ipvi") && (!(opt.red->answer) || !(opt.nir->answer)) )
 	G_fatal_error(_("ipvi index requires red and nir maps"));
@@ -318,18 +329,18 @@ int main(int argc, char *argv[])
     ncols = Rast_window_cols();
 
     /* Create New raster files */
-    outfd = Rast_open_new(result, DCELL_TYPE);
-    outrast = Rast_allocate_d_buf();
+    outfd = Rast_open_new(result, FCELL_TYPE);
+    outrast = Rast_allocate_f_buf();
 
     /* Process pixels */
     for (row = 0; row < nrows; row++)
     {
-	DCELL d_bluechan;
-	DCELL d_greenchan;
-	DCELL d_redchan;
-	DCELL d_nirchan;
-	DCELL d_chan5chan;
-	DCELL d_chan7chan;
+	FCELL d_bluechan;
+	FCELL d_greenchan;
+	FCELL d_redchan;
+	FCELL d_nirchan;
+	FCELL d_chan5chan;
+	FCELL d_chan7chan;
 
 	G_percent(row, nrows, 2);
 
@@ -442,13 +453,13 @@ int main(int argc, char *argv[])
 		}
 	    }
 
-	    if (Rast_is_d_null_value(&d_redchan) ||
-		((nirchan) && Rast_is_d_null_value(&d_nirchan)) ||
-		((greenchan) && Rast_is_d_null_value(&d_greenchan)) ||
-		((bluechan) && Rast_is_d_null_value(&d_bluechan)) ||
-		((chan5chan) && Rast_is_d_null_value(&d_chan5chan)) ||
-		((chan7chan) && Rast_is_d_null_value(&d_chan7chan))) {
-		Rast_set_d_null_value(&outrast[col], 1);
+	    if (Rast_is_f_null_value(&d_redchan) ||
+		((nirchan) && Rast_is_f_null_value(&d_nirchan)) ||
+		((greenchan) && Rast_is_f_null_value(&d_greenchan)) ||
+		((bluechan) && Rast_is_f_null_value(&d_bluechan)) ||
+		((chan5chan) && Rast_is_f_null_value(&d_chan5chan)) ||
+		((chan7chan) && Rast_is_f_null_value(&d_chan7chan))) {
+		Rast_set_f_null_value(&outrast[col], 1);
 	    }
 	    else {
 		/* calculate simple_ratio        */
@@ -457,11 +468,14 @@ int main(int argc, char *argv[])
 
 		/* calculate ndvi                    */
 		if (!strcasecmp(viflag, "ndvi")) {
-		    if (d_redchan + d_nirchan < 0.001)
-			Rast_set_d_null_value(&outrast[col], 1);
+		    if (d_redchan + d_nirchan < 0.001)  /* TODO: why this? */
+			Rast_set_f_null_value(&outrast[col], 1);
 		    else
 			outrast[col] = nd_vi(d_redchan, d_nirchan);
 		}
+
+		if (!strcasecmp(viflag, "ndwi"))
+		    outrast[col] = nd_wi(d_greenchan, d_nirchan);
 
 		if (!strcasecmp(viflag, "ipvi"))
 		    outrast[col] = ip_vi(d_redchan, d_nirchan);
@@ -506,7 +520,7 @@ int main(int argc, char *argv[])
 		    outrast[col] = va_ri(d_redchan, d_greenchan, d_bluechan);
 	    }
 	}
-	Rast_put_d_row(outfd, outrast);
+	Rast_put_f_row(outfd, outrast);
     }
     G_percent(1, 1, 1);
       

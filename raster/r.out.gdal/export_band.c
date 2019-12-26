@@ -18,8 +18,9 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-#include "cpl_string.h"
-#include "gdal.h"
+#include <gdal.h>
+#include <cpl_string.h>
+#include <cpl_port.h>
 #include "local_proto.h"
 
 int exact_range_check(double, double, GDALDataType, const char *);
@@ -75,17 +76,23 @@ int exact_checks(GDALDataType export_datatype,
 
 	    Rast_get_row(fd, bufer, row, maptype);
 	    for (col = 0; col < cols; col++) {
-		if (Rast_is_f_null_value(&((FCELL *) bufer)[col])) {
+		FCELL fval = ((FCELL *) bufer)[col];
+
+		if (Rast_is_f_null_value(&fval)) {
+		    ((FCELL *) bufer)[col] = fnullval;
 		    n_nulls++;
 		}
 		else {
-		    if (((FCELL *) bufer)[col] == fnullval) {
+		    if (fval == fnullval) {
 			nodatavalmatch = 1;
 		    }
-		    if (dfCellMin > ((FCELL *) bufer)[col])
-			dfCellMin = ((FCELL *) bufer)[col];
-		    if (dfCellMax < ((FCELL *) bufer)[col])
-			dfCellMax = ((FCELL *) bufer)[col];
+		    if (!CPLIsInf(fval)) {
+			/* ignore inf */
+			if (dfCellMin > fval)
+			    dfCellMin = fval;
+			if (dfCellMax < fval)
+			    dfCellMax = fval;
+		    }
 		}
 	    }
 	    G_percent(row + 1, rows, 2);
@@ -101,18 +108,23 @@ int exact_checks(GDALDataType export_datatype,
 
 	    Rast_get_row(fd, bufer, row, maptype);
 	    for (col = 0; col < cols; col++) {
-		if (Rast_is_d_null_value(&((DCELL *) bufer)[col])) {
+		DCELL dval = ((DCELL *) bufer)[col];
+
+		if (Rast_is_d_null_value(&dval)) {
 		    ((DCELL *) bufer)[col] = dnullval;
 		    n_nulls++;
 		}
 		else {
-		    if (((DCELL *) bufer)[col] == dnullval) {
+		    if (dval == dnullval) {
 			nodatavalmatch = 1;
 		    }
-		    if (dfCellMin > ((DCELL *) bufer)[col])
-			dfCellMin = ((DCELL *) bufer)[col];
-		    if (dfCellMax < ((DCELL *) bufer)[col])
-			dfCellMax = ((DCELL *) bufer)[col];
+		    if (!CPLIsInf(dval)) {
+			/* ignore inf */
+			if (dfCellMin > dval)
+			    dfCellMin = dval;
+			if (dfCellMax < dval)
+			    dfCellMax = dval;
+		    }
 		}
 	    }
 	    G_percent(row + 1, rows, 2);
@@ -217,6 +229,7 @@ int export_band(GDALDatasetH hMEMDS, int band,
     int rows = cellhead->rows;
     int ret = 0;
     char value[200];
+    char *units;
 
     /* Open GRASS raster */
     fd = Rast_open_old(name, mapset);
@@ -228,6 +241,13 @@ int export_band(GDALDatasetH hMEMDS, int band,
 	G_warning(_("Unable to get raster band"));
 	return -1;
     }
+
+    if (!no_metadata)
+	GDALSetDescription(hBand, name);
+
+    units = Rast_read_units(name, mapset);
+    if (units)
+	GDALSetRasterUnitType(hBand, units);
 
     /* Get min/max values. */
     if (Rast_read_fp_range(name, mapset, &sRange) == -1) {
@@ -521,9 +541,11 @@ int exact_range_check(double min, double max, GDALDataType datatype,
 
     case GDT_Float32:
     case GDT_CFloat32:
-	if (min < TYPE_FLOAT32_MIN || max > TYPE_FLOAT32_MAX) {
+	/* support export of inf / -inf ? */
+	if ((float)min !=TYPE_FLOAT32_MIN && (float)max != TYPE_FLOAT32_MAX &&
+	    (min < TYPE_FLOAT32_MIN || max > TYPE_FLOAT32_MAX)) {
 	    G_warning(_("Selected GDAL datatype does not cover data range."));
-	    G_warning(_("GDAL datatype: %s, range: %g - %g"),
+	    G_warning(_("GDAL datatype: %s, range: %.7g - %.7g"),
 		      GDALGetDataTypeName(datatype), TYPE_FLOAT32_MIN,
 		      TYPE_FLOAT32_MAX);
 	    G_warning(_("Raster map <%s> range: %g - %g"), name, min, max);
@@ -535,9 +557,10 @@ int exact_range_check(double min, double max, GDALDataType datatype,
     case GDT_Float64:
     case GDT_CFloat64:
 	/* not possible because DCELL is FLOAT64, not 128bit floating point, but anyway... */
+	/* support export of inf / -inf ? */
 	if (min < TYPE_FLOAT64_MIN || max > TYPE_FLOAT64_MAX) {
 	    G_warning(_("Selected GDAL datatype does not cover data range."));
-	    G_warning(_("GDAL datatype: %s, range: %g - %g"),
+	    G_warning(_("GDAL datatype: %s, range: %.16g - %.16g"),
 		      GDALGetDataTypeName(datatype), TYPE_FLOAT64_MIN,
 		      TYPE_FLOAT64_MAX);
 	    G_warning(_("Raster map <%s> range: %g - %g"), name, min, max);

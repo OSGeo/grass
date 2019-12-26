@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-### Inspired by https://svn.osgeo.org/gdal/trunk/gdal/Vagrantfile
+### Inspired by https://github.com/OSGeo/gdal/blob/master/Vagrantfile
 
 require 'socket'
 
@@ -13,10 +13,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   vm_ram = ENV['VAGRANT_VM_RAM'] || 1024
   vm_cpu = ENV['VAGRANT_VM_CPU'] || 1
   
-  config.vm.box = "xenial64"
+  config.vm.box = "bionic64"
   
   config.vm.hostname = "grass-gis-vagrant"
-  config.vm.box_url = "https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-vagrant.box"
+  config.vm.box_url = "https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64-vagrant.box"
   config.vm.define "grass-gis-vagrant" do |host|
     
     config.vm.network :forwarded_port, guest: 80, host: 8080
@@ -63,14 +63,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       "proj-bin",
       "libreadline-dev",
       "libsqlite3-dev",
-      "libwxgtk3.0-dev",
+      "libwxgtk3.0-gtk3-dev",
       "libxmu-dev",
-      "python",
-      "python-wxgtk3.0",
-      "python-dev",
-      "python-numpy",
-      "python-ply",
-      "python-pil",
+      "python3",
+      "python3-wxgtk4.0",
+      "python3-dateutil",
+      "python3-dev",
+      "python3-numpy",
+      "python3-ply",
+      "python3-pil",
+      "python3-six",
       "libnetcdf-dev",
       "netcdf-bin",
       "libblas-dev",

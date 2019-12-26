@@ -18,8 +18,6 @@ for details.
 :authors: Soeren Gebbert
 """
 from __future__ import print_function
-# i18N
-import gettext
 from datetime import datetime
 from .core import init_dbif
 from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
@@ -375,7 +373,7 @@ class SpatioTemporalTopologyBuilder(object):
 
     def _detect_first(self):
         if len(self) > 0:
-            prev_ = self._store.values()[0]
+            prev_ = list(self._store.values())[0]
             while prev_ is not None:
                 self._first = prev_
                 prev_ = prev_.prev()

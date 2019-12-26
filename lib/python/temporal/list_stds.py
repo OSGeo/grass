@@ -18,13 +18,12 @@ for details.
 :authors: Soeren Gebbert
 """
 from __future__ import print_function
-# i18N
-import gettext
 from .core import get_tgis_message_interface, get_available_temporal_mapsets, init_dbif
 from .datetime_math import time_delta_to_relative_time
 from .space_time_datasets import RasterDataset
 from .factory import dataset_factory
 from .open_stds import open_old_stds
+import grass.script as gscript
 
 ###############################################################################
 
@@ -250,9 +249,19 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
     else:
         # In comma separated mode only map ids are needed
         if method == "comma":
-            columns = "id"
+            if columns not in ['id', 'name']:
+                columns = "id"
 
         rows = sp.get_registered_maps(columns, where, order, dbif)
+        
+        if not rows:
+            dbif.close()
+            err = "Space time %(sp)s dataset <%(i)s> is empty"
+            if where:
+                err += " or where condition is wrong"
+            gscript.fatal(_(err) % {
+                            'sp': sp.get_new_map_instance(None).get_type(),
+                            'i': sp.get_id()})
 
         if rows:
             if method == "comma":
@@ -260,9 +269,9 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                 count = 0
                 for row in rows:
                     if count == 0:
-                        string += row["id"]
+                        string += row[columns]
                     else:
-                        string += ",%s" % row["id"]
+                        string += ",%s" % row[columns]
                     count += 1
                 if outpath:
                     outfile.write('{st}\n'.format(st=string))

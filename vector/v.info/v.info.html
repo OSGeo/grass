@@ -3,9 +3,15 @@
 <em>v.info</em> reports some basic information (metadata) about a
 user-specified vector map and its topology status.
 
-<p>If topology info is not available (i.e., vector map cannot be open on
+<p>
+If topology info is not available (i.e., vector map cannot be opened on
 level 2), vector map extends and number of features need to be counted
 on the fly which may take some time.
+
+<p>
+Note that the flag <b>-c</b> only works when the vector map is connected
+to one or several attribute table(s). This connection can be shown or set
+with <em>v.db.connect</em>.
 
 <h2>EXAMPLE</h2>
 
@@ -128,7 +134,7 @@ bottom=0.000000
 
 <h2>PYTHON</h2>
 
-See <em><a href="http://grass.osgeo.org/grass73/manuals/libpython/">Python
+See <em><a href="https://grass.osgeo.org/grass79/manuals/libpython/">Python
 Scripting Library</a></em> for more info.
 <p>
 Note: The Python tab in the <em>wxGUI</em> can be used for entering the
@@ -146,14 +152,18 @@ gcore.vector_info_topo('geology') # for `v.info shell=topo`
 <em>
 <a href="r.info.html">r.info</a>,
 <a href="r3.info.html">r3.info</a>,
-<a href="t.info.html">t.info</a>
+<a href="t.info.html">t.info</a>,
+<a href="v.db.connect.html">v.db.connect</a>
 </em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Original author CERL<br>
 Updated to GRASS 6 by Radim Blazek, ITC-Irst, Trento, Italy<br>
 Level 1 support by Markus Metz<br>
 Updated to GRASS 7 by Martin Landa, CTU in Prague, Czech Republic
 
-<p><i>Last changed: $Date$</i>
+<!--
+<p>
+<i>Last changed: $Date$</i>
+-->

@@ -36,7 +36,6 @@ static void set_default_region(void);
 
 #ifdef HAVE_OGR
 static void set_gdal_region(GDALDatasetH);
-static void set_ogr_region(OGRLayerH);
 #endif
 
 /**
@@ -79,6 +78,7 @@ int input_wkt(char *wktfile)
 {
     FILE *infd;
     char buff[8000];
+    OGRSpatialReferenceH hSRS;
     int ret;
 
     if (strcmp(wktfile, "-") == 0)
@@ -100,6 +100,28 @@ int input_wkt(char *wktfile)
 
     ret = GPJ_wkt_to_grass(&cellhd, &projinfo, &projunits, buff, 0);
     set_default_region();
+
+    hSRS = OSRNewSpatialReference(buff);
+    if (hSRS) {
+	const char *authkey, *authname, *authcode;
+
+	authkey = NULL;
+	if (OSRIsProjected(hSRS))
+	    authkey = "PROJCS";
+	else if (OSRIsGeographic(hSRS))
+	    authkey = "GEOGCS";
+
+	if (authkey) {
+	    authname = OSRGetAuthorityName(hSRS, authkey);
+	    if (authname && *authname && strcmp(authname, "EPSG") == 0) {
+		authcode = OSRGetAuthorityCode(hSRS, authkey);
+		if (authcode && *authcode) {
+		    projepsg = G_create_key_value();
+		    G_set_key_value("epsg", authcode, projepsg);
+		}
+	    }
+	}
+    }
 
     return ret;
 }
@@ -172,6 +194,7 @@ int input_proj4(char *proj4params)
 int input_epsg(int epsg_num)
 {
     OGRSpatialReferenceH hSRS;
+    char epsgstr[100];
     int ret = 0;
 
     /* Set finder function for locating OGR csv co-ordinate system tables */
@@ -182,6 +205,10 @@ int input_epsg(int epsg_num)
 	G_fatal_error(_("Unable to translate EPSG code"));
 
     ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, hSRS, 0);
+
+    sprintf(epsgstr, "%d", epsg_num);
+    projepsg = G_create_key_value();
+    G_set_key_value("epsg", epsgstr, projepsg);
 
     OSRDestroySpatialReference(hSRS);
 
@@ -212,24 +239,25 @@ int input_epsg(int epsg_num)
 int input_georef(char *geofile)
 {
     OGRDataSourceH ogr_ds;
+    OGRSpatialReferenceH hSRS;
     int ret = 0;
 
     /* Try opening file with OGR first because it doesn't output a
      * (potentially confusing) error message if it can't open the file */
-    G_message(_("Trying to open with OGR..."));
+    G_debug(1, "Trying to open <%s> with OGR...", geofile);
     OGRRegisterAll();
 
+    hSRS = NULL;
     if ((ogr_ds = OGROpen(geofile, FALSE, NULL))
 	&& (OGR_DS_GetLayerCount(ogr_ds) > 0)) {
 	OGRLayerH ogr_layer;
-	OGRSpatialReferenceH ogr_srs;
 
-	G_message(_("...succeeded."));
+	G_debug(1, "...succeeded.");
 	/* Get the first layer */
 	ogr_layer = OGR_DS_GetLayer(ogr_ds, 0);
-	ogr_srs = OGR_L_GetSpatialRef(ogr_layer);
-	ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, ogr_srs, 0);
-	set_ogr_region(ogr_layer);
+	hSRS = OGR_L_GetSpatialRef(ogr_layer);
+	ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, hSRS, 0);
+	set_default_region();
 
 	OGR_DS_Destroy(ogr_ds);
     }
@@ -237,29 +265,63 @@ int input_georef(char *geofile)
 	/* Try opening with GDAL */
 	GDALDatasetH gdal_ds;
 
-	G_message(_("Trying to open with GDAL..."));
+	G_debug(1, "Trying to open with GDAL...");
 	GDALAllRegister();
 
 	if ((gdal_ds = GDALOpen(geofile, GA_ReadOnly))) {
 	    char *wktstring;
 
-	    G_message(_("...succeeded."));
+	    G_debug(1, "...succeeded.");
 	    wktstring = (char *)GDALGetProjectionRef(gdal_ds);
 	    ret =
 		GPJ_wkt_to_grass(&cellhd, &projinfo, &projunits, wktstring,
 				 0);
 
 	    set_gdal_region(gdal_ds);
+	    hSRS = OSRNewSpatialReference(wktstring);
 	}
-	else
-	    G_fatal_error(_("Could not read georeferenced file %s using "
-			    "either OGR nor GDAL"), geofile);
+	else {
+	    int namelen;
+
+	    namelen = strlen(geofile);
+	    if (namelen > 4 && G_strcasecmp(geofile + (namelen - 4), ".prj") == 0) {
+		G_warning(_("<%s> is not a GDAL dataset, trying to open it as ESRI WKT"),
+			  geofile);
+
+		return input_wkt(geofile);
+	    }
+	    else {
+		G_fatal_error(_("Unable to read georeferenced file <%s> using "
+				"GDAL library"), geofile);
+	    }
+	}
     }
 
     if (cellhd.proj == PROJECTION_XY)
 	G_warning(_("Read of file %s was successful, but it did not contain "
 		    "projection information. 'XY (unprojected)' will be used"),
 		  geofile);
+
+    if (hSRS) {
+	const char *authkey, *authname, *authcode;
+
+	authkey = NULL;
+	if (OSRIsProjected(hSRS))
+	    authkey = "PROJCS";
+	else if (OSRIsGeographic(hSRS))
+	    authkey = "GEOGCS";
+
+	if (authkey) {
+	    authname = OSRGetAuthorityName(hSRS, authkey);
+	    if (authname && *authname && strcmp(authname, "EPSG") == 0) {
+		authcode = OSRGetAuthorityCode(hSRS, authkey);
+		if (authcode && *authcode) {
+		    projepsg = G_create_key_value();
+		    G_set_key_value("epsg", authcode, projepsg);
+		}
+	    }
+	}
+    }
 
     return ret;
 
@@ -345,37 +407,4 @@ static void set_gdal_region(GDALDatasetH hDS)
     return;
 }
 
-/**
- * \brief Populates global cellhd with region settings based on 
- *        georeferencing information in an OGR layer
- * 
- * \param Ogr_layer OGR layer to retrieve georeferencing information from
- **/
-
-static void set_ogr_region(OGRLayerH Ogr_layer)
-{
-    OGREnvelope oExt;
-
-    /* Populate with initial values in case we can't set everything */
-    set_default_region();
-
-    /* Code below originally from v.in.ogr */
-    if ((OGR_L_GetExtent(Ogr_layer, &oExt, 1)) == OGRERR_NONE) {
-	cellhd.north = oExt.MaxY;
-	cellhd.south = oExt.MinY;
-	cellhd.west = oExt.MinX;
-	cellhd.east = oExt.MaxX;
-	cellhd.rows = 20;	/* TODO - calculate useful values */
-	cellhd.cols = 20;
-	cellhd.ns_res = (cellhd.north - cellhd.south) / cellhd.rows;
-	cellhd.ew_res = (cellhd.east - cellhd.west) / cellhd.cols;
-
-	cellhd.rows3 = cellhd.rows;
-	cellhd.cols3 = cellhd.cols;
-	cellhd.ns_res3 = cellhd.ns_res;
-	cellhd.ew_res3 = cellhd.ew_res;
-    }
-
-    return;
-}
 #endif /* HAVE_OGR */

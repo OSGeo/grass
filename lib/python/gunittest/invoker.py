@@ -24,6 +24,8 @@ from .reporters import (GrassTestFilesMultiReporter,
                         NoopFileAnonymizer, keyvalue_to_text)
 from .utils import silent_rmtree, ensure_dir
 
+from grass.script.utils import decode, encode, _get_encoding
+
 try:
     from string import maketrans
 except ImportError:
@@ -103,6 +105,7 @@ class GrassTestFilesInvoker(object):
 
         :param loader.GrassTestPythonModule module:
         """
+        # TODO: use g.mapset -c, no need to duplicate functionality
         # using path.sep but also / and \ for cases when it is confused
         # (namely the case of Unix path on MS Windows)
         # replace . to get rid of unclean path
@@ -116,11 +119,11 @@ class GrassTestFilesInvoker(object):
             silent_rmtree(mapset_dir)
         os.mkdir(mapset_dir)
         # TODO: default region in mapset will be what?
-        # copy WIND file from PERMANENT
+        # copy DEFAULT_WIND file from PERMANENT to WIND
         # TODO: this should be a function in grass.script (used also in gis_set.py, PyGRASS also has its way with Mapset)
         # TODO: are premisions an issue here?
-        shutil.copy(os.path.join(gisdbase, location, 'PERMANENT', 'WIND'),
-                    os.path.join(mapset_dir))
+        shutil.copy(os.path.join(gisdbase, location, 'PERMANENT', 'DEFAULT_WIND'),
+                    os.path.join(mapset_dir, 'WIND'))
         return mapset, mapset_dir
 
     def _run_test_module(self, module, results_dir, gisdbase, location):
@@ -151,8 +154,6 @@ class GrassTestFilesInvoker(object):
 
         stdout_path = os.path.join(cwd, 'stdout.txt')
         stderr_path = os.path.join(cwd, 'stderr.txt')
-        stdout = open(stdout_path, 'w')
-        stderr = open(stderr_path, 'w')
 
         self.reporter.start_file_test(module)
         # TODO: we might clean the directory here before test if non-empty
@@ -161,10 +162,13 @@ class GrassTestFilesInvoker(object):
             # ignoring shebang line to use current Python
             # and also pass parameters to it
             # add also '-Qwarn'?
-            p = subprocess.Popen([sys.executable, '-tt', '-3',
-                                  module.abs_file_path],
-                                 cwd=cwd, env=env,
-                                 stdout=stdout, stderr=stderr)
+            if sys.version_info.major >= 3:
+                args = [sys.executable, '-tt', module.abs_file_path]
+            else:
+                args = [sys.executable, '-tt', '-3', module.abs_file_path]
+            p = subprocess.Popen(args, cwd=cwd, env=env,
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE)
         elif module.file_type == 'sh':
             # ignoring shebang line to pass parameters to shell
             # expecting system to have sh or something compatible
@@ -180,14 +184,46 @@ class GrassTestFilesInvoker(object):
             #                of an '&&' or '||' operator.
             p = subprocess.Popen(['sh', '-e', '-x', module.abs_file_path],
                                  cwd=cwd, env=env,
-                                 stdout=stdout, stderr=stderr)
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE)
         else:
             p = subprocess.Popen([module.abs_file_path],
                                  cwd=cwd, env=env,
-                                 stdout=stdout, stderr=stderr)
-        returncode = p.wait()
-        stdout.close()
-        stderr.close()
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE)
+        stdout, stderr = p.communicate()
+        returncode = p.returncode
+        encodings = [_get_encoding(), 'utf8', 'latin-1', 'ascii']
+        detected = False
+        idx = 0
+        while not detected:
+            try:
+                stdout = decode(stdout, encoding=encodings[idx])
+                detected = True
+            except:
+                idx += 1
+                pass
+
+        detected = False
+        idx = 0
+        while not detected:
+            try:
+                stderr = decode(stderr, encoding=encodings[idx])
+                detected = True
+            except:
+                idx += 1
+                pass
+
+        with open(stdout_path, 'w') as stdout_file:
+            stdout_file.write(stdout)
+        with open(stderr_path, 'w') as stderr_file:
+            if type(stderr) == 'bytes':
+                stderr_file.write(decode(stderr))
+            else:
+                if isinstance(stderr, str):
+                    stderr_file.write(stderr)
+                else:
+                    stderr_file.write(stderr.encode('utf8'))
         self._file_anonymizer.anonymize([stdout_path, stderr_path])
 
         test_summary = update_keyval_file(

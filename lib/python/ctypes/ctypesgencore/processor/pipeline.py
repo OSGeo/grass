@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os
 import re
@@ -54,7 +54,9 @@ def process(data, options):
     filter_by_regexes_exclude(data, options)
     filter_by_regexes_include(data, options)
     remove_macros(data, options)
-    fix_conflicting_names(data, options)
+    if options.output_language == "python":
+        # this function is python specific
+        fix_conflicting_names(data, options)
     find_source_libraries(data, options)
 
     calculate_final_inclusion(data, options)

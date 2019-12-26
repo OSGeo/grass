@@ -1,6 +1,9 @@
 #!/usr/bin/env sh
 # Author: Ivan Mincik, ivan.mincik@gmail.com
 
+set -e
+
+export CC="ccache $CC"
 ./configure --host=x86_64-linux-gnu \
             --build=x86_64-linux-gnu \
             --prefix=/usr/lib \
@@ -19,6 +22,7 @@
             --with-netcdf \
             --with-blas \
             --with-sqlite \
+            --with-zstd \
             --enable-largefile \
             --with-freetype-includes=/usr/include/freetype2/ \
             --with-postgres-includes=/usr/include/postgresql/ \

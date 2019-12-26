@@ -59,12 +59,12 @@ int do_astar(void)
     while (heap_size > 0) {
 	G_percent(count++, n_points, 1);
 	if (count > n_points)
-	    G_fatal_error(_("%lld surplus points"),
+	    G_fatal_error(_("%"PRI_OFF_T" surplus points"),
 	                  heap_size);
 
 	if (heap_size > n_points)
 	    G_fatal_error
-		(_("Too many points in heap %lld, should be %lld"),
+		(_("Too many points in heap %"PRI_OFF_T", should be %"PRI_OFF_T""),
 		 heap_size, n_points);
 
 	heap_p = heap_drop();

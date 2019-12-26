@@ -70,7 +70,7 @@
       <module-item name="r.mask">
         <label>Mask</label>
       </module-item>
-      <wxgui-item name="RasterMapCalculator"/>
+      <subtoolbox name="RasterMapCalculator"/>
       <subtoolbox name="NeighborhoodAnalysis"/>
       <subtoolbox name="OverlayRasters"/>
       <subtoolbox name="SolarRadianceAndShadows"/>
@@ -150,10 +150,22 @@
       <subtoolbox name="TransformImage"/>
       <separator/>
       <subtoolbox name="SatelliteImagesTools"/>
+      <subtoolbox name="ImageryGuiTools"/>
       <subtoolbox name="SatelliteImagesProducts"/>
       <subtoolbox name="EvapotranspirationCalculation"/>
       <separator/>
       <subtoolbox name="ImageryReportsAndStatistics"/>
+    </items>
+  </toolbox>
+  <toolbox name="ImageryGuiTools">
+    <label>Orthophoto tools</label>
+    <items>
+      <wxgui-item name="ManagingGCPsfor3DCorrection">
+        <label>Manage GCPs for 3D correction</label>
+      </wxgui-item>
+      <wxgui-item name="CorrectsScanningDistortions">
+        <label>Corrects scanning distortions</label>
+      </wxgui-item>
     </items>
   </toolbox>
   <toolbox name="Volumes">
@@ -563,6 +575,18 @@
       </module-item>
     </items>
   </toolbox>
+  <toolbox name="RasterMapCalculator">
+    <label>Raster map calculator</label>
+    <items>
+      <module-item name="r.mapcalc.simple">
+        <label>Simplified raster map calculator</label>
+      </module-item>
+      <module-item name="r.mapcalc">
+        <label>Raster map calculator</label>
+        <handler>OnMapCalculator</handler>
+      </module-item>
+    </items>
+  </toolbox>
   <toolbox name="GRASSWorkingEnvironment">
     <label>GRASS working environment</label>
     <items>
@@ -790,6 +814,9 @@
       <separator/>
       <module-item name="r.slope.aspect">
         <label>Slope and aspect</label>
+      </module-item>
+      <module-item name="r.geomorphon">
+        <label>Landforms</label>
       </module-item>
       <module-item name="r.param.scale">
         <label>Terrain parameters</label>
@@ -1344,6 +1371,9 @@
   <toolbox name="OverlayVectorMaps">
     <label>Overlay vector maps</label>
     <items>
+      <module-item name="v.clip">
+        <label>Clip vector maps</label>
+      </module-item>
       <module-item name="v.overlay">
         <label>Overlay vector maps</label>
       </module-item>
@@ -1444,6 +1474,10 @@
       </module-item>
       <module-item name="v.db.univar">
         <label>Univariate statistics for attribute columns</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.profile">
+        <label>Sample transects</label>
       </module-item>
       <separator/>
       <module-item name="v.qcount">

@@ -1,12 +1,13 @@
+import ctypes
 import os
 import sys
-
-import ctypes
+import six
 from ctypes import *
+from grass.script.utils import encode
 
-if sys.version_info.major == 3:
+if sys.version_info.major >= 3:
     long = int
-
+    unicode = str
 
 _int_types = (c_int16, c_int32)
 if hasattr(ctypes, 'c_int64'):
@@ -45,7 +46,6 @@ def POINTER(obj):
 
 
 class UserString:
-
     def __init__(self, seq):
         if isinstance(seq, str):
             self.data = seq
@@ -292,8 +292,8 @@ class String(MutableString, Union):
                 ('data', c_char_p)]
 
     def __init__(self, obj=""):
-        if isinstance(obj, (str, UserString)):
-            self.data = str(obj)
+        if isinstance(obj, (str, unicode, bytes, UserString)):
+            self.data = encode(obj)
         else:
             self.raw = obj
 
@@ -310,7 +310,11 @@ class String(MutableString, Union):
             return obj
 
         # Convert from str
-        elif isinstance(obj, str):
+        elif isinstance(obj, bytes):
+            return cls(obj)
+
+        # Convert from str/unicode
+        elif isinstance(obj, (str, unicode)):
             return cls(obj)
 
         # Convert from c_char_p
@@ -325,13 +329,17 @@ class String(MutableString, Union):
         elif isinstance(obj, int):
             return cls(cast(obj, POINTER(c_char)))
 
+        # Convert from c_char array
+        elif isinstance(obj, c_char * len(obj)):
+            return obj
+
         # Convert from object
         else:
             return String.from_param(obj._as_parameter_)
     from_param = classmethod(from_param)
 
 
-def ReturnString(obj):
+def ReturnString(obj, func=None, arguments=None):
     return String.from_param(obj)
 
 # As of ctypes 1.0, ctypes does not support custom error-checking
@@ -356,10 +364,12 @@ def UNCHECKED(type):
 
 class _variadic_function(object):
 
-    def __init__(self, func, restype, argtypes):
+    def __init__(self, func, restype, argtypes, errcheck):
         self.func = func
         self.func.restype = restype
         self.argtypes = argtypes
+        if errcheck:
+            self.func.errcheck = errcheck
 
     def _as_parameter_(self):
         # So we can pass this variadic function as a function pointer

@@ -19,7 +19,6 @@ This program is free software under the GNU General Public License
 """
 
 import os
-from core.utils import _
 
 import wx
 
@@ -29,6 +28,7 @@ try:
     hasPIL = True
 except ImportError:
     hasPIL = False
+from gui_core.wrap import NewId
 
 
 class OverlayController(object):
@@ -46,7 +46,7 @@ class OverlayController(object):
         self._cmd = None   # to be set by user
         self._name = None  # to be defined by subclass
         self._removeLabel = None  # to be defined by subclass
-        self._id = wx.NewId()
+        self._id = NewId()
         self._dialog = None
 
         # signals that overlay or its visibility changed
@@ -334,7 +334,7 @@ class LegendController(OverlayController):
     def _finishResizing(self):
         window = self._giface.GetMapWindow()
         window.mouseLeftUp.disconnect(self._finishResizing)
-        screenSize = window.GetClientSizeTuple()
+        screenSize = window.GetClientSize()
         self.ResizeLegend(
             window.mouse["begin"],
             window.mouse["end"],

@@ -74,7 +74,10 @@ is_point_outside_max_dist(Viewpoint vp, GridHeader hd,
 			  dimensionType row, dimensionType col,
 			  float maxDist);
 
-
+/*determines if the point at row,col is within min and max angle (in 0-360, 0 is east, CCW) */
+int is_point_inside_angle(Viewpoint vp,
+                         dimensionType row, dimensionType col,
+                         float minAngle, float maxAngle);
 
 /*sort the event list by the angle around the viewpoint) */
 void sort_event_list(AMI_STREAM < AEvent > **eventList);
@@ -96,7 +99,7 @@ void print_event(AEvent a, int debug_level);
 
     /*computes the distance from the event to the viewpoint. Note: all 3
        //events associate to a cell are considered at the same distance, from
-       //the center of teh cell to the viewpoint */
+       //the center of the cell to the viewpoint */
 double get_square_distance_from_viewpoint(const AEvent & a,
 					  const Viewpoint & vp);
 

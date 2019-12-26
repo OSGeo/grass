@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ############################################################################
 #
@@ -18,6 +18,7 @@
 #% description: Exports attribute tables into various formats.
 #% keyword: database
 #% keyword: export
+#% keyword: output
 #% keyword: attribute table
 #%end
 
@@ -59,10 +60,6 @@ import os
 from grass.script.utils import try_remove, basename
 from grass.script import core as gcore
 from grass.exceptions import CalledModuleError
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 
 def main():

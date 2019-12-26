@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ############################################################################
 #
@@ -56,10 +56,6 @@ import os
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
 
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
-
 
 def main():
     global tmp
@@ -101,5 +97,5 @@ def main():
 
 if __name__ == "__main__":
     options, flags = gscript.parser()
-    nuldev = file(os.devnull, 'w')
+    nuldev = open(os.devnull, 'w')
     main()

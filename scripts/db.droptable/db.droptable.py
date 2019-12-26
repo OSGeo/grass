@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ############################################################################
 #
@@ -44,11 +44,7 @@
 
 import sys
 import grass.script as grass
-
-# i18N
-import os
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+from grass.script.utils import encode
 
 
 def main():
@@ -75,8 +71,9 @@ def main():
 
     # check if table exists
     if not grass.db_table_exist(table):
-        grass.fatal(_("Table <%s> not found in database <%s>") %
-                    (table, database))
+        grass.warning(_("Table <%s> not found in database <%s>") %
+                       (table, database))
+        sys.exit(0)
 
     # check if table is used somewhere (connected to vector map)
     used = grass.db.db_table_in_vector(table)
@@ -93,7 +90,7 @@ def main():
 
     p = grass.feed_command('db.execute', input='-', database=database,
                            driver=driver)
-    p.stdin.write("DROP TABLE " + table)
+    p.stdin.write(encode("DROP TABLE " + table))
     p.stdin.close()
     p.wait()
     if p.returncode != 0:

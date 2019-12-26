@@ -26,7 +26,7 @@ def dict2html(dic, keys=None, border='',
     :param str vdec: string to decorate the value (i.e. "b", "i", etc.)
 
     >>> dic = {'key 0': 0, 'key 1': 1}
-    >>> print dict2html(dic)
+    >>> print (dict2html(dic))
     <table>
         <tr>
           <td>key 0</td>
@@ -37,7 +37,7 @@ def dict2html(dic, keys=None, border='',
           <td>1</td>
         </tr>
     </table>
-    >>> print dict2html(dic, border="1")
+    >>> print (dict2html(dic, border="1"))
     <table border='1'>
         <tr>
           <td>key 0</td>
@@ -48,7 +48,7 @@ def dict2html(dic, keys=None, border='',
           <td>1</td>
         </tr>
     </table>
-    >>> print dict2html(dic, kdec='b', vfmt='%05d', vdec='i')
+    >>> print (dict2html(dic, kdec='b', vfmt='%05d', vdec='i'))
     <table>
         <tr>
           <td><b>key 0</b></td>
@@ -60,8 +60,8 @@ def dict2html(dic, keys=None, border='',
         </tr>
     </table>
     >>> dic = {'key 0': (2, 3), 'key 1': (10, 5)}
-    >>> print dict2html(dic, kdec='b', vdec='i',
-    ...                 vfun=lambda x: "%d<sup>%.1f</sup>" % x)
+    >>> print (dict2html(dic, kdec='b', vdec='i',
+    ...                 vfun=lambda x: "%d<sup>%.1f</sup>" % x))
     <table>
         <tr>
           <td><b>key 0</b></td>

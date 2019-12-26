@@ -15,6 +15,7 @@ This program is free software under the GNU General Public License
 """
 
 import textwrap
+import six
 
 import wx
 import wx.lib.colourselect as csel
@@ -24,8 +25,8 @@ from core.debug import Debug
 from gui_core.gselect import ColumnSelect
 from core.units import Units
 from core.settings import UserSettings
-from core.utils import _
-from gui_core.wrap import SpinCtrl, Button
+from gui_core.wrap import SpinCtrl, Button, StaticText, \
+    StaticBox
 
 
 class VDigitSettingsDialog(wx.Dialog):
@@ -104,7 +105,7 @@ class VDigitSettingsDialog(wx.Dialog):
 
         self.symbology = {}
         for label, key in self._symbologyData():
-            textLabel = wx.StaticText(panel, wx.ID_ANY, label)
+            textLabel = StaticText(panel, wx.ID_ANY, label)
             color = csel.ColourSelect(
                 panel, id=wx.ID_ANY, colour=UserSettings.Get(
                     group='vdigit', key='symbol', subkey=[
@@ -154,7 +155,7 @@ class VDigitSettingsDialog(wx.Dialog):
         #
         # display section
         #
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -163,13 +164,13 @@ class VDigitSettingsDialog(wx.Dialog):
         flexSizer = wx.FlexGridSizer(cols=3, hgap=5, vgap=5)
         flexSizer.AddGrowableCol(0)
         # line width
-        text = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Line width"))
+        text = StaticText(parent=panel, id=wx.ID_ANY, label=_("Line width"))
         self.lineWidthValue = SpinCtrl(
             parent=panel, id=wx.ID_ANY, size=(75, -1),
             initial=UserSettings.Get(
                 group='vdigit', key="lineWidth", subkey='value'),
             min=1, max=1e6)
-        units = wx.StaticText(
+        units = StaticText(
             parent=panel, id=wx.ID_ANY, size=(115, -1),
             label=UserSettings.Get(
                 group='vdigit', key="lineWidth", subkey='units'),
@@ -195,7 +196,7 @@ class VDigitSettingsDialog(wx.Dialog):
         #
         # snapping section
         #
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -205,7 +206,7 @@ class VDigitSettingsDialog(wx.Dialog):
         flexSizer.AddGrowableCol(0)
 
         # snapping
-        text = wx.StaticText(
+        text = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Snapping threshold"))
@@ -245,7 +246,7 @@ class VDigitSettingsDialog(wx.Dialog):
                 subkey='enabled'))
         vertexSizer.Add(self.snapVertex, proportion=0, flag=wx.EXPAND)
         self.mapUnits = self.parent.MapWindow.Map.GetProjInfo()['units']
-        self.snappingInfo = wx.StaticText(
+        self.snappingInfo = StaticText(
             parent=panel, id=wx.ID_ANY,
             label=_("Snapping threshold is %(value).1f %(units)s") %
             {'value': self.digit.GetDisplay().GetThreshold(),
@@ -261,7 +262,7 @@ class VDigitSettingsDialog(wx.Dialog):
         #
         # select box
         #
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -282,7 +283,7 @@ class VDigitSettingsDialog(wx.Dialog):
         # threshold
         flexSizer = wx.FlexGridSizer(cols=3, hgap=5, vgap=5)
         flexSizer.AddGrowableCol(0)
-        text = wx.StaticText(
+        text = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Select threshold"))
@@ -291,7 +292,7 @@ class VDigitSettingsDialog(wx.Dialog):
             initial=UserSettings.Get(
                 group='vdigit', key="selectThresh", subkey='value'),
             min=1, max=1e6)
-        units = wx.StaticText(
+        units = StaticText(
             parent=panel, id=wx.ID_ANY, size=(115, -1),
             label=UserSettings.Get(
                 group='vdigit', key="lineWidth", subkey='units'),
@@ -340,7 +341,7 @@ class VDigitSettingsDialog(wx.Dialog):
         #
         # digitize lines box
         #
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel, id=wx.ID_ANY, label=" %s " %
             _("Digitize lines/boundaries"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
@@ -365,7 +366,7 @@ class VDigitSettingsDialog(wx.Dialog):
         #
         # digitize areas box
         #
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -392,7 +393,7 @@ class VDigitSettingsDialog(wx.Dialog):
         #
         # save-on-exit box
         #
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -427,7 +428,7 @@ class VDigitSettingsDialog(wx.Dialog):
         #
         # query tool box
         #
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -466,7 +467,7 @@ class VDigitSettingsDialog(wx.Dialog):
             border=1)
         flexSizer = wx.FlexGridSizer(cols=4, hgap=5, vgap=5)
         flexSizer.AddGrowableCol(0)
-        txt = wx.StaticText(
+        txt = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Select lines"))
@@ -486,7 +487,7 @@ class VDigitSettingsDialog(wx.Dialog):
                 group='vdigit',
                 key="queryLength",
                 subkey='thresh'))
-        units = wx.StaticText(
+        units = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label="%s" %
@@ -520,7 +521,7 @@ class VDigitSettingsDialog(wx.Dialog):
             border=1)
         flexSizer = wx.FlexGridSizer(cols=4, hgap=5, vgap=5)
         flexSizer.AddGrowableCol(0)
-        txt = wx.StaticText(
+        txt = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Select dangles"))
@@ -540,7 +541,7 @@ class VDigitSettingsDialog(wx.Dialog):
                 group='vdigit',
                 key="queryDangle",
                 subkey='thresh'))
-        units = wx.StaticText(
+        units = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label="%s" %
@@ -586,7 +587,7 @@ class VDigitSettingsDialog(wx.Dialog):
         #
         # add new record
         #
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -612,7 +613,7 @@ class VDigitSettingsDialog(wx.Dialog):
         settings = ((_("Layer"), 1), (_("Category"), 1),
                     (_("Mode"), _("Next to use")))
         # layer
-        text = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Layer"))
+        text = StaticText(parent=panel, id=wx.ID_ANY, label=_("Layer"))
         self.layer = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(125, -1),
                               min=1, max=1e3)
         self.layer.SetValue(int(UserSettings.Get(
@@ -621,7 +622,7 @@ class VDigitSettingsDialog(wx.Dialog):
         flexSizer.Add(self.layer, proportion=0,
                       flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
         # category number
-        text = wx.StaticText(
+        text = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Category number"))
@@ -637,7 +638,7 @@ class VDigitSettingsDialog(wx.Dialog):
         flexSizer.Add(self.category, proportion=0,
                       flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
         # category mode
-        text = wx.StaticText(
+        text = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Category mode"))
@@ -663,7 +664,7 @@ class VDigitSettingsDialog(wx.Dialog):
         #
         # delete existing record
         #
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel, id=wx.ID_ANY, label=" %s " %
             _("Delete existing feature(s)"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
@@ -687,8 +688,8 @@ class VDigitSettingsDialog(wx.Dialog):
         #
         # geometry attributes (currently only length and area are supported)
         #
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s " % _("Geometry attributes"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s " % _("Geometry attributes"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
         self.geomAttrb = {'length': {'label': _('length')},
@@ -767,8 +768,8 @@ class VDigitSettingsDialog(wx.Dialog):
         note = '\n'.join(textwrap.wrap(_("Note: These settings are stored "
                                          "in the workspace not in the vector digitizer "
                                          "preferences."), 55))
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=note),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=note),
                       pos=(3, 0), span=(1, 3))
 
         gridSizer.AddGrowableCol(0)
@@ -817,7 +818,7 @@ class VDigitSettingsDialog(wx.Dialog):
         checked = event.IsChecked()
         id = event.GetId()
         key = None
-        for attrb, val in self.geomAttrb.iteritems():
+        for attrb, val in six.iteritems(self.geomAttrb):
             if val['check'] == id:
                 key = attrb
                 break
@@ -985,7 +986,7 @@ class VDigitSettingsDialog(wx.Dialog):
         if self.parent.GetLayerManager():
             self.parent.GetLayerManager().WorkspaceChanged()  # geometry attributes
         # symbology
-        for key, (enabled, color) in self.symbology.iteritems():
+        for key, (enabled, color) in six.iteritems(self.symbology):
             if enabled:
                 UserSettings.Set(group='vdigit', key='symbol',
                                  subkey=[key, 'enabled'],
@@ -1033,7 +1034,7 @@ class VDigitSettingsDialog(wx.Dialog):
             item = tree.FindItemByData('maplayer', mapLayer)
         else:
             item = None
-        for key, val in self.geomAttrb.iteritems():
+        for key, val in six.iteritems(self.geomAttrb):
             checked = self.FindWindowById(val['check']).IsChecked()
             column = self.FindWindowById(val['column']).GetValue()
             unitsIdx = self.FindWindowById(val['units']).GetSelection()

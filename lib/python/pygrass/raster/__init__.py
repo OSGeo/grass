@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import (nested_scopes, generators, division, absolute_import,
                         with_statement, print_function, unicode_literals)
-import os
 import ctypes
 import numpy as np
 
 #
 # import GRASS modules
 #
-from grass.script import fatal, warning
-from grass.script import core as grasscore
+from grass.script import fatal
 
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
@@ -35,7 +33,8 @@ from grass.pygrass.raster.rowio import RowIO
 
 WARN_OVERWRITE = "Raster map <{0}> already exists and will be overwritten"
 
-test_raster_name="Raster_test_map"
+test_raster_name = "Raster_test_map"
+
 
 class RasterRow(RasterAbstractBase):
     """Raster_row_access": Inherits: "Raster_abstract_base" and implements
@@ -53,6 +52,7 @@ class RasterRow(RasterAbstractBase):
         * No mathematical operation like __add__ and stuff for the Raster
           object (only for rows), since r.mapcalc is more sophisticated and
           faster
+        * Raises IndexError if [row] is out of range
 
         Examples:
 
@@ -67,7 +67,7 @@ class RasterRow(RasterAbstractBase):
         >>> elev.has_cats()
         True
         >>> elev.mode
-        u'r'
+        'r'
         >>> elev.mtype
         'CELL'
         >>> elev.num_cats()
@@ -91,7 +91,7 @@ class RasterRow(RasterAbstractBase):
 
         >>> attrs = list(elev.hist)
         >>> attrs[0]
-        ('name', u'Raster_test_map')
+        ('name', 'Raster_test_map')
         >>> attrs[2]
         ('mtype', '')
 
@@ -328,7 +328,7 @@ class RasterSegment(RasterAbstractBase):
     def __setitem__(self, key, row):
         """Return the row of Raster object, slice allowed."""
         if isinstance(key, slice):
-            #Get the start, stop, and step from the slice
+            # Get the start, stop, and step from the slice
             return [self.put_row(ii, row)
                     for ii in range(*key.indices(len(self)))]
         elif isinstance(key, tuple):
@@ -409,7 +409,7 @@ class RasterSegment(RasterAbstractBase):
             >>> map_b = RasterSegment(test_raster_name + "_segment")
             >>> map_a.open('r')
             >>> map_b.open('w', mtype="CELL", overwrite=True)
-            >>> for row in xrange(map_a.info.rows):
+            >>> for row in range(map_a.info.rows):
             ...     map_b[row] = map_a[row] + 1000
             >>> map_a.close()
             >>> map_b.close()
@@ -439,7 +439,7 @@ class RasterSegment(RasterAbstractBase):
 
             >>> elev = RasterSegment(test_raster_name)
             >>> elev.open('r')
-            >>> for i in xrange(4):
+            >>> for i in range(4):
             ...     elev.get(i,i)
             11
             22
@@ -476,8 +476,8 @@ class RasterSegment(RasterAbstractBase):
             >>> map_b = RasterSegment(test_raster_name + "_segment")
             >>> map_a.open('r')
             >>> map_b.open('w', mtype="FCELL", overwrite=True)
-            >>> for row in xrange(map_a.info.rows):
-            ...     for col in xrange(map_a.info.cols):
+            >>> for row in range(map_a.info.rows):
+            ...     for col in range(map_a.info.cols):
             ...         value = map_a.get(row,col)
             ...         map_b.put(row,col,value + 100)
             >>> map_a.close()
@@ -487,10 +487,10 @@ class RasterSegment(RasterAbstractBase):
             >>> map_b.open("r")
             >>> for row in map_b:
             ...         row
-            Buffer([ 111.,  121.,  131.,  141.], dtype=float32)
-            Buffer([ 112.,  122.,  132.,  142.], dtype=float32)
-            Buffer([ 113.,  123.,  133.,  143.], dtype=float32)
-            Buffer([ 114.,  124.,  134.,  144.], dtype=float32)
+            Buffer([111., 121., 131., 141.], dtype=float32)
+            Buffer([112., 122., 132., 142.], dtype=float32)
+            Buffer([113., 123., 133., 143.], dtype=float32)
+            Buffer([114., 124., 134., 144.], dtype=float32)
             >>> map_b.close()
 
         """
@@ -545,14 +545,14 @@ class RasterSegment(RasterAbstractBase):
                 self.hist.read()
 
                 if self.mode == "rw":
-                    #warning(_(WARN_OVERWRITE.format(self)))
+                    # warning(_(WARN_OVERWRITE.format(self)))
                     # Close the file descriptor and open it as new again
                     libraster.Rast_close(self._fd)
                     self._fd = libraster.Rast_open_new(
                         self.name, self._gtype)
             # Here we simply overwrite the existing map without content copying
             elif self.mode == "w":
-                #warning(_(WARN_OVERWRITE.format(self)))
+                # warning(_(WARN_OVERWRITE.format(self)))
                 self._gtype = RTYPE[self.mtype]['grass type']
                 self.segment.open(self)
                 self._fd = libraster.Rast_open_new(self.name, self._gtype)
@@ -677,7 +677,7 @@ def raster2numpy_img(rastname, region, color="ARGB", array=None):
         color_mode = 4
 
     if array is None:
-        array = np.ndarray((region.rows*region.cols*scale), np.uint8)
+        array = np.ndarray((region.rows * region.cols * scale), np.uint8)
 
     libraster.Rast_map_to_img_str(rastname, color_mode,
                                   array.ctypes.data_as(ctypes.POINTER(ctypes.c_uint8)))
@@ -708,16 +708,16 @@ def numpy2raster(array, mtype, rastname, overwrite=False):
 if __name__ == "__main__":
 
     import doctest
-    from grass.pygrass import utils
     from grass.pygrass.modules import Module
     Module("g.region", n=40, s=0, e=40, w=0, res=10)
-    Module("r.mapcalc", expression="%s = row() + (10 * col())"%(test_raster_name),
-                             overwrite=True)
+    Module("r.mapcalc",
+        expression="%s = row() + (10 * col())" % (test_raster_name),
+        overwrite=True)
     Module("r.support", map=test_raster_name,
-                        title="A test map",
-                        history="Generated by r.mapcalc",
-                        description="This is a test map")
-    cats="""11:A
+        title="A test map",
+        history="Generated by r.mapcalc",
+        description="This is a test map")
+    cats = """11:A
             12:B
             13:C
             14:D

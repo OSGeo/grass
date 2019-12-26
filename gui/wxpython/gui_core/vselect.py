@@ -25,20 +25,20 @@ import random
 import wx
 import wx.lib.mixins.listctrl as listmix
 
-from core.utils import _
 from core.gcmd import GMessage, GError, GWarning
 from core.gcmd import RunCommand
+from gui_core.wrap import Button, ListCtrl
 
 import grass.script as grass
 from grass.pydispatch.signal import Signal
 
 
-class VectorSelectList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
+class VectorSelectList(ListCtrl, listmix.ListCtrlAutoWidthMixin):
     """Widget for managing vector features selected from map display
     """
 
     def __init__(self, parent):
-        wx.ListCtrl.__init__(
+        ListCtrl.__init__(
             self,
             parent=parent,
             id=wx.ID_ANY,
@@ -57,8 +57,8 @@ class VectorSelectList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         if 'Category' not in item:
             return
 
-        pos = self.InsertStringItem(0, str(item['Category']))
-        self.SetStringItem(pos, 1, str(item['Type']))
+        pos = self.InsertItem(0, str(item['Category']))
+        self.SetItem(pos, 1, str(item['Type']))
         self.dictIndex[str(item['Category'])] = pos
 
     def RemoveItem(self, item):
@@ -132,7 +132,7 @@ class VectorSelectBase():
         self._dialog = VectorSelectDialog(parent=self.parent)
         self._dialog.Bind(wx.EVT_CLOSE, self.OnCloseDialog)
         if createButton:
-            createMap = wx.Button(
+            createMap = Button(
                 self._dialog, wx.ID_ANY, _("Create a new map"))
             createMap.Bind(wx.EVT_BUTTON, self.OnExportMap)
             self._dialog.AddWidget(createMap, proportion=0.1)
@@ -244,7 +244,9 @@ class VectorSelectBase():
         self.updateLayer.emit()
         if len(self.selectedFeatures) > 0:
             self.painter.SetLayer(self.selectedFeatures[0]['Layer'])
-            self.painter.SetMap(self.selectedFeatures[0]['Map'])
+            self.painter.SetMap(
+                self.selectedFeatures[0]['Map'] + '@' + self.selectedFeatures[0]['Mapset']
+            )
             tmp = list()
             for i in self.selectedFeatures:
                 tmp.append(i['Category'])

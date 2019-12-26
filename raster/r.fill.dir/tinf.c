@@ -11,7 +11,7 @@
  * The actual functions follow. */
 
 int (*is_null) (void *);
-int (*bpe) ();
+size_t (*bpe) ();
 void *(*get_max) (void *, void *);
 void *(*get_min) (void *, void *);
 void (*get_row) (int, void *, int);
@@ -100,17 +100,17 @@ int is_null_d(void *value)
 }
 
 /* return the size of the current type */
-int bpe_c()
+size_t bpe_c()
 {
     return sizeof(CELL);
 }
 
-int bpe_f()
+size_t bpe_f()
 {
     return sizeof(FCELL);
 }
 
-int bpe_d()
+size_t bpe_d()
 {
     return sizeof(DCELL);
 }
@@ -210,17 +210,17 @@ void put_row_d(int fd, void *row)
 }
 
 /* Allocate memory for one line of data */
-void *get_buf_c()
+void *get_buf_c(void)
 {
     return (void *)Rast_allocate_c_buf();
 }
 
-void *get_buf_f()
+void *get_buf_f(void)
 {
     return (void *)Rast_allocate_f_buf();
 }
 
-void *get_buf_d()
+void *get_buf_d(void)
 {
     return (void *)Rast_allocate_d_buf();
 }

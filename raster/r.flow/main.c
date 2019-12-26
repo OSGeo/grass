@@ -318,7 +318,7 @@ static void calculate(void)
 
     ystep = region.ns_res * (double)loopstep;
 
-    /* FIXME - allow seed to be specified for repeatability */
+    /* You can set GRASS_RANDOM_SEED for repeatability */
     G_srand48_auto();
 
     for (row = 0, y = (double)region.north - (region.ns_res * .5);

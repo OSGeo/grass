@@ -7,8 +7,6 @@
 
 #define ODD(a)	((a) & 1)
 
-#define SEED_MAX		54772
-#define SEED_MIN		0
 #define PI       		M_PI
 
 #define CELLSORTER struct cell_sorter_

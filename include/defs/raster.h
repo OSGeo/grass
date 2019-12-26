@@ -35,6 +35,12 @@ int Rast__check_for_auto_masking(void);
 void Rast_suppress_masking(void);
 void Rast_unsuppress_masking(void);
 
+/* bands.c */
+int Rast_has_band_reference(const char *, const char *);
+int Rast_read_band_reference(const char *, const char *, char **, char **);
+int Rast_write_band_reference(const char *, const char *, const char *);
+int Rast_remove_band_reference(const char *);
+
 /* cats.c */
 int Rast_read_cats(const char *, const char *, struct Categories *);
 int Rast_read_vector_cats(const char *, const char *, struct Categories *);
@@ -528,6 +534,9 @@ void Rast_get_range_min_max(const struct Range *, CELL *, CELL *);
 void Rast_init_fp_range(struct FPRange *);
 void Rast_get_fp_range_min_max(const struct FPRange *, DCELL *, DCELL *);
 
+int Rast_read_rstats(const char *, const char *, struct R_stats *);
+void Rast_write_rstats(const char *, const struct R_stats *);
+
 /* raster.c */
 int Rast_raster_cmp(const void *, const void *, RASTER_MAP_TYPE);
 void Rast_raster_cpy(void *, const void *, int, RASTER_MAP_TYPE);
@@ -566,6 +575,11 @@ void Rast_set_window(struct Cell_head *);
 void Rast_unset_window(void);
 void Rast_set_output_window(struct Cell_head *);
 void Rast_set_input_window(struct Cell_head *);
+
+/* vrt.c */
+struct R_vrt *Rast_get_vrt(const char *, const char *);
+void Rast_close_vrt(struct R_vrt *);
+int Rast_get_vrt_row(int, void *, int, RASTER_MAP_TYPE);
 
 /* window.c */
 void Rast_get_window(struct Cell_head *);

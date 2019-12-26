@@ -19,17 +19,23 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import wx
+import sys
+import six
 from copy import copy, deepcopy
 
 import wx
-from wx.lib.mixins.listctrl import CheckListCtrlMixin, ColumnSorterMixin, ListCtrlAutoWidthMixin, TextEditMixin
+from wx.lib.mixins.listctrl import CheckListCtrlMixin, ColumnSorterMixin, \
+    ListCtrlAutoWidthMixin, TextEditMixin
 
 from core import globalvar
-from core.utils import _
+from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl, ListCtrl, \
+    BitmapFromImage
+
+if sys.version_info.major >= 3:
+    basestring = str
 
 
-class PointsList(wx.ListCtrl,
+class PointsList(ListCtrl,
                  CheckListCtrlMixin,
                  ListCtrlAutoWidthMixin,
                  ColumnSorterMixin):
@@ -74,7 +80,7 @@ class PointsList(wx.ListCtrl,
         @endcode
         """
 
-        wx.ListCtrl.__init__(self, parent, id, pos, size, style)
+        ListCtrl.__init__(self, parent, id, pos, size, style)
 
         # Mixin settings
         CheckListCtrlMixin.__init__(self)
@@ -108,8 +114,8 @@ class PointsList(wx.ListCtrl,
         self.il = self.GetImageList(wx.IMAGE_LIST_SMALL)
 
         # images for column sorting
-        SmallUpArrow = wx.BitmapFromImage(self.getSmallUpArrowImage())
-        SmallDnArrow = wx.BitmapFromImage(self.getSmallDnArrowImage())
+        SmallUpArrow = BitmapFromImage(self.getSmallUpArrowImage())
+        SmallDnArrow = BitmapFromImage(self.getSmallDnArrowImage())
         self.sm_dn = self.il.Add(SmallDnArrow)
         self.sm_up = self.il.Add(SmallUpArrow)
 
@@ -170,7 +176,7 @@ class PointsList(wx.ListCtrl,
 
         self.selIdxs.append(itemIndexes)
 
-        for hCol in self.hiddenCols.itervalues():
+        for hCol in six.itervalues(self.hiddenCols):
             defVal = hCol['colsData'][iDefVal]
             if type(hCol['colsData'][iColEd]).__name__ == "list":
                 hCol['itemDataMap'].append(hCol['colsData'][iColEd][defVal])
@@ -184,7 +190,7 @@ class PointsList(wx.ListCtrl,
         itemData[0] = self.selectedkey + 1
         self.itemDataMap.append(copy(itemData))
 
-        self.Append(map(str, itemData))
+        self.Append(list(map(str, itemData)))
 
         self.selected = self.GetItemCount() - 1
         self.SetItemData(self.selected, self.selectedkey)
@@ -235,7 +241,7 @@ class PointsList(wx.ListCtrl,
         self.itemDataMap[key][colNum] = cellVal
         if not isinstance(cellVal, basestring):
             cellVal = str(cellVal)
-        self.SetStringItem(index, colNum, cellVal)
+        self.SetItem(index, colNum, cellVal)
 
     def EditCellKey(self, key, colName, cellData):
         """Changes value in list using index (changes during sorting)"""
@@ -255,7 +261,7 @@ class PointsList(wx.ListCtrl,
         if index != -1:
             if not isinstance(cellVal, basestring):
                 cellVal = str(cellVal)
-            self.SetStringItem(index, colNum, cellVal)
+            self.SetItem(index, colNum, cellVal)
 
     def _findIndex(self, key):
         """Find index for key"""
@@ -281,13 +287,13 @@ class PointsList(wx.ListCtrl,
             return
 
         key = self.GetItemData(self.selected)
-        wx.ListCtrl.DeleteItem(self, self.selected)
+        ListCtrl.DeleteItem(self, self.selected)
 
         del self.itemDataMap[key]
         self.selIdxs.pop(key)
 
         # update hidden columns
-        for hCol in self.hiddenCols.itervalues():
+        for hCol in six.itervalues(self.hiddenCols):
             hCol['itemDataMap'].pop(key)
             hCol['selIdxs'].pop(key)
 
@@ -295,7 +301,7 @@ class PointsList(wx.ListCtrl,
         for newkey in range(key, len(self.itemDataMap)):
             index = self.FindItemData(-1, newkey + 1)
             self.itemDataMap[newkey][0] = newkey
-            self.SetStringItem(index, 0, str(newkey + 1))
+            self.SetItem(index, 0, str(newkey + 1))
             self.SetItemData(index, newkey)
 
         # update selected
@@ -389,7 +395,7 @@ class PointsList(wx.ListCtrl,
                         value = editedCell[1]
                         if not isinstance(editedCell[1], basestring):
                             value = str(editedCell[1])
-                        self.SetStringItem(index, editedCell[0], value)
+                        self.SetItem(index, editedCell[0], value)
                         self.itemDataMap[key][editedCell[0]] = editedCell[1]
                         changed = True
                     i += 1
@@ -430,7 +436,7 @@ class PointsList(wx.ListCtrl,
                 'small_up_arrow.png'),
             'rb')
         try:
-            img = wx.ImageFromStream(stream)
+            img = wx.Image(stream)
         finally:
             stream.close()
         return img
@@ -443,7 +449,7 @@ class PointsList(wx.ListCtrl,
                 'small_down_arrow.png'),
             'rb')
         try:
-            img = wx.ImageFromStream(stream)
+            img = wx.Image(stream)
         finally:
             stream.close()
         return img
@@ -552,8 +558,8 @@ class EditItem(wx.Dialog):
         panel = wx.Panel(parent=self)
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s %s " % (_(itemCap), str(pointNo + 1)))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s %s " % (_(itemCap), str(pointNo + 1)))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         # source coordinates
@@ -584,18 +590,18 @@ class EditItem(wx.Dialog):
 
                 if validator:
                     self.fields.append(
-                        wx.TextCtrl(
+                        TextCtrl(
                             parent=panel, id=wx.ID_ANY, validator=validator,
                             size=(150, -1)))
                 else:
-                    self.fields.append(wx.TextCtrl(parent=panel, id=wx.ID_ANY,
-                                                   size=(150, -1)))
+                    self.fields.append(TextCtrl(parent=panel, id=wx.ID_ANY,
+                                                size=(150, -1)))
                     value = cell[1]
                     if not isinstance(cell[1], basestring):
                         value = str(cell[1])
                     self.fields[iField].SetValue(value)
 
-            label = wx.StaticText(
+            label = StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_(
@@ -629,8 +635,8 @@ class EditItem(wx.Dialog):
         #
         # buttons
         #
-        self.btnCancel = wx.Button(panel, wx.ID_CANCEL)
-        self.btnOk = wx.Button(panel, wx.ID_OK)
+        self.btnCancel = Button(panel, wx.ID_CANCEL)
+        self.btnOk = Button(panel, wx.ID_OK)
         self.btnOk.SetDefault()
 
         btnSizer = wx.StdDialogButtonSizer()

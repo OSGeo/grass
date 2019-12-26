@@ -26,8 +26,11 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com> (MapFrameBase)
 """
 
+from __future__ import print_function
+
 import os
 import sys
+import six
 import time
 import shutil
 import fileinput
@@ -42,14 +45,13 @@ from core import utils
 from core.giface import StandaloneGrassInterface
 from core.gcmd import RunCommand
 from core.render import Map, MapLayer, Overlay, RenderMapMgr
-from core.utils import _
 from mapdisp.frame import MapFrame
 from core.debug import Debug
 from core.settings import UserSettings
 
 from grass.script.utils import try_remove
 from grass.script import core as grass
-from grass.script.task import cmdtuple_to_list
+from grass.script.task import cmdtuple_to_list, cmdlist_to_tuple
 from grass.pydispatch.signal import Signal
 
 # for standalone app
@@ -154,7 +156,7 @@ class DMonMap(Map):
             else:
                 # clean overlays after erase
                 self.oldOverlays = []
-                overlays = self._giface.GetMapDisplay().decorations.keys()
+                overlays = list(self._giface.GetMapDisplay().decorations.keys())
                 for each in overlays:
                     self._giface.GetMapDisplay().RemoveOverlay(each)
 
@@ -213,23 +215,10 @@ class DMonMap(Map):
                 classLayer = MapLayer
                 args['ltype'] = ltype
 
-                mapLayer = classLayer(name=name,
-                                      cmd=cmd,
-                                      Map=None,
-                                      hidden=True,
-                                      render=False,
-                                      mapfile=mapFile,
-                                      **args)
-                mapLayer.GetRenderMgr().updateProgress.connect(self.GetRenderMgr().ReportProgress)
-                if render_env:
-                    mapLayer.GetRenderMgr().UpdateRenderEnv(render_env)
-                    render_env = dict()
-
                 exists = False
                 for i, layer in enumerate(existingLayers):
                     if layer.GetCmd(
-                            string=True) == mapLayer.GetCmd(
-                            string=True):
+                            string=True) == utils.GetCmdString(cmdlist_to_tuple(cmd)):
                         exists = True
 
                         if layersOrder[i] == -1:
@@ -246,6 +235,18 @@ class DMonMap(Map):
                         break
                 if exists:
                     continue
+
+                mapLayer = classLayer(name=name,
+                                      cmd=cmd,
+                                      Map=None,
+                                      hidden=True,
+                                      render=False,
+                                      mapfile=mapFile,
+                                      **args)
+                mapLayer.GetRenderMgr().updateProgress.connect(self.GetRenderMgr().ReportProgress)
+                if render_env:
+                    mapLayer.GetRenderMgr().UpdateRenderEnv(render_env)
+                    render_env = dict()
 
                 newLayer = self._addLayer(mapLayer)
 
@@ -348,7 +349,7 @@ class LayerList(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         items = self._map.GetListOfLayers()
         try:
             result = items[self._index]
@@ -356,6 +357,9 @@ class LayerList(object):
             raise StopIteration
         self._index += 1
         return result
+
+    def next(self):
+        return self.__next__()
 
     def GetSelectedLayers(self, checkedOnly=True):
         # hidden and selected vs checked and selected
@@ -480,19 +484,16 @@ class DMonFrame(MapFrame):
         width, height = self.MapWindow.GetClientSize()
         for line in fileinput.input(monFile['env'], inplace=True):
             if 'GRASS_RENDER_WIDTH' in line:
-                print 'GRASS_RENDER_WIDTH={0}'.format(width)
+                print('GRASS_RENDER_WIDTH={0}'.format(width))
             elif 'GRASS_RENDER_HEIGHT' in line:
-                print 'GRASS_RENDER_HEIGHT={0}'.format(height)
+                print('GRASS_RENDER_HEIGHT={0}'.format(height))
             else:
-                print line.rstrip('\n')
+                print(line.rstrip('\n'))
 
 
 class MapApp(wx.App):
 
     def OnInit(self):
-        if not globalvar.CheckWxVersion([2, 9]):
-            wx.InitAllImageHandlers()
-
         grass.set_raise_on_error(True)
         # actual use of StandaloneGrassInterface not yet tested
         # needed for adding functionality in future
@@ -533,6 +534,18 @@ class MapApp(wx.App):
 
         self.mapFrm.GetMapWindow().SetAlwaysRenderEnabled(False)
 
+        # set default properties
+        self.mapFrm.SetProperties(render=UserSettings.Get(
+            group='display', key='autoRendering', subkey='enabled'),
+                                 mode=UserSettings.Get(
+            group='display', key='statusbarMode', subkey='selection'),
+                                 alignExtent=UserSettings.Get(
+            group='display', key='alignExtent', subkey='enabled'),
+                                 constrainRes=UserSettings.Get(
+            group='display', key='compResolution', subkey='enabled'),
+                                 showCompExtent=UserSettings.Get(
+            group='display', key='showCompExtent', subkey='enabled'))
+
         self.Map.saveToFile.connect(lambda cmd: self.mapFrm.DOutFile(cmd))
         self.Map.dToRast.connect(lambda cmd: self.mapFrm.DToRast(cmd))
         self.Map.query.connect(
@@ -546,10 +559,12 @@ class MapApp(wx.App):
     def OnExit(self):
         if __name__ == "__main__":
             # stop the timer
-            # self.timer.Stop()
+            if self.timer.IsRunning:
+                self.timer.Stop()
             # terminate thread
-            for f in monFile.itervalues():
+            for f in six.itervalues(monFile):
                 try_remove(f)
+        return True
 
     def watcher(self):
         """Redraw, if new layer appears (check's timestamp of
@@ -587,7 +602,7 @@ class MapApp(wx.App):
 
 if __name__ == "__main__":
     if len(sys.argv) != 6:
-        print __doc__
+        print(__doc__)
         sys.exit(0)
 
     # set command variable

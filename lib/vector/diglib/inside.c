@@ -26,7 +26,7 @@ dig_x_intersect(double beg_x,
     /* assumes beg_y != end_y */
 
     /* sort for numerical stability */
-    if (end_y < beg_y) {
+    if (end_x < beg_x || (end_x == beg_x && end_y < beg_y)) {
 	b = end_x;
 	end_x = beg_x;
 	beg_x = b;

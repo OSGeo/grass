@@ -18,7 +18,16 @@
 #define GRASS_GPROJECTS_H
 
 #include <grass/config.h>
+/* TODO: clean up support for PROJ 5+ */
+#ifdef HAVE_PROJ_H
+#include <proj.h>
+#define RAD_TO_DEG    57.295779513082321
+#define DEG_TO_RAD   .017453292519943296
+#else
 #include <proj_api.h>
+#define PJ_FWD 	 1
+#define PJ_INV 	-1
+#endif
 #ifdef HAVE_OGR
 #    include <ogr_srs_api.h>
 #endif
@@ -30,12 +39,19 @@
 /* GRASS relative location of datum conversion lookup tables */
 #define GRIDDIR "/etc/proj/nad"
 
+/* TODO: rename pj_ to gpj_ to avoid symbol clash with PROJ lib */
 struct pj_info
 {
+#ifdef HAVE_PROJ_H
+    PJ *pj;
+#else
     projPJ pj;
+#endif
     double meters;
     int zone;
     char proj[100];
+    char *def;
+    char *srid;
 };
 
 struct gpj_datum
@@ -66,9 +82,13 @@ struct gpj_ellps
     double a, es, rf;
 };
 
+#ifndef HAVE_PROJ_H
 /* PROJ.4's private datastructures copied from projects.h as removed
    from upstream; pending better solution. see:
    http://trac.osgeo.org/proj/ticket/98 */
+
+/* In PROJ 5, the 'struct FACTORS' is back in as 'struct P5_FACTORS',
+ * and old 'struct LP' is now back in as 'PJ_UV' */
 
 typedef struct { double u, v; } LP;
 
@@ -87,6 +107,7 @@ struct FACTORS {
 	int code;		/* info as to analytics, see following */
 };
 /* end of copy */
+#endif
 
 #include <grass/defs/gprojects.h>
 

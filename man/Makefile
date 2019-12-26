@@ -47,8 +47,10 @@ default: $(DSTFILES)
 
 # This must be a separate target so that evaluation of $(MANPAGES)
 # is delayed until the indices have been generated
+left := (
+right := )
 manpages:
-	$(MAKE) $(MANPAGES)
+	$(MAKE) $(subst $(left),\$(left),$(subst $(right),\$(right),$(MANPAGES)))
 
 .PHONY: manpages
 

@@ -5,9 +5,10 @@
 #include <grass/display.h>
 #include "local_proto.h"
 
-extern struct pj_info iproj, oproj;
+extern struct pj_info iproj, oproj, tproj;
 
-int where_am_i(char **coords, FILE *fp, int have_spheroid, int decimal, int dcoord)
+int where_am_i(char **coords, FILE *fp, int have_spheroid, int decimal,
+               int dcoord)
 {
     char buf1[50], buf2[50];
     int screen_x, screen_y;
@@ -57,8 +58,9 @@ int where_am_i(char **coords, FILE *fp, int have_spheroid, int decimal, int dcoo
 	    double lat = north;
 	    double lon = east;
 
-	    if (pj_do_proj(&lon, &lat, &iproj, &oproj) < 0)
-		G_fatal_error("Error in pj_do_proj()");
+	    if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
+			      &lon, &lat, NULL) < 0)
+		G_fatal_error(_("Error in GPJ_transform()"));
 
 	    if (decimal) {
 		G_format_easting(lon, buf1, 0);

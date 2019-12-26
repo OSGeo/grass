@@ -27,8 +27,9 @@ Classes:
  - :class:`VectorCategorySelect`
  - :class:`SignatureSelect`
  - :class:`SeparatorSelect`
+ - :class:`SqlWhereSelect`
 
-(C) 2007-2014 by the GRASS Development Team
+(C) 2007-2018 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -40,21 +41,17 @@ This program is free software under the GNU General Public License
 @author Matej Krejci <matejkrejci gmail.com> (VectorCategorySelect)
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import glob
 import copy
+import six
 
 import wx
 
 from core import globalvar
-if globalvar.wxPythonPhoenix:
-    ComboPopup = wx.ComboPopup
-    ComboCtrl = wx.ComboCtrl
-else:
-    import wx.combo
-    ComboPopup = wx.combo.ComboPopup
-    ComboCtrl = wx.combo.ComboCtrl
 import wx.lib.buttons as buttons
 import wx.lib.filebrowsebutton as filebrowse
 
@@ -63,23 +60,19 @@ import wx.lib.filebrowsebutton as filebrowse
 import grass.script as grass
 from grass.script import task as gtask
 from grass.exceptions import CalledModuleError
-try:
-    from grass.pygrass import messages
-except ImportError as e:
-    print >> sys.stderr, _("Unable to import pyGRASS: %s\n"
-                           "Some functionality will be not accessible") % e
 
 from gui_core.widgets import ManageSettingsWidget, CoordinatesValidator
 
-from core.gcmd import RunCommand, GError, GMessage, GWarning
+from core.gcmd import RunCommand, GError, GMessage, GWarning, GException
 from core.utils    import GetListOfLocations, GetListOfMapsets, \
     GetFormats, rasterFormatExtension, vectorFormatExtension
 from core.utils import GetSettingsPath, GetValidLayerName, ListSortLower
-from core.utils import GetVectorNumberOfLayers, _
+from core.utils import GetVectorNumberOfLayers
 from core.settings import UserSettings
 from core.debug import Debug
 from gui_core.vselect import VectorSelectBase
-from gui_core.wrap import TreeCtrl
+from gui_core.wrap import TreeCtrl, Button, StaticText, StaticBox, \
+    TextCtrl, Panel, ComboPopup, ComboCtrl
 
 from grass.pydispatch.signal import Signal
 
@@ -510,7 +503,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                 renamed_elements.append(elementdict[elem])
 
         if element in ('stds', 'strds', 'str3ds', 'stvds'):
-            if self.tgis_error is False:
+            if not self.tgis_error:
                 import grass.temporal as tgis
                 filesdict = tgis.tlist_grouped(
                     elementdict[element], element == 'stds')
@@ -522,7 +515,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
 
         # add extra items first
         if self.extraItems:
-            for group, items in self.extraItems.iteritems():
+            for group, items in six.iteritems(self.extraItems):
                 node = self.AddItem(group, node=True)
                 self.seltree.SetItemTextColour(node, wx.Colour(50, 50, 200))
                 for item in items:
@@ -757,11 +750,19 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             if self.type in ('stds', 'strds', 'str3ds', 'stvds'):
                 # Initiate the temporal framework. Catch database error
                 # and set the error flag for the stds listing.
-                import grass.temporal as tgis
                 try:
-                    tgis.init(True)
-                except messages.FatalError as e:
-                    sys.stderr.write("Temporal GIS error:\n%s" % e)
+                    import grass.temporal as tgis
+                    from grass.pygrass import messages
+                    try:
+                        tgis.init(True)
+                    except messages.FatalError as e:
+                        sys.stderr.write(_("Temporal GIS error:\n%s") % e)
+                        self.tgis_error = True
+                except ImportError as e:
+                    # PyGRASS (ctypes) is the likely cause
+                    sys.stderr.write(_(
+                        "Unable to import pyGRASS: %s\n"
+                        "Some functionality will be not accessible") % e)
                     self.tgis_error = True
         if 'mapsets' in kargs:
             self.mapsets = kargs['mapsets']
@@ -800,7 +801,7 @@ class VectorDBInfo:
 
     def _CheckDBConnection(self):
         """Check DB connection"""
-        nuldev = file(os.devnull, 'w+')
+        nuldev = open(os.devnull, 'w+')
         # if map is not defined (happens with vnet initialization) or it
         # doesn't exist
         try:
@@ -882,6 +883,8 @@ class VectorDBInfo:
 
         :param layer: vector layer number
         """
+        if layer not in self.layers:
+            raise GException(_("No table linked to layer <{}>.".format(layer)))
         return self.layers[layer]['table']
 
     def GetDbSettings(self, layer):
@@ -983,7 +986,7 @@ class DriverSelect(wx.ComboBox):
         self.SetStringSelection(value)
 
 
-class DatabaseSelect(wx.TextCtrl):
+class DatabaseSelect(TextCtrl):
     """Creates combo box for selecting database driver.
     """
 
@@ -1118,22 +1121,22 @@ class ColumnSelect(ComboCtrl):
             columnchoices = dbInfo.GetTableDesc(table)
             keyColumn = dbInfo.GetKeyColumn(layer)
             self.columns = len(columnchoices.keys()) * ['']
-            for key, val in columnchoices.iteritems():
+            for key, val in six.iteritems(columnchoices):
                 self.columns[val['index']] = key
             if excludeKey:  # exclude key column
                 self.columns.remove(keyColumn)
             if excludeCols:  # exclude key column
-                for key in columnchoices.iterkeys():
+                for key in six.iterkeys(columnchoices):
                     if key in excludeCols:
                         self.columns.remove(key)
             if type:  # only selected column types
-                for key, value in columnchoices.iteritems():
+                for key, value in six.iteritems(columnchoices):
                     if value['type'] not in type:
                         try:
                             self.columns.remove(key)
                         except ValueError:
                             pass
-        except (KeyError, ValueError):
+        except (KeyError, ValueError, GException):
             self.columns[:] = []
 
         # update list
@@ -1223,7 +1226,7 @@ class LocationSelect(wx.ComboBox):
             self.SetItems([])
 
 
-class MapsetSelect(ComboCtrl):
+class MapsetSelect(wx.ComboBox):
     """Widget for selecting GRASS mapset"""
 
     def __init__(self, parent, id=wx.ID_ANY,
@@ -1235,11 +1238,13 @@ class MapsetSelect(ComboCtrl):
         # if not new and not multiple:
         ###     style = wx.CB_READONLY
 
-        ComboCtrl.__init__(self, parent, id, size=size,
-                           style=style, **kwargs)
+        wx.ComboBox.__init__(self, parent, id, size=size,
+                             style=style, **kwargs)
         self.searchPath = searchPath
         self.skipCurrent = skipCurrent
         self.SetName("MapsetSelect")
+        self.value = ''
+        self.multiple = multiple
         if not gisdbase:
             self.gisdbase = grass.gisenv()['GISDBASE']
         else:
@@ -1250,12 +1255,23 @@ class MapsetSelect(ComboCtrl):
         else:
             self.location = location
 
-        self.tcp = ListCtrlComboPopup()
-        self.SetPopupControl(self.tcp)
-        self.tcp.SetData(multiple=multiple)
-
         if setItems:
-            self.tcp.SetItems(self._getMapsets())
+            self.SetItems(self._getMapsets())
+
+        if self.multiple:
+            self.Bind(wx.EVT_COMBOBOX, self._onSelection)
+            self.Bind(wx.EVT_TEXT, self._onSelection)
+
+    def _onSelection(self, event):
+        value = self.GetValue()
+        if value:
+            if self.value:
+                self.value += ','
+            self.value += value
+            self.SetValue(self.value)
+        else:
+            self.value = value
+        event.Skip()
 
     def UpdateItems(self, location, dbase=None):
         """Update list of mapsets for given location
@@ -1268,12 +1284,10 @@ class MapsetSelect(ComboCtrl):
             self.gisdbase = dbase
         self.location = location
 
-        self.tcp.DeleteAllItems()
-
         if location:
-            self.tcp.SetItems(self._getMapsets())
+            self.SetItems(self._getMapsets())
         else:
-            self.tcp.SetItems([])
+            self.SetItems([])
 
     def _getMapsets(self):
         if self.searchPath:
@@ -1291,31 +1305,6 @@ class MapsetSelect(ComboCtrl):
             mlist.remove(gisenv['MAPSET'])
 
         return mlist
-
-    def GetStringSelection(self):
-        """For backward compatibility. MapsetSelect changed to allow
-        multiple selection, this required to change super-class from
-        wx.ComboBox to wx.combo.ComboCtrl"""
-        return self.GetValue()
-
-    def SetStringSelection(self, text):
-        """For backward compatibility. MapsetSelect changed to allow
-        multiple selection, this required to change super-class from
-        wx.ComboBox to wx.combo.ComboCtrl"""
-        return self.SetValue(text)
-
-    def SetSelection(self, sel=0):
-        """For backward compatibility. MapsetSelect changed to allow
-        multiple selection, this required to change super-class from
-        wx.ComboBox to wx.combo.ComboCtrl"""
-        self.SetValue('')  # TODO: implement SetSelection()
-
-    def SetItems(self, items):
-        """For backward compatibility. MapsetSelect changed to allow
-        multiple selection, this required to change super-class from
-        wx.ComboBox to wx.combo.ComboCtrl"""
-        self.tcp.DeleteAllItems()
-        self.tcp.SetItems(items)
 
 
 class SubGroupSelect(wx.ComboBox):
@@ -1406,7 +1395,7 @@ class GdalSelect(wx.Panel):
 
         self.reloadDataRequired = Signal('GdalSelect.reloadDataRequired')
 
-        self.inputBox = wx.StaticBox(parent=self)
+        self.inputBox = StaticBox(parent=self)
         if dest:
             self.inputBox.SetLabel(" %s " % _("Output settings"))
         else:
@@ -1510,7 +1499,7 @@ class GdalSelect(wx.Panel):
             fileMask=fileMask)
         browse.GetChildren()[1].SetName('GdalSelectDataSource')
         self.fileWidgets['browse'] = browse
-        self.fileWidgets['options'] = wx.TextCtrl(parent=self.filePanel)
+        self.fileWidgets['options'] = TextCtrl(parent=self.filePanel)
 
         # directory
         self.dirPanel = wx.Panel(parent=self)
@@ -1535,11 +1524,11 @@ class GdalSelect(wx.Panel):
                 self.dirWidgets['format'].GetStringSelection()))
         formatSelect.Bind(wx.EVT_CHOICE, self.OnUpdate)
 
-        self.dirWidgets['extensionLabel'] = wx.StaticText(
+        self.dirWidgets['extensionLabel'] = StaticText(
             parent=self.dirPanel, label=_("Extension:"))
-        self.dirWidgets['extension'] = wx.TextCtrl(parent=self.dirPanel)
+        self.dirWidgets['extension'] = TextCtrl(parent=self.dirPanel)
         self.dirWidgets['extension'].Bind(wx.EVT_TEXT, self.ExtensionChanged)
-        self.dirWidgets['options'] = wx.TextCtrl(parent=self.dirPanel)
+        self.dirWidgets['options'] = TextCtrl(parent=self.dirPanel)
         if self.ogr:
             shapefile = 'ESRI Shapefile'
             if shapefile in fileFormats:
@@ -1576,12 +1565,12 @@ class GdalSelect(wx.Panel):
         self.dbWidgets['choice'] = wx.Choice(
             parent=self.dbPanel, name='GdalSelectDataSource')
         self.dbWidgets['choice'].Bind(wx.EVT_CHOICE, self.OnUpdate)
-        self.dbWidgets['text'] = wx.TextCtrl(
+        self.dbWidgets['text'] = TextCtrl(
             parent=self.dbPanel, name='GdalSelectDataSource')
         self.dbWidgets['text'].Bind(wx.EVT_TEXT, self.OnUpdate)
-        self.dbWidgets['textLabel1'] = wx.StaticText(
+        self.dbWidgets['textLabel1'] = StaticText(
             parent=self.dbPanel, label=_("Name:"))
-        self.dbWidgets['textLabel2'] = wx.StaticText(
+        self.dbWidgets['textLabel2'] = StaticText(
             parent=self.dbPanel, label=_("Name:"))
         self.dbWidgets['featType'] = wx.RadioBox(
             parent=self.dbPanel,
@@ -1607,7 +1596,7 @@ class GdalSelect(wx.Panel):
             startDirectory=os.getcwd(),
             changeCallback=self.OnUpdate)
         self.dbWidgets['dirbrowse'] = browse
-        self.dbWidgets['options'] = wx.TextCtrl(parent=self.dbPanel)
+        self.dbWidgets['options'] = TextCtrl(parent=self.dbPanel)
 
         # protocol
         self.protocolPanel = wx.Panel(parent=self)
@@ -1617,9 +1606,9 @@ class GdalSelect(wx.Panel):
             choices=protocolFormats)
         self.protocolWidgets['format'] = protocolChoice
 
-        self.protocolWidgets['text'] = wx.TextCtrl(parent=self.protocolPanel)
+        self.protocolWidgets['text'] = TextCtrl(parent=self.protocolPanel)
         self.protocolWidgets['text'].Bind(wx.EVT_TEXT, self.OnUpdate)
-        self.protocolWidgets['options'] = wx.TextCtrl(
+        self.protocolWidgets['options'] = TextCtrl(
             parent=self.protocolPanel)
 
         # native
@@ -1655,7 +1644,7 @@ class GdalSelect(wx.Panel):
                     dsn = v
                     break
             optList = list()
-            for k, v in data.iteritems():
+            for k, v in six.iteritems(data):
                 if k in ('format', 'conninfo', 'topology'):
                     continue
                 optList.append('%s=%s' % (k, v))
@@ -1700,8 +1689,8 @@ class GdalSelect(wx.Panel):
         sizer.Add(paddingSizer, flag=wx.EXPAND, pos=(0, 0), span=(1, 2))
         sizer.AddGrowableCol(0)
         if self.dest:
-            sizer.Add(wx.StaticText(parent=self.filePanel,
-                                    label=_("Creation options:")),
+            sizer.Add(StaticText(parent=self.filePanel,
+                                 label=_("Creation options:")),
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(1, 0))
             sizer.Add(self.fileWidgets['options'],
@@ -1714,8 +1703,8 @@ class GdalSelect(wx.Panel):
 
         # directory
         sizer = wx.GridBagSizer(vgap=3, hgap=10)
-        sizer.Add(wx.StaticText(parent=self.dirPanel,
-                                label=_("Format:")),
+        sizer.Add(StaticText(parent=self.dirPanel,
+                             label=_("Format:")),
                   flag=wx.ALIGN_CENTER_VERTICAL,
                   pos=(0, 0))
         sizer.Add(self.dirWidgets['format'],
@@ -1731,14 +1720,14 @@ class GdalSelect(wx.Panel):
                   flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                   pos=(1, 0), span=(1, 4))
         if self.dest:
-            sizer.Add(wx.StaticText(parent=self.dirPanel,
-                                    label=_("Creation options:")),
+            sizer.Add(StaticText(parent=self.dirPanel,
+                                 label=_("Creation options:")),
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(2, 0))
             sizer.Add(self.dirWidgets['options'],
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                       pos=(2, 1))
-            helpBtn = wx.Button(parent=self.dirPanel, id=wx.ID_HELP)
+            helpBtn = Button(parent=self.dirPanel, id=wx.ID_HELP)
             helpBtn.Bind(wx.EVT_BUTTON, self.OnHelp)
             sizer.Add(helpBtn,
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
@@ -1753,8 +1742,8 @@ class GdalSelect(wx.Panel):
 
         # database
         sizer = wx.GridBagSizer(vgap=1, hgap=5)
-        sizer.Add(wx.StaticText(parent=self.dbPanel,
-                                label=_("Format:")),
+        sizer.Add(StaticText(parent=self.dbPanel,
+                             label=_("Format:")),
                   flag=wx.ALIGN_CENTER_VERTICAL,
                   pos=(0, 0))
         sizer.Add(self.dbWidgets['format'],
@@ -1782,8 +1771,8 @@ class GdalSelect(wx.Panel):
             sizer.Add(self.dbWidgets['featType'],
                       pos=(0, 2), flag=wx.EXPAND)
 
-            sizer.Add(wx.StaticText(parent=self.dbPanel,
-                                    label=_("Creation options:")),
+            sizer.Add(StaticText(parent=self.dbPanel,
+                                 label=_("Creation options:")),
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(5, 0))
             sizer.Add(self.dbWidgets['options'],
@@ -1791,7 +1780,7 @@ class GdalSelect(wx.Panel):
                       pos=(5, 1), span=(1, 2))
 
             # help button
-            helpBtn = wx.Button(parent=self.dbPanel, id=wx.ID_HELP)
+            helpBtn = Button(parent=self.dbPanel, id=wx.ID_HELP)
             helpBtn.Bind(wx.EVT_BUTTON, self.OnHelp)
             sizer.Add(helpBtn,
                       pos=(5, 3))
@@ -1805,23 +1794,23 @@ class GdalSelect(wx.Panel):
 
         # protocol
         sizer = wx.GridBagSizer(vgap=3, hgap=3)
-        sizer.Add(wx.StaticText(parent=self.protocolPanel,
-                                label=_("Format:")),
+        sizer.Add(StaticText(parent=self.protocolPanel,
+                             label=_("Format:")),
                   flag=wx.ALIGN_CENTER_VERTICAL,
                   pos=(0, 0))
         sizer.Add(self.protocolWidgets['format'],
                   flag=wx.ALIGN_CENTER_VERTICAL,
                   pos=(0, 1))
-        sizer.Add(wx.StaticText(parent=self.protocolPanel,
-                                label=_("Protocol:")),
+        sizer.Add(StaticText(parent=self.protocolPanel,
+                             label=_("Protocol:")),
                   flag=wx.ALIGN_CENTER_VERTICAL,
                   pos=(1, 0))
         sizer.Add(self.protocolWidgets['text'],
                   flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                   pos=(1, 1))
         if self.dest:
-            sizer.Add(wx.StaticText(parent=self.protocolPanel,
-                                    label=_("Creation options:")),
+            sizer.Add(StaticText(parent=self.protocolPanel,
+                                 label=_("Creation options:")),
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(2, 0))
             sizer.Add(self.protocolWidgets['options'],
@@ -1835,8 +1824,8 @@ class GdalSelect(wx.Panel):
 
         # native
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(wx.StaticText(parent=self.nativePanel,
-                                label=_("No settings available")),
+        sizer.Add(StaticText(parent=self.nativePanel,
+                             label=_("No settings available")),
                   flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border=5)
         self.nativePanel.SetSizer(sizer)
 
@@ -1876,7 +1865,7 @@ class GdalSelect(wx.Panel):
         self.changingSizer.Show(
             self.protocolPanel, show=(
             sourceType == 'pro'))
-        self.changingSizer.Show(self.dbPanel, show=(sourceType is 'db'))
+        self.changingSizer.Show(self.dbPanel, show=(sourceType == 'db'))
 
         self.changingSizer.Layout()
 
@@ -2345,9 +2334,9 @@ class OgrTypeSelect(wx.Panel):
     def _layout(self):
         """Do layout"""
         sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add(wx.StaticText(parent=self,
-                                id=wx.ID_ANY,
-                                label=_("Feature type:")),
+        sizer.Add(StaticText(parent=self,
+                             id=wx.ID_ANY,
+                             label=_("Feature type:")),
                   proportion=1,
                   flag=wx.ALIGN_CENTER_VERTICAL,
                   border=5)
@@ -2372,7 +2361,7 @@ class OgrTypeSelect(wx.Panel):
             return 'boundary'
 
 
-class CoordinatesSelect(wx.Panel):
+class CoordinatesSelect(Panel):
 
     def __init__(self, parent, giface, multiple=False, **kwargs):
         """Widget to get coordinates from map window  by mouse click
@@ -2388,9 +2377,9 @@ class CoordinatesSelect(wx.Panel):
 
         super(CoordinatesSelect, self).__init__(parent=parent, id=wx.ID_ANY)
 
-        self.coordsField = wx.TextCtrl(parent=self, id=wx.ID_ANY,
-                                       size=globalvar.DIALOG_TEXTCTRL_SIZE,
-                                       validator=CoordinatesValidator())
+        self.coordsField = TextCtrl(parent=self, id=wx.ID_ANY,
+                                    size=globalvar.DIALOG_TEXTCTRL_SIZE,
+                                    validator=CoordinatesValidator())
 
         icon = wx.Bitmap(
             os.path.join(
@@ -2460,7 +2449,7 @@ class CoordinatesSelect(wx.Panel):
 
             coords = self._getCoords()
             if coords is not None:
-                for i in range(len(coords) / 2):
+                for i in range(len(coords) // 2):
                     i = i * 2
                     self.pointsToDraw.AddItem(
                         coords=(coords[i], coords[i + 1]))
@@ -2530,8 +2519,8 @@ class VectorCategorySelect(wx.Panel):
 
         self.mapdisp = self.giface.GetMapDisplay()
 
-        self.catsField = wx.TextCtrl(parent=self, id=wx.ID_ANY,
-                                     size=globalvar.DIALOG_TEXTCTRL_SIZE)
+        self.catsField = TextCtrl(parent=self, id=wx.ID_ANY,
+                                  size=globalvar.DIALOG_TEXTCTRL_SIZE)
 
         icon = wx.Bitmap(
             os.path.join(
@@ -2708,3 +2697,60 @@ class SeparatorSelect(wx.ComboBox):
                                               **kwargs)
         self.SetName("SeparatorSelect")
         self.SetItems(['pipe', 'comma', 'space', 'tab', 'newline'])
+
+
+class SqlWhereSelect(wx.Panel):
+
+    def __init__(self, parent, **kwargs):
+        """Widget to define SQL WHERE condition.
+
+        :param parent: parent window
+        """
+        super(SqlWhereSelect, self).__init__(parent=parent, id=wx.ID_ANY)
+        self.parent = parent
+        self.vector_map = None
+
+        self.sqlField = TextCtrl(parent=self, id=wx.ID_ANY,
+                                 size=globalvar.DIALOG_TEXTCTRL_SIZE)
+        self.GetChildren()[0].SetName("SqlWhereSelect")
+        icon = wx.Bitmap(
+            os.path.join(
+                globalvar.ICONDIR,
+                "grass",
+                "table.png"))
+        self.buttonInsSql = buttons.ThemedGenBitmapButton(
+            parent=self, id=wx.ID_ANY, bitmap=icon, size=globalvar.DIALOG_COLOR_SIZE)
+        self.buttonInsSql.Bind(wx.EVT_BUTTON, self._onClick)
+
+        self._doLayout()
+
+
+    def _doLayout(self):
+        self.dialogSizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.dialogSizer.Add(self.sqlField,
+                             proportion=1,
+                             flag=wx.EXPAND)
+        self.dialogSizer.Add(self.buttonInsSql)
+        self.SetSizer(self.dialogSizer)
+
+    def GetTextWin(self):
+        return self.sqlField
+
+    def _onClick(self, event):
+        from dbmgr.sqlbuilder import SQLBuilderWhere
+        try:
+            if not self.vector_map:
+                raise GException(_('No vector map selected'))
+            win = SQLBuilderWhere(parent=self,
+                                  vectmap=self.vector_map,
+                                  layer=self.vector_layer)
+            win.Show()
+        except GException as e:
+            GMessage(parent=self.parent, message='{}'.format(e))
+        
+    def SetData(self, vector, layer):
+        self.vector_map = vector
+        self.vector_layer = int(layer) # TODO: support layer names
+
+    def SetValue(self, value):
+        self.sqlField.SetValue(value)

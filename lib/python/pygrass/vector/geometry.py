@@ -14,6 +14,7 @@ import numpy as np
 import grass.lib.gis as libgis
 import grass.lib.vector as libvect
 
+from grass.pygrass.utils import decode
 from grass.pygrass.errors import GrassError, mapinfo_must_be_set
 
 from grass.pygrass.vector.basic import Ilist, Bbox, Cats
@@ -162,9 +163,9 @@ class Attrs(object):
         >>> test_vect.open('r')
         >>> v1 = test_vect[1]
         >>> v1.attrs['name']
-        u'point'
+        'point'
         >>> v1.attrs['name', 'value']
-        (u'point', 1.0)
+        ('point', 1.0)
         >>> test_vect.close()
 
         """
@@ -185,15 +186,15 @@ class Attrs(object):
         >>> test_vect.open('r')
         >>> v1 = test_vect[1]
         >>> v1.attrs['name']
-        u'point'
+        'point'
 
         >>> v1.attrs['name'] = "new_point_1"
         >>> v1.attrs['name']
-        u'new_point_1'
+        'new_point_1'
 
         >>> v1.attrs['name', 'value'] = "new_point_2", 100.
         >>> v1.attrs['name', 'value']
-        (u'new_point_2', 100.0)
+        ('new_point_2', 100.0)
         >>> v1.attrs['name', 'value'] = "point", 1.
         >>> v1.attrs.table.conn.commit()
         >>> test_vect.close()
@@ -233,7 +234,7 @@ class Attrs(object):
            >>> test_vect.open('r')
            >>> v1 = test_vect[1]
            >>> v1.attrs.values()
-           (1, u'point', 1.0)
+           (1, 'point', 1.0)
             >>> test_vect.close()
 
         """
@@ -251,7 +252,7 @@ class Attrs(object):
            >>> test_vect.open('r')
            >>> v1 = test_vect[1]
            >>> v1.attrs.keys()
-           [u'cat', u'name', u'value']
+           ['cat', 'name', 'value']
             >>> test_vect.close()
 
         """
@@ -375,7 +376,7 @@ class Geo(object):
             >>> pnt.to_wkt()
             'POINT (10.0000000000000000 100.0000000000000000)'
         """
-        return libvect.Vect_line_to_wkt(self.c_points, self.gtype, not self.is2D)
+        return decode(libvect.Vect_line_to_wkt(self.c_points, self.gtype, not self.is2D))
 
     def to_wkb(self):
         """Return a "well know binary" (WKB) geometry byte array, this method uses
@@ -721,7 +722,8 @@ class Line(Geo):
                                           pnt.c_points.contents.x,
                                           pnt.c_points.contents.y,
                                           pnt.c_points.contents.z,
-                                          angle, slope):
+                                          ctypes.pointer(ctypes.c_double(angle)),
+                                          ctypes.pointer(ctypes.c_double(slope))):
             raise ValueError("Vect_point_on_line give an error.")
         pnt.is2D = self.is2D
         return pnt
@@ -1301,8 +1303,9 @@ class Boundary(Line):
 
     def __init__(self, **kargs):
         super(Boundary, self).__init__(**kargs)
-
         v_id = kargs.get('v_id', 0)
+        # not sure what it means that v_id is None
+        v_id = 0 if v_id is None else v_id
         self.dir = libvect.GV_FORWARD if v_id > 0 else libvect.GV_BACKWARD
         self.c_left = ctypes.pointer(ctypes.c_int())
         self.c_right = ctypes.pointer(ctypes.c_int())
@@ -1377,13 +1380,13 @@ class Centroid(Point):
 
         >>> centroid = Centroid(x=0, y=10)
         >>> centroid
-        Centoid(0.000000, 10.000000)
+        Centroid(0.000000, 10.000000)
         >>> from grass.pygrass.vector import VectorTopo
         >>> test_vect = VectorTopo(test_vector_name)
         >>> test_vect.open(mode='r')
         >>> centroid = Centroid(v_id=18, c_mapinfo=test_vect.c_mapinfo)
         >>> centroid
-        Centoid(3.500000, 3.500000)
+        Centroid(3.500000, 3.500000)
         >>> test_vect.close()
 
     ..
@@ -1404,7 +1407,7 @@ class Centroid(Point):
         #self.c_pline = ctypes.pointer(libvect.P_line()) if topology else None
 
     def __repr__(self):
-        return "Centoid(%s)" % ', '.join(['%f' % co for co in self.coords()])
+        return "Centroid(%s)" % ', '.join(['%f' % co for co in self.coords()])
 
     @mapinfo_must_be_set
     def _centroid_id(self):
@@ -1709,7 +1712,7 @@ class Area(Geo):
         """Return a "well know text" (WKT) area string, this method uses
            the GEOS implementation in the vector library. ::
         """
-        return libvect.Vect_read_area_to_wkt(self.c_mapinfo, self.id)
+        return decode(libvect.Vect_read_area_to_wkt(self.c_mapinfo, self.id))
 
     def to_wkb(self):
         """Return a "well know binary" (WKB) area byte array, this method uses

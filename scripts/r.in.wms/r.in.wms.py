@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 MODULE:    r.in.wms
 
@@ -13,10 +13,12 @@ This program is free software under the GNU General Public License
 """
 
 #%module
-#% description: Downloads and imports data from WMS/WMTS/NASA OnEarth server.
+#% description: Downloads and imports data from OGC WMS and OGC WMTS web mapping servers.
 #% keyword: raster
 #% keyword: import
 #% keyword: OGC web services
+#% keyword: OGC WMS
+#% keyword: OGC WMTS
 #%end
 
 #%option
@@ -77,7 +79,7 @@ This program is free software under the GNU General Public License
 #% key: wms_version
 #% type:string
 #% description: WMS standard version
-#% options: 1.1.1,1.3.0
+#% options: 1.1.0,1.1.1,1.3.0
 #% answer: 1.1.1
 #% guisection: Request
 #%end
@@ -143,6 +145,20 @@ This program is free software under the GNU General Public License
 #% guisection: Map style
 #%end
 
+#%option
+#% key: proxy
+#% label: HTTP proxy only GDAL driver (GDAL_HTTP_PROXY)
+#% type: string
+#% description: HTTP proxy
+#%end
+
+#%option
+#% key: proxy_user_pw
+#% label: User and password for HTTP proxy only for GDAL driver (GDAL_HTTP_PROXYUSERPWD). Must be in the form of [user name]:[password].
+#% type: string
+#% description: User and password for HTTP proxy
+#%end
+
 #%option G_OPT_F_BIN_INPUT
 #% key: capfile
 #% required: no
@@ -168,6 +184,12 @@ This program is free software under the GNU General Public License
 #% guisection: Map style
 #%end
 
+#%flag
+#% key: b
+#% description: Keep original bands (default: create composite)
+#% guisection: Map style
+#%end
+
 #%rules
 #% exclusive: capfile_output, capfile
 #%end
@@ -177,10 +199,7 @@ import sys
 sys.path.insert(1, os.path.join(os.path.dirname(sys.path[0]), 'etc', 'r.in.wms'))
 
 import grass.script as grass
-
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+from grass.script.utils import decode
 
 
 def GetRegionParams(opt_region):
@@ -200,7 +219,7 @@ def GetRegionParams(opt_region):
                                quiet=True,
                                flags='ug',
                                region=opt_region)
-        region_params = grass.parse_key_val(s, val_type=float)
+        region_params = grass.parse_key_val(decode(s), val_type=float)
     else:
         region_params = grass.region()
 
@@ -222,6 +241,14 @@ def main():
         wms.GetCapabilities(options)
     else:
         from wms_base import GRASSImporter
+        # set proxy
+        if options['proxy'] and options['proxy_user_pw']:
+            wms.setProxy(options['proxy'], options['proxy_user_pw'])
+        if options['proxy']:
+            wms.setProxy(options['proxy'])
+            if 'GRASS' in options['driver']:
+                grass.warning(_("The proxy will be ignored by the choosen GRASS driver. It is only used with the GDAL driver."))
+
         options['region'] = GetRegionParams(options['region'])
         fetched_map = wms.GetMap(options, flags)
 
@@ -229,7 +256,7 @@ def main():
         if not fetched_map:
             grass.warning(_("Nothing to import.\nNo data has been downloaded from wms server."))
             return
-        importer = GRASSImporter(options['output'])
+        importer = GRASSImporter(options['output'], (flags['b'] == False))
         importer.ImportMapIntoGRASS(fetched_map)
 
     return 0

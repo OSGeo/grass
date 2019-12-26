@@ -26,13 +26,13 @@ from core import globalvar
 from core.render import Map
 from gui_core.forms import GUI
 from mapdisp.gprint import PrintOptions
-from core.utils import GetLayerNameFromCmd, _
+from core.utils import GetLayerNameFromCmd
 from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from gui_core.preferences import DefaultFontDialog
 from core.debug import Debug
 from core.gcmd import GError
 from gui_core.toolbars import BaseToolbar, BaseIcons
-from gui_core.wrap import PseudoDC
+from gui_core.wrap import PseudoDC, Menu, EmptyBitmap, NewId, BitmapFromImage
 
 
 class BufferedWindow(wx.Window):
@@ -80,13 +80,15 @@ class BufferedWindow(wx.Window):
 
         self.pdc = PseudoDC()
         # will store an off screen empty bitmap for saving to file
-        self._buffer = wx.EmptyBitmap(
+        self._buffer = EmptyBitmap(
             max(1, self.Map.width),
             max(1, self.Map.height))
 
         # make sure that extents are updated at init
         self.Map.region = self.Map.GetRegion()
         self.Map.SetRegion()
+
+        self._finishRenderingInfo = None
 
         self.Bind(wx.EVT_ERASE_BACKGROUND, lambda x: None)
 
@@ -96,11 +98,11 @@ class BufferedWindow(wx.Window):
         """
         if drawid is None:
             if pdctype == 'image':
-                drawid = imagedict[img]
+                drawid = self.imagedict[img]
             elif pdctype == 'clear':
                 drawid is None
             else:
-                drawid = wx.NewId()
+                drawid = NewId()
         else:
             pdc.SetId(drawid)
 
@@ -121,7 +123,7 @@ class BufferedWindow(wx.Window):
         if pdctype == 'image':
             bg = wx.TRANSPARENT_BRUSH
             pdc.SetBackground(bg)
-            bitmap = wx.BitmapFromImage(img)
+            bitmap = BitmapFromImage(img)
             w, h = bitmap.GetSize()
             pdc.DrawBitmap(
                 bitmap, coords[0],
@@ -160,7 +162,7 @@ class BufferedWindow(wx.Window):
         # Make new off screen bitmap: this bitmap will always have the
         # current drawing in it, so it can be used to save the image to
         # a file, or whatever.
-        self._buffer = wx.EmptyBitmap(self.Map.width, self.Map.height)
+        self._buffer = EmptyBitmap(self.Map.width, self.Map.height)
 
         # get the image to be rendered
         self.img = self.GetImage()
@@ -188,23 +190,23 @@ class BufferedWindow(wx.Window):
         file. See the wx.Windows docs for wx.Bitmap::SaveFile for the
         details
         """
-        busy = wx.BusyInfo(message=_("Please wait, exporting image..."),
-                           parent=self)
-        wx.Yield()
-
+        wx.GetApp().Yield()
+        self._finishRenderingInfo = (FileName, FileType, width, height)
+        self.Map.GetRenderMgr().updateMap.connect(self._finishSaveToFile)
         self.Map.ChangeMapSize((width, height))
-        ibuffer = wx.EmptyBitmap(max(1, width), max(1, height))
         self.Map.Render(force=True, windres=True)
+
+    def _finishSaveToFile(self):
         img = self.GetImage()
         self.Draw(self.pdc, img, drawid=99)
+        FileName, FileType, width, height = self._finishRenderingInfo
+        ibuffer = EmptyBitmap(max(1, width), max(1, height))
         dc = wx.BufferedDC(None, ibuffer)
         dc.Clear()
-        # probably does nothing, removed from wxPython 2.9
-        # self.PrepareDC(dc)
         self.pdc.DrawToDC(dc)
         ibuffer.SaveFile(FileName, FileType)
-
-        busy.Destroy()
+        self.Map.GetRenderMgr().updateMap.disconnect(self._finishSaveToFile)
+        self._finishRenderingInfo = None
 
     def GetImage(self):
         """Converts files to wx.Image
@@ -496,7 +498,7 @@ class HistogramFrame(wx.Frame):
         """Print options and output menu
         """
         point = wx.GetMousePosition()
-        printmenu = wx.Menu()
+        printmenu = Menu()
         # Add items to the menu
         setup = wx.MenuItem(printmenu, id=wx.ID_ANY, text=_('Page setup'))
         printmenu.AppendItem(setup)

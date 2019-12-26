@@ -7,7 +7,7 @@ from grass.gunittest.gmodules import SimpleModule
 
 
 # v.what map=schools,roadsmajor,elev_points,geology layer=-1,-1,-1,-1 coordinates=636661,226489 distance=1000
-out1 = """East: 636661
+out1 = u"""East: 636661
 North: 226489
 ------------------------------------------------------------------
 Map: schools 
@@ -38,7 +38,7 @@ Category: 217
 """
 
 # v.what map=schools,roadsmajor,elev_points,geology layer=-1,-1,-1,-1 coordinates=636661,226489 distance=1000 -ag
-out2 = """East: 636661
+out2 = u"""East: 636661
 North: 226489
 ------------------------------------------------------------------
 Map: schools 
@@ -94,7 +94,7 @@ SHAPE_len : 198808.723525
 """
 
 # v.what map=schools,roadsmajor,elev_points,geology layer=-1,-1,-1,-1 coordinates=636661,226489 distance=1000 -ag
-out3 = """East=636661
+out3 = u"""East=636661
 North=226489
 
 Map=schools
@@ -146,7 +146,7 @@ SHAPE_len=198808.723525
 """
 
 # v.what map=schools,roadsmajor,elev_points,geology layer=-1,-1,-1,-1 coordinates=636661,226489 distance=100
-out4 = """East: 636661
+out4 = u"""East: 636661
 North: 226489
 ------------------------------------------------------------------
 Map: schools 

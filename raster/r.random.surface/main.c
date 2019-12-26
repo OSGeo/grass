@@ -31,7 +31,7 @@
 #include "local_proto.h"
 
 BIGF BigF;
-double **Surface, NS, EW, FilterSD, AllMaxDist, *Norm;
+double **RSurface, NS, EW, FilterSD, AllMaxDist, *Norm;
 int MapCount, FDM, Rs, Cs, Theory;
 CELL *CellBuffer;
 FILTER *AllFilters, Filter;
@@ -99,7 +99,7 @@ int main(int argc, char **argv)
     SeedStuff->type = TYPE_INTEGER;
     SeedStuff->required = NO;
     SeedStuff->description =
-	_("Random seed (SEED_MIN >= value >= SEED_MAX), default [random]");
+	_("Random seed, default [random]");
 
     range_high_stuff = G_define_option();
     range_high_stuff->key = "high";
@@ -127,8 +127,10 @@ int main(int argc, char **argv)
 
 	G_message(_("Generating raster map <%s>..."), OutNames[DoMap]);
 
-	if (Seeds[DoMap] == SEED_MIN - 1)
-	    Seeds[DoMap] = (int)(ran1() * SEED_MAX);
+	if (Seeds[DoMap] < 0)
+	    G_srand48_auto();
+	else
+	    G_srand48(Seeds[DoMap]);
 
 	MapSeed = Seed = Seeds[DoMap];
 	ZeroMapCells();

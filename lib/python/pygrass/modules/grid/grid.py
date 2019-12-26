@@ -83,9 +83,9 @@ def copy_mapset(mapset, path):
     >>> sorted(os.listdir(path))                          # doctest: +ELLIPSIS
     [...'PERMANENT'...]
     >>> sorted(os.listdir(os.path.join(path, 'PERMANENT')))
-    [u'DEFAULT_WIND', u'PROJ_EPSG', u'PROJ_INFO', u'PROJ_UNITS', u'VAR', u'WIND']
+    ['DEFAULT_WIND', 'PROJ_INFO', 'PROJ_UNITS', 'VAR', 'WIND']
     >>> sorted(os.listdir(os.path.join(path, mname)))   # doctest: +ELLIPSIS
-    [...u'SEARCH_PATH',...u'WIND']
+    [...'SEARCH_PATH',...'WIND']
     >>> import shutil
     >>> shutil.rmtree(path)
 
@@ -146,7 +146,8 @@ def get_mapset(gisrc_src, gisrc_dst):
     src = Mapset(msrc, lsrc, gsrc)
     dst = Mapset(mdst, ldst, gdst)
     visible = [m for m in src.visible]
-    visible.append(src.name)
+    if src.name not in visible:
+        visible.append(src.name)
     dst.visible.extend(visible)
     return src, dst
 
@@ -310,7 +311,7 @@ def get_cmd(cmdd):
     ...              elevation='ele', slope='slp', aspect='asp',
     ...              overwrite=True, run_=False)
     >>> get_cmd(slp.get_dict())  # doctest: +ELLIPSIS
-    ['r.slope.aspect', u'elevation=ele', u'format=degrees', ..., u'--o']
+    ['r.slope.aspect', 'elevation=ele', 'format=degrees', ..., '--o']
     """
     cmd = [cmdd['name'], ]
     cmd.extend(("%s=%s" % (k, v) for k, v in cmdd['inputs']
@@ -599,6 +600,7 @@ class GridModule(object):
         loc = Location()
         mset = loc[self.mset.name]
         mset.visible.extend(loc.mapsets())
+        noutputs = 0
         for otmap in self.module.outputs:
             otm = self.module.outputs[otmap]
             if otm.typedesc == 'raster' and otm.value:
@@ -606,6 +608,12 @@ class GridModule(object):
                            self.mset.name, self.msetstr, bboxes,
                            self.module.flags.overwrite,
                            self.start_row, self.start_col, self.out_prefix)
+                noutputs += 1
+        if noutputs < 1:
+            msg = 'No raster output option defined for <{}>'.format(self.module.name)
+            if self.module.name == 'r.mapcalc':
+                msg += '. Use <{}.simple> instead'.format(self.module.name)
+            raise RuntimeError(msg)
 
     def rm_tiles(self):
         """Remove all the tiles."""

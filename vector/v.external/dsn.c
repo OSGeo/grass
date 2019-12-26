@@ -7,7 +7,7 @@
 char *get_datasource_name(const char *opt_dsn, int use_ogr)
 {
     char *dsn;
-    
+
     if (G_strncasecmp(opt_dsn, "PG:", 3) == 0) {
         /* PostgreSQL/PostGIS */
         size_t i;

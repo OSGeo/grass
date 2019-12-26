@@ -1,0 +1,129 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.mapcalc.simple</em> provides a wrapper to <em>r.mapcalc</em>.
+Up to 6 maps can be combined using simple expressions.
+
+<p>
+The general syntax for the <b>expression</b> follows
+<em><a href="r.mapcalc.html">r.mapcalc</a></em> expression format,
+for example, <tt>A + B</tt> or <tt>exp(A + B)</tt> are valid.
+The variables A, B, ..., F represent raster maps which are provided
+as options <b>a</b>, <b>b</b>, ..., <b>f</b>.
+
+<p>
+The result name, i.e. the output raster map, is provided using the
+option <b>output</b> and, unlike <em>r.mapcalc</em> it is not part
+of the expression.
+
+<p>
+This module is meant for convenience (for users and programmers) while
+the <em>r.mapcalc</em> module is a better choice for more complex
+expressions and advanced usage.
+
+
+<h2>NOTES</h2>
+
+Differences to <em>r.mapcalc</em> module:
+
+<ul>
+    <li>The input raster map names and the output map raster name are
+        separate from the expression (formula) which uses generic
+        variable names (A, B, C, ...).
+    <li>The output raster name is not included in the expression.
+    <li>The expression is expected to be a single short one liner
+        without the function <tt>eval()</tt>.
+</ul>
+
+Differences to <em>r.mapcalc.simple</em> module in GRASS GIS 5 and 6:
+
+<ul>
+    <li>The primary purpose is not being a GUI front end to
+        <em>r.mapcalc</em>, but a wrapper which allows easy building of
+        interfaces to <em>r.mapcalc</em> (including GUIs).
+    <li>Whitespace (most notably spaces) are allowed
+        (in the same way as for <em>r.mapcalc</em>).
+    <li>The variable names are case-insensitive to allow the original
+        uppercase as well as lowercase as in option names
+        (unless the <b>-c</b> flag is used).
+    <li>Option names for each map are just one letter (not amap, etc.).
+    <li>Output option name is <b>output</b> as for other modules
+        (not outfile).
+    <li>Raster map names can be optionally quoted (the <b>-q</b> flag).
+    <li>There is no expert mode
+        (which was just running <em>r.mapcalc</em>).
+    <li>The <b>expression</b> option is first, so it is possible to
+        omit its name in the command line
+        (just like with <em>r.mapcalc</em>).
+    <li>Overwriting of outputs is done in the same way as with other
+        modules, so there is no flag to not overwrite outputs.
+</ul>
+
+
+<h2>EXAMPLES</h2>
+
+
+<h3>Basic examples</h3>
+
+<div class="code"><pre>
+r.mapcalc.simple expression="0" output=zeros
+r.mapcalc.simple expression="1" output=ones
+r.mapcalc.simple expression="2" output=twos
+</pre></div>
+
+<div class="code"><pre>
+r.mapcalc.simple expression="A + B + C" a=zeros b=ones c=twos output=result1
+</pre></div>
+
+<div class="code"><pre>
+r.mapcalc.simple expression="(A * B) / 2 + 3 * C" a=zeros b=ones c=twos output=result2
+</pre></div>
+
+<div align="center" style="margin: 10px">
+<img src="r_mapcalc_simple.png" width="594px" height="495px"><br>
+<i>Figure: r.mapcalc.simple graphical user interface</i>
+</div>
+
+
+<h3>Example expressions</h3>
+
+Addition:
+
+<div class="code"><pre>
+A + B
+</pre></div>
+
+No spaces around operators are not recommended for readability,
+but allowed in the expression:
+
+<div class="code"><pre>
+A+B
+</pre></div>
+
+More complex expression with a function:
+
+<p>
+<div class="code"><pre>
+exp(A+C)+(B-2)*7
+</pre></div>
+
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r3.mapcalc.html">r3.mapcalc</a>,
+<a href="t.rast.mapcalc.html">t.rast.mapcalc</a>,
+<a href="g.region.html">g.region</a>
+</em>
+
+
+<h2>AUTHORS</h2>
+
+Vaclav Petras, <a href="https://geospatial.ncsu.edu/geoforall/">NCSU GeoForAll Lab</a><br>
+Michael Barton, Arizona State University (updated to GRASS 5.7)<br>
+R. Brunzema (original 5.0 Bash version)
+
+<!--
+<p>
+<i>Last changed: $Date$</i>
+-->

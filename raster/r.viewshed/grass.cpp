@@ -309,6 +309,11 @@ init_event_list_in_memory(AEvent * eventList, char *rastName,
 						   hd->nodata_value);
 		continue;
 	    }
+	    if (viewOptions.doDirection &&
+		    !is_point_inside_angle(*vp, i, j, viewOptions.horizontal_angle_min,
+					   viewOptions.horizontal_angle_max)) {
+		continue;
+	    }
 
 	    /* if point is outside maxDist, do NOT include it as an
 	       event */
@@ -533,7 +538,11 @@ AMI_STREAM < AEvent > *init_event_list(char *rastName, Viewpoint * vp,
 		add_result_to_io_visibilitygrid(visgrid, &visCell);
 		continue;
 	    }
-
+	    if (viewOptions.doDirection &&
+		    !is_point_inside_angle(*vp, i, j, viewOptions.horizontal_angle_min,
+					   viewOptions.horizontal_angle_max)) {
+		continue;
+	    }
 	    /* if point is outside maxDist, do NOT include it as an
 	       event */
 	    if (is_point_outside_max_dist
@@ -782,7 +791,6 @@ save_vis_elev_to_GRASS(Grid * visgrid, char *elevfname, char *visfname,
 /* helper function to deal with GRASS writing to a row buffer */
 void writeValue(void *bufrast, int j, double x, RASTER_MAP_TYPE data_type)
 {
-
     switch (data_type) {
     case CELL_TYPE:
 	((CELL *) bufrast)[j] = (CELL) x;
@@ -824,7 +832,8 @@ void writeNodataValue(void *bufrast, int j, RASTER_MAP_TYPE data_type)
 void
 save_io_visibilitygrid_to_GRASS(IOVisibilityGrid * visgrid,
 				char *fname, RASTER_MAP_TYPE type,
-				float (*fun) (float))
+				float (*fun) (float),
+				OutputMode mode)
 {
 
     G_message(_("Saving grid to <%s>"), fname);
@@ -878,7 +887,10 @@ save_io_visibilitygrid_to_GRASS(IOVisibilityGrid * visgrid,
 	    }
 	    else {
 		/*  this cell is not in stream, so it is invisible */
-		writeNodataValue(visrast, j, type);
+		if (mode == OUTPUT_BOOL)
+		    writeValue(visrast, j, BOOL_INVISIBLE, type);
+		else if (mode == OUTPUT_ANGLE)
+		    writeNodataValue(visrast, j, type);
 	    }
 	}			/* for j */
 

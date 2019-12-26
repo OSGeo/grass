@@ -10,8 +10,10 @@ for details.
 """
 
 from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 import grass.script as gscript
+from grass.script.utils import decode
 
 
 class TestWhatStrds(TestCase):
@@ -63,8 +65,7 @@ class TestWhatStrds(TestCase):
 2|100|200|300|400
 3|100|200|300|400
 """
-        self.assertLooksLike(output, db_sel.outputs.stdout)
+        self.assertMultiLineEqual(output, decode(db_sel.outputs.stdout))
 
 if __name__ == '__main__':
-    from grass.gunittest.main import test
     test()

@@ -68,6 +68,7 @@ struct kdnode
 {
     unsigned char dim;          /*!< split dimension of this node */
     unsigned char depth;        /*!< depth at this node */
+    unsigned char balance;      /*!< flag to indicate if balancing is needed */
     double *c;                  /*!< coordinates */
     int uid;                    /*!< unique id of this node */
     struct kdnode *child[2];    /*!< link to children: `[0]` for smaller, `[1]` for larger */

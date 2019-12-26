@@ -159,7 +159,7 @@ programming. The programmer should use only routines with this prefix.
 
 \subsection vlibBuffer Vector buffer functions
 
- - Vect_line_buffer()
+ - Vect_line_buffer2()
 
  - Vect_line_parallel()
 

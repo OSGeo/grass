@@ -42,7 +42,7 @@
 *		 needed amount of memory will be allocated for the projection
 *	
 *		 Bugfixes 20050328: added floor() before (int) typecasts to in avoid
-*		 assymetrical rounding errors. Added missing offset outcellhd.ew_res/2 
+*		 asymmetrical rounding errors. Added missing offset outcellhd.ew_res/2 
 *		 to initial xcoord for each row in main projection loop (we want to  project 
 *		 center of cell, not border).
 *
@@ -112,7 +112,8 @@ int main(int argc, char **argv)
     struct History history;
 
     struct pj_info iproj,	/* input map proj parameters    */
-      oproj;			/* output map proj parameters   */
+		   oproj,	/* output map proj parameters   */
+		   tproj;	/* transformation parameters   */
 
     struct Key_Value *in_proj_info,	/* projection information of    */
      *in_unit_info,		/* input and output mapsets     */
@@ -130,10 +131,12 @@ int main(int argc, char **argv)
      *inlocation,		/* name of input location       */
      *outmap,			/* name of output layer         */
      *indbase,			/* name of input database       */
-     *interpol,			/* interpolation method:
-				   nearest neighbor, bilinear, cubic */
+     *interpol,			/* interpolation method         */
      *memory,			/* amount of memory for cache   */
      *res;			/* resolution of target map     */
+#ifdef HAVE_PROJ_H
+    struct Option *pipeline;	/* name of custom PROJ pipeline */
+#endif
     struct Cell_head incellhd,	/* cell header of input map     */
       outcellhd;		/* and output map               */
 
@@ -197,6 +200,14 @@ int main(int argc, char **argv)
     res->required = NO;
     res->description = _("Resolution of output raster map");
     res->guisection = _("Target");
+
+#ifdef HAVE_PROJ_H
+    pipeline = G_define_option();
+    pipeline->key = "pipeline";
+    pipeline->type = TYPE_STRING;
+    pipeline->required = NO;
+    pipeline->description = _("PROJ pipeline for coordinate transformation");
+#endif
 
     list = G_define_flag();
     list->key = 'l';
@@ -284,13 +295,13 @@ int main(int argc, char **argv)
     /* if requested, list the raster maps in source location - MN 5/2001 */
     if (list->answer) {
 	int i;
-	char **list;
+	char **srclist;
 	G_verbose_message(_("Checking location <%s> mapset <%s>"),
 			  inlocation->answer, setname);
-	list = G_list(G_ELEMENT_RASTER, G_getenv_nofatal("GISDBASE"),
+	srclist = G_list(G_ELEMENT_RASTER, G_getenv_nofatal("GISDBASE"),
 		      G_getenv_nofatal("LOCATION_NAME"), setname);
-	for (i = 0; list[i]; i++) {
-	    fprintf(stdout, "%s\n", list[i]);
+	for (i = 0; srclist[i]; i++) {
+	    fprintf(stdout, "%s\n", srclist	[i]);
 	}
 	fflush(stdout);
 	exit(EXIT_SUCCESS);	/* leave r.proj after listing */
@@ -310,11 +321,25 @@ int main(int argc, char **argv)
     if ((in_proj_info = G_get_projinfo()) == NULL)
 	G_fatal_error(_("Unable to get projection info of input map"));
 
+    /* apparently the +over switch must be set in the input projection,
+     * not the output latlon projection */
+    if (curr_proj == PROJECTION_LL)
+	G_set_key_value("+over", "defined", in_proj_info);
+
     if ((in_unit_info = G_get_projunits()) == NULL)
 	G_fatal_error(_("Unable to get projection units of input map"));
 
     if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
 	G_fatal_error(_("Unable to get projection key values of input map"));
+
+    tproj.def = NULL;
+#ifdef HAVE_PROJ_H
+    if (pipeline->answer) {
+	tproj.def = G_store(pipeline->answer);
+    }
+#endif
+    if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
+	G_fatal_error(_("Unable to initialize coordinate transformation"));
 
     G_free_key_value(in_proj_info);
     G_free_key_value(in_unit_info);
@@ -355,7 +380,7 @@ int main(int argc, char **argv)
 	outcellhd.south =  1e9;
 	outcellhd.east  = -1e9;
 	outcellhd.west  =  1e9;
-	bordwalk_edge(&incellhd, &outcellhd, &iproj, &oproj);
+	bordwalk_edge(&incellhd, &outcellhd, &iproj, &oproj, &tproj, PJ_FWD);
 	inorth = outcellhd.north;
 	isouth = outcellhd.south;
 	ieast  = outcellhd.east;
@@ -385,7 +410,7 @@ int main(int argc, char **argv)
 
     /* Cut non-overlapping parts of input map */
     if (!nocrop->answer)
-	bordwalk(&outcellhd, &incellhd, &oproj, &iproj);
+	bordwalk(&outcellhd, &incellhd, &iproj, &oproj, &tproj, PJ_INV);
 
     /* Add 2 cells on each side for bilinear/cubic & future interpolation methods */
     /* (should probably be a factor based on input and output resolution) */
@@ -411,7 +436,7 @@ int main(int argc, char **argv)
     /* Adjust borders of output map */
 
     if (!nocrop->answer)
-	bordwalk(&incellhd, &outcellhd, &iproj, &oproj);
+	bordwalk(&incellhd, &outcellhd, &iproj, &oproj, &tproj, PJ_FWD);
 
 #if 0
     outcellhd.west = outcellhd.south = HUGE_VAL;
@@ -420,7 +445,9 @@ int main(int argc, char **argv)
 	ycoord1 = Rast_row_to_northing((double)(row + 0.5), &incellhd);
 	for (col = 0; col < incellhd.cols; col++) {
 	    xcoord1 = Rast_col_to_easting((double)(col + 0.5), &incellhd);
-	    pj_do_proj(&xcoord1, &ycoord1, &iproj, &oproj);
+	    if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
+			      &xcoord1, &ycoord1, NULL) < 0)
+		G_fatal_error(_("Error in %s"), "GPJ_transform()");
 	    if (xcoord1 > outcellhd.east)
 		outcellhd.east = xcoord1;
 	    if (ycoord1 > outcellhd.north)
@@ -441,23 +468,23 @@ int main(int argc, char **argv)
 
     G_message(" ");
     G_message(_("Input:"));
-    G_message(_("Cols: %d (%d)"), incellhd.cols, icols);
-    G_message(_("Rows: %d (%d)"), incellhd.rows, irows);
-    G_message(_("North: %f (%f)"), incellhd.north, inorth);
-    G_message(_("South: %f (%f)"), incellhd.south, isouth);
-    G_message(_("West: %f (%f)"), incellhd.west, iwest);
-    G_message(_("East: %f (%f)"), incellhd.east, ieast);
+    G_message(_("Cols: %d (original: %d)"), incellhd.cols, icols);
+    G_message(_("Rows: %d (original: %d)"), incellhd.rows, irows);
+    G_message(_("North: %f (original: %f)"), incellhd.north, inorth);
+    G_message(_("South: %f (original: %f)"), incellhd.south, isouth);
+    G_message(_("West: %f (original: %f)"), incellhd.west, iwest);
+    G_message(_("East: %f (original: %f)"), incellhd.east, ieast);
     G_message(_("EW-res: %f"), incellhd.ew_res);
     G_message(_("NS-res: %f"), incellhd.ns_res);
     G_message(" ");
 
     G_message(_("Output:"));
-    G_message(_("Cols: %d (%d)"), outcellhd.cols, ocols);
-    G_message(_("Rows: %d (%d)"), outcellhd.rows, orows);
-    G_message(_("North: %f (%f)"), outcellhd.north, onorth);
-    G_message(_("South: %f (%f)"), outcellhd.south, osouth);
-    G_message(_("West: %f (%f)"), outcellhd.west, owest);
-    G_message(_("East: %f (%f)"), outcellhd.east, oeast);
+    G_message(_("Cols: %d (original: %d)"), outcellhd.cols, ocols);
+    G_message(_("Rows: %d (original: %d)"), outcellhd.rows, orows);
+    G_message(_("North: %f (original: %f)"), outcellhd.north, onorth);
+    G_message(_("South: %f (original: %f)"), outcellhd.south, osouth);
+    G_message(_("West: %f (original: %f)"), outcellhd.west, owest);
+    G_message(_("East: %f (original: %f)"), outcellhd.east, oeast);
     G_message(_("EW-res: %f"), outcellhd.ew_res);
     G_message(_("NS-res: %f"), outcellhd.ns_res);
     G_message(" ");
@@ -509,8 +536,11 @@ int main(int argc, char **argv)
 
 	    /* project coordinates in output matrix to       */
 	    /* coordinates in input matrix                   */
-	    if (pj_do_proj(&xcoord1, &ycoord1, &oproj, &iproj) < 0)
+	    if (GPJ_transform(&iproj, &oproj, &tproj, PJ_INV,
+			      &xcoord1, &ycoord1, NULL) < 0) {
+		G_warning(_("Error in %s"), "GPJ_transform()");
 		Rast_set_null_value(obufptr, 1, cell_type);
+	    }
 	    else {
 		/* convert to row/column indices of input matrix */
 

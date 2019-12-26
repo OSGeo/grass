@@ -65,7 +65,7 @@ class TestVectorInfoAssertions(TestCase):
                                     precision=0.01)
         self.assertRaises(self.failureException,
                           self.assertVectorFitsUnivar,
-                          map='schools', column='GLEVEL',
+                          map='schools', column='MOBILECAPA',
                           reference=V_UNIVAR_SCHOOLS_WIDTH_SUBSET,
                           precision=0.01)
         self.assertRaises(ValueError,

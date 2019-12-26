@@ -40,6 +40,10 @@ def db_describe(table, **args):
 
     :return: parsed module output
     """
+    if 'database' in args and args['database'] == '':
+        args.pop('database')
+    if 'driver' in args and args['driver'] == '':
+        args.pop('driver')
     s = read_command('db.describe', flags='c', table=table, **args)
     if not s:
         fatal(_("Unable to describe table <%s>") % table)
@@ -80,7 +84,7 @@ def db_table_exist(table, **args):
 
     :return: True for success, False otherwise
     """
-    nuldev = file(os.devnull, 'w+')
+    nuldev = open(os.devnull, 'w+')
     ok = True
     try:
         run_command('db.describe', flags='c', table=table,
@@ -105,7 +109,7 @@ def db_connection(force=False):
     :return: parsed output of db.connect
     """
     try:
-        nuldev = file(os.devnull, 'w')
+        nuldev = open(os.devnull, 'w')
         conn = parse_command('db.connect', flags='g', stderr=nuldev)
         nuldev.close()
     except CalledModuleError:
@@ -170,8 +174,10 @@ def db_select(sql=None, filename=None, table=None, **args):
     return tuple(result)
 
 
-def db_table_in_vector(table):
+def db_table_in_vector(table, mapset='.'):
     """Return the name of vector connected to the table.
+    By default it check only in the current mapset, because the same table
+    name could be used also in other mapset by other vector.
     It returns None if no vectors are connected to the table.
 
     >>> run_command('g.copy', vector='firestations,myfirestations')
@@ -185,9 +191,9 @@ def db_table_in_vector(table):
     :param str table: name of table to query
     """
     from .vector import vector_db
-    nuldev = file(os.devnull, 'w')
+    nuldev = open(os.devnull, 'w')
     used = []
-    vects = list_strings('vect')
+    vects = list_strings('vector', mapset=mapset)
     for vect in vects:
         for f in vector_db(vect, stderr=nuldev).values():
             if not f:

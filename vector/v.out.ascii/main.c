@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("export"));
+    G_add_keyword(_("output"));
     G_add_keyword("ASCII");
     module->label =
 	_("Exports a vector map to a GRASS ASCII vector representation.");

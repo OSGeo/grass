@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 ############################################################################
 #
 # MODULE:    g.gui.timeline.py
@@ -50,7 +50,7 @@ def main():
         # TODO: why do we need this special check here, the reason of error
         # is wrong intallation or something, no need to report this to the
         # user in a nice way
-        gscript.fatal(e.message)
+        gscript.fatal(str(e))
 
     datasets = options['inputs'].strip().split(',')
     datasets = [data for data in datasets if data]

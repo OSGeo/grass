@@ -129,11 +129,14 @@ int I_ReadSigSet(FILE * fd, struct SigSet *S)
 
     while (gettag(fd, tag)) {
 	if (eq(tag, "title:"))
-	    get_title(fd, S);
+	    if (get_title(fd, S) != 0)
+            return -1;
 	if (eq(tag, "nbands:"))
-	    get_nbands(fd, S);
+	    if (get_nbands(fd, S) != 0)
+            return -1;
 	if (eq(tag, "class:"))
-	    get_class(fd, S);
+	    if (get_class(fd, S) != 0)
+            return -1;
     }
     return 1;			/* for now assume success */
 }
@@ -148,7 +151,8 @@ static int gettag(FILE * fd, char *tag)
 
 static int get_nbands(FILE * fd, struct SigSet *S)
 {
-    fscanf(fd, "%d", &S->nbands);
+    if (fscanf(fd, "%d", &S->nbands) != 1)
+        return -1;
 
     return 0;
 }
@@ -158,7 +162,8 @@ static int get_title(FILE * fd, struct SigSet *S)
     char title[1024];
 
     *title = 0;
-    fscanf(fd, "%[^\n]", title);
+    if (fscanf(fd, "%[^\n]", title) != 1)
+        return -1;
     I_SetSigTitle(S, title);
 
     return 0;
@@ -174,13 +179,17 @@ static int get_class(FILE * fd, struct SigSet *S)
 	if (eq(tag, "endclass:"))
 	    break;
 	if (eq(tag, "classnum:"))
-	    get_classnum(fd, C);
+	    if (get_classnum(fd, C) != 0)
+            return -1;
 	if (eq(tag, "classtype:"))
-	    get_classtype(fd, C);
+	    if (get_classtype(fd, C) != 0)
+            return -1;
 	if (eq(tag, "classtitle:"))
-	    get_classtitle(fd, C);
+	    if (get_classtitle(fd, C) != 0)
+            return -1;
 	if (eq(tag, "subclass:"))
-	    get_subclass(fd, S, C);
+	    if (get_subclass(fd, S, C) != 0)
+            return -1;
     }
 
     return 0;
@@ -188,14 +197,16 @@ static int get_class(FILE * fd, struct SigSet *S)
 
 static int get_classnum(FILE * fd, struct ClassSig *C)
 {
-    fscanf(fd, "%ld", &C->classnum);
+    if (fscanf(fd, "%ld", &C->classnum) != 1)
+        return -1;
 
     return 0;
 }
 
 static int get_classtype(FILE * fd, struct ClassSig *C)
 {
-    fscanf(fd, "%d", &C->type);
+    if (fscanf(fd, "%d", &C->type) != 1)
+        return -1;
 
     return 0;
 }
@@ -205,7 +216,8 @@ static int get_classtitle(FILE * fd, struct ClassSig *C)
     char title[1024];
 
     *title = 0;
-    fscanf(fd, "%[^\n]", title);
+    if (fscanf(fd, "%[^\n]", title) != 1)
+        return -1;
     I_SetClassTitle(C, title);
 
     return 0;
@@ -222,11 +234,14 @@ static int get_subclass(FILE * fd, struct SigSet *S, struct ClassSig *C)
 	if (eq(tag, "endsubclass:"))
 	    break;
 	if (eq(tag, "pi:"))
-	    get_subclass_pi(fd, Sp);
+	    if (get_subclass_pi(fd, Sp) != 0)
+            return -1;
 	if (eq(tag, "means:"))
-	    get_subclass_means(fd, Sp, S->nbands);
+	    if (get_subclass_means(fd, Sp, S->nbands) != 0)
+            return -1;
 	if (eq(tag, "covar:"))
-	    get_subclass_covar(fd, Sp, S->nbands);
+	    if (get_subclass_covar(fd, Sp, S->nbands) != 0)
+            return -1;
     }
 
     return 0;
@@ -234,7 +249,8 @@ static int get_subclass(FILE * fd, struct SigSet *S, struct ClassSig *C)
 
 static int get_subclass_pi(FILE * fd, struct SubSig *Sp)
 {
-    fscanf(fd, "%lf", &Sp->pi);
+    if (fscanf(fd, "%lf", &Sp->pi) != 1)
+        return -1;
 
     return 0;
 }
@@ -244,7 +260,8 @@ static int get_subclass_means(FILE * fd, struct SubSig *Sp, int nbands)
     int i;
 
     for (i = 0; i < nbands; i++)
-	fscanf(fd, "%lf", &Sp->means[i]);
+	if (fscanf(fd, "%lf", &Sp->means[i]) != 1)
+        return -1;
 
     return 0;
 }
@@ -255,7 +272,8 @@ static int get_subclass_covar(FILE * fd, struct SubSig *Sp, int nbands)
 
     for (i = 0; i < nbands; i++)
 	for (j = 0; j < nbands; j++)
-	    fscanf(fd, "%lf", &Sp->R[i][j]);
+	    if (fscanf(fd, "%lf", &Sp->R[i][j]) != 1)
+            return -1;
 
     return 0;
 }

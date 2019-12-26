@@ -1,12 +1,15 @@
 General
 =======
-This is a part of visvis library [1], specifically visvis.vvmovie.
-The files are from the visvis-1.8 version.
+
+This is a library for manipulating (non-geospatial) images in GRASS GIS.
+
+The images2*.py files are a part of visvis library [1], specifically
+visvis.vvmovie. The files are from the visvis-1.8 version.
 
 [1] https://code.google.com/p/visvis/
 
-Changes
-=======
+Changes to visvis
+=================
 In images2avi, the image format for temporary files is changed
 from JPG to PNG, to improve the resulting AVI. This makes the size larger,
 however the JPG format is unsuitable for maps in general.
@@ -33,7 +36,7 @@ however the JPG format is unsuitable for maps in general.
      
 Questions
 =========
-Should we make these files PEP8 compliant? This would make
+Should we make the visvis files PEP8 compliant? This would make
 merging of possible changes from visvis more difficult.
 
 

@@ -252,7 +252,7 @@ int my_yyinput(char *buf, int max_size)
 /**********************************************************************
  * yyerror
  *
- * This should be called just before failing. It formats a meaningfull
+ * This should be called just before failing. It formats a meaningful
  * message and deposits it in a useful place.
  *
  **********************************************************************/

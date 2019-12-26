@@ -14,6 +14,6 @@ void ZeroMapCells(void)
 
     for (Row = 0; Row < Rs; Row++) {
 	for (Col = 0; Col < Cs; Col++)
-	    Surface[Row][Col] = 0.0;
+	    RSurface[Row][Col] = 0.0;
     }
 }

@@ -16,10 +16,15 @@ for details.
 
 import wx
 
+# i18n is taken care of in the grass library code.
+# So we need to import it before any of the GUI code.
+# NOTE: in this particular case, we don't really need the grass library;
+# NOTE: we import it just for the side effects of gettext.install()
+import grass
+
 from core import globalvar
 from gui_core.dialogs import SimpleDialog
 from gui_core import gselect
-from core.utils import _
 
 
 class ExampleMapDialog(SimpleDialog):

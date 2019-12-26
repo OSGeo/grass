@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 All of the components of ctypegencore require an argument called "options".
@@ -32,7 +32,11 @@ default_values = {
     "other_known_names": [],
     "include_macros": True,
     "libraries": [],
-    "strip_build_path": None
+    "strip_build_path": None,
+    "output_language": "python",
+    "no_stddef_types": False,
+    "no_gnu_types": False,
+    "no_python_types": False,
 }
 
 
