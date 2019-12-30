@@ -1,12 +1,12 @@
 
 
-make_script_in_dir(r.shade)
+build_script_in_subdir(r.shade)
 
-make_script_in_dir(d.correlate)
+build_script_in_subdir(d.correlate)
 
-make_script_in_dir(d.frame)
+build_script_in_subdir(d.frame)
 
-make_script_in_dir(d.out.file )
+build_script_in_subdir(d.out.file )
 
 set(scripts_SUBDIRS
   d.to.rast
@@ -84,10 +84,10 @@ set(scripts_SUBDIRS
   #TODO
   #r.in.wms
   #wxpyimgview
-  make_script_in_dir( r.in.wms )
+  build_script_in_subdir( r.in.wms )
   
 foreach(d ${scripts_SUBDIRS})
-make_script_in_dir(${d} )
+build_script_in_subdir(${d} )
 endforeach()
 
 

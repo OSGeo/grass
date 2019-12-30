@@ -7,7 +7,7 @@ if(MSVC)
   set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 endif()
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/find_scripts;${CMAKE_MODULE_PATH}")
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/find_scripts;${CMAKE_SOURCE_DIR}/cmake/modules;${CMAKE_MODULE_PATH}")
 
 set(default_option_enabled ON)
 if(WIN32)
@@ -83,7 +83,7 @@ set(NAME_VER ${GRASS_VERSION_MAJOR})
 set(LIB_VER "${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.")
 message(STATUS "GRASS_VERSION_NUMBER  =  '${GRASS_VERSION_NUMBER}'")
 
-include(cmake/repo_status.cmake)
+include(repo_status)
 repo_status("${CMAKE_CURRENT_LIST_DIR}" GRASS_VERSION_GIT)
 
 # Setup build locations.
@@ -97,157 +97,24 @@ if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 endif()
 
-function(update_per_group_target t_name)
-  if(${t_name} MATCHES "(^([a-z|0-9]+)\\.)")
-    string(REPLACE "." ";" name_to_list "${t_name}")
-    list(GET name_to_list 0 all_target_name)
-    if(all_target_name)
-      set(all_target_name ${all_target_name}-all)
-    else()
-      message(FATAL_ERROR "all_target_name=${all_target_name} \t t_name=${t_name}")      
-    endif()
-    
-    if(TARGET ${all_target_name})
-      add_dependencies(${all_target_name} ${t_name})
-    else()
-      add_custom_target(${all_target_name} DEPENDS ${t_name})
-    endif()
-  endif()
+include(update_per_group_target)
 
-endfunction()
+include(build_module)
+include(build_program)
+include(build_program_in_subdir)
+include(build_library_in_subdir)
 
-function(build_module)
-  cmake_parse_arguments(G  "EXE" "NAME;SRCDIR;SRC_REGEX" "SOURCES;INCLUDES;DEPENDS;OPTIONAL_DEPENDS;DEFS;HEADERS" ${ARGN} )
+include(build_grass_script)
+include(build_script_in_subdir)
 
-  if(NOT G_NAME)
-    message(FATAL_ERROR "G_NAME empty")
-  endif()
-  update_per_group_target( ${G_NAME} )
-
-  if(NOT G_SRC_REGEX)
-    set(G_SRC_REGEX "*.c")
-  endif()
-  
-  if(NOT G_SRCDIR)
-    set(G_SRCDIR ${CMAKE_CURRENT_SOURCE_DIR})
-  endif()
-
-  foreach(G_HEADER ${G_HEADERS})
-    if( EXISTS "${G_SRCDIR}/${G_HEADER}" )
-      file(COPY ${G_SRCDIR}/${G_HEADER} DESTINATION "${CMAKE_BINARY_DIR}/include/grass")
-    else() 
-      file(GLOB header_list_from_glob LIST_DIRECTORIES false "${G_SRCDIR}/${G_HEADER}")
-      if(NOT header_list_from_glob)
-	message(FATAL_ERROR "MUST copy '${G_SRCDIR}/${G_HEADER}' to ${CMAKE_BINARY_DIR}/include/grass")
-      endif()
-      foreach(header_I ${header_list_from_glob})
-	file(COPY ${header_I} DESTINATION "${CMAKE_BINARY_DIR}/include/grass")
-      endforeach()
-    endif()
-  endforeach()
-
-  if(NOT G_SOURCES)
-    file(GLOB ${G_NAME}_SRCS "${G_SRCDIR}/${G_SRC_REGEX}")
-  else()
-    set(${G_NAME}_SRCS ${G_SOURCES})
-  endif()
-  
-  if(G_EXE)
-    add_executable(${G_NAME} ${${G_NAME}_SRCS})
-  else()
-    add_library(${G_NAME} ${${G_NAME}_SRCS})
-    set_target_properties(${G_NAME}
-      PROPERTIES OUTPUT_NAME ${G_NAME}.${GRASS_VERSION_NUMBER}
-      )
-  endif()
-
-  foreach(G_OPTIONAL_DEPEND ${G_OPTIONAL_DEPENDS})
-    if(TARGET ${G_OPTIONAL_DEPEND})
-      add_dependencies(${G_NAME} ${G_OPTIONAL_DEPEND})
-    endif()
-  endforeach()
- foreach(G_DEPEND ${G_DEPENDS})
-   if(NOT TARGET ${G_DEPEND})
-     message(FATAL_ERROR "${G_DEPEND} not a target")
-     break()
-   endif()
-
-   add_dependencies(${G_NAME} ${G_DEPEND})
-
-   set(${G_NAME}_INCLUDE_DIRS)
-   list(APPEND ${G_NAME}_INCLUDE_DIRS "${G_SRCDIR}")
-   foreach(G_INCLUDE ${G_INCLUDES})
-     list(APPEND ${G_NAME}_INCLUDE_DIRS "${G_INCLUDE}")
-   endforeach()
-   
-   if(${G_NAME}_INCLUDE_DIRS)
-     list(REMOVE_DUPLICATES ${G_NAME}_INCLUDE_DIRS )
-   endif()
-   
-   target_include_directories(${G_NAME} PUBLIC ${${G_NAME}_INCLUDE_DIRS})
-
- endforeach()
- 
- foreach(G_DEF ${G_DEFS})
-   target_compile_definitions(${G_NAME} PUBLIC "${G_DEF}")
- endforeach()
-
-
- target_link_libraries(${G_NAME} ${G_DEPENDS} ${G_OPTIONAL_DEPENDS})
- if(G_EXE)
-    install(TARGETS ${G_NAME} DESTINATION bin)
- else()
-    install(TARGETS ${G_NAME} DESTINATION lib)
- endif()
-
-
-
-endfunction()  
-
-
-macro(build_library_in_subdir dir_name)
-  set (extra_args ${ARGN})
-  if ("NAME" IN_LIST extra_args)
-    #message("dir_name=${dir_name} ${extra_args}")
-    build_module(SRCDIR ${CMAKE_CURRENT_SOURCE_DIR}/${dir_name} ${ARGN} )
-  else()
-    get_filename_component(g_name ${dir_name} NAME)
-    #message("dir_name=${dir_name} |g_name= ${g_name}")
-    build_module(NAME grass_${g_name} SRCDIR ${CMAKE_CURRENT_SOURCE_DIR}/${dir_name} ${ARGN})
-  endif()
-endmacro()
-
-macro(build_program)
-  build_module(${ARGN} EXE)
-endmacro()
-
-macro(build_program_in_subdir dir_name)
-  set (extra_args ${ARGN})
-  if ("NAME" IN_LIST extra_args)
-    #message("dir_name=${dir_name} ${extra_args}")
-    build_program(SRCDIR ${CMAKE_CURRENT_SOURCE_DIR}/${dir_name} ${ARGN} )
-  else()
-    get_filename_component(pgm_name ${dir_name} NAME)
-    build_program(NAME ${pgm_name} SRCDIR ${CMAKE_CURRENT_SOURCE_DIR}/${dir_name} ${ARGN} )
-  endif()
-endmacro()
-
-macro(check_target target_name have_define_var)
-set(${have_define_var} 0)
-if(TARGET ${target_name})
-  message(STATUS "${target_name} package found. Setting ${have_define_var} to 1")
-  set(${have_define_var} 1)
-endif()
-endmacro()
+include(check_target)
 
 add_subdirectory(thirdparty)
-
-include(cmake/scripts.cmake)
 
 add_subdirectory(include)
 
 if(MSVC)
-  include_directories("${CMAKE_SOURCE_DIR}/thirdparty/msvc/")
+  include_directories("${CMAKE_SOURCE_DIR}/msvc/")
 endif()
 
 include_directories("${CMAKE_BINARY_DIR}/include")

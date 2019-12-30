@@ -1,6 +1,3 @@
-macro(make_script_in_dir dir_name)
-  build_grass_script(NAME ${dir_name})
-endmacro()
 
 function(build_grass_script)
     cmake_parse_arguments(G  "" "NAME;SRCDIR;SRC_REGEX" "SOURCES;DEPENDS" ${ARGN} )
@@ -83,6 +80,3 @@ foreach(pyfile ${SRC_FILES})
 endforeach()
 
 endfunction()
-
-
-

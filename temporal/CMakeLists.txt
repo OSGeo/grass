@@ -52,6 +52,6 @@ set(temporal_SUBDIRS
 build_program_in_subdir(t.connect DEPENDS grass_gis grass_temporal)
 
 foreach(d ${temporal_SUBDIRS})
-  make_script_in_dir(${d})
+  build_script_in_subdir(${d})
 endforeach()
 
