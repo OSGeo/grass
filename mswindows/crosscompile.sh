@@ -1,13 +1,21 @@
 #!/bin/sh
 #
-# Script for building a cross-compiled portable package of GRASS GIS
+################################################################################
 #
-# Written by Huidae Cho
+# MODULE:	crosscompile.sh
+# AUTHOR(S):	Huidae Cho <grass4u gmail.com>
+# PURPOSE:	Builds a cross-compiled portable package of GRASS GIS
+# COPYRIGHT:	(C) 2019 by Huidae Cho and the GRASS Development Team
 #
-# Requires MXE <https://mxe.cc/> for cross-compilation
+#		This program is free software under the GNU General Public
+#		License (>=v2). Read the file COPYING that comes with GRASS
+#		for details.
 #
-# Tested on Slackware 14.2 x86_64 with up-to-date packages from slackpkg and
-# sbopkg
+################################################################################
+#
+# This script requires MXE <https://mxe.cc/> for cross-compilation and was
+# tested on Slackware 14.2 x86_64 with up-to-date packages from slackpkg and
+# sbopkg.
 #
 # Basic steps:
 #
