@@ -7,7 +7,7 @@ eastings and northings may be passed to the program directly from
 standard input. If the <b>output</b> option is omitted, the results
 are sent directly to standard output. In this way <em>m.proj</em> can
 be used as a simple frontend to
-the <a href="http://trac.osgeo.org/proj/">PROJ.4</a>
+the <a href="https://proj.org">PROJ</a>
 <em>cs2cs</em> utility. The <b>-i</b> or <b>-o</b> flags make the task
 especially easy for the common problem of converting to or from lat/long
 WGS84.
@@ -46,7 +46,7 @@ verbose mode (<b>--verbose</b>) with <em>cs2cs</em> directly in this case.
 Custom projection parameters can be used via the <b>proj_in</b> and
 <b>proj_out</b> options. Full documentation of the projection
 parameter format may be found on
-the <a href="http://trac.osgeo.org/proj/">PROJ.4</a> website. Using
+the <a href="https://proj.org">PROJ</a> website. Using
 these options will fully override the default parameters the module
 would normally use.
 <p>
@@ -54,7 +54,7 @@ By using the <b>--verbose</b> verbose flag, the user can see exactly
 what projection parameters will be used in the conversion as well as
 some other informative messages.
 <p>
-If output is to lat/long, it will be formatted using PROJ.4's
+If output is to lat/long, it will be formatted using PROJ's
 Degree:Minute:Second (DMS) convention
 of <tt>DDDdMM'SSS.SS"H</tt>. This can be handy if you wish to quickly
 convert lat/long decimal degree data into its DMS equivalent.<br>
@@ -149,13 +149,11 @@ e.g. feet), <tt>+lat_0</tt> (standard parallel), <tt>+lon_0</tt>
 (central meridian), <tt>+k</tt> (scale factor) and <tt>+x_0</tt>
 (false easting). Sometimes false northing is needed which is coded as
 <tt>+y_0</tt>.  Internally, the underlying
-<a href="http://trac.osgeo.org/proj/">PROJ.4</a> projection library
+<a href="https://proj.org">PROJ</a> projection library
 performs an inverse projection to latitude-longitude and then projects
 the coordinate list to the target projection.
 <p>
-<!-- HB 4/2006: I'm leaving this in from the GRASS 5 help page, but is
-it accurate? --> Datum conversions are automatically handled by the
-PROJ.4 library if
+Datum conversions are automatically handled by the PROJ library if
 <tt>+datum</tt> setings are specified on <b>both</b> the input <b>and</b> output
 projections on the command line. The <tt>+towgs84</tt> parameter can be used to 
 define either 3 or 7 term datum transform coefficients, satisfying this requirement.
@@ -187,19 +185,19 @@ ellipsoid).
 
 <p>
 For more usage examples, see the documentation for the
-<a href="http://trac.osgeo.org/proj/">PROJ.4</a> <em>cs2cs</em> program.
+<a href="https://proj.org">PROJ</a> <em>cs2cs</em> program.
 
 
 <h2>REFERENCES</h2>
 
 <ul>
   <li>Evenden, G.I.
-      (1990) <a href="ftp://ftp.remotesensing.org/proj/OF90-284.pdf">Cartographic
+      (1990) <a href="https://pubs.usgs.gov/of/1990/of90-284/ofr90-284.pdf">Cartographic
       projection procedures for the UNIX environment - a user's
       manual</a>.  USGS Open-File Report 90-284 (OF90-284.pdf) See
       also there: Interim Report and 2nd Interim Report on Release 4,
       Evenden 1994).</li>
-  <li><a href="http://trac.osgeo.org/proj/">PROJ.4</a> Cartographic Projection Library</li>
+  <li><a href="https://proj.org">PROJ</a> Cartographic Projection Library</li>
 </ul>
 
 <h2>SEE ALSO</h2>
