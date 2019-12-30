@@ -24,6 +24,7 @@ option(WITH_BZLIB "enable sqlite support" ON)
 option(WITH_BLAS "enable sqlite support" ON)
 option(WITH_LAPACK "enable sqlite support" ON)
 option(WITH_LARGEFILES "enable largefile support" ${default_option_enabled})
+option(WITH_DOCS "Build documentation" OFF)
 if(APPLE)
   if(POLICY CMP0042)
     cmake_policy(SET CMP0042 NEW)
@@ -40,48 +41,22 @@ if("${isSystemDir}" STREQUAL "-1")
   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 endif("${isSystemDir}" STREQUAL "-1")
 
-set(GRASS_VERSION_MAJOR)
-set(GRASS_VERSION_MINOR)
-set(GRASS_VERSION_PATCH)
+include(get_host_arch)
+get_host_arch(BUILD_ARCH)
 
-set(GRASS_VERSION_UPDATE_PKG "0.2")
-set(BUILD_ARCH "x86_64")
-
-file(STRINGS "include/VERSION" GRASS_VERSION_STRINGS)
-list(LENGTH GRASS_VERSION_STRINGS GRASS_VERSION_FILE_LENGTH)
-
-if(MSVC)
-  set(GRASS_C_FLAGS "/D_CRT_SECURE_NO_WARNINGS")
-  if(CMAKE_C_FLAGS)
-    set(CMAKE_C_FLAGS "${GRASS_C_FLAGS} ${CMAKE_C_FLAGS}")
-  endif()
-
-  set(GRASS_CXX_FLAGS "/D_CRT_SECURE_NO_WARNINGS")
-  if(CMAKE_CXX_FLAGS)
-    set(CMAKE_CXX_FLAGS "${GRASS_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
-  endif()
-endif()
-
-if(GRASS_VERSION_FILE_LENGTH LESS 3 )
-  message(FATAL_ERROR "include/VERSION is not a valid file")
-endif()
-
-list(GET GRASS_VERSION_STRINGS 0 GRASS_VERSION_MAJOR)
-list(GET GRASS_VERSION_STRINGS 1 GRASS_VERSION_MINOR)
-
-if(GRASS_VERSION_FILE_LENGTH GREATER 3 )
-  list(GET GRASS_VERSION_STRINGS 2 GRASS_VERSION_RELEASE)
-endif()
-
-if(GRASS_VERSION_FILE_LENGTH GREATER 4 )
-  list(GET GRASS_VERSION_STRINGS 3 GRASS_VERSION_DATE)
-endif()
+include(get_versions)
+get_versions("include/VERSION"
+  GRASS_VERSION_MAJOR
+  GRASS_VERSION_MINOR
+  GRASS_VERSION_RELEASE
+  GRASS_VERSION_DATE)
 
 set(GRASS_VERSION_NUMBER ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE})
-
-set(NAME_VER ${GRASS_VERSION_MAJOR})
-set(LIB_VER "${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.")
 message(STATUS "GRASS_VERSION_NUMBER  =  '${GRASS_VERSION_NUMBER}'")
+set(GRASS_VERSION_UPDATE_PKG "0.2")
+
+include(set_compiler_flags)
+set_compiler_flags()
 
 include(repo_status)
 repo_status("${CMAKE_CURRENT_LIST_DIR}" GRASS_VERSION_GIT)
@@ -98,15 +73,12 @@ if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
 endif()
 
 include(update_per_group_target)
-
 include(build_module)
 include(build_program)
 include(build_program_in_subdir)
 include(build_library_in_subdir)
-
 include(build_grass_script)
 include(build_script_in_subdir)
-
 include(check_target)
 
 add_subdirectory(thirdparty)
@@ -134,25 +106,26 @@ set(ALL_SUBDIRS
   vector  
   temporal
   tools
-
   gui
-
-
-  
   # ps
   # locale
-  # man
-  # doc
-  # testsuite
-  # demolocation
-  # macosx  
-  # mswindows
 )
 
 foreach(d ${ALL_SUBDIRS})
   add_subdirectory(${d})
 endforeach()
 
+if(WITH_DOCS)
+  add_subdirectory(doc)
+  if(NOT MSVC)
+   add_subdirectory(man)
+  endif()
+endif() # WITH_DOCS
+
+# TODO: To be discussed
+# add_subdirectory(testsuite)
+# add_subdirectory(macosx)
+# add_subdirectory(mswindows)
 if(WITH_X11)
   build_program_in_subdir(visualization/ximgview DEPENDS grass_gis X11)
 endif()
