@@ -3,7 +3,11 @@ include(CheckFunctionExists) #TODO: use CheckSymbolExists
 check_include_file(limits.h HAVE_LIMITS_H)
 check_include_file(termio.h HAVE_TERMIO_H)
 check_include_file(termios.h HAVE_TERMIOS_H)
-check_include_file(unistd.h HAVE_UNISTD_H)
+if(NOT MSVC)
+  check_include_file(unistd.h HAVE_UNISTD_H)
+else()
+  #set(HAVE_UNISTD_H 1)
+endif()
 check_include_file(values.h HAVE_VALUES_H)
 check_include_file(zlib.h HAVE_ZLIB_H)
 if(TARGET BZIP2)
@@ -14,7 +18,7 @@ check_include_file(sys/ioctl.h HAVE_SYS_IOCTL_H)
 check_include_file(sys/mtio.h HAVE_SYS_MTIO_H)
 check_include_file(sys/resource.h HAVE_SYS_RESOURCE_H)
 check_include_file(sys/time.h HAVE_SYS_TIME_H)
-check_include_file(time.h TIME_WITH_SYS_TIME)
+check_include_file(time.h HAVE_TIME_H)
 check_include_file(sys/timeb.h HAVE_SYS_TIMEB_H)
 check_include_file(sys/types.h HAVE_SYS_TYPES_H)
 check_include_file(sys/utsname.h HAVE_SYS_UTSNAME_H)
@@ -157,7 +161,17 @@ long long int x;
 return 0;
 }
 "
-HAVE_LONG_LONG_INT )
+HAVE_LONG_LONG_INT)
+
+CHECK_C_SOURCE_COMPILES("
+#include <sys/types.h>
+#include <sys/time.h>
+#include <time.h>
+int main() {
+struct tm *tp;
+; return 0; }
+"
+TIME_WITH_SYS_TIME)
 
 CHECK_FUNCTION_EXISTS(ftime HAVE_FTIME)
 CHECK_FUNCTION_EXISTS(gethostname HAVE_GETHOSTNAME)
