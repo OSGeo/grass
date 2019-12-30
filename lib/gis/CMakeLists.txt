@@ -30,10 +30,15 @@ endif()
 
 set(GRASS_VERSION_DATE 20160402)
 
+set(grass_gis_DEFS "-DGRASS_VERSION_DATE=${GRASS_VERSION_DATE}")
+if(MSVC)
+  set(grass_gis_DEFS "${grass_gis_DEFS};-D_USE_MATH_DEFINES=1")
+endif()
+
 build_module(NAME grass_gis SOURCES "${gislib_SRCS}"
   DEPENDS grass_datetime ZLIB 
   OPTIONAL_DEPENDS PTHREAD BZIP2 ICONV
-  DEFS "-DGRASS_VERSION_DATE=${GRASS_VERSION_DATE}"
+  DEFS "${grass_gis_DEFS}"
   )
 if(UNIX)
   target_link_libraries(grass_gis LIBM)

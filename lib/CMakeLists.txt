@@ -1,10 +1,16 @@
 
+set(use_math_DEFS "")
+if(MSVC)
+  set(use_math_DEFS "-D_USE_MATH_DEFINES=1")
+endif()
+
 build_library_in_subdir(datetime)
 
 add_subdirectory(gis)
 
 build_library_in_subdir(driver 
-DEPENDS grass_gis FREETYPE ICONV ZLIB)
+  DEFS "${use_math_DEFS}"
+  DEPENDS grass_gis FREETYPE ICONV ZLIB)
 
 add_subdirectory(proj)
 
@@ -31,16 +37,18 @@ build_library_in_subdir(external/ccmath)
 build_library_in_subdir(external/shapelib NAME grass_shape
   HEADERS "shapefil.h")
 
+
 build_library_in_subdir(gmath
   DEPENDS grass_ccmath grass_gis
-  OPTIONAL_DEPENDS FFTW )
+  DEFS "${use_math_DEFS}"
+  OPTIONAL_DEPENDS FFTW)
 
 build_library_in_subdir(linkm)
 
 file(GLOB pngdriver_SRCS "./pngdriver/*.c")
 list(APPEND pngdriver_SRCS "./driver/init.c")
 build_library_in_subdir(pngdriver
-SOURCES ${pngdriver_SRCS}
+  SOURCES ${pngdriver_SRCS}
   DEPENDS grass_driver LIBPNG ZLIB
   INCLUDES "./driver"
   )
@@ -153,10 +161,14 @@ endif()
 
 add_subdirectory(temporal)
 
-#add_subdirectory(python)
+# TODO: some issue with windows and ctypesgen.py (To be discussed)
+if(NOT MSVC)
+  add_subdirectory(python)
+endif()
 
 build_library_in_subdir(iostream SRC_REGEX "*.cpp" DEPENDS grass_gis)
 
 build_library_in_subdir(manage DEPENDS grass_raster grass_vector grass_raster3d )
 
-build_library_in_subdir(calc DEPENDS grass_raster)
+build_library_in_subdir(calc 
+DEPENDS grass_raster)

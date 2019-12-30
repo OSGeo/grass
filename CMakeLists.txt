@@ -227,20 +227,16 @@ macro(build_program_in_subdir dir_name)
   endif()
 endmacro()
 
-
 add_subdirectory(thirdparty)
 
 include(cmake/scripts.cmake)
 
-if(MSVC)
-add_definitions(-D_USE_MATH_DEFINES=1)
-endif()
-
 add_subdirectory(include)
 
 if(MSVC)
-include_directories("${CMAKE_SOURCE_DIR}/thirdparty/msvc/")
+  include_directories("${CMAKE_SOURCE_DIR}/thirdparty/msvc/")
 endif()
+
 include_directories("${CMAKE_BINARY_DIR}/include")
 
 add_subdirectory(lib)

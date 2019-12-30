@@ -118,7 +118,10 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #endif
 
 /* define PI and friends */
-#if !defined(_MSC_VER)
+#if defined(_MSC_VER)
+#define _USE_MATH_DEFINES 1
+#include <math.h>
+#else
 #undef M_PI
 #define M_PI    3.14159265358979323846	/* pi */
 

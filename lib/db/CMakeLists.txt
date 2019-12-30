@@ -25,5 +25,4 @@ build_library_in_subdir(dbmi_driver NAME grass_dbmidriver
   INCLUDES "./dbmi_base"
   )
 
-
 add_subdirectory(sqlp)
