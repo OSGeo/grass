@@ -76,30 +76,10 @@ set(GRASS_VERSION_NUMBER ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_V
 
 set(NAME_VER ${GRASS_VERSION_MAJOR})
 set(LIB_VER "${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.")
-
-set(GRASS_VERSION_SVN "exported")
-find_program(SVN_VERSION NAMES svnversion)
-if(SVN_VERSION)
-  execute_process(
-    COMMAND ${SVN_VERSION} -c
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    OUTPUT_VARIABLE svnversion_OV
-    ERROR_VARIABLE  svnversion_EV
-    RESULT_VARIABLE svnversion_RV
-    )
-
-  if(svnversion_RV )
-    message(FATAL_ERROR "Error running svnversion=${svnversion_EV}")
-  else()
-    string(REGEX REPLACE "([0-9]+):" "r" GRASS_VERSION_SVN "${svnversion_OV}")
-    string(STRIP ${GRASS_VERSION_SVN} GRASS_VERSION_SVN)
-  endif()
-  #message(FATAL_ERROR "GRASS_VERSION_SVN=${GRASS_VERSION_SVN}| ${svnversion_OV}")
-    
-endif() #SVN_VERSION
-
 message(STATUS "GRASS_VERSION_NUMBER  =  '${GRASS_VERSION_NUMBER}'")
-message(STATUS "GRASS_VERSION_SVN     =  '${GRASS_VERSION_SVN}'")
+
+include(cmake/repo_status.cmake)
+repo_status("${CMAKE_CURRENT_LIST_DIR}" GRASS_VERSION_GIT)
 
 # Setup build locations.
 if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)

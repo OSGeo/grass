@@ -8,8 +8,11 @@ DEPENDS grass_gis FREETYPE ICONV ZLIB)
 
 add_subdirectory(proj)
 
+file(GLOB raster_SRCS "./raster/*.c")
+list(APPEND raster_SRCS "./gis/gisinit.c")
 build_library_in_subdir(raster
   DEFS "-DGDAL_DYNAMIC=1;-DGDAL_LINK=1"
+  SOURCES ${raster_SRCS}
   DEPENDS GDAL PROJ4 grass_gproj
 )
 
