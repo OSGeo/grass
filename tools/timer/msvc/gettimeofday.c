@@ -25,8 +25,15 @@
  * IS" BASIS, AND THE AUTHOR HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE,
  * SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
+#include <windows.h>
 
- /* FILETIME of Jan 1 1970 00:00:00, the PostgreSQL epoch */
+ /*
+  * 64-bit integers
+  */
+
+#define UINT64CONST(x) (x##UL)
+
+/* FILETIME of Jan 1 1970 00:00:00, the PostgreSQL epoch */
 static const unsigned __int64 epoch = UINT64CONST(116444736000000000);
 
 /*
