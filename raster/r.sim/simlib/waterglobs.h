@@ -76,8 +76,6 @@ extern double gasdev(void);
 extern void gasdev_for_paralel(double *, double *);
 extern double amax1(double, double);
 extern double amin1(double, double);
-extern int min(int, int);
-extern int max(int, int);
 extern void create_observation_points();
 
 extern double xmin, ymin, xmax, ymax;
