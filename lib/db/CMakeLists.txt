@@ -1,5 +1,13 @@
+
+file(GLOB dbmibase_SRCS "./dbmi_base/*.c")
+if(MSVC)
+  set(dbmibase_INCLUDES "./dbmi_base" "./dbmi_base/msvc")
+  list(APPEND dbmibase_SRCS "./dbmi_base/msvc/dirent.c")
+endif()
+
 build_library_in_subdir(dbmi_base NAME grass_dbmibase
-  INCLUDES "./dbmi_base"
+  INCLUDES ${dbmibase_INCLUDES}
+  SOURCES ${dbmibase_SRCS}
   DEPENDS grass_gis
   HEADERS "dbstubs.h")
 
