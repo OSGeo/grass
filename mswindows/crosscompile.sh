@@ -173,7 +173,6 @@ PKG_CONFIG=$MXE_BIN-pkg-config \
 --with-openmp \
 --with-postgres \
 --with-sqlite \
---with-cairo-includes=$MXE_SHARED/include/cairo \
 --with-freetype \
 --with-freetype-includes=$MXE_SHARED/include/freetype2 \
 --with-readline \
