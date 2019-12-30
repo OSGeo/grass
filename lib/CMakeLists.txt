@@ -19,24 +19,17 @@ list(APPEND raster_SRCS "./gis/gisinit.c")
 build_library_in_subdir(raster
   DEFS "-DGDAL_DYNAMIC=1;-DGDAL_LINK=1"
   SOURCES ${raster_SRCS}
-  DEPENDS GDAL PROJ4 grass_gproj
-)
+  DEPENDS GDAL PROJ4 grass_gproj)
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
   find_library(DL_LIBRARY dl)
    target_link_libraries(grass_raster ${DL_LIBRARY})
 endif()
 
-message("Creating ${CMAKE_BINARY_DIR}/include/grass/ccmath_grass.h")
-configure_file(external/ccmath/ccmath.cmake.h
-  ${CMAKE_BINARY_DIR}/include/grass/ccmath_grass.h
-  COPYONLY)
-	     
 build_library_in_subdir(external/ccmath)
 
 build_library_in_subdir(external/shapelib NAME grass_shape
   HEADERS "shapefil.h")
-
 
 build_library_in_subdir(gmath
   DEPENDS grass_ccmath grass_gis
@@ -50,24 +43,21 @@ list(APPEND pngdriver_SRCS "./driver/init.c")
 build_library_in_subdir(pngdriver
   SOURCES ${pngdriver_SRCS}
   DEPENDS grass_driver LIBPNG ZLIB
-  INCLUDES "./driver"
-  )
+  INCLUDES "./driver")
 
 file(GLOB psdriver_SRCS "./psdriver/*.c")
 list(APPEND psdriver_SRCS "./driver/init.c")
 build_library_in_subdir(psdriver
-SOURCES ${psdriver_SRCS}
+  SOURCES ${psdriver_SRCS}
   DEPENDS grass_driver
-    INCLUDES "./driver"
- )
+  INCLUDES "./driver")
 
 file(GLOB htmldriver_SRCS "./htmldriver/*.c")
 list(APPEND htmldriver_SRCS "./driver/init.c")
 build_library_in_subdir(htmldriver
   SOURCES ${htmldriver_SRCS}
   DEPENDS grass_driver
-    INCLUDES "./driver"
-  )
+  INCLUDES "./driver")
 
 set(_grass_display_DEFS)
 
@@ -86,14 +76,11 @@ if(WITH_CAIRO)
   list(APPEND cairodriver_SRCS "./driver/init.c")
   build_library_in_subdir(cairodriver
     DEPENDS ${_cairodriver_DEPENDS}
-	SOURCES ${cairodriver_SRCS}
-    )
-
+	SOURCES ${cairodriver_SRCS})
 
   set(_grass_display_DEFS "-DUSE_CAIRO")
   list(APPEND _grass_display_DEPENDS grass_cairodriver)
 endif()
-
 
 build_library_in_subdir(bitmap 
 SOURCES "./bitmap/bitmap.c" "./bitmap/sparse.c"
@@ -105,8 +92,7 @@ build_library_in_subdir(btree2 HEADERS "kdtree.h" DEPENDS grass_gis)
 
 build_library_in_subdir(display
   DEFS ${_grass_display_DEFS}
-  DEPENDS ${_grass_display_DEPENDS}
-  )
+  DEPENDS ${_grass_display_DEPENDS})
 
 add_subdirectory(db)
 
