@@ -12,7 +12,7 @@ foreach(py_file ${py_files})
   add_custom_command(
     OUTPUT ${py_file}.stamp
     DEPENDS g.parser
-    COMMAND ${PYTHON_EXECUTABLE} -t -m py_compile ${py_file}
+    COMMAND ${PYTHON_EXECUTABLE} -t -3 -m py_compile ${py_file}
     COMMAND ${CMAKE_COMMAND} -E touch  ${py_file}.stamp
     COMMENT "Generating ${py_file}c"
     VERBATIM
@@ -28,10 +28,17 @@ foreach(py_file ${py_files})
   #   COMMENT "Generating ${py_file}c"
   #   )
   
-  install(FILES ${py_file} DESTINATION tools )
+  install(FILES ${py_file} DESTINATION tools)
 endforeach()
 
-build_program_in_subdir(timer NAME current_time_s_ms DEPENDS grass_gis )
+set(current_time_s_ms_SRCS "timer/main.c")
+if(MSVC)
+  list(APPEND current_time_s_ms_SRCS "timer/msvc/gettimeofday.c")
+endif()
+build_program_in_subdir(timer
+NAME current_time_s_ms
+DEPENDS grass_gis
+SOURCES "${current_time_s_ms_SRCS}")
 
 add_executable(g.echo g.echo.c)
 
