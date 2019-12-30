@@ -258,8 +258,9 @@ endif()
 
 add_subdirectory(include)
 
-#include_directories("${CMAKE_SOURCE_DIR}/dist.x86_64-unknown-openbsd6.0/include")
-
+if(MSVC)
+include_directories("${CMAKE_SOURCE_DIR}/thirdparty/msvc/")
+endif()
 include_directories("${CMAKE_BINARY_DIR}/include")
 
 add_subdirectory(lib)
@@ -292,14 +293,9 @@ set(ALL_SUBDIRS
   # mswindows
 )
 
-
-
 foreach(d ${ALL_SUBDIRS})
   add_subdirectory(${d})
 endforeach()
-
-
-
 
 if(WITH_X11)
   build_program_in_subdir(visualization/ximgview DEPENDS grass_gis X11)
