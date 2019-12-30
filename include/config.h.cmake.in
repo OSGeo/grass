@@ -90,7 +90,7 @@ typedef @PID_TYPE@ pid_t;
 #cmakedefine HAVE_LONG_LONG_INT ${HAVE_LONG_LONG_INT}
 
 /* Define the return type of signal handlers */
-#define RETSIGTYPE @RETSIGTYPE_RESULT@
+#define RETSIGTYPE ${RETSIGTYPE}
 
 /* define if ftime() exists */
 #cmakedefine HAVE_FTIME ${HAVE_FTIME}
@@ -195,7 +195,7 @@ typedef @PID_TYPE@ pid_t;
 #cmakedefine HAVE_FT2BUILD_H ${HAVE_FT2BUILD_H}
 
 /* Whether or not we are using G_socks for display communications */
-#cmakedefine USE_G_SOCKS ${GDEBUG}
+#cmakedefine USE_G_SOCKS ${USE_G_SOCKS}
 
 /* define if X is disabled or unavailable */
 #cmakedefine X_DISPLAY_MISSING ${X_DISPLAY_MISSING}
@@ -251,34 +251,11 @@ typedef @PID_TYPE@ pid_t;
 #define INT_MIN -MAXINT
 #endif
 
-
-
 /*
  * Defines needed to get large file support - from cdrtools-2.01
  */
 
-/* MINGW32 LFS */
-
-/* define if we have LFS */
-#undef	HAVE_LARGEFILES
-
-#ifdef	HAVE_LARGEFILES		/* If we have working largefiles at all	   */
-				/* This is not defined with glibc-2.1.3	   */
-
-#if 0
-
-/* what to do with these four? configure comments these out */
-
-#undef _LARGEFILE_SOURCE	/* To make ftello() visible (HP-UX 10.20). */
-#undef _LARGE_FILES		/* Large file defined on AIX-style hosts.  */
-#undef _XOPEN_SOURCE		/* To make ftello() visible (glibc 2.1.3). */
-#undef _XOPEN_SOURCE_EXTENDED
-				/* XXX We don't use this because glibc2.1.3*/
-				/* XXX is bad anyway. If we define	   */
-				/* XXX _XOPEN_SOURCE we will loose caddr_t */
-#endif
-#endif	/* HAVE_LARGEFILES */
-
+#define	HAVE_LARGEFILES ${HAVE_LARGEFILES}
 
 /* define if langinfo.h exists */
 #cmakedefine HAVE_LANGINFO_H  ${HAVE_LANGINFO_H}
