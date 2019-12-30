@@ -1,3 +1,4 @@
+if(NOT MSVC)
 set(py_files g.html2man/g.html2man.py g.html2man/ghtml.py g.html2man/ggroff.py)
 foreach(py_file ${py_files})
   get_filename_component(py_file_NAME ${py_file} NAME)
@@ -12,7 +13,7 @@ foreach(py_file ${py_files})
   add_custom_command(
     OUTPUT ${py_file}.stamp
     DEPENDS g.parser
-    COMMAND ${PYTHON_EXECUTABLE} -t -3 -m py_compile ${py_file}
+    COMMAND ${PYTHON_EXECUTABLE} -t -m py_compile ${py_file}
     COMMAND ${CMAKE_COMMAND} -E touch  ${py_file}.stamp
     COMMENT "Generating ${py_file}c"
     VERBATIM
@@ -30,6 +31,7 @@ foreach(py_file ${py_files})
   
   install(FILES ${py_file} DESTINATION tools)
 endforeach()
+endif() #MSVC
 
 set(current_time_s_ms_SRCS "timer/main.c")
 if(MSVC)
