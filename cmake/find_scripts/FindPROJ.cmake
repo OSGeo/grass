@@ -15,30 +15,28 @@
 #
 ###############################################################################
 
-# Try to use OSGeo4W installation
-IF(WIN32)
-    SET(PROJ4_OSGEO4W_HOME "C:/OSGeo4W") 
+FIND_PATH(PROJ_INCLUDE_DIR proj_api.h
+    DOC "Path to PROJ.4 include directory")
+ 
+ file(READ "${PROJ_INCLUDE_DIR}/proj_api.h" _proj_api_h_CONTENTS)
+  string(REGEX REPLACE ".*# *define PJ_VERSION.([0-9]+).*" "\\1" PROJ_VERSION_STRING "${_proj_api_h_CONTENTS}")
+  #if(MUPARSER_VERSION MATCHES "^[0-9]+\$")
+  #  set(MUPARSER_VERSION "${MUPARSER_VERSION}.0.0")
+FIND_LIBRARY(PROJ_LIBRARY
+    NAMES proj proj_i proj_d
+    DOC "Path to PROJ library file")
 
-    IF($ENV{OSGEO4W_HOME})
-        SET(PROJ4_OSGEO4W_HOME "$ENV{OSGEO4W_HOME}") 
-    ENDIF()
-ENDIF(WIN32)
-
-FIND_PATH(PROJ4_INCLUDE_DIR proj_api.h
-    PATHS ${PROJ4_OSGEO4W_HOME}/include
-    DOC "Path to PROJ.4 library include directory")
-
-SET(PROJ4_NAMES ${PROJ4_NAMES} proj proj_i)
-FIND_LIBRARY(PROJ4_LIBRARY
-    NAMES ${PROJ4_NAMES}
-    PATHS ${PROJ4_OSGEO4W_HOME}/lib
-    DOC "Path to PROJ.4 library file")
-
+if(PROJ_INCLUDE_DIR AND PROJ_LIBRARY)
+set(PROJ_FOUND TRUE)
+endif()
+IF(PROJ_FOUND)
+  SET(PROJ_LIBRARIES ${PROJ_LIBRARY})
+ENDIF()
 # Handle the QUIETLY and REQUIRED arguments and set SPATIALINDEX_FOUND to TRUE
 # if all listed variables are TRUE
 INCLUDE(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(PROJ4 DEFAULT_MSG PROJ4_LIBRARY PROJ4_INCLUDE_DIR)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(PROJ 
+	FOUND_VAR PROJ_FOUND
+	REQUIRED_VARS  PROJ_LIBRARY PROJ_INCLUDE_DIR PROJ_VERSION_STRING
+	VERSION_VAR PROJ_VERSION_STRING)
 
-IF(PROJ4_FOUND)
-  SET(PROJ4_LIBRARIES ${PROJ4_LIBRARY})
-ENDIF()
