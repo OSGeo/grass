@@ -1,37 +1,21 @@
-if(NOT MSVC)
 set(py_files g.html2man/g.html2man.py g.html2man/ghtml.py g.html2man/ggroff.py)
 foreach(py_file ${py_files})
   get_filename_component(py_file_NAME ${py_file} NAME)
-
-
-    file(COPY ${py_file} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-    # <----- RESET HERE ----->
-    set(py_file ${CMAKE_CURRENT_BINARY_DIR}/${py_file_NAME})
-    # <----- RESET HERE ----->
-
-
+  file(COPY ${py_file} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+  set(copied_file_path ${CMAKE_CURRENT_BINARY_DIR}/${py_file_NAME})
+  set(stamp_file_path ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${py_file_NAME}.stamp)
   add_custom_command(
-    OUTPUT ${py_file}.stamp
+    OUTPUT ${stamp_file_path}
     DEPENDS g.parser
-    COMMAND ${PYTHON_EXECUTABLE} -t -m py_compile ${py_file}
-    COMMAND ${CMAKE_COMMAND} -E touch  ${py_file}.stamp
-    COMMENT "Generating ${py_file}c"
-    VERBATIM
-    )
-  
+    COMMAND ${PYTHON_EXECUTABLE} -t -m py_compile ${copied_file_path}
+    COMMAND ${CMAKE_COMMAND} -E touch  ${stamp_file_path}
+    COMMENT "Generating ${copied_file_path}c"
+    VERBATIM)
   add_custom_target(tools.${py_file_NAME} ALL
-    DEPENDS ${py_file}.stamp
-    )
+    DEPENDS ${stamp_file_path})
 
-    
-  # add_custom_target(tools_${py_file_NAME} ALL
-  #   COMMAND ${PYTHON_EXECUTABLE} -t -3 -m py_compile ${py_file}
-  #   COMMENT "Generating ${py_file}c"
-  #   )
-  
-  install(FILES ${py_file} DESTINATION tools)
+  install(FILES ${copied_file_path} DESTINATION tools)
 endforeach()
-endif() #MSVC
 
 set(current_time_s_ms_SRCS "timer/main.c")
 if(MSVC)

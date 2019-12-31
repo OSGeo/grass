@@ -2,7 +2,6 @@ set(MODULES
   date gis raster gmath proj imagery vector rtree display
   stats dbmi raster3d arraystats cluster vedit segment rowio temporal)
 
-
 if(WITH_OPENGL)
   list(APPEND MODULES ogsf nviz)
 endif()
@@ -40,8 +39,6 @@ set(cluster_HDRS      cluster.h defs/cluster.h)
 # set(vedit_INC       "${GDAL_INCLUDE_DIR}")
 
 foreach(module ${MODULES})
-
-
   if(NOT ${module}_LIBS)
     set(${module}_LIBS grass_${module})
   endif()
