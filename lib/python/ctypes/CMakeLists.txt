@@ -63,9 +63,8 @@ foreach(module ${MODULES})
   endif()
 
   set(output_file "${CMAKE_CURRENT_BINARY_DIR}/${module}.py")
-  set(stamp_file_path ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${module}.py.stamp)
-  add_custom_command(
-    OUTPUT ${stamp_file_path}
+
+  add_custom_commandOUTPUT ${output_file}
     DEPENDS ${${module}_LIBS}
     COMMAND ${CMAKE_COMMAND}
 	-DCTYPESGEN_PY=${CMAKE_CURRENT_SOURCE_DIR}/ctypesgen.py
@@ -76,11 +75,10 @@ foreach(module ${MODULES})
     -DLIBS=${${module}_LIBS}
     -DOUT_FILE=${output_file}
     -P ${CMAKE_SOURCE_DIR}/cmake/ctypesgen.cmake
-    COMMAND ${CMAKE_COMMAND} -E touch ${stamp_file_path}
     COMMENT "Generating ${output_file}"
     VERBATIM)
 
-  add_custom_target(${${module}_TARGET_NAME} ALL DEPENDS ${stamp_file_path})
+  add_custom_target(${${module}_TARGET_NAME} ALL DEPENDS ${output_file})
   install(FILES ${output_file} DESTINATION etc/python/grass/lib)
 
 endforeach()
