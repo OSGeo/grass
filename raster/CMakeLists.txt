@@ -6,7 +6,6 @@ build_program_in_subdir(
   r.buffer
   DEPENDS grass_gis grass_raster )
 
-
 build_program_in_subdir(
   r.carve
   DEPENDS grass_gis grass_raster grass_vector grass_bitmap)
@@ -24,7 +23,7 @@ build_program_in_subdir(
   DEPENDS grass_gis grass_raster grass_btree2)
 
 build_program_in_subdir(
-  r.coin
+r.coin
   DEPENDS grass_gis grass_raster )
 
 add_subdirectory(r.colors)
@@ -91,11 +90,10 @@ build_program_in_subdir(
   r.gwflow
   DEPENDS grass_gis grass_raster grass_gpde)
 
-if(NOT MSVC)
 build_program_in_subdir(
   r.horizon
   DEPENDS grass_gis grass_raster grass_gproj)
-endif()
+
 build_program_in_subdir(
   r.in.ascii
   DEPENDS grass_gis grass_raster)
@@ -186,7 +184,6 @@ build_program_in_subdir(
   r.out.gdal
   DEPENDS grass_gis grass_raster grass_dbmibase grass_imagery)
 
-#TODO
 set_source_files_properties(r.out.gdal/main.c
   PROPERTIES COMPILE_DEFINITIONS
   "GRASS_VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\";GDAL_VERSION_MAJOR=\"2\";GDAL_VERSION_MINOR=\"1\";GDAL_VERSION_REV=\"1\""
@@ -199,7 +196,6 @@ set_source_files_properties(r.out.gdal/main.c
 build_program_in_subdir(
   r.out.mat
   DEPENDS grass_gis grass_raster)
-
 
 build_program_in_subdir(
   r.out.mpeg
@@ -377,11 +373,11 @@ build_program_in_subdir(
  build_program_in_subdir(
    r.stream.extract
    DEPENDS grass_gis grass_raster grass_segment grass_vector)
-   if(NOT MSVC)
+
 build_program_in_subdir(
   r.sun 
- DEPENDS grass_gis grass_raster grass_gproj)
-endif()
+ DEPENDS grass_gmath grass_raster grass_gproj)
+
 build_program_in_subdir(
   r.sunhours
  DEPENDS grass_gis grass_raster grass_gproj)
@@ -422,14 +418,17 @@ build_program_in_subdir(
   r.surf.random
  DEPENDS grass_gis grass_raster grass_gmath )
 
-if(NOT MSVC)
-#REVIEW: EXTRA_CFLAGS = -DUSER=\"$(USER)\" -DNODATA_FIX -DELEV_FLOAT -Wno-sign-compare
+if(MSVC)
+  set(USER_NAME $ENV{USERNAME})
+else()
+  set(USER_NAME $ENV{USER})
+endif()
+
  build_program_in_subdir(
    r.terraflow
    DEPENDS grass_gis grass_raster grass_iostream
    SRC_REGEX "*.cpp"
-   DEFS "-DUSER=USER;-DNODATA_FIX;-DELEV_FLOAT")
-endif()
+   DEFS "-DUSER=${USER_NAME};-DNODATA_FIX;-DELEV_FLOAT")
 
 build_program_in_subdir(
   r.texture
@@ -481,14 +480,11 @@ build_program_in_subdir(
   r.usler
  DEPENDS grass_gis grass_raster)
 
-#REVIEW: EXTRA_CFLAGS = -DUSER=\"$(USER)\" -Wno-sign-compare
-if(NOT MSVC)
- build_program_in_subdir(
+build_program_in_subdir(
    r.viewshed
    DEPENDS grass_gis grass_raster grass_iostream
    SRC_REGEX "*.cpp"
-   DEFS "-DUSER=USER")
-endif()
+   DEFS "-DUSER=${USER_NAME}")
 
 build_program_in_subdir(
   r.volume
@@ -502,11 +498,10 @@ build_program_in_subdir(
   r.water.outlet
  DEPENDS grass_gis grass_raster)
 
-#TODO
-# build_program_in_subdir(
-#   r.watershed
-#   DEPENDS grass_gis grass_raster
-#   SRC_REGEX "*.cpp")
+build_program_in_subdir(
+   r.watershed
+   DEPENDS grass_gis grass_raster
+   SRC_REGEX "*.cpp")
 
 build_program_in_subdir(
   r.what
