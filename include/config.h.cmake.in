@@ -77,15 +77,6 @@
 /* define if clapack.h exists */
 #cmakedefine HAVE_CLAPACK_H ${HAVE_CLAPACK_H}
 
-/* define gid_t type */
-typedef @GID_TYPE@ gid_t;
-
-/* define uid_t type */
-typedef @UID_TYPE@ uid_t;
-
-/* define pid_t type */
-typedef @PID_TYPE@ pid_t;
-
 /* define if "long long" is available */
 #cmakedefine HAVE_LONG_LONG_INT ${HAVE_LONG_LONG_INT}
 
@@ -283,6 +274,15 @@ typedef @PID_TYPE@ pid_t;
 #ifdef _MSC_VER
 #define strncasecmp _strnicmp
 #define strcasecmp _stricmp
+
+/* define gid_t type */
+typedef @GID_TYPE@ gid_t;
+
+/* define uid_t type */
+typedef @UID_TYPE@ uid_t;
+
+/* define pid_t type */
+typedef @PID_TYPE@ pid_t;
 
 #ifndef S_ISDIR
 #define S_ISDIR(mode)  (((mode) & S_IFMT) == S_IFDIR)
