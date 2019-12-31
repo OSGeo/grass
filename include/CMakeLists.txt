@@ -48,6 +48,7 @@ check_target(GDAL HAVE_GDAL)
 check_target(GDAL HAVE_OGR)
 check_target(SQLITE HAVE_SQLITE)
 
+#TODO: check with more version of proj
 if(PROJ_VERSION_STRING LESS 500)
   check_target(PROJ HAVE_PROJ_H)
 endif()
