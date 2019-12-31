@@ -34,7 +34,7 @@ set(cluster_HDRS      cluster.h defs/cluster.h)
 
 #TODO
 # set(VECT_INC         ${PQINCPATH} )
-# set(proj_INC        "${PROJ4_INCLUDE_DIR}")
+# set(proj_INC        "${PROJ_INCLUDE_DIR}")
 # set(vector_INC      "${PQINCPATH};${GDAL_INCLUDE_DIR}")
 # set(vedit_INC       "${GDAL_INCLUDE_DIR}")
 

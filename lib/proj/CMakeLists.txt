@@ -47,7 +47,7 @@ set(PROJ_TABLES desc.table parms.table units.table)
 # PROJ_DSTFILES := $(patsubst %,$(PROJ_DIR)/%,$(PROJ_TABLES))
 
 build_module(NAME grass_gproj
-  DEPENDS grass_driver GDAL ZLIB PROJ4
+  DEPENDS grass_driver GDAL ZLIB PROJ
   SOURCES "${grass_gproj_SOURCES}"
   INCLUDES "../driver"
   )

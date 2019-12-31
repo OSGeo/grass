@@ -19,7 +19,7 @@ list(APPEND raster_SRCS "./gis/gisinit.c")
 build_library_in_subdir(raster
   DEFS "-DGDAL_DYNAMIC=1;-DGDAL_LINK=1"
   SOURCES ${raster_SRCS}
-  DEPENDS GDAL PROJ4 grass_gproj)
+  DEPENDS GDAL PROJ grass_gproj)
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
   find_library(DL_LIBRARY dl)

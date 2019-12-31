@@ -47,6 +47,7 @@ check_target(GEOS HAVE_GEOS)
 check_target(GDAL HAVE_GDAL)
 check_target(GDAL HAVE_OGR)
 check_target(SQLITE HAVE_SQLITE)
+check_target(PROJ HAVE_PROJ_H)
 
 check_target(BLAS HAVE_LIBBLAS)
 check_target(BLAS HAVE_CBLAS_H)

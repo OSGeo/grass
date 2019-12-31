@@ -158,6 +158,9 @@
 /* define if jpeglib.h exists */
 #cmakedefine HAVE_JPEGLIB_H ${HAVE_JPEGLIB_H}
 
+/* define if proj.h exists */
+#cmakedefine HAVE_PROJ_H ${HAVE_PROJ_H}
+
 /* define if fftw3.h exists */
 #cmakedefine HAVE_FFTW3_H ${HAVE_FFTW3_H}
 
