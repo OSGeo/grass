@@ -27,12 +27,7 @@ endif()
 build_program_in_subdir(g.rename DEPENDS grass_manage grass_raster )
 build_program_in_subdir(g.tempfile DEPENDS grass_gis )
 
-
-#TODO
-set(GRASS_VERSION_UPDATE_PKG "0.2")
-set(BUILD_ARCH "x86_64")
-
-build_program_in_subdir(g.version DEPENDS grass_gis GEOS GDAL
+build_program_in_subdir(g.version DEPENDS grass_gis GEOS GDAL SQLITE
 DEFS "-DGRASS_VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
      "-DGRASS_VERSION_GIT=\"${GRASS_VERSION_GIT}\""
      "-DGRASS_VERSION_UPDATE_PKG=${GRASS_VERSION_UPDATE_PKG}"
