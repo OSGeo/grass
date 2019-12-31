@@ -121,6 +121,8 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #if defined(_MSC_VER)
 #define _USE_MATH_DEFINES 1
 #include <math.h>
+#undef min
+#undef max
 #else
 #undef M_PI
 #define M_PI    3.14159265358979323846	/* pi */
