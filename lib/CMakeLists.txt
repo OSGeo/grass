@@ -26,7 +26,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Linux")
    target_link_libraries(grass_raster ${DL_LIBRARY})
 endif()
 
-message("Copying external/ccmath/ccmath.h to ${CMAKE_BINARY_DIR}/include/grass/ccmath_grass.h")
 configure_file(external/ccmath/ccmath.h
   ${CMAKE_BINARY_DIR}/include/grass/ccmath_grass.h
   COPYONLY)
