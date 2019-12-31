@@ -39,7 +39,6 @@ set(cluster_HDRS      cluster.h defs/cluster.h)
 # set(vector_INC      "${PQINCPATH};${GDAL_INCLUDE_DIR}")
 # set(vedit_INC       "${GDAL_INCLUDE_DIR}")
 
-
 foreach(module ${MODULES})
 
 
@@ -67,27 +66,25 @@ foreach(module ${MODULES})
   endif()
 
   set(output_file "${CMAKE_CURRENT_BINARY_DIR}/${module}.py")
+  set(stamp_file_path ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${module}.py.stamp)
+  add_custom_command(
+    OUTPUT ${stamp_file_path}
+    DEPENDS ${${module}_LIBS}
+    COMMAND ${CMAKE_COMMAND}
+	-DCTYPESGEN_PY=${CMAKE_CURRENT_SOURCE_DIR}/ctypesgen.py
+	-DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
+    -DCOMPILER=${CMAKE_C_COMPILER}
+    -DBIN_DIR=${CMAKE_BINARY_DIR}
+    -DHDRS=${${module}_HDRS}
+    -DLIBS=${${module}_LIBS}
+    -DOUT_FILE=${output_file}
+    -P ${CMAKE_SOURCE_DIR}/cmake/ctypesgen.cmake
+    COMMAND ${CMAKE_COMMAND} -E touch ${stamp_file_path}
+    COMMENT "Generating ${output_file}"
+    VERBATIM)
 
-    add_custom_command(
-      OUTPUT ${output_file}.stamp
-      DEPENDS ${${module}_LIBS}
-      COMMAND ${CMAKE_COMMAND} -DCTYPESGEN_PY=${CMAKE_CURRENT_SOURCE_DIR}/ctypesgen.py
-      -DCOMPILER=${CMAKE_C_COMPILER}
-      -DBIN_DIR=${CMAKE_BINARY_DIR}
-      -DHDRS=${${module}_HDRS}
-      -DLIBS=${${module}_LIBS}
-      -DOUT_FILE=${output_file}
-      -P ${CMAKE_SOURCE_DIR}/cmake/ctypesgen.cmake
-      COMMAND ${CMAKE_COMMAND} -E touch  ${output_file}.stamp
-      COMMENT "Generating ${output_file}"
-      VERBATIM
-      )
-  
-    add_custom_target(${${module}_TARGET_NAME} ALL
-      DEPENDS ${output_file}.stamp
-      )
-  
+  add_custom_target(${${module}_TARGET_NAME} ALL DEPENDS ${stamp_file_path})
   install(FILES ${output_file} DESTINATION etc/python/grass/lib)
-  
+
 endforeach()
 

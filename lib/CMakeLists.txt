@@ -120,10 +120,10 @@ HEADERS "lidar.h")
 
 build_library_in_subdir(raster3d DEPENDS grass_raster)
 
-#build_program_in_subdir(raster3d/test
-#  NAME test.raster3d.lib
-#  DEPENDS grass_gis grass_raster3d grass_raster
- # )
+build_program_in_subdir(raster3d/test
+  NAME test.raster3d.lib
+  DEPENDS grass_gis grass_raster3d grass_raster
+)
 
 build_library_in_subdir(gpde HEADERS "N_*.h"
   DEPENDS grass_gis grass_raster3d grass_gmath
@@ -142,19 +142,13 @@ build_library_in_subdir(stats DEPENDS grass_raster)
 build_library_in_subdir(arraystats DEPENDS grass_gis)
 
 if(WITH_OPENGL)
- # set(ogsf_DEPENDS OPENGL GDAL TIFF)
- # build_library_in_subdir(ogsf DEPENDS ${ogsf_DEPENDS})
- build_library_in_subdir(ogsf DEPENDS OPENGL GDAL TIFF)
- build_library_in_subdir(nviz DEPENDS OPENGL GDAL TIFF)
+  build_library_in_subdir(ogsf DEPENDS OPENGL GDAL TIFF)
+  build_library_in_subdir(nviz DEPENDS OPENGL GDAL TIFF)
 endif()
-
 
 add_subdirectory(temporal)
 
-# TODO: some issue with windows and ctypesgen.py (To be discussed)
-if(NOT MSVC)
-  add_subdirectory(python)
-endif()
+add_subdirectory(python)
 
 build_library_in_subdir(iostream SRC_REGEX "*.cpp" DEPENDS grass_gis)
 

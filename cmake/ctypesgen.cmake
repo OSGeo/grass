@@ -2,12 +2,23 @@ set(ENV{GISRC} "${BIN_DIR}/demolocation/.grassrc${GRASS_VERSION_MAJOR}${GRASS_VE
 set(ENV{GISBASE} "${BIN_DIR}")
 set(ENV{PATH} "${BIN_DIR}/bin:${BIN_DIR}/scripts:$ENV{PATH}")
 set(ENV{PYTHONPATH} "${BIN_DIR}/gui/wxpython:${BIN_DIR}/etc/python:$ENV{PYTHONPATH}")
-set(ENV{LD_LIBRARY_PATH} "${BIN_DIR}/lib:$ENV{LD_LIBRARY_PATH}")
+if(WIN32)
+  set(ENV{LD_LIBRARY_PATH} "${BIN_DIR}/lib:$ENV{LD_LIBRARY_PATH}")
+else()
+  set(ENV{PATH} "${BIN_DIR}/bin:$ENV{PATH}")
+endif()
 set(ENV{LC_ALL} C)
 
 set(LIBRARIES)
 foreach(LIB ${LIBS})
-  list(APPEND LIBRARIES "--library=${BIN_DIR}/lib/lib${LIB}.so")
+  if(WIN32)
+    list(APPEND LIBRARIES "--library=${BIN_DIR}/bin/${LIB}.dll")
+  elseif(APPLE)
+    list(APPEND LIBRARIES "--library=${BIN_DIR}/lib/lib${LIB}.so")
+  else()
+    #This can be linux or unix
+    list(APPEND LIBRARIES "--library=${BIN_DIR}/lib/lib${LIB}.so")
+  endif()
 endforeach()
 
 set(HEADERS)
@@ -15,21 +26,19 @@ foreach(HDR ${HDRS})
   list(APPEND HEADERS "${BIN_DIR}/include/grass/${HDR}")
 endforeach()
 
-
 foreach(req  OUT_FILE HDRS LIBS  CTYPESGEN_PY COMPILER )
   if(NOT DEFINED ${req} OR "${${req}}" STREQUAL "")
     message(FATAL_ERROR "you must set ${req}")
   endif()
 endforeach()
 
+if(MSVC)
+  set(CTYPESFLAGS "${COMPILER} -E -DPACKAGE=\"grasslibs\"")
+else()
+  set(CTYPESFLAGS "${COMPILER} -E -DPACKAGE=\"grasslibs\" -D__GLIBC_HAVE_LONG_LONG")
+endif()
 
-#NLS_CFLAGS = -DPACKAGE=\"$(PACKAGE)\"
-#USE_LARGEFILES      = 1
-#LFS_CFLAGS          = 
-#CTYPESFLAGS = --cpp "$(CC) -E $(CPPFLAGS) $(LFS_CFLAGS) $(EXTRA_CFLAGS) $(NLS_CFLAGS) $(DEFS) $(EXTRA_INC) $(INC) -D__GLIBC_HAVE_LONG_LONG"
-
-set(CTYPESFLAGS "${COMPILER} -E -DPACKAGE=\"grasslibs\" -D__GLIBC_HAVE_LONG_LONG")
-
+message(STATUS "Running ${PYTHON_EXECUTABLE} ${CTYPESGEN_PY} --cpp=${CTYPESFLAGS} --includedir=\"${BIN_DIR}/include\" --runtime-libdir=\"${BIN_DIR}/lib\" ${HEADERS} ${LIBRARIES} --output=${OUT_FILE}")
 execute_process(
   COMMAND ${PYTHON_EXECUTABLE} ${CTYPESGEN_PY}
   --cpp=${CTYPESFLAGS}
@@ -46,5 +55,3 @@ execute_process(
 if( ctypesgen_RV )
   message(FATAL_ERROR "ctypesgen.py: ${ctypesgen_EV} \n ${ctypesgen_OV}")
 endif()
-
-#message(FATAL_ERROR "ctypesgen_RV = ${ctypesgen_OV}")
