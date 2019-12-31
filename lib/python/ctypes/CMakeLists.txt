@@ -64,7 +64,7 @@ foreach(module ${MODULES})
 
   set(output_file "${CMAKE_CURRENT_BINARY_DIR}/${module}.py")
 
-  add_custom_commandOUTPUT ${output_file}
+  add_custom_command(OUTPUT ${output_file}
     DEPENDS ${${module}_LIBS}
     COMMAND ${CMAKE_COMMAND}
 	-DCTYPESGEN_PY=${CMAKE_CURRENT_SOURCE_DIR}/ctypesgen.py
