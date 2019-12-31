@@ -2,10 +2,8 @@ set(ENV{GISRC} "${BIN_DIR}/demolocation/.grassrc${GRASS_VERSION_MAJOR}${GRASS_VE
 set(ENV{GISBASE} "${BIN_DIR}")
 set(ENV{PATH} "${BIN_DIR}/bin:${BIN_DIR}/scripts:$ENV{PATH}")
 set(ENV{PYTHONPATH} "${BIN_DIR}/gui/wxpython:${BIN_DIR}/etc/python:$ENV{PYTHONPATH}")
-if(WIN32)
+if(NOT MSVC)
   set(ENV{LD_LIBRARY_PATH} "${BIN_DIR}/lib:$ENV{LD_LIBRARY_PATH}")
-else()
-  set(ENV{PATH} "${BIN_DIR}/bin:$ENV{PATH}")
 endif()
 set(ENV{LC_ALL} C)
 
