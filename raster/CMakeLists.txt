@@ -498,10 +498,10 @@ build_program_in_subdir(
   r.water.outlet
  DEPENDS grass_gis grass_raster)
 
-build_program_in_subdir(
-   r.watershed
-   DEPENDS grass_gis grass_raster
-   SRC_REGEX "*.cpp")
+# build_program_in_subdir(
+#    r.watershed
+#    DEPENDS grass_gis grass_raster
+#    SRC_REGEX "*.cpp")
 
 build_program_in_subdir(
   r.what
