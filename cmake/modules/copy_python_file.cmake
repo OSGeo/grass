@@ -12,10 +12,6 @@ function(copy_python_file py_file py_module_name py_DIR_PATH install_dest)
   set(output_path ${CMAKE_CURRENT_BINARY_DIR}/${py_DIR_PATH})
   file(COPY ${py_file_REALPATH} DESTINATION ${output_path})
   set(copied_py_file ${output_path}/${py_file_NAME})
-  #rkm: TEMPORARY
-  if(NOT EXISTS ${copied_py_file})
-    message(FATAL_ERROR "not exists temp ${output_path};;${py_file_NAME} ")
-  endif()
 
   set(stamp_file_path ${output_path}/CMakeFiles/${py_file_NAME}.stamp)
   add_custom_command(
