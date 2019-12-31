@@ -84,4 +84,3 @@ foreach(module ${MODULES})
   install(FILES ${output_file} DESTINATION etc/python/grass/lib)
 
 endforeach()
-

@@ -1,6 +1,6 @@
 #TODO
 add_subdirectory(icons)
-#add_subdirectory(images)
+add_subdirectory(images)
 #add_subdirectory(scripts)
 
 add_subdirectory(wxpython)
