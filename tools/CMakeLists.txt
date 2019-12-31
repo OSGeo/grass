@@ -3,16 +3,15 @@ foreach(py_file ${py_files})
   get_filename_component(py_file_NAME ${py_file} NAME)
   file(COPY ${py_file} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
   set(copied_file_path ${CMAKE_CURRENT_BINARY_DIR}/${py_file_NAME})
-  set(stamp_file_path ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${py_file_NAME}.stamp)
+  set(pyc_file_path "${copied_file_path}c")
   add_custom_command(
-    OUTPUT ${stamp_file_path}
+    OUTPUT ${pyc_file_path}
     DEPENDS g.parser
     COMMAND ${PYTHON_EXECUTABLE} -t -m py_compile ${copied_file_path}
-    COMMAND ${CMAKE_COMMAND} -E touch  ${stamp_file_path}
-    COMMENT "Generating ${copied_file_path}c"
+    COMMENT "Generating ${pyc_file_path}"
     VERBATIM)
   add_custom_target(tools.${py_file_NAME} ALL
-    DEPENDS ${stamp_file_path})
+    DEPENDS ${pyc_file_path})
 
   install(FILES ${copied_file_path} DESTINATION tools)
 endforeach()
