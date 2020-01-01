@@ -188,10 +188,6 @@ build_program_in_subdir(
   v.normal
   DEPENDS grass_gis grass_vector grass_cdhc)
 
-#TODO
-# 	v.lidar.correction \
-# 	v.lidar.edgedetection \
-# 	v.lidar.growing \
 build_program_in_subdir(
   v.out.ascii
   DEPENDS grass_gis grass_vector)
@@ -199,15 +195,6 @@ build_program_in_subdir(
 build_program_in_subdir(
   v.out.dxf
   DEPENDS grass_gis grass_vector)
-
-#TODO
-# build_program_in_subdir(
-#   v.out.lidar
-#   DEPENDS grass_gis grass_vector)
-
-# build_program_in_subdir(
-#   v.out.postgis
-#   DEPENDS grass_gis grass_vector)
 
 build_program_in_subdir(
   v.out.pov
@@ -361,7 +348,13 @@ build_program_in_subdir(
   v.external
   DEPENDS grass_gis grass_vector )
 
-#TODO
+build_program_in_subdir(
+  v.external.out
+  DEPENDS grass_gis grass_vector )
+
+
+
+#TODO: MODULES DISABLED
 # build_program_in_subdir(
 #   v.in.dwg
 #   DEPENDS grass_gis grass_vector )
@@ -370,7 +363,13 @@ build_program_in_subdir(
 #   v.in.lidar
 #   DEPENDS grass_gis grass_vector )
 
-build_program_in_subdir(
-  v.external.out
-  DEPENDS grass_gis grass_vector )
+# 	v.lidar.correction \
+# 	v.lidar.edgedetection \
+# 	v.lidar.growing \
+# build_program_in_subdir(
+#   v.out.lidar
+#   DEPENDS grass_gis grass_vector)
 
+# build_program_in_subdir(
+#   v.out.postgis
+#   DEPENDS grass_gis grass_vector)

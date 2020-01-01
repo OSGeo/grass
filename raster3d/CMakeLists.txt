@@ -21,16 +21,7 @@ build_program_in_subdir(
   r3.in.bin
   DEPENDS grass_gis grass_raster3d )
 
-#TODO
-# build_program_in_subdir(
-#   r3.in.lidar
-#   DEPENDS grass_gis grass_raster3d )
 
-if(NOT MSVC)
-build_program_in_subdir(
-  r3.in.v5d
-  DEPENDS grass_gis grass_raster3d )
-endif()
 
 build_program_in_subdir(
   r3.info
@@ -39,11 +30,6 @@ build_program_in_subdir(
 build_program_in_subdir(
   r3.mask
   DEPENDS grass_gis grass_raster3d )
-
-#TODO
-# build_program_in_subdir(
-#   r3.mkdspf
-#   DEPENDS grass_gis grass_raster3d grass_gpde )
 
 build_program_in_subdir(
   r3.null
@@ -87,11 +73,25 @@ build_program_in_subdir(
   r3.to.rast 
   DEPENDS grass_gis grass_raster3d )
 
-#TODO
+build_program_in_subdir(
+  r3.out.vtk
+  DEPENDS grass_gis grass_raster3d )
+
+# TODO: MODULES DISABLED
 # build_program_in_subdir(
 #   r3.out.netcdf
 #   DEPENDS grass_gis grass_raster3d )
 
+# build_program_in_subdir(
+#   r3.mkdspf
+#   DEPENDS grass_gis grass_raster3d grass_gpde )
+
+# build_program_in_subdir(
+#   r3.in.lidar
+#   DEPENDS grass_gis grass_raster3d )
+
+if(NOT MSVC)
 build_program_in_subdir(
-  r3.out.vtk
+  r3.in.v5d
   DEPENDS grass_gis grass_raster3d )
+endif()

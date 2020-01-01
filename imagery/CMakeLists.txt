@@ -49,11 +49,6 @@ build_program_in_subdir(
   DEPENDS grass_imagery grass_raster grass_vector grass_gis)
 
 
-# build_program_in_subdir(
-#    i.ortho.photo
-#    DEPENDS grass_imagery grass_raster grass_vector grass_gis)
-
- 
 build_program_in_subdir(
   i.rectify
   DEPENDS grass_imagery grass_raster grass_vector grass_gis)
@@ -65,10 +60,6 @@ build_program_in_subdir(
 build_program_in_subdir(
   i.segment
   DEPENDS grass_imagery grass_raster grass_vector grass_gis grass_segment)
-
-# build_program_in_subdir(
-#   i.superpixels.slic
-#   DEPENDS grass_imagery grass_raster grass_vector grass_gis)
 
 build_program_in_subdir(
   i.smap
@@ -100,3 +91,12 @@ build_program_in_subdir(
   DEPENDS grass_imagery grass_raster grass_vector grass_gis)
 
 build_program_in_subdir(i.atcorr DEPENDS grass_imagery grass_raster grass_vector grass_gis SRC_REGEX "*.cpp")
+
+# TODO: MODULES DISABLED
+# build_program_in_subdir(
+#    i.ortho.photo
+#    DEPENDS grass_imagery grass_raster grass_vector grass_gis)
+
+# build_program_in_subdir(
+#   i.superpixels.slic
+#   DEPENDS grass_imagery grass_raster grass_vector grass_gis)

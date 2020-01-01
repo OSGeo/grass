@@ -110,11 +110,6 @@ build_program_in_subdir(
   r.in.gridatb
   DEPENDS grass_gis grass_raster)
 
-#TODO
-# build_program_in_subdir(
-#   r.in.lidar
-#   DEPENDS grass_gis grass_raster grass_lidar)
-
 build_program_in_subdir(
   r.in.mat
   DEPENDS grass_gis grass_raster)
@@ -147,14 +142,6 @@ build_program_in_subdir(
 build_program_in_subdir(
   r.lake
   DEPENDS grass_gis grass_raster)
-
-#TODO
-# build_program_in_subdir(
-#   r.li
-#   DEPENDS grass_gis grass_raster)
-if(NOT MSVC)
-add_subdirectory(r.mapcalc)
-endif()
 
 build_program_in_subdir(
   r.mfilter
@@ -424,12 +411,6 @@ else()
   set(USER_NAME $ENV{USER})
 endif()
 
- build_program_in_subdir(
-   r.terraflow
-   DEPENDS grass_gis grass_raster grass_iostream
-   SRC_REGEX "*.cpp"
-   DEFS "-DUSER=${USER_NAME};-DNODATA_FIX;-DELEV_FLOAT")
-
 build_program_in_subdir(
   r.texture
   DEPENDS grass_gis grass_raster)
@@ -481,12 +462,6 @@ build_program_in_subdir(
  DEPENDS grass_gis grass_raster)
 
 build_program_in_subdir(
-   r.viewshed
-   DEPENDS grass_gis grass_raster grass_iostream
-   SRC_REGEX "*.cpp"
-   DEFS "-DUSER=${USER_NAME}")
-
-build_program_in_subdir(
   r.volume
   DEPENDS grass_gis grass_raster grass_vector)
 
@@ -498,11 +473,6 @@ build_program_in_subdir(
   r.water.outlet
  DEPENDS grass_gis grass_raster)
 
-# build_program_in_subdir(
-#    r.watershed
-#    DEPENDS grass_gis grass_raster
-#    SRC_REGEX "*.cpp")
-
 build_program_in_subdir(
   r.what
  DEPENDS grass_gis grass_raster grass_vector)
@@ -510,3 +480,32 @@ build_program_in_subdir(
 build_program_in_subdir(
   r.what.color
  DEPENDS grass_gis grass_raster)
+
+# TODO: MODULES DISABLED
+# build_program_in_subdir(
+#    r.in.lidar
+#    DEPENDS grass_gis grass_raster grass_lidar)
+
+# build_program_in_subdir(
+#    r.watershed
+#    DEPENDS grass_gis grass_raster
+#    SRC_REGEX "*.cpp")
+
+# build_program_in_subdir(
+#   r.li
+#   DEPENDS grass_gis grass_raster)
+if(NOT MSVC)
+add_subdirectory(r.mapcalc)
+
+build_program_in_subdir(
+   r.viewshed
+   DEPENDS grass_gis grass_raster grass_iostream
+   SRC_REGEX "*.cpp"
+   DEFS "-DUSER=${USER_NAME}")
+
+ build_program_in_subdir(
+   r.terraflow
+   DEPENDS grass_gis grass_raster grass_iostream
+   SRC_REGEX "*.cpp"
+   DEFS "-DUSER=${USER_NAME};-DNODATA_FIX;-DELEV_FLOAT")
+endif()

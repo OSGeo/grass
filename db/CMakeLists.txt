@@ -1,6 +1,3 @@
-#TODO
-#add_subdirectory(drivers)
-
 build_program_in_subdir(db.columns DEPENDS grass_gis grass_dbmiclient )
 
 build_program_in_subdir(db.createdb DEPENDS grass_gis grass_dbmiclient )
@@ -19,8 +16,9 @@ build_program_in_subdir(db.databases DEPENDS grass_gis grass_dbmiclient )
 
 build_program_in_subdir(db.dropdb DEPENDS grass_gis grass_dbmiclient )
 
-
+# TODO: MODULES DISABLED
 #add_subdirectory(dbf)
+#add_subdirectory(drivers)
 
 
 # MODULE_TOPDIR = ..
