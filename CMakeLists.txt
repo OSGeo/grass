@@ -15,16 +15,23 @@ set(default_option_enabled ON)
 if(WIN32)
   set(default_option_enabled OFF)
 endif()
+set( grass_build_type "${CMAKE_BUILD_TYPE}" )
+string( TOLOWER "${grass_build_type}" grass_build_type_lc )
+set(find_library_suffix "RELEASE")
+if( grass_build_type_lc STREQUAL "debug" )
+set(find_library_suffix "DEBUG")
+endif()
 
 option(WITH_CAIRO "Build with cairo support ." ON)
 option(WITH_X11 "Build with X11 support ." ${default_option_enabled})
 option(WITH_OPENGL "Build with opengl support ." ON)
 option(WITH_SQLITE "enable sqlite support" ON)
 option(WITH_POSTGRES "enable postgres support" OFF)
-option(WITH_NLS "enable sqlite support" ${default_option_enabled})
-option(WITH_BZLIB "enable sqlite support" ON)
-option(WITH_BLAS "enable sqlite support" ON)
-option(WITH_LAPACK "enable sqlite support" ON)
+option(WITH_NLS "enable nls support" ${default_option_enabled})
+option(WITH_BZLIB "enable bzlib support" ON)
+option(WITH_BLAS "enable blas support" ON)
+option(WITH_LAPACK "enable lapack support" ON)
+option(WITH_PYTHON "Build python bindings" OFF)
 option(WITH_LARGEFILES "enable largefile support" ${default_option_enabled})
 option(WITH_DOCS "Build documentation" OFF)
 if(APPLE)
@@ -103,12 +110,10 @@ set(ALL_SUBDIRS
   misc
   raster
   raster3d
-  demolocation
   scripts
   vector  
   temporal
   tools
-  gui
   # ps
   # locale
 )
@@ -116,6 +121,10 @@ set(ALL_SUBDIRS
 foreach(d ${ALL_SUBDIRS})
   add_subdirectory(${d})
 endforeach()
+
+if(WITH_PYTHON)
+  add_subdirectory(gui)
+endif()
 
 if(WITH_DOCS)
   add_subdirectory(doc)
@@ -127,7 +136,7 @@ endif() # WITH_DOCS
 # TODO: To be discussed
 # add_subdirectory(testsuite)
 # add_subdirectory(macosx)
-# add_subdirectory(mswindows)
+
 if(WITH_X11)
   build_program_in_subdir(visualization/ximgview DEPENDS grass_gis X11)
 endif()

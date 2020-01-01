@@ -27,29 +27,18 @@
 # Instead looking for Geometry.h
 #---
 
-find_path( GEOS_INCLUDE_DIR geos/geom/Geometry.h
-           PATHS 
-           ${CMAKE_INSTALL_PREFIX}/include
-           $ENV{GEOS_DIR}/include
-           ${GEOS_DIR}/include
-           /usr/include
-           /usr/local/include
-           /usr/local/ossim/include )
+find_path( GEOS_INCLUDE_DIR geos/geom/Geometry.h)
 
 # Find GEOS C library:
-find_library( GEOS_C_LIB NAMES geos_c )
-
+find_library( GEOS_C_LIBRARY_RELEASE NAMES geos_c )
+find_library( GEOS_C_LIBRARY_DEBUG NAMES geos_cd )
 set(GEOS_FOUND FALSE)
 
-set( GEOS_LIBRARIES)
-if(GEOS_C_LIB)
-  set( GEOS_LIBRARIES ${GEOS_C_LIB})
-endif()
-# # Find GEOS c++ library:
-# find_library( GEOS_CPP_LIB NAMES geos )
-
-if(GEOS_CPP_LIB)
-  set(GEOS_LIBRARIES ${GEOS_C_LIB} ${GEOS_CPP_LIB} )
+set(GEOS_LIBRARY)
+if(GEOS_C_LIBRARY_DEBUG)
+  set( GEOS_LIBRARY ${GEOS_C_LIBRARY_DEBUG})
+elseif(GEOS_C_LIBRARY_RELEASE)
+  set( GEOS_LIBRARY ${GEOS_C_LIBRARY_RELEASE})
 endif()
 
 #---
@@ -57,6 +46,6 @@ endif()
 #--- 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args( GEOS DEFAULT_MSG 
-                                   GEOS_LIBRARIES
+                                   GEOS_LIBRARY
                                    GEOS_INCLUDE_DIR )
 
