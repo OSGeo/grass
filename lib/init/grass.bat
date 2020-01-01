@@ -1,0 +1,25 @@
+@echo off
+::set PYTHONHOME=%GISBASE%\Python37
+
+set GRASS_PROJSHARE=@GRASS_PROJSHARE@
+
+set PROJ_LIB=@PROJ_LIB@
+
+set GDAL_DATA=@GDAL_DATA@
+
+set GEOTIFF_CSV=@GEOTIFF_CSV@
+
+::set FONTCONFIG_FILE=%GISBASE%\etc\fonts.conf
+
+set PATH=@DLL_PATH_LIST@;%PATH%
+
+set GRASS_PYTHON=@GRASS_PYTHON@
+
+set GRASS_CONFIG_DIR=@GRASS_CONFIG_DIR@
+
+"@GRASS_PYTHON@" "@GISBASE@\etc\@START_UP@" %*
+
+rem
+rem Pause on error
+rem
+if %ERRORLEVEL% GEQ 1 pause
