@@ -109,9 +109,9 @@ if(TARGET X11)
 endif()
 
 #used in config.cmake.in
-set(STATIC_BUILD TRUE)
-if(BUILD_SHARED_LIBS)
-  set(STATIC_BUILD FALSE)
+set(STATIC_BUILD 0)
+if(NOT BUILD_SHARED_LIBS)
+  set(STATIC_BUILD 1)
 endif()
 
 #used in config.cmake.in

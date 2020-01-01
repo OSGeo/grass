@@ -1,3 +1,4 @@
+include(GenerateExportHeader)
 function(build_module)
   cmake_parse_arguments(G  "EXE" "NAME;SRCDIR;SRC_REGEX" "SOURCES;INCLUDES;DEPENDS;OPTIONAL_DEPENDS;DEFS;HEADERS" ${ARGN} )
 
@@ -38,9 +39,12 @@ function(build_module)
     add_executable(${G_NAME} ${${G_NAME}_SRCS})
   else()
     add_library(${G_NAME} ${${G_NAME}_SRCS})
-    set_target_properties(${G_NAME}
-      PROPERTIES OUTPUT_NAME ${G_NAME}.${GRASS_VERSION_NUMBER}
-      )
+    set_target_properties(${G_NAME} PROPERTIES OUTPUT_NAME ${G_NAME}.${GRASS_VERSION_NUMBER})
+
+	set(export_file_name "${CMAKE_BINARY_DIR}/include/export/${G_NAME}_export.h")
+	generate_export_header(${G_NAME}
+	  STATIC_DEFINE "STATIC_BUILD"
+	  EXPORT_FILE_NAME ${export_file_name})
   endif()
 
   foreach(G_OPTIONAL_DEPEND ${G_OPTIONAL_DEPENDS})
