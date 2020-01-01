@@ -1,7 +1,3 @@
-# MODULE_TOPDIR = ../..
-
-# include $(MODULE_TOPDIR)/include/Make/Other.make
-# include $(MODULE_TOPDIR)/include/Make/Compile.make
 
 # #for i18N support
 set(PACKAGE "grasslibs")
@@ -18,7 +14,6 @@ set(env_file_name "env.sh")
 set(START_UP "grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}")
 endif()
 
-
 set(CONFIG_PROJSHARE)
 get_filename_component(PROJ_INSTALL_PREFIX ${PROJ_INCLUDE_DIR} PATH)
 if(DEFINED ENV{PROJSHARE})
@@ -33,6 +28,7 @@ endif()
 file(TO_NATIVE_PATH "${PROJ_INSTALL_PREFIX}/share/proj" PROJ_LIB)
 file(TO_NATIVE_PATH ${CONFIG_PROJSHARE} GRASS_PROJSHARE)
 
+
 find_path(gdal_share_dir  "gdal" PATH_SUFFIXES share)
 if(NOT gdal_share_dir)
 	message(FATAL_ERROR "Cannot find share/gdal")
@@ -44,19 +40,33 @@ if(NOT geotiff_share_dir)
 	message(FATAL_ERROR "Cannot find share/epsg_csv")
 endif()
 file(TO_NATIVE_PATH "${geotiff_share_dir}/epsg_csv" GEOTIFF_CSV)
+get_filename_component(GDAL_DIR ${GDAL_LIBRARY} PATH)
+get_filename_component(GDAL_DIR ${GDAL_DIR} PATH)
+file(TO_NATIVE_PATH  ${GDAL_DIR}/bin DEPS_DLL_PATH)
+if(find_library_suffix STREQUAL "DEBUG")
+  if(MSVC)
+	file(TO_NATIVE_PATH  ${GDAL_DIR}/debug/bin DEPS_DLL_PATH)
+  endif() # MSVC
+endif()
+list(APPEND DLL_PATH_LIST ${DEPS_DLL_PATH})
+
+file(TO_NATIVE_PATH ${PYTHON_EXECUTABLE} GRASS_PYTHON)
+
+
 
 #For build tree
+file(COPY ${CMAKE_SOURCE_DIR}/demolocation/PERMANENT DESTINATION ${CMAKE_BINARY_DIR}/demolocation/)
+
+configure_file(${CMAKE_SOURCE_DIR}/demolocation/grassrc.tmpl 
+"${CMAKE_BINARY_DIR}/etc/config/rc" @ONLY)
+
+
+
+
 file(TO_NATIVE_PATH  ${CMAKE_BINARY_DIR}/bin grass_dll_dir)
 set(DLL_PATH_LIST)
 list(APPEND DLL_PATH_LIST ${grass_dll_dir})
 
-file(TO_NATIVE_PATH  ${GDAL_INSTALL_PREFIX}/bin DEPS_DLL_PATH)
-if(find_library_suffix STREQUAL "DEBUG")
-  if(MSVC)
-	file(TO_NATIVE_PATH  ${GDAL_INSTALL_PREFIX}/bin DEPS_DLL_PATH)
-  endif() # MSVC
-endif()
-list(APPEND DLL_PATH_LIST ${DEPS_DLL_PATH})
 separate_arguments(DLL_PATH_LIST)
 
 set(LD_LIBRARY_PATH_VAR)
@@ -70,15 +80,11 @@ endif()
 
 #file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} GISBASE)
 set(GISBASE ${CMAKE_BINARY_DIR})
-file(TO_NATIVE_PATH ${PYTHON_EXECUTABLE} GRASS_PYTHON)
-file(COPY ${CMAKE_SOURCE_DIR}/demolocation/PERMANENT DESTINATION ${CMAKE_BINARY_DIR}/demolocation/)
 
 file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} GISDBASE)
 set(BINDIR "${CMAKE_BINARY_DIR}/bin")
 file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/etc/config" GRASS_CONFIG_DIR)
 
-configure_file(${CMAKE_SOURCE_DIR}/demolocation/grassrc.tmpl 
-"${CMAKE_BINARY_DIR}/etc/config/rc" @ONLY)
 
 if(NOT MSVC)
   configure_file(env.sh ${CMAKE_BINARY_DIR}/etc/config/env  @ONLY)
@@ -105,9 +111,7 @@ if(UNIX OR MINGW)
   endif()
 endif()
 
-set(RUN_GISBASE "${CMAKE_INSTALL_PREFIX}")
-set(GISBASE "${RUN_GISBASE}")
-set(output_file_path "${CMAKE_INSTALL_PREFIX}/etc")
+set(GISBASE "${CMAKE_INSTALL_PREFIX}")
 configure_file(grass.py ${CMAKE_CURRENT_BINARY_DIR}/${START_UP}  @ONLY)
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${START_UP} DESTINATION etc)
 
