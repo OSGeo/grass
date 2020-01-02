@@ -76,15 +76,18 @@ if(UNIX OR MINGW)
     set(LD_LIBRARY_PATH_VAR "${CMAKE_BINARY_DIR}/lib")
   endif()
 endif()
-
-
+message(STATUS "GISBASE (build) : ${GISBASE}")
+message(STATUS "grass config directory (build): ${GRASS_CONFIG_DIR}")
 if(NOT MSVC)
   configure_file(env.sh ${CMAKE_BINARY_DIR}/etc/config/bashrc  @ONLY)
+  message(STATUS "env variables: ${CMAKE_BINARY_DIR}/etc/config/bashrc")
 endif()
 configure_file(${script_file_name}.in ${CMAKE_BINARY_DIR}/${script_file_name}  @ONLY)
 
 configure_file(grass.py ${CMAKE_BINARY_DIR}/etc/${START_UP} @ONLY)
+message(STATUS "Startup script: ${CMAKE_BINARY_DIR}/${script_file_name}")
 
+message(STATUS "gisrc: ${CMAKE_BINARY_DIR}/etc/config/rc")
 
 # For install tree
 configure_file(${script_file_name}.in ${CMAKE_CURRENT_BINARY_DIR}/${script_file_name}  @ONLY)
@@ -109,8 +112,10 @@ if(WIN32)
 else()
 	set(GRASS_CONFIG_DIR "$ENV{HOME}/.grass7")
 endif()
-
 set(GISBASE "${CMAKE_INSTALL_PREFIX}")
+
+message(STATUS "GISBASE (install) : ${GISBASE}")
+message(STATUS "grass config directory (install): ${GRASS_CONFIG_DIR}")
 
 if(NOT MSVC)
   configure_file(env.sh ${CMAKE_CURRENT_BINARY_DIR}/bashrc  @ONLY)
