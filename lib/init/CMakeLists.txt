@@ -87,7 +87,7 @@ configure_file(grass.py ${CMAKE_BINARY_DIR}/etc/${START_UP} @ONLY)
 
 
 # For install tree
-configure_file(${script_file_name} ${CMAKE_CURRENT_BINARY_DIR}/${script_file_name}  @ONLY)
+configure_file(${script_file_name}.in ${CMAKE_CURRENT_BINARY_DIR}/${script_file_name}  @ONLY)
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${script_file_name} DESTINATION bin)
 
 if(UNIX OR MINGW)
