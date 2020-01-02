@@ -36,10 +36,12 @@ endif()
 file(TO_NATIVE_PATH "${gdal_share_dir}/gdal" GDAL_DATA)
 
 find_path(geotiff_share_dir  "epsg_csv" PATH_SUFFIXES share)
-if(NOT geotiff_share_dir)
-	message(FATAL_ERROR "Cannot find share/epsg_csv")
+if(geotiff_share_dir)
+  file(TO_NATIVE_PATH "${geotiff_share_dir}/epsg_csv" GEOTIFF_CSV)
+else()
+  set(GEOTIFF_CSV "")
+  message(WARNING "Cannot find share/epsg_csv. GEOTIFF_CSV will not be set")
 endif()
-file(TO_NATIVE_PATH "${geotiff_share_dir}/epsg_csv" GEOTIFF_CSV)
 
 get_filename_component(GDAL_DIR ${GDAL_LIBRARY_${find_library_suffix}} PATH)
 get_filename_component(GDAL_DIR ${GDAL_DIR} PATH)
@@ -54,7 +56,6 @@ file(TO_NATIVE_PATH ${PYTHON_EXECUTABLE} GRASS_PYTHON)
 file(COPY ${CMAKE_SOURCE_DIR}/demolocation/PERMANENT DESTINATION ${CMAKE_BINARY_DIR}/demolocation/)
 
 set(GISBASE ${CMAKE_BINARY_DIR})
-set(BINDIR "${CMAKE_BINARY_DIR}/bin")
 file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} GISDBASE)
 configure_file(${CMAKE_SOURCE_DIR}/demolocation/grassrc.tmpl 
 "${CMAKE_BINARY_DIR}/etc/config/rc" @ONLY)
@@ -78,15 +79,14 @@ endif()
 
 
 if(NOT MSVC)
-  configure_file(env.sh ${CMAKE_BINARY_DIR}/etc/config/env  @ONLY)
+  configure_file(env.sh ${CMAKE_BINARY_DIR}/etc/config/bashrc  @ONLY)
 endif()
-configure_file(${script_file_name} ${CMAKE_BINARY_DIR}/${script_file_name}  @ONLY)
+configure_file(${script_file_name}.in ${CMAKE_BINARY_DIR}/${script_file_name}  @ONLY)
 
 configure_file(grass.py ${CMAKE_BINARY_DIR}/etc/${START_UP} @ONLY)
 
 
 # For install tree
-set(BINDIR "${CMAKE_INSTALL_PREFIX}/bin")
 configure_file(${script_file_name} ${CMAKE_CURRENT_BINARY_DIR}/${script_file_name}  @ONLY)
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${script_file_name} DESTINATION bin)
 
@@ -107,15 +107,15 @@ if(WIN32)
 	endif()
 	file(TO_NATIVE_PATH "${app_data_dir}/GRASS7" GRASS_CONFIG_DIR)
 else()
-	set(GRASS_CONFIG_DIR "${ENV{HOME}}/.grass7")
+	set(GRASS_CONFIG_DIR "$ENV{HOME}/.grass7")
 endif()
 
 set(GISBASE "${CMAKE_INSTALL_PREFIX}")
 
 if(NOT MSVC)
   configure_file(env.sh ${CMAKE_CURRENT_BINARY_DIR}/bashrc  @ONLY)
-  file(INSTALL ${CMAKE_CURRENT_BINARY_DIR}/bashrc
-  DESTINATION ${GRASS_CONFIG_DIR}/bashrc)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/bashrc
+  DESTINATION ${GRASS_CONFIG_DIR})
 endif()
 
 configure_file(grass.py ${CMAKE_CURRENT_BINARY_DIR}/${START_UP}  @ONLY)
