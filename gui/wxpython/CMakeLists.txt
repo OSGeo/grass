@@ -63,3 +63,19 @@
 
 # $(DSTDIR):
 # 	$(MKDIR) $@
+function(run_grass_python)
+  set(c "${ARGN}")
+  set(stamp_file_path ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${module}.py.stamp)
+  add_custom_command(
+    OUTPUT ${stamp_file_path}
+    #DEPENDS ${${module}_LIBS}
+    COMMAND ${CMAKE_COMMAND}
+	-DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
+    -DBIN_DIR=${CMAKE_BINARY_DIR}
+    -P ${CMAKE_SOURCE_DIR}/cmake/python.cmake
+    COMMAND ${CMAKE_COMMAND} -E touch ${stamp_file_path}
+    COMMENT "Running  ${python_args}"
+    VERBATIM)
+
+  add_custom_target(${${module}_TARGET_NAME} ALL DEPENDS ${stamp_file_path})
+endfunction()
