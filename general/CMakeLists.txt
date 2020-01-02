@@ -38,15 +38,6 @@ add_subdirectory(manage/lister)
 build_program_in_subdir(g.list DEPENDS grass_manage)
 add_dependencies(g.list cell vector)
 
+build_program_in_subdir(g.remove DEPENDS grass_manage grass_raster)
 # TODO: MODULES DISABLED
 # g.gui
-
-
-
-if(NOT MSVC)
-build_program_in_subdir(g.remove DEPENDS grass_manage grass_raster )
-endif()
-
-
-
-
