@@ -40,28 +40,26 @@ if(NOT geotiff_share_dir)
 	message(FATAL_ERROR "Cannot find share/epsg_csv")
 endif()
 file(TO_NATIVE_PATH "${geotiff_share_dir}/epsg_csv" GEOTIFF_CSV)
-get_filename_component(GDAL_DIR ${GDAL_LIBRARY} PATH)
+
+get_filename_component(GDAL_DIR ${GDAL_LIBRARY_${find_library_suffix}} PATH)
 get_filename_component(GDAL_DIR ${GDAL_DIR} PATH)
+
 file(TO_NATIVE_PATH  ${GDAL_DIR}/bin DEPS_DLL_PATH)
-if(find_library_suffix STREQUAL "DEBUG")
-  if(MSVC)
-	file(TO_NATIVE_PATH  ${GDAL_DIR}/debug/bin DEPS_DLL_PATH)
-  endif() # MSVC
-endif()
 list(APPEND DLL_PATH_LIST ${DEPS_DLL_PATH})
 
 file(TO_NATIVE_PATH ${PYTHON_EXECUTABLE} GRASS_PYTHON)
 
 
-
-#For build tree
+# For build tree
 file(COPY ${CMAKE_SOURCE_DIR}/demolocation/PERMANENT DESTINATION ${CMAKE_BINARY_DIR}/demolocation/)
 
+set(GISBASE ${CMAKE_BINARY_DIR})
+set(BINDIR "${CMAKE_BINARY_DIR}/bin")
+file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} GISDBASE)
 configure_file(${CMAKE_SOURCE_DIR}/demolocation/grassrc.tmpl 
 "${CMAKE_BINARY_DIR}/etc/config/rc" @ONLY)
 
-
-
+file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/etc/config" GRASS_CONFIG_DIR)
 
 file(TO_NATIVE_PATH  ${CMAKE_BINARY_DIR}/bin grass_dll_dir)
 set(DLL_PATH_LIST)
@@ -78,13 +76,6 @@ if(UNIX OR MINGW)
   endif()
 endif()
 
-#file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} GISBASE)
-set(GISBASE ${CMAKE_BINARY_DIR})
-
-file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} GISDBASE)
-set(BINDIR "${CMAKE_BINARY_DIR}/bin")
-file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/etc/config" GRASS_CONFIG_DIR)
-
 
 if(NOT MSVC)
   configure_file(env.sh ${CMAKE_BINARY_DIR}/etc/config/env  @ONLY)
@@ -94,11 +85,7 @@ configure_file(${script_file_name} ${CMAKE_BINARY_DIR}/${script_file_name}  @ONL
 configure_file(grass.py ${CMAKE_BINARY_DIR}/etc/${START_UP} @ONLY)
 
 
-
-
-
-
-#For install tree
+# For install tree
 set(BINDIR "${CMAKE_INSTALL_PREFIX}/bin")
 configure_file(${script_file_name} ${CMAKE_CURRENT_BINARY_DIR}/${script_file_name}  @ONLY)
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${script_file_name} DESTINATION bin)
@@ -111,7 +98,26 @@ if(UNIX OR MINGW)
   endif()
 endif()
 
+
+if(WIN32)
+    set(app_data_dir $ENV{APPDATA})
+	if(NOT EXISTS ${app_data_dir})
+	# this can happen with some strange settings
+	message(FATAL_ERROR "The APPDATA variable is not set, ask your operating system support")
+	endif()
+	file(TO_NATIVE_PATH "${app_data_dir}/GRASS7" GRASS_CONFIG_DIR)
+else()
+	set(GRASS_CONFIG_DIR "${ENV{HOME}}/.grass7")
+endif()
+
 set(GISBASE "${CMAKE_INSTALL_PREFIX}")
+
+if(NOT MSVC)
+  configure_file(env.sh ${CMAKE_CURRENT_BINARY_DIR}/bashrc  @ONLY)
+  file(INSTALL ${CMAKE_CURRENT_BINARY_DIR}/bashrc
+  DESTINATION ${GRASS_CONFIG_DIR}/bashrc)
+endif()
+
 configure_file(grass.py ${CMAKE_CURRENT_BINARY_DIR}/${START_UP}  @ONLY)
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${START_UP} DESTINATION etc)
 
