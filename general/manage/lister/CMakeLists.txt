@@ -15,5 +15,13 @@
 # $(ETC)/lister:
 # 	$(MKDIR) $@
 
-build_module(NAME cell EXE SOURCES "cell.c" DEPENDS grass_vector grass_dbmibase grass_gis grass_raster)
-build_module(NAME vector EXE SOURCES "vector.c" DEPENDS grass_vector grass_dbmibase grass_gis grass_raster )
+build_module(NAME cell EXE 
+SOURCES "cell.c" 
+DEPENDS grass_vector grass_dbmibase grass_gis grass_raster)
+set_target_properties(cell
+  PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/etc/lister")
+build_module(NAME vector EXE 
+SOURCES "vector.c" 
+DEPENDS grass_vector grass_dbmibase grass_gis grass_raster )
+set_target_properties(vector
+  PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/etc/lister")

@@ -33,14 +33,20 @@ if(WITH_CAIRO)
   endif()
 endif()
 
-# g.cairocomp
-# g.gui
-# TODO: MODULES DISABLED
-if(NOT MSVC)
+add_subdirectory(manage/lister)
+
 build_program_in_subdir(g.list DEPENDS grass_manage)
+add_dependencies(g.list cell vector)
+
+# TODO: MODULES DISABLED
+# g.gui
+
+
+
+if(NOT MSVC)
 build_program_in_subdir(g.remove DEPENDS grass_manage grass_raster )
 endif()
-add_subdirectory(manage/lister)
+
 
 
 
