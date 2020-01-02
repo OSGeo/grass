@@ -20,8 +20,9 @@ build_program_in_subdir(g.region DEPENDS grass_gis grass_gproj
 build_program_in_subdir(g.rename DEPENDS grass_manage grass_raster )
 build_program_in_subdir(g.tempfile DEPENDS grass_gis )
 
-build_program_in_subdir(g.version DEPENDS grass_gis GEOS GDAL SQLITE
-DEFS "-DGRASS_VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
+build_program_in_subdir(g.version
+  DEPENDS grass_gis PROJ GEOS GDAL SQLITE
+  DEFS "-DGRASS_VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
      "-DGRASS_VERSION_GIT=\"${GRASS_VERSION_GIT}\""
      "-DGRASS_VERSION_UPDATE_PKG=${GRASS_VERSION_UPDATE_PKG}"
      "-DARCH=\"${BUILD_ARCH}\""

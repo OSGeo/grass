@@ -20,8 +20,6 @@ FIND_PATH(PROJ_INCLUDE_DIR proj_api.h
  
  file(READ "${PROJ_INCLUDE_DIR}/proj_api.h" _proj_api_h_CONTENTS)
   string(REGEX REPLACE ".*# *define PJ_VERSION.([0-9]+).*" "\\1" PROJ_VERSION_STRING "${_proj_api_h_CONTENTS}")
-  #if(MUPARSER_VERSION MATCHES "^[0-9]+\$")
-  #  set(MUPARSER_VERSION "${MUPARSER_VERSION}.0.0")
 
 FIND_LIBRARY(PROJ_LIBRARY_RELEASE
     NAMES proj proj_i
