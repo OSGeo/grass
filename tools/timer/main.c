@@ -12,14 +12,13 @@
  *               for details.
  *
  *****************************************************************************/
-#ifdef HAVE_SYS_TIME_H
-#include <sys/time.h>
-#else
-#include <time.h>
-#endif
 #ifdef _MSC_VER
 #include <windows.h>
+#include <time.h>
+#else
+#include <sys/time.h>
 #endif
+
 #include <string.h>
 #include <stdio.h>
 
