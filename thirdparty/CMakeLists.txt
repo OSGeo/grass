@@ -146,6 +146,13 @@ if(Threads_FOUND)
   endif()
 endif()
 
+if(MSVC)
+  find_package(PCRE REQUIRED)
+  add_library(PCRE INTERFACE IMPORTED GLOBAL)
+  set_property(TARGET PCRE PROPERTY INTERFACE_LINK_LIBRARIES ${PCRE_LIBRARY_${find_library_suffix}} )
+  set_property(TARGET PCRE PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${PCRE_INCLUDE_DIR} )
+endif()
+
 #find_package (PythonLibs REQUIRED )
 
 set(Python_ADDITIONAL_VERSIONS 3.5 3.6) #2.7 2.6 2.5)

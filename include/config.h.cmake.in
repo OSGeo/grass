@@ -230,6 +230,9 @@
 /* define if regex.h exists */
 #cmakedefine HAVE_REGEX_H ${HAVE_REGEX_H}
 
+/* define if pcre.h exists */
+#cmakedefine HAVE_PCRE_H ${HAVE_PCRE_H}
+
 /* define if pthread.h exists */
 #cmakedefine HAVE_PTHREAD_H ${HAVE_PTHREAD_H}
 

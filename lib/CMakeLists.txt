@@ -154,6 +154,8 @@ endif()
 build_library_in_subdir(iostream SRC_REGEX "*.cpp" DEPENDS grass_gis)
 
 build_library_in_subdir(manage DEPENDS grass_raster grass_vector grass_raster3d )
+file(COPY manage/element_list DESTINATION ${CMAKE_BINARY_DIR}/etc)
+install(FILES ${CMAKE_BINARY_DIR}/etc/element_list DESTINATION etc)
 
 build_library_in_subdir(calc 
 DEPENDS grass_raster)

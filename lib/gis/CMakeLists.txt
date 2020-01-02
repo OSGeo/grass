@@ -43,3 +43,7 @@ build_module(NAME grass_gis SOURCES "${gislib_SRCS}"
 if(UNIX)
   target_link_libraries(grass_gis LIBM)
 endif()
+
+if(MSVC)
+target_link_libraries(grass_gis PCRE)
+endif()

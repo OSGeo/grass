@@ -61,6 +61,9 @@ check_target(LAPACK HAVE_CLAPACK_H)
 check_target(FREETYPE HAVE_FT2BUILD_H)
 check_target(POSTGRES HAVE_POSTGRES)
 check_target(ODBC HAVE_SQL_H)
+if(MSVC)
+check_target(PCRE HAVE_PCRE_H)
+endif()
 
 # Whether or not we are using G_socks for display communications
 set(USE_G_SOCKS 0)
