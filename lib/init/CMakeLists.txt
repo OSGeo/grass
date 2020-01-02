@@ -35,14 +35,14 @@ if(NOT gdal_share_dir)
 endif()
 file(TO_NATIVE_PATH "${gdal_share_dir}/gdal" GDAL_DATA)
 
+if(MSVC)
 find_path(geotiff_share_dir  "epsg_csv" PATH_SUFFIXES share)
 if(geotiff_share_dir)
   file(TO_NATIVE_PATH "${geotiff_share_dir}/epsg_csv" GEOTIFF_CSV)
 else()
-  set(GEOTIFF_CSV "")
-  message(WARNING "Cannot find share/epsg_csv. GEOTIFF_CSV will not be set")
+  message(FATAL_ERROR "Cannot find share/epsg_csv.")
 endif()
-
+endif() #MSVC
 get_filename_component(GDAL_DIR ${GDAL_LIBRARY_${find_library_suffix}} PATH)
 get_filename_component(GDAL_DIR ${GDAL_DIR} PATH)
 
