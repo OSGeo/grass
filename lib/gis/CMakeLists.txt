@@ -40,6 +40,27 @@ build_module(NAME grass_gis SOURCES "${gislib_SRCS}"
   OPTIONAL_DEPENDS PTHREAD BZIP2 ICONV
   DEFS "${grass_gis_DEFS}"
   )
+
+add_custom_command(TARGET grass_gis POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/etc/proj
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/colors ${CMAKE_BINARY_DIR}/etc/colors/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/ellipse.table ${CMAKE_BINARY_DIR}/etc/proj/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/datum.table ${CMAKE_BINARY_DIR}/etc/proj/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/datumtransform.table ${CMAKE_BINARY_DIR}/etc/proj/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/FIPS.code ${CMAKE_BINARY_DIR}/etc/proj/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/state27 ${CMAKE_BINARY_DIR}/etc/proj/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/state83 ${CMAKE_BINARY_DIR}/etc/proj/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/projections ${CMAKE_BINARY_DIR}/etc/proj/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/ellipse.table.solar.system ${CMAKE_BINARY_DIR}/etc/proj/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/colors.desc ${CMAKE_BINARY_DIR}/etc/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/renamed_options ${CMAKE_BINARY_DIR}/etc/
+  )
+  install(DIRECTORY colors DESTINATION etc/colors)
+  install(FILES ellipse.table ellipse.table.solar.system
+	datum.table datumtransform.table
+	FIPS.code state27 state83 projections DESTINATION etc/proj)
+  install(FILES colors.desc renamed_options DESTINATION etc)
+
 if(UNIX)
   target_link_libraries(grass_gis LIBM)
 endif()
