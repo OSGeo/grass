@@ -1,81 +1,75 @@
-# MODULE_TOPDIR = ../..
-
-# SUBDIRS = docs animation datacatalog mapswipe gmodeler rlisetup psmap dbmgr vdigit iclass gcp timeline tplot
-# EXTRA_CLEAN_FILES = menustrings.py build_ext.pyc xml/menudata.xml xml/module_tree_menudata.xml */*.pyc
-
-# include $(MODULE_TOPDIR)/include/Make/Dir.make
-# include $(MODULE_TOPDIR)/include/Make/Python.make
-
-# DSTDIR = $(GUIDIR)/wxpython
-
-# SRCFILES := $(wildcard icons/*.py scripts/*.py xml/*) \
-# 	$(wildcard animation/*.py core/*.py datacatalog/*.py dbmgr/*.py gcp/*.py gmodeler/*.py \
-# 	gui_core/*.py iclass/*.py lmgr/*.py location_wizard/*.py mapwin/*.py mapdisp/*.py \
-# 	mapswipe/*.py modules/*.py nviz/*.py psmap/*.py rdigit/*.py rlisetup/*.py timeline/*.py vdigit/*.py \
-# 	vnet/*.py web_services/*.py wxplot/*.py iscatt/*.py tplot/*.py) \
-# 	gis_set.py gis_set_error.py wxgui.py README
-
-# DSTFILES := $(patsubst %,$(DSTDIR)/%,$(SRCFILES)) \
-# 	$(patsubst %.py,$(DSTDIR)/%.pyc,$(filter %.py,$(SRCFILES)))
-
-# PYDSTDIRS := $(patsubst %,$(DSTDIR)/%,animation core datacatalog dbmgr gcp gmodeler \
-# 	gui_core iclass lmgr location_wizard mapwin mapdisp modules nviz psmap \
-# 	mapswipe vdigit wxplot web_services rdigit rlisetup vnet timeline iscatt tplot)
 
 
-# DSTDIRS := $(patsubst %,$(DSTDIR)/%,icons scripts xml)
+include(copy_python_file)
+function(build_gui_module_in_dir module_name)
 
-# default: $(DSTFILES)
-# 	-$(MAKE) $(DSTDIR)/xml/module_items.xml
-# 	-$(MAKE) xml/menudata.xml
-# 	-$(MAKE) xml/module_tree_menudata.xml
-# 	-$(MAKE) menustrings.py
-# 	$(MAKE) parsubdirs
+file(GLOB py_files ${module_name}/*.py)
+file(GLOB img_files ${module_name}/*.png  ${module_name}/*.jpg )
+
+set(g_gui_found FALSE)
+foreach(py_file ${py_files})
+if(py_file MATCHES "g.gui.*")
+set(g_gui_found TRUE)
+copy_python_file(${py_file} scripts)
+endif()
+copy_python_file(${py_file} gui/wxpython/${module_name})
+endforeach()
+
+foreach(img_file ${img_files})
+file(COPY ${img_file} DESTINATION ${CMAKE_BINARY_DIR}/docs/html/)
+endforeach()
+if(g_gui_found)
+if(WIN32)
+set(python_script "g.gui.${module_name}.py")
+else()
+set(python_script "g.gui.${module_name}")
+endif()
+set(gui_module_name "g.gui.${module_name}")
+
+set(html_file_path ${CMAKE_CURRENT_SOURCE_DIR}/${module_name}/g.gui.${module_name}.html )
+#message(FATAL_ERROR "html_file_path=${html_file_path}")
+add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/docs/html/${gui_module_name}.tmp.html
+	COMMAND ${CMAKE_BINARY_DIR}/tools/run_python.bat
+	${CMAKE_BINARY_DIR}/scripts/${python_script}
+	--html-description > ${CMAKE_BINARY_DIR}/docs/html/${gui_module_name}.tmp.html
+	DEPENDS ${CMAKE_BINARY_DIR}/scripts/${python_script}
+	COMMENT "Generating ${gui_module_name}.tmp.html"
+	VERBATIM)
 
 
-# $(DSTDIR)/%: % | $(PYDSTDIRS) $(DSTDIRS)
-# 	$(INSTALL_DATA) $< $@
+add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/docs/html/${gui_module_name}.html
+	COMMAND ${CMAKE_BINARY_DIR}/tools/run_python.bat
+	${CMAKE_BINARY_DIR}/tools/mkhtml.py ${gui_module_name}
+	${html_file_path} > ${CMAKE_BINARY_DIR}/docs/html/${gui_module_name}.html
+	COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/docs/html/${gui_module_name}.tmp.html
+	DEPENDS ${CMAKE_BINARY_DIR}/docs/html/${gui_module_name}.tmp.html
+	COMMENT "Generating docs/html/${gui_module_name}.html"
+  VERBATIM)
 
-# xml/menudata.xml: core/toolboxes.py
-# 	$(call run_grass,$(PYTHON) $< > $@)
-# 	$(call run_grass,$(PYTHON) $< "validate" $@)
+  add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/docs/html/wxGUI.${module_name}.html
+	COMMAND ${CMAKE_BINARY_DIR}/tools/run_python.bat
+	${CMAKE_BINARY_DIR}/tools/mkhtml.py  ${gui_module_name}
+	${html_file_path} > ${CMAKE_BINARY_DIR}/docs/html/wxGUI.${module_name}.html
+	COMMENT "Generating docs/html/wxGUI.${module_name}.html"
+  VERBATIM)
 
-# xml/module_tree_menudata.xml: core/toolboxes.py
-# 	$(call run_grass,$(PYTHON) $< "module_tree" > $@)
-# 	$(call run_grass,$(PYTHON) $< "validate" $@)
-
-# menustrings.py: core/menutree.py $(DSTDIR)/xml/menudata.xml $(DSTDIR)/xml/module_tree_menudata.xml $(DSTDIR)/xml/menudata_modeler.xml $(DSTDIR)/xml/menudata_psmap.xml
-# 	@echo "# This is a generated file.\n" > $@
-# 	$(call run_grass,$(PYTHON) $< "manager" >> $@)
-# 	$(call run_grass,$(PYTHON) $< "module_tree" >> $@)
-# 	$(call run_grass,$(PYTHON) $< "modeler" >> $@)
-# 	$(call run_grass,$(PYTHON) $< "psmap" >> $@)
-
-# $(DSTDIR)/xml/module_items.xml: tools/build_modules_xml.py
-# 	@echo "Generating interface description for all modules..."
-# 	$(call run_grass,$(PYTHON) $< > $@)
-
-# $(PYDSTDIRS): %: | $(DSTDIR)
-# 	$(MKDIR) $@
-
-# $(DSTDIRS): %: | $(DSTDIR)
-# 	$(MKDIR) $@
-
-# $(DSTDIR):
-# 	$(MKDIR) $@
-function(run_grass_python)
-  set(c "${ARGN}")
-  set(stamp_file_path ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${module}.py.stamp)
-  add_custom_command(
-    OUTPUT ${stamp_file_path}
-    #DEPENDS ${${module}_LIBS}
-    COMMAND ${CMAKE_COMMAND}
-	-DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
-    -DBIN_DIR=${CMAKE_BINARY_DIR}
-    -P ${CMAKE_SOURCE_DIR}/cmake/python.cmake
-    COMMAND ${CMAKE_COMMAND} -E touch ${stamp_file_path}
-    COMMENT "Running  ${python_args}"
-    VERBATIM)
-
-  add_custom_target(${${module}_TARGET_NAME} ALL DEPENDS ${stamp_file_path})
+    add_custom_target(g_gui_${module_name}_docs ALL
+    DEPENDS
+	${CMAKE_BINARY_DIR}/docs/html/${gui_module_name}.html
+	${CMAKE_BINARY_DIR}/docs/html/wxGUI.${module_name}.html)
+endif() #g_gui_found
 endfunction()
+#missing docs
+set(gui_sub_dirs animation core datacatalog dbmgr gcp gmodeler gui_core iclass
+icons image2target iscatt lmgr location_wizard mapdisp mapswipe mapwin modules nviz
+photo2image psmap rdigit rlisetup startup timeline tools tplot vdigit
+vnet web_services wxplot)
+
+foreach(gui_sub_dir ${gui_sub_dirs})
+  build_gui_module_in_dir(${gui_sub_dir})
+endforeach()
+copy_python_file(${CMAKE_CURRENT_SOURCE_DIR}/gis_set.py gui/wxpython)
+copy_python_file(${CMAKE_CURRENT_SOURCE_DIR}/gis_set_error.py gui/wxpython)
+copy_python_file(${CMAKE_CURRENT_SOURCE_DIR}/wxgui.py gui/wxpython)
+
+install(FILES README DESTINATION gui/wxpython)
