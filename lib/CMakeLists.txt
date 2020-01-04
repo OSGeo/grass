@@ -5,6 +5,7 @@ if(MSVC)
 endif()
 
 build_library_in_subdir(datetime)
+add_dependencies(grass_datetime copy_header)
 
 add_subdirectory(gis)
 
@@ -121,12 +122,10 @@ build_library_in_subdir(raster3d DEPENDS grass_raster)
 
 build_program_in_subdir(raster3d/test
   NAME test.raster3d.lib
-  DEPENDS grass_gis grass_raster3d grass_raster
-)
+  DEPENDS grass_gis grass_raster3d grass_raster)
 
 build_library_in_subdir(gpde HEADERS "N_*.h"
-  DEPENDS grass_gis grass_raster3d grass_gmath
-  )
+  DEPENDS grass_gis grass_raster3d grass_gmath)
 
 build_library_in_subdir(dspf  DEPENDS grass_gis)
 
