@@ -4,14 +4,12 @@ set(PACKAGE "grasslibs")
 
 file(GLOB init_HTMLFILES "*.html")
 
-#START_UP is the variable used in grass.py
+#START_UP is the variable used in grass.py, grass.sh.in and grass.bat.in
+set(START_UP "grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}.py")
 if(WIN32)
 set(script_file_name "grass.bat")
-set(START_UP "grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}.py")
 else()
 set(script_file_name "grass.sh")
-set(env_file_name "env.sh")
-set(START_UP "grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}")
 endif()
 
 set(CONFIG_PROJSHARE)
@@ -82,7 +80,8 @@ if(NOT MSVC)
   configure_file(env.sh ${CMAKE_BINARY_DIR}/etc/config/bashrc  @ONLY)
   message(STATUS "env variables: ${CMAKE_BINARY_DIR}/etc/config/bashrc")
 endif()
-configure_file(${script_file_name}.in ${CMAKE_BINARY_DIR}/${script_file_name}  @ONLY)
+configure_file(${script_file_name}.in
+   ${CMAKE_BINARY_DIR}/bin/${script_file_name}  @ONLY)
 
 configure_file(grass.py ${CMAKE_BINARY_DIR}/etc/${START_UP} @ONLY)
 message(STATUS "Startup script: ${CMAKE_BINARY_DIR}/${script_file_name}")
