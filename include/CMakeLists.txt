@@ -213,18 +213,23 @@ if(WITH_OPENGL)
     set(OPENGL_X11 1)
   endif()
 endif()
-#message(STATUS "Copying headers to ${CMAKE_BINARY_DIR}/include/grass/")
-
-execute_process(COMMAND ${CMAKE_COMMAND}
-  -E make_directory
-  ${CMAKE_BINARY_DIR}/include/grass/)
 
 file(GLOB_RECURSE SRCHS "*.h")
+ set(include_depends)
 foreach(srch ${SRCHS})
   get_filename_component(srch_PATH ${srch} PATH)
+  get_filename_component(srch_NAME ${srch} NAME)
   STRING(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}" "" dsth_PATH "${srch_PATH}")
-  file(COPY ${srch} DESTINATION ${CMAKE_BINARY_DIR}/include/grass${dsth_PATH})
+  set(output_dir ${CMAKE_BINARY_DIR}/include/xgrass${dsth_PATH})
+  add_custom_command(
+	OUTPUT ${output_dir}/${srch_NAME}
+	COMMAND ${CMAKE_COMMAND} -E copy ${srch} ${output_dir}
+	COMMENT "Copy ${CMAKE_BINARY_DIR}/include/grass${dsth_PATH}"
+	)
+	list(APPEND include_depends ${output_dir}/${srch_NAME} )
 endforeach()
+
+add_custom_target(copy_header DEPENDS ${include_depends} COMMENT  "${CMAKE_BINARY_DIR}/include/grass")
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in
   "${CMAKE_CURRENT_BINARY_DIR}/grass/version.h")
