@@ -7,6 +7,8 @@ if(MSVC)
   if(BUILD_SHARED_LIBS)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
   endif()
+
+  set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 endif()
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/find_scripts;${CMAKE_SOURCE_DIR}/cmake/modules;${CMAKE_MODULE_PATH}")
@@ -63,6 +65,11 @@ get_versions("include/VERSION"
 set(GRASS_VERSION_NUMBER ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE})
 message(STATUS "GRASS_VERSION_NUMBER  =  '${GRASS_VERSION_NUMBER}'")
 set(GRASS_VERSION_UPDATE_PKG "0.2")
+set(VERSION_DATE 2019)
+file(TO_NATIVE_PATH ${CMAKE_SOURCE_DIR} module_top_dir)
+file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} bin_dir)
+configure_file(cmake/run_python.bat ${CMAKE_BINARY_DIR}/tools/run_python.bat @ONLY)
+configure_file(cmake/run_grass.bat ${CMAKE_BINARY_DIR}/tools/run_grass.bat @ONLY)
 
 include(set_compiler_flags)
 set_compiler_flags()
