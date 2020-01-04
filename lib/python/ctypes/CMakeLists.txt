@@ -62,7 +62,7 @@ foreach(module ${MODULES})
     message(FATAL_ERROR "${${module}_TARGET_NAME} is not set")
   endif()
 
-  set(output_file "${CMAKE_CURRENT_BINARY_DIR}/${module}.py")
+  set(output_file "${CMAKE_BINARY_DIR}/etc/python/grass/lib/${module}.py")
 
   add_custom_command(OUTPUT ${output_file}
     DEPENDS ${${module}_LIBS}
