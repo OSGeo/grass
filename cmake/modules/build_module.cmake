@@ -1,6 +1,6 @@
 include(GenerateExportHeader)
 function(build_module)
-  cmake_parse_arguments(G  "EXE" "NAME;SRCDIR;SRC_REGEX;NO_HTML_DESCR" "SOURCES;INCLUDES;DEPENDS;OPTIONAL_DEPENDS;DEFS;HEADERS" ${ARGN} )
+  cmake_parse_arguments(G  "EXE;NO_HTML_DESCRIPTION" "NAME;SRCDIR;SRC_REGEX" "SOURCES;INCLUDES;DEPENDS;OPTIONAL_DEPENDS;DEFS;HEADERS" ${ARGN} )
 
   if(NOT G_NAME)
     message(FATAL_ERROR "G_NAME empty")
@@ -35,8 +35,8 @@ function(build_module)
     file(GLOB ${G_NAME}_SRCS "${G_SRCDIR}/${G_SRC_REGEX}")
   else()
     set(${G_NAME}_SRCS ${G_SOURCES})
-  endif()
-  
+  endif() 
+
   if(G_EXE)
     add_executable(${G_NAME} ${${G_NAME}_SRCS})
 	set_target_properties (${G_NAME} PROPERTIES FOLDER bin)
@@ -97,32 +97,42 @@ function(build_module)
  else()
     install(TARGETS ${G_NAME} DESTINATION lib)
  endif()
-
+ #TODO glob for *.html
+ file(GLOB html_files "${G_SRCDIR}/*.html")
  set(html_file "${G_SRCDIR}/${G_NAME}.html")
+
+  file(GLOB img_files ${G_NAME}/*.png  ${G_NAME}/*.jpg)
+   if(img_files)
+   set(img_cmd ${CMAKE_COMMAND} -E copy ${img_files} ${CMAKE_BINARY_DIR}/docs/html)
+   else()
+   set(img_cmd ${CMAKE_COMMAND} -E echo "")
+   endif()
+
+# if(EXISTS "${html_files}")
  if(EXISTS "${html_file}")
-   if(NOT ${G_NO_HTML_DESCR})
-     add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/docs/html/${G_NAME}.tmp.html
-	   COMMAND ${CMAKE_BINARY_DIR}/tools/run_grass.bat
-	   ${CMAKE_BINARY_DIR}/bin/${G_NAME}
-	   --html-description > ${CMAKE_BINARY_DIR}/docs/html/${G_NAME}.tmp.html
-	   DEPENDS ${G_NAME}
-	   COMMENT "Generating ${G_NAME}.tmp.html"
-	   VERBATIM)
-    else()
-	  file(WRITE ${CMAKE_BINARY_DIR}/docs/html/${G_NAME}.tmp.html  "")
+	if(${G_NO_HTML_DESCRIPTION})
+	set(tmp_html_cmd ${CMAKE_COMMAND} -E echo "")
+	else()
+	set(tmp_html_cmd ${CMAKE_BINARY_DIR}/tools/run_grass.bat ${G_NAME} --html-description)
 	endif()
+	set(mkhtml_cmd ${CMAKE_BINARY_DIR}/tools/run_python.bat ${CMAKE_BINARY_DIR}/tools/mkhtml.py)
 
-    add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/docs/html/${G_NAME}.html
-	  COMMAND ${CMAKE_BINARY_DIR}/tools/run_python.bat
-	  ${CMAKE_BINARY_DIR}/tools/mkhtml.py ${CMAKE_BINARY_DIR}/bin/${G_NAME}
-	  ${html_file} > ${CMAKE_BINARY_DIR}/docs/html/${G_NAME}.html
-	  DEPENDS ${CMAKE_BINARY_DIR}/docs/html/${G_NAME}.tmp.html
-	  COMMENT "Generating docs/html/${G_NAME}.html"
-      VERBATIM)
+	set(html_file_tmp "${CMAKE_BINARY_DIR}/docs/html/${G_NAME}.tmp.html")
+	set(html_file_out "${CMAKE_BINARY_DIR}/docs/html/${G_NAME}.html")
 
-    add_custom_target(${G_NAME}_doc ALL
-      COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/docs/html/${G_NAME}.tmp.html
-      DEPENDS ${CMAKE_BINARY_DIR}/docs/html/${G_NAME}.html)
-	  set_target_properties (${G_NAME}_doc PROPERTIES FOLDER docs)
+	  ADD_CUSTOM_COMMAND(TARGET ${G_NAME} POST_BUILD
+	  COMMAND ${tmp_html_cmd} > ${html_file_tmp}
+	  COMMAND ${mkhtml_cmd} ${G_NAME} ${html_file} ${html_file_tmp} > ${html_file_out}
+	  COMMAND ${CMAKE_COMMAND} -E remove ${html_file_tmp}
+	  COMMAND ${img_cmd}
+	  )
+
+
+
+	  #set_source_files_properties(${CMAKE_BINARY_DIR}/docs/html/${G_NAME}.html PROPERTIES GENERATED TRUE)
+    #add_custom_target(${G_NAME}_doc ALL
+     # COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/docs/html/${G_NAME}.tmp.html
+     # 
+	 # set_target_properties (${G_NAME}_doc PROPERTIES FOLDER docs)
    endif()
 endfunction()

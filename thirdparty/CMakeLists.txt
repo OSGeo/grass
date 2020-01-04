@@ -155,19 +155,7 @@ if(MSVC)
   set_property(TARGET PCRE PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${PCRE_INCLUDE_DIR} )
 endif()
 
-#find_package (PythonLibs REQUIRED )
-
-set(Python_ADDITIONAL_VERSIONS 3.5 3.6) #2.7 2.6 2.5)
+# find_package (PythonLibs REQUIRED )
+set(Python_ADDITIONAL_VERSIONS 3.5 3.6)
 find_package (PythonInterp REQUIRED )
-#find_package ( Numpy )
-
-# if (PYTHON_VERSION_MAJOR GREATER 2 )
-#   message(FATAL_ERROR "cannot use python 3 or higher")
-# endif()
-
-
-
-
-
-
-
+# find_package ( Numpy )
