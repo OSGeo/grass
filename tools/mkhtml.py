@@ -69,16 +69,14 @@ def decode(bytes_):
 #  check for a strange case where autoconf sends two arguments
 pgm = sys.argv[1]
 if len(sys.argv) > 2:
-    src_file = sys.argv[2]
-	if not os.path.isfile(src_file):
-	    src_file = "%s.html" % pgm
-    tmp_file = src_file.replace(".html", '.tmp.html')
+    src_file = sys.argv[2] if os.path.isfile(sys.argv[2]) else "%s.html" % pgm
+    tmp_file = sys.argv[3] if os.path.isfile(sys.argv[2]) else "%s.tmp.html" % pgm
 
 if src_file is None:
     src_file = "%s.html" % pgm
     tmp_file = "%s.tmp.html" % pgm
 
-
+#print('src_file', src_file)
 trunk_url = "https://github.com/OSGeo/grass/tree/master/"
 addons_url = "https://github.com/OSGeo/grass-addons/tree/master/"
 
