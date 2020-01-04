@@ -57,6 +57,8 @@ add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/docs/html/${gui_module_name}.html
     DEPENDS
 	${CMAKE_BINARY_DIR}/docs/html/${gui_module_name}.html
 	${CMAKE_BINARY_DIR}/docs/html/wxGUI.${module_name}.html)
+
+	set_target_properties (g_gui_${module_name}_docs PROPERTIES FOLDER docs)
 endif() #g_gui_found
 endfunction()
 #missing docs

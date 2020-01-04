@@ -1,14 +1,10 @@
 include(copy_python_file)
-function(build_pymodule_in_subdir py_DIR_PATH)
-   set(py_FILES ${ARGN})
-    if (NOT "__init__.py" IN_LIST py_FILES)
-	  get_filename_component(py_init_py_file_path ${py_DIR_PATH}/__init__.py REALPATH)
-	  list(APPEND py_FILES "__init__.py")
-    endif()
-    #find leaf of py_DIR_PATH which will be name of module
-    get_filename_component(py_module_name ${py_DIR_PATH} NAME)
-	set(install_dest etc/python/grass/${py_DIR_PATH})
-	foreach(py_file ${py_FILES})
-	  copy_python_file(${py_file} ${py_module_name} ${py_DIR_PATH} ${install_dest} )
-	endforeach()
+function(build_pymodule_in_subdir module_name)
+
+  file(GLOB py_files ${module_name}/*.py)
+  file(GLOB img_files ${module_name}/*.png  ${module_name}/*.jpg )
+  foreach(py_file ${py_files})
+     copy_python_file(${py_file} etc/python/grass/${module_name} )
+  endforeach()
+
 endfunction()

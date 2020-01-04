@@ -53,11 +53,10 @@ foreach(pyfile ${SRC_FILES})
     VERBATIM
     )
   
-  add_custom_target(${pyfile_NAME}
-    ALL
-    DEPENDS ${${pyfile_NAME}_OUTPUT_FILE}.stamp
-    )
+  add_custom_target(${pyfile_NAME} ALL
+  DEPENDS ${${pyfile_NAME}_OUTPUT_FILE}.stamp)
 
+  set_target_properties (${pyfile_NAME} PROPERTIES FOLDER scripts)
   # add_custom_target(${pyfile_NAME} "${${pyfile_NAME}_OUTPUT_FILE}"
   #   COMMAND ${CMAKE_COMMAND}
   #   -DINPUT_FILE=${pyfile}

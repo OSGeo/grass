@@ -79,6 +79,7 @@ foreach(module ${MODULES})
     VERBATIM)
 
   add_custom_target(${${module}_TARGET_NAME} ALL DEPENDS ${output_file})
+  set_target_properties (${${module}_TARGET_NAME} PROPERTIES FOLDER lib/python)
   install(FILES ${output_file} DESTINATION etc/python/grass/lib)
 
 endforeach()

@@ -39,10 +39,10 @@ function(build_module)
   
   if(G_EXE)
     add_executable(${G_NAME} ${${G_NAME}_SRCS})
-	SET_TARGET_PROPERTIES (${G_NAME} PROPERTIES FOLDER bin)
+	set_target_properties (${G_NAME} PROPERTIES FOLDER bin)
   else()
     add_library(${G_NAME} ${${G_NAME}_SRCS})
-	SET_TARGET_PROPERTIES (${G_NAME} PROPERTIES FOLDER lib)
+	set_target_properties (${G_NAME} PROPERTIES FOLDER lib)
     set_target_properties(${G_NAME} PROPERTIES OUTPUT_NAME ${G_NAME}.${GRASS_VERSION_NUMBER})
 
 	set(export_file_name "${CMAKE_BINARY_DIR}/include/export/${G_NAME}_export.h")
@@ -123,5 +123,6 @@ function(build_module)
     add_custom_target(${G_NAME}_doc ALL
       COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/docs/html/${G_NAME}.tmp.html
       DEPENDS ${CMAKE_BINARY_DIR}/docs/html/${G_NAME}.html)
+	  set_target_properties (${G_NAME}_doc PROPERTIES FOLDER docs)
    endif()
 endfunction()
