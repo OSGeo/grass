@@ -97,6 +97,8 @@ function(build_module)
  else()
     install(TARGETS ${G_NAME} DESTINATION lib)
  endif()
+
+ if(WITH_DOCS)
  #TODO glob for *.html
  file(GLOB html_files "${G_SRCDIR}/*.html")
  set(html_file "${G_SRCDIR}/${G_NAME}.html")
@@ -127,12 +129,8 @@ function(build_module)
 	  COMMAND ${img_cmd}
 	  )
 
+   endif() # if(EXISTS "${html_file}")
 
+ endif() #WITH_DOCS
 
-	  #set_source_files_properties(${CMAKE_BINARY_DIR}/docs/html/${G_NAME}.html PROPERTIES GENERATED TRUE)
-    #add_custom_target(${G_NAME}_doc ALL
-     # COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/docs/html/${G_NAME}.tmp.html
-     # 
-	 # set_target_properties (${G_NAME}_doc PROPERTIES FOLDER docs)
-   endif()
 endfunction()
