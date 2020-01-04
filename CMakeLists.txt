@@ -89,6 +89,7 @@ if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
 endif()
 
 include(update_per_group_target)
+include(copy_python_file)
 include(build_module)
 include(build_program)
 include(build_program_in_subdir)
@@ -108,6 +109,7 @@ endif()
 include_directories("${CMAKE_BINARY_DIR}/include")
 
 add_subdirectory(lib)
+add_subdirectory(tools)
 
 set(ALL_SUBDIRS
   general
@@ -120,7 +122,6 @@ set(ALL_SUBDIRS
   scripts
   vector  
   temporal
-  tools
   # ps
   # locale
 )
