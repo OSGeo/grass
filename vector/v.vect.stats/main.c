@@ -483,6 +483,9 @@ int main(int argc, char *argv[])
 	for (i = 0; i < ACats->n_cats; i++) {
 
 	    if (ACats->field[i] == area_field) {
+		if (acat_list && !Vect_cat_in_cat_list(ACats->cat[i], acat_list)) {
+		    continue;
+		}
 		Area_cat[nacats].area_cat = ACats->cat[i];
 		Area_cat[nacats].count = 0;
 		Area_cat[nacats].nvalues = 0;
@@ -581,6 +584,10 @@ int main(int argc, char *argv[])
 		    tmp_cat = -1;
 		    for (j = 0; j < PCats->n_cats; j++) {
 			if (PCats->field[j] == point_field) {
+			    if (pcat_list && !Vect_cat_in_cat_list(PCats->cat[j], pcat_list)) {
+				continue;
+			    }
+
 			    if (tmp_cat >= 0)
 				G_debug(3,
 					"More cats found in point layer (point=%d)",
@@ -623,6 +630,11 @@ int main(int argc, char *argv[])
 		search_ai.area_cat = -1;
 		for (j = 0; j < ACats->n_cats; j++) {
 		    if (ACats->field[j] == area_field) {
+			if (acat_list && !Vect_cat_in_cat_list(ACats->cat[j], acat_list)) {
+			    continue;
+			}
+
+
 			if (search_ai.area_cat >= 0)
 			    G_debug(3,
 				    "More cats found in area layer (area=%d)",
