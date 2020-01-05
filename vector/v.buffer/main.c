@@ -527,8 +527,16 @@ int main(int argc, char *argv[])
 
 	    Vect_reset_cats(CCats);
 	    for (i = 0; i < Cats->n_cats; i++) {
-		if (field < 0 || Cats->field[i] == field) {
+		if (field < 0) {
 		    Vect_cat_set(CCats, Cats->field[i], Cats->cat[i]);
+		}
+		else if (field > 0 && Cats->field[i] == field) {
+		    if (!cat_list) {
+			Vect_cat_set(CCats, Cats->field[i], Cats->cat[i]);
+		    }
+		    else if (Vect_cat_in_cat_list(Cats->cat[i], cat_list)) {
+			Vect_cat_set(CCats, Cats->field[i], Cats->cat[i]);
+		    }
 		}
 	    }
 
@@ -630,8 +638,16 @@ int main(int argc, char *argv[])
 
 	    Vect_reset_cats(CCats);
 	    for (i = 0; i < Cats->n_cats; i++) {
-		if (field < 0 || Cats->field[i] == field) {
+		if (field < 0) {
 		    Vect_cat_set(CCats, Cats->field[i], Cats->cat[i]);
+		}
+		else if (field > 0 && Cats->field[i] == field) {
+		    if (!cat_list) {
+			Vect_cat_set(CCats, Cats->field[i], Cats->cat[i]);
+		    }
+		    else if (Vect_cat_in_cat_list(Cats->cat[i], cat_list)) {
+			Vect_cat_set(CCats, Cats->field[i], Cats->cat[i]);
+		    }
 		}
 	    }
 

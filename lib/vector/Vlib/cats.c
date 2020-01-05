@@ -659,6 +659,11 @@ struct cat_list *Vect_cats_set_constraint(struct Map_info *Map, int layer,
    \return 0 no match, categories are outside constraints
    \return 1 match, categories are inside constraints
  */
+/* TODO:
+ * for GRASS 8, change return type:
+ * return a list of all category numbers that match the constraints
+ * return NULL if no category number matches the constraints
+ */
 int Vect_cats_in_constraint(struct line_cats *Cats, int layer,
 			      struct cat_list *list)
 {
