@@ -14,13 +14,14 @@ endif()
 list(GET grass_version_strings 0 version_major)
 list(GET grass_version_strings 1 version_minor)
 
-if(grass_version_file_length GREATER 3 )
+if(grass_version_file_length GREATER 2 )
   list(GET grass_version_strings 2 version_release)
 endif()
 
-if(grass_version_file_length GREATER 4 )
+if(grass_version_file_length GREATER 3  )
   list(GET grass_version_strings 3 version_date)
 endif()
+
 set(${var_major} ${version_major} PARENT_SCOPE)
 set(${var_minor} ${version_minor} PARENT_SCOPE)
 set(${var_release} ${version_release} PARENT_SCOPE)

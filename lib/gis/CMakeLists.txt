@@ -28,7 +28,7 @@ if(MINGW)
   list(APPEND gislib_SRCS "fmode.c")
 endif()
 
-set(grass_gis_DEFS "-DGRASS_VERSION_DATE=${GRASS_VERSION_DATE}")
+set(grass_gis_DEFS "-DGRASS_VERSION_DATE=\"${GRASS_VERSION_DATE}\"")
 if(MSVC)
   set(grass_gis_DEFS "${grass_gis_DEFS};-D_USE_MATH_DEFINES=1")
 endif()
