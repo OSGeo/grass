@@ -38,6 +38,13 @@ function(build_module)
   endif() 
 
   if(G_EXE)
+  #set(MODULE_LIST "${MODULE_LIST} ${G_NAME}")
+  #list(APPEND MODULE_LIST ${G_NAME})
+  #SET(MODULE_LIST  "${MODULE_LIST} ${G_NAME}" CACHE INTERNAL "source_list")
+  get_property(MODULE_LIST GLOBAL PROPERTY MODULE_LIST)
+  set_property(GLOBAL PROPERTY MODULE_LIST "${MODULE_LIST} ${G_NAME}")
+
+#message(FATAL_ERROR "EXCLUDED_MODULE_LIST=${EXCLUDED_MODULE_LIST}")
     add_executable(${G_NAME} ${${G_NAME}_SRCS})
 	set_target_properties (${G_NAME} PROPERTIES FOLDER bin)
   else()
@@ -115,9 +122,9 @@ function(build_module)
 	if(${G_NO_HTML_DESCRIPTION})
 	set(tmp_html_cmd ${CMAKE_COMMAND} -E echo "")
 	else()
-	set(tmp_html_cmd ${CMAKE_BINARY_DIR}/tools/run_grass.bat ${G_NAME} --html-description)
+	set(tmp_html_cmd ${RUN_GRASS} ${G_NAME} --html-description)
 	endif()
-	set(mkhtml_cmd ${CMAKE_BINARY_DIR}/tools/run_python.bat ${CMAKE_BINARY_DIR}/tools/mkhtml.py)
+	set(mkhtml_cmd ${RUN_PYTHON} ${CMAKE_BINARY_DIR}/tools/mkhtml.py)
 
 	set(html_file_tmp "${CMAKE_BINARY_DIR}/docs/html/${G_NAME}.tmp.html")
 	set(html_file_out "${CMAKE_BINARY_DIR}/docs/html/${G_NAME}.html")
@@ -128,7 +135,7 @@ function(build_module)
 	  COMMAND ${CMAKE_COMMAND} -E remove ${html_file_tmp}
 	  COMMAND ${img_cmd}
 	  )
-
+	  install(FILES ${html_file_out} docs/html)
    endif() # if(EXISTS "${html_file}")
 
  endif() #WITH_DOCS

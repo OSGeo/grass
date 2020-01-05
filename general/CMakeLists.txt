@@ -40,5 +40,5 @@ build_program_in_subdir(g.list DEPENDS grass_manage)
 add_dependencies(g.list cell vector)
 
 build_program_in_subdir(g.remove DEPENDS grass_manage grass_raster)
-# TODO: MODULES DISABLED
-# g.gui
+
+build_program_in_subdir(g.gui DEPENDS grass_raster)

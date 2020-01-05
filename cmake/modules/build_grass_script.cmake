@@ -17,17 +17,11 @@ function(build_grass_script)
       message(FATAL_ERROR "[ ${G_NAME} ]: SRC_FILES empty ")
     endif()
 
+if(WIN32)
+  file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} script_install_dir)
 
-#  message(FATAL_ERROR "ETCPYFILES=${ETCPYFILES}")
-#install(FILES ${ETCPYCFILES} DESTINATION etc)
-
-if(MINGW)
-  #PGM script_name
-  # $(BIN)/$(PGM).bat: $(MODULE_TOPDIR)/scripts/windows_launch.bat
-  # sed -e "s#SCRIPT_NAME#$(PGM)#" -e "s#SCRIPT_DIR#$(SCRIPT_DIR)#" $(MODULE_TOPDIR)/scripts/windows_launch.bat > $@
-  # unix2dos $@
   configure_file(
-    ${CMAKE_SOURCE_DIR}/scripts/windows_launch.bat
+    ${CMAKE_SOURCE_DIR}/cmake/windows_launch.bat.in
     ${CMAKE_BINARY_DIR}/bin/${G_NAME}.bat
     )
   install( PROGRAMS ${CMAKE_BINARY_DIR}/bin/${G_NAME}.bat DESTINATION bin )
@@ -54,25 +48,33 @@ foreach(pyfile ${SRC_FILES})
     )
   
   add_custom_target(${pyfile_NAME} ALL
+  COMMAND ${CMAKE_COMMAND} -E copy ${pyfile} ${CMAKE_BINARY_DIR}/scripts
   DEPENDS ${${pyfile_NAME}_OUTPUT_FILE}.stamp)
 
   set_target_properties (${pyfile_NAME} PROPERTIES FOLDER scripts)
-  # add_custom_target(${pyfile_NAME} "${${pyfile_NAME}_OUTPUT_FILE}"
-  #   COMMAND ${CMAKE_COMMAND}
-  #   -DINPUT_FILE=${pyfile}
-  #   -DOUTPUT_FILE=${${pyfile_NAME}_OUTPUT_FILE}
-  #   -DBIN_DIR=${CMAKE_BINARY_DIR}
-  #   -P ${CMAKE_SOURCE_DIR}/cmake/locale_strings.cmake
-  #   DEPENDS g.parser
-  #   COMMENT "Generating ${${pyfile_NAME}_OUTPUT_FILE}"
-  #   )
+  add_custom_target(${pyfile_NAME} "${${pyfile_NAME}_OUTPUT_FILE}"
+     COMMAND ${CMAKE_COMMAND}
+     -DINPUT_FILE=${pyfile}
+     -DOUTPUT_FILE=${${pyfile_NAME}_OUTPUT_FILE}
+     -DBIN_DIR=${CMAKE_BINARY_DIR}
+     -P ${CMAKE_SOURCE_DIR}/cmake/locale_strings.cmake
+     DEPENDS g.parser
+     COMMENT "Generating ${${pyfile_NAME}_OUTPUT_FILE}"
+     )
 
-#  set_source_files_properties("${${pyfile_NAME}_OUTPUT_FILE}" GENERATED)
+  set_source_files_properties("${${pyfile_NAME}_OUTPUT_FILE}" GENERATED)
   
   foreach(G_DEPEND ${G_DEPENDS})
     add_dependencies(${G_DEPEND})
   endforeach()
-  
+
+    get_property(MODULE_LIST GLOBAL PROPERTY MODULE_LIST)
+if(MSVC)
+  set_property(GLOBAL PROPERTY MODULE_LIST "${MODULE_LIST} ${G_NAME}.bat")
+  else()
+  set_property(GLOBAL PROPERTY MODULE_LIST "${MODULE_LIST} ${G_NAME}")
+  endif()
+
   install(FILES ${pyfile}
     RENAME ${pyfile_NAME}
     DESTINATION scripts)

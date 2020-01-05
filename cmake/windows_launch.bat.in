@@ -1,0 +1,2 @@
+@echo off
+"@GRASS_PYTHON@" "@script_install_dir@\scripts\@G_NAME@.py" %*

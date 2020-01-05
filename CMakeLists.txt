@@ -35,7 +35,7 @@ option(WITH_BLAS "enable blas support" ON)
 option(WITH_LAPACK "enable lapack support" ON)
 option(WITH_PYTHON "Build python bindings" OFF)
 option(WITH_LARGEFILES "enable largefile support" ${default_option_enabled})
-option(WITH_DOCS "Build documentation" OFF)
+option(WITH_DOCS "Build documentation" ON)
 if(APPLE)
   if(POLICY CMP0042)
     cmake_policy(SET CMP0042 NEW)
@@ -68,14 +68,27 @@ set(GRASS_VERSION_UPDATE_PKG "0.2")
 set(VERSION_DATE 2019)
 file(TO_NATIVE_PATH ${CMAKE_SOURCE_DIR} module_top_dir)
 file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} bin_dir)
-configure_file(cmake/run_python.bat ${CMAKE_BINARY_DIR}/tools/run_python.bat @ONLY)
-configure_file(cmake/run_grass.bat ${CMAKE_BINARY_DIR}/tools/run_grass.bat @ONLY)
+file(TO_NATIVE_PATH ${PYTHON_EXECUTABLE} GRASS_PYTHON)
+if(WIN32)
+set(SCRIPT_EXT ".bat")
+set(RUN_GRASS ${CMAKE_BINARY_DIR}/tools/run_grass.bat)
+set(RUN_PYTHON ${CMAKE_BINARY_DIR}/tools/run_python.bat)
+else()
+set(SCRIPT_EXT ".sh")
+set(RUN_GRASS ${CMAKE_BINARY_DIR}/tools/run_grass.sh)
+set(RUN_PYTHON ${CMAKE_BINARY_DIR}/tools/run_python.sh)
+endif()
+configure_file(cmake/run_python${SCRIPT_EXT}.in ${RUN_PYTHON} @ONLY)
+configure_file(ccmake/run_grass${SCRIPT_EXT}.in ${RUN_GRASS} @ONLY)
+
 
 include(set_compiler_flags)
 set_compiler_flags()
 
 include(repo_status)
 repo_status("${CMAKE_CURRENT_LIST_DIR}" GRASS_VERSION_GIT)
+
+
 
 # Setup build locations.
 if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
@@ -136,9 +149,7 @@ endif()
 
 if(WITH_DOCS)
   add_subdirectory(doc)
-  if(NOT MSVC)
-   add_subdirectory(man)
-  endif()
+  add_subdirectory(man)
 endif() # WITH_DOCS
 
 # TODO: To be discussed

@@ -1,0 +1,13 @@
+#!/bin/sh
+export MODULE_TOPDIR=@module_top_dir@
+export GISBASE=@bin_dir@
+export GISRC=@bin_dir@/etc/config/rc
+export PATH=@bin_dir@/bin:@bin_dir@/scripts:$PATH
+export LD_LIBRARY_PATH=@bin_dir@/lib:$LD_LIBRARY_PATH
+export LC_ALL=C
+export LANG=C
+export LANGUAGE=C
+export VERSION_NUMBER=@GRASS_VERSION_NUMBER@
+export VERSION_DATE=@VERSION_DATE@
+"$@"
+

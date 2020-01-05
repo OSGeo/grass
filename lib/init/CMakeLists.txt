@@ -53,7 +53,8 @@ file(TO_NATIVE_PATH ${PYTHON_EXECUTABLE} GRASS_PYTHON)
 # For build tree
 file(COPY ${CMAKE_SOURCE_DIR}/demolocation/PERMANENT DESTINATION ${CMAKE_BINARY_DIR}/demolocation/)
 
-set(GISBASE ${CMAKE_BINARY_DIR})
+
+file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} GISBASE)
 file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} GISDBASE)
 configure_file(${CMAKE_SOURCE_DIR}/demolocation/grassrc.tmpl 
 "${CMAKE_BINARY_DIR}/etc/config/rc" @ONLY)
