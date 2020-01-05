@@ -48,10 +48,11 @@ def do_doctest_gettext_workaround():
     __builtin__._ = new_translator
 
 
-def parse_modules(fd):
+def parse_modules(fd, mlist=None):
     """Writes metadata to xml file."""
     # TODO: what about ms windows? does gtask handle this?
-    mlist = list(gcore.get_commands()[0])
+	if mlist is None:
+		mlist = list(gcore.get_commands()[0])
     indent = 4
     for m in sorted(mlist):
         # TODO: get rid of g.mapsets_picker.py
@@ -88,7 +89,6 @@ def get_module_metadata(name):
 
     return task.get_description(full=True), \
         task.get_keywords()
-
 
 def header(fd):
     fd.write('<?xml version="1.0" encoding="UTF-8"?>\n')
@@ -135,22 +135,23 @@ def module_test():
     print(get_module_metadata('t.rast.univar'))
 
 
-def main():
+def main(module_list=None):
     fh = sys.stdout
 
     header(fh)
-    parse_modules(fh)
+    parse_modules(fh, module_list)
     footer(fh)
 
     return 0
 
 
 if __name__ == "__main__":
+    mlist = None
     if len(sys.argv) > 1:
         if sys.argv[1] == 'doctest':
             sys.exit(doc_test())
         elif sys.argv[1] == 'test':
             sys.exit(module_test())
         else:
-            gcore.fatal('Unrecognized parameter.')
-    sys.exit(main())
+            mlist = sys.argv[1:]
+    sys.exit(main(mlist))
