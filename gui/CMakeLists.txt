@@ -11,10 +11,11 @@ separate_arguments(MODULE_LIST)
 set(EXCLUDED_MODULE_LIST "current_time_s_ms;g.parser;cell;vector;v.in.pdal;i.find")
 list(REMOVE_ITEM MODULE_LIST ${EXCLUDED_MODULE_LIST})
 list(REMOVE_DUPLICATES MODULE_LIST )
-#message(FATAL_ERROR "MODULE_LIST=${MODULE_LIST}")
+
   add_custom_target(copy_build_module_xml 
   COMMAND ${CMAKE_COMMAND} -E copy 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tools/build_modules_xml.py ${CMAKE_CURRENT_BINARY_DIR}/tools/build_modules_xml.py)
+  ${CMAKE_CURRENT_SOURCE_DIR}/tools/build_modules_xml.py ${CMAKE_CURRENT_BINARY_DIR}/tools/build_modules_xml.py
+  DEPENDS copy_docs_html_icons copy_gui_symbols)
 
   add_custom_target(build_modulesitems_xml 
   COMMAND ${RUN_PYTHON} 

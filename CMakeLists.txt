@@ -79,7 +79,7 @@ set(RUN_GRASS ${CMAKE_BINARY_DIR}/tools/run_grass.sh)
 set(RUN_PYTHON ${CMAKE_BINARY_DIR}/tools/run_python.sh)
 endif()
 configure_file(cmake/run_python${SCRIPT_EXT}.in ${RUN_PYTHON} @ONLY)
-configure_file(ccmake/run_grass${SCRIPT_EXT}.in ${RUN_GRASS} @ONLY)
+configure_file(cmake/run_grass${SCRIPT_EXT}.in ${RUN_GRASS} @ONLY)
 
 
 include(set_compiler_flags)

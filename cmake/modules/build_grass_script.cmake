@@ -52,15 +52,15 @@ foreach(pyfile ${SRC_FILES})
   DEPENDS ${${pyfile_NAME}_OUTPUT_FILE}.stamp)
 
   set_target_properties (${pyfile_NAME} PROPERTIES FOLDER scripts)
-  add_custom_target(${pyfile_NAME} "${${pyfile_NAME}_OUTPUT_FILE}"
-     COMMAND ${CMAKE_COMMAND}
-     -DINPUT_FILE=${pyfile}
-     -DOUTPUT_FILE=${${pyfile_NAME}_OUTPUT_FILE}
-     -DBIN_DIR=${CMAKE_BINARY_DIR}
-     -P ${CMAKE_SOURCE_DIR}/cmake/locale_strings.cmake
-     DEPENDS g.parser
-     COMMENT "Generating ${${pyfile_NAME}_OUTPUT_FILE}"
-     )
+  #add_custom_target(${pyfile_NAME} "${${pyfile_NAME}_OUTPUT_FILE}"
+     #COMMAND ${CMAKE_COMMAND}
+     #-DINPUT_FILE=${pyfile}
+     #-DOUTPUT_FILE=${${pyfile_NAME}_OUTPUT_FILE}
+     #-DBIN_DIR=${CMAKE_BINARY_DIR}
+     #-P ${CMAKE_SOURCE_DIR}/cmake/locale_strings.cmake
+     #DEPENDS g.parser
+     #COMMENT "Generating ${${pyfile_NAME}_OUTPUT_FILE}"
+     #)
 
   set_source_files_properties("${${pyfile_NAME}_OUTPUT_FILE}" GENERATED)
   
