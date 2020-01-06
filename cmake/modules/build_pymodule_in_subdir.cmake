@@ -14,7 +14,7 @@ function(build_pymodule_in_subdir module_name dest_dir)
 
   set(g_gui_file ${CMAKE_CURRENT_SOURCE_DIR}/${module_name}/${G_NAME}.py)
 
-  add_custom_target(py_${targ_name}
+  add_custom_target(py_${targ_name} ALL
   COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/${dest_dir}/${module_name}
   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${py_files} ${CMAKE_BINARY_DIR}/${dest_dir}/${module_name}
   DEPENDS g.parser
