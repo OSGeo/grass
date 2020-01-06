@@ -33,7 +33,7 @@ function(build_pymodule_in_subdir module_name dest_dir)
   install(PROGRAMS ${CMAKE_BINARY_DIR}/bin/${G_NAME}.bat DESTINATION bin)
   else()
   file(COPY ${g_gui_file} ${CMAKE_BINARY_DIR}/bin/${G_NAME})
-  install(PROGRAM ${CMAKE_BINARY_DIR}/bin/${G_NAME} DESTINATION bin)
+  install(PROGRAMS ${CMAKE_BINARY_DIR}/bin/${G_NAME} DESTINATION bin)
   endif()
 
   add_custom_target(py_g_gui_${targ_name} ALL
