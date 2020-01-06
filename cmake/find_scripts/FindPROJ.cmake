@@ -40,6 +40,14 @@ if(PROJ_INCLUDE_DIR AND PROJ_LIBRARY)
 set(PROJ_FOUND TRUE)
 endif()
 
+
+MARK_AS_ADVANCED(
+  PROJ_INCLUDE_DIR
+  PROJ_LIBRARY
+  PROJ_LIBRARY_DEBUG
+  PROJ_LIBRARY_RELEASE
+)
+
 # Handle the QUIETLY and REQUIRED arguments and set SPATIALINDEX_FOUND to TRUE
 # if all listed variables are TRUE
 INCLUDE(FindPackageHandleStandardArgs)

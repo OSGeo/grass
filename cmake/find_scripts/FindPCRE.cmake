@@ -19,6 +19,10 @@ if(PCRE_FOUND)
   set(PCRE_INCLUDE_DIRS ${PCRE_INCLUDE_DIR})
 endif()
 
+mark_as_advanced(PCRE_LIBRARY)
+mark_as_advanced(PCRE_LIBRARY_DEBUG)
+mark_as_advanced(PCRE_LIBRARY_RELEASE)
+mark_as_advanced(PCRE_INCLUDE_DIR)
 include(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(PCRE
    DEFAULT_MSG

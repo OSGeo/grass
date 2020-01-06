@@ -1,7 +1,5 @@
 find_path(FFTW_INCLUDE_DIR fftw3.h)
-set(HAVE_FFTW3_H 0)
-set(HAVE_FFTW_H 0)
-set(HAVE_DFFTW_H 0)
+
 if(FFTW_INCLUDE_DIR)
   set(HAVE_FFTW3_H 1)
   message(STATUS "Found fftw3.h in ${FFTW_INCLUDE_DIR}")
@@ -47,6 +45,17 @@ endif()
 if(NOT FFTWD_FOUND  AND NOT FFTWF_FOUND )
   set(FFTW_FOUND FALSE)
 endif()
+
+MARK_AS_ADVANCED(
+  FFTW_LIBRARIES
+  FFTW_INCLUDE_DIR
+  DFFTW_INCLUDE_DIR
+  FFTWF_LIB
+  FFTWF_THREADS_LIB
+  FFTWD_LIB
+  FFTWD_THREADS_LIB
+)
+
 
 #copy HAVE_ to parent scope so that we can use in include/CMakeLists.txt and rest
 set(HAVE_FFTW3_H ${HAVE_FFTW3_H} PARENT_SCOPE)
