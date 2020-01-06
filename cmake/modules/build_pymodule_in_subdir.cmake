@@ -32,7 +32,7 @@ function(build_pymodule_in_subdir module_name dest_dir)
   configure_file(${CMAKE_SOURCE_DIR}/cmake/windows_launch.bat.in ${CMAKE_BINARY_DIR}/bin/${G_NAME}.bat)
   install(PROGRAMS ${CMAKE_BINARY_DIR}/bin/${G_NAME}.bat DESTINATION bin)
   else()
-  file(COPY ${g_gui_file} ${CMAKE_BINARY_DIR}/bin/${G_NAME})
+  configure_file(${g_gui_file} ${CMAKE_BINARY_DIR}/bin/${G_NAME} COPYONLY)
   install(PROGRAMS ${CMAKE_BINARY_DIR}/bin/${G_NAME} DESTINATION bin)
   endif()
 
