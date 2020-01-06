@@ -135,7 +135,7 @@ function(build_module)
 	  COMMAND ${CMAKE_COMMAND} -E remove ${html_file_tmp}
 	  COMMAND ${img_cmd}
 	  )
-	  install(FILES ${html_file_out} docs/html)
+	  install(FILES ${html_file_out} DESTINATION docs/html)
    endif() # if(EXISTS "${html_file}")
 
  endif() #WITH_DOCS

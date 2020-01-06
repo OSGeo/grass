@@ -45,6 +45,7 @@ function(build_pymodule_in_subdir module_name dest_dir)
 
   set(python_script ${CMAKE_BINARY_DIR}/scripts/${G_NAME}.py)
 
+if(WITH_DOCS)
   set(html_file ${CMAKE_CURRENT_SOURCE_DIR}/${module_name}/${G_NAME}.html )
 
    set(tmp_html_cmd )
@@ -70,10 +71,12 @@ function(build_pymodule_in_subdir module_name dest_dir)
 	  COMMAND ${RUN_PYTHON} ${CMAKE_BINARY_DIR}/tools/mkhtml.py ${python_script} ${html_file} ${html_file_tmp} > ${html_file_gui} 
 	  DEPENDS py_g_gui_${targ_name}_mkhtml
    )
-
+endif() #WITH_DOCS
   endif()
 
   install(FILES ${py_files} DESTINATION ${dest_dir})
+  if(WITH_DOCS)
   install(FILES ${img_files} DESTINATION docs/html)
+  endif()
 
 endfunction()
