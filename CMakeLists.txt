@@ -17,11 +17,16 @@ set(default_option_enabled ON)
 if(WIN32)
   set(default_option_enabled OFF)
 endif()
+
+if(CMAKE_BUILD_TYPE)
 set( grass_build_type "${CMAKE_BUILD_TYPE}" )
 string( TOLOWER "${grass_build_type}" grass_build_type_lc )
-set(find_library_suffix "RELEASE")
+set(find_library_suffix "_RELEASE")
 if( grass_build_type_lc STREQUAL "debug" )
-set(find_library_suffix "DEBUG")
+set(find_library_suffix "_DEBUG")
+endif()
+else()
+set(find_library_suffix "")
 endif()
 
 option(WITH_CAIRO "Build with cairo support ." ON)
@@ -65,22 +70,6 @@ get_versions("include/VERSION"
 set(GRASS_VERSION_NUMBER ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE})
 message(STATUS "GRASS_VERSION_NUMBER  =  '${GRASS_VERSION_NUMBER}'")
 set(GRASS_VERSION_UPDATE_PKG "0.2")
-set(VERSION_DATE 2019)
-file(TO_NATIVE_PATH ${CMAKE_SOURCE_DIR} module_top_dir)
-file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} bin_dir)
-file(TO_NATIVE_PATH ${PYTHON_EXECUTABLE} GRASS_PYTHON)
-
-if(WIN32)
-set(SCRIPT_EXT ".bat")
-set(RUN_GRASS ${CMAKE_BINARY_DIR}/tools/run_grass.bat)
-set(RUN_PYTHON ${CMAKE_BINARY_DIR}/tools/run_python.bat)
-else()
-set(SCRIPT_EXT ".sh")
-set(RUN_GRASS ${CMAKE_BINARY_DIR}/tools/run_grass.sh)
-set(RUN_PYTHON ${CMAKE_BINARY_DIR}/tools/run_python.sh)
-endif()
-configure_file(cmake/run_python${SCRIPT_EXT}.in ${RUN_PYTHON} @ONLY)
-configure_file(cmake/run_grass${SCRIPT_EXT}.in ${RUN_GRASS} @ONLY)
 
 
 include(set_compiler_flags)
@@ -112,8 +101,38 @@ include(build_grass_script)
 include(build_script_in_subdir)
 include(check_target)
 
+# function(set_runtime_output_dir target_name output_dir)
+# set(runtime_output_dir "${CMAKE_BINARY_DIR}/driver/db/"
+# ADD_CUSTOM_COMMAND(TARGET ${target_name} POST_BUILD
+#   COMMAND ${CMAKE_COMMAND} -E make_directory ${output_dir}
+#   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/bin/${target_name} ${output_dir}
+#   DEPENDS ${target_name}
+#   )
+# endfunction()
+
 add_subdirectory(thirdparty)
 
+set(GISBASE ${CMAKE_BINARY_DIR}/gisbase)
+
+file(TO_NATIVE_PATH ${CMAKE_SOURCE_DIR} module_top_dir)
+file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} bin_dir)
+file(TO_NATIVE_PATH ${PYTHON_EXECUTABLE} GRASS_PYTHON)
+
+file(TO_NATIVE_PATH ${GISBASE} gis_base_dir)
+
+if(WIN32)
+set(SCRIPT_EXT ".bat")
+set(RUN_GRASS ${CMAKE_BINARY_DIR}/tools/run_grass.bat)
+set(RUN_PYTHON ${CMAKE_BINARY_DIR}/tools/run_python.bat)
+else()
+set(SCRIPT_EXT ".sh")
+set(RUN_GRASS ${CMAKE_BINARY_DIR}/tools/run_grass.sh)
+set(RUN_PYTHON ${CMAKE_BINARY_DIR}/tools/run_python.sh)
+endif()
+configure_file(cmake/run_python${SCRIPT_EXT}.in ${RUN_PYTHON} @ONLY)
+configure_file(cmake/run_grass${SCRIPT_EXT}.in ${RUN_GRASS} @ONLY)
+
+set(NO_HTML_DESCR_TARGETS "g.parser;ximgview")
 add_subdirectory(include)
 
 if(MSVC)
@@ -122,7 +141,22 @@ endif()
 
 include_directories("${CMAKE_BINARY_DIR}/include")
 
-execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/docs/html)
+execute_process(
+  COMMAND ${CMAKE_COMMAND} -E echo "Creating directories in ${GISBASE}"
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/bin/
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/demolocation/
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/etc/config/
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/db/driver/
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/tools/
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/lib/
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/etc/lister/
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/etc/python/grass/lib
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/gui/wxpython/xml/
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/gui/icons/
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/gui/images/
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/docs/html/
+  )
+
 add_subdirectory(lib)
 add_subdirectory(tools)
 
