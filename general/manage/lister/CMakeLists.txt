@@ -1,27 +1,9 @@
-# MODULE_TOPDIR = ../../..
-
-# LIBES = $(VECTORLIB) $(DBMILIB) $(GISLIB) $(RASTERLIB)
-# DEPENDENCIES = $(VECTORDEP) $(DBMIDEP) $(GISDEP) $(RASTERDEP)
-# EXTRA_INC = $(VECT_INC)
-# EXTRA_CFLAGS = $(VECT_CFLAGS)
-
-# include $(MODULE_TOPDIR)/include/Make/Module.make
-
-# default: $(ETC)/lister/cell $(ETC)/lister/vector
-
-# $(ETC)/lister/%: $(OBJDIR)/%.o | $(ETC)/lister
-# 	$(call linker)
-
-# $(ETC)/lister:
-# 	$(MKDIR) $@
-
-build_module(NAME cell EXE 
+build_program(NAME cell 
 SOURCES "cell.c" 
-DEPENDS grass_vector grass_dbmibase grass_gis grass_raster)
-set_target_properties(cell
-  PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/etc/lister")
-build_module(NAME vector EXE 
+DEPENDS grass_vector grass_dbmibase grass_gis grass_raster
+RUNTIME_OUTPUT_DIR etc/lister)
+
+build_program(NAME vector
 SOURCES "vector.c" 
-DEPENDS grass_vector grass_dbmibase grass_gis grass_raster )
-set_target_properties(vector
-  PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/etc/lister")
+DEPENDS grass_vector grass_dbmibase grass_gis grass_raster
+RUNTIME_OUTPUT_DIR etc/lister)

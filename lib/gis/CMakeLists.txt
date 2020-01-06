@@ -40,18 +40,18 @@ build_module(NAME grass_gis SOURCES "${gislib_SRCS}"
   )
 
 add_custom_command(TARGET grass_gis POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/etc/proj
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/colors ${CMAKE_BINARY_DIR}/etc/colors/
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/ellipse.table ${CMAKE_BINARY_DIR}/etc/proj/
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/datum.table ${CMAKE_BINARY_DIR}/etc/proj/
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/datumtransform.table ${CMAKE_BINARY_DIR}/etc/proj/
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/FIPS.code ${CMAKE_BINARY_DIR}/etc/proj/
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/state27 ${CMAKE_BINARY_DIR}/etc/proj/
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/state83 ${CMAKE_BINARY_DIR}/etc/proj/
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/projections ${CMAKE_BINARY_DIR}/etc/proj/
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/ellipse.table.solar.system ${CMAKE_BINARY_DIR}/etc/proj/
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/colors.desc ${CMAKE_BINARY_DIR}/etc/
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/renamed_options ${CMAKE_BINARY_DIR}/etc/
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/etc/proj
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/colors ${GISBASE}/etc/colors/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/ellipse.table ${GISBASE}/etc/proj/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/datum.table ${GISBASE}/etc/proj/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/datumtransform.table ${GISBASE}/etc/proj/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/FIPS.code ${GISBASE}/etc/proj/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/state27 ${GISBASE}/etc/proj/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/state83 ${GISBASE}/etc/proj/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/projections ${GISBASE}/etc/proj/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/ellipse.table.solar.system ${GISBASE}/etc/proj/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/colors.desc ${GISBASE}/etc/
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/renamed_options ${GISBASE}/etc/
   )
   install(DIRECTORY colors DESTINATION etc/colors)
   install(FILES ellipse.table ellipse.table.solar.system

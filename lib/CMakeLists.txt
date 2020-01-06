@@ -5,7 +5,6 @@ if(MSVC)
 endif()
 
 build_library_in_subdir(datetime)
-add_dependencies(grass_datetime copy_header)
 
 add_subdirectory(gis)
 
@@ -24,7 +23,8 @@ build_library_in_subdir(raster
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
   find_library(DL_LIBRARY dl)
-   target_link_libraries(grass_raster ${DL_LIBRARY})
+  mark_as_advanced(DL_LIBRARY)
+  target_link_libraries(grass_raster ${DL_LIBRARY})
 endif()
 
 configure_file(external/ccmath/ccmath.h
@@ -153,8 +153,8 @@ endif()
 build_library_in_subdir(iostream SRC_REGEX "*.cpp" DEPENDS grass_gis)
 
 build_library_in_subdir(manage DEPENDS grass_raster grass_vector grass_raster3d )
-file(COPY manage/element_list DESTINATION ${CMAKE_BINARY_DIR}/etc)
-install(FILES ${CMAKE_BINARY_DIR}/etc/element_list DESTINATION etc)
+file(COPY manage/element_list DESTINATION ${GISBASE}/etc)
+install(FILES ${GISBASE}/etc/element_list DESTINATION etc)
 
 build_library_in_subdir(calc 
 DEPENDS grass_raster)

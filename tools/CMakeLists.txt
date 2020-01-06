@@ -11,8 +11,11 @@ endif()
 build_program_in_subdir(timer
 NAME current_time_s_ms
 DEPENDS grass_gis
-SOURCES "${current_time_s_ms_SRCS}")
+SOURCES "${current_time_s_ms_SRCS}"
+RUNTIME_OUTPUT_DIR etc)
 
-add_executable(g.echo g.echo.c)
+build_program(NAME g.echo
+  SOURCES g.echo.c
+  RUNTIME_OUTPUT_DIR tools
+  PACKAGE "NONE")
 
-install(TARGETS g.echo DESTINATION tools)

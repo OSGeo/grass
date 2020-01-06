@@ -62,21 +62,21 @@ foreach(module ${MODULES})
     message(FATAL_ERROR "${${module}_TARGET_NAME} is not set")
   endif()
 
-  set(output_file "${CMAKE_BINARY_DIR}/etc/python/grass/lib/${module}.py")
+  set(output_file "${GISBASE}/etc/python/grass/lib/${module}.py")
 
   add_custom_command(OUTPUT ${output_file}
     DEPENDS ${${module}_LIBS}
     COMMAND ${CMAKE_COMMAND}
 	-DCTYPESGEN_PY=${CMAKE_CURRENT_SOURCE_DIR}/ctypesgen.py
 	-DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
-    -DCOMPILER=${CMAKE_C_COMPILER}
-    -DBIN_DIR=${CMAKE_BINARY_DIR}
-    -DHDRS=${${module}_HDRS}
-    -DLIBS=${${module}_LIBS}
-    -DOUT_FILE=${output_file}
-    -P ${CMAKE_SOURCE_DIR}/cmake/ctypesgen.cmake
-    COMMENT "Generating ${output_file}"
-    VERBATIM)
+	-DCOMPILER=${CMAKE_C_COMPILER}
+	-DBIN_DIR=${GISBASE}
+	-DHDRS=${${module}_HDRS}
+	-DLIBS=${${module}_LIBS}
+	-DOUT_FILE=${output_file}
+	-P ${CMAKE_SOURCE_DIR}/cmake/ctypesgen.cmake
+	COMMENT "Generating ${output_file}"
+	VERBATIM)
 
   add_custom_target(${${module}_TARGET_NAME} ALL DEPENDS ${output_file})
   set_target_properties (${${module}_TARGET_NAME} PROPERTIES FOLDER lib/python)

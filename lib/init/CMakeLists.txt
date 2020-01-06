@@ -1,6 +1,5 @@
 
 # #for i18N support
-set(PACKAGE "grasslibs")
 
 file(GLOB init_HTMLFILES "*.html")
 
@@ -26,22 +25,25 @@ endif()
 file(TO_NATIVE_PATH "${PROJ_INSTALL_PREFIX}/share/proj" PROJ_LIB)
 file(TO_NATIVE_PATH ${CONFIG_PROJSHARE} GRASS_PROJSHARE)
 
-
 find_path(gdal_share_dir  "gdal" PATH_SUFFIXES share)
 if(NOT gdal_share_dir)
-	message(FATAL_ERROR "Cannot find share/gdal")
+  message(FATAL_ERROR "Cannot find share/gdal")
 endif()
+mark_as_advanced(gdal_share_dir)
+
 file(TO_NATIVE_PATH "${gdal_share_dir}/gdal" GDAL_DATA)
 
 if(MSVC)
-find_path(geotiff_share_dir  "epsg_csv" PATH_SUFFIXES share)
-if(geotiff_share_dir)
-  file(TO_NATIVE_PATH "${geotiff_share_dir}/epsg_csv" GEOTIFF_CSV)
-else()
-  message(FATAL_ERROR "Cannot find share/epsg_csv.")
-endif()
+  find_path(geotiff_share_dir  "epsg_csv" PATH_SUFFIXES share)
+  mark_as_advanced(geotiff_share_dir)
+  if(geotiff_share_dir)
+    file(TO_NATIVE_PATH "${geotiff_share_dir}/epsg_csv" GEOTIFF_CSV)
+  else()
+    message(FATAL_ERROR "Cannot find share/epsg_csv.")
+  endif()
 endif() #MSVC
-get_filename_component(GDAL_DIR ${GDAL_LIBRARY_${find_library_suffix}} PATH)
+
+get_filename_component(GDAL_DIR ${GDAL_LIBRARY} PATH)
 get_filename_component(GDAL_DIR ${GDAL_DIR} PATH)
 
 file(TO_NATIVE_PATH  ${GDAL_DIR}/bin DEPS_DLL_PATH)
@@ -49,117 +51,115 @@ list(APPEND DLL_PATH_LIST ${DEPS_DLL_PATH})
 
 file(TO_NATIVE_PATH ${PYTHON_EXECUTABLE} GRASS_PYTHON)
 
-
-# For build tree
-file(COPY ${CMAKE_SOURCE_DIR}/demolocation/PERMANENT DESTINATION ${CMAKE_BINARY_DIR}/demolocation/)
-
-
-file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} GISBASE)
-file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} GISDBASE)
-configure_file(${CMAKE_SOURCE_DIR}/demolocation/grassrc.tmpl 
-"${CMAKE_BINARY_DIR}/etc/config/rc" @ONLY)
-
-file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/etc/config" GRASS_CONFIG_DIR)
-
-file(TO_NATIVE_PATH  ${CMAKE_BINARY_DIR}/bin grass_dll_dir)
-set(DLL_PATH_LIST)
-list(APPEND DLL_PATH_LIST ${grass_dll_dir})
-
-separate_arguments(DLL_PATH_LIST)
-
-set(LD_LIBRARY_PATH_VAR)
+# For install tree (first do install tree)
 if(UNIX OR MINGW)
   if( DEFINED ENV{LD_LIBRARY_PATH})
-    set(LD_LIBRARY_PATH_VAR "$ENV{LD_LIBRARY_PATH}:${CMAKE_BINARY_DIR}/lib")
-  else()
-    set(LD_LIBRARY_PATH_VAR "${CMAKE_BINARY_DIR}/lib")
-  endif()
-endif()
-message(STATUS "GISBASE (build) : ${GISBASE}")
-message(STATUS "grass config directory (build): ${GRASS_CONFIG_DIR}")
-if(NOT MSVC)
-  configure_file(env.sh ${CMAKE_BINARY_DIR}/etc/config/bashrc  @ONLY)
-  message(STATUS "env variables: ${CMAKE_BINARY_DIR}/etc/config/bashrc")
-endif()
-configure_file(${script_file_name}.in
-   ${CMAKE_BINARY_DIR}/bin/${script_file_name}  @ONLY)
-
-configure_file(grass.py ${CMAKE_BINARY_DIR}/etc/${START_UP} @ONLY)
-message(STATUS "Startup script: ${CMAKE_BINARY_DIR}/${script_file_name}")
-
-message(STATUS "gisrc: ${CMAKE_BINARY_DIR}/etc/config/rc")
-
-# For install tree
-configure_file(${script_file_name}.in ${CMAKE_CURRENT_BINARY_DIR}/${script_file_name}  @ONLY)
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${script_file_name} DESTINATION bin)
-
-if(UNIX OR MINGW)
-  if( DEFINED ENV{LD_LIBRARY_PATH})
-    set(LD_LIBRARY_PATH_VAR "$ENV{LD_LIBRARY_PATH}:${CMAKE_INSTALL_PREFIX}/lib")
+    set(LD_LIBRARY_PATH_VAR "${CMAKE_INSTALL_PREFIX}/lib:$ENV{LD_LIBRARY_PATH}")
   else()
     set(LD_LIBRARY_PATH_VAR "${CMAKE_INSTALL_PREFIX}/lib")
   endif()
 endif()
 
-
 if(WIN32)
-    set(app_data_dir $ENV{APPDATA})
-	if(NOT EXISTS ${app_data_dir})
-	# this can happen with some strange settings
-	message(FATAL_ERROR "The APPDATA variable is not set, ask your operating system support")
-	endif()
-	file(TO_NATIVE_PATH "${app_data_dir}/GRASS7" GRASS_CONFIG_DIR)
+  set(app_data_dir $ENV{APPDATA})
+  if(NOT EXISTS ${app_data_dir})
+    # this can happen with some strange settings
+    message(FATAL_ERROR "The APPDATA variable is not set, ask your operating system support")
+  endif()
+  file(TO_NATIVE_PATH "${app_data_dir}/GRASS7" grass_config_dir)
 else()
-	set(GRASS_CONFIG_DIR "$ENV{HOME}/.grass7")
+  set(grass_config_dir "$ENV{HOME}/.grass7")
 endif()
-set(GISBASE "${CMAKE_INSTALL_PREFIX}")
 
-message(STATUS "GISBASE (install) : ${GISBASE}")
-message(STATUS "grass config directory (install): ${GRASS_CONFIG_DIR}")
+file(TO_NATIVE_PATH "${CMAKE_INSTALL_PREFIX}" gisbase_init_dir)
+message(STATUS "GISBASE (install) : ${gisbase_init_dir}")
+message(STATUS "grass config directory (install): ${grass_config_dir}")
 
+#configure and install env.sh 
 if(NOT MSVC)
   configure_file(env.sh ${CMAKE_CURRENT_BINARY_DIR}/bashrc  @ONLY)
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/bashrc
-  DESTINATION ${GRASS_CONFIG_DIR})
+  DESTINATION ${grass_config_dir})
 endif()
 
-configure_file(grass.py ${CMAKE_CURRENT_BINARY_DIR}/${START_UP}  @ONLY)
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${START_UP} DESTINATION etc)
+#configure and install grass.py
+configure_file(grass.py ${CMAKE_CURRENT_BINARY_DIR}/etc/${START_UP} @ONLY)
+install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/etc/${START_UP} DESTINATION etc)
 
-add_executable(echo echo.c)
-install(TARGETS echo DESTINATION etc)
-set_target_properties(echo
-  PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/etc")
+#configure and install grass wrapper script (grass.bat or grass.sh
+configure_file(${script_file_name}.in ${CMAKE_CURRENT_BINARY_DIR}/${script_file_name}  @ONLY)
+install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${script_file_name} DESTINATION bin)
 
-add_executable(run run.c)
-install(TARGETS run DESTINATION etc)
-set_target_properties(run
-  PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/etc")
 
-add_executable(clean_temp clean_temp.c)
-add_dependencies(clean_temp grass_gis)
-target_link_libraries(clean_temp grass_gis)
-install(TARGETS clean_temp DESTINATION etc)
-set_target_properties(clean_temp
-  PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/etc")
 
-add_executable(lock lock.c)
-add_dependencies(lock grass_gis grass_datetime)
-target_link_libraries(lock grass_gis grass_datetime)
-set_target_properties(lock
-  PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/etc")
-install(TARGETS lock DESTINATION etc)
+
+# For build tree
+file(TO_NATIVE_PATH ${GISBASE} gisbase_init_dir)
+file(TO_NATIVE_PATH "${GISBASE}/etc/config" grass_config_dir)
+configure_file(${script_file_name}.in ${GISBASE}/${script_file_name}  @ONLY)
+file(COPY ${CMAKE_SOURCE_DIR}/demolocation/PERMANENT DESTINATION ${GISBASE}/demolocation/)
+
+configure_file(${CMAKE_SOURCE_DIR}/demolocation/grassrc.cmake.in
+"${grass_config_dir}/rc" @ONLY)
+
+file(TO_NATIVE_PATH  ${GISBASE}/bin grass_dll_dir)
+set(DLL_PATH_LIST)
+list(APPEND DLL_PATH_LIST ${grass_dll_dir})
+separate_arguments(DLL_PATH_LIST)
+
+set(LD_LIBRARY_PATH_VAR)
+if(UNIX OR MINGW)
+  if( DEFINED ENV{LD_LIBRARY_PATH})
+    set(LD_LIBRARY_PATH_VAR "${GISBASE}/lib:$ENV{LD_LIBRARY_PATH}")
+  else()
+    set(LD_LIBRARY_PATH_VAR "${GISBASE}/lib")
+  endif()
+endif()
+message(STATUS "GISBASE (build) : ${gisbase_init_dir}")
+message(STATUS "grass config directory (build): ${grass_config_dir}")
+if(NOT MSVC)
+  configure_file(env.sh ${grass_config_dir}/bashrc  @ONLY)
+  message(STATUS "env variables: ${GISBASE}/etc/config/bashrc")
+endif()
+
+configure_file(grass.py ${GISBASE}/etc/${START_UP} @ONLY)
+message(STATUS "Startup (build): ${GISBASE}/${script_file_name}")
+message(STATUS "gisrc (build): ${GISBASE}/etc/config/rc")
+
+#finish installtree and buildtree configurations
+
+
+build_program(NAME echo
+  SOURCES echo.c
+  PACKAGE "grasslibs"
+  RUNTIME_OUTPUT_DIR etc)
+
+build_program(NAME run
+  SOURCES run.c
+  PACKAGE "grasslibs"
+  RUNTIME_OUTPUT_DIR etc)
+
+build_program(NAME clean_temp
+  SOURCES clean_temp.c
+  DEPENDS grass_gis
+  PACKAGE "grasslibs"
+  RUNTIME_OUTPUT_DIR etc)
+
+build_program(NAME lock
+  SOURCES lock.c
+  DEPENDS grass_gis grass_datetime
+  PACKAGE "grasslibs"
+  RUNTIME_OUTPUT_DIR etc)
 
 if(MINGW)
-  add_executable(winlocale winlocale.c)
-  install(TARGETS winlocale DESTINATION etc)
-  set_target_properties(winlocale
-    PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/etc")
+build_program(NAME winlocale
+  SOURCES winlocale.c
+  RUNTIME_OUTPUT_DIR etc)
 endif()
 
 set(VERSIONNUMBER_CONTENTS "${GRASS_VERSION_NUMBER}")
-if(GRASS_VERSION_SVN)
-  list(APPEND VERSIONNUMBER_CONTENTS "${VERSIONNUMBER_CONTENTS} ${GRASS_VERSION_SVN}")
+if(GRASS_VERSION_GIT)
+  list(APPEND VERSIONNUMBER_CONTENTS "${VERSIONNUMBER_CONTENTS} ${GRASS_VERSION_GIT}")
 endif()
 
 file(WRITE ${CMAKE_BINARY_DIR}/VERSIONNUMBER "${VERSIONNUMBER_CONTENTS}")

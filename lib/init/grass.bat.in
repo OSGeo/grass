@@ -13,16 +13,15 @@ set GEOTIFF_CSV=@GEOTIFF_CSV@
 
 set PATH=@DLL_PATH_LIST@;%PATH%
 
-GISBASE=@GISBASE@
+set GISBASE=@gisbase_init_dir@
 
-set PYTHONPATH=@GISBASE@\etc\python;=@GISBASE@\gui\wxpython;
-
+set PYTHONPATH=@gisbase_init_dir@\etc\python;=@GISBASE_INSTALL@\gui\wxpython;
 
 set GRASS_PYTHON=@GRASS_PYTHON@
 
-set GRASS_CONFIG_DIR=@GRASS_CONFIG_DIR@
+set GRASS_CONFIG_DIR=@grass_config_dir@
 
-"@GRASS_PYTHON@" "@GISBASE@\etc\@START_UP@" %*
+"@GRASS_PYTHON@" "@gisbase_init_dir@\etc\@START_UP@" %*
 
 rem
 rem Pause on error

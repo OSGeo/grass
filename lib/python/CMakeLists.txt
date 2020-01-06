@@ -20,5 +20,7 @@ configure_file(script/setup.py
  
  build_pymodule_in_subdir(gunittest etc/python/grass)
 
-file(INSTALL __init__.py DESTINATION ${CMAKE_BINARY_DIR}/etc/python)
-install(FILES __init__.py DESTINATION etc/python)
+ 
+file(WRITE ${GISBASE}/etc/python/_init__.py  "#coding=utf-8") 
+file(COPY __init__.py DESTINATION ${GISBASE}/etc/python/grass/)
+install(FILES __init__.py DESTINATION etc/python/grass/)
