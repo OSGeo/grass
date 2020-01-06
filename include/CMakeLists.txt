@@ -221,15 +221,17 @@ foreach(srch ${SRCHS})
   get_filename_component(srch_NAME ${srch} NAME)
   STRING(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}" "" dsth_PATH "${srch_PATH}")
   set(output_dir ${CMAKE_BINARY_DIR}/include/grass${dsth_PATH})
+
   add_custom_command(
-	OUTPUT ${output_dir}/${srch_NAME}
-	COMMAND ${CMAKE_COMMAND} -E copy ${srch} ${output_dir}
-	COMMENT "Copy ${CMAKE_BINARY_DIR}/include/grass${dsth_PATH}"
-	)
-	list(APPEND include_depends ${output_dir}/${srch_NAME} )
+    OUTPUT ${output_dir}/${srch_NAME}
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${output_dir}
+    COMMAND ${CMAKE_COMMAND} -E copy ${srch} ${output_dir}
+    COMMENT "Copy ${srch} to ${CMAKE_BINARY_DIR}/include/grass${dsth_PATH}/${srch_NAME}"
+    )
+  list(APPEND include_depends ${output_dir}/${srch_NAME} )
 endforeach()
 
-add_custom_target(copy_header DEPENDS ${include_depends} COMMENT  "${CMAKE_BINARY_DIR}/include/grass")
+add_custom_target(copy_header DEPENDS ${include_depends})
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in
   "${CMAKE_CURRENT_BINARY_DIR}/grass/version.h")
