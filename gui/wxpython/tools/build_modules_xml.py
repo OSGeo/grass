@@ -51,8 +51,8 @@ def do_doctest_gettext_workaround():
 def parse_modules(fd, mlist=None):
     """Writes metadata to xml file."""
     # TODO: what about ms windows? does gtask handle this?
-	if mlist is None:
-		mlist = list(gcore.get_commands()[0])
+    if mlist is None:
+        mlist = list(gcore.get_commands()[0])
     indent = 4
     for m in sorted(mlist):
         # TODO: get rid of g.mapsets_picker.py

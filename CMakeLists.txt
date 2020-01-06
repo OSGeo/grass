@@ -69,6 +69,7 @@ set(VERSION_DATE 2019)
 file(TO_NATIVE_PATH ${CMAKE_SOURCE_DIR} module_top_dir)
 file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} bin_dir)
 file(TO_NATIVE_PATH ${PYTHON_EXECUTABLE} GRASS_PYTHON)
+
 if(WIN32)
 set(SCRIPT_EXT ".bat")
 set(RUN_GRASS ${CMAKE_BINARY_DIR}/tools/run_grass.bat)

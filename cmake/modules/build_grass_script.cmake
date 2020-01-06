@@ -18,7 +18,7 @@ function(build_grass_script)
     endif()
 
 if(WIN32)
-  file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} script_install_dir)
+ 
 
   configure_file(
     ${CMAKE_SOURCE_DIR}/cmake/windows_launch.bat.in
@@ -48,7 +48,7 @@ foreach(pyfile ${SRC_FILES})
     )
   
   add_custom_target(${pyfile_NAME} ALL
-  COMMAND ${CMAKE_COMMAND} -E copy ${pyfile} ${CMAKE_BINARY_DIR}/scripts
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${pyfile} ${CMAKE_BINARY_DIR}/scripts
   DEPENDS ${${pyfile_NAME}_OUTPUT_FILE}.stamp)
 
   set_target_properties (${pyfile_NAME} PROPERTIES FOLDER scripts)

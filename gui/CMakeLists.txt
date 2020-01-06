@@ -1,6 +1,17 @@
 #TODO
 add_subdirectory(icons)
-add_subdirectory(images)
+# images
+#file(GLOB gui_images "${CMAKE_CURRENT_SOURCE_DIR}/images/*.png")
+#install(FILES ${gui_images} DESTINATION gui/images )
+
+add_custom_target(copy_gui_images
+COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/images ${CMAKE_BINARY_DIR}/gui/
+DEPENDS copy_gui_icons_flags)
+
+install(DIRECTORY gui/images DESTINATION gui)
+
+#add_subdirectory(images)
+
 #add_subdirectory(scripts)
 
 add_subdirectory(wxpython)
@@ -14,12 +25,14 @@ list(REMOVE_DUPLICATES MODULE_LIST )
 
   add_custom_target(copy_build_module_xml 
   COMMAND ${CMAKE_COMMAND} -E copy 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tools/build_modules_xml.py ${CMAKE_CURRENT_BINARY_DIR}/tools/build_modules_xml.py
-  DEPENDS copy_docs_html_icons copy_gui_symbols)
+  ${CMAKE_CURRENT_SOURCE_DIR}/wxpython/tools/build_modules_xml.py ${CMAKE_CURRENT_BINARY_DIR}/wxpython/tools/build_modules_xml.py
+  COMMAND ${PYTHON_EXECUTABLE} -m compileall  ${CMAKE_BINARY_DIR}/scripts
+  COMMAND ${PYTHON_EXECUTABLE} -m compileall  ${CMAKE_BINARY_DIR}/gui/wxpython
+  DEPENDS copy_gui_images)
 
   add_custom_target(build_modulesitems_xml 
   COMMAND ${RUN_PYTHON} 
-  ${CMAKE_CURRENT_BINARY_DIR}/tools/build_modules_xml.py ${MODULE_LIST} > ${CMAKE_BINARY_DIR}/gui/wxpython/xml/module_items.xml
+  ${CMAKE_CURRENT_BINARY_DIR}/wxpython/tools/build_modules_xml.py ${MODULE_LIST} > ${CMAKE_BINARY_DIR}/gui/wxpython/xml/module_items.xml
   DEPENDS copy_build_module_xml)
 
    add_custom_target(build_xml_menudata

@@ -10,55 +10,66 @@ function(build_pymodule_in_subdir module_name dest_dir)
   set(targ_name ${targ_prefix}_${target_name} )
 
   set(g_gui_found FALSE)
-  file(GLOB g_gui_files ${module_name}/g.gui.*.py)
+  set(G_NAME g.gui.${module_name}) #Important as it is used in windows_launch.bat.in
 
-  add_custom_target(py_${targ_name} ALL
+  set(g_gui_file ${CMAKE_CURRENT_SOURCE_DIR}/${module_name}/${G_NAME}.py)
+
+  add_custom_target(py_${targ_name}
   COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/${dest_dir}/${module_name}
-  COMMAND ${CMAKE_COMMAND} -E copy ${py_files} ${CMAKE_BINARY_DIR}/${dest_dir}/${module_name}
-  COMMAND ${PYTHON_EXECUTABLE} -m compileall  ${CMAKE_BINARY_DIR}/${dest_dir}/${module_name}
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${py_files} ${CMAKE_BINARY_DIR}/${dest_dir}/${module_name}
   DEPENDS g.parser
   )
   set_target_properties (py_${targ_name} PROPERTIES FOLDER ${dest_dir})
    if(img_files)
-   add_custom_target(docs_images_${targ_name} 
-   COMMAND ${CMAKE_COMMAND} -E copy ${img_files} ${CMAKE_BINARY_DIR}/docs/html
+   add_custom_target(docs_images_${targ_name} ALL
+   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${img_files} ${CMAKE_BINARY_DIR}/docs/html
    DEPENDS py_${targ_name})
    set_target_properties (docs_images_${targ_name} PROPERTIES FOLDER docs)
    endif()
 
-  if(g_gui_files)
-   add_custom_target(py_g_gui_${targ_name} ALL
-	COMMAND ${CMAKE_COMMAND} -E copy ${g_gui_files} ${CMAKE_BINARY_DIR}/scripts
-	COMMAND ${PYTHON_EXECUTABLE} -m compileall  ${CMAKE_BINARY_DIR}/scripts
-	DEPENDS py_${targ_name}
-	)
-	 set_target_properties (py_g_gui_${targ_name} PROPERTIES FOLDER gui)
-	install(FILES ${py_files} DESTINATION scripts)
+  if(EXISTS ${g_gui_file})
+  if(WIN32)
+  configure_file(${CMAKE_SOURCE_DIR}/cmake/windows_launch.bat.in ${CMAKE_BINARY_DIR}/bin/${G_NAME}.bat)
+  install(PROGRAMS ${CMAKE_BINARY_DIR}/bin/${G_NAME}.bat DESTINATION bin)
+  else()
+  file(COPY ${g_gui_file} ${CMAKE_BINARY_DIR}/bin/${G_NAME})
+  install(PROGRAM ${CMAKE_BINARY_DIR}/bin/${G_NAME} DESTINATION bin)
+  endif()
 
-	if(WIN32)
-set(python_script "${CMAKE_BINARY_DIR}/scripts/g.gui.${module_name}.py")
-else()
-set(python_script "${CMAKE_BINARY_DIR}/scripts/g.gui.${module_name}")
-endif()
-set(gui_module_name "g.gui.${module_name}")
+  add_custom_target(py_g_gui_${targ_name} ALL
+     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${g_gui_file} ${CMAKE_BINARY_DIR}/scripts/
+	 DEPENDS py_${targ_name})
+  set_target_properties (py_g_gui_${targ_name} PROPERTIES FOLDER gui)
+  install(FILES ${g_gui_file} DESTINATION scripts)
+  file(COPY ${g_gui_file} DESTINATION ${CMAKE_BINARY_DIR}/scripts/)
 
-set(html_file ${CMAKE_CURRENT_SOURCE_DIR}/${module_name}/${gui_module_name}.html )
-#message(FATAL_ERROR "html_file_path=${html_file_path}")
+  set(python_script ${CMAKE_BINARY_DIR}/scripts/${G_NAME}.py)
 
+  set(html_file ${CMAKE_CURRENT_SOURCE_DIR}/${module_name}/${G_NAME}.html )
 
-	set(tmp_html_cmd ${RUN_PYTHON} ${python_script} --html-description)
-	set(mkhtml_cmd ${RUN_PYTHON} ${CMAKE_BINARY_DIR}/tools/mkhtml.py)
+   set(tmp_html_cmd )
+   set(mkhtml_cmd )
 	
-	set(html_file_tmp "${CMAKE_BINARY_DIR}/docs/html/${gui_module_name}.tmp.html")
-	set(html_file_out "${CMAKE_BINARY_DIR}/docs/html/${gui_module_name}.html")
-	set(html_file_gui  "${CMAKE_BINARY_DIR}/docs/html/wxGUI.${module_name}.html")
-	  ADD_CUSTOM_COMMAND(TARGET py_g_gui_${targ_name} POST_BUILD
-	  COMMAND ${tmp_html_cmd} > ${html_file_tmp}
-	  COMMAND ${mkhtml_cmd} ${python_script} ${html_file} ${html_file_tmp} > ${html_file_out}
-	  COMMAND ${CMAKE_COMMAND} -E remove ${html_file_tmp}
-	  COMMAND ${mkhtml_cmd} ${gui_module_name} ${html_file} ${html_file_tmp} > ${html_file_gui} 
+   set(html_file_tmp "${CMAKE_BINARY_DIR}/docs/html/${G_NAME}.tmp.html")
+   set(html_file_out "${CMAKE_BINARY_DIR}/docs/html/${G_NAME}.html")
+   set(html_file_gui  "${CMAKE_BINARY_DIR}/docs/html/wxGUI.${G_NAME}.html")
+
+   add_custom_target(py_g_gui_${targ_name}_html_descr
+	  COMMAND ${RUN_PYTHON} ${python_script} --html-description > ${html_file_tmp}
 	  DEPENDS py_g_gui_${targ_name}
-	  )
+   )
+
+   add_custom_target(py_g_gui_${targ_name}_mkhtml
+	  COMMAND ${RUN_PYTHON} ${CMAKE_BINARY_DIR}/tools/mkhtml.py ${python_script} ${html_file} ${html_file_tmp} > ${html_file_out}
+	  COMMAND ${CMAKE_COMMAND} -E remove ${html_file_tmp}
+	  COMMAND ${RUN_PYTHON} ${CMAKE_BINARY_DIR}/tools/mkhtml.py ${python_script} ${html_file} ${html_file_tmp} > ${html_file_gui} 
+	  DEPENDS py_g_gui_${targ_name}_html_descr
+   )
+
+   add_custom_target(py_g_gui_${targ_name}_mkhtml_wxgui ALL
+	  COMMAND ${RUN_PYTHON} ${CMAKE_BINARY_DIR}/tools/mkhtml.py ${python_script} ${html_file} ${html_file_tmp} > ${html_file_gui} 
+	  DEPENDS py_g_gui_${targ_name}_mkhtml
+   )
 
   endif()
 
@@ -66,20 +77,3 @@ set(html_file ${CMAKE_CURRENT_SOURCE_DIR}/${module_name}/${gui_module_name}.html
   install(FILES ${img_files} DESTINATION docs/html)
 
 endfunction()
-
-
-add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/docs/html/${gui_module_name}.html
-	COMMAND ${RUN_PYTHON}
-	${CMAKE_BINARY_DIR}/tools/mkhtml.py ${gui_module_name}
-	${html_file_path} > ${CMAKE_BINARY_DIR}/docs/html/${gui_module_name}.html
-	COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/docs/html/${gui_module_name}.tmp.html
-	DEPENDS ${CMAKE_BINARY_DIR}/docs/html/${gui_module_name}.tmp.html
-	COMMENT "Generating docs/html/${gui_module_name}.html"
-  VERBATIM)
-
-  add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/docs/html/wxGUI.${module_name}.html
-	COMMAND ${RUN_PYTHON}
-	${CMAKE_BINARY_DIR}/tools/mkhtml.py  ${gui_module_name}
-	${html_file_path} > ${CMAKE_BINARY_DIR}/docs/html/wxGUI.${module_name}.html
-	COMMENT "Generating docs/html/wxGUI.${module_name}.html"
-  VERBATIM)

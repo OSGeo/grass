@@ -3,7 +3,7 @@ function(copy_python_file py_file install_dest)
   set(output_path ${CMAKE_BINARY_DIR}/${install_dest})
   set(copied_file_path ${output_path}/${py_file_NAME})
    add_custom_command(OUTPUT ${copied_file_path}
-    COMMAND ${CMAKE_COMMAND} -E copy ${py_file} ${output_path}
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${py_file} ${output_path}
 	DEPENDS g.parser
     COMMENT "Copy ${output_path}/${py_file_NAME}"
     VERBATIM)
