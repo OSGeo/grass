@@ -19,6 +19,7 @@ from datetime import datetime
 
 import grass.script.core as gcore
 import grass.script.task as gtask
+from grass.exceptions import ScriptError
 
 
 def escapeXML(text):
@@ -48,11 +49,10 @@ def do_doctest_gettext_workaround():
     __builtin__._ = new_translator
 
 
-def parse_modules(fd, mlist=None):
+def parse_modules(fd):
     """Writes metadata to xml file."""
     # TODO: what about ms windows? does gtask handle this?
-    if mlist is None:
-        mlist = list(gcore.get_commands()[0])
+    mlist = list(gcore.get_commands()[0])
     indent = 4
     for m in sorted(mlist):
         # TODO: get rid of g.mapsets_picker.py
@@ -81,14 +81,15 @@ def get_module_metadata(name):
     """
     try:
         task = gtask.parse_interface(name)
-    except:
+    except ScriptError as exc:
         sys.stderr.write("Cannot parse interface for module %s. Empty strings"
-                         " will be placed instead of description and keywords."
-                         "\n" % name)
+                         " will be placed instead of description and keywords. Reason: %s"
+                         "\n" % (name, str(exc)))
         return '', ''
 
     return task.get_description(full=True), \
         task.get_keywords()
+
 
 def header(fd):
     fd.write('<?xml version="1.0" encoding="UTF-8"?>\n')
@@ -135,23 +136,22 @@ def module_test():
     print(get_module_metadata('t.rast.univar'))
 
 
-def main(module_list=None):
+def main():
     fh = sys.stdout
 
     header(fh)
-    parse_modules(fh, module_list)
+    parse_modules(fh)
     footer(fh)
 
     return 0
 
 
 if __name__ == "__main__":
-    mlist = None
     if len(sys.argv) > 1:
         if sys.argv[1] == 'doctest':
             sys.exit(doc_test())
         elif sys.argv[1] == 'test':
             sys.exit(module_test())
         else:
-            mlist = sys.argv[1:]
-    sys.exit(main(mlist))
+            gcore.fatal('Unrecognized parameter.')
+    sys.exit(main())
