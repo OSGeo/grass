@@ -220,7 +220,7 @@ foreach(srch ${SRCHS})
   get_filename_component(srch_PATH ${srch} PATH)
   get_filename_component(srch_NAME ${srch} NAME)
   STRING(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}" "" dsth_PATH "${srch_PATH}")
-  set(output_dir ${CMAKE_BINARY_DIR}/include/xgrass${dsth_PATH})
+  set(output_dir ${CMAKE_BINARY_DIR}/include/grass${dsth_PATH})
   add_custom_command(
 	OUTPUT ${output_dir}/${srch_NAME}
 	COMMAND ${CMAKE_COMMAND} -E copy ${srch} ${output_dir}
