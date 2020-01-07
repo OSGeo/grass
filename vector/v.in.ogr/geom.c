@@ -64,7 +64,7 @@ centroid(OGRGeometryH hGeomAny, CENTR * Centr, struct spatial_index *Sindex,
     hGeom = hGeomAny;
 
 #if GDAL_VERSION_NUM >= 2000000
-    if (OGR_G_HasCurveGeometry(hGeom, 1)) {
+    if (OGR_G_HasCurveGeometry(hGeom, 0)) {
 	G_debug(2, "Approximating curves in a '%s'",
 		OGR_G_GetGeometryName(hGeom));
 
@@ -192,11 +192,25 @@ centroid(OGRGeometryH hGeomAny, CENTR * Centr, struct spatial_index *Sindex,
 }
 
 /* count polygons and isles */
-int poly_count(OGRGeometryH hGeom, int line2boundary)
+int poly_count(OGRGeometryH hGeomAny, int line2boundary)
 {
     int i, nr, ret;
+    OGRGeometryH hGeom;
     OGRwkbGeometryType eType;
     OGRGeometryH hRing;
+
+    hGeom = hGeomAny;
+
+#if GDAL_VERSION_NUM >= 2000000
+    if (OGR_G_HasCurveGeometry(hGeom, 0)) {
+	G_debug(2, "Approximating curves in a '%s'",
+		OGR_G_GetGeometryName(hGeom));
+
+	/* The ownership of the returned geometry belongs to the caller. */
+	hGeom = OGR_G_GetLinearGeometry(hGeom, 0, NULL);
+    }
+#endif
+
     eType = wkbFlatten(OGR_G_GetGeometryType(hGeom));
 
     if (eType == wkbPolygon) {
@@ -218,8 +232,13 @@ int poly_count(OGRGeometryH hGeom, int line2boundary)
 	}
     }
 
-    if (!line2boundary)
+    if (!line2boundary) {
+	/* destroy non-curve version of a curve geometry */
+	if (hGeom != hGeomAny)
+	    OGR_G_DestroyGeometry(hGeom);
+
 	return 0;
+    }
 
     if (eType == wkbLineString) {
 	G_debug(5, "Polygon");
@@ -240,6 +259,11 @@ int poly_count(OGRGeometryH hGeom, int line2boundary)
     }
 
     G_debug(1, "poly_count(): n_poly_boundaries=%d", n_polygon_boundaries);
+
+    /* destroy non-curve version of a curve geometry */
+    if (hGeom != hGeomAny)
+	OGR_G_DestroyGeometry(hGeom);
+
     return 0;
 }
 
@@ -275,7 +299,7 @@ geom(OGRGeometryH hGeomAny, struct Map_info *Map, int field, int cat,
     hGeom = hGeomAny;
 
 #if GDAL_VERSION_NUM >= 2000000
-    if (OGR_G_HasCurveGeometry(hGeom, 1)) {
+    if (OGR_G_HasCurveGeometry(hGeom, 0)) {
 	G_debug(2, "Approximating curves in a '%s'",
 		OGR_G_GetGeometryName(hGeom));
 

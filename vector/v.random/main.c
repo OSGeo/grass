@@ -192,6 +192,7 @@ int main(int argc, char *argv[])
     output = parm.output->answer;
     n = strtoul(parm.nsites->answer, NULL, 10);
 
+    seed = 0;
     if(parm.seed->answer)
         seed = atoi(parm.seed->answer);
 
@@ -234,6 +235,11 @@ int main(int argc, char *argv[])
     /* Do we need to write random values into attribute table? */
     usefloat = -1;
     notable = !(parm.zcol->answer || (parm.input -> answer && field > 0));
+    driver = NULL;
+    driver_input = NULL;
+    Fi = NULL;
+    Fi_input = NULL;
+    ncols = 0;
     if (!notable) {
 	Fi = Vect_default_field_info(&Out, 1, NULL, GV_1TABLE);
 	driver =
@@ -471,8 +477,23 @@ int main(int argc, char *argv[])
 	    if (bbox.N > box.N)
 		bbox.N = box.N;
 
-            if (field > 0)
-                Vect_cat_get(Cats, field, &cat_area);
+	    cat_area = -1;
+            if (field > 0) {
+		if (cat_list) {
+		    for (i = 0; i < Cats->n_cats; i++) {
+			if (Cats->field[i] == field &&
+			    Vect_cat_in_cat_list(Cats->cat[i], cat_list)) {
+			    cat_area = Cats->cat[i];
+			    break;
+			}
+		    }
+		}
+		else {
+		    Vect_cat_get(Cats, field, &cat_area);
+		}
+		if (cat_area < 0)
+		    continue;
+	    }
 
 	    for (i = 0; i < n; ++i) {
 		double x, y, z;
