@@ -113,6 +113,7 @@ include(check_target)
 add_subdirectory(thirdparty)
 
 set(GISBASE ${CMAKE_BINARY_DIR}/gisbase)
+configure_file(cmake/mkhtml.cmake.in ${CMAKE_BINARY_DIR}/cmake/mkhtml.cmake @ONLY)
 
 file(TO_NATIVE_PATH ${CMAKE_SOURCE_DIR} module_top_dir)
 file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} bin_dir)
@@ -180,7 +181,7 @@ foreach(d ${ALL_SUBDIRS})
 endforeach()
 
 if(WITH_PYTHON)
-  add_subdirectory(gui)
+ # add_subdirectory(gui)
 endif()
 
 if(WITH_DOCS)

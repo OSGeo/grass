@@ -151,9 +151,14 @@ function(build_module)
    set(install_dest "${G_RUNTIME_OUTPUT_DIR}")
    set(G_RUNTIME_OUTPUT_DIR "${GISBASE}/${install_dest}")
  endif()
- 
-  
- if(WITH_DOCS)
+ #set_target_properties(${G_NAME} PROPERTIES prop1 "source_directory name")
+ set_target_properties(${G_NAME} PROPERTIES G_SRCDIR "${G_SRCDIR}")
+
+     #add_custom_command(TARGET ${G_NAME} POST_BUILD
+     # COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${G_NAME}> ${G_RUNTIME_OUTPUT_DIR})
+  build_docs(${G_NAME} ${G_RUNTIME_OUTPUT_DIR})
+
+ if(WITH_DOCSX)
  set(html_files)
  set(html_file "${G_SRCDIR}/${G_NAME}.html")
  set(create_html FALSE)
@@ -212,3 +217,48 @@ function(build_module)
  install(TARGETS ${G_NAME} DESTINATION ${install_dest})
 
 endfunction()
+
+ function(build_docs target_name G_RUNTIME_OUTPUT_DIR)
+
+   if(${target_name} STREQUAL "g.parser")
+   #message("Dont know to build docs for ${target_name}")
+   return()
+   endif()
+
+  get_target_property(G_SRCDIR ${target_name} G_SRCDIR)
+
+ # message("G_SRCDIR for ${G_NAME} is ${G_SRCDIR}")
+   
+  set(html_file ${G_SRCDIR}/${target_name}.html)
+  set(input_html_file)
+  if(EXISTS ${html_file})
+  set(input_html_file ${html_file})
+  set(input_html_tmp_file ${G_SRCDIR}/${target_name}.tmp.html)
+   #message("html_file for ${target_name} is ${html_file}")
+   else()
+   #message("${target_name} is a library?")
+   endif()
+
+   if(NOT input_html_file)
+   #message("Dont know to build docs for ${target_name}")
+   return()
+   endif()
+
+  add_custom_command(TARGET ${target_name} POST_BUILD
+    COMMAND ${CMAKE_COMMAND}
+      -DINPUT_HTML_FILE=${input_html_file}
+      -DIS_EXECUTABLE=TRUE
+	  -Dexecutable_name=${target_name}
+	  -DGRASS_PGM=$<TARGET_FILE:${target_name}>
+	  -DOUTPUT_DIR=${G_RUNTIME_OUTPUT_DIR}
+	  -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
+      -P ${CMAKE_BINARY_DIR}/cmake/mkhtml.cmake
+	#COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${target_name}> ${G_RUNTIME_OUTPUT_DIR}
+	#COMMAND ${CMAKE_COMMAND} -E touch  ${input_html_tmp_file}
+    #COMMENT "Generating html for ${target_name}"
+	)
+    #VERBATIM)
+  
+  #add_custom_target(${target_name}_html ALL DEPENDS ${G_RUNTIME_OUTPUT_DIR}/${target_name}.exe)
+
+ endfunction()
