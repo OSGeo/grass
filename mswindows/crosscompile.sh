@@ -30,7 +30,7 @@
 # cd ~/usr/src
 # git clone https://github.com/OSGeo/grass.git
 # cd grass
-# mswindows/crosscompile.sh --mxe=$HOME/usr/src/mxe --update --package \
+# mswindows/crosscompile.sh --mxe-path=$HOME/usr/src/mxe --update --package \
 #      > crosscompile.log 2>&1
 #
 
@@ -38,12 +38,12 @@
 set -e
 
 # default paths, but can be overriden from the command line
-MXE=${MXE-$HOME/usr/local/src/mxe}
-FREETYPE_INCLUDE=${FREETYPE_INCLUDE-/usr/include/freetype2}
+mxe_path=${MXE_PATH-$HOME/usr/local/src/mxe}
+freetype_include=${FREETYPE_INCLUDE-/usr/include/freetype2}
 
 # process options
-UPDATE=0
-PACKAGE=0
+update=0
+package=0
 for opt; do
 	case "$opt" in
 	-h|--help)
@@ -51,7 +51,7 @@ for opt; do
 Usage: crosscompile.sh [OPTIONS]
 
 -h, --help                   display this help message
-    --mxe=PATH               MXE path (default: $HOME/usr/local/src/mxe)
+    --mxe-path=PATH          MXE path (default: $HOME/usr/local/src/mxe)
     --freetype-include=PATH  FreeType include path
                              (default: /usr/include/freetype2)
     --update                 update the current branch
@@ -60,17 +60,17 @@ Usage: crosscompile.sh [OPTIONS]
 EOT
 		exit
 		;;
-	--mxe=*)
-		MXE=`echo $opt | sed 's/^[^=]*=//'`
+	--mxe-path=*)
+		mxe_path=`echo $opt | sed 's/^[^=]*=//'`
 		;;
 	--freetype-include=*)
-		FREETYPE_INCLUDE=`echo $opt | sed 's/^[^=]*=//'`
+		freetype_include=`echo $opt | sed 's/^[^=]*=//'`
 		;;
 	--update)
-		UPDATE=1
+		update=1
 		;;
 	--package)
-		PACKAGE=1
+		package=1
 		;;
 	*)
 		echo "$opt: unknown option"
@@ -87,15 +87,15 @@ fi
 
 # check paths
 errors=0
-if [ ! -d $MXE ]; then
-	echo "$MXE: not found"
+if [ ! -d $mxe_path ]; then
+	echo "$mxe_path: not found"
 	errors=1
 fi
-if [ ! -d $FREETYPE_INCLUDE ]; then
-	echo "$FREETYPE_INCLUDE: not found"
+if [ ! -d $freetype_include ]; then
+	echo "$freetype_include: not found"
 	errors=1
 fi
-if [ $UPDATE -eq 1 -a ! -d .git ]; then
+if [ $update -eq 1 -a ! -d .git ]; then
 	echo "not a git repository"
 	errors=1
 fi
@@ -110,7 +110,7 @@ echo "Started cross-compilation: `date`"
 echo
 
 # update the current branch if requested
-if [ $UPDATE -eq 1 -a -d .git ]; then
+if [ $update -eq 1 -a -d .git ]; then
 	git pull
 fi
 
@@ -124,7 +124,7 @@ LDFLAGS="-lcurses" \
 --with-nls \
 --with-readline \
 --with-wxwidgets \
---with-freetype-includes=$FREETYPE_INCLUDE \
+--with-freetype-includes=$freetype_include \
 --with-bzlib \
 --with-postgres \
 --with-pthread \
@@ -137,7 +137,7 @@ LDFLAGS="-lcurses" \
 
 make clean default
 
-BUILD_ARCH=`sed -n '/^ARCH[ \t]*=/{s/^.*=[ \t]*//; p}' include/Make/Platform.make`
+build_arch=`sed -n '/^ARCH[ \t]*=/{s/^.*=[ \t]*//; p}' include/Make/Platform.make`
 for i in \
 	config.log \
 	include/Make/Platform.make \
@@ -145,46 +145,46 @@ for i in \
 	include/Make/Doxyfile_arch_latex \
 	error.log \
 ; do
-	cp -a $i $i.$BUILD_ARCH
+	cp -a $i $i.$build_arch
 done
 
 ################################################################################
 # Cross-compile the target architecture
 
-ARCH=x86_64-w64-mingw32
-SHARED=$ARCH.shared
-MXE_BIN=$MXE/usr/bin/$SHARED
-MXE_SHARED=$MXE/usr/$SHARED
+arch=x86_64-w64-mingw32
+shared=$arch.shared
+mxe_bin=$mxe_path/usr/bin/$shared
+mxe_shared=$mxe_path/usr/$shared
 
-CC=$MXE_BIN-gcc \
-CXX=$MXE_BIN-g++ \
+CC=$mxe_bin-gcc \
+CXX=$mxe_bin-g++ \
 CFLAGS="-g -O2 -Wall" \
 CXXFLAGS="-g -O2 -Wall" \
-AR=$MXE_BIN-ar \
-RANLIB=$MXE_BIN-ranlib \
-WINDRES=$MXE_BIN-windres \
-PKG_CONFIG=$MXE_BIN-pkg-config \
+AR=$mxe_bin-ar \
+RANLIB=$mxe_bin-ranlib \
+WINDRES=$mxe_bin-windres \
+PKG_CONFIG=$mxe_bin-pkg-config \
 ./configure \
---host=$ARCH \
+--host=$arch \
 --with-nls \
 --with-readline \
 --with-wxwidgets \
---with-freetype-includes=$MXE_SHARED/include/freetype2 \
+--with-freetype-includes=$mxe_shared/include/freetype2 \
 --with-bzlib \
 --with-postgres \
 --with-pthread \
 --with-openmp \
 --with-blas \
 --with-lapack \
---with-geos=$MXE_SHARED/bin/geos-config \
---with-netcdf=$MXE_SHARED/bin/nc-config \
---with-gdal=$MXE_SHARED/bin/gdal-config \
+--with-geos=$mxe_shared/bin/geos-config \
+--with-netcdf=$mxe_shared/bin/nc-config \
+--with-gdal=$mxe_shared/bin/gdal-config \
 --with-opengl=windows \
 >> /dev/stdout
 
 make clean default
 
-ARCH=`sed -n '/^ARCH[ \t]*=/{s/^.*=[ \t]*//; p}' include/Make/Platform.make`
+arch=`sed -n '/^ARCH[ \t]*=/{s/^.*=[ \t]*//; p}' include/Make/Platform.make`
 for i in \
 	config.log \
 	include/Make/Platform.make \
@@ -192,21 +192,21 @@ for i in \
 	include/Make/Doxyfile_arch_latex \
 	error.log \
 ; do
-	cp -a $i $i.$ARCH
+	cp -a $i $i.$arch
 done
 
 ################################################################################
 # Copy document files from the native build
 
-BUILD_DIST=dist.$BUILD_ARCH
-DIST=dist.$ARCH
+build_dist=dist.$build_arch
+dist=dist.$arch
 
 for i in \
 	docs \
 	gui/wxpython/xml \
 ; do
-	rm -rf $DIST/$i
-	cp -a $BUILD_DIST/$i $DIST/$i
+	rm -rf $dist/$i
+	cp -a $build_dist/$i $dist/$i
 done
 
 ################################################################################
@@ -273,26 +273,26 @@ for i in \
 	libzstd.dll \
 	zlib1.dll \
 ; do
-	cp -a $MXE_SHARED/bin/$i $DIST/lib
+	cp -a $mxe_shared/bin/$i $dist/lib
 done
 
 for i in \
 	proj \
 	gdal \
 ; do
-	rm -rf $DIST/share/$i
-	cp -a $MXE_SHARED/share/$i $DIST/share/$i
+	rm -rf $dist/share/$i
+	cp -a $mxe_shared/share/$i $dist/share/$i
 done
 
 ################################################################################
 # Post-compile process
 
-VERSION=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
+version=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 
-rm -f $DIST/grass$VERSION.tmp
-cp -a bin.$ARCH/grass$VERSION.py $DIST/etc
+rm -f $dist/grass$version.tmp
+cp -a bin.$arch/grass$version.py $dist/etc
 
-cat<<'EOT' > $DIST/grass$VERSION.bat
+cat<<'EOT' > $dist/grass$version.bat
 @echo off
 
 rem Change this variable to override auto-detection of python.exe in PATH
@@ -337,15 +337,15 @@ rem for %%i in (%GRASS_PYTHON%) do set PYTHONHOME=%%~dpi
 "%GRASS_PYTHON%" "%GISBASE%\etc\grass79.py" %*
 if %ERRORLEVEL% geq 1 pause
 EOT
-unix2dos $DIST/grass$VERSION.bat
+unix2dos $dist/grass$version.bat
 
 # package if requested
-if [ $PACKAGE -eq 1 ]; then
-	DATE=`date +%Y%m%d`
+if [ $package -eq 1 ]; then
+	date=`date +%Y%m%d`
 	rm -f grass
-	ln -s $DIST grass
-	rm -f grass*-$ARCH-*.zip
-	zip -r grass$VERSION-$ARCH-$DATE.zip grass
+	ln -s $dist grass
+	rm -f grass*-$arch-*.zip
+	zip -r grass$version-$arch-$date.zip grass
 	rm -f grass
 fi
 
