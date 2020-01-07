@@ -2,11 +2,11 @@
 
 <p><em>g.proj</em> provides a means of converting a co-ordinate system
 description (i.e. projection information) between various formats.
-If compiled without <a href="http://www.gdal.org/">OGR</a> present, the 
+If compiled without <a href="https://www.gdal.org/">OGR</a> present, the
 functionality is limited to:
 <ul>
 <li>Reporting the projection information for the current location, 
-either in conventional GRASS (-p flag) or PROJ.4 (-j flag) format</li>
+either in conventional GRASS (-p flag) or PROJ (-j flag) format</li>
 <li>Changing the datum, or reporting and modifying the datum transformation 
 parameters, for the current location</li>
 </ul>
@@ -33,9 +33,9 @@ file.</dd>
 
 <dt>proj4=<em>description</em> or <em>-</em></dt>
 <dd><em>description</em> should be a projection description in 
-<a href="http://proj.osgeo.org/">PROJ.4</a> format, enclosed in
+<a href="https://proj.org/">PROJ</a> format, enclosed in
 quotation marks if there are any spaces. If <em>-</em> is given for
-<em>description</em>, the PROJ.4 description will be read from stdin rather 
+<em>description</em>, the PROJ description will be read from stdin rather
 than as a directly-supplied command-line parameter.</dd>
 
 <dt>epsg=<em>number</em></dt>
@@ -48,7 +48,7 @@ to support future revisions of the EPSG database.</dd>
 </dl>
 
 <p>If datum information is incorrect or missing in the input
-co-ordinate system definition (e.g. PROJ.4 descriptions have very limited
+co-ordinate system definition (e.g. PROJ descriptions have very limited
 support for specifying datum names), a GRASS datum abbreviation can instead be
 supplied using the <em>datum</em> parameter. This will override any
 datum contained in the input co-ordinate system, and discard
@@ -105,7 +105,7 @@ this means there are no EPSG Authority codes in the WKT output.
 <p>WKT format shows the false eastings and northings in the projected unit
 (e.g. meters, feet) but in PROJ format it should always be given in meters.
 
-<p>The maximum size of input WKT or PROJ.4 projection descriptions is
+<p>The maximum size of input WKT or PROJ projection descriptions is
 limited to 8000 bytes.
 
 <h2>EXAMPLES</h2>
@@ -135,14 +135,14 @@ g.proj -wef > irish_grid.prj
 
 <h3>Read projection from file</h3>
 
-Read the projection information from a GeoTIFF file and print it in PROJ.4
+Read the projection information from a GeoTIFF file and print it in PROJ
 format:<br>
 
 <div class="code"><pre>
 g.proj -jf georef=ASTER_DEM20020508161837.tif
 </pre></div>
 
-<p>Convert the PROJ.4 projection description contained in a text file to WKT
+<p>Convert the PROJ projection description contained in a text file to WKT
 format:<br>
 
 <div class="code"><pre>
@@ -189,7 +189,7 @@ stored in a text file:<br>
 g.proj -c wkt=irish_grid.prj location=irish_grid
 </pre></div>
 
-<p>Create a new location from a PROJ.4 description, explicitly
+<p>Create a new location from a PROJ description, explicitly
 specifying a datum and using the default datum transformation
 parameters:<br>
 
@@ -216,15 +216,15 @@ ogr2ogr -t_srs "`g.proj -wf`" polbnda_italy_GB_ovest.shp polbnda_italy_LL.shp
 
 <h2>REFERENCES</h2>
 
-<a href="http://proj.maptools.org">PROJ 4</a>: Projection/datum support library<br>
-<a href="http://www.gdal.org">GDAL raster library and toolset</a><br>
-<a href="http://www.gdal.org/">OGR vector library and toolset</a>
+<a href="https://proj.org">PROJ</a>: Projection/datum support library<br>
+<a href="https://www.gdal.org">GDAL raster library and toolset</a><br>
+<a href="https://www.gdal.org/">OGR vector library and toolset</a>
 
 <p><b>Further reading</b>
 <ul>
-<li> <a href="http://www.asprs.org/Grids-Datums.html">ASPRS Grids and Datum</a>
+<li> <a href="https://www.asprs.org/asprs-publications/grids-and-datums">ASPRS Grids and Datum</a>
 <li> <a href="http://www.mapref.org">MapRef - The Collection of Map Projections and Reference Systems for Europe</a>
-<li> <a href="http://www.remotesensing.org/geotiff/proj_list/">Projections Transform List</a> (PROJ4)
+<li> <a href="http://geotiff.maptools.org/proj_list/">Projections Transform List</a> (PROJ)
 </ul>
 
 <h2>SEE ALSO</h2>
