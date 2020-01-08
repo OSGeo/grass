@@ -45,6 +45,10 @@ function(build_module)
     add_executable(${G_NAME} ${${G_NAME}_SRCS})
     set_target_properties (${G_NAME} PROPERTIES FOLDER bin)
     set(default_html_file_name ${G_NAME})
+	set(PGM_NAME ${G_NAME})
+	if(WIN32)
+	set(PGM_NAME ${G_NAME}.exe)
+	endif()
 
   else()
     add_library(${G_NAME} ${${G_NAME}_SRCS})
@@ -53,6 +57,7 @@ function(build_module)
     set(export_file_name "${CMAKE_BINARY_DIR}/include/export/${G_NAME}_export.h")
     # Default is to use library target name without grass_ prefix
     string(REPLACE "grass_" "" default_html_file_name ${G_NAME})
+	set(PGM_NAME ${default_html_file_name})
 
     generate_export_header(${G_NAME}
       STATIC_DEFINE "STATIC_BUILD"
@@ -155,9 +160,10 @@ function(build_module)
  endif()
 
  # To use this property later in build_docs
- 
+
  set_target_properties(${G_NAME} PROPERTIES RUN_HTML_DESCR "${RUN_HTML_DESCR}")
- set_target_properties(${G_NAME} PROPERTIES G_PGM "$<TARGET_FILE:${G_NAME}>")
+ set_target_properties(${G_NAME} PROPERTIES G_TARGET_FILE "$<TARGET_FILE:${G_NAME}>")
+ set_target_properties(${G_NAME} PROPERTIES PGM_NAME "${PGM_NAME}")
  set_target_properties(${G_NAME} PROPERTIES G_SRC_DIR "${G_SRCDIR}")
  set_target_properties(${G_NAME} PROPERTIES G_RUNTIME_OUTPUT_DIR "${G_RUNTIME_OUTPUT_DIR}") 
  set_target_properties(${G_NAME} PROPERTIES G_HTML_FILE_NAME "${HTML_FILE_NAME}.html")

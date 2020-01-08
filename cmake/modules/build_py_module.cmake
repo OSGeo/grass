@@ -57,17 +57,15 @@ function(build_py_module)
 
   if(EXISTS ${PY_MODULE_FILE})
     set(MAIN_SCRIPT_FILE "${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}")
+	set(PGM_NAME ${G_NAME})
     if(WIN32)
       configure_file(
 	${CMAKE_SOURCE_DIR}/cmake/windows_launch.bat.in
 	${MAIN_SCRIPT_FILE}.bat)
       #From here .bat is our main script file
       set(MAIN_SCRIPT_FILE ${MAIN_SCRIPT_FILE}.bat)
+	  set(PGM_NAME ${G_NAME}.bat)
     else()
-      if(G_TARGET_NAME STREQUAL "v.what.strds")
-	##message(FATAL_ERROR "stop  MAIN_SCRIPT_FILE=${MAIN_SCRIPT_FILE}")
- endif()
-
       configure_file(${PY_MODULE_FILE} ${MAIN_SCRIPT_FILE} COPYONLY)
     endif()
   else()
@@ -120,9 +118,10 @@ function(build_py_module)
   endif()
 
   set_target_properties(${G_TARGET_NAME} PROPERTIES G_SRC_DIR "${G_SRC_DIR}")
-  set_target_properties(${G_TARGET_NAME} PROPERTIES G_PGM "${MAIN_SCRIPT_FILE}") 
+  set_target_properties(${G_TARGET_NAME} PROPERTIES G_TARGET_FILE "${MAIN_SCRIPT_FILE}")
+  set_target_properties(${G_TARGET_NAME} PROPERTIES PGM_NAME "${PGM_NAME}")
   set_target_properties(${G_TARGET_NAME} PROPERTIES RUN_HTML_DESCR "${RUN_HTML_DESCR}")
-  set_target_properties(${G_TARGET_NAME} PROPERTIES G_RUNTIME_OUTPUT_DIR "${GISBASE}/scripts") 
+  set_target_properties(${G_TARGET_NAME} PROPERTIES G_RUNTIME_OUTPUT_DIR "${GISBASE}/scripts")
   set_target_properties(${G_TARGET_NAME} PROPERTIES G_HTML_FILE_NAME "${HTML_FILE_NAME}.html")
   set_target_properties(${G_TARGET_NAME} PROPERTIES IS_PYTHON_SCRIPT TRUE)
 
