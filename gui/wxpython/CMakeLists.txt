@@ -1,12 +1,17 @@
 
 # missing docs
-set(gui_DIRS animation core datacatalog dbmgr gcp gmodeler gui_core iclass
-icons image2target iscatt lmgr location_wizard mapdisp mapswipe mapwin modules nviz
-photo2image psmap rdigit rlisetup startup timeline tools tplot vdigit
-vnet web_services wxplot)
+set(gui_DIRS animation datacatalog dbmgr gcp gmodeler 
+iclass image2target mapswipe photo2image psmap rlisetup timeline tplot vdigit)
 
 foreach(gui_DIR ${gui_DIRS})
   build_gui_in_subdir(${gui_DIR})
+endforeach()
+
+set(gui_lib_DIRS core gui_core icons iscatt lmgr location_wizard 
+mapdisp mapwin modules nviz rdigit startup tools vnet web_services wxplot)
+
+foreach(gui_lib_DIR ${gui_lib_DIRS})
+  build_py_lib_in_subdir(${gui_lib_DIR})
 endforeach()
 
 install(FILES README DESTINATION gui/wxpython)
