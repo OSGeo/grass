@@ -29,17 +29,9 @@ function(build_py_module)
     set(G_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${G_NAME})
   endif()
 
- 
   if(NOT G_SRC_REGEX)
     set(G_SRC_REGEX "*.py")
   endif()
-
-  # if(G_AS_GUI)
-  #   set(G_TARGET_NAME g.gui.${G_NAME})
-  # else()
-  #   set(G_TARGET_NAME ${G_NAME})
-  # endif()
-
 
   set(G_TARGET_NAME ${G_TARGET_NAME_PREFIX}${G_NAME})
   
@@ -132,20 +124,14 @@ function(build_py_module)
   set_target_properties(${G_TARGET_NAME} PROPERTIES RUN_HTML_DESCR "${RUN_HTML_DESCR}")
   set_target_properties(${G_TARGET_NAME} PROPERTIES G_RUNTIME_OUTPUT_DIR "${GISBASE}/scripts") 
   set_target_properties(${G_TARGET_NAME} PROPERTIES G_HTML_FILE_NAME "${HTML_FILE_NAME}.html")
+  set_target_properties(${G_TARGET_NAME} PROPERTIES IS_PYTHON_SCRIPT TRUE)
 
-  if(WITH_DOCS)
-  build_docs(${G_TARGET_NAME})
-#  add_dependencies(${G_TARGET_NAME} ${G_DEPENDS})
-  endif()
+ if(WITH_DOCS)
+	build_docs(${G_TARGET_NAME})
+	add_dependencies(${G_TARGET_NAME} pylib.grass)
+ endif()
 
-
-  # if(MAIN_SCRIPT_FILE)
-  #   add_custom_command(TARGET ${G_TARGET_NAME} POST_BUILD 
-  #     COMMAND ${CMAKE_COMMAND} -E copy ${MAIN_SCRIPT_FILE} ${CMAKE_BINARY_DIR}/scripts
-  #     )
-  # endif()
-
-  install(FILES ${PYTHON_FILES} DESTINATION etc/${G_NAME})
+ install(FILES ${PYTHON_FILES} DESTINATION etc/${G_NAME})
 
 endfunction()
 

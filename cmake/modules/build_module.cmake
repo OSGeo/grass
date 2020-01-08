@@ -161,64 +161,11 @@ function(build_module)
  set_target_properties(${G_NAME} PROPERTIES G_SRC_DIR "${G_SRCDIR}")
  set_target_properties(${G_NAME} PROPERTIES G_RUNTIME_OUTPUT_DIR "${G_RUNTIME_OUTPUT_DIR}") 
  set_target_properties(${G_NAME} PROPERTIES G_HTML_FILE_NAME "${HTML_FILE_NAME}.html")
+ set_target_properties(${G_TARGET_NAME} PROPERTIES IS_PYTHON_SCRIPT FALSE)
  
- build_docs(${G_NAME})
-
- if(WITH_DOCSX)
- set(html_files)
- set(html_file "${G_SRCDIR}/${G_NAME}.html")
- set(create_html FALSE)
- if(EXISTS "${html_file}")
-   set(create_html TRUE)
-   file(GLOB img_files ${G_NAME}/*.png  ${G_NAME}/*.jpg)
- else()
-   set(html_file "")
-   file(GLOB html_files "${G_SRCDIR}/*.html")
-    #message("html_files=${html_files}")
-   if(html_files)
-     # TODO; check if there is more than 1 .html for libs
-     list(GET html_files 0 html_file)
-     set(create_html TRUE)
-   endif()
- endif()
-
-
-# message("html_file=${html_file}")
-# message(FATAL_ERROR "create_html=${create_html}")
- if(create_html)
-   get_filename_component(html_name ${html_file} NAME)
-   string(REPLACE ".html" "" html_name ${html_name})
-   file(GLOB img_files ${G_SRCDIR}/*.png  ${G_SRCDIR}/*.jpg)
-
-   set(html_file_tmp "${GISBASE}/docs/html/${html_name}.tmp.html")
-   set(html_file_out "${GISBASE}/docs/html/${html_name}.html")
-    add_custom_command(TARGET ${G_NAME} POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${G_NAME}> ${G_RUNTIME_OUTPUT_DIR})
-     if(RUN_HTML_DESCR)
-       add_custom_command(TARGET ${G_NAME} POST_BUILD	 
-     	 COMMAND ${RUN_GRASS} ${G_NAME} --html-description  > ${html_file_tmp}
-     	 COMMENT "Generating ${html_file_tmp}")
-     endif()
-     
-     if(img_files)
-    add_custom_command(TARGET ${G_NAME} POST_BUILD	 
-     	 COMMAND ${CMAKE_COMMAND} -E copy ${img_files} ${GISBASE}/docs/html/
-     	 #COMMENT "Copy ${G_SRCDIR}/{*.png,*.jpg} to ${GISBASE}/docs/html/"
-	 )
-     endif()
-     
-     set(mkhtml_cmd ${RUN_PYTHON} ${CMAKE_BINARY_DIR}/tools/mkhtml.py)
-    add_custom_command(TARGET ${G_NAME} POST_BUILD
-      COMMAND ${mkhtml_cmd} ${html_name} ${html_file} ${html_file_tmp} > ${html_file_out}
-      COMMAND ${CMAKE_COMMAND} -E remove ${html_file_tmp}
-      COMMENT "Generating ${html_file_out}"
-    )
-  install(FILES ${html_file_out} DESTINATION docs/html)
-#     add_custom_target(${G_NAME}_docs ALL DEPENDS ${html_file_out})
-   endif() # if(EXISTS "${html_file}")
-   
- endif() #WITH_DOCS
-
+ if(WITH_DOCS)
+	build_docs(${G_NAME})
+ endif() # WITH_DOCS
 
  install(TARGETS ${G_NAME} DESTINATION ${install_dest})
 

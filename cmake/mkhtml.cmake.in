@@ -81,10 +81,9 @@ file(GLOB IMG_FILES ${PGM_SOURCE_DIR}/*.png  ${PGM_SOURCE_DIR}/*.jpg)
 foreach(IMG_FILE ${IMG_FILES})
   file(INSTALL ${IMG_FILE} DESTINATION ${GISBASE}/docs/html)
 endforeach()
-set(IS_PYTHON 1)
 message("Creating ${TMP_HTML_FILE}:: ${PGM_NAME} --html-description")
 if(RUN_HTML_DESCR)
-  if(IS_PYTHON)
+  if(IS_PYTHON_SCRIPT)
   execute_process(
     COMMAND ${PYTHON_EXECUTABLE} ${PGM_NAME} "--html-description"
     OUTPUT_FILE ${TMP_HTML_FILE}
