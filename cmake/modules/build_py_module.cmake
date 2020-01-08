@@ -129,7 +129,7 @@ function(build_py_module)
 	COMMAND ${CMAKE_COMMAND} -E copy ${PY_MODULE_FILE} ${CMAKE_BINARY_DIR}/TEMP/
     COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/${G_DST_DIR}/${G_NAME}/    
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PYTHON_FILES} ${GISBASE}/${G_DST_DIR}/${G_NAME}
-    DEPENDS ${TRANSLATE_C_FILE} ${PY_MODULE_FILE})
+    DEPENDS ${TRANSLATE_C_FILE} )
 
   #get_property(MODULE_LIST GLOBAL PROPERTY MODULE_LIST)
   #add_dependencies(${G_NAME} ${MODULE_LIST})

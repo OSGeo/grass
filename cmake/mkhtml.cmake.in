@@ -80,9 +80,14 @@ if(PYTHON_SCRIPT)
 if(WIN32)
  file(TO_NATIVE_PATH "${PYTHON_EXECUTABLE}" python_exe)
  file(TO_NATIVE_PATH "${BINARY_DIR}/TEMP" scripts_dir)
-  
  configure_file(${TOP_DIR}/cmake/py_cli.bat.in  ${BINARY_DIR}/TEMP/${PGM_NAME2}.bat @ONLY)
 #message("Writing ${BINARY_DIR}/TEMP/${PGM_NAME2} ")
+else()
+file(COPY ${G_TARGET_FILE} DESTINATION ${BINARY_DIR}/TEMP/)
+ FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE)
+ 
+file(RENAME ${BINARY_DIR}/TEMP/${PGM_NAME2}.py ${BINARY_DIR}/TEMP/${PGM_NAME2})
+
 endif() #WIN32
 endif() #PYTHON_SCRIPT
 
@@ -133,6 +138,10 @@ file(REMOVE ${TMP_HTML_FILE})
 #  endif()
 if(PYTHON_SCRIPT)
 if(WIN32)
- configure_file(${TOP_DIR}/cmake/py_cli_install.bat.in  ${GISBASE}/scripts/${PGM_NAME2}.bat @ONLY)
+ configure_file(${TOP_DIR}/cmake/py_cli_install.bat.in  ${OUTPUT_DIR}/${PGM_NAME2}.bat @ONLY)
+ else()
+ file(INSTALL ${BINARY_DIR}/TEMP/${PGM_NAME2} DESTINATION ${OUTPUT_DIR})
  endif()
+
  endif()
+
