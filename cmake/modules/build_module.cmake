@@ -160,15 +160,22 @@ function(build_module)
  endif()
 
  # To use this property later in build_docs
-
+ 	set(PGM_EXT "")
+	if(WIN32)
+	if(G_EXE)
+	set(PGM_EXT ".exe")
+	endif()
+	endif()
  set_target_properties(${G_NAME} PROPERTIES RUN_HTML_DESCR "${RUN_HTML_DESCR}")
  set_target_properties(${G_NAME} PROPERTIES G_TARGET_FILE "$<TARGET_FILE:${G_NAME}>")
  set_target_properties(${G_NAME} PROPERTIES PGM_NAME "${PGM_NAME}")
  set_target_properties(${G_NAME} PROPERTIES G_SRC_DIR "${G_SRCDIR}")
  set_target_properties(${G_NAME} PROPERTIES G_RUNTIME_OUTPUT_DIR "${G_RUNTIME_OUTPUT_DIR}") 
  set_target_properties(${G_NAME} PROPERTIES G_HTML_FILE_NAME "${HTML_FILE_NAME}.html")
- set_target_properties(${G_TARGET_NAME} PROPERTIES IS_PYTHON_SCRIPT FALSE)
- 
+ set_target_properties(${G_TARGET_NAME} PROPERTIES PYTHON_SCRIPT FALSE)
+ set_target_properties(${G_TARGET_NAME} PROPERTIES PGM_EXT "${PGM_EXT}")
+
+
  if(WITH_DOCS)
 	build_docs(${G_NAME})
  endif() # WITH_DOCS

@@ -1,0 +1,2 @@
+@echo off
+"@python_exe@" "@scripts_dir@\@PGM_NAME2@.py" %*

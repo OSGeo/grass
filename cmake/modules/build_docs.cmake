@@ -1,12 +1,13 @@
 function(build_docs target_name)
   get_target_property(G_SRC_DIR ${target_name} G_SRC_DIR)
   get_target_property(G_TARGET_FILE ${target_name} G_TARGET_FILE)
-  get_target_property(PGM_NAME ${target_name} PGM_NAME)
+  #get_target_property(PGM_NAME ${target_name} PGM_NAME)
   get_target_property(RUN_HTML_DESCR ${target_name} RUN_HTML_DESCR)
   get_target_property(G_RUNTIME_OUTPUT_DIR ${target_name} G_RUNTIME_OUTPUT_DIR)
   get_target_property(G_HTML_FILE_NAME ${target_name} G_HTML_FILE_NAME)
-  get_target_property(IS_PYTHON_SCRIPT ${target_name} IS_PYTHON_SCRIPT)
-   
+  get_target_property(PYTHON_SCRIPT ${target_name} PYTHON_SCRIPT)
+  get_target_property(PGM_EXT ${target_name} PGM_EXT)
+
   set(html_file ${G_SRC_DIR}/${G_HTML_FILE_NAME})
   set(HTML_FILE)
   set(no_docs_list "grass_sqlp;echo;clean_temp;lock;run")
@@ -16,22 +17,22 @@ function(build_docs target_name)
   else()
     file(GLOB html_files ${G_SRC_DIR}/*.html)
     if(html_files)
-      if(NOT "${target_name}" IN_LIST no_docs_list)
+      if(NOT ${target_name} IN_LIST no_docs_list)
 	message(FATAL_ERROR "${html_file} does not exists. ${G_SRC_DIR} \n ${G_RUNTIME_OUTPUT_DIR} | ${target_name}")
       endif()
     endif()
   endif()
   
-
+##message("G_TARGET_FILE=${G_TARGET_FILE}")
   add_custom_command(TARGET ${target_name} POST_BUILD
     COMMAND ${CMAKE_COMMAND}
     -DHTML_FILE=${HTML_FILE}
     -DRUN_HTML_DESCR=${RUN_HTML_DESCR}
 	-DG_TARGET_FILE=${G_TARGET_FILE}
-	-DPGM_NAME=${PGM_NAME}
-	-DIS_PYTHON_SCRIPT=${IS_PYTHON_SCRIPT}
     -DOUTPUT_DIR=${G_RUNTIME_OUTPUT_DIR}
     -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
+	-DPYTHON_SCRIPT=${PYTHON_SCRIPT}
+	-DPGM_EXT=${PGM_EXT}
     -P ${CMAKE_BINARY_DIR}/cmake/mkhtml.cmake
     )
   

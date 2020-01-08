@@ -1,0 +1,2 @@
+@echo off
+"%GRASS_PYTHON%" "%GISBASE%\script\@PGM_NAME2@.py" %*
