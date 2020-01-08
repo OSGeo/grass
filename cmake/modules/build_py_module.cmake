@@ -128,7 +128,7 @@ function(build_py_module)
 
  if(WITH_DOCS)
 	build_docs(${G_TARGET_NAME})
-	add_dependencies(${G_TARGET_NAME} pylib.grass)
+	add_dependencies(${G_TARGET_NAME} pylib.script)
  endif()
 
  install(FILES ${PYTHON_FILES} DESTINATION etc/${G_NAME})
