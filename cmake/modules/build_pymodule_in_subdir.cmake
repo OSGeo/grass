@@ -1,5 +1,5 @@
 include(copy_python_file)
-function(build_pymodule_in_subdir module_name dest_dir)
+function(xbuild_pymodule_in_subdir module_name dest_dir)
   #set(pyc_depends)
 
   file(GLOB img_files ${module_name}/*.png  ${module_name}/*.jpg)
