@@ -4,6 +4,7 @@ function(build_docs target_name)
   get_target_property(RUN_HTML_DESCR ${target_name} RUN_HTML_DESCR)
   get_target_property(G_RUNTIME_OUTPUT_DIR ${target_name} G_RUNTIME_OUTPUT_DIR)
   get_target_property(G_HTML_FILE_NAME ${target_name} G_HTML_FILE_NAME)
+  get_target_property(IS_PYTHON_SCRIPT ${target_name} IS_PYTHON_SCRIPT)
    
   set(html_file ${G_SRC_DIR}/${G_HTML_FILE_NAME})
   set(HTML_FILE)
@@ -26,6 +27,7 @@ function(build_docs target_name)
     -DHTML_FILE=${HTML_FILE}
     -DRUN_HTML_DESCR=${RUN_HTML_DESCR}
     -DG_PGM=${G_PGM}
+	-DIS_PYTHON_SCRIPT=${IS_PYTHON_SCRIPT}
     -DOUTPUT_DIR=${G_RUNTIME_OUTPUT_DIR}
     -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
     -P ${CMAKE_BINARY_DIR}/cmake/mkhtml.cmake
