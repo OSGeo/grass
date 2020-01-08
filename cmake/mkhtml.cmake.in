@@ -1,103 +1,123 @@
+function(fatal_error file_name)
+  message("file_name=${file_name}")
+  message(STATUS "ENV{PATH}=$ENV{PATH}")
+  message(STATUS "ENV{PYTHONPATH}=$ENV{PYTHONPATH}")
+  message(STATUS "ENV{GISRC}=$ENV{GISRC}")
+  message(STATUS "ENV{GISBASE}=$ENV{GISBASE}")
+  if(UNIX)
+    message(STATUS "ENV{LD_LIBRARY_PATH}=$ENV{LD_LIBRARY_PATH}")
+  endif()
+
+  message(STATUS "PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}")
+  message(STATUS "PGM_SOURCE_DIR=${PGM_SOURCE_DIR}")
+  message(STATUS "MKHTML_PY=${MKHTML_PY}")
+  message(STATUS "PGM_NAME=${PGM_NAME}")
+  message(STATUS "OUT_HTML_FILE=${OUT_HTML_FILE}")
+
+  execute_process(COMMAND ${CMAKE_COMMAND} -E remove ${G_PGM})
+  message(SEND_ERROR "Failed to create ${TMP_HTML_FILE}")
+
+endfunction()
+
+if(NOT HTML_FILE)
+  message(STATUS "Dont know to build docs for ${G_PGM}")
+  file(INSTALL ${G_PGM} DESTINATION ${OUTPUT_DIR})
+  return()
+endif()
+
+message("${G_PGM} output  ${OUTPUT_DIR}")
+
 set(GISBASE "@GISBASE@")
 set(TOP_DIR "@CMAKE_SOURCE_DIR@")
 set(BINARY_DIR "@CMAKE_BINARY_DIR@")
 set(PYTHON_EXECUTABLE "@PYTHON_EXECUTABLE@")
 file(TO_NATIVE_PATH "${TOP_DIR}" MODULE_TOPDIR )
 file(TO_NATIVE_PATH "${GISBASE}" GIS_BASE_DIR )
+file(TO_NATIVE_PATH "${GIS_BASE_DIR}/etc/config/rc" GISRC)
+file(TO_NATIVE_PATH "${BINARY_DIR}/bin" BIN_DIR)
+file(TO_NATIVE_PATH "${BINARY_DIR}/scripts" SCRIPTS_DIR)
+file(TO_NATIVE_PATH "${GISBASE}/gui/wxpython" WXPYTHON_DIR)
+file(TO_NATIVE_PATH "${GISBASE}/etc/python" PYTHON_DIR)
+
+if(WIN32)
+  set(P_SEP ";")
+else()
+  set(P_SEP ":")
+endif()
+
+set(ENV{PATH} "${BIN_DIR}${P_SEP}${SCRIPTS_DIR}${P_SEP}$ENV{PATH}")
+
+#message(STATUS "Setup grass environment with ${GISBASE}")
 set(ENV{GISBASE} "${GIS_BASE_DIR}")
 set(ENV{MODULE_TOPDIR} "${MODULE_TOPDIR}")
-file(TO_NATIVE_PATH "${GIS_BASE_DIR}/etc/config/rc" GISRC)
 set(ENV{GISRC} "${GISRC}")
 set(ENV{LC_ALL} C)
 set(ENV{LANG} C)
 set(ENV{LANGUAGE} C)
-
-if (WIN32)
-  set(P_SEP ";")
-else ()
-  set(P_SEP ":")
-endif()
-
-file(TO_NATIVE_PATH "${BINARY_DIR}/bin" BIN_DIR)
-file(TO_NATIVE_PATH "${BINARY_DIR}/scripts" SCRIPTS_DIR)
-
-
-set(ENV{PATH}  "${BIN_DIR}${P_SEP}${SCRIPTS_DIR}${P_SEP}$ENV{PATH}")
-
 if(UNIX)
-	if($ENV{LD_LIBRARY_PATH})
-		set(ENV{LD_LIBRARY_PATH} "${BINARY_DIR}/lib:$ENV{LD_LIBRARY_PATH}")
-	else()
-	set(ENV{LD_LIBRARY_PATH} "${BINARY_DIR}/lib")
-	endif()
+  set(GRASS_LD_LIBRARY_PATH "${BINARY_DIR}/lib:$ENV{LD_LIBRARY_PATH}")
+  string(REGEX REPLACE "^(.*)\\${P_SEP}$" "\\1" GRASS_LD_LIBRARY_PATH "${GRASS_LD_LIBRARY_PATH}")
+  set(ENV{LD_LIBRARY_PATH} ${GRASS_LD_LIBRARY_PATH})
 endif()
 
-set(IS_PYTHON TRUE)
-if(IS_PYTHON)
-	file(TO_NATIVE_PATH "${BINARY_DIR}/gui/wxpython" WXPYTHON_DIR)
-	file(TO_NATIVE_PATH "${BINARY_DIR}/etc/python" PYTHON_DIR)
-	if($ENV{PYTHONPATH})
-		set(ENV{PYTHONPATH} "${WXPYTHON_DIR}/gui/wxpython${P_SEP}${PYTHON_DIR}/etc/python${P_SEP}$ENV{PYTHONPATH}")
-	else()
-		set(ENV{PYTHONPATH} "${WXPYTHON_DIR}/gui/wxpython${P_SEP}${PYTHON_DIR}/etc/python")
-	endif()
-endif()
+set(GRASS_PYTHONPATH "${WXPYTHON_DIR}${P_SEP}${PYTHON_DIR}${P_SEP}${GISBASE}/scripts${P_SEP}$ENV{PYTHONPATH}")
 
-get_filename_component(HTML_FILE_NAME ${INPUT_HTML_FILE} NAME)
-get_filename_component(PGM_SOURCE_DIR ${INPUT_HTML_FILE} PATH)
-get_filename_component(PGM_NAME ${GRASS_PGM} NAME)
+string(REGEX REPLACE "^(.*)\\${P_SEP}$" "\\1" GRASS_PYTHONPATH "${GRASS_PYTHONPATH}")
+set(ENV{PYTHONPATH} "${GRASS_PYTHONPATH}")
+
+get_filename_component(HTML_FILE_NAME ${HTML_FILE} NAME)
+get_filename_component(PGM_SOURCE_DIR ${HTML_FILE} PATH)
+
+if(NOT PGM_NAME)
+  get_filename_component(PGM_NAME ${G_PGM} NAME)
+endif()
 
 string(REPLACE ".html" ".tmp.html" TMP_HTML_NAME ${HTML_FILE_NAME})
 set(TMP_HTML_FILE ${PGM_SOURCE_DIR}/${TMP_HTML_NAME})
 set(OUT_HTML_FILE ${GISBASE}/docs/html/${HTML_FILE_NAME})
 set(MKHTML_PY ${BINARY_DIR}/tools/mkhtml.py)
 
+file(GLOB IMG_FILES ${PGM_SOURCE_DIR}/*.png  ${PGM_SOURCE_DIR}/*.jpg)
+foreach(IMG_FILE ${IMG_FILES})
+  file(INSTALL ${IMG_FILE} DESTINATION ${GISBASE}/docs/html)
+endforeach()
+set(IS_PYTHON 1)
+message("Creating ${TMP_HTML_FILE}:: ${PGM_NAME} --html-description")
+if(RUN_HTML_DESCR)
+  if(IS_PYTHON)
+  execute_process(
+    COMMAND ${PYTHON_EXECUTABLE} ${PGM_NAME} "--html-description"
+    OUTPUT_FILE ${TMP_HTML_FILE}
+    RESULT_VARIABLE html_descr_rv)
+else()
+  execute_process(
+    COMMAND ${}${PGM_NAME} "--html-description"
+    OUTPUT_FILE ${TMP_HTML_FILE}
+    RESULT_VARIABLE html_descr_rv)
+endif()
+  #TODO: print TMP_HTML_FILE contents in case of failure.
+  #message("html_descr_rv=${html_descr_rv}")
+  if(NOT html_descr_rv EQUAL 0)
+    fatal_error(${G_PGM} ${TMP_HTML_FILE})
+  endif()
 
-#message("ENV{PATH}=$ENV{PATH}")
-#message("ENV{PYTHONPATH}=$ENV{PYTHONPATH}")
-#message("ENV{GISRC}=$ENV{GISRC}")
-#message("ENV{GISBASE}=$ENV{GISBASE}")
-#message("ENV{VERSION_NUMBER}=@GRASS_VERSION_NUMBER@")
-#message("ENV{VERSION_DATE}=@GRASS_VERSION_DATE@")
-
-#message("PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}")
-#message("PGM_SOURCE_DIR=${PGM_SOURCE_DIR}")
-#message("MKHTML_PY=${MKHTML_PY}")
-#message("PGM_NAME=${PGM_NAME}")
-#message("OUT_HTML_FILE=${OUT_HTML_FILE}")
-
-
-message("Creating ${TMP_HTML_FILE}")
-execute_process(
-	COMMAND ${PGM_NAME} "--html-description"
-	OUTPUT_FILE ${TMP_HTML_FILE}
-	RESULT_VARIABLE html_descr_rv)
-
-#message("html_descr_rv=${html_descr_rv}")
-if(NOT html_descr_rv EQUAL 0)
-  execute_process(COMMAND ${CMAKE_COMMAND} -E remove ${GRASS_PGM})
-  message(SEND_ERROR "Failed to create ${TMP_HTML_FILE}")
+  if(NOT EXISTS ${TMP_HTML_FILE})
+    fatal_error(${G_PGM} ${TMP_HTML_FILE})
+  endif()
+else()
+  message(FATAL_ERROR "No html-description run for ${G_PGM}")
 endif()
 
-message("Creating ${OUT_HTML_FILE}")
+message(STATUS "Creating ${OUT_HTML_FILE}")
 execute_process(
-COMMAND ${CMAKE_COMMAND} -E chdir ${PGM_SOURCE_DIR} ${PYTHON_EXECUTABLE} ${MKHTML_PY} ${PGM_NAME}
-OUTPUT_FILE ${OUT_HTML_FILE}
-RESULT_VARIABLE mkhtml_rv)
+  COMMAND ${CMAKE_COMMAND} -E chdir ${PGM_SOURCE_DIR} ${PYTHON_EXECUTABLE} ${MKHTML_PY} ${PGM_NAME}
+  OUTPUT_FILE ${OUT_HTML_FILE}
+  RESULT_VARIABLE mkhtml_rv)
 
 #message("mkhtml_rv=${mkhtml_rv}")
 if(NOT mkhtml_rv EQUAL 0)
-  execute_process(COMMAND ${CMAKE_COMMAND} -E remove ${GRASS_PGM})
-  message(SEND_ERROR "Failed to create ${OUT_HTML_FILE}")
+  fatal_error(${G_PGM} ${OUT_HTML_FILE})
 endif()
-message("Copy ${GRASS_PGM} to ${OUTPUT_DIR}")
-execute_process(
-COMMAND ${CMAKE_COMMAND} -E copy ${GRASS_PGM} ${OUTPUT_DIR}
-COMMAND ${CMAKE_COMMAND} -E remove ${TMP_HTML_FILE}
-RESULT_VARIABLE copy_rv)
 
-#message("copy_rv=${copy_rv}")
-if(NOT copy_rv EQUAL 0)
-  execute_process(COMMAND ${CMAKE_COMMAND} -E remove ${GRASS_PGM})
-  message(SEND_ERROR "Failed to copy ${GRASS_PGM} to ${OUTPUT_DIR}")
-endif()
+file(INSTALL ${G_PGM} DESTINATION ${OUTPUT_DIR})
+file(REMOVE ${TMP_HTML_FILE})

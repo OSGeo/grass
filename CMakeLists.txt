@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.3)
-
+set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 project(GRASSGIS)
 
 set(BUILD_SHARED_LIBS ON)
@@ -38,7 +38,7 @@ option(WITH_NLS "enable nls support" ${default_option_enabled})
 option(WITH_BZLIB "enable bzlib support" ON)
 option(WITH_BLAS "enable blas support" ON)
 option(WITH_LAPACK "enable lapack support" ON)
-option(WITH_PYTHON "Build python bindings" OFF)
+option(WITH_PYTHON "Build python bindings" ON)
 option(WITH_LARGEFILES "enable largefile support" ${default_option_enabled})
 option(WITH_DOCS "Build documentation" ON)
 if(APPLE)
@@ -71,14 +71,11 @@ set(GRASS_VERSION_NUMBER ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_V
 message(STATUS "GRASS_VERSION_NUMBER  =  '${GRASS_VERSION_NUMBER}'")
 set(GRASS_VERSION_UPDATE_PKG "0.2")
 
-
 include(set_compiler_flags)
 set_compiler_flags()
 
 include(repo_status)
 repo_status("${CMAKE_CURRENT_LIST_DIR}" GRASS_VERSION_GIT)
-
-
 
 # Setup build locations.
 if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
@@ -93,12 +90,13 @@ endif()
 
 include(update_per_group_target)
 include(copy_python_file)
+include(build_docs)
 include(build_module)
 include(build_program)
 include(build_program_in_subdir)
 include(build_library_in_subdir)
-include(build_grass_script)
-include(build_script_in_subdir)
+include(build_py_module)
+
 include(check_target)
 
 # function(set_runtime_output_dir target_name output_dir)
@@ -173,7 +171,6 @@ set(ALL_SUBDIRS
   vector  
   temporal
   # ps
-  # locale
 )
 
 foreach(d ${ALL_SUBDIRS})
@@ -181,13 +178,16 @@ foreach(d ${ALL_SUBDIRS})
 endforeach()
 
 if(WITH_PYTHON)
- # add_subdirectory(gui)
+ add_subdirectory(gui)
 endif()
 
 if(WITH_DOCS)
   add_subdirectory(doc)
   add_subdirectory(man)
 endif() # WITH_DOCS
+
+
+####add_subdirectory(locale)
 
 # TODO: To be discussed
 # add_subdirectory(testsuite)

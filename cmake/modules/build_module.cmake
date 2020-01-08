@@ -1,14 +1,17 @@
 include(GenerateExportHeader)
 function(build_module)
-  cmake_parse_arguments(G  "EXE" "NAME;SRCDIR;SRC_REGEX;RUNTIME_OUTPUT_DIR;PACKAGE" "SOURCES;INCLUDES;DEPENDS;OPTIONAL_DEPENDS;DEFS;HEADERS" ${ARGN} )
+  cmake_parse_arguments(G
+    "EXE"
+    "NAME;SRCDIR;SRC_REGEX;RUNTIME_OUTPUT_DIR;PACKAGE;HTML_FILE_NAME"
+    "SOURCES;INCLUDES;DEPENDS;OPTIONAL_DEPENDS;DEFS;HEADERS"
+    ${ARGN} )
 
   if(NOT G_NAME)
     message(FATAL_ERROR "G_NAME empty")
   endif()
 
-  update_per_group_target( ${G_NAME} )
+  ## update_per_group_target(${G_NAME})
 
- 
   if(NOT G_SRC_REGEX)
     set(G_SRC_REGEX "*.c")
   endif()
@@ -38,30 +41,34 @@ function(build_module)
     set(${G_NAME}_SRCS ${G_SOURCES})
   endif() 
 
-  
   if(G_EXE)
-  #set(MODULE_LIST "${MODULE_LIST} ${G_NAME}")
-  #list(APPEND MODULE_LIST ${G_NAME})
-  #SET(MODULE_LIST  "${MODULE_LIST} ${G_NAME}" CACHE INTERNAL "source_list")
-  get_property(MODULE_LIST GLOBAL PROPERTY MODULE_LIST)
-  set_property(GLOBAL PROPERTY MODULE_LIST "${MODULE_LIST} ${G_NAME}")
-
-#message(FATAL_ERROR "EXCLUDED_MODULE_LIST=${EXCLUDED_MODULE_LIST}")
     add_executable(${G_NAME} ${${G_NAME}_SRCS})
-
     set_target_properties (${G_NAME} PROPERTIES FOLDER bin)
+    set(default_html_file_name ${G_NAME})
+
   else()
     add_library(${G_NAME} ${${G_NAME}_SRCS})
     set_target_properties (${G_NAME} PROPERTIES FOLDER lib)
     set_target_properties(${G_NAME} PROPERTIES OUTPUT_NAME ${G_NAME}.${GRASS_VERSION_NUMBER})
-
     set(export_file_name "${CMAKE_BINARY_DIR}/include/export/${G_NAME}_export.h")
-    generate_export_header(${G_NAME}
-	  STATIC_DEFINE "STATIC_BUILD"
-	  EXPORT_FILE_NAME ${export_file_name})
-   endif()
+    # Default is to use library target name without grass_ prefix
+    string(REPLACE "grass_" "" default_html_file_name ${G_NAME})
 
-   add_dependencies(${G_NAME} copy_header)      
+    generate_export_header(${G_NAME}
+      STATIC_DEFINE "STATIC_BUILD"
+      EXPORT_FILE_NAME ${export_file_name})
+  endif()
+
+  if(G_HTML_FILE_NAME)
+    set(HTML_FILE_NAME ${G_HTML_FILE_NAME})
+  else()
+    set(HTML_FILE_NAME ${default_html_file_name})
+  endif()
+
+  get_property(MODULE_LIST GLOBAL PROPERTY MODULE_LIST)
+  set_property(GLOBAL PROPERTY MODULE_LIST "${MODULE_LIST};${G_NAME}")
+  
+  add_dependencies(${G_NAME} copy_header)
 
   foreach(G_OPTIONAL_DEPEND ${G_OPTIONAL_DEPENDS})
     if(TARGET ${G_OPTIONAL_DEPEND})
@@ -69,7 +76,6 @@ function(build_module)
     endif()
   endforeach()
  foreach(G_DEPEND ${G_DEPENDS})
-
    if(NOT TARGET ${G_DEPEND})
      message(FATAL_ERROR "${G_DEPEND} not a target")
      break()
@@ -94,7 +100,6 @@ function(build_module)
    target_compile_definitions(${G_NAME} PUBLIC "${G_DEF}")
  endforeach()
 
-
  set(package_define)
  if(NOT G_PACKAGE)
    if(G_EXE)
@@ -109,36 +114,33 @@ function(build_module)
  endif()
 
  target_compile_definitions(${G_NAME} PRIVATE "-DPACKAGE=\"${package_define}\"")
-
+ 
  foreach(dep ${G_DEPENDS} ${G_OPTIONAL_DEPENDS})
    if(TARGET ${dep})
      get_target_property(interface_def ${dep} INTERFACE_COMPILE_DEFINITIONS)
-	 if(interface_def)
+     if(interface_def)
        target_compile_definitions(${G_NAME} PRIVATE "${interface_def}")
-	 endif()
+     endif()
    endif()
-    target_link_libraries(${G_NAME} ${dep})
+   target_link_libraries(${G_NAME} ${dep})
  endforeach()
 
  set(RUN_HTML_DESCR TRUE)
-   #auto set if to run RUN_HTML_DESCR
-   if(G_EXE)
-     set(RUN_HTML_DESCR TRUE)
-     if (G_RUNTIME_OUTPUT_DIR)
-       set(RUN_HTML_DESCR FALSE)
-     endif()
-   # g.parser does not have --html-description.
+ # Auto set if to run RUN_HTML_DESCR
+ if(G_EXE)
+   set(RUN_HTML_DESCR TRUE)
+   if (G_RUNTIME_OUTPUT_DIR)
+     set(RUN_HTML_DESCR FALSE)
+   endif()
+   # g.parser and some others does not have --html-description.
    if( ${G_NAME} IN_LIST NO_HTML_DESCR_TARGETS)
      set(RUN_HTML_DESCR FALSE)
    endif()     
-   else()
-     set(RUN_HTML_DESCR FALSE)
-   endif()
+ else()
+   set(RUN_HTML_DESCR FALSE)
+ endif()
 
-#   message(" ${G_NAME} == ${RUN_HTML_DESCR}") 
-
-
-  set(install_dest "")
+ set(install_dest "")
  if(NOT G_RUNTIME_OUTPUT_DIR)
    if(G_EXE)
      set(G_RUNTIME_OUTPUT_DIR "${GISBASE}/bin")
@@ -151,12 +153,16 @@ function(build_module)
    set(install_dest "${G_RUNTIME_OUTPUT_DIR}")
    set(G_RUNTIME_OUTPUT_DIR "${GISBASE}/${install_dest}")
  endif()
- #set_target_properties(${G_NAME} PROPERTIES prop1 "source_directory name")
- set_target_properties(${G_NAME} PROPERTIES G_SRCDIR "${G_SRCDIR}")
 
-     #add_custom_command(TARGET ${G_NAME} POST_BUILD
-     # COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${G_NAME}> ${G_RUNTIME_OUTPUT_DIR})
-  build_docs(${G_NAME} ${G_RUNTIME_OUTPUT_DIR})
+ # To use this property later in build_docs
+ 
+ set_target_properties(${G_NAME} PROPERTIES RUN_HTML_DESCR "${RUN_HTML_DESCR}")
+ set_target_properties(${G_NAME} PROPERTIES G_PGM "$<TARGET_FILE:${G_NAME}>")
+ set_target_properties(${G_NAME} PROPERTIES G_SRC_DIR "${G_SRCDIR}")
+ set_target_properties(${G_NAME} PROPERTIES G_RUNTIME_OUTPUT_DIR "${G_RUNTIME_OUTPUT_DIR}") 
+ set_target_properties(${G_NAME} PROPERTIES G_HTML_FILE_NAME "${HTML_FILE_NAME}.html")
+ 
+ build_docs(${G_NAME})
 
  if(WITH_DOCSX)
  set(html_files)
@@ -218,47 +224,5 @@ function(build_module)
 
 endfunction()
 
- function(build_docs target_name G_RUNTIME_OUTPUT_DIR)
 
-   if(${target_name} STREQUAL "g.parser")
-   #message("Dont know to build docs for ${target_name}")
-   return()
-   endif()
 
-  get_target_property(G_SRCDIR ${target_name} G_SRCDIR)
-
- # message("G_SRCDIR for ${G_NAME} is ${G_SRCDIR}")
-   
-  set(html_file ${G_SRCDIR}/${target_name}.html)
-  set(input_html_file)
-  if(EXISTS ${html_file})
-  set(input_html_file ${html_file})
-  set(input_html_tmp_file ${G_SRCDIR}/${target_name}.tmp.html)
-   #message("html_file for ${target_name} is ${html_file}")
-   else()
-   #message("${target_name} is a library?")
-   endif()
-
-   if(NOT input_html_file)
-   #message("Dont know to build docs for ${target_name}")
-   return()
-   endif()
-
-  add_custom_command(TARGET ${target_name} POST_BUILD
-    COMMAND ${CMAKE_COMMAND}
-      -DINPUT_HTML_FILE=${input_html_file}
-      -DIS_EXECUTABLE=TRUE
-	  -Dexecutable_name=${target_name}
-	  -DGRASS_PGM=$<TARGET_FILE:${target_name}>
-	  -DOUTPUT_DIR=${G_RUNTIME_OUTPUT_DIR}
-	  -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
-      -P ${CMAKE_BINARY_DIR}/cmake/mkhtml.cmake
-	#COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${target_name}> ${G_RUNTIME_OUTPUT_DIR}
-	#COMMAND ${CMAKE_COMMAND} -E touch  ${input_html_tmp_file}
-    #COMMENT "Generating html for ${target_name}"
-	)
-    #VERBATIM)
-  
-  #add_custom_target(${target_name}_html ALL DEPENDS ${G_RUNTIME_OUTPUT_DIR}/${target_name}.exe)
-
- endfunction()
