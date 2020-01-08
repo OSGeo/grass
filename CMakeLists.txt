@@ -134,10 +134,6 @@ configure_file(cmake/run_grass${SCRIPT_EXT}.in ${RUN_GRASS} @ONLY)
 set(NO_HTML_DESCR_TARGETS "g.parser;ximgview")
 add_subdirectory(include)
 
-if(MSVC)
-  include_directories("${CMAKE_SOURCE_DIR}/msvc/")
-endif()
-
 include_directories("${CMAKE_BINARY_DIR}/include")
 
 execute_process(
