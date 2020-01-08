@@ -7,7 +7,8 @@ build_program_in_subdir(dbf
   SOURCES ${dbf_SRCS}
   DEPENDS grass_gis grass_dbmidriver
   grass_shape grass_sqlp
-  RUNTIME_OUTPUT_DIR "db/driver/"
+  HTML_FILE_NAME grass-dbf
+  RUNTIME_OUTPUT_DIR "driver/db/"
   )
 
 set(db_drivers)
@@ -15,34 +16,36 @@ list(APPEND db_drivers dbf)
 #TODO ; add targets
 if(ODBC_LIB)
   add_subdirectory(odbc)
-  list(APPEND db_drivers "odbc")
+  #list(APPEND db_drivers "odbc")
 endif()
 
 if(MYSQL_LIB)
   add_subdirectory(mysql)
-  list(APPEND db_drivers "mysql")
+  #list(APPEND db_drivers "mysql")
 endif()
 
 if(TARGET POSTGRES)
   add_subdirectory(postgres)
-  list(APPEND db_drivers "postrgresq")
+  #list(APPEND db_drivers "postrgresq")
 endif()
 
 if(TARGET SQLITE)
-  list(APPEND db_drivers "sqlite")
+  list(APPEND db_drivers sqlite)
   build_program_in_subdir(sqlite
   DEPENDS grass_gis grass_dbmidriver
   grass_sqlp SQLITE
-  RUNTIME_OUTPUT_DIR "db/driver/"
+  HTML_FILE_NAME grass-sqlite
+  RUNTIME_OUTPUT_DIR "driver/db/"
   )
 endif()
 
 if(TARGET GDAL)
-  list(APPEND db_drivers "ogr")
+  list(APPEND db_drivers ogr)
   build_program_in_subdir(ogr
   DEPENDS grass_gis grass_dbmidriver GDAL
   grass_sqlp
-  RUNTIME_OUTPUT_DIR "db/driver/")
+  HTML_FILE_NAME grass-ogr
+  RUNTIME_OUTPUT_DIR "driver/db/")
 endif()
 
-set(db_driver_targets ${db_drivers} PARENT_SCOPE)
+set(db_drivers ${db_drivers} PARENT_SCOPE)
