@@ -1,14 +1,8 @@
-
-
-build_script_in_subdir(r.shade)
-
-build_script_in_subdir(d.correlate)
-
-build_script_in_subdir(d.frame)
-
-build_script_in_subdir(d.out.file )
-
-set(scripts_SUBDIRS
+set(script_DIRS
+  r.shade
+  d.correlate
+  d.frame
+  d.out.file
   d.to.rast
   d.polar
   d.rast.edit
@@ -43,6 +37,7 @@ set(scripts_SUBDIRS
   r.import
   r.in.aster
   r.in.srtm
+  r.in.wms
   r.mask
   r.out.xyz
   r.pack
@@ -78,16 +73,10 @@ set(scripts_SUBDIRS
   v.unpack
   v.what.strds
   v.what.vect
-  
   )
 
-  #TODO
-  #r.in.wms
-  #wxpyimgview
-  build_script_in_subdir( r.in.wms )
-  
-foreach(d ${scripts_SUBDIRS})
-build_script_in_subdir(${d} )
+#TODO: MODULES DISABLED
+#wxpyimgview
+foreach(script_DIR ${script_DIRS})
+  build_script_in_subdir(${script_DIR})
 endforeach()
-
-

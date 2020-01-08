@@ -1,4 +1,4 @@
-set(temporal_SUBDIRS
+set(temporal_DIRS
   t.create
   t.support
   t.topology
@@ -51,7 +51,6 @@ set(temporal_SUBDIRS
 
 build_program_in_subdir(t.connect DEPENDS grass_gis grass_temporal)
 
-foreach(d ${temporal_SUBDIRS})
-  build_script_in_subdir(${d})
+foreach(temporal_DIR ${temporal_DIRS})
+  build_script_in_subdir(${temporal_DIR})
 endforeach()
-

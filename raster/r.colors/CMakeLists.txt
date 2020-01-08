@@ -1,7 +1,5 @@
 
-set(r_colors_SRCS
-  raster_main.c edit_colors.c rules.c stats.c
-  )
+set(r_colors_SRCS raster_main.c edit_colors.c rules.c stats.c)
 set(r3_colors_SRCS
   raster3d_main.c edit_colors.c rules.c stats.c)
 
