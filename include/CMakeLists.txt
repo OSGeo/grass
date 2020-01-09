@@ -236,15 +236,12 @@ add_custom_target(copy_header DEPENDS ${include_depends})
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in
   "${CMAKE_CURRENT_BINARY_DIR}/grass/version.h")
 
-message(STATUS "Creating ${CMAKE_BINARY_DIR}/grass/config.h")
+message(STATUS "Creating ${CMAKE_CURRENT_BINARY_DIR}/grass/config.h")
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake.in
   "${CMAKE_CURRENT_BINARY_DIR}/grass/config.h")
 
-  if(MSVC)
-  file(COPY "${CMAKE_SOURCE_DIR}/msvc/strings.h" DESTINATION ${CMAKE_BINARY_DIR}/include/)
-  file(COPY "${CMAKE_SOURCE_DIR}/msvc/unistd.h" DESTINATION ${CMAKE_BINARY_DIR}/include/)
-endif()
+
 file(WRITE ${CMAKE_BINARY_DIR}/include/grass/copying.h "")
 file(STRINGS ${CMAKE_SOURCE_DIR}/COPYING copying_lines)
 foreach(copying_line ${copying_lines})

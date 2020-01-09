@@ -135,6 +135,9 @@ set(NO_HTML_DESCR_TARGETS "g.parser;ximgview")
 add_subdirectory(include)
 
 include_directories("${CMAKE_BINARY_DIR}/include")
+if(MSVC)
+	include_directories("${CMAKE_SOURCE_DIR}/msvc")
+endif()
 
 execute_process(
   COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/TEMP
