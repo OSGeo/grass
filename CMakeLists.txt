@@ -131,7 +131,7 @@ endif()
 configure_file(cmake/run_python${SCRIPT_EXT}.in ${RUN_PYTHON} @ONLY)
 configure_file(cmake/run_grass${SCRIPT_EXT}.in ${RUN_GRASS} @ONLY)
 
-set(NO_HTML_DESCR_TARGETS "g.parser;ximgview")
+set(NO_HTML_DESCR_TARGETS "g.parser;ximgview;test.raster3d.lib")
 add_subdirectory(include)
 
 include_directories("${CMAKE_BINARY_DIR}/include")
