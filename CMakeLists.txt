@@ -137,6 +137,7 @@ add_subdirectory(include)
 include_directories("${CMAKE_BINARY_DIR}/include")
 
 execute_process(
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/TEMP
   COMMAND ${CMAKE_COMMAND} -E echo "Creating directories in ${GISBASE}"
   COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/bin/
   COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/demolocation/

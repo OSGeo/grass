@@ -152,4 +152,5 @@ if(WIN32)
  endif()
 
  endif()
-
+ file(REMOVE  ${TMP_HTML_FILE})
+ file(REMOVE ${BINARY_DIR}/TEMP/${PGM_NAME2})
