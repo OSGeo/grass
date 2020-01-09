@@ -121,7 +121,7 @@ message("Running pythonn ${PGM_NAME2}${PGM_EXT} --html-description")
   if(NOT EXISTS ${TMP_HTML_FILE})
     fatal_error(${TMP_HTML_FILE})
   endif()
-else()
+else(PYTHON_SCRIPT)
 message("Running ${PGM_NAME2}${PGM_EXT} --html-description")
   execute_process(
 
@@ -138,9 +138,10 @@ message("Running ${PGM_NAME2}${PGM_EXT} --html-description")
   if(NOT EXISTS ${TMP_HTML_FILE})
     fatal_error(${TMP_HTML_FILE})
   endif()
-else()
+endif(PYTHON_SCRIPT)
+else(RUN_HTML_DESCR)
   message(STATUS "No html-description run for ${PGM_NAME2}")
-endif()
+endif(RUN_HTML_DESCR)
 
 message(STATUS "Creating ${OUT_HTML_FILE}")
 execute_process(
