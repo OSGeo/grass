@@ -80,3 +80,7 @@ set(script_DIRS
 foreach(script_DIR ${script_DIRS})
   build_script_in_subdir(${script_DIR})
 endforeach()
+
+
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/r.in.wms 
+DESTINATION ${CMAKE_BINARY_DIR}/etc/)
