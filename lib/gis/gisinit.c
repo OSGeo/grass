@@ -85,11 +85,13 @@ void G__no_gisinit(const char *version)
     if (initialized)
 	return;
 
+    /* temporary disabled since svn keywords are not maintained by git
     if (strcmp(version, GIS_H_VERSION) != 0)
 	G_fatal_error(_("Module built against version %s but "
 			"trying to use version %s. "
 			"You need to rebuild GRASS GIS or untangle multiple installations."),
                         version, GIS_H_VERSION);
+    */
     gisinit();
 }
 
