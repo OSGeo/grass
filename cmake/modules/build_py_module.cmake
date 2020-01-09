@@ -128,9 +128,10 @@ function(build_py_module)
  ## message("Adding python taret ${G_TARGET_NAME}")
 
   set(MAIN_SCRIPT_FILE ${CMAKE_BINARY_DIR}/TEMP/${G_TARGET_NAME}.py)
-
+  if(EXISTS ${PY_MODULE_FILE})
+  file(COPY ${PY_MODULE_FILE} DESTINATION ${CMAKE_BINARY_DIR}/TEMP/)
+  endif()
   add_custom_target(${G_TARGET_NAME} ALL
-
     COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/${G_DST_DIR}/${G_NAME}/    
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PYTHON_FILES} ${GISBASE}/${G_DST_DIR}/${G_NAME}
     DEPENDS ${TRANSLATE_C_FILE} )
