@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3:10
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
