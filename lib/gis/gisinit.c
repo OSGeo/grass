@@ -54,7 +54,7 @@ void G__gisinit(const char *version, const char *pgm)
 			"trying to use version %s. "
 			"You need to rebuild GRASS GIS or untangle multiple installations."),
                         version, GIS_H_VERSION);
-
+    
     /* Make sure location and mapset are set */
     G_location_path();
     mapset = G_mapset();
