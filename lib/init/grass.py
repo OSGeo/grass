@@ -1536,7 +1536,7 @@ def get_grass_env_file(sh, grass_config_dir):
     """Get name of the shell-specific GRASS environment (rc) file"""
     if sh in ['csh', 'tcsh']:
         grass_env_file = os.path.join(grass_config_dir, 'cshrc')
-    elif sh in ['bash', 'msh', 'cygwin', 'sh']:
+    elif sh in ['bash', 'ash', 'msh', 'cygwin', 'sh']:
         grass_env_file = os.path.join(grass_config_dir, 'bashrc')
     elif sh == 'zsh':
         grass_env_file = os.path.join(grass_config_dir, 'zshrc')
