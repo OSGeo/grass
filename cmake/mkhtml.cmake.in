@@ -73,19 +73,20 @@ get_filename_component(PGM_SOURCE_DIR ${HTML_FILE} PATH)
 
 
 string(REPLACE ".html"  "" PGM_NAME2 "${HTML_FILE_NAME}" )
-message("PGM_NAME2=${PGM_NAME2}")
-message("G_TARGET_FILE2x=${G_TARGET_FILE}")
+#message("PGM_NAME2=${PGM_NAME2}")
+#message("G_TARGET_FILE2x=${G_TARGET_FILE}")
 
 if(PYTHON_SCRIPT)
 
- file(TO_NATIVE_PATH "${PYTHON_EXECUTABLE}" python_exe)
- file(TO_NATIVE_PATH "${BINARY_DIR}/TEMP" scripts_dir)
- configure_file(${TOP_DIR}/cmake/py_cli.bat.in  ${BINARY_DIR}/TEMP/${PGM_NAME2}.bat @ONLY)
+ #file(TO_NATIVE_PATH "${PYTHON_EXECUTABLE}" python_exe)
+# file(TO_NATIVE_PATH "${BINARY_DIR}/TEMP" scripts_dir)
+# configure_file(${TOP_DIR}/cmake/py_cli.bat.in  ${BINARY_DIR}/TEMP/${PGM_NAME2}.bat @ONLY)
 #message("Writing ${BINARY_DIR}/TEMP/${PGM_NAME2} ")
 else()
 configure_file(${G_TARGET_FILE} ${BINARY_DIR}/CMakeFiles/${PGM_NAME2} COPYONLY)
-file(COPY ${BINARY_DIR}/CMakeFiles/${PGM_NAME2} DESTINATION ${BINARY_DIR}/TEMP/
- FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE)
+#file(COPY ${BINARY_DIR}/CMakeFiles/${PGM_NAME2} DESTINATION ${BINARY_DIR}/TEMP/
+#file(COPY ${G_TARGET_FILE}/CMakeFiles/${PGM_NAME2} DESTINATION ${BINARY_DIR}/TEMP/
+# FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE)
 
 
 endif() #WIN32
@@ -147,7 +148,7 @@ execute_process(
   OUTPUT_FILE ${OUT_HTML_FILE}
   RESULT_VARIABLE mkhtml_rv)
 
-message("mkhtml_rv=${mkhtml_rv}")
+#message("mkhtml_rv=${mkhtml_rv}")
 if(NOT mkhtml_rv EQUAL 0)
   fatal_error(${OUT_HTML_FILE})
 endif()
@@ -156,16 +157,18 @@ file(GLOB IMG_FILES ${PGM_SOURCE_DIR}/*.png  ${PGM_SOURCE_DIR}/*.jpg)
 foreach(IMG_FILE ${IMG_FILES})
   file(INSTALL ${IMG_FILE} DESTINATION ${GISBASE}/docs/html)
 endforeach()
-file(INSTALL ${G_TARGET_FILE} DESTINATION ${OUTPUT_DIR})
+
 file(REMOVE ${TMP_HTML_FILE})
 #if( NOT PGM_NAME2 STREQUAL "g.parser")
   #fatal_error(${PGM_NAME2} ${OUT_HTML_FILE})
 #  endif()
 if(PYTHON_SCRIPT)
 if(WIN32)
+file(INSTALL ${G_TARGET_FILE} DESTINATION ${OUTPUT_DIR})
  configure_file(${TOP_DIR}/cmake/py_cli_install.bat.in  ${OUTPUT_DIR}/${PGM_NAME2}.bat @ONLY)
  else()
- file(INSTALL ${BINARY_DIR}/TEMP/${PGM_NAME2} DESTINATION ${OUTPUT_DIR})
+ file(INSTALL ${G_TARGET_FILE} DESTINATION ${OUTPUT_DIR}
+ RENAME ${PGM_NAME})
  endif()
 
  endif()

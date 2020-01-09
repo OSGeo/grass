@@ -94,16 +94,16 @@ function(build_py_module)
 	  #${CMAKE_BINARY_DIR}/CMakeFiles/scripts/${PGM_NAME})
       ###file(COPY ${CMAKE_BINARY_DIR}/CMakeFiles/scripts/${PGM_NAME} DESTINATION ${CMAKE_BINARY_DIR}/scripts)
   else()
-  	if(${G_TYPE} IN_LIST types)
+  	#if(${G_TYPE} IN_LIST types)
 	#configure_file(${PY_MODULE_FILE} ${CMAKE_BINARY_DIR}/CMakeFiles/scripts/${PGM_NAME})
-	file(COPY ${PY_MODULE_FILE} DESTINATION ${CMAKE_BINARY_DIR}/TEMP/
-	  FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
+	#file(COPY ${PY_MODULE_FILE} DESTINATION ${CMAKE_BINARY_DIR}/TEMP/
+	 # FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
 
 	  	#COMMAND ${CMAKE_COMMAND} -E copy ${PY_MODULE_FILE} ${CMAKE_BINARY_DIR}//
-	  endif()
+	 # endif()
   endif()
 	  
-    set(MAIN_SCRIPT_FILE "${GISBASE}/scripts/${PGM_NAME}")
+    #set(MAIN_SCRIPT_FILE "${GISBASE}/scripts/${PGM_NAME}")
 	#message( "MAIN_SCRIPT_FILE=${MAIN_SCRIPT_FILE}")
 	  endif()
   ######################## TRANSLATE STRING FOR SCRIPTS #########################
@@ -132,8 +132,9 @@ function(build_py_module)
   file(COPY ${PY_MODULE_FILE} DESTINATION ${CMAKE_BINARY_DIR}/TEMP/)
   endif()
   add_custom_target(${G_TARGET_NAME} ALL
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/${G_DST_DIR}/${G_NAME}/    
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PYTHON_FILES} ${GISBASE}/${G_DST_DIR}/${G_NAME}
+    #COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/${G_DST_DIR}/${G_NAME}/    
+	#COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PY_MODULE_FILE} ${CMAKE_BINARY_DIR}/TEMP/
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PYTHON_FILES} ${GISBASE}/${G_DST_DIR}/
     DEPENDS ${TRANSLATE_C_FILE} )
 
   #get_property(MODULE_LIST GLOBAL PROPERTY MODULE_LIST)
