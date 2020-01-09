@@ -18,7 +18,6 @@ ENV GRASS_CONFIG="\
       --with-cxx \
       --with-proj --with-proj-share=/usr/share/proj \
       --with-gdal \
-      --with-pdal \
       --with-python \
       --with-geos \
       --with-sqlite \
@@ -28,6 +27,7 @@ ENV GRASS_CONFIG="\
       --with-fftw \
       --with-postgres --with-postgres-includes='/usr/include/postgresql' \
       --without-freetype \
+      --without-pdal \
       --without-openmp \
       --without-opengl \
       --without-nls \
@@ -62,7 +62,6 @@ ENV PACKAGES="\
       gettext \
       geos \
       gnutls \
-      laszip \
       libbz2 \
       libjpeg-turbo \
       libpng \
@@ -71,7 +70,6 @@ ENV PACKAGES="\
       ncurses \
       openjpeg \
       openblas \
-      pdal \
       py3-numpy \
       py3-pillow \
       py3-six \
@@ -97,14 +95,12 @@ ENV PACKAGES="\
       gdal-dev \
       geos-dev \
       gnutls-dev \
-      laszip-dev \
       libc6-compat \
       libjpeg-turbo-dev \
       libpng-dev \
       make \
       openjpeg-dev \
       openblas-dev \
-      pdal-dev \
       postgresql-dev \
       proj-dev \
       python3-dev \
@@ -204,15 +200,12 @@ RUN pip install grass-session
 # set GRASSBIN
 ENV GRASSBIN="/usr/local/bin/grass"
 
-# ===========================
-# TEST grass-session and PDAL
-# ===========================
+# ==================
+# TEST grass-session
+# ==================
 
-WORKDIR /tmp
-COPY docker/testdata/simple.laz .
 WORKDIR /scripts
 COPY docker/testdata/test_grass_session.py .
-## just scan the LAZ file
 # TODO: fix test
 #RUN /usr/bin/python3 /scripts/test_grass_session.py
 
@@ -231,7 +224,6 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
 
 # show installed version
 RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
-    pdal --version && \
     python3 --version
 
 CMD [$GRASSBIN, "--version"]
