@@ -178,7 +178,6 @@ RUN rm -rf /usr/local/grass79/demolocation; \
     rm -rf /usr/local/grass79/share;
 
 
-
 FROM common as grass
 
 ENV LC_ALL="en_US.UTF-8"
@@ -223,4 +222,4 @@ RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
 WORKDIR /grassdb
 VOLUME /grassdb
 
-CMD [$GRASSBIN, "--version"]
+CMD $GRASSBIN --version
