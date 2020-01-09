@@ -11,11 +11,11 @@ set GEOTIFF_CSV=@GEOTIFF_CSV@
 
 ::set FONTCONFIG_FILE=%GISBASE%\etc\fonts.conf
 
-set PATH=@DLL_PATH_LIST@;%PATH%
+set PATH=@gisbase_init_dir@\bin;@BINARY_DIR@\bin;@DLL_PATH_LIST@;%PATH%
 
 set GISBASE=@gisbase_init_dir@
 
-set PYTHONPATH=@gisbase_init_dir@\etc\python;=@GISBASE_INSTALL@\gui\wxpython;
+set PYTHONPATH=@gisbase_init_dir@\etc\python;@gisbase_init_dir@\gui\wxpython;@gisbase_init_dir@\etc
 
 set GRASS_PYTHON=@GRASS_PYTHON@
 

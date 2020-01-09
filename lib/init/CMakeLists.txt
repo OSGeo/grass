@@ -11,6 +11,8 @@ else()
 set(script_file_name "grass.sh")
 endif()
 
+file(TO_NATIVE_PATH  ${CMAKE_BINARY_DIR}/bin BINARY_DIR)
+
 set(CONFIG_PROJSHARE)
 get_filename_component(PROJ_INSTALL_PREFIX ${PROJ_INCLUDE_DIR} PATH)
 if(DEFINED ENV{PROJSHARE})
