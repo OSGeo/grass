@@ -1,7 +1,6 @@
 function(build_docs target_name)
   get_target_property(G_SRC_DIR ${target_name} G_SRC_DIR)
   get_target_property(G_TARGET_FILE ${target_name} G_TARGET_FILE)
-  #get_target_property(PGM_NAME ${target_name} PGM_NAME)
   get_target_property(RUN_HTML_DESCR ${target_name} RUN_HTML_DESCR)
   get_target_property(G_RUNTIME_OUTPUT_DIR ${target_name} G_RUNTIME_OUTPUT_DIR)
   get_target_property(G_HTML_FILE_NAME ${target_name} G_HTML_FILE_NAME)
