@@ -94,9 +94,13 @@ function(build_py_module)
 	  #${CMAKE_BINARY_DIR}/CMakeFiles/scripts/${PGM_NAME})
       ###file(COPY ${CMAKE_BINARY_DIR}/CMakeFiles/scripts/${PGM_NAME} DESTINATION ${CMAKE_BINARY_DIR}/scripts)
   else()
+  	if(${G_TYPE} IN_LIST "GUI;SCRIPT")
 	#configure_file(${PY_MODULE_FILE} ${CMAKE_BINARY_DIR}/CMakeFiles/scripts/${PGM_NAME})
-	file(COPY ${PY_MODULE_FILE} DESTINATION ${GISBASE}/scripts/
+	file(COPY ${PY_MODULE_FILE} DESTINATION ${CMAKE_BINARY_DIR}/TEMP/
 	  FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
+
+	  	#COMMAND ${CMAKE_COMMAND} -E copy ${PY_MODULE_FILE} ${CMAKE_BINARY_DIR}//
+	  endif()
   endif()
 	  
     set(MAIN_SCRIPT_FILE "${GISBASE}/scripts/${PGM_NAME}")
@@ -126,7 +130,7 @@ function(build_py_module)
   set(MAIN_SCRIPT_FILE ${CMAKE_BINARY_DIR}/TEMP/${G_TARGET_NAME}.py)
 
   add_custom_target(${G_TARGET_NAME} ALL
-	COMMAND ${CMAKE_COMMAND} -E copy ${PY_MODULE_FILE} ${CMAKE_BINARY_DIR}/TEMP/
+
     COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/${G_DST_DIR}/${G_NAME}/    
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PYTHON_FILES} ${GISBASE}/${G_DST_DIR}/${G_NAME}
     DEPENDS ${TRANSLATE_C_FILE} )
@@ -154,22 +158,26 @@ function(build_py_module)
 
 
  if(WITH_DOCS)
+ 	set(PGM_EXT "")
 	if(NOT G_TYPE STREQUAL "LIB")
-	set(PGM_EXT "")
-	if(WIN32)
-	set(PGM_EXT ".bat")
-	endif()
+		if(WIN32)
+			set(PGM_EXT ".bat")
+		endif()
+
+
+
 
   set_target_properties(${G_TARGET_NAME} PROPERTIES G_SRC_DIR "${G_SRC_DIR}")
   set_target_properties(${G_TARGET_NAME} PROPERTIES G_TARGET_FILE "${MAIN_SCRIPT_FILE}")
   #set_target_properties(${G_TARGET_NAME} PROPERTIES PGM_NAME "${PGM_NAME}")
   set_target_properties(${G_TARGET_NAME} PROPERTIES RUN_HTML_DESCR TRUE)
   set_target_properties(${G_TARGET_NAME} PROPERTIES PYTHON_SCRIPT TRUE)
-  set_target_properties(${G_TARGET_NAME} PROPERTIES PGM_EXT "${PGM_EXT}")
+  #set_target_properties(${G_TARGET_NAME} PROPERTIES PGM_EXT "${PGM_EXT}")
   set_target_properties(${G_TARGET_NAME} PROPERTIES G_RUNTIME_OUTPUT_DIR "${GISBASE}/scripts")
   set_target_properties(${G_TARGET_NAME} PROPERTIES G_HTML_FILE_NAME "${HTML_FILE_NAME}.html")
-
+  	if(${G_TYPE} IN_LIST "GUI;SCRIPT")
 		build_docs(${G_TARGET_NAME})
+		endif()
 	endif()
 
 	if(${G_TYPE} IN_LIST "GUI;SCRIPT")

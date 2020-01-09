@@ -77,7 +77,9 @@ message("PGM_NAME2=${PGM_NAME2}")
 message("G_TARGET_FILE2x=${G_TARGET_FILE}")
 
 if(PYTHON_SCRIPT)
+set(PGM_EXT "")
 if(WIN32)
+set(PGM_EXT ".bat")
  file(TO_NATIVE_PATH "${PYTHON_EXECUTABLE}" python_exe)
  file(TO_NATIVE_PATH "${BINARY_DIR}/TEMP" scripts_dir)
  configure_file(${TOP_DIR}/cmake/py_cli.bat.in  ${BINARY_DIR}/TEMP/${PGM_NAME2}.bat @ONLY)
@@ -87,8 +89,14 @@ file(COPY ${G_TARGET_FILE} DESTINATION ${BINARY_DIR}/TEMP/
  FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE)
 
 file(RENAME ${BINARY_DIR}/TEMP/${PGM_NAME2}.py ${BINARY_DIR}/TEMP/${PGM_NAME2})
-
+else()
 endif() #WIN32
+else()
+set(PGM_EXT "")
+if(WIN32)
+message("OUTPUT_DIR=${OUTPUT_DIR}")
+set(PGM_EXT ".exe")
+endif()
 endif() #PYTHON_SCRIPT
 
 string(REPLACE ".html" ".tmp.html" TMP_HTML_NAME ${HTML_FILE_NAME})

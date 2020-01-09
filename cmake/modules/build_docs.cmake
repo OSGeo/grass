@@ -6,7 +6,7 @@ function(build_docs target_name)
   get_target_property(G_RUNTIME_OUTPUT_DIR ${target_name} G_RUNTIME_OUTPUT_DIR)
   get_target_property(G_HTML_FILE_NAME ${target_name} G_HTML_FILE_NAME)
   get_target_property(PYTHON_SCRIPT ${target_name} PYTHON_SCRIPT)
-  get_target_property(PGM_EXT ${target_name} PGM_EXT)
+
 
   set(html_file ${G_SRC_DIR}/${G_HTML_FILE_NAME})
   set(HTML_FILE)
@@ -23,7 +23,7 @@ function(build_docs target_name)
     endif()
   endif()
   
-##message("G_TARGET_FILE=${G_TARGET_FILE}")
+
   add_custom_command(TARGET ${target_name} POST_BUILD
     COMMAND ${CMAKE_COMMAND}
     -DHTML_FILE=${HTML_FILE}
@@ -32,7 +32,6 @@ function(build_docs target_name)
     -DOUTPUT_DIR=${G_RUNTIME_OUTPUT_DIR}
     -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
 	-DPYTHON_SCRIPT=${PYTHON_SCRIPT}
-	-DPGM_EXT=${PGM_EXT}
     -P ${CMAKE_BINARY_DIR}/cmake/mkhtml.cmake
     )
   
