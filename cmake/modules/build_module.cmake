@@ -174,7 +174,7 @@ function(build_module)
  set_target_properties(${G_NAME} PROPERTIES G_SRC_DIR "${G_SRCDIR}")
  set_target_properties(${G_NAME} PROPERTIES G_RUNTIME_OUTPUT_DIR "${G_RUNTIME_OUTPUT_DIR}") 
  set_target_properties(${G_NAME} PROPERTIES G_HTML_FILE_NAME "${HTML_FILE_NAME}.html")
- set_target_properties(${G_TARGET_NAME} PROPERTIES PYTHON_SCRIPT FALSE)
+ set_target_properties(${G_NAME} PROPERTIES PYTHON_SCRIPT FALSE)
 
 
  if(WITH_DOCS)

@@ -77,9 +77,7 @@ message("PGM_NAME2=${PGM_NAME2}")
 message("G_TARGET_FILE2x=${G_TARGET_FILE}")
 
 if(PYTHON_SCRIPT)
-set(PGM_EXT "")
-if(WIN32)
-set(PGM_EXT ".bat")
+
  file(TO_NATIVE_PATH "${PYTHON_EXECUTABLE}" python_exe)
  file(TO_NATIVE_PATH "${BINARY_DIR}/TEMP" scripts_dir)
  configure_file(${TOP_DIR}/cmake/py_cli.bat.in  ${BINARY_DIR}/TEMP/${PGM_NAME2}.bat @ONLY)
@@ -92,11 +90,7 @@ file(COPY ${BINARY_DIR}/CMakeFiles/${PGM_NAME2} DESTINATION ${BINARY_DIR}/TEMP/
 
 endif() #WIN32
 
-set(PGM_EXT "")
-if(WIN32)
-message("OUTPUT_DIR=${OUTPUT_DIR}")
-set(PGM_EXT ".exe")
-endif()
+
 endif() #PYTHON_SCRIPT
 
 string(REPLACE ".html" ".tmp.html" TMP_HTML_NAME ${HTML_FILE_NAME})
@@ -106,9 +100,9 @@ set(MKHTML_PY ${BINARY_DIR}/tools/mkhtml.py)
 
 if(RUN_HTML_DESCR)
 if(PYTHON_SCRIPT)
-message("Running pythonn ${PGM_NAME2}${PGM_EXT} --html-description")
+message("Running pythonn ${PGM_NAME2}.py --html-description")
   execute_process(
-    COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_BINARY_DIR}/TEMP/ ${PYTHON_EXECUTABLE}  ${PGM_NAME2}.py "--html-description"
+    COMMAND ${CMAKE_COMMAND} -E chdir ${BINARY_DIR}/TEMP/ ${PYTHON_EXECUTABLE}  ${PGM_NAME2}.py "--html-description"
     OUTPUT_FILE ${TMP_HTML_FILE}
     RESULT_VARIABLE html_descr_rv)
 
@@ -122,6 +116,10 @@ message("Running pythonn ${PGM_NAME2}${PGM_EXT} --html-description")
     fatal_error(${TMP_HTML_FILE})
   endif()
 else(PYTHON_SCRIPT)
+set(PGM_EXT "")
+if(WIN32)
+set(PGM_EXT ".exe")
+endif()
 message("Running ${PGM_NAME2}${PGM_EXT} --html-description")
   execute_process(
 
