@@ -69,43 +69,20 @@ function(build_py_module)
 
 #  message("PYTHON_FILES=${PYTHON_FILES}")
   ##################### TRANSLATE STRING FOR SCRIPTS AND GUI #####################
-  if(NOT PY_MODULE_FILE)
-    set(PY_MODULE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/${G_NAME}/${G_TARGET_NAME}.py)
-  endif()
+if(NOT PY_MODULE_FILE)
+	set(PY_MODULE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/${G_NAME}/${G_TARGET_NAME}.py)
+	if(EXISTS "${PY_MODULE_FILE}")
+		file(COPY ${PY_MODULE_FILE} DESTINATION ${CMAKE_BINARY_DIR}/scripts/)
+	endif()
+	set(MAIN_SCRIPT_FILE ${CMAKE_BINARY_DIR}/scripts/${G_TARGET_NAME}.py)
+endif()
 
-  if(NOT G_TYPE STREQUAL "LIB")
+if(NOT G_TYPE STREQUAL "LIB")
 	if (NOT EXISTS ${PY_MODULE_FILE})
 		message(FATAL_ERROR "${PY_MODULE_FILE} does not exists")
     endif()
+endif()#  if(NOT G_TYPE STREQUAL "LIB")
 
-
-
-  set(PGM_NAME ${G_TARGET_NAME})
-  if(WIN32)
-      set(PGM_NAME ${G_TARGET_NAME}.bat)      
-      #file(TO_NATIVE_PATH "${GISBASE}/scripts" scripts_dir)
-	  #file(TO_NATIVE_PATH "${PYTHON_EXECUTABLE}" python_exe)
-	  #file(WRITE ${GISBASE}/scripts/${PGM_NAME} 
-	  #"@echo off
-#\"${python_exe}\" \"${scripts_dir}\\${G_TARGET_NAME}.py\" \%* ")
-#message("Writing ${GISBASE}/scripts/${PGM_NAME} ")
-      #configure_file(
-	  #${CMAKE_SOURCE_DIR}/cmake/windows_launch.bat.in 
-	  #${CMAKE_BINARY_DIR}/CMakeFiles/scripts/${PGM_NAME})
-      ###file(COPY ${CMAKE_BINARY_DIR}/CMakeFiles/scripts/${PGM_NAME} DESTINATION ${CMAKE_BINARY_DIR}/scripts)
-  else()
-  	#if(${G_TYPE} IN_LIST types)
-	#configure_file(${PY_MODULE_FILE} ${CMAKE_BINARY_DIR}/CMakeFiles/scripts/${PGM_NAME})
-	#file(COPY ${PY_MODULE_FILE} DESTINATION ${CMAKE_BINARY_DIR}/TEMP/
-	 # FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
-
-	  	#COMMAND ${CMAKE_COMMAND} -E copy ${PY_MODULE_FILE} ${CMAKE_BINARY_DIR}//
-	 # endif()
-  endif()
-	  
-    #set(MAIN_SCRIPT_FILE "${GISBASE}/scripts/${PGM_NAME}")
-	#message( "MAIN_SCRIPT_FILE=${MAIN_SCRIPT_FILE}")
-	  endif()
   ######################## TRANSLATE STRING FOR SCRIPTS #########################
   set(TRANSLATE_C_FILE "")
 
@@ -127,14 +104,11 @@ function(build_py_module)
 
  ## message("Adding python taret ${G_TARGET_NAME}")
 
-  set(MAIN_SCRIPT_FILE ${CMAKE_BINARY_DIR}/TEMP/${G_TARGET_NAME}.py)
-  if(EXISTS "${PY_MODULE_FILE}")
-  file(COPY ${PY_MODULE_FILE} DESTINATION ${CMAKE_BINARY_DIR}/TEMP/)
-  endif()
+
   add_custom_target(${G_TARGET_NAME} ALL
-    #COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/${G_DST_DIR}/${G_NAME}/    
-	#COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PY_MODULE_FILE} ${CMAKE_BINARY_DIR}/TEMP/
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PYTHON_FILES} ${GISBASE}/${G_DST_DIR}/
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/${G_DST_DIR}/${G_NAME}/    
+
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PYTHON_FILES} ${GISBASE}/${G_DST_DIR}/${G_NAME}/
     DEPENDS ${TRANSLATE_C_FILE} )
 
   #get_property(MODULE_LIST GLOBAL PROPERTY MODULE_LIST)
@@ -160,21 +134,11 @@ function(build_py_module)
 
 
  if(WITH_DOCS)
- 	set(PGM_EXT "")
-	if(NOT G_TYPE STREQUAL "LIB")
-		if(WIN32)
-			set(PGM_EXT ".bat")
-		endif()
-
-
-
 
   set_target_properties(${G_TARGET_NAME} PROPERTIES G_SRC_DIR "${G_SRC_DIR}")
   set_target_properties(${G_TARGET_NAME} PROPERTIES G_TARGET_FILE "${MAIN_SCRIPT_FILE}")
-  #set_target_properties(${G_TARGET_NAME} PROPERTIES PGM_NAME "${PGM_NAME}")
   set_target_properties(${G_TARGET_NAME} PROPERTIES RUN_HTML_DESCR TRUE)
   set_target_properties(${G_TARGET_NAME} PROPERTIES PYTHON_SCRIPT TRUE)
-  #set_target_properties(${G_TARGET_NAME} PROPERTIES PGM_EXT "${PGM_EXT}")
   set_target_properties(${G_TARGET_NAME} PROPERTIES G_RUNTIME_OUTPUT_DIR "${GISBASE}/scripts")
   set_target_properties(${G_TARGET_NAME} PROPERTIES G_HTML_FILE_NAME "${HTML_FILE_NAME}.html")
   	if(${G_TYPE} IN_LIST types)

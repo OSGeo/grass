@@ -6,15 +6,7 @@ function(fatal_error file_name)
   if(UNIX)
     message(STATUS "ENV{LD_LIBRARY_PATH}=$ENV{LD_LIBRARY_PATH}")
   endif()
-
-#  message(STATUS "PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}")
- # message(STATUS "PGM_SOURCE_DIR=${PGM_SOURCE_DIR}")
-  #message(STATUS "MKHTML_PY=${MKHTML_PY}")
-  #message(STATUS "PGM_NAME=${PGM_NAME}")
   message(STATUS "G_TARGET_FILE=${G_TARGET_FILE}")
-  #message(STATUS "OUT_HTML_FILE=${OUT_HTML_FILE}")
-  #message(STATUS "IS_PYTHON_SCRIPT=${IS_PYTHON_SCRIPT}")
-
   execute_process(COMMAND ${CMAKE_COMMAND} -E remove ${G_TARGET_FILE})
   message(SEND_ERROR "Failed to create ${file_name}")
 
@@ -22,7 +14,7 @@ endfunction()
 
 if(NOT HTML_FILE)
   message( "Dont know to build docs for ${PGM_NAME}")
-  file(INSTALL ${G_TARGET_FILE} DESTINATION ${OUTPUT_DIR})
+  file(COPY ${G_TARGET_FILE} DESTINATION ${OUTPUT_DIR})
   return()
 endif()
 
@@ -38,7 +30,6 @@ file(TO_NATIVE_PATH "${GIS_BASE_DIR}/bin" GIS_BIN_DIR)
 file(TO_NATIVE_PATH "${GIS_BASE_DIR}/scripts" SCRIPTS_DIR)
 file(TO_NATIVE_PATH "${GISBASE}/gui/wxpython" WXPYTHON_DIR)
 file(TO_NATIVE_PATH "${GISBASE}/etc/python" PYTHON_DIR)
-file(TO_NATIVE_PATH "${BINARY_DIR}/TEMP" TEMP_DIR)
 
 if(WIN32)
   set(P_SEP ";")
@@ -46,10 +37,7 @@ else()
   set(P_SEP ":")
 endif()
 
-
-
-set(ENV{PATH} "${TEMP_DIR}${P_SEP}${BIN_DIR}${P_SEP}$ENV{PATH}")
-
+set(ENV{PATH} "${BIN_DIR}${P_SEP}$ENV{PATH}")
 
 set(ENV{GISBASE} "${GIS_BASE_DIR}")
 set(ENV{MODULE_TOPDIR} "${MODULE_TOPDIR}")
@@ -74,25 +62,8 @@ get_filename_component(PGM_SOURCE_DIR ${HTML_FILE} PATH)
 
 string(REPLACE ".html"  "" PGM_NAME2 "${HTML_FILE_NAME}" )
 #message("PGM_NAME2=${PGM_NAME2}")
-#message("G_TARGET_FILE2x=${G_TARGET_FILE}")
-
-if(PYTHON_SCRIPT)
-
- #file(TO_NATIVE_PATH "${PYTHON_EXECUTABLE}" python_exe)
-# file(TO_NATIVE_PATH "${BINARY_DIR}/TEMP" scripts_dir)
-# configure_file(${TOP_DIR}/cmake/py_cli.bat.in  ${BINARY_DIR}/TEMP/${PGM_NAME2}.bat @ONLY)
-#message("Writing ${BINARY_DIR}/TEMP/${PGM_NAME2} ")
-else()
-configure_file(${G_TARGET_FILE} ${BINARY_DIR}/CMakeFiles/${PGM_NAME2} COPYONLY)
-#file(COPY ${BINARY_DIR}/CMakeFiles/${PGM_NAME2} DESTINATION ${BINARY_DIR}/TEMP/
-#file(COPY ${G_TARGET_FILE}/CMakeFiles/${PGM_NAME2} DESTINATION ${BINARY_DIR}/TEMP/
-# FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE)
 
 
-endif() #WIN32
-
-
-endif() #PYTHON_SCRIPT
 
 string(REPLACE ".html" ".tmp.html" TMP_HTML_NAME ${HTML_FILE_NAME})
 set(TMP_HTML_FILE ${PGM_SOURCE_DIR}/${TMP_HTML_NAME})
@@ -103,7 +74,7 @@ if(RUN_HTML_DESCR)
 if(PYTHON_SCRIPT)
 message("Running pythonn ${PGM_NAME2}.py --html-description")
   execute_process(
-    COMMAND ${CMAKE_COMMAND} -E chdir ${BINARY_DIR}/TEMP/ ${PYTHON_EXECUTABLE}  ${PGM_NAME2}.py "--html-description"
+    COMMAND ${CMAKE_COMMAND} -E chdir ${PGM_SOURCE_DIR} ${PYTHON_EXECUTABLE}  ${PGM_NAME2}.py "--html-description"
     OUTPUT_FILE ${TMP_HTML_FILE}
     RESULT_VARIABLE html_descr_rv)
 
@@ -138,6 +109,7 @@ message("Running ${PGM_NAME2}${PGM_EXT} --html-description")
     fatal_error(${TMP_HTML_FILE})
   endif()
 endif(PYTHON_SCRIPT)
+
 else(RUN_HTML_DESCR)
   message(STATUS "No html-description run for ${PGM_NAME2}")
 endif(RUN_HTML_DESCR)
@@ -158,19 +130,14 @@ foreach(IMG_FILE ${IMG_FILES})
   file(INSTALL ${IMG_FILE} DESTINATION ${GISBASE}/docs/html)
 endforeach()
 
-file(REMOVE ${TMP_HTML_FILE})
-#if( NOT PGM_NAME2 STREQUAL "g.parser")
-  #fatal_error(${PGM_NAME2} ${OUT_HTML_FILE})
-#  endif()
-if(PYTHON_SCRIPT)
 if(WIN32)
 file(INSTALL ${G_TARGET_FILE} DESTINATION ${OUTPUT_DIR})
  configure_file(${TOP_DIR}/cmake/py_cli_install.bat.in  ${OUTPUT_DIR}/${PGM_NAME2}.bat @ONLY)
  else()
  file(INSTALL ${G_TARGET_FILE} DESTINATION ${OUTPUT_DIR}
- RENAME ${PGM_NAME})
+ RENAME ${PGM_NAME2})
  endif()
 
- endif()
+
  file(REMOVE  ${TMP_HTML_FILE})
- file(REMOVE ${BINARY_DIR}/TEMP/${PGM_NAME2})
+
