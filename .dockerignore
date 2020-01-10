@@ -1,5 +1,7 @@
 docker
 !docker/testdata
+!docker/alpine/alpine-py38-ctypes.patch
+!docker/alpine/alpine-py38-gisinit.patch
 .git
 .gitignore
 .github

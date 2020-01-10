@@ -158,10 +158,15 @@ RUN echo "Install main packages";\
 
 # Copy and install GRASS GIS
 COPY . /src/grass_build/
+WORKDIR /src/grass_build/
+# PATCH ctypes
+COPY docker/alpine/alpine-py38-ctypes.patch /src/alpine-py38-ctypes.patch
+COPY docker/alpine/alpine-py38-gisinit.patch /src/alpine-py38-gisinit.patch
+RUN patch -p1 < /src/alpine-py38-ctypes.patch
+RUN patch -p1 < /src/alpine-py38-gisinit.patch
 
 # Configure compile and install GRASS GIS
-RUN echo "  => Configure and compile grass";\
-    cd /src/grass_build && \
+RUN echo "  => Configure and compile grass" && \
     /src/grass_build/configure $GRASS_CONFIG && \
     make -j $NUMTHREADS && \
     make install && \
@@ -184,7 +189,7 @@ ENV LC_ALL="en_US.UTF-8"
 
 # Copy GRASS GIS from build image
 COPY --from=build /usr/local/bin/grass /usr/local/bin/grass
-COPY --from=build /usr/local/grass* /usr/local/grass
+COPY --from=build /usr/local/grass* /usr/local/grass/
 RUN pip3 install --upgrade pip six grass-session
 RUN ln -s /usr/local/grass /usr/local/grass7
 RUN ln -s /usr/local/grass `grass --config path`
