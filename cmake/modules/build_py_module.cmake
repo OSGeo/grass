@@ -66,7 +66,6 @@ function(build_py_module)
   endif()
 
 
-
 #  message("PYTHON_FILES=${PYTHON_FILES}")
   ##################### TRANSLATE STRING FOR SCRIPTS AND GUI #####################
 if(NOT PY_MODULE_FILE)
@@ -107,16 +106,11 @@ endif()#  if(NOT G_TYPE STREQUAL "LIB")
 
   add_custom_target(${G_TARGET_NAME} ALL
     COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/${G_DST_DIR}/${G_NAME}/    
-
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PYTHON_FILES} ${GISBASE}/${G_DST_DIR}/${G_NAME}/
     DEPENDS ${TRANSLATE_C_FILE} )
 
   #get_property(MODULE_LIST GLOBAL PROPERTY MODULE_LIST)
   #add_dependencies(${G_NAME} ${MODULE_LIST})
-
-  if(G_DEPENDS)
-    #add_dependencies(${G_TARGET_NAME} ${G_DEPENDS})
-  endif()
 
   if(G_TYPE STREQUAL "GUI")
   set_target_properties (${G_TARGET_NAME} PROPERTIES FOLDER gui)
@@ -141,17 +135,15 @@ endif()#  if(NOT G_TYPE STREQUAL "LIB")
   set_target_properties(${G_TARGET_NAME} PROPERTIES PYTHON_SCRIPT TRUE)
   set_target_properties(${G_TARGET_NAME} PROPERTIES G_RUNTIME_OUTPUT_DIR "${GISBASE}/scripts")
   set_target_properties(${G_TARGET_NAME} PROPERTIES G_HTML_FILE_NAME "${HTML_FILE_NAME}.html")
-  	if(${G_TYPE} IN_LIST types)
-		build_docs(${G_TARGET_NAME})
-		endif()
-	endif()
+  if(${G_TYPE} IN_LIST types)
+	build_docs(${G_TARGET_NAME})
+  endif()
 
-	if(${G_TYPE} IN_LIST types)
-		add_dependencies(${G_TARGET_NAME} pylib.script)
-	endif()
- endif()
+  if(${G_TYPE} IN_LIST types)
+	add_dependencies(${G_TARGET_NAME} pylib.script)
+  endif()
+ endif(WITH_DOCS)
 
  install(FILES ${PYTHON_FILES} DESTINATION etc/${G_NAME})
 
 endfunction()
-
