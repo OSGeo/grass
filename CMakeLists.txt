@@ -140,9 +140,9 @@ if(MSVC)
 endif()
 
 execute_process(
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/TEMP
   COMMAND ${CMAKE_COMMAND} -E echo "Creating directories in ${GISBASE}"
   COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/bin/
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/scripts/
   COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/demolocation/
   COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/etc/config/
   COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/db/driver/
