@@ -531,7 +531,7 @@ class VNETDialog(wx.Dialog):
                                   text=_('Input tables'),
                                   name='inputDbMgr')
         elif not show:
-            self.notebook.RemovePage(page='inputDbMgr')
+            self.notebook.RemovePage(page=self.notebook.GetPageIndexByName('inputDbMgr'))
 
     def _createResultDbMgrPage(self):
         """Tab with attribute tables of analysis result layers"""
@@ -559,7 +559,7 @@ class VNETDialog(wx.Dialog):
                                   text=_('Result tables'),
                                   name='resultDbMgr')
         elif not haveDbMgr:
-            self.notebook.RemovePage(page='resultDbMgr')
+            self.notebook.RemovePage(page=self.notebook.GetPageIndexByName('resultDbMgr'))
 
     def OnPageChanged(self, event):
         """Tab switched"""
