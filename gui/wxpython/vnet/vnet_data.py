@@ -23,7 +23,6 @@ This program is free software under the GNU General Public License
 @author Eliska Kyzlikova <eliska.kyzlikova gmail.com> (turn costs support)
 """
 import os
-import types
 import six
 from copy import deepcopy
 
@@ -1217,7 +1216,7 @@ class History:
         if key not in self.newHistStepData:
             self.newHistStepData[key] = {}
 
-        if isinstance(subkey, types.ListType):
+        if isinstance(subkey, list):
             if subkey[0] not in self.newHistStepData[key]:
                 self.newHistStepData[key][subkey[0]] = {}
             self.newHistStepData[key][subkey[0]][subkey[1]] = value
@@ -1289,7 +1288,7 @@ class History:
             newHist.write('%s%s' % (key, self.sep))
             for idx in range(len(subkeys)):
                 value = self.newHistStepData[key][subkeys[idx]]
-                if isinstance(value, types.DictType):
+                if isinstance(value, dict):
                     if idx > 0:
                         newHist.write('%s%s%s' % (os.linesep, key, self.sep))
                     newHist.write('%s%s' % (subkeys[idx], self.sep))
@@ -1308,14 +1307,14 @@ class History:
                 else:
                     if idx > 0 and isinstance(
                             self.newHistStepData[key][subkeys[idx - 1]],
-                            types.DictType):
+                            dict):
                         newHist.write('%s%s%s' % (os.linesep, key, self.sep))
                     value = self._parseValue(
                         self.newHistStepData[key][subkeys[idx]])
                     newHist.write('%s%s%s' % (subkeys[idx], self.sep, value))
                     if idx < len(subkeys) - 1 and not isinstance(
                             self.newHistStepData[key][subkeys[idx + 1]],
-                            types.DictType):
+                            dict):
                         newHist.write('%s' % self.sep)
             newHist.write(os.linesep)
         self.histStepsNum = 0
@@ -1417,7 +1416,7 @@ class History:
             if key not in histStepData:
                 histStepData[key] = {}
 
-            if isinstance(subkey, types.ListType):
+            if isinstance(subkey, list):
                 if subkey[0] not in histStepData[key]:
                     histStepData[key][subkey[0]] = {}
                 histStepData[key][subkey[0]][subkey[1]] = value
