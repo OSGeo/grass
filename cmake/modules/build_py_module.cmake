@@ -73,6 +73,9 @@ if(NOT PY_MODULE_FILE)
 	if(EXISTS "${PY_MODULE_FILE}")
 		file(COPY ${PY_MODULE_FILE} DESTINATION ${CMAKE_BINARY_DIR}/scripts/)
 		set(MAIN_SCRIPT_FILE ${CMAKE_BINARY_DIR}/scripts/${G_TARGET_NAME}.py)
+	else()
+	set(PY_MODULE_FILE "")
+	set(MAIN_SCRIPT_FILE "")
 	endif()
 endif()
 
@@ -104,11 +107,16 @@ endif()#  if(NOT G_TYPE STREQUAL "LIB")
  ## message("Adding python taret ${G_TARGET_NAME}")
 
 
+   if(G_TYPE STREQUAL "SCRIPT")
+     add_custom_target(${G_TARGET_NAME} ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PYTHON_FILES} ${GISBASE}/scripts/
+    DEPENDS ${TRANSLATE_C_FILE} )
+   else()
   add_custom_target(${G_TARGET_NAME} ALL
     COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/${G_DST_DIR}/${G_NAME}/    
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PYTHON_FILES} ${GISBASE}/${G_DST_DIR}/${G_NAME}/
-    DEPENDS ${TRANSLATE_C_FILE} )
-
+    DEPENDS ${PY_MODULE_FILE} )
+	   endif()
   #get_property(MODULE_LIST GLOBAL PROPERTY MODULE_LIST)
   #add_dependencies(${G_NAME} ${MODULE_LIST})
 
@@ -139,8 +147,9 @@ endif()#  if(NOT G_TYPE STREQUAL "LIB")
 	build_docs(${G_TARGET_NAME})
   endif()
 
-  if(${G_TYPE} IN_LIST types)
-	add_dependencies(${G_TARGET_NAME} pylib.script)
+   if(NOT G_TYPE STREQUAL "LIB")
+	add_dependencies(${G_TARGET_NAME} pylib.script pylib.exceptions)
+	add_dependencies(${G_TARGET_NAME} g.parser)
   endif()
  endif(WITH_DOCS)
 

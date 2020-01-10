@@ -13,8 +13,9 @@ function(fatal_error file_name)
 endfunction()
 
 if(NOT HTML_FILE)
-  message( "Dont know to build docs for ${PGM_NAME}")
-  file(COPY ${G_TARGET_FILE} DESTINATION ${OUTPUT_DIR})
+  if(G_TARGET_FILE)
+	file(COPY ${G_TARGET_FILE} DESTINATION ${OUTPUT_DIR})
+  endif()
   return()
 endif()
 
@@ -100,7 +101,7 @@ message("Running ${PGM_NAME2}${PGM_EXT} --html-description")
     RESULT_VARIABLE html_descr_rv)
 
   #TODO: print TMP_HTML_FILE contents in case of failure.
-  message("html_descr_rv=${html_descr_rv}")
+  #message("html_descr_rv=${html_descr_rv}")
   if(NOT html_descr_rv EQUAL 0)
     fatal_error(${TMP_HTML_FILE})
   endif()
