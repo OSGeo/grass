@@ -24,7 +24,7 @@ configure_file(script/setup.py
 
 add_custom_target(python
 	COMMAND ${CMAKE_COMMAND} -E echo "#coding=utf-8" > ${GISBASE}/etc/python/__init__.py
-	COMMAND ${CMAKE_COMMAND} -E echo ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py  ${GISBASE}/etc/python/grass/
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py  ${GISBASE}/etc/python/grass/
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/etc/python/grass/script/setup.py ${GISBASE}/etc/python/grass/script/
 	DEPENDS python_bandref python_exceptions python_imaging python_pydispatch python_script python_temporal
 	python_pygrass python_pygrass_messages python_pygrass_modules python_pygrass_modules 
