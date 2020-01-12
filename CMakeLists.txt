@@ -1,8 +1,14 @@
 cmake_minimum_required(VERSION 3.3)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
+
+#if(DEFINED ENV{VCPKG_DEFAULT_TRIPLET} AND NOT DEFINED VCPKG_TARGET_TRIPLET)
+#  set(VCPKG_TARGET_TRIPLET "$ENV{VCPKG_DEFAULT_TRIPLET}" CACHE STRING "")
+#endif()
+
 project(GRASSGIS)
 
 set(BUILD_SHARED_LIBS ON)
+#message(FATAL_ERROR "VCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}")
 if(MSVC)
   if(BUILD_SHARED_LIBS)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
@@ -33,11 +39,14 @@ option(WITH_CAIRO "Build with cairo support ." ON)
 option(WITH_X11 "Build with X11 support ." ${default_option_enabled})
 option(WITH_OPENGL "Build with opengl support ." ON)
 option(WITH_SQLITE "enable sqlite support" ON)
-option(WITH_POSTGRES "enable postgres support" OFF)
+option(WITH_POSTGRES "enable postgres support" ON)
 option(WITH_NLS "enable nls support" ${default_option_enabled})
 option(WITH_BZLIB "enable bzlib support" ON)
 option(WITH_BLAS "enable blas support" ON)
 option(WITH_LAPACK "enable lapack support" ON)
+option(WITH_LIBLAS "enable libLAS support" ON)
+option(WITH_OPENDWG "enable v.in.dwg" OFF)
+
 option(WITH_PYTHON "Build python bindings" ON)
 option(WITH_LARGEFILES "enable largefile support" ${default_option_enabled})
 option(WITH_DOCS "Build documentation" ON)
@@ -95,7 +104,9 @@ include(build_module)
 include(build_program)
 include(build_program_in_subdir)
 include(build_library_in_subdir)
+include(copy_python_files_in_subdir)
 include(build_py_module)
+
 
 include(check_target)
 
