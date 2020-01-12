@@ -96,18 +96,18 @@ endif()#  if(NOT G_TYPE STREQUAL "LIB")
  ## message("Adding python taret ${G_TARGET_NAME}")
 
 
-   if(G_TYPE STREQUAL "SCRIPT")
-     add_custom_target(${G_TARGET_NAME} ALL
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PY_MODULE_FILE} ${GISBASE}/scripts/
-    DEPENDS ${TRANSLATE_C_FILE} )
-   else()
-  add_custom_target(${G_TARGET_NAME} ALL
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/${G_DST_DIR}/${G_NAME}/    
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PYTHON_FILES} ${GISBASE}/${G_DST_DIR}/${G_NAME}/
-    DEPENDS ${PY_MODULE_FILE} )
-	   endif()
-  #get_property(MODULE_LIST GLOBAL PROPERTY MODULE_LIST)
-  #add_dependencies(${G_NAME} ${MODULE_LIST})
+if(G_TYPE STREQUAL "SCRIPT")
+	add_custom_target(${G_TARGET_NAME}
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PY_MODULE_FILE} ${GISBASE}/scripts/
+		DEPENDS ${TRANSLATE_C_FILE})
+else()
+	add_custom_target(${G_TARGET_NAME}
+		COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/${G_DST_DIR}/${G_NAME}/
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PYTHON_FILES} ${GISBASE}/${G_DST_DIR}/${G_NAME}/
+		DEPENDS ${PY_MODULE_FILE})
+endif()
+
+  set(modules_list "${G_TARGET_NAME};${modules_list}" CACHE INTERNAL "list of modules")
 
   if(G_TYPE STREQUAL "GUI")
   set_target_properties (${G_TARGET_NAME} PROPERTIES FOLDER gui)
