@@ -72,16 +72,36 @@ check_target(LAPACK HAVE_CLAPACK_H)
 check_target(FREETYPE HAVE_FT2BUILD_H)
 check_target(POSTGRES HAVE_POSTGRES)
 check_target(ODBC HAVE_SQL_H)
+
+if(TARGET POSTGRES)
+	try_compile(HAVE_PQCMDTUPLES
+		${CMAKE_CURRENT_BINARY_DIR}
+		${CMAKE_SOURCE_DIR}/cmake/tests/have_pqcmdtuples.c
+		CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${PostgreSQL_INCLUDE_DIR}"
+					"-w"
+					"-DLINK_LIBRARIES:STRING=${PostgreSQL_LIBRARY}"
+		OUTPUT_VARIABLE COMPILE_HAVE_PQCMDTUPLES)
+	if(NOT COMPILE_HAVE_PQCMDTUPLES)
+		message("Performing Test HAVE_PQCMDTUPLES - Failed\n COMPILE_OUTPUT:${COMPILE_HAVE_PQCMDTUPLES}\n")
+	else()
+		message(STATUS "Performing Test HAVE_PQCMDTUPLES - Success")
+		set(HAVE_PQCMDTUPLES 1)
+	endif()
+endif()
+
 if(MSVC)
 check_target(PCRE HAVE_PCRE_H)
 endif()
 
+check_target(POSTGRES HAVE_LIBPQ_FE_H)
+
 # Whether or not we are using G_socks for display communications
 set(USE_G_SOCKS 0)
 
-set(HAVE_LARGEFILES 0)
 if(WITH_LARGEFILES)
   set(HAVE_LARGEFILES 1)
+else()
+  set(HAVE_LARGEFILES 0)
 endif()
 
 if(MSVC)
@@ -96,15 +116,12 @@ endif()
 ########################TODO########################
 #no target ATLAS in thirdpary/CMakeLists.txt
 check_target(ATLAS HAVE_LIBATLAS)
-set(HAVE_LIBPQ_FE_H 0)
-set(HAVE_PQCMDTUPLES 0)
 
 set(USE_NLS 0)
 if(WITH_NLS)
   set(USE_NLS 1)
 endif()
 set(HAVE_READLINE_READLINE_H 0)
-
 
 if(MSVC)
 set(PID_TYPE int)
@@ -114,7 +131,6 @@ set(_OE_SOCKETS 0)
 set(USE_DELTA_FOR_TZ 0)
 set(_REENTRANT 0)
 ########################TODO########################
-
 
 set(X_DISPLAY_MISSING 1)
 if(TARGET X11)
@@ -242,9 +258,7 @@ foreach(srch ${SRCHS})
   list(APPEND include_depends ${output_dir}/${srch_NAME} )
 endforeach()
 
-
 add_custom_target(copy_header DEPENDS ${include_depends} python gui_wxpython)
-
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in
   "${CMAKE_CURRENT_BINARY_DIR}/grass/version.h")
@@ -253,7 +267,6 @@ message(STATUS "Creating ${CMAKE_CURRENT_BINARY_DIR}/grass/config.h")
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake.in
   "${CMAKE_CURRENT_BINARY_DIR}/grass/config.h")
-
 
 file(WRITE ${CMAKE_BINARY_DIR}/include/grass/copying.h "")
 file(STRINGS ${CMAKE_SOURCE_DIR}/COPYING copying_lines)
@@ -266,7 +279,6 @@ file(STRINGS ${CMAKE_SOURCE_DIR}/CITING citing_lines)
 foreach(citing_line ${citing_lines})
   file(APPEND ${CMAKE_BINARY_DIR}/include/grass/citing.h "\"${citing_line}\\n\"\n"    )
 endforeach()
-
 
 #TODO
 #file(READ  ${CMAKE_SOURCE_DIR}/config.status config_status_header)
