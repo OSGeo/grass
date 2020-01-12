@@ -3,49 +3,65 @@ set(dbf_SRCS dbf/column.c dbf/create_table.c
   dbf/driver.c dbf/error.c dbf/execute.c dbf/fetch.c
   dbf/listtab.c dbf/main.c dbf/select.c dbf/str.c dbf/table.c)
 
+set(db_drivers)
+set(grass_dbstubs_DEFS)
+if(MSVC)
+set(grass_dbstubs_DEFS "-DDB_DRIVER_C=1")
+endif()
 build_program_in_subdir(dbf
   SOURCES ${dbf_SRCS}
-  DEPENDS grass_gis grass_dbmidriver
-  grass_shape grass_sqlp
+  DEPENDS grass_gis grass_dbmidriver grass_shape grass_sqlp
+  DEFS "${grass_dbstubs_DEFS}"
   HTML_FILE_NAME grass-dbf
-  RUNTIME_OUTPUT_DIR "driver/db/"
-  )
+  RUNTIME_OUTPUT_DIR "driver/db/")
 
-set(db_drivers)
 list(APPEND db_drivers dbf)
-#TODO ; add targets
-if(ODBC_LIB)
-  add_subdirectory(odbc)
-  #list(APPEND db_drivers "odbc")
+
+build_program_in_subdir(ogr
+  DEPENDS grass_gis grass_dbmidriver grass_sqlp GDAL
+  DEFS "${grass_dbstubs_DEFS}"
+  HTML_FILE_NAME grass-ogr
+  RUNTIME_OUTPUT_DIR "driver/db/")
+
+list(APPEND db_drivers ogr)
+
+build_program_in_subdir(odbc
+  DEPENDS grass_gis grass_dbmidriver grass_sqlp
+  DEFS "${grass_dbstubs_DEFS}"
+  PRIMARY_DEPENDS ODBC
+  HTML_FILE_NAME grass-odbc
+  RUNTIME_OUTPUT_DIR "driver/db/")
+if(TARGET ODBC)
+  list(APPEND db_drivers odbc)
 endif()
 
-if(MYSQL_LIB)
-  add_subdirectory(mysql)
-  #list(APPEND db_drivers "mysql")
-endif()
-
-if(TARGET POSTGRES)
-  add_subdirectory(postgres)
-  #list(APPEND db_drivers "postrgresq")
-endif()
+build_program_in_subdir(sqlite
+  DEPENDS grass_gis grass_dbmidriver grass_sqlp
+  DEFS "${grass_dbstubs_DEFS}"
+  PRIMARY_DEPENDS SQLITE
+  HTML_FILE_NAME grass-sqlite
+  RUNTIME_OUTPUT_DIR "driver/db/")
 
 if(TARGET SQLITE)
   list(APPEND db_drivers sqlite)
-  build_program_in_subdir(sqlite
-  DEPENDS grass_gis grass_dbmidriver
-  grass_sqlp SQLITE
-  HTML_FILE_NAME grass-sqlite
-  RUNTIME_OUTPUT_DIR "driver/db/"
-  )
 endif()
 
-if(TARGET GDAL)
-  list(APPEND db_drivers ogr)
-  build_program_in_subdir(ogr
-  DEPENDS grass_gis grass_dbmidriver GDAL
-  grass_sqlp
-  HTML_FILE_NAME grass-ogr
+build_program_in_subdir(postgres
+  DEPENDS grass_gis grass_dbmidriver grass_sqlp
+  DEFS "${grass_dbstubs_DEFS}"
+  PRIMARY_DEPENDS POSTGRES
+  HTML_FILE_NAME grass-pg
   RUNTIME_OUTPUT_DIR "driver/db/")
+
+if(TARGET POSTGRES)
+  list(APPEND db_drivers postgres)
 endif()
+
+
+if(MYSQL_LIB)
+  ##add_subdirectory(mysql)
+  #list(APPEND db_drivers "mysql")
+endif()
+
 
 set(db_drivers ${db_drivers} PARENT_SCOPE)

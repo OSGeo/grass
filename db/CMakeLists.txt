@@ -1,12 +1,9 @@
 
 set(db_drivers grass_gis)
-if(NOT MSVC)
 add_subdirectory(drivers)
-endif()
 
 build_program_in_subdir(db.columns DEPENDS grass_dbmiclient)
 add_dependencies(db.columns ${db_drivers})
-
 
 build_program_in_subdir(db.createdb DEPENDS grass_dbmiclient)
 add_dependencies(db.createdb ${db_drivers})
