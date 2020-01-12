@@ -482,13 +482,11 @@ build_program_in_subdir(
   r.what.color
  DEPENDS grass_gis grass_raster)
 
-if(TARGET LIBLAS)
 build_program_in_subdir(
 	r.in.lidar
-	DEPENDS grass_gis grass_raster grass_lidar LIBLAS)
-else()
-message(STATUS "r.in.lidar is disable because libLAS is not found")
-endif()
+	DEPENDS grass_gis grass_raster grass_lidar
+	PRIMARY_DEPENDS LIBLAS)
+
 add_subdirectory(r.li)
 
 add_subdirectory(r.mapcalc)

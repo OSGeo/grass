@@ -84,21 +84,18 @@ build_program_in_subdir(
 
 build_program_in_subdir(
   v.in.dxf
-  DEPENDS grass_gis grass_vector )
+  DEPENDS grass_gis grass_vector)
 
-if(TARGET PDAL)
 file(GLOB v_in_pdal_SOURCES "v.in.pdal/*.c" "v.in.pdal/main.cpp")
 build_program_in_subdir(
   v.in.pdal
   SOURCES "${v_in_pdal_SOURCES}"
-  DEPENDS grass_gis grass_vector PDAL)
-else()
-message("v.in.pdal is disabled because PDAL library found")
-endif()
+  DEPENDS grass_gis grass_vector
+  PRIMARY_DEPENDS PDAL)
 
 build_program_in_subdir(
   v.in.region
-  DEPENDS grass_gis grass_vector )
+  DEPENDS grass_gis grass_vector)
 
 build_program_in_subdir(
   v.kcv
