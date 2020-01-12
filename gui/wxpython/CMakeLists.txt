@@ -86,7 +86,7 @@ set(env_command ${CMAKE_COMMAND} -E env
    COMMAND ${env_command} ${PYTHON_EXECUTABLE} 
    ${CMAKE_CURRENT_SOURCE_DIR}/core/toolboxes.py > ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/menudata.xml
    COMMAND ${env_command}  ${PYTHON_EXECUTABLE} 
-   ${c}/core/toolboxes.py "validate" ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/menudata.xml
+   ${CMAKE_CURRENT_SOURCE_DIR}/core/toolboxes.py "validate" ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/menudata.xml
    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/menudata.xml ${WXPYTHON_DIR}/xml/
    DEPENDS build_modules_items_xml)
 
