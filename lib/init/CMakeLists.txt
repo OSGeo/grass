@@ -93,8 +93,6 @@ configure_file(${script_file_name}.in ${CMAKE_CURRENT_BINARY_DIR}/${script_file_
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${script_file_name} DESTINATION bin)
 
 
-
-
 # For build tree
 file(TO_NATIVE_PATH ${GISBASE} gisbase_init_dir)
 file(TO_NATIVE_PATH "${GISBASE}/etc/config" grass_config_dir)
@@ -164,10 +162,10 @@ if(GRASS_VERSION_GIT)
   list(APPEND VERSIONNUMBER_CONTENTS "${VERSIONNUMBER_CONTENTS} ${GRASS_VERSION_GIT}")
 endif()
 
-file(WRITE ${CMAKE_BINARY_DIR}/VERSIONNUMBER "${VERSIONNUMBER_CONTENTS}")
-install(FILES ${CMAKE_BINARY_DIR}/VERSIONNUMBER DESTINATION etc)
+file(WRITE ${CMAKE_BINARY_DIR}/gisbase/etc/VERSIONNUMBER "${VERSIONNUMBER_CONTENTS}")
+install(FILES ${CMAKE_BINARY_DIR}/gisbase/etc/VERSIONNUMBER DESTINATION etc)
 
-configure_file(license.txt.in ${CMAKE_BINARY_DIR}/license)
+configure_file(license.txt.in ${CMAKE_BINARY_DIR}/gisbase/etc/license)
 
-install(FILES ${CMAKE_BINARY_DIR}/VERSIONNUMBER DESTINATION etc)
-install(FILES ${CMAKE_BINARY_DIR}/license DESTINATION etc)
+install(FILES ${CMAKE_BINARY_DIR}/gisbase/etc/VERSIONNUMBER DESTINATION etc)
+install(FILES ${CMAKE_BINARY_DIR}/gisbase/etc/license DESTINATION etc)
