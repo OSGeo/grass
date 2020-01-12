@@ -3,7 +3,7 @@ function(build_module)
   cmake_parse_arguments(G
     "EXE"
     "NAME;SRCDIR;SRC_REGEX;RUNTIME_OUTPUT_DIR;PACKAGE;HTML_FILE_NAME"
-    "SOURCES;INCLUDES;DEPENDS;OPTIONAL_DEPENDS;PRIMARY_DEPENDS;DEFS;HEADERS"
+    "SOURCES;INCLUDES;DEPENDS;OPTIONAL_DEPENDS;PRIMARY_DEPENDS;DEFS;HEADERS;TEST_SOURCES"
     ${ARGN} )
 
   if(NOT G_NAME)
@@ -181,7 +181,6 @@ function(build_module)
 		endif()
 	endif()
 
-
  set_target_properties(${G_NAME} PROPERTIES RUN_HTML_DESCR "${RUN_HTML_DESCR}")
  set_target_properties(${G_NAME} PROPERTIES G_TARGET_FILE "$<TARGET_FILE:${G_NAME}>")
  set_target_properties(${G_NAME} PROPERTIES PGM_NAME "${PGM_NAME}")
@@ -190,14 +189,17 @@ function(build_module)
  set_target_properties(${G_NAME} PROPERTIES G_HTML_FILE_NAME "${HTML_FILE_NAME}.html")
  set_target_properties(${G_NAME} PROPERTIES PYTHON_SCRIPT FALSE)
 
-
  if(WITH_DOCS)
 	build_docs(${G_NAME})
  endif() # WITH_DOCS
 
+foreach(test_SOURCE ${G_TEST_SOURCES})
+	add_test(NAME  ${G_NAME}-test
+         COMMAND ${grass_env_command}  ${PYTHON_EXECUTABLE}
+		 ${G_SRCDIR}/testsuite/${test_SOURCE})
+	message("[build_module] ADDING TEST ${G_NAME}-test")
+endforeach()
+
  install(TARGETS ${G_NAME} DESTINATION ${install_dest})
 
 endfunction()
-
-
-

@@ -129,6 +129,7 @@ build_program_in_subdir(
 endif()
 build_program_in_subdir(
   r.info
+  TEST_SOURCES "test_r_info.py"
   DEPENDS grass_gis grass_raster)
 
 build_program_in_subdir(

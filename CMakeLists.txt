@@ -86,6 +86,8 @@ set_compiler_flags()
 include(repo_status)
 repo_status("${CMAKE_CURRENT_LIST_DIR}" GRASS_VERSION_GIT)
 
+enable_testing()
+
 # Setup build locations.
 if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -122,8 +124,35 @@ include(check_target)
 add_subdirectory(thirdparty)
 
 set(GISBASE ${CMAKE_BINARY_DIR}/gisbase)
-configure_file(cmake/mkhtml.cmake.in ${CMAKE_BINARY_DIR}/cmake/mkhtml.cmake @ONLY)
+file(TO_NATIVE_PATH "${GISBASE}" GISBASE_NATIVE)
+file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/bin" BINARY_DIR)
+file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/lib" LIB_DIR)
+file(TO_NATIVE_PATH "${CMAKE_SOURCE_DIR}" MODULE_TOPDIR)
+file(TO_NATIVE_PATH "${GISBASE}/scripts" SCRIPTS_DIR)
+file(TO_NATIVE_PATH "${GISBASE}/etc/config/rc" GISRC)
+file(TO_NATIVE_PATH "${GISBASE}/etc/python" ETC_PYTHON_DIR)
+file(TO_NATIVE_PATH "${GISBASE}/gui/wxpython" ETC_WXPYTHON_DIR)
+if(WIN32)
+set(sep "\;")
+else()
+set(sep "\:")
+endif()
 
+set(grass_env_command ${CMAKE_COMMAND} -E env
+	"PATH=${BINARY_DIR}${sep}${SCRIPTS_DIR}"
+	"PYTHONPATH=${ETC_PYTHON_DIR}${sep}${ETC_WXPYTHON_DIR}${sep}$ENV{PYTHONPATH}"
+	"LD_LIBRARY_PATH=${LIB_DIR}${sep}$ENV{LD_LIBRARY_PATH}"
+	"GISBASE=${GISBASE_NATIVE}"
+	"GISRC=${GISRC}"
+	"LC_ALL=C"
+	"LANG=C"
+	"LANGUAGE=C"
+	"MODULE_TOPDIR=${MODULE_TOPDIR}"
+	"GRASS_PYTHON=${PYTHON_EXECUTABLE}"
+    "VERSION_NUMBER=\"7.9.dev\""
+    "VERSION_DATE=\"2019\"")
+
+configure_file(cmake/mkhtml.cmake.in ${CMAKE_BINARY_DIR}/cmake/mkhtml.cmake @ONLY)
 file(TO_NATIVE_PATH ${CMAKE_SOURCE_DIR} module_top_dir)
 file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} bin_dir)
 file(TO_NATIVE_PATH ${PYTHON_EXECUTABLE} GRASS_PYTHON)
