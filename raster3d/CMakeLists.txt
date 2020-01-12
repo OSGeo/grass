@@ -21,8 +21,6 @@ build_program_in_subdir(
   r3.in.bin
   DEPENDS grass_gis grass_raster3d )
 
-
-
 build_program_in_subdir(
   r3.info
   DEPENDS grass_gis grass_raster3d )
@@ -77,21 +75,23 @@ build_program_in_subdir(
   r3.out.vtk
   DEPENDS grass_gis grass_raster3d )
 
-# TODO: MODULES DISABLED
-# build_program_in_subdir(
-#   r3.out.netcdf
-#   DEPENDS grass_gis grass_raster3d )
-
-# build_program_in_subdir(
-#   r3.mkdspf
-#   DEPENDS grass_gis grass_raster3d grass_gpde )
-
-# build_program_in_subdir(
-#   r3.in.lidar
-#   DEPENDS grass_gis grass_raster3d )
-
-if(NOT MSVC)
 build_program_in_subdir(
-  r3.in.v5d
-  DEPENDS grass_gis grass_raster3d )
+   r3.mkdspf
+   DEPENDS grass_gis grass_raster3d grass_gpde grass_dspf)
+
+build_program_in_subdir(
+   r3.in.lidar
+   DEPENDS grass_gis grass_raster3d grass_segment
+   PRIMARY_DEPENDS LIBLAS)
+
+build_program_in_subdir(
+   r3.out.netcdf
+   DEPENDS grass_gis grass_raster3d
+   PRIMARY_DEPENDS NETCDF)
+
+# mode_t is not available on msvc. Discuss
+if(NOT MSVC)
+	build_program_in_subdir(
+	r3.in.v5d
+	DEPENDS grass_gis grass_raster3d)
 endif()

@@ -11,11 +11,13 @@ build_program_in_subdir(
   m.transform
   DEPENDS grass_gis grass_imagery grass_raster grass_vector)
 
-# TODO: MODULES DISABLED
-# build_program_in_subdir(
-#   m.nviz.image
-#   DEPENDS grass_gis)
+if(WITH_OPENGL)
+build_program_in_subdir(
+  m.nviz.image
+  DEPENDS grass_gis grass_ogsf grass_nviz)
 
-# build_program_in_subdir(
-#   m.nviz.script
-#   DEPENDS grass_gis)
+build_program_in_subdir(
+   m.nviz.script
+   DEPENDS grass_gis grass_ogsf grass_nviz)
+endif(WITH_OPENGL)
+

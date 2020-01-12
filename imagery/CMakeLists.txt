@@ -1,6 +1,9 @@
 build_program_in_subdir(i.albedo DEPENDS grass_imagery grass_raster grass_vector grass_gis )
 build_program_in_subdir(i.aster.toar DEPENDS grass_imagery grass_raster grass_vector grass_gis )
 
+build_program_in_subdir(i.atcorr 
+	DEPENDS grass_imagery grass_raster grass_vector grass_gis SRC_REGEX "*.cpp")
+
 build_program_in_subdir(i.biomass DEPENDS grass_imagery grass_raster grass_vector grass_gis )
 build_program_in_subdir(i.cca DEPENDS grass_imagery grass_raster grass_vector grass_gis )
 build_program_in_subdir(i.cluster DEPENDS grass_imagery grass_raster grass_vector grass_gis grass_cluster)
@@ -16,7 +19,11 @@ build_program_in_subdir(i.evapo.pm DEPENDS grass_imagery grass_raster grass_vect
 build_program_in_subdir(i.evapo.pt DEPENDS grass_imagery grass_raster grass_vector grass_gis)
 build_program_in_subdir(i.evapo.time DEPENDS grass_imagery grass_raster grass_vector grass_gis)
 build_program_in_subdir(i.emissivity DEPENDS grass_imagery grass_raster grass_vector grass_gis)
-build_program_in_subdir(i.find DEPENDS grass_imagery grass_raster grass_vector grass_gis)
+build_program_in_subdir(i.find
+  DEPENDS grass_imagery grass_raster grass_vector grass_gis
+  PACKAGE "grassmods"
+  RUNTIME_OUTPUT_DIR etc)
+
 build_program_in_subdir(i.gensig DEPENDS grass_imagery grass_raster grass_vector grass_gis)
 
 build_program_in_subdir(
@@ -35,11 +42,6 @@ build_program_in_subdir(
   i.landsat.toar
   DEPENDS grass_imagery grass_raster grass_vector grass_gis)
 
-if(NOT MSVC)
-build_program_in_subdir(
-  i.landsat.acca
-  DEPENDS grass_imagery grass_raster grass_vector grass_gis)
-endif()
 build_program_in_subdir(
   i.maxlik
   DEPENDS grass_imagery grass_raster grass_vector grass_gis)
@@ -47,7 +49,6 @@ build_program_in_subdir(
 build_program_in_subdir(
   i.modis.qc
   DEPENDS grass_imagery grass_raster grass_vector grass_gis)
-
 
 build_program_in_subdir(
   i.rectify
@@ -82,21 +83,21 @@ build_program_in_subdir(
   DEPENDS grass_imagery grass_raster grass_vector grass_gis)
 
 build_program_in_subdir(
-  i.fft
-  DEPENDS grass_imagery grass_raster
-  grass_vector grass_gis FFTW)
-
-build_program_in_subdir(
   i.zc
   DEPENDS grass_imagery grass_raster grass_vector grass_gis)
 
-build_program_in_subdir(i.atcorr DEPENDS grass_imagery grass_raster grass_vector grass_gis SRC_REGEX "*.cpp")
+build_program_in_subdir(
+  i.fft
+  DEPENDS grass_imagery grass_raster grass_gmath grass_gis
+  PRIMARY_DEPENDS FFTW)
 
-# TODO: MODULES DISABLED
-# build_program_in_subdir(
-#    i.ortho.photo
-#    DEPENDS grass_imagery grass_raster grass_vector grass_gis)
+build_program_in_subdir(
+  i.ifft
+  DEPENDS grass_gis grass_raster grass_gmath grass_btree2
+  PRIMARY_DEPENDS FFTW)
 
-# build_program_in_subdir(
-#   i.superpixels.slic
-#   DEPENDS grass_imagery grass_raster grass_vector grass_gis)
+build_program_in_subdir(
+	i.landsat.acca
+	DEPENDS grass_raster grass_gis)
+
+add_subdirectory(i.ortho.photo)

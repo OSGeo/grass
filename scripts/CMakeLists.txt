@@ -37,7 +37,6 @@ set(script_DIRS
   r.import
   r.in.aster
   r.in.srtm
-  r.in.wms
   r.mask
   r.out.xyz
   r.pack

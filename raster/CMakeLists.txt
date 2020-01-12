@@ -481,20 +481,15 @@ build_program_in_subdir(
   r.what.color
  DEPENDS grass_gis grass_raster)
 
-# TODO: MODULES DISABLED
-# build_program_in_subdir(
-#    r.in.lidar
-#    DEPENDS grass_gis grass_raster grass_lidar)
+if(TARGET LIBLAS)
+build_program_in_subdir(
+	r.in.lidar
+	DEPENDS grass_gis grass_raster grass_lidar LIBLAS)
+else()
+message(STATUS "r.in.lidar is disable because libLAS is not found")
+endif()
+add_subdirectory(r.li)
 
-# build_program_in_subdir(
-#    r.watershed
-#    DEPENDS grass_gis grass_raster
-#    SRC_REGEX "*.cpp")
-
-# build_program_in_subdir(
-#   r.li
-#   DEPENDS grass_gis grass_raster)
-if(NOT MSVC)
 add_subdirectory(r.mapcalc)
 
 build_program_in_subdir(
@@ -508,4 +503,5 @@ build_program_in_subdir(
    DEPENDS grass_gis grass_raster grass_iostream
    SRC_REGEX "*.cpp"
    DEFS "-DUSER=${USER_NAME};-DNODATA_FIX;-DELEV_FLOAT")
-endif()
+
+ add_subdirectory(r.watershed)

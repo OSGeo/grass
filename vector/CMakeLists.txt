@@ -86,9 +86,15 @@ build_program_in_subdir(
   v.in.dxf
   DEPENDS grass_gis grass_vector )
 
+if(TARGET PDAL)
+file(GLOB v_in_pdal_SOURCES "v.in.pdal/*.c" "v.in.pdal/main.cpp")
 build_program_in_subdir(
   v.in.pdal
-  DEPENDS grass_gis grass_vector )
+  SOURCES "${v_in_pdal_SOURCES}"
+  DEPENDS grass_gis grass_vector PDAL)
+else()
+message("v.in.pdal is disabled because PDAL library found")
+endif()
 
 build_program_in_subdir(
   v.in.region
@@ -352,24 +358,38 @@ build_program_in_subdir(
   v.external.out
   DEPENDS grass_gis grass_vector )
 
+build_program_in_subdir(
+  v.in.lidar
+ DEPENDS grass_gis grass_vector 
+ PRIMARY_DEPENDS LIBLAS )
 
+build_program_in_subdir(
+   v.lidar.correction
+   DEPENDS grass_gis grass_vector grass_lidar
+   PRIMARY_DEPENDS LIBLAS)
 
-#TODO: MODULES DISABLED
-# build_program_in_subdir(
-#   v.in.dwg
-#   DEPENDS grass_gis grass_vector )
+build_program_in_subdir(
+   v.lidar.edgedetection
+   DEPENDS grass_gis grass_vector grass_lidar grass_dbmibase grass_gmath
+   PRIMARY_DEPENDS LIBLAS)
 
-# build_program_in_subdir(
-#   v.in.lidar
-#   DEPENDS grass_gis grass_vector )
+build_program_in_subdir(
+   v.lidar.growing
+   DEPENDS grass_gis grass_vector 
+   PRIMARY_DEPENDS LIBLAS)
 
-# 	v.lidar.correction \
-# 	v.lidar.edgedetection \
-# 	v.lidar.growing \
-# build_program_in_subdir(
-#   v.out.lidar
-#   DEPENDS grass_gis grass_vector)
+build_program_in_subdir(
+   v.out.lidar
+   DEPENDS grass_gis grass_vector
+   PRIMARY_DEPENDS LIBLAS)
 
-# build_program_in_subdir(
-#   v.out.postgis
-#   DEPENDS grass_gis grass_vector)
+build_program_in_subdir(
+   v.out.postgis
+	DEPENDS grass_gis grass_vector
+	PRIMARY_DEPENDS POSTGRES)
+
+if(WITH_OPENDWG)
+	build_program_in_subdir(
+	v.in.dwg
+	DEPENDS grass_gis grass_vector)
+endif()
