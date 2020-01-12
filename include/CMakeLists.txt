@@ -48,8 +48,19 @@ check_target(GDAL HAVE_OGR)
 check_target(SQLITE HAVE_SQLITE)
 
 #TODO: check with more version of proj
-if(PROJ_VERSION_STRING LESS 500)
-  check_target(PROJ HAVE_PROJ_H)
+
+if(PROJ_VERSION_STRING GREATER 599 AND PROJ_VERSION_STRING LESS 700)
+	message("Using PROJ.4 API version 6.x")
+	set(PROJMAJOR 6)
+elseif(PROJ_VERSION_STRING GREATER 499 AND PROJ_VERSION_STRING LESS 600)
+	check_target(PROJ HAVE_PROJ_H)
+	message("Using PROJ.4 API version 5.x")
+	set(PROJMAJOR 5)
+elseif(PROJ_VERSION_STRING GREATER 399 AND PROJ_VERSION_STRING LESS 500)
+	check_target(PROJ HAVE_PROJ_H)
+	set(USE_PROJ4API 1)
+	message("Using PROJ.4 API version 4.x")
+	set(PROJMAJOR 4)
 endif()
 
 check_target(BLAS HAVE_LIBBLAS)
@@ -231,7 +242,9 @@ foreach(srch ${SRCHS})
   list(APPEND include_depends ${output_dir}/${srch_NAME} )
 endforeach()
 
-add_custom_target(copy_header DEPENDS ${include_depends})
+
+add_custom_target(copy_header DEPENDS ${include_depends} python gui_wxpython)
+
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in
   "${CMAKE_CURRENT_BINARY_DIR}/grass/version.h")
