@@ -64,6 +64,9 @@ function(build_module)
 	set(PGM_NAME ${G_NAME}.exe)
 	endif()
 
+	set(modules_list "${G_NAME};${modules_list}" CACHE INTERNAL "list of modules")
+
+
   else()
     add_library(${G_NAME} ${${G_NAME}_SRCS})
     set_target_properties (${G_NAME} PROPERTIES FOLDER lib)

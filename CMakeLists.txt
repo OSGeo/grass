@@ -198,6 +198,8 @@ execute_process(
 
 add_subdirectory(lib)
 add_subdirectory(tools)
+set(modules_list)
+
 
 set(ALL_SUBDIRS
   general
@@ -216,6 +218,11 @@ set(ALL_SUBDIRS
 foreach(d ${ALL_SUBDIRS})
   add_subdirectory(${d})
 endforeach()
+add_custom_target(ALL_MODULES 
+	COMMAND ${CMAKE_COMMAND} -E echo "Building all modules"
+	DEPENDS ${modules_list})
+
+###message(FATAL_ERROR "modules_list=${modules_list}")
 
 if(WITH_PYTHON)
  add_subdirectory(gui)

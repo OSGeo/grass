@@ -43,6 +43,7 @@ add_custom_target(copy_wxpython_xml
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/xml  ${WXPYTHON_DIR}/xml/
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../xml/grass-interface.dtd ${GISBASE}/gui/
 #####  DEPENDS copy_gui_images
+DEPENDS ALL_MODULES
   )
 add_custom_target(compile_python_files 
   COMMAND ${PYTHON_EXECUTABLE} -m compileall ${GISBASE}/scripts
