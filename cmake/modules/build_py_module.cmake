@@ -11,12 +11,6 @@ macro(build_script_in_subdir dir_name)
     TYPE "SCRIPT")
 endmacro()
 
-macro(build_py_lib_in_subdir dir_name)
-  build_py_module(NAME ${dir_name}
-	TYPE "LIB"
-    DST_DIR etc/python/grass)
-endmacro()
-
 
 function(build_py_module)
   cmake_parse_arguments(G
@@ -36,7 +30,7 @@ function(build_py_module)
     message(FATAL_ERROR "TYPE argument is required")
   endif()
 
-  set(types "GUI;LIB;SCRIPT")
+  set(types "GUI;SCRIPT")
   if(NOT "${G_TYPE}" IN_LIST types)
 	message(FATAL_ERROR "TYPE is '${G_TYPE}'. Supported values are ${types}")
   endif()
@@ -44,15 +38,10 @@ function(build_py_module)
   set(G_TARGET_NAME_PREFIX "")
   if(G_TYPE STREQUAL "GUI")
 	set(G_TARGET_NAME_PREFIX "g.gui.")
-  elseif(G_TYPE STREQUAL "LIB")
-	set(G_TARGET_NAME_PREFIX "pylib.")
   endif()
   
-
-
-
   set(G_TARGET_NAME ${G_TARGET_NAME_PREFIX}${G_NAME})
-  
+ 
   if(G_HTML_FILE_NAME)
     set(HTML_FILE_NAME ${G_HTML_FILE_NAME})
   else()
@@ -109,7 +98,7 @@ endif()#  if(NOT G_TYPE STREQUAL "LIB")
 
    if(G_TYPE STREQUAL "SCRIPT")
      add_custom_target(${G_TARGET_NAME} ALL
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PYTHON_FILES} ${GISBASE}/scripts/
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PY_MODULE_FILE} ${GISBASE}/scripts/
     DEPENDS ${TRANSLATE_C_FILE} )
    else()
   add_custom_target(${G_TARGET_NAME} ALL
@@ -128,9 +117,6 @@ endif()#  if(NOT G_TYPE STREQUAL "LIB")
   set_target_properties (${G_TARGET_NAME} PROPERTIES FOLDER scripts)
   endif()
 
-  if(G_TYPE STREQUAL "LIB")
-  set_target_properties (${G_TARGET_NAME} PROPERTIES FOLDER python)
-  endif()
 
   install(PROGRAMS ${MAIN_SCRIPT_FILE} DESTINATION scripts)
 
@@ -143,14 +129,12 @@ endif()#  if(NOT G_TYPE STREQUAL "LIB")
   set_target_properties(${G_TARGET_NAME} PROPERTIES PYTHON_SCRIPT TRUE)
   set_target_properties(${G_TARGET_NAME} PROPERTIES G_RUNTIME_OUTPUT_DIR "${GISBASE}/scripts")
   set_target_properties(${G_TARGET_NAME} PROPERTIES G_HTML_FILE_NAME "${HTML_FILE_NAME}.html")
-  if(${G_TYPE} IN_LIST types)
-	build_docs(${G_TARGET_NAME})
-  endif()
 
-   if(NOT G_TYPE STREQUAL "LIB")
-	add_dependencies(${G_TARGET_NAME} pylib.script pylib.exceptions)
+	build_docs(${G_TARGET_NAME})
+	   
+	#add_dependencies(${G_TARGET_NAME} pylib.script pylib.exceptions)
 	add_dependencies(${G_TARGET_NAME} g.parser)
-  endif()
+
  endif(WITH_DOCS)
 
  install(FILES ${PYTHON_FILES} DESTINATION etc/${G_NAME})

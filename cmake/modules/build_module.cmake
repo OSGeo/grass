@@ -3,7 +3,7 @@ function(build_module)
   cmake_parse_arguments(G
     "EXE"
     "NAME;SRCDIR;SRC_REGEX;RUNTIME_OUTPUT_DIR;PACKAGE;HTML_FILE_NAME"
-    "SOURCES;INCLUDES;DEPENDS;OPTIONAL_DEPENDS;DEFS;HEADERS"
+    "SOURCES;INCLUDES;DEPENDS;OPTIONAL_DEPENDS;PRIMARY_DEPENDS;DEFS;HEADERS"
     ${ARGN} )
 
   if(NOT G_NAME)
@@ -11,6 +11,14 @@ function(build_module)
   endif()
 
   ## update_per_group_target(${G_NAME})
+  foreach(PRIMARY_DEPEND ${G_PRIMARY_DEPENDS})
+	if (NOT TARGET ${PRIMARY_DEPEND})
+		message(STATUS "${G_NAME} disabled because ${PRIMARY_DEPEND} is not available")
+		return()
+	else()
+	list(APPEND G_DEPENDS ${PRIMARY_DEPEND})
+	endif()
+  endforeach()
 
   if(NOT G_SRC_REGEX)
     set(G_SRC_REGEX "*.c")
@@ -43,7 +51,13 @@ function(build_module)
 
   if(G_EXE)
     add_executable(${G_NAME} ${${G_NAME}_SRCS})
+	if("${G_NAME}" MATCHES "^v.*")
+	set_target_properties (${G_NAME} PROPERTIES FOLDER vector)
+	elseif("${G_NAME}" MATCHES "^r.*")
+	set_target_properties (${G_NAME} PROPERTIES FOLDER raster)
+	else()
     set_target_properties (${G_NAME} PROPERTIES FOLDER bin)
+	endif()
     set(default_html_file_name ${G_NAME})
 	set(PGM_NAME ${G_NAME})
 	if(WIN32)
