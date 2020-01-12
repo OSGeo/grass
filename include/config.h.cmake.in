@@ -159,6 +159,7 @@
 #cmakedefine HAVE_JPEGLIB_H ${HAVE_JPEGLIB_H}
 
 /* define if proj.h exists */
+#cmakedefine PROJMAJOR ${PROJMAJOR}
 #cmakedefine HAVE_PROJ_H ${HAVE_PROJ_H}
 
 /* define if fftw3.h exists */
