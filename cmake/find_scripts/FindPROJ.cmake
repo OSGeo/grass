@@ -18,9 +18,9 @@
 FIND_PATH(PROJ_INCLUDE_DIR proj_api.h DOC "Path to PROJ.4 include directory")
 
 if(EXISTS "${PROJ_INCLUDE_DIR}/proj_api.h")
-	file(READ "${PROJ_INCLUDE_DIR}/xproj_api.h" proj_h_header)
+	file(READ "${PROJ_INCLUDE_DIR}/proj_api.h" proj_h_header)
 	string(REGEX MATCH "#define +PJ_VERSION +([0-9]+)" _dummy "${proj_h_header}")
-    set(PROJ_VERSION_STRING "${CMAKE_MATCH_1}")
+    set(PROJ_VERSION_STRING "${CMAKE_MATCH_1}" CACHE INTERNAL "PROJ.4 version string")
 endif()
 FIND_LIBRARY(PROJ_LIBRARY_RELEASE
     NAMES proj proj_i
