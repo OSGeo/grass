@@ -15,11 +15,25 @@
 #
 ###############################################################################
 
-FIND_PATH(PROJ_INCLUDE_DIR proj_api.h
-    DOC "Path to PROJ.4 include directory")
- 
- file(READ "${PROJ_INCLUDE_DIR}/proj_api.h" _proj_api_h_CONTENTS)
-  string(REGEX REPLACE ".*# *define PJ_VERSION.([0-9]+).*" "\\1" PROJ_VERSION_STRING "${_proj_api_h_CONTENTS}")
+FIND_PATH(PROJ_INCLUDE_DIR proj.h
+    DOC "Path to PROJ.4 include directory 5.x +")
+
+if(NOT PROJ_INCLUDE_DIR)
+	FIND_PATH(PROJ_INCLUDE_DIR proj_api.h DOC "Path to PROJ.4 include directory 4.x")
+	#file(READ "${PROJ_INCLUDE_DIR}/proj_api.h" _proj_h_CONTENTS)
+endif()
+
+if(EXISTS "${PROJ_INCLUDE_DIR}/proj.h")
+	file(READ "${PROJ_INCLUDE_DIR}/proj.h" _proj_h_CONTENTS)
+	 string(REGEX REPLACE ".*# *define PROJ_VERSION_MAJOR.([0-9])" "\\1" PROJ_VERSION_MAJOR "${_proj_h_CONTENTS}")
+	 string(REGEX REPLACE ".*# *define PROJ_VERSION_MINOR.([0-9])" "\\1" PROJ_VERSION_MINOR "${_proj_h_CONTENTS}")
+	 string(REGEX REPLACE ".*# *define PROJ_VERSION_PATCH.([0-9])" "\\1" PROJ_VERSION_PATCH "${_proj_h_CONTENTS}")
+
+	 string(REGEX REPLACE ".*# *define PJ_VERSION.([0-9]+).*" "\\1" PROJ_VERSION_STRING "${_proj_h_CONTENTS}")
+elseif(EXISTS "${PROJ_INCLUDE_DIR}/proj_api.h")
+file(READ "${PROJ_INCLUDE_DIR}/proj_api.h" _proj_h_CONTENTS)
+string(REGEX REPLACE ".*# *define PJ_VERSION.([0-9]+).*" "\\1" PROJ_VERSION_STRING "${_proj_h_CONTENTS}")
+endif()
 
 FIND_LIBRARY(PROJ_LIBRARY_RELEASE
     NAMES proj proj_i
