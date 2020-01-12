@@ -98,4 +98,5 @@ int print_head_info(file_info *);
 /* struct_copy.c */
 int struct_copy(char *, char *, int);
 
-extern CELL_ENTRY cell_table[];
+#include <export/grass_dspf_export.h>
+extern GRASS_DSPF_EXPORT CELL_ENTRY cell_table[];
