@@ -39,7 +39,7 @@
 static const char *GRASS_copyright __attribute__ ((unused))
     = "GRASS GNU GPL licensed Software";
 
-#define GIS_H_VERSION "GRASS_VERSION_STRING"
+#define GIS_H_VERSION GRASS_VERSION_STRING
 #define GIS_H_DATE    "$Date$"
 
 #define G_gisinit(pgm) G__gisinit(GIS_H_VERSION, (pgm))
