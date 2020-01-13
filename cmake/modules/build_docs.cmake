@@ -1,3 +1,10 @@
+# AUTHOR(S): Rashad Kanavath <rashad km gmail>
+# PURPOSE: 	 Create PGM_NAME.html by running mkthml.py. This first set  a grass
+#             environment. TODO use custom_command POST_BUILD directly
+# COPYRIGHT: (C) 2020 by the GRASS Development Team
+#   	    	 This program is free software under the GPL (>=v2)
+#   	    	 Read the file COPYING that comes with GRASS for details.
+
 function(build_docs target_name)
   get_target_property(G_SRC_DIR ${target_name} G_SRC_DIR)
   get_target_property(G_TARGET_FILE ${target_name} G_TARGET_FILE)

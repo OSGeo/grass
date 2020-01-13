@@ -1,3 +1,10 @@
+# AUTHOR(S): Rashad Kanavath <rashad km gmail>
+# PURPOSE: 	 This is the main function that builds all grass libraries (prefixed with grass_)
+#            and grass exeuctables. This cmake function is tailored to meet requirement of grass gnu make rules
+# COPYRIGHT: (C) 2020 by the GRASS Development Team
+#   	    	 This program is free software under the GPL (>=v2)
+#   	    	 Read the file COPYING that comes with GRASS for details.
+
 include(GenerateExportHeader)
 function(build_module)
   cmake_parse_arguments(G
@@ -10,7 +17,6 @@ function(build_module)
     message(FATAL_ERROR "G_NAME empty")
   endif()
 
-  ## update_per_group_target(${G_NAME})
   foreach(PRIMARY_DEPEND ${G_PRIMARY_DEPENDS})
 	if (NOT TARGET ${PRIMARY_DEPEND})
 		message(STATUS "${G_NAME} disabled because ${PRIMARY_DEPEND} is not available")

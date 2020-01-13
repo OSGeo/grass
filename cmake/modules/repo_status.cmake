@@ -1,3 +1,8 @@
+# AUTHOR(S): Rashad Kanavath <rashad km gmail>
+# PURPOSE: 	 Read git status of grass repository if building from git clone
+# COPYRIGHT: (C) 2020 by the GRASS Development Team
+#   	    	 This program is free software under the GPL (>=v2)
+#   	    	 Read the file COPYING that comes with GRASS for details.
 function(repo_status repo_dir version_git_var)
 
 if(NOT EXISTS "${repo_dir}/.git")

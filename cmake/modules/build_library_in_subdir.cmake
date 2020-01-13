@@ -1,7 +1,6 @@
 # AUTHOR(S): Rashad Kanavath <rashad km gmail>
-# PURPOSE: 	 CMake macro to build a grass library under sub directory 
-#            which is passed as argument to macro
-# COPYRIGHT: (C) 2000 by the GRASS Development Team
+# PURPOSE: 	 This is the macro to make grass libraries through build_module function.
+# COPYRIGHT: (C) 2020 by the GRASS Development Team
 #   	    	 This program is free software under the GPL (>=v2)
 #   	    	 Read the file COPYING that comes with GRASS for details.
 

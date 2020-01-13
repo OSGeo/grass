@@ -1,8 +1,3 @@
-copy_python_file(${CMAKE_CURRENT_SOURCE_DIR}/mkhtml.py tools)
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/mkhtml.py DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-copy_python_file(${CMAKE_CURRENT_SOURCE_DIR}/g.html2man/g.html2man.py tools)
-copy_python_file(${CMAKE_CURRENT_SOURCE_DIR}/g.html2man/ghtml.py tools)
-copy_python_file(${CMAKE_CURRENT_SOURCE_DIR}/g.html2man/ggroff.py tools)
 
 set(current_time_s_ms_SRCS "timer/main.c")
 if(MSVC)
@@ -18,4 +13,11 @@ build_program(NAME g.echo
   SOURCES g.echo.c
   RUNTIME_OUTPUT_DIR tools
   PACKAGE "NONE")
+  add_dependencies(g.echo python_doc_tools)
+  add_custom_target(python_doc_tools
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/mkhtml.py  ${GISBASE}/tools
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/g.html2man/g.html2man.py  ${GISBASE}/tools
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/g.html2man/ghtml.py ${GISBASE}/tools
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/g.html2man/ggroff.py ${GISBASE}/tools
+	)
 

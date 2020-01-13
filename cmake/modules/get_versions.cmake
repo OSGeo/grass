@@ -1,3 +1,8 @@
+# AUTHOR(S): Rashad Kanavath <rashad km gmail>
+# PURPOSE: 	 Read major, minor patch, date from given version file
+# COPYRIGHT: (C) 2020 by the GRASS Development Team
+#   	    	 This program is free software under the GPL (>=v2)
+#   	    	 Read the file COPYING that comes with GRASS for details.
 function(get_versions file_path var_major var_minor var_release var_date)
 
 set(version_major  0)

@@ -1,3 +1,9 @@
+# AUTHOR(S): Rashad Kanavath <rashad km gmail>
+# PURPOSE: 	  create translation strings for grass scripts
+#             environment. TODO use custom_command POST_BUILD directly
+# COPYRIGHT: (C) 2020 by the GRASS Development Team
+#   	    	 This program is free software under the GPL (>=v2)
+#   	    	 Read the file COPYING that comes with GRASS for details.
 
 set(ENV{GISRC} "${BIN_DIR}/demolocation/.grassrc${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}")
 set(ENV{GISBASE} "${BIN_DIR}")

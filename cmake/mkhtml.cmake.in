@@ -1,3 +1,9 @@
+# AUTHOR(S): Rashad Kanavath <rashad km gmail>
+# PURPOSE: 	 Create PGM_NAME.html by running mkthml.py. This first set a grass
+#             environment and call --html-description on the program.
+# COPYRIGHT: (C) 2020 by the GRASS Development Team
+#   	    	 This program is free software under the GPL (>=v2)
+#   	    	 Read the file COPYING that comes with GRASS for details.
 function(fatal_error file_name)
   message(STATUS "ENV{PATH}=$ENV{PATH}")
   message(STATUS "ENV{PYTHONPATH}=$ENV{PYTHONPATH}")

@@ -1,3 +1,11 @@
+# AUTHOR(S): Rashad Kanavath <rashad km gmail>
+# PURPOSE: 	  build_py_module is the main function that builds both scripts and gui/wxpython
+#              targets. build_gui_in_subdir and build_script_in_subdir are simple shortcut macros
+# COPYRIGHT: (C) 2020 by the GRASS Development Team
+#   	    	 This program is free software under the GPL (>=v2)
+#   	    	 Read the file COPYING that comes with GRASS for details.
+
+
 macro(build_gui_in_subdir dir_name)
   build_py_module(NAME ${dir_name}
     DST_DIR gui/wxpython
@@ -104,7 +112,7 @@ else()
 	add_custom_target(${G_TARGET_NAME}
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/${G_DST_DIR}/${G_NAME}/
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PYTHON_FILES} ${GISBASE}/${G_DST_DIR}/${G_NAME}/
-		DEPENDS ${PY_MODULE_FILE})
+		DEPENDS ${PY_MODULE_FILE} gui_wxpython)
 endif()
 
   set(modules_list "${G_TARGET_NAME};${modules_list}" CACHE INTERNAL "list of modules")

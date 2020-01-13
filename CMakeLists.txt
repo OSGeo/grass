@@ -1,3 +1,9 @@
+# AUTHOR(S): Rashad Kanavath <rashad km gmail>
+# PURPOSE: 	 Grass root that adds options to activate/deactivate 3rd party libraries
+# COPYRIGHT: (C) 2020 by the GRASS Development Team
+#   	    	 This program is free software under the GPL (>=v2)
+#   	    	 Read the file COPYING that comes with GRASS for details.
+
 cmake_minimum_required(VERSION 3.3)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 
@@ -99,8 +105,6 @@ if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 endif()
 
-include(update_per_group_target)
-include(copy_python_file)
 include(build_docs)
 include(build_module)
 include(build_program)
@@ -111,15 +115,6 @@ include(build_py_module)
 
 
 include(check_target)
-
-# function(set_runtime_output_dir target_name output_dir)
-# set(runtime_output_dir "${CMAKE_BINARY_DIR}/driver/db/"
-# ADD_CUSTOM_COMMAND(TARGET ${target_name} POST_BUILD
-#   COMMAND ${CMAKE_COMMAND} -E make_directory ${output_dir}
-#   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/bin/${target_name} ${output_dir}
-#   DEPENDS ${target_name}
-#   )
-# endfunction()
 
 add_subdirectory(thirdparty)
 
@@ -149,27 +144,10 @@ set(grass_env_command ${CMAKE_COMMAND} -E env
 	"LANGUAGE=C"
 	"MODULE_TOPDIR=${MODULE_TOPDIR}"
 	"GRASS_PYTHON=${PYTHON_EXECUTABLE}"
-    "VERSION_NUMBER=\"7.9.dev\""
-    "VERSION_DATE=\"2019\"")
+    "VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
+    "VERSION_DATE=\"${GRASS_VERSION_DATE}\"")
 
 configure_file(cmake/mkhtml.cmake.in ${CMAKE_BINARY_DIR}/cmake/mkhtml.cmake @ONLY)
-file(TO_NATIVE_PATH ${CMAKE_SOURCE_DIR} module_top_dir)
-file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} bin_dir)
-file(TO_NATIVE_PATH ${PYTHON_EXECUTABLE} GRASS_PYTHON)
-
-file(TO_NATIVE_PATH ${GISBASE} gis_base_dir)
-
-if(WIN32)
-set(SCRIPT_EXT ".bat")
-set(RUN_GRASS ${CMAKE_BINARY_DIR}/tools/run_grass.bat)
-set(RUN_PYTHON ${CMAKE_BINARY_DIR}/tools/run_python.bat)
-else()
-set(SCRIPT_EXT ".sh")
-set(RUN_GRASS ${CMAKE_BINARY_DIR}/tools/run_grass.sh)
-set(RUN_PYTHON ${CMAKE_BINARY_DIR}/tools/run_python.sh)
-endif()
-configure_file(cmake/run_python${SCRIPT_EXT}.in ${RUN_PYTHON} @ONLY)
-configure_file(cmake/run_grass${SCRIPT_EXT}.in ${RUN_GRASS} @ONLY)
 
 set(NO_HTML_DESCR_TARGETS "g.parser;ximgview;test.raster3d.lib")
 add_subdirectory(include)
