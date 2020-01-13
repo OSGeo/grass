@@ -48,6 +48,7 @@ set(script_DIRS
   r3.in.xyz
   v.build.all
   v.centroids
+  v.clip
   v.db.addcolumn
   v.db.addtable
   v.db.join
