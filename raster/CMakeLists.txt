@@ -82,6 +82,8 @@ build_program_in_subdir(
   r.flow
   DEPENDS grass_gis grass_raster grass_segment grass_vector grass_bitmap)
 
+build_program_in_subdir(r.geomorphon DEPENDS grass_gis grass_raster grass_gmath)
+
 build_program_in_subdir(
   r.grow.distance
   DEPENDS grass_gis grass_raster )
@@ -89,6 +91,10 @@ build_program_in_subdir(
 build_program_in_subdir(
   r.gwflow
   DEPENDS grass_gis grass_raster grass_gpde)
+
+build_program_in_subdir(
+  r.his
+  DEPENDS grass_gis grass_raster grass_gproj)
 
 build_program_in_subdir(
   r.horizon
@@ -221,6 +227,8 @@ build_program_in_subdir(
 build_program_in_subdir(
   r.patch
   DEPENDS grass_gis grass_raster)
+
+build_program_in_subdir(r.path DEPENDS grass_gis grass_raster grass_vector)
 
 build_program_in_subdir(
   r.profile

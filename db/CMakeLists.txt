@@ -29,4 +29,13 @@ add_dependencies(db.databases ${db_drivers})
 build_program_in_subdir(db.dropdb DEPENDS grass_dbmiclient)
 add_dependencies(db.dropdb ${db_drivers})
 
+build_program_in_subdir(db.login DEPENDS grass_dbmiclient)
+add_dependencies(db.login ${db_drivers})
+
+build_program_in_subdir(db.select DEPENDS grass_dbmiclient)
+add_dependencies(db.select ${db_drivers})
+
+build_program_in_subdir(db.tables DEPENDS grass_dbmiclient)
+add_dependencies(db.tables ${db_drivers})
+
 #TODO: PGM = databaseintro
