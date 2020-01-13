@@ -1,27 +1,31 @@
 
 # missing docs
-set(gui_DIRS animation datacatalog dbmgr gcp gmodeler 
-iclass image2target mapswipe photo2image psmap rlisetup timeline tplot vdigit)
 
-foreach(gui_DIR ${gui_DIRS})
-  build_gui_in_subdir(${gui_DIR})
-endforeach()
 
 set(WXPYTHON_DIR ${GISBASE}/gui/wxpython)
 set(gui_lib_DIRS core gui_core icons iscatt lmgr location_wizard 
 mapdisp mapwin modules nviz rdigit startup tools vnet web_services wxplot)
 
+set(gui_lib_targets)
+foreach(gui_lib_DIR ${gui_lib_DIRS})
+  copy_python_files_in_subdir(${gui_lib_DIR} gui/wxpython)
+  list(APPEND gui_lib_targets python_${gui_lib_DIR})
+endforeach()
 add_custom_target(gui_wxpython
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/gis_set.py ${WXPYTHON_DIR}/
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/gis_set_error.py ${WXPYTHON_DIR}/
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/wxgui.py ${WXPYTHON_DIR}/
-	DEPENDS python_core python_gui_core python_icons python_iscatt python_lmgr python_location_wizard 
-	python_mapdisp python_mapwin python_modules python_nviz python_rdigit python_startup python_vnet
-	python_web_services python_wxplot)
+	DEPENDS ${gui_lib_targets})
 
-foreach(gui_lib_DIR ${gui_lib_DIRS})
-  copy_python_files_in_subdir(${gui_lib_DIR} gui/wxpython)
+set(gui_DIRS animation datacatalog dbmgr gcp gmodeler 
+iclass image2target mapswipe photo2image psmap rlisetup timeline tplot vdigit)
+set(g_gui_targets)
+foreach(gui_DIR ${gui_DIRS})
+  build_gui_in_subdir(${gui_DIR})
+  list(APPEND g_gui_targets "g.gui.${gui_DIR}")
 endforeach()
+
+
 
 install(FILES README DESTINATION gui/wxpython)
 
@@ -33,17 +37,17 @@ add_custom_target(copy_wxpython_xml
 	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/xml  ${WXPYTHON_DIR}/xml/
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../xml/grass-interface.dtd ${GISBASE}/gui/
 	#####  DEPENDS copy_gui_images
-	DEPENDS ALL_MODULES)
+	DEPENDS gui_wxpython)
 
 add_custom_target(compile_python_files
 	COMMAND ${PYTHON_EXECUTABLE} -m compileall ${GISBASE}/scripts
 	COMMAND ${PYTHON_EXECUTABLE} -m compileall ${WXPYTHON_DIR}
-	DEPENDS copy_wxpython_xml)
+	DEPENDS ALL_MODULES)
 
 add_custom_target(build_modules_items_xml
 	COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE}
 	${CMAKE_CURRENT_SOURCE_DIR}/tools/build_modules_xml.py > ${WXPYTHON_DIR}/xml/module_items.xml
-	DEPENDS compile_python_files
+	DEPENDS copy_wxpython_xml compile_python_files ${g_gui_targets}
 	COMMENT "Generating interface description for all modules..."
 	VERBATIM)
 

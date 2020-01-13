@@ -8,7 +8,7 @@ add_custom_target(copy_gui_images
 COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/images ${CMAKE_BINARY_DIR}/gui/
 DEPENDS copy_gui_icons_flags)
 
-install(DIRECTORY gui/images DESTINATION gui)
+install(DIRECTORY images DESTINATION gui)
 
 #add_subdirectory(images)
 
