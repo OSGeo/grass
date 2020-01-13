@@ -13,6 +13,7 @@ function(build_docs target_name)
   
   if(EXISTS ${html_file})
     set(HTML_FILE ${html_file})
+	install(FILES ${GISBASE}/docs/html/${G_HTML_FILE_NAME} DESTINATION docs/html)
   else()
     file(GLOB html_files ${G_SRC_DIR}/*.html)
     if(html_files)
@@ -36,5 +37,5 @@ function(build_docs target_name)
   
   #add_custom_target(${target_name}_html ALL DEPENDS ${G_RUNTIME_OUTPUT_DIR}/${target_name}.exe)
 
-  install(FILES ${GISBASE}/docs/html/${G_HTML_FILE_NAME} DESTINATION docs/html)
+
  endfunction()
