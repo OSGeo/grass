@@ -84,8 +84,9 @@ enum MM_stream_usage {
 };
 
 
-
+#ifdef GRASS_CMAKE_BUILD
 #include <export/grass_iostream_export.h>
+#endif
 // Declarations of a very simple memory manager designed to work with
 // BTEs that rely on the underlying OS to manage physical memory.
 class GRASS_IOSTREAM_EXPORT MM_register {
