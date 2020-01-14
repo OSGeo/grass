@@ -13,7 +13,7 @@ visualization.
 
 In general: you don't really need write access as you can simply open
 a [pull request](https://github.com/OSGeo/grass/pulls) to contribute to
-GRASS GIS.
+GRASS GIS. See [CONTRIBUTING file](CONTRIBUTING.md) for more details.
 
 Want to become a core developer? See
 [Procedure for gaining Git write access](https://trac.osgeo.org/grass/wiki/HowToContribute#WriteaccesstotheGRASScorerepository)
