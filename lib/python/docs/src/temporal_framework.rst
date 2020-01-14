@@ -273,7 +273,7 @@ to access its registered maps.
     # Lets import the temporal framework and
     # the script framework
     import grass.temporal as tgis
-    import grass.script as grass
+    import grass.script as gs
 
     # Make sure the temporal database exists
     # and set the temporal GIS environment
@@ -292,7 +292,7 @@ to access its registered maps.
     # Check if the space time raster dataset is in the temporal database
     if strds.is_in_db(dbif=dbif) == False:
         dbif.close()
-        grass.fatal(_("Space time %s dataset <%s> not found") % (
+        gs.fatal(_("Space time %s dataset <%s> not found") % (
             strds.get_new_map_instance(None).get_type(), id))
 
     # Fill the object with the content from the temporal database
@@ -330,7 +330,7 @@ for different space time datasets (raster, 3D raster and vector):
     # Lets import the temporal framework and
     # the script framework
     import grass.temporal as tgis
-    import grass.script as grass
+    import grass.script as gs
 
     # The id of the new space time dataset
     id="test@PERMANENT"
@@ -357,15 +357,15 @@ for different space time datasets (raster, 3D raster and vector):
     # First we check if the dataset is already in the database
     if stds.is_in_db(dbif=dbif) and overwrite == False:
         dbif.close()
-        grass.fatal(_("Space time %s dataset <%s> is already in the database. "
-                        "Use the overwrite flag.") %
-                    (stds.get_new_map_instance(None).get_type(), name))
+        gs.fatal(_("Space time %s dataset <%s> is already in the database. "
+                   "Use the overwrite flag.") %
+                 (stds.get_new_map_instance(None).get_type(), name))
 
     # We delete the exiting dataset and create a new one in case we are allowed to overwrite it
     if stds.is_in_db(dbif=dbif) and overwrite == True:
-        grass.warning(_("Overwrite space time %s dataset <%s> "
-                        "and unregister all maps.") %
-                    (stds.get_new_map_instance(None).get_type(), name))
+        gs.warning(_("Overwrite space time %s dataset <%s> "
+                     "and unregister all maps.") %
+                   (stds.get_new_map_instance(None).get_type(), name))
         stds.delete(dbif=dbif)
         stds = stds.get_new_instance(id)
 
@@ -385,7 +385,7 @@ Temporal shifting
 
 .. code-block:: python
 
-    import grass.script as grass
+    import grass.script as gs
     import grass.temporal as tgis
 
     id="test@PERMANENT"
@@ -401,7 +401,7 @@ Temporal shifting
 
     if stds.is_in_db(dbif) == False:
         dbif.close()
-        grass.fatal(_("Space time dataset <%s> not found in temporal database") % (id))
+        gs.fatal(_("Space time dataset <%s> not found in temporal database") % (id))
 
     stds.select(dbif=dbif)
 

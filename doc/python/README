@@ -2,7 +2,7 @@ There are two ways of using Python to run GRASS commands:
  (or you could mix them together)
 
 - Module scripting using the grass python helper library and g.parser.
-    import grass.script as grass
+    import grass.script as gs
   For examples see scripts/ in the GRASS 7 source code.
 
 

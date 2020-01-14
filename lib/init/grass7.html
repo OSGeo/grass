@@ -358,18 +358,18 @@ A very simple Python script ("test.py") may look like this:
 #!/usr/bin/env python3
 
 # import GRASS Python bindings (see also pygrass)
-import grass.script as gscript
+import grass.script as gs
 import grass.script.setup as gsetup
 
-gscript.message('Current GRASS GIS 7 environment:')
-print(gscript.gisenv())
+gs.message('Current GRASS GIS 7 environment:')
+print(gs.gisenv())
 
-gscript.message('Available raster maps:')
-for raster in gscript.list_strings(type='raster'):
+gs.message('Available raster maps:')
+for raster in gs.list_strings(type='raster'):
     print(raster)
 
-gscript.message('Available vector maps:')
-for vector in gscript.list_strings(type='vector'):
+gs.message('Available vector maps:')
+for vector in gs.list_strings(type='vector'):
     print(vector)
 </pre></div>
 
