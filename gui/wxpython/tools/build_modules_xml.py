@@ -19,6 +19,7 @@ from datetime import datetime
 
 import grass.script.core as gcore
 import grass.script.task as gtask
+from grass.exceptions import ScriptError
 
 
 def escapeXML(text):
@@ -80,10 +81,10 @@ def get_module_metadata(name):
     """
     try:
         task = gtask.parse_interface(name)
-    except:
+    except ScriptError as exc:
         sys.stderr.write("Cannot parse interface for module %s. Empty strings"
-                         " will be placed instead of description and keywords."
-                         "\n" % name)
+                         " will be placed instead of description and keywords. Reason: %s"
+                         "\n" % (name, str(exc)))
         return '', ''
 
     return task.get_description(full=True), \
