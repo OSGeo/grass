@@ -226,6 +226,12 @@ def extract_dataset(input, output, type, where, expression, base, time_suffix,
                     # Set the time stamp
                     new_map.set_temporal_extent(old_map.get_temporal_extent())
 
+                    if type == "raster":
+                        # Set the band reference
+                        band_reference = old_map.metadata.get_band_reference()
+                        if band_reference is not None:
+                            new_map.set_band_reference(band_reference)
+
                     # Insert map in temporal database
                     new_map.insert(dbif)
 
