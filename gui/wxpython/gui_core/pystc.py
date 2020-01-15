@@ -70,6 +70,11 @@ class PyStc(stc.StyledTextCtrl):
         self.SetEdgeMode(stc.STC_EDGE_BACKGROUND)
         self.SetEdgeColumn(78)
 
+        # show line numbers
+        self.SetMarginType(1, wx.stc.STC_MARGIN_NUMBER)
+        # supporting only  2 or 3 digit line numbers
+        self.SetMarginWidth(1, 3 * self.faces["size2"])
+
         # setup a margin to hold fold markers
         self.SetMarginType(2, stc.STC_MARGIN_SYMBOL)
         self.SetMarginMask(2, stc.STC_MASK_FOLDERS)
