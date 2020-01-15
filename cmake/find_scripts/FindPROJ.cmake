@@ -1,10 +1,10 @@
 ###############################################################################
-# CMake module to search for PROJ.4 library
+# CMake module to search for PROJ library
 #
 # On success, the macro sets the following variables:
 # PROJ_FOUND       = if the library found
 # PROJ_LIBRARY     = full path to the library
-# PROJ_INCLUDE_DIR = where to find the library headers 
+# PROJ_INCLUDE_DIR = where to find the library headers
 # also defined, but not for general use are
 # PROJ_LIBRARY, where to find the PROJ.4 library.
 #
@@ -51,8 +51,7 @@ MARK_AS_ADVANCED(
 # Handle the QUIETLY and REQUIRED arguments and set SPATIALINDEX_FOUND to TRUE
 # if all listed variables are TRUE
 INCLUDE(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(PROJ 
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(PROJ
 	FOUND_VAR PROJ_FOUND
 	REQUIRED_VARS  PROJ_LIBRARY PROJ_INCLUDE_DIR PROJ_VERSION_STRING
 	VERSION_VAR PROJ_VERSION_STRING)
-
