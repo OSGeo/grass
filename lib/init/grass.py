@@ -379,6 +379,8 @@ def get_grass_config_dir():
     Configuration directory is for example used for grass env file
     (the one which caries mapset settings from session to session).
     """
+    if 'GRASS_CONFIG_DIR' in os.environ:
+        return os.environ['GRASS_CONFIG_DIR']
     if sys.platform == 'win32':
         grass_config_dirname = "GRASS7"
         win_conf_path = os.getenv('APPDATA')
@@ -637,7 +639,8 @@ def set_paths(grass_config_dir):
 
     # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries
     # this works for subprocesses but won't affect the current process
-    path_prepend(gpath("lib"), LD_LIBRARY_PATH_VAR)
+    if not LD_LIBRARY_PATH_VAR == '':
+        path_prepend(gpath("lib"), LD_LIBRARY_PATH_VAR)
 
 
 def find_exe(pgm):
@@ -1662,7 +1665,7 @@ def get_grass_env_file(sh, grass_config_dir):
     """Get name of the shell-specific GRASS environment (rc) file"""
     if sh in ['csh', 'tcsh']:
         grass_env_file = os.path.join(grass_config_dir, 'cshrc')
-    elif sh in ['bash', 'msh', 'cygwin', 'sh']:
+    elif sh in ['bash', 'ash', 'msh', 'cygwin', 'sh']:
         grass_env_file = os.path.join(grass_config_dir, 'bashrc')
     elif sh == 'zsh':
         grass_env_file = os.path.join(grass_config_dir, 'zshrc')
