@@ -140,15 +140,17 @@ def vector_columns(map, layer=None, getDict=True, **args):
     return result
 
 
-def vector_history(map):
+def vector_history(map, replace=False):
     """Set the command history for a vector map to the command used to
     invoke the script (interface to `v.support`).
 
     :param str map: mapname
+    :param bool replace: Replace command line instead of appending it
 
     :return: v.support output
     """
-    run_command('v.support', map=map, cmdhist=os.environ['CMDLINE'])
+    run_command('v.support', map=map, cmdhist=os.environ['CMDLINE'],
+                flags='h' if replace else None)
 
 
 def vector_info_topo(map, layer=1):
