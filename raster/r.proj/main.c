@@ -284,6 +284,7 @@ int main(int argc, char **argv)
     G_create_alt_env();
     G_setenv_nogisrc("GISDBASE", indbase->answer ? indbase->answer : G_gisdbase());
     G_setenv_nogisrc("LOCATION_NAME", inlocation->answer);
+    G_setenv_nogisrc("MAPSET", setname);
 
     permissions = G_mapset_permissions(setname);
     if (permissions < 0)	/* can't access mapset       */
