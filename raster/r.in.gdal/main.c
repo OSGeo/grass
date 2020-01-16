@@ -894,6 +894,7 @@ int main(int argc, char *argv[])
 		G_create_alt_env();
 		G_setenv_nogisrc("LOCATION_NAME", parm.target->answer);
 		sprintf(target_mapset, "PERMANENT");	/* must exist */
+		G_setenv_nogisrc("MAPSET", target_mapset);
 
 		if (G_mapset_permissions(target_mapset) == -1) {
 		    /* create target location later */
