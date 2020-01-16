@@ -75,9 +75,34 @@ void Rast__error_handler(void *p)
     Rast__unopen_all();
 }
 
+static void set_compression_method(const char *cname)
+{
+    /* ask gislib */
+    R__.compression_type = G_compressor_number(cname);
+    if (R__.compression_type < 1) {
+	if (R__.compression_type < 0) {
+	    G_warning(_("Unknown compression method <%s>, using default %s"),
+		cname, G_compressor_name(G_default_compressor()));
+	}
+	if (R__.compression_type == 0) {
+	    G_warning(_("No compression is not supported for GRASS raster maps, using default %s"),
+		      G_compressor_name(G_default_compressor()));
+	}
+	/* use default */
+	R__.compression_type = G_default_compressor();
+    }
+    if (G_check_compressor(R__.compression_type) != 1) {
+	G_warning(_("This GRASS version does not support %s compression, using default %s"),
+	    cname, G_compressor_name(G_default_compressor()));
+	/* use default */
+	R__.compression_type = G_default_compressor();
+    }
+}
+
 static int init(void)
 {
-    char *zlib, *nulls, *cname;
+    char *zlib, *nulls;
+    const char *cname;
 
     Rast__init_window();
 
@@ -93,38 +118,32 @@ static int init(void)
 
     R__.nbytes = sizeof(CELL);
 
-    R__.compression_type = G_default_compressor();
-
-    cname = getenv("GRASS_COMPRESSOR");
-    /* 1: RLE
+    /* compression methods as defined in lib/gis/compress.h
+     * 1: RLE
      * 2: ZLIB (DEFLATE)
      * 3: LZ4
      * 4: BZIP2
      * 5: ZSTD */
-    if (cname && *cname) {
-	/* ask gislib */
-	R__.compression_type = G_compressor_number(cname);
-	if (R__.compression_type < 1) {
-	    if (R__.compression_type < 0) {
-		G_warning(_("Unknown compression method <%s>, using default %s"),
-		    cname, G_compressor_name(G_default_compressor()));
-	    }
-	    if (R__.compression_type == 0) {
-		G_warning(_("No compression is not supported for GRASS raster maps, using default %s"),
-		          G_compressor_name(G_default_compressor()));
-	    }
-	    /* use default */
-	    R__.compression_type = G_default_compressor();
-	}
-	if (G_check_compressor(R__.compression_type) != 1) {
-	    G_warning(_("This GRASS version does not support %s compression, using default %s"),
-		cname, G_compressor_name(G_default_compressor()));
-	    /* use default */
-	    R__.compression_type = G_default_compressor();
-	}
-	G_debug(1, "Using %s compression",
-	           G_compressor_name(R__.compression_type));
+
+    /* raster compressor setting priorities:
+     * default: G_default_compressor()
+     * override by:
+     * 1. GRASS_COMPRESSOR in g.gisenv
+     * 2. GRASS_COMPRESSOR as env var 
+     */
+
+    R__.compression_type = G_default_compressor();
+
+    /* is the compression method set anywhere ? */
+    cname = G_getenv_nofatal("GRASS_COMPRESSOR");
+    if (!cname || (cname && *cname == '\0')) {
+	cname = getenv("GRASS_COMPRESSOR");
     }
+    if (cname && *cname) {
+	set_compression_method(cname);
+    }
+    G_debug(1, "Using %s compression",
+	       G_compressor_name(R__.compression_type));
 
     nulls = getenv("GRASS_COMPRESS_NULLS");
     R__.compress_nulls = (nulls && atoi(nulls) == 0) ? 0 : 1;

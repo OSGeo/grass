@@ -235,17 +235,25 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
     struct Cell_head cellhd;
     int new, old, nrows, row;
     void *rast;
-    char *cname;
+    const char *cname;
 
     Rast_get_cellhd(name, G_mapset(), &cellhd);
-    cname = getenv("GRASS_COMPRESSOR");
+    
+    /* this is a poor copy of parts of lib/raster/init.c:init() 
+     * TODO: new function in lib/raster to get 
+     * the current raster compression method */
+    cname = G_getenv_nofatal("GRASS_COMPRESSOR");
+    if (!cname || (cname && *cname == '\0')) {
+	cname = getenv("GRASS_COMPRESSOR");
+    }
     if (cname && *cname) {
        if (G_compressor_number(cname) < 1)
-           cname = G_compressor_name(G_default_compressor());
+	   cname = G_compressor_name(G_default_compressor());
        else
-           cname = G_compressor_name(G_compressor_number(cname));
-    } else
-           cname = G_compressor_name(G_default_compressor());
+	   cname = G_compressor_name(G_compressor_number(cname));
+    }
+    else
+       cname = G_compressor_name(G_default_compressor());
 
     /* check if already compressed/decompressed */
     if (uncompress) {
