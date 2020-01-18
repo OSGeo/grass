@@ -105,18 +105,17 @@ if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 endif()
 
-include(build_docs)
 include(build_module)
 include(build_program)
 include(build_program_in_subdir)
 include(build_library_in_subdir)
 include(copy_python_files_in_subdir)
-include(build_py_module)
-
-
+include(build_script_in_subdir)
+include(build_gui_in_subdir)
 include(check_target)
 
 add_subdirectory(thirdparty)
+set(MKHTML_PY ${CMAKE_BINARY_DIR}/tools/mkhtml.py)
 
 set(GISBASE ${CMAKE_BINARY_DIR}/gisbase)
 file(TO_NATIVE_PATH "${GISBASE}" GISBASE_NATIVE)
@@ -126,28 +125,30 @@ file(TO_NATIVE_PATH "${CMAKE_SOURCE_DIR}" MODULE_TOPDIR)
 file(TO_NATIVE_PATH "${GISBASE}/scripts" SCRIPTS_DIR)
 file(TO_NATIVE_PATH "${GISBASE}/etc/config/rc" GISRC)
 file(TO_NATIVE_PATH "${GISBASE}/etc/python" ETC_PYTHON_DIR)
-file(TO_NATIVE_PATH "${GISBASE}/gui/wxpython" ETC_WXPYTHON_DIR)
+file(TO_NATIVE_PATH "${GISBASE}/gui/wxpython" GUI_WXPYTHON_DIR)
 if(WIN32)
 set(sep "\;")
+set(env_path "")
 else()
-set(sep "\:")
+set(sep ":")
+set(env_path ":$ENV{PATH}")
 endif()
 
+
 set(grass_env_command ${CMAKE_COMMAND} -E env
-	"PATH=${BINARY_DIR}${sep}${SCRIPTS_DIR}"
-	"PYTHONPATH=${ETC_PYTHON_DIR}${sep}${ETC_WXPYTHON_DIR}${sep}$ENV{PYTHONPATH}"
+	"PATH=${BINARY_DIR}${sep}${SCRIPTS_DIR}${env_path}"
+	"PYTHONPATH=${ETC_PYTHON_DIR}${sep}${GUI_WXPYTHON_DIR}${sep}$ENV{PYTHONPATH}"
 	"LD_LIBRARY_PATH=${LIB_DIR}${sep}$ENV{LD_LIBRARY_PATH}"
 	"GISBASE=${GISBASE_NATIVE}"
 	"GISRC=${GISRC}"
 	"LC_ALL=C"
 	"LANG=C"
 	"LANGUAGE=C"
-	"MODULE_TOPDIR=${MODULE_TOPDIR}"
-	"GRASS_PYTHON=${PYTHON_EXECUTABLE}"
+	"MODULE_TOPDIR=${MODULE_TOPDIR}"	
     "VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
     "VERSION_DATE=\"${GRASS_VERSION_DATE}\"")
 
-configure_file(cmake/mkhtml.cmake.in ${CMAKE_BINARY_DIR}/cmake/mkhtml.cmake @ONLY)
+
 
 set(NO_HTML_DESCR_TARGETS "g.parser;ximgview;test.raster3d.lib")
 add_subdirectory(include)
@@ -163,7 +164,7 @@ execute_process(
   COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/scripts/
   COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/demolocation/
   COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/etc/config/
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/db/driver/
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/driver/db/
   COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/tools/
   COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/lib/
   COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/etc/lister/

@@ -24,7 +24,6 @@ set(output_to_write)
 foreach(line ${varname})
   string(REPLACE "\"" "\\\"" line "${line}")
   set(line "_(\"${line}\")")
-  #message("line=${line}")
   list(APPEND output_to_write "${line}")
 endforeach()
 

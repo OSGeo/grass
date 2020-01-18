@@ -183,24 +183,77 @@ function(build_module)
  endif()
 
  # To use this property later in build_docs
- 	set(PGM_EXT "NONE")
+ 	set(PGM_EXT "")
 	if(WIN32)
 		if(G_EXE)
 			set(PGM_EXT ".exe")
 		endif()
 	endif()
 
- set_target_properties(${G_NAME} PROPERTIES RUN_HTML_DESCR "${RUN_HTML_DESCR}")
- set_target_properties(${G_NAME} PROPERTIES G_TARGET_FILE "$<TARGET_FILE:${G_NAME}>")
- set_target_properties(${G_NAME} PROPERTIES PGM_NAME "${PGM_NAME}")
- set_target_properties(${G_NAME} PROPERTIES G_SRC_DIR "${G_SRCDIR}")
- set_target_properties(${G_NAME} PROPERTIES G_RUNTIME_OUTPUT_DIR "${G_RUNTIME_OUTPUT_DIR}") 
- set_target_properties(${G_NAME} PROPERTIES G_HTML_FILE_NAME "${HTML_FILE_NAME}.html")
- set_target_properties(${G_NAME} PROPERTIES PYTHON_SCRIPT FALSE)
 
  if(WITH_DOCS)
-	build_docs(${G_NAME})
- endif() # WITH_DOCS
+
+  set(G_HTML_FILE_NAME "${HTML_FILE_NAME}.html")
+ 
+  set(html_file ${G_SRCDIR}/${G_HTML_FILE_NAME})
+  set(HTML_FILE)
+  set(no_docs_list "grass_sqlp;echo;clean_temp;lock;run")
+  
+  if(EXISTS ${html_file})
+    set(HTML_FILE ${html_file})
+	install(FILES ${GISBASE}/docs/html/${G_HTML_FILE_NAME} DESTINATION docs/html)
+  else()
+    file(GLOB html_files ${G_SRCDIR}/*.html)
+    if(html_files)
+      if(NOT ${target_name} IN_LIST no_docs_list)
+		message(FATAL_ERROR "${html_file} does not exists. ${G_SRCDIR} \n ${G_RUNTIME_OUTPUT_DIR} | ${target_name}")
+      endif()
+    endif()
+  endif()
+ 
+
+  if(NOT HTML_FILE)
+	return()
+  endif()
+##message("HTML_FILE=${HTML_FILE}")
+
+get_filename_component(HTML_FILE_NAME ${HTML_FILE} NAME)
+get_filename_component(PGM_SOURCE_DIR ${HTML_FILE} PATH)
+
+string(REPLACE ".html"  "" PGM_NAME "${HTML_FILE_NAME}" )
+string(REPLACE ".html" ".tmp.html" TMP_HTML_NAME ${HTML_FILE_NAME})
+set(TMP_HTML_FILE ${G_SRCDIR}/${TMP_HTML_NAME})
+set(OUT_HTML_FILE ${GISBASE}/docs/html/${HTML_FILE_NAME})
+
+set(PGM_EXT "")
+if(WIN32)
+  set(PGM_EXT ".exe")
+endif()
+
+set(html_descr_argument "--html-description")
+if(RUN_HTML_DESCR)
+set(html_descr_command ${G_NAME}${PGM_EXT} "--html-description")
+else()
+set(html_descr_command ${CMAKE_COMMAND} -E echo "")
+endif()
+
+file(GLOB IMG_FILES ${G_SRCDIR}/*.png  ${G_SRCDIR}/*.jpg)
+set(copy_images_command ${CMAKE_COMMAND} -E echo "")
+if(IMG_FILES)
+	set(copy_images_command ${CMAKE_COMMAND} -E copy ${IMG_FILES} ${GISBASE}/docs/html/)
+endif()
+
+add_custom_command(TARGET ${G_NAME} POST_BUILD
+  COMMAND ${grass_env_command} ${CMAKE_COMMAND} -E chdir ${G_SRCDIR} 
+  ${html_descr_command} > ${TMP_HTML_FILE}
+  COMMAND ${grass_env_command} ${CMAKE_COMMAND} -E chdir ${G_SRCDIR} 
+  ${PYTHON_EXECUTABLE} ${MKHTML_PY} ${PGM_NAME} > ${OUT_HTML_FILE}
+  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${G_NAME}> ${G_RUNTIME_OUTPUT_DIR}
+  COMMAND ${copy_images_command}
+  COMMAND ${CMAKE_COMMAND} -E remove ${TMP_HTML_FILE}
+  COMMENT "Creating ${OUT_HTML_FILE}")
+
+endif() # WITH_DOCS
 
 foreach(test_SOURCE ${G_TEST_SOURCES})
 	add_test(NAME  ${G_NAME}-test
