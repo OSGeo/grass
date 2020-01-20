@@ -11,7 +11,7 @@ set GEOTIFF_CSV=@GEOTIFF_CSV@
 
 ::set FONTCONFIG_FILE=%GISBASE%\etc\fonts.conf
 
-set PATH=@gisbase_init_dir@\bin;@BINARY_DIR@\bin;@DLL_PATH_LIST@;%PATH%
+set PATH=@gisbase_init_dir@\bin;@BINARY_DIR@;@DLL_PATH_LIST@;%PATH%
 
 set GISBASE=@gisbase_init_dir@
 
