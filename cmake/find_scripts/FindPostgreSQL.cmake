@@ -65,6 +65,7 @@ find_path(PostgreSQL_TYPE_INCLUDE_DIR
     postgresql
     pgsql/server
     postgresql/server
+    postgresql/9.5/server
     include/server
     
   # Help the user find it if we cannot.
