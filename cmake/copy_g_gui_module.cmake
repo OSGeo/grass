@@ -18,7 +18,7 @@ if(WIN32)
   set(PGM_NAME ${G_NAME})
   configure_file(
     ${SOURCE_DIR}/cmake/windows_launch.bat.in
-    ${GISBASE}/bin/${G_NAME}.bat @ONLY)
+    ${GISBASE}/scripts/${G_NAME}.bat @ONLY)
 endif(WIN32)
 
 set(TMP_SCRIPT_FILE ${BINARY_DIR}/CMakeFiles/${G_NAME}${SCRIPT_EXT})
