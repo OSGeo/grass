@@ -99,5 +99,7 @@ int print_head_info(file_info *);
 int struct_copy(char *, char *, int);
 #ifdef GRASS_CMAKE_BUILD
 #include <export/grass_dspf_export.h>
+#else
+#define GRASS_DSPF_EXPORT
 #endif
 extern GRASS_DSPF_EXPORT CELL_ENTRY cell_table[];

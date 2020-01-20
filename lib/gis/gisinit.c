@@ -28,6 +28,8 @@
 
 #ifdef GRASS_CMAKE_BUILD
 #include <export/grass_gis_export.h>
+#else
+#define GRASS_GIS_EXPORT
 #endif
 struct G__ G__;
 

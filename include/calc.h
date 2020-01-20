@@ -35,6 +35,8 @@ typedef struct func_desc
 
 #ifdef GRASS_CMAKE_BUILD
 #include <export/grass_calc_export.h>
+#else
+#define GRASS_CALC_EXPORT
 #endif
 
 extern GRASS_CALC_EXPORT volatile int floating_point_exception;
