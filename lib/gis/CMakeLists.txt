@@ -35,7 +35,7 @@ endif()
 
 build_module(NAME grass_gis SOURCES "${gislib_SRCS}"
   DEPENDS grass_datetime ZLIB 
-  OPTIONAL_DEPENDS PTHREAD BZIP2 ICONV
+  OPTIONAL_DEPENDS PTHREAD BZIP2 ICONV POSTGRES
   DEFS "${grass_gis_DEFS}"
   )
 
