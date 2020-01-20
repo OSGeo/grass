@@ -258,7 +258,7 @@ foreach(srch ${SRCHS})
   list(APPEND include_depends ${output_dir}/${srch_NAME} )
 endforeach()
 
-add_custom_target(copy_header DEPENDS ${include_depends} python)
+add_custom_target(copy_header DEPENDS ${include_depends} LIB_PYTHON)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in
   "${CMAKE_CURRENT_BINARY_DIR}/grass/version.h")

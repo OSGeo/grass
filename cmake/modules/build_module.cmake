@@ -1,3 +1,4 @@
+
 # AUTHOR(S): Rashad Kanavath <rashad km gmail>
 # PURPOSE: 	 This is the main function that builds all grass libraries (prefixed with grass_)
 #            and grass exeuctables. This cmake function is tailored to meet requirement of grass gnu make rules
@@ -213,6 +214,9 @@ function(build_module)
  
 
   if(NOT HTML_FILE)
+	add_custom_command(TARGET ${G_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${G_NAME}> ${G_RUNTIME_OUTPUT_DIR}
+	)
 	return()
   endif()
 ##message("HTML_FILE=${HTML_FILE}")
@@ -234,11 +238,11 @@ set(html_descr_argument "--html-description")
 if(RUN_HTML_DESCR)
 set(html_descr_command ${G_NAME}${PGM_EXT} "--html-description")
 else()
-set(html_descr_command ${CMAKE_COMMAND} -E echo "")
+  set(html_descr_command ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${G_NAME})
 endif()
 
 file(GLOB IMG_FILES ${G_SRCDIR}/*.png  ${G_SRCDIR}/*.jpg)
-set(copy_images_command ${CMAKE_COMMAND} -E echo "")
+set(copy_images_command ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${G_NAME})
 if(IMG_FILES)
 	set(copy_images_command ${CMAKE_COMMAND} -E copy ${IMG_FILES} ${GISBASE}/docs/html/)
 endif()

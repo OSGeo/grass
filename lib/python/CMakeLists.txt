@@ -23,7 +23,7 @@ configure_file(script/setup.py
   ${CMAKE_BINARY_DIR}/etc/python/grass/script/setup.py
   COPYONLY)
 
-add_custom_target(python
+add_custom_target(LIB_PYTHON
 	COMMAND ${CMAKE_COMMAND} -E echo "#coding=utf-8" > ${GISBASE}/etc/python/__init__.py
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py  ${GISBASE}/etc/python/grass/
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/etc/python/grass/script/setup.py ${GISBASE}/etc/python/grass/script/
@@ -37,6 +37,6 @@ add_custom_target(python
 #TODO: MODULES DISABLED
 #  add_subdirectory(ctypes)
 
-set_target_properties (python PROPERTIES FOLDER lib)
+set_target_properties (LIB_PYTHON PROPERTIES FOLDER lib)
 
 install(DIRECTORY ${GISBASE}/etc/python/grass DESTINATION etc/python/grass/)

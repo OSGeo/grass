@@ -11,10 +11,11 @@ foreach(gui_lib_DIR ${gui_lib_DIRS})
   copy_python_files_in_subdir(${gui_lib_DIR} gui/wxpython)
   list(APPEND gui_lib_targets python_${gui_lib_DIR})
 endforeach()
-add_custom_target(gui_wxpython
+add_custom_target(GUI_WXPYTHON
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/gis_set.py ${WXPYTHON_DIR}/
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/gis_set_error.py ${WXPYTHON_DIR}/
-	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/wxgui.py ${WXPYTHON_DIR}/)
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/wxgui.py ${WXPYTHON_DIR}/
+	DEPENDS ${gui_lib_targets})
 
 set(gui_DIRS animation datacatalog dbmgr gcp gmodeler 
 iclass image2target mapswipe photo2image psmap rlisetup timeline tplot vdigit)
@@ -25,6 +26,7 @@ foreach(gui_DIR ${gui_DIRS})
 endforeach()
 
 
+add_subdirectory(docs)
 
 install(FILES README DESTINATION gui/wxpython)
 
@@ -35,8 +37,7 @@ install(FILES README DESTINATION gui/wxpython)
 add_custom_target(copy_wxpython_xml
 	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/xml  ${WXPYTHON_DIR}/xml/
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../xml/grass-interface.dtd ${GISBASE}/gui/
-	#####  DEPENDS copy_gui_images
-	DEPENDS gui_wxpython)
+	DEPENDS GUI_WXPYTHON)
 
 add_custom_target(compile_python_files
 	COMMAND ${PYTHON_EXECUTABLE} -m compileall ${GISBASE}/scripts
@@ -73,4 +74,4 @@ add_custom_target(build_menustrings ALL
    ${CMAKE_CURRENT_SOURCE_DIR}/core/menutree.py "module_tree" >> ${CMAKE_CURRENT_SOURCE_DIR}/menustrings.py
   COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE}
    ${CMAKE_CURRENT_SOURCE_DIR}/core/menutree.py "psmap" >> ${CMAKE_CURRENT_SOURCE_DIR}/menustrings.py
-  DEPENDS build_module_tree_menudata)
+  DEPENDS build_module_tree_menudata copy_gui_images)

@@ -73,14 +73,30 @@ set(script_DIRS
   v.unpack
   v.what.strds
   v.what.vect
+  wxpyimgview
+  r.mapcalc.simple
+  r.in.wms
   )
 
-#TODO: MODULES DISABLED
-#wxpyimgview
 foreach(script_DIR ${script_DIRS})
   build_script_in_subdir(${script_DIR})
 endforeach()
 
-
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/r.in.wms 
-DESTINATION ${CMAKE_BINARY_DIR}/etc/)
+  DESTINATION ${CMAKE_BINARY_DIR}/etc/)
+
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/wxpyimgview/wxpyimgview_gui.py
+  DESTINATION ${CMAKE_BINARY_DIR}/etc/)
+
+add_custom_target(r.in.wms_files
+	COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/etc/r.in.wms/
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/r.in.wms/wms_base.py ${GISBASE}/etc/r.in.wms/
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/r.in.wms/wms_cap_parsers.py ${GISBASE}/etc/r.in.wms/
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/r.in.wms/wms_drv.py ${GISBASE}/etc/r.in.wms/
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/r.in.wms/wms_gdal_drv.py ${GISBASE}/etc/r.in.wms/
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/r.in.wms/srs.py ${GISBASE}/etc/r.in.wms/
+	DEPENDS v.to.lines
+	)
+add_dependencies(r.in.wms r.in.wms_files)
+
+ set_target_properties (r.in.wms_files PROPERTIES FOLDER scripts)
