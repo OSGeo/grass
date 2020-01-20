@@ -13,6 +13,7 @@
  */
 
 #include <string.h>
+#include <math.h>
 
 #include <grass/glocale.h>
 

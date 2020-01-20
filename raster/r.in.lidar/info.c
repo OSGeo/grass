@@ -12,6 +12,7 @@
  */
 
 #include <string.h>
+#include <math.h> /* For INIFINITY  */
 
 #include <grass/glocale.h>
 
