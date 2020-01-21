@@ -234,7 +234,7 @@ def main():
 
     # prepare to set region in temp location
     if 'r' in region_flag:
-        tgtregion="tgtregion_for_" + TMPLOC
+        tgtregion = "tgtregion_for_" + TMPLOC
         grass.run_command('v.in.region', **dict(output=tgtregion, flags='d'))
 
     # switch to temp location
