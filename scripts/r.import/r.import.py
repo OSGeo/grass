@@ -210,6 +210,7 @@ def main():
     SRCGISRC = grass.tempfile()
 
     TMPLOC = 'temp_import_location_' + str(os.getpid())
+    TMP_REG_NAME = 'vreg_tmp_' + str(os.getpid())
 
     f = open(SRCGISRC, 'w')
     f.write('MAPSET: PERMANENT\n')
@@ -234,7 +235,7 @@ def main():
 
     # prepare to set region in temp location
     if 'r' in region_flag:
-        tgtregion = "tgtregion_for_" + TMPLOC
+        tgtregion = TMP_REG_NAME
         grass.run_command('v.in.region', **dict(output=tgtregion, flags='d'))
 
     # switch to temp location
@@ -287,6 +288,8 @@ def main():
     if flags['n']:
         rflags = 'n'
 
+    vreg = TMP_REG_NAME
+
     for outfile in outfiles:
 
         n = region['n']
@@ -325,7 +328,6 @@ def main():
             grass.run_command('g.region', n=n, s=s, e=e, w=w)
 
         # v.in.region in tgt
-        vreg = TMP_REG_NAME = 'vreg_tmp_' + str(os.getpid())
         grass.run_command('v.in.region', output=vreg, quiet=True)
 
         grass.del_temp_region()
