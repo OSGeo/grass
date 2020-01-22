@@ -210,6 +210,7 @@ def main():
     SRCGISRC = grass.tempfile()
 
     TMPLOC = 'temp_import_location_' + str(os.getpid())
+    TMP_REG_NAME = 'vreg_tmp_' + str(os.getpid())
 
     f = open(SRCGISRC, 'w')
     f.write('MAPSET: PERMANENT\n')
@@ -232,6 +233,11 @@ def main():
     except CalledModuleError:
         grass.fatal(_("Unable to read GDAL dataset <%s>") % GDALdatasource)
 
+    # prepare to set region in temp location
+    if 'r' in region_flag:
+        tgtregion = TMP_REG_NAME
+        grass.run_command('v.in.region', **dict(output=tgtregion, flags='d'))
+
     # switch to temp location
     os.environ['GISRC'] = str(SRCGISRC)
 
@@ -248,6 +254,11 @@ def main():
                       memory=memory, flags='ak' + additional_flags)
     if bands:
         parameters['band'] = bands
+    if 'r' in region_flag:
+        grass.run_command('v.proj', **dict(location=tgtloc, mapset=tgtmapset,
+                          input=tgtregion, output=tgtregion))
+        grass.run_command('g.region', **dict(vector=tgtregion))
+        parameters['flags'] = parameters['flags'] + region_flag
     try:
         grass.run_command('r.in.gdal', **parameters)
     except CalledModuleError:
@@ -267,11 +278,17 @@ def main():
     # switch to target location
     os.environ['GISRC'] = str(TGTGISRC)
 
+    if 'r' in region_flag:
+        grass.run_command('g.remove', **dict(type="vector", flags="f",
+                          name=tgtregion))
+
     region = grass.region()
 
     rflags = None
     if flags['n']:
         rflags = 'n'
+
+    vreg = TMP_REG_NAME
 
     for outfile in outfiles:
 
@@ -311,7 +328,6 @@ def main():
             grass.run_command('g.region', n=n, s=s, e=e, w=w)
 
         # v.in.region in tgt
-        vreg = TMP_REG_NAME = 'vreg_tmp_' + str(os.getpid())
         grass.run_command('v.in.region', output=vreg, quiet=True)
 
         grass.del_temp_region()
