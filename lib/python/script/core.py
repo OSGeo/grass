@@ -1219,18 +1219,18 @@ def region_env(region3d=False, flags=None, env=None, **kwargs):
     gis_env = gisenv(env)
     windfile = os.path.join(gis_env['GISDBASE'], gis_env['LOCATION_NAME'],
                             gis_env['MAPSET'], "WIND")
-    fd = open(windfile, "r")
-    grass_region = ''
-    for line in fd.readlines():
-        key, value = map(lambda x: x.strip(), line.split(":", 1))
-        if kwargs and key not in ('proj', 'zone'):
-            continue
-        if not kwargs and not region3d and \
-                key in ('top', 'bottom', 'cols3', 'rows3',
-                        'depths', 'e-w resol3', 'n-s resol3', 't-b resol'):
-            continue
+    with open(windfile, "r") as fd:
+        grass_region = ''
+        for line in fd.readlines():
+            key, value = map(lambda x: x.strip(), line.split(":", 1))
+            if kwargs and key not in ('proj', 'zone'):
+                continue
+            if not kwargs and not region3d and \
+                    key in ('top', 'bottom', 'cols3', 'rows3',
+                            'depths', 'e-w resol3', 'n-s resol3', 't-b resol'):
+                continue
 
-        grass_region += '%s: %s;' % (key, value)
+            grass_region += '%s: %s;' % (key, value)
 
     if not kwargs:  # return current region
         return grass_region
