@@ -26,7 +26,7 @@ import wx
 import tempfile
 from multiprocessing import Process, Queue
 
-from core.gcmd import RunCommand, GException
+from core.gcmd import RunCommand, GException, DecodeString
 from core.settings import UserSettings
 from core.debug import Debug
 from core.utils import autoCropImageFromFile
@@ -821,7 +821,7 @@ def read2_command(*args, **kwargs):
     kwargs['stderr'] = gcore.PIPE
     ps = gcore.start_command(*args, **kwargs)
     stdout, stderr = ps.communicate()
-    return ps.returncode, stdout, stderr
+    return ps.returncode, DecodeString(stdout), DecodeString(stderr)
 
 
 def test():
