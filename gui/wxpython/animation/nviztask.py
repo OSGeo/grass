@@ -297,7 +297,7 @@ class NvizTask:
             self.task.set_param(paramName, value)
             # FIXME: we assume we want always default color map
             if paramName == 'elevation_map':
-                self.task.set_param('color_map', '')
+                self.task.set_param('color_map', self.task.get_param(paramName)['value'])
             if paramName == 'volume':
                 self.task.set_param('isosurf_color_map', '')
             self.task.set_flag('overwrite', True)
