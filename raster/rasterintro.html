@@ -281,17 +281,17 @@ The GRASS GIS raster format is architecture independent and portable between
 
 All GRASS GIS raster map types are by default ZSTD compressed if 
 available, otherwise ZLIB compressed. Through the environment variable 
-<tt>GRASS_COMPRESSOR</tt> the compression method can be set to RLE, 
-ZLIB, LZ4, BZIP2, or ZSTD.
+or <b>g.gisenv</b> variable<tt>GRASS_COMPRESSOR</tt> the compression 
+method can be set to RLE, ZLIB, LZ4, BZIP2, or ZSTD.
 <p>
 Important: the NULL file compression can be turned off with 
 <tt>export GRASS_COMPRESS_NULLS=0</tt>. Raster maps with NULL file 
 compression can only be opened with GRASS GIS 7.2.0 or later. NULL file 
 compression for a particular raster map can be managed with <b>r.null -z</b>.
 <p>
-Integer (CELL type) raster maps can be compressed with RLE if
-the environment variable <tt>GRASS_COMPRESSOR</tt> exists and is set to 
-RLE. However, this is not recommended.
+Integer (CELL type) raster maps can be compressed with RLE if the 
+environment or <b>g.gisenv</b> variable <tt>GRASS_COMPRESSOR</tt> 
+exists and is set to RLE. However, this is not recommended.
 <p>
 Floating point (FCELL, DCELL) raster maps never use RLE compression;
 they are either compressed with ZLIB, LZ4, BZIP2, ZSTD or are uncompressed.
@@ -336,7 +336,7 @@ In the internal cellhd file, the value for "compressed" is 1 for RLE, 2
 for ZLIB, 3 for LZ4,4 for BZIP2, and 5 for ZSTD.
 <p>
 Obviously, decompression is controlled by the raster map's compression,
-not the environment variable.
+not the environment or <b>g.gisenv</b> variable.
 
 <h3>See also</h3>
 
