@@ -180,7 +180,7 @@ class RenderWMSMgr(wx.EvtHandler):
 
         self.fetched_data_cmd = self.fetching_cmd
 
-        Debug.msg(1, "RenderWMSMgr.OnRenderDone(%s): ret=%d time=%f" %
+        Debug.msg(1, "RenderWMSMgr.OnRenderDone(%s): ret=%s time=%f" %
                   (self.layer, event.ret, time.time() - self._startTime))
 
         self.dataFetched.emit(layer=self.layer)

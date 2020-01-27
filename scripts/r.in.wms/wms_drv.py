@@ -227,7 +227,7 @@ class WMSDrv(WMSBase):
                                         flags='wf',
                                         epsg=self.params['srs'])
         projection = projection.rstrip('\n')
-        temp_map_dataset.SetProjection(grass.encode(projection))
+        temp_map_dataset.SetProjection(projection)
 
         pixel_x_length = (map_region['maxx'] - map_region['minx']) / int(map_region['cols'])
         pixel_y_length = (map_region['miny'] - map_region['maxy']) / int(map_region['rows'])

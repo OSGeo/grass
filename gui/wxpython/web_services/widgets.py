@@ -449,16 +449,16 @@ class WSPanel(wx.Panel):
         """Update order in list.
         """
         def getlayercaption(layer):
-            if l['title']:
-                cap = (l['title'])
+            if layer['title']:
+                cap = (layer['title'])
             else:
-                cap = (l['name'])
+                cap = (layer['name'])
 
-            if l['style']:
-                if l['style']['title']:
-                    cap += ' / ' + l['style']['title']
+            if layer['style']:
+                if layer['style']['title']:
+                    cap += ' / ' + layer['style']['title']
                 else:
-                    cap += ' / ' + l['style']['name']
+                    cap += ' / ' + layer['style']['name']
             return cap
 
         layer_capts = [getlayercaption(l) for l in self.sel_layers]
@@ -734,7 +734,7 @@ class WSPanel(wx.Panel):
                 wx.C2S_HTML_SYNTAX)
             lcmd.append("bgcolor=" + '0x' + hex_color[1:])
 
-        lcmd.append("map=" + self.o_layer_name)
+        lcmd.append("map=" + grass.decode(self.o_layer_name))
 
         return lcmd
 
@@ -846,7 +846,7 @@ class WSPanel(wx.Panel):
                 choices=formats_list,
                 majorDimension=4,
                 style=wx.RA_SPECIFY_COLS)
-            self.source_sizer.Insert(item=self.params['format'], before=2,
+            self.source_sizer.Insert(window=self.params['format'], index=2,
                                      flag=wx.LEFT | wx.RIGHT | wx.BOTTOM,
                                      border=5)
 
@@ -1052,7 +1052,7 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
 
             self.Expand(item)
             child_item, cookie = self.GetFirstChild(item)
-            while child_item.IsOk():
+            while child_item and child_item.IsOk():
                 if  self.GetPyData(child_item)['layer'].IsRequestable() \
                         and not self.IsSelected(child_item):
                     items_to_sel.append(child_item)
@@ -1083,7 +1083,7 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
                     break
 
             while items_to_sel:
-                self.SelectItem(items_to_sel.pop(), unselect_others=False)
+                self.SelectItem(items_to_sel.pop(), select=False)
         else:
             _emitSelected(self.GetPyData(cur_item)['layer'])
 
@@ -1126,7 +1126,7 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
 
             if len(items_to_sel) == len(l_st_list):
                 item = self.GetNext(item)
-                if not item.IsOk():
+                if not item or not item.IsOk():
                     return
                 checknext(item, l_st_list, items_to_sel)
 
@@ -1149,7 +1149,7 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
             if self.HasFlag(wx.TR_MULTIPLE):
                 un_o = False
 
-            self.SelectItem(item, unselect_others=un_o)
+            self.SelectItem(item, select=un_o)
             l_st_list.remove(l_st)
 
         return l_st_list
