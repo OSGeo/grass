@@ -59,6 +59,7 @@ RUN apt-get update \
         python3-ply \
         python3-six \
         python3-wxgtk4.0 \
+        python3-gdal \
         sqlite3 \
         subversion \
         unixodbc-dev \
