@@ -711,6 +711,23 @@ def get_database_info_string():
 
 ###############################################################################
 
+def _create_temporal_database_views(dbif):
+    """Create all views in the temporal database (internal use only)
+
+    Used by create_temporal_database() and upgrade_temporal_database().
+
+    :param dbif: The database interface to be used
+    """
+    for sql_filename in ("raster_views",
+                         "raster3d_views",
+                         "vector_views",
+                         "strds_views",
+                         "str3ds_views",
+                         "stvds_views"):
+        sql_filepath = open(os.path.join(template_path,
+                                         sql_filename + '.sql'),
+                            'r').read()
+        dbif.execute_transaction(sql_filepath)
 
 def create_temporal_database(dbif):
     """This function will create the temporal database
@@ -739,13 +756,6 @@ def create_temporal_database(dbif):
     vector_metadata_sql = open(os.path.join(template_path,
                                             "vector_metadata_table.sql"),
                                'r').read()
-    raster_views_sql = open(os.path.join(template_path, "raster_views.sql"),
-                            'r').read()
-    raster3d_views_sql = open(os.path.join(template_path,
-                                           "raster3d_views.sql"), 'r').read()
-    vector_views_sql = open(os.path.join(template_path, "vector_views.sql"),
-                            'r').read()
-
     stds_tables_template_sql = open(os.path.join(template_path,
                                                  "stds_tables_template.sql"),
                                     'r').read()
@@ -758,12 +768,6 @@ def create_temporal_database(dbif):
     stvds_metadata_sql = open(os.path.join(template_path,
                                            "stvds_metadata_table.sql"),
                               'r').read()
-    strds_views_sql = open(os.path.join(template_path, "strds_views.sql"),
-                           'r').read()
-    str3ds_views_sql = open(os.path.join(template_path, "str3ds_views.sql"),
-                            'r').read()
-    stvds_views_sql = open(os.path.join(template_path, "stvds_views.sql"),
-                           'r').read()
 
     # Create the raster, raster3d and vector tables SQL statements
     raster_tables_sql = map_tables_template_sql.replace("GRASS_MAP", "raster")
@@ -810,27 +814,24 @@ def create_temporal_database(dbif):
     if dbif.connected is not True:
         dbif.connect()
 
-    # Execute the SQL statements for sqlite
+    # Execute the SQL statements
     # Create the global tables for the native grass datatypes
     dbif.execute_transaction(raster_tables_sql)
     dbif.execute_transaction(raster_metadata_sql)
-    dbif.execute_transaction(raster_views_sql)
     dbif.execute_transaction(vector_tables_sql)
     dbif.execute_transaction(vector_metadata_sql)
-    dbif.execute_transaction(vector_views_sql)
     dbif.execute_transaction(raster3d_tables_sql)
     dbif.execute_transaction(raster3d_metadata_sql)
-    dbif.execute_transaction(raster3d_views_sql)
     # Create the tables for the new space-time datatypes
     dbif.execute_transaction(strds_tables_sql)
     dbif.execute_transaction(strds_metadata_sql)
-    dbif.execute_transaction(strds_views_sql)
     dbif.execute_transaction(stvds_tables_sql)
     dbif.execute_transaction(stvds_metadata_sql)
-    dbif.execute_transaction(stvds_views_sql)
     dbif.execute_transaction(str3ds_tables_sql)
     dbif.execute_transaction(str3ds_metadata_sql)
-    dbif.execute_transaction(str3ds_views_sql)
+
+    # Create views
+    self._create_temporal_database_views(dbif)
 
     # The delete trigger
     dbif.execute_transaction(delete_trigger_sql)
@@ -890,16 +891,19 @@ def upgrade_temporal_database(dbif):
         msgr.fatal(_("Unsupported TGIS DB upgrade scenario: from version %s to %s") % \
                    (upgrade_db_from, tgis_db_version))
 
-    # re-create raster views
-    raster_views_sql = open(
-        os.path.join(template_path, "raster_views.sql"),
+    drop_views_sql = open(
+        os.path.join(template_path, "drop_views.sql"),
         'r').read()
 
     msgr.message(
         _("Upgrading temporal database <%s> from version %s to %s...") % \
         (tgis_database_string, upgrade_db_from, tgis_db_version))
+    # Drop views
+    dbif.execute_transaction(drop_views_sql)
+    # Perform upgrade
     dbif.execute_transaction(upgrade_db_sql)
-    dbif.execute_transaction(raster_views_sql)
+    # Recreate views
+    self._create_temporal_database_views(dbif)
 
     dbif.close()
 
