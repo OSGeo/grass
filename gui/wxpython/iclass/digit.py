@@ -52,7 +52,7 @@ class IClassVDigitWindow(VDigitWindow):
             return
 
         region = grass.region()
-        e, n = self.Pixel2Cell(event.GetPositionTuple())
+        e, n = self.Pixel2Cell(event.GetPosition())
         if not((region['s'] <= n <= region['n'])
                and(region['w'] <= e <= region['e'])):
             GWarning(
@@ -103,7 +103,7 @@ class IClassVDigitWindow(VDigitWindow):
 
     def GetCategoryColor(self, cat):
         """Get color associated with given category"""
-        r, g, b = map(int, self.parent.GetClassColor(cat).split(':'))
+        r, g, b = [int(x) for x in self.parent.GetClassColor(cat).split(':')][:3]
         return wx.Colour(r, g, b)
 
 

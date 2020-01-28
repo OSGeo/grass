@@ -24,6 +24,7 @@ except ImportError as e:
     sys.stderr.write(_("Loading ctypes libs failed"))
 
 from core.gcmd import GException
+from grass.script import encode
 
 
 def Rasterize(polygon, rast, region, value):
@@ -207,7 +208,7 @@ def _stringListToCharArr(str_list):
     char_arr = arr()
     for i, st in enumerate(str_list):
         if st:
-            char_arr[i] = st
+            char_arr[i] = encode(st)
         else:
             char_arr[i] = None
 

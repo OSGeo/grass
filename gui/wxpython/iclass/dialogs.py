@@ -579,7 +579,9 @@ class CategoryListCtrl(ListCtrl,
         text_c = wx.Colour(*ContrastColor(back_c))
 
         # if it is in scope of the method, gui falls, using self solved it
-        self.l = wx.ListItemAttr(colText=text_c, colBack=back_c)
+        self.l = wx.ListItemAttr()
+        self.l.SetBackgroundColour(back_c)
+        self.l.SetTextColour(text_c)
         return self.l
 
 
