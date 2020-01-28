@@ -653,7 +653,7 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
 
     backup_howto = _("The format of your actual temporal database is not " \
                      "supported any more.\n" \
-                     "From there, create a backup of your temporal database "\
+                     "Please create a backup of your temporal database "\
                      "to avoid the loss of your temporal data.\n")
     if tgis_db_version > 2:
         backup_howto += _("Recommended solution: Run t.upgrade command installed from "\
