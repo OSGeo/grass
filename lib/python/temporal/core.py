@@ -527,6 +527,7 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
     global tgis_database
     global tgis_database_string
     global tgis_dbmi_paramstyle
+    global tgis_db_version
     global raise_on_error
     global enable_mapset_check
     global enable_timestamp_write
@@ -650,21 +651,30 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
         if dbif.fetchone()[0]:
             db_exists = True
 
-    backup_howto = "The format of your actual temporal database is not " \
-                   "supported any more.\nSolution: You need to export it by " \
-                   "restoring the GRASS GIS version used for creating this DB"\
-                   ". From there, create a backup of your temporal database "\
-                   "to avoid the loss of your temporal data.\nNotes: Use " \
-                   "t.rast.export and t.vect.export to make a backup of your" \
-                   " existing space time datasets.To safe the timestamps of" \
-                   " your existing maps and space time datasets, use " \
-                   "t.rast.list, t.vect.list and t.rast3d.list. "\
-                   "You can register the existing time stamped maps easily if"\
-                   " you export columns=id,start_time,end_time into text "\
-                   "files and use t.register to register them again in new" \
-                   " created space time datasets (t.create). After the backup"\
-                   " remove the existing temporal database, a new one will be"\
-                   " created automatically.\n"
+    backup_howto = _("The format of your actual temporal database is not " \
+                     "supported any more.\n" \
+                     "From there, create a backup of your temporal database "\
+                     "to avoid the loss of your temporal data.\n")
+    if tgis_db_version > 2:
+        backup_howto += _("Recommended solution: Run t.upgrade command installed from "\
+                          "GRASS Addons.\n")
+        backup_howto += _("Alternative solution: ")
+    else:
+        backup_howto += _("Solution: ")
+
+    backup_howto += _("You need to export it by " \
+                      "restoring the GRASS GIS version used for creating this DB."\
+                      "Notes: Use t.rast.export and t.vect.export "\
+                      "to make a backup of your" \
+                      " existing space time datasets.To safe the timestamps of" \
+                      " your existing maps and space time datasets, use " \
+                      "t.rast.list, t.vect.list and t.rast3d.list. "\
+                      "You can register the existing time stamped maps easily if"\
+                      " you export columns=id,start_time,end_time into text "\
+                      "files and use t.register to register them again in new" \
+                      " created space time datasets (t.create). After the backup"\
+                      " remove the existing temporal database, a new one will be"\
+                      " created automatically.\n")
 
     if db_exists is True:
         dbif.close()
