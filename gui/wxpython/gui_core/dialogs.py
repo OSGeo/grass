@@ -1293,7 +1293,7 @@ class GroupDialog(wx.Dialog):
                 label = _("Changing of group <%s> failed.") % group
 
         self.infoLabel.SetLabel(label)
-        wx.FutureCall(4000, self.ClearNotification)
+        wx.CallLater(4000, self.ClearNotification)
 
     def GetSelectedGroup(self):
         """Return currently selected group (without mapset)"""
