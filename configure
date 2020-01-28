@@ -1602,6 +1602,7 @@ EOF
 	    # FreeBSD 3.* and greater have ELF.
 	    SHLIB_CFLAGS="-fPIC"
 	    #SHLIB_LD="ld -Bshareable -x"
+            SHLIB_LD_FLAGS="-Wl,-soname,\$(notdir \$@)"
 	    SHLIB_LD="${CC} -shared"
 	    SHLIB_SUFFIX=".so"
 	    LDFLAGS="-export-dynamic"

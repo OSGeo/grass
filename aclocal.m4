@@ -561,6 +561,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    SHLIB_CFLAGS="-fPIC"
 	    #SHLIB_LD="ld -Bshareable -x"
 	    SHLIB_LD="${CC} -shared"
+            SHLIB_LD_FLAGS="-Wl,-soname,\$(notdir \$[@])"
 	    SHLIB_SUFFIX=".so"
 	    LDFLAGS="-export-dynamic"
 	    #LD_SEARCH_FLAGS='-rpath ${LIB_RUNTIME_DIR}'
