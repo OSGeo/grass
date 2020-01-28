@@ -793,7 +793,7 @@ class TaskFrame(wx.Frame):
                 self.closebox.IsChecked() and \
                 (event.returncode == 0):
             # was closed also when aborted but better is leave it open
-            wx.FutureCall(2000, self.Close)
+            wx.CallLater(2000, self.Close)
 
     def OnMapCreated(self, name, ltype):
         """Map created or changed
