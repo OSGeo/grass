@@ -12,10 +12,6 @@ ALTER TABLE raster_metadata
 ALTER TABLE strds_metadata
  ADD COLUMN number_of_bands INTEGER;
 
--- raster_views.sql
-DROP VIEW raster_view_abs_time;
-DROP VIEW raster_view_rel_time;
-
 -- tgis_metadata
 UPDATE tgis_metadata
   SET value = '3'

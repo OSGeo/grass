@@ -728,6 +728,8 @@ def _create_temporal_database_views(dbif):
 
     :param dbif: The database interface to be used
     """
+    template_path = get_sql_template_path()
+
     for sql_filename in ("raster_views",
                          "raster3d_views",
                          "vector_views",
@@ -913,7 +915,7 @@ def upgrade_temporal_database(dbif):
     # Perform upgrade
     dbif.execute_transaction(upgrade_db_sql)
     # Recreate views
-    self._create_temporal_database_views(dbif)
+    _create_temporal_database_views(dbif)
 
     dbif.close()
 
