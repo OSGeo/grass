@@ -139,7 +139,7 @@ void G_reset_mapsets(void)
 
    List is updated by each call to this function.
 
-   \return pointer to zero terminated array of available mapsets
+   \return pointer to NULL terminated array of available mapsets
  */
 char **G_get_available_mapsets(void)
 {
@@ -180,8 +180,8 @@ char **G_get_available_mapsets(void)
 	}
 
 	mapsets[n++] = G_store(ent->d_name);
-	mapsets[n] = NULL;
     }
+	mapsets[n] = NULL;
 
     closedir(dir);
     G_free(location);
