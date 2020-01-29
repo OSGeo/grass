@@ -2512,7 +2512,7 @@ class VPropertiesDialog(PsmapDialog):
         self.outlineCheck = wx.CheckBox(
             panel, id=wx.ID_ANY, label=_("draw outline"))
         self.outlineCheck.SetValue(self.vPropertiesDict['hcolor'] != 'none')
-        self.outlineCheck.SetToolTipString(
+        self.outlineCheck.SetToolTip(
             _("No effect for fill color from table column"))
 
         widthText = StaticText(panel, id=wx.ID_ANY, label=_("Width (pts):"))
@@ -5912,7 +5912,7 @@ class ImageDialog(PsmapDialog):
                 min=0,
                 max=359,
                 initial=0)
-        panel.image['rotate'].SetToolTipString(
+        panel.image['rotate'].SetToolTip(
             _("Counterclockwise rotation in degrees"))
         if self.imageDict['rotate']:
             panel.image['rotate'].SetValue(int(self.imageDict['rotate']))
@@ -6465,7 +6465,7 @@ class PointDialog(PsmapDialog):
             label=_("Size (pt):"))
         self.sizeCtrl = SpinCtrl(
             panel, id=wx.ID_ANY, size=self.spinCtrlSize)
-        self.sizeCtrl.SetToolTipString(_("Symbol size in points"))
+        self.sizeCtrl.SetToolTip(_("Symbol size in points"))
         self.sizeCtrl.SetValue(self.pointDict['size'])
 
         gridSizer.Add(
@@ -6500,7 +6500,7 @@ class PointDialog(PsmapDialog):
                 min=-360,
                 max=360,
                 initial=0)
-        self.rotCtrl.SetToolTipString(
+        self.rotCtrl.SetToolTip(
             _("Counterclockwise rotation in degrees"))
         self.rotCtrl.SetValue(float(self.pointDict['rotate']))
 
@@ -6836,7 +6836,7 @@ class RectangleDialog(PsmapDialog):
                 min=-360,
                 max=360,
                 initial=0)
-        self.widthCtrl.SetToolTipString(_("Line width in points"))
+        self.widthCtrl.SetToolTip(_("Line width in points"))
         self.widthCtrl.SetValue(float(self.rectDict['width']))
 
         gridSizer.Add(
