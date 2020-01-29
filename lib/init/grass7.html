@@ -4,9 +4,11 @@
 
 <b>grass79</b> [<b>-h</b> | <b>-help</b> | <b>--help</b>] [<b>-v</b> | <b>--version</b>] |
 [<b>-c</b> | <b>-c geofile</b> | <b>-c EPSG:code[:datum_trans]</b>] | <b>-e</b> | <b>-f</b> |
-[<b>--text</b> | <b>--gtext</b> | <b>--gui</b>] | <b>--config</b> | <b>--exec EXECUTABLE</b> | <b>--tmp-location</b>
+[<b>--text</b> | <b>--gtext</b> | <b>--gui</b>] | <b>--config</b> |
+[<b>--tmp-location</b> | <b>--tmp-mapset</b>]
     [[[<b>&lt;GISDBASE&gt;/</b>]<b>&lt;LOCATION&gt;/</b>]
     	<b>&lt;MAPSET&gt;</b>]
+[<b>--exec EXECUTABLE</b>]
 
 <h3>Flags:</h3>
 
@@ -55,8 +57,13 @@
 <dt><b>--tmp-location</b>
 <dd> Run using a temporary location which is created based on the given
 coordinate reference system and deleted at the end of the execution
-(use the --exec flag).
-The active mapset will be PERMANENT.
+(use with the --exec flag).
+The active mapset will be the PERMANENT mapset.
+
+<dt><b>--tmp-mapset</b>
+<dd> Run using a temporary mapset which is created in the specified
+location and deleted at the end of the execution
+(use with the --exec flag).
 
 </dl>
 
@@ -389,6 +396,44 @@ help text of a module:
 <div class="code"><pre>
 grass79 --tmp-location XY --exec r.neighbors --help
 </pre></div>
+
+
+<h4>Using temporary mapset</h4>
+
+<p>
+A single command can be executed, e.g., to examine properties of a
+location (here using the NC SPM sample location):
+
+<div class="code"><pre>
+grass79 --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec g.proj -p
+</pre></div>
+
+Computation in a Python script can be executed in the same way:
+
+<div class="code"><pre>
+grass79 --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py
+</pre></div>
+
+Additional parameters are just passed to the script, so we can run the
+script with different sets of parameters (here 5, 8 and 3, 9) in
+different temporary mapsets which is good for parallel processing.
+
+<div class="code"><pre>
+grass79 --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py 5 8
+grass79 --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py 3 9
+</pre></div>
+
+The same applies to Bash scripts (and other scripts supported on you
+platform):
+
+<div class="code"><pre>
+grass79 --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.sh 5 8
+</pre></div>
+
+The temporary mapset is automatically deleted after computation,
+so the script is expected to export, link or otherwise preserve the
+output data before ending.
+
 
 <h4>Troubleshooting</h4>
 Importantly, to avoid an <tt>"[Errno 8] Exec format error"</tt> there must be a 
