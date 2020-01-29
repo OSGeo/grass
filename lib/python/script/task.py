@@ -201,7 +201,7 @@ class grassTask:
                     if not desc:
                         desc = p['description']
                     errorList.append(_("Parameter '%(name)s' (%(desc)s) is missing.") % \
-                                     {'name': p['name'], 'desc': encode(desc)})
+                                     {'name': p['name'], 'desc': desc})
 
         return errorList
 
