@@ -207,7 +207,7 @@ class IClassToolbar(BaseToolbar):
 
         if cat:
             stat = self.stats_data.GetStatistics(cat)
-            back_c = wx.Colour(*map(int, stat.color.split(':')))
+            back_c = wx.Colour([int(x) for x in stat.color.split(':')])
             text_c = wx.Colour(*ContrastColor(back_c))
         else:
             back_c = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BACKGROUND)

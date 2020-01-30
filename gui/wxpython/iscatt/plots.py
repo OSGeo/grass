@@ -25,7 +25,7 @@ from copy import deepcopy
 from iscatt.core_c import MergeArrays, ApplyColormap
 from iscatt.dialogs import ManageBusyCursorMixin
 from core.settings import UserSettings
-from gui_core.wrap import Menu
+from gui_core.wrap import Menu, NewId
 
 try:
     import matplotlib
@@ -276,9 +276,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
             self.axes.add_artist(ellip)
             callafter_list.append([self.axes.draw_artist, [ellip]])
 
-            color = map(
-                lambda v: int(v) / 255.0,
-                styles[cat_id]['color'].split(":"))
+            color = [int(v) / 255.0 for v in styles[cat_id]['color'].split(":")[:3]]
 
             ellip = Ellipse(xy=e['pos'],
                             width=e['width'],
@@ -620,8 +618,8 @@ class ScatterPlotContextMenu:
                            lambda event: self.plot.ZoomToExtend()]]
 
             for item in menu_items:
-                item_id = wx.ID_ANY
-                menu.Append(item_id, text=item[1])
+                item_id = NewId()
+                menu.Append(item_id, item[1])
                 menu.Bind(wx.EVT_MENU, item[2], id=item_id)
 
             wx.CallAfter(self.ShowMenu, menu)
