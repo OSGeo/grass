@@ -286,10 +286,10 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer, char *geom_
 				cellhd->proj, cellhd->zone);
 		}
 		if (loc_wind.proj != cellhd->proj) {
-		    strcat(error_msg, "\nERROR: proj\n");
+		    strcat(error_msg, "\nDifference in: proj\n");
 		}
 		else {
-		    strcat(error_msg, "\nERROR: ");
+		    strcat(error_msg, "\nDifference in: ");
 		    switch (err) {
 		    case -1:
 			strcat(error_msg, "proj\n");
@@ -348,17 +348,17 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer, char *geom_
 		}
 	    }
             if (!check_only) {
-		strcat(error_msg,
-		       _("\nIn case of no significant differences in the projection definitions,"
-			 " use the -o flag to ignore them and use"
-			 " current location definition.\n"));
-		strcat(error_msg,
-		       _("Consider generating a new location from the input dataset using "
-			"the 'location' parameter.\n"));
-	    }
-
+                strcat(error_msg,
+                       _("\nIn case of no significant differences in the projection definitions,"
+                         " use the -o flag to ignore them and use"
+                         " current location definition.\n"));
+                strcat(error_msg,
+                       _("Consider generating a new location from the input dataset using "
+                         "the 'location' parameter.\n"));
+            }
+            
 	    if (check_only)
-		msg_fn = G_warning;
+		msg_fn = G_message;
 	    else
 		msg_fn = G_fatal_error;
 	    msg_fn("%s", error_msg);
