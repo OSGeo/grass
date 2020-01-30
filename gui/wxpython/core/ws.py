@@ -142,7 +142,9 @@ class RenderWMSMgr(wx.EvtHandler):
 
     def _render(self, cmd, env):
         try:
-            return grass.run_command(cmd[0], env=env, **cmd[1])
+            # TODO: use errors=status when working
+            grass.run_command(cmd[0], env=env, **cmd[1])
+            return 0
         except CalledModuleError as e:
             grass.error(e)
             return 1

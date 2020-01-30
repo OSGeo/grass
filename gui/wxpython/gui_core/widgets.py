@@ -1352,7 +1352,7 @@ class ManageSettingsWidget(wx.Panel):
 
         :param settings: - dict with all settigs {nameofsetting : settingdata, ....}
         """
-        self._settings = dict(self._settings.items() + settings.items())
+        self._settings.update(settings)
         self._saveSettings()
 
     def OnSettingsDelete(self, event):

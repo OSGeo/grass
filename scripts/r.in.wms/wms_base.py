@@ -289,7 +289,7 @@ class WMSBase(object):
                     temp.write(cap)
                 return
             except IOError as error:
-                grass.fatal(_("Unabble to open file '%s'.\n%s\n" % (capfile_output, error)))
+                grass.fatal(_("Unable to open file '%s'.\n%s\n" % (capfile_output, error)))
 
         # print to output
         print(cap)
