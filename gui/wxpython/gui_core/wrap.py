@@ -23,6 +23,8 @@ try:
 except ImportError:
     import wx.lib.customtreectrl as CT
 
+import wx.lib.agw.floatspin as fs
+
 from core.globalvar import gtk3, wxPythonPhoenix, CheckWxVersion
 if wxPythonPhoenix:
     import wx.adv
@@ -120,6 +122,22 @@ class SpinCtrl(wx.SpinCtrl):
                 kwargs['size'] = wx.Size(self.gtk3MinSize, -1)
 
         wx.SpinCtrl.__init__(self, *args, **kwargs)
+
+
+class FloatSpin(fs.FloatSpin):
+    """Wrapper around fs.FloatSpin to have more control
+    over the widget on different platforms"""
+
+    gtk3MinSize = 130
+
+    def __init__(self, *args, **kwargs):
+        if gtk3:
+            if 'size' in kwargs:
+                kwargs['size'] = wx.Size(max(self.gtk3MinSize, kwargs['size'][0]), kwargs['size'][1])
+            else:
+                kwargs['size'] = wx.Size(self.gtk3MinSize, -1)
+
+        fs.FloatSpin.__init__(self, *args, **kwargs)
 
 
 class Button(wx.Button):
