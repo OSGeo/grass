@@ -37,15 +37,6 @@ if globalvar.wxPythonPhoenix:
 else:
     import wx.lib.flatnotebook as FN
 import wx.lib.colourselect as csel
-import wx.lib.mixins.listctrl as listmix
-from wx.lib.newevent import NewEvent
-if globalvar.wxPythonPhoenix:
-    try:
-        from agw.hypertreelist import HyperTreeList as TreeListCtrl
-    except ImportError: # if it's not there locally, try the wxPython lib.
-        from wx.lib.agw.hypertreelist import HyperTreeList as TreeListCtrl
-else:
-    from wx.gizmos import TreeListCtrl
 
 from core.debug import Debug
 from core.gcmd import GWarning, GMessage
@@ -56,7 +47,7 @@ from web_services.cap_interface import WMSCapabilities, WMTSCapabilities, OnEart
 from gui_core.widgets import GNotebook
 from gui_core.widgets import ManageSettingsWidget
 from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, \
-    TextCtrl
+    TextCtrl, TreeCtrl
 
 import grass.script as grass
 
@@ -448,7 +439,7 @@ class WSPanel(wx.Panel):
     def _updateLayerOrderList(self, selected=None):
         """Update order in list.
         """
-        def getlayercaption(layer):
+        def getlayercaption(l):
             if l['title']:
                 cap = (l['title'])
             else:
@@ -846,7 +837,7 @@ class WSPanel(wx.Panel):
                 choices=formats_list,
                 majorDimension=4,
                 style=wx.RA_SPECIFY_COLS)
-            self.source_sizer.Insert(item=self.params['format'], before=2,
+            self.source_sizer.Insert(2, window=self.params['format'],
                                      flag=wx.LEFT | wx.RIGHT | wx.BOTTOM,
                                      border=5)
 
@@ -918,8 +909,7 @@ class WSPanel(wx.Panel):
         """
         return self.ws
 
-
-class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
+class LayersList(TreeCtrl):
 
     def __init__(self, parent, web_service, style, pos=wx.DefaultPosition):
         """List of layers and styles available in capabilities file
@@ -927,18 +917,7 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
         self.parent = parent
         self.ws = web_service
 
-        TreeListCtrl.__init__(self, parent=parent, id=wx.ID_ANY, style=style)
-
-        # setup mixins
-        listmix.ListCtrlAutoWidthMixin.__init__(self)
-        if self.ws != 'OnEarth':
-            self.AddColumn(_('Name'))
-            self.AddColumn(_('Type'))
-        else:
-            self.AddColumn(_('Layer name'))
-
-        self.SetMainColumn(0)  # column with the tree
-        self.setResizeColumn(0)
+        TreeCtrl.__init__(self, parent=parent, id=wx.ID_ANY, style=style)
 
         self.root = None
         self.Bind(wx.EVT_TREE_SEL_CHANGING, self.OnListSelChanging)
@@ -970,10 +949,6 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
                 return layer_title
 
             def addlayer(layer, item):
-
-                if self.ws != 'OnEarth':
-                    self.SetItemText(item, _('layer'), 1)
-
                 styles = layer.GetLayerData('styles')
 
                 def_st = None
@@ -991,14 +966,12 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
                         def_st = st
 
                     style_item = self.AppendItem(item, style_name)
-                    if self.ws != 'OnEarth':
-                        self.SetItemText(style_item, _('style'), 1)
 
-                    self.SetPyData(style_item, {'type': 'style',
+                    self.SetItemData(style_item, {'type': 'style',
                                                 'layer': layer,  # it is parent layer of style
                                                 'style': st})
 
-                self.SetPyData(item, {'type': 'layer',  # is it layer or style?
+                self.SetItemData(item, {'type': 'layer',  # is it layer or style?
                                       'layer': layer,  # Layer instance from web_services.cap_interface
                                       'style': def_st})  # layer can have assigned default style
 
@@ -1030,13 +1003,13 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
         sel_layers_dict = []
         for s in sel_layers:
             try:
-                layer = self.GetPyData(s)['layer']
+                layer = self.GetItemData(s)['layer']
             except ValueError:
                 continue
             sel_layers_dict.append({
                 'name': layer.GetLayerData('name'),
                 'title': layer.GetLayerData('title'),
-                'style': self.GetPyData(s)['style'],
+                'style': self.GetItemData(s)['style'],
                 'cap_intf_l': layer
             })
         return sel_layers_dict
@@ -1052,23 +1025,23 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
 
             self.Expand(item)
             child_item, cookie = self.GetFirstChild(item)
-            while child_item.IsOk():
-                if  self.GetPyData(child_item)['layer'].IsRequestable() \
+            while child_item and child_item.IsOk():
+                if  self.GetItemData(child_item)['layer'].IsRequestable() \
                         and not self.IsSelected(child_item):
                     items_to_sel.append(child_item)
-                elif not self.GetPyData(child_item)['layer'].IsRequestable():
+                elif not self.GetItemData(child_item)['layer'].IsRequestable():
                     list_to_check.append(child_item)
 
                 child_item, cookie = self.GetNextChild(item, cookie)
 
         cur_item = event.GetItem()
-        if not self.GetPyData(cur_item)['layer'].IsRequestable():
+        if not self.GetItemData(cur_item)['layer'].IsRequestable():
             event.Veto()
 
             if not self.HasFlag(wx.TR_MULTIPLE):
                 return
 
-            _emitSelected(self.GetPyData(cur_item)['layer'])
+            _emitSelected(self.GetItemData(cur_item)['layer'])
 
             items_to_chck = []
             items_to_sel = []
@@ -1083,9 +1056,9 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
                     break
 
             while items_to_sel:
-                self.SelectItem(items_to_sel.pop(), unselect_others=False)
+                self.SelectItem(items_to_sel.pop(), select=True)
         else:
-            _emitSelected(self.GetPyData(cur_item)['layer'])
+            _emitSelected(self.GetItemData(cur_item)['layer'])
 
     def GetItemCount(self):
         """Required for listmix.ListCtrlAutoWidthMixin
@@ -1105,9 +1078,9 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
         """
         def checknext(item, l_st_list, items_to_sel):
             def compare(item, l_name, st_name):
-                it_l_name = self.GetPyData(item)['layer'].GetLayerData('name')
-                it_st = self.GetPyData(item)['style']
-                it_type = self.GetPyData(item)['type']
+                it_l_name = self.GetItemData(item)['layer'].GetLayerData('name')
+                it_st = self.GetItemData(item)['style']
+                it_type = self.GetItemData(item)['type']
 
                 if it_l_name == l_name and ((not it_st and not st_name) or (
                         it_st and it_st['name'] == st_name and it_type == 'style')):
@@ -1125,7 +1098,7 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
                     break
 
             if len(items_to_sel) == len(l_st_list):
-                item = self.GetNext(item)
+                item = self.GetNextVisible(item)
                 if not item.IsOk():
                     return
                 checknext(item, l_st_list, items_to_sel)
@@ -1145,11 +1118,11 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
                 continue
 
             item, l_st = i
-            un_o = True
+            keep = False
             if self.HasFlag(wx.TR_MULTIPLE):
-                un_o = False
+                keep = True
 
-            self.SelectItem(item, unselect_others=un_o)
+            self.SelectItem(item, select=keep)
             l_st_list.remove(l_st)
 
         return l_st_list
