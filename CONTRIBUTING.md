@@ -7,10 +7,11 @@ https://grass.osgeo.org/get-involved/.
 In the rest of this document, we will focus on contributions centered
 around the GRASS GIS source code.
 
-## Reporting issues and suggesting features and changes
+## Reporting issues and suggesting features
 
-* Get an OSGeo Services UserID (http://www.osgeo.org/osgeo_userid).
-* Got to https://trac.osgeo.org/grass/#BugTracking and follow instructions there.
+To report an issue or to suggest features or a change,
+[open an issue](https://github.com/OSGeo/grass/issues/new/choose)
+on GitHub.
 
 ## Changing code and documentation
 
