@@ -138,12 +138,12 @@ class Statistics:
         name = c_char_p()
         I_iclass_statistics_get_name(cStatistics, byref(name))
         if self.name != name.value:
-            set_stats["name"] = name.value
+            set_stats["name"] = grass.decode(name.value)
 
         color = c_char_p()
         I_iclass_statistics_get_color(cStatistics, byref(color))
         if self.color != color.value:
-            set_stats["color"] = color.value
+            set_stats["color"] = grass.decode(color.value)
 
         nbands = c_int()
         I_iclass_statistics_get_nbands(cStatistics, byref(nbands))
