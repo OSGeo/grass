@@ -404,7 +404,8 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             else:
                 self.SetCurrent()
             self._display.ResizeWindow(size.width,
-                                       size.height)
+                                       size.height,
+                                       self.GetContentScaleFactor())
 
             # reposition checkbox in statusbar
             self.parent.StatusbarReposition()
@@ -674,7 +675,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             size = self.GetClientSize()
             self._display.LookHere(
                 self.mouse['begin'][0],
-                size[1] - self.mouse['begin'][1])
+                size[1] - self.mouse['begin'][1], self.GetContentScaleFactor())
             focus = self._display.GetFocus()
             for i, coord in enumerate(('x', 'y', 'z')):
                 self.iview['focus'][coord] = focus[i]
@@ -743,7 +744,8 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         size = self.GetClientSize()
         # UL -> LL
         x, y = xyCoords
-        sid, x, y, z = self._display.GetPointOnSurface(x, size[1] - y)
+        sid, x, y, z = self._display.GetPointOnSurface(x, size[1] - y,
+                                                       self.GetContentScaleFactor())
 
         if not sid:
             return None
@@ -768,9 +770,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             if hasattr(self.lmgr, "nviz"):
                 self.lmgr.nviz.UpdateSettings()
                 x, y = pos[0], self.GetClientSize()[1] - pos[1]
-                result = self._display.GetPointOnSurface(x, y)
+                result = self._display.GetPointOnSurface(x, y,
+                                                         self.GetContentScaleFactor())
                 if result[0]:
-                    self._display.LookHere(x, y)
+                    self._display.LookHere(x, y, self.GetContentScaleFactor())
                     focus = self._display.GetFocus()
                     for i, coord in enumerate(('x', 'y', 'z')):
                         self.iview['focus'][coord] = focus[i]
@@ -859,9 +862,11 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         """Simulation of panning using focus"""
         size = self.GetClientSize()
         id1, x1, y1, z1 = self._display.GetPointOnSurface(
-            self.mouse['tmp'][0], size[1] - self.mouse['tmp'][1])
+            self.mouse['tmp'][0], size[1] - self.mouse['tmp'][1],
+            self.GetContentScaleFactor())
         id2, x2, y2, z2 = self._display.GetPointOnSurface(
-            event.GetX(), size[1] - event.GetY())
+            event.GetX(), size[1] - event.GetY(),
+            self.GetContentScaleFactor())
         if id1 and id1 == id2:
             dx, dy, dz = x2 - x1, y2 - y1, z2 - z1
             focus = self.iview['focus']
@@ -883,9 +888,11 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         """
         size = self.GetClientSize()
         id1, x1, y1, z1 = self._display.GetPointOnSurface(
-            self.mouse['tmp'][0], size[1] - self.mouse['tmp'][1])
+            self.mouse['tmp'][0], size[1] - self.mouse['tmp'][1],
+            self.GetContentScaleFactor())
         id2, x2, y2, z2 = self._display.GetPointOnSurface(
-            event.GetX(), size[1] - event.GetY())
+            event.GetX(), size[1] - event.GetY(),
+            self.GetContentScaleFactor())
 
         if id1 and id1 == id2:
             dx, dy = x2 - x1, y2 - y1
@@ -1015,7 +1022,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
     def QuerySurface(self, x, y):
         """Query surface on given position"""
         size = self.GetClientSize()
-        result = self._display.QueryMap(x, size[1] - y)
+        result = self._display.QueryMap(x, size[1] - y, self.GetContentScaleFactor())
         if result:
             self.qpoints.append((result['x'], result['y'], result['z']))
             self.log.WriteLog("%-30s: %.3f" % (_("Easting"), result['x']))
