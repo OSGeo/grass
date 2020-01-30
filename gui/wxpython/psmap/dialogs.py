@@ -44,10 +44,7 @@ import wx.lib.scrolledpanel as scrolled
 import wx.lib.filebrowsebutton as filebrowse
 from wx.lib.mixins.listctrl import CheckListCtrlMixin, ListCtrlAutoWidthMixin
 from wx.lib.expando import ExpandoTextCtrl, EVT_ETC_LAYOUT_NEEDED
-try:
-    import wx.lib.agw.floatspin as fs
-except ImportError:
-    fs = None
+import wx.lib.agw.floatspin as fs
 
 from core import globalvar
 
@@ -72,7 +69,7 @@ from dbmgr.vinfo import VectorDBInfo
 from gui_core.gselect import Select
 from core.gcmd import RunCommand, GError, GMessage
 from gui_core.dialogs import SymbolDialog
-from gui_core.wrap import SpinCtrl, Button, TextCtrl, BitmapButton, \
+from gui_core.wrap import FloatSpin, SpinCtrl, Button, TextCtrl, BitmapButton, \
     StaticText, StaticBox, Rect, EmptyBitmap, TextEntryDialog, ListCtrl, NewId, \
     BitmapFromImage
 from psmap.utils import *
@@ -226,7 +223,6 @@ class PsmapDialog(wx.Dialog):
         self.objectType = None
         self.unitConv = UnitConversion(self)
         self.spinCtrlSize = (65, -1)
-        self.floatSpinSize = (120, -1)
 
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
@@ -2353,21 +2349,17 @@ class VPropertiesDialog(PsmapDialog):
         self.outlineCheck.SetValue(self.vPropertiesDict['color'] != 'none')
 
         widthText = StaticText(panel, id=wx.ID_ANY, label=_("Width (pts):"))
-        if fs:
-            self.widthSpin = fs.FloatSpin(
-                panel,
-                id=wx.ID_ANY,
-                min_val=0,
-                max_val=30,
-                increment=0.5,
-                value=1,
-                style=fs.FS_RIGHT)
-            self.widthSpin.SetFormat("%f")
-            self.widthSpin.SetDigits(2)
-        else:
-            self.widthSpin = SpinCtrl(
-                panel, id=wx.ID_ANY, min=1, max=25, initial=1,
-                size=self.spinCtrlSize)
+
+        self.widthSpin = FloatSpin(
+            panel,
+            id=wx.ID_ANY,
+            min_val=0,
+            max_val=30,
+            increment=0.5,
+            value=1,
+            style=fs.FS_RIGHT)
+        self.widthSpin.SetFormat("%f")
+        self.widthSpin.SetDigits(2)
 
         if self.vPropertiesDict['color'] is None:
             self.vPropertiesDict['color'] = 'none'
@@ -2517,21 +2509,16 @@ class VPropertiesDialog(PsmapDialog):
 
         widthText = StaticText(panel, id=wx.ID_ANY, label=_("Width (pts):"))
 
-        if fs:
-            self.outWidthSpin = fs.FloatSpin(
-                panel,
-                id=wx.ID_ANY,
-                min_val=0,
-                max_val=30,
-                increment=0.5,
-                value=1,
-                style=fs.FS_RIGHT)
-            self.outWidthSpin.SetFormat("%f")
-            self.outWidthSpin.SetDigits(1)
-        else:
-            self.outWidthSpin = SpinCtrl(
-                panel, id=wx.ID_ANY, min=1, max=30, initial=1,
-                size=self.spinCtrlSize)
+        self.outWidthSpin = FloatSpin(
+            panel,
+            id=wx.ID_ANY,
+            min_val=0,
+            max_val=30,
+            increment=0.5,
+            value=1,
+            style=fs.FS_RIGHT)
+        self.outWidthSpin.SetFormat("%f")
+        self.outWidthSpin.SetDigits(1)
 
         if self.vPropertiesDict['hcolor'] != 'none':
             self.outWidthSpin.SetValue(self.vPropertiesDict['hwidth'])
@@ -2896,20 +2883,17 @@ class VPropertiesDialog(PsmapDialog):
 
         widthText = StaticText(
             panel, id=wx.ID_ANY, label=_("Set width (pts):"))
-        if fs:
-            self.widthSpin = fs.FloatSpin(
-                panel,
-                id=wx.ID_ANY,
-                min_val=0,
-                max_val=30,
-                increment=0.5,
-                value=1,
-                style=fs.FS_RIGHT)
-            self.widthSpin.SetFormat("%f")
-            self.widthSpin.SetDigits(1)
-        else:
-            self.widthSpin = SpinCtrl(
-                panel, id=wx.ID_ANY, min=1, max=30, initial=1)
+
+        self.widthSpin = FloatSpin(
+            panel,
+            id=wx.ID_ANY,
+            min_val=0,
+            max_val=30,
+            increment=0.5,
+            value=1,
+            style=fs.FS_RIGHT)
+        self.widthSpin.SetFormat("%f")
+        self.widthSpin.SetDigits(1)
 
         self.cwidthCheck = wx.CheckBox(
             panel, id=wx.ID_ANY, label=_("multiply width by category value"))
@@ -5863,27 +5847,18 @@ class ImageDialog(PsmapDialog):
 
         scaleLabel = StaticText(
             parent=panel, id=wx.ID_ANY, label=_("Scale:"))
-        if fs:
-            panel.image['scale'] = fs.FloatSpin(
-                panel, id=wx.ID_ANY, min_val=0, max_val=50, increment=0.5,
-                value=1, style=fs.FS_RIGHT, size=self.floatSpinSize)
-            panel.image['scale'].SetFormat("%f")
-            panel.image['scale'].SetDigits(1)
-        else:
-            panel.image['scale'] = TextCtrl(
-                panel, id=wx.ID_ANY, size=self.spinCtrlSize,
-                validator=TCValidator(flag='DIGIT_ONLY'))
+
+        panel.image['scale'] = FloatSpin(
+            panel, id=wx.ID_ANY, min_val=0, max_val=50, increment=0.5,
+            value=1, style=fs.FS_RIGHT)
+        panel.image['scale'].SetFormat("%f")
+        panel.image['scale'].SetDigits(1)
 
         if self.imageDict['scale']:
-            if fs:
-                value = float(self.imageDict['scale'])
-            else:
-                value = str(self.imageDict['scale'])
+            value = float(self.imageDict['scale'])
         else:
-            if fs:
-                value = 0
-            else:
-                value = '0'
+            value = 0
+
         panel.image['scale'].SetValue(value)
 
         gridSizer.Add(
@@ -5898,20 +5873,12 @@ class ImageDialog(PsmapDialog):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Rotation angle (deg):"))
-        if fs:
-            panel.image['rotate'] = fs.FloatSpin(
-                panel, id=wx.ID_ANY, min_val=0, max_val=360, increment=0.5,
-                value=0, style=fs.FS_RIGHT, size=self.floatSpinSize)
-            panel.image['rotate'].SetFormat("%f")
-            panel.image['rotate'].SetDigits(1)
-        else:
-            panel.image['rotate'] = SpinCtrl(
-                parent=panel,
-                id=wx.ID_ANY,
-                size=self.spinCtrlSize,
-                min=0,
-                max=359,
-                initial=0)
+        panel.image['rotate'] = FloatSpin(
+            panel, id=wx.ID_ANY, min_val=0, max_val=360, increment=0.5,
+            value=0, style=fs.FS_RIGHT)
+        panel.image['rotate'].SetFormat("%f")
+        panel.image['rotate'].SetDigits(1)
+
         panel.image['rotate'].SetToolTip(
             _("Counterclockwise rotation in degrees"))
         if self.imageDict['rotate']:
@@ -6480,26 +6447,18 @@ class PointDialog(PsmapDialog):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Rotation angle (deg):"))
-        if fs:
-            self.rotCtrl = fs.FloatSpin(
-                panel,
-                id=wx.ID_ANY,
-                min_val=-360,
-                max_val=360,
-                increment=1,
-                value=0,
-                style=fs.FS_RIGHT,
-                size=self.spinCtrlSize)
-            self.rotCtrl.SetFormat("%f")
-            self.rotCtrl.SetDigits(1)
-        else:
-            self.rotCtrl = SpinCtrl(
-                parent=panel,
-                id=wx.ID_ANY,
-                size=self.spinCtrlSize,
-                min=-360,
-                max=360,
-                initial=0)
+
+        self.rotCtrl = FloatSpin(
+            panel,
+            id=wx.ID_ANY,
+            min_val=-360,
+            max_val=360,
+            increment=1,
+            value=0,
+            style=fs.FS_RIGHT)
+        self.rotCtrl.SetFormat("%f")
+        self.rotCtrl.SetDigits(1)
+        
         self.rotCtrl.SetToolTip(
             _("Counterclockwise rotation in degrees"))
         self.rotCtrl.SetValue(float(self.pointDict['rotate']))
@@ -6816,26 +6775,18 @@ class RectangleDialog(PsmapDialog):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Line width:"))
-        if fs:
-            self.widthCtrl = fs.FloatSpin(
-                panel,
-                id=wx.ID_ANY,
-                min_val=0,
-                max_val=50,
-                increment=1,
-                value=0,
-                style=fs.FS_RIGHT,
-                size=self.floatSpinSize)
-            self.widthCtrl.SetFormat("%f")
-            self.widthCtrl.SetDigits(1)
-        else:
-            self.widthCtrl = SpinCtrl(
-                parent=panel,
-                id=wx.ID_ANY,
-                size=self.spinCtrlSize,
-                min=-360,
-                max=360,
-                initial=0)
+
+        self.widthCtrl = FloatSpin(
+            panel,
+            id=wx.ID_ANY,
+            min_val=0,
+            max_val=50,
+            increment=1,
+            value=0,
+            style=fs.FS_RIGHT)
+        self.widthCtrl.SetFormat("%f")
+        self.widthCtrl.SetDigits(1)
+
         self.widthCtrl.SetToolTip(_("Line width in points"))
         self.widthCtrl.SetValue(float(self.rectDict['width']))
 
