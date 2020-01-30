@@ -1897,8 +1897,36 @@ def print_params():
             linesrev = filerev.readlines()
             val = grep('#define GIS_H_VERSION', linesrev)
             filerev.close()
-            sys.stdout.write(
-                "%s\n" % val[0].split(':')[1].rstrip('$"\n').strip())
+            print(val)
+            version_string = val[0].split("GIS_H_VERSION")[1].strip()
+            if (version_string and
+                    version_string[0] != '"' and version_string[-1] != '"' and
+                    version_string.upper() == version_string):
+                # macro name, try to find the actual value in version.h
+                rev = gpath("include", "grass", "version.h")
+                filerev = open(rev)
+                linesrev = filerev.readlines()
+                val = grep("#define {macro}".format(macro=version_string), linesrev)
+                filerev.close()
+                line = val[0]
+                version_string = line.split(version_string)[1].strip()
+            if version_string.endswith(')"'):
+                # GRASS_VERSION_STRING revision of the library
+                # example: "@(#) 7.9.dev (2020)"
+                libgis_version = version_string.strip('"').strip()
+                useless_part = "@(#)"
+                if libgis_version.startswith(useless_part):
+                    libgis_version = libgis_version[len(useless_part):].strip()
+                sys.stdout.write("%s\n" % libgis_version)
+            elif "Revision:" in version_string:
+                # Subversion revision of the library
+                # example: "$Revision: 72327 $"
+                libgis_version = version_string.split(":")[1].rstrip('$"\n').strip()
+                sys.stdout.write("%s\n" % libgis_version)
+            else:
+                sys.stdout.write(
+                    "GRASS GIS libgis version number and date not available\n" + line
+                )
         elif arg == 'svn_revision':
             filerev = open(gpath('etc', 'VERSIONNUMBER'))
             linerev = filerev.readline().rstrip('\n')
