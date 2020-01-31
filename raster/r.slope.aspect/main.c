@@ -976,8 +976,14 @@ int main(int argc, char *argv[])
 				    360);
 
 	Rast_read_cats(aspect_name, G_mapset(), &cats);
-	Rast_set_cats_title
-	    ("Aspect counterclockwise in degrees from east", &cats);
+	if (flag.n->answer) {
+	    Rast_set_cats_title
+		("Aspect clockwise in degrees from north", &cats);
+	}
+	else {
+	    Rast_set_cats_title
+		("Aspect counterclockwise in degrees from east", &cats);
+	}
 
 	G_verbose_message(_("Min computed aspect %.4f, max computed aspect %.4f"),
 			  min_asp, max_asp);
