@@ -811,7 +811,7 @@ int main(int argc, char *argv[])
 		if (out_type == CELL_TYPE) {
 		    if (aspect > 0 && aspect < 0.5)
 			aspect = 360;
-		    *((CELL *) asp_ptr) = (CELL) (aspect + .5);
+		    *((CELL *) asp_ptr) = (CELL) floor(aspect + .5);
 		}
 		else
 		    Rast_set_d_value(asp_ptr,
