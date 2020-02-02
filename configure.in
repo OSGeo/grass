@@ -140,11 +140,23 @@ LIB_VER=`echo ${GRASS_VERSION_NUMBER} | sed 's/^\([0-9.]*\).*$/\1/'`
 changequote([,])
 
 GRASS_VERSION_GIT="exported"
+# get git short hash + date of last change in GRASS headers
+# (and anything else in include)
+GRASS_HEADERS_GIT_HASH=`date`
+GRASS_HEADERS_GIT_DATE=`date`
 AC_PATH_PROG(GIT, git, no)
 if test "$GIT" != "no" ; then
    GRASS_VERSION_GIT=`$GIT rev-parse --short HEAD 2>/dev/null`
    if test -z "$GRASS_VERSION_GIT"; then
       GRASS_VERSION_GIT="exported"
+   fi
+   GRASS_HEADERS_GIT_HASH=`$GIT log -1 --pretty=format:"%h" -- include 2>/dev/null`
+   if test -z "$GRASS_HEADERS_GIT_HASH"; then
+      GRASS_HEADERS_GIT_HASH=`date`
+   fi
+   GRASS_HEADERS_GIT_DATE=`$GIT log -1 --pretty=format:"%cd" -- include 2>/dev/null`
+   if test -z "$GRASS_HEADERS_GIT_DATE"; then
+      GRASS_HEADERS_GIT_DATE=`date`
    fi
 fi
 
@@ -155,6 +167,8 @@ AC_SUBST(GRASS_VERSION_RELEASE)
 AC_SUBST(GRASS_VERSION_NUMBER)
 AC_SUBST(GRASS_VERSION_DATE)
 AC_SUBST(GRASS_VERSION_GIT)
+AC_SUBST(GRASS_HEADERS_GIT_HASH)
+AC_SUBST(GRASS_HEADERS_GIT_DATE)
 AC_SUBST(NAME_VER)
 AC_SUBST(LIB_VER)
 
