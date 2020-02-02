@@ -1353,11 +1353,11 @@ if test "$GIT" != "no" ; then
    if test -z "$GRASS_VERSION_GIT"; then
       GRASS_VERSION_GIT="exported"
    fi
-   GRASS_HEADERS_GIT_HASH=`$GIT log -1 --pretty=format:"%h" -- include 2>/dev/null`
+   GRASS_HEADERS_GIT_HASH=`$GIT log -1 --pretty=format:"%h" -- "${SRCDIR}/include" 2>/dev/null`
    if test -z "$GRASS_HEADERS_GIT_HASH"; then
       GRASS_HEADERS_GIT_HASH=`date`
    fi
-   GRASS_HEADERS_GIT_DATE=`$GIT log -1 --pretty=format:"%cd" -- include 2>/dev/null`
+   GRASS_HEADERS_GIT_DATE=`$GIT log -1 --pretty=format:"%cd" -- "${SRCDIR}/include" 2>/dev/null`
    if test -z "$GRASS_HEADERS_GIT_DATE"; then
       GRASS_HEADERS_GIT_DATE=`date`
    fi
