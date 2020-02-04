@@ -53,6 +53,7 @@ import six
 import platform
 import tempfile
 import locale
+import uuid
 
 
 # mechanism meant for debugging this script (only)
@@ -275,6 +276,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
           [[[GISDBASE/]LOCATION/]MAPSET]
   $CMD_NAME [FLAG]... GISDBASE/LOCATION/MAPSET --exec EXECUTABLE [EPARAM]...
   $CMD_NAME --tmp-location [geofile | EPSG | XY] --exec EXECUTABLE [EPARAM]...
+  $CMD_NAME --tmp-mapset GISDBASE/LOCATION/ --exec EXECUTABLE [EPARAM]...
 
 {flags}:
   -h or --help                   {help_flag}
@@ -293,6 +295,9 @@ Geographic Resources Analysis Support System (GRASS GIS).
   --exec EXECUTABLE              {exec_}
                                    {exec_detail}
   --tmp-location                 {tmp_location}
+                                   {tmp_location_detail}
+  --tmp-mapset                   {tmp_mapset}
+                                   {tmp_mapset_detail}
 
 {params}:
   GISDBASE                       {gisdbase}
@@ -355,6 +360,9 @@ def help_message(default_gui):
             executable_params=_("parameters of the executable"),
             standard_flags=_("standard flags"),
             tmp_location=_("create temporary location (use with the --exec flag)"),
+            tmp_location_detail=_("created in a temporary directory and deleted at exit"),
+            tmp_mapset=_("create temporary mapset (use with the --exec flag)"),
+            tmp_mapset_detail=_("created in the specified location and deleted at exit"),
         )
     )
     s = t.substitute(CMD_NAME=CMD_NAME, DEFAULT_GUI=default_gui,
@@ -851,23 +859,15 @@ def get_mapset_invalid_reason(gisdbase, location, mapset):
     :returns: translated message
     """
     full_location = os.path.join(gisdbase, location)
-    full_permanent = os.path.join(full_location, 'PERMANENT')
     full_mapset = os.path.join(full_location, mapset)
     # first checking the location validity
-    if not os.path.exists(full_location):
-        return _("Location <%s> doesn't exist") % full_location
-    elif 'PERMANENT' not in os.listdir(full_location):
-        return _("<%s> is not a valid GRASS Location"
-                 " because PERMANENT Mapset is missing") % full_location
-    elif not os.path.isdir(full_permanent):
-        return _("<%s> is not a valid GRASS Location"
-                 " because PERMANENT is not a directory") % full_location
-    # partially based on the is_location_valid() function
-    elif not os.path.isfile(os.path.join(full_permanent,
-                                         'DEFAULT_WIND')):
-        return _("<%s> is not a valid GRASS Location"
-                 " because PERMANENT Mapset does not have a DEFAULT_WIND file"
-                 " (default computational region)") % full_location
+    # perhaps a special set of checks with different messages mentioning mapset
+    # will be needed instead of the same set of messages used for location
+    location_msg = get_location_invalid_reason(
+        gisdbase, location, none_for_no_reason=True
+    )
+    if location_msg:
+        return location_msg
     # if location is valid, check mapset
     elif mapset not in os.listdir(full_location):
         return _("Mapset <{mapset}> doesn't exist in GRASS Location <{loc}>. "
@@ -886,7 +886,87 @@ def get_mapset_invalid_reason(gisdbase, location, mapset):
     else:
         return _("Mapset <{mapset}> or Location <{location}> is"
                  " invalid for an unknown reason").format(
-                     mapset=mapset, loc=location)
+                     mapset=mapset, location=location)
+
+
+def get_location_invalid_reason(gisdbase, location, none_for_no_reason=False):
+    """Returns a message describing what is wrong with the Location
+
+    The goal is to provide the most suitable error message
+    (rather than to do a quick check).
+
+    By default, when no reason is found, a message about unknown reason is
+    returned. This applies also to the case when this function is called on
+    a valid location (e.g. as a part of larger investigation).
+    ``none_for_no_reason=True`` allows the function to be used as part of other
+    diagnostic. When this function fails to find reason for invalidity, other
+    the caller can continue the investigation in their context.
+
+    :param gisdbase: Path to GRASS GIS database directory
+    :param location: name of a Location
+    :param none_for_no_reason: When True, return None when reason is unknown
+    :returns: translated message or None
+    """
+    full_location = os.path.join(gisdbase, location)
+    full_permanent = os.path.join(full_location, 'PERMANENT')
+
+    # directory
+    if not os.path.exists(full_location):
+        return _("Location <%s> doesn't exist") % full_location
+    # permament mapset
+    elif 'PERMANENT' not in os.listdir(full_location):
+        return _("<%s> is not a valid GRASS Location"
+                 " because PERMANENT Mapset is missing") % full_location
+    elif not os.path.isdir(full_permanent):
+        return _("<%s> is not a valid GRASS Location"
+                 " because PERMANENT is not a directory") % full_location
+    # partially based on the is_location_valid() function
+    elif not os.path.isfile(os.path.join(full_permanent,
+                                         'DEFAULT_WIND')):
+        return _("<%s> is not a valid GRASS Location"
+                 " because PERMANENT Mapset does not have a DEFAULT_WIND file"
+                 " (default computational region)") % full_location
+    # no reason for invalidity found (might be valid)
+    if none_for_no_reason:
+        return None
+    else:
+        return _("Location <{location}> is"
+                 " invalid for an unknown reason").format(location=full_location)
+
+
+def dir_contains_location(path):
+    """Return True if directory *path* contains a valid location"""
+    if not os.path.isdir(path):
+        return False
+    for name in os.listdir(path):
+        if os.path.isdir(os.path.join(path, name)):
+            if is_location_valid(path, name):
+                return True
+    return False
+
+
+def get_location_invalid_suggestion(gisdbase, location_name):
+    """Return suggestion what to do when specified location is not valid
+
+    It gives suggestion when:
+     * A mapset was specified instead of a location.
+     * A GRASS database was specified instead of a location.
+    """
+    full_path = os.path.join(gisdbase, location_name)
+    # a common error is to use mapset instead of location,
+    # if that's the case, include that info into the message
+    if is_mapset_valid(full_path):
+        return _(
+            "<{loc}> looks like a mapset, not a location."
+            " Did you mean just <{one_dir_up}>?").format(
+                loc=location_name, one_dir_up=gisdbase)
+    # confusion about what is database and what is location
+    elif dir_contains_location(full_path):
+        return _(
+            "It looks like <{loc}> contains locations."
+            " Did you mean to specify one of them?").format(
+                loc=location_name)
+    return None
 
 
 def can_create_location(gisdbase, location):
@@ -926,7 +1006,7 @@ def cannot_create_location_reason(gisdbase, location):
 
 
 def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
-               tmp_location=False, tmpdir=None):
+               tmp_location=False, tmp_mapset=False, tmpdir=None):
     """Selected Location and Mapset are checked and created if requested
 
     The gisrc (GRASS environment file) is written at the end
@@ -938,13 +1018,25 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
     # in a distant past), refactor
     l = arg
     if l:
+        # TODO: the block below could be just one line: os.path.abspath(l)
+        # abspath both resolves relative paths and normalizes the path
+        # so that trailing / is stripped away and split then always returns
+        # non-empty element as the last element (which is good for both mapset
+        # and location split)
         if l == '.':
             l = os.getcwd()
         elif not os.path.isabs(l):
             l = os.path.abspath(l)
+        if l.endswith(os.path.sep):
+            l = l.rstrip(os.path.sep)
+            # now we can get the last element by split on the first go
+            # and it works for the last element being mapset or location
 
-        l, mapset = os.path.split(l)
-        if not mapset:
+        if tmp_mapset:
+            # We generate a random name and then create the mapset as usual.
+            mapset = "tmp_" + uuid.uuid4().hex
+            create_new = True
+        else:
             l, mapset = os.path.split(l)
         l, location_name = os.path.split(l)
         gisdbase = l
@@ -966,7 +1058,15 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
         # check if 'path' is a valid GRASS location/mapset
         path_is_valid_mapset = is_mapset_valid(path)
 
-        if path_is_valid_mapset and create_new:
+        if path_is_valid_mapset and tmp_mapset:
+            # If we would be creating the mapset directory at the same time as
+            # generating the name, we could just try another name in case of
+            # conflict. Conflict is unlikely, but it would be worth considering
+            # it during refactoring of this code.
+            fatal(_("Mapset <{}> already exists."
+                    " Unable to create a new temporary mapset of that name.")
+                  .format(path))
+        elif path_is_valid_mapset and create_new:
             warning(_("Mapset <{}> already exists. Ignoring the"
                       " request to create it. Note that this warning"
                       " may become an error in future versions.")
@@ -982,7 +1082,7 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
                 # mapset on the fly
                 # check if 'location_name' is a valid GRASS location
                 if not is_location_valid(gisdbase, location_name):
-                    if not tmp_location:
+                    if not (tmp_location or tmp_mapset):
                         # 'location_name' is not a valid GRASS location
                         # and user requested its creation, so we parsed
                         # the path wrong and need to move one level
@@ -991,6 +1091,15 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
                         gisdbase = os.path.join(gisdbase, location_name)
                         location_name = mapset
                         mapset = "PERMANENT"
+                    if tmp_mapset:
+                        suggestion = get_location_invalid_suggestion(
+                            gisdbase, location_name)
+                        reason = get_location_invalid_reason(
+                            gisdbase, location_name)
+                        if suggestion:
+                            fatal("{reason}\n{suggestion}".format(**locals()))
+                        else:
+                            fatal(reason)
                     if not can_create_location(gisdbase, location_name):
                         fatal(cannot_create_location_reason(
                             gisdbase, location_name))
@@ -1020,6 +1129,19 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
                     else:
                         # create mapset directory
                         os.mkdir(path)
+                        if tmp_mapset:
+                            # The tmp location is handled by (re-)using the
+                            # tmpdir, but we need to take care of the tmp
+                            # mapset which is only a subtree in an existing
+                            # location. We simply remove the tree at exit.
+                            # All mapset cleaning functions should succeed
+                            # because they are called before exit or registered
+                            # only later (and thus called before this one).
+                            # (Theoretically, they could be disabled if that's
+                            # just cleaning a files in the mapset directory.)
+                            atexit.register(
+                                lambda: shutil.rmtree(path, ignore_errors=True)
+                            )
                     # make directory a mapset, add the region
                     # copy PERMANENT/DEFAULT_WIND to <mapset>/WIND
                     s = readfile(os.path.join(gisdbase, location_name,
@@ -1951,6 +2073,7 @@ class Parameters(object):
         self.mapset = None
         self.geofile = None
         self.tmp_location = False
+        self.tmp_mapset = False
 
 
 def parse_cmdline(argv, default_gui):
@@ -1991,6 +2114,8 @@ def parse_cmdline(argv, default_gui):
             sys.exit()
         elif i == "--tmp-location":
             params.tmp_location = True
+        elif i == "--tmp-mapset":
+            params.tmp_mapset = True
         else:
             args.append(i)
     if len(args) > 1:
@@ -2010,6 +2135,11 @@ def validate_cmdline(params):
     """ Validate the cmdline params and exit if necessary. """
     if params.exit_grass and not params.create_new:
         fatal(_("Flag -e requires also flag -c"))
+    if params.tmp_location and params.tmp_mapset:
+        fatal(_(
+            "Either --tmp-location or --tmp-mapset can be used, not both").format(
+                params.mapset)
+        )
     if params.tmp_location and not params.geofile:
         fatal(
             _(
@@ -2164,6 +2294,9 @@ def main():
         elif params.create_new and params.geofile:
             set_mapset(gisrc=gisrc, arg=params.mapset,
                        geofile=params.geofile, create_new=True)
+        elif params.tmp_mapset:
+            set_mapset(gisrc=gisrc, arg=params.mapset,
+                       tmp_mapset=params.tmp_mapset)
         else:
             set_mapset(gisrc=gisrc, arg=params.mapset,
                        create_new=params.create_new)
