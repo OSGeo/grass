@@ -339,9 +339,6 @@ int main(int argc, char **argv)
 	tproj.def = G_store(pipeline->answer);
     }
 #endif
-
-    /* switch back to current location */
-    G_switch_env();
     if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
 	G_fatal_error(_("Unable to initialize coordinate transformation"));
 
@@ -351,9 +348,6 @@ int main(int argc, char **argv)
     G_free_key_value(out_unit_info);
     if (G_verbose() > G_verbose_std())
 	pj_print_proj_params(&iproj, &oproj);
-
-    /* switch to input location */
-    G_switch_env();
 
     /* this call causes r.proj to read the entire map into memeory */
     Rast_get_cellhd(inmap->answer, setname, &incellhd);
