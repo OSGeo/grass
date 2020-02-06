@@ -177,10 +177,13 @@ RUN echo "  => Configure and compile grass" && \
 RUN ln -s `find /usr/local/bin -name "grass*"` /usr/local/bin/grass
 
 # Reduce the image size - Remove unnecessary grass files
-RUN rm -rf /usr/local/grass78/demolocation; \
+RUN cp /usr/local/grass78/gui/wxpython/xml/module_items.xml module_items.xml; \
+    rm -rf /usr/local/grass78/demolocation; \
     rm -rf /usr/local/grass78/fonts; \
     rm -rf /usr/local/grass78/gui; \
-    rm -rf /usr/local/grass78/share;
+    rm -rf /usr/local/grass78/share; \
+    mkdir -p /usr/local/grass78/gui/wxpython/xml/; \
+    mv module_items.xml /usr/local/grass78/gui/wxpython/xml/module_items.xml;
 
 
 FROM common as grass
