@@ -41,7 +41,10 @@ except ImportError:
 
 import wx
 
-from ctypes import *
+try:
+    from ctypes import *
+except KeyError as e:
+    print("wxnviz.py: {}".format(e), file=sys.stderr)
 
 try:
     WindowsError
@@ -54,7 +57,7 @@ try:
     from grass.lib.ogsf import *
     from grass.lib.nviz import *
     from grass.lib.raster import *
-except (ImportError, WindowsError) as e:
+except (ImportError, WindowsError, TypeError) as e:
     print("wxnviz.py: {}".format(e), file=sys.stderr)
 
 from core.debug import Debug
