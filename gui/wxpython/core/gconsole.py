@@ -538,7 +538,10 @@ class GConsole(wx.EvtHandler):
                                 command[0])
                         pymodule = imp.load_source(
                             command[0].replace('.', '_'), pyPath)
-                        pymain = inspect.getargspec(pymodule.main)
+                        try:  # PY3
+                            pymain = inspect.getfullargspec(pymodule.main)
+                        except AttributeError:
+                            pymain = inspect.getargspec(pymodule.main)
                         if pymain and 'giface' in pymain.args:
                             pymodule.main(self._giface)
                             return
