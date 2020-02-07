@@ -39,7 +39,7 @@ try:
     from grass.lib.gis import *
     from grass.lib.vector import *
     from grass.lib.vedit import *
-except (ImportError, WindowsError) as e:
+except (ImportError, WindowsError, TypeError) as e:
     print("wxdigit.py: {}".format(e), file=sys.stderr)
 
 log = None
