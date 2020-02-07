@@ -372,13 +372,15 @@ def handle_errors(returncode, result, args, kwargs):
         code = ' '.join(args)
         return module, code
 
+    handler = kwargs.get('errors', 'raise')
+    if handler.lower() == 'status':
+        return returncode
+
     if returncode == 0:
         return result
-    handler = kwargs.get('errors', 'raise')
+
     if handler.lower() == 'ignore':
         return result
-    elif handler.lower() == 'status':
-        return returncode
     elif handler.lower() == 'fatal':
         module, code = get_module_and_code(args, kwargs)
         fatal(_("Module {module} ({code}) failed with"
