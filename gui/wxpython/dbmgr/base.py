@@ -969,19 +969,17 @@ class DbMgrNotebookBase(FN.FlatNotebook):
         # perform SQL non-select statements (e.g. 'delete from table where
         # cat=1')
         if len(listOfSQLStatements) > 0:
-            fd, sqlFilePath = tempfile.mkstemp(text=True)
-            sqlFile = open(sqlFilePath, 'w')
-            for sql in listOfSQLStatements:
-                enc = UserSettings.Get(
+            enc = UserSettings.Get(
                     group='atm', key='encoding', subkey='value')
-                if not enc and 'GRASS_DB_ENCODING' in os.environ:
-                    enc = os.environ['GRASS_DB_ENCODING']
-                if enc:
-                    sqlFile.write(sql.encode(enc) + ';')
-                else:
-                    sqlFile.write(sql.encode('utf-8') + ';')
-                sqlFile.write(os.linesep)
-            sqlFile.close()
+            if not enc and 'GRASS_DB_ENCODING' in os.environ:
+                enc = os.environ['GRASS_DB_ENCODING']
+            else:
+                enc = 'utf-8'
+            fd, sqlFilePath = tempfile.mkstemp(text=True)
+            with open(sqlFilePath, 'w', encoding=enc) as sqlFile:
+                for sql in listOfSQLStatements:
+                    sqlFile.write(sql + ';')
+                    sqlFile.write(os.linesep)
 
             driver = self.dbMgrData['mapDBInfo'].layers[
                 self.selLayer]["driver"]
@@ -1523,7 +1521,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                             else:
                                 idx = i
 
-                            if column['ctype'] != types.StringType:
+                            if column['ctype'] != str:
                                 tlist.itemDataMap[item][
                                     idx] = column['ctype'](values[i])
                             else:  # -> string
@@ -1533,7 +1531,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                                              {'value': str(values[i]),
                                               'type': column['type']})
 
-                        if column['ctype'] == types.StringType:
+                        if column['ctype'] == str:
                             if "'" in values[i]:  # replace "'" -> "''"
                                 values[i] = values[i].replace("'", "''")
                             updateList.append(
