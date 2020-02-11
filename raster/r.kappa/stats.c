@@ -27,12 +27,12 @@ int stats(void)
     const char *argv[9];
     int argc = 0;
 
-    strcpy(mname, maps[0]);
+    strcpy(mname, maps[1]);
     mmapset = G_find_raster2(mname, "");
     if (mmapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), maps[0]);
 
-    strcpy(rname, maps[1]);
+    strcpy(rname, maps[0]);
     rmapset = G_find_raster2(rname, "");
     if (rmapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), maps[1]);
