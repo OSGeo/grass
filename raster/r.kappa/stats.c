@@ -18,7 +18,7 @@ static void die(void)
 int stats(void)
 {
     char buf[1024];
-    char mname[GNAME_MAX], rname[GMAPSET_MAX];
+    char mname[GNAME_MAX], rname[GNAME_MAX];
     const char *mmapset, *rmapset;
     int i, nl;
     size_t ns;
