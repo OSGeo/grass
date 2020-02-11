@@ -2659,7 +2659,7 @@ def getParameterizedFlags(paramFlags, itemFlags):
     fl = ''
 """)
 
-                self.fd.write("""    for i in [key for key, value in paramFlags.iteritems() if value == 'True']:
+                self.fd.write("""    for i in [key for key, value in paramFlags.items() if value == 'True']:
         if i in itemFlags:
             fl += i[-1]
 
