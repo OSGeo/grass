@@ -240,7 +240,8 @@ class GrassTestFilesInvoker(object):
             shutil.rmtree(mapset_dir)
 
     def run_in_location(self, gisdbase, location, location_type,
-                        results_dir):
+                        results_dir, test_list_in='False',
+                        test_list_out='False'):
         """Run tests in a given location"""
         if os.path.abspath(results_dir) == os.path.abspath(self.start_dir):
             raise RuntimeError("Results root directory should not be the same"
@@ -265,10 +266,31 @@ class GrassTestFilesInvoker(object):
                                    universal_location_value=GrassTestLoader.universal_tests_value,
                                    import_modules=False)
 
+        if test_list_out != 'False':
+            # overwrite old list
+            with open(test_list_out, 'w') as file:
+                file.write("# you can outcomment tests in the input list \n")
+            # append each module to list
+            for module in modules:
+                with open(test_list_out, 'a') as file:
+                    file.write(module.abs_file_path + "\n")
+
         self.reporter.start(results_dir)
-        for module in modules:
+
+        test_modules = modules
+
+        if test_list_in != 'False':
+            test_modules = []
+            for module in modules:
+                with open(test_list_in, 'r') as testwhitelist:
+                    for line in testwhitelist:
+                        if str(module.abs_file_path) == str(line.strip()):
+                            test_modules.append(module)
+
+        for module in test_modules:
             self._run_test_module(module=module, results_dir=results_dir,
                                   gisdbase=gisdbase, location=location)
+
         self.reporter.finish()
 
         # TODO: move this to some (new?) reporter

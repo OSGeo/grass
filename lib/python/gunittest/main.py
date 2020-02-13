@@ -135,6 +135,11 @@ def main():
     parser.add_argument('--output', dest='output', action='store',
                         default='testreport',
                         help='Output directory')
+    parser.add_argument('--test_list_in',
+                        help='File to read tests from list', default='False')
+    parser.add_argument('--test_list_out',
+                        help='File to write all test paths to list', default='False')
+
     args = parser.parse_args()
     gisdbase = args.gisdbase
     if gisdbase is None:
@@ -142,6 +147,8 @@ def main():
         gisdbase = gcore.gisenv()['GISDBASE']
     location = args.location
     location_type = args.location_type
+    test_list_in = args.test_list_in
+    test_list_out = args.test_list_out
 
     if not gisdbase:
         sys.stderr.write("GISDBASE (grassdata directory)"
@@ -171,7 +178,9 @@ def main():
     invoker.run_in_location(gisdbase=gisdbase,
                             location=location,
                             location_type=location_type,
-                            results_dir=results_dir)
+                            results_dir=results_dir,
+                            test_list_in=args.test_list_in,
+                            test_list_out=args.test_list_out)
     return 0
 
 if __name__ == '__main__':

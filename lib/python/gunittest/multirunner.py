@@ -82,6 +82,10 @@ def main():
     parser.add_argument('--create-main-report',
                         help='Create also main report for all tests',
                         action="store_true", default=False, dest='main_report')
+    parser.add_argument('--test_list_in',
+                        help='File to read tests from list', default='False')
+    parser.add_argument('--test_list_out',
+                        help='File to write all test paths to list', default='False')
 
     args = parser.parse_args()
     gisdb = args.grassdata
@@ -92,10 +96,12 @@ def main():
     if len(locations) != len(locations_types):
         print("ERROR: Number of locations and their tags must be the same", file=sys.stderr)
         return 1
-    
 
     main_report = args.main_report
-    grasssrc = args.grasssrc  # TODO: can be guessed from dist    
+    test_list_in = args.test_list_in
+    test_list_out = args.test_list_out
+
+    grasssrc = args.grasssrc  # TODO: can be guessed from dist
     # TODO: create directory according to date and revision and create reports there
 
     # some predefined variables, name of the GRASS launch script + location/mapset
@@ -107,7 +113,7 @@ def main():
     # we assume that GRASS GIS' start script is available and in the PATH
     # the shell=True is here because of MS Windows? (code taken from wiki)
     startcmd = grass7bin + ' --config path'
-    p = subprocess.Popen(startcmd, shell=True, 
+    p = subprocess.Popen(startcmd, shell=True,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = p.communicate()
     if p.returncode != 0:
@@ -123,7 +129,7 @@ def main():
 
     ########### DATA
     # define GRASS DATABASE
-    
+
     # Set GISDBASE environment variable
     os.environ['GISDBASE'] = text_to_string(gisdb)
 
@@ -147,7 +153,9 @@ def main():
                               '-m', 'grass.gunittest.main',
                               '--grassdata', gisdb, '--location', location,
                               '--location-type', location_type,
-                              '--output', absreport],
+                              '--output', absreport,
+                              '--test_list_in', test_list_in,
+                              '--test_list_out', test_list_out],
                               cwd=grasssrc)
         returncode = p.wait()
         reports.append(report)

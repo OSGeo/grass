@@ -1,0 +1,9 @@
+# you can outcomment tests in the input list 
+/home/user/grass_master/vector/v.in.pdal/testsuite/test_v_in_pdal_basic.py
+/home/user/grass_master/vector/v.in.pdal/testsuite/test_v_in_pdal_filter.py
+/home/user/grass_master/vector/v.vect.stats/testsuite/test_vect_stats.py
+/home/user/grass_master/vector/v.info/testsuite/test_vinfo.py
+/home/user/grass_master/vector/v.univar/testsuite/v_univar_test.py
+/home/user/grass_master/vector/v.to.3d/testsuite/test_vto3d.py
+/home/user/grass_master/vector/v.category/testsuite/copy_multiple_cats.sh
+/home/user/grass_master/vector/v.extract/testsuite/test_v_extract.py
