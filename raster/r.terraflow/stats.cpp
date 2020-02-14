@@ -20,8 +20,10 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/types.h>
+#ifndef _MSC_VER
 #include <sys/time.h>
-#ifndef __MINGW32__
+#endif
+#ifndef _WIN32
 #include <sys/resource.h>
 #endif
 #include <stdio.h>
@@ -126,7 +128,7 @@ statsRecorder::statsRecorder(char *fname) : ofstream(noclobberFileName(fname)){
   //ofstream that takes an fd; wrote another noclobber() function that
   //closes fd and returns the name;
   rt_start(tm);
-#ifndef __MINGW32__
+#ifndef _WIN32
   bss = sbrk(0);
 #endif
   char buf[BUFSIZ];
@@ -137,7 +139,7 @@ statsRecorder::statsRecorder(char *fname) : ofstream(noclobberFileName(fname)){
 
 long 
 statsRecorder::freeMem() {
-#ifdef __MINGW32__
+#ifdef _WIN32
   return -1;
 #else
   struct rlimit rlim;
@@ -153,7 +155,7 @@ statsRecorder::freeMem() {
   } 
   long freeMem = rlim.rlim_cur - ((char*)sbrk(0)-(char*)bss);
   return freeMem;
-#endif /* __MINGW32__ */
+#endif /* _WIN32 */
 }
 
 char *
