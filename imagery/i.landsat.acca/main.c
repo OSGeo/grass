@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
     th_4 = atof(b56c->answer);
     th_7 = atof(b45r->answer);
     acca_algorithm(&out, band, pass2->answer, shadow->answer,
-		   csig->answer);
+		   csig->answer, hist_n);
 
     if (filter->answer)
 	filter_holes(&out);
