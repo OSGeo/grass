@@ -34,7 +34,6 @@ import os
 import locale
 import tempfile
 import copy
-import types
 import math
 import functools
 
@@ -425,7 +424,7 @@ class VirtualAttributeList(ListCtrl,
         """Get item text"""
         index = self.itemIndexMap[item]
         s = self.itemDataMap[index][col]
-        return s
+        return str(s)
 
     def OnGetItemAttr(self, item):
         """Get item attributes"""
@@ -480,7 +479,7 @@ class VirtualAttributeList(ListCtrl,
 
         if not self.dbMgrData['editable'] or self.columns[
                 self.GetColumn(self._col).GetText()]['ctype'] not in (
-                types.IntType, types.FloatType):
+                int, float):
             popupMenu.Enable(self.popupId['calculate'], False)
 
         subMenu.Append(self.popupId['area'], text=_("Area size"))
