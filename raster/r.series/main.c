@@ -231,8 +231,8 @@ int main(int argc, char *argv[])
         G_warning(_("Parallel processing disabled due to active mask."));
         nprocs = 1;
     }
-    lo = -INFINITY;
-    hi = INFINITY;
+    sscanf("-inf", "%lf", &lo);
+    sscanf("inf", "%lf", &hi);
     if (parm.range->answer) {
         lo = atof(parm.range->answers[0]);
         hi = atof(parm.range->answers[1]);

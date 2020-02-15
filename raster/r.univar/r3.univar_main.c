@@ -144,10 +144,10 @@ int main(int argc, char *argv[])
     /* table field separator */
     zone_info.sep = G_option_to_separator(param.separator);
 
-    dmin = NAN;
-    dmax = NAN;
-    zone_info.min = 0;
-    zone_info.max = 0;
+    sscanf("-nan", "%lf", &dmin);          /* set to nan as default */
+    sscanf("-nan", "%lf", &dmax);          /* set to nan as default */
+    sscanf("-nan", "%lf", &zone_info.min); /* set to nan as default */
+    sscanf("-nan", "%lf", &zone_info.max); /* set to nan as default */
     zone_info.n_zones = 0;
 
     /* open 3D zoning raster with default region */
