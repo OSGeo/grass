@@ -84,11 +84,15 @@ enum MM_stream_usage {
 };
 
 
-
+#ifdef GRASS_CMAKE_BUILD
+#include <export/grass_iostream_export.h>
+#else
+#define GRASS_IOSTREAM_EXPORT
+#endif
 
 // Declarations of a very simple memory manager designed to work with
 // BTEs that rely on the underlying OS to manage physical memory.
-class MM_register {
+class GRASS_IOSTREAM_EXPORT MM_register {
 private:
   // The number of instances of this class and descendents that exist.
   static int instances;
@@ -170,7 +174,7 @@ static mm_register_init source_file_mm_register_init;
 
 
 // Here is the single memory management object (defined in mm.C).
-extern MM_register MM_manager;
+extern GRASS_IOSTREAM_EXPORT MM_register MM_manager;
 
 
 
