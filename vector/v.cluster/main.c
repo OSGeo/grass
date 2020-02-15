@@ -264,7 +264,7 @@ int main(int argc, char *argv[])
 	    c[2] = 0.0;
 	    n = 0;
 	    sum = sumsq = 0;
-	    min = 1.0 / 0.0;
+		sscanf("inf", "%lf", &min);
 	    max = 0;
 	    kd = G_malloc(minpnts * sizeof(double));
 	    ki = G_malloc(minpnts * sizeof(int));
@@ -469,7 +469,7 @@ int main(int argc, char *argv[])
 	    c[2] = 0.0;
 	    n = 0;
 	    sum = sumsq = 0;
-	    min = 1.0 / 0.0;
+		sscanf("inf", "%lf", &min);
 	    max = 0;
 	    kd = G_malloc(minpnts * sizeof(double));
 	    ki = G_malloc(minpnts * sizeof(int));

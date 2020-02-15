@@ -466,7 +466,10 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	double convergence;
 
 	if (G_projection() == PROJECTION_XY)
-	    convergence = 0./0.;
+		// GCC 5.4.0 says 0./0. is -nan
+		// Clang 3.8.0 says 0./0. is nan
+		// I stick to -nan in msvc too. But this has to rechecked.
+	    sscanf("-nan", "%lf", &convergence);
 	else if (G_projection() == PROJECTION_LL)
 	    convergence = 0.0;
 	else {

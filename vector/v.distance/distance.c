@@ -12,7 +12,9 @@ int get_line_box(const struct line_pnts *Points,
     int i;
 
     if (Points->n_points == 0) {
-	box->E = box->W = box->N = box->S = box->T = box->B = 0.0 / 0.0;
+	double nan_val;
+	sscanf("-nan", "%lf", &nan_val);
+	box->E = box->W = box->N = box->S = box->T = box->B = nan_val;
 	return 0;
     }
 
