@@ -34,7 +34,7 @@ from core.gcmd import GException, GError, RunCommand
 
 import grass.script as grass
 
-from core_c import CreateCatRast, ComputeScatts, UpdateCatRast, \
+from iscatt.core_c import CreateCatRast, ComputeScatts, UpdateCatRast, \
     Rasterize, SC_SCATT_DATA, SC_SCATT_CONDITIONS
 
 MAX_SCATT_SIZE = 4100 * 4100
@@ -270,7 +270,7 @@ class CatRastUpdater:
             if not areas_cats[c]:
                 continue
 
-            layer = areas_cats[c].keys()[0]
+            layer = list(areas_cats[c])[0]
             cat = areas_cats[c][layer][0]
 
             if cat in rasterized_cats:
@@ -812,7 +812,7 @@ def idScattToidBands(scatt_id, n_bands):
     band_1 = (int)(
         (2 * n_b1 + 1 - sqrt(((2 * n_b1 + 1) * (2 * n_b1 + 1) - 8 * scatt_id))) / 2)
 
-    band_2 = scatt_id - (band_1 * (2 * n_b1 + 1) - band_1 * band_1) / 2 + band_1 + 1
+    band_2 = int(scatt_id - (band_1 * (2 * n_b1 + 1) - band_1 * band_1) / 2 + band_1 + 1)
 
     return band_1, band_2
 
@@ -826,8 +826,8 @@ def idBandsToidScatt(band_1_id, band_2_id, n_bands):
 
     n_b1 = n_bands - 1
 
-    scatt_id = (
-        band_1_id * (2 * n_b1 + 1) - band_1_id * band_1_id) / 2 + band_2_id - band_1_id - 1
+    scatt_id = int((
+        band_1_id * (2 * n_b1 + 1) - band_1_id * band_1_id) / 2 + band_2_id - band_1_id - 1)
 
     return scatt_id
 

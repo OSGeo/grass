@@ -376,7 +376,7 @@ void main_loop(void)
             /* Changes made by Soeren 8. Mar 2011 to replace the site walker output implementation */
             /* Save all walkers located within the computational region and with valid 
                z coordinates */
-            if ((i == miter || i == iter1)) {	
+            if (outwalk != NULL && (i == miter || i == iter1)) {
                 nstack = 0;
                 
                 for (lw = 0; lw < nwalk; lw++) {

@@ -47,7 +47,7 @@ try:
     from grass.lib.vector import *
     from grass.lib.vedit import *
     from grass.lib.dbmi import *
-except (ImportError, WindowsError) as e:
+except (ImportError, WindowsError, TypeError) as e:
     print("wxdigit.py: {}".format(e), file=sys.stderr)
 
 class VDigitError:

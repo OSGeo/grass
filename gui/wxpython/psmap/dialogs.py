@@ -226,6 +226,7 @@ class PsmapDialog(wx.Dialog):
         self.objectType = None
         self.unitConv = UnitConversion(self)
         self.spinCtrlSize = (65, -1)
+        self.floatSpinSize = (120, -1)
 
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
@@ -5865,7 +5866,7 @@ class ImageDialog(PsmapDialog):
         if fs:
             panel.image['scale'] = fs.FloatSpin(
                 panel, id=wx.ID_ANY, min_val=0, max_val=50, increment=0.5,
-                value=1, style=fs.FS_RIGHT, size=self.spinCtrlSize)
+                value=1, style=fs.FS_RIGHT, size=self.floatSpinSize)
             panel.image['scale'].SetFormat("%f")
             panel.image['scale'].SetDigits(1)
         else:
@@ -5900,7 +5901,7 @@ class ImageDialog(PsmapDialog):
         if fs:
             panel.image['rotate'] = fs.FloatSpin(
                 panel, id=wx.ID_ANY, min_val=0, max_val=360, increment=0.5,
-                value=0, style=fs.FS_RIGHT, size=self.spinCtrlSize)
+                value=0, style=fs.FS_RIGHT, size=self.floatSpinSize)
             panel.image['rotate'].SetFormat("%f")
             panel.image['rotate'].SetDigits(1)
         else:
@@ -6824,7 +6825,7 @@ class RectangleDialog(PsmapDialog):
                 increment=1,
                 value=0,
                 style=fs.FS_RIGHT,
-                size=self.spinCtrlSize)
+                size=self.floatSpinSize)
             self.widthCtrl.SetFormat("%f")
             self.widthCtrl.SetDigits(1)
         else:

@@ -51,7 +51,7 @@ from core.gthread import gThread
 try:
     import grass.lib.gis as gislib
     haveCtypes = True
-except ImportError:
+except (ImportError, TypeError):
     haveCtypes = False
 
 

@@ -478,13 +478,13 @@ int main(int argc, char **argv)
 
     Vect_hist_command(&voutput);
 
-    if (write_context.write_cats == TRUE && !notab_flag->answer) {
-	copy_tabs(&vinput, &voutput);
-    }
-
     Vect_close(&vinput);
-    if (!notopo_flag->answer)
+    if (!notopo_flag->answer) {
         Vect_build(&voutput);
+	if (write_context.write_cats == TRUE && !notab_flag->answer) {
+	    copy_tabs(&vinput, &voutput);
+	}
+    }
     Vect_close(&voutput);
 
     if (do_grid_decimation)

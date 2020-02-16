@@ -36,7 +36,8 @@ r.mapcalc "azimuth_aspect = if(ccw_aspect == 0, 0, \
 
 Alternatively, the <b>-n</b> flag can be used to produce aspect as 
 degrees CW from North. Aspect for flat areas is then set to -9999 
-(default: 0).
+(default: 0). Note: The reason for using -9999 is to be compliant with
+<b>gdaldem</b> which uses -9999 by default as the nodata value.
 
 <p>
 The aspect for slope equal to zero (flat areas) is set to zero (-9999 

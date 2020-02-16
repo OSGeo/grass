@@ -53,7 +53,7 @@ from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, MapV
 from core.settings import UserSettings
 from core.debug import Debug
 from gui_core.wrap import SpinCtrl, TextCtrl, Button, CheckListBox, \
-    StaticText, StaticBox, Menu, NewId
+    StaticText, StaticBox, Menu, NewId, EmptyBitmap
 
 
 class SimpleDialog(wx.Dialog):
@@ -1293,7 +1293,7 @@ class GroupDialog(wx.Dialog):
                 label = _("Changing of group <%s> failed.") % group
 
         self.infoLabel.SetLabel(label)
-        wx.FutureCall(4000, self.ClearNotification)
+        wx.CallLater(4000, self.ClearNotification)
 
     def GetSelectedGroup(self):
         """Return currently selected group (without mapset)"""
@@ -2445,7 +2445,7 @@ class DefaultFontDialog(wx.Dialog):
         gridSizer.Add(self.fontlb,
                       flag=wx.EXPAND, pos=(1, 0))
 
-        self.renderfont = wx.StaticBitmap(panel, -1, wx.EmptyBitmapRGBA(100, 50, 255, 255, 255))
+        self.renderfont = wx.StaticBitmap(panel, -1, wx.Bitmap.FromRGBA(100, 50, 255, 255, 255))
         gridSizer.Add(self.renderfont,
                       flag=wx.EXPAND, pos=(2, 0))
 
@@ -2594,10 +2594,11 @@ class DefaultFontDialog(wx.Dialog):
         env['GRASS_RENDER_WIDTH'] = str(size[0])
         env['GRASS_RENDER_HEIGHT'] = str(size[1])
         env['GRASS_RENDER_FILE'] = self.tmp_file
-        ret = RunCommand('d.text', text=text, font=font, align='cc', at='50,50',
+        env['GRASS_REGION'] = grass.region_env(s=0, n=size[1], w=0, e=size[0])
+        ret = RunCommand('d.text', text=text, font=font, align='cc', at='50,60',
                          size=80, color='black', env=env)
         if ret == 0:
             self.renderfont.SetBitmap(wx.Bitmap(self.tmp_file))
         else:
-            self.renderfont.SetBitmap(wx.EmptyBitmapRGBA(size[0], size[1]))
+            self.renderfont.SetBitmap(EmptyBitmap(size[0], size[1]))
         try_remove(self.tmp_file)

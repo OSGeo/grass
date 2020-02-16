@@ -193,10 +193,10 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
 				cellhd->proj, cellhd->zone);
 		}
 		if (loc_wind.proj != cellhd->proj) {
-		    strcat(error_msg, "\nERROR: proj\n");
+		    strcat(error_msg, "\nDifference in: proj\n");
 		}
 		else {
-		    strcat(error_msg, "\nERROR: ");
+		    strcat(error_msg, "\nDifference in: ");
 		    switch (err) {
 		    case -1:
 			strcat(error_msg, "proj\n");
@@ -265,7 +265,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
             }
             
 	    if (check_only)
-		msg_fn = G_warning;
+		msg_fn = G_message;
 	    else
 		msg_fn = G_fatal_error;
 	    msg_fn("%s", error_msg);

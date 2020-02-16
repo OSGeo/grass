@@ -870,7 +870,7 @@ class IClassMapFrame(DoubleMapFrame):
         :param value: new value
         :param cat: which category to update
         """
-        if isinstance(value, (types.IntType, types.FloatType)):
+        if isinstance(value, (int, float)):
             tmpFile.write("UPDATE %s SET %s = %d WHERE cat = %d\n" %
                           (table, column, value, cat))
         else:

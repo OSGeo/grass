@@ -159,9 +159,11 @@ RUN echo "Install main packages";\
 # Copy and install GRASS GIS
 COPY . /src/grass_build/
 WORKDIR /src/grass_build/
-# PATCH ctypes
-COPY docker/alpine/alpine-py38-ctypes.patch /src/alpine-py38-ctypes.patch
-RUN patch -p1 < /src/alpine-py38-ctypes.patch
+
+# Python 3.8.1 patch
+RUN apk add curl
+RUN curl -L https://github.com/mmacata/alpine-python381-patch/releases/download/0.0.0/python3-dev-3.8.1-r1.apk > /src/python3-dev-3.8.1-r1.apk
+RUN apk add --allow-untrusted /src/python3-dev-3.8.1-r1.apk
 
 # Configure compile and install GRASS GIS
 RUN echo "  => Configure and compile grass" && \
@@ -175,10 +177,13 @@ RUN echo "  => Configure and compile grass" && \
 RUN ln -s `find /usr/local/bin -name "grass*"` /usr/local/bin/grass
 
 # Reduce the image size - Remove unnecessary grass files
-RUN rm -rf /usr/local/grass79/demolocation; \
+RUN cp /usr/local/grass79/gui/wxpython/xml/module_items.xml module_items.xml; \
+    rm -rf /usr/local/grass79/demolocation; \
     rm -rf /usr/local/grass79/fonts; \
     rm -rf /usr/local/grass79/gui; \
-    rm -rf /usr/local/grass79/share;
+    rm -rf /usr/local/grass79/share; \
+    mkdir -p /usr/local/grass79/gui/wxpython/xml/; \
+    mv module_items.xml /usr/local/grass79/gui/wxpython/xml/module_items.xml;
 
 
 FROM common as grass
@@ -195,6 +200,11 @@ RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
     pdal --version && \
     python3 --version
 
+# Python 3.8.1 patch again
+RUN apk add curl
+RUN curl -L https://github.com/mmacata/alpine-python381-patch/releases/download/0.0.0/python3-3.8.1-r1.apk > /src/python3-3.8.1-r1.apk
+RUN apk add --allow-untrusted /src/python3-3.8.1-r1.apk
+
 
 FROM grass as test
 
@@ -205,6 +215,9 @@ COPY docker/testdata/test_grass_session.py .
 ## just scan the LAZ file
 # TODO: fix test
 #RUN /usr/bin/python3 /scripts/test_grass_session.py
+# Test addon installation
+RUN apk add make gcc
+RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.learn.ml
 
 
 FROM grass as final

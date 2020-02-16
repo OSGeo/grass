@@ -2659,7 +2659,7 @@ def getParameterizedFlags(paramFlags, itemFlags):
     fl = ''
 """)
 
-                self.fd.write("""    for i in [key for key, value in paramFlags.iteritems() if value == 'True']:
+                self.fd.write("""    for i in [key for key, value in paramFlags.items() if value == 'True']:
         if i in itemFlags:
             fl += i[-1]
 
@@ -2677,7 +2677,7 @@ if __name__ == "__main__":
         if properties.get('overwrite'):
             self.fd.write('    os.environ["GRASS_OVERWRITE"] = "1"\n')
 
-        self.fd.write('    sys.exit(main())\n')
+        self.fd.write('    sys.exit(main(options, flags))\n')
 
     def _writePythonItem(self, item, ignoreBlock=True, variables={}):
         """Write model object to Python file"""
