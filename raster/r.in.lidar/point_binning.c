@@ -764,7 +764,7 @@ void write_values(struct PointBinning *point_binning,
             double sum_z =
                 Rast_get_d_value((DCELL*)point_binning->sum_array + offset, rtype);
 
-            /* We are not writing any categories. They are not neededsb
+            /* We are not writing any categories. They are not needed
              * and potentially it is too much trouble to do it and it is
              * unclear what to write. Not writing them is also a little
              * bit faster. */

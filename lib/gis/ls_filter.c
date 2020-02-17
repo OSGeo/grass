@@ -156,16 +156,16 @@ static int re_filter(const char *filename, void *closure)
 	pcre_extra* pcreExtra;
 	int pcreExecRet;
 	pcre* pcre_regex = closure;
-	// Optimize the regex
+	/* Optimize the regex */
 	pcreExtra = pcre_study(pcre_regex, 0, &pcreErrorStr);
 	pcreExecRet = pcre_exec(pcre_regex,
 		pcreExtra,
 		filename,
-		strlen(filename),  // length of string
-		0,                      // Start looking at this point
-		0,                      // OPTIONS
+		strlen(filename),  /* length of string */
+		0,                      /* Start looking at this point */
+		0,                      /* OPTIONS */
 		NULL,
-		0);                    // Length of subStrVec
+		0);                    /* Length of subStrVec */
 
 	return filename[0] != '.' && pcreExecRet == 0;
 #endif
@@ -198,7 +198,7 @@ void *G_ls_regex_filter(const char *pat, int exclude, int extended,
 	pcre* pcre_regex;
 	const char* pcreErrorStr;
 	int pcreErrorOffset;
-	// First, the regex string must be compiled.
+	/* First, the regex string must be compiled */
 	pcre_regex = pcre_compile(pat, 0, &pcreErrorStr, &pcreErrorOffset, NULL);
 	/*
 	if (regcomp(regex, pat, REG_NOSUB |
@@ -266,4 +266,3 @@ void G_free_ls_filter(void *regex)
     G_free(regex);
 
 }
-

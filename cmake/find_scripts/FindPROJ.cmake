@@ -1,5 +1,5 @@
 ###############################################################################
-# CMake module to search for PROJ.4 library
+# CMake module to search for PROJ library
 #
 # On success, the macro sets the following variables:
 # PROJ_FOUND       = if the library found
@@ -55,4 +55,3 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS(PROJ
 	FOUND_VAR PROJ_FOUND
 	REQUIRED_VARS  PROJ_LIBRARY PROJ_INCLUDE_DIR PROJ_VERSION_STRING
 	VERSION_VAR PROJ_VERSION_STRING)
-
