@@ -8,7 +8,7 @@ build_library_in_subdir(datetime)
 
 add_subdirectory(gis)
 
-build_library_in_subdir(driver 
+build_library_in_subdir(driver
   DEFS "${use_math_DEFS}"
   DEPENDS grass_gis FREETYPE ICONV ZLIB)
 
@@ -67,10 +67,10 @@ set(_grass_display_DEFS)
 
 set(_grass_display_DEPENDS
   grass_driver grass_raster
-  grass_htmldriver grass_pngdriver grass_psdriver) 
+  grass_htmldriver grass_pngdriver grass_psdriver)
 
 if(WITH_CAIRO)
-  
+
   set(_cairodriver_DEPENDS CAIRO FREETYPE grass_driver)
   if(WITH_X11)
     list(APPEND _cairodriver_DEPENDS X11)
@@ -86,7 +86,7 @@ if(WITH_CAIRO)
   list(APPEND _grass_display_DEPENDS grass_cairodriver)
 endif()
 
-build_library_in_subdir(bitmap 
+build_library_in_subdir(bitmap
 SOURCES "./bitmap/bitmap.c" "./bitmap/sparse.c"
 DEPENDS grass_linkm)
 
@@ -114,8 +114,8 @@ build_library_in_subdir(segment DEPENDS grass_gis) #addeed DEPENDS grass_gis for
 
 add_subdirectory(rst)
 
-build_library_in_subdir(lidar 
-DEPENDS GDAL GEOS grass_vector grass_raster grass_dbmibase grass_segment 
+build_library_in_subdir(lidar
+DEPENDS GDAL GEOS grass_vector grass_raster grass_dbmibase grass_segment
 HEADERS "lidar.h")
 
 build_library_in_subdir(raster3d DEPENDS grass_raster)
@@ -141,10 +141,10 @@ build_library_in_subdir(arraystats DEPENDS grass_gis)
 
 if(WITH_OPENGL)
 	build_library_in_subdir(ogsf
-	DEPENDS grass_raster grass_raster3d OPENGL TIFF)
+	DEPENDS grass_raster grass_raster3d grass_vector grass_bitmap OPENGL TIFF)
 
 	build_library_in_subdir(nviz
-	DEPENDS grass_display grass_raster grass_vector grass_bitmap OPENGL TIFF)
+	DEPENDS grass_display grass_raster grass_vector grass_bitmap grass_ogsf OPENGL TIFF)
 endif()
 
 add_subdirectory(temporal)
@@ -159,5 +159,5 @@ build_library_in_subdir(manage DEPENDS grass_raster grass_vector grass_raster3d 
 file(COPY manage/element_list DESTINATION ${GISBASE}/etc)
 install(FILES ${GISBASE}/etc/element_list DESTINATION etc)
 
-build_library_in_subdir(calc 
+build_library_in_subdir(calc
 DEPENDS grass_raster)
