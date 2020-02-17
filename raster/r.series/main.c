@@ -16,6 +16,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <math.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -194,8 +195,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    lo = -1.0 / 0.0; /* -inf */
-    hi = 1.0 / 0.0; /* inf */
+    lo = -INFINITY; /* -inf */
+    hi = INFINITY; /* inf */
     if (parm.range->answer) {
 	lo = atof(parm.range->answers[0]);
 	hi = atof(parm.range->answers[1]);
