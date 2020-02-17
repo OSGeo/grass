@@ -3,7 +3,7 @@
 
 
 set(WXPYTHON_DIR ${GISBASE}/gui/wxpython)
-set(gui_lib_DIRS core gui_core icons iscatt lmgr location_wizard 
+set(gui_lib_DIRS core gui_core icons iscatt lmgr location_wizard
 mapdisp mapwin modules nviz rdigit startup tools vnet web_services wxplot)
 
 set(gui_lib_targets)
@@ -17,7 +17,7 @@ add_custom_target(GUI_WXPYTHON
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/wxgui.py ${WXPYTHON_DIR}/
 	DEPENDS ${gui_lib_targets})
 
-set(gui_DIRS animation datacatalog dbmgr gcp gmodeler 
+set(gui_DIRS animation datacatalog dbmgr gcp gmodeler
 iclass image2target mapswipe photo2image psmap rlisetup timeline tplot vdigit)
 set(g_gui_targets)
 foreach(gui_DIR ${gui_DIRS})
@@ -74,4 +74,4 @@ add_custom_target(build_menustrings ALL
    ${CMAKE_CURRENT_SOURCE_DIR}/core/menutree.py "module_tree" >> ${CMAKE_CURRENT_SOURCE_DIR}/menustrings.py
   COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE}
    ${CMAKE_CURRENT_SOURCE_DIR}/core/menutree.py "psmap" >> ${CMAKE_CURRENT_SOURCE_DIR}/menustrings.py
-  DEPENDS build_module_tree_menudata copy_gui_images)
+  DEPENDS build_module_tree_menudata gui_images)
