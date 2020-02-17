@@ -22,7 +22,7 @@ Want to become a core developer? See
 
 > See INSTALL file.
 
-Yes, you should really read INSTALL.
+Yes, you should really read [INSTALL](INSTALL).
 
 ## How to generate the 'Programmer's Manual'
 
