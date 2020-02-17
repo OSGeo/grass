@@ -14,8 +14,8 @@ A clear and concise description of what the bug is.
 Steps to reproduce the behavior:
 
 1. Go to '...'
-2. Click on '....'
-3. Compute '....'
+2. Click on '...'
+3. Compute '...'
 4. See error
 
 **Expected behavior**
@@ -26,7 +26,7 @@ If applicable, add screenshots to help explain your problem.
 
 **System description (please complete the following information):**
 
-- Operating System: [e.g. Windows, Linux, ... incl. version]
+- Operating System: [e.g. Windows, Linux, ..., incl. version]
 - GRASS GIS version [e.g. 7.8.1]
 
 <!---

@@ -361,9 +361,9 @@ TODO: git tags
 - Our GRASS web site: /announces/
     - Note: DON'T use relative links there
 - Our main mailing lists:
-    - <http://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org>
-    - <http://lists.osgeo.org/mailman/listinfo/grass-dev> | <grass-dev@lists.osgeo.org>
-    - <http://lists.osgeo.org/mailman/listinfo/grass-user> | <grass-user@lists.osgeo.org>
+    - <https://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org>
+    - <https://lists.osgeo.org/mailman/listinfo/grass-dev> | <grass-dev@lists.osgeo.org>
+    - <https://lists.osgeo.org/mailman/listinfo/grass-user> | <grass-user@lists.osgeo.org>
 - DebianGIS: <debian-gis@lists.debian.org> - send only small note
 - FreeGIS: <freegis-list@intevation.de>
 - Geowanking: <geowanking@geowanking.org>
@@ -373,14 +373,12 @@ Via Email:
 
 - info@osgeo.org
 - <http://www.gis-news.de/>  (franz-josef.behr@gismngt.de)
-- <http://spatialnews.geocomm.com/submitnews.html> (not free any more, convince editor@geocomm.com)
 - mfeilner@linuxnewmedia.de
 - info@harzer.de
 - editor-geo@geoconnexion.com
 
 Via Web:
 
-- <https://plus.google.com/u/0/communities/111147786674687562495> (G+ GRASS GIS community)
 - <http://linuxtoday.com/contribute.php3>
 - <https://joinup.ec.europa.eu/software/grassgis/home> (submit news, MN)
 - <http://www.macnn.com/contact/newstips/1>
