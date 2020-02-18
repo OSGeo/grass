@@ -1,7 +1,7 @@
 """
 Created on Mon 17 Feb 2020 02:27:26 PM UTC
 
-@author: Markus Neteler, upon https://github.com/OSGeo/grass/pull/277
+@author: Markus Neteler and Māris Nartišs, upon https://github.com/OSGeo/grass/pull/277
 """
 
 import os
