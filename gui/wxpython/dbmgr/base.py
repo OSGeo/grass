@@ -57,7 +57,7 @@ from dbmgr.sqlbuilder import SQLBuilderSelect, SQLBuilderUpdate
 from core.gcmd import RunCommand, GException, GError, GMessage, GWarning
 from core.utils import ListOfCatsToRange
 from gui_core.dialogs import CreateNewVector
-from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue, CreateDbInfoDesc
+from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue, CreateDbInfoDesc, GetDbEncoding
 from core.debug import Debug
 from dbmgr.dialogs import ModifyTableRecord, AddColumnDialog
 from core.settings import UserSettings
@@ -268,13 +268,23 @@ class VirtualAttributeList(ListCtrl,
         i = 0
         outFile.seek(0)
 
+        enc = GetDbEncoding()
+        first_wrong_encoding = True
         while True:
             # os.linesep doesn't work here (MSYS)
             # not sure what the replace is for?
             # but we need strip to get rid of the ending newline
             # which on windows leaves \r in a last empty attribute table cell
             # and causes error
-            record = decode(outFile.readline().strip()).replace('\n', '')
+            try:
+                record = decode(outFile.readline(), encoding=enc).strip().replace('\n', '')
+            except UnicodeDecodeError as e:
+                record = decode(outFile.readline(), encoding=enc, errors="replace").strip().replace('\n', '')
+                if first_wrong_encoding:
+                    first_wrong_encoding = False
+                    GWarning(parent=self,
+                             message=_("Incorrect encoding {enc} used. Set encoding in GUI Settings"
+                                       "or set GRASS_DB_ENCODING variable."))
 
             if not record:
                 break
@@ -968,12 +978,7 @@ class DbMgrNotebookBase(FN.FlatNotebook):
         # perform SQL non-select statements (e.g. 'delete from table where
         # cat=1')
         if len(listOfSQLStatements) > 0:
-            enc = UserSettings.Get(
-                    group='atm', key='encoding', subkey='value')
-            if not enc and 'GRASS_DB_ENCODING' in os.environ:
-                enc = os.environ['GRASS_DB_ENCODING']
-            else:
-                enc = 'utf-8'
+            enc = GetDbEncoding()
             fd, sqlFilePath = tempfile.mkstemp(text=True)
             with open(sqlFilePath, 'w', encoding=enc) as sqlFile:
                 for sql in listOfSQLStatements:

@@ -38,11 +38,7 @@ if sys.version_info.major >= 3:
         if isinstance(value, unicode):
             return value
         if isinstance(value, bytes):
-            enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
-            if not enc and 'GRASS_DB_ENCODING' in os.environ:
-                enc = os.environ['GRASS_DB_ENCODING']
-            else:
-                enc = 'utf-8'  # assuming UTF-8
+            enc = GetDbEncoding()
             return str(value, enc, errors='replace')
         else:
             return str(value)
@@ -56,12 +52,19 @@ else:
         """
         if isinstance(value, unicode):
             return value
-        enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
-        if not enc and 'GRASS_DB_ENCODING' in os.environ:
-            enc = os.environ['GRASS_DB_ENCODING']
-        else:
-            enc = 'utf-8'  # assuming UTF-8
+        enc = GetDbEncoding()
         return unicode(str(value), enc, errors='replace')
+
+
+def GetDbEncoding():
+    """Checks if user set DB encoding (first user settings,
+    then env variable), if not assumes unicode."""
+    enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
+    if not enc and 'GRASS_DB_ENCODING' in os.environ:
+        enc = os.environ['GRASS_DB_ENCODING']
+    else:
+        enc = 'utf-8'  # assuming UTF-8
+    return enc
 
 
 def CreateDbInfoDesc(panel, mapDBInfo, layer):
