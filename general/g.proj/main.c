@@ -111,6 +111,7 @@ int main(int argc, char *argv[])
     dontprettify = G_define_flag();
     dontprettify->key = 'f';
     dontprettify->guisection = _("Print");
+    /* Does anyone build gdal without ogr these days ?. Anyway.. */
 #ifdef HAVE_OGR
     dontprettify->description = _("Print 'flat' output with no linebreaks "
                                   "(applies to WKT and PROJ.4 output)");
@@ -369,6 +370,7 @@ int main(int argc, char *argv[])
 #endif
                (create->answer ? 1 : 0));
     if (formats > 1) {
+        /* Does anyone build gdal without ogr these days ?. Anyway.. */
 #ifdef HAVE_OGR
         G_fatal_error(_("Only one of -%c, -%c, -%c, -%c, -%c"
                         " or -%c flags may be specified"),
