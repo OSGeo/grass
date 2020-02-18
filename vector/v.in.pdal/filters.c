@@ -25,7 +25,7 @@
 int spatial_filter_from_option(struct Option *option, double *xmin,
                                double *ymin, double *xmax, double *ymax)
 {
-    if (option->answer)
+    if (!option->answer)
         return FALSE;
     int arg_s_num = 0;
     int i = 0;
