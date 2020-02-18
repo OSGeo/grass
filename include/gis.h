@@ -111,13 +111,19 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define UNIT_FILE       "PROJ_UNITS"
 #define EPSG_FILE       "PROJ_EPSG"
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #define CONFIG_DIR "GRASS7"
 #else
 #define CONFIG_DIR ".grass7"
 #endif
 
 /* define PI and friends */
+#if defined(_MSC_VER)
+#define _USE_MATH_DEFINES 1
+#include <math.h>
+#undef min
+#undef max
+#else
 #undef M_PI
 #define M_PI    3.14159265358979323846	/* pi */
 
@@ -126,6 +132,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
 
 #undef M_PI_4
 #define M_PI_4  0.78539816339744830962	/* pi/4 */
+#endif
 
 #undef M_R2D
 #define M_R2D  57.295779513082320877    /* 180/pi */

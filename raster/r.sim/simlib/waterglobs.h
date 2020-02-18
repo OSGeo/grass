@@ -6,6 +6,10 @@
 #define UNDEF	-9999
 
 #include <grass/raster.h>
+#ifdef _MSC_VER
+#undef min
+#undef max
+#endif
 
 extern char *elevin;
 extern char *dxin;
