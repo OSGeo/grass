@@ -33,9 +33,8 @@ class TestRBlend(TestCase):
         # create a mapset with a name is also a valid mathematical expression
         cls.runModule("g.mapset", flags="c", mapset=cls.mapset_name)
         cls.mapsets_to_remove.append(cls.mapset_name)
-        run_command('g.copy', raster=cls.map1+'@PERMANENT,'+cls.map1)
+        run_command('g.copy', raster=cls.map1 + '@PERMANENT,' + cls.map1)
         cls.runModule('g.region', raster=cls.map1, flags='p')
-        run_command('d.mon', start='wx0')
 
     @classmethod
     def tearDownClass(cls):
@@ -48,7 +47,6 @@ class TestRBlend(TestCase):
         location = gisenv.outputs.stdout.strip()
         cls.runModule('g.remove', flags='f', type='raster',
                       name=(cls.temp1, cls.temp2, cls.temp3))
-        run_command('d.mon', stop='wx0')
         cls.runModule("g.mapset", mapset=cls.old_mapset)
         for mapset_name in cls.mapsets_to_remove:
             mapset_path = os.path.join(gisdbase, location, mapset_name)
@@ -57,16 +55,11 @@ class TestRBlend(TestCase):
     def test_blend(self):
         """blends test with special mapset name"""
 
-#r.grow input=elevation@1234-56-78 output=grown
-#Observe output: syntax error, unexpected INTEGER, expecting VARNAME or NAME
-
         # should not lead to syntax error, unexpected INTEGER, expecting VARNAME or NAME
-        module = SimpleModule('r.blend', first=self.map2, second=self.map1+'@'+self.mapset_name,
+        module = SimpleModule('r.blend', first=self.map2, second=self.map1 + '@' + self.mapset_name,
                               output='elev_shade_blend')
         self.assertModule(module)
 
-        run_command('d.rgb', red=self.temp1, green=self.temp2,
-                    blue=self.temp3)
 
 if __name__ == '__main__':
     test()
