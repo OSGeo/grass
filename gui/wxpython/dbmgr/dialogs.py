@@ -28,7 +28,7 @@ import wx.lib.scrolledpanel as scrolled
 from core.gcmd import RunCommand, GError
 from core.debug import Debug
 from core.settings import UserSettings
-from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue
+from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue, GetDbEncoding
 from gui_core.widgets import IntegerValidator, FloatValidator
 from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, \
     TextCtrl
@@ -333,18 +333,13 @@ class DisplayAttributesDialog(wx.Dialog):
         """Submit records"""
         layer = 1
         close = True
-        enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
-        if not enc and 'GRASS_DB_ENCODING' in os.environ:
-            enc = os.environ['GRASS_DB_ENCODING']
+        enc = GetDbEncoding()
 
         for sql in self.GetSQLString(updateValues=True):
             if not sql:
                 close = False
                 continue
-            if enc:
-                sql = sql.encode(enc)
-            else:
-                sql = sql.encode('utf-8')
+            sql = sql.encode(enc)
 
             driver, database = self.mapDBInfo.GetDbSettings(layer)
             Debug.msg(1, "SQL: %s" % sql)

@@ -708,6 +708,7 @@ class GStc(stc.StyledTextCtrl):
             try:
                 self.AddText(txt)
             except UnicodeDecodeError:
+                # TODO: this might be dead code for Py3, txt is already unicode?
                 enc = UserSettings.Get(
                     group='atm', key='encoding', subkey='value')
                 if enc:

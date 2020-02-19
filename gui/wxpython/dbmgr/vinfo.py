@@ -15,7 +15,6 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import types
 import sys
 import six
 
@@ -29,24 +28,43 @@ import grass.script as grass
 
 if sys.version_info.major >= 3:
     unicode = str
+    def GetUnicodeValue(value):
+        """Get unicode value
 
-def GetUnicodeValue(value):
-    """Get unicode value
+        :param value: value to be recoded
 
-    :param value: value to be recoded
+        :return: unicode value
+        """
+        if isinstance(value, unicode):
+            return value
+        if isinstance(value, bytes):
+            enc = GetDbEncoding()
+            return str(value, enc, errors='replace')
+        else:
+            return str(value)
+else:
+    def GetUnicodeValue(value):
+        """Get unicode value
 
-    :return: unicode value
-    """
-    if isinstance(value, unicode):
-        return value
+        :param value: value to be recoded
 
+        :return: unicode value
+        """
+        if isinstance(value, unicode):
+            return value
+        enc = GetDbEncoding()
+        return unicode(str(value), enc, errors='replace')
+
+
+def GetDbEncoding():
+    """Checks if user set DB encoding (first user settings,
+    then env variable), if not assumes unicode."""
     enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
     if not enc and 'GRASS_DB_ENCODING' in os.environ:
         enc = os.environ['GRASS_DB_ENCODING']
     else:
         enc = 'utf-8'  # assuming UTF-8
-
-    return unicode(str(value), enc, errors='replace')
+    return enc
 
 
 def CreateDbInfoDesc(panel, mapDBInfo, layer):
@@ -139,7 +157,7 @@ class VectorDBInfo(VectorDBInfoBase):
                 if len(value) < 1:
                     value = None
                 else:
-                    if self.tables[table][key]['ctype'] != types.StringType:
+                    if self.tables[table][key]['ctype'] != str:
                         value = self.tables[table][key]['ctype'](value)
                     else:
                         value = GetUnicodeValue(value)
