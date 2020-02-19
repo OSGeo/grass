@@ -279,12 +279,12 @@ class VirtualAttributeList(ListCtrl,
             try:
                 record = decode(outFile.readline(), encoding=enc).strip().replace('\n', '')
             except UnicodeDecodeError as e:
-                record = decode(outFile.readline(), encoding=enc, errors="replace").strip().replace('\n', '')
+                record = outFile.readline().decode(encoding=enc, errors="replace").strip().replace('\n', '')
                 if first_wrong_encoding:
                     first_wrong_encoding = False
                     GWarning(parent=self,
                              message=_("Incorrect encoding {enc} used. Set encoding in GUI Settings"
-                                       "or set GRASS_DB_ENCODING variable."))
+                                       " or set GRASS_DB_ENCODING variable.").format(enc=enc))
 
             if not record:
                 break
