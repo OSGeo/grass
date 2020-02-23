@@ -140,14 +140,15 @@ int main(int argc, char *argv[])
     }
 
     if (gish_rev->answer) {
+	printf("%s\n", __DATE__);
 	const char *p;
 	p = strstr(GIS_H_VERSION, " ");
 	if (shell->answer) {
 	    fprintf(stdout, "libgis_revision=\"%s\"\n", p);
-	    fprintf(stdout, "libgis_date=\"%s\"\n", GRASS_DATE_GIT);
+	    fprintf(stdout, "libgis_date=\"%s\"\n", GIS_H_DATE);
 	}
 	else {
-	    fprintf(stdout, "libgis %s\nlibgis %s\n", p, GRASS_VERSION_DATE);
+	    fprintf(stdout, "libgis %s\nlibgis %s\n", p, GIS_H_DATE);
 	}
     }
 
