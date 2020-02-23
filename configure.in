@@ -140,11 +140,16 @@ LIB_VER=`echo ${GRASS_VERSION_NUMBER} | sed 's/^\([0-9.]*\).*$/\1/'`
 changequote([,])
 
 GRASS_VERSION_GIT="exported"
+GRASS_DATE_GIT=$GRASS_VERSION_DATE
 AC_PATH_PROG(GIT, git, no)
 if test "$GIT" != "no" ; then
    GRASS_VERSION_GIT=`$GIT rev-parse --short HEAD 2>/dev/null`
    if test -z "$GRASS_VERSION_GIT"; then
       GRASS_VERSION_GIT="exported"
+   fi
+   GRASS_DATE_GIT=`$GIT log --pretty=format:"%ai" -1`
+   if test -z "$GRASS_DATE_GIT"; then
+      GRASS_DATE_GIT=$GRASS_VERSION_DATE
    fi
 fi
 
@@ -155,6 +160,7 @@ AC_SUBST(GRASS_VERSION_RELEASE)
 AC_SUBST(GRASS_VERSION_NUMBER)
 AC_SUBST(GRASS_VERSION_DATE)
 AC_SUBST(GRASS_VERSION_GIT)
+AC_SUBST(GRASS_DATE_GIT)
 AC_SUBST(NAME_VER)
 AC_SUBST(LIB_VER)
 

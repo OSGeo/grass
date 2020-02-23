@@ -143,8 +143,8 @@ int main(int argc, char *argv[])
 	const char *p;
 	p = strstr(GIS_H_VERSION, " ");
 	if (shell->answer) {
-	    fprintf(stdout, "libgis_revision=\"%s\"\n", p ? p + 1 : "00000");
-	    fprintf(stdout, "libgis_date=%s\n", GRASS_VERSION_DATE);
+	    fprintf(stdout, "libgis_revision=\"%s\"\n", p);
+	    fprintf(stdout, "libgis_date=\"%s\"\n", GRASS_DATE_GIT);
 	}
 	else {
 	    fprintf(stdout, "libgis %s\nlibgis %s\n", p, GRASS_VERSION_DATE);
