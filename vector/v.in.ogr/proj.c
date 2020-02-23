@@ -373,6 +373,25 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer, char *geom_
 				loc_proj_info->value[i_value]);
 		    strcat(error_msg, "\n");
 		}
+		else {
+		    strcat(error_msg, _("Location PROJ_INFO is:\n"));
+		    if (loc_wind.proj == PROJECTION_XY)
+			sprintf(error_msg + strlen(error_msg),
+				"Location proj = %d (unreferenced/unknown)\n",
+				loc_wind.proj);
+		    else if (loc_wind.proj == PROJECTION_LL)
+			sprintf(error_msg + strlen(error_msg),
+				"Location proj = %d (lat/long)\n",
+				loc_wind.proj);
+		    else if (loc_wind.proj == PROJECTION_UTM)
+			sprintf(error_msg + strlen(error_msg),
+				"Location proj = %d (UTM), zone = %d\n",
+				loc_wind.proj, cellhd->zone);
+		    else
+			sprintf(error_msg + strlen(error_msg),
+				"Location proj = %d (unknown), zone = %d\n",
+				loc_wind.proj, cellhd->zone);
+		}
 
 		if (proj_info != NULL) {
 		    strcat(error_msg, _("Dataset PROJ_INFO is:\n"));
