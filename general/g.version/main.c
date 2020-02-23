@@ -140,53 +140,15 @@ int main(int argc, char *argv[])
     }
 
     if (gish_rev->answer) {
-	char **rev_ver = G_tokenize(GIS_H_VERSION, "$");
-	char **rev_time = G_tokenize(GIS_H_DATE, "$");
-	const int tokens_expected = 3;
-	int no_libgis = FALSE;
-
-	/* if number of tokes is right, print it */
-	if (G_number_of_tokens(rev_ver) == tokens_expected &&
-	    G_number_of_tokens(rev_time) == tokens_expected) {
-	    if (shell->answer) {
-                const char *p;
-                p = strstr(rev_ver[1], " ");
-		fprintf(stdout, "libgis_revision=%s\n",
-			p ? p + 1 : "00000");
-                p = strstr(rev_time[1], " ");
-		fprintf(stdout, "libgis_date=\"%s\"\n",
-			p ? p + 1 : "?");
-	    }
-	    else {
-		fprintf(stdout, "libgis %s\nlibgis %s\n", rev_ver[1],
-			rev_time[1]);
-	    }
+	const char *p;
+	p = strstr(GIS_H_VERSION, " ");
+	if (shell->answer) {
+	    fprintf(stdout, "libgis_revision=\"%s\"\n", p);
+	    fprintf(stdout, "libgis_date=\"%s\"\n", GIS_H_DATE);
 	}
 	else {
-	    no_libgis = TRUE;
-	    if (shell->answer) {
-		fprintf(stdout, "libgis_revision=\n");
-		fprintf(stdout, "libgis_date=\n");
-		G_warning("GRASS GIS libgis version and date number not available");
-		/* this can be alternatively fatal error or it can cause
-		   fatal error later */
-	    }
-	    else {
-		fprintf(stdout,
-			_("Cannot determine GRASS libgis version and date number."
-			 " The GRASS build might be broken."
-			 " Report this to developers or packagers.\n"));
-	    }
+	    fprintf(stdout, "libgis %s\nlibgis %s\n", p, GIS_H_DATE);
 	}
-	if (no_libgis) {
-	    G_debug(1,
-		    _("GRASS GIS libgis version and date number don't have the expected format."
-		     " Trying to print the original strings..."));
-	    G_debug(1, _("GIS_H_VERSION=\"%s\""), GIS_H_VERSION);
-	    G_debug(1, _("GIS_H_DATE=\"%s\""), GIS_H_DATE);
-	}
-	G_free_tokens(rev_ver);
-	G_free_tokens(rev_time);
     }
 
     if (extended->answer) {
