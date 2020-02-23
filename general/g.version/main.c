@@ -140,7 +140,6 @@ int main(int argc, char *argv[])
     }
 
     if (gish_rev->answer) {
-	printf("%s\n", __DATE__);
 	const char *p;
 	p = strstr(GIS_H_VERSION, " ");
 	if (shell->answer) {
