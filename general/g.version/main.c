@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
 
 	if (*rev_ver && *rev_time) {
 	    if (shell->answer) {
-		fprintf(stdout, "libgis_revision=%s\n", rev_ver);
+		fprintf(stdout, "libgis_revision=\"%s\"\n", rev_ver);
 		fprintf(stdout, "libgis_date=\"%s\"\n", rev_time);
 	    }
 	    else {
