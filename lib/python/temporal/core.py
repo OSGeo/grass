@@ -654,27 +654,24 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
     backup_howto = _("The format of your actual temporal database is not " \
                      "supported any more.\n" \
                      "Please create a backup of your temporal database "\
-                     "to avoid the lossing data.\n")
+                     "to avoid the lossing data.\nSolution: ")
     if tgis_db_version > 2:
-        backup_howto += _("Recommended solution: Run t.upgrade command installed from "\
-                          "GRASS Addons.\n")
-        backup_howto += _("Alternative solution: ")
+        backup_howto += _("Run t.upgrade command installed from " \
+                          "GRASS Addons in order to upgrade your temporal database.")
     else:
-        backup_howto += _("Solution: ")
-
-    backup_howto += _("You need to export it by " \
-                      "restoring the GRASS GIS version used for creating this DB."\
-                      "Notes: Use t.rast.export and t.vect.export "\
-                      "to make a backup of your" \
-                      " existing space time datasets. To save the timestamps of" \
-                      " your existing maps and space time datasets, use " \
-                      "t.rast.list, t.vect.list and t.rast3d.list. "\
-                      "You can register the existing time stamped maps easily if"\
-                      " you export columns=id,start_time,end_time into text "\
-                      "files and use t.register to register them again in new" \
-                      " created space time datasets (t.create). After the backup"\
-                      " remove the existing temporal database, a new one will be"\
-                      " created automatically.\n")
+        backup_howto += _("You need to export it by " \
+                          "restoring the GRASS GIS version used for creating this DB."\
+                          "Notes: Use t.rast.export and t.vect.export "\
+                          "to make a backup of your" \
+                          " existing space time datasets. To save the timestamps of" \
+                          " your existing maps and space time datasets, use " \
+                          "t.rast.list, t.vect.list and t.rast3d.list. "\
+                          "You can register the existing time stamped maps easily if"\
+                          " you export columns=id,start_time,end_time into text "\
+                          "files and use t.register to register them again in new" \
+                          " created space time datasets (t.create). After the backup"\
+                          " remove the existing temporal database, a new one will be"\
+                          " created automatically.\n")
 
     if db_exists is True:
         dbif.close()
