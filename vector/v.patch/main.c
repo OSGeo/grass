@@ -483,14 +483,14 @@ int main(int argc, char *argv[])
 	if (append->answer)
 	    Vect_build_partial(&OutMap, GV_BUILD_NONE);
 
-	Vect_build_partial(&OutMap, GV_BUILD_BASE);
-
 	if (Vect_get_num_primitives(&OutMap, GV_BOUNDARY) > 0) {
 	    int nmodif;
 	    struct bound_box box;
 	    double xmax, ymax, min_snap, max_snap;
 	    int exp;
 	    char *separator = "-----------------------------------------------------";
+
+	    Vect_build_partial(&OutMap, GV_BUILD_BASE);
 
 	    Vect_get_map_box(&OutMap, &box);
 
