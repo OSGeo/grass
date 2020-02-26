@@ -31,7 +31,7 @@ ENV PACKAGES="\
       ncurses \
       openjpeg \
       openblas \
-      #pdal \
+      # pdal \
       py3-numpy \
       py3-pillow \
       py3-six \
@@ -84,7 +84,7 @@ ENV GRASS_CONFIG="\
       --with-cxx \
       --with-proj --with-proj-share=/usr/share/proj \
       --with-gdal \
-      #--with-pdal \
+      --with-pdal \
       --with-python \
       --with-geos \
       --with-sqlite \
@@ -132,7 +132,7 @@ ENV GRASS_BUILD_PACKAGES="\
       make \
       openjpeg-dev \
       openblas-dev \
-      #pdal-dev \
+      # pdal-dev \
       postgresql-dev \
       proj-dev \
       python3-dev \
@@ -160,6 +160,15 @@ RUN echo "Install main packages";\
 COPY . /src/grass_build/
 WORKDIR /src/grass_build/
 
+# Python 3.8.1 patch and PDAL
+RUN apk add curl
+RUN curl -L https://github.com/mmacata/alpine-python381-patch/releases/download/3.8.1-r3/python3-dev-3.8.1-r3.apk > /src/python3-dev-3.8.1-r3.apk
+RUN apk add --allow-untrusted /src/python3-dev-3.8.1-r3.apk
+RUN curl -L https://github.com/mmacata/alpine-pdal/releases/download/2.0.1-r5/pdal-dev-2.0.1-r5.apk > /src/pdal-dev-2.0.1-r5.apk
+RUN curl -L https://github.com/mmacata/alpine-pdal/releases/download/2.0.1-r5/pdal-2.0.1-r5.apk > /src/pdal-2.0.1-r5.apk
+RUN apk add --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing nitro cpd-dev libgeotiff-dev hdf5-dev
+RUN apk add --allow-untrusted /src/pdal-dev-2.0.1-r5.apk /src/pdal-2.0.1-r5.apk
+
 # Configure compile and install GRASS GIS
 RUN echo "  => Configure and compile grass" && \
     /src/grass_build/configure $GRASS_CONFIG && \
@@ -185,20 +194,25 @@ FROM common as grass
 
 ENV LC_ALL="en_US.UTF-8"
 
+# Python 3.8.1 patch and PDAL again
+RUN apk add curl
+RUN curl -L https://github.com/mmacata/alpine-python381-patch/releases/download/3.8.1-r3/python3-3.8.1-r3.apk > /src/python3-3.8.1-r3.apk
+RUN apk add --allow-untrusted /src/python3-3.8.1-r3.apk
+RUN curl -L https://github.com/mmacata/alpine-pdal/releases/download/2.0.1-r5/pdal-2.0.1-r5.apk > /src/pdal-2.0.1-r5.apk
+RUN apk add --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing nitro cpd-dev libgeotiff-dev hdf5-dev
+RUN apk add --allow-untrusted /src/pdal-2.0.1-r5.apk
+
 # Copy GRASS GIS from build image
 COPY --from=build /usr/local/bin/grass /usr/local/bin/grass
 COPY --from=build /usr/local/grass* /usr/local/grass/
+# pip 20.0.0 fix
+RUN apk add curl && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python3 get-pip.py pip==20.0.2 && rm get-pip.py
 RUN pip3 install --upgrade pip six grass-session
 RUN ln -s /usr/local/grass /usr/local/grass7
 RUN ln -s /usr/local/grass `grass --config path`
 RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
-    # pdal --version && \
+    pdal --version && \
     python3 --version
-
-# Python 3.8.1 patch again
-RUN apk add curl
-RUN curl -L https://github.com/mmacata/alpine-python381-patch/releases/download/0.0.0/python3-3.8.1-r1.apk > /src/python3-3.8.1-r1.apk
-RUN apk add --allow-untrusted /src/python3-3.8.1-r1.apk
 
 
 FROM grass as test
@@ -226,7 +240,7 @@ ENV GRASSBIN="/usr/local/bin/grass" \
 
 # show installed version
 RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
-    #pdal --version && \
+    pdal --version && \
     python3 --version
 
 # Data workdir
