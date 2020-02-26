@@ -49,11 +49,12 @@ from core import globalvar
 from core.gcmd import GError, RunCommand, GMessage
 from gui_core.gselect import LocationSelect, MapsetSelect, Select, \
     OgrTypeSelect, SubGroupSelect
-from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, MapValidator
+from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, \
+    MapValidator
 from core.settings import UserSettings
 from core.debug import Debug
-from gui_core.wrap import SpinCtrl, TextCtrl, Button, CheckListBox, \
-    StaticText, StaticBox, Menu, NewId, EmptyBitmap
+from gui_core.wrap import Button, CheckListBox, EmptyBitmap, HyperlinkCtrl, \
+    Menu, NewId, SpinCtrl, StaticBox, StaticText, TextCtrl 
 
 
 class SimpleDialog(wx.Dialog):
@@ -2314,7 +2315,7 @@ class HyperlinkDialog(wx.Dialog):
         hyperlinkLabel = hyperlinkLabel if hyperlinkLabel else hyperlink
         hyperlinkCtrl = HyperlinkCtrl(
             self, id=wx.ID_ANY, label=hyperlinkLabel, url=hyperlink,
-            style=wx.HL_ALIGN_LEFT | wx.HL_CONTEXTMENU)
+            style=HyperlinkCtrl.HL_ALIGN_LEFT | HyperlinkCtrl.HL_CONTEXTMENU)
         sizer.Add(
             hyperlinkCtrl,
             proportion=0,
