@@ -63,7 +63,7 @@ from gui_core.wrap import (
     EmptyBitmap, ExpandoTextCtrl, FileBrowseButton, FloatSpin, ListBox,
     ListCtrl, NewId, Notebook, OwnerDrawnComboBox, Panel, RadioButton,
     Rect, ScrolledPanel, SpinCtrl, StaticBox, StaticText, TextCtrl,
-    TextEntryDialog,
+    TextEntryDialog, EmptyImage
 )
 from psmap.utils import *
 from psmap.instructions import *
@@ -179,7 +179,10 @@ class PenStyleComboBox(OwnerDrawnComboBox):
         bgCol = wx.Colour(240, 240, 250)
         dc.SetBrush(wx.Brush(bgCol))
         dc.SetPen(wx.Pen(bgCol))
-        dc.DrawRectangleRect(rect)
+        if globalvar.wxPythonPhoenix:
+            dc.DrawRectangle(rect)
+        else:
+            dc.DrawRectangleRect(rect)
 
     def OnMeasureItem(self, item):
         """Overridden from OwnerDrawnComboBox, should return the height
@@ -2649,7 +2652,7 @@ class VPropertiesDialog(PsmapDialog):
 
         self.symbolName = StaticText(panel, id=wx.ID_ANY)
         self.symbolName.SetLabel(self.vPropertiesDict['symbol'])
-        bitmap = BitmapFromImage(
+        bitmap = wx.Bitmap(
             os.path.join(
                 globalvar.SYMBDIR,
                 self.vPropertiesDict['symbol']) +
@@ -3132,7 +3135,7 @@ class VPropertiesDialog(PsmapDialog):
         if dlg.ShowModal() == wx.ID_OK:
             img = dlg.GetSelectedSymbolPath()
             name = dlg.GetSelectedSymbolName()
-            self.symbolButton.SetBitmapLabel(BitmapFromImage(img + '.png'))
+            self.symbolButton.SetBitmapLabel(wx.Bitmap(img + '.png'))
             self.symbolName.SetLabel(name)
 
         dlg.Destroy()
@@ -4337,7 +4340,7 @@ class LegendDialog(PsmapDialog):
                     'fontCtrl'].GetStringSelection()
                 self.vLegendDict['fontsize'] = self.panelVector.font[
                     'fontSizeCtrl'].GetValue()
-                dc = ClientDc(self)
+                dc = ClientDC(self)
                 dc.SetFont(
                     wx.Font(
                         pointSize=self.vLegendDict['fontsize'],
@@ -4935,7 +4938,7 @@ class ScalebarDialog(PsmapDialog):
             if not os.path.exists(path):
                 bitmap = EmptyBitmap(0, 0)
             else:
-                bitmap = BitmapFromImage(path)
+                bitmap = wx.Bitmap(path)
             self.sbCombo.Append(item='', bitmap=bitmap, clientData=item[0])
         #self.sbCombo.Append(item = 'simple', bitmap = wx.Bitmap("./images/scalebar-simple.png"), clientData = 's')
         if self.scalebarDict['scalebar'] == 'f':
@@ -5798,7 +5801,7 @@ class ImageDialog(PsmapDialog):
         # image preview
         vSizer = wx.BoxSizer(wx.VERTICAL)
         self.previewSize = (150, 150)
-        img = wx.EmptyImage(*self.previewSize)
+        img = EmptyImage(*self.previewSize)
         panel.image['preview'] = wx.StaticBitmap(
             panel, wx.ID_ANY, BitmapFromImage(img))
         vSizer.Add(
@@ -6305,8 +6308,8 @@ class PointDialog(PsmapDialog):
                                       label=self.pointDict['symbol'])
         gridSizer.Add(self.symbolLabel, pos=(0, 1),
                       flag=wx.ALIGN_CENTER_VERTICAL)
-        bitmap = BitmapFromImage(os.path.join(globalvar.SYMBDIR,
-                                self.pointDict['symbol']) + '.png')
+        bitmap = wx.Bitmap(os.path.join(globalvar.SYMBDIR,
+                           self.pointDict['symbol']) + '.png')
         self.symbolButton = BitmapButton(panel, id=wx.ID_ANY, bitmap=bitmap)
         self.symbolButton.Bind(wx.EVT_BUTTON, self.OnSymbolSelection)
 
@@ -6540,7 +6543,7 @@ class PointDialog(PsmapDialog):
         if dlg.ShowModal() == wx.ID_OK:
             img = dlg.GetSelectedSymbolPath()
             name = dlg.GetSelectedSymbolName()
-            self.symbolButton.SetBitmapLabel(BitmapFromImage(img + '.png'))
+            self.symbolButton.SetBitmapLabel(wx.Bitmap(img + '.png'))
             self.symbolLabel.SetLabel(name)
 
         dlg.Destroy()

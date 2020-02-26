@@ -35,11 +35,6 @@ import six
 
 import wx
 
-try:
-    from wx.adv import HyperlinkCtrl
-except ImportError:
-    from wx import HyperlinkCtrl
-
 from grass.script import core as grass
 from grass.script.utils import natural_sort, try_remove
 
