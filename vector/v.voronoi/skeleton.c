@@ -525,7 +525,7 @@ int tie_up(void)
 	                         IPoints[i]);
 	}
 
-	distmin = 1. / 0.; /* +inf */
+	sscanf("inf", "%lf", &distmin);
 	xmin = x;
 	ymin = y;
 

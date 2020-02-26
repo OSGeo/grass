@@ -31,7 +31,9 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 
-#define	POINT2D_C
+#ifndef POINT2D_C
+#define	POINT2D_C 1
+#endif
 #include <grass/interpf.h>
 
 /* needed for AIX */

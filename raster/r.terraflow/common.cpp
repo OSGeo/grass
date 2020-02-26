@@ -23,7 +23,7 @@
 #endif
 #include <ctype.h>
 
-#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1)
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1) || defined (_MSC_VER)
 #include <ostream>
 #else
 #include <ostream.h>
