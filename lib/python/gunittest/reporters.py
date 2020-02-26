@@ -307,7 +307,14 @@ def get_html_test_authors_table(directory, tests_authors):
 
 
 class GrassTestFilesMultiReporter(object):
+    """Interface to multiple repoter objects
 
+    For start and finish of the tests and of a test of one file,
+    it calls corresponding methods of all contained reporters.
+    For all other attributes, it returns attribute of a first reporter
+    which has this attribute using the order in which the reporters were
+    provided.
+    """
     def __init__(self, reporters, forgiving=False):
         self.reporters = reporters
         self.forgiving = forgiving
@@ -355,6 +362,14 @@ class GrassTestFilesMultiReporter(object):
                     pass
                 else:
                     raise
+
+    def __getattr__(self, name):
+        for reporter in self.reporters:
+            try:
+                return getattr(reporter, name)
+            except AttributeError:
+                continue
+        raise AttributeError
 
 
 class GrassTestFilesCountingReporter(object):
@@ -444,10 +459,10 @@ def html_file_preview(filename):
     before = '<pre>'
     after = '</pre>'
     if not os.path.isfile(filename):
-        return '<p style="color: red>File %s does not exist<p>' % filename
+        return '<p style="color: red>File %s does not exist</p>' % filename
     size = os.path.getsize(filename)
     if not size:
-        return '<p style="color: red>File %s is empty<p>' % filename
+        return '<p style="color: red>File %s is empty</p>' % filename
     max_size = 10000
     html = StringIO()
     html.write(before)
@@ -462,7 +477,7 @@ def html_file_preview(filename):
         for line in tail(filename, 50):
             html.write(color_error_line(html_escape(line)))
     else:
-        return '<p style="color: red>File %s is too large to show<p>' % filename
+        return '<p style="color: red>File %s is too large to show</p>' % filename
     html.write(after)
     return html.getvalue()
 
