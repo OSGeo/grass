@@ -2276,7 +2276,7 @@ def yacc(
             raise YaccError("no rules of the form p_rulename are defined.")
 
         # Sort the symbols by line number
-        symbols.sort(lambda x, y: cmp(get_func_code(x).co_firstlineno, get_func_code(y).co_firstlineno))
+        symbols.sort(key=lambda x: get_func_code(x).co_firstlineno)
 
         # Add all of the symbols to the grammar
         for f in symbols:
@@ -2288,7 +2288,7 @@ def yacc(
         # Make a signature of the docstrings
         for f in symbols:
             if f.__doc__:
-                Signature.update(f.__doc__)
+                Signature.update(f.__doc__.encode("utf-8"))
 
         lr_init_vars()
 
