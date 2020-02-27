@@ -162,8 +162,6 @@ WORKDIR /src/grass_build/
 
 # Python 3.8.1 patch and PDAL
 RUN apk add curl
-RUN curl -L https://github.com/mmacata/alpine-python381-patch/releases/download/3.8.1-r3/python3-dev-3.8.1-r3.apk > /src/python3-dev-3.8.1-r3.apk
-RUN apk add --allow-untrusted /src/python3-dev-3.8.1-r3.apk
 RUN curl -L https://github.com/mmacata/alpine-pdal/releases/download/2.0.1-r5/pdal-dev-2.0.1-r5.apk > /src/pdal-dev-2.0.1-r5.apk
 RUN curl -L https://github.com/mmacata/alpine-pdal/releases/download/2.0.1-r5/pdal-2.0.1-r5.apk > /src/pdal-2.0.1-r5.apk
 RUN apk add --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing nitro cpd-dev libgeotiff-dev hdf5-dev
@@ -196,8 +194,6 @@ ENV LC_ALL="en_US.UTF-8"
 
 # Python 3.8.1 patch and PDAL again
 RUN apk add curl
-RUN curl -L https://github.com/mmacata/alpine-python381-patch/releases/download/3.8.1-r3/python3-3.8.1-r3.apk > /src/python3-3.8.1-r3.apk
-RUN apk add --allow-untrusted /src/python3-3.8.1-r3.apk
 RUN curl -L https://github.com/mmacata/alpine-pdal/releases/download/2.0.1-r5/pdal-2.0.1-r5.apk > /src/pdal-2.0.1-r5.apk
 RUN apk add --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing nitro cpd-dev libgeotiff-dev hdf5-dev
 RUN apk add --allow-untrusted /src/pdal-2.0.1-r5.apk
