@@ -654,7 +654,7 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
     backup_howto = _("The format of your actual temporal database is not " \
                      "supported any more.\n" \
                      "Please create a backup of your temporal database "\
-                     "to avoid the lossing data.\nSOLUTION: ")
+                     "to avoid lossing data.\nSOLUTION: ")
     if tgis_db_version > 2:
         backup_howto += _("Run t.upgrade command installed from " \
                           "GRASS Addons in order to upgrade your temporal database.\n")
