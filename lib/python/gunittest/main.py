@@ -184,7 +184,7 @@ def main():
         location_type=location_type,
         results_dir=results_dir,
         test_list_in=args.test_list_in,
-        test_list_out=args.test_list_out)
+        test_list_out=args.test_list_out
     )
     if reporter.file_pass_per >= args.min_success:
         return 0
