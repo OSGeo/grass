@@ -67,6 +67,22 @@ scripts. The flag causes execution to stop once some command gives a non-zero
 return code.
 
 
+Setting sensitivity of the test run
+-----------------------------------
+
+Sensitivity, specified by the ``--min-success`` parameter, determined
+how many tests need to fail for the runner to consider it an error
+and return a non-zero return code.
+For example, if at least 60% of test is required to succeed, you can
+use::
+
+    python -m grass.gunittest.main ... --min-success 60
+
+If all tests should succeed, use ``--min-success 100``. If you want
+to run the test and ``grass.gunittest.main`` returning zero return code
+even if some tests fail, use ``--min-success 0``
+
+
 Running tests and creating report
 ---------------------------------
 
