@@ -93,6 +93,21 @@ class TestRastStats(TestCase):
         self.assertLooksLike(output_str, str(v_db_select.outputs.stdout))
 
 
+    def test_zone_all(self):
+        # Output of v.rast.stats
+        univar_string = """cat|value|label|a_number|a_null_cells|a_minimum|a_maximum|a_range|a_average|a_stddev|a_variance|a_coeff_var|a_sum|a_first_quartile|a_median|a_third_quartile|a_percentile_90
+1|1||1710|0|102|209|107|155.5|26.5502667908755|704.916666666667|17.0741265536177|265905|133|155.5|178|191
+2|2||6390|0|121|280|159|200.5|33.0895250293302|1094.91666666667|16.5035037552769|1281195|177|200.5|224|245
+"""
+
+        self.assertModule("v.rast.stats", map="zone_map", raster="map_a",
+                          flags="c", column_prefix="a")
+        v_db_select = SimpleModule("v.db.select", map="zone_map")
+
+        self.runModule(v_db_select)
+        self.assertLooksLike(univar_string, str(v_db_select.outputs.stdout))
+
+
 class TestRastStatsFails(TestCase):
 
     def test_error_handling_a(self):
