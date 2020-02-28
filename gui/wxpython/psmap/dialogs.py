@@ -35,33 +35,18 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
 import string
+import sys
 from copy import deepcopy
 
 import wx
-import wx.lib.scrolledpanel as scrolled
-import wx.lib.filebrowsebutton as filebrowse
+import wx.lib.agw.floatspin as fs
 from wx.lib.mixins.listctrl import CheckListCtrlMixin, ListCtrlAutoWidthMixin
-from wx.lib.expando import ExpandoTextCtrl, EVT_ETC_LAYOUT_NEEDED
-try:
-    import wx.lib.agw.floatspin as fs
-except ImportError:
-    fs = None
 
 from core import globalvar
 
 if globalvar.wxPythonPhoenix:
-    import wx.adv
-    from wx.adv import OwnerDrawnComboBox, ODCB_PAINTING_CONTROL, ODCB_PAINTING_SELECTED
-    from wx.adv import BitmapComboBox
-else:
-    import wx.combo
-    from wx.combo import OwnerDrawnComboBox, ODCB_PAINTING_CONTROL, ODCB_PAINTING_SELECTED
-    from wx.combo import BitmapComboBox
-
-if globalvar.wxPythonPhoenix:
-    from wx import Validator as Validator
+    from wx import Validator
 else:
     from wx import PyValidator as Validator
 
@@ -72,9 +57,14 @@ from dbmgr.vinfo import VectorDBInfo
 from gui_core.gselect import Select
 from core.gcmd import RunCommand, GError, GMessage
 from gui_core.dialogs import SymbolDialog
-from gui_core.wrap import SpinCtrl, Button, TextCtrl, BitmapButton, \
-    StaticText, StaticBox, Rect, EmptyBitmap, TextEntryDialog, ListCtrl, NewId, \
-    BitmapFromImage
+from gui_core.wrap import (
+    BitmapButton, BitmapComboBox, BitmapFromImage, Button,
+    CheckBox, Choice, ClientDC, ColourPickerCtrl, Dialog, DirBrowseButton,
+    EmptyBitmap, ExpandoTextCtrl, FileBrowseButton, FloatSpin, ListBox,
+    ListCtrl, NewId, Notebook, OwnerDrawnComboBox, Panel, RadioButton,
+    Rect, ScrolledPanel, SpinCtrl, StaticBox, StaticText, TextCtrl,
+    TextEntryDialog, EmptyImage
+)
 from psmap.utils import *
 from psmap.instructions import *
 
@@ -179,8 +169,8 @@ class PenStyleComboBox(OwnerDrawnComboBox):
         background area of each item."""
         # If the item is selected, or its item # iseven, or we are painting the
         # combo control itself, then use the default rendering.
-        if (item & 1 == 0 or flags & (ODCB_PAINTING_CONTROL |
-                                      ODCB_PAINTING_SELECTED)):
+        if (item & 1 == 0 or flags & (OwnerDrawnComboBox.ODCB_PAINTING_CONTROL |
+                                      OwnerDrawnComboBox.ODCB_PAINTING_SELECTED)):
             OwnerDrawnComboBox.OnDrawBackground(
                 self, dc, rect, item, flags)
             return
@@ -189,7 +179,10 @@ class PenStyleComboBox(OwnerDrawnComboBox):
         bgCol = wx.Colour(240, 240, 250)
         dc.SetBrush(wx.Brush(bgCol))
         dc.SetPen(wx.Pen(bgCol))
-        dc.DrawRectangleRect(rect)
+        if globalvar.wxPythonPhoenix:
+            dc.DrawRectangle(rect)
+        else:
+            dc.DrawRectangleRect(rect)
 
     def OnMeasureItem(self, item):
         """Overridden from OwnerDrawnComboBox, should return the height
@@ -213,10 +206,10 @@ class CheckListCtrl(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
         ListCtrlAutoWidthMixin.__init__(self)
 
 
-class PsmapDialog(wx.Dialog):
+class PsmapDialog(Dialog):
 
     def __init__(self, parent, id, title, settings, apply=True):
-        wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY,
+        Dialog.__init__(self, parent=parent, id=wx.ID_ANY,
                            title=title, size=wx.DefaultSize,
                            style=wx.CAPTION | wx.MINIMIZE_BOX | wx.CLOSE_BOX)
         self.apply = apply
@@ -226,7 +219,6 @@ class PsmapDialog(wx.Dialog):
         self.objectType = None
         self.unitConv = UnitConversion(self)
         self.spinCtrlSize = (65, -1)
-        self.floatSpinSize = (120, -1)
 
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
@@ -235,7 +227,7 @@ class PsmapDialog(wx.Dialog):
         parent.units['unitsLabel'] = StaticText(
             parent, id=wx.ID_ANY, label=_("Units:"))
         choices = self.unitConv.getPageUnitsNames()
-        parent.units['unitsCtrl'] = wx.Choice(
+        parent.units['unitsCtrl'] = Choice(
             parent, id=wx.ID_ANY, choices=choices)
         parent.units['unitsCtrl'].SetStringSelection(
             self.unitConv.findName(dialogDict['unit']))
@@ -274,9 +266,9 @@ class PsmapDialog(wx.Dialog):
         panel.position = dict()
         positionLabel = StaticText(
             panel, id=wx.ID_ANY, label=_("Position is given:"))
-        panel.position['toPaper'] = wx.RadioButton(
+        panel.position['toPaper'] = RadioButton(
             panel, id=wx.ID_ANY, label=_("relative to paper"), style=wx.RB_GROUP)
-        panel.position['toMap'] = wx.RadioButton(
+        panel.position['toMap'] = RadioButton(
             panel, id=wx.ID_ANY, label=_("by map coordinates"))
         panel.position['toPaper'].SetValue(dialogDict['XY'])
         panel.position['toMap'].SetValue(not dialogDict['XY'])
@@ -392,7 +384,7 @@ class PsmapDialog(wx.Dialog):
 ##
 # if color:
 ##            parent.font['colorLabel'] = wx.StaticText(parent, id = wx.ID_ANY, label = _("Choose color:"))
-##            parent.font['colorCtrl'] = wx.ColourPickerCtrl(parent, id = wx.ID_ANY, style=wx.FNTP_FONTDESC_AS_LABEL)
+##            parent.font['colorCtrl'] = ColourPickerCtrl(parent, id = wx.ID_ANY, style=wx.FNTP_FONTDESC_AS_LABEL)
 # parent.font['colorCtrl'].SetColour(dialogDict['color'])
 
 # parent.font['colorCtrl'].SetColour(convertRGB(dialogDict['color']))
@@ -414,7 +406,7 @@ class PsmapDialog(wx.Dialog):
             'Courier-Oblique',
             'Courier-Bold',
             'Courier-BoldOblique']
-        parent.font['fontCtrl'] = wx.Choice(
+        parent.font['fontCtrl'] = Choice(
             parent, id=wx.ID_ANY, choices=fontChoices)
         if dialogDict['font'] in fontChoices:
             parent.font['fontCtrl'].SetStringSelection(dialogDict['font'])
@@ -427,15 +419,15 @@ class PsmapDialog(wx.Dialog):
         if color:
             parent.font['colorLabel'] = StaticText(
                 parent, id=wx.ID_ANY, label=_("Choose color:"))
-            parent.font['colorCtrl'] = wx.ColourPickerCtrl(
+            parent.font['colorCtrl'] = ColourPickerCtrl(
                 parent, id=wx.ID_ANY)
             parent.font['colorCtrl'].SetColour(convertRGB(dialogDict['color']))
 ##            parent.font['colorLabel'] = wx.StaticText(parent, id = wx.ID_ANY, label = _("Color:"))
 # colorChoices = [  'aqua', 'black', 'blue', 'brown', 'cyan', 'gray', 'green', 'indigo', 'magenta',\
 # 'orange', 'purple', 'red', 'violet', 'white', 'yellow']
-##            parent.colorCtrl = wx.Choice(parent, id = wx.ID_ANY, choices = colorChoices)
+##            parent.colorCtrl = Choice(parent, id = wx.ID_ANY, choices = colorChoices)
 # parent.colorCtrl.SetStringSelection(parent.rLegendDict['color'])
-##            parent.font['colorCtrl'] = wx.ColourPickerCtrl(parent, id = wx.ID_ANY)
+##            parent.font['colorCtrl'] = ColourPickerCtrl(parent, id = wx.ID_ANY)
 # parent.font['colorCtrl'].SetColour(dialogDict['color'])
 
     def OnApply(self, event):
@@ -629,7 +621,7 @@ class PageSetupDialog(PsmapDialog):
             hBox = wx.BoxSizer(wx.HORIZONTAL)
             stText = StaticText(
                 self, id=wx.ID_ANY, label=self.catsLabels[item] + ':')
-            choice = wx.Choice(
+            choice = Choice(
                 self,
                 id=wx.ID_ANY,
                 choices=choices[i],
@@ -749,7 +741,7 @@ class MapDialog(PsmapDialog):
 
         # notebook
         if self.isNotebook:
-            self.notebook = wx.Notebook(
+            self.notebook = Notebook(
                 parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
             self.mPanel = MapFramePanel(
                 parent=self.notebook,
@@ -824,11 +816,11 @@ class MapDialog(PsmapDialog):
                     self.mPanel.drawMap.SetValue(found)
 
 
-class MapFramePanel(wx.Panel):
-    """wx.Panel with map (scale, region, border) settings"""
+class MapFramePanel(Panel):
+    """Panel with map (scale, region, border) settings"""
 
     def __init__(self, parent, id, settings, rect, notebook=True):
-        wx.Panel.__init__(self, parent, id=wx.ID_ANY, style=wx.TAB_TRAVERSAL)
+        Panel.__init__(self, parent, id=wx.ID_ANY, style=wx.TAB_TRAVERSAL)
 
         self.id = id
         self.instruction = settings
@@ -900,7 +892,7 @@ class MapFramePanel(wx.Panel):
                         _("fit frame to match saved region"),
                         _("fit frame to match current computational region"),
                         _("fixed scale and map center")]
-        self.scaleChoice = wx.Choice(self, id=wx.ID_ANY, choices=scaleChoices)
+        self.scaleChoice = Choice(self, id=wx.ID_ANY, choices=scaleChoices)
 
         gridBagSizer.Add(
             frameText, pos=(0, 0),
@@ -920,17 +912,17 @@ class MapFramePanel(wx.Panel):
         sizerM = wx.StaticBoxSizer(self.staticBox, wx.HORIZONTAL)
         self.mapSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        self.rasterTypeRadio = wx.RadioButton(
+        self.rasterTypeRadio = RadioButton(
             self, id=wx.ID_ANY, label=" %s " %
             _("raster"), style=wx.RB_GROUP)
-        self.vectorTypeRadio = wx.RadioButton(
+        self.vectorTypeRadio = RadioButton(
             self, id=wx.ID_ANY, label=" %s " %
             _("vector"))
-        self.drawMap = wx.CheckBox(
+        self.drawMap = CheckBox(
             self, id=wx.ID_ANY, label="add selected map")
 
         self.mapOrRegionText = [_("Map:"), _("Region:")]
-        dc = wx.ClientDC(self)  # determine size of labels
+        dc = ClientDC(self)  # determine size of labels
         width = max(
             dc.GetTextExtent(
                 self.mapOrRegionText[0])[0], dc.GetTextExtent(
@@ -1105,7 +1097,7 @@ class MapFramePanel(wx.Panel):
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        self.borderCheck = wx.CheckBox(
+        self.borderCheck = CheckBox(
             self, id=wx.ID_ANY, label=(
                 _("draw border around map frame")))
         if self.mapFrameDict['border'] == 'y':
@@ -1117,7 +1109,7 @@ class MapFramePanel(wx.Panel):
             self, id=wx.ID_ANY, label=_("border color:"))
         self.borderWidthText = StaticText(
             self, id=wx.ID_ANY, label=_("border width (pts):"))
-        self.borderColourPicker = wx.ColourPickerCtrl(self, id=wx.ID_ANY)
+        self.borderColourPicker = ColourPickerCtrl(self, id=wx.ID_ANY)
         self.borderWidthCtrl = SpinCtrl(
             self, id=wx.ID_ANY, min=1, max=100, initial=1)
 
@@ -1533,11 +1525,11 @@ class MapFramePanel(wx.Panel):
         return True
 
 
-class RasterPanel(wx.Panel):
+class RasterPanel(Panel):
     """Panel for raster map settings"""
 
     def __init__(self, parent, id, settings, notebook=True):
-        wx.Panel.__init__(self, parent, id=wx.ID_ANY, style=wx.TAB_TRAVERSAL)
+        Panel.__init__(self, parent, id=wx.ID_ANY, style=wx.TAB_TRAVERSAL)
         self.instruction = settings
 
         if notebook:
@@ -1571,10 +1563,10 @@ class RasterPanel(wx.Panel):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        self.rasterNoRadio = wx.RadioButton(
+        self.rasterNoRadio = RadioButton(
             self, id=wx.ID_ANY, label=_("no raster map"),
             style=wx.RB_GROUP)
-        self.rasterYesRadio = wx.RadioButton(
+        self.rasterYesRadio = RadioButton(
             self, id=wx.ID_ANY, label=_("raster:"))
 
         self.rasterSelect = Select(
@@ -1669,11 +1661,11 @@ class RasterPanel(wx.Panel):
         return self.id
 
 
-class VectorPanel(wx.Panel):
+class VectorPanel(Panel):
     """Panel for vector maps settings"""
 
     def __init__(self, parent, id, settings, notebook=True):
-        wx.Panel.__init__(self, parent, id=wx.ID_ANY, style=wx.TAB_TRAVERSAL)
+        Panel.__init__(self, parent, id=wx.ID_ANY, style=wx.TAB_TRAVERSAL)
 
         self.parent = parent
         self.instruction = settings
@@ -1767,7 +1759,7 @@ class VectorPanel(wx.Panel):
 
         text = StaticText(self, id=wx.ID_ANY, label=_(
             "The topmost vector map overlaps the others"))
-        self.listbox = wx.ListBox(
+        self.listbox = ListBox(
             self, id=wx.ID_ANY, choices=[],
             style=wx.LB_SINGLE | wx.LB_NEEDED_SB)
         self.btnUp = Button(self, id=wx.ID_ANY, label=_("Up"))
@@ -2138,7 +2130,7 @@ class VPropertiesDialog(PsmapDialog):
         self.patternPath = os.path.join(gisbase, 'etc', 'paint', 'patterns')
 
         # notebook
-        notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
+        notebook = Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
         self.DSpanel = self._DataSelectionPanel(notebook)
         self.EnableLayerSelection(enable=self.connection)
         selectPanel = {
@@ -2164,7 +2156,7 @@ class VPropertiesDialog(PsmapDialog):
         self._layout(notebook)
 
     def _DataSelectionPanel(self, notebook):
-        panel = wx.Panel(
+        panel = Panel(
             parent=notebook, id=wx.ID_ANY, size=(-1, -1),
             style=wx.TAB_TRAVERSAL)
         notebook.AddPage(page=panel, text=_("Data selection"))
@@ -2189,9 +2181,9 @@ class VPropertiesDialog(PsmapDialog):
                 name = ("point", "centroid")
             else:
                 name = ("line", "boundary")
-            self.checkType1 = wx.CheckBox(
+            self.checkType1 = CheckBox(
                 panel, id=wx.ID_ANY, label=label[0], name=name[0])
-            self.checkType2 = wx.CheckBox(
+            self.checkType2 = CheckBox(
                 panel, id=wx.ID_ANY, label=label[1], name=name[1])
             self.checkType1.SetValue(
                 self.vPropertiesDict['type'].find(
@@ -2231,7 +2223,7 @@ class VPropertiesDialog(PsmapDialog):
             self.warning = StaticText(panel, id=wx.ID_ANY, label=_(
                 "Database connection is not defined in DB file."))
         text = StaticText(panel, id=wx.ID_ANY, label=_("Select layer:"))
-        self.layerChoice = wx.Choice(
+        self.layerChoice = Choice(
             panel, id=wx.ID_ANY, choices=[str(each) for each in self.layers],
             size=self.spinCtrlSize)
 
@@ -2242,7 +2234,7 @@ class VPropertiesDialog(PsmapDialog):
         else:
             table = ""
 
-        self.radioWhere = wx.RadioButton(
+        self.radioWhere = RadioButton(
             panel, id=wx.ID_ANY, label="SELECT * FROM %s WHERE" %
             table, style=wx.RB_GROUP)
         self.textCtrlWhere = TextCtrl(panel, id=wx.ID_ANY, value="")
@@ -2253,9 +2245,9 @@ class VPropertiesDialog(PsmapDialog):
         else:
             cols = []
 
-        self.choiceColumns = wx.Choice(panel, id=wx.ID_ANY, choices=cols)
+        self.choiceColumns = Choice(panel, id=wx.ID_ANY, choices=cols)
 
-        self.radioCats = wx.RadioButton(
+        self.radioCats = RadioButton(
             panel, id=wx.ID_ANY, label="Choose categories ")
         self.textCtrlCats = TextCtrl(panel, id=wx.ID_ANY, value="")
         self.textCtrlCats.SetToolTip(
@@ -2315,7 +2307,7 @@ class VPropertiesDialog(PsmapDialog):
             _("Mask"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
 
-        self.mask = wx.CheckBox(
+        self.mask = CheckBox(
             panel, id=wx.ID_ANY, label=_("Use current mask"))
         if self.vPropertiesDict['masked'] == 'y':
             self.mask.SetValue(True)
@@ -2332,7 +2324,7 @@ class VPropertiesDialog(PsmapDialog):
         return panel
 
     def _ColorsPointAreaPanel(self, notebook):
-        panel = wx.Panel(
+        panel = Panel(
             parent=notebook, id=wx.ID_ANY, size=(-1, -1),
             style=wx.TAB_TRAVERSAL)
         notebook.AddPage(page=panel, text=_("Colors"))
@@ -2348,26 +2340,22 @@ class VPropertiesDialog(PsmapDialog):
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         self.gridBagSizerO = wx.GridBagSizer(hgap=5, vgap=2)
 
-        self.outlineCheck = wx.CheckBox(
+        self.outlineCheck = CheckBox(
             panel, id=wx.ID_ANY, label=_("draw outline"))
         self.outlineCheck.SetValue(self.vPropertiesDict['color'] != 'none')
 
         widthText = StaticText(panel, id=wx.ID_ANY, label=_("Width (pts):"))
-        if fs:
-            self.widthSpin = fs.FloatSpin(
-                panel,
-                id=wx.ID_ANY,
-                min_val=0,
-                max_val=30,
-                increment=0.5,
-                value=1,
-                style=fs.FS_RIGHT)
-            self.widthSpin.SetFormat("%f")
-            self.widthSpin.SetDigits(2)
-        else:
-            self.widthSpin = SpinCtrl(
-                panel, id=wx.ID_ANY, min=1, max=25, initial=1,
-                size=self.spinCtrlSize)
+
+        self.widthSpin = FloatSpin(
+            panel,
+            id=wx.ID_ANY,
+            min_val=0,
+            max_val=30,
+            increment=0.5,
+            value=1,
+            style=fs.FS_RIGHT)
+        self.widthSpin.SetFormat("%f")
+        self.widthSpin.SetDigits(2)
 
         if self.vPropertiesDict['color'] is None:
             self.vPropertiesDict['color'] = 'none'
@@ -2378,7 +2366,7 @@ class VPropertiesDialog(PsmapDialog):
             self.widthSpin.SetValue(1)
 
         colorText = StaticText(panel, id=wx.ID_ANY, label=_("Color:"))
-        self.colorPicker = wx.ColourPickerCtrl(panel, id=wx.ID_ANY)
+        self.colorPicker = ColourPickerCtrl(panel, id=wx.ID_ANY)
         if self.vPropertiesDict['color'] != 'none':
             self.colorPicker.SetColour(
                 convertRGB(self.vPropertiesDict['color']))
@@ -2420,13 +2408,13 @@ class VPropertiesDialog(PsmapDialog):
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         self.gridBagSizerF = wx.GridBagSizer(hgap=5, vgap=2)
 
-        self.fillCheck = wx.CheckBox(
+        self.fillCheck = CheckBox(
             panel, id=wx.ID_ANY, label=_("fill color"))
         self.fillCheck.SetValue(
             self.vPropertiesDict['fcolor'] !=
             'none' or self.vPropertiesDict['rgbcolumn'] is not None)
 
-        self.colorPickerRadio = wx.RadioButton(
+        self.colorPickerRadio = RadioButton(
             panel, id=wx.ID_ANY, label=_("choose color:"), style=wx.RB_GROUP)
         # set choose color option if there is no db connection
         if self.connection:
@@ -2434,14 +2422,14 @@ class VPropertiesDialog(PsmapDialog):
                 not self.vPropertiesDict['rgbcolumn'])
         else:
             self.colorPickerRadio.SetValue(False)
-        self.fillColorPicker = wx.ColourPickerCtrl(panel, id=wx.ID_ANY)
+        self.fillColorPicker = ColourPickerCtrl(panel, id=wx.ID_ANY)
         if self.vPropertiesDict['fcolor'] != 'none':
             self.fillColorPicker.SetColour(
                 convertRGB(self.vPropertiesDict['fcolor']))
         else:
             self.fillColorPicker.SetColour(convertRGB('red'))
 
-        self.colorColRadio = wx.RadioButton(
+        self.colorColRadio = RadioButton(
             panel, id=wx.ID_ANY, label=_("color from map table column:"))
         self.colorColChoice = self.getColsChoice(parent=panel)
         if self.connection:
@@ -2488,7 +2476,7 @@ class VPropertiesDialog(PsmapDialog):
         return panel
 
     def _ColorsLinePanel(self, notebook):
-        panel = wx.Panel(
+        panel = Panel(
             parent=notebook, id=wx.ID_ANY, size=(-1, -1),
             style=wx.TAB_TRAVERSAL)
         notebook.AddPage(page=panel, text=_("Colors"))
@@ -2509,29 +2497,24 @@ class VPropertiesDialog(PsmapDialog):
         if self.vPropertiesDict['color'] is None:
             self.vPropertiesDict['color'] = 'none'
 
-        self.outlineCheck = wx.CheckBox(
+        self.outlineCheck = CheckBox(
             panel, id=wx.ID_ANY, label=_("draw outline"))
         self.outlineCheck.SetValue(self.vPropertiesDict['hcolor'] != 'none')
-        self.outlineCheck.SetToolTipString(
+        self.outlineCheck.SetToolTip(
             _("No effect for fill color from table column"))
 
         widthText = StaticText(panel, id=wx.ID_ANY, label=_("Width (pts):"))
 
-        if fs:
-            self.outWidthSpin = fs.FloatSpin(
-                panel,
-                id=wx.ID_ANY,
-                min_val=0,
-                max_val=30,
-                increment=0.5,
-                value=1,
-                style=fs.FS_RIGHT)
-            self.outWidthSpin.SetFormat("%f")
-            self.outWidthSpin.SetDigits(1)
-        else:
-            self.outWidthSpin = SpinCtrl(
-                panel, id=wx.ID_ANY, min=1, max=30, initial=1,
-                size=self.spinCtrlSize)
+        self.outWidthSpin = FloatSpin(
+            panel,
+            id=wx.ID_ANY,
+            min_val=0,
+            max_val=30,
+            increment=0.5,
+            value=1,
+            style=fs.FS_RIGHT)
+        self.outWidthSpin.SetFormat("%f")
+        self.outWidthSpin.SetDigits(1)
 
         if self.vPropertiesDict['hcolor'] != 'none':
             self.outWidthSpin.SetValue(self.vPropertiesDict['hwidth'])
@@ -2539,7 +2522,7 @@ class VPropertiesDialog(PsmapDialog):
             self.outWidthSpin.SetValue(1)
 
         colorText = StaticText(panel, id=wx.ID_ANY, label=_("Color:"))
-        self.colorPicker = wx.ColourPickerCtrl(panel, id=wx.ID_ANY)
+        self.colorPicker = ColourPickerCtrl(panel, id=wx.ID_ANY)
         if self.vPropertiesDict['hcolor'] != 'none':
             self.colorPicker.SetColour(
                 convertRGB(self.vPropertiesDict['hcolor']))
@@ -2584,7 +2567,7 @@ class VPropertiesDialog(PsmapDialog):
         fillText = StaticText(
             panel, id=wx.ID_ANY, label=_("Color of lines:"))
 
-        self.colorPickerRadio = wx.RadioButton(
+        self.colorPickerRadio = RadioButton(
             panel, id=wx.ID_ANY, label=_("choose color:"), style=wx.RB_GROUP)
 
         # set choose color option if there is no db connection
@@ -2593,14 +2576,14 @@ class VPropertiesDialog(PsmapDialog):
                 not self.vPropertiesDict['rgbcolumn'])
         else:
             self.colorPickerRadio.SetValue(False)
-        self.fillColorPicker = wx.ColourPickerCtrl(panel, id=wx.ID_ANY)
+        self.fillColorPicker = ColourPickerCtrl(panel, id=wx.ID_ANY)
         if self.vPropertiesDict['color'] != 'none':
             self.fillColorPicker.SetColour(
                 convertRGB(self.vPropertiesDict['color']))
         else:
             self.fillColorPicker.SetColour(convertRGB('black'))
 
-        self.colorColRadio = wx.RadioButton(
+        self.colorColRadio = RadioButton(
             panel, id=wx.ID_ANY, label=_("color from map table column:"))
         self.colorColChoice = self.getColsChoice(parent=panel)
         if self.connection:
@@ -2646,7 +2629,7 @@ class VPropertiesDialog(PsmapDialog):
         return panel
 
     def _StylePointPanel(self, notebook):
-        panel = wx.Panel(
+        panel = Panel(
             parent=notebook, id=wx.ID_ANY, size=(-1, -1),
             style=wx.TAB_TRAVERSAL)
         notebook.AddPage(page=panel, text=_("Size and style"))
@@ -2662,7 +2645,7 @@ class VPropertiesDialog(PsmapDialog):
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        self.symbolRadio = wx.RadioButton(
+        self.symbolRadio = RadioButton(
             panel, id=wx.ID_ANY, label=_("symbol:"),
             style=wx.RB_GROUP)
         self.symbolRadio.SetValue(bool(self.vPropertiesDict['symbol']))
@@ -2676,11 +2659,11 @@ class VPropertiesDialog(PsmapDialog):
             '.png')
         self.symbolButton = BitmapButton(panel, id=wx.ID_ANY, bitmap=bitmap)
 
-        self.epsRadio = wx.RadioButton(
+        self.epsRadio = RadioButton(
             panel, id=wx.ID_ANY, label=_("eps file:"))
         self.epsRadio.SetValue(bool(self.vPropertiesDict['eps']))
 
-        self.epsFileCtrl = filebrowse.FileBrowseButton(
+        self.epsFileCtrl = FileBrowseButton(
             panel, id=wx.ID_ANY, labelText='', buttonText=_("Browse"),
             toolTip=_("Type filename or click browse to choose file"),
             dialogTitle=_("Choose a file"),
@@ -2736,12 +2719,12 @@ class VPropertiesDialog(PsmapDialog):
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        self.sizeRadio = wx.RadioButton(
+        self.sizeRadio = RadioButton(
             panel, id=wx.ID_ANY, label=_("size:"),
             style=wx.RB_GROUP)
         self.sizeSpin = SpinCtrl(
             panel, id=wx.ID_ANY, min=1, max=50, initial=1)
-        self.sizecolumnRadio = wx.RadioButton(
+        self.sizecolumnRadio = RadioButton(
             panel, id=wx.ID_ANY, label=_("size from map table column:"))
         self.sizeColChoice = self.getColsChoice(panel)
         self.scaleText = StaticText(panel, id=wx.ID_ANY, label=_("scale:"))
@@ -2813,13 +2796,13 @@ class VPropertiesDialog(PsmapDialog):
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        self.rotateCheck = wx.CheckBox(
+        self.rotateCheck = CheckBox(
             panel, id=wx.ID_ANY, label=_("rotate symbols:"))
-        self.rotateRadio = wx.RadioButton(panel, id=wx.ID_ANY, label=_(
+        self.rotateRadio = RadioButton(panel, id=wx.ID_ANY, label=_(
             "counterclockwise in degrees:"), style=wx.RB_GROUP)
         self.rotateSpin = SpinCtrl(
             panel, id=wx.ID_ANY, min=0, max=360, initial=0)
-        self.rotatecolumnRadio = wx.RadioButton(
+        self.rotatecolumnRadio = RadioButton(
             panel, id=wx.ID_ANY, label=_("from map table column:"))
         self.rotateColChoice = self.getColsChoice(panel)
 
@@ -2878,7 +2861,7 @@ class VPropertiesDialog(PsmapDialog):
         return panel
 
     def _StyleLinePanel(self, notebook):
-        panel = wx.Panel(
+        panel = Panel(
             parent=notebook, id=wx.ID_ANY, size=(-1, -1),
             style=wx.TAB_TRAVERSAL)
         notebook.AddPage(page=panel, text=_("Size and style"))
@@ -2896,22 +2879,19 @@ class VPropertiesDialog(PsmapDialog):
 
         widthText = StaticText(
             panel, id=wx.ID_ANY, label=_("Set width (pts):"))
-        if fs:
-            self.widthSpin = fs.FloatSpin(
-                panel,
-                id=wx.ID_ANY,
-                min_val=0,
-                max_val=30,
-                increment=0.5,
-                value=1,
-                style=fs.FS_RIGHT)
-            self.widthSpin.SetFormat("%f")
-            self.widthSpin.SetDigits(1)
-        else:
-            self.widthSpin = SpinCtrl(
-                panel, id=wx.ID_ANY, min=1, max=30, initial=1)
 
-        self.cwidthCheck = wx.CheckBox(
+        self.widthSpin = FloatSpin(
+            panel,
+            id=wx.ID_ANY,
+            min_val=0,
+            max_val=30,
+            increment=0.5,
+            value=1,
+            style=fs.FS_RIGHT)
+        self.widthSpin.SetFormat("%f")
+        self.widthSpin.SetDigits(1)
+
+        self.cwidthCheck = CheckBox(
             panel, id=wx.ID_ANY, label=_("multiply width by category value"))
 
         if self.vPropertiesDict['width']:
@@ -2963,7 +2943,7 @@ class VPropertiesDialog(PsmapDialog):
 # "will repeat the pattern, an odd number of blocks will alternate the pattern."))
         linecapText = StaticText(
             panel, id=wx.ID_ANY, label=_("Choose linecap:"))
-        self.linecapChoice = wx.Choice(
+        self.linecapChoice = Choice(
             panel, id=wx.ID_ANY, choices=[
                 "butt", "round", "extended_butt"])
 
@@ -3003,7 +2983,7 @@ class VPropertiesDialog(PsmapDialog):
         return panel
 
     def _StyleAreaPanel(self, notebook):
-        panel = wx.Panel(
+        panel = Panel(
             parent=notebook, id=wx.ID_ANY, size=(-1, -1),
             style=wx.TAB_TRAVERSAL)
         notebook.AddPage(page=panel, text=_("Size and style"))
@@ -3019,9 +2999,9 @@ class VPropertiesDialog(PsmapDialog):
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        self.patternCheck = wx.CheckBox(
+        self.patternCheck = CheckBox(
             panel, id=wx.ID_ANY, label=_("use pattern:"))
-        self.patFileCtrl = filebrowse.FileBrowseButton(
+        self.patFileCtrl = FileBrowseButton(
             panel, id=wx.ID_ANY, labelText=_("Choose pattern file:"),
             buttonText=_("Browse"),
             toolTip=_("Type filename or click browse to choose file"),
@@ -3166,14 +3146,14 @@ class VPropertiesDialog(PsmapDialog):
                 widget.GetWindow().Enable(enable)
 
     def getColsChoice(self, parent):
-        """Returns a wx.Choice with table columns"""
+        """Returns a Choice with table columns"""
         if self.connection:
             cols = self.mapDBInfo.GetColumns(
                 self.mapDBInfo.layers[int(self.currLayer)]['table'])
         else:
             cols = []
 
-        choice = wx.Choice(parent=parent, id=wx.ID_ANY, choices=cols)
+        choice = Choice(parent=parent, id=wx.ID_ANY, choices=cols)
         return choice
 
     def update(self):
@@ -3367,7 +3347,7 @@ class LegendDialog(PsmapDialog):
             self.currRaster = None
 
         # notebook
-        self.notebook = wx.Notebook(
+        self.notebook = Notebook(
             parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
         self.panelRaster = self._rasterLegend(self.notebook)
         self.panelVector = self._vectorLegend(self.notebook)
@@ -3389,7 +3369,7 @@ class LegendDialog(PsmapDialog):
                      self.FindWindowByName('showVLegend'))
 
     def _rasterLegend(self, notebook):
-        panel = scrolled.ScrolledPanel(
+        panel = ScrolledPanel(
             parent=notebook, id=wx.ID_ANY, size=(-1, 500),
             style=wx.TAB_TRAVERSAL)
         panel.SetupScrolling(scroll_x=False, scroll_y=True)
@@ -3398,7 +3378,7 @@ class LegendDialog(PsmapDialog):
 
         border = wx.BoxSizer(wx.VERTICAL)
         # is legend
-        self.isRLegend = wx.CheckBox(
+        self.isRLegend = CheckBox(
             panel, id=wx.ID_ANY, label=_("Show raster legend"))
         self.isRLegend.SetValue(self.rLegendDict['rLegend'])
         self.isRLegend.SetName("showRLegend")
@@ -3417,10 +3397,10 @@ class LegendDialog(PsmapDialog):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         flexSizer = wx.FlexGridSizer(cols=2, hgap=5, vgap=5)
 
-        self.rasterDefault = wx.RadioButton(
+        self.rasterDefault = RadioButton(
             panel, id=wx.ID_ANY, label=_("current raster"),
             style=wx.RB_GROUP)
-        self.rasterOther = wx.RadioButton(
+        self.rasterOther = RadioButton(
             panel, id=wx.ID_ANY, label=_("select raster"))
         self.rasterDefault.SetValue(self.rLegendDict['rasterDefault'])
         self.rasterOther.SetValue(not self.rLegendDict['rasterDefault'])
@@ -3480,11 +3460,11 @@ class LegendDialog(PsmapDialog):
             _("Type of legend"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         vbox = wx.BoxSizer(wx.VERTICAL)
-        self.discrete = wx.RadioButton(
+        self.discrete = RadioButton(
             parent=panel, id=wx.ID_ANY, label=" %s " %
             _("discrete legend (categorical maps)"),
             style=wx.RB_GROUP)
-        self.continuous = wx.RadioButton(
+        self.continuous = RadioButton(
             parent=panel, id=wx.ID_ANY, label=" %s " %
             _("continuous color gradient legend (floating point map)"))
 
@@ -3516,14 +3496,14 @@ class LegendDialog(PsmapDialog):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
         # no data
-        self.nodata = wx.CheckBox(
+        self.nodata = CheckBox(
             panel, id=wx.ID_ANY, label=_('draw "no data" box'))
         if self.rLegendDict['nodata'] == 'y':
             self.nodata.SetValue(True)
         else:
             self.nodata.SetValue(False)
         # tickbar
-        self.ticks = wx.CheckBox(
+        self.ticks = CheckBox(
             panel,
             id=wx.ID_ANY,
             label=_("draw ticks across color table"))
@@ -3539,7 +3519,7 @@ class LegendDialog(PsmapDialog):
             self.minim, self.maxim = rinfo['min'], rinfo['max']
         else:
             self.minim, self.maxim = 0, 0
-        self.range = wx.CheckBox(panel, id=wx.ID_ANY, label=_("range"))
+        self.range = CheckBox(panel, id=wx.ID_ANY, label=_("range"))
         self.range.SetValue(self.rLegendDict['range'])
         self.minText = StaticText(
             panel,
@@ -3613,7 +3593,7 @@ class LegendDialog(PsmapDialog):
         return panel
 
     def _vectorLegend(self, notebook):
-        panel = scrolled.ScrolledPanel(
+        panel = ScrolledPanel(
             parent=notebook, id=wx.ID_ANY, size=(-1, 500),
             style=wx.TAB_TRAVERSAL)
         panel.SetupScrolling(scroll_x=False, scroll_y=True)
@@ -3622,7 +3602,7 @@ class LegendDialog(PsmapDialog):
 
         border = wx.BoxSizer(wx.VERTICAL)
         # is legend
-        self.isVLegend = wx.CheckBox(
+        self.isVLegend = CheckBox(
             panel, id=wx.ID_ANY, label=_("Show vector legend"))
         self.isVLegend.SetValue(self.vLegendDict['vLegend'])
         self.isVLegend.SetName("showVLegend")
@@ -3715,9 +3695,9 @@ class LegendDialog(PsmapDialog):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         flexGridSizer = wx.FlexGridSizer(cols=2, hgap=5, vgap=5)
 
-        self.borderCheck = wx.CheckBox(
+        self.borderCheck = CheckBox(
             panel, id=wx.ID_ANY, label=_("draw border around legend"))
-        self.borderColorCtrl = wx.ColourPickerCtrl(
+        self.borderColorCtrl = ColourPickerCtrl(
             panel, id=wx.ID_ANY, style=wx.FNTP_FONTDESC_AS_LABEL)
         if self.vLegendDict['border'] == 'none':
             self.borderColorCtrl.SetColour(wx.BLACK)
@@ -3899,7 +3879,7 @@ class LegendDialog(PsmapDialog):
                 max=maxVect,
                 initial=legendDict['cols'])
             # span
-            panel.spanRadio = wx.CheckBox(
+            panel.spanRadio = CheckBox(
                 panel, id=wx.ID_ANY, label=_("column span:"))
             panel.spanTextCtrl = TextCtrl(panel, id=wx.ID_ANY, value='')
             panel.spanTextCtrl.SetToolTip(_("Column separation distance between the left edges\n"
@@ -4360,7 +4340,7 @@ class LegendDialog(PsmapDialog):
                     'fontCtrl'].GetStringSelection()
                 self.vLegendDict['fontsize'] = self.panelVector.font[
                     'fontSizeCtrl'].GetValue()
-                dc = wx.ClientDC(self)
+                dc = ClientDC(self)
                 dc.SetFont(
                     wx.Font(
                         pointSize=self.vLegendDict['fontsize'],
@@ -4509,7 +4489,7 @@ class MapinfoDialog(PsmapDialog):
         self.OnIsBorder(None)
 
     def _mapinfoPanel(self):
-        panel = wx.Panel(
+        panel = Panel(
             parent=self, id=wx.ID_ANY, size=(-1, -1),
             style=wx.TAB_TRAVERSAL)
         #panel.SetupScrolling(scroll_x = False, scroll_y = True)
@@ -4596,12 +4576,12 @@ class MapinfoDialog(PsmapDialog):
         flexSizer = wx.FlexGridSizer(cols=2, hgap=5, vgap=5)
 
         self.colors = {}
-        self.colors['borderCtrl'] = wx.CheckBox(
+        self.colors['borderCtrl'] = CheckBox(
             panel, id=wx.ID_ANY, label=_("use border color:"))
-        self.colors['backgroundCtrl'] = wx.CheckBox(
+        self.colors['backgroundCtrl'] = CheckBox(
             panel, id=wx.ID_ANY, label=_("use background color:"))
-        self.colors['borderColor'] = wx.ColourPickerCtrl(panel, id=wx.ID_ANY)
-        self.colors['backgroundColor'] = wx.ColourPickerCtrl(
+        self.colors['borderColor'] = ColourPickerCtrl(panel, id=wx.ID_ANY)
+        self.colors['backgroundColor'] = ColourPickerCtrl(
             panel, id=wx.ID_ANY)
 
         if self.mapinfoDict['border'] is None:
@@ -4789,7 +4769,7 @@ class ScalebarDialog(PsmapDialog):
             self.mapUnit = 'meters'
 
     def _scalebarPanel(self):
-        panel = wx.Panel(parent=self, id=wx.ID_ANY, style=wx.TAB_TRAVERSAL)
+        panel = Panel(parent=self, id=wx.ID_ANY, style=wx.TAB_TRAVERSAL)
         border = wx.BoxSizer(wx.VERTICAL)
         #
         # position
@@ -4872,9 +4852,9 @@ class ScalebarDialog(PsmapDialog):
             _("Scalebar height is real height on paper"))
 
         choices = [_('default')] + self.unitConv.getMapUnitsNames()
-        self.unitsLength = wx.Choice(panel, id=wx.ID_ANY, choices=choices)
+        self.unitsLength = Choice(panel, id=wx.ID_ANY, choices=choices)
         choices = self.unitConv.getPageUnitsNames()
-        self.unitsHeight = wx.Choice(panel, id=wx.ID_ANY, choices=choices)
+        self.unitsHeight = Choice(panel, id=wx.ID_ANY, choices=choices)
 
         # set values
         unitName = self.unitConv.findName(self.scalebarDict['unitsLength'])
@@ -4986,7 +4966,7 @@ class ScalebarDialog(PsmapDialog):
             panel, id=wx.ID_ANY, min=4, max=30, initial=10)
         self.fontsizeCtrl.SetValue(self.scalebarDict['fontsize'])
 
-        self.backgroundCheck = wx.CheckBox(
+        self.backgroundCheck = CheckBox(
             panel, id=wx.ID_ANY, label=_("transparent text background"))
         if self.scalebarDict['background'] == 'y':
             self.backgroundCheck.SetValue(False)
@@ -5174,7 +5154,7 @@ class TextDialog(PsmapDialog):
             y=self.textDict['where'][1],
             paperToMap=True)
 
-        notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
+        notebook = Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
         self.textPanel = self._textPanel(notebook)
         self.positionPanel = self._positionPanel(notebook)
         self.OnBackground(None)
@@ -5186,7 +5166,7 @@ class TextDialog(PsmapDialog):
         self._layout(notebook)
 
     def _textPanel(self, notebook):
-        panel = wx.Panel(parent=notebook, id=wx.ID_ANY, style=wx.TAB_TRAVERSAL)
+        panel = Panel(parent=notebook, id=wx.ID_ANY, style=wx.TAB_TRAVERSAL)
         notebook.AddPage(page=panel, text=_("Text"))
 
         border = wx.BoxSizer(wx.VERTICAL)
@@ -5275,23 +5255,23 @@ class TextDialog(PsmapDialog):
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         self.effect = {}
-        self.effect['backgroundCtrl'] = wx.CheckBox(
+        self.effect['backgroundCtrl'] = CheckBox(
             panel, id=wx.ID_ANY, label=_("text background"))
-        self.effect['backgroundColor'] = wx.ColourPickerCtrl(
+        self.effect['backgroundColor'] = ColourPickerCtrl(
             panel, id=wx.ID_ANY)
 
-        self.effect['highlightCtrl'] = wx.CheckBox(
+        self.effect['highlightCtrl'] = CheckBox(
             panel, id=wx.ID_ANY, label=_("highlight"))
-        self.effect['highlightColor'] = wx.ColourPickerCtrl(
+        self.effect['highlightColor'] = ColourPickerCtrl(
             panel, id=wx.ID_ANY)
         self.effect['highlightWidth'] = SpinCtrl(
             panel, id=wx.ID_ANY, size=self.spinCtrlSize, min=0, max=5, initial=1)
         self.effect['highlightWidthLabel'] = StaticText(
             panel, id=wx.ID_ANY, label=_("Width (pts):"))
 
-        self.effect['borderCtrl'] = wx.CheckBox(
+        self.effect['borderCtrl'] = CheckBox(
             panel, id=wx.ID_ANY, label=_("text border"))
-        self.effect['borderColor'] = wx.ColourPickerCtrl(panel, id=wx.ID_ANY)
+        self.effect['borderColor'] = ColourPickerCtrl(panel, id=wx.ID_ANY)
         self.effect['borderWidth'] = SpinCtrl(
             panel, id=wx.ID_ANY, size=self.spinCtrlSize, min=1, max=25, initial=1)
         self.effect['borderWidthLabel'] = StaticText(
@@ -5361,7 +5341,7 @@ class TextDialog(PsmapDialog):
             border=1)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
-        self.Bind(EVT_ETC_LAYOUT_NEEDED, self.OnRefit, self.textCtrl)
+        self.Bind(ExpandoTextCtrl.EVT_ETC_LAYOUT_NEEDED, self.OnRefit, self.textCtrl)
         self.Bind(
             wx.EVT_CHECKBOX,
             self.OnBackground,
@@ -5378,7 +5358,7 @@ class TextDialog(PsmapDialog):
         return panel
 
     def _positionPanel(self, notebook):
-        panel = wx.Panel(parent=notebook, id=wx.ID_ANY, style=wx.TAB_TRAVERSAL)
+        panel = Panel(parent=notebook, id=wx.ID_ANY, style=wx.TAB_TRAVERSAL)
         notebook.AddPage(page=panel, text=_("Position"))
 
         border = wx.BoxSizer(wx.VERTICAL)
@@ -5452,7 +5432,7 @@ class TextDialog(PsmapDialog):
             for col in ["left", "center", "right"]:
                 ref.append(row + " " + col)
         self.radio = [
-            wx.RadioButton(
+            RadioButton(
                 panel,
                 id=wx.ID_ANY,
                 label='',
@@ -5466,7 +5446,7 @@ class TextDialog(PsmapDialog):
             border=0)
         for i in range(1, 9):
             self.radio.append(
-                wx.RadioButton(
+                RadioButton(
                     panel,
                     id=wx.ID_ANY,
                     label='',
@@ -5501,7 +5481,7 @@ class TextDialog(PsmapDialog):
             _("Text rotation"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
 
-        self.rotCtrl = wx.CheckBox(
+        self.rotCtrl = CheckBox(
             panel,
             id=wx.ID_ANY,
             label=_("rotate text (counterclockwise)"))
@@ -5752,7 +5732,7 @@ class ImageDialog(PsmapDialog):
             y=self.imageDict['where'][1],
             paperToMap=True)
 
-        notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
+        notebook = Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
         self.imagePanelName = imagePanelName
         self.imagePanel = self._imagePanel(notebook)
         self.positionPanel = self._positionPanel(notebook)
@@ -5772,7 +5752,7 @@ class ImageDialog(PsmapDialog):
         return Image(self.id, self.instruction)
 
     def _imagePanel(self, notebook):
-        panel = wx.Panel(
+        panel = Panel(
             parent=notebook, id=wx.ID_ANY, size=(-1, -1),
             style=wx.TAB_TRAVERSAL)
         notebook.AddPage(page=panel, text=self.imagePanelName)
@@ -5793,7 +5773,7 @@ class ImageDialog(PsmapDialog):
             startDir = os.path.dirname(self.imageDict['epsfile'])
         else:
             startDir = self._getImageDirectory()
-        dir = filebrowse.DirBrowseButton(
+        dir = DirBrowseButton(
             parent=panel,
             id=wx.ID_ANY,
             labelText=_("Choose a directory:"),
@@ -5808,7 +5788,7 @@ class ImageDialog(PsmapDialog):
         # image list
         hSizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        imageList = wx.ListBox(parent=panel, id=wx.ID_ANY)
+        imageList = ListBox(parent=panel, id=wx.ID_ANY)
         panel.image['list'] = imageList
         imageList.Bind(wx.EVT_LISTBOX, self.OnImageSelectionChanged)
 
@@ -5821,7 +5801,7 @@ class ImageDialog(PsmapDialog):
         # image preview
         vSizer = wx.BoxSizer(wx.VERTICAL)
         self.previewSize = (150, 150)
-        img = wx.EmptyImage(*self.previewSize)
+        img = EmptyImage(*self.previewSize)
         panel.image['preview'] = wx.StaticBitmap(
             panel, wx.ID_ANY, BitmapFromImage(img))
         vSizer.Add(
@@ -5863,27 +5843,18 @@ class ImageDialog(PsmapDialog):
 
         scaleLabel = StaticText(
             parent=panel, id=wx.ID_ANY, label=_("Scale:"))
-        if fs:
-            panel.image['scale'] = fs.FloatSpin(
-                panel, id=wx.ID_ANY, min_val=0, max_val=50, increment=0.5,
-                value=1, style=fs.FS_RIGHT, size=self.floatSpinSize)
-            panel.image['scale'].SetFormat("%f")
-            panel.image['scale'].SetDigits(1)
-        else:
-            panel.image['scale'] = TextCtrl(
-                panel, id=wx.ID_ANY, size=self.spinCtrlSize,
-                validator=TCValidator(flag='DIGIT_ONLY'))
+
+        panel.image['scale'] = FloatSpin(
+            panel, id=wx.ID_ANY, min_val=0, max_val=50, increment=0.5,
+            value=1, style=fs.FS_RIGHT)
+        panel.image['scale'].SetFormat("%f")
+        panel.image['scale'].SetDigits(1)
 
         if self.imageDict['scale']:
-            if fs:
-                value = float(self.imageDict['scale'])
-            else:
-                value = str(self.imageDict['scale'])
+            value = float(self.imageDict['scale'])
         else:
-            if fs:
-                value = 0
-            else:
-                value = '0'
+            value = 0
+
         panel.image['scale'].SetValue(value)
 
         gridSizer.Add(
@@ -5898,21 +5869,13 @@ class ImageDialog(PsmapDialog):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Rotation angle (deg):"))
-        if fs:
-            panel.image['rotate'] = fs.FloatSpin(
-                panel, id=wx.ID_ANY, min_val=0, max_val=360, increment=0.5,
-                value=0, style=fs.FS_RIGHT, size=self.floatSpinSize)
-            panel.image['rotate'].SetFormat("%f")
-            panel.image['rotate'].SetDigits(1)
-        else:
-            panel.image['rotate'] = SpinCtrl(
-                parent=panel,
-                id=wx.ID_ANY,
-                size=self.spinCtrlSize,
-                min=0,
-                max=359,
-                initial=0)
-        panel.image['rotate'].SetToolTipString(
+        panel.image['rotate'] = FloatSpin(
+            panel, id=wx.ID_ANY, min_val=0, max_val=360, increment=0.5,
+            value=0, style=fs.FS_RIGHT)
+        panel.image['rotate'].SetFormat("%f")
+        panel.image['rotate'].SetDigits(1)
+
+        panel.image['rotate'].SetToolTip(
             _("Counterclockwise rotation in degrees"))
         if self.imageDict['rotate']:
             panel.image['rotate'].SetValue(int(self.imageDict['rotate']))
@@ -5944,7 +5907,7 @@ class ImageDialog(PsmapDialog):
         return panel
 
     def _positionPanel(self, notebook):
-        panel = wx.Panel(
+        panel = Panel(
             parent=notebook, id=wx.ID_ANY, size=(-1, -1),
             style=wx.TAB_TRAVERSAL)
         notebook.AddPage(page=panel, text=_("Position"))
@@ -6310,7 +6273,7 @@ class PointDialog(PsmapDialog):
             y=self.pointDict['where'][1],
             paperToMap=True)
 
-        notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
+        notebook = Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
         self.pointPanelName = pointPanelName
         self.pointPanel = self._pointPanel(notebook)
         self.positionPanel = self._positionPanel(notebook)
@@ -6319,7 +6282,7 @@ class PointDialog(PsmapDialog):
         self._layout(notebook)
 
     def _pointPanel(self, notebook):
-        panel = wx.Panel(
+        panel = Panel(
             parent=notebook, id=wx.ID_ANY, size=(-1, -1),
             style=wx.TAB_TRAVERSAL)
         notebook.AddPage(page=panel, text=self.pointPanelName)
@@ -6346,7 +6309,7 @@ class PointDialog(PsmapDialog):
         gridSizer.Add(self.symbolLabel, pos=(0, 1),
                       flag=wx.ALIGN_CENTER_VERTICAL)
         bitmap = wx.Bitmap(os.path.join(globalvar.SYMBDIR,
-                                        self.pointDict['symbol']) + '.png')
+                           self.pointDict['symbol']) + '.png')
         self.symbolButton = BitmapButton(panel, id=wx.ID_ANY, bitmap=bitmap)
         self.symbolButton.Bind(wx.EVT_BUTTON, self.OnSymbolSelection)
 
@@ -6389,8 +6352,8 @@ class PointDialog(PsmapDialog):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Outline color:"))
-        self.outlineColorCtrl = wx.ColourPickerCtrl(panel, id=wx.ID_ANY)
-        self.outlineTranspCtrl = wx.CheckBox(
+        self.outlineColorCtrl = ColourPickerCtrl(panel, id=wx.ID_ANY)
+        self.outlineTranspCtrl = CheckBox(
             panel, id=wx.ID_ANY, label=_("transparent"))
 
         if self.pointDict['color'] != 'none':
@@ -6416,8 +6379,8 @@ class PointDialog(PsmapDialog):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Fill color:"))
-        self.fillColorCtrl = wx.ColourPickerCtrl(panel, id=wx.ID_ANY)
-        self.fillTranspCtrl = wx.CheckBox(
+        self.fillColorCtrl = ColourPickerCtrl(panel, id=wx.ID_ANY)
+        self.fillTranspCtrl = CheckBox(
             panel, id=wx.ID_ANY, label=_("transparent"))
 
         if self.pointDict['fcolor'] != 'none':
@@ -6465,7 +6428,7 @@ class PointDialog(PsmapDialog):
             label=_("Size (pt):"))
         self.sizeCtrl = SpinCtrl(
             panel, id=wx.ID_ANY, size=self.spinCtrlSize)
-        self.sizeCtrl.SetToolTipString(_("Symbol size in points"))
+        self.sizeCtrl.SetToolTip(_("Symbol size in points"))
         self.sizeCtrl.SetValue(self.pointDict['size'])
 
         gridSizer.Add(
@@ -6480,27 +6443,19 @@ class PointDialog(PsmapDialog):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Rotation angle (deg):"))
-        if fs:
-            self.rotCtrl = fs.FloatSpin(
-                panel,
-                id=wx.ID_ANY,
-                min_val=-360,
-                max_val=360,
-                increment=1,
-                value=0,
-                style=fs.FS_RIGHT,
-                size=self.spinCtrlSize)
-            self.rotCtrl.SetFormat("%f")
-            self.rotCtrl.SetDigits(1)
-        else:
-            self.rotCtrl = SpinCtrl(
-                parent=panel,
-                id=wx.ID_ANY,
-                size=self.spinCtrlSize,
-                min=-360,
-                max=360,
-                initial=0)
-        self.rotCtrl.SetToolTipString(
+
+        self.rotCtrl = FloatSpin(
+            panel,
+            id=wx.ID_ANY,
+            min_val=-360,
+            max_val=360,
+            increment=1,
+            value=0,
+            style=fs.FS_RIGHT)
+        self.rotCtrl.SetFormat("%f")
+        self.rotCtrl.SetDigits(1)
+        
+        self.rotCtrl.SetToolTip(
             _("Counterclockwise rotation in degrees"))
         self.rotCtrl.SetValue(float(self.pointDict['rotate']))
 
@@ -6528,7 +6483,7 @@ class PointDialog(PsmapDialog):
         return panel
 
     def _positionPanel(self, notebook):
-        panel = wx.Panel(
+        panel = Panel(
             parent=notebook, id=wx.ID_ANY, size=(-1, -1),
             style=wx.TAB_TRAVERSAL)
         notebook.AddPage(page=panel, text=_("Position"))
@@ -6732,7 +6687,7 @@ class RectangleDialog(PsmapDialog):
         self._layout(self.panel)
 
     def _rectPanel(self):
-        panel = wx.Panel(parent=self, id=wx.ID_ANY, style=wx.TAB_TRAVERSAL)
+        panel = Panel(parent=self, id=wx.ID_ANY, style=wx.TAB_TRAVERSAL)
         border = wx.BoxSizer(wx.VERTICAL)
 
         # color
@@ -6748,8 +6703,8 @@ class RectangleDialog(PsmapDialog):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Outline color:"))
-        self.outlineColorCtrl = wx.ColourPickerCtrl(panel, id=wx.ID_ANY)
-        self.outlineTranspCtrl = wx.CheckBox(
+        self.outlineColorCtrl = ColourPickerCtrl(panel, id=wx.ID_ANY)
+        self.outlineTranspCtrl = CheckBox(
             panel, id=wx.ID_ANY, label=_("transparent"))
 
         if self.rectDict['color'] != 'none':
@@ -6778,8 +6733,8 @@ class RectangleDialog(PsmapDialog):
         if self.objectType == ('rectangle',):
             fillLabel = StaticText(
                 parent=panel, id=wx.ID_ANY, label=_("Fill color:"))
-            self.fillColorCtrl = wx.ColourPickerCtrl(panel, id=wx.ID_ANY)
-            self.fillTranspCtrl = wx.CheckBox(
+            self.fillColorCtrl = ColourPickerCtrl(panel, id=wx.ID_ANY)
+            self.fillTranspCtrl = CheckBox(
                 panel, id=wx.ID_ANY, label=_("transparent"))
 
             if self.rectDict['fcolor'] != 'none':
@@ -6816,27 +6771,19 @@ class RectangleDialog(PsmapDialog):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Line width:"))
-        if fs:
-            self.widthCtrl = fs.FloatSpin(
-                panel,
-                id=wx.ID_ANY,
-                min_val=0,
-                max_val=50,
-                increment=1,
-                value=0,
-                style=fs.FS_RIGHT,
-                size=self.floatSpinSize)
-            self.widthCtrl.SetFormat("%f")
-            self.widthCtrl.SetDigits(1)
-        else:
-            self.widthCtrl = SpinCtrl(
-                parent=panel,
-                id=wx.ID_ANY,
-                size=self.spinCtrlSize,
-                min=-360,
-                max=360,
-                initial=0)
-        self.widthCtrl.SetToolTipString(_("Line width in points"))
+
+        self.widthCtrl = FloatSpin(
+            panel,
+            id=wx.ID_ANY,
+            min_val=0,
+            max_val=50,
+            increment=1,
+            value=0,
+            style=fs.FS_RIGHT)
+        self.widthCtrl.SetFormat("%f")
+        self.widthCtrl.SetDigits(1)
+
+        self.widthCtrl.SetToolTip(_("Line width in points"))
         self.widthCtrl.SetValue(float(self.rectDict['width']))
 
         gridSizer.Add(
@@ -6924,7 +6871,7 @@ class LabelsDialog(PsmapDialog):
         self._layout(self.panel)
 
     def _labelPanel(self):
-        panel = wx.Panel(parent=self, id=wx.ID_ANY, style=wx.TAB_TRAVERSAL)
+        panel = Panel(parent=self, id=wx.ID_ANY, style=wx.TAB_TRAVERSAL)
 
         border = wx.BoxSizer(wx.VERTICAL)
 

@@ -137,5 +137,5 @@ void create_map(const struct input *inputs, int num_inputs, const char *output,
     if (title)
 	Rast_put_cell_title(output, title);
 
-    G_done_msg(_("Link to raster map <%s> created."), output);
+    G_done_msg(_("Virtual raster map <%s> created."), output);
 }

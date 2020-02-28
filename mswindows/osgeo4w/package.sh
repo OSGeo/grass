@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-# osgeo4w-setup -g -k -a x86_64 -q -P gdal proj geos fftw libjpeg liblas-devel libpng libpq libtiff libxdr pdcurses regex-devel sqlite3 zstd-devel zstd laszip2 python3-core python3-six
+# osgeo4w-setup -g -k -a x86_64 -q -P gdal -P proj -P geos -P fftw -P libjpeg -P liblas-devel -P libpng -P libpq -P libtiff -P libxdr -P pdcurses -P regex-devel -P sqlite3 -P zstd-devel -P zstd -P laszip2 -P python3-core -P python3-six
 
 set -e
 

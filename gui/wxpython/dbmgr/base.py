@@ -34,7 +34,6 @@ import os
 import locale
 import tempfile
 import copy
-import types
 import math
 import functools
 
@@ -58,7 +57,7 @@ from dbmgr.sqlbuilder import SQLBuilderSelect, SQLBuilderUpdate
 from core.gcmd import RunCommand, GException, GError, GMessage, GWarning
 from core.utils import ListOfCatsToRange
 from gui_core.dialogs import CreateNewVector
-from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue, CreateDbInfoDesc
+from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue, CreateDbInfoDesc, GetDbEncoding
 from core.debug import Debug
 from dbmgr.dialogs import ModifyTableRecord, AddColumnDialog
 from core.settings import UserSettings
@@ -269,13 +268,23 @@ class VirtualAttributeList(ListCtrl,
         i = 0
         outFile.seek(0)
 
+        enc = GetDbEncoding()
+        first_wrong_encoding = True
         while True:
             # os.linesep doesn't work here (MSYS)
             # not sure what the replace is for?
             # but we need strip to get rid of the ending newline
             # which on windows leaves \r in a last empty attribute table cell
             # and causes error
-            record = decode(outFile.readline().strip()).replace('\n', '')
+            try:
+                record = decode(outFile.readline(), encoding=enc).strip().replace('\n', '')
+            except UnicodeDecodeError as e:
+                record = outFile.readline().decode(encoding=enc, errors="replace").strip().replace('\n', '')
+                if first_wrong_encoding:
+                    first_wrong_encoding = False
+                    GWarning(parent=self,
+                             message=_("Incorrect encoding {enc} used. Set encoding in GUI Settings"
+                                       " or set GRASS_DB_ENCODING variable.").format(enc=enc))
 
             if not record:
                 break
@@ -425,7 +434,7 @@ class VirtualAttributeList(ListCtrl,
         """Get item text"""
         index = self.itemIndexMap[item]
         s = self.itemDataMap[index][col]
-        return s
+        return str(s)
 
     def OnGetItemAttr(self, item):
         """Get item attributes"""
@@ -480,7 +489,7 @@ class VirtualAttributeList(ListCtrl,
 
         if not self.dbMgrData['editable'] or self.columns[
                 self.GetColumn(self._col).GetText()]['ctype'] not in (
-                types.IntType, types.FloatType):
+                int, float):
             popupMenu.Enable(self.popupId['calculate'], False)
 
         subMenu.Append(self.popupId['area'], text=_("Area size"))
@@ -969,19 +978,12 @@ class DbMgrNotebookBase(FN.FlatNotebook):
         # perform SQL non-select statements (e.g. 'delete from table where
         # cat=1')
         if len(listOfSQLStatements) > 0:
+            enc = GetDbEncoding()
             fd, sqlFilePath = tempfile.mkstemp(text=True)
-            sqlFile = open(sqlFilePath, 'w')
-            for sql in listOfSQLStatements:
-                enc = UserSettings.Get(
-                    group='atm', key='encoding', subkey='value')
-                if not enc and 'GRASS_DB_ENCODING' in os.environ:
-                    enc = os.environ['GRASS_DB_ENCODING']
-                if enc:
-                    sqlFile.write(sql.encode(enc) + ';')
-                else:
-                    sqlFile.write(sql.encode('utf-8') + ';')
-                sqlFile.write(os.linesep)
-            sqlFile.close()
+            with open(sqlFilePath, 'w', encoding=enc) as sqlFile:
+                for sql in listOfSQLStatements:
+                    sqlFile.write(sql + ';')
+                    sqlFile.write(os.linesep)
 
             driver = self.dbMgrData['mapDBInfo'].layers[
                 self.selLayer]["driver"]
@@ -1523,7 +1525,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                             else:
                                 idx = i
 
-                            if column['ctype'] != types.StringType:
+                            if column['ctype'] != str:
                                 tlist.itemDataMap[item][
                                     idx] = column['ctype'](values[i])
                             else:  # -> string
@@ -1533,7 +1535,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                                              {'value': str(values[i]),
                                               'type': column['type']})
 
-                        if column['ctype'] == types.StringType:
+                        if column['ctype'] == str:
                             if "'" in values[i]:  # replace "'" -> "''"
                                 values[i] = values[i].replace("'", "''")
                             updateList.append(

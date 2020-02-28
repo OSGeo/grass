@@ -139,7 +139,10 @@ def main():
                         help='File to read tests from list', default='False')
     parser.add_argument('--test_list_out',
                         help='File to write all test paths to list', default='False')
-
+    parser.add_argument('--min-success', dest='min_success', action='store',
+                        default='90', type=int,
+                        help=("Minimum success percentage (lower percentage"
+                              " than this will result in a non-zero return code; values 0-100)"))
     args = parser.parse_args()
     gisdbase = args.gisdbase
     if gisdbase is None:
@@ -175,13 +178,17 @@ def main():
     # as an enhancemnt
     # we can just iterate over all locations available in database
     # but the we don't know the right location type (category, label, shortcut)
-    invoker.run_in_location(gisdbase=gisdbase,
-                            location=location,
-                            location_type=location_type,
-                            results_dir=results_dir,
-                            test_list_in=args.test_list_in,
-                            test_list_out=args.test_list_out)
-    return 0
+    reporter = invoker.run_in_location(
+        gisdbase=gisdbase,
+        location=location,
+        location_type=location_type,
+        results_dir=results_dir,
+        test_list_in=args.test_list_in,
+        test_list_out=args.test_list_out)
+    )
+    if reporter.file_pass_per >= args.min_success:
+        return 0
+    return 1
 
 if __name__ == '__main__':
     sys.exit(main())

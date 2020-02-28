@@ -9,7 +9,7 @@ a Geographic Information System used for geospatial data management and
 analysis, image processing, graphics/map production, spatial modeling, and
 visualization.
 
-## How to get write access here?
+## How to get write access here
 
 In general: you don't really need write access as you can simply open
 a [pull request](https://github.com/OSGeo/grass/pulls) to contribute to
@@ -18,13 +18,13 @@ GRASS GIS. See [CONTRIBUTING file](CONTRIBUTING.md) for more details.
 Want to become a core developer? See
 [Procedure for gaining Git write access](https://trac.osgeo.org/grass/wiki/HowToContribute#WriteaccesstotheGRASScorerepository)
 
-## How to compile GRASS?
+## How to compile GRASS
 
 > See INSTALL file.
 
-Yes, you should really read INSTALL.
+Yes, you should really read [INSTALL](INSTALL).
 
-## How to generate the 'Programmer's Manual'?
+## How to generate the 'Programmer's Manual'
 
 This needs doxygen (<http://www.doxygen.org>) and optionally
 Graphviz dot (<http://www.research.att.com/sw/tools/graphviz/>).
@@ -71,17 +71,20 @@ source code):
 docker build -t grassgis79 .
 ```
 
-A test run (assuming you have existing GRASS GIS location; it can be downloaded from
+A test run (assuming you have existing GRASS GIS location; it can be
+downloaded from
 [here](https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.zip))
 
 ```
 # case 1: launching in the grassdata directory in which the location is stored:
-docker run -it --rm --user=$(id -u):$(id -g) --volume $(pwd):/data --env HOME=/data/ grassgis79 \
-    grass --text nc_basic_spm_grass7/user1 --exec g.region -p
+docker run -it --rm --user=$(id -u):$(id -g) --volume $(pwd):/data \
+    --env HOME=/data/ grassgis79 grass --text nc_basic_spm_grass7/user1 \
+        --exec g.region -p
 
 # case 2: launching anywhere
-docker run -it --rm --user=$(id -u):$(id -g) --volume /your/test/grassdata/:/data --env HOME=/data/ grassgis79 \
-    grass /data/nc_basic_spm_grass7/PERMANENT --exec g.region -p
+docker run -it --rm --user=$(id -u):$(id -g) \
+    --volume /your/test/grassdata/:/data --env HOME=/data/ grassgis79 \
+        grass /data/nc_basic_spm_grass7/PERMANENT --exec g.region -p
 ```
 
 Note that the first `grassgis79` is the name of the image while the second
@@ -90,10 +93,11 @@ Note that the first `grassgis79` is the name of the image while the second
 To run the tests (again assuming local location):
 
 ```
-docker run -it --rm --user=$(id -u):$(id -g) --volume /your/test/grassdata/:/data --env HOME=/data/ -w /code/grass \
-    grassgis79 grass /data/nc_basic_spm_grass7/PERMANENT --exec \
-        python -m grass.gunittest.main \
-            --location nc_basic_spm_grass7 --location-type nc
+docker run -it --rm --user=$(id -u):$(id -g) \
+    --volume /your/test/grassdata/:/data --env HOME=/data/ -w /code/grass \
+        grassgis79 grass /data/nc_basic_spm_grass7/PERMANENT --exec \
+            python -m grass.gunittest.main \
+                --location nc_basic_spm_grass7 --location-type nc
 ```
 
 Note: If you compiled locally before building the Docker image, you may
