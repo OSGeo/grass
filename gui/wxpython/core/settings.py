@@ -1029,6 +1029,7 @@ class Settings:
                 return
 
         try:
+            newline = '\n'
             file = open(self.filePath, "w")
             for group in list(settings.keys()):
                 for key in list(settings[group].keys()):
@@ -1040,7 +1041,7 @@ class Settings:
                             if idx > 0:
                                 file.write(
                                     '%s%s%s%s%s' %
-                                    (os.linesep, group, self.sep, key, self.sep))
+                                    (newline, group, self.sep, key, self.sep))
                             file.write('%s%s' % (subkeys[idx], self.sep))
                             kvalues = list(settings[group][key][subkeys[idx]].keys())
                             srange = range(len(kvalues))
@@ -1059,7 +1060,7 @@ class Settings:
                                     dict):
                                 file.write(
                                     '%s%s%s%s%s' %
-                                    (os.linesep, group, self.sep, key, self.sep))
+                                    (newline, group, self.sep, key, self.sep))
                             value = self._parseValue(
                                 settings[group][key][subkeys[idx]])
                             file.write(
@@ -1069,7 +1070,7 @@ class Settings:
                                     settings[group][key][subkeys[idx + 1]],
                                     dict):
                                 file.write('%s' % self.sep)
-                    file.write(os.linesep)
+                    file.write(newline)
         except IOError as e:
             raise GException(e)
         except Exception as e:
