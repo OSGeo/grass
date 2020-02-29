@@ -983,7 +983,7 @@ class DbMgrNotebookBase(FN.FlatNotebook):
             with open(sqlFilePath, 'w', encoding=enc) as sqlFile:
                 for sql in listOfSQLStatements:
                     sqlFile.write(sql + ';')
-                    sqlFile.write(os.linesep)
+                    sqlFile.write('\n')
 
             driver = self.dbMgrData['mapDBInfo'].layers[
                 self.selLayer]["driver"]
@@ -3881,11 +3881,11 @@ class FieldStatistics(wx.Frame):
             if fn == 'null':
                 sqlFile.write(
                     'select count(*) from %s where %s is null;%s' %
-                    (table, column, os.linesep))
+                    (table, column, '\n'))
             else:
                 sqlFile.write(
                     'select %s(%s) from %s;%s' %
-                    (fn, column, table, os.linesep))
+                    (fn, column, table, '\n'))
         sqlFile.close()
 
         dataStr = RunCommand('db.select',

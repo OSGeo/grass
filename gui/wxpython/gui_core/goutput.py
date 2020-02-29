@@ -490,9 +490,9 @@ class GConsoleWindow(wx.SplitterWindow):
         try:
             with open(self.cmdFileProtocol, "a") as output:
                 cmds = self.cmdPrompt.GetCommands()
-                output.write(os.linesep.join(cmds))
+                output.write('\n'.join(cmds))
                 if len(cmds) > 0:
-                    output.write(os.linesep)
+                    output.write('\n')
         except IOError as e:
             GError(_("Unable to write file '{filePath}'.\n\nDetails: {error}").format(
                 filePath=self.cmdFileProtocol, error=e))
