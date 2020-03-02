@@ -123,17 +123,26 @@ def cleanup():
         grass.try_remove(SRCGISRC)
 
 
-def checkGDALversion(smallerversion="2.4.1"):
-    """Checks GDAL version if it is smaller than given smaller version
-
-    :param smallerversion: version number to check if the actual GDAL version
-                           is smaller
-    :type smallerversion: str
+def gdal_version():
+    """Returns the GDAL version as tuple
     """
-    smallerversion_tuple = tuple([int(x) for x in smallerversion.split('.')])
-    GDALversion = grass.parse_command('g.version', flags='reg')['gdal']
-    GDALversion_tuple = tuple([int(x) for x in GDALversion.split('.')])
-    if GDALversion_tuple < smallerversion_tuple:
+    version = grass.parse_command('g.version', flags='reg')['gdal']
+    return version
+
+
+def version_less_than(actual_version, comparison_version):
+    """Checks actual version if it is less than given comparison version
+
+    :param actual_version: version number to check if it is less than the
+                           comparison version
+    :type actual_version: str
+    :param comparison_version: version number to check if the actual version
+                           is less
+    :type comparison_version: str
+    """
+    comparison_version_tuple = tuple([int(x) for x in comparison_version.split('.')])
+    actual_version_tuple = tuple([int(x) for x in actual_version.split('.')])
+    if actual_version_tuple < comparison_version_tuple:
         return True
     else:
         return False
@@ -145,14 +154,11 @@ def fix_gfsfile(input):
     :param input: gml file name to import with v.import
     :type input: str
     """
-    # get srs string from gml file TODO
+    # get srs string from gml file
     gmltree = ET.parse(input)
     gmlroot = gmltree.getroot()
     gmlstring = ET.tostring(gmlroot).decode('utf-8')
-    try:
-        srs_str = re.search(r"srsName=\"(.*?)\"", gmlstring).groups()[0]
-    except:
-        srs_str = re.search(r"SRSName=\"(.*?)\"", gmlstring).groups()[0]
+    srs_str = re.search(r"srsname=\"(.*?)\"", gmlstring.lower()).groups()[0]
 
     # set srs string in gfs file
     gml = os.path.basename(input).split('.')[-1]
@@ -160,9 +166,11 @@ def fix_gfsfile(input):
     if os.path.isfile(gfsfile):
         tree = ET.parse(gfsfile)
         root = tree.getroot()
-        for featClass in root.findall('GMLFeatureClass'):
-            ET.SubElement(featClass, 'SRSName').text = srs_str
-        tree.write(gfsfile)
+        gfsstring = ET.tostring(root).decode('utf-8')
+        if not "srsname" in gfsstring.lower():
+            for featClass in root.findall('GMLFeatureClass'):
+                ET.SubElement(featClass, 'SRSName').text = srs_str
+            tree.write(gfsfile)
 
 
 def main():
@@ -252,8 +260,8 @@ def main():
     # create temp location from input without import
     grass.verbose(_("Creating temporary location for <%s>...") % OGRdatasource)
     try:
-        if checkGDALversion():
-            if os.path.basename(OGRdatasource).split('.')[-1].lower() == "gml":
+        if version_less_than(gdal_version(), "2.4.1"):
+            if OGRdatasource.lower().endswith("gml"):
                 fix_gfsfile(OGRdatasource)
         grass.run_command('v.in.ogr', input=OGRdatasource,
                           location=TMPLOC, flags='i',
@@ -301,8 +309,8 @@ def main():
     # import into temp location
     grass.message(_("Importing <%s> ...") % OGRdatasource)
     try:
-        if checkGDALversion():
-            if os.path.basename(OGRdatasource).split('.')[-1].lower() == "gml":
+        if version_less_than(gdal_version(), "2.4.1"):
+            if OGRdatasource.lower().endswith("gml"):
                 fix_gfsfile(OGRdatasource)
         grass.run_command('v.in.ogr', input=OGRdatasource,
                           flags=vflags, overwrite=overwrite, **vopts)
