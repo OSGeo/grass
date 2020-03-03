@@ -457,9 +457,6 @@ int main(int argc, char *argv[])
     Vect_set_person(&OutMap, G_whoami());
 
     if (!no_topo->answer) {
-	if (append->answer)
-	    Vect_build_partial(&OutMap, GV_BUILD_NONE);
-
 	Vect_build_partial(&OutMap, GV_BUILD_BASE);
 
 	if (Vect_get_num_primitives(&OutMap, GV_BOUNDARY) > 0) {
@@ -559,8 +556,9 @@ int main(int argc, char *argv[])
 
 	    /* Boundaries are hopefully clean, build areas */
 	    G_message("%s", separator);
-	    Vect_build_partial(&OutMap, GV_BUILD_NONE);
 	}
+
+	Vect_build_partial(&OutMap, GV_BUILD_NONE);
 	Vect_build(&OutMap);
     }
     Vect_close(&OutMap);
