@@ -462,8 +462,7 @@ int main(int argc, char **argv)
 	              group.name);
     }
     if (!I_get_con_points(group.name, &group.control_points)) {
-	G_fatal_error(_("Can not read control points for group <%s>"),
-	              group.name);
+	group.control_points.count = 0;
     }
     
     points = &group.control_points;

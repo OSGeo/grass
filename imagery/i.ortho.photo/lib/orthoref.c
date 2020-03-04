@@ -90,9 +90,11 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
     /*  Need at least 4 active control points, 
      *  or user-provided camera position */
     active = 0;
-    for (i = 0; i < cpz->count; i++) {
-	if (cpz->status[i] > 0)
-	    active++;
+    if (cpz) {
+	for (i = 0; i < cpz->count; i++) {
+	    if (cpz->status[i] > 0)
+		active++;
+	}
     }
 
     /*  Initialize (and zero out) all matrices needed */
@@ -273,7 +275,7 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 #ifdef DEBUG
 	fclose(debug);
 #endif
-	return (-1);
+	return (0);
     }
 
     G_verbose_message("INITIAL CAMERA POSITION:");
