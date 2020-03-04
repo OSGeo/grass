@@ -379,7 +379,7 @@ static void do_pt_xforms(void)
 int main(int argc, char **argv)
 {
     struct Option *grp, *fmt, *xfm_pts;
-    struct Flag *sum, *rev_flag, *dump_flag;
+    struct Flag *sum, *rev_flag, *dump_flag, *pan_flag;
     struct GModule *module;
     char *desc;
 
@@ -438,6 +438,10 @@ int main(int argc, char **argv)
     dump_flag->key = 'x';
     dump_flag->description = _("Display transform matrix coefficients");
 
+    pan_flag = G_define_flag();
+    pan_flag->key = 'p';
+    pan_flag->description = _("Enable panorama camera correction");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -449,6 +453,9 @@ int main(int argc, char **argv)
     columns = fmt->answers;
     forward = !rev_flag->answer;
     coord_file = xfm_pts->answer;
+
+    if (pan_flag->answer)
+	I_ortho_panorama();
 
     if (!I_get_ref_points(group.name, &group.photo_points)) {
 	G_fatal_error(_("Can not read reference points for group <%s>"),
