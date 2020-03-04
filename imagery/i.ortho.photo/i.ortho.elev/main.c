@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     char *units;
     char *nd;
 
-    char buf[100];
+    char buf[GPATH_MAX];
     int stat;
     int overwrite;
 
@@ -124,17 +124,17 @@ int main(int argc, char *argv[])
     *nd = 0;
 
     strcpy(group, group_opt->answer);
-    if(loc_opt->answer)
+    if (loc_opt->answer)
     	strcpy(location_elev, loc_opt->answer);
-    if(mapset_opt->answer)
+    if (mapset_opt->answer)
     	strcpy(mapset_elev, mapset_opt->answer);
     /*if(elev_opt->answer)
     	strcpy(elev_layer, elev_opt->answer);*/
-    if(math_opt->answer)
+    if (math_opt->answer)
     	strcpy(math_exp, math_opt->answer);
-    if(unit_opt->answer)
+    if (unit_opt->answer)
     	strcpy(units, unit_opt->answer);
-    if(nd_opt->answer)
+    if (nd_opt->answer)
     	strcpy(nd, nd_opt->answer);
 	
     if (!I_get_target(group, location, mapset)) {
@@ -149,17 +149,18 @@ int main(int argc, char *argv[])
     /*Report the contents of the ELEVATION file as in the GROUP */
     if (print_flag->answer) {
 	/*If the content is empty report an error */
-	if(!I_get_group_elev(group, elev_layer, mapset_elev, location_elev, math_exp, units, nd)){
+	if (!I_get_group_elev(group, elev_layer, mapset_elev, location_elev, math_exp, units, nd)) {
 		G_fatal_error(_("Cannot find default elevation map for target in group [%s]"),group);
-	/*If there is a content, report it as a message */
-	} else {
-		G_message("map:\t\t\t%s",elev_layer);
-		G_message("mapset:\t\t\t%s",mapset_elev);
-		G_message("location:\t\t%s",location_elev);
-		G_message("math expression:\t%s",math_exp);
-		G_message("units:\t\t\t%s",units);
-		G_message("nodata value:\t\t%s",nd);
-		exit(EXIT_SUCCESS);
+	}
+	/*If there is a content, print it */
+	else {
+	    fprintf(stdout, "map:\t\t\t%s\n",elev_layer);
+	    fprintf(stdout, "mapset:\t\t\t%s\n",mapset_elev);
+	    fprintf(stdout, "location:\t\t%s\n",location_elev);
+	    fprintf(stdout, "math expression:\t%s\n",math_exp);
+	    fprintf(stdout, "units:\t\t\t%s\n",units);
+	    fprintf(stdout, "nodata value:\t\t%s\n",nd);
+	    exit(EXIT_SUCCESS);
 	}    
     }
 
@@ -200,17 +201,27 @@ int main(int argc, char *argv[])
 	/* return to current Location/mapset to write in the group file */
 	select_current_env();
 	
+	/* if location and/or mapset of elevation are not set, use target */
+	if (*mapset_elev == 0)
+	    strcpy(mapset_elev, mapset);
+	if (*location_elev == 0)
+	    strcpy(location_elev, location);
+
 	/* load information from the ELEVATION file in the GROUP */
-	I_get_group_elev(group, elev_layer, mapset_elev, location_elev, math_exp, units, nd);
+	if (I_find_group_elev_file(group)) {
+	    I_get_group_elev(group, elev_layer, mapset_elev, location_elev,
+	                     math_exp, units, nd);
+	}
 	/* Modify ELEVATION file in source GROUP */
-	I_put_group_elev(group,elev_opt->answer,mapset_opt->answer,loc_opt->answer, 
-			math_opt->answer, unit_opt->answer, nd_opt->answer);
+	I_put_group_elev(group, elev_opt->answer, mapset_elev, location_elev, 
+			 math_exp, units, nd);
 	/* select current location */
 	select_current_env();
 
         G_message(_("Group [%s] in location [%s] mapset [%s] now uses elevation map [%s]"),
-	          group, location, mapset, elev_opt->answer);
-    }else{
+	          group, G_location(), G_mapset(), elev_opt->answer);
+    }
+    else {
 	G_fatal_error(_("Mapset [%s] in target location [%s] - %s "),
                   mapset, location,
 		  stat == 0 ? _("permission denied\n") : _("not found\n"));
