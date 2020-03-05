@@ -382,6 +382,7 @@ int main(int argc, char **argv)
     struct Flag *sum, *rev_flag, *dump_flag, *pan_flag;
     struct GModule *module;
     char *desc;
+    char *camera;
 
     G_gisinit(argv[0]);
 
@@ -463,6 +464,22 @@ int main(int argc, char **argv)
     }
     if (!I_get_con_points(group.name, &group.control_points)) {
 	group.control_points.count = 0;
+    }
+    
+    camera = (char *)G_malloc(GNAME_MAX * sizeof(char));
+    if (!I_get_group_camera(group.name, camera))
+	G_fatal_error(_("No camera reference file selected for group <%s>"),
+		      group.name);
+
+    if (!I_get_cam_info(camera, &group.camera_ref))
+	G_fatal_error(_("Bad format in camera file for group <%s>"),
+		      group.name);
+
+    /* get initial camera exposure station, if any */
+    if (I_find_initial(group.name)) {
+	if (!I_get_init_info(group.name, &group.camera_exp))
+	    G_warning(_("Bad format in initial exposure station file for group <%s>"),
+		      group.name);
     }
     
     points = &group.control_points;
