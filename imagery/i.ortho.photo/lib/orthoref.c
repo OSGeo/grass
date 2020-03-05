@@ -306,7 +306,7 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 /************************** Start Iterations *****************************/
     /* itererate until convergence */
 
-    for (iter = 0; iter <= max_iters; iter++) {
+    for (iter = 0; iter < max_iters; iter++) {
 	/*  break if converged */
 	dx = delta.x[0][0];
 	dy = delta.x[1][0];
@@ -525,6 +525,7 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 #endif
 
     }  /* end ITERATION loop */
+    G_verbose_message("%d iterations to refine camera postion", iter);
 
     /* This is the solution */
     *XC = epsilon.x[0][0];
