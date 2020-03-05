@@ -6,7 +6,8 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 from grass.pygrass.vector import VectorTopo
 from grass.pygrass.vector.geometry import Line
-
+from grass.pygrass.vector.geometry import Boundary
+from grass.pygrass.vector.geometry import Centroid
 
 class TestRastStats(TestCase):
 
@@ -25,6 +26,7 @@ class TestRastStats(TestCase):
         self.runModule("g.remove", flags='f', type="raster", name="map_a")
         self.runModule("g.remove", flags='f', type="raster", name="map_b")
         self.runModule("g.remove", flags='f', type="raster", name="zone_map")
+        self.runModule("g.remove", flags='f', type="raster", name="row_map")
         self.runModule("g.remove", flags='f', type="raster", name="test_line")
 
     def setUp(self):
@@ -34,6 +36,8 @@ class TestRastStats(TestCase):
         self.runModule("r.mapcalc", expression="map_a = 100 + row() + col()",
                        overwrite=True)
         self.runModule("r.mapcalc", expression="zone_map = if(row() < 20, 1,2)",
+                       overwrite=True)
+        self.runModule("r.mapcalc", expression="row_map = row()",
                        overwrite=True)
         self.runModule("r.to.vect", input="zone_map", output="zone_map",
                        type="area", overwrite=True)
@@ -47,6 +51,18 @@ class TestRastStats(TestCase):
         vt.table.conn.commit()
         vt.close()
         
+        vt = VectorTopo('test_small_area')
+        vt.open('w', tab_cols=cols)
+        area1 = Boundary(points=[(0, 0), (0, 0.2), (0.2, 0.2), (0.2, 0), (0, 0)])
+        area2 = Boundary(points=[(2.7, 2.7), (2.7, 2.8), (2.8, 2.8), (2.8, 2.7), (2.7, 2.7)])
+        cent1 = Centroid(x=0.1, y=0.1)
+        cent2 = Centroid(x=2.75, y=2.75)
+        vt.write(area1)
+        vt.write(area2)
+        vt.write(cent1, ('first',))
+        vt.write(cent2, ('second',))
+        vt.table.conn.commit()
+        vt.close()
 
     def test_1(self):
         # Output of v.rast.stats
@@ -108,6 +124,22 @@ class TestRastStats(TestCase):
         self.assertLooksLike(univar_string, str(v_db_select.outputs.stdout))
 
 
+    def test_small_area_with_centroid(self):
+        # Output of v.rast.stats
+        univar_string = """cat|name|a_number|a_null_cells|a_minimum|a_maximum|a_range|a_average|a_stddev|a_variance|a_coeff_var|a_sum|a_first_quartile|a_median|a_third_quartile|a_percentile_90
+1|first|1|0|90|90|0|90|0|0|0|90|90|90|90|90
+2|second|1|0|88|88|0|88|0|0|0|88|88|88|88|88
+"""
+
+        self.assertModule("v.rast.stats", map='test_small_area', raster="row_map",
+                          flags="c", column_prefix="a", type_=["area","centroid"])
+        v_db_select = SimpleModule("v.db.select", map="test_small_area")
+
+        self.runModule(v_db_select)
+        self.assertLooksLike(univar_string, str(v_db_select.outputs.stdout))
+
+
+
 class TestRastStatsFails(TestCase):
 
     def test_error_handling_a(self):
@@ -123,6 +155,11 @@ class TestRastStatsFails(TestCase):
     def test_error_handling_d(self):
         # No column_prefix
         self.assertModuleFail("v.rast.stats", map="zone_map", raster="map_b")
+
+    def test_small_area_no_centroid_fails(self):
+        # No categories in raster map
+        self.assertModuleFail("v.rast.stats", map='test_small_area', raster="row_map",
+                              flags="c", column_prefix="a", type_="area")
 
 if __name__ == '__main__':
     from grass.gunittest.main import test
