@@ -75,16 +75,25 @@ exposure.
   needs to be denoted as +90 degree for clockwise turn and -90 degree for
   a counterclockwise turn.
 </ul>
+
+<p>
+If ground control points are available, the INITIAL values are iteratively 
+corrected. This is particularl useful when the INITIAL values are rather 
+rough estimates.
+
 <p>
 
 The standard deviations for (XC,YC,ZC) are expressed in meters, and
 are used as <em>a priori</em> values for the standard deviations used in 
-computation of the ortho rectification parameters.
+computation of the ortho rectification parameters. Higher values improve 
+the refinement of the initial camera exposure. As a rule of thumb, 5% 
+of the estimated target extents should be used.
 <p>
 
 The standard deviations for (omega,phi,kappa) are expressed in degrees, and
 are used as <em>a priori</em> values for the standard deviations used in 
-computation of the ortho rectification parameters.
+computation of the ortho rectification parameters. As a rule of thumb, 
+2 degrees should be used.
 
 <p>
 If <i>Use these values at run time? (1=yes, 0=no)</i> is set to 0, the
