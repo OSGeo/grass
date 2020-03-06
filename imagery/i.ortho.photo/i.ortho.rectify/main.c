@@ -264,14 +264,14 @@ int main(int argc, char *argv[])
     if (pan_flag->answer)
 	I_ortho_panorama();
 
+    /* get the target */
+    get_target(group.name);
+
     /* read the reference points for the group, compute image-to-photo trans. */
     get_ref_points(&group);
 
     /* read the control points for the group, convert to photo coords. */
     get_conz_points(&group);
-
-    /* get the target */
-    get_target(group.name);
 
     /* Check the GRASS_OVERWRITE environment variable */
     if ((overstr = getenv("GRASS_OVERWRITE")))  /* OK ? */

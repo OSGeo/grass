@@ -14,7 +14,9 @@ int get_conz_points(struct Ortho_Image_Group *group)
 
     G_verbose_message(_("Computing equations..."));
 
+    select_target_env();
     Compute_ortho_equation(group);
+    select_current_env();
 
     switch (group->con_equation_stat) {
     case -1:

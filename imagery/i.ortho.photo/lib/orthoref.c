@@ -80,7 +80,8 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 
     Q1 = (double)1.0;
     
-    G_get_ellipsoid_parameters(&e_a, &e2);
+    if (!G_get_ellipsoid_parameters(&e_a, &e2))
+	G_fatal_error(_("No ellpsoid parameters available"));
     ellps_a = e_a;
 
     /* DEBUG */
