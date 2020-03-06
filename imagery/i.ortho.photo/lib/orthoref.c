@@ -45,6 +45,7 @@ char msg[120];
 #endif
 
 static int panorama = 0;
+static double ellps_a = 0;
 
 /* enable panorama camera correction, 
  * e.g. for CORONA KH-4A/B */
@@ -75,8 +76,12 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
     double omega_var, phi_var, kappa_var;
     int i, iter, max_iters, n;
     int first, active;
+    double e_a, e2;
 
     Q1 = (double)1.0;
+    
+    G_get_ellipsoid_parameters(&e_a, &e2);
+    ellps_a = e_a;
 
     /* DEBUG */
 #ifdef DEBUG
@@ -386,6 +391,12 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 	    X = cpz->e2[i];
 	    Y = cpz->n2[i];
 	    Z = cpz->z2[i];
+	    
+	    /* adjust for earth curvature */
+	    dx = X - *XC;
+	    dy = Y - *YC;
+	    dd = (dx * dx) + (dy * dy);
+	    Z -= dd / (2.0 * ellps_a);
 
 #ifdef DEBUG
 	    fprintf(debug,
@@ -411,24 +422,34 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 	    V = UVW.x[1][0];
 	    W = UVW.x[2][0];
 
+	    /* panorama correction
+	     * in theory either for U, V or for xbar, ybar
+	     * U, V is recommended because U, V are only used
+	     * for the residuals
+	     * correcting U, V also gives a slightly smaller RMSE */
+	    if (panorama) {
+		double a, epan;
+		
+		epan = U;
+		if (epan < 0) {
+		    a = atan2(-epan, -W);
+		    epan = -a * -W;
+		}
+		else {
+		    a = atan2(epan, -W);
+		    epan = a * -W;
+		}
+		U = epan;
+
+		V *= cos(a);
+
+		UVW.x[0][0] = U;
+		UVW.x[1][0] = V;
+	    }
+
 	    /* Form Partial derivatives of Normal Equations */
 	    xbar = x - Xp;
 	    ybar = y - Yp;
-
-	    if (panorama) {
-		double a;
-		
-		if (xbar < 0) {
-		    a = -xbar / CFL;
-		    xbar = -CFL * tan(a);
-		}
-		else {
-		    a = xbar / CFL;
-		    xbar = CFL * tan(a);
-		}
-
-		ybar /= cos(a);
-	    }
 
 	    B.x[0][0] = (-Q1 / W) * ((xbar * m31) + (CFL * m11));
 	    B.x[0][1] = (-Q1 / W) * ((xbar * m32) + (CFL * m12));
@@ -601,6 +622,7 @@ int I_ortho_ref(double e1, double n1, double z1,
     MATRIX UVW, XYZ;
     double U, V, W;
     double Xp, Yp, CFL;
+    double dx, dy, dd;
 
     /*  Initialize and zero the matrices */
     /*  Object Space Coordinates */
@@ -618,6 +640,12 @@ int I_ortho_ref(double e1, double n1, double z1,
     Yp = cam_info->Yp;
     CFL = cam_info->CFL;
 
+    /* adjust for earth curvature */
+    dx = e1 - XC;
+    dy = n1 - YC;
+    dd = (dx * dx) + (dy * dy);
+    z1 -= dd / (2.0 * ellps_a);
+
     /* Object Space (&XYZ, XC,YC,ZC, X,Y,Z); */
     XYZ.x[0][0] = e1 - XC;
     XYZ.x[1][0] = n1 - YC;
@@ -630,26 +658,28 @@ int I_ortho_ref(double e1, double n1, double z1,
     V = UVW.x[1][0];
     W = UVW.x[2][0];
 
-    /* This is the solution */
-    *e2 = (-CFL) * (U / W);
-    *n2 = (-CFL) * (V / W);
-    
+    /* panorama correction could also be done for e2, n2 below
+     * results are identical */
     if (panorama) {
 	double a, epan;
 	
-	epan = *e2;
+	epan = U;
 	if (epan < 0) {
-	    a = atan2(-epan, CFL);
-	    epan = -a * CFL;
+	    a = atan2(-epan, -W);
+	    epan = -a * -W;
 	}
 	else {
-	    a = atan2(epan, CFL);
-	    epan = a * CFL;
+	    a = atan2(epan, -W);
+	    epan = a * -W;
 	}
-	*e2 = epan;
+	U = epan;
 
-	*n2 *= cos(a);
+	V *= cos(a);
     }
+
+    /* This is the solution */
+    *e2 = (-CFL) * (U / W);
+    *n2 = (-CFL) * (V / W);
 
     return (1);
 }
