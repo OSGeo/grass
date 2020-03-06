@@ -2020,7 +2020,7 @@ def print_params():
             val = grep('#define GIS_H_VERSION', linesrev)
             filerev.close()
             sys.stdout.write(
-                "%s\n" % val[0].split(':')[1].rstrip('$"\n').strip())
+                "%s\n" % val[0].split(' ')[1].rstrip('$"\n').strip())
         elif arg == 'svn_revision':
             filerev = open(gpath('etc', 'VERSIONNUMBER'))
             linerev = filerev.readline().rstrip('\n')
