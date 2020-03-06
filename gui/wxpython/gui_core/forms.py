@@ -1712,7 +1712,9 @@ class CmdPanel(wx.Panel):
                             win = gselect.LocationSelect(parent=which_panel,
                                                          value=value)
                             win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                            win.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
                             win.Bind(wx.EVT_TEXT, self.OnSetValue)
+                            win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
 
                         elif prompt == 'mapset':
                             if p.get('age', 'old') == 'old':
@@ -1724,7 +1726,9 @@ class CmdPanel(wx.Panel):
                                 parent=which_panel, value=value, new=new,
                                 multiple=p.get('multiple', False))
                             win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                            win.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
                             win.Bind(wx.EVT_TEXT, self.OnSetValue)
+                            win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
 
                         elif prompt == 'dbase':
                             win = gselect.DbaseSelect(
