@@ -550,8 +550,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     wx.EVT_MENU,
                     self.OnSetCompRegFromMap,
                     id=self.popupID['region'])
-                
-                # raster align 
+
+                # raster align
                 if ltype and ltype == "raster" and len(selected) == 1:
                     item = wx.MenuItem(
                         self.popupMenu,
@@ -1654,8 +1654,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                             digitToolbar
                             and digitToolbar.GetLayer() !=
                             mapLayer):
-                        # ignore when map layer is edited
-                        self.Map.ChangeLayerActive(mapLayer, checked)
+                        # layer is maplayer type
+                        if mapLayer:
+                            # ignore when map layer is edited
+                            self.Map.ChangeLayerActive(mapLayer, checked)
                         self.lmgr.WorkspaceChanged()
                     child = self.GetNextSibling(child)
             else:
@@ -2039,15 +2041,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     if mapLayer.type == 'raster':
                         if mapWin.IsLoaded(layer):
                             mapWin.UnloadRaster(layer)
-    
+
                         mapWin.LoadRaster(layer)
-    
+
                     elif mapLayer.type == 'raster_3d':
                         if mapWin.IsLoaded(layer):
                             mapWin.UnloadRaster3d(layer)
-    
+
                         mapWin.LoadRaster3d(layer)
-    
+
                     elif mapLayer.type == 'vector':
                         if mapWin.IsLoaded(layer):
                             mapWin.UnloadVector(layer)
@@ -2056,7 +2058,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                             mapWin.LoadVector(layer, points=True)
                         if (vInfo['lines'] + vInfo['boundaries']) > 0:
                             mapWin.LoadVector(layer, points=False)
-    
+
                     # reset view when first layer loaded
                     nlayers = len(
                         mapWin.Map.GetListOfLayers(
