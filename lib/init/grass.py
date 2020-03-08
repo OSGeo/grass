@@ -1985,10 +1985,10 @@ def print_params():
     """Write compile flags and other configuration to stderr"""
     params = sys.argv[2:]
     if not params:
-        params = ['arch', 'build', 'compiler', 'path', 'revision', 'version', 'date']
+        params = ['arch', 'build', 'compiler', 'path', 'revision', 'version']
 
     # check if we are dealing with parameters which require dev files
-    dev_params = ["arch", "compiler", "build", "revision", "date"]
+    dev_params = ["arch", "compiler", "build"]
     if any([param in dev_params for param in params]):
         plat = gpath('include', 'Make', 'Platform.make')
         if not os.path.exists(plat):
@@ -2014,21 +2014,8 @@ def print_params():
             val = grep('CC', linesplat)
             sys.stdout.write("%s\n" % val[0].split('=')[1].strip())
         elif arg == 'revision':
-            rev = gpath('include', 'grass', 'version.h')
-            filerev = open(rev)
-            linesrev = filerev.readlines()
-            val = grep('#define GRASS_HEADERS_VERSION', linesrev)
-            filerev.close()
             sys.stdout.write(
-                "%s\n" % val[0].split('"')[1].rstrip('"\n').strip())
-        elif arg == 'date':
-            rev = gpath('include', 'grass', 'version.h')
-            filerev = open(rev)
-            linesrev = filerev.readlines()
-            val = grep('#define GRASS_HEADERS_DATE', linesrev)
-            filerev.close()
-            sys.stdout.write(
-                "%s\n" % val[0].split('"')[1].rstrip('"\n').strip())
+                "@GRASS_VERSION_GIT@\n")
         elif arg == 'svn_revision':
             filerev = open(gpath('etc', 'VERSIONNUMBER'))
             linerev = filerev.readline().rstrip('\n')
