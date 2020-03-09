@@ -250,6 +250,13 @@ class GMFrame(wx.Frame):
 
         show_menu_errors(menu_errors)
 
+        # Enable copying to clipboard with cmd+c from console and python shell on macOS
+        # (default key binding will clear the console), trac #3008
+        if sys.platform == "darwin":
+            self.Bind(wx.EVT_MENU, self.OnCopyToClipboard, id=wx.ID_COPY)
+            self.accel_tbl = wx.AcceleratorTable([(wx.ACCEL_CTRL, ord("C"), wx.ID_COPY)])
+            self.SetAcceleratorTable(self.accel_tbl)
+
         # start with layer manager on top
         if self.currentPage:
             self.GetMapDisplay().Raise()
@@ -692,6 +699,13 @@ class GMFrame(wx.Frame):
         self.currentPage = None
 
         event.Skip()
+
+    def OnCopyToClipboard(self, event):
+        """Copy selected text in shell to the clipboard"""
+        try:
+            wx.Window.FindFocus().Copy()
+        except:
+            pass
 
     def _switchPageHandler(self, event, notification):
         self._switchPage(notification=notification)
