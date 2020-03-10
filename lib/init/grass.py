@@ -2155,6 +2155,10 @@ def validate_cmdline(params):
             ).format(params.mapset)
         )
 
+def handleSignal(signum, frame):
+    """Handle signals sent to the this process."""
+    if signum == signal.SIGTERM:
+        sys.exit()
 
 def main():
     """The main function which does the whole setup and run procedure
@@ -2324,6 +2328,9 @@ def main():
     # for first time user because the cost is low and first time user
     # doesn't necessarily mean that the mapset is used for the first time.
     clean_temp()
+    
+    # Make sure terminate signal is caught, apparently not the case for macOS
+    signal.signal(signal.SIGTERM, handleSignal)
 
     # build user fontcap if specified but not present
     make_fontcap()
@@ -2367,6 +2374,10 @@ def main():
         start_gui(grass_gui)
         kv = read_gisrc(gisrc)
         kv['PID'] = str(shell_process.pid)
+        # Make PID for this process on macOS, needed for enable quitting
+        # GRASS, trac #3009.
+        if MACOSX:
+            kv['PID'] = str(os.getpid())
         write_gisrc(kv, gisrc)
         exit_val = shell_process.wait()
         if exit_val != 0:
