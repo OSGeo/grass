@@ -432,7 +432,7 @@ class RenderLayerMgr(wx.EvtHandler):
         p = grass.start_command(cmd[0], env=env, stderr=grass.PIPE, **cmd[1])
         stdout, stderr = p.communicate()
         if p.returncode:
-            return stderr
+            return grass.decode(stderr)
         else:
             return None
 
