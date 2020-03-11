@@ -575,13 +575,13 @@ class CategoryListCtrl(ListCtrl,
 
         menu = Menu()
 
-        item = menu.Append(wx.ID_ANY, text=_("Rename class"))
+        item = menu.Append(wx.ID_ANY, _("Rename class"))
         self.Bind(wx.EVT_MENU, self.OnRename, item)
 
-        item = menu.Append(wx.ID_ANY, text=_("Set color"))
+        item = menu.Append(wx.ID_ANY, _("Set color"))
         self.Bind(wx.EVT_MENU, self.OnSetColor, item)
 
-        item = menu.Append(item_id, text=_("Change opacity level"))
+        item = menu.Append(item_id, _("Change opacity level"))
         self.Bind(wx.EVT_MENU, self.OnPopupOpacityLevel, item)
 
         if showed:
@@ -589,7 +589,7 @@ class CategoryListCtrl(ListCtrl,
         else:
             text = _("Show")
 
-        item = menu.Append(wx.ID_ANY, text=text)
+        item = menu.Append(wx.ID_ANY, text)
         self.Bind(
             wx.EVT_MENU,
             lambda event: self._setCatAttrs(
@@ -600,31 +600,31 @@ class CategoryListCtrl(ListCtrl,
 
         menu.AppendSeparator()
 
-        item = menu.Append(wx.ID_ANY, text=_("Move to top"))
+        item = menu.Append(wx.ID_ANY, _("Move to top"))
         self.Bind(wx.EVT_MENU, self.OnMoveTop, item)
         if cat_idx == 0:
             menu.Enable(item.GetId(), False)
 
-        item = menu.Append(wx.ID_ANY, text=_("Move to bottom"))
+        item = menu.Append(wx.ID_ANY, _("Move to bottom"))
         self.Bind(wx.EVT_MENU, self.OnMoveBottom, item)
         if cat_idx == len(cats) - 1:
             menu.Enable(item.GetId(), False)
 
         menu.AppendSeparator()
 
-        item = menu.Append(wx.ID_ANY, text=_("Move category up"))
+        item = menu.Append(wx.ID_ANY, _("Move category up"))
         self.Bind(wx.EVT_MENU, self.OnMoveUp, item)
         if cat_idx == 0:
             menu.Enable(item.GetId(), False)
 
-        item = menu.Append(wx.ID_ANY, text=_("Move category down"))
+        item = menu.Append(wx.ID_ANY, _("Move category down"))
         self.Bind(wx.EVT_MENU, self.OnMoveDown, item)
         if cat_idx == len(cats) - 1:
             menu.Enable(item.GetId(), False)
 
         menu.AppendSeparator()
 
-        item = menu.Append(wx.ID_ANY, text=_("Export class raster"))
+        item = menu.Append(wx.ID_ANY, _("Export class raster"))
         self.Bind(wx.EVT_MENU, self.OnExportCatRast, item)
 
         self.PopupMenu(menu)
