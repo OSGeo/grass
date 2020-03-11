@@ -236,12 +236,12 @@ class InstallExtensionWindow(wx.Frame):
         data = node.data
         if data and 'command' in data:
             self.popupMenu = Menu()
-            self.popupMenu.Append(self.popupID['install'], text=_("Install"))
+            self.popupMenu.Append(self.popupID['install'], _("Install"))
             self.Bind(wx.EVT_MENU, self.OnInstall, id=self.popupID['install'])
             self.popupMenu.AppendSeparator()
             self.popupMenu.Append(
                 self.popupID['help'],
-                text=_("Show manual page"))
+                _("Show manual page"))
             self.Bind(wx.EVT_MENU, self.OnItemHelp, id=self.popupID['help'])
 
             self.PopupMenu(self.popupMenu)
