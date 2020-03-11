@@ -42,8 +42,10 @@ from grass.script import raster as grast
 from grass.script import vector as gvect
 from grass.exceptions import CalledModuleError
 
-from functions import SamplingType, sampleAreaVector, convertFeature
-from functions import obtainAreaVector, obtainCategories
+from .functions import (
+    SamplingType, convertFeature, obtainAreaVector, obtainCategories,
+    sampleAreaVector,
+)
 from core.gcmd import GError, GMessage, RunCommand
 
 
