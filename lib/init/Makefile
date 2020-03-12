@@ -79,7 +79,7 @@ $(ARCH_DISTDIR)/$(START_UP).tmp: grass.py
 	rm -f $@
 	sed \
 	-e 's#@GRASS_VERSION_NUMBER@#$(GRASS_VERSION_NUMBER)#' \
-        -e 's#@GRASS_VERSION_GIT@#$(GRASS_VERSION_GIT)#' \
+	-e 's#@GRASS_VERSION_GIT@#$(GRASS_VERSION_GIT)#' \
 	-e 's#@START_UP@#$(START_UP)#' \
 	-e 's#@GRASS_CONFIG_DIR@#$(GRASS_CONFIG_DIR)#' \
 	-e 's#@LD_LIBRARY_PATH_VAR@#$(LD_LIBRARY_PATH_VAR)#' \
