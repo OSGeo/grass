@@ -1369,10 +1369,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                         text='', ct_type=1, wnd=ctrl)
         else:
             if selectedLayer and selectedLayer != self.GetRootItem():
-                if selectedLayer and self.GetLayerInfo(selectedLayer, key='type') == 'group' \
-                        and self.IsExpanded(selectedLayer):
-                    # add to group (first child of self.layer_selected) if group
-                    # expanded
+                if selectedLayer and self.GetLayerInfo(selectedLayer, key='type') == 'group':
+                    # add to group (first child of self.layer_selected)
                     layer = self.PrependItem(parent=selectedLayer,
                                              text='', ct_type=1, wnd=ctrl)
                 else:
