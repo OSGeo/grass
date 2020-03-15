@@ -1371,7 +1371,7 @@ class SettingsDialog(wx.Dialog):
         gridSizer = wx.GridBagSizer(vgap=1, hgap=1)
 
         row = 0
-        setts = dict(self.colorsSetts.items() + self.sizeSetts.items())
+        setts = {**self.colorsSetts, **self.sizeSetts}
 
         settsOrder = [
             "selected",
