@@ -202,7 +202,7 @@ class AnalysisToolbar(BaseToolbar):
             size=(
                 350,
                 30))  # FIXME
-        self.anChoice.SetToolTip(_('Availiable analyses'))
+        self.anChoice.SetToolTip(_('Available analyses'))
         self.anChoice.SetSelection(0)
 
         self.anChoiceId = self.AddControl(self.anChoice)
