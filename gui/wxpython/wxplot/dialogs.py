@@ -1595,7 +1595,7 @@ class OptDialog(wx.Dialog):
         UserSettings.SaveToFile(fileSettings)
         self.parent.parent.mapdislay.GetLayerManager().GetLogWindow().WriteLog(
             _('Plot settings saved to file \'%s\'.') % UserSettings.filePath)
-        self.Close()
+        self.EndModal(wx.ID_OK)
 
     def OnApply(self, event):
         """Button 'Apply' pressed. Does not close dialog"""
@@ -1611,4 +1611,4 @@ class OptDialog(wx.Dialog):
 
     def OnCancel(self, event):
         """Button 'Cancel' pressed"""
-        self.Close()
+        self.EndModal(wx.ID_OK)
