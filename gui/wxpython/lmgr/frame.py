@@ -688,6 +688,7 @@ class GMFrame(wx.Frame):
 
         self.notebookLayers.GetPage(event.GetSelection()).maptree.Map.Clean()
         self.notebookLayers.GetPage(event.GetSelection()).maptree.Close(True)
+        self.notebookLayers.GetPage(event.GetSelection()).maptree.mapdisplay._mgr.UnInit()
 
         self.currentPage = None
 
@@ -1525,7 +1526,7 @@ class GMFrame(wx.Frame):
                                        lcmd=layer['cmd'],
                                        lgroup=layer['group'],
                                        lnviz=layer['nviz'],
-                                       lvdigit=layer['vdigit'],                                       
+                                       lvdigit=layer['vdigit'],
                                        loadWorkspace=True)
 
             if 'selected' in layer:
