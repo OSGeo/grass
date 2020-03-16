@@ -191,15 +191,15 @@ class BasePlotFrame(wx.Frame):
 
         # x and y axis set to normal (non-log)
         self.client.logScale = (False, False)
-        if self.properties['x-axis']['prop']['type']:
+        if self.properties['x-axis']['prop']['type'] == 'custom':
+            self.client.xSpec = 'min'
+        else:
             self.client.xSpec = self.properties['x-axis']['prop']['type']
-        else:
-            self.client.xSpec = 'auto'
 
-        if self.properties['y-axis']['prop']['type']:
-            self.client.ySpec = self.properties['y-axis']['prop']['type']
+        if self.properties['y-axis']['prop']['type'] == 'custom':
+            self.client.ySpec = 'min'
         else:
-            self.client.ySpec = 'auto'
+            self.client.ySpec = self.properties['y-axis']['prop']['type']
 
     def InitRasterOpts(self, rasterList, plottype):
         """Initialize or update raster dictionary for plotting
