@@ -650,9 +650,9 @@ class TextDialog(wx.Dialog):
         self.properties = self.parent.properties  # read-only
 
         # font size
-        self.fontfamily = self.properties['font']['wxfont'].GetFamily()
-        self.fontstyle = self.properties['font']['wxfont'].GetStyle()
-        self.fontweight = self.properties['font']['wxfont'].GetWeight()
+        self.fontfamily = self.parent.wx_font.GetFamily()
+        self.fontstyle = self.parent.wx_font.GetStyle()
+        self.fontweight = self.parent.wx_font.GetWeight()
 
         self._do_layout()
 
@@ -887,11 +887,14 @@ class TextDialog(wx.Dialog):
             'axisSize'] = self.axislabelsize.GetValue()
 
         family = self.ffamilydict[self.ffamilycb.GetStringSelection()]
-        self.properties['font']['wxfont'].SetFamily(family)
+        self.properties['font']['prop']['family'] = family
+        self.parent.wx_font.SetFamily(family)
         style = self.fstyledict[self.fstylecb.GetStringSelection()]
-        self.properties['font']['wxfont'].SetStyle(style)
+        self.properties['font']['prop']['style'] = style
+        self.parent.wx_font.SetStyle(style)
         weight = self.fwtdict[self.fwtcb.GetStringSelection()]
-        self.properties['font']['wxfont'].SetWeight(weight)
+        self.properties['font']['prop']['weight'] = weight
+        self.parent.wx_font.SetWeight(weight)
 
     def OnSave(self, event):
         """Button 'Save' pressed"""
