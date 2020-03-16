@@ -21,6 +21,7 @@ import wx
 
 from icons.icon import MetaIcon
 from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.wrap import ComboBox
 from core.gcmd import RunCommand
 
 
@@ -193,7 +194,7 @@ class AnalysisToolbar(BaseToolbar):
             choices.append(
                 self.vnet_mgr.GetAnalysisProperties(moduleName)['label'])
 
-        self.anChoice = wx.ComboBox(
+        self.anChoice = ComboBox(
             parent=self,
             id=wx.ID_ANY,
             choices=choices,
@@ -201,7 +202,7 @@ class AnalysisToolbar(BaseToolbar):
             size=(
                 350,
                 30))  # FIXME
-        self.anChoice.SetToolTipString(_('Availiable analyses'))
+        self.anChoice.SetToolTip(_('Available analyses'))
         self.anChoice.SetSelection(0)
 
         self.anChoiceId = self.AddControl(self.anChoice)

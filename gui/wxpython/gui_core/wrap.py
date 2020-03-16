@@ -1,7 +1,7 @@
 """
 @package gui_core.wrap
 
-@brief Core wrapped wxpython widgets 
+@brief Core wrapped wxpython widgets
 
 Classes:
  - wrap::GSpinCtrl
@@ -619,7 +619,7 @@ class ListBox(wx.ListBox):
     over the widget on different platforms/wxpython versions"""
 
     def __init__(self, *args, **kwargs):
-        wx.ListBox.__init__(self, *args, **kwargs) 
+        wx.ListBox.__init__(self, *args, **kwargs)
 
     def SetToolTip(self, tip):
         if wxPythonPhoenix:
@@ -642,3 +642,17 @@ class HyperlinkCtrl(HyperlinkCtrl_):
             HyperlinkCtrl_.SetToolTip(self, tipString=tip)
         else:
             HyperlinkCtrl_.SetToolTipString(self, tip)
+
+
+class ComboBox(wx.ComboBox):
+    """Wrapper around wx.ComboBox to have more control
+    over the widget on different platforms/wxpython versions"""
+
+    def __init__(self, *args, **kwargs):
+        wx.ComboBox.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            wx.ComboBox.SetToolTip(self, tipString=tip)
+        else:
+            wx.ComboBox.SetToolTipString(self, tip)
