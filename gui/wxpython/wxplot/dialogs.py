@@ -900,7 +900,7 @@ class TextDialog(wx.Dialog):
         UserSettings.ReadSettingsFile(settings=fileSettings)
         fileSettings[self.plottype] = UserSettings.Get(group=self.plottype)
         UserSettings.SaveToFile(fileSettings)
-        self.parent.parent.GetLayerManager().GetLogWindow().WriteLog(
+        self.parent.parent.mapdisplay.GetLayerManager().GetLogWindow().WriteLog(
             _('Plot text sizes saved to file \'%s\'.') % UserSettings.filePath)
         self.EndModal(wx.ID_OK)
 
@@ -1593,7 +1593,7 @@ class OptDialog(wx.Dialog):
         UserSettings.ReadSettingsFile(settings=fileSettings)
         fileSettings[self.plottype] = UserSettings.Get(group=self.plottype)
         UserSettings.SaveToFile(fileSettings)
-        self.parent.parent.GetLayerManager().GetLogWindow().WriteLog(
+        self.parent.parent.mapdislay.GetLayerManager().GetLogWindow().WriteLog(
             _('Plot settings saved to file \'%s\'.') % UserSettings.filePath)
         self.Close()
 
