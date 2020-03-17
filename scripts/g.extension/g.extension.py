@@ -198,7 +198,7 @@ def expand_module_class_name(class_letters):
     """
     name = {
         'd': 'display',
-        'db': 'database',
+        'db': 'db',
         'g': 'general',
         'i': 'imagery',
         'm': 'misc',
