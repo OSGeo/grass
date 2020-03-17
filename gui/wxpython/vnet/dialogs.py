@@ -55,8 +55,10 @@ from dbmgr.vinfo import VectorDBInfo
 from gui_core.widgets import GNotebook
 from gui_core.goutput import GConsoleWindow
 from gui_core.gselect import Select, LayerSelect, ColumnSelect
-from gui_core.wrap import SpinCtrl, Button, BitmapButton, StaticText, \
-    StaticBox, TextCtrl, ListCtrl, BitmapFromImage
+from gui_core.wrap import (
+    BitmapButton, BitmapFromImage, Button, CheckBox, ComboBox, ListCtrl,
+    Panel, ScrolledPanel, SpinCtrl, StaticBox, StaticText, TextCtrl
+)
 
 from vnet.widgets import PointsList
 from vnet.toolbars import MainToolbar, PointListToolbar, AnalysisToolbar
@@ -126,7 +128,7 @@ class VNETDialog(wx.Dialog):
         #
         self._mgr = wx.aui.AuiManager(self)
 
-        self.mainPanel = wx.Panel(parent=self)
+        self.mainPanel = Panel(parent=self)
         self.notebook = GNotebook(parent=self.mainPanel,
                                   style=FN.FNB_FANCY_TABS | FN.FNB_BOTTOM |
                                   FN.FNB_NO_X_BUTTON)
@@ -229,9 +231,9 @@ class VNETDialog(wx.Dialog):
 
     def _createPointsPage(self):
         """Tab with points list and analysis settings"""
-        pointsPanel = wx.Panel(parent=self)
-        anSettingsPanel = wx.Panel(parent=pointsPanel)
-        maxDistPanel = wx.Panel(parent=anSettingsPanel)
+        pointsPanel = Panel(parent=self)
+        anSettingsPanel = Panel(parent=pointsPanel)
+        maxDistPanel = Panel(parent=anSettingsPanel)
         maxValue = 1e8
 
         listBox = StaticBox(parent=pointsPanel, id=wx.ID_ANY,
@@ -265,12 +267,12 @@ class VNETDialog(wx.Dialog):
         self.anSettings["max_dist"].SetValue(100000)  # TODO init val
         self.MaxDist()
 
-        #showCutPanel =  wx.Panel(parent = anSettingsPanel)
-        # self.anSettings["show_cut"] = wx.CheckBox(parent = showCutPanel, id=wx.ID_ANY,
+        #showCutPanel =  Panel(parent = anSettingsPanel)
+        # self.anSettings["show_cut"] = CheckBox(parent = showCutPanel, id=wx.ID_ANY,
         #                                          label = _("Show minimal cut"))
         #self.anSettings["show_cut"].Bind(wx.EVT_CHECKBOX, self.OnShowCut)
 
-        isoLinesPanel = wx.Panel(parent=anSettingsPanel)
+        isoLinesPanel = Panel(parent=anSettingsPanel)
         isoLineslabel = StaticText(
             parent=isoLinesPanel,
             id=wx.ID_ANY,
@@ -352,7 +354,7 @@ class VNETDialog(wx.Dialog):
 
     def _createOutputPage(self):
         """Tab with output console"""
-        outputPanel = wx.Panel(parent=self)
+        outputPanel = Panel(parent=self)
         self.notebook.AddPage(page=outputPanel,
                               text=_("Output"),
                               name='output')
@@ -369,7 +371,7 @@ class VNETDialog(wx.Dialog):
 
     def _createParametersPage(self):
         """Tab for selection of data for analysis"""
-        dataPanel = scrolled.ScrolledPanel(parent=self)
+        dataPanel = ScrolledPanel(parent=self)
         self.notebook.AddPage(page=dataPanel,
                               text=_('Parameters'),
                               name='parameters')
@@ -385,7 +387,7 @@ class VNETDialog(wx.Dialog):
             ['node_column', "", ColumnSelect],
         ]
 
-        # self.useTurns = wx.CheckBox(parent = dataPanel, id=wx.ID_ANY,
+        # self.useTurns = CheckBox(parent = dataPanel, id=wx.ID_ANY,
         #                            label = _('Use turns'))
 
         box = StaticBox(dataPanel, -1, "Vector map and layers for analysis")
@@ -395,7 +397,7 @@ class VNETDialog(wx.Dialog):
         selPanels = {}
 
         for dataSel in dataSelects:
-            selPanels[dataSel[0]] = wx.Panel(parent=dataPanel)
+            selPanels[dataSel[0]] = Panel(parent=dataPanel)
             if dataSel[0] == 'input':
                 self.inputData[
                     dataSel[0]] = dataSel[2](
@@ -1239,7 +1241,7 @@ class SettingsDialog(wx.Dialog):
             id=wx.ID_ANY,
             label=_('Color table style %s:') %
             '(v.net.flow)')
-        self.settings['color_table'] = wx.ComboBox(
+        self.settings['color_table'] = ComboBox(
             parent=self, id=wx.ID_ANY, choices=rules.split(),
             style=wx.CB_READONLY, size=(180, -1))
 
@@ -1251,7 +1253,7 @@ class SettingsDialog(wx.Dialog):
         if i != wx.NOT_FOUND:
             self.settings['color_table'].Select(i)
 
-        self.settings["invert_colors"] = wx.CheckBox(
+        self.settings["invert_colors"] = CheckBox(
             parent=self,
             id=wx.ID_ANY,
             label=_('Invert colors %s:') %
@@ -1511,7 +1513,7 @@ class CreateTtbDialog(wx.Dialog):
         selPanels = {}
 
         for dataSel in dataSelects:
-            selPanels[dataSel[0]] = wx.Panel(parent=self)
+            selPanels[dataSel[0]] = Panel(parent=self)
             if dataSel[0] in ['input', 'output']:
                 self.inputData[
                     dataSel[0]] = dataSel[2](
@@ -1640,7 +1642,7 @@ class OutputVectorDialog(wx.Dialog):
         """Save analysis result"""
         wx.Dialog.__init__(self, parent, id, title=_(title), style=style)
 
-        self.panel = wx.Panel(parent=self)
+        self.panel = Panel(parent=self)
         box = StaticBox(parent=self.panel, id=wx.ID_ANY,
                         label="Vector map")
 
@@ -1806,7 +1808,7 @@ class DefGlobalTurnsDialog(wx.Dialog):
         self.btnAdd = Button(parent=self, id=wx.ID_ANY, label="Add")
         self.btnRemove = Button(parent=self, id=wx.ID_ANY, label="Remove")
         self.btnClose = Button(parent=self, id=wx.ID_CLOSE)
-        self.useUTurns = wx.CheckBox(
+        self.useUTurns = CheckBox(
             parent=self, id=wx.ID_ANY, label="Use U-turns")
 
         self.btnAdd.Bind(wx.EVT_BUTTON, self.OnAddButtonClick)
