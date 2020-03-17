@@ -157,12 +157,15 @@ class VNETDialog(wx.Dialog):
         # Stores data which are needed for attribute table browser of analysis
         # input map layers
         self.inpDbMgrData = {}
-        self._createInputDbMgrPage()
+        self._checkSelectedVectorMap()
 
         # Stores data which are need for attribute table browser of analysis
         # result map layers
         self.resultDbMgrData = {}
-        self._createResultDbMgrPage()
+        if self.tmp_result:
+            self.resultDbMgrData['input'] = self.tmp_result.GetVectMapName()
+        else:
+            self.resultDbMgrData['input'] = None
 
         self.notebook.Bind(
             FN.EVT_FLATNOTEBOOK_PAGE_CHANGED,
@@ -505,24 +508,27 @@ class VNETDialog(wx.Dialog):
                          border=5)
         return selSizer
 
-    def _createInputDbMgrPage(self):
-        """Tab with attribute tables of analysis input layers"""
-        self.inpDbMgrData['dbMgr'] = DbMgrBase()
-
+    def _checkSelectedVectorMap(self):
+        """Check selected vector map"""
         selMapName = None
         # if selected vector map is in layer tree then set it
         layer = self.giface.GetLayerList().GetSelectedLayer()
         if layer is not None and layer.type == 'vector':
             selMapName = layer.maplayer.name
-
-        self.inpDbMgrData['browse'] = self.inpDbMgrData[
-            'dbMgr'].CreateDbMgrPage(parent=self.notebook, pageName='browse')
-        self.inpDbMgrData['browse'].SetTabAreaColour(globalvar.FNPageColor)
+            self._createInputDbMgrPage()
 
         self.inpDbMgrData['input'] = None
         if selMapName:
             self.inputData['input'].SetValue(selMapName)
             self.OnVectSel(None)
+
+    def _createInputDbMgrPage(self):
+        """Tab with attribute tables of analysis input layers"""
+        self.inpDbMgrData['dbMgr'] = DbMgrBase()
+
+        self.inpDbMgrData['browse'] = self.inpDbMgrData[
+            'dbMgr'].CreateDbMgrPage(parent=self.notebook, pageName='browse')
+        self.inpDbMgrData['browse'].SetTabAreaColour(globalvar.FNPageColor)
 
     def _updateInputDbMgrPage(self, show):
         """Show or hide input tables tab"""
@@ -540,11 +546,6 @@ class VNETDialog(wx.Dialog):
             'dbMgr'].CreateDbMgrPage(parent=self.notebook, pageName='browse')
         self.resultDbMgrData['browse'].SetTabAreaColour(globalvar.FNPageColor)
 
-        if self.tmp_result:
-            self.resultDbMgrData['input'] = self.tmp_result.GetVectMapName()
-        else:
-            self.resultDbMgrData['input'] = None
-
     def _updateResultDbMgrPage(self):
         """Show or Hide Result tables tab"""
         # analysis, which created result
@@ -555,6 +556,7 @@ class VNETDialog(wx.Dialog):
             analysis)["resultProps"]["dbMgr"]
 
         if haveDbMgr and self.notebook.GetPageIndexByName('resultDbMgr') == -1:
+            self._createResultDbMgrPage()
             self.notebook.AddPage(page=self.resultDbMgrData['browse'],
                                   text=_('Result tables'),
                                   name='resultDbMgr')
@@ -758,7 +760,10 @@ class VNETDialog(wx.Dialog):
                 self.inputData['node_layer'].SetSelection(iItem)
 
         self.addToTreeBtn.Enable()
-        if hasattr(self, 'inpDbMgrData'):
+        if 'browse' in self.inpDbMgrData:
+            self._updateInputDbMgrPage(show=True)
+        else:
+            self._createInputDbMgrPage()
             self._updateInputDbMgrPage(show=True)
 
         self.OnALayerSel(event)
