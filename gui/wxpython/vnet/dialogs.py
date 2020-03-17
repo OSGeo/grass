@@ -257,7 +257,9 @@ class VNETDialog(wx.Dialog):
             parent=maxDistPanel, id=wx.ID_ANY,
             label=_("Maximum distance of point to the network:"))
         self.anSettings["max_dist"] = SpinCtrl(
-            parent=maxDistPanel, id=wx.ID_ANY, min=0, max=maxValue)
+            parent=maxDistPanel, id=wx.ID_ANY, min=0, max=maxValue,
+            size=(150, -1),
+        )
         self.anSettings["max_dist"].Bind(
             wx.EVT_SPINCTRL, lambda event: self.MaxDist())
         self.anSettings["max_dist"].SetValue(100000)  # TODO init val
