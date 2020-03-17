@@ -102,6 +102,7 @@ import os
 import atexit
 import xml.etree.ElementTree as ET # only needed for GDAL version < 2.4.1
 import re # only needed for GDAL version < 2.4.1
+from osgeo import gdal
 
 import grass.script as grass
 from grass.exceptions import CalledModuleError
@@ -130,22 +131,8 @@ def gdal_version():
     return version
 
 
-def version_less_than(actual_version, comparison_version):
-    """Checks actual version if it is less than given comparison version
-
-    :param actual_version: version number to check if it is less than the
-                           comparison version
-    :type actual_version: str
-    :param comparison_version: version number to check if the actual version
-                           is less
-    :type comparison_version: str
-    """
-    comparison_version_tuple = tuple([int(x) for x in comparison_version.split('.')])
-    actual_version_tuple = tuple([int(x) for x in actual_version.split('.')])
-    if actual_version_tuple < comparison_version_tuple:
-        return True
-    else:
-        return False
+def GDAL_COMPUTE_VERSION(maj, min, rev):
+    return ((maj) * 1000000 + (min) * 10000 + (rev) * 100)
 
 
 def fix_gfsfile(input):
@@ -260,7 +247,7 @@ def main():
     # create temp location from input without import
     grass.verbose(_("Creating temporary location for <%s>...") % OGRdatasource)
     try:
-        if version_less_than(gdal_version(), "2.4.1"):
+        if int(gdal.VersionInfo('VERSION_NUM')) < GDAL_COMPUTE_VERSION(2, 4, 1):
             if OGRdatasource.lower().endswith("gml"):
                 fix_gfsfile(OGRdatasource)
         grass.run_command('v.in.ogr', input=OGRdatasource,
@@ -309,7 +296,7 @@ def main():
     # import into temp location
     grass.message(_("Importing <%s> ...") % OGRdatasource)
     try:
-        if version_less_than(gdal_version(), "2.4.1"):
+        if int(gdal.VersionInfo('VERSION_NUM')) < GDAL_COMPUTE_VERSION(2, 4, 1):
             if OGRdatasource.lower().endswith("gml"):
                 fix_gfsfile(OGRdatasource)
         grass.run_command('v.in.ogr', input=OGRdatasource,
