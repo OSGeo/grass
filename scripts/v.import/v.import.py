@@ -100,6 +100,8 @@
 import sys
 import os
 import atexit
+import xml.etree.ElementTree as ET # only needed for GDAL version < 2.4.1
+import re # only needed for GDAL version < 2.4.1
 
 import grass.script as grass
 from grass.exceptions import CalledModuleError
@@ -119,6 +121,42 @@ def cleanup():
         grass.try_rmdir(os.path.join(GISDBASE, TMPLOC))
     if SRCGISRC:
         grass.try_remove(SRCGISRC)
+
+
+def gdal_version():
+    """Returns the GDAL version as tuple
+    """
+    version = grass.parse_command('g.version', flags='reg')['gdal']
+    return version
+
+
+def GDAL_COMPUTE_VERSION(maj, min, rev):
+    return ((maj) * 1000000 + (min) * 10000 + (rev) * 100)
+
+
+def fix_gfsfile(input):
+    """Fixes the gfs file of an gml file by adding the SRSName
+
+    :param input: gml file name to import with v.import
+    :type input: str
+    """
+    # get srs string from gml file
+    gmltree = ET.parse(input)
+    gmlroot = gmltree.getroot()
+    gmlstring = ET.tostring(gmlroot).decode('utf-8')
+    srs_str = re.search(r"srsname=\"(.*?)\"", gmlstring.lower()).groups()[0]
+
+    # set srs string in gfs file
+    gml = os.path.basename(input).split('.')[-1]
+    gfsfile = input.replace(gml, 'gfs')
+    if os.path.isfile(gfsfile):
+        tree = ET.parse(gfsfile)
+        root = tree.getroot()
+        gfsstring = ET.tostring(root).decode('utf-8')
+        if not "srsname" in gfsstring.lower():
+            for featClass in root.findall('GMLFeatureClass'):
+                ET.SubElement(featClass, 'SRSName').text = srs_str
+            tree.write(gfsfile)
 
 
 def main():
@@ -208,8 +246,16 @@ def main():
     # create temp location from input without import
     grass.verbose(_("Creating temporary location for <%s>...") % OGRdatasource)
     try:
+        if OGRdatasource.lower().endswith("gml"):
+            try:
+                from osgeo import gdal
+            except:
+                grass.fatal(_("Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"))
+            if int(gdal.VersionInfo('VERSION_NUM')) < GDAL_COMPUTE_VERSION(2, 4, 1):
+                fix_gfsfile(OGRdatasource)
         grass.run_command('v.in.ogr', input=OGRdatasource,
-                          location=TMPLOC, flags='i', quiet=True, overwrite=overwrite, **vopts)
+                          location=TMPLOC, flags='i',
+                          quiet=True, overwrite=overwrite, **vopts)
     except CalledModuleError:
         grass.fatal(_("Unable to create location from OGR datasource <%s>") % OGRdatasource)
 
@@ -253,6 +299,13 @@ def main():
     # import into temp location
     grass.message(_("Importing <%s> ...") % OGRdatasource)
     try:
+        if OGRdatasource.lower().endswith("gml"):
+            try:
+                from osgeo import gdal
+            except:
+                grass.fatal(_("Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"))
+            if int(gdal.VersionInfo('VERSION_NUM')) < GDAL_COMPUTE_VERSION(2, 4, 1):
+                fix_gfsfile(OGRdatasource)
         grass.run_command('v.in.ogr', input=OGRdatasource,
                           flags=vflags, overwrite=overwrite, **vopts)
     except CalledModuleError:
