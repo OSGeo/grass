@@ -48,8 +48,8 @@ int main(int argc, char *argv[])
     char group[GNAME_MAX];
 
     char *elev_layer;
-    char *mapset_elev;
-    char *location_elev;
+    char *mapset_elev, *mapset_elev_old;
+    char *location_elev, *location_elev_old;
     char *math_exp;
     char *units;
     char *nd;
@@ -111,14 +111,18 @@ int main(int argc, char *argv[])
 
     elev_layer = (char *)G_malloc(GNAME_MAX * sizeof(char));
     mapset_elev = (char *)G_malloc(GMAPSET_MAX * sizeof(char));
+    mapset_elev_old = (char *)G_malloc(GMAPSET_MAX * sizeof(char));
     location_elev = (char *)G_malloc(80 * sizeof(char));
+    location_elev_old = (char *)G_malloc(80 * sizeof(char));
     math_exp = (char *)G_malloc(80 * sizeof(char));
     units = (char *)G_malloc(80 * sizeof(char));
     nd = (char *)G_malloc(80 * sizeof(char));
 
     *elev_layer = 0;
     *mapset_elev = 0;
+    *mapset_elev_old = 0;
     *location_elev = 0;
+    *location_elev_old = 0;
     *math_exp = 0;
     *units = 0;
     *nd = 0;
@@ -191,32 +195,39 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Elevation map name is missing. Please set '%s' option"),
 	        elev_opt->key);
 	}
-	/* elevation map exists in target ? */
-	if (G_find_raster2(elev_opt->answer, mapset) == NULL) {
-            /* select current location */
-	    select_current_env();
-	    G_fatal_error(_("Raster map <%s> not found"), elev_opt->answer);
-	}
 	
 	/* return to current Location/mapset to write in the group file */
 	select_current_env();
 	
+	/* load information from the ELEVATION file in the GROUP */
+	if (I_find_group_elev_file(group)) {
+	    I_get_group_elev(group, elev_layer, mapset_elev_old, location_elev_old,
+	                     math_exp, units, nd);
+	    if (*location_elev == 0)
+		strcpy(location_elev, location_elev_old);
+	    if (*mapset_elev == 0)
+		strcpy(mapset_elev, mapset_elev_old);
+	}
 	/* if location and/or mapset of elevation are not set, use target */
 	if (*mapset_elev == 0)
 	    strcpy(mapset_elev, mapset);
 	if (*location_elev == 0)
 	    strcpy(location_elev, location);
 
-	/* load information from the ELEVATION file in the GROUP */
-	if (I_find_group_elev_file(group)) {
-	    I_get_group_elev(group, elev_layer, mapset_elev, location_elev,
-	                     math_exp, units, nd);
+	/* select target location */
+	select_target_env();
+	/* elevation map exists in target ? */
+	if (G_find_raster2(elev_opt->answer, mapset_elev) == NULL) {
+            /* select current location */
+	    select_current_env();
+	    G_fatal_error(_("Raster map <%s> not found"), elev_opt->answer);
 	}
+	/* select current location */
+	select_current_env();
+
 	/* Modify ELEVATION file in source GROUP */
 	I_put_group_elev(group, elev_opt->answer, mapset_elev, location_elev, 
 			 math_exp, units, nd);
-	/* select current location */
-	select_current_env();
 
         G_message(_("Group [%s] in location [%s] mapset [%s] now uses elevation map [%s]"),
 	          group, G_location(), G_mapset(), elev_opt->answer);

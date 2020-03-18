@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 	              target_location, target_mapset);
     }
 
-    G_setenv_nogisrc("MAPSET", mapset);
+    G_setenv_nogisrc("MAPSET", target_mapset);
     G_get_window(&target_window);
     if (target_window.proj == PROJECTION_XY)
 	G_fatal_error(_("Target locations with XY (unreferenced) are not supported"));
