@@ -154,8 +154,8 @@ int main(int argc, char *argv[])
 		fprintf(stdout, "libgis_date=\"%s\"\n", rev_time);
 	    }
 	    else {
-		fprintf(stdout, "libgis %s\nlibgis %s\n", rev_ver,
-			rev_time);
+		fprintf(stdout, "libgis revision: %s\n", rev_ver);
+		fprintf(stdout, "libgis date: %s\n", rev_time);
 	    }
 	}
 	else {
