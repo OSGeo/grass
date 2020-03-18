@@ -102,7 +102,10 @@ import os
 import atexit
 import xml.etree.ElementTree as ET # only needed for GDAL version < 2.4.1
 import re # only needed for GDAL version < 2.4.1
-from osgeo import gdal
+try:
+    from osgeo import gdal
+except:
+    grass.fatal(_("Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"))
 
 import grass.script as grass
 from grass.exceptions import CalledModuleError
