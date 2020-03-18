@@ -106,11 +106,6 @@ import re # only needed for GDAL version < 2.4.1
 import grass.script as grass
 from grass.exceptions import CalledModuleError
 
-try:
-    from osgeo import gdal
-except:
-    grass.fatal(_("Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"))
-
 # initialize global vars
 TMPLOC = None
 SRCGISRC = None
@@ -251,8 +246,12 @@ def main():
     # create temp location from input without import
     grass.verbose(_("Creating temporary location for <%s>...") % OGRdatasource)
     try:
-        if int(gdal.VersionInfo('VERSION_NUM')) < GDAL_COMPUTE_VERSION(2, 4, 1):
-            if OGRdatasource.lower().endswith("gml"):
+        if OGRdatasource.lower().endswith("gml"):
+            try:
+                from osgeo import gdal
+            except:
+                grass.fatal(_("Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"))
+            if int(gdal.VersionInfo('VERSION_NUM')) < GDAL_COMPUTE_VERSION(2, 4, 1):
                 fix_gfsfile(OGRdatasource)
         grass.run_command('v.in.ogr', input=OGRdatasource,
                           location=TMPLOC, flags='i',
@@ -300,8 +299,12 @@ def main():
     # import into temp location
     grass.message(_("Importing <%s> ...") % OGRdatasource)
     try:
-        if int(gdal.VersionInfo('VERSION_NUM')) < GDAL_COMPUTE_VERSION(2, 4, 1):
-            if OGRdatasource.lower().endswith("gml"):
+        if OGRdatasource.lower().endswith("gml"):
+            try:
+                from osgeo import gdal
+            except:
+                grass.fatal(_("Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"))
+            if int(gdal.VersionInfo('VERSION_NUM')) < GDAL_COMPUTE_VERSION(2, 4, 1):
                 fix_gfsfile(OGRdatasource)
         grass.run_command('v.in.ogr', input=OGRdatasource,
                           flags=vflags, overwrite=overwrite, **vopts)
