@@ -688,7 +688,8 @@ class GMFrame(wx.Frame):
 
         self.notebookLayers.GetPage(event.GetSelection()).maptree.Map.Clean()
         self.notebookLayers.GetPage(event.GetSelection()).maptree.Close(True)
-        self.notebookLayers.GetPage(event.GetSelection()).maptree.mapdisplay._mgr.UnInit()
+        self.notebookLayers.GetPage(event.GetSelection()).maptree. \
+            mapdisplay._mgr._UnInit()
 
         self.currentPage = None
 

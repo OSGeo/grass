@@ -741,7 +741,7 @@ class MapFrame(SingleMapFrame):
                 self._giface.WriteError(_('Failed to run d.to.rast:\n') + messages)
                 grass.try_remove(pngFile)
                 return
-    
+
             # alignExtent changes only region variable
             oldRegion = self.GetMap().GetCurrentRegion().copy()
             self.GetMap().AlignExtentFromDisplay()
@@ -774,7 +774,7 @@ class MapFrame(SingleMapFrame):
         pngFile = grass.tempfile(create=False) + '.png'
         dOutFileCmd = ['d.out.file', 'output=' + pngFile, 'format=png']
         self.DOutFile(dOutFileCmd, callback=_DToRastDone)
-        
+
 
 
     def DToRastOptData(self, dcmd, layer, params, propwin):
@@ -1561,3 +1561,8 @@ class MapFrame(SingleMapFrame):
 
         self.RemoveToolbar('rdigit', destroy=True)
         self.rdigit = None
+
+    def _UnInit(self):
+        """Uninitializarion"""
+        if not self._layerManager:
+            self._mgr.UnInit()
