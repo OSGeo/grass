@@ -398,6 +398,7 @@ def txt2numpy(
     comments="#",
     usecols=None,
     encoding=None,
+    structured=True,
 ):
     """Read table-like output from grass modules as Numpy array;
     format instructions are handed down to Numpys genfromtxt function
@@ -423,6 +424,9 @@ def txt2numpy(
     :param usecols: List of columns to import
     :type usecols: list
 
+    :param structured: return structured array if True, un-structured otherwise
+    :type structured: bool
+
     :return: numpy.ndarray
 
         >>> import grass.script.core as grasscore
@@ -444,15 +448,21 @@ def txt2numpy(
     elif type(tablestring).__name__ != "bytes":
         raise GrassError(_("Unsupported data type"))
 
+    kwargs = {
+        "missing_values": null_value,
+        "filling_values": fill_value,
+        "usecols": usecols,
+        "names": names,
+        "encoding": encoding,
+        "delimiter": sep
+        }
+
+    if structured:
+        kwargs["dtype"] = None
+
     np_array = np.genfromtxt(
         BytesIO(tablestring),
-        missing_values=null_value,
-        filling_values=fill_value,
-        usecols=usecols,
-        names=names,
-        encoding=encoding,
-        dtype=None,
-        delimiter=sep,
+        **kwargs
     )
     return np_array
 
