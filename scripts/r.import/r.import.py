@@ -276,8 +276,8 @@ def main():
             grass.fatal(_("Input contains GCPs, rectification is required"))
 
     if 'r' in region_flag:
-        grass.run_command('g.remove', **dict(type="vector", flags="f",
-                          name=tgtregion))
+        grass.run_command('g.remove', type="vector", flags="f",
+                          name=tgtregion)
 
     # switch to target location
     os.environ['GISRC'] = str(TGTGISRC)
