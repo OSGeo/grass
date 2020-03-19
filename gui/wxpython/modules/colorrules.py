@@ -1199,7 +1199,7 @@ class VectorColorTable(ColorTable):
             self.cp = wx.CollapsiblePane(
                 scrollPanel,
                 label=_("Import or export color table"),
-                winid=wx.ID_ANY,
+                id=wx.ID_ANY,
                 style=wx.CP_DEFAULT_STYLE | wx.CP_NO_TLW_RESIZE)
             self.Bind(
                 wx.EVT_COLLAPSIBLEPANE_CHANGED,
