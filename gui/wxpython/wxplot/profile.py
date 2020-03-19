@@ -36,9 +36,9 @@ class ProfileFrame(BasePlotFrame):
     """Mainframe for displaying profile of one or more raster maps. Uses wx.lib.plot.
     """
 
-    def __init__(self, parent, controller, units, size=wx.Size(700, 400),
+    def __init__(self, parent, giface, controller, units, size=wx.Size(700, 400),
                  rasterList=None, **kwargs):
-        BasePlotFrame.__init__(self, parent=parent, size=size, **kwargs)
+        BasePlotFrame.__init__(self, parent=parent, giface=giface, size=size, **kwargs)
 
         self.controller = controller
         self.controller.transectChanged.connect(self.SetTransect)

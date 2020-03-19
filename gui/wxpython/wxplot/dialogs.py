@@ -613,7 +613,7 @@ class HistRasterDialog(wx.Dialog):
 
 class TextDialog(wx.Dialog):
 
-    def __init__(self, parent, id, title, plottype='',
+    def __init__(self, parent, giface, id, title, plottype='',
                  style=wx.DEFAULT_DIALOG_STYLE, **kwargs):
         """Dialog to set histogram text options: font, title
         and font size, axis labels and font size
@@ -622,6 +622,7 @@ class TextDialog(wx.Dialog):
         #
         # initialize variables
         #
+        self._giface = giface
         # combo box entry lists
         self.ffamilydict = {'default': wx.FONTFAMILY_DEFAULT,
                             'decorative': wx.FONTFAMILY_DECORATIVE,
@@ -834,7 +835,6 @@ class TextDialog(wx.Dialog):
         btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
         btnSave.SetToolTip(
             _("Apply and save changes to user settings file (default for next sessions)"))
-        btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
         btnCancel.SetToolTip(_("Close dialog and ignore changes"))
 
         # sizers
@@ -900,7 +900,7 @@ class TextDialog(wx.Dialog):
         UserSettings.ReadSettingsFile(settings=fileSettings)
         fileSettings[self.plottype] = UserSettings.Get(group=self.plottype)
         UserSettings.SaveToFile(fileSettings)
-        self.parent.parent.GetLayerManager().GetLogWindow().WriteLog(
+        self._giface.WriteLog(
             _('Plot text sizes saved to file \'%s\'.') % UserSettings.filePath)
         self.EndModal(wx.ID_OK)
 
@@ -914,14 +914,10 @@ class TextDialog(wx.Dialog):
         self.OnApply(None)
         self.EndModal(wx.ID_OK)
 
-    def OnCancel(self, event):
-        """Button 'Cancel' pressed"""
-        self.EndModal(wx.ID_CANCEL)
-
 
 class OptDialog(wx.Dialog):
 
-    def __init__(self, parent, id, title, plottype='',
+    def __init__(self, parent, giface, id, title, plottype='',
                  style=wx.DEFAULT_DIALOG_STYLE, **kwargs):
         """Dialog to set various options for data plotted, including: line
         width, color, style; marker size, color, fill, and style; grid
@@ -931,6 +927,7 @@ class OptDialog(wx.Dialog):
 
         # init variables
         self.parent = parent
+        self._giface = giface
         self.linestyledict = parent.linestyledict
         self.ptfilldict = parent.ptfilldict
         self.parent = parent
@@ -1464,7 +1461,6 @@ class OptDialog(wx.Dialog):
         btnOk.Bind(wx.EVT_BUTTON, self.OnOk)
         btnOk.SetDefault()
         btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
-        btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
 
         self.SetSizer(sizer)
         sizer.Fit(self)
@@ -1593,9 +1589,9 @@ class OptDialog(wx.Dialog):
         UserSettings.ReadSettingsFile(settings=fileSettings)
         fileSettings[self.plottype] = UserSettings.Get(group=self.plottype)
         UserSettings.SaveToFile(fileSettings)
-        self.parent.parent.GetLayerManager().GetLogWindow().WriteLog(
+        self._giface.WriteLog(
             _('Plot settings saved to file \'%s\'.') % UserSettings.filePath)
-        self.Close()
+        self.EndModal(wx.ID_OK)
 
     def OnApply(self, event):
         """Button 'Apply' pressed. Does not close dialog"""
@@ -1608,7 +1604,3 @@ class OptDialog(wx.Dialog):
         """Button 'OK' pressed"""
         self.OnApply(None)
         self.EndModal(wx.ID_OK)
-
-    def OnCancel(self, event):
-        """Button 'Cancel' pressed"""
-        self.Close()

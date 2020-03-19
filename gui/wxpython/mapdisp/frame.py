@@ -1136,7 +1136,7 @@ class MapFrame(SingleMapFrame):
 
         self.profileController = ProfileController(
             self._giface, mapWindow=self.GetMapWindow())
-        win = ProfileFrame(parent=self, rasterList=rasters,
+        win = ProfileFrame(parent=self, giface=self._giface, rasterList=rasters,
                            units=self.Map.projinfo['units'],
                            controller=self.profileController)
         win.Show()
@@ -1154,7 +1154,8 @@ class MapFrame(SingleMapFrame):
                 raster.append(layer.maplayer.GetName())
 
         from wxplot.histogram import HistogramPlotFrame
-        win = HistogramPlotFrame(parent=self, rasterList=raster)
+        win = HistogramPlotFrame(parent=self, giface=self._giface,
+                                 rasterList=raster)
         win.CentreOnParent()
         win.Show()
 
@@ -1168,7 +1169,7 @@ class MapFrame(SingleMapFrame):
                 raster.append(layer.maplayer.GetName())
 
         from wxplot.scatter import ScatterFrame
-        win = ScatterFrame(parent=self, rasterList=raster)
+        win = ScatterFrame(parent=self, giface=self._giface, rasterList=raster)
 
         win.CentreOnParent()
         win.Show()
