@@ -1483,7 +1483,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             if (event.LeftIsDown() and
                 not (digitToolbar and
                      digitToolbar.GetAction() in ("moveLine",) and
-                     self.digit.GetDisplay().GetSelected() > 0)):
+                     len(self.digit.GetDisplay().GetSelected()) > 0)):
                 self.MouseDraw(pdc=self.pdcTmp)
 
     def OnLeftDown(self, event):
