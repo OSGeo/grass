@@ -71,8 +71,8 @@ void calc_kappa(void)
 	else
 	    kpp[i] = (pii[i] - pi[i] * pj[i]) / (pi[i] - pi[i] * pj[i]);
 
-    /* print out the commission and ommission accuracy, and conditional kappa */
-    fprintf(fd, "\nCats\t%% Commission\t%% Ommission\tEstimated Kappa\n");
+    /* print out the comission and omission accuracy, and conditional kappa */
+    fprintf(fd, "\nCats\t%% Comission\t%% Omission\tEstimated Kappa\n");
     for (i = 0; i < ncat; i++)
 	if ((kpp[i] == -999) && (i != 0))
 	    fprintf(fd, "%ld\tNA\t\tNA\t\tNA\n", rlst[i]);
