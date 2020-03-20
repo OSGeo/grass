@@ -39,7 +39,6 @@ from mapdisp.frame import MapFrame
 from core.render import Map
 from wxplot.histogram import HistogramPlotFrame
 from core.utils import GetLayerNameFromCmd, ltype2command
-from wxplot.profile import ProfileFrame
 from core.debug import Debug
 from core.settings import UserSettings, GetDisplayVectSettings
 from vdigit.main import haveVDigit
@@ -1127,7 +1126,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                              "raster map. No map name defined."))
             return
 
-        win = HistogramPlotFrame(parent=self, rasterList=rasterList)
+        win = HistogramPlotFrame(parent=self, giface=self._giface, rasterList=rasterList)
         win.CentreOnScreen()
         win.Show()
 

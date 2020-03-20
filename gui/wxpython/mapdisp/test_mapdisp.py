@@ -267,6 +267,7 @@ class Tester(object):
 
         from wxplot.profile import ProfileFrame
         profileWindow = ProfileFrame(parent=self.frame,
+                                     giface=giface,
                                      controller=self.controller,
                                      units=map_.projinfo['units'],
                                      rasterList=rasters)
