@@ -475,7 +475,7 @@ def get_available_temporal_mapsets():
 ###############################################################################
 
 
-def init(raise_fatal_error=False):
+def init(raise_fatal_error=False, skip_db_version_check=False):
     """This function set the correct database backend from GRASS environmental
        variables and creates the grass temporal database structure for raster,
        vector and raster3d maps as well as for the space-time datasets strds,
@@ -516,6 +516,10 @@ def init(raise_fatal_error=False):
                                   exception will be raised in case a fatal
                                   error occurs in the init process, otherwise
                                   sys.exit(1) will be called.
+        :param skip_db_version_check: Set this True to skip mismatch temporal
+                                      database version check.
+                                      Recommended to be used only for
+                                      upgrade_temporal_database().
     """
     # We need to set the correct database backend and several global variables
     # from the GRASS mapset specific environment variables of g.gisenv and t.connect
@@ -523,6 +527,7 @@ def init(raise_fatal_error=False):
     global tgis_database
     global tgis_database_string
     global tgis_dbmi_paramstyle
+    global tgis_db_version
     global raise_on_error
     global enable_mapset_check
     global enable_timestamp_write
@@ -646,25 +651,34 @@ def init(raise_fatal_error=False):
         if dbif.fetchone()[0]:
             db_exists = True
 
-    backup_howto = "The format of your actual temporal database is not " \
-                   "supported any more.\nSolution: You need to export it by " \
-                   "restoring the GRASS GIS version used for creating this DB"\
-                   ". From there, create a backup of your temporal database "\
-                   "to avoid the loss of your temporal data.\nNotes: Use " \
-                   "t.rast.export and t.vect.export to make a backup of your" \
-                   " existing space time datasets.To safe the timestamps of" \
-                   " your existing maps and space time datasets, use " \
-                   "t.rast.list, t.vect.list and t.rast3d.list. "\
-                   "You can register the existing time stamped maps easily if"\
-                   " you export columns=id,start_time,end_time into text "\
-                   "files and use t.register to register them again in new" \
-                   " created space time datasets (t.create). After the backup"\
-                   " remove the existing temporal database, a new one will be"\
-                   " created automatically.\n"
+    backup_howto = _("The format of your actual temporal database is not " \
+                     "supported any more.\n" \
+                     "Please create a backup of your temporal database "\
+                     "to avoid lossing data.\nSOLUTION: ")
+    if tgis_db_version > 2:
+        backup_howto += _("Run t.upgrade command installed from " \
+                          "GRASS Addons in order to upgrade your temporal database.\n")
+    else:
+        backup_howto += _("You need to export it by " \
+                          "restoring the GRASS GIS version used for creating this DB."\
+                          "Notes: Use t.rast.export and t.vect.export "\
+                          "to make a backup of your" \
+                          " existing space time datasets. To save the timestamps of" \
+                          " your existing maps and space time datasets, use " \
+                          "t.rast.list, t.vect.list and t.rast3d.list. "\
+                          "You can register the existing time stamped maps easily if"\
+                          " you export columns=id,start_time,end_time into text "\
+                          "files and use t.register to register them again in new" \
+                          " created space time datasets (t.create). After the backup"\
+                          " remove the existing temporal database, a new one will be"\
+                          " created automatically.\n")
 
     if db_exists is True:
-        # Check the version of the temporal database
         dbif.close()
+        if  skip_db_version_check is True:
+            return
+
+        # Check the version of the temporal database
         dbif.connect()
         metadata = get_tgis_metadata(dbif)
         dbif.close()
@@ -704,6 +718,25 @@ def get_database_info_string():
 
 ###############################################################################
 
+def _create_temporal_database_views(dbif):
+    """Create all views in the temporal database (internal use only)
+
+    Used by create_temporal_database() and upgrade_temporal_database().
+
+    :param dbif: The database interface to be used
+    """
+    template_path = get_sql_template_path()
+
+    for sql_filename in ("raster_views",
+                         "raster3d_views",
+                         "vector_views",
+                         "strds_views",
+                         "str3ds_views",
+                         "stvds_views"):
+        sql_filepath = open(os.path.join(template_path,
+                                         sql_filename + '.sql'),
+                            'r').read()
+        dbif.execute_transaction(sql_filepath)
 
 def create_temporal_database(dbif):
     """This function will create the temporal database
@@ -732,13 +765,6 @@ def create_temporal_database(dbif):
     vector_metadata_sql = open(os.path.join(template_path,
                                             "vector_metadata_table.sql"),
                                'r').read()
-    raster_views_sql = open(os.path.join(template_path, "raster_views.sql"),
-                            'r').read()
-    raster3d_views_sql = open(os.path.join(template_path,
-                                           "raster3d_views.sql"), 'r').read()
-    vector_views_sql = open(os.path.join(template_path, "vector_views.sql"),
-                            'r').read()
-
     stds_tables_template_sql = open(os.path.join(template_path,
                                                  "stds_tables_template.sql"),
                                     'r').read()
@@ -751,12 +777,6 @@ def create_temporal_database(dbif):
     stvds_metadata_sql = open(os.path.join(template_path,
                                            "stvds_metadata_table.sql"),
                               'r').read()
-    strds_views_sql = open(os.path.join(template_path, "strds_views.sql"),
-                           'r').read()
-    str3ds_views_sql = open(os.path.join(template_path, "str3ds_views.sql"),
-                            'r').read()
-    stvds_views_sql = open(os.path.join(template_path, "stvds_views.sql"),
-                           'r').read()
 
     # Create the raster, raster3d and vector tables SQL statements
     raster_tables_sql = map_tables_template_sql.replace("GRASS_MAP", "raster")
@@ -803,27 +823,24 @@ def create_temporal_database(dbif):
     if dbif.connected is not True:
         dbif.connect()
 
-    # Execute the SQL statements for sqlite
+    # Execute the SQL statements
     # Create the global tables for the native grass datatypes
     dbif.execute_transaction(raster_tables_sql)
     dbif.execute_transaction(raster_metadata_sql)
-    dbif.execute_transaction(raster_views_sql)
     dbif.execute_transaction(vector_tables_sql)
     dbif.execute_transaction(vector_metadata_sql)
-    dbif.execute_transaction(vector_views_sql)
     dbif.execute_transaction(raster3d_tables_sql)
     dbif.execute_transaction(raster3d_metadata_sql)
-    dbif.execute_transaction(raster3d_views_sql)
     # Create the tables for the new space-time datatypes
     dbif.execute_transaction(strds_tables_sql)
     dbif.execute_transaction(strds_metadata_sql)
-    dbif.execute_transaction(strds_views_sql)
     dbif.execute_transaction(stvds_tables_sql)
     dbif.execute_transaction(stvds_metadata_sql)
-    dbif.execute_transaction(stvds_views_sql)
     dbif.execute_transaction(str3ds_tables_sql)
     dbif.execute_transaction(str3ds_metadata_sql)
-    dbif.execute_transaction(str3ds_views_sql)
+
+    # Create views
+    self._create_temporal_database_views(dbif)
 
     # The delete trigger
     dbif.execute_transaction(delete_trigger_sql)
@@ -838,6 +855,64 @@ def create_temporal_database(dbif):
     metadata["tgis_db_version"] = tgis_db_version
     metadata["creation_time"] = datetime.today()
     _create_tgis_metadata_table(metadata, dbif)
+
+    dbif.close()
+
+###############################################################################
+
+
+def upgrade_temporal_database(dbif):
+    """This function will upgrade the temporal database if needed.
+
+       It will update all tables and triggers that are requested by
+       currently supported TGIS DB version.
+
+       :param dbif: The database interface to be used
+    """
+    global tgis_database_string
+    global tgis_db_version
+
+    metadata = get_tgis_metadata(dbif)
+
+    msgr = get_tgis_message_interface()
+    if metadata is None:
+        msgr.fatal(_("Unable to receive temporal database metadata.\n"
+                     "Current temporal database info:%(info)s") % (
+                         {"info": get_database_info_string()}))
+    upgrade_db_from = None
+    for entry in metadata:
+        if "tgis_db_version" in entry and entry[1] != str(tgis_db_version):
+            upgrade_db_from = entry[1]
+            break
+
+    if upgrade_db_from is None:
+        msgr.message(_("Temporal database is up-to-date. Operation canceled"))
+        dbif.close()
+        return
+
+    template_path = get_sql_template_path()
+    try:
+        upgrade_db_sql = open(os.path.join(
+            template_path,
+            "upgrade_db_%s_to_%s.sql" % (upgrade_db_from, tgis_db_version)),
+            'r').read()
+    except FileNotFoundError:
+        msgr.fatal(_("Unsupported TGIS DB upgrade scenario: from version %s to %s") % \
+                   (upgrade_db_from, tgis_db_version))
+
+    drop_views_sql = open(
+        os.path.join(template_path, "drop_views.sql"),
+        'r').read()
+
+    msgr.message(
+        _("Upgrading temporal database <%s> from version %s to %s...") % \
+        (tgis_database_string, upgrade_db_from, tgis_db_version))
+    # Drop views
+    dbif.execute_transaction(drop_views_sql)
+    # Perform upgrade
+    dbif.execute_transaction(upgrade_db_sql)
+    # Recreate views
+    _create_temporal_database_views(dbif)
 
     dbif.close()
 
