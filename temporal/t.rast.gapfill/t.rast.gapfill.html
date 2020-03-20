@@ -40,6 +40,7 @@ t.create type=strds temporaltype=absolute \
          
 t.register type=raster input=precipitation_daily maps=map1,map2,map3
 
+# the output shows three missing maps
 t.rast.list input=precipitation_daily columns=name,start_time,min,max
 
 name|start_time|min|max
@@ -54,8 +55,8 @@ id|name|mapset|start_time|end_time|interval_length|distance_from_begin
 map1@PERMANENT|map1|PERMANENT|2012-08-20 00:00:00|2012-08-21 00:00:00|1.0|0.0
 None|None|None|2012-08-21 00:00:00|2012-08-22 00:00:00|1.0|1.0
 map2@PERMANENT|map2|PERMANENT|2012-08-22 00:00:00|2012-08-23 00:00:00|1.0|2.0
-None|None|None|2012-08-23 00:00:00|2012-08-24 00:00:00|1.0|3.0
-map3@PERMANENT|map3|PERMANENT|2012-08-24 00:00:00|2012-08-25 00:00:00|1.0|4.0
+None|None|None|2012-08-23 00:00:00|2012-08-25 00:00:00|2.0|3.0
+map3@PERMANENT|map3|PERMANENT|2012-08-25 00:00:00|2012-08-26 00:00:00|1.0|5.0
 
 t.rast.gapfill input=precipitation_daily basename=gap
 
