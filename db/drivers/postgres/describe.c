@@ -207,6 +207,7 @@ int get_column_info(PGresult * res, int col, int *pgtype, int *gpgtype,
 
     case PG_TYPE_TEXT:
 	*sqltype = DB_SQL_TYPE_TEXT;
+	*size = 1000;
 	break;
 
     case PG_TYPE_FLOAT4:
