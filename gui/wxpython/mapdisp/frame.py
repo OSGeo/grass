@@ -106,6 +106,9 @@ class MapFrame(SingleMapFrame):
         # Emitted when closing display by closing its window.
         self.closingDisplay = Signal("MapFrame.closingDisplay")
 
+        # Emitted when closing display by closing its window.
+        self.closingVNETDialog = Signal("MapFrame.closingVNETDialog")
+
         # properties are shared in other objects, so defining here
         self.mapWindowProperties = MapWindowProperties()
         self.mapWindowProperties.setValuesFromUserSettings()
@@ -744,7 +747,7 @@ class MapFrame(SingleMapFrame):
                 self._giface.WriteError(_('Failed to run d.to.rast:\n') + messages)
                 grass.try_remove(pngFile)
                 return
-    
+
             # alignExtent changes only region variable
             oldRegion = self.GetMap().GetCurrentRegion().copy()
             self.GetMap().AlignExtentFromDisplay()
@@ -777,7 +780,7 @@ class MapFrame(SingleMapFrame):
         pngFile = grass.tempfile(create=False) + '.png'
         dOutFileCmd = ['d.out.file', 'output=' + pngFile, 'format=png']
         self.DOutFile(dOutFileCmd, callback=_DToRastDone)
-        
+
 
 
     def DToRastOptData(self, dcmd, layer, params, propwin):
@@ -843,6 +846,8 @@ class MapFrame(SingleMapFrame):
             self.RemoveNviz()
         if hasattr(self, 'rdigit') and self.rdigit:
             self.rdigit.CleanUp()
+        if self.dialogs['vnet']:
+            self.closingVNETDialog.emit()
         self._mgr.UnInit()
 
     def OnCloseWindow(self, event):
@@ -1484,6 +1489,7 @@ class MapFrame(SingleMapFrame):
 
         from vnet.dialogs import VNETDialog
         self.dialogs['vnet'] = VNETDialog(parent=self, giface=self._giface)
+        self.closingVNETDialog.connect(self.dialogs['vnet'].OnCloseDialog)
         self.dialogs['vnet'].CenterOnScreen()
         self.dialogs['vnet'].Show()
 
