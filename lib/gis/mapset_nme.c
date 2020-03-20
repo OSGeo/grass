@@ -139,10 +139,11 @@ void G_reset_mapsets(void)
 
    List is updated by each call to this function.
 
-   \return pointer to zero terminated array of available mapsets
+   \return pointer to NULL terminated array of available mapsets
  */
 char **G_get_available_mapsets(void)
 {
+    char *location;
     char **mapsets = NULL;
     int alloc = 50;
     int n = 0;
@@ -153,15 +154,18 @@ char **G_get_available_mapsets(void)
 
     mapsets = G_calloc(alloc, sizeof(char *));
 
-    dir = opendir(G_location_path());
-    if (!dir)
-	return mapsets;
+    location = G_location_path();
+    dir = opendir(location);
+    if (!dir) {
+        G_free(location);
+        return mapsets;
+    }
 
     while ((ent = readdir(dir))) {
 	char buf[GPATH_MAX];
 	struct stat st;
 
-	sprintf(buf, "%s/%s/WIND", G_location_path(), ent->d_name);
+	sprintf(buf, "%s/%s/WIND", location, ent->d_name);
 
 	if (G_stat(buf, &st) != 0) {
 	    G_debug(4, "%s is not mapset", ent->d_name);
@@ -176,10 +180,11 @@ char **G_get_available_mapsets(void)
 	}
 
 	mapsets[n++] = G_store(ent->d_name);
-	mapsets[n] = NULL;
     }
+	mapsets[n] = NULL;
 
     closedir(dir);
+    G_free(location);
 
     return mapsets;
 }
