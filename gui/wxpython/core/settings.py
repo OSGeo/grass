@@ -585,6 +585,10 @@ class Settings:
                     'titleSize': 12,
                     'axisSize': 11,
                     'legendSize': 10,
+                    'defaultSize': 11,
+                    'family': wx.FONTFAMILY_SWISS,
+                    'style': wx.FONTSTYLE_NORMAL,
+                    'weight': wx.FONTWEIGHT_NORMAL,
                 },
                 'grid': {
                     'color': (200, 200, 200, 255),
