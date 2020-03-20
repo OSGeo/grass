@@ -22,15 +22,15 @@ This program is free software under the GNU General Public License
 import os
 
 import wx
-import wx.lib.colourselect as csel
-import wx.lib.scrolledpanel as scrolled
 
 from core import globalvar
 from core.settings import UserSettings
 from core.globalvar import ICONDIR
 from gui_core.gselect import Select
-from gui_core.wrap import SpinCtrl, Button, StaticText, \
-    StaticBox, TextCtrl, Choice
+from gui_core.wrap import (
+    ColourSelect, ComboBox, Button, CheckBox, Choice, Panel, RadioButton,
+    ScrolledPanel, SpinCtrl, StaticBox, StaticText, TextCtrl,
+)
 
 from grass.script import core as grass
 
@@ -211,7 +211,7 @@ class ScatterRasterDialog(wx.Dialog):
 #        box.Add(item = label,
 #                flag = wx.ALIGN_CENTER_VERTICAL, pos = (2, 0))
 #        types = ['normal', 'bubble']
-#        scattertype = wx.ComboBox(parent = self, id = wx.ID_ANY, size = (250, -1),
+#        scattertype = ComboBox(parent = self, id = wx.ID_ANY, size = (250, -1),
 #                                choices = types, style = wx.CB_DROPDOWN)
 #        scattertype.SetStringSelection(self.scattertype)
 #        box.Add(item = scattertype,
@@ -296,7 +296,7 @@ class PlotStatsFrame(wx.Frame):
                 wx.BITMAP_TYPE_ICO))
         self.panel = wx.Panel(self)
 
-        sp = scrolled.ScrolledPanel(
+        sp = ScrolledPanel(
             self.panel, -1, size=(400, 400),
             style=wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER, name="Statistics")
 
@@ -516,7 +516,7 @@ class HistRasterDialog(wx.Dialog):
         box.Add(label,
                 flag=wx.ALIGN_CENTER_VERTICAL, pos=(4, 0))
         types = ['count', 'percent', 'area']
-        histtype = wx.ComboBox(parent=self, id=wx.ID_ANY, size=(250, -1),
+        histtype = ComboBox(parent=self, id=wx.ID_ANY, size=(250, -1),
                                choices=types, style=wx.CB_DROPDOWN)
         histtype.SetStringSelection(self.histtype)
         box.Add(histtype,
@@ -761,7 +761,7 @@ class TextDialog(wx.Dialog):
             id=wx.ID_ANY,
             label=_("Font family:"))
         gridSizer.Add(label1, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
-        self.ffamilycb = wx.ComboBox(
+        self.ffamilycb = ComboBox(
             parent=self, id=wx.ID_ANY, size=(250, -1),
             choices=list(self.ffamilydict.keys()),
             style=wx.CB_DROPDOWN)
@@ -777,7 +777,7 @@ class TextDialog(wx.Dialog):
         #
         label = StaticText(parent=self, id=wx.ID_ANY, label=_("Style:"))
         gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(1, 0))
-        self.fstylecb = wx.ComboBox(
+        self.fstylecb = ComboBox(
             parent=self, id=wx.ID_ANY, size=(250, -1),
             choices=list(self.fstyledict.keys()),
             style=wx.CB_DROPDOWN)
@@ -793,7 +793,7 @@ class TextDialog(wx.Dialog):
         #
         label = StaticText(parent=self, id=wx.ID_ANY, label=_("Weight:"))
         gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(2, 0))
-        self.fwtcb = wx.ComboBox(
+        self.fwtcb = ComboBox(
             parent=self, size=(250, -1),
             choices=list(self.fwtdict.keys()),
             style=wx.CB_DROPDOWN)
@@ -1041,7 +1041,7 @@ class OptDialog(wx.Dialog):
                 pos=(
                     row,
                     0))
-            color = csel.ColourSelect(
+            color = ColourSelect(
                 parent=self, id=wx.ID_ANY, colour=self.raster[
                     self.map]['pcolor'])
             self.wxId['pcolor'] = color.GetId()
@@ -1113,7 +1113,7 @@ class OptDialog(wx.Dialog):
                 pos=(
                     0,
                     0))
-            ptcolor = csel.ColourSelect(
+            ptcolor = ColourSelect(
                 parent=self,
                 id=wx.ID_ANY,
                 colour=self.properties['marker']['color'])
@@ -1195,7 +1195,7 @@ class OptDialog(wx.Dialog):
                 pos=(
                     0,
                     0))
-            ptcolor = csel.ColourSelect(
+            ptcolor = ColourSelect(
                 parent=self, id=wx.ID_ANY, colour=self.raster[
                     self.map]['pcolor'])
             self.wxId['pcolor'] = ptcolor.GetId()
@@ -1332,7 +1332,7 @@ class OptDialog(wx.Dialog):
             gridSizer.Add(max, pos=(row, 1))
 
             row += 1
-            log = wx.CheckBox(parent=self, id=wx.ID_ANY, label=_("Log scale"))
+            log = CheckBox(parent=self, id=wx.ID_ANY, label=_("Log scale"))
             log.SetValue(prop['log'])
             self.wxId[atype]['log'] = log.GetId()
             gridSizer.Add(log, pos=(row, 0), span=(1, 2))
@@ -1363,7 +1363,7 @@ class OptDialog(wx.Dialog):
         row = 0
         label = StaticText(parent=self, id=wx.ID_ANY, label=_("Grid color"))
         gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
-        gridcolor = csel.ColourSelect(
+        gridcolor = ColourSelect(
             parent=self,
             id=wx.ID_ANY,
             colour=self.properties['grid']['color'])
@@ -1371,7 +1371,7 @@ class OptDialog(wx.Dialog):
         gridSizer.Add(gridcolor, pos=(row, 1))
 
         row += 1
-        gridshow = wx.CheckBox(parent=self, id=wx.ID_ANY, label=_("Show grid"))
+        gridshow = CheckBox(parent=self, id=wx.ID_ANY, label=_("Show grid"))
         gridshow.SetValue(self.properties['grid']['enabled'])
         self.wxId['grid']['enabled'] = gridshow.GetId()
         gridSizer.Add(gridshow, pos=(row, 0), span=(1, 2))
@@ -1391,7 +1391,7 @@ class OptDialog(wx.Dialog):
         gridSizer.Add(legendfontsize, pos=(row, 1))
 
         row += 1
-        legendshow = wx.CheckBox(
+        legendshow = CheckBox(
             parent=self,
             id=wx.ID_ANY,
             label=_("Show legend"))
