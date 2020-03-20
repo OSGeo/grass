@@ -36,6 +36,12 @@ try:
     from wx.lib.agw.hyperlink import HyperLinkCtrl
 except ImportError:
     from wx.lib.hyperlink import HyperLinkCtrl
+try:
+    from wx.adv import AboutDialogInfo
+    from wx.adv import AboutBox
+except ImportError:
+    from wx import AboutDialogInfo
+    from wx import AboutBox
 
 import grass.script as grass
 
@@ -894,7 +900,7 @@ def ShowAboutDialog(prgName, startYear):
     :param prgName: name of the program
     :param startYear: the first year of existence of the program
     """
-    info = wx.AboutDialogInfo()
+    info = AboutDialogInfo()
 
     info.SetIcon(
         wx.Icon(
@@ -913,7 +919,7 @@ def ShowAboutDialog(prgName, startYear):
                 '(>=v2). Read the file COPYING that comes with GRASS for details.',
                 75)))
 
-    wx.AboutBox(info)
+    AboutBox(info)
 
 
 def _grassDevTeam(start):
