@@ -67,8 +67,6 @@ from vnet.vnet_utils import DegreesToRadians, RadiansToDegrees, GetNearestNodeCa
 # - when layer tree of is changed, tmp result map is removed from render list
 # - optimization of map drawing
 # - tmp maps - add number of process
-# - destructor problem - when GRASS GIS is closed with open VNETDialog,
-#   it's destructor is not called
 
 
 class VNETDialog(wx.Dialog):
@@ -817,7 +815,7 @@ class VNETDialog(wx.Dialog):
 
         return mapName, mapSet
 
-    def OnCloseDialog(self, event):
+    def OnCloseDialog(self, event=None):
         """Cancel dialog"""
         self.vnet_mgr.CleanUp()
         self._mgr.UnInit()
