@@ -56,7 +56,7 @@ PlotIcons = {
 class BasePlotFrame(wx.Frame):
     """Abstract PyPlot display frame class"""
 
-    def __init__(self, parent=None, size=wx.Size(700, 400),
+    def __init__(self, parent=None, giface=None, size=wx.Size(700, 400),
                  style=wx.DEFAULT_FRAME_STYLE, rasterList=[], **kwargs):
 
         wx.Frame.__init__(
@@ -68,6 +68,7 @@ class BasePlotFrame(wx.Frame):
             **kwargs)
 
         self.parent = parent  # MapFrame for a plot type
+        self._giface = giface
         self.Map = Map()             # instance of render.Map to be associated with display
         self.rasterList = rasterList  # list of rasters to plot
         self.raster = {}    # dictionary of raster maps and their plotting parameters
@@ -572,7 +573,7 @@ class BasePlotFrame(wx.Frame):
     def PlotText(self, event):
         """Set custom text values for profile title and axis labels.
         """
-        dlg = TextDialog(parent=self, id=wx.ID_ANY,
+        dlg = TextDialog(parent=self, giface=self._giface, id=wx.ID_ANY,
                          plottype=self.plottype,
                          title=_('Text settings'))
 
@@ -586,7 +587,7 @@ class BasePlotFrame(wx.Frame):
         options.  Calls OptDialog class.
         """
 
-        dlg = OptDialog(parent=self, id=wx.ID_ANY,
+        dlg = OptDialog(parent=self, giface=self._giface, id=wx.ID_ANY,
                         plottype=self.plottype,
                         title=_('Plot settings'))
         btnval = dlg.ShowModal()
