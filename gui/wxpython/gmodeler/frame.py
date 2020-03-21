@@ -41,7 +41,7 @@ if globalvar.wxPythonPhoenix:
 else:
     import wx.lib.flatnotebook as FN
 from wx.lib.newevent import NewEvent
-    
+
 from gui_core.widgets import GNotebook
 from core.gconsole        import GConsole, \
     EVT_CMD_RUN, EVT_CMD_DONE, EVT_CMD_PREPARE
@@ -63,8 +63,10 @@ from gui_core.pystc import PyStc
 from gmodeler.giface import GraphicalModelerGrassInterface
 from gmodeler.model import *
 from gmodeler.dialogs import *
-from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl, \
-    Menu, StockCursor, EmptyBitmap, NewId
+from gui_core.wrap import (
+    Button, EmptyBitmap, ImageFromBitmap, Menu, NewId, StaticBox,
+    StaticText, StockCursor, TextCtrl,
+)
 from gui_core.wrap import TextEntryDialog as wxTextEntryDialog
 
 wxModelDone, EVT_MODEL_DONE = NewEvent()
@@ -158,7 +160,7 @@ class ModelFrame(wx.Frame):
         self._gconsole.Bind(EVT_CMD_DONE, self.OnCmdDone)
         self.Bind(EVT_CMD_PREPARE, self.OnCmdPrepare)
         self.Bind(EVT_MODEL_DONE, self.OnModelDone)
-        
+
         self.notebook.AddPage(page=self.canvas, text=_('Model'), name='model')
         self.notebook.AddPage(
             page=self.itemPanel,
@@ -312,8 +314,8 @@ class ModelFrame(wx.Frame):
                 stime = _("unknown")
 
             return stime
-        
-        self.goutput.GetProgressBar().SetValue(0)            
+
+        self.goutput.GetProgressBar().SetValue(0)
         self.goutput.WriteCmdLog('({}) {} ({})'.format(
             str(time.ctime()), _("Command finished"), time_elapsed(event.time)),
             notification=event.notification)
@@ -328,7 +330,7 @@ class ModelFrame(wx.Frame):
                                          notification=event.notification)
                 event = wxModelDone()
                 wx.PostEvent(self, event)
-                
+
         except IndexError:
             pass
 
@@ -405,7 +407,7 @@ class ModelFrame(wx.Frame):
         if vect:
             self._gconsole.RunCmd(['g.remove', '-f', 'type=vector',
                                    'name=%s' % ','.join(vect)])
-                
+
         self.SetStatusText(_("%d intermediate maps deleted from current mapset") %
                            int(len(rast) + len(rast3d) + len(vect)))
 
@@ -624,7 +626,7 @@ class ModelFrame(wx.Frame):
         """Computation finished
         """
         self.SetStatusText('', 0)
-        
+
         # restore original files
         if hasattr(self.model, "fileInput"):
             for finput in self.model.fileInput:
@@ -652,7 +654,7 @@ class ModelFrame(wx.Frame):
             if layers:
                 for layer in layers:
                     self._giface.GetLayerList().DeleteLayer(layer)
-                
+
             # add new map layer
             self._giface.GetLayerList().AddLayer(
                 ltype=data.GetPrompt(), name=data.GetValue(), checked=True,
@@ -706,7 +708,7 @@ class ModelFrame(wx.Frame):
                        int(ymaxImg - yminImg) + 50)
         bitmap = EmptyBitmap(width=size.width, height=size.height)
 
-        filetype, ltype = GetImageHandlers(wx.ImageFromBitmap(bitmap))
+        filetype, ltype = GetImageHandlers(ImageFromBitmap(bitmap))
 
         dlg = wx.FileDialog(
             parent=self,
@@ -1703,7 +1705,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                 layers = self.frame._giface.GetLayerList().GetLayersByName(shape.GetValue())
                 for layer in layers:
                     self.frame._giface.GetLayerList().DeleteLayer(layer)
-                    
+
         except GException as e:
             GError(parent=self,
                    message='{}'.format(e))
