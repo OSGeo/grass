@@ -24,6 +24,7 @@ from __future__ import print_function
 import os
 import sys
 import copy
+import wx
 
 from core import globalvar
 from core.gcmd import GException, GError
@@ -496,6 +497,10 @@ class Settings:
                     'titleSize': 12,
                     'axisSize': 11,
                     'legendSize': 10,
+                    'defaultSize': 11,
+                    'family': wx.FONTFAMILY_SWISS,
+                    'style': wx.FONTSTYLE_NORMAL,
+                    'weight': wx.FONTWEIGHT_NORMAL,
                 },
                 'marker': {
                     'color': (0, 0, 0, 255),
@@ -535,6 +540,10 @@ class Settings:
                     'titleSize': 12,
                     'axisSize': 11,
                     'legendSize': 10,
+                    'defaultSize': 11,
+                    'family': wx.FONTFAMILY_SWISS,
+                    'style': wx.FONTSTYLE_NORMAL,
+                    'weight': wx.FONTWEIGHT_NORMAL,
                 },
                 'grid': {
                     'color': (200, 200, 200, 255),
@@ -576,6 +585,10 @@ class Settings:
                     'titleSize': 12,
                     'axisSize': 11,
                     'legendSize': 10,
+                    'defaultSize': 11,
+                    'family': wx.FONTFAMILY_SWISS,
+                    'style': wx.FONTSTYLE_NORMAL,
+                    'weight': wx.FONTWEIGHT_NORMAL,
                 },
                 'grid': {
                     'color': (200, 200, 200, 255),
