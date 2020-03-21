@@ -694,7 +694,7 @@ class VNETAnalysisParameters:
                 vectMaps = grass.list_grouped('vector')[mapSet]
 
         if not params["input"] or mapName not in vectMaps:
-            invParams = params.keys()[:]
+            invParams = list(params.keys())[:]
             return invParams
 
         # check arc/node layer
