@@ -1560,7 +1560,7 @@ class VectorColorTable(ColorTable):
 
         sep = ';'
         if self.inmap:
-            outFile = tempfile.NamedTemporaryFile(mode='w+b')
+            outFile = tempfile.NamedTemporaryFile(mode='w+')
             ret = RunCommand('v.db.select',
                              quiet=True,
                              flags='c',
