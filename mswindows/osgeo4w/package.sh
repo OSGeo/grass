@@ -269,6 +269,7 @@ if [ -n "$PACKAGE_PATCH" ]; then
 
     # bat files - unix2dos
     unix2dos bin/${GRASS_EXECUTABLE}.bat.tmpl
+    unix2dos bin/python-${GRASS_EXECUTABLE}.bat
     unix2dos etc/postinstall/grass${PACKAGE_POSTFIX}.bat
     unix2dos etc/preremove/grass${PACKAGE_POSTFIX}.bat
 
@@ -281,6 +282,7 @@ if [ -n "$PACKAGE_PATCH" ]; then
     /bin/tar -cjf $PDIR/grass$PACKAGE_POSTFIX-$VERSION-$PACKAGE_PATCH.tar.bz2 \
 	apps/grass/grass$POSTFIX \
 	bin/${GRASS_EXECUTABLE}.bat.tmpl \
+        bin/python-${GRASS_EXECUTABLE}.bat \
 	etc/postinstall/grass${PACKAGE_POSTFIX}.bat \
 	etc/preremove/grass${PACKAGE_POSTFIX}.bat
 
