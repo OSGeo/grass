@@ -146,9 +146,12 @@ class BasePlotFrame(wx.Frame):
         self.properties['font'] = {}
         self.properties['font']['prop'] = UserSettings.Get(
             group=self.plottype, key='font')
-        self.properties['font']['wxfont'] = wx.Font(11, wx.FONTFAMILY_SWISS,
-                                                    wx.FONTSTYLE_NORMAL,
-                                                    wx.FONTWEIGHT_NORMAL)
+        self.wx_font = wx.Font(
+            self.properties['font']['prop']['defaultSize'],
+            self.properties['font']['prop']['family'],
+            self.properties['font']['prop']['style'],
+            self.properties['font']['prop']['weight'],
+        )
 
         self.properties['raster'] = {}
         self.properties['raster'] = UserSettings.Get(
@@ -337,7 +340,7 @@ class BasePlotFrame(wx.Frame):
     def SetGraphStyle(self):
         """Set plot and text options
         """
-        self.client.SetFont(self.properties['font']['wxfont'])
+        self.client.SetFont(self.wx_font)
         self.client.fontSizeTitle = self.properties['font']['prop']['titleSize']
         self.client.fontSizeAxis = self.properties['font']['prop']['axisSize']
 
@@ -562,7 +565,7 @@ class BasePlotFrame(wx.Frame):
     def UpdateLabels(self):
         x, y = self._getPlotLabels()
 
-        self.client.SetFont(self.properties['font']['wxfont'])
+        self.client.SetFont(self.wx_font)
         self.client.fontSizeTitle = self.properties['font']['prop']['titleSize']
         self.client.fontSizeAxis = self.properties['font']['prop']['axisSize']
 
