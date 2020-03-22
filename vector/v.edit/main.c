@@ -7,6 +7,7 @@
  * AUTHOR(S):  Wolf Bergenheim
  *             Jachym Cepicky
  *             Major updates by Martin Landa <landa.martin gmail.com>
+ *             Extend tools by Huidae Cho <grass4u gmail.com>
  *
  * COPYRIGHT:  (C) 2006-2017 by the GRASS Development Team
  *
