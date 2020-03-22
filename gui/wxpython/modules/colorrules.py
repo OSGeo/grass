@@ -611,6 +611,9 @@ class ColorTable(wx.Frame):
         self.OnCancel(event)
 
     def OnApply(self, event):
+        return self._apply()
+
+    def _apply(self, updatePreview=True):
         """Apply selected color table
 
         :return: True on success otherwise False
@@ -620,7 +623,8 @@ class ColorTable(wx.Frame):
             GMessage(parent=self, message=_("No valid color rules given."))
         else:
             # re-render preview and current map window
-            self.OnPreview(None)
+            if updatePreview:
+                self.OnPreview(None)
             display = self.layerTree.GetMapDisplay()
             if display and display.IsAutoRendered():
                 display.GetWindow().UpdateMap(render=True)
@@ -629,7 +633,7 @@ class ColorTable(wx.Frame):
 
     def OnOK(self, event):
         """Apply selected color table and close the dialog"""
-        if self.OnApply(event):
+        if self._apply(updatePreview=False):
             self.OnCancel(event)
 
     def OnCancel(self, event):
@@ -1846,7 +1850,7 @@ class VectorColorTable(ColorTable):
         self.Map.Clean()
         self.Destroy()
 
-    def OnApply(self, event):
+    def _apply(self, updatePreview=True):
         """Apply selected color table
 
         :return: True on success otherwise False
@@ -1861,7 +1865,7 @@ class VectorColorTable(ColorTable):
 
             self.UseAttrColumn(True)
 
-        return ColorTable.OnApply(self, event)
+        return ColorTable._apply(self, updatePreview)
 
 
 class ThematicVectorTable(VectorColorTable):
@@ -1880,7 +1884,7 @@ class ThematicVectorTable(VectorColorTable):
         self.selectionInput.SetValue(self.inmap)
         self.selectionInput.Disable()
 
-    def OnApply(self, event):
+    def _apply(self, updatePreview=True):
         """Apply selected color table
 
         :return: True on success otherwise False
