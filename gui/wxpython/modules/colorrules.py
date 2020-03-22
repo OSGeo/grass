@@ -82,8 +82,8 @@ class RulesPanel:
         # clear button
         self.clearAll = Button(parent, id=wx.ID_ANY, label=_("Clear all"))
         #  determines how many rules should be added
-        self.numRules = SpinCtrl(parent, id=wx.ID_ANY,
-                                 min=1, max=1e6, initial=1)
+        self.numRules = SpinCtrl(parent, id=wx.ID_ANY, min=1, max=1e6,
+                                 initial=1, size=(150, -1))
         # add rules
         self.btnAdd = Button(parent, id=wx.ID_ADD)
 
@@ -1199,7 +1199,7 @@ class VectorColorTable(ColorTable):
             self.cp = wx.CollapsiblePane(
                 scrollPanel,
                 label=_("Import or export color table"),
-                winid=wx.ID_ANY,
+                id=wx.ID_ANY,
                 style=wx.CP_DEFAULT_STYLE | wx.CP_NO_TLW_RESIZE)
             self.Bind(
                 wx.EVT_COLLAPSIBLEPANE_CHANGED,
@@ -1560,7 +1560,7 @@ class VectorColorTable(ColorTable):
 
         sep = ';'
         if self.inmap:
-            outFile = tempfile.NamedTemporaryFile(mode='w+b')
+            outFile = tempfile.NamedTemporaryFile(mode='w+')
             ret = RunCommand('v.db.select',
                              quiet=True,
                              flags='c',
