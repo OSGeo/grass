@@ -1891,7 +1891,7 @@ class GdalSelect(wx.Panel):
         # data list: [type, dsn, format, options]
         if len(data) == 3:
             data.append('')
-        elif len < 3:
+        elif len(data) < 3:
             return
 
         self.source.SetSelection(self.sourceMap[data[0]])
@@ -2747,7 +2747,7 @@ class SqlWhereSelect(wx.Panel):
             win.Show()
         except GException as e:
             GMessage(parent=self.parent, message='{}'.format(e))
-        
+
     def SetData(self, vector, layer):
         self.vector_map = vector
         self.vector_layer = int(layer) # TODO: support layer names
