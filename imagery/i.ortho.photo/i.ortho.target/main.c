@@ -40,6 +40,8 @@ int main(int argc, char *argv[])
     /* newly defined location and maspet */
     char target_location[GMAPSET_MAX];
     char target_mapset[GMAPSET_MAX];
+    int stat;
+    struct Cell_head target_window;
 
     G_gisinit(argv[0]);
 
@@ -75,6 +77,20 @@ int main(int argc, char *argv[])
 
     I_get_target(group, location, mapset);
     G_create_alt_env();
+    G_setenv_nogisrc("LOCATION_NAME", target_location);
+    stat = G_mapset_permissions(target_mapset);
+    if (stat != 1) {
+	G_fatal_error(_("Unable to access target location/mapset %s/%s"),
+	              target_location, target_mapset);
+    }
+
+    G_setenv_nogisrc("MAPSET", target_mapset);
+    G_get_window(&target_window);
+    if (target_window.proj == PROJECTION_XY)
+	G_fatal_error(_("Target locations with XY (unreferenced) are not supported"));
+    else if (target_window.proj == PROJECTION_LL)
+	G_fatal_error(_("Target locations with lon/lat are not supported"));
+
     G_switch_env();
     I_put_target(group, target_location, target_mapset);
 

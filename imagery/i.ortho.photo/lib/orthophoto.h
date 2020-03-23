@@ -141,6 +141,8 @@ int I_ortho_ref(double, double, double, double *, double *, double *,
 int I_inverse_ortho_ref(double, double, double, double *, double *, double *,
 			struct Ortho_Camera_File_Ref *, double, double,
 			double, MATRIX);
+void I_ortho_panorama(void);
+
 /* ref_points.c */
 int I_new_ref_point(struct Ortho_Photo_Points *, double,
 		    double, double, double, int);
