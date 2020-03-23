@@ -465,22 +465,22 @@ class VirtualAttributeList(ListCtrl,
                             'calculator': NewId(),
                             'stats': NewId()}
 
-        popupMenu.Append(self.popupId['sortAsc'], text=_("Sort ascending"))
-        popupMenu.Append(self.popupId['sortDesc'], text=_("Sort descending"))
+        popupMenu.Append(self.popupId['sortAsc'], _("Sort ascending"))
+        popupMenu.Append(self.popupId['sortDesc'], _("Sort descending"))
         popupMenu.AppendSeparator()
         subMenu = Menu()
         popupMenu.AppendMenu(self.popupId['calculate'], _(
             "Calculate (only numeric columns)"), subMenu)
         popupMenu.Append(
             self.popupId['calculator'],
-            text=_("Field calculator"))
+            _("Field calculator"))
         popupMenu.AppendSeparator()
-        popupMenu.Append(self.popupId['stats'], text=_("Statistics"))
+        popupMenu.Append(self.popupId['stats'], _("Statistics"))
 
         if not self.pages['manageTable']:
             popupMenu.AppendSeparator()
             self.popupId['addCol'] = NewId()
-            popupMenu.Append(self.popupId['addCol'], text=_("Add column"))
+            popupMenu.Append(self.popupId['addCol'], _("Add column"))
             if not self.dbMgrData['editable']:
                 popupMenu.Enable(self.popupId['addCol'], False)
 
@@ -492,23 +492,23 @@ class VirtualAttributeList(ListCtrl,
                 int, float):
             popupMenu.Enable(self.popupId['calculate'], False)
 
-        subMenu.Append(self.popupId['area'], text=_("Area size"))
-        subMenu.Append(self.popupId['length'], text=_("Line length"))
+        subMenu.Append(self.popupId['area'], _("Area size"))
+        subMenu.Append(self.popupId['length'], _("Line length"))
         subMenu.Append(
             self.popupId['compact'],
-            text=_("Compactness of an area"))
-        subMenu.Append(self.popupId['fractal'], text=_(
+            _("Compactness of an area"))
+        subMenu.Append(self.popupId['fractal'], _(
             "Fractal dimension of boundary defining a polygon"))
         subMenu.Append(
             self.popupId['perimeter'],
-            text=_("Perimeter length of an area"))
-        subMenu.Append(self.popupId['ncats'], text=_(
+            _("Perimeter length of an area"))
+        subMenu.Append(self.popupId['ncats'], _(
             "Number of features for each category"))
         subMenu.Append(
             self.popupId['slope'],
-            text=_("Slope steepness of 3D line"))
-        subMenu.Append(self.popupId['lsin'], text=_("Line sinuousity"))
-        subMenu.Append(self.popupId['lazimuth'], text=_("Line azimuth"))
+            _("Slope steepness of 3D line"))
+        subMenu.Append(self.popupId['lsin'], _("Line sinuousity"))
+        subMenu.Append(self.popupId['lazimuth'], _("Line azimuth"))
 
         self.Bind(
             wx.EVT_MENU,
@@ -983,7 +983,7 @@ class DbMgrNotebookBase(FN.FlatNotebook):
             with open(sqlFilePath, 'w', encoding=enc) as sqlFile:
                 for sql in listOfSQLStatements:
                     sqlFile.write(sql + ';')
-                    sqlFile.write(os.linesep)
+                    sqlFile.write('\n')
 
             driver = self.dbMgrData['mapDBInfo'].layers[
                 self.selLayer]["driver"]
@@ -3881,11 +3881,11 @@ class FieldStatistics(wx.Frame):
             if fn == 'null':
                 sqlFile.write(
                     'select count(*) from %s where %s is null;%s' %
-                    (table, column, os.linesep))
+                    (table, column, '\n'))
             else:
                 sqlFile.write(
                     'select %s(%s) from %s;%s' %
-                    (fn, column, table, os.linesep))
+                    (fn, column, table, '\n'))
         sqlFile.close()
 
         dataStr = RunCommand('db.select',

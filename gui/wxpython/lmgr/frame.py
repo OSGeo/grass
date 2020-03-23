@@ -407,7 +407,7 @@ class GMFrame(wx.Frame):
             self.OnCBPageChanged)
         self.notebookLayers.Bind(
             FN.EVT_FLATNOTEBOOK_PAGE_CLOSING,
-            self.OnCBPageClosed)
+            self.OnCBPageClosing)
 
         return self.notebook
 
@@ -651,11 +651,34 @@ class GMFrame(wx.Frame):
 
         event.Skip()
 
-    def OnCBPageClosed(self, event):
-        """Page of notebook closed
-        Also close associated map display
+    def OnCBPageClosing(self, event):
+        """Page of notebook is being closed
+        from Layer Manager (x button next to arrows)
+        Also close associated map display.
         """
+        # save changes in the workspace
+        if not self.CanClosePage():
+            event.Veto()
 
+        maptree = self.notebookLayers.GetPage(event.GetSelection()).maptree
+        maptree.GetMapDisplay().CleanUp()
+        maptree.Close(True)
+
+        self.currentPage = None
+
+        event.Skip()
+
+    def _closePageNoEvent(self, page_index):
+        """Close page and destroy map display without
+        generating notebook page closing event"""
+        self.notebookLayers.Unbind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING)
+        self.notebookLayers.DeletePage(page_index)
+        self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING,
+                                 self.OnCBPageClosing)
+
+    def CanClosePage(self):
+        """Ask if page with map display can be closed
+        """
         # save changes in the workspace
         maptree = self.GetLayerTree()
         if  self.workspaceChanged and UserSettings.Get(
@@ -675,23 +698,15 @@ class GMFrame(wx.Frame):
                                        style=wx.YES_NO | wx.YES_DEFAULT |
                                        wx.CANCEL | wx.ICON_QUESTION | wx.CENTRE)
                 ret = dlg.ShowModal()
+                dlg.Destroy()
                 if ret == wx.ID_YES:
                     if not self.workspaceFile:
                         self.OnWorkspaceSaveAs()
                     else:
                         self.SaveToWorkspaceFile(self.workspaceFile)
                 elif ret == wx.ID_CANCEL:
-                    event.Veto()
-                    dlg.Destroy()
-                    return
-                dlg.Destroy()
-
-        self.notebookLayers.GetPage(event.GetSelection()).maptree.Map.Clean()
-        self.notebookLayers.GetPage(event.GetSelection()).maptree.Close(True)
-
-        self.currentPage = None
-
-        event.Skip()
+                    return False
+        return True
 
     def _switchPageHandler(self, event, notification):
         self._switchPage(notification=notification)
@@ -1525,7 +1540,7 @@ class GMFrame(wx.Frame):
                                        lcmd=layer['cmd'],
                                        lgroup=layer['group'],
                                        lnviz=layer['nviz'],
-                                       lvdigit=layer['vdigit'],                                       
+                                       lvdigit=layer['vdigit'],
                                        loadWorkspace=True)
 
             if 'selected' in layer:
@@ -1739,7 +1754,8 @@ class GMFrame(wx.Frame):
         """Close all open map display windows
         """
         for display in self.GetMapDisplay(onlyCurrent=False):
-            display.OnCloseWindow(event)
+            display.CleanUp()
+            display.Destroy()
 
     def OnRenderAllMapDisplays(self, event=None):
         for display in self.GetAllMapDisplays():
@@ -2113,6 +2129,7 @@ class GMFrame(wx.Frame):
             self._onMapDisplayStarting3dMode(mapDisplayPage))
         mapdisplay.starting3dMode.connect(self.AddNvizTools)
         mapdisplay.ending3dMode.connect(self.RemoveNvizTools)
+        mapdisplay.closingDisplay.connect(self._closePageNoEvent)
 
         # use default window layout
         if UserSettings.Get(
@@ -2583,6 +2600,7 @@ class GMFrame(wx.Frame):
 
         self.OnDisplayCloseAll()
 
+        self.notebookLayers.Unbind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING)
         self.notebookLayers.DeleteAllPages()
         self._auimgr.UnInit()
         self.Destroy()

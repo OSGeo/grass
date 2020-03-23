@@ -28,8 +28,10 @@ from wx.lib.mixins.listctrl import CheckListCtrlMixin, ColumnSorterMixin, \
     ListCtrlAutoWidthMixin, TextEditMixin
 
 from core import globalvar
-from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl, ListCtrl, \
-    BitmapFromImage
+from gui_core.wrap import (
+    BitmapFromImage, Button, ComboBox, ListCtrl, Panel, StaticBox,
+    StaticText, TextCtrl,
+)
 
 if sys.version_info.major >= 3:
     basestring = str
@@ -555,7 +557,7 @@ class EditItem(wx.Dialog):
         wx.Dialog.__init__(self, parent, id, title=_(title), style=style)
 
         self.parent = parent
-        panel = wx.Panel(parent=self)
+        panel = Panel(parent=self)
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         box = StaticBox(parent=panel, id=wx.ID_ANY,
@@ -575,10 +577,10 @@ class EditItem(wx.Dialog):
 
             # Select
             if type(cell[2]).__name__ == "list":
-                self.fields.append(wx.ComboBox(parent=panel, id=wx.ID_ANY,
-                                               choices=cell[2],
-                                               style=wx.CB_READONLY,
-                                               size=(110, -1)))
+                self.fields.append(ComboBox(parent=panel, id=wx.ID_ANY,
+                                            choices=cell[2],
+                                            style=wx.CB_READONLY,
+                                            size=(110, -1)))
             # Text field
             else:
                 if cell[2] == float:

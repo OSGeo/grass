@@ -39,7 +39,6 @@ from mapdisp.frame import MapFrame
 from core.render import Map
 from wxplot.histogram import HistogramPlotFrame
 from core.utils import GetLayerNameFromCmd, ltype2command
-from wxplot.profile import ProfileFrame
 from core.debug import Debug
 from core.settings import UserSettings, GetDisplayVectSettings
 from vdigit.main import haveVDigit
@@ -550,8 +549,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     wx.EVT_MENU,
                     self.OnSetCompRegFromMap,
                     id=self.popupID['region'])
-                
-                # raster align 
+
+                # raster align
                 if ltype and ltype == "raster" and len(selected) == 1:
                     item = wx.MenuItem(
                         self.popupMenu,
@@ -1127,7 +1126,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                              "raster map. No map name defined."))
             return
 
-        win = HistogramPlotFrame(parent=self, rasterList=rasterList)
+        win = HistogramPlotFrame(parent=self, giface=self._giface, rasterList=rasterList)
         win.CentreOnScreen()
         win.Show()
 
@@ -1369,10 +1368,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                         text='', ct_type=1, wnd=ctrl)
         else:
             if selectedLayer and selectedLayer != self.GetRootItem():
-                if selectedLayer and self.GetLayerInfo(selectedLayer, key='type') == 'group' \
-                        and self.IsExpanded(selectedLayer):
-                    # add to group (first child of self.layer_selected) if group
-                    # expanded
+                if selectedLayer and self.GetLayerInfo(selectedLayer, key='type') == 'group':
+                    # add to group (first child of self.layer_selected)
                     layer = self.PrependItem(parent=selectedLayer,
                                              text='', ct_type=1, wnd=ctrl)
                 else:
@@ -1654,8 +1651,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                             digitToolbar
                             and digitToolbar.GetLayer() !=
                             mapLayer):
-                        # ignore when map layer is edited
-                        self.Map.ChangeLayerActive(mapLayer, checked)
+                        # layer is maplayer type
+                        if mapLayer:
+                            # ignore when map layer is edited
+                            self.Map.ChangeLayerActive(mapLayer, checked)
                         self.lmgr.WorkspaceChanged()
                     child = self.GetNextSibling(child)
             else:
@@ -2039,15 +2038,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     if mapLayer.type == 'raster':
                         if mapWin.IsLoaded(layer):
                             mapWin.UnloadRaster(layer)
-    
+
                         mapWin.LoadRaster(layer)
-    
+
                     elif mapLayer.type == 'raster_3d':
                         if mapWin.IsLoaded(layer):
                             mapWin.UnloadRaster3d(layer)
-    
+
                         mapWin.LoadRaster3d(layer)
-    
+
                     elif mapLayer.type == 'vector':
                         if mapWin.IsLoaded(layer):
                             mapWin.UnloadVector(layer)
@@ -2056,7 +2055,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                             mapWin.LoadVector(layer, points=True)
                         if (vInfo['lines'] + vInfo['boundaries']) > 0:
                             mapWin.LoadVector(layer, points=False)
-    
+
                     # reset view when first layer loaded
                     nlayers = len(
                         mapWin.Map.GetListOfLayers(

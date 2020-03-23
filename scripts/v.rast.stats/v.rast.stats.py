@@ -235,7 +235,7 @@ def main():
             basecols[percindex] = perccol
 
         # dictionary with name of methods and position in "r.univar -gt"  output
-        variables = {'number': 2, 'null_cells': 2, 'minimum': 4, 'maximum': 5, 'range': 6,
+        variables = {'number': 2, 'null_cells': 3, 'minimum': 4, 'maximum': 5, 'range': 6,
                      'average': 7, 'stddev': 9, 'variance': 10, 'coeff_var': 11,
                      'sum': 12, 'first_quartile': 14, 'median': 15,
                      'third_quartile': 16, perccol: 17}

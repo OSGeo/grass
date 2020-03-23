@@ -36,15 +36,9 @@ import wx
 from wx.lib.mixins.listctrl import CheckListCtrlMixin, ColumnSorterMixin, ListCtrlAutoWidthMixin
 import wx.lib.colourselect as csel
 
-from core import globalvar
-if globalvar.wxPythonPhoenix:
-    from wx.adv import Wizard as wiz
-else:
-    import wx.wizard as wiz
-
 import grass.script as grass
 
-from core import utils
+from core import utils, globalvar
 from core.render import Map
 from gui_core.gselect import Select, LocationSelect, MapsetSelect
 from gui_core.dialogs import GroupDialog

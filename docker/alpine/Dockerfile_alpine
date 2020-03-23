@@ -1,4 +1,5 @@
-FROM alpine:edge as common
+FROM mundialis/docker-pdal:1.8.0 as pdal
+FROM alpine:3.11 as common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -15,6 +16,7 @@ ENV PACKAGES="\
       bison \
       bzip2 \
       cairo \
+      curl \
       fftw \
       flex \
       freetype \
@@ -22,16 +24,17 @@ ENV PACKAGES="\
       gettext \
       geos \
       gnutls \
-      laszip \
+      jsoncpp \
       libbz2 \
+      libexecinfo \
       libjpeg-turbo \
       libpng \
+      libunwind \
       musl \
       musl-utils \
       ncurses \
       openjpeg \
       openblas \
-      # pdal \
       py3-numpy \
       py3-pillow \
       py3-six \
@@ -45,7 +48,6 @@ ENV PACKAGES="\
       zstd \
       zstd-libs \
     "
-
 # ====================
 # INSTALL DEPENDENCIES
 # ====================
@@ -66,10 +68,15 @@ RUN echo "Install Python";\
 # Add the packages
 RUN echo "Install main packages";\
     apk update; \
-    apk add --no-cache \
-            --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
-            --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
-            $PACKAGES
+    apk add --no-cache $PACKAGES
+
+COPY --from=pdal /usr/bin/pdal* /usr/bin/
+COPY --from=pdal /usr/lib/pdal /usr/lib/pdal
+COPY --from=pdal /usr/lib/libpdal* /usr/lib/
+COPY --from=pdal /usr/lib/pkgconfig/pdal.pc /usr/lib/pkgconfig/pdal.pc
+COPY --from=pdal /usr/include/pdal /usr/include/pdal
+COPY --from=pdal /usr/local/lib/liblaszip* /usr/local/lib/
+COPY --from=pdal /usr/local/include/laszip /usr/local/include/laszip
 
 
 FROM common as build
@@ -125,14 +132,12 @@ ENV GRASS_BUILD_PACKAGES="\
       gdal-dev \
       geos-dev \
       gnutls-dev \
-      laszip-dev \
       libc6-compat \
       libjpeg-turbo-dev \
       libpng-dev \
       make \
       openjpeg-dev \
       openblas-dev \
-      # pdal-dev \
       postgresql-dev \
       proj-dev \
       python3-dev \
@@ -150,24 +155,12 @@ ENV GRASS_BUILD_PACKAGES="\
 # Add the packages
 RUN echo "Install main packages";\
     # Add packages just for the GRASS build process
-    apk add --no-cache \
-            --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
-            --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
-            --virtual .build-deps $GRASS_BUILD_PACKAGES
+    apk add --no-cache --virtual .build-deps $GRASS_BUILD_PACKAGES
     # echo LANG="en_US.UTF-8" > /etc/default/locale;
 
 # Copy and install GRASS GIS
 COPY . /src/grass_build/
 WORKDIR /src/grass_build/
-
-# Python 3.8.1 patch and PDAL
-RUN apk add curl
-RUN curl -L https://github.com/mmacata/alpine-python381-patch/releases/download/3.8.1-r3/python3-dev-3.8.1-r3.apk > /src/python3-dev-3.8.1-r3.apk
-RUN apk add --allow-untrusted /src/python3-dev-3.8.1-r3.apk
-RUN curl -L https://github.com/mmacata/alpine-pdal/releases/download/2.0.1-r5/pdal-dev-2.0.1-r5.apk > /src/pdal-dev-2.0.1-r5.apk
-RUN curl -L https://github.com/mmacata/alpine-pdal/releases/download/2.0.1-r5/pdal-2.0.1-r5.apk > /src/pdal-2.0.1-r5.apk
-RUN apk add --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing nitro cpd-dev libgeotiff-dev hdf5-dev
-RUN apk add --allow-untrusted /src/pdal-dev-2.0.1-r5.apk /src/pdal-2.0.1-r5.apk
 
 # Configure compile and install GRASS GIS
 RUN echo "  => Configure and compile grass" && \
@@ -194,14 +187,6 @@ FROM common as grass
 
 ENV LC_ALL="en_US.UTF-8"
 
-# Python 3.8.1 patch and PDAL again
-RUN apk add curl
-RUN curl -L https://github.com/mmacata/alpine-python381-patch/releases/download/3.8.1-r3/python3-3.8.1-r3.apk > /src/python3-3.8.1-r3.apk
-RUN apk add --allow-untrusted /src/python3-3.8.1-r3.apk
-RUN curl -L https://github.com/mmacata/alpine-pdal/releases/download/2.0.1-r5/pdal-2.0.1-r5.apk > /src/pdal-2.0.1-r5.apk
-RUN apk add --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing nitro cpd-dev libgeotiff-dev hdf5-dev
-RUN apk add --allow-untrusted /src/pdal-2.0.1-r5.apk
-
 # Copy GRASS GIS from build image
 COPY --from=build /usr/local/bin/grass /usr/local/bin/grass
 COPY --from=build /usr/local/grass* /usr/local/grass/
@@ -217,15 +202,16 @@ RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
 
 FROM grass as test
 
-WORKDIR /tmp
-COPY docker/testdata/simple.laz .
-WORKDIR /scripts
-COPY docker/testdata/test_grass_session.py .
-## just scan the LAZ file
-# TODO: fix test
-#RUN /usr/bin/python3 /scripts/test_grass_session.py
-# Test addon installation
 RUN apk add make gcc
+
+## run simple LAZ test
+COPY docker/testdata/simple.laz /tmp/simple.laz
+COPY docker/testdata/test_grass_session.py /scripts/test_grass_session.py
+ENV GRASSBIN=grass
+RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.in.pdal
+RUN /usr/bin/python3 /scripts/test_grass_session.py
+
+# Test addon installation
 RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.learn.ml
 
 
@@ -236,7 +222,6 @@ FROM grass as final
 ENV GRASSBIN="/usr/local/bin/grass" \
     GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     SHELL="/bin/bash"
-
 
 # show installed version
 RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \

@@ -103,6 +103,12 @@ class MapFrame(SingleMapFrame):
         # Emitted when ending (switching from) 3D mode.
         self.ending3dMode = Signal("MapFrame.ending3dMode")
 
+        # Emitted when closing display by closing its window.
+        self.closingDisplay = Signal("MapFrame.closingDisplay")
+
+        # Emitted when closing display by closing its window.
+        self.closingVNETDialog = Signal("MapFrame.closingVNETDialog")
+
         # properties are shared in other objects, so defining here
         self.mapWindowProperties = MapWindowProperties()
         self.mapWindowProperties.setValuesFromUserSettings()
@@ -741,7 +747,7 @@ class MapFrame(SingleMapFrame):
                 self._giface.WriteError(_('Failed to run d.to.rast:\n') + messages)
                 grass.try_remove(pngFile)
                 return
-    
+
             # alignExtent changes only region variable
             oldRegion = self.GetMap().GetCurrentRegion().copy()
             self.GetMap().AlignExtentFromDisplay()
@@ -774,7 +780,7 @@ class MapFrame(SingleMapFrame):
         pngFile = grass.tempfile(create=False) + '.png'
         dOutFileCmd = ['d.out.file', 'output=' + pngFile, 'format=png']
         self.DOutFile(dOutFileCmd, callback=_DToRastDone)
-        
+
 
 
     def DToRastOptData(self, dcmd, layer, params, propwin):
@@ -826,14 +832,11 @@ class MapFrame(SingleMapFrame):
         self.PopupMenu(printmenu)
         printmenu.Destroy()
 
-    def OnCloseWindow(self, event):
-        """Window closed.
-        Also close associated layer tree page
-        """
-        Debug.msg(2, "MapFrame.OnCloseWindow(): function starts")
-        pgnum = None
+    def CleanUp(self):
+        """Clean up before closing map display.
+        End digitizer/nviz."""
+        Debug.msg(2, "MapFrame.CleanUp()")
         self.Map.Clean()
-
         # close edited map and 3D tools properly
         if self.GetToolbar('vdigit'):
             maplayer = self.toolbars['vdigit'].GetLayer()
@@ -843,15 +846,25 @@ class MapFrame(SingleMapFrame):
             self.RemoveNviz()
         if hasattr(self, 'rdigit') and self.rdigit:
             self.rdigit.CleanUp()
+        if self.dialogs['vnet']:
+            self.closingVNETDialog.emit()
+        self._mgr.UnInit()
 
-        if not self._layerManager:
+    def OnCloseWindow(self, event):
+        """Window closed.
+        Also close associated layer tree page
+        """
+        Debug.msg(2, "MapFrame.OnCloseWindow()")
+        if self._layerManager:
+            if self._layerManager.CanClosePage():
+                self.CleanUp()
+                pgnum = self.layerbook.GetPageIndex(self.page)
+                if pgnum > -1:
+                    self.closingDisplay.emit(page_index=pgnum)
+                    # Destroy is called when notebook page is deleted
+        else:
+            self.CleanUp()
             self.Destroy()
-        elif self.page:
-            pgnum = self.layerbook.GetPageIndex(self.page)
-            if pgnum > -1:
-                self._mgr.UnInit()
-                self.layerbook.DeletePage(pgnum)
-        Debug.msg(2, "MapFrame.OnCloseWindow(): function ends")
 
     def Query(self, x, y):
         """Query selected layers.
@@ -1136,7 +1149,7 @@ class MapFrame(SingleMapFrame):
 
         self.profileController = ProfileController(
             self._giface, mapWindow=self.GetMapWindow())
-        win = ProfileFrame(parent=self, rasterList=rasters,
+        win = ProfileFrame(parent=self, giface=self._giface, rasterList=rasters,
                            units=self.Map.projinfo['units'],
                            controller=self.profileController)
         win.Show()
@@ -1154,7 +1167,8 @@ class MapFrame(SingleMapFrame):
                 raster.append(layer.maplayer.GetName())
 
         from wxplot.histogram import HistogramPlotFrame
-        win = HistogramPlotFrame(parent=self, rasterList=raster)
+        win = HistogramPlotFrame(parent=self, giface=self._giface,
+                                 rasterList=raster)
         win.CentreOnParent()
         win.Show()
 
@@ -1168,7 +1182,7 @@ class MapFrame(SingleMapFrame):
                 raster.append(layer.maplayer.GetName())
 
         from wxplot.scatter import ScatterFrame
-        win = ScatterFrame(parent=self, rasterList=raster)
+        win = ScatterFrame(parent=self, giface=self._giface, rasterList=raster)
 
         win.CentreOnParent()
         win.Show()
@@ -1475,6 +1489,7 @@ class MapFrame(SingleMapFrame):
 
         from vnet.dialogs import VNETDialog
         self.dialogs['vnet'] = VNETDialog(parent=self, giface=self._giface)
+        self.closingVNETDialog.connect(self.dialogs['vnet'].OnCloseDialog)
         self.dialogs['vnet'].CenterOnScreen()
         self.dialogs['vnet'].Show()
 

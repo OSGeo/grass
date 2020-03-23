@@ -694,7 +694,7 @@ class VNETAnalysisParameters:
                 vectMaps = grass.list_grouped('vector')[mapSet]
 
         if not params["input"] or mapName not in vectMaps:
-            invParams = params.keys()[:]
+            invParams = list(params.keys())[:]
             return invParams
 
         # check arc/node layer
@@ -1270,7 +1270,7 @@ class History:
                     removedHistStep = removedHistData[line] = {}
                     continue
                 else:
-                    newHist.write('%s%s%s' % (os.linesep, line, os.linesep))
+                    newHist.write('%s%s%s' % ('\n', line, '\n'))
                     self.histStepsNum = newHistStepsNum
             else:
                 if newHistStepsNum >= self.maxHistSteps:
@@ -1282,7 +1282,7 @@ class History:
 
     def _saveNewHistStep(self, newHist):
         """Save buffer (new step) data into file"""
-        newHist.write('%s%s%s' % (os.linesep, "history step=0", os.linesep))
+        newHist.write('%s%s%s' % ('\n', "history step=0", '\n'))
         for key in list(self.newHistStepData.keys()):
             subkeys = list(self.newHistStepData[key].keys())
             newHist.write('%s%s' % (key, self.sep))
@@ -1290,7 +1290,7 @@ class History:
                 value = self.newHistStepData[key][subkeys[idx]]
                 if isinstance(value, dict):
                     if idx > 0:
-                        newHist.write('%s%s%s' % (os.linesep, key, self.sep))
+                        newHist.write('%s%s%s' % ('\n', key, self.sep))
                     newHist.write('%s%s' % (subkeys[idx], self.sep))
                     kvalues = list(self.newHistStepData[key][subkeys[idx]].keys())
                     srange = range(len(kvalues))
@@ -1308,7 +1308,7 @@ class History:
                     if idx > 0 and isinstance(
                             self.newHistStepData[key][subkeys[idx - 1]],
                             dict):
-                        newHist.write('%s%s%s' % (os.linesep, key, self.sep))
+                        newHist.write('%s%s%s' % ('\n', key, self.sep))
                     value = self._parseValue(
                         self.newHistStepData[key][subkeys[idx]])
                     newHist.write('%s%s%s' % (subkeys[idx], self.sep, value))
@@ -1316,7 +1316,7 @@ class History:
                             self.newHistStepData[key][subkeys[idx + 1]],
                             dict):
                         newHist.write('%s' % self.sep)
-            newHist.write(os.linesep)
+            newHist.write('\n')
         self.histStepsNum = 0
 
     def _parseValue(self, value, read=False):

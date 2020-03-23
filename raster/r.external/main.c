@@ -244,6 +244,7 @@ int main(int argc, char *argv[])
 
 	query_band(hBand, output2, &cellhd, &info);
 	create_map(input, band, output2, &cellhd, &info, title, flip);
+        transfer_colormap(hBand, output2);
 
 	G_free(output2);
 	G_free(title2);

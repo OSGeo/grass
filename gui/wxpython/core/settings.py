@@ -24,6 +24,7 @@ from __future__ import print_function
 import os
 import sys
 import copy
+import wx
 
 from core import globalvar
 from core.gcmd import GException, GError
@@ -496,6 +497,10 @@ class Settings:
                     'titleSize': 12,
                     'axisSize': 11,
                     'legendSize': 10,
+                    'defaultSize': 11,
+                    'family': wx.FONTFAMILY_SWISS,
+                    'style': wx.FONTSTYLE_NORMAL,
+                    'weight': wx.FONTWEIGHT_NORMAL,
                 },
                 'marker': {
                     'color': (0, 0, 0, 255),
@@ -535,6 +540,10 @@ class Settings:
                     'titleSize': 12,
                     'axisSize': 11,
                     'legendSize': 10,
+                    'defaultSize': 11,
+                    'family': wx.FONTFAMILY_SWISS,
+                    'style': wx.FONTSTYLE_NORMAL,
+                    'weight': wx.FONTWEIGHT_NORMAL,
                 },
                 'grid': {
                     'color': (200, 200, 200, 255),
@@ -576,6 +585,10 @@ class Settings:
                     'titleSize': 12,
                     'axisSize': 11,
                     'legendSize': 10,
+                    'defaultSize': 11,
+                    'family': wx.FONTFAMILY_SWISS,
+                    'style': wx.FONTSTYLE_NORMAL,
+                    'weight': wx.FONTWEIGHT_NORMAL,
                 },
                 'grid': {
                     'color': (200, 200, 200, 255),
@@ -1029,6 +1042,7 @@ class Settings:
                 return
 
         try:
+            newline = '\n'
             file = open(self.filePath, "w")
             for group in list(settings.keys()):
                 for key in list(settings[group].keys()):
@@ -1040,7 +1054,7 @@ class Settings:
                             if idx > 0:
                                 file.write(
                                     '%s%s%s%s%s' %
-                                    (os.linesep, group, self.sep, key, self.sep))
+                                    (newline, group, self.sep, key, self.sep))
                             file.write('%s%s' % (subkeys[idx], self.sep))
                             kvalues = list(settings[group][key][subkeys[idx]].keys())
                             srange = range(len(kvalues))
@@ -1059,7 +1073,7 @@ class Settings:
                                     dict):
                                 file.write(
                                     '%s%s%s%s%s' %
-                                    (os.linesep, group, self.sep, key, self.sep))
+                                    (newline, group, self.sep, key, self.sep))
                             value = self._parseValue(
                                 settings[group][key][subkeys[idx]])
                             file.write(
@@ -1069,7 +1083,7 @@ class Settings:
                                     settings[group][key][subkeys[idx + 1]],
                                     dict):
                                 file.write('%s' % self.sep)
-                    file.write(os.linesep)
+                    file.write(newline)
         except IOError as e:
             raise GException(e)
         except Exception as e:

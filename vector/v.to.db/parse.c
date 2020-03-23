@@ -168,7 +168,7 @@ int parse_command_line(int argc, char *argv[])
     options.col[2] = NULL;
     options.col[3] = NULL;
     while (parms.col->answers && parms.col->answers[ncols]) {
-	options.col[ncols] = G_store(parms.col->answers[ncols]);
+	options.col[ncols] = G_store(G_chop(parms.col->answers[ncols]));
 	ncols++;
     }
 
