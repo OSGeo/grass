@@ -1090,9 +1090,7 @@ class VectorColorTable(ColorTable):
         # additional bindings for vector color management
         self.Bind(wx.EVT_COMBOBOX, self.OnLayerSelection, self.layerSelect)
 
-        self.sourceColumn.Bind(wx.EVT_TEXT, self.OnSourceColumnSelection)
-        self.fromColumn.Bind(wx.EVT_TEXT, self.OnFromColSelection)
-        self.toColumn.Bind(wx.EVT_TEXT, self.OnToColSelection)
+        self._columnWidgetEvtHandler()
         self.Bind(wx.EVT_BUTTON, self.OnAddColumn, self.addColumn)
 
         self._initLayer()
@@ -1396,8 +1394,8 @@ class VectorColorTable(ColorTable):
             self.useColumn.SetValue(False)
             self.OnCheckColumn(event=None)
             self.useColumn.Enable(self.CheckMapset())
-
-        self.LoadTable()
+        else:
+            self.LoadTable()
 
         self.btnPreview.Enable(enable)
         self.btnOK.Enable(enable)
@@ -1447,6 +1445,7 @@ class VectorColorTable(ColorTable):
     def OnLayerSelection(self, event):
         # reset choices in column selection comboboxes if layer changes
         vlayer = int(self.layerSelect.GetStringSelection())
+        self._columnWidgetEvtHandler(bind=False)
         self.sourceColumn.InsertColumns(
             vector=self.inmap, layer=vlayer,
             type=['integer', 'double precision'],
@@ -1484,6 +1483,8 @@ class VectorColorTable(ColorTable):
         else:
             self.properties['loadColumn'] = ''
             self.properties['storeColumn'] = ''
+
+        self._columnWidgetEvtHandler()
 
         if event:
             self.LoadTable()
@@ -1866,6 +1867,33 @@ class VectorColorTable(ColorTable):
             self.UseAttrColumn(True)
 
         return ColorTable._apply(self, updatePreview)
+
+    def _columnWidgetEvtHandler(self, bind=True):
+        """Bind/Unbind Column widgets handlers"""
+        widgets = [
+            {
+                'widget': self.sourceColumn,
+                'event': wx.EVT_TEXT,
+                'handler': self.OnSourceColumnSelection,
+            },
+            {
+                'widget': self.fromColumn,
+                'event': wx.EVT_TEXT,
+                'handler': self.OnFromColSelection,
+            },
+            {
+                'widget': self.toColumn,
+                'event': wx.EVT_TEXT,
+                'handler': self.OnToColSelection,
+            },
+        ]
+        for widget in widgets:
+            if bind is True:
+                getattr(widget['widget'], 'Bind')(
+                    widget['event'], widget['handler'],
+                )
+            else:
+                getattr(widget['widget'], 'Unbind')(widget['event'])
 
 
 class ThematicVectorTable(VectorColorTable):
