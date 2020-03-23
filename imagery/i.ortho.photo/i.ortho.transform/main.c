@@ -16,6 +16,7 @@
  *
  *****************************************************************************/
 
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -54,6 +55,72 @@ static struct Ortho_Control_Points *points;
 
 static int count;
 static struct Stats fwd, rev;
+
+/* target fns taken from i.ortho.rectify */
+static int which_env = -1;	/* 0 = cur, 1 = target */
+
+int select_current_env(void)
+{
+    if (which_env < 0) {
+	G_create_alt_env();
+	which_env = 0;
+    }
+    if (which_env != 0) {
+	G_switch_env();
+	which_env = 0;
+    }
+
+    return 0;
+}
+
+int select_target_env(void)
+{
+    if (which_env < 0) {
+	G_create_alt_env();
+	which_env = 1;
+    }
+    if (which_env != 1) {
+	G_switch_env();
+	which_env = 1;
+    }
+
+    return 0;
+}
+
+static int get_target(void)
+{
+    char location[GMAPSET_MAX];
+    char mapset[GMAPSET_MAX];
+    char buf[1024];
+    int stat;
+
+    if (!I_get_target(group.name, location, mapset)) {
+	sprintf(buf, _("Target information for group <%s> missing"), group.name);
+	goto error;
+    }
+
+    sprintf(buf, "%s/%s", G_gisdbase(), location);
+    if (access(buf, 0) != 0) {
+	sprintf(buf, _("Target location <%s> not found"), location);
+	goto error;
+    }
+    select_target_env();
+    G_setenv_nogisrc("LOCATION_NAME", location);
+    stat = G_mapset_permissions(mapset);
+    if (stat > 0) {
+	G_setenv_nogisrc("MAPSET", mapset);
+	select_current_env();
+	return 1;
+    }
+    sprintf(buf, _("Mapset <%s> in target location <%s> - "), mapset, location);
+    strcat(buf, stat == 0 ? _("permission denied") : _("not found"));
+  error:
+    strcat(buf, "\n");
+    strcat(buf, _("Please run i.target for group "));
+    strcat(buf, group.name);
+    G_fatal_error("%s", buf);
+    return 1;			/* never reached */
+}
 
 static void update_max(struct Max *m, int n, double k)
 {
@@ -375,13 +442,13 @@ static void do_pt_xforms(void)
     	fclose(fp);
 }
 
-
 int main(int argc, char **argv)
 {
     struct Option *grp, *fmt, *xfm_pts;
-    struct Flag *sum, *rev_flag, *dump_flag;
+    struct Flag *sum, *rev_flag, *dump_flag, *pan_flag;
     struct GModule *module;
     char *desc;
+    char *camera;
 
     G_gisinit(argv[0]);
 
@@ -438,6 +505,10 @@ int main(int argc, char **argv)
     dump_flag->key = 'x';
     dump_flag->description = _("Display transform matrix coefficients");
 
+    pan_flag = G_define_flag();
+    pan_flag->key = 'p';
+    pan_flag->description = _("Enable panorama camera correction");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -450,20 +521,44 @@ int main(int argc, char **argv)
     forward = !rev_flag->answer;
     coord_file = xfm_pts->answer;
 
+    if (pan_flag->answer)
+	I_ortho_panorama();
+
     if (!I_get_ref_points(group.name, &group.photo_points)) {
 	G_fatal_error(_("Can not read reference points for group <%s>"),
 	              group.name);
     }
     if (!I_get_con_points(group.name, &group.control_points)) {
-	G_fatal_error(_("Can not read control points for group <%s>"),
-	              group.name);
+	group.control_points.count = 0;
     }
+    
+    camera = (char *)G_malloc(GNAME_MAX * sizeof(char));
+    if (!I_get_group_camera(group.name, camera))
+	G_fatal_error(_("No camera reference file selected for group <%s>"),
+		      group.name);
+
+    if (!I_get_cam_info(camera, &group.camera_ref))
+	G_fatal_error(_("Bad format in camera file for group <%s>"),
+		      group.name);
+
+    /* get initial camera exposure station, if any */
+    if (I_find_initial(group.name)) {
+	if (!I_get_init_info(group.name, &group.camera_exp))
+	    G_warning(_("Bad format in initial exposure station file for group <%s>"),
+		      group.name);
+    }
+
+    /* get the target */
+    get_target();
     
     points = &group.control_points;
 
     parse_format();
 
+    /* I_compute_ortho_equations() must be run in the target location */
+    select_target_env();
     compute_transformation();
+    select_current_env();
 
     analyze();
 

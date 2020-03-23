@@ -44,6 +44,15 @@ FILE *debug;
 char msg[120];
 #endif
 
+static int panorama = 0;
+static double ellps_a = 0;
+
+/* enable panorama camera correction, 
+ * e.g. for CORONA KH-4A/B */
+void I_ortho_panorama(void)
+{
+    panorama = 1;
+}
 
 /* Compute the ortho rectification parameters */
 /* Camera position: XC, YC, ZC */
@@ -65,10 +74,15 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
     double Q1;
     double kappa1, kappa2, XC_var, YC_var, ZC_var;
     double omega_var, phi_var, kappa_var;
-    int i, iter, n;
+    int i, iter, max_iters, n;
     int first, active;
+    double e_a, e2;
 
     Q1 = (double)1.0;
+    
+    if (!G_get_ellipsoid_parameters(&e_a, &e2))
+	G_fatal_error(_("No ellpsoid parameters available"));
+    ellps_a = e_a;
 
     /* DEBUG */
 #ifdef DEBUG
@@ -79,17 +93,14 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
     }
 #endif
 
-    /*  Need at least 4 active control points */
+    /*  Need at least 4 active control points, 
+     *  or user-provided camera position */
     active = 0;
-    for (i = 0; i < cpz->count; i++) {
-	if (cpz->status[i] > 0)
-	    active++;
-    }
-    if (active < 4) {
-#ifdef DEBUG
-	fclose(debug);
-#endif
-	return (-1);
+    if (cpz) {
+	for (i = 0; i < cpz->count; i++) {
+	    if (cpz->status[i] > 0)
+		active++;
+	}
     }
 
     /*  Initialize (and zero out) all matrices needed */
@@ -169,6 +180,7 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
      * - init_info->status allows for disactivation of defined values 
      */
     if ((init_info != NULL) && (init_info->status == 1)) {
+	G_verbose_message("Using provided values for XC,YC,ZC,omega,phi,kappa");
 	/* Have initial values */
 	*XC = init_info->XC_init;
 	*YC = init_info->YC_init;
@@ -185,10 +197,11 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 	WT1.x[4][4] = (Q1 / (init_info->phi_var * init_info->phi_var));
 	WT1.x[5][5] = (Q1 / (init_info->kappa_var * init_info->kappa_var));
     }
-    else {  /* set from mean values of active control points */
+    else if (active >= 4) {  /* set from mean values of active control points */
 	double dist_grnd, dist_photo;
 	double meanx, meany, meanX, meanY, meanZ;
 	
+	G_verbose_message("Estimating values for XC,YC,ZC,omega,phi,kappa");
 	/* set initial XC and YC from mean values of control points */
 	meanx = meany = meanX = meanY = meanZ = 0;
 	x = y = X = Y = 0;
@@ -263,9 +276,18 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 	WT1.x[4][4] = (Q1 / (phi_var * phi_var));
 	WT1.x[5][5] = (Q1 / (kappa_var * kappa_var));
     }
-    G_debug(1, "INITIAL CAMERA POSITION:");
-    G_debug(1, "XC: %.2f, YC: %.2f, ZC: %.2f", *XC, *YC, *ZC);
-    G_debug(1, "Omega %.2f, Phi %.2f, Kappa: %.2f", *Omega, *Phi, *Kappa);
+    else {
+	G_warning(_("Camera postion not available"));
+#ifdef DEBUG
+	fclose(debug);
+#endif
+	return (0);
+    }
+
+    G_verbose_message("INITIAL CAMERA POSITION:");
+    G_verbose_message("XC: %.2f, YC: %.2f, ZC: %.2f", *XC, *YC, *ZC);
+    G_verbose_message("Omega %.2f, Phi %.2f, Kappa: %.2f",
+                      *Omega * 180. / M_PI, *Phi * 180. / M_PI, *Kappa * 180. / M_PI);
 
 #ifdef DEBUG
     fprintf(debug, "\nINITIAL CAMERA POSITION:\n");
@@ -282,10 +304,15 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
     epsilon.x[4][0] = *Phi;
     epsilon.x[5][0] = *Kappa;
 
+    /* adjust camera position only if enough control points are available */
+    max_iters = MAX_ITERS;
+    if (active < 4)
+	max_iters = -1;
+
 /************************** Start Iterations *****************************/
     /* itererate until convergence */
 
-    for (iter = 0; iter <= MAX_ITERS; iter++) {
+    for (iter = 0; iter < max_iters; iter++) {
 	/*  break if converged */
 	dx = delta.x[0][0];
 	dy = delta.x[1][0];
@@ -328,6 +355,7 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 
 	/* see  WOLF 1983, Appendix, p. 591 */
 
+	/* ground -> photo */
 	M.x[0][0] = (cp * ck);
 	M.x[0][1] = (cw * sk) + (sw * sp * ck);
 	M.x[0][2] = (sw * sk) - (cw * sp * ck);
@@ -364,6 +392,12 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 	    X = cpz->e2[i];
 	    Y = cpz->n2[i];
 	    Z = cpz->z2[i];
+	    
+	    /* adjust for earth curvature */
+	    dx = X - *XC;
+	    dy = Y - *YC;
+	    dd = (dx * dx) + (dy * dy);
+	    Z -= dd / (2.0 * ellps_a);
 
 #ifdef DEBUG
 	    fprintf(debug,
@@ -389,6 +423,31 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 	    V = UVW.x[1][0];
 	    W = UVW.x[2][0];
 
+	    /* panorama correction
+	     * in theory either for U, V or for xbar, ybar
+	     * U, V is recommended because U, V are only used
+	     * for the residuals
+	     * correcting U, V also gives a slightly smaller RMSE */
+	    if (panorama) {
+		double a, epan;
+		
+		epan = U;
+		if (epan < 0) {
+		    a = atan2(-epan, -W);
+		    epan = -a * -W;
+		}
+		else {
+		    a = atan2(epan, -W);
+		    epan = a * -W;
+		}
+		U = epan;
+
+		V *= cos(a);
+
+		UVW.x[0][0] = U;
+		UVW.x[1][0] = V;
+	    }
+
 	    /* Form Partial derivatives of Normal Equations */
 	    xbar = x - Xp;
 	    ybar = y - Yp;
@@ -396,6 +455,7 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 	    B.x[0][0] = (-Q1 / W) * ((xbar * m31) + (CFL * m11));
 	    B.x[0][1] = (-Q1 / W) * ((xbar * m32) + (CFL * m12));
 	    B.x[0][2] = (-Q1 / W) * ((xbar * m33) + (CFL * m13));
+
 	    B.x[0][3] = (Q1 / W) *
 		((xbar * ((-m33 * mu) + (m32 * nu))) +
 		 (CFL * ((-m13 * mu) + (m12 * nu)))
@@ -412,6 +472,7 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 	    B.x[1][0] = (-Q1 / W) * ((ybar * m31) + (CFL * m21));
 	    B.x[1][1] = (-Q1 / W) * ((ybar * m32) + (CFL * m22));
 	    B.x[1][2] = (-Q1 / W) * ((ybar * m33) + (CFL * m23));
+
 	    B.x[1][3] = (Q1 / W) *
 		((ybar * ((-m33 * mu) + (m32 * nu))) +
 		 (CFL * ((-m23 * mu) + (m22 * nu)))
@@ -425,6 +486,7 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 	    B.x[1][5] = (Q1 / W) *
 		(CFL * ((-m11 * lam) + (-m12 * mu) + (-m13 * nu)));
 
+	    /* residuals of image coordinates */
 	    E.x[0][0] = (-Q1) * (xbar + (CFL * (U / W)));
 	    E.x[1][0] = (-Q1) * (ybar + (CFL * (V / W)));
 
@@ -463,13 +525,14 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 	/* Add weigth matrix of unknowns to NN */
 	m_add(&NN, &WT1, &NN);
 	/* Solve for delta */
+	
+	/* similar but not identical to solvemat in lib/imagery/georef.c */
 	if (!inverse(&NN, &N)) {	/* control point status becomes zero if matrix is non-invertable */
 	    error("Matrix Inversion (Control Points status modified)");
 	    for (i = 0; i < cpz->count; i++)
 		cpz->status[i] = 0;
 	    return (0);
 	}
-
 
 	/* delta = N-1 * CC */
 	m_mult(&N, &CC, &delta);
@@ -484,6 +547,7 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 #endif
 
     }  /* end ITERATION loop */
+    G_verbose_message("%d iterations to refine camera postion", iter);
 
     /* This is the solution */
     *XC = epsilon.x[0][0];
@@ -493,13 +557,16 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
     *Phi = epsilon.x[4][0];
     *Kappa = epsilon.x[5][0];
 
-    G_debug(1, "FINAL CAMERA POSITION:");
-    G_debug(1, "XC: %.2f, YC: %.2f, ZC: %.2f", *XC, *YC, *ZC);
-    G_debug(1, "Omega %.2f, Phi %.2f, Kappa: %.2f", *Omega, *Phi, *Kappa);
+    G_verbose_message("FINAL CAMERA POSITION:");
+    G_verbose_message("XC: %.2f, YC: %.2f, ZC: %.2f", *XC, *YC, *ZC);
+    G_verbose_message("Omega %.2f, Phi %.2f, Kappa: %.2f",
+                      *Omega * 180. / M_PI, *Phi * 180. / M_PI, *Kappa * 180. / M_PI);
+
     if (*ZC < 0)
 	G_warning(_("Potential BUG in ortholib: camera altitude < 0"));
 
     /*  Compute Orientation Matrix from Omega, Phi, Kappa */
+    /* ground -> photo */
     sw = sin(*Omega);
     cw = cos(*Omega);
     sp = sin(*Phi);
@@ -522,6 +589,7 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
     MO->x[2][2] = cw * cp;
 
     /* Compute Transposed Orientation Matrix from Omega, Phi, Kappa */
+    /* photo -> ground */
 
     MT->nrows = 3;
     MT->ncols = 3;
@@ -555,6 +623,7 @@ int I_ortho_ref(double e1, double n1, double z1,
     MATRIX UVW, XYZ;
     double U, V, W;
     double Xp, Yp, CFL;
+    double dx, dy, dd;
 
     /*  Initialize and zero the matrices */
     /*  Object Space Coordinates */
@@ -572,6 +641,12 @@ int I_ortho_ref(double e1, double n1, double z1,
     Yp = cam_info->Yp;
     CFL = cam_info->CFL;
 
+    /* adjust for earth curvature */
+    dx = e1 - XC;
+    dy = n1 - YC;
+    dd = (dx * dx) + (dy * dy);
+    z1 -= dd / (2.0 * ellps_a);
+
     /* Object Space (&XYZ, XC,YC,ZC, X,Y,Z); */
     XYZ.x[0][0] = e1 - XC;
     XYZ.x[1][0] = n1 - YC;
@@ -584,9 +659,29 @@ int I_ortho_ref(double e1, double n1, double z1,
     V = UVW.x[1][0];
     W = UVW.x[2][0];
 
+    /* panorama correction could also be done for e2, n2 below
+     * results are identical */
+    if (panorama) {
+	double a, epan;
+	
+	epan = U;
+	if (epan < 0) {
+	    a = atan2(-epan, -W);
+	    epan = -a * -W;
+	}
+	else {
+	    a = atan2(epan, -W);
+	    epan = a * -W;
+	}
+	U = epan;
+
+	V *= cos(a);
+    }
+
     /* This is the solution */
     *e2 = (-CFL) * (U / W);
     *n2 = (-CFL) * (V / W);
+
     return (1);
 }
 
@@ -622,6 +717,23 @@ int I_inverse_ortho_ref(double e1, double n1, double z1,
     UVW.x[0][0] = e1 - Xp;
     UVW.x[1][0] = n1 - Yp;
     UVW.x[2][0] = -CFL;
+    
+    if (panorama) {
+	double a, epan;
+	
+	epan = UVW.x[0][0];
+	if (epan < 0) {
+	    a = -epan / CFL;
+	    epan = -CFL * tan(a);
+	}
+	else {
+	    a = epan / CFL;
+	    epan = CFL * tan(a);
+	}
+	UVW.x[0][0] = epan;
+
+	UVW.x[1][0] /= cos(a);
+    }
 
     m_mult(&M, &UVW, &XYZ);
 
