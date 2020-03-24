@@ -313,7 +313,7 @@ class Model(object):
         try:
             gxmXml = ProcessModelFile(etree.parse(filename))
         except Exception as e:
-            raise GException(e)
+            raise GException('{}'.format(e))
 
         if self.canvas:
             win = self.canvas.parent
