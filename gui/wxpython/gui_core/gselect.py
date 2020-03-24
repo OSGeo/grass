@@ -1893,7 +1893,7 @@ class GdalSelect(wx.Panel):
         # data list: [type, dsn, format, options]
         if len(data) == 3:
             data.append('')
-        elif len < 3:
+        elif len(data) < 3:
             return
 
         self.source.SetSelection(self.sourceMap[data[0]])
