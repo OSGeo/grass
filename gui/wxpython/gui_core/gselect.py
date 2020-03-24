@@ -1656,23 +1656,25 @@ class GdalSelect(wx.Panel):
         self.SetSourceType(sourceType)
         self.source.SetSelection(self.sourceMap[sourceType])
 
-        dsn = os.path.expandvars(dsn)  # v.external.out uses $HOME
-        # fill in default values
-        if sourceType == 'dir':
-            self.dirWidgets['format'].SetStringSelection(format)
-            self.dirWidgets['browse'].SetValue(dsn)
-            self.dirWidgets['options'].SetValue(options)
-        elif sourceType == 'db':
-            self.dbWidgets['format'].SetStringSelection(format)
-            self.dbWidgets['options'].SetValue(options)
-            name = self._getCurrentDbWidgetName()
-            if name == 'choice':
-                if dsn in self.dbWidgets[name].GetItems():
-                    self.dbWidgets[name].SetStringSelection(dsn)
-                if 'topology' in data.keys():
-                    self.dbWidgets['featType'].SetSelection(1)
-            else:
-                self.dbWidgets[name].SetValue(dsn)
+        # v.external.out does not return dsn for the native format
+        if dsn:
+            dsn = os.path.expandvars(dsn)  # v.external.out uses $HOME
+            # fill in default values
+            if sourceType == 'dir':
+                self.dirWidgets['format'].SetStringSelection(format)
+                self.dirWidgets['browse'].SetValue(dsn)
+                self.dirWidgets['options'].SetValue(options)
+            elif sourceType == 'db':
+                self.dbWidgets['format'].SetStringSelection(format)
+                self.dbWidgets['options'].SetValue(options)
+                name = self._getCurrentDbWidgetName()
+                if name == 'choice':
+                    if dsn in self.dbWidgets[name].GetItems():
+                        self.dbWidgets[name].SetStringSelection(dsn)
+                    if 'topology' in data.keys():
+                        self.dbWidgets['featType'].SetSelection(1)
+                else:
+                    self.dbWidgets[name].SetValue(dsn)
 
     def _layout(self):
         """Layout"""
@@ -2747,7 +2749,7 @@ class SqlWhereSelect(wx.Panel):
             win.Show()
         except GException as e:
             GMessage(parent=self.parent, message='{}'.format(e))
-        
+
     def SetData(self, vector, layer):
         self.vector_map = vector
         self.vector_layer = int(layer) # TODO: support layer names
