@@ -722,7 +722,7 @@ class GdalOutputDialog(wx.Dialog):
         dialogSizer.Fit(self.panel)
 
         size = wx.Size(
-            globalvar.DIALOG_GSELECT_SIZE[0] + 225,
+            globalvar.DIALOG_GSELECT_SIZE[0] + 320,
             self.GetBestSize()[1] + 35)
         self.SetMinSize(size)
         self.SetSize((size.width, size.height))
