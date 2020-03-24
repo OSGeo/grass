@@ -1515,7 +1515,7 @@ class GdalSelect(wx.Panel):
         browse.GetChildren()[1].SetName('GdalSelectDataSource')
 
         self.dirWidgets['browse'] = browse
-        formatSelect = wx.Choice(parent=self.dirPanel, size=(300, -1))
+        formatSelect = wx.Choice(parent=self.dirPanel)
         self.dirWidgets['format'] = formatSelect
         fileFormats = GetFormats(writableOnly=dest)[fType]['file']
         formatSelect.SetItems(sorted(list(fileFormats)))
