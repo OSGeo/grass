@@ -313,7 +313,7 @@ class Model(object):
         try:
             gxmXml = ProcessModelFile(etree.parse(filename))
         except Exception as e:
-            raise GException(unicode(e))
+            raise GException(e)
 
         if self.canvas:
             win = self.canvas.parent
@@ -653,7 +653,7 @@ class Model(object):
             delInterData = dlg.DeleteIntermediateData()
             dlg.Destroy()
             if err:
-                GError(parent=parent, message=unicode('\n'.join(err)))
+                GError(parent=parent, message='\n'.join(err))
                 return
 
             err = list()
@@ -669,14 +669,13 @@ class Model(object):
                     parent=parent,
                     message=_("Variables below not defined:") +
                     "\n\n" +
-                    unicode(
-                        '\n'.join(
-                            map(
-                                lambda x: "%s: %s (%s)" %
-                                (x[0],
-                                 x[1],
-                                    x[2]),
-                                err))))
+                    '\n'.join(
+                        map(
+                            lambda x: "%s: %s (%s)" %
+                            (x[0],
+                             x[1],
+                             x[2]),
+                            err)))
                 return
 
         log.cmdThread.SetId(-1)
@@ -2047,7 +2046,7 @@ class ProcessModelFile:
             intermediate = False if data.find('intermediate') is None else True
 
             display = False if data.find('display') is None else True
-            
+
             rels = list()
             for rel in data.findall('relation'):
                 defrel = {'id': int(rel.get('id', -1)),
