@@ -238,6 +238,8 @@ mkdir -p $OSGEO4W_ROOT_MSYS/etc/preremove $OSGEO4W_ROOT_MSYS/etc/postinstall
 sed -e "s#@POSTFIX@#$POSTFIX#g" \
     mswindows/osgeo4w/grass.bat.tmpl >$OSGEO4W_ROOT_MSYS/bin/${GRASS_EXECUTABLE}.bat
 sed -e "s#@POSTFIX@#$POSTFIX#g" \
+    mswindows/osgeo4w/python-grass.bat.tmpl >$OSGEO4W_ROOT_MSYS/bin/python-${GRASS_EXECUTABLE}.bat
+sed -e "s#@POSTFIX@#$POSTFIX#g" \
     mswindows/osgeo4w/env.bat.tmpl >$OSGEO4W_ROOT_MSYS/apps/grass/grass$POSTFIX/etc/env.bat
 sed -e "s#@POSTFIX@#$POSTFIX#g" -e "s#@VERSION@#$VERSION#g" -e "s#@GRASS_EXECUTABLE@#$GRASS_EXECUTABLE#g" \
     mswindows/osgeo4w/postinstall.bat >$OSGEO4W_ROOT_MSYS/etc/postinstall/grass${PACKAGE_POSTFIX}.bat
@@ -259,6 +261,7 @@ if [ -n "$PACKAGE_PATCH" ]; then
 
     # bat files - unix2dos
     unix2dos bin/${GRASS_EXECUTABLE}.bat
+    unix2dos bin/python-${GRASS_EXECUTABLE}.bat
     unix2dos etc/postinstall/grass${PACKAGE_POSTFIX}.bat
     unix2dos etc/preremove/grass${PACKAGE_POSTFIX}.bat
 
@@ -271,6 +274,7 @@ if [ -n "$PACKAGE_PATCH" ]; then
     /bin/tar -cjf $PDIR/grass$PACKAGE_POSTFIX-$VERSION-$PACKAGE_PATCH.tar.bz2 \
 	apps/grass/grass$POSTFIX \
 	bin/${GRASS_EXECUTABLE}.bat \
+	bin/python-${GRASS_EXECUTABLE}.bat \
 	etc/postinstall/grass${PACKAGE_POSTFIX}.bat \
 	etc/preremove/grass${PACKAGE_POSTFIX}.bat
 

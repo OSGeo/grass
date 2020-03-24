@@ -1,7 +1,7 @@
 @echo off
 rem #########################################################################
 rem #
-rem # GRASS initialization bat script (OSGeo4W)
+rem # GRASS initialization bat script for Python environment (OSGeo4W)
 rem #
 rem #########################################################################
 
@@ -12,10 +12,8 @@ call "%~dp0\o4w_env.bat"
 call "%OSGEO4W_ROOT%\apps\grass\grass@POSTFIX@\etc\env.bat"
 @echo off
 
-rem
-rem Launch GRASS GIS
-rem
-"%GRASS_PYTHON%" "%GISBASE%\etc\grass@POSTFIX@.py" %*
+set PYTHONPATH=%OSGEO4W_ROOT%\apps\grass\grass@POSTFIX@\etc\python;%PYTHONPATH%
+"%GRASS_PYTHON%" %*
 
 rem
 rem Pause on error

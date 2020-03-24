@@ -1554,7 +1554,7 @@ class GCPList(ListCtrl,
                         _('Forward error'),
                         _('Backward error')):
                 info.SetText(lbl)
-                self.InsertColumnInfo(idx_col, info)
+                self.InsertColumn(idx_col, info)
                 idx_col += 1
 
     def LoadData(self):
