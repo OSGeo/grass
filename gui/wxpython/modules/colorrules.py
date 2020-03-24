@@ -1251,7 +1251,7 @@ class VectorColorTable(ColorTable):
 
     def OnPaneChanged(self, event=None):
         # redo the layout
-        self.Layout()
+        self.panel.Layout()
         # and also change the labels
         if self.cp.IsExpanded():
             self.cp.SetLabel('')
