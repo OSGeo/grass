@@ -56,9 +56,14 @@ proj_INC        = $(PROJINC)
 vector_INC      = $(VECT_INC) $(VECT_CFLAGS)
 vedit_INC       = $(VECT_INC) $(VECT_CFLAGS)
 
+MAC_FLAGS = ""
+ifneq ($(findstring darwin,$(ARCH)),)
+MAC_FLAGS  = "-D_Nullable="
+endif
+
 SED = sed
 CTYPESGEN = ./ctypesgen.py
-CTYPESFLAGS = --cpp "$(CC) -E $(CPPFLAGS) $(LFS_CFLAGS) $(EXTRA_CFLAGS) $(NLS_CFLAGS) $(DEFS) $(EXTRA_INC) $(INC) -D__GLIBC_HAVE_LONG_LONG"
+CTYPESFLAGS = --cpp "$(CC) -E $(CPPFLAGS) $(LFS_CFLAGS) $(MAC_FLAGS) $(EXTRA_CFLAGS) $(NLS_CFLAGS) $(DEFS) $(EXTRA_INC) $(INC) -D__GLIBC_HAVE_LONG_LONG"
 EXTRA_CLEAN_FILES := $(wildcard ctypesgencore/*.pyc) $(wildcard ctypesgencore/*/*.pyc)
 
 ifneq ($(MINGW),)
