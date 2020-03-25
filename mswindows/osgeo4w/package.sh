@@ -113,11 +113,7 @@ read PATCH <&3
 export VERSION=${MAJOR}.${MINOR}.${PATCH}
 export POSTFIX=${MAJOR}${MINOR}
 
-if [[ "$PATCH" == *svn* ]] ; then
-    GRASS_EXECUTABLE=grass${MAJOR}${MINOR}svn
-else
-    GRASS_EXECUTABLE=grass${MAJOR}${MINOR}
-fi
+GRASS_EXECUTABLE=grass${MAJOR}${MINOR}
 
 if [ -f mswindows/osgeo4w/package.log ]; then
     i=0
@@ -263,12 +259,8 @@ if [ -n "$PACKAGE_PATCH" ]; then
     SRC=$PWD
     cd $OSGEO4W_ROOT_MSYS
 
-    # update startup script
-    sed -e "s#@POSTFIX@#$POSTFIX#g" \
-	$SRC/mswindows/osgeo4w/grass.bat.tmpl > bin/${GRASS_EXECUTABLE}.bat.tmpl
-
     # bat files - unix2dos
-    unix2dos bin/${GRASS_EXECUTABLE}.bat.tmpl
+    unix2dos bin/${GRASS_EXECUTABLE}.bat
     unix2dos bin/python-${GRASS_EXECUTABLE}.bat
     unix2dos etc/postinstall/grass${PACKAGE_POSTFIX}.bat
     unix2dos etc/preremove/grass${PACKAGE_POSTFIX}.bat
@@ -281,13 +273,11 @@ if [ -n "$PACKAGE_PATCH" ]; then
     # creating grass package
     /bin/tar -cjf $PDIR/grass$PACKAGE_POSTFIX-$VERSION-$PACKAGE_PATCH.tar.bz2 \
 	apps/grass/grass$POSTFIX \
-	bin/${GRASS_EXECUTABLE}.bat.tmpl \
-        bin/python-${GRASS_EXECUTABLE}.bat \
+	bin/${GRASS_EXECUTABLE}.bat \
+	bin/python-${GRASS_EXECUTABLE}.bat \
 	etc/postinstall/grass${PACKAGE_POSTFIX}.bat \
 	etc/preremove/grass${PACKAGE_POSTFIX}.bat
 
-    # clean up
-    rm bin/${GRASS_EXECUTABLE}.bat.tmpl
 fi
 
 log
