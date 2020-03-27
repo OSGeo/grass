@@ -421,7 +421,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             # select the layer in the same way as right click
             if not self.IsSelected(layer):
                 self.DoSelectItem(layer, True, False)
-            self.OnLayerContextMenu(event)
+            wx.CallAfter(self.OnLayerContextMenu, event)
 
     def OnLayerContextMenu(self, event):
         """Contextual menu for item/layer"""
