@@ -198,7 +198,8 @@ int Rast_get_vrt_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
 	     * a mask is applied to the collected data 
 	     * after this function returns */
 	    Rast_set_null_value(tmpbuf, rd_window->cols, data_type);
-	    tfd = Rast_open_old(p->name, p->mapset);
+	    /* avoid Rast__check_for_auto_masking() */
+	    tfd = Rast__open_old(p->name, p->mapset);
 	    Rast_get_row_nomask(tfd, tmpbuf, row, data_type);
 	    Rast_unopen(tfd);
 	    
