@@ -648,6 +648,7 @@ static int open_raster_new(const char *name, int open_mode,
     fcb->map_type = map_type;
     fcb->open_mode = -1;
     fcb->gdal = NULL;
+    fcb->vrt = NULL;
 
     /* for writing fcb->data is allocated to be R__.wr_window.cols * 
        sizeof(CELL or DCELL or FCELL)  */
