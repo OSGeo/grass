@@ -93,6 +93,9 @@ static int init(void)
 
     R__.nbytes = sizeof(CELL);
 
+    R__.fileinfo_count = 0;
+    R__.fileinfo = NULL;
+
     R__.compression_type = G_default_compressor();
 
     cname = getenv("GRASS_COMPRESSOR");
