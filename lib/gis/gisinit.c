@@ -49,6 +49,7 @@ void G__gisinit(const char *version, const char *pgm)
 
     G_set_program_name(pgm);
 
+    /* verify version of GRASS headers (and anything else in include) */
     if (strcmp(version, GIS_H_VERSION) != 0)
 	G_fatal_error(_("Module built against version %s but "
 			"trying to use version %s. "
@@ -83,6 +84,7 @@ void G__no_gisinit(const char *version)
     if (initialized)
 	return;
 
+    /* verify version of GRASS headers (and anything else in include) */
     if (strcmp(version, GIS_H_VERSION) != 0)
 	G_fatal_error(_("Module built against version %s but "
 			"trying to use version %s. "

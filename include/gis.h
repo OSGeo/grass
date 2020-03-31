@@ -39,8 +39,14 @@
 static const char *GRASS_copyright __attribute__ ((unused))
     = "GRASS GNU GPL licensed Software";
 
-#define GIS_H_VERSION GRASS_VERSION_STRING
-#define GIS_H_DATE    "$Date$"
+/* GRASS version, GRASS date, git short hash of last change in GRASS headers
+ * (and anything else in include)
+ */
+#define GIS_H_VERSION GRASS_HEADERS_VERSION
+/* git date of last change in GRASS headers
+ * (and anything else in include)
+ */
+#define GIS_H_DATE    GRASS_HEADERS_DATE
 
 #define G_gisinit(pgm) G__gisinit(GIS_H_VERSION, (pgm))
 #define G_no_gisinit() G__no_gisinit(GIS_H_VERSION)
