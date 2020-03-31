@@ -248,7 +248,7 @@ class DisplayAttributesDialog(wx.Dialog):
 
                     if newvalue != value:
                         updatedColumns.append(name)
-                        if not newvalue:
+                        if newvalue == '':
                             updatedValues.append('NULL')
                         else:
                             if ctype != str:
