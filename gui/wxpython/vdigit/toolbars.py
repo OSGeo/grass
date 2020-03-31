@@ -55,6 +55,9 @@ class VDigitToolbar(BaseToolbar):
             self.editingStopped.connect(layerTree.StopEditing)
             self.editingBgMap.connect(layerTree.SetBgMapForEditing)
 
+        # bind events
+        self.Bind(wx.EVT_SHOW, self.OnShow)
+
         # currently selected map layer for editing (reference to MapLayer
         # instance)
         self.mapLayer = None
@@ -1116,3 +1119,8 @@ class VDigitToolbar(BaseToolbar):
     def GetLayer(self):
         """Get selected layer for editing -- MapLayer instance"""
         return self.mapLayer
+
+    def OnShow(self, event):
+        """Show frame event"""
+        # list of available vector maps
+        self.UpdateListOfLayers(updateTool=True)
