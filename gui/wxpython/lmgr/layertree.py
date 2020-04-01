@@ -641,6 +641,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.OnVectorColorTable,
                 id=self.popupID['color'])
 
+            self.popupMenu.Append(
+                self.popupID['colori'],
+                _("Set color table interactively"))
+            self.Bind(
+                wx.EVT_MENU,
+                self.lmgr.OnVectorRules,
+                id=self.popupID['colori'])
+
             item = wx.MenuItem(
                 self.popupMenu,
                 id=self.popupID['attr'],
