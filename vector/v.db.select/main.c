@@ -34,7 +34,7 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct Option *map_opt, *field_opt, *fs_opt, *vs_opt, *nv_opt, *col_opt,
 	*where_opt, *file_opt, *group_opt;
-    struct Flag *c_flag, *v_flag, *r_flag, *f_flag;
+    struct Flag *c_flag, *v_flag, *r_flag, *n_flag, *f_flag;
     dbDriver *driver;
     dbString sql, value_string;
     dbCursor cursor;
@@ -109,6 +109,11 @@ int main(int argc, char **argv)
     v_flag->key = 'v';
     v_flag->description = _("Vertical output (instead of horizontal)");
     v_flag->guisection = _("Format");
+
+    n_flag = G_define_flag();
+    n_flag->key = 'n';
+    n_flag->description = _("Escape newline characters");
+    n_flag->guisection = _("Format");
 
     f_flag = G_define_flag();
     f_flag->key = 'f';
@@ -264,8 +269,18 @@ int main(int argc, char **argv)
 
 	    if (nv_opt->answer && db_test_value_isnull(value))
 		fprintf(stdout, "%s", nv_opt->answer);
-	    else
-		fprintf(stdout, "%s", db_get_string(&value_string));
+	    else {
+		char *str = db_get_string(&value_string);
+
+		if (n_flag->answer) {
+		    if (strchr(str, '\r'))
+			str = G_str_replace(str, "\r", "\\r");
+		    if (strchr(str, '\n'))
+			str = G_str_replace(str, "\n", "\\n");
+		}
+
+		fprintf(stdout, "%s", str);
+	    }
 
 	    if (v_flag->answer)
 		fprintf(stdout, "\n");
