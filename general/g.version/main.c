@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
 	if (*rev_ver && *rev_time) {
 	    if (shell->answer) {
                 fprintf(stdout, "libgis_revision=");
-                if (strstr(rev_ver, " ") != NULL)
+                if (strchr(rev_ver, ' ') != NULL)
                     fprintf(stdout, "\"%s\"", rev_ver);
                 else
                     fprintf(stdout, "%s", rev_ver);
