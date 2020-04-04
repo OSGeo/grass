@@ -36,11 +36,10 @@ a given input vector <em>layer</em>. The <b>print only</b> (<b>-p</b>) mode
 doesn't require a table. Use <em><a href="db.execute.html">db.execute</a></em>
 or <em><a href="v.db.addtable.html">v.db.addtable</a></em> to create a table if
 needed.
-<p>Updating the table has to be done column-wise. The <em>column</em> must be
-present in the table, except when using the <b>print only</b> (<b>-p</b>)
-mode. Use <em><a href="db.execute.html">db.execute</a></em> or
-<em><a href="v.db.addcolumn.html">v.db.addcolumn</a></em> to add new columns if
-needed.
+<p>Updating the table has to be done column-wise. The <em>column</em> will be
+created in the table if it doesn't already exist, except when using the
+<b>print only</b> (<b>-p</b>) mode. If the <em>column</em> exists, the
+<b>--overwrite</b> flag is required to overwrite it.
 
 <h2>EXAMPLES</h2>
 
