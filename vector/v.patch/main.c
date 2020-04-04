@@ -613,7 +613,7 @@ int copy_records(dbDriver * driver_in, dbString * table_name_in,
 
     while (1) {
 	int more;
-	char buf[2000];
+	char buf[DB_SQL_MAX];
 
 	if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
 	    db_close_cursor(&cursor);
