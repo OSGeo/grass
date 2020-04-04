@@ -112,7 +112,7 @@ int main(int argc, char **argv)
 
     n_flag = G_define_flag();
     n_flag->key = 'n';
-    n_flag->description = _("Escape newline characters");
+    n_flag->description = _("Escape newline and backslash characters");
     n_flag->guisection = _("Format");
 
     f_flag = G_define_flag();
@@ -273,6 +273,8 @@ int main(int argc, char **argv)
 		char *str = db_get_string(&value_string);
 
 		if (n_flag->answer) {
+		    if (strchr(str, '\\'))
+			str = G_str_replace(str, "\\", "\\\\");
 		    if (strchr(str, '\r'))
 			str = G_str_replace(str, "\r", "\\r");
 		    if (strchr(str, '\n'))
