@@ -187,6 +187,7 @@ double o_orig, z1;
 double horizonStep;
 double ltime, tim, timo;
 double declination;	/* Contains the negative of the declination at the chosen day */
+double solar_constant;
 
 /*
  * double lum_C31_l, lum_C33_l;
@@ -230,7 +231,7 @@ int main(int argc, char *argv[])
 	struct Option *elevin, *aspin, *aspect, *slopein, *slope, *linkein,
 	    *lin, *albedo, *longin, *alb, *latin, *coefbh, *coefdh,
 	    *incidout, *beam_rad, *insol_time, *diff_rad, *refl_rad,
-	    *glob_rad, *day, *step, *declin, *ltime, *dist, *horizon,
+	    *glob_rad, *day, *step, *declin, *solar_cnst, *ltime, *dist, *horizon,
 	    *horizonstep, *numPartitions, *civilTime, *threads;
     }
     parm;
@@ -469,6 +470,14 @@ int main(int argc, char *argv[])
     parm.declin->required = NO;
     parm.declin->description =
 	_("Declination value (overriding the internally computed value) [radians]");
+
+    parm.solar_cnst = G_define_option();
+    parm.solar_cnst->key = "solar_constant";
+    parm.solar_cnst->type = TYPE_DOUBLE;
+    parm.solar_cnst->required = NO;
+    parm.solar_cnst->answer = "1367";
+    parm.solar_cnst->description =
+	_("Solar constant [W/m^2]");
 
     parm.ltime = G_define_option();
     parm.ltime->key = "time";
@@ -740,6 +749,11 @@ int main(int argc, char *argv[])
 	sscanf(parm.declin->answer, "%lf", &declin);
 	declination = -declin;
     }
+
+    if (parm.solar_cnst->answer)
+        sscanf(parm.solar_cnst->answer, "%lf", &solar_constant);
+    else
+        solar_constant = 1367;
 
     if (ttime != 0) {
 	/* Shadow for just one time during the day */
@@ -2026,7 +2040,7 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 
     Rast_append_format_history(
 	&hist,
-	" Solar constant (W/m^2):                   1367");
+	" Solar constant (W/m^2):                   %f", solar_constant);
     Rast_append_format_history(
 	&hist,
 	" Extraterrestrial irradiance (W/m^2):      %f",
