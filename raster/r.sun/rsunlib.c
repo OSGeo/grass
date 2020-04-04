@@ -113,7 +113,7 @@ double com_sol_const(int no_of_day)
 {
     double I0, d1;
 
-    /* Solar constant: 1367.0 W/m^2.
+    /* Solar constant: 1367.0 W/m^2. Note: solar constant is parameter.
 
        Perigee offset: here we call Jan 2 at 8:18pm the Perigee, so day
 	number 2.8408. In angular units that's (2*pi * 2.8408 / 365.25) = 0.048869.
@@ -128,7 +128,7 @@ double com_sol_const(int no_of_day)
 
     /*  v W/(m*m) */
     d1 = pi2 * no_of_day / 365.25;
-    I0 = 1367. * (1 + 0.03344 * cos(d1 - 0.048869));
+    I0 = solar_constant * (1 + 0.03344 * cos(d1 - 0.048869));
 
     return I0;
 }
