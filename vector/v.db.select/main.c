@@ -34,7 +34,7 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct Option *map_opt, *field_opt, *fs_opt, *vs_opt, *nv_opt, *col_opt,
 	*where_opt, *file_opt, *group_opt;
-    struct Flag *c_flag, *v_flag, *r_flag, *n_flag, *f_flag;
+    struct Flag *c_flag, *v_flag, *r_flag, *n_flag, *j_flag, *f_flag;
     dbDriver *driver;
     dbString sql, value_string;
     dbCursor cursor;
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
     dbColumn *column;
     dbValue *value;
     struct field_info *Fi;
-    int ncols, col, more;
+    int ncols, col, more, first;
     struct Map_info Map;
     char query[DB_SQL_MAX];
     struct ilist *list_lines;
@@ -115,12 +115,19 @@ int main(int argc, char **argv)
     n_flag->description = _("Escape newline and backslash characters");
     n_flag->guisection = _("Format");
 
+    j_flag = G_define_flag();
+    j_flag->key = 'j';
+    j_flag->description = _("JSON output");
+    j_flag->guisection = _("Format");
+
     f_flag = G_define_flag();
     f_flag->key = 'f';
     f_flag->description = _("Exclude attributes not linked to features");
     f_flag->guisection = _("Selection");
 
     G_gisinit(argv[0]);
+
+    G_option_excludes(j_flag, c_flag, v_flag, n_flag, NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -216,7 +223,7 @@ int main(int argc, char **argv)
     ncols = db_get_table_number_of_columns(table);
 
     /* column names if horizontal output (ignore for -r) */
-    if (!v_flag->answer && !c_flag->answer && !r_flag->answer) {
+    if (!v_flag->answer && !c_flag->answer && !r_flag->answer && !j_flag->answer) {
 	for (col = 0; col < ncols; col++) {
 	    column = db_get_table_column(table, col);
 	    if (col)
@@ -227,6 +234,10 @@ int main(int argc, char **argv)
     }
 
     init_box = 1;
+    first = 1;
+
+    if (!r_flag->answer && j_flag->answer)
+	fprintf(stdout, "[");
 
     /* fetch the data */
     while (1) {
@@ -236,6 +247,11 @@ int main(int argc, char **argv)
 
 	if (!more)
 	    break;
+
+	if (first)
+	    first = 0;
+	else if (!r_flag->answer && j_flag->answer)
+	    fprintf(stdout, ",\n");
 
 	cat = -1;
 	for (col = 0; col < ncols; col++) {
@@ -264,15 +280,24 @@ int main(int argc, char **argv)
 	    if (!c_flag->answer && v_flag->answer)
 		fprintf(stdout, "%s%s", db_get_column_name(column), fs);
 
-	    if (col && !v_flag->answer)
+	    if (col && !v_flag->answer && !j_flag->answer)
 		fprintf(stdout, "%s", fs);
 
-	    if (nv_opt->answer && db_test_value_isnull(value))
-		fprintf(stdout, "%s", nv_opt->answer);
-	    else {
+	    if (j_flag->answer) {
+		if (!col)
+		    fprintf(stdout, "{");
+		fprintf(stdout, "\"%s\":", db_get_column_name(column));
+	    }
+
+	    if (nv_opt->answer && db_test_value_isnull(value)) {
+		if (j_flag->answer)
+		    fprintf(stdout, "\"%s\"", db_get_column_name(column));
+		else
+		    fprintf(stdout, "%s", nv_opt->answer);
+	    } else {
 		char *str = db_get_string(&value_string);
 
-		if (n_flag->answer) {
+		if (n_flag->answer || j_flag->answer) {
 		    if (strchr(str, '\\'))
 			str = G_str_replace(str, "\\", "\\\\");
 		    if (strchr(str, '\r'))
@@ -281,11 +306,26 @@ int main(int argc, char **argv)
 			str = G_str_replace(str, "\n", "\\n");
 		}
 
-		fprintf(stdout, "%s", str);
+		if (j_flag->answer) {
+		    int sqltype = db_get_column_sqltype(column);
+		    if (sqltype == DB_SQL_TYPE_INTEGER ||
+			sqltype == DB_SQL_TYPE_DOUBLE_PRECISION ||
+			sqltype == DB_SQL_TYPE_REAL)
+			fprintf(stdout, "%s", str);
+		    else
+			fprintf(stdout, "\"%s\"", str);
+		} else
+		    fprintf(stdout, "%s", str);
 	    }
 
 	    if (v_flag->answer)
 		fprintf(stdout, "\n");
+	    else if (j_flag->answer) {
+		if (col < ncols - 1)
+		    fprintf(stdout, ",");
+		else
+		    fprintf(stdout, "}");
+	    }
 	}
 
 	if (f_flag->answer && col < ncols)
@@ -319,21 +359,37 @@ int main(int argc, char **argv)
 	    }
 	}
 	else {
-	    if (!v_flag->answer)
+	    if (!v_flag->answer && !j_flag->answer)
 		fprintf(stdout, "\n");
 	    else if (vs)
 		fprintf(stdout, "%s\n", vs);
 	}
     }
 
+    if (!r_flag->answer && j_flag->answer)
+	fprintf(stdout, "]\n");
+
     if (r_flag->answer) {
-	fprintf(stdout, "n=%f\n", min_box->N);
-	fprintf(stdout, "s=%f\n", min_box->S);
-	fprintf(stdout, "w=%f\n", min_box->W);
-	fprintf(stdout, "e=%f\n", min_box->E);
-	if (Vect_is_3d(&Map)) {
-	    fprintf(stdout, "t=%f\n", min_box->T);
-	    fprintf(stdout, "b=%f\n", min_box->B);
+	if (j_flag->answer) {
+	    fprintf(stdout, "{");
+	    fprintf(stdout, "\"n\":%f,", min_box->N);
+	    fprintf(stdout, "\"s\":%f,", min_box->S);
+	    fprintf(stdout, "\"w\":%f,", min_box->W);
+	    fprintf(stdout, "\"e\":%f", min_box->E);
+	    if (Vect_is_3d(&Map)) {
+		fprintf(stdout, ",\"t\":%f,\n", min_box->T);
+		fprintf(stdout, "\"b\":%f\n", min_box->B);
+	    }
+	    fprintf(stdout, "}\n");
+	} else {
+	    fprintf(stdout, "n=%f\n", min_box->N);
+	    fprintf(stdout, "s=%f\n", min_box->S);
+	    fprintf(stdout, "w=%f\n", min_box->W);
+	    fprintf(stdout, "e=%f\n", min_box->E);
+	    if (Vect_is_3d(&Map)) {
+		fprintf(stdout, "t=%f\n", min_box->T);
+		fprintf(stdout, "b=%f\n", min_box->B);
+	    }
 	}
 	fflush(stdout);
 
