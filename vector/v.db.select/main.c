@@ -304,6 +304,8 @@ int main(int argc, char **argv)
 			str = G_str_replace(str, "\r", "\\r");
 		    if (strchr(str, '\n'))
 			str = G_str_replace(str, "\n", "\\n");
+		    if (j_flag->answer && strchr(str, '"'))
+			str = G_str_replace(str, "\"", "\\\"");
 		}
 
 		if (j_flag->answer) {
