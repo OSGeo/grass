@@ -5,12 +5,12 @@
  *
  * AUTHOR(S):    Radim Blazek
  *               OGR support by Martin Landa <landa.martin gmail.com>
- *               -f flag by Huidae Cho <grass4u gmail.com>
+ *               -n, -j, -f flags by Huidae Cho <grass4u gmail.com>
  *               group option by Luca Delucchi <lucadeluge gmail.com>
  *
  * PURPOSE:      Print vector attributes
  *
- * COPYRIGHT:    (C) 2005-2009, 2011-2014 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2005-2009, 2011-2014, 2020 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
