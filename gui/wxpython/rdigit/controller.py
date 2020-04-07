@@ -81,6 +81,8 @@ class RDigitController(wx.EvtHandler):
         self._currentCellValue = None
         # last edited buffer value
         self._currentWidthValue = None
+        # digit env
+        self._env = os.environ.copy()
 
         self._oldMouseUse = None
         self._oldCursor = None
@@ -469,6 +471,8 @@ class RDigitController(wx.EvtHandler):
         keep the order of editing. These rasters are then patched together.
         Sets default color table for the newly digitized raster.
         """
+        self._setRegion()
+
         if not self._editedRaster or self._running:
             return
         self._running = True
@@ -525,7 +529,8 @@ class RDigitController(wx.EvtHandler):
             gcore.run_command(
                 'r.patch', input=rastersToPatch[:: -1] +
                 [self._backupRasterName],
-                output=self._editedRaster, overwrite=True, quiet=True)
+                output=self._editedRaster, overwrite=True, quiet=True,
+                env=self._env)
             gcore.run_command(
                 'g.remove',
                 type='raster',
@@ -605,9 +610,15 @@ class RDigitController(wx.EvtHandler):
                 overwrite=True,
                 quiet=True)
             gcore.run_command('r.grow', input=tempRaster, output=output,
-                              flags='m', radius=bufferDist, quiet=True)
+                              flags='m', radius=bufferDist, quiet=True,
+                              env=self._env)
         else:
             gcore.run_command('r.in.poly', input=asciiFile.name, output=output,
-                              type_=mapType, quiet=True)
+                              type_=mapType, quiet=True, env=self._env)
         os.unlink(asciiFile.name)
         return output
+
+    def _setRegion(self):
+        """Set region according input raster map"""
+        self._env['GRASS_REGION'] = gcore.region_env(
+            raster=self._backupRasterName)
