@@ -119,7 +119,7 @@ class GRASSStartup(wx.Frame):
             parent=self.panel, id=wx.ID_ANY, label=" %s " %
             _("3. Select GRASS Mapset"))
 
-        self.lmessage = StaticText(parent=self.panel)
+        self.lmessage = StaticWrapText(parent=self.panel)
         # It is not clear if all wx versions supports color, so try-except.
         # The color itself may not be correct for all platforms/system settings
         # but in http://xoomer.virgilio.it/infinity77/wxPython/Widgets/wx.SystemSettings.html
@@ -473,7 +473,6 @@ class GRASSStartup(wx.Frame):
             you know that there is everything correct now.
         """
         self.lmessage.SetLabel(text)
-        self.lmessage.Wrap(self.GetClientSize()[0])
         self.sizer.Layout()
 
     def _showError(self, text):
@@ -487,7 +486,6 @@ class GRASSStartup(wx.Frame):
             you know that there is everything correct now.
         """
         self.lmessage.SetLabel(_("Error: {text}").format(text=text))
-        self.lmessage.Wrap(self.GetClientSize()[0])
         self.sizer.Layout()
 
     def _hideMessage(self):
