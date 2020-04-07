@@ -222,7 +222,7 @@ class ImportDialog(wx.Dialog):
         dialogSizer.Fit(self.panel)
 
         # auto-layout seems not work here - FIXME
-        size = wx.Size(globalvar.DIALOG_GSELECT_SIZE[0] + 225, 550)
+        size = wx.Size(globalvar.DIALOG_GSELECT_SIZE[0] + 322, 550)
         self.SetMinSize(size)
         self.SetSize((size.width, size.height + 100))
         # width = self.GetSize()[0]
