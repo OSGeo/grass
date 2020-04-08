@@ -2014,8 +2014,7 @@ def print_params():
             val = grep('CC', linesplat)
             sys.stdout.write("%s\n" % val[0].split('=')[1].strip())
         elif arg == 'revision':
-            sys.stdout.write(
-                "@GRASS_VERSION_GIT@\n")
+            sys.stdout.write("@GRASS_VERSION_GIT@\n")
         elif arg == 'svn_revision':
             filerev = open(gpath('etc', 'VERSIONNUMBER'))
             linerev = filerev.readline().rstrip('\n')
@@ -2027,6 +2026,8 @@ def print_params():
                sys.stdout.write("No SVN revision defined\n")
         elif arg == 'version':
             sys.stdout.write("%s\n" % GRASS_VERSION)
+        elif arg == 'date':
+            sys.stdout.write("@GRASS_HEADERS_GIT_DATE@\n")
         else:
             message(_("Parameter <%s> not supported") % arg)
 
