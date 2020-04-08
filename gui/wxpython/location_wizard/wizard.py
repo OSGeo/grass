@@ -171,8 +171,8 @@ class DatabasePage(TitledPage):
         self.locTitle = ''
 
         # text controls
-        self.tgisdbase = self.MakeStaticText(grassdatabase, size=(300, -1))
-        self.tlocation = self.MakeTextCtrl("newLocationBla", size=(300, -1))
+        self.tgisdbase = self.MakeStaticText(grassdatabase, size=(-1, -1))
+        self.tlocation = self.MakeTextCtrl("newLocation", size=(300, -1))
         self.tlocation.SetFocus()
         self.tlocation.SetValidator(
             GenericValidator(
@@ -276,16 +276,6 @@ class DatabasePage(TitledPage):
             nextButton.Disable()
 
         event.Skip()
-
-    def OnBrowse(self, event):
-        """Choose GRASS data directory"""
-        dlg = wx.DirDialog(self, _("Choose GRASS data directory:"),
-                           os.getcwd(), wx.DD_DEFAULT_STYLE)
-        if dlg.ShowModal() == wx.ID_OK:
-            self.grassdatabase = dlg.GetPath()
-            self.tgisdbase.SetValue(self.grassdatabase)
-
-        dlg.Destroy()
 
     def OnPageChanging(self, event=None):
         error = None
