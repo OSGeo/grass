@@ -1985,10 +1985,10 @@ def print_params():
     """Write compile flags and other configuration to stderr"""
     params = sys.argv[2:]
     if not params:
-        params = ['arch', 'build', 'compiler', 'path', 'revision', 'version']
+        params = ['arch', 'build', 'compiler', 'path', 'revision', 'version', 'date']
 
     # check if we are dealing with parameters which require dev files
-    dev_params = ["arch", "compiler", "build"]
+    dev_params = ["arch", "compiler", "build", "date"]
     if any([param in dev_params for param in params]):
         plat = gpath('include', 'Make', 'Platform.make')
         if not os.path.exists(plat):
@@ -2027,7 +2027,12 @@ def print_params():
         elif arg == 'version':
             sys.stdout.write("%s\n" % GRASS_VERSION)
         elif arg == 'date':
-            sys.stdout.write("@GRASS_HEADERS_GIT_DATE@\n")
+            date_str = "#define GRASS_HEADERS_DATE "
+            gdate = gpath('include', 'grass', 'version.h')
+            with open(gdate) as filegdate:
+                for line in filegdate.readlines():
+                    if line.startswith(date_str):
+                        sys.stdout.write(line.replace(date_str, ''))
         else:
             message(_("Parameter <%s> not supported") % arg)
 
