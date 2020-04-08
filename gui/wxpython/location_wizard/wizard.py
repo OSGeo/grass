@@ -281,7 +281,7 @@ class DatabasePage(TitledPage):
         error = None
         if os.path.isdir(
             os.path.join(
-                self.tgisdbase.GetValue(),
+                self.tgisdbase.GetLabel(),
                 self.tlocation.GetValue())):
             error = _("Location already exists in GRASS Database.")
 
@@ -295,7 +295,7 @@ class DatabasePage(TitledPage):
             return
 
         self.location = self.tlocation.GetValue()
-        self.grassdatabase = self.tgisdbase.GetValue()
+        self.grassdatabase = self.tgisdbase.GetLabel()
         self.locTitle = self.tlocTitle.GetValue()
         if os.linesep in self.locTitle or \
                 len(self.locTitle) > 255:
