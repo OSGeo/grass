@@ -97,6 +97,14 @@
 #% description: Title for resultant raster map
 #% guisection: Metadata
 #%end
+#%option
+#% key: srcnodata
+#% key_desc: NoData in data source
+#% type: string
+#% required: no
+#% description: One (or more, comma separated) value(s) representing NoData in the datasource
+#% guisection: Optional
+#%end
 #%flag
 #% key: e
 #% description: Estimate resolution only
@@ -145,14 +153,47 @@ def cleanup():
         grass.try_rmdir(os.path.join(GISDBASE, TMPLOC))
     if SRCGISRC:
         grass.try_remove(SRCGISRC)
+    if "TMP_VRT" in locals():
+        grass.try_remove(TMP_VRT)
     if TMP_REG_NAME and grass.find_file(name=TMP_REG_NAME, element='vector',
                                         mapset=grass.gisenv()['MAPSET'])['fullname']:
         grass.run_command('g.remove', type='vector', name=TMP_REG_NAME,
                           flags='f', quiet=True)
 
 
+def createvrt(dst, src, nodata=None, region=None, bandlist=None):
+    # Lazy import
+    from osgeo import gdal
+    if not nodata and not region:
+        grass.fatal(_("Either NoData or extent must begiven to create VRT."))
+    params = {"format": "VRT"}
+    if nodata:
+        for nd in nodata.split(","):
+            if not nd.isdigit():
+                grass.fatal(_("Invalid NoData format"))
+        params["srcNodata"] = nodata.replace(",", " ")
+
+    if bandlist:
+        for band in bandlist.split(","):
+            if not band.isdigit():
+                grass.fatal(_("Invalid band number format"))
+        params["bandList"] = bandlist.replace(",", " ")
+
+    if region:
+        print(region)
+        params["projWin"] = "{w} {n} {e} {s}".format(**region)
+
+    print(params)
+    print(region)
+    print(gdal.TranslateOptions(**params))
+    indata = gdal.Open(src)
+    vrt = gdal.Translate(dst, indata, options=gdal.TranslateOptions(**params))
+    vrt = None
+    indata = None
+
+
 def main():
-    global TMPLOC, SRCGISRC, TGTGISRC, GISDBASE, TMP_REG_NAME
+    global TMPLOC, SRCGISRC, TGTGISRC, GISDBASE, TMP_REG_NAME, TMP_VRT
 
     GDALdatasource = options['input']
     output = options['output']
@@ -161,6 +202,7 @@ def main():
     bands = options['band']
     tgtres = options['resolution']
     title = options["title"]
+    srcnodata = options["srcnodata"]
     if flags['e'] and not output:
         output = 'rimport_tmp'  # will be removed with the entire tmp location
     if options['resolution_value']:
@@ -251,16 +293,26 @@ def main():
     # import into temp location
     grass.verbose(_("Importing <%s> to temporary location...") % GDALdatasource)
     parameters = dict(input=GDALdatasource, output=output,
-                      memory=memory, flags='ak' + additional_flags)
+                      flags='a' + additional_flags)
     if bands:
         parameters['band'] = bands
     if 'r' in region_flag:
         grass.run_command('v.proj', **dict(location=tgtloc, mapset=tgtmapset,
                           input=tgtregion, output=tgtregion))
-        grass.run_command('g.region', **dict(vector=tgtregion))
-        parameters['flags'] = parameters['flags'] + region_flag
+        region = grass.parse_command('g.region', **dict(vector=tgtregion, flags="g"))
+        parameters['flags'] = parameters['flags'].replace("r", "")
+    else:
+        region = None
+
+    print(region)
+    if 'r' in region_flag or srcnodata or bands:
+        TMP_VRT = grass.tempfile()
+        parameters['input'] = TMP_VRT
+        createvrt("/rmp/test.vrt", # TMP_VRT
+        GDALdatasource, nodata=srcnodata, region=region, bandlist=bands)
     try:
-        grass.run_command('r.in.gdal', **parameters)
+        print(parameters)
+        grass.run_command('r.external', **parameters)
     except CalledModuleError:
         grass.fatal(_("Unable to import GDAL dataset <%s>") % GDALdatasource)
 
