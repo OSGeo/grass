@@ -684,7 +684,7 @@ def install_extension(source, url, xmlurl):
         if len(mlist) > 1:
             print('-' * 60)
 
-    if flags['d']:
+    if flags['d'] or flags['i']:
         return
 
     if ret != 0:
@@ -1349,7 +1349,7 @@ def install_extension_std_platforms(name, source, url):
         sys.stderr.write(' '.join(make_cmd) + '\n')
         grass.message("\n%s\n" % _("To install run:"))
         sys.stderr.write(' '.join(install_cmd) + '\n')
-        return 0
+        return 0, None, None
 
     os.chdir(os.path.join(TMPDIR, name))
 
@@ -1364,7 +1364,7 @@ def install_extension_std_platforms(name, source, url):
                       ' Please check above error messages.'))
 
     if flags['i']:
-        return 0
+        return 0, None, None
 
     grass.message(_("Installing..."))
 
@@ -1940,10 +1940,12 @@ def main():
         list_installed_extensions(toolboxes=flags['t'])
         return 0
 
-    if flags['d']:
+    if flags['d'] or flags['i']:
+        flag = 'd' if flags['d'] else 'i'
         if options['operation'] != 'add':
-            grass.warning(_("Flag 'd' is relevant only to"
-                            " 'operation=add'. Ignoring this flag."))
+            grass.warning(_("Flag '{}' is relevant only to"
+                            " 'operation=add'. Ignoring this flag.").format(
+                                flag))
         else:
             global REMOVE_TMPDIR
             REMOVE_TMPDIR = False
