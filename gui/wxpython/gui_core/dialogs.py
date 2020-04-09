@@ -224,17 +224,20 @@ class VectorDialog(SimpleDialog):
         """
         SimpleDialog.__init__(self, parent, title)
 
-        self.element = Select(
-            parent=self.panel,
-            id=wx.ID_ANY,
-            size=globalvar.DIALOG_GSELECT_SIZE,
-            type='vector',
-            layerTree=layerTree,
-            validator=MapValidator())
+        self.element = self._selection_widget(layerTree)
         self.element.SetFocus()
 
         self.warning = _("Name of vector map is missing.")
         wx.CallAfter(self._layout)
+
+    def _selection_widget(self, layerTree):
+        return Select(parent=self.panel,
+                      id=wx.ID_ANY,
+                      size=globalvar.DIALOG_GSELECT_SIZE,
+                      type='vector',
+                      layerTree=layerTree,
+                      fullyQualified=True
+                      )
 
     def _layout(self):
         """Do layout"""
@@ -321,6 +324,16 @@ class NewVectorDialog(VectorDialog):
         self.table.Bind(wx.EVT_CHECKBOX, self.OnTable)
 
         self.warning = _("Name of new vector map is missing.")
+
+    def _selection_widget(self, layerTree):
+        return Select(parent=self.panel,
+                      id=wx.ID_ANY,
+                      size=globalvar.DIALOG_GSELECT_SIZE,
+                      type='vector',
+                      layerTree=layerTree,
+                      fullyQualified=False,
+                      validator=MapValidator()
+                      )
 
     def OnTable(self, event):
         if self.keycol:

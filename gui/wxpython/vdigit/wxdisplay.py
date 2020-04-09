@@ -1000,7 +1000,7 @@ class DisplayDriver:
         :return: map_info
         :return: None on error
         """
-        Debug.msg("DisplayDriver.OpenMap(): name=%s mapset=%s updated=%d",
+        Debug.msg(1, "DisplayDriver.OpenMap(): name=%s mapset=%s updated=%d",
                   name, mapset, update)
         if not self.mapInfo:
             self.mapInfo = Map_info()
