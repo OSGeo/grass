@@ -127,6 +127,15 @@ class TitledPage(WizardPageSimple):
             textCtrl.SetToolTip(tooltip)
         return textCtrl
 
+    def MakeStaticText(self, text='', size=(100, -1),
+                     style=0, parent=None):
+        """Generic static text control"""
+        if not parent:
+            parent = self
+        staticText = StaticText(parent=parent, id=wx.ID_ANY, label=text,
+                               size=size, style=style)
+        return staticText
+
     def MakeButton(self, text, id=wx.ID_ANY, size=(-1, -1),
                    parent=None, tooltip=None):
         """Generic button"""
@@ -161,11 +170,8 @@ class DatabasePage(TitledPage):
         self.location = ''
         self.locTitle = ''
 
-        # buttons
-        self.bbrowse = self.MakeButton(_("Browse"))
-
         # text controls
-        self.tgisdbase = self.MakeTextCtrl(grassdatabase, size=(300, -1))
+        self.tgisdbase = self.MakeStaticText(grassdatabase, size=(-1, -1))
         self.tlocation = self.MakeTextCtrl("newLocation", size=(300, -1))
         self.tlocation.SetFocus()
         self.tlocation.SetValidator(
@@ -199,11 +205,6 @@ class DatabasePage(TitledPage):
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
                        pos=(1, 2))
-        self.sizer.Add(self.bbrowse,
-                       flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5,
-                       pos=(1, 3))
 
         self.sizer.Add(
             self.MakeLabel(
@@ -249,7 +250,6 @@ class DatabasePage(TitledPage):
         self.sizer.AddGrowableCol(3)
 
         # bindings
-        self.Bind(wx.EVT_BUTTON, self.OnBrowse, self.bbrowse)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.tgisdbase.Bind(wx.EVT_TEXT, self.OnChangeName)
         self.tlocation.Bind(wx.EVT_TEXT, self.OnChangeName)
@@ -277,21 +277,11 @@ class DatabasePage(TitledPage):
 
         event.Skip()
 
-    def OnBrowse(self, event):
-        """Choose GRASS data directory"""
-        dlg = wx.DirDialog(self, _("Choose GRASS data directory:"),
-                           os.getcwd(), wx.DD_DEFAULT_STYLE)
-        if dlg.ShowModal() == wx.ID_OK:
-            self.grassdatabase = dlg.GetPath()
-            self.tgisdbase.SetValue(self.grassdatabase)
-
-        dlg.Destroy()
-
     def OnPageChanging(self, event=None):
         error = None
         if os.path.isdir(
             os.path.join(
-                self.tgisdbase.GetValue(),
+                self.tgisdbase.GetLabel(),
                 self.tlocation.GetValue())):
             error = _("Location already exists in GRASS Database.")
 
@@ -305,7 +295,7 @@ class DatabasePage(TitledPage):
             return
 
         self.location = self.tlocation.GetValue()
-        self.grassdatabase = self.tgisdbase.GetValue()
+        self.grassdatabase = self.tgisdbase.GetLabel()
         self.locTitle = self.tlocTitle.GetValue()
         if os.linesep in self.locTitle or \
                 len(self.locTitle) > 255:
