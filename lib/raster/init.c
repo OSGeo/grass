@@ -121,9 +121,6 @@ static int init(void)
     R__.fileinfo_count = 0;
     R__.fileinfo = NULL;
 
-    R__.compression_type = G_default_compressor();
-
-    cname = getenv("GRASS_COMPRESSOR");
     /* compression methods as defined in lib/gis/compress.h
      * 1: RLE
      * 2: ZLIB (DEFLATE)
