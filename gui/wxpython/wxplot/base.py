@@ -56,7 +56,7 @@ PlotIcons = {
 class BasePlotFrame(wx.Frame):
     """Abstract PyPlot display frame class"""
 
-    def __init__(self, parent=None, size=wx.Size(700, 400),
+    def __init__(self, parent=None, giface=None, size=wx.Size(700, 400),
                  style=wx.DEFAULT_FRAME_STYLE, rasterList=[], **kwargs):
 
         wx.Frame.__init__(
@@ -68,6 +68,7 @@ class BasePlotFrame(wx.Frame):
             **kwargs)
 
         self.parent = parent  # MapFrame for a plot type
+        self._giface = giface
         self.Map = Map()             # instance of render.Map to be associated with display
         self.rasterList = rasterList  # list of rasters to plot
         self.raster = {}    # dictionary of raster maps and their plotting parameters
@@ -145,9 +146,12 @@ class BasePlotFrame(wx.Frame):
         self.properties['font'] = {}
         self.properties['font']['prop'] = UserSettings.Get(
             group=self.plottype, key='font')
-        self.properties['font']['wxfont'] = wx.Font(11, wx.FONTFAMILY_SWISS,
-                                                    wx.FONTSTYLE_NORMAL,
-                                                    wx.FONTWEIGHT_NORMAL)
+        self.wx_font = wx.Font(
+            self.properties['font']['prop']['defaultSize'],
+            self.properties['font']['prop']['family'],
+            self.properties['font']['prop']['style'],
+            self.properties['font']['prop']['weight'],
+        )
 
         self.properties['raster'] = {}
         self.properties['raster'] = UserSettings.Get(
@@ -191,15 +195,15 @@ class BasePlotFrame(wx.Frame):
 
         # x and y axis set to normal (non-log)
         self.client.logScale = (False, False)
-        if self.properties['x-axis']['prop']['type']:
+        if self.properties['x-axis']['prop']['type'] == 'custom':
+            self.client.xSpec = 'min'
+        else:
             self.client.xSpec = self.properties['x-axis']['prop']['type']
-        else:
-            self.client.xSpec = 'auto'
 
-        if self.properties['y-axis']['prop']['type']:
-            self.client.ySpec = self.properties['y-axis']['prop']['type']
+        if self.properties['y-axis']['prop']['type'] == 'custom':
+            self.client.ySpec = 'min'
         else:
-            self.client.ySpec = 'auto'
+            self.client.ySpec = self.properties['y-axis']['prop']['type']
 
     def InitRasterOpts(self, rasterList, plottype):
         """Initialize or update raster dictionary for plotting
@@ -336,7 +340,7 @@ class BasePlotFrame(wx.Frame):
     def SetGraphStyle(self):
         """Set plot and text options
         """
-        self.client.SetFont(self.properties['font']['wxfont'])
+        self.client.SetFont(self.wx_font)
         self.client.fontSizeTitle = self.properties['font']['prop']['titleSize']
         self.client.fontSizeAxis = self.properties['font']['prop']['axisSize']
 
@@ -561,7 +565,7 @@ class BasePlotFrame(wx.Frame):
     def UpdateLabels(self):
         x, y = self._getPlotLabels()
 
-        self.client.SetFont(self.properties['font']['wxfont'])
+        self.client.SetFont(self.wx_font)
         self.client.fontSizeTitle = self.properties['font']['prop']['titleSize']
         self.client.fontSizeAxis = self.properties['font']['prop']['axisSize']
 
@@ -572,7 +576,7 @@ class BasePlotFrame(wx.Frame):
     def PlotText(self, event):
         """Set custom text values for profile title and axis labels.
         """
-        dlg = TextDialog(parent=self, id=wx.ID_ANY,
+        dlg = TextDialog(parent=self, giface=self._giface, id=wx.ID_ANY,
                          plottype=self.plottype,
                          title=_('Text settings'))
 
@@ -586,7 +590,7 @@ class BasePlotFrame(wx.Frame):
         options.  Calls OptDialog class.
         """
 
-        dlg = OptDialog(parent=self, id=wx.ID_ANY,
+        dlg = OptDialog(parent=self, giface=self._giface, id=wx.ID_ANY,
                         plottype=self.plottype,
                         title=_('Plot settings'))
         btnval = dlg.ShowModal()

@@ -313,7 +313,7 @@ class Model(object):
         try:
             gxmXml = ProcessModelFile(etree.parse(filename))
         except Exception as e:
-            raise GException(unicode(e))
+            raise GException('{}'.format(e))
 
         if self.canvas:
             win = self.canvas.parent
@@ -653,7 +653,7 @@ class Model(object):
             delInterData = dlg.DeleteIntermediateData()
             dlg.Destroy()
             if err:
-                GError(parent=parent, message=unicode('\n'.join(err)))
+                GError(parent=parent, message='\n'.join(err))
                 return
 
             err = list()
@@ -669,14 +669,13 @@ class Model(object):
                     parent=parent,
                     message=_("Variables below not defined:") +
                     "\n\n" +
-                    unicode(
-                        '\n'.join(
-                            map(
-                                lambda x: "%s: %s (%s)" %
-                                (x[0],
-                                 x[1],
-                                    x[2]),
-                                err))))
+                    '\n'.join(
+                        map(
+                            lambda x: "%s: %s (%s)" %
+                            (x[0],
+                             x[1],
+                             x[2]),
+                            err)))
                 return
 
         log.cmdThread.SetId(-1)
@@ -2047,7 +2046,7 @@ class ProcessModelFile:
             intermediate = False if data.find('intermediate') is None else True
 
             display = False if data.find('display') is None else True
-            
+
             rels = list()
             for rel in data.findall('relation'):
                 defrel = {'id': int(rel.get('id', -1)),
@@ -2659,7 +2658,7 @@ def getParameterizedFlags(paramFlags, itemFlags):
     fl = ''
 """)
 
-                self.fd.write("""    for i in [key for key, value in paramFlags.iteritems() if value == 'True']:
+                self.fd.write("""    for i in [key for key, value in paramFlags.items() if value == 'True']:
         if i in itemFlags:
             fl += i[-1]
 
@@ -2677,7 +2676,7 @@ if __name__ == "__main__":
         if properties.get('overwrite'):
             self.fd.write('    os.environ["GRASS_OVERWRITE"] = "1"\n')
 
-        self.fd.write('    sys.exit(main())\n')
+        self.fd.write('    sys.exit(main(options, flags))\n')
 
     def _writePythonItem(self, item, ignoreBlock=True, variables={}):
         """Write model object to Python file"""

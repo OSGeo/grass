@@ -40,7 +40,7 @@ https://trac.osgeo.org/grass/stats/code
 
 Maintainer: M. Neteler
 
-* https://grass.osgeo.org
+* https://grass.osgeo.org  (to be replaced in 2020)
 ** Shared virtual OSGeo machine (osgeo6) hosted at Oregon State University Open Source Lab
    (server: osgeo6.osgeo.osuosl.org)
 ** OSGeo SAC page: http://wiki.osgeo.org/wiki/SAC_Service_Status
@@ -104,6 +104,10 @@ Maintainer: M. Neteler
 ** OLD: Sitemeter: http://www.sitemeter.com/?a=stats&s=s24grassgis
 
 Summary: The system should run almost autonomously.
+
+== WinGRASS maintenance scripts ==
+
+* https://github.com/landam/wingrass-maintenance-scripts
 
 == GRASS Mailing lists ==
 

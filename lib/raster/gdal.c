@@ -286,8 +286,11 @@ struct GDAL_link *Rast_get_gdal_link(const char *name, const char *mapset)
     p = G_find_key_value("null", key_val);
     if (!p)
 	return NULL;
-    if (strcmp(p, "none") == 0)
+    /* atof on windows can not read "nan" and returns 0 instead */
+    if (strcmp(p, "none") == 0 ||
+        G_strcasecmp(p, "nan") == 0 || G_strcasecmp(p, "-nan") == 0) {
 	Rast_set_d_null_value(&null_val, 1);
+    }
     else
 	null_val = atof(p);
 

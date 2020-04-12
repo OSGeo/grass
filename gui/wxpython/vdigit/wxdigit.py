@@ -47,7 +47,7 @@ try:
     from grass.lib.vector import *
     from grass.lib.vedit import *
     from grass.lib.dbmi import *
-except (ImportError, WindowsError) as e:
+except (ImportError, WindowsError, TypeError) as e:
     print("wxdigit.py: {}".format(e), file=sys.stderr)
 
 class VDigitError:
@@ -266,12 +266,11 @@ class IVDigit:
         name = create_string_buffer(GNAME_MAX)
         mapset = create_string_buffer(GMAPSET_MAX)
         if not G_name_is_fully_qualified(bgmap, name, mapset):
-            name = str(bgmap)
-            mapset = str(G_find_vector2(bgmap, ''))
+            name = bgmap
+            mapset = grass.decode(G_find_vector2(bgmap, ''))
         else:
-            name = str(name.value)
-            mapset = str(mapset.value)
-
+            name = grass.decode(name.value)
+            mapset = grass.decode(mapset.value)
         if (name == Vect_get_name(self.poMapInfo) and
                 mapset == Vect_get_mapset(self.poMapInfo)):
             self.poBgMapInfo = self.popoBgMapInfo = None

@@ -1,7 +1,7 @@
 """
 @package gui_core.wrap
 
-@brief Core wrapped wxpython widgets 
+@brief Core wrapped wxpython widgets
 
 Classes:
  - wrap::GSpinCtrl
@@ -16,22 +16,35 @@ This program is free software under the GNU General Public License
 """
 
 import wx
-import wx.lib.buttons as buttons
+import wx.lib.agw.floatspin as fs
 import wx.lib.colourselect as csel
+import wx.lib.filebrowsebutton as filebrowse
+import wx.lib.scrolledpanel as scrolled
+from wx.lib import expando
+from wx.lib import buttons
 try:
     import wx.lib.agw.customtreectrl as CT
 except ImportError:
     import wx.lib.customtreectrl as CT
 
-from core.globalvar import gtk3, wxPythonPhoenix, CheckWxVersion
-if wxPythonPhoenix:
-    import wx.adv
+from core.globalvar import CheckWxVersion, gtk3, wxPythonPhoenix
 
 if wxPythonPhoenix:
+    import wx.adv
+    from wx.adv import OwnerDrawnComboBox as OwnerDrawnComboBox_
+    from wx.adv import ODCB_PAINTING_CONTROL, ODCB_PAINTING_SELECTED
+    from wx.adv import BitmapComboBox as BitmapComboBox_
+    from wx.adv import HyperlinkCtrl as HyperlinkCtrl_
+    from wx.adv import HL_ALIGN_LEFT, HL_CONTEXTMENU
     ComboPopup = wx.ComboPopup
     wxComboCtrl = wx.ComboCtrl
 else:
     import wx.combo
+    from wx.combo import OwnerDrawnComboBox as OwnerDrawnComboBox_
+    from wx.combo import ODCB_PAINTING_CONTROL, ODCB_PAINTING_SELECTED
+    from wx.combo import BitmapComboBox as BitmapComboBox_
+    from wx import HyperlinkCtrl as HyperlinkCtrl_
+    from wx import HL_ALIGN_LEFT, HL_CONTEXTMENU
     ComboPopup = wx.combo.ComboPopup
     wxComboCtrl = wx.combo.ComboCtrl
 
@@ -47,11 +60,13 @@ def BitmapFromImage(image, depth=-1):
     else:
         return wx.BitmapFromImage(image, depth=depth)
 
+
 def ImageFromBitmap(bitmap):
     if wxPythonPhoenix:
         return bitmap.ConvertToImage()
     else:
         return wx.ImageFromBitmap(bitmap)
+
 
 def EmptyBitmap(width, height, depth=-1):
     if wxPythonPhoenix:
@@ -120,6 +135,34 @@ class SpinCtrl(wx.SpinCtrl):
                 kwargs['size'] = wx.Size(self.gtk3MinSize, -1)
 
         wx.SpinCtrl.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            wx.SpinCtrl.SetToolTip(self, tipString=tip)
+        else:
+            wx.SpinCtrl.SetToolTipString(self, tip)
+
+
+class FloatSpin(fs.FloatSpin):
+    """Wrapper around fs.FloatSpin to have more control
+    over the widget on different platforms"""
+
+    gtk3MinSize = 130
+
+    def __init__(self, *args, **kwargs):
+        if gtk3:
+            if 'size' in kwargs:
+                kwargs['size'] = wx.Size(max(self.gtk3MinSize, kwargs['size'][0]), kwargs['size'][1])
+            else:
+                kwargs['size'] = wx.Size(self.gtk3MinSize, -1)
+
+        fs.FloatSpin.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            fs.FloatSpin.SetToolTip(self, tipString=tip)
+        else:
+            fs.FloatSpin.SetToolTipString(self, tip)
 
 
 class Button(wx.Button):
@@ -472,6 +515,7 @@ class ColourSelect(csel.ColourSelect):
         else:
             csel.ColourSelect.SetToolTipString(self, tip)
 
+
 class ComboCtrl(wxComboCtrl):
     def __init__(self, *args, **kwargs):
         wxComboCtrl.__init__(self, *args, **kwargs)
@@ -481,3 +525,134 @@ class ComboCtrl(wxComboCtrl):
             wxComboCtrl.SetToolTip(self, tipString=tip)
         else:
             wxComboCtrl.SetToolTipString(self, tip)
+
+
+class Dialog(wx.Dialog):
+    """Wrapper around wx.Dialog to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        wx.Dialog.__init__(self, *args, **kwargs)
+
+
+class Notebook(wx.Notebook):
+    """Wrapper around NoteBook to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        wx.Notebook.__init__(self, *args, **kwargs)
+
+
+class OwnerDrawnComboBox(OwnerDrawnComboBox_):
+    """Wrapper around OwnerDrawnComboBox to have more control
+    over the widget on different platforms/wxpython versions"""
+    ODCB_PAINTING_CONTROL = ODCB_PAINTING_CONTROL
+    ODCB_PAINTING_SELECTED = ODCB_PAINTING_SELECTED
+
+    def __init__(self, *args, **kwargs):
+        OwnerDrawnComboBox_.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            OwnerDrawnComboBox_.SetToolTip(self, tipString=tip)
+        else:
+            OwnerDrawnComboBox_.SetToolTipString(self, tip)
+
+
+class BitmapComboBox(BitmapComboBox_):
+    """Wrapper around BitmapComboBox to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        BitmapComboBox_.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            BitmapComboBox_.SetToolTip(self, tipString=tip)
+        else:
+            BitmapComboBox_.SetToolTipString(self, tip)
+
+
+class ScrolledPanel(scrolled.ScrolledPanel):
+    """Wrapper around scrolled.ScrolledPanel to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        scrolled.ScrolledPanel.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            scrolled.ScrolledPanel.SetToolTip(self, tipString=tip)
+        else:
+            scrolled.ScrolledPanel.SetToolTipString(self, tip)
+
+
+class FileBrowseButton(filebrowse.FileBrowseButton):
+    """Wrapper around filebrowse.FileBrowseButton to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        filebrowse.FileBrowseButton.__init__(self, *args, **kwargs)
+
+
+class DirBrowseButton(filebrowse.DirBrowseButton):
+    """Wrapper around filebrowse.DirBrowseButton to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        filebrowse.DirBrowseButton.__init__(self, *args, **kwargs)
+
+
+class ExpandoTextCtrl(expando.ExpandoTextCtrl):
+    """Wrapper around expando.ExpandoTextCtrl to have more control
+    over the widget on different platforms/wxpython versions"""
+    EVT_ETC_LAYOUT_NEEDED = expando.EVT_ETC_LAYOUT_NEEDED
+
+    def __init__(self, *args, **kwargs):
+        expando.ExpandoTextCtrl.__init__(self, *args, **kwargs)
+
+
+class ColourPickerCtrl(wx.ColourPickerCtrl):
+    """Wrapper around wx.ColourPickerCtrl to have more control
+    over the widget on different platforms/wxpython versions"""
+
+    def __init__(self, *args, **kwargs):
+        wx.ColourPickerCtrl.__init__(self, *args, **kwargs)
+
+
+class ListBox(wx.ListBox):
+    """Wrapper around wx.ListBox to have more control
+    over the widget on different platforms/wxpython versions"""
+
+    def __init__(self, *args, **kwargs):
+        wx.ListBox.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            wx.ListBox.SetToolTip(self, tipString=tip)
+        else:
+            wx.ListBox.SetToolTipString(self, tip)
+
+
+class HyperlinkCtrl(HyperlinkCtrl_):
+    """Wrapper around HyperlinkCtrl to have more control
+    over the widget on different platforms/wxpython versions"""
+    HL_ALIGN_LEFT = HL_ALIGN_LEFT
+    HL_CONTEXTMENU = HL_CONTEXTMENU
+
+    def __init__(self, *args, **kwargs):
+        HyperlinkCtrl_.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            HyperlinkCtrl_.SetToolTip(self, tipString=tip)
+        else:
+            HyperlinkCtrl_.SetToolTipString(self, tip)
+
+
+class ComboBox(wx.ComboBox):
+    """Wrapper around wx.ComboBox to have more control
+    over the widget on different platforms/wxpython versions"""
+
+    def __init__(self, *args, **kwargs):
+        wx.ComboBox.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            wx.ComboBox.SetToolTip(self, tipString=tip)
+        else:
+            wx.ComboBox.SetToolTipString(self, tip)

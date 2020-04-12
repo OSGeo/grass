@@ -379,7 +379,7 @@ class PyEditController(object):
                             message=_("Open file"),
                             defaultDir=os.getcwd(),
                             wildcard=_("Python script (*.py)|*.py"),
-                            style=wx.OPEN)
+                            style=wx.FD_OPEN)
 
         if dlg.ShowModal() == wx.ID_OK:
             filename = dlg.GetPath()

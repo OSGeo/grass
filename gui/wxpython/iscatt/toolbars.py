@@ -73,7 +73,7 @@ class MainToolbar(BaseToolbar):
              lambda event: self.scatt_mgr.AddScattPlot()),
             (None,),
             ("cats_mgr", icons['cats_mgr'],
-             lambda event: self.parent.ShowCategoryPanel(event.Checked()),
+             lambda event: self.parent.ShowCategoryPanel(event.IsChecked()),
              wx.ITEM_CHECK),
             (None,),
             ("pan", icons["pan"],
@@ -105,7 +105,7 @@ class MainToolbar(BaseToolbar):
 
     def SetPloltsMode(self, event, tool_name):
         self.scatt_mgr.modeSet.disconnect(self.ModeSet)
-        if event.Checked() == True:
+        if event.IsChecked():
             for i_tool_data in self._data:
                 i_tool_name = i_tool_data[0]
                 if not i_tool_name or i_tool_name in [
@@ -124,7 +124,7 @@ class MainToolbar(BaseToolbar):
     def ActivateSelectionPolygonMode(self, event):
 
         activated = self.scatt_mgr.ActivateSelectionPolygonMode(
-            event.Checked())
+            event.IsChecked())
         self.parent.ShowPlotEditingToolbar(activated)
 
         i_tool_id = vars(self)['sel_pol_mode']
@@ -217,7 +217,7 @@ class EditingToolbar(BaseToolbar):
 
     def SetMode(self, event, tool_name):
         self.scatt_mgr.modeSet.disconnect(self.ModeSet)
-        if event.Checked() == True:
+        if event.IsChecked():
             for i_tool_data in self._data:
                 i_tool_name = i_tool_data[0]
                 if not i_tool_name:

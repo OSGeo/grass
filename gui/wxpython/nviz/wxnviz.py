@@ -41,7 +41,10 @@ except ImportError:
 
 import wx
 
-from ctypes import *
+try:
+    from ctypes import *
+except KeyError as e:
+    print("wxnviz.py: {}".format(e), file=sys.stderr)
 
 try:
     WindowsError
@@ -54,7 +57,7 @@ try:
     from grass.lib.ogsf import *
     from grass.lib.nviz import *
     from grass.lib.raster import *
-except (ImportError, WindowsError) as e:
+except (ImportError, WindowsError, TypeError) as e:
     print("wxnviz.py: {}".format(e), file=sys.stderr)
 
 from core.debug import Debug
@@ -150,7 +153,7 @@ class Nviz(object):
         GVL_libinit()
         GVL_init_region()
 
-    def ResizeWindow(self, width, height):
+    def ResizeWindow(self, width, height, scale=1):
         """GL canvas resized
 
         :param width: window width
@@ -159,11 +162,11 @@ class Nviz(object):
         :return: 1 on success
         :return: 0 on failure (window resized by default to 20x20 px)
         """
-        self.width = width
-        self.height = height
+        self.width = int(width * scale)
+        self.height = int(height * scale)
         Debug.msg(3, "Nviz::ResizeWindow(): width=%d height=%d",
-                  width, height)
-        return Nviz_resize_window(width, height)
+                  self.width, self.height)
+        return Nviz_resize_window(self.width, self.height)
 
     def GetLongDim(self):
         """Get longest dimension, used for initial size of north arrow"""
@@ -219,13 +222,13 @@ class Nviz(object):
 
         return (x.value, y.value, h.value)
 
-    def LookHere(self, x, y):
+    def LookHere(self, x, y, scale=1):
         """Look here feature
         :param x,y: screen coordinates
         """
 
-        Nviz_look_here(x, y)
-        Debug.msg(3, "Nviz::LookHere(): x=%f, y=%f", x, y)
+        Nviz_look_here(int(x * scale), int(y * scale))
+        Debug.msg(3, "Nviz::LookHere(): x=%f, y=%f", x * scale, y * scale)
 
     def LookAtCenter(self):
         """Center view at center of displayed surface"""
@@ -1922,7 +1925,7 @@ class Nviz(object):
         """
         Nviz_delete_scalebar(self.data, id)
 
-    def GetPointOnSurface(self, sx, sy):
+    def GetPointOnSurface(self, sx, sy, scale=1):
         """Get point on surface
 
         :param sx,sy: canvas coordinates (LL)
@@ -1931,20 +1934,20 @@ class Nviz(object):
         x = c_float()
         y = c_float()
         z = c_float()
-        Debug.msg(5, "Nviz::GetPointOnSurface(): sx=%d sy=%d" % (sx, sy))
+        Debug.msg(5, "Nviz::GetPointOnSurface(): sx=%d sy=%d" % (sx * scale, sy * scale))
         num = GS_get_selected_point_on_surface(
-            sx, sy, byref(sid), byref(x), byref(y), byref(z))
+            int(sx * scale), int(sy * scale), byref(sid), byref(x), byref(y), byref(z))
         if num == 0:
             return (None, None, None, None)
 
         return (sid.value, x.value, y.value, z.value)
 
-    def QueryMap(self, sx, sy):
+    def QueryMap(self, sx, sy, scale=1):
         """Query surface map
 
         :param sx,sy: canvas coordinates (LL)
         """
-        sid, x, y, z = self.GetPointOnSurface(sx, sy)
+        sid, x, y, z = self.GetPointOnSurface(sx, sy, scale)
         if not sid:
             return None
 
@@ -1957,8 +1960,8 @@ class Nviz(object):
                 'x': x,
                 'y': y,
                 'z': z,
-                'elevation': catstr.value.replace('(', '').replace(')', ''),
-                'color': valstr.value}
+                'elevation': DecodeString(catstr.value).replace('(', '').replace(')', ''),
+                'color': DecodeString(valstr.value)}
 
     def GetDistanceAlongSurface(self, sid, p1, p2, useExag=True):
         """Get distance measured along surface"""

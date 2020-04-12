@@ -261,7 +261,7 @@ class WMSBase(object):
                 grass.fatal(msg)
 
         grass.debug('Fetching capabilities OK')
-        return grass.decode(cap)
+        return grass.decode(cap.read())
 
     def _fetchDataFromServer(self, url, username=None, password=None):
         """!Fetch data from server
@@ -286,15 +286,13 @@ class WMSBase(object):
         if capfile_output:
             try:
                 with open(capfile_output, "w") as temp:
-                    temp.write(cap.read())
+                    temp.write(cap)
                 return
             except IOError as error:
-                grass.fatal(_("Unabble to open file '%s'.\n%s\n" % (cap_file, error)))
+                grass.fatal(_("Unable to open file '%s'.\n%s\n" % (capfile_output, error)))
 
         # print to output
-        cap_lines = cap.readlines()
-        for line in cap_lines:
-            print(line.rstrip())
+        print(cap)
 
     def _computeBbox(self):
         """!Get region extent for WMS query (bbox)

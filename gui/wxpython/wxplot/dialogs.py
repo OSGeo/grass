@@ -22,15 +22,15 @@ This program is free software under the GNU General Public License
 import os
 
 import wx
-import wx.lib.colourselect as csel
-import wx.lib.scrolledpanel as scrolled
 
 from core import globalvar
 from core.settings import UserSettings
 from core.globalvar import ICONDIR
 from gui_core.gselect import Select
-from gui_core.wrap import SpinCtrl, Button, StaticText, \
-    StaticBox, TextCtrl, Choice
+from gui_core.wrap import (
+    ColourSelect, ComboBox, Button, CheckBox, Choice, Panel, RadioButton,
+    ScrolledPanel, SpinCtrl, StaticBox, StaticText, TextCtrl,
+)
 
 from grass.script import core as grass
 
@@ -211,7 +211,7 @@ class ScatterRasterDialog(wx.Dialog):
 #        box.Add(item = label,
 #                flag = wx.ALIGN_CENTER_VERTICAL, pos = (2, 0))
 #        types = ['normal', 'bubble']
-#        scattertype = wx.ComboBox(parent = self, id = wx.ID_ANY, size = (250, -1),
+#        scattertype = ComboBox(parent = self, id = wx.ID_ANY, size = (250, -1),
 #                                choices = types, style = wx.CB_DROPDOWN)
 #        scattertype.SetStringSelection(self.scattertype)
 #        box.Add(item = scattertype,
@@ -296,7 +296,7 @@ class PlotStatsFrame(wx.Frame):
                 wx.BITMAP_TYPE_ICO))
         self.panel = wx.Panel(self)
 
-        sp = scrolled.ScrolledPanel(
+        sp = ScrolledPanel(
             self.panel, -1, size=(400, 400),
             style=wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER, name="Statistics")
 
@@ -516,7 +516,7 @@ class HistRasterDialog(wx.Dialog):
         box.Add(label,
                 flag=wx.ALIGN_CENTER_VERTICAL, pos=(4, 0))
         types = ['count', 'percent', 'area']
-        histtype = wx.ComboBox(parent=self, id=wx.ID_ANY, size=(250, -1),
+        histtype = ComboBox(parent=self, id=wx.ID_ANY, size=(250, -1),
                                choices=types, style=wx.CB_DROPDOWN)
         histtype.SetStringSelection(self.histtype)
         box.Add(histtype,
@@ -613,7 +613,7 @@ class HistRasterDialog(wx.Dialog):
 
 class TextDialog(wx.Dialog):
 
-    def __init__(self, parent, id, title, plottype='',
+    def __init__(self, parent, giface, id, title, plottype='',
                  style=wx.DEFAULT_DIALOG_STYLE, **kwargs):
         """Dialog to set histogram text options: font, title
         and font size, axis labels and font size
@@ -622,6 +622,7 @@ class TextDialog(wx.Dialog):
         #
         # initialize variables
         #
+        self._giface = giface
         # combo box entry lists
         self.ffamilydict = {'default': wx.FONTFAMILY_DEFAULT,
                             'decorative': wx.FONTFAMILY_DECORATIVE,
@@ -649,9 +650,9 @@ class TextDialog(wx.Dialog):
         self.properties = self.parent.properties  # read-only
 
         # font size
-        self.fontfamily = self.properties['font']['wxfont'].GetFamily()
-        self.fontstyle = self.properties['font']['wxfont'].GetStyle()
-        self.fontweight = self.properties['font']['wxfont'].GetWeight()
+        self.fontfamily = self.parent.wx_font.GetFamily()
+        self.fontstyle = self.parent.wx_font.GetStyle()
+        self.fontweight = self.parent.wx_font.GetWeight()
 
         self._do_layout()
 
@@ -760,7 +761,7 @@ class TextDialog(wx.Dialog):
             id=wx.ID_ANY,
             label=_("Font family:"))
         gridSizer.Add(label1, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
-        self.ffamilycb = wx.ComboBox(
+        self.ffamilycb = ComboBox(
             parent=self, id=wx.ID_ANY, size=(250, -1),
             choices=list(self.ffamilydict.keys()),
             style=wx.CB_DROPDOWN)
@@ -776,7 +777,7 @@ class TextDialog(wx.Dialog):
         #
         label = StaticText(parent=self, id=wx.ID_ANY, label=_("Style:"))
         gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(1, 0))
-        self.fstylecb = wx.ComboBox(
+        self.fstylecb = ComboBox(
             parent=self, id=wx.ID_ANY, size=(250, -1),
             choices=list(self.fstyledict.keys()),
             style=wx.CB_DROPDOWN)
@@ -792,7 +793,7 @@ class TextDialog(wx.Dialog):
         #
         label = StaticText(parent=self, id=wx.ID_ANY, label=_("Weight:"))
         gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(2, 0))
-        self.fwtcb = wx.ComboBox(
+        self.fwtcb = ComboBox(
             parent=self, size=(250, -1),
             choices=list(self.fwtdict.keys()),
             style=wx.CB_DROPDOWN)
@@ -834,7 +835,6 @@ class TextDialog(wx.Dialog):
         btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
         btnSave.SetToolTip(
             _("Apply and save changes to user settings file (default for next sessions)"))
-        btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
         btnCancel.SetToolTip(_("Close dialog and ignore changes"))
 
         # sizers
@@ -887,11 +887,14 @@ class TextDialog(wx.Dialog):
             'axisSize'] = self.axislabelsize.GetValue()
 
         family = self.ffamilydict[self.ffamilycb.GetStringSelection()]
-        self.properties['font']['wxfont'].SetFamily(family)
+        self.properties['font']['prop']['family'] = family
+        self.parent.wx_font.SetFamily(family)
         style = self.fstyledict[self.fstylecb.GetStringSelection()]
-        self.properties['font']['wxfont'].SetStyle(style)
+        self.properties['font']['prop']['style'] = style
+        self.parent.wx_font.SetStyle(style)
         weight = self.fwtdict[self.fwtcb.GetStringSelection()]
-        self.properties['font']['wxfont'].SetWeight(weight)
+        self.properties['font']['prop']['weight'] = weight
+        self.parent.wx_font.SetWeight(weight)
 
     def OnSave(self, event):
         """Button 'Save' pressed"""
@@ -900,7 +903,7 @@ class TextDialog(wx.Dialog):
         UserSettings.ReadSettingsFile(settings=fileSettings)
         fileSettings[self.plottype] = UserSettings.Get(group=self.plottype)
         UserSettings.SaveToFile(fileSettings)
-        self.parent.parent.GetLayerManager().GetLogWindow().WriteLog(
+        self._giface.WriteLog(
             _('Plot text sizes saved to file \'%s\'.') % UserSettings.filePath)
         self.EndModal(wx.ID_OK)
 
@@ -914,14 +917,10 @@ class TextDialog(wx.Dialog):
         self.OnApply(None)
         self.EndModal(wx.ID_OK)
 
-    def OnCancel(self, event):
-        """Button 'Cancel' pressed"""
-        self.EndModal(wx.ID_CANCEL)
-
 
 class OptDialog(wx.Dialog):
 
-    def __init__(self, parent, id, title, plottype='',
+    def __init__(self, parent, giface, id, title, plottype='',
                  style=wx.DEFAULT_DIALOG_STYLE, **kwargs):
         """Dialog to set various options for data plotted, including: line
         width, color, style; marker size, color, fill, and style; grid
@@ -931,6 +930,7 @@ class OptDialog(wx.Dialog):
 
         # init variables
         self.parent = parent
+        self._giface = giface
         self.linestyledict = parent.linestyledict
         self.ptfilldict = parent.ptfilldict
         self.parent = parent
@@ -1041,7 +1041,7 @@ class OptDialog(wx.Dialog):
                 pos=(
                     row,
                     0))
-            color = csel.ColourSelect(
+            color = ColourSelect(
                 parent=self, id=wx.ID_ANY, colour=self.raster[
                     self.map]['pcolor'])
             self.wxId['pcolor'] = color.GetId()
@@ -1113,7 +1113,7 @@ class OptDialog(wx.Dialog):
                 pos=(
                     0,
                     0))
-            ptcolor = csel.ColourSelect(
+            ptcolor = ColourSelect(
                 parent=self,
                 id=wx.ID_ANY,
                 colour=self.properties['marker']['color'])
@@ -1195,7 +1195,7 @@ class OptDialog(wx.Dialog):
                 pos=(
                     0,
                     0))
-            ptcolor = csel.ColourSelect(
+            ptcolor = ColourSelect(
                 parent=self, id=wx.ID_ANY, colour=self.raster[
                     self.map]['pcolor'])
             self.wxId['pcolor'] = ptcolor.GetId()
@@ -1332,7 +1332,7 @@ class OptDialog(wx.Dialog):
             gridSizer.Add(max, pos=(row, 1))
 
             row += 1
-            log = wx.CheckBox(parent=self, id=wx.ID_ANY, label=_("Log scale"))
+            log = CheckBox(parent=self, id=wx.ID_ANY, label=_("Log scale"))
             log.SetValue(prop['log'])
             self.wxId[atype]['log'] = log.GetId()
             gridSizer.Add(log, pos=(row, 0), span=(1, 2))
@@ -1363,7 +1363,7 @@ class OptDialog(wx.Dialog):
         row = 0
         label = StaticText(parent=self, id=wx.ID_ANY, label=_("Grid color"))
         gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
-        gridcolor = csel.ColourSelect(
+        gridcolor = ColourSelect(
             parent=self,
             id=wx.ID_ANY,
             colour=self.properties['grid']['color'])
@@ -1371,7 +1371,7 @@ class OptDialog(wx.Dialog):
         gridSizer.Add(gridcolor, pos=(row, 1))
 
         row += 1
-        gridshow = wx.CheckBox(parent=self, id=wx.ID_ANY, label=_("Show grid"))
+        gridshow = CheckBox(parent=self, id=wx.ID_ANY, label=_("Show grid"))
         gridshow.SetValue(self.properties['grid']['enabled'])
         self.wxId['grid']['enabled'] = gridshow.GetId()
         gridSizer.Add(gridshow, pos=(row, 0), span=(1, 2))
@@ -1391,7 +1391,7 @@ class OptDialog(wx.Dialog):
         gridSizer.Add(legendfontsize, pos=(row, 1))
 
         row += 1
-        legendshow = wx.CheckBox(
+        legendshow = CheckBox(
             parent=self,
             id=wx.ID_ANY,
             label=_("Show legend"))
@@ -1464,7 +1464,6 @@ class OptDialog(wx.Dialog):
         btnOk.Bind(wx.EVT_BUTTON, self.OnOk)
         btnOk.SetDefault()
         btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
-        btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
 
         self.SetSizer(sizer)
         sizer.Fit(self)
@@ -1593,9 +1592,9 @@ class OptDialog(wx.Dialog):
         UserSettings.ReadSettingsFile(settings=fileSettings)
         fileSettings[self.plottype] = UserSettings.Get(group=self.plottype)
         UserSettings.SaveToFile(fileSettings)
-        self.parent.parent.GetLayerManager().GetLogWindow().WriteLog(
+        self._giface.WriteLog(
             _('Plot settings saved to file \'%s\'.') % UserSettings.filePath)
-        self.Close()
+        self.EndModal(wx.ID_OK)
 
     def OnApply(self, event):
         """Button 'Apply' pressed. Does not close dialog"""
@@ -1608,7 +1607,3 @@ class OptDialog(wx.Dialog):
         """Button 'OK' pressed"""
         self.OnApply(None)
         self.EndModal(wx.ID_OK)
-
-    def OnCancel(self, event):
-        """Button 'Cancel' pressed"""
-        self.Close()

@@ -793,7 +793,7 @@ class TaskFrame(wx.Frame):
                 self.closebox.IsChecked() and \
                 (event.returncode == 0):
             # was closed also when aborted but better is leave it open
-            wx.FutureCall(2000, self.Close)
+            wx.CallLater(2000, self.Close)
 
     def OnMapCreated(self, name, ltype):
         """Map created or changed
@@ -918,11 +918,11 @@ class TaskFrame(wx.Frame):
                     # happens when closing dialog of a new layer which was
                     # removed from tree
                     pass
-                self.Destroy()
+                self._Destroy()
         else:
             Debug.msg(1, "TaskFrame.OnCancel(): no parent")
             # cancel for non-display commands
-            self.Destroy()
+            self._Destroy()
 
     def OnHelp(self, event):
         """Show manual page (switch to the 'Manual' notebook page)"""
@@ -937,6 +937,12 @@ class TaskFrame(wx.Frame):
         """Create command string (python list)"""
         return self.notebookpanel.createCmd(ignoreErrors=ignoreErrors,
                                             ignoreRequired=ignoreRequired)
+
+    def _Destroy(self):
+        """Destroy Frame"""
+        self.notebookpanel.notebook.Unbind(wx.EVT_NOTEBOOK_PAGE_CHANGED)
+        self.notebookpanel.notebook.widget.Unbind(wx.EVT_NOTEBOOK_PAGE_CHANGED)
+        self.Destroy()
 
 
 class CmdPanel(wx.Panel):
@@ -1706,7 +1712,9 @@ class CmdPanel(wx.Panel):
                             win = gselect.LocationSelect(parent=which_panel,
                                                          value=value)
                             win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                            win.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
                             win.Bind(wx.EVT_TEXT, self.OnSetValue)
+                            win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
 
                         elif prompt == 'mapset':
                             if p.get('age', 'old') == 'old':
@@ -1718,7 +1726,9 @@ class CmdPanel(wx.Panel):
                                 parent=which_panel, value=value, new=new,
                                 multiple=p.get('multiple', False))
                             win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                            win.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
                             win.Bind(wx.EVT_TEXT, self.OnSetValue)
+                            win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
 
                         elif prompt == 'dbase':
                             win = gselect.DbaseSelect(

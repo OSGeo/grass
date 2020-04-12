@@ -69,7 +69,7 @@ class SQLBuilder(wx.Frame):
         self.layer = layer
         self.dbInfo = VectorDBInfo(self.vectmap)
         self.tablename = self.dbInfo.GetTable(self.layer)
-                
+
         self.driver, self.database = self.dbInfo.GetDbSettings(self.layer)
 
         self.colvalues = []     # array with unique values in selected column
@@ -107,7 +107,7 @@ class SQLBuilder(wx.Frame):
                 proportion=1,
                 flag=wx.EXPAND | wx.ALL,
                 border=3)
-        
+
         #
         # text areas
         #
@@ -233,13 +233,13 @@ class SQLBuilder(wx.Frame):
 
         if modeChoices:
             modesizer = wx.BoxSizer(wx.VERTICAL)
-            
+
             self.mode = wx.RadioBox(parent=self.panel, id=wx.ID_ANY,
                                     label=" %s " % _("Interactive insertion"),
                                     choices=modeChoices,
                                     style=wx.RA_SPECIFY_COLS,
                                     majorDimension=1)
-            
+
             self.mode.SetSelection(1)  # default 'values'
             modesizer.Add(self.mode, proportion=1,
                           flag=wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, border=5)
@@ -388,7 +388,7 @@ class SQLBuilder(wx.Frame):
             i += 1
 
         self.list_values.AppendItems(items)
-        
+
     def OnSampleValues(self, event):
         """Get sample values"""
         self.OnUniqueValues(None, True)
@@ -704,7 +704,7 @@ class SQLBuilderUpdate(SQLBuilder):
                              label=" %s " % _("Functions"))
         funcsizer = wx.StaticBoxSizer(funcsbox, wx.VERTICAL)
         self.list_func = wx.ListBox(parent=self.funcpanel, id=wx.ID_ANY,
-                                    choices=self.sqlFuncs['sqlite'].keys(),
+                                    choices=list(self.sqlFuncs['sqlite'].keys()),
                                     style=wx.LB_SORT)
 
         funcsizer.Add(self.list_func, proportion=1,
@@ -856,12 +856,12 @@ class SQLBuilderWhere(SQLBuilder):
                 {'type': "WHERE", 'map': vectmap}
 
         super(SQLBuilderWhere, self).__init__(
-            parent, title, vectmap, id=wx.ID_ANY, 
+            parent, title, vectmap, id=wx.ID_ANY,
             layer=layer)
-        
+
     def OnClear(self, event):
         self.text_sql.SetValue('')
-        
+
     def OnApply(self, event):
         self.parent.SetValue(self.text_sql.GetValue())
 
@@ -884,14 +884,14 @@ class SQLBuilderWhere(SQLBuilder):
         newsqlstr += value
         if inspoint < len(sqlstr):
             newsqlstr += ' ' if sqlstr[inspoint] != ' ' else ''
-        
+
         if newsqlstr:
             self.text_sql.SetValue(sqlstr[:inspoint] + newsqlstr + sqlstr[inspoint:])
             self.text_sql.SetInsertionPoint(inspoint + len(newsqlstr))
-                    
+
         wx.CallAfter(self.text_sql.SetFocus)
 
-        
+
 if __name__ == "__main__":
     if len(sys.argv) not in [3, 4]:
         print(__doc__, file=sys.stderr)

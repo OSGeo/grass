@@ -241,7 +241,13 @@ class GrassTestFilesInvoker(object):
 
     def run_in_location(self, gisdbase, location, location_type,
                         results_dir):
-        """Run tests in a given location"""
+        """Run tests in a given location
+
+        Returns an object with counting attributes of GrassTestFilesCountingReporter,
+        i.e., a file-oriented reporter as opposed to testsuite-oriented one.
+        Use only the attributes related to the summary, such as file_pass_per,
+        not to one file as these will simply contain the last executed file.
+        """
         if os.path.abspath(results_dir) == os.path.abspath(self.start_dir):
             raise RuntimeError("Results root directory should not be the same"
                                " as discovery start directory")
@@ -291,3 +297,4 @@ class GrassTestFilesInvoker(object):
             top_level_testsuite_page_name='testsuite_index.html')
         testsuite_dir_reporter.report_for_dirs(root=results_dir,
                                                directories=self.testsuite_dirs)
+        return self.reporter

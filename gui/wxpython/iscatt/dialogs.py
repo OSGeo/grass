@@ -417,7 +417,9 @@ class SettingsDialog(wx.Dialog):
         gridSizer = wx.GridBagSizer(vgap=1, hgap=1)
 
         row = 0
-        setts = dict(self.colorsSetts.items() + self.sizeSetts.items())
+        setts = dict()
+        setts.update(self.colorsSetts)
+        setts.update(self.sizeSetts)
 
         settsOrder = ["sel_pol", "sel_pol_vertex", "sel_area",
                       "sel_area_opacty", "snap_tresh"]
@@ -449,7 +451,7 @@ class SettingsDialog(wx.Dialog):
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
 
-        gridSizer.AddGrowableCol(1)
+        gridSizer.AddGrowableCol(0)
         ellPolBoxSizer.Add(gridSizer, flag=wx.EXPAND)
 
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)

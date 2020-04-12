@@ -21,6 +21,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
+import sys
 
 import wx
 from core import globalvar
@@ -137,6 +138,13 @@ class ImportDialog(wx.Dialog):
 
         self.createSettingsPage()
 
+        # Enable copying to clipboard with cmd+c from dialog on macOS
+        # (default key binding will close the dialog), trac #3592
+        if sys.platform == "darwin":
+            self.Bind(wx.EVT_MENU, self.OnCopyToClipboard, id=wx.ID_COPY)
+            self.accel_tbl = wx.AcceleratorTable([(wx.ACCEL_CTRL, ord("C"), wx.ID_COPY)])
+            self.SetAcceleratorTable(self.accel_tbl)
+
     def createSettingsPage(self):
 
         self._blackList = {
@@ -214,7 +222,7 @@ class ImportDialog(wx.Dialog):
         dialogSizer.Fit(self.panel)
 
         # auto-layout seems not work here - FIXME
-        size = wx.Size(globalvar.DIALOG_GSELECT_SIZE[0] + 225, 550)
+        size = wx.Size(globalvar.DIALOG_GSELECT_SIZE[0] + 322, 550)
         self.SetMinSize(size)
         self.SetSize((size.width, size.height + 100))
         # width = self.GetSize()[0]
@@ -309,6 +317,13 @@ class ImportDialog(wx.Dialog):
     def OnCmdDone(self, event):
         """Do what has to be done after importing"""
         pass
+
+    def OnCopyToClipboard(self, event):
+        """Copy selected text in dialog to the clipboard"""
+        try:
+            wx.Window.FindFocus().Copy()
+        except:
+            pass
 
     def _getLayersToReprojetion(self, projMatch_idx, grassName_idx):
         """If there are layers with different projection from loation projection,
@@ -707,7 +722,7 @@ class GdalOutputDialog(wx.Dialog):
         dialogSizer.Fit(self.panel)
 
         size = wx.Size(
-            globalvar.DIALOG_GSELECT_SIZE[0] + 225,
+            globalvar.DIALOG_GSELECT_SIZE[0] + 320,
             self.GetBestSize()[1] + 35)
         self.SetMinSize(size)
         self.SetSize((size.width, size.height))

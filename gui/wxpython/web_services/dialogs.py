@@ -37,7 +37,7 @@ from core.utils import GetSettingsPath
 from core.gconsole import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
 
 from gui_core.gselect import Select
-from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl
+from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl, RadioButton
 
 from web_services.widgets import WSPanel, WSManageSettingsWidget
 
@@ -363,8 +363,6 @@ class WSDialogBase(wx.Dialog):
         """Update layer name to web service panel
         """
         lname = event.GetString()
-        lname = lname.encode('ascii', 'replace')
-
         for v in six.itervalues(self.ws_panels):
             v['panel'].SetOutputLayerName(lname.strip())
 
@@ -869,17 +867,17 @@ class SaveWMSLayerDialog(wx.Dialog):
 
         self.region_types_order = ['display', 'comp', 'named']
         self.region_types = {}
-        self.region_types['display'] = wx.RadioButton(
+        self.region_types['display'] = RadioButton(
             parent=self, label=_("Map display"), style=wx.RB_GROUP)
-        self.region_types['comp'] = wx.RadioButton(
+        self.region_types['comp'] = RadioButton(
             parent=self, label=_("Computational region"))
-        self.region_types['named'] = wx.RadioButton(
+        self.region_types['named'] = RadioButton(
             parent=self, label=_("Named region"))
-        self.region_types['display'].SetToolTipString(
+        self.region_types['display'].SetToolTip(
             _("Extent and resolution" " are based on Map Display geometry."))
-        self.region_types['comp'].SetToolTipString(
+        self.region_types['comp'].SetToolTip(
             _("Extent and resolution" " are based on computational region."))
-        self.region_types['named'].SetToolTipString(
+        self.region_types['named'].SetToolTip(
             _("Extent and resolution" " are based on named region."))
         self.region_types['display'].SetValue(
             True)  # set default as map display

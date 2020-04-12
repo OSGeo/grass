@@ -19,6 +19,9 @@ enum flip {
     FLIP_V = 2,
 };
 
+/* colors.c */
+void transfer_colormap(GDALRasterBandH, const char *);
+
 /* link.c */
 void query_band(GDALRasterBandH, const char *,
 		struct Cell_head *, struct band_info *);

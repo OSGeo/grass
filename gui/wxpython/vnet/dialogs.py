@@ -55,8 +55,10 @@ from dbmgr.vinfo import VectorDBInfo
 from gui_core.widgets import GNotebook
 from gui_core.goutput import GConsoleWindow
 from gui_core.gselect import Select, LayerSelect, ColumnSelect
-from gui_core.wrap import SpinCtrl, Button, BitmapButton, StaticText, \
-    StaticBox, TextCtrl, ListCtrl, BitmapFromImage
+from gui_core.wrap import (
+    BitmapButton, BitmapFromImage, Button, CheckBox, ComboBox, ListCtrl,
+    Panel, ScrolledPanel, SpinCtrl, StaticBox, StaticText, TextCtrl
+)
 
 from vnet.widgets import PointsList
 from vnet.toolbars import MainToolbar, PointListToolbar, AnalysisToolbar
@@ -67,8 +69,6 @@ from vnet.vnet_utils import DegreesToRadians, RadiansToDegrees, GetNearestNodeCa
 # - when layer tree of is changed, tmp result map is removed from render list
 # - optimization of map drawing
 # - tmp maps - add number of process
-# - destructor problem - when GRASS GIS is closed with open VNETDialog,
-#   it's destructor is not called
 
 
 class VNETDialog(wx.Dialog):
@@ -126,7 +126,7 @@ class VNETDialog(wx.Dialog):
         #
         self._mgr = wx.aui.AuiManager(self)
 
-        self.mainPanel = wx.Panel(parent=self)
+        self.mainPanel = Panel(parent=self)
         self.notebook = GNotebook(parent=self.mainPanel,
                                   style=FN.FNB_FANCY_TABS | FN.FNB_BOTTOM |
                                   FN.FNB_NO_X_BUTTON)
@@ -157,12 +157,15 @@ class VNETDialog(wx.Dialog):
         # Stores data which are needed for attribute table browser of analysis
         # input map layers
         self.inpDbMgrData = {}
-        self._createInputDbMgrPage()
+        self._checkSelectedVectorMap()
 
         # Stores data which are need for attribute table browser of analysis
         # result map layers
         self.resultDbMgrData = {}
-        self._createResultDbMgrPage()
+        if self.tmp_result:
+            self.resultDbMgrData['input'] = self.tmp_result.GetVectMapName()
+        else:
+            self.resultDbMgrData['input'] = None
 
         self.notebook.Bind(
             FN.EVT_FLATNOTEBOOK_PAGE_CHANGED,
@@ -226,9 +229,9 @@ class VNETDialog(wx.Dialog):
 
     def _createPointsPage(self):
         """Tab with points list and analysis settings"""
-        pointsPanel = wx.Panel(parent=self)
-        anSettingsPanel = wx.Panel(parent=pointsPanel)
-        maxDistPanel = wx.Panel(parent=anSettingsPanel)
+        pointsPanel = Panel(parent=self)
+        anSettingsPanel = Panel(parent=pointsPanel)
+        maxDistPanel = Panel(parent=anSettingsPanel)
         maxValue = 1e8
 
         listBox = StaticBox(parent=pointsPanel, id=wx.ID_ANY,
@@ -254,18 +257,20 @@ class VNETDialog(wx.Dialog):
             parent=maxDistPanel, id=wx.ID_ANY,
             label=_("Maximum distance of point to the network:"))
         self.anSettings["max_dist"] = SpinCtrl(
-            parent=maxDistPanel, id=wx.ID_ANY, min=0, max=maxValue)
+            parent=maxDistPanel, id=wx.ID_ANY, min=0, max=maxValue,
+            size=(150, -1),
+        )
         self.anSettings["max_dist"].Bind(
             wx.EVT_SPINCTRL, lambda event: self.MaxDist())
         self.anSettings["max_dist"].SetValue(100000)  # TODO init val
         self.MaxDist()
 
-        #showCutPanel =  wx.Panel(parent = anSettingsPanel)
-        # self.anSettings["show_cut"] = wx.CheckBox(parent = showCutPanel, id=wx.ID_ANY,
+        #showCutPanel =  Panel(parent = anSettingsPanel)
+        # self.anSettings["show_cut"] = CheckBox(parent = showCutPanel, id=wx.ID_ANY,
         #                                          label = _("Show minimal cut"))
         #self.anSettings["show_cut"].Bind(wx.EVT_CHECKBOX, self.OnShowCut)
 
-        isoLinesPanel = wx.Panel(parent=anSettingsPanel)
+        isoLinesPanel = Panel(parent=anSettingsPanel)
         isoLineslabel = StaticText(
             parent=isoLinesPanel,
             id=wx.ID_ANY,
@@ -347,7 +352,7 @@ class VNETDialog(wx.Dialog):
 
     def _createOutputPage(self):
         """Tab with output console"""
-        outputPanel = wx.Panel(parent=self)
+        outputPanel = Panel(parent=self)
         self.notebook.AddPage(page=outputPanel,
                               text=_("Output"),
                               name='output')
@@ -364,7 +369,7 @@ class VNETDialog(wx.Dialog):
 
     def _createParametersPage(self):
         """Tab for selection of data for analysis"""
-        dataPanel = scrolled.ScrolledPanel(parent=self)
+        dataPanel = ScrolledPanel(parent=self)
         self.notebook.AddPage(page=dataPanel,
                               text=_('Parameters'),
                               name='parameters')
@@ -380,7 +385,7 @@ class VNETDialog(wx.Dialog):
             ['node_column', "", ColumnSelect],
         ]
 
-        # self.useTurns = wx.CheckBox(parent = dataPanel, id=wx.ID_ANY,
+        # self.useTurns = CheckBox(parent = dataPanel, id=wx.ID_ANY,
         #                            label = _('Use turns'))
 
         box = StaticBox(dataPanel, -1, "Vector map and layers for analysis")
@@ -390,7 +395,7 @@ class VNETDialog(wx.Dialog):
         selPanels = {}
 
         for dataSel in dataSelects:
-            selPanels[dataSel[0]] = wx.Panel(parent=dataPanel)
+            selPanels[dataSel[0]] = Panel(parent=dataPanel)
             if dataSel[0] == 'input':
                 self.inputData[
                     dataSel[0]] = dataSel[2](
@@ -505,24 +510,27 @@ class VNETDialog(wx.Dialog):
                          border=5)
         return selSizer
 
-    def _createInputDbMgrPage(self):
-        """Tab with attribute tables of analysis input layers"""
-        self.inpDbMgrData['dbMgr'] = DbMgrBase()
-
+    def _checkSelectedVectorMap(self):
+        """Check selected vector map"""
         selMapName = None
         # if selected vector map is in layer tree then set it
         layer = self.giface.GetLayerList().GetSelectedLayer()
         if layer is not None and layer.type == 'vector':
             selMapName = layer.maplayer.name
-
-        self.inpDbMgrData['browse'] = self.inpDbMgrData[
-            'dbMgr'].CreateDbMgrPage(parent=self.notebook, pageName='browse')
-        self.inpDbMgrData['browse'].SetTabAreaColour(globalvar.FNPageColor)
+            self._createInputDbMgrPage()
 
         self.inpDbMgrData['input'] = None
         if selMapName:
             self.inputData['input'].SetValue(selMapName)
             self.OnVectSel(None)
+
+    def _createInputDbMgrPage(self):
+        """Tab with attribute tables of analysis input layers"""
+        self.inpDbMgrData['dbMgr'] = DbMgrBase()
+
+        self.inpDbMgrData['browse'] = self.inpDbMgrData[
+            'dbMgr'].CreateDbMgrPage(parent=self.notebook, pageName='browse')
+        self.inpDbMgrData['browse'].SetTabAreaColour(globalvar.FNPageColor)
 
     def _updateInputDbMgrPage(self, show):
         """Show or hide input tables tab"""
@@ -540,11 +548,6 @@ class VNETDialog(wx.Dialog):
             'dbMgr'].CreateDbMgrPage(parent=self.notebook, pageName='browse')
         self.resultDbMgrData['browse'].SetTabAreaColour(globalvar.FNPageColor)
 
-        if self.tmp_result:
-            self.resultDbMgrData['input'] = self.tmp_result.GetVectMapName()
-        else:
-            self.resultDbMgrData['input'] = None
-
     def _updateResultDbMgrPage(self):
         """Show or Hide Result tables tab"""
         # analysis, which created result
@@ -555,6 +558,7 @@ class VNETDialog(wx.Dialog):
             analysis)["resultProps"]["dbMgr"]
 
         if haveDbMgr and self.notebook.GetPageIndexByName('resultDbMgr') == -1:
+            self._createResultDbMgrPage()
             self.notebook.AddPage(page=self.resultDbMgrData['browse'],
                                   text=_('Result tables'),
                                   name='resultDbMgr')
@@ -758,7 +762,10 @@ class VNETDialog(wx.Dialog):
                 self.inputData['node_layer'].SetSelection(iItem)
 
         self.addToTreeBtn.Enable()
-        if hasattr(self, 'inpDbMgrData'):
+        if 'browse' in self.inpDbMgrData:
+            self._updateInputDbMgrPage(show=True)
+        else:
+            self._createInputDbMgrPage()
             self._updateInputDbMgrPage(show=True)
 
         self.OnALayerSel(event)
@@ -817,9 +824,10 @@ class VNETDialog(wx.Dialog):
 
         return mapName, mapSet
 
-    def OnCloseDialog(self, event):
+    def OnCloseDialog(self, event=None):
         """Cancel dialog"""
         self.vnet_mgr.CleanUp()
+        self._mgr.UnInit()
         toolSwitcher = self.giface.GetMapDisplay().GetToolSwitcher()
         toolSwitcher.RemoveToolbarFromGroup(
             'mouseUse', self.toolbars['pointsList'])
@@ -1231,7 +1239,7 @@ class SettingsDialog(wx.Dialog):
             id=wx.ID_ANY,
             label=_('Color table style %s:') %
             '(v.net.flow)')
-        self.settings['color_table'] = wx.ComboBox(
+        self.settings['color_table'] = ComboBox(
             parent=self, id=wx.ID_ANY, choices=rules.split(),
             style=wx.CB_READONLY, size=(180, -1))
 
@@ -1243,7 +1251,7 @@ class SettingsDialog(wx.Dialog):
         if i != wx.NOT_FOUND:
             self.settings['color_table'].Select(i)
 
-        self.settings["invert_colors"] = wx.CheckBox(
+        self.settings["invert_colors"] = CheckBox(
             parent=self,
             id=wx.ID_ANY,
             label=_('Invert colors %s:') %
@@ -1371,7 +1379,7 @@ class SettingsDialog(wx.Dialog):
         gridSizer = wx.GridBagSizer(vgap=1, hgap=1)
 
         row = 0
-        setts = dict(self.colorsSetts.items() + self.sizeSetts.items())
+        setts = {**self.colorsSetts, **self.sizeSetts}
 
         settsOrder = [
             "selected",
@@ -1503,7 +1511,7 @@ class CreateTtbDialog(wx.Dialog):
         selPanels = {}
 
         for dataSel in dataSelects:
-            selPanels[dataSel[0]] = wx.Panel(parent=self)
+            selPanels[dataSel[0]] = Panel(parent=self)
             if dataSel[0] in ['input', 'output']:
                 self.inputData[
                     dataSel[0]] = dataSel[2](
@@ -1632,7 +1640,7 @@ class OutputVectorDialog(wx.Dialog):
         """Save analysis result"""
         wx.Dialog.__init__(self, parent, id, title=_(title), style=style)
 
-        self.panel = wx.Panel(parent=self)
+        self.panel = Panel(parent=self)
         box = StaticBox(parent=self.panel, id=wx.ID_ANY,
                         label="Vector map")
 
@@ -1798,7 +1806,7 @@ class DefGlobalTurnsDialog(wx.Dialog):
         self.btnAdd = Button(parent=self, id=wx.ID_ANY, label="Add")
         self.btnRemove = Button(parent=self, id=wx.ID_ANY, label="Remove")
         self.btnClose = Button(parent=self, id=wx.ID_CLOSE)
-        self.useUTurns = wx.CheckBox(
+        self.useUTurns = CheckBox(
             parent=self, id=wx.ID_ANY, label="Use U-turns")
 
         self.btnAdd.Bind(wx.EVT_BUTTON, self.OnAddButtonClick)

@@ -86,7 +86,7 @@ void prn_error_mat(int out_cols, int hdr)
 	if (ncat % out_cols)
 	    num_panels++;
 	t_rowcount = 0;
-	fprintf(fd, "\nError Matrix\n");
+	fprintf(fd, "\nError Matrix (MAP1: reference, MAP2: classification)\n");
 
 	for (at_panel = 0; at_panel < num_panels; at_panel++) {
 	    first_col = at_panel * out_cols;

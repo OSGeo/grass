@@ -39,7 +39,7 @@ try:
     from grass.lib.gis import *
     from grass.lib.vector import *
     from grass.lib.vedit import *
-except (ImportError, WindowsError) as e:
+except (ImportError, WindowsError, TypeError) as e:
     print("wxdigit.py: {}".format(e), file=sys.stderr)
 
 log = None
@@ -1000,7 +1000,7 @@ class DisplayDriver:
         :return: map_info
         :return: None on error
         """
-        Debug.msg("DisplayDriver.OpenMap(): name=%s mapset=%s updated=%d",
+        Debug.msg(1, "DisplayDriver.OpenMap(): name=%s mapset=%s updated=%d",
                   name, mapset, update)
         if not self.mapInfo:
             self.mapInfo = Map_info()

@@ -3,14 +3,15 @@
 ## Contributions other than code
 
 There is more than one way of contributing, see full list at
-https://grass.osgeo.org/get-involved/.
+<https://grass.osgeo.org/get-involved/>.
 In the rest of this document, we will focus on contributions centered
 around the GRASS GIS source code.
 
-## Reporting issues and suggesting features and changes
+## Reporting issues and suggesting features
 
-* Get an OSGeo Services UserID (http://www.osgeo.org/osgeo_userid).
-* Got to https://trac.osgeo.org/grass/#BugTracking and follow instructions there.
+To report an issue or to suggest features or a change,
+[open an issue](https://github.com/OSGeo/grass/issues/new/choose)
+on GitHub.
 
 ## Changing code and documentation
 
@@ -44,7 +45,8 @@ cd grass/
 git remote add upstream https://github.com/OSGeo/grass
 ```
 
-* Your remotes now should be "origin" which is your fork and "upstream" which is this main GRASS GIS repository. You can confirm that using:
+* Your remotes now should be "origin" which is your fork and "upstream" which
+  is this main GRASS GIS repository. You can confirm that using:
 
 ```
 git remote -v
@@ -83,7 +85,8 @@ git rebase upstream/master
 
 ### Update if you have local branches
 
-If `rebase` fails with "error: cannot rebase: You have unstaged changes...", then move your uncommitted local changes to "stash" using:
+If `rebase` fails with "error: cannot rebase: You have unstaged changes...",
+then move your uncommitted local changes to "stash" using:
 
 ```
 git stash
@@ -123,7 +126,7 @@ git checkout -b new-feature
 You can use your favorite tools to change source code or other files
 in the local copy of the code. When make changes, please follow
 Submitting Guidelines at
-http://trac.osgeo.org/grass/wiki/Submitting.
+<http://trac.osgeo.org/grass/wiki/Submitting>.
 
 ### Committing
 
@@ -171,4 +174,4 @@ the maintainers will decide if it is more appropriate to:
 ### Further notes
 
 GRASS GIS maintainers use additional workflows besides the one described
-above. These are detailed at https://trac.osgeo.org/grass/wiki/HowToGit
+above. These are detailed at <https://trac.osgeo.org/grass/wiki/HowToGit>

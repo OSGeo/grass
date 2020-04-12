@@ -42,8 +42,10 @@ from grass.script import raster as grast
 from grass.script import vector as gvect
 from grass.exceptions import CalledModuleError
 
-from functions import SamplingType, sampleAreaVector, convertFeature
-from functions import obtainAreaVector, obtainCategories
+from .functions import (
+    SamplingType, convertFeature, obtainAreaVector, obtainCategories,
+    sampleAreaVector,
+)
 from core.gcmd import GError, GMessage, RunCommand
 
 
@@ -142,7 +144,7 @@ class RLIWizard(object):
 
     def _write_confile(self):
         """Write the configuration file"""
-        f = open(os.path.join(self.rlipath, self.startpage.conf_name), 'wb')
+        f = open(os.path.join(self.rlipath, self.startpage.conf_name), 'w')
         self.rasterinfo = grast.raster_info(self.startpage.rast)
         self._write_region(f)
         self._write_area(f)

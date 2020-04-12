@@ -97,12 +97,12 @@ def main():
 
     if new == '' and shrink == False:
         temp_val = "r.grow.tmp.%s.val" % tmp
-        new = temp_val
+        new = '"%s"' % temp_val
     else:
         temp_val = None
 
     if old == '':
-        old = input
+        old = '"%s"' % input
 
     if not mapunits:
         kv = grass.region()
@@ -135,7 +135,7 @@ def main():
             grass.fatal(_("Growing failed. Removing temporary maps."))
 
         grass.mapcalc(
-            "$output = if(!isnull($input),$old,if($dist < $radius,$new,null()))",
+            '$output = if(!isnull("$input"),$old,if($dist < $radius,$new,null()))',
             output=output, input=input, radius=radius,
             old=old, new=new, dist=temp_dist)
     else:
@@ -147,7 +147,7 @@ def main():
             grass.fatal(_("Shrinking failed. Removing temporary maps."))
 
         grass.mapcalc(
-            "$output = if($dist < $radius,null(),$old)",
+            "$output = if(isnull($dist), $old, if($dist < $radius,null(),$old))",
             output=output, radius=radius, old=old, dist=temp_dist)
 
     grass.run_command('r.colors', map=output, raster=input)

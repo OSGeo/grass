@@ -811,7 +811,7 @@ int main(int argc, char *argv[])
 		if (out_type == CELL_TYPE) {
 		    if (aspect > 0 && aspect < 0.5)
 			aspect = 360;
-		    *((CELL *) asp_ptr) = (CELL) (aspect + .5);
+		    *((CELL *) asp_ptr) = (CELL) floor(aspect + .5);
 		}
 		else
 		    Rast_set_d_value(asp_ptr,
@@ -976,9 +976,12 @@ int main(int argc, char *argv[])
 				    360);
 
 	Rast_read_cats(aspect_name, G_mapset(), &cats);
-	Rast_set_cats_title
-	    ("Aspect counterclockwise in degrees from east", &cats);
-
+	if (flag.n->answer)
+	    Rast_set_cats_title
+		("Aspect clockwise in degrees from north", &cats);
+	else
+	    Rast_set_cats_title
+		("Aspect counterclockwise in degrees from east", &cats);
 	G_verbose_message(_("Min computed aspect %.4f, max computed aspect %.4f"),
 			  min_asp, max_asp);
 	/* the categries quant intervals are 1.0 long, plus
@@ -1068,7 +1071,10 @@ int main(int argc, char *argv[])
 	Rast_init_colors(&colors);
 	Rast_read_fp_range(aspect_name, G_mapset(), &range);
 	Rast_get_fp_range_min_max(&range, &min, &max);
-	Rast_make_aspect_fp_colors(&colors, min, max);
+	if (flag.n->answer)
+	    Rast_make_aspect_fp_colors(&colors, 0, max);
+	else
+	    Rast_make_aspect_fp_colors(&colors, min, max);
 	Rast_write_colors(aspect_name, G_mapset(), &colors);
 
 	/* writing history file */

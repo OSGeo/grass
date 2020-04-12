@@ -35,11 +35,6 @@ import six
 
 import wx
 
-try:
-    from wx.adv import HyperlinkCtrl
-except ImportError:
-    from wx import HyperlinkCtrl
-
 from grass.script import core as grass
 from grass.script.utils import natural_sort, try_remove
 
@@ -49,11 +44,12 @@ from core import globalvar
 from core.gcmd import GError, RunCommand, GMessage
 from gui_core.gselect import LocationSelect, MapsetSelect, Select, \
     OgrTypeSelect, SubGroupSelect
-from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, MapValidator
+from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, \
+    MapValidator
 from core.settings import UserSettings
 from core.debug import Debug
-from gui_core.wrap import SpinCtrl, TextCtrl, Button, CheckListBox, \
-    StaticText, StaticBox, Menu, NewId
+from gui_core.wrap import Button, CheckListBox, EmptyBitmap, HyperlinkCtrl, \
+    Menu, NewId, SpinCtrl, StaticBox, StaticText, TextCtrl 
 
 
 class SimpleDialog(wx.Dialog):
@@ -228,17 +224,20 @@ class VectorDialog(SimpleDialog):
         """
         SimpleDialog.__init__(self, parent, title)
 
-        self.element = Select(
-            parent=self.panel,
-            id=wx.ID_ANY,
-            size=globalvar.DIALOG_GSELECT_SIZE,
-            type='vector',
-            layerTree=layerTree,
-            validator=MapValidator())
+        self.element = self._selection_widget(layerTree)
         self.element.SetFocus()
 
         self.warning = _("Name of vector map is missing.")
         wx.CallAfter(self._layout)
+
+    def _selection_widget(self, layerTree):
+        return Select(parent=self.panel,
+                      id=wx.ID_ANY,
+                      size=globalvar.DIALOG_GSELECT_SIZE,
+                      type='vector',
+                      layerTree=layerTree,
+                      fullyQualified=True
+                      )
 
     def _layout(self):
         """Do layout"""
@@ -325,6 +324,16 @@ class NewVectorDialog(VectorDialog):
         self.table.Bind(wx.EVT_CHECKBOX, self.OnTable)
 
         self.warning = _("Name of new vector map is missing.")
+
+    def _selection_widget(self, layerTree):
+        return Select(parent=self.panel,
+                      id=wx.ID_ANY,
+                      size=globalvar.DIALOG_GSELECT_SIZE,
+                      type='vector',
+                      layerTree=layerTree,
+                      fullyQualified=False,
+                      validator=MapValidator()
+                      )
 
     def OnTable(self, event):
         if self.keycol:
@@ -1293,7 +1302,7 @@ class GroupDialog(wx.Dialog):
                 label = _("Changing of group <%s> failed.") % group
 
         self.infoLabel.SetLabel(label)
-        wx.FutureCall(4000, self.ClearNotification)
+        wx.CallLater(4000, self.ClearNotification)
 
     def GetSelectedGroup(self):
         """Return currently selected group (without mapset)"""
@@ -2314,7 +2323,7 @@ class HyperlinkDialog(wx.Dialog):
         hyperlinkLabel = hyperlinkLabel if hyperlinkLabel else hyperlink
         hyperlinkCtrl = HyperlinkCtrl(
             self, id=wx.ID_ANY, label=hyperlinkLabel, url=hyperlink,
-            style=wx.HL_ALIGN_LEFT | wx.HL_CONTEXTMENU)
+            style=HyperlinkCtrl.HL_ALIGN_LEFT | HyperlinkCtrl.HL_CONTEXTMENU)
         sizer.Add(
             hyperlinkCtrl,
             proportion=0,
@@ -2445,7 +2454,7 @@ class DefaultFontDialog(wx.Dialog):
         gridSizer.Add(self.fontlb,
                       flag=wx.EXPAND, pos=(1, 0))
 
-        self.renderfont = wx.StaticBitmap(panel, -1, wx.EmptyBitmapRGBA(100, 50, 255, 255, 255))
+        self.renderfont = wx.StaticBitmap(panel, -1, wx.Bitmap.FromRGBA(100, 50, 255, 255, 255))
         gridSizer.Add(self.renderfont,
                       flag=wx.EXPAND, pos=(2, 0))
 
@@ -2594,10 +2603,11 @@ class DefaultFontDialog(wx.Dialog):
         env['GRASS_RENDER_WIDTH'] = str(size[0])
         env['GRASS_RENDER_HEIGHT'] = str(size[1])
         env['GRASS_RENDER_FILE'] = self.tmp_file
-        ret = RunCommand('d.text', text=text, font=font, align='cc', at='50,50',
+        env['GRASS_REGION'] = grass.region_env(s=0, n=size[1], w=0, e=size[0])
+        ret = RunCommand('d.text', text=text, font=font, align='cc', at='50,60',
                          size=80, color='black', env=env)
         if ret == 0:
             self.renderfont.SetBitmap(wx.Bitmap(self.tmp_file))
         else:
-            self.renderfont.SetBitmap(wx.EmptyBitmapRGBA(size[0], size[1]))
+            self.renderfont.SetBitmap(EmptyBitmap(size[0], size[1]))
         try_remove(self.tmp_file)

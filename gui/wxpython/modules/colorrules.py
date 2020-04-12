@@ -82,8 +82,8 @@ class RulesPanel:
         # clear button
         self.clearAll = Button(parent, id=wx.ID_ANY, label=_("Clear all"))
         #  determines how many rules should be added
-        self.numRules = SpinCtrl(parent, id=wx.ID_ANY,
-                                 min=1, max=1e6, initial=1)
+        self.numRules = SpinCtrl(parent, id=wx.ID_ANY, min=1, max=1e6,
+                                 initial=1, size=(150, -1))
         # add rules
         self.btnAdd = Button(parent, id=wx.ID_ADD)
 
@@ -611,6 +611,9 @@ class ColorTable(wx.Frame):
         self.OnCancel(event)
 
     def OnApply(self, event):
+        return self._apply()
+
+    def _apply(self, updatePreview=True):
         """Apply selected color table
 
         :return: True on success otherwise False
@@ -620,7 +623,8 @@ class ColorTable(wx.Frame):
             GMessage(parent=self, message=_("No valid color rules given."))
         else:
             # re-render preview and current map window
-            self.OnPreview(None)
+            if updatePreview:
+                self.OnPreview(None)
             display = self.layerTree.GetMapDisplay()
             if display and display.IsAutoRendered():
                 display.GetWindow().UpdateMap(render=True)
@@ -629,7 +633,7 @@ class ColorTable(wx.Frame):
 
     def OnOK(self, event):
         """Apply selected color table and close the dialog"""
-        if self.OnApply(event):
+        if self._apply(updatePreview=False):
             self.OnCancel(event)
 
     def OnCancel(self, event):
@@ -1086,9 +1090,7 @@ class VectorColorTable(ColorTable):
         # additional bindings for vector color management
         self.Bind(wx.EVT_COMBOBOX, self.OnLayerSelection, self.layerSelect)
 
-        self.sourceColumn.Bind(wx.EVT_TEXT, self.OnSourceColumnSelection)
-        self.fromColumn.Bind(wx.EVT_TEXT, self.OnFromColSelection)
-        self.toColumn.Bind(wx.EVT_TEXT, self.OnToColSelection)
+        self._columnWidgetEvtHandler()
         self.Bind(wx.EVT_BUTTON, self.OnAddColumn, self.addColumn)
 
         self._initLayer()
@@ -1199,7 +1201,7 @@ class VectorColorTable(ColorTable):
             self.cp = wx.CollapsiblePane(
                 scrollPanel,
                 label=_("Import or export color table"),
-                winid=wx.ID_ANY,
+                id=wx.ID_ANY,
                 style=wx.CP_DEFAULT_STYLE | wx.CP_NO_TLW_RESIZE)
             self.Bind(
                 wx.EVT_COLLAPSIBLEPANE_CHANGED,
@@ -1249,7 +1251,7 @@ class VectorColorTable(ColorTable):
 
     def OnPaneChanged(self, event=None):
         # redo the layout
-        self.Layout()
+        self.panel.Layout()
         # and also change the labels
         if self.cp.IsExpanded():
             self.cp.SetLabel('')
@@ -1392,8 +1394,8 @@ class VectorColorTable(ColorTable):
             self.useColumn.SetValue(False)
             self.OnCheckColumn(event=None)
             self.useColumn.Enable(self.CheckMapset())
-
-        self.LoadTable()
+        else:
+            self.LoadTable()
 
         self.btnPreview.Enable(enable)
         self.btnOK.Enable(enable)
@@ -1443,6 +1445,7 @@ class VectorColorTable(ColorTable):
     def OnLayerSelection(self, event):
         # reset choices in column selection comboboxes if layer changes
         vlayer = int(self.layerSelect.GetStringSelection())
+        self._columnWidgetEvtHandler(bind=False)
         self.sourceColumn.InsertColumns(
             vector=self.inmap, layer=vlayer,
             type=['integer', 'double precision'],
@@ -1480,6 +1483,8 @@ class VectorColorTable(ColorTable):
         else:
             self.properties['loadColumn'] = ''
             self.properties['storeColumn'] = ''
+
+        self._columnWidgetEvtHandler()
 
         if event:
             self.LoadTable()
@@ -1560,7 +1565,7 @@ class VectorColorTable(ColorTable):
 
         sep = ';'
         if self.inmap:
-            outFile = tempfile.NamedTemporaryFile(mode='w+b')
+            outFile = tempfile.NamedTemporaryFile(mode='w+')
             ret = RunCommand('v.db.select',
                              quiet=True,
                              flags='c',
@@ -1846,7 +1851,7 @@ class VectorColorTable(ColorTable):
         self.Map.Clean()
         self.Destroy()
 
-    def OnApply(self, event):
+    def _apply(self, updatePreview=True):
         """Apply selected color table
 
         :return: True on success otherwise False
@@ -1861,7 +1866,34 @@ class VectorColorTable(ColorTable):
 
             self.UseAttrColumn(True)
 
-        return ColorTable.OnApply(self, event)
+        return ColorTable._apply(self, updatePreview)
+
+    def _columnWidgetEvtHandler(self, bind=True):
+        """Bind/Unbind Column widgets handlers"""
+        widgets = [
+            {
+                'widget': self.sourceColumn,
+                'event': wx.EVT_TEXT,
+                'handler': self.OnSourceColumnSelection,
+            },
+            {
+                'widget': self.fromColumn,
+                'event': wx.EVT_TEXT,
+                'handler': self.OnFromColSelection,
+            },
+            {
+                'widget': self.toColumn,
+                'event': wx.EVT_TEXT,
+                'handler': self.OnToColSelection,
+            },
+        ]
+        for widget in widgets:
+            if bind is True:
+                getattr(widget['widget'], 'Bind')(
+                    widget['event'], widget['handler'],
+                )
+            else:
+                getattr(widget['widget'], 'Unbind')(widget['event'])
 
 
 class ThematicVectorTable(VectorColorTable):
@@ -1880,7 +1912,7 @@ class ThematicVectorTable(VectorColorTable):
         self.selectionInput.SetValue(self.inmap)
         self.selectionInput.Disable()
 
-    def OnApply(self, event):
+    def _apply(self, updatePreview=True):
         """Apply selected color table
 
         :return: True on success otherwise False
