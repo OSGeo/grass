@@ -1752,6 +1752,8 @@ class GMFrame(wx.Frame):
             self.workspaceFile)
 
         self.OnDisplayCloseAll()
+        self.notebookLayers.Unbind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING)
+        self.notebookLayers.DeleteAllPages()
         self.workspaceFile = None
         self.workspaceChanged = False
         self._setTitle()
