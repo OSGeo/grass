@@ -206,8 +206,12 @@ int main(int argc, char *argv[])
 			}
 		    }
 
-		    G_warning(_("Values in column <%s> will be overwritten"),
-			      options.col[col]);
+		    if (G_get_overwrite())
+			G_warning(_("Values in column <%s> will be overwritten"),
+				  options.col[col]);
+		    else
+			G_fatal_error(_("Column <%s> exists. To overwrite, use the --overwrite flag"),
+				      options.col[col]);
 
 		    break;
 		}
