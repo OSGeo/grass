@@ -1768,8 +1768,7 @@ class GMFrame(wx.Frame):
         """Close all open map display windows
         """
         for display in self.GetMapDisplay(onlyCurrent=False):
-            display.CleanUp()
-            display.Destroy()
+            display.OnCloseWindow(event)
 
     def OnRenderAllMapDisplays(self, event=None):
         for display in self.GetAllMapDisplays():
