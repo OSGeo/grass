@@ -840,7 +840,7 @@ def create_temporal_database(dbif):
     dbif.execute_transaction(str3ds_metadata_sql)
 
     # Create views
-    self._create_temporal_database_views(dbif)
+    _create_temporal_database_views(dbif)
 
     # The delete trigger
     dbif.execute_transaction(delete_trigger_sql)
