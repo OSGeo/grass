@@ -37,7 +37,7 @@ raster_HDRS     = raster.h defs/raster.h
 gmath_HDRS      = gmath.h defs/gmath.h
 proj_HDRS       = gprojects.h defs/gprojects.h
 imagery_HDRS    = imagery.h defs/imagery.h
-vector_HDRS     = vector.h defs/vector.h vect/dig_structs.h vect/dig_defines.h vect/dig_externs.h 
+vector_HDRS     = vector.h defs/vector.h vect/dig_structs.h vect/dig_defines.h vect/dig_externs.h
 rtree_HDRS	= rtree.h
 display_HDRS    = display.h defs/display.h
 stats_HDRS      = stats.h defs/stats.h
@@ -62,7 +62,7 @@ MAC_FLAGS  = "-D_Nullable="
 endif
 
 CTYPESGEN = ./run.py
-CTYPESFLAGS = --cpp "$(CC) -E $(CPPFLAGS) $(LFS_CFLAGS) $(MAC_FLAGS) $(EXTRA_CFLAGS) $(NLS_CFLAGS) $(DEFS) $(EXTRA_INC) $(INC) -D__GLIBC_HAVE_LONG_LONG"
+CTYPESFLAGS = --cpp "$(CC) -E $(CPPFLAGS) $(LFS_CFLAGS) $(MAC_FLAGS) $(EXTRA_CFLAGS) $(NLS_CFLAGS) $(DEFS) $(EXTRA_INC) $(INC) -D__GLIBC_HAVE_LONG_LONG -D__GNUCLIKE_BUILTIN_VARARGS"
 EXTRA_CLEAN_FILES := $(wildcard ctypesgencore/*.pyc) $(wildcard ctypesgencore/*/*.pyc)
 
 ifneq ($(MINGW),)
