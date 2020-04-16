@@ -1487,7 +1487,7 @@ def set_language(grass_config_dir):
     os.environ['LANGUAGE'] = language
     os.environ['LANG'] = language
 
-    if language == 'ko_KR' and encoding == 'cp949':
+    if language == 'ko' or (language == 'ko_KR' and encoding == 'cp949'):
         # The default encoding for the Korean language in Windows is cp949,
         # Microsoft's proprietary extension to euc-kr, but gettext prints no
         # translated messages at all in the Command Prompt window if LC_CTYPE
