@@ -195,7 +195,10 @@ ENV INTEL="" \
 # =====================
 
 # install external Python API
-RUN pip install grass-session
+#RUN pip install grass-session
+# ugly workaround for https://github.com/zarch/grass-session/issues/16
+RUN apk add git
+RUN pip3 install --upgrade pip six git+git://github.com/zarch/grass-session.git@0b8414c1
 
 # set GRASSBIN
 ENV GRASSBIN="/usr/local/bin/grass"
