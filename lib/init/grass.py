@@ -1487,13 +1487,18 @@ def set_language(grass_config_dir):
     os.environ['LANGUAGE'] = language
     os.environ['LANG'] = language
 
-    if language == 'ko' or (language == 'ko_KR' and encoding == 'cp949'):
+    if WINDOWS and (language == 'ko' or (language == 'ko_KR' and encoding == 'cp949')):
         # The default encoding for the Korean language in Windows is cp949,
         # Microsoft's proprietary extension to euc-kr, but gettext prints no
         # translated messages at all in the Command Prompt window if LC_CTYPE
         # is set to ko_KR.cp949. Here, force LC_CTYPE to be euc-kr.
         normalized = 'euc-kr'
         encoding = None
+
+        # XXX: In UN*X, LC_CTYPE needs to be set to *any* value before GRASS
+        # starts when the language setting is overriden by the user. For
+        # example, 'LC_CTYPE= grass' will break the welcome message.
+        # Interestingly, modules' help messages look fine.
     elif encoding:
         normalized = locale.normalize('%s.%s' % (language, encoding))
     else:
