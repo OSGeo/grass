@@ -46,7 +46,7 @@ from icons.icon import MetaIcon
 from gui_core.widgets import MapValidator
 from gui_core.wrap import Menu, GenBitmapButton, TextCtrl, NewId
 from lmgr.giface import LayerManagerGrassInterfaceForMapDisplay
-from core.giface import Notification
+
 
 TREE_ITEM_HEIGHT = 25
 
