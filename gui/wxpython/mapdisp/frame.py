@@ -850,15 +850,18 @@ class MapFrame(SingleMapFrame):
             self.closingVNETDialog.emit()
         self._mgr.UnInit()
 
-    def OnCloseWindow(self, event):
+    def OnCloseWindow(self, event, askIfSaveWorkspace=True):
         """Window closed.
         Also close associated layer tree page
         """
         Debug.msg(2, "MapFrame.OnCloseWindow()")
         if self._layerManager:
-            if self._layerManager.CanClosePage():
+            pgnum = self.layerbook.GetPageIndex(self.page)
+            name = self.layerbook.GetPageText(pgnum)
+            caption = _("Close Map Display {}").format(name)
+            if not askIfSaveWorkspace or \
+               (askIfSaveWorkspace and self._layerManager.CanClosePage(caption)):
                 self.CleanUp()
-                pgnum = self.layerbook.GetPageIndex(self.page)
                 if pgnum > -1:
                     self.closingDisplay.emit(page_index=pgnum)
                     # Destroy is called when notebook page is deleted
