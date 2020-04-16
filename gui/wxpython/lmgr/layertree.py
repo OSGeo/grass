@@ -43,7 +43,6 @@ from core.settings import UserSettings, GetDisplayVectSettings
 from vdigit.main import haveVDigit
 from core.gcmd import GWarning, GError, RunCommand
 from icons.icon import MetaIcon
-from web_services.dialogs import SaveWMSLayerDialog
 from gui_core.widgets import MapValidator
 from gui_core.wrap import Menu, GenBitmapButton, TextCtrl, NewId
 from lmgr.giface import LayerManagerGrassInterfaceForMapDisplay
@@ -897,6 +896,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnSaveWs(self, event):
         """Show dialog for saving web service layer into GRASS vector/raster layer"""
         mapLayer = self.GetLayerInfo(self.layer_selected, key='maplayer')
+        from web_services.dialogs import SaveWMSLayerDialog
         dlg = SaveWMSLayerDialog(parent=self, layer=mapLayer,
                                  giface=self._gifaceForDisplay)
         dlg.CentreOnScreen()
