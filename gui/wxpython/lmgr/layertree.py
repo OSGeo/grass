@@ -37,7 +37,6 @@ from gui_core.dialogs import SqlQueryFrame, SetOpacityDialog, TextEntryDialog
 from gui_core.forms import GUI
 from mapdisp.frame import MapFrame
 from core.render import Map
-from wxplot.histogram import HistogramPlotFrame
 from core.utils import GetLayerNameFromCmd, ltype2command
 from core.debug import Debug
 from core.settings import UserSettings, GetDisplayVectSettings
@@ -1136,6 +1135,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                              "raster map. No map name defined."))
             return
 
+        # lazy import to reduce dependecies and startup
+        from wxplot.histogram import HistogramPlotFrame
         win = HistogramPlotFrame(parent=self, giface=self._giface, rasterList=rasterList)
         win.CentreOnScreen()
         win.Show()
