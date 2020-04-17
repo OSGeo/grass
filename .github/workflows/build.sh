@@ -8,11 +8,17 @@
 # fail on non-zero return code from a subprocess
 set -e
 
+# print commands
+set -x
+
 if [ -z "$1" ]
 then
     echo "Usage: $0 PREFIX"
     exit 1
 fi
+
+# non-existent variables as an errors
+set -u
 
 export INSTALL_PREFIX=$1
 
