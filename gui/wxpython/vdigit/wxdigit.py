@@ -1165,7 +1165,7 @@ class IVDigit:
     def SnapLine(self):
         """Snap selected lines/boundaries
 
-        :return: on success
+        :return: 0 on success
         :return: -1 on error
         """
         if not self._checkMap():
@@ -1180,6 +1180,8 @@ class IVDigit:
         if nlines < Vect_get_num_lines(self.poMapInfo):
             self._addChangeset()
             self.toolbar.EnableUndo()
+
+        return 0
 
     def ConnectLine(self):
         """Connect selected lines/boundaries
