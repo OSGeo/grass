@@ -29,6 +29,7 @@ kelvin: blue to red for temperature in Kelvin scale
 magma: perceptually uniform sequential color table magma
 ndvi: Normalized Difference Vegetation Index colors
 ndwi: Normalized Difference Water Index colors
+nlcd: US National Land Cover Dataset colors
 oranges: white to orange
 plasma: perceptually uniform sequential color table plasma
 population: color table covering human population classification breaks
