@@ -30,10 +30,10 @@ jobs:
     - name: Ensure one core for compilation
       run: |
         echo "::set-env name=MAKEFLAGS::-j1"
-    - name: Set LD_LIBRARY_PATH for GRASS GIS compilation
+    - name: Set LD_LIBRARY_PATH for compilation
       run: |
         echo "::set-env name=LD_LIBRARY_PATH::$HOME/install/lib"
-    - name: Get and build GRASS GIS
+    - name: Build
       run: .github/workflows/build.sh $HOME/install
 
   test:
@@ -61,15 +61,15 @@ jobs:
     - name: Set number of cores for compilation
       run: |
         echo "::set-env name=MAKEFLAGS::-j$(nproc)"
-    - name: Set LD_LIBRARY_PATH for GRASS GIS compilation
+    - name: Set LD_LIBRARY_PATH for compilation
       run: |
         echo "::set-env name=LD_LIBRARY_PATH::$HOME/install/lib"
-    - name: Get and build GRASS GIS
+    - name: Build
       run: .github/workflows/build.sh $HOME/install
     - name: Add the bin directory to PATH
       run: |
         echo "::add-path::$HOME/install/bin"
-    - name: Basic test of GRASS GIS
+    - name: Test executing of the grass command
       run: .github/workflows/test_simple.sh
-    - name: Thorough test of GRASS GIS
+    - name: Run tests
       run: .github/workflows/test_thorough.sh
