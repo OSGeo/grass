@@ -1344,7 +1344,7 @@ class CmdPanel(wx.Panel):
                                        flag=style, border=5)
                         font_sizer.Add(font_btn, proportion=0,
                                        flag=style, border=5)
-                        
+
                         which_sizer.Add(font_sizer, proportion=0,
                                         flag=style, border=5)
                         p['wxId'].append(font_btn.GetId())
@@ -2082,7 +2082,7 @@ class CmdPanel(wx.Panel):
                             self.OnUpdateValues()  # TODO: replace by signal
 
                         self.win1.OnCheckItem = OnCheckItem
-                        
+
                 elif prompt == 'sql_query':
                     win = gselect.SqlWhereSelect(
                         parent=which_panel, param=p)
@@ -2207,7 +2207,7 @@ class CmdPanel(wx.Panel):
         pSqlWhereIds = []
         for p in pSqlWhere:
             pSqlWhereIds += p['wxId']
-        
+
         # set wxId-bindings
         if pMap:
             pMap['wxId-bind'] = []
@@ -2253,7 +2253,7 @@ class CmdPanel(wx.Panel):
         maxsizes = (0, 0)
         for section in sections:
             tab[section].SetSizer(tabsizer[section])
-            tabsizer[section].Fit(tab[section])
+            tab[section].SetupScrolling(True, True, 10, 10)
             tab[section].Layout()
             minsecsizes = tabsizer[section].GetSize()
             maxsizes = list(map(lambda x: max(maxsizes[x], minsecsizes[x]), (0, 1)))
