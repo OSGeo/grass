@@ -1752,7 +1752,7 @@ class GMFrame(wx.Frame):
             4, "GMFrame.OnWorkspaceClose(): file=%s" %
             self.workspaceFile)
 
-        self.OnDisplayCloseAll()
+        self.DisplayCloseAll()
         self.workspaceFile = None
         self.workspaceChanged = False
         self._setTitle()
@@ -1765,11 +1765,18 @@ class GMFrame(wx.Frame):
         if self.currentPage and self.GetMapDisplay():
             self.GetMapDisplay().OnCloseWindow(event)
 
-    def OnDisplayCloseAll(self, event=None):
+    def OnDisplayCloseAll(self, event):
+        """Close all open map display windows (from menu)
+        """
+        if not self.CanClosePage(caption=_("Close all Map Displays")):
+            return
+        self.DisplayCloseAll()
+
+    def DisplayCloseAll(self):
         """Close all open map display windows
         """
         for display in self.GetMapDisplay(onlyCurrent=False):
-            display.OnCloseWindow(event, askIfSaveWorkspace=False)
+            display.OnCloseWindow(event=None, askIfSaveWorkspace=False)
 
     def OnRenderAllMapDisplays(self, event=None):
         for display in self.GetAllMapDisplays():
@@ -2583,7 +2590,7 @@ class GMFrame(wx.Frame):
                 event.Veto()
             return
 
-        self.OnDisplayCloseAll()
+        self.DisplayCloseAll()
 
         self._auimgr.UnInit()
         self.Destroy()
