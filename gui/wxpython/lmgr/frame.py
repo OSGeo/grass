@@ -664,7 +664,9 @@ class GMFrame(wx.Frame):
         Also close associated map display.
         """
         # save changes in the workspace
-        if not self.CanClosePage():
+        name = self.notebookLayers.GetPageText(event.GetSelection())
+        caption = _("Close Map Display {}").format(name)
+        if not self.CanClosePage(caption):
             event.Veto()
 
         maptree = self.notebookLayers.GetPage(event.GetSelection()).maptree
@@ -683,8 +685,8 @@ class GMFrame(wx.Frame):
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING,
                                  self.OnCBPageClosing)
 
-    def CanClosePage(self):
-        """Ask if page with map display can be closed
+    def CanClosePage(self, caption):
+        """Ask if page with map display(s) can be closed
         """
         # save changes in the workspace
         maptree = self.GetLayerTree()
@@ -698,10 +700,9 @@ class GMFrame(wx.Frame):
 
             # ask user to save current settings
             if maptree.GetCount() > 0:
-                name = self.notebookLayers.GetPageText(self.currentPageNum)
                 dlg = wx.MessageDialog(self,
                                        message=message,
-                                       caption=_("Close Map Display %s") % name,
+                                       caption=caption,
                                        style=wx.YES_NO | wx.YES_DEFAULT |
                                        wx.CANCEL | wx.ICON_QUESTION | wx.CENTRE)
                 ret = dlg.ShowModal()
@@ -1751,7 +1752,7 @@ class GMFrame(wx.Frame):
             4, "GMFrame.OnWorkspaceClose(): file=%s" %
             self.workspaceFile)
 
-        self.OnDisplayCloseAll()
+        self.DisplayCloseAll()
         self.workspaceFile = None
         self.workspaceChanged = False
         self._setTitle()
@@ -1764,12 +1765,18 @@ class GMFrame(wx.Frame):
         if self.currentPage and self.GetMapDisplay():
             self.GetMapDisplay().OnCloseWindow(event)
 
-    def OnDisplayCloseAll(self, event=None):
+    def OnDisplayCloseAll(self, event):
+        """Close all open map display windows (from menu)
+        """
+        if not self.CanClosePage(caption=_("Close all Map Displays")):
+            return
+        self.DisplayCloseAll()
+
+    def DisplayCloseAll(self):
         """Close all open map display windows
         """
         for display in self.GetMapDisplay(onlyCurrent=False):
-            display.CleanUp()
-            display.Destroy()
+            display.OnCloseWindow(event=None, askIfSaveWorkspace=False)
 
     def OnRenderAllMapDisplays(self, event=None):
         for display in self.GetAllMapDisplays():
@@ -2576,46 +2583,15 @@ class GMFrame(wx.Frame):
             self._auimgr.UnInit()
             self.Destroy()
             return
+        if not self.CanClosePage(caption=_("Quit GRASS GUI")):
+            # when called from menu, it gets CommandEvent and not
+            # CloseEvent
+            if hasattr(event, 'Veto'):
+                event.Veto()
+            return
 
-        if UserSettings.Get(group='manager', key='askOnQuit',
-                            subkey='enabled') and self.workspaceChanged:
-            maptree = self.GetLayerTree()
+        self.DisplayCloseAll()
 
-            if self.workspaceFile:
-                message = _("Do you want to save changes in the workspace?")
-            else:
-                message = _("Do you want to store current settings "
-                            "to workspace file?")
-
-            # ask user to save current settings
-            if maptree.GetCount() > 0:
-                dlg = wx.MessageDialog(self,
-                                       message=message,
-                                       caption=_("Quit GRASS GUI"),
-                                       style=wx.YES_NO | wx.YES_DEFAULT |
-                                       wx.CANCEL | wx.ICON_QUESTION | wx.CENTRE)
-                ret = dlg.ShowModal()
-                dlg.Destroy()
-                if ret == wx.ID_YES:
-                    if not self.workspaceFile:
-                        self.OnWorkspaceSaveAs()
-                    else:
-                        self.SaveToWorkspaceFile(self.workspaceFile)
-                elif ret == wx.ID_CANCEL:
-                    # when called from menu, it gets CommandEvent and not
-                    # CloseEvent
-                    if hasattr(event, 'Veto'):
-                        event.Veto()
-                    return
-
-        # don't ask any more...
-        UserSettings.Set(group='manager', key='askOnQuit', subkey='enabled',
-                         value=False)
-
-        self.OnDisplayCloseAll()
-
-        self.notebookLayers.Unbind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING)
-        self.notebookLayers.DeleteAllPages()
         self._auimgr.UnInit()
         self.Destroy()
 
