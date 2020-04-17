@@ -266,30 +266,20 @@ def wxpath(*args):
 
 
 def wide_count(s):
-    '''
-    Returns the number of wide CJK characters in a string.
+    """Returns the number of wide CJK characters in a string.
 
-    Arguments:
-        s (str): string
-
-    Returns:
-        Number of wide CJK characters (int)
-    '''
+    :param str s: string
+    """
     return sum(unicodedata.east_asian_width(c) in 'WF' for c in s)
 
 
 def f(fmt, *args):
-    '''
-    Adjusts fixed-width string specifiers for wide CJK characters and returns a
+    """Adjusts fixed-width string specifiers for wide CJK characters and returns a
     formatted string.
 
-    Arguments:
-        fmt (str): format string
-        *args: arguments for the format string
-
-    Returns:
-        Formatted string (str)
-    '''
+    :param str fmt: format string
+    :param *args: arguments for the format string
+    """
     matches = []
     # https://docs.python.org/3/library/stdtypes.html#old-string-formatting
     for m in re.finditer('%([#0 +-]*)([0-9]*)(\.[0-9]*)?([hlL]?[diouxXeEfFgGcrsa%])', fmt):
@@ -309,21 +299,6 @@ def f(fmt, *args):
             fmt = ''.join((fmt[:m.start()], '%', f, w, p, c, fmt[m.end():]))
         i -= 1
     return fmt % args
-
-
-def printf(fmt, *args):
-    '''
-    Prints the formatted string of print(fmt % args, end='') similar to
-    printf() in C. Note that this function does not add a newline.
-
-    Arguments:
-        fmt (str): format string
-        *args: arguments for the format string
-
-    Returns:
-        None
-    '''
-    print(f(fmt, *args), end='')
 
 
 # using format for most but leaving usage of template for the dynamic ones
