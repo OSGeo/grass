@@ -1,0 +1,83 @@
+[flake8]
+ignore =
+    E265,
+    F821,
+    E501,
+    W503,
+    E117,
+    E121,
+    E122,
+    E123,
+    E124,
+    E125,
+    E126,
+    E127,
+    E128,
+    E129,
+    E201,
+    E202,
+    E203,
+    E211,
+    E221,
+    E222,
+    E225,
+    E226,
+    E228,
+    E231,
+    E241,
+    E251,
+    E261, # at least two spaces before inline comment
+    E262, # inline comment should start with '# '
+    E266, # too many leading '#' for block comment
+    E271,
+    E272,
+    E301,
+    E302,
+    E303,
+    E305,
+    E402, # module level import not at top of file
+    E722, # do not use bare 'except'
+    E741, # ambiguous variable name 'l'
+    W291,
+    W292,
+    W293,
+    W391,
+    W504,
+    E101, # indentation contains mixed spaces and tabs
+    E111, # indentation is not a multiple of four
+    E114, # indentation is not a multiple of four (comment)
+    E116, # unexpected indentation (comment)
+    E242, # tab after ','
+    W191, # indentation contains tabs
+    E401, # multiple imports on one line
+    E502, # the backslash is redundant between brackets
+    E701, # multiple statements on one line (colon)
+    E702, # multiple statements on one line (semicolon)
+    E703, # statement ends with a semicolon
+    E711, # comparison to None should be 'if cond is None:'
+    E712, # comparison to True should be 'if cond is True:' or 'if cond:'
+    E713, # test for membership should be 'not in'
+    E721, # do not compare types, use 'isinstance()'
+    E731, # do not assign a lambda expression, use a def
+    F401, # '.reader.BandReferenceReader' imported but unused
+    F403, # 'from ctypes import *' used; unable to detect undefined names
+    F405, # 'RasterRow' may be undefined, or defined from star imports: ctypes, grass.pygrass.raster, grass.pygrass.vector
+    F811, # redefinition of unused 'utils' from line 26
+    F841, # local variable 't0' is assigned to but never used
+    F901, # 'raise NotImplemented' should be 'raise NotImplementedError'
+    W605, # invalid escape sequence '\_'
+
+max-line-length = 150
+exclude =
+    .git,
+    __pycache__,
+    .env,
+    .venv,
+    env,
+    venv,
+    ENV,
+    env.bak,
+    venv.bak,
+    ctypes,
+    pydispatch,
+    testsuite,
