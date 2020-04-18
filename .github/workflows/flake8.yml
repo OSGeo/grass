@@ -24,6 +24,7 @@ jobs:
 
   flake8-wxgui:
 
+    continue-on-error: true
     runs-on: ubuntu-18.04
 
     steps:
@@ -43,6 +44,7 @@ jobs:
 
   flake8-scripts:
 
+    continue-on-error: true
     runs-on: ubuntu-18.04
 
     steps:
@@ -62,6 +64,7 @@ jobs:
 
   flake8-temporal-modules:
 
+    continue-on-error: true
     runs-on: ubuntu-18.04
 
     steps:
