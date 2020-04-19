@@ -2032,7 +2032,10 @@ def print_params():
             with open(gdate) as filegdate:
                 for line in filegdate.readlines():
                     if line.startswith(date_str):
-                        sys.stdout.write(line.replace(date_str, ''))
+                        sys.stdout.write('{}\n'.format(
+                            line.replace(date_str, '').lstrip()[1:-2]) # remove quotes
+                        )
+                        break
         else:
             message(_("Parameter <%s> not supported") % arg)
 
