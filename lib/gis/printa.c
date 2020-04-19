@@ -82,7 +82,7 @@ static int _vprintf(struct options *opts, const char *format, va_list ap)
 	nbytes = vfprintf(opts->stream, format, ap);
     else {
 	if ((long int)opts->size >= 0) {
-	    /* snprintf(str, 0, ...) prints garbage */
+	    /* snprintf(str, 0, ...) does not alter str */
 	    nbytes = vsnprintf(opts->_str, opts->_size, format, ap);
 	    opts->_size -= nbytes;
 	} else
