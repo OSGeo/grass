@@ -161,6 +161,16 @@ int G_asprintf(char **, const char *, ...)
 int G_rasprintf(char **, size_t *,const char *, ...)
     __attribute__ ((format(printf, 3, 4)));
 
+/* printa.c */
+int G_printa(const char *, ...);
+int G_fprinta(FILE *, const char *, ...);
+int G_sprinta(char *, const char *, ...);
+int G_snprinta(char *, size_t, const char *, ...);
+int G_vprinta(const char *, va_list);
+int G_vfprinta(FILE *, const char *, va_list);
+int G_vsprinta(char *, const char *, va_list);
+int G_vsnprinta(char *, size_t, const char *, va_list);
+
 /* bands.c */
 int G__read_band_reference(FILE *, struct Key_Value **);
 int G__write_band_reference(FILE *, const char *, const char *);
