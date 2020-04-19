@@ -156,6 +156,7 @@ static int oprinta(struct options *opts, const char *format, va_list ap)
 		    char tmp;
 		    /* found a conversion specifier */
 		    if (*c == 's') {
+			/* if this is a string specifier */
 			int width = -1, prec = -1, use_ovprintf = 1;
 			char *p_tmp, *s;
 			va_list ap_copy;
@@ -164,15 +165,17 @@ static int oprinta(struct options *opts, const char *format, va_list ap)
 			 * characters */
 			va_copy(ap_copy, ap);
 
-			/* if string */
 			*p_spec = 0;
 			p_spec = spec;
 			if (*p_spec == '-')
+			    /* alignment */
 			    p_spec++;
 			if (*p_spec == '*') {
+			    /* read width from next argument */
 			    width = va_arg(ap, int);
 			    p_spec++;
 			} else if (*p_spec >= '0' && *p_spec <= '9') {
+			    /* read width */
 			    p_tmp = p_spec;
 			    while (*p_spec >= '0' && *p_spec <= '9')
 				p_spec++;
@@ -182,11 +185,14 @@ static int oprinta(struct options *opts, const char *format, va_list ap)
 			    *p_spec = tmp;
 			}
 			if (*p_spec == '.') {
+			    /* precision */
 			    p_spec++;
 			    if (*p_spec == '*') {
+				/* read precision from next argument */
 				prec = va_arg(ap, int);
 				p_spec++;
 			    } else if (*p_spec >= '0' && *p_spec <= '9') {
+				/* read precision */
 				p_tmp = p_spec;
 				while (*p_spec >= '0' && *p_spec <= '9')
 				    p_spec++;
@@ -197,7 +203,7 @@ static int oprinta(struct options *opts, const char *format, va_list ap)
 			    }
 			}
 			if (*p_spec) {
-			    /* really? */
+			    /* illegal string specifier? */
 			    va_end(ap_copy);
 			    *(q + 1) = 0;
 			    G_fatal_error(_("Failed to parse string specifier: %s"), p);
@@ -205,9 +211,11 @@ static int oprinta(struct options *opts, const char *format, va_list ap)
 
 			s = va_arg(ap, char *);
 			if (width > 0) {
+			    /* if width is specified */
 			    int wcount = wide_count(s);
 
 			    if (wcount) {
+				/* if there are wide characters */
 				width += wcount;
 				prec += prec > 0 ? wcount : 0;
 				p_spec = spec;
@@ -220,7 +228,9 @@ static int oprinta(struct options *opts, const char *format, va_list ap)
 				nbytes += oprintf(opts, spec, s);
 				use_ovprintf = 0;
 			    }
+			    /* else use ovprintf() as much as possible */
 			}
+			/* else use ovprintf() as much as possible */
 			if (use_ovprintf) {
 			    tmp = *(q + 1);
 			    *(q + 1) = 0;
@@ -230,7 +240,7 @@ static int oprinta(struct options *opts, const char *format, va_list ap)
 
 			va_end(ap_copy);
 		    } else {
-			/* else use ovprintf() */
+			/* else use ovprintf() for non-string specifiers */
 			tmp = *(q + 1);
 			*(q + 1) = 0;
 			nbytes += ovprintf(opts, p, ap);
