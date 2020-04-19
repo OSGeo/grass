@@ -275,8 +275,8 @@ def wide_count(s):
 
 
 def f(fmt, *args):
-    """Adjusts fixed-width string specifiers for wide CJK characters and returns a
-    formatted string.
+    """Adjusts fixed-width string specifiers for wide CJK characters and
+    returns a formatted string. Does not support named arguments yet.
 
     :param str fmt: format string
     :param *args: arguments for the format string
