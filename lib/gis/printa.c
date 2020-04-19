@@ -25,7 +25,10 @@
 #include <grass/glocale.h>
 
 /* printf(3) man page */
-#define CONVERSIONS "diouxXeEfFgGaAcsCSpnm%"
+#define CONVS "diouxXeEfFgGaAcsCSpnm%"
+
+/* % + flags + width + precision + length + conversoin + NULL */
+#define SPEC_BUF_SIZE 16
 
 struct options
 {
@@ -131,7 +134,7 @@ static int oprintf(struct options *opts, const char *format, ...)
  */
 static int oprinta(struct options *opts, const char *format, va_list ap)
 {
-    char *fmt, *asis, *p, spec[10];
+    char *fmt, *asis, *p, spec[SPEC_BUF_SIZE];
     int nbytes = 0;
 
     /* make a copy so we can temporarily change the format string */
@@ -149,7 +152,7 @@ static int oprinta(struct options *opts, const char *format, va_list ap)
 
 	    /* skip % */
 	    while (*++q) {
-		char *c = CONVERSIONS - 1;
+		char *c = CONVS - 1;
 
 		while (*++c && *q != *c);
 		if (*c) {
@@ -247,8 +250,12 @@ static int oprinta(struct options *opts, const char *format, va_list ap)
 			*(q + 1) = tmp;
 		    }
 		    break;
-		} else
+		} else if (p_spec - spec < SPEC_BUF_SIZE - 2)
+		    /* 2 reserved for % and NULL */
 		    *p_spec++ = *q;
+		else
+		    G_fatal_error(_("Format specifier exceeds the buffer size (%d)"),
+				  SPEC_BUF_SIZE);
 	    }
 	    asis = (p = q) + 1;
 	}
