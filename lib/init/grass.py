@@ -270,7 +270,8 @@ def wide_count(s):
 
     :param str s: string
     """
-    return sum(unicodedata.east_asian_width(c) in 'WF' for c in s)
+    return sum(unicodedata.east_asian_width(c) in 'WF' for c in
+            (s if sys.version_info.major >= 3 else unicode(s)))
 
 
 def f(fmt, *args):
