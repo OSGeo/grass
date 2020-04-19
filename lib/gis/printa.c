@@ -135,7 +135,7 @@ static int oprinta(struct options *opts, const char *format, va_list ap)
     int nbytes = 0;
 
     /* make a copy so we can temporarily change the format string */
-    p = asis = fmt = (char *)malloc(strlen(format) + 1);
+    p = asis = fmt = (char *)G_malloc(strlen(format) + 1);
     strcpy(fmt, format);
 
     while (*p) {
