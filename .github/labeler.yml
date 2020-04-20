@@ -1,0 +1,64 @@
+libraries:
+  - lib/**/*
+  - include/grass/*
+  - include/grass/**/*
+
+module:
+  - db/**/*
+  - display/**/*
+  - general/**/*
+  - imagery/**/*
+  - misc/**/*
+  - ps/**/*
+  - raster/**/*
+  - raster3d/**/*
+  - scripts/**/*
+  - temporal/**/*
+  - vector/**/*
+
+GUI:
+  - gui/**/*
+
+Windows:
+  - mswindows/**/*
+
+macOS:
+  - macosx/**/*
+
+Linux:
+  - rpm/**/*
+  - singularity/**/*
+
+docker:
+  - docker/**/*
+
+# docs:
+#   - doc/**/*
+# manual:
+#   - man/**/*
+
+translation:
+  - locale/**/*
+
+CI:
+  - ".github/**/*"
+
+
+# based on file types
+Python:
+  - "**/*.py"
+
+C:
+  - "**/*.c"
+
+C++:
+  - "**/*.cpp"
+
+CSS:
+  - "**/*.css"
+
+HTML:
+  - "**/*.html"
+
+JavaScript:
+  - "**/*.js"
