@@ -1,9 +1,9 @@
 /*!
- * \file lib/gis/printa.c
+ * \file lib/gis/aprintf.c
  *
  * \brief GIS Library - Print functions for aligning wide characters.
  *
- * Extracted from the print-aligned C library (libprinta under GPL v3+) by
+ * Extracted from the aligned printf C library (libaprintf under GPL v3+) by
  * Huidae Cho.
  *
  * (C) 2020 by the GRASS Development Team
@@ -42,7 +42,7 @@ static int count_wide_chars_in_cols(const char *, int);
 static int count_bytes_in_cols(const char *, int);
 static int ovprintf(struct options *, const char *, va_list);
 static int oprintf(struct options *, const char *, ...);
-static int oprinta(struct options *, const char *, va_list);
+static int oaprintf(struct options *, const char *, va_list);
 
 /*!
  * \brief Count the number of wide characters in a string.
@@ -176,7 +176,7 @@ static int oprintf(struct options *opts, const char *format, ...)
 
 /*!
  * \brief Core function for aligning wide characters with Latin characters
- * using %s specifiers. G_printa(), G_fprinta(), and G_sprinta() wrap around
+ * using %s specifiers. G_aprintf(), G_faprintf(), and G_saprintf() wrap around
  * this function to implement printf(), fprintf(), and sprintf() counterparts,
  * respectively.
  *
@@ -185,7 +185,7 @@ static int oprintf(struct options *opts, const char *format, ...)
  * \param[in] ap variable argument list for the format string
  * \return number of bytes printed or fatal error on error
  */
-static int oprinta(struct options *opts, const char *format, va_list ap)
+static int oaprintf(struct options *opts, const char *format, va_list ap)
 {
     char *fmt, *asis, *p, spec[SPEC_BUF_SIZE];
     int nbytes = 0;
@@ -329,26 +329,26 @@ static int oprinta(struct options *opts, const char *format, va_list ap)
 }
 
 /*!
- * \brief vprintf() version of G_printa(). See G_printa() for more details.
+ * \brief vprintf() version of G_aprintf(). See G_aprintf() for more details.
  *
  * \param[in] format string format
  * \param[in] ap variable argument list for the format string
  * \return number of bytes printed or fatal error on error
  */
-int G_vprinta(const char *format, va_list ap)
+int G_vaprintf(const char *format, va_list ap)
 {
-    return oprinta(NULL, format, ap);
+    return oaprintf(NULL, format, ap);
 }
 
 /*!
- * \brief vfprintf() version of G_printa(). See G_printa() for more details.
+ * \brief vfprintf() version of G_aprintf(). See G_aprintf() for more details.
  *
  * \param[in] stream file pointer
  * \param[in] format string format
  * \param[in] ap variable argument list for the format string
  * \return number of bytes printed or fatal error on error
  */
-int G_vfprinta(FILE *stream, const char *format, va_list ap)
+int G_vfaprintf(FILE *stream, const char *format, va_list ap)
 {
     struct options opts;
 
@@ -356,18 +356,18 @@ int G_vfprinta(FILE *stream, const char *format, va_list ap)
     opts.str = NULL;
     opts.size = -1;
 
-    return oprinta(&opts, format, ap);
+    return oaprintf(&opts, format, ap);
 }
 
 /*!
- * \brief vsprintf() version of G_printa(). See G_printa() for more details.
+ * \brief vsprintf() version of G_aprintf(). See G_aprintf() for more details.
  *
  * \param[in] str string buffer
  * \param[in] format string format
  * \param[in] ap variable argument list for the format string
  * \return number of bytes printed or fatal error on error
  */
-int G_vsprinta(char *str, const char *format, va_list ap)
+int G_vsaprintf(char *str, const char *format, va_list ap)
 {
     struct options opts;
 
@@ -375,11 +375,11 @@ int G_vsprinta(char *str, const char *format, va_list ap)
     opts.str = opts._str = str;
     opts.size = -1;
 
-    return oprinta(&opts, format, ap);
+    return oaprintf(&opts, format, ap);
 }
 
 /*!
- * \brief vsnprintf() version of G_printa(). See G_printa() for more details.
+ * \brief vsnprintf() version of G_aprintf(). See G_aprintf() for more details.
  *
  * \param[in] str string buffer
  * \param[in] size string buffer size
@@ -388,7 +388,7 @@ int G_vsprinta(char *str, const char *format, va_list ap)
  * \return number of bytes that would be printed if size was big enough or
  *	   fatal error on error
  */
-int G_vsnprinta(char *str, size_t size, const char *format, va_list ap)
+int G_vsnaprintf(char *str, size_t size, const char *format, va_list ap)
 {
     struct options opts;
 
@@ -396,7 +396,7 @@ int G_vsnprinta(char *str, size_t size, const char *format, va_list ap)
     opts.str = opts._str = str;
     opts.size = opts._size = size;
 
-    return oprinta(&opts, format, ap);
+    return oaprintf(&opts, format, ap);
 }
 
 /*!
@@ -411,7 +411,7 @@ int G_vsnprinta(char *str, size_t size, const char *format, va_list ap)
     가나|
 -----------
  * and
- *	G_printa("%10s|\n%10s|\n", "ABCD", "가나");
+ *	G_aprintf("%10s|\n%10s|\n", "ABCD", "가나");
 -----------
       ABCD|
       가나|
@@ -421,60 +421,60 @@ int G_vsnprinta(char *str, size_t size, const char *format, va_list ap)
  * \param[in] ... arguments for the format string
  * \return number of bytes printed or fatal error on error
  */
-int G_printa(const char *format, ...)
+int G_aprintf(const char *format, ...)
 {
     va_list ap;
     int nbytes;
 
     va_start(ap, format);
-    nbytes = G_vprinta(format, ap);
+    nbytes = G_vaprintf(format, ap);
     va_end(ap);
 
     return nbytes;
 }
 
 /*!
- * \brief fprintf() version of G_printa(). See G_printa() for more details.
+ * \brief fprintf() version of G_aprintf(). See G_aprintf() for more details.
  *
  * \param[in] stream file pointer
  * \param[in] format string format
  * \param[in] ... arguments for the format string
  * \return number of bytes printed or fatal error on error
  */
-int G_fprinta(FILE *stream, const char *format, ...)
+int G_faprintf(FILE *stream, const char *format, ...)
 {
     va_list ap;
     int nbytes;
 
     va_start(ap, format);
-    nbytes = G_vfprinta(stream, format, ap);
+    nbytes = G_vfaprintf(stream, format, ap);
     va_end(ap);
 
     return nbytes;
 }
 
 /*!
- * \brief sprintf() version of G_printa(). See G_printa() for more details.
+ * \brief sprintf() version of G_aprintf(). See G_aprintf() for more details.
  *
  * \param[in] str string buffer
  * \param[in] format string format
  * \param[in] ... arguments for the format string
  * \return number of bytes printed or fatal error on error
  */
-int G_sprinta(char *str, const char *format, ...)
+int G_saprintf(char *str, const char *format, ...)
 {
     va_list ap;
     int nbytes;
 
     va_start(ap, format);
-    nbytes = G_vsprinta(str, format, ap);
+    nbytes = G_vsaprintf(str, format, ap);
     va_end(ap);
 
     return nbytes;
 }
 
 /*!
- * \brief snprintf() version of G_printa(). See G_printa() for more details.
+ * \brief snprintf() version of G_aprintf(). See G_aprintf() for more details.
  *
  * \param[in] str string buffer
  * \param[in] size string buffer size
@@ -483,13 +483,13 @@ int G_sprinta(char *str, const char *format, ...)
  * \return number of bytes that would be printed if size was big enough or
  *	   fatal error on error
  */
-int G_snprinta(char *str, size_t size, const char *format, ...)
+int G_snaprintf(char *str, size_t size, const char *format, ...)
 {
     va_list ap;
     int nbytes;
 
     va_start(ap, format);
-    nbytes = G_vsnprinta(str, size, format, ap);
+    nbytes = G_vsnaprintf(str, size, format, ap);
     va_end(ap);
 
     return nbytes;
