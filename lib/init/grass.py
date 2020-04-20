@@ -339,7 +339,7 @@ def help_message(default_gui):
             gui=_("use $DEFAULT_GUI graphical user interface"),
             gui_detail=_("and set as default"),
             config=_("print GRASS configuration parameters"),
-            config_detail=_("options: arch,build,compiler,path,revision,svn_revision,version,date"),
+            config_detail=_("options: arch,build,compiler,date,path,revision,svn_revision,version"),
             params=_("Parameters"),
             gisdbase=_("initial GRASS database directory"),
             gisdbase_detail=_("directory containing Locations"),
