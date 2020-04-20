@@ -265,7 +265,7 @@ def wxpath(*args):
     return os.path.join(_WXPYTHON_BASE, *args)
 
 
-def wide_count(s):
+def count_wide_chars(s):
     """Returns the number of wide CJK characters in a string.
 
     :param str s: string
@@ -296,7 +296,7 @@ def f(fmt, *args):
         p = m.group(3) or ''
         c = m.group(4)
         if c == 's' and w:
-            w = str(int(w) - wide_count(args[i]))
+            w = str(int(w) - count_wide_chars(args[i]))
             fmt = ''.join((fmt[:m.start()], '%', f, w, p, c, fmt[m.end():]))
         i -= 1
     return fmt % args
