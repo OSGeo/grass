@@ -37,7 +37,9 @@ struct options
     size_t size, _size;
 };
 
-static int wide_count(const char *);
+static int count_wide_chars(const char *);
+static int count_wide_chars_in_cols(const char *, int);
+static int count_bytes_in_cols(const char *, int);
 static int ovprintf(struct options *, const char *, va_list);
 static int oprintf(struct options *, const char *, ...);
 static int oprinta(struct options *, const char *, va_list);
@@ -48,7 +50,7 @@ static int oprinta(struct options *, const char *, va_list);
  * \param[in] str input string
  * \return number of wide characters in str
  */
-static int wide_count(const char *str)
+static int count_wide_chars(const char *str)
 {
     int count = 0, lead = 0;
 
@@ -64,6 +66,59 @@ static int wide_count(const char *str)
 	}
 
     return count;
+}
+
+/*!
+ * \brief Count the number of wide characters in a string in a number of columns.
+ *
+ * \param[in] str input string
+ * \param[in] ncols number of columns
+ * \return number of wide characters in str in ncols
+ */
+static int count_wide_chars_in_cols(const char *str, int ncols)
+{
+    int count = 0, lead = 0;
+
+    str--;
+    while(ncols >= 0 && *++str){
+	if((*str & 0xc0) != 0x80){
+	    lead = 1;
+	    ncols--;
+	}else if(lead){
+	    lead = 0;
+	    ncols--;
+	    count++;
+	}
+    }
+    if((*str & 0xc0) == 0x80)
+	count--;
+
+    return count;
+}
+
+/*!
+ * \brief Count the number of bytes in a string in a number of columns.
+ *
+ * \param[in] str input string
+ * \param[in] ncols number of columns
+ * \return number of bytes in str in ncols
+ */
+static int count_bytes_in_cols(const char *str, int ncols)
+{
+    const char *p = str - 1;
+    int lead = 0;
+
+    while(ncols >= 0 && *++p){
+	if((*p & 0xc0) != 0x80){
+	    lead = 1;
+	    ncols--;
+	}else if(lead){
+	    lead = 0;
+	    ncols--;
+	}
+    }
+
+    return p - str;
 }
 
 /*!
@@ -215,12 +270,17 @@ static int oprinta(struct options *opts, const char *format, va_list ap)
 			s = va_arg(ap, char *);
 			if (width > 0) {
 			    /* if width is specified */
-			    int wcount = wide_count(s);
+			    int wcount = count_wide_chars(s);
 
 			    if (wcount) {
 				/* if there are wide characters */
-				width += wcount;
-				prec += prec > 0 ? wcount : 0;
+				if (prec > 0) {
+				    int nbytes = count_bytes_in_cols(s, prec);
+
+				    width += count_wide_chars_in_cols(s, prec);
+				    prec = nbytes;
+				} else if (prec < 0)
+				    width += wcount;
 				p_spec = spec;
 				p_spec += sprintf(p_spec, "%%%s%d",
 					spec[0] == '-' ? "-" : "", width);
