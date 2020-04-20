@@ -161,7 +161,7 @@ def cleanup():
                           flags='f', quiet=True)
 
 
-def createvrt(dst, src, nodata=None, region=None, bandlist=None):
+def createvrt(dst, src, nodata=None, region=None, bandlist=None, s_crs=None):
     # Lazy import
     from osgeo import gdal
     if not nodata and not region:
@@ -181,6 +181,8 @@ def createvrt(dst, src, nodata=None, region=None, bandlist=None):
 
     if region:
         print(region)
+        params["projWinSRS"] = s_crs
+        params["outputSRS"] = s_crs
         params["projWin"] = "{w} {n} {e} {s}".format(**region)
 
     print(params)
@@ -301,15 +303,18 @@ def main():
                           input=tgtregion, output=tgtregion))
         region = grass.parse_command('g.region', **dict(vector=tgtregion, flags="g"))
         parameters['flags'] = parameters['flags'].replace("r", "")
+        s_crs = grass.read_command('g.proj', flags="j").strip()
     else:
         region = None
+        s_crs = None
 
     print(region)
     if 'r' in region_flag or srcnodata or bands:
         TMP_VRT = grass.tempfile()
         parameters['input'] = TMP_VRT
         createvrt("/rmp/test.vrt", # TMP_VRT
-        GDALdatasource, nodata=srcnodata, region=region, bandlist=bands)
+        GDALdatasource, nodata=srcnodata, region=region, bandlist=bands,
+        s_crs=s_crs)
     try:
         print(parameters)
         grass.run_command('r.external', **parameters)
