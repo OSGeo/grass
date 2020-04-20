@@ -27,7 +27,7 @@ class TestRImportRegion(TestCase):
                           resample='bilinear')
         reference = dict(north=223490, south=223390, east=636820, west=636710,
                          nsres=10, ewres=10, datatype='FCELL')
-        self.assertRasterFitsInfo(raster=self.imported, reference=reference)
+        self.assertRasterFitsInfo(raster=self.imported, reference=reference, precision=1.1)
 
     def test_import_asc_custom_res(self):
         """Import ASC in different projection, with specified resolution"""
@@ -45,6 +45,13 @@ class TestRImportRegion(TestCase):
         reference = dict(north=223655, south=223600)
         self.assertRasterFitsInfo(raster=self.imported, reference=reference, precision=1e-6)
 
+    def test_import_asc_region_extent_nodata(self):
+        """Import ASC in different projection in specified region with altered nodata"""
+        self.runModule('g.region', raster='elevation', n=223655, s=223600)
+        self.assertModule('r.import', input='data/data2.asc', output=self.imported,
+                          resample='nearest', extent='region', resolution='region', srcnodata="21,22")
+        reference = dict(north=223655, south=223600)
+        self.assertRasterFitsInfo(raster=self.imported, reference=reference, precision=1e-6)
 
 if __name__ == '__main__':
     test()
