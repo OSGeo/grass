@@ -163,6 +163,16 @@ out_sep = u"""1076,366545504,324050.96875,1077,1076,Zwe,366545512.376,324050.972
 1290,63600420,109186.835938,1291,1290,Zwe,63600422.4739,109186.832069
 """
 
+out_json = u"""[{"cat":1,"onemap_pro":963738.75,"PERIMETER":4083.97998,"GEOL250_":2,"GEOL250_ID":1,"GEO_NAME":"Zml","SHAPE_area":963738.608571,"SHAPE_len":4083.979839},
+{"cat":2,"onemap_pro":22189124,"PERIMETER":26628.261719,"GEOL250_":3,"GEOL250_ID":2,"GEO_NAME":"Zmf","SHAPE_area":22189123.2296,"SHAPE_len":26628.261112},
+{"cat":3,"onemap_pro":579286.875,"PERIMETER":3335.55835,"GEOL250_":4,"GEOL250_ID":3,"GEO_NAME":"Zml","SHAPE_area":579286.829631,"SHAPE_len":3335.557182},
+{"cat":4,"onemap_pro":20225526,"PERIMETER":33253,"GEOL250_":5,"GEOL250_ID":4,"GEO_NAME":"Zml","SHAPE_area":20225526.6368,"SHAPE_len":33253.000508},
+{"cat":5,"onemap_pro":450650720,"PERIMETER":181803.765625,"GEOL250_":6,"GEOL250_ID":5,"GEO_NAME":"Ybgg","SHAPE_area":450650731.029,"SHAPE_len":181803.776199},
+{"cat":6,"onemap_pro":6386874.5,"PERIMETER":17978.429688,"GEOL250_":7,"GEOL250_ID":6,"GEO_NAME":"Zml","SHAPE_area":6386875.00182,"SHAPE_len":17978.430892},
+{"cat":7,"onemap_pro":969311.1875,"PERIMETER":4096.096191,"GEOL250_":8,"GEOL250_ID":7,"GEO_NAME":"Ybgg","SHAPE_area":969311.720138,"SHAPE_len":4096.098584},
+{"cat":8,"onemap_pro":537840.625,"PERIMETER":3213.40625,"GEOL250_":9,"GEOL250_ID":8,"GEO_NAME":"Zmf","SHAPE_area":537840.953797,"SHAPE_len":3213.407197},
+{"cat":9,"onemap_pro":3389078.25,"PERIMETER":16346.604492,"GEOL250_":10,"GEOL250_ID":9,"GEO_NAME":"Zml","SHAPE_area":3389077.17888,"SHAPE_len":16346.604884},
+{"cat":10,"onemap_pro":906132.375,"PERIMETER":4319.162109,"GEOL250_":11,"GEOL250_ID":10,"GEO_NAME":"Zml","SHAPE_area":906132.945012,"SHAPE_len":4319.163379}]"""
 
 class SelectTest(TestCase):
     """Test case for v.db.select"""
@@ -171,6 +181,7 @@ class SelectTest(TestCase):
     invect = 'geology'
     col = 'GEO_NAME'
     val = 'Zwe'
+    cat = 10
 
     def testRun(self):
         """Basic test of v.db.select"""
@@ -213,6 +224,19 @@ class SelectTest(TestCase):
                            separator=',')
         sel.run()
         self.assertLooksLike(reference=out_sep, actual=sel.outputs.stdout)
+
+    def testJSON(self):
+        import json
+        sel = SimpleModule('v.db.select', flags='j', map=self.invect,
+                           where="cat<={cat}".format(cat=self.cat))
+        sel.run()
+
+        try:
+            json.loads(sel.outputs.stdout)
+        except ValueError:
+            self.fail(msg="No JSON object could be decoded:\n" + sel.outputs.stdout)
+
+        self.assertLooksLike(reference=out_json, actual=sel.outputs.stdout)
 
 if __name__ == '__main__':
     test()
