@@ -226,9 +226,16 @@ class SelectTest(TestCase):
         self.assertLooksLike(reference=out_sep, actual=sel.outputs.stdout)
 
     def testJSON(self):
+        import json
         sel = SimpleModule('v.db.select', flags='j', map=self.invect,
                            where="cat<={cat}".format(cat=self.cat))
         sel.run()
+
+        try:
+            json.loads(sel.outputs.stdout)
+        except ValueError:
+            self.fail(msg="No JSON object could be decoded:\n" + sel.outputs.stdout)
+
         self.assertLooksLike(reference=out_json, actual=sel.outputs.stdout)
 
 if __name__ == '__main__':
