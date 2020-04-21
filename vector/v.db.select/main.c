@@ -1,22 +1,22 @@
 
-/***************************************************************
+/*******************************************************************************
  *
  * MODULE:       v.db.select
  *
  * AUTHOR(S):    Radim Blazek
  *               OGR support by Martin Landa <landa.martin gmail.com>
- *               -f flag by Huidae Cho <grass4u gmail.com>
+ *               -e, -j, and -f flags by Huidae Cho <grass4u gmail.com>
  *               group option by Luca Delucchi <lucadeluge gmail.com>
  *
  * PURPOSE:      Print vector attributes
  *
- * COPYRIGHT:    (C) 2005-2009, 2011-2014 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2005-2020 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
  *               comes with GRASS for details.
  *
- **************************************************************/
+ ******************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,9 +32,26 @@
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct Option *map_opt, *field_opt, *fs_opt, *vs_opt, *nv_opt, *col_opt,
-	*where_opt, *file_opt, *group_opt;
-    struct Flag *c_flag, *v_flag, *r_flag, *f_flag;
+    struct
+    {
+	struct Option *map;
+	struct Option *field;
+	struct Option *fsep;
+	struct Option *vsep;
+	struct Option *nullval;
+	struct Option *cols;
+	struct Option *where;
+	struct Option *file;
+	struct Option *group;
+    } options;
+    struct {
+	struct Flag *region;
+	struct Flag *colnames;
+	struct Flag *vertical;
+	struct Flag *escape;
+	struct Flag *json;
+	struct Flag *features;
+    } flags;
     dbDriver *driver;
     dbString sql, value_string;
     dbCursor cursor;
@@ -42,11 +59,11 @@ int main(int argc, char **argv)
     dbColumn *column;
     dbValue *value;
     struct field_info *Fi;
-    int ncols, col, more;
+    int ncols, col, more, first_rec;
     struct Map_info Map;
     char query[DB_SQL_MAX];
     struct ilist *list_lines;
-    char *fs, *vs;
+    char *fsep, *vsep;
     struct bound_box *min_box, *line_box;
     int i, line, area, init_box, cat, field_number;
 
@@ -57,119 +74,137 @@ int main(int argc, char **argv)
     G_add_keyword(_("SQL"));
     module->description = _("Prints vector map attributes.");
 
-    map_opt = G_define_standard_option(G_OPT_V_MAP);
-    map_opt->guisection = _("Main");
+    options.map = G_define_standard_option(G_OPT_V_MAP);
+    options.map->guisection = _("Main");
 
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
-    field_opt->guisection = _("Selection");
+    options.field = G_define_standard_option(G_OPT_V_FIELD);
+    options.field->guisection = _("Selection");
 
-    col_opt = G_define_standard_option(G_OPT_DB_COLUMNS);
-    col_opt->guisection = _("Selection");
+    options.cols = G_define_standard_option(G_OPT_DB_COLUMNS);
+    options.cols->guisection = _("Selection");
 
-    where_opt = G_define_standard_option(G_OPT_DB_WHERE);
-    where_opt->guisection = _("Selection");
+    options.where = G_define_standard_option(G_OPT_DB_WHERE);
+    options.where->guisection = _("Selection");
 
-    group_opt = G_define_option();
-    group_opt->key = "group";
-    group_opt->required = NO;
-    group_opt->description = _("GROUP BY conditions of SQL statement without 'group by' keyword");
-    group_opt->guisection = _("Selection");
+    options.group = G_define_option();
+    options.group->key = "group";
+    options.group->required = NO;
+    options.group->description =
+	_("GROUP BY conditions of SQL statement without 'group by' keyword");
+    options.group->guisection = _("Selection");
 
-    fs_opt = G_define_standard_option(G_OPT_F_SEP);
-    fs_opt->guisection = _("Main");
+    options.fsep = G_define_standard_option(G_OPT_F_SEP);
+    options.fsep->guisection = _("Main");
 
-    vs_opt = G_define_standard_option(G_OPT_F_SEP);
-    vs_opt->key = "vertical_separator";
-    vs_opt->label = _("Output vertical record separator");
-    vs_opt->answer = NULL;
-    vs_opt->guisection = _("Format");
+    options.vsep = G_define_standard_option(G_OPT_F_SEP);
+    options.vsep->key = "vertical_separator";
+    options.vsep->label = _("Output vertical record separator");
+    options.vsep->answer = NULL;
+    options.vsep->guisection = _("Format");
 
-    nv_opt = G_define_standard_option(G_OPT_M_NULL_VALUE);
-    nv_opt->guisection = _("Format");
+    options.nullval = G_define_standard_option(G_OPT_M_NULL_VALUE);
+    options.nullval->guisection = _("Format");
 
-    file_opt = G_define_standard_option(G_OPT_F_OUTPUT);
-    file_opt->key = "file";
-    file_opt->required = NO;
-    file_opt->guisection = _("Main");
-    file_opt->description =
+    options.file = G_define_standard_option(G_OPT_F_OUTPUT);
+    options.file->key = "file";
+    options.file->required = NO;
+    options.file->guisection = _("Main");
+    options.file->description =
 	_("Name for output file (if omitted or \"-\" output to stdout)");
 
-    r_flag = G_define_flag();
-    r_flag->key = 'r';
-    r_flag->description =
+    flags.region = G_define_flag();
+    flags.region->key = 'r';
+    flags.region->description =
 	_("Print minimal region extent of selected vector features instead of attributes");
-    r_flag->guisection = _("Region");
+    flags.region->guisection = _("Region");
 
-    c_flag = G_define_flag();
-    c_flag->key = 'c';
-    c_flag->description = _("Do not include column names in output");
-    c_flag->guisection = _("Format");
+    flags.colnames = G_define_flag();
+    flags.colnames->key = 'c';
+    flags.colnames->description = _("Do not include column names in output");
+    flags.colnames->guisection = _("Format");
 
-    v_flag = G_define_flag();
-    v_flag->key = 'v';
-    v_flag->description = _("Vertical output (instead of horizontal)");
-    v_flag->guisection = _("Format");
+    flags.vertical = G_define_flag();
+    flags.vertical->key = 'v';
+    flags.vertical->description = _("Vertical output (instead of horizontal)");
+    flags.vertical->guisection = _("Format");
 
-    f_flag = G_define_flag();
-    f_flag->key = 'f';
-    f_flag->description = _("Exclude attributes not linked to features");
-    f_flag->guisection = _("Selection");
+    flags.escape = G_define_flag();
+    flags.escape->key = 'e';
+    flags.escape->description = _("Escape newline and backslash characters");
+    flags.escape->guisection = _("Format");
+
+    flags.json = G_define_flag();
+    flags.json->key = 'j';
+    flags.json->description = _("JSON output");
+    flags.json->guisection = _("Format");
+
+    flags.features = G_define_flag();
+    flags.features->key = 'f';
+    flags.features->description =
+	_("Exclude attributes not linked to features");
+    flags.features->guisection = _("Selection");
 
     G_gisinit(argv[0]);
+
+    G_option_excludes(flags.json, flags.colnames, flags.vertical, flags.escape,
+		      NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     /* set input vector map name and mapset */
-    if (file_opt->answer && strcmp(file_opt->answer, "-") != 0) {
-	if (NULL == freopen(file_opt->answer, "w", stdout)) {
-	    G_fatal_error(_("Unable to open file <%s> for writing"), file_opt->answer);
-	}
+    if (options.file->answer && strcmp(options.file->answer, "-") != 0) {
+	if (NULL == freopen(options.file->answer, "w", stdout))
+	    G_fatal_error(_("Unable to open file <%s> for writing"),
+			  options.file->answer);
     }
 
     min_box = line_box = NULL;
     list_lines = NULL;
 
-    if (r_flag->answer) {
+    if (flags.region->answer) {
 	min_box = (struct bound_box *) G_malloc(sizeof(struct bound_box));
 	G_zero((void *)min_box, sizeof(struct bound_box));
 
 	line_box = (struct bound_box *) G_malloc(sizeof(struct bound_box));
     }
 
-    if (r_flag->answer || f_flag->answer)
+    if (flags.region->answer || flags.features->answer)
 	list_lines = Vect_new_list();
 
     /* the field separator */
-    fs = G_option_to_separator(fs_opt);
-    if (vs_opt->answer)
-        vs = G_option_to_separator(vs_opt);
+    fsep = G_option_to_separator(options.fsep);
+    if (options.vsep->answer)
+        vsep = G_option_to_separator(options.vsep);
     else
-        vs = NULL;
+        vsep = NULL;
 
     db_init_string(&sql);
     db_init_string(&value_string);
 
     /* open input vector */
-    if (r_flag->answer || f_flag->answer) {
-	if (2 > Vect_open_old2(&Map, map_opt->answer, "", field_opt->answer)) {
+    if (flags.region->answer || flags.features->answer) {
+	if (2 > Vect_open_old2(&Map, options.map->answer, "",
+			       options.field->answer)) {
 	    Vect_close(&Map);
 	    G_fatal_error(_("Unable to open vector map <%s> at topology level. "
 			   "Flag '%c' requires topology level."),
-			  map_opt->answer, r_flag->key);
+			  options.map->answer, flags.region->key);
 	}
-	field_number = Vect_get_field_number(&Map, field_opt->answer);
+	field_number = Vect_get_field_number(&Map, options.field->answer);
     } else {
-	if (Vect_open_old_head2(&Map, map_opt->answer, "", field_opt->answer) < 0)
-	    G_fatal_error(_("Unable to open vector map <%s>"), map_opt->answer);
+	if (Vect_open_old_head2(&Map, options.map->answer, "",
+				options.field->answer) < 0)
+	    G_fatal_error(_("Unable to open vector map <%s>"),
+			  options.map->answer);
 	/* field_number won't be used, but is initialized to suppress compiler
 	 * warnings. */
 	field_number = -1;
     }
 
-    if ((Fi = Vect_get_field2(&Map, field_opt->answer)) == NULL)
+    if ((Fi = Vect_get_field2(&Map, options.field->answer)) == NULL)
 	G_fatal_error(_("Database connection not defined for layer <%s>"),
-		      field_opt->answer);
+		      options.field->answer);
 
     driver = db_start_driver_open_database(Fi->driver, Fi->database);
 
@@ -178,28 +213,28 @@ int main(int argc, char **argv)
 		      Fi->database, Fi->driver);
     db_set_error_handler_driver(driver);
 
-    if (col_opt->answer)
-	sprintf(query, "SELECT %s FROM ", col_opt->answer);
+    if (options.cols->answer)
+	sprintf(query, "SELECT %s FROM ", options.cols->answer);
     else
 	sprintf(query, "SELECT * FROM ");
 
     db_set_string(&sql, query);
     db_append_string(&sql, Fi->table);
 
-    if (where_opt->answer) {
+    if (options.where->answer) {
 	char *buf = NULL;
 
-	buf = G_malloc((strlen(where_opt->answer) + 8));
-	sprintf(buf, " WHERE %s", where_opt->answer);
+	buf = G_malloc((strlen(options.where->answer) + 8));
+	sprintf(buf, " WHERE %s", options.where->answer);
 	db_append_string(&sql, buf);
 	G_free(buf);
     }
 
-    if (group_opt->answer) {
+    if (options.group->answer) {
         char *buf = NULL;
 
-        buf = G_malloc((strlen(group_opt->answer) + 8));
-        sprintf(buf, " GROUP BY %s", group_opt->answer);
+        buf = G_malloc((strlen(options.group->answer) + 8));
+        sprintf(buf, " GROUP BY %s", options.group->answer);
         db_append_string(&sql, buf);
         G_free(buf);
     }
@@ -210,18 +245,23 @@ int main(int argc, char **argv)
     table = db_get_cursor_table(&cursor);
     ncols = db_get_table_number_of_columns(table);
 
-    /* column names if horizontal output (ignore for -r) */
-    if (!v_flag->answer && !c_flag->answer && !r_flag->answer) {
+    /* column names if horizontal output (ignore for -r, -c, -v, -j) */
+    if (!flags.region->answer && !flags.colnames->answer &&
+	!flags.vertical->answer && !flags.json->answer) {
 	for (col = 0; col < ncols; col++) {
 	    column = db_get_table_column(table, col);
 	    if (col)
-		fprintf(stdout, "%s", fs);
+		fprintf(stdout, "%s", fsep);
 	    fprintf(stdout, "%s", db_get_column_name(column));
 	}
 	fprintf(stdout, "\n");
     }
 
-    init_box = 1;
+    init_box = TRUE;
+    first_rec = TRUE;
+
+    if (!flags.region->answer && flags.json->answer)
+	fprintf(stdout, "[");
 
     /* fetch the data */
     while (1) {
@@ -232,6 +272,11 @@ int main(int argc, char **argv)
 	if (!more)
 	    break;
 
+	if (first_rec)
+	    first_rec = FALSE;
+	else if (!flags.region->answer && flags.json->answer)
+	    fprintf(stdout, ",\n");
+
 	cat = -1;
 	for (col = 0; col < ncols; col++) {
 	    column = db_get_table_column(table, col);
@@ -239,15 +284,16 @@ int main(int argc, char **argv)
 
 	    if (cat < 0 && strcmp(Fi->key, db_get_column_name(column)) == 0) {
 		cat = db_get_value_int(value);
-		if (r_flag->answer)
+		if (flags.region->answer)
 		    break;
 	    }
 
-	    if (r_flag->answer)
+	    if (flags.region->answer)
 		continue;
 
-	    if (f_flag->answer) {
-		Vect_cidx_find_all(&Map, field_number, ~GV_AREA, cat, list_lines);
+	    if (flags.features->answer) {
+		Vect_cidx_find_all(&Map, field_number, ~GV_AREA, cat,
+				   list_lines);
 		/* if no features are found for this category, don't print
 		 * anything. */
 		if (list_lines->n_values == 0)
@@ -256,67 +302,116 @@ int main(int argc, char **argv)
 
 	    db_convert_column_value_to_string(column, &value_string);
 
-	    if (!c_flag->answer && v_flag->answer)
-		fprintf(stdout, "%s%s", db_get_column_name(column), fs);
+	    if (!flags.colnames->answer && flags.vertical->answer)
+		fprintf(stdout, "%s%s", db_get_column_name(column), fsep);
 
-	    if (col && !v_flag->answer)
-		fprintf(stdout, "%s", fs);
+	    if (col && !flags.vertical->answer && !flags.json->answer)
+		fprintf(stdout, "%s", fsep);
 
-	    if (nv_opt->answer && db_test_value_isnull(value))
-		fprintf(stdout, "%s", nv_opt->answer);
-	    else
-		fprintf(stdout, "%s", db_get_string(&value_string));
+	    if (flags.json->answer) {
+		if (!col)
+		    fprintf(stdout, "{");
+		fprintf(stdout, "\"%s\":", db_get_column_name(column));
+	    }
 
-	    if (v_flag->answer)
+	    if (options.nullval->answer && db_test_value_isnull(value)) {
+		if (flags.json->answer)
+		    fprintf(stdout, "\"%s\"", db_get_column_name(column));
+		else
+		    fprintf(stdout, "%s", options.nullval->answer);
+	    } else {
+		char *str = db_get_string(&value_string);
+
+		if (flags.escape->answer || flags.json->answer) {
+		    if (strchr(str, '\\'))
+			str = G_str_replace(str, "\\", "\\\\");
+		    if (strchr(str, '\r'))
+			str = G_str_replace(str, "\r", "\\r");
+		    if (strchr(str, '\n'))
+			str = G_str_replace(str, "\n", "\\n");
+		    if (flags.json->answer && strchr(str, '"'))
+			str = G_str_replace(str, "\"", "\\\"");
+		}
+
+		if (flags.json->answer) {
+		    int sqltype = db_get_column_sqltype(column);
+		    if (sqltype == DB_SQL_TYPE_INTEGER ||
+			sqltype == DB_SQL_TYPE_DOUBLE_PRECISION ||
+			sqltype == DB_SQL_TYPE_REAL)
+			fprintf(stdout, "%s", str);
+		    else
+			fprintf(stdout, "\"%s\"", str);
+		} else
+		    fprintf(stdout, "%s", str);
+	    }
+
+	    if (flags.vertical->answer)
 		fprintf(stdout, "\n");
+	    else if (flags.json->answer) {
+		if (col < ncols - 1)
+		    fprintf(stdout, ",");
+		else
+		    fprintf(stdout, "}");
+	    }
 	}
 
-	if (f_flag->answer && col < ncols)
+	if (flags.features->answer && col < ncols)
 	    continue;
 
-	if (r_flag->answer) {
+	if (flags.region->answer) {
 	    /* get minimal region extent */
 	    Vect_cidx_find_all(&Map, field_number, ~GV_AREA, cat, list_lines);
 	    for (i = 0; i < list_lines->n_values; i++) {
 		line = list_lines->value[i];
 		if (Vect_get_line_type(&Map, line) == GV_CENTROID) {
 		    area = Vect_get_centroid_area(&Map, line);
-		    if (area > 0) {
-			if (!Vect_get_area_box(&Map, area, line_box))
-			    G_fatal_error(_("Unable to get bounding box of area %d"),
-					  area);
-		    }
+		    if (area > 0 && !Vect_get_area_box(&Map, area, line_box))
+			G_fatal_error(
+			    _("Unable to get bounding box of area %d"), area);
 		}
-		else {
-		    if (!Vect_get_line_box(&Map, line, line_box))
-			G_fatal_error(_("Unable to get bounding box of line %d"),
-				      line);
-		}
+		else if (!Vect_get_line_box(&Map, line, line_box))
+		    G_fatal_error(_("Unable to get bounding box of line %d"),
+				  line);
 		if (init_box) {
 		    Vect_box_copy(min_box, line_box);
-		    init_box = 0;
+		    init_box = FALSE;
 		}
-		else {
+		else
 		    Vect_box_extend(min_box, line_box);
-		}
 	    }
 	}
 	else {
-	    if (!v_flag->answer)
+	    if (!flags.vertical->answer && !flags.json->answer)
 		fprintf(stdout, "\n");
-	    else if (vs)
-		fprintf(stdout, "%s\n", vs);
+	    else if (vsep)
+		fprintf(stdout, "%s\n", vsep);
 	}
     }
 
-    if (r_flag->answer) {
-	fprintf(stdout, "n=%f\n", min_box->N);
-	fprintf(stdout, "s=%f\n", min_box->S);
-	fprintf(stdout, "w=%f\n", min_box->W);
-	fprintf(stdout, "e=%f\n", min_box->E);
-	if (Vect_is_3d(&Map)) {
-	    fprintf(stdout, "t=%f\n", min_box->T);
-	    fprintf(stdout, "b=%f\n", min_box->B);
+    if (!flags.region->answer && flags.json->answer)
+	fprintf(stdout, "]\n");
+
+    if (flags.region->answer) {
+	if (flags.json->answer) {
+	    fprintf(stdout, "{");
+	    fprintf(stdout, "\"n\":%f,", min_box->N);
+	    fprintf(stdout, "\"s\":%f,", min_box->S);
+	    fprintf(stdout, "\"w\":%f,", min_box->W);
+	    fprintf(stdout, "\"e\":%f", min_box->E);
+	    if (Vect_is_3d(&Map)) {
+		fprintf(stdout, ",\"t\":%f,\n", min_box->T);
+		fprintf(stdout, "\"b\":%f\n", min_box->B);
+	    }
+	    fprintf(stdout, "}\n");
+	} else {
+	    fprintf(stdout, "n=%f\n", min_box->N);
+	    fprintf(stdout, "s=%f\n", min_box->S);
+	    fprintf(stdout, "w=%f\n", min_box->W);
+	    fprintf(stdout, "e=%f\n", min_box->E);
+	    if (Vect_is_3d(&Map)) {
+		fprintf(stdout, "t=%f\n", min_box->T);
+		fprintf(stdout, "b=%f\n", min_box->B);
+	    }
 	}
 	fflush(stdout);
 
