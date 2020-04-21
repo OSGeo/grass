@@ -100,7 +100,7 @@ def main():
     # NOTE: we suppress -1 cat and 0 cat
     if isConnection:
         f = grass.vector_db(map=mapname)[int(layer)]
-        p = grass.pipe_command('v.db.select', quiet=True, map=mapname, layer=layer)
+        p = grass.pipe_command('v.db.select', flags='e', quiet=True, map=mapname, layer=layer)
         records1 = []
         catcol = -1
         ncols = 0
