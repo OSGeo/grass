@@ -1615,7 +1615,7 @@ class BufferedMapWindow(MapWindowBase, Window):
                 screenCoords[0],
                 screenCoords[1],
                 self.hitradius)
-            if idlist:
+            if idlist and idlist[0] != 99:
                 self.dragid = idlist[0]
                 self.overlayActivated.emit(overlayId=self.dragid)
 
