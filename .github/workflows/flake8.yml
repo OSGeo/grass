@@ -22,7 +22,7 @@ jobs:
     - name: Run Flake8
       run: |
         cd lib/python
-        flake8 --count --statistics --show-source .
+        flake8 --count --statistics --show-source --jobs=$(nproc) .
 
   flake8-wxgui:
 
@@ -42,7 +42,7 @@ jobs:
     - name: Run Flake8
       run: |
         cd gui/wxpython
-        flake8 --count --statistics --show-source .
+        flake8 --count --statistics --show-source --jobs=$(nproc) .
 
   flake8-scripts:
 
@@ -62,7 +62,7 @@ jobs:
     - name: Run Flake8
       run: |
         cd scripts
-        flake8 --count --statistics --show-source .
+        flake8 --count --statistics --show-source --jobs=$(nproc) .
 
   flake8-temporal-modules:
 
@@ -82,4 +82,4 @@ jobs:
     - name: Run Flake8
       run: |
         cd temporal
-        flake8 --count --statistics --show-source .
+        flake8 --count --statistics --show-source --jobs=$(nproc) .
