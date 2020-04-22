@@ -30,9 +30,6 @@ ignore =
     W293, # blank line contains whitespace
     W503, # line break before binary operator
     W504, # line break after binary operator
-    E121, # continuation line under-indented for hanging indent
-    E221, # multiple spaces before operator
-    E251, # unexpected spaces around keyword / parameter equals
 
 max-line-length = 88
 exclude =
