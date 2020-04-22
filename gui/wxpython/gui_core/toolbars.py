@@ -309,7 +309,7 @@ class ToolSwitcher:
 
         :param tool: id of the button
         """
-        if not tool in self._toolsGroups:
+        if tool not in self._toolsGroups:
             return
         for group in self._toolsGroups[tool]:
             self._groups[group]['custom'] = \

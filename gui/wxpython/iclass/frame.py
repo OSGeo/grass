@@ -50,7 +50,6 @@ from gui_core.dialogs import SetOpacityDialog
 from gui_core.wrap import Menu
 from mapwin.base import MapWindowProperties
 from dbmgr.vinfo import VectorDBInfo
-import grass.script as grass
 
 from iclass.digit import IClassVDigitWindow, IClassVDigit
 from iclass.toolbars    import IClassMapToolbar, IClassMiscToolbar,\

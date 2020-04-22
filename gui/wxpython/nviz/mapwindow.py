@@ -1424,7 +1424,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             except ValueError:
                 continue
             if key == 'color':
-                if not ':' in value:
+                if ':' not in value:
                     value = ':'.join(map(str, str2rgb[value]))
                 data['lines']['color']['value'] = value
                 data['points']['color']['value'] = value

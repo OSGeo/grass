@@ -1342,7 +1342,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         selectedLayer = self.GetSelectedLayer()
         # deselect active item
-        if lchecked != False and selectedLayer:
+        if lchecked is not False and selectedLayer:
             self.SelectItem(selectedLayer, select=False)
 
         Debug.msg(3, "LayerTree().AddLayer(): ltype=%s" % (ltype))
@@ -1509,7 +1509,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                    None))
 
         # select new item
-        if lchecked != False:
+        if lchecked is not False:
             self.SelectItem(layer, select=True)
 
         # use predefined layer name if given

@@ -183,7 +183,7 @@ class Popen(subprocess.Popen):
                         # If there are spaces, the argument was already
                         # esscaped with double quotes, so don't escape it
                         # again.
-                        if c in v and not " " in v:
+                        if c in v and " " not in v:
                             # Here, we escape each ^ in ^^^ with ^^ and a
                             # <special character> with ^ + <special character>,
                             # so we need 7 carets.

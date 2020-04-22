@@ -836,7 +836,7 @@ class VNETDialog(wx.Dialog):
 
     def OnDefIsecTurnCosts(self, event):
         """Registers/unregisters mouse handler into map window"""
-        if self.defIsecTurnsHndlrReg == False:
+        if not self.defIsecTurnsHndlrReg:
             self.mapWin.RegisterMouseEventHandler(wx.EVT_LEFT_DOWN,
                                                   self.OnDefIsecTurnCost,
                                                   'cross')

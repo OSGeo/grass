@@ -149,7 +149,7 @@ class VectorDBInfo(VectorDBInfoBase):
             ret[key] = list()
 
         for record in data:
-            if not 'Table' in record:
+            if 'Table' not in record:
                 continue
 
             table = record['Table']
