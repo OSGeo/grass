@@ -4293,7 +4293,7 @@ class LegendDialog(PsmapDialog):
             self.vLegendDict['vLegend'] = False
         else:
             self.vLegendDict['vLegend'] = True
-        if self.vLegendDict['vLegend'] == True and self.vectorId is not None:
+        if self.vLegendDict['vLegend'] and self.vectorId is not None:
             # labels
             # reindex order
             idx = 1
@@ -5663,7 +5663,7 @@ class TextDialog(PsmapDialog):
             self.textDict['rotate'] = None
         # reference point
         for radio in self.radio:
-            if radio.GetValue() == True:
+            if radio.GetValue():
                 self.textDict['ref'] = radio.GetName()
 
         if self.id not in self.instruction:

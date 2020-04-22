@@ -48,7 +48,7 @@ class SbException(Exception):
     """Exception class used in SbManager and SbItems"""
 
     def __init__(self, message):
-#        Exception.__init__(self, message)
+        # Exception.__init__(self, message)
         self.message = message
 
     def __str__(self):

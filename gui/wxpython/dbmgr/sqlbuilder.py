@@ -58,7 +58,7 @@ class SQLBuilder(wx.Frame):
 
         # variables
         self.vectmap = vectmap  # fullname
-        if not "@" in self.vectmap:
+        if "@" not in self.vectmap:
             self.vectmap = grass.find_file(
                 self.vectmap, element='vector')['fullname']
             if not self.vectmap:
@@ -380,7 +380,7 @@ class SQLBuilder(wx.Frame):
 
         i = 0
         items = []
-        for item in data: #sorted(set(map(lambda x: desc['ctype'](x[0]), data))):
+        for item in data: # sorted(set(map(lambda x: desc['ctype'](x[0]), data))):
             if desc['type'] not in ('character', 'text'):
                 items.append(str(item[0]))
             else:

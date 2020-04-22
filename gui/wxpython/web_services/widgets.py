@@ -298,7 +298,7 @@ class WSPanel(wx.Panel):
         self.params['maxrows'].SetValue(val)
 
         self.flags['o'] = self.params['bgcolor'] = None
-        if not 'o' in self.drv_props['ignored_flags']:
+        if 'o' not in self.drv_props['ignored_flags']:
             self.flags['o'] = wx.CheckBox(
                 parent=adv_setts_panel, id=wx.ID_ANY,
                 label=_("Do not request transparent data"))
@@ -713,7 +713,7 @@ class WSPanel(wx.Panel):
         i_method = self.params['method'].GetSelection()
         lcmd.append('method=' + self.reproj_methods[i_method])
 
-        if not 'o' in self.drv_props['ignored_flags'] and \
+        if 'o' not in self.drv_props['ignored_flags'] and \
                 self.flags['o'].IsChecked():
             lcmd.append('-o')
 

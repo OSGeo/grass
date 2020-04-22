@@ -414,7 +414,7 @@ class GraphicsSetItem:
         :param propName - name of the newly defined property
         :type propName: str
         """
-        if not propName in self.properties:
+        if propName not in self.properties:
             self.properties[propName] = None
 
     def SetPropertyVal(self, propName, propVal):

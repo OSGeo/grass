@@ -1021,7 +1021,7 @@ class DisplayDriver:
         ret = open_fn(self.poMapInfo, name, mapset)
 
         if ret == -1:
-             # fatal error detected
+            # fatal error detected
             del self.mapInfo
             self.poMapInfo = self.mapInfo = None
         elif ret < 2:

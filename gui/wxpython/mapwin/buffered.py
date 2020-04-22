@@ -1597,8 +1597,8 @@ class BufferedMapWindow(MapWindowBase, Window):
             # redraw map
             self.UpdateMap(render=False)
 
-       # TODO: decide which coordinates to send (e, n, mouse['begin'],
-       # mouse['end'])
+        # TODO: decide which coordinates to send (e, n, mouse['begin'],
+        # mouse['end'])
         self.mouseLeftUp.emit(x=coordinates[0], y=coordinates[1])
 
     def OnButtonDClick(self, event):

@@ -376,10 +376,10 @@ class BasePlotFrame(wx.Frame):
         else:
             self.properties['y-axis']['axis'] = None
 
-        if self.properties['x-axis']['prop']['log'] == True:
+        if self.properties['x-axis']['prop']['log']:
             self.properties['x-axis']['axis'] = None
             self.client.xSpec = 'min'
-        if self.properties['y-axis']['prop']['log'] == True:
+        if self.properties['y-axis']['prop']['log']:
             self.properties['y-axis']['axis'] = None
             self.client.ySpec = 'min'
 

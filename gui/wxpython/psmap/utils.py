@@ -472,7 +472,6 @@ def GhostscriptForWindows(tile, size, fp):
     length, bbox = data
 
     import tempfile
-    import os
 
     file = tempfile.mkstemp()[1]
 

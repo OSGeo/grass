@@ -180,7 +180,7 @@ class GCPWizard(object):
         #
         if self.wizard.RunWizard(self.startpage):
             success = self.OnWizFinished()
-            if success == False:
+            if not success:
                 GMessage(parent=self.parent,
                          message=_("Georectifying setup canceled."))
                 self.Cleanup()
@@ -192,7 +192,7 @@ class GCPWizard(object):
         #
         # start GCP display
         #
-        if success != False:
+        if success:
             # instance of render.Map to be associated with display
             self.SwitchEnv('source')
             self.SrcMap = Map(gisrc=self.source_gisrc)
@@ -1304,7 +1304,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         else:
             item.SetPropertyVal('hide', False)
-            if self.highest_only == True:
+            if self.highest_only:
                 if itemIndex == self.highest_key:
                     wxPen = "highest"
                 else:
@@ -1395,7 +1395,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                 "#-----------------------     -----------------------     ---------------\n")
 
             for index in range(self.list.GetItemCount()):
-                if self.list.IsChecked(index) == True:
+                if self.list.IsChecked(index):
                     check = "1"
                     self.GCPcount += 1
                 else:
@@ -1585,7 +1585,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         global maptype
         self.SaveGCPs(None)
 
-        if self.CheckGCPcount(msg=True) == False:
+        if not self.CheckGCPcount(msg=True):
             return
 
         if maptype == 'raster':
@@ -1700,7 +1700,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                 key = self.list.GetItemData(index)
                 fwd_err = self.mapcoordlist[key][5]
 
-                if self.highest_only == True:
+                if self.highest_only:
                     self.list.SetItemTextColour(index, wx.BLACK)
                     if highest_fwd_err < fwd_err:
                         highest_fwd_err = fwd_err
@@ -1791,7 +1791,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.SaveGCPs(None)
         # self.SetStatusText('')
 
-        if self.CheckGCPcount(msg=True) == False:
+        if not self.CheckGCPcount(msg=True):
             return
 
         # get list of forward and reverse rms error values for each point
@@ -1901,7 +1901,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         order = self.gr_order
         self.gr_order = 1
 
-        if self.CheckGCPcount(msg=True) == False:
+        if not self.CheckGCPcount(msg=True):
             self.gr_order = order
             return
 
@@ -2697,7 +2697,7 @@ class GrSettingsDialog(wx.Dialog):
         self.rmsWin = TextCtrl(parent=panel, id=wx.ID_ANY,
                                size=(70, -1), style=wx.TE_NOHIDESEL)
         self.rmsWin.SetValue("%s" % str(sdfactor))
-        if (self.parent.highest_only == True):
+        if (self.parent.highest_only):
             self.rmsWin.Disable()
 
         self.symbol['sdfactor'] = self.rmsWin.GetId()
@@ -3181,7 +3181,7 @@ class GrSettingsDialog(wx.Dialog):
                 tgtrenderVector = True
 
         if tgt_map['raster'] == '' and tgt_map['vector'] == '':
-            if self.parent.show_target == True:
+            if self.parent.show_target:
                 self.parent.show_target = False
                 self.parent._mgr.GetPane("target").Hide()
                 self.parent._mgr.Update()
@@ -3189,7 +3189,7 @@ class GrSettingsDialog(wx.Dialog):
                 self.parent.activemap.Enable(False)
                 self.parent.GetMapToolbar().Enable('zoommenu', enable=False)
         else:
-            if self.parent.show_target == False:
+            if not self.parent.show_target:
                 self.parent.show_target = True
                 self.parent._mgr.GetPane("target").Show()
                 self.parent._mgr.Update()

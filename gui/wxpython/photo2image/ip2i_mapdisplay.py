@@ -277,7 +277,7 @@ class MapFrame(SingleMapFrame):
                               BottomDockable(False).TopDockable(True).
                               CloseButton(False).Layer(2))
 
-            if self.show_target == False:
+            if self.show_target is False:
                 self.toolbars['gcpdisp'].Enable('zoommenu', enable=False)
 
             self.toolbars['gcpman'] = GCPManToolbar(self)

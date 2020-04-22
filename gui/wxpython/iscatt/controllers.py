@@ -976,7 +976,7 @@ class IMapDispConnection:
 
     def RenderCatRast(self, cat_id):
 
-        if not cat_id in six.iterkeys(self.added_cats_rasts):
+        if cat_id not in six.iterkeys(self.added_cats_rasts):
             cat_rast = self.scatt_mgr.core.GetCatRast(cat_id)
 
             cat_name = self.cats_mgr.GetCategoryAttrs(cat_id)['name']
@@ -1053,7 +1053,7 @@ class IClassConnection:
     def RenderCatRast(self, cat_id):
 
         train_mgr, preview_mgr = self.iclass_frame.GetMapManagers()
-        if not cat_id in self.added_cats_rasts:
+        if cat_id not in self.added_cats_rasts:
             cat_rast = self.scatt_mgr.core.GetCatRast(cat_id)
 
             cat_name = self.cats_mgr.GetCategoryAttrs(cat_id)['name']

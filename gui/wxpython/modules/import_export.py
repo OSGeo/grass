@@ -780,14 +780,6 @@ class DxfImportDialog(ImportDialog):
 
         self.doLayout()
 
-    def _getCommand(self):
-        """Get command"""
-        return 'v.in.dxf'
-
-    def _getBlackListedParameters(self):
-
-        return ['input', 'output', 'layers']
-
     def OnRun(self, event):
         """Import/Link data (each layes as separate vector map)"""
         data = self.list.GetLayers()

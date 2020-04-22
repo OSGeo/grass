@@ -421,9 +421,9 @@ class DisplayAttributesDialog(wx.Dialog):
                         tfid = int(data['Id'][idx])
                     else:
                         tfid = 0  # Area / Volume
-                    if not tfid in self.cats:
+                    if tfid not in self.cats:
                         self.cats[tfid] = {}
-                    if not layer in self.cats[tfid]:
+                    if layer not in self.cats[tfid]:
                         self.cats[tfid][layer] = []
                     cat = int(data['Category'][idx])
                     self.cats[tfid][layer].append(cat)

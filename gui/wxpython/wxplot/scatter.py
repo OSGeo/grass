@@ -260,7 +260,7 @@ class ScatterFrame(BasePlotFrame):
         title = _('Regression Statistics for Scatterplot(s)')
 
         for rpair in self.rasterList:
-            if isinstance(rpair, tuple) == False:
+            if not isinstance(rpair, tuple):
                 continue
             rast1, rast2 = rpair
             rast1 = rast1.split('@')[0]

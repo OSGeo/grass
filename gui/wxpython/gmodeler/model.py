@@ -2332,7 +2332,7 @@ class WriteModelFile:
                 for f in val:
                     if f.get('value', False) or f.get('parameterized', False):
                         if f.get('parameterized', False):
-                            if f.get('value', False) == False:
+                            if f.get('value', False) is False:
                                 self.fd.write(
                                     '%s<flag name="%s" value="0" parameterized="1" />\n' %
                                     (' ' *

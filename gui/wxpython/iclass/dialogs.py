@@ -571,9 +571,6 @@ class CategoryListCtrl(ListCtrl,
         return -1
 
     def OnGetItemAttr(self, item):
-        return None
-
-    def OnGetItemAttr(self, item):
         """Set correct class color for a item"""
         back_c = wx.Colour(*map(int, self.OnGetItemText(item, 1).split(':')))
         text_c = wx.Colour(*ContrastColor(back_c))

@@ -469,7 +469,7 @@ class HistRasterDialog(wx.Dialog):
         self.rselection = Select(self, id=wx.ID_ANY,
                                  size=globalvar.DIALOG_GSELECT_SIZE,
                                  type='cell')
-        if self.groupRadio.GetValue() == True:
+        if self.groupRadio.GetValue():
             self.rselection.Disable()
         else:
             rastText = ''
@@ -488,7 +488,7 @@ class HistRasterDialog(wx.Dialog):
         self.gselection = Select(self, id=wx.ID_ANY,
                                  size=globalvar.DIALOG_GSELECT_SIZE,
                                  type='group')
-        if self.rasterRadio.GetValue() == True:
+        if self.rasterRadio.GetValue():
             self.gselection.Disable()
         else:
             if self.group is not None:

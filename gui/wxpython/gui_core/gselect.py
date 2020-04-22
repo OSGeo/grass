@@ -2418,9 +2418,9 @@ class CoordinatesSelect(Panel):
         if self.buttonInsCoords.GetToggle() and self.mapWin:
             switcher = self._giface.GetMapDisplay().GetToolSwitcher()
             switcher.ToolChanged(self.buttonInsCoords.GetId())
-            if self.mapWin.RegisterMouseEventHandler(wx.EVT_LEFT_DOWN,
-                                                     self._onMapClickHandler,
-                                                     'cross') == False:
+            if not self.mapWin.RegisterMouseEventHandler(wx.EVT_LEFT_DOWN,
+                                                         self._onMapClickHandler,
+                                                         'cross'):
                 return
 
             self.registered = True
@@ -2591,8 +2591,8 @@ class VectorCategorySelect(wx.Panel):
 
                 self._vectorSelect = VectorSelectBase(
                     self.mapdisp, self.giface)
-                if self.mapdisp.GetWindow().RegisterMouseEventHandler(
-                        wx.EVT_LEFT_DOWN, self._onMapClickHandler, 'cross') == False:
+                if not self.mapdisp.GetWindow().RegisterMouseEventHandler(
+                        wx.EVT_LEFT_DOWN, self._onMapClickHandler, 'cross'):
                     return
                 self.registered = True
                 self.mapdisp.Raise()

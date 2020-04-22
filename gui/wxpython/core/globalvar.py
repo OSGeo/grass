@@ -108,7 +108,7 @@ def CheckForWx(forceVersion=os.getenv('GRASS_WXVERSION', None)):
         if forceVersion:
             wxversion.select(forceVersion)
         wxversion.ensureMinimal(str(minVersion[0]) + '.' + str(minVersion[1]))
-        import wx
+        import wx  # noqa: F811
         version = parse_version_string(wx.__version__)
 
         if version < minVersion:

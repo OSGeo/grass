@@ -159,7 +159,7 @@ class UpdateThread(Thread):
         # get widget id
         if not self.eventId:
             for p in self.task.params:
-                if p.get('gisprompt', False) == False:
+                if p.get('gisprompt', False) is False:
                     continue
                 prompt = p.get('element', '')
                 if prompt == 'vector':
@@ -971,7 +971,7 @@ class CmdPanel(wx.Panel):
             p for p in self.task.params +
             self.task.flags if not p.get(
                 'hidden',
-                False) == True]
+                False) is True]
 
         self.label_id = []  # wrap titles on resize
 
@@ -1039,7 +1039,7 @@ class CmdPanel(wx.Panel):
         #
         visible_flags = [
             f for f in self.task.flags if not f.get(
-                'hidden', False) == True]
+                'hidden', False) is True]
         for f in visible_flags:
             # we don't want another help (checkbox appeared in r58783)
             if f['name'] == 'help':
@@ -1110,7 +1110,7 @@ class CmdPanel(wx.Panel):
         #
         visible_params = [
             p for p in self.task.params if not p.get(
-                'hidden', False) == True]
+                'hidden', False) is True]
 
         try:
             first_param = visible_params[0]
@@ -1134,7 +1134,7 @@ class CmdPanel(wx.Panel):
             # title sizer (description, name, type)
             if (len(p.get('values', [])) > 0) and \
                     p.get('multiple', False) and \
-                    p.get('gisprompt', False) == False and \
+                    p.get('gisprompt', False) is False and \
                     p.get('type', '') == 'string':
                 title_txt = StaticBox(parent=which_panel, id=wx.ID_ANY)
             else:
@@ -1178,7 +1178,7 @@ class CmdPanel(wx.Panel):
                 valuelist_desc = list(map(unicode, p.get('values_desc', [])))
                 required_text = "*" if p.get('required', False) else ""
                 if p.get('multiple', False) and \
-                        p.get('gisprompt', False) == False and \
+                        p.get('gisprompt', False) is False and \
                         p.get('type', '') == 'string':
                     title_txt.SetLabel(
                         " %s:%s  (%s=%s) " %
@@ -1317,7 +1317,7 @@ class CmdPanel(wx.Panel):
             # text entry
             if (p.get('type', 'string') in ('string', 'integer', 'float')
                     and len(p.get('values', [])) == 0
-                    and p.get('gisprompt', False) == False
+                    and p.get('gisprompt', False) is False
                     and p.get('prompt', '') != 'color'):
 
                 title_txt.SetLabel(title + ':')
@@ -2161,7 +2161,7 @@ class CmdPanel(wx.Panel):
                             p['wxId-bind'] = list()
                         p['wxId-bind'] += pOpt['wxId']
                 continue
-            if p.get('gisprompt', False) == False:
+            if p.get('gisprompt', False) is False:
                 continue
 
             prompt = p.get('prompt', '')

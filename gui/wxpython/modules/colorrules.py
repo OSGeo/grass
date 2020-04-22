@@ -1614,7 +1614,7 @@ class VectorColorTable(ColorTable):
                 colvallist.append(col1)
                 i += 1
 
-            if i > limit and readvals == False:
+            if i > limit and readvals is False:
                 dlg = wx.MessageDialog(parent=self, message=_(
                     "Number of loaded records reached %d, "
                     "displaying all the records will be time-consuming "
