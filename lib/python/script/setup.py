@@ -228,7 +228,7 @@ def clean_default_db():
         if os.path.exists(database):
             gcore.message(_("Cleaning up default sqlite database ..."))
             gcore.start_command('db.execute', sql = 'VACUUM')
-	    # give it some time to start
+            # give it some time to start
             import time
             time.sleep(0.1)
 

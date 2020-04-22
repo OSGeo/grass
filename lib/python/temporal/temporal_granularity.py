@@ -508,7 +508,7 @@ def compute_absolute_time_granularity(maps):
 ###############################################################################
 
 def compute_common_relative_time_granularity(gran_list):
-	"""Compute the greatest common granule from a list of relative time granules
+    """Compute the greatest common granule from a list of relative time granules
 
         .. code-block:: python
 
@@ -524,7 +524,7 @@ def compute_common_relative_time_granularity(gran_list):
             >>> tgis.compute_common_relative_time_granularity(grans)
             10
     """
-	return gcd_list(gran_list)
+    return gcd_list(gran_list)
 
 ###############################################################################
 

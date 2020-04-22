@@ -1,11 +1,8 @@
 [flake8]
 ignore =
-    E101, # indentation contains mixed spaces and tabs
-    W191, # indentation contains tabs
     E111, # indentation is not a multiple of four
     E114, # indentation is not a multiple of four (comment)
     E116, # unexpected indentation (comment)
-    E242, # tab after ','
     E251, # unexpected spaces around keyword / parameter equals
     E262, # inline comment should start with '# '
     E265, # block comment should start with '# '
