@@ -1160,7 +1160,9 @@ def fix_newlines(directory):
     # skip binary files
     # see https://stackoverflow.com/a/7392391
     textchars = bytearray({7,8,9,10,12,13,27} | set(range(0x20, 0x100)) - {0x7f})
-    is_binary_string = lambda bytes: bool(bytes.translate(None, textchars))
+
+    def is_binary_string(bytes):
+        return bool(bytes.translate(None, textchars))
 
     for root, unused, files in os.walk(directory):
         for name in files:
