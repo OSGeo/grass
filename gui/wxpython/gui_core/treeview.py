@@ -263,7 +263,7 @@ class TreeFrame(wx.Frame):
         szr.SetSizeHints(self)
 
     def OnSelChanged(self):
-        print('selected items: ' + \
+        print('selected items: ' +
               str([node.label for node in self.tree.GetSelected()]))
 
     def OnItemActivated(self, node):

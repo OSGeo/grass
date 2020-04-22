@@ -408,7 +408,6 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
 
 class CategoryListCtrl(ListCtrl,
                        listmix.ListCtrlAutoWidthMixin):
-                       # listmix.TextEditMixin):
 
     def __init__(self, parent, cats_mgr, sel_cats_in_iscatt, id=wx.ID_ANY):
 

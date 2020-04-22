@@ -803,7 +803,7 @@ class ProjParamsPage(TitledPage):
                                         label=_("Ellipsoid only"))
 
         # default button setting
-        if self.radio1.GetValue() == False and self.radioEpsg.GetValue() == False:
+        if self.radio1.GetValue() is False and self.radioEpsg.GetValue() is False:
             self.radio1.SetValue(True)
             self.SetNext(self.parent.datumpage)
             #            self.parent.sumpage.SetPrev(self.parent.datumpage)
@@ -850,7 +850,7 @@ class ProjParamsPage(TitledPage):
             self.p4projparams = ''
             for id, param in six.iteritems(self.pparam):
                 if param['type'] == 'bool':
-                    if param['value'] == False:
+                    if param['value'] is False:
                         continue
                     else:
                         self.p4projparams += (' +' + param['proj4'])
@@ -2563,7 +2563,7 @@ class LocationWizard(wx.Object):
         current_gdb = decode(grass.gisenv()['GISDBASE'])
         if current_gdb != database:
             # change to new GISDbase or create new one
-            if os.path.isdir(database) != True:
+            if not os.path.isdir(database):
                 # create new directory
                 try:
                     os.mkdir(database)

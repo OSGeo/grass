@@ -17,7 +17,6 @@ import wx
 
 from icons.icon import MetaIcon
 from gui_core.toolbars import BaseToolbar, BaseIcons
-from core.gcmd import RunCommand
 from core.gcmd import GException, GError, RunCommand
 from iscatt.iscatt_core import idBandsToidScatt
 from iscatt.dialogs import SettingsDialog

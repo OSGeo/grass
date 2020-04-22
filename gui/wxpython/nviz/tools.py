@@ -53,7 +53,7 @@ from core.settings import UserSettings
 from gui_core.widgets import ScrolledPanel, NumTextCtrl, FloatSlider, SymbolButton
 from gui_core.gselect import Select
 from gui_core.wrap import Window, SpinCtrl, PseudoDC, ToggleButton, Button, \
-    TextCtrl, ToggleButton, StaticText, StaticBox, CheckListBox, ColourSelect
+    TextCtrl, StaticText, StaticBox, CheckListBox, ColourSelect
 from core.debug import Debug
 try:
     from nviz.mapwindow import wxUpdateProperties, wxUpdateView,\
@@ -2753,7 +2753,7 @@ class NvizToolWindow(FN.FlatNotebook):
         data['constant']['transp'] = self._getPercent(
             data['constant']['transp'], toPercent=False)
 
-       # update properties
+        # update properties
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
         if self.mapDisplay.IsAutoRendered():

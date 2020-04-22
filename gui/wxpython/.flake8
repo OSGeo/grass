@@ -1,15 +1,8 @@
 [flake8]
 ignore =
-    E114, # indentation is not a multiple of four (comment)
-    E115, # expected an indented block (comment)
-    E262, # inline comment should start with '# '
     E265, # block comment should start with '# '
     E266, # too many leading '#' for block comment
-    W605, # invalid escape sequence '\.'
     E402, # module level import not at top of file
-    E502, # the backslash is redundant between brackets
-    E712, # comparison to False should be 'if cond is False:' or 'if not cond:'
-    E713, # test for membership should be 'not in'
     E722, # do not use bare 'except'
     E731, # do not assign a lambda expression, use a def
     E741, # ambiguous variable name 'l'
@@ -17,7 +10,6 @@ ignore =
     F401, # 'animation.utils.getCpuCount' imported but unused
     F403, # 'from gmodeler.model import *' used; unable to detect undefined names
     F405, # '_' may be undefined, or defined from star imports: gmodeler.model
-    F811, # redefinition of unused 'wx' from line 106
     F821, # undefined name '_'
     F841, # local variable 'dc' is assigned to but never used
     E117, # over-indented
@@ -45,7 +37,6 @@ ignore =
     E303, # too many blank lines (3)
     E305, # expected 2 blank lines after class or function definition, found 1
     E306, # expected 1 blank line before a nested definition, found 0
-    E401, # multiple imports on one line
     E501, # line too long (96 > 79 characters)
     W291, # trailing whitespace
     W293, # blank line contains whitespace
