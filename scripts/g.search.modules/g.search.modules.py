@@ -283,7 +283,7 @@ def _basic_search(pattern, name, description, module_keywords):
         if name.lower().find(pattern) > -1 or\
            description.lower().find(pattern) > -1 or\
            module_keywords.lower().find(pattern) > -1:
-           return True
+            return True
         else:
             return False
     else:

@@ -153,7 +153,7 @@ def fix_gfsfile(input):
         tree = ET.parse(gfsfile)
         root = tree.getroot()
         gfsstring = ET.tostring(root).decode('utf-8')
-        if not "srsname" in gfsstring.lower():
+        if "srsname" not in gfsstring.lower():
             for featClass in root.findall('GMLFeatureClass'):
                 ET.SubElement(featClass, 'SRSName').text = srs_str
             tree.write(gfsfile)

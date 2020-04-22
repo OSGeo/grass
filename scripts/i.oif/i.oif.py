@@ -102,7 +102,7 @@ def main():
         n = 0
         for band in bands:
             proc[band] = grass.pipe_command('r.univar', flags='g', map=band)
-            if n % workers is 0:
+            if n % workers == 0:
                 # wait for the ones launched so far to finish
                 for bandp in bands[:n]:
                     if not proc[bandp].stdout.closed:

@@ -256,7 +256,7 @@ def main():
         if not fetched_map:
             grass.warning(_("Nothing to import.\nNo data has been downloaded from wms server."))
             return
-        importer = GRASSImporter(options['output'], (flags['b'] == False))
+        importer = GRASSImporter(options['output'], (not flags['b']))
         importer.ImportMapIntoGRASS(fetched_map)
 
     return 0

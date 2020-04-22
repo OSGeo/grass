@@ -141,7 +141,7 @@ def main():
     ms3 = 'tmp%s_ms3' % pid
     pan = 'tmp%s_pan' % pid
 
-    if rescale == False:
+    if not rescale:
         if bits == 8:
             grass.message(_("Using 8bit image channels"))
             if sproc:

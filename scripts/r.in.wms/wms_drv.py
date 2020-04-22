@@ -843,7 +843,7 @@ class OnEarthRequestMgr(BaseRequestMgr):
         else:
             url = urls[0]
             for u in urls:
-                if not 'time=${' in u:
+                if 'time=${' not in u:
                     url = u
 
         url, t_bbox, width, height = self.cap_tree.gettilepatternurldata(url)
