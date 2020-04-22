@@ -142,7 +142,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
         while True:
             tok = l.lexer.token()
-            if not tok: break
+            if not tok:
+                break
 
             if tok.type == "STVDS" or tok.type == "STRDS" or tok.type == "STR3DS":
                 raise SyntaxError("Syntax error near '%s'" %(tok.type))
@@ -204,8 +205,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         resultdict = {}
         # Check if given temporal relation are valid.
         for topo in topolist:
-          if topo.upper() not in topologylist:
-              raise SyntaxError("Unpermitted temporal relation name '" + topo + "'")
+            if topo.upper() not in topologylist:
+                raise SyntaxError("Unpermitted temporal relation name '" + topo + "'")
 
         # Create temporal topology for maplistA to maplistB.
         tb = SpatioTemporalTopologyBuilder()

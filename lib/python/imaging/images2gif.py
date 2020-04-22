@@ -209,10 +209,11 @@ class GifWriter:
 
         if loops == 0 or loops == float('inf'):
             loops = 2 ** 16 - 1
-            #bb = "" # application extension should not be used
-                    # (the extension interprets zero loops
-                    # to mean an infinite number of loops)
-                    # Mmm, does not seem to work
+            # bb = ""
+            # application extension should not be used
+            # (the extension interprets zero loops
+            # to mean an infinite number of loops)
+            # Mmm, does not seem to work
         if True:
             bb = "\x21\xFF\x0B"  # application extension
             bb += "NETSCAPE2.0"

@@ -1,24 +1,12 @@
 [flake8]
 ignore =
-    E101, # indentation contains mixed spaces and tabs
-    W191, # indentation contains tabs
-    E111, # indentation is not a multiple of four
-    E114, # indentation is not a multiple of four (comment)
-    E116, # unexpected indentation (comment)
-    E242, # tab after ','
-    E251, # unexpected spaces around keyword / parameter equals
     E262, # inline comment should start with '# '
     E265, # block comment should start with '# '
     E266, # too many leading '#' for block comment
     E402, # module level import not at top of file
-    E501, # line too long (183 > 150 characters)
     E502, # the backslash is redundant between brackets
-    E701, # multiple statements on one line (colon)
-    E702, # multiple statements on one line (semicolon)
-    E703, # statement ends with a semicolon
     E711, # comparison to None should be 'if cond is None:'
     E712, # comparison to True should be 'if cond is True:' or 'if cond:'
-    E713, # test for membership should be 'not in'
     E721, # do not compare types, use 'isinstance()'
     E722, # do not use bare 'except'
     E731, # do not assign a lambda expression, use a def
@@ -58,9 +46,11 @@ ignore =
     E228, # missing whitespace around modulo operator
     E231, # missing whitespace after ':'
     E241, # multiple spaces after ','
+    E251, # unexpected spaces around keyword / parameter equals
     E261, # at least two spaces before inline comment
     E271, # multiple spaces after keyword
     E272, # multiple spaces before keyword
+    E501, # line too long (183 > 150 characters)
     E301, # expected 1 blank line, found 0
     E302, # expected 2 blank lines, found 1
     E303, # too many blank lines (3)
