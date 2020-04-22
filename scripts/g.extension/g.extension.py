@@ -966,7 +966,7 @@ def install_private_extension_xml(url, mlist):
                 tnode = node
                 break
 
-        if tnode == None:
+        if tnode is None:
             # create new node for task
             tnode = etree.Element('task', attrib={'name': name})
             dnode = etree.Element('description')

@@ -3,7 +3,6 @@ ignore =
     E265, # block comment should start with '# '
     E266, # too many leading '#' for block comment
     E402, # module level import not at top of file
-    E711, # comparison to None should be 'if cond is None:'
     E712, # comparison to False should be 'if cond is False:' or 'if not cond:'
     E722, # do not use bare 'except'
     E731, # do not assign a lambda expression, use a def
@@ -13,7 +12,6 @@ ignore =
     F821, # undefined name '_'
     F841, # local variable 'center' is assigned to but never used
     E111, # indentation is not a multiple of four
-    E711, # comparison to None should be 'if cond is None:'
     F632, # use ==/!= to compare str, bytes, and int literals
     W391, # blank line at end of file
     E111, # indentation is not a multiple of four
