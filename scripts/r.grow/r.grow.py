@@ -95,7 +95,7 @@ def main():
         shrink = True
         radius = -radius
 
-    if new == '' and shrink == False:
+    if new == '' and not shrink:
         temp_val = "r.grow.tmp.%s.val" % tmp
         new = '"%s"' % temp_val
     else:
@@ -127,7 +127,7 @@ def main():
     else:
         output = out_name[0]
 
-    if shrink is False:
+    if not shrink:
         try:
             grass.run_command('r.grow.distance', input=input, metric=metric,
                               distance=temp_dist, value=temp_val)
