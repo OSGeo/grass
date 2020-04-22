@@ -201,7 +201,7 @@ def main():
     shell_style = flags['g']
     ignore_broken = flags['i']
 
-    if workers is 1 and "WORKERS" in os.environ:
+    if workers == 1 and "WORKERS" in os.environ:
         workers = int(os.environ["WORKERS"])
 
     if not os.path.exists(infile):
@@ -286,17 +286,17 @@ def main():
         grass.debug("i=%d, %%=%d  (workers=%d)" % (i, i % workers, workers))
         # print sys.getsizeof(proc)  # sizeof(proc array)  [not so big]
 
-        if i % workers is 0:
+        if i % workers == 0:
             # wait for the ones launched so far to finish
             for p_i in depths[:i]:
                 pout[p_i] = proc[p_i].communicate()[0]
-                if proc[p_i].wait() is not 0:
+                if proc[p_i].wait() != 0:
                     grass.fatal(_("Trouble importing data. Aborting."))
 
     # wait for jSobs to finish, collect any stray output
     for i in depths:
         pout[i] = proc[i].communicate()[0]
-        if proc[i].wait() is not 0:
+        if proc[i].wait() != 0:
             grass.fatal(_("Trouble importing data. Aborting."))
 
     del proc

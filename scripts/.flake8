@@ -8,11 +8,9 @@ ignore =
     E731, # do not assign a lambda expression, use a def
     E741, # ambiguous variable name 'l'
     F401, # 'grass.script.core.gisenv' imported but unused
-    F632, # use ==/!= to compare str, bytes, and int literals
     F821, # undefined name '_'
     F841, # local variable 'center' is assigned to but never used
     E111, # indentation is not a multiple of four
-    F632, # use ==/!= to compare str, bytes, and int literals
     W391, # blank line at end of file
     E111, # indentation is not a multiple of four
     E121, # continuation line under-indented for hanging indent
