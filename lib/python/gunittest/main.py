@@ -86,7 +86,7 @@ def test():
     #    cov.start()
     #except ImportError:
     #    pass
-        # TODO: add some message somewhere
+    # TODO: add some message somewhere
 
     # TODO: enable passing omit to exclude also gunittest or nothing
     program = GrassTestProgram(module='__main__', exit_at_end=False, grass_location='all')

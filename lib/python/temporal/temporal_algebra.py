@@ -683,9 +683,10 @@ class TemporalAlgebraLexer(object):
         print(data)
         self.lexer.input(data)
         while True:
-             tok = self.lexer.token()
-             if not tok: break
-             print(tok)
+            tok = self.lexer.token()
+            if not tok:
+                break
+            print(tok)
 
 ###############################################################################
 
@@ -836,7 +837,8 @@ class TemporalAlgebraParser(object):
         count = 0
         while True:
             tok = l.lexer.token()
-            if not tok: break
+            if not tok:
+                break
 
             # Ignore map layer
             tokens.append(tok.type)
@@ -1776,8 +1778,8 @@ class TemporalAlgebraParser(object):
                         "FINISHED"]
 
         for topo in topolist:
-          if topo.upper() not in topologylist:
-              raise SyntaxError("Unpermitted temporal relation name '" + topo + "'")
+            if topo.upper() not in topologylist:
+                raise SyntaxError("Unpermitted temporal relation name '" + topo + "'")
 
         # Create temporal topology for maplistA to maplistB.
         tb = SpatioTemporalTopologyBuilder()
@@ -1929,8 +1931,8 @@ class TemporalAlgebraParser(object):
             tvardict["END_DATE"]       = end.date()
             tvardict["END_DATETIME"]   = end
             tvardict["END_TIME"]       = end.time()
-            #core.fatal(_("The temporal functions for map <%s> only supported for absolute"\
-                #          "time." % (str(map.get_id()))))
+            # core.fatal(_("The temporal functions for map <%s> only "
+            #              "supported for absolute time." % (str(map.get_id()))))
         return(tvardict)
 
     def eval_datetime_str(self, tfuncval, comp, value):

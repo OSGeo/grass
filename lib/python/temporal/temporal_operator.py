@@ -277,9 +277,10 @@ class TemporalOperatorLexer(object):
         print(data)
         self.lexer.input(data)
         while True:
-             tok = self.lexer.token()
-             if not tok: break
-             print(tok)
+            tok = self.lexer.token()
+            if not tok:
+                break
+            print(tok)
 
 ###############################################################################
 

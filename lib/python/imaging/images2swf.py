@@ -876,10 +876,14 @@ def _readPixels(bb, i, tagType, L1):
         raise RuntimeError("Need Numpy to read an SWF file.")
 
     # Get info
-    charId = bb[i:i + 2]; i += 2
-    format = ord(bb[i:i + 1]); i += 1
-    width = bitsToInt(bb[i:i + 2], 16); i += 2
-    height = bitsToInt(bb[i:i + 2], 16); i += 2
+    charId = bb[i:i + 2]
+    i += 2
+    format = ord(bb[i:i + 1])
+    i += 1
+    width = bitsToInt(bb[i:i + 2], 16)
+    i += 2
+    height = bitsToInt(bb[i:i + 2], 16)
+    i += 2
 
     # If we can, get pixeldata and make nunmpy array
     if format != 5:

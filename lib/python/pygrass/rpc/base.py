@@ -168,7 +168,7 @@ class RPCServerBase(object):
         try:
             ret = self.client_conn.recv()
             if isinstance(ret,  FatalError):
-               raise ret
+                raise ret
             return ret
         except (EOFError,  IOError,  FatalError) as e:
             # The pipe was closed by the checker thread because

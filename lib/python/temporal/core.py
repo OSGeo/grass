@@ -563,7 +563,6 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
     _init_tgis_c_library_interface()
     msgr = get_tgis_message_interface()
     msgr.debug(1, "Initiate the temporal database")
-                  #"\n  traceback:%s"%(str("  \n".join(traceback.format_stack()))))
 
     msgr.debug(1, ("Raise on error id: %s"%str(raise_on_error)))
 
@@ -928,7 +927,7 @@ def _create_tgis_metadata_table(content, dbif=None):
        :param dbif: The database interface to be used
     """
     dbif, connected = init_dbif(dbif)
-    statement = "CREATE TABLE tgis_metadata (key VARCHAR NOT NULL, value VARCHAR);\n";
+    statement = "CREATE TABLE tgis_metadata (key VARCHAR NOT NULL, value VARCHAR);\n"
     dbif.execute_transaction(statement)
 
     for key in content.keys():
@@ -1109,12 +1108,12 @@ class SQLDatabaseInterfaceConnection(object):
 
     def _create_mapset_error_message(self, mapset):
 
-          return("You have no permission to "
-                 "access mapset <%(mapset)s>, or "
-                 "mapset <%(mapset)s> has no temporal database. "
-                 "Accessible mapsets are: <%(mapsets)s>" % \
-                 {"mapset": decode(mapset),
-                  "mapsets":','.join(self.tgis_mapsets.keys())})
+        return("You have no permission to "
+               "access mapset <%(mapset)s>, or "
+               "mapset <%(mapset)s> has no temporal database. "
+               "Accessible mapsets are: <%(mapsets)s>" % \
+               {"mapset": decode(mapset),
+                "mapsets":','.join(self.tgis_mapsets.keys())})
 
 ###############################################################################
 
@@ -1158,8 +1157,6 @@ class DBConnection(object):
         self.msgr.debug(1, "DBConnection constructor:"\
                            "\n  backend: %s"\
                            "\n  dbstring: %s"%(backend, self.dbstring))
-                           #"\n  traceback:%s"%(backend, self.dbstring,
-                           #str("  \n".join(traceback.format_stack()))))
 
     def __del__(self):
         if self.connected is True:

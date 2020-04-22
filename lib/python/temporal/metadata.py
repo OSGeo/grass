@@ -429,7 +429,7 @@ class Raster3DMetadata(RasterMetadataBase):
 
         RasterMetadataBase.__init__(self, "raster3d_metadata", ident,
                                     datatype, cols, rows, number_of_cells,
-                                    nsres,	ewres, min, max)
+                                    nsres, ewres, min, max)
 
         self.set_tbres(tbres)
         self.set_depths(depths)
