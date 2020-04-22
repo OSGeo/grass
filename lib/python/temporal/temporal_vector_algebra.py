@@ -204,8 +204,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         resultdict = {}
         # Check if given temporal relation are valid.
         for topo in topolist:
-          if topo.upper() not in topologylist:
-              raise SyntaxError("Unpermitted temporal relation name '" + topo + "'")
+            if topo.upper() not in topologylist:
+                raise SyntaxError("Unpermitted temporal relation name '" + topo + "'")
 
         # Create temporal topology for maplistA to maplistB.
         tb = SpatioTemporalTopologyBuilder()

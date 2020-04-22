@@ -683,9 +683,10 @@ class TemporalAlgebraLexer(object):
         print(data)
         self.lexer.input(data)
         while True:
-             tok = self.lexer.token()
-             if not tok: break
-             print(tok)
+            tok = self.lexer.token()
+            if not tok:
+                break
+            print(tok)
 
 ###############################################################################
 
@@ -1776,8 +1777,8 @@ class TemporalAlgebraParser(object):
                         "FINISHED"]
 
         for topo in topolist:
-          if topo.upper() not in topologylist:
-              raise SyntaxError("Unpermitted temporal relation name '" + topo + "'")
+            if topo.upper() not in topologylist:
+                raise SyntaxError("Unpermitted temporal relation name '" + topo + "'")
 
         # Create temporal topology for maplistA to maplistB.
         tb = SpatioTemporalTopologyBuilder()
