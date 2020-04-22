@@ -110,7 +110,7 @@ def main():
                                 stderr=nuldev)
     tables = decode(tables)
 
-    if not table in tables.splitlines():
+    if table not in tables.splitlines():
         colnames = []
         column_def = []
         if columns:
@@ -123,7 +123,7 @@ def main():
                 column_def.append(x)
 
         # if not existing, create it:
-        if not key in colnames:
+        if key not in colnames:
             column_def.insert(0, "%s integer" % key)
         column_def = ','.join(column_def)
 

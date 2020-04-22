@@ -83,7 +83,7 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
 
         grass.debug('Checking WMS capabilities tree.', 4)
 
-        if not "version" in self.getroot().attrib:
+        if "version" not in self.getroot().attrib:
             raise ParseError(_("Missing version attribute root node "
                                "in Capabilities XML file"))
         else:

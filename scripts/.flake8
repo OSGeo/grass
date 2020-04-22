@@ -5,7 +5,6 @@ ignore =
     E402, # module level import not at top of file
     E711, # comparison to None should be 'if cond is None:'
     E712, # comparison to False should be 'if cond is False:' or 'if not cond:'
-    E713, # test for membership should be 'not in'
     E722, # do not use bare 'except'
     E731, # do not assign a lambda expression, use a def
     E741, # ambiguous variable name 'l'

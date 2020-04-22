@@ -89,7 +89,7 @@ class WMSBase(object):
         self.params['bgcolor'] = options['bgcolor'].strip()
 
         if options['format'] == "jpeg" and \
-           not 'format' in driver_props['ignored_params']:
+           'format' not in driver_props['ignored_params']:
             if not flags['o'] and \
                     'WMS' in self.params['driver']:
                 grass.warning(_("JPEG format does not support transparency"))
@@ -100,7 +100,7 @@ class WMSBase(object):
 
         # TODO: get srs from Tile Service file in OnEarth_GRASS driver
         self.params['srs'] = int(options['srs'])
-        if self.params['srs'] <= 0 and not 'srs' in driver_props['ignored_params']:
+        if self.params['srs'] <= 0 and 'srs' not in driver_props['ignored_params']:
             grass.fatal(_("Invalid EPSG code %d") % self.params['srs'])
 
         self.params['wms_version'] = options['wms_version']
