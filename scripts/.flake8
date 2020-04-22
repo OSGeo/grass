@@ -9,7 +9,6 @@ ignore =
     F401, # 'grass.script.core.gisenv' imported but unused
     F821, # undefined name '_'
     F841, # local variable 'center' is assigned to but never used
-    W391, # blank line at end of file
     E121, # continuation line under-indented for hanging indent
     E125, # continuation line with same indent as next logical line
     E127, # continuation line over-indented for visual indent
@@ -29,7 +28,6 @@ ignore =
     E305, # expected 2 blank lines after class or function definition, found 1
     E501, # line too long (161 > 150 characters)
     W293, # blank line contains whitespace
-    W391, # blank line at end of file
     W503, # line break before binary operator
     W504, # line break after binary operator
     E121, # continuation line under-indented for hanging indent
