@@ -9,9 +9,7 @@ ignore =
     F401, # 'grass.script.core.gisenv' imported but unused
     F821, # undefined name '_'
     F841, # local variable 'center' is assigned to but never used
-    E111, # indentation is not a multiple of four
     W391, # blank line at end of file
-    E111, # indentation is not a multiple of four
     E121, # continuation line under-indented for hanging indent
     E125, # continuation line with same indent as next logical line
     E127, # continuation line over-indented for visual indent
