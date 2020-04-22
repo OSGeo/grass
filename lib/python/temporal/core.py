@@ -927,7 +927,7 @@ def _create_tgis_metadata_table(content, dbif=None):
        :param dbif: The database interface to be used
     """
     dbif, connected = init_dbif(dbif)
-    statement = "CREATE TABLE tgis_metadata (key VARCHAR NOT NULL, value VARCHAR);\n";
+    statement = "CREATE TABLE tgis_metadata (key VARCHAR NOT NULL, value VARCHAR);\n"
     dbif.execute_transaction(statement)
 
     for key in content.keys():
