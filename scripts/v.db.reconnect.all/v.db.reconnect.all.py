@@ -241,7 +241,7 @@ def main():
             if schema != old_schema:
                 do_reconnect = False
 
-            if do_reconnect == True:
+            if do_reconnect:
                 gscript.verbose(_("Reconnecting layer %d...") % layer)
 
                 if flags['c']:

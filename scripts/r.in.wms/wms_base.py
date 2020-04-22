@@ -380,7 +380,7 @@ class WMSBase(object):
             and self.source_epsg == self.target_epsg:
             do_reproject = False
         # TODO: correctly compare source and target crs
-        if do_reproject == True and self.proj_srs == self.proj_location:
+        if do_reproject and self.proj_srs == self.proj_location:
             do_reproject = False
         if do_reproject:
             grass.message(_("Reprojecting raster..."))
