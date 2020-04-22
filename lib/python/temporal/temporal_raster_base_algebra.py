@@ -1865,7 +1865,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 mapinput = map_i.get_id()
                 # Create r.mapcalc expression string for the operation.
                 cmdstring = "(%s)" %(n_maps)
-                 # Append module command.
+                # Append module command.
                 map_i.cmd_list = cmdstring
                 # Append map to result map list.
                 resultlist.append(map_i)
