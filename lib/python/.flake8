@@ -7,7 +7,6 @@ ignore =
     E502, # the backslash is redundant between brackets
     E711, # comparison to None should be 'if cond is None:'
     E712, # comparison to True should be 'if cond is True:' or 'if cond:'
-    E713, # test for membership should be 'not in'
     E721, # do not compare types, use 'isinstance()'
     E722, # do not use bare 'except'
     E731, # do not assign a lambda expression, use a def
