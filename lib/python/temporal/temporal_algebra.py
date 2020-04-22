@@ -837,7 +837,8 @@ class TemporalAlgebraParser(object):
         count = 0
         while True:
             tok = l.lexer.token()
-            if not tok: break
+            if not tok:
+                break
 
             # Ignore map layer
             tokens.append(tok.type)
