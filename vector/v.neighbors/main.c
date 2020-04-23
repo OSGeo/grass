@@ -238,10 +238,9 @@ int main(int argc, char *argv[])
     Vect_get_map_box(&In, &box);
 
     if (box.N > region.north + radius || box.S < region.south - radius ||
-        box.E > region.east + radius || box.W < region.west - radius) {
-        Vect_close(&In);
+        box.E > region.east + radius || box.W < region.west - radius) 
         G_warning(_("Input vector and computational region do not overlap"));
-    }
+    
 
     dia = sqrt(region.ns_res * region.ns_res + region.ew_res * region.ew_res);
     if (radius * 2.0 < dia) {
