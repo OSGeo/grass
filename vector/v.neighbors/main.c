@@ -238,8 +238,12 @@ int main(int argc, char *argv[])
     Vect_get_map_box(&In, &box);
 
     if (box.N > region.north + radius || box.S < region.south - radius ||
-        box.E > region.east + radius || box.W < region.west - radius) 
+        box.E > region.east + radius || box.W < region.west - radius) {
+			if (box.S > region.north + radius || box.N < region.south - radius ||
+				box.W > region.east + radius || box.E < region.west - radius) 
+					G_fatal_error(_("All points fall outside of the current computational region"));
         G_warning(_("Input vector and computational region do not overlap"));
+	}
     
 
     dia = sqrt(region.ns_res * region.ns_res + region.ew_res * region.ew_res);
