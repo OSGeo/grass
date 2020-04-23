@@ -981,7 +981,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         gridSizer.Add(showCompExtent,
                       pos=(row, 0), span=(1, 2))
-        
+
         #
         # mouse wheel zoom
         #
@@ -1418,7 +1418,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             hlWidth, pos=(row, col + 1),
             span=(1, 2),
             flag=wx.ALIGN_RIGHT)
-        
+
         # random colors
         row +=1
         randomColors = wx.CheckBox(parent=panel, id=wx.ID_ANY, label=_(
@@ -1926,7 +1926,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             wx.EndBusyCursor()
             return
 
-        choices = map(str, sorted(self.epsgCodeDict.keys()))
+        choices = list(map(str, sorted(self.epsgCodeDict.keys())))
 
         epsgCombo.SetItems(choices)
         wx.EndBusyCursor()
