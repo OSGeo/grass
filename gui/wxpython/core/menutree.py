@@ -171,7 +171,7 @@ class MenuTreeModelBuilder:
 
         :param fh: file descriptor
         """
-        className = str(self.__class__).split('.', 1)[1]
+        className = self.__class__.__name__
         fh.write('menustrings_%s = [\n' % className)
         for child in self.model.root.children:
             printStrings(child, fh)
