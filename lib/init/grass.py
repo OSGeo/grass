@@ -518,15 +518,8 @@ def read_env_file(path):
     return kv
 
 
-def write_gisrc(kv, filename):
-    f = open(filename, 'w')
-    for k, v in kv.items():
-        f.write("%s: %s\n" % (k, v))
-    f.close()
-
-
-def append_to_gisrc(kv, filename):
-    f = open(filename, 'a')
+def write_gisrc(kv, filename, append=False):
+    f = open(filename, 'a' if append else 'w')
     for k, v in kv.items():
         f.write("%s: %s\n" % (k, v))
     f.close()
@@ -2383,7 +2376,7 @@ def main():
         start_gui(grass_gui)
         kv = {}
         kv['PID'] = str(shell_process.pid)
-        append_to_gisrc(kv, gisrc)
+        write_gisrc(kv, gisrc, True)
         exit_val = shell_process.wait()
         if exit_val != 0:
             warning(_("Failed to start shell '%s'") % os.getenv('SHELL'))
