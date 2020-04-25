@@ -525,6 +525,13 @@ def write_gisrc(kv, filename):
     f.close()
 
 
+def append_to_gisrc(kv, filename):
+    f = open(filename, 'a')
+    for k, v in kv.items():
+        f.write("%s: %s\n" % (k, v))
+    f.close()
+
+
 def read_gui(gisrc, default_gui):
     grass_gui = None
     # At this point the GRASS user interface variable has been set from the
@@ -2374,9 +2381,9 @@ def main():
 
         # start GUI and register shell PID in rc file
         start_gui(grass_gui)
-        kv = read_gisrc(gisrc)
+        kv = {}
         kv['PID'] = str(shell_process.pid)
-        write_gisrc(kv, gisrc)
+        append_to_gisrc(kv, gisrc)
         exit_val = shell_process.wait()
         if exit_val != 0:
             warning(_("Failed to start shell '%s'") % os.getenv('SHELL'))
