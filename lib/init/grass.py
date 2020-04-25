@@ -797,7 +797,7 @@ def create_location(gisdbase, location, geostring):
     global _
     if gpath('etc', 'python') not in sys.path:
         sys.path.append(gpath('etc', 'python'))
-    # import core installs a new _() function?
+    # importing the core module installs a new _() function?
     __ = _
     from grass.script import core as gcore  # pylint: disable=E0611
     _ = __
@@ -1749,7 +1749,7 @@ def close_gui():
     global _
     if gpath('etc', 'python') not in sys.path:
         sys.path.append(gpath('etc', 'python'))
-    # import core installs a new _() function?
+    # importing the core module installs a new _() function?
     __ = _
     from grass.script import core as gcore  # pylint: disable=E0611
     _ = __
