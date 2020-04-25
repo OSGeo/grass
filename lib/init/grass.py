@@ -785,14 +785,6 @@ def save_gui(gisrc, grass_gui):
         write_gisrc(kv, gisrc)
 
 
-def reinstall_locale():
-    if '.' in os.environ['LC_CTYPE']:
-        encoding = os.environ['LC_CTYPE'].split('.')[1]
-        gettext.install('grasslibs', gpath('locale'), codeset=encoding)
-    else:
-        gettext.install('grasslibs', gpath('locale'))
-
-
 def create_location(gisdbase, location, geostring):
     """Create GRASS Location using georeferenced file or EPSG
 
@@ -802,10 +794,13 @@ def create_location(gisdbase, location, geostring):
     :param location: name of new Location
     :param geostring: path to a georeferenced file or EPSG code
     """
+    global _
     if gpath('etc', 'python') not in sys.path:
         sys.path.append(gpath('etc', 'python'))
+    # import core installs a new _() function?
+    __ = _
     from grass.script import core as gcore  # pylint: disable=E0611
-    reinstall_locale()
+    _ = __
 
     try:
         if geostring and geostring.upper().find('EPSG:') > -1:
@@ -1751,10 +1746,13 @@ def start_gui(grass_gui):
 
 def close_gui():
     """Close GUI if running"""
+    global _
     if gpath('etc', 'python') not in sys.path:
         sys.path.append(gpath('etc', 'python'))
+    # import core installs a new _() function?
+    __ = _
     from grass.script import core as gcore  # pylint: disable=E0611
-    reinstall_locale()
+    _ = __
     env = gcore.gisenv()
     if 'GUI_PID' not in env:
         return
