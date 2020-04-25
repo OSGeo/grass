@@ -52,7 +52,7 @@ elif data_type == DCELL_TYPE:
     ptype = POINTER(c_double)
     type_name = 'DCELL'
 
-print "Raster map <%s> contains data type %s." % (input, type_name)
+print("Raster map <%s> contains data type %s." % (input, type_name))
 
 in_fd   = Rast_open_old(input, mapset)
 in_rast = Rast_allocate_buf(data_type)
@@ -60,14 +60,14 @@ in_rast = cast(c_void_p(in_rast), ptype)
 
 rows = Rast_window_rows()
 cols = Rast_window_cols()
-print "Current region is %d rows x %d columns" % (rows, cols)
+print("Current region is %d rows x %d columns" % (rows, cols))
 
 # iterate through map rows
-print "Map data:"
+print("Map data:")
 for row_n in range(rows):
     # read a row of raster data into memory, then print it
     Rast_get_row(in_fd, in_rast, row_n, data_type)
-    print row_n, in_rast[0:cols]
+    print(row_n, in_rast[0:cols])
     # TODO check for NULL
 
 # closed map and cleanup memory allocation

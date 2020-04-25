@@ -119,11 +119,11 @@ def main():
         segment_distance = G_distance(x[i-1], y[i-1], x[i], y[i])
         overall_distance += segment_distance
         
-        print "segment %d distance is %.2f meters" % (i, segment_distance)
+        print("segment %d distance is %.2f meters" % (i, segment_distance))
         
         # add to the area array
     
-    print "\ntotal distance is %.2f meters\n" % overall_distance
+    print("\ntotal distance is %.2f meters\n" % overall_distance)
     
     # calc area
     if len(coords) < 3:
@@ -136,7 +136,7 @@ def main():
 
     # do not need to close polygon (but it doesn't hurt if you do)
     area = G_area_of_polygon(x, y, len(coords))
-    print "area is %.2f square meters\n" % area
+    print("area is %.2f square meters\n" % area)
     
     # we don't need this, but just to have a look
     if proj_type == 1:
