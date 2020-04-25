@@ -31,21 +31,21 @@ from scipy import interpolate
 
 def usage():
     """How to use this..."""
-    print "create_iwave.py <csv file>"
+    print("create_iwave.py <csv file>")
     print
-    print "Generates filter function template for iwave.cpp from csv file. Note:"
-    print "- csv file must have wl response for each band in each column"
-    print "- first line must be a header with wl followed by band names"
-    print "- all following lines will be the data."
-    print "If spectral response is null, leave field empty in csv file. Example:"
+    print("Generates filter function template for iwave.cpp from csv file. Note:")
+    print("- csv file must have wl response for each band in each column")
+    print("- first line must be a header with wl followed by band names")
+    print("- all following lines will be the data.")
+    print("If spectral response is null, leave field empty in csv file. Example:")
     print
-    print "WL(nm),band 1,band 2,band 3,band 4"
-    print "455,0.93,,,"
-    print "485,0.94,0.00,,"
-    print "545,0.00,0.87,0.00,"
+    print("WL(nm),band 1,band 2,band 3,band 4")
+    print("455,0.93,,,")
+    print("485,0.94,0.00,,")
+    print("545,0.00,0.87,0.00,")
     print
-    print "This script will interpolate the filter functions to 2.5 nm steps"
-    print "and output a cpp template file in the IWave format to be added to iwave.cpp"
+    print("This script will interpolate the filter functions to 2.5 nm steps")
+    print("and output a cpp template file in the IWave format to be added to iwave.cpp")
 
 def read_input(csvfile):
     """
@@ -64,7 +64,7 @@ def read_input(csvfile):
     bands = infile.readline().split(',')
     bands.remove(bands[0])
     bands[-1] = bands[-1].strip()
-    print " > Number of bands found: %d" % len(bands)
+    print(" > Number of bands found: %d" % len(bands))
     infile.close()
 
     # create converter dictionary for import
@@ -197,7 +197,7 @@ def write_cpp(bands, values, sensor, folder):
     # keep in sync with IWave::parse()
     rthresh = 0.01
     print 
-    print " > Response peaks from interpolation to 2.5 nm steps:"
+    print(" > Response peaks from interpolation to 2.5 nm steps:")
 
     # getting necessary data
     # single or multiple bands?
@@ -218,7 +218,7 @@ def write_cpp(bands, values, sensor, folder):
  	while c < len(fi) - 1 and fi[c + 1] > rthresh:
 	    c = c + 1
  	max_wavelength = np.floor(li[0] * 1000 + (2.5 * c))
- 	print "   %s (%inm - %inm)" % (bands[b], min_wavelength, max_wavelength)
+ 	print("   %s (%inm - %inm)" % (bands[b], min_wavelength, max_wavelength))
 
     else:
         filter_f = []
@@ -240,7 +240,7 @@ def write_cpp(bands, values, sensor, folder):
 	    while c < len(fi) - 1 and fi[c + 1] > rthresh:
 		c = c + 1
 	    max_wavelength = np.floor(li[0] * 1000 + (2.5 * c))
-	    print "   %s (%inm - %inm)" % (bands[b], min_wavelength, max_wavelength)
+	    print("   %s (%inm - %inm)" % (bands[b], min_wavelength, max_wavelength))
     
     # writing...
     outfile = open(os.path.join(folder, sensor+"_cpp_template.txt"), 'w')
@@ -314,7 +314,7 @@ def main():
     sensor = os.path.splitext(os.path.basename(inputfile))[0]
     
     print
-    print " > Getting sensor name from csv file: %s" % (sensor)
+    print(" > Getting sensor name from csv file: %s" % (sensor))
     
     # getting data from file
     bands, values = read_input(inputfile)
@@ -324,7 +324,7 @@ def main():
     # around the peak response, keep in sync with IWave::parse()
     rthresh = 0.01
     print
-    print " > Response peaks from input file:"
+    print(" > Response peaks from input file:")
     for b in range(1, len(bands) + 1):
 	lowl = 0
 	hiwl = 0
@@ -346,15 +346,15 @@ def main():
 	    hiwl = values[i,0]
 	    i += 1
 	
-	print "   %s (%inm - %inm)" % (bands[b - 1], lowl, hiwl)
+	print("   %s (%inm - %inm)" % (bands[b - 1], lowl, hiwl))
 
     # writing file in same folder of input file
     write_cpp(bands, values, sensor, os.path.dirname(inputfile))
     
     print
-    print " > Filter functions exported to %s" % ("sensors_csv/"+sensor+"_cpp_template.txt")
-    print " > Please check this file for possible errors before inserting the code into file iwave.cpp"
-    print " > Don't forget to add the necessary data to the files iwave.h, geomcond.h, geomcond.cpp, and to i.atcorr.html"
+    print(" > Filter functions exported to %s" % ("sensors_csv/"+sensor+"_cpp_template.txt"))
+    print(" > Please check this file for possible errors before inserting the code into file iwave.cpp")
+    print(" > Don't forget to add the necessary data to the files iwave.h, geomcond.h, geomcond.cpp, and to i.atcorr.html")
     print
     
     return
