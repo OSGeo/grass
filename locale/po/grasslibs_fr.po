@@ -10360,8 +10360,8 @@ msgstr ""
 msgid "Unable to seek"
 msgstr "Recherche impossible"
 
-#~ msgid "options: arch,build,compiler,path,revision,svn_revision,version"
-#~ msgstr "options : arch, build, compilateur, path, révision, révision_svn, version"
+msgid "options: arch,build,compiler,path,revision,svn_revision,version"
+msgstr "options : arch, build, compilateur, path, révision, révision_svn, version"
 
 #~ msgid "Unable to execute command '%s': %s"
 #~ msgstr "Impossible d'exécuter la commande '%s' : %s"
