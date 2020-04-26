@@ -249,7 +249,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:725
 msgid "Invalid color table format"
-msgstr "무효한 색상 테이블 서식"
+msgstr "무효한 색상 테이블 포맷"
 
 #: ../gui/wxpython/modules/colorrules.py:806
 #, python-format
@@ -2633,7 +2633,7 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:332
 msgid "Select EPSG code of spatial reference system"
-msgstr ""
+msgstr "공간 참조 체계의 EPSG 코드를 선택하세요"
 
 #: ../gui/wxpython/location_wizard/wizard.py:338
 msgid "Read projection and datum terms from a georeferenced data file"
@@ -2802,7 +2802,7 @@ msgstr ""
 #: ../gui/wxpython/location_wizard/wizard.py:1754
 #: ../gui/wxpython/vnet/dialogs.py:370
 msgid "Parameters"
-msgstr ""
+msgstr "매개변수"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1666
 msgid "Choose EPSG codes file"
@@ -3637,7 +3637,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/settings.py:645
 msgid "animation"
-msgstr ""
+msgstr "애니메이션"
 
 #: ../gui/wxpython/core/settings.py:868
 msgid "Collapse all except PERMANENT and current"
@@ -4629,7 +4629,7 @@ msgstr "일반적인 벡터 서식 가져오기"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:72
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1073
 msgid "ASCII points or GRASS ASCII format"
-msgstr "ASCII 점 또는 GRASS ASCII 서식"
+msgstr "ASCII 점 또는 GRASS ASCII 포맷"
 
 #: ../gui/wxpython/menustrings.py:72 ../gui/wxpython/menustrings.py:1089
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:73
@@ -4701,7 +4701,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:84
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1085
 msgid "Matlab array or Mapgen format import"
-msgstr "매트랩 배열 또는 맵젠 서식 가져오기"
+msgstr "매트랩 배열 또는 맵젠 포맷 가져오기"
 
 #: ../gui/wxpython/menustrings.py:84 ../gui/wxpython/menustrings.py:1101
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:85
@@ -4791,7 +4791,7 @@ msgstr "데이터베이스 테이블 가져오기"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1069
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1100
 msgid "Common import formats"
-msgstr "일반적인 가져오기 서식"
+msgstr "일반적인 가져오기 포맷"
 
 #: ../gui/wxpython/menustrings.py:99 ../gui/wxpython/menustrings.py:1116
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:100
@@ -4815,7 +4815,7 @@ msgstr "래스터 지도 내보내기"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1132
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1157
 msgid "Common export formats"
-msgstr "일반적인 내보내기 서식"
+msgstr "일반적인 내보내기 포맷"
 
 #: ../gui/wxpython/menustrings.py:102 ../gui/wxpython/menustrings.py:1119
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:103
@@ -5150,7 +5150,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:163
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1164
 msgid "Output format for raster data"
-msgstr "래스터 자료를 위한 출력 서식"
+msgstr "래스터 자료를 위한 출력 포맷"
 
 #: ../gui/wxpython/menustrings.py:164 ../gui/wxpython/menustrings.py:1181
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:164
@@ -5162,7 +5162,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:165
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1166
 msgid "Output format for vector data"
-msgstr "벡터 자료를 위한 출력 서식"
+msgstr "벡터 자료를 위한 출력 포맷"
 
 #: ../gui/wxpython/menustrings.py:166 ../gui/wxpython/menustrings.py:1183
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:166
@@ -5411,7 +5411,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1946
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1953
 msgid "Animation tool"
-msgstr ""
+msgstr "애니메이션 도구"
 
 #: ../gui/wxpython/menustrings.py:200 ../gui/wxpython/menustrings.py:1036
 #: ../gui/wxpython/menustrings.py:1976 ../gui/wxpython/menustrings.py:1983
@@ -5420,7 +5420,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1947
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1954
 msgid "Launch animation tool."
-msgstr ""
+msgstr "애니메이션 도구를 시작합니다."
 
 #: ../gui/wxpython/menustrings.py:201
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:201
@@ -6120,7 +6120,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1252
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1306
 msgid "Distance to features"
-msgstr "피쳐까지 거리"
+msgstr "피처까지 거리"
 
 #: ../gui/wxpython/menustrings.py:331 ../gui/wxpython/menustrings.py:387
 #: ../gui/wxpython/menustrings.py:1271 ../gui/wxpython/menustrings.py:1327
@@ -7961,7 +7961,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:642
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1568
 msgid "Nearest features"
-msgstr "최근접 피쳐"
+msgstr "최근접 피처"
 
 #: ../gui/wxpython/menustrings.py:649 ../gui/wxpython/menustrings.py:1589
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:643
@@ -9571,7 +9571,7 @@ msgstr "행 삭제"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:923
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1849
 msgid "Removes a vector feature from a vector map through attribute selection."
-msgstr "속성 선택을 이용해서 벡터 지도로부터 벡터 피쳐를 제거합니다"
+msgstr "속성 선택을 이용해서 벡터 지도로부터 벡터 피처를 제거합니다"
 
 #: ../gui/wxpython/menustrings.py:939 ../gui/wxpython/menustrings.py:1879
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:924
@@ -10624,7 +10624,7 @@ msgstr "지도 작성자에 대한 정보를 보여 줍니다"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:38
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1039
 msgid "Common formats import"
-msgstr "일반적인 서식 가져오기"
+msgstr "일반적인 포맷 가져오기"
 
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:40
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:70
@@ -11255,7 +11255,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/preferences.py:222
 msgid "screen pixels"
-msgstr ""
+msgstr "화면 화소"
 
 #: ../gui/wxpython/vdigit/preferences.py:222
 msgid "map units"
@@ -11410,7 +11410,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/preferences.py:670
 msgid "Delete existing feature(s)"
-msgstr "기존 피쳐를 삭제합니다"
+msgstr "기존 피처를 삭제합니다"
 
 #: ../gui/wxpython/vdigit/preferences.py:675
 msgid "Delete record from table"
@@ -11665,7 +11665,7 @@ msgstr ""
 #: ../gui/wxpython/vdigit/wxdigit.py:506
 #, python-format
 msgid "Unknown feature type '%s'"
-msgstr "알려지지 않은 피쳐 유형 '%s'"
+msgstr "알려지지 않은 피처 유형 '%s'"
 
 #: ../gui/wxpython/vdigit/wxdigit.py:511
 msgid "Not enough points for line"
@@ -11693,7 +11693,7 @@ msgstr ""
 #: ../gui/wxpython/startup/locdownload.py:217
 #, python-brace-format
 msgid "Unknown format '{0}'."
-msgstr "알려지지 않은 서식 '{0}'."
+msgstr "알려지지 않은 포맷 '{0}'."
 
 #: ../gui/wxpython/startup/locdownload.py:233
 msgid "Downloaded location is not valid"
@@ -11906,7 +11906,7 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:108 ../gui/wxpython/nviz/tools.py:503
 msgid "Animation"
-msgstr ""
+msgstr "애니메이션"
 
 #: ../gui/wxpython/nviz/tools.py:253
 msgid "Control View"
@@ -12452,11 +12452,11 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:2483
 msgid "Do you want to record new animation without saving the previous one?"
-msgstr ""
+msgstr "기존 애니메이션을 저장하지 않고 새로 녹화하길 원하십니까?"
 
 #: ../gui/wxpython/nviz/tools.py:2486
 msgid "Animation already axists"
-msgstr ""
+msgstr "애니메이션이 이미 존재합니다"
 
 #: ../gui/wxpython/nviz/tools.py:2656
 msgid "No file prefix given."
@@ -14638,7 +14638,7 @@ msgid ""
 "Unknown format %(for)s"
 msgstr ""
 "지시 %(file)s를 읽는데 실패했습니다.\n"
-"알려지지 않은 서식입니다 %(for)s"
+"알려지지 않은 포맷입니다 %(for)s"
 
 #: ../gui/wxpython/psmap/instructions.py:787
 #, python-format
@@ -15593,7 +15593,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/data.py:66
 msgid "No animation name selected."
-msgstr ""
+msgstr "애니메이션 이름을 선택하지 않았습니다."
 
 #: ../gui/wxpython/animation/data.py:132
 msgid "No workspace file selected."
@@ -15607,7 +15607,7 @@ msgstr ""
 #: ../gui/wxpython/animation/data.py:144
 #, python-format
 msgid "Animation %d"
-msgstr ""
+msgstr "애니메이션 %d"
 
 #: ../gui/wxpython/animation/nviztask.py:45 ../gui/wxpython/lmgr/frame.py:1432
 #, python-format
@@ -15631,7 +15631,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/toolbars.py:30
 msgid "Change animation speed"
-msgstr ""
+msgstr "애니메이션 속도 변경"
 
 #: ../gui/wxpython/animation/toolbars.py:33
 msgid "Play forward"
@@ -15653,34 +15653,34 @@ msgstr ""
 #: ../gui/wxpython/animation/toolbars.py:52
 #: ../gui/wxpython/animation/dialogs.py:328
 msgid "Add new animation"
-msgstr ""
+msgstr "새 애니메이션 추가"
 
 #: ../gui/wxpython/animation/toolbars.py:55
 #: ../gui/wxpython/animation/toolbars.py:56
 msgid "Add, edit or remove animation"
-msgstr "동화를 추가, 편집, 또는 제거합니다"
+msgstr "애니메이션 추가, 편집, 제거"
 
 #: ../gui/wxpython/animation/toolbars.py:59
 #: ../gui/wxpython/animation/toolbars.py:60
 #: ../gui/wxpython/animation/dialogs.py:911
 msgid "Export animation"
-msgstr ""
+msgstr "애니메이션 내보내기"
 
 #: ../gui/wxpython/animation/toolbars.py:68
 msgid "Add space-time dataset or series of map layers"
-msgstr ""
+msgstr "시공간 자료세트 또는 지도 레이어 계열 추가"
 
 #: ../gui/wxpython/animation/toolbars.py:69
 msgid "Add space-time dataset or series of map layers for animation"
-msgstr ""
+msgstr "애니메이션을 위해서 시공간 자료세트 또는 지도 레이어 계열을 추가하세요"
 
 #: ../gui/wxpython/animation/frame.py:53
 msgid "GRASS GIS Animation tool"
-msgstr "GRASS GIS 동화 도구"
+msgstr "GRASS GIS 애니메이션 도구"
 
 #: ../gui/wxpython/animation/frame.py:172
 msgid "Animation Toolbar"
-msgstr ""
+msgstr "애니메이션 도구 모음"
 
 #: ../gui/wxpython/animation/frame.py:284
 msgid "Loading data"
@@ -15722,7 +15722,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:57
 msgid "Adjust speed of animation"
-msgstr ""
+msgstr "애니메이션 속도 조절"
 
 #: ../gui/wxpython/animation/dialogs.py:104
 msgid "Simple mode"
@@ -15775,11 +15775,11 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:292
 msgid "Animation speed is too high."
-msgstr ""
+msgstr "애니메이션 속도가 너무 빠릅니다."
 
 #: ../gui/wxpython/animation/dialogs.py:330
 msgid "Edit animation"
-msgstr ""
+msgstr "애니메이션 편집"
 
 #: ../gui/wxpython/animation/dialogs.py:348
 msgid "Advanced"
@@ -15817,7 +15817,7 @@ msgstr ""
 msgid ""
 "For 3D animation, please select only one space-time dataset\n"
 "or one series of map layers."
-msgstr ""
+msgstr "3차원 애니메이션을 위해 시공간 자료세트 또는 지도 레이어 계열을 하나만 선택하세요."
 
 #: ../gui/wxpython/animation/dialogs.py:479
 #: ../gui/wxpython/lmgr/layertree.py:111
@@ -15838,7 +15838,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:519
 msgid "Parameter for animation:"
-msgstr ""
+msgstr "애니메이션을 위한 매개변수"
 
 #: ../gui/wxpython/animation/dialogs.py:558
 msgid "Animate region change (2D view only)"
@@ -15882,11 +15882,11 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:757
 msgid "Add, edit or remove animations"
-msgstr "동화를 추가, 편집, 또는 제거합니다"
+msgstr "애니메이션을 추가, 편집, 또는 제거합니다"
 
 #: ../gui/wxpython/animation/dialogs.py:769
 msgid "List of animations"
-msgstr ""
+msgstr "애니메이션 목록"
 
 #: ../gui/wxpython/animation/dialogs.py:782
 msgid "Edit"
@@ -15895,12 +15895,12 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:841
 #, python-format
 msgid "Maximum number of animations is %d."
-msgstr ""
+msgstr "애니메이션의 최대 개수는 %d입니다"
 
 #: ../gui/wxpython/animation/dialogs.py:891
 #: ../gui/wxpython/animation/controller.py:262
 msgid "More animations are using one window. Please select different window for each animation."
-msgstr ""
+msgstr "여러 개의 애니메이션이 하나의 창을 사용하고 있습니다. 각 애니메이션에 다른 창을 선택하세요."
 
 #: ../gui/wxpython/animation/dialogs.py:992
 msgid "Add time stamp"
@@ -15960,7 +15960,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1193
 msgid "animation_"
-msgstr ""
+msgstr "애니메이션 (n_)"
 
 #: ../gui/wxpython/animation/dialogs.py:1201
 msgid "Choose directory for export"
@@ -15974,7 +15974,7 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:1261
 #: ../gui/wxpython/animation/dialogs.py:1292
 msgid "Choose file to save animation"
-msgstr ""
+msgstr "애니메이션을 저장하기 위해 파일을 선택하세요"
 
 #: ../gui/wxpython/animation/dialogs.py:1260
 msgid "SWF file:"
@@ -16077,7 +16077,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1825
 msgid "Animation Tool settings"
-msgstr ""
+msgstr "애니메이션 도구 설정"
 
 #: ../gui/wxpython/animation/dialogs.py:1889
 msgid "Number of parallel processes:"
@@ -16172,7 +16172,7 @@ msgstr ""
 #: ../gui/wxpython/animation/controller.py:234
 #, python-format
 msgid "Maximum number of animations is %s."
-msgstr ""
+msgstr "애니메이션의 최대 개수는 %s입니다"
 
 #: ../gui/wxpython/animation/controller.py:443
 msgid "Failed to display legend."
@@ -16184,7 +16184,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/controller.py:505
 msgid "No animation to export."
-msgstr ""
+msgstr "내보내기할 애니메이션이 없습니다."
 
 #: ../gui/wxpython/animation/controller.py:542
 msgid "Preparing export, please wait..."
@@ -16197,7 +16197,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/controller.py:624
 msgid "Exporting animation, please wait..."
-msgstr ""
+msgstr "애니메이션을 내보내는 중입니다, 기다리세요..."
 
 #: ../gui/wxpython/icons/icon.py:40
 #, python-format
@@ -18876,7 +18876,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:1439
 msgid "Delete selected features"
-msgstr "선택된 피쳐를 삭제합니다"
+msgstr "선택된 피처를 삭제합니다"
 
 #: ../gui/wxpython/dbmgr/base.py:1502
 msgid "Update existing record"
