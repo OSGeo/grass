@@ -20341,3 +20341,6 @@ msgstr ""
 #: ../gui/wxpython/web_services/dialogs.py:1105
 msgid "Unable to fetch data.\n"
 msgstr ""
+
+#~ msgid "Animation already axists"
+#~ msgstr "애니메이션이 이미 존재합니다"

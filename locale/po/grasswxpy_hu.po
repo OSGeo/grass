@@ -1004,7 +1004,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/vclean.py:77
 msgid "break lines/boundaries"
-msgstr ""
+msgstr "törésvonalak/határok"
 
 #: ../gui/wxpython/modules/vclean.py:78
 msgid "remove duplicates"
@@ -11332,12 +11332,12 @@ msgstr ""
 #: ../gui/wxpython/vdigit/preferences.py:477
 #: ../gui/wxpython/vdigit/preferences.py:531
 msgid "shorter than"
-msgstr ""
+msgstr "rövidebb mint"
 
 #: ../gui/wxpython/vdigit/preferences.py:477
 #: ../gui/wxpython/vdigit/preferences.py:531
 msgid "longer than"
-msgstr ""
+msgstr "hosszabb mint"
 
 #: ../gui/wxpython/vdigit/preferences.py:516
 msgid "dangle"
@@ -11354,7 +11354,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/preferences.py:595
 msgid "Digitize new feature"
-msgstr ""
+msgstr "Új elem digitalizálás"
 
 #: ../gui/wxpython/vdigit/preferences.py:600
 msgid "Add new record into table"
@@ -11385,7 +11385,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/preferences.py:629
 msgid "Category number"
-msgstr ""
+msgstr "Kategória szám"
 
 #: ../gui/wxpython/vdigit/preferences.py:645
 msgid "Category mode"
@@ -11405,7 +11405,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/preferences.py:675
 msgid "Delete record from table"
-msgstr ""
+msgstr "Rekord törlés a táblából"
 
 #: ../gui/wxpython/vdigit/preferences.py:693
 msgid "Geometry attributes"
@@ -12810,7 +12810,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/forms.py:2731
 #: ../gui/wxpython/gui_core/toolbars.py:70
 msgid "Select font"
-msgstr ""
+msgstr "Betűkészlet"
 
 #: ../gui/wxpython/gui_core/forms.py:1448 ../gui/wxpython/lmgr/toolbars.py:158
 msgid "Graphical Modeler"
@@ -13265,7 +13265,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/toolbars.py:59
 msgid "Zoom to selected map layer(s)"
-msgstr ""
+msgstr "Nagyítás a szelektált térkép réteg(ek)re"
 
 #: ../gui/wxpython/gui_core/toolbars.py:61
 msgid "Zoom to computational region extent"
@@ -13273,7 +13273,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/toolbars.py:63
 msgid "Pan"
-msgstr ""
+msgstr "Eltolás"
 
 #: ../gui/wxpython/gui_core/toolbars.py:64
 msgid "Drag with mouse to pan"
@@ -14326,7 +14326,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/goutput.py:172
 msgid "&Log file"
-msgstr ""
+msgstr "Napló fájl"
 
 #: ../gui/wxpython/gui_core/goutput.py:174
 msgid "Toggle to save list of executed commands into a file; content saved when switching off."
@@ -15638,7 +15638,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/nviztask.py:294
 msgid "No map series nor space-time dataset is added."
-msgstr ""
+msgstr "Sem térkép sorozatot sem tér-idő adatállományt nem adtak meg."
 
 #: ../gui/wxpython/animation/toolbars.py:30
 msgid "Change animation speed"
@@ -16152,7 +16152,7 @@ msgstr ""
 #: ../gui/wxpython/tplot/frame.py:927 ../gui/wxpython/timeline/frame.py:467
 #, python-format
 msgid "Space time dataset <%s> not found."
-msgstr ""
+msgstr "<%s> tér-adat adathalmazt nem találom"
 
 #: ../gui/wxpython/animation/temporal_manager.py:349
 #, python-format
@@ -16161,11 +16161,11 @@ msgstr ""
 
 #: ../gui/wxpython/animation/utils.py:185
 msgid "The number of maps in space-time datasets has to be the same."
-msgstr ""
+msgstr "A tér-adat adathalmazokban a térképek számának azonosnak kell lennie."
 
 #: ../gui/wxpython/animation/utils.py:189
 msgid "The temporal type (absolute/relative) of space-time datasets has to be the same."
-msgstr ""
+msgstr "A tér-adat adathalmazok idő típusának (abszolút/relatív) azonosnak kell lennie."
 
 #: ../gui/wxpython/animation/utils.py:193
 msgid "The map type (point/interval) of space-time datasets has to be the same."
@@ -16194,7 +16194,7 @@ msgstr "Nem tudom a jelmagyarázatot megjeleníteni."
 
 #: ../gui/wxpython/animation/controller.py:475
 msgid "Inconsistent number of maps, please check input data."
-msgstr ""
+msgstr "Inkonzisztens számú térkép, ellenőrizze az input adatokat."
 
 #: ../gui/wxpython/animation/controller.py:505
 msgid "No animation to export."
@@ -16282,19 +16282,19 @@ msgstr "STVDS"
 
 #: ../gui/wxpython/tplot/frame.py:282
 msgid "Set title for the plot"
-msgstr ""
+msgstr "Rajz cím"
 
 #: ../gui/wxpython/tplot/frame.py:287
 msgid "Set label for X axis"
-msgstr ""
+msgstr "X tengely címke"
 
 #: ../gui/wxpython/tplot/frame.py:292
 msgid "Set label for Y axis"
-msgstr ""
+msgstr "Y tengely címke"
 
 #: ../gui/wxpython/tplot/frame.py:304
 msgid "Labels"
-msgstr ""
+msgstr "Címkék"
 
 #: ../gui/wxpython/tplot/frame.py:311
 msgid "Path for output CSV file with plotted data"
@@ -16302,11 +16302,11 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:317
 msgid "CVS path"
-msgstr ""
+msgstr "CVS útvonal"
 
 #: ../gui/wxpython/tplot/frame.py:323
 msgid "Do you want the CSV header?"
-msgstr ""
+msgstr "Akar CVS fejlécet?"
 
 #: ../gui/wxpython/tplot/frame.py:364 ../gui/wxpython/tplot/frame.py:842
 #: ../gui/wxpython/tplot/frame.py:846 ../gui/wxpython/tplot/frame.py:867
@@ -16355,7 +16355,7 @@ msgstr ""
 #: ../gui/wxpython/tplot/frame.py:639
 #, python-format
 msgid "Temporal resolution: %s"
-msgstr ""
+msgstr "Időbeli felbontás: %s"
 
 #: ../gui/wxpython/tplot/frame.py:641 ../gui/wxpython/timeline/frame.py:376
 #, python-format
@@ -16382,11 +16382,11 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:804
 msgid "File exists"
-msgstr ""
+msgstr "A fájl létezik"
 
 #: ../gui/wxpython/tplot/frame.py:809
 msgid "Please change name of output CSV file or "
-msgstr ""
+msgstr "Kérem módosítsa az output CSV fájl nevét vagy"
 
 #: ../gui/wxpython/tplot/frame.py:835
 msgid "Incorrect coordinates format, should be: x,y"
@@ -20366,3 +20366,6 @@ msgstr ""
 #: ../gui/wxpython/web_services/dialogs.py:1105
 msgid "Unable to fetch data.\n"
 msgstr ""
+
+#~ msgid "Animation already axists"
+#~ msgstr "Animáció már létezik"

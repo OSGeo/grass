@@ -20763,3 +20763,6 @@ msgstr "&Abrufen"
 
 msgid "Fetch list of available modules from GRASS Addons SVN repository"
 msgstr "Abruf der Modulliste vom GRASS-Addons SVN-Repository"
+
+#~ msgid "Animation already axists"
+#~ msgstr "Die Animation existiert bereits."

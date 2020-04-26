@@ -20878,3 +20878,6 @@ msgstr "Crea un raster da punti LAS LiDAR usando statistiche univariate"
 
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with libLAS."
 msgstr "Converte nuvole di punti LAS LiDAR in un vettoriale GRASS usando libLAS."
+
+#~ msgid "Animation already axists"
+#~ msgstr "Animazione già esistente"

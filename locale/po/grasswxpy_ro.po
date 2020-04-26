@@ -20883,3 +20883,6 @@ msgstr "&Obține"
 
 msgid "Fetch list of available modules from GRASS Addons SVN repository"
 msgstr "Obțina lista modulelor disponibile de la GRASS Addons SVN"
+
+#~ msgid "Animation already axists"
+#~ msgstr "Animația există deja"
