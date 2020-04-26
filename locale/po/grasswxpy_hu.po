@@ -15904,6 +15904,7 @@ msgid "Edit"
 msgstr "Szerkesztés"
 
 #: ../gui/wxpython/animation/dialogs.py:841
+#: ../gui/wxpython/animation/controller.py:234
 #, python-format
 msgid "Maximum number of animations is %d."
 msgstr "Maximális animáció szám %d."
@@ -16182,11 +16183,6 @@ msgstr ""
 #: ../gui/wxpython/animation/utils.py:210
 msgid "The number of maps to animate has to be the same as the number of maps in temporal dataset."
 msgstr ""
-
-#: ../gui/wxpython/animation/controller.py:234
-#, python-format
-msgid "Maximum number of animations is %s."
-msgstr "Az animációk maximális száma %s."
 
 #: ../gui/wxpython/animation/controller.py:443
 msgid "Failed to display legend."

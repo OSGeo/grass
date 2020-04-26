@@ -16069,6 +16069,7 @@ msgid "Edit"
 msgstr "Editar"
 
 #: ../gui/wxpython/animation/dialogs.py:841
+#: ../gui/wxpython/animation/controller.py:234
 #, python-format
 msgid "Maximum number of animations is %d."
 msgstr "La cantidad máxima de animaciones es %d."
@@ -16347,11 +16348,6 @@ msgstr "La cantidad de mapas a animar tiene que ser el mismo para cada serie de 
 #: ../gui/wxpython/animation/utils.py:210
 msgid "The number of maps to animate has to be the same as the number of maps in temporal dataset."
 msgstr "La cantidad de mapas a animar tiene que ser el miemos que el número de mapas en conjunto de datos espacio temporales."
-
-#: ../gui/wxpython/animation/controller.py:234
-#, python-format
-msgid "Maximum number of animations is %s."
-msgstr "El número máximo de animaciones es %s."
 
 #: ../gui/wxpython/animation/controller.py:443
 msgid "Failed to display legend."
