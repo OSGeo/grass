@@ -20558,3 +20558,6 @@ msgstr "&Pobierz"
 
 msgid "Fetch list of available modules from GRASS Addons SVN repository"
 msgstr "Pobierz listę wtyczek"
+
+#~ msgid "Animation already axists"
+#~ msgstr "Animacja już istnieje"
