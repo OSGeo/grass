@@ -21132,3 +21132,6 @@ msgstr "Calculatrice raster."
 
 #~ msgid "Code revision"
 #~ msgstr "Révision du code"
+
+#~ msgid "Animation already axists"
+#~ msgstr "L'animation existe déjà"

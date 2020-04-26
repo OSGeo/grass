@@ -3480,7 +3480,7 @@ msgstr "Por favor provea el nombre de la cámara (generado por i.ortho.camera)"
 
 #: ../gui/wxpython/photo2image/g.gui.photo2image.py:111
 msgid "Please provive an order value (1 if 4 Fiducials, 2 if 8 Fiducials)"
-msgstr ""
+msgstr "Por favor proporcione un valor de orden (1 si tiene 4 fiduciales, 2 si tiene 8 fiduciales)."
 
 #: ../gui/wxpython/photo2image/g.gui.photo2image.py:116
 msgid "Please provive an output files extension (used by i.rectify)"
@@ -4094,7 +4094,7 @@ msgstr "Borrar Directorio de mapas"
 #: ../gui/wxpython/gis_set.py:258
 #, python-format
 msgid "GRASS GIS %s Startup%s"
-msgstr ""
+msgstr "GRASS GIS %s inicio%s"
 
 #: ../gui/wxpython/gis_set.py:263
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:257
@@ -11792,7 +11792,7 @@ msgstr "No hay suficientes puntos para una línea"
 
 #: ../gui/wxpython/startup/guiutils.py:51
 msgid "Name for the new mapset:"
-msgstr ""
+msgstr "Nombre para el nuevo Directorio de mapas:"
 
 #: ../gui/wxpython/startup/locdownload.py:150
 #, python-brace-format
@@ -13462,6 +13462,8 @@ msgid ""
 "Temporal GIS error:\n"
 "%s"
 msgstr ""
+"Error del GIS Temporal:\n"
+"%s"
 
 #: ../gui/wxpython/gui_core/gselect.py:771
 #, python-format
@@ -16451,23 +16453,23 @@ msgstr "STVDS"
 
 #: ../gui/wxpython/tplot/frame.py:282
 msgid "Set title for the plot"
-msgstr ""
+msgstr "Definir título del gráfico"
 
 #: ../gui/wxpython/tplot/frame.py:287
 msgid "Set label for X axis"
-msgstr ""
+msgstr "Definir etiqueta para el eje X"
 
 #: ../gui/wxpython/tplot/frame.py:292
 msgid "Set label for Y axis"
-msgstr ""
+msgstr "Definir etiqueta para el eje Y"
 
 #: ../gui/wxpython/tplot/frame.py:304
 msgid "Labels"
-msgstr ""
+msgstr "Etiquetas"
 
 #: ../gui/wxpython/tplot/frame.py:311
 msgid "Path for output CSV file with plotted data"
-msgstr ""
+msgstr "Ruta al archivo CSV de salida con los datos graficados"
 
 #: ../gui/wxpython/tplot/frame.py:317
 msgid "CVS path"
@@ -16475,7 +16477,7 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:323
 msgid "Do you want the CSV header?"
-msgstr ""
+msgstr "Desea el encabezado del CSV?"
 
 #: ../gui/wxpython/tplot/frame.py:364 ../gui/wxpython/tplot/frame.py:842
 #: ../gui/wxpython/tplot/frame.py:846 ../gui/wxpython/tplot/frame.py:867
@@ -16547,11 +16549,11 @@ msgstr "Problemas al obtener los datos del conjunto de datos vectoriales. Lista 
 #: ../gui/wxpython/tplot/frame.py:802
 #, python-brace-format
 msgid "{pa} already exists, do you want to overwrite?"
-msgstr ""
+msgstr "{pa} ya existe. ¿Quiere sobrescribirlo?"
 
 #: ../gui/wxpython/tplot/frame.py:804
 msgid "File exists"
-msgstr ""
+msgstr "El archivo ya existe"
 
 #: ../gui/wxpython/tplot/frame.py:809
 msgid "Please change name of output CSV file or "
@@ -16999,7 +17001,7 @@ msgstr "Archivo de Entorno de trabajo GRASS  (*.gxw)|*.gxw"
 
 #: ../gui/wxpython/lmgr/frame.py:1391
 msgid "Most likely the database, location or mapset does not exist"
-msgstr ""
+msgstr "Probablemente, la base de datos, la Localización o el Directorio de mapas no existan"
 
 #: ../gui/wxpython/lmgr/frame.py:1394
 #, python-brace-format
@@ -20897,3 +20899,30 @@ msgstr "Crea un mapa ráster a partir de puntos LAS LiDAR usando estadísticas u
 
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with libLAS."
 msgstr "Convierte nubes de puntos LAS LiDAR a un mapa vectorial GRASS con libLAS."
+
+#~ msgid "Fetching list of modules from GRASS-Addons (be patient)..."
+#~ msgstr "Obteniendo lista de módulos del repositorio de complementos de GRASS (sea paciente)..."
+
+#~ msgid "Installs new extension from GRASS AddOns repository."
+#~ msgstr "Instala una nueva extensión desde el repositorio de complementos de GRASS."
+
+#~ msgid "Animation already axists"
+#~ msgstr "La animación ya existe"
+
+#, python-brace-format
+#~ msgid "New name for <{n}>"
+#~ msgstr "Nuevo nombre para <{n}>"
+
+#, python-brace-format
+#~ msgid "Do you really want to delete map(s) <{m}>?"
+#~ msgstr "Realmente desea remover el/los mapa(s) <{m}>?"
+
+#, python-brace-format
+#~ msgid "Do you really want to delete {n} maps?"
+#~ msgstr "Realmente desea remover {n} mapas?"
+
+#~ msgid "No available options"
+#~ msgstr "No hay opciones disponibles"
+
+#~ msgid "Available analyses"
+#~ msgstr "Análisis disponibles"
