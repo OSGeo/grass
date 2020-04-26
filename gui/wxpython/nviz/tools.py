@@ -2482,7 +2482,7 @@ class NvizToolWindow(FN.FlatNotebook):
                     "Do you want to record new animation without saving the previous one?")
                 dlg = wx.MessageDialog(parent=self,
                                        message=msg,
-                                       caption=_("Animation already axists"),
+                                       caption=_("Animation already exists"),
                                        style=wx.YES_NO | wx.CENTRE)
                 if dlg.ShowModal() == wx.ID_NO:
                     dlg.Destroy()
