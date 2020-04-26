@@ -15970,6 +15970,7 @@ msgid "Edit"
 msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:841
+#: ../gui/wxpython/animation/controller.py:234
 #, python-format
 msgid "Maximum number of animations is %d."
 msgstr ""
@@ -16244,11 +16245,6 @@ msgstr ""
 
 #: ../gui/wxpython/animation/utils.py:210
 msgid "The number of maps to animate has to be the same as the number of maps in temporal dataset."
-msgstr ""
-
-#: ../gui/wxpython/animation/controller.py:234
-#, python-format
-msgid "Maximum number of animations is %s."
 msgstr ""
 
 #: ../gui/wxpython/animation/controller.py:443

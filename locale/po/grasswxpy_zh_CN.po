@@ -11775,6 +11775,7 @@ msgid "Edit"
 msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:837
+#: ../gui/wxpython/animation/controller.py:234
 #, python-format
 msgid "Maximum number of animations is %d."
 msgstr ""
@@ -12138,11 +12139,6 @@ msgstr ""
 #: ../gui/wxpython/animation/temporal_manager.py:347
 #, python-format
 msgid "Topology of Space time dataset %s is invalid."
-msgstr ""
-
-#: ../gui/wxpython/animation/controller.py:234
-#, python-format
-msgid "Maximum number of animations is %s."
 msgstr ""
 
 #: ../gui/wxpython/animation/controller.py:443
