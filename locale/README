@@ -7,7 +7,7 @@ This file contains following sections:
 3. A detailed explanation of translation workflow, testing;
 4. Some notes and links
 
-[ Web page: http://grass.osgeo.org/devel/i18n.php ]
+[ Web page: https://grass.osgeo.org/devel/i18n.php ]
 
 Updating the message catalogs currently only works on 
 unix-like systems and requires xgettext.
@@ -104,10 +104,10 @@ NOTE4: Such lines
 A detailed example of adapting code for use in multiple languages
 can be found in gettext manual.
 How to prepare program source: 
-http://www.gnu.org/software/gettext/manual/gettext.html#Sources
+https://www.gnu.org/software/gettext/manual/gettext.html#Sources
 
 More advanced tricks like resolving ambiguties and handling of plural forms:
-http://www.gnu.org/software/gettext/manual/gettext.html#Programmers
+https://www.gnu.org/software/gettext/manual/gettext.html#Programmers
 
 
 TODO: ADD PYTHON code snippets here
@@ -123,17 +123,17 @@ GENERAL TRANSLATION PROCEDURE (no programming required)
  see also: https://grasswiki.osgeo.org/wiki/GRASS_messages_translation#Get_the_translated_po_files
 
 [1] .pot files are auto-generated on grass.osgeo.org and
-    stored in https://grass.osgeo.org/grass77/binary/linux/snapshot/transifex/
-     --> cronjob: /home/neteler/cronjobs/cron_grass77_releasebranch_72_build_bins.sh
+    stored in https://grass.osgeo.org/grass79/binary/linux/snapshot/transifex/
+     --> cronjob (on grasslxd container): /home/neteler/cronjobs/cron_grass7_HEAD_build_bins.sh
 
 [2] Transifex job copies daily from [1] to here: 
-	https://www.transifex.com/grass-gis/grass77/
+	https://www.transifex.com/grass-gis/grass7/dashboard/
 
 [3] Translators work in Transifex,
 
 [4] Updated po files are taken from Transifex and merged into GRASS GIS source repo 
     (MO files are generated when compiling GRASS GIS)
-    Script: grass-addons/tools/transifex_merge.sh
+    Script: https://github.com/OSGeo/grass-addons/blob/master/tools/transifex_merge.sh
 
     # trim disconnected=obsolete translations
     POFILE=grassYXZ_LANG.po
@@ -164,7 +164,7 @@ TODO OLD    make update-po  merges new messages into existing *.po files
 
 If you have any difficulty with these instructions please ask for help
 on the GRASS development mailing list <grass-dev lists.osgeo.org>
-(subscribe at http://lists.osgeo.org/mailman/listinfo/grass-dev). Your
+(subscribe at https://lists.osgeo.org/mailman/listinfo/grass-dev). Your
 willingness, time, and effort translating are valuable. If necessary,
 all of these steps except for the actual translation can be done by
 someone else on a different computer.
@@ -231,7 +231,7 @@ DETAILED PROCEDURE :
         mv ./template/grasswxpy.pot ./po/grasswxpy_de.po
 
        Get the two characters indicating the language from this
-       code list: http://www.loc.gov/standards/iso639-2/php/English_list.php
+       code list: https://www.loc.gov/standards/iso639-2/php/English_list.php
        The code to use is ISO 639-1 (two characters).
 
        Then continue with 4. below.
@@ -252,7 +252,6 @@ DETAILED PROCEDURE :
        This will update the messages in all existing files in 
        the .po/ directory.
     
-
 
 4. TRANSLATE MESSAGES
 
@@ -278,7 +277,7 @@ DETAILED PROCEDURE :
      in the translated messages!
    
    * Please use 'ISO-8859-1' or 'ISO-8859-15' for western languages.
-     See http://en.wikipedia.org/wiki/ISO_8859 for details.
+     See https://en.wikipedia.org/wiki/ISO_8859 for details.
    
    After finishing the translation, save the files.
 
@@ -295,6 +294,7 @@ DETAILED PROCEDURE :
    It should work :-)
 
    If you don't have this possibility, just skip this step.
+
 
 7. Send the updated .po files to a GRASS Development Team member.
    If possible, please send diffs against CVS:
@@ -316,28 +316,18 @@ PLEASE HELP TO TRANSLATE GRASS MESSAGES!
 
 LINKS
 
-- KBabel: http://i18n.kde.org/tools/kbabel/
-- poEdit: http://poedit.sourceforge.net/
-- *.po files for many languages: KDE translator center, http://i18n.kde.org/teams/
+- Localize: https://userbase.kde.org/Lokalize
+- poEdit: https://poedit.net/
+- *.po files for many languages: KDE translator center, https://l10n.kde.org/teams-list.php
 
 NOTES
 
 [1] To load existing .po files (eg from older GRASS versions or
-    KDE translator center, http://i18n.kde.org/teams/) into
+    KDE translator center, https://l10n.kde.org/teams-list.php) into
     Kbabel, use
     KBABEL -> SETTINGS -> CONFIGURE DIRECTORY -> PO AUXILIARY
 
-[2] To use QGIS' TS files, you have to convert them to PO format.
-    TS files -> PO files converter:
-    To translate the .ts files e.g. from QGIS to .po files, 
-    use
-      http://oss.erdfunkstelle.de/ts2msg/index.shtml
-
-    cd qgis/i18n
-    ts2msg utf8 qgis_de.ts
-    -> qgis_de.po
-
-[3] To change/add the keymap under KDE, you have to:
+[2] To change/add the keymap under KDE, you have to:
     1. Open "(KDE) Control Center = kcontrol"
     2. Go to Regional & Accessibility -> Keyboard Layout
     3. Check "Enable Keyboard Layout".
@@ -354,7 +344,3 @@ NOTES
       setxkbmap -model  -layout dev -variant basic
       # back to US layout:
       setxkbmap -model  -layout us -variant basic
-
-    How to use the keyboard
-
-    http://indlinux.org/keymap/keymaps.php
