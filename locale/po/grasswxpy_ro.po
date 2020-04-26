@@ -12495,7 +12495,7 @@ msgid "Do you want to record new animation without saving the previous one?"
 msgstr "Doriți să înregistrați o animație nouă fără să o salvați pe cea dinainte?"
 
 #: ../gui/wxpython/nviz/tools.py:2486
-msgid "Animation already axists"
+msgid "Animation already exists"
 msgstr "Animația există deja"
 
 #: ../gui/wxpython/nviz/tools.py:2656
