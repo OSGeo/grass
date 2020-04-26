@@ -336,7 +336,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/g.search.modules_to_translate.c:19
 msgid "JSON format"
-msgstr "JSON 서식"
+msgstr "JSON 포맷"
 
 #: ../locale/scriptstrings/t.rast.extract_to_translate.c:1
 msgid "Extracts a subset of a space time raster datasets."
@@ -2452,7 +2452,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.in.mapgen_to_translate.c:4
 msgid "Input map is in Matlab format"
-msgstr "입력 지도가 매트랩 서식입니다"
+msgstr "입력 지도가 매트랩 포맷입니다"
 
 #: ../locale/scriptstrings/v.in.mapgen_to_translate.c:5
 msgid "Create a 3D vector points map from 3 column Matlab data"
@@ -3373,7 +3373,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/db.out.ogr_to_translate.c:7
 msgid "Table format"
-msgstr "테이블 서식"
+msgstr "테이블 포맷"
 
 #: ../locale/scriptstrings/db.out.ogr_to_translate.c:8
 msgid "Name for output table (default: input name)"
@@ -3707,7 +3707,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.db.droprow_to_translate.c:1
 msgid "Removes a vector feature from a vector map through attribute selection."
-msgstr "속성 선택을 이용해서 벡터 지도로부터 벡터 피쳐를 제거합니다"
+msgstr "속성 선택을 이용해서 벡터 지도로부터 벡터 피처를 제거합니다"
 
 #: ../locale/scriptstrings/t.sample_to_translate.c:1
 msgid "Samples the input space time dataset(s) with a sample space time dataset and print the result to stdout."
@@ -3976,7 +3976,7 @@ msgstr ""
 #: ../locale/scriptstrings/r.drain_to_translate.c:5
 #: ../raster/r.drain/main.c:116
 msgid "Name of input elevation or cost surface raster map"
-msgstr ""
+msgstr "입력 표고 또는 비용 표면 래스터 지도의 이름"
 
 #: ../locale/scriptstrings/r.drain_to_translate.c:6
 #: ../raster/r.drain/main.c:121
@@ -4195,7 +4195,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.in.wfs_to_translate.c:7
 msgid "Specify alternate spatial reference system (example: EPSG:4326)"
-msgstr ""
+msgstr "대체할 공간 참조 체계를 지정하세요 (예: EPSG:4326)"
 
 #: ../locale/scriptstrings/v.in.wfs_to_translate.c:8
 msgid "The given code must be supported by the server, consult the capabilities file"
@@ -4477,7 +4477,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:7
 msgid "Basename for output raster maps"
-msgstr "출력 래스터 지도의 기본이름"
+msgstr "출력 래스터 지도의 기반 이름"
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:1
 msgid "Converts coordinates from one projection to another (cs2cs frontend)."
@@ -4497,7 +4497,7 @@ msgstr "기타"
 #: ../misc/m.transform/main.c:317 ../vector/v.proj/main.c:75
 #: ../vector/v.transform/main.c:71
 msgid "transformation"
-msgstr ""
+msgstr "변환"
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:5
 msgid "Input coordinates to reproject"
@@ -4529,7 +4529,7 @@ msgstr "출력 좌표 파일을 위한 이름(표준출력으로 보낼 경우 �
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:12
 msgid "Field separator (format: input[,output])"
-msgstr "필드 구분자(서식: 입력[,출력])"
+msgstr "필드 구분자(포맷: 입력[,출력])"
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:14
 msgid "Input projection parameters (PROJ.4 style)"
@@ -6045,7 +6045,7 @@ msgstr ""
 #: ../raster/r.profile/main.c:55 ../raster/r.transect/main.c:105
 #: ../vector/v.profile/main.c:155
 msgid "transect"
-msgstr ""
+msgstr "횡단"
 
 #: ../raster/r.profile/main.c:57
 msgid "Outputs the raster map layer values lying on user-defined line(s)."
@@ -6177,7 +6177,7 @@ msgstr ""
 
 #: ../raster/r.sun/main.c:270
 msgid "Name of the input elevation raster map [meters]"
-msgstr ""
+msgstr "입력 표고 래스터 지도의 이름 [미터]"
 
 #: ../raster/r.sun/main.c:279
 msgid "Name of the input aspect map (terrain aspect or azimuth of the solar panel) [decimal degrees]"
@@ -6603,7 +6603,7 @@ msgstr "출력 파일을 지정하지 않으면 표준 출력으로 출력합니
 
 #: ../raster/r.volume/main.c:110
 msgid "Generate unformatted report (items separated by colon)"
-msgstr "서식 없는 보고서를 생성합니다 (콜론으로 구분된 항목들)"
+msgstr "포맷 안 된 보고서를 생성합니다 (콜론으로 구분된 항목들)"
 
 #: ../raster/r.volume/main.c:143
 msgid "No MASK found. If no clump map is given than the MASK is required. You need to define a clump raster map or create a MASK by r.mask command."
@@ -7728,7 +7728,7 @@ msgstr "물리 기반의 수문모형인 TOPMODEL을 모의합니다."
 
 #: ../raster/r.topmodel/main.c:60
 msgid "Name of input TOPMODEL parameters file"
-msgstr ""
+msgstr "입력 TOPMODEL 매개변수 파일의 이름"
 
 #: ../raster/r.topmodel/main.c:65
 msgid "Name of input topographic index statistics file"
@@ -7736,11 +7736,11 @@ msgstr "입력 지형지표 통계 파일의 이름"
 
 #: ../raster/r.topmodel/main.c:69
 msgid "Name of input rainfall and potential evapotranspiration data file"
-msgstr ""
+msgstr "강우와 잠재증발산 입력 자료 파일의 이름"
 
 #: ../raster/r.topmodel/main.c:76
 msgid "Time step"
-msgstr ""
+msgstr "시간 간격"
 
 #: ../raster/r.topmodel/main.c:77
 msgid "Generate output for this time step"
@@ -7785,7 +7785,7 @@ msgstr ""
 
 #: ../raster/r.topmodel/main.c:120
 msgid "Preprocess only and stop after generating outtopidxstats"
-msgstr ""
+msgstr "전처리만 실행하고 outtopidxstats를 생성한 후 멈춥니다"
 
 #: ../raster/r.topmodel/main.c:150
 #, c-format
@@ -8387,7 +8387,7 @@ msgstr ""
 
 #: ../raster/r.li/r.li.daemon/daemon.c:623
 msgid "Illegal areas disposition"
-msgstr ""
+msgstr "잘못된 면의 배치"
 
 #: ../raster/r.li/r.li.daemon/daemon.c:695
 msgid "Cannot make lseek"
@@ -8709,7 +8709,7 @@ msgstr ""
 
 #: ../raster/r.resamp.rst/main.c:173
 msgid "Name for output elevation raster map"
-msgstr "출력 고도 래스터 지도를 위한 이름"
+msgstr "출력 표고 래스터 지도를 위한 이름"
 
 #: ../raster/r.resamp.rst/main.c:179
 msgid "Name for output slope map (or fx)"
@@ -9362,7 +9362,7 @@ msgstr "쪽 사이에 폼피드를 사용합니다"
 
 #: ../raster/r.report/parse.c:123
 msgid "Scientific format"
-msgstr "과학적 서식"
+msgstr "과학적 기수법"
 
 #: ../raster/r.report/parse.c:187
 msgid "nsteps has to be > 0; using nsteps=255"
@@ -10125,7 +10125,7 @@ msgstr ""
 
 #: ../raster/r.to.rast3elev/main.c:366
 msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
-msgstr "2차원 고도 및 값 래스터 지도를 기반으로 3차원 볼륨 지도를 생성합니다."
+msgstr "2차원 표고 및 값 래스터 지도를 기반으로 3차원 볼륨 지도를 생성합니다."
 
 #: ../raster/r.to.rast3elev/main.c:400
 msgid "The upper value is not valid"
@@ -10881,7 +10881,7 @@ msgstr ""
 
 #: ../raster/r.slope.aspect/main.c:198
 msgid "Format for reporting the slope"
-msgstr "경사의 보고를 위한 서식"
+msgstr "경사의 보고를 위한 포맷"
 
 #: ../raster/r.slope.aspect/main.c:205
 msgid "Type of output aspect and slope maps"
@@ -11130,7 +11130,7 @@ msgstr ""
 
 #: ../raster/r.in.ascii/gethead.c:218
 msgid "error in ascii data format"
-msgstr "ASCII 자료 서식 내에 오류"
+msgstr "ASCII 자료 포맷 내에 오류"
 
 #: ../raster/r.in.ascii/gethead.c:248
 #, c-format
@@ -11351,7 +11351,7 @@ msgstr ""
 #: ../raster/r.watershed/seg/dseg_open.c:32
 #: ../raster/r.watershed/seg/cseg_open.c:31
 msgid "Illegal parameters are passed"
-msgstr ""
+msgstr "잘못된 매개변수가 전달됐습니다"
 
 #: ../raster/r.stream.extract/cseg.c:33 ../raster/r.stream.extract/dseg.c:33
 #: ../raster/r.stream.extract/bseg.c:33 ../raster/r.stream.extract/seg.c:34
@@ -11720,7 +11720,7 @@ msgstr ""
 
 #: ../raster/r.fill.dir/main.c:117
 msgid "Aspect direction format"
-msgstr ""
+msgstr "향 방향 포맷"
 
 #: ../raster/r.fill.dir/main.c:123
 msgid "Find unresolved areas only"
@@ -11754,7 +11754,7 @@ msgstr ""
 #: ../raster/r.fill.dir/wtrshed.c:95
 #, c-format
 msgid "Watershed pass %d"
-msgstr ""
+msgstr "유역 패스 %d"
 
 #: ../raster/r.fill.dir/resolve.c:136
 #, c-format
@@ -12406,7 +12406,7 @@ msgstr ""
 #: ../vector/v.in.lidar/projection.c:111 ../vector/v.in.pdal/projection.c:110
 #: ../vector/v.in.pdal/projection.c:156 ../vector/v.in.pdal/projection.c:189
 msgid "Unable to convert input map projection information to GRASS format for checking"
-msgstr "검사를 위해 입력 지도의 투영 정보를 GRASS 서식으로 변환할 수 없습니다"
+msgstr "검사를 위해 입력 지도의 투영 정보를 GRASS 포맷으로 변환할 수 없습니다"
 
 #: ../raster/r.in.lidar/projection.c:128 ../raster/r.in.gdal/proj.c:144
 #: ../raster/r.external/proj.c:144 ../raster3d/r3.in.lidar/projection.c:130
@@ -13035,7 +13035,7 @@ msgstr ""
 #: ../raster/r.out.gdal/main.c:52
 #, c-format
 msgid "Supported formats:\n"
-msgstr "지원되는 서식:\n"
+msgstr "지원되는 포맷:\n"
 
 #: ../raster/r.out.gdal/main.c:138
 msgid "Exports GRASS raster maps into GDAL supported formats."
@@ -13043,7 +13043,7 @@ msgstr ""
 
 #: ../raster/r.out.gdal/main.c:144
 msgid "List supported output formats"
-msgstr ""
+msgstr "지원되는 포맷을 나열합니다"
 
 #: ../raster/r.out.gdal/main.c:150
 msgid "Do not write GDAL standard colortable"
@@ -14178,7 +14178,7 @@ msgstr ""
 #: ../raster/r.in.bin/main.c:410
 #, c-format
 msgid "Option %s must be > 0"
-msgstr ""
+msgstr "옵션 %s는 0보다 커야합니다"
 
 #: ../raster/r.in.bin/main.c:413
 #, c-format
@@ -14525,7 +14525,7 @@ msgstr ""
 
 #: ../raster/r.tile/main.c:55
 msgid "Output base name"
-msgstr "출력 기본이름"
+msgstr "출력 기반 이름"
 
 #: ../raster/r.tile/main.c:62
 msgid "Width of tiles (columns)"
@@ -15186,7 +15186,7 @@ msgstr "결과 테이블:"
 #: ../vector/v.surf.bspline/crosscorr.c:324
 #, c-format
 msgid "    lambda |       mean |        rms |\n"
-msgstr ""
+msgstr "    lambda |       mean |        rms |\n"
 
 #: ../raster/r.resamp.bspline/crosscorr.c:345
 #: ../vector/v.surf.bspline/crosscorr.c:334
@@ -15835,7 +15835,7 @@ msgstr "분절 파일 %s를 생성할 수 없습니다"
 #: ../raster/r.flow/io.c:154
 #, c-format
 msgid "Cannot format segment file %s"
-msgstr "분절 파일 %s에 서식을 적용할 수 없습니다"
+msgstr "분절 파일 %s를 포맷할 수 없습니다"
 
 #: ../raster/r.flow/io.c:160
 #, c-format
@@ -16174,7 +16174,7 @@ msgstr ""
 
 #: ../raster/r.relief/main.c:114
 msgid "Name of input raster (typically elevation) map"
-msgstr ""
+msgstr "입력 래스터(일반적으로 표고) 지도의 이름"
 
 #: ../raster/r.relief/main.c:117
 msgid "Name for output shaded relief map"
@@ -16232,7 +16232,7 @@ msgstr ""
 
 #: ../raster/r.carve/main.c:82
 msgid "Name of input raster elevation map"
-msgstr ""
+msgstr "입력 표고 래스터 지도의 이름"
 
 #: ../raster/r.carve/main.c:87
 msgid "Name of input vector map containing stream(s)"
@@ -16403,7 +16403,7 @@ msgstr ""
 #: ../vector/v.external.out/list.c:102 ../vector/v.out.ogr/list.c:116
 #: ../vector/v.in.ogr/main.c:420 ../vector/v.external/list.c:94
 msgid "Supported formats:"
-msgstr ""
+msgstr "지원되는 포맷:"
 
 #: ../raster/r.in.gdal/main.c:332
 msgid "You have to specify a target location different from output location"
@@ -16523,7 +16523,7 @@ msgstr ""
 #: ../raster/r.external/proj.c:85 ../vector/v.in.lidar/main.c:507
 #: ../vector/v.in.ogr/proj.c:292 ../vector/v.external/proj.c:177
 msgid "Unable to convert input map projection to GRASS format; cannot create new location."
-msgstr "입력 지도의 투영을 GRASS 서식으로 변환할 수 없습니다; 새 로케이션을 생성할 수 없습니다."
+msgstr "입력 지도의 투영을 GRASS 포맷으로 변환할 수 없습니다; 새 로케이션을 생성할 수 없습니다."
 
 #: ../raster/r.in.gdal/main.c:899 ../raster/r.in.gdal/proj.c:91
 #: ../raster/r.external/proj.c:91 ../vector/v.in.lidar/main.c:513
@@ -16881,7 +16881,7 @@ msgstr "행 %d에서 읽기에 실패했습니다"
 
 #: ../raster/r.out.mpeg/main.c:104
 msgid "animation"
-msgstr ""
+msgstr "애니메이션"
 
 #: ../raster/r.out.mpeg/main.c:107
 msgid "Converts raster map series to MPEG movie."
@@ -17318,7 +17318,7 @@ msgstr ""
 
 #: ../raster/r.external/link.c:46
 msgid "Complex types not supported"
-msgstr ""
+msgstr "복소수 유형은 지원하지 않습니다"
 
 #: ../raster/r.external/link.c:56
 #, c-format
@@ -18247,7 +18247,7 @@ msgstr ""
 
 #: ../raster/r.watershed/front/main.c:233
 msgid "Only needed if memory requirements exceed available RAM; see manual on how to calculate memory requirements"
-msgstr ""
+msgstr "메모리 요구 사항이 사용 가능한 RAM을 초과하는 경우에만 필요합니다. 메모리 요구 사항을 계산하는 방법에 대한 설명서를 참고하십시오."
 
 #: ../raster/r.watershed/front/main.c:238
 msgid "Use positive flow accumulation even for likely underestimates"
@@ -18593,7 +18593,7 @@ msgstr ""
 #: ../vector/v.surf.rst/main.c:336 ../vector/v.surf.rst/main.c:344
 #: ../vector/v.surf.rst/main.c:351
 msgid "Parameters"
-msgstr ""
+msgstr "매개변수"
 
 #: ../raster/r.sim/r.sim.sediment/main.c:234
 #: ../raster/r.sim/r.sim.water/main.c:238
@@ -20921,7 +20921,7 @@ msgstr ""
 
 #: ../display/d.vect/main.c:97
 msgid "Display geometry of features"
-msgstr "피쳐의 도형을 보여 줍니다"
+msgstr "피처의 도형을 보여 줍니다"
 
 #: ../display/d.vect/main.c:98
 msgid "Display category numbers of features"
@@ -21114,7 +21114,7 @@ msgstr ""
 
 #: ../display/d.vect/lines.c:121
 msgid "Unable to display features by id, topology not available. Please try to rebuild topology using v.build or v.build.all."
-msgstr "피쳐를 ID별로 보여 줄 수 없습니다, 위상이 유효하지 않습니다. v.build 또는 v.build.all을 이용해서 위상을 복구해 보세요."
+msgstr "피처를 ID별로 보여 줄 수 없습니다, 위상이 유효하지 않습니다. v.build 또는 v.build.all을 이용해서 위상을 복구해 보세요."
 
 #: ../display/d.vect/lines.c:169
 #, c-format
@@ -21171,7 +21171,7 @@ msgstr ""
 
 #: ../display/d.vect/shape.c:201
 msgid "Unable to colorize features, unknown map bounding box"
-msgstr "피쳐에 색을 입힐 수 없습니다, 알려지지 않은 지도의 경계 상자"
+msgstr "피처에 색을 입힐 수 없습니다, 알려지지 않은 지도의 경계 상자"
 
 #: ../display/d.vect/shape.c:338
 #, c-format
@@ -21670,7 +21670,7 @@ msgstr ""
 
 #: ../raster3d/r3.mkdspf/main.c:115
 msgid "Maximum isosurface level"
-msgstr ""
+msgstr "최대 등표면 고도"
 
 #: ../raster3d/r3.mkdspf/main.c:121
 msgid "Positive increment between isosurface levels"
@@ -22010,7 +22010,7 @@ msgstr ""
 
 #: ../raster3d/r3.timestamp/main.c:91
 msgid "Timestamp format is invalid"
-msgstr "타임스탬프의 서식이 잘못됐습니다"
+msgstr "타임스탬프의 포맷이 무효합니다"
 
 #: ../raster3d/r3.in.bin/main.c:73
 msgid "Error reading binary data"
@@ -22360,7 +22360,7 @@ msgstr ""
 #: ../raster3d/r3.in.ascii/main.c:221
 #, c-format
 msgid "Unsupported GRASS version %s"
-msgstr ""
+msgstr "지원되지 않는 GRASS 버전 %s"
 
 #: ../raster3d/r3.in.ascii/main.c:265
 #, c-format
@@ -22507,7 +22507,7 @@ msgstr "GRASS libgis의 버전과 날짜 번호를 결정할 수 없습니다. G
 
 #: ../general/g.version/main.c:183
 msgid "GRASS GIS libgis version and date number don't have the expected format. Trying to print the original strings..."
-msgstr "GRASS GIS libgis 버전과 날짜 번호가 예상치 못 했던 서식을 가지고 있습니다. 원래 문자열의 출력을 시도하는 중입니다..."
+msgstr "GRASS GIS libgis 버전과 날짜 번호가 예상치 못 했던 포맷을 가지고 있습니다. 원래 문자열의 출력을 시도하는 중입니다..."
 
 #: ../general/g.version/main.c:185
 #, c-format
@@ -22571,7 +22571,7 @@ msgstr "줄 %2$d에 알려지지 않은 규칙 유형 \"%1$s\"\n"
 
 #: ../general/g.parser/main.c:74
 msgid "Usage"
-msgstr ""
+msgstr "사용법"
 
 #: ../general/g.parser/main.c:84
 msgid "Unable to open script file"
@@ -22597,7 +22597,7 @@ msgstr ""
 #: ../general/g.parser/parse.c:22
 #, c-format
 msgid "Unknown boolean value \"%s\" at line %d\n"
-msgstr "줄 %2$d에 알려지지 않은 불린값 \"%1$s\"\n"
+msgstr "줄 %2$d에 알려지지 않은 불리언값 \"%1$s\"\n"
 
 #: ../general/g.parser/parse.c:70
 #, c-format
@@ -22687,7 +22687,7 @@ msgstr "지도세트를 포함한 완전한 지도 이름을 출력합니다"
 
 #: ../general/g.list/main.c:147
 msgid "Pretty printing in human readable format"
-msgstr "사람이 읽기 쉬운 서식으로 출력합니다"
+msgstr "사람이 읽기 쉬운 포맷으로 출력합니다"
 
 #: ../general/g.list/main.c:152
 msgid "Verbose listing (also list map titles)"
@@ -23336,7 +23336,7 @@ msgstr ""
 #: ../general/g.proj/main.c:129 ../general/g.proj/main.c:138
 #: ../general/g.proj/main.c:148 ../general/g.proj/main.c:158
 msgid "Specification"
-msgstr ""
+msgstr "사양"
 
 #: ../general/g.proj/main.c:130
 msgid "Name of georeferenced data file to read projection information from"
@@ -23486,7 +23486,7 @@ msgstr ""
 
 #: ../general/g.proj/create.c:72
 msgid "Projection information updated"
-msgstr ""
+msgstr "투영 정보가 갱신되었습니다"
 
 #: ../general/g.mapset/main.c:51
 msgid "Changes/reports current mapset."
@@ -25574,7 +25574,7 @@ msgstr ""
 
 #: ../imagery/i.topo.corr/main.c:66
 msgid "Name of input base raster map (elevation or illumination)"
-msgstr ""
+msgstr "입력 기반 래스터 지도의 이름 (표고 또는 조도)"
 
 #: ../imagery/i.topo.corr/main.c:72
 msgid "Solar zenith in degrees"
@@ -26462,7 +26462,7 @@ msgstr ""
 
 #: ../imagery/i.landsat.acca/main.c:112 ../imagery/i.landsat.toar/main.c:82
 msgid "Base name of input raster bands"
-msgstr "입력 래스터 밴드의 기본 이름"
+msgstr "입력 래스터 밴드의 기반 이름"
 
 #: ../imagery/i.landsat.acca/main.c:113 ../imagery/i.landsat.toar/main.c:83
 msgid "Example: 'B.' for B.1, B.2, ..."
@@ -27628,7 +27628,7 @@ msgstr ""
 
 #: ../imagery/i.evapo.pm/main.c:65
 msgid "Name of input elevation raster map [m a.s.l.]"
-msgstr ""
+msgstr "입력 표고 래스터 지도의 이름 [해발]"
 
 #: ../imagery/i.evapo.pm/main.c:69
 msgid "Name of input temperature raster map [C]"
@@ -27822,7 +27822,7 @@ msgstr ""
 #: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:249
 #, c-format
 msgid "Bad format in camera file for group <%s>"
-msgstr "그룹 <%s>를 위한 카메라 파일 내에 잘못된 서식"
+msgstr "그룹 <%s>를 위한 카메라 파일 내에 잘못된 포맷"
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:255
 #, c-format
@@ -27837,7 +27837,7 @@ msgstr ""
 #: ../imagery/i.ortho.photo/i.ortho.rectify/exec.c:47
 #: ../imagery/i.ortho.photo/i.ortho.rectify/angle.c:50
 msgid "Could not open elevation raster"
-msgstr "고도 래스터를 열 수 없었습니다"
+msgstr "표고 래스터를 열 수 없었습니다"
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/angle.c:36
 msgid "Calculating camera angle to local surface..."
@@ -28285,7 +28285,7 @@ msgstr ""
 
 #: ../misc/m.nviz.image/main.c:246
 msgid "Unsupported output format"
-msgstr ""
+msgstr "지원되지 않는 출력 포맷"
 
 #: ../misc/m.nviz.image/cplane.c:40
 #, c-format
@@ -28320,7 +28320,7 @@ msgstr ""
 
 #: ../misc/m.nviz.image/args.c:132
 msgid "Name of raster map(s) for elevation"
-msgstr "고도 래스터 지도의 이름"
+msgstr "표고를 위한 래스터 지도의 이름"
 
 #: ../misc/m.nviz.image/args.c:142
 msgid "Constant elevation value(s) to use instead of a raster DEM"
@@ -28824,7 +28824,7 @@ msgstr ""
 
 #: ../misc/m.nviz.script/main.c:75
 msgid "Creates fly-through script to run in NVIZ."
-msgstr ""
+msgstr "NVIZ에서 실행하는 비행 경로(fly-through) 스크립트를 작성합니다."
 
 #: ../misc/m.nviz.script/main.c:80
 msgid "Name of output script"
@@ -29552,7 +29552,7 @@ msgstr ""
 #: ../db/drivers/postgres/describe.c:140
 #, c-format
 msgid "column '%s' : type bool (boolean) is stored as char(1), values: 0 (false), 1 (true)"
-msgstr ""
+msgstr "'%s' 열: 불 유형(boolean)은 char(1)으로 저장됩니다, 값: 0(거짓), 1(참)"
 
 #: ../db/drivers/postgres/cursor.c:41 ../db/drivers/mysql/cursor.c:44
 msgid "Unable allocate cursor."
@@ -29589,7 +29589,7 @@ msgstr "타임스탬프를 스캔할 수 없습니다 (충분하지 못 한 인�
 
 #: ../db/drivers/postgres/fetch.c:188
 msgid "Unable to recognize boolean value"
-msgstr "불린 값을 인식할 수 없습니다"
+msgstr "불리언값을 인식할 수 없습니다"
 
 #: ../db/drivers/postgres/fetch.c:206
 msgid "Taken not found"
@@ -29677,7 +29677,7 @@ msgstr ""
 
 #: ../db/drivers/mysql/fetch.c:200
 msgid "Unknown timestamp format: "
-msgstr "알려지지 않은 타임스탬프 서식:"
+msgstr "알려지지 않은 타임스탬프 포맷:"
 
 #: ../db/drivers/mysql/fetch.c:215
 msgid "Unable to scan date: "
@@ -30389,7 +30389,7 @@ msgstr "알려지지 않은 옵션 '%s'"
 #: ../vector/v.colors.out/scan_cats.c:28 ../vector/v.to.db/lines.c:75
 #: ../vector/v.to.db/query.c:23
 msgid "Reading features..."
-msgstr "피쳐를 읽는 중입니다..."
+msgstr "피처를 읽는 중입니다..."
 
 #: ../vector/v.to.rast/do_lines.c:59 ../vector/v.to.rast/do_lines.c:67
 #: ../vector/v.to.rast3/main.c:145
@@ -30744,7 +30744,7 @@ msgstr ""
 
 #: ../vector/v.out.ogr/main.c:190
 msgid "Unable to determine input map's vector feature type(s)."
-msgstr "입력 지도의 벡터 피쳐 유형을 결정할 수 없습니다"
+msgstr "입력 지도의 벡터 피처 유형을 결정할 수 없습니다"
 
 #: ../vector/v.out.ogr/main.c:255
 msgid "The combination of types is not supported by all formats."
@@ -30752,7 +30752,7 @@ msgstr ""
 
 #: ../vector/v.out.ogr/main.c:272
 msgid "Unable to create OGR spatial reference"
-msgstr ""
+msgstr "OGR 공간 참조를 생성할 수 없습니다"
 
 #: ../vector/v.out.ogr/main.c:294
 #, c-format
@@ -31093,13 +31093,13 @@ msgstr ""
 #: ../vector/v.out.ogr/export_areas.c:170
 #, c-format
 msgid "Unable to export multi-features. No category index for layer %d."
-msgstr "멀티피쳐를 내보낼 수 없습니다. 레이어 %d를 위한 범주 색인이 없습니다."
+msgstr "멀티피처를 내보낼 수 없습니다. 레이어 %d를 위한 범주 색인이 없습니다."
 
 #: ../vector/v.out.ogr/export_lines.c:214
 #: ../vector/v.out.ogr/export_areas.c:203
 #, c-format
 msgid "Unable to create multi-feature. Category %d not found in line %d, field %d"
-msgstr "다중 피쳐를 생성할 수 없습니다. 범주 %d를 줄 %d, 필드 %d에서 찾을 수 없습니다"
+msgstr "다중 피처를 생성할 수 없습니다. 범주 %d를 줄 %d, 필드 %d에서 찾을 수 없습니다"
 
 #: ../vector/v.out.ogr/export_areas.c:181
 msgid "Exporting features with category..."
@@ -31357,7 +31357,7 @@ msgstr ""
 
 #: ../vector/v.clean/main.c:98
 msgid "remove duplicate geometry features (pay attention to categories!)"
-msgstr "중복된 지형 피쳐를 제거합니다 (범주를 주의하세요!)"
+msgstr "중복된 지형 피처를 제거합니다 (범주를 주의하세요!)"
 
 #: ../vector/v.clean/main.c:99
 msgid "remove dangles, threshold ignored if < 0"
@@ -31385,7 +31385,7 @@ msgstr "중복된 면 도심을 제거합니다 ('type' 옵션은 무시)"
 
 #: ../vector/v.clean/main.c:107
 msgid "break (topologically clean) polygons (imported from non topological format, like ShapeFile). Boundaries are broken on each point shared between 2 and more polygons where angles of segments are different"
-msgstr "(Shapefile 같이 비위상 서식에서 가져온 위상에 결점이 없는) 다각형을 분해합니다. 분절의 각도가 다른 2개 이상의 다각형 사이에 공유된 각 점에서 경계를 나눕니다."
+msgstr "(Shapefile같이 비위상 포맷에서 가져온 위상에 결점이 없는) 다각형을 분해합니다. 분절의 각도가 다른 2개 이상의 다각형 사이에 공유된 각 점에서 경계를 나눕니다."
 
 #: ../vector/v.clean/main.c:110
 msgid "remove vertices in threshold from lines and boundaries, boundary is pruned only if topology is not damaged (new intersection, changed attachment of centroid), first and last segment of the boundary is never changed"
@@ -31494,7 +31494,7 @@ msgstr "길이가 0인 모든 선 또는 경계를 제거합니다"
 
 #: ../vector/v.clean/main.c:314
 msgid "Topological cleaning works best with native GRASS vector format"
-msgstr "위상 정리는 GRASS 고유 벡터 서식에 가장 적합합니다"
+msgstr "위상 정리는 GRASS 고유 벡터 포맷에 가장 적합합니다"
 
 #: ../vector/v.clean/main.c:325
 msgid "Failed to copy attribute table to output vector map"
@@ -32412,7 +32412,7 @@ msgstr ""
 #, c-format
 msgid "%d error in <%s> option"
 msgid_plural "%d errors in <%s> option"
-msgstr[0] ""
+msgstr[0] "<%2$s> 옵션 내에 %1$s개의 오류"
 
 #: ../vector/v.out.ascii/main.c:141
 msgid "dig_att file already exist"
@@ -32563,7 +32563,7 @@ msgstr ""
 #: ../vector/v.cluster/main.c:304 ../vector/v.cluster/main.c:509
 #, c-format
 msgid "Min: %g, max: %g"
-msgstr ""
+msgstr "최소: %g, 최대: %g"
 
 #: ../vector/v.cluster/main.c:305 ../vector/v.cluster/main.c:510
 #, c-format
@@ -34087,7 +34087,7 @@ msgstr ""
 
 #: ../vector/v.select/args.c:51
 msgid "A feature is written to output if the result of operation 'ainput operator binput' is true. An input feature is considered to be true, if category of given layer is defined."
-msgstr ""
+msgstr "연산 'ainput operator binput'의 결과가 참이면 피처를 기록합니다. 주어진 레이어의 카테고리가 정의된 경우, 입력 피처를 참값으로 간주합니다."
 
 #: ../vector/v.select/args.c:59 ../vector/v.select/args.c:75
 msgid "features partially or completely overlap"
@@ -34980,7 +34980,7 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:1929
 #, c-format
 msgid "The snapping threshold %g might be too large."
-msgstr ""
+msgstr "스냅핑 임계값 %g이 너무 클 지도 모릅니다."
 
 #: ../vector/v.in.ogr/main.c:1932
 msgid "Try to reduce the snapping threshold or clean the output manually."
@@ -35431,7 +35431,7 @@ msgstr ""
 #: ../vector/v.overlay/main.c:195
 #, c-format
 msgid "Unable to determine feature type for <%s>"
-msgstr "<%s>를 위한 피쳐 유형을 결정할 수 없습니다"
+msgstr "<%s>를 위한 피처 유형을 결정할 수 없습니다"
 
 #: ../vector/v.overlay/main.c:201
 #, c-format
@@ -35446,7 +35446,7 @@ msgstr ""
 #: ../vector/v.overlay/main.c:264
 #, c-format
 msgid "Copying vector features from <%s>..."
-msgstr "<%s>로부터 벡터 피쳐를 복사하는 중입니다..."
+msgstr "<%s>로부터 벡터 피처를 복사하는 중입니다..."
 
 #: ../vector/v.overlay/main.c:345
 #, c-format
@@ -36737,7 +36737,7 @@ msgstr ""
 
 #: ../vector/v.in.db/main.c:235 ../vector/v.voronoi/main.c:322
 msgid "Writing features..."
-msgstr "피쳐를 쓰고 있습니다..."
+msgstr "피처를 쓰고 있습니다..."
 
 #: ../vector/v.in.db/main.c:243
 msgid "Key column must be integer"
@@ -36745,7 +36745,7 @@ msgstr ""
 
 #: ../vector/v.in.db/main.c:256
 msgid "x/y/z column must be integer or double"
-msgstr ""
+msgstr "x/y/z 열은 정수형 또는 배정도 실수형이어야 합니다. "
 
 #: ../vector/v.in.db/main.c:288
 msgid "Unable to copy table"
@@ -37017,7 +37017,7 @@ msgstr ""
 
 #: ../vector/v.out.pov/main.c:49
 msgid "Converts GRASS x,y,z points to POV-Ray x,z,y format."
-msgstr ""
+msgstr "GRASS x,y,z 점을 POV-Ray x,y,z 포맷으로 변환합니다"
 
 #: ../vector/v.out.pov/main.c:60
 msgid "Name for output POV file"
@@ -37051,7 +37051,7 @@ msgstr ""
 #, c-format
 msgid "%d feature written."
 msgid_plural "%d features written."
-msgstr[0] "%d개의 피쳐를 썼습니다."
+msgstr[0] "%d개의 피처를 썼습니다."
 
 #: ../vector/v.to.points/main.c:61
 msgid "Creates points along input lines in new vector map with 2 layers."
@@ -37494,7 +37494,7 @@ msgstr "검색 지름 %g가 셀의 대각선 %g보다 작습니다: 어떤 점�
 
 #: ../vector/v.split/main.c:56
 msgid "densification"
-msgstr ""
+msgstr "조밀화"
 
 #: ../vector/v.split/main.c:60
 msgid "Splits vector lines to shorter segments."
@@ -38178,7 +38178,7 @@ msgstr ""
 
 #: ../vector/v.what/main.c:105
 msgid "Print the stats in JSON"
-msgstr "통계를 JSON 양식으로 출력"
+msgstr "통계를 JSON 포맷으로 출력합니다"
 
 #: ../vector/v.what/main.c:110
 msgid "Print multiple features if overlapping features are found"
@@ -38201,7 +38201,7 @@ msgstr ""
 #: ../vector/v.what/main.c:202
 #, c-format
 msgid "Unknown input format, skipping: '%s'"
-msgstr "알려지지 않은 입력 서식, 건너뜁니다: '%s'"
+msgstr "알려지지 않은 입력 포맷, 건너뜁니다: '%s'"
 
 #: ../vector/v.outlier/main.c:75
 msgid "Removes outliers from vector point data."
@@ -38756,11 +38756,11 @@ msgstr ""
 
 #: ../vector/v.edit/main.c:215
 msgid "Selecting features..."
-msgstr "피쳐를 선택하는 중입니다..."
+msgstr "피처를 선택하는 중입니다..."
 
 #: ../vector/v.edit/main.c:227
 msgid "No features selected, nothing to edit"
-msgstr "어떤 피쳐도 선택하지 않았으므로 수정할 것이 없습니다"
+msgstr "어떤 피처도 선택하지 않았으므로 수정할 것이 없습니다"
 
 #: ../vector/v.edit/main.c:235
 #, c-format
@@ -38791,7 +38791,7 @@ msgstr[0] ""
 #, c-format
 msgid "%d feature deleted"
 msgid_plural "%d features deleted"
-msgstr[0] "%d개의 피쳐를 삭제했습니다"
+msgstr[0] "%d개의 피처를 삭제했습니다"
 
 #: ../vector/v.edit/main.c:317
 #, c-format
@@ -38879,7 +38879,7 @@ msgstr[0] ""
 
 #: ../vector/v.edit/main.c:471
 msgid "No feature modified"
-msgstr ""
+msgstr "어떤 피처도 수정되지 않았습니다"
 
 #: ../vector/v.edit/main.c:478
 #, c-format
@@ -38914,7 +38914,7 @@ msgstr ""
 
 #: ../vector/v.edit/args.c:63
 msgid "Delete selected features from vector map"
-msgstr "벡터 지도로부터 선택된 피쳐를 삭제합니다"
+msgstr "벡터 지도로부터 선택된 피처를 삭제합니다"
 
 #: ../vector/v.edit/args.c:64
 msgid "Move selected features in vector map"
@@ -38950,7 +38950,7 @@ msgstr ""
 
 #: ../vector/v.edit/args.c:73
 msgid "Delete categories from selected vector features for defined layer"
-msgstr "정의된 레이어를 위한 선택된 벡터 피쳐로부터 범주를 삭제합니다"
+msgstr "정의된 레이어를 위한 선택된 벡터 피처로부터 범주를 삭제합니다"
 
 #: ../vector/v.edit/args.c:75
 msgid "Copy selected features"
@@ -39120,7 +39120,7 @@ msgstr "질의를 위한 임계값은 %.2f입니다"
 #, c-format
 msgid "%d of %d feature selected from vector map <%s>"
 msgid_plural "%d of %d features selected from vector map <%s>"
-msgstr[0] "벡터지도 <%3$s>에서 %2$d개 중 %1$d개의 피쳐를 선택했습니다"
+msgstr[0] "벡터지도 <%3$s>에서 %2$d개 중 %1$d개의 피처를 선택했습니다"
 
 #: ../vector/v.edit/select.c:496
 msgid "Layer must be > 0 for 'where'"
@@ -39191,15 +39191,15 @@ msgstr "드라이버 <%s>를 열 수 없습니다"
 
 #: ../vector/v.info/print.c:317
 msgid "Name:"
-msgstr ""
+msgstr "이름:"
 
 #: ../vector/v.info/print.c:320
 msgid "Mapset:"
-msgstr ""
+msgstr "지도세트:"
 
 #: ../vector/v.info/print.c:324
 msgid "Location:"
-msgstr ""
+msgstr "로케이션:"
 
 #: ../vector/v.info/print.c:327
 msgid "Database:"
@@ -39207,36 +39207,36 @@ msgstr "데이터베이스:"
 
 #: ../vector/v.info/print.c:331
 msgid "Title:"
-msgstr ""
+msgstr "제목:"
 
 #: ../vector/v.info/print.c:334
 msgid "Map scale:"
-msgstr ""
+msgstr "지도 축척:"
 
 #: ../vector/v.info/print.c:338
 msgid "Name of creator:"
-msgstr ""
+msgstr "제작자 이름:"
 
 #: ../vector/v.info/print.c:341
 msgid "Organization:"
-msgstr ""
+msgstr "기관:"
 
 #: ../vector/v.info/print.c:344
 msgid "Source date:"
-msgstr ""
+msgstr "원천 날짜:"
 
 #: ../vector/v.info/print.c:351
 msgid "Timestamp (first layer): "
-msgstr ""
+msgstr "타임스탬프 (첫째 레이어):"
 
 #: ../vector/v.info/print.c:355
 msgid "Timestamp (first layer): none"
-msgstr ""
+msgstr "타임스탬프 (첫째 레이어): 없음"
 
 #: ../vector/v.info/print.c:363 ../vector/v.info/print.c:387
 #: ../vector/v.info/print.c:427
 msgid "Map format:"
-msgstr ""
+msgstr "지도 포맷:"
 
 #: ../vector/v.info/print.c:368
 msgid "OGR layer:"
@@ -39256,7 +39256,7 @@ msgstr ""
 
 #: ../vector/v.info/print.c:395
 msgid "DB name:"
-msgstr ""
+msgstr "DB 이름:"
 
 #: ../vector/v.info/print.c:399
 msgid "Geometry column:"
@@ -39276,7 +39276,7 @@ msgstr ""
 
 #: ../vector/v.info/print.c:436
 msgid "Type of map"
-msgstr ""
+msgstr "지도 유형"
 
 #: ../vector/v.info/print.c:436
 msgid "level"
@@ -39308,7 +39308,7 @@ msgstr ""
 
 #: ../vector/v.info/print.c:465
 msgid "Number of faces:"
-msgstr ""
+msgstr "페이스의 개수:"
 
 #: ../vector/v.info/print.c:467
 msgid "Number of kernels:"
@@ -39915,7 +39915,7 @@ msgstr ""
 
 #: ../vector/v.extract/main.c:414
 msgid "Extracting features..."
-msgstr "피쳐를 추출하고 있습니다..."
+msgstr "피처를 추출하고 있습니다..."
 
 #: ../vector/v.extract/main.c:438
 msgid "Removing duplicate centroids..."
@@ -41042,7 +41042,7 @@ msgstr ""
 
 #: ../vector/v.external/list.c:168
 msgid "No feature tables found in database."
-msgstr "데이터베이스 안에 피쳐 테이블을 찾을 수 없습니다"
+msgstr "데이터베이스 안에 피처 테이블을 찾을 수 없습니다"
 
 #: ../vector/v.external/list.c:179
 #, c-format
@@ -41064,7 +41064,7 @@ msgstr[0] ""
 #: ../vector/v.external/list.c:310
 #, c-format
 msgid "Unable to convert input map projection to GRASS format. Projection check cannot be provided for OGR layer <%s>"
-msgstr "입력 지도의 투영을 GRASS 서식으로 변환할 수 없습니다. OGR 레이어 <%s>를 위한 투영 검사는 제공될 수 없습니다"
+msgstr "입력 지도의 투영을 GRASS 포맷으로 변환할 수 없습니다. OGR 레이어 <%s>를 위한 투영 검사는 제공될 수 없습니다"
 
 #: ../vector/v.external/list.c:326
 #, c-format
@@ -43181,7 +43181,7 @@ msgstr ""
 #. GTC Invalid WFS maximum features parameter
 #: ../scripts/v.in.wfs/v.in.wfs.py:109
 msgid "Invalid maximum number of features"
-msgstr "무효한 최대 피쳐 개수"
+msgstr "무효한 최대 피처 개수"
 
 #. GTC Invalid WFS start index parameter
 #: ../scripts/v.in.wfs/v.in.wfs.py:115
