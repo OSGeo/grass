@@ -231,7 +231,7 @@ class AnimationController(wx.EvtHandler):
         if not found:
             GMessage(
                 parent=self.frame,
-                message=_("Maximum number of animations is %s.") %
+                message=_("Maximum number of animations is %d.") %
                 len(self.animations))
             return
 
