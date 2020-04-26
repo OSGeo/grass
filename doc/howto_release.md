@@ -168,27 +168,9 @@ If RC, then check
 
 ### Packaging of source code tarball
 
-TODO: add checkout of code via release tag (?)
-
 ```bash
-# update again from GH to fetch tag
-#  assumptions:
-#  - own fork as "origin"
-#  - remote repo as "upstream"
-git fetch --all --prune && git checkout releasebranch_7_8 && \
- git merge upstream/releasebranch_7_8 && git push origin releasebranch_7_8
-
-# create source package (in the source directory):
-echo grass-${VERSION}
-
-mkdir grass-${VERSION}
-mv * grass-${VERSION}/
-# create the package:
-tar cvfzh grass-${VERSION}.tar.gz --exclude-vcs grass-${VERSION}/*
-# restore src code location:
-mv ./grass-${VERSION}/* .
-rmdir ./grass-${VERSION}
-# Calculating MD5 sum:
+# fetch tarball from GitHub
+wget https://github.com/OSGeo/grass/archive/${VERSION}.tar.gz -O grass-${VERSION}.tar.gz
 md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 ```
 
