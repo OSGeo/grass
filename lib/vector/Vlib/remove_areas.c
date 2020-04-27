@@ -119,7 +119,7 @@ Vect_remove_small_areas_ext(struct Map_info *Map, double thresh,
 	}
 	G_debug(3, "num neighbours = %d", AList->n_values);
 
-	/* Go through the list of neighours and find that with the longest boundary */
+	/* Go through the list of neighbours and find that with the longest boundary */
 	dissolve_neighbour = 0;
 	length = -1.0;
 	for (i = 0; i < AList->n_values; i++) {
