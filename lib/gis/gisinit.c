@@ -26,9 +26,25 @@
 #include "G.h"
 #include "gis_local_proto.h"
 
+#ifdef GRASS_CMAKE_BUILD
+#include <export/grass_gis_export.h>
+#else
+#define GRASS_GIS_EXPORT
+#endif
 struct G__ G__;
 
-static int initialized = 0; /** Is set when engine is initialized */
+/** initialized is set to 1 when engine is initialized */
+/* GRASS_GIS_EXPORT static int initialized on windows msvc throws below error.
+"Error	C2201	'initialized': must have external linkage in order to be exported/imported"
+So we do an ifndef on msvc. without GRASS_GIS_EXPORT it will be exported in DLL.
+*/
+#ifndef _MSC_VER
+static int initialized = 0;
+#else
+GRASS_GIS_EXPORT int initialized;
+#endif
+
+
 static int gisinit(void);
 
 /*!
