@@ -474,7 +474,7 @@ int region_growing(struct globals *globals)
 				pathflag = FALSE;
 
 			    if (Rk_bestn.id < 0) {
-				G_debug(4, "Rk's best neighour is negative");
+				G_debug(4, "Rk's best neighbour is negative");
 				pathflag = FALSE;
 			    }
 
