@@ -341,11 +341,10 @@ class LocationDownloadPanel(wx.Panel):
         button_sizer.Add(self.download_button, proportion=0)
 
         vertical.Add(button_sizer, proportion=0,
-                     flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT | wx.ALIGN_RIGHT, border=10)
+                     flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border=10)
         vertical.AddStretchSpacer()
         vertical.Add(self.message, proportion=0,
-                     flag=wx.ALIGN_CENTER_VERTICAL |
-                     wx.ALIGN_LEFT | wx.ALL | wx.EXPAND, border=10)
+                     flag=wx.ALIGN_LEFT | wx.ALL | wx.EXPAND, border=10)
 
         self.SetSizer(vertical)
         vertical.Fit(self)
