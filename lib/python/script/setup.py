@@ -99,6 +99,8 @@ for details.
 import os
 import sys
 import tempfile as tmpfile
+import gettext
+_ = gettext.translation('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale')).gettext
 
 
 windows = sys.platform == 'win32'
