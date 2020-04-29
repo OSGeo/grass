@@ -127,7 +127,7 @@ class PreferencesBaseDialog(wx.Dialog):
         mainSizer.Add(btnSizer, proportion=0,
                       flag=wx.EXPAND, border=0)
         mainSizer.Add(btnStdSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
+                      flag=wx.EXPAND | wx.ALL, border=5)
 
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)

@@ -258,7 +258,7 @@ class ModelSearchDialog(wx.Dialog):
         mainSizer.Add(labelSizer, proportion=1,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border=3)
         mainSizer.Add(btnSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+                      flag=wx.EXPAND | wx.ALL, border=5)
 
         self.panel.SetSizer(mainSizer)
         mainSizer.Fit(self)

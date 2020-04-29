@@ -1106,18 +1106,18 @@ class SearchModuleWidget(wx.Panel):
         boxSizer = wx.BoxSizer(wx.VERTICAL)
 
         boxSizer.Add(self._search,
-                     flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND | wx.BOTTOM,
+                     flag=wx.EXPAND | wx.BOTTOM,
                      border=5)
         if self._showChoice:
             hSizer = wx.BoxSizer(wx.HORIZONTAL)
             hSizer.Add(self._searchChoice,
-                       flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND | wx.BOTTOM,
+                       flag=wx.EXPAND | wx.BOTTOM,
                        border=5)
             hSizer.AddStretchSpacer()
             boxSizer.Add(hSizer, flag=wx.EXPAND)
         if self._showTip:
             boxSizer.Add(self._searchTip,
-                         flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
+                         flag=wx.EXPAND)
 
         sizer.Add(boxSizer, proportion=1)
 

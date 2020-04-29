@@ -825,7 +825,7 @@ class HelpPanel(wx.Panel):
                      flag=wx.ALL, border=5)
         btnSizer.Add(wx.Size(1, 1), proportion=1)
         btnSizer.Add(self.btnNext, proportion=0,
-                     flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
+                     flag=wx.ALL, border=5)
 
         sizer.Add(self.content, proportion=1,
                   flag=wx.EXPAND)

@@ -490,7 +490,7 @@ class PsmapDialog(Dialog):
             flag=wx.EXPAND | wx.ALL,
             border=5)
         mainSizer.Add(btnSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+                      flag=wx.EXPAND | wx.ALL, border=5)
 
         self.SetSizer(mainSizer)
         mainSizer.Layout()
@@ -679,7 +679,7 @@ class PageSetupDialog(PsmapDialog):
         mainSizer.Add(
             btnSizer,
             proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT | wx.ALL,
+            flag=wx.ALIGN_RIGHT | wx.ALL,
             border=10)
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
@@ -3573,7 +3573,6 @@ class LegendDialog(PsmapDialog):
         sizer.Add(
             gridBagSizer,
             proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL,
             border=0)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
@@ -3675,7 +3674,7 @@ class LegendDialog(PsmapDialog):
         sizer.Add(
             gridBagSizer,
             proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            flag=wx.EXPAND,
             border=0)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
@@ -3772,7 +3771,6 @@ class LegendDialog(PsmapDialog):
         sizer.Add(
             unitBox,
             proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL,
             border=0)
 
         hBox = wx.BoxSizer(wx.HORIZONTAL)
@@ -5009,7 +5007,6 @@ class ScalebarDialog(PsmapDialog):
         sizer.Add(
             gridBagSizer,
             proportion=1,
-            flag=wx.ALIGN_CENTER_VERTICAL,
             border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
@@ -5824,7 +5821,7 @@ class ImageDialog(PsmapDialog):
         sizer.Add(
             epsInfo,
             proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALL,
             border=3)
 
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
@@ -5940,7 +5937,7 @@ class ImageDialog(PsmapDialog):
         sizer.Add(
             gridBagSizer,
             proportion=1,
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALL,
             border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
@@ -6516,7 +6513,7 @@ class PointDialog(PsmapDialog):
         sizer.Add(
             gridBagSizer,
             proportion=1,
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALL,
             border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 

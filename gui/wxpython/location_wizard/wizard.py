@@ -500,7 +500,6 @@ class ProjectionsPage(TitledPage):
 
         # events
         self.tproj.Bind(wx.EVT_TEXT, self.OnText)
-        self.tproj.Bind(wx.EVT_TEXT_ENTER, self.OnText)
         self.searchb.Bind(wx.EVT_TEXT_ENTER, self.OnSearch)
         self.projlist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
@@ -1039,7 +1038,6 @@ class DatumPage(TitledPage):
         self.datumlist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnDatumSelected)
         self.searchb.Bind(wx.EVT_TEXT_ENTER, self.OnDSearch)
         self.tdatum.Bind(wx.EVT_TEXT, self.OnDText)
-        self.tdatum.Bind(wx.EVT_TEXT_ENTER, self.OnDText)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
@@ -1226,7 +1224,6 @@ class EllipsePage(TitledPage):
         # events
         self.ellipselist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
         self.tellipse.Bind(wx.EVT_TEXT, self.OnText)
-        self.tellipse.Bind(wx.EVT_TEXT_ENTER, self.OnText)
         self.searchb.Bind(wx.EVT_TEXT_ENTER, self.OnSearch)
 
         self.radio1.Bind(
@@ -1557,7 +1554,6 @@ class EPSGPage(TitledPage):
         self.bbrowse.Bind(wx.EVT_BUTTON, self.OnBrowse)
         self.tfile.Bind(wx.EVT_TEXT_ENTER, self.OnBrowseCodes)
         self.tcode.Bind(wx.EVT_TEXT, self.OnText)
-        self.tcode.Bind(wx.EVT_TEXT_ENTER, self.OnText)
         self.epsglist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
         self.searchb.Bind(wx.EVT_TEXT_ENTER, self.OnSearch)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
@@ -1785,7 +1781,6 @@ class IAUPage(TitledPage):
         self.bbrowse.Bind(wx.EVT_BUTTON, self.OnBrowse)
         self.tfile.Bind(wx.EVT_TEXT_ENTER, self.OnBrowseCodes)
         self.tcode.Bind(wx.EVT_TEXT, self.OnText)
-        self.tcode.Bind(wx.EVT_TEXT_ENTER, self.OnText)
         self.epsglist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
         self.searchb.Bind(wx.EVT_TEXT_ENTER, self.OnSearch)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)

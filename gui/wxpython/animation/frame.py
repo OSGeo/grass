@@ -487,7 +487,7 @@ class SimpleAnimationSlider(AnimationSliderBase):
         hbox.Add(
             self.slider,
             proportion=1,
-            flag=wx.ALIGN_CENTER | wx.EXPAND,
+            flag=wx.EXPAND,
             border=0)
         self.SetSizerAndFit(hbox)
 
@@ -541,7 +541,7 @@ class TimeAnimationSlider(AnimationSliderBase):
         hbox.Add(
             self.slider,
             proportion=1,
-            flag=wx.ALIGN_CENTER | wx.EXPAND,
+            flag=wx.EXPAND,
             border=0)
         vbox.Add(hbox, proportion=0, flag=wx.EXPAND, border=0)
 

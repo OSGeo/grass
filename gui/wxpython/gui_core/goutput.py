@@ -230,7 +230,7 @@ class GConsoleWindow(wx.SplitterWindow):
             border=5)
 
         outBtnSizer.Add(self.btnOutputSave, proportion=proportion,
-                        flag=wx.ALIGN_RIGHT | wx.RIGHT | wx.BOTTOM, border=5)
+                        flag=wx.RIGHT | wx.BOTTOM, border=5)
 
         cmdBtnSizer.Add(
             self.btnCmdProtocol,
@@ -265,11 +265,7 @@ class GConsoleWindow(wx.SplitterWindow):
         self.outputSizer.Fit(self)
         self.outputSizer.SetSizeHints(self)
         self.panelOutput.SetSizer(self.outputSizer)
-        # eliminate gtk_widget_size_allocate() warnings
-        # avoid to use a deprecated method in wxPython >= 2.9
-        getattr(self.outputSizer, 'FitInside',
-                self.outputSizer.SetVirtualSizeHints)(self.panelOutput)
-
+        self.outputSizer.FitInside(self.panelOutput)
         if self._gcstyle & GC_PROMPT:
             promptSizer.Fit(self)
             promptSizer.SetSizeHints(self)

@@ -502,11 +502,11 @@ class VNETDialog(wx.Dialog):
                               flag=wx.EXPAND | wx.ALL)
 
             selSizer.Add(selFiledSizer, proportion=0,
-                         flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER_VERTICAL,
+                         flag=wx.EXPAND | wx.ALL,
                          border=5)
         else:
             selSizer.Add(sel, proportion=1,
-                         flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER_VERTICAL,
+                         flag=wx.EXPAND | wx.ALL,
                          border=5)
         return selSizer
 

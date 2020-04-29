@@ -167,9 +167,9 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(listSizer, proportion=1,
-                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+                      flag=wx.EXPAND | wx.ALL, border=5)
         mainSizer.Add(addSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALIGN_CENTER |
+                      flag=wx.EXPAND |
                       wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
         fidSizer = wx.BoxSizer(wx.HORIZONTAL)
         fidSizer.Add(StaticText(parent=self, id=wx.ID_ANY,
@@ -183,7 +183,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         mainSizer.Add(fidSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL, border=5)
         mainSizer.Add(btnSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+                      flag=wx.EXPAND | wx.ALL, border=5)
 
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
