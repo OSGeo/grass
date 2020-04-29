@@ -377,7 +377,7 @@ class GRASSStartup(wx.Frame):
                            flag=wx.EXPAND | wx.ALL,
                            border=1)
             main_sizer.Add(buttons_sizer, proportion=0,
-                           flag=wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
+                           flag=wx.ALL,
                            border=1)
             for button in buttons:
                 buttons_sizer.Add(button, proportion=0,
@@ -443,15 +443,13 @@ class GRASSStartup(wx.Frame):
                   wx.ALL,
                   border=3)  # image
         sizer.Add(gisdbase_boxsizer, proportion=0,
-                  flag=wx.ALIGN_CENTER_HORIZONTAL |
-                  wx.RIGHT | wx.LEFT | wx.TOP | wx.EXPAND,
+                  flag=wx.RIGHT | wx.LEFT | wx.TOP | wx.EXPAND,
                   border=3)  # GISDBASE setting
 
         # warning/error message
         sizer.Add(self.lmessage,
                   proportion=0,
-                  flag=wx.ALIGN_CENTER_VERTICAL |
-                  wx.ALIGN_LEFT | wx.ALL | wx.EXPAND, border=5)
+                  flag=wx.ALIGN_LEFT | wx.ALL | wx.EXPAND, border=5)
         sizer.Add(location_mapset_sizer, proportion=1,
                   flag=wx.RIGHT | wx.LEFT | wx.EXPAND,
                   border=1)
