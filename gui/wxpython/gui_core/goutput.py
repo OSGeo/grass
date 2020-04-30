@@ -360,7 +360,11 @@ class GConsoleWindow(wx.SplitterWindow):
 
             p2 = self.cmdOutput.GetCurrentPos()
 
-            self.cmdOutput.StartStyling(p1, 0xff)
+            # between wxWidgets 3.0 and 3.1 they dropped mask param
+            try:
+                self.cmdOutput.StartStyling(p1)
+            except TypeError:
+                self.cmdOutput.StartStyling(p1, 0xff)
             self.cmdOutput.SetStyling(p2 - p1, style)
 
         self.cmdOutput.EnsureCaretVisible()
@@ -769,7 +773,10 @@ class GStc(stc.StyledTextCtrl):
         p2 = self.GetCurrentPos()
 
         if p2 >= p1:
-            self.StartStyling(p1, 0xff)
+            try:
+                self.StartStyling(p1)
+            except TypeError:
+                self.StartStyling(p1, 0xff)
 
             if style == 'error':
                 self.SetStyling(p2 - p1, self.StyleError)
