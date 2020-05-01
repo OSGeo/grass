@@ -88,8 +88,9 @@ def main():
 
     # Check for PLY istallation
     try:
-        import ply.lex as lex
-        import ply.yacc as yacc
+        # Intentionally unused imports
+        import ply.lex as lex  # noqa: F401
+        import ply.yacc as yacc  # noqa: F401
     except:
         grass.script.fatal(_("Please install PLY (Lex and Yacc Python implementation) to use the temporal algebra modules. "
                              "You can use t.rast3d.mapcalc that provides a limited but useful alternative to "

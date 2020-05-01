@@ -55,7 +55,6 @@
 #%end
 
 import grass.script as grass
-import grass.script.raster as raster
 from grass.exceptions import CalledModuleError
 
 ############################################################################
