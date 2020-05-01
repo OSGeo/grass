@@ -149,7 +149,7 @@ def main():
                                                      (sp.get_new_map_instance(None).get_type(),  time,  key))
 
                     # Print the column names if requested
-                    if colhead == True and first == True:
+                    if colhead and first:
                         output = ""
                         count = 0
                         for key in rows[0].keys():

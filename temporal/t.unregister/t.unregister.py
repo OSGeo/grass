@@ -128,7 +128,7 @@ def main():
         map = tgis.dataset_factory(type, mapid)
 
         # Unregister map if in database
-        if map.is_in_db(dbif) == True:
+        if map.is_in_db(dbif):
             # Unregister from a single dataset
             if input:
                 # Collect SQL statements
