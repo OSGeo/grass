@@ -2144,7 +2144,7 @@ class MapsetAccess(wx.Dialog):
         line = wx.StaticLine(parent=self, id=wx.ID_ANY,
                              style=wx.LI_HORIZONTAL)
         sizer.Add(line, proportion=0,
-                  flag=wx.EXPAND | wx.ALIGN_CENTRE | wx.ALL, border=5)
+                  flag=wx.EXPAND | wx.ALL, border=5)
 
         btnsizer = wx.StdDialogButtonSizer()
         okbtn = Button(self, wx.ID_OK)

@@ -213,7 +213,7 @@ class ImportDialog(wx.Dialog):
         dialogSizer.Add(
             btnsizer,
             proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM | wx.ALIGN_RIGHT,
+            flag=wx.BOTTOM | wx.ALIGN_RIGHT,
             border=10)
 
         # dialogSizer.SetSizeHints(self.panel)

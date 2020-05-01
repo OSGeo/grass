@@ -175,7 +175,7 @@ class InstallExtensionWindow(wx.Frame):
         sizer.Add(optionSizer, proportion=0,
                   flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
         sizer.Add(btnSizer, proportion=0,
-                  flag=wx.ALIGN_RIGHT | wx.ALL | wx.EXPAND, border=5)
+                  flag=wx.ALL | wx.EXPAND, border=5)
 
         self.panel.SetSizer(sizer)
         sizer.Fit(self.panel)

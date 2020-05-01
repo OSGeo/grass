@@ -790,7 +790,6 @@ class MapSplitter(wx.SplitterWindow):
     def Init(self):
         self.OnSashChanged(evt=None)
         self.SetMinimumPaneSize(0)
-        self.SetSashSize(self.sashWidthMin)
 
     # def OnMotion(self, event):
     #     w = self.GetSashSize()

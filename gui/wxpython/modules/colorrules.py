@@ -424,7 +424,7 @@ class ColorTable(wx.Frame):
         # layout
         inputSizer.Add(
             self.selectionInput,
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND,
+            flag=wx.ALL | wx.EXPAND,
             border=5)
 
         return inputSizer
@@ -1177,7 +1177,7 @@ class VectorColorTable(ColorTable):
                    flag=wx.ALIGN_CENTER_VERTICAL)
         inputSizer.Add(
             vSizer,
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND,
+            flag=wx.ALL | wx.EXPAND,
             border=5)
         self.colorColumnSizer = vSizer
         return inputSizer
@@ -1242,7 +1242,7 @@ class VectorColorTable(ColorTable):
                                     style=wx.LI_HORIZONTAL), proportion=0,
                       flag=wx.EXPAND | wx.ALL, border=5)
         mainsizer.Add(btnSizer, proportion=0,
-                      flag=wx.ALL | wx.ALIGN_RIGHT | wx.EXPAND, border=5)
+                      flag=wx.ALL | wx.EXPAND, border=5)
 
         self.panel.SetSizer(mainsizer)
         mainsizer.Layout()
