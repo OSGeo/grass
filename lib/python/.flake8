@@ -1,9 +1,5 @@
 [flake8]
 ignore =
-    E262, # inline comment should start with '# '
-    E265, # block comment should start with '# '
-    E266, # too many leading '#' for block comment
-    E502, # the backslash is redundant between brackets
     E711, # comparison to None should be 'if cond is None:'
     E712, # comparison to True should be 'if cond is True:' or 'if cond:'
     E722, # do not use bare 'except'
@@ -11,9 +7,13 @@ ignore =
     F401, # '.reader.BandReferenceReader' imported but unused
     F403, # 'from ctypes import *' used; unable to detect undefined names
     F405, # 'RasterRow' may be undefined, or defined from star imports: ctypes, grass.pygrass.raster, grass.pygrass.vector
-    F821, # undefined name '_'
     F841, # local variable 't0' is assigned to but never used
     W605, # invalid escape sequence '\_'
+    E262, # inline comment should start with '# '
+    E265, # block comment should start with '# '
+    E266, # too many leading '#' for block comment
+    F821, # undefined name '_'
+    E502, # the backslash is redundant between brackets
     W291, # trailing whitespace
     W292, # no newline at end of file
     W293, # blank line contains whitespace
