@@ -12,7 +12,6 @@ ignore =
     F401, # '.reader.BandReferenceReader' imported but unused
     F403, # 'from ctypes import *' used; unable to detect undefined names
     F405, # 'RasterRow' may be undefined, or defined from star imports: ctypes, grass.pygrass.raster, grass.pygrass.vector
-    F811, # redefinition of unused 'utils' from line 26
     F821, # undefined name '_'
     F841, # local variable 't0' is assigned to but never used
     F901, # 'raise NotImplemented' should be 'raise NotImplementedError'

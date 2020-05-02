@@ -23,7 +23,7 @@ from grass.pygrass.raster import *
 import grass.lib.gis as libgis
 from .base import RPCServerBase
 from grass.pygrass.gis.region import Region
-import grass.pygrass.utils as utils
+from grass.pygrass import utils
 import logging
 
 ###############################################################################
@@ -434,7 +434,6 @@ class DataProvider(RPCServerBase):
 
 if __name__ == "__main__":
     import doctest
-    from grass.pygrass import utils
     from grass.pygrass.modules import Module
     Module("g.region", n=40, s=0, e=40, w=0, res=10)
     Module("r.mapcalc", expression="%s = row() + (10 * col())"%(test_raster_name),
