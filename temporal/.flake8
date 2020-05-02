@@ -3,7 +3,6 @@ ignore =
     E265, # block comment should start with '# '
     E266, # too many leading '#' for block comment
     E502, # the backslash is redundant between brackets
-    E722, # do not use bare 'except'
     F821, # undefined name '_'
     F841, # local variable 'column' is assigned to but never used
     W291, # trailing whitespace

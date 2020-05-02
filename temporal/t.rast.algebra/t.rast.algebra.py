@@ -105,7 +105,7 @@ def main():
         # Intentionally unused imports
         import ply.lex as lex  # noqa: F401
         import ply.yacc as yacc  # noqa: F401
-    except:
+    except ImportError:
         grass.script.fatal(_("Please install PLY (Lex and Yacc Python implementation) to use the temporal algebra modules. "
                              "You can use t.rast.mapcalc that provides a limited but useful alternative to "
                              "t.rast.algebra without PLY requirement."))
