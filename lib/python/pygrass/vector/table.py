@@ -31,7 +31,7 @@ from grass.pygrass.vector import sql
 from grass.lib.ctypes_preamble import String
 
 
-if sys.version_info.major == 3:
+if sys.version_info.major >= 3:
     long = int
     unicode = str
 

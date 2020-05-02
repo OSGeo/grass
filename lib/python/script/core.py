@@ -34,7 +34,7 @@ from .utils import KeyValue, parse_key_val, basename, encode, decode
 from grass.exceptions import ScriptError, CalledModuleError
 
 # PY2/PY3 compat
-if sys.version_info.major > 2:
+if sys.version_info.major >= 3:
     unicode = str
 
 # subprocess wrapper that uses shell on Windows
@@ -224,7 +224,7 @@ def shutil_which(cmd, mode=os.F_OK | os.X_OK, path=None):
                     return name
     return None
 
-if sys.version_info.major > 2:
+if sys.version_info.major >= 3:
     shutil_which = shutil.which
 
 # Added because of scripts calling scripts on MS Windows.

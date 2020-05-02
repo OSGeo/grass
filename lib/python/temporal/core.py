@@ -52,7 +52,7 @@ except:
 import atexit
 from datetime import datetime
 
-if sys.version_info.major == 3:
+if sys.version_info.major >= 3:
     long = int
 
 ###############################################################################
