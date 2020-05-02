@@ -3,7 +3,6 @@ ignore =
     E262, # inline comment should start with '# '
     E265, # block comment should start with '# '
     E266, # too many leading '#' for block comment
-    E402, # module level import not at top of file
     E502, # the backslash is redundant between brackets
     E711, # comparison to None should be 'if cond is None:'
     E712, # comparison to True should be 'if cond is True:' or 'if cond:'
@@ -56,6 +55,19 @@ ignore =
     E303, # too many blank lines (3)
     E305, # expected 2 blank lines after class or function definition, found 1
     E401, # multiple imports on one line
+
+per-file-ignores =
+    # C wrappers call libgis.G_gisinit before importing other modules.
+    # TODO: Is this really needed?
+    pygrass/vector/__init__.py: E402,
+    pygrass/raster/__init__.py: E402,
+    pygrass/utils.py: E402,
+    # Current benchmarks/tests are changing sys.path before import.
+    # Possibly, a different approach should be taken there anyway.
+    pygrass/tests/benchmark.py: E402,
+    # Configuration file for Sphinx:
+    # Ignoring import/code mix and line length.
+    docs/conf.py: E402, E501
 
 max-line-length = 88
 exclude =

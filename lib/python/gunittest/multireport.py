@@ -18,17 +18,17 @@ import datetime
 import operator
 from collections import defaultdict, namedtuple
 
-
-# TODO: we should be able to work without matplotlib
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-from matplotlib.dates import date2num
-
 from grass.gunittest.checkers import text_to_keyvalue
 from grass.gunittest.utils import ensure_dir
 from grass.gunittest.reporters import success_to_html_percent
 
+# TODO: we should be able to work without matplotlib
+import matplotlib
+matplotlib.use('Agg')
+# This counts as code already, so silence "import not at top of file".
+# Perhaps in the future, switch_backend() could be used.
+import matplotlib.pyplot as plt  # noqa: E402
+from matplotlib.dates import date2num  # noqa: E402
 
 class TestResultSummary(object):
     def __init__(self):

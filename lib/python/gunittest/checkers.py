@@ -13,6 +13,7 @@ import os
 import sys
 import re
 import doctest
+import hashlib
 
 from grass.script.utils import decode, encode, _get_encoding
 
@@ -554,8 +555,6 @@ def check_text_ellipsis_doctest(reference, actual):
     return checker.check_output(reference, actual,
                                 optionflags=doctest.ELLIPSIS)
 
-
-import hashlib
 
 # optimal size depends on file system and maybe on hasher.block_size
 _BUFFER_SIZE = 2**16
