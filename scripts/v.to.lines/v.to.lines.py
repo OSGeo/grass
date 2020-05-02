@@ -102,7 +102,6 @@ def main():
         grass.fatal(_("Error creating layer 2"))
     try:
         grass.run_command('v.db.addtable', map=input_tmp, layer="2",
-                          columns="left integer,right integer",
                           quiet=quiet)
     except CalledModuleError:
         grass.run_command('g.remove', flags='f', type='vector',

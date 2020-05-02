@@ -148,7 +148,7 @@ def main():
     # modules such as v.what.rast happy: (creates new row for each
     # vector line):
     try:
-        grass.run_command('v.to.db', map=map_name, layer=layer,
+        grass.run_command('v.to.db', overwrite=True, map=map_name, layer=layer,
                           option='cat', column=key, qlayer=layer)
     except CalledModuleError:
         # remove link
