@@ -1,11 +1,12 @@
 How the GRASS Webserver and related infrastructure works
 
 written by M. Neteler
-Last changed: Apr 2020
+Last changed: May 2020
 
 
 Related Wiki documents:
 * https://grass.osgeo.org/wiki/GRASS_Migration_to_OSGeo (historical document)
+
 
 == GRASS Source code repository ==
 
@@ -36,13 +37,15 @@ downloadable_paths = /grass-addons/grass7/*/*,/sandbox/*/*
 Statistics:
 https://trac.osgeo.org/grass/stats/code
 
+
 == GRASS Web server ==
 
 Maintainer: M. Neteler
 
-* https://grass.osgeo.org  (to be replaced in 2020)
+* https://grass.osgeo.org  (to be replaced in 2020, see https://staging.grass.osgeo.org/)
 ** Shared virtual OSGeo machine (osgeo6) hosted at Oregon State University Open Source Lab
    (server: osgeo6.osgeo.osuosl.org)
+** new server 2020: LXD container on osgeo7
 ** OSGeo SAC page: http://wiki.osgeo.org/wiki/SAC_Service_Status
     http://wiki.osgeo.org/index.php/SAC
 ** Login: via OSGeo LDAP, there is a "grass" LDAP group
@@ -53,10 +56,11 @@ Maintainer: M. Neteler
 * Backup:
 ** VERIFY 2010: grass.osgeo.org is backup'ed by OSGeo SAC: http://wiki.osgeo.org/wiki/SAC:Backups
 ** Wiki backup, via rsync to http://josef.fsv.cvut.cz/WIKI/grass-osgeo/index.php/Main_Page
+** new server 2020: LXD container on osgeo7 backup'ed
 
 * Web pages:
-** CMSMS: https://grass.osgeo.org/home/imprint/
-** mirrored from Wroclav university via httrack (tier-1),
+** CMSMS: https://grass.osgeo.org/home/imprint/ (to be phased out in 2020 with hugo solution)
+** OLD mirrored from Wroclav university via httrack (tier-1),
    then offered as rsync mirror (tier-2) to other mirror sites
 ** RSS feed: offered by CMSMS
 
@@ -105,9 +109,11 @@ Maintainer: M. Neteler
 
 Summary: The system should run almost autonomously.
 
+
 == WinGRASS maintenance scripts ==
 
 * https://github.com/landam/wingrass-maintenance-scripts
+
 
 == GRASS Mailing lists ==
 
@@ -158,6 +164,7 @@ Summary: The system should run almost autonomous. An eye must be
 
 Macro for manual pages: https://grasswiki.osgeo.org/wiki/Template:Cmd
 
+
 == GRASS IRC ==
 
 Channel: irc://irc.freenode.net/grass
@@ -173,16 +180,15 @@ Web based client: See http://grasswiki.osgeo.org/wiki/IRC
 
 == GRASS Bugtracker ==
 
-Future bugtracker
-  * https://github.com/OSGeo/grass
+Current bugtracker (Jan 2020 - today):
+  * https://github.com/OSGeo/grass/issues
 
-Current bugtracker (Jan 2008 - today):
+Current bugtracker (Jan 2008 - Jan 2020):
   * https://trac.osgeo.org/grass/report
-  * Trac
   * posts new bugs and comments to grass-dev list
   * Settings:
 
-tracsvn (OSGeo server) (Dec 2007 - 2019)
+Old tracsvn (OSGeo server) (Dec 2007 - Mai 2019)
 /var/www/trac/env/grass/conf/trac.ini
   downloadable_paths = /grass-addons/grass7/*/*,/sandbox/*/*
   path = /var/www/grass/htdocs
@@ -195,13 +201,13 @@ tracsvn (OSGeo server) (Dec 2007 - 2019)
   base_url = https://trac.osgeo.org/grass/
   database = postgres://postgres@/trac_grass
 
-Old bugtracker (Jan 2007 - Dec 2008):
+Very old bugtracker (Jan 2007 - Dec 2008):
   * http://wald.intevation.org/tracker/?group_id=21
   * gforce, sponsored by Intevation GmbH, Germany
   * spamassasin spamfilter locally, bogofilter at grass-dev list
   * needs 'noreply*wald.intevation.org' to be enabled as alias in Mailman
 
-Very old bugtracker (Dec 2000 - Dec 2006):
+Very very old bugtracker (Dec 2000 - Dec 2006):
   * https://intevation.de/rt/webrt?q_queue=grass
   * webRT, sponsored by Intevation GmbH, Germany
   * spamassasin spamfilter locally, bogofilter at grass-dev list
@@ -219,7 +225,7 @@ Details:
 Installed with g.extension
 Manuals: https://grass.osgeo.org/grass7/manuals/addons/
 
-The redirect to the latest directory is defined on grass.osgeo.org:
+The redirect to the latest grass7x directory is defined on grass.osgeo.org:
   /etc/apache2/includes/grass.osgeo.org.inc
 
 Procedure building of binaries (Windows):
@@ -259,9 +265,15 @@ Maintenance script:
 
 The github update is run as a cronjob on server "geo102" (CTU, CZ).
 
-== GRASS GitHub Actions ==
 
-Details: https://github.com/OSGeo/grass/pull/525
+== GRASS CI: GitHub Actions ==
+
+Started Apr. 2020
+
+Maintainer: Vaclav Petras
+
+* https://github.com/OSGeo/grass/actions
+* Details: https://github.com/OSGeo/grass/pull/525
 
 - CI workflow with:
   - A build job which is not parallelized and is meant for clear & relatively fast check of compilation and building in general. (Duplicating what is running on Travis)
@@ -271,6 +283,7 @@ Details: https://github.com/OSGeo/grass/pull/525
   - The other directories use the default settings and the failure is ignored. (Neither is an ideal solution, but we can see and change it based on whatever is more advantageous for getting it fixed.)
 
 Helper files placed to .github/workflows
+
 
 == GRASS Coverity Scan ==
 
