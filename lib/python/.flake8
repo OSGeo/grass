@@ -14,7 +14,6 @@ ignore =
     F405, # 'RasterRow' may be undefined, or defined from star imports: ctypes, grass.pygrass.raster, grass.pygrass.vector
     F821, # undefined name '_'
     F841, # local variable 't0' is assigned to but never used
-    F901, # 'raise NotImplemented' should be 'raise NotImplementedError'
     W605, # invalid escape sequence '\_'
     W291, # trailing whitespace
     W292, # no newline at end of file
