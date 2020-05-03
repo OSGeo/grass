@@ -40,6 +40,8 @@
 #%end
 #%option G_OPT_V_FIELD
 #%end
+#%option G_OPT_V_TYPE
+#%end
 #%option G_OPT_DB_WHERE
 #%end
 #%option G_OPT_R_INPUTS
@@ -102,6 +104,7 @@ def main():
     colprefixes = options['column_prefix'].split(',')
     vector = options['map']
     layer = options['layer']
+    vtypes = options['type']
     where = options['where']
     percentile = options['percentile']
     basecols = options['method'].split(',')
@@ -162,7 +165,7 @@ def main():
             kwargs['flags'] = 'd'
 
         grass.run_command('v.to.rast', input=vector, layer=layer, output=rastertmp,
-                          use='cat', quiet=True, **kwargs)
+                          use='cat', type=vtypes, quiet=True, **kwargs)
     except CalledModuleError:
         grass.fatal(_("An error occurred while converting vector to raster"))
 
