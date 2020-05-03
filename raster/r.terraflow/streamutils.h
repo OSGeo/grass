@@ -96,7 +96,7 @@ void printGridStream(AMI_STREAM<T> *str,
   fstrm << "rows=" << nrows << endl;
   fstrm << "cols=" << ncols << endl;
 
-  assert(str->stream_len() == nrows * ncols);
+  assert(str->stream_len() == (off_t)nrows * ncols);
   str->seek(0);
   for(dimension_type i=0; i<nrows; i++) {
 	for(dimension_type j=0; j<ncols; j++) {
