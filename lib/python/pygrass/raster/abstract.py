@@ -527,7 +527,7 @@ class RasterAbstractBase(object):
         :param point: pair of coordinates in tuple object or class object with coords() method
         """
         # Check for tuple
-        if type(point) != type([]) and type(point) != type(()):
+        if not isinstance(point, list) and not isinstance(point, tuple):
             point = point.coords()
 
         if not region:

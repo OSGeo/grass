@@ -169,12 +169,15 @@ def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
     :returns: None
 
     """
+
+    def rmloc(r):
+        return r.split('@')[0] if '@' in r else r
+
     env = os.environ.copy()
     # instantiate modules
     get_grp = Module('i.group', flags='lg', stdout_=sub.PIPE, run_=False)
     set_grp = Module('i.group')
     get_grp.run_ = True
-    rmloc = lambda r: r.split('@')[0] if '@' in r else r
 
     src = read_gisrc(gisrc_src)
     dst = read_gisrc(gisrc_dst)

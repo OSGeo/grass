@@ -18,7 +18,7 @@ from grass.gunittest.main import test
 from grass.pygrass.vector.table import Table, get_path
 
 
-if sys.version_info.major == 3:
+if sys.version_info.major >= 3:
     long = int
 
 # dictionary that generate random data
