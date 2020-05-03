@@ -90,7 +90,7 @@ from core import globalvar
 from core.gcmd import GMessage, GError
 from core.debug import Debug
 from gui_core.wrap import Button, SearchCtrl, StaticText, StaticBox, \
-    TextCtrl, Menu, Rect, EmptyBitmap, ListCtrl, NewId
+    TextCtrl, Menu, Rect, EmptyBitmap, ListCtrl, NewId, CheckListCtrlMixin
 
 
 class NotebookController:
@@ -935,7 +935,7 @@ class SingleSymbolPanel(wx.Panel):
 
 
 class GListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin,
-                listmix.CheckListCtrlMixin):
+                CheckListCtrlMixin):
     """Generic ListCtrl with popup menu to select/deselect all
     items"""
 
@@ -944,7 +944,7 @@ class GListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin,
 
         ListCtrl.__init__(self, parent, id=wx.ID_ANY,
                              style=wx.LC_REPORT)
-        listmix.CheckListCtrlMixin.__init__(self)
+        CheckListCtrlMixin.__init__(self)
 
         # setup mixins
         listmix.ListCtrlAutoWidthMixin.__init__(self)
@@ -1009,7 +1009,7 @@ class GListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin,
             if item == -1:
                 break
 
-            isChecked = self.IsChecked(item)
+            isChecked = self.IsItemChecked(item)
             if checked is not None and checked != isChecked:
                 continue
 

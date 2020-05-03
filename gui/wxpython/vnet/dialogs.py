@@ -1169,9 +1169,9 @@ class PtsList(PointsList):
         for k, v in six.iteritems(data):
             if k == "use":
 
-                if v and not self.IsChecked(idx):
+                if v and not self.IsItemChecked(idx):
                     self.CheckItem(idx, True)
-                elif not v and self.IsChecked(idx):
+                elif not v and self.IsItemChecked(idx):
                     self.CheckItem(idx, False)
             else:
                 found = 0

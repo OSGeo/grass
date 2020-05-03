@@ -29,7 +29,7 @@ from core.gcmd import RunCommand, GError
 from core.debug import Debug
 from core.settings import UserSettings
 from gui_core.wrap import SpinCtrl, Button, StaticText, \
-    StaticBox, Menu, ListCtrl, NewId
+    StaticBox, Menu, ListCtrl, NewId, CheckListCtrlMixin
 
 
 class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
@@ -768,14 +768,14 @@ class VDigitDuplicatesDialog(wx.Dialog):
             wlist = self.FindWindowById(id)
 
             for item in range(wlist.GetItemCount()):
-                if not wlist.IsChecked(item):
+                if not wlist.IsItemChecked(item):
                     ids.append(int(wlist.GetItem(item, 0).GetText()))
 
         return ids
 
 
 class CheckListFeature(
-        ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCtrlMixin):
+        ListCtrl, listmix.ListCtrlAutoWidthMixin, CheckListCtrlMixin):
 
     def __init__(self, parent, data,
                  pos=wx.DefaultPosition, log=None):
@@ -786,7 +786,7 @@ class CheckListFeature(
 
         ListCtrl.__init__(self, parent, wx.ID_ANY, style=wx.LC_REPORT)
 
-        listmix.CheckListCtrlMixin.__init__(self)
+        CheckListCtrlMixin.__init__(self)
 
         self.log = log
 

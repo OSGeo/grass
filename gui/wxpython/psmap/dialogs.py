@@ -41,7 +41,7 @@ from copy import deepcopy
 
 import wx
 import wx.lib.agw.floatspin as fs
-from wx.lib.mixins.listctrl import CheckListCtrlMixin, ListCtrlAutoWidthMixin
+from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
 
 from core import globalvar
 
@@ -63,7 +63,7 @@ from gui_core.wrap import (
     EmptyBitmap, ExpandoTextCtrl, FileBrowseButton, FloatSpin, ListBox,
     ListCtrl, NewId, Notebook, OwnerDrawnComboBox, Panel, RadioButton,
     Rect, ScrolledPanel, SpinCtrl, StaticBox, StaticText, TextCtrl,
-    TextEntryDialog, EmptyImage
+    TextEntryDialog, EmptyImage, CheckListCtrlMixin
 )
 from psmap.utils import *
 from psmap.instructions import *
@@ -4296,7 +4296,7 @@ class LegendDialog(PsmapDialog):
             # reindex order
             idx = 1
             for item in range(self.vectorListCtrl.GetItemCount()):
-                if self.vectorListCtrl.IsChecked(item):
+                if self.vectorListCtrl.IsItemChecked(item):
                     self.vectorListCtrl.SetItemData(item, idx)
                     idx += 1
                 else:
