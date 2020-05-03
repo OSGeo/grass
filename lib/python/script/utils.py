@@ -27,7 +27,7 @@ import re
 import time
 
 
-if sys.version_info.major == 3:
+if sys.version_info.major >= 3:
     unicode = str
 
 
@@ -334,8 +334,13 @@ def split(s):
 def natural_sort(l):
     """Returns sorted strings using natural sort
     """
-    convert = lambda text: int(text) if text.isdigit() else text.lower()
-    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
+
+    def convert(text):
+        return int(text) if text.isdigit() else text.lower()
+
+    def alphanum_key(key):
+        return [convert(c) for c in re.split('([0-9]+)', key)]
+
     return sorted(l, key=alphanum_key)
 
 

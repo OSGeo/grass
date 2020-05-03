@@ -33,9 +33,6 @@ import os
 import sys
 import grass.script as gscript
 
-if sys.version_info.major == 3:
-    long = int
-
 from .c_libraries_interface import *
 from grass.pygrass import messages
 from grass.script.utils import decode, encode
@@ -54,6 +51,9 @@ except:
 
 import atexit
 from datetime import datetime
+
+if sys.version_info.major >= 3:
+    long = int
 
 ###############################################################################
 

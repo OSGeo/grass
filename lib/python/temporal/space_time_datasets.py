@@ -24,7 +24,7 @@ from .temporal_extent import RasterAbsoluteTime, RasterRelativeTime, Raster3DAbs
     STRDSRelativeTime, STR3DSAbsoluteTime, STR3DSRelativeTime, STVDSAbsoluteTime, STVDSRelativeTime
 import grass.script.array as garray
 from .core import init
-from datetime import datetime
+
 
 ###############################################################################
 

@@ -11,10 +11,6 @@ from __future__ import (nested_scopes, generators, division, absolute_import,
 import os
 import sys
 
-if sys.version_info.major == 3:
-    long = int
-    unicode = str
-
 import ctypes
 import numpy as np
 from sqlite3 import OperationalError
@@ -33,6 +29,12 @@ from grass.script.core import warning
 
 from grass.pygrass.vector import sql
 from grass.lib.ctypes_preamble import String
+
+
+if sys.version_info.major >= 3:
+    long = int
+    unicode = str
+
 
 # For test purposes
 test_vector_name = "table_doctest_map"

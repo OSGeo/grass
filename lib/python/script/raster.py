@@ -29,7 +29,7 @@ from grass.exceptions import CalledModuleError
 from .utils import float_or_dms, parse_key_val, try_remove
 
 
-if sys.version_info.major == 3:
+if sys.version_info.major >= 3:
     unicode = str
 
 

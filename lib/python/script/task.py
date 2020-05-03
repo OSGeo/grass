@@ -21,8 +21,9 @@ import re
 import sys
 import string
 
-if sys.version_info.major == 3:
-    unicode = str
+from .utils import encode, decode, split
+from .core import *
+
 
 try:
     import xml.etree.ElementTree as etree
@@ -36,8 +37,9 @@ if hasattr(etree, 'ParseError'):
 else:
     ETREE_EXCEPTIONS = (expat.ExpatError)
 
-from .utils import encode, decode, split
-from .core import *
+
+if sys.version_info.major >= 3:
+    unicode = str
 
 
 class grassTask:

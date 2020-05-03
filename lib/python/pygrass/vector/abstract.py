@@ -443,6 +443,5 @@ class Info(object):
 
 if __name__ == "__main__":
     import doctest
-    from grass.pygrass import utils
     utils.create_test_vector_map(test_vector_name)
     doctest.testmod()
