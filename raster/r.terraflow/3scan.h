@@ -193,7 +193,7 @@ scan3(AMI_STREAM<T> &amis0,
     l_prev = l_crt;
     l_crt = l_next;
     if (i < nr-2) {
-      ae = amis0.new_substream(AMI_READ_STREAM, (i+2)*nc, (i+3)*nc-1, 
+      ae = amis0.new_substream(AMI_READ_STREAM, (off_t)(i+2)*nc, (off_t)(i+3)*nc-1,
 			      &l_next);
       assert(ae == AMI_ERROR_NO_ERROR);
     } else {
@@ -258,7 +258,7 @@ memoryScan(AMI_STREAM<T> &str,
   str.seek(0);
   
   assert(nrows > 1);
-  assert(nrows * ncols == str.stream_len());
+  assert((off_t)nrows * ncols == str.stream_len());
   buf[0] = new T[ncols+2];
   buf[1] = new T[ncols+2];
   buf[2] = new T[ncols+2];
@@ -310,8 +310,8 @@ memoryScan(AMI_STREAM<T1> &str1, AMI_STREAM<T2> &str2,
   str2.seek(0);
 
   assert(nrows > 1);
-  assert(nrows * ncols == str1.stream_len());
-  assert(nrows * ncols == str2.stream_len());
+  assert((off_t)nrows * ncols == str1.stream_len());
+  assert((off_t)nrows * ncols == str2.stream_len());
   buf1[0] = new T1[ncols+2];
   buf1[1] = new T1[ncols+2];
   buf1[2] = new T1[ncols+2];

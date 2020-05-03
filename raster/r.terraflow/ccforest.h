@@ -139,7 +139,7 @@ public:
   T findNextRoot(const T& i);	/* find root where i >= prev i */
   void printRootStream();
   void printEdgeStream();
-  int size();
+  off_t size();
 };
 
 

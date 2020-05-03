@@ -256,7 +256,7 @@ generateWatersheds(AMI_STREAM<waterWindowType> **waterWindows,
   if (stats)
     stats->comment("generateWatersheds", opt->verbose);
 
-  assert((*waterWindows)->stream_len() == (nrows * ncols));
+  assert((*waterWindows)->stream_len() == ((off_t)nrows * ncols));
 
   WATER_DEBUG cout << "sort waterWindowsStream (by priority): ";
   sort(waterWindows, priorityCmpWaterWindowType());
@@ -273,7 +273,7 @@ generateWatersheds(AMI_STREAM<waterWindowType> **waterWindows,
   if (stats)
     stats->comment("starting generate watersheds main loop", opt->verbose);
   
-  assert((*waterWindows)->stream_len() == (nrows * ncols));
+  assert((*waterWindows)->stream_len() == ((off_t)nrows * ncols));
   /* not really in a grid, so row, col are not valid (but count correct) */
   for(dimension_type row=0; row<nrows; row++) {
     for(dimension_type col=0; col<ncols; col++) {

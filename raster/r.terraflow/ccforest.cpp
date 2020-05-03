@@ -79,8 +79,8 @@ ccforest<T>::~ccforest() {
 /* ---------------------------------------------------------------------- */
 
 template<class T>
-int ccforest<T>::size() {
-  size_t streamLength = edgeStream->stream_len();
+off_t ccforest<T>::size() {
+  off_t streamLength = edgeStream->stream_len();
   return streamLength;
 }
 
@@ -134,11 +134,11 @@ void ccforest<T>::findAllRoots(int depth) {
   EMPQueueAdaptive<cckeyvalue,T> *pq =
 	new EMPQueueAdaptive<cckeyvalue,T>();	/* parent queue */
 
-  size_t streamLength = edgeStream->stream_len();
+  off_t streamLength = edgeStream->stream_len();
   T prevSrc = T(-1);
   T parent = T(-1);
   ccedge prevEdge;
-  for(unsigned int i=0; i<streamLength; i++) {
+  for(off_t i=0; i<streamLength; i++) {
 	ccedge *e;
 	AMI_err ae = edgeStream->read_item(&e);
 	assert(ae == AMI_ERROR_NO_ERROR);

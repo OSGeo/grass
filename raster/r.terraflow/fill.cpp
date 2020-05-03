@@ -275,7 +275,7 @@ computeFlowDirections(AMI_STREAM<elevation_type>*& elstr,
   assert(boundaryStr->stream_len() == 0);
   delete boundaryStr;
   
-  assert(labeledWater->stream_len() == nrows * ncols);
+  assert(labeledWater->stream_len() == (off_t)nrows * ncols);
   rt_stop(rt);
   if (stats)
     stats->recordTime("generating watersheds", rt);
@@ -315,7 +315,7 @@ computeFlowDirections(AMI_STREAM<elevation_type>*& elstr,
   rt_start(rt);
   filledstr = new AMI_STREAM<elevation_type>();
   commit_fill(labeledWater, raise, labelFactory::getLabelCount(), filledstr);
-  assert(filledstr->stream_len() == nrows * ncols);
+  assert(filledstr->stream_len() == (off_t)nrows * ncols);
   delete [] raise;
   rt_stop(rt);
   if (stats) {
@@ -653,9 +653,9 @@ mergeStreamGridGrid(AMI_STREAM<T1> *grid1,
       ae = outStream->write_item(t4);
       assert(ae == AMI_ERROR_NO_ERROR);
     }
-    /*assert(outStream->stream_len() == (row+1) * cols); */
+    /*assert(outStream->stream_len() == (off_t)(row+1) * cols); */
   }
-  assert(outStream->stream_len() == rows * cols);
+  assert(outStream->stream_len() == (off_t)rows * cols);
   return;
 }
 
