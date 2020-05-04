@@ -1663,7 +1663,7 @@ def remove_extension_files(edict, force=False):
             remove_extension_std(name, force)
             removed = False
         
-        if removed == True:
+        if removed is True:
             eremoved.append(name)
     
     return eremoved
