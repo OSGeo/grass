@@ -85,7 +85,7 @@ def main():
         try:
             for fname in ['PROJ_INFO', 'PROJ_UNITS']:
                 f = tar.extractfile(fname)
-                sys.stdout.write(f.read())
+                sys.stdout.write(f.read().decode())
         except KeyError:
             grass.fatal(_("Pack file unreadable: file '{}' missing".format(fname)))
         tar.close()
