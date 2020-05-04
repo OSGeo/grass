@@ -180,14 +180,10 @@ def createvrt(dst, src, nodata=None, region=None, bandlist=None, s_crs=None):
         params["bandList"] = bandlist.replace(",", " ")
 
     if region:
-        print(region)
         params["projWinSRS"] = s_crs
         params["outputSRS"] = s_crs
         params["projWin"] = "{w} {n} {e} {s}".format(**region)
 
-    print(params)
-    print(region)
-    print(gdal.TranslateOptions(**params))
     indata = gdal.Open(src)
     vrt = gdal.Translate(dst, indata, options=gdal.TranslateOptions(**params))
     vrt = None
@@ -308,7 +304,6 @@ def main():
         region = None
         s_crs = None
 
-    print(region)
     if 'r' in region_flag or srcnodata or bands:
         TMP_VRT = grass.tempfile()
         parameters['input'] = TMP_VRT
@@ -316,7 +311,6 @@ def main():
         GDALdatasource, nodata=srcnodata, region=region, bandlist=bands,
         s_crs=s_crs)
     try:
-        print(parameters)
         grass.run_command('r.external', **parameters)
     except CalledModuleError:
         grass.fatal(_("Unable to import GDAL dataset <%s>") % GDALdatasource)
