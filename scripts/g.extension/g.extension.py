@@ -762,7 +762,7 @@ def install_extension(source, url, xmlurl):
             ret1, new_modules_ext, new_files_ext = install_extension_win(extension)
         else:
             ret1, new_modules_ext, new_files_ext, tmp_dir = install_extension_std_platforms(extension,
-                                                   source=source, url=url)
+                                                            source=source, url=url)
         edict[extension]['mlist'].extend(new_modules_ext)
         edict[extension]['flist'].extend(new_files_ext)
         new_modules.extend(new_modules_ext)
@@ -890,7 +890,7 @@ def get_addons_metadata(url, mlist):
         and dictionary with dest, keyw, files keys as value, the second item
         is list of 'binary' files (installation files)
     """
-    
+
     # TODO: extensions with multiple modules
     data = {}
     bin_list = []
@@ -1031,7 +1031,7 @@ def install_module_xml(mlist):
             keywords = gtask.parse_interface(name).keywords
         except Exception as e:
             grass.warning(_("No metadata available for module '%s'.")
-                           % name)
+                          % name)
             continue
 
         tnode = None
@@ -1152,7 +1152,6 @@ def install_extension_win(name):
                     "#!/usr/bin/env python3\n"
                 ), end='')
 
-
     # collect old files
     old_file_list = list()
     for r, d, f in os.walk(options['prefix']):
@@ -1267,7 +1266,7 @@ def fix_newlines(directory):
     """
     # skip binary files
     # see https://stackoverflow.com/a/7392391
-    textchars = bytearray({7,8,9,10,12,13,27} | set(range(0x20, 0x100)) - {0x7f})
+    textchars = bytearray({7, 8, 9, 10, 12, 13, 27} | set(range(0x20, 0x100)) - {0x7f})
 
     def is_binary_string(bytes):
         return bool(bytes.translate(None, textchars))
@@ -1289,6 +1288,7 @@ def fix_newlines(directory):
             if newdata != data:
                 with open(filename, 'wb') as newfile:
                     newfile.write(newdata)
+
 
 def extract_zip(name, directory, tmpdir):
     """Extract a ZIP file into a directory"""
@@ -1343,7 +1343,7 @@ def download_source_code(source, url, name, outdev,
         download_source_code_official_github(url, name, outdev, directory)
     elif source == 'svn':
         download_source_code_svn(url, name, outdev, directory)
-    elif source in ['remote_zip']: # , 'official'
+    elif source in ['remote_zip']:  # , 'official'
         # we expect that the module.zip file is not by chance in the archive
         zip_name = os.path.join(tmpdir, 'extension.zip')
         try:
@@ -1497,7 +1497,7 @@ def install_extension_std_platforms(name, source, url):
 
     grass.message(_("Installing..."))
     ret = grass.call(install_cmd, stdout=outdev)
-    
+
     # collect new files
     file_list = list()
     for r, d, f in os.walk(options['prefix']):
@@ -1585,7 +1585,6 @@ def remove_extension(force=False):
                             bname = fnode.text.strip()
                             edict[ename]['flist'].append(bname)
 
-
     if force:
         grass.verbose(_("List of removed files:"))
     else:
@@ -1632,12 +1631,10 @@ def remove_extension_files(edict, force=False):
             for task in tree.findall('task'):
                 ename = task.get('name').strip()
                 einstalled.append(ename)
-        
     else:
         tree = None
 
     for name in edict:
-        
         removed = True
         if len(edict[name]['flist']) > 0:
             err = list()
@@ -1653,7 +1650,6 @@ def remove_extension_files(edict, force=False):
             if len(err) > 0:
                 for error_line in err:
                     grass.error(error_line)
-
         else:
             if name not in einstalled:
                 # try even if module does not seem to be available,
@@ -1662,17 +1658,17 @@ def remove_extension_files(edict, force=False):
 
             remove_extension_std(name, force)
             removed = False
-        
+
         if removed is True:
             eremoved.append(name)
-    
+
     return eremoved
 
 
 def remove_extension_std(name, force=False):
     """Remove extension/module expecting the standard layout
-    
-    Any images for manuals or files installed in etc will not be 
+
+    Any images for manuals or files installed in etc will not be
     removed
     """
     for fpath in [os.path.join(options['prefix'], 'bin', name),
@@ -1800,7 +1796,7 @@ def check_dirs():
 
 
 def update_manual_page(module):
-    """Fix manual page for addons which are at different directory 
+    """Fix manual page for addons which are at different directory
        than core modules"""
     if module.split('.', 1)[0] == 'wx':
         return  # skip for GUI modules
@@ -2084,7 +2080,6 @@ def resolve_source_code(url=None, name=None):
 
         if not url_validated:
             grass.fatal(_('Cannot open URL: {}'.format(url)))
-
 
     # Handle local URLs
     if os.path.isdir(url):
