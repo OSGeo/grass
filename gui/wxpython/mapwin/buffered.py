@@ -909,8 +909,6 @@ class BufferedMapWindow(MapWindowBase, Window):
         Debug.msg(1, "BufferedWindow.UpdateMap(): started "
                   "(render=%s, renderVector=%s)" % (render, renderVector))
 
-        self.resize = False
-
         # was if self.Map.cmdfile and ...
         if self.IsAlwaysRenderEnabled() and self.img is None:
             render = True
