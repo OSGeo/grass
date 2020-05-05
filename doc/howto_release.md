@@ -161,7 +161,8 @@ To be done in GH interface:
 Tag version | target (examples):
   7.8.1RC1  | releasebranch_7_8
 
-Add release desciption (re-use existing texts as possible)
+Add release desciption (re-use existing texts as possible, from
+<https://github.com/OSGeo/grass/releases>)
 
 If RC, then check
 [x] This is a pre-release
@@ -233,6 +234,8 @@ scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
 # generate link to "latest" source code
 ssh neteler@$SERVER1 "cd $SERVER1DIR ; rm -f grass-$MAJOR.$MINOR-latest.tar.gz"
 ssh neteler@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.gz grass-$MAJOR.$MINOR-latest.tar.gz"
+ssh neteler@$SERVER1 "cd $SERVER1DIR ; rm -f grass-$MAJOR.$MINOR-latest.md5sum"
+ssh neteler@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.gz grass-$MAJOR.$MINOR-latest.md5sum"
 
 # verify
 echo "https://$SERVER1/grass$MAJOR$MINOR/source/"
