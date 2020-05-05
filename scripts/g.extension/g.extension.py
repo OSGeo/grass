@@ -1040,7 +1040,7 @@ def install_module_xml(mlist):
                 tnode = node
                 break
 
-        if tnode == None:
+        if tnode is None:
             # create new node for task
             tnode = etree.Element('task', attrib={'name': name})
             dnode = etree.Element('description')
@@ -1175,7 +1175,7 @@ def install_extension_win(name):
 
 
 def download_source_code_svn(url, name, outdev, directory=None):
-    """Download source code from a Subversion reporsitory
+    """Download source code from a Subversion repository
 
     .. note:
         Stdout is passed to to *outdev* while stderr is will be just printed.
@@ -1203,7 +1203,7 @@ def download_source_code_svn(url, name, outdev, directory=None):
 
 
 def download_source_code_official_github(url, name, outdev, directory=None):
-    """Download source code from a official GitHub reporsitory
+    """Download source code from a official GitHub repository
 
     .. note:
         Stdout is passed to to *outdev* while stderr is will be just printed.
@@ -1266,8 +1266,10 @@ def fix_newlines(directory):
     """
     # skip binary files
     # see https://stackoverflow.com/a/7392391
-    textchars = bytearray({7,8,9,10,12,13,27} | set(range(0x20, 0x100)) - {0x7f})
-    is_binary_string = lambda bytes: bool(bytes.translate(None, textchars))
+    textchars = bytearray({7, 8, 9, 10, 12, 13, 27} | set(range(0x20, 0x100)) - {0x7f})
+
+    def is_binary_string(bytes):
+        return bool(bytes.translate(None, textchars))
 
     for root, unused, files in os.walk(directory):
         for name in files:
