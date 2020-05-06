@@ -300,16 +300,19 @@ class RDigitController(wx.EvtHandler):
 
     def Stop(self):
         """Before stopping digitizer, asks to save edits"""
-        dlg = wx.MessageDialog(
-            self._mapWindow,
-            _("Do you want to save changes?"),
-            _("Save raster map changes"),
-            wx.YES_NO)
-        if dlg.ShowModal() == wx.ID_YES:
-            if self._drawing:
-                self._finish()
-            self._thread.Run(callable=self._exportRaster,
-                             ondone=lambda event: self._updateAndQuit())
+        if self._editedRaster:
+            dlg = wx.MessageDialog(
+                self._mapWindow,
+                _("Do you want to save changes?"),
+                _("Save raster map changes"),
+                wx.YES_NO)
+            if dlg.ShowModal() == wx.ID_YES:
+                if self._drawing:
+                    self._finish()
+                self._thread.Run(callable=self._exportRaster,
+                                 ondone=lambda event: self._updateAndQuit())
+            else:
+                self.quitDigitizer.emit()
         else:
             self.quitDigitizer.emit()
 
