@@ -102,7 +102,7 @@
 #% key_desc: NoData in data source
 #% type: string
 #% required: no
-#% description: One (or more, comma separated) value(s) representing NoData in the datasource
+#% description: The value representing NoData in the data source (only set this if not given in the data source)
 #% guisection: Optional
 #%end
 #%flag
@@ -171,18 +171,17 @@ def createvrt(dst, src, nodata=None, region=None, bandlist=None, s_crs=None):
         for nd in nodata.split(","):
             if not nd.isdigit():
                 grass.fatal(_("Invalid NoData format"))
-        params["srcNodata"] = nodata.replace(",", " ")
+        params["noData"] = nodata
 
     if bandlist:
         for band in bandlist.split(","):
             if not band.isdigit():
                 grass.fatal(_("Invalid band number format"))
-        params["bandList"] = bandlist.replace(",", " ")
+        params["bandList"] = bandlist.replace(",", " ").split(" ")
 
     if region:
         params["projWinSRS"] = s_crs
-        params["outputSRS"] = s_crs
-        params["projWin"] = "{w} {n} {e} {s}".format(**region)
+        params["projWin"] = "{w} {n} {e} {s}".format(**region).split(" ")
 
     indata = gdal.Open(src)
     vrt = gdal.Translate(dst, indata, options=gdal.TranslateOptions(**params))
@@ -307,9 +306,8 @@ def main():
     if 'r' in region_flag or srcnodata or bands:
         TMP_VRT = grass.tempfile()
         parameters['input'] = TMP_VRT
-        createvrt("/rmp/test.vrt", # TMP_VRT
-        GDALdatasource, nodata=srcnodata, region=region, bandlist=bands,
-        s_crs=s_crs)
+        createvrt(TMP_VRT, GDALdatasource, nodata=srcnodata, region=region,
+        bandlist=bands, s_crs=s_crs)
     try:
         grass.run_command('r.external', **parameters)
     except CalledModuleError:
