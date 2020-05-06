@@ -341,12 +341,13 @@ class RDigitController(wx.EvtHandler):
         :param restore: if restore previous cursor, mouse['use']
         """
         try:
-            gcore.run_command(
-                'g.remove',
-                type='raster',
-                flags='f',
-                name=self._backupRasterName,
-                quiet=True)
+            if self._backupRasterName:
+                gcore.run_command(
+                    'g.remove',
+                    type='raster',
+                    flags='f',
+                    name=self._backupRasterName,
+                    quiet=True)
         except CalledModuleError:
             pass
 
