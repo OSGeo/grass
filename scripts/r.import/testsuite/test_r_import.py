@@ -50,6 +50,7 @@ class TestRImportRegion(TestCase):
         self.runModule('g.region', raster='elevation', n=223655, s=223600)
         self.assertModule('r.import', input='data/data2.asc', output=self.imported,
                           resample='nearest', extent='region', resolution='region', srcnodata="21,22")
+        self.assertRasterMinMax(self.imported, refmin=22, refmax=22)
         reference = dict(north=223655, south=223600)
         self.assertRasterFitsInfo(raster=self.imported, reference=reference, precision=1e-6)
 
