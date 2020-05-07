@@ -495,13 +495,15 @@ class VDigitToolbar(BaseToolbar):
 
     def OnUndo(self, event):
         """Undo previous changes"""
-        self.digit.Undo()
+        if self.digit:
+            self.digit.Undo()
 
         event.Skip()
 
     def OnRedo(self, event):
         """Undo previous changes"""
-        self.digit.Undo(level=1)
+        if self.digit:
+            self.digit.Undo(level=1)
 
         event.Skip()
 
