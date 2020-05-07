@@ -45,7 +45,7 @@ jobs:
     - name: Build
       env:
         CFLAGS: "-std=${{ matrix.c }}"
-        CXXFLAGS: "-std=${{ matrix.cpp }} -pedantic-errors"
+        CXXFLAGS: "-std=${{ matrix.cpp }}"
       run: .github/workflows/build.sh $HOME/install
 
   test:
