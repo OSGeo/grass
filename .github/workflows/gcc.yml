@@ -1,0 +1,45 @@
+name: CI
+
+on:
+- push
+- pull_request
+
+jobs:
+  build:
+    name: GCC ${{ matrix.c }}/${{ matrix.cpp }} build
+
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        c:
+        - gnu99
+        - gnu11
+        - gnu17
+        cpp:
+        - c++11
+        - c++14
+        # - c++17  # not available in Ubuntu 18.04
+        fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get dependencies
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y wget git gawk findutils
+        xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
+            sudo apt-get install -y --no-install-recommends --no-install-suggests
+    - name: Create installation directory
+      run: |
+        mkdir $HOME/install
+    - name: Ensure one core for compilation
+      run: |
+        echo "::set-env name=MAKEFLAGS::-j1"
+    - name: Set LD_LIBRARY_PATH for compilation
+      run: |
+        echo "::set-env name=LD_LIBRARY_PATH::$HOME/install/lib"
+    - name: Build
+      env:
+        CFLAGS: "-std=${{ matrix.c }}"
+        CXXFLAGS: "-std=${{ matrix.cpp }}"
+      run: .github/workflows/build.sh $HOME/install
