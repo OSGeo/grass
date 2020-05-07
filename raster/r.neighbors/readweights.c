@@ -42,3 +42,20 @@ void gaussian_weights(double sigma)
 	}
     }
 }
+
+void exponential_weights(double factor)
+{
+    int i, j;
+
+    ncb.weights = G_malloc(ncb.nsize * sizeof(DCELL *));
+    for (i = 0; i < ncb.nsize; i++)
+	ncb.weights[i] = G_malloc(ncb.nsize * sizeof(DCELL));
+
+    for (i = 0; i < ncb.nsize; i++) {
+	double y = i - ncb.dist;
+	for (j = 0; j < ncb.nsize; j++) {
+	    double x = j - ncb.dist;
+	    ncb.weights[i][j] = exp(factor*sqrt(x*x+y*y));
+	}
+    }
+}

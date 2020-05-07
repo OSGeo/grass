@@ -58,12 +58,32 @@ Without using the selection map, the output map would look like this:
 1 1 1 1 1
 </pre></div>
 
-<p>Optionally, the user can also specify the <b>TITLE</b> to
-be assigned to the raster map layer <b>output</b>, elect
-to not align the resolution of the output with that of the
-input (the <b>-a</b> option), and run <em><b>r.neighbors</b></em>
-with a custom matrix weights with the <em>weight</em> option.
+<p>It is also possible to weigh cells within the neighborhood. This can
+be either done with a custom weights matrix with the <em><b>weight</b></em> option
+or by giving factors for mathematical functions in the <em><b>gauss</b></em> or
+<em><b>exponent</b></em> option.
+<p>In the <em><b>gauss</b></em> option, the user specifies the sigma value (&sigma;)
+for the gauss filter, that represents the standard deviation of the gaussian
+distribution. The weighting formula for the gaussian filter is defined as follows:
+<p>exp(-(x&#42;x+y&#42;y)/(2&#42;&sigma;&#94;2))/(2&#42;&pi;&#42;&sigma;&#94;2)
+<p>Lower values for sigma result in a steeper curve, so that more weight
+is put on cells close to the center of the moving window with a steeper
+decrease in weights with distance from the center.
+<p>In the <em><b>exponent</b></em> option, the user specifies a factor for an
+exponential kernel. Negative factors result in negative exponential
+decrease in weights from the center cell. The weighting formula for the
+exponential kernel is defined as follows:
+<p>exp(factor*sqrt(x&#42;x+y&#42;y))
+<p>Stronger negative values for the factor result in a steeper curve,
+so that more weight is put on cells close to the center of the moving
+window with a steeper decrease in weights with distance from the center.
+
+<p>Optionally, the user can also run <em><b>r.neighbors</b></em> specify
+the <b>TITLE</b> to be assigned to the raster map layer <b>output</b>,
+select to not align the resolution of the output with that of the
+input (the <b>-a</b> option).
 These options are described further below.
+
 <p>
 <em>Neighborhood Operation Methods:</em>
 The <b>neighborhood</b> operators determine what new 

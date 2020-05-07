@@ -149,6 +149,7 @@ int main(int argc, char *argv[])
 	struct Option *title;
 	struct Option *weight;
 	struct Option *gauss;
+	struct Option *exp;
 	struct Option *quantile;
     } parm;
     struct
@@ -231,6 +232,12 @@ int main(int argc, char *argv[])
     parm.gauss->required = NO;
     parm.gauss->description = _("Sigma (in cells) for Gaussian filter");
 
+    parm.exp = G_define_option();
+    parm.exp->key = "exponent";
+    parm.exp->type = TYPE_DOUBLE;
+    parm.exp->required = NO;
+    parm.exp->description = _("Factor for an exponential kernel");
+
     parm.quantile = G_define_option();
     parm.quantile->key = "quantile";
     parm.quantile->type = TYPE_DOUBLE;
@@ -265,6 +272,14 @@ int main(int argc, char *argv[])
     if (parm.weight->answer && parm.gauss->answer)
 	G_fatal_error(_("%s= and %s= are mutually exclusive"),
 			parm.weight->key, parm.gauss->key);
+
+    if (parm.exp->answer && parm.gauss->answer)
+	G_fatal_error(_("%s= and %s= are mutually exclusive"),
+			parm.exp->key, parm.gauss->key);
+
+    if (parm.weight->answer && parm.exp->answer)
+	G_fatal_error(_("%s= and %s= are mutually exclusive"),
+			parm.weight->key, parm.exp->key);
 
     ncb.oldcell = parm.input->answer;
 
@@ -307,6 +322,10 @@ int main(int argc, char *argv[])
 	gaussian_weights(atof(parm.gauss->answer));
 	weights = 1;
     }
+    else if (parm.exp->answer) {
+	exponential_weights(atof(parm.exp->answer));
+	weights = 1;
+    }
     
     copycolr = 0;
     have_weights_mask = 0;
@@ -335,6 +354,10 @@ int main(int argc, char *argv[])
 		}
 		else if (parm.gauss->answer) {
 		    G_warning(_("Method %s not compatible with Gaussian filter, using unweighed version instead"),
+			      method_name);
+		}
+		else if (parm.exp->answer) {
+		    G_warning(_("Method %s not compatible with exponential kernel, using unweighed version instead"),
 			      method_name);
 		}
 		
