@@ -14,11 +14,11 @@ jobs:
         c:
         - gnu99
         - gnu11
-        - gnu17
+        # - gnu17  # not available in Ubuntu 18.04
         cpp:
         - c++11
         - c++14
-        # - c++17  # not available in Ubuntu 18.04
+        - c++17
       fail-fast: false
 
     steps:
