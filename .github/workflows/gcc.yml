@@ -1,4 +1,4 @@
-name: CI
+name: GCC C/C++ standards check
 
 on:
 - push
