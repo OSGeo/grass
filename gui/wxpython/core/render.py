@@ -121,6 +121,7 @@ class Layer(object):
         self.opacity = opacity
 
         self.forceRender = render
+        self.renderedSize = None
 
         Debug.msg(3, "Layer.__init__(): type=%s, cmd='%s', name=%s, "
                   "active=%d, opacity=%d, hidden=%d" %
@@ -248,6 +249,10 @@ class Layer(object):
             else:
                 return {'name': self.name,
                         'mapset': ''}
+
+    def GetRenderedSize(self):
+        """Get currently rendered size of layer as tuple, None if not rendered"""
+        return self.renderedSize
 
     def IsActive(self):
         """Check if layer is activated for rendering"""
@@ -425,7 +430,7 @@ class RenderLayerMgr(wx.EvtHandler):
 
         self._startTime = time.time()
         self.thread.Run(callable=self._render, cmd=cmd_render, env=env_cmd,
-                        ondone=self.OnRenderDone, userdata={'cmd': cmd})
+                        ondone=self.OnRenderDone, userdata={'cmd': cmd, 'env': env})
         self.layer.forceRender = False
 
     def _render(self, cmd, env):
@@ -465,8 +470,13 @@ class RenderLayerMgr(wx.EvtHandler):
             # don't remove layer if overlay, we need to keep the old one
             if self.layer.type != 'overlay':
                 try_remove(self.layer.mapfile)
+                self.layer.renderedSize = None
+        else:
+            env = event.userdata['env']
+            self.layer.renderedSize = (env['GRASS_RENDER_WIDTH'],
+                                       env['GRASS_RENDER_HEIGHT'])
 
-        self.updateProgress.emit(layer=self.layer)
+        self.updateProgress.emit(env=event.userdata['env'], layer=self.layer)
 
 
 class RenderMapMgr(wx.EvtHandler):
@@ -498,19 +508,27 @@ class RenderMapMgr(wx.EvtHandler):
         self._rendering = False
         self._old_legend = []
 
-    def _init(self, env=None):
-        """Init render manager
-
-        :param env: environmental variables or None
-        """
+    def _init(self):
+        """Init render manager"""
         self._startTime = time.time()
         self.progressInfo = None
-        self._env = env
         self.layers = []
 
         # re-render from scratch
         if os.path.exists(self.Map.mapfile):
             os.remove(self.Map.mapfile)
+
+    def _checkRenderedSizes(self, env, layers):
+        """Check if rendering size in current env differs from size of
+        already rendered layers, if so, set forceRender to rerender them."""
+        w = env['GRASS_RENDER_WIDTH']
+        h = env['GRASS_RENDER_HEIGHT']
+        for layer in layers:
+            size = layer.GetRenderedSize()
+            if size:
+                # is rendered but its size differes from current env
+                if not layer.forceRender and (size[0] != w or size[1] != h):
+                    layer.forceRender = True
 
     def UpdateRenderEnv(self, env):
         self._render_env.update(env)
@@ -531,7 +549,12 @@ class RenderMapMgr(wx.EvtHandler):
                                                     except_ltype=True)
 
         # reset progress
-        self.ReportProgress()
+        self.ReportProgress(env=env)
+
+        # check all already rendered layers have the same size
+        # otherwise force rerendering the layer
+        if not force:
+            self._checkRenderedSizes(env=env, layers=self.layers)
 
         # render map layers if forced
         nlayers = 0
@@ -540,7 +563,7 @@ class RenderMapMgr(wx.EvtHandler):
                 nlayers += 1
                 layer.Render(env)
             else:
-                layer.GetRenderMgr().updateProgress.emit(layer=layer)
+                layer.GetRenderMgr().updateProgress.emit(env=env, layer=layer)
 
         Debug.msg(1, "RenderMapMgr.Render(): %d layers to be rendered "
                   "(force=%d, all active layers -> %d)" % (nlayers, force,
@@ -580,10 +603,10 @@ class RenderMapMgr(wx.EvtHandler):
         self._rendering = True
 
         env = self.GetRenderEnv()
-        self._init(env)
+        self._init()
         # no layer composition afterwards
         if self._renderLayers(env, force, overlaysOnly=True) == 0:
-            self.renderDone.emit()
+            self.renderDone.emit(env=env)
 
     def Render(self, force=False, windres=False):
         """Render map composition
@@ -600,12 +623,12 @@ class RenderMapMgr(wx.EvtHandler):
         self._rendering = True
 
         env = self.GetRenderEnv(windres)
-        self._init(env)
+        self._init()
         if self._renderLayers(env, force) == 0:
-            self.renderDone.emit()
+            self.renderDone.emit(env=env)
 
 
-    def OnRenderDone(self):
+    def OnRenderDone(self, env):
         """Rendering process done
 
         Make image composiotion, emits updateMap event.
@@ -639,10 +662,10 @@ class RenderMapMgr(wx.EvtHandler):
                                   mask='%s' % ",".join(masks),
                                   opacity='%s' % ",".join(opacities),
                                   bgcolor=bgcolor,
-                                  width=self._env['GRASS_RENDER_WIDTH'],
-                                  height=self._env['GRASS_RENDER_HEIGHT'],
+                                  width=env['GRASS_RENDER_WIDTH'],
+                                  height=env['GRASS_RENDER_HEIGHT'],
                                   output=self.Map.mapfile,
-                                  env=self._env)
+                                  env=env)
             if ret != 0:
                 self._rendering = False
                 if wx.IsBusy():
@@ -673,12 +696,16 @@ class RenderMapMgr(wx.EvtHandler):
         # if legend file changed, rerender vector legend
         if new_legend != self._old_legend:
             self._old_legend = new_legend
+            found = False
             for layer in self.layers:
                 if layer.GetType() == 'overlay' and layer.GetName() == 'vectleg':
                     layer.forceRender = True
-            self.Render()
-        else:
-            self.updateMap.emit()
+                    found = True
+            if found:
+                self.Render()
+                return
+
+        self.updateMap.emit()
 
     def Abort(self):
         """Abort all rendering processes"""
@@ -691,7 +718,7 @@ class RenderMapMgr(wx.EvtHandler):
             wx.EndBusyCursor()
         self.updateProgress.emit(range=0, value=0, text=_("Rendering aborted"))
 
-    def ReportProgress(self, layer=None):
+    def ReportProgress(self, env, layer=None):
         """Calculates progress in rendering/downloading
         and emits signal to inform progress bar about progress.
 
@@ -740,7 +767,7 @@ class RenderMapMgr(wx.EvtHandler):
 
         if layer and self.progressInfo[
                 'progresVal'] == self.progressInfo['range']:
-            self.renderDone.emit()
+            self.renderDone.emit(env=env)
 
     def RenderingFailed(self, cmd, error):
         self.renderingFailed.emit(cmd=cmd, error=error)
