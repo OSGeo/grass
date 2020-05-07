@@ -135,10 +135,10 @@ class RenderWMSMgr(wx.EvtHandler):
 
             self._startTime = time.time()
             self.thread.Run(callable=self._render, cmd=cmd_render, env=env,
-                            ondone=self.OnRenderDone)
+                            ondone=self.OnRenderDone, userdata={'env': env})
             self.layer.forceRender = False
 
-        self.updateProgress.emit(layer=self.layer)
+        self.updateProgress.emit(env=env, layer=self.layer)
 
     def _render(self, cmd, env):
         try:
@@ -156,7 +156,7 @@ class RenderWMSMgr(wx.EvtHandler):
             return
         self.downloading = False
         if not self.updateMap:
-            self.updateProgress.emit(layer=self.layer)
+            self.updateProgress.emit(env=event.userdata['env'], layer=self.layer)
             self.renderedRegion = None
             self.fetched_data_cmd = None
             return
@@ -192,7 +192,7 @@ class RenderWMSMgr(wx.EvtHandler):
         Debug.msg(1, "RenderWMSMgr.OnRenderDone(%s): ret=%d time=%f" %
                   (self.layer, event.ret, time.time() - self._startTime))
 
-        self.dataFetched.emit(layer=self.layer)
+        self.dataFetched.emit(env=event.userdata['env'], layer=self.layer)
 
     def _getRegionDict(self, env):
         """Parse string from GRASS_REGION env variable into dict.
