@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: ${{ matrix.os }} build
+    name: ${{ matrix.os }} ${{ matrix.c }}/${{ matrix.cpp }} build
 
     runs-on: ${{ matrix.os }}
     strategy:
@@ -14,6 +14,15 @@ jobs:
         os:
         - ubuntu-16.04
         - ubuntu-18.04
+        c:
+        - gnu90
+        - gnu99
+        - gnu11
+        cpp:
+        - c++98
+        - c++11
+        - c++14
+        - c++17
       fail-fast: false
 
     steps:
@@ -34,6 +43,9 @@ jobs:
       run: |
         echo "::set-env name=LD_LIBRARY_PATH::$HOME/install/lib"
     - name: Build
+      env:
+        CFLAGS: "-std=${{ matrix.c }}"
+        CXXFLAGS: "-std=${{ matrix.cpp }} -pedantic-errors"
       run: .github/workflows/build.sh $HOME/install
 
   test:
