@@ -19,7 +19,7 @@ jobs:
         - c++11
         - c++14
         # - c++17  # not available in Ubuntu 18.04
-        fail-fast: false
+      fail-fast: false
 
     steps:
     - uses: actions/checkout@v2
