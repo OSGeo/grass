@@ -1122,5 +1122,6 @@ class VDigitToolbar(BaseToolbar):
 
     def OnShow(self, event):
         """Show frame event"""
-        # list of available vector maps
-        self.UpdateListOfLayers(updateTool=True)
+        if event.IsShown():
+            # list of available vector maps
+            self.UpdateListOfLayers(updateTool=True)
