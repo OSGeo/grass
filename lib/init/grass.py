@@ -160,17 +160,6 @@ def try_remove(path):
         pass
 
 
-def clean_env():
-    gisrc = os.environ['GISRC']
-    env_curr = read_gisrc(gisrc)
-    env_new = {}
-    for k, v in env_curr.items():
-        if k.endswith('PID') or k.startswith('MONITOR'):
-            continue
-        env_new[k] = v
-    write_gisrc(env_new, gisrc)
-
-
 def is_debug():
     """Returns True if we are in debug mode
 
@@ -523,6 +512,31 @@ def write_gisrc(kv, filename):
     for k, v in kv.items():
         f.write("%s: %s\n" % (k, v))
     f.close()
+
+
+def remove_session_specific_env_vars(env):
+    """Remove gis env variables specific to one session
+
+    Removes variables which shouldn't used by another session, e.g.,
+    d.mon related variables.
+    """
+    new_env = {}
+    for k, v in env.items():
+        if k.endswith('PID') or k.startswith('MONITOR'):
+            continue
+        new_env[k] = v
+    return new_env
+
+
+def copy_general_gis_env(source, target):
+    """Copy general (not session-specific) variables to a new rc file
+
+    :param source: name of a file to copy the variables from
+    :param target: name of a file to copy the variables to
+    """
+    curr_env = read_gisrc(source)
+    new_env = remove_session_specific_env_vars(curr_env)
+    write_gisrc(new_env, target)
 
 
 def read_gui(gisrc, default_gui):
@@ -1568,9 +1582,13 @@ def lock_mapset(mapset_path, force_gislock_removal, user, grass_gui):
     if msg:
         if grass_gui == "wxpython":
             call([os.getenv('GRASS_PYTHON'), wxpath("gis_set_error.py"), msg])
-            # TODO: here we probably miss fatal or exit, needs to be added
-        else:
-            fatal(msg)
+            # After the dialog is dismissed, we exit using the same fatal
+            # as in the pure-command line mode. No difference when user does
+            # not see the command line and if the user does see it, then the
+            # error is repeated there which might be helpful for further
+            # investigation or when the user closed the dialog without reading
+            # the message.
+        fatal(msg)
     debug("Mapset <{mapset}> locked using '{lockfile}'".format(
         mapset=mapset_path, lockfile=lockfile))
     return lockfile
@@ -1971,9 +1989,6 @@ def clean_all():
     gsetup.clean_default_db()
     # remove leftover temp files
     clean_temp()
-    # save 'last used' GISRC after removing variables which shouldn't
-    # be saved, e.g. d.mon related
-    clean_env()
 
 
 def grep(pattern, lines):
@@ -2387,7 +2402,10 @@ def main():
         # here we are at the end of grass session
         clean_all()
         if not params.tmp_location:
-            writefile(gisrcrc, readfile(gisrc))
+            # Save general (not session-specific) gis env variables
+            # to user config dir (aka last used rc file).
+            copy_general_gis_env(gisrc, gisrcrc)
+
         # After this point no more grass modules may be called
         # done message at last: no atexit.register()
         # or register done_message()
