@@ -2406,7 +2406,10 @@ def main():
         # close GUI if running
         close_gui()
 
-        if not params.tmp_location:
+        # Saving only here in an interactive session and only if not using
+        # tmp location or mapset. (Not saving anything although just l/m
+        # could be ignored.)
+        if not params.tmp_location and not params.tmp_mapset:
             # Save general (not session-specific) gis env variables
             # to user config dir (aka last used rc file).
             copy_general_gis_env(gisrc, gisrcrc)
