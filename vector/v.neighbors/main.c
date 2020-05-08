@@ -208,10 +208,7 @@ int main(int argc, char *argv[])
 
         /* establish the statsvalue routine */
         statsvalue = menu[method].method;
-
     }
-
-
 
     /* open input vector */
     Vect_set_open_level(2);
@@ -272,8 +269,6 @@ int main(int argc, char *argv[])
         G_debug(1, "selected values = %d", nrec);
 
         db_close_database_shutdown_driver(driver);
-
-
     }
 
     /* Determine raster output type */
@@ -389,10 +384,6 @@ int main(int argc, char *argv[])
                                                         * sizeof(double));
                             }
                         }
-
-
-
-
                     }
                 }
             }
@@ -420,7 +411,6 @@ int main(int argc, char *argv[])
     Rast_short_history(out_opt->answer, "raster", &history);
     Rast_command_history(&history);
     Rast_write_history(out_opt->answer, &history);
-
 
     if (count_sum < 1)
         G_warning(_("No points found"));
