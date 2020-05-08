@@ -64,6 +64,10 @@ degrees but in meters calculated as geodesic distances on a sphere.
 If one or both of the input vector maps are 3D, the user is notified
 accordingly.
 
+<p>The <em>-p</em> flag prints the results to standard output. By default the
+output is in form of a linear matrix. If only only variable is upploaded and 
+a square matrix is desired, the user can set the <em>-s</em> flag.
+
 <h2>EXAMPLES</h2>
 
 <h3>Find nearest lines</h3>
@@ -192,19 +196,22 @@ from_cat|distance
 
 <h3>Print distance matrix</h3>
 
-Note: Matrix-style output is enabled only for flag <em>-a</em> and one
-given upload option.
-<p>
-Spearfish sample data location:
+North Carolina sample data location
+
+<p>As linear matrix:
 <div class="code"><pre>
-v.distance -pa from=archsites to=archsites upload=dist
+v.distance -pa from=hospitals to=hospitals upload=dist,to_attr to_column=NAME separator=tab
+from_cat    to_cat  dist    to_attr
+1   1   0   Cherry Hospital
+1   2   7489.1043632983983  Wayne Memorial Hospital
+1   3   339112.17046729225  Watauga Medical Center
+1   4   70900.392145909267  Central Prison Hospital
+1   5   70406.227393921712  Dorothea Dix Hospital
 </pre></div>
 
-<p>
-North Carolina sample data location:
-
+<p>As square matrix (only possible with single upload option):
 <div class="code"><pre>
-v.distance -pa from=hospitals to=hospitals upload=dist separator=tab
+v.distance -pas from=hospitals to=hospitals upload=dist separator=tab
 from_cat to_cat       dist
               1          2          3          4          5 ...
 1             0    7489.10  339112.17   70900.39   70406.23 ...
@@ -234,6 +241,7 @@ Matrix-like output by Martin Landa, FBK-irst, Trento, Italy<br>
 Improved processing speed: Markus Metz<br>
 Distance from any feature to any feature: Markus Metz<br>
 New table without the -p flag: Huidae Cho
+Make linear matrix the default for all outputs: Moritz Lennert
 
 <!--
 <p>
