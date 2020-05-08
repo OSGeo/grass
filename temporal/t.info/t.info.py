@@ -109,16 +109,16 @@ def main():
 
     dataset = tgis.dataset_factory(type_, id_)
 
-    if dataset.is_in_db(dbif) == False:
+    if not dataset.is_in_db(dbif):
         grass.fatal(_("Dataset <%s> not found in temporal database") % (id_))
 
     dataset.select(dbif)
 
-    if history == True and type_ in ["strds", "stvds", "str3ds"]:
+    if history and type_ in ["strds", "stvds", "str3ds"]:
         dataset.print_history()
         return
 
-    if shellstyle == True:
+    if shellstyle:
         dataset.print_shell_info()
     else:
         dataset.print_info()

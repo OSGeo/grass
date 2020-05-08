@@ -123,7 +123,6 @@ import sys
 import copy
 import grass.script as gscript
 
-import pdb
 
 ############################################################################
 

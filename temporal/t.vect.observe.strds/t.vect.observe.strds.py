@@ -55,7 +55,6 @@
 #%end
 
 import grass.script as grass
-import grass.script.raster as raster
 from grass.exceptions import CalledModuleError
 
 ############################################################################
@@ -64,7 +63,7 @@ class Sample(object):
     def __init__(self, start = None, end = None, raster_names = None):
         self.start = start
         self.end = end
-        if raster_names != None:
+        if raster_names is not None:
             self.raster_names = raster_names
         else:
             self.raster_names = []

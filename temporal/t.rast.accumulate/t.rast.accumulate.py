@@ -199,7 +199,7 @@ def main():
 
     input_strds = tgis.SpaceTimeRasterDataset(id)
 
-    if input_strds.is_in_db() == False:
+    if not input_strds.is_in_db():
         dbif.close()
         grass.fatal(_("Space time raster dataset <%s> not found") % (id))
 
@@ -219,18 +219,18 @@ def main():
                           "database, use overwrite flag to overwrite") % out_id)
 
     if tgis.check_granularity_string(granularity,
-                                     input_strds.get_temporal_type()) == False:
+                                     input_strds.get_temporal_type()) is False:
             dbif.close()
             grass.fatal(_("Invalid granularity"))
 
     if tgis.check_granularity_string(cycle,
-                                     input_strds.get_temporal_type()) == False:
+                                     input_strds.get_temporal_type()) is False:
             dbif.close()
             grass.fatal(_("Invalid cycle"))
 
     if offset:
         if tgis.check_granularity_string(offset,
-                                         input_strds.get_temporal_type()) == False:
+                                         input_strds.get_temporal_type()) is False:
                 dbif.close()
                 grass.fatal(_("Invalid offset"))
 
@@ -247,7 +247,7 @@ def main():
             lower_id = lower + "@" + mapset
 
         lower_strds = tgis.SpaceTimeRasterDataset(lower_id)
-        if lower_strds.is_in_db() == False:
+        if not lower_strds.is_in_db():
             dbif.close()
             grass.fatal(_("Space time raster dataset <%s> not found") % (lower_strds.get_id()))
 
@@ -269,7 +269,7 @@ def main():
             upper_id = upper + "@" + mapset
 
         upper_strds = tgis.SpaceTimeRasterDataset(upper_id)
-        if upper_strds.is_in_db() == False:
+        if not upper_strds.is_in_db():
             dbif.close()
             grass.fatal(_("Space time raster dataset <%s> not found") % (upper_strds.get_id()))
 

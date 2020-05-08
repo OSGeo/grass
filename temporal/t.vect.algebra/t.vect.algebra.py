@@ -66,9 +66,10 @@ def main():
 
     # Check for PLY istallation
     try:
-        import ply.lex as lex
-        import ply.yacc as yacc
-    except:
+        # Intentionally unused imports
+        import ply.lex as lex  # noqa: F401
+        import ply.yacc as yacc  # noqa: F401
+    except ImportError:
         grass.script.fatal(_("Please install PLY (Lex and Yacc Python implementation) to use the temporal algebra modules."))
 
     tgis.init(True)
