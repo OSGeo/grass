@@ -629,7 +629,7 @@ int main(int argc, char *argv[])
         if (base_array) {
             G_debug(2, "filling base raster array");
             for (row = 0; row < rows; row++) {
-                Rast_get_row(base_raster, base_array + ((size_t) row * cols * Rast_cell_size(base_raster_data_type)), row, base_raster_data_type);
+                Rast_get_row(base_raster, (double*)base_array + ((size_t) row * cols * Rast_cell_size(base_raster_data_type)), row, base_raster_data_type);
             }
         }
 

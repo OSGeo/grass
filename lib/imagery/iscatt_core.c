@@ -700,19 +700,23 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
     const char *mapset;
     char header[1024];
 
-    int fd_cats_rasts[scatt_conds->n_a_cats];
-    FILE *f_cats_rasts_conds[scatt_conds->n_a_cats];
-
-    struct rast_row bands_rows[n_bands];
+	int *fd_cats_rasts;
+	FILE **f_cats_rasts_conds;
+	struct rast_row *bands_rows;
+	int *fd_bands;
+	int *bands_ids;
+	int *b_needed_bands;
 
     RASTER_MAP_TYPE data_type;
-
     int nrows, i_band, n_a_bands, band_id;
     int i_row, head_nchars, i_cat, id_cat;
 
-    int fd_bands[n_bands];
-    int bands_ids[n_bands];
-    int b_needed_bands[n_bands];
+	fd_cats_rasts = calloc(scatt_conds->n_a_cats, sizeof(*fd_cats_rasts));
+	f_cats_rasts_conds = calloc(scatt_conds->n_a_cats, sizeof(*f_cats_rasts_conds));
+	bands_rows = calloc(n_bands, sizeof(*bands_rows));
+	fd_bands = calloc(n_bands, sizeof(*fd_bands));
+	bands_ids = calloc(n_bands, sizeof(*bands_ids));
+	b_needed_bands = calloc(n_bands, sizeof(*b_needed_bands));
 
     Rast_set_window(region);
 
