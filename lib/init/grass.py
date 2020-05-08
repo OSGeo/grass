@@ -2414,10 +2414,10 @@ def main():
             # to user config dir (aka last used rc file).
             copy_general_gis_env(gisrc, gisrcrc)
 
-        # After this point no more grass modules may be called
-        # done message at last: no atexit.register()
-        # or register done_message()
         done_message()
+        # After this point no more grass modules may be called
+        # except what was registered using atexit in a proper order.
+
 
 if __name__ == '__main__':
     main()
