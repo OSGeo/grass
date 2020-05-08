@@ -1976,19 +1976,24 @@ def done_message():
     message("")
 
 
-def clean_temp():
+def clean_mapset_temp():
+    """Clean current mapset temp dir
+
+    Cleans whatever is current mapset based on the GISRC env variable.
+    """
     message(_("Cleaning up temporary files..."))
     nul = open(os.devnull, 'w')
     call([gpath("etc", "clean_temp")], stdout=nul)
     nul.close()
 
 
-def clean_all():
+def clean_mapset():
+    """Perform full cleanup of the current mapset"""
     from grass.script import setup as gsetup
     # clean default sqlite db
     gsetup.clean_default_db()
     # remove leftover temp files
-    clean_temp()
+    clean_mapset_temp()
 
 
 def grep(pattern, lines):
@@ -2347,7 +2352,13 @@ def main():
     # files which previous session may have left behind. We do it even
     # for first time user because the cost is low and first time user
     # doesn't necessarily mean that the mapset is used for the first time.
-    clean_temp()
+    clean_mapset_temp()
+    # We always clean at the end like with unlocking. This is the same as
+    # calling the function explicitly before each exit, but additionally
+    # it also cleans the mapset on failure.
+    # This is the full proper clean up as opposed to the simplified one
+    # we do at the start of the session.
+    atexit.register(clean_mapset)
 
     # build user fontcap if specified but not present
     make_fontcap()
@@ -2355,18 +2366,14 @@ def main():
     # TODO: is this really needed? Modules should call this when/if required.
     ensure_db_connected(location)
 
-    # Display the version and license info
-    # only non-error, interactive version continues from here
     if batch_job:
         returncode = run_batch_job(batch_job)
-        clean_all()
         sys.exit(returncode)
     elif params.exit_grass:
-        # clean always at exit, cleans whatever is current mapset based on
-        # the GISRC env variable
-        clean_all()
         sys.exit(0)
     else:
+        # Display the version and license info. Everything should be okay
+        # (no error occured). Interactive version continues from here.
         show_banner()
         say_hello()
         show_info(shellname=shellname,
@@ -2399,8 +2406,6 @@ def main():
         # close GUI if running
         close_gui()
 
-        # here we are at the end of grass session
-        clean_all()
         if not params.tmp_location:
             # Save general (not session-specific) gis env variables
             # to user config dir (aka last used rc file).
