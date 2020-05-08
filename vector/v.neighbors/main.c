@@ -34,27 +34,55 @@
 struct menu
 {
     stat_func *method;          /* routine to compute new value */
-    int is_int;                 /* whether the result is an integer (unused) */
+    int otype;                  /* whether the result is an integer (unused) */
     char *name;                 /* method name */
     char *text;                 /* menu display - full description */
 };
 
+enum out_type
+{
+    T_FLOAT = 1,
+    T_INT = 2,
+    T_COUNT = 3,
+    T_COPY = 4,
+    T_SUM = 5
+};
+
 /* modify this table to add new methods */
 static struct menu menu[] = {
-    {c_count, 0, "count", "number of points"},
-    {c_sum, 0, "sum", "sum of values"},
-    {c_ave, 0, "average", "average value"},
-    {c_median, 0, "median", "median value"},
-    {c_mode, 0, "mode", "most frequently occurring value"},
-    {c_min, 0, "minimum", "lowest value"},
-    {c_max, 0, "maximum", "highest value"},
-    {c_range, 0, "range", "range of values"},
-    {c_stddev, 0, "stddev", "standard deviation"},
-    {c_var, 0, "variance", "statistical variance"},
-    {c_divr, 1, "diversity", "number of different values"},
+    {c_count, T_COUNT, "count", "number of points"},
+    {c_sum, T_SUM, "sum", "sum of values"},
+    {c_ave, T_FLOAT, "average", "average value"},
+    {c_median, T_FLOAT, "median", "median value"},
+    {c_mode, T_COPY, "mode", "most frequently occurring value"},
+    {c_min, T_COPY, "minimum", "lowest value"},
+    {c_max, T_COPY, "maximum", "highest value"},
+    {c_range, T_COPY, "range", "range of values"},
+    {c_stddev, T_FLOAT, "stddev", "standard deviation"},
+    {c_var, T_FLOAT, "variance", "statistical variance"},
+    {c_divr, T_INT, "diversity", "number of different values"},
     {NULL, 0, NULL, NULL}
 };
 
+static RASTER_MAP_TYPE output_type(RASTER_MAP_TYPE input_type, int weighted,
+                                   int mode)
+{
+    switch (mode) {
+    case T_FLOAT:
+        return DCELL_TYPE;
+    case T_INT:
+        return CELL_TYPE;
+    case T_COUNT:
+        return weighted ? DCELL_TYPE : CELL_TYPE;
+    case T_COPY:
+        return input_type;
+    case T_SUM:
+        return weighted ? DCELL_TYPE : input_type;
+    default:
+        G_fatal_error(_("Invalid out_type enumeration: %d"), mode);
+        return -1;
+    }
+}
 
 int main(int argc, char *argv[])
 {
@@ -76,6 +104,7 @@ int main(int argc, char *argv[])
 
     char *p;
     int method;
+    RASTER_MAP_TYPE imap_type, omap_type;
     int nrec;
     int i;
     int tmp_cat;
@@ -183,6 +212,7 @@ int main(int argc, char *argv[])
     }
 
 
+
     /* open input vector */
     Vect_set_open_level(2);
     if (Vect_open_old2(&In, in_opt->answer, "", field_opt->answer) < 0)
@@ -194,6 +224,8 @@ int main(int argc, char *argv[])
         pcat_list = Vect_cats_set_constraint(&In, field,
                                              point_where_opt->answer,
                                              point_cats_opt->answer);
+
+    imap_type = CELL_TYPE;
 
     if (strcmp(method_opt->answer, "count") != 0) {
         Fi = Vect_get_field(&In, field);
@@ -224,6 +256,16 @@ int main(int argc, char *argv[])
             G_fatal_error(_("points_column <%s> of points vector <%s> must be numeric"),
                           column_opt->answer, Fi->table);
 
+        /* Determine raster type equivalent of ctype */
+        switch (ctype) {
+        case DB_C_TYPE_INT:
+            imap_type = CELL_TYPE;
+            break;
+        case DB_C_TYPE_DOUBLE:
+            imap_type = DCELL_TYPE;
+            break;
+        }
+
         db_CatValArray_init(&cvarr);
         nrec = db_select_CatValArray(driver, Fi->table, Fi->key,
                                      column_opt->answer, NULL, &cvarr);
@@ -234,17 +276,20 @@ int main(int argc, char *argv[])
 
     }
 
+    /* Determine raster output type */
+    omap_type = output_type(imap_type, 0, menu[method].otype);
+
     G_get_set_window(&region);
     Vect_get_map_box(&In, &box);
 
     if (box.N > region.north + radius || box.S < region.south - radius ||
         box.E > region.east + radius || box.W < region.west - radius) {
-			if (box.S > region.north + radius || box.N < region.south - radius ||
-				box.W > region.east + radius || box.E < region.west - radius) 
-					G_fatal_error(_("All points fall outside of the current computational region"));
+        if (box.S > region.north + radius || box.N < region.south - radius ||
+            box.W > region.east + radius || box.E < region.west - radius)
+            G_fatal_error(_("All points fall outside of the current computational region"));
         G_warning(_("Input vector and computational region do not overlap"));
-	}
-    
+    }
+
 
     dia = sqrt(region.ns_res * region.ns_res + region.ew_res * region.ew_res);
     if (radius * 2.0 < dia) {
@@ -255,13 +300,14 @@ int main(int argc, char *argv[])
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
-    result = Rast_allocate_buf(DCELL_TYPE);
+    result = Rast_allocate_buf(omap_type);
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     List = Vect_new_boxlist(0);
 
     /*open the new cellfile */
-    out_fd = Rast_open_new(out_opt->answer, DCELL_TYPE);
+
+    out_fd = Rast_open_new(out_opt->answer, omap_type);
 
     box.T = PORT_DOUBLE_MAX;
     box.B = -PORT_DOUBLE_MAX;
@@ -276,7 +322,7 @@ int main(int argc, char *argv[])
         box.N = y + radius;
         box.S = y - radius;
 
-        Rast_set_null_value(result, ncols, DCELL_TYPE);
+        Rast_set_null_value(result, ncols, omap_type);
         rp = result;
 
         for (col = 0; col < ncols; col++) {
@@ -358,13 +404,13 @@ int main(int argc, char *argv[])
                 else {
                     value = count;
                 }
-                Rast_set_d_value(rp, value, DCELL_TYPE);
+                Rast_set_d_value(rp, value, omap_type);
             }
-            rp = G_incr_void_ptr(rp, Rast_cell_size(DCELL_TYPE));
+            rp = G_incr_void_ptr(rp, Rast_cell_size(omap_type));
             count_sum += count;
         }
 
-        Rast_put_row(out_fd, result, DCELL_TYPE);
+        Rast_put_row(out_fd, result, omap_type);
     }
     G_percent(1, 1, 1);
 
