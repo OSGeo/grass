@@ -287,6 +287,12 @@ Geographic Resources Analysis Support System (GRASS GIS).
                                    {tmp_location_detail}
   --tmp-mapset                   {tmp_mapset}
                                    {tmp_mapset_detail}
+  --no-lock                      {no_lock}
+                                   {no_lock_detail}
+  --no-clean                     {no_clean}
+                                   {no_clean_detail}
+  --clean-only                   {clean_only}
+                                   {clean_only_detail}
 
 {params}:
   GISDBASE                       {gisdbase}
@@ -352,6 +358,12 @@ def help_message(default_gui):
             tmp_location_detail=_("created in a temporary directory and deleted at exit"),
             tmp_mapset=_("create temporary mapset (use with the --exec flag)"),
             tmp_mapset_detail=_("created in the specified location and deleted at exit"),
+            no_lock=_("do not lock the mapset (use with the --exec flag)"),
+            no_lock_detail=_("no .gislock will be created"),
+            no_clean=_("do not clean the mapset (use with the --exec flag)"),
+            no_clean_detail=_("temporary data in the mapset will be left untouched"),
+            clean_only=_("clean the mapset and exit"),
+            clean_only_detail=_("only cleans the mapset and then ends the session"),
         )
     )
     s = t.substitute(CMD_NAME=CMD_NAME, DEFAULT_GUI=default_gui,
@@ -2103,6 +2115,10 @@ class Parameters(object):
         self.geofile = None
         self.tmp_location = False
         self.tmp_mapset = False
+        self.no_lock = False
+        self.no_clean = False
+        self.clean_only = False
+        self.exec_present = False
 
 
 def parse_cmdline(argv, default_gui):
@@ -2145,6 +2161,12 @@ def parse_cmdline(argv, default_gui):
             params.tmp_location = True
         elif i == "--tmp-mapset":
             params.tmp_mapset = True
+        elif i == "--no-lock":
+            params.no_lock = True
+        elif i == "--no-clean":
+            params.no_clean = True
+        elif i == "--clean-only":
+            params.clean_only = True
         else:
             args.append(i)
     if len(args) > 1:
@@ -2160,7 +2182,7 @@ def parse_cmdline(argv, default_gui):
     return params
 
 
-def validate_cmdline(params):
+def validate_cmdline(params, exec_present):
     """ Validate the cmdline params and exit if necessary. """
     if params.exit_grass and not params.create_new:
         fatal(_("Flag -e requires also flag -c"))
@@ -2183,6 +2205,12 @@ def validate_cmdline(params):
                 " --tmp-location, mapset name <{}> provided"
             ).format(params.mapset)
         )
+    if params.clean_only and params.no_clean:
+        fatal(_("Flags --no-clean and --clean-only are mutually exclusive"))
+    if params.clean_only and exec_present:
+        fatal(_("Flag --clean-only cannot be used with --exec"))
+    if params.clean_only and params.grass_gui:
+        fatal(_("Flag --clean-only cannot be used with --text, --gui, or --gtext"))
 
 
 def main():
@@ -2224,10 +2252,13 @@ def main():
         batch_job = sys.argv[index + 1:]
         clean_argv = sys.argv[1:index]
         params = parse_cmdline(clean_argv, default_gui=default_gui)
+        # Parsing does not deal with --exec, but we know --exec is there.
+        params.exec_present = True
     except ValueError:
         params = parse_cmdline(sys.argv[1:], default_gui=default_gui)
-    validate_cmdline(params)
-    # For now, we allow, but not advertise/document, --tmp-location
+    validate_cmdline(params, params.exec_present)
+    # For now, we allow, but not advertise/document, --tmp-location,
+    # --tmp-mapset, --no-clean, and --no-lock
     # without --exec (usefulness to be evaluated).
 
     grass_gui = params.grass_gui  # put it to variable, it is used a lot
@@ -2341,24 +2372,26 @@ def main():
 
     location = mapset_settings.full_mapset
 
-    # check and create .gislock file
-    lock_mapset(mapset_settings.full_mapset, user=user,
-                force_gislock_removal=params.force_gislock_removal,
-                grass_gui=grass_gui)
-    # unlock the mapset which is current at the time of turning off
-    # in case mapset was changed
-    atexit.register(lambda: unlock_gisrc_mapset(gisrc, gisrcrc))
-    # We now own the mapset (set and lock), so we can clean temporary
-    # files which previous session may have left behind. We do it even
-    # for first time user because the cost is low and first time user
-    # doesn't necessarily mean that the mapset is used for the first time.
-    clean_mapset_temp()
-    # We always clean at the end like with unlocking. This is the same as
-    # calling the function explicitly before each exit, but additionally
-    # it also cleans the mapset on failure.
-    # This is the full proper clean up as opposed to the simplified one
-    # we do at the start of the session.
-    atexit.register(clean_mapset)
+    if not params.no_lock:
+        # check and create .gislock file
+        lock_mapset(mapset_settings.full_mapset, user=user,
+                    force_gislock_removal=params.force_gislock_removal,
+                    grass_gui=grass_gui)
+        # unlock the mapset which is current at the time of turning off
+        # in case mapset was changed
+        atexit.register(lambda: unlock_gisrc_mapset(gisrc, gisrcrc))
+        # We now own the mapset (set and lock), so we can clean temporary
+        # files which previous session may have left behind. We do it even
+        # for first time user because the cost is low and first time user
+        # doesn't necessarily mean that the mapset is used for the first time.
+    if not params.no_clean:
+        clean_mapset_temp()
+        # We always clean at the end like with unlocking. This is the same as
+        # calling the function explicitly before each exit, but additionally
+        # it also cleans the mapset on failure.
+        # This is the full proper clean up as opposed to the simplified one
+        # we do at the start of the session.
+        atexit.register(clean_mapset)
 
     # build user fontcap if specified but not present
     make_fontcap()
@@ -2369,7 +2402,7 @@ def main():
     if batch_job:
         returncode = run_batch_job(batch_job)
         sys.exit(returncode)
-    elif params.exit_grass:
+    elif params.exit_grass or params.clean_only:
         sys.exit(0)
     else:
         # Display the version and license info. Everything should be okay
