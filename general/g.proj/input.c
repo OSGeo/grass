@@ -258,8 +258,6 @@ int input_georef(char *geofile)
 	hSRS = OGR_L_GetSpatialRef(ogr_layer);
 	ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, hSRS, 0);
 	set_default_region();
-
-	OGR_DS_Destroy(ogr_ds);
     }
     else {
 	/* Try opening with GDAL */
@@ -322,6 +320,8 @@ int input_georef(char *geofile)
 	    }
 	}
     }
+    if (ogr_ds)
+	OGR_DS_Destroy(ogr_ds);
 
     return ret;
 
