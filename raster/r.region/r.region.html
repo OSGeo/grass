@@ -29,14 +29,14 @@ e=<em>value</em>, and w=<em>value</em>.
 
 <h2>EXAMPLES</h2>
 
-Assign absolute coordinates to map:
+<p>Assign absolute coordinates to map:
 <div class="code"><pre>
 r.region map=mymap n=220750 s=220000 w=638300 e=639000
 </pre></div>
 
-Shift map (using offset, here by 100 map units in two directions):
+<p>Shift map (using offset, here by +100 map units in the NS direction, -50 in the EW direction):
 <div class="code"><pre>
-r.region map=mymap n=n+100 e=e+100 w=w+100 s=s+100
+r.region map=mymap n=n+100 e=e-50 w=w-50 s=s+100
 </pre></div>
 
 
