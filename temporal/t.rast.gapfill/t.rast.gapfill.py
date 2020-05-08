@@ -70,9 +70,7 @@
 
 import sys
 import copy
-from multiprocessing import Process
 import grass.script as grass
-from grass.exceptions import FatalError
 
 ############################################################################
 
@@ -216,7 +214,7 @@ def main():
     # Insert new interpolated maps in temporal database and dataset
     for _map in result_list:
         id = _map.get_id()
-        if overwrite_flags[id] == True:
+        if overwrite_flags[id]:
             if _map.is_time_absolute():
                 start, end = _map.get_absolute_time()
                 if _map.is_in_db():

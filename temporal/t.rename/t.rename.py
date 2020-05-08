@@ -85,7 +85,7 @@ def main():
                       "mapset.") % (stds.get_new_map_instance(None).get_type(), 
                                     old_id))
         
-    if stds.is_in_db(dbif=dbif) == False:
+    if not stds.is_in_db(dbif=dbif):
         dbif.close()
         grass.fatal(_("Space time %s dataset <%s> not found") % (
             stds.get_new_map_instance(None).get_type(), old_id))
@@ -93,14 +93,14 @@ def main():
     # Check if the new id is in the database
     new_stds = tgis.dataset_factory(type, new_id)
 
-    if new_stds.is_in_db(dbif=dbif) == True and grass.overwrite() == False:
+    if new_stds.is_in_db(dbif=dbif) and not grass.overwrite():
         dbif.close()
         grass.fatal(_("Unable to rename Space time %s dataset <%s>. Name <%s> "
                       "is in use, please use the overwrite flag.") % (
             stds.get_new_map_instance(None).get_type(), old_id, new_id))
     
     # Remove an already existing space time dataset
-    if new_stds.is_in_db(dbif=dbif) == True:
+    if new_stds.is_in_db(dbif=dbif):
         new_stds.delete(dbif=dbif)
         
     stds.select(dbif=dbif)

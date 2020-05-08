@@ -69,7 +69,7 @@ def main():
     stds = tgis.open_old_stds(name, type, dbif)
     check = stds.shift(gran=gran, dbif=dbif)
 
-    if check == False:
+    if check is False:
         dbif.close()
         grass.fatal(_("Unable to temporally shift the space time %s dataset <%s>") % \
                      (stds.get_new_map_instance(None).get_type(), id))

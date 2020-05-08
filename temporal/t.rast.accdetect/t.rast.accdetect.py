@@ -180,7 +180,7 @@ def main():
 
     input_strds = tgis.SpaceTimeRasterDataset(id)
 
-    if input_strds.is_in_db() == False:
+    if not input_strds.is_in_db():
         dbif.close()
         grass.fatal(_("Space time %s dataset <%s> not found") % (
             input_strds.get_output_map_instance(None).get_type(), id))
@@ -243,7 +243,7 @@ def main():
             minimum_id = minimum + "@" + mapset
 
         minimum_strds = tgis.SpaceTimeRasterDataset(minimum_id)
-        if minimum_strds.is_in_db() == False:
+        if not minimum_strds.is_in_db():
             dbif.close()
             grass.fatal(_("Space time raster dataset <%s> not found") % (minimum_strds.get_id()))
 
@@ -262,7 +262,7 @@ def main():
             maximum_id = maximum + "@" + mapset
 
         maximum_strds = tgis.SpaceTimeRasterDataset(maximum_id)
-        if maximum_strds.is_in_db() == False:
+        if not maximum_strds.is_in_db():
             dbif.close()
             grass.fatal(_("Space time raster dataset <%s> not found") % (maximum_strds.get_id()))
 

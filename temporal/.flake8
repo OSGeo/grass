@@ -1,14 +1,10 @@
 [flake8]
 ignore =
+    F841, # local variable 'column' is assigned to but never used
+    F821, # undefined name '_'
     E265, # block comment should start with '# '
     E266, # too many leading '#' for block comment
     E502, # the backslash is redundant between brackets
-    E711, # comparison to None should be 'if cond is not None:'
-    E712, # comparison to False should be 'if cond is False:' or 'if not cond:'
-    E722, # do not use bare 'except'
-    F401, # 'ply.lex' imported but unused
-    F821, # undefined name '_'
-    F841, # local variable 'column' is assigned to but never used
     W291, # trailing whitespace
     W293, # blank line contains whitespace
     W391, # blank line at end of file

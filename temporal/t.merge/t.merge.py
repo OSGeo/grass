@@ -103,7 +103,7 @@ def main():
     output_stds = tgis.dataset_factory(type, output_id)
     output_exists = output_stds.is_in_db(dbif=dbif)
 
-    if output_exists == True and grass.overwrite() == False:
+    if output_exists and not grass.overwrite():
         dbif.close()
         grass.fatal(_("Unable to merge maps into space time %s dataset <%s> "\
                       "please use the overwrite flag.") % \
@@ -121,7 +121,7 @@ def main():
     registered_output_maps = {}
     # Maps that are already registered in an existing dataset 
     # are not registered again
-    if output_exists == True:
+    if output_exists:
         rows = output_stds.get_registered_maps(columns="id", dbif=dbif)
         if rows:
             for row in rows:
@@ -145,7 +145,7 @@ def main():
 
     output_stds.update_from_registered_maps(dbif=dbif)
 
-    if output_exists == True:
+    if output_exists:
         output_stds.update_command_string(dbif=dbif)
 
 if __name__ == "__main__":
