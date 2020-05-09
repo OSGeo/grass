@@ -22,13 +22,7 @@ jobs:
       run: |
         yum install -y epel-release
         yum install -y wget gawk
-        xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/yum.txt") -r -- \
-            yum install -y
-    - name: Install more recent CMake
-      run: |
-        wget https://github.com/Kitware/CMake/releases/download/v3.16.6/cmake-3.16.6-Linux-x86_64.sh
-        chmod u+x cmake-3.16.6-Linux-x86_64.sh
-        ./cmake-3.16.6-Linux-x86_64.sh --prefix=/usr/local --exclude-subdir --skip-license
+        yum install -y $(cat .github/workflows/yum.txt)
     - name: Install conda
       run: |
         wget https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh
