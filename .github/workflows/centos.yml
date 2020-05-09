@@ -48,7 +48,7 @@ jobs:
     - name: Build
       run: |
         source $CONDA_ACTIVATE
-        .github/workflows/build.sh $HOME/install
+        .github/workflows/build_centos.sh $HOME/install
     - name: Add the bin directory to PATH
       run: |
         echo "::add-path::$HOME/install/bin"
