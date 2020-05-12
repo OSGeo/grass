@@ -214,7 +214,7 @@ to set the north, south, east and west edges.  Rotational coefficients will
 be ignored, resulting in incorrect positioning for rotated datasets.<br>
 
 <dt> Projection
-<dd> The datasets projection will be used to compare to the current location
+<dd> The dataset's projection will be used to compare to the current location
 or to define a new location.  Internally GDAL represents projections in 
 OpenGIS Well Known Text format.  A large subset of the total set of GRASS
 projections are supported.<br>
@@ -349,7 +349,7 @@ r.in.gdal -o input=tg_0.25deg_reg_1995-2015_v12.0.nc output=temperatur_mean num_
 
 <h3>GTOPO30 DEM</h3>
 
-To avoid that the GTOPO30 data are read incorrectly, you can add a new line
+To avoid the GTOPO30 data being read incorrectly, you can add a new line
 "PIXELTYPE SIGNEDINT" in the .HDR to force interpretation of the file as
 signed rather than unsigned integers. Then the .DEM file can be imported.
 Finally, e.g. the 'terrain' color table can be assigned to the imported map
@@ -366,7 +366,7 @@ See also their <a href="http://www.ngdc.noaa.gov/mgg/dem/demportal.html">DEM por
 
 <h3>Raster file import over network</h3>
 
-Since GDAL 2.x it is possible to import raster data over network
+Since GDAL 2.x it is possible to import raster data over the network <!-- mention WMS, WMTS can do that too-->
 (see <a href="http://gdal.org/gdal_virtual_file_systems.html">GDAL Virtual File Systems</a>)
 including <a href="http://www.cogeo.org/">Cloud Optimized GeoTIFF</a>,
 i.e. access uncompressed and compressed raster data via a http(s) or ftp connection.
