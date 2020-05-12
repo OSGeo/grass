@@ -35,4 +35,3 @@ sqlite-devel
 wxGTK-devel
 wxPython
 zlib-devel
-zstd
