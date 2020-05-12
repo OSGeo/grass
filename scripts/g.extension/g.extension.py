@@ -140,6 +140,8 @@ import tempfile
 import xml.etree.ElementTree as etree
 from distutils.dir_util import copy_tree
 
+import requests
+
 from six.moves.urllib.request import urlopen, urlretrieve, ProxyHandler, build_opener, install_opener
 from six.moves.urllib.error import HTTPError, URLError
 
@@ -1347,11 +1349,11 @@ def download_source_code(source, url, name, outdev,
         # we expect that the module.zip file is not by chance in the archive
         zip_name = os.path.join(tmpdir, 'extension.zip')
         try:
-            response = urlopen(url)
+            response = requests.get(url)
         except URLError:
             grass.fatal(_("Extension <%s> not found") % name)
         with open(zip_name, 'wb') as out_file:
-            shutil.copyfileobj(response, out_file)
+            out_file.write(response.content)
         extract_zip(name=zip_name, directory=directory, tmpdir=tmpdir)
         fix_newlines(directory)
     elif source.startswith('remote_') and \
@@ -1918,7 +1920,7 @@ KNOWN_HOST_SERVICES_INFO = {
         'ignored_suffixes': ['.zip', '.tar.gz', '.tar.bz2', '.tar'],
         'possible_starts': ['', 'https://', 'http://'],
         'url_start': 'https://',
-        'url_end': '/repository/archive.zip',
+        'url_end': '/-/archive/master/{}-master.zip',
     },
     'Bitbucket': {
         'domain': 'bitbucket.org',
@@ -1933,7 +1935,7 @@ KNOWN_HOST_SERVICES_INFO = {
 # https://gitlab.com/user/reponame/repository/archive.zip?ref=b%C3%A9po
 
 
-def resolve_known_host_service(url):
+def resolve_known_host_service(url, name):
     """Determine source type and full URL for known hosting service
 
     If the service is not determined from the provided URL, tuple with
@@ -1962,7 +1964,7 @@ def resolve_known_host_service(url):
             actual_start = ''
         url = '{prefix}{base}{suffix}'.format(prefix=actual_start,
                                               base=url.rstrip('/'),
-                                              suffix=match['url_end'])
+                                              suffix=match['url_end'].format(name))
         gscript.verbose(_("Will use the following URL for download: {0}")
                         .format(url))
         return 'remote_zip', url
@@ -2027,9 +2029,9 @@ def resolve_source_code(url=None, name=None):
     GitLab:
 
     >>> resolve_source_code('gitlab.com/JoeUser/GrassModule') # doctest: +SKIP
-    ('remote_zip', 'https://gitlab.com/JoeUser/GrassModule/repository/archive.zip')
+    ('remote_zip', 'https://gitlab.com/JoeUser/GrassModule/'/-/archive/master/GrassModule-master.zip')
     >>> resolve_source_code('https://gitlab.com/JoeUser/GrassModule') # doctest: +SKIP
-    ('remote_zip', 'https://gitlab.com/JoeUser/GrassModule/repository/archive.zip')
+    ('remote_zip', 'https://gitlab.com/JoeUser/GrassModule/'/-/archive/master/GrassModule-master.zip')
 
     Bitbucket:
 
@@ -2092,7 +2094,7 @@ def resolve_source_code(url=None, name=None):
                 return suffix, os.path.abspath(url)
     # Handle remote URLs
     else:
-        source, resolved_url = resolve_known_host_service(url)
+        source, resolved_url = resolve_known_host_service(url, name)
         if source:
             return source, resolved_url
         # we allow URL to end with =zip or ?zip and not only .zip
