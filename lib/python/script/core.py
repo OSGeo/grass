@@ -1277,6 +1277,10 @@ def use_temp_region():
     then sets WIND_OVERRIDE to refer to that region. Installs an atexit
     handler to delete the temporary region upon termination.
     """
+    if "WIND_OVERRIDE" in os.environ:
+	# programming error
+	fatal("temp region is already set")
+	
     name = "tmp.%s.%d" % (os.path.basename(sys.argv[0]), os.getpid())
     run_command("g.region", save=name, overwrite=True)
     os.environ['WIND_OVERRIDE'] = name
@@ -1285,11 +1289,12 @@ def use_temp_region():
 
 def del_temp_region():
     """Unsets WIND_OVERRIDE and removes any region named by it."""
-    try:
-        name = os.environ.pop('WIND_OVERRIDE')
-        run_command("g.remove", flags='f', quiet=True, type='region', name=name)
-    except:
-        pass
+    if "WIND_OVERRIDE" not in os.environ:
+	# programming error
+	fatal("temp region is not set or already deleted")
+
+    name = os.environ.pop('WIND_OVERRIDE')
+    run_command("g.remove", flags='f', quiet=True, type='region', name=name)
 
 # interface to g.findfile
 
