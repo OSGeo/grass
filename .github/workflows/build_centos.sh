@@ -30,7 +30,7 @@ export INSTALL_PREFIX=$1
     --with-freetype --with-freetype-includes=/usr/include/freetype2 \
     --with-proj --with-proj-share=/usr/share/proj \
     --with-gdal=/usr/bin/gdal-config \
-    --with-zstd \
+    --without-zstd \
     --without-tiff \
     --without-ffmpeg \
     --without-mysql \
