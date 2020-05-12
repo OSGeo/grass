@@ -71,7 +71,7 @@ wait
 
 PARAM="--no-clean"
 # To check that it fails as expected, uncomment the following line.
-PARAM=""
+# PARAM=""
 
 for i in `seq 1 ${NPROC}`
 do
@@ -80,6 +80,8 @@ do
 done
 
 wait
+
+"${GRASS}" "${MAPSET_PATH}" --clean-only
 
 # Evaluate the computation
 # See how many raster maps are in the mapset
