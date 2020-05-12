@@ -112,12 +112,7 @@ class AnimationFrame(wx.Frame):
 
         # toolbars
         self.toolbars = {}
-        tb = ['miscToolbar', 'animationToolbar', 'mainToolbar']
-        if sys.platform == 'win32':
-            tb.reverse()
-        for toolb in tb:
-            self._addToolbar(toolb)
-
+        self._addToolbars()
         self._addPanes()
         self._mgr.Update()
 
@@ -146,46 +141,45 @@ class AnimationFrame(wx.Frame):
                     slider.GetBestSize()). DestroyOnClose(True).CloseButton(False).Bottom())
             self._mgr.GetPane('slider_' + name).Hide()
 
-    def _addToolbar(self, name):
-        """Add defined toolbar to the window
+    def _addToolbars(self):
+        """Add toolbars to the window
 
         Currently known toolbars are:
          - 'mainToolbar'          - data management
          - 'animationToolbar'     - animation controls
          - 'miscToolbar'          - help, close
         """
-        if name == "mainToolbar":
-            self.toolbars[name] = MainToolbar(self)
-            self._mgr.AddPane(self.toolbars[name],
-                              wx.aui.AuiPaneInfo().
-                              Name('mainToolbar').Caption(_("Main Toolbar")).
-                              ToolbarPane().Top().
-                              LeftDockable(False).RightDockable(False).
-                              BottomDockable(True).TopDockable(True).
-                              CloseButton(False).Layer(2).Row(1).
-                              BestSize((self.toolbars['mainToolbar'].GetBestSize())))
-        elif name == 'animationToolbar':
-            self.toolbars[name] = AnimationToolbar(self)
-            self._mgr.AddPane(self.toolbars[name],
-                              wx.aui.AuiPaneInfo().
-                              Name('animationToolbar').Caption(_("Animation Toolbar")).
-                              ToolbarPane().Top().
-                              LeftDockable(False).RightDockable(False).
-                              BottomDockable(True).TopDockable(True).
-                              CloseButton(False).Layer(2).Row(1).
-                              BestSize((self.toolbars['animationToolbar'].GetBestSize())))
-            self.controller.SetAnimationToolbar(
-                self.toolbars['animationToolbar'])
-        elif name == 'miscToolbar':
-            self.toolbars[name] = MiscToolbar(self)
-            self._mgr.AddPane(self.toolbars[name],
-                              wx.aui.AuiPaneInfo().
-                              Name('miscToolbar').Caption(_("Misc Toolbar")).
-                              ToolbarPane().Top().
-                              LeftDockable(False).RightDockable(False).
-                              BottomDockable(True).TopDockable(True).
-                              CloseButton(False).Layer(2).Row(1).
-                              BestSize((self.toolbars['miscToolbar'].GetBestSize())))
+        self.toolbars["mainToolbar"] = MainToolbar(self)
+        self._mgr.AddPane(self.toolbars["mainToolbar"],
+                          wx.aui.AuiPaneInfo().
+                          Name('mainToolbar').Caption(_("Main Toolbar")).
+                          ToolbarPane().Top().
+                          LeftDockable(False).RightDockable(False).
+                          BottomDockable(True).TopDockable(True).
+                          CloseButton(False).Layer(2).Row(1).Position(0).
+                          BestSize((self.toolbars['mainToolbar'].GetBestSize())))
+
+        self.toolbars['animationToolbar'] = AnimationToolbar(self)
+        self._mgr.AddPane(self.toolbars['animationToolbar'],
+                          wx.aui.AuiPaneInfo().
+                          Name('animationToolbar').Caption(_("Animation Toolbar")).
+                          ToolbarPane().Top().
+                          LeftDockable(False).RightDockable(False).
+                          BottomDockable(True).TopDockable(True).
+                          CloseButton(False).Layer(2).Row(1).Position(1).
+                          BestSize((self.toolbars['animationToolbar'].GetBestSize())))
+        self.controller.SetAnimationToolbar(
+            self.toolbars['animationToolbar'])
+
+        self.toolbars['miscToolbar'] = MiscToolbar(self)
+        self._mgr.AddPane(self.toolbars['miscToolbar'],
+                          wx.aui.AuiPaneInfo().
+                          Name('miscToolbar').Caption(_("Misc Toolbar")).
+                          ToolbarPane().Top().
+                          LeftDockable(False).RightDockable(False).
+                          BottomDockable(True).TopDockable(True).
+                          CloseButton(False).Layer(2).Row(1).Position(2).
+                          BestSize((self.toolbars['miscToolbar'].GetBestSize())))
 
     def SetAnimations(self, layerLists):
         """Set animation data
