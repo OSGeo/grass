@@ -510,7 +510,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	*-apple-darwin*)
 	    SHLIB_CFLAGS="-fno-common"
 	    SHLIB_SUFFIX=".dylib"
-	    SHLIB_LD="cc -dynamiclib -compatibility_version \${GRASS_VERSION_MAJOR}.\${GRASS_VERSION_MINOR} -current_version \${GRASS_VERSION_MAJOR}.\${GRASS_VERSION_MINOR} -install_name \${INST_DIR}/lib/lib\${LIB_NAME}\${SHLIB_SUFFIX}"
+	    SHLIB_LD="${CC} -dynamiclib -compatibility_version \${GRASS_VERSION_MAJOR}.\${GRASS_VERSION_MINOR} -current_version \${GRASS_VERSION_MAJOR}.\${GRASS_VERSION_MINOR} -install_name \${INST_DIR}/lib/lib\${LIB_NAME}\${SHLIB_SUFFIX}"
 	    LD_LIBRARY_PATH_VAR="DYLD_LIBRARY_PATH"
 	    ;;
 	*-sun-solaris*)
