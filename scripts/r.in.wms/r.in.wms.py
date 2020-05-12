@@ -68,7 +68,7 @@ This program is free software under the GNU General Public License
 #%option
 #% key: driver
 #% type:string
-#% description: Driver used to communication with server
+#% description: Driver used for communication with the server
 #% descriptions: WMS_GDAL;Download data using GDAL WMS driver;WMS_GRASS;Download data using native GRASS-WMS driver;WMTS_GRASS;Download data using native GRASS-WMTS driver;OnEarth_GRASS;Download data using native GRASS-OnEarth driver;
 #% options:WMS_GDAL, WMS_GRASS, WMTS_GRASS, OnEarth_GRASS
 #% answer:WMS_GRASS
