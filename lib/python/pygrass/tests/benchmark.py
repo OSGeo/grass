@@ -374,7 +374,7 @@ class OptionParser(optparse.OptionParser):
         for option in self.option_list:
             if hasattr(option, strREQUIRED) and option.required:
                 if not getattr(values, option.dest):
-                    self.error("option %s is required".format(str(option)))
+                    self.error("option {} is required".format(str(option)))
         return optparse.OptionParser.check_values(self, values, args)
 
 
