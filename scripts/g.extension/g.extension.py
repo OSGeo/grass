@@ -140,9 +140,7 @@ import tempfile
 import xml.etree.ElementTree as etree
 from distutils.dir_util import copy_tree
 
-import requests
-
-from six.moves.urllib.request import urlopen, urlretrieve, ProxyHandler, build_opener, install_opener
+from six.moves.urllib.request import urlopen, Request, urlretrieve, ProxyHandler, build_opener, install_opener
 from six.moves.urllib.error import HTTPError, URLError
 
 # Get the XML parsing exceptions to catch. The behavior changed with Python 2.7
@@ -1349,11 +1347,11 @@ def download_source_code(source, url, name, outdev,
         # we expect that the module.zip file is not by chance in the archive
         zip_name = os.path.join(tmpdir, 'extension.zip')
         try:
-            response = requests.get(url)
+            response = urlopen(Request(url, headers={'User-Agent': 'Mozilla/5.0'}))
         except URLError:
             grass.fatal(_("Extension <%s> not found") % name)
         with open(zip_name, 'wb') as out_file:
-            out_file.write(response.content)
+            out_file.write(response.read())
         extract_zip(name=zip_name, directory=directory, tmpdir=tmpdir)
         fix_newlines(directory)
     elif source.startswith('remote_') and \
