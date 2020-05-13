@@ -218,7 +218,12 @@ class RLiSetupFrame(wx.Frame):
 
     def OnRemove(self, event):
         """Remove configuration file from path and update the list"""
-        confile = self.listfiles[self.listfileBox.GetSelections()[0]]
+        try:
+            confile = self.listfiles[self.listfileBox.GetSelections()[0]]
+        except:
+            gcmd.GMessage(parent=self,
+                          message=_("You have to select a configuration file"))
+            return
         dlg = wx.MessageDialog(
             parent=self.parent,
             message=_(
