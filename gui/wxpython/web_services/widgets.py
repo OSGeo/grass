@@ -46,8 +46,8 @@ from web_services.cap_interface import WMSCapabilities, WMTSCapabilities, OnEart
 
 from gui_core.widgets import GNotebook
 from gui_core.widgets import ManageSettingsWidget
-from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, \
-    TextCtrl, TreeCtrl
+from gui_core.wrap import Button, ScrolledPanel, SpinCtrl, StaticBox, \
+    StaticText, TextCtrl, TreeCtrl
 
 import grass.script as grass
 
@@ -147,6 +147,8 @@ class WSPanel(wx.Panel):
         self.Bind(EVT_CMD_DONE, self.OnCapDownloadDone)
         self.Bind(EVT_CMD_OUTPUT, self.OnCmdOutput)
 
+        self.SetMinSize((-1, 300))
+
     def __del__(self):
         self.cmd_thread.abort(abortall=True)
         grass.try_remove(self.cap_file)
@@ -241,7 +243,8 @@ class WSPanel(wx.Panel):
         """
         # TODO parse maxcol, maxrow, settings from d.wms module?
         # TODO OnEarth driver - add selection of time
-        adv_setts_panel = wx.Panel(parent=self, id=wx.ID_ANY)
+        adv_setts_panel = ScrolledPanel(parent=self, id=wx.ID_ANY,
+                                        style=wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER)
         self.notebook.AddPage(page=adv_setts_panel,
                               text=_('Advanced request settings'),
                               name='adv_req_setts')
@@ -411,6 +414,8 @@ class WSPanel(wx.Panel):
                        border=5)
 
         adv_setts_panel.SetSizer(border)
+        adv_setts_panel.SetAutoLayout(True)
+        adv_setts_panel.SetupScrolling()
 
     def OnUp(self, event):
         """Move selected layer up
