@@ -668,6 +668,7 @@ class GMFrame(wx.Frame):
         caption = _("Close Map Display {}").format(name)
         if not self.CanClosePage(caption):
             event.Veto()
+            return
 
         maptree = self.notebookLayers.GetPage(event.GetSelection()).maptree
         maptree.GetMapDisplay().CleanUp()
