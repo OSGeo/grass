@@ -147,6 +147,8 @@ class WSPanel(wx.Panel):
         self.Bind(EVT_CMD_DONE, self.OnCapDownloadDone)
         self.Bind(EVT_CMD_OUTPUT, self.OnCmdOutput)
 
+        self.SetMinSize((-1, 300))
+
     def __del__(self):
         self.cmd_thread.abort(abortall=True)
         grass.try_remove(self.cap_file)
