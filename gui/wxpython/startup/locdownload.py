@@ -90,13 +90,16 @@ class DownloadError(Exception):
 class RedirectText(object):
     def __init__(self, window):
         self.out = window
- 
+
     def write(self, string):
         try:
             wx.CallAfter(self.out.SetLabel, string)
         except:
             # window closed -> PyDeadObjectError
             pass
+
+    def flush(self):
+        pass
 
 # copy from g.extension, potentially move to library
 def move_extracted_files(extract_dir, target_dir, files):
@@ -185,7 +188,7 @@ def reporthook(count, block_size, total_size):
     sys.stdout.write("Download in progress, wait until it is finished\n{0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed".format(
         percent, progress_size / (1024 * 1024), speed, duration
     ))
-    
+
 # based on g.extension, potentially move to library
 def download_and_extract(source):
     """Download a file (archive) from URL and uncompress it"""
@@ -491,14 +494,14 @@ class LocationDownloadDialog(wx.Dialog):
                                    caption=_("Abort download"),
                                    style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE
             )
-            
+
             ret = dlg.ShowModal()
             dlg.Destroy()
 
             # TODO: terminate download process on wx.ID_YES
             if ret == wx.ID_NO:
                 return
-    
+
         self.Close()
 
 def main():
