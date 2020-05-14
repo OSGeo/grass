@@ -362,8 +362,8 @@ class RLIWizard(object):
                 cl = float(self.CIR_CL) / float(self.rasterinfo['cols'])
                 rl = float(self.CIR_RL) / float(self.rasterinfo['rows'])
             else:
-                cl = float(self.moving.width) / float(self.rasterinfo['cols'])
-                rl = float(self.moving.height) / float(self.rasterinfo['rows'])
+                cl = float(self.units.width) / float(self.rasterinfo['cols'])
+                rl = float(self.units.height) / float(self.rasterinfo['rows'])
 
             fil.write("SAMPLEAREA -1|-1|%r|%r\n" % (rl, cl))
             if self.units.distrtype == 'non_overlapping':
