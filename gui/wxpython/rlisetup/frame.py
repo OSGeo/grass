@@ -220,7 +220,7 @@ class RLiSetupFrame(wx.Frame):
         """Remove configuration file from path and update the list"""
         try:
             confile = self.listfiles[self.listfileBox.GetSelections()[0]]
-        except:
+        except IndexError:
             gcmd.GMessage(parent=self,
                           message=_("You have to select a configuration file"))
             return
@@ -251,7 +251,7 @@ class RLiSetupFrame(wx.Frame):
         """Rename an existing configuration file"""
         try:
             confile = self.listfiles[self.listfileBox.GetSelections()[0]]
-        except:
+        except IndexError:
             gcmd.GMessage(parent=self,
                           message=_("You have to select a configuration file"))
             return
@@ -271,7 +271,7 @@ class RLiSetupFrame(wx.Frame):
         """Show and edit a configuration file"""
         try:
             confile = self.listfiles[self.listfileBox.GetSelections()[0]]
-        except:
+        except IndexError:
             gcmd.GMessage(parent=self,
                           message=_("You have to select a configuration file"))
             return
