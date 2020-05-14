@@ -314,6 +314,7 @@ class MapFrame(SingleMapFrame):
                 parent=self, toolSwitcher=self._toolSwitcher,
                 MapWindow=self.MapWindow, digitClass=VDigit,
                 giface=self._giface)
+            self.toolbars['vdigit'].quitDigitizer.connect(self.QuitVDigit)
         self.MapWindowVDigit.SetToolbar(self.toolbars['vdigit'])
 
         self._mgr.AddPane(self.toolbars['vdigit'],
@@ -1579,3 +1580,11 @@ class MapFrame(SingleMapFrame):
 
         self.RemoveToolbar('rdigit', destroy=True)
         self.rdigit = None
+
+    def QuitVDigit(self):
+        """Quit VDigit"""
+        if not self.IsStandalone():
+            # disable the toolbar
+            self.RemoveToolbar("vdigit", destroy=True)
+        else:
+            self.Close()
