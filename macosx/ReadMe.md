@@ -1,6 +1,4 @@
----
-title: GRASS Mac OS X Build
----
+# title: GRASS GIS Mac OS X Build
 
 (and other Mac notes)
 
