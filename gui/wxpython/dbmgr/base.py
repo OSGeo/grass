@@ -1210,7 +1210,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
             name='wherePanel')
         sqlWhereColumn = wx.ComboBox(
             parent=whereSimpleSqlPanel, id=wx.ID_ANY, size=(150, -1),
-            style=wx.CB_SIMPLE | wx.CB_READONLY,
+            style=wx.CB_READONLY,
             choices=self.dbMgrData['mapDBInfo'].GetColumns(
                 self.dbMgrData['mapDBInfo'].layers[layer]['table']))
         sqlWhereColumn.SetSelection(0)
@@ -1262,16 +1262,16 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         sqlSimpleWhereSizer.Add(
             sqlWhereColumn,
-            flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
             border=3)
         sqlSimpleWhereSizer.Add(
             sqlWhereCond,
-            flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
             border=3)
         sqlSimpleWhereSizer.Add(
             sqlWhereValue,
             proportion=1,
-            flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
             border=3)
         whereSimpleSqlPanel.SetSizer(sqlSimpleWhereSizer)
         simpleSqlSizer.Add(sqlLabel, border=5, pos=(0, 0),
