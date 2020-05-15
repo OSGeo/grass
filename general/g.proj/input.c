@@ -247,6 +247,7 @@ int input_georef(char *geofile)
     G_debug(1, "Trying to open <%s> with OGR...", geofile);
     OGRRegisterAll();
 
+    ogr_ds = NULL;
     hSRS = NULL;
     if ((ogr_ds = OGROpen(geofile, FALSE, NULL))
 	&& (OGR_DS_GetLayerCount(ogr_ds) > 0)) {
