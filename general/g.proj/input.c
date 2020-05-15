@@ -247,6 +247,7 @@ int input_georef(char *geofile)
     G_debug(1, "Trying to open <%s> with OGR...", geofile);
     OGRRegisterAll();
 
+    ogr_ds = NULL;
     hSRS = NULL;
     if ((ogr_ds = OGROpen(geofile, FALSE, NULL))
 	&& (OGR_DS_GetLayerCount(ogr_ds) > 0)) {
@@ -258,8 +259,6 @@ int input_georef(char *geofile)
 	hSRS = OGR_L_GetSpatialRef(ogr_layer);
 	ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, hSRS, 0);
 	set_default_region();
-
-	OGR_DS_Destroy(ogr_ds);
     }
     else {
 	/* Try opening with GDAL */
@@ -322,6 +321,8 @@ int input_georef(char *geofile)
 	    }
 	}
     }
+    if (ogr_ds)
+	OGR_DS_Destroy(ogr_ds);
 
     return ret;
 
