@@ -73,11 +73,11 @@ class VDigitSettingsDialog(wx.Dialog):
         # sizers
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.Add(btnCancel, proportion=0,
-                     flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
+                     flag=wx.ALL, border=5)
         btnSizer.Add(btnApply, proportion=0,
-                     flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
+                     flag=wx.ALL, border=5)
         btnSizer.Add(btnSave, proportion=0,
-                     flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
+                     flag=wx.ALL, border=5)
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(

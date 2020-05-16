@@ -2528,6 +2528,8 @@ class PsMapBufferedWindow(wx.Window):
         # Make new off screen bitmap: this bitmap will always have the
         # current drawing in it, so it can be used to save the image
         # to a file, or whatever.
+        width = max(width, 20)
+        height = max(height, 20)
         self._buffer = EmptyBitmap(width, height)
         # re-render image on idle
         self.resize = True

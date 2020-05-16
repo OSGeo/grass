@@ -80,9 +80,9 @@ class PyShellWindow(wx.Panel):
                          flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
         btnSizer.AddStretchSpacer()
         btnSizer.Add(self.btnClear, proportion=0,
-                     flag=wx.EXPAND | wx.ALIGN_RIGHT, border=5)
+                     flag=wx.EXPAND, border=5)
         sizer.Add(btnSizer, proportion=0,
-                  flag=wx.ALIGN_RIGHT | wx.ALL | wx.EXPAND, border=5)
+                  flag=wx.ALL | wx.EXPAND, border=5)
 
         sizer.Fit(self)
         sizer.SetSizeHints(self)

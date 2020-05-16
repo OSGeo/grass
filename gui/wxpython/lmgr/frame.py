@@ -149,35 +149,31 @@ class GMFrame(wx.Frame):
                          'nviz': LMNvizToolbar(parent=self)}
         self._toolbarsData = {'workspace': ("toolbarWorkspace",     # name
                                             _("Workspace Toolbar"),  # caption
-                                            1),                     # row
+                                            1, 0),                   # row, position
                               'data': ("toolbarData",
                                        _("Data Toolbar"),
-                                       1),
+                                       1, 1),
                               'misc': ("toolbarMisc",
                                        _("Misc Toolbar"),
-                                       2),
+                                       2, 2),
                               'tools': ("toolbarTools",
                                         _("Tools Toolbar"),
-                                        2),
+                                        2, 1),
                               'vector': ("toolbarVector",
                                          _("Vector Toolbar"),
-                                         2),
+                                         2, 0),
                               'nviz': ("toolbarNviz",
                                        _("3D view Toolbar"),
-                                       2),
+                                       2, 3),
                               }
-        if sys.platform == 'win32':
-            self._toolbarsList = ('workspace', 'data',
-                                  'vector', 'tools', 'misc', 'nviz')
-        else:
-            self._toolbarsList = ('data', 'workspace',
-                                  'nviz', 'misc', 'tools', 'vector')
-        for toolbar in self._toolbarsList:
-            name, caption, row = self._toolbarsData[toolbar]
+        toolbarsList = ('workspace', 'data',
+                        'vector', 'tools', 'misc', 'nviz')
+        for toolbar in toolbarsList:
+            name, caption, row, position = self._toolbarsData[toolbar]
             self._auimgr.AddPane(self.toolbars[toolbar],
                                  wx.aui.AuiPaneInfo().
                                  Name(name).Caption(caption).
-                                 ToolbarPane().Top().Row(row).
+                                 ToolbarPane().Top().Row(row).Position(position).
                                  LeftDockable(False).RightDockable(False).
                                  BottomDockable(False).TopDockable(True).
                                  CloseButton(False).Layer(2).
