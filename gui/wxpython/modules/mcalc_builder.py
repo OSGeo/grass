@@ -396,7 +396,7 @@ class MapCalcFrame(wx.Frame):
 
         buttonSizer3 = wx.GridBagSizer(7, 1)
         buttonSizer3.Add(self.functlabel, pos=(0, 0),
-                         span=(1, 2), flag=wx.ALIGN_CENTER|wx.EXPAND)
+                         span=(1, 2), flag=wx.ALIGN_CENTER | wx.EXPAND)
         buttonSizer3.Add(self.function, pos=(1, 0),
                          span=(1, 2))
         buttonSizer3.Add(self.mapsellabel, pos=(2, 0),
