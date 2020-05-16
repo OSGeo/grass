@@ -132,14 +132,7 @@ class IClassMapFrame(DoubleMapFrame):
         #
         # Add toolbars
         #
-
-        toolbarsCopy = toolbars[:]
-        if sys.platform == 'win32':
-            self.AddToolbar(toolbarsCopy.pop(1))
-            toolbarsCopy.reverse()
-        else:
-            self.AddToolbar(toolbarsCopy.pop(0))
-        for toolb in toolbarsCopy:
+        for toolb in toolbars:
             self.AddToolbar(toolb)
         self.firstMapWindow.SetToolbar(self.toolbars['vdigit'])
 
@@ -313,7 +306,7 @@ class IClassMapFrame(DoubleMapFrame):
                               ToolbarPane().Top().
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
-                              CloseButton(False).Layer(2).Row(1).
+                              CloseButton(False).Layer(2).Row(1).Position(0).
                               BestSize((self.toolbars[name].GetBestSize())))
 
         if name == "iClass":
@@ -326,7 +319,7 @@ class IClassMapFrame(DoubleMapFrame):
                               ToolbarPane().Top().
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
-                              CloseButton(False).Layer(2).Row(2).
+                              CloseButton(False).Layer(2).Row(2).Position(0).
                               BestSize((self.toolbars[name].GetBestSize())))
 
         if name == "iClassMisc":
@@ -338,7 +331,7 @@ class IClassMapFrame(DoubleMapFrame):
                               ToolbarPane().Top().
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
-                              CloseButton(False).Layer(2).Row(1).
+                              CloseButton(False).Layer(2).Row(1).Position(1).
                               BestSize((self.toolbars[name].GetBestSize())))
 
         if name == "vdigit":
@@ -365,21 +358,15 @@ class IClassMapFrame(DoubleMapFrame):
                               ToolbarPane().Top().
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
-                              CloseButton(False).Layer(2).Row(2).
+                              CloseButton(False).Layer(2).Row(2).Position(1).
                               BestSize((self.toolbars[name].GetBestSize())))
 
     def _addPanes(self):
         """Add mapwindows and toolbars to aui manager"""
-        if sys.platform == 'win32':
-            self._addPaneMapWindow(name='training')
-            self._addPaneToolbar(name='iClassTrainingMapManager')
-            self._addPaneMapWindow(name='preview')
-            self._addPaneToolbar(name='iClassPreviewMapManager')
-        else:
-            self._addPaneToolbar(name='iClassPreviewMapManager')
-            self._addPaneMapWindow(name='preview')
-            self._addPaneToolbar(name='iClassTrainingMapManager')
-            self._addPaneMapWindow(name='training')
+        self._addPaneMapWindow(name='training', position=0)
+        self._addPaneToolbar(name='iClassTrainingMapManager', position=1)
+        self._addPaneMapWindow(name='preview', position=2)
+        self._addPaneToolbar(name='iClassPreviewMapManager', position=3)
 
         # otherwise best size was ignored
         self._mgr.SetDockSizeConstraint(0.5, 0.5)
@@ -389,7 +376,7 @@ class IClassMapFrame(DoubleMapFrame):
                           Dockable(False).Floatable(False).CloseButton(False).
                           Left().Layer(1).BestSize((335, -1)))
 
-    def _addPaneToolbar(self, name):
+    def _addPaneToolbar(self, name, position):
         if name == 'iClassPreviewMapManager':
             parent = self.previewMapManager
         else:
@@ -399,10 +386,10 @@ class IClassMapFrame(DoubleMapFrame):
         self._mgr.AddPane(self.toolbars[name],
                           wx.aui.AuiPaneInfo().ToolbarPane().Movable().
                           Name(name).
-                          CloseButton(False).Center().Layer(0).
+                          CloseButton(False).Center().Layer(0).Position(position).
                           BestSize((self.toolbars[name].GetBestSize())))
 
-    def _addPaneMapWindow(self, name):
+    def _addPaneMapWindow(self, name, position):
         if name == 'preview':
             window = self.GetSecondWindow()
             caption = _("Preview Display")
@@ -413,7 +400,7 @@ class IClassMapFrame(DoubleMapFrame):
         self._mgr.AddPane(window, wx.aui.AuiPaneInfo().
                           Name(name).Caption(caption).
                           Dockable(False).Floatable(False).CloseButton(False).
-                          Center().Layer(0))
+                          Center().Layer(0).Position(position))
 
     def IsStandalone(self):
         """Check if Map display is standalone"""

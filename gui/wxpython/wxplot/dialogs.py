@@ -98,7 +98,7 @@ class ProfileRasterDialog(wx.Dialog):
             parent=self, id=wx.ID_ANY, size=(
                 20, -1), style=wx.LI_HORIZONTAL)
         sizer.Add(line, proportion=0, flag=wx.GROW |
-                  wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border=5)
+                  wx.LEFT | wx.RIGHT, border=5)
 
         btnsizer = wx.StdDialogButtonSizer()
 
@@ -224,7 +224,7 @@ class ScatterRasterDialog(wx.Dialog):
             parent=self, id=wx.ID_ANY, size=(
                 20, -1), style=wx.LI_HORIZONTAL)
         sizer.Add(line, proportion=0, flag=wx.GROW |
-                  wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border=5)
+                  wx.LEFT | wx.RIGHT, border=5)
 
         btnsizer = wx.StdDialogButtonSizer()
 
@@ -319,25 +319,25 @@ class PlotStatsFrame(wx.Frame):
             id=wx.ID_ANY,
             label=self.title)
         sizer.Add(statstitle, proportion=0,
-                  flag=wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=3)
+                  flag=wx.GROW | wx.ALL, border=3)
         line = wx.StaticLine(
             parent=self.panel, id=wx.ID_ANY, size=(
                 20, -1), style=wx.LI_HORIZONTAL)
         sizer.Add(line, proportion=0,
-                  flag=wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=3)
+                  flag=wx.GROW | wx.ALL, border=3)
         for stats in self.message:
             statstxt = StaticText(parent=sp, id=wx.ID_ANY, label=stats)
             statstxt.SetBackgroundColour("WHITE")
             txtSizer.Add(
                 statstxt,
                 proportion=1,
-                flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
+                flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
                 border=3)
             line = wx.StaticLine(
                 parent=sp, id=wx.ID_ANY, size=(
                     20, -1), style=wx.LI_HORIZONTAL)
             txtSizer.Add(line, proportion=0, flag=wx.GROW |
-                         wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=3)
+                         wx.ALL, border=3)
 
         sp.SetSizer(txtSizer)
         sp.SetAutoLayout(1)
@@ -350,7 +350,7 @@ class PlotStatsFrame(wx.Frame):
             parent=self.panel, id=wx.ID_ANY, size=(
                 20, -1), style=wx.LI_HORIZONTAL)
         sizer.Add(line, proportion=0, flag=wx.GROW |
-                  wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border=3)
+                  wx.LEFT | wx.RIGHT, border=3)
 
         #
         # buttons
@@ -363,7 +363,7 @@ class PlotStatsFrame(wx.Frame):
         btnSizer.Add(
             btn_clipboard,
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALL,
+            flag=wx.ALL,
             border=5)
 
         btnCancel = Button(self.panel, wx.ID_CLOSE)
@@ -371,13 +371,13 @@ class PlotStatsFrame(wx.Frame):
         btnSizer.Add(
             btnCancel,
             proportion=0,
-            flag=wx.ALIGN_RIGHT | wx.ALL,
+            flag=wx.ALL,
             border=5)
 
         sizer.Add(
             btnSizer,
             proportion=0,
-            flag=wx.ALIGN_RIGHT | wx.ALL,
+            flag=wx.ALL,
             border=5)
 
         # bindings
@@ -529,7 +529,7 @@ class HistRasterDialog(wx.Dialog):
             parent=self, id=wx.ID_ANY, size=(
                 20, -1), style=wx.LI_HORIZONTAL)
         sizer.Add(line, proportion=0, flag=wx.GROW |
-                  wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border=5)
+                 wx.LEFT | wx.RIGHT, border=5)
 
         btnsizer = wx.StdDialogButtonSizer()
 
@@ -814,7 +814,7 @@ class TextDialog(wx.Dialog):
             parent=self, id=wx.ID_ANY, size=(
                 20, -1), style=wx.LI_HORIZONTAL)
         sizer.Add(line, proportion=0, flag=wx.GROW |
-                  wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border=3)
+                  wx.LEFT | wx.RIGHT, border=3)
 
         #
         # buttons
@@ -848,17 +848,17 @@ class TextDialog(wx.Dialog):
         btnSizer.Add(
             btnSave,
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALL,
+            flag=wx.ALL,
             border=5)
         btnSizer.Add(
             btnStdSizer,
             proportion=0,
-            flag=wx.ALIGN_RIGHT | wx.ALL,
+            flag=wx.ALL,
             border=5)
         sizer.Add(
             btnSizer,
             proportion=0,
-            flag=wx.ALIGN_RIGHT | wx.ALL,
+            flag=wx.ALL,
             border=5)
 
         #
@@ -1413,7 +1413,7 @@ class OptDialog(wx.Dialog):
             parent=self, id=wx.ID_ANY, size=(
                 20, -1), style=wx.LI_HORIZONTAL)
         sizer.Add(line, proportion=0, flag=wx.GROW |
-                  wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border=3)
+                  wx.LEFT | wx.RIGHT, border=3)
 
         #
         # buttons
@@ -1443,17 +1443,17 @@ class OptDialog(wx.Dialog):
         btnSizer.Add(
             btnSave,
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALL,
+            flag=wx.ALL,
             border=5)
         btnSizer.Add(
             btnStdSizer,
             proportion=0,
-            flag=wx.ALIGN_RIGHT | wx.ALL,
+            flag=wx.ALL,
             border=5)
         sizer.Add(
             btnSizer,
             proportion=0,
-            flag=wx.ALIGN_RIGHT | wx.ALL,
+            flag=wx.ALL,
             border=5)
 
         #

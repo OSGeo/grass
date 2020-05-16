@@ -172,7 +172,7 @@ class AddScattPlotDialog(wx.Dialog):
                      flag=wx.EXPAND)
 
         selSizer.Add(sel, proportion=1,
-                     flag=wx.EXPAND | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
+                     flag=wx.EXPAND | wx.TOP,
                      border=5)
 
         return selSizer

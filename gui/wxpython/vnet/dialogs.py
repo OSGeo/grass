@@ -502,11 +502,11 @@ class VNETDialog(wx.Dialog):
                               flag=wx.EXPAND | wx.ALL)
 
             selSizer.Add(selFiledSizer, proportion=0,
-                         flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER_VERTICAL,
+                         flag=wx.EXPAND | wx.ALL,
                          border=5)
         else:
             selSizer.Add(sel, proportion=1,
-                         flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER_VERTICAL,
+                         flag=wx.EXPAND | wx.ALL,
                          border=5)
         return selSizer
 
@@ -1169,9 +1169,9 @@ class PtsList(PointsList):
         for k, v in six.iteritems(data):
             if k == "use":
 
-                if v and not self.IsChecked(idx):
+                if v and not self.IsItemChecked(idx):
                     self.CheckItem(idx, True)
-                elif not v and self.IsChecked(idx):
+                elif not v and self.IsItemChecked(idx):
                     self.CheckItem(idx, False)
             else:
                 found = 0

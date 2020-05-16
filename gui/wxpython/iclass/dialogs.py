@@ -324,7 +324,7 @@ class IClassCategoryManagerDialog(wx.Dialog):
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         closeButton = Button(panel, id=wx.ID_CLOSE)
         btnSizer.Add(wx.Size(-1, -1), proportion=1, flag=wx.EXPAND)
-        btnSizer.Add(closeButton, proportion=0, flag=wx.ALIGN_RIGHT)
+        btnSizer.Add(closeButton, proportion=0)
         mainSizer.Add(
             btnSizer,
             proportion=0,

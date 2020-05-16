@@ -24,13 +24,13 @@ import six
 from copy import copy, deepcopy
 
 import wx
-from wx.lib.mixins.listctrl import CheckListCtrlMixin, ColumnSorterMixin, \
+from wx.lib.mixins.listctrl import ColumnSorterMixin, \
     ListCtrlAutoWidthMixin, TextEditMixin
 
 from core import globalvar
 from gui_core.wrap import (
     BitmapFromImage, Button, ComboBox, ListCtrl, Panel, StaticBox,
-    StaticText, TextCtrl,
+    StaticText, TextCtrl, CheckListCtrlMixin
 )
 
 if sys.version_info.major >= 3:

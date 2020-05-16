@@ -751,7 +751,7 @@ class PropertiesDialog(wx.Dialog):
             flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
             border=5)
         mainSizer.Add(btnStdSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
+                      flag=wx.EXPAND | wx.ALL, border=5)
 
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)

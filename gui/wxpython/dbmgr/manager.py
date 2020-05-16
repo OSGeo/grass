@@ -169,11 +169,11 @@ class AttributeManager(wx.Frame, DbMgrBase):
         # buttons
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.Add(self.btnReset, proportion=1,
-                     flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
+                     flag=wx.ALL, border=5)
         btnSizer.Add(self.btnReload, proportion=1,
-                     flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
+                     flag=wx.ALL, border=5)
         btnSizer.Add(self.btnClose, proportion=1,
-                     flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
+                     flag=wx.ALL, border=5)
 
         mainSizer.Add(self.notebook, proportion=1, flag=wx.EXPAND)
         mainSizer.Add(btnSizer, flag=wx.ALIGN_RIGHT | wx.ALL, border=5)

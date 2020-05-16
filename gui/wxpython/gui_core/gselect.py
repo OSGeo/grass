@@ -1686,7 +1686,7 @@ class GdalSelect(wx.Panel):
         paddingSizer = wx.BoxSizer(wx.VERTICAL)
         sizer = wx.GridBagSizer(vgap=5, hgap=10)
         paddingSizer.Add(self.fileWidgets['browse'],
-                         flag=wx.BOTTOM | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+                         flag=wx.BOTTOM | wx.EXPAND,
                          border=35)
         sizer.Add(paddingSizer, flag=wx.EXPAND, pos=(0, 0), span=(1, 2))
         sizer.AddGrowableCol(0)
@@ -1828,7 +1828,7 @@ class GdalSelect(wx.Panel):
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(StaticText(parent=self.nativePanel,
                              label=_("No settings available")),
-                  flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border=5)
+                  flag=wx.ALL | wx.EXPAND, border=5)
         self.nativePanel.SetSizer(sizer)
 
         for panel in (self.nativePanel, self.filePanel,

@@ -204,7 +204,7 @@ class SpeedDialog(wx.Dialog):
         btnStdSizer.Realize()
 
         mainSizer.Add(btnStdSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
+                      flag=wx.EXPAND | wx.ALL, border=5)
 
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
@@ -367,7 +367,7 @@ class InputDialog(wx.Dialog):
         btnStdSizer.Realize()
 
         sizer.Add(btnStdSizer, proportion=0,
-                  flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
+                  flag=wx.EXPAND | wx.ALL, border=5)
         self.SetSizer(sizer)
         sizer.Fit(self)
 
@@ -528,7 +528,7 @@ class InputDialog(wx.Dialog):
         hbox.Add(
             self.fileSelector,
             proportion=1,
-            flag=wx.EXPAND | wx.ALIGN_CENTER)
+            flag=wx.EXPAND)
         dataBoxSizer.Add(
             hbox,
             proportion=0,
@@ -821,7 +821,7 @@ class EditDialog(wx.Dialog):
         btnStdSizer.Realize()
 
         mainSizer.Add(btnStdSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
+                      flag=wx.EXPAND | wx.ALL, border=5)
 
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
@@ -941,7 +941,7 @@ class ExportDialog(wx.Dialog):
             page=self._createDecorationsPanel(notebook),
             text=_("Decorations"))
         mainSizer.Add(notebook, proportion=0,
-                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
+                      flag=wx.EXPAND | wx.ALL, border=5)
 
         self.btnExport = Button(self, wx.ID_OK)
         self.btnExport.SetLabel(_("Export"))
@@ -957,7 +957,7 @@ class ExportDialog(wx.Dialog):
         btnStdSizer.Realize()
 
         mainSizer.Add(btnStdSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
+                      flag=wx.EXPAND | wx.ALL, border=5)
         self.SetSizer(mainSizer)
 
         # set the longest option to fit
@@ -1179,7 +1179,7 @@ class ExportDialog(wx.Dialog):
         hSizer.Add(
             self.formatChoice,
             proportion=1,
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND | wx.ALL,
+            flag=wx.EXPAND | wx.ALL,
             border=2)
         borderSizer.Add(
             hSizer,
@@ -1357,7 +1357,7 @@ class ExportDialog(wx.Dialog):
         borderSizer.Add(
             fpsSizer,
             proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALL,
             border=5)
 
         panel.SetSizer(borderSizer)

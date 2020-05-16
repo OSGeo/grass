@@ -1815,9 +1815,9 @@ class VariablePanel(wx.Panel):
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(listSizer, proportion=1,
-                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+                      flag=wx.EXPAND | wx.ALL, border=5)
         mainSizer.Add(addSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALIGN_CENTER |
+                      flag=wx.EXPAND |
                       wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
 
         self.SetSizer(mainSizer)
@@ -1924,9 +1924,9 @@ class ItemPanel(wx.Panel):
 
         mainSizer = wx.BoxSizer(wx.HORIZONTAL)
         mainSizer.Add(listSizer, proportion=1,
-                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=3)
+                      flag=wx.EXPAND | wx.ALL, border=3)
         mainSizer.Add(manageSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=3)
+                      flag=wx.EXPAND | wx.ALL, border=3)
 
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
@@ -2011,9 +2011,9 @@ class PythonPanel(wx.Panel):
                      flag=wx.LEFT | wx.RIGHT, border=5)
         btnSizer.AddStretchSpacer()
         btnSizer.Add(self.btnSaveAs, proportion=0,
-                     flag=wx.RIGHT | wx.ALIGN_RIGHT, border=5)
+                     flag=wx.RIGHT, border=5)
         btnSizer.Add(self.btnRun, proportion=0,
-                     flag=wx.RIGHT | wx.ALIGN_RIGHT, border=5)
+                     flag=wx.RIGHT, border=5)
 
         sizer.Add(bodySizer, proportion=1,
                   flag=wx.EXPAND | wx.ALL, border=3)

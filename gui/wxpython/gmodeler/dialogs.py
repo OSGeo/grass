@@ -40,7 +40,7 @@ from gui_core.gselect import Select, ElementSelect
 from gmodeler.model import *
 from lmgr.menudata import LayerManagerMenuData
 from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl, \
-    Menu, ListCtrl, NewId
+    Menu, ListCtrl, NewId, CheckListCtrlMixin
 
 from grass.script import task as gtask
 
@@ -258,7 +258,7 @@ class ModelSearchDialog(wx.Dialog):
         mainSizer.Add(labelSizer, proportion=1,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border=3)
         mainSizer.Add(btnSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+                      flag=wx.EXPAND | wx.ALL, border=5)
 
         self.panel.SetSizer(mainSizer)
         mainSizer.Fit(self)
@@ -1067,7 +1067,7 @@ class ItemListCtrl(ModelListCtrl):
                 wx.LIST_STATE_SELECTED | wx.LIST_STATE_FOCUSED)
 
 
-class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
+class ItemCheckListCtrl(ItemListCtrl, CheckListCtrlMixin):
 
     def __init__(self, parent, shape, columns, frame, **kwargs):
         self.parent = parent
@@ -1075,7 +1075,7 @@ class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
 
         ItemListCtrl.__init__(self, parent, columns, frame,
                               disablePopup=True, **kwargs)
-        listmix.CheckListCtrlMixin.__init__(self)
+        CheckListCtrlMixin.__init__(self)
         self.SetColumnWidth(0, 100)
 
         self.shape = shape
@@ -1099,7 +1099,7 @@ class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
 
         # action ids start at 1
         for i in range(self.GetItemCount()):
-            if self.IsChecked(i):
+            if self.IsItemChecked(i):
                 ids['checked'].append(self.itemIdMap[i])
             else:
                 ids['unchecked'].append(self.itemIdMap[i])
