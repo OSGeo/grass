@@ -313,6 +313,35 @@ class ListCtrl(wx.ListCtrl):
         else:
             return wx.ListCtrl.SetStringItem(self, index=index, col=column, label=label, imageId=imageId)
 
+    def CheckItem(self, item, check=True):
+        """Uses either deprecated listmix.CheckListCtrlMixin
+        or new checkbox implementation in wx.ListCtrl since 4.1.0"""
+        if hasattr(self, 'HasCheckBoxes'):
+            wx.ListCtrl.CheckItem(self, item, check)
+        else:
+            super(ListCtrl, self).CheckItem(item, check)
+
+    def IsItemChecked(self, item):
+        if hasattr(self, 'HasCheckBoxes'):
+            return wx.ListCtrl.IsItemChecked(self, item)
+        else:
+            return super(ListCtrl, self).IsChecked(item)
+
+           
+if CheckWxVersion([4, 1, 0]):
+    class CheckListCtrlMixin():
+        """This class pretends to be deprecated CheckListCtrlMixin mixin and
+        only enables checkboxes in new versions of ListCtrl"""
+        def __init__(self):
+            self.EnableCheckBoxes(True)
+            self.AssignImageList(wx.ImageList(16, 16), wx.IMAGE_LIST_SMALL)
+else:
+    import wx.lib.mixins.listctrl as listmix
+    class CheckListCtrlMixin(listmix.CheckListCtrlMixin):
+        """Wrapper for deprecated mixin"""
+        def __init__(self):
+            listmix.CheckListCtrlMixin.__init__(self)
+
 
 class TreeCtrl(wx.TreeCtrl):
     """Wrapper around wx.TreeCtrl to have more control

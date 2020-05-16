@@ -438,7 +438,7 @@ class NvizToolWindow(FN.FlatNotebook):
         reset.SetToolTip(_("Reset to default view"))
         reset.Bind(wx.EVT_BUTTON, self.OnResetView)
         viewSizer.Add(reset, proportion=0,
-                      flag=wx.TOP | wx.BOTTOM | wx.RIGHT | wx.ALIGN_RIGHT,
+                      flag=wx.TOP | wx.BOTTOM | wx.RIGHT,
                       border=5)
 
         gridSizer.Add(viewSizer, pos=(4, 0), span=(1, 3),

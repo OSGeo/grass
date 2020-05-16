@@ -81,7 +81,7 @@ class DataCatalogFrame(wx.Frame):
         btnSizer.Add(self.btnClose)
 
         sizer.Add(btnSizer, proportion=0,
-                  flag=wx.ALL | wx.ALIGN_RIGHT | wx.EXPAND,
+                  flag=wx.ALL | wx.EXPAND,
                   border=5)
 
         self.panel.SetSizer(sizer)

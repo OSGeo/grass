@@ -71,7 +71,9 @@ class BufferedWindow(wx.Window):
         # Make new offscreen bitmap: this bitmap will always have the
         # current drawing in it, so it can be used to save the image to
         # a file, or whatever.
-        self._Buffer = EmptyBitmap(*size)
+        w = max(size[0], 20)
+        h = max(size[1], 20)
+        self._Buffer = EmptyBitmap(w, h)
         self.UpdateDrawing()
         # event.Skip()
 

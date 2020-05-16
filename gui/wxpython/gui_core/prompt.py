@@ -384,9 +384,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         """Show sorted auto-completion list if it is not empty"""
         if len(self.autoCompList) > 0:
             self.autoCompList.sort()
-            self.AutoCompShow(
-                lenEntered=0, itemList=' '.join(
-                    self.autoCompList))
+            self.AutoCompShow(0, itemList=' '.join(self.autoCompList))
 
     def OnKeyPressed(self, event):
         """Key pressed capture special treatment for tabulator to show help"""

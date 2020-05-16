@@ -52,7 +52,7 @@ from gui_core.dialogs import SymbolDialog, DefaultFontDialog
 from gui_core.widgets import IntegerValidator, ColorTablesComboBox
 from core.debug import Debug
 from gui_core.wrap import SpinCtrl, Button, BitmapButton, StaticText, \
-    StaticBox, TextCtrl, ListCtrl
+    StaticBox, TextCtrl, ListCtrl, CheckListCtrlMixin
 
 
 class PreferencesBaseDialog(wx.Dialog):
@@ -127,7 +127,7 @@ class PreferencesBaseDialog(wx.Dialog):
         mainSizer.Add(btnSizer, proportion=0,
                       flag=wx.EXPAND, border=0)
         mainSizer.Add(btnStdSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
+                      flag=wx.EXPAND | wx.ALL, border=5)
 
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
@@ -2144,7 +2144,7 @@ class MapsetAccess(wx.Dialog):
         line = wx.StaticLine(parent=self, id=wx.ID_ANY,
                              style=wx.LI_HORIZONTAL)
         sizer.Add(line, proportion=0,
-                  flag=wx.EXPAND | wx.ALIGN_CENTRE | wx.ALL, border=5)
+                  flag=wx.EXPAND | wx.ALL, border=5)
 
         btnsizer = wx.StdDialogButtonSizer()
         okbtn = Button(self, wx.ID_OK)
@@ -2156,7 +2156,7 @@ class MapsetAccess(wx.Dialog):
         btnsizer.Realize()
 
         sizer.Add(btnsizer, proportion=0,
-                  flag=wx.EXPAND | wx.ALIGN_RIGHT | wx.ALL, border=5)
+                  flag=wx.EXPAND | wx.ALL, border=5)
 
         # do layout
         self.Layout()
@@ -2170,7 +2170,7 @@ class MapsetAccess(wx.Dialog):
         ms = []
         i = 0
         for mset in self.all_mapsets_ordered:
-            if self.mapsetlb.IsChecked(i):
+            if self.mapsetlb.IsItemChecked(i):
                 ms.append(mset)
             i += 1
 
@@ -2178,7 +2178,7 @@ class MapsetAccess(wx.Dialog):
 
 
 class CheckListMapset(
-        ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCtrlMixin):
+        ListCtrl, listmix.ListCtrlAutoWidthMixin, CheckListCtrlMixin):
     """List of mapset/owner/group"""
 
     def __init__(self, parent, log=None):
@@ -2186,7 +2186,7 @@ class CheckListMapset(
 
         ListCtrl.__init__(self, parent, wx.ID_ANY,
                           style=wx.LC_REPORT)
-        listmix.CheckListCtrlMixin.__init__(self)
+        CheckListCtrlMixin.__init__(self)
         self.log = log
 
         # setup mixins

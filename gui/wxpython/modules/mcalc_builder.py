@@ -245,7 +245,7 @@ class MapCalcFrame(wx.Frame):
         # Text area
         #
         self.text_mcalc = TextCtrl(
-            parent=self.panel, id=wx.ID_ANY, size=(-1, 75),
+            parent=self.panel, id=wx.ID_ANY, size=(-1, 100),
             style=wx.TE_MULTILINE)
         wx.CallAfter(self.text_mcalc.SetFocus)
 
@@ -339,9 +339,9 @@ class MapCalcFrame(wx.Frame):
 
         self._layout()
 
-        self.SetMinSize(self.GetBestSize())
+        self.SetMinSize(self.panel.GetBestSize())
         # workaround for http://trac.wxwidgets.org/ticket/13628
-        self.SetSize(self.GetBestSize())
+        self.SetSize(self.panel.GetBestSize())
 
     def _return_funct(self, event):
         i = event.GetString()
@@ -388,15 +388,15 @@ class MapCalcFrame(wx.Frame):
 
         outputSizer = wx.StaticBoxSizer(self.outputBox, wx.VERTICAL)
         outputSizer.Add(self.newmaplabel,
-                        flag=wx.ALIGN_CENTER | wx.BOTTOM | wx.TOP, border=5)
+                        flag=wx.ALIGN_CENTER | wx.TOP, border=5)
         outputSizer.Add(self.newmaptxt,
-                        flag=wx.EXPAND)
+                        flag=wx.EXPAND | wx.ALL, border=5)
 
         operandSizer = wx.StaticBoxSizer(self.operandBox, wx.HORIZONTAL)
 
         buttonSizer3 = wx.GridBagSizer(7, 1)
         buttonSizer3.Add(self.functlabel, pos=(0, 0),
-                         span=(1, 2), flag=wx.ALIGN_CENTER)
+                         span=(1, 2), flag=wx.ALIGN_CENTER | wx.EXPAND)
         buttonSizer3.Add(self.function, pos=(1, 0),
                          span=(1, 2))
         buttonSizer3.Add(self.mapsellabel, pos=(2, 0),
@@ -437,7 +437,7 @@ class MapCalcFrame(wx.Frame):
             border=5)
 
         operandSizer.Add(buttonSizer3, proportion=0,
-                         flag=wx.TOP | wx.BOTTOM | wx.RIGHT, border=5)
+                         flag=wx.ALL, border=5)
 
         controlSizer.Add(operatorSizer, proportion=1,
                          flag=wx.RIGHT | wx.EXPAND, border=5)

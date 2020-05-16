@@ -35,7 +35,7 @@ import six
 from copy import copy
 
 import wx
-from wx.lib.mixins.listctrl import CheckListCtrlMixin, ColumnSorterMixin, ListCtrlAutoWidthMixin
+from wx.lib.mixins.listctrl import ColumnSorterMixin, ListCtrlAutoWidthMixin
 import wx.lib.colourselect as csel
 
 from core import globalvar
@@ -58,7 +58,7 @@ from core.settings import UserSettings
 from gcp.mapdisplay import MapFrame
 from core.giface import Notification
 from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, \
-    CheckListBox, TextCtrl, Menu, ListCtrl, BitmapFromImage
+    CheckListBox, TextCtrl, Menu, ListCtrl, BitmapFromImage, CheckListCtrlMixin
 
 from location_wizard.wizard import TitledPage as TitledPage
 
@@ -1306,7 +1306,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         # changed
         itemIndex += 1
 
-        if not self.list.IsChecked(key - 1):
+        if not self.list.IsItemChecked(key - 1):
             wxPen = "unused"
             if not self.show_unused:
                 item.SetPropertyVal('hide', True)
@@ -1406,7 +1406,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                 "#-----------------------     -----------------------     ---------------\n")
 
             for index in range(self.list.GetItemCount()):
-                if self.list.IsChecked(index) == True:
+                if self.list.IsItemChecked(index):
                     check = "1"
                     self.GCPcount += 1
                 else:
@@ -1707,7 +1707,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         highest_idx = 0
 
         for index in range(self.list.GetItemCount()):
-            if self.list.IsChecked(index):
+            if self.list.IsItemChecked(index):
                 key = self.list.GetItemData(index)
                 fwd_err = self.mapcoordlist[key][5]
 
@@ -1840,7 +1840,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         for index in range(self.list.GetItemCount()):
             key = self.list.GetItemData(index)
-            if self.list.IsChecked(index):
+            if self.list.IsItemChecked(index):
                 fwd_err, bkw_err = errlist[GCPcount].split()
                 self.list.SetItem(index, 5, fwd_err)
                 self.list.SetItem(index, 6, bkw_err)
@@ -1878,7 +1878,7 @@ class GCP(MapFrame, ColumnSorterMixin):
             self.list.SetItemTextColour(highest_idx, wx.RED)
         elif GCPcount > 0 and self.rmsthresh > 0 and not self.highest_only:
             for index in range(self.list.GetItemCount()):
-                if self.list.IsChecked(index):
+                if self.list.IsItemChecked(index):
                     key = self.list.GetItemData(index)
                     if (self.mapcoordlist[key][5] > self.rmsthresh):
                         self.list.SetItemTextColour(index, wx.RED)
@@ -2894,12 +2894,12 @@ class GrSettingsDialog(wx.Dialog):
                 id=wx.ID_ANY,
                 label=_('Select source map to display:')),
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5)
         sizer.Add(
             self.srcselection,
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5)
         self.srcselection.SetValue(src_map)
         sizer.Add(
@@ -2908,12 +2908,12 @@ class GrSettingsDialog(wx.Dialog):
                 id=wx.ID_ANY,
                 label=_('Select target raster map to display:')),
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5)
         sizer.Add(
             self.tgtrastselection,
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5)
         self.tgtrastselection.SetValue(tgt_map['raster'])
         sizer.Add(
@@ -2922,12 +2922,12 @@ class GrSettingsDialog(wx.Dialog):
                 id=wx.ID_ANY,
                 label=_('Select target vector map to display:')),
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5)
         sizer.Add(
             self.tgtvectselection,
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5)
         self.tgtvectselection.SetValue(tgt_map['vector'])
 
@@ -2999,7 +2999,7 @@ class GrSettingsDialog(wx.Dialog):
                 id=wx.ID_ANY,
                 label=_('Extension for output maps:')),
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5)
         self.ext_txt = TextCtrl(
             parent=panel, id=wx.ID_ANY, value="", size=(
@@ -3008,7 +3008,7 @@ class GrSettingsDialog(wx.Dialog):
         sizer.Add(
             self.ext_txt,
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5)
 
         # bindings

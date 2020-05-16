@@ -2926,7 +2926,7 @@ class ModelParamDialog(wx.Dialog):
                           flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
 
         mainSizer.Add(btnSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+                      flag=wx.EXPAND | wx.ALL, border=5)
 
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)

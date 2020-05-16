@@ -87,7 +87,7 @@ class SimpleDialog(wx.Dialog):
         btnSizer.Realize()
 
         self.sizer.Add(self.dataSizer, proportion=1,
-                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+                       flag=wx.EXPAND | wx.ALL, border=5)
 
         # self.sizer.Add(item = self.informLabel, proportion = 0, flag = wx.ALL, border = 5)
         self.sizer.Add(btnSizer, proportion=0,
@@ -734,7 +734,7 @@ class GroupDialog(wx.Dialog):
         bodySizer.Add(StaticText(parent=self, id=wx.ID_ANY,
                                  label=_("Select existing group or "
                                             "enter name of new group:")),
-                      flag=wx.ALIGN_CENTER_VERTICAL | wx.TOP, border=10)
+                      flag=wx.TOP, border=10)
         self.groupSelect = Select(parent=self, type='group',
                                   mapsets=[grass.gisenv()['MAPSET']],
                                   size=globalvar.DIALOG_GSELECT_SIZE,
@@ -746,7 +746,7 @@ class GroupDialog(wx.Dialog):
                                       label=_("Edit/create subgroup"))
 
         bodySizer.Add(self.subg_chbox,
-                      flag=wx.ALIGN_CENTER_VERTICAL | wx.TOP, border=10)
+                      flag=wx.TOP, border=10)
 
         self.subg_panel = wx.Panel(self)
         subg_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -757,8 +757,7 @@ class GroupDialog(wx.Dialog):
                 id=wx.ID_ANY,
                 label=_(
                     "Select existing subgroup or "
-                    "enter name of new subgroup:")),
-            flag=wx.ALIGN_CENTER_VERTICAL)
+                    "enter name of new subgroup:")))
 
         self.subGroupSelect = SubGroupSelect(parent=self.subg_panel)
 
@@ -898,7 +897,7 @@ class GroupDialog(wx.Dialog):
         self.infoLabel = StaticText(parent=self, id=wx.ID_ANY)
         bodySizer.Add(
             self.infoLabel,
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.BOTTOM,
+            flag=wx.TOP | wx.BOTTOM,
             border=5)
 
         # bindings
@@ -1425,7 +1424,7 @@ class MapLayersDialogBase(wx.Dialog):
         self.btnSizer.Realize()
 
         self.mainSizer.Add(self.btnSizer, proportion=0,
-                           flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+                           flag=wx.EXPAND | wx.ALL, border=5)
 
         self.SetSizer(self.mainSizer)
         self.mainSizer.Fit(self)
@@ -1801,12 +1800,12 @@ class SetOpacityDialog(wx.Dialog):
                 pos=(1, 1))
 
         sizer.Add(box, proportion=0,
-                  flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
+                  flag=wx.EXPAND | wx.ALL, border=5)
 
         line = wx.StaticLine(parent=panel, id=wx.ID_ANY,
                              style=wx.LI_HORIZONTAL)
         sizer.Add(line, proportion=0,
-                  flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
+                  flag=wx.EXPAND | wx.ALL, border=5)
 
         # buttons
         btnsizer = wx.StdDialogButtonSizer()
@@ -1824,7 +1823,7 @@ class SetOpacityDialog(wx.Dialog):
         btnsizer.Realize()
 
         sizer.Add(btnsizer, proportion=0,
-                  flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
+                  flag=wx.EXPAND | wx.ALL, border=5)
 
         panel.SetSizer(sizer)
         sizer.Fit(panel)

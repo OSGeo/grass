@@ -104,7 +104,7 @@ class SwipeMapDialog(wx.Dialog):
         mainSizer.Add(self.btnSwitch, proportion=0,
                       flag=wx.ALL | wx.ALIGN_LEFT, border=5)
         mainSizer.Add(self.btnSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+                      flag=wx.EXPAND | wx.ALL, border=5)
         self.mainSizer = mainSizer
         self._switchMode(simple=True)
         self.SetSizer(mainSizer)

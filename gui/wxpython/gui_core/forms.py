@@ -535,7 +535,7 @@ class TaskFrame(wx.Frame):
         self.description = StaticWrapText(parent=self.panel,
                                           label=module_desc)
         topsizer.Add(self.description, proportion=1, border=5,
-                     flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
+                     flag=wx.ALL | wx.EXPAND)
 
         guisizer.Add(topsizer, proportion=0, flag=wx.EXPAND)
 
@@ -1067,7 +1067,7 @@ class CmdPanel(wx.Panel):
             title_sizer.Add(chk, proportion=1,
                             flag=wx.EXPAND)
             title_sizer.Add(rtitle_txt, proportion=0,
-                            flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL)
+                            flag=wx.ALIGN_CENTER_VERTICAL)
             which_sizer.Add(
                 title_sizer,
                 proportion=0,
@@ -1161,7 +1161,7 @@ class CmdPanel(wx.Panel):
                 title_sizer.Add(
                     rtitle_txt,
                     proportion=0,
-                    flag=wx.ALIGN_RIGHT | wx.RIGHT | wx.TOP,
+                    flag=wx.RIGHT | wx.TOP,
                     border=5)
                 which_sizer.Add(title_sizer, proportion=0,
                                 flag=wx.EXPAND)
@@ -1537,7 +1537,7 @@ class CmdPanel(wx.Panel):
                         which_sizer.Add(
                             selection,
                             proportion=0,
-                            flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
+                            flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP,
                             border=5)
                     elif prompt == 'group':
                         win = self.FindWindowById(p['wxId'][0])
@@ -1546,7 +1546,7 @@ class CmdPanel(wx.Panel):
                         which_sizer.Add(
                             selection,
                             proportion=0,
-                            flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
+                            flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP,
                             border=5)
                     else:
                         if prompt in ('stds', 'strds', 'stvds', 'str3ds'):
@@ -1577,19 +1577,19 @@ class CmdPanel(wx.Panel):
                             hSizer.Add(
                                 selection,
                                 proportion=0,
-                                flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
+                                flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP,
                                 border=5)
                             hSizer.Add(
                                 bb,
                                 proportion=0,
-                                flag=wx.EXPAND | wx.BOTTOM | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
+                                flag=wx.EXPAND | wx.BOTTOM | wx.RIGHT | wx.TOP,
                                 border=5)
                             which_sizer.Add(hSizer)
                         else:
                             which_sizer.Add(
                                 selection,
                                 proportion=0,
-                                flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
+                                flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP,
                                 border=5)
 
                 # subgroup
@@ -1601,7 +1601,7 @@ class CmdPanel(wx.Panel):
                     which_sizer.Add(
                         selection,
                         proportion=0,
-                        flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
+                        flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP,
                         border=5)
 
                 # sigrature file
@@ -1614,7 +1614,7 @@ class CmdPanel(wx.Panel):
                     which_sizer.Add(
                         selection,
                         proportion=0,
-                        flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
+                        flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP,
                         border=5)
 
                 # separator
@@ -1628,7 +1628,7 @@ class CmdPanel(wx.Panel):
                     which_sizer.Add(
                         win,
                         proportion=0,
-                        flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
+                        flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP,
                         border=5)
 
                 # layer, dbdriver, dbname, dbcolumn, dbtable entry
@@ -1909,9 +1909,8 @@ class CmdPanel(wx.Panel):
                             border=5)
                         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
                         btnSizer.Add(btnLoad, proportion=0,
-                                     flag=wx.ALIGN_RIGHT | wx.RIGHT, border=10)
-                        btnSizer.Add(btnSave, proportion=0,
-                                     flag=wx.ALIGN_RIGHT)
+                                     flag=wx.RIGHT, border=10)
+                        btnSizer.Add(btnSave, proportion=0)
                         which_sizer.Add(
                             btnSizer,
                             proportion=0,

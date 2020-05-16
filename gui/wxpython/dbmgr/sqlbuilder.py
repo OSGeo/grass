@@ -242,7 +242,7 @@ class SQLBuilder(wx.Frame):
 
             self.mode.SetSelection(1)  # default 'values'
             modesizer.Add(self.mode, proportion=1,
-                          flag=wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, border=5)
+                          flag=wx.EXPAND, border=5)
 
         # self.list_columns.SetMinSize((-1,130))
         # self.list_values.SetMinSize((-1,100))
@@ -271,9 +271,8 @@ class SQLBuilder(wx.Frame):
 
         buttonsizer3 = wx.BoxSizer(wx.HORIZONTAL)
         buttonsizer3.Add(self.btn_uniquesample, proportion=0,
-                         flag=wx.ALIGN_CENTER_HORIZONTAL | wx.RIGHT, border=5)
-        buttonsizer3.Add(self.btn_unique, proportion=0,
-                         flag=wx.ALIGN_CENTER_HORIZONTAL)
+                         flag=wx.RIGHT, border=5)
+        buttonsizer3.Add(self.btn_unique, proportion=0)
 
         valuesizer.Add(buttonsizer3, proportion=0,
                        flag=wx.TOP, border=5)

@@ -123,7 +123,6 @@ class Menu(wx.MenuBar):
         id = event.GetMenuId()
         item = self.FindItemById(id)
         if item:
-            text = item.GetText()
             help = item.GetHelp()
 
         # but in this case just call Skip so the default is done
