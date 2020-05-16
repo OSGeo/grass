@@ -18,7 +18,7 @@
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate
 #               user interface and cleans up after it is finished.
-# COPYRIGHT:    (C) 2000-2019 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2020 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -510,8 +510,10 @@ def read_env_file(path):
     return kv
 
 
-def write_gisrc(kv, filename):
-    f = open(filename, 'w')
+def write_gisrc(kv, filename, append=False):
+    # use append=True to avoid a race condition between write_gisrc() and
+    # grass_prompt() on startup (PR #548)
+    f = open(filename, 'a' if append else 'w')
     for k, v in kv.items():
         f.write("%s: %s\n" % (k, v))
     f.close()
@@ -2318,9 +2320,14 @@ def main():
 
         # start GUI and register shell PID in rc file
         start_gui(grass_gui)
-        kv = read_gisrc(gisrc)
+        kv = {}
         kv['PID'] = str(shell_process.pid)
-        write_gisrc(kv, gisrc)
+
+        # grass_prompt() tries to read gisrc while write_gisrc() is adding PID
+        # to this file, so don't rewrite it; just append PID to make it
+        # available to grass_prompt() at all times (PR #548)
+        write_gisrc(kv, gisrc, append=True)
+
         exit_val = shell_process.wait()
         if exit_val != 0:
             warning(_("Failed to start shell '%s'") % os.getenv('SHELL'))
