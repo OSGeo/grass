@@ -42,6 +42,12 @@ struct menu
     char *text;			/* menu display - full description */
 };
 
+struct weight_functions
+{
+    char *name;			/* name  of the weight type */
+    char *text;			/* weight types display - full description */
+};
+
 enum out_type {
     T_FLOAT	= 1,
     T_INT	= 2,
@@ -75,6 +81,15 @@ static struct menu menu[] = {
     {0, 0, 0, 0, 0, 0, 0, 0}
 };
 
+/* modify this table to add new methods */
+static struct weight_functions weight_functions[] = {
+    {"None", "No weighting"},
+    {"gaussian", "Gaussian weighting function"},
+    {"exponential", "Exponential weighting function"},
+    {"file", "File with a custom weighting matrix"},
+    {0, 0}
+};
+
 struct ncb ncb;
 
 struct output
@@ -100,6 +115,19 @@ static int find_method(const char *method_name)
 	    return i;
 
     G_fatal_error(_("Unknown method <%s>"), method_name);
+
+    return -1;
+}
+
+static int find_weight_function(const char *weight_function)
+{
+    int i;
+
+    for (i = 0; weight_functions[i].name; i++)
+	if (strcmp(weight_functions[i].name, weight_function) == 0)
+	    return i;
+
+    G_fatal_error(_("Unknown weight type <%s>"), weight_function);
 
     return -1;
 }
@@ -148,8 +176,8 @@ int main(int argc, char *argv[])
 	struct Option *method, *size;
 	struct Option *title;
 	struct Option *weight;
-	struct Option *gauss;
-	struct Option *exp;
+	struct Option *weighting_function;
+	struct Option *weighting_factor;
 	struct Option *quantile;
     } parm;
     struct
@@ -188,6 +216,14 @@ int main(int argc, char *argv[])
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.output->multiple = YES;
 
+    parm.size = G_define_option();
+    parm.size->key = "size";
+    parm.size->type = TYPE_INTEGER;
+    parm.size->required = NO;
+    parm.size->description = _("Neighborhood size");
+    parm.size->answer = "3";
+    parm.size->guisection = _("Neighborhood");
+
     parm.method = G_define_option();
     parm.method->key = "method";
     parm.method->type = TYPE_STRING;
@@ -206,37 +242,34 @@ int main(int argc, char *argv[])
     parm.method->multiple = YES;
     parm.method->guisection = _("Neighborhood");
 
-    parm.size = G_define_option();
-    parm.size->key = "size";
-    parm.size->type = TYPE_INTEGER;
-    parm.size->required = NO;
-    parm.size->description = _("Neighborhood size");
-    parm.size->answer = "3";
-    parm.size->guisection = _("Neighborhood");
+    parm.weighting_function = G_define_option();
+    parm.weighting_function->key = "weighting_function";
+    parm.weighting_function->type = TYPE_STRING;
+    parm.weighting_function->required = NO;
+    parm.weighting_function->answer = "None";
+    p = G_malloc(1024);
+    for (n = 0; weight_functions[n].name; n++) {
+	if (n)
+	    strcat(p, ",");
+	else
+	    *p = 0;
+	strcat(p, weight_functions[n].name);
+    }
+    parm.weighting_function->options = p;
+    parm.weighting_function->description = _("Weighting function");
+    parm.weighting_function->multiple = NO;
 
-    parm.title = G_define_option();
-    parm.title->key = "title";
-    parm.title->key_desc = "phrase";
-    parm.title->type = TYPE_STRING;
-    parm.title->required = NO;
-    parm.title->description = _("Title for output raster map");
+    parm.weighting_factor = G_define_option();
+    parm.weighting_factor->key = "weighting_factor";
+    parm.weighting_factor->type = TYPE_DOUBLE;
+    parm.weighting_factor->required = NO;
+    parm.weighting_factor->multiple = NO;
+    parm.weighting_factor->description = _("Factor used in the selected weighting function (ignored for None and file)");
 
     parm.weight = G_define_standard_option(G_OPT_F_INPUT);
     parm.weight->key = "weight";
     parm.weight->required = NO;
     parm.weight->description = _("Text file containing weights");
-
-    parm.gauss = G_define_option();
-    parm.gauss->key = "gauss";
-    parm.gauss->type = TYPE_DOUBLE;
-    parm.gauss->required = NO;
-    parm.gauss->description = _("Sigma (in cells) for Gaussian filter");
-
-    parm.exp = G_define_option();
-    parm.exp->key = "exponent";
-    parm.exp->type = TYPE_DOUBLE;
-    parm.exp->required = NO;
-    parm.exp->description = _("Factor for an exponential kernel");
 
     parm.quantile = G_define_option();
     parm.quantile->key = "quantile";
@@ -245,6 +278,14 @@ int main(int argc, char *argv[])
     parm.quantile->multiple = YES;
     parm.quantile->description = _("Quantile to calculate for method=quantile");
     parm.quantile->options = "0.0-1.0";
+    parm.quantile->guisection = _("Neighborhood");
+
+    parm.title = G_define_option();
+    parm.title->key = "title";
+    parm.title->key_desc = "phrase";
+    parm.title->type = TYPE_STRING;
+    parm.title->required = NO;
+    parm.title->description = _("Title for output raster map");
 
     flag.align = G_define_flag();
     flag.align->key = 'a';
@@ -265,21 +306,19 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Neighborhood size must be odd"));
     ncb.dist = ncb.nsize / 2;
 
-    if (parm.weight->answer && flag.circle->answer)
+    if (strcmp(parm.weighting_function->answer, "None") == 1 && flag.circle->answer)
 	G_fatal_error(_("-%c and %s= are mutually exclusive"),
-			flag.circle->key, parm.weight->key);
+			flag.circle->key, parm.weighting_function->answer);
 
-    if (parm.weight->answer && parm.gauss->answer)
-	G_fatal_error(_("%s= and %s= are mutually exclusive"),
-			parm.weight->key, parm.gauss->key);
+    if (strcmp(parm.weighting_function->answer, "file") == 0 && !parm.weight->answer)
+	G_fatal_error(_("File with weighting matrix is missing."));
 
-    if (parm.exp->answer && parm.gauss->answer)
-	G_fatal_error(_("%s= and %s= are mutually exclusive"),
-			parm.exp->key, parm.gauss->key);
-
-    if (parm.weight->answer && parm.exp->answer)
-	G_fatal_error(_("%s= and %s= are mutually exclusive"),
-			parm.weight->key, parm.exp->key);
+    /* Check if weighting factor is given for all other weighting functions*/
+    if (strcmp(parm.weighting_function->answer, "None") != 0 &&
+        strcmp(parm.weighting_function->answer, "file") != 0 &&
+        !parm.weighting_factor->answer)
+	G_fatal_error(_("Weighting function '%s' requires a %s."),
+			parm.weighting_function->answer, parm.weighting_factor->key);
 
     ncb.oldcell = parm.input->answer;
 
@@ -314,16 +353,15 @@ int main(int argc, char *argv[])
     weights = 0;
     ncb.weights = NULL;
     ncb.mask = NULL;
-    if (parm.weight->answer) {
+    if (strcmp(parm.weighting_function->answer, "file") == 0) {
 	read_weights(parm.weight->answer);
 	weights = 1;
     }
-    else if (parm.gauss->answer) {
-	gaussian_weights(atof(parm.gauss->answer));
-	weights = 1;
-    }
-    else if (parm.exp->answer) {
-	exponential_weights(atof(parm.exp->answer));
+    else if (strcmp(parm.weighting_function->answer, "None") != 0) {
+	G_verbose_message(_("Computing %s weights..."),
+			      parm.weighting_function->answer);
+	compute_weights(parm.weighting_function->answer,
+	                atof(parm.weighting_factor->answer));
 	weights = 1;
     }
     
@@ -344,23 +382,14 @@ int main(int argc, char *argv[])
 		out->method_fn_w = menu[method].method_w;
 	    }
 	    else {
-		if (parm.weight->answer) {
+		if (strcmp(parm.weighting_function->answer,"None") == 1) {
 		    G_warning(_("Method %s not compatible with weighing window, using weight mask instead"),
 			      method_name);
 		    if (!have_weights_mask) {
 			weights_mask();
 			have_weights_mask = 1;
 		    }
-		}
-		else if (parm.gauss->answer) {
-		    G_warning(_("Method %s not compatible with Gaussian filter, using unweighed version instead"),
-			      method_name);
-		}
-		else if (parm.exp->answer) {
-		    G_warning(_("Method %s not compatible with exponential kernel, using unweighed version instead"),
-			      method_name);
-		}
-		
+		}		
 		out->method_fn = menu[method].method;
 		out->method_fn_w = NULL;
 	    }
