@@ -61,7 +61,7 @@ from gui_core.wrap import (
     BitmapButton, BitmapComboBox, BitmapFromImage, Button,
     CheckBox, Choice, ClientDC, ColourPickerCtrl, Dialog, DirBrowseButton,
     EmptyBitmap, ExpandoTextCtrl, FileBrowseButton, FloatSpin, ListBox,
-    ListCtrl, NewId, Notebook, OwnerDrawnComboBox, Panel, RadioButton,
+    ListCtrl, Notebook, OwnerDrawnComboBox, Panel, RadioButton,
     Rect, ScrolledPanel, SpinCtrl, StaticBox, StaticText, TextCtrl,
     TextEntryDialog, EmptyImage, CheckListCtrlMixin
 )
