@@ -46,8 +46,12 @@ from grass.script.task import cmdlist_to_tuple
 from core.gcmd import RunCommand, GError, GMessage, GWarning
 from core.utils import GetCmdString
 from dbmgr.vinfo import VectorDBInfo
-from gui_core.wrap import NewId
+from gui_core.wrap import NewId as wxNewId
 from psmap.utils import *
+
+
+def NewId():
+    return int(wxNewId())
 
 
 class Instruction:
