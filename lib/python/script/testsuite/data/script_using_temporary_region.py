@@ -18,10 +18,10 @@ def call_use_temp_region(script, size, remaining, nesting, map_name=None):
         )
     )
     # The use_temp_region() function is using program name to generate an
-    # identifiable name, so uncomment the following like to trick it and
-    # give us even more unique names (changes the nature test, but may be
-    # useful for debugging).
-    # sys.argv[0] = "{this_file}_nesting_{nesting}".format(**locals())
+    # identifiable name, so uncomment the following line to trick it and
+    # give us even more unique names. (This won't fully test the
+    # actual behavior, but it may be useful for debugging).
+    # sys.argv[0] = "{script}_nesting_{nesting}".format(**locals())
     gs.use_temp_region()
     gs.run_command("g.region", rows=size, cols=size)
     if remaining:

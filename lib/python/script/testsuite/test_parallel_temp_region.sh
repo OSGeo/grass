@@ -14,7 +14,7 @@ set -u
 
 if [ $# -eq 0 ]
 then
-    # No arguments supplied, use default which is is small enough to run
+    # No arguments supplied, use default which is small enough to run
     # well on small machines and does not overwhelm a normal system.
     MAP_PARALLEL=parallel_tmp_region_parallel
     MAP_NEST=parallel_tmp_region_nest
