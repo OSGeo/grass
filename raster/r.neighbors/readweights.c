@@ -1,3 +1,4 @@
+#include <string.h>
 #include <stdio.h>
 #include <math.h>
 #include <grass/gis.h>
@@ -25,37 +26,24 @@ void read_weights(const char *filename)
     fclose(fp);
 }
 
-void gaussian_weights(double sigma)
+void compute_weights(const char * function_type, double factor)
 {
-    double sigma2 = sigma * sigma;
-    int i, j;
+		int i, j;
 
-    ncb.weights = G_malloc(ncb.nsize * sizeof(DCELL *));
-    for (i = 0; i < ncb.nsize; i++)
-	ncb.weights[i] = G_malloc(ncb.nsize * sizeof(DCELL));
+        ncb.weights = G_malloc(ncb.nsize * sizeof(DCELL *));
+        for (i = 0; i < ncb.nsize; i++)
+		ncb.weights[i] = G_malloc(ncb.nsize * sizeof(DCELL));
 
-    for (i = 0; i < ncb.nsize; i++) {
-	double y = i - ncb.dist;
-	for (j = 0; j < ncb.nsize; j++) {
-	    double x = j - ncb.dist;
-	    ncb.weights[i][j] = exp(-(x*x+y*y)/(2*sigma2))/(2*M_PI*sigma2);
+        for (i = 0; i < ncb.nsize; i++) {
+		double y = i - ncb.dist;
+		for (j = 0; j < ncb.nsize; j++) {
+	        double x = j - ncb.dist;
+            if (strcmp(function_type, "gaussian") == 0) {
+		        double sigma2 = factor * factor;
+	            ncb.weights[i][j] = exp(-(x*x+y*y)/(2*sigma2))/(2*M_PI*sigma2);
+	        } else if (strcmp(function_type, "exponential") == 0) {
+                ncb.weights[i][j] = exp(factor*sqrt(x*x+y*y));
+        }
 	}
-    }
-}
-
-void exponential_weights(double factor)
-{
-    int i, j;
-
-    ncb.weights = G_malloc(ncb.nsize * sizeof(DCELL *));
-    for (i = 0; i < ncb.nsize; i++)
-	ncb.weights[i] = G_malloc(ncb.nsize * sizeof(DCELL));
-
-    for (i = 0; i < ncb.nsize; i++) {
-	double y = i - ncb.dist;
-	for (j = 0; j < ncb.nsize; j++) {
-	    double x = j - ncb.dist;
-	    ncb.weights[i][j] = exp(factor*sqrt(x*x+y*y));
 	}
-    }
 }
