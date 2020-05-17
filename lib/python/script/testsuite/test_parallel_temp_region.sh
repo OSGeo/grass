@@ -19,7 +19,7 @@ then
     MAP_PARALLEL=parallel_tmp_region_parallel
     MAP_NEST=parallel_tmp_region_nest
     NUM_SEQUNTIALS=10
-    NUM_PARALLELS=100
+    NUM_PARALLELS=50
     SIMPLE_SIZE=150
     NEST_SIZES=100,200
     NUM_NEST=2
