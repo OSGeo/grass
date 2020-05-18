@@ -181,7 +181,7 @@ class DatabasePage(TitledPage):
         self.tlocTitle = self.MakeTextCtrl(size=(400, -1))
         
         # text for required options
-        self.required_txt = self.MakeStaticText(text = "*", size=(-1, -1))
+        self.required_txt = self.MakeStaticText("*", size=(-1, -1))
         self.required_txt.SetForegroundColour(wx.RED)
         self.required_txt.SetToolTip(_("This option is required"))
 
