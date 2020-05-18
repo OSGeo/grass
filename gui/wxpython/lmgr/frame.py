@@ -2529,7 +2529,11 @@ class GMFrame(wx.Frame):
         for layer in self.GetLayerTree().GetSelections():
             if self.GetLayerTree().GetLayerInfo(layer, key='type') == 'group':
                 self.GetLayerTree().DeleteChildren(layer)
-            self.GetLayerTree().Delete(layer)
+            # nested children group layer in the parent group layer (both selected)
+            try:
+                self.GetLayerTree().Delete(layer)
+            except ValueError:
+                pass
 
     def OnKeyDown(self, event):
         """Key pressed"""
