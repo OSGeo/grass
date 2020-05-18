@@ -83,7 +83,7 @@ static struct menu menu[] = {
 
 /* modify this table to add new methods */
 static struct weight_functions weight_functions[] = {
-    {"None", "No weighting"},
+    {"none", "No weighting"},
     {"gaussian", "Gaussian weighting function"},
     {"exponential", "Exponential weighting function"},
     {"file", "File with a custom weighting matrix"},
@@ -246,7 +246,7 @@ int main(int argc, char *argv[])
     parm.weighting_function->key = "weighting_function";
     parm.weighting_function->type = TYPE_STRING;
     parm.weighting_function->required = NO;
-    parm.weighting_function->answer = "None";
+    parm.weighting_function->answer = "none";
     p = G_malloc(1024);
     for (n = 0; weight_functions[n].name; n++) {
 	if (n)
@@ -264,7 +264,7 @@ int main(int argc, char *argv[])
     parm.weighting_factor->type = TYPE_DOUBLE;
     parm.weighting_factor->required = NO;
     parm.weighting_factor->multiple = NO;
-    parm.weighting_factor->description = _("Factor used in the selected weighting function (ignored for None and file)");
+    parm.weighting_factor->description = _("Factor used in the selected weighting function (ignored for none and file)");
 
     parm.weight = G_define_standard_option(G_OPT_F_INPUT);
     parm.weight->key = "weight";
@@ -306,7 +306,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Neighborhood size must be odd"));
     ncb.dist = ncb.nsize / 2;
 
-    if (strcmp(parm.weighting_function->answer, "None") == 1 && flag.circle->answer)
+    if (strcmp(parm.weighting_function->answer, "none") == 1 && flag.circle->answer)
 	G_fatal_error(_("-%c and %s= are mutually exclusive"),
 			flag.circle->key, parm.weighting_function->answer);
 
@@ -314,7 +314,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("File with weighting matrix is missing."));
 
     /* Check if weighting factor is given for all other weighting functions*/
-    if (strcmp(parm.weighting_function->answer, "None") != 0 &&
+    if (strcmp(parm.weighting_function->answer, "none") != 0 &&
         strcmp(parm.weighting_function->answer, "file") != 0 &&
         !parm.weighting_factor->answer)
 	G_fatal_error(_("Weighting function '%s' requires a %s."),
@@ -357,7 +357,7 @@ int main(int argc, char *argv[])
 	read_weights(parm.weight->answer);
 	weights = 1;
     }
-    else if (strcmp(parm.weighting_function->answer, "None") != 0) {
+    else if (strcmp(parm.weighting_function->answer, "none") != 0) {
 	G_verbose_message(_("Computing %s weights..."),
 			      parm.weighting_function->answer);
 	compute_weights(parm.weighting_function->answer,
@@ -382,7 +382,7 @@ int main(int argc, char *argv[])
 		out->method_fn_w = menu[method].method_w;
 	    }
 	    else {
-		if (strcmp(parm.weighting_function->answer,"None") == 1) {
+		if (strcmp(parm.weighting_function->answer,"none") == 1) {
 		    G_warning(_("Method %s not compatible with weighing window, using weight mask instead"),
 			      method_name);
 		    if (!have_weights_mask) {
