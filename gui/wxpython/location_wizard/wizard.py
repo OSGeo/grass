@@ -179,6 +179,11 @@ class DatabasePage(TitledPage):
                 grass.legal_name,
                 self._nameValidationFailed))
         self.tlocTitle = self.MakeTextCtrl(size=(400, -1))
+        
+        # text for required options
+        self.required_txt = self.MakeStaticText(text = "*", size=(-1, -1))
+        self.required_txt.SetForegroundColour(wx.RED)
+        self.required_txt.SetToolTip(_("This option is required"))
 
         # checkbox
         self.tlocRegion = self.MakeCheckBox(_("Set default region extent and resolution"),
@@ -209,7 +214,7 @@ class DatabasePage(TitledPage):
         self.sizer.Add(
             self.MakeLabel(
                 "%s:" %
-                _("Project Location"),
+                _("Location Name"),
                 tooltip=_("Name of location directory in GIS Data Directory")),
             flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
@@ -220,6 +225,11 @@ class DatabasePage(TitledPage):
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
                        pos=(2, 2))
+        self.sizer.Add(self.required_txt,
+                       flag=wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTER_VERTICAL |
+                       wx.ALL, border=5,
+                       pos=(2, 3))
 
         self.sizer.Add(
             self.MakeLabel(
