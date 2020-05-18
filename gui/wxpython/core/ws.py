@@ -170,14 +170,21 @@ class RenderWMSMgr(wx.EvtHandler):
         self.mapMerger.AddRasterBands(self.tempMap, {1: 1, 2: 2, 3: 3})
         del self.mapMerger
 
+        add_alpha_channel = True
+        mask_fill_value = 0
+        if self.fetching_cmd[1]['format'] == 'jpeg':
+            mask_fill_value = 255 # white color, g.pnmcomp doesn't apply mask (alpha channel)
+            add_alpha_channel = False
+
         self.maskMerger = GDALRasterMerger(
             targetFile=self.layer.maskfile,
             region=self.renderedRegion,
             bandsNum=1,
             gdalDriver='PNM',
-            fillValue=0)
-        #{4 : 1} alpha channel (4) to first and only channel (1) in mask
-        self.maskMerger.AddRasterBands(self.tempMap, {4: 1})
+            fillValue=mask_fill_value)
+        if add_alpha_channel:
+            #{4 : 1} alpha channel (4) to first and only channel (1) in mask
+            self.maskMerger.AddRasterBands(self.tempMap, {4: 1})
         del self.maskMerger
 
         self.fetched_data_cmd = self.fetching_cmd
