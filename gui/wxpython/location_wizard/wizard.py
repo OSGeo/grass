@@ -172,7 +172,7 @@ class DatabasePage(TitledPage):
 
         # text controls
         self.tgisdbase = self.MakeStaticText(grassdatabase, size=(-1, -1))
-        self.tlocation = self.MakeTextCtrl("newLocation", size=(300, -1))
+        self.tlocation = self.MakeTextCtrl("newLocation", size=(400, -1))
         self.tlocation.SetFocus()
         self.tlocation.SetValidator(
             GenericValidator(
@@ -209,7 +209,7 @@ class DatabasePage(TitledPage):
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
-                       pos=(1, 2))
+                       pos=(1, 3))
 
         self.sizer.Add(
             self.MakeLabel(
@@ -220,12 +220,12 @@ class DatabasePage(TitledPage):
             border=5,
             pos=(2, 1)
         )
-        self.sizer.Add(self.tlocation,
+        self.sizer.Add(self.required_txt,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
                        pos=(2, 2))
-        self.sizer.Add(self.required_txt,
+        self.sizer.Add(self.tlocation,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
@@ -246,17 +246,17 @@ class DatabasePage(TitledPage):
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
-                       pos=(3, 2), span=(1, 2))
+                       pos=(3, 3), span=(1, 2))
         self.sizer.Add(self.tlocRegion,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
-                       pos=(4, 2), span=(1, 2))
+                       pos=(4, 3), span=(1, 2))
         self.sizer.Add(self.tlocUserMapset,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
-                       pos=(5, 2), span=(1, 2))
+                       pos=(5, 3), span=(1, 2))
         self.sizer.AddGrowableCol(3)
 
         # bindings
