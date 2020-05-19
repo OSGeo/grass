@@ -306,7 +306,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Neighborhood size must be odd"));
     ncb.dist = ncb.nsize / 2;
 
-    if (strcmp(parm.weighting_function->answer, "none") == 1 && flag.circle->answer)
+    if (strcmp(parm.weighting_function->answer, "none") && flag.circle->answer)
 	G_fatal_error(_("-%c and %s= are mutually exclusive"),
 			flag.circle->key, parm.weighting_function->answer);
 
@@ -314,8 +314,8 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("File with weighting matrix is missing."));
 
     /* Check if weighting factor is given for all other weighting functions*/
-    if (strcmp(parm.weighting_function->answer, "none") != 0 &&
-        strcmp(parm.weighting_function->answer, "file") != 0 &&
+    if (strcmp(parm.weighting_function->answer, "none") &&
+        strcmp(parm.weighting_function->answer, "file") &&
         !parm.weighting_factor->answer)
 	G_fatal_error(_("Weighting function '%s' requires a %s."),
 			parm.weighting_function->answer, parm.weighting_factor->key);
@@ -357,7 +357,7 @@ int main(int argc, char *argv[])
 	read_weights(parm.weight->answer);
 	weights = 1;
     }
-    else if (strcmp(parm.weighting_function->answer, "none") != 0) {
+    else if (strcmp(parm.weighting_function->answer, "none")) {
 	G_verbose_message(_("Computing %s weights..."),
 			      parm.weighting_function->answer);
 	compute_weights(parm.weighting_function->answer,
@@ -382,7 +382,7 @@ int main(int argc, char *argv[])
 		out->method_fn_w = menu[method].method_w;
 	    }
 	    else {
-		if (strcmp(parm.weighting_function->answer,"none") == 1) {
+		if (strcmp(parm.weighting_function->answer,"none")) {
 		    G_warning(_("Method %s not compatible with weighing window, using weight mask instead"),
 			      method_name);
 		    if (!have_weights_mask) {
