@@ -49,7 +49,7 @@ from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, \
 from core.settings import UserSettings
 from core.debug import Debug
 from gui_core.wrap import Button, CheckListBox, EmptyBitmap, HyperlinkCtrl, \
-    Menu, NewId, SpinCtrl, StaticBox, StaticText, TextCtrl 
+    Menu, NewId, SpinCtrl, StaticBox, StaticText, TextCtrl
 
 
 class SimpleDialog(wx.Dialog):
@@ -1330,7 +1330,8 @@ class GroupDialog(wx.Dialog):
 
     def ClearNotification(self):
         """Clear notification string"""
-        self.infoLabel.SetLabel("")
+        if self.infoLabel:
+            self.infoLabel.SetLabel("")
 
     def ApplyChanges(self):
         """Create or edit group"""
