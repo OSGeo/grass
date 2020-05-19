@@ -88,7 +88,7 @@ class TitledPage(WizardPageSimple):
         self.pagesizer = wx.BoxSizer(wx.VERTICAL)
         self.sizer = wx.GridBagSizer(vgap=0, hgap=0)
         self.sizer.SetCols(5)
-        self.sizer.SetRows(6)
+        self.sizer.SetRows(8)
 
     def DoLayout(self):
         """Do page layout"""
@@ -127,15 +127,6 @@ class TitledPage(WizardPageSimple):
             textCtrl.SetToolTip(tooltip)
         return textCtrl
 
-    def MakeStaticText(self, text='', size=(100, -1),
-                     style=0, parent=None):
-        """Generic static text control"""
-        if not parent:
-            parent = self
-        staticText = StaticText(parent=parent, id=wx.ID_ANY, label=text,
-                               size=size, style=style)
-        return staticText
-
     def MakeButton(self, text, id=wx.ID_ANY, size=(-1, -1),
                    parent=None, tooltip=None):
         """Generic button"""
@@ -171,7 +162,7 @@ class DatabasePage(TitledPage):
         self.locTitle = ''
 
         # text controls
-        self.tgisdbase = self.MakeStaticText(grassdatabase, size=(-1, -1))
+        self.tgisdbase = self.MakeTextCtrl(grassdatabase, size=(400, -1), style = wx.TE_READONLY | wx.TRANSPARENT_WINDOW)       
         self.tlocation = self.MakeTextCtrl("newLocation", size=(400, -1))
         self.tlocation.SetFocus()
         self.tlocation.SetValidator(
@@ -181,9 +172,16 @@ class DatabasePage(TitledPage):
         self.tlocTitle = self.MakeTextCtrl(size=(400, -1))
         
         # text for required options
-        self.required_txt = self.MakeStaticText("*", size=(-1, -1))
+        self.required_txt = self.MakeLabel("*")
         self.required_txt.SetForegroundColour(wx.RED)
         self.required_txt.SetToolTip(_("This option is required"))
+        
+        # text for optional options
+        self.optional_txt = self.MakeLabel("(optional)")
+        italics = wx.Font(10, wx.DEFAULT, wx.ITALIC, wx.NORMAL)
+        self.optional_txt.SetFont(italics)
+        self.optional_txt.SetForegroundColour("gray")
+        self.optional_txt.SetToolTip(_("This option is optional"))
 
         # checkbox
         self.tlocRegion = self.MakeCheckBox(_("Set default region extent and resolution"),
@@ -201,62 +199,67 @@ class DatabasePage(TitledPage):
 
         # layout
         self.sizer.Add(self.MakeLabel(_("GIS Data Directory:")),
-                       flag=wx.ALIGN_RIGHT |
+                       flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5,
+                       wx.ALL, border=2,
                        pos=(1, 1))
         self.sizer.Add(self.tgisdbase,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
-                       pos=(1, 3))
+                       pos=(2, 1))
 
         self.sizer.Add(
             self.MakeLabel(
                 "%s:" %
                 _("Location Name"),
                 tooltip=_("Name of location directory in GIS Data Directory")),
-            flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
-            pos=(2, 1)
+            pos=(3, 1)
         )
-        self.sizer.Add(self.required_txt,
-                       flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5,
-                       pos=(2, 2))
         self.sizer.Add(self.tlocation,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
-                       pos=(2, 3))
+                       pos=(4, 1))
+        self.sizer.Add(self.required_txt,
+                       flag=wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTER_VERTICAL |
+                       wx.ALL, border=5,
+                       pos=(4, 2))
 
         self.sizer.Add(
             self.MakeLabel(
                 "%s:" %
-                _("Location Title"),
+                _("Description"),
                 tooltip=_(
-                    "Optional location title, "
-                    "you can leave this field blank.")),
-            flag=wx.ALIGN_RIGHT | wx.ALIGN_TOP | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+                    "Description of location directory in GIS Data Directory")),
+            flag=wx.ALIGN_LEFT | wx.ALIGN_TOP | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
-            pos=(3, 1)
+            pos=(5, 1)
         )
         self.sizer.Add(self.tlocTitle,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
-                       pos=(3, 3), span=(1, 2))
+                       pos=(6, 1))
+        self.sizer.Add(self.optional_txt,
+                       flag=wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTER_VERTICAL |
+                       wx.ALL, border=5,
+                       pos=(6, 2))
+        
         self.sizer.Add(self.tlocRegion,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
-                       pos=(4, 3), span=(1, 2))
+                       pos=(7, 1), span=(1, 2))
         self.sizer.Add(self.tlocUserMapset,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
-                       pos=(5, 3), span=(1, 2))
+                       pos=(8, 1), span=(1, 2))
         self.sizer.AddGrowableCol(3)
 
         # bindings
