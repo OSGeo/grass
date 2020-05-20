@@ -179,10 +179,10 @@ class DatabasePage(TitledPage):
         self.required_txt.SetToolTip(_("This option is required"))
         
         # text for optional options
-        self.optional_txt = self.MakeLabel("(optional)")
+        self.optional_txt = self.MakeLabel(_("(optional)"))
         italics = wx.Font(10, wx.DEFAULT, wx.ITALIC, wx.NORMAL)
         self.optional_txt.SetFont(italics)
-        self.optional_txt.SetForegroundColour("gray")
+        self.optional_txt.SetForegroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
 
         # layout
         self.sizer.Add(
