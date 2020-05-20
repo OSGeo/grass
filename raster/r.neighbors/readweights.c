@@ -26,9 +26,31 @@ void read_weights(const char *filename)
     fclose(fp);
 }
 
+double gaussian(double factor, double squared_distance)
+{
+    double sigma2 = factor * factor;
+	return exp(-squared_distance/(2*sigma2))/(2*M_PI*sigma2);
+}
+
+double exponential(double factor, double squared_distance)
+{
+	return exp(factor*sqrt(squared_distance));
+}
+
 void compute_weights(const char * function_type, double factor)
 {
 		int i, j;
+		double (*weight)(double, double);
+
+        if(!strcmp(function_type, "gaussian"))
+        {
+                weight = gaussian;
+         }
+         else if (!strcmp(function_type, "exponential"))
+         {
+                weight = exponential;
+        }
+
 
         ncb.weights = G_malloc(ncb.nsize * sizeof(DCELL *));
         for (i = 0; i < ncb.nsize; i++)
@@ -38,12 +60,7 @@ void compute_weights(const char * function_type, double factor)
 		double y = i - ncb.dist;
 		for (j = 0; j < ncb.nsize; j++) {
 	        double x = j - ncb.dist;
-            if (strcmp(function_type, "gaussian") == 0) {
-		        double sigma2 = factor * factor;
-	            ncb.weights[i][j] = exp(-(x*x+y*y)/(2*sigma2))/(2*M_PI*sigma2);
-	        } else if (strcmp(function_type, "exponential") == 0) {
-                ncb.weights[i][j] = exp(factor*sqrt(x*x+y*y));
-        }
-	}
-	}
+            ncb.weights[i][j] = weight(factor, x*x+y*y);
+	    }
+	    }
 }
