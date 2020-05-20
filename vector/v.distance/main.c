@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 	struct Option *sep;
     } opt;
     struct {
-	struct Flag *print, *all;
+	struct Flag *print, *all, *square;
     } flag;
 
     int print;			/* -p: print to stdout */
@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
     opt.upload = G_define_option();
     opt.upload->key = "upload";
     opt.upload->type = TYPE_STRING;
-    opt.upload->required = NO;
+    opt.upload->required = YES;
     opt.upload->multiple = YES;
     opt.upload->guisection = _("From");
     opt.upload->options = "cat,dist,to_x,to_y,to_along,to_angle,to_attr";
@@ -254,19 +254,23 @@ int main(int argc, char *argv[])
 	  "or uploaded to a new table created by the 'table' option; "
 	  "multiple 'upload' options may be used.");
 
+    flag.square = G_define_flag();
+    flag.square->key = 's';
+    flag.square->label =
+	_("Print output as square matrix (only possible for one single upload variable)");
+
     /* GUI dependency */
     opt.from->guidependency = G_store(opt.from_field->key);
     sprintf(buf1, "%s,%s", opt.to_field->key, opt.to_column->key);
     opt.to->guidependency = G_store(buf1);
     opt.to_field->guidependency = G_store(opt.to_column->key);
 
-    G_option_required(opt.upload, opt.out, NULL);
-    G_option_exclusive(opt.column, flag.print, NULL);
-    G_option_exclusive(opt.table, flag.print, NULL);
-    G_option_requires(opt.upload, flag.print, opt.column, NULL);
+    G_option_required(opt.out, opt.table, flag.print, NULL);
+    G_option_exclusive(opt.out, opt.table, flag.print, NULL);
+    G_option_requires(opt.upload, flag.print, opt.table, opt.column, NULL);
     G_option_requires(opt.column, opt.upload, NULL);
     G_option_requires(flag.print, opt.upload, NULL);
-    G_option_requires_all(opt.table, opt.out, opt.upload, NULL);
+    G_option_requires_all(opt.table, opt.upload, NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -286,8 +290,9 @@ int main(int argc, char *argv[])
     print = flag.print->answer;
     create_map = opt.out->answer != NULL;
     create_table = opt.table->answer != NULL;
-    update_table = !create_table && opt.column->answer;
+    update_table = !print && !create_table && opt.column->answer;
     do_all = flag.all->answer;
+    print_as_matrix = flag.square->answer;
 
     if (do_all && update_table)
 	G_fatal_error(_("Updating the from= table is not supported with -a"));
@@ -298,9 +303,8 @@ int main(int argc, char *argv[])
     while (opt.upload->answer && opt.upload->answers[i])
 	i++;
 
-    /* -a !table= upload=one_value from=map to=map: print as matrix */
-    print_as_matrix = do_all && !create_table && i == 1 &&
-		      strcmp(opt.from->answer, opt.to->answer) == 0;
+    if (i > 1 && print_as_matrix)
+	G_fatal_error(_("Square matrix output only possible with one single upload variable"));
 
     /* TODO: Known issue. Segmentation fault on print_as_matrix with dmin= or
      * dmax= because count may not be nfrom^2. Needs to populate Near[] fully
