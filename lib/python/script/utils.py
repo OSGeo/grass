@@ -25,6 +25,10 @@ import locale
 import shlex
 import re
 import time
+import platform
+import uuid
+import random
+import string
 
 
 if sys.version_info.major >= 3:
@@ -467,3 +471,104 @@ def clock():
     if sys.version_info > (3,2):
         return time.perf_counter()
     return time.clock()
+
+
+def legalize_vector_name(name):
+    if not name:
+        raise ValueError("name cannot be empty")
+    if re.match("[^A-Za-z0-9]", name[0]):
+        name[0] = "_"
+    re.sub("[^A-Za-z0-9_]", "_", name)
+    keywords = ["and", "or", "not"]
+    if name in keywords:
+        name = "{name}_".format(**locals())
+    return name
+
+
+def append_node_pid(name):
+    """Add node name and PID to a name (string)
+
+    For the result to be unique, the name needs to be unique within a process.
+    Given that, the result will be unique enough for use in temporary maps
+    and other elements on single machine or an HPC cluster.
+
+    >>> append_node_pid("tmp_raster_1")
+
+    ..note::
+
+        Before you use this function for creating temporary files (i.e., normal
+        files on disk, not maps and other mapset elements), see functions
+        designed for it in the GRASS GIS or standard Python library. These
+        take care of collisions already on different levels.
+    """
+    node = legalize_vector_name(platform.node())
+    pid = os.getpid()
+    return "{name}_{node}_{pid}".format(**locals())
+
+
+def append_uuid(name):
+    """Add UUID4 to a name (string)
+
+    To generate a name of an temporary mapset element which is unique in a
+    system, use :func:`append_node_pid()` in a combination with a name unique
+    within your process.
+
+    To avoid collisions, never shorten the name obtained from this function.
+    A shortened UUID does not have the collision guarantees the full UUID has.
+
+    For a random name of a given shorter size, see :func:`append_random()`.
+
+    >>> append_uuid("tmp")
+
+    ..note::
+
+        See the note about creating temporary files in the
+        :func:`append_node_pid()` description.
+    """
+    suffix = uuid.uuid4().hex
+    return "{name}_{suffix}".format(**locals())
+
+
+def append_random(name, suffix_length=None, total_length=None):
+    """Add a random part to of a specified length to a name (string)
+
+    >>> append_random("tmp", 8)
+    >>> append_random("tmp", total_length=16)
+
+    ..note::
+
+        Note that this will be influeced by the random seed set for the Python
+        random package.
+
+    ..note::
+
+        See the note about creating temporary files in the
+        :func:`append_node_pid()` description.
+    """
+    if suffix_length and total_length:
+        raise ValueError(
+            "Either suffix_length or total_length can be provided, not both"
+        )
+    if not suffix_length and not total_length:
+        raise ValueError(
+            "suffix_length or total_length has to be provided"
+        )
+    if total_length:
+        # remove len of name and one underscore
+        name_length = len(name)
+        suffix_length = total_length - name_length - 1
+        if suffix_length <= 0:
+            raise ValueError(
+                "No characters left for the suffix:"
+                " total_length <{total_length}> is too small"
+                " or name <{name}> ({name_length}) is too long".format(
+                    **locals()
+                )
+            )
+    # We don't do lower and upper case because that could cause conflicts in
+    # contexts which are case-insensitive.
+    # We use lowercase because that's what is in UUID4 hex string.
+    allowed_chars = string.ascii_lowercase + string.digits
+    # The following can be shorter with random.choices from Python 3.6.
+    suffix = ''.join(random.choice(allowed_chars) for _ in range(suffix_length))
+    return "{name}_{suffix}".format(**locals())
