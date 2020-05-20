@@ -473,12 +473,36 @@ def clock():
     return time.clock()
 
 
-def legalize_vector_name(name):
+def legalize_vector_name(name, fallback_prefix="x"):
+    """Make *name* usable for vectors, tables, and columns
+
+    The returned string is a name usable for vectors, tables, and columns,
+    i.e., it is a vector legal name which is a string containing only
+    lowercase and uppercase ASCII letters, digits, and underscores.
+
+    Invalid characters are replaced by underscores.
+    If the name starts with an invalid character, the name is prefixed with
+    *fallback_prefix*. This increases the length of the resulting name by the
+    length of the prefix.
+
+    The *fallback_prefix* can be empty which is useful when the *name* is later
+    used as a suffix for some other valid name.
+
+    ValueError is raised when provided *name* is empty or *fallback_prefix*
+    does not start with a valid character.
+    """
+    # The implementation is based on Vect_legal_filename().
     if not name:
         raise ValueError("name cannot be empty")
-    if re.match("[^A-Za-z0-9]", name[0]):
-        name[0] = "_"
-    re.sub("[^A-Za-z0-9_]", "_", name)
+    if fallback_prefix and re.match("[^A-Za-z]", fallback_prefix[0]):
+        raise ValueError("fallback_prefix must start with an ASCII letter")
+    if fallback_prefix and re.match("[^A-Za-z]", name[0], flags=re.ASCII):
+        # We prefix here rather than just replace, because in cases of unique
+        # identifiers, e.g., columns or node names, replacing the first
+        # character by the same replacement character increases chances of
+        # conflict (e.g. column names 10, 20, 30).
+        name = "{fallback_prefix}{name}".format(**locals())
+    name = re.sub("[^A-Za-z0-9_]", "_", name, flags=re.ASCII)
     keywords = ["and", "or", "not"]
     if name in keywords:
         name = "{name}_".format(**locals())
@@ -492,6 +516,9 @@ def append_node_pid(name):
     Given that, the result will be unique enough for use in temporary maps
     and other elements on single machine or an HPC cluster.
 
+    The returned string is a name usable for vectors, tables, and columns
+    (vector legal name) as long as provided argument *name* is.
+
     >>> append_node_pid("tmp_raster_1")
 
     ..note::
@@ -501,7 +528,14 @@ def append_node_pid(name):
         designed for it in the GRASS GIS or standard Python library. These
         take care of collisions already on different levels.
     """
-    node = legalize_vector_name(platform.node())
+    # We are using this node as a suffix, so we don't need to make sure it
+    # is prefixed with additional character(s) since that's exactly what
+    # happens in this function.
+    # Note that this may still cause collisions when nodes are named in a way
+    # that they collapse into the same name after the replacements are done,
+    # but we consider that unlikely given that
+    # nodes will be likely already named as something close to what we need.
+    node = legalize_vector_name(platform.node(), fallback_prefix="")
     pid = os.getpid()
     return "{name}_{node}_{pid}".format(**locals())
 
