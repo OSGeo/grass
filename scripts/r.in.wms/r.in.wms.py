@@ -173,7 +173,7 @@ This program is free software under the GNU General Public License
 
 #%flag
 #% key: c
-#% description: Get the server capabilities then exit
+#% description: Get the server capabilities, print them out, then exit
 #% guisection: Request
 #% suppress_required: yes
 #%end
