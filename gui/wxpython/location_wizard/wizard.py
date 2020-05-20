@@ -174,15 +174,15 @@ class DatabasePage(TitledPage):
         self.tlocTitle = self.MakeTextCtrl(size=(400, -1))
         
         # text for required options
-        self.required_txt = self.MakeLabel("*")
-        self.required_txt.SetForegroundColour(wx.RED)
-        self.required_txt.SetToolTip(_("This option is required"))
+        required_txt = self.MakeLabel("*")
+        required_txt.SetForegroundColour(wx.RED)
+        required_txt.SetToolTip(_("This option is required"))
         
         # text for optional options
-        self.optional_txt = self.MakeLabel(_("(optional)"))
+        optional_txt = self.MakeLabel(_("(optional)"))
         italics = wx.Font(10, wx.DEFAULT, wx.ITALIC, wx.NORMAL)
-        self.optional_txt.SetFont(italics)
-        self.optional_txt.SetForegroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
+        optional_txt.SetFont(italics)
+        optional_txt.SetForegroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
 
         # layout
         self.sizer.Add(
@@ -199,7 +199,7 @@ class DatabasePage(TitledPage):
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
                        pos=(2, 1))
-        self.sizer.Add(self.required_txt,
+        self.sizer.Add(required_txt,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
@@ -220,7 +220,7 @@ class DatabasePage(TitledPage):
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
                        pos=(4, 1))
-        self.sizer.Add(self.optional_txt,
+        self.sizer.Add(optional_txt,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
