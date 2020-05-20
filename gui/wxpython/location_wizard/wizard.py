@@ -164,7 +164,7 @@ class DatabasePage(TitledPage):
         self.bbrowse = self.MakeButton(_("Change"))
 
         # text controls
-        self.tgisdbase = self.MakeTextCtrl(grassdatabase, size=(400, -1))    
+        self.tgisdbase = self.MakeLabel(grassdatabase)    
         self.tlocation = self.MakeTextCtrl("newLocation", size=(400, -1))
         self.tlocation.SetFocus()
         self.tlocation.SetValidator(
@@ -277,7 +277,7 @@ class DatabasePage(TitledPage):
                            os.getcwd(), wx.DD_DEFAULT_STYLE)
         if dlg.ShowModal() == wx.ID_OK:
             self.grassdatabase = dlg.GetPath()
-            self.tgisdbase.SetValue(self.grassdatabase)
+            self.tgisdbase.SetLabel(self.grassdatabase)
 
         dlg.Destroy()
 
