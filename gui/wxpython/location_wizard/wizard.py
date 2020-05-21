@@ -2404,8 +2404,6 @@ class LocationWizard(wx.Object):
                 self.location = self.startpage.location
                 self.grassdatabase = self.startpage.grassdatabase
                 self.georeffile = self.filepage.georeffile
-                self.default_region = self.startpage.tlocRegion.IsChecked()
-                self.user_mapset = self.startpage.tlocUserMapset.IsChecked()
                 # FIXME here was code for setting default region, what for is this if:
                 # if self.altdb == False:
 
