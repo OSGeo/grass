@@ -558,11 +558,12 @@ class InputDialog(wx.Dialog):
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         box = StaticBox(
             parent=panel, label=" %s " %
-            _("Animate region change (2D view only)"))
+            _("Set spatial extent in 2D view"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
-        gridSizer.Add(StaticText(panel, label=_("Start region:")),
+        self.stRegionLabel = StaticText(panel, label=_("Use saved region:"))
+        gridSizer.Add(self.stRegionLabel,
                       pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         self.stRegion = Select(parent=panel, type='region', size=(200, -1))
         if self.animationData.startRegion:
@@ -571,17 +572,22 @@ class InputDialog(wx.Dialog):
             self.stRegion, pos=(0, 1),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
 
+        self.animateRegionCheckbox = CheckBox(panel, label=_("Animate region change"))
+        self.animateRegionCheckbox.SetValue(False)
+        gridSizer.Add(self.animateRegionCheckbox, pos=(1, 0), span=(1, 2), flag=wx.EXPAND)
+        self.animateRegionCheckbox.Bind(wx.EVT_CHECKBOX, lambda evt: self._onAnimateExtent())
+
         self.endRegRadio = RadioButton(
             panel, label=_("End region:"), style=wx.RB_GROUP)
-        gridSizer.Add(self.endRegRadio, pos=(1, 0), flag=wx.EXPAND)
+        gridSizer.Add(self.endRegRadio, pos=(2, 0),  border=10, flag=wx.EXPAND | wx.LEFT)
         self.endRegion = Select(parent=panel, type='region', size=(200, -1))
         gridSizer.Add(
-            self.endRegion, pos=(1, 1),
+            self.endRegion, pos=(2, 1),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
         self.zoomRadio = RadioButton(panel, label=_("Zoom value:"))
         self.zoomRadio.SetToolTip(_("N-S/E-W distances in map units used to "
                                     "gradually reduce region."))
-        gridSizer.Add(self.zoomRadio, pos=(2, 0), flag=wx.EXPAND)
+        gridSizer.Add(self.zoomRadio, pos=(3, 0), border=10, flag=wx.EXPAND | wx.LEFT)
 
         zoomSizer = wx.BoxSizer(wx.HORIZONTAL)
         self.zoomNS = TextCtrl(panel, validator=FloatValidator())
@@ -593,13 +599,15 @@ class InputDialog(wx.Dialog):
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT, border=3)
         zoomSizer.Add(self.zoomEW, proportion=1, flag=wx.LEFT, border=3)
         gridSizer.Add(
-            zoomSizer, pos=(2, 1),
+            zoomSizer, pos=(3, 1),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
         if self.animationData.endRegion:
+            self.animateRegionCheckbox.SetValue(True)
             self.endRegRadio.SetValue(True)
             self.zoomRadio.SetValue(False)
             self.endRegion.SetValue(self.animationData.endRegion)
         if self.animationData.zoomRegionValue:
+            self.animateRegionCheckbox.SetValue(True)
             self.endRegRadio.SetValue(False)
             self.zoomRadio.SetValue(True)
             zoom = self.animationData.zoomRegionValue
@@ -612,7 +620,7 @@ class InputDialog(wx.Dialog):
         self.zoomRadio.Bind(
             wx.EVT_RADIOBUTTON,
             lambda evt: self._enableRegionWidgets())
-        self._enableRegionWidgets()
+        self._onAnimateExtent()
 
         gridSizer.AddGrowableCol(1)
         sizer.Add(gridSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=3)
@@ -622,6 +630,16 @@ class InputDialog(wx.Dialog):
         mainSizer.Fit(panel)
 
         return panel
+
+    def _onAnimateExtent(self):
+        checked = self.animateRegionCheckbox.IsChecked()
+        self.endRegion.Enable(checked)
+        self.zoomNS.Enable(checked)
+        self.zoomEW.Enable(checked)
+        self.zoomRadio.Enable(checked)
+        self.endRegRadio.Enable(checked)
+        if checked:
+            self._enableRegionWidgets()
 
     def _enableRegionWidgets(self):
         """Enables/disables region widgets
@@ -645,7 +663,8 @@ class InputDialog(wx.Dialog):
                     child_.GetWindow().Enable(mode != 1)
             elif child.IsWindow():
                 child.GetWindow().Enable(mode != 1)
-        self._enableRegionWidgets()
+        if mode == 0:
+            self._onAnimateExtent()
 
         # update layout
         sizer = self.threeDPanel.GetContainingSizer()
@@ -721,23 +740,29 @@ class InputDialog(wx.Dialog):
         isEnd = self.endRegRadio.GetValue() and self.endRegion.GetValue()
         isZoom = self.zoomRadio.GetValue() and self.zoomNS.GetValue() and self.zoomEW.GetValue()
         isStart = self.stRegion.GetValue()
-        condition = bool(isStart) + bool(isZoom) + bool(isEnd)
-        if condition == 1:
-            raise GException(_("Region information is not complete"))
-        elif condition == 2:
-            self.animationData.startRegion = isStart
+        useAnim = self.animateRegionCheckbox.GetValue()
+
+        self.animationData.startRegion = None
+        self.animationData.endRegion = None
+        self.animationData.zoomRegionValue = None
+        if not useAnim:
+            if isStart:
+                self.animationData.startRegion = isStart
+        else:
+            if isStart:
+                self.animationData.startRegion = isStart
+            else:
+                raise GException(_("Region information is not complete"))
             if isEnd:
                 self.animationData.endRegion = self.endRegion.GetValue()
                 self.animationData.zoomRegionValue = None
-            else:
+            elif isZoom:
                 self.animationData.zoomRegionValue = (
                     float(self.zoomNS.GetValue()),
                     float(self.zoomEW.GetValue()))
                 self.animationData.endRegion = None
-        else:
-            self.animationData.startRegion = None
-            self.animationData.endRegion = None
-            self.animationData.zoomRegionValue = None
+            else:
+                raise GException(_("Region information is not complete"))
 
     def UnInit(self):
         self.simpleLmgr.UnInit()

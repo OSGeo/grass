@@ -213,33 +213,35 @@ class AnimationData(object):
         fset=SetZoomRegionValue,
         fget=GetZoomRegionValue)
 
-    def GetRegions(self, width, height):
-        self._computeRegions(width, height, self._mapCount, self._startRegion,
+    def GetRegions(self):
+        self._computeRegions(self._mapCount, self._startRegion,
                              self._endRegion, self._zoomRegionValue)
         return self._regions
 
     def _computeRegions(
-            self, width, height, count, startRegion, endRegion=None,
+            self, count, startRegion, endRegion=None,
             zoomValue=None):
         """Computes regions based on start region and end region or zoom value
         for each of the animation frames."""
-        currRegion = dict(
-            gcore.region())  # cast to dict, otherwise deepcopy error
-        del currRegion['cells']
-        del currRegion['cols']
-        del currRegion['rows']
-        if 'projection' in currRegion:
-            del currRegion['projection']
-        if 'zone' in currRegion:
-            del currRegion['zone']
+        region = dict(gcore.region())  # cast to dict, otherwise deepcopy error
+        if startRegion:
+            region = dict(parse_key_val(gcore.read_command('g.region',
+                                                           flags='gu',
+                                                           region=startRegion),
+                                        val_type=float))
+
+        del region['cells']
+        del region['cols']
+        del region['rows']
+        if 'projection' in region:
+            del region['projection']
+        if 'zone' in region:
+            del region['zone']
         regions = []
         for i in range(self._mapCount):
-            if endRegion or zoomValue:
-                regions.append(copy.copy(currRegion))
-            else:
-                regions.append(None)
-        if not startRegion:
-            self._regions = regions
+            regions.append(copy.copy(region))
+        self._regions = regions
+        if not (endRegion or zoomValue):
             return
 
         startRegionDict = parse_key_val(
@@ -255,7 +257,7 @@ class AnimationData(object):
                     flags='gu',
                     region=endRegion),
                 val_type=float)
-            for key in ('n', 's', 'e', 'w'):
+            for key in ('n', 's', 'e', 'w', 'nsres', 'ewres'):
                 values = interpolate(
                     startRegionDict[key],
                     endRegionDict[key],
@@ -274,12 +276,6 @@ class AnimationData(object):
                 if regions[i]['n'] < regions[i]['s'] or \
                    regions[i]['e'] < regions[i]['w']:
                     regions[i] = regions[i - 1]
-
-        for region in regions:
-            mapwidth = abs(region['e'] - region['w'])
-            mapheight = abs(region['n'] - region['s'])
-            region['nsres'] = mapheight / height
-            region['ewres'] = mapwidth / width
 
         self._regions = regions
 
