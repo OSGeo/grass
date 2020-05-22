@@ -2121,7 +2121,7 @@ class SummaryPage(TitledPage):
         self.sizer.Add(self.llocation,
                        flag=wx.ALIGN_LEFT | wx.ALL,
                        border=5, pos=(2, 1))
-        self.sizer.Add(self.MakeLabel(_("Location Description:")),
+        self.sizer.Add(self.MakeLabel(_("Description:")),
                        flag=wx.ALIGN_LEFT | wx.ALL,
                        border=5, pos=(3, 0))
         self.sizer.Add(self.panelTitle,
