@@ -82,7 +82,8 @@ class TitledPage(WizardPageSimple):
         self.page = WizardPageSimple.__init__(self, parent)
 
         # page title
-        self.title = StaticText(parent=self, id=wx.ID_ANY, label=title)
+        self.title = StaticText(parent=self, id=wx.ID_ANY, label=title,
+                                style=wx.ALIGN_CENTRE_HORIZONTAL)
         self.title.SetFont(wx.Font(13, wx.SWISS, wx.NORMAL, wx.BOLD))
         # main sizers
         self.pagesizer = wx.BoxSizer(wx.VERTICAL)
@@ -93,7 +94,7 @@ class TitledPage(WizardPageSimple):
     def DoLayout(self):
         """Do page layout"""
         self.pagesizer.Add(self.title, proportion=0,
-                           flag=wx.ALIGN_CENTRE | wx.ALL,
+                           flag=wx.EXPAND | wx.ALL,
                            border=5)
         self.pagesizer.Add(wx.StaticLine(self, -1), proportion=0,
                            flag=wx.EXPAND | wx.ALL,
