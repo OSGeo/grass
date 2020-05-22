@@ -384,9 +384,12 @@ def interpolate(start, end, count):
         while start < end:
             values.append(start)
             start += step
-    else:
+    elif end < start:
         while end < start:
             values.append(start)
             start += step
+    else:
+        values = [start] * (count - 1)
     values.append(end)
+
     return values
