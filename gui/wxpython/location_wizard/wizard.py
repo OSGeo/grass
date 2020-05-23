@@ -88,7 +88,7 @@ class TitledPage(WizardPageSimple):
         self.pagesizer = wx.BoxSizer(wx.VERTICAL)
         self.sizer = wx.GridBagSizer(vgap=0, hgap=0)
         self.sizer.SetCols(5)
-        self.sizer.SetRows(6)
+        self.sizer.SetRows(8)
 
     def DoLayout(self):
         """Do page layout"""
@@ -127,15 +127,6 @@ class TitledPage(WizardPageSimple):
             textCtrl.SetToolTip(tooltip)
         return textCtrl
 
-    def MakeStaticText(self, text='', size=(100, -1),
-                     style=0, parent=None):
-        """Generic static text control"""
-        if not parent:
-            parent = self
-        staticText = StaticText(parent=parent, id=wx.ID_ANY, label=text,
-                               size=size, style=style)
-        return staticText
-
     def MakeButton(self, text, id=wx.ID_ANY, size=(-1, -1),
                    parent=None, tooltip=None):
         """Generic button"""
@@ -164,58 +155,51 @@ class DatabasePage(TitledPage):
 
     def __init__(self, wizard, parent, grassdatabase):
         TitledPage.__init__(self, wizard, _(
-            "Define GRASS Database and Location Name"))
+            "Define new GRASS Location"))
 
         self.grassdatabase = grassdatabase
         self.location = ''
         self.locTitle = ''
+        
+        self.bbrowse = self.MakeButton(_("Change"))
 
         # text controls
-        self.tgisdbase = self.MakeStaticText(grassdatabase, size=(-1, -1))
-        self.tlocation = self.MakeTextCtrl("newLocation", size=(300, -1))
+        self.tgisdbase = self.MakeLabel(grassdatabase)    
+        self.tlocation = self.MakeTextCtrl("newLocation", size=(400, -1))
         self.tlocation.SetFocus()
         self.tlocation.SetValidator(
             GenericValidator(
                 grass.legal_name,
                 self._nameValidationFailed))
         self.tlocTitle = self.MakeTextCtrl(size=(400, -1))
-
-        # checkbox
-        self.tlocRegion = self.MakeCheckBox(_("Set default region extent and resolution"),
-                                            tooltip=_("This option allows setting default "
-                                                      "computation region immediately after "
-                                                      "new location is created. Default "
-                                                      "computation region can be defined later "
-                                                      "using g.region based on imported data."))
-
-        self.tlocUserMapset = self.MakeCheckBox(_("Create user mapset"),
-                                                tooltip=_("This option allows creating user "
-                                                          "mapset immediately after new location "
-                                                          "is created. Note that GRASS always creates "
-                                                          "PERMANENT mapset."))
+        
+        # text for required options
+        required_txt = self.MakeLabel("*")
+        required_txt.SetForegroundColour(wx.RED)
+        required_txt.SetToolTip(_("This option is required"))
+        
+        # text for optional options
+        optional_txt = self.MakeLabel(_("(optional)"))
+        italics = wx.Font(10, wx.DEFAULT, wx.ITALIC, wx.NORMAL)
+        optional_txt.SetFont(italics)
+        optional_txt.SetForegroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
 
         # layout
-        self.sizer.Add(self.MakeLabel(_("GIS Data Directory:")),
-                       flag=wx.ALIGN_RIGHT |
-                       wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5,
-                       pos=(1, 1))
-        self.sizer.Add(self.tgisdbase,
-                       flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5,
-                       pos=(1, 2))
-
         self.sizer.Add(
             self.MakeLabel(
                 "%s:" %
-                _("Project Location"),
+                _("Name"),
                 tooltip=_("Name of location directory in GIS Data Directory")),
-            flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
-            pos=(2, 1)
+            pos=(1, 1)
         )
         self.sizer.Add(self.tlocation,
+                       flag=wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTER_VERTICAL |
+                       wx.ALL, border=5,
+                       pos=(2, 1))
+        self.sizer.Add(required_txt,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
@@ -224,11 +208,10 @@ class DatabasePage(TitledPage):
         self.sizer.Add(
             self.MakeLabel(
                 "%s:" %
-                _("Location Title"),
+                _("Description"),
                 tooltip=_(
-                    "Optional location title, "
-                    "you can leave this field blank.")),
-            flag=wx.ALIGN_RIGHT | wx.ALIGN_TOP | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+                    "Description of location directory in GIS Data Directory")),
+            flag=wx.ALIGN_LEFT | wx.ALIGN_TOP | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
             pos=(3, 1)
         )
@@ -236,23 +219,34 @@ class DatabasePage(TitledPage):
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
-                       pos=(3, 2), span=(1, 2))
-        self.sizer.Add(self.tlocRegion,
+                       pos=(4, 1))
+        self.sizer.Add(optional_txt,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
-                       pos=(4, 2), span=(1, 2))
-        self.sizer.Add(self.tlocUserMapset,
+                       pos=(4, 2))
+        
+        self.sizer.Add(self.MakeLabel(_("Location will be created in GRASS database:")),
+                       flag=wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTER_VERTICAL |
+                       wx.ALL, border=2,
+                       pos=(5, 1))
+        self.sizer.Add(self.tgisdbase,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
-                       pos=(5, 2), span=(1, 2))
-        self.sizer.AddGrowableCol(3)
+                       pos=(6, 1))
+        self.sizer.Add(self.bbrowse,
+                       flag=wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTER_VERTICAL |
+                       wx.ALL, border=5,
+                       pos=(6, 2))
 
         # bindings
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.tgisdbase.Bind(wx.EVT_TEXT, self.OnChangeName)
         self.tlocation.Bind(wx.EVT_TEXT, self.OnChangeName)
+        self.Bind(wx.EVT_BUTTON, self.OnBrowse, self.bbrowse)
 
     def _nameValidationFailed(self, ctrl):
         message = _(
@@ -276,6 +270,16 @@ class DatabasePage(TitledPage):
             nextButton.Disable()
 
         event.Skip()
+        
+    def OnBrowse(self, event):
+        """Choose GRASS data directory"""
+        dlg = wx.DirDialog(self, _("Choose GRASS data directory:"),
+                           os.getcwd(), wx.DD_DEFAULT_STYLE)
+        if dlg.ShowModal() == wx.ID_OK:
+            self.grassdatabase = dlg.GetPath()
+            self.tgisdbase.SetLabel(self.grassdatabase)
+
+        dlg.Destroy()
 
     def OnPageChanging(self, event=None):
         error = None
@@ -2117,7 +2121,7 @@ class SummaryPage(TitledPage):
         self.sizer.Add(self.llocation,
                        flag=wx.ALIGN_LEFT | wx.ALL,
                        border=5, pos=(2, 1))
-        self.sizer.Add(self.MakeLabel(_("Location Title:")),
+        self.sizer.Add(self.MakeLabel(_("Description:")),
                        flag=wx.ALIGN_LEFT | wx.ALL,
                        border=5, pos=(3, 0))
         self.sizer.Add(self.panelTitle,
@@ -2400,8 +2404,6 @@ class LocationWizard(wx.Object):
                 self.location = self.startpage.location
                 self.grassdatabase = self.startpage.grassdatabase
                 self.georeffile = self.filepage.georeffile
-                self.default_region = self.startpage.tlocRegion.IsChecked()
-                self.user_mapset = self.startpage.tlocUserMapset.IsChecked()
                 # FIXME here was code for setting default region, what for is this if:
                 # if self.altdb == False:
 
