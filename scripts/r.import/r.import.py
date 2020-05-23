@@ -151,6 +151,17 @@ def cleanup():
                           flags='f', quiet=True)
 
 
+def is_projection_matching(GDALdatasource):
+    """Returns True if current location projection
+    matches dataset projection, otherwise False"""
+    try:
+        grass.run_command('r.in.gdal', input=GDALdatasource, flags='j',
+                          quiet=True)
+        return True
+    except CalledModuleError:
+        return False
+
+
 def main():
     global TMPLOC, SRCGISRC, TGTGISRC, GISDBASE, TMP_REG_NAME
 
@@ -180,8 +191,7 @@ def main():
     region_flag = ''
     if options['extent'] == 'region':
         region_flag += 'r'
-    if flags['o'] or grass.run_command('r.in.gdal', input=GDALdatasource, flags='j',
-                                       errors='status', quiet=True) == 0:
+    if flags['o'] or is_projection_matching(GDALdatasource):
         parameters = dict(input=GDALdatasource, output=output,
                           memory=memory, flags='ak' + additional_flags + region_flag)
         if bands:
