@@ -489,9 +489,10 @@ class WSDialogBase(wx.Dialog):
             self.active_ws_panel.Hide()
 
         self.active_ws_panel = self.ws_panels[ws]['panel']
-        self.active_ws_panel.Show()
-        self.SetMaxSize((-1, -1))
-        self.active_ws_panel.GetContainingSizer().Layout()
+        if not self.active_ws_panel.IsShown():
+            self.active_ws_panel.Show()
+            self.SetMaxSize((-1, -1))
+            self.active_ws_panel.GetContainingSizer().Layout()
 
     def OnAdvConnPaneChanged(self, event):
         """Collapse search module box
@@ -810,9 +811,9 @@ class WSPropertiesDialog(WSDialogBase):
 
         ws = self._getWSfromCmd(cmd)
         if self.ws_panels[ws]['panel'].IsConnected():
-            self.ws_panels[ws]['panel'].UpdateWidgetsByCmd(cmd)
             self.choose_ws_rb.SetStringSelection(self.ws_panels[ws]['label'])
             self._showWsPanel(ws)
+            self.ws_panels[ws]['panel'].UpdateWidgetsByCmd(cmd)
 
     def _getWSfromCmd(self, cmd):
         driver = cmd[1]['driver']
