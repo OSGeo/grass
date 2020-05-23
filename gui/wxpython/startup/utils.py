@@ -35,24 +35,29 @@ def get_possible_database_path():
     # potential translations (old Windows and some Linux)
     # but ~ and ~/Documents should cover most of the cases
     # ordered by preference and then likelihood
-    candidates = [
-        os.path.join(home, "grassdata"),
-        os.path.join(home, "Documents", "grassdata"),
-        os.path.join(home, "My Documents", "grassdata"),
-    ]
-    try:
-        # here goes everything which has potential unicode issues
-        candidates.append(os.path.join(home, _("Documents"), "grassdata"))
-        candidates.append(os.path.join(home, _("My Documents"), "grassdata"))
-    except UnicodeDecodeError:
-        # just ignore the errors if it doesn't work
-        pass
-    path = None
-    for candidate in candidates:
-        if os.path.exists(candidate):
-            path = candidate
-            break  # get the first match
-    return path
+    
+    options = ["grassdata","GRASSDATA","Grassdata","GrassData"]
+    
+    for option in options:
+    
+        candidates = [
+            os.path.join(home, option),
+            os.path.join(home, "Documents", option),
+            os.path.join(home, "My Documents", option),
+        ]
+        try:
+            # here goes everything which has potential unicode issues
+            candidates.append(os.path.join(home, _("Documents"), option))
+            candidates.append(os.path.join(home, _("My Documents"), option))
+        except UnicodeDecodeError:
+            # just ignore the errors if it doesn't work
+            pass
+        path = None
+        for candidate in candidates:
+            if os.path.exists(candidate):
+                path = candidate
+                return path
+
 
 
 def get_lockfile_if_present(database, location, mapset):
