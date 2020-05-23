@@ -2004,6 +2004,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             mapName, found = GetLayerNameFromCmd(dcmd)
             mapLayer = self.GetLayerInfo(layer, key='maplayer')
             self.SetItemText(layer, mapName)
+            # calculates all the positions of the visible items
+            # fix length from item to next non-toplevel window position
+            self.CalculatePositions()
 
             if not mapText or not found:
                 propwin.Hide()
