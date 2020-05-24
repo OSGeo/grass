@@ -55,7 +55,7 @@ from core.utils import cmp
 from core.gcmd import RunCommand, GError, GMessage, GWarning
 from gui_core.widgets import GenericValidator
 from gui_core.wrap import SpinCtrl, SearchCtrl, StaticText, \
-    TextCtrl, Button, CheckBox, StaticBox, NewId, ListCtrl
+    TextCtrl, Button, CheckBox, StaticBox, NewId, ListCtrl, HyperlinkCtrl
 from location_wizard.base import BaseClass
 from location_wizard.dialogs import SelectTransformDialog
 
@@ -1496,25 +1496,17 @@ class EPSGPage(TitledPage):
         self.epsgparams = ''
 
         # labels
-        self.lfile = self.MakeLabel(
-            _("Path to the EPSG-codes file:"),
-            style=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
         self.lcode = self.MakeLabel(
             _("EPSG code:"),
             style=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
-        # text input
-        epsgdir = utils.PathJoin(os.environ["GRASS_PROJSHARE"], 'epsg')
-        self.tfile = self.MakeTextCtrl(text=epsgdir, size=(200, -1),
-                                       style=wx.TE_PROCESS_ENTER)
-        self.tcode = self.MakeTextCtrl(size=(200, -1))
-
-        # buttons
-        self.bbrowse = self.MakeButton(_("Browse"))
+        self.llink = self.MakeLabel(
+            _("Link to epsg.io:"),
+            style=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
 
         # search box
         self.searchb = SearchCtrl(self, size=(200, -1),
                                   style=wx.TE_PROCESS_ENTER)
-
+        
         self.epsglist = ItemList(
             self,
             data=None,
@@ -1523,42 +1515,44 @@ class EPSGPage(TitledPage):
                 _('Description'),
                 _('Parameters')])
 
+        # epsg.io hyperlink
+        self.tlink = HyperlinkCtrl(
+            self, id=wx.ID_ANY, 
+            size=(200, -1),
+            label="epsg.io",
+            url="epsg.io")
+        self.tlink.SetNormalColour(
+            wx.SystemSettings.GetColour(
+                wx.SYS_COLOUR_GRAYTEXT))
+        self.tlink.SetVisitedColour(
+            wx.SystemSettings.GetColour(
+                wx.SYS_COLOUR_GRAYTEXT))
+        
         # layout
-        self.sizer.Add(self.lfile,
-                       flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5, pos=(1, 1), span=(1, 2))
-        self.sizer.Add(self.tfile,
-                       flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5, pos=(1, 3))
-        self.sizer.Add(self.bbrowse,
-                       flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5, pos=(1, 4))
         self.sizer.Add(self.lcode,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5, pos=(2, 1), span=(1, 2))
-        self.sizer.Add(self.tcode,
-                       flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5, pos=(2, 3))
+                       wx.ALL, border=5, pos=(1, 1), span=(1, 2))
         self.sizer.Add(self.searchb,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5, pos=(3, 3))
-
+                       wx.ALL, border=5, pos=(1, 3))
+        self.sizer.Add(self.llink,
+                       flag=wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTER_VERTICAL |
+                       wx.ALL, border=5, pos=(2, 1), span=(1, 2))
+        self.sizer.Add(self.tlink,
+                       flag=wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTER_VERTICAL |
+                       wx.ALL, border=5, pos=(2, 3), span=(1, 2))
         self.sizer.Add(self.epsglist,
-                       flag=wx.ALIGN_LEFT | wx.EXPAND, pos=(4, 1),
+                       flag=wx.ALIGN_LEFT | wx.EXPAND, pos=(3, 1),
                        span=(1, 4))
         self.sizer.AddGrowableCol(3)
         self.sizer.AddGrowableRow(4)
 
         # events
-        self.bbrowse.Bind(wx.EVT_BUTTON, self.OnBrowse)
-        self.tfile.Bind(wx.EVT_TEXT_ENTER, self.OnBrowseCodes)
-        self.tcode.Bind(wx.EVT_TEXT, self.OnText)
+        self.searchb.Bind(wx.EVT_TEXT, self.OnText)
         self.epsglist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
         self.searchb.Bind(wx.EVT_TEXT_ENTER, self.OnSearch)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
@@ -1678,11 +1672,12 @@ class EPSGPage(TitledPage):
     def OnItemSelected(self, event):
         """EPSG code selected from the list"""
         index = event.GetIndex()
-        item = event.GetItem()
 
         self.epsgcode = int(self.epsglist.GetItem(index, 0).GetText())
         self.epsgdesc = self.epsglist.GetItem(index, 1).GetText()
-        self.tcode.SetValue(str(self.epsgcode))
+        self.searchb.SetValue(str(self.epsgcode))
+        self.tlink.SetURL(str("https://epsg.io/{0}".format(self.epsgcode)))
+        self.tlink.SetLabel(str("epsg.io:{0}".format(self.epsgcode)))
 
         event.Skip()
 
