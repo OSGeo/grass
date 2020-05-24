@@ -37,12 +37,4 @@ after_success:
   - bash < (curl -s https://codecov.io/bash)
 
 notifications:
-        email:
-            recipients:
-                - grass-dev@lists.osgeo.org
-                - landa.martin@gmail.com
-                - wenzeslaus@gmail.com
-            on_success: change
-            on_failure: always
         irc: "chat.freenode.net#grass"
-
