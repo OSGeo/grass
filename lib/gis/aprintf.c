@@ -389,7 +389,7 @@ int G_vsnaprintf(char *str, size_t size, const char *format, va_list ap)
 }
 
 /*!
- * \brief Adjust the width of string specifiers to the display space intead of
+ * \brief Adjust the width of string specifiers to the display space instead of
  * the number of bytes for wide characters and print them formatted using the
  * adjusted display width.
  *
