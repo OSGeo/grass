@@ -27,7 +27,7 @@
 /* printf(3) man page */
 #define CONVS "diouxXeEfFgGaAcsCSpnm%"
 
-/* % + flags + width + precision + length + conversoin + NULL */
+/* % + flags + width + precision + length + conversion + NULL */
 #define SPEC_BUF_SIZE 16
 
 struct options
