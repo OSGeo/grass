@@ -117,7 +117,7 @@ int print_stats(univar_stat * stats)
 	double quartile_25 = 0.0, quartile_75 = 0.0, *quartile_perc;
 	double median = 0.0;
 	unsigned int i;
-	int qpos_25, qpos_75, *qpos_perc;
+	size_t qpos_25, qpos_75, *qpos_perc;
 
 	/* all these calculations get promoted to doubles, so any DIV0 becomes nan */
 	mean = stats[z].sum / stats[z].n;
@@ -178,7 +178,7 @@ int print_stats(univar_stat * stats)
 
 	/* TODO: mode, skewness, kurtosis */
 	if (param.extended->answer) {
-	    qpos_perc = (int *)G_calloc(stats[z].n_perc, sizeof(int));
+	    qpos_perc = (size_t *)G_calloc(stats[z].n_perc, sizeof(size_t));
 	    quartile_perc = (double *)G_calloc(stats[z].n_perc, sizeof(double));
 
 	    if (stats[z].n == 0) {
@@ -188,10 +188,10 @@ int print_stats(univar_stat * stats)
 	    }
 	    else {
 		for (i = 0; i < stats[z].n_perc; i++) {
-		    qpos_perc[i] = (int)(stats[z].n * 1e-2 * stats[z].perc[i] - 0.5);
+		    qpos_perc[i] = (size_t)(stats[z].n * 1e-2 * stats[z].perc[i] - 0.5);
 		}
-		qpos_25 = (int)(stats[z].n * 0.25 - 0.5);
-		qpos_75 = (int)(stats[z].n * 0.75 - 0.5);
+		qpos_25 = (size_t)(stats[z].n * 0.25 - 0.5);
+		qpos_75 = (size_t)(stats[z].n * 0.75 - 0.5);
 
 		switch (stats[z].map_type) {
 		case CELL_TYPE:
