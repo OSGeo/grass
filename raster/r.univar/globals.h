@@ -34,8 +34,8 @@ typedef struct
     unsigned int n_perc;
     double *perc;
     double sum_abs;
-    unsigned long n;
-    unsigned long size;
+    size_t n;
+    size_t size;
     DCELL *dcell_array;
     FCELL *fcell_array;
     CELL *cell_array;
@@ -63,9 +63,9 @@ extern param_type param;
 extern zone_type zone_info;
 
 /* fn prototypes */
-void heapsort_double(double *data, int n);
-void heapsort_float(float *data, int n);
-void heapsort_int(int *data, int n);
+void heapsort_double(double *data, size_t n);
+void heapsort_float(float *data, size_t n);
+void heapsort_int(int *data, size_t n);
 int print_stats(univar_stat * stats);
 int print_stats_table(univar_stat * stats);
 univar_stat *create_univar_stat_struct(int map_type, int n_perc);

@@ -10,16 +10,17 @@
  */
 
 #include "globals.h"
-static void downheap_int(int *array, int n, int k);
-static void downheap_float(float *array, int n, int k);
-static void downheap_double(double *array, int n, int k);
+static void downheap_int(int *array, size_t n, size_t k);
+static void downheap_float(float *array, size_t n, size_t k);
+static void downheap_double(double *array, size_t n, size_t k);
 
 /* *************************************************************** */
 /* *************************************************************** */
 /* *************************************************************** */
-void downheap_int(int *array, int n, int k)
+void downheap_int(int *array, size_t n, size_t k)
 {
-    int j, v;
+    size_t j;
+    int v;
 
     v = array[k];
     while (k <= n / 2) {
@@ -40,9 +41,9 @@ void downheap_int(int *array, int n, int k)
 /* *************************************************************** */
 /* *************************************************************** */
 /* *************************************************************** */
-void downheap_float(float *array, int n, int k)
+void downheap_float(float *array, size_t n, size_t k)
 {
-    int j;
+    size_t j;
     float v;
 
     v = array[k];
@@ -64,9 +65,9 @@ void downheap_float(float *array, int n, int k)
 /* *************************************************************** */
 /* *************************************************************** */
 /* *************************************************************** */
-void downheap_double(double *array, int n, int k)
+void downheap_double(double *array, size_t n, size_t k)
 {
-    int j;
+    size_t j;
     double v;
 
     v = array[k];
@@ -88,9 +89,10 @@ void downheap_double(double *array, int n, int k)
 /* *************************************************************** */
 /* ****** heapsort for int arrays of size n ********************** */
 /* *************************************************************** */
-void heapsort_int(int *array, int n)
+void heapsort_int(int *array, size_t n)
 {
-    int k, t;
+    ssize_t k;
+    int t;
 
     --n;
 
@@ -110,9 +112,9 @@ void heapsort_int(int *array, int n)
 /* *************************************************************** */
 /* ****** heapsort for float arrays of size n ******************** */
 /* *************************************************************** */
-void heapsort_float(float *array, int n)
+void heapsort_float(float *array, size_t n)
 {
-    int k;
+    ssize_t k;
     float t;
 
     --n;
@@ -132,9 +134,9 @@ void heapsort_float(float *array, int n)
 /* *************************************************************** */
 /* ****** heapsort for double arrays of size n ******************* */
 /* *************************************************************** */
-void heapsort_double(double *array, int n)
+void heapsort_double(double *array, size_t n)
 {
-    int k;
+    ssize_t k;
     double t;
 
     --n;
