@@ -1,0 +1,22 @@
+name: OSGeo4W
+
+on:
+- push
+- pull_request
+
+jobs:
+  build:
+    name: ${{ matrix.os }} build
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+        - windows-latest
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get dependencies
+      run: |
+        wget
