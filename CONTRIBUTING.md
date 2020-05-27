@@ -137,10 +137,10 @@ git add file1
 git add file2
 ```
 
-* Commit the change:
+* Commit the change (first word is the module name):
 
 ```
-git commit -m "Added a new feature"
+git commit -m "module: added a new feature"
 ```
 
 ### Pushing changes to GitHub
