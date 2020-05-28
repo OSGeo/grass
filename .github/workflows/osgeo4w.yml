@@ -22,6 +22,5 @@ jobs:
               $url = "http://download.osgeo.org/osgeo4w/osgeo4w-setup-x86_64.exe"
               $output = "osgeo4w-setup-x86_64.exe"
               (New-Object System.Net.WebClient).DownloadFile($url, $output)
-              dir
-              osgeo4w-setup-x86_64.exe -A -g -k -q -s http://download.osgeo.org/x86_64 -P cairo,fftw,freetype-devel,gdal-ecw,gdal-mrsid,liblas-devel,libxdr,msys,pdcurses,python3-numpy,python3-pywin32,python3-wx,regex-devel,wxpython,zstd-devel
+              .\osgeo4w-setup-x86_64.exe -A -g -k -q -s http://download.osgeo.org/x86_64 -P cairo,fftw,freetype-devel,gdal-ecw,gdal-mrsid,liblas-devel,libxdr,msys,pdcurses,python3-numpy,python3-pywin32,python3-wx,regex-devel,wxpython,zstd-devel
               dir c:\OSGeo4W64
