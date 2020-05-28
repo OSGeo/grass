@@ -22,5 +22,5 @@ jobs:
               $url = "http://download.osgeo.org/osgeo4w/osgeo4w-setup-x86_64.exe"
               $output = "osgeo4w-setup-x86_64.exe"
               (New-Object System.Net.WebClient).DownloadFile($url, $output)
-              mkdir c:\OSGeo4W
+              mkdir c:\OSGeo4W64
               dir c:\OSGeo4W64
