@@ -1436,12 +1436,13 @@ class MapFrame(SingleMapFrame):
                       constrainRes=False, projection=False, alignExtent=True):
         """Set properies of map display window"""
         self.mapWindowProperties.autoRender = render
-        self.statusbarManager.SetMode(mode)
-        self.StatusbarUpdate()
+        if self.statusbarManager:
+            self.statusbarManager.SetMode(mode)
+            self.StatusbarUpdate()
+            self.SetProperty('projection', projection)
         self.mapWindowProperties.showRegion = showCompExtent
         self.mapWindowProperties.alignExtent = alignExtent
         self.mapWindowProperties.resolution = constrainRes
-        self.SetProperty('projection', projection)
 
     def IsStandalone(self):
         """Check if Map display is standalone
