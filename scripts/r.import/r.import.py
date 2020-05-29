@@ -221,13 +221,16 @@ def main():
 
     # create temp location from input without import
     grass.verbose(_("Creating temporary location for <%s>...") % GDALdatasource)
+    # creating a new location with r.in.gdal requires a sanitized env
+    env = os.environ.copy()
+    env = grass.sanitize_mapset_environment(env)
     parameters = dict(input=GDALdatasource, output=output,
                       memory=memory, flags='c', title=title,
                       location=TMPLOC, quiet=True)
     if bands:
         parameters['band'] = bands
     try:
-        grass.run_command('r.in.gdal', **parameters)
+        grass.run_command('r.in.gdal', env=env, **parameters)
     except CalledModuleError:
         grass.fatal(_("Unable to read GDAL dataset <%s>") % GDALdatasource)
 
