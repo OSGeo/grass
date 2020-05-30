@@ -757,7 +757,7 @@ class WSPropertiesDialog(WSDialogBase):
 
         self.giface.GetLayerTree().GetOptData(dcmd=lcmd,
                                               layer=self.layer,
-                                              params=None,
+                                              params=True,
                                               propwin=self)
 
         # TODO use just list or tuple
