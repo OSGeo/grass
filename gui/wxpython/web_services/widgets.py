@@ -1081,7 +1081,7 @@ class LayersList(TreeCtrl):
         :param l_st_list: [{style : 'style_name', layer : 'layer_name'}, ...]
         :return: items from l_st_list which were not found
         """
-        def checknext(item, l_st_list, items_to_sel):
+        def checknext(root_item, l_st_list, items_to_sel):
             def compare(item, l_name, st_name):
                 it_l_name = self.GetItemData(item)['layer'].GetLayerData('name')
                 it_st = self.GetItemData(item)['style']
@@ -1094,19 +1094,20 @@ class LayersList(TreeCtrl):
 
                 return False
 
-            for i, l_st in enumerate(l_st_list):
-                l_name = l_st['layer']
-                st_name = l_st['style']
+            (child, cookie) = self.GetFirstChild(root_item)
+            while child.IsOk():
+                for i, l_st in enumerate(l_st_list):
+                    l_name = l_st['layer']
+                    st_name = l_st['style']
 
-                if compare(item, l_name, st_name):
-                    items_to_sel[i] = [item, l_st]
-                    break
+                    if compare(child, l_name, st_name):
+                        items_to_sel[i] = [child, l_st]
+                        break
 
-            if len(items_to_sel) == len(l_st_list):
-                item = self.GetNextVisible(item)
-                if not item.IsOk():
-                    return
-                checknext(item, l_st_list, items_to_sel)
+                if len(items_to_sel) == len(l_st_list):
+                    if self.ItemHasChildren(child):
+                        checknext(child, l_st_list, items_to_sel)
+                    child = self.GetNextSibling(child)
 
         self.UnselectAll()
 
@@ -1115,6 +1116,7 @@ class LayersList(TreeCtrl):
 
         items_to_sel = [None] * len(l_st_list)
         checknext(root_item, l_st_list, items_to_sel)
+        self.CollapseAll()
 
         # items are selected according to position in l_st_list
         # to be added to Layers order list in right order
@@ -1128,6 +1130,8 @@ class LayersList(TreeCtrl):
                 keep = True
 
             self.SelectItem(item, select=keep)
+            self.SetFocusedItem(item)
+            self.Expand(item)
             l_st_list.remove(l_st)
 
         return l_st_list
