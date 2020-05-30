@@ -2284,13 +2284,6 @@ class LocationWizard(wx.Object):
         self.parent = parent
 
         #
-        # define wizard image
-        #
-        imagePath = os.path.join(globalvar.IMGDIR, "loc_wizard_qgis.png")
-        wizbmp = wx.Image(imagePath, wx.BITMAP_TYPE_PNG)
-        wizbmp = wizbmp.ConvertToBitmap()
-
-        #
         # get georeferencing information from tables in $GISBASE/etc
         #
         self.__readData()
@@ -2314,8 +2307,7 @@ class LocationWizard(wx.Object):
         self.wizard = WizardWithHelpButton(
             parent,
             id=wx.ID_ANY,
-            title=_("Define new GRASS Location"),
-            bitmap=wizbmp)
+            title=_("Define new GRASS Location"))
         self.wizard.Bind(wiz.EVT_WIZARD_HELP, self.OnHelp)
 
         self.startpage = DatabasePage(self.wizard, self, grassdatabase)
@@ -2707,13 +2699,13 @@ class LocationWizard(wx.Object):
 
 class WizardWithHelpButton(Wizard):
 
-    def __init__(self, parent, id, title, bitmap):
+    def __init__(self, parent, id, title):
         if globalvar.wxPythonPhoenix:
             Wizard.__init__(self)
             self.SetExtraStyle(wx.adv.WIZARD_EX_HELPBUTTON)
-            self.Create(parent=parent, id=id, title=title, bitmap=bitmap)
+            self.Create(parent=parent, id=id, title=title)
         else:
             pre = wiz.PreWizard()
             pre.SetExtraStyle(wx.wizard.WIZARD_EX_HELPBUTTON)
-            pre.Create(parent=parent, id=id, title=title, bitmap=bitmap)
+            pre.Create(parent=parent, id=id, title=title)
             self.PostCreate(pre)
