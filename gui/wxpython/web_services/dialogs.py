@@ -160,9 +160,7 @@ class WSDialogBase(wx.Dialog):
         self.settsManager.settingsSaving.connect(self.OnSettingsSaving)
 
     def OnLayerSelected(self, title):
-
-        if not self.layerName.GetValue().strip():
-            self.layerName.SetValue(title)
+        self.layerName.SetValue(title)
 
     def _doLayout(self):
 
