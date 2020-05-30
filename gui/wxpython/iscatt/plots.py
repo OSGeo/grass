@@ -24,6 +24,7 @@ from multiprocessing import Process, Queue
 from copy import deepcopy
 from iscatt.core_c import MergeArrays, ApplyColormap
 from iscatt.dialogs import ManageBusyCursorMixin
+from iscatt.utils import dist_point_to_segment
 from core.settings import UserSettings
 from gui_core.wrap import Menu, NewId
 
@@ -35,7 +36,6 @@ try:
         FigureCanvasWxAgg as FigCanvas
     from matplotlib.lines import Line2D
     from matplotlib.artist import Artist
-    from matplotlib.mlab import dist_point_to_segment
     from matplotlib.patches import Polygon, Ellipse, Rectangle
     import matplotlib.image as mi
     import matplotlib.colors as mcolors
