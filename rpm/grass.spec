@@ -10,8 +10,16 @@ Version:	7.9.0
 Release:	1%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
 
-%if 0%{?rhel}
+%if 0%{?rhel} >= 7
+%define __python %{__python3}
+%global python3_version_nodots 36
+%global main_python3 1
 %endif
+
+# Note that the bcond macros are named for the CLI option they create.
+# "%%bcond_without" means "ENABLE by default and create a --without option"
+%bcond_without python3
+
 License:	GPLv2+
 URL:		https://grass.osgeo.org
 Source0:	https://grass.osgeo.org/%{name}%{shortver}/source/%{name}-%{version}.tar.gz
@@ -41,7 +49,7 @@ BuildRequires:	libtiff-devel
 BuildRequires:	libXmu-devel
 BuildRequires:	mesa-libGL-devel
 BuildRequires:	mesa-libGLU-devel
-%if (0%{?fedora} >= 27)
+%if (0%{?rhel} > 7 || 0%{?fedora})
 BuildRequires:	mariadb-connector-c-devel openssl-devel
 %else
 BuildRequires:	mysql-devel
@@ -50,9 +58,9 @@ BuildRequires:	mysql-devel
 BuildRequires:	netcdf-devel
 %endif
 BuildRequires:	python3
-%if 0%{?rhel} > 6
+%if 0%{?rhel} == 7
 # EPEL7
-BuildRequires:	python36-numpy
+BuildRequires:	python%{python3_version_nodots}-numpy
 %else
 BuildRequires:	python3-numpy
 %endif
@@ -62,32 +70,28 @@ BuildRequires:	postgresql-devel
 BuildRequires:	libpq-devel
 %endif
 BuildRequires:	proj-devel
-%if (0%{?fedora} >= 30)
+%if (0%{?rhel} > 7 || 0%{?fedora} >= 30)
 BuildRequires:	proj-datumgrid
-BuildRequires:	proj-datumgrid-world
 %else
 BuildRequires:	proj-epsg
 BuildRequires:	proj-nad
 %endif
+%if 0%{?fedora} >= 30
+BuildRequires:	proj-datumgrid-world
+%endif
 %if (0%{?rhel} <= 6 && !0%{?fedora})
 # argparse is included in python2.7+ but not python2.6
-BuildRequires:  python-argparse
+BuildRequires:	python-argparse
 %endif
-%if 0%{?rhel} > 6
+%if 0%{?rhel} == 7
 # EPEL7
-BuildRequires:	python36-dateutil
+BuildRequires:	python%{python3_version_nodots}-dateutil
 %else
 BuildRequires:	python3-dateutil
 %endif
 BuildRequires:	python3-devel
 %if (0%{?rhel} > 6 || 0%{?fedora})
-%if 0%{?rhel} > 6
-# EPEL7
-BuildRequires:	python-pillow
-%else
-# Fedora
-BuildRequires:  python3-pillow
-%endif
+BuildRequires:	python3-pillow
 %else
 # EPEL6
 BuildRequires:	python-imaging
@@ -103,36 +107,38 @@ BuildRequires:	libzstd-devel
 Requires:	bzip2-libs
 Requires:	libzstd
 Requires:	geos
-%if (0%{?fedora} >= 30)
+%if (0%{?rhel} > 7 || 0%{?fedora} >= 30)
 Requires:	proj-datumgrid
-Requires:	proj-datumgrid-world
 %else
 Requires:	proj-epsg
 Requires:	proj-nad
 %endif
+%if 0%{?fedora} >= 30
+Requires:  proj-datumgrid-world
+%endif
 Requires:	python3
-%if 0%{?rhel} > 6
+%if 0%{?rhel} == 7
 # EPEL7
-Requires:	python36-numpy
+Requires:	python%{python3_version_nodots}-numpy
 %else
 Requires:	python3-numpy
 %endif
 %if 0%{?rhel} > 6
-# EPEL7
+# EPEL7/EPEL8
 #Requires:  python3-matplotlib-wx
 %else
 Requires:	python3-matplotlib
 %endif
-%if 0%{?rhel} > 6
+%if 0%{?rhel} == 7
 # EPEL7
-Requires:	python36-dateutil
+Requires:	python%{python3_version_nodots}-dateutil
 %else
 Requires:	python3-dateutil
 %endif
-%if 0%{?rhel}
-Requires:	wxPython
+%if 0%{?rhel} && 0%{?rhel} < 7
+Requires: wxPython
 %else
-Requires:	python3-wxpython4
+Requires: python3-wxpython4
 %endif
 
 %if "%{_lib}" == "lib"
@@ -191,7 +197,11 @@ CXXFLAGS="-std=c++98 ${CFLAGS}"
 	--with-tiff \
 	--with-png \
 	--with-postgres \
+%if 0%{?rhel} > 7
+    --with-mysql=no \
+%else
 	--with-mysql \
+%endif
 	--with-opengl \
 	--with-odbc \
 	--with-fftw \
@@ -354,6 +364,29 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
+* Tue May 26 2020 Markus Neteler <neteler@mundialis.de> - 7.8.3-5
+- fixed wxPython for F33 (BZ#1836761)
+
+* Thu May 21 2020 Sandro Mani <manisandro@gmail.com> - 7.8.3-4
+- Rebuild (gdal)
+
+* Sat May 09 2020 Markus Neteler <neteler@mundialis.de> - 7.8.3-3
+- disabled mysql on EPEL8 due to header problem
+- updated PROJ package names for EPEL8
+
+* Wed May 06 2020 Markus Neteler <neteler@mundialis.de> - 7.8.3-2
+- enforce Python3 on EPEL7
+- do not hardcode python version on Fedora but use macro
+
+* Tue May 05 2020 Markus Neteler <neteler@mundialis.de> - 7.8.3
+- new upstream version GRASS GIS 7.8.3
+
+* Tue Mar 03 2020 Sandro Mani <manisandro@gmail.com> - 7.8.2-3
+- Rebuild (gdal)
+
+* Wed Jan 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 7.8.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
 * Thu Dec 12 2019 Markus Neteler <neteler@mundialis.de> - 7.8.2
 - new upstream version GRASS GIS 7.8.2
 
