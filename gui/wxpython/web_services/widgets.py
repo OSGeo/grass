@@ -802,7 +802,7 @@ class WSPanel(wx.Panel):
             self.formats_list = []
             cur_sel = None
 
-            if self.params['format'] is not None:
+            if self.params['format']:
                 cur_sel = self.params['format'].GetStringSelection()
 
             if len(curr_sel_ls) > 0:
@@ -812,7 +812,8 @@ class WSPanel(wx.Panel):
                 self._updateFormatRadioBox(self.formats_list)
 
                 if cur_sel:
-                    self.params['format'].SetStringSelection(cur_sel)
+                    if self.params['format']:
+                        self.params['format'].SetStringSelection(cur_sel)
                 else:
                     self._setDefaultFormatVal()
 
@@ -830,7 +831,7 @@ class WSPanel(wx.Panel):
     def _updateFormatRadioBox(self, formats_list):
         """Helper function
         """
-        if self.params['format'] is not None:
+        if self.params['format']:
             self.req_page_sizer.Detach(self.params['format'])
             self.params['format'].Destroy()
         if len(self.formats_list) > 0:
