@@ -651,7 +651,7 @@ class TplotFrame(wx.Frame):
             zipped = list(zip(x, *y))
         else:
             zipped = list(zip(x, y))
-        with open(self.csvpath, "w") as fi:
+        with open(self.csvpath, "w", newline='') as fi:
             writer = csv.writer(fi)
             if self.header:
                 head = ["Time"]
