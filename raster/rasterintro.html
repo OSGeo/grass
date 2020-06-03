@@ -201,6 +201,20 @@ Univariate statistics (<a href="r.univar.html">r.univar</a>) and
 reports are also available (<a href="r.report.html">r.report</a>,<a
 href="r.stats.html">r.stats</a>, <a href="r.volume.html">r.volume</a>).
 
+Since <a href="r.univar.html">r.univar</a> may be slow for extented
+statistics these can be calculated using
+<a href="r.stats.quantile.html">r.stats.quantile</a>. Without a zones input
+raster, the <a href="r.quantile.html">r.quantile</a> module will be significantly
+more efficient for calculating percentiles with large maps. For calculating
+univariate statistics from a raster map based on vector polygon map and
+upload statistics to new attribute columns, see
+<a href="v.rast.stats.html">v.rast.stats</a>. Category or object
+oriented statistics can be computed with <a href="r.statistics.html">r.statistics</a>.
+For floating-point cover map support for this, see the alternative
+<a href="r.stats.zonal.html">r.stats.zonal</a>. For quantile calculations
+with support for floating-point cover maps, see the alternative
+<a href="r.stats.quantile.html">r.stats.quantile</a>.
+
 <h3>Raster map algebra and aggregation</h3>
 
 The <a href="r.mapcalc.html">r.mapcalc</a> command provides raster map
