@@ -7,7 +7,7 @@
 
 #include "local_proto.h"
 
-#define printline(x) fprintf (stdout, " | %-74.74s |\n", x)
+#define printline(x) G_faprintf (stdout, " | %-74.74s |\n", x)
 #define divider(x) \
         fprintf (stdout, " %c", x); \
         for (i = 0; i < 76; i++ ) \
@@ -314,41 +314,41 @@ void print_info(const struct Map_info *Map)
     }
 
     divider('+');
-    sprintf(line, "%-17s%s", _("Name:"),
+    G_saprintf(line, "%-17s%s", _("Name:"),
             Vect_get_name(Map));
     printline(line);
-    sprintf(line, "%-17s%s", _("Mapset:"),
+    G_saprintf(line, "%-17s%s", _("Mapset:"),
             Vect_get_mapset(Map));
     printline(line);
     
-    sprintf(line, "%-17s%s", _("Location:"),
+    G_saprintf(line, "%-17s%s", _("Location:"),
             G_location());
     printline(line);
-    sprintf(line, "%-17s%s", _("Database:"),
+    G_saprintf(line, "%-17s%s", _("Database:"),
             G_gisdbase());
     printline(line);
 
-    sprintf(line, "%-17s%s", _("Title:"),
+    G_saprintf(line, "%-17s%s", _("Title:"),
             Vect_get_map_name(Map));
     printline(line);
-    sprintf(line, "%-17s1:%d", _("Map scale:"),
+    G_saprintf(line, "%-17s1:%d", _("Map scale:"),
             Vect_get_scale(Map));
     printline(line);
 
-    sprintf(line, "%-17s%s", _("Name of creator:"),
+    G_saprintf(line, "%-17s%s", _("Name of creator:"),
             Vect_get_person(Map));
     printline(line);
-    sprintf(line, "%-17s%s", _("Organization:"),
+    G_saprintf(line, "%-17s%s", _("Organization:"),
             Vect_get_organization(Map));
     printline(line);
-    sprintf(line, "%-17s%s", _("Source date:"),
+    G_saprintf(line, "%-17s%s", _("Source date:"),
             Vect_get_map_date(Map));
     printline(line);
 
     /* This shows the TimeStamp (if present) */
     if (time_ok  == TRUE && (first_time_ok || second_time_ok)) {
         G_format_timestamp(&ts, timebuff);
-        sprintf(line, "%-17s%s", _("Timestamp (first layer): "), timebuff);
+        G_saprintf(line, "%-17s%s", _("Timestamp (first layer): "), timebuff);
         printline(line);
     }
     else {
@@ -360,18 +360,18 @@ void print_info(const struct Map_info *Map)
     
     if (map_type == GV_FORMAT_OGR ||
         map_type == GV_FORMAT_OGR_DIRECT) {
-        sprintf(line, "%-17s%s (%s)", _("Map format:"),
+        G_saprintf(line, "%-17s%s (%s)", _("Map format:"),
                 Vect_maptype_info(Map), Vect_get_finfo_format_info(Map));
         printline(line);
         
         /* for OGR format print also datasource and layer */
-        sprintf(line, "%-17s%s", _("OGR layer:"),
+        G_saprintf(line, "%-17s%s", _("OGR layer:"),
                 Vect_get_finfo_layer_name(Map));
         printline(line);
-        sprintf(line, "%-17s%s", _("OGR datasource:"),
+        G_saprintf(line, "%-17s%s", _("OGR datasource:"),
                 Vect_get_finfo_dsn_name(Map));
         printline(line);
-        sprintf(line, "%-17s%s", _("Feature type:"),
+        G_saprintf(line, "%-17s%s", _("Feature type:"),
                 Vect_get_finfo_geometry_type(Map));
         printline(line);
     }
@@ -384,23 +384,23 @@ void print_info(const struct Map_info *Map)
 
         finfo = Vect_get_finfo(Map);
         
-        sprintf(line, "%-17s%s (%s)", _("Map format:"),
+        G_saprintf(line, "%-17s%s (%s)", _("Map format:"),
                 Vect_maptype_info(Map), Vect_get_finfo_format_info(Map));
         printline(line);
         
         /* for PostGIS format print also datasource and layer */
-        sprintf(line, "%-17s%s", _("DB table:"),
+        G_saprintf(line, "%-17s%s", _("DB table:"),
                 Vect_get_finfo_layer_name(Map));
         printline(line);
-        sprintf(line, "%-17s%s", _("DB name:"),
+        G_saprintf(line, "%-17s%s", _("DB name:"),
                 Vect_get_finfo_dsn_name(Map));
         printline(line);
 
-        sprintf(line, "%-17s%s", _("Geometry column:"),
+        G_saprintf(line, "%-17s%s", _("Geometry column:"),
                 finfo->pg.geom_column);
         printline(line);
 
-        sprintf(line, "%-17s%s", _("Feature type:"),
+        G_saprintf(line, "%-17s%s", _("Feature type:"),
                 Vect_get_finfo_geometry_type(Map));
         printline(line);
 
@@ -410,21 +410,21 @@ void print_info(const struct Map_info *Map)
                                                    &toposchema_name, &topogeom_column,
                                                    &topo_geo_only);
         if (topo_format == GV_TOPO_POSTGIS) {
-            sprintf(line, "%-17s%s (%s %s%s)", _("Topology:"), "PostGIS",
+            G_saprintf(line, "%-17s%s (%s %s%s)", _("Topology:"), "PostGIS",
                     _("schema:"), toposchema_name,
                     topo_geo_only ? ", topo-geo-only: yes" : "");
             printline(line);
 
-            sprintf(line, "%-17s%s", _("Topology column:"),
+            G_saprintf(line, "%-17s%s", _("Topology column:"),
                     topogeom_column);
         }
         else
-            sprintf(line, "%-17s%s", _("Topology:"), "pseudo (simple features)");
+            G_saprintf(line, "%-17s%s", _("Topology:"), "pseudo (simple features)");
         
         printline(line);
     }
     else {
-        sprintf(line, "%-17s%s", _("Map format:"),
+        G_saprintf(line, "%-17s%s", _("Map format:"),
                 Vect_maptype_info(Map));
         printline(line);
     }
@@ -432,27 +432,27 @@ void print_info(const struct Map_info *Map)
 
     divider('|');
     
-    sprintf(line, "  %s: %s (%s: %i)",
+    G_saprintf(line, "  %s: %s (%s: %i)",
             _("Type of map"), _("vector"), _("level"), Vect_level(Map));
     printline(line);
     
     if (Vect_level(Map) > 0) {
         printline("");
-        sprintf(line,
+        G_saprintf(line,
                 "  %-24s%-9d       %-22s%-9d",
                 _("Number of points:"), 
                 Vect_get_num_primitives(Map, GV_POINT),
                 _("Number of centroids:"),
                 Vect_get_num_primitives(Map, GV_CENTROID));
         printline(line);
-        sprintf(line,
+        G_saprintf(line,
                 "  %-24s%-9d       %-22s%-9d",
                 _("Number of lines:"),
                 Vect_get_num_primitives(Map, GV_LINE),
                 _("Number of boundaries:"),
                 Vect_get_num_primitives(Map, GV_BOUNDARY));
         printline(line);
-        sprintf(line,
+        G_saprintf(line,
                 "  %-24s%-9d       %-22s%-9d",
                 _("Number of areas:"),
                 Vect_get_num_areas(Map),
@@ -460,14 +460,14 @@ void print_info(const struct Map_info *Map)
                 Vect_get_num_islands(Map));
         printline(line);
         if (Vect_is_3d(Map)) {
-            sprintf(line,
+            G_saprintf(line,
                     "  %-24s%-9d       %-22s%-9d",
                     _("Number of faces:"),
                     Vect_get_num_primitives(Map, GV_FACE),
                     _("Number of kernels:"),
                     Vect_get_num_primitives(Map, GV_KERNEL));
             printline(line);
-            sprintf(line,
+            G_saprintf(line,
                     "  %-24s%-9d       %-22s%-9d",
                     _("Number of volumes:"),
                     Vect_get_num_volumes(Map),
@@ -477,11 +477,11 @@ void print_info(const struct Map_info *Map)
         }
         printline("");
 
-        sprintf(line, "  %-24s%s",
+        G_saprintf(line, "  %-24s%s",
                 _("Map is 3D:"),
                 Vect_is_3d(Map) ? _("Yes") : _("No"));
         printline(line);
-        sprintf(line, "  %-24s%-9d",
+        G_saprintf(line, "  %-24s%-9d",
                 _("Number of dblinks:"),
                 Vect_get_num_dblinks(Map));
         printline(line);
@@ -501,12 +501,12 @@ void print_info(const struct Map_info *Map)
         else
             sprintf(tmp1, "%d", utm_zone);
 
-        sprintf(line, "  %s: %s (%s %s)",
+        G_saprintf(line, "  %s: %s (%s %s)",
                 _("Projection"), Vect_get_proj_name(Map),
                 _("zone"), tmp1);
     }
     else
-        sprintf(line, "  %s: %s",
+        G_saprintf(line, "  %s: %s",
                 _("Projection"), Vect_get_proj_name(Map));
 
     printline(line);
@@ -536,9 +536,9 @@ void print_info(const struct Map_info *Map)
     printline("");
 
     format_double(Vect_get_thresh(Map), tmp1);
-    sprintf(line, "  %s: %s", _("Digitization threshold"), tmp1);
+    G_saprintf(line, "  %s: %s", _("Digitization threshold"), tmp1);
     printline(line);
-    sprintf(line, "  %s:", _("Comment"));
+    G_saprintf(line, "  %s:", _("Comment"));
     printline(line);
     sprintf(line, "    %s", Vect_get_comment(Map));
     printline(line);

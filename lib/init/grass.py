@@ -54,6 +54,7 @@ import platform
 import tempfile
 import locale
 import uuid
+import unicodedata
 
 
 # mechanism meant for debugging this script (only)
@@ -262,6 +263,43 @@ def wxpath(*args):
         # this can be called only after GISBASE was set
         _WXPYTHON_BASE = gpath("gui", "wxpython")
     return os.path.join(_WXPYTHON_BASE, *args)
+
+
+def count_wide_chars(s):
+    """Returns the number of wide CJK characters in a string.
+
+    :param str s: string
+    """
+    return sum(unicodedata.east_asian_width(c) in 'WF' for c in
+            (s if sys.version_info.major >= 3 else unicode(s)))
+
+
+def f(fmt, *args):
+    """Adjusts fixed-width string specifiers for wide CJK characters and
+    returns a formatted string. Does not support named arguments yet.
+
+    :param str fmt: format string
+    :param *args: arguments for the format string
+    """
+    matches = []
+    # https://docs.python.org/3/library/stdtypes.html#old-string-formatting
+    for m in re.finditer('%([#0 +-]*)([0-9]*)(\.[0-9]*)?([hlL]?[diouxXeEfFgGcrsa%])', fmt):
+        matches.append(m)
+
+    if len(matches) != len(args):
+        raise Exception('The numbers of format specifiers and arguments do not match')
+
+    i = len(args) - 1
+    for m in reversed(matches):
+        f = m.group(1)
+        w = m.group(2)
+        p = m.group(3) or ''
+        c = m.group(4)
+        if c == 's' and w:
+            w = str(int(w) - count_wide_chars(args[i]))
+            fmt = ''.join((fmt[:m.start()], '%', f, w, p, c, fmt[m.end():]))
+        i -= 1
+    return fmt % args
 
 
 # using format for most but leaving usage of template for the dynamic ones
@@ -1796,7 +1834,7 @@ INFO_TEXT = r"""
 
 def show_info(shellname, grass_gui, default_gui):
     """Write basic info about GRASS GIS and GRASS session to stderr"""
-    sys.stderr.write(INFO_TEXT % (
+    sys.stderr.write(f(INFO_TEXT,
         _("GRASS GIS homepage:"),
         # GTC Running through: SHELL NAME
         _("This version running through:"),
@@ -1806,11 +1844,11 @@ def show_info(shellname, grass_gui, default_gui):
         _("See citation options with:")))
 
     if grass_gui == 'wxpython':
-        message("%-41sg.gui wxpython" % _("If required, restart the GUI with:"))
+        message(f("%-41sg.gui wxpython", _("If required, restart the GUI with:")))
     else:
-        message("%-41sg.gui %s" % (_("Start the GUI with:"), default_gui))
+        message(f("%-41sg.gui %s", _("Start the GUI with:"), default_gui))
 
-    message("%-41sexit" % _("When ready to quit enter:"))
+    message(f("%-41sexit", _("When ready to quit enter:")))
     message("")
 
 
