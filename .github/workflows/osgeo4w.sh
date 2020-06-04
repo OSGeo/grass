@@ -6,6 +6,11 @@
 
 # stop on errors
 set -e
+echo output...
+echo OUTPUT > l
+pwd
+pwd >> l
+exit 0
 
 export PATH=/mingw64/bin:/c/OSGeo4W64/bin:/usr/bin
 
