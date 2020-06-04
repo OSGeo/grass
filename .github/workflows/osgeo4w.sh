@@ -7,16 +7,16 @@
 
 # stop on errors
 set -e
+
 cd "$1"
-pwd
-ls -al
-exit 0
 
 export PATH=/mingw64/bin:/c/OSGeo4W64/bin:/usr/bin
 
 osgeo4w_root_msys=/c/OSGeo4W64
 arch=x86_64-w64-mingw32
 bit=64
+
+head $osgeo4w_root_msys/bin/nc-config
 
 # start
 echo "Started compilation: `date`"
