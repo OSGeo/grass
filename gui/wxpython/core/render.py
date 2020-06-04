@@ -1375,7 +1375,8 @@ class Map(object):
                     os.remove(f)
 
             if layer.GetType() in ('vector', 'thememap'):
-                os.remove(layer._legrow)
+                if os.path.isfile(layer._legrow):
+                    os.remove(layer._legrow)
 
             list.remove(layer)
 
