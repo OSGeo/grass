@@ -44,7 +44,7 @@ try:
 except ImportError:  # < Python 2.7
     from xml.parsers.expat import ExpatError as ParseError
 
-from wms_base import WMSBase, GetSRSParamVal
+from wms_base import GetEpsg, GetSRSParamVal, WMSBase
 
 from wms_cap_parsers import WMTSCapabilitiesTree, OnEarthCapabilitiesTree
 from srs import Srs
@@ -225,7 +225,7 @@ class WMSDrv(WMSBase):
         # georeferencing and setting projection of temp_map
         projection = grass.read_command('g.proj',
                                         flags='wf',
-                                        epsg=self.params['srs'])
+                                        epsg=GetEpsg(self.params['srs']))
         projection = projection.rstrip('\n')
         temp_map_dataset.SetProjection(projection)
 

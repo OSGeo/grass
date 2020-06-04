@@ -612,7 +612,7 @@ class WMSDriversInfo:
             "image/gif",
             "image/png8"]
 
-        self.srs = ("epsg", "crs")
+        self.srs = ("epsg", "ogc")
 
     def GetDrvProperties(self, driver):
         """!Get information about driver parameters.
@@ -692,9 +692,9 @@ def GetSRSParamVal(srs):
     """
 
     if srs in [84, 83, 27]:
-        return "CRS:%d" % srs
+        return "OGC:CRS{}".format(srs)
     else:
-        return "EPSG:%d" % srs
+        return "EPSG:{}".format(srs)
 
 
 def GetEpsg(srs):

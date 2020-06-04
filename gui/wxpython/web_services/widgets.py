@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz>
 """
 
+import re
 import os
 import sys
 import six
@@ -709,7 +710,9 @@ class WSPanel(wx.Panel):
 
         if 'srs' not in self.drv_props['ignored_params']:
             i_srs = self.params['srs'].GetSelection()
-            epsg_num = int(self.projs_list[i_srs].split(':')[-1])
+            srs = self.projs_list[i_srs].split(':')[-1]
+            epsg_num = int(''.join(re.findall(r'\d+', srs)))
+
             lcmd.append("srs=%s" % epsg_num)
 
         for k in ['maxcols', 'maxrows', 'urlparams']:
@@ -774,11 +777,8 @@ class WSPanel(wx.Panel):
                 proj_code = Srs(proj.strip()).getcode()
                 proj_spl = proj_code.split(':')
                 if proj_spl[0].strip().lower() in self.drv_info.GetSrs():
-                    try:
-                        int(proj_spl[1])
-                        self.projs_list.append(proj_code)
-                    except ValueError as IndexError:
-                        continue
+                    # accept ogc:crs code
+                    self.projs_list.append(proj_code)
 
             cur_sel = self.params['srs'].GetStringSelection()
 
