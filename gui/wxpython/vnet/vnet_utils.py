@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 
 import math
 from grass.script import core as grass
+from grass.script.utils import encode
 
 try:
     import grass.lib.vector as vectlib
@@ -58,8 +59,8 @@ def SnapToNode(e, n, tresh, vectMap):
 
     openedMap = pointer(vectlib.Map_info())
     ret = vectlib.Vect_open_old(openedMap,
-                                c_char_p(vectMap),
-                                c_char_p(mapSet))
+                                c_char_p(encode(vectMap)),
+                                c_char_p(encode(mapSet)))
     if ret == 1:
         vectlib.Vect_close(openedMap)
     if ret != 2:
@@ -98,8 +99,8 @@ def GetNearestNodeCat(e, n, layer, tresh, vectMap):
 
     openedMap = pointer(vectlib.Map_info())
     ret = vectlib.Vect_open_old(openedMap,
-                                c_char_p(vectMapName),
-                                c_char_p(mapSet))
+                                c_char_p(encode(vectMapName)),
+                                c_char_p(encode(mapSet)))
     if ret == 1:
         vectlib.Vect_close(openedMap)
     if ret != 2:
