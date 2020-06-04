@@ -1,9 +1,4 @@
 #!/bin/sh
-#
-# Standalone script for building a portable package of GRASS GIS for OSGeo4W
-#
-# Written by Huidae Cho
-#
 
 # stop on errors
 set -e
@@ -37,23 +32,15 @@ OSGEO4W_ROOT_MSYS=$osgeo4w_path \
 --with-liblas=$grass_src/mswindows/osgeo4w/liblas-config \
 --with-opengl=windows
 
-make clean default
+make
 
-# package
+echo
+echo "Completed compilation: `date`"
 
-opt_path=$osgeo4w_path/opt
-grass_path=$opt_path/grass
+# install
+
+grass_bin=bin.$arch
 version=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
-date=`date +%Y%m%d`
-grass_zip=$grass_src/grass$version-$arch-osgeo4w64-$date.zip
-
-test -d $grass_path && rm -rf $grass_path
-test -d $opt_path || mkdir -p $opt_path
-cp -a dist.$arch $grass_path
-rm -f $grass_path/grass$version.tmp $grass_path/etc/fontcap
-cp -a bin.$arch/grass$version.py $grass_path/etc
-cp -a `ldd dist.$arch/lib/*.dll | awk '/mingw64/{print $3}' |
-	sort -u | grep -v 'lib\(crypto\|ssl\)'` $grass_path/lib
 
 (
 sed -e 's/^\(set GISBASE=\).*/\1%OSGEO4W_ROOT%\\opt\\grass/' \
@@ -71,20 +58,11 @@ if not exist %GISBASE%\etc\fontcap (
 	popd
 )
 EOT
-) > $grass_path/etc/env.bat
-unix2dos $grass_path/etc/env.bat
+) > $grass_bin/env.bat
 
 (
 sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
     -e 's/^\(call "%OSGEO4W_ROOT%\\\).*\(\\etc\\env\.bat"\)$/\1opt\\grass\2/' \
     -e 's/@POSTFIX@/'$version'/g' \
     mswindows/osgeo4w/grass.bat.tmpl
-) > $grass_path/grass$version.bat
-unix2dos $grass_path/grass$version.bat
-
-cd $osgeo4w_path/..
-osgeo4w_basename=`basename $osgeo4w_path`
-zip -r $grass_zip $osgeo4w_basename -x "$osgeo4w_basename/var/*" "*/__pycache__/*"
-
-echo
-echo "Completed compilation: `date`"
+) > $grass_bin/grass$version.bat
