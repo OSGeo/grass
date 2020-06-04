@@ -3,10 +3,11 @@
 # Standalone script for building a portable package of GRASS GIS for OSGeo4W
 #
 # Written by Huidae Cho
+#
 
 # stop on errors
 set -e
-echo output...
+cd "$1"
 pwd
 ls -al
 exit 0
