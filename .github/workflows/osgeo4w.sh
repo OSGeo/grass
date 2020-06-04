@@ -16,6 +16,8 @@ osgeo4w_root_msys=/c/OSGeo4W64
 arch=x86_64-w64-mingw32
 bit=64
 
+ls -al /c/
+ls -al $osgeo4w_root_msys/bin
 head $osgeo4w_root_msys/bin/nc-config
 
 # start
