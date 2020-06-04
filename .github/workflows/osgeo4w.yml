@@ -24,6 +24,6 @@ jobs:
         (New-Object System.Net.WebClient).DownloadFile($url, $exe)
         Start-Process ('.\'+$exe) -ArgumentList '-A -g -k -q -s http://download.osgeo.org/x86_64 -P cairo,fftw,freetype-devel,gdal-ecw,gdal-mrsid,liblas-devel,libxdr,msys,pdcurses,python3-numpy,python3-pywin32,python3-wx,regex-devel,wxpython,zstd-devel' -Wait
     - name: Install MSYS2 packages
-      run: C:\msys64\usr\bin\pacman.exe -S tar libintl make bison diffutils git dos2unix zip mingw-w64-x86_64-toolchain mingw-w64-x86_64-cairo mingw-w64-x86_64-python3-six
+      run: C:\msys64\usr\bin\pacman.exe --noconfirm -S tar libintl make bison diffutils git dos2unix zip mingw-w64-x86_64-toolchain mingw-w64-x86_64-cairo mingw-w64-x86_64-python3-six
     - name: Compile GRASS GIS
       run: C:\msys64\usr\bin\bash.exe -l (''+(Get-Location)+'\.github\workflows\osgeo4w.sh') (Get-Location)
