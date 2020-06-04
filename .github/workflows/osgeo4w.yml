@@ -23,8 +23,4 @@ jobs:
               $url = 'http://download.osgeo.org/osgeo4w/' + $exe
               (New-Object System.Net.WebClient).DownloadFile($url, $exe)
               &('.\'+$exe) -A -g -k -q -s http://download.osgeo.org/x86_64 -P cairo,fftw,freetype-devel,gdal-ecw,gdal-mrsid,liblas-devel,libxdr,msys,pdcurses,python3-numpy,python3-pywin32,python3-wx,regex-devel,wxpython,zstd-devel
-    - name: Configure GRASS GIS
-      run: |
-              echo $MINGW_CHOST
-              ./configure --host=$MINGW_CHOST --with-include=/c/OSGeo4W64/include --with-libs="/c/OSGeo4W64/lib /c/OSGeo4W64/bin" --with-nls --with-freetype-include=/c/OSGeo4W64/include/freetype2 --with-bzlib --with-geos=mswindows/osgeo4w/geos-config --with-netcdf=/c/OSGeo4W64/bin/nc-config --with-gdal=mswindows/osgeo4w/gdal-config --with-liblas=mswindows/osgeo4w/liblas-config --with-opengl=windows
-      shell: bash
+              C:\msys64\usr\bin\bash.exe -l osgeo4w.sh
