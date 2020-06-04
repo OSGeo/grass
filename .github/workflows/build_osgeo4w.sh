@@ -5,18 +5,18 @@ set -e
 
 test -d "$1" && cd "$1"
 
+osgeo4w_path=/c/OSGeo4W64
+arch=x86_64-w64-mingw32
+src=`pwd`
+
 # start
 echo "Started compilation: `date`"
 echo
 
 # compile
 
-osgeo4w_path=/c/OSGeo4W64
-arch=x86_64-w64-mingw32
-grass_src=`pwd`
-
 export PATH=/mingw64/bin:/c/OSGeo4W64/bin:/usr/bin
-export PROJ_LIB=/$osgeo4w_path/share/proj
+export PROJ_LIB=$osgeo4w_path/share/proj
 
 OSGEO4W_ROOT_MSYS=$osgeo4w_path \
 ./configure \
@@ -26,10 +26,10 @@ OSGEO4W_ROOT_MSYS=$osgeo4w_path \
 --with-nls \
 --with-freetype-includes=$osgeo4w_path/include/freetype2 \
 --with-bzlib \
---with-geos=$grass_src/mswindows/osgeo4w/geos-config \
+--with-geos=$src/mswindows/osgeo4w/geos-config \
 --with-netcdf=$osgeo4w_path/bin/nc-config \
---with-gdal=$grass_src/mswindows/osgeo4w/gdal-config \
---with-liblas=$grass_src/mswindows/osgeo4w/liblas-config \
+--with-gdal=$src/mswindows/osgeo4w/gdal-config \
+--with-liblas=$src/mswindows/osgeo4w/liblas-config \
 --with-opengl=windows
 
 make
@@ -39,11 +39,15 @@ echo "Completed compilation: `date`"
 
 # install
 
-grass_bin=bin.$arch
+bin=bin.$arch
+dist=dist.$arch
 version=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
+src_win_esc=`echo $src | sed 's#^/\([a-z]\)#\1:#; s#/#\\\\\\\\#g'`
+bin_win_esc="$src_win_esc\\$bin"
+dist_win_esc="$src_win_esc\\$dist"
 
 (
-sed -e 's/^\(set GISBASE=\).*/\1%OSGEO4W_ROOT%\\opt\\grass/' \
+sed 's/^\(set GISBASE=\).*/\1'$dist_win_esc'/' \
     mswindows/osgeo4w/env.bat.tmpl
 cat<<EOT
 
@@ -58,11 +62,17 @@ if not exist %GISBASE%\etc\fontcap (
 	popd
 )
 EOT
-) > $grass_bin/env.bat
+) > $dist/etc/env.bat
 
 (
 sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
-    -e 's/^\(call "%OSGEO4W_ROOT%\\\).*\(\\etc\\env\.bat"\)$/\1opt\\grass\2/' \
+    -e 's/^\(call "\).*\(\\etc\\env\.bat"\)$/\1'$dist_win_esc'\2/' \
     -e 's/@POSTFIX@/'$version'/g' \
     mswindows/osgeo4w/grass.bat.tmpl
-) > $grass_bin/grass$version.bat
+) > $bin/grass$version.bat
+
+echo env.bat
+cat $dist/etc/env.bat
+
+echo grass.bat
+cat $bin/grass$version.bat
