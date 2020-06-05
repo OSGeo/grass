@@ -1,8 +1,27 @@
 #!/bin/sh
-package=0
+#
+# Usage: build_osgeo4w.sh [-p] [path]
+#
+# By default, the script will look for the source code in the current directory
+# and create bin.x86_64-w64-mingw32\grass$ver.bat (run this batch file to start
+# GRASS GIS) and dist.x86_64-w64-mingw32\etc\env.bat.
+#
+# -p	optionally install GRASS GIS to C:\OSGeo4W64\opt\grass (run
+#	C:\OSGeo4W64\opt\grass\grass$ver.bat) and create an unzippable package
+#	grass$ver-x86_64-w64-mingw32-osgeo4w64-$date.zip
+#
+# path	optionally specify a path to the source code
+#
 
 # stop on errors
 set -e
+
+if [ "$1" = "-p" ]; then
+	package=1
+	shift
+else
+	package=0
+fi
 
 test -d "$1" && cd "$1"
 
@@ -40,6 +59,7 @@ ver=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 rm -f $dist/grass$ver.tmp $dist/etc/fontcap
 
 if [ $package -eq 1 ]; then
+	########################################################################
 	# package
 
 	opt_path=$osgeo4w_path/opt
@@ -84,7 +104,9 @@ EOT
 	osgeo4w_basename=`basename $osgeo4w_path`
 	zip -r $zip $osgeo4w_basename \
 	    -x "$osgeo4w_basename/var/*" "*/__pycache__/*"
+	ls -al $zip
 else
+	########################################################################
 	# create batch files
 
 	src_win_esc=`echo $src | sed 's#^/\([a-z]\)#\1:#; s#/#\\\\\\\\#g'`

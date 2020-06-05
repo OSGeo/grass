@@ -30,7 +30,9 @@ jobs:
     - name: Install MSYS2 packages
       run: C:\msys64\usr\bin\pacman.exe --noconfirm -S tar libintl make bison diffutils git dos2unix zip mingw-w64-x86_64-toolchain mingw-w64-x86_64-cairo mingw-w64-x86_64-python3-six
     - name: Compile GRASS GIS
-      run: C:\msys64\usr\bin\bash.exe -l (''+(Get-Location)+'\.github\workflows\build_osgeo4w.sh') (Get-Location)
+      run: C:\msys64\usr\bin\bash.exe -l (''+(Get-Location)+'\.github\workflows\build_osgeo4w.sh') -p (Get-Location)
+    - name: Set PATH
+      run: $env:PATH += 'C:\OSGeo4W64\opt\grass;'
     - name: Test executing of the grass command
       run: .github/workflows/test_simple.bat
     - name: Run tests
