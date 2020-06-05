@@ -36,7 +36,7 @@ def get_possible_database_path():
     # but ~ and ~/Documents should cover most of the cases
     # ordered by preference and then likelihood
     
-    options = ["grassdata","GRASSDATA","Grassdata","GrassData"]
+    options = ["grassdata", "GRASSDATA", "Grassdata", "GrassData"]
     
     for option in options:
     
