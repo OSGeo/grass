@@ -91,14 +91,12 @@ sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
 ) > $bin/grass$ver.bat
 unix2dos $bin/grass$ver.bat
 
-test $package -eq 0 && exit 0
+test $package -eq 0 && exit
 
 # package
 
 opt_path=$osgeo4w_path/opt
 grass_path=$opt_path/grass
-date=`date +%Y%m%d`
-zip=$src/grass$ver-$arch-osgeo4w64-$date.zip
 
 mkdir -p $opt_path
 cp -a $dist $grass_path
@@ -133,9 +131,13 @@ sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
 ) > $grass_path/grass$ver.bat
 unix2dos $grass_path/grass$ver.bat
 
-cd $osgeo4w_path/..
-osgeo4w_basename=`basename $osgeo4w_path`
-zip -r $zip $osgeo4w_basename \
-    -x "$osgeo4w_basename/var/*" "*/__pycache__/*"
+exit
 
-ls -al $zip
+# don't package for GitHub workflow; unnecessary
+
+osgeo4w_basename=`basename $osgeo4w_path`
+date=`date +%Y%m%d`
+zip=$src/grass$ver-$arch-osgeo4w64-$date.zip
+
+cd $osgeo4w_path/..
+zip -r $zip $osgeo4w_basename -x "$osgeo4w_basename/var/*" "*/__pycache__/*"
