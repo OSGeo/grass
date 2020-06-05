@@ -24,7 +24,9 @@ jobs:
     - name: Backup PATH
       run: $path = $env:PATH
     - name: Set PATH to bin.x86_64-w64-mingw32
-      run: $env:PATH = $path + 'bin.x86_64-w64-mingw32;'
+      run: |
+        $env:PATH = $path + 'bin.x86_64-w64-mingw32;'
+        echo $env:PATH
     - name: Test executing of the grass command
       run: .github/workflows/test_simple.bat
     - name: Run tests
