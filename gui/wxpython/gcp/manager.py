@@ -613,18 +613,26 @@ class GroupPage(TitledPage):
         if self.xygroup == '':
             self.xygroup = self.cb_group.GetValue()
 
-        dlg = VectGroup(parent=self,
-                        id=wx.ID_ANY,
-                        grassdb=self.grassdatabase,
-                        location=self.xylocation,
-                        mapset=self.xymapset,
-                        group=self.xygroup)
+        vector_dir = os.path.join(self.grassdatabase,
+                                  self.xylocation,
+                                  self.xymapset,
+                                  'vector')
 
-        if dlg.ShowModal() != wx.ID_OK:
-            return
+        if os.path.exists(vector_dir):
+            dlg = VectGroup(parent=self,
+                            id=wx.ID_ANY,
+                            grassdb=self.grassdatabase,
+                            location=self.xylocation,
+                            mapset=self.xymapset,
+                            group=self.xygroup)
 
-        dlg.MakeVGroup()
-        self.OnEnterPage()
+            if dlg.ShowModal() != wx.ID_OK:
+                return
+
+            dlg.MakeVGroup()
+            self.OnEnterPage()
+        else:
+            GError(parent=self, message=_('No vector maps.'))
 
     def OnExtension(self, event):
         self.extension = self.ext_txt.GetValue()
