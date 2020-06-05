@@ -24,6 +24,7 @@ import wx
 
 from core import globalvar
 from core.render import Map
+from core.settings import UserSettings
 from gui_core.forms import GUI
 from mapdisp.gprint import PrintOptions
 from core.utils import GetLayerNameFromCmd
@@ -227,10 +228,10 @@ class BufferedWindow(wx.Window):
         Debug.msg(
             2, "BufferedWindow.UpdateHist(%s): render=%s" %
             (img, self.render))
-        
+
         if not self.render:
             return
-        
+
         # render new map images
         # set default font and encoding environmental variables
         if "GRASS_FONT" in os.environ:
@@ -318,7 +319,15 @@ class HistogramFrame(wx.Frame):
         self.params = {}  # previously set histogram parameters
         self.propwin = ''  # ID of properties dialog
 
-        self.font = ""
+        # Default font
+        font_properties = UserSettings.Get(
+            group='histogram', key='font', settings_type='default')
+        self.font = wx.Font(
+            font_properties['defaultSize'],
+            font_properties['family'],
+            font_properties['style'],
+            font_properties['weight'],
+        ).GetFaceName().lower()
         self.encoding = 'ISO-8859-1'  # default encoding for display fonts
 
         self.toolbar = HistogramToolbar(parent=self)
