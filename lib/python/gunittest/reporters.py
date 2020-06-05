@@ -97,10 +97,11 @@ class FileAnonymizer(object):
         # to remove user home directory and GISDBASE
         # we suppuse that we run in standard grass session
         # TODO: provide more effective implementation
+        path_end = r'[\\/]?'
         for path in self._paths_to_remove:
             for filename in filenames:
-                path_end = r'[\\/]?'
-                replace_in_file(filename, path + path_end, '')
+                replace_in_file(filename,
+                                path.replace('\\', r'\\') + path_end, '')
 
 
 def get_source_url(path, revision, line=None):
