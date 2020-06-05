@@ -10,7 +10,7 @@
 #	C:\OSGeo4W64\opt\grass\grass$ver.bat) and create an unzippable package
 #	grass$ver-x86_64-w64-mingw32-osgeo4w64-$date.zip
 #
-# path	optionally specify a path to the source code
+# path	specify a path to the source code
 #
 
 # stop on errors
@@ -58,25 +58,16 @@ ver=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 
 rm -f $dist/grass$ver.tmp $dist/etc/fontcap
 
-if [ $package -eq 1 ]; then
-	########################################################################
-	# package
+# create batch files
 
-	opt_path=$osgeo4w_path/opt
-	grass_path=$opt_path/grass
-	date=`date +%Y%m%d`
-	zip=$src/grass$ver-$arch-osgeo4w64-$date.zip
+src_win_esc=`echo $src | sed 's#^/\([a-z]\)#\1:#; s#/#\\\\\\\\#g'`
+bin_win_esc="$src_win_esc\\$bin"
+dist_win_esc="$src_win_esc\\$dist"
 
-	mkdir -p $opt_path
-	cp -a $dist $grass_path
-	cp -a $bin/grass$ver.py $grass_path/etc
-	cp -a `ldd $dist/lib/*.dll | awk '/mingw64/{print $3}' |
-		sort -u | grep -v 'lib\(crypto\|ssl\)'` $grass_path/lib
-
-	(
-	sed -e 's/^\(set GISBASE=\).*/\1%OSGEO4W_ROOT%\\opt\\grass/' \
-	    mswindows/osgeo4w/env.bat.tmpl
-	cat<<EOT
+(
+sed 's/^\(set GISBASE=\).*/\1'$dist_win_esc'/' \
+    mswindows/osgeo4w/env.bat.tmpl
+cat<<EOT
 
 set PATH=%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%
 
@@ -89,34 +80,36 @@ if not exist %GISBASE%\etc\fontcap (
 	popd
 )
 EOT
-	) > $grass_path/etc/env.bat
-	unix2dos $grass_path/etc/env.bat
+) > $dist/etc/env.bat
+unix2dos $dist/etc/env.bat
 
-	(
-	sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
-	    -e 's/^\(call "%OSGEO4W_ROOT%\\\).*\(\\etc\\env\.bat"\)$/\1opt\\grass\2/' \
-	    -e 's/@POSTFIX@/'$ver'/g' \
-	    mswindows/osgeo4w/grass.bat.tmpl
-	) > $grass_path/grass$ver.bat
-	unix2dos $grass_path/grass$ver.bat
+(
+sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
+    -e 's/^\(call "\).*\(\\etc\\env\.bat"\)$/\1'$dist_win_esc'\2/' \
+    -e 's/@POSTFIX@/'$ver'/g' \
+    mswindows/osgeo4w/grass.bat.tmpl
+) > $bin/grass$ver.bat
+unix2dos $bin/grass$ver.bat
 
-	cd $osgeo4w_path/..
-	osgeo4w_basename=`basename $osgeo4w_path`
-	zip -r $zip $osgeo4w_basename \
-	    -x "$osgeo4w_basename/var/*" "*/__pycache__/*"
-	ls -al $zip
-else
-	########################################################################
-	# create batch files
+test $package -eq 0 && exit 0
 
-	src_win_esc=`echo $src | sed 's#^/\([a-z]\)#\1:#; s#/#\\\\\\\\#g'`
-	bin_win_esc="$src_win_esc\\$bin"
-	dist_win_esc="$src_win_esc\\$dist"
+# package
 
-	(
-	sed 's/^\(set GISBASE=\).*/\1'$dist_win_esc'/' \
-	    mswindows/osgeo4w/env.bat.tmpl
-	cat<<EOT
+opt_path=$osgeo4w_path/opt
+grass_path=$opt_path/grass
+date=`date +%Y%m%d`
+zip=$src/grass$ver-$arch-osgeo4w64-$date.zip
+
+mkdir -p $opt_path
+cp -a $dist $grass_path
+cp -a $bin/grass$ver.py $grass_path/etc
+cp -a `ldd $dist/lib/*.dll | awk '/mingw64/{print $3}' |
+	sort -u | grep -v 'lib\(crypto\|ssl\)'` $grass_path/lib
+
+(
+sed -e 's/^\(set GISBASE=\).*/\1%OSGEO4W_ROOT%\\opt\\grass/' \
+    mswindows/osgeo4w/env.bat.tmpl
+cat<<EOT
 
 set PATH=%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%
 
@@ -129,14 +122,20 @@ if not exist %GISBASE%\etc\fontcap (
 	popd
 )
 EOT
-	) > $dist/etc/env.bat
-	unix2dos $dist/etc/env.bat
+) > $grass_path/etc/env.bat
+unix2dos $grass_path/etc/env.bat
 
-	(
-	sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
-	    -e 's/^\(call "\).*\(\\etc\\env\.bat"\)$/\1'$dist_win_esc'\2/' \
-	    -e 's/@POSTFIX@/'$ver'/g' \
-	    mswindows/osgeo4w/grass.bat.tmpl
-	) > $bin/grass$ver.bat
-	unix2dos $bin/grass$ver.bat
-fi
+(
+sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
+    -e 's/^\(call "%OSGEO4W_ROOT%\\\).*\(\\etc\\env\.bat"\)$/\1opt\\grass\2/' \
+    -e 's/@POSTFIX@/'$ver'/g' \
+    mswindows/osgeo4w/grass.bat.tmpl
+) > $grass_path/grass$ver.bat
+unix2dos $grass_path/grass$ver.bat
+
+cd $osgeo4w_path/..
+osgeo4w_basename=`basename $osgeo4w_path`
+zip -r $zip $osgeo4w_basename \
+    -x "$osgeo4w_basename/var/*" "*/__pycache__/*"
+
+ls -al $zip
