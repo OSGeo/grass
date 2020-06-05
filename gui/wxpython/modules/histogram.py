@@ -241,7 +241,7 @@ class BufferedWindow(wx.Window):
         if "GRASS_ENCODING" in os.environ:
             self._oldencoding = os.environ["GRASS_ENCODING"]
         if self.parent.encoding is not None and self.parent.encoding != "ISO-8859-1":
-            os.environ[GRASS_ENCODING] = self.parent.encoding
+            os.environ["GRASS_ENCODING"] = self.parent.encoding
 
         # using active comp region
         self.Map.GetRegion(update=True)
