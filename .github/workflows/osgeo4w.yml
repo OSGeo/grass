@@ -21,19 +21,19 @@ jobs:
         git config --global core.autocrlf false
         git config --global core.eol lf
     - uses: actions/checkout@v2
-    - name: Backup PATH
-      run: $path = $env:PATH
-    - name: Set PATH to bin.x86_64-w64-mingw32
-      run: |
-        $env:PATH = $path + 'bin.x86_64-w64-mingw32;'
-        echo $env:PATH
     - name: Test executing of the grass command
-      run: .github/workflows/test_simple.bat
+      run: |
+        $env:PATH += 'bin.x86_64-w64-mingw32;'
+        .github/workflows/test_simple.bat
     - name: Run tests
-      run: .github/workflows/test_thorough.bat
-    - name: Set PATH to C:\OSGeo4W64\opt\grass
-      run: $env:PATH = $path + 'C:\OSGeo4W64\opt\grass;'
+      run: |
+        $env:PATH += 'bin.x86_64-w64-mingw32;'
+        .github/workflows/test_thorough.bat
     - name: Test executing of the grass command using the package
-      run: .github/workflows/test_simple.bat
+      run: |
+        $env:PATH += 'C:\OSGeo4W64\opt\grass;'
+        .github/workflows/test_simple.bat
     - name: Run tests using the package
-      run: .github/workflows/test_thorough.bat
+      run: |
+        $env:PATH += 'C:\OSGeo4W64\opt\grass;'
+        .github/workflows/test_thorough.bat
