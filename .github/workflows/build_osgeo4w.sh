@@ -68,7 +68,7 @@ sed 's/^\(set GISBASE=\).*/\1'$dist_win_esc'/' \
     mswindows/osgeo4w/env.bat.tmpl
 cat<<EOT
 
-set PATH=%OSGEO4W_ROOT%\\apps\\msys\\bin;C:\\msys64\\mingw64\\bin;%PATH%
+set PATH=C:\\msys64\\mingw64\\bin;%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%
 
 if not exist %GISBASE%\etc\fontcap (
 	pushd .
