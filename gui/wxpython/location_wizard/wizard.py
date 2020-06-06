@@ -1554,9 +1554,8 @@ class EPSGPage(TitledPage):
         # epsg.io hyperlink
         self.tlink = HyperlinkCtrl(
             self, id=wx.ID_ANY, 
-            size=(200, -1),
-            label="epsg.io",
-            url="epsg.io")
+            label="https://epsg.io/?q=",
+            url="https://epsg.io/?q=")
         self.tlink.SetNormalColour(
             wx.SystemSettings.GetColour(
                 wx.SYS_COLOUR_GRAYTEXT))
@@ -1566,26 +1565,19 @@ class EPSGPage(TitledPage):
         
         # layout       
         searchBoxSizer.Add(self.lcode, proportion=0,
-                       flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL |
+                       flag=wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5)
         searchBoxSizer.Add(self.searchb, proportion=1,
-                       flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5)
+                       flag=wx.ALL, border=5)
         epsglistBoxSizer.Add(self.epsglist, proportion=1,
-                       flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL |
-                       wx.EXPAND |
+                       flag=wx.EXPAND |
                        wx.ALL, border=5)
-        informationBoxSizer.AddStretchSpacer(10) 
+        informationBoxSizer.AddStretchSpacer(1) 
         informationBoxSizer.Add(self.llink,  proportion=0,
-                       flag=wx.ALIGN_RIGHT |
-                       wx.ALIGN_CENTER_VERTICAL |
+                       flag=wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5)
         informationBoxSizer.Add(self.tlink, proportion=1,
-                       flag=wx.ALIGN_RIGHT |
-                       wx.ALIGN_CENTER_VERTICAL |
+                       flag=wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5)
         
         self.sizer.Add(searchBoxSizer, proportion=0, flag=wx.EXPAND)
@@ -1593,8 +1585,7 @@ class EPSGPage(TitledPage):
         self.sizer.Add(informationBoxSizer, proportion=0, flag=wx.EXPAND)
         
         # events
-        self.searchb.Bind(wx.EVT_TEXT, self.OnText)
-        self.searchb.Bind(wx.EVT_TEXT, self.OnSearch)
+        self.searchb.Bind(wx.EVT_TEXT, self.OnTextChange)
         self.epsglist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
@@ -1646,11 +1637,13 @@ class EPSGPage(TitledPage):
                     self.parent.datum_trans = dtrans
             self.GetNext().SetPrev(self)
 
-    def OnText(self, event):
+    def OnTextChange(self, event):
         self.epsgcode = event.GetString()
+            
         try:
             self.epsgcode = int(self.epsgcode)
         except:
+            
             self.epsgcode = None
 
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
@@ -1665,20 +1658,22 @@ class EPSGPage(TitledPage):
             self.epsgcode = None  # not found
             if nextButton.IsEnabled():
                 nextButton.Enable(False)
-            self.epsgdesc = self.epsgparams = ''
-
-    def OnSearch(self, event):
+            self.epsgdesc = self.epsgparams = ''           
+            
         value = self.searchb.GetValue()
+        self.tlink.SetURL(str("https://epsg.io/?q={0}".format(value)))
+        self.tlink.SetLabel(str("https://epsg.io/?q={0}".format(value)))
 
         if value == '':
             self.epsgcode = None
             self.epsgdesc = self.epsgparams = ''
-            self.searchb.SetValue('')
             self.OnBrowseCodes(None)
         else:
             try:
+                
                 self.epsgcode, self.epsgdesc, self.epsgparams = \
-                    self.epsglist.Search(index=[0, 1, 2], pattern=value)
+                self.epsglist.Search(index=[0, 1, 2], pattern=value)
+                
             except (IndexError, ValueError):  # -> no item found
                 self.epsgcode = None
                 self.epsgdesc = self.epsgparams = ''
@@ -1692,8 +1687,8 @@ class EPSGPage(TitledPage):
         self.epsgcode = int(self.epsglist.GetItem(index, 0).GetText())
         self.epsgdesc = self.epsglist.GetItem(index, 1).GetText()
         self.searchb.SetValue(str(self.epsgcode))
-        self.tlink.SetURL(str("https://epsg.io/{0}".format(self.epsgcode)))
-        self.tlink.SetLabel(str("epsg.io:{0}".format(self.epsgcode)))
+        self.tlink.SetURL(str("https://epsg.io/?q={0}".format(self.epsgcode)))
+        self.tlink.SetLabel(str("https://epsg.io/?q={0}".format(self.epsgcode)))
 
         event.Skip()
 
