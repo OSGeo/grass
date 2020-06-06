@@ -10358,7 +10358,7 @@ msgstr "항목을 제거합니다"
 #: ../gui/wxpython/menustrings.py:2035
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:2006
 msgid "Remove action/data from model"
-msgstr "모형에서 작업/자료를 제거합니다"
+msgstr "모델에서 작업/자료를 제거합니다"
 
 #: ../gui/wxpython/menustrings.py:2036
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:2007
@@ -10379,7 +10379,7 @@ msgstr "중간 자료를 삭제합니다"
 #: ../gui/wxpython/menustrings.py:2039
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:2010
 msgid "Delete intermediate data defined in the model"
-msgstr "모형 안에 정의된 중간 자료를 삭제합니다"
+msgstr "모델 안에 정의된 중간 자료를 삭제합니다"
 
 #: ../gui/wxpython/menustrings.py:2041
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:2012
@@ -19688,7 +19688,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:806
 msgid "Do you want to delete all variables from the model?"
-msgstr "모형으로부터 모든 변수를 삭제하길 원하십니까?"
+msgstr "모델로부터 모든 변수를 삭제하길 원하십니까?"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:808
 msgid "Delete variables"
