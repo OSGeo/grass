@@ -12447,7 +12447,7 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:2486
 msgid "Animation already exists"
-msgstr "Animáció már létezik"
+msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:2656
 msgid "No file prefix given."
@@ -20363,5 +20363,9 @@ msgstr ""
 msgid "Unable to fetch data.\n"
 msgstr ""
 
-#~ msgid "Animation already axists"
-#~ msgstr "Animáció már létezik"
+msgid "Animation already axists"
+msgstr "Animáció már létezik"
+
+#, python-format
+#~ msgid "Maximum number of animations is %s."
+#~ msgstr "Az animációk maximális száma %s."

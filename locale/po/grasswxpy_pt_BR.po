@@ -1044,7 +1044,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/vclean.py:87
 msgid "remove small areas"
-msgstr ""
+msgstr "remove áreas pequenas"
 
 #: ../gui/wxpython/modules/vclean.py:88
 msgid "remove lines/boundaries of zero length"
@@ -1060,15 +1060,15 @@ msgstr ""
 
 #: ../gui/wxpython/modules/vclean.py:128
 msgid "Select input vector map:"
-msgstr ""
+msgstr "Seleciona mapa vetorial de entrada:"
 
 #: ../gui/wxpython/modules/vclean.py:134
 msgid " Feature type: "
-msgstr ""
+msgstr "Tipo de feição:"
 
 #: ../gui/wxpython/modules/vclean.py:138
 msgid "Select output vector map:"
-msgstr ""
+msgstr "Seleciona mapa vetorial de saída:"
 
 #: ../gui/wxpython/modules/vclean.py:179
 msgid "Copy the current command string to the clipboard (Ctrl+C)"
@@ -1076,11 +1076,11 @@ msgstr ""
 
 #: ../gui/wxpython/modules/vclean.py:224 ../gui/wxpython/psmap/utils.py:106
 msgid "point"
-msgstr ""
+msgstr "ponto"
 
 #: ../gui/wxpython/modules/vclean.py:225
 msgid "line"
-msgstr ""
+msgstr "linha"
 
 #: ../gui/wxpython/modules/vclean.py:226
 msgid "boundary"
@@ -5525,13 +5525,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1179
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1181
 msgid "Shows the extent and resolution of the computational region."
-msgstr ""
+msgstr "Mostra a extensão e resolução da região computacional."
 
 #: ../gui/wxpython/menustrings.py:219 ../gui/wxpython/menustrings.py:1196
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:217
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1180
 msgid "Show region using latitude and longitude"
-msgstr ""
+msgstr "Mostra região usando latitude e longitude"
 
 #: ../gui/wxpython/menustrings.py:221 ../gui/wxpython/menustrings.py:1198
 msgid "Show current region extent in Map Display"
@@ -5545,7 +5545,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:219
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1182
 msgid "Set region"
-msgstr ""
+msgstr "Definir região"
 
 #: ../gui/wxpython/menustrings.py:224 ../gui/wxpython/menustrings.py:1201
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:220
@@ -5571,17 +5571,17 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:228
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:224
 msgid "User access"
-msgstr ""
+msgstr "Acesso de usuário"
 
 #: ../gui/wxpython/menustrings.py:229
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:225
 msgid "Controls access to the current mapset for other users on the system. If no option given, prints current status."
-msgstr ""
+msgstr "Controla o acesso de outros usuários no sistema ao mapset atual. Se nenhuma opção for dada, imprime o status atual."
 
 #: ../gui/wxpython/menustrings.py:230
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:226
 msgid "Change working environment"
-msgstr ""
+msgstr "Modifica ambiente de trabalho"
 
 #: ../gui/wxpython/menustrings.py:231
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:227
@@ -5685,7 +5685,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:251
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:247
 msgid "Manage projections"
-msgstr ""
+msgstr "Gerenciar projeções"
 
 #: ../gui/wxpython/menustrings.py:252
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:248
@@ -5695,12 +5695,12 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:253
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:249
 msgid "Convert coordinates"
-msgstr ""
+msgstr "Converter coordenadas"
 
 #: ../gui/wxpython/menustrings.py:254
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:250
 msgid "Converts coordinates from one projection to another (cs2cs frontend)."
-msgstr ""
+msgstr "Converte coordenadas de uma projeção para outra (cs2cs frontend)."
 
 #: ../gui/wxpython/menustrings.py:255
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:251
@@ -5720,7 +5720,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:258
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:254
 msgid "Manage installed extension"
-msgstr ""
+msgstr "Gerenciar extensões instaladas"
 
 #: ../gui/wxpython/menustrings.py:259
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:255
@@ -5731,7 +5731,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:256
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1990
 msgid "Preferences"
-msgstr ""
+msgstr "Preferências"
 
 #: ../gui/wxpython/menustrings.py:261
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:257
@@ -5742,7 +5742,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:258
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1184
 msgid "&Raster"
-msgstr ""
+msgstr "&Raster"
 
 #: ../gui/wxpython/menustrings.py:263 ../gui/wxpython/menustrings.py:1203
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:259
@@ -5949,7 +5949,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:293
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1219
 msgid "Color tables (stddev)"
-msgstr ""
+msgstr "Tabela de cores (stddev)"
 
 #: ../gui/wxpython/menustrings.py:298 ../gui/wxpython/menustrings.py:1238
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:294
@@ -5979,13 +5979,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1223
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1516
 msgid "Export color table"
-msgstr ""
+msgstr "Exportar tabela de cores"
 
 #: ../gui/wxpython/menustrings.py:302 ../gui/wxpython/menustrings.py:1242
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:298
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1224
 msgid "Exports the color table associated with a raster map."
-msgstr ""
+msgstr "Exporta a tabela de cores associada a um mapa raster."
 
 #: ../gui/wxpython/menustrings.py:303 ../gui/wxpython/menustrings.py:1243
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:299
@@ -6003,7 +6003,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:301
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1227
 msgid "Create RGB"
-msgstr ""
+msgstr "Criar RGB"
 
 #: ../gui/wxpython/menustrings.py:306 ../gui/wxpython/menustrings.py:1246
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:302
@@ -10198,19 +10198,19 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:1046
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1031
 msgid "About system"
-msgstr ""
+msgstr "Sobre o sistema"
 
 #: ../gui/wxpython/menustrings.py:1047
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1032
 msgid "Prints system information"
-msgstr ""
+msgstr "Imprime informação do sistema"
 
 #: ../gui/wxpython/menustrings.py:1048 ../gui/wxpython/menustrings.py:1049
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1033
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1034
 #: ../gui/wxpython/gui_core/ghelp.py:60
 msgid "About GRASS GIS"
-msgstr ""
+msgstr "Sobre GRASS GIS"
 
 #: ../gui/wxpython/menustrings.py:1052
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1037
@@ -11878,7 +11878,7 @@ msgstr ""
 #: ../gui/wxpython/nviz/mapwindow.py:2272 ../gui/wxpython/nviz/tools.py:2680
 #: ../gui/wxpython/nviz/tools.py:2729 ../gui/wxpython/nviz/tools.py:5173
 msgid "constant#"
-msgstr ""
+msgstr "constante#"
 
 #: ../gui/wxpython/nviz/wxnviz.py:35
 msgid "This module requires the NumPy module, which could not be imported. It probably is not installed (it's not part of the standard Python distribution). See the Numeric Python site (http://numpy.scipy.org) for information on downloading source or binaries."
@@ -14792,7 +14792,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:930
 msgid "Region:"
-msgstr ""
+msgstr "Região:"
 
 #: ../gui/wxpython/psmap/dialogs.py:987
 msgid "Map scale and center"
@@ -14804,11 +14804,11 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:992
 msgid "E:"
-msgstr ""
+msgstr "L:"
 
 #: ../gui/wxpython/psmap/dialogs.py:993
 msgid "N:"
-msgstr ""
+msgstr "N:"
 
 #: ../gui/wxpython/psmap/dialogs.py:1000 ../gui/wxpython/psmap/dialogs.py:5863
 msgid "Scale:"
@@ -15691,7 +15691,7 @@ msgstr ""
 #: ../gui/wxpython/animation/controller.py:598
 #, python-format
 msgid "%(from)s %(dash)s %(to)s"
-msgstr ""
+msgstr "%(from)s %(dash)s %(to)s"
 
 #: ../gui/wxpython/animation/frame.py:613
 #, python-format
@@ -15892,7 +15892,7 @@ msgstr "Editar"
 #: ../gui/wxpython/animation/controller.py:234
 #, python-format
 msgid "Maximum number of animations is %d."
-msgstr "Número máximo de animações são %d."
+msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:891
 #: ../gui/wxpython/animation/controller.py:262
@@ -16185,7 +16185,7 @@ msgstr "Preparando exportação, aguarde..."
 #: ../gui/wxpython/animation/controller.py:605
 #, python-format
 msgid "%(start)s %(unit)s"
-msgstr ""
+msgstr "%(start)s %(unit)s"
 
 #: ../gui/wxpython/animation/controller.py:624
 msgid "Exporting animation, please wait..."
@@ -20723,3 +20723,7 @@ msgstr "Digitalizar"
 
 msgid "Failed to copy map: action is allowed only within the same location."
 msgstr "Falha ao copiar o mapa: ação só é possível dentro da mesma location."
+
+#, python-format
+#~ msgid "Maximum number of animations is %s."
+#~ msgstr "Número máximo de animações são %s."

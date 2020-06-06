@@ -12578,7 +12578,7 @@ msgstr "¿Quiere grabar una nueva animación sin guardar la anterior?"
 
 #: ../gui/wxpython/nviz/tools.py:2486
 msgid "Animation already exists"
-msgstr "La animación ya existe"
+msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:2656
 msgid "No file prefix given."
@@ -20896,14 +20896,14 @@ msgstr "Crea un mapa ráster a partir de puntos LAS LiDAR usando estadísticas u
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with libLAS."
 msgstr "Convierte nubes de puntos LAS LiDAR a un mapa vectorial GRASS con libLAS."
 
+msgid "Animation already axists"
+msgstr "La animación ya existe"
+
 #~ msgid "Fetching list of modules from GRASS-Addons (be patient)..."
 #~ msgstr "Obteniendo lista de módulos del repositorio de complementos de GRASS (sea paciente)..."
 
 #~ msgid "Installs new extension from GRASS AddOns repository."
 #~ msgstr "Instala una nueva extensión desde el repositorio de complementos de GRASS."
-
-#~ msgid "Animation already axists"
-#~ msgstr "La animación ya existe"
 
 #, python-brace-format
 #~ msgid "New name for <{n}>"
@@ -20922,3 +20922,7 @@ msgstr "Convierte nubes de puntos LAS LiDAR a un mapa vectorial GRASS con libLAS
 
 #~ msgid "Available analyses"
 #~ msgstr "Análisis disponibles"
+
+#, python-format
+#~ msgid "Maximum number of animations is %s."
+#~ msgstr "El número máximo de animaciones es %s."

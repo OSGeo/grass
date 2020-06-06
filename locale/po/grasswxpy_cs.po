@@ -12483,7 +12483,7 @@ msgstr "Přejete si zaznamenat novou animaci, aniž byste uložili předchozí?"
 
 #: ../gui/wxpython/nviz/tools.py:2486
 msgid "Animation already exists"
-msgstr "Animace již existuje"
+msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:2656
 msgid "No file prefix given."
@@ -20818,5 +20818,5 @@ msgstr "&Stáhnout"
 msgid "Fetch list of available modules from GRASS Addons SVN repository"
 msgstr "Stáhnout seznam dostupných modulů z GRASS Addons SVN repozitáře"
 
-#~ msgid "Animation already axists"
-#~ msgstr "Animace již existuje"
+msgid "Animation already axists"
+msgstr "Animace již existuje"

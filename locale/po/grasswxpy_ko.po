@@ -360,7 +360,7 @@ msgstr "데이터베이스 연결이 정의되지 않았습니다"
 #: ../gui/wxpython/modules/colorrules.py:1349
 #, python-format
 msgid "Selected map <%(map)s> is not in current mapset <%(mapset)s>. Attribute table cannot be edited."
-msgstr "선택된 지도 <%(map)s>가 현재 지도세트 <%(mapset)s> 내에 존재하지 않습니다. 속성 테이블을 편집할 수 없습니다."
+msgstr "선택된 지도 <%(map)s>가 현재 지도 세트 <%(mapset)s> 내에 존재하지 않습니다. 속성 테이블을 편집할 수 없습니다."
 
 #: ../gui/wxpython/modules/colorrules.py:1520
 #, python-format
@@ -1151,7 +1151,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/vclean.py:518
 msgid "Name of input vector map"
-msgstr ""
+msgstr "입력 벡터 지도의 이름"
 
 #: ../gui/wxpython/modules/vclean.py:519
 msgid "Name for output vector map"
@@ -1260,7 +1260,7 @@ msgstr ""
 
 #: ../gui/wxpython/wxplot/profile.py:407
 msgid "No files generated."
-msgstr ""
+msgstr "파일이 생성되지 않았습니다."
 
 #: ../gui/wxpython/wxplot/profile.py:415
 msgid "Statistics for Profile(s)"
@@ -1755,7 +1755,7 @@ msgstr ""
 #: ../gui/wxpython/iclass/toolbars.py:263
 #: ../gui/wxpython/iclass/toolbars.py:272
 msgid "std dev"
-msgstr ""
+msgstr "표준 편차"
 
 #: ../gui/wxpython/iclass/toolbars.py:346
 msgid "Add raster map"
@@ -2013,13 +2013,13 @@ msgstr ""
 
 #: ../gui/wxpython/iclass/dialogs.py:259 ../gui/wxpython/gmodeler/dialogs.py:92
 msgid "Name of raster map:"
-msgstr ""
+msgstr "래스터 지도의 이름:"
 
 #: ../gui/wxpython/iclass/dialogs.py:261
 #: ../gui/wxpython/gui_core/dialogs.py:242
 #: ../gui/wxpython/gmodeler/dialogs.py:94
 msgid "Name of vector map:"
-msgstr ""
+msgstr "벡터 지도의 이름:"
 
 #: ../gui/wxpython/iclass/dialogs.py:297 ../gui/wxpython/iscatt/frame.py:145
 msgid "Classes"
@@ -2737,7 +2737,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/gselect.py:2098
 #: ../gui/wxpython/gmodeler/dialogs.py:924
 msgid "Yes"
-msgstr ""
+msgstr "예"
 
 #: ../gui/wxpython/location_wizard/wizard.py:990
 msgid "Specify geodetic datum"
@@ -2867,7 +2867,7 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:2135
 msgid "Projection:"
-msgstr ""
+msgstr "투영:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:2143
 msgid ""
@@ -3460,7 +3460,7 @@ msgstr ""
 #: ../gui/wxpython/core/render.py:185
 #, python-format
 msgid "Details: %s\n"
-msgstr ""
+msgstr "세부 사항: %s\n"
 
 #: ../gui/wxpython/core/render.py:270
 #, python-format
@@ -3899,7 +3899,7 @@ msgstr "2. GRASS 로케이션을 선택하세요"
 #: ../gui/wxpython/gis_set.py:121
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:128
 msgid "3. Select GRASS Mapset"
-msgstr "3. GRASS 지도세트를 선택하세요"
+msgstr "3. GRASS 지도 세트를 선택하세요"
 
 #: ../gui/wxpython/gis_set.py:139
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:146
@@ -3909,12 +3909,12 @@ msgstr "GRASS GIS 데이터베이스 디렉토리는 로케이션을 포함합�
 #: ../gui/wxpython/gis_set.py:143
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:150
 msgid "All data in one Location is in the same  coordinate reference system (projection). One Location can be one project. Location contains Mapsets."
-msgstr "한 로케이션 내의 모든 자료는 같은 투영을 공유합니다. 로케이션 하나가 프로젝트 하나가 될 수 있습니다. 로케이션은 지도세트를 포함합니다."
+msgstr "한 로케이션 내의 모든 자료는 같은 투영을 공유합니다. 로케이션 하나가 프로젝트 하나가 될 수 있습니다. 로케이션은 지도 세트를 포함합니다."
 
 #: ../gui/wxpython/gis_set.py:151
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:158
 msgid "Mapset contains GIS data related to one project, task within one project, subregion or user."
-msgstr "지도세트는 프로젝트, 작업, 부영역 또는 사용자와 관련된 GIS 자료를 포함합니다."
+msgstr "지도 세트는 프로젝트, 작업, 부영역 또는 사용자와 관련된 GIS 자료를 포함합니다."
 
 #: ../gui/wxpython/gis_set.py:166
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:173
@@ -4004,7 +4004,7 @@ msgstr "삭제(&D)"
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:207
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:725
 msgid "Delete selected mapset"
-msgstr "선택된 지도세트를 삭제합니다"
+msgstr "선택된 지도 세트를 삭제합니다"
 
 #: ../gui/wxpython/gis_set.py:258
 #, python-format
@@ -4077,9 +4077,9 @@ msgid ""
 "\n"
 "This mapset cannot be renamed."
 msgstr ""
-"유효한 GRASS 로케이션을 위해서는 지도세트 <PERMANENT>가 필요합니다.\n"
+"유효한 GRASS 로케이션을 위해서는 지도 세트 <PERMANENT>가 필요합니다.\n"
 "\n"
-"이 지도세트의 이름은 바꿀 수 없습니다."
+"이 지도 세트의 이름은 바꿀 수 없습니다."
 
 #: ../gui/wxpython/gis_set.py:624 ../gui/wxpython/gis_set.py:667
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:625
@@ -4134,9 +4134,9 @@ msgid ""
 "\n"
 "This mapset cannot be deleted."
 msgstr ""
-"유효한 GRASS 로케이션을 위해서는 지도세트 <PERMANENT>가 필요합니다.\n"
+"유효한 GRASS 로케이션을 위해서는 지도 세트 <PERMANENT>가 필요합니다.\n"
 "\n"
-"이 지도세트는 삭제할 수 없습니다."
+"이 지도 세트는 삭제할 수 없습니다."
 
 #: ../gui/wxpython/gis_set.py:719
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:720
@@ -4146,14 +4146,14 @@ msgid ""
 "\n"
 "ALL MAPS included in this mapset will be PERMANENTLY DELETED!"
 msgstr ""
-"로케이션 <%(location)s>로부터 지도세트 <%(mapset)s>의 삭제를 진행할까요?\n"
+"로케이션 <%(location)s>로부터 지도 세트 <%(mapset)s>의 삭제를 진행할까요?\n"
 "\n"
-"이 지도세트에 포함된 모든 지도들이 영구히 삭제될 것입니다!"
+"이 지도 세트에 포함된 모든 지도들이 영구히 삭제될 것입니다!"
 
 #: ../gui/wxpython/gis_set.py:733
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:734
 msgid "Unable to delete mapset"
-msgstr "지도세트를 삭제할 수 없습니다"
+msgstr "지도 세트를 삭제할 수 없습니다"
 
 #: ../gui/wxpython/gis_set.py:747
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:748
@@ -4233,7 +4233,7 @@ msgid ""
 "\n"
 "Do you want to try to remove .gislock (note that you need permission for this operation) and continue?"
 msgstr ""
-"GRASS가 이미 선택된 지도세트 <%(mapset)s>에서 실행 중입니다 (파일 %(lock)s를 찾았습니다).\n"
+"GRASS가 이미 선택된 지도 세트 <%(mapset)s>에서 실행 중입니다 (파일 %(lock)s를 찾았습니다).\n"
 "\n"
 "동시 실행은 허락되지 않습니다.\n"
 "\n"
@@ -5187,7 +5187,7 @@ msgstr "복사"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:169
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1170
 msgid "Copies available data files in the current mapset search path to the user's current mapset."
-msgstr ""
+msgstr "지도 세트 검색 경로에서 가능한 파일을 현재 사용자 지도 세트로 복사합니다."
 
 #: ../gui/wxpython/menustrings.py:170 ../gui/wxpython/menustrings.py:961
 #: ../gui/wxpython/menustrings.py:1187 ../gui/wxpython/menustrings.py:1901
@@ -5234,7 +5234,7 @@ msgstr "삭제"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:175
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1176
 msgid "Removes data base element files from the user's current mapset using the search pattern."
-msgstr "검색패턴을 이용해서 사용자의 현재 지도세트로부터 데이터베이스 요소파일을 제거합니다."
+msgstr "검색패턴을 이용해서 사용자의 현재 지도 세트로부터 데이터베이스 요소파일을 제거합니다."
 
 #: ../gui/wxpython/menustrings.py:176 ../gui/wxpython/menustrings.py:314
 #: ../gui/wxpython/menustrings.py:608 ../gui/wxpython/menustrings.py:862
@@ -5363,7 +5363,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:191
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1958
 msgid "Georectify"
-msgstr ""
+msgstr "위치 보정"
 
 #: ../gui/wxpython/menustrings.py:192 ../gui/wxpython/menustrings.py:1988
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:192
@@ -5586,7 +5586,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:231
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:227
 msgid "Changes/reports current mapset. Optionally create new mapset or list available mapsets in given location."
-msgstr "현재 지도세트를 바꾸거나 보고합니다. 선택적으로 새 지도세트를 생성하거나 주어진 로케이션 안에 유효한 지도세트를 나열합니다."
+msgstr "현재 지도 세트를 바꾸거나 보고합니다. 선택적으로 새 지도 세트를 생성하거나 주어진 로케이션 안에 유효한 지도 세트를 나열합니다."
 
 #: ../gui/wxpython/menustrings.py:232
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:228
@@ -5949,7 +5949,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:293
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1219
 msgid "Color tables (stddev)"
-msgstr "색상 테이블 (표준편차)"
+msgstr "색상 테이블 (표준 편차)"
 
 #: ../gui/wxpython/menustrings.py:298 ../gui/wxpython/menustrings.py:1238
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:294
@@ -7980,7 +7980,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1571
 #: ../gui/wxpython/mapdisp/toolbars.py:58
 msgid "Vector network analysis tool"
-msgstr ""
+msgstr "벡터 네트워크 분석 도구"
 
 #: ../gui/wxpython/menustrings.py:652 ../gui/wxpython/menustrings.py:1592
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:646
@@ -8036,7 +8036,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:655
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1581
 msgid "Shortest path for sets of features"
-msgstr ""
+msgstr "피처 세트의 최단 경로"
 
 #: ../gui/wxpython/menustrings.py:662 ../gui/wxpython/menustrings.py:1602
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:656
@@ -10182,7 +10182,7 @@ msgstr "도움말(&H)"
 #: ../gui/wxpython/menustrings.py:1042
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1027
 msgid "GRASS help"
-msgstr ""
+msgstr "GRASS 도움말"
 
 #: ../gui/wxpython/menustrings.py:1043 ../gui/wxpython/menustrings.py:1045
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1028
@@ -10210,7 +10210,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1034
 #: ../gui/wxpython/gui_core/ghelp.py:60
 msgid "About GRASS GIS"
-msgstr "GRASS GIS에 대해"
+msgstr "GRASS GIS에 관해"
 
 #: ../gui/wxpython/menustrings.py:1052
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1037
@@ -10358,7 +10358,7 @@ msgstr "항목을 제거합니다"
 #: ../gui/wxpython/menustrings.py:2035
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:2006
 msgid "Remove action/data from model"
-msgstr "모형에서 작업/자료를 제거합니다"
+msgstr "모델에서 작업/자료를 제거합니다"
 
 #: ../gui/wxpython/menustrings.py:2036
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:2007
@@ -10379,7 +10379,7 @@ msgstr "중간 자료를 삭제합니다"
 #: ../gui/wxpython/menustrings.py:2039
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:2010
 msgid "Delete intermediate data defined in the model"
-msgstr "모형 안에 정의된 중간 자료를 삭제합니다"
+msgstr "모델 안에 정의된 중간 자료를 삭제합니다"
 
 #: ../gui/wxpython/menustrings.py:2041
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:2012
@@ -10401,7 +10401,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:2059
 #: ../gui/wxpython/tplot/frame.py:347 ../gui/wxpython/timeline/frame.py:139
 msgid "Help"
-msgstr ""
+msgstr "도움말"
 
 #: ../gui/wxpython/menustrings.py:2046
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:2017
@@ -10478,7 +10478,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:2035
 #: ../gui/wxpython/gui_core/toolbars.py:74 ../gui/wxpython/lmgr/layertree.py:78
 msgid "Quit"
-msgstr ""
+msgstr "종료"
 
 #: ../gui/wxpython/menustrings.py:2065
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:2036
@@ -10619,7 +10619,7 @@ msgstr "지도 작성자에 대해"
 #: ../gui/wxpython/menustrings.py:2091
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:2062
 msgid "Display information about Cartographic Composer"
-msgstr "지도 작성자에 대한 정보를 보여 줍니다"
+msgstr "지도 작성자에 관한 정보를 보여 줍니다"
 
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:38
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1039
@@ -10931,7 +10931,7 @@ msgstr "GRASS GIS %s 시작 %s"
 #: ../gui/wxpython/startup/guiutils.py:80
 #, python-format
 msgid "Invalid line in GISRC file (%s):%s\n"
-msgstr "GISRC 파일 (%s) 내에 무효한 줄: %s\n"
+msgstr "GISRC 파일(%s) 내에 무효한 줄: %s\n"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:556
 msgid "New mapset:"
@@ -11762,11 +11762,11 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/mapwindow.py:1021
 msgid "Easting"
-msgstr "동거"
+msgstr "동거(easting)"
 
 #: ../gui/wxpython/nviz/mapwindow.py:1022
 msgid "Northing"
-msgstr "북거"
+msgstr "북거(northing)"
 
 #: ../gui/wxpython/nviz/mapwindow.py:1023
 msgid "Elevation"
@@ -12592,7 +12592,7 @@ msgstr ""
 #: ../gui/wxpython/nviz/tools.py:5682 ../gui/wxpython/nviz/tools.py:5693
 #: ../gui/wxpython/nviz/tools.py:5701
 msgid "Northing (Y):"
-msgstr "북거 (Y):"
+msgstr "북거(northing) (Y):"
 
 #: ../gui/wxpython/nviz/tools.py:5683 ../gui/wxpython/nviz/tools.py:5692
 #: ../gui/wxpython/nviz/tools.py:5702
@@ -12602,7 +12602,7 @@ msgstr ""
 #: ../gui/wxpython/nviz/tools.py:5684 ../gui/wxpython/nviz/tools.py:5691
 #: ../gui/wxpython/nviz/tools.py:5700
 msgid "Easting (X):"
-msgstr "동거 (X):"
+msgstr "동거(easting) (X):"
 
 #: ../gui/wxpython/nviz/tools.py:5697
 msgid "Bottom edge:"
@@ -12813,7 +12813,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/forms.py:1225
 msgid "valid range"
-msgstr ""
+msgstr "유효 범위"
 
 #: ../gui/wxpython/gui_core/forms.py:1335
 #: ../gui/wxpython/gui_core/forms.py:2731
@@ -13356,7 +13356,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/gselect.py:1420
 msgid "Native"
-msgstr ""
+msgstr "고유"
 
 #: ../gui/wxpython/gui_core/gselect.py:1426
 msgid "File"
@@ -13531,7 +13531,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/widgets.py:1156
 msgid "Searching, please type more characters."
-msgstr ""
+msgstr "검색에 보다 더 긴 문자열이 필요합니다."
 
 #: ../gui/wxpython/gui_core/widgets.py:1165
 #, python-format
@@ -13615,7 +13615,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:284
 msgid "Layer Manager settings"
-msgstr ""
+msgstr "레이어 관리자 설정"
 
 #: ../gui/wxpython/gui_core/preferences.py:294
 msgid "Ask when removing map layer from layer tree"
@@ -13748,7 +13748,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:958
 msgid "Enable auto-zooming to selected map layer"
-msgstr ""
+msgstr "선택한 레이어의 자동 확대 기능을 사용합니다"
 
 #: ../gui/wxpython/gui_core/preferences.py:974
 msgid "Show computational region extent"
@@ -13873,7 +13873,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/preferences.py:1689
 #: ../gui/wxpython/mapdisp/statusbar.py:826
 msgid "Projection"
-msgstr ""
+msgstr "투영"
 
 #: ../gui/wxpython/gui_core/preferences.py:1698
 msgid "Projection statusbar settings"
@@ -13965,7 +13965,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:105
 msgid "Select GRASS location and mapset"
-msgstr "GRASS 로케이션과 지도세트를 선택하세요"
+msgstr "GRASS 로케이션과 지도 세트를 선택하세요"
 
 #: ../gui/wxpython/gui_core/dialogs.py:125
 msgid "Location or mapset is not defined."
@@ -13982,7 +13982,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:175
 msgid "Select mapset in GRASS location"
-msgstr "GRASS 로케이션 내의 지도세트를 선택하세요"
+msgstr "GRASS 로케이션 내의 지도 세트를 선택하세요"
 
 #: ../gui/wxpython/gui_core/dialogs.py:195
 msgid "Name of mapset is missing."
@@ -13990,7 +13990,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:236
 msgid "Name of vector map is missing."
-msgstr ""
+msgstr "벡터 지도의 이름이 누락됐습니다."
 
 #: ../gui/wxpython/gui_core/dialogs.py:289
 msgid "Create attribute table"
@@ -14709,7 +14709,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:476
 msgid "Close dialog and apply changes"
-msgstr ""
+msgstr "대화 상자를 닫고 변경 사항을 적용합니다"
 
 #: ../gui/wxpython/psmap/dialogs.py:527
 msgid "Units"
@@ -14770,7 +14770,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:896
 msgid "Map frame options:"
-msgstr ""
+msgstr "지도 틀 옵션:"
 
 #: ../gui/wxpython/psmap/dialogs.py:897
 msgid "fit frame to match selected map"
@@ -14798,7 +14798,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:930
 msgid "Region:"
-msgstr ""
+msgstr "영역:"
 
 #: ../gui/wxpython/psmap/dialogs.py:987
 msgid "Map scale and center"
@@ -15238,7 +15238,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:4872
 msgid "default"
-msgstr ""
+msgstr "기본값"
 
 #: ../gui/wxpython/psmap/dialogs.py:4949
 msgid "Type:"
@@ -15998,7 +15998,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1303
 msgid "Additional options:"
-msgstr ""
+msgstr "추가 옵션:"
 
 #: ../gui/wxpython/animation/dialogs.py:1307
 msgid "Consider adding '-sameq' or '-qscale 1' if not satisfied with video quality. Options depend on ffmpeg version."
@@ -18651,7 +18651,7 @@ msgstr "알려지지 않은"
 #: ../gui/wxpython/dbmgr/dialogs.py:790 ../gui/wxpython/dbmgr/base.py:2328
 #: ../gui/wxpython/dbmgr/base.py:2392
 msgid "Column"
-msgstr ""
+msgstr "열"
 
 #: ../gui/wxpython/dbmgr/dialogs.py:801 ../gui/wxpython/dbmgr/base.py:2347
 #: ../gui/wxpython/gmodeler/preferences.py:256
@@ -19005,7 +19005,7 @@ msgstr ""
 #: ../gui/wxpython/dbmgr/base.py:3722
 #, python-format
 msgid "Drop also linked attribute table (%s)"
-msgstr "연결된 속성 테이블 (%s)도 같이 삭제합니다"
+msgstr "연결된 속성 테이블(%s)도 같이 삭제합니다"
 
 #: ../gui/wxpython/dbmgr/base.py:2905
 msgid "Column name"
@@ -19261,7 +19261,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/frame.py:337
 msgid "Do you want to save changes in the model?"
-msgstr ""
+msgstr "모델의 변경 사항을 저장하시겠습니까?"
 
 #: ../gui/wxpython/gmodeler/frame.py:339
 msgid "Do you want to store current model settings to model file?"
@@ -19274,7 +19274,7 @@ msgstr ""
 #: ../gui/wxpython/gmodeler/frame.py:406
 #, python-format
 msgid "%d intermediate maps deleted from current mapset"
-msgstr "현재 지도세트로부터 %d개의 중간 지도가 삭제됐습니다"
+msgstr "현재 지도 세트로부터 %d개의 중간 지도가 삭제됐습니다"
 
 #: ../gui/wxpython/gmodeler/frame.py:415
 msgid "No intermediate data to delete."
@@ -19413,7 +19413,7 @@ msgstr "변수의 목록 - 삭제하려면 오른쪽 클릭"
 #: ../gui/wxpython/gmodeler/frame.py:1734
 #: ../gui/wxpython/gmodeler/frame.py:1792
 msgid "Default value"
-msgstr ""
+msgstr "기본값"
 
 #: ../gui/wxpython/gmodeler/frame.py:1740
 msgid "Add new variable"
@@ -19684,7 +19684,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:806
 msgid "Do you want to delete all variables from the model?"
-msgstr "모형으로부터 모든 변수를 삭제하길 원하십니까?"
+msgstr "모델로부터 모든 변수를 삭제하길 원하십니까?"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:808
 msgid "Delete variables"
@@ -20098,7 +20098,7 @@ msgstr ""
 
 #: ../gui/wxpython/web_services/widgets.py:195
 msgid "Source projection:"
-msgstr ""
+msgstr "원천 자료 투영:"
 
 #: ../gui/wxpython/web_services/widgets.py:256
 msgid "Advanced request settings"
@@ -20338,5 +20338,9 @@ msgstr ""
 msgid "Unable to fetch data.\n"
 msgstr ""
 
-#~ msgid "Animation already axists"
-#~ msgstr "애니메이션이 이미 존재합니다"
+msgid "Animation already axists"
+msgstr "애니메이션이 이미 존재합니다"
+
+#, python-format
+#~ msgid "Maximum number of animations is %s."
+#~ msgstr "애니메이션의 최대 개수는 %s입니다"
