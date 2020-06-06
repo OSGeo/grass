@@ -12577,7 +12577,7 @@ msgstr "Voulez-vous enregistrer une nouvelle animation sans enregistrer la préc
 
 #: ../gui/wxpython/nviz/tools.py:2486
 msgid "Animation already exists"
-msgstr "L'animation existe déjà"
+msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:2656
 msgid "No file prefix given."
@@ -21126,8 +21126,12 @@ msgstr "Calculer une nouvelle carte raster depuis une expression r.mapcalc simpl
 msgid "Raster map calculator."
 msgstr "Calculatrice raster."
 
+msgid "Animation already axists"
+msgstr "L'animation existe déjà"
+
 #~ msgid "Code revision"
 #~ msgstr "Révision du code"
 
-#~ msgid "Animation already axists"
-#~ msgstr "L'animation existe déjà"
+#, python-format
+#~ msgid "Maximum number of animations is %s."
+#~ msgstr "Le nombre maximal d'animations est %s."

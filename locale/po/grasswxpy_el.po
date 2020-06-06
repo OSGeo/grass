@@ -15846,7 +15846,7 @@ msgstr ""
 #: ../gui/wxpython/animation/controller.py:234
 #, python-format
 msgid "Maximum number of animations is %d."
-msgstr "Ο μέγιστος αριθμός κινουμένων είναι: %d. "
+msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:891
 #: ../gui/wxpython/animation/controller.py:262
@@ -20444,3 +20444,7 @@ msgstr "3D μάσκα"
 
 msgid "Volume"
 msgstr "Όγκος"
+
+#, python-format
+#~ msgid "Maximum number of animations is %s."
+#~ msgstr "Ο μέγιστος αριθμός κινουμένων είναι: %s. "
