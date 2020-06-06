@@ -27,5 +27,15 @@ jobs:
         $url = 'http://download.osgeo.org/osgeo4w/' + $exe
         (New-Object System.Net.WebClient).DownloadFile($url, $exe)
         Start-Process ('.\'+$exe) -ArgumentList '-A -g -k -q -s http://download.osgeo.org/x86_64 -P cairo,fftw,freetype-devel,gdal-ecw,gdal-mrsid,liblas-devel,libxdr,msys,pdcurses,python3-numpy,python3-pywin32,python3-wx,regex-devel,wxpython,zstd-devel' -Wait
-    - name: Test encodings module
-      run: C:\OSGeo4W64\apps\Python37\python.exe -m encodings
+    - name: Install MSYS2 packages
+      run: C:\msys64\usr\bin\pacman.exe --noconfirm -S tar libintl make bison diffutils git dos2unix zip mingw-w64-x86_64-toolchain mingw-w64-x86_64-cairo mingw-w64-x86_64-python3-six
+    - name: Compile GRASS GIS
+      run: C:\msys64\usr\bin\bash.exe -l (''+(Get-Location)+'\.github\workflows\build_osgeo4w.sh') -p (Get-Location)
+    - name: Test executing of the grass command
+      run: .github/workflows/test_simple.bat 'bin.x86_64-w64-mingw32'
+    - name: Run tests
+      run: .github/workflows/test_thorough.bat 'bin.x86_64-w64-mingw32'
+    - name: Test executing of the grass command using the package
+      run: .github/workflows/test_simple.bat 'C:\OSGeo4W64\opt\grass'
+    - name: Run tests using the package
+      run: .github/workflows/test_thorough.bat 'C:\OSGeo4W64\opt\grass'
