@@ -15863,7 +15863,7 @@ msgstr ""
 #: ../gui/wxpython/animation/controller.py:234
 #, python-format
 msgid "Maximum number of animations is %d."
-msgstr "En büyük animasyon sayısı: %d."
+msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:891
 #: ../gui/wxpython/animation/controller.py:262
@@ -20675,3 +20675,7 @@ msgstr "Sayısallaştırma"
 
 msgid "&Fetch"
 msgstr "&Getir"
+
+#, python-format
+#~ msgid "Maximum number of animations is %s."
+#~ msgstr "En büyük animasyon sayısı: %s."

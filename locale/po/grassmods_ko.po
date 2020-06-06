@@ -1933,7 +1933,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:12
 msgid "Name of vector map to be queried"
-msgstr ""
+msgstr "질의할 벡터 지도의 이름"
 
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:13
 msgid "query_layer,query_column"
@@ -2834,7 +2834,7 @@ msgstr "속성 자료를 위한 인코딩값"
 #: ../locale/scriptstrings/v.import_to_translate.c:15
 #: ../vector/v.in.ogr/main.c:315
 msgid "Overrides encoding interpretation, useful when importing ESRI Shapefile"
-msgstr ""
+msgstr "인코딩을 재정의합니다, ESRI Shapefile을 가져올 때 유용합니다"
 
 #: ../locale/scriptstrings/v.import_to_translate.c:17
 #: ../vector/v.in.ogr/main.c:291
@@ -3166,11 +3166,11 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.mask_to_translate.c:9
 msgid "Name of vector map to use as mask"
-msgstr ""
+msgstr "마스크로 쓸 벡터 지도의 이름"
 
 #: ../locale/scriptstrings/r.mask_to_translate.c:11
 msgid "Layer number or name (vector)"
-msgstr "레이어 번호 또는 이름(벡터)"
+msgstr "레이어 번호 또는 이름(vector)"
 
 #: ../locale/scriptstrings/r.mask_to_translate.c:13
 msgid "Category values (vector)"
@@ -4394,7 +4394,7 @@ msgstr "지표"
 
 #: ../locale/scriptstrings/r.grow_to_translate.c:8
 msgid "Value to write for input cells which are non-NULL (-1 => NULL)"
-msgstr ""
+msgstr "널이 아닌 입력 셀에 쓸 값 (-1 => NULL)"
 
 #: ../locale/scriptstrings/r.grow_to_translate.c:9
 msgid "Value to write for \"grown\" cells"
@@ -4610,11 +4610,11 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.plane_to_translate.c:6
 msgid "Easting coordinate of a point on the plane"
-msgstr "평면 상 한 점의 동거 좌표"
+msgstr "평면 상 한 점의 동거(easting) 좌표"
 
 #: ../locale/scriptstrings/r.plane_to_translate.c:7
 msgid "Northing coordinate of a point on the plane"
-msgstr "평면 상 한 점의 북거 좌표"
+msgstr "평면 상 한 점의 북거(northing) 좌표"
 
 #: ../locale/scriptstrings/r.plane_to_translate.c:8
 msgid "Elevation coordinate of a point on the plane"
@@ -4854,7 +4854,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/d.rast.leg_to_translate.c:7
 msgid "Name of raster map to display"
-msgstr ""
+msgstr "보여 줄 래스터 지도의 이름"
 
 #: ../locale/scriptstrings/d.rast.leg_to_translate.c:8
 #: ../display/d.legend/main.c:272
@@ -5491,7 +5491,7 @@ msgstr ""
 #: ../ps/ps.map/do_labels.c:44
 #, c-format
 msgid "Can't open label file <%s> in mapset <%s>"
-msgstr "지도세트 <%2$s> 내 꼬리표 파일 <%1$s>를 열 수 없습니다"
+msgstr "지도 세트 <%2$s> 내 꼬리표 파일 <%1$s>를 열 수 없습니다"
 
 #: ../ps/ps.map/do_labels.c:48
 #, c-format
@@ -6644,7 +6644,7 @@ msgid ""
 "Volume report on data from <%s> using clumps on <%s> raster map"
 msgstr ""
 "\n"
-"<%2$s> 래스터 지도 상의 덩어리를 이용한 <%1$s> 자료에 대한 부피 보고서"
+"<%2$s> 래스터 지도 상의 덩어리를 이용한 <%1$s> 자료에 관한 부피 보고서"
 
 #: ../raster/r.volume/main.c:270
 #, c-format
@@ -7724,7 +7724,7 @@ msgstr ""
 
 #: ../raster/r.topmodel/main.c:55
 msgid "Simulates TOPMODEL which is a physically based hydrologic model."
-msgstr "물리 기반의 수문모형인 TOPMODEL을 모의합니다."
+msgstr "물리 기반의 수문모델인 TOPMODEL을 모의합니다."
 
 #: ../raster/r.topmodel/main.c:60
 msgid "Name of input TOPMODEL parameters file"
@@ -8452,7 +8452,7 @@ msgstr ""
 
 #: ../raster/r.out.ppm3/main.c:59
 msgid "Converts 3 GRASS raster layers (R,G,B) to a PPM image file."
-msgstr "세 개의 GRASS 래스터 레이어 (R,G,B)를 PPM 이미지 파일로 변환합니다."
+msgstr "세 개의 GRASS 래스터 레이어(R,G,B)를 PPM 이미지 파일로 변환합니다."
 
 #: ../raster/r.out.ppm3/main.c:64 ../raster/r.composite/main.c:90
 #: ../display/d.rgb/main.c:69
@@ -9087,7 +9087,7 @@ msgstr ""
 
 #: ../raster/r.random/main.c:98
 msgid "Report information about input raster and exit"
-msgstr "입력 래스터에 대한 정보를 보고하고 종료합니다"
+msgstr "입력 래스터에 관한 정보를 보고하고 종료합니다"
 
 #: ../raster/r.random/main.c:102
 msgid "Generate vector points as 3D points"
@@ -9223,7 +9223,7 @@ msgstr ""
 #: ../vector/v.in.dxf/write_vect.c:238 ../vector/v.extract/copy_tab.c:129
 #, c-format
 msgid "Unable to grant privileges on table <%s>"
-msgstr "테이블 <%s>에 대한 권한을 부여할 수 없습니다"
+msgstr "테이블 <%s>에 관한 권한을 부여할 수 없습니다"
 
 #: ../raster/r.spreadpath/main.c:89 ../raster/r.spread/main.c:106
 #: ../raster/r.ros/main.c:213
@@ -12940,12 +12940,12 @@ msgstr ""
 #: ../raster/r.compress/main.c:134
 #, c-format
 msgid "<%s> is a reclass file of map <%s> in mapset <%s> - can't uncompress"
-msgstr "<%1$s>는 지도세트 <%3$s> 내 지도 <%2$s>의 재분류 파일입니다 - 압축해제할 수 없습니다"
+msgstr "<%1$s>는 지도 세트 <%3$s> 내 지도 <%2$s>의 재분류 파일입니다 - 압축해제할 수 없습니다"
 
 #: ../raster/r.compress/main.c:136
 #, c-format
 msgid "<%s> is a reclass file of map <%s> in mapset <%s> - can't compress"
-msgstr "<%1$s>는 지도세트 <%3$s> 내 지도 <%2$s>의 재분류 파일입니다 - 압축할 수 없습니다"
+msgstr "<%1$s>는 지도 세트 <%3$s> 내 지도 <%2$s>의 재분류 파일입니다 - 압축할 수 없습니다"
 
 #: ../raster/r.compress/main.c:141
 #, c-format
@@ -14588,7 +14588,7 @@ msgstr "이력"
 
 #: ../raster/r.info/main.c:77
 msgid "Outputs basic information about a raster map."
-msgstr "래스터 지도에 대한 기본적인 정보를 출력합니다."
+msgstr "래스터 지도에 관한 기본적인 정보를 출력합니다."
 
 #: ../raster/r.info/main.c:83
 msgid "Print raster array information in shell script style"
@@ -16309,7 +16309,7 @@ msgstr ""
 #: ../raster/r.in.gdal/main.c:212 ../vector/v.info/print.c:505
 #: ../vector/v.info/print.c:510
 msgid "Projection"
-msgstr ""
+msgstr "투영"
 
 #: ../raster/r.in.gdal/main.c:151
 msgid "Offset to be added to band numbers"
@@ -16698,7 +16698,7 @@ msgstr ""
 
 #: ../raster/r.sunmask/main.c:211
 msgid "Easting coordinate (point of interest)"
-msgstr "동거 좌표 (관심 지점)"
+msgstr "동거(easting) 좌표 (관심 지점)"
 
 #: ../raster/r.sunmask/main.c:212 ../raster/r.sunmask/main.c:222
 msgid "Default: map center"
@@ -17386,7 +17386,7 @@ msgstr ""
 
 #: ../raster/r.resamp.filter/main.c:474
 msgid "Differing number of values for filter= and [xy_]radius="
-msgstr ""
+msgstr "filter=와 [xy_]radius= 값의 개수가 다릅니다."
 
 #: ../raster/r.resamp.filter/main.c:477
 #, c-format
@@ -17427,7 +17427,7 @@ msgstr ""
 
 #: ../raster/r.composite/main.c:103 ../raster/r.composite/main.c:121
 msgid "Levels"
-msgstr ""
+msgstr "단계"
 
 #: ../raster/r.composite/main.c:118
 #, c-format
@@ -17475,7 +17475,7 @@ msgstr ""
 
 #: ../raster/r.region/main.c:77
 msgid "Name of raster map to change"
-msgstr ""
+msgstr "변경할 래스터 지도의 이름"
 
 #: ../raster/r.region/main.c:85
 msgid "Set region from named region"
@@ -17947,7 +17947,7 @@ msgstr ""
 #: ../raster/r.watershed/shed/com_line.c:380
 #, c-format
 msgid "Because of digital terrain model limitations, %s cannot pick up"
-msgstr "디지털 지형 모형의 한계 때문에 %s이 이런 저습지를 찾아낼 수 없습니다."
+msgstr "디지털 지형 모델의 한계 때문에 %s이 이런 저습지를 찾아낼 수 없습니다."
 
 #: ../raster/r.watershed/shed/com_line.c:382
 #, c-format
@@ -18247,7 +18247,7 @@ msgstr ""
 
 #: ../raster/r.watershed/front/main.c:233
 msgid "Only needed if memory requirements exceed available RAM; see manual on how to calculate memory requirements"
-msgstr "메모리 요구 사항이 사용 가능한 RAM을 초과하는 경우에만 필요합니다. 메모리 요구 사항을 계산하는 방법에 대한 설명서를 참고하십시오."
+msgstr "메모리 요구 사항이 사용 가능한 램을 초과하는 경우에만 필요합니다; 메모리 요구 사항을 계산하는 방법은 설명서를 참고하십시오"
 
 #: ../raster/r.watershed/front/main.c:238
 msgid "Use positive flow accumulation even for likely underestimates"
@@ -19027,7 +19027,7 @@ msgstr ""
 #: ../display/d.vect.thematic/plot1.c:163 ../display/d.vect.thematic/main.c:316
 #, c-format
 msgid "Cannot select data (%s) from table"
-msgstr "테이블로부터 자료 (%s)를 선택할 수 없습니다"
+msgstr "테이블로부터 자료(%s)를 선택할 수 없습니다"
 
 #: ../display/d.vect.thematic/plot1.c:148
 msgid "Line width column not specified."
@@ -19050,17 +19050,17 @@ msgstr ""
 #: ../display/d.vect.thematic/plot1.c:279
 #, c-format
 msgid "Error in color definition column (%s), element %d with cat %d: colorstring [%s]"
-msgstr "색상 정의 열 (%1$s), cat %3$d를 가진 요소 %2$d 내에 오류: 색상 문자열 [%4$s]"
+msgstr "색상 정의 열(%1$s), cat %3$d를 가진 요소 %2$d 내에 오류: 색상 문자열 [%4$s]"
 
 #: ../display/d.vect.thematic/plot1.c:286
 #, c-format
 msgid "Error in color definition column (%s), element %d with cat %d"
-msgstr "색상 정의 열 (%1$s), cat %3$d를 가진 요소 %2$d 내에 오류"
+msgstr "색상 정의 열(%1$s), cat %3$d를 가진 요소 %2$d 내에 오류"
 
 #: ../display/d.vect.thematic/plot1.c:354
 #, c-format
 msgid "Error in line width column (%s), element %d with cat %d: line width [%d]"
-msgstr "선 넓이 열 (%1$s), cat %3$d를 가진 요소 %2$d 내에 오류: 선 넓이 [%4$d]"
+msgstr "선 넓이 열(%1$s), cat %3$d를 가진 요소 %2$d 내에 오류: 선 넓이 [%4$d]"
 
 #: ../display/d.vect.thematic/main.c:87
 msgid "choropleth map"
@@ -20647,7 +20647,7 @@ msgstr ""
 
 #: ../display/d.rast/main.c:61
 msgid "Name of raster map to be displayed"
-msgstr ""
+msgstr "보여질 래스터 지도의 이름"
 
 #: ../display/d.rast/main.c:69
 msgid "List of categories or values to be displayed"
@@ -22069,7 +22069,7 @@ msgstr ""
 
 #: ../raster3d/r3.info/main.c:80
 msgid "Outputs basic information about a user-specified 3D raster map layer."
-msgstr "사용자가 지정한 3차원 래스터 지도에 대한 기본적인 정보를 출력합니다"
+msgstr "사용자가 지정한 3차원 래스터 지도에 관한 기본적인 정보를 출력합니다"
 
 #: ../raster3d/r3.info/main.c:86
 msgid "Print raster3d information in shell style"
@@ -22369,7 +22369,7 @@ msgstr ""
 
 #: ../raster3d/r3.in.ascii/main.c:298
 msgid "End of file reached while still loading data."
-msgstr ""
+msgstr "자료를 로딩하는 중 파일 끝에 도달하였습니다."
 
 #: ../raster3d/r3.in.ascii/main.c:310
 #, c-format
@@ -22647,11 +22647,11 @@ msgstr "지도 이름 제외패턴 (기본값: 없음)"
 
 #: ../general/g.list/main.c:100
 msgid "Name of mapset to list (default: current search path)"
-msgstr "나열할 지도세트의 이름 (기본값: 현재 검색경로)"
+msgstr "나열할 지도 세트의 이름 (기본값: 현재 검색 경로)"
 
 #: ../general/g.list/main.c:102
 msgid "'.' for current mapset; '*' for all mapsets in location"
-msgstr "현재 지도세트 '.'; 로케이션 안의 모든 지도세트 '*'"
+msgstr "현재 지도 세트 '.'; 로케이션 안의 모든 지도 세트 '*'"
 
 #: ../general/g.list/main.c:108
 msgid "Name of saved region for map search (default: not restricted)"
@@ -22683,7 +22683,7 @@ msgstr "자료형을 출력합니다"
 
 #: ../general/g.list/main.c:142
 msgid "Print fully-qualified map names (including mapsets)"
-msgstr "지도세트를 포함한 완전한 지도 이름을 출력합니다"
+msgstr "지도 세트를 포함한 완전한 지도 이름을 출력합니다"
 
 #: ../general/g.list/main.c:147
 msgid "Pretty printing in human readable format"
@@ -23098,7 +23098,7 @@ msgstr "<%s> GUI를 배경프로세스에서 시작합니다. 기다려주세요
 
 #: ../general/g.rename/main.c:49
 msgid "Renames data base element files in the user's current mapset."
-msgstr "사용자의 현재 지도세트 안에 있는 데이터베이스 요소파일들의 이름을 바꿉니다."
+msgstr "사용자의 현재 지도 세트 안에 있는 데이터베이스 요소파일들의 이름을 바꿉니다."
 
 #: ../general/g.rename/main.c:55
 msgid "renamed"
@@ -23112,7 +23112,7 @@ msgstr "%s <%s>를 찾을 수 없습니다"
 #: ../general/g.rename/main.c:80
 #, c-format
 msgid "<%s> already exists in mapset <%s>"
-msgstr "<%s>가 지도세트 <%s> 안에 이미 존재합니다."
+msgstr "<%s>가 지도 세트 <%s> 안에 이미 존재합니다."
 
 #: ../general/g.rename/main.c:90
 #, c-format
@@ -23140,19 +23140,19 @@ msgstr ""
 
 #: ../general/g.mapsets/main.c:65
 msgid "search path"
-msgstr "검색경로"
+msgstr "검색 경로"
 
 #: ../general/g.mapsets/main.c:66
 msgid "Modifies/prints the user's current mapset search path."
-msgstr "사용자의 지도세트 검색경로를 수정하거나 출력합니다."
+msgstr "사용자의 지도 세트 검색 경로를 수정하거나 출력합니다."
 
 #: ../general/g.mapsets/main.c:67
 msgid "Affects the user's access to data existing under the other mapsets in the current location."
-msgstr "현재 로케이션 안에 있는 다른 지도세트 내에 존재하는 자료에 대한 사용자의 접근에 영향을 미칩니다."
+msgstr "현재 로케이션 안에 있는 다른 지도 세트 내에 존재하는 자료에 관한 사용자의 접근에 영향을 미칩니다."
 
 #: ../general/g.mapsets/main.c:73
 msgid "Name(s) of existing mapset(s) to add/remove or set"
-msgstr "추가/제거 또는 설정하고 싶은 기존 지도세트의 이름"
+msgstr "추가/제거 또는 설정하고 싶은 기존 지도 세트의 이름"
 
 #: ../general/g.mapsets/main.c:85
 msgid "Field separator for printing (-l and -p flags)"
@@ -23160,15 +23160,15 @@ msgstr "출력을 위한 필드구분자(-l과 -p 플래그)"
 
 #: ../general/g.mapsets/main.c:91
 msgid "List all available mapsets in alphabetical order"
-msgstr "모든 지도세트을 알파벳순으로 나열합니다"
+msgstr "모든 지도 세트을 알파벳순으로 나열합니다"
 
 #: ../general/g.mapsets/main.c:97
 msgid "Print mapsets in current search path"
-msgstr "검색경로에 있는 지도세트을 출력합니다"
+msgstr "검색 경로에 있는 지도 세트을 출력합니다"
 
 #: ../general/g.mapsets/main.c:103
 msgid "Launch mapset selection GUI dialog"
-msgstr "지도세트선택 GUI 대화창을 시작합니다"
+msgstr "지도 세트 선택을 위한 GUI 대화 상자를 시작합니다"
 
 #: ../general/g.mapsets/main.c:126
 #, c-format
@@ -23178,31 +23178,31 @@ msgstr "알려지지 않은 조작 '%s'"
 #: ../general/g.mapsets/main.c:174 ../general/g.mapsets/main.c:208
 #, c-format
 msgid "Mapset <%s> not found"
-msgstr "지도세트 <%s>를 찾을 수 없습니다"
+msgstr "지도 세트 <%s>를 찾을 수 없습니다"
 
 #: ../general/g.mapsets/main.c:181 ../general/g.mapsets/main.c:240
 #, c-format
 msgid "Current mapset (<%s>) must always included in the search path"
-msgstr "현재 지도세트(<%s>)가 반드시 검색경로에 포함되어야 합니다"
+msgstr "현재 지도 세트(<%s>)가 반드시 검색 경로에 포함되어야 합니다"
 
 #: ../general/g.mapsets/main.c:203
 #, c-format
 msgid "Mapset <%s> already in the path"
-msgstr "지도세트 <%s>가 경로에 이미 존재합니다"
+msgstr "지도 세트 <%s>가 경로에 이미 존재합니다"
 
 #: ../general/g.mapsets/main.c:210
 #, c-format
 msgid "Mapset <%s> added to search path"
-msgstr "지도세트 <%s>를 검색경로에 추가했습니다"
+msgstr "지도 세트 <%s>를 검색 경로에 추가했습니다"
 
 #: ../general/g.mapsets/main.c:243
 #, c-format
 msgid "Mapset <%s> removed from search path"
-msgstr "지도세트 <%s>를 검색경로에서 제거했습니다"
+msgstr "지도 세트 <%s>를 검색 경로에서 제거했습니다"
 
 #: ../general/g.mapsets/main.c:255
 msgid "Search path not modified"
-msgstr "검색경로가 수정되지 않았습니다"
+msgstr "검색 경로가 수정되지 않았습니다"
 
 #: ../general/g.mapsets/main.c:273
 msgid "Unable to open SEARCH_PATH for write"
@@ -23210,11 +23210,11 @@ msgstr "SEARCH_PATH를 쓰기 위해 열 수 없습니다"
 
 #: ../general/g.mapsets/list.c:10
 msgid "Available mapsets:"
-msgstr "유효한 지도세트들:"
+msgstr "유효한 지도 세트들:"
 
 #: ../general/g.mapsets/list.c:35
 msgid "Accessible mapsets:"
-msgstr "접근 가능한 지도세트들:"
+msgstr "접근 가능한 지도 세트들:"
 
 #: ../general/g.pnmcomp/main.c:54
 msgid "Error reading PPM file"
@@ -23272,7 +23272,7 @@ msgstr ""
 
 #: ../general/g.copy/main.c:44
 msgid "Copies available data files in the current mapset search path to the user's current mapset."
-msgstr "지도세트 검색경로에 있는 자료파일을 사용자의 현재지도세트로 복사합니다."
+msgstr "지도 세트 검색 경로에 있는 자료파일을 사용자의 현재지도 세트로 복사합니다."
 
 #: ../general/g.copy/main.c:51
 msgid "copied"
@@ -23490,7 +23490,7 @@ msgstr "투영 정보가 갱신되었습니다"
 
 #: ../general/g.mapset/main.c:51
 msgid "Changes/reports current mapset."
-msgstr "현재 지도세트를 바꾸거나 보고합니다."
+msgstr "현재 지도 세트를 바꾸거나 보고합니다."
 
 #: ../general/g.mapset/main.c:52
 msgid "Optionally create new mapset or list available mapsets in given location."
@@ -23544,7 +23544,7 @@ msgstr ""
 #: ../general/g.mapset/main.c:182
 #, c-format
 msgid "Lock file of mapset <%s> cannot be checked"
-msgstr "지도세트 <%s>의 잠금 파일을 검사할 수 없습니다"
+msgstr "지도 세트 <%s>의 잠금 파일을 검사할 수 없습니다"
 
 #: ../general/g.mapset/main.c:185
 #, c-format
@@ -23682,7 +23682,7 @@ msgstr ""
 #: ../general/g.message/main.c:63 ../general/g.message/main.c:69
 #: ../general/g.message/main.c:85
 msgid "Level"
-msgstr ""
+msgstr "단계"
 
 #: ../general/g.message/main.c:64
 msgid "Print message in all modes except of quiet mode"
@@ -23726,7 +23726,7 @@ msgstr "로케이션의 투영설정을 대화식으로 재설정합니다."
 
 #: ../general/g.setproj/main.c:88
 msgid "You must be in the PERMANENT mapset to run g.setproj"
-msgstr "g.setproj를 실행하기 위해서는 PERMANENT 지도세트 안에 있어야 합니다"
+msgstr "g.setproj를 실행하기 위해서는 PERMANENT 지도 세트 안에 있어야 합니다"
 
 #: ../general/g.setproj/main.c:101
 msgid "PERMANENT: permission denied"
@@ -23803,15 +23803,15 @@ msgstr "타원체 정보를 바꾸지 않았습니다"
 #: ../general/g.setproj/main.c:311
 #, c-format
 msgid "The radius is currently %f"
-msgstr "반경은 현재 %f입니다"
+msgstr "반지름은 현재 %f입니다"
 
 #: ../general/g.setproj/main.c:312
 msgid "Do you want to change the radius?"
-msgstr "반경을 바꾸길 원하십니까?"
+msgstr "반지름을 바꾸길 원하십니까?"
 
 #: ../general/g.setproj/main.c:314 ../general/g.setproj/main.c:320
 msgid "Enter radius for the sphere in meters"
-msgstr "구체의 반경을 미터로 입력하세요"
+msgstr "구체의 반지름을 미터로 입력하세요"
 
 #: ../general/g.setproj/main.c:336
 msgid "Invalid input ellipsoid"
@@ -23956,7 +23956,7 @@ msgstr "당신만이"
 #: ../general/g.access/exp_perms.c:31
 #, c-format
 msgid "%s %s %s %saccess to mapset %s"
-msgstr "%1$s 지도세트 %5$s에 대한 %4$s권한을 %2$s %3$s"
+msgstr "%1$s 지도 세트 %5$s에 관한 %4$s권한을 %2$s %3$s"
 
 #: ../general/g.access/exp_perms.c:32
 msgid "will"
@@ -23972,11 +23972,11 @@ msgstr "허가"
 
 #: ../general/g.access/main.c:41
 msgid "Controls access to the current mapset for other users on the system."
-msgstr "시스템상 다른 사용자의 현재 지도세트에 대한 접근을 제어합니다."
+msgstr "시스템상 다른 사용자의 현재 지도 세트에 관한 접근을 제어합니다."
 
 #: ../general/g.access/main.c:42
 msgid "If no option given, prints current status."
-msgstr "옵션이 주어지지 않으면 현재상태를 출력합니다."
+msgstr "옵션이 주어지지 않으면 현재 상태를 출력합니다."
 
 #: ../general/g.access/main.c:49
 msgid "Access for group"
@@ -23992,15 +23992,15 @@ msgstr "MS 윈도우는 유닉스 파일시스템의 접근제한을 지원하�
 
 #: ../general/g.access/main.c:72
 msgid "Access to the PERMANENT mapset must be open, nothing changed"
-msgstr "PERMANENT 지도세트에 대한 접근은 열려 있어야 합니다. 아무것도 바꾸지 않았습니다."
+msgstr "PERMANENT 지도 세트에 관한 접근은 열려 있어야 합니다. 아무것도 바꾸지 않았습니다."
 
 #: ../general/g.access/main.c:76
 msgid "Unable to determine mapset permissions"
-msgstr "지도세트의 허가를 결정할 수 없습니다"
+msgstr "지도 세트의 허가를 결정할 수 없습니다"
 
 #: ../general/g.access/set_perms.c:26
 msgid "Unable to change mapset permissions"
-msgstr "지도세트의 허가를 바꿀 수 없습니다"
+msgstr "지도 세트의 허가를 바꿀 수 없습니다"
 
 #: ../general/g.filename/main.c:42
 msgid "Prints GRASS data base file names."
@@ -24028,11 +24028,11 @@ msgstr "래스터 지도 <%s@%s>는 기반 지도입니다. 재분류된 지도 
 #: ../general/g.remove/check_reclass.c:54
 #, c-format
 msgid "Removing information about reclassed map from <%s@%s> failed"
-msgstr "<%s@%s>로부터 재분류된 지도에 대한 정보를 삭제하는데 실패했습니다"
+msgstr "<%s@%s>로부터 재분류된 지도에 관한 정보를 삭제하는데 실패했습니다"
 
 #: ../general/g.remove/main.c:73
 msgid "Removes data base element files from the user's current mapset using the search pattern."
-msgstr "검색패턴을 이용해서 사용자의 현재 지도세트로부터 데이터베이스 요소파일을 제거합니다."
+msgstr "검색패턴을 이용해서 사용자의 현재 지도 세트로부터 데이터베이스 요소파일을 제거합니다."
 
 #: ../general/g.remove/main.c:83 ../general/g.remove/main.c:91
 #: ../general/g.remove/main.c:133 ../vector/v.kernel/main.c:121
@@ -24071,12 +24071,12 @@ msgstr ""
 #: ../general/g.remove/main.c:267
 #, c-format
 msgid "Nothing removed. You must use the force flag (-%c) to actually remove them. Exiting."
-msgstr "아무것도 제거되지 않았습니다. 실제로 제거하기 위해서는 강제 플래그 (-%c)를 사용해야 합니다. 종료합니다."
+msgstr "아무것도 제거되지 않았습니다. 실제로 제거하기 위해서는 강제 플래그(-%c)를 사용해야 합니다. 종료합니다."
 
 #: ../general/g.remove/construct_pattern.c:37
 #, c-format
 msgid "%s: Cannot remove or exclude files not in the current mapset."
-msgstr "%s: 현재 지도세트 안에 있지 않은 파일은 제거하거나 배제할 수 없습니다."
+msgstr "%s: 현재 지도 세트 안에 있지 않은 파일은 제거하거나 배제할 수 없습니다."
 
 #: ../general/g.remove/construct_pattern.c:57
 msgid "Illegal filenames not allowed in the name or ignore option."
@@ -24844,7 +24844,7 @@ msgstr ""
 #: ../imagery/i.cluster/main.c:169
 #, c-format
 msgid "Group <%s> not found in current mapset"
-msgstr "현재 지도세트 안에서 그룹 <%s>를 찾을 수 없습니다"
+msgstr "현재 지도 세트 안에서 그룹 <%s>를 찾을 수 없습니다"
 
 #: ../imagery/i.gensig/parse.c:44 ../imagery/i.maxlik/open.c:20
 #: ../imagery/i.smap/parse.c:64 ../imagery/i.gensigset/parse.c:50
@@ -25381,7 +25381,7 @@ msgstr ""
 
 #: ../imagery/i.smap/parse.c:21
 msgid "Generated by i.gensigset"
-msgstr ""
+msgstr "i.gensigset(i.smap에 대한 통계)으로 생성합니다. "
 
 #: ../imagery/i.smap/parse.c:33
 msgid "Name for output raster map holding goodness of fit (lower is better)"
@@ -25646,7 +25646,7 @@ msgstr ""
 
 #: ../imagery/i.albedo/main.c:124
 msgid "Landsat 5+7 (6 input bands:1,2,3,4,5,7)"
-msgstr ""
+msgstr "Landsat 5+7 (6 개의 입력 영상 밴드: 1,2,3,4,5,7)"
 
 #: ../imagery/i.albedo/main.c:128
 msgid "Landsat 8 (7 input bands:1,2,3,4,5,6,7)"
@@ -28328,7 +28328,7 @@ msgstr ""
 
 #: ../misc/m.nviz.image/args.c:149
 msgid "Name of raster map(s) for color"
-msgstr ""
+msgstr "색상을 위한 래스터 지도의 이름"
 
 #: ../misc/m.nviz.image/args.c:155
 msgid "Color value(s)"
@@ -28336,7 +28336,7 @@ msgstr ""
 
 #: ../misc/m.nviz.image/args.c:163
 msgid "Name of raster map(s) for mask"
-msgstr ""
+msgstr "마스크를 위한 래스터 지도의 이름"
 
 #: ../misc/m.nviz.image/args.c:172
 msgid "Name of raster map(s) for transparency"
@@ -28404,7 +28404,7 @@ msgstr ""
 
 #: ../misc/m.nviz.image/args.c:317 ../misc/m.nviz.image/args.c:410
 msgid "Layer number or name for thematic mapping"
-msgstr ""
+msgstr "주제도 제작을 위한 레이어 번호 또는 이름"
 
 #: ../misc/m.nviz.image/args.c:329
 msgid "Vector line width"
@@ -28590,7 +28590,7 @@ msgstr ""
 
 #: ../misc/m.nviz.image/args.c:771
 msgid "Light position (x,y,z model coordinates)"
-msgstr ""
+msgstr "광원의 위치 (x,y,z 모델 좌표)"
 
 #: ../misc/m.nviz.image/args.c:772 ../misc/m.nviz.image/args.c:778
 #: ../misc/m.nviz.image/args.c:787 ../misc/m.nviz.image/args.c:797
@@ -28773,7 +28773,7 @@ msgstr ""
 #: ../misc/m.nviz.image/volume.c:288
 #, c-format
 msgid "Unable to set slice (%d) position of volume %d"
-msgstr "볼륨 %d의 슬라이스 (%d) 위치를 설정할 수 없습니다"
+msgstr "볼륨 %2$d의 슬라이스(%1$d) 위치를 설정할 수 없습니다"
 
 #: ../misc/m.nviz.image/volume.c:294
 #, c-format
@@ -28864,7 +28864,7 @@ msgstr ""
 
 #: ../misc/m.nviz.script/main.c:132
 msgid "Include command in the script to output a KeyFrame file"
-msgstr ""
+msgstr "키프레임 파일을 출력하는 스크립트에 명령어를 포함합니다"
 
 #: ../misc/m.nviz.script/main.c:136
 msgid "Render images off-screen"
@@ -29297,7 +29297,7 @@ msgstr ""
 #: ../db/drivers/ogr/describe.c:186 ../db/drivers/postgres/describe.c:130
 #, c-format
 msgid "Column '%s' : type int8 (bigint) is stored as integer (4 bytes) some data may be damaged"
-msgstr "열 '%s': int8 (bigint) 유형이 (4 바이트) 정수로 저장됩니다, 일부 자료가 훼손될 수 있습니다"
+msgstr "열 '%s': int8(bigint) 유형이 (4 바이트) 정수로 저장됩니다, 일부 자료가 훼손될 수 있습니다"
 
 #: ../db/drivers/ogr/describe.c:212 ../db/drivers/ogr/fetch.c:167
 msgid "Unknown type"
@@ -29976,7 +29976,7 @@ msgstr ""
 
 #: ../vector/v.mkgrid/main.c:105
 msgid "Lower left easting and northing coordinates of map"
-msgstr "지도의 좌측 하단 동거 및 북거"
+msgstr "지도의 좌측 하단 동거(easting) 및 북거(northing)"
 
 #: ../vector/v.mkgrid/main.c:109
 msgid "width,height"
@@ -30032,11 +30032,11 @@ msgstr ""
 
 #: ../vector/v.mkgrid/main.c:241
 msgid "Invalid easting"
-msgstr "무효한 동거"
+msgstr "무효한 동거(easting)"
 
 #: ../vector/v.mkgrid/main.c:244
 msgid "Invalid northing"
-msgstr "무효한 북거"
+msgstr "무효한 북거(northing)"
 
 #: ../vector/v.mkgrid/main.c:309
 msgid "The hexagons will be asymmetrical."
@@ -30142,7 +30142,7 @@ msgstr ""
 
 #: ../vector/v.external.out/args.c:70
 msgid "Native"
-msgstr ""
+msgstr "고유"
 
 #: ../vector/v.external.out/args.c:80
 msgid "Print current status in shell script style"
@@ -30196,7 +30196,7 @@ msgstr ""
 #: ../vector/v.external.out/status.c:25
 #, c-format
 msgid "format: native\n"
-msgstr ""
+msgstr "포맷: 고유\n"
 
 #: ../vector/v.external.out/status.c:80
 msgid "No settings defined"
@@ -30426,7 +30426,7 @@ msgstr ""
 #: ../vector/v.to.rast/support.c:153
 #, c-format
 msgid "Error in color definition column (%s) with cat %d: colorstring [%s]"
-msgstr "cat %2$d를 가진 색상 정의 열 (%1$s) 내에 오류: 색상 문자열 [%3$s]"
+msgstr "cat %2$d를 가진 색상 정의 열(%1$s) 내에 오류: 색상 문자열 [%3$s]"
 
 #: ../vector/v.to.rast/support.c:156
 msgid "Color set to [200:200:200]"
@@ -30435,7 +30435,7 @@ msgstr ""
 #: ../vector/v.to.rast/support.c:161
 #, c-format
 msgid "Error in color definition column (%s), with cat %d"
-msgstr "cat %2$d를 가진 색상 정의 열 (%1$s) 내에 오류"
+msgstr "cat %2$d를 가진 색상 정의 열(%1$s) 내에 오류"
 
 #: ../vector/v.to.rast/support.c:263
 msgid "Label column was not specified, no labels will be written"
@@ -32674,7 +32674,7 @@ msgstr ""
 
 #: ../vector/v.in.lidar/main.c:189 ../vector/v.in.ogr/main.c:256
 msgid "Format: xmin,ymin,xmax,ymax - usually W,S,E,N"
-msgstr ""
+msgstr "포맷: x 최소,y 최소,x 최대,y 최대 - 보통 서,남,동,북"
 
 #: ../vector/v.in.lidar/main.c:221
 msgid "Areas where to import points"
@@ -32944,7 +32944,7 @@ msgstr "다각선에 어떤 범주 번호도 할당하지 않습니다"
 
 #: ../vector/v.build.polylines/main.c:132
 msgid "Assign category number of first line to polyline"
-msgstr "첫번째 선의 범주 번호를 다각선에 할당합니다"
+msgstr "첫 번째 선의 범주 번호를 다각선에 할당합니다"
 
 #: ../vector/v.build.polylines/main.c:133
 msgid "Assign multiple category numbers to polyline"
@@ -33279,7 +33279,7 @@ msgstr ""
 
 #: ../vector/v.surf.rst/main.c:269
 msgid "Name of raster map used as mask"
-msgstr ""
+msgstr "마스크로 쓸 래스터 지도의 이름"
 
 #: ../vector/v.surf.rst/main.c:277 ../vector/v.vol.rst/main.c:269
 msgid "Tension parameter"
@@ -34980,7 +34980,7 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:1929
 #, c-format
 msgid "The snapping threshold %g might be too large."
-msgstr "스냅핑 임계값 %g이 너무 클 지도 모릅니다."
+msgstr "끌어 붙이기 임계값 %g이 너무 큽니다."
 
 #: ../vector/v.in.ogr/main.c:1932
 msgid "Try to reduce the snapping threshold or clean the output manually."
@@ -35378,7 +35378,7 @@ msgstr ""
 
 #: ../vector/v.overlay/main.c:77
 msgid "Layer number or name (vector map A)"
-msgstr ""
+msgstr "레이어 번호 또는 이름(벡터 지도 A)"
 
 #: ../vector/v.overlay/main.c:87
 msgid "Name of input vector map (B)"
@@ -36421,7 +36421,7 @@ msgstr ""
 
 #: ../vector/v.distance/main.c:135
 msgid "Layer number or name (from)"
-msgstr ""
+msgstr "레이어 번호 또는 이름 (from)"
 
 #: ../vector/v.distance/main.c:142
 msgid "Feature type (from)"
@@ -36433,7 +36433,7 @@ msgstr ""
 
 #: ../vector/v.distance/main.c:152
 msgid "Layer number or name (to)"
-msgstr ""
+msgstr "레이어 번호 또는 이름 (to)"
 
 #: ../vector/v.distance/main.c:159
 msgid "Feature type (to)"
@@ -37013,7 +37013,7 @@ msgstr "벡터 지도 <%s>로부터 요소를 복사할 수 없습니다"
 
 #: ../vector/v.net.visibility/main.c:90
 msgid "Lat-long projection"
-msgstr ""
+msgstr "위경도 투영"
 
 #: ../vector/v.out.pov/main.c:49
 msgid "Converts GRASS x,y,z points to POV-Ray x,z,y format."
@@ -38462,7 +38462,7 @@ msgstr ""
 #: ../vector/v.kernel/main.c:301
 #, c-format
 msgid "Standard deviation: %f"
-msgstr "표준편차: %f"
+msgstr "표준 편차: %f"
 
 #: ../vector/v.kernel/main.c:306
 #, c-format
@@ -38504,7 +38504,7 @@ msgstr[0] ""
 #: ../vector/v.kernel/main.c:407
 #, c-format
 msgid "Distances between all points are beyond %e (4 * standard deviation), unable to calculate optimal value."
-msgstr "모든 점들 사이의 거리가 %e보다 큽니다 (4 * 표준편차), 최적의 값을 계산할 수 없습니다."
+msgstr "모든 점들 사이의 거리가 %e보다 큽니다 (4 * 표준 편차), 최적의 값을 계산할 수 없습니다."
 
 #: ../vector/v.kernel/main.c:418
 #, c-format
@@ -38898,7 +38898,7 @@ msgstr ""
 
 #: ../vector/v.edit/args.c:20
 msgid "Name of vector map to edit"
-msgstr ""
+msgstr "편집할 벡터 지도의 이름"
 
 #: ../vector/v.edit/args.c:36
 msgid "Tool"
@@ -39195,7 +39195,7 @@ msgstr "이름:"
 
 #: ../vector/v.info/print.c:320
 msgid "Mapset:"
-msgstr "지도세트:"
+msgstr "지도 세트:"
 
 #: ../vector/v.info/print.c:324
 msgid "Location:"
@@ -39223,7 +39223,7 @@ msgstr "기관:"
 
 #: ../vector/v.info/print.c:344
 msgid "Source date:"
-msgstr "원천 날짜:"
+msgstr "원천 자료 날짜:"
 
 #: ../vector/v.info/print.c:351
 msgid "Timestamp (first layer): "
@@ -39280,31 +39280,31 @@ msgstr "지도 유형"
 
 #: ../vector/v.info/print.c:436
 msgid "level"
-msgstr ""
+msgstr "단계"
 
 #: ../vector/v.info/print.c:443
 msgid "Number of points:"
-msgstr ""
+msgstr "점의 개수:"
 
 #: ../vector/v.info/print.c:445
 msgid "Number of centroids:"
-msgstr ""
+msgstr "도심의 개수:"
 
 #: ../vector/v.info/print.c:450
 msgid "Number of lines:"
-msgstr ""
+msgstr "선의 개수:"
 
 #: ../vector/v.info/print.c:452
 msgid "Number of boundaries:"
-msgstr ""
+msgstr "경계의 개수:"
 
 #: ../vector/v.info/print.c:457
 msgid "Number of areas:"
-msgstr ""
+msgstr "면의 개수:"
 
 #: ../vector/v.info/print.c:459
 msgid "Number of islands:"
-msgstr ""
+msgstr "섬의 개수:"
 
 #: ../vector/v.info/print.c:465
 msgid "Number of faces:"
@@ -39324,19 +39324,19 @@ msgstr ""
 
 #: ../vector/v.info/print.c:481
 msgid "Map is 3D:"
-msgstr ""
+msgstr "3차원 지도:"
 
 #: ../vector/v.info/print.c:482
 msgid "Yes"
-msgstr ""
+msgstr "예"
 
 #: ../vector/v.info/print.c:482
 msgid "No"
-msgstr ""
+msgstr "아니오"
 
 #: ../vector/v.info/print.c:485
 msgid "Number of dblinks:"
-msgstr ""
+msgstr "DB 연결 개수:"
 
 #: ../vector/v.info/print.c:498
 msgid "invalid"
@@ -39352,11 +39352,11 @@ msgstr ""
 
 #: ../vector/v.info/print.c:539
 msgid "Digitization threshold"
-msgstr ""
+msgstr "디지털화 임계값"
 
 #: ../vector/v.info/print.c:541
 msgid "Comment"
-msgstr ""
+msgstr "주석"
 
 #: ../vector/v.info/main.c:42
 msgid "attribute columns"
@@ -39364,7 +39364,7 @@ msgstr "속성 열"
 
 #: ../vector/v.info/main.c:46
 msgid "Outputs basic information about a vector map."
-msgstr "벡터 지도에 대한 기본적인 정보를 출력합니다."
+msgstr "벡터 지도에 관한 기본적인 정보를 출력합니다."
 
 #: ../vector/v.info/level1.c:29
 #, c-format
@@ -39746,7 +39746,7 @@ msgstr ""
 #: ../vector/v.vect.stats/main.c:280
 #, c-format
 msgid "Vector map <%s> is not in user mapset and cannot be updated"
-msgstr "벡터 지도 <%s>가 사용자 지도세트 내에 존재하지 않으므로 갱신할 수 없습니다"
+msgstr "벡터 지도 <%s>가 사용자 지도 세트 내에 존재하지 않으므로 갱신할 수 없습니다"
 
 #: ../vector/v.vect.stats/main.c:346
 msgid "count_column is required to upload point counts"
@@ -40348,7 +40348,7 @@ msgstr ""
 #: ../vector/v.lrs/v.lrs.create/main.c:780
 #, c-format
 msgid "Unable to guess direction for the line (cat %d), line skip."
-msgstr "(cat %d) 선을 위한 방향을 추측할 수 없습니다, 선을 건너뜁니다."
+msgstr "선(cat %d)을 위한 방향을 추측할 수 없습니다, 선을 건너뜁니다."
 
 #: ../vector/v.lrs/v.lrs.create/main.c:784
 #, c-format
@@ -40414,7 +40414,7 @@ msgstr ""
 #: ../vector/v.net/args.c:25 ../vector/v.net/args.c:71
 #: ../vector/v.net/args.c:93 ../vector/v.net/args.c:100
 msgid "Nodes"
-msgstr ""
+msgstr "교점"
 
 #: ../vector/v.net/args.c:40
 msgid "new point is placed on each node (line end) if doesn't exist"
@@ -41094,7 +41094,7 @@ msgstr ""
 #: ../vector/v.to.db/main.c:56
 #, c-format
 msgid "Vector map <%s> not found in the current mapset. Unable to modify vector maps from different mapsets."
-msgstr "벡터 지도 <%s>를 현재 지도세트 내에서 찾을 수 없습니다. 다른 지도세트 내에 있는 벡터 지도는 수정할 수 없습니다."
+msgstr "벡터 지도 <%s>를 현재 지도 세트 내에서 찾을 수 없습니다. 다른 지도 세트 내에 있는 벡터 지도는 수정할 수 없습니다."
 
 #: ../vector/v.to.db/main.c:73 ../vector/v.to.db/main.c:80
 #: ../vector/v.to.db/update.c:30 ../vector/v.to.db/update.c:34
@@ -41211,7 +41211,7 @@ msgstr ""
 
 #: ../vector/v.to.db/parse.c:36
 msgid "Layer number or name (write to)"
-msgstr ""
+msgstr "레이어 번호 또는 이름(쓰기용)"
 
 #: ../vector/v.to.db/parse.c:43
 msgid "For coor valid point/centroid, for length valid line/boundary"
@@ -41573,7 +41573,7 @@ msgstr "제거할 기존 마스크가 없습니다"
 
 #: ../scripts/r.mask/r.mask.py:123
 msgid "MASK already found in current mapset. Delete first or overwrite."
-msgstr "현재 지도세트 안에 마스크가 이미 존재합니다. 먼저 삭제하거나 덮어쓰세요."
+msgstr "현재 지도 세트 안에 마스크가 이미 존재합니다. 먼저 삭제하거나 덮어쓰세요."
 
 #: ../scripts/r.mask/r.mask.py:125
 msgid "MASK already exists and will be overwritten"

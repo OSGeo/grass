@@ -139,12 +139,12 @@ msgstr ""
 #: ../lib/manage/do_copy.c:43
 #, c-format
 msgid "Copy %s <%s> to current mapset as <%s>"
-msgstr ""
+msgstr "Copia %s <%s> para o mapset atual como <%s>"
 
 #: ../lib/manage/do_copy.c:50 ../lib/manage/do_copy.c:67
 #, c-format
 msgid "Unable to copy <%s> to current mapset as <%s>"
-msgstr ""
+msgstr "Não foi possível copiar <%s> para o mapset atual como <%s>"
 
 #: ../lib/manage/do_copy.c:72
 #, c-format
@@ -199,12 +199,12 @@ msgstr ""
 
 #: ../lib/temporal/lib/default_name.c:69
 msgid "Programmer error - only SQLite driver is currently supported"
-msgstr ""
+msgstr "Erro do programador - apenas driver SQLite é suportado atualmente."
 
 #: ../lib/temporal/lib/connect.c:110
 #, c-format
 msgid "Mapset <%s> does not exist."
-msgstr "Mapset <1%s> não existe."
+msgstr "Mapset <%s> não existe."
 
 #: ../lib/rowio/setup.c:61 ../lib/rowio/setup.c:67 ../lib/segment/open.c:118
 #: ../lib/rst/interp_float/segmen2d_parallel.c:78
@@ -529,7 +529,7 @@ msgstr ""
 #: ../lib/raster/color_write.c:96 ../lib/vector/Vlib/color_write.c:91
 #, c-format
 msgid "Unable to create <%s> file for map <%s>"
-msgstr ""
+msgstr "Não foi possível criar o arquivo <%s> para o mapa <%s>"
 
 #: ../lib/raster/get_row.c:35 ../lib/raster/get_row.c:906
 #, c-format
@@ -844,7 +844,7 @@ msgstr ""
 #: ../lib/raster/gdal.c:515
 #, c-format
 msgid "Unable to create <%s> dataset using memory driver"
-msgstr ""
+msgstr "Não foi possível criar conjunto de dados <%s> usando driver da memória"
 
 #: ../lib/raster/gdal.c:519
 #, c-format
@@ -885,7 +885,7 @@ msgstr ""
 
 #: ../lib/raster/get_cellhd.c:71
 msgid "whose header file can't be opened."
-msgstr ""
+msgstr "cujo cabeçalho de arquivo não pode ser aberto."
 
 #: ../lib/raster/get_cellhd.c:76
 #, c-format
@@ -930,17 +930,17 @@ msgstr ""
 #: ../lib/raster/init.c:109
 #, c-format
 msgid "Unknown compression method <%s>, using default %s"
-msgstr ""
+msgstr "Método de compressão desconhecido <%s>, usando padrão %s"
 
 #: ../lib/raster/init.c:113
 #, c-format
 msgid "No compression is not supported for GRASS raster maps, using default %s"
-msgstr ""
+msgstr "A compressão não é suportada para mapas raster GRASS, usando padrão %s"
 
 #: ../lib/raster/init.c:120
 #, c-format
 msgid "This GRASS version does not support %s compression, using default %s"
-msgstr ""
+msgstr "Esta versão GRASS não suporta compressão %s, usando padrão %s"
 
 #: ../lib/raster/null_val.c:64
 msgid "EmbedGivenNulls: wrong data type"
@@ -1082,7 +1082,7 @@ msgstr ""
 #: ../lib/vector/Vlib/net_build.c:971
 #, c-format
 msgid "Database connection not defined for layer %d"
-msgstr ""
+msgstr "Conexão do banco de dados não definida para a camada %d"
 
 #: ../lib/ogsf/gp3.c:208 ../lib/ogsf/gv3.c:350
 #: ../lib/rst/interp_float/vinput2d.c:109 ../lib/db/dbmi_client/db.c:46
@@ -1096,7 +1096,7 @@ msgstr ""
 #: ../lib/vector/neta/utils.c:119 ../lib/vector/neta/timetables.c:133
 #, c-format
 msgid "Unable to open database <%s> by driver <%s>"
-msgstr ""
+msgstr "Não foi possível abrir banco de dados <%s> pelo driver <%s>"
 
 #: ../lib/ogsf/gp3.c:211
 #, c-format
@@ -1250,7 +1250,7 @@ msgstr ""
 
 #: ../lib/gpde/n_parse_options.c:106
 msgid "The calculation time in seconds"
-msgstr ""
+msgstr "Cálculo do tempo em segundos"
 
 #: ../lib/gpde/n_arrays_io.c:93
 #, c-format
@@ -1283,12 +1283,12 @@ msgstr ""
 #: ../lib/gpde/n_arrays_io.c:422
 #, c-format
 msgid "Write 3d array to g3d map <%s>"
-msgstr ""
+msgstr "Escreve array 3d para o mapa g3d <%s>"
 
 #: ../lib/gpde/n_gwflow.c:436 ../lib/gpde/n_gwflow.c:715
 #, c-format
 msgid "The total sum of the water budget: %g\n"
-msgstr ""
+msgstr "Somatório total do balanço hídrico: %g\n"
 
 #: ../lib/gpde/n_gwflow.c:438 ../lib/gpde/n_gwflow.c:717
 #, c-format
@@ -1718,7 +1718,7 @@ msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2154
 msgid "Only maps from the same mapset can be registered"
-msgstr ""
+msgstr "Apenas mapas do mesmo mapset podem ser registrados"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2159
 #, python-format
@@ -1752,7 +1752,7 @@ msgstr ""
 #: ../lib/python/temporal/abstract_map_dataset.py:520
 #, python-format
 msgid "Unable to update dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
-msgstr ""
+msgstr "Não foi possível atualizar o conjunto de dados <%(ds)s> do tipo %(type)s no banco de dados temporal. O mapset do conjunto de dados não coincide com o mapset atual"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2291
 #, python-format
@@ -1762,7 +1762,7 @@ msgstr ""
 #: ../lib/python/temporal/abstract_dataset.py:386
 #, python-format
 msgid "Unable to insert dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
-msgstr ""
+msgstr "Não foi possível inserir o conjunto de dados <%(ds)s> do tipo %(type)s no banco de dados temporal. O mapset do conjunto de dados não coincide com o mapset atual"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:350
 #, python-format
@@ -1833,7 +1833,7 @@ msgstr ""
 #: ../lib/python/temporal/abstract_map_dataset.py:909
 #, python-format
 msgid "Unable to unregister dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the dataset does not match the current mapset"
-msgstr ""
+msgstr "Não foi possível desfazer o registro do conjunto de dados <%(ds)s> do tipo %(type)s do banco de dados temporal. O mapset do conjunto de dados Não coincide com mapset atual"
 
 #: ../lib/python/temporal/register.py:82 ../lib/python/temporal/register.py:85
 #, python-format
@@ -2060,7 +2060,7 @@ msgstr ""
 #: ../lib/python/temporal/stds_import.py:306
 #, python-format
 msgid "Unable to create default temporal database in new location %s"
-msgstr ""
+msgstr "Não foi possível criar banco de dados temporal padrão em nova location %s"
 
 #: ../lib/python/temporal/stds_import.py:380
 #, python-format
@@ -2078,7 +2078,7 @@ msgstr ""
 #: ../lib/python/temporal/stds_import.py:405
 #, python-format
 msgid "Unable to find GeoTIFF raster file <%s> in archive."
-msgstr ""
+msgstr "Não foi possível encontrar o arquivo raster GeoTIFF <%s> no arquivo."
 
 #: ../lib/python/temporal/stds_import.py:411
 #, python-format
@@ -2283,12 +2283,12 @@ msgstr ""
 #: ../lib/python/temporal/temporal_algebra.py:2426
 #, python-format
 msgid "%s map <%s> not found in GRASS spatial database"
-msgstr ""
+msgstr "%s mapa <%s> não encontrado no banco de dados espacial GRASS"
 
 #: ../lib/python/temporal/sampling.py:95 ../lib/python/temporal/sampling.py:100
 #, python-format
 msgid "Dataset <%s> not found in temporal database"
-msgstr ""
+msgstr "Conjunto de dados <%s> não encontrado no banco de dados temporal"
 
 #: ../lib/python/temporal/extract.py:60
 msgid "You need to specify the base name of new created maps"
@@ -2458,7 +2458,7 @@ msgstr ""
 
 #: ../lib/python/temporal/base.py:380
 msgid "Object not found in the temporal database"
-msgstr ""
+msgstr "Objeto não encontrado no banco de dados temporal"
 
 #: ../lib/python/temporal/base.py:462 ../lib/python/temporal/base.py:513
 msgid "Missing identifier"
@@ -2466,7 +2466,7 @@ msgstr ""
 
 #: ../lib/python/temporal/base.py:621
 msgid "Wrong identifier, the mapset is missing"
-msgstr ""
+msgstr "Identificador errado, o mapset está faltando"
 
 #: ../lib/python/temporal/space_time_datasets.py:251
 #, python-format
@@ -2579,7 +2579,7 @@ msgstr ""
 #: ../lib/python/temporal/core.py:778
 #, python-format
 msgid "Creating temporal database: %s"
-msgstr ""
+msgstr "Criando banco de dados temporal: %s"
 
 #: ../lib/python/temporal/core.py:787
 #, python-format
@@ -2731,7 +2731,7 @@ msgstr ""
 #: ../lib/python/script/vector.py:88
 #, python-format
 msgid "Database connection not defined for layer %s"
-msgstr ""
+msgstr "Conexão do banco de dados não definida para a camada %s"
 
 #: ../lib/python/script/vector.py:230
 #, python-format
@@ -2782,7 +2782,7 @@ msgstr ""
 
 #: ../lib/python/script/setup.py:229
 msgid "Cleaning up default sqlite database ..."
-msgstr ""
+msgstr "Limpando banco de dados sqlite padrão ..."
 
 #: ../lib/python/script/setup.py:247 ../lib/init/grass.py:1844
 msgid "Cleaning up temporary files..."
@@ -3024,19 +3024,19 @@ msgstr ""
 
 #: ../lib/raster3d/open.c:20
 msgid "Rast3d_open_cell_old_no_header: error in Rast3d_mask_open_old"
-msgstr ""
+msgstr "Rast3d_open_cell_old_no_header: erro em Rast3d_mask_open_old"
 
 #: ../lib/raster3d/open.c:26
 msgid "Rast3d_open_cell_old_no_header: error in Rast3d_malloc"
-msgstr ""
+msgstr "Rast3d_open_cell_old_no_header: erro em Rast3d_malloc"
 
 #: ../lib/raster3d/open.c:37
 msgid "Rast3d_open_cell_old_no_header: error in G_open_old"
-msgstr ""
+msgstr "Rast3d_open_cell_old_no_header: erro em G_open_old"
 
 #: ../lib/raster3d/open.c:93
 msgid "Rast3d_open_cell_old: error in Rast3d_open_cell_old_no_header"
-msgstr ""
+msgstr "Rast3d_open_cell_old: erro em Rast3d_open_cell_old_no_header"
 
 #: ../lib/raster3d/open.c:98
 msgid "Rast3d_open_cell_old: can't rewind file"
@@ -3081,7 +3081,7 @@ msgstr ""
 #: ../lib/raster3d/open.c:233
 #, c-format
 msgid "map <%s> is not in the current mapset"
-msgstr ""
+msgstr "mapa <%s> não está no mapset atual"
 
 #: ../lib/raster3d/open.c:243
 msgid "Rast3d_open_cell_new: could not open file"
@@ -3121,7 +3121,7 @@ msgstr ""
 #: ../lib/raster3d/close.c:105 ../lib/raster3d/close.c:191
 #, c-format
 msgid "Unable to write header for 3D raster map <%s>"
-msgstr ""
+msgstr "Não foi possível escrever o cabeçalho para o mapa raster 3D <%s>"
 
 #: ../lib/raster3d/close.c:47
 #, c-format
@@ -3148,11 +3148,11 @@ msgstr ""
 #: ../lib/raster3d/close.c:110 ../lib/raster3d/close.c:153
 #, c-format
 msgid "Unable to create 3D raster map <%s>"
-msgstr ""
+msgstr "Não foi possível criar o mapa raster 3D <%s>"
 
 #: ../lib/raster3d/close.c:169
 msgid "Error in cache"
-msgstr ""
+msgstr "Erro de cache"
 
 #: ../lib/raster3d/history.c:43
 #, c-format
@@ -3282,7 +3282,7 @@ msgstr ""
 #: ../lib/imagery/iclass.c:83
 #, c-format
 msgid "No areas in category %d"
-msgstr ""
+msgstr "Sem áreas na categoria %d"
 
 #: ../lib/imagery/iclass.c:127
 #, c-format
@@ -3297,7 +3297,7 @@ msgstr ""
 #: ../lib/imagery/iclass.c:143
 #, c-format
 msgid "Subgroup <%s> does not have enough files (it has %d files)"
-msgstr ""
+msgstr "Subgrupo <%s> não tem arquivos suficientes (tem %d arquivos)"
 
 #: ../lib/imagery/iclass.c:147
 #, c-format
@@ -3515,7 +3515,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:220 ../lib/gis/parser.c:633
 msgid "ERROR"
-msgstr ""
+msgstr "ERRO"
 
 #: ../lib/init/grass.py:221
 msgid "Exiting..."
@@ -3528,7 +3528,7 @@ msgstr ""
 #: ../lib/init/grass.py:370 ../lib/gis/parser_html.c:141
 #: ../lib/gis/parser_rest.c:146
 msgid "Flags"
-msgstr ""
+msgstr "Flags"
 
 #: ../lib/init/grass.py:371
 msgid "print this help message"
@@ -3540,7 +3540,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:373
 msgid "create given database, location or mapset if it doesn't exist"
-msgstr ""
+msgstr "cria determinado banco de dados, location ou mapset se não existir"
 
 #: ../lib/init/grass.py:374
 msgid "exit after creation of location or mapset. Only with -c flag"
@@ -3577,7 +3577,7 @@ msgstr ""
 #: ../lib/init/grass.py:384 ../lib/gis/parser_html.c:189
 #: ../lib/gis/parser_rest.c:179
 msgid "Parameters"
-msgstr ""
+msgstr "Parâmetros"
 
 #: ../lib/init/grass.py:385
 msgid "initial GRASS GIS database directory"
@@ -3585,7 +3585,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:386
 msgid "directory containing Locations"
-msgstr ""
+msgstr "diretório contendo Locations"
 
 #: ../lib/init/grass.py:387
 msgid "initial GRASS Location"
@@ -3597,7 +3597,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:389
 msgid "initial GRASS Mapset"
-msgstr ""
+msgstr "Mapset GRASS inicial"
 
 #: ../lib/init/grass.py:390
 msgid "fully qualified initial Mapset directory"
@@ -3666,27 +3666,27 @@ msgstr ""
 #: ../lib/init/grass.py:444
 #, python-format
 msgid "Failed to create configuration directory '%s' with error: %s"
-msgstr ""
+msgstr "Falhou na criação do diretório de configuração '%s' com erro: %s"
 
 #: ../lib/init/grass.py:487
 #, python-format
 msgid "Unable to create temporary directory <grass7-%(user)s-%(lock)s>! Exiting."
-msgstr ""
+msgstr "Não foi possível criar diretório temporário <grass7-%(user)s-%(lock)s>! Saindo."
 
 #: ../lib/init/grass.py:540
 #, python-brace-format
 msgid "Invalid line in RC file ({file}): '{line}' ({error})\n"
-msgstr ""
+msgstr "Linha inválida no arquivo RC ({arquivo}): '{linha}' ({erro})\n"
 
 #: ../lib/init/grass.py:546
 #, python-brace-format
 msgid "Empty RC file ({file})"
-msgstr ""
+msgstr "Arquivo RC vazio ({arquivo})"
 
 #: ../lib/init/grass.py:596
 #, python-format
 msgid "GUI <%s> not supported in this version"
-msgstr ""
+msgstr "GUI <%s> não suportado nesta versão"
 
 #: ../lib/init/grass.py:758
 msgid "Searched for a web browser, but none found"
@@ -3698,10 +3698,13 @@ msgid ""
 "Please check your GRASS_PYTHON environment variable.\n"
 "Use the -help option for details.\n"
 msgstr ""
+"O comando python não funciona como esperado!\n"
+"Por favor verifique seu ambiente de variável GRASS_PYTHON.\n"
+"Use a opção -help para obter mais detalhes.\n"
 
 #: ../lib/init/grass.py:802
 msgid "GRASS GUI not found. Please check your installation."
-msgstr ""
+msgstr "GRASS GUI não encontrado. Por favor verifique sua instalação."
 
 #: ../lib/init/grass.py:804
 msgid ""
@@ -3724,7 +3727,7 @@ msgstr ""
 #: ../lib/init/grass.py:909 ../lib/gis/make_mapset.c:66
 #, c-format, python-format
 msgid "Location <%s> doesn't exist"
-msgstr ""
+msgstr "Localização <%s> não existe"
 
 #: ../lib/init/grass.py:911
 #, python-format
@@ -3734,7 +3737,7 @@ msgstr ""
 #: ../lib/init/grass.py:914
 #, python-format
 msgid "<%s> is not a valid GRASS Location because PERMANENT is not a directory"
-msgstr ""
+msgstr "<%s> não é uma GRASS Location porque PERMANENT não é um diretório"
 
 #: ../lib/init/grass.py:919
 #, python-format
@@ -3749,17 +3752,17 @@ msgstr ""
 #: ../lib/init/grass.py:928
 #, python-format
 msgid "<%s> is not a GRASS Mapset because it is not a directory"
-msgstr ""
+msgstr "<%s> não é um Mapset GRASS porque não é um diretório"
 
 #: ../lib/init/grass.py:931
 #, python-format
 msgid "<%s> is not a valid GRASS Mapset because it does not have a WIND file"
-msgstr ""
+msgstr "<%s> não é um Mapset GRASS válido porque não tem um arquivo WIND"
 
 #: ../lib/init/grass.py:935
 #, python-format
 msgid "<%s> is not a valid GRASS Mapset because its WIND file is not readable"
-msgstr ""
+msgstr "<%s> não é um Mapset GRASS válido porque não é possível ler seu arquivo WIND"
 
 #: ../lib/init/grass.py:938
 #, python-brace-format
@@ -3809,7 +3812,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:1090
 msgid "GRASS GIS database directory, location and mapset not set properly. Use GUI or command line to set them."
-msgstr ""
+msgstr "Diretório do banco de dados GRASS GIS, location e mapset não definidos de modo apropriado. Use GUI ou a linha de comando para defini-los."
 
 #: ../lib/init/grass.py:1115
 #, python-format
@@ -3858,13 +3861,13 @@ msgstr ""
 #: ../lib/init/grass.py:1412
 #, python-format
 msgid "Path '%s' not accessible."
-msgstr ""
+msgstr "Caminho '%s' não acessível."
 
 #. GTC %s is mapset's folder path
 #: ../lib/init/grass.py:1417
 #, python-format
 msgid "You are not the owner of '%s'."
-msgstr ""
+msgstr "Você não é o proprietário de '%s'."
 
 #: ../lib/init/grass.py:1425
 #, python-format
@@ -3926,21 +3929,21 @@ msgstr ""
 #: ../lib/init/grass.py:1603
 #, python-format
 msgid "Execution of <%s> finished."
-msgstr ""
+msgstr "Execução de <%s> terminou."
 
 #: ../lib/init/grass.py:1633
 #, python-brace-format
 msgid "Unable to close GUI. {0}"
-msgstr ""
+msgstr "Não foi possível fechar a GUI. {0}"
 
 #: ../lib/init/grass.py:1661
 #, python-format
 msgid "Welcome to GRASS GIS %s"
-msgstr ""
+msgstr "Bem-vindo ao GRASS GIS %s"
 
 #: ../lib/init/grass.py:1683
 msgid "GRASS GIS homepage:"
-msgstr ""
+msgstr "GRASS GIS homepage:"
 
 #. GTC Running through: SHELL NAME
 #: ../lib/init/grass.py:1685
@@ -3953,19 +3956,19 @@ msgstr ""
 
 #: ../lib/init/grass.py:1688
 msgid "See the licence terms with:"
-msgstr ""
+msgstr "Veja os termos de licença com:"
 
 #: ../lib/init/grass.py:1689
 msgid "See citation options with:"
-msgstr ""
+msgstr "Veja opções de citação com:"
 
 #: ../lib/init/grass.py:1692
 msgid "If required, restart the GUI with:"
-msgstr ""
+msgstr "Caso necessário, reinicie o GUI com:"
 
 #: ../lib/init/grass.py:1694
 msgid "Start the GUI with:"
-msgstr ""
+msgstr "Inicie o GUI com:"
 
 #: ../lib/init/grass.py:1696
 msgid "When ready to quit enter:"
@@ -4695,25 +4698,25 @@ msgstr ""
 #: ../lib/gis/lrand48.c:84
 #, c-format
 msgid "gettimeofday failed: %s"
-msgstr ""
+msgstr "gettimeofday falhou: %s"
 
 #: ../lib/gis/lrand48.c:114
 msgid "Pseudo-random number generator not seeded"
-msgstr ""
+msgstr "Gerador de números pseudo-aleatórios não foi semeado"
 
 #: ../lib/gis/cmprlz4.c:89 ../lib/gis/cmprlz4.c:156 ../lib/gis/cmprbzip.c:104
 #: ../lib/gis/cmprbzip.c:183 ../lib/gis/cmprzstd.c:102
 #: ../lib/gis/cmprzstd.c:176 ../lib/gis/cmprzlib.c:100
 #: ../lib/gis/cmprzlib.c:179 ../lib/gis/compress.c:335
 msgid "No source buffer"
-msgstr ""
+msgstr "Sem buffer de origem"
 
 #: ../lib/gis/cmprlz4.c:92 ../lib/gis/cmprlz4.c:159 ../lib/gis/cmprbzip.c:107
 #: ../lib/gis/cmprbzip.c:186 ../lib/gis/cmprzstd.c:105
 #: ../lib/gis/cmprzstd.c:179 ../lib/gis/cmprzlib.c:103
 #: ../lib/gis/cmprzlib.c:182
 msgid "No destination buffer"
-msgstr ""
+msgstr "Sem buffer de destino"
 
 #: ../lib/gis/cmprlz4.c:99 ../lib/gis/cmprlz4.c:166 ../lib/gis/cmprbzip.c:114
 #: ../lib/gis/cmprbzip.c:193 ../lib/gis/cmprzstd.c:112
@@ -4721,7 +4724,7 @@ msgstr ""
 #: ../lib/gis/cmprzlib.c:189 ../lib/gis/compress.c:337
 #, c-format
 msgid "Invalid source buffer size %d"
-msgstr ""
+msgstr "Buffer de origem com tamanho inválido %d"
 
 #: ../lib/gis/cmprlz4.c:101 ../lib/gis/cmprlz4.c:168 ../lib/gis/cmprbzip.c:116
 #: ../lib/gis/cmprbzip.c:195 ../lib/gis/cmprzstd.c:114
@@ -4729,7 +4732,7 @@ msgstr ""
 #: ../lib/gis/cmprzlib.c:191 ../lib/gis/compress.c:257
 #, c-format
 msgid "Invalid destination buffer size %d"
-msgstr ""
+msgstr "Buffer de destino com tamanho inválido %d"
 
 #: ../lib/gis/cmprlz4.c:121
 msgid "LZ4 compression error"
@@ -4743,7 +4746,7 @@ msgstr "Erro na descompactação LZ4"
 #: ../lib/gis/cmprzlib.c:215
 #, c-format
 msgid "Got uncompressed size %d, expected %d"
-msgstr ""
+msgstr "Conseguiu tamanho não comprimido de %d, esperado era %d"
 
 #: ../lib/gis/cmprbzip.c:97 ../lib/gis/cmprbzip.c:176
 msgid "GRASS needs to be compiled with BZIP2 for BZIP2 compression"
@@ -4766,47 +4769,47 @@ msgstr ""
 
 #: ../lib/gis/parser_html.c:57 ../lib/gis/parser_rest.c:60
 msgid "NAME"
-msgstr ""
+msgstr "NOME"
 
 #: ../lib/gis/parser_html.c:70 ../lib/gis/parser_rest.c:73
 msgid "KEYWORDS"
-msgstr ""
+msgstr "PALAVRAS CHAVE"
 
 #: ../lib/gis/parser_html.c:75 ../lib/gis/parser_rest.c:78
 msgid "SYNOPSIS"
-msgstr ""
+msgstr "SINOPSE"
 
 #: ../lib/gis/parser_html.c:167 ../lib/gis/parser_rest.c:164
 #: ../lib/gis/parser_help.c:215 ../lib/gis/parser_interface.c:329
 msgid "Allow output files to overwrite existing files"
-msgstr ""
+msgstr "Aceitar que os arquivos de saída substituam os arquivos existentes."
 
 #: ../lib/gis/parser_html.c:171 ../lib/gis/parser_help.c:217
 #: ../lib/gis/parser_interface.c:337
 msgid "Print usage summary"
-msgstr ""
+msgstr "Imprimir sumário de uso"
 
 #: ../lib/gis/parser_html.c:174 ../lib/gis/parser_rest.c:168
 #: ../lib/gis/parser_help.c:218 ../lib/gis/parser_interface.c:344
 msgid "Verbose module output"
-msgstr ""
+msgstr "Módulo de saída detalhado"
 
 #: ../lib/gis/parser_html.c:177 ../lib/gis/parser_rest.c:171
 #: ../lib/gis/parser_help.c:219 ../lib/gis/parser_interface.c:351
 msgid "Quiet module output"
-msgstr ""
+msgstr "Módulo de saída silencioso"
 
 #: ../lib/gis/parser_html.c:180 ../lib/gis/parser_help.c:221
 msgid "Force launching GUI dialog"
-msgstr ""
+msgstr "Forçando abertura da caixa de diálogo"
 
 #: ../lib/gis/parser_html.c:233 ../lib/gis/parser_rest.c:223
 msgid "Options"
-msgstr ""
+msgstr "Opções"
 
 #: ../lib/gis/parser_html.c:239 ../lib/gis/parser_rest.c:230
 msgid "Default"
-msgstr ""
+msgstr "Padrão"
 
 #: ../lib/gis/open.c:68
 #, c-format
@@ -4855,7 +4858,7 @@ msgstr ""
 
 #: ../lib/gis/parser.c:347
 msgid "Bug in UI description. Missing module description"
-msgstr ""
+msgstr "Problema na descrição UI. Falta a descrição do módulo"
 
 #: ../lib/gis/parser.c:357
 msgid "Bug in UI description. Missing option key"
@@ -4869,12 +4872,12 @@ msgstr ""
 #: ../lib/gis/parser.c:361
 #, c-format
 msgid "Bug in UI description. Description for option <%s> missing"
-msgstr ""
+msgstr "Problema na descrição UI. Falta a descrição para a opção <%s>"
 
 #: ../lib/gis/parser.c:413
 #, c-format
 msgid "Bug in UI description. Option '%s' in <%s> does not exist"
-msgstr ""
+msgstr "Problema na descrição UI. A opção '%s' em <%s> não existe"
 
 #: ../lib/gis/parser.c:537
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
@@ -4891,50 +4894,50 @@ msgstr ""
 #: ../lib/gis/parser.c:597
 #, c-format
 msgid "Sorry <%s> is not a valid option"
-msgstr ""
+msgstr "Desculpe <%s> não é uma opção válida"
 
 #: ../lib/gis/parser.c:610
 msgid "Your installation doesn't include GUI, exiting."
-msgstr ""
+msgstr "Sua instalação não possui GUI, saindo."
 
 #: ../lib/gis/parser.c:961
 msgid "Unable to determine program name"
-msgstr ""
+msgstr "Não foi possível determinar o nome do programa"
 
 #: ../lib/gis/parser.c:983 ../lib/gis/parser.c:1002
 #, c-format
 msgid "%s: Sorry, <%c> is not a valid flag"
-msgstr ""
+msgstr "%s: Desculpe, <%c> não é uma flag válida"
 
 #: ../lib/gis/parser.c:1132
 #, c-format
 msgid "%s: Sorry, <%s=> is ambiguous"
-msgstr ""
+msgstr "%s: Desculpe, <%s=> é ambíguo"
 
 #: ../lib/gis/parser.c:1135
 #, c-format
 msgid "Option <%s=> matches"
-msgstr ""
+msgstr "Opção <%s=> coincide"
 
 #: ../lib/gis/parser.c:1153
 #, c-format
 msgid "Please update the usage of <%s>: option <%s> has been renamed to <%s>"
-msgstr ""
+msgstr "Por favor atualize o uso de <%s>: a opção <%s> foi renomeada para <%s>"
 
 #: ../lib/gis/parser.c:1166
 #, c-format
 msgid "%s: Sorry, <%s> is not a valid parameter"
-msgstr ""
+msgstr "%s: Desculpe, <%s> não é um parâmetro válido"
 
 #: ../lib/gis/parser.c:1172 ../lib/gis/parser.c:1418
 #, c-format
 msgid "<%s> is an abbreviation for <%s>"
-msgstr ""
+msgstr "<%s> é uma abreviação para <%s>"
 
 #: ../lib/gis/parser.c:1177
 #, c-format
 msgid "Option <%s> does not accept multiple answers"
-msgstr ""
+msgstr "Opção <%s> não aceita multiplas respostas"
 
 #: ../lib/gis/parser.c:1249
 #, c-format
@@ -4942,6 +4945,8 @@ msgid ""
 "Illegal range syntax for parameter <%s>\n"
 "\tPresented as: %s"
 msgstr ""
+"Intervalo ilegal para o parâmetro <%s>\n"
+"\tApresentado como: %s"
 
 #: ../lib/gis/parser.c:1255
 #, c-format
@@ -4949,11 +4954,13 @@ msgid ""
 "Value <%s> out of range for parameter <%s>\n"
 "\tLegal range: %s"
 msgstr ""
+"Valor <%s> fora do intervalo para o parâmetro <%s>\n"
+"\tIntervalo possível: %s"
 
 #: ../lib/gis/parser.c:1261
 #, c-format
 msgid "Missing value for parameter <%s>"
-msgstr ""
+msgstr "Valor faltante para o parâmetro <%s>"
 
 #: ../lib/gis/parser.c:1267
 #, c-format
@@ -4961,6 +4968,8 @@ msgid ""
 "Value <%s> ambiguous for parameter <%s>\n"
 "\tValid options: %s"
 msgstr ""
+"O valor <%s> é ambíguo para o parâmetro <%s>\n"
+"\tOpções válidas: %s"
 
 #: ../lib/gis/parser.c:1440
 #, c-format
@@ -4968,6 +4977,8 @@ msgid ""
 "Required parameter <%s> not set:\n"
 "\t(%s)"
 msgstr ""
+"Parâmetro requerido <%s> não foi definido:\n"
+"\t(%s)"
 
 #: ../lib/gis/parser.c:1532
 #, c-format
@@ -4975,6 +4986,8 @@ msgid ""
 "Option <%s> must be provided in multiples of %d\n"
 "\tYou provided %d item(s): %s"
 msgstr ""
+"Opção <%s> deve ser fornecida em multiplos de %d\n"
+"\tVocê forneceu %d item(s): %s"
 
 #: ../lib/gis/parser.c:1606 ../lib/gis/error.c:363
 #, c-format
@@ -4984,32 +4997,32 @@ msgstr "ERRO:"
 #: ../lib/gis/parser.c:1608 ../lib/gis/parser.c:1615
 #, c-format
 msgid "option <%s>: <%s> exists. To overwrite, use the --overwrite flag"
-msgstr ""
+msgstr "opção <%s>: <%s> existe. Para substituir, use a flag --overwrite"
 
 #: ../lib/gis/parser.c:1725
 #, c-format
 msgid "%s= is not a separator option"
-msgstr ""
+msgstr "%s= não é uma opção de separador"
 
 #: ../lib/gis/parser.c:1728
 #, c-format
 msgid "No separator given for %s="
-msgstr ""
+msgstr "Sem separador para %s="
 
 #: ../lib/gis/parser.c:1790 ../lib/gis/parser.c:1807
 #, c-format
 msgid "%s= is not a file option"
-msgstr ""
+msgstr "%s= não é uma opção de arquivo"
 
 #: ../lib/gis/parser.c:1792
 #, c-format
 msgid "Opening multiple files not supported for %s="
-msgstr ""
+msgstr "A abertura de multiplos arquivos não é suportada para %s="
 
 #: ../lib/gis/parser.c:1798
 #, c-format
 msgid "Unable to open %s file <%s>"
-msgstr ""
+msgstr "Incapaz de abrir %s arquivo <%s>"
 
 #: ../lib/gis/parser.c:1804
 #, c-format
@@ -5038,19 +5051,19 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:175
 msgid "Name of database driver"
-msgstr ""
+msgstr "Nome do driver do banco de dados"
 
 #: ../lib/gis/parser_standard_options.c:184
 msgid "Name of database"
-msgstr ""
+msgstr "Nome do banco de dados"
 
 #: ../lib/gis/parser_standard_options.c:193
 msgid "Database schema"
-msgstr ""
+msgstr "Esquema do banco de dados"
 
 #: ../lib/gis/parser_standard_options.c:194
 msgid "Do not use this option if schemas are not supported by driver/database server"
-msgstr ""
+msgstr "Não use esta opção se os esquemas não são suportados pelo driver/banco de dados do servidor"
 
 #: ../lib/gis/parser_standard_options.c:203
 msgid "Name of attribute column"
@@ -5118,11 +5131,11 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:335
 msgid "Type of raster map to be created"
-msgstr ""
+msgstr "Tipo de mapa raster a ser criado"
 
 #: ../lib/gis/parser_standard_options.c:336
 msgid "Storage type for resultant raster map"
-msgstr ""
+msgstr "Tipo de armazenamento para o mapa raster resultante"
 
 #: ../lib/gis/parser_standard_options.c:340
 msgid "Integer"
@@ -5203,7 +5216,7 @@ msgstr "Nome do mapa vetor de entrada"
 #: ../lib/gis/parser_standard_options.c:465
 #: ../lib/gis/parser_standard_options.c:492
 msgid "Or data source for direct OGR access"
-msgstr ""
+msgstr "Ou fonte de dados para acesso OGR direto"
 
 #: ../lib/gis/parser_standard_options.c:474
 msgid "Name of input vector map(s)"
@@ -5211,7 +5224,7 @@ msgstr "Nome do mapa vetor de entrada"
 
 #: ../lib/gis/parser_standard_options.c:475
 msgid "Or data source(s) for direct OGR access"
-msgstr ""
+msgstr "Ou fonte(s) de dados para acesso OGR direto"
 
 #: ../lib/gis/parser_standard_options.c:483
 msgid "Name for output vector map"
@@ -5219,20 +5232,20 @@ msgstr "Nome do mapa vetor de saída"
 
 #: ../lib/gis/parser_standard_options.c:491
 msgid "Name of vector map"
-msgstr ""
+msgstr "Nome do mapa vetorial"
 
 #: ../lib/gis/parser_standard_options.c:501
 msgid "Name of vector map(s)"
-msgstr ""
+msgstr "Nome do(s) mapa(s) vetorial(is)"
 
 #: ../lib/gis/parser_standard_options.c:510
 #: ../lib/gis/parser_standard_options.c:519
 msgid "Input feature type"
-msgstr ""
+msgstr "Tipo de entrada de feição  "
 
 #: ../lib/gis/parser_standard_options.c:526
 msgid "Layer number or name"
-msgstr ""
+msgstr "Número ou nome da camada"
 
 #: ../lib/gis/parser_standard_options.c:528
 msgid "Vector features can have category values in different layers. This number determines which layer to use. When used with direct OGR access this is the layer name."
@@ -5244,7 +5257,7 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:540
 msgid "A single vector map can be connected to multiple database tables. This number determines which table to use. When used with direct OGR access this is the layer name."
-msgstr ""
+msgstr "Um único mapa vetorial pode ser conectado a múltiplas tabelas do banco de dados. Este número determina qual tabela será usada. Este será o nome da camada quando usado com acesso OGR direto."
 
 #: ../lib/gis/parser_standard_options.c:549
 msgid "Category value"
@@ -5299,7 +5312,7 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:644
 msgid "Name of input directory"
-msgstr ""
+msgstr "Nome do diretório de entrada"
 
 #: ../lib/gis/parser_standard_options.c:654
 msgid "Units"
@@ -5311,7 +5324,7 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:673
 msgid "Name of mapset (default: current search path)"
-msgstr ""
+msgstr "Nome do mapset (padrão: caminho de pesquisa atual)"
 
 #: ../lib/gis/parser_standard_options.c:674
 msgid "'.' for current mapset"
@@ -5327,11 +5340,11 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:693
 msgid "GRASS GIS database directory"
-msgstr ""
+msgstr "Diretório do banco de dados GRASS GIS"
 
 #: ../lib/gis/parser_standard_options.c:694
 msgid "Default: path to the current GRASS GIS database"
-msgstr ""
+msgstr "Padrão: caminho para o banco de dados GRASS GIS atual"
 
 #: ../lib/gis/parser_standard_options.c:706
 msgid "Coordinates"
@@ -5399,23 +5412,23 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:846
 msgid "Type of the input space time dataset"
-msgstr ""
+msgstr "Tipo do conjunto de dados de entrada de espaço-tempo"
 
 #: ../lib/gis/parser_standard_options.c:854
 msgid "Name of the input map"
-msgstr ""
+msgstr "Nome do mapa de entrada"
 
 #: ../lib/gis/parser_standard_options.c:863
 msgid "Name of the input maps"
-msgstr ""
+msgstr "Nome dos mapas de entrada"
 
 #: ../lib/gis/parser_standard_options.c:872
 msgid "Type of the input map"
-msgstr ""
+msgstr "Tipo de mapa de entrada"
 
 #: ../lib/gis/parser_standard_options.c:881
 msgid "The temporal type of the space time dataset"
-msgstr ""
+msgstr "Tipo temporal do conjunto de dados de espaço-tempo"
 
 #: ../lib/gis/parser_standard_options.c:888
 msgid "WHERE conditions of SQL statement without 'where' keyword used in the temporal GIS framework"
@@ -5444,7 +5457,7 @@ msgstr ""
 #: ../lib/gis/gisinit.c:53 ../lib/gis/gisinit.c:87
 #, c-format
 msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS GIS or untangle multiple installations."
-msgstr ""
+msgstr "Módulo construído baseado na versão %s, mas tentando usar a versão %s. Você precisa reconstruir o GRASS GIS ou isolar as versões instaladas."
 
 #: ../lib/gis/gisinit.c:65
 #, c-format
@@ -5454,11 +5467,11 @@ msgstr "MAPSET %s - permissão negada"
 #: ../lib/gis/gisinit.c:68
 #, c-format
 msgid "MAPSET %s not found at %s"
-msgstr ""
+msgstr "MAPSET %s não foi encontrado em %s"
 
 #: ../lib/gis/gisinit.c:102
 msgid "System not initialized. Programmer forgot to call G_gisinit()."
-msgstr ""
+msgstr "Sistema não iniciou. O programador esqueceu de chamar G_gisinit()."
 
 #: ../lib/gis/view.c:176
 #, c-format
@@ -5488,12 +5501,12 @@ msgstr "Apenas %d%% da janela salva em \"%s\" sobrepõe a janela atual do GRASS"
 #: ../lib/gis/open_misc.c:49
 #, c-format
 msgid "G__open_misc(read): mapset <%s> doesn't match xmapset <%s>"
-msgstr ""
+msgstr "G__open_misc(read): mapset <%s> não coincide com xmapset <%s>"
 
 #: ../lib/gis/open_misc.c:74
 #, c-format
 msgid "G__open_misc(write): xmapset <%s> != G_mapset() <%s>"
-msgstr ""
+msgstr "G__open_misc(write): xmapset <%s> != G_mapset() <%s>"
 
 #: ../lib/gis/myname.c:46
 msgid "This location has no description."
@@ -5502,7 +5515,7 @@ msgstr "Location não possui descrição."
 #: ../lib/gis/adj_cellhd.c:57
 #, c-format
 msgid "Illegal n-s resolution value <%lf>"
-msgstr ""
+msgstr "Valor n-s da resolução é ilegal <%If>"
 
 #: ../lib/gis/adj_cellhd.c:61 ../lib/gis/adj_cellhd.c:163
 msgid "Illegal row value"
@@ -5534,15 +5547,15 @@ msgstr "Coordenadas inválidas"
 
 #: ../lib/gis/adj_cellhd.c:109 ../lib/gis/adj_cellhd.c:249
 msgid "NS resolution has been changed"
-msgstr ""
+msgstr "Resolução NS foi alterada"
 
 #: ../lib/gis/adj_cellhd.c:114 ../lib/gis/adj_cellhd.c:254
 msgid "EW resolution has been changed"
-msgstr ""
+msgstr "Resolução EW foi alterada"
 
 #: ../lib/gis/adj_cellhd.c:117 ../lib/gis/adj_cellhd.c:257
 msgid "NS and EW resolutions are different"
-msgstr ""
+msgstr "As resoluções para NS e EW são diferentes"
 
 #: ../lib/gis/adj_cellhd.c:157
 msgid "Illegal n-s resolution value"
@@ -5579,48 +5592,48 @@ msgstr "Topo deve ser maior que Base"
 #: ../lib/gis/adj_cellhd.c:276
 #, c-format
 msgid "East (%.15g) is not larger than West (%.15g)"
-msgstr ""
+msgstr "Leste (%.15g) não é maior que Oeste (%.15g)"
 
 #: ../lib/gis/adj_cellhd.c:311
 #, c-format
 msgid "Illegal latitude for North: %g"
-msgstr ""
+msgstr "Latitude ilegal em relação ao Norte: %g"
 
 #: ../lib/gis/adj_cellhd.c:313
 #, c-format
 msgid "Illegal latitude for South: %g"
-msgstr ""
+msgstr "Latitude ilegal em relação ao Sul: %g"
 
 #: ../lib/gis/adj_cellhd.c:319
 #, c-format
 msgid "Illegal longitude for West: %g"
-msgstr ""
+msgstr "Longitude ilegal em relação a Oeste: %g"
 
 #: ../lib/gis/adj_cellhd.c:323
 #, c-format
 msgid "Illegal longitude for East: %g"
-msgstr ""
+msgstr "Longitude ilegal em relação ao Leste: %g"
 
 #: ../lib/gis/adj_cellhd.c:351
 #, c-format
 msgid "NS extent does not match NS resolution: %g cells difference"
-msgstr ""
+msgstr "A extensão NS não corresponde à resolução NS: %g células diferentes"
 
 #: ../lib/gis/adj_cellhd.c:360
 #, c-format
 msgid "%g cells missing to reach 90 degree north"
-msgstr ""
+msgstr "%g células faltantes para atingir 90 graus norte"
 
 #: ../lib/gis/adj_cellhd.c:363 ../lib/gis/adj_cellhd.c:377
 #: ../lib/gis/adj_cellhd.c:391
 #, c-format
 msgid "Subtle input data rounding error of north boundary (%g)"
-msgstr ""
+msgstr "Erro sutil de arredondamento dos dados de entrada no limite norte (%g)"
 
 #: ../lib/gis/adj_cellhd.c:373
 #, c-format
 msgid "90 degree north is exceeded by %g cells"
-msgstr ""
+msgstr "90 graus norte está excedido por %g células"
 
 #: ../lib/gis/adj_cellhd.c:402
 msgid "Illegal latitude for North"
@@ -5629,18 +5642,18 @@ msgstr "Latitude Norte ilegal "
 #: ../lib/gis/adj_cellhd.c:410
 #, c-format
 msgid "%g cells missing to reach 90 degree south"
-msgstr ""
+msgstr "%g células perdidas para atingir 90 graus sul"
 
 #: ../lib/gis/adj_cellhd.c:413 ../lib/gis/adj_cellhd.c:427
 #: ../lib/gis/adj_cellhd.c:441
 #, c-format
 msgid "Subtle input data rounding error of south boundary (%g)"
-msgstr ""
+msgstr "Erro sutil de arredondamento dos dados de entrada no limite south (%g)"
 
 #: ../lib/gis/adj_cellhd.c:423
 #, c-format
 msgid "90 degree south is exceeded by %g cells"
-msgstr ""
+msgstr "90 graus sul está excedido de %g células"
 
 #: ../lib/gis/adj_cellhd.c:452
 msgid "Illegal latitude for South"
@@ -5649,267 +5662,267 @@ msgstr "Latitude Sul ilegal"
 #: ../lib/gis/adj_cellhd.c:481
 #, c-format
 msgid "EW extent does not match EW resolution: %g cells difference"
-msgstr ""
+msgstr "A extensão EW não corresponde à resolução EW: %g células diferentes"
 
 #: ../lib/gis/adj_cellhd.c:487
 #, c-format
 msgid "360 degree EW extent is exceeded by %g cells"
-msgstr ""
+msgstr "A extensão EW em 360 graus está excedida por %g células"
 
 #: ../lib/gis/adj_cellhd.c:493
 #, c-format
 msgid "%g cells missing to cover 360 degree EW extent"
-msgstr ""
+msgstr "%g células perdidas para cobrir a extensão EW  em 360 graus"
 
 #: ../lib/gis/adj_cellhd.c:528
 msgid "Invalid NS resolution"
-msgstr ""
+msgstr "Resolução NS inválida"
 
 #: ../lib/gis/adj_cellhd.c:533
 msgid "Invalid EW resolution"
-msgstr ""
+msgstr "Resolução EW inválida"
 
 #: ../lib/gis/adj_cellhd.c:538
 msgid "Invalid North"
-msgstr ""
+msgstr "Norte inválido"
 
 #: ../lib/gis/adj_cellhd.c:543
 msgid "Invalid South"
-msgstr ""
+msgstr "Sul inválido"
 
 #: ../lib/gis/adj_cellhd.c:548
 msgid "Invalid West"
-msgstr ""
+msgstr "Oeste inválido"
 
 #: ../lib/gis/adj_cellhd.c:553
 msgid "Invalid East"
-msgstr ""
+msgstr "Leste inválido"
 
 #: ../lib/gis/adj_cellhd.c:606
 #, c-format
 msgid "NS resolution rounded from %s to %s"
-msgstr ""
+msgstr "Resolução NS arredondada de %s para %s"
 
 #: ../lib/gis/adj_cellhd.c:639 ../lib/gis/adj_cellhd.c:694
 #, c-format
 msgid "North rounded from %s to %s"
-msgstr ""
+msgstr "Norte arredondado de %s to %s"
 
 #: ../lib/gis/adj_cellhd.c:651
 #, c-format
 msgid "South adjusted from %s to %s"
-msgstr ""
+msgstr "Sul ajustado de %s to %s"
 
 #: ../lib/gis/adj_cellhd.c:666 ../lib/gis/adj_cellhd.c:709
 #, c-format
 msgid "South rounded from %s to %s"
-msgstr ""
+msgstr "Sul arredondado de %s para %s"
 
 #: ../lib/gis/adj_cellhd.c:678
 #, c-format
 msgid "North adjusted from %s to %s"
-msgstr ""
+msgstr "Norte ajustado de %s para %s"
 
 #: ../lib/gis/adj_cellhd.c:732
 #, c-format
 msgid "EW resolution rounded from %s to %s"
-msgstr ""
+msgstr "Resolução EW arredondada de %s para %s"
 
 #: ../lib/gis/adj_cellhd.c:765 ../lib/gis/adj_cellhd.c:820
 #, c-format
 msgid "West rounded from %s to %s"
-msgstr ""
+msgstr "Oeste arredondado de %s para %s"
 
 #: ../lib/gis/adj_cellhd.c:777
 #, c-format
 msgid "East adjusted from %s to %s"
-msgstr ""
+msgstr "Leste ajustado de %s para %s"
 
 #: ../lib/gis/adj_cellhd.c:792 ../lib/gis/adj_cellhd.c:835
 #, c-format
 msgid "East rounded from %s to %s"
-msgstr ""
+msgstr "Leste arredondado de %s para %s"
 
 #: ../lib/gis/adj_cellhd.c:804
 #, c-format
 msgid "West adjusted from %s to %s"
-msgstr ""
+msgstr "Oeste ajustado de %s para %s"
 
 #: ../lib/gis/units.c:208
 msgid "square units"
-msgstr ""
+msgstr "metros quadrados"
 
 #: ../lib/gis/units.c:208
 msgid "square unit"
-msgstr ""
+msgstr "metro quadrado"
 
 #: ../lib/gis/units.c:210
 msgid "units"
-msgstr ""
+msgstr "unidades"
 
 #: ../lib/gis/units.c:210
 msgid "unit"
-msgstr ""
+msgstr "unidade"
 
 #: ../lib/gis/units.c:215
 msgid "square meters"
-msgstr ""
+msgstr "metros quadrados"
 
 #: ../lib/gis/units.c:215
 msgid "square meter"
-msgstr ""
+msgstr "metro quadrado"
 
 #: ../lib/gis/units.c:217
 msgid "meters"
-msgstr ""
+msgstr "metros"
 
 #: ../lib/gis/units.c:217
 msgid "meter"
-msgstr ""
+msgstr "metro"
 
 #: ../lib/gis/units.c:222
 msgid "square kilometers"
-msgstr ""
+msgstr "quilômetros quadrados"
 
 #: ../lib/gis/units.c:222
 msgid "square kilometer"
-msgstr ""
+msgstr "quilômetro quadrado"
 
 #: ../lib/gis/units.c:224
 msgid "kilometers"
-msgstr ""
+msgstr "quilômetros"
 
 #: ../lib/gis/units.c:224
 msgid "kilometer"
-msgstr ""
+msgstr "quilômetro"
 
 #: ../lib/gis/units.c:229
 msgid "acres"
-msgstr ""
+msgstr "acres"
 
 #: ../lib/gis/units.c:229
 msgid "acre"
-msgstr ""
+msgstr "acre"
 
 #: ../lib/gis/units.c:237
 msgid "hectares"
-msgstr ""
+msgstr "hectares"
 
 #: ../lib/gis/units.c:237
 msgid "hectare"
-msgstr ""
+msgstr "hectare"
 
 #: ../lib/gis/units.c:245
 msgid "square miles"
-msgstr ""
+msgstr "milhas quadradas"
 
 #: ../lib/gis/units.c:245
 msgid "square mile"
-msgstr ""
+msgstr "milha quadrada"
 
 #: ../lib/gis/units.c:247
 msgid "miles"
-msgstr ""
+msgstr "milhas"
 
 #: ../lib/gis/units.c:247
 msgid "mile"
-msgstr ""
+msgstr "milha"
 
 #: ../lib/gis/units.c:252
 msgid "square feet"
-msgstr ""
+msgstr "pés quadrados"
 
 #: ../lib/gis/units.c:252
 msgid "square foot"
-msgstr ""
+msgstr "pé quadrado"
 
 #: ../lib/gis/units.c:254
 msgid "feet"
-msgstr ""
+msgstr "pés"
 
 #: ../lib/gis/units.c:254
 msgid "foot"
-msgstr ""
+msgstr "pé"
 
 #: ../lib/gis/units.c:259
 msgid "square US feet"
-msgstr ""
+msgstr "pés quadrados - EUA"
 
 #: ../lib/gis/units.c:259
 msgid "square US foot"
-msgstr ""
+msgstr "pé quadrado - EUA"
 
 #: ../lib/gis/units.c:261
 msgid "US feet"
-msgstr ""
+msgstr "pés - EUA"
 
 #: ../lib/gis/units.c:261
 msgid "US foot"
-msgstr ""
+msgstr "pé - EUA"
 
 #: ../lib/gis/units.c:266
 msgid "square degrees"
-msgstr ""
+msgstr "graus ao quadrado"
 
 #: ../lib/gis/units.c:266
 msgid "square degree"
-msgstr ""
+msgstr "grau ao quadrado"
 
 #: ../lib/gis/units.c:268
 msgid "degrees"
-msgstr ""
+msgstr "graus"
 
 #: ../lib/gis/units.c:268
 msgid "degree"
-msgstr ""
+msgstr "graus"
 
 #: ../lib/gis/units.c:272
 msgid "years"
-msgstr ""
+msgstr "anos"
 
 #: ../lib/gis/units.c:272
 msgid "year"
-msgstr ""
+msgstr "ano"
 
 #: ../lib/gis/units.c:276
 msgid "months"
-msgstr ""
+msgstr "meses"
 
 #: ../lib/gis/units.c:276
 msgid "month"
-msgstr ""
+msgstr "mês"
 
 #: ../lib/gis/units.c:280
 msgid "days"
-msgstr ""
+msgstr "dias"
 
 #: ../lib/gis/units.c:280
 msgid "day"
-msgstr ""
+msgstr "dia"
 
 #: ../lib/gis/units.c:284
 msgid "hours"
-msgstr ""
+msgstr "horas"
 
 #: ../lib/gis/units.c:284
 msgid "hour"
-msgstr ""
+msgstr "hora"
 
 #: ../lib/gis/units.c:288
 msgid "minutes"
-msgstr ""
+msgstr "minutos"
 
 #: ../lib/gis/units.c:288
 msgid "minute"
-msgstr ""
+msgstr "minuto"
 
 #: ../lib/gis/units.c:292
 msgid "seconds"
-msgstr ""
+msgstr "segundos"
 
 #: ../lib/gis/units.c:292
 msgid "second"
-msgstr ""
+msgstr "segundo"
 
 #: ../lib/gis/key_value3.c:33
 #, c-format
@@ -5957,17 +5970,17 @@ msgstr "Região atual linhas: %d, colunas: %d"
 #: ../lib/gis/alloc.c:47
 #, c-format
 msgid "G_malloc: unable to allocate %lu bytes of memory at %s:%d"
-msgstr ""
+msgstr "G_malloc: não foi possível alocar %lu bytes de memória em %s:%d"
 
 #: ../lib/gis/alloc.c:89
 #, c-format
 msgid "G_calloc: unable to allocate %lu * %lu bytes of memory at %s:%d"
-msgstr ""
+msgstr "G_calloc: não foi possível alocar %lu * %lu bytes de memória em %s:%d"
 
 #: ../lib/gis/alloc.c:135
 #, c-format
 msgid "G_realloc: unable to allocate %lu bytes of memory at %s:%d"
-msgstr ""
+msgstr "G_realloc:  não foi possível alocar %lu bytes de memória em %s:%d"
 
 #: ../lib/gis/env.c:311
 msgid "GISRC - variable not set"
@@ -5991,7 +6004,7 @@ msgstr "arquivos %s não estão disponíveis no mapset <%s>\n"
 #: ../lib/gis/list.c:132
 #, c-format
 msgid "%s files available in mapset <%s>:\n"
-msgstr ""
+msgstr "%s arquivos disponíveis no mapset <%s>:\n"
 
 #: ../lib/gis/list.c:204
 msgid "G_list: Unknown element type"
@@ -6042,12 +6055,12 @@ msgstr "  %*s   opções: "
 #: ../lib/gis/spawn.c:386
 #, c-format
 msgid "CreateProcess() failed: error = %d"
-msgstr ""
+msgstr "CreateProcess() falhou: erro = %d"
 
 #: ../lib/gis/spawn.c:421
 #, c-format
 msgid "G_spawn: unable to redirect descriptor %d"
-msgstr ""
+msgstr "G_spawn: incapaz de redirecionar o descritor %d"
 
 #: ../lib/gis/spawn.c:429 ../lib/gis/spawn.c:619
 #, c-format
@@ -6125,16 +6138,16 @@ msgstr ""
 #: ../lib/gis/rd_cellhd.c:153
 #, c-format
 msgid "Invalid projection field: %s"
-msgstr ""
+msgstr "Campo de projeção inválido: %s"
 
 #: ../lib/gis/rd_cellhd.c:160
 msgid "Duplicate zone field"
-msgstr ""
+msgstr "Campo de zona duplicado"
 
 #: ../lib/gis/rd_cellhd.c:163
 #, c-format
 msgid "Invalid zone field: %s"
-msgstr ""
+msgstr "Campo zona inválido: %s"
 
 #: ../lib/gis/rd_cellhd.c:170 ../lib/gis/rd_cellhd.c:172
 #: ../lib/gis/rd_cellhd.c:363 ../lib/gis/rd_cellhd.c:365
@@ -6144,43 +6157,43 @@ msgstr ""
 #: ../lib/gis/rd_cellhd.c:388 ../lib/gis/rd_cellhd.c:390
 #, c-format
 msgid "Field <%s> missing"
-msgstr ""
+msgstr "Campo <%s> faltante"
 
 #: ../lib/gis/rd_cellhd.c:195
 msgid "Duplicate north field"
-msgstr ""
+msgstr "Campo norte duplicado"
 
 #: ../lib/gis/rd_cellhd.c:197
 #, c-format
 msgid "Invalid north field: %s"
-msgstr ""
+msgstr "Campo norte inválido: %s"
 
 #: ../lib/gis/rd_cellhd.c:203
 msgid "Duplicate south field"
-msgstr ""
+msgstr "Campo sul duplicado"
 
 #: ../lib/gis/rd_cellhd.c:205
 #, c-format
 msgid "Invalid south field: %s"
-msgstr ""
+msgstr "Campo sul inválido: %s"
 
 #: ../lib/gis/rd_cellhd.c:211
 msgid "Duplicate east field"
-msgstr ""
+msgstr "Campo leste duplicado"
 
 #: ../lib/gis/rd_cellhd.c:213
 #, c-format
 msgid "Invalid east field: %s"
-msgstr ""
+msgstr "Campo leste inválido: %s"
 
 #: ../lib/gis/rd_cellhd.c:219
 msgid "Duplicate west field"
-msgstr ""
+msgstr "Campo oeste duplicado"
 
 #: ../lib/gis/rd_cellhd.c:221
 #, c-format
 msgid "Invalid west field: %s"
-msgstr ""
+msgstr "Campo oeste inválido: %s"
 
 #: ../lib/gis/rd_cellhd.c:227
 msgid "Duplicate top field"
@@ -6319,12 +6332,12 @@ msgstr ""
 
 #: ../lib/gis/cmprzstd.c:80 ../lib/gis/cmprzstd.c:95 ../lib/gis/cmprzstd.c:169
 msgid "GRASS needs to be compiled with ZSTD for ZSTD compression"
-msgstr ""
+msgstr "GRASS necessita ser compilado com ZSTD para usar a compressão ZSTD."
 
 #: ../lib/gis/cmprzstd.c:134 ../lib/gis/cmprzstd.c:196
 #, c-format
 msgid "ZSTD compression error %d: %s"
-msgstr ""
+msgstr "Erro na compressão ZSTD %d: %s"
 
 #: ../lib/gis/paths.c:201
 #, c-format
@@ -6356,11 +6369,11 @@ msgstr ""
 #: ../lib/gis/color_rules.c:343
 #, c-format
 msgid "range: %g to %g"
-msgstr ""
+msgstr "range: %g a %g"
 
 #: ../lib/gis/color_rules.c:368
 msgid "Unable to open color descriptions"
-msgstr ""
+msgstr "Não foi possível abrir descrição de cor"
 
 #: ../lib/gis/mapset_msc.c:90
 #, c-format
@@ -6385,12 +6398,12 @@ msgstr ""
 #: ../lib/gis/ls.c:103
 #, c-format
 msgid "Unable to open directory %s"
-msgstr ""
+msgstr "Não foi possível abrir diretório %s"
 
 #: ../lib/gis/location.c:61
 #, c-format
 msgid "LOCATION <%s> not available"
-msgstr ""
+msgstr "LOCATION <%s> não disponível"
 
 #: ../lib/gis/token.c:169
 msgid "parse error"
@@ -6403,22 +6416,22 @@ msgstr "%s completo. %s"
 
 #: ../lib/gis/parser_dependencies.c:122
 msgid "Internal error: option or flag not found"
-msgstr ""
+msgstr "Erro interno: opção ou flag não encontrada"
 
 #: ../lib/gis/parser_dependencies.c:179
 #, c-format
 msgid "<%s> or <%s>"
-msgstr ""
+msgstr "<%s> ou <%s>"
 
 #: ../lib/gis/parser_dependencies.c:179
 #, c-format
 msgid "<%s> and <%s>"
-msgstr ""
+msgstr "<%s> e <%s>"
 
 #: ../lib/gis/parser_dependencies.c:212
 #, c-format
 msgid "Options %s are mutually exclusive"
-msgstr ""
+msgstr "Opções %s são mutuamente excludentes"
 
 #: ../lib/gis/parser_dependencies.c:236
 #, c-format
@@ -6428,22 +6441,22 @@ msgstr ""
 #: ../lib/gis/parser_dependencies.c:270
 #, c-format
 msgid "Option <%s> requires at least one of %s"
-msgstr ""
+msgstr "Opção <%s> requer pelo menos um de %s"
 
 #: ../lib/gis/parser_dependencies.c:273
 #, c-format
 msgid "Option <%s> requires <%s>"
-msgstr ""
+msgstr "Opção <%s> requer <%s>"
 
 #: ../lib/gis/parser_dependencies.c:305
 #, c-format
 msgid "Option <%s> requires all of %s"
-msgstr ""
+msgstr "Opção <%s> requer todos de %s"
 
 #: ../lib/gis/parser_dependencies.c:332
 #, c-format
 msgid "Option <%s> is mutually exclusive with all of %s"
-msgstr ""
+msgstr "Opção <%s> é mutuamente excludente com todos de %s"
 
 #: ../lib/gis/parser_dependencies.c:358
 #, c-format
@@ -6462,12 +6475,12 @@ msgstr "Arquivo <%s> não encontrado para locação <%s>"
 
 #: ../lib/gis/home.c:39
 msgid "Unable to determine user's home directory"
-msgstr ""
+msgstr "Incapaz de determinar o diretório home do usuário"
 
 #: ../lib/gis/home.c:120
 #, c-format
 msgid "Failed to create directory [%s]"
-msgstr ""
+msgstr "Falhou na criação do diretório [%s]"
 
 #: ../lib/gis/debug.c:80
 #, c-format
@@ -6476,7 +6489,7 @@ msgstr "Não consegui abrir arquivo de depuração '%s'"
 
 #: ../lib/gis/worker.c:84
 msgid "Task already has a worker"
-msgstr ""
+msgstr "Tarefa em execuçao"
 
 #: ../lib/gis/compress.c:143 ../lib/gis/compress.c:208
 #: ../lib/gis/compress.c:225 ../lib/gis/compress.c:240
@@ -6522,62 +6535,62 @@ msgstr ""
 #: ../lib/gis/timestamp.c:292
 #, c-format
 msgid "Unable to create timestamp file for %s map <%s@%s>"
-msgstr ""
+msgstr "Não foi possível criar arquivo de horário para o mapa %s <%s@%s>"
 
 #: ../lib/gis/timestamp.c:301
 #, c-format
 msgid "Invalid timestamp specified for %s map <%s@%s>"
-msgstr ""
+msgstr "Horário inválido especificado para o mapa %s <%s@%s>"
 
 #: ../lib/gis/timestamp.c:331
 #, c-format
 msgid "Unable to open timestamp file for %s map <%s@%s>"
-msgstr ""
+msgstr "Não foi possível abrir arquivo de horário para o mapa %s <%s@%s>"
 
 #: ../lib/gis/timestamp.c:340
 #, c-format
 msgid "Invalid timestamp file for %s map <%s@%s>"
-msgstr ""
+msgstr "Arquivo de horário inválido para o mapa %s <%s@%s>"
 
 #: ../lib/gis/timestamp.c:479
 #, c-format
 msgid "Unable to open timestamp file for vector map <%s@%s>"
-msgstr ""
+msgstr "Não foi possível abrir arquivo de horário para o mapa vetorial <%s@%s>"
 
 #: ../lib/gis/timestamp.c:488
 #, c-format
 msgid "Invalid timestamp file for vector map <%s@%s>"
-msgstr ""
+msgstr "Arquivo de horário inválido para o mapa vetorial <%s@%s>"
 
 #: ../lib/gis/timestamp.c:524
 #, c-format
 msgid "Unable to create timestamp file for vector map <%s@%s>"
-msgstr ""
+msgstr "Não foi possível criar arquivo de horário para o mapa vetorial <%s@%s>"
 
 #: ../lib/gis/timestamp.c:533
 #, c-format
 msgid "Invalid timestamp specified for vector map <%s@%s>"
-msgstr ""
+msgstr "Horário inválido especificado para mapa vetorial <%s@%s>"
 
 #: ../lib/gis/legal_name.c:39
 #, c-format
 msgid "Illegal filename <%s>. Cannot start with '.' or be 'NULL'."
-msgstr ""
+msgstr "Nome de arquivo ilegal <%s>. Não é possível iniciar com '.' ou ser 'NULL'."
 
 #: ../lib/gis/legal_name.c:46
 #, c-format
 msgid "Illegal filename <%s>. Character <%c> not allowed.\n"
-msgstr ""
+msgstr "Nome de arquivo ilegal <%s>. Caractere <%c> não permitido.\n"
 
 #: ../lib/gis/legal_name.c:77 ../lib/gis/legal_name.c:81
 #, c-format
 msgid "Output raster map name <%s> is not valid map name"
-msgstr ""
+msgstr "Nome de saída do mapa raster <%s> não é válido"
 
 #: ../lib/gis/legal_name.c:118 ../lib/gis/legal_name.c:122
 #, c-format
 msgid "Output raster map <%s> is used as input"
-msgstr ""
+msgstr "Mapa raster de saída <%s> está sendo usado como entrada"
 
 #: ../lib/gis/proj3.c:121 ../lib/vector/Vlib/header.c:552
 msgid "Unknown projection"
@@ -6586,7 +6599,7 @@ msgstr "Projeção desconhecida"
 #: ../lib/gis/get_window.c:118
 #, c-format
 msgid "Unable to open element file <%s> for <%s@%s>"
-msgstr ""
+msgstr "Não foi possível abrir elemento do arquivo <%s> para <%s@%s>"
 
 #: ../lib/gis/get_window.c:123
 #, c-format
@@ -6601,7 +6614,7 @@ msgstr ""
 #: ../lib/gis/find_file.c:127
 #, c-format
 msgid "Using <%s@%s>..."
-msgstr ""
+msgstr "Usando <%s@%s>..."
 
 #: ../lib/gis/mkstemp.c:132
 msgid "Attempt to create read-only temporary file"
@@ -6619,12 +6632,12 @@ msgstr "MAPSET não foi definido"
 #: ../lib/gis/mapset.c:80
 #, c-format
 msgid "MAPSET <%s> not available"
-msgstr ""
+msgstr "MAPSET <%s> não disponível"
 
 #: ../lib/db/dbmi_client/table.c:46 ../lib/db/dbmi_client/delete_tab.c:40
 #, c-format
 msgid "Unable open database <%s> by driver <%s>"
-msgstr ""
+msgstr "Não foi possível abrir banco de dados <%s> pelo driver <%s>"
 
 #: ../lib/db/dbmi_client/table.c:110 ../lib/db/dbmi_client/copy_tab.c:242
 #: ../lib/db/dbmi_client/copy_tab.c:319 ../lib/vector/Vlib/write_ogr.c:211
@@ -6657,12 +6670,12 @@ msgstr ""
 #: ../lib/db/dbmi_client/copy_tab.c:189
 #, c-format
 msgid "Table <%s> already exists in database and will be overwritten"
-msgstr ""
+msgstr "Tabela <%s> já existe no banco de dados e será sobrescrita"
 
 #: ../lib/db/dbmi_client/copy_tab.c:194
 #, c-format
 msgid "Table <%s> already exists in database <%s>"
-msgstr ""
+msgstr "Tabela <%s> já existe no banco de dados <%s>"
 
 #: ../lib/db/dbmi_client/copy_tab.c:274
 #, c-format
@@ -6678,7 +6691,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write_pg.c:2017
 #, c-format
 msgid "Unable to fetch data from table <%s>"
-msgstr ""
+msgstr "Não foi possível buscar dados da tabela <%s>"
 
 #: ../lib/db/dbmi_client/copy_tab.c:394
 #, c-format
@@ -7363,7 +7376,7 @@ msgstr ""
 #: ../lib/vector/Vlib/copy.c:749
 #, c-format
 msgid "Unable to add database link for vector map <%s>"
-msgstr ""
+msgstr "Não foi possível adicionar link do banco de dados para o mapa vetorial <%s>"
 
 #: ../lib/vector/Vlib/copy.c:764 ../lib/vector/Vlib/close_nat.c:102
 #: ../lib/vector/Vlib/map.c:318
@@ -7374,7 +7387,7 @@ msgstr ""
 #: ../lib/vector/Vlib/copy.c:773
 #, c-format
 msgid "Unable to open database <%s> with driver <%s>"
-msgstr ""
+msgstr "Não foi possível abrir banco de dados <%s> com driver <%s>"
 
 #: ../lib/vector/Vlib/copy.c:780
 msgid "Unable to create index"
@@ -7666,7 +7679,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/read_pg.c:575
 msgid "No geometry or topo geometry column defined"
-msgstr ""
+msgstr "Coluna de geometria ou topo geometria não definida"
 
 #: ../lib/vector/Vlib/read_pg.c:585
 msgid "Random access not supported. Primary key not defined."
@@ -7674,7 +7687,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/read_pg.c:652
 msgid "Inconsistency in topology: detected centroid (should be point)"
-msgstr ""
+msgstr "Inconsistência na topologia: centróide detectado (deveria ser ponto)"
 
 #: ../lib/vector/Vlib/read_pg.c:662
 msgid "Inconsistency in topology: detected boundary (should be line)"
@@ -7817,11 +7830,11 @@ msgstr ""
 #: ../lib/vector/Vlib/write_ogr.c:340 ../lib/vector/Vlib/write_pg.c:1118
 #, c-format
 msgid "More layers defined, using driver <%s> and database <%s>"
-msgstr ""
+msgstr "Mais camadas definidas, usando driver <%s> e banco de dados <%s>"
 
 #: ../lib/vector/Vlib/write_ogr.c:346 ../lib/vector/Vlib/write_pg.c:1123
 msgid "Database connection not defined. Unable to write attributes."
-msgstr ""
+msgstr "Conexão com o banco de dados não definida. Não foi possível escrever atributos."
 
 #: ../lib/vector/Vlib/write_ogr.c:410 ../lib/vector/Vlib/write_pg.c:1238
 #: ../lib/vector/Vlib/write_pg.c:1403
@@ -7872,12 +7885,12 @@ msgstr ""
 #: ../lib/vector/Vlib/write_ogr.c:581 ../lib/vector/Vlib/write_pg.c:2013
 #, c-format
 msgid "Unable to select attributes for category %d"
-msgstr ""
+msgstr "Não foi possível selecionar atributos para a categoria %d"
 
 #: ../lib/vector/Vlib/write_ogr.c:593 ../lib/vector/Vlib/write_pg.c:2022
 #, c-format
 msgid "No database record for category %d, no attributes will be written"
-msgstr ""
+msgstr "Não há registro para a categoria %d no banco de dados, nenhum atributo será escrito"
 
 #: ../lib/vector/Vlib/write_ogr.c:626
 #, c-format
@@ -7907,11 +7920,11 @@ msgstr ""
 
 #: ../lib/vector/Vlib/field.c:154
 msgid "Unable to write database links"
-msgstr ""
+msgstr "Não foi possível escrever links do banco de dados"
 
 #: ../lib/vector/Vlib/field.c:178
 msgid "Database connection not defined. Skipping."
-msgstr ""
+msgstr "Conexão ao banco de dados não definida. Ignorando."
 
 #: ../lib/vector/Vlib/field.c:185
 msgid "More DB links defined for input vector map. Using only first DB link for output."
@@ -7929,6 +7942,9 @@ msgid ""
 "driver: %s\n"
 "database: %s"
 msgstr ""
+"Driver padrão / banco de dados definido para:\n"
+"driver: %s\n"
+"banco de dados: %s"
 
 #: ../lib/vector/Vlib/field.c:352
 msgid "Default driver is not set"
@@ -7982,7 +7998,7 @@ msgstr ""
 #: ../lib/vector/Vlib/field.c:925
 #, c-format
 msgid "Unable to create database definition file for vector map <%s>"
-msgstr ""
+msgstr "Não foi possível criar arquivo para definição de banco de dados para mapa vetorial <%s>"
 
 #: ../lib/vector/Vlib/field.c:1020
 msgid "Bug: attempt to update map which is not in current mapset"
@@ -8118,7 +8134,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/write_pg.c:1910
 msgid "Unable to insert topological element into PostGIS Topology schema"
-msgstr ""
+msgstr "Não foi possível inserir elemento topológico no esquema PostGIS Topology "
 
 #: ../lib/vector/Vlib/write_pg.c:2048
 #, c-format
@@ -8147,15 +8163,15 @@ msgstr ""
 #: ../lib/vector/Vlib/write_pg.c:2277
 #, c-format
 msgid "Unable to determine next left/right edge for edge %d"
-msgstr ""
+msgstr "Não foi possível determinar as próximas bordas da esquerda/direita para borda %d"
 
 #: ../lib/vector/Vlib/write_pg.c:2282
 msgid "Unable to insert new edge. Topology not available."
-msgstr ""
+msgstr "Não foi possível inserir nova borda. Topologia não disponível."
 
 #: ../lib/vector/Vlib/write_pg.c:2381 ../lib/vector/Vlib/write_pg.c:2388
 msgid "Invalid topology"
-msgstr ""
+msgstr "Topologia inválida"
 
 #: ../lib/vector/Vlib/write_pg.c:2587 ../lib/vector/Vlib/write_pg.c:2684
 #, c-format
@@ -8283,7 +8299,7 @@ msgstr ""
 #: ../lib/vector/Vlib/map.c:403
 #, c-format
 msgid "Ignoring invalid mapset: %s"
-msgstr ""
+msgstr "Ignorando mapset inválido: %s"
 
 #: ../lib/vector/Vlib/map.c:408
 #, c-format
@@ -8308,12 +8324,12 @@ msgstr ""
 #: ../lib/vector/Vlib/map.c:486
 #, c-format
 msgid "Unable to open directory '%s'"
-msgstr ""
+msgstr "Não foi possível abrir diretório '%s'"
 
 #: ../lib/vector/Vlib/map.c:500
 #, c-format
 msgid "Unable to delete file '%s'"
-msgstr ""
+msgstr "Não foi possível apagar o arquivo '%s'"
 
 #: ../lib/vector/Vlib/map.c:520
 #, c-format
@@ -8323,7 +8339,7 @@ msgstr ""
 #: ../lib/vector/Vlib/map.c:529
 #, c-format
 msgid "Unable to remove directory '%s': %s"
-msgstr ""
+msgstr "Não foi possível remover diretório '%s': %s"
 
 #: ../lib/vector/Vlib/open_ogr.c:60
 msgid "OGR datasource not defined"
@@ -8748,7 +8764,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/open_pg.c:109 ../lib/vector/Vlib/open_pg.c:267
 msgid "No feature tables found in database."
-msgstr ""
+msgstr "Não foram encontradas tabelas de feições no banco de dados"
 
 #: ../lib/vector/Vlib/open_pg.c:133
 #, c-format
@@ -8772,7 +8788,7 @@ msgstr ""
 #: ../lib/vector/Vlib/open_pg.c:282
 #, c-format
 msgid "PostGIS layer <%s.%s> already exists in database '%s'"
-msgstr ""
+msgstr "A camada PostGIS <%s.%s> já existe no banco de dados '%s'"
 
 #: ../lib/vector/Vlib/open_pg.c:390
 msgid "No key column detected."
@@ -8790,11 +8806,11 @@ msgstr ""
 
 #: ../lib/vector/Vlib/open_pg.c:559
 msgid "Connection to PostgreSQL database failed. Try to set up username/password by db.login."
-msgstr ""
+msgstr "A conexão ao banco de dados PostgreSQL falhou. Tente definir usuário/senha usando db.login."
 
 #: ../lib/vector/Vlib/open_pg.c:566
 msgid "Unable to get database name"
-msgstr ""
+msgstr "Não foi possível encontrar o nome do banco de dados"
 
 #: ../lib/vector/Vlib/open_pg.c:571
 #, c-format
@@ -8804,7 +8820,7 @@ msgstr ""
 #: ../lib/vector/Vlib/open_pg.c:580
 #, c-format
 msgid "PostGIS Topology extension not found in the database <%s>"
-msgstr ""
+msgstr "Extensão PostGIS Topology não encontrada no banco de dados <%s>"
 
 #: ../lib/vector/Vlib/open_pg.c:667
 msgid "Empty bounding box"
@@ -9057,7 +9073,7 @@ msgstr ""
 #: ../lib/vector/Vlib/net_build.c:277 ../lib/vector/Vlib/net_build.c:1032
 #, c-format
 msgid "Database record for node %d (cat = %d) not found (cost set to 0)"
-msgstr ""
+msgstr "Registro do banco de dados para o nó %d (cat = %d) não encontrado (cost set to 0)"
 
 #: ../lib/vector/Vlib/net_build.c:332 ../lib/vector/Vlib/net_build.c:352
 msgid "Cannot add network arc for virtual node connection."
@@ -9561,7 +9577,7 @@ msgstr ""
 
 #: ../lib/vector/neta/utils.c:247
 msgid "Unable to load data from database"
-msgstr ""
+msgstr "Não foi possível carregar os dados do banco de dados"
 
 #: ../lib/vector/neta/utils.c:254
 msgid "Problem loading category values"
@@ -9738,7 +9754,7 @@ msgstr ""
 #: ../lib/lidar/zones.c:476 ../lib/lidar/zones.c:513
 #, c-format
 msgid "<%s> created in database."
-msgstr ""
+msgstr "<%s> criado no banco de dados."
 
 #: ../lib/lidar/zones.c:480 ../lib/lidar/zones.c:517
 #, c-format
@@ -9816,3 +9832,6 @@ msgstr "não consegui obter informações da camada"
 
 msgid "invalid color name"
 msgstr "nome de cor inválido"
+
+#~ msgid "initial GRASS database directory"
+#~ msgstr "Diretório do banco de dados GRASS inicial"
