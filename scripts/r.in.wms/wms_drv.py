@@ -425,7 +425,7 @@ class WMSRequestMgr(BaseRequestMgr):
         rows = int(region['rows'])
 
         # computes parameters of tiles
-        self.num_tiles_x = cols / self.tile_cols
+        self.num_tiles_x = cols // self.tile_cols
         self.last_tile_x_size = cols % self.tile_cols
         self.tile_length_x = float(
             self.tile_cols) / float(cols) * (self.bbox['maxx'] - self.bbox['minx'])
@@ -435,7 +435,7 @@ class WMSRequestMgr(BaseRequestMgr):
             self.last_tile_x = True
             self.num_tiles_x = self.num_tiles_x + 1
 
-        self.num_tiles_y = rows / self.tile_rows
+        self.num_tiles_y = rows // self.tile_rows
         self.last_tile_y_size = rows % self.tile_rows
         self.tile_length_y = float(
             self.tile_rows) / float(rows) * (self.bbox['maxy'] - self.bbox['miny'])
