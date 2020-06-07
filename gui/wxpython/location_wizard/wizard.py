@@ -1570,7 +1570,7 @@ class EPSGPage(TitledPage):
                        flag=wx.ALL |
                        wx.EXPAND, border=5)
         epsglistBoxSizer.Add(self.epsglist, proportion=1,
-                       flag= wx.ALL |
+                       flag=wx.ALL |
                        wx.EXPAND, border=5)
         informationBoxSizer.AddStretchSpacer(1) 
         informationBoxSizer.Add(self.llink,  proportion=0,
@@ -1666,7 +1666,7 @@ class EPSGPage(TitledPage):
             self.epsgcode = None
             self.epsgdesc = self.epsgparams = ''
             self.OnBrowseCodes(None)
-            self.tlink.SetURL(str("https://epsg.io/".format(value)))  
+            self.tlink.SetURL(str("https://epsg.io/"))  
         else:
             try:
                 self.epsgcode, self.epsgdesc, self.epsgparams = \
