@@ -32,10 +32,6 @@ jobs:
     - name: Compile GRASS GIS
       run: C:\msys64\usr\bin\bash.exe -l (''+(Get-Location)+'\.github\workflows\build_osgeo4w.sh') -p (Get-Location)
     - name: Test executing of the grass command
-      run: .github/workflows/test_simple.bat 'bin.x86_64-w64-mingw32'
-    - name: Run tests
-      run: .github/workflows/test_thorough.bat 'bin.x86_64-w64-mingw32'
-    - name: Test executing of the grass command using the package
       run: .github/workflows/test_simple.bat 'C:\OSGeo4W64\opt\grass'
-    - name: Run tests using the package
+    - name: Run tests
       run: .github/workflows/test_thorough.bat 'C:\OSGeo4W64\opt\grass'
