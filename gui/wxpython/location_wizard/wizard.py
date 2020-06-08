@@ -647,7 +647,8 @@ class ItemList(ListCtrl,
         self.Bind(wx.EVT_LIST_COL_CLICK, self.OnColumnClick)
 
     def Populate(self, data=None, update=False):
-        """Populate list"""
+        """Populate and sort list.
+        Returns sorted list."""
         self.itemDataMap = {}
         self.itemIndexMap = []
 
@@ -674,6 +675,7 @@ class ItemList(ListCtrl,
             self.SetColumnWidth(1, 300)
 
             self.SendSizeEvent()
+            return data
 
         except Exception as e:
             wx.MessageBox(parent=self,
@@ -755,13 +757,14 @@ class ItemList(ListCtrl,
         """Used by listmix.ColumnSorterMixin"""
         return self
 
-    def Search(self, index, pattern):
+    def Search(self, index, pattern, firstOnly=True):
         """Search projection by description
-        Return first found item or None
+        Return first found item (or None) if firstOnly is True,
+        all data (or empty list) if False
         """
         if pattern == '':
             self.Populate(self.sourceData)
-            return []
+            return None if firstOnly else []
 
         data = []
         pattern = pattern.lower()
@@ -776,11 +779,17 @@ class ItemList(ListCtrl,
                     # osgeo4w problem (should be fixed)
                     pass
 
-        self.Populate(data)
+        data = self.Populate(data)
         if len(data) > 0:
-            return data[0]
+            if firstOnly:
+                return data[0]
+            else:
+                return data
         else:
-            return []
+            if firstOnly:
+                return None
+            else:
+                return []
 
 
 class ProjParamsPage(TitledPage):
@@ -1596,12 +1605,11 @@ class EPSGPage(TitledPage):
         if event.GetDirection():
             if not self.epsgcode:
                 # disable 'next' button by default
-                wx.FindWindowById(wx.ID_FORWARD).Enable(False)
+                self.EnableNext(False)
+                # load default epsg database file
+                self.OnBrowseCodes(None)
             else:
-                wx.FindWindowById(wx.ID_FORWARD).Enable(True)
-
-        # load default epsg database file
-        self.OnBrowseCodes(None)
+                self.EnableNext(True)
 
         event.Skip()
 
@@ -1638,43 +1646,42 @@ class EPSGPage(TitledPage):
                     self.parent.datum_trans = dtrans
             self.GetNext().SetPrev(self)
 
-    def OnTextChange(self, event):
-        self.epsgcode = event.GetString()
-            
-        try:
-            self.epsgcode = int(self.epsgcode)
-        except:          
-            self.epsgcode = None
-
+    def EnableNext(self, enable=True):
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
+        nextButton.Enable(enable)
 
-        if self.epsgcode and self.epsgCodeDict and \
-                self.epsgcode in self.epsgCodeDict.keys():
-            self.epsgdesc = self.epsgCodeDict[self.epsgcode][0]
-            self.epsgparams = self.epsgCodeDict[self.epsgcode][1]
-            if not nextButton.IsEnabled():
-                nextButton.Enable(True)
-        else:
-            self.epsgcode = None  # not found
-            if nextButton.IsEnabled():
-                nextButton.Enable(False)
-            self.epsgdesc = self.epsgparams = ''           
-            
+    def OnTextChange(self, event):
         value = self.searchb.GetValue()
-
         if value == '':
+            self.tlink.SetURL(str("https://epsg.io/"))
             self.epsgcode = None
             self.epsgdesc = self.epsgparams = ''
             self.OnBrowseCodes(None)
-            self.tlink.SetURL(str("https://epsg.io/"))  
+            self.EnableNext(False)
         else:
-            try:
-                self.epsgcode, self.epsgdesc, self.epsgparams = \
-                self.epsglist.Search(index=[0, 1, 2], pattern=value)
-                self.tlink.SetURL(str("https://epsg.io/?q={0}".format(value)))             
-            except (IndexError, ValueError):  # -> no item found
+            self.tlink.SetURL(str("https://epsg.io/?q={0}".format(value)))
+            data = self.epsglist.Search(index=[0, 1, 2], pattern=value,
+                                        firstOnly=False)
+            if data:
+                index = 0
+                # search for the exact epsg code match
+                # otherwise just select first item
+                try:
+                    epsg = int(value)
+                    for i, (code, desc, params) in enumerate(data):
+                        if code == epsg:
+                            index = i
+                            break
+                except ValueError:
+                    pass
+                self.epsgcode, self.epsgdesc, self.epsgparams = data[index]
+                self.epsglist.Select(index)
+                self.epsglist.Focus(index)
+                self.EnableNext()
+            else:
                 self.epsgcode = None
                 self.epsgdesc = self.epsgparams = ''
+                self.EnableNext(False)
 
         event.Skip()
 
@@ -1684,8 +1691,7 @@ class EPSGPage(TitledPage):
 
         self.epsgcode = int(self.epsglist.GetItem(index, 0).GetText())
         self.epsgdesc = self.epsglist.GetItem(index, 1).GetText()
-        self.searchb.SetValue(str(self.epsgcode))
-        self.tlink.SetURL(str("https://epsg.io/?q={0}".format(self.epsgcode)))
+        self.EnableNext(True)
 
         event.Skip()
 
