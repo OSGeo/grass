@@ -38,7 +38,7 @@ import wx.lib.mixins.listctrl as listmix
 from core.gcmd import GMessage, GError, DecodeString, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets
 from startup.utils import (
-    get_lockfile_if_present, get_possible_database_path, create_mapset)
+    get_lockfile_if_present, get_or_create_possible_database_path, create_mapset)
 import startup.utils as sutils
 from startup.guiutils import SetSessionMapset, NewMapsetDialog
 import startup.guiutils as sgui
@@ -506,7 +506,7 @@ class GRASSStartup(wx.Frame):
         # only if nothing is set (<UNKNOWN> comes from init script)
         if self.GetRCValue("LOCATION_NAME") != "<UNKNOWN>":
             return
-        path = get_possible_database_path()
+        path = get_or_create_possible_database_path()
         if path:
             try:
                 self.tgisdbase.SetValue(path)
