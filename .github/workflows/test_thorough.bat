@@ -1,4 +1,4 @@
-set grass=%1\grass79
+set grass=%1
 set python=C:\OSGeo4W64\bin\python3
 
 call %grass% --tmp-location XY --exec g.extension g.download.location
