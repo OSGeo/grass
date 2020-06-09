@@ -716,7 +716,9 @@ def RunCommand(prog, flags="", overwrite=False, quiet=False,
         ps.stdin.close()
         ps.stdin = None
 
-    stdout, stderr = [decode(out) for out in ps.communicate()]
+    stdout, stderr = ps.communicate()
+    stderr = decode(stderr)
+    stdout = decode(stdout) if read else stdout
 
     if parent:  # restore previous settings
         os.environ['GRASS_MESSAGE_FORMAT'] = messageFormat
