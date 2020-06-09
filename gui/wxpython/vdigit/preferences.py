@@ -25,8 +25,8 @@ from core.debug import Debug
 from gui_core.gselect import ColumnSelect
 from core.units import Units
 from core.settings import UserSettings
-from gui_core.wrap import SpinCtrl, Button, StaticText, \
-    StaticBox
+from gui_core.wrap import Button, CheckBox, SpinCtrl, StaticBox, \
+    StaticText
 
 
 class VDigitSettingsDialog(wx.Dialog):
@@ -114,7 +114,7 @@ class VDigitSettingsDialog(wx.Dialog):
             isEnabled = UserSettings.Get(group='vdigit', key='symbol',
                                          subkey=[key, 'enabled'])
             if isEnabled is not None:
-                enabled = wx.CheckBox(panel, id=wx.ID_ANY, label="")
+                enabled = CheckBox(panel, id=wx.ID_ANY, label="")
                 enabled.SetValue(isEnabled)
                 self.symbology[key] = (enabled, color)
             else:
@@ -237,8 +237,8 @@ class VDigitSettingsDialog(wx.Dialog):
             flag=wx.ALIGN_RIGHT | wx.FIXED_MINSIZE)
 
         vertexSizer = wx.BoxSizer(wx.VERTICAL)
-        self.snapVertex = wx.CheckBox(parent=panel, id=wx.ID_ANY,
-                                      label=_("Snap also to vertex"))
+        self.snapVertex = CheckBox(parent=panel, id=wx.ID_ANY,
+                                   label=_("Snap also to vertex"))
         self.snapVertex.SetValue(
             UserSettings.Get(
                 group='vdigit',
@@ -273,7 +273,7 @@ class VDigitSettingsDialog(wx.Dialog):
         self.selectFeature = {}
         for feature in ('point', 'line',
                         'centroid', 'boundary'):
-            chkbox = wx.CheckBox(parent=panel, label=feature)
+            chkbox = CheckBox(parent=panel, label=feature)
             self.selectFeature[feature] = chkbox.GetId()
             chkbox.SetValue(UserSettings.Get(group='vdigit', key='selectType',
                                              subkey=[feature, 'enabled']))
@@ -306,18 +306,18 @@ class VDigitSettingsDialog(wx.Dialog):
             flag=wx.ALIGN_RIGHT | wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
             border=10)
 
-        self.selectIn = wx.CheckBox(parent=panel, id=wx.ID_ANY, label=_(
+        self.selectIn = CheckBox(parent=panel, id=wx.ID_ANY, label=_(
             "Select only features inside of selection bounding box"))
         self.selectIn.SetValue(
             UserSettings.Get(
                 group='vdigit',
                 key="selectInside",
                 subkey='enabled'))
-        self.selectIn.SetToolTipString(
+        self.selectIn.SetToolTip(
             _("By default are selected all features overlapping selection bounding box "))
 
-        self.checkForDupl = wx.CheckBox(parent=panel, id=wx.ID_ANY,
-                                        label=_("Check for duplicates"))
+        self.checkForDupl = CheckBox(parent=panel, id=wx.ID_ANY,
+                                     label=_("Check for duplicates"))
         self.checkForDupl.SetValue(
             UserSettings.Get(
                 group='vdigit',
@@ -346,7 +346,7 @@ class VDigitSettingsDialog(wx.Dialog):
             _("Digitize lines/boundaries"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
-        self.intersect = wx.CheckBox(
+        self.intersect = CheckBox(
             parent=panel, label=_("Break lines at intersection"))
         self.intersect.SetValue(
             UserSettings.Get(
@@ -373,7 +373,7 @@ class VDigitSettingsDialog(wx.Dialog):
             _("Digitize areas"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
-        self.closeBoundary = wx.CheckBox(
+        self.closeBoundary = CheckBox(
             parent=panel, label=_("Close boundary (snap to the start node)"))
         self.closeBoundary.SetValue(
             UserSettings.Get(
@@ -400,7 +400,7 @@ class VDigitSettingsDialog(wx.Dialog):
             _("Save changes"))
         # save changes on exit?
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        self.save = wx.CheckBox(parent=panel, label=_("Save changes on exit"))
+        self.save = CheckBox(parent=panel, label=_("Save changes on exit"))
         self.save.SetValue(
             UserSettings.Get(
                 group='vdigit',
@@ -437,7 +437,7 @@ class VDigitSettingsDialog(wx.Dialog):
 
         LocUnits = self.parent.MapWindow.Map.GetProjInfo()['units']
 
-        self.queryBox = wx.CheckBox(
+        self.queryBox = CheckBox(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Select by box"))
@@ -595,8 +595,8 @@ class VDigitSettingsDialog(wx.Dialog):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         # checkbox
-        self.addRecord = wx.CheckBox(parent=panel, id=wx.ID_ANY,
-                                     label=_("Add new record into table"))
+        self.addRecord = CheckBox(parent=panel, id=wx.ID_ANY,
+                                  label=_("Add new record into table"))
         self.addRecord.SetValue(
             UserSettings.Get(
                 group='vdigit',
@@ -670,7 +670,7 @@ class VDigitSettingsDialog(wx.Dialog):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         # checkbox
-        self.deleteRecord = wx.CheckBox(parent=panel, id=wx.ID_ANY,
+        self.deleteRecord = CheckBox(parent=panel, id=wx.ID_ANY,
                                         label=_("Delete record from table"))
         self.deleteRecord.SetValue(
             UserSettings.Get(
@@ -711,8 +711,8 @@ class VDigitSettingsDialog(wx.Dialog):
         row = 0
         for attrb in ['length', 'area', 'perimeter']:
             # checkbox
-            check = wx.CheckBox(parent=panel, id=wx.ID_ANY,
-                                label=self.geomAttrb[attrb]['label'])
+            check = CheckBox(parent=panel, id=wx.ID_ANY,
+                             label=self.geomAttrb[attrb]['label'])
             ### self.deleteRecord.SetValue(UserSettings.Get(group='vdigit', key="delRecord", subkey='enabled'))
             check.Bind(wx.EVT_CHECKBOX, self.OnGeomAttrb)
             # column (only numeric)
