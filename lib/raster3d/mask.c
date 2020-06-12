@@ -306,12 +306,12 @@ void Rast3d_mask_tile(RASTER3D_Map * map, int tileIndex, void *tile, int type)
 	for (dy = y; dy < rows; dy++) {
 	    for (dx = x; dx < cols; dx++) {
 		RASTER3D_MASKNUM(map, dx, dy, dz, tile, type);
-		tile += length;
+		tile = (int*)tile + length;
 	    }
 
-	    tile += xLength;
+	    tile = (int*) + xLength;
 	}
-	tile += yLength;
+	tile = (int*) + yLength;
     }
 }
 

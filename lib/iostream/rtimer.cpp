@@ -33,11 +33,16 @@
  *  General Public License for more details.  *
  *  **************************************************************************/
 
-
+#if !defined(_MSC_VER)
 #include <sys/time.h>
+#endif
+
 #include <stdio.h>
 #include <string.h>
+
+#if !defined(_MSC_VER)
 #include <strings.h>
+#endif
 
 //#include <rtimer.h>
 #include <grass/iostream/rtimer.h>

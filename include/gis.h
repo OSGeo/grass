@@ -68,7 +68,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
 
 /*! \brief Cross-platform Newline Character */
 #define NEWLINE     '\n'
-#ifdef __MINGW32__
+#ifdef _WIN32
 #  define HOST_NEWLINE "\r\n"
 #else
 #  define HOST_NEWLINE "\n"
@@ -118,13 +118,19 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define UNIT_FILE       "PROJ_UNITS"
 #define EPSG_FILE       "PROJ_EPSG"
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #define CONFIG_DIR "GRASS7"
 #else
 #define CONFIG_DIR ".grass7"
 #endif
 
 /* define PI and friends */
+#if defined(_MSC_VER)
+#define _USE_MATH_DEFINES 1
+#include <math.h>
+#undef min
+#undef max
+#else
 #undef M_PI
 #define M_PI    3.14159265358979323846	/* pi */
 
@@ -133,6 +139,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
 
 #undef M_PI_4
 #define M_PI_4  0.78539816339744830962	/* pi/4 */
+#endif
 
 #undef M_R2D
 #define M_R2D  57.295779513082320877    /* 180/pi */
@@ -201,7 +208,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
 
 /* Cross-platform Directory Separator Character and null device stuff */
 #define GRASS_DIRSEP '/'
-#ifdef __MINGW32__
+#ifdef _WIN32
 #  define HOST_DIRSEP '\\'
 #  define G_DEV_NULL "NUL:"
 #else
@@ -600,7 +607,7 @@ typedef float FCELL;
 #if HAVE_INT64_T
 #include <sys/types.h>
 typedef int64_t grass_int64;
-#elif defined(__MINGW32__)
+#elif defined(_WIN32)
 typedef __int64 grass_int64;
 #elif HAVE_LONG_LONG_INT
 typedef long long int grass_int64;

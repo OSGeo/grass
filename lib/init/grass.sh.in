@@ -1,0 +1,6 @@
+#! /bin/sh
+trap "echo 'User break!' ; exit" 2 3 9 15
+
+. @grass_config_dir@/bashrc
+
+"$GRASS_PYTHON" "@gisbase_init_dir@/etc/@START_UP@" "$@"

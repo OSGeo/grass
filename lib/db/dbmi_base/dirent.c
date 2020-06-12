@@ -16,10 +16,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <grass/dbmi.h>
-/* NOTE: these should come from <unistd.h> or from <sys/file.h> */
+
+#if !defined(HAVE_UNISTD_H)
 #define R_OK 4
 #define W_OK 2
 #define X_OK 1
+#endif
 
 #include <sys/types.h>
 #ifdef USE_DIRECT

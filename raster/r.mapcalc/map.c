@@ -742,7 +742,8 @@ void create_history(const char *dst, expression * e)
     Rast_short_history(dst, "raster", &hist);
 
     for (i = 0; ; i++) {
-	char buf[RECORD_LEN];
+	char *buf;
+	buf = (char*)G_calloc(RECORD_LEN, sizeof(char));
 	int n;
 
 	if (!len)
@@ -768,7 +769,8 @@ void create_history(const char *dst, expression * e)
     }
 
     if (seeded) {
-	char buf[RECORD_LEN];
+	char* buf;
+	buf = (char*)G_calloc(RECORD_LEN, sizeof(char));
 	sprintf(buf, "random seed = %ld", seed_value);
 	Rast_append_history(&hist, buf);
     }

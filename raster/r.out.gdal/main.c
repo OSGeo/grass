@@ -895,6 +895,8 @@ int nodataval_check(double nodataval, GDALDataType datatype)
 
 double set_default_nodata_value(GDALDataType datatype, double min, double max)
 {
+	double nan_val;
+	sscanf("-nan", "%lf", &nan_val);
     switch (datatype) {
     case GDT_Byte:
 	if (max < TYPE_BYTE_MAX)
@@ -940,11 +942,11 @@ double set_default_nodata_value(GDALDataType datatype, double min, double max)
 
     case GDT_Float32:
     case GDT_CFloat32:
-	return 0.0 / 0.0;
+	return nan_val;
 
     case GDT_Float64:
     case GDT_CFloat64:
-	return 0.0 / 0.0;
+	return nan_val;
 
     default:
 	return 0;

@@ -132,9 +132,10 @@ int main(int argc, char *argv[])
     
     /* table field separator */
     zone_info.sep = G_option_to_separator(param.separator);
-
-    zone_info.min = 0.0 / 0.0;	/* set to nan as default */
-    zone_info.max = 0.0 / 0.0;	/* set to nan as default */
+	double nan_val;
+	sscanf("-nan", "%lf", &nan_val);
+    zone_info.min = nan_val; /* set to nan as default */
+    zone_info.max = nan_val; /* set to nan as default */
     zone_info.n_zones = 0;
 
     fdz = -1;
