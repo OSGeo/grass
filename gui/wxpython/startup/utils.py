@@ -18,6 +18,9 @@ solve the errors etc. in a general manner).
 
 import os
 import shutil
+import tempfile
+import getpass
+import sys
 
 
 def get_possible_database_path():
@@ -52,6 +55,54 @@ def get_possible_database_path():
         if os.path.exists(candidate):
             path = candidate
             break  # get the first match
+    return path
+
+
+def create_possible_database_path():
+    """Create the directory to what is possibly a GRASS Database.
+
+    Create directory named grassdata in the usual locations.   
+    
+    Returns the new path as a string.  
+    """
+    home = os.path.expanduser('~') 
+    tmp = os.path.join(tempfile.gettempdir(),
+                               "grassdata_{}".format(getpass.getuser()))           
+    
+    # Create independent "grassdata" in the home Linux dir
+    if sys.platform.startswith('linux'):
+        try:
+            path = os.path.join(home, "grassdata")
+            os.mkdir(path)
+        except OSError: 
+            print ("Creation of the directory {} failed".format(path))
+    
+    # Create independent "grassdata" in other dirs (Windows and Mac)
+    else:  
+        candidates = [
+            os.path.join(home, "Documents", "grassdata"),
+            os.path.join(home, "My Documents", "grassdata")
+        ]
+        
+        try:
+            # here goes everything which has potential unicode issues
+            candidates.append(os.path.join(home, _("Documents"), "grassdata"))
+            candidates.append(os.path.join(home, _("My Documents"), "grassdata"))
+        except:
+            # just ignore the errors if it doesn't work
+            pass
+                
+            for candidate in candidates:                
+                try:
+                    os.mkdir(candidate)
+                    path = candidate
+                except OSError:
+                    print ("Creation of the directory {} failed".format(candidate))
+                        
+    # If still doesn't exist, create "grassdata_username" dir in temp           
+    if path is None:        
+            os.mkdir(tmp)
+            path = tmp            
     return path
 
 
