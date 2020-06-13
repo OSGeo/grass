@@ -16,6 +16,8 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (Mentor: Martin Landa)
 """
+import pathlib
+
 try:
     from xml.etree.ElementTree import ParseError
 except ImportError:  # < Python 2.7
@@ -30,12 +32,28 @@ class BaseCapabilitiesTree(etree.ElementTree):
     def __init__(self, cap_file):
         """!Initialize xml.etree.ElementTree
         """
+        is_file = False
         try:
-            etree.ElementTree.__init__(self, file=cap_file)
-        except ParseError:
-            raise ParseError(_("Unable to parse XML file"))
-        except IOError as error:
-            raise ParseError(_("Unable to open XML file '%s'.\n%s\n" % (cap_file, error)))
+            xml = pathlib.Path(cap_file)
+            if xml.exists():
+                is_file = True
+        except OSError as exc:
+            if exc.errno == 36: # file name too long
+                pass
+            else:
+                raise
+        if is_file:
+            try:
+                etree.ElementTree.__init__(self, file=cap_file)
+            except ParseError:
+                raise ParseError(_("Unable to parse XML file"))
+            except IOError as error:
+                raise ParseError(_("Unable to open XML file '%s'.\n%s\n" % (cap_file, error)))
+        else:
+            try:
+                etree.ElementTree.__init__(self, element=etree.fromstring(cap_file))
+            except ParseError:
+                raise ParseError(_("Unable to parse XML file"))
 
         if self.getroot() is None:
             raise ParseError(_("Root node was not found."))
