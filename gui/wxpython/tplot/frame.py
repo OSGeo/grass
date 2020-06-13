@@ -272,7 +272,7 @@ class TplotFrame(wx.Frame):
         self.controlPanelSizerVector.Fit(self)
         self.ntb.AddPage(page=self.controlPanelVector, text=_('STVDS'),
                          name='STVDS')
-        
+
         # ------------ITEMS IN NOTEBOOK PAGE (LABELS)------------------------
         self.controlPanelLabels = wx.Panel(parent=self.ntb, id=wx.ID_ANY)
         self.titleLabel = StaticText(parent=self.controlPanelLabels,
@@ -651,14 +651,14 @@ class TplotFrame(wx.Frame):
             zipped = list(zip(x, *y))
         else:
             zipped = list(zip(x, y))
-        with open(self.csvpath, "wb") as fi:
+        with open(self.csvpath, "w", newline='') as fi:
             writer = csv.writer(fi)
             if self.header:
                 head = ["Time"]
                 head.extend(self.yticksNames)
                 writer.writerow(head)
             writer.writerows(zipped)
-        
+
     def drawR(self):
         ycsv = []
         xcsv = []
@@ -799,7 +799,7 @@ class TplotFrame(wx.Frame):
         if (os.path.exists(self.csvpath) and not self.overwrite):
             dlg = wx.MessageDialog(self, _("{pa} already exists, do you want "
                                    "to overwrite?".format(pa=self.csvpath)),
-                                   _("File exists"), 
+                                   _("File exists"),
                                    wx.OK | wx.CANCEL | wx.ICON_QUESTION)
             if dlg.ShowModal() != wx.ID_OK:
                 dlg.Destroy()
