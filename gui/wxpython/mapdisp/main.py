@@ -457,7 +457,7 @@ class DMonGrassInterface(StandaloneGrassInterface):
             action = self._mapframe.RemoveToolbar
         else:
             action = self._mapframe.AddToolbar
-        toolbars = self._mapframe.GetToolbarNames()
+        toolbars = list(self._mapframe.GetToolbarNames())
         if not toolbars:
             toolbars.append('map')
         for toolbar in toolbars:
