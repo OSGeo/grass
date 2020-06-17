@@ -39,39 +39,28 @@ def get_possible_database_path():
     # Documents and My Documents for Windows
     # potential translations (old Windows and some Linux)
     # but ~ and ~/Documents should cover most of the cases
-    # ordered by platform preference
-    
-    # Search or create independent "grassdata" in the home Linux dir
-    if sys.platform.startswith('linux'):
-        
-        # Search for independent "grassdata" dir
-        for dir in next(os.walk(home))[1]:            
-            if 'grassdata' in dir.lower():
-                path = os.path.join(home, dir)
-                break         
+    # ordered by platform preference      
             
-    # Search independent "grassdata" in other dirs (Windows and Mac)
-    else:        
-        candidates = [
-            os.path.join(home, "Documents"),
-            os.path.join(home, "My Documents"),
-            os.path.join(tempfile.gettempdir()) # temp dir
-        ]
-        
-        try:
-            # here goes everything which has potential unicode issues
-            candidates.append(os.path.join(home, _("Documents")))
-            candidates.append(os.path.join(home, _("My Documents")))
-        except UnicodeDecodeError:
-            # just ignore the errors if it doesn't work
-            pass
+    # Search independent "grassdata" directories      
+    candidates = [
+        os.path.join(home),
+        os.path.join(home, "Documents"),
+    ]
+    
+    try:
+        # here goes everything which has potential unicode issues
+        candidates.append(os.path.join(home, _("Documents")))
+    except UnicodeDecodeError:
+        # just ignore the errors if it doesn't work
+        pass
 
-        for candidate in candidates:         
-            if os.path.exists(candidate):
-                for subdir in next(os.walk(candidate))[1]:
-                    if 'grassdata' in subdir.lower():
-                        path = os.path.join(candidate, subdir)
-                        break                
+    # Find possible database path
+    for candidate in candidates:         
+        if os.path.exists(candidate):
+            for subdir in next(os.walk(candidate))[1]:
+                if 'grassdata' in subdir.lower():
+                    path = os.path.join(candidate, subdir)
+                    break                
     return path    
 
 
