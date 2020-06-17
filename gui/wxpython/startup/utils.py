@@ -28,9 +28,7 @@ def get_possible_database_path():
     Looks for directory named grassdata in the usual locations.
 
     Returns the path as a string or None if nothing was found, so the return 
-    value can be used to test if the directory was found.
-    
-    Returns the path as a string.   
+    value can be used to test if the directory was found.  
     """
     home = os.path.expanduser('~')           
     path = None     
@@ -44,7 +42,7 @@ def get_possible_database_path():
     # Search independent "grassdata" directories      
     candidates = [
         os.path.join(home),
-        os.path.join(home, "Documents"),
+        os.path.join(home, "Documents")
     ]
     
     try:
