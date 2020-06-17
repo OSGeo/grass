@@ -42,8 +42,6 @@ import numpy
 import time
 import signal
 
-import wxversion
-wxversion.select('2.8')
 import wx
 
 

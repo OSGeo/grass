@@ -34,6 +34,8 @@ from grass.script.core import get_commands
 
 from core.debug import Debug
 
+WXPY3_MIN_VERSION = [4, 0, 0, 0]
+
 
 def parse_version_string(version):
     """Parse version number, return three numbers as list
@@ -88,43 +90,23 @@ def CheckWxVersion(version):
     return True
 
 
-def CheckForWx(forceVersion=os.getenv('GRASS_WXVERSION', None)):
-    """Try to import wx module and check its version
-
-    :param forceVersion: force wxPython version, eg. '2.8'
-    """
+def CheckForWx():
+    """Try to import wx module"""
     if 'wx' in sys.modules.keys():
         return
 
-    minVersion = [2, 8, 10, 1]
     try:
-        try:
-            # Note that Phoenix doesn't have wxversion anymore
-            import wxversion
-        except ImportError as e:
-            # if there is no wx raises ImportError
-            import wx
-            return
-        if forceVersion:
-            wxversion.select(forceVersion)
-        wxversion.ensureMinimal(str(minVersion[0]) + '.' + str(minVersion[1]))
-        import wx  # noqa: F811
+        import wx
         version = parse_version_string(wx.__version__)
-
-        if version < minVersion:
+        if version < WXPY3_MIN_VERSION:
             raise ValueError(
                 "Your wxPython version is {}".format(wx.__version__))
-
+        return
     except ImportError as e:
-        print('ERROR: wxGUI requires wxPython. %s' % str(e),
+        print('ERROR: wxGUI requires wxPython. {}'.format(e),
               file=sys.stderr)
         print('You can still use GRASS GIS modules in'
               ' the command line or in Python.', file=sys.stderr)
-        sys.exit(1)
-    except (ValueError, wxversion.VersionError) as e:
-        message = "ERROR: wxGUI requires wxPython >= {version}: {error}".format(
-            version=version_as_string(minVersion), error=e)
-        print(message, file=sys.stderr)
         sys.exit(1)
     except locale.Error as e:
         print("Unable to set locale:", e, file=sys.stderr)
@@ -263,7 +245,7 @@ toolbarSize = (24, 24)
 
 """@Check version of wxPython, use agwStyle for 2.8.11+"""
 hasAgw = CheckWxVersion([2, 8, 11, 0])
-wxPython3 = CheckWxVersion([3, 0, 0, 0])
+wxPython3 = CheckWxVersion(WXPY3_MIN_VERSION)
 wxPythonPhoenix = CheckWxPhoenix()
 
 gtk3 = True if 'gtk3' in wx.PlatformInfo else False
