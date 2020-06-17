@@ -511,17 +511,30 @@ class GRASSStartup(wx.Frame):
         # If nothing found, create GRASS directory
         if path is None:
             path = create_possible_database_path()
-        try:
-            self.tgisdbase.SetValue(path)
-        except UnicodeDecodeError:
-            # restore previous state
-            # wizard gives error in this case, we just ignore
-            path = None
-            self.tgisdbase.SetValue(self.gisdbase)
-        # if we still have path
+
         if path:
-            self.gisdbase = path
-            self.OnSetDatabase(None)
+            try:
+                self.tgisdbase.SetValue(path)
+            except UnicodeDecodeError:
+                # restore previous state
+                # wizard gives error in this case, we just ignore
+                path = None
+                self.tgisdbase.SetValue(self.gisdbase)
+            # if we still have path
+            if path:
+                self.gisdbase = path
+                self.OnSetDatabase(None)
+        else:
+            # nothing found
+            # TODO: should it be warning, hint or message?
+            self._showWarning(_(
+                'GRASS needs a directory (GRASS database) '
+                'in which to store its data. '
+                'Create one now if you have not already done so. '
+                'A popular choice is "grassdata", located in '
+                'your home directory. '
+                'Press Browse button to select the directory.'))
+
 
     def OnWizard(self, event):
         """Location wizard started"""

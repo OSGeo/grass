@@ -59,51 +59,55 @@ def get_possible_database_path():
 
 
 def create_possible_database_path():
-    """Create the directory to what is possibly a GRASS Database.
+    """Create the standard GRASS GIS directory.
 
-    Create directory named grassdata in the usual locations.   
+    Create directory named grassdata in the standard location according to the platform.  
     
-    Returns the new path as a string.  
+    Returns the new path as a string or None if nothing was found or created.
     """
-    home = os.path.expanduser('~') 
-    tmp = os.path.join(tempfile.gettempdir(),
-                               "grassdata_{}".format(getpass.getuser()))           
+    home = os.path.expanduser('~')   
+    candidates = []       
     
-    # Create independent "grassdata" in the home Linux dir
-    if sys.platform.startswith('linux'):
-        try:
-            path = os.path.join(home, "grassdata")
-            os.mkdir(path)
-        except OSError: 
-            print ("Creation of the directory {} failed".format(path))
+    # Candidate for independent "grassdata" in for Linux and macOS
+    if sys.platform.startswith('linux') or sys.platform.startswith('darwin'):
+        candidates.append(os.path.join(home, "grassdata"))
     
-    # Create independent "grassdata" in other dirs (Windows and Mac)
+    # Candidates for independent "grassdata" in other dirs (Windows)
     else:  
-        candidates = [
-            os.path.join(home, "Documents", "grassdata"),
-            os.path.join(home, "My Documents", "grassdata")
-        ]
+        candidates.append(os.path.join(home, "Documents", "grassdata"))
         
         try:
             # here goes everything which has potential unicode issues
             candidates.append(os.path.join(home, _("Documents"), "grassdata"))
-            candidates.append(os.path.join(home, _("My Documents"), "grassdata"))
-        except:
+        except UnicodeDecodeError:
             # just ignore the errors if it doesn't work
             pass
-                
-            for candidate in candidates:                
-                try:
-                    os.mkdir(candidate)
-                    path = candidate
-                except OSError:
-                    print ("Creation of the directory {} failed".format(candidate))
-                        
-    # If still doesn't exist, create "grassdata_username" dir in temp           
-    if path is None:        
+    
+    # Create "grassdata" directory           
+    for candidate in candidates:                
+        try:
+            os.mkdir(candidate)
+            path = candidate
+            return path
+        except OSError:
+            pass
+    
+    # Temporary "grassdata" directory       
+    tmp = os.path.join(tempfile.gettempdir(),
+                               "grassdata_{}".format(getpass.getuser())) 
+    
+    # Control if exists, if does not, create it
+    if os.path.exists(tmp):
+        path = tmp
+        return path
+    else:
+        try:
             os.mkdir(tmp)
-            path = tmp            
-    return path
+            path = tmp
+        except OSError:
+            pass
+        
+    return path                
 
 
 def get_lockfile_if_present(database, location, mapset):
