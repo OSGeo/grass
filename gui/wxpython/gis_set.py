@@ -39,7 +39,7 @@ from core.gcmd import GMessage, GError, DecodeString, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets
 from startup.utils import (
     get_lockfile_if_present, get_possible_database_path, 
-    create_possible_database_path, create_mapset)
+    create_database_directory, create_mapset)
 import startup.utils as sutils
 from startup.guiutils import SetSessionMapset, NewMapsetDialog
 import startup.guiutils as sgui
@@ -508,9 +508,9 @@ class GRASSStartup(wx.Frame):
         if self.GetRCValue("LOCATION_NAME") != "<UNKNOWN>":
             return
         path = get_possible_database_path()
-        # If nothing found, create GRASS directory
+        # If nothing found, try to create GRASS directory
         if path is None:
-            path = create_possible_database_path()
+            path = create_database_directory()
 
         if path:
             try:
@@ -534,7 +534,6 @@ class GRASSStartup(wx.Frame):
                 'A popular choice is "grassdata", located in '
                 'your home directory. '
                 'Press Browse button to select the directory.'))
-
 
     def OnWizard(self, event):
         """Location wizard started"""

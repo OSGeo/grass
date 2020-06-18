@@ -58,57 +58,49 @@ def get_possible_database_path():
     return path
 
 
-def create_possible_database_path():
-    """Create the standard GRASS GIS directory.
+def create_database_directory():
+    """Creates the standard GRASS GIS directory.
 
-    Create directory named grassdata in the standard location according to the platform.  
+    Creates database directory named grassdata in the standard location 
+    according to the platform.  
     
     Returns the new path as a string or None if nothing was found or created.
     """
     home = os.path.expanduser('~')   
     candidates = []       
-    
-    # Candidate for independent "grassdata" in for Linux and macOS
+   
+    # Candidate for case independent "grassdata" for Linux and macOS
     if sys.platform.startswith('linux') or sys.platform.startswith('darwin'):
-        candidates.append(os.path.join(home, "grassdata"))
-    
-    # Candidates for independent "grassdata" in other dirs (Windows)
+        candidates.append(os.path.join(home, "grassdata"))   
+    # Candidates for case independent "grassdata" in other dirs (Windows)
     else:  
         candidates.append(os.path.join(home, "Documents", "grassdata"))
         
-        try:
-            # here goes everything which has potential unicode issues
-            candidates.append(os.path.join(home, _("Documents"), "grassdata"))
-        except UnicodeDecodeError:
-            # just ignore the errors if it doesn't work
-            pass
-    
     # Create "grassdata" directory           
     for candidate in candidates:                
         try:
             os.mkdir(candidate)
-            path = candidate
-            return path
+            return candidate
         except OSError:
             pass
     
-    # Temporary "grassdata" directory       
-    tmp = os.path.join(tempfile.gettempdir(),
-                               "grassdata_{}".format(getpass.getuser())) 
+    # Temporary "grassdata" directory     
+    tmp = os.path.join(
+        tempfile.gettempdir(),
+        "grassdata_{}".format(getpass.getuser())
+    ) 
     
-    # Control if exists, if does not, create it
+    # Check if exists, if does not, create it
     if os.path.exists(tmp):
-        path = tmp
-        return path
+        return tmp
     else:
         try:
             os.mkdir(tmp)
-            path = tmp
+            return tmp
         except OSError:
             pass
         
-    return path                
-
+    return None
 
 def get_lockfile_if_present(database, location, mapset):
     """Return path to lock if present, None otherwise
