@@ -18,42 +18,43 @@ solve the errors etc. in a general manner).
 
 import os
 import shutil
-import tempfile
-import sys
 
 
 def get_possible_database_path():
     """Finds the directory for possible GRASS Database.
-
     It automatically detects independent directory named grassdata 
     in the usual locations. 
-
-    Returns the path as a string or None. If nothing was found, the return 
-    value can be used to test if the directory was found.  
+    
+    Returns the path as a string or None. If nothing was found, 
+    the return value can be used to test if the directory was found.  
     """
-    home = os.path.expanduser('~')            
+    home = os.path.expanduser('~')       
     # try some common directories for grassdata
-    # grassdata (lowercase) in home for Linux (first choice)
+    # case independent grassdata in home for Linux (first choice)
     # Documents for Windows
     # potential translations (old Windows and some Linux)
     # but ~ and ~/Documents should cover most of the cases
-    # case independent  
             
-    # Search independent "grassdata" directories      
+    # Independent "grassdata" directories      
     candidates = [
         home,
-        os.path.join(home, "Documents")
-    ]    
-    
-    tr_documents = os.path.join(home,_("Documents"))
-    if tr_documents not in candidates:
-        try:
-            # here goes everything which has potential unicode issues
-            candidates.append(tr_documents)
-        except UnicodeDecodeError:
-            # just ignore the errors if it doesn't work
-            pass
-
+        os.path.join(home, "Documents"),
+        os.path.join(home, "My Documents")
+    ] 
+    # Potential translations (old Windows and some Linux)
+    tr_documents = [
+        os.path.join(home,_("Documents")),
+        os.path.join(home,_("My Documents"))
+    ]
+    # Add potential translations to the list of candidates
+    for tr_document in tr_documents: 
+        if tr_document not in candidates:
+            try:
+                # here goes everything which has potential unicode issues
+                candidates.append(tr_document)
+            except UnicodeDecodeError:
+                # just ignore the errors if it doesn't work
+                pass
     # Find possible database path
     for candidate in candidates:         
         if os.path.exists(candidate):
