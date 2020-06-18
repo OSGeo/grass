@@ -23,43 +23,44 @@ import sys
 
 
 def get_possible_database_path():
-    """Finds the directory to what is possibly a GRASS Database.
+    """Finds the directory for possible GRASS Database.
 
-    Looks for directory named grassdata in the usual locations.
+    It automatically detects independent directory named grassdata 
+    in the usual locations. 
 
-    Returns the path as a string or None if nothing was found, so the return 
+    Returns the path as a string or None. If nothing was found, the return 
     value can be used to test if the directory was found.  
     """
-    home = os.path.expanduser('~')           
-    path = None     
+    home = os.path.expanduser('~')            
     # try some common directories for grassdata
     # grassdata (lowercase) in home for Linux (first choice)
-    # Documents and My Documents for Windows
+    # Documents for Windows
     # potential translations (old Windows and some Linux)
     # but ~ and ~/Documents should cover most of the cases
-    # ordered by platform preference      
+    # case independent  
             
     # Search independent "grassdata" directories      
     candidates = [
-        os.path.join(home),
+        home,
         os.path.join(home, "Documents")
-    ]
+    ]    
     
-    try:
-        # here goes everything which has potential unicode issues
-        candidates.append(os.path.join(home, _("Documents")))
-    except UnicodeDecodeError:
-        # just ignore the errors if it doesn't work
-        pass
+    tr_documents = os.path.join(home,_("Documents"))
+    if tr_documents not in candidates:
+        try:
+            # here goes everything which has potential unicode issues
+            candidates.append(tr_documents)
+        except UnicodeDecodeError:
+            # just ignore the errors if it doesn't work
+            pass
 
     # Find possible database path
     for candidate in candidates:         
         if os.path.exists(candidate):
             for subdir in next(os.walk(candidate))[1]:
                 if 'grassdata' in subdir.lower():
-                    path = os.path.join(candidate, subdir)
-                    break                
-    return path    
+                    return os.path.join(candidate,subdir)             
+    return None    
 
 
 def get_lockfile_if_present(database, location, mapset):
