@@ -66,25 +66,23 @@ def create_database_directory():
     
     Returns the new path as a string or None if nothing was found or created.
     """
-    home = os.path.expanduser('~')   
-    candidates = []       
+    home = os.path.expanduser('~')
    
     # Candidate for case independent "grassdata" for Linux and macOS
     if sys.platform.startswith('linux') or sys.platform.startswith('darwin'):
-        candidates.append(os.path.join(home, "grassdata"))   
+        candidate = os.path.join(home, "grassdata")
     # Candidates for case independent "grassdata" in other dirs (Windows)
     else:  
-        candidates.append(os.path.join(home, "Documents", "grassdata"))
+        candidate = os.path.join(home, "Documents", "grassdata")
         
-    # Create "grassdata" directory           
-    for candidate in candidates:                
-        try:
-            os.mkdir(candidate)
-            return candidate
-        except OSError:
-            pass
+    # Create "grassdata" directory   
+    try:
+        os.mkdir(candidate)
+        return candidate
+    except OSError:
+        pass
     
-    # Temporary "grassdata" directory     
+    # Temporary "grassdata" directory   
     tmp = os.path.join(
         tempfile.gettempdir(),
         "grassdata_{}".format(getpass.getuser())
@@ -92,13 +90,12 @@ def create_database_directory():
     
     # Check if exists, if does not, create it
     if os.path.exists(tmp):
+        return tmp       
+    try:
+        os.mkdir(tmp)
         return tmp
-    else:
-        try:
-            os.mkdir(tmp)
-            return tmp
-        except OSError:
-            pass
+    except OSError:
+        pass
         
     return None
 
