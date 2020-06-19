@@ -329,30 +329,27 @@ class CoordinateSystemPage(TitledPage):
 
         # toggles
         self.radioEpsg = wx.RadioButton(parent=self, id=wx.ID_ANY, label=_(
-            "Select coordinate reference system by EPSG"), style=wx.RB_GROUP)
+            "Select CRS from a list by EPSG or description"), style=wx.RB_GROUP)
         #self.radioIau = wx.RadioButton(
         #    parent=self, id=wx.ID_ANY,
         #    label=_("Select IAU code of spatial reference system"))
         self.radioFile = wx.RadioButton(
             parent=self, id=wx.ID_ANY, label=_(
-                "Read projection and datum terms from a "
-                "georeferenced data file"))
+                "Read CRS from a georeferenced data file"))
+        self.radioXy = wx.RadioButton(parent=self, id=wx.ID_ANY, label=_(
+                "Create a generic cartesian coordinate system (XY)"))
         self.radioWkt = wx.RadioButton(
             parent=self, id=wx.ID_ANY, label=_(
-                "Read projection and datum terms from a "
-                "Well Known Text (WKT) .prj file"))
-        self.radioSrs = wx.RadioButton(parent=self, id=wx.ID_ANY, label=_(
-            "Select coordinate system parameters from a list"))
+                "Specify CRS using WKT string"))
         self.radioProj = wx.RadioButton(
             parent=self, id=wx.ID_ANY, label=_(
-                "Specify projection and datum terms using custom "
-                "PROJ.4 parameters"))
-        self.radioXy = wx.RadioButton(parent=self, id=wx.ID_ANY, label=_(
-            "Create a generic Cartesian coordinate system (XY)"))
+                "Specify CRS using PROJ.4 string"))
+        self.radioSrs = wx.RadioButton(parent=self, id=wx.ID_ANY, label=_(
+                "Define custom CRS"))
 
         # layout
         self.sizer.SetVGap(10)
-        self.sizer.Add(StaticText(parent=self, label=_("Simple methods:")),
+        self.sizer.Add(StaticText(parent=self, label=_("Select Coordinate Reference System (CRS):")),
                        flag=wx.ALIGN_LEFT, pos=(1, 1))
         self.sizer.Add(self.radioEpsg,
                        flag=wx.ALIGN_LEFT, pos=(2, 1))
@@ -360,15 +357,15 @@ class CoordinateSystemPage(TitledPage):
         #               flag=wx.ALIGN_LEFT, pos=(1, 1))
         self.sizer.Add(self.radioFile,
                        flag=wx.ALIGN_LEFT, pos=(3, 1))
-        self.sizer.Add(self.radioWkt,
-                       flag=wx.ALIGN_LEFT, pos=(4, 1))
         self.sizer.Add(self.radioXy,
+                       flag=wx.ALIGN_LEFT, pos=(4, 1))
+        self.sizer.Add(StaticText(parent=self, label=_("Advanced additional methods:")),
                        flag=wx.ALIGN_LEFT, pos=(5, 1))
-        self.sizer.Add(StaticText(parent=self, label=_("Advanced methods:")),
+        self.sizer.Add(self.radioWkt,
                        flag=wx.ALIGN_LEFT, pos=(6, 1))
-        self.sizer.Add(self.radioSrs,
-                       flag=wx.ALIGN_LEFT, pos=(7, 1))
         self.sizer.Add(self.radioProj,
+                       flag=wx.ALIGN_LEFT, pos=(7, 1))
+        self.sizer.Add(self.radioSrs,
                        flag=wx.ALIGN_LEFT, pos=(8, 1))
         self.sizer.AddGrowableCol(1)
 
@@ -464,10 +461,10 @@ class CoordinateSystemPage(TitledPage):
 
 
 class ProjectionsPage(TitledPage):
-    """Wizard page for selecting projection (select coordinate system option)"""
+    """Wizard page for defining custom CRS"""
 
     def __init__(self, wizard, parent):
-        TitledPage.__init__(self, wizard, _("Choose projection"))
+        TitledPage.__init__(self, wizard, _("Define custom CRS"))
         
         self.sizer = wx.GridBagSizer(vgap=0, hgap=0)
         self.sizer.SetCols(5)
@@ -1367,7 +1364,7 @@ class GeoreferencedFilePage(TitledPage):
     for setting coordinate system parameters"""
 
     def __init__(self, wizard, parent):
-        TitledPage.__init__(self, wizard, _("Select georeferenced file"))
+        TitledPage.__init__(self, wizard, _("Read CRS from a georeferenced data file"))
         
         self.sizer = wx.GridBagSizer(vgap=0, hgap=0)
         self.sizer.SetCols(5)
@@ -1447,80 +1444,115 @@ class WKTPage(TitledPage):
 
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _(
-            "Select Well Known Text (WKT) .prj file"))
+            "Specify CRS using WKT string"))
         
         self.sizer = wx.GridBagSizer(vgap=0, hgap=0)
         self.sizer.SetCols(5)
         self.sizer.SetRows(8)
         
-        self.wktfile = ''
+        self.customstring = ''
+        self.parent = parent
 
-        # create controls
-        self.lfile = self.MakeLabel(_("WKT .prj file:"))
-        self.tfile = self.MakeTextCtrl(size=(300, -1))
-        self.bbrowse = self.MakeButton(_("Browse"))
+        # widgets
+        self.text_wkt = self.MakeTextCtrl(size=(400, 200),
+                                                  style=wx.TE_MULTILINE)
+        self.label_wkt = self.MakeLabel(
+            _("Enter WKT parameters string:"))
 
-        # do layout
-        self.sizer.Add(self.lfile, flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTRE_VERTICAL |
-                       wx.ALL, border=5, pos=(1, 1))
-        self.sizer.Add(self.tfile, flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTRE_VERTICAL |
-                       wx.ALL, border=5, pos=(1, 2))
-        self.sizer.Add(self.bbrowse, flag=wx.ALIGN_LEFT |
-                       wx.ALL, border=5, pos=(1, 3))
-        self.sizer.AddGrowableCol(3)
+        # layout
+        self.sizer.Add(self.label_wkt,
+                       flag=wx.ALIGN_LEFT | wx.ALL,
+                       border=5, pos=(1, 1))
+        self.sizer.Add(self.text_wkt,
+                       flag=wx.ALIGN_LEFT | wx.ALL | wx.EXPAND,
+                       border=5, pos=(2, 1), span=(1, 2))
+        self.sizer.AddGrowableRow(2)
+        self.sizer.AddGrowableCol(2)
 
-        self.bbrowse.Bind(wx.EVT_BUTTON, self.OnBrowse)
-        self.tfile.Bind(wx.EVT_TEXT, self.OnText)
+        self.text_wkt.Bind(wx.EVT_TEXT, self.GetWktstring)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
     def OnEnterPage(self, event):
-        if len(self.wktfile) == 0:
+        if len(self.customstring) == 0:
             # disable 'next' button by default
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
 
         event.Skip()
-
+        
     def OnPageChanging(self, event):
-        if event.GetDirection() and not os.path.isfile(self.wktfile):
-            event.Veto()
+        if event.GetDirection():
+            self.custom_dtrans_string = ''
+
+            if self.customstring.find('+datum=') < 0:
+                self.GetNext().SetPrev(self)
+                return
+
+            # check for datum tranforms
+            # FIXME: -t flag is a hack-around for trac bug #1849
+            ret, out, err = RunCommand('g.proj',
+                                       read=True, getErrorMsg=True,
+                                       wkt=self.customstring,
+                                       datum_trans='-1',
+                                       flags='t')
+            if ret != 0:
+                wx.MessageBox(parent=self,
+                              message=err,
+                              caption=_("Error"),
+                              style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+                event.Veto()
+                return
+
+            if out:
+                dtrans = ''
+                # open a dialog to select datum transform number
+                dlg = SelectTransformDialog(self.parent.parent, transforms=out)
+
+                if dlg.ShowModal() == wx.ID_OK:
+                    dtrans = dlg.GetTransform()
+                    if dtrans == '':
+                        dlg.Destroy()
+                        event.Veto()
+                        return _('Datum transform is required.')
+                else:
+                    dlg.Destroy()
+                    event.Veto()
+                    return _('Datum transform is required.')
+
+                self.parent.datum_trans = dtrans
+
+                # prepare +nadgrids or +towgs84 terms for Summary page. first
+                # convert them:
+                ret, projlabel, err = RunCommand('g.proj',
+                                                 flags='jft',
+                                                 proj4=self.customstring,
+                                                 datum_trans=dtrans,
+                                                 getErrorMsg=True,
+                                                 read=True)
+                # splitting on space alone would break for grid files with
+                # space in pathname
+                for projterm in projlabel.split(' +'):
+                    if projterm.find(
+                            "towgs84=") != -1 or projterm.find("nadgrids=") != -1:
+                        self.custom_dtrans_string = ' +%s' % projterm
+                        break
+
         self.GetNext().SetPrev(self)
 
-        event.Skip()
-
-    def OnText(self, event):
-        """File changed"""
-        self.wktfile = event.GetString()
+        
+    def GetWktstring(self, event):
+        """Change WKT string"""
+        # TODO: check WKT syntax
+        self.customstring = event.GetString()
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
-        if len(self.wktfile) > 0 and os.path.isfile(self.wktfile):
-            if not nextButton.IsEnabled():
-                nextButton.Enable(True)
-        else:
+        if len(self.customstring) == 0:
             if nextButton.IsEnabled():
                 nextButton.Enable(False)
-
-        event.Skip()
-
-    def OnBrowse(self, event):
-        """Choose file"""
-        dlg = wx.FileDialog(
-            parent=self,
-            message=_("Select Well Known Text (WKT) .prj file"),
-            defaultDir=os.getcwd(),
-            wildcard="PRJ files (*.prj)|*.prj|Files (*.*)|*.*",
-            style=wx.FD_OPEN)
-
-        if dlg.ShowModal() == wx.ID_OK:
-            path = dlg.GetPath()
-            self.tfile.SetValue(path)
-        dlg.Destroy()
-
-        event.Skip()
-
+        else:
+            if not nextButton.IsEnabled():
+                nextButton.Enable()
 
 class EPSGPage(TitledPage):
     """Wizard page for selecting EPSG code for
@@ -1973,7 +2005,7 @@ class CustomPage(TitledPage):
     def __init__(self, wizard, parent):
         TitledPage.__init__(
             self, wizard,
-            _("Choose method of specifying georeferencing parameters"))
+            _("Specify CRS using PROJ.4 string"))
         global coordsys
         
         self.sizer = wx.GridBagSizer(vgap=0, hgap=0)
@@ -2019,7 +2051,7 @@ class CustomPage(TitledPage):
                 return
 
             # check for datum tranforms
-            # FIXME: -t flag is a hack-around for trac bug #1849
+            # FIXME: -t flag is a hack-around for trac bug #1849          
             ret, out, err = RunCommand('g.proj',
                                        read=True, getErrorMsg=True,
                                        proj4=self.customstring,
