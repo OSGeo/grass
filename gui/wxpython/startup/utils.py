@@ -21,19 +21,15 @@ import shutil
 
 
 def get_possible_database_path():
-    """Finds the directory for possible GRASS Database.
-    It automatically detects independent directory named grassdata 
-    in the usual locations. 
+    """Looks for directory 'grassdata' (case-insensitive) in standard 
+    locations to detect existing GRASS Database.
     
-    Returns the path as a string or None. If nothing was found, 
-    the return value can be used to test if the directory was found.  
+    Returns the path as a string or None if nothing was found.
     """
-    home = os.path.expanduser('~')       
+    home = os.path.expanduser('~')  
     # try some common directories for grassdata
     # case independent grassdata in home for Linux (first choice)
     # Documents for Windows
-    # potential translations (old Windows and some Linux)
-    # but ~ and ~/Documents should cover most of the cases
             
     # Independent "grassdata" directories      
     candidates = [
@@ -41,20 +37,7 @@ def get_possible_database_path():
         os.path.join(home, "Documents"),
         os.path.join(home, "My Documents")
     ] 
-    # Potential translations (old Windows and some Linux)
-    tr_documents = [
-        os.path.join(home,_("Documents")),
-        os.path.join(home,_("My Documents"))
-    ]
-    # Add potential translations to the list of candidates
-    for tr_document in tr_documents: 
-        if tr_document not in candidates:
-            try:
-                # here goes everything which has potential unicode issues
-                candidates.append(tr_document)
-            except UnicodeDecodeError:
-                # just ignore the errors if it doesn't work
-                pass
+
     # Find possible database path
     for candidate in candidates:         
         if os.path.exists(candidate):
