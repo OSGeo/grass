@@ -26,25 +26,21 @@ def get_possible_database_path():
     
     Returns the path as a string or None if nothing was found.
     """
-    home = os.path.expanduser('~')  
+    home = os.path.expanduser('~')
+
     # try some common directories for grassdata
-    # case independent grassdata in home for Linux (first choice)
-    # Documents for Windows
-            
-    # Independent "grassdata" directories      
     candidates = [
         home,
         os.path.join(home, "Documents"),
-        os.path.join(home, "My Documents")
-    ] 
+    ]
 
-    # Find possible database path
-    for candidate in candidates:         
+    # find possible database path
+    for candidate in candidates:
         if os.path.exists(candidate):
             for subdir in next(os.walk(candidate))[1]:
                 if 'grassdata' in subdir.lower():
-                    return os.path.join(candidate,subdir)             
-    return None    
+                    return os.path.join(candidate,subdir)
+    return None
 
 
 def get_lockfile_if_present(database, location, mapset):
