@@ -38,7 +38,7 @@ import wx.lib.mixins.listctrl as listmix
 from core.gcmd import GMessage, GError, DecodeString, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets
 from startup.utils import (
-    get_lockfile_if_present, get_possible_database_path, 
+    get_lockfile_if_present, get_possible_database_path,
     create_database_directory, create_mapset)
 import startup.utils as sutils
 from startup.guiutils import SetSessionMapset, NewMapsetDialog
