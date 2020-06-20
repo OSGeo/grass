@@ -233,13 +233,13 @@ Very very old bugtracker (Dec 2000 * Dec 2006):
 
 ## GRASS Addons
 
-Maintainer: Martin Landa
+Maintainer: Martin Landa and Markus Neteler
 
 Details:
- grass-addons/tools/addons/README.txt
 
-Installed with g.extension
-Manuals: https://grass.osgeo.org/grass7/manuals/addons/
+- Windows-addons: grass-addons/tools/addons/README.txt
+- Addon manual pages: https://github.com/OSGeo/grass-addons/blob/master/tools/addons/README.txt
+- Rendered manuals: https://grass.osgeo.org/grass7/manuals/addons/
 
 The redirect to the latest grass7x directory is defined on grass.osgeo.org:
   /etc/apache2/includes/grass.osgeo.org.inc
@@ -248,7 +248,7 @@ Procedure building of binaries (Windows):
 * Addons module are compiled on build server, currently at the CTU in Prague) and publishing their manual pages on publishing server, i.e. grass.osgeo.org.
 * A new compilation is triggered everytime when a commit is done in the Addons-SVN.
 * Logs:
-    * Linux log files:   https://grass.osgeo.org/addons/grass7/logs
+    * Linux log files:   https://grass.osgeo.org/addons/grass7/logs (compiled on `grasslxd` on `osgeo7`)
     * Windows log files: http://wingrass.fsv.cvut.cz/grass78/x86_64/addons/latest/logs/
 
 Procedure of granting write access to Addons repo:
