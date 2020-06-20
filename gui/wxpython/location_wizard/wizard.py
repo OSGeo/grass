@@ -2108,7 +2108,7 @@ class SummaryPage(TitledPage):
         self.panelProj4string.SetSizer(proj4stringSizer)
 
         self.panelProj4string.SetupScrolling()
-        self.panelProj.SetupScrolling(scroll_y=False)
+        self.panelProj.SetupScrolling()
         self.panelTitle.SetupScrolling(scroll_y=False)
 
         self.sizer.Add(self.MakeLabel(_("GRASS Database:")),
@@ -2147,7 +2147,6 @@ class SummaryPage(TitledPage):
                        flag=wx.ALIGN_LEFT | wx.ALL | wx.EXPAND,
                        border=0, pos=(5, 1))
         self.sizer.AddGrowableCol(1)
-        self.sizer.AddGrowableRow(3, 1)
         self.sizer.AddGrowableRow(4, 1)
         self.sizer.AddGrowableRow(5, 5)
 
@@ -2237,7 +2236,7 @@ class SummaryPage(TitledPage):
             label = 'matches file %s' % self.parent.filepage.georeffile
 
         elif coordsys == 'wkt':
-            label = 'matches string %s' % self.parent.wktpage.wktstring
+            label = 'matches WKT string %s' % self.parent.wktpage.wktstring
 
         elif coordsys == 'proj':
             label = ('%s, %s %s' % (projdesc, datumdesc, ellipsedesc))
@@ -2637,13 +2636,12 @@ class LocationWizard(wx.Object):
                                       filename=self.filepage.georeffile,
                                       desc=self.startpage.locTitle)
             elif coordsys == "wkt":
-                if not self.wktpage.wktfile or \
-                        not os.path.isfile(self.wktpage.wktfile):
-                    return _("File <%s> not found." % self.wktpage.wktfile)
+                if not self.wktpage.wktstring:
+                    return _('WKT string missing.')
 
                 grass.create_location(dbase=self.startpage.grassdatabase,
                                       location=self.startpage.location,
-                                      wkt=self.wktpage.wktfile,
+                                      wkt=self.wktpage.wktstring,
                                       desc=self.startpage.locTitle)
 
         except grass.ScriptError as e:
