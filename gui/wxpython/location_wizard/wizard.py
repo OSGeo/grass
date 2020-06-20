@@ -318,7 +318,7 @@ class CoordinateSystemPage(TitledPage):
 
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _(
-            "Choose method for creating a new location"))
+            "Select Coordinate Reference System (CRS)"))
         
         self.sizer = wx.GridBagSizer(vgap=0, hgap=0)
         self.sizer.SetCols(5)
@@ -349,24 +349,22 @@ class CoordinateSystemPage(TitledPage):
 
         # layout
         self.sizer.SetVGap(10)
-        self.sizer.Add(StaticText(parent=self, label=_("Select Coordinate Reference System (CRS):")),
-                       flag=wx.ALIGN_LEFT, pos=(1, 1))
         self.sizer.Add(self.radioEpsg,
-                       flag=wx.ALIGN_LEFT, pos=(2, 1))
+                       flag=wx.ALIGN_LEFT, pos=(1, 1))
         #self.sizer.Add(self.radioIau,
         #               flag=wx.ALIGN_LEFT, pos=(1, 1))
         self.sizer.Add(self.radioFile,
-                       flag=wx.ALIGN_LEFT, pos=(3, 1))
+                       flag=wx.ALIGN_LEFT, pos=(2, 1))
         self.sizer.Add(self.radioXy,
+                       flag=wx.ALIGN_LEFT, pos=(3, 1))
+        self.sizer.Add(StaticText(parent=self, label=_("Additional methods:")),
                        flag=wx.ALIGN_LEFT, pos=(4, 1))
-        self.sizer.Add(StaticText(parent=self, label=_("Advanced additional methods:")),
-                       flag=wx.ALIGN_LEFT, pos=(5, 1))
         self.sizer.Add(self.radioWkt,
-                       flag=wx.ALIGN_LEFT, pos=(6, 1))
+                       flag=wx.ALIGN_LEFT, pos=(5, 1))
         self.sizer.Add(self.radioProj,
-                       flag=wx.ALIGN_LEFT, pos=(7, 1))
+                       flag=wx.ALIGN_LEFT, pos=(6, 1))
         self.sizer.Add(self.radioSrs,
-                       flag=wx.ALIGN_LEFT, pos=(8, 1))
+                       flag=wx.ALIGN_LEFT, pos=(7, 1))
         self.sizer.AddGrowableCol(1)
 
         # bindings
@@ -1450,12 +1448,12 @@ class WKTPage(TitledPage):
         self.sizer.SetCols(5)
         self.sizer.SetRows(8)
         
-        self.customstring = ''
+        self.wktstring = ''
         self.parent = parent
 
         # widgets
         self.text_wkt = self.MakeTextCtrl(size=(400, 200),
-                                                  style=wx.TE_MULTILINE)
+                                          style=wx.TE_MULTILINE)
         self.label_wkt = self.MakeLabel(
             _("Enter WKT parameters string:"))
 
@@ -1474,80 +1472,27 @@ class WKTPage(TitledPage):
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
     def OnEnterPage(self, event):
-        if len(self.customstring) == 0:
+        if len(self.wktstring) == 0:
             # disable 'next' button by default
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
 
         event.Skip()
-        
+
     def OnPageChanging(self, event):
         if event.GetDirection():
-            self.custom_dtrans_string = ''
-
-            if self.customstring.find('+datum=') < 0:
-                self.GetNext().SetPrev(self)
-                return
-
-            # check for datum tranforms
-            # FIXME: -t flag is a hack-around for trac bug #1849
-            ret, out, err = RunCommand('g.proj',
-                                       read=True, getErrorMsg=True,
-                                       wkt=self.customstring,
-                                       datum_trans='-1',
-                                       flags='t')
-            if ret != 0:
-                wx.MessageBox(parent=self,
-                              message=err,
-                              caption=_("Error"),
-                              style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
-                event.Veto()
-                return
-
-            if out:
-                dtrans = ''
-                # open a dialog to select datum transform number
-                dlg = SelectTransformDialog(self.parent.parent, transforms=out)
-
-                if dlg.ShowModal() == wx.ID_OK:
-                    dtrans = dlg.GetTransform()
-                    if dtrans == '':
-                        dlg.Destroy()
-                        event.Veto()
-                        return _('Datum transform is required.')
-                else:
-                    dlg.Destroy()
-                    event.Veto()
-                    return _('Datum transform is required.')
-
-                self.parent.datum_trans = dtrans
-
-                # prepare +nadgrids or +towgs84 terms for Summary page. first
-                # convert them:
-                ret, projlabel, err = RunCommand('g.proj',
-                                                 flags='jft',
-                                                 proj4=self.customstring,
-                                                 datum_trans=dtrans,
-                                                 getErrorMsg=True,
-                                                 read=True)
-                # splitting on space alone would break for grid files with
-                # space in pathname
-                for projterm in projlabel.split(' +'):
-                    if projterm.find(
-                            "towgs84=") != -1 or projterm.find("nadgrids=") != -1:
-                        self.custom_dtrans_string = ' +%s' % projterm
-                        break
-
+            event.Veto()
         self.GetNext().SetPrev(self)
 
-        
+        event.Skip()
+
     def GetWktstring(self, event):
         """Change WKT string"""
         # TODO: check WKT syntax
-        self.customstring = event.GetString()
+        self.wktstring = event.GetString()
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
-        if len(self.customstring) == 0:
+        if len(self.wktstring) == 0:
             if nextButton.IsEnabled():
                 nextButton.Enable(False)
         else:
@@ -2258,7 +2203,8 @@ class SummaryPage(TitledPage):
                     georef=self.parent.filepage.georeffile, **extra_opts)
             elif coordsys == 'wkt':
                 ret, projlabel, err = RunCommand(
-                    'g.proj', flags='jft', wkt=self.parent.wktpage.wktfile, **extra_opts)
+                    'g.proj', flags='jft', wkt="-", 
+                    stdin=self.parent.wktpage.wktstring, **extra_opts)
 
             finishButton = wx.FindWindowById(wx.ID_FORWARD)
             if ret == 0:
@@ -2291,7 +2237,7 @@ class SummaryPage(TitledPage):
             label = 'matches file %s' % self.parent.filepage.georeffile
 
         elif coordsys == 'wkt':
-            label = 'matches file %s' % self.parent.wktpage.wktfile
+            label = 'matches string %s' % self.parent.wktpage.wktstring
 
         elif coordsys == 'proj':
             label = ('%s, %s %s' % (projdesc, datumdesc, ellipsedesc))
