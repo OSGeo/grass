@@ -69,10 +69,10 @@ def create_database_directory():
     home = os.path.expanduser('~')
 
     # Determine the standard path according to the platform
-    if sys.platform.startswith('linux') or sys.platform.startswith('darwin'):
-        path = os.path.join(home, "grassdata")
-    else:
+    if sys.platform == 'win32':
         path = os.path.join(home, "Documents", "grassdata")
+    else:
+        path = os.path.join(home, "grassdata")
 
     # Create "grassdata" directory
     try:
