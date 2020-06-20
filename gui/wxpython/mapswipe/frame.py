@@ -23,7 +23,6 @@ import grass.script as grass
 from gui_core.mapdisp import DoubleMapFrame
 from gui_core.dialogs import GetImageHandlers
 from mapwin.base import MapWindowProperties
-from core import globalvar
 from core.render import Map
 from mapdisp import statusbar as sb
 from core.debug import Debug
@@ -177,8 +176,7 @@ class SwipeMapFrame(DoubleMapFrame):
 
         # create statusbar and its manager
         statusbar = self.CreateStatusBar(number=4, style=0)
-        if globalvar.wxPython3:
-            statusbar.SetMinHeight(24)
+        statusbar.SetMinHeight(24)
         statusbar.SetStatusWidths([-5, -2, -1, -1])
         self.statusbarManager = sb.SbManager(
             mapframe=self, statusbar=statusbar)
