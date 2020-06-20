@@ -42,8 +42,8 @@ from gui_core.forms import GUI
 from core.settings import UserSettings
 from gui_core.gselect import Select
 from gui_core.widgets import FloatValidator
-from gui_core.wrap import SpinCtrl, CheckBox, TextCtrl, Button, \
-    BitmapButton, StaticText, StaticBox, Choice, RadioButton, EmptyImage
+from gui_core.wrap import BitmapButton, Button, CheckBox, Choice, \
+    ComboBox, EmptyImage, RadioButton, SpinCtrl, StaticBox, StaticText, TextCtrl
 
 from animation.utils import TemporalMode, getRegisteredMaps, getNameAndLayer, getCpuCount
 from animation.data import AnimationData, AnimLayer
@@ -1992,7 +1992,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             pos=(
                 row,
                 0))
-        self.tempFormat = wx.ComboBox(parent=panel, name='GetValue')
+        self.tempFormat = ComboBox(parent=panel, name='GetValue')
         self.tempFormat.SetItems(self._timeFormats)
         self.tempFormat.SetValue(self._initFormat)
         self.winId['animation:temporal:format'] = self.tempFormat.GetId()
