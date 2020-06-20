@@ -80,10 +80,8 @@ import atexit
 import grass.script as grass
 
 try:
-    import wxversion
-    wxversion.select(['3.0', '2.8', '2.6'])
     import wx
-except Exception:
+except ImportError:
     # ensure that --help, --interface-description etc work even without wx
     if __name__ == "__main__":
         if len(sys.argv) == 2:
