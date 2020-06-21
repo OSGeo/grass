@@ -60,11 +60,11 @@ rm -f $dist/grass$ver.tmp $dist/etc/fontcap
 
 # create batch files
 
-src_win_esc=`echo $src | sed 's#^/\([a-z]\)#\1:#; s#/#\\\\\\\\#g'`
-dist_win_esc="$src_win_esc\\\\$dist"
+src_esc=`echo $src | sed 's#^/\([a-z]\)#\1:#; s#/#\\\\\\\\#g'`
+dist_esc="$src_esc\\\\$dist"
 
 (
-sed 's/^\(set GISBASE=\).*/\1'$dist_win_esc'/' \
+sed 's/^\(set GISBASE=\).*/\1'$dist_esc'/' \
     mswindows/osgeo4w/env.bat.tmpl
 cat<<EOT
 
@@ -84,7 +84,7 @@ unix2dos $dist/etc/env.bat
 
 (
 sed -e 's/^\(call "\)%~dp0\(.*\)$/\1C:\\OSGeo4W64\\bin\2/' \
-    -e 's/^\(call "\).*\(\\etc\\env\.bat"\)$/\1'$dist_win_esc'\2/' \
+    -e 's/^\(call "\).*\(\\etc\\env\.bat"\)$/\1'$dist_esc'\2/' \
     -e 's/^\(.* "\)%GISBASE%\\etc\(\\grass.*\)$/\1%GISBASE%\\..\\'$bin'\2/' \
     -e 's/@POSTFIX@/'$ver'/g' \
     mswindows/osgeo4w/grass.bat.tmpl
