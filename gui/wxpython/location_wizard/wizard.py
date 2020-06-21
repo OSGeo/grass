@@ -1408,8 +1408,6 @@ class GeoreferencedFilePage(TitledPage):
             event.Veto()
         self.GetNext().SetPrev(self)
 
-        event.Skip()
-
     def OnText(self, event):
         """File changed"""
         self.georeffile = event.GetString()
@@ -1467,7 +1465,7 @@ class WKTPage(TitledPage):
         self.sizer.AddGrowableRow(2)
         self.sizer.AddGrowableCol(2)
 
-        self.text_wkt.Bind(wx.EVT_TEXT, self.GetWktstring)
+        self.text_wkt.Bind(wx.EVT_TEXT, self.OnText)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
@@ -1481,13 +1479,12 @@ class WKTPage(TitledPage):
         event.Skip()
 
     def OnPageChanging(self, event):
-        if event.GetDirection():
+        isblank = bool(self.wktstring and self.wktstring.strip())
+        if event.GetDirection() and isblank is False:
             event.Veto()
         self.GetNext().SetPrev(self)
 
-        event.Skip()
-
-    def GetWktstring(self, event):
+    def OnText(self, event):
         """Change WKT string"""
         # TODO: check WKT syntax
         self.wktstring = event.GetString()
@@ -1504,7 +1501,7 @@ class EPSGPage(TitledPage):
     setting coordinate system parameters"""
 
     def __init__(self, wizard, parent):
-        TitledPage.__init__(self, wizard, _("Choose EPSG Code"))
+        TitledPage.__init__(self, wizard, _("Select CRS from a list"))
         
         self.sizer = wx.BoxSizer(wx.VERTICAL)  
         searchBoxSizer = wx.BoxSizer(wx.HORIZONTAL)
