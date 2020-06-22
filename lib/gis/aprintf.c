@@ -197,17 +197,17 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
 
 		while (*++c && *q != *c);
 		if (*c) {
+		    va_list ap_copy;
 		    char tmp;
+
+		    /* copy ap for ovprintf() */
+		    va_copy(ap_copy, ap);
+
 		    /* found a conversion specifier */
 		    if (*c == 's') {
 			/* if this is a string specifier */
 			int width = -1, prec = -1, use_ovprintf = 1;
 			char *p_tmp, *s;
-			va_list ap_copy;
-
-			/* save this ap and use ovprintf() for non-wide
-			 * characters */
-			va_copy(ap_copy, ap);
 
 			*p_spec = 0;
 			p_spec = spec;
@@ -286,15 +286,54 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
 			    nbytes += ovprintf(opts, p, ap_copy);
 			    *(q + 1) = tmp;
 			}
-
-			va_end(ap_copy);
 		    } else {
 			/* else use ovprintf() for non-string specifiers */
 			tmp = *(q + 1);
 			*(q + 1) = 0;
-			nbytes += ovprintf(opts, p, ap);
+			nbytes += ovprintf(opts, p, ap_copy);
 			*(q + 1) = tmp;
+
+			/* once ap is passed to another function, its value
+			 * becomes undefined (printf(3) man page) or
+			 * indeterminate
+			 * (http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1124.pdf
+			 * section 7.15 paragraph 3) after callee functions
+			 * return; simply passing ap to ovprintf() works on
+			 * Linux, but it doesn't on MinGW on Windows; pass its
+			 * copy and skip an argument manually; argument types
+			 * from printf(3) man page */
+			switch (*c) {
+			    case 'd':
+			    case 'i':
+			    case 'o':
+			    case 'u':
+			    case 'x':
+			    case 'X':
+			    case 'c':
+			    case 'C':
+			    case 'S':
+				va_arg(ap, int);
+				break;
+			    case 'e':
+			    case 'E':
+			    case 'f':
+			    case 'F':
+			    case 'g':
+			    case 'G':
+			    case 'a':
+			    case 'A':
+				va_arg(ap, double);
+				break;
+			    case 'p':
+				va_arg(ap, void *);
+				break;
+			    case 'n':
+				va_arg(ap, int *);
+				break;
+			    /* otherwise, no argument is required for m% */
+			}
 		    }
+		    va_end(ap_copy);
 		    break;
 		} else if (p_spec - spec < SPEC_BUF_SIZE - 2)
 		    /* 2 reserved for % and NULL */
