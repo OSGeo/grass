@@ -293,12 +293,12 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
 			nbytes += ovprintf(opts, p, ap_copy);
 			*(q + 1) = tmp;
 
-			/* once ap is passed to another function, its value
-			 * becomes undefined (printf(3) man page) or
-			 * indeterminate
+			/* once ap is passed to another function that calls
+			 * va_arg() on it, its value becomes undefined
+			 * (printf(3) man page) or indeterminate
 			 * (http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1124.pdf
-			 * section 7.15 paragraph 3) after callee functions
-			 * return; simply passing ap to ovprintf() works on
+			 * section 7.15 paragraph 3) after the callee function
+			 * returns; simply passing ap to ovprintf() works on
 			 * Linux, but it doesn't on MinGW on Windows; pass its
 			 * copy and skip an argument manually; argument types
 			 * from printf(3) man page */
