@@ -208,7 +208,7 @@ int main(int argc, char *argv[])
     if (!vector && !map && !cross_corr_flag->answer)
 	G_fatal_error(_("No raster or vector or cross-validation output"));
 
-    if (!strcmp(type_opt->answer, "linear"))
+    if (!strcmp(type_opt->answer, "bilinear"))
 	bilin = P_BILINEAR;
     else
 	bilin = P_BICUBIC;
