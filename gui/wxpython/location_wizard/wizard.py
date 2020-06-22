@@ -1479,8 +1479,7 @@ class WKTPage(TitledPage):
         event.Skip()
 
     def OnPageChanging(self, event):
-        isblank = bool(self.wktstring and self.wktstring.strip())
-        if event.GetDirection() and isblank is False:
+        if event.GetDirection() and not self.wktstring.strip():
             event.Veto()
         self.GetNext().SetPrev(self)
 
