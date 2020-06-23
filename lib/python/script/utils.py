@@ -455,8 +455,14 @@ def set_path(modulename, dirname=None, path='.'):
             pathname = os.path.join(modulename, dirname) if dirname else modulename
             raise ImportError("Not able to find the path '%s' directory "
                               "(current dir '%s')." % (pathname, os.getcwd()))
-
-        sys.path.insert(0, path)
+        # Two paths in one string 'module path:module libname path'
+        # Used by g.extension compilation process
+        if os.pathsep in path:
+            paths = path.split(os.pathsep)
+            sys.path.insert(0, paths[0])
+            sys.path.insert(0, paths[1])
+        else:
+            sys.path.insert(0, path)
 
 def clock():
     """
