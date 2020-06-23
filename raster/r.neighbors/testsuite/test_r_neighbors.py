@@ -145,7 +145,7 @@ sum=2009777199.90327""",
 
     def test_standard_options_quantile(self):
         """Test output with standard options (size=3, quadratic moving window,
-        standard statistics.
+        standard statistics).
         """
         outputs = [
             self.raster_q01,
