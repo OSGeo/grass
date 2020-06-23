@@ -2686,12 +2686,6 @@ class LocationWizard(wx.Object):
         proj = self.projpage.p4proj
         proj4params = self.paramspage.p4projparams
 
-#       datum = self.datumpage.datum
-#        if self.datumpage.datumdesc:
-#            datumdesc = self.datumpage.datumdesc + ' - ' + self.datumpage.ellipse
-#        else:
-#            datumdesc = ''
-
         datumparams = self.datumpage.datumparams
         ellipse = self.ellipsepage.ellipse
         ellipseparams = self.ellipsepage.ellipseparams
