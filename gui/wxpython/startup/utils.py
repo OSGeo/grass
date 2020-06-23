@@ -18,6 +18,9 @@ solve the errors etc. in a general manner).
 
 import os
 import shutil
+import tempfile
+import getpass
+import sys
 
 
 def get_possible_database_path():
@@ -42,6 +45,53 @@ def get_possible_database_path():
                     return os.path.join(candidate,subdir)
     return None
 
+
+def create_database_directory():
+    """Creates the standard GRASS GIS directory.
+
+    Creates database directory named grassdata in the standard location 
+    according to the platform.
+
+    Returns the new path as a string or None if nothing was found or created.
+    """
+    home = os.path.expanduser('~')
+
+    # Determine the standard path according to the platform
+    if sys.platform == 'win32':
+        path = os.path.join(home, "Documents", "grassdata")
+    else:
+        path = os.path.join(home, "grassdata")
+
+    # Create "grassdata" directory
+    try:
+        os.mkdir(path)
+        return path
+    except OSError:
+        pass
+
+    # Create a temporary "grassdata" directory if GRASS is running
+    # in some special environment and the standard directories
+    # cannot be created which might be the case in some "try out GRASS"
+    # use cases.
+    path = os.path.join(
+        tempfile.gettempdir(),
+        "grassdata_{}".format(getpass.getuser())
+    )
+
+    # The created tmp is not cleaned by GRASS, so we are relying on
+    # the system to do it at some point. The positive outcome is that
+    # another GRASS instance will find the data created by the first
+    # one which is desired in the "try out GRASS" use case we are
+    # aiming towards."
+    if os.path.exists(path):
+        return path
+    try:
+        os.mkdir(path)
+        return path
+    except OSError:
+        pass
+
+    return None
 
 def get_lockfile_if_present(database, location, mapset):
     """Return path to lock if present, None otherwise
