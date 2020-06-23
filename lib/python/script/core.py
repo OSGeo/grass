@@ -1581,7 +1581,7 @@ def create_location(dbase, location, epsg=None, proj4=None, filename=None,
     :param proj4: if given create new location based on Proj4 definition
     :param str filename: if given create new location based on georeferenced file
     :param str wkt: if given create new location based on WKT definition
-                    (path to PRJ file)
+                    (can be path to PRJ file or WKT string)
     :param datum: GRASS format datum code
     :param datum_trans: datum transformation parameters (used for epsg and proj4)
     :param desc: description of the location (creates MYNAME file)
@@ -1606,6 +1606,7 @@ def create_location(dbase, location, epsg=None, proj4=None, filename=None,
             warning(_("Location <%s> already exists and will be overwritten") % location)
             shutil.rmtree(os.path.join(dbase, location))
 
+    stdin = None
     kwargs = dict()
     if datum:
         kwargs['datum'] = datum
@@ -1622,13 +1623,18 @@ def create_location(dbase, location, epsg=None, proj4=None, filename=None,
         ps = pipe_command('g.proj', quiet=True, georef=filename,
                           location=location, stderr=PIPE)
     elif wkt:
-        ps = pipe_command('g.proj', quiet=True, wkt=wkt, location=location,
-                          stderr=PIPE)
+        if os.path.isfile(wkt):
+            ps = pipe_command('g.proj', quiet=True, wkt=wkt, location=location,
+                              stderr=PIPE)
+        else:
+            ps = pipe_command('g.proj', quiet=True, wkt='-', location=location,
+                              stderr=PIPE, stdin=PIPE)
+            stdin = encode(wkt)
     else:
         _create_location_xy(dbase, location)
 
     if epsg or proj4 or filename or wkt:
-        error = ps.communicate()[1]
+        error = ps.communicate(stdin)[1]
         run_command('g.gisenv', set='GISDBASE=%s' % gisdbase)
 
         if ps.returncode != 0 and error:
