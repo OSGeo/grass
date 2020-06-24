@@ -1,6 +1,7 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from grass.gunittest.gmodules import SimpleModule
+from grass.script.raster import raster_info
+from grass.script import tempfile
 
 
 class TestNeighbors(TestCase):
@@ -415,8 +416,18 @@ class TestNeighbors(TestCase):
             },
         },
     }
+
     # TODO: replace by unified handing of maps
     to_remove = []
+
+    def check_univar(self, test_case):
+        """Checks multiple output against unviariate reference from dict"""
+        for method in self.test_options[test_case]:
+            self.assertRasterFitsUnivar(
+                raster="{}_raster_{}".format(test_case, method),
+                reference=self.test_options[test_case][method],
+                precision=1e-5,
+            )
 
     @classmethod
     def setUpClass(cls):
@@ -428,10 +439,7 @@ class TestNeighbors(TestCase):
         cls.del_temp_region()
         if cls.to_remove:
             cls.runModule(
-                "g.remove",
-                flags="f",
-                type="raster",
-                name=",".join(cls.to_remove)
+                "g.remove", flags="f", type="raster", name=",".join(cls.to_remove)
             )
 
     def test_standard_options(self):
@@ -441,7 +449,7 @@ class TestNeighbors(TestCase):
         test_case = "test_standard_options"
         outputs = [
             "{}_raster_{}".format(test_case, method)
-            for method in self.test_options[test_case].keys()
+            for method in self.test_options[test_case]
         ]
         self.to_remove.extend(outputs)
         self.assertModule(
@@ -450,12 +458,7 @@ class TestNeighbors(TestCase):
             output=",".join(outputs),
             method=list(self.test_options[test_case].keys()),
         )
-        for method in self.test_options[test_case].keys():
-            self.assertRasterFitsUnivar(
-                raster="{}_raster_{}".format(test_case, method),
-                reference=self.test_options[test_case][method],
-                precision=1e-5,
-            )
+        self.check_univar(test_case)
 
     def test_standard_options_quantile(self):
         """Test output with standard options (size=3, quadratic moving window,
@@ -464,22 +467,17 @@ class TestNeighbors(TestCase):
         test_case = "test_standard_options_quantile"
         outputs = [
             "{}_raster_{}".format(test_case, method)
-            for method in self.test_options[test_case].keys()
+            for method in self.test_options[test_case]
         ]
         self.to_remove.extend(outputs)
         self.assertModule(
             "r.neighbors",
             input="elevation",
             output=",".join(outputs),
-            method=["quantile"] * len(self.test_options[test_case].keys()),
+            method=["quantile"] * len(self.test_options[test_case]),
             quantile=list(self.test_options[test_case].keys()),
         )
-        for method in self.test_options[test_case].keys():
-            self.assertRasterFitsUnivar(
-                raster="{}_raster_{}".format(test_case, method),
-                reference=self.test_options[test_case][method],
-                precision=1e-5,
-            )
+        self.check_univar(test_case)
 
     def test_standard_options_circular(self):
         """Test output with circular neighborhood (size=7,
@@ -487,7 +485,7 @@ class TestNeighbors(TestCase):
         test_case = "test_standard_options_circular"
         outputs = [
             "{}_raster_{}".format(test_case, method)
-            for method in self.test_options[test_case].keys()
+            for method in self.test_options[test_case]
         ]
         self.to_remove.extend(outputs)
         self.assertModule(
@@ -498,26 +496,20 @@ class TestNeighbors(TestCase):
             output=",".join(outputs),
             method=list(self.test_options[test_case].keys()),
         )
-        for method in self.test_options[test_case].keys():
-            self.assertRasterFitsUnivar(
-                raster="{}_raster_{}".format(test_case, method),
-                reference=self.test_options[test_case][method],
-                precision=1e-5,
-            )
+        self.check_univar(test_case)
 
     def test_standard_options_selection(self):
         """Test output with selection raster (standard options otherwise)."""
         test_case = "test_standard_options_selection"
         outputs = [
             "{}_raster_{}".format(test_case, method)
-            for method in self.test_options[test_case].keys()
+            for method in self.test_options[test_case]
         ]
         self.to_remove.extend(outputs)
         selection = "test_neighbors_selection"
         self.to_remove.append(selection)
         self.runModule(
-            "r.mapcalc",
-            expression="{}=if(y()==15,1,null())".format(selection),
+            "r.mapcalc", expression="{}=if(y()==15,1,null())".format(selection),
         )
         self.assertModule(
             "r.neighbors",
@@ -526,19 +518,14 @@ class TestNeighbors(TestCase):
             selection=selection,
             method=list(self.test_options[test_case].keys()),
         )
-        for method in self.test_options[test_case].keys():
-            self.assertRasterFitsUnivar(
-                raster="{}_raster_{}".format(test_case, method),
-                reference=self.test_options[test_case][method],
-                precision=1e-5,
-            )
+        self.check_univar(test_case)
 
     def test_weighting_function(self):
         """Test results with gaussian weighting (standard options otherwise)."""
         test_case = "test_weighting_function"
         outputs = [
             "{}_raster_{}".format(test_case, method)
-            for method in self.test_options[test_case].keys()
+            for method in self.test_options[test_case]
         ]
         self.to_remove.extend(outputs)
         self.assertModule(
@@ -550,22 +537,15 @@ class TestNeighbors(TestCase):
             output=",".join(outputs),
             method=list(self.test_options[test_case].keys()),
         )
-        for method in self.test_options[test_case].keys():
-            self.assertRasterFitsUnivar(
-                raster="{}_raster_{}".format(test_case, method),
-                reference=self.test_options[test_case][method],
-                precision=1e-5,
-            )
+        self.check_univar(test_case)
 
     def test_weighting_file(self):
         """Test results with file for weighting (standard options otherwise)."""
 
-        from grass.script import tempfile
-
         test_case = "test_weighting_file"
         outputs = [
             "{}_raster_{}".format(test_case, method)
-            for method in self.test_options[test_case].keys()
+            for method in self.test_options[test_case]
         ]
         self.to_remove.extend(outputs)
 
@@ -581,12 +561,8 @@ class TestNeighbors(TestCase):
             method=list(self.test_options[test_case].keys()),
             weight=weights,
         )
-        for method in self.test_options[test_case].keys():
-            self.assertRasterFitsUnivar(
-                raster="{}_raster_{}".format(test_case, method),
-                reference=self.test_options[test_case][method],
-                precision=1e-5,
-            )
+        self.check_univar(test_case)
+
         # Module fails with mutual exclusive options
         self.assertModuleFail(
             "r.neighbors",
@@ -602,8 +578,6 @@ class TestNeighbors(TestCase):
         """Test if result is of integer or float data type depending on
         input datatype and method"""
         # landclass96 (values 1-7)
-
-        from grass.script.raster import raster_info
 
         test_case = "test_standard_options_datatype"
 
