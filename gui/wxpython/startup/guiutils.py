@@ -16,15 +16,12 @@ This is for code which depend on something from GUI (wx or wxGUI).
 
 import os
 
-import wx
-
 import grass.script as gs
 
 from core import globalvar
 from core.gcmd import GError, DecodeString, RunCommand
 from gui_core.dialogs import TextEntryDialog
 from gui_core.widgets import GenericMultiValidator
-from startup.utils import mapset_exists
 
 
 def SetSessionMapset(database, location, mapset):
@@ -141,3 +138,12 @@ def GetVersion():
         grassVersion = versionLine
         grassRevisionStr = ''
     return (grassVersion, grassRevisionStr)
+
+
+def mapset_exists(database, location, mapset):
+    """Returns True whether mapset path exists."""
+    location_path = os.path.join(database, location)
+    mapset_path = os.path.join(location_path, mapset)
+    if os.path.exists(mapset_path):
+        return True
+    return False

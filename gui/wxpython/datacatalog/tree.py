@@ -918,8 +918,8 @@ class DataCatalogTree(LocationMapTree):
         dlg = NewMapsetDialog(
             parent=self,
             default=get_default_mapset_name(),
-            database = self.gisdbase,
-            location = self.location
+            database=self.gisdbase,
+            location=self.location
         )
         if dlg.ShowModal() == wx.ID_OK:
             mapset = dlg.GetValue()
@@ -1124,8 +1124,6 @@ class DataCatalogTree(LocationMapTree):
     def _popupMenuLocation(self):
         """Create popup menu for locations"""
         menu = Menu()
-        genv = gisenv()
-        currentLocation, currentMapset = self._isCurrent(genv)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Create new mapset"))
         menu.AppendItem(item)

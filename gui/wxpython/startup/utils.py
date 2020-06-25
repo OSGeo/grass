@@ -160,12 +160,3 @@ def get_default_mapset_name():
         defaultName = 'user'
 
     return defaultName
-
-
-def mapset_exists(database, location, mapset):
-    """Returns True whether mapset path exists."""
-    location_path = os.path.join(database, location)
-    mapset_path = os.path.join(location_path, mapset)
-    if os.path.exists(mapset_path):
-        return True
-    return False

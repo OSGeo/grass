@@ -950,8 +950,8 @@ class GRASSStartup(wx.Frame):
         dlg = NewMapsetDialog(
             parent=self,
             default=get_default_mapset_name(),
-            database = self.gisdbase,
-            location = self.location
+            database=self.gisdbase,
+            location=self.location
         )
         if dlg.ShowModal() == wx.ID_OK:
             mapset = dlg.GetValue()
