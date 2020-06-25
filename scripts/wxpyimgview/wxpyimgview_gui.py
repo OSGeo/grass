@@ -36,11 +36,14 @@
 #% answer: 10
 #%end
 
-import sys
-import struct
-import numpy
-import time
 import signal
+import struct
+import sys
+import time
+
+import grass.script as grass
+
+import numpy
 
 import wx
 
@@ -111,7 +114,7 @@ class Application(wx.App):
     def read_bmp_header(self, header):
         magic, bmfh, bmih = struct.unpack("2s12s40s10x", header)
 
-        if magic != 'BM':
+        if grass.decode(magic) != 'BM':
             raise SyntaxError("Invalid magic number")
 
         size, res1, res2, hsize = struct.unpack("<IHHI", bmfh)
