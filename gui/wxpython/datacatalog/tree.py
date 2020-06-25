@@ -33,7 +33,7 @@ from core.treemodel import TreeModel, DictNode
 from gui_core.treeview import TreeView
 from gui_core.wrap import Menu
 from datacatalog.dialogs import CatalogReprojectionDialog
-from startup.utils import create_mapset
+from startup.utils import create_mapset, get_default_mapset_name
 from startup.guiutils import SetSessionMapset, NewMapsetDialog
 
 from grass.pydispatch.signal import Signal
@@ -806,6 +806,18 @@ class DataCatalogTree(LocationMapTree):
             self._model.SortChildren(found_element)
             self.RefreshNode(mapset_node, recursive=True)
 
+    def InsertMapset(self, name, location_node, mapset_name):
+        """Insert mapset into model and refresh tree"""
+        found_element = self._model.SearchNodes(
+            parent=location_node, type='mapset', name=mapset_name)
+        found_element = found_element[0] if found_element else None
+        found = self._model.SearchNodes(parent=found_element, name=name)
+        if len(found) == 0:
+            self._model.AppendNode(parent=found_element, label=name,
+                                   data=dict(type=mapset_name, name=name))
+            self._model.SortChildren(found_element)
+            self.RefreshNode(location_node, recursive=True)
+
     def OnDeleteMap(self, event):
         """Delete layer or mapset"""
         names = [self.selected_layer[i].label + '@' + self.selected_mapset[i].label
@@ -900,54 +912,29 @@ class DataCatalogTree(LocationMapTree):
 
     def OnCreateMapset(self, event):
         """Create new mapset"""
+        self.gisdbase = gisenv()['GISDBASE']
+        self.location = gisenv()['LOCATION_NAME']
+
         dlg = NewMapsetDialog(
             parent=self,
-            default=self._getDefaultMapsetName(),
-            validation_failed_handler=self._nameValidationFailed,
-            help_hanlder=self.OnHelp,
+            default=get_default_mapset_name(),
+            database = self.gisdbase,
+            location = self.location
         )
         if dlg.ShowModal() == wx.ID_OK:
             mapset = dlg.GetValue()
-            return self.CreateNewMapset(mapset=mapset)
+            try:
+                create_mapset(self.gisdbase, self.location, mapset)
+                self.InsertMapset(name=mapset, location_node=self.location,
+                                     mapset_name=mapset)
+                return True
+            except Exception as e:
+                GError(parent=self,
+                       message=_("Unable to create new mapset: %s") % e,
+                       showTraceback=False)
+                return False
         else:
             return False
-
-    def CreateNewMapset(self, mapset):
-        self.listOfMapsets = GetListOfMapsets(self.gisdbase, 
-                                              self.selected_location[0])
-        if mapset in self.listOfMapsets:
-            GMessage(parent=self,
-                     message=_("Mapset <%s> already exists.") % mapset)
-            return False
-
-        if mapset.lower() == 'ogr':
-            dlg1 = wx.MessageDialog(
-                parent=self,
-                message=_(
-                    "Mapset <%s> is reserved for direct "
-                    "read access to OGR layers. Please consider to use "
-                    "another name for your mapset.\n\n"
-                    "Are you really sure that you want to create this mapset?") %
-                mapset,
-                caption=_("Reserved mapset name"),
-                style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
-            ret = dlg1.ShowModal()
-            dlg1.Destroy()
-            if ret == wx.ID_NO:
-                dlg1.Destroy()
-                return False
-
-        try:
-            create_mapset(self.gisdbase, self.selected_location[0], mapset)
-            self.OnSelectLocation(None)
-            self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
-            self.bstart.SetFocus()
-
-            return True
-        except Exception as e:
-            GError(parent=self,
-                   message=_("Unable to create new mapset: %s") % e,
-                   showTraceback=False)
 
     def _nameValidationFailed(self, ctrl):
         message = _(
@@ -966,17 +953,6 @@ class DataCatalogTree(LocationMapTree):
 
     def SetLocation(self, dbase, location, mapset):
         SetSessionMapset(dbase, location, mapset)
-
-    def _getDefaultMapsetName(self):
-        """Returns default name for mapset."""
-        try:
-            defaultName = getpass.getuser()
-            # raise error if not ascii (not valid mapset name)
-            defaultName.encode('ascii')
-        except:  # whatever might go wrong
-            defaultName = 'user'
-
-        return defaultName
 
     def OnMetadata(self, event):
         """Show metadata of any raster/vector/3draster"""
@@ -1154,6 +1130,7 @@ class DataCatalogTree(LocationMapTree):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Create new mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCreateMapset, item)
+
         self.PopupMenu(menu)
         menu.Destroy()
 

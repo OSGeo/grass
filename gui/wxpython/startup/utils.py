@@ -148,3 +148,24 @@ def rename_location(database, old_name, new_name):
     """Rename location from *old_name* to *new_name*"""
     os.rename(os.path.join(database, old_name),
               os.path.join(database, new_name))
+
+
+def get_default_mapset_name():
+    """Returns default name for mapset."""
+    try:
+        defaultName = getpass.getuser()
+        # raise error if not ascii (not valid mapset name)
+        defaultName.encode('ascii')
+    except:  # whatever might go wrong
+        defaultName = 'user'
+
+    return defaultName
+
+
+def mapset_exists(database, location, mapset):
+    """Returns True whether mapset path exists."""
+    location_path = os.path.join(database, location)
+    mapset_path = os.path.join(location_path, mapset)
+    if os.path.exists(mapset_path):
+        return True
+    return False
