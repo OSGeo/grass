@@ -475,7 +475,9 @@ class LocationMapTree(TreeView):
             self._popupMenuEmpty()
             return
 
-        if self.selected_layer[0]:
+        if not self.selected_layer:
+            self._popupMenuEmpty()
+        elif self.selected_layer[0]:
             self._popupMenuLayer()
         elif self.selected_mapset[0] and not self.selected_type[0] and len(self.selected_mapset) == 1:
             self._popupMenuMapset()
