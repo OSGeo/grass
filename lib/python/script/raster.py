@@ -26,7 +26,7 @@ import time
 
 from .core import *
 from grass.exceptions import CalledModuleError
-from .utils import float_or_dms, parse_key_val, try_remove
+from .utils import encode, float_or_dms, parse_key_val, try_remove
 
 
 if sys.version_info.major >= 3:
@@ -158,7 +158,7 @@ def mapcalc_start(exp, quiet=False, verbose=False, overwrite=False,
 
     p = feed_command('r.mapcalc', file='-', env=env, seed=seed,
                      quiet=quiet, verbose=verbose, overwrite=overwrite)
-    p.stdin.write(e)
+    p.stdin.write(encode(e))
     p.stdin.close()
     return p
 
