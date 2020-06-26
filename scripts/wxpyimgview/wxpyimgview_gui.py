@@ -148,7 +148,7 @@ class Application(wx.App):
             raise SyntaxError("Invalid image size")
 
     def map_file(self):
-        f = open(self.image, 'r')
+        f = open(self.image, 'rb')
 
         header = f.read(self.HEADER_SIZE)
         self.read_bmp_header(header)
