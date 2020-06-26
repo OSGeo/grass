@@ -36,12 +36,17 @@
 #% answer: 10
 #%end
 
+import os
 import signal
 import struct
 import sys
 import time
 
 import grass.script as grass
+from grass.script.setup import set_gui_path
+
+set_gui_path()
+from gui_core.wrap import BitmapFromImage
 
 import numpy
 
@@ -81,8 +86,8 @@ class Frame(wx.Frame):
         data = app.imgbuf.reshape((app.i_height, app.i_width, 4))
         data = data[::, ::, 2::-1]
         fn = getattr(data, "tobytes", getattr(data, "tostring"))
-        image = wx.ImageFromData(app.i_width, app.i_height, fn())
-        dc.DrawBitmap(wx.BitmapFromImage(image), x0, y0, False)
+        image = wx.Image(app.i_width, app.i_height, fn())
+        dc.DrawBitmap(BitmapFromImage(image), x0, y0, False)
 
     def redraw(self, ev):
         if self.app.fraction > 0.001:
