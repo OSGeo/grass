@@ -16,16 +16,14 @@ for details.
 @author Tereza Fiedlerova
 @author Anna Petrasova (kratochanna gmail com)
 """
-import os
 import re
 import copy
-import getpass
 from multiprocessing import Process, Queue, cpu_count
 
 import wx
 
 from core.gcmd import RunCommand, GError, GMessage, GWarning
-from core.utils import GetListOfLocations, GetListOfMapsets
+from core.utils import GetListOfLocations
 from core.debug import Debug
 from gui_core.dialogs import TextEntryDialog
 from core.giface import StandaloneGrassInterface
@@ -34,7 +32,7 @@ from gui_core.treeview import TreeView
 from gui_core.wrap import Menu
 from datacatalog.dialogs import CatalogReprojectionDialog
 from startup.utils import create_mapset, get_default_mapset_name
-from startup.guiutils import SetSessionMapset, NewMapsetDialog
+from startup.guiutils import NewMapsetDialog
 
 from grass.pydispatch.signal import Signal
 
@@ -912,47 +910,31 @@ class DataCatalogTree(LocationMapTree):
 
     def OnCreateMapset(self, event):
         """Create new mapset"""
-        self.gisdbase = gisenv()['GISDBASE']
-        self.location = gisenv()['LOCATION_NAME']
+        gisdbase = gisenv()['GISDBASE']
 
         dlg = NewMapsetDialog(
             parent=self,
             default=get_default_mapset_name(),
-            database=self.gisdbase,
-            location=self.location
+            database=gisdbase,
+            location=self.selected_location[0].label
         )
         if dlg.ShowModal() == wx.ID_OK:
             mapset = dlg.GetValue()
             try:
-                create_mapset(self.gisdbase, self.location, mapset)
-                self.InsertMapset(name=mapset, location_node=self.location,
-                                     mapset_name=mapset)
+                create_mapset(gisdbase,
+                              self.selected_location[0].label,
+                              mapset)
                 return True
             except Exception as e:
                 GError(parent=self,
                        message=_("Unable to create new mapset: %s") % e,
                        showTraceback=False)
                 return False
+            self.InsertMapset(name=mapset,
+                              location_node=self.selected_location[0].label,
+                              mapset_name=mapset)
         else:
             return False
-
-    def _nameValidationFailed(self, ctrl):
-        message = _(
-            "Name <%(name)s> is not a valid name for location or mapset. "
-            "Please use only ASCII characters excluding %(chars)s "
-            "and space.") % {
-            'name': ctrl.GetValue(),
-            'chars': '/"\'@,=*~'}
-        GError(parent=self, message=message, caption=_("Invalid name"))
-        
-    def OnHelp(self, event):
-        """'Help' button clicked"""
-
-        # help text in lib/init/helptext.html
-        RunCommand('g.manual', entry='helptext')
-
-    def SetLocation(self, dbase, location, mapset):
-        SetSessionMapset(dbase, location, mapset)
 
     def OnMetadata(self, event):
         """Show metadata of any raster/vector/3draster"""

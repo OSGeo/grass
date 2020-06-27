@@ -39,7 +39,7 @@ class NewMapsetDialog(TextEntryDialog):
 
         # list of tuples consisting of conditions and callbacks
         checks = [(gs.legal_name, self._nameValidationFailed),
-                  (self._checkMapsetExists, self._mapsetAlreadyExists),
+                  (self._checkMapsetNotExists, self._mapsetAlreadyExists),
                   (self._checkOGR, self._reservedMapsetName)]
         validator = GenericMultiValidator(checks)
 
@@ -67,15 +67,15 @@ class NewMapsetDialog(TextEntryDialog):
         return True
 
     def _reservedMapsetName(self, ctrl):
-            message = _(
-                "Name <%s> is reserved for direct "
-                "read access to OGR layers. Please use "
-                "another name for your mapset.\n\n") % {
-            'name': ctrl.GetValue()}
-            GError(parent=self, message=message,
-                   caption=_("Reserved mapset name"))
+        message = _(
+            "Name <%s> is reserved for direct "
+            "read access to OGR layers. Please use "
+            "another name for your mapset.") % {
+        'name': ctrl.GetValue()}
+        GError(parent=self, message=message,
+               caption=_("Reserved mapset name"))
 
-    def _checkMapsetExists(self, text):
+    def _checkMapsetNotExists(self, text):
         """Check whether user's input mapset exists or not."""
         if mapset_exists(self.database, self.location, text):
             return False
@@ -83,8 +83,8 @@ class NewMapsetDialog(TextEntryDialog):
 
     def _mapsetAlreadyExists(self, ctrl):
         message = _(
-            "Mapset <%s> already exists.Please consider to use "
-            "another name for your location.\n\n") % {
+            "Mapset <%s> already exists. Please consider to use "
+            "another name for your location.") % {
             'name': ctrl.GetValue()}
         GError(parent=self, message=message, caption=_("Existing mapset path"))
 

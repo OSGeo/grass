@@ -891,13 +891,11 @@ class GenericMultiValidator(Validator):
         """
         ctrl = self.GetWindow()
         text = ctrl.GetValue()
-        for check in self._checks:
-            condition, callback = check
+        for condition, callback in self._checks:
             if not condition(text):
                 callback(ctrl)
                 return False
-            else:
-                return True
+        return True
 
     def TransferToWindow(self):
         """Transfer data from validator to window.

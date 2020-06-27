@@ -944,19 +944,19 @@ class GRASSStartup(wx.Frame):
 
     def OnCreateMapset(self, event):
         """Create new mapset"""
-        self.gisdbase = self.tgisdbase.GetValue()
-        self.location = self.listOfLocations[self.lblocations.GetSelection()]
+        gisdbase = self.tgisdbase.GetValue()
+        location = self.listOfLocations[self.lblocations.GetSelection()]
 
         dlg = NewMapsetDialog(
             parent=self,
             default=get_default_mapset_name(),
-            database=self.gisdbase,
-            location=self.location
+            database=gisdbase,
+            location=location
         )
         if dlg.ShowModal() == wx.ID_OK:
             mapset = dlg.GetValue()
             try:
-                create_mapset(self.gisdbase, self.location, mapset)
+                create_mapset(gisdbase, location, mapset)
                 self.OnSelectLocation(None)
                 self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
                 self.bstart.SetFocus()
