@@ -54,13 +54,12 @@ def filterModel(model, element=None, name=None):
     for gisdbase in fmodel.root.children:
         for location in gisdbase.children:
             for mapset in location.children:
-                for elem in mapset.children:
-                    if element and elem.label != element:
-                        nodesToRemove.append(elem)
+                for layer in mapset.children:
+                    if element and layer.data['type'] != element:
+                        nodesToRemove.append(layer)
                         continue
-                    for node in elem.children:
-                        if name and regex.search(node.label) is None:
-                            nodesToRemove.append(node)
+                    if name and regex.search(layer.label) is None:
+                        nodesToRemove.append(layer)
 
     for node in reversed(nodesToRemove):
         fmodel.RemoveNode(node)
@@ -72,16 +71,6 @@ def filterModel(model, element=None, name=None):
 def cleanUpTree(model):
     """Removes empty element/mapsets/locations nodes.
     It first removes empty elements, then mapsets, then locations"""
-    # removes empty elements
-    nodesToRemove = []
-    for gisdbase in model.root.children:
-        for location in gisdbase.children:
-            for mapset in location.children:
-                for element in mapset.children:
-                    if not element.children:
-                        nodesToRemove.append(element)
-    for node in reversed(nodesToRemove):
-        model.RemoveNode(node)
     # removes empty mapsets
     nodesToRemove = []
     for gisdbase in model.root.children:
@@ -285,6 +274,7 @@ class LocationMapTree(TreeView):
         self._initImages()
 
         self._initVariables()
+        self.UpdateCurrentLocationMapsetNode()
 
     def _initTreeItems(self, locations=None, mapsets=None):
         """Add locations, mapsets and layers to the tree.
@@ -358,9 +348,12 @@ class LocationMapTree(TreeView):
         if errors:
             wx.CallAfter(GWarning, '\n'.join(errors))
         Debug.msg(1, "Tree filled")
-        
-#        wx.CallAfter(self.HighlightCurrentMapset)
+
         self.RefreshItems()
+
+    def UpdateCurrentLocationMapsetNode(self):
+        self.current_location_node, self.current_mapset_node = \
+            self.GetCurrentLocationMapsetNode()
 
     def InitTreeItems(self):
         """Load locations, mapsets and layers in the tree."""
@@ -371,44 +364,45 @@ class LocationMapTree(TreeView):
         self._orig_model = self._model
         self._model.RemoveNode(self._model.root)
         self.InitTreeItems()
-#        self.HighlightCurrentMapset()
+        self.UpdateCurrentLocationMapsetNode()
 
     def ReloadCurrentMapset(self):
         """Reload current mapset tree only."""
         def get_first_child(node):
             try:
-                child = mapsetItem.children[0]
+                child = self.current_mapset_node.children[0]
             except IndexError:
                 child = None
             return child
 
         genv = gisenv()
-        locationItem, mapsetItem = self.GetCurrentLocationMapsetNode()
-        if not locationItem or not mapsetItem:
+        self.UpdateCurrentLocationMapsetNode()
+        if not self.current_location_node or not self.current_mapset_node:
             return
 
-        if mapsetItem.children:
-            node = get_first_child(mapsetItem)
+        if self.current_mapset_node.children:
+            node = get_first_child(self.current_mapset_node)
             while node:
                 self._model.RemoveNode(node)
-                node = get_first_child(mapsetItem)
+                node = get_first_child(self.current_mapset_node)
 
         q = Queue()
         p = Process(
             target=getLocationTree,
             args=(
                 genv['GISDBASE'],
-                locationItem.data['name'],
+                self.current_location_node.data['name'],
                 q,
-                mapsetItem.data['name']))
+                self.current_mapset_node.data['name']))
         p.start()
         maps, error = q.get()
         if error:
             raise CalledModuleError(error)
 
-        self._populateMapsetItem(mapsetItem, maps[mapsetItem.data['name']])
+        self._populateMapsetItem(self.current_mapset_node,
+                                 maps[self.current_mapset_node.data['name']])
         self._orig_model = copy.deepcopy(self._model)
-        self.RefreshNode(mapsetItem)
+        self.RefreshNode(self.current_mapset_node)
         self.RefreshItems()
 
     def _populateMapsetItem(self, mapset_node, data):
@@ -452,34 +446,6 @@ class LocationMapTree(TreeView):
         for each in self._iconTypes:
             il.Add(icons[each])
         self.AssignImageList(il)
-        
-#    def HighlightCurrentMapset(self):
-#        
-#        def _removeHighlight(item_):
-#            if self.GetChildrenCount(item_, recursively=False) == 0:
-#                return
-#            print (self.GetItemText(item_))
-#            self.SetItemBold(item_, bold=True)
-#            
-#        def traverseTree(item):
-#            child, cookie = self.GetFirstChild(item)
-#            while child.IsOk():
-#                _removeHighlight(child)
-#                traverseTree(child)
-#                child, cookie = self.GetNextChild(item, cookie)
-#            
-#        
-#        root = self.GetRootItem()  # grassdb
-#        traverseTree(root)
-##        child, cookie = tree.GetFirstChild(root, 0)
-##         while child.isOk():
-##             self.traverseTree(tree, child, level+1)
-##             child, cookie = tree.GetNextChild(item, cookie)
-##        location, mapset = self.GetCurrentLocationMapsetNode()
-##        root = self._model.root
-##        if root and root.children:
-##            for 
-        
         
     def GetControl(self):
         """Returns control itself."""
@@ -588,17 +554,17 @@ class LocationMapTree(TreeView):
         if node.data['type'] == 'grassdb':
             font.SetWeight(wx.FONTWEIGHT_BOLD)
         elif node.data['type'] in ('location', 'mapset'):
-            location, mapset = self.GetCurrentLocationMapsetNode()
-            if node in (location, mapset):
+            if node in (self.current_location_node, self.current_mapset_node):
+                font.SetWeight(wx.FONTWEIGHT_BOLD)
+            else:
                 font.SetWeight(wx.FONTWEIGHT_NORMAL)
         return font
 
     def ExpandCurrentMapset(self):
         """Expand current mapset"""
-        locationItem, mapsetItem = self.GetCurrentLocationMapsetNode()
-        if mapsetItem:
-            self.Select(mapsetItem, select=True)
-            self.ExpandNode(mapsetItem, recursive=True)
+        if self.current_mapset_node:
+            self.Select(self.current_mapset_node, select=True)
+            self.ExpandNode(self.current_mapset_node, recursive=True)
 
 
 class DataCatalogTree(LocationMapTree):
@@ -941,7 +907,9 @@ class DataCatalogTree(LocationMapTree):
             self.changeMapset.emit(mapset=self.selected_mapset[0].label)
         else:
             self.changeLocation.emit(mapset=self.selected_mapset[0].label, location=self.selected_location[0].label)
+        self.UpdateCurrentLocationMapsetNode()
         self.ExpandCurrentMapset()
+        self.RefreshItems()
 
     def OnMetadata(self, event):
         """Show metadata of any raster/vector/3draster"""
