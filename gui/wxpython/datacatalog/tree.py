@@ -534,6 +534,7 @@ class LocationMapTree(TreeView):
         return locationItem[0], mapsetItem[0]
         
     def OnGetItemImage(self, index, which=wx.TreeItemIcon_Normal, column=0):
+        """Overriden method to return image for each item."""
         node = self._model.GetNodeByIndex(index)
         try:
             return self._iconTypes.index(node.data['type'])
@@ -541,6 +542,8 @@ class LocationMapTree(TreeView):
             return 0
 
     def OnGetItemFont(self, index):
+        """Overriden method to return font for each item.
+           Used to highlight current db/loc/mapset."""
         node = self._model.GetNodeByIndex(index)
         font = self.GetFont()
         if node.data['type'] == 'grassdb':
