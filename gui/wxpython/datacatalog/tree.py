@@ -482,7 +482,7 @@ class LocationMapTree(TreeView):
             self._popupMenuElement()
         elif self.selected_mapset[0] and not self.selected_type[0] and len(self.selected_mapset) == 1:
             self._popupMenuMapset()
-        elif self.selected_location[0] and not self.selected_type[0] and len(self.selected_location) == 1:
+        elif self.selected_location[0] and not self.selected_mapset[0] and len(self.selected_location) == 1:
             self._popupMenuLocation()
         else:
             self._popupMenuEmpty()
@@ -806,15 +806,13 @@ class DataCatalogTree(LocationMapTree):
 
     def InsertMapset(self, name, location_node, mapset_name):
         """Insert mapset into model and refresh tree"""
-        found_element = self._model.SearchNodes(
-            parent=location_node, type='mapset', name=mapset_name)
-        found_element = found_element[0] if found_element else None
-        found = self._model.SearchNodes(parent=found_element, name=name)
-        if len(found) == 0:
-            self._model.AppendNode(parent=found_element, label=name,
-                                   data=dict(type=mapset_name, name=name))
-            self._model.SortChildren(found_element)
-            self.RefreshNode(location_node, recursive=True)
+        found_element = self._model.AppendNode(
+                parent=location_node, label=mapset_name,
+                data=dict(type='mapset', name=mapset_name))
+        self._model.AppendNode(parent=found_element, label=name,
+                               data=dict(type=mapset_name, name=name))
+        self._model.SortChildren(found_element)
+        self.RefreshNode(location_node, recursive=True)
 
     def OnDeleteMap(self, event):
         """Delete layer or mapset"""
@@ -924,17 +922,15 @@ class DataCatalogTree(LocationMapTree):
                 create_mapset(gisdbase,
                               self.selected_location[0].label,
                               mapset)
-                return True
-            except Exception as e:
+            except OSError as err:
                 GError(parent=self,
-                       message=_("Unable to create new mapset: %s") % e,
+                       message=_("Unable to create new mapset: %s") % err,
                        showTraceback=False)
-                return False
+            print(mapset)
+            print(self.selected_location[0])
             self.InsertMapset(name=mapset,
-                              location_node=self.selected_location[0].label,
+                              location_node=self.selected_location[0],
                               mapset_name=mapset)
-        else:
-            return False
 
     def OnMetadata(self, event):
         """Show metadata of any raster/vector/3draster"""
@@ -1107,7 +1103,7 @@ class DataCatalogTree(LocationMapTree):
         """Create popup menu for locations"""
         menu = Menu()
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create new mapset"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCreateMapset, item)
 

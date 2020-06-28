@@ -71,7 +71,7 @@ class NewMapsetDialog(TextEntryDialog):
             "Name <%s> is reserved for direct "
             "read access to OGR layers. Please use "
             "another name for your mapset.") % {
-        'name': ctrl.GetValue()}
+            'name': ctrl.GetValue()}
         GError(parent=self, message=message,
                caption=_("Reserved mapset name"))
 

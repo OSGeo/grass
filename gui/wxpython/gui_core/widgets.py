@@ -20,6 +20,7 @@ Classes:
  - widgets::NTCValidator
  - widgets::SimpleValidator
  - widgets::GenericValidator
+ - widgets::GenericMultiValidator
  - widgets::GListCtrl
  - widgets::SearchModuleWidget
  - widgets::ManageSettingsWidget

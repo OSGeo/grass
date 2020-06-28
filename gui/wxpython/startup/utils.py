@@ -155,7 +155,7 @@ def get_default_mapset_name():
     try:
         defaultName = getpass.getuser()
         defaultName.encode('ascii')
-    except:
+    except UnicodeEncodeError:
         # raise error if not ascii (not valid mapset name)
         defaultName = 'user'
 
