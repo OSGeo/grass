@@ -241,14 +241,6 @@ class DataCatalogNode(DictNode):
         return True
 
 
-class CatalogModel(TreeModel):
-    def __init__(self, nodeClass):
-        super(TreeModel, self).__init__(nodeClass)
-        
-    def GetNodeImage(node):
-        node.data['type']
-        
-
 class LocationMapTree(TreeView):
 
     def __init__(
