@@ -259,7 +259,6 @@ class GRASSStartup(wx.Frame):
         self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"),
                              wx.BITMAP_TYPE_ICO))
 
-        self.bstart.SetForegroundColour(wx.Colour(35, 142, 35))
         self.bstart.SetToolTip(_("Enter GRASS session"))
         self.bstart.Enable(False)
         self.bmapset.Enable(False)
