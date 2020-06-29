@@ -804,14 +804,11 @@ class DataCatalogTree(LocationMapTree):
             self._model.SortChildren(found_element)
             self.RefreshNode(mapset_node, recursive=True)
 
-    def InsertMapset(self, name, location_node, mapset_name):
+    def InsertMapset(self, name, location_node):
         """Insert mapset into model and refresh tree"""
-        found_element = self._model.AppendNode(
-                parent=location_node, label=mapset_name,
-                data=dict(type='mapset', name=mapset_name))
-        self._model.AppendNode(parent=found_element, label=name,
-                               data=dict(type=mapset_name, name=name))
-        self._model.SortChildren(found_element)
+        self._model.AppendNode(parent=location_node, label=name,
+                               data=dict(type="mapset", name=name))
+        self._model.SortChildren(location_node)
         self.RefreshNode(location_node, recursive=True)
 
     def OnDeleteMap(self, event):
@@ -929,8 +926,7 @@ class DataCatalogTree(LocationMapTree):
             print(mapset)
             print(self.selected_location[0])
             self.InsertMapset(name=mapset,
-                              location_node=self.selected_location[0],
-                              mapset_name=mapset)
+                              location_node=self.selected_location[0])
 
     def OnMetadata(self, event):
         """Show metadata of any raster/vector/3draster"""
