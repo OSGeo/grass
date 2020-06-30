@@ -88,6 +88,63 @@ the 3 pan sharpening algorithms differ in terms of spectral response.
 
 <h2>EXAMPLES</h2>
 
+<h3>Pan sharpening of LANDSAT ETM+ (Landsat 7)</h3>
+
+LANDSAT ETM+ (Landsat 7), North Carolina sample dataset, PCA method:
+
+<div class="code"><pre>
+# original at 28m
+g.region raster=lsat7_2002_10 -p
+
+d.mon wx0
+d.rgb b=lsat7_2002_10 g=lsat7_2002_20 r=lsat7_2002_30
+
+# i.pansharpen with PCA algorithm
+i.pansharpen red=lsat7_2002_30 \
+  green=lsat7_2002_20 blue=lsat7_2002_10 \
+  pan=lsat7_2002_80 method=pca \
+  output=lsat7_2002_15m_pca -l
+
+# color enhance
+i.colors.enhance blue=lsat7_2002_15m_pca_blue \
+  green=lsat7_2002_15m_pca_green red=lsat7_2002_15m_pca_red
+
+# display at 14.25m, IHS pansharpened
+g.region raster=lsat7_2002_15m_pca_red -p
+d.erase
+d.rgb b=lsat7_2002_15m_pca_blue g=lsat7_2002_15m_pca_green r=lsat7_2002_15m_pca_red 
+</pre></div>
+
+<p>
+LANDSAT ETM+ (Landsat 7), North Carolina sample dataset, IHS method:
+
+<div class="code"><pre>
+# original at 28m
+g.region raster=lsat7_2002_10 -p
+
+d.mon wx0
+d.rgb b=lsat7_2002_10 g=lsat7_2002_20 r=lsat7_2002_30
+
+# i.pansharpen with IHS algorithm
+i.pansharpen red=lsat7_2002_30 \
+  green=lsat7_2002_20 blue=lsat7_2002_10 \
+  pan=lsat7_2002_80 method=ihs \
+  output=lsat7_2002_15m_ihs -l
+
+# color enhance
+i.colors.enhance blue=lsat7_2002_15m_ihs_blue \
+  green=lsat7_2002_15m_ihs_green red=lsat7_2002_15m_ihs_red
+
+# display at 14.25m, IHS pansharpened
+g.region raster=lsat7_2002_15m_ihs_red -p
+d.erase
+d.rgb b=lsat7_2002_15m_ihs_blue g=lsat7_2002_15m_ihs_green r=lsat7_2002_15m_ihs_red
+
+# compare before/after (RGB support under "Advanced"):
+g.gui.mapswipe
+</pre></div>
+
+
 <h3>Pan sharpening comparison example</h3>
 
 Pan sharpening of a Landsat image from Boulder, Colorado, USA
@@ -151,35 +208,6 @@ d.rgb b=ihs542_blue g=ihs542_green r=ihs542_red
   </table>
 </center>
 <br>
-
-<h3>Pan sharpening of LANDSAT ETM+ (Landsat 7)</h3>
-
-LANDSAT ETM+ (Landsat 7), North Carolina sample dataset:
-
-<div class="code"><pre>
-# original at 28m
-g.region raster=lsat7_2002_10 -p
-
-d.mon wx0
-d.rgb b=lsat7_2002_10 g=lsat7_2002_20 r=lsat7_2002_30
-
-# i.pansharpen with IHS algorithm
-i.pansharpen red=lsat7_2002_30@PERMANENT \
-  green=lsat7_2002_20 blue=lsat7_2002_10 \
-  pan=lsat7_2002_80 method=ihs \
-  output=lsat7_2002_ihs
-
-# display at 14.25m
-g.region raster=lsat7_2002_ihs_red -p
-d.erase
-d.rgb r=lsat7_2002_ihs_red g=lsat7_2002_ihs_green b=lsat7_2002_ihs_blue
-
-# compare before/after (RGB support in "Advanced"):
-g.gui.mapswipe
-
-# optionally color balancing:
-i.colors.enhance r=lsat7_2002_ihs_red g=lsat7_2002_ihs_green b=lsat7_2002_ihs_blue
-</pre></div>
 
 <h2>SEE ALSO</h2>
 
