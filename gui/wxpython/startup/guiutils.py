@@ -10,7 +10,7 @@ This program is free software under the GNU General Public License
 
 @author Vaclav Petras <wenzeslaus gmail com>
 
-This is for code which depend on something from GUI (wx or wxGUI). 
+This is for code which depend on something from GUI (wx or wxGUI).
 """
 
 
@@ -55,7 +55,7 @@ class NewMapsetDialog(TextEntryDialog):
         message = _(
             "Name '{}' is not a valid name for location or mapset. "
             "Please use only ASCII characters excluding characters {} "
-            "and space.").format(ctrl.GetValue(),'/"\'@,=*~')
+            "and space.").format(ctrl.GetValue(), '/"\'@,=*~')
         GError(parent=self, message=message, caption=_("Invalid name"))
 
     def _checkOGR(self, text):
