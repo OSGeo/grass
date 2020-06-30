@@ -53,11 +53,9 @@ class NewMapsetDialog(TextEntryDialog):
 
     def _nameValidationFailed(self, ctrl):
         message = _(
-            "Name <%(name)s> is not a valid name for location or mapset. "
-            "Please use only ASCII characters excluding %(chars)s "
-            "and space.") % {
-            'name': ctrl.GetValue(),
-            'chars': '/"\'@,=*~'}
+            "Name '{}' is not a valid name for location or mapset. "
+            "Please use only ASCII characters excluding characters {} "
+            "and space.").format(ctrl.GetValue(),'/"\'@,=*~')
         GError(parent=self, message=message, caption=_("Invalid name"))
 
     def _checkOGR(self, text):
@@ -68,10 +66,9 @@ class NewMapsetDialog(TextEntryDialog):
 
     def _reservedMapsetName(self, ctrl):
         message = _(
-            "Name <%s> is reserved for direct "
+            "Name '{}' is reserved for direct "
             "read access to OGR layers. Please use "
-            "another name for your mapset.") % {
-             ctrl.GetValue()}
+            "another name for your mapset.").format(ctrl.GetValue())
         GError(parent=self, message=message,
                caption=_("Reserved mapset name"))
 
@@ -83,9 +80,8 @@ class NewMapsetDialog(TextEntryDialog):
 
     def _mapsetAlreadyExists(self, ctrl):
         message = _(
-            "Mapset <%s> already exists. Please consider to use "
-            "another name for your location.") % {
-             ctrl.GetValue()}
+            "Mapset '{}' already exists. Please consider to use "
+            "another name for your location.").format(ctrl.GetValue())
         GError(parent=self, message=message, caption=_("Existing mapset path"))
 
 
