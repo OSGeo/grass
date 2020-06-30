@@ -15,6 +15,7 @@ for details.
 
 @author Tereza Fiedlerova
 @author Anna Petrasova (kratochanna gmail com)
+@author Linda Kladivova (l.kladivova@seznam.cz)
 """
 import re
 import copy
@@ -923,8 +924,6 @@ class DataCatalogTree(LocationMapTree):
                 GError(parent=self,
                        message=_("Unable to create new mapset: %s") % err,
                        showTraceback=False)
-            print(mapset)
-            print(self.selected_location[0])
             self.InsertMapset(name=mapset,
                               location_node=self.selected_location[0])
 

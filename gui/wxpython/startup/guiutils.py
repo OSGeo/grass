@@ -71,7 +71,7 @@ class NewMapsetDialog(TextEntryDialog):
             "Name <%s> is reserved for direct "
             "read access to OGR layers. Please use "
             "another name for your mapset.") % {
-            'name': ctrl.GetValue()}
+             ctrl.GetValue()}
         GError(parent=self, message=message,
                caption=_("Reserved mapset name"))
 
@@ -85,7 +85,7 @@ class NewMapsetDialog(TextEntryDialog):
         message = _(
             "Mapset <%s> already exists. Please consider to use "
             "another name for your location.") % {
-            'name': ctrl.GetValue()}
+             ctrl.GetValue()}
         GError(parent=self, message=message, caption=_("Existing mapset path"))
 
 
