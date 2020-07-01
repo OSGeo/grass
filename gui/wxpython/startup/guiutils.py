@@ -10,20 +10,18 @@ This program is free software under the GNU General Public License
 
 @author Vaclav Petras <wenzeslaus gmail com>
 
-This is for code which depend on something from GUI (wx or wxGUI). 
+This is for code which depend on something from GUI (wx or wxGUI).
 """
 
 
 import os
 
-import wx
-
 import grass.script as gs
 
 from core import globalvar
-from core.gcmd import DecodeString, RunCommand
+from core.gcmd import GError, DecodeString, RunCommand
 from gui_core.dialogs import TextEntryDialog
-from gui_core.widgets import GenericValidator
+from gui_core.widgets import GenericMultiValidator
 
 
 def SetSessionMapset(database, location, mapset):
@@ -33,30 +31,58 @@ def SetSessionMapset(database, location, mapset):
     RunCommand("g.gisenv", set="MAPSET=%s" % mapset)
 
 
-
 class NewMapsetDialog(TextEntryDialog):
     def __init__(self, parent=None, default=None,
-                 validation_failed_handler=None, help_hanlder=None):
-        if help_hanlder:
-            style = wx.OK | wx.CANCEL | wx.HELP
-        else:
-            style = wx.OK | wx.CANCEL
-        if validation_failed_handler:
-            validator=GenericValidator(
-                gs.legal_name, validation_failed_handler)
-        else:
-            validator = None
+                 database=None, location=None):
+        self.database = database
+        self.location = location
+
+        # list of tuples consisting of conditions and callbacks
+        checks = [(gs.legal_name, self._nameValidationFailed),
+                  (self._checkMapsetNotExists, self._mapsetAlreadyExists),
+                  (self._checkOGR, self._reservedMapsetName)]
+        validator = GenericMultiValidator(checks)
+
         TextEntryDialog.__init__(
             self, parent=parent,
             message=_("Name for the new mapset:"),
             caption=_("Create new mapset"),
             defaultValue=default,
             validator=validator,
-            style=style
         )
-        if help_hanlder:
-            help_button = self.FindWindowById(wx.ID_HELP)
-            help_button.Bind(wx.EVT_BUTTON, help_hanlder)
+
+    def _nameValidationFailed(self, ctrl):
+        message = _(
+            "Name '{}' is not a valid name for location or mapset. "
+            "Please use only ASCII characters excluding characters {} "
+            "and space.").format(ctrl.GetValue(), '/"\'@,=*~')
+        GError(parent=self, message=message, caption=_("Invalid name"))
+
+    def _checkOGR(self, text):
+        """Check user's input for reserved mapset name."""
+        if text.lower() == 'ogr':
+            return False
+        return True
+
+    def _reservedMapsetName(self, ctrl):
+        message = _(
+            "Name '{}' is reserved for direct "
+            "read access to OGR layers. Please use "
+            "another name for your mapset.").format(ctrl.GetValue())
+        GError(parent=self, message=message,
+               caption=_("Reserved mapset name"))
+
+    def _checkMapsetNotExists(self, text):
+        """Check whether user's input mapset exists or not."""
+        if mapset_exists(self.database, self.location, text):
+            return False
+        return True
+
+    def _mapsetAlreadyExists(self, ctrl):
+        message = _(
+            "Mapset '{}' already exists. Please consider to use "
+            "another name for your location.").format(ctrl.GetValue())
+        GError(parent=self, message=message, caption=_("Existing mapset path"))
 
 
 # TODO: similar to (but not the same as) read_gisrc function in grass.py
@@ -108,3 +134,12 @@ def GetVersion():
         grassVersion = versionLine
         grassRevisionStr = ''
     return (grassVersion, grassRevisionStr)
+
+
+def mapset_exists(database, location, mapset):
+    """Returns True whether mapset path exists."""
+    location_path = os.path.join(database, location)
+    mapset_path = os.path.join(location_path, mapset)
+    if os.path.exists(mapset_path):
+        return True
+    return False
