@@ -90,6 +90,7 @@ public:
         update_value(point_binning_, bin_index_nodes_, cols_,
                      arr_row, arr_col, rtype_, x, y, z);
         n_processed++;
+        return true;
     }
     gpoint_count n_processed;
 private:
