@@ -81,9 +81,11 @@ static int add_node(struct BinIndex *bin_index, int head, double z)
 }
 
 
+/* Unlike the other functions, this one is not using map_type (RASTER_MAP_TYPE)
+ * because the values (z) are always doubles and the index is integer. */
 int update_bin_index(struct BinIndex *bin_index, void *index_array,
                      int cols, int row, int col,
-                     RASTER_MAP_TYPE map_type, double value)
+                     double value)
 {
     int head_id;
     void *ptr = index_array;
@@ -840,7 +842,7 @@ void update_value(struct PointBinning *point_binning,
                      rtype, z);
     if (point_binning->bin_index)
         update_bin_index(bin_index_nodes, point_binning->index_array, cols,
-                         arr_row, arr_col, rtype, z);
+                         arr_row, arr_col, z);
     if (point_binning->bin_coordinates) {
         /* this assumes that n is already computed for this xyz */
         void *ptr = get_cell_ptr(point_binning->n_array, cols, arr_row,
