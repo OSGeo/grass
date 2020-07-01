@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
     method_opt->description = _("Statistic to use for raster values");
     method_opt->options =
 	"n,min,max,range,sum,mean,stddev,variance,coeff_var,median,percentile,skewness,trimmean";
-    method_opt->answer = "mean";
+    method_opt->answer = const_cast<char*>("mean");
     method_opt->guisection = _("Statistic");
     G_asprintf((char **)&(method_opt->descriptions),
                "n;%s;"
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
 
     Option *type_opt = G_define_standard_option(G_OPT_R_TYPE);
     type_opt->required = NO;
-    type_opt->answer = "FCELL";
+    type_opt->answer = const_cast<char*>("FCELL");
 
     Option *base_raster_opt = G_define_standard_option(G_OPT_R_INPUT);
     base_raster_opt->key = "base_raster";
@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
     zscale_opt->key = "zscale";
     zscale_opt->type = TYPE_DOUBLE;
     zscale_opt->required = NO;
-    zscale_opt->answer = "1.0";
+    zscale_opt->answer = const_cast<char*>("1.0");
     zscale_opt->description = _("Scale to apply to Z data");
     zscale_opt->guisection = _("Transform");
 
@@ -188,7 +188,7 @@ int main(int argc, char *argv[])
     iscale_opt->key = "intensity_scale";
     iscale_opt->type = TYPE_DOUBLE;
     iscale_opt->required = NO;
-    iscale_opt->answer = "1.0";
+    iscale_opt->answer = const_cast<char*>("1.0");
     iscale_opt->description = _("Scale to apply to intensity values");
     iscale_opt->guisection = _("Transform");
 
@@ -218,7 +218,7 @@ int main(int argc, char *argv[])
     max_ground_window_opt->key = "max_ground_window_size";
     max_ground_window_opt->type = TYPE_DOUBLE;
     max_ground_window_opt->required = NO;
-    max_ground_window_opt->answer = "33";
+    max_ground_window_opt->answer = const_cast<char*>("33");
     max_ground_window_opt->description =
         _("Maximum window size for ground filter");
     max_ground_window_opt->guisection = _("Ground filter");
@@ -227,7 +227,7 @@ int main(int argc, char *argv[])
     ground_slope_opt->key = "ground_slope";
     ground_slope_opt->type = TYPE_DOUBLE;
     ground_slope_opt->required = NO;
-    ground_slope_opt->answer = "1.0";
+    ground_slope_opt->answer = const_cast<char*>("1.0");
     ground_slope_opt->description = _("Slope for ground filter");
     ground_slope_opt->guisection = _("Ground filter");
 
@@ -235,7 +235,7 @@ int main(int argc, char *argv[])
     max_ground_distance_opt->key = "max_ground_distance";
     max_ground_distance_opt->type = TYPE_DOUBLE;
     max_ground_distance_opt->required = NO;
-    max_ground_distance_opt->answer = "2.5";
+    max_ground_distance_opt->answer = const_cast<char*>("2.5");
     max_ground_distance_opt->description =
         _("Maximum distance for ground filter");
     max_ground_distance_opt->guisection = _("Ground filter");
@@ -244,7 +244,7 @@ int main(int argc, char *argv[])
     init_ground_distance_opt->key = "initial_ground_distance";
     init_ground_distance_opt->type = TYPE_DOUBLE;
     init_ground_distance_opt->required = NO;
-    init_ground_distance_opt->answer = "0.15";
+    init_ground_distance_opt->answer = const_cast<char*>("0.15");
     init_ground_distance_opt->description =
         _("Initial distance for ground filter");
     init_ground_distance_opt->guisection = _("Ground filter");
@@ -253,7 +253,7 @@ int main(int argc, char *argv[])
     ground_cell_size_opt->key = "ground_cell_size";
     ground_cell_size_opt->type = TYPE_DOUBLE;
     ground_cell_size_opt->required = NO;
-    ground_cell_size_opt->answer = "1";
+    ground_cell_size_opt->answer = const_cast<char*>("1");
     ground_cell_size_opt->description =
         _("Initial distance for ground filter");
     ground_cell_size_opt->guisection = _("Ground filter");
