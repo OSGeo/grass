@@ -755,7 +755,8 @@ int main(int argc, char *argv[])
     G_percent(1, 1, 1);		/* flush */
     G_free(raster_row);
 
-    G_message(_("%lu points found in input file(s)"), grass_filter.num_processed());
+    G_message(_(GPOINT_COUNT_FORMAT " points found in input file(s)"),
+              grass_filter.num_processed());
 
     /* close raster file & write history */
     Rast_close(out_fd);
@@ -776,25 +777,32 @@ int main(int argc, char *argv[])
 
     if (infiles.num_items > 1) {
         sprintf(buff, _("Raster map <%s> created."
-                        " %lu points from %d files found in region."),
+                        " " GPOINT_COUNT_FORMAT " points from %d files found in region."),
                 outmap, grass_filter.num_passed(), infiles.num_items);
     }
     else {
         sprintf(buff, _("Raster map <%s> created."
-                        " %lu points found in region."),
+                        " " GPOINT_COUNT_FORMAT " points found in region."),
                 outmap, grass_filter.num_passed());
     }
 
     G_done_msg("%s", buff);
-    G_message("Filtered spatially %llu points.", grass_filter.num_spatially_filtered());
-    G_message("Filtered z range %llu points.", grass_filter.num_zrange_filtered());
-    G_message("Filtered i range %llu points.", grass_filter.num_irange_filtered());
-    G_message("Filtered class %llu points.", grass_filter.num_class_filtered());
-    G_message("Filtered return %llu points.", grass_filter.num_return_filtered());
+    G_message("Filtered spatially " GPOINT_COUNT_FORMAT " points.",
+              grass_filter.num_spatially_filtered());
+    G_message("Filtered z range " GPOINT_COUNT_FORMAT " points.",
+              grass_filter.num_zrange_filtered());
+    G_message("Filtered i range " GPOINT_COUNT_FORMAT " points.",
+              grass_filter.num_irange_filtered());
+    G_message("Filtered class " GPOINT_COUNT_FORMAT " points.",
+              grass_filter.num_class_filtered());
+    G_message("Filtered return " GPOINT_COUNT_FORMAT " points.",
+              grass_filter.num_return_filtered());
 
-    G_message("Processed into raster %llu points.", binning_writer.n_processed);
+    G_message("Processed into raster " GPOINT_COUNT_FORMAT " points.",
+              binning_writer.n_processed);
 
-    G_debug(1, "Processed %lu points.", grass_filter.num_processed());
+    G_debug(1, "Processed " GPOINT_COUNT_FORMAT " points.",
+            grass_filter.num_processed());
 
     string_list_free(&infiles);
 

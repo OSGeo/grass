@@ -21,10 +21,13 @@
 #define LAS_MID 2
 #define LAS_LAST 3
 
+/* Type and format specifier for count of points */
 #ifdef HAVE_LONG_LONG_INT
 typedef unsigned long long gpoint_count;
+#define GPOINT_COUNT_FORMAT "%llu"
 #else
 typedef unsigned long gpoint_count;
+#define GPOINT_COUNT_FORMAT "%lu"
 #endif
 
 struct GLidarLayers
