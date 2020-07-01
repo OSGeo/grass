@@ -72,7 +72,7 @@ void point_binning_free(struct PointBinning *point_binning,
 
 int update_bin_index(struct BinIndex *bin_index, void *index_array,
                      int cols, int row, int col,
-                     RASTER_MAP_TYPE map_type, double value);
+                     double value);
 void write_variance(void *raster_row, void *n_array, void *sum_array,
                     void *sumsq_array, int row, int cols,
                     RASTER_MAP_TYPE rtype, int method);
