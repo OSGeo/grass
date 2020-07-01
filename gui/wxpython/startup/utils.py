@@ -93,6 +93,7 @@ def create_database_directory():
 
     return None
 
+
 def get_lockfile_if_present(database, location, mapset):
     """Return path to lock if present, None otherwise
 
@@ -136,7 +137,6 @@ def delete_location(database, location):
     shutil.rmtree(os.path.join(database, location))
 
 
-
 def rename_mapset(database, location, old_name, new_name):
     """Rename mapset from *old_name* to *new_name*"""
     location_path = os.path.join(database, location)
@@ -148,3 +148,15 @@ def rename_location(database, old_name, new_name):
     """Rename location from *old_name* to *new_name*"""
     os.rename(os.path.join(database, old_name),
               os.path.join(database, new_name))
+
+
+def get_default_mapset_name():
+    """Returns default name for mapset."""
+    try:
+        defaultName = getpass.getuser()
+        defaultName.encode('ascii')
+    except UnicodeEncodeError:
+        # raise error if not ascii (not valid mapset name)
+        defaultName = 'user'
+
+    return defaultName

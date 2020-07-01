@@ -20,6 +20,7 @@ Classes:
  - widgets::NTCValidator
  - widgets::SimpleValidator
  - widgets::GenericValidator
+ - widgets::GenericMultiValidator
  - widgets::GListCtrl
  - widgets::SearchModuleWidget
  - widgets::ManageSettingsWidget
@@ -862,6 +863,50 @@ class MapValidator(GenericValidator):
         GenericValidator.__init__(self,
                                   grass.legal_name,
                                   _mapNameValidationFailed)
+
+
+class GenericMultiValidator(Validator):
+    """This validator checks conditions and calls callbacks
+    in case the condition is not fulfilled.
+    """
+
+    def __init__(self, checks):
+        """Standard constructor.
+
+        :param checks: list of tuples consisting of conditions (list of
+        functions which accepts string value and returns T/F) and callbacks (
+        list of functions which is called when condition is not fulfilled)
+        """
+        Validator.__init__(self)
+        self._checks = checks
+
+    def Clone(self):
+        """Standard cloner.
+
+        Note that every validator must implement the Clone() method.
+        """
+        return GenericMultiValidator(self._checks)
+
+    def Validate(self, win):
+        """Validate the contents of the given text control.
+        """
+        ctrl = self.GetWindow()
+        text = ctrl.GetValue()
+        for condition, callback in self._checks:
+            if not condition(text):
+                callback(ctrl)
+                return False
+        return True
+
+    def TransferToWindow(self):
+        """Transfer data from validator to window.
+        """
+        return True  # Prevent wxDialog from complaining.
+
+    def TransferFromWindow(self):
+        """Transfer data from window to validator.
+        """
+        return True  # Prevent wxDialog from complaining.
 
 
 class SingleSymbolPanel(wx.Panel):

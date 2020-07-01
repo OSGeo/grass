@@ -15,8 +15,8 @@ for details.
 
 @author Tereza Fiedlerova
 @author Anna Petrasova (kratochanna gmail com)
+@author Linda Kladivova (l.kladivova@seznam.cz)
 """
-import os
 import re
 import copy
 from multiprocessing import Process, Queue, cpu_count
@@ -32,6 +32,8 @@ from core.treemodel import TreeModel, DictNode
 from gui_core.treeview import TreeView
 from gui_core.wrap import Menu
 from datacatalog.dialogs import CatalogReprojectionDialog
+from startup.utils import create_mapset, get_default_mapset_name
+from startup.guiutils import NewMapsetDialog
 
 from grass.pydispatch.signal import Signal
 
@@ -479,10 +481,12 @@ class LocationMapTree(TreeView):
             self._popupMenuEmpty()
         elif self.selected_layer[0]:
             self._popupMenuLayer()
-        elif self.selected_mapset[0] and not self.selected_type[0] and len(self.selected_mapset) == 1:
-            self._popupMenuMapset()
         elif self.selected_type[0] and len(self.selected_type) == 1:
             self._popupMenuElement()
+        elif self.selected_mapset[0] and not self.selected_type[0] and len(self.selected_mapset) == 1:
+            self._popupMenuMapset()
+        elif self.selected_location[0] and not self.selected_mapset[0] and len(self.selected_location) == 1:
+            self._popupMenuLocation()
         else:
             self._popupMenuEmpty()
 
@@ -803,6 +807,13 @@ class DataCatalogTree(LocationMapTree):
             self._model.SortChildren(found_element)
             self.RefreshNode(mapset_node, recursive=True)
 
+    def InsertMapset(self, name, location_node):
+        """Insert mapset into model and refresh tree"""
+        self._model.AppendNode(parent=location_node, label=name,
+                               data=dict(type="mapset", name=name))
+        self._model.SortChildren(location_node)
+        self.RefreshNode(location_node, recursive=True)
+
     def OnDeleteMap(self, event):
         """Delete layer or mapset"""
         names = [self.selected_layer[i].label + '@' + self.selected_mapset[i].label
@@ -894,6 +905,29 @@ class DataCatalogTree(LocationMapTree):
         else:
             self.changeLocation.emit(mapset=self.selected_mapset[0].label, location=self.selected_location[0].label)
         self.ExpandCurrentMapset()
+
+    def OnCreateMapset(self, event):
+        """Create new mapset"""
+        gisdbase = gisenv()['GISDBASE']
+
+        dlg = NewMapsetDialog(
+            parent=self,
+            default=get_default_mapset_name(),
+            database=gisdbase,
+            location=self.selected_location[0].label
+        )
+        if dlg.ShowModal() == wx.ID_OK:
+            mapset = dlg.GetValue()
+            try:
+                create_mapset(gisdbase,
+                              self.selected_location[0].label,
+                              mapset)
+            except OSError as err:
+                GError(parent=self,
+                       message=_("Unable to create new mapset: %s") % err,
+                       showTraceback=False)
+            self.InsertMapset(name=mapset,
+                              location_node=self.selected_location[0])
 
     def OnMetadata(self, event):
         """Show metadata of any raster/vector/3draster"""
@@ -1059,6 +1093,17 @@ class DataCatalogTree(LocationMapTree):
         if (self.selected_location[0].label == genv['LOCATION_NAME']
                 and self.selected_mapset[0].label == genv['MAPSET']):
             item.Enable(False)
+        self.PopupMenu(menu)
+        menu.Destroy()
+
+    def _popupMenuLocation(self):
+        """Create popup menu for locations"""
+        menu = Menu()
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create mapset"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCreateMapset, item)
+
         self.PopupMenu(menu)
         menu.Destroy()
 
