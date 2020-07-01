@@ -53,6 +53,7 @@ class DataCatalogFrame(wx.Frame):
         # tree
         self.tree = DataCatalogTree(parent=self.panel, giface=self._giface)
         self.tree.InitTreeItems()
+        self.tree.UpdateCurrentLocationMapsetNode()
         self.tree.ExpandCurrentMapset()
         self.tree.changeMapset.connect(lambda mapset:
                                        self.ChangeLocationMapset(location=None,
