@@ -79,6 +79,7 @@ class DataCatalog(wx.Panel):
 
     def LoadItemsDone(self):
         self._loaded = True
+        self.tree.UpdateCurrentLocationMapsetNode()
         self.tree.ExpandCurrentMapset()
 
     def OnReloadTree(self, event):
