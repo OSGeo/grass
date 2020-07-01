@@ -277,7 +277,7 @@ def main():
         # these previous colors are way too blue for landsat
         # blue_colors = ['0 0 0 0\n10% 0 0 0\n20% 200 200 200\n40% 230 230 230\n67% 255 255 255\n100% 255 255 255']
         bc = grass.feed_command('r.colors', quiet = True, map = "%s_blue" % out, rules = "-")
-        bc.stdin.write('\n'.join(blue_colors))
+        bc.stdin.write(grass.encode('\n'.join(blue_colors)))
         bc.stdin.close()
 
     # output notice

@@ -39,7 +39,7 @@ from core.gcmd import GMessage, GError, DecodeString, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets
 from startup.utils import (
     get_lockfile_if_present, get_possible_database_path,
-    create_database_directory, create_mapset)
+    create_database_directory, create_mapset, get_default_mapset_name)
 import startup.utils as sutils
 from startup.guiutils import SetSessionMapset, NewMapsetDialog
 import startup.guiutils as sgui
@@ -944,55 +944,31 @@ class GRASSStartup(wx.Frame):
 
     def OnCreateMapset(self, event):
         """Create new mapset"""
+        gisdbase = self.tgisdbase.GetValue()
+        location = self.listOfLocations[self.lblocations.GetSelection()]
+
         dlg = NewMapsetDialog(
             parent=self,
-            default=self._getDefaultMapsetName(),
-            validation_failed_handler=self._nameValidationFailed,
-            help_hanlder=self.OnHelp,
+            default=get_default_mapset_name(),
+            database=gisdbase,
+            location=location
         )
         if dlg.ShowModal() == wx.ID_OK:
             mapset = dlg.GetValue()
-            return self.CreateNewMapset(mapset=mapset)
+            try:
+                create_mapset(gisdbase, location, mapset)
+                self.OnSelectLocation(None)
+                self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
+                self.bstart.SetFocus()
+                return True
+            except Exception as e:
+                GError(parent=self,
+                       message=_("Unable to create new mapset: %s") % e,
+                       showTraceback=False)
+                return False
         else:
             return False
 
-    def CreateNewMapset(self, mapset):
-        if mapset in self.listOfMapsets:
-            GMessage(parent=self,
-                     message=_("Mapset <%s> already exists.") % mapset)
-            return False
-
-        if mapset.lower() == 'ogr':
-            dlg1 = wx.MessageDialog(
-                parent=self,
-                message=_(
-                    "Mapset <%s> is reserved for direct "
-                    "read access to OGR layers. Please consider to use "
-                    "another name for your mapset.\n\n"
-                    "Are you really sure that you want to create this mapset?") %
-                mapset,
-                caption=_("Reserved mapset name"),
-                style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
-            ret = dlg1.ShowModal()
-            dlg1.Destroy()
-            if ret == wx.ID_NO:
-                dlg1.Destroy()
-                return False
-
-        try:
-            self.gisdbase = self.tgisdbase.GetValue()
-            location = self.listOfLocations[self.lblocations.GetSelection()]
-            create_mapset(self.gisdbase, location, mapset)
-            self.OnSelectLocation(None)
-            self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
-            self.bstart.SetFocus()
-
-            return True
-        except Exception as e:
-            GError(parent=self,
-                   message=_("Unable to create new mapset: %s") % e,
-                   showTraceback=False)
-            return False
 
     def OnStart(self, event):
         """'Start GRASS' button clicked"""
@@ -1045,17 +1021,6 @@ class GRASSStartup(wx.Frame):
 
     def SetLocation(self, dbase, location, mapset):
         SetSessionMapset(dbase, location, mapset)
-
-    def _getDefaultMapsetName(self):
-        """Returns default name for mapset."""
-        try:
-            defaultName = getpass.getuser()
-            # raise error if not ascii (not valid mapset name)
-            defaultName.encode('ascii')
-        except:  # whatever might go wrong
-            defaultName = 'user'
-
-        return defaultName
 
     def ExitSuccessfully(self):
         self.Destroy()
