@@ -1,0 +1,34 @@
+name: General linting
+
+on:
+- push
+- pull_request
+
+jobs:
+
+  super-linter:
+
+    name: GitHub Super Linter
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    -  name: Lint code base
+       uses: docker://github/super-linter:v2.2.2
+       env:
+         # Listed but disabled linters would be nice to have.
+         # Python (supported using Pylint) and C/C++ (not supported) are
+         # handled separately due to the complexity of the settings.
+         # (The rest is simply disabled automatically as of v2.)
+         VALIDATE_BASH: false
+         VALIDATE_CSS: false
+         VALIDATE_DOCKER: false
+         VALIDATE_JAVASCRIPT_ES: true
+         VALIDATE_JAVASCRIPT_STANDARD: false
+         VALIDATE_JSON: true
+         VALIDATE_MD: false
+         VALIDATE_PERL: false
+         VALIDATE_POWERSHELL: true
+         VALIDATE_XML: true
+         VALIDATE_YAML: true
