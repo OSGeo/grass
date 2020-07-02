@@ -196,7 +196,8 @@ class CTreeView(AbstractTreeViewMixin, CustomTreeCtrl):
             kw[style] = CT.TR_HIDE_ROOT | CT.TR_FULL_ROW_HIGHLIGHT |\
                 CT.TR_HAS_BUTTONS | CT.TR_LINES_AT_ROOT | CT.TR_SINGLE
         super(CTreeView, self).__init__(parent=parent, model=model, **kw)
-        self.SetBackgroundColour("white")
+        self.SetBackgroundColour(
+            wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOW))
         self.RefreshItems()
 
 

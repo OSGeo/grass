@@ -176,7 +176,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 style=ctstyle,
                 **kwargs)
         self.SetName("LayerTree")
-        self.SetBackgroundColour("white")
+        self.SetBackgroundColour(
+            wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOW))
 
         # SetAutoLayout() causes that no vertical scrollbar is displayed
         # when some layers are not visible in layer tree
