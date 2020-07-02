@@ -117,7 +117,8 @@ measured in degree unit).
 
 
 <h2>METHOD</h2>
-<p>The calculation method is based on the method used in <b>r.sun</b>
+
+The calculation method is based on the method used in <b>r.sun</b>
 to calculate shadows. It starts at a very shallow angle and walks
 along the line of sight and asks at each step whether the line of
 sight &quot;hits&quot; the terrain. If so, the angle is increased to
@@ -132,6 +133,11 @@ of the Earth whereby remote features will seem to be lower than they
 actually are. It also accounts for the changes of angles towards
 cardinal directions caused by the projection (see above). 
 
+<p>
+The output with the <b>-d</b> flag is azimuth degree (-90 – 90, where
+0 is parallel with the focal cell). In case of negative horizon values
+obtained this indicates that the horizon height is below the cell it is
+computed from.
 
 <h2>EXAMPLES</h2>
 
