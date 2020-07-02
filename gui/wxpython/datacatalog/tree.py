@@ -243,32 +243,59 @@ class DataCatalogNode(DictNode):
         return True
 
 
-class LocationMapTree(TreeView):
+class DataCatalogTree(TreeView):
 
     def __init__(
-            self, parent, model=None, style=wx.TR_HIDE_ROOT | wx.TR_EDIT_LABELS
-            | wx.TR_LINES_AT_ROOT | wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT | wx.TR_MULTIPLE):
+            self, parent, model=None, giface=None,
+            style=wx.TR_HIDE_ROOT | wx.TR_EDIT_LABELS |
+            wx.TR_LINES_AT_ROOT | wx.TR_HAS_BUTTONS |
+            wx.TR_FULL_ROW_HIGHLIGHT | wx.TR_MULTIPLE):
         """Location Map Tree constructor."""
         self._model = TreeModel(DataCatalogNode)
         self._orig_model = self._model
         super(
-            LocationMapTree,
+            DataCatalogTree,
             self).__init__(
             parent=parent,
             model=self._model,
             id=wx.ID_ANY,
             style=style)
+
+        self._giface = giface
+        self._restricted = True
+
         self.showNotification = Signal('Tree.showNotification')
         self.changeMapset = Signal('Tree.changeMapset')
         self.changeLocation = Signal('Tree.changeLocation')
         self.parent = parent
         self.contextMenu.connect(self.OnRightClick)
         self.itemActivated.connect(self.OnDoubleClick)
-        self._iconTypes = ['grassdb', 'location', 'mapset', 'raster', 'vector', 'raster_3d']
+        self._iconTypes = ['grassdb', 'location', 'mapset', 'raster',
+                           'vector', 'raster_3d']
         self._initImages()
 
         self._initVariables()
+        self._initVariablesCatalog()
         self.UpdateCurrentLocationMapsetNode()
+
+        self.beginDrag = Signal('DataCatalogTree.beginDrag')
+        self.endDrag = Signal('DataCatalogTree.endDrag')
+        self.startEdit = Signal('DataCatalogTree.startEdit')
+        self.endEdit = Signal('DataCatalogTree.endEdit')
+
+        self.Bind(wx.EVT_TREE_BEGIN_DRAG, lambda evt:
+                  self._emitSignal(evt.GetItem(), self.beginDrag, event=evt))
+        self.Bind(wx.EVT_TREE_END_DRAG, lambda evt:
+                  self._emitSignal(evt.GetItem(), self.endDrag, event=evt))
+        self.beginDrag.connect(self.OnBeginDrag)
+        self.endDrag.connect(self.OnEndDrag)
+
+        self.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, lambda evt:
+                  self._emitSignal(evt.GetItem(), self.startEdit, event=evt))
+        self.Bind(wx.EVT_TREE_END_LABEL_EDIT, lambda evt:
+                  self._emitSignal(evt.GetItem(), self.endEdit, event=evt))
+        self.startEdit.connect(self.OnStartEditLabel)
+        self.endEdit.connect(self.OnEditLabel)
 
     def _initTreeItems(self, locations=None, mapsets=None):
         """Add locations, mapsets and layers to the tree.
@@ -349,10 +376,6 @@ class LocationMapTree(TreeView):
         self.current_location_node, self.current_mapset_node = \
             self.GetCurrentLocationMapsetNode()
 
-    def InitTreeItems(self):
-        """Load locations, mapsets and layers in the tree."""
-        raise NotImplementedError()
-
     def ReloadTreeItems(self):
         """Reload locations, mapsets and layers in the tree."""
         self._orig_model = self._model
@@ -407,18 +430,6 @@ class LocationMapTree(TreeView):
                                            data=dict(type=elem, name=layer))
         self._model.SortChildren(mapset_node)
 
-    def _popupMenuLayer(self):
-        """Create popup menu for layers"""
-        raise NotImplementedError()
-
-    def _popupMenuMapset(self):
-        """Create popup menu for mapsets"""
-        raise NotImplementedError()
-
-    def _popupMenuElement(self):
-        """Create popup menu for elements"""
-        raise NotImplementedError()
-
     def _initVariables(self):
         """Init variables."""
         self.selected_layer = []
@@ -440,7 +451,7 @@ class LocationMapTree(TreeView):
         for each in self._iconTypes:
             il.Add(icons[each])
         self.AssignImageList(il)
-        
+
     def GetControl(self):
         """Returns control itself."""
         return self
@@ -536,7 +547,7 @@ class LocationMapTree(TreeView):
             return locationItem[0], None
 
         return locationItem[0], mapsetItem[0]
-        
+
     def OnGetItemImage(self, index, which=wx.TreeItemIcon_Normal, column=0):
         """Overriden method to return image for each item."""
         node = self._model.GetNodeByIndex(index)
@@ -564,35 +575,6 @@ class LocationMapTree(TreeView):
         if self.current_mapset_node:
             self.Select(self.current_mapset_node, select=True)
             self.ExpandNode(self.current_mapset_node, recursive=True)
-
-
-class DataCatalogTree(LocationMapTree):
-
-    def __init__(self, parent, giface=None):
-        """Data Catalog Tree constructor."""
-        super(DataCatalogTree, self).__init__(parent)
-        self._giface = giface
-        self._restricted = True
-
-        self._initVariablesCatalog()
-        self.beginDrag = Signal('DataCatalogTree.beginDrag')
-        self.endDrag = Signal('DataCatalogTree.endDrag')
-        self.startEdit = Signal('DataCatalogTree.startEdit')
-        self.endEdit = Signal('DataCatalogTree.endEdit')
-
-        self.Bind(wx.EVT_TREE_BEGIN_DRAG, lambda evt:
-                  self._emitSignal(evt.GetItem(), self.beginDrag, event=evt))
-        self.Bind(wx.EVT_TREE_END_DRAG, lambda evt:
-                  self._emitSignal(evt.GetItem(), self.endDrag, event=evt))
-        self.beginDrag.connect(self.OnBeginDrag)
-        self.endDrag.connect(self.OnEndDrag)
-
-        self.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, lambda evt:
-                  self._emitSignal(evt.GetItem(), self.startEdit, event=evt))
-        self.Bind(wx.EVT_TREE_END_LABEL_EDIT, lambda evt:
-                  self._emitSignal(evt.GetItem(), self.endEdit, event=evt))
-        self.startEdit.connect(self.OnStartEditLabel)
-        self.endEdit.connect(self.OnEditLabel)
 
     def _initVariablesCatalog(self):
         """Init variables."""
@@ -879,7 +861,6 @@ class DataCatalogTree(LocationMapTree):
             self._giface.GetMapWindow().ZoomToMap()
 
         Debug.msg(1, "Displayed layer(s): " + str(all_names))
-
 
     def OnBeginDrag(self, node, event):
         """Just copy necessary data"""
