@@ -213,7 +213,7 @@ int main(int argc, char *argv[])
 
 		if (parse_error)
 		    G_fatal_error(_("Incorrect format of input rules. "
-				    "Check separators. Invalid line is:\n%s"), buf);
+				    "Is the first column numeric? Or check separators. Invalid line is:\n%s"), buf);
 	    }
 	    G_free_tokens(tokens);
 	    Rast_write_cats(name, &cats);
