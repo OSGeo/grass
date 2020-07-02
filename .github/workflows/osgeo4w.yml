@@ -1,0 +1,37 @@
+name: OSGeo4W
+
+on:
+- push
+- pull_request
+
+jobs:
+  build:
+    name: ${{ matrix.os }} build and tests
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+        - windows-2019
+      fail-fast: false
+
+    steps:
+    - name: Set git to use LF
+      run: |
+        git config --global core.autocrlf false
+        git config --global core.eol lf
+    - uses: actions/checkout@v2
+    - name: Install OSGeo4W
+      run: |
+        $exe = 'osgeo4w-setup-x86_64.exe'
+        $url = 'http://download.osgeo.org/osgeo4w/' + $exe
+        (New-Object System.Net.WebClient).DownloadFile($url, $exe)
+        Start-Process ('.\'+$exe) -ArgumentList '-A -g -k -q -s http://download.osgeo.org/x86_64 -P cairo,fftw,freetype-devel,gdal-ecw,gdal-mrsid,liblas-devel,libxdr,msys,pdcurses,python3-numpy,python3-pywin32,python3-wx,regex-devel,wxpython,zstd-devel' -Wait
+    - name: Install MSYS2 packages
+      run: C:\msys64\usr\bin\pacman.exe --noconfirm -S tar libintl make bison diffutils git dos2unix zip mingw-w64-x86_64-toolchain mingw-w64-x86_64-cairo mingw-w64-x86_64-python3-six
+    - name: Compile GRASS GIS
+      run: C:\msys64\usr\bin\bash.exe -l (''+(Get-Location)+'\.github\workflows\build_osgeo4w.sh') -p (Get-Location)
+    - name: Test executing of the grass command
+      run: .github/workflows/test_simple.bat 'C:\OSGeo4W64\opt\grass\grass79.bat'
+    - name: Run tests
+      run: .github/workflows/test_thorough.bat 'C:\OSGeo4W64\opt\grass\grass79.bat'

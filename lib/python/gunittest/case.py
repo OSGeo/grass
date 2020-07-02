@@ -19,7 +19,7 @@ import unittest
 
 from grass.pygrass.modules import Module
 from grass.exceptions import CalledModuleError
-from grass.script import shutil_which, text_to_string, encode
+from grass.script import shutil_which, text_to_string, encode, decode
 
 from .gmodules import call_module, SimpleModule
 from .checkers import (check_text_ellipsis,
@@ -184,6 +184,9 @@ class TestCase(unittest.TestCase):
 
         See :func:`check_text_ellipsis` for details of behavior.
         """
+        # actual is in the system codec while the passed reference is in utf-8;
+        # re-decode reference into the system codec for proper comparison
+        reference = decode(encode(reference, 'utf-8'))
         self.assertTrue(isinstance(actual, (str, unicode)), (
                         'actual argument is not a string'))
         self.assertTrue(isinstance(reference, (str, unicode)), (
