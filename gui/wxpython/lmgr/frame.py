@@ -197,7 +197,7 @@ class GMFrame(wx.Frame):
 
         self._auimgr.Update()
 
-        wx.CallAfter(self.notebook.SetSelectionByName, 'layers')
+        wx.CallAfter(self.notebook.SetSelectionByName, 'catalog')
 
         # use default window layout ?
         if UserSettings.Get(
@@ -311,7 +311,20 @@ class GMFrame(wx.Frame):
                 parent=self, style=globalvar.FNPageDStyle)
         else:
             self.notebook = FormNotebook(parent=self, style=wx.NB_BOTTOM)
-        # create displays notebook widget and add it to main notebook page
+
+        # create 'data catalog' widget and add it to main notebook page
+        self.datacatalog = DataCatalog(
+            parent=self.notebook, giface=self._giface)
+        self.datacatalog.showNotification.connect(
+            lambda message: self.SetStatusText(message))
+        self.datacatalog.changeMapset.connect(lambda mapset: self.ChangeMapset(mapset))
+        self.datacatalog.changeLocation.connect(lambda mapset, location: self.ChangeLocation(location, mapset))
+        self.notebook.AddPage(
+            page=self.datacatalog,
+            text=_("Data"),
+            name='catalog')
+
+        # create displays notebook widget
         cbStyle = globalvar.FNPageStyle
         if globalvar.hasAgw:
             self.notebookLayers = FN.FlatNotebook(
@@ -371,18 +384,6 @@ class GMFrame(wx.Frame):
                 name='search')
         else:
             self.search = None
-
-        # create 'data catalog' notebook page
-        self.datacatalog = DataCatalog(
-            parent=self.notebook, giface=self._giface)
-        self.datacatalog.showNotification.connect(
-            lambda message: self.SetStatusText(message))
-        self.datacatalog.changeMapset.connect(lambda mapset: self.ChangeMapset(mapset))
-        self.datacatalog.changeLocation.connect(lambda mapset, location: self.ChangeLocation(location, mapset))
-        self.notebook.AddPage(
-            page=self.datacatalog,
-            text=_("Data"),
-            name='catalog')
 
         # create 'python shell' notebook page
         if not UserSettings.Get(
