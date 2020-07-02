@@ -79,7 +79,7 @@ class DataCatalog(wx.Panel):
 
     def LoadItemsDone(self):
         self._loaded = True
-        self.tree.UpdateCurrentLocationMapsetNode()
+        self.tree.UpdateCurrentDbLocationMapsetNode()
         self.tree.ExpandCurrentMapset()
 
     def OnReloadTree(self, event):
@@ -90,6 +90,10 @@ class DataCatalog(wx.Panel):
     def OnReloadCurrentMapset(self, event):
         """Reload current mapset tree only"""
         self.tree.ReloadCurrentMapset()
+
+    def OnCreateGrassDb(self, event):
+        """Create new grass database"""
+        self.tree.CreateGrassDb()
 
     def SetRestriction(self, restrict):
         """Allow editing other mapsets or restrict editing to current mapset"""

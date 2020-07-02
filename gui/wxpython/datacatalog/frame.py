@@ -53,7 +53,7 @@ class DataCatalogFrame(wx.Frame):
         # tree
         self.tree = DataCatalogTree(parent=self.panel, giface=self._giface)
         self.tree.InitTreeItems()
-        self.tree.UpdateCurrentLocationMapsetNode()
+        self.tree.UpdateCurrentDbLocationMapsetNode()
         self.tree.ExpandCurrentMapset()
         self.tree.changeMapset.connect(lambda mapset:
                                        self.ChangeLocationMapset(location=None,
@@ -105,6 +105,10 @@ class DataCatalogFrame(wx.Frame):
     def OnReloadCurrentMapset(self, event):
         """Reload current mapset tree only"""
         self.tree.ReloadCurrentMapset()
+
+    def OnCreateGrassDb(self, event):
+        """Create new grass database"""
+        self.tree.CreateGrassDb()
 
     def SetRestriction(self, restrict):
         """Allow editing other mapsets or restrict editing to current mapset"""
