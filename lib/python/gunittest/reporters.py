@@ -95,12 +95,17 @@ class FileAnonymizer(object):
         # besides GISBASE and test recursion start directory (which is
         # supposed to be source root directory or similar) we can also try
         # to remove user home directory and GISDBASE
-        # we suppuse that we run in standard grass session
+        # we suppose that we run in standard grass session
         # TODO: provide more effective implementation
+
+        # regex for a trailing separator
+        path_end = r'[\\/]?'
         for path in self._paths_to_remove:
             for filename in filenames:
-                path_end = r'[\\/]?'
-                replace_in_file(filename, path + path_end, '')
+                # literal special characters (e.g., ^\()[]{}.*+-$) in path need
+                # to be escaped in a regex (2nd argument); otherwise, they will
+                # be interpreted as special characters
+                replace_in_file(filename, re.escape(path) + path_end, '')
 
 
 def get_source_url(path, revision, line=None):

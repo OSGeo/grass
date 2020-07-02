@@ -24,7 +24,7 @@ class TestRBlend(TestCase):
         """Create maps in a small region."""
         cls.use_temp_region()
         cls.runModule('g.region', raster=cls.map1, flags='p')
-        run_command('d.mon', start='wx0')
+        run_command('d.mon', start='png')
 
     @classmethod
     def tearDownClass(cls):
@@ -32,7 +32,7 @@ class TestRBlend(TestCase):
         cls.runModule('g.remove', flags='f', type='raster',
                       name=(cls.temp1, cls.temp2, cls.temp3))
         cls.del_temp_region()
-        run_command('d.mon', stop='wx0')
+        run_command('d.mon', stop='png')
 
     def test_blend(self):
         """blends color test"""
