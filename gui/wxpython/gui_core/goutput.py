@@ -36,6 +36,7 @@ from core.gcmd import GError, EncodeString
 from core.gconsole   import GConsole, \
     EVT_CMD_OUTPUT, EVT_CMD_PROGRESS, EVT_CMD_RUN, EVT_CMD_DONE, \
     Notification
+from core.globalvar import CheckWxVersion, wxPythonPhoenix
 from gui_core.prompt import GPromptSTC
 from gui_core.wrap import Button, ToggleButton, StaticText, \
     StaticBox
@@ -599,7 +600,8 @@ class GStc(stc.StyledTextCtrl):
         self.SetTabWidth(4)
         self.SetUseTabs(False)
         self.UsePopUp(True)
-        self.SetSelBackground(True, "#FFFF00")
+        self.SetSelBackground(True,
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT))
         self.SetUseHorizontalScrollBar(True)
 
         #
@@ -633,44 +635,59 @@ class GStc(stc.StyledTextCtrl):
             typesize = 10
         typesize = float(typesize)
 
+        fontInfo = wx.FontInfo(typesize)
+        fontInfo.FaceName(typeface)
+        fontInfo.Family(wx.FONTFAMILY_TELETYPE)
+        defaultFont = wx.Font(fontInfo)
+
+        self.StyleClearAll()
+
+        isDarkMode = False
+        if wxPythonPhoenix and CheckWxVersion([4, 1, 0]):
+            isDarkMode = wx.SystemSettings.GetAppearance().IsDark()
+
+        defaultBackgroundColour = wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
+        defaultTextColour = wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
+
         self.StyleDefault = 0
-        self.StyleDefaultSpec = "face:%s,size:%d,fore:#000000,back:#FFFFFF" % (
-            typeface,
-            typesize)
+        self.StyleSetFont(stc.STC_STYLE_DEFAULT, defaultFont)
+        self.StyleSetBackground(stc.STC_STYLE_DEFAULT, defaultBackgroundColour)
+        self.StyleSetForeground(stc.STC_STYLE_DEFAULT, defaultTextColour)
+
         self.StyleCommand = 1
-        self.StyleCommandSpec = "face:%s,size:%d,,fore:#000000,back:#bcbcbc" % (
-            typeface, typesize)
+        self.StyleSetBackground(self.StyleCommand,
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_BACKGROUND))
+        self.StyleSetForeground(self.StyleCommand, defaultTextColour)
+
         self.StyleOutput = 2
-        self.StyleOutputSpec = "face:%s,size:%d,,fore:#000000,back:#FFFFFF" % (
-            typeface,
-            typesize)
+        self.StyleSetBackground(self.StyleOutput, defaultBackgroundColour)
+        self.StyleSetForeground(self.StyleOutput, defaultTextColour)
+
         # fatal error
         self.StyleError = 3
-        self.StyleErrorSpec = "face:%s,size:%d,,fore:#7F0000,back:#FFFFFF" % (
-            typeface,
-            typesize)
+        errorColour = wx.Colour(127, 0, 0)
+        if isDarkMode:
+            errorColour = wx.Colour(230, 0, 0)
+        self.StyleSetBackground(self.StyleError, defaultBackgroundColour)
+        self.StyleSetForeground(self.StyleError, errorColour)
+
         # warning
         self.StyleWarning = 4
-        self.StyleWarningSpec = "face:%s,size:%d,,fore:#0000FF,back:#FFFFFF" % (
-            typeface, typesize)
+        warningColour =  wx.Colour(0, 0, 255)
+        if isDarkMode:
+            warningColour = wx.Colour(0, 102, 255)
+        self.StyleSetBackground(self.StyleWarning, defaultBackgroundColour)
+        self.StyleSetForeground(self.StyleWarning, warningColour)
+
         # message
         self.StyleMessage = 5
-        self.StyleMessageSpec = "face:%s,size:%d,,fore:#000000,back:#FFFFFF" % (
-            typeface, typesize)
+        self.StyleSetBackground(self.StyleMessage, defaultBackgroundColour)
+        self.StyleSetForeground(self.StyleMessage, defaultTextColour)
+
         # unknown
         self.StyleUnknown = 6
-        self.StyleUnknownSpec = "face:%s,size:%d,,fore:#000000,back:#FFFFFF" % (
-            typeface, typesize)
-
-        # default and clear => init
-        self.StyleSetSpec(stc.STC_STYLE_DEFAULT, self.StyleDefaultSpec)
-        self.StyleClearAll()
-        self.StyleSetSpec(self.StyleCommand, self.StyleCommandSpec)
-        self.StyleSetSpec(self.StyleOutput, self.StyleOutputSpec)
-        self.StyleSetSpec(self.StyleError, self.StyleErrorSpec)
-        self.StyleSetSpec(self.StyleWarning, self.StyleWarningSpec)
-        self.StyleSetSpec(self.StyleMessage, self.StyleMessageSpec)
-        self.StyleSetSpec(self.StyleUnknown, self.StyleUnknownSpec)
+        self.StyleSetBackground(self.StyleUnknown, defaultBackgroundColour)
+        self.StyleSetForeground(self.StyleUnknown, defaultTextColour)
 
     def OnDestroy(self, evt):
         """The clipboard contents can be preserved after
