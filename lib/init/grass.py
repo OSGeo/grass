@@ -1771,13 +1771,16 @@ def run_batch_job(batch_job):
 def start_gui(grass_gui):
     """Start specified GUI
 
-    :param grass_gui: GUI name (allowed values: 'wxpython')
+    :param grass_gui: GUI name (supported values: 'wxpython')
+
+    Returns the process for a supported GUI, None otherwise.
     """
     # Start the chosen GUI but ignore text
     debug("GRASS GUI should be <%s>" % grass_gui)
     # Check for gui interface
     if grass_gui == "wxpython":
-        Popen([os.getenv('GRASS_PYTHON'), wxpath("wxgui.py")])
+        return Popen([os.getenv('GRASS_PYTHON'), wxpath("wxgui.py")])
+    return None
 
 
 def close_gui():
@@ -2066,6 +2069,11 @@ def grep(pattern, lines):
     return [elem for elem in lines if expr.match(elem)]
 
 
+def io_is_interactive():
+    """Return True if running in an interactive terminal (TTY), False otherwise"""
+    return sys.stdin.isatty() and sys.stdout.isatty()
+
+
 def print_params():
     """Write compile flags and other configuration to stderr"""
     params = sys.argv[2:]
@@ -2292,6 +2300,17 @@ def main():
 
     grass_gui = params.grass_gui  # put it to variable, it is used a lot
 
+    # A shell is activated when using TTY.
+    # Explicit --[g]text in command line, forces a shell to be activated.
+    force_shell = grass_gui in ["text", "gtext"]
+    use_shell = io_is_interactive() or force_shell
+    if not use_shell:
+        # If no shell is used, always use actual GUI as GUI, even when "text" is set as
+        # a GUI in the gisrcrc becasue otherwise there would be nothing for the user
+        # unless running in the batch mode. (The gisrcrc file is loaded later on in case
+        # nothing was provided in the command line).
+        grass_gui = default_gui
+
     # TODO: with --tmp-location there is no point in loading settings
     # i.e. rc file from home dir, but the code is too spread out
     # to disable it at this point
@@ -2432,43 +2451,50 @@ def main():
         clean_all()
         sys.exit(0)
     else:
-        show_banner()
-        say_hello()
-        show_info(shellname=shellname,
-                  grass_gui=grass_gui, default_gui=default_gui)
-        if grass_gui == "wxpython":
-            message(_("Launching <%s> GUI in the background, please wait...")
-                    % grass_gui)
-        if sh in ['csh', 'tcsh']:
-            shell_process = csh_startup(mapset_settings.full_mapset,
-                                        grass_env_file)
-        elif sh in ['zsh']:
-            shell_process = sh_like_startup(mapset_settings.full_mapset,
+        if use_shell:
+            show_banner()
+            say_hello()
+            show_info(shellname=shellname,
+                      grass_gui=grass_gui, default_gui=default_gui)
+            if grass_gui == "wxpython":
+                message(_("Launching <%s> GUI in the background, please wait...")
+                        % grass_gui)
+            if sh in ['csh', 'tcsh']:
+                shell_process = csh_startup(mapset_settings.full_mapset,
                                             mapset_settings.location,
-                                            grass_env_file,
-                                            "zsh")
-        elif sh in ['bash', 'msh', 'cygwin']:
-            shell_process = sh_like_startup(mapset_settings.full_mapset,
-                                            mapset_settings.location,
-                                            grass_env_file,
-                                            "bash")
+                                            mapset_settings.mapset,
+                                            grass_env_file)
+            elif sh in ['zsh']:
+                shell_process = sh_like_startup(mapset_settings.full_mapset,
+                                                mapset_settings.location,
+                                                grass_env_file,
+                                                "zsh")
+            elif sh in ['bash', 'msh', 'cygwin']:
+                shell_process = sh_like_startup(mapset_settings.full_mapset,
+                                                mapset_settings.location,
+                                                grass_env_file,
+                                                "bash")
+            else:
+                shell_process = default_startup(mapset_settings.full_mapset,
+                                                mapset_settings.location)
         else:
-            shell_process = default_startup(mapset_settings.full_mapset,
-                                            mapset_settings.location)
+            shell_process = None
 
         # start GUI and register shell PID in rc file
-        start_gui(grass_gui)
-        kv = {}
-        kv['PID'] = str(shell_process.pid)
+        gui_process = start_gui(grass_gui)
 
-        # grass_prompt() tries to read gisrc while write_gisrc() is adding PID
-        # to this file, so don't rewrite it; just append PID to make it
-        # available to grass_prompt() at all times (PR #548)
-        write_gisrc(kv, gisrc, append=True)
-
-        exit_val = shell_process.wait()
-        if exit_val != 0:
-            warning(_("Failed to start shell '%s'") % os.getenv('SHELL'))
+        if shell_process:
+            kv = {}
+            kv['PID'] = str(shell_process.pid)
+            # grass_prompt() tries to read gisrc while write_gisrc() is adding PID
+            # to this file, so don't rewrite it; just append PID to make it
+            # available to grass_prompt() at all times (PR #548)
+            write_gisrc(kv, gisrc, append=True)
+            exit_val = shell_process.wait()
+            if exit_val != 0:
+                warning(_("Failed to start shell '%s'") % os.getenv('SHELL'))
+        else:
+            gui_process.wait()
 
         # close GUI if running
         close_gui()
@@ -2480,7 +2506,8 @@ def main():
         # After this point no more grass modules may be called
         # done message at last: no atexit.register()
         # or register done_message()
-        done_message()
+        if use_shell:
+            done_message()
 
 if __name__ == '__main__':
     main()
