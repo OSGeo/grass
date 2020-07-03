@@ -16,7 +16,7 @@ This program is free software under the GNU General Public License
 
 import wx
 from gui_core.toolbars import BaseToolbar
-from gui_core.wrap import StaticText, TextCtrl
+from gui_core.wrap import StaticText, TextCtrl, Button
 from icons.icon import MetaIcon
 
 icons = {
@@ -32,7 +32,7 @@ icons = {
     'locked': MetaIcon(
         img='locked',
         label=_("Click to allow editing other mapsets")),
-    'createGrassDb': MetaIcon(
+    'addGrassDB': MetaIcon(
         img='locked',
         label=_("Click to add new grass database"))
 }
@@ -45,11 +45,17 @@ class DataCatalogToolbar(BaseToolbar):
     def __init__(self, parent):
         """Main toolbar constructor
         """
+
         BaseToolbar.__init__(self, parent)
 
         self.InitToolbar(self._toolbarData())
+
+        # browse button
+        self.bbrowse = self.MakeButton(_("Add database"))
+
         self.filter = TextCtrl(parent=self)
         self.filter.SetSize((120, self.filter.GetBestSize()[1]))
+        self.Bind(wx.EVT_BUTTON, self.parent.OnAddGrassDB, self.bbrowse)
         self.filter.Bind(wx.EVT_TEXT,
                          lambda event: self.parent.Filter(
                          self.filter.GetValue()))
@@ -59,9 +65,21 @@ class DataCatalogToolbar(BaseToolbar):
                  "Use prefix 'r:', 'v:' and 'r3:'"
                  "to show only raster, vector or 3D raster data, respectively. "
                  "Use Python regular expressions to refine your search.")
+        self.AddControl(self.bbrowse)
         self.SetToolShortHelp(self.filter.GetId(), help)
         # realize the toolbar
         self.Realize()
+
+    def MakeButton(self, text, id=wx.ID_ANY, size=(-1, -1),
+                   parent=None, tooltip=None):
+        """Generic button"""
+        if not parent:
+            parent = self
+        button = Button(parent=parent, id=id, label=text,
+                        size=size)
+        if tooltip:
+            button.SetToolTip(tooltip)
+        return button
 
     def _toolbarData(self):
         """Returns toolbar data (name, icon, handler)"""
@@ -72,9 +90,7 @@ class DataCatalogToolbar(BaseToolbar):
                                      ("reloadMapset", icons["reloadMapset"],
                                       self.parent.OnReloadCurrentMapset),
                                      ("lock", icons['locked'],
-                                      self.OnSetRestriction, wx.ITEM_CHECK),
-                                     ("createGrassDb", icons['locked'],
-                                      self.parent.OnCreateGrassDb)
+                                      self.OnSetRestriction, wx.ITEM_CHECK)
                                      ))
 
     def OnSetRestriction(self, event):

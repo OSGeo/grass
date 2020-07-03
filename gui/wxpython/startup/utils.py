@@ -46,7 +46,7 @@ def get_possible_database_path():
     return None
 
 
-def create_database_directory(name):
+def create_database_directory():
     """Creates the standard GRASS GIS directory.
 
     Creates database directory named grassdata in the standard location 
@@ -58,9 +58,9 @@ def create_database_directory(name):
 
     # Determine the standard path according to the platform
     if sys.platform == 'win32':
-        path = os.path.join(home, "Documents", name)
+        path = os.path.join(home, "Documents", "grassdata")
     else:
-        path = os.path.join(home, name)
+        path = os.path.join(home, "grassdata")
 
     # Create "grassdata" directory
     try:

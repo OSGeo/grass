@@ -16,7 +16,6 @@ This is for code which depend on something from GUI (wx or wxGUI).
 
 
 import os
-import sys
 
 import grass.script as gs
 
@@ -87,57 +86,6 @@ class NewMapsetDialog(TextEntryDialog):
         GError(parent=self, message=message, caption=_("Existing mapset path"))
 
 
-class NewGrassDbDialog(TextEntryDialog):
-    def __init__(self, parent=None, default=None):
-
-        # list of tuples consisting of conditions and callbacks
-        checks = [(gs.legal_name, self._nameValidationFailed),
-                  (self._checkDbNotExists, self._dbAlreadyExists),
-                  (self._checkOGR, self._reservedDbName)]
-        validator = GenericMultiValidator(checks)
-
-        TextEntryDialog.__init__(
-            self, parent=parent,
-            message=_("Name for the grass database:"),
-            caption=_("Create new grass database"),
-            defaultValue=default,
-            validator=validator,
-        )
-
-    def _nameValidationFailed(self, ctrl):
-        message = _(
-            "Name '{}' is not a valid name for grass database. "
-            "Please use only ASCII characters excluding characters {} "
-            "and space.").format(ctrl.GetValue(), '/"\'@,=*~')
-        GError(parent=self, message=message, caption=_("Invalid name"))
-
-    def _checkOGR(self, text):
-        """Check user's input for reserved grass database name."""
-        if text.lower() == 'ogr':
-            return False
-        return True
-
-    def _reservedDbName(self, ctrl):
-        message = _(
-            "Name '{}' is reserved for direct "
-            "read access to OGR layers. Please use "
-            "another name for your grass database.").format(ctrl.GetValue())
-        GError(parent=self, message=message,
-               caption=_("Reserved grass database name"))
-
-    def _checkDbNotExists(self, text):
-        """Check whether user's input grass database exists or not."""
-        if grassdb_exists(text):
-            return False
-        return True
-
-    def _dbAlreadyExists(self, ctrl):
-        message = _(
-            "Grass database '{}' already exists. Please consider to use "
-            "another name for your grass database.").format(ctrl.GetValue())
-        GError(parent=self, message=message, caption=_("Existing grass database path"))
-
-
 # TODO: similar to (but not the same as) read_gisrc function in grass.py
 def read_gisrc():
     """Read variables from a current GISRC file
@@ -196,17 +144,3 @@ def mapset_exists(database, location, mapset):
     if os.path.exists(mapset_path):
         return True
     return False
-
-
-def grassdb_exists(text):
-    """Returns True whether db path in common paths exists."""
-    home = os.path.expanduser('~')
-    candidates = [
-        home,
-        os.path.join(home, "Documents"),
-    ]
-    # find possible database path
-    for candidate in candidates:
-        if os.path.exists(os.path.join(candidate, text)):
-            return True
-        return False

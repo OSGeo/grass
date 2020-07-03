@@ -510,7 +510,7 @@ class GRASSStartup(wx.Frame):
         path = get_possible_database_path()
         # If nothing found, try to create GRASS directory
         if path is None:
-            path = create_database_directory("grassdata")
+            path = create_database_directory()
 
         if path:
             try:

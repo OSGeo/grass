@@ -16,6 +16,7 @@ for details.
 """
 
 import wx
+import os
 
 from core.gthread import gThread
 from core.debug import Debug
@@ -91,9 +92,15 @@ class DataCatalog(wx.Panel):
         """Reload current mapset tree only"""
         self.tree.ReloadCurrentMapset()
 
-    def OnCreateGrassDb(self, event):
-        """Create new grass database"""
-        self.tree.CreateGrassDb()
+    def OnAddGrassDB(self, event):
+        """Add an existing grass database"""
+        dlg = wx.DirDialog(self, _("Choose GRASS data directory:"),
+                           os.getcwd(), wx.DD_DEFAULT_STYLE)
+        if dlg.ShowModal() == wx.ID_OK:
+            grassdatabase = dlg.GetPath()
+            self.tree.InsertGrassDb(name=grassdatabase)
+
+        dlg.Destroy()
 
     def SetRestriction(self, restrict):
         """Allow editing other mapsets or restrict editing to current mapset"""

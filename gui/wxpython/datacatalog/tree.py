@@ -34,9 +34,8 @@ from gui_core.treeview import TreeView
 from gui_core.wrap import Menu
 from datacatalog.dialogs import CatalogReprojectionDialog
 from icons.icon import MetaIcon
-from startup.utils import (create_mapset, get_default_mapset_name,
-create_database_directory)
-from startup.guiutils import NewMapsetDialog, NewGrassDbDialog
+from startup.utils import create_mapset, get_default_mapset_name
+from startup.guiutils import NewMapsetDialog
 
 from grass.pydispatch.signal import Signal
 
@@ -838,12 +837,12 @@ class DataCatalogTree(TreeView):
         self._model.SortChildren(location_node)
         self.RefreshNode(location_node, recursive=True)
 
-    def InsertGrassDb(self, name, root_node):
+    def InsertGrassDb(self, name):
         """Insert grass db into model and refresh tree"""
-        self._model.AppendNode(parent=root_node, label=name,
+        self._model.AppendNode(parent=self._model.root, label=name,
                                data=dict(type="grassdb", name=name))
-        self._model.SortChildren(root_node)
-        self.RefreshNode(root_node, recursive=True)
+        self._model.SortChildren(self._model.root)
+        self.RefreshNode(self._model.root, recursive=True)
 
     def OnDeleteMap(self, event):
         """Delete layer or mapset"""
@@ -967,24 +966,6 @@ class DataCatalogTree(TreeView):
                        showTraceback=False)
             self.InsertMapset(name=mapset,
                               location_node=location)
-
-    def CreateGrassDb(self):
-        "Create new grass database"
-        root = self._model.root
-
-        dlg = NewGrassDbDialog(
-            parent=self,
-        )
-        if dlg.ShowModal() == wx.ID_OK:
-            db = dlg.GetValue()
-            try:
-                create_database_directory(db)
-            except OSError as err:
-                GError(parent=self,
-                       message=_("Unable to create new grass database: %s") % err,
-                       showTraceback=False)
-            self.InsertGrassDb(name=db,
-                               root_node=root)
 
     def OnMetadata(self, event):
         """Show metadata of any raster/vector/3draster"""
@@ -1176,7 +1157,9 @@ class DataCatalogTree(TreeView):
 
     def _popupMenuGrassDb(self):
         """Create popup menu for grass db"""
-        raise NotImplementedError()
+        menu = Menu()
+        self.PopupMenu(menu)
+        menu.Destroy()
 
     def _popupMenuElement(self):
         """Create popup menu for elements"""
