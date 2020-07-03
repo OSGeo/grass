@@ -972,6 +972,7 @@ class DataCatalogTree(TreeView):
             name = text.strip()
 
         self._model = filterModel(self._orig_model, name=name, element=element)
+        self.UpdateCurrentLocationMapsetNode()
         self.RefreshItems()
         self.ExpandCurrentMapset()
 
