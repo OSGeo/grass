@@ -69,5 +69,6 @@ arc.to.gridatb.py {infname} {outfname}
 for inline in inf:
     outline = re.sub(f'(?=^|[ \t]*){nodata_value}(\.0*)?(?=([ \t]*|$))', '9999.00', inline)
     outf.write(outline)
+
 inf.close()
 outf.close()

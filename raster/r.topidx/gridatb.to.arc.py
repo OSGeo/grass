@@ -49,5 +49,6 @@ NODATA_value  9999
 ''')
 for inline in inf:
     outf.write(inline)
+
 inf.close()
 outf.close()
