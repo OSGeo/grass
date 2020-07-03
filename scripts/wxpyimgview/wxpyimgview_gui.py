@@ -36,11 +36,19 @@
 #% answer: 10
 #%end
 
-import sys
-import struct
-import numpy
-import time
+import os
 import signal
+import struct
+import sys
+import time
+
+import grass.script as grass
+from grass.script.setup import set_gui_path
+
+set_gui_path()
+from gui_core.wrap import BitmapFromImage
+
+import numpy
 
 import wx
 
@@ -78,8 +86,8 @@ class Frame(wx.Frame):
         data = app.imgbuf.reshape((app.i_height, app.i_width, 4))
         data = data[::, ::, 2::-1]
         fn = getattr(data, "tobytes", getattr(data, "tostring"))
-        image = wx.ImageFromData(app.i_width, app.i_height, fn())
-        dc.DrawBitmap(wx.BitmapFromImage(image), x0, y0, False)
+        image = wx.Image(app.i_width, app.i_height, fn())
+        dc.DrawBitmap(BitmapFromImage(image), x0, y0, False)
 
     def redraw(self, ev):
         if self.app.fraction > 0.001:
@@ -111,7 +119,7 @@ class Application(wx.App):
     def read_bmp_header(self, header):
         magic, bmfh, bmih = struct.unpack("2s12s40s10x", header)
 
-        if magic != 'BM':
+        if grass.decode(magic) != 'BM':
             raise SyntaxError("Invalid magic number")
 
         size, res1, res2, hsize = struct.unpack("<IHHI", bmfh)
@@ -140,7 +148,7 @@ class Application(wx.App):
             raise SyntaxError("Invalid image size")
 
     def map_file(self):
-        f = open(self.image, 'r')
+        f = open(self.image, 'rb')
 
         header = f.read(self.HEADER_SIZE)
         self.read_bmp_header(header)
