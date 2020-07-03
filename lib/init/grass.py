@@ -1851,8 +1851,7 @@ def show_info(shellname, grass_gui, default_gui):
     message(f("%-41sexit", _("When ready to quit enter:")))
     message("")
 
-
-def csh_startup(location, location_name, mapset, grass_env_file):
+def csh_startup(location, grass_env_file):
     userhome = os.getenv('HOME')      # save original home
     home = location
     os.environ['HOME'] = home
@@ -1868,10 +1867,10 @@ def csh_startup(location, location_name, mapset, grass_env_file):
     f.write("set histfile = %s\n" % os.path.join(os.getenv('HOME'),
                                                  ".history"))
 
-    f.write("set prompt = '\\\n")
-    f.write("Mapset <%s> in Location <%s> \\\n" % (mapset, location_name))
-    f.write("GRASS GIS %s > '\n" % GRASS_VERSION)
-    f.write("set BOGUS=``;unset BOGUS\n")
+    f.write("alias _location g.gisenv get=LOCATION_NAME\n")
+    f.write("alias _mapset g.gisenv get=MAPSET\n")
+    f.write("alias precmd \'echo \"Mapset <`_mapset`> in Location <`_location`>\"\'\n")
+    f.write("set prompt=\"GRASS GIS %s > \"\n" % GRASS_VERSION)
 
     # csh shell rc file left for backward compatibility
     path = os.path.join(userhome, ".grass.cshrc")
@@ -2401,8 +2400,6 @@ def main():
                     % grass_gui)
         if sh in ['csh', 'tcsh']:
             shell_process = csh_startup(mapset_settings.full_mapset,
-                                        mapset_settings.location,
-                                        mapset_settings.mapset,
                                         grass_env_file)
         elif sh in ['bash', 'msh', 'cygwin']:
             shell_process = bash_startup(mapset_settings.full_mapset,
