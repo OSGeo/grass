@@ -280,6 +280,9 @@ class DataCatalogTree(TreeView):
         self._initVariablesCatalog()
         self.UpdateCurrentDbLocationMapsetNode()
 
+        self._grassdatabases = []
+        self._grassdatabases.append(gisenv()['GISDBASE'])
+
         self.beginDrag = Signal('DataCatalogTree.beginDrag')
         self.endDrag = Signal('DataCatalogTree.endDrag')
         self.startEdit = Signal('DataCatalogTree.startEdit')
@@ -303,70 +306,71 @@ class DataCatalogTree(TreeView):
         """Add locations, mapsets and layers to the tree.
         Runs in multiple processes. Saves resulting data and error."""
         # mapsets param currently unused
-        genv = gisenv()
-        if not locations:
-            locations = GetListOfLocations(genv['GISDBASE'])
+        for grassdatabase in self._grassdatabases:
 
-        loc_count = proc_count = 0
-        queue_list = []
-        proc_list = []
-        loc_list = []
-        nprocs = 4
-        try:
-            nprocs = cpu_count()
-        except NotImplementedError:
+            if not locations:
+                locations = GetListOfLocations(grassdatabase)
+
+            loc_count = proc_count = 0
+            queue_list = []
+            proc_list = []
+            loc_list = []
             nprocs = 4
+            try:
+                nprocs = cpu_count()
+            except NotImplementedError:
+                nprocs = 4
 
-        results = dict()
-        errors = []
-        location_nodes = []
-        nlocations = len(locations)
-        grassdata_node = self._model.AppendNode(
-            parent=self._model.root,
-            label=genv['GISDBASE'],
-            data=dict(type='grassdb'))
-        for location in locations:
-            results[location] = dict()
-            varloc = self._model.AppendNode(
-                parent=grassdata_node, label=location, data=dict(
-                    type='location', name=location))
-            location_nodes.append(varloc)
-            loc_count += 1
+            results = dict()
+            errors = []
+            location_nodes = []
+            nlocations = len(locations)
+            grassdata_node = self._model.AppendNode(
+                parent=self._model.root,
+                label=grassdatabase,
+                data=dict(type='grassdb'))
+            for location in locations:
+                results[location] = dict()
+                varloc = self._model.AppendNode(
+                    parent=grassdata_node, label=location, data=dict(
+                        type='location', name=location))
+                location_nodes.append(varloc)
+                loc_count += 1
 
-            Debug.msg(
-                3, "Scanning location <{0}> ({1}/{2})".format(location, loc_count, nlocations))
+                Debug.msg(
+                    3, "Scanning location <{0}> ({1}/{2})".format(location, loc_count, nlocations))
 
-            q = Queue()
-            p = Process(target=getLocationTree,
-                        args=(genv['GISDBASE'], location, q))
-            p.start()
+                q = Queue()
+                p = Process(target=getLocationTree,
+                            args=(grassdatabase, location, q))
+                p.start()
 
-            queue_list.append(q)
-            proc_list.append(p)
-            loc_list.append(location)
+                queue_list.append(q)
+                proc_list.append(p)
+                loc_list.append(location)
 
-            proc_count += 1
-            # Wait for all running processes
-            if proc_count == nprocs or loc_count == nlocations:
-                Debug.msg(4, "Process subresults")
-                for i in range(len(loc_list)):
-                    maps, error = queue_list[i].get()
-                    proc_list[i].join()
-                    if error:
-                        errors.append(error)
+                proc_count += 1
+                # Wait for all running processes
+                if proc_count == nprocs or loc_count == nlocations:
+                    Debug.msg(4, "Process subresults")
+                    for i in range(len(loc_list)):
+                        maps, error = queue_list[i].get()
+                        proc_list[i].join()
+                        if error:
+                            errors.append(error)
 
-                    for key in sorted(maps.keys()):
-                        mapset_node = self._model.AppendNode(
-                            parent=location_nodes[i],
-                            label=key, data=dict(
-                                type='mapset', name=key))
-                        self._populateMapsetItem(mapset_node, maps[key])
+                        for key in sorted(maps.keys()):
+                            mapset_node = self._model.AppendNode(
+                                parent=location_nodes[i],
+                                label=key, data=dict(
+                                    type='mapset', name=key))
+                            self._populateMapsetItem(mapset_node, maps[key])
 
-                proc_count = 0
-                proc_list = []
-                queue_list = []
-                loc_list = []
-                location_nodes = []
+                    proc_count = 0
+                    proc_list = []
+                    queue_list = []
+                    loc_list = []
+                    location_nodes = []
 
         if errors:
             wx.CallAfter(GWarning, '\n'.join(errors))
@@ -379,7 +383,7 @@ class DataCatalogTree(TreeView):
             self.GetCurrentDbLocationMapsetNode()
 
     def ReloadTreeItems(self):
-        """Reload locations, mapsets and layers in the tree."""
+        """Reload dbs, locations, mapsets and layers in the tree."""
         self._orig_model = self._model
         self._model.RemoveNode(self._model.root)
         self.InitTreeItems()
@@ -551,12 +555,13 @@ class DataCatalogTree(TreeView):
         location = genv['LOCATION_NAME']
         mapset = genv['MAPSET']
 
-        grassdbItem = self._model.SearchNodes(name=gisdbase, type='grassdb')
+        grassdbItem = self._model.SearchNodes(
+            name=gisdbase, type='grassdb')
         if not grassdbItem:
             return None, None, None
 
         locationItem = self._model.SearchNodes(
-            parent = grassdbItem[0],
+            parent=grassdbItem[0],
             name=location, type='location')
         if not locationItem:
             return grassdbItem[0], None, None
@@ -839,10 +844,8 @@ class DataCatalogTree(TreeView):
 
     def InsertGrassDb(self, name):
         """Insert grass db into model and refresh tree"""
-        self._model.AppendNode(parent=self._model.root, label=name,
-                               data=dict(type="grassdb", name=name))
         self._model.SortChildren(self._model.root)
-        self.RefreshNode(self._model.root, recursive=True)
+        self.ReloadTreeItems()
 
     def OnDeleteMap(self, event):
         """Delete layer or mapset"""
