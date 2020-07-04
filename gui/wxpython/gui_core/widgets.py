@@ -21,6 +21,7 @@ Classes:
  - widgets::SimpleValidator
  - widgets::GenericValidator
  - widgets::GenericMultiValidator
+ - widgets::LayersListValidator
  - widgets::GListCtrl
  - widgets::SearchModuleWidget
  - widgets::ManageSettingsWidget
@@ -979,6 +980,55 @@ class SingleSymbolPanel(wx.Panel):
         self.Refresh()
 
 
+class LayersListValidator(GenericValidator):
+    """This validator check output map existence"""
+
+    def __init__(self, condition, callback):
+        """Standard constructor.
+
+        :param condition: function which accepts string value and returns T/F
+        :param callback: function which is called when condition is not fulfilled
+        """
+        GenericValidator.__init__(self, condition, callback)
+
+    def Clone(self):
+        """Standard cloner.
+
+        Note that every validator must implement the Clone() method.
+        """
+        return LayersListValidator(self._condition, self._callback)
+
+    def Validate(self, win, validate_all=False):
+        """Validate output map existence"""
+        mapset = grass.gisenv()['MAPSET']
+        maps = grass.list_grouped(type=self._condition)[mapset]
+
+        # Check all selected layers
+        if validate_all:
+            outputs = []
+            data = win.GetLayers()
+
+            if data is None:
+                return False
+
+            for layer, output, list_id in data:
+                if output in maps:
+                    outputs.append(output)
+
+            if outputs:
+                win.output_map = outputs
+                self._callback(layers_list=win)
+                return False
+        else:
+            output_map = win.GetItemText(
+                win.col, win.row)
+            if output_map in maps:
+                win.output_map = output_map
+                self._callback(layers_list=win)
+                return False
+        return True
+
+
 class GListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin,
                 CheckListCtrlMixin):
     """Generic ListCtrl with popup menu to select/deselect all
@@ -1665,6 +1715,10 @@ class LayersList(GListCtrl, listmix.TextEditMixin):
         GListCtrl.__init__(self, parent)
 
         self.log = log
+        self.row = None
+        self.col = None
+        self.output_map = None
+        self.validate = True
 
         # setup mixins
         listmix.TextEditMixin.__init__(self)
@@ -1719,3 +1773,22 @@ class LayersList(GListCtrl, listmix.TextEditMixin):
             layers.append((layer, output, itm[-1]))
 
         return layers
+
+    def ValidateOutputMapName(self):
+        """Validate output map name"""
+        wx.CallAfter(self.GetValidator().Validate, self)
+
+    def OpenEditor(self, row, col):
+        """Open editor"""
+        self.col = col
+        self.row = row
+        super().OpenEditor(row, col)
+
+    def CloseEditor(self, event=None):
+        """Close editor"""
+        if event:
+            if event.IsCommandEvent():
+                listmix.TextEditMixin.CloseEditor(self, event)
+                if self.validate:
+                    self.ValidateOutputMapName()
+            event.Skip()
