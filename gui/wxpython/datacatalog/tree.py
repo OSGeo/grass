@@ -303,13 +303,16 @@ class DataCatalogTree(TreeView):
         self.endEdit.connect(self.OnEditLabel)
 
     def _initTreeItems(self, locations=None, mapsets=None):
-        """Add locations, mapsets and layers to the tree.
+        """Add grass databases, locations, mapsets and layers to the tree.
         Runs in multiple processes. Saves resulting data and error."""
         # mapsets param currently unused
+
+        print(self._grassdatabases)
         for grassdatabase in self._grassdatabases:
 
-            if not locations:
-                locations = GetListOfLocations(grassdatabase)
+            print(grassdatabase)
+            locations = GetListOfLocations(grassdatabase)
+            print(locations)
 
             loc_count = proc_count = 0
             queue_list = []
@@ -328,7 +331,7 @@ class DataCatalogTree(TreeView):
             grassdata_node = self._model.AppendNode(
                 parent=self._model.root,
                 label=grassdatabase,
-                data=dict(type='grassdb'))
+                data=dict(type='grassdb', name=grassdatabase))
             for location in locations:
                 results[location] = dict()
                 varloc = self._model.AppendNode(
@@ -385,6 +388,7 @@ class DataCatalogTree(TreeView):
     def ReloadTreeItems(self):
         """Reload dbs, locations, mapsets and layers in the tree."""
         self._orig_model = self._model
+        self._model.SortChildren(self._model.root)
         self._model.RemoveNode(self._model.root)
         self.InitTreeItems()
         self.UpdateCurrentDbLocationMapsetNode()
@@ -587,9 +591,7 @@ class DataCatalogTree(TreeView):
            Used to highlight current db/loc/mapset."""
         node = self._model.GetNodeByIndex(index)
         font = self.GetFont()
-        if node.data['type'] == 'grassdb':
-            font.SetWeight(wx.FONTWEIGHT_BOLD)
-        elif node.data['type'] in ('location', 'mapset'):
+        if node.data['type'] in ('grassdb','location', 'mapset'):
             if node in (self.current_grassdb_node, self.current_location_node, self.current_mapset_node):
                 font.SetWeight(wx.FONTWEIGHT_BOLD)
             else:
