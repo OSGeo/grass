@@ -655,8 +655,7 @@ class GStc(stc.StyledTextCtrl):
         self.StyleSetForeground(stc.STC_STYLE_DEFAULT, defaultTextColour)
 
         self.StyleCommand = 1
-        self.StyleSetBackground(self.StyleCommand,
-            wx.SystemSettings.GetColour(wx.SYS_COLOUR_BACKGROUND))
+        self.StyleSetBackground(self.StyleCommand, wx.Colour(154, 154, 154, 255))
         self.StyleSetForeground(self.StyleCommand, defaultTextColour)
 
         self.StyleOutput = 2
