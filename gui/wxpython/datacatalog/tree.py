@@ -17,6 +17,7 @@ for details.
 @author Anna Petrasova (kratochanna gmail com)
 @author Linda Kladivova (l.kladivova@seznam.cz)
 """
+import os
 import re
 import copy
 from multiprocessing import Process, Queue, cpu_count
@@ -31,13 +32,17 @@ from core.giface import StandaloneGrassInterface
 from core.treemodel import TreeModel, DictNode
 from gui_core.treeview import TreeView
 from gui_core.wrap import Menu
+from gui_core.widgets import GenericValidator
 from datacatalog.dialogs import CatalogReprojectionDialog
 from icons.icon import MetaIcon
-from startup.utils import create_mapset, get_default_mapset_name
+from startup.utils import (create_mapset, get_default_mapset_name,
+                           delete_mapset, delete_location, rename_mapset,
+                           rename_location)
 from startup.guiutils import NewMapsetDialog
 
 from grass.pydispatch.signal import Signal
 
+from grass.script import core as grass
 import grass.script as gscript
 from grass.script import gisenv
 from grass.exceptions import CalledModuleError
@@ -636,6 +641,101 @@ class DataCatalogTree(TreeView):
         if new_name:
             self.Rename(old_name, new_name)
 
+    def OnRenameMapset(self, event):
+        """
+        Rename selected mapset
+        """
+        if self.selected_mapset[0].label == 'PERMANENT':
+            GMessage(
+                parent=self, message=_(
+                    'Mapset <PERMANENT> is required for valid GRASS location.\n\n'
+                    'This mapset cannot be renamed.'))
+            return
+
+        dlg = TextEntryDialog(
+            parent=self,
+            message=_('Current name: %s\n\nEnter new name:') %
+            self.selected_mapset[0].label,
+            caption=_('Rename selected mapset'),
+            validator=GenericValidator(
+                grass.legal_name,
+                self._nameValidationFailed))
+
+        if dlg.ShowModal() == wx.ID_OK:
+            newmapset = dlg.GetValue()
+            new_mapset_path = os.path.join(gisenv()['GISDBASE'],
+                                           self.selected_location[0].label,
+                                           newmapset)
+            if os.path.exists(new_mapset_path):
+                wx.MessageBox(
+                    parent=self, caption=_('Message'), message=_(
+                        'Unable to rename mapset.\n\n'
+                        'Mapset <%s> already exists in location.') %
+                    newmapset, style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+            else:
+                try:
+                    rename_mapset(gisenv()['GISDBASE'],
+                                  self.selected_location[0].label,
+                                  self.selected_mapset[0].label,
+                                  newmapset)
+                except Exception as e:
+                    wx.MessageBox(
+                        parent=self,
+                        caption=_('Error'),
+                        message=_('Unable to rename mapset.\n\n%s') %
+                        e,
+                        style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+
+        dlg.Destroy()
+        self.ReloadTreeItems()
+
+    def OnRenameLocation(self, event):
+        """Rename selected location
+        """
+        dlg = TextEntryDialog(
+            parent=self,
+            message=_('Current name: %s\n\nEnter new name:') %
+            self.selected_location[0].label,
+            caption=_('Rename selected location'),
+            validator=GenericValidator(
+                grass.legal_name,
+                self._nameValidationFailed))
+
+        if dlg.ShowModal() == wx.ID_OK:
+            newlocation = dlg.GetValue()
+            new_location_path = os.path.join(gisenv()['GISDBASE'],
+                                           self.selected_location[0].label)
+            if os.path.exists(new_location_path):
+                wx.MessageBox(
+                    parent=self, caption=_('Message'), message=_(
+                        'Unable to rename location.\n\n'
+                        'Location <%s> already exists in GRASS database.') %
+                    newlocation, style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+            else:
+                try:
+                    rename_location(gisenv()['GISDBASE'],
+                                  self.selected_location[0].label,
+                                  newlocation)
+                except Exception as e:
+                    wx.MessageBox(
+                        parent=self,
+                        caption=_('Error'),
+                        message=_('Unable to rename location.\n\n%s') %
+                        e,
+                        style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+
+        dlg.Destroy()
+        self.ReloadTreeItems()
+
+    def _nameValidationFailed(self, ctrl):
+        message = _(
+            "Name <%(name)s> is not a valid name for location or mapset. "
+            "Please use only ASCII characters excluding %(chars)s "
+            "and space.") % {
+            'name': ctrl.GetValue(),
+            'chars': '/"\'@,=*~'}
+        GError(parent=self, message=message, caption=_("Invalid name"))
+
     def OnStartEditLabel(self, node, event):
         """Start label editing"""
         self.DefineItems([node])
@@ -838,6 +938,65 @@ class DataCatalogTree(TreeView):
                 gscript.try_remove(gisrc)
             self.UnselectAll()
             self.showNotification.emit(message=_("g.remove completed"))
+
+    def OnDeleteMapset(self, event):
+        """
+        Delete selected mapset
+        """
+        if self.selected_mapset[0].label == 'PERMANENT':
+            GMessage(
+                parent=self, message=_(
+                    'Mapset <PERMANENT> is required for valid GRASS location.\n\n'
+                    'This mapset cannot be deleted.'))
+            return
+
+        dlg = wx.MessageDialog(
+            parent=self,
+            message=_(
+                "Do you want to continue with deleting mapset <%(mapset)s> "
+                "from location <%(location)s>?\n\n"
+                "ALL MAPS included in this mapset will be "
+                "PERMANENTLY DELETED!") %
+            {'mapset': self.selected_mapset[0].label,
+             'location': self.selected_location[0].label},
+            caption=_("Delete selected mapset"),
+            style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
+
+        if dlg.ShowModal() == wx.ID_YES:
+            try:
+                delete_mapset(gisenv()['GISDBASE'],
+                    self.selected_location[0].label,
+                    self.selected_mapset[0].label)
+            except:
+                wx.MessageBox(message=_('Unable to delete mapset'))
+
+        dlg.Destroy()
+        self.ReloadTreeItems()
+
+    def OnDeleteLocation(self, event):
+        """
+        Delete selected location
+        """
+        dlg = wx.MessageDialog(
+            parent=self,
+            message=_(
+                "Do you want to continue with deleting "
+                "location <%s>?\n\n"
+                "ALL MAPS included in this location will be "
+                "PERMANENTLY DELETED!") %
+            (self.selected_location[0].label),
+            caption=_("Delete selected location"),
+            style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
+
+        if dlg.ShowModal() == wx.ID_YES:
+            try:
+                delete_location(gisenv()['GISDBASE'],
+                                self.selected_location[0].label)
+            except:
+                wx.MessageBox(message=_('Unable to delete location'))
+
+        dlg.Destroy()
+        self.ReloadTreeItems()
 
     def OnDisplayLayer(self, event):
         """Display layer in current graphics view"""
@@ -1086,16 +1245,39 @@ class DataCatalogTree(TreeView):
         if (self.selected_location[0].label == genv['LOCATION_NAME']
                 and self.selected_mapset[0].label == genv['MAPSET']):
             item.Enable(False)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete mapset"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDeleteMapset, item)
+        if (self.selected_location[0].label == genv['LOCATION_NAME']
+                and self.selected_mapset[0].label == genv['MAPSET']):
+            item.Enable(False)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename mapset"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnRenameMapset, item)
+
         self.PopupMenu(menu)
         menu.Destroy()
 
     def _popupMenuLocation(self):
         """Create popup menu for locations"""
         menu = Menu()
+        genv = gisenv()
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Create mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCreateMapset, item)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete location"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDeleteLocation, item)
+        if (self.selected_location[0].label == genv['LOCATION_NAME']):
+            item.Enable(False)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename location"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnRenameLocation, item)
 
         self.PopupMenu(menu)
         menu.Destroy()
