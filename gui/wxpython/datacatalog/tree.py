@@ -42,7 +42,6 @@ from startup.guiutils import NewMapsetDialog
 
 from grass.pydispatch.signal import Signal
 
-from grass.script import core as grass
 import grass.script as gscript
 from grass.script import gisenv
 from grass.exceptions import CalledModuleError
@@ -658,7 +657,7 @@ class DataCatalogTree(TreeView):
             self.selected_mapset[0].label,
             caption=_('Rename selected mapset'),
             validator=GenericValidator(
-                grass.legal_name,
+                gscript.core.legal_name,
                 self._nameValidationFailed))
 
         if dlg.ShowModal() == wx.ID_OK:
@@ -698,13 +697,13 @@ class DataCatalogTree(TreeView):
             self.selected_location[0].label,
             caption=_('Rename selected location'),
             validator=GenericValidator(
-                grass.legal_name,
+                gscript.core.legal_name,
                 self._nameValidationFailed))
 
         if dlg.ShowModal() == wx.ID_OK:
             newlocation = dlg.GetValue()
             new_location_path = os.path.join(gisenv()['GISDBASE'],
-                                           self.selected_location[0].label)
+                                             newlocation)
             if os.path.exists(new_location_path):
                 wx.MessageBox(
                     parent=self, caption=_('Message'), message=_(
@@ -714,8 +713,8 @@ class DataCatalogTree(TreeView):
             else:
                 try:
                     rename_location(gisenv()['GISDBASE'],
-                                  self.selected_location[0].label,
-                                  newlocation)
+                                    self.selected_location[0].label,
+                                    newlocation)
                 except Exception as e:
                     wx.MessageBox(
                         parent=self,
