@@ -2153,11 +2153,21 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         self.SetLayerInfo(item, key='maplayer', value=maplayer)
 
-        # if digitization tool enabled -> update list of available vector map
-        # layers
+        # if vector digitization tool enabled -> update list of
+        # available vector map layers
         if self.mapdisplay.GetToolbar('vdigit'):
             self.mapdisplay.GetToolbar(
                 'vdigit').UpdateListOfLayers(updateTool=True)
+
+        # if raster digitization tool enabled -> update list of
+        # available raster map layers
+        if self.mapdisplay.GetToolbar('rdigit'):
+            rasters = self.GetMap().GetListOfLayers(
+                ltype='raster', mapset=grass.gisenv()['MAPSET'])
+            self.mapdisplay.GetToolbar(
+                'rdigit').UpdateRasterLayers(rasters)
+            self.mapdisplay.GetToolbar(
+                'rdigit').SelectDefault()
 
         self.Map.SetLayers(self.GetVisibleLayers())
 
