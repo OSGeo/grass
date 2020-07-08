@@ -134,8 +134,7 @@ class TreeModel(object):
             node.parent.children.remove(node)
         else:
             # node is root
-            for n in node.children:
-                node.children.remove(n)
+            del node.children[:]
 
     def SortChildren(self, node):
         """Sorts children alphabetically based on label."""
