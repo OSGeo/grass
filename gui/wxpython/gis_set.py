@@ -24,28 +24,28 @@ import os
 import sys
 import copy
 import platform
-import codecs
-import getpass
 
 # i18n is taken care of in the grass library code.
 # So we need to import it before any of the GUI code.
-from grass.script import core as grass
 
 from core import globalvar
 import wx
 import wx.lib.mixins.listctrl as listmix
 
-from core.gcmd import GMessage, GError, DecodeString, RunCommand
+from core.gcmd import GMessage, GError, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets
 from startup.utils import (
     get_lockfile_if_present, get_possible_database_path,
-    create_database_directory, create_mapset, get_default_mapset_name)
-import startup.utils as sutils
-from startup.guiutils import SetSessionMapset, NewMapsetDialog
+    create_database_directory)
+from startup.guiutils import (SetSessionMapset,
+                              create_mapset_interactively,
+                              rename_mapset_interactively,
+                              rename_location_interactively,
+                              delete_mapset_interactively,
+                              delete_location_interactively)
 import startup.guiutils as sgui
 from location_wizard.dialogs import RegionDef
-from gui_core.dialogs import TextEntryDialog
-from gui_core.widgets import GenericValidator, StaticWrapText
+from gui_core.widgets import StaticWrapText
 from gui_core.wrap import Button, ListCtrl, StaticText, StaticBox, \
     TextCtrl, BitmapFromImage
 
@@ -230,7 +230,7 @@ class GRASSStartup(wx.Frame):
         self.bstart.Bind(wx.EVT_BUTTON, self.OnStart)
         self.bexit.Bind(wx.EVT_BUTTON, self.OnExit)
         self.bhelp.Bind(wx.EVT_BUTTON, self.OnHelp)
-        self.bmapset.Bind(wx.EVT_BUTTON, self.OnCreateMapset)
+        self.bmapset.Bind(wx.EVT_BUTTON, self.CreateMapset)
         self.bwizard.Bind(wx.EVT_BUTTON, self.OnWizard)
 
         self.rename_location_button.Bind(wx.EVT_BUTTON, self.RenameLocation)
@@ -565,7 +565,7 @@ class GRASSStartup(wx.Frame):
                 defineRegion.Destroy()
 
             if gWizard.user_mapset:
-                self.OnCreateMapset(event)
+                self.CreateMapset(event)
 
     def ImportFile(self, filePath):
         """Tries to import file as vector or raster.
@@ -606,163 +606,90 @@ class GRASSStartup(wx.Frame):
                     'name': filePath},
                 parent=self)
 
+    def CreateMapset(self, event):
+        """Create new mapset"""
+        gisdbase = self.tgisdbase.GetValue()
+        location = self.listOfLocations[self.lblocations.GetSelection()]
+        try:
+            mapset = create_mapset_interactively(self, gisdbase, location)
+            self.OnSelectLocation(None)
+            self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
+            self.bstart.SetFocus()
+            return True
+        except Exception as e:
+            GError(parent=self,
+                   message=_("Unable to create new mapset: %s") % e,
+                   showTraceback=False)
+            return False
+
     # the event can be refactored out by using lambda in bind
     def RenameMapset(self, event):
         """Rename selected mapset
         """
         location = self.listOfLocations[self.lblocations.GetSelection()]
         mapset = self.listOfMapsets[self.lbmapsets.GetSelection()]
-        if mapset == 'PERMANENT':
-            GMessage(
-                parent=self, message=_(
-                    'Mapset <PERMANENT> is required for valid GRASS location.\n\n'
-                    'This mapset cannot be renamed.'))
-            return
-
-        dlg = TextEntryDialog(
-            parent=self,
-            message=_('Current name: %s\n\nEnter new name:') %
-            mapset,
-            caption=_('Rename selected mapset'),
-            validator=GenericValidator(
-                grass.legal_name,
-                self._nameValidationFailed))
-
-        if dlg.ShowModal() == wx.ID_OK:
-            newmapset = dlg.GetValue()
-            if newmapset == mapset:
-                dlg.Destroy()
-                return
-
-            if newmapset in self.listOfMapsets:
-                wx.MessageBox(
-                    parent=self, caption=_('Message'), message=_(
-                        'Unable to rename mapset.\n\n'
-                        'Mapset <%s> already exists in location.') %
-                    newmapset, style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
-            else:
-                try:
-                    sutils.rename_mapset(self.gisdbase, location,
-                                         mapset, newmapset)
-                    self.OnSelectLocation(None)
-                    self.lbmapsets.SetSelection(
-                        self.listOfMapsets.index(newmapset))
-                except Exception as e:
-                    wx.MessageBox(
-                        parent=self,
-                        caption=_('Error'),
-                        message=_('Unable to rename mapset.\n\n%s') %
-                        e,
-                        style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
-
-        dlg.Destroy()
+        try:
+            newmapset = rename_mapset_interactively(self, self.gisdbase,
+                                                    location, mapset)
+            self.OnSelectLocation(None)
+            self.lbmapsets.SetSelection(
+                    self.listOfMapsets.index(newmapset))
+            return True
+        except Exception as e:
+            GError(parent=self,
+                   message=_("Unable to rename mapset: %s") % e,
+                   showTraceback=False)
+            return False
 
     def RenameLocation(self, event):
         """Rename selected location
         """
         location = self.listOfLocations[self.lblocations.GetSelection()]
-
-        dlg = TextEntryDialog(
-            parent=self,
-            message=_('Current name: %s\n\nEnter new name:') %
-            location,
-            caption=_('Rename selected location'),
-            validator=GenericValidator(
-                grass.legal_name,
-                self._nameValidationFailed))
-
-        if dlg.ShowModal() == wx.ID_OK:
-            newlocation = dlg.GetValue()
-            if newlocation == location:
-                dlg.Destroy()
-                return
-
-            if newlocation in self.listOfLocations:
-                wx.MessageBox(
-                    parent=self, caption=_('Message'), message=_(
-                        'Unable to rename location.\n\n'
-                        'Location <%s> already exists in GRASS database.') %
-                    newlocation, style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
-            else:
-                try:
-                    sutils.rename_location(self.gisdbase,
-                                           location, newlocation)
-                    self.UpdateLocations(self.gisdbase)
-                    self.lblocations.SetSelection(
-                        self.listOfLocations.index(newlocation))
-                    self.UpdateMapsets(newlocation)
-                except Exception as e:
-                    wx.MessageBox(
-                        parent=self,
-                        caption=_('Error'),
-                        message=_('Unable to rename location.\n\n%s') %
-                        e,
-                        style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
-
-        dlg.Destroy()
+        try:
+            newlocation = rename_location_interactively(self, self.gisdbase,
+                                                        location)
+            self.UpdateLocations(self.gisdbase)
+            self.lblocations.SetSelection(
+                    self.listOfLocations.index(newlocation))
+            self.UpdateMapsets(newlocation)
+        except Exception as e:
+            GError(parent=self,
+                   message=_("Unable to rename location: %s") % e,
+                   showTraceback=False)
+            return False
 
     def DeleteMapset(self, event):
-        """Delete selected mapset
+        """
+        Delete selected mapset
         """
         location = self.listOfLocations[self.lblocations.GetSelection()]
         mapset = self.listOfMapsets[self.lbmapsets.GetSelection()]
-        if mapset == 'PERMANENT':
-            GMessage(
-                parent=self, message=_(
-                    'Mapset <PERMANENT> is required for valid GRASS location.\n\n'
-                    'This mapset cannot be deleted.'))
-            return
-
-        dlg = wx.MessageDialog(
-            parent=self,
-            message=_(
-                "Do you want to continue with deleting mapset <%(mapset)s> "
-                "from location <%(location)s>?\n\n"
-                "ALL MAPS included in this mapset will be "
-                "PERMANENTLY DELETED!") %
-            {'mapset': mapset, 'location': location},
-            caption=_("Delete selected mapset"),
-            style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
-
-        if dlg.ShowModal() == wx.ID_YES:
-            try:
-                sutils.delete_mapset(self.gisdbase, location, mapset)
-                self.OnSelectLocation(None)
-                self.lbmapsets.SetSelection(0)
-            except:
-                wx.MessageBox(message=_('Unable to delete mapset'))
-
-        dlg.Destroy()
+        try:
+            delete_mapset_interactively(self, self.gisbase, location, mapset)
+            self.OnSelectLocation(None)
+            self.lbmapsets.SetSelection(0)
+        except Exception as e:
+            GError(parent=self,
+                   message=_("Unable to delete mapset: %s") % e,
+                   showTraceback=False)
+            return False
 
     def DeleteLocation(self, event):
         """
         Delete selected location
         """
-
         location = self.listOfLocations[self.lblocations.GetSelection()]
-
-        dlg = wx.MessageDialog(
-            parent=self,
-            message=_(
-                "Do you want to continue with deleting "
-                "location <%s>?\n\n"
-                "ALL MAPS included in this location will be "
-                "PERMANENTLY DELETED!") %
-            (location),
-            caption=_("Delete selected location"),
-            style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
-
-        if dlg.ShowModal() == wx.ID_YES:
-            try:
-                sutils.delete_location(self.gisdbase, location)
-                self.UpdateLocations(self.gisdbase)
-                self.lblocations.SetSelection(0)
-                self.OnSelectLocation(None)
-                self.lbmapsets.SetSelection(0)
-            except:
-                wx.MessageBox(message=_('Unable to delete location'))
-
-        dlg.Destroy()
+        try:
+            delete_location_interactively(self, self.gisdbase, location)
+            self.UpdateLocations(self.gisdbase)
+            self.lblocations.SetSelection(0)
+            self.OnSelectLocation(None)
+            self.lbmapsets.SetSelection(0)
+        except Exception as e:
+            GError(parent=self,
+                   message=_("Unable to delete location: %s") % e,
+                   showTraceback=False)
+            return False
 
     def DownloadLocation(self, event):
         """Download location online"""
@@ -941,34 +868,6 @@ class GRASSStartup(wx.Frame):
             self.OnSetDatabase(event)
 
         dlg.Destroy()
-
-    def OnCreateMapset(self, event):
-        """Create new mapset"""
-        gisdbase = self.tgisdbase.GetValue()
-        location = self.listOfLocations[self.lblocations.GetSelection()]
-
-        dlg = NewMapsetDialog(
-            parent=self,
-            default=get_default_mapset_name(),
-            database=gisdbase,
-            location=location
-        )
-        if dlg.ShowModal() == wx.ID_OK:
-            mapset = dlg.GetValue()
-            try:
-                create_mapset(gisdbase, location, mapset)
-                self.OnSelectLocation(None)
-                self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
-                self.bstart.SetFocus()
-                return True
-            except Exception as e:
-                GError(parent=self,
-                       message=_("Unable to create new mapset: %s") % e,
-                       showTraceback=False)
-                return False
-        else:
-            return False
-
 
     def OnStart(self, event):
         """'Start GRASS' button clicked"""

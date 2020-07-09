@@ -150,13 +150,4 @@ def rename_location(database, old_name, new_name):
               os.path.join(database, new_name))
 
 
-def get_default_mapset_name():
-    """Returns default name for mapset."""
-    try:
-        defaultName = getpass.getuser()
-        defaultName.encode('ascii')
-    except UnicodeEncodeError:
-        # raise error if not ascii (not valid mapset name)
-        defaultName = 'user'
 
-    return defaultName
