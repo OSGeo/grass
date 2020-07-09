@@ -34,7 +34,7 @@ icons = {
         label=_("Click to allow editing other mapsets")),
     'addGrassDB': MetaIcon(
         img='grassdb-add',
-        label=_("Click to add new grass database"))
+        label=_("Click to add new GRASS database"))
 }
 
 

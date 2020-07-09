@@ -98,8 +98,8 @@ class DataCatalog(wx.Panel):
                            os.getcwd(), wx.DD_DEFAULT_STYLE)
         if dlg.ShowModal() == wx.ID_OK:
             grassdatabase = dlg.GetPath()
-            self.tree._grassdatabases.append(grassdatabase)
-
+            print(grassdatabase)
+            self.tree.InsertGrassDb(name=grassdatabase)
             self.tree.ReloadTreeItems()
 
         dlg.Destroy()

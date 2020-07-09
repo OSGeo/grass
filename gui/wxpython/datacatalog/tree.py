@@ -268,7 +268,6 @@ class DataCatalogTree(TreeView):
         self.showNotification = Signal('Tree.showNotification')
         self.changeMapset = Signal('Tree.changeMapset')
         self.changeLocation = Signal('Tree.changeLocation')
-        self.changeGrassDb = Signal('Tree.changeGrassDb')
         self.parent = parent
         self.contextMenu.connect(self.OnRightClick)
         self.itemActivated.connect(self.OnDoubleClick)
@@ -280,8 +279,8 @@ class DataCatalogTree(TreeView):
         self._initVariablesCatalog()
         self.UpdateCurrentDbLocationMapsetNode()
 
-        self._grassdatabases = []
-        self._grassdatabases.append(gisenv()['GISDBASE'])
+        self.grassdatabases = []
+        self.grassdatabases.append(gisenv()['GISDBASE'])
 
         self.beginDrag = Signal('DataCatalogTree.beginDrag')
         self.endDrag = Signal('DataCatalogTree.endDrag')
@@ -307,8 +306,8 @@ class DataCatalogTree(TreeView):
         Runs in multiple processes. Saves resulting data and error."""
         # mapsets param currently unused
 
-        print(self._grassdatabases)
-        for grassdatabase in self._grassdatabases:
+        print(self.grassdatabases)
+        for grassdatabase in self.grassdatabases:
 
             print(grassdatabase)
             locations = GetListOfLocations(grassdatabase)
@@ -388,7 +387,6 @@ class DataCatalogTree(TreeView):
     def ReloadTreeItems(self):
         """Reload dbs, locations, mapsets and layers in the tree."""
         self._orig_model = self._model
-        self._model.SortChildren(self._model.root)
         self._model.RemoveNode(self._model.root)
         self.InitTreeItems()
         self.UpdateCurrentDbLocationMapsetNode()
@@ -416,7 +414,7 @@ class DataCatalogTree(TreeView):
         p = Process(
             target=getLocationTree,
             args=(
-                self.selected_grassdb[0],
+                self.current_grassdb_node.data,
                 self.current_location_node.data['name'],
                 q,
                 self.current_mapset_node.data['name']))
@@ -846,8 +844,11 @@ class DataCatalogTree(TreeView):
 
     def InsertGrassDb(self, name):
         """Insert grass db into model and refresh tree"""
+        self.grassdatabases.append(name)
+        print(self.grassdatabases)
+        self._model.AppendNode(parent=self._model.root, label=name,
+                               data=dict(type="grassdb", name=name))
         self._model.SortChildren(self._model.root)
-        self.ReloadTreeItems()
 
     def OnDeleteMap(self, event):
         """Delete layer or mapset"""
@@ -941,7 +942,7 @@ class DataCatalogTree(TreeView):
             self.changeLocation.emit(mapset=self.selected_mapset[0].label,
                                      location=self.selected_location[0].label)
         else:
-            self.changeGrassDb.emit(mapset=self.selected_mapset[0].label,
+            self.changeLocation.emit(mapset=self.selected_mapset[0].label,
                                      location=self.selected_location[0].label,
                                      grassdb=self.selected_grassdb[0].label)
         self.UpdateCurrentDbLocationMapsetNode()

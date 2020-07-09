@@ -113,6 +113,7 @@ class DataCatalogFrame(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
             grassdatabase = dlg.GetPath()
             self.tree.InsertGrassDb(name=grassdatabase)
+            self.tree.ReloadTreeItems()
 
         dlg.Destroy()
 
