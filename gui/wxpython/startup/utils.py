@@ -24,9 +24,8 @@ import sys
 
 
 def get_possible_database_path():
-    """Looks for directory 'grassdata' (case-insensitive) in standard 
+    """Looks for directory 'grassdata' (case-insensitive) in standard
     locations to detect existing GRASS Database.
-    
     Returns the path as a string or None if nothing was found.
     """
     home = os.path.expanduser('~')
@@ -48,8 +47,7 @@ def get_possible_database_path():
 
 def create_database_directory():
     """Creates the standard GRASS GIS directory.
-
-    Creates database directory named grassdata in the standard location 
+    Creates database directory named grassdata in the standard location
     according to the platform.
 
     Returns the new path as a string or None if nothing was found or created.
@@ -114,7 +112,7 @@ def create_mapset(database, location, mapset):
     mapset_path = os.path.join(location_path, mapset)
     # create an empty directory
     os.mkdir(mapset_path)
-    # copy DEFAULT_WIND file and its permissions from PERMANENT 
+    # copy DEFAULT_WIND file and its permissions from PERMANENT
     # to WIND in the new mapset
     region_path1 = os.path.join(location_path, 'PERMANENT', 'DEFAULT_WIND')
     region_path2 = os.path.join(location_path, mapset, 'WIND')
@@ -148,6 +146,3 @@ def rename_location(database, old_name, new_name):
     """Rename location from *old_name* to *new_name*"""
     os.rename(os.path.join(database, old_name),
               os.path.join(database, new_name))
-
-
-

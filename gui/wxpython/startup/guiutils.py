@@ -196,6 +196,7 @@ def location_exists(database, location):
         return True
     return False
 
+
 def create_mapset_interactively(guiparent, grassdb, location):
     """
     Create new mapset
@@ -220,6 +221,7 @@ def create_mapset_interactively(guiparent, grassdb, location):
                    err,
                    showTraceback=False)
     return(mapset)
+
 
 def rename_mapset_interactively(guiparent, grassdb, location, mapset):
     """
@@ -256,6 +258,7 @@ def rename_mapset_interactively(guiparent, grassdb, location, mapset):
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
 
     dlg.Destroy()
+
 
 def rename_location_interactively(guiparent, grassdb, location):
     """
@@ -325,6 +328,7 @@ def delete_mapset_interactively(guiparent, grassdb, location, mapset):
 
     dlg.Destroy()
 
+
 def delete_location_interactively(guiparent, grassdb, location):
     """
     Delete selected location
@@ -353,6 +357,7 @@ def delete_location_interactively(guiparent, grassdb, location):
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
 
     dlg.Destroy()
+
 
 def get_default_mapset_name():
     """Returns default name for mapset."""
