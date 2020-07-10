@@ -305,13 +305,9 @@ class DataCatalogTree(TreeView):
         """Add grass databases, locations, mapsets and layers to the tree.
         Runs in multiple processes. Saves resulting data and error."""
         # mapsets param currently unused
-
-        print(self.grassdatabases)
         for grassdatabase in self.grassdatabases:
 
-            print(grassdatabase)
             locations = GetListOfLocations(grassdatabase)
-            print(locations)
 
             loc_count = proc_count = 0
             queue_list = []
@@ -378,6 +374,7 @@ class DataCatalogTree(TreeView):
             wx.CallAfter(GWarning, '\n'.join(errors))
         Debug.msg(1, "Tree filled")
 
+        self.UpdateCurrentDbLocationMapsetNode()
         self.RefreshItems()
 
     def UpdateCurrentDbLocationMapsetNode(self):
@@ -389,7 +386,6 @@ class DataCatalogTree(TreeView):
         self._orig_model = self._model
         self._model.RemoveNode(self._model.root)
         self.InitTreeItems()
-        self.UpdateCurrentDbLocationMapsetNode()
 
     def ReloadCurrentMapset(self):
         """Reload current mapset tree only."""
@@ -514,7 +510,7 @@ class DataCatalogTree(TreeView):
             self._popupMenuLayer()
         elif self.selected_mapset[0] and len(self.selected_mapset) == 1:
             self._popupMenuMapset()
-        elif self.selected_location[0] and not self.selected_mapset[0] and len(self.selected_location) == 1:
+        elif self.selected_location[0] and len(self.selected_location) == 1:
             self._popupMenuLocation()
         elif self.selected_grassdb[0] and not self.selected_location[0] and not self.selected_mapset[0] and len(self.selected_grassdb) == 1:
             self._popupMenuGrassDb()
@@ -723,18 +719,27 @@ class DataCatalogTree(TreeView):
                             self.selected_location[0].label,
                             self.selected_mapset[0].label)
             gisrc2, env2 = gscript.create_environment(
-                            self.selected_grassdb[i].label,
+                            self.copy_grassdb[i].label,
                             self.copy_location[i].label,
                             self.copy_mapset[i].label)
             new_name = self.copy_layer[i].label
-
-            if self.selected_grassdb[0] == self.copy_grassdb[i]:
-                if self.selected_location[0] == self.copy_location[i]:
-                    # within one mapset
-                    if self.selected_mapset[0] == self.copy_mapset[i]:
-                        # ignore when just moves map
-                        if self.copy_mode is False:
-                            return
+            if self.selected_location[0] == self.copy_location[i]:
+                # within one mapset
+                if self.selected_mapset[0] == self.copy_mapset[i]:
+                    # ignore when just moves map
+                    if self.copy_mode is False:
+                        return
+                    new_name = self._getNewMapName(_('New name for <{n}>').format(n=self.copy_layer[i].label),
+                                                   _('Select new name'),
+                                                   self.copy_layer[i].label, env=env,
+                                                   mapset=self.selected_mapset[0].label,
+                                                   element=self.copy_layer[i].data['type'])
+                    if not new_name:
+                        return
+                # within one location, different mapsets
+                else:
+                    if map_exists(new_name, element=self.copy_layer[i].data['type'], env=env,
+                                  mapset=self.selected_mapset[0].label):
                         new_name = self._getNewMapName(_('New name for <{n}>').format(n=self.copy_layer[i].label),
                                                        _('Select new name'),
                                                        self.copy_layer[i].label, env=env,
@@ -742,50 +747,39 @@ class DataCatalogTree(TreeView):
                                                        element=self.copy_layer[i].data['type'])
                         if not new_name:
                             return
-                    # within one location, different mapsets
-                    else:
-                        if map_exists(new_name, element=self.copy_layer[i].data['type'], env=env,
-                                      mapset=self.selected_mapset[0].label):
-                            new_name = self._getNewMapName(_('New name for <{n}>').format(n=self.copy_layer[i].label),
-                                                           _('Select new name'),
-                                                           self.copy_layer[i].label, env=env,
-                                                           mapset=self.selected_mapset[0].label,
-                                                           element=self.copy_layer[i].data['type'])
-                            if not new_name:
-                                return
 
-                    string = self.copy_layer[i].label + '@' + self.copy_mapset[i].label + ',' + new_name
-                    pasted = 0
+                string = self.copy_layer[i].label + '@' + self.copy_mapset[i].label + ',' + new_name
+                pasted = 0
+                if self.copy_mode:
+                    label = _("Copying <{name}>...").format(name=string)
+                else:
+                    label = _("Moving <{name}>...").format(name=string)
+                self.showNotification.emit(message=label)
+                if self.copy_layer[i].data['type'] == 'vector':
+                    pasted, cmd = self._runCommand('g.copy', vector=string, env=env)
+                    node = 'vector'
+                elif self.copy_layer[i].data['type'] == 'raster':
+                    pasted, cmd = self._runCommand('g.copy', raster=string, env=env)
+                    node = 'raster'
+                else:
+                    pasted, cmd = self._runCommand('g.copy', raster_3d=string, env=env)
+                    node = 'raster_3d'
+                if pasted == 0:
+                    self.InsertLayer(name=new_name, mapset_node=self.selected_mapset[0],
+                                     element_name=node)
+                    Debug.msg(1, "COPIED TO: " + new_name)
                     if self.copy_mode:
-                        label = _("Copying <{name}>...").format(name=string)
+                        self.showNotification.emit(message=_("g.copy completed"))
                     else:
-                        label = _("Moving <{name}>...").format(name=string)
-                    self.showNotification.emit(message=label)
-                    if self.copy_layer[i].data['type'] == 'vector':
-                        pasted, cmd = self._runCommand('g.copy', vector=string, env=env)
-                        node = 'vector'
-                    elif self.copy_layer[i].data['type'] == 'raster':
-                        pasted, cmd = self._runCommand('g.copy', raster=string, env=env)
-                        node = 'raster'
-                    else:
-                        pasted, cmd = self._runCommand('g.copy', raster_3d=string, env=env)
-                        node = 'raster_3d'
-                    if pasted == 0:
-                        self.InsertLayer(name=new_name, mapset_node=self.selected_mapset[0],
-                                         element_name=node)
-                        Debug.msg(1, "COPIED TO: " + new_name)
-                        if self.copy_mode:
-                            self.showNotification.emit(message=_("g.copy completed"))
-                        else:
-                            self.showNotification.emit(message=_("g.copy completed"))
+                        self.showNotification.emit(message=_("g.copy completed"))
 
-                        # remove old
-                        if not self.copy_mode:
-                            self._removeMapAfterCopy(self.copy_layer[i], self.copy_mapset[i], env2)
+                    # remove old
+                    if not self.copy_mode:
+                        self._removeMapAfterCopy(self.copy_layer[i], self.copy_mapset[i], env2)
 
-                    gscript.try_remove(gisrc)
-                    gscript.try_remove(gisrc2)
-                    # expand selected mapset
+                gscript.try_remove(gisrc)
+                gscript.try_remove(gisrc2)
+                # expand selected mapset
             else:
                 if self.copy_layer[i].data['type'] == 'raster_3d':
                     GError(_("Reprojection is not implemented for 3D rasters"), parent=self)
@@ -798,7 +792,7 @@ class DataCatalogTree(TreeView):
                                                    element=self.copy_layer[i].data['type'])
                     if not new_name:
                         continue
-                gisdbase = self.selected_grassdb[0]
+                gisdbase = gisenv()['GISDBASE']
                 callback = lambda gisrc2=gisrc2, gisrc=gisrc, cLayer=self.copy_layer[i], \
                                   cMapset=self.copy_mapset[i], cMode=self.copy_mode, name=new_name: \
                                   self._onDoneReprojection(env2, gisrc2, gisrc, cLayer, cMapset, cMode, name)
@@ -845,10 +839,10 @@ class DataCatalogTree(TreeView):
     def InsertGrassDb(self, name):
         """Insert grass db into model and refresh tree"""
         self.grassdatabases.append(name)
-        print(self.grassdatabases)
         self._model.AppendNode(parent=self._model.root, label=name,
                                data=dict(type="grassdb", name=name))
         self._model.SortChildren(self._model.root)
+        self.ReloadTreeItems()
 
     def OnDeleteMap(self, event):
         """Delete layer or mapset"""
