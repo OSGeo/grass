@@ -986,8 +986,10 @@ class DataCatalogTree(TreeView):
     def _SwitchLocationMapset(self):
         """Switch to location and mapset"""
         genv = gisenv()
+        # If selected location is the current one, just switch mapsets
         if self.selected_location[0].label == genv['LOCATION_NAME']:
             self.changeMapset.emit(mapset=self.selected_mapset[0].label)
+        # If selected location is not the current one, switch mapsets and locations
         else:
             self.changeLocation.emit(mapset=self.selected_mapset[0].label,
                                      location=self.selected_location[0].label)

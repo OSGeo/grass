@@ -650,7 +650,7 @@ class GRASSStartup(wx.Frame):
         location = self.listOfLocations[self.lblocations.GetSelection()]
         mapset = self.listOfMapsets[self.lbmapsets.GetSelection()]
         try:
-            delete_mapset_interactively(self, self.gisbase, location, mapset)
+            delete_mapset_interactively(self, self.gisdbase, location, mapset)
             self.OnSelectLocation(None)
             self.lbmapsets.SetSelection(0)
         except Exception as e:
@@ -941,15 +941,6 @@ class GRASSStartup(wx.Frame):
         """Close window event"""
         event.Skip()
         sys.exit(self.exit_user_requested)
-
-    def _nameValidationFailed(self, ctrl):
-        message = _(
-            "Name <%(name)s> is not a valid name for location or mapset. "
-            "Please use only ASCII characters excluding %(chars)s "
-            "and space.") % {
-            'name': ctrl.GetValue(),
-            'chars': '/"\'@,=*~'}
-        GError(parent=self, message=message, caption=_("Invalid name"))
 
 
 class GListBox(ListCtrl, listmix.ListCtrlAutoWidthMixin):
