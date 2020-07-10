@@ -665,7 +665,10 @@ class DataCatalogTree(TreeView):
                     gisenv()['GISDBASE'],
                     self.selected_location[0].label,
                     self.selected_mapset[0].label)
-            self.SwitchLocationMapset(new_mapset=newmapset)
+            # When renaming a current mapset, switch to a new mapset
+            if (self.selected_mapset[0].label == gisenv()['MAPSET']):
+                self.selected_mapset[0].label = newmapset
+                self._SwitchLocationMapset()
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to rename mapset: %s") % e,
@@ -682,7 +685,10 @@ class DataCatalogTree(TreeView):
                     self,
                     gisenv()['GISDBASE'],
                     self.selected_location[0].label)
-            self.SwitchLocationMapset(new_location=newlocation)
+            # When renaming a current location, switch to a new location
+            if (self.selected_location[0].label == gisenv()['LOCATION_NAME']):
+                self.selected_location[0].label = newlocation
+                self._SwitchLocationMapset(new_location=newlocation)
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to rename location: %s") % e,
@@ -974,26 +980,17 @@ class DataCatalogTree(TreeView):
             self.OnPasteMap(event)
 
     def OnSwitchLocationMapset(self, event):
+        """Switch to location and mapset"""
+        self._SwitchLocationMapset()
+
+    def _SwitchLocationMapset(self):
+        """Switch to location and mapset"""
         genv = gisenv()
         if self.selected_location[0].label == genv['LOCATION_NAME']:
             self.changeMapset.emit(mapset=self.selected_mapset[0].label)
         else:
-            self.changeLocation.emit(mapset=self.selected_mapset[0].label, location=self.selected_location[0].label)
-        self.UpdateCurrentLocationMapsetNode()
-        self.ExpandCurrentMapset()
-        self.RefreshItems()
-
-    def SwitchLocationMapset(self, selected_mapset=None, selected_location=None,
-                             new_mapset=None, new_location=None):
-        genv = gisenv()
-        if (selected_location == genv['LOCATION_NAME']
-        and selected_mapset == genv['MAPSET']):
-            print("bla")
-            self.changeMapset.emit(mapset=new_mapset)
-        if (selected_location == genv['LOCATION_NAME']
-        and not selected_mapset):
-            print("bla2")
-            self.changeLocation.emit(location=new_location)
+            self.changeLocation.emit(mapset=self.selected_mapset[0].label,
+                                     location=self.selected_location[0].label)
         self.UpdateCurrentLocationMapsetNode()
         self.ExpandCurrentMapset()
         self.RefreshItems()

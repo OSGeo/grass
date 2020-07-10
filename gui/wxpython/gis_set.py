@@ -230,14 +230,14 @@ class GRASSStartup(wx.Frame):
         self.bstart.Bind(wx.EVT_BUTTON, self.OnStart)
         self.bexit.Bind(wx.EVT_BUTTON, self.OnExit)
         self.bhelp.Bind(wx.EVT_BUTTON, self.OnHelp)
-        self.bmapset.Bind(wx.EVT_BUTTON, self.CreateMapset)
+        self.bmapset.Bind(wx.EVT_BUTTON, self.OnCreateMapset)
         self.bwizard.Bind(wx.EVT_BUTTON, self.OnWizard)
 
-        self.rename_location_button.Bind(wx.EVT_BUTTON, self.RenameLocation)
-        self.delete_location_button.Bind(wx.EVT_BUTTON, self.DeleteLocation)
-        self.download_location_button.Bind(wx.EVT_BUTTON, self.DownloadLocation)
-        self.rename_mapset_button.Bind(wx.EVT_BUTTON, self.RenameMapset)
-        self.delete_mapset_button.Bind(wx.EVT_BUTTON, self.DeleteMapset)
+        self.rename_location_button.Bind(wx.EVT_BUTTON, self.OnRenameLocation)
+        self.delete_location_button.Bind(wx.EVT_BUTTON, self.OnDeleteLocation)
+        self.download_location_button.Bind(wx.EVT_BUTTON, self.OnDownloadLocation)
+        self.rename_mapset_button.Bind(wx.EVT_BUTTON, self.OnRenameMapset)
+        self.delete_mapset_button.Bind(wx.EVT_BUTTON, self.OnDeleteMapset)
 
         self.lblocations.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnSelectLocation)
         self.lbmapsets.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnSelectMapset)
@@ -606,24 +606,9 @@ class GRASSStartup(wx.Frame):
                     'name': filePath},
                 parent=self)
 
-    def CreateMapset(self, event):
-        """Create new mapset"""
-        gisdbase = self.tgisdbase.GetValue()
-        location = self.listOfLocations[self.lblocations.GetSelection()]
-        try:
-            mapset = create_mapset_interactively(self, gisdbase, location)
-            self.OnSelectLocation(None)
-            self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
-            self.bstart.SetFocus()
-            return True
-        except Exception as e:
-            GError(parent=self,
-                   message=_("Unable to create new mapset: %s") % e,
-                   showTraceback=False)
-            return False
 
     # the event can be refactored out by using lambda in bind
-    def RenameMapset(self, event):
+    def OnRenameMapset(self, event):
         """Rename selected mapset
         """
         location = self.listOfLocations[self.lblocations.GetSelection()]
@@ -641,7 +626,7 @@ class GRASSStartup(wx.Frame):
                    showTraceback=False)
             return False
 
-    def RenameLocation(self, event):
+    def OnRenameLocation(self, event):
         """Rename selected location
         """
         location = self.listOfLocations[self.lblocations.GetSelection()]
@@ -658,7 +643,7 @@ class GRASSStartup(wx.Frame):
                    showTraceback=False)
             return False
 
-    def DeleteMapset(self, event):
+    def OnDeleteMapset(self, event):
         """
         Delete selected mapset
         """
@@ -674,7 +659,7 @@ class GRASSStartup(wx.Frame):
                    showTraceback=False)
             return False
 
-    def DeleteLocation(self, event):
+    def OnDeleteLocation(self, event):
         """
         Delete selected location
         """
@@ -691,7 +676,7 @@ class GRASSStartup(wx.Frame):
                    showTraceback=False)
             return False
 
-    def DownloadLocation(self, event):
+    def OnDownloadLocation(self, event):
         """Download location online"""
         from startup.locdownload import LocationDownloadDialog
 
@@ -868,6 +853,22 @@ class GRASSStartup(wx.Frame):
             self.OnSetDatabase(event)
 
         dlg.Destroy()
+
+    def OnCreateMapset(self, event):
+        """Create new mapset"""
+        gisdbase = self.tgisdbase.GetValue()
+        location = self.listOfLocations[self.lblocations.GetSelection()]
+        try:
+            mapset = create_mapset_interactively(self, gisdbase, location)
+            self.OnSelectLocation(None)
+            self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
+            self.bstart.SetFocus()
+            return True
+        except Exception as e:
+            GError(parent=self,
+                   message=_("Unable to create new mapset: %s") % e,
+                   showTraceback=False)
+            return False
 
     def OnStart(self, event):
         """'Start GRASS' button clicked"""
