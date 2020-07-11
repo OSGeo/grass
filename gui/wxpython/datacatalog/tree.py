@@ -510,9 +510,9 @@ class DataCatalogTree(TreeView):
             self._popupMenuLayer()
         elif self.selected_mapset[0] and len(self.selected_mapset) == 1:
             self._popupMenuMapset()
-        elif self.selected_location[0] and len(self.selected_location) == 1:
+        elif self.selected_location[0] and not self.selected_mapset[0] and len(self.selected_location) == 1:
             self._popupMenuLocation()
-        elif self.selected_grassdb[0] and not self.selected_location[0] and not self.selected_mapset[0] and len(self.selected_grassdb) == 1:
+        elif self.selected_grassdb[0] and not self.selected_location[0] and len(self.selected_grassdb) == 1:
             self._popupMenuGrassDb()
         else:
             self._popupMenuEmpty()
@@ -585,7 +585,7 @@ class DataCatalogTree(TreeView):
            Used to highlight current db/loc/mapset."""
         node = self._model.GetNodeByIndex(index)
         font = self.GetFont()
-        if node.data['type'] in ('grassdb','location', 'mapset'):
+        if node.data['type'] in ('grassdb', 'location', 'mapset'):
             if node in (self.current_grassdb_node, self.current_location_node, self.current_mapset_node):
                 font.SetWeight(wx.FONTWEIGHT_BOLD)
             else:
@@ -792,14 +792,21 @@ class DataCatalogTree(TreeView):
                                                    element=self.copy_layer[i].data['type'])
                     if not new_name:
                         continue
-                gisdbase = gisenv()['GISDBASE']
                 callback = lambda gisrc2=gisrc2, gisrc=gisrc, cLayer=self.copy_layer[i], \
                                   cMapset=self.copy_mapset[i], cMode=self.copy_mode, name=new_name: \
                                   self._onDoneReprojection(env2, gisrc2, gisrc, cLayer, cMapset, cMode, name)
-                dlg = CatalogReprojectionDialog(self, self._giface, gisdbase, self.copy_location[i].label,
-                                                self.copy_mapset[i].label, self.copy_layer[i].label, env2,
-                                                gisdbase, self.selected_location[0].label, self.selected_mapset[0].label,
-                                                new_name, self.copy_layer[i].data['type'], env, callback)
+                dlg = CatalogReprojectionDialog(self, self._giface,
+                                                self.copy_grassdb[i].label,
+                                                self.copy_location[i].label,
+                                                self.copy_mapset[i].label,
+                                                self.copy_layer[i].label,
+                                                env2,
+                                                self.selected_grassdb[0].label,
+                                                self.selected_location[0].label,
+                                                self.selected_mapset[0].label,
+                                                new_name,
+                                                self.copy_layer[i].data['type'],
+                                                env, callback)
                 dlg.ShowModal()
         self.ExpandNode(self.selected_mapset[0], recursive=True)
         self._initVariablesCatalog()
@@ -934,11 +941,12 @@ class DataCatalogTree(TreeView):
             self.changeMapset.emit(mapset=self.selected_mapset[0].label)
         elif self.selected_grassdb[0].label == genv['GISDBASE']:
             self.changeLocation.emit(mapset=self.selected_mapset[0].label,
-                                     location=self.selected_location[0].label)
+                                     location=self.selected_location[0].label,
+                                     dbase=None)
         else:
             self.changeLocation.emit(mapset=self.selected_mapset[0].label,
                                      location=self.selected_location[0].label,
-                                     grassdb=self.selected_grassdb[0].label)
+                                     dbase=self.selected_grassdb[0].label)
         self.UpdateCurrentDbLocationMapsetNode()
         self.ExpandCurrentMapset()
         self.RefreshItems()

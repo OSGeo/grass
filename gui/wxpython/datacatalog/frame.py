@@ -56,10 +56,11 @@ class DataCatalogFrame(wx.Frame):
         self.tree.UpdateCurrentDbLocationMapsetNode()
         self.tree.ExpandCurrentMapset()
         self.tree.changeMapset.connect(lambda mapset:
-                                       self.ChangeLocationMapset(location=None,
+                                       self.ChangeDbLocationMapset(location=None,
                                                                  mapset=mapset))
-        self.tree.changeLocation.connect(lambda mapset, location:
-                                         self.ChangeLocationMapset(location=location,
+        self.tree.changeLocation.connect(lambda mapset, location, dbase:
+                                         self.ChangeDbLocationMapset(dbase=dbase,
+                                                                   location=location,
                                                                    mapset=mapset))
 
         # buttons
@@ -120,8 +121,19 @@ class DataCatalogFrame(wx.Frame):
         """Allow editing other mapsets or restrict editing to current mapset"""
         self.tree.SetRestriction(restrict)
 
-    def ChangeLocationMapset(self, mapset, location=None):
-        """Change mapset or location"""
+    def ChangeDbLocationMapset(self, mapset, location=None, dbase=None):
+        """Change mapset, location or db"""
+        if dbase:
+            if RunCommand('g.mapset', parent=self,
+                          location=location,
+                          mapset=mapset,
+                          dbase=dbase) == 0:
+                GMessage(parent=self,
+                         message=_("Current GRASS database is <%(dbase)s>.\n"
+                                   "Current location is <%(loc)s>.\n"
+                                   "Current mapset is <%(mapset)s>."
+                                   ) %
+                         {'dbase': dbase, 'loc': location, 'mapset': mapset})
         if location:
             if RunCommand('g.mapset', parent=self,
                           location=location,
