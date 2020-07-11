@@ -450,7 +450,7 @@ class DataCatalogTree(TreeView):
             'raster': MetaIcon(img='raster').GetBitmap(bmpsize),
             'vector': MetaIcon(img='vector').GetBitmap(bmpsize),
             'raster_3d': MetaIcon(img='raster3d').GetBitmap(bmpsize)
-            }
+        }
         il = wx.ImageList(bmpsize[0], bmpsize[1], mask=False)
         for each in self._iconTypes:
             il.Add(icons[each])
@@ -1146,8 +1146,8 @@ class DataCatalogTree(TreeView):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnSwitchDbLocationMapset, item)
         if (self.selected_grassdb[0].label == genv['GISDBASE']
-            and self.selected_location[0].label == genv['LOCATION_NAME']
-            and self.selected_mapset[0].label == genv['MAPSET']):
+                and self.selected_location[0].label == genv['LOCATION_NAME']
+                and self.selected_mapset[0].label == genv['MAPSET']):
             item.Enable(False)
         self.PopupMenu(menu)
         menu.Destroy()
