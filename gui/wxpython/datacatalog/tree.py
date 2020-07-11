@@ -665,10 +665,6 @@ class DataCatalogTree(TreeView):
                     gisenv()['GISDBASE'],
                     self.selected_location[0].label,
                     self.selected_mapset[0].label)
-            # When renaming a current mapset, switch to a new mapset
-            if (self.selected_mapset[0].label == gisenv()['MAPSET']):
-                self.selected_mapset[0].label = newmapset
-                self._SwitchLocationMapset()
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to rename mapset: %s") % e,
@@ -685,10 +681,6 @@ class DataCatalogTree(TreeView):
                     self,
                     gisenv()['GISDBASE'],
                     self.selected_location[0].label)
-            # When renaming a current location, switch to a new location
-            if (self.selected_location[0].label == gisenv()['LOCATION_NAME']):
-                self.selected_location[0].label = newlocation
-                self._SwitchLocationMapset(new_location=newlocation)
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to rename location: %s") % e,
@@ -776,7 +768,7 @@ class DataCatalogTree(TreeView):
                                                        element=self.copy_layer[i].data['type'])
                         if not new_name:
                             return
-    
+
                 string = self.copy_layer[i].label + '@' + self.copy_mapset[i].label + ',' + new_name
                 pasted = 0
                 if self.copy_mode:
@@ -801,11 +793,11 @@ class DataCatalogTree(TreeView):
                         self.showNotification.emit(message=_("g.copy completed"))
                     else:
                         self.showNotification.emit(message=_("g.copy completed"))
-    
+
                     # remove old
                     if not self.copy_mode:
                         self._removeMapAfterCopy(self.copy_layer[i], self.copy_mapset[i], env2)
-    
+
                 gscript.try_remove(gisrc)
                 gscript.try_remove(gisrc2)
                 # expand selected mapset
@@ -1173,6 +1165,9 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameMapset, item)
+        if (self.selected_location[0].label == genv['LOCATION_NAME']
+                and self.selected_mapset[0].label == genv['MAPSET']):
+            item.Enable(False)
 
         self.PopupMenu(menu)
         menu.Destroy()
@@ -1195,6 +1190,8 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename location"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameLocation, item)
+        if (self.selected_location[0].label == genv['LOCATION_NAME']):
+            item.Enable(False)
 
         self.PopupMenu(menu)
         menu.Destroy()
