@@ -56,12 +56,14 @@ class DataCatalogFrame(wx.Frame):
         self.tree.UpdateCurrentDbLocationMapsetNode()
         self.tree.ExpandCurrentMapset()
         self.tree.changeMapset.connect(lambda mapset:
-                                       self.ChangeDbLocationMapset(location=None,
-                                                                 mapset=mapset))
+                                       self.ChangeDbLocationMapset(
+                                       location=None,
+                                       mapset=mapset))
         self.tree.changeLocation.connect(lambda mapset, location, dbase:
-                                         self.ChangeDbLocationMapset(dbase=dbase,
-                                                                   location=location,
-                                                                   mapset=mapset))
+                                         self.ChangeDbLocationMapset(
+                                         dbase=dbase,
+                                         location=location,
+                                         mapset=mapset))
 
         # buttons
         self.btnClose = Button(parent=self.panel, id=wx.ID_CLOSE)
@@ -134,7 +136,7 @@ class DataCatalogFrame(wx.Frame):
                                    "Current mapset is <%(mapset)s>."
                                    ) %
                          {'dbase': dbase, 'loc': location, 'mapset': mapset})
-        if location:
+        elif location:
             if RunCommand('g.mapset', parent=self,
                           location=location,
                           mapset=mapset) == 0:
