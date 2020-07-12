@@ -380,6 +380,8 @@ int main(int argc, char **argv)
 	    if (map_type == 2 || map_type == 3 || map_type == 5) {
 		if (Rast_is_null_value(ptr, raster_type))
 		    aspect_c = 0;
+		else if (map_type == 5 && aspect_f < 0)
+		    aspect_c = (int)(0.5 - aspect_f);
 		else
 		    aspect_c = (int)(aspect_f + 0.5);
 	    }
@@ -514,7 +516,7 @@ int main(int argc, char **argv)
 	    /* case switch for r.watershed drainage type aspect map */
 	    else if (map_type == 5) {
 		D_use_color(arrow_color);
-		switch (aspect_c >= 0 ? aspect_c : -aspect_c) {
+		switch (aspect_c) {
 		case 0:
 		    /* only draw if x_color is not none (transparent) */
 		    if (x_color > 0) {
