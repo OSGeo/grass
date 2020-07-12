@@ -1091,7 +1091,7 @@ class GMFrame(wx.Frame):
             if RunCommand('g.mapset', parent=self,
                           location=location,
                           mapset=mapset) != 0:
-                 return  # error reported
+                return  # error reported
 
             # close current workspace and create new one
             self.OnWorkspaceClose()
