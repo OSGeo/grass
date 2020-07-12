@@ -8,7 +8,7 @@ Classes:
  - treemodel::DictNode
  - treemodel::ModuleNode
 
-(C) 2020 by the GRASS Development Team
+(C) 2013-2020 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -132,8 +132,7 @@ class TreeModel(object):
             return self._getNode(node.children[index[0]], index[1:])
 
     def RemoveNode(self, node):
-        """Removes node. If node is root,
-        removes root's children, root is kept."""
+        """Removes node. If node is root, removes root's children, root is kept."""
         if node.parent:
             node.parent.children.remove(node)
         else:
