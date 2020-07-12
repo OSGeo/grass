@@ -5,6 +5,7 @@
 <b>grass79</b> [<b>-h</b> | <b>-help</b> | <b>--help</b>] [<b>-v</b> | <b>--version</b>] |
 [<b>-c</b> | <b>-c geofile</b> | <b>-c EPSG:code[:datum_trans]</b>] | <b>-e</b> | <b>-f</b> |
 [<b>--text</b> | <b>--gtext</b> | <b>--gui</b>] | <b>--config</b> |
+[<b>--no-lock</b>] | [<b>--no-clean</b>] | [<b>--clean-only</b>] |
 [<b>--tmp-location</b> | <b>--tmp-mapset</b>]
     [[[<b>&lt;GISDBASE&gt;/</b>]<b>&lt;LOCATION&gt;/</b>]
     	<b>&lt;MAPSET&gt;</b>]
@@ -64,6 +65,19 @@ The active mapset will be the PERMANENT mapset.
 <dd> Run using a temporary mapset which is created in the specified
 location and deleted at the end of the execution
 (use with the --exec flag).
+
+<dt><b>--no-lock</b>
+<dd> Do not lock the mapset and leave the responsibility for handling
+concurrent sessions on the user.
+(Use with the <b>--exec</b> flag. See also <b>--no-clean</b>.)
+
+<dt><b>--no-clean</b>
+<dd> Do not clean the mapset when starting and ending a session.
+(Use with the <b>--exec</b> flag.
+See also <b>--no-lock</b> and <b>--clean-only</b>.)
+
+<dt><b>--clean-only</b>
+<dd> Do only the cleanup of the mapset and exit.
 
 </dl>
 
@@ -451,6 +465,61 @@ The temporary mapset is automatically deleted after computation,
 so the script is expected to export, link or otherwise preserve the
 output data before ending.
 
+<h4>Multiple sessions in one mapset</h4>
+
+Multiple processes in GRASS GIS can run parallel in two basic ways.
+First, the processes can run in multiple sessions each using its own
+mapset (a mapset created by the user or on-the-fly by
+<b>--tmp-mapset</b>). This option often requires management of mapsets
+and collection of data from multiple mapsets, but it is the most robust
+one. Second, some processes, for example most of the raster operations,
+can run in parallel in one mapset. Although this typically means
+running in one session connected to one mapset, this can be also done
+by starting multiple sessions using <b>--exec</b> connected to one
+mapset. In this case, the standard mapset locking and cleaning needs to
+be disabled using <b>--no-lock</b> and <b>--no-clean</b>. This is
+advantageous when it is not possible to have all the parallel processes
+started within one session, for example, when each process is running
+on a different machine.
+
+<p>
+In the following example, let's assume that a Python script called
+<code>run.py</code> was prepared, so that it can run multiple times in
+parallel and it takes one parameter which makes each run unique.
+Another script called <code>post_process_all_runs.py</code> will do
+the post-processing using results from all runs of <code>run.py</code>
+within one mapset.
+
+<p>
+In the first step, let's create a new mapset to be used in the next
+steps:
+
+<div class="code"><pre>
+grass79 -e -c /path/to/mapset
+</pre></div>
+
+This is the list of commands to be executed in parallel. The actual
+parallel execution is beyond this example, but let's assume that
+something like GNU parallel or Python multiprocessing package executes
+the following commands in parallel.
+
+<div class="code"><pre>
+grass79 /path/to/mapset --no-lock --no-clean --exec run.py 1
+grass79 /path/to/mapset --no-lock --no-clean --exec run.py 2
+grass79 /path/to/mapset --no-lock --no-clean --exec run.py 3
+grass79 /path/to/mapset --no-lock --no-clean --exec run.py 4
+</pre></div>
+
+In a final step, assuming the above processes finished, the other script
+does the post-processing of what is now the mapset.
+
+<div class="code"><pre>
+grass79 /path/to/mapset --exec post_process_all_runs.py
+</pre></div>
+
+The above command is not using <b>--no-clean</b>, so the standard
+cleaning procedure omitted above happens here, so no extra cleaning step
+is needed.
 
 <h4>Troubleshooting</h4>
 Importantly, to avoid an <tt>"[Errno 8] Exec format error"</tt> there must be a 

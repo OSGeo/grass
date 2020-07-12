@@ -161,17 +161,6 @@ def try_remove(path):
         pass
 
 
-def clean_env():
-    gisrc = os.environ['GISRC']
-    env_curr = read_gisrc(gisrc)
-    env_new = {}
-    for k, v in env_curr.items():
-        if k.endswith('PID') or k.startswith('MONITOR'):
-            continue
-        env_new[k] = v
-    write_gisrc(env_new, gisrc)
-
-
 def is_debug():
     """Returns True if we are in debug mode
 
@@ -336,6 +325,12 @@ Geographic Resources Analysis Support System (GRASS GIS).
                                    {tmp_location_detail}
   --tmp-mapset                   {tmp_mapset}
                                    {tmp_mapset_detail}
+  --no-lock                      {no_lock}
+                                   {no_lock_detail}
+  --no-clean                     {no_clean}
+                                   {no_clean_detail}
+  --clean-only                   {clean_only}
+                                   {clean_only_detail}
 
 {params}:
   GISDBASE                       {gisdbase}
@@ -401,6 +396,12 @@ def help_message(default_gui):
             tmp_location_detail=_("created in a temporary directory and deleted at exit"),
             tmp_mapset=_("create temporary mapset (use with the --exec flag)"),
             tmp_mapset_detail=_("created in the specified location and deleted at exit"),
+            no_lock=_("do not lock the mapset (use with the --exec flag)"),
+            no_lock_detail=_("no .gislock will be created"),
+            no_clean=_("do not clean the mapset (use with the --exec flag)"),
+            no_clean_detail=_("temporary data in the mapset will be left untouched"),
+            clean_only=_("clean the mapset and exit"),
+            clean_only_detail=_("only cleans the mapset and then ends the session"),
         )
     )
     s = t.substitute(CMD_NAME=CMD_NAME, DEFAULT_GUI=default_gui,
@@ -563,6 +564,31 @@ def write_gisrc(kv, filename, append=False):
     for k, v in kv.items():
         f.write("%s: %s\n" % (k, v))
     f.close()
+
+
+def remove_session_specific_env_vars(env):
+    """Remove gis env variables specific to one session
+
+    Removes variables which shouldn't used by another session, e.g.,
+    d.mon related variables.
+    """
+    new_env = {}
+    for k, v in env.items():
+        if k.endswith('PID') or k.startswith('MONITOR'):
+            continue
+        new_env[k] = v
+    return new_env
+
+
+def copy_general_gis_env(source, target):
+    """Copy general (not session-specific) variables to a new rc file
+
+    :param source: name of a file to copy the variables from
+    :param target: name of a file to copy the variables to
+    """
+    curr_env = read_gisrc(source)
+    new_env = remove_session_specific_env_vars(curr_env)
+    write_gisrc(new_env, target)
 
 
 def read_gui(gisrc, default_gui):
@@ -1608,9 +1634,13 @@ def lock_mapset(mapset_path, force_gislock_removal, user, grass_gui):
     if msg:
         if grass_gui == "wxpython":
             call([os.getenv('GRASS_PYTHON'), wxpath("gis_set_error.py"), msg])
-            # TODO: here we probably miss fatal or exit, needs to be added
-        else:
-            fatal(msg)
+            # After the dialog is dismissed, we exit using the same fatal
+            # as in the pure-command line mode. No difference when user does
+            # not see the command line and if the user does see it, then the
+            # error is repeated there which might be helpful for further
+            # investigation or when the user closed the dialog without reading
+            # the message.
+        fatal(msg)
     debug("Mapset <{mapset}> locked using '{lockfile}'".format(
         mapset=mapset_path, lockfile=lockfile))
     return lockfile
@@ -1998,22 +2028,24 @@ def done_message():
     message("")
 
 
-def clean_temp():
+def clean_mapset_temp():
+    """Clean current mapset temp dir
+
+    Cleans whatever is current mapset based on the GISRC env variable.
+    """
     message(_("Cleaning up temporary files..."))
     nul = open(os.devnull, 'w')
     call([gpath("etc", "clean_temp")], stdout=nul)
     nul.close()
 
 
-def clean_all():
+def clean_mapset():
+    """Perform full cleanup of the current mapset"""
     from grass.script import setup as gsetup
     # clean default sqlite db
     gsetup.clean_default_db()
     # remove leftover temp files
-    clean_temp()
-    # save 'last used' GISRC after removing variables which shouldn't
-    # be saved, e.g. d.mon related
-    clean_env()
+    clean_mapset_temp()
 
 
 def grep(pattern, lines):
@@ -2123,6 +2155,10 @@ class Parameters(object):
         self.geofile = None
         self.tmp_location = False
         self.tmp_mapset = False
+        self.no_lock = False
+        self.no_clean = False
+        self.clean_only = False
+        self.exec_present = False
 
 
 def parse_cmdline(argv, default_gui):
@@ -2165,6 +2201,12 @@ def parse_cmdline(argv, default_gui):
             params.tmp_location = True
         elif i == "--tmp-mapset":
             params.tmp_mapset = True
+        elif i == "--no-lock":
+            params.no_lock = True
+        elif i == "--no-clean":
+            params.no_clean = True
+        elif i == "--clean-only":
+            params.clean_only = True
         else:
             args.append(i)
     if len(args) > 1:
@@ -2180,7 +2222,7 @@ def parse_cmdline(argv, default_gui):
     return params
 
 
-def validate_cmdline(params):
+def validate_cmdline(params, exec_present):
     """ Validate the cmdline params and exit if necessary. """
     if params.exit_grass and not params.create_new:
         fatal(_("Flag -e requires also flag -c"))
@@ -2203,6 +2245,12 @@ def validate_cmdline(params):
                 " --tmp-location, mapset name <{}> provided"
             ).format(params.mapset)
         )
+    if params.clean_only and params.no_clean:
+        fatal(_("Flags --no-clean and --clean-only are mutually exclusive"))
+    if params.clean_only and exec_present:
+        fatal(_("Flag --clean-only cannot be used with --exec"))
+    if params.clean_only and params.grass_gui:
+        fatal(_("Flag --clean-only cannot be used with --text, --gui, or --gtext"))
 
 
 def main():
@@ -2244,10 +2292,13 @@ def main():
         batch_job = sys.argv[index + 1:]
         clean_argv = sys.argv[1:index]
         params = parse_cmdline(clean_argv, default_gui=default_gui)
+        # Parsing does not deal with --exec, but we know --exec is there.
+        params.exec_present = True
     except ValueError:
         params = parse_cmdline(sys.argv[1:], default_gui=default_gui)
-    validate_cmdline(params)
-    # For now, we allow, but not advertise/document, --tmp-location
+    validate_cmdline(params, params.exec_present)
+    # For now, we allow, but not advertise/document, --tmp-location,
+    # --tmp-mapset, --no-clean, and --no-lock
     # without --exec (usefulness to be evaluated).
 
     grass_gui = params.grass_gui  # put it to variable, it is used a lot
@@ -2361,18 +2412,26 @@ def main():
 
     location = mapset_settings.full_mapset
 
-    # check and create .gislock file
-    lock_mapset(mapset_settings.full_mapset, user=user,
-                force_gislock_removal=params.force_gislock_removal,
-                grass_gui=grass_gui)
-    # unlock the mapset which is current at the time of turning off
-    # in case mapset was changed
-    atexit.register(lambda: unlock_gisrc_mapset(gisrc, gisrcrc))
-    # We now own the mapset (set and lock), so we can clean temporary
-    # files which previous session may have left behind. We do it even
-    # for first time user because the cost is low and first time user
-    # doesn't necessarily mean that the mapset is used for the first time.
-    clean_temp()
+    if not params.no_lock:
+        # check and create .gislock file
+        lock_mapset(mapset_settings.full_mapset, user=user,
+                    force_gislock_removal=params.force_gislock_removal,
+                    grass_gui=grass_gui)
+        # unlock the mapset which is current at the time of turning off
+        # in case mapset was changed
+        atexit.register(lambda: unlock_gisrc_mapset(gisrc, gisrcrc))
+        # We now own the mapset (set and lock), so we can clean temporary
+        # files which previous session may have left behind. We do it even
+        # for first time user because the cost is low and first time user
+        # doesn't necessarily mean that the mapset is used for the first time.
+    if not params.no_clean:
+        clean_mapset_temp()
+        # We always clean at the end like with unlocking. This is the same as
+        # calling the function explicitly before each exit, but additionally
+        # it also cleans the mapset on failure.
+        # This is the full proper clean up as opposed to the simplified one
+        # we do at the start of the session.
+        atexit.register(clean_mapset)
 
     # build user fontcap if specified but not present
     make_fontcap()
@@ -2380,18 +2439,14 @@ def main():
     # TODO: is this really needed? Modules should call this when/if required.
     ensure_db_connected(location)
 
-    # Display the version and license info
-    # only non-error, interactive version continues from here
     if batch_job:
         returncode = run_batch_job(batch_job)
-        clean_all()
         sys.exit(returncode)
-    elif params.exit_grass:
-        # clean always at exit, cleans whatever is current mapset based on
-        # the GISRC env variable
-        clean_all()
+    elif params.exit_grass or params.clean_only:
         sys.exit(0)
     else:
+        # Display the version and license info. Everything should be okay
+        # (no error occured). Interactive version continues from here.
         show_banner()
         say_hello()
         show_info(shellname=shellname,
@@ -2427,14 +2482,18 @@ def main():
         # close GUI if running
         close_gui()
 
-        # here we are at the end of grass session
-        clean_all()
-        if not params.tmp_location:
-            writefile(gisrcrc, readfile(gisrc))
-        # After this point no more grass modules may be called
-        # done message at last: no atexit.register()
-        # or register done_message()
+        # Saving only here in an interactive session and only if not using
+        # tmp location or mapset. (Not saving anything although just l/m
+        # could be ignored.)
+        if not params.tmp_location and not params.tmp_mapset:
+            # Save general (not session-specific) gis env variables
+            # to user config dir (aka last used rc file).
+            copy_general_gis_env(gisrc, gisrcrc)
+
         done_message()
+        # After this point no more grass modules may be called
+        # except what was registered using atexit in a proper order.
+
 
 if __name__ == '__main__':
     main()
