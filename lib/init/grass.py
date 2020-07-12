@@ -1851,6 +1851,7 @@ def show_info(shellname, grass_gui, default_gui):
     message(f("%-41sexit", _("When ready to quit enter:")))
     message("")
 
+
 def csh_startup(location, grass_env_file):
     userhome = os.getenv('HOME')      # save original home
     home = location
