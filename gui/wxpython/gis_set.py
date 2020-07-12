@@ -565,7 +565,7 @@ class GRASSStartup(wx.Frame):
                 defineRegion.Destroy()
 
             if gWizard.user_mapset:
-                self.CreateMapset(event)
+                self.OnCreateMapset(event)
 
     def ImportFile(self, filePath):
         """Tries to import file as vector or raster.
@@ -616,15 +616,14 @@ class GRASSStartup(wx.Frame):
         try:
             newmapset = rename_mapset_interactively(self, self.gisdbase,
                                                     location, mapset)
-            self.OnSelectLocation(None)
-            self.lbmapsets.SetSelection(
-                    self.listOfMapsets.index(newmapset))
-            return True
+            if newmapset:
+                self.OnSelectLocation(None)
+                self.lbmapsets.SetSelection(
+                        self.listOfMapsets.index(newmapset))
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to rename mapset: %s") % e,
                    showTraceback=False)
-            return False
 
     def OnRenameLocation(self, event):
         """Rename selected location
@@ -633,15 +632,15 @@ class GRASSStartup(wx.Frame):
         try:
             newlocation = rename_location_interactively(self, self.gisdbase,
                                                         location)
-            self.UpdateLocations(self.gisdbase)
-            self.lblocations.SetSelection(
-                    self.listOfLocations.index(newlocation))
-            self.UpdateMapsets(newlocation)
+            if newlocation:
+                self.UpdateLocations(self.gisdbase)
+                self.lblocations.SetSelection(
+                        self.listOfLocations.index(newlocation))
+                self.UpdateMapsets(newlocation)
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to rename location: %s") % e,
                    showTraceback=False)
-            return False
 
     def OnDeleteMapset(self, event):
         """
@@ -657,7 +656,6 @@ class GRASSStartup(wx.Frame):
             GError(parent=self,
                    message=_("Unable to delete mapset: %s") % e,
                    showTraceback=False)
-            return False
 
     def OnDeleteLocation(self, event):
         """
@@ -674,7 +672,6 @@ class GRASSStartup(wx.Frame):
             GError(parent=self,
                    message=_("Unable to delete location: %s") % e,
                    showTraceback=False)
-            return False
 
     def OnDownloadLocation(self, event):
         """Download location online"""
@@ -860,15 +857,14 @@ class GRASSStartup(wx.Frame):
         location = self.listOfLocations[self.lblocations.GetSelection()]
         try:
             mapset = create_mapset_interactively(self, gisdbase, location)
-            self.OnSelectLocation(None)
-            self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
-            self.bstart.SetFocus()
-            return True
+            if mapset:
+                self.OnSelectLocation(None)
+                self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
+                self.bstart.SetFocus()
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to create new mapset: %s") % e,
                    showTraceback=False)
-            return False
 
     def OnStart(self, event):
         """'Start GRASS' button clicked"""

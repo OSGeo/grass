@@ -86,7 +86,7 @@ class MapsetDialog(TextEntryDialog):
 
     def _mapsetAlreadyExists(self, ctrl):
         message = _(
-            "Mapset '{}' already exists. Please consider to use "
+            "Mapset '{}' already exists. Please consider using "
             "another name for your mapset.").format(ctrl.GetValue())
         GError(parent=self, message=message,
                caption=_("Existing mapset path"))
@@ -125,7 +125,7 @@ class LocationDialog(TextEntryDialog):
 
     def _locationAlreadyExists(self, ctrl):
         message = _(
-            "Location '{}' already exists. Please consider to use "
+            "Location '{}' already exists. Please consider using "
             "another name for your location.").format(ctrl.GetValue())
         GError(parent=self, message=message,
                caption=_("Existing location path"))
@@ -205,6 +205,9 @@ def create_mapset_interactively(guiparent, grassdb, location):
                 message=_("Unable to create new mapset: %s") % err,
                 showTraceback=False,
             )
+    else:
+        mapset = None
+    dlg.Destroy()
     return mapset
 
 
@@ -234,7 +237,6 @@ def rename_mapset_interactively(guiparent, grassdb, location, mapset):
         newmapset = dlg.GetValue()
         try:
             rename_mapset(grassdb, location, mapset, newmapset)
-            return newmapset
         except OSError as err:
             wx.MessageBox(
                 parent=guiparent,
@@ -242,8 +244,10 @@ def rename_mapset_interactively(guiparent, grassdb, location, mapset):
                 message=_("Unable to rename mapset.\n\n%s") % err,
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
-
+    else:
+        newmapset = None
     dlg.Destroy()
+    return newmapset
 
 
 def rename_location_interactively(guiparent, grassdb, location):
@@ -262,7 +266,6 @@ def rename_location_interactively(guiparent, grassdb, location):
         newlocation = dlg.GetValue()
         try:
             rename_location(grassdb, location, newlocation)
-            return newlocation
         except OSError as err:
             wx.MessageBox(
                 parent=guiparent,
@@ -270,8 +273,10 @@ def rename_location_interactively(guiparent, grassdb, location):
                 message=_("Unable to rename location.\n\n%s") % err,
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
-
+    else:
+        newlocation = None
     dlg.Destroy()
+    return newlocation
 
 
 def delete_mapset_interactively(guiparent, grassdb, location, mapset):

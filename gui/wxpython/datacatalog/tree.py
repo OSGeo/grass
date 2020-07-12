@@ -646,14 +646,14 @@ class DataCatalogTree(TreeView):
             mapset = create_mapset_interactively(self,
                                         gisdbase,
                                         self.selected_location[0].label)
-            self.InsertMapset(name=mapset,
-                              location_node=self.selected_location[0])
-            return True
+            if mapset:
+                self.InsertMapset(name=mapset,
+                                  location_node=self.selected_location[0])
+                self.ReloadTreeItems()
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to create new mapset: %s") % e,
                    showTraceback=False)
-            return False
 
     def OnRenameMapset(self, event):
         """
@@ -665,12 +665,12 @@ class DataCatalogTree(TreeView):
                     gisenv()['GISDBASE'],
                     self.selected_location[0].label,
                     self.selected_mapset[0].label)
+            if newmapset:
+                self.ReloadTreeItems()
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to rename mapset: %s") % e,
                    showTraceback=False)
-            return False
-        self.ReloadTreeItems()
 
     def OnRenameLocation(self, event):
         """
@@ -681,12 +681,12 @@ class DataCatalogTree(TreeView):
                     self,
                     gisenv()['GISDBASE'],
                     self.selected_location[0].label)
+            if newlocation:
+                self.ReloadTreeItems()
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to rename location: %s") % e,
                    showTraceback=False)
-            return False
-        self.ReloadTreeItems()
 
     def OnStartEditLabel(self, node, event):
         """Start label editing"""
@@ -904,7 +904,6 @@ class DataCatalogTree(TreeView):
             GError(parent=self,
                    message=_("Unable to delete mapset: %s") % e,
                    showTraceback=False)
-            return False
         self.ReloadTreeItems()
 
     def OnDeleteLocation(self, event):
@@ -919,7 +918,6 @@ class DataCatalogTree(TreeView):
             GError(parent=self,
                    message=_("Unable to delete location: %s") % e,
                    showTraceback=False)
-            return False
         self.ReloadTreeItems()
 
     def OnDisplayLayer(self, event):
