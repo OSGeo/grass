@@ -8,7 +8,7 @@ Classes:
  - treemodel::DictNode
  - treemodel::ModuleNode
 
-(C) 2013 by the GRASS Development Team
+(C) 2013-2020 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 import six
+import weakref
 
 
 class TreeModel(object):
@@ -41,7 +42,7 @@ class TreeModel(object):
     [0, 0, 0]
     >>> tree.GetNodeByIndex((0,1)).label
     'node12'
-    >>> print tree
+    >>> print(tree)
     node1
       node11
         * xxx : 1
@@ -76,8 +77,10 @@ class TreeModel(object):
         :return: new node
         """
         node = self.nodeClass(label=label, data=data)
+        # useful for debugging deleting nodes
+        # weakref.finalize(node, print, "Deleted node {}".format(label))
         parent.children.append(node)
-        node.parent = parent
+        node.parent = weakref.proxy(parent)
         return node
 
     def SearchNodes(self, parent=None, **kwargs):
@@ -129,7 +132,7 @@ class TreeModel(object):
             return self._getNode(node.children[index[0]], index[1:])
 
     def RemoveNode(self, node):
-        """Removes node."""
+        """Removes node. If node is root, removes root's children, root is kept."""
         if node.parent:
             node.parent.children.remove(node)
         else:
