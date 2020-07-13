@@ -9,6 +9,7 @@ This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Vaclav Petras <wenzeslaus gmail com>
+@author Linda Kladivova <l.kladivova@seznam.cz>
 
 This is for code which depend on something from GUI (wx or wxGUI).
 """
