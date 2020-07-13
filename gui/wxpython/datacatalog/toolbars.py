@@ -32,6 +32,9 @@ icons = {
     'locked': MetaIcon(
         img='locked',
         label=_("Click to allow editing other mapsets")),
+    'addGrassDB': MetaIcon(
+        img='grassdb-add',
+        label=_("Click to add new GRASS database"))
 }
 
 
@@ -42,6 +45,7 @@ class DataCatalogToolbar(BaseToolbar):
     def __init__(self, parent):
         """Main toolbar constructor
         """
+
         BaseToolbar.__init__(self, parent)
 
         self.InitToolbar(self._toolbarData())
@@ -69,7 +73,9 @@ class DataCatalogToolbar(BaseToolbar):
                                      ("reloadMapset", icons["reloadMapset"],
                                       self.parent.OnReloadCurrentMapset),
                                      ("lock", icons['locked'],
-                                      self.OnSetRestriction, wx.ITEM_CHECK)
+                                      self.OnSetRestriction, wx.ITEM_CHECK),
+                                     ("addGrassDB", icons['addGrassDB'],
+                                      self.parent.OnAddGrassDB)
                                      ))
 
     def OnSetRestriction(self, event):

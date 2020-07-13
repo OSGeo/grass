@@ -318,7 +318,10 @@ class GMFrame(wx.Frame):
         self.datacatalog.showNotification.connect(
             lambda message: self.SetStatusText(message))
         self.datacatalog.changeMapset.connect(lambda mapset: self.ChangeMapset(mapset))
-        self.datacatalog.changeLocation.connect(lambda mapset, location: self.ChangeLocation(location, mapset))
+        self.datacatalog.changeLocation.connect(lambda mapset, location, dbase:
+                                                self.ChangeLocation(dbase=dbase,
+                                                                    location=location,
+                                                                    mapset=mapset))
         self.notebook.AddPage(
             page=self.datacatalog,
             text=_("Data"),
@@ -1071,19 +1074,35 @@ class GMFrame(wx.Frame):
                 return  # this should not happen
             self.ChangeLocation(location, mapset)
 
-    def ChangeLocation(self, location, mapset):
-        if RunCommand('g.mapset', parent=self,
-                      location=location,
-                      mapset=mapset) != 0:
-            return  # error reported
+    def ChangeLocation(self, location, mapset, dbase=None):
+        if dbase:
+            if RunCommand('g.mapset', parent=self,
+                          dbase=dbase,
+                          location=location,
+                          mapset=mapset) != 0:
+                return  # error reported
 
-        # close current workspace and create new one
-        self.OnWorkspaceClose()
-        self.OnWorkspaceNew()
-        GMessage(parent=self,
-                 message=_("Current location is <%(loc)s>.\n"
-                           "Current mapset is <%(mapset)s>.") %
-                 {'loc': location, 'mapset': mapset})
+            # close current workspace and create new one
+            self.OnWorkspaceClose()
+            self.OnWorkspaceNew()
+            GMessage(parent=self,
+                     message=_("Current GRASS database is <%(dbase)s>.\n"
+                               "Current location is <%(loc)s>.\n"
+                               "Current mapset is <%(mapset)s>.") %
+                     {'dbase': dbase, 'loc': location, 'mapset': mapset})
+        else:
+            if RunCommand('g.mapset', parent=self,
+                          location=location,
+                          mapset=mapset) != 0:
+                return  # error reported
+
+            # close current workspace and create new one
+            self.OnWorkspaceClose()
+            self.OnWorkspaceNew()
+            GMessage(parent=self,
+                     message=_("Current location is <%(loc)s>.\n"
+                               "Current mapset is <%(mapset)s>.") %
+                     {'loc': location, 'mapset': mapset})
 
     def OnCreateMapset(self, event):
         """Create new mapset"""

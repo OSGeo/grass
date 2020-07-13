@@ -4,7 +4,8 @@
 @brief Data catalog tree classes
 
 Classes:
- - datacatalog::LocationMapTree
+ - datacatalog::NameEntryDialog
+ - datacatalog::DataCatalogNode
  - datacatalog::DataCatalogTree
 
 (C) 2014-2018 by Tereza Fiedlerova, and the GRASS Development Team
@@ -276,7 +277,10 @@ class DataCatalogTree(TreeView):
 
         self._initVariables()
         self._initVariablesCatalog()
-        self.UpdateCurrentLocationMapsetNode()
+        self.UpdateCurrentDbLocationMapsetNode()
+
+        self.grassdatabases = []
+        self.grassdatabases.append(gisenv()['GISDBASE'])
 
         self.beginDrag = Signal('DataCatalogTree.beginDrag')
         self.endDrag = Signal('DataCatalogTree.endDrag')
@@ -298,90 +302,90 @@ class DataCatalogTree(TreeView):
         self.endEdit.connect(self.OnEditLabel)
 
     def _initTreeItems(self, locations=None, mapsets=None):
-        """Add locations, mapsets and layers to the tree.
+        """Add grass databases, locations, mapsets and layers to the tree.
         Runs in multiple processes. Saves resulting data and error."""
         # mapsets param currently unused
-        genv = gisenv()
-        if not locations:
-            locations = GetListOfLocations(genv['GISDBASE'])
+        for grassdatabase in self.grassdatabases:
 
-        loc_count = proc_count = 0
-        queue_list = []
-        proc_list = []
-        loc_list = []
-        nprocs = 4
-        try:
-            nprocs = cpu_count()
-        except NotImplementedError:
+            locations = GetListOfLocations(grassdatabase)
+
+            loc_count = proc_count = 0
+            queue_list = []
+            proc_list = []
+            loc_list = []
             nprocs = 4
+            try:
+                nprocs = cpu_count()
+            except NotImplementedError:
+                nprocs = 4
 
-        results = dict()
-        errors = []
-        location_nodes = []
-        nlocations = len(locations)
-        grassdata_node = self._model.AppendNode(
-            parent=self._model.root, label=_('GRASS locations in {0}').format(
-                genv['GISDBASE']), data=dict(
-                type='grassdb'))
-        for location in locations:
-            results[location] = dict()
-            varloc = self._model.AppendNode(
-                parent=grassdata_node, label=location, data=dict(
-                    type='location', name=location))
-            location_nodes.append(varloc)
-            loc_count += 1
+            results = dict()
+            errors = []
+            location_nodes = []
+            nlocations = len(locations)
+            grassdata_node = self._model.AppendNode(
+                parent=self._model.root,
+                label=grassdatabase,
+                data=dict(type='grassdb', name=grassdatabase))
+            for location in locations:
+                results[location] = dict()
+                varloc = self._model.AppendNode(
+                    parent=grassdata_node, label=location, data=dict(
+                        type='location', name=location))
+                location_nodes.append(varloc)
+                loc_count += 1
 
-            Debug.msg(
-                3, "Scanning location <{0}> ({1}/{2})".format(location, loc_count, nlocations))
+                Debug.msg(
+                    3, "Scanning location <{0}> ({1}/{2})".format(location, loc_count, nlocations))
 
-            q = Queue()
-            p = Process(target=getLocationTree,
-                        args=(genv['GISDBASE'], location, q))
-            p.start()
+                q = Queue()
+                p = Process(target=getLocationTree,
+                            args=(grassdatabase, location, q))
+                p.start()
 
-            queue_list.append(q)
-            proc_list.append(p)
-            loc_list.append(location)
+                queue_list.append(q)
+                proc_list.append(p)
+                loc_list.append(location)
 
-            proc_count += 1
-            # Wait for all running processes
-            if proc_count == nprocs or loc_count == nlocations:
-                Debug.msg(4, "Process subresults")
-                for i in range(len(loc_list)):
-                    maps, error = queue_list[i].get()
-                    proc_list[i].join()
-                    if error:
-                        errors.append(error)
+                proc_count += 1
+                # Wait for all running processes
+                if proc_count == nprocs or loc_count == nlocations:
+                    Debug.msg(4, "Process subresults")
+                    for i in range(len(loc_list)):
+                        maps, error = queue_list[i].get()
+                        proc_list[i].join()
+                        if error:
+                            errors.append(error)
 
-                    for key in sorted(maps.keys()):
-                        mapset_node = self._model.AppendNode(
-                            parent=location_nodes[i],
-                            label=key, data=dict(
-                                type='mapset', name=key))
-                        self._populateMapsetItem(mapset_node, maps[key])
+                        for key in sorted(maps.keys()):
+                            mapset_node = self._model.AppendNode(
+                                parent=location_nodes[i],
+                                label=key, data=dict(
+                                    type='mapset', name=key))
+                            self._populateMapsetItem(mapset_node, maps[key])
 
-                proc_count = 0
-                proc_list = []
-                queue_list = []
-                loc_list = []
-                location_nodes = []
+                    proc_count = 0
+                    proc_list = []
+                    queue_list = []
+                    loc_list = []
+                    location_nodes = []
 
         if errors:
             wx.CallAfter(GWarning, '\n'.join(errors))
         Debug.msg(1, "Tree filled")
 
+        self.UpdateCurrentDbLocationMapsetNode()
         self.RefreshItems()
 
-    def UpdateCurrentLocationMapsetNode(self):
-        self.current_location_node, self.current_mapset_node = \
-            self.GetCurrentLocationMapsetNode()
+    def UpdateCurrentDbLocationMapsetNode(self):
+        self.current_grassdb_node, self.current_location_node, self.current_mapset_node = \
+            self.GetCurrentDbLocationMapsetNode()
 
     def ReloadTreeItems(self):
-        """Reload locations, mapsets and layers in the tree."""
+        """Reload dbs, locations, mapsets and layers in the tree."""
         self._orig_model = self._model
         self._model.RemoveNode(self._model.root)
         self.InitTreeItems()
-        self.UpdateCurrentLocationMapsetNode()
 
     def ReloadCurrentMapset(self):
         """Reload current mapset tree only."""
@@ -392,9 +396,8 @@ class DataCatalogTree(TreeView):
                 child = None
             return child
 
-        genv = gisenv()
-        self.UpdateCurrentLocationMapsetNode()
-        if not self.current_location_node or not self.current_mapset_node:
+        self.UpdateCurrentDbLocationMapsetNode()
+        if not self.current_grassdb_node or not self.current_location_node or not self.current_mapset_node:
             return
 
         if self.current_mapset_node.children:
@@ -407,7 +410,7 @@ class DataCatalogTree(TreeView):
         p = Process(
             target=getLocationTree,
             args=(
-                genv['GISDBASE'],
+                self.current_grassdb_node.data['name'],
                 self.current_location_node.data['name'],
                 q,
                 self.current_mapset_node.data['name']))
@@ -432,6 +435,7 @@ class DataCatalogTree(TreeView):
 
     def _initVariables(self):
         """Init variables."""
+        self.selected_grassdb = []
         self.selected_layer = []
         self.selected_mapset = []
         self.selected_location = []
@@ -446,7 +450,7 @@ class DataCatalogTree(TreeView):
             'raster': MetaIcon(img='raster').GetBitmap(bmpsize),
             'vector': MetaIcon(img='vector').GetBitmap(bmpsize),
             'raster_3d': MetaIcon(img='raster3d').GetBitmap(bmpsize)
-            }
+        }
         il = wx.ImageList(bmpsize[0], bmpsize[1], mask=False)
         for each in self._iconTypes:
             il.Add(icons[each])
@@ -466,17 +470,26 @@ class DataCatalogTree(TreeView):
                 self.selected_layer.append(item)
                 self.selected_mapset.append(item.parent)
                 self.selected_location.append(item.parent.parent)
+                self.selected_grassdb.append(item.parent.parent.parent)
                 mixed.append('layer')
             elif type == 'mapset':
                 self.selected_layer.append(None)
                 self.selected_mapset.append(item)
                 self.selected_location.append(item.parent)
+                self.selected_grassdb.append(item.parent.parent)
                 mixed.append('mapset')
             elif type == 'location':
                 self.selected_layer.append(None)
                 self.selected_mapset.append(None)
                 self.selected_location.append(item)
+                self.selected_grassdb.append(item.parent)
                 mixed.append('location')
+            elif type == 'grassdb':
+                self.selected_layer.append(None)
+                self.selected_mapset.append(None)
+                self.selected_location.append(None)
+                self.selected_grassdb.append(item)
+                mixed.append('grassdb')
         self.mixed = False
         if len(set(mixed)) > 1:
             self.mixed = True
@@ -499,6 +512,8 @@ class DataCatalogTree(TreeView):
             self._popupMenuMapset()
         elif self.selected_location[0] and not self.selected_mapset[0] and len(self.selected_location) == 1:
             self._popupMenuLocation()
+        elif self.selected_grassdb[0] and not self.selected_location[0] and len(self.selected_grassdb) == 1:
+            self._popupMenuGrassDb()
         else:
             self._popupMenuEmpty()
 
@@ -531,22 +546,31 @@ class DataCatalogTree(TreeView):
         else:
             Debug.msg(1, "Location <%s> not found" % location)
 
-    def GetCurrentLocationMapsetNode(self):
+    def GetCurrentDbLocationMapsetNode(self):
         """Get current mapset node"""
         genv = gisenv()
+        gisdbase = genv['GISDBASE']
         location = genv['LOCATION_NAME']
         mapset = genv['MAPSET']
-        locationItem = self._model.SearchNodes(name=location, type='location')
+
+        grassdbItem = self._model.SearchNodes(
+            name=gisdbase, type='grassdb')
+        if not grassdbItem:
+            return None, None, None
+
+        locationItem = self._model.SearchNodes(
+            parent=grassdbItem[0],
+            name=location, type='location')
         if not locationItem:
-            return None, None
+            return grassdbItem[0], None, None
 
         mapsetItem = self._model.SearchNodes(
             parent=locationItem[0],
             name=mapset, type='mapset')
         if not mapsetItem:
-            return locationItem[0], None
+            return grassdbItem[0], locationItem[0], None
 
-        return locationItem[0], mapsetItem[0]
+        return grassdbItem[0], locationItem[0], mapsetItem[0]
 
     def OnGetItemImage(self, index, which=wx.TreeItemIcon_Normal, column=0):
         """Overriden method to return image for each item."""
@@ -561,10 +585,8 @@ class DataCatalogTree(TreeView):
            Used to highlight current db/loc/mapset."""
         node = self._model.GetNodeByIndex(index)
         font = self.GetFont()
-        if node.data['type'] == 'grassdb':
-            font.SetWeight(wx.FONTWEIGHT_BOLD)
-        elif node.data['type'] in ('location', 'mapset'):
-            if node in (self.current_location_node, self.current_mapset_node):
+        if node.data['type'] in ('grassdb', 'location', 'mapset'):
+            if node in (self.current_grassdb_node, self.current_location_node, self.current_mapset_node):
                 font.SetWeight(wx.FONTWEIGHT_BOLD)
             else:
                 font.SetWeight(wx.FONTWEIGHT_NORMAL)
@@ -582,6 +604,7 @@ class DataCatalogTree(TreeView):
         self.copy_layer = None
         self.copy_mapset = None
         self.copy_location = None
+        self.copy_grassdb = None
 
     def SetRestriction(self, restrict):
         self._restricted = restrict
@@ -602,6 +625,7 @@ class DataCatalogTree(TreeView):
         self.copy_layer = self.selected_layer[:]
         self.copy_mapset = self.selected_mapset[:]
         self.copy_location = self.selected_location[:]
+        self.copy_grassdb = self.selected_grassdb[:]
         if len(self.copy_layer) > 1:
             label = _("{c} maps marked for moving.").format(c=len(self.selected_layer))
         else:
@@ -614,6 +638,7 @@ class DataCatalogTree(TreeView):
         self.copy_layer = self.selected_layer[:]
         self.copy_mapset = self.selected_mapset[:]
         self.copy_location = self.selected_location[:]
+        self.copy_grassdb = self.selected_grassdb[:]
         if len(self.copy_layer) > 1:
             label = _("{c} maps marked for copying.").format(c=len(self.selected_layer))
         else:
@@ -624,8 +649,9 @@ class DataCatalogTree(TreeView):
         """Rename layer with dialog"""
         old_name = self.selected_layer[0].label
         gisrc, env = gscript.create_environment(
-            gisenv()['GISDBASE'],
-            self.selected_location[0].label, mapset=self.selected_mapset[0].label)
+            self.selected_grassdb[0].label,
+            self.selected_location[0].label,
+            self.selected_mapset[0].label)
         new_name = self._getNewMapName(
             _('New name'),
             _('Rename map'),
@@ -657,8 +683,9 @@ class DataCatalogTree(TreeView):
         """Rename layer"""
         string = old + ',' + new
         gisrc, env = gscript.create_environment(
-            gisenv()['GISDBASE'],
-            self.selected_location[0].label, self.selected_mapset[0].label)
+            self.selected_grassdb[0].label,
+            self.selected_location[0].label,
+            self.selected_mapset[0].label)
         label = _("Renaming map <{name}>...").format(name=string)
         self.showNotification.emit(message=label)
         if self.selected_layer[0].data['type'] == 'vector':
@@ -687,10 +714,12 @@ class DataCatalogTree(TreeView):
             return
 
         for i in range(len(self.copy_layer)):
-            gisrc, env = gscript.create_environment(
-                            gisenv()['GISDBASE'], self.selected_location[0].label, mapset=self.selected_mapset[0].label)
-            gisrc2, env2 = gscript.create_environment(
-                            gisenv()['GISDBASE'], self.copy_location[i].label, mapset=self.copy_mapset[i].label)
+            gisrc, env = gscript.create_environment(self.selected_grassdb[0].label,
+                                                    self.selected_location[0].label,
+                                                    self.selected_mapset[0].label)
+            gisrc2, env2 = gscript.create_environment(self.copy_grassdb[i].label,
+                                                      self.copy_location[i].label,
+                                                      self.copy_mapset[i].label)
             new_name = self.copy_layer[i].label
             if self.selected_location[0] == self.copy_location[i]:
                 # within one mapset
@@ -716,7 +745,7 @@ class DataCatalogTree(TreeView):
                                                        element=self.copy_layer[i].data['type'])
                         if not new_name:
                             return
-    
+
                 string = self.copy_layer[i].label + '@' + self.copy_mapset[i].label + ',' + new_name
                 pasted = 0
                 if self.copy_mode:
@@ -741,11 +770,11 @@ class DataCatalogTree(TreeView):
                         self.showNotification.emit(message=_("g.copy completed"))
                     else:
                         self.showNotification.emit(message=_("g.copy completed"))
-    
+
                     # remove old
                     if not self.copy_mode:
                         self._removeMapAfterCopy(self.copy_layer[i], self.copy_mapset[i], env2)
-    
+
                 gscript.try_remove(gisrc)
                 gscript.try_remove(gisrc2)
                 # expand selected mapset
@@ -761,14 +790,21 @@ class DataCatalogTree(TreeView):
                                                    element=self.copy_layer[i].data['type'])
                     if not new_name:
                         continue
-                gisdbase = gisenv()['GISDBASE']
                 callback = lambda gisrc2=gisrc2, gisrc=gisrc, cLayer=self.copy_layer[i], \
                                   cMapset=self.copy_mapset[i], cMode=self.copy_mode, name=new_name: \
                                   self._onDoneReprojection(env2, gisrc2, gisrc, cLayer, cMapset, cMode, name)
-                dlg = CatalogReprojectionDialog(self, self._giface, gisdbase, self.copy_location[i].label,
-                                                self.copy_mapset[i].label, self.copy_layer[i].label, env2,
-                                                gisdbase, self.selected_location[0].label, self.selected_mapset[0].label,
-                                                new_name, self.copy_layer[i].data['type'], env, callback)
+                dlg = CatalogReprojectionDialog(self, self._giface,
+                                                self.copy_grassdb[i].label,
+                                                self.copy_location[i].label,
+                                                self.copy_mapset[i].label,
+                                                self.copy_layer[i].label,
+                                                env2,
+                                                self.selected_grassdb[0].label,
+                                                self.selected_location[0].label,
+                                                self.selected_mapset[0].label,
+                                                new_name,
+                                                self.copy_layer[i].data['type'],
+                                                env, callback)
                 dlg.ShowModal()
         self.ExpandNode(self.selected_mapset[0], recursive=True)
         self._initVariablesCatalog()
@@ -805,6 +841,14 @@ class DataCatalogTree(TreeView):
         self._model.SortChildren(location_node)
         self.RefreshNode(location_node, recursive=True)
 
+    def InsertGrassDb(self, name):
+        """Insert grass db into model and refresh tree"""
+        self.grassdatabases.append(name)
+        self._model.AppendNode(parent=self._model.root, label=name,
+                               data=dict(type="grassdb", name=name))
+        self._model.SortChildren(self._model.root)
+        self.ReloadTreeItems()
+
     def OnDeleteMap(self, event):
         """Delete layer or mapset"""
         names = [self.selected_layer[i].label + '@' + self.selected_mapset[i].label
@@ -818,8 +862,9 @@ class DataCatalogTree(TreeView):
             self.showNotification.emit(message=label)
             for i in range(len(self.selected_layer)):
                 gisrc, env = gscript.create_environment(
-                    gisenv()['GISDBASE'],
-                    self.selected_location[i].label, self.selected_mapset[i].label)
+                    self.selected_grassdb[i].label,
+                    self.selected_location[i].label,
+                    self.selected_mapset[i].label)
                 removed, cmd = self._runCommand(
                         'g.remove', flags='f', type=self.selected_layer[i].data['type'],
                         name=self.selected_layer[i].label, env=env)
@@ -888,38 +933,46 @@ class DataCatalogTree(TreeView):
             Debug.msg(1, "DROP DONE")
             self.OnPasteMap(event)
 
-    def OnSwitchLocationMapset(self, event):
+    def OnSwitchDbLocationMapset(self, event):
         genv = gisenv()
-        if self.selected_location[0].label == genv['LOCATION_NAME']:
+        if self.selected_grassdb[0].label == genv['GISDBASE'] and \
+           self.selected_location[0].label == genv['LOCATION_NAME']:
             self.changeMapset.emit(mapset=self.selected_mapset[0].label)
+        elif self.selected_grassdb[0].label == genv['GISDBASE']:
+            self.changeLocation.emit(mapset=self.selected_mapset[0].label,
+                                     location=self.selected_location[0].label,
+                                     dbase=None)
         else:
-            self.changeLocation.emit(mapset=self.selected_mapset[0].label, location=self.selected_location[0].label)
-        self.UpdateCurrentLocationMapsetNode()
+            self.changeLocation.emit(mapset=self.selected_mapset[0].label,
+                                     location=self.selected_location[0].label,
+                                     dbase=self.selected_grassdb[0].label)
+        self.UpdateCurrentDbLocationMapsetNode()
         self.ExpandCurrentMapset()
         self.RefreshItems()
 
     def OnCreateMapset(self, event):
         """Create new mapset"""
-        gisdbase = gisenv()['GISDBASE']
+        gisdbase = self.selected_grassdb[0]
+        location = self.selected_location[0]
 
         dlg = NewMapsetDialog(
             parent=self,
             default=get_default_mapset_name(),
-            database=gisdbase,
-            location=self.selected_location[0].label
+            database=gisdbase.label,
+            location=location.label
         )
         if dlg.ShowModal() == wx.ID_OK:
             mapset = dlg.GetValue()
             try:
-                create_mapset(gisdbase,
-                              self.selected_location[0].label,
+                create_mapset(gisdbase.label,
+                              location.label,
                               mapset)
             except OSError as err:
                 GError(parent=self,
                        message=_("Unable to create new mapset: %s") % err,
                        showTraceback=False)
             self.InsertMapset(name=mapset,
-                              location_node=self.selected_location[0])
+                              location_node=location)
 
     def OnMetadata(self, event):
         """Show metadata of any raster/vector/3draster"""
@@ -936,8 +989,9 @@ class DataCatalogTree(TreeView):
             cmd.append('map=%s@%s' % (self.selected_layer[i].label, self.selected_mapset[i].label))
 
             gisrc, env = gscript.create_environment(
-                gisenv()['GISDBASE'],
-                self.selected_location[i].label, self.selected_mapset[i].label)
+                self.selected_grassdb[i].label,
+                self.selected_location[i].label,
+                self.selected_mapset[i].label)
             # print output to command log area
             # temp gisrc file must be deleted onDone
             self._giface.RunCmd(cmd, env=env, onDone=done, userData=gisrc)
@@ -972,7 +1026,7 @@ class DataCatalogTree(TreeView):
             name = text.strip()
 
         self._model = filterModel(self._orig_model, name=name, element=element)
-        self.UpdateCurrentLocationMapsetNode()
+        self.UpdateCurrentDbLocationMapsetNode()
         self.RefreshItems()
         self.ExpandCurrentMapset()
 
@@ -998,27 +1052,34 @@ class DataCatalogTree(TreeView):
 
     def _isCurrent(self, genv):
         if self._restricted:
-            currentMapset = currentLocation = True
-            for i in range(len(self.selected_location)):
-                if self.selected_location[i].label != genv['LOCATION_NAME']:
+            currentMapset = currentLocation = currentGrassDb = True
+            for i in range(len(self.selected_grassdb)):
+                if self.selected_grassdb[i].label != genv['GISDBASE']:
+                    currentGrassDb = False
                     currentLocation = False
                     currentMapset = False
                     break
+            if currentLocation:
+                for i in range(len(self.selected_location)):
+                    if self.selected_location[i].label != genv['LOCATION_NAME']:
+                        currentLocation = False
+                        currentMapset = False
+                        break
             if currentMapset:
                 for i in range(len(self.selected_mapset)):
                     if self.selected_mapset[i].label != genv['MAPSET']:
                         currentMapset = False
                         break
 
-            return currentLocation, currentMapset
+            return currentGrassDb, currentLocation, currentMapset
         else:
-            return True, True
+            return True, True, True
 
     def _popupMenuLayer(self):
         """Create popup menu for layers"""
         menu = Menu()
         genv = gisenv()
-        currentLocation, currentMapset = self._isCurrent(genv)
+        currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Cut"))
         menu.AppendItem(item)
@@ -1072,7 +1133,7 @@ class DataCatalogTree(TreeView):
         """Create popup menu for mapsets"""
         menu = Menu()
         genv = gisenv()
-        currentLocation, currentMapset = self._isCurrent(genv)
+        currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Paste"))
         menu.AppendItem(item)
@@ -1082,9 +1143,10 @@ class DataCatalogTree(TreeView):
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Switch mapset"))
         menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.OnSwitchLocationMapset, item)
-        if (self.selected_location[0].label == genv['LOCATION_NAME']
-                and self.selected_mapset[0].label == genv['MAPSET']):
+        self.Bind(wx.EVT_MENU, self.OnSwitchDbLocationMapset, item)
+        if (self.selected_grassdb[0].label == genv['GISDBASE'] and
+                self.selected_location[0].label == genv['LOCATION_NAME'] and
+                self.selected_mapset[0].label == genv['MAPSET']):
             item.Enable(False)
         self.PopupMenu(menu)
         menu.Destroy()
@@ -1100,6 +1162,12 @@ class DataCatalogTree(TreeView):
         self.PopupMenu(menu)
         menu.Destroy()
 
+    def _popupMenuGrassDb(self):
+        """Create popup menu for grass db"""
+        menu = Menu()
+        self.PopupMenu(menu)
+        menu.Destroy()
+
     def _popupMenuElement(self):
         """Create popup menu for elements"""
         menu = Menu()
@@ -1107,7 +1175,7 @@ class DataCatalogTree(TreeView):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnPasteMap, item)
         genv = gisenv()
-        currentLocation, currentMapset = self._isCurrent(genv)
+        currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
         if not(currentMapset and self.copy_layer):
             item.Enable(False)
 
