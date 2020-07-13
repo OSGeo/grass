@@ -1,10 +1,10 @@
 [![Build Status](https://travis-ci.com/OSGeo/grass.svg?branch=master)](https://travis-ci.com/OSGeo/grass)
-![GCC C/C++ standards check](https://github.com/OSGeo/grass/workflows/GCC%20C/C++%20standards%20check/badge.svg)
-![Python code quality check](https://github.com/OSGeo/grass/workflows/Python%20code%20quality%20check/badge.svg)
-![General linting](https://github.com/OSGeo/grass/workflows/General%20linting/badge.svg)
-![CI](https://github.com/OSGeo/grass/workflows/CI/badge.svg)
-![OSGeo4W](https://github.com/OSGeo/grass/workflows/OSGeo4W/badge.svg)
-![CI](https://github.com/OSGeo/grass/workflows/CI/badge.svg)
+[![GCC C/C++ standards check](https://github.com/OSGeo/grass/workflows/GCC%20C/C++%20standards%20check/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3A%22GCC+C%2FC%2B%2B+standards+check%22)
+[![Python code quality check](https://github.com/OSGeo/grass/workflows/Python%20code%20quality%20check/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3A%22Python+code+quality+check%22)
+[![General linting](https://github.com/OSGeo/grass/workflows/General%20linting/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3A%22General+linting%22)
+[![CI](https://github.com/OSGeo/grass/workflows/CI/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3ACI)
+[![OSGeo4W](https://github.com/OSGeo/grass/workflows/OSGeo4W/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3AOSGeo4W)
+[![Centos](https://github.com/OSGeo/grass/workflows/CentOS/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3ACentOS)
 
 # GRASS GIS Repository
 
