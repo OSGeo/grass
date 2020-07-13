@@ -80,7 +80,9 @@ class TreeModel(object):
         # useful for debugging deleting nodes
         # weakref.finalize(node, print, "Deleted node {}".format(label))
         parent.children.append(node)
-        node.parent = weakref.proxy(parent)
+        # weakref doesn't work out of the box when deepcopying this class
+        # node.parent = weakref.proxy(parent)
+        node.parent = parent
         return node
 
     def SearchNodes(self, parent=None, **kwargs):
