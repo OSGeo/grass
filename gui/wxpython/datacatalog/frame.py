@@ -57,13 +57,13 @@ class DataCatalogFrame(wx.Frame):
         self.tree.ExpandCurrentMapset()
         self.tree.changeMapset.connect(lambda mapset:
                                        self.ChangeDbLocationMapset(
-                                       location=None,
-                                       mapset=mapset))
+                                               location=None,
+                                               mapset=mapset))
         self.tree.changeLocation.connect(lambda mapset, location, dbase:
                                          self.ChangeDbLocationMapset(
-                                         dbase=dbase,
-                                         location=location,
-                                         mapset=mapset))
+                                                 dbase=dbase,
+                                                 location=location,
+                                                 mapset=mapset))
 
         # buttons
         self.btnClose = Button(parent=self.panel, id=wx.ID_CLOSE)

@@ -318,7 +318,10 @@ class GMFrame(wx.Frame):
         self.datacatalog.showNotification.connect(
             lambda message: self.SetStatusText(message))
         self.datacatalog.changeMapset.connect(lambda mapset: self.ChangeMapset(mapset))
-        self.datacatalog.changeLocation.connect(lambda mapset, location, dbase: self.ChangeLocation(dbase, location, mapset))
+        self.datacatalog.changeLocation.connect(lambda mapset, location, dbase:
+                                                self.ChangeLocation(dbase=dbase,
+                                                                    location=location,
+                                                                    mapset=mapset))
         self.notebook.AddPage(
             page=self.datacatalog,
             text=_("Data"),
@@ -1057,21 +1060,21 @@ class GMFrame(wx.Frame):
         self._gconsole.RunCmd([filename])
 
     def OnChangeLocation(self, event):
-        """Change current location, GRASS database"""
+        """Change current location"""
         dlg = LocationDialog(parent=self)
         if dlg.ShowModal() == wx.ID_OK:
-            location, mapset, dbase = dlg.GetValues()
+            location, mapset = dlg.GetValues()
             dlg.Destroy()
 
-            if not dbase or not location or not mapset:
+            if not location or not mapset:
                 GError(
                     parent=self,
                     message=_(
-                        "No database/location/mapset provided. Operation canceled."))
+                        "No location/mapset provided. Operation canceled."))
                 return  # this should not happen
-            self.ChangeLocation(dbase, location, mapset)
+            self.ChangeLocation(location, mapset)
 
-    def ChangeLocation(self, location, mapset, dbase):
+    def ChangeLocation(self, location, mapset, dbase=None):
         if dbase:
             if RunCommand('g.mapset', parent=self,
                           dbase=dbase,

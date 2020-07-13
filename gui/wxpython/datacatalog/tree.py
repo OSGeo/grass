@@ -410,7 +410,7 @@ class DataCatalogTree(TreeView):
         p = Process(
             target=getLocationTree,
             args=(
-                self.current_grassdb_node.data,
+                self.current_grassdb_node.data['name'],
                 self.current_location_node.data['name'],
                 q,
                 self.current_mapset_node.data['name']))
@@ -714,14 +714,12 @@ class DataCatalogTree(TreeView):
             return
 
         for i in range(len(self.copy_layer)):
-            gisrc, env = gscript.create_environment(
-                            self.selected_grassdb[0].label,
-                            self.selected_location[0].label,
-                            self.selected_mapset[0].label)
-            gisrc2, env2 = gscript.create_environment(
-                            self.copy_grassdb[i].label,
-                            self.copy_location[i].label,
-                            self.copy_mapset[i].label)
+            gisrc, env = gscript.create_environment(self.selected_grassdb[0].label,
+                                                    self.selected_location[0].label,
+                                                    self.selected_mapset[0].label)
+            gisrc2, env2 = gscript.create_environment(self.copy_grassdb[i].label,
+                                                      self.copy_location[i].label,
+                                                      self.copy_mapset[i].label)
             new_name = self.copy_layer[i].label
             if self.selected_location[0] == self.copy_location[i]:
                 # within one mapset
@@ -937,7 +935,8 @@ class DataCatalogTree(TreeView):
 
     def OnSwitchDbLocationMapset(self, event):
         genv = gisenv()
-        if self.selected_location[0].label == genv['LOCATION_NAME']:
+        if self.selected_grassdb[0].label == genv['GISDBASE'] and \
+           self.selected_location[0].label == genv['LOCATION_NAME']:
             self.changeMapset.emit(mapset=self.selected_mapset[0].label)
         elif self.selected_grassdb[0].label == genv['GISDBASE']:
             self.changeLocation.emit(mapset=self.selected_mapset[0].label,
@@ -1027,7 +1026,7 @@ class DataCatalogTree(TreeView):
             name = text.strip()
 
         self._model = filterModel(self._orig_model, name=name, element=element)
-        self.UpdateCurrentLocationMapsetNode()
+        self.UpdateCurrentDbLocationMapsetNode()
         self.RefreshItems()
         self.ExpandCurrentMapset()
 
@@ -1145,9 +1144,9 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Switch mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnSwitchDbLocationMapset, item)
-        if (self.selected_grassdb[0].label == genv['GISDBASE']
-                and self.selected_location[0].label == genv['LOCATION_NAME']
-                and self.selected_mapset[0].label == genv['MAPSET']):
+        if (self.selected_grassdb[0].label == genv['GISDBASE'] and
+                self.selected_location[0].label == genv['LOCATION_NAME'] and
+                self.selected_mapset[0].label == genv['MAPSET']):
             item.Enable(False)
         self.PopupMenu(menu)
         menu.Destroy()

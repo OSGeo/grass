@@ -75,7 +75,7 @@ class DataCatalogToolbar(BaseToolbar):
                                      ("lock", icons['locked'],
                                       self.OnSetRestriction, wx.ITEM_CHECK),
                                      ("addGrassDB", icons['addGrassDB'],
-                                     self.parent.OnAddGrassDB)
+                                      self.parent.OnAddGrassDB)
                                      ))
 
     def OnSetRestriction(self, event):
