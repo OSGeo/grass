@@ -309,6 +309,7 @@ def delete_mapset_interactively(guiparent, grassdb, location, mapset):
     if dlg.ShowModal() == wx.ID_YES:
         try:
             delete_mapset(grassdb, location, mapset)
+            return True
         except OSError as err:
             wx.MessageBox(
                 parent=guiparent,
@@ -316,6 +317,7 @@ def delete_mapset_interactively(guiparent, grassdb, location, mapset):
                 message=_("Unable to delete mapset.\n\n%s") % err,
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
+        return False
 
     dlg.Destroy()
 
@@ -340,6 +342,7 @@ def delete_location_interactively(guiparent, grassdb, location):
     if dlg.ShowModal() == wx.ID_YES:
         try:
             delete_location(grassdb, location)
+            return True
         except OSError as err:
             wx.MessageBox(
                 parent=guiparent,
@@ -347,5 +350,6 @@ def delete_location_interactively(guiparent, grassdb, location):
                 message=_("Unable to delete location.\n\n%s") % err,
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
+            return False
 
     dlg.Destroy()
