@@ -34,8 +34,11 @@ from gui_core.treeview import TreeView
 from gui_core.wrap import Menu
 from datacatalog.dialogs import CatalogReprojectionDialog
 from icons.icon import MetaIcon
-from startup.utils import create_mapset, get_default_mapset_name
-from startup.guiutils import NewMapsetDialog
+from startup.guiutils import (create_mapset_interactively,
+                              rename_mapset_interactively,
+                              rename_location_interactively,
+                              delete_mapset_interactively,
+                              delete_location_interactively)
 
 from grass.pydispatch.signal import Signal
 
@@ -662,6 +665,56 @@ class DataCatalogTree(TreeView):
         if new_name:
             self.Rename(old_name, new_name)
 
+    def OnCreateMapset(self, event):
+        """Create new mapset"""
+        gisdbase = self.selected_grassdb[0]
+        location = self.selected_location[0]
+        try:
+            mapset = create_mapset_interactively(self,
+                                        gisdbase.label,
+                                        location.label)
+            if mapset:
+                self.InsertMapset(name=mapset,
+                                  location_node=location)
+                self.ReloadTreeItems()
+        except Exception as e:
+            GError(parent=self,
+                   message=_("Unable to create new mapset: %s") % e,
+                   showTraceback=False)
+
+    def OnRenameMapset(self, event):
+        """
+        Rename selected mapset
+        """
+        try:
+            newmapset = rename_mapset_interactively(
+                    self,
+                    self.selected_grassdb[0].label,
+                    self.selected_location[0].label,
+                    self.selected_mapset[0].label)
+            if newmapset:
+                self.ReloadTreeItems()
+        except Exception as e:
+            GError(parent=self,
+                   message=_("Unable to rename mapset: %s") % e,
+                   showTraceback=False)
+
+    def OnRenameLocation(self, event):
+        """
+        Rename selected location
+        """
+        try:
+            newlocation = rename_location_interactively(
+                    self,
+                    self.selected_grassdb[0].label,
+                    self.selected_location[0].label)
+            if newlocation:
+                self.ReloadTreeItems()
+        except Exception as e:
+            GError(parent=self,
+                   message=_("Unable to rename location: %s") % e,
+                   showTraceback=False)
+
     def OnStartEditLabel(self, node, event):
         """Start label editing"""
         self.DefineItems([node])
@@ -884,6 +937,35 @@ class DataCatalogTree(TreeView):
             self.UnselectAll()
             self.showNotification.emit(message=_("g.remove completed"))
 
+    def OnDeleteMapset(self, event):
+        """
+        Delete selected mapset
+        """
+        try:
+            delete_mapset_interactively(self,
+                                        self.selected_grassdb[0].label,
+                                        self.selected_location[0].label,
+                                        self.selected_mapset[0].label)
+        except Exception as e:
+            GError(parent=self,
+                   message=_("Unable to delete mapset: %s") % e,
+                   showTraceback=False)
+        self.ReloadTreeItems()
+
+    def OnDeleteLocation(self, event):
+        """
+        Delete selected location
+        """
+        try:
+            delete_location_interactively(self,
+                                          self.selected_grassdb[0].label,
+                                          self.selected_location[0].label)
+        except Exception as e:
+            GError(parent=self,
+                   message=_("Unable to delete location: %s") % e,
+                   showTraceback=False)
+        self.ReloadTreeItems()
+
     def OnDisplayLayer(self, event):
         """Display layer in current graphics view"""
         self.DisplayLayer()
@@ -934,9 +1016,17 @@ class DataCatalogTree(TreeView):
             self.OnPasteMap(event)
 
     def OnSwitchDbLocationMapset(self, event):
+        """Switch to location and mapset"""
+        self._SwitchDbLocationMapset()
+
+    def _SwitchDbLocationMapset(self):
+        """Switch to location and mapset"""
         genv = gisenv()
-        if self.selected_grassdb[0].label == genv['GISDBASE'] and \
-           self.selected_location[0].label == genv['LOCATION_NAME']:
+        # Distinguish when only part of db/location/mapset is changed.
+        if (
+            self.selected_grassdb[0].label == genv['GISDBASE']
+            and self.selected_location[0].label == genv['LOCATION_NAME']
+        ):
             self.changeMapset.emit(mapset=self.selected_mapset[0].label)
         elif self.selected_grassdb[0].label == genv['GISDBASE']:
             self.changeLocation.emit(mapset=self.selected_mapset[0].label,
@@ -949,30 +1039,6 @@ class DataCatalogTree(TreeView):
         self.UpdateCurrentDbLocationMapsetNode()
         self.ExpandCurrentMapset()
         self.RefreshItems()
-
-    def OnCreateMapset(self, event):
-        """Create new mapset"""
-        gisdbase = self.selected_grassdb[0]
-        location = self.selected_location[0]
-
-        dlg = NewMapsetDialog(
-            parent=self,
-            default=get_default_mapset_name(),
-            database=gisdbase.label,
-            location=location.label
-        )
-        if dlg.ShowModal() == wx.ID_OK:
-            mapset = dlg.GetValue()
-            try:
-                create_mapset(gisdbase.label,
-                              location.label,
-                              mapset)
-            except OSError as err:
-                GError(parent=self,
-                       message=_("Unable to create new mapset: %s") % err,
-                       showTraceback=False)
-            self.InsertMapset(name=mapset,
-                              location_node=location)
 
     def OnMetadata(self, event):
         """Show metadata of any raster/vector/3draster"""
@@ -1144,20 +1210,62 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Switch mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnSwitchDbLocationMapset, item)
-        if (self.selected_grassdb[0].label == genv['GISDBASE'] and
-                self.selected_location[0].label == genv['LOCATION_NAME'] and
-                self.selected_mapset[0].label == genv['MAPSET']):
+        if (
+            self.selected_grassdb[0].label == genv['GISDBASE']
+            and self.selected_location[0].label == genv['LOCATION_NAME']
+            and self.selected_mapset[0].label == genv['MAPSET']
+        ):
             item.Enable(False)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete mapset"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDeleteMapset, item)
+        if (
+            self.selected_grassdb[0].label == genv['GISDBASE']
+            and self.selected_location[0].label == genv['LOCATION_NAME']
+            and self.selected_mapset[0].label == genv['MAPSET']
+        ):
+            item.Enable(False)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename mapset"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnRenameMapset, item)
+        if (
+            self.selected_grassdb[0].label == genv['GISDBASE']
+            and self.selected_location[0].label == genv['LOCATION_NAME']
+            and self.selected_mapset[0].label == genv['MAPSET']
+        ):
+            item.Enable(False)
+
         self.PopupMenu(menu)
         menu.Destroy()
 
     def _popupMenuLocation(self):
         """Create popup menu for locations"""
         menu = Menu()
+        genv = gisenv()
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Create mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCreateMapset, item)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete location"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDeleteLocation, item)
+        if (
+            self.selected_grassdb[0].label == genv['GISDBASE']
+            and self.selected_location[0].label == genv['LOCATION_NAME']
+        ):
+            item.Enable(False)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename location"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnRenameLocation, item)
+        if (
+            self.selected_grassdb[0].label == genv['GISDBASE']
+            and self.selected_location[0].label == genv['LOCATION_NAME']
+        ):
+            item.Enable(False)
 
         self.PopupMenu(menu)
         menu.Destroy()

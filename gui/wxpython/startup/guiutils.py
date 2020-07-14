@@ -16,13 +16,18 @@ This is for code which depend on something from GUI (wx or wxGUI).
 
 
 import os
+import sys
+import wx
 
 import grass.script as gs
 
 from core import globalvar
-from core.gcmd import GError, DecodeString, RunCommand
+from core.gcmd import GError, GMessage, DecodeString, RunCommand
 from gui_core.dialogs import TextEntryDialog
 from gui_core.widgets import GenericMultiValidator
+from startup.utils import (create_mapset, delete_mapset, delete_location,
+                           rename_mapset, rename_location, mapset_exists,
+                           location_exists, get_default_mapset_name)
 
 
 def SetSessionMapset(database, location, mapset):
@@ -32,8 +37,8 @@ def SetSessionMapset(database, location, mapset):
     RunCommand("g.gisenv", set="MAPSET=%s" % mapset)
 
 
-class NewMapsetDialog(TextEntryDialog):
-    def __init__(self, parent=None, default=None,
+class MapsetDialog(TextEntryDialog):
+    def __init__(self, parent=None, default=None, message=None, caption=None,
                  database=None, location=None):
         self.database = database
         self.location = location
@@ -46,8 +51,8 @@ class NewMapsetDialog(TextEntryDialog):
 
         TextEntryDialog.__init__(
             self, parent=parent,
-            message=_("Name for the new mapset:"),
-            caption=_("Create new mapset"),
+            message=message,
+            caption=caption,
             defaultValue=default,
             validator=validator,
         )
@@ -81,9 +86,49 @@ class NewMapsetDialog(TextEntryDialog):
 
     def _mapsetAlreadyExists(self, ctrl):
         message = _(
-            "Mapset '{}' already exists. Please consider to use "
+            "Mapset '{}' already exists. Please consider using "
+            "another name for your mapset.").format(ctrl.GetValue())
+        GError(parent=self, message=message,
+               caption=_("Existing mapset path"))
+
+
+class LocationDialog(TextEntryDialog):
+    def __init__(self, parent=None, default=None, message=None, caption=None,
+                 database=None):
+        self.database = database
+
+        # list of tuples consisting of conditions and callbacks
+        checks = [(gs.legal_name, self._nameValidationFailed),
+                  (self._checkLocationNotExists, self._locationAlreadyExists)]
+        validator = GenericMultiValidator(checks)
+
+        TextEntryDialog.__init__(
+            self, parent=parent,
+            message=message,
+            caption=caption,
+            defaultValue=default,
+            validator=validator,
+        )
+
+    def _nameValidationFailed(self, ctrl):
+        message = _(
+            "Name '{}' is not a valid name for location or mapset. "
+            "Please use only ASCII characters excluding characters {} "
+            "and space.").format(ctrl.GetValue(), '/"\'@,=*~')
+        GError(parent=self, message=message, caption=_("Invalid name"))
+
+    def _checkLocationNotExists(self, text):
+        """Check whether user's input location exists or not."""
+        if location_exists(self.database, text):
+            return False
+        return True
+
+    def _locationAlreadyExists(self, ctrl):
+        message = _(
+            "Location '{}' already exists. Please consider using "
             "another name for your location.").format(ctrl.GetValue())
-        GError(parent=self, message=message, caption=_("Existing mapset path"))
+        GError(parent=self, message=message,
+               caption=_("Existing location path"))
 
 
 # TODO: similar to (but not the same as) read_gisrc function in grass.py
@@ -137,10 +182,170 @@ def GetVersion():
     return (grassVersion, grassRevisionStr)
 
 
-def mapset_exists(database, location, mapset):
-    """Returns True whether mapset path exists."""
-    location_path = os.path.join(database, location)
-    mapset_path = os.path.join(location_path, mapset)
-    if os.path.exists(mapset_path):
-        return True
-    return False
+def create_mapset_interactively(guiparent, grassdb, location):
+    """
+    Create new mapset
+    """
+    dlg = MapsetDialog(
+        parent=guiparent,
+        default=get_default_mapset_name(),
+        message=_("Name for the new mapset:"),
+        caption=_("Create new mapset"),
+        database=grassdb,
+        location=location,
+    )
+
+    if dlg.ShowModal() == wx.ID_OK:
+        mapset = dlg.GetValue()
+        try:
+            create_mapset(grassdb, location, mapset)
+        except OSError as err:
+            GError(
+                parent=guiparent,
+                message=_("Unable to create new mapset: %s") % err,
+                showTraceback=False,
+            )
+    else:
+        mapset = None
+    dlg.Destroy()
+    return mapset
+
+
+def rename_mapset_interactively(guiparent, grassdb, location, mapset):
+    """
+    Rename selected mapset
+    """
+    if mapset == "PERMANENT":
+        GMessage(
+            parent=guiparent,
+            message=_(
+                "Mapset <PERMANENT> is required for valid GRASS location.\n\n"
+                "This mapset cannot be renamed."
+            ),
+        )
+        return
+    dlg = MapsetDialog(
+        parent=guiparent,
+        default=mapset,
+        message=_("Current name: %s\n\nEnter new name:") % mapset,
+        caption=_("Rename selected mapset"),
+        database=grassdb,
+        location=location,
+    )
+
+    if dlg.ShowModal() == wx.ID_OK:
+        newmapset = dlg.GetValue()
+        try:
+            rename_mapset(grassdb, location, mapset, newmapset)
+        except OSError as err:
+            wx.MessageBox(
+                parent=guiparent,
+                caption=_("Error"),
+                message=_("Unable to rename mapset.\n\n%s") % err,
+                style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
+            )
+    else:
+        newmapset = None
+    dlg.Destroy()
+    return newmapset
+
+
+def rename_location_interactively(guiparent, grassdb, location):
+    """
+    Rename selected location
+    """
+    dlg = LocationDialog(
+        parent=guiparent,
+        default=location,
+        message=_("Current name: %s\n\nEnter new name:") % location,
+        caption=_("Rename selected location"),
+        database=grassdb,
+    )
+
+    if dlg.ShowModal() == wx.ID_OK:
+        newlocation = dlg.GetValue()
+        try:
+            rename_location(grassdb, location, newlocation)
+        except OSError as err:
+            wx.MessageBox(
+                parent=guiparent,
+                caption=_("Error"),
+                message=_("Unable to rename location.\n\n%s") % err,
+                style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
+            )
+    else:
+        newlocation = None
+    dlg.Destroy()
+    return newlocation
+
+
+def delete_mapset_interactively(guiparent, grassdb, location, mapset):
+    """
+    Delete selected mapset
+    """
+    if mapset == "PERMANENT":
+        GMessage(
+            parent=guiparent,
+            message=_(
+                "Mapset <PERMANENT> is required for valid GRASS location.\n\n"
+                "This mapset cannot be deleted."
+            ),
+        )
+        return
+
+    dlg = wx.MessageDialog(
+        parent=guiparent,
+        message=_(
+            "Do you want to continue with deleting mapset <%(mapset)s> "
+            "from location <%(location)s>?\n\n"
+            "ALL MAPS included in this mapset will be "
+            "PERMANENTLY DELETED!"
+        )
+        % {"mapset": mapset, "location": location},
+        caption=_("Delete selected mapset"),
+        style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
+    )
+
+    if dlg.ShowModal() == wx.ID_YES:
+        try:
+            delete_mapset(grassdb, location, mapset)
+        except OSError as err:
+            wx.MessageBox(
+                parent=guiparent,
+                caption=_("Error"),
+                message=_("Unable to delete mapset.\n\n%s") % err,
+                style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
+            )
+
+    dlg.Destroy()
+
+
+def delete_location_interactively(guiparent, grassdb, location):
+    """
+    Delete selected location
+    """
+    dlg = wx.MessageDialog(
+        parent=guiparent,
+        message=_(
+            "Do you want to continue with deleting "
+            "location <%s>?\n\n"
+            "ALL MAPS included in this location will be "
+            "PERMANENTLY DELETED!"
+        )
+        % (location),
+        caption=_("Delete selected location"),
+        style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
+    )
+
+    if dlg.ShowModal() == wx.ID_YES:
+        try:
+            delete_location(grassdb, location)
+        except OSError as err:
+            wx.MessageBox(
+                parent=guiparent,
+                caption=_("Error"),
+                message=_("Unable to delete location.\n\n%s") % err,
+                style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
+            )
+
+    dlg.Destroy()
