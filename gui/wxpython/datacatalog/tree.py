@@ -1022,9 +1022,11 @@ class DataCatalogTree(TreeView):
     def _SwitchDbLocationMapset(self):
         """Switch to location and mapset"""
         genv = gisenv()
-        # If selected location is the current one, just switch mapsets
-        if self.selected_grassdb[0].label == genv['GISDBASE'] and \
-           self.selected_location[0].label == genv['LOCATION_NAME']:
+        # Distinguish when only part of db/location/mapset is changed.
+        if (
+            self.selected_grassdb[0].label == genv['GISDBASE']
+            and self.selected_location[0].label == genv['LOCATION_NAME']
+        ):
             self.changeMapset.emit(mapset=self.selected_mapset[0].label)
         elif self.selected_grassdb[0].label == genv['GISDBASE']:
             self.changeLocation.emit(mapset=self.selected_mapset[0].label,
@@ -1034,7 +1036,7 @@ class DataCatalogTree(TreeView):
             self.changeLocation.emit(mapset=self.selected_mapset[0].label,
                                      location=self.selected_location[0].label,
                                      dbase=self.selected_grassdb[0].label)
-        self.UpdateCurrentLocationMapsetNode()
+        self.UpdateCurrentDbLocationMapsetNode()
         self.ExpandCurrentMapset()
         self.RefreshItems()
 
