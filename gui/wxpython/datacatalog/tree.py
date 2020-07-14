@@ -689,7 +689,7 @@ class DataCatalogTree(TreeView):
         try:
             newmapset = rename_mapset_interactively(
                     self,
-                    gisenv()['GISDBASE'],
+                    self.selected_grassdb[0].label,
                     self.selected_location[0].label,
                     self.selected_mapset[0].label)
             if newmapset:
@@ -706,7 +706,7 @@ class DataCatalogTree(TreeView):
         try:
             newlocation = rename_location_interactively(
                     self,
-                    gisenv()['GISDBASE'],
+                    self.selected_grassdb[0].label,
                     self.selected_location[0].label)
             if newlocation:
                 self.ReloadTreeItems()
@@ -943,7 +943,7 @@ class DataCatalogTree(TreeView):
         """
         try:
             delete_mapset_interactively(self,
-                                        gisenv()['GISDBASE'],
+                                        self.selected_grassdb[0].label,
                                         self.selected_location[0].label,
                                         self.selected_mapset[0].label)
         except Exception as e:
@@ -958,7 +958,7 @@ class DataCatalogTree(TreeView):
         """
         try:
             delete_location_interactively(self,
-                                          gisenv()['GISDBASE'],
+                                          self.selected_grassdb[0].label,
                                           self.selected_location[0].label)
         except Exception as e:
             GError(parent=self,
