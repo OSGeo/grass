@@ -39,10 +39,12 @@ from startup.utils import (
     create_database_directory)
 from startup.guiutils import (SetSessionMapset,
                               create_mapset_interactively,
+                              create_location_interactively,
                               rename_mapset_interactively,
                               rename_location_interactively,
                               delete_mapset_interactively,
-                              delete_location_interactively)
+                              delete_location_interactively,
+                              download_location_interactively)
 import startup.guiutils as sgui
 from location_wizard.dialogs import RegionDef
 from gui_core.widgets import StaticWrapText
@@ -231,7 +233,7 @@ class GRASSStartup(wx.Frame):
         self.bexit.Bind(wx.EVT_BUTTON, self.OnExit)
         self.bhelp.Bind(wx.EVT_BUTTON, self.OnHelp)
         self.bmapset.Bind(wx.EVT_BUTTON, self.OnCreateMapset)
-        self.bwizard.Bind(wx.EVT_BUTTON, self.OnWizard)
+        self.bwizard.Bind(wx.EVT_BUTTON, self.OnCreateLocation)
 
         self.rename_location_button.Bind(wx.EVT_BUTTON, self.OnRenameLocation)
         self.delete_location_button.Bind(wx.EVT_BUTTON, self.OnDeleteLocation)
@@ -535,11 +537,9 @@ class GRASSStartup(wx.Frame):
                 'your home directory. '
                 'Press Browse button to select the directory.'))
 
-    def OnWizard(self, event):
+    def OnCreateLocation(self, event):
         """Location wizard started"""
-        from location_wizard.wizard import LocationWizard
-        gWizard = LocationWizard(parent=self,
-                                 grassdatabase=self.tgisdbase.GetValue())
+        gWizard = create_location_interactively(self, self.tgisdbase.GetValue())
         if gWizard.location is not None:
             self.tgisdbase.SetValue(gWizard.grassdatabase)
             self.OnSetDatabase(None)
@@ -563,7 +563,6 @@ class GRASSStartup(wx.Frame):
                 defineRegion.CenterOnParent()
                 defineRegion.ShowModal()
                 defineRegion.Destroy()
-
             if gWizard.user_mapset:
                 self.OnCreateMapset(event)
 
@@ -674,24 +673,26 @@ class GRASSStartup(wx.Frame):
                    showTraceback=False)
 
     def OnDownloadLocation(self, event):
-        """Download location online"""
-        from startup.locdownload import LocationDownloadDialog
-
-        loc_download = LocationDownloadDialog(parent=self, database=self.gisdbase)
-        loc_download.ShowModal()
-        location = loc_download.GetLocation()
-        if location:
-            # get the new location to the list
-            self.UpdateLocations(self.gisdbase)
-            # seems to be used in similar context
-            self.UpdateMapsets(os.path.join(self.gisdbase, location))
-            self.lblocations.SetSelection(
-                self.listOfLocations.index(location))
-            # wizard does this as well, not sure if needed
-            self.SetLocation(self.gisdbase, location, 'PERMANENT')
-            # seems to be used in similar context
-            self.OnSelectLocation(None)
-        loc_download.Destroy()
+        """
+        Download location online
+        """
+        try:
+            location = download_location_interactively(self, self.gisdbase)
+            if location:
+                # get the new location to the list
+                self.UpdateLocations(self.gisdbase)
+                # seems to be used in similar context
+                self.UpdateMapsets(os.path.join(self.gisdbase, location))
+                self.lblocations.SetSelection(
+                    self.listOfLocations.index(location))
+                # wizard does this as well, not sure if needed
+                self.SetLocation(self.gisdbase, location, 'PERMANENT')
+                # seems to be used in similar context
+                self.OnSelectLocation(None)
+        except Exception as e:
+            GError(parent=self,
+                   message=_("Unable to download sample location: %s") % e,
+                   showTraceback=False)
 
     def UpdateLocations(self, dbase):
         """Update list of locations"""

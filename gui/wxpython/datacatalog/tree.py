@@ -35,10 +35,12 @@ from gui_core.wrap import Menu
 from datacatalog.dialogs import CatalogReprojectionDialog
 from icons.icon import MetaIcon
 from startup.guiutils import (create_mapset_interactively,
+                              create_location_interactively,
                               rename_mapset_interactively,
                               rename_location_interactively,
                               delete_mapset_interactively,
-                              delete_location_interactively)
+                              delete_location_interactively,
+                              download_location_interactively)
 
 from grass.pydispatch.signal import Signal
 
@@ -686,6 +688,32 @@ class DataCatalogTree(TreeView):
                    message=_("Unable to create new mapset: %s") % e,
                    showTraceback=False)
 
+    def OnCreateLocation(self, event):
+        """
+        Location wizard started
+        """
+        gWizard = create_location_interactively(
+                self, self.selected_grassdb[0].data['name']
+                )
+        if gWizard.location is not None:
+            self.ReloadTreeItems()
+            if gWizard.georeffile:
+                message = _("Do you want to import <%(name)s> to the newly created location?") % {
+                    'name': gWizard.georeffile}
+                dlg = wx.MessageDialog(parent=self, message=message, caption=_(
+                    "Import data?"), style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+                dlg.CenterOnParent()
+                if dlg.ShowModal() == wx.ID_YES:
+                    self.ImportFile(gWizard.georeffile)
+                dlg.Destroy()
+            if gWizard.default_region:
+                defineRegion = RegionDef(self, location=gWizard.location)
+                defineRegion.CenterOnParent()
+                defineRegion.ShowModal()
+                defineRegion.Destroy()
+            if gWizard.user_mapset:
+                self.OnCreateMapset(event)
+
     def OnRenameMapset(self, event):
         """
         Rename selected mapset
@@ -968,6 +996,21 @@ class DataCatalogTree(TreeView):
                    message=_("Unable to delete location: %s") % e,
                    showTraceback=False)
         self.ReloadTreeItems()
+
+    def OnDownloadLocation(self, event):
+        """
+        Download location online
+        """
+        try:
+            location = download_location_interactively(
+                    self, self.selected_grassdb[0].data['name']
+                    )
+            if location:
+                self.ReloadTreeItems()
+        except Exception as e:
+            GError(parent=self,
+                   message=_("Unable to download sample location: %s") % e,
+                   showTraceback=False)
 
     def OnDisplayLayer(self, event):
         """Display layer in current graphics view"""
@@ -1276,6 +1319,15 @@ class DataCatalogTree(TreeView):
     def _popupMenuGrassDb(self):
         """Create popup menu for grass db"""
         menu = Menu()
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create new location"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCreateLocation, item)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Download sample location"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDownloadLocation, item)
+
         self.PopupMenu(menu)
         menu.Destroy()
 

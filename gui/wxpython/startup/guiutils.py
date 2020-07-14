@@ -210,6 +210,22 @@ def create_mapset_interactively(guiparent, grassdb, location):
     dlg.Destroy()
     return mapset
 
+def create_location_interactively(guiparent, grassdb):
+    """
+    Location wizard started
+    """
+    from location_wizard.wizard import LocationWizard
+    gWizard = None
+    try:
+        gWizard = LocationWizard(parent=guiparent,
+                                 grassdatabase=grassdb)
+    except OSError as err:
+            GError(
+                parent=guiparent,
+                message=_("Unable to create new location %s") % err,
+                showTraceback=False,
+            )
+    return gWizard
 
 def rename_mapset_interactively(guiparent, grassdb, location, mapset):
     """
@@ -277,6 +293,21 @@ def rename_location_interactively(guiparent, grassdb, location):
         newlocation = None
     dlg.Destroy()
     return newlocation
+
+
+def download_location_interactively(guiparent, grassdb):
+    """
+    Download location online
+    """
+    from startup.locdownload import LocationDownloadDialog
+
+    loc_download = LocationDownloadDialog(parent=guiparent,
+                                          database=grassdb)
+    loc_download.ShowModal()
+    location = loc_download.GetLocation()
+
+    return location
+    loc_download.Destroy()
 
 
 def delete_mapset_interactively(guiparent, grassdb, location, mapset):
