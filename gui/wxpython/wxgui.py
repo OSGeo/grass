@@ -110,10 +110,10 @@ class GMApp(wx.App):
 
         return True
 
-        def OnExit(self):
-            """Clean up on exit"""
-            unregisterPid(os.getpid())
-            return super().OnExit()
+    def OnExit(self):
+        """Clean up on exit"""
+        unregisterPid(os.getpid())
+        return super().OnExit()
 
 
 def printHelp():
