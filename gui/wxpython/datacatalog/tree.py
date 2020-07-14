@@ -1210,23 +1210,31 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Switch mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnSwitchDbLocationMapset, item)
-        if (self.selected_grassdb[0].label == genv['GISDBASE'] and
-                self.selected_location[0].label == genv['LOCATION_NAME'] and
-                self.selected_mapset[0].label == genv['MAPSET']):
+        if (
+            self.selected_grassdb[0].label == genv['GISDBASE']
+            and self.selected_location[0].label == genv['LOCATION_NAME']
+            and self.selected_mapset[0].label == genv['MAPSET']
+        ):
             item.Enable(False)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteMapset, item)
-        if (self.selected_location[0].label == genv['LOCATION_NAME']
-                and self.selected_mapset[0].label == genv['MAPSET']):
+        if (
+            self.selected_grassdb[0].label == genv['GISDBASE']
+            and self.selected_location[0].label == genv['LOCATION_NAME']
+            and self.selected_mapset[0].label == genv['MAPSET']
+        ):
             item.Enable(False)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameMapset, item)
-        if (self.selected_location[0].label == genv['LOCATION_NAME']
-                and self.selected_mapset[0].label == genv['MAPSET']):
+        if (
+            self.selected_grassdb[0].label == genv['GISDBASE']
+            and self.selected_location[0].label == genv['LOCATION_NAME']
+            and self.selected_mapset[0].label == genv['MAPSET']
+        ):
             item.Enable(False)
 
         self.PopupMenu(menu)
@@ -1244,13 +1252,19 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete location"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteLocation, item)
-        if (self.selected_location[0].label == genv['LOCATION_NAME']):
+        if (
+            self.selected_grassdb[0].label == genv['GISDBASE']
+            and self.selected_location[0].label == genv['LOCATION_NAME']
+        ):
             item.Enable(False)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename location"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameLocation, item)
-        if (self.selected_location[0].label == genv['LOCATION_NAME']):
+        if (
+            self.selected_grassdb[0].label == genv['GISDBASE']
+            and self.selected_location[0].label == genv['LOCATION_NAME']
+        ):
             item.Enable(False)
 
         self.PopupMenu(menu)
