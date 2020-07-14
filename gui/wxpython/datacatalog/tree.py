@@ -1023,8 +1023,8 @@ class DataCatalogTree(TreeView):
         genv = gisenv()
         # Distinguish when only part of db/location/mapset is changed.
         if (
-            self.selected_grassdb[0].data['name'] == genv['GISDBASE'] and \
-            self.selected_location[0].data['name'] == genv['LOCATION_NAME']
+            self.selected_grassdb[0].data['name'] == genv['GISDBASE']
+            and self.selected_location[0].data['name'] == genv['LOCATION_NAME']
         ):
             self.changeMapset.emit(mapset=self.selected_mapset[0].data['name'])
         elif self.selected_grassdb[0].data['name'] == genv['GISDBASE']:
@@ -1038,30 +1038,6 @@ class DataCatalogTree(TreeView):
         self.UpdateCurrentDbLocationMapsetNode()
         self.ExpandCurrentMapset()
         self.RefreshItems()
-
-    def OnCreateMapset(self, event):
-        """Create new mapset"""
-        gisdbase = self.selected_grassdb[0]
-        location = self.selected_location[0]
-
-        dlg = NewMapsetDialog(
-            parent=self,
-            default=get_default_mapset_name(),
-            database=gisdbase.data['name'],
-            location=location.data['name']
-        )
-        if dlg.ShowModal() == wx.ID_OK:
-            mapset = dlg.GetValue()
-            try:
-                create_mapset(gisdbase.data['name'],
-                              location.data['name'],
-                              mapset)
-            except OSError as err:
-                GError(parent=self,
-                       message=_("Unable to create new mapset: %s") % err,
-                       showTraceback=False)
-            self.InsertMapset(name=mapset,
-                              location_node=location)
 
     def OnMetadata(self, event):
         """Show metadata of any raster/vector/3draster"""
