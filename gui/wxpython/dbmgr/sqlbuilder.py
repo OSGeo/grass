@@ -128,11 +128,23 @@ class SQLBuilder(wx.Frame):
         #
         # buttons
         #
-        self.btn_clear = Button(parent=self.panel, id=wx.ID_CLEAR)
+        if sys.platform == "darwin":
+            self.ID_CLEAR = wx.NewIdRef()
+            self.ID_CLOSE = wx.NewIdRef()
+            self.Bind(wx.EVT_MENU, self.OnClose, id=self.ID_CLOSE)
+            self.accel_tbl = wx.AcceleratorTable(
+                [(wx.ACCEL_NORMAL, wx.WXK_ESCAPE, self.ID_CLOSE)])
+            self.SetAcceleratorTable(self.accel_tbl)
+        else:
+            self.ID_CLEAR = wx.ID_CLEAR
+            self.ID_CLOSE = wx.ID_CLOSE
+        self.btn_clear = Button(
+            parent=self.panel, id=self.ID_CLEAR, label=_("Clear"))
         self.btn_clear.SetToolTip(_("Set SQL statement to default"))
         self.btn_apply = Button(parent=self.panel, id=wx.ID_APPLY)
         self.btn_apply.SetToolTip(_("Apply SQL statement"))
-        self.btn_close = Button(parent=self.panel, id=wx.ID_CLOSE)
+        self.btn_close = Button(
+            parent=self.panel, id=self.ID_CLOSE, label=_("Close"))
         self.btn_close.SetToolTip(_("Close the dialog"))
 
         self.btn_logic = {'is': ['=', ],

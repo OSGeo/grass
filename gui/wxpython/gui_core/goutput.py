@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
+import sys
 import textwrap
 
 import wx
@@ -156,10 +157,15 @@ class GConsoleWindow(wx.SplitterWindow):
                                     label=" %s " % cmdLabel)
 
         # buttons
+        if sys.platform == "darwin":
+            self.ID_CLEAR = wx.NewIdRef()
+        else:
+            self.ID_CLEAR = wx.ID_CLEAR
         self.btnOutputClear = Button(
-            parent=self.panelOutput, id=wx.ID_CLEAR)
+            parent=self.panelOutput, id=self.ID_CLEAR, label=_("Clear"))
         self.btnOutputClear.SetToolTip(_("Clear output window content"))
-        self.btnCmdClear = Button(parent=self.panelOutput, id=wx.ID_CLEAR)
+        self.btnCmdClear = Button(
+            parent=self.panelOutput, id=self.ID_CLEAR, label=_("Clear"))
         self.btnCmdClear.SetToolTip(_("Clear command prompt content"))
         self.btnOutputSave = Button(parent=self.panelOutput, id=wx.ID_SAVE)
         self.btnOutputSave.SetToolTip(

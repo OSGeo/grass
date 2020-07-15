@@ -136,12 +136,24 @@ class AttributeManager(wx.Frame, DbMgrBase):
             wx.CallAfter(self.notebook.SetSelection, 0)  # select browse tab
 
         # buttons
-        self.btnClose = Button(parent=self.panel, id=wx.ID_CLOSE)
+        if sys.platform == "darwin":
+            self.ID_CLEAR = wx.NewIdRef()
+            self.ID_CLOSE = wx.NewIdRef()
+            self.Bind(wx.EVT_MENU, self.OnCloseWindow, id=self.ID_CLOSE)
+            self.accel_tbl = wx.AcceleratorTable(
+                [(wx.ACCEL_NORMAL, wx.WXK_ESCAPE, self.ID_CLOSE)])
+            self.SetAcceleratorTable(self.accel_tbl)
+        else:
+            self.ID_CLEAR = wx.ID_CLEAR
+            self.ID_CLOSE = wx.ID_CLOSE
+        self.btnClose = Button(
+            parent=self.panel, id=self.ID_CLOSE, label=_("Close"))
         self.btnClose.SetToolTip(_("Close Attribute Table Manager"))
         self.btnReload = Button(parent=self.panel, id=wx.ID_REFRESH)
         self.btnReload.SetToolTip(
             _("Reload currently selected attribute data"))
-        self.btnReset = Button(parent=self.panel, id=wx.ID_CLEAR)
+        self.btnReset = Button(
+            parent=self.panel, id=self.ID_CLEAR, label=_("Clear"))
         self.btnReset.SetToolTip(
             _("Reload all attribute data (drop current selection)"))
 

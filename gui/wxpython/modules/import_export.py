@@ -116,14 +116,25 @@ class ImportDialog(wx.Dialog):
         # buttons
         #
         # cancel
-        self.btn_close = Button(parent=self.panel, id=wx.ID_CLOSE)
-        self.btn_close.SetToolTip(_("Close dialog"))
+        if sys.platform == "darwin":
+            self.ID_CLOSE = wx.NewIdRef()
+            self.Bind(wx.EVT_MENU, self.OnClose, id=self.ID_CLOSE)
+            self.accel_tbl = wx.AcceleratorTable(
+                [(wx.ACCEL_NORMAL, wx.WXK_ESCAPE, self.ID_CLOSE)])
+            self.SetAcceleratorTable(self.accel_tbl)
+        else:
+            self.ID_CLOSE = wx.ID_CLOSE
+        self.btn_close = Button(
+            parent=self.panel, id=self.ID_CLOSE, label=_("Close"))
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
+        self.btn_close.SetToolTip(_("Close dialog"))
         # run
+        if sys.platform == "darwin":
+            self.OK_ID = wx.NewIdRef()
+        else:
+            self.OK_ID = wx.OK_ID
         self.btn_run = Button(
-            parent=self.panel,
-            id=wx.ID_OK,
-            label=_("&Import"))
+            parent=self.panel, id=self.OK_ID, label=_("&Import"))
         self.btn_run.SetToolTip(_("Import selected layers"))
         self.btn_run.SetDefault()
         self.btn_run.Bind(wx.EVT_BUTTON, self.OnRun)
@@ -139,13 +150,6 @@ class ImportDialog(wx.Dialog):
                               name='source')
 
         self.createSettingsPage()
-
-        # Enable copying to clipboard with cmd+c from dialog on macOS
-        # (default key binding will close the dialog), trac #3592
-        if sys.platform == "darwin":
-            self.Bind(wx.EVT_MENU, self.OnCopyToClipboard, id=wx.ID_COPY)
-            self.accel_tbl = wx.AcceleratorTable([(wx.ACCEL_CTRL, ord("C"), wx.ID_COPY)])
-            self.SetAcceleratorTable(self.accel_tbl)
 
     def createSettingsPage(self):
 

@@ -44,14 +44,20 @@ class PyShellWindow(wx.Panel):
         self.intro = _("Welcome to wxGUI Interactive Python Shell %s") % VERSION + "\n\n" + \
             _("Type %s for more GRASS scripting related information.") % "\"help(grass)\"" + "\n" + \
             _("Type %s to add raster or vector to the layer tree.") % "\"AddLayer()\"" + "\n\n"
+        use_stock_id = (sys.platform != "darwin")  # Should be False on macOS
         self.shell = PyShell(parent=self, id=wx.ID_ANY,
                              introText=self.intro,
                              locals={'grass': grass,
-                                     'AddLayer': self.AddLayer})
+                                     'AddLayer': self.AddLayer},
+                             useStockId=use_stock_id)
 
         sys.displayhook = self._displayhook
 
-        self.btnClear = Button(self, wx.ID_CLEAR)
+        if sys.platform == "darwin":
+            self.ID_CLEAR = wx.NewIdRef()
+        else:
+            self.ID_CLEAR = wx.ID_CLEAR
+        self.btnClear = Button(self, self.ID_CLEAR, _("Clear"))
         self.btnClear.Bind(wx.EVT_BUTTON, self.OnClear)
         self.btnClear.SetToolTip(_("Delete all text from the shell"))
 

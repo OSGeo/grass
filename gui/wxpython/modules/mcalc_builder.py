@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
+import sys
 import re
 
 import wx
@@ -150,7 +151,20 @@ class MapCalcFrame(wx.Frame):
         #
         # Buttons
         #
-        self.btn_clear = Button(parent=self.panel, id=wx.ID_CLEAR)
+        if sys.platform == "darwin":
+            self.ID_CLEAR = wx.NewIdRef()
+            self.ID_CLOSE = wx.NewIdRef()
+            self.ID_COPY = wx.NewIdRef()
+            self.Bind(wx.EVT_MENU, self.OnClose, id=self.ID_CLOSE)
+            self.accel_tbl = wx.AcceleratorTable(
+                [(wx.ACCEL_NORMAL, wx.WXK_ESCAPE, self.ID_CLOSE)])
+            self.SetAcceleratorTable(self.accel_tbl)
+        else:
+            self.ID_CLEAR = wx.ID_CLEAR
+            self.ID_CLOSE = wx.ID_CLOSE
+            self.ID_COPY = wx.ID_COPY
+        self.btn_clear = Button(
+            parent=self.panel, id=self.ID_CLEAR, label=_("Clear"))
         self.btn_help = Button(parent=self.panel, id=wx.ID_HELP)
         self.btn_run = Button(
             parent=self.panel,
@@ -158,13 +172,15 @@ class MapCalcFrame(wx.Frame):
             label=_("&Run"))
         self.btn_run.SetForegroundColour(wx.Colour(35, 142, 35))
         self.btn_run.SetDefault()
-        self.btn_close = Button(parent=self.panel, id=wx.ID_CLOSE)
+        self.btn_close = Button(
+            parent=self.panel, id=self.ID_CLOSE, label=_("Close"))
         self.btn_save = Button(parent=self.panel, id=wx.ID_SAVE)
         self.btn_save.SetToolTip(_('Save expression to file'))
         self.btn_load = Button(parent=self.panel, id=wx.ID_ANY,
                                label=_("&Load"))
         self.btn_load.SetToolTip(_('Load expression from file'))
-        self.btn_copy = Button(parent=self.panel, id=wx.ID_COPY)
+        self.btn_copy = Button(
+            parent=self.panel, id=self.ID_COPY, label=_("Copy"))
         self.btn_copy.SetToolTip(
             _("Copy the current command string to the clipboard"))
 
