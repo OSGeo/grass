@@ -655,15 +655,21 @@ class DataCatalogTree(TreeView):
             self.selected_grassdb[0].data['name'],
             self.selected_location[0].data['name'],
             self.selected_mapset[0].data['name'])
-        new_name = self._getNewMapName(
-            _('New name'),
-            _('Rename map'),
-            old_name,
-            env=env,
-            mapset=self.selected_mapset[0].data['name'],
-            element=self.selected_layer[0].data['type'])
-        if new_name:
-            self.Rename(old_name, new_name)
+        try:
+            new_name = self._getNewMapName(
+                _('New name'),
+                _('Rename map'),
+                old_name,
+                env=env,
+                mapset=self.selected_mapset[0].data['name'],
+                element=self.selected_layer[0].data['type'])
+            if new_name:
+                self.Rename(old_name, new_name)
+                self.ReloadTreeItems()
+        except Exception as e:
+            GError(parent=self,
+                   message=_("Unable to rename map: %s") % e,
+                   showTraceback=False)
 
     def OnCreateMapset(self, event):
         """Create new mapset"""
