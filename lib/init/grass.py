@@ -1900,18 +1900,19 @@ def csh_startup(location, location_name, mapset, grass_env_file):
     os.environ['HOME'] = userhome
     return process
 
-def shell_startup(location, location_name, grass_env_file, shell_name):
-    if shell_name not in ['bash', 'zsh']:
-        raise ValueError('Only bash and zsh are supported by shell_startup()')
 
-    if shell_name == 'zsh':
+def sh_like_startup(location, location_name, grass_env_file, sh):
+    if sh == 'bash':
+        sh_history = ".bash_history"
+        shrc = ".bashrc"
+        grass_shrc = ".grass.bashrc"
+    elif sh == 'zsh':
         sh_history = ".zsh_history"
         shrc = ".zshrc"
         grass_shrc = ".grass.zshrc"
     else:
-        sh_history = ".bash_history"
-        shrc = ".bashrc"
-        grass_shrc = ".grass.bashrc"
+        raise ValueError(
+            'Only bash-like and zsh shells are supported by sh_like_startup()')
 
     # save command history in mapset dir and remember more
     os.environ['HISTFILE'] = os.path.join(location, sh_history)
@@ -1930,8 +1931,8 @@ def shell_startup(location, location_name, grass_env_file, shell_name):
     try_remove(shell_rc_file)
 
     f = open(shell_rc_file, 'w')
-    
-    if shell_name == 'zsh':
+
+    if sh == 'zsh':
         f.write('test -r {home}/.alias && source {home}/.alias\n'.format(
             home=userhome))
     else:
@@ -1942,8 +1943,8 @@ def shell_startup(location, location_name, grass_env_file, shell_name):
         grass_name = "ISIS-GRASS"
     else:
         grass_name = "GRASS"
-        
-    if shell_name == 'zsh':
+
+    if sh == 'zsh':
         f.write("setopt PROMPT_SUBST\n")
         f.write("PS1='{name} {version} : %1~ > '\n".format(
             name=grass_name, version=GRASS_VERSION))
@@ -1956,7 +1957,7 @@ def shell_startup(location, location_name, grass_env_file, shell_name):
     mask3d_test = 'test -d "$MAPSET_PATH/grid3/RASTER3D_MASK"'
 
     zsh_addition = ""
-    if shell_name == 'zsh':
+    if sh == 'zsh':
         zsh_addition = """
     local z_lo=`g.gisenv get=LOCATION_NAME`
     local z_ms=`g.gisenv get=MAPSET`
@@ -1986,7 +1987,7 @@ PROMPT_COMMAND=grass_prompt\n""".format(
             zsh_addition=zsh_addition
             ))
 
-    if shell_name == 'zsh':
+    if sh == 'zsh':
         f.write('precmd() { eval "$PROMPT_COMMAND" }\n')
         f.write('RPROMPT=\'${ZLOC}\'\n')
 
@@ -2015,6 +2016,7 @@ PROMPT_COMMAND=grass_prompt\n""".format(
     process = Popen([gpath("etc", "run"), os.getenv('SHELL')])
     os.environ['HOME'] = userhome
     return process
+
 
 def default_startup(location, location_name):
     if WINDOWS:
@@ -2443,15 +2445,15 @@ def main():
                                         mapset_settings.mapset,
                                         grass_env_file)
         elif sh in ['zsh']:
-            shell_process = shell_startup(mapset_settings.full_mapset,
-                                          mapset_settings.location,
-                                          grass_env_file,
-                                          "zsh")
+            shell_process = sh_like_startup(mapset_settings.full_mapset,
+                                            mapset_settings.location,
+                                            grass_env_file,
+                                            "zsh")
         elif sh in ['bash', 'msh', 'cygwin']:
-            shell_process = shell_startup(mapset_settings.full_mapset,
-                                          mapset_settings.location,
-                                          grass_env_file,
-                                          "bash")
+            shell_process = sh_like_startup(mapset_settings.full_mapset,
+                                            mapset_settings.location,
+                                            grass_env_file,
+                                            "bash")
         else:
             shell_process = default_startup(mapset_settings.full_mapset,
                                             mapset_settings.location)
