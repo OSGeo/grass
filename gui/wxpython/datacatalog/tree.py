@@ -942,10 +942,11 @@ class DataCatalogTree(TreeView):
         Delete selected mapset
         """
         try:
-            if (delete_mapset_interactively(self,
-                                        self.selected_grassdb[0].label,
-                                        self.selected_location[0].label,
-                                        self.selected_mapset[0].label)):
+            if (delete_mapset_interactively(
+                    self,
+                    self.selected_grassdb[0].label,
+                    self.selected_location[0].label,
+                    self.selected_mapset[0].label)):
                 self.ReloadTreeItems()
         except Exception as e:
             GError(parent=self,
@@ -957,9 +958,10 @@ class DataCatalogTree(TreeView):
         Delete selected location
         """
         try:
-            if (delete_location_interactively(self,
-                                          self.selected_grassdb[0].label,
-                                          self.selected_location[0].label)):
+            if (delete_location_interactively(
+                    self,
+                    self.selected_grassdb[0].label,
+                    self.selected_location[0].label)):
                 self.ReloadTreeItems()
         except Exception as e:
             GError(parent=self,
