@@ -32,7 +32,7 @@ from core import globalvar
 import wx
 import wx.lib.mixins.listctrl as listmix
 
-from core.gcmd import GMessage, GError, RunCommand
+from core.gcmd import GError, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets
 from startup.utils import (
     get_lockfile_if_present, get_possible_database_path,
@@ -44,7 +44,8 @@ from startup.guiutils import (SetSessionMapset,
                               rename_location_interactively,
                               delete_mapset_interactively,
                               delete_location_interactively,
-                              download_location_interactively)
+                              download_location_interactively,
+                              import_file)
 import startup.guiutils as sgui
 from location_wizard.dialogs import RegionDef
 from gui_core.widgets import StaticWrapText
@@ -539,72 +540,36 @@ class GRASSStartup(wx.Frame):
 
     def OnCreateLocation(self, event):
         """Location wizard started"""
-        gWizard = create_location_interactively(self, self.tgisdbase.GetValue())
-        if gWizard.location is not None:
-            self.tgisdbase.SetValue(gWizard.grassdatabase)
+        grassdatabase, location, georeffile, default_region, user_mapset = \
+        create_location_interactively(self, self.tgisdbase.GetValue())
+        if location is not None:
+            self.tgisdbase.SetValue(grassdatabase)
             self.OnSetDatabase(None)
-            self.UpdateMapsets(os.path.join(self.gisdbase, gWizard.location))
+            self.UpdateMapsets(os.path.join(self.gisdbase, location))
             self.lblocations.SetSelection(
                 self.listOfLocations.index(
-                    gWizard.location))
+                    location))
             self.lbmapsets.SetSelection(0)
-            self.SetLocation(self.gisdbase, gWizard.location, 'PERMANENT')
-            if gWizard.georeffile:
+            self.SetLocation(self.gisdbase, location, 'PERMANENT')
+
+            if georeffile:
                 message = _("Do you want to import <%(name)s> to the newly created location?") % {
-                    'name': gWizard.georeffile}
+                    'name': georeffile}
                 dlg = wx.MessageDialog(parent=self, message=message, caption=_(
                     "Import data?"), style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
                 dlg.CenterOnParent()
                 if dlg.ShowModal() == wx.ID_YES:
-                    self.ImportFile(gWizard.georeffile)
+                    import_file(self, georeffile)
                 dlg.Destroy()
-            if gWizard.default_region:
-                defineRegion = RegionDef(self, location=gWizard.location)
+
+            if default_region:
+                defineRegion = RegionDef(self, location=location)
                 defineRegion.CenterOnParent()
                 defineRegion.ShowModal()
                 defineRegion.Destroy()
-            if gWizard.user_mapset:
+
+            if user_mapset:
                 self.OnCreateMapset(event)
-
-    def ImportFile(self, filePath):
-        """Tries to import file as vector or raster.
-
-        If successfull sets default region from imported map.
-        """
-        RunCommand('db.connect', flags='c')
-        mapName = os.path.splitext(os.path.basename(filePath))[0]
-        vectors = RunCommand('v.in.ogr', input=filePath, flags='l',
-                             read=True)
-
-        wx.BeginBusyCursor()
-        wx.GetApp().Yield()
-        if vectors:
-            # vector detected
-            returncode, error = RunCommand(
-                'v.in.ogr', input=filePath, output=mapName, flags='e',
-                getErrorMsg=True)
-        else:
-            returncode, error = RunCommand(
-                'r.in.gdal', input=filePath, output=mapName, flags='e',
-                getErrorMsg=True)
-        wx.EndBusyCursor()
-
-        if returncode != 0:
-            GError(
-                parent=self,
-                message=_(
-                    "Import of <%(name)s> failed.\n"
-                    "Reason: %(msg)s") % ({
-                        'name': filePath,
-                        'msg': error}))
-        else:
-            GMessage(
-                message=_(
-                    "Data file <%(name)s> imported successfully. "
-                    "The location's default region was set from this imported map.") % {
-                    'name': filePath},
-                parent=self)
-
 
     # the event can be refactored out by using lambda in bind
     def OnRenameMapset(self, event):
@@ -981,7 +946,7 @@ class GListBox(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         self._LoadData(choices, disabled)
 
     def SetSelection(self, item, force=False):
-        if item !=  wx.NOT_FOUND and \
+        if item != wx.NOT_FOUND and \
                 (platform.system() != 'Windows' or force):
             # Windows -> FIXME
             self.SetItemState(
@@ -1006,6 +971,7 @@ class StartUp(wx.App):
         StartUp.SuggestDatabase()
 
         return 1
+
 
 if __name__ == "__main__":
     if os.getenv("GISBASE") is None:

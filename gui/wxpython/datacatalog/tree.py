@@ -33,6 +33,7 @@ from core.treemodel import TreeModel, DictNode
 from gui_core.treeview import TreeView
 from gui_core.wrap import Menu
 from datacatalog.dialogs import CatalogReprojectionDialog
+from location_wizard.dialogs import RegionDef
 from icons.icon import MetaIcon
 from startup.guiutils import (create_mapset_interactively,
                               create_location_interactively,
@@ -40,7 +41,8 @@ from startup.guiutils import (create_mapset_interactively,
                               rename_location_interactively,
                               delete_mapset_interactively,
                               delete_location_interactively,
-                              download_location_interactively)
+                              download_location_interactively,
+                              import_file)
 
 from grass.pydispatch.signal import Signal
 
@@ -692,26 +694,29 @@ class DataCatalogTree(TreeView):
         """
         Location wizard started
         """
-        gWizard = create_location_interactively(
-                self, self.selected_grassdb[0].data['name']
-                )
-        if gWizard.location is not None:
+        grassdatabase, location, georeffile, default_region, user_mapset = \
+        create_location_interactively(self,
+                                      self.selected_grassdb[0].data['name'])
+        if location is not None:
             self.ReloadTreeItems()
-            if gWizard.georeffile:
+
+            if georeffile:
                 message = _("Do you want to import <%(name)s> to the newly created location?") % {
-                    'name': gWizard.georeffile}
+                    'name': georeffile}
                 dlg = wx.MessageDialog(parent=self, message=message, caption=_(
                     "Import data?"), style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
                 dlg.CenterOnParent()
                 if dlg.ShowModal() == wx.ID_YES:
-                    self.ImportFile(gWizard.georeffile)
+                    import_file(self, georeffile)
                 dlg.Destroy()
-            if gWizard.default_region:
-                defineRegion = RegionDef(self, location=gWizard.location)
+
+            if default_region:
+                defineRegion = RegionDef(self, location=location)
                 defineRegion.CenterOnParent()
                 defineRegion.ShowModal()
                 defineRegion.Destroy()
-            if gWizard.user_mapset:
+
+            if user_mapset:
                 self.OnCreateMapset(event)
 
     def OnRenameMapset(self, event):
