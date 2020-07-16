@@ -519,6 +519,8 @@ class DataCatalogTree(TreeView):
             self._popupMenuLocation()
         elif self.selected_grassdb[0] and not self.selected_location[0] and len(self.selected_grassdb) == 1:
             self._popupMenuGrassDb()
+        elif len(self.selected_mapset) > 1:
+            self._popupMenuMultipleMapsets()
         else:
             self._popupMenuEmpty()
 
@@ -943,15 +945,19 @@ class DataCatalogTree(TreeView):
 
     def OnDeleteMapset(self, event):
         """
-        Delete selected mapset
+        Delete selected mapset or mapsets
         """
         try:
-            if (delete_mapset_interactively(
-                    self,
-                    self.selected_grassdb[0].data['name'],
-                    self.selected_location[0].data['name'],
-                    self.selected_mapset[0].data['name'])):
-                self.ReloadTreeItems()
+            db_loc_mapset = []
+            for i in range(len(self.selected_mapset)):
+                # Append to the list of tuples
+                db_loc_mapset.append((
+                    self.selected_grassdb[i].data['name'],
+                    self.selected_location[i].data['name'],
+                    self.selected_mapset[i].data['name']
+                ))
+            delete_mapset_interactively(self, db_loc_mapset)
+            self.ReloadTreeItems()
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to delete mapset: %s") % e,
@@ -962,11 +968,10 @@ class DataCatalogTree(TreeView):
         Delete selected location
         """
         try:
-            if (delete_location_interactively(
-                    self,
-                    self.selected_grassdb[0].data['name'],
-                    self.selected_location[0].data['name'])):
-                self.ReloadTreeItems()
+            delete_location_interactively(self,
+                                          self.selected_grassdb[0].data['name'],
+                                          self.selected_location[0].data['name'])
+            self.ReloadTreeItems()
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to delete location: %s") % e,
@@ -1312,6 +1317,17 @@ class DataCatalogTree(TreeView):
         currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
         if not(currentMapset and self.copy_layer):
             item.Enable(False)
+
+        self.PopupMenu(menu)
+        menu.Destroy()
+
+    def _popupMenuMultipleMapsets(self):
+        """Create popup menu for multiple selected mapsets"""
+        menu = Menu()
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete mapsets"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDeleteMapset, item)
 
         self.PopupMenu(menu)
         menu.Destroy()

@@ -648,8 +648,8 @@ class GRASSStartup(wx.Frame):
         location = self.listOfLocations[self.lblocations.GetSelection()]
         mapset = self.listOfMapsets[self.lbmapsets.GetSelection()]
         try:
-            if (delete_mapset_interactively(self, self.gisdbase,
-                                            location, mapset)):
+            db_loc_mapset = [(self.gisdbase, location, mapset)]
+            if (delete_mapset_interactively(self, db_loc_mapset)):
                 self.OnSelectLocation(None)
                 self.lbmapsets.SetSelection(0)
         except Exception as e:
