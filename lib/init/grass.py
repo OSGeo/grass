@@ -1734,9 +1734,21 @@ def csh_startup(location, location_name, mapset, grass_env_file):
     return process
 
 
-def bash_startup(location, location_name, grass_env_file):
+def sh_like_startup(location, location_name, grass_env_file, sh):
+    if sh == 'bash':
+        sh_history = ".bash_history"
+        shrc = ".bashrc"
+        grass_shrc = ".grass.bashrc"
+    elif sh == 'zsh':
+        sh_history = ".zsh_history"
+        shrc = ".zshrc"
+        grass_shrc = ".grass.zshrc"
+    else:
+        raise ValueError(
+            'Only bash-like and zsh shells are supported by sh_like_startup()')
+
     # save command history in mapset dir and remember more
-    os.environ['HISTFILE'] = os.path.join(location, ".bash_history")
+    os.environ['HISTFILE'] = os.path.join(location, sh_history)
     if not os.getenv('HISTSIZE') and not os.getenv('HISTFILESIZE'):
         os.environ['HISTSIZE'] = "3000"
 
@@ -1748,23 +1760,42 @@ def bash_startup(location, location_name, grass_env_file):
     home = location                   # save .bashrc in $LOCATION
     os.environ['HOME'] = home
 
-    bashrc = os.path.join(home, ".bashrc")
-    try_remove(bashrc)
+    shell_rc_file = os.path.join(home, shrc)
+    try_remove(shell_rc_file)
 
-    f = open(bashrc, 'w')
-    f.write("test -r ~/.alias && . ~/.alias\n")
+    f = open(shell_rc_file, 'w')
+
+    if sh == 'zsh':
+        f.write('test -r {home}/.alias && source {home}/.alias\n'.format(
+            home=userhome))
+    else:
+        f.write("test -r ~/.alias && . ~/.alias\n")
 
     if os.getenv('ISISROOT'):
         # GRASS GIS and ISIS blend
         grass_name = "ISIS-GRASS"
     else:
         grass_name = "GRASS"
-    f.write("PS1='{name} {version} ({location}):\\w > '\n".format(
-        name=grass_name, version=GRASS_VERSION, location=location_name))
+
+    if sh == 'zsh':
+        f.write("setopt PROMPT_SUBST\n")
+        f.write("PS1='{name} {version} : %1~ > '\n".format(
+            name=grass_name, version=GRASS_VERSION))
+    else:
+        f.write("PS1='{name} {version} ({location}):\\w > '\n".format(
+            name=grass_name, version=GRASS_VERSION, location=location_name))
 
     # TODO: have a function and/or module to test this
     mask2d_test = 'test -f "$MAPSET_PATH/cell/MASK"'
     mask3d_test = 'test -d "$MAPSET_PATH/grid3/RASTER3D_MASK"'
+
+    zsh_addition = ""
+    if sh == 'zsh':
+        zsh_addition = """
+    local z_lo=`g.gisenv get=LOCATION_NAME`
+    local z_ms=`g.gisenv get=MAPSET`
+    ZLOC="Mapset <$z_ms> in <$z_lo>"
+    """
 
     # double curly brackets means single one for format function
     # setting LOCATION for backwards compatibility
@@ -1772,20 +1803,26 @@ def bash_startup(location, location_name, grass_env_file):
         """grass_prompt() {{
     MAPSET_PATH="`g.gisenv get=GISDBASE,LOCATION_NAME,MAPSET separator='/'`"
     LOCATION="$MAPSET_PATH"
+    {zsh_addition}
     if {mask2d_test} && {mask3d_test} ; then
-        echo [{both_masks}]
+        echo "[{both_masks}]"
     elif {mask2d_test} ; then
-        echo [{mask2d}]
+        echo "[{mask2d}]"
     elif {mask3d_test} ; then
-        echo [{mask3d}]
+        echo "[{mask3d}]"
     fi
 }}
 PROMPT_COMMAND=grass_prompt\n""".format(
             both_masks=_("2D and 3D raster MASKs present"),
             mask2d=_("Raster MASK present"),
             mask3d=_("3D raster MASK present"),
-            mask2d_test=mask2d_test, mask3d_test=mask3d_test
+            mask2d_test=mask2d_test, mask3d_test=mask3d_test,
+            zsh_addition=zsh_addition
             ))
+
+    if sh == 'zsh':
+        f.write('precmd() { eval "$PROMPT_COMMAND" }\n')
+        f.write('RPROMPT=\'${ZLOC}\'\n')
 
     # this line was moved here from below .grass.bashrc to allow ~ and $HOME in
     # .grass.bashrc
@@ -1793,7 +1830,7 @@ PROMPT_COMMAND=grass_prompt\n""".format(
 
     # read other settings (aliases, ...) since environmental variables
     # have been already set by load_env(), see #3462
-    for env_file in [os.path.join(userhome, ".grass.bashrc"),
+    for env_file in [os.path.join(userhome, grass_shrc),
                      grass_env_file]:
         if not os.access(env_file, os.R_OK):
             continue
@@ -1804,6 +1841,9 @@ PROMPT_COMMAND=grass_prompt\n""".format(
                 f.write(line + '\n')
 
     f.write("export PATH=\"%s\"\n" % os.getenv('PATH'))
+    # fix trac issue #3009 https://trac.osgeo.org/grass/ticket/3009
+    # re: failure to "Quit GRASS" from GUI
+    f.write("trap \"exit\" TERM\n")
     f.close()
 
     process = Popen([gpath("etc", "run"), os.getenv('SHELL')])
@@ -2226,10 +2266,16 @@ def main():
                                         mapset_settings.location,
                                         mapset_settings.mapset,
                                         grass_env_file)
+        elif sh in ['zsh']:
+            shell_process = sh_like_startup(mapset_settings.full_mapset,
+                                            mapset_settings.location,
+                                            grass_env_file,
+                                            "zsh")
         elif sh in ['bash', 'msh', 'cygwin']:
-            shell_process = bash_startup(mapset_settings.full_mapset,
-                                         mapset_settings.location,
-                                         grass_env_file)
+            shell_process = sh_like_startup(mapset_settings.full_mapset,
+                                            mapset_settings.location,
+                                            grass_env_file,
+                                            "bash")
         else:
             shell_process = default_startup(mapset_settings.full_mapset,
                                             mapset_settings.location)
