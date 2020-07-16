@@ -756,6 +756,7 @@ class DataCatalogTree(TreeView):
                 'g.rename', raster3d=string, env=env)
         if renamed == 0:
             self.selected_layer[0].data['name'] = new
+            self.selected_layer[0].label = new
             self.RefreshNode(self.selected_layer[0])
             self.showNotification.emit(
                 message=_("{cmd} -- completed").format(cmd=cmd))
