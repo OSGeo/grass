@@ -33,7 +33,6 @@ from core.treemodel import TreeModel, DictNode
 from gui_core.treeview import TreeView
 from gui_core.wrap import Menu
 from datacatalog.dialogs import CatalogReprojectionDialog
-from location_wizard.dialogs import RegionDef
 from icons.icon import MetaIcon
 from startup.guiutils import (create_mapset_interactively,
                               create_location_interactively,
@@ -41,8 +40,7 @@ from startup.guiutils import (create_mapset_interactively,
                               rename_location_interactively,
                               delete_mapset_interactively,
                               delete_location_interactively,
-                              download_location_interactively,
-                              import_file)
+                              download_location_interactively)
 
 from grass.pydispatch.signal import Signal
 
@@ -694,27 +692,12 @@ class DataCatalogTree(TreeView):
         """
         Location wizard started
         """
-        grassdatabase, location, georeffile, default_region, user_mapset = \
-        create_location_interactively(self,
-                                      self.selected_grassdb[0].data['name'])
+        grassdatabase, location, user_mapset = (
+            create_location_interactively(self,
+                                          self.selected_grassdb[0].data['name'])
+        )
         if location is not None:
             self.ReloadTreeItems()
-
-            if georeffile:
-                message = _("Do you want to import <%(name)s> to the newly created location?") % {
-                    'name': georeffile}
-                dlg = wx.MessageDialog(parent=self, message=message, caption=_(
-                    "Import data?"), style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
-                dlg.CenterOnParent()
-                if dlg.ShowModal() == wx.ID_YES:
-                    import_file(self, georeffile)
-                dlg.Destroy()
-
-            if default_region:
-                defineRegion = RegionDef(self, location=location)
-                defineRegion.CenterOnParent()
-                defineRegion.ShowModal()
-                defineRegion.Destroy()
 
             if user_mapset:
                 self.OnCreateMapset(event)
@@ -1006,19 +989,16 @@ class DataCatalogTree(TreeView):
         """
         Download location online
         """
-        try:
-            location = download_location_interactively(
-                    self, self.selected_grassdb[0].data['name']
-                    )
-            if location:
-                self.ReloadTreeItems()
-        except Exception as e:
-            GError(parent=self,
-                   message=_("Unable to download sample location: %s") % e,
-                   showTraceback=False)
+        location = download_location_interactively(
+                self, self.selected_grassdb[0].data['name']
+        )
+        if location:
+            self.ReloadTreeItems()
 
     def OnDisplayLayer(self, event):
-        """Display layer in current graphics view"""
+        """
+        Display layer in current graphics view
+        """
         self.DisplayLayer()
 
     def DisplayLayer(self):

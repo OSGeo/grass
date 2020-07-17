@@ -44,10 +44,8 @@ from startup.guiutils import (SetSessionMapset,
                               rename_location_interactively,
                               delete_mapset_interactively,
                               delete_location_interactively,
-                              download_location_interactively,
-                              import_file)
+                              download_location_interactively)
 import startup.guiutils as sgui
-from location_wizard.dialogs import RegionDef
 from gui_core.widgets import StaticWrapText
 from gui_core.wrap import Button, ListCtrl, StaticText, StaticBox, \
     TextCtrl, BitmapFromImage
@@ -540,8 +538,9 @@ class GRASSStartup(wx.Frame):
 
     def OnCreateLocation(self, event):
         """Location wizard started"""
-        grassdatabase, location, georeffile, default_region, user_mapset = \
-        create_location_interactively(self, self.tgisdbase.GetValue())
+        grassdatabase, location, user_mapset = (
+            create_location_interactively(self, self.gisdbase)
+        )
         if location is not None:
             self.tgisdbase.SetValue(grassdatabase)
             self.OnSetDatabase(None)
@@ -551,22 +550,6 @@ class GRASSStartup(wx.Frame):
                     location))
             self.lbmapsets.SetSelection(0)
             self.SetLocation(self.gisdbase, location, 'PERMANENT')
-
-            if georeffile:
-                message = _("Do you want to import <%(name)s> to the newly created location?") % {
-                    'name': georeffile}
-                dlg = wx.MessageDialog(parent=self, message=message, caption=_(
-                    "Import data?"), style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
-                dlg.CenterOnParent()
-                if dlg.ShowModal() == wx.ID_YES:
-                    import_file(self, georeffile)
-                dlg.Destroy()
-
-            if default_region:
-                defineRegion = RegionDef(self, location=location)
-                defineRegion.CenterOnParent()
-                defineRegion.ShowModal()
-                defineRegion.Destroy()
 
             if user_mapset:
                 self.OnCreateMapset(event)
@@ -583,7 +566,7 @@ class GRASSStartup(wx.Frame):
             if newmapset:
                 self.OnSelectLocation(None)
                 self.lbmapsets.SetSelection(
-                        self.listOfMapsets.index(newmapset))
+                    self.listOfMapsets.index(newmapset))
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to rename mapset: %s") % e,
@@ -599,7 +582,7 @@ class GRASSStartup(wx.Frame):
             if newlocation:
                 self.UpdateLocations(self.gisdbase)
                 self.lblocations.SetSelection(
-                        self.listOfLocations.index(newlocation))
+                    self.listOfLocations.index(newlocation))
                 self.UpdateMapsets(newlocation)
         except Exception as e:
             GError(parent=self,
@@ -641,23 +624,18 @@ class GRASSStartup(wx.Frame):
         """
         Download location online
         """
-        try:
-            location = download_location_interactively(self, self.gisdbase)
-            if location:
-                # get the new location to the list
-                self.UpdateLocations(self.gisdbase)
-                # seems to be used in similar context
-                self.UpdateMapsets(os.path.join(self.gisdbase, location))
-                self.lblocations.SetSelection(
-                    self.listOfLocations.index(location))
-                # wizard does this as well, not sure if needed
-                self.SetLocation(self.gisdbase, location, 'PERMANENT')
-                # seems to be used in similar context
-                self.OnSelectLocation(None)
-        except Exception as e:
-            GError(parent=self,
-                   message=_("Unable to download sample location: %s") % e,
-                   showTraceback=False)
+        location = download_location_interactively(self, self.gisdbase)
+        if location:
+            # get the new location to the list
+            self.UpdateLocations(self.gisdbase)
+            # seems to be used in similar context
+            self.UpdateMapsets(os.path.join(self.gisdbase, location))
+            self.lblocations.SetSelection(
+                self.listOfLocations.index(location))
+            # wizard does this as well, not sure if needed
+            self.SetLocation(self.gisdbase, location, 'PERMANENT')
+            # seems to be used in similar context
+            self.OnSelectLocation(None)
 
     def UpdateLocations(self, dbase):
         """Update list of locations"""

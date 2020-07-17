@@ -24,6 +24,7 @@ import grass.script as gs
 from core import globalvar
 from core.gcmd import GError, GMessage, DecodeString, RunCommand
 from gui_core.dialogs import TextEntryDialog
+from location_wizard.dialogs import RegionDef
 from gui_core.widgets import GenericMultiValidator
 from startup.utils import (create_mapset, delete_mapset, delete_location,
                            rename_mapset, rename_location, mapset_exists,
@@ -216,19 +217,36 @@ def create_location_interactively(guiparent, grassdb):
     Location wizard started
     """
     from location_wizard.wizard import LocationWizard
-    gWizard_output = None
-    try:
-        gWizard = LocationWizard(parent=guiparent,
-                                 grassdatabase=grassdb)
+
+    gWizard_output = (None, None, None)
+    gWizard = LocationWizard(parent=guiparent,
+                             grassdatabase=grassdb)
+
+    if gWizard.location is not None:
+        if gWizard.georeffile:
+            message = _(
+                "Do you want to import <%(name)s>"
+                "to the newly created location?"
+            ) % {'name': gWizard.georeffile}
+            dlg = wx.MessageDialog(parent=guiparent,
+                                   message=message,
+                                   caption=_("Import data?"),
+                                   style=wx.YES_NO | wx.YES_DEFAULT |
+                                   wx.ICON_QUESTION)
+            dlg.CenterOnParent()
+            if dlg.ShowModal() == wx.ID_YES:
+                import_file(guiparent, gWizard.georeffile)
+            dlg.Destroy()
+
+        if gWizard.default_region:
+            defineRegion = RegionDef(guiparent, location=gWizard.location)
+            defineRegion.CenterOnParent()
+            defineRegion.ShowModal()
+            defineRegion.Destroy()
+
         gWizard_output = (gWizard.grassdatabase, gWizard.location,
-                          gWizard.georeffile, gWizard.default_region,
-                          gWizard.user_mapset)
-    except OSError as err:
-            GError(
-                parent=guiparent,
-                message=_("Unable to create new location %s") % err,
-                showTraceback=False,
-            )
+                  gWizard.user_mapset)
+
     return gWizard_output
 
 
@@ -422,6 +440,7 @@ def import_file(guiparent, filePath):
             GMessage(
                 message=_(
                     "Data file <%(name)s> imported successfully. "
-                    "The location's default region was set from this imported map.") % {
+                    "The location's default region was set from "
+                    "this imported map.") % {
                     'name': filePath},
                 parent=guiparent)
