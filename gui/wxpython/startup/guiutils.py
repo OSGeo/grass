@@ -319,7 +319,7 @@ def delete_mapset_interactively(guiparent, grassdb, location, mapset):
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
         dlg.Destroy()
-        return False
+    return False
 
 
 def delete_location_interactively(guiparent, grassdb, location):
@@ -352,4 +352,4 @@ def delete_location_interactively(guiparent, grassdb, location):
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
         dlg.Destroy()
-        return False
+    return False
