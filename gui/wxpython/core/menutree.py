@@ -184,7 +184,7 @@ class MenuTreeModelBuilder:
 def removeSeparators(model, node=None):
     if not node:
         node = model.root
-    if node.label:
+    if node.label or node is model.root:
         for child in reversed(node.children):
             removeSeparators(model, child)
     else:

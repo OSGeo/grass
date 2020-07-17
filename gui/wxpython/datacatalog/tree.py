@@ -229,8 +229,12 @@ class NameEntryDialog(TextEntryDialog):
 class DataCatalogNode(DictNode):
     """Node representing item in datacatalog."""
 
-    def __init__(self, label, data=None):
-        super(DataCatalogNode, self).__init__(label=label, data=data)
+    def __init__(self, data=None):
+        super(DataCatalogNode, self).__init__(data=data)
+
+    @property
+    def label(self):
+        return self.data["name"]
 
     def match(self, **kwargs):
         """Method used for searching according to given parameters.
@@ -328,12 +332,11 @@ class DataCatalogTree(TreeView):
             nlocations = len(locations)
             grassdata_node = self._model.AppendNode(
                 parent=self._model.root,
-                label=grassdatabase,
                 data=dict(type='grassdb', name=grassdatabase))
             for location in locations:
                 results[location] = dict()
                 varloc = self._model.AppendNode(
-                    parent=grassdata_node, label=location, data=dict(
+                    parent=grassdata_node, data=dict(
                         type='location', name=location))
                 location_nodes.append(varloc)
                 loc_count += 1
@@ -363,8 +366,7 @@ class DataCatalogTree(TreeView):
                         for key in sorted(maps.keys()):
                             mapset_node = self._model.AppendNode(
                                 parent=location_nodes[i],
-                                label=key, data=dict(
-                                    type='mapset', name=key))
+                                data=dict(type='mapset', name=key))
                             self._populateMapsetItem(mapset_node, maps[key])
 
                     proc_count = 0
@@ -432,7 +434,7 @@ class DataCatalogTree(TreeView):
         for elem in data:
             if data[elem]:
                 for layer in data[elem]:
-                    self._model.AppendNode(parent=mapset_node, label=layer,
+                    self._model.AppendNode(parent=mapset_node,
                                            data=dict(type=elem, name=layer))
         self._model.SortChildren(mapset_node)
 
@@ -882,14 +884,14 @@ class DataCatalogTree(TreeView):
 
     def InsertLayer(self, name, mapset_node, element_name):
         """Insert layer into model and refresh tree"""
-        self._model.AppendNode(parent=mapset_node, label=name,
+        self._model.AppendNode(parent=mapset_node,
                                data=dict(type=element_name, name=name))
         self._model.SortChildren(mapset_node)
         self.RefreshNode(mapset_node, recursive=True)
 
     def InsertMapset(self, name, location_node):
         """Insert mapset into model and refresh tree"""
-        self._model.AppendNode(parent=location_node, label=name,
+        self._model.AppendNode(parent=location_node,
                                data=dict(type="mapset", name=name))
         self._model.SortChildren(location_node)
         self.RefreshNode(location_node, recursive=True)
@@ -897,7 +899,7 @@ class DataCatalogTree(TreeView):
     def InsertGrassDb(self, name):
         """Insert grass db into model and refresh tree"""
         self.grassdatabases.append(name)
-        self._model.AppendNode(parent=self._model.root, label=name,
+        self._model.AppendNode(parent=self._model.root,
                                data=dict(type="grassdb", name=name))
         self._model.SortChildren(self._model.root)
         self.ReloadTreeItems()
