@@ -697,7 +697,7 @@ class DataCatalogTree(TreeView):
                                           self.selected_grassdb[0].data['name'])
         )
         if location is not None:
-            if user_mapset is not "PERNAMENT":
+            if user_mapset != "PERNAMENT":
                 self.InsertMapset(name=user_mapset, location_node=location)
             self.ReloadTreeItems()
 
