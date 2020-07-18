@@ -542,7 +542,7 @@ class GRASSStartup(wx.Frame):
             create_location_interactively(self, self.gisdbase)
         )
         if location is not None:
-            if user_mapset is not "PERNAMENT":
+            if user_mapset != "PERNAMENT":
                 self.OnSelectLocation(None)
                 self.lbmapsets.SetSelection(
                     self.listOfMapsets.index(user_mapset))
