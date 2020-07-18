@@ -274,19 +274,16 @@ class TreeFrame(wx.Frame):
 def main():
     tree = TreeModel(DictNode)
     root = tree.root
-    n1 = tree.AppendNode(parent=root, label='node1')
-    n2 = tree.AppendNode(parent=root, label='node2')
-    n3 = tree.AppendNode(parent=root, label='node3')  # pylint: disable=W0612
-    n11 = tree.AppendNode(parent=n1, label='node11', data={'xxx': 'A'})
+    n1 = tree.AppendNode(parent=root, data={"label": "node1"})
+    n2 = tree.AppendNode(parent=root, data={"label": "node2"})
+    n3 = tree.AppendNode(parent=root, data={"label": "node3"})  # pylint: disable=W0612
+    n11 = tree.AppendNode(parent=n1, data={"label": "node11", "xxx": "A"})
     n12 = tree.AppendNode(
-        parent=n1, label='node12', data={
-            'xxx': 'B'})  # pylint: disable=W0612
+        parent=n1, data={"label": "node12", "xxx": "B"})  # pylint: disable=W0612
     n21 = tree.AppendNode(
-        parent=n2, label='node21', data={
-            'xxx': 'A'})  # pylint: disable=W0612
+        parent=n2, data={"label": "node21", "xxx": "A"})  # pylint: disable=W0612
     n111 = tree.AppendNode(
-        parent=n11, label='node111', data={
-            'xxx': 'A'})  # pylint: disable=W0612
+        parent=n11, data={"label": "node111", "xxx": "A"})  # pylint: disable=W0612
 
     app = wx.App()
     frame = TreeFrame(model=tree)

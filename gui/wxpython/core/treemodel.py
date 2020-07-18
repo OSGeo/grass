@@ -28,12 +28,12 @@ class TreeModel(object):
 
     >>> tree = TreeModel(DictNode)
     >>> root = tree.root
-    >>> n1 = tree.AppendNode(parent=root, label='node1')
-    >>> n2 = tree.AppendNode(parent=root, label='node2')
-    >>> n11 = tree.AppendNode(parent=n1, label='node11', data={'xxx': 1})
-    >>> n111 = tree.AppendNode(parent=n11, label='node111', data={'xxx': 4})
-    >>> n12 = tree.AppendNode(parent=n1, label='node12', data={'xxx': 2})
-    >>> n21 = tree.AppendNode(parent=n2, label='node21', data={'xxx': 1})
+    >>> n1 = tree.AppendNode(parent=root, data={"label": "node1"})
+    >>> n2 = tree.AppendNode(parent=root, data={"label": "node2"})
+    >>> n11 = tree.AppendNode(parent=n1, data={"label": "node11", "xxx": 1})
+    >>> n111 = tree.AppendNode(parent=n11, data={"label": "node111", "xxx": 4})
+    >>> n12 = tree.AppendNode(parent=n1, data={"label": "node12", "xxx": 2})
+    >>> n21 = tree.AppendNode(parent=n2, data={"label": "node21", "xxx": 1})
     >>> [node.label for node in tree.SearchNodes(key='xxx', value=1)]
     ['node11', 'node21']
     >>> [node.label for node in tree.SearchNodes(key='xxx', value=5)]
@@ -44,15 +44,22 @@ class TreeModel(object):
     'node12'
     >>> print(tree)
     node1
+      * label : node1
       node11
+        * label : node11
         * xxx : 1
         node111
+          * label : node111
           * xxx : 4
       node12
+        * label : node12
         * xxx : 2
     node2
+      * label : node2
       node21
+        * label : node21
         * xxx : 1
+
     """
 
     def __init__(self, nodeClass):
@@ -60,23 +67,21 @@ class TreeModel(object):
 
         :param nodeClass: class which is used for creating nodes
         """
-        self._root = nodeClass('root')
+        self._root = nodeClass()
         self.nodeClass = nodeClass
 
     @property
     def root(self):
         return self._root
 
-    def AppendNode(self, parent, label, data=None):
+    def AppendNode(self, parent, **kwargs):
         """Create node and append it to parent node.
 
         :param parent: parent node of the new node
-        :param label: node label
-        :param data: optional node data
 
         :return: new node
         """
-        node = self.nodeClass(label=label, data=data)
+        node = self.nodeClass(**kwargs)
         # useful for debugging deleting nodes
         # weakref.finalize(node, print, "Deleted node {}".format(label))
         parent.children.append(node)
@@ -157,20 +162,21 @@ class TreeModel(object):
 class DictNode(object):
     """Node which has data in a form of dictionary."""
 
-    def __init__(self, label, data=None):
+    def __init__(self, data=None):
         """Create node.
 
-        :param label: node label (displayed in GUI)
         :param data: data as dictionary or None
         """
-
-        self.label = label
-        if data is None:
-            self.data = dict()
+        if not data:
+            self.data = {"label": ""}
         else:
             self.data = data
         self._children = []
         self.parent = None
+
+    @property
+    def label(self):
+        return self.data["label"]
 
     @property
     def children(self):
@@ -202,8 +208,15 @@ class DictNode(object):
 class ModuleNode(DictNode):
     """Node representing module."""
 
-    def __init__(self, label, data=None):
-        super(ModuleNode, self).__init__(label=label, data=data)
+    def __init__(self, label=None, data=None):
+        super(ModuleNode, self).__init__(data=data)
+        self._label = label if label else ''
+        if not data:
+            self.data = {}
+
+    @property
+    def label(self):
+        return self._label
 
     def match(self, key, value, case_sensitive=False):
         """Method used for searching according to command,

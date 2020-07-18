@@ -220,13 +220,13 @@ def QueryTreeBuilder(data, column):
     def addNode(parent, data, model):
         for k, v in six.iteritems(data):
             if isinstance(v, dict):
-                node = model.AppendNode(parent=parent, label=k)
+                node = model.AppendNode(parent=parent, data={"label": k})
                 addNode(parent=node, data=v, model=model)
             else:
                 if not isinstance(v, six.string_types):
                     v = str(v)
-                node = model.AppendNode(parent=parent, label=k,
-                                        data={column: v})
+                node = model.AppendNode(parent=parent,
+                                        data={"label": k, column: v})
 
     model = TreeModel(DictNode)
     for part in data:
