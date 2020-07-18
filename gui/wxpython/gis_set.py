@@ -542,17 +542,19 @@ class GRASSStartup(wx.Frame):
             create_location_interactively(self, self.gisdbase)
         )
         if location is not None:
+            if user_mapset is not "PERNAMENT":
+                self.OnSelectLocation(None)
+                self.lbmapsets.SetSelection(
+                    self.listOfMapsets.index(user_mapset))
+                self.bstart.SetFocus()
             self.tgisdbase.SetValue(grassdatabase)
             self.OnSetDatabase(None)
-            self.UpdateMapsets(os.path.join(self.gisdbase, location))
+            self.UpdateMapsets(os.path.join(grassdatabase, location))
             self.lblocations.SetSelection(
                 self.listOfLocations.index(
                     location))
             self.lbmapsets.SetSelection(0)
-            self.SetLocation(self.gisdbase, location, 'PERMANENT')
-
-            if user_mapset:
-                self.OnCreateMapset(event)
+            self.SetLocation(grassdatabase, location, 'PERMANENT')
 
     # the event can be refactored out by using lambda in bind
     def OnRenameMapset(self, event):
@@ -624,16 +626,18 @@ class GRASSStartup(wx.Frame):
         """
         Download location online
         """
-        location = download_location_interactively(self, self.gisdbase)
+        grassdatabase, location, user_mapset = download_location_interactively(
+            self, self.gisdbase
+        )
         if location:
             # get the new location to the list
-            self.UpdateLocations(self.gisdbase)
+            self.UpdateLocations(grassdatabase)
             # seems to be used in similar context
-            self.UpdateMapsets(os.path.join(self.gisdbase, location))
+            self.UpdateMapsets(os.path.join(grassdatabase, location))
             self.lblocations.SetSelection(
                 self.listOfLocations.index(location))
             # wizard does this as well, not sure if needed
-            self.SetLocation(self.gisdbase, location, 'PERMANENT')
+            self.SetLocation(grassdatabase, location, user_mapset)
             # seems to be used in similar context
             self.OnSelectLocation(None)
 

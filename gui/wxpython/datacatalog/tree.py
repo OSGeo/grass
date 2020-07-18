@@ -697,10 +697,9 @@ class DataCatalogTree(TreeView):
                                           self.selected_grassdb[0].data['name'])
         )
         if location is not None:
+            if user_mapset is not "PERNAMENT":
+                self.InsertMapset(name=user_mapset, location_node=location)
             self.ReloadTreeItems()
-
-            if user_mapset:
-                self.OnCreateMapset(event)
 
     def OnRenameMapset(self, event):
         """
@@ -913,6 +912,13 @@ class DataCatalogTree(TreeView):
         self._model.SortChildren(location_node)
         self.RefreshNode(location_node, recursive=True)
 
+    def InsertLocation(self, name, grassdb_node):
+        """Insert location into model and refresh tree"""
+        self._model.AppendNode(parent=grassdb_node, label=name,
+                               data=dict(type="location", name=name))
+        self._model.SortChildren(grassdb_node)
+        self.RefreshNode(grassdb_node, recursive=True)
+
     def InsertGrassDb(self, name):
         """Insert grass db into model and refresh tree"""
         self.grassdatabases.append(name)
@@ -989,7 +995,7 @@ class DataCatalogTree(TreeView):
         """
         Download location online
         """
-        location = download_location_interactively(
+        grassdatabase, location, user_mapset = download_location_interactively(
                 self, self.selected_grassdb[0].data['name']
         )
         if location:

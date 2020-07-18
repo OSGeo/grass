@@ -218,7 +218,7 @@ def create_location_interactively(guiparent, grassdb):
     """
     from location_wizard.wizard import LocationWizard
 
-    gWizard_output = (None, None, None)
+    gWizard_output = (None, None, "PERNAMENT")
     gWizard = LocationWizard(parent=guiparent,
                              grassdatabase=grassdb)
 
@@ -244,9 +244,16 @@ def create_location_interactively(guiparent, grassdb):
             defineRegion.ShowModal()
             defineRegion.Destroy()
 
+        if gWizard.user_mapset:
+            user_mapset = create_mapset_interactively(guiparent,
+                                                      gWizard.grassdatabase,
+                                                      gWizard.location)
+            # Returns database and location created by user
+            # and a mapset user may want to switch to
+            gWizard_output = (gWizard.grassdatabase, gWizard.location,
+                              user_mapset)
         gWizard_output = (gWizard.grassdatabase, gWizard.location,
-                  gWizard.user_mapset)
-
+                          "PERNAMENT")
     return gWizard_output
 
 
@@ -324,13 +331,19 @@ def download_location_interactively(guiparent, grassdb):
     """
     from startup.locdownload import LocationDownloadDialog
 
+    loc_download_output = (None, None, "PERNAMENT")
     loc_download = LocationDownloadDialog(parent=guiparent,
                                           database=grassdb)
     loc_download.ShowModal()
-    location = loc_download.GetLocation()
 
+    if loc_download.GetLocation() is not None:
+        # Returns database and location created by user
+        # and a mapset user may want to switch to
+        loc_download_output = (grassdb,
+                               loc_download.GetLocation(),
+                               "PERNAMENT")
     loc_download.Destroy()
-    return location
+    return loc_download_output
 
 
 def delete_mapset_interactively(guiparent, grassdb, location, mapset):
