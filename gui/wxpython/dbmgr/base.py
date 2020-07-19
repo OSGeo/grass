@@ -115,11 +115,7 @@ class VirtualAttributeList(ListCtrl,
                    message=e.value)
             return
 
-        # add some attributes (colourful background for each item rows)
-        self.attr1 = wx.ListItemAttr()
-        self.attr1.SetBackgroundColour(wx.Colour(238, 238, 238))
-        self.attr2 = wx.ListItemAttr()
-        self.attr2.SetBackgroundColour("white")
+        self.EnableAlternateRowColours()
         self.il = wx.ImageList(16, 16)
         self.sm_up = self.il.Add(
             wx.ArtProvider.GetBitmap(
@@ -435,13 +431,6 @@ class VirtualAttributeList(ListCtrl,
         index = self.itemIndexMap[item]
         s = self.itemDataMap[index][col]
         return str(s)
-
-    def OnGetItemAttr(self, item):
-        """Get item attributes"""
-        if (item % 2) == 0:
-            return self.attr2
-        else:
-            return self.attr1
 
     def OnColumnMenu(self, event):
         """Column heading right mouse button -> pop-up menu"""
