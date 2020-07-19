@@ -542,7 +542,7 @@ class GRASSStartup(wx.Frame):
             create_location_interactively(self, self.gisdbase)
         )
         if location is not None:
-            if user_mapset != "PERNAMENT":
+            if user_mapset != "PERMANENT":
                 self.OnSelectLocation(None)
                 self.lbmapsets.SetSelection(
                     self.listOfMapsets.index(user_mapset))
@@ -626,7 +626,7 @@ class GRASSStartup(wx.Frame):
         """
         Download location online
         """
-        grassdatabase, location, user_mapset = download_location_interactively(
+        grassdatabase, location, mapset = download_location_interactively(
             self, self.gisdbase
         )
         if location:
@@ -637,7 +637,7 @@ class GRASSStartup(wx.Frame):
             self.lblocations.SetSelection(
                 self.listOfLocations.index(location))
             # wizard does this as well, not sure if needed
-            self.SetLocation(grassdatabase, location, user_mapset)
+            self.SetLocation(grassdatabase, location, mapset)
             # seems to be used in similar context
             self.OnSelectLocation(None)
 

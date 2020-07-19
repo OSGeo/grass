@@ -697,8 +697,6 @@ class DataCatalogTree(TreeView):
                                           self.selected_grassdb[0].data['name'])
         )
         if location is not None:
-            if user_mapset != "PERNAMENT":
-                self.InsertMapset(name=user_mapset, location_node=location)
             self.ReloadTreeItems()
 
     def OnRenameMapset(self, event):
@@ -911,13 +909,6 @@ class DataCatalogTree(TreeView):
                                data=dict(type="mapset", name=name))
         self._model.SortChildren(location_node)
         self.RefreshNode(location_node, recursive=True)
-
-    def InsertLocation(self, name, grassdb_node):
-        """Insert location into model and refresh tree"""
-        self._model.AppendNode(parent=grassdb_node, label=name,
-                               data=dict(type="location", name=name))
-        self._model.SortChildren(grassdb_node)
-        self.RefreshNode(grassdb_node, recursive=True)
 
     def InsertGrassDb(self, name):
         """Insert grass db into model and refresh tree"""

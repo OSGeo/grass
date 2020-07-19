@@ -57,6 +57,7 @@ from gui_core.widgets import GenericMultiValidator
 from gui_core.wrap import SpinCtrl, SearchCtrl, StaticText, \
     TextCtrl, Button, CheckBox, StaticBox, NewId, ListCtrl, HyperlinkCtrl
 from location_wizard.dialogs import SelectTransformDialog
+from datacatalog.tree import DataCatalogTree
 from startup.utils import location_exists
 
 from grass.script import decode
@@ -2280,6 +2281,9 @@ class LocationWizard(wx.Object):
         # file from which new location is created
         self.georeffile = None
 
+        # Datacatalog
+        self.tree = DataCatalogTree(self, giface=None)
+
         # additional settings
         self.default_region = False
         self.user_mapset = False
@@ -2544,11 +2548,9 @@ class LocationWizard(wx.Object):
                            (_("Unable to create new GRASS Database"),
                             database))
                     return None
-
-            # change to new GISDbase directory
-            RunCommand('g.gisenv',
-                       parent=self.wizard,
-                       set='GISDBASE=%s' % database)
+            item = self.tree._model.SearchNodes(name=database, type='grassdb')
+            if not item:
+                self.tree.InsertGrassDb(name=database)
 
             wx.MessageBox(
                 parent=self.wizard,
