@@ -215,6 +215,7 @@ def rename_mapset_interactively(guiparent, grassdb, location, mapset):
     """
     Rename selected mapset
     """
+    newmapset = None
     if mapset == "PERMANENT":
         GMessage(
             parent=guiparent,
@@ -223,7 +224,8 @@ def rename_mapset_interactively(guiparent, grassdb, location, mapset):
                 "This mapset cannot be renamed."
             ),
         )
-        return
+        return newmapset
+
     dlg = MapsetDialog(
         parent=guiparent,
         default=mapset,
@@ -244,8 +246,6 @@ def rename_mapset_interactively(guiparent, grassdb, location, mapset):
                 message=_("Unable to rename mapset.\n\n%s") % err,
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
-    else:
-        newmapset = None
     dlg.Destroy()
     return newmapset
 
@@ -291,7 +291,7 @@ def delete_mapset_interactively(guiparent, grassdb, location, mapset):
                 "This mapset cannot be deleted."
             ),
         )
-        return
+        return False
 
     dlg = wx.MessageDialog(
         parent=guiparent,
@@ -318,7 +318,7 @@ def delete_mapset_interactively(guiparent, grassdb, location, mapset):
                 message=_("Unable to delete mapset.\n\n%s") % err,
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
-        dlg.Destroy()
+    dlg.Destroy()
     return False
 
 
@@ -351,5 +351,5 @@ def delete_location_interactively(guiparent, grassdb, location):
                 message=_("Unable to delete location.\n\n%s") % err,
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
-        dlg.Destroy()
+    dlg.Destroy()
     return False
