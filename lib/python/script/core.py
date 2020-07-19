@@ -30,7 +30,7 @@ import random
 import pipes
 import types as python_types
 
-from .utils import KeyValue, parse_key_val, basename, encode, decode
+from .utils import KeyValue, parse_key_val, basename, encode, decode, try_remove
 from grass.exceptions import ScriptError, CalledModuleError
 
 # PY2/PY3 compat
@@ -1588,15 +1588,12 @@ def create_location(dbase, location, epsg=None, proj4=None, filename=None,
     :param bool overwrite: True to overwrite location if exists(WARNING:
                            ALL DATA from existing location ARE DELETED!)
     """
-    gisdbase = None
-    if epsg or proj4 or filename or wkt:
-        # FIXME: changing GISDBASE mid-session is not background-job safe
-        gisdbase = gisenv()['GISDBASE']
-        run_command('g.gisenv', set='GISDBASE=%s' % dbase)
     # create dbase if not exists
     if not os.path.exists(dbase):
-            os.mkdir(dbase)
-
+        os.mkdir(dbase)
+    current_location = gisenv()['LOCATION_NAME']
+    if epsg or proj4 or filename or wkt:
+        tmp_gisrc, env = create_environment(dbase, current_location, 'PERMANENT')
     # check if location already exists
     if os.path.exists(os.path.join(dbase, location)):
         if not overwrite:
@@ -1615,27 +1612,27 @@ def create_location(dbase, location, epsg=None, proj4=None, filename=None,
 
     if epsg:
         ps = pipe_command('g.proj', quiet=True, flags='t', epsg=epsg,
-                          location=location, stderr=PIPE, **kwargs)
+                          location=location, stderr=PIPE, env=env, **kwargs)
     elif proj4:
         ps = pipe_command('g.proj', quiet=True, flags='t', proj4=proj4,
-                          location=location, stderr=PIPE, **kwargs)
+                          location=location, stderr=PIPE, env=env, **kwargs)
     elif filename:
         ps = pipe_command('g.proj', quiet=True, georef=filename,
-                          location=location, stderr=PIPE)
+                          location=location, stderr=PIPE, env=env)
     elif wkt:
         if os.path.isfile(wkt):
             ps = pipe_command('g.proj', quiet=True, wkt=wkt, location=location,
-                              stderr=PIPE)
+                              stderr=PIPE, env=env)
         else:
             ps = pipe_command('g.proj', quiet=True, wkt='-', location=location,
-                              stderr=PIPE, stdin=PIPE)
+                              stderr=PIPE, stdin=PIPE, env=env)
             stdin = encode(wkt)
     else:
         _create_location_xy(dbase, location)
 
     if epsg or proj4 or filename or wkt:
         error = ps.communicate(stdin)[1]
-        run_command('g.gisenv', set='GISDBASE=%s' % gisdbase)
+        try_remove(tmp_gisrc)
 
         if ps.returncode != 0 and error:
             raise ScriptError(repr(error))
