@@ -1936,6 +1936,8 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     f = open(shell_rc_file, 'w')
 
     if sh == 'zsh':
+        if not os.getenv('SAVEHIST'):
+            os.environ['SAVEHIST'] = os.getenv('HISTSIZE')
         f.write('test -r {home}/.alias && source {home}/.alias\n'.format(
             home=userhome))
     else:
