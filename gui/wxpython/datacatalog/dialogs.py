@@ -93,7 +93,7 @@ class CatalogReprojectionDialog(wx.Dialog):
         label = _("Map layer <{ml}> needs to be reprojected.\n"
                   "Please review and modify reprojection parameters:").format(ml=self.iLayer)
         dialogSizer.Add(StaticText(self.panel, label=label),
-                        flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=10)
+                        flag=wx.ALL | wx.EXPAND, border=10)
         if self.etype == 'raster':
             optionsSizer.Add(StaticText(self.panel, label=_("Estimated resolution:")),
                              pos=(0, 0), flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
