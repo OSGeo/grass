@@ -63,6 +63,20 @@
 #% label: Skip earlier feature IDs and start downloading at this one
 #% description: (default: start with the first feature)
 #%end
+#%option
+#% key: username
+#% type: string
+#% required: no
+#% multiple: no
+#% label: Username or file with username or environment variable name with username
+#%end
+#%option
+#% key: password
+#% type: string
+#% required: no
+#% multiple: no
+#% label: Password or file with password or environment variable name with password
+#%end
 #%flag
 #% key: l
 # todo #% description: List available layers and exit
@@ -81,8 +95,12 @@ from grass.script.utils import try_remove
 from grass.script import core as grass
 try:
     from urllib2 import urlopen, URLError, HTTPError
+    from urllib2 import build_opener, install_opener
+    from urllib2 import HTTPPasswordMgrWithDefaultRealm, HTTPBasicAuthHandler
 except ImportError:
     from urllib.request import urlopen
+    from urllib.request import build_opener, install_opener
+    from urllib.request import HTTPPasswordMgrWithDefaultRealm, HTTPBasicAuthHandler
     from urllib.error import URLError, HTTPError
 
 
@@ -122,6 +140,32 @@ def main():
     tmpxml = tmp + '.xml'
 
     grass.debug(wfs_url)
+
+    # Set user and password if given
+    if options['username'] and options['password']:
+        grass.message(_("Setting username and password..."))
+        if os.path.isfile(options['username']):
+            with open(options['username']) as f:
+                filecontent = f.read()
+                user = filecontent.strip()
+        elif options['username'] in os.environ:
+            user = os.environ[options['username']]
+        else:
+            user = options['username']
+        if os.path.isfile(options['password']):
+            with open(options['password']) as f:
+                filecontent = f.read()
+                pw = filecontent.strip()
+        elif options['password'] in os.environ:
+            pw = os.environ[options['password']]
+        else:
+            pw = options['password']
+
+        passmgr = HTTPPasswordMgrWithDefaultRealm()
+        passmgr.add_password(None, wfs_url,user, pw)
+        authhandler = HTTPBasicAuthHandler(passmgr)
+        opener = build_opener(authhandler)
+        install_opener(opener)
 
     # GTC Downloading WFS features
     grass.message(_("Retrieving data..."))
