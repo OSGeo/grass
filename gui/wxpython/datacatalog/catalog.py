@@ -20,8 +20,11 @@ import os
 
 from core.gthread import gThread
 from core.debug import Debug
+from core.gcmd import GError
 from datacatalog.tree import DataCatalogTree
 from datacatalog.toolbars import DataCatalogToolbar
+from startup.guiutils import create_mapset_interactively
+from grass.script import gisenv
 
 from grass.pydispatch.signal import Signal
 
@@ -101,6 +104,24 @@ class DataCatalog(wx.Panel):
             self.tree.InsertGrassDb(name=grassdatabase)
 
         dlg.Destroy()
+
+    def OnCreateMapset(self, event):
+        """Create new mapset in current location"""
+        genv = gisenv()
+        gisdbase = genv['GISDBASE']
+        location = genv['LOCATION_NAME']
+        try:
+            mapset = create_mapset_interactively(self, gisdbase, location)
+            if mapset:
+                item = self.tree._model.SearchNodes(name=location,
+                                                    type='location')
+                self.tree.InsertMapset(name=mapset,
+                                  location_node=item)
+                self.tree.ReloadTreeItems()
+        except Exception as e:
+            GError(parent=self,
+                   message=_("Unable to create new mapset: %s") % e,
+                   showTraceback=False)
 
     def SetRestriction(self, restrict):
         """Allow editing other mapsets or restrict editing to current mapset"""

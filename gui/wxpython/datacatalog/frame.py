@@ -22,10 +22,12 @@ import sys
 import wx
 
 from core.globalvar import ICONDIR
-from core.gcmd import RunCommand, GMessage
+from core.gcmd import RunCommand, GError, GMessage
 from datacatalog.tree import DataCatalogTree
 from datacatalog.toolbars import DataCatalogToolbar
 from gui_core.wrap import Button
+from grass.script import gisenv
+from startup.guiutils import create_mapset_interactively
 
 
 class DataCatalogFrame(wx.Frame):
@@ -118,6 +120,24 @@ class DataCatalogFrame(wx.Frame):
             self.tree.InsertGrassDb(name=grassdatabase)
 
         dlg.Destroy()
+
+    def OnCreateMapset(self, event):
+        """Create new mapset in current location"""
+        genv = gisenv()
+        gisdbase = genv['GISDBASE']
+        location = genv['LOCATION_NAME']
+        try:
+            mapset = create_mapset_interactively(self, gisdbase, location)
+            if mapset:
+                item = self.tree._model.SearchNodes(name=location,
+                                                    type='location')
+                self.tree.InsertMapset(name=mapset,
+                                  location_node=item)
+                self.tree.ReloadTreeItems()
+        except Exception as e:
+            GError(parent=self,
+                   message=_("Unable to create new mapset: %s") % e,
+                   showTraceback=False)
 
     def SetRestriction(self, restrict):
         """Allow editing other mapsets or restrict editing to current mapset"""
