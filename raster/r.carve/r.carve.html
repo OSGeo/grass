@@ -3,8 +3,17 @@
 <em>r.carve</em> accepts vector stream data as input, transforms them to
 raster, and subtracts a default-depth + additional-depth from a DEM. If
 the given width is more than 1 cell, it will carve the stream with the
-given width. With the <b>-n</b> flag it should eliminate all flat cells within
-the stream, so when and if the water gets into the stream it will
+given width. It is possible to define different width and depth (column
+in the vector map table) separately for each line segment (<b>width_column</b>,
+<b>depth_column</b> parameter). Another way is to combine the value from
+the vector map table column (represent width or depth) and the <b>width</b>
+or <b>depth</b> parameter. If the width or depth value in the vector map
+table is NULL, the value(s) of the <b>width</b> or <b>depth</b> argument
+parameter is used if defined, otherwise the default value for width is used,
+which represents half the resolution of the region, and for depth it is
+0.0 m. If the width and depth values are less than 0.0 m, the default
+value is used. With the <b>-n</b> flag it should eliminate all flat cells
+within the stream, so when and if the water gets into the stream it will
 flow. The <em>points</em> option generates x,y,z for points which define the stream
 with the z-value of the bottom of the carved-in stream. These points
 can then be combined with contours to interpolate a new DEM with
@@ -98,6 +107,83 @@ d.rast carved_dem_accum
 </center>
 
 
+Another <b>width_columns</b>, <b>depth_columns</b>, <b>width</b>, <b>depth</b> parameters combinations:
+
+<div class="code"><pre>
+# g.region -p
+projection: 99 (Lambert Conformal Conic)
+zone:       0
+datum:      nad83
+ellipsoid:  a=6378137 es=0.006694380022900787
+north:      220750
+south:      220000
+west:       638300
+east:       639000
+nsres:      1
+ewres:      1
+rows:       750
+cols:       700
+cells:      525000
+
+# streams vector map with added width, depth columns with following values
+# db.select table=streams sql="SELECT cat, width, depth FROM streams WHERE cat in (95364, 95371, 95379, 95395, 95424, 95425)"
+cat|width|depth
+95364||
+95371||
+95379||
+95395|-99|
+95424|50|8
+95425|20|2
+
+# width and depth values are read from vector map table columns
+# if value in column is less than 0.0 m or NULL, default value is used (for <b>width</b> parameter default value is half of region resolution and for <b>depth</b> is 0.0 m)
+r.carve rast=elev_lid792_1m vect=streams out=carved_dem width_column=width depth_column=depth
+
+# debug info
+D0/0: Process line with id: 4, cat: 95364, width: 0.50, depth: 0.00
+D0/0: Process line with id: 3, cat: 95371, width: 0.50, depth: 0.00
+D0/0: Process line with id: 5, cat: 95379, width: 0.50, depth: 0.00
+D0/0: Process line with id: 6, cat: 95379, width: 0.50, depth: 0.00
+D0/0: Process line with id: 7, cat: 95395, width: 0.50, depth: 0.00
+D0/0: Process line with id: 1, cat: 95424, width: 25.00, depth: 8.00
+D0/0: Process line with id: 2, cat: 95425, width: 10.00, depth: 2.00
+
+width value = width value / 2.0
+
+# width and depth values are read from vector map table columns
+# if value in column is less than 0.0 m (for <b>width</b> parameter default value is half of region resolution and for <b>depth</b> is 0.0 m)
+# if value in width column is NULL, <b>width</b>, <b>depth</b> parameter argument value is used
+r.carve rast=elev_lid792_1m vect=streams out=carved_dem width_column=width depth_column=depth width=15.0 depth=6.0
+
+# debug info
+D0/0: Process line with id: 4, cat: 95364, width: 7.50, depth: 6.00
+D0/0: Process line with id: 3, cat: 95371, width: 7.50, depth: 6.00
+D0/0: Process line with id: 5, cat: 95379, width: 7.50, depth: 6.00
+D0/0: Process line with id: 6, cat: 95379, width: 7.50, depth: 6.00
+D0/0: Process line with id: 7, cat: 95395, width: 0.50, depth: 6.00
+D0/0: Process line with id: 1, cat: 95424, width: 25.00, depth: 8.00
+D0/0: Process line with id: 2, cat: 95425, width: 10.00, depth: 2.00
+
+width value = width value / 2.0
+
+# width values are read from vector map table columns, and depth is constant value 6.0 m (<b>depth</b> parameter argument)
+# if width value in column is less than 0.0 m, default value is used which is half of region resolution
+# if value in width column is NULL, <b>width</b> parameter argument value is used, which is constant value 15.0 m
+r.carve rast=elev_lid792_1m vect=streams out=carved_dem width_columns=width depth_column=depth width=15.0 depth=6.0
+
+# debug info
+D0/0: Process line with id: 4, cat: 95364, width: 7.50, depth: 6.00
+D0/0: Process line with id: 3, cat: 95371, width: 7.50, depth: 6.00
+D0/0: Process line with id: 5, cat: 95379, width: 7.50, depth: 6.00
+D0/0: Process line with id: 6, cat: 95379, width: 7.50, depth: 6.00
+D0/0: Process line with id: 7, cat: 95395, width: 0.50, depth: 6.00
+D0/0: Process line with id: 1, cat: 95424, width: 25.00, depth: 6.00
+D0/0: Process line with id: 2, cat: 95425, width: 10.00, depth: 6.00
+
+width value = width value / 2.0
+</pre></div>
+
+
 <h2>KNOWN ISSUES</h2>
 <!-- Is this still the case as of Jan 11, 2008? - EP -->
 The module does not operate yet in latitude-longitude locations.  It
@@ -117,12 +203,12 @@ M.  Johnston, GMSL (Report for CERL 1999)
 <a href="r.flow.html">r.flow</a>,
 <a href="r.fill.dir.html">r.fill.dir</a>,
 <a href="r.watershed.html">r.watershed</a>
-</em> 
+</em>
 
 <h2>AUTHOR</h2>
 Bill Brown (GMSL)<br>
-GRASS 6 update: Brad Douglas
-
+GRASS 6 update: Brad Douglas<br>
+Adding the option to read width, depth values from vector map table columns: Tomas Zigo
 <!--
 <p>
 <i>Last changed: $Date$</i>

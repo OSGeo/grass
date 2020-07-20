@@ -1,10 +1,11 @@
-
 /****************************************************************************
  *
  * MODULE:       r.carve
  *
  * AUTHOR(S):    Original author Bill Brown, UIUC GIS Laboratory
  *               Brad Douglas <rez touchofmadness com>
+ *               Tomas Zigo <tomas zigo slovanet sk> (adding the option
+ *               to read width, depth values from vector map table columns)
  *
  * PURPOSE:      Takes vector stream data, converts it to 3D raster and
  *               subtracts a specified depth
@@ -49,18 +50,62 @@ typedef struct
 
 struct parms
 {
-    struct Option *inrast, *invect, *outrast, *outvect;
+    struct Option *inrast, *invect, *outrast, *outvect, *width_col,
+      *depth_col, *field;
     RASTER_MAP_TYPE raster_type;
     double swidth, sdepth;
     int wrap, noflat;
 };
 
+struct sql_statement
+{
+    dbString *sql;
+    int ncats;
+    struct vect_id_cat_map *id_cat_map;
+};
+
+struct vect_id_cat_map
+{
+    int id;
+    int cat;
+};
+
+struct ptr
+{
+    enum Type {
+                 P_INT,
+                 P_DOUBLE,
+                 P_CHAR,
+                 P_DBSTRING,
+                 P_VECT_ID_CAT_MAP,
+    } type;
+    union {
+        int *p_int;
+        double *p_double;
+        char *p_char;
+        dbString *p_dbString;
+        struct vect_id_cat_map *p_vect_id_cat_map;
+    };
+};
+
+typedef enum
+{
+   WIDTH,
+   DEPTH,
+} value_type;
 
 /* enforce_ds.c */
-extern int enforce_downstream(int /*infd */ , int /*outfd */ ,
-			      struct Map_info * /*Map */ ,
-			      struct Map_info * /*outMap */ ,
-			      struct parms * /* parm */ );
+extern void enforce_downstream(int /*infd */ , int /*outfd */ ,
+                               struct Map_info * /*Map */ ,
+                               struct Map_info * /*outMap */ ,
+                               struct parms * /* parm */,
+                               struct field_info * /* Fi */,
+                               int * /* width_col_posw */,
+                               int * /* depth_col_pos */,
+                               char *[2] /* columns[2] */,
+                               dbDriver * /* driver */);
+extern void adjust_swidth(struct Cell_head *win, double *value);
+extern void adjust_sdepth(double *value);
 
 /* lobf.c */
 extern Point2 *pg_getpoints(PointGrp *);
@@ -75,6 +120,7 @@ void *write_raster(void *, const int, const RASTER_MAP_TYPE);
 
 /* support.c */
 extern void update_rast_history(struct parms *);
+extern void check_mem_alloc(struct ptr *pointer);
 
 /* vect.c */
 extern int open_new_vect(struct Map_info *, char *);
