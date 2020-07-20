@@ -52,6 +52,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("sinuous"));
     G_add_keyword(_("slope"));
     module->description = _("Populates attribute values from vector features.");
+    module->overwrite = 1;
 
     parse_command_line(argc, argv);
 
