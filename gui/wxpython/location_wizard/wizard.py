@@ -57,7 +57,6 @@ from gui_core.widgets import GenericMultiValidator
 from gui_core.wrap import SpinCtrl, SearchCtrl, StaticText, \
     TextCtrl, Button, CheckBox, StaticBox, NewId, ListCtrl, HyperlinkCtrl
 from location_wizard.dialogs import SelectTransformDialog
-from datacatalog.tree import DataCatalogTree
 from startup.utils import location_exists
 
 from grass.script import decode
@@ -596,7 +595,7 @@ class ItemList(ListCtrl,
         for column in columns:
             self.InsertColumn(i, column)
             i += 1
-        
+
         self.EnableAlternateRowColours()
 
         if self.sourceData:
@@ -1478,6 +1477,7 @@ class WKTPage(TitledPage):
             if not nextButton.IsEnabled():
                 nextButton.Enable()
 
+
 class EPSGPage(TitledPage):
     """Wizard page for selecting EPSG code for
     setting coordinate system parameters"""
@@ -1485,7 +1485,7 @@ class EPSGPage(TitledPage):
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Select CRS from a list"))
 
-        self.sizer = wx.BoxSizer(wx.VERTICAL)  
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
         searchBoxSizer = wx.BoxSizer(wx.HORIZONTAL)
         epsglistBoxSizer = wx.BoxSizer(wx.HORIZONTAL)
         informationBoxSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -1978,7 +1978,7 @@ class CustomPage(TitledPage):
                 return
 
             # check for datum tranforms
-            # FIXME: -t flag is a hack-around for trac bug #1849          
+            # FIXME: -t flag is a hack-around for trac bug #1849
             ret, out, err = RunCommand('g.proj',
                                        read=True, getErrorMsg=True,
                                        proj4=self.customstring,
@@ -2281,9 +2281,6 @@ class LocationWizard(wx.Object):
         # file from which new location is created
         self.georeffile = None
 
-        # Datacatalog
-        self.tree = DataCatalogTree(self, giface=None)
-
         # additional settings
         self.default_region = False
         self.user_mapset = False
@@ -2548,9 +2545,6 @@ class LocationWizard(wx.Object):
                            (_("Unable to create new GRASS Database"),
                             database))
                     return None
-            item = self.tree._model.SearchNodes(name=database, type='grassdb')
-            if not item:
-                self.tree.InsertGrassDb(name=database)
 
             wx.MessageBox(
                 parent=self.wizard,

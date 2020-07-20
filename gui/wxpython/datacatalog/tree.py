@@ -677,8 +677,8 @@ class DataCatalogTree(TreeView):
         location = self.selected_location[0]
         try:
             mapset = create_mapset_interactively(self,
-                                        gisdbase.data['name'],
-                                        location.data['name'],)
+                                                 gisdbase.data['name'],
+                                                 location.data['name'])
             if mapset:
                 self.InsertMapset(name=mapset,
                                   location_node=location)
@@ -697,6 +697,9 @@ class DataCatalogTree(TreeView):
                                           self.selected_grassdb[0].data['name'])
         )
         if location is not None:
+            item = self._model.SearchNodes(name=grassdatabase, type='grassdb')
+            if not item:
+                self.InsertGrassDb(name=grassdatabase)
             self.ReloadTreeItems()
 
     def OnRenameMapset(self, event):
