@@ -28,7 +28,7 @@ import codecs
 import string
 import random
 import pipes
-import tempfile
+from tempfile import NamedTemporaryFile
 import types as python_types
 
 from .utils import KeyValue, parse_key_val, basename, encode, decode, try_remove
@@ -1771,7 +1771,7 @@ def create_environment(gisdbase, location, mapset):
     """Creates environment to be passed in run_command for example.
     Returns tuple with temporary file path and the environment. The user
     of this function is responsible for deleting the file."""
-    with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
+    with NamedTemporaryFile(mode='w', delete=False) as f:
         f.write('MAPSET: {mapset}\n'.format(mapset=mapset))
         f.write('GISDBASE: {g}\n'.format(g=gisdbase))
         f.write('LOCATION_NAME: {l}\n'.format(l=location))
