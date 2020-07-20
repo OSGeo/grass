@@ -64,7 +64,7 @@
 #% description: (default: start with the first feature)
 #%end
 #%option
-#% key: user
+#% key: username
 #% type: string
 #% required: no
 #% multiple: no
@@ -142,16 +142,16 @@ def main():
     grass.debug(wfs_url)
 
     # Set user and password if given
-    if options['user'] and options['password']:
-        grass.message(_("Setting user and password..."))
-        if os.path.isfile(options['user']):
-            with open(options['user']) as f:
+    if options['username'] and options['password']:
+        grass.message(_("Setting username and password..."))
+        if os.path.isfile(options['username']):
+            with open(options['username']) as f:
                 filecontent = f.read()
                 user = filecontent.strip()
-        elif options['user'] in os.environ:
-            user = os.environ[options['user']]
+        elif options['username'] in os.environ:
+            user = os.environ[options['username']]
         else:
-            user = options['user']
+            user = options['username']
         if os.path.isfile(options['password']):
             with open(options['password']) as f:
                 filecontent = f.read()
