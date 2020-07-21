@@ -1008,15 +1008,23 @@ class DataCatalogTree(TreeView):
         self.copy_mode = wx.GetMouseState().ControlDown()
         if node:
             self.DefineItems([node])
-            if self._restricted and gisenv()['MAPSET'] != self.selected_mapset[0].data['name']:
-                GMessage(_("To move or copy maps to other mapsets, unlock editing of other mapsets"),
+            if None not in self.selected_mapset:
+                if self._restricted and gisenv()['MAPSET'] != self.selected_mapset[0].data['name']:
+                    GMessage(_("To move or copy maps to other mapsets, unlock editing of other mapsets"),
+                             parent=self)
+                    event.Veto()
+                    return
+
+                event.Allow()
+                Debug.msg(1, "DROP DONE")
+                self.OnPasteMap(event)
+            else:
+                GMessage(_("To move or copy maps to other location, "
+                           "please drag them to a mapset in the "
+                           "destination location"),
                          parent=self)
                 event.Veto()
                 return
-
-            event.Allow()
-            Debug.msg(1, "DROP DONE")
-            self.OnPasteMap(event)
 
     def OnSwitchDbLocationMapset(self, event):
         """Switch to location and mapset"""
