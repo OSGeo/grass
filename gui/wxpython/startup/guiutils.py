@@ -240,6 +240,7 @@ def rename_mapset_interactively(guiparent, grassdb, location, mapset):
         try:
             rename_mapset(grassdb, location, mapset, newmapset)
         except OSError as err:
+            newmapset = None
             wx.MessageBox(
                 parent=guiparent,
                 caption=_("Error"),
@@ -267,6 +268,7 @@ def rename_location_interactively(guiparent, grassdb, location):
         try:
             rename_location(grassdb, location, newlocation)
         except OSError as err:
+            newlocation = None
             wx.MessageBox(
                 parent=guiparent,
                 caption=_("Error"),
