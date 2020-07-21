@@ -223,6 +223,7 @@ def create_location_interactively(guiparent, grassdb):
 
     if gWizard.location is None:
         gWizard_output = (None, None, None)
+        # Returns Nones after Cancel
         return gWizard_output
 
     if gWizard.georeffile:
@@ -247,13 +248,13 @@ def create_location_interactively(guiparent, grassdb):
         defineRegion.Destroy()
 
     if gWizard.user_mapset:
-        user_mapset = create_mapset_interactively(guiparent,
+        mapset = create_mapset_interactively(guiparent,
                                                   gWizard.grassdatabase,
                                                   gWizard.location)
         # Returns database and location created by user
         # and a mapset user may want to switch to
         gWizard_output = (gWizard.grassdatabase, gWizard.location,
-                          user_mapset)
+                          mapset)
     else:
         # Returns PERMANENT mapset when user mapset not defined
         gWizard_output = (gWizard.grassdatabase, gWizard.location,
@@ -421,41 +422,41 @@ def delete_location_interactively(guiparent, grassdb, location):
 
 
 def import_file(guiparent, filePath):
-        """Tries to import file as vector or raster.
+    """Tries to import file as vector or raster.
 
-        If successfull sets default region from imported map.
-        """
-        RunCommand('db.connect', flags='c')
-        mapName = os.path.splitext(os.path.basename(filePath))[0]
-        vectors = RunCommand('v.in.ogr', input=filePath, flags='l',
-                             read=True)
+    If successfull sets default region from imported map.
+    """
+    RunCommand('db.connect', flags='c')
+    mapName = os.path.splitext(os.path.basename(filePath))[0]
+    vectors = RunCommand('v.in.ogr', input=filePath, flags='l',
+                         read=True)
 
-        wx.BeginBusyCursor()
-        wx.GetApp().Yield()
-        if vectors:
-            # vector detected
-            returncode, error = RunCommand(
-                'v.in.ogr', input=filePath, output=mapName, flags='e',
-                getErrorMsg=True)
-        else:
-            returncode, error = RunCommand(
-                'r.in.gdal', input=filePath, output=mapName, flags='e',
-                getErrorMsg=True)
-        wx.EndBusyCursor()
+    wx.BeginBusyCursor()
+    wx.GetApp().Yield()
+    if vectors:
+        # vector detected
+        returncode, error = RunCommand(
+            'v.in.ogr', input=filePath, output=mapName, flags='e',
+            getErrorMsg=True)
+    else:
+        returncode, error = RunCommand(
+            'r.in.gdal', input=filePath, output=mapName, flags='e',
+            getErrorMsg=True)
+    wx.EndBusyCursor()
 
-        if returncode != 0:
-            GError(
-                parent=guiparent,
-                message=_(
-                    "Import of <%(name)s> failed.\n"
-                    "Reason: %(msg)s") % ({
-                        'name': filePath,
-                        'msg': error}))
-        else:
-            GMessage(
-                message=_(
-                    "Data file <%(name)s> imported successfully. "
-                    "The location's default region was set from "
-                    "this imported map.") % {
-                    'name': filePath},
-                parent=guiparent)
+    if returncode != 0:
+        GError(
+            parent=guiparent,
+            message=_(
+                "Import of <%(name)s> failed.\n"
+                "Reason: %(msg)s") % ({
+                    'name': filePath,
+                    'msg': error}))
+    else:
+        GMessage(
+            message=_(
+                "Data file <%(name)s> imported successfully. "
+                "The location's default region was set from "
+                "this imported map.") % {
+                'name': filePath},
+            parent=guiparent)

@@ -692,7 +692,7 @@ class DataCatalogTree(TreeView):
         """
         Location wizard started
         """
-        grassdatabase, location, user_mapset = (
+        grassdatabase, location, mapset = (
             create_location_interactively(self,
                                           self.selected_grassdb[0].data['name'])
         )
@@ -989,7 +989,7 @@ class DataCatalogTree(TreeView):
         """
         Download location online
         """
-        grassdatabase, location, user_mapset = download_location_interactively(
+        grassdatabase, location, mapset = download_location_interactively(
                 self, self.selected_grassdb[0].data['name']
         )
         if location:

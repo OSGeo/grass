@@ -538,14 +538,14 @@ class GRASSStartup(wx.Frame):
 
     def OnCreateLocation(self, event):
         """Location wizard started"""
-        grassdatabase, location, user_mapset = (
+        grassdatabase, location, mapset = (
             create_location_interactively(self, self.gisdbase)
         )
         if location is not None:
-            if user_mapset != "PERMANENT":
+            if mapset != "PERMANENT":
                 self.OnSelectLocation(None)
                 self.lbmapsets.SetSelection(
-                    self.listOfMapsets.index(user_mapset))
+                    self.listOfMapsets.index(mapset))
                 self.bstart.SetFocus()
             self.tgisdbase.SetValue(grassdatabase)
             self.OnSetDatabase(None)
