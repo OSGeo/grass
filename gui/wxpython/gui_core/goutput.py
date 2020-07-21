@@ -692,7 +692,8 @@ class GStc(stc.StyledTextCtrl):
         """The clipboard contents can be preserved after
         the app has exited"""
 
-        wx.TheClipboard.Flush()
+        if wx.TheClipboard.IsOpened():
+            wx.TheClipboard.Flush()
         evt.Skip()
 
     def AddTextWrapped(self, txt, wrap=None):

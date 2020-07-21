@@ -619,7 +619,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
     def OnDestroy(self, event):
         """The clipboard contents can be preserved after
         the app has exited"""
-        wx.TheClipboard.Flush()
+        if wx.TheClipboard.IsOpened():
+            wx.TheClipboard.Flush()
         event.Skip()
 
     def OnCmdErase(self, event):
