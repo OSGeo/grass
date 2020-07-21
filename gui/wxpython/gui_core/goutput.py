@@ -38,7 +38,7 @@ from core.gconsole   import GConsole, \
     Notification
 from core.globalvar import CheckWxVersion, wxPythonPhoenix
 from gui_core.prompt import GPromptSTC
-from gui_core.wrap import Button, ToggleButton, StaticText, \
+from gui_core.wrap import Button, ClearButton, ToggleButton, StaticText, \
     StaticBox
 from core.settings import UserSettings
 from gui_core.widgets import SearchModuleWidget
@@ -156,10 +156,9 @@ class GConsoleWindow(wx.SplitterWindow):
                                     label=" %s " % cmdLabel)
 
         # buttons
-        self.btnOutputClear = Button(
-            parent=self.panelOutput, id=wx.ID_CLEAR)
+        self.btnOutputClear = ClearButton(parent=self.panelOutput)
         self.btnOutputClear.SetToolTip(_("Clear output window content"))
-        self.btnCmdClear = Button(parent=self.panelOutput, id=wx.ID_CLEAR)
+        self.btnCmdClear = ClearButton(parent=self.panelOutput)
         self.btnCmdClear.SetToolTip(_("Clear command prompt content"))
         self.btnOutputSave = Button(parent=self.panelOutput, id=wx.ID_SAVE)
         self.btnOutputSave.SetToolTip(
