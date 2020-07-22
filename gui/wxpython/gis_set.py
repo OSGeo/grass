@@ -606,7 +606,6 @@ class GRASSStartup(wx.Frame):
                     'name': filePath},
                 parent=self)
 
-
     # the event can be refactored out by using lambda in bind
     def OnRenameMapset(self, event):
         """Rename selected mapset
@@ -649,9 +648,10 @@ class GRASSStartup(wx.Frame):
         location = self.listOfLocations[self.lblocations.GetSelection()]
         mapset = self.listOfMapsets[self.lbmapsets.GetSelection()]
         try:
-            delete_mapset_interactively(self, self.gisdbase, location, mapset)
-            self.OnSelectLocation(None)
-            self.lbmapsets.SetSelection(0)
+            if (delete_mapset_interactively(self, self.gisdbase,
+                                            location, mapset)):
+                self.OnSelectLocation(None)
+                self.lbmapsets.SetSelection(0)
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to delete mapset: %s") % e,
@@ -663,11 +663,11 @@ class GRASSStartup(wx.Frame):
         """
         location = self.listOfLocations[self.lblocations.GetSelection()]
         try:
-            delete_location_interactively(self, self.gisdbase, location)
-            self.UpdateLocations(self.gisdbase)
-            self.lblocations.SetSelection(0)
-            self.OnSelectLocation(None)
-            self.lbmapsets.SetSelection(0)
+            if (delete_location_interactively(self, self.gisdbase, location)):
+                self.UpdateLocations(self.gisdbase)
+                self.lblocations.SetSelection(0)
+                self.OnSelectLocation(None)
+                self.lbmapsets.SetSelection(0)
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to delete location: %s") % e,
@@ -980,7 +980,7 @@ class GListBox(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         self._LoadData(choices, disabled)
 
     def SetSelection(self, item, force=False):
-        if item !=  wx.NOT_FOUND and \
+        if item != wx.NOT_FOUND and \
                 (platform.system() != 'Windows' or force):
             # Windows -> FIXME
             self.SetItemState(
@@ -1005,6 +1005,7 @@ class StartUp(wx.App):
         StartUp.SuggestDatabase()
 
         return 1
+
 
 if __name__ == "__main__":
     if os.getenv("GISBASE") is None:

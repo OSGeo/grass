@@ -215,6 +215,7 @@ def rename_mapset_interactively(guiparent, grassdb, location, mapset):
     """
     Rename selected mapset
     """
+    newmapset = None
     if mapset == "PERMANENT":
         GMessage(
             parent=guiparent,
@@ -223,7 +224,8 @@ def rename_mapset_interactively(guiparent, grassdb, location, mapset):
                 "This mapset cannot be renamed."
             ),
         )
-        return
+        return newmapset
+
     dlg = MapsetDialog(
         parent=guiparent,
         default=mapset,
@@ -238,14 +240,13 @@ def rename_mapset_interactively(guiparent, grassdb, location, mapset):
         try:
             rename_mapset(grassdb, location, mapset, newmapset)
         except OSError as err:
+            newmapset = None
             wx.MessageBox(
                 parent=guiparent,
                 caption=_("Error"),
                 message=_("Unable to rename mapset.\n\n%s") % err,
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
-    else:
-        newmapset = None
     dlg.Destroy()
     return newmapset
 
@@ -267,6 +268,7 @@ def rename_location_interactively(guiparent, grassdb, location):
         try:
             rename_location(grassdb, location, newlocation)
         except OSError as err:
+            newlocation = None
             wx.MessageBox(
                 parent=guiparent,
                 caption=_("Error"),
@@ -291,7 +293,7 @@ def delete_mapset_interactively(guiparent, grassdb, location, mapset):
                 "This mapset cannot be deleted."
             ),
         )
-        return
+        return False
 
     dlg = wx.MessageDialog(
         parent=guiparent,
@@ -309,6 +311,8 @@ def delete_mapset_interactively(guiparent, grassdb, location, mapset):
     if dlg.ShowModal() == wx.ID_YES:
         try:
             delete_mapset(grassdb, location, mapset)
+            dlg.Destroy()
+            return True
         except OSError as err:
             wx.MessageBox(
                 parent=guiparent,
@@ -316,8 +320,8 @@ def delete_mapset_interactively(guiparent, grassdb, location, mapset):
                 message=_("Unable to delete mapset.\n\n%s") % err,
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
-
     dlg.Destroy()
+    return False
 
 
 def delete_location_interactively(guiparent, grassdb, location):
@@ -340,6 +344,8 @@ def delete_location_interactively(guiparent, grassdb, location):
     if dlg.ShowModal() == wx.ID_YES:
         try:
             delete_location(grassdb, location)
+            dlg.Destroy()
+            return True
         except OSError as err:
             wx.MessageBox(
                 parent=guiparent,
@@ -347,5 +353,5 @@ def delete_location_interactively(guiparent, grassdb, location):
                 message=_("Unable to delete location.\n\n%s") % err,
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
-
     dlg.Destroy()
+    return False
