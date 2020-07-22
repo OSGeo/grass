@@ -945,29 +945,31 @@ class DataCatalogTree(TreeView):
         Delete selected mapset
         """
         try:
-            delete_mapset_interactively(self,
-                                        self.selected_grassdb[0].data['name'],
-                                        self.selected_location[0].data['name'],
-                                        self.selected_mapset[0].data['name'])
+            if (delete_mapset_interactively(
+                    self,
+                    self.selected_grassdb[0].data['name'],
+                    self.selected_location[0].data['name'],
+                    self.selected_mapset[0].data['name'])):
+                self.ReloadTreeItems()
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to delete mapset: %s") % e,
                    showTraceback=False)
-        self.ReloadTreeItems()
 
     def OnDeleteLocation(self, event):
         """
         Delete selected location
         """
         try:
-            delete_location_interactively(self,
-                                          self.selected_grassdb[0].data['name'],
-                                          self.selected_location[0].data['name'])
+            if (delete_location_interactively(
+                    self,
+                    self.selected_grassdb[0].data['name'],
+                    self.selected_location[0].data['name'])):
+                self.ReloadTreeItems()
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to delete location: %s") % e,
                    showTraceback=False)
-        self.ReloadTreeItems()
 
     def OnDisplayLayer(self, event):
         """Display layer in current graphics view"""
