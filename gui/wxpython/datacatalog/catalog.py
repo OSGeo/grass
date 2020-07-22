@@ -113,10 +113,13 @@ class DataCatalog(wx.Panel):
         try:
             mapset = create_mapset_interactively(self, gisdbase, location)
             if mapset:
-                item = self.tree._model.SearchNodes(name=location,
-                                                    type='location')
+                db = self.tree._model.SearchNodes(name=gisdbase,
+                                                  type='grassdb')
+                loc = self.tree._model.SearchNodes(parent=db[0],
+                                                   name=location,
+                                                   type='location')
                 self.tree.InsertMapset(name=mapset,
-                                  location_node=item)
+                                       location_node=loc[0])
                 self.tree.ReloadTreeItems()
         except Exception as e:
             GError(parent=self,
