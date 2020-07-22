@@ -115,11 +115,7 @@ class VirtualAttributeList(ListCtrl,
                    message=e.value)
             return
 
-        # add some attributes (colourful background for each item rows)
-        self.attr1 = wx.ListItemAttr()
-        self.attr1.SetBackgroundColour(wx.Colour(238, 238, 238))
-        self.attr2 = wx.ListItemAttr()
-        self.attr2.SetBackgroundColour("white")
+        self.EnableAlternateRowColours()
         self.il = wx.ImageList(16, 16)
         self.sm_up = self.il.Add(
             wx.ArtProvider.GetBitmap(
@@ -435,13 +431,6 @@ class VirtualAttributeList(ListCtrl,
         index = self.itemIndexMap[item]
         s = self.itemDataMap[index][col]
         return str(s)
-
-    def OnGetItemAttr(self, item):
-        """Get item attributes"""
-        if (item % 2) == 0:
-            return self.attr2
-        else:
-            return self.attr1
 
     def OnColumnMenu(self, event):
         """Column heading right mouse button -> pop-up menu"""
@@ -3815,7 +3804,7 @@ class FieldStatistics(wx.Frame):
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         txtSizer.Add(self.text, proportion=1, flag=wx.EXPAND |
-                     wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
+                     wx.ALL, border=5)
 
         self.sp.SetSizer(txtSizer)
         self.sp.SetAutoLayout(True)
@@ -3827,13 +3816,13 @@ class FieldStatistics(wx.Frame):
         line = wx.StaticLine(parent=self.panel, id=wx.ID_ANY,
                              size=(20, -1), style=wx.LI_HORIZONTAL)
         sizer.Add(line, proportion=0, flag=wx.GROW |
-                  wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border=3)
+                  wx.LEFT | wx.RIGHT, border=3)
 
         # buttons
         btnSizer.Add(self.btnClipboard, proportion=0,
-                     flag=wx.ALIGN_LEFT | wx.ALL, border=5)
+                     flag=wx.ALL, border=5)
         btnSizer.Add(self.btnCancel, proportion=0,
-                     flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
+                     flag=wx.ALL, border=5)
         sizer.Add(
             btnSizer,
             proportion=0,

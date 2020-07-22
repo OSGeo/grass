@@ -80,6 +80,14 @@ LOCATIONS = [
         "label": "GISMentors location, Czech Republic",
         "url": "http://training.gismentors.eu/geodata/grass/gismentors.zip",
     },
+    {
+        "label": "Natural Earth Dataset in WGS84",
+        "url": "https://github.com/baharmon/natural-earth-dataset/archive/natural-earth.zip",
+        "size": "207 MB",
+        "epsg": "4326",
+        "license": "ODC Public Domain Dedication and License 1.0",
+        "maintainer": "Brendan Harmon (brendan.harmon@gmail.com)",
+    },
 ]
 
 
