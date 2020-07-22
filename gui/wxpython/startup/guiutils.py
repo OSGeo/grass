@@ -342,8 +342,8 @@ def delete_mapset_interactively(guiparent, db_loc_mapset):
             try:
                 for grassdb, location, mapset in db_loc_mapset:
                     delete_mapset(grassdb, location, mapset)
-                    dlg.Destroy()
-                    return True
+                dlg.Destroy()
+                return True
             except OSError as err:
                 wx.MessageBox(
                     parent=guiparent,
