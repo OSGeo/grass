@@ -542,19 +542,16 @@ class GRASSStartup(wx.Frame):
             create_location_interactively(self, self.gisdbase)
         )
         if location is not None:
-            if mapset != "PERMANENT":
-                self.OnSelectLocation(None)
-                self.lbmapsets.SetSelection(
-                    self.listOfMapsets.index(mapset))
-                self.bstart.SetFocus()
+            self.OnSelectLocation(None)
+            self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
+            self.bstart.SetFocus()
             self.tgisdbase.SetValue(grassdatabase)
             self.OnSetDatabase(None)
             self.UpdateMapsets(os.path.join(grassdatabase, location))
             self.lblocations.SetSelection(
-                self.listOfLocations.index(
-                    location))
+                self.listOfLocations.index(location))
             self.lbmapsets.SetSelection(0)
-            self.SetLocation(grassdatabase, location, 'PERMANENT')
+            self.SetLocation(grassdatabase, location, mapset)
 
     # the event can be refactored out by using lambda in bind
     def OnRenameMapset(self, event):

@@ -214,7 +214,10 @@ def create_mapset_interactively(guiparent, grassdb, location):
 
 def create_location_interactively(guiparent, grassdb):
     """
-    Location wizard started
+    Create new location using Location Wizard.
+
+    Returns tuple (database, location, mapset) where mapset is "PERMANENT"
+    by default or it can be the mapset the user may want to switch to.
     """
     from location_wizard.wizard import LocationWizard
 
@@ -332,7 +335,11 @@ def rename_location_interactively(guiparent, grassdb, location):
 
 def download_location_interactively(guiparent, grassdb):
     """
-    Download location online
+    Download new location using Location Wizard.
+
+    Returns tuple (database, location, mapset) where mapset is "PERMANENT"
+    by default or in future it could be the mapset the user may want to
+    switch to.
     """
     from startup.locdownload import LocationDownloadDialog
 
