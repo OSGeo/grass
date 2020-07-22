@@ -38675,8 +38675,8 @@ msgid "Only calculate optimal radius and exit (no map is written)"
 msgstr "Solamente calcular radio óptimo y salir (no se escribe ningún mapa)"
 
 #: ../vector/v.kernel/main.c:218
-msgid "In network mode, normalize values by sum of density multiplied by length of each segment. Integral over the output map then gives 1.0 * mult"
-msgstr "En el modo de red, normalizar valores por la suma de densidades multiplicada por la longitud de cada segmento. Entonces la integral sobre el mapa de salida da 1.0 * mult"
+msgid "In network mode, normalize values by sum of density multiplied by length of each segment. Integral over the output map then gives 1.0 * multiplier"
+msgstr "En el modo de red, normalizar valores por la suma de densidades multiplicada por la longitud de cada segmento. Entonces la integral sobre el mapa de salida da 1.0 * multiplier"
 
 #: ../vector/v.kernel/main.c:224
 msgid "In network mode, multiply the result by number of input points"
