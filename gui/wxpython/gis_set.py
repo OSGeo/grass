@@ -553,6 +553,7 @@ class GRASSStartup(wx.Frame):
             self.lbmapsets.SetSelection(0)
             self.SetLocation(grassdatabase, location, mapset)
 
+
     # the event can be refactored out by using lambda in bind
     def OnRenameMapset(self, event):
         """Rename selected mapset
@@ -595,9 +596,10 @@ class GRASSStartup(wx.Frame):
         location = self.listOfLocations[self.lblocations.GetSelection()]
         mapset = self.listOfMapsets[self.lbmapsets.GetSelection()]
         try:
-            delete_mapset_interactively(self, self.gisdbase, location, mapset)
-            self.OnSelectLocation(None)
-            self.lbmapsets.SetSelection(0)
+            if (delete_mapset_interactively(self, self.gisdbase,
+                                            location, mapset)):
+                self.OnSelectLocation(None)
+                self.lbmapsets.SetSelection(0)
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to delete mapset: %s") % e,
@@ -609,11 +611,11 @@ class GRASSStartup(wx.Frame):
         """
         location = self.listOfLocations[self.lblocations.GetSelection()]
         try:
-            delete_location_interactively(self, self.gisdbase, location)
-            self.UpdateLocations(self.gisdbase)
-            self.lblocations.SetSelection(0)
-            self.OnSelectLocation(None)
-            self.lbmapsets.SetSelection(0)
+            if (delete_location_interactively(self, self.gisdbase, location)):
+                self.UpdateLocations(self.gisdbase)
+                self.lblocations.SetSelection(0)
+                self.OnSelectLocation(None)
+                self.lbmapsets.SetSelection(0)
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to delete location: %s") % e,

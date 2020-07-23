@@ -877,7 +877,8 @@ class DataCatalogTree(TreeView):
                                                 new_name,
                                                 self.copy_layer[i].data['type'],
                                                 env, callback)
-                dlg.ShowModal()
+                if dlg.ShowModal() == wx.ID_CANCEL:
+                    return
         self.ExpandNode(self.selected_mapset[0], recursive=True)
         self._initVariablesCatalog()
 
@@ -961,29 +962,31 @@ class DataCatalogTree(TreeView):
         Delete selected mapset
         """
         try:
-            delete_mapset_interactively(self,
-                                        self.selected_grassdb[0].data['name'],
-                                        self.selected_location[0].data['name'],
-                                        self.selected_mapset[0].data['name'])
+            if (delete_mapset_interactively(
+                    self,
+                    self.selected_grassdb[0].data['name'],
+                    self.selected_location[0].data['name'],
+                    self.selected_mapset[0].data['name'])):
+                self.ReloadTreeItems()
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to delete mapset: %s") % e,
                    showTraceback=False)
-        self.ReloadTreeItems()
 
     def OnDeleteLocation(self, event):
         """
         Delete selected location
         """
         try:
-            delete_location_interactively(self,
-                                          self.selected_grassdb[0].data['name'],
-                                          self.selected_location[0].data['name'])
+            if (delete_location_interactively(
+                    self,
+                    self.selected_grassdb[0].data['name'],
+                    self.selected_location[0].data['name'])):
+                self.ReloadTreeItems()
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to delete location: %s") % e,
                    showTraceback=False)
-        self.ReloadTreeItems()
 
     def OnDownloadLocation(self, event):
         """
@@ -1023,6 +1026,18 @@ class DataCatalogTree(TreeView):
     def OnBeginDrag(self, node, event):
         """Just copy necessary data"""
         self.DefineItems(self.GetSelected())
+
+        if self.selected_location and None in self.selected_mapset and \
+           None in self.selected_layer:
+            GMessage(_("Move or copy location isn't allowed"))
+            event.Veto()
+            return
+        elif self.selected_location and self.selected_mapset and \
+             None in self.selected_layer:
+            GMessage(_("Move or copy mapset isn't allowed"))
+            event.Veto()
+            return
+
         if self.selected_layer and not (self._restricted and gisenv()[
                                         'LOCATION_NAME'] != self.selected_location[0].data['name']):
             event.Allow()
@@ -1036,15 +1051,23 @@ class DataCatalogTree(TreeView):
         self.copy_mode = wx.GetMouseState().ControlDown()
         if node:
             self.DefineItems([node])
-            if self._restricted and gisenv()['MAPSET'] != self.selected_mapset[0].data['name']:
-                GMessage(_("To move or copy maps to other mapsets, unlock editing of other mapsets"),
+            if None not in self.selected_mapset:
+                if self._restricted and gisenv()['MAPSET'] != self.selected_mapset[0].data['name']:
+                    GMessage(_("To move or copy maps to other mapsets, unlock editing of other mapsets"),
+                             parent=self)
+                    event.Veto()
+                    return
+
+                event.Allow()
+                Debug.msg(1, "DROP DONE")
+                self.OnPasteMap(event)
+            else:
+                GMessage(_("To move or copy maps to other location, "
+                           "please drag them to a mapset in the "
+                           "destination location"),
                          parent=self)
                 event.Veto()
                 return
-
-            event.Allow()
-            Debug.msg(1, "DROP DONE")
-            self.OnPasteMap(event)
 
     def OnSwitchDbLocationMapset(self, event):
         """Switch to location and mapset"""
