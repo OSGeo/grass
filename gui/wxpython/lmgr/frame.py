@@ -340,8 +340,24 @@ class GMFrame(wx.Frame):
         self.notebookLayers.SetRightClickMenu(menu)
         self.notebook.AddPage(
             page=self.notebookLayers,
-            text=_("Layers"),
+            text=_("Display"),
             name='layers')
+
+        # create 'search module' notebook page
+        if not UserSettings.Get(
+                group='manager', key='hideTabs', subkey='search'):
+            self.search = SearchModuleWindow(
+                parent=self.notebook, handlerObj=self,
+                giface=self._giface,
+                model=self._moduleTreeBuilder.GetModel())
+            self.search.showNotification.connect(
+                lambda message: self.SetStatusText(message))
+            self.notebook.AddPage(
+                page=self.search,
+                text=_("Modules"),
+                name='search')
+        else:
+            self.search = None
 
         # create 'command output' text area
         self._gconsole = GConsole(
@@ -371,22 +387,6 @@ class GMFrame(wx.Frame):
                             lambda event: self.RunSpecialCmd(event.cmd))
 
         self._setCopyingOfSelectedText()
-
-        # create 'search module' notebook page
-        if not UserSettings.Get(
-                group='manager', key='hideTabs', subkey='search'):
-            self.search = SearchModuleWindow(
-                parent=self.notebook, handlerObj=self,
-                giface=self._giface,
-                model=self._moduleTreeBuilder.GetModel())
-            self.search.showNotification.connect(
-                lambda message: self.SetStatusText(message))
-            self.notebook.AddPage(
-                page=self.search,
-                text=_("Modules"),
-                name='search')
-        else:
-            self.search = None
 
         # create 'python shell' notebook page
         if not UserSettings.Get(
