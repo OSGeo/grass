@@ -6,6 +6,7 @@ from multiple methods.
 
 Classes:
  - wizard::TitledPage
+ - wizard::GridBagSizerTitledPage
  - wizard::DatabasePage
  - wizard::CoordinateSystemPage
  - wizard::ProjectionsPage
@@ -70,7 +71,6 @@ global west
 global resolution
 global wizerror
 global translist
-
 
 class TitledPage(WizardPageSimple):
     """Class to make wizard pages. Generic methods to make labels,
@@ -145,6 +145,16 @@ class TitledPage(WizardPageSimple):
         if tooltip:
             chbox.SetToolTip(tooltip)
         return chbox
+
+
+class GridBagSizerTitledPage(TitledPage):
+    """GridBagSizer declaration for TitledPage class"""
+    def __init__(self, parent, title):
+        super().__init__(parent, title)
+
+        self.sizer = wx.GridBagSizer(vgap=0, hgap=0)
+        self.sizer.SetCols(5)
+        self.sizer.SetRows(8)
 
 
 class DatabasePage(TitledPage):
@@ -600,7 +610,7 @@ class ItemList(ListCtrl,
         for column in columns:
             self.InsertColumn(i, column)
             i += 1
-        
+
         self.EnableAlternateRowColours()
 
         if self.sourceData:
@@ -1489,7 +1499,7 @@ class EPSGPage(TitledPage):
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Select CRS from a list"))
 
-        self.sizer = wx.BoxSizer(wx.VERTICAL)  
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
         searchBoxSizer = wx.BoxSizer(wx.HORIZONTAL)
         epsglistBoxSizer = wx.BoxSizer(wx.HORIZONTAL)
         informationBoxSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -1982,7 +1992,7 @@ class CustomPage(TitledPage):
                 return
 
             # check for datum tranforms
-            # FIXME: -t flag is a hack-around for trac bug #1849          
+            # FIXME: -t flag is a hack-around for trac bug #1849
             ret, out, err = RunCommand('g.proj',
                                        read=True, getErrorMsg=True,
                                        proj4=self.customstring,
