@@ -861,7 +861,8 @@ class DataCatalogTree(TreeView):
                                                 new_name,
                                                 self.copy_layer[i].data['type'],
                                                 env, callback)
-                dlg.ShowModal()
+                if dlg.ShowModal() == wx.ID_CANCEL:
+                    return
         self.ExpandNode(self.selected_mapset[0], recursive=True)
         self._initVariablesCatalog()
 
