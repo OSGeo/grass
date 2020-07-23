@@ -38,12 +38,12 @@ icons = {
     'addMapset': MetaIcon(
         img='mapset-add',
         label=_("Click to add new mapset in current location")),
-#    'addLocation': MetaIcon(
-#        img='grass_location',
-#        label=_("Click to add new location in current database")),
-#    'downloadLocation': MetaIcon(
-#        img='downloading_svg',
-#        label=_("Click to download location to current database"))
+    'addLocation': MetaIcon(
+        img='location-add',
+        label=_("Click to add new location in current database")),
+    'downloadLocation': MetaIcon(
+        img='location-download',
+        label=_("Click to download location to current database"))
 }
 
 
@@ -86,6 +86,10 @@ class DataCatalogToolbar(BaseToolbar):
                                      ("addGrassDB", icons['addGrassDB'],
                                       self.parent.OnAddGrassDB),
                                      ("addMapset", icons['addMapset'],
+                                      self.parent.OnCreateMapset),
+                                     ("addLocation", icons['addLocation'],
+                                      self.parent.OnCreateMapset),
+                                     ("downloadLocation", icons['downloadLocation'],
                                       self.parent.OnCreateMapset)
                                      ))
 
