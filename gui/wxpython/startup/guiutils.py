@@ -217,7 +217,7 @@ def create_location_interactively(guiparent, grassdb):
     Create new location using Location Wizard.
 
     Returns tuple (database, location, mapset) where mapset is "PERMANENT"
-    by default or it can be the mapset the user may want to switch to.
+    by default or another mapset a user created and may want to switch to.
     """
     from location_wizard.wizard import LocationWizard
 
@@ -231,9 +231,9 @@ def create_location_interactively(guiparent, grassdb):
 
     if gWizard.georeffile:
         message = _(
-            "Do you want to import <%(name)s>"
+            "Do you want to import {}"
             "to the newly created location?"
-        ) % {'name': gWizard.georeffile}
+        ).format(gWizard.georeffile)
         dlg = wx.MessageDialog(parent=guiparent,
                                message=message,
                                caption=_("Import data?"),
