@@ -1460,7 +1460,8 @@ class CmdPanel(wx.Panel):
                                     for layer in layers:
                                         if layer.type != p.get('prompt'):
                                             continue
-                                        mapList.append(str(layer))
+                                        if str(layer):
+                                            mapList.append(str(layer))
                         selection = gselect.Select(
                             parent=which_panel, id=wx.ID_ANY,
                             size=globalvar.DIALOG_GSELECT_SIZE, type=elem,
