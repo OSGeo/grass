@@ -669,22 +669,30 @@ class DataCatalogTree(TreeView):
             self.Rename(old_name, new_name)
             self.ReloadTreeItems()
 
-    def OnCreateMapset(self, event):
-        """Create new mapset"""
-        gisdbase = self.selected_grassdb[0]
-        location = self.selected_location[0]
+    def CreateMapset(self, grassdb, location):
+        """General function for creating new mapset"""
         try:
-            mapset = create_mapset_interactively(self,
-                                        gisdbase.data['name'],
-                                        location.data['name'],)
+            mapset = create_mapset_interactively(self, grassdb, location)
             if mapset:
+                db = self._model.SearchNodes(name=grassdb,
+                                                  type='grassdb')
+                loc = self._model.SearchNodes(parent=db[0],
+                                                   name=location,
+                                                   type='location')
                 self.InsertMapset(name=mapset,
-                                  location_node=location)
+                                       location_node=loc[0])
                 self.ReloadTreeItems()
         except Exception as e:
             GError(parent=self,
-                   message=_("Unable to create new mapset: %s") % e,
+                   message=_("Unable to create new mapset: {}").format(e),
                    showTraceback=False)
+
+    def OnCreateMapset(self, event):
+        """Create new mapset"""
+        self.CreateMapset(
+            self.selected_grassdb[0].data['name'],
+            self.selected_location[0].data['name']
+        )
 
     def OnRenameMapset(self, event):
         """

@@ -108,23 +108,7 @@ class DataCatalog(wx.Panel):
     def OnCreateMapset(self, event):
         """Create new mapset in current location"""
         genv = gisenv()
-        gisdbase = genv['GISDBASE']
-        location = genv['LOCATION_NAME']
-        try:
-            mapset = create_mapset_interactively(self, gisdbase, location)
-            if mapset:
-                db = self.tree._model.SearchNodes(name=gisdbase,
-                                                  type='grassdb')
-                loc = self.tree._model.SearchNodes(parent=db[0],
-                                                   name=location,
-                                                   type='location')
-                self.tree.InsertMapset(name=mapset,
-                                       location_node=loc[0])
-                self.tree.ReloadTreeItems()
-        except Exception as e:
-            GError(parent=self,
-                   message=_("Unable to create new mapset: %s") % e,
-                   showTraceback=False)
+        self.tree.CreateMapset(genv['GISDBASE'], genv['LOCATION_NAME'])
 
     def SetRestriction(self, restrict):
         """Allow editing other mapsets or restrict editing to current mapset"""
