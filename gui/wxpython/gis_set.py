@@ -595,15 +595,9 @@ class GRASSStartup(wx.Frame):
         """
         location = self.listOfLocations[self.lblocations.GetSelection()]
         mapset = self.listOfMapsets[self.lbmapsets.GetSelection()]
-        try:
-            if (delete_mapset_interactively(self, self.gisdbase,
-                                            location, mapset)):
-                self.OnSelectLocation(None)
-                self.lbmapsets.SetSelection(0)
-        except Exception as e:
-            GError(parent=self,
-                   message=_("Unable to delete mapset: %s") % e,
-                   showTraceback=False)
+        if (delete_mapset_interactively(self, self.gisdbase, location, mapset)):
+            self.OnSelectLocation(None)
+            self.lbmapsets.SetSelection(0)
 
     def OnDeleteLocation(self, event):
         """

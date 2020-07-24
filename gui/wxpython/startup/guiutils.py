@@ -20,6 +20,7 @@ import sys
 import wx
 
 import grass.script as gs
+from grass.script import gisenv
 
 from core import globalvar
 from core.gcmd import GError, GMessage, DecodeString, RunCommand
@@ -205,7 +206,7 @@ def create_mapset_interactively(guiparent, grassdb, location):
             mapset = None
             GError(
                 parent=guiparent,
-                message=_("Unable to create new mapset: %s") % err,
+                message=_("Unable to create new mapset: {}").format(err),
                 showTraceback=False,
             )
     dlg.Destroy()
@@ -283,7 +284,7 @@ def rename_mapset_interactively(guiparent, grassdb, location, mapset):
     dlg = MapsetDialog(
         parent=guiparent,
         default=mapset,
-        message=_("Current name: %s\n\nEnter new name:") % mapset,
+        message=_("Current name: {}\n\nEnter new name:").format(mapset),
         caption=_("Rename selected mapset"),
         database=grassdb,
         location=location,
@@ -298,7 +299,7 @@ def rename_mapset_interactively(guiparent, grassdb, location, mapset):
             wx.MessageBox(
                 parent=guiparent,
                 caption=_("Error"),
-                message=_("Unable to rename mapset.\n\n%s") % err,
+                message=_("Unable to rename mapset.\n\n{}").format(err),
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
     dlg.Destroy()
@@ -312,7 +313,7 @@ def rename_location_interactively(guiparent, grassdb, location):
     dlg = LocationDialog(
         parent=guiparent,
         default=location,
-        message=_("Current name: %s\n\nEnter new name:") % location,
+        message=_("Current name: {}\n\nEnter new name:").format(location),
         caption=_("Rename selected location"),
         database=grassdb,
     )
@@ -326,7 +327,7 @@ def rename_location_interactively(guiparent, grassdb, location):
             wx.MessageBox(
                 parent=guiparent,
                 caption=_("Error"),
-                message=_("Unable to rename location.\n\n%s") % err,
+                message=_("Unable to rename location.\n\n{}").format(err),
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
     else:
@@ -359,46 +360,103 @@ def download_location_interactively(guiparent, grassdb):
 
 
 def delete_mapset_interactively(guiparent, grassdb, location, mapset):
+    """Delete one mapset with user interaction.
+
+    This is currently just a convenience wrapper for delete_mapsets_interactively().
     """
-    Delete selected mapset
+    mapsets = [(grassdb, location, mapset)]
+    return delete_mapsets_interactively(guiparent, mapsets)
+
+
+def delete_mapsets_interactively(guiparent, mapsets):
+    """Delete multiple mapsets with user interaction.
+
+    Parameter *mapsets* is a list of tuples (database, location, mapset).
+
+    If PERMANENT or current mapset found, delete operation is not performed.
+
+    Exceptions during deletation are handled in this function.
+
+    Retuns True if there was a change, i.e., all mapsets were successfuly deleted
+    or at least one mapset was deleted. Returns False if one or more mapsets cannot be
+    deleted (see above the possible reasons) or if an error was encountered when
+    deleting the first mapset in the list.
     """
-    if mapset == "PERMANENT":
-        GMessage(
+    genv = gisenv()
+    issues = []
+    deletes = []
+
+    # Check selected mapsets and remember issue.
+    # Each error is reported only once (using elif).
+    for grassdb, location, mapset in mapsets:
+        mapset_path = os.path.join(grassdb, location, mapset)
+        # Check for permanent mapsets
+        if mapset == "PERMANENT":
+            issue = _("<{}> is required for a valid location.").format(mapset_path)
+            issues.append(issue)
+        # Check for current mapset
+        elif (
+                grassdb == genv['GISDBASE'] and
+                location == genv['LOCATION_NAME'] and
+                mapset == genv['MAPSET']
+        ):
+            issue = _("<{}> is the current mapset.").format(mapset_path)
+            issues.append(issue)
+        # No issue detected
+        else:
+            deletes.append(mapset_path)
+
+    modified = False  # True after first successful delete
+    # If any issues, display the warning message and do not delete anything
+    if issues:
+        issues = "\n".join(issues)
+        dlg = wx.MessageDialog(
             parent=guiparent,
             message=_(
-                "Mapset <PERMANENT> is required for valid GRASS location.\n\n"
-                "This mapset cannot be deleted."
-            ),
+                "Cannot delete one or more mapsets for the following reasons:\n\n"
+                "{}\n\n"
+                "No mapsets will be deleted."
+            ).format(issues),
+            caption=_("Unable to delete selected mapsets"),
+            style=wx.OK | wx.ICON_WARNING
         )
-        return False
-
-    dlg = wx.MessageDialog(
-        parent=guiparent,
-        message=_(
-            "Do you want to continue with deleting mapset <%(mapset)s> "
-            "from location <%(location)s>?\n\n"
-            "ALL MAPS included in this mapset will be "
-            "PERMANENTLY DELETED!"
+        dlg.ShowModal()
+    else:
+        deletes = "\n".join(deletes)
+        dlg = wx.MessageDialog(
+            parent=guiparent,
+            message=_(
+                "Do you want to continue with deleting"
+                " one or more of the following mapsets?\n\n"
+                "{}\n\n"
+                "All maps included in these mapsets will be permanently deleted!"
+            ).format(deletes),
+            caption=_("Delete selected mapsets"),
+            style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
         )
-        % {"mapset": mapset, "location": location},
-        caption=_("Delete selected mapset"),
-        style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
-    )
-
-    if dlg.ShowModal() == wx.ID_YES:
-        try:
-            delete_mapset(grassdb, location, mapset)
-            dlg.Destroy()
-            return True
-        except OSError as err:
-            wx.MessageBox(
-                parent=guiparent,
-                caption=_("Error"),
-                message=_("Unable to delete mapset.\n\n%s") % err,
-                style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
-            )
+        if dlg.ShowModal() == wx.ID_YES:
+            try:
+                for grassdb, location, mapset in mapsets:
+                    delete_mapset(grassdb, location, mapset)
+                    modified = True
+                dlg.Destroy()
+                return modified
+            except OSError as error:
+                wx.MessageBox(
+                    parent=guiparent,
+                    caption=_("Error when deleting mapsets"),
+                    message=_(
+                        "The following error occured when deleting mapset <{path}>:"
+                        "\n\n{error}\n\n"
+                        "Deleting of mapsets was interrupted."
+                        ).format(
+                            path=os.path.join(grassdb, location, mapset),
+                            error=error,
+                    ),
+                    style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
+                )
     dlg.Destroy()
-    return False
+    return modified
 
 
 def delete_location_interactively(guiparent, grassdb, location):
@@ -409,11 +467,10 @@ def delete_location_interactively(guiparent, grassdb, location):
         parent=guiparent,
         message=_(
             "Do you want to continue with deleting "
-            "location <%s>?\n\n"
+            "location {}?\n\n"
             "ALL MAPS included in this location will be "
             "PERMANENTLY DELETED!"
-        )
-        % (location),
+        ).format(location),
         caption=_("Delete selected location"),
         style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
     )
@@ -427,7 +484,7 @@ def delete_location_interactively(guiparent, grassdb, location):
             wx.MessageBox(
                 parent=guiparent,
                 caption=_("Error"),
-                message=_("Unable to delete location.\n\n%s") % err,
+                message=_("Unable to delete location.\n\n{}").format(err),
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
     dlg.Destroy()
