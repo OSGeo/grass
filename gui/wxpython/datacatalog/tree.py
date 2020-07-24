@@ -35,10 +35,12 @@ from gui_core.wrap import Menu
 from datacatalog.dialogs import CatalogReprojectionDialog
 from icons.icon import MetaIcon
 from startup.guiutils import (create_mapset_interactively,
+                              create_location_interactively,
                               rename_mapset_interactively,
                               rename_location_interactively,
                               delete_mapset_interactively,
-                              delete_location_interactively)
+                              delete_location_interactively,
+                              download_location_interactively)
 
 from grass.pydispatch.signal import Signal
 
@@ -675,8 +677,8 @@ class DataCatalogTree(TreeView):
         location = self.selected_location[0]
         try:
             mapset = create_mapset_interactively(self,
-                                        gisdbase.data['name'],
-                                        location.data['name'],)
+                                                 gisdbase.data['name'],
+                                                 location.data['name'])
             if mapset:
                 self.InsertMapset(name=mapset,
                                   location_node=location)
@@ -685,6 +687,20 @@ class DataCatalogTree(TreeView):
             GError(parent=self,
                    message=_("Unable to create new mapset: %s") % e,
                    showTraceback=False)
+
+    def OnCreateLocation(self, event):
+        """
+        Location wizard started
+        """
+        grassdatabase, location, mapset = (
+            create_location_interactively(self,
+                                          self.selected_grassdb[0].data['name'])
+        )
+        if location is not None:
+            item = self._model.SearchNodes(name=grassdatabase, type='grassdb')
+            if not item:
+                self.InsertGrassDb(name=grassdatabase)
+            self.ReloadTreeItems()
 
     def OnRenameMapset(self, event):
         """
@@ -972,8 +988,20 @@ class DataCatalogTree(TreeView):
                    message=_("Unable to delete location: %s") % e,
                    showTraceback=False)
 
+    def OnDownloadLocation(self, event):
+        """
+        Download location online
+        """
+        grassdatabase, location, mapset = download_location_interactively(
+                self, self.selected_grassdb[0].data['name']
+        )
+        if location:
+            self.ReloadTreeItems()
+
     def OnDisplayLayer(self, event):
-        """Display layer in current graphics view"""
+        """
+        Display layer in current graphics view
+        """
         self.DisplayLayer()
 
     def DisplayLayer(self):
@@ -1299,6 +1327,15 @@ class DataCatalogTree(TreeView):
     def _popupMenuGrassDb(self):
         """Create popup menu for grass db"""
         menu = Menu()
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create new location"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCreateLocation, item)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Download sample location"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDownloadLocation, item)
+
         self.PopupMenu(menu)
         menu.Destroy()
 

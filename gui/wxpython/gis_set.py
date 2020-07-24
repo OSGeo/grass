@@ -32,19 +32,20 @@ from core import globalvar
 import wx
 import wx.lib.mixins.listctrl as listmix
 
-from core.gcmd import GMessage, GError, RunCommand
+from core.gcmd import GError, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets
 from startup.utils import (
     get_lockfile_if_present, get_possible_database_path,
     create_database_directory)
 from startup.guiutils import (SetSessionMapset,
                               create_mapset_interactively,
+                              create_location_interactively,
                               rename_mapset_interactively,
                               rename_location_interactively,
                               delete_mapset_interactively,
-                              delete_location_interactively)
+                              delete_location_interactively,
+                              download_location_interactively)
 import startup.guiutils as sgui
-from location_wizard.dialogs import RegionDef
 from gui_core.widgets import StaticWrapText
 from gui_core.wrap import Button, ListCtrl, StaticText, StaticBox, \
     TextCtrl, BitmapFromImage
@@ -231,7 +232,7 @@ class GRASSStartup(wx.Frame):
         self.bexit.Bind(wx.EVT_BUTTON, self.OnExit)
         self.bhelp.Bind(wx.EVT_BUTTON, self.OnHelp)
         self.bmapset.Bind(wx.EVT_BUTTON, self.OnCreateMapset)
-        self.bwizard.Bind(wx.EVT_BUTTON, self.OnWizard)
+        self.bwizard.Bind(wx.EVT_BUTTON, self.OnCreateLocation)
 
         self.rename_location_button.Bind(wx.EVT_BUTTON, self.OnRenameLocation)
         self.delete_location_button.Bind(wx.EVT_BUTTON, self.OnDeleteLocation)
@@ -535,76 +536,23 @@ class GRASSStartup(wx.Frame):
                 'your home directory. '
                 'Press Browse button to select the directory.'))
 
-    def OnWizard(self, event):
+    def OnCreateLocation(self, event):
         """Location wizard started"""
-        from location_wizard.wizard import LocationWizard
-        gWizard = LocationWizard(parent=self,
-                                 grassdatabase=self.tgisdbase.GetValue())
-        if gWizard.location is not None:
-            self.tgisdbase.SetValue(gWizard.grassdatabase)
+        grassdatabase, location, mapset = (
+            create_location_interactively(self, self.gisdbase)
+        )
+        if location is not None:
+            self.OnSelectLocation(None)
+            self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
+            self.bstart.SetFocus()
+            self.tgisdbase.SetValue(grassdatabase)
             self.OnSetDatabase(None)
-            self.UpdateMapsets(os.path.join(self.gisdbase, gWizard.location))
+            self.UpdateMapsets(os.path.join(grassdatabase, location))
             self.lblocations.SetSelection(
-                self.listOfLocations.index(
-                    gWizard.location))
+                self.listOfLocations.index(location))
             self.lbmapsets.SetSelection(0)
-            self.SetLocation(self.gisdbase, gWizard.location, 'PERMANENT')
-            if gWizard.georeffile:
-                message = _("Do you want to import <%(name)s> to the newly created location?") % {
-                    'name': gWizard.georeffile}
-                dlg = wx.MessageDialog(parent=self, message=message, caption=_(
-                    "Import data?"), style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
-                dlg.CenterOnParent()
-                if dlg.ShowModal() == wx.ID_YES:
-                    self.ImportFile(gWizard.georeffile)
-                dlg.Destroy()
-            if gWizard.default_region:
-                defineRegion = RegionDef(self, location=gWizard.location)
-                defineRegion.CenterOnParent()
-                defineRegion.ShowModal()
-                defineRegion.Destroy()
+            self.SetLocation(grassdatabase, location, mapset)
 
-            if gWizard.user_mapset:
-                self.OnCreateMapset(event)
-
-    def ImportFile(self, filePath):
-        """Tries to import file as vector or raster.
-
-        If successfull sets default region from imported map.
-        """
-        RunCommand('db.connect', flags='c')
-        mapName = os.path.splitext(os.path.basename(filePath))[0]
-        vectors = RunCommand('v.in.ogr', input=filePath, flags='l',
-                             read=True)
-
-        wx.BeginBusyCursor()
-        wx.GetApp().Yield()
-        if vectors:
-            # vector detected
-            returncode, error = RunCommand(
-                'v.in.ogr', input=filePath, output=mapName, flags='e',
-                getErrorMsg=True)
-        else:
-            returncode, error = RunCommand(
-                'r.in.gdal', input=filePath, output=mapName, flags='e',
-                getErrorMsg=True)
-        wx.EndBusyCursor()
-
-        if returncode != 0:
-            GError(
-                parent=self,
-                message=_(
-                    "Import of <%(name)s> failed.\n"
-                    "Reason: %(msg)s") % ({
-                        'name': filePath,
-                        'msg': error}))
-        else:
-            GMessage(
-                message=_(
-                    "Data file <%(name)s> imported successfully. "
-                    "The location's default region was set from this imported map.") % {
-                    'name': filePath},
-                parent=self)
 
     # the event can be refactored out by using lambda in bind
     def OnRenameMapset(self, event):
@@ -618,7 +566,7 @@ class GRASSStartup(wx.Frame):
             if newmapset:
                 self.OnSelectLocation(None)
                 self.lbmapsets.SetSelection(
-                        self.listOfMapsets.index(newmapset))
+                    self.listOfMapsets.index(newmapset))
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to rename mapset: %s") % e,
@@ -634,7 +582,7 @@ class GRASSStartup(wx.Frame):
             if newlocation:
                 self.UpdateLocations(self.gisdbase)
                 self.lblocations.SetSelection(
-                        self.listOfLocations.index(newlocation))
+                    self.listOfLocations.index(newlocation))
                 self.UpdateMapsets(newlocation)
         except Exception as e:
             GError(parent=self,
@@ -674,24 +622,23 @@ class GRASSStartup(wx.Frame):
                    showTraceback=False)
 
     def OnDownloadLocation(self, event):
-        """Download location online"""
-        from startup.locdownload import LocationDownloadDialog
-
-        loc_download = LocationDownloadDialog(parent=self, database=self.gisdbase)
-        loc_download.ShowModal()
-        location = loc_download.GetLocation()
+        """
+        Download location online
+        """
+        grassdatabase, location, mapset = download_location_interactively(
+            self, self.gisdbase
+        )
         if location:
             # get the new location to the list
-            self.UpdateLocations(self.gisdbase)
+            self.UpdateLocations(grassdatabase)
             # seems to be used in similar context
-            self.UpdateMapsets(os.path.join(self.gisdbase, location))
+            self.UpdateMapsets(os.path.join(grassdatabase, location))
             self.lblocations.SetSelection(
                 self.listOfLocations.index(location))
             # wizard does this as well, not sure if needed
-            self.SetLocation(self.gisdbase, location, 'PERMANENT')
+            self.SetLocation(grassdatabase, location, mapset)
             # seems to be used in similar context
             self.OnSelectLocation(None)
-        loc_download.Destroy()
 
     def UpdateLocations(self, dbase):
         """Update list of locations"""
