@@ -216,7 +216,7 @@ int main(int argc, char **argv)
     flag_normalize = G_define_flag();
     flag_normalize->key = 'n';
     flag_normalize->description =
-	_("In network mode, normalize values by sum of density multiplied by length of each segment. Integral over the output map then gives 1.0 * mult");
+	_("In network mode, normalize values by sum of density multiplied by length of each segment. Integral over the output map then gives 1.0 * multiplier");
     flag_normalize->guisection = _("Network");
 
     flag_multiply = G_define_flag();
@@ -227,7 +227,7 @@ int main(int argc, char **argv)
 
     G_option_required(out_opt, net_out_opt, NULL);
     G_option_exclusive(out_opt, net_out_opt, NULL);
-    /* this should be activated for GRASS 8
+    /* TODO: this should be activated for GRASS 8
     G_option_requires(net_opt, net_out_opt, NULL);
     */
     if (G_parser(argc, argv))
