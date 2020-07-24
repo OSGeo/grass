@@ -688,19 +688,22 @@ class DataCatalogTree(TreeView):
         """Create new mapset"""
         self.CreateMapset(self.selected_grassdb[0], self.selected_location[0])
 
-    def OnCreateLocation(self, event):
+    def CreateLocation(self, grassdb_node):
         """
-        Location wizard started
+        Creates new location interactively and adds it to the tree.
         """
         grassdatabase, location, mapset = (
-            create_location_interactively(self,
-                                          self.selected_grassdb[0].data['name'])
+            create_location_interactively(self, grassdb_node.data['name'])
         )
-        if location is not None:
+        if location:
             item = self._model.SearchNodes(name=grassdatabase, type='grassdb')
             if not item:
                 self.InsertGrassDb(name=grassdatabase)
             self.ReloadTreeItems()
+
+    def OnCreateLocation(self, event):
+        """Create new location"""
+        self.CreateLocation(self.selected_grassdb[0])
 
     def OnRenameMapset(self, event):
         """
@@ -987,15 +990,21 @@ class DataCatalogTree(TreeView):
                    message=_("Unable to delete location: %s") % e,
                    showTraceback=False)
 
+    def DownloadLocation(self, grassdb_node):
+        """
+        Download new location interactively using Location Wizard.
+        """
+        grassdatabase, location, mapset = (
+            download_location_interactively(self, grassdb_node.data['name'])
+        )
+        if location:
+            self.ReloadTreeItems()
+
     def OnDownloadLocation(self, event):
         """
         Download location online
         """
-        grassdatabase, location, mapset = download_location_interactively(
-                self, self.selected_grassdb[0].data['name']
-        )
-        if location:
-            self.ReloadTreeItems()
+        self.DownloadLocation(self.selected_grassdb[0])
 
     def OnDisplayLayer(self, event):
         """

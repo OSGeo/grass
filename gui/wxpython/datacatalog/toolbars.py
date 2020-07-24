@@ -37,7 +37,13 @@ icons = {
         label=_("Click to add new GRASS database")),
     'addMapset': MetaIcon(
         img='mapset-add',
-        label=_("Click to add new mapset in current location"))
+        label=_("Click to add new mapset in current location")),
+    'addLocation': MetaIcon(
+        img='location-add',
+        label=_("Click to add new location")),
+    'downloadLocation': MetaIcon(
+        img='location-download',
+        label=_("Click to download new location"))
 }
 
 
@@ -80,7 +86,11 @@ class DataCatalogToolbar(BaseToolbar):
                                      ("addGrassDB", icons['addGrassDB'],
                                       self.parent.OnAddGrassDB),
                                      ("addMapset", icons['addMapset'],
-                                      self.parent.OnCreateMapset)
+                                      self.parent.OnCreateMapset),
+                                     ("addLocation", icons['addLocation'],
+                                      self.parent.OnCreateLocation),
+                                     ("downloadLocation", icons['downloadLocation'],
+                                      self.parent.OnDownloadLocation)
                                      ))
 
     def OnSetRestriction(self, event):
