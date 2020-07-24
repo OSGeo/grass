@@ -27,3 +27,5 @@ To install a docker image, run (replace `<tag>` with the desired Docker tag from
 ```
 docker pull mundialis/grass-py3-pdal:<tag>
 ```
+
+See also: https://grass.osgeo.org/download/software/docker-images/
