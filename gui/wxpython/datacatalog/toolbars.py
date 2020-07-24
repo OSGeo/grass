@@ -34,7 +34,10 @@ icons = {
         label=_("Click to allow editing other mapsets")),
     'addGrassDB': MetaIcon(
         img='grassdb-add',
-        label=_("Click to add new GRASS database"))
+        label=_("Click to add new GRASS database")),
+    'addMapset': MetaIcon(
+        img='mapset-add',
+        label=_("Click to add new mapset in current location"))
 }
 
 
@@ -75,7 +78,9 @@ class DataCatalogToolbar(BaseToolbar):
                                      ("lock", icons['locked'],
                                       self.OnSetRestriction, wx.ITEM_CHECK),
                                      ("addGrassDB", icons['addGrassDB'],
-                                      self.parent.OnAddGrassDB)
+                                      self.parent.OnAddGrassDB),
+                                     ("addMapset", icons['addMapset'],
+                                      self.parent.OnCreateMapset)
                                      ))
 
     def OnSetRestriction(self, event):
