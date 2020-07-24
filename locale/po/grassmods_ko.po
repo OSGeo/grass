@@ -38432,7 +38432,7 @@ msgid "Only calculate optimal radius and exit (no map is written)"
 msgstr ""
 
 #: ../vector/v.kernel/main.c:218
-msgid "In network mode, normalize values by sum of density multiplied by length of each segment. Integral over the output map then gives 1.0 * mult"
+msgid "In network mode, normalize values by sum of density multiplied by length of each segment. Integral over the output map then gives 1.0 * multiplier"
 msgstr ""
 
 #: ../vector/v.kernel/main.c:224
