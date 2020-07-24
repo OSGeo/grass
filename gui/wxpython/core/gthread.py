@@ -18,6 +18,7 @@ import threading
 import time
 
 import wx
+from wx.lib.newevent import NewEvent
 
 import sys
 if sys.version_info.major == 2:
@@ -27,14 +28,21 @@ else:
 
 from core.gconsole import EVT_CMD_DONE, wxCmdDone
 
+wxThdTerminate, EVT_THD_TERMINATE = NewEvent()
+
 
 class gThread(threading.Thread, wx.EvtHandler):
-    """Thread for various backends"""
+    """Thread for various backends
+
+    terminating thread:
+    https://www.geeksforgeeks.org/python-different-ways-to-kill-a-thread/
+    """
     requestId = 0
 
     def __init__(self, requestQ=None, resultQ=None, **kwds):
         wx.EvtHandler.__init__(self)
         self.terminate = False
+        self._terminate_evt = None
 
         threading.Thread.__init__(self, **kwds)
 
@@ -51,6 +59,7 @@ class gThread(threading.Thread, wx.EvtHandler):
         self.setDaemon(True)
 
         self.Bind(EVT_CMD_DONE, self.OnDone)
+        self.Bind(EVT_THD_TERMINATE, self.OnTerminate)
         self.start()
 
     def Run(self, *args, **kwds):
@@ -80,7 +89,7 @@ class gThread(threading.Thread, wx.EvtHandler):
     def run(self):
         while True:
             requestId, args, kwds = self.requestQ.get()
-            for key in ('callable', 'ondone', 'userdata'):
+            for key in ('callable', 'ondone', 'userdata', 'onterminate'):
                 if key in kwds:
                     vars()[key] = kwds[key]
                     del kwds[key]
@@ -92,6 +101,13 @@ class gThread(threading.Thread, wx.EvtHandler):
             ret = None
             exception = None
             time.sleep(.01)
+
+            self._terminate_evt = wxThdTerminate(
+                onterminate=vars()['onterminate'],
+                kwds=kwds,
+                args=args,
+                pid=requestId,
+            )
 
             if self.terminate:
                 return
@@ -123,3 +139,31 @@ class gThread(threading.Thread, wx.EvtHandler):
     def Terminate(self, terminate=True):
         """Abort command(s)"""
         self.terminate = terminate
+
+    def start(self):
+        self.__run_backup = self.run
+        self.run = self.__run
+        threading.Thread.start(self)
+
+    def __run(self):
+        sys.settrace(self.globaltrace)
+        self.__run_backup()
+        self.run = self.__run_backup
+
+    def globaltrace(self, frame, event, arg):
+        if event == 'call':
+            return self.localtrace
+        else:
+            return None
+
+    def localtrace(self, frame, event, arg):
+        if self.terminate:
+            if event == 'line':
+                # Send event
+                wx.PostEvent(self, self._terminate_evt)
+                raise SystemExit()
+        return self.localtrace
+
+    def OnTerminate(self, event):
+        if event.onterminate:
+            event.onterminate(event)
