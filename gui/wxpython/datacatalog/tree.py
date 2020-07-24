@@ -37,7 +37,7 @@ from icons.icon import MetaIcon
 from startup.guiutils import (create_mapset_interactively,
                               rename_mapset_interactively,
                               rename_location_interactively,
-                              delete_mapset_interactively,
+                              delete_mapsets_interactively,
                               delete_location_interactively)
 
 from grass.pydispatch.signal import Signal
@@ -947,31 +947,27 @@ class DataCatalogTree(TreeView):
         """
         Delete selected mapset or mapsets
         """
-        try:
-            db_loc_mapset = []
-            for i in range(len(self.selected_mapset)):
-                # Append to the list of tuples
-                db_loc_mapset.append((
-                    self.selected_grassdb[i].data['name'],
-                    self.selected_location[i].data['name'],
-                    self.selected_mapset[i].data['name']
-                ))
-            delete_mapset_interactively(self, db_loc_mapset)
+        mapsets = []
+        for i in range(len(self.selected_mapset)):
+            # Append to the list of tuples
+            mapsets.append((
+                self.selected_grassdb[i].data['name'],
+                self.selected_location[i].data['name'],
+                self.selected_mapset[i].data['name']
+            ))
+        if delete_mapsets_interactively(self, mapsets):
             self.ReloadTreeItems()
-        except Exception as e:
-            GError(parent=self,
-                   message=_("Unable to delete mapset: %s") % e,
-                   showTraceback=False)
 
     def OnDeleteLocation(self, event):
         """
         Delete selected location
         """
         try:
-            delete_location_interactively(self,
-                                          self.selected_grassdb[0].data['name'],
-                                          self.selected_location[0].data['name'])
-            self.ReloadTreeItems()
+            if (delete_location_interactively(
+                    self,
+                    self.selected_grassdb[0].data['name'],
+                    self.selected_location[0].data['name'])):
+                self.ReloadTreeItems()
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to delete location: %s") % e,

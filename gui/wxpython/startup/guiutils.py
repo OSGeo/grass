@@ -282,35 +282,54 @@ def rename_location_interactively(guiparent, grassdb, location):
     return newlocation
 
 
-def delete_mapset_interactively(guiparent, db_loc_mapset):
+def delete_mapset_interactively(guiparent, grassdb, location, mapset):
+    """Delete one mapset with user interaction.
+
+    This is currently just a convenience wrapper for delete_mapsets_interactively().
     """
-    Delete selected mapset/s. Whether PERMANENT or current mapsets found,
-    delete operation is not performed.
+    mapsets = [(grassdb, location, mapset)]
+    return delete_mapsets_interactively(guiparent, mapsets)
+
+
+def delete_mapsets_interactively(guiparent, mapsets):
+    """Delete multiple mapsets with user interaction.
+
+    Parameter *mapsets* is a list of tuples (database, location, mapset).
+
+    If PERMANENT or current mapset found, delete operation is not performed.
+
+    Exceptions during deletation are handled in this function.
+
+    Retuns True if there was a change, i.e., all mapsets were successfuly deleted
+    or at least one mapset was deleted. Returns False if one or more mapsets cannot be
+    deleted (see above the possible reasons) or if an error was encountered when
+    deleting the first mapset in the list.
     """
     genv = gisenv()
-
-    # Initialization
     issues = []
     deletes = []
 
-    # Check selected mapsets and remember issues
-    for grassdb, location, mapset in db_loc_mapset:
-
+    # Check selected mapsets and remember issue.
+    # Each error is reported only once (using elif).
+    for grassdb, location, mapset in mapsets:
+        mapset_path = os.path.join(grassdb, location, mapset)
         # Check for permanent mapsets
         if mapset == "PERMANENT":
-            issue = _("'{}' is required for a valid location.").format(
-                    os.path.join(grassdb, location, mapset))
+            issue = _("<{}> is required for a valid location.").format(mapset_path)
             issues.append(issue)
-        # Check for current mapsets
-        elif (grassdb == genv['GISDBASE'] and
+        # Check for current mapset
+        elif (
+                grassdb == genv['GISDBASE'] and
                 location == genv['LOCATION_NAME'] and
-                mapset == genv['MAPSET']):
-            issue = _("'{}' is a current mapset.").format(
-                    os.path.join(grassdb, location, mapset))
+                mapset == genv['MAPSET']
+        ):
+            issue = _("<{}> is the current mapset.").format(mapset_path)
             issues.append(issue)
+        # No issue detected
         else:
-            deletes.append(os.path.join(grassdb, location, mapset))
+            deletes.append(mapset_path)
 
+    modified = False  # True after first successful delete
     # If any issues, display the warning message and do not delete anything
     if issues:
         issues = "\n".join(issues)
@@ -321,7 +340,7 @@ def delete_mapset_interactively(guiparent, db_loc_mapset):
                 "{}\n\n"
                 "No mapsets will be deleted."
             ).format(issues),
-            caption=_("Delete selected mapsets"),
+            caption=_("Unable to delete selected mapsets"),
             style=wx.OK | wx.ICON_WARNING
         )
         dlg.ShowModal()
@@ -330,29 +349,37 @@ def delete_mapset_interactively(guiparent, db_loc_mapset):
         dlg = wx.MessageDialog(
             parent=guiparent,
             message=_(
-                "Do you want to continue with deleting one or more following mapsets?\n\n"
+                "Do you want to continue with deleting"
+                " one or more of the following mapsets?\n\n"
                 "{}\n\n"
-                "ALL MAPS included in these mapsets will be "
-                "PERMANENTLY DELETED!"
+                "All maps included in these mapsets will be permanently deleted!"
             ).format(deletes),
             caption=_("Delete selected mapsets"),
             style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
         )
         if dlg.ShowModal() == wx.ID_YES:
             try:
-                for grassdb, location, mapset in db_loc_mapset:
+                for grassdb, location, mapset in mapsets:
                     delete_mapset(grassdb, location, mapset)
+                    modified = True
                 dlg.Destroy()
-                return True
-            except OSError as err:
+                return modified
+            except OSError as error:
                 wx.MessageBox(
                     parent=guiparent,
-                    caption=_("Error"),
-                    message=_("Unable to delete mapset.\n\n{}").format(err),
+                    caption=_("Error when deleting mapsets"),
+                    message=_(
+                        "The following error occured when deleting mapset <{path}>:"
+                        "\n\n{error}\n\n"
+                        "Deleting of mapsets was interrupted."
+                        ).format(
+                            path=os.path.join(grassdb, location, mapset),
+                            error=error,
+                    ),
                     style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
                 )
     dlg.Destroy()
-    return False
+    return modified
 
 
 def delete_location_interactively(guiparent, grassdb, location):
