@@ -24,6 +24,7 @@ import grass.script as gs
 from core import globalvar
 from core.gcmd import GError, GMessage, DecodeString, RunCommand
 from gui_core.dialogs import TextEntryDialog
+from location_wizard.dialogs import RegionDef
 from gui_core.widgets import GenericMultiValidator
 from startup.utils import (create_mapset, delete_mapset, delete_location,
                            rename_mapset, rename_location, mapset_exists,
@@ -211,10 +212,64 @@ def create_mapset_interactively(guiparent, grassdb, location):
     return mapset
 
 
+def create_location_interactively(guiparent, grassdb):
+    """
+    Create new location using Location Wizard.
+
+    Returns tuple (database, location, mapset) where mapset is "PERMANENT"
+    by default or another mapset a user created and may want to switch to.
+    """
+    from location_wizard.wizard import LocationWizard
+
+    gWizard = LocationWizard(parent=guiparent,
+                             grassdatabase=grassdb)
+
+    if gWizard.location is None:
+        gWizard_output = (None, None, None)
+        # Returns Nones after Cancel
+        return gWizard_output
+
+    if gWizard.georeffile:
+        message = _(
+            "Do you want to import {}"
+            "to the newly created location?"
+        ).format(gWizard.georeffile)
+        dlg = wx.MessageDialog(parent=guiparent,
+                               message=message,
+                               caption=_("Import data?"),
+                               style=wx.YES_NO | wx.YES_DEFAULT |
+                               wx.ICON_QUESTION)
+        dlg.CenterOnParent()
+        if dlg.ShowModal() == wx.ID_YES:
+            import_file(guiparent, gWizard.georeffile)
+        dlg.Destroy()
+
+    if gWizard.default_region:
+        defineRegion = RegionDef(guiparent, location=gWizard.location)
+        defineRegion.CenterOnParent()
+        defineRegion.ShowModal()
+        defineRegion.Destroy()
+
+    if gWizard.user_mapset:
+        mapset = create_mapset_interactively(guiparent,
+                                                  gWizard.grassdatabase,
+                                                  gWizard.location)
+        # Returns database and location created by user
+        # and a mapset user may want to switch to
+        gWizard_output = (gWizard.grassdatabase, gWizard.location,
+                          mapset)
+    else:
+        # Returns PERMANENT mapset when user mapset not defined
+        gWizard_output = (gWizard.grassdatabase, gWizard.location,
+                          "PERMANENT")
+    return gWizard_output
+
+
 def rename_mapset_interactively(guiparent, grassdb, location, mapset):
     """
     Rename selected mapset
     """
+    newmapset = None
     if mapset == "PERMANENT":
         GMessage(
             parent=guiparent,
@@ -223,7 +278,8 @@ def rename_mapset_interactively(guiparent, grassdb, location, mapset):
                 "This mapset cannot be renamed."
             ),
         )
-        return
+        return newmapset
+
     dlg = MapsetDialog(
         parent=guiparent,
         default=mapset,
@@ -238,14 +294,13 @@ def rename_mapset_interactively(guiparent, grassdb, location, mapset):
         try:
             rename_mapset(grassdb, location, mapset, newmapset)
         except OSError as err:
+            newmapset = None
             wx.MessageBox(
                 parent=guiparent,
                 caption=_("Error"),
                 message=_("Unable to rename mapset.\n\n%s") % err,
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
-    else:
-        newmapset = None
     dlg.Destroy()
     return newmapset
 
@@ -267,6 +322,7 @@ def rename_location_interactively(guiparent, grassdb, location):
         try:
             rename_location(grassdb, location, newlocation)
         except OSError as err:
+            newlocation = None
             wx.MessageBox(
                 parent=guiparent,
                 caption=_("Error"),
@@ -277,6 +333,29 @@ def rename_location_interactively(guiparent, grassdb, location):
         newlocation = None
     dlg.Destroy()
     return newlocation
+
+
+def download_location_interactively(guiparent, grassdb):
+    """
+    Download new location using Location Wizard.
+
+    Returns tuple (database, location, mapset) where mapset is "PERMANENT"
+    by default or in future it could be the mapset the user may want to
+    switch to.
+    """
+    from startup.locdownload import LocationDownloadDialog
+
+    result = (None, None, None)
+    loc_download = LocationDownloadDialog(parent=guiparent,
+                                          database=grassdb)
+    loc_download.ShowModal()
+
+    if loc_download.GetLocation() is not None:
+        # Returns database and location created by user
+        # and a mapset user may want to switch to
+        result = (grassdb, loc_download.GetLocation(), "PERMANENT")
+    loc_download.Destroy()
+    return result
 
 
 def delete_mapset_interactively(guiparent, grassdb, location, mapset):
@@ -291,7 +370,7 @@ def delete_mapset_interactively(guiparent, grassdb, location, mapset):
                 "This mapset cannot be deleted."
             ),
         )
-        return
+        return False
 
     dlg = wx.MessageDialog(
         parent=guiparent,
@@ -309,6 +388,8 @@ def delete_mapset_interactively(guiparent, grassdb, location, mapset):
     if dlg.ShowModal() == wx.ID_YES:
         try:
             delete_mapset(grassdb, location, mapset)
+            dlg.Destroy()
+            return True
         except OSError as err:
             wx.MessageBox(
                 parent=guiparent,
@@ -316,8 +397,8 @@ def delete_mapset_interactively(guiparent, grassdb, location, mapset):
                 message=_("Unable to delete mapset.\n\n%s") % err,
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
-
     dlg.Destroy()
+    return False
 
 
 def delete_location_interactively(guiparent, grassdb, location):
@@ -340,6 +421,8 @@ def delete_location_interactively(guiparent, grassdb, location):
     if dlg.ShowModal() == wx.ID_YES:
         try:
             delete_location(grassdb, location)
+            dlg.Destroy()
+            return True
         except OSError as err:
             wx.MessageBox(
                 parent=guiparent,
@@ -347,5 +430,46 @@ def delete_location_interactively(guiparent, grassdb, location):
                 message=_("Unable to delete location.\n\n%s") % err,
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
-
     dlg.Destroy()
+    return False
+
+
+def import_file(guiparent, filePath):
+    """Tries to import file as vector or raster.
+
+    If successfull sets default region from imported map.
+    """
+    RunCommand('db.connect', flags='c')
+    mapName = os.path.splitext(os.path.basename(filePath))[0]
+    vectors = RunCommand('v.in.ogr', input=filePath, flags='l',
+                         read=True)
+
+    wx.BeginBusyCursor()
+    wx.GetApp().Yield()
+    if vectors:
+        # vector detected
+        returncode, error = RunCommand(
+            'v.in.ogr', input=filePath, output=mapName, flags='e',
+            getErrorMsg=True)
+    else:
+        returncode, error = RunCommand(
+            'r.in.gdal', input=filePath, output=mapName, flags='e',
+            getErrorMsg=True)
+    wx.EndBusyCursor()
+
+    if returncode != 0:
+        GError(
+            parent=guiparent,
+            message=_(
+                "Import of <%(name)s> failed.\n"
+                "Reason: %(msg)s") % ({
+                    'name': filePath,
+                    'msg': error}))
+    else:
+        GMessage(
+            message=_(
+                "Data file <%(name)s> imported successfully. "
+                "The location's default region was set from "
+                "this imported map.") % {
+                'name': filePath},
+            parent=guiparent)

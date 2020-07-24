@@ -35,10 +35,12 @@ from gui_core.wrap import Menu
 from datacatalog.dialogs import CatalogReprojectionDialog
 from icons.icon import MetaIcon
 from startup.guiutils import (create_mapset_interactively,
+                              create_location_interactively,
                               rename_mapset_interactively,
                               rename_location_interactively,
                               delete_mapset_interactively,
-                              delete_location_interactively)
+                              delete_location_interactively,
+                              download_location_interactively)
 
 from grass.pydispatch.signal import Signal
 
@@ -682,6 +684,20 @@ class DataCatalogTree(TreeView):
         """Create new mapset"""
         self.CreateMapset(self.selected_grassdb[0], self.selected_location[0])
 
+    def OnCreateLocation(self, event):
+        """
+        Location wizard started
+        """
+        grassdatabase, location, mapset = (
+            create_location_interactively(self,
+                                          self.selected_grassdb[0].data['name'])
+        )
+        if location is not None:
+            item = self._model.SearchNodes(name=grassdatabase, type='grassdb')
+            if not item:
+                self.InsertGrassDb(name=grassdatabase)
+            self.ReloadTreeItems()
+
     def OnRenameMapset(self, event):
         """
         Rename selected mapset
@@ -857,7 +873,8 @@ class DataCatalogTree(TreeView):
                                                 new_name,
                                                 self.copy_layer[i].data['type'],
                                                 env, callback)
-                dlg.ShowModal()
+                if dlg.ShowModal() == wx.ID_CANCEL:
+                    return
         self.ExpandNode(self.selected_mapset[0], recursive=True)
         self._initVariablesCatalog()
 
@@ -941,32 +958,46 @@ class DataCatalogTree(TreeView):
         Delete selected mapset
         """
         try:
-            delete_mapset_interactively(self,
-                                        self.selected_grassdb[0].data['name'],
-                                        self.selected_location[0].data['name'],
-                                        self.selected_mapset[0].data['name'])
+            if (delete_mapset_interactively(
+                    self,
+                    self.selected_grassdb[0].data['name'],
+                    self.selected_location[0].data['name'],
+                    self.selected_mapset[0].data['name'])):
+                self.ReloadTreeItems()
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to delete mapset: %s") % e,
                    showTraceback=False)
-        self.ReloadTreeItems()
 
     def OnDeleteLocation(self, event):
         """
         Delete selected location
         """
         try:
-            delete_location_interactively(self,
-                                          self.selected_grassdb[0].data['name'],
-                                          self.selected_location[0].data['name'])
+            if (delete_location_interactively(
+                    self,
+                    self.selected_grassdb[0].data['name'],
+                    self.selected_location[0].data['name'])):
+                self.ReloadTreeItems()
         except Exception as e:
             GError(parent=self,
                    message=_("Unable to delete location: %s") % e,
                    showTraceback=False)
-        self.ReloadTreeItems()
+
+    def OnDownloadLocation(self, event):
+        """
+        Download location online
+        """
+        grassdatabase, location, mapset = download_location_interactively(
+                self, self.selected_grassdb[0].data['name']
+        )
+        if location:
+            self.ReloadTreeItems()
 
     def OnDisplayLayer(self, event):
-        """Display layer in current graphics view"""
+        """
+        Display layer in current graphics view
+        """
         self.DisplayLayer()
 
     def DisplayLayer(self):
@@ -991,6 +1022,18 @@ class DataCatalogTree(TreeView):
     def OnBeginDrag(self, node, event):
         """Just copy necessary data"""
         self.DefineItems(self.GetSelected())
+
+        if self.selected_location and None in self.selected_mapset and \
+           None in self.selected_layer:
+            GMessage(_("Move or copy location isn't allowed"))
+            event.Veto()
+            return
+        elif self.selected_location and self.selected_mapset and \
+             None in self.selected_layer:
+            GMessage(_("Move or copy mapset isn't allowed"))
+            event.Veto()
+            return
+
         if self.selected_layer and not (self._restricted and gisenv()[
                                         'LOCATION_NAME'] != self.selected_location[0].data['name']):
             event.Allow()
@@ -1004,15 +1047,23 @@ class DataCatalogTree(TreeView):
         self.copy_mode = wx.GetMouseState().ControlDown()
         if node:
             self.DefineItems([node])
-            if self._restricted and gisenv()['MAPSET'] != self.selected_mapset[0].data['name']:
-                GMessage(_("To move or copy maps to other mapsets, unlock editing of other mapsets"),
+            if None not in self.selected_mapset:
+                if self._restricted and gisenv()['MAPSET'] != self.selected_mapset[0].data['name']:
+                    GMessage(_("To move or copy maps to other mapsets, unlock editing of other mapsets"),
+                             parent=self)
+                    event.Veto()
+                    return
+
+                event.Allow()
+                Debug.msg(1, "DROP DONE")
+                self.OnPasteMap(event)
+            else:
+                GMessage(_("To move or copy maps to other location, "
+                           "please drag them to a mapset in the "
+                           "destination location"),
                          parent=self)
                 event.Veto()
                 return
-
-            event.Allow()
-            Debug.msg(1, "DROP DONE")
-            self.OnPasteMap(event)
 
     def OnSwitchDbLocationMapset(self, event):
         """Switch to location and mapset"""
@@ -1272,6 +1323,15 @@ class DataCatalogTree(TreeView):
     def _popupMenuGrassDb(self):
         """Create popup menu for grass db"""
         menu = Menu()
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create new location"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCreateLocation, item)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Download sample location"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDownloadLocation, item)
+
         self.PopupMenu(menu)
         menu.Destroy()
 

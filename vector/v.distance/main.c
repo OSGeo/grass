@@ -265,7 +265,7 @@ int main(int argc, char *argv[])
     opt.to->guidependency = G_store(buf1);
     opt.to_field->guidependency = G_store(opt.to_column->key);
 
-    G_option_required(opt.out, opt.table, flag.print, NULL);
+    G_option_required(opt.out, opt.table, flag.print, opt.column, NULL);
     G_option_exclusive(opt.out, opt.table, flag.print, NULL);
     G_option_requires(opt.upload, flag.print, opt.table, opt.column, NULL);
     G_option_requires(opt.column, opt.upload, NULL);
