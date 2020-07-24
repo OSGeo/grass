@@ -102,6 +102,11 @@ class DataCatalog(wx.Panel):
 
         dlg.Destroy()
 
+    def OnCreateMapset(self, event):
+        """Create new mapset in current location"""
+        db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
+        self.tree.CreateMapset(db_node, loc_node)
+
     def SetRestriction(self, restrict):
         """Allow editing other mapsets or restrict editing to current mapset"""
         self.tree.SetRestriction(restrict)

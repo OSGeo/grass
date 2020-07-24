@@ -60,7 +60,7 @@ from core.giface import Notification
 from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, \
     CheckListBox, TextCtrl, Menu, ListCtrl, BitmapFromImage, CheckListCtrlMixin
 
-from location_wizard.wizard import TitledPage as TitledPage
+from location_wizard.wizard import GridBagSizerTitledPage as TitledPage
 
 #
 # global variables
