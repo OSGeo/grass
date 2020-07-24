@@ -6,6 +6,7 @@ from multiple methods.
 
 Classes:
  - wizard::TitledPage
+ - wizard::GridBagSizerTitledPage
  - wizard::DatabasePage
  - wizard::CoordinateSystemPage
  - wizard::ProjectionsPage
@@ -71,7 +72,6 @@ global west
 global resolution
 global wizerror
 global translist
-
 
 class TitledPage(WizardPageSimple):
     """Class to make wizard pages. Generic methods to make labels,
@@ -146,6 +146,16 @@ class TitledPage(WizardPageSimple):
         if tooltip:
             chbox.SetToolTip(tooltip)
         return chbox
+
+
+class GridBagSizerTitledPage(TitledPage):
+    """GridBagSizer declaration for TitledPage class"""
+    def __init__(self, parent, title):
+        super().__init__(parent, title)
+
+        self.sizer = wx.GridBagSizer(vgap=0, hgap=0)
+        self.sizer.SetCols(5)
+        self.sizer.SetRows(8)
 
 
 class DatabasePage(TitledPage):

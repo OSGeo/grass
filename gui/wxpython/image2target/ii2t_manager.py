@@ -24,11 +24,11 @@ This program is free software under the GNU General Public License
 @author Original version improved by Martin Landa <landa.martin gmail.com>
 @author Rewritten by Markus Metz redesign georectfier -> GCP Manage
 @author Support for GraphicsSet added by Stepan Turek <stepan.turek seznam.cz> (2012)
-@author port i.image.2target (v6) to version 7 in 2017 by Yann 
+@author port i.image.2target (v6) to version 7 in 2017 by Yann
 """
 
 #TODO: i.ortho.transform has 6 appearances, check each of them and configure
-#TODO: i.ortho.transform looks for REF_POINTS/CONTROL_POINTS and not POINTS 
+#TODO: i.ortho.transform looks for REF_POINTS/CONTROL_POINTS and not POINTS
 #TODO: CHECK CONTROL_POINTS format and create it for i.ortho.transform to use.
 
 from __future__ import print_function
@@ -65,7 +65,7 @@ from core.giface import Notification
 from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, \
     CheckListBox, TextCtrl, Menu, ListCtrl, BitmapFromImage, CheckListCtrlMixin
 
-from location_wizard.wizard import TitledPage as TitledPage
+from location_wizard.wizard import GridBagSizerTitledPage as TitledPage
 
 #
 # global variables
@@ -122,7 +122,7 @@ class GCPWizard(object):
     #    self.extension = extension
     #    self.src_maps = self.src_map
     #    # location for xy map to georectify
-    #    self.newlocation = self.srcloc 
+    #    self.newlocation = self.srcloc
     #    # mapset for xy map to georectify
     #    self.newmapset = self.srcmpt
     def __init__(self, parent, giface):
