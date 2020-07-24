@@ -30,6 +30,11 @@ import platform
 
 from core import globalvar
 import wx
+# import adv and html before wx.App is created, otherwise
+# we get annoying "Debug: Adding duplicate image handler for 'Windows bitmap file'"
+# during download location dialog start up, remove when not needed
+import wx.adv
+import wx.html
 import wx.lib.mixins.listctrl as listmix
 
 from core.gcmd import GError, RunCommand
