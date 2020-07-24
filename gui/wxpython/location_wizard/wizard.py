@@ -53,10 +53,11 @@ import wx.lib.scrolledpanel as scrolled
 from core import utils
 from core.utils import cmp
 from core.gcmd import RunCommand, GError, GMessage, GWarning
-from gui_core.widgets import GenericValidator
+from gui_core.widgets import GenericMultiValidator
 from gui_core.wrap import SpinCtrl, SearchCtrl, StaticText, \
     TextCtrl, Button, CheckBox, StaticBox, NewId, ListCtrl, HyperlinkCtrl
 from location_wizard.dialogs import SelectTransformDialog
+from startup.utils import location_exists
 
 from grass.script import decode
 from grass.script import core as grass
@@ -171,10 +172,11 @@ class DatabasePage(TitledPage):
         self.tgisdbase = self.MakeLabel(grassdatabase)
         self.tlocation = self.MakeTextCtrl("newLocation", size=(400, -1))
         self.tlocation.SetFocus()
+
+        checks = [(grass.legal_name, self._nameValidationFailed),
+                  (self._checkLocationNotExists, self._locationAlreadyExists)]
         self.tlocation.SetValidator(
-            GenericValidator(
-                grass.legal_name,
-                self._nameValidationFailed))
+            GenericMultiValidator(checks))
         self.tlocTitle = self.MakeTextCtrl(size=(400, -1))
 
         # text for required options
@@ -255,15 +257,23 @@ class DatabasePage(TitledPage):
 
     def _nameValidationFailed(self, ctrl):
         message = _(
-            "Name <%(name)s> is not a valid name for location. "
-            "Please use only ASCII characters excluding %(chars)s "
-            "and space.") % {
-            'name': ctrl.GetValue(),
-            'chars': '/"\'@,=*~'}
-        GError(
-            parent=self,
-            message=message,
-            caption=_("Invalid location name"))
+            "Name '{}' is not a valid name for location. "
+            "Please use only ASCII characters excluding characters {} "
+            "and space.").format(ctrl.GetValue(), '/"\'@,=*~')
+        GError(parent=self, message=message, caption=_("Invalid name"))
+
+    def _checkLocationNotExists(self, text):
+        """Check whether user's input location exists or not."""
+        if location_exists(self.tgisdbase.GetLabel(), text):
+            return False
+        return True
+
+    def _locationAlreadyExists(self, ctrl):
+        message = _(
+            "Location '{}' already exists. Please consider using "
+            "another name for your location.").format(ctrl.GetValue())
+        GError(parent=self, message=message,
+               caption=_("Existing location path"))
 
     def OnChangeName(self, event):
         """Name for new location was changed"""
@@ -287,21 +297,6 @@ class DatabasePage(TitledPage):
         dlg.Destroy()
 
     def OnPageChanging(self, event=None):
-        error = None
-        if os.path.isdir(
-            os.path.join(
-                self.tgisdbase.GetLabel(),
-                self.tlocation.GetValue())):
-            error = _("Location already exists in GRASS Database.")
-
-        if error:
-            GError(parent=self,
-                   message="%s <%s>.%s%s" % (_("Unable to create location"),
-                                             str(self.tlocation.GetValue()),
-                                             os.linesep,
-                                             error))
-            event.Veto()
-            return
 
         self.location = self.tlocation.GetValue()
         self.grassdatabase = self.tgisdbase.GetLabel()
@@ -600,7 +595,7 @@ class ItemList(ListCtrl,
         for column in columns:
             self.InsertColumn(i, column)
             i += 1
-        
+
         self.EnableAlternateRowColours()
 
         if self.sourceData:
@@ -1482,6 +1477,7 @@ class WKTPage(TitledPage):
             if not nextButton.IsEnabled():
                 nextButton.Enable()
 
+
 class EPSGPage(TitledPage):
     """Wizard page for selecting EPSG code for
     setting coordinate system parameters"""
@@ -1489,7 +1485,7 @@ class EPSGPage(TitledPage):
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Select CRS from a list"))
 
-        self.sizer = wx.BoxSizer(wx.VERTICAL)  
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
         searchBoxSizer = wx.BoxSizer(wx.HORIZONTAL)
         epsglistBoxSizer = wx.BoxSizer(wx.HORIZONTAL)
         informationBoxSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -1982,7 +1978,7 @@ class CustomPage(TitledPage):
                 return
 
             # check for datum tranforms
-            # FIXME: -t flag is a hack-around for trac bug #1849          
+            # FIXME: -t flag is a hack-around for trac bug #1849
             ret, out, err = RunCommand('g.proj',
                                        read=True, getErrorMsg=True,
                                        proj4=self.customstring,
@@ -2549,11 +2545,6 @@ class LocationWizard(wx.Object):
                            (_("Unable to create new GRASS Database"),
                             database))
                     return None
-
-            # change to new GISDbase directory
-            RunCommand('g.gisenv',
-                       parent=self.wizard,
-                       set='GISDBASE=%s' % database)
 
             wx.MessageBox(
                 parent=self.wizard,
