@@ -101,7 +101,8 @@ class RedirectText(object):
 
     def write(self, string):
         try:
-            wx.CallAfter(self.out.SetLabel, string)
+            if self.out:
+                wx.CallAfter(self.out.SetLabel, string)
         except:
             # window closed -> PyDeadObjectError
             pass
