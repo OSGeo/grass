@@ -200,7 +200,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         self.Map.GetRenderMgr().renderDone.connect(self._updateMFinished)
 
         # vars for handling mouse clicks
-        self.dragid = -1
+        self.dragid = None
         self.lastpos = (0, 0)
 
         # list for registration of graphics to draw
@@ -1556,7 +1556,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             self._onLeftUp(event)
 
         elif self.mouse['use'] == 'pointer':
-            if self.dragid and int(self.dragid) >= 0:
+            if self.dragid:
                 # end drag of overlay decoration
                 if self.overlays and self.dragid in self.overlays:
                     self.overlays[
