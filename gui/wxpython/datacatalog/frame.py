@@ -22,12 +22,10 @@ import sys
 import wx
 
 from core.globalvar import ICONDIR
-from core.gcmd import RunCommand, GError, GMessage
+from core.gcmd import RunCommand, GMessage
 from datacatalog.tree import DataCatalogTree
 from datacatalog.toolbars import DataCatalogToolbar
 from gui_core.wrap import Button
-from grass.script import gisenv
-from startup.guiutils import create_mapset_interactively
 
 
 class DataCatalogFrame(wx.Frame):
@@ -123,8 +121,8 @@ class DataCatalogFrame(wx.Frame):
 
     def OnCreateMapset(self, event):
         """Create new mapset in current location"""
-        genv = gisenv()
-        self.tree.CreateMapset(genv['GISDBASE'], genv['LOCATION_NAME'])
+        db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
+        self.tree.CreateMapset(db_node, loc_node)
 
     def SetRestriction(self, restrict):
         """Allow editing other mapsets or restrict editing to current mapset"""

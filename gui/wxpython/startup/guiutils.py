@@ -195,18 +195,18 @@ def create_mapset_interactively(guiparent, grassdb, location):
         location=location,
     )
 
+    mapset = None
     if dlg.ShowModal() == wx.ID_OK:
         mapset = dlg.GetValue()
         try:
             create_mapset(grassdb, location, mapset)
         except OSError as err:
+            mapset = None
             GError(
                 parent=guiparent,
                 message=_("Unable to create new mapset: %s") % err,
                 showTraceback=False,
             )
-    else:
-        mapset = None
     dlg.Destroy()
     return mapset
 
