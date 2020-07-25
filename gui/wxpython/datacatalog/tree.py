@@ -992,7 +992,7 @@ class DataCatalogTree(TreeView):
 
     def DownloadLocation(self, grassdb_node):
         """
-        Download new location interactively using Location Wizard.
+        Download new location interactively.
         """
         grassdatabase, location, mapset = (
             download_location_interactively(self, grassdb_node.data['name'])
