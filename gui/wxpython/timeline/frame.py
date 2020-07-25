@@ -8,7 +8,7 @@ Classes:
  - frame::TimelineFrame
  - frame::LookUp
 
-(C) 2012-2016 by the GRASS Development Team
+(C) 2012-2020 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -38,7 +38,7 @@ try:
     from matplotlib import cbook
 except ImportError as e:
     raise ImportError(_('The Timeline Tool needs the "matplotlib" '
-                        '(python-matplotlib) package to be installed. {0}').format(e))
+                        '(python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {0}').format(e))
 
 import grass.script as grass
 
