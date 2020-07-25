@@ -101,3 +101,5 @@ S_JTSK	"System_Jednotne_Trigonometricke_Site_Katastralni"	bessel	dx=589	dy=76	dz
 sirgas2000 "Sistema_de_Referencia_Geocentrico_para_las_AmericaS_2000"   grs80       dx=0        dy=0       dz=0
 # https://epsg.io/4170, sirgas1995 in degree
 sirgas1995 "Sistema_de_Referencia_Geocentrico_para_las_AmericaS_1995"   grs80       dx=0        dy=0       dz=0
+# https://epsg.io/4624
+RGFG95 "Reseau_Geodesique_Francais_Guyane_1995"   grs80       dx=0        dy=0       dz=0
