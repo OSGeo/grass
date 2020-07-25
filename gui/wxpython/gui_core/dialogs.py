@@ -2368,7 +2368,6 @@ class QuitDialog(wx.Dialog):
         self.btnClose.SetFocus()
         self.btnQuit = Button(parent=self.panel, id=wx.ID_YES,
                                  label=_("Quit GRASS GIS"))
-        self.btnQuit.SetForegroundColour(wx.Colour(35, 142, 35))
 
         self.btnClose.Bind(wx.EVT_BUTTON, self.OnClose)
         self.btnQuit.Bind(wx.EVT_BUTTON, self.OnQuit)
