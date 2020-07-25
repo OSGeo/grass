@@ -222,7 +222,29 @@ class GCPWizard(object):
                 render=False)
 
             self.SwitchEnv('target')
-            if tgt_map['raster']:
+
+            web_service_layer = self.mappage.GetWebServiceLayers(
+                name=tgt_map['raster'])
+
+            if tgt_map['raster'] and web_service_layer:
+                #
+                # add web service layer to target map
+                #
+
+                rendertype = web_service_layer['type']
+                cmdlist = web_service_layer['cmd']
+                name = tgt_map['raster']
+
+                self.TgtMap.AddLayer(
+                    ltype=rendertype,
+                    command=cmdlist,
+                    active=True,
+                    name=name,
+                    hidden=False,
+                    opacity=1.0,
+                    render=False)
+
+            elif tgt_map['raster']:
                 #
                 # add raster layer to target map
                 #
@@ -719,6 +741,8 @@ class DispMapPage(TitledPage):
 
         self.parent = parent
         global maptype
+        self.web_servc_lyrs_root_node_name = \
+            _("Map Display Web Service Layer(s)")
 
         #
         # layout
@@ -762,7 +786,8 @@ class DispMapPage(TitledPage):
 
         self.tgtrastselection = Select(
             self, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
-            type='raster', updateOnPopup=False)
+            type='raster', updateOnPopup=False,
+            extraItems=self.GetSelectTargetRasterExtraItems())
 
         self.sizer.Add(
             self.tgtrastselection,
@@ -931,6 +956,35 @@ class DispMapPage(TitledPage):
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
 
+    def GetWebServiceLayers(self, ltype=("wms"), name=None):
+        """Get Map Display web service layer(s).
+
+        :param ltype: map layer type
+        :param name: map layer name
+
+        :return: web service layer(s) dict
+        {
+            web_service_map_layer_name: {'type': ltype, 'cmd': [cmd list]},
+           ...
+        }
+        :return: None when web service map layer name doesn't exist
+       """
+        layers = {}
+        for layer in self.parent._giface.GetLayerList():
+            if layer.type in ltype:
+                layers[str(layer)] = {
+                    'type' : layer.type,
+                    'cmd': layer.cmd
+                }
+        if name:
+            return layers.get(name)
+        return layers
+
+    def GetSelectTargetRasterExtraItems(self):
+        """Get select target raster widget extra items."""
+        return {
+            self.web_servc_lyrs_root_node_name: self.GetWebServiceLayers().keys()
+        }
 
 class GCP(MapFrame, ColumnSorterMixin):
     """
@@ -2878,7 +2932,8 @@ class GrSettingsDialog(wx.Dialog):
         self.parent.grwiz.SwitchEnv('target')
         self.tgtrastselection = Select(
             panel, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
-            type='raster', updateOnPopup=False)
+            type='raster', updateOnPopup=False,
+            extraItems=self.parent.grwiz.mappage.GetSelectTargetRasterExtraItems())
         self.tgtrastselection.SetElementList('cell')
         self.tgtrastselection.GetElementList()
 
@@ -3173,7 +3228,27 @@ class GrSettingsDialog(wx.Dialog):
             tgt_map['raster'] = self.new_tgt_map['raster']
             tgt_map['vector'] = self.new_tgt_map['vector']
 
-            if tgt_map['raster'] != '':
+            web_service_layer = self.parent.grwiz.mappage.GetWebServiceLayers(
+                name=tgt_map['raster'])
+
+            if tgt_map['raster'] != '' and web_service_layer:
+                #
+                # add web service layer to target map
+                #
+                rendertype = web_service_layer['type']
+                cmdlist = web_service_layer['cmd']
+                name = tgt_map['raster']
+
+                self.parent.grwiz.TgtMap.AddLayer(
+                    ltype=rendertype,
+                    command=cmdlist,
+                    active=True,
+                    name=name,
+                    hidden=False,
+                    opacity=1.0,
+                    render=False)
+
+            elif tgt_map['raster'] != '':
                 cmdlist = ['d.rast', 'map=%s' % tgt_map['raster']]
                 name, found = utils.GetLayerNameFromCmd(cmdlist)
                 self.parent.grwiz.TgtMap.AddLayer(
