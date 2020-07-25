@@ -28,16 +28,22 @@ icons = {
         label=_("Reload current GRASS mapset only")),
     'unlocked': MetaIcon(
         img='unlocked',
-        label=_("Click to restrict editing to current mapset only")),
+        label=_("Restrict editing to current mapset only")),
     'locked': MetaIcon(
         img='locked',
-        label=_("Click to allow editing other mapsets")),
+        label=_("Allow editing other mapsets")),
     'addGrassDB': MetaIcon(
         img='grassdb-add',
-        label=_("Click to add new GRASS database")),
+        label=_("Add new GRASS database")),
     'addMapset': MetaIcon(
         img='mapset-add',
-        label=_("Click to add new mapset in current location"))
+        label=_("Create new mapset in current location")),
+    'addLocation': MetaIcon(
+        img='location-add',
+        label=_("Create new location in current GRASS database")),
+    'downloadLocation': MetaIcon(
+        img='location-download',
+        label=_("Download sample location to current GRASS database"))
 }
 
 
@@ -79,6 +85,10 @@ class DataCatalogToolbar(BaseToolbar):
                                       self.OnSetRestriction, wx.ITEM_CHECK),
                                      ("addGrassDB", icons['addGrassDB'],
                                       self.parent.OnAddGrassDB),
+                                     ("addLocation", icons['addLocation'],
+                                      self.parent.OnCreateLocation),
+                                     ("downloadLocation", icons['downloadLocation'],
+                                      self.parent.OnDownloadLocation),
                                      ("addMapset", icons['addMapset'],
                                       self.parent.OnCreateMapset)
                                      ))

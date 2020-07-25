@@ -107,6 +107,16 @@ class DataCatalog(wx.Panel):
         db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
         self.tree.CreateMapset(db_node, loc_node)
 
+    def OnCreateLocation(self, event):
+        """Create new location"""
+        db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
+        self.tree.CreateLocation(db_node)
+
+    def OnDownloadLocation(self, event):
+        """Download location to current grass database"""
+        db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
+        self.tree.DownloadLocation(db_node)
+
     def SetRestriction(self, restrict):
         """Allow editing other mapsets or restrict editing to current mapset"""
         self.tree.SetRestriction(restrict)
