@@ -893,22 +893,25 @@ class DispMapPage(TitledPage):
                                     self.parent.grouppage.xygroup,
                                     'VREF')
 
-            f = open(vgrpfile)
+            error_message = _(
+                'No maps in selected group <%s>.\n'
+                'Please edit group or select another group.') % \
+                self.parent.grouppage.xygroup
+
             try:
-                for vect in f.readlines():
-                    vect = vect.strip('\n')
-                    if len(vect) < 1:
-                        continue
-                    self.parent.src_maps.append(vect)
-            finally:
-                f.close()
+                with open(vgrpfile) as f:
+                    for vect in f.readlines():
+                        vect = vect.strip('\n')
+                        if len(vect) < 1:
+                            continue
+                        self.parent.src_maps.append(vect)
+            except FileNotFoundError:
+                GError(parent=self, message=error_message,
+                       showTraceback=False)
+                return
 
             if len(self.parent.src_maps) < 1:
-                GError(
-                    parent=self, message=_(
-                        'No maps in selected group <%s>.\n'
-                        'Please edit group or select another group.') %
-                    self.parent.grouppage.xygroup)
+                GError(parent=self, message=error_message)
                 return
 
         # filter out all maps not in group
