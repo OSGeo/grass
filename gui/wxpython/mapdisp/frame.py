@@ -314,6 +314,7 @@ class MapFrame(SingleMapFrame):
                 MapWindow=self.MapWindow, digitClass=VDigit,
                 giface=self._giface)
             self.toolbars['vdigit'].quitDigitizer.connect(self.QuitVDigit)
+            self.Map.layerAdded.connect(self._updateVDigitLayers)
         self.MapWindowVDigit.SetToolbar(self.toolbars['vdigit'])
 
         self._mgr.AddPane(self.toolbars['vdigit'],
@@ -330,6 +331,11 @@ class MapFrame(SingleMapFrame):
         self.MapWindow.pen = wx.Pen(colour='red', width=2, style=wx.SOLID)
         self.MapWindow.polypen = wx.Pen(
             colour='green', width=2, style=wx.SOLID)
+
+    def _updateVDigitLayers(self, layer):
+        """Update vdigit layers"""
+        if 'vdigit' in self.toolbars:
+            self.toolbars['vdigit'].UpdateListOfLayers(updateTool=True)
 
     def AddNviz(self):
         """Add 3D view mode window
