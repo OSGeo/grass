@@ -17,8 +17,9 @@ import shutil
 def delete_mapset(database, location, mapset):
     """Deletes a specified mapset"""
     if mapset == "PERMANENT":
-        # TODO: translatable or not?
-        raise ValueError("Mapset PERMANENT cannot be deleted (a whole location can be)")
+        raise ValueError(
+            _("Mapset PERMANENT cannot be deleted (a whole location can be)")
+        )
     shutil.rmtree(os.path.join(database, location, mapset))
 
 

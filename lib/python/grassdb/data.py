@@ -22,26 +22,26 @@ def map_exists(name, element, mapset=None, env=None):
                    None for all mapsets in the search path
     """
     # change type to element used by find file
-    if element == 'raster':
-        element = 'cell'
-    elif element == 'raster_3d':
-        element = 'grid3'
+    if element == "raster":
+        element = "cell"
+    elif element == "raster_3d":
+        element = "grid3"
     # g.findfile returns non-zero when file was not found
     # se we ignore return code and just focus on stdout
     process = gs.start_command(
-        'g.findfile',
-        flags='n',
+        "g.findfile",
+        flags="n",
         element=element,
         file=name,
         mapset=mapset,
         stdout=gs.PIPE,
         stderr=gs.PIPE,
-        env=env)
-    output, errors = process.communicate()
-    info = gs.parse_key_val(output, sep='=')
+        env=env,
+    )
+    output, unused_errors = process.communicate()
+    info = gs.parse_key_val(output, sep="=")
     # file is the key questioned in grass.script.core find_file()
     # return code should be equivalent to checking the output
-    if info['file']:
+    if info["file"]:
         return True
-    else:
-        return False
+    return False
