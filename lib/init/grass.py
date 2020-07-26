@@ -877,6 +877,8 @@ def cannot_create_location_reason(gisdbase, location):
     :param location: name of a Location
     :returns: translated message
     """
+    from grass.grassdb.checks import is_location_valid
+
     path = os.path.join(gisdbase, location)
     if is_location_valid(gisdbase, location):
         return _("Unable to create new location because"
@@ -904,13 +906,13 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
 
     tmp_location requires tmpdir (which is used as gisdbase)
     """
-    from grass.grassdb.mapset import (
+    from grass.grassdb.checks import (
         is_mapset_valid,
         is_location_valid,
         get_mapset_invalid_reason,
         get_location_invalid_reason,
         get_location_invalid_suggestion,
-        can_create_location,
+        mapset_exists,
     )
     # TODO: arg param seems to be always the mapset parameter (or a dash
     # in a distant past), refactor
