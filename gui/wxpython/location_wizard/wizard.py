@@ -58,8 +58,8 @@ from gui_core.widgets import GenericMultiValidator
 from gui_core.wrap import SpinCtrl, SearchCtrl, StaticText, \
     TextCtrl, Button, CheckBox, StaticBox, NewId, ListCtrl, HyperlinkCtrl
 from location_wizard.dialogs import SelectTransformDialog
-from startup.utils import location_exists
 
+from grass.grassdb.mapset import location_exists
 from grass.script import decode
 from grass.script import core as grass
 from grass.exceptions import OpenError

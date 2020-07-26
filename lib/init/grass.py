@@ -859,156 +859,6 @@ def create_location(gisdbase, location, geostring):
         fatal(err.value.strip('"').strip("'").replace('\\n', os.linesep))
 
 
-# TODO: distinguish between valid for getting maps and usable as current
-# https://lists.osgeo.org/pipermail/grass-dev/2016-September/082317.html
-# interface created according to the current usage
-def is_mapset_valid(full_mapset):
-    """Return True if GRASS Mapset is valid"""
-    # WIND is created from DEFAULT_WIND by `g.region -d` and functions
-    # or modules which create a new mapset. Most modules will fail if
-    # WIND doesn't exist (assuming that neither GRASS_REGION nor
-    # WIND_OVERRIDE environmental variables are set).
-    return os.access(os.path.join(full_mapset, "WIND"), os.R_OK)
-
-
-def is_location_valid(gisdbase, location):
-    """Return True if GRASS Location is valid
-
-    :param gisdbase: Path to GRASS GIS database directory
-    :param location: name of a Location
-    """
-    # DEFAULT_WIND file should not be required until you do something
-    # that actually uses them. The check is just a heuristic; a directory
-    # containing a PERMANENT/DEFAULT_WIND file is probably a GRASS
-    # location, while a directory lacking it probably isn't.
-    return os.access(os.path.join(gisdbase, location,
-                                  "PERMANENT", "DEFAULT_WIND"), os.F_OK)
-
-
-# basically checking location, possibly split into two functions
-# (mapset one can call location one)
-def get_mapset_invalid_reason(gisdbase, location, mapset):
-    """Returns a message describing what is wrong with the Mapset
-
-    The goal is to provide the most suitable error message
-    (rather than to do a quick check).
-
-    :param gisdbase: Path to GRASS GIS database directory
-    :param location: name of a Location
-    :param mapset: name of a Mapset
-    :returns: translated message
-    """
-    full_location = os.path.join(gisdbase, location)
-    full_mapset = os.path.join(full_location, mapset)
-    # first checking the location validity
-    # perhaps a special set of checks with different messages mentioning mapset
-    # will be needed instead of the same set of messages used for location
-    location_msg = get_location_invalid_reason(
-        gisdbase, location, none_for_no_reason=True
-    )
-    if location_msg:
-        return location_msg
-    # if location is valid, check mapset
-    elif mapset not in os.listdir(full_location):
-        return _("Mapset <{mapset}> doesn't exist in GRASS Location <{loc}>. "
-                 "A new mapset can be created by '-c' switch.").format(
-                     mapset=mapset, loc=location)
-    elif not os.path.isdir(full_mapset):
-        return _("<%s> is not a GRASS Mapset"
-                 " because it is not a directory") % mapset
-    elif not os.path.isfile(os.path.join(full_mapset, 'WIND')):
-        return _("<%s> is not a valid GRASS Mapset"
-                 " because it does not have a WIND file") % mapset
-    # based on the is_mapset_valid() function
-    elif not os.access(os.path.join(full_mapset, "WIND"), os.R_OK):
-        return _("<%s> is not a valid GRASS Mapset"
-                 " because its WIND file is not readable") % mapset
-    else:
-        return _("Mapset <{mapset}> or Location <{location}> is"
-                 " invalid for an unknown reason").format(
-                     mapset=mapset, location=location)
-
-
-def get_location_invalid_reason(gisdbase, location, none_for_no_reason=False):
-    """Returns a message describing what is wrong with the Location
-
-    The goal is to provide the most suitable error message
-    (rather than to do a quick check).
-
-    By default, when no reason is found, a message about unknown reason is
-    returned. This applies also to the case when this function is called on
-    a valid location (e.g. as a part of larger investigation).
-    ``none_for_no_reason=True`` allows the function to be used as part of other
-    diagnostic. When this function fails to find reason for invalidity, other
-    the caller can continue the investigation in their context.
-
-    :param gisdbase: Path to GRASS GIS database directory
-    :param location: name of a Location
-    :param none_for_no_reason: When True, return None when reason is unknown
-    :returns: translated message or None
-    """
-    full_location = os.path.join(gisdbase, location)
-    full_permanent = os.path.join(full_location, 'PERMANENT')
-
-    # directory
-    if not os.path.exists(full_location):
-        return _("Location <%s> doesn't exist") % full_location
-    # permament mapset
-    elif 'PERMANENT' not in os.listdir(full_location):
-        return _("<%s> is not a valid GRASS Location"
-                 " because PERMANENT Mapset is missing") % full_location
-    elif not os.path.isdir(full_permanent):
-        return _("<%s> is not a valid GRASS Location"
-                 " because PERMANENT is not a directory") % full_location
-    # partially based on the is_location_valid() function
-    elif not os.path.isfile(os.path.join(full_permanent,
-                                         'DEFAULT_WIND')):
-        return _("<%s> is not a valid GRASS Location"
-                 " because PERMANENT Mapset does not have a DEFAULT_WIND file"
-                 " (default computational region)") % full_location
-    # no reason for invalidity found (might be valid)
-    if none_for_no_reason:
-        return None
-    else:
-        return _("Location <{location}> is"
-                 " invalid for an unknown reason").format(location=full_location)
-
-
-def dir_contains_location(path):
-    """Return True if directory *path* contains a valid location"""
-    if not os.path.isdir(path):
-        return False
-    for name in os.listdir(path):
-        if os.path.isdir(os.path.join(path, name)):
-            if is_location_valid(path, name):
-                return True
-    return False
-
-
-def get_location_invalid_suggestion(gisdbase, location_name):
-    """Return suggestion what to do when specified location is not valid
-
-    It gives suggestion when:
-     * A mapset was specified instead of a location.
-     * A GRASS database was specified instead of a location.
-    """
-    full_path = os.path.join(gisdbase, location_name)
-    # a common error is to use mapset instead of location,
-    # if that's the case, include that info into the message
-    if is_mapset_valid(full_path):
-        return _(
-            "<{loc}> looks like a mapset, not a location."
-            " Did you mean just <{one_dir_up}>?").format(
-                loc=location_name, one_dir_up=gisdbase)
-    # confusion about what is database and what is location
-    elif dir_contains_location(full_path):
-        return _(
-            "It looks like <{loc}> contains locations."
-            " Did you mean to specify one of them?").format(
-                loc=location_name)
-    return None
-
-
 def can_create_location(gisdbase, location):
     """Checks if location can be created"""
     path = os.path.join(gisdbase, location)
@@ -1054,6 +904,14 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
 
     tmp_location requires tmpdir (which is used as gisdbase)
     """
+    from grass.grassdb.mapset import (
+        is_mapset_valid,
+        is_location_valid,
+        get_mapset_invalid_reason,
+        get_location_invalid_reason,
+        get_location_invalid_suggestion,
+        can_create_location,
+    )
     # TODO: arg param seems to be always the mapset parameter (or a dash
     # in a distant past), refactor
     l = arg
@@ -1116,7 +974,12 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
             if not create_new:
                 # 'path' is not a valid mapset and user does not
                 # want to create anything new
-                fatal(get_mapset_invalid_reason(gisdbase, location_name, mapset))
+                reason = get_mapset_invalid_reason(gisdbase, location_name, mapset)
+                if not mapset_exists(gisdbase, location_name, mapset):
+                    suggestion = _("A new mapset can be created using '-c' switch.")
+                else:
+                    suggestion = _("Maybe you meant a different directory.")
+                fatal("{reason}\n{suggestion}".format(**locals()))
             else:
                 # 'path' is not valid and the user wants to create
                 # mapset on the fly

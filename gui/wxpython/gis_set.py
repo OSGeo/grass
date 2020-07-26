@@ -32,10 +32,12 @@ from core import globalvar
 import wx
 import wx.lib.mixins.listctrl as listmix
 
+from grass.grassdb.mapset import get_lockfile_if_present
+
 from core.gcmd import GError, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets
 from startup.utils import (
-    get_lockfile_if_present, get_possible_database_path,
+    get_possible_database_path,
     create_database_directory)
 from startup.guiutils import (SetSessionMapset,
                               create_mapset_interactively,

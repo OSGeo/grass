@@ -90,20 +90,6 @@ def create_database_directory():
     return None
 
 
-def get_lockfile_if_present(database, location, mapset):
-    """Return path to lock if present, None otherwise
-
-    Returns the path as a string or None if nothing was found, so the
-    return value can be used to test if the lock is present.
-    """
-    lock_name = ".gislock"
-    lockfile = os.path.join(database, location, mapset, lock_name)
-    if os.path.isfile(lockfile):
-        return lockfile
-    else:
-        return None
-
-
 def create_mapset(database, location, mapset):
     """Creates a mapset in a specified location"""
     location_path = os.path.join(database, location)
@@ -147,21 +133,7 @@ def rename_location(database, old_name, new_name):
     os.rename(os.path.join(database, old_name), os.path.join(database, new_name))
 
 
-def mapset_exists(database, location, mapset):
-    """Returns True whether mapset path exists."""
-    location_path = os.path.join(database, location)
-    mapset_path = os.path.join(location_path, mapset)
-    if os.path.exists(mapset_path):
-        return True
-    return False
 
-
-def location_exists(database, location):
-    """Returns True whether location path exists."""
-    location_path = os.path.join(database, location)
-    if os.path.exists(location_path):
-        return True
-    return False
 
 
 def get_default_mapset_name():
