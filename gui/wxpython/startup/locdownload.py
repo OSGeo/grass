@@ -22,6 +22,7 @@ import os
 import sys
 import tempfile
 import shutil
+import textwrap
 import time
 
 try:
@@ -91,9 +92,11 @@ LOCATIONS = [
     },
 ]
 
+
 class DownloadError(Exception):
     """Error happened during download or when processing the file"""
     pass
+
 
 class RedirectText(object):
     def __init__(self, window):
@@ -102,13 +105,53 @@ class RedirectText(object):
     def write(self, string):
         try:
             if self.out:
+                string = self._wrap_string(string)
+                heigth = self._get_heigth(string)
                 wx.CallAfter(self.out.SetLabel, string)
+                self._resize(heigth)
         except:
             # window closed -> PyDeadObjectError
             pass
 
     def flush(self):
         pass
+
+    def _wrap_string(self, string, width=40):
+        """Wrap string
+
+        :param str string: input string
+        :param int width: maximum length allowed of the wrapped lines
+
+        :return str: newline-separated string
+        """
+        wrapper = textwrap.TextWrapper(width=width)
+        return wrapper.fill(text=string)
+
+    def _get_heigth(self, string):
+        """Get widget new heigth
+
+        :param str string: input string
+
+        :return int: widget heigth
+        """
+        n_lines = string.count('\n')
+        attr = self.out.GetClassDefaultAttributes()
+        font_size = attr.font.GetPointSize()
+        heigth = int((n_lines + 2) * font_size // 0.75) # 1 px = 0.75 pt
+        return heigth
+
+    def _resize(self, heigth=-1):
+        """Resize widget heigth
+
+        :param int heigth: widget heigth
+        """
+        wx.CallAfter(self.out.GetParent().SetMinSize, (-1, -1))
+        wx.CallAfter(self.out.SetMinSize, (-1, heigth))
+        wx.CallAfter(
+            self.out.GetParent().parent.sizer.Fit,
+            self.out.GetParent().parent,
+        )
+
 
 # copy from g.extension, potentially move to library
 def move_extracted_files(extract_dir, target_dir, files):
@@ -204,9 +247,27 @@ def download_and_extract(source):
     tmpdir = tempfile.mkdtemp()
     Debug.msg(1, 'Tmpdir: {}'.format(tmpdir))
     directory = os.path.join(tmpdir, 'location')
+    http_error_message = _(
+        "Download file from <{url}>, "
+        "return status code {code}, "
+    )
+    url_error_message = _(
+        "Download file from <{url}>, "
+        "failed. Check internet connection."
+    )
     if source.endswith('.zip'):
         archive_name = os.path.join(tmpdir, 'location.zip')
-        filename, headers = urlretrieve(source, archive_name, reporthook)
+        try:
+            filename, headers = urlretrieve(source, archive_name, reporthook)
+        except HTTPError as err:
+            raise DownloadError(
+                http_error_message.format(
+                        url=source,
+                        code=err,
+                ),
+            )
+        except URLError:
+            raise DownloadError(url_error_message.format(url=source))
         if headers.get('content-type', '') != 'application/zip':
             raise DownloadError(
                 _("Download of <{url}> failed"
@@ -220,7 +281,17 @@ def download_and_extract(source):
         else:
             ext = source.rsplit('.', 1)[1]
         archive_name = os.path.join(tmpdir, 'location.' + ext)
-        urlretrieve(source, archive_name, reporthook)
+        try:
+            urlretrieve(source, archive_name, reporthook)
+        except HTTPError as err:
+            raise DownloadError(
+                http_error_message.format(
+                    url=source,
+                    code=err,
+                ),
+            )
+        except URLError:
+            raise DownloadError(url_error_message.format(url=source))
         extract_tar(name=archive_name, directory=directory, tmpdir=tmpdir)
     else:
         # probably programmer error
@@ -489,7 +560,7 @@ class LocationDownloadDialog(wx.Dialog):
         wx.Dialog.__init__(self, parent=parent, title=title)
         cancel_button = Button(self, id=wx.ID_CANCEL)
         self.download_button = Button(parent=self, id=wx.ID_ANY,
-                                      label=_("Do&wnload"))
+                                      label=_("Download"))
         self.download_button.SetToolTip(_("Download selected location"))
         self.panel = LocationDownloadPanel(parent=self, database=database)
         cancel_button.Bind(wx.EVT_BUTTON, self.OnCancel)
