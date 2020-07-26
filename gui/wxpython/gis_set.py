@@ -32,7 +32,7 @@ from core import globalvar
 import wx
 import wx.lib.mixins.listctrl as listmix
 
-from grass.grassdb.mapset import get_lockfile_if_present
+from grass.grassdb.checks import get_lockfile_if_present
 
 from core.gcmd import GError, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets
