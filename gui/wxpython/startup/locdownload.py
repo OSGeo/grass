@@ -26,11 +26,12 @@ import time
 
 try:
     from urllib2 import HTTPError, URLError
-    from urllib import urlopen, urlretrieve
+    from urllib import request, urlopen, urlretrieve
 except ImportError:
     # there is also HTTPException, perhaps change to list
     from urllib.error import HTTPError, URLError
     from urllib.request import urlopen, urlretrieve
+    from urllib import request
 
 import wx
 from wx.lib.newevent import NewEvent
@@ -89,7 +90,6 @@ LOCATIONS = [
         "maintainer": "Brendan Harmon (brendan.harmon@gmail.com)",
     },
 ]
-
 
 class DownloadError(Exception):
     """Error happened during download or when processing the file"""
@@ -221,7 +221,6 @@ def download_and_extract(source):
             ext = source.rsplit('.', 1)[1]
         archive_name = os.path.join(tmpdir, 'location.' + ext)
         urlretrieve(source, archive_name, reporthook)
-        # TODO: error handling for urlretrieve
         extract_tar(name=archive_name, directory=directory, tmpdir=tmpdir)
     else:
         # probably programmer error
@@ -294,10 +293,13 @@ class LocationDownloadPanel(wx.Panel):
         """
         wx.Panel.__init__(self, parent=parent)
 
+        self.parent = parent
         self._last_downloaded_location_name = None
         self._download_in_progress = False
         self.database = database
         self.locations = locations
+        self._abort_btn_label = _('Abort')
+        self._abort_btn_tooltip = _('Abort download location')
 
         self.label = StaticText(
             parent=self,
@@ -309,11 +311,7 @@ class LocationDownloadPanel(wx.Panel):
         self.choice = wx.Choice(parent=self, choices=choices)
 
         self.choice.Bind(wx.EVT_CHOICE, self.OnChangeChoice)
-
-        self.download_button = Button(parent=self, id=wx.ID_ANY,
-                                      label=_("Do&wnload"))
-        self.download_button.SetToolTip(_("Download selected location"))
-        self.download_button.Bind(wx.EVT_BUTTON, self.OnDownload)
+        self.parent.download_button.Bind(wx.EVT_BUTTON, self.OnDownload)
         # TODO: add button for a link to an associated website?
         # TODO: add thumbnail for each location?
 
@@ -347,13 +345,6 @@ class LocationDownloadPanel(wx.Panel):
                      flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border=10)
         vertical.Add(self.choice, proportion=0,
                      flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border=10)
-
-        button_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        button_sizer.AddStretchSpacer()
-        button_sizer.Add(self.download_button, proportion=0)
-
-        vertical.Add(button_sizer, proportion=0,
-                     flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border=10)
         vertical.AddStretchSpacer()
         vertical.Add(self.message, proportion=0,
                      flag=wx.ALIGN_LEFT | wx.ALL | wx.EXPAND, border=10)
@@ -363,14 +354,28 @@ class LocationDownloadPanel(wx.Panel):
         self.Layout()
         self.SetMinSize(self.GetBestSize())
 
+    def _change_download_btn_label(self, label=_('Download'),
+                                tooltip=_('Download selected location')):
+        """Change download button label/tooltip"""
+        if self.parent.download_button:
+            self.parent.download_button.SetLabel(label)
+            self.parent.download_button.SetToolTip(tooltip)
+
     def OnDownload(self, event):
         """Handle user-initiated action of download"""
-        Debug.msg(1, "OnDownload")
-        if self._download_in_progress:
-            self._warning(_("Download in progress, wait until it is finished"))
-        index = self.choice.GetSelection()
-        self.DownloadItem(self.locations[index])
-        self.download_button.Enable(False)
+        button_label = self.parent.download_button.GetLabel()
+        if button_label == _('Download'):
+            self._change_download_btn_label(
+                label=self._abort_btn_label,
+                tooltip=self._abort_btn_tooltip,
+            )
+            Debug.msg(1, "OnDownload")
+            if self._download_in_progress:
+                self._warning(_("Download in progress, wait until it is finished"))
+            index = self.choice.GetSelection()
+            self.DownloadItem(self.locations[index])
+        else:
+            self.parent.OnCancel()
 
     def DownloadItem(self, item):
         """Download the selected item"""
@@ -382,6 +387,7 @@ class LocationDownloadPanel(wx.Panel):
         if os.path.exists(destination):
             self._error(_("Location named <%s> already exists,"
                           " download canceled") % dirname)
+            self._change_download_btn_label()
             return
 
         def download_complete_callback(event):
@@ -394,12 +400,21 @@ class LocationDownloadPanel(wx.Panel):
                 self._warning(_("Download completed. The downloaded sample data is listed "
                                 "in the location/mapset tabs upon closing of this window")
                 )
+            self._change_download_btn_label()
+
+        def terminate_download_callback(event):
+            self._download_in_progress = False
+            request.urlcleanup()
+            sys.stdout.write("Download aborted")
+            self.thread = gThread()
+            self._change_download_btn_label()
 
         self._download_in_progress = True
         self._warning(_("Download in progress, wait until it is finished"))
         self.thread.Run(callable=download_location,
                         url=url, name=dirname, database=self.database,
-                        ondone=download_complete_callback)
+                        ondone=download_complete_callback,
+                        onterminate=terminate_download_callback)
 
     def OnChangeChoice(self, event):
         """React to user changing the selection"""
@@ -415,6 +430,7 @@ class LocationDownloadPanel(wx.Panel):
         if os.path.exists(destination):
             self._warning(_("Location named <%s> already exists,"
                             " rename it first") % dirname)
+            self.parent.download_button.SetLabel(label=_('Download'))
             return
         else:
             self._clearMessage()
@@ -434,7 +450,7 @@ class LocationDownloadPanel(wx.Panel):
             _clearMessage() when you know that there is everything
             correct.
         """
-        self.message.SetLabel(text)
+        sys.stdout.write(text)
         self.sizer.Layout()
 
     def _error(self, text):
@@ -448,7 +464,7 @@ class LocationDownloadPanel(wx.Panel):
             _clearMessage() when you know that there is everything
             correct.
         """
-        self.message.SetLabel(_("Error: {text}").format(text=text))
+        sys.stdout.write(_("Error: {text}").format(text=text))
         self.sizer.Layout()
 
     def _clearMessage(self):
@@ -471,22 +487,27 @@ class LocationDownloadDialog(wx.Dialog):
         :param title: window title if the default is not appropriate
         """
         wx.Dialog.__init__(self, parent=parent, title=title)
+        cancel_button = Button(self, id=wx.ID_CANCEL)
+        self.download_button = Button(parent=self, id=wx.ID_ANY,
+                                      label=_("Do&wnload"))
+        self.download_button.SetToolTip(_("Download selected location"))
         self.panel = LocationDownloadPanel(parent=self, database=database)
-        close_button = Button(self, id=wx.ID_CLOSE)
-        # TODO: terminate download process
-        close_button.Bind(wx.EVT_BUTTON, self.OnClose)
+        cancel_button.Bind(wx.EVT_BUTTON, self.OnCancel)
+        self.Bind(wx.EVT_CLOSE, lambda evt: self.Hide())
 
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self.panel, proportion=1, flag=wx.EXPAND)
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.sizer.Add(self.panel, proportion=1, flag=wx.EXPAND)
 
         button_sizer = wx.StdDialogButtonSizer()
-        button_sizer.Add(close_button)
+        button_sizer.Add(cancel_button)
+        button_sizer.Add(self.download_button)
         button_sizer.Realize()
 
-        sizer.Add(button_sizer, proportion=0,
-                  flag=wx.ALIGN_RIGHT | wx.BOTTOM, border=10)
-        self.SetSizer(sizer)
-        sizer.Fit(self)
+        self.sizer.Add(button_sizer, proportion=0,
+                       flag=wx.ALIGN_RIGHT | wx.TOP | wx.BOTTOM,
+                       border=10)
+        self.SetSizer(self.sizer)
+        self.sizer.Fit(self)
 
         self.Layout()
 
@@ -494,7 +515,7 @@ class LocationDownloadDialog(wx.Dialog):
         """Get the name of the last location downloaded by the user"""
         return self.panel.GetLocation()
 
-    def OnClose(self, event):
+    def OnCancel(self, event=None):
         if self.panel._download_in_progress:
             # running thread
             dlg = wx.MessageDialog(parent=self,
@@ -506,11 +527,14 @@ class LocationDownloadDialog(wx.Dialog):
             ret = dlg.ShowModal()
             dlg.Destroy()
 
-            # TODO: terminate download process on wx.ID_YES
             if ret == wx.ID_NO:
                 return
+            else:
+                self.panel.thread.Terminate()
+                self.panel._change_download_btn_label()
 
-        self.Close()
+        if event:
+            self.Close()
 
 def main():
     """Tests the download dialog"""
