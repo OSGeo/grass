@@ -59,6 +59,9 @@ def is_location_valid(database, location):
 
 def is_mapset_users(mapset_path):
     """Check if the mapset belongs to the user"""
+    # Note that this does account for libgis built with SKIP_MAPSET_OWN_CHK
+    # which disables the ownerships check, i.e., even if it was build with the
+    # skip, it still needs the env variable.
     if os.environ.get("GRASS_SKIP_MAPSET_OWNER_CHECK", None):
         # Mapset just needs to be accessible for writting.
         return os.access(mapset_path, os.W_OK)
