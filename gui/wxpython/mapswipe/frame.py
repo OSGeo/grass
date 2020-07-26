@@ -763,7 +763,8 @@ class SwipeMapFrame(DoubleMapFrame):
         self.GetFirstMap().Clean()
         self.GetSecondMap().Clean()
         self._mgr.UnInit()
-        self._inputDialog.UnInit()
+        if self._inputDialog:
+            self._inputDialog.UnInit()
         self.Destroy()
 
 
