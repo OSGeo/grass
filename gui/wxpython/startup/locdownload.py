@@ -431,7 +431,7 @@ class LocationDownloadPanel(wx.Panel):
         self.Layout()
         self.SetMinSize(self.GetBestSize())
 
-    def _change_download_btn_label(self, label=_('Download'),
+    def _change_download_btn_label(self, label=_('Do&wnload'),
                                 tooltip=_('Download selected location')):
         """Change download button label/tooltip"""
         if self.parent.download_button:
@@ -441,7 +441,7 @@ class LocationDownloadPanel(wx.Panel):
     def OnDownload(self, event):
         """Handle user-initiated action of download"""
         button_label = self.parent.download_button.GetLabel()
-        if button_label == _('Download'):
+        if button_label in (_('Download'), _('Do&wnload')) :
             self._change_download_btn_label(
                 label=self._abort_btn_label,
                 tooltip=self._abort_btn_tooltip,
@@ -566,7 +566,7 @@ class LocationDownloadDialog(wx.Dialog):
         wx.Dialog.__init__(self, parent=parent, title=title)
         cancel_button = Button(self, id=wx.ID_CANCEL)
         self.download_button = Button(parent=self, id=wx.ID_ANY,
-                                      label=_("Download"))
+                                      label=_("Do&wnload"))
         self.download_button.SetToolTip(_("Download selected location"))
         self.panel = LocationDownloadPanel(parent=self, database=database)
         cancel_button.Bind(wx.EVT_BUTTON, self.OnCancel)
