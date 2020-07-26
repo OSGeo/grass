@@ -168,8 +168,7 @@ def get_mapset_invalid_reason(database, location, mapset, none_for_no_reason=Fal
     if none_for_no_reason:
         return None
     return _(
-        "Mapset <{mapset}> or Location <{location}> is"
-        " invalid for an unknown reason"
+        "Mapset <{mapset}> or Location <{location}> is invalid for an unknown reason"
     ).format(mapset=mapset, location=location)
 
 
@@ -227,9 +226,9 @@ def get_location_invalid_reason(database, location, none_for_no_reason=False):
     # no reason for invalidity found (might be valid)
     if none_for_no_reason:
         return None
-    return _(
-        "Location <{location_path}> is" " invalid for an unknown reason"
-    ).format(location_path=location_path)
+    return _("Location <{location_path}> is invalid for an unknown reason").format(
+        location_path=location_path
+    )
 
 
 def get_location_invalid_suggestion(database, location):
