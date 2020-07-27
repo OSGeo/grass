@@ -1164,6 +1164,7 @@ class ExportDialog(wx.Dialog):
         choices = [_("image sequence"), _("animated GIF"), _("SWF"), _("AVI")]
         self.formatChoice = wx.Choice(parent=panel, id=wx.ID_ANY,
                                       choices=choices)
+        self.formatChoice.SetSelection(0)
         self.formatChoice.Bind(
             wx.EVT_CHOICE,
             lambda event: self.ChangeFormat(
