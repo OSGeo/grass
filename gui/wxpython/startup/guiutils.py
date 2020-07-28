@@ -349,6 +349,7 @@ def download_location_interactively(guiparent, grassdb):
     result = (None, None, None)
     loc_download = LocationDownloadDialog(parent=guiparent,
                                           database=grassdb)
+    loc_download.Centre()
     loc_download.ShowModal()
 
     if loc_download.GetLocation() is not None:
