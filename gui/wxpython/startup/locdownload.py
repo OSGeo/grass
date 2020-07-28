@@ -570,7 +570,7 @@ class LocationDownloadDialog(wx.Dialog):
         self.download_button.SetToolTip(_("Download selected location"))
         self.panel = LocationDownloadPanel(parent=self, database=database)
         cancel_button.Bind(wx.EVT_BUTTON, self.OnCancel)
-        self.Bind(wx.EVT_CLOSE, lambda evt: self.Hide())
+        self.Bind(wx.EVT_CLOSE, self.OnCancel)
 
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         self.sizer.Add(self.panel, proportion=1, flag=wx.EXPAND)
@@ -611,7 +611,8 @@ class LocationDownloadDialog(wx.Dialog):
                 self.panel._change_download_btn_label()
 
         if event:
-            self.Close()
+            self.EndModal(wx.ID_CANCEL)
+
 
 def main():
     """Tests the download dialog"""
