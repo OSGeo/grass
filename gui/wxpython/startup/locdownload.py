@@ -576,8 +576,18 @@ class LocationDownloadDialog(wx.Dialog):
         self.sizer.Add(self.panel, proportion=1, flag=wx.EXPAND)
 
         button_sizer = wx.StdDialogButtonSizer()
-        button_sizer.Add(cancel_button)
-        button_sizer.Add(self.download_button)
+        button_sizer.Add(
+            cancel_button,
+            proportion=0,
+            flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
+            border=5,
+        )
+        button_sizer.Add(
+            self.download_button,
+            proportion=0,
+            flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
+            border=5,
+        )
         button_sizer.Realize()
 
         self.sizer.Add(button_sizer, proportion=0,
