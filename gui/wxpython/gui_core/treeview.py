@@ -158,9 +158,14 @@ class AbstractTreeViewMixin(VirtualTree):
     def RefreshNode(self, node, recursive=False):
         """Refreshes node."""
         index = self._model.GetIndexOfNode(node)
-        self.RefreshItem(index)
         if recursive:
-            self.RefreshChildrenRecursively(self.GetItemByIndex(index))
+            try:
+                item = self.GetItemByIndex(index)
+            except IndexError:
+                return
+            self.RefreshItemRecursively(item, index)
+        else:
+            self.RefreshItem(index)
 
     def _emitSignal(self, item, signal, **kwargs):
         """Helper method for emitting signals.

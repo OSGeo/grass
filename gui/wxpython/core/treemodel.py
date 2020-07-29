@@ -117,7 +117,7 @@ class TreeModel(object):
     def GetIndexOfNode(self, node):
         """Method used for communication between view (VirtualTree) and model."""
         index = []
-        return self._getIndex(node, index)
+        return tuple(self._getIndex(node, index))
 
     def _getIndex(self, node, index):
         if node.parent:
