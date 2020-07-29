@@ -63,7 +63,7 @@ def is_mapset_users(mapset_path):
     # which disables the ownerships check, i.e., even if it was build with the
     # skip, it still needs the env variable.
     if os.environ.get("GRASS_SKIP_MAPSET_OWNER_CHECK", None):
-        # Mapset just needs to be accessible for writting.
+        # Mapset just needs to be accessible for writing.
         return os.access(mapset_path, os.W_OK)
     # Mapset needs to be owned by user.
     stat_info = os.stat(mapset_path)

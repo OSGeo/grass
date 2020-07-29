@@ -978,7 +978,7 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
                 # want to create anything new
                 reason = get_mapset_invalid_reason(gisdbase, location_name, mapset)
                 if not mapset_exists(gisdbase, location_name, mapset):
-                    suggestion = _("A new mapset can be created using '-c' switch.")
+                    suggestion = _("A new mapset can be created using '-c' flag.")
                 else:
                     suggestion = _("Maybe you meant a different directory.")
                 fatal("{reason}\n{suggestion}".format(**locals()))
