@@ -75,7 +75,7 @@ class DataCatalog(wx.Panel):
         if self._loaded:
             return
 
-        self.thread.Run(callable=self.tree.InitTreeItems,
+        self.thread.Run(callable=self.tree.ReloadTreeItems,
                         ondone=lambda event: self.LoadItemsDone())
 
     def LoadItemsDone(self):
