@@ -48,6 +48,7 @@ from grass.pydispatch.signal import Signal
 
 import grass.script as gscript
 from grass.script import gisenv
+from grass.grassdb.data import map_exists
 from grass.exceptions import CalledModuleError
 
 
@@ -157,41 +158,6 @@ def getLocationTree(gisdbase, location, queue, mapsets=None):
     gscript.try_remove(tmp_gisrc_file)
 
 
-def map_exists(name, element, env, mapset=None):
-    """Check is map is present in the mapset given in the environment
-
-    :param name: name of the map
-    :param element: data type ('raster', 'raster_3d', and 'vector')
-    :param env environment created by function gscript.create_environment
-    """
-    if not mapset:
-        mapset = gscript.run_command('g.mapset', flags='p', env=env).strip()
-    # change type to element used by find file
-    if element == 'raster':
-        element = 'cell'
-    elif element == 'raster_3d':
-        element = 'grid3'
-    # g.findfile returns non-zero when file was not found
-    # se we ignore return code and just focus on stdout
-    process = gscript.start_command(
-        'g.findfile',
-        flags='n',
-        element=element,
-        file=name,
-        mapset=mapset,
-        stdout=gscript.PIPE,
-        stderr=gscript.PIPE,
-        env=env)
-    output, errors = process.communicate()
-    info = gscript.parse_key_val(output, sep='=')
-    # file is the key questioned in grass.script.core find_file()
-    # return code should be equivalent to checking the output
-    if info['file']:
-        return True
-    else:
-        return False
-
-
 class NameEntryDialog(TextEntryDialog):
 
     def __init__(self, element, mapset, env, **kwargs):
@@ -206,7 +172,7 @@ class NameEntryDialog(TextEntryDialog):
         new = self.GetValue()
         if not new:
             return
-        if map_exists(new, self._element, self._env, self._mapset):
+        if map_exists(new, self._element, env=self._env, mapset=self._mapset):
             dlg = wx.MessageDialog(
                 self,
                 message=_(
