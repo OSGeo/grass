@@ -21,15 +21,20 @@ import wx
 
 import grass.script as gs
 from grass.script import gisenv
+from grass.grassdb.checks import mapset_exists, location_exists
+from grass.grassdb.create import create_mapset, get_default_mapset_name
+from grass.grassdb.manage import (
+    delete_mapset,
+    delete_location,
+    rename_mapset,
+    rename_location,
+)
 
 from core import globalvar
 from core.gcmd import GError, GMessage, DecodeString, RunCommand
 from gui_core.dialogs import TextEntryDialog
 from location_wizard.dialogs import RegionDef
 from gui_core.widgets import GenericMultiValidator
-from startup.utils import (create_mapset, delete_mapset, delete_location,
-                           rename_mapset, rename_location, mapset_exists,
-                           location_exists, get_default_mapset_name)
 
 
 def SetSessionMapset(database, location, mapset):
