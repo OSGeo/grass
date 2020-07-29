@@ -20,6 +20,7 @@ for details.
 """
 import re
 import copy
+import os
 from multiprocessing import Process, Queue, cpu_count
 
 import wx
@@ -49,6 +50,7 @@ from grass.pydispatch.signal import Signal
 import grass.script as gscript
 from grass.script import gisenv
 from grass.grassdb.data import map_exists
+from grass.grassdb.checks import get_user_if_different, is_mapset_locked
 from grass.exceptions import CalledModuleError
 
 
@@ -594,6 +596,23 @@ class DataCatalogTree(TreeView):
             return self._iconTypes.index(node.data['type'])
         except ValueError:
             return 0
+
+    def OnGetItemNote(self, index):
+        """Overriden method to return note for each mapset.
+           Used to distinguish mapsets by lock and ownership."""
+        node = self._model.GetNodeByIndex(index)
+        node.label = node.data['name']
+        if node.data['type'] in ('mapset'):
+            mapset_path = os.path.join(node.parent.parent.data['name'],
+                                       node.parent.data['name'],
+                                       node.data['name'])
+            user = get_user_if_different(mapset_path)
+            if is_mapset_locked(mapset_path):
+                node.label = _("<{label}> (locked)").format(mapset=node.label)
+            if user:
+                node.label = _("<{label}> ({user})").format(mapset=node.label,
+                                                          user=user)
+        return node.label
 
     def OnGetItemFont(self, index):
         """Overriden method to return font for each item.

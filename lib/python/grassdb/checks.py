@@ -91,6 +91,23 @@ def get_lockfile_if_present(database, location, mapset):
     return None
 
 
+def get_user_if_different(mapset_path):
+    """Return user if different, None otherwise.
+
+    Returns the name as a string or None if nothing was found, so the
+    return value can be used to test if mapset belongs to another user.
+    """
+    if os.environ.get("GRASS_SKIP_MAPSET_OWNER_CHECK", None):
+        # Mapset just needs to be accessible for writing.
+        return os.access(mapset_path, os.W_OK)
+    # Mapset needs to be owned by user.
+    stat_info = os.stat(mapset_path)
+    mapset_uid = stat_info.st_uid
+    if mapset_uid != os.getuid():
+        return os.getuid()
+    return None
+
+
 def can_start_in_mapset(mapset_path, ignore_lock=False):
     """Check if a mapset from a gisrc file is usable for new session"""
     if not is_mapset_valid(mapset_path):
