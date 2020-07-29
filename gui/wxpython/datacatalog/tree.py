@@ -124,18 +124,16 @@ def getLocationTree(gisdbase, location, queue, mapsets=None):
         gscript.try_remove(tmp_gisrc_file)
         return
     else:
-        listOfMapsets = mapsets.split(',')
+        mapsets = mapsets.split(',')
         Debug.msg(
             4, "Location <{0}>: {1} mapsets found".format(
-                location, len(listOfMapsets)))
-        for each in listOfMapsets:
-            maps_dict[each] = {}
-            for elem in elements:
-                maps_dict[each][elem] = []
+                location, len(mapsets)))
+        for each in mapsets:
+            maps_dict[each] = []
     try:
         maplist = gscript.read_command(
             'g.list', flags='mt', type=elements,
-            mapset=','.join(listOfMapsets),
+            mapset=','.join(mapsets),
             quiet=True, env=env).strip()
     except CalledModuleError:
         queue.put(
@@ -153,7 +151,7 @@ def getLocationTree(gisdbase, location, queue, mapsets=None):
         for each in listOfMaps:
             ltype, wholename = each.split('/')
             name, mapset = wholename.split('@')
-            maps_dict[mapset][ltype].append(name)
+            maps_dict[mapset].append({'name': name, 'type': ltype})
 
     queue.put((maps_dict, None))
     gscript.try_remove(tmp_gisrc_file)
@@ -312,73 +310,139 @@ class DataCatalogTree(TreeView):
         self.startEdit.connect(self.OnStartEditLabel)
         self.endEdit.connect(self.OnEditLabel)
 
-    def _initTreeItems(self, locations=None, mapsets=None):
-        """Add grass databases, locations, mapsets and layers to the tree.
-        Runs in multiple processes. Saves resulting data and error."""
-        # mapsets param currently unused
-        for grassdatabase in self.grassdatabases:
 
-            locations = GetListOfLocations(grassdatabase)
+    def _reloadMapsetNode(self, mapset_node):
+        """Recursively reload the model of a specific mapset node"""
+        if mapset_node.children:
+            del mapset_node.children[:]
 
-            loc_count = proc_count = 0
-            queue_list = []
-            proc_list = []
-            loc_list = []
+        q = Queue()
+        p = Process(
+            target=getLocationTree,
+            args=(
+                mapset_node.parent.parent.data['name'],
+                mapset_node.parent.data['name'],
+                q,
+                mapset_node.data['name']))
+        p.start()
+        maps, error = q.get()
+        self._populateMapsetItem(mapset_node,
+                                 maps[mapset_node.data['name']])
+        self._orig_model = copy.deepcopy(self._model)
+        return error
+
+    def _reloadLocationNode(self, location_node):
+        """Recursively reload the model of a specific location node"""
+        if location_node.children:
+            del location_node.children[:]
+
+        q = Queue()
+        p = Process(
+            target=getLocationTree,
+            args=(
+                location_node.parent.data['name'],
+                location_node.data['name'],
+                q,
+                None))
+        p.start()
+        maps, error = q.get()
+        for mapset in maps:
+            mapset_node = self._model.AppendNode(
+                                parent=location_node,
+                                data=dict(type='mapset', name=mapset))
+            self._populateMapsetItem(mapset_node,
+                                     maps[mapset])
+        self._model.SortChildren(location_node)
+        self._orig_model = copy.deepcopy(self._model)
+        return error
+
+    def _reloadGrassDBNode(self, grassdb_node):
+        """Recursively reload the model of a specific grassdb node.
+        Runs reloading locations in parallel."""
+        if grassdb_node.children:
+            del grassdb_node.children[:]
+        locations = GetListOfLocations(grassdb_node.data["name"])
+
+        loc_count = proc_count = 0
+        queue_list = []
+        proc_list = []
+        loc_list = []
+        try:
+            nprocs = cpu_count()
+        except NotImplementedError:
             nprocs = 4
-            try:
-                nprocs = cpu_count()
-            except NotImplementedError:
-                nprocs = 4
 
-            results = dict()
-            errors = []
-            location_nodes = []
-            nlocations = len(locations)
-            grassdata_node = self._model.AppendNode(
-                parent=self._model.root,
-                data=dict(type='grassdb', name=grassdatabase))
-            for location in locations:
-                results[location] = dict()
-                varloc = self._model.AppendNode(
-                    parent=grassdata_node, data=dict(
-                        type='location', name=location))
-                location_nodes.append(varloc)
-                loc_count += 1
+        results = dict()
+        errors = []
+        location_nodes = []
+        all_location_nodes = []
+        nlocations = len(locations)
+        for location in locations:
+            results[location] = dict()
+            varloc = self._model.AppendNode(parent=grassdb_node,
+                                            data=dict(type='location',
+                                                      name=location))
+            location_nodes.append(varloc)
+            all_location_nodes.append(varloc)
+            loc_count += 1
 
-                Debug.msg(
-                    3, "Scanning location <{0}> ({1}/{2})".format(location, loc_count, nlocations))
+            Debug.msg(
+                3, "Scanning location <{0}> ({1}/{2})".format(location, loc_count, nlocations))
 
-                q = Queue()
-                p = Process(target=getLocationTree,
-                            args=(grassdatabase, location, q))
-                p.start()
+            q = Queue()
+            p = Process(target=getLocationTree,
+                        args=(grassdb_node.data["name"], location, q))
+            p.start()
 
-                queue_list.append(q)
-                proc_list.append(p)
-                loc_list.append(location)
+            queue_list.append(q)
+            proc_list.append(p)
+            loc_list.append(location)
 
-                proc_count += 1
-                # Wait for all running processes
-                if proc_count == nprocs or loc_count == nlocations:
-                    Debug.msg(4, "Process subresults")
-                    for i in range(len(loc_list)):
-                        maps, error = queue_list[i].get()
-                        proc_list[i].join()
-                        if error:
-                            errors.append(error)
+            proc_count += 1
+            # Wait for all running processes
+            if proc_count == nprocs or loc_count == nlocations:
+                Debug.msg(4, "Process subresults")
+                for i in range(len(loc_list)):
+                    maps, error = queue_list[i].get()
+                    proc_list[i].join()
+                    if error:
+                        errors.append(error)
 
-                        for key in sorted(maps.keys()):
-                            mapset_node = self._model.AppendNode(
+                    for key in sorted(maps.keys()):
+                        mapset_node = self._model.AppendNode(
                                 parent=location_nodes[i],
                                 data=dict(type='mapset', name=key))
-                            self._populateMapsetItem(mapset_node, maps[key])
+                        self._populateMapsetItem(mapset_node, maps[key])
 
-                    proc_count = 0
-                    proc_list = []
-                    queue_list = []
-                    loc_list = []
-                    location_nodes = []
+                proc_count = 0
+                proc_list = []
+                queue_list = []
+                loc_list = []
+                location_nodes = []    
 
+        for node in all_location_nodes:
+            self._model.SortChildren(node)
+        self._model.SortChildren(grassdb_node)
+        self._orig_model = copy.deepcopy(self._model)
+        return errors
+
+    def _reloadTreeItems(self):
+        """Updates grass databases, locations, mapsets and layers in the tree.
+        Saves resulting data and error."""
+        errors = []
+        for grassdatabase in self.grassdatabases:
+            grassdb_nodes = self._model.SearchNodes(name=grassdatabase,
+                                                    type='grassdb')
+            if not grassdb_nodes:
+                grassdb_node = self._model.AppendNode(parent=self._model.root,
+                                                      data=dict(type='grassdb',
+                                                                name=grassdatabase))
+            else:
+                grassdb_node = grassdb_nodes[0]
+            error = self._reloadGrassDBNode(grassdb_node)
+            if error:
+                errors.append(error)
+            
         if errors:
             wx.CallAfter(GWarning, '\n'.join(errors))
         Debug.msg(1, "Tree filled")
@@ -386,60 +450,34 @@ class DataCatalogTree(TreeView):
         self.UpdateCurrentDbLocationMapsetNode()
         self.RefreshItems()
 
+    def _renameNode(self, node, name):
+        """Rename node (map, mapset, location), sort and refresh.
+        Should be called after actual renaming of a map, mapset, location."""
+        node.data['name'] = name
+        self._model.SortChildren(node.parent)
+        self.RefreshNode(node.parent, recursive=True)
+
     def UpdateCurrentDbLocationMapsetNode(self):
         self.current_grassdb_node, self.current_location_node, self.current_mapset_node = \
             self.GetCurrentDbLocationMapsetNode()
 
     def ReloadTreeItems(self):
         """Reload dbs, locations, mapsets and layers in the tree."""
-        self._orig_model = self._model
-        self._model.RemoveNode(self._model.root)
-        self.InitTreeItems()
+        self._reloadTreeItems()
 
     def ReloadCurrentMapset(self):
         """Reload current mapset tree only."""
-        def get_first_child(node):
-            try:
-                child = self.current_mapset_node.children[0]
-            except IndexError:
-                child = None
-            return child
-
         self.UpdateCurrentDbLocationMapsetNode()
         if not self.current_grassdb_node or not self.current_location_node or not self.current_mapset_node:
             return
 
-        if self.current_mapset_node.children:
-            node = get_first_child(self.current_mapset_node)
-            while node:
-                self._model.RemoveNode(node)
-                node = get_first_child(self.current_mapset_node)
-
-        q = Queue()
-        p = Process(
-            target=getLocationTree,
-            args=(
-                self.current_grassdb_node.data['name'],
-                self.current_location_node.data['name'],
-                q,
-                self.current_mapset_node.data['name']))
-        p.start()
-        maps, error = q.get()
-        if error:
-            raise CalledModuleError(error)
-
-        self._populateMapsetItem(self.current_mapset_node,
-                                 maps[self.current_mapset_node.data['name']])
-        self._orig_model = copy.deepcopy(self._model)
-        self.RefreshNode(self.current_mapset_node)
-        self.RefreshItems()
+        self._reloadMapsetNode(self.current_mapset_node)
+        self.RefreshNode(self.current_mapset_node, recursive=True)
 
     def _populateMapsetItem(self, mapset_node, data):
-        for elem in data:
-            if data[elem]:
-                for layer in data[elem]:
-                    self._model.AppendNode(parent=mapset_node,
-                                           data=dict(type=elem, name=layer))
+        for item in data:
+            self._model.AppendNode(parent=mapset_node,
+                                   data=dict(**item))
         self._model.SortChildren(mapset_node)
 
     def _initVariables(self):
@@ -626,10 +664,6 @@ class DataCatalogTree(TreeView):
 
         return ret, cmdString
 
-    def InitTreeItems(self):
-        """Add locations, mapsets and layers to the tree."""
-        self._initTreeItems()
-
     def OnMoveMap(self, event):
         """Move layer or mapset (just save it temporarily, copying is done by paste)"""
         self.copy_mode = False
@@ -673,7 +707,6 @@ class DataCatalogTree(TreeView):
             element=self.selected_layer[0].data['type'])
         if new_name:
             self.Rename(old_name, new_name)
-            self.ReloadTreeItems()
 
     def CreateMapset(self, grassdb_node, location_node):
         """Creates new mapset interactively and adds it to the tree."""
@@ -696,10 +729,10 @@ class DataCatalogTree(TreeView):
             create_location_interactively(self, grassdb_node.data['name'])
         )
         if location:
-            item = self._model.SearchNodes(name=grassdatabase, type='grassdb')
-            if not item:
-                self.InsertGrassDb(name=grassdatabase)
-            self.ReloadTreeItems()
+            grassdb_nodes = self._model.SearchNodes(name=grassdatabase, type='grassdb')
+            if not grassdb_nodes:
+                grassdb_node = self.InsertGrassDb(name=grassdatabase)
+            self.InsertLocation(location, grassdb_node)
 
     def OnCreateLocation(self, event):
         """Create new location"""
@@ -709,43 +742,35 @@ class DataCatalogTree(TreeView):
         """
         Rename selected mapset
         """
-        try:
-            newmapset = rename_mapset_interactively(
-                    self,
-                    self.selected_grassdb[0].data['name'],
-                    self.selected_location[0].data['name'],
-                    self.selected_mapset[0].data['name'])
-            if newmapset:
-                self.ReloadTreeItems()
-        except Exception as e:
-            GError(parent=self,
-                   message=_("Unable to rename mapset: %s") % e,
-                   showTraceback=False)
+        newmapset = rename_mapset_interactively(
+                self,
+                self.selected_grassdb[0].data['name'],
+                self.selected_location[0].data['name'],
+                self.selected_mapset[0].data['name'])
+        if newmapset:
+            self._renameNode(self.selected_mapset[0], newmapset)
 
     def OnRenameLocation(self, event):
         """
         Rename selected location
         """
-        try:
-            newlocation = rename_location_interactively(
-                    self,
-                    self.selected_grassdb[0].data['name'],
-                    self.selected_location[0].data['name'])
-            if newlocation:
-                self.ReloadTreeItems()
-        except Exception as e:
-            GError(parent=self,
-                   message=_("Unable to rename location: %s") % e,
-                   showTraceback=False)
+        newlocation = rename_location_interactively(
+                self,
+                self.selected_grassdb[0].data['name'],
+                self.selected_location[0].data['name'])
+        if newlocation:
+            self._renameNode(self.selected_location[0], newlocation)
 
     def OnStartEditLabel(self, node, event):
         """Start label editing"""
         self.DefineItems([node])
+        # TODO: add renaming mapset/location
+        if not self.selected_layer[0]:
+            event.Veto()
+            return
         Debug.msg(1, "Start label edit {name}".format(name=node.data['name']))
         label = _("Editing {name}").format(name=node.data['name'])
         self.showNotification.emit(message=label)
-        if not self.selected_layer:
-            event.Veto()
 
     def OnEditLabel(self, node, event):
         """End label editing"""
@@ -772,8 +797,7 @@ class DataCatalogTree(TreeView):
             renamed, cmd = self._runCommand(
                 'g.rename', raster3d=string, env=env)
         if renamed == 0:
-            self.selected_layer[0].data['name'] = new
-            self.RefreshNode(self.selected_layer[0])
+            self._renameNode(self.selected_layer[0], new)
             self.showNotification.emit(
                 message=_("{cmd} -- completed").format(cmd=cmd))
             Debug.msg(1, "LAYER RENAMED TO: " + new)
@@ -911,19 +935,32 @@ class DataCatalogTree(TreeView):
         self.RefreshNode(mapset_node, recursive=True)
 
     def InsertMapset(self, name, location_node):
-        """Insert mapset into model and refresh tree"""
-        self._model.AppendNode(parent=location_node,
-                               data=dict(type="mapset", name=name))
+        """Insert new mapset into model and refresh tree.
+        Assumes mapset is empty."""
+        mapset_node = self._model.AppendNode(parent=location_node,
+                                             data=dict(type="mapset", name=name))
         self._model.SortChildren(location_node)
         self.RefreshNode(location_node, recursive=True)
+        return mapset_node
+
+    def InsertLocation(self, name, grassdb_node):
+        """Insert new location into model and refresh tree"""
+        location_node = self._model.AppendNode(parent=grassdb_node,
+                                               data=dict(type="location", name=name))
+        # reload new location since it has a mapset
+        self._reloadLocationNode(location_node)
+        self._model.SortChildren(grassdb_node)
+        self.RefreshNode(grassdb_node, recursive=True)
+        return location_node
 
     def InsertGrassDb(self, name):
-        """Insert grass db into model and refresh tree"""
+        """Insert new grass db into model and refresh tree"""
         self.grassdatabases.append(name)
-        self._model.AppendNode(parent=self._model.root,
-                               data=dict(type="grassdb", name=name))
-        self._model.SortChildren(self._model.root)
-        self.ReloadTreeItems()
+        grassdb_node = self._model.AppendNode(parent=self._model.root,
+                                              data=dict(type="grassdb", name=name))
+        self._reloadGrassDBNode(grassdb_node)
+        self.RefreshItems()
+        return grassdb_node
 
     def OnDeleteMap(self, event):
         """Delete layer or mapset"""
@@ -973,22 +1010,23 @@ class DataCatalogTree(TreeView):
                 self.selected_mapset[i].data['name']
             ))
         if delete_mapsets_interactively(self, mapsets):
-            self.ReloadTreeItems()
+            locations = set([each for each in self.selected_location])
+            for loc_node in locations:
+                self._reloadLocationNode(loc_node)
+                self.UpdateCurrentDbLocationMapsetNode()
+                self.RefreshNode(loc_node, recursive=True)
 
     def OnDeleteLocation(self, event):
         """
         Delete selected location
         """
-        try:
-            if (delete_location_interactively(
-                    self,
-                    self.selected_grassdb[0].data['name'],
-                    self.selected_location[0].data['name'])):
-                self.ReloadTreeItems()
-        except Exception as e:
-            GError(parent=self,
-                   message=_("Unable to delete location: %s") % e,
-                   showTraceback=False)
+        if (delete_location_interactively(
+                self,
+                self.selected_grassdb[0].data['name'],
+                self.selected_location[0].data['name'])):
+            self._reloadGrassDBNode(self.selected_grassdb[0])
+            self.UpdateCurrentDbLocationMapsetNode()
+            self.RefreshNode(self.selected_grassdb[0], recursive=True)
 
     def DownloadLocation(self, grassdb_node):
         """
@@ -998,7 +1036,9 @@ class DataCatalogTree(TreeView):
             download_location_interactively(self, grassdb_node.data['name'])
         )
         if location:
-            self.ReloadTreeItems()
+            self._reloadGrassDBNode(grassdb_node)
+            self.UpdateCurrentDbLocationMapsetNode()
+            self.RefreshItems()
 
     def OnDownloadLocation(self, event):
         """
