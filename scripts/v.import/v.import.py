@@ -139,7 +139,7 @@ def is_projection_matching(OGRdatasource):
     matches dataset projection, otherwise False"""
     try:
         grass.run_command('v.in.ogr', input=OGRdatasource, flags='j',
-                                quiet=True)
+                          quiet=True)
         return True
     except CalledModuleError:
         return False
