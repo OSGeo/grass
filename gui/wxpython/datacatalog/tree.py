@@ -42,6 +42,7 @@ from startup.guiutils import (
     delete_mapsets_interactively,
     delete_location_interactively,
     download_location_interactively,
+    remove_grassdb_interactively
 )
 
 from grass.pydispatch.signal import Signal
@@ -1012,6 +1013,23 @@ class DataCatalogTree(TreeView):
         """
         self.DownloadLocation(self.selected_grassdb[0])
 
+    def RemoveGrassDb(self, grassdb_node):
+        """
+        Remove grassdb node from the tree interactively.
+        """
+        if (remove_grassdb_interactively(self, grassdb_node.data['name'])):
+            self.grassdatabases.remove(grassdb_node.data['name'])
+            self._model.RemoveNode(grassdb_node)
+            self._reloadTreeItems()
+            self.UpdateCurrentDbLocationMapsetNode()
+            self.RefreshItems()
+
+    def OnRemoveGrassDb(self, event):
+        """
+        Remove grassdb node from the tree.
+        """
+        self.RemoveGrassDb(self.selected_grassdb[0])
+
     def OnDisplayLayer(self, event):
         """
         Display layer in current graphics view
@@ -1193,13 +1211,13 @@ class DataCatalogTree(TreeView):
                     currentLocation = False
                     currentMapset = False
                     break
-            if currentLocation:
+            if currentLocation and self.selected_location[0]:
                 for i in range(len(self.selected_location)):
                     if self.selected_location[i].data['name'] != genv['LOCATION_NAME']:
                         currentLocation = False
                         currentMapset = False
                         break
-            if currentMapset:
+            if currentMapset and self.selected_mapset[0]:
                 for i in range(len(self.selected_mapset)):
                     if self.selected_mapset[i].data['name'] != genv['MAPSET']:
                         currentMapset = False
@@ -1341,6 +1359,8 @@ class DataCatalogTree(TreeView):
     def _popupMenuGrassDb(self):
         """Create popup menu for grass db"""
         menu = Menu()
+        genv = gisenv()
+        currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Create new location"))
         menu.AppendItem(item)
@@ -1349,6 +1369,12 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Download sample location"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDownloadLocation, item)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Remove database from the tree"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnRemoveGrassDb, item)
+        if currentGrassDb:
+            item.Enable(False)
 
         self.PopupMenu(menu)
         menu.Destroy()

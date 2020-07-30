@@ -496,6 +496,74 @@ def delete_location_interactively(guiparent, grassdb, location):
     return False
 
 
+def remove_grassdb_interactively(guiparent, grassdb):
+    """
+    Check grass database node if could be removed.
+
+    If current grass database found, desired operation cannot be performed.
+
+    Exceptions during removing are handled in this function.
+
+    Retuns True if desired operation could be performed, Returns None if
+    cannot be performed (see above the possible reasons).
+    """
+
+    genv = gisenv()
+    issue = None
+    to_be_removed = False
+
+    # Check for current grassdb
+    if (grassdb == genv['GISDBASE']):
+        issue = _("<{}> is the current GRASS database.").format(grassdb)
+
+    if issue:
+        dlg = wx.MessageDialog(
+        parent=guiparent,
+        message=_(
+            "Cannot remove GRASS database from the tree for the following reason:\n\n"
+            "{}\n\n"
+            "No GRASS database will be removed."
+        ).format(issue),
+        caption=_("Unable to delete selected GRASS database"),
+        style=wx.OK | wx.ICON_WARNING
+        )
+        dlg.ShowModal()
+    else:
+        dlg = wx.MessageDialog(
+            parent=guiparent,
+            message=_(
+                "Do you want to continue with removing"
+                " the following GRASS database?\n\n"
+                "{}\n\n"
+                "It will not be permanently deleted."
+            ).format(grassdb),
+            caption=_("Remove selected GRASS database"),
+            style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
+        )
+        if dlg.ShowModal() == wx.ID_YES:
+            try:
+                to_be_removed = True
+                dlg.Destroy()
+                return to_be_removed
+            except OSError as error:
+                wx.MessageBox(
+                    parent=guiparent,
+                    caption=_("Error when removing GRASS database"),
+                    message=_(
+                        "The following error occured when removing database <{path}>:"
+                        "\n\n{error}\n\n"
+                        "Removing of GRASS database was interrupted."
+                    ).format(
+                        path=grassdb,
+                        error=error,
+                    ),
+                    style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
+                )
+    dlg.Destroy()
+    return to_be_removed
+
+
+
 def import_file(guiparent, filePath):
     """Tries to import file as vector or raster.
 
