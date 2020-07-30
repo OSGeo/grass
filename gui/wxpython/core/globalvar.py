@@ -134,13 +134,14 @@ Deleted automatically on re-render action
 QUERYLAYER = 'qlayer'
 
 """Style definition for FlatNotebook pages"""
-FNPageStyle = FN.FNB_VC8 | \
+FNPageStyle = FN.FNB_FF2 | \
     FN.FNB_BACKGROUND_GRADIENT | \
     FN.FNB_NODRAG | \
     FN.FNB_TABS_BORDER_SIMPLE
 
 FNPageDStyle = FN.FNB_FANCY_TABS | \
     FN.FNB_BOTTOM | \
+    FN.FNB_NODRAG | \
     FN.FNB_NO_NAV_BUTTONS | \
     FN.FNB_NO_X_BUTTON
 

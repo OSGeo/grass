@@ -131,8 +131,7 @@ class ImportDialog(wx.Dialog):
         self.Bind(wx.EVT_CLOSE, lambda evt: self.Destroy())
 
         self.notebook = GNotebook(parent=self,
-                                  style=FN.FNB_FANCY_TABS | FN.FNB_BOTTOM |
-                                  FN.FNB_NO_X_BUTTON)
+                                  style=globalvar.FNPageDStyle)
 
         self.notebook.AddPage(page=self.panel,
                               text=_('Source settings'),
