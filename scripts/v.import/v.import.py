@@ -134,6 +134,17 @@ def GDAL_COMPUTE_VERSION(maj, min, rev):
     return ((maj) * 1000000 + (min) * 10000 + (rev) * 100)
 
 
+def is_projection_matching(OGRdatasource):
+    """Returns True if current location projection
+    matches dataset projection, otherwise False"""
+    try:
+        grass.run_command('v.in.ogr', input=OGRdatasource, flags='j',
+                          quiet=True)
+        return True
+    except CalledModuleError:
+        return False
+
+
 def fix_gfsfile(input):
     """Fixes the gfs file of an gml file by adding the SRSName
 
@@ -205,9 +216,7 @@ def main():
     vopts['snap'] = options['snap']
 
     # try v.in.ogr directly
-    if flags['o'] or grass.run_command('v.in.ogr', input=OGRdatasource, flags='j',
-                                       errors='status', quiet=True, overwrite=overwrite,
-                                       **vopts) == 0:
+    if flags['o'] or is_projection_matching(OGRdatasource):
         try:
             grass.run_command('v.in.ogr', input=OGRdatasource,
                               flags=vflags, overwrite=overwrite, **vopts)
