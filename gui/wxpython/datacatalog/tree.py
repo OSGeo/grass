@@ -1302,8 +1302,6 @@ class DataCatalogTree(TreeView):
     def _popupMenuLocation(self):
         """Create popup menu for locations"""
         menu = Menu()
-        genv = gisenv()
-        currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Create mapset"))
         menu.AppendItem(item)
@@ -1356,8 +1354,6 @@ class DataCatalogTree(TreeView):
     def _popupMenuMultipleMapsets(self):
         """Create popup menu for multiple selected mapsets"""
         menu = Menu()
-        genv = gisenv()
-        currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete mapsets"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteMapset, item)
