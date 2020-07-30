@@ -11,6 +11,7 @@ for details.
 
 
 import os
+from pwd import getpwuid
 
 
 def mapset_exists(database, location, mapset):
@@ -91,21 +92,15 @@ def get_lockfile_if_present(database, location, mapset):
     return None
 
 
-def get_user_if_different(mapset_path):
-    """Return user if different, None otherwise.
+def get_mapset_owner(mapset_path):
+    """Return mapset user
 
-    Returns the name as a string or None if nothing was found, so the
-    return value can be used to test if mapset belongs to another user.
+    Returns the name as a string so the return value can be used to test
+    if mapset belongs to another user.
     """
-    if os.environ.get("GRASS_SKIP_MAPSET_OWNER_CHECK", None):
-        # Mapset just needs to be accessible for writing.
-        return os.access(mapset_path, os.W_OK)
-    # Mapset needs to be owned by user.
-    stat_info = os.stat(mapset_path)
-    mapset_uid = stat_info.st_uid
-    if mapset_uid != os.getuid():
-        return os.getuid()
-    return None
+    owner = getpwuid(os.stat(mapset_path).st_uid).pw_name
+    print(owner)
+    return owner
 
 
 def can_start_in_mapset(mapset_path, ignore_lock=False):
