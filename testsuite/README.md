@@ -2,9 +2,18 @@ This directory contains scripts to check some functionality of GRASS GIS.
 
 GRASS GIS testsuite documentation: https://grass.osgeo.org/grass79/manuals/libpython/gunittest_testing.html
 
-Some tests may be launched in the location `../demolocation/`
+## Simple test data
 
-## Test data
+Some tests may be launched in the location `../demolocation/`:
+
+```
+# create new mapset for test
+grass79 ../demolocation/user1 -c
+# run the test
+make
+```
+
+## Extended test data
 
 Most tests require the North Carolina Sample dataset, available from
 https://grass.osgeo.org/sampledata/north_carolina/
