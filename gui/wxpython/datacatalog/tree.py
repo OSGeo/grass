@@ -20,7 +20,6 @@ for details.
 """
 import re
 import copy
-import os
 from multiprocessing import Process, Queue, cpu_count
 
 import wx

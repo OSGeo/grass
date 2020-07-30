@@ -99,7 +99,6 @@ def get_mapset_owner(mapset_path):
     if mapset belongs to another user.
     """
     owner = getpwuid(os.stat(mapset_path).st_uid).pw_name
-    print(owner)
     return owner
 
 
