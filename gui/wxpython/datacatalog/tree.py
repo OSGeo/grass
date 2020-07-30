@@ -1287,13 +1287,13 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteMapset, item)
-        if not currentMapset:
+        if self._restricted:
             item.Enable(False)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameMapset, item)
-        if not currentMapset:
+        if self._restricted:
             item.Enable(False)
 
         self.PopupMenu(menu)
@@ -1312,13 +1312,13 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete location"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteLocation, item)
-        if not currentLocation:
+        if self._restricted:
             item.Enable(False)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename location"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameLocation, item)
-        if not currentLocation:
+        if self._restricted:
             item.Enable(False)
 
         self.PopupMenu(menu)
@@ -1361,7 +1361,7 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete mapsets"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteMapset, item)
-        if not currentLocation:
+        if self._restricted:
             item.Enable(False)
 
         self.PopupMenu(menu)
