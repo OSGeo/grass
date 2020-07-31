@@ -942,36 +942,21 @@ class DataCatalogTree(TreeView):
 
     def InsertGrassDb(self, name):
         """
-        Insert new grass db into model if not already added,
-        update user setting and refresh tree.
+        Insert new grass db into model, update user setting and refresh tree.
         """
-        grassdb_node = self._model.SearchNodes(name=name, type='grassdb')
-        if grassdb_node:
-            dlg = wx.MessageDialog(
-                parent=self,
-                message=_(
-                    "This GRASS database <{}> has been already added"
-                    " to the data catalogue."
-                ).format(name),
-                caption=_("Unable to add GRASS database"),
-                style=wx.OK | wx.ICON_WARNING
-            )
-            dlg.ShowModal()
-            dlg.Destroy()
-        else:
-            self.list_of_grassdatabases.append(name)
-            grassdb_node = self._model.AppendNode(parent=self._model.root,
-                                                  data=dict(type="grassdb", name=name))
-            self._reloadGrassDBNode(grassdb_node)
-            self.RefreshItems()
+        self.list_of_grassdatabases.append(name)
+        grassdb_node = self._model.AppendNode(parent=self._model.root,
+                                              data=dict(type="grassdb", name=name))
+        self._reloadGrassDBNode(grassdb_node)
+        self.RefreshItems()
 
-            # Add grassdb to user's settings
-            self.string_of_grassdatabases = ",".join(self.list_of_grassdatabases)
-            UserSettings.Set(group='general',
-                             key='datacatalog',
-                             subkey='grassdb',
-                             value=self.string_of_grassdatabases)
-            UserSettings.SaveToFile()
+        # Add grassdb to user's settings
+        self.string_of_grassdatabases = ",".join(self.list_of_grassdatabases)
+        UserSettings.Set(group='general',
+                         key='datacatalog',
+                         subkey='grassdb',
+                         value=self.string_of_grassdatabases)
+        UserSettings.SaveToFile()
         return grassdb_node
 
     def OnDeleteMap(self, event):
