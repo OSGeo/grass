@@ -23,6 +23,7 @@ import copy
 from multiprocessing import Process, Queue, cpu_count
 
 import wx
+import os
 
 from core.gcmd import RunCommand, GError, GMessage, GWarning
 from core.utils import GetListOfLocations
@@ -204,7 +205,14 @@ class DataCatalogNode(DictNode):
 
     @property
     def label(self):
-        return self.data["name"]
+        if self.data["lock"] == True and self.data["user"]:
+            return self.data["name"] + " <user: {}>".format(self.data["user"]) +" (locked)"
+        elif self.data["lock"] == True:
+            return self.data["name"] + " (locked)"
+        elif self.data["user"]:
+            return self.data["name"] + " <user: {}>".format(self.data["user"])
+        else:
+            return self.data["name"]
 
     def match(self, **kwargs):
         """Method used for searching according to given parameters.
@@ -314,10 +322,27 @@ class DataCatalogTree(TreeView):
                 None))
         p.start()
         maps, error = q.get()
+
         for mapset in maps:
+            mapset_path = os.path.join(location_node.parent.data['name'],
+                                       location_node.data['name'],
+                                       mapset)
+            # Check mapset ownership
+            different_user = None
+            if not is_mapset_users(mapset_path):
+                different_user = get_mapset_owner(mapset_path)
+
+            # Check mapset gislock
+            locked = False
+            if is_mapset_locked(mapset_path):
+                locked = True
+
             mapset_node = self._model.AppendNode(
                                 parent=location_node,
-                                data=dict(type='mapset', name=mapset))
+                                data=dict(type='mapset',
+                                          name=mapset,
+                                          lock=locked,
+                                          user=different_user))
             self._populateMapsetItem(mapset_node,
                                      maps[mapset])
         self._model.SortChildren(location_node)
@@ -596,6 +621,17 @@ class DataCatalogTree(TreeView):
             return self._iconTypes.index(node.data['type'])
         except ValueError:
             return 0
+
+    def OnGetItemTextColour(self, index):
+        """Overriden method to return colour for each item.
+           Used to distinquish lock and ownership on mapsets."""
+        node = self._model.GetNodeByIndex(index)
+        text_colour = self.GetTextColour()
+        if node.data['lock'] == True or node.data['user']:
+            text_colour.SetTextColour(wx.SYS_COLOUR_GRAYTEXT)
+        else:
+            text_colour.SetTextColour(wx.SYS_COLOUR_WINDOWTEXT)
+        return text_colour
 
     def OnGetItemFont(self, index):
         """Overriden method to return font for each item.
