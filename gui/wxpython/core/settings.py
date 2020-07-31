@@ -112,6 +112,10 @@ class Settings:
                         'enabled' : False
                     },
                 },
+                # datacatalog
+                'datacatalog': {
+                    'grassdb': None
+                },
             },
             'manager': {
                 # show opacity level widget

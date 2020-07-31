@@ -34,6 +34,7 @@ from gui_core.treeview import TreeView
 from gui_core.wrap import Menu
 from datacatalog.dialogs import CatalogReprojectionDialog
 from icons.icon import MetaIcon
+from core.settings import UserSettings
 from startup.guiutils import (
     create_mapset_interactively,
     create_location_interactively,
@@ -42,7 +43,7 @@ from startup.guiutils import (
     delete_mapsets_interactively,
     delete_location_interactively,
     download_location_interactively,
-    remove_grassdb_interactively
+    delete_grassdb_interactively
 )
 
 from grass.pydispatch.signal import Signal
@@ -255,8 +256,27 @@ class DataCatalogTree(TreeView):
         self._initVariablesCatalog()
         self.UpdateCurrentDbLocationMapsetNode()
 
-        self.grassdatabases = []
-        self.grassdatabases.append(gisenv()['GISDBASE'])
+        self.string_of_grassdatabases = UserSettings.Get(
+                group='general', key='datacatalog', subkey='grassdb')
+        self.list_of_grassdatabases = []
+
+        # If empty, grassdb has to be added to the list
+        if not self.string_of_grassdatabases:
+            self.list_of_grassdatabases.append(gisenv()['GISDBASE'])
+        else:
+            self.list_of_grassdatabases = self.string_of_grassdatabases.split(",")
+
+            # If current grassdb not in a list it has to be added
+            if not gisenv()['GISDBASE'] in self.list_of_grassdatabases:
+                self.list_of_grassdatabases.append(gisenv()['GISDBASE'])
+
+        self.string_of_grassdatabases = ",".join(self.list_of_grassdatabases)
+
+        # Add grassdb to user's settings
+        UserSettings.Set(
+            group='general', key='datacatalog', subkey='grassdb',
+            value=self.string_of_grassdatabases)
+        UserSettings.SaveToFile()
 
         self.beginDrag = Signal('DataCatalogTree.beginDrag')
         self.endDrag = Signal('DataCatalogTree.endDrag')
@@ -397,7 +417,7 @@ class DataCatalogTree(TreeView):
         """Updates grass databases, locations, mapsets and layers in the tree.
         Saves resulting data and error."""
         errors = []
-        for grassdatabase in self.grassdatabases:
+        for grassdatabase in self.list_of_grassdatabases:
             grassdb_nodes = self._model.SearchNodes(name=grassdatabase,
                                                     type='grassdb')
             if not grassdb_nodes:
@@ -921,12 +941,37 @@ class DataCatalogTree(TreeView):
         return location_node
 
     def InsertGrassDb(self, name):
-        """Insert new grass db into model and refresh tree"""
-        self.grassdatabases.append(name)
-        grassdb_node = self._model.AppendNode(parent=self._model.root,
-                                              data=dict(type="grassdb", name=name))
-        self._reloadGrassDBNode(grassdb_node)
-        self.RefreshItems()
+        """
+        Insert new grass db into model if not already added,
+        update user setting and refresh tree.
+        """
+        grassdb_node = self._model.SearchNodes(name=name, type='grassdb')
+        if grassdb_node:
+            dlg = wx.MessageDialog(
+                parent=self,
+                message=_(
+                    "This GRASS database <{}> has been already added"
+                    " to the data catalogue."
+                ).format(name),
+                caption=_("Unable to add GRASS database"),
+                style=wx.OK | wx.ICON_WARNING
+            )
+            dlg.ShowModal()
+            dlg.Destroy()
+        else:
+            self.list_of_grassdatabases.append(name)
+            grassdb_node = self._model.AppendNode(parent=self._model.root,
+                                                  data=dict(type="grassdb", name=name))
+            self._reloadGrassDBNode(grassdb_node)
+            self.RefreshItems()
+
+            # Add grassdb to user's settings
+            self.string_of_grassdatabases = ",".join(self.list_of_grassdatabases)
+            UserSettings.Set(group='general',
+                             key='datacatalog',
+                             subkey='grassdb',
+                             value=self.string_of_grassdatabases)
+            UserSettings.SaveToFile()
         return grassdb_node
 
     def OnDeleteMap(self, event):
@@ -1013,20 +1058,69 @@ class DataCatalogTree(TreeView):
         """
         self.DownloadLocation(self.selected_grassdb[0])
 
+    def DeleteGrassDb(self, grassdb_node):
+        """
+        Delete grassdb from the disk interactively.
+        """
+        grassdb = grassdb_node.data['name']
+        if (delete_grassdb_interactively(self, grassdb)):
+            self.list_of_grassdatabases.remove(grassdb)
+            self._model.RemoveNode(grassdb_node)
+            self.RefreshItems()
+
+            # Add grassdb to user's settings
+            self.string_of_grassdatabases = ",".join(self.list_of_grassdatabases)
+            UserSettings.Set(
+                        group='general',
+                        key='datacatalog',
+                        subkey='grassdb',
+                        value=self.string_of_grassdatabases)
+            UserSettings.SaveToFile()
+
+    def OnDeleteGrassDb(self, event):
+        """
+        Delete grassdb from the disk.
+        """
+        self.DeleteGrassDb(self.selected_grassdb[0])
+
     def RemoveGrassDb(self, grassdb_node):
         """
-        Remove grassdb node from the tree interactively.
+        Remove grassdb node from the data catalogue.
         """
-        if (remove_grassdb_interactively(self, grassdb_node.data['name'])):
-            self.grassdatabases.remove(grassdb_node.data['name'])
+        genv = gisenv()
+        grassdb = grassdb_node.data['name']
+
+        # Check for current grassdb
+        if (grassdb == genv['GISDBASE']):
+            dlg = wx.MessageDialog(
+                parent=self,
+                message=_(
+                    "Cannot delete GRASS database from the disk for the following reason:\n\n"
+                    "<{}> is the current GRASS database.\n\n"
+                    "GRASS database will not be deleted."
+                ).format(grassdb),
+                caption=_("Unable to delete selected GRASS database"),
+                style=wx.OK | wx.ICON_WARNING
+            )
+            dlg.ShowModal()
+            dlg.Destroy()
+        else:
+            self.list_of_grassdatabases.remove(grassdb)
             self._model.RemoveNode(grassdb_node)
-            self._reloadTreeItems()
-            self.UpdateCurrentDbLocationMapsetNode()
             self.RefreshItems()
+
+            # Add grassdb to user's settings
+            self.string_of_grassdatabases = ",".join(self.list_of_grassdatabases)
+            UserSettings.Set(
+                        group='general',
+                        key='datacatalog',
+                        subkey='grassdb',
+                        value=self.string_of_grassdatabases)
+            UserSettings.SaveToFile()
 
     def OnRemoveGrassDb(self, event):
         """
-        Remove grassdb node from the tree.
+        Remove grassdb node from the data catalogue.
         """
         self.RemoveGrassDb(self.selected_grassdb[0])
 
@@ -1370,9 +1464,15 @@ class DataCatalogTree(TreeView):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDownloadLocation, item)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Remove database from the tree"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Remove database from the data catalogue"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRemoveGrassDb, item)
+        if currentGrassDb:
+            item.Enable(False)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete database from the disk"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDeleteGrassDb, item)
         if currentGrassDb:
             item.Enable(False)
 

@@ -26,6 +26,7 @@ from grass.grassdb.create import create_mapset, get_default_mapset_name
 from grass.grassdb.manage import (
     delete_mapset,
     delete_location,
+    delete_grassdb,
     rename_mapset,
     rename_location,
 )
@@ -496,21 +497,21 @@ def delete_location_interactively(guiparent, grassdb, location):
     return False
 
 
-def remove_grassdb_interactively(guiparent, grassdb):
+def delete_grassdb_interactively(guiparent, grassdb):
     """
-    Check grass database node if could be removed.
+    Delete grass database if could be deleted.
 
     If current grass database found, desired operation cannot be performed.
 
-    Exceptions during removing are handled in this function.
+    Exceptions during deleting are handled in this function.
 
-    Retuns True if desired operation could be performed, Returns None if
-    cannot be performed (see above the possible reasons).
+    Returns True if grass database is deleted from the disk. Returns None if
+    cannot be deleted (see above the possible reasons).
     """
 
     genv = gisenv()
     issue = None
-    to_be_removed = False
+    deleted = False
 
     # Check for current grassdb
     if (grassdb == genv['GISDBASE']):
@@ -520,9 +521,9 @@ def remove_grassdb_interactively(guiparent, grassdb):
         dlg = wx.MessageDialog(
         parent=guiparent,
         message=_(
-            "Cannot remove GRASS database from the tree for the following reason:\n\n"
+            "Cannot delete GRASS database from the disk for the following reason:\n\n"
             "{}\n\n"
-            "No GRASS database will be removed."
+            "GRASS database will not be deleted."
         ).format(issue),
         caption=_("Unable to delete selected GRASS database"),
         style=wx.OK | wx.ICON_WARNING
@@ -532,27 +533,28 @@ def remove_grassdb_interactively(guiparent, grassdb):
         dlg = wx.MessageDialog(
             parent=guiparent,
             message=_(
-                "Do you want to continue with removing"
-                " the following GRASS database?\n\n"
+                "Do you want to continue with deleting"
+                " the following GRASS database from the disk?\n\n"
                 "{}\n\n"
-                "It will not be permanently deleted."
+                "The directory will be pernamently deleted!"
             ).format(grassdb),
-            caption=_("Remove selected GRASS database"),
+            caption=_("Delete selected GRASS database"),
             style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
         )
         if dlg.ShowModal() == wx.ID_YES:
             try:
-                to_be_removed = True
+                delete_grassdb(grassdb)
+                deleted = True
                 dlg.Destroy()
-                return to_be_removed
+                return deleted
             except OSError as error:
                 wx.MessageBox(
                     parent=guiparent,
-                    caption=_("Error when removing GRASS database"),
+                    caption=_("Error when deleting GRASS database"),
                     message=_(
-                        "The following error occured when removing database <{path}>:"
+                        "The following error occured when deleting database <{path}>:"
                         "\n\n{error}\n\n"
-                        "Removing of GRASS database was interrupted."
+                        "Deleting of GRASS database was interrupted."
                     ).format(
                         path=grassdb,
                         error=error,
@@ -560,8 +562,7 @@ def remove_grassdb_interactively(guiparent, grassdb):
                     style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
                 )
     dlg.Destroy()
-    return to_be_removed
-
+    return deleted
 
 
 def import_file(guiparent, filePath):
