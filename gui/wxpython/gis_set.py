@@ -38,7 +38,9 @@ from core.gcmd import GError, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets
 from startup.utils import (
     get_possible_database_path,
-    create_database_directory)
+    create_database_directory,
+    startup_location_exists,
+    copy_startup_location)
 from startup.guiutils import (SetSessionMapset,
                               create_mapset_interactively,
                               create_location_interactively,
@@ -510,9 +512,11 @@ class GRASSStartup(wx.Frame):
         if self.GetRCValue("LOCATION_NAME") != "<UNKNOWN>":
             return
         path = get_possible_database_path()
-        # If nothing found, try to create GRASS directory
+        # If nothing found, try to create GRASS directory and copy startup loc
         if path is None:
             path = create_database_directory()
+            if startup_location_exists:
+                copy_startup_location(path)
 
         if path:
             try:

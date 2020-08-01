@@ -20,7 +20,7 @@ import os
 import tempfile
 import getpass
 import sys
-
+from shutil import copytree, ignore_patterns
 
 def get_possible_database_path():
     """Looks for directory 'grassdata' (case-insensitive) in standard
@@ -87,3 +87,34 @@ def create_database_directory():
         pass
 
     return None
+
+
+def startup_location_exists():
+    """Check for demolocation directory in distribution.
+
+    Returns True if found or False if nothing was found.
+    """
+    home = os.path.expanduser("~")
+    demolocation = os.path.join(home, "grass", "demolocation"),
+    print(demolocation)
+
+    # Find out if demolocation exists
+    if os.path.exists(demolocation):
+        return True
+    return False
+
+
+def copy_startup_location(grassdatabase):
+    """Copy the simple demolocation with some data to GRASS database.
+    Returns True if successfully copied or False when an error was encountered.
+    """
+    home = os.path.expanduser("~")
+    demolocation = os.path.join(home, "grass", "demolocation")
+
+    # Copy source demolocation into GRASS database
+    try:
+        copytree(demolocation, grassdatabase, ignore=ignore_patterns('*.tmpl','Makefile*'))
+        return True
+    except (IOError, OSError) as why:
+        pass
+    return False
