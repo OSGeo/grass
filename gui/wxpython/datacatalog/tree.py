@@ -205,9 +205,9 @@ class DataCatalogNode(DictNode):
 
     @property
     def label(self):
-        if self.data["lock"] == True and self.data["user"]:
-            return self.data["name"] + " <user: {}>".format(self.data["user"]) +" (locked)"
-        elif self.data["lock"] == True:
+        if self.data["lock"] and self.data["user"]:
+            return self.data["name"] + " <user: {}>".format(self.data["user"]) + " (locked)"
+        elif self.data["lock"]:
             return self.data["name"] + " (locked)"
         elif self.data["user"]:
             return self.data["name"] + " <user: {}>".format(self.data["user"])
@@ -286,7 +286,6 @@ class DataCatalogTree(TreeView):
         self.startEdit.connect(self.OnStartEditLabel)
         self.endEdit.connect(self.OnEditLabel)
 
-
     def _reloadMapsetNode(self, mapset_node):
         """Recursively reload the model of a specific mapset node"""
         if mapset_node.children:
@@ -332,16 +331,11 @@ class DataCatalogTree(TreeView):
             if not is_mapset_users(mapset_path):
                 different_user = get_mapset_owner(mapset_path)
 
-            # Check mapset gislock
-            locked = False
-            if is_mapset_locked(mapset_path):
-                locked = True
-
             mapset_node = self._model.AppendNode(
                                 parent=location_node,
                                 data=dict(type='mapset',
                                           name=mapset,
-                                          lock=locked,
+                                          lock=is_mapset_locked(mapset_path),
                                           user=different_user))
             self._populateMapsetItem(mapset_node,
                                      maps[mapset])
@@ -402,16 +396,27 @@ class DataCatalogTree(TreeView):
                         errors.append(error)
 
                     for key in sorted(maps.keys()):
+                        mapset_path = os.path.join(location_nodes[i].parent.data['name'],
+                                       location_nodes[i].data['name'],
+                                       key)
+                        # Check mapset ownership
+                        different_user = None
+                        if not is_mapset_users(mapset_path):
+                            different_user = get_mapset_owner(mapset_path)
+
                         mapset_node = self._model.AppendNode(
                                 parent=location_nodes[i],
-                                data=dict(type='mapset', name=key))
+                                data=dict(type='mapset',
+                                          name=key,
+                                          lock=is_mapset_locked(mapset_path),
+                                          user=different_user))
                         self._populateMapsetItem(mapset_node, maps[key])
 
                 proc_count = 0
                 proc_list = []
                 queue_list = []
                 loc_list = []
-                location_nodes = []    
+                location_nodes = []
 
         for node in all_location_nodes:
             self._model.SortChildren(node)
@@ -435,7 +440,7 @@ class DataCatalogTree(TreeView):
             error = self._reloadGrassDBNode(grassdb_node)
             if error:
                 errors.append(error)
-            
+
         if errors:
             wx.CallAfter(GWarning, '\n'.join(errors))
         Debug.msg(1, "Tree filled")
@@ -606,9 +611,19 @@ class DataCatalogTree(TreeView):
         if not locationItem:
             return grassdbItem[0], None, None
 
+        mapset_path = os.path.join(gisdbase, location, mapset)
+
+        # Check mapset ownership
+        different_user = None
+        if not is_mapset_users(mapset_path):
+            different_user = get_mapset_owner(mapset_path)
+
         mapsetItem = self._model.SearchNodes(
             parent=locationItem[0],
-            name=mapset, type='mapset')
+            name=mapset,
+            type='mapset',
+            lock=is_mapset_locked(mapset_path),
+            user=different_user)
         if not mapsetItem:
             return grassdbItem[0], locationItem[0], None
 
@@ -627,10 +642,10 @@ class DataCatalogTree(TreeView):
            Used to distinquish lock and ownership on mapsets."""
         node = self._model.GetNodeByIndex(index)
         text_colour = self.GetTextColour()
-        if node.data['lock'] == True or node.data['user']:
-            text_colour.SetTextColour(wx.SYS_COLOUR_GRAYTEXT)
+        if node.data['lock'] or node.data['user']:
+            text_colour = wx.SYS_COLOUR_GRAYTEXT
         else:
-            text_colour.SetTextColour(wx.SYS_COLOUR_WINDOWTEXT)
+            text_colour = wx.SYS_COLOUR_WINDOWTEXT
         return text_colour
 
     def OnGetItemFont(self, index):
