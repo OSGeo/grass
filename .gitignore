@@ -30,6 +30,7 @@ raster/r.mapcalc/mapcalc.output
 raster/r.mapcalc/mapcalc.tab.c
 raster/r.mapcalc/mapcalc.tab.h
 raster/r.mapcalc/mapcalc.yy.c
+testreport/*
 testsuite/examples/testreports/
 mswindows/GRASS-Installer.nsi
 mswindows/GRASS-Packager.bat
