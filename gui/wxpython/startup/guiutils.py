@@ -373,7 +373,7 @@ def rename_location_interactively(guiparent, grassdb, location):
                 "{}\n\n"
                 "No location will be renamed."
             ).format(issue),
-            caption=_("Unable to rename selected mapset"),
+            caption=_("Unable to rename selected location"),
             style=wx.OK | wx.ICON_WARNING
         )
         dlg.ShowModal()

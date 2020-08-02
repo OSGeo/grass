@@ -276,7 +276,6 @@ class DataCatalogTree(TreeView):
         self.startEdit.connect(self.OnStartEditLabel)
         self.endEdit.connect(self.OnEditLabel)
 
-
     def _reloadMapsetNode(self, mapset_node):
         """Recursively reload the model of a specific mapset node"""
         if mapset_node.children:
@@ -384,7 +383,7 @@ class DataCatalogTree(TreeView):
                 proc_list = []
                 queue_list = []
                 loc_list = []
-                location_nodes = []    
+                location_nodes = []
 
         for node in all_location_nodes:
             self._model.SortChildren(node)
@@ -408,7 +407,7 @@ class DataCatalogTree(TreeView):
             error = self._reloadGrassDBNode(grassdb_node)
             if error:
                 errors.append(error)
-            
+
         if errors:
             wx.CallAfter(GWarning, '\n'.join(errors))
         Debug.msg(1, "Tree filled")
