@@ -1215,12 +1215,13 @@ class MapFrame(SingleMapFrame):
 
         :param overlayId: id of overlay
         """
-        dlg = self.decorations[overlayId].dialog
-        if dlg.IsShown():
-            dlg.SetFocus()
-            dlg.Raise()
-        else:
-            dlg.Show()
+        if self.decorations:
+            dlg = self.decorations[overlayId].dialog
+            if dlg.IsShown():
+                dlg.SetFocus()
+                dlg.Raise()
+            else:
+                dlg.Show()
 
     def RemoveOverlay(self, overlayId):
         """Hide overlay.
