@@ -1591,11 +1591,45 @@ def run_batch_job(batch_job):
         batch_job = quote(batch_job)
         proc = Popen(batch_job, shell=True)
     else:
+        def script_path(batch_job):
+            """Adjust script path
+
+            :param batch_job list: index 0, script path
+
+            :return str or None: script path or None
+            """
+            script_in_addon_path = None
+            if 'GRASS_ADDON_BASE' in os.environ:
+                script_in_addon_path = os.path.join(
+                    os.environ['GRASS_ADDON_BASE'],
+                    'scripts',
+                    batch_job[0],
+                )
+            if script_in_addon_path and \
+               os.path.exists(script_in_addon_path):
+                batch_job[0] = script_in_addon_path
+                return script_in_addon_path
+            elif os.path.exists(batch_job[0]):
+                return batch_job[0]
+
         try:
-            proc = Popen(batch_job, shell=False)
+            script = script_path(batch_job)
+            proc = Popen(batch_job, shell=False, env=os.environ)
         except OSError as error:
-            fatal(_("Execution of <{cmd}> failed:\n"
-                    "{error}").format(cmd=batch_job_string, error=error))
+            error_message = _("Execution of <{cmd}> failed:\n"
+                              "{error}").format(
+                                  cmd=batch_job_string,
+                                  error=error,
+                              )
+            # No such file or directory
+            if error.errno == errno.ENOENT:
+                if script and os.access(batch_job[0], os.X_OK):
+                    # Allow run py script with CRLF line terminators
+                    proc = Popen([sys.executable] + batch_job, shell=False)
+                else:
+                    fatal(error_message)
+            else:
+                fatal(error_message)
     returncode = proc.wait()
     message(_("Execution of <%s> finished.") % batch_job_string)
     return returncode
