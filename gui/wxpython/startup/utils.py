@@ -90,30 +90,29 @@ def create_database_directory():
 
 
 def startup_location_exists():
-    """Check for demolocation directory in distribution.
+    """Check for startup location directory in distribution.
 
-    Returns True if found or False if nothing was found.
+    Returns startup location if found or None if nothing was found.
     """
     home = os.path.expanduser("~")
-    demolocation = os.path.join(home, "grass", "demolocation"),
-    print(demolocation)
+    startup_location = os.path.join(home, "grass", "demolocation"),
 
-    # Find out if demolocation exists
-    if os.path.exists(demolocation):
-        return True
-    return False
+    # Find out if startup location exists
+    if os.path.exists(startup_location):
+        return startup_location
+    return None
 
 
-def copy_startup_location(grassdatabase):
-    """Copy the simple demolocation with some data to GRASS database.
+def copy_startup_location(grassdatabase, startup_location):
+    """Copy the simple startup_location with some data to GRASS database.
     Returns True if successfully copied or False when an error was encountered.
     """
-    home = os.path.expanduser("~")
-    demolocation = os.path.join(home, "grass", "demolocation")
+    src = startup_location
+    dst = os.path.join(grassdatabase, "demolocation")
 
-    # Copy source demolocation into GRASS database
+    # Copy source startup location into GRASS database
     try:
-        copytree(demolocation, grassdatabase, ignore=ignore_patterns('*.tmpl','Makefile*'))
+        copytree(src, dst, ignore=ignore_patterns('*.tmpl','Makefile*'))
         return True
     except (IOError, OSError) as why:
         pass
