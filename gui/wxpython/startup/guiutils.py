@@ -536,6 +536,7 @@ def delete_location_interactively(guiparent, grassdb, location):
     deleted (see above the possible reasons) or if another error was encountered.
     """
     genv = gisenv()
+    issue = None
 
     # Check selected location and remember issue.
     # Each error is reported only once (using elif).
