@@ -527,70 +527,92 @@ def delete_mapsets_interactively(guiparent, mapsets):
 
 
 def delete_location_interactively(guiparent, grassdb, location):
-    """Delete a location with user interaction.
+    """Delete one location with user interaction.
+
+    This is currently just a convenience wrapper for delete_locations_interactively().
+    """
+    locations = [(grassdb, location)]
+    return delete_mapsets_interactively(guiparent, locations)
+
+
+def delete_locations_interactively(guiparent, locations):
+    """Delete multiple locations with user interaction.
+
+    Parameter *locations* is a list of tuples (database, location).
 
     If current location found, delete operation is not performed.
 
     Exceptions during deletation are handled in this function.
 
-    Returns True if there was a change, returns False if a location cannot be
-    deleted (see above the possible reasons) or if another error was encountered.
+    Returns True if there was a change, i.e., all locations were successfuly deleted
+    or at least one location was deleted. Returns False if one or more locations cannot be
+    deleted (see above the possible reasons) or if an error was encountered when
+    deleting the first location in the list.
     """
     genv = gisenv()
-    issue = None
+    issues = []
+    deletes = []
 
-    # Check selected location and remember issue.
+    # Check selected locations and remember issue.
     # Each error is reported only once (using elif).
-    location_path = os.path.join(grassdb, location)
+    for grassdb, location in locations:
+        location_path = os.path.join(grassdb, location)
 
-    # Check for current location
-    if (
-        grassdb == genv['GISDBASE'] and
-        location == genv['LOCATION_NAME']
-    ):
-        issue = _("<{}> is the current location.").format(location_path)
+        # Check for current location
+        if (
+            grassdb == genv['GISDBASE'] and
+            location == genv['LOCATION_NAME']
+        ):
+            issue = _("<{}> is the current location.").format(location_path)
+            issues.append(issue)
+        # No issue detected
+        else:
+            deletes.append(location_path)
 
     modified = False  # True after first successful delete
 
     # If any issues, display the warning message and do not delete anything
-    if issue:
+    if issues:
+        issues = "\n".join(issues)
         dlg = wx.MessageDialog(
             parent=guiparent,
             message=_(
-                "Cannot delete selected location for the following reasons:\n\n"
+                "Cannot delete one or more locations for the following reasons:\n\n"
                 "{}\n\n"
-                "No location will be deleted."
-            ).format(issue),
-            caption=_("Unable to delete selected location"),
+                "No locations will be deleted."
+            ).format(issues),
+            caption=_("Unable to delete selected locations"),
             style=wx.OK | wx.ICON_WARNING
         )
         dlg.ShowModal()
     else:
+        deletes = "\n".join(deletes)
         dlg = wx.MessageDialog(
             parent=guiparent,
             message=_(
                 "Do you want to continue with deleting"
-                "the following location?\n\n"
+                " one or more of the following locations?\n\n"
                 "{}\n\n"
-                "All mapsets included in this location will be permanently deleted!"
-            ).format(location_path),
-            caption=_("Delete selected location"),
+                "All mapsets included in these locations will be permanently deleted!"
+            ).format(deletes),
+            caption=_("Delete selected locations"),
             style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
         )
         if dlg.ShowModal() == wx.ID_YES:
             try:
-                delete_location(grassdb, location)
-                modified = True
+                for grassdb, location in locations:
+                    delete_location(grassdb, location)
+                    modified = True
                 dlg.Destroy()
                 return modified
             except OSError as error:
                 wx.MessageBox(
                     parent=guiparent,
-                    caption=_("Error when deleting location"),
+                    caption=_("Error when deleting locations"),
                     message=_(
                         "The following error occured when deleting location <{path}>:"
                         "\n\n{error}\n\n"
-                        "Deleting was interrupted."
+                        "Deleting of locations was interrupted."
                     ).format(
                         path=os.path.join(grassdb, location),
                         error=error,
