@@ -256,26 +256,27 @@ class DataCatalogTree(TreeView):
         self._initVariablesCatalog()
         self.UpdateCurrentDbLocationMapsetNode()
 
-        self.string_of_grassdatabases = UserSettings.Get(
-                group='general', key='datacatalog', subkey='grassdb')
-        self.list_of_grassdatabases = []
+        # Load grassdatabases from user's settings
+        self.grassdatabases = (UserSettings.Get(
+                                            group='general',
+                                            key='datacatalog',
+                                            subkey='grassdb'))
 
         # If empty, grassdb has to be added to the list
-        if not self.string_of_grassdatabases:
-            self.list_of_grassdatabases.append(gisenv()['GISDBASE'])
+        if not self.grassdatabases:
+            self.grassdatabases = []
+            self.grassdatabases.append(gisenv()['GISDBASE'])
         else:
-            self.list_of_grassdatabases = self.string_of_grassdatabases.split(",")
+            self.grassdatabases = self.grassdatabases.split(",")
 
             # If current grassdb not in a list it has to be added
-            if not gisenv()['GISDBASE'] in self.list_of_grassdatabases:
-                self.list_of_grassdatabases.append(gisenv()['GISDBASE'])
+            if not gisenv()['GISDBASE'] in self.grassdatabases:
+                self.grassdatabases.append(gisenv()['GISDBASE'])
 
-        self.string_of_grassdatabases = ",".join(self.list_of_grassdatabases)
-
-        # Add grassdb to user's settings
+        # Update user's settings
         UserSettings.Set(
             group='general', key='datacatalog', subkey='grassdb',
-            value=self.string_of_grassdatabases)
+            value=",".join(self.grassdatabases))
         UserSettings.SaveToFile()
 
         self.beginDrag = Signal('DataCatalogTree.beginDrag')
@@ -417,7 +418,7 @@ class DataCatalogTree(TreeView):
         """Updates grass databases, locations, mapsets and layers in the tree.
         Saves resulting data and error."""
         errors = []
-        for grassdatabase in self.list_of_grassdatabases:
+        for grassdatabase in self.grassdatabases:
             grassdb_nodes = self._model.SearchNodes(name=grassdatabase,
                                                     type='grassdb')
             if not grassdb_nodes:
@@ -944,18 +945,17 @@ class DataCatalogTree(TreeView):
         """
         Insert new grass db into model, update user setting and refresh tree.
         """
-        self.list_of_grassdatabases.append(name)
         grassdb_node = self._model.AppendNode(parent=self._model.root,
                                               data=dict(type="grassdb", name=name))
         self._reloadGrassDBNode(grassdb_node)
         self.RefreshItems()
 
-        # Add grassdb to user's settings
-        self.string_of_grassdatabases = ",".join(self.list_of_grassdatabases)
+        # Update user's settings
+        self.grassdatabases.append(name)
         UserSettings.Set(group='general',
                          key='datacatalog',
                          subkey='grassdb',
-                         value=self.string_of_grassdatabases)
+                         value=",".join(self.grassdatabases))
         UserSettings.SaveToFile()
         return grassdb_node
 
@@ -1049,17 +1049,16 @@ class DataCatalogTree(TreeView):
         """
         grassdb = grassdb_node.data['name']
         if (delete_grassdb_interactively(self, grassdb)):
-            self.list_of_grassdatabases.remove(grassdb)
             self._model.RemoveNode(grassdb_node)
             self.RefreshItems()
 
-            # Add grassdb to user's settings
-            self.string_of_grassdatabases = ",".join(self.list_of_grassdatabases)
+            # Update user's settings
+            self.grassdatabases.remove(grassdb)
             UserSettings.Set(
                         group='general',
                         key='datacatalog',
                         subkey='grassdb',
-                        value=self.string_of_grassdatabases)
+                        value=",".join(self.grassdatabases))
             UserSettings.SaveToFile()
 
     def OnDeleteGrassDb(self, event):
@@ -1090,17 +1089,16 @@ class DataCatalogTree(TreeView):
             dlg.ShowModal()
             dlg.Destroy()
         else:
-            self.list_of_grassdatabases.remove(grassdb)
             self._model.RemoveNode(grassdb_node)
             self.RefreshItems()
 
-            # Add grassdb to user's settings
-            self.string_of_grassdatabases = ",".join(self.list_of_grassdatabases)
+            # Update user's settings
+            self.grassdatabases.remove(grassdb)
             UserSettings.Set(
                         group='general',
                         key='datacatalog',
                         subkey='grassdb',
-                        value=self.string_of_grassdatabases)
+                        value=",".join(self.grassdatabases))
             UserSettings.SaveToFile()
 
     def OnRemoveGrassDb(self, event):
