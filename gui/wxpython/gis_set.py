@@ -33,6 +33,11 @@ from grass.script import core as grass
 
 from core import globalvar
 import wx
+# import adv and html before wx.App is created, otherwise
+# we get annoying "Debug: Adding duplicate image handler for 'Windows bitmap file'"
+# during download location dialog start up, remove when not needed
+import wx.adv
+import wx.html
 import wx.lib.mixins.listctrl as listmix
 
 from core.gcmd import GMessage, GError, DecodeString, RunCommand
@@ -766,6 +771,7 @@ class GRASSStartup(wx.Frame):
         from startup.locdownload import LocationDownloadDialog
 
         loc_download = LocationDownloadDialog(parent=self, database=self.gisdbase)
+        loc_download.Centre()
         loc_download.ShowModal()
         location = loc_download.GetLocation()
         if location:
