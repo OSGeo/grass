@@ -72,6 +72,16 @@ def is_mapset_users(mapset_path):
     return mapset_uid == os.getuid()
 
 
+def get_mapset_owner(mapset_path):
+    """Return mapset user
+
+    Returns the name as a string so the return value can be used to test
+    if mapset belongs to another user.
+    """
+    owner = getpwuid(os.stat(mapset_path).st_uid).pw_name
+    return owner
+
+
 def is_mapset_locked(mapset_path):
     """Check if the mapset is locked"""
     lock_name = ".gislock"
@@ -90,16 +100,6 @@ def get_lockfile_if_present(database, location, mapset):
     if os.path.isfile(lockfile):
         return lockfile
     return None
-
-
-def get_mapset_owner(mapset_path):
-    """Return mapset user
-
-    Returns the name as a string so the return value can be used to test
-    if mapset belongs to another user.
-    """
-    owner = getpwuid(os.stat(mapset_path).st_uid).pw_name
-    return owner
 
 
 def can_start_in_mapset(mapset_path, ignore_lock=False):

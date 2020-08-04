@@ -205,12 +205,15 @@ class DataCatalogNode(DictNode):
 
     @property
     def label(self):
-        if self.data["lock"] and self.data["user"]:
-            return self.data["name"] + " <user: {}>".format(self.data["user"]) + " (locked)"
-        elif self.data["lock"]:
-            return self.data["name"] + " (locked)"
-        elif self.data["user"]:
-            return self.data["name"] + " <user: {}>".format(self.data["user"])
+        if self.data["type"] == "mapset":
+            if self.data["lock"] and self.data["user"]:
+                return self.data["name"] + " <user: {}>".format(self.data["user"]) + " (locked)"
+            elif self.data["lock"]:
+                return self.data["name"] + " (locked)"
+            elif self.data["user"]:
+                return self.data["name"] + " <user: {}>".format(self.data["user"])
+            else:
+                return self.data["name"]
         else:
             return self.data["name"]
 
@@ -641,12 +644,10 @@ class DataCatalogTree(TreeView):
         """Overriden method to return colour for each item.
            Used to distinquish lock and ownership on mapsets."""
         node = self._model.GetNodeByIndex(index)
-        text_colour = self.GetTextColour()
-        if node.data['lock'] or node.data['user']:
-            text_colour = wx.SYS_COLOUR_GRAYTEXT
-        else:
-            text_colour = wx.SYS_COLOUR_WINDOWTEXT
-        return text_colour
+        if node.data['type'] == "mapset":
+            if node.data['lock'] or node.data['user']:
+                return wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT)
+        return wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
 
     def OnGetItemFont(self, index):
         """Overriden method to return font for each item.
