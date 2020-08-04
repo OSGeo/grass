@@ -89,13 +89,13 @@ def create_database_directory():
     return None
 
 
-def startup_location_exists():
+def get_startup_location():
     """Check for startup location directory in distribution.
 
     Returns startup location if found or None if nothing was found.
     """
-    home = os.path.expanduser("~")
-    startup_location = os.path.join(home, "grass", "demolocation"),
+    gisbase = os.getenv("GISBASE")
+    startup_location = os.path.join(gisbase, "demolocation"),
 
     # Find out if startup location exists
     if os.path.exists(startup_location):
