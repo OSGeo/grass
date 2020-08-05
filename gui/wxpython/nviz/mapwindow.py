@@ -125,6 +125,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.mapQueried = Signal('GLWindow.mapQueried')
 
         self.init = False
+        self.call = False
         self.initView = False
         self.context = None
         if CheckWxVersion(version=[2, 9]):
@@ -464,6 +465,16 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 win.SetItems(self.GetLayerNames('raster'))
 
             self.init = True
+        else:
+            if not self.call:
+                layer = self.tree.GetSelectedLayer(
+                    multi=False, checkedOnly=True)
+                if layer:
+                    layer = self.tree.GetLayerInfo(layer, key='maplayer')
+                    if layer.type == 'raster':
+                        self.lmgr.nviz.UpdatePage('surface')
+                        self.lmgr.nviz.UpdateSettings()
+                self.call = True
 
         self.UpdateMap()
 
@@ -1668,6 +1679,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         :param item: layer item
         """
+        self.call = False
         layer = self.tree.GetLayerInfo(item, key='maplayer')
 
         if layer.type not in ('raster', 'raster_3d'):
