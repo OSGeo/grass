@@ -1284,7 +1284,7 @@ def set_language(grass_config_dir):
     if language == 'C':
         language = 'en'
 
-    if language == 'None' or language == '' or not language:
+    if language == 'None' or language == '' or language == 'system' or not language:
         # Language override is disabled (system language specified)
         # As by default program runs with C locale, but users expect to
         # have their default locale, we'll just set default locale
