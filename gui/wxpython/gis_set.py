@@ -512,6 +512,7 @@ class GRASSStartup(wx.Frame):
         if self.GetRCValue("LOCATION_NAME") != "<UNKNOWN>":
             return
         path = get_possible_database_path()
+        print(path)
 
         # If nothing found, try to create GRASS directory and copy startup loc
         if path is None:

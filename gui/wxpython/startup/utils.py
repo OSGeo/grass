@@ -95,7 +95,7 @@ def get_startup_location():
     Returns startup location if found or None if nothing was found.
     """
     gisbase = os.getenv("GISBASE")
-    startup_location = os.path.join(gisbase, "demolocation"),
+    startup_location = os.path.join(gisbase, "demolocation")
 
     # Find out if startup location exists
     if os.path.exists(startup_location):
