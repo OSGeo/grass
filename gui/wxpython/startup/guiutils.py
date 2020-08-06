@@ -515,13 +515,13 @@ def delete_grassdb_interactively(guiparent, grassdb):
 
     # Check for current grassdb
     if (grassdb == genv['GISDBASE']):
-        issue = _("<{}> is the current GRASS database.").format(grassdb)
+        issue = _("<{}> is current GRASS database.").format(grassdb)
 
     if issue:
         dlg = wx.MessageDialog(
         parent=guiparent,
         message=_(
-            "Cannot delete GRASS database from the disk for the following reason:\n\n"
+            "Cannot delete GRASS database from disk for the following reason:\n\n"
             "{}\n\n"
             "GRASS database will not be deleted."
         ).format(issue),
@@ -533,10 +533,10 @@ def delete_grassdb_interactively(guiparent, grassdb):
         dlg = wx.MessageDialog(
             parent=guiparent,
             message=_(
-                "Do you want to continue with deleting"
-                " the following GRASS database from the disk?\n\n"
+                "Do you want to delete"
+                " the following GRASS database from disk?\n\n"
                 "{}\n\n"
-                "The directory will be pernamently deleted!"
+                "The directory will be permanently deleted!"
             ).format(grassdb),
             caption=_("Delete selected GRASS database"),
             style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,

@@ -118,8 +118,8 @@ class Settings:
             #
             'datacatalog': {
                 # grassdb string
-                'grassdb': {
-                    'getString': ""
+                'grassdbs': {
+                    'listAsString': ""
                 },
             },
             'manager': {

@@ -93,7 +93,7 @@ class DataCatalog(wx.Panel):
         self.tree.ReloadCurrentMapset()
 
     def OnAddGrassDB(self, event):
-        """Add an grass database"""
+        """Add grass database"""
         dlg = wx.DirDialog(self, _("Choose GRASS data directory:"),
                            os.getcwd(), wx.DD_DEFAULT_STYLE)
         if dlg.ShowModal() == wx.ID_OK:
