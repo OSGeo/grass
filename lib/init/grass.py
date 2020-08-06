@@ -1623,6 +1623,10 @@ def run_batch_job(batch_job):
         batch_job = quote(batch_job)
         proc = Popen(batch_job, shell=True)
     else:
+        def find(name, path):
+            for root, dirs, files in os.walk(path):
+                if name in files:
+                    return os.path.join(root, name)
         def script_path(batch_job):
             """Adjust script path
 
@@ -1630,17 +1634,44 @@ def run_batch_job(batch_job):
 
             :return str or None: script path or None
             """
-            script_in_addon_path = None
+            script_in_addon_base = None
             if 'GRASS_ADDON_BASE' in os.environ:
-                script_in_addon_path = os.path.join(
+                script_in_addon_base = os.path.join(
                     os.environ['GRASS_ADDON_BASE'],
                     'scripts',
                     batch_job[0],
                 )
-            if script_in_addon_path and \
-               os.path.exists(script_in_addon_path):
-                batch_job[0] = script_in_addon_path
-                return script_in_addon_path
+
+            script_in_addon_path = None
+            if 'GRASS_ADDON_PATH' in os.environ:
+                if os.pathsep in os.environ['GRASS_ADDON_PATH']:
+                    script_in_addon_path = []
+                    paths = os.environ['GRASS_ADDON_PATH'].split(
+                        os.pathsep)
+                    for path in paths:
+                        script_in_addon_path.append(path)
+                else:
+                    script_in_addon_path = os.path.join(
+                        os.environ['GRASS_ADDON_PATH'],
+                        batch_job[0],
+                    )
+
+            if script_in_addon_base and \
+               os.path.exists(script_in_addon_base):
+                batch_job[0] = script_in_addon_base
+                return script_in_addon_base
+            elif script_in_addon_path:
+                if isinstance(script_in_addon_path, list):
+                    for path in script_in_addon_path:
+                        result = find(batch_job[0], path)
+                        if result:
+                            batch_job[0] = result
+                            return result
+                else:
+                    result = find(batch_job[0], script_in_addon_path)
+                    if result:
+                        batch_job[0] = result
+                        return result
             elif os.path.exists(batch_job[0]):
                 return batch_job[0]
 
