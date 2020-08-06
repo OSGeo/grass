@@ -110,26 +110,12 @@ class DataCatalogFrame(wx.Frame):
         self.tree.ReloadCurrentMapset()
 
     def OnAddGrassDB(self, event):
-        """Add an existing grass database if not already added"""
+        """Add an grass database"""
         dlg = wx.DirDialog(self, _("Choose GRASS data directory:"),
                            os.getcwd(), wx.DD_DEFAULT_STYLE)
         if dlg.ShowModal() == wx.ID_OK:
             grassdatabase = dlg.GetPath()
-            grassdb_node = self.tree._model.SearchNodes(name=grassdatabase,
-                                                   type='grassdb')
-            if grassdb_node:
-                dlg = wx.MessageDialog(
-                    parent=self,
-                    message=_(
-                        "GRASS database <{}> has been already added"
-                        " to the data catalogue."
-                    ).format(grassdatabase),
-                    caption=_("Unable to add GRASS database"),
-                    style=wx.OK | wx.ICON_WARNING
-                )
-                dlg.ShowModal()
-            else:
-                self.tree.InsertGrassDb(name=grassdatabase)
+            self.tree.InsertGrassDb(name=grassdatabase)
         dlg.Destroy()
 
     def OnCreateMapset(self, event):
