@@ -1108,7 +1108,7 @@ class DataCatalogTree(TreeView):
             UserSettings.Set(group='datacatalog',
                              key='grassdb',
                              subkey='getString',
-                             value =",".join(self.grassdatabases))
+                             value=",".join(self.grassdatabases))
             UserSettings.SaveToFile()
 
     def OnRemoveGrassDb(self, event):
