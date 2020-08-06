@@ -112,9 +112,14 @@ class Settings:
                         'enabled' : False
                     },
                 },
-                # datacatalog
-                'datacatalog': {
-                    'grassdb': None
+            },
+            #
+            # datacatalog
+            #
+            'datacatalog': {
+                # grassdb string
+                'grassdb': {
+                    'getString': ""
                 },
             },
             'manager': {
