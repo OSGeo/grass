@@ -1,14 +1,14 @@
-# How the GRASS Webserver and related infrastructure works
+# How the GRASS GIS Webserver and related infrastructure works
 
 written by M. Neteler
-Last changed: June 2020
+Last changed: July 2020
 
 Related Wiki documents:
 
 * https://grass.osgeo.org/wiki/GRASS_Migration_to_OSGeo (historical document)
 
 
-## GRASS Source code repository
+## GRASS GIS Source code repository
 
 Maintainer: Markus Neteler, Martin Landa, OSGeo-SAC, http://wiki.osgeo.org/wiki/SAC
 
@@ -55,41 +55,40 @@ Statistics:
 
 Maintainer: M. Neteler
 
-* https://grass.osgeo.org  (to be replaced in 2020, see https://staging.grass.osgeo.org/)
+* https://grass.osgeo.org
+    * grasslxd: LXD container on osgeo7 (https://wiki.osgeo.org/wiki/SAC_Service_Status#osgeo7)
+        * OS: Debian Buster
+        * Apache Server with hugo
+    * for migration details (7/2020), see https://github.com/OSGeo/grass-website/issues/180
+    * ssh login: via osgeo jumphost
+    * deployment via cronjob: https://github.com/OSGeo/grass-addons/tree/master/tools/cronjobs_osgeo_lxd
+* https://old.grass.osgeo.org (CMSMS, replaced in 2020 by hugo based solution)
     * Shared virtual OSGeo machine (osgeo6) hosted at Oregon State University Open Source Lab
    (server: osgeo6.osgeo.osuosl.org)
     * Login: via OSGeo LDAP, there is a "grass" LDAP group
     * Software:
         * OS: Debian Wheezy
         * Apache Server with PHP
-    * new server 2020: LXD container on osgeo7
-        * OS: Debian Buster
-        * Apache Server with hugo
     * Login: via OSGeo LDAP, there is a "grass" LDAP group
-    * OSGeo SAC page: http://wiki.osgeo.org/wiki/SAC_Service_Status
-    http://wiki.osgeo.org/index.php/SAC
-
-
 * Backup:
-    * VERIFY 2010: grass.osgeo.org is backup'ed by OSGeo SAC: http://wiki.osgeo.org/wiki/SAC:Backups
+    * grasslxd container on osgeo7 is backup'ed, see http://wiki.osgeo.org/wiki/SAC:Backups
     * Wiki backup, via rsync to http://josef.fsv.cvut.cz/WIKI/grass-osgeo/index.php/Main_Page
-    * new server 2020: LXD container on osgeo7 backup'ed
+* Mirrors:
+    * rsync, see https://grass.osgeo.org/contribute/
+    * mirror list, see https://grass.osgeo.org/about/mirrors/
+* RSS feed: offered by hugo at https://grass.osgeo.org/index.xml, used at https://planet.osgeo.org
 
-* Web pages:
-    * CMSMS: https://grass.osgeo.org/home/imprint/ (to be phased out in 2020 with hugo solution)
-    * OLD and broken: mirrored from Wroclav university via httrack (tier-1),
-   then offered as rsync mirror (tier-2) to other mirror sites
-    * RSS feed: offered by CMSMS, used for https://planet.osgeo.org
-    * RSS feed: offered by hugo, used for https://planet.osgeo.org
-
-* Weekly snapshots (generated Saturday morning California time):
+* Weekly software snapshots (generated Saturday morning California time):
     * Source code tarball of git (GitHub) https://github.com/OSGeo/grass
-    * Linux binary snapshot is compiled
+    * Linux binary snapshot is compiled on grasslxd
         * GRASS is compiled with GDAL, PROJ, SQLite, MySQL, PostgreSQL, FFTW, C++ support
         * binary tar.gz and manuals are moved into Web space
 
 * GRASS user manual HTML:
-    * generated during compilation of weekly Linux binary snapshot
+    * generated during compilation of weekly Linux binary snapshot on grasslxd
+
+* GRASS addons manual HTML:
+    * generated during compilation of weekly Linux binary snapshot on grasslxd
 
 * GRASS programmer's manual (https://grass.osgeo.org/programming7/)
     * HTML: cronjob run Wednesday morning California time
@@ -100,6 +99,7 @@ Maintainer: M. Neteler
     * generated during compilation of Linux binary snapshot, stats of `(cd locale; make)` are extracted into text file
     * text file parsed by PHP page and shown as table
     * GRASS GIS version is coded in devel/i18n_stats.inc
+    * for Transifex integration, see below
 
 * Mailman mailing lists + greylisting (at lists.osgeo.org since 11/2007)
     * Mailman is doing the job, only registered users can post
@@ -108,21 +108,11 @@ Maintainer: M. Neteler
         * User -> grass-web at lists osgeo.org -> greylisting -> Mailman
 
 * Backup of mailing lists (mbox files)
-    * manually done by MN, rarely
     * nightly backup at OSGeo.org, bacula
-    * TODO: Establish solution via local cp on lists.osgeo.org (SAC ticket todo)
 
 * Web statistics
     * See URL at http://wiki.osgeo.org/wiki/Project_Stats
-    * OSGeo: awstats (https://grass.osgeo.org/stats/awstats.pl)
-        * configuration at: 
-            * /etc/awstats/awstats.grass.osgeo.org.conf
-            * /etc/httpd/conf.d/sites/grass.osgeo.org.conf
-            * /etc/apache2/includes/grass.osgeo.org.inc
-        * httpd logs: /var/log/httpd/grass_*
-        * ~~awstats~~ processed log files: /osgeo/download/logs   * https://grass.osgeo.org/stats/
         * cronjob script: /osgeo/scripts/update_logs.sh
-    * OLD FBK Mirror: Webalizer (http://grass.fbk.eu/webalizer/) runs daily as cronjob
 
 Summary: The system should run almost autonomously.
 
@@ -140,12 +130,12 @@ Available lists:
 
 * at OSGeo.org (https://lists.osgeo.org/mailman/listinfo):
    grass-abm 	 	Integration of GRASS with JAVA based agent based modeling (ABM)
-   grass-announce 	GRASS announcements
+   grass-announce GRASS announcements
    grass-commit 	Mailing list to distribute GRASS-CVS commits
    grass-dev 		GRASS GIS Development mailing list
    grass-es 		La lista de correo de GRASS GIS en español
    grass-psc 		GRASS-PSC: GRASS Project Steering Committee
-   grass-stats 		GRASS and statistical software
+   grass-stats 	GRASS and statistical software
    grass-translations 	Translation of GRASS (i18N)
    grass-user 		GRASS user list
    grass-web 		GRASS website mailing list
@@ -162,6 +152,7 @@ Notes:
     * has monthly password reminder disabled to avoid leakage into publicly archived lists
 * grass-commit is receiving posts from the GRASS SVN at osgeo.org. Not open for other postings, they will be trashed automatically
 * grass-web is an open list (posting without subscription possible) with (Google) spam filter
+    * moderated by M. Neteler to avoid spam
 * OLD, UNUSED: grass-qa is receiving posts from the GRASS Quality Control System at Ecole Polytechnique de Montreal, Canada. Not open for other postings.
 
 
@@ -169,7 +160,7 @@ Notes:
 
 Maintainer: Martin Landa, Markus Neteler
 
-* http://grasswiki.osgeo.org
+* https://grasswiki.osgeo.org
 * Mediawiki
 * mirrored at CZ Tech University
 * requires registration to keep spammers out
@@ -182,7 +173,7 @@ Macros for manual pages (src, cmd, API, ...):
 ## GRASS IRC
 
 Channel: irc://irc.freenode.net/grass
-Web based client: See http://grasswiki.osgeo.org/wiki/IRC
+Web based client: See https://grasswiki.osgeo.org/wiki/IRC
 
 * channel owner: Alessandro Frigeri <afrigeri unipg.it> ("geoalf")
 * quasi guru level: Markus Neteler ("markusN")
@@ -238,7 +229,7 @@ Maintainer: Martin Landa and Markus Neteler
 Details:
 
 - Windows-addons: grass-addons/tools/addons/README.txt
-- Addon manual pages: https://github.com/OSGeo/grass-addons/blob/master/tools/addons/README.txt
+- Addon manual pages cronjob: https://github.com/OSGeo/grass-addons/tree/master/tools/cronjobs_osgeo_lxd
 - Rendered manuals: https://grass.osgeo.org/grass7/manuals/addons/
 
 The redirect to the latest grass7x directory is defined on grass.osgeo.org:
@@ -312,9 +303,10 @@ Maintainer: Markus Neteler
 i18N gettext messages:
 
 * Dashboard: https://www.transifex.com/grass-gis/
-* URL to fetch files:
+* Auto-update URL to fetch files:
     * https://www.transifex.com/grass-gis/grass7/content/
-    * Use: "Auto update resources" button
+        * Menu: Resources
+            * Use: "Auto update resources" button
 
 ## OLD: GRASS Quality Control
 

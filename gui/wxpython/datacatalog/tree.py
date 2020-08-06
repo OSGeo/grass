@@ -1275,7 +1275,6 @@ class DataCatalogTree(TreeView):
                     if self.selected_mapset[i].data['name'] != genv['MAPSET']:
                         currentMapset = False
                         break
-
             return currentGrassDb, currentLocation, currentMapset
         else:
             return True, True, True
@@ -1359,21 +1358,13 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteMapset, item)
-        if (
-            self.selected_grassdb[0].data['name'] == genv['GISDBASE']
-            and self.selected_location[0].data['name'] == genv['LOCATION_NAME']
-            and self.selected_mapset[0].data['name'] == genv['MAPSET']
-        ):
+        if self._restricted:
             item.Enable(False)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameMapset, item)
-        if (
-            self.selected_grassdb[0].data['name'] == genv['GISDBASE']
-            and self.selected_location[0].data['name'] == genv['LOCATION_NAME']
-            and self.selected_mapset[0].data['name'] == genv['MAPSET']
-        ):
+        if self._restricted:
             item.Enable(False)
 
         self.PopupMenu(menu)
@@ -1382,7 +1373,6 @@ class DataCatalogTree(TreeView):
     def _popupMenuLocation(self):
         """Create popup menu for locations"""
         menu = Menu()
-        genv = gisenv()
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Create mapset"))
         menu.AppendItem(item)
@@ -1391,19 +1381,13 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete location"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteLocation, item)
-        if (
-            self.selected_grassdb[0].data['name'] == genv['GISDBASE']
-            and self.selected_location[0].data['name'] == genv['LOCATION_NAME']
-        ):
+        if self._restricted:
             item.Enable(False)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename location"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameLocation, item)
-        if (
-            self.selected_grassdb[0].data['name'] == genv['GISDBASE']
-            and self.selected_location[0].data['name'] == genv['LOCATION_NAME']
-        ):
+        if self._restricted:
             item.Enable(False)
 
         self.PopupMenu(menu)
@@ -1455,10 +1439,11 @@ class DataCatalogTree(TreeView):
     def _popupMenuMultipleMapsets(self):
         """Create popup menu for multiple selected mapsets"""
         menu = Menu()
-
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete mapsets"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteMapset, item)
+        if self._restricted:
+            item.Enable(False)
 
         self.PopupMenu(menu)
         menu.Destroy()
