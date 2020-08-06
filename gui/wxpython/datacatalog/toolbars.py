@@ -27,7 +27,7 @@ icons = {
         img='reload',
         label=_("Reload current GRASS mapset only")),
     'locked': MetaIcon(
-        img='toggleEditing',
+        img='edit',
         label=_("Allow editing other mapsets")),
     'addGrassDB': MetaIcon(
         img='grassdb-add',
