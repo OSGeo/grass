@@ -40,7 +40,7 @@ from startup.guiutils import (
     rename_mapset_interactively,
     rename_location_interactively,
     delete_mapsets_interactively,
-    delete_location_interactively,
+    delete_locations_interactively,
     download_location_interactively,
 )
 
@@ -526,6 +526,8 @@ class DataCatalogTree(TreeView):
             self._popupMenuLocation()
         elif self.selected_grassdb[0] and not self.selected_location[0] and len(self.selected_grassdb) == 1:
             self._popupMenuGrassDb()
+        elif len(self.selected_location) > 1 and not self.selected_mapset[0]:
+            self._popupMenuMultipleLocations()
         elif len(self.selected_mapset) > 1:
             self._popupMenuMultipleMapsets()
         else:
@@ -983,15 +985,21 @@ class DataCatalogTree(TreeView):
 
     def OnDeleteLocation(self, event):
         """
-        Delete selected location
+        Delete selected location or locations
         """
-        if (delete_location_interactively(
-                self,
-                self.selected_grassdb[0].data['name'],
-                self.selected_location[0].data['name'])):
-            self._reloadGrassDBNode(self.selected_grassdb[0])
-            self.UpdateCurrentDbLocationMapsetNode()
-            self.RefreshNode(self.selected_grassdb[0], recursive=True)
+        locations = []
+        for i in range(len(self.selected_location)):
+            # Append to the list of tuples
+            locations.append((
+                self.selected_grassdb[i].data['name'],
+                self.selected_location[i].data['name']
+            ))
+        if delete_locations_interactively(self, locations):
+            grassdbs = set([each for each in self.selected_grassdb])
+            for grassdb_node in grassdbs:
+                self._reloadGrassDBNode(grassdb_node)
+                self.UpdateCurrentDbLocationMapsetNode()
+                self.RefreshNode(grassdb_node, recursive=True)
 
     def DownloadLocation(self, grassdb_node):
         """
@@ -1345,6 +1353,18 @@ class DataCatalogTree(TreeView):
         genv = gisenv()
         currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
         if not(currentMapset and self.copy_layer):
+            item.Enable(False)
+
+        self.PopupMenu(menu)
+        menu.Destroy()
+
+    def _popupMenuMultipleLocations(self):
+        """Create popup menu for multiple selected locations"""
+        menu = Menu()
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete locations"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDeleteLocation, item)
+        if self._restricted:
             item.Enable(False)
 
         self.PopupMenu(menu)
