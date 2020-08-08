@@ -157,7 +157,8 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK 1
 
 # Create generic GRASS GIS binary name regardless of version number
 RUN ln -sf `find /usr/local/bin -name "grass??" | sort | tail -n 1` /usr/local/bin/grass
-RUN ln -sf `find /usr/local -type d -name "grass??" | sort | tail -n 1` /usr/local/grass
+# Create generic GRASS GIS lib name regardless of version number
+RUN ln -sf `grass --config path` /usr/local/grass
 
 # show GRASS GIS, PROJ, GDAL etc versions
 RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
