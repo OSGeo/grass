@@ -26,6 +26,7 @@ from grass.grassdb.create import create_mapset, get_default_mapset_name
 from grass.grassdb.manage import (
     delete_mapset,
     delete_location,
+    delete_grassdb,
     rename_mapset,
     rename_location,
 )
@@ -621,6 +622,74 @@ def delete_locations_interactively(guiparent, locations):
                 )
     dlg.Destroy()
     return modified
+
+
+def delete_grassdb_interactively(guiparent, grassdb):
+    """
+    Delete grass database if could be deleted.
+
+    If current grass database found, desired operation cannot be performed.
+
+    Exceptions during deleting are handled in this function.
+
+    Returns True if grass database is deleted from the disk. Returns None if
+    cannot be deleted (see above the possible reasons).
+    """
+
+    genv = gisenv()
+    issue = None
+    deleted = False
+
+    # Check for current grassdb
+    if (grassdb == genv['GISDBASE']):
+        issue = _("<{}> is current GRASS database.").format(grassdb)
+
+    if issue:
+        dlg = wx.MessageDialog(
+        parent=guiparent,
+        message=_(
+            "Cannot delete GRASS database from disk for the following reason:\n\n"
+            "{}\n\n"
+            "GRASS database will not be deleted."
+        ).format(issue),
+        caption=_("Unable to delete selected GRASS database"),
+        style=wx.OK | wx.ICON_WARNING
+        )
+        dlg.ShowModal()
+    else:
+        dlg = wx.MessageDialog(
+            parent=guiparent,
+            message=_(
+                "Do you want to delete"
+                " the following GRASS database from disk?\n\n"
+                "{}\n\n"
+                "The directory will be permanently deleted!"
+            ).format(grassdb),
+            caption=_("Delete selected GRASS database"),
+            style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
+        )
+        if dlg.ShowModal() == wx.ID_YES:
+            try:
+                delete_grassdb(grassdb)
+                deleted = True
+                dlg.Destroy()
+                return deleted
+            except OSError as error:
+                wx.MessageBox(
+                    parent=guiparent,
+                    caption=_("Error when deleting GRASS database"),
+                    message=_(
+                        "The following error occured when deleting database <{path}>:"
+                        "\n\n{error}\n\n"
+                        "Deleting of GRASS database was interrupted."
+                    ).format(
+                        path=grassdb,
+                        error=error,
+                    ),
+                    style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
+                )
+    dlg.Destroy()
+    return deleted
 
 
 def import_file(guiparent, filePath):
