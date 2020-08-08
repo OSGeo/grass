@@ -18,6 +18,7 @@ for details.
 @author Anna Petrasova (kratochanna gmail com)
 @author Linda Kladivova (l.kladivova@seznam.cz)
 """
+import os
 import re
 import copy
 from multiprocessing import Process, Queue, cpu_count
@@ -34,6 +35,7 @@ from gui_core.treeview import TreeView
 from gui_core.wrap import Menu
 from datacatalog.dialogs import CatalogReprojectionDialog
 from icons.icon import MetaIcon
+from core.settings import UserSettings
 from startup.guiutils import (
     create_mapset_interactively,
     create_location_interactively,
@@ -42,6 +44,7 @@ from startup.guiutils import (
     delete_mapsets_interactively,
     delete_locations_interactively,
     download_location_interactively,
+    delete_grassdb_interactively
 )
 
 from grass.pydispatch.signal import Signal
@@ -254,8 +257,13 @@ class DataCatalogTree(TreeView):
         self._initVariablesCatalog()
         self.UpdateCurrentDbLocationMapsetNode()
 
-        self.grassdatabases = []
-        self.grassdatabases.append(gisenv()['GISDBASE'])
+        # Get databases from settings
+        # add current to settings if it's not included
+        self.grassdatabases = self._getValidSavedGrassDBs()
+        currentDB = gisenv()['GISDBASE']
+        if currentDB not in self.grassdatabases:
+            self.grassdatabases.append(currentDB)
+            self._saveGrassDBs()
 
         self.beginDrag = Signal('DataCatalogTree.beginDrag')
         self.endDrag = Signal('DataCatalogTree.endDrag')
@@ -275,6 +283,29 @@ class DataCatalogTree(TreeView):
                   self._emitSignal(evt.GetItem(), self.endEdit, event=evt))
         self.startEdit.connect(self.OnStartEditLabel)
         self.endEdit.connect(self.OnEditLabel)
+
+    def _getValidSavedGrassDBs(self):
+        """Returns list of GRASS databases from settings.
+        Returns only existing directories."""
+        dbs = UserSettings.Get(group='datacatalog',
+                               key='grassdbs',
+                               subkey='listAsString')
+        dbs = [db for db in dbs.split(',') if os.path.isdir(db)]
+        return dbs
+
+    def _saveGrassDBs(self):
+        """Save current grass dbs in tree to settings"""
+        UserSettings.Set(group='datacatalog',
+                         key='grassdbs',
+                         subkey='listAsString',
+                         value=",".join(self.grassdatabases))
+        grassdbSettings = {}
+        UserSettings.ReadSettingsFile(settings=grassdbSettings)
+        if 'datacatalog' not in grassdbSettings:
+            grassdbSettings['datacatalog'] = UserSettings.Get(group='datacatalog')
+        # update only dbs
+        grassdbSettings['datacatalog']['grassdbs'] = UserSettings.Get(group='datacatalog', key='grassdbs')
+        UserSettings.SaveToFile(grassdbSettings)
 
     def _reloadMapsetNode(self, mapset_node):
         """Recursively reload the model of a specific mapset node"""
@@ -921,12 +952,21 @@ class DataCatalogTree(TreeView):
         return location_node
 
     def InsertGrassDb(self, name):
-        """Insert new grass db into model and refresh tree"""
-        self.grassdatabases.append(name)
-        grassdb_node = self._model.AppendNode(parent=self._model.root,
-                                              data=dict(type="grassdb", name=name))
-        self._reloadGrassDBNode(grassdb_node)
-        self.RefreshItems()
+        """
+        Insert new grass db into model, update user setting and refresh tree.
+        Check if not already added.
+        """
+        grassdb_node = self._model.SearchNodes(name=name,
+                                                   type='grassdb')
+        if not grassdb_node:
+            grassdb_node = self._model.AppendNode(parent=self._model.root,
+                                                  data=dict(type="grassdb", name=name))
+            self._reloadGrassDBNode(grassdb_node)
+            self.RefreshItems()
+
+            # Update user's settings
+            self.grassdatabases.append(name)
+            self._saveGrassDBs()
         return grassdb_node
 
     def OnDeleteMap(self, event):
@@ -1018,6 +1058,38 @@ class DataCatalogTree(TreeView):
         Download location online
         """
         self.DownloadLocation(self.selected_grassdb[0])
+
+    def DeleteGrassDb(self, grassdb_node):
+        """
+        Delete grassdb from disk.
+        """
+        grassdb = grassdb_node.data['name']
+        if (delete_grassdb_interactively(self, grassdb)):
+            self.RemoveGrassDB(grassdb_node)
+
+    def OnDeleteGrassDb(self, event):
+        """
+        Delete grassdb from disk.
+        """
+        self.DeleteGrassDb(self.selected_grassdb[0])
+
+    def OnRemoveGrassDb(self, event):
+        """
+        Remove grassdb node from data catalogue.
+        """
+        self.RemoveGrassDB(self.selected_grassdb[0])
+
+    def RemoveGrassDB(self, grassdb_node):
+        """
+        Remove grassdb node from tree
+        and updates settings. Doesn't check if it's current db.
+        """
+        self.grassdatabases.remove(grassdb_node.data['name'])
+        self._model.RemoveNode(grassdb_node)
+        self.RefreshItems()
+
+        # Update user's settings
+        self._saveGrassDBs()
 
     def OnDisplayLayer(self, event):
         """
@@ -1332,6 +1404,8 @@ class DataCatalogTree(TreeView):
     def _popupMenuGrassDb(self):
         """Create popup menu for grass db"""
         menu = Menu()
+        genv = gisenv()
+        currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Create new location"))
         menu.AppendItem(item)
@@ -1340,6 +1414,18 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Download sample location"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDownloadLocation, item)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Remove GRASS database from data catalog"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnRemoveGrassDb, item)
+        if currentGrassDb:
+            item.Enable(False)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete GRASS database from disk"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDeleteGrassDb, item)
+        if currentGrassDb:
+            item.Enable(False)
 
         self.PopupMenu(menu)
         menu.Destroy()

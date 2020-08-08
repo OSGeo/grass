@@ -28,6 +28,11 @@ def delete_location(database, location):
     shutil.rmtree(os.path.join(database, location))
 
 
+def delete_grassdb(database):
+    """Deletes a specified GRASS database"""
+    shutil.rmtree(database)
+
+
 def rename_mapset(database, location, old_name, new_name):
     """Rename mapset from *old_name* to *new_name*"""
     if old_name == "PERMANENT":

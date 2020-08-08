@@ -113,6 +113,15 @@ class Settings:
                     },
                 },
             },
+            #
+            # datacatalog
+            #
+            'datacatalog': {
+                # grassdb string
+                'grassdbs': {
+                    'listAsString': ""
+                },
+            },
             'manager': {
                 # show opacity level widget
                 'changeOpacityLevel': {
