@@ -532,7 +532,7 @@ def delete_location_interactively(guiparent, grassdb, location):
     This is currently just a convenience wrapper for delete_locations_interactively().
     """
     locations = [(grassdb, location)]
-    return delete_mapsets_interactively(guiparent, locations)
+    return delete_locations_interactively(guiparent, locations)
 
 
 def delete_locations_interactively(guiparent, locations):
@@ -563,7 +563,7 @@ def delete_locations_interactively(guiparent, locations):
             grassdb == genv['GISDBASE'] and
             location == genv['LOCATION_NAME']
         ):
-            issue = _("<{}> is the current location.").format(location_path)
+            issue = _("<{}> is current location.").format(location_path)
             issues.append(issue)
         # No issue detected
         else:
@@ -612,7 +612,7 @@ def delete_locations_interactively(guiparent, locations):
                     message=_(
                         "The following error occured when deleting location <{path}>:"
                         "\n\n{error}\n\n"
-                        "Deleting of locations was interrupted."
+                        "Deleting locations was interrupted."
                     ).format(
                         path=os.path.join(grassdb, location),
                         error=error,
