@@ -1182,8 +1182,10 @@ def load_gisrc(gisrc, gisrcrc):
     return mapset_settings
 
 
-def can_start_in_mapset(gisrc, force_lock_removal=False):
-    """Check if a mapset from a gisrc file is usable for new session"""
+def can_start_in_gisrc_mapset(gisrc, ignore_lock=False):
+    """Check if a mapset from a gisrc file is usable for a new session"""
+    from grass.grassdb.checks import can_start_in_mapset
+
     mapset_settings = MapsetSettings()
     kv = read_gisrc(gisrc)
     mapset_settings.gisdbase = kv.get('GISDBASE')
@@ -1191,13 +1193,9 @@ def can_start_in_mapset(gisrc, force_lock_removal=False):
     mapset_settings.mapset = kv.get('MAPSET')
     if not mapset_settings.is_valid():
         return False
-    if not is_mapset_valid(mapset_settings.full_mapset):
-        return False
-    if not is_mapset_users(mapset_settings.full_mapset):
-        return False
-    if not force_lock_removal and is_mapset_locked(mapset_settings.full_mapset):
-        return False
-    return True
+    return can_start_in_mapset(
+        mapset_path=mapset_settings.full_mapset, ignore_lock=ignore_lock
+    )
 
 
 # load environmental variables from grass_env_file
@@ -1444,24 +1442,6 @@ def set_language(grass_config_dir):
         gettext.install('grasslibs', gpath('locale'), codeset=encoding)
     else:
         gettext.install('grasslibs', gpath('locale'))
-
-
-def is_mapset_users(mapset_path):
-    """Check if the mapset belongs to the user"""
-    if os.environ.get("GRASS_SKIP_MAPSET_OWNER_CHECK", None):
-        # Mapset just needs to be accessible for writting.
-        return os.access(mapset_path, os.W_OK)
-    # Mapset needs to be owned by user.
-    stat_info = os.stat(mapset_path)
-    mapset_uid = stat_info.st_uid
-    return mapset_uid == os.getuid()
-
-
-def is_mapset_locked(mapset_path):
-    """Check if the mapset is locked"""
-    lock_name = '.gislock'
-    lockfile = os.path.join(mapset_path, lock_name)
-    return os.path.exists(lockfile)
 
 
 # TODO: grass_gui parameter is a hack and should be removed, see below
@@ -2322,7 +2302,9 @@ def main():
 
     # Parsing argument to get LOCATION
     if not params.mapset and not params.tmp_location:
-        last_mapset_usable = can_start_in_mapset(gisrc, params.force_gislock_removal)
+        last_mapset_usable = can_start_in_gisrc_mapset(
+            gisrc=gisrc, ignore_lock=params.force_gislock_removal
+        )
         # Try interactive startup
         # User selects LOCATION and MAPSET if not set
         if not last_mapset_usable and not set_mapset_interactive(grass_gui):
