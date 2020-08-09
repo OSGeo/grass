@@ -2714,7 +2714,9 @@ class NvizToolWindow(FN.FlatNotebook):
         for vtype in ('points', 'lines'):
             checklist = self.FindWindowById(
                 self.win['vector'][vtype]['surface'])
-            checklist.Delete(checklist.FindString(name))
+            item = checklist.FindString(name)
+            if item > wx.NOT_FOUND:
+                checklist.Delete(item)
 
         if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
