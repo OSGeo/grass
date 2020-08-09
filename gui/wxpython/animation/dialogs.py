@@ -2006,7 +2006,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.tempFormat.Bind(
             wx.EVT_TEXT, lambda evt: self._setTimeFormat(
                 self.tempFormat.GetValue()))
-        self.tempFormat.SetToolTipString(
+        self.tempFormat.SetToolTip(
             _(
                 "Click and then press key up or down to preview "
                 "different date and time formats. "
