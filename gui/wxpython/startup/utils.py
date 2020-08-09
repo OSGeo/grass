@@ -89,7 +89,7 @@ def create_database_directory():
     return None
 
 
-def get_startup_location():
+def _get_startup_location_in_distribution():
     """Check for startup location directory in distribution.
 
     Returns startup location if found or None if nothing was found.
@@ -103,8 +103,9 @@ def get_startup_location():
     return None
 
 
-def copy_startup_location(grassdatabase, startup_location):
+def _copy_startup_location(grassdatabase, startup_location):
     """Copy the simple startup_location with some data to GRASS database.
+
     Returns True if successfully copied or False when an error was encountered.
     """
     src = startup_location
@@ -114,6 +115,21 @@ def copy_startup_location(grassdatabase, startup_location):
     try:
         copytree(src, dst, ignore=ignore_patterns('*.tmpl','Makefile*'))
         return True
-    except (IOError, OSError) as why:
+    except (IOError, OSError):
         pass
     return False
+
+
+def get_startup_location(grassdatabase):
+    """Wrapping function for managing startup location.
+
+    Returns the location on success and None otherwise.
+    Internally resolves all the cases (no location to copy, copying failed
+    and an existing user's copy of the location)."""
+
+    # Find out if startup location exists
+    location = _get_startup_location_in_distribution()
+    if location:
+            if _copy_startup_location(grassdatabase, location):
+                return location
+    return None
