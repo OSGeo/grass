@@ -58,8 +58,8 @@ def is_location_valid(database, location):
     )
 
 
-def is_different_mapset_owner(mapset_path):
-    """Check if the mapset belongs to the different owner than the current user."""
+def is_current_user_mapset_owner(mapset_path):
+    """Check if the mapset belongs to the current user"""
     # Note that this does account for libgis built with SKIP_MAPSET_OWN_CHK
     # which disables the ownerships check, i.e., even if it was build with the
     # skip, it still needs the env variable.
@@ -69,7 +69,15 @@ def is_different_mapset_owner(mapset_path):
     # Mapset needs to be owned by user.
     stat_info = os.stat(mapset_path)
     mapset_uid = stat_info.st_uid
-    return mapset_uid != os.getuid()
+    return mapset_uid == os.getuid()
+
+
+def is_different_mapset_owner(mapset_path):
+    """The convenient wrapper for opposite case of is_current_user_mapset_owner.
+    """
+    if is_current_user_mapset_owner(mapset_path):
+        return False
+    return True
 
 
 def get_mapset_owner(mapset_path):

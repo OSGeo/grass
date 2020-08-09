@@ -205,19 +205,20 @@ class DataCatalogNode(DictNode):
 
     @property
     def label(self):
-        if self.data['type'] == 'mapset':
-            if self.data['current']:
-                return self.data['name'] + _(" (current)")
-            elif self.data['is_different_owner'] and self.data['lock']:
-                return self.data['name'] + _(" (in use, owner: {})").format(self.data['owner'])
-            elif self.data['lock']:
-                return self.data['name'] + _(" (in use)")
-            elif self.data['is_different_owner']:
-                return self.data['name'] + _(" (owner: {})").format(self.data['owner'])
+        data = self.data
+        if data['type'] == 'mapset':
+            if data['current']:
+                return _("{name} (current)").format(**data)
+            elif data['is_different_owner'] and data['lock']:
+                return _("{name} (in use, owner: {owner})").format(**data)
+            elif data['lock']:
+                return _("{name} (in use)").format(**data)
+            elif data['is_different_owner']:
+                return _("{name} (owner: {owner})").format(**data)
             else:
-                return self.data['name']
+                return _("{name}").format(**data)
         else:
-            return self.data['name']
+            return _("{name}").format(**data)
 
     def match(self, **kwargs):
         """Method used for searching according to given parameters.
@@ -267,6 +268,7 @@ class DataCatalogTree(TreeView):
 
         self._initVariables()
         self._initVariablesCatalog()
+        self.UpdateMapsetInfo()
         self.UpdateCurrentDbLocationMapsetNode()
 
         self.grassdatabases = []
@@ -445,6 +447,7 @@ class DataCatalogTree(TreeView):
             wx.CallAfter(GWarning, '\n'.join(errors))
         Debug.msg(1, "Tree filled")
 
+        self.UpdateMapsetInfo()
         self.UpdateCurrentDbLocationMapsetNode()
         self.RefreshItems()
 
@@ -459,7 +462,10 @@ class DataCatalogTree(TreeView):
         self.current_grassdb_node, self.current_location_node, self.current_mapset_node = \
             self.GetCurrentDbLocationMapsetNode()
 
-    def UpdateMapsetNodes(self):
+        if self.current_mapset_node:
+            self.current_mapset_node.data['current'] = True
+
+    def UpdateMapsetInfo(self):
         """Update current, lock, owner, is_different_owner keys for mapset node."""
         # Find all mapset nodes and update keys
         mapset_nodes = self._model.SearchNodes(type='mapset')
@@ -632,9 +638,6 @@ class DataCatalogTree(TreeView):
         if not mapsetItem:
             return grassdbItem[0], locationItem[0], None
 
-        self.UpdateMapsetNodes()
-        mapsetItem[0].data['current'] = True
-
         return grassdbItem[0], locationItem[0], mapsetItem[0]
 
     def OnGetItemImage(self, index, which=wx.TreeItemIcon_Normal, column=0):
@@ -743,7 +746,6 @@ class DataCatalogTree(TreeView):
             self.InsertMapset(name=mapset,
                               location_node=location_node,
                               grassdb_node=grassdb_node)
-            self.ReloadTreeItems()
 
     def OnCreateMapset(self, event):
         """Create new mapset"""
@@ -975,6 +977,8 @@ class DataCatalogTree(TreeView):
                                                        lock=is_mapset_locked(mapset_path),
                                                        is_different_owner=is_different_mapset_owner(mapset_path),
                                                        owner=get_mapset_owner(mapset_path)))
+        # reload new mapset
+        self._reloadMapsetNode(mapset_node)
         self._model.SortChildren(location_node)
         self.RefreshNode(location_node, recursive=True)
         return mapset_node
@@ -1174,9 +1178,8 @@ class DataCatalogTree(TreeView):
             self.changeLocation.emit(mapset=self.selected_mapset[0].data['name'],
                                      location=self.selected_location[0].data['name'],
                                      dbase=self.selected_grassdb[0].data['name'])
+        self.UpdateMapsetInfo()
         self.UpdateCurrentDbLocationMapsetNode()
-        self.UpdateMapsetNodes()
-        self.selected_mapset[0].data['current'] = True
         self.ExpandCurrentMapset()
         self.RefreshItems()
 
@@ -1232,6 +1235,7 @@ class DataCatalogTree(TreeView):
             name = text.strip()
 
         self._model = filterModel(self._orig_model, name=name, element=element)
+        self.UpdateMapsetInfo()
         self.UpdateCurrentDbLocationMapsetNode()
         self.RefreshItems()
         self.ExpandCurrentMapset()
