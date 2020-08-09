@@ -120,7 +120,8 @@ Singularity container for GRASS GIS to be run into GRASS main directory
 	make -j 2 && make install && ldconfig
     # Create generic GRASS GIS binary name regardless of version number
     ln -sf `find /usr/local/bin -name "grass??" | sort | tail -n 1` /usr/local/bin/grass
-    ln -sf `find /usr/local -type d -name "grass??" | sort | tail -n 1` /usr/local/grass
+    # Create generic GRASS GIS lib name regardless of version number
+    ln -sf `grass --config path` /usr/local/grass
     # Remove unused file
     apt-get autoremove -y
     apt-get clean -y
