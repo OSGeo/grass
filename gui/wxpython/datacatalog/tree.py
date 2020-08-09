@@ -589,7 +589,7 @@ class DataCatalogTree(TreeView):
                                                      selected_loc.data['name']),
                         caption=_("Switch to mapset in different location"),
                         style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION
-                        )
+                    )
                     if dlg.ShowModal() == wx.ID_YES:
                         self._SwitchDbLocationMapset()
                         self.DisplayLayer()
@@ -597,8 +597,8 @@ class DataCatalogTree(TreeView):
                         return
                     dlg.Destroy()
                 else:
-                     self.DisplayLayer()
-                     return
+                    self.DisplayLayer()
+                    return
 
         # expand/collapse location/mapset...
         if self.IsNodeExpanded(node):
