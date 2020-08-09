@@ -26,9 +26,12 @@ icons = {
     'reloadMapset': MetaIcon(
         img='reload',
         label=_("Reload current GRASS mapset only")),
+    'unlocked': MetaIcon(
+        img='edit',
+        label=_("Restrict edits to the current mapset only")),
     'locked': MetaIcon(
         img='edit',
-        label=_("Allow editing other mapsets and locations")),
+        label=_("Allow edits outside of the current mapset")),
     'addGrassDB': MetaIcon(
         img='grassdb-add',
         label=_("Add new GRASS database")),
@@ -92,6 +95,10 @@ class DataCatalogToolbar(BaseToolbar):
 
     def OnSetRestriction(self, event):
         if self.GetToolState(self.lock):
+            self.SetToolNormalBitmap(self.lock, icons['unlocked'].GetBitmap())
+            self.SetToolShortHelp(self.lock, icons['unlocked'].GetLabel())
             self.parent.SetRestriction(restrict=False)
         else:
+            self.SetToolNormalBitmap(self.lock, icons['locked'].GetBitmap())
+            self.SetToolShortHelp(self.lock, icons['locked'].GetLabel())
             self.parent.SetRestriction(restrict=True)
