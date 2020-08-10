@@ -28,7 +28,7 @@ Want to become a core developer? See
 
 > See INSTALL file.
 
-Yes, you should really read [INSTALL](INSTALL). In addition, there is detailed [compile instructions](https://grasswiki.osgeo.org/wiki/Compile_and_Install) in the Wiki.
+Yes, you should really read [INSTALL](INSTALL). In addition, there are detailed [compile instructions](https://grasswiki.osgeo.org/wiki/Compile_and_Install) in the Wiki.
 
 ## Docker
 
