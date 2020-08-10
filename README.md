@@ -28,56 +28,18 @@ Want to become a core developer? See
 
 > See INSTALL file.
 
-Yes, you should really read [INSTALL](INSTALL).
-
-## How to generate the 'Programmer's Manual'
-
-This needs doxygen (<http://www.doxygen.org>) and optionally
-Graphviz dot (<http://www.research.att.com/sw/tools/graphviz/>).
-
-To build the GRASS programmer's documentation, run
-
-```
-make htmldocs
-```
-
-or to generate documentation as single html file
-(recommended for simple reading)
-
-```
-make htmldocs-single
-```
-
-here. This takes quite some time. The result is in `lib/html/index.html`
-which refers to further document repositories in
-
-```
-lib/vector/html/index.html
-lib/db/html/index.html
-lib/gis/html/index.html
-```
-
-The master file is: `./grasslib.dox` where all sub-documents have to
-be linked into.
-
-To generate the documents in PDF format, run
-
-```
-make pdfdocs
-```
-
-An online version is available [here](https://grass.osgeo.org/programming7/)
+Yes, you should really read [INSTALL](INSTALL). In addition, there is detailed [compile instructions](https://grasswiki.osgeo.org/wiki/Compile_and_Install) in the Wiki.
 
 ## Docker
 
-Build using the downloaded source code (in the directory with the
-source code):
+Build a docker image using the downloaded source code (run this in the directory 
+containing the source code):
 
 ```
 docker build -t grassgis79 .
 ```
 
-A test run (assuming you have existing GRASS GIS location; it can be
+A test run (assuming you have the existing GRASS GIS test location; it can be
 downloaded from
 [here](https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.zip))
 
@@ -113,4 +75,42 @@ this issue, clean all the compiled files from the source code:
 
 ```
 make distclean
+```
+
+## How to generate the 'Programmer's Manual'
+
+You can generate locally the [GRASS GIS Programmer's Manual](https://grass.osgeo.org/programming7/).
+
+This needs doxygen (<http://www.doxygen.org>) and optionally
+Graphviz dot (<http://www.research.att.com/sw/tools/graphviz/>).
+
+To build the GRASS programmer's documentation, run
+
+```
+make htmldocs
+```
+
+or to generate documentation as single html file
+(recommended for simple reading)
+
+```
+make htmldocs-single
+```
+
+here. This takes quite some time. The result is in `lib/html/index.html`
+which refers to further document repositories in
+
+```
+lib/vector/html/index.html
+lib/db/html/index.html
+lib/gis/html/index.html
+```
+
+The master file is: `./grasslib.dox` where all sub-documents have to
+be linked into.
+
+To generate the documents in PDF format, run
+
+```
+make pdfdocs
 ```
