@@ -1100,7 +1100,7 @@ class DataCatalogTree(TreeView):
     def DisplayLayer(self):
         """Display selected layer in current graphics view"""
         all_names = []
-        names = {'raster': [], 'vector': [], 'raster3d': []}
+        names = {'raster': [], 'vector': [], 'raster_3d': []}
         for i in range(len(self.selected_layer)):
             name = self.selected_layer[i].data['name'] + '@' + self.selected_mapset[i].data['name']
             names[self.selected_layer[i].data['type']].append(name)
