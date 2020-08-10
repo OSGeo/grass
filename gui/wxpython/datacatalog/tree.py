@@ -844,7 +844,7 @@ class DataCatalogTree(LocationMapTree):
     def DisplayLayer(self):
         """Display selected layer in current graphics view"""
         all_names = []
-        names = {'raster': [], 'vector': [], 'raster3d': []}
+        names = {'raster': [], 'vector': [], 'raster_3d': []}
         for i in range(len(self.selected_layer)):
             name = self.selected_layer[i].label + '@' + self.selected_mapset[i].label
             names[self.selected_type[i].label].append(name)
