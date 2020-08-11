@@ -582,19 +582,15 @@ class DataCatalogTree(TreeView):
                 if selected_loc.data['name'] != genv['LOCATION_NAME']:
                     dlg = wx.MessageDialog(
                         parent=self,
-                        message=_("The map {0} is in the mapset in"
-                                  " the different location {1}."
-                                  " Do you want to switch to this"
-                                  " mapset?").format(selected_layer.data['name'],
-                                                     selected_loc.data['name']),
-                        caption=_("Switch to mapset in different location"),
-                        style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION
+                        message=_(
+                            "The map is not in the current location and cannot be displayed."
+                            "\n\n"
+                            "To view this map, switch to the selected mapset."
+                        ),
+                        caption=_("Unable to display the map"),
+                        style=wx.OK | wx.ICON_WARNING
                     )
-                    if dlg.ShowModal() == wx.ID_YES:
-                        self._SwitchDbLocationMapset()
-                        self.DisplayLayer()
-                        dlg.Destroy()
-                        return
+                    dlg.ShowModal()
                     dlg.Destroy()
                 else:
                     self.DisplayLayer()
