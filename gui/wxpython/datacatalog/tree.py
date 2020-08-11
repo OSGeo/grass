@@ -24,7 +24,6 @@ import copy
 from multiprocessing import Process, Queue, cpu_count
 
 import wx
-import os
 
 from core.gcmd import RunCommand, GError, GMessage, GWarning
 from core.utils import GetListOfLocations
