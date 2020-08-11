@@ -209,14 +209,18 @@ class DataCatalogNode(DictNode):
     def label(self):
         data = self.data
         if data['type'] == 'mapset':
+            owner = data['owner'] if data['owner'] else _("name unknown")
             if data['current']:
                 return _("{name}  (current)").format(**data)
             elif data['is_different_owner'] and data['lock']:
-                return _("{name}  (in use, owner: {owner})").format(**data)
+                return _("{name}  (in use, owner: {owner})").format(
+                    name=data["name"], owner=owner
+                )
             elif data['lock']:
                 return _("{name}  (in use)").format(**data)
             elif data['is_different_owner']:
-                return _("{name}  (owner: {owner})").format(**data)
+                return _("{name}  (owner: {owner})").format(name=data["name"],
+                                                            owner=owner)
 
         return _("{name}").format(**data)
 
