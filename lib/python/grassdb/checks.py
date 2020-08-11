@@ -11,6 +11,7 @@ for details.
 
 
 import os
+from pwd import getpwuid
 
 
 def mapset_exists(database, location, mapset):
@@ -57,8 +58,8 @@ def is_location_valid(database, location):
     )
 
 
-def is_mapset_users(mapset_path):
-    """Check if the mapset belongs to the user"""
+def is_current_user_mapset_owner(mapset_path):
+    """Returns True if mapset owner is the current user"""
     # Note that this does account for libgis built with SKIP_MAPSET_OWN_CHK
     # which disables the ownerships check, i.e., even if it was build with the
     # skip, it still needs the env variable.
@@ -69,6 +70,16 @@ def is_mapset_users(mapset_path):
     stat_info = os.stat(mapset_path)
     mapset_uid = stat_info.st_uid
     return mapset_uid == os.getuid()
+
+
+def is_different_mapset_owner(mapset_path):
+    """Returns True if mapset owner is different from the current user"""
+    return not is_current_user_mapset_owner(mapset_path)
+
+
+def get_mapset_owner(mapset_path):
+    """Returns mapset owner"""
+    return getpwuid(os.stat(mapset_path).st_uid).pw_name
 
 
 def is_mapset_locked(mapset_path):
@@ -95,7 +106,7 @@ def can_start_in_mapset(mapset_path, ignore_lock=False):
     """Check if a mapset from a gisrc file is usable for new session"""
     if not is_mapset_valid(mapset_path):
         return False
-    if not is_mapset_users(mapset_path):
+    if not is_current_user_mapset_owner(mapset_path):
         return False
     if not ignore_lock and is_mapset_locked(mapset_path):
         return False
