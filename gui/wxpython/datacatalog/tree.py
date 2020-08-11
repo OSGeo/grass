@@ -52,6 +52,8 @@ from grass.pydispatch.signal import Signal
 import grass.script as gscript
 from grass.script import gisenv
 from grass.grassdb.data import map_exists
+from grass.grassdb.checks import (get_mapset_owner, is_mapset_locked,
+                                  is_different_mapset_owner)
 from grass.exceptions import CalledModuleError
 
 
@@ -205,7 +207,18 @@ class DataCatalogNode(DictNode):
 
     @property
     def label(self):
-        return self.data["name"]
+        data = self.data
+        if data['type'] == 'mapset':
+            if data['current']:
+                return _("{name}  (current)").format(**data)
+            elif data['is_different_owner'] and data['lock']:
+                return _("{name}  (in use, owner: {owner})").format(**data)
+            elif data['lock']:
+                return _("{name}  (in use)").format(**data)
+            elif data['is_different_owner']:
+                return _("{name}  (owner: {owner})").format(**data)
+
+        return _("{name}").format(**data)
 
     def match(self, **kwargs):
         """Method used for searching according to given parameters.
@@ -253,8 +266,11 @@ class DataCatalogTree(TreeView):
                            'vector', 'raster_3d']
         self._initImages()
 
-        self._initVariables()
-        self._initVariablesCatalog()
+        self._resetSelectVariables()
+        self._resetCopyVariables()
+        self.current_grassdb_node = None
+        self.current_location_node = None
+        self.current_mapset_node = None
         self.UpdateCurrentDbLocationMapsetNode()
 
         # Get databases from settings
@@ -283,6 +299,22 @@ class DataCatalogTree(TreeView):
                   self._emitSignal(evt.GetItem(), self.endEdit, event=evt))
         self.startEdit.connect(self.OnStartEditLabel)
         self.endEdit.connect(self.OnEditLabel)
+
+    def _resetSelectVariables(self):
+        """Reset variables related to item selection."""
+        self.selected_grassdb = []
+        self.selected_layer = []
+        self.selected_mapset = []
+        self.selected_location = []
+        self.mixed = False
+
+    def _resetCopyVariables(self):
+        """Reset copy related variables."""
+        self.copy_mode = False
+        self.copy_layer = None
+        self.copy_mapset = None
+        self.copy_location = None
+        self.copy_grassdb = None
 
     def _getValidSavedGrassDBs(self):
         """Returns list of GRASS databases from settings.
@@ -342,10 +374,20 @@ class DataCatalogTree(TreeView):
                 None))
         p.start()
         maps, error = q.get()
+
         for mapset in maps:
+            mapset_path = os.path.join(location_node.parent.data['name'],
+                                       location_node.data['name'],
+                                       mapset)
+
             mapset_node = self._model.AppendNode(
                                 parent=location_node,
-                                data=dict(type='mapset', name=mapset))
+                                data=dict(type='mapset',
+                                          name=mapset,
+                                          current=False,
+                                          lock=is_mapset_locked(mapset_path),
+                                          is_different_owner=is_different_mapset_owner(mapset_path),
+                                          owner=get_mapset_owner(mapset_path)))
             self._populateMapsetItem(mapset_node,
                                      maps[mapset])
         self._model.SortChildren(location_node)
@@ -357,7 +399,7 @@ class DataCatalogTree(TreeView):
         Runs reloading locations in parallel."""
         if grassdb_node.children:
             del grassdb_node.children[:]
-        locations = GetListOfLocations(grassdb_node.data["name"])
+        locations = GetListOfLocations(grassdb_node.data['name'])
 
         loc_count = proc_count = 0
         queue_list = []
@@ -387,7 +429,7 @@ class DataCatalogTree(TreeView):
 
             q = Queue()
             p = Process(target=getLocationTree,
-                        args=(grassdb_node.data["name"], location, q))
+                        args=(grassdb_node.data['name'], location, q))
             p.start()
 
             queue_list.append(q)
@@ -405,9 +447,17 @@ class DataCatalogTree(TreeView):
                         errors.append(error)
 
                     for key in sorted(maps.keys()):
+                        mapset_path = os.path.join(location_nodes[i].parent.data['name'],
+                                                   location_nodes[i].data['name'],
+                                                   key)
                         mapset_node = self._model.AppendNode(
                                 parent=location_nodes[i],
-                                data=dict(type='mapset', name=key))
+                                data=dict(type='mapset',
+                                          name=key,
+                                          lock=is_mapset_locked(mapset_path),
+                                          current=False,
+                                          is_different_owner=is_different_mapset_owner(mapset_path),
+                                          owner=get_mapset_owner(mapset_path)))
                         self._populateMapsetItem(mapset_node, maps[key])
 
                 proc_count = 0
@@ -454,8 +504,26 @@ class DataCatalogTree(TreeView):
         self.RefreshNode(node.parent, recursive=True)
 
     def UpdateCurrentDbLocationMapsetNode(self):
+        """Update variables storing current mapset/location/grassdb node.
+        Updates associated mapset node data ('lock' and 'current').
+        """
+
+        def is_current_mapset_node_locked():
+            mapset_path = os.path.join(self.current_grassdb_node.data['name'],
+                                       self.current_location_node.data['name'],
+                                       self.current_mapset_node.data["name"])
+            return is_mapset_locked(mapset_path)
+
+        if self.current_mapset_node:
+            self.current_mapset_node.data["current"] = False
+            self.current_mapset_node.data["lock"] = is_current_mapset_node_locked()
+
         self.current_grassdb_node, self.current_location_node, self.current_mapset_node = \
             self.GetCurrentDbLocationMapsetNode()
+
+        if self.current_mapset_node:
+            self.current_mapset_node.data["current"] = True
+            self.current_mapset_node.data["lock"] = is_current_mapset_node_locked()
 
     def ReloadTreeItems(self):
         """Reload dbs, locations, mapsets and layers in the tree."""
@@ -475,14 +543,6 @@ class DataCatalogTree(TreeView):
             self._model.AppendNode(parent=mapset_node,
                                    data=dict(**item))
         self._model.SortChildren(mapset_node)
-
-    def _initVariables(self):
-        """Init variables."""
-        self.selected_grassdb = []
-        self.selected_layer = []
-        self.selected_mapset = []
-        self.selected_location = []
-        self.mixed = False
 
     def _initImages(self):
         bmpsize = (16, 16)
@@ -505,7 +565,7 @@ class DataCatalogTree(TreeView):
 
     def DefineItems(self, selected):
         """Set selected items."""
-        self._initVariables()
+        self._resetSelectVariables()
         mixed = []
         for item in selected:
             type = item.data['type']
@@ -613,7 +673,8 @@ class DataCatalogTree(TreeView):
 
         mapsetItem = self._model.SearchNodes(
             parent=locationItem[0],
-            name=mapset, type='mapset')
+            name=mapset,
+            type='mapset')
         if not mapsetItem:
             return grassdbItem[0], locationItem[0], None
 
@@ -626,6 +687,17 @@ class DataCatalogTree(TreeView):
             return self._iconTypes.index(node.data['type'])
         except ValueError:
             return 0
+
+    def OnGetItemTextColour(self, index):
+        """Overriden method to return colour for each item.
+           Used to distinquish lock and ownership on mapsets."""
+        node = self._model.GetNodeByIndex(index)
+        if node.data['type'] == 'mapset':
+            if node.data['current']:
+                return wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
+            elif node.data['lock'] or node.data['is_different_owner']:
+                return wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT)
+        return wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
 
     def OnGetItemFont(self, index):
         """Overriden method to return font for each item.
@@ -644,14 +716,6 @@ class DataCatalogTree(TreeView):
         if self.current_mapset_node:
             self.Select(self.current_mapset_node, select=True)
             self.ExpandNode(self.current_mapset_node, recursive=True)
-
-    def _initVariablesCatalog(self):
-        """Init variables."""
-        self.copy_mode = False
-        self.copy_layer = None
-        self.copy_mapset = None
-        self.copy_location = None
-        self.copy_grassdb = None
 
     def SetRestriction(self, restrict):
         self._restricted = restrict
@@ -708,12 +772,11 @@ class DataCatalogTree(TreeView):
 
     def CreateMapset(self, grassdb_node, location_node):
         """Creates new mapset interactively and adds it to the tree."""
-        mapset = create_mapset_interactively(self, grassdb_node.data["name"],
-                                             location_node.data["name"])
+        mapset = create_mapset_interactively(self, grassdb_node.data['name'],
+                                             location_node.data['name'])
         if mapset:
             self.InsertMapset(name=mapset,
                               location_node=location_node)
-            self.ReloadTreeItems()
 
     def OnCreateMapset(self, event):
         """Create new mapset"""
@@ -905,7 +968,7 @@ class DataCatalogTree(TreeView):
                 if dlg.ShowModal() == wx.ID_CANCEL:
                     return
         self.ExpandNode(self.selected_mapset[0], recursive=True)
-        self._initVariablesCatalog()
+        self._resetCopyVariables()
 
     def _onDoneReprojection(self, iEnv, iGisrc, oGisrc, cLayer, cMapset, cMode, name):
         self.InsertLayer(name=name, mapset_node=self.selected_mapset[0],
@@ -935,8 +998,16 @@ class DataCatalogTree(TreeView):
     def InsertMapset(self, name, location_node):
         """Insert new mapset into model and refresh tree.
         Assumes mapset is empty."""
+        mapset_path = os.path.join(location_node.parent.data['name'],
+                                   location_node.data['name'],
+                                   name)
         mapset_node = self._model.AppendNode(parent=location_node,
-                                             data=dict(type="mapset", name=name))
+                                             data=dict(type='mapset',
+                                                       name=name,
+                                                       current=False,
+                                                       lock=is_mapset_locked(mapset_path),
+                                                       is_different_owner=is_different_mapset_owner(mapset_path),
+                                                       owner=get_mapset_owner(mapset_path)))
         self._model.SortChildren(location_node)
         self.RefreshNode(location_node, recursive=True)
         return mapset_node
@@ -944,7 +1015,7 @@ class DataCatalogTree(TreeView):
     def InsertLocation(self, name, grassdb_node):
         """Insert new location into model and refresh tree"""
         location_node = self._model.AppendNode(parent=grassdb_node,
-                                               data=dict(type="location", name=name))
+                                               data=dict(type='location', name=name))
         # reload new location since it has a mapset
         self._reloadLocationNode(location_node)
         self._model.SortChildren(grassdb_node)
@@ -957,7 +1028,7 @@ class DataCatalogTree(TreeView):
         Check if not already added.
         """
         grassdb_node = self._model.SearchNodes(name=name,
-                                                   type='grassdb')
+                                               type='grassdb')
         if not grassdb_node:
             grassdb_node = self._model.AppendNode(parent=self._model.root,
                                                   data=dict(type="grassdb", name=name))
