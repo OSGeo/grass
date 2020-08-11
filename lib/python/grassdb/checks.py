@@ -11,7 +11,7 @@ for details.
 
 
 import os
-from pwd import getpwuid
+from pathlib import Path
 
 
 def mapset_exists(database, location, mapset):
@@ -78,8 +78,12 @@ def is_different_mapset_owner(mapset_path):
 
 
 def get_mapset_owner(mapset_path):
-    """Returns mapset owner"""
-    return getpwuid(os.stat(mapset_path).st_uid).pw_name
+    """Returns mapset owner name or None if owner name unknown"""
+    try:
+        path = Path(mapset_path)
+        return path.owner()
+    except KeyError:
+        return None
 
 
 def is_mapset_locked(mapset_path):
