@@ -636,10 +636,32 @@ class DataCatalogTree(TreeView):
         """
         if not isinstance(self._giface, StandaloneGrassInterface):
             self.DefineItems([node])
-            if self.selected_layer[0] is not None:
-                # display selected layer and return
-                self.DisplayLayer()
-                return
+            selected_layer = self.selected_layer[0]
+            selected_mapset = self.selected_mapset[0]
+            selected_loc = self.selected_location[0]
+
+            if selected_layer is not None:
+                genv = gisenv()
+
+                # Check if the layer is in different location
+                if selected_loc.data['name'] != genv['LOCATION_NAME']:
+                    dlg = wx.MessageDialog(
+                        parent=self,
+                        message=_(
+                            "Map <{0}@{1}> is not in the current location"
+                            " and therefore cannot be displayed."
+                            "\n\n"
+                            "To display this map switch to mapset <{1}> first."
+                        ).format(selected_layer.data['name'],
+                                 selected_mapset.data['name']),
+                        caption=_("Unable to display the map"),
+                        style=wx.OK | wx.ICON_WARNING
+                    )
+                    dlg.ShowModal()
+                    dlg.Destroy()
+                else:
+                    self.DisplayLayer()
+                    return
 
         # expand/collapse location/mapset...
         if self.IsNodeExpanded(node):
