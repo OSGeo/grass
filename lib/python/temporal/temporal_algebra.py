@@ -3038,6 +3038,51 @@ class TemporalAlgebraParser(object):
             elif len(t) == 7:
                 print(str(t[3]) + "* = tshift(", str(t[3]), ",", str(t[5]), ")")
 
+
+    def p_expr_time_const(self, t):
+        # Examples
+        # start_doy(A, -1)  # Get the start DOY from the preceding map 
+        #                     of the time series as a numerical constant
+        #                     for the mapcalculator expression
+
+        """
+        expr : t_var LPAREN NAME COMMA INT RPAREN
+        """
+        if self.run:
+            # Check input stds.
+            maplist = self.check_stds(t[3])
+            resultlist = []
+
+            # Get increment format.
+            t_neighbour = int(t[5])
+
+            max_index = len(maplist)
+            for map_i in maplist:
+                # Get map index and temporal extent.
+                map_index = maplist.index(map_i)
+                new_index = map_index + t_neighbour
+                if new_index < max_index and new_index >= 0:
+                    # Get neighbouring map and set temporal extent.
+                    map_n = maplist[new_index]
+                    map_i_t_extent = map_i.get_temporal_extent()
+                    # Create r.mapcalc expression string for the operation.
+                    tfuncdict = self.get_temporal_func_dict(map_n)
+                    # Generate an intermediate map for the result map list.
+                    map_new = self.generate_new_map(map_n, bool_op = 'and', copy = True)
+                    map_new.set_temporal_extent(map_i_t_extent)
+                    print(tfuncdict[t[1].upper()])
+                    # Set new command list for map.
+                    map_new.cmd_list = str(tfuncdict[t[1].upper()])
+
+                    # Append map with updated command list to result list.
+                    resultlist.append(map_new)
+
+            t[0] = resultlist
+
+        if self.debug:
+            print(t[0], t[1], t[2], t[3])
+
+
     # Handle errors.
     def p_error(self, t):
         if t:
