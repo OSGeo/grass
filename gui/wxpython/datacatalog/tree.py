@@ -573,6 +573,7 @@ class DataCatalogTree(TreeView):
         if not isinstance(self._giface, StandaloneGrassInterface):
             self.DefineItems([node])
             selected_layer = self.selected_layer[0]
+            selected_mapset = self.selected_mapset[0]
             selected_loc = self.selected_location[0]
 
             if selected_layer is not None:
@@ -583,10 +584,12 @@ class DataCatalogTree(TreeView):
                     dlg = wx.MessageDialog(
                         parent=self,
                         message=_(
-                            "The map is not in the current location and cannot be displayed."
+                            "Map {0}@{1} is not in the current location"
+                            " and therefore cannot be displayed."
                             "\n\n"
-                            "To view this map, switch to the selected mapset."
-                        ),
+                            "To displey this map switch to mapset first."
+                        ).format(selected_layer.data['name'],
+                                 selected_mapset.data['name']),
                         caption=_("Unable to display the map"),
                         style=wx.OK | wx.ICON_WARNING
                     )
