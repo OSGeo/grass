@@ -73,8 +73,8 @@ try:
     from PIL import Image
     pillow = True
     try:
-        from PIL import PILLOW_VERSION  # test if user has Pillow or PIL
-    except ImportError:
+        PIL.__version__  # test if user has Pillow or PIL
+    except AttributeError:
         pillow = False
     from PIL.GifImagePlugin import getheader, getdata
 except ImportError:
@@ -495,7 +495,7 @@ def writeGif(filename, images, duration=0.1, repeat=True, **kwargs):
     """
     if pillow:
         # Pillow >= 3.4.0 has animated GIF writing
-        version = [int(i) for i in PILLOW_VERSION.split('.')]
+        version = [int(i) for i in PIL.__version__.split('.')]
         if version[0] > 3 or (version[0] == 3 and version[1] >= 4):
             writeGifPillow(filename, images, duration, repeat)
             return
