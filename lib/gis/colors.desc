@@ -13,6 +13,7 @@ elevation: maps relative ranges of raster values to elevation color ramp
 etopo2: colors for ETOPO2 worldwide bathymetry/topography
 evi: enhanced vegetative index colors
 fahrenheit: blue to red for Fahrenheit temperature
+forest_cover: percentage of forest cover
 gdd: accumulated growing degree days
 grass: GRASS GIS green (perceptually uniform)
 greens: white to green
