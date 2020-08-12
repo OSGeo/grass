@@ -248,9 +248,9 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             GMessage(message)
 
     def GetContentScaleFactor(self):
-            if sys.platform == "darwin" and not CheckWxVersion(version=[4, 1, 0]):
-                return 1
-            return super().GetContentScaleFactor()
+        if sys.platform == "darwin" and not CheckWxVersion(version=[4, 1, 0]):
+            return 1
+        return super().GetContentScaleFactor()
 
     def InitFly(self):
         """Initialize fly through dictionary"""
