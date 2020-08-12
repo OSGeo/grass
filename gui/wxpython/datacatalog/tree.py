@@ -584,10 +584,10 @@ class DataCatalogTree(TreeView):
                     dlg = wx.MessageDialog(
                         parent=self,
                         message=_(
-                            "Map {0}@{1} is not in the current location"
+                            "Map <{0}@{1}> is not in the current location"
                             " and therefore cannot be displayed."
                             "\n\n"
-                            "To displey this map switch to mapset first."
+                            "To display this map switch to mapset <{1}> first."
                         ).format(selected_layer.data['name'],
                                  selected_mapset.data['name']),
                         caption=_("Unable to display the map"),
