@@ -3070,7 +3070,6 @@ class TemporalAlgebraParser(object):
                     # Generate an intermediate map for the result map list.
                     map_new = self.generate_new_map(map_n, bool_op = 'and', copy = True)
                     map_new.set_temporal_extent(map_i_t_extent)
-                    print(tfuncdict[t[1].upper()])
                     # Set new command list for map.
                     map_new.cmd_list = str(tfuncdict[t[1].upper()])
 
