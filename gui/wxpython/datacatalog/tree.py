@@ -44,7 +44,8 @@ from startup.guiutils import (
     delete_mapsets_interactively,
     delete_locations_interactively,
     download_location_interactively,
-    delete_grassdb_interactively
+    delete_grassdb_interactively,
+    switch_mapset_interactively
 )
 
 from grass.pydispatch.signal import Signal
@@ -1259,30 +1260,16 @@ class DataCatalogTree(TreeView):
                 event.Veto()
                 return
 
-    def OnSwitchDbLocationMapset(self, event):
+    def OnSwitchMapset(self, event):
         """Switch to location and mapset"""
-        self._SwitchDbLocationMapset()
+        grassdb = self.selected_grassdb[0].data['name']
+        location = self.selected_location[0].data['name']
+        mapset = self.selected_mapset[0].data['name']
 
-    def _SwitchDbLocationMapset(self):
-        """Switch to location and mapset"""
-        genv = gisenv()
-        # Distinguish when only part of db/location/mapset is changed.
-        if (
-            self.selected_grassdb[0].data['name'] == genv['GISDBASE']
-            and self.selected_location[0].data['name'] == genv['LOCATION_NAME']
-        ):
-            self.changeMapset.emit(mapset=self.selected_mapset[0].data['name'])
-        elif self.selected_grassdb[0].data['name'] == genv['GISDBASE']:
-            self.changeLocation.emit(mapset=self.selected_mapset[0].data['name'],
-                                     location=self.selected_location[0].data['name'],
-                                     dbase=None)
-        else:
-            self.changeLocation.emit(mapset=self.selected_mapset[0].data['name'],
-                                     location=self.selected_location[0].data['name'],
-                                     dbase=self.selected_grassdb[0].data['name'])
-        self.UpdateCurrentDbLocationMapsetNode()
-        self.ExpandCurrentMapset()
-        self.RefreshItems()
+        if switch_mapset_interactively(self, grassdb, location, mapset):
+            self.UpdateCurrentDbLocationMapsetNode()
+            self.ExpandCurrentMapset()
+            self.RefreshItems()
 
     def OnMetadata(self, event):
         """Show metadata of any raster/vector/3draster"""
@@ -1452,7 +1439,7 @@ class DataCatalogTree(TreeView):
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Switch mapset"))
         menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.OnSwitchDbLocationMapset, item)
+        self.Bind(wx.EVT_MENU, self.OnSwitchMapset, item)
         if (
             self.selected_grassdb[0].data['name'] == genv['GISDBASE']
             and self.selected_location[0].data['name'] == genv['LOCATION_NAME']

@@ -2403,6 +2403,65 @@ class QuitDialog(wx.Dialog):
         self.EndModal(wx.ID_YES)
 
 
+class CustomQuestionDialog(wx.Dialog):
+
+    def __init__(self, parent,  message, caption='', label1='', label2='',
+                 id=wx.ID_ANY, style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+                 **kwargs):
+        """Question Dialog with two custom buttons
+
+        :param parent: window
+        """
+        wx.Dialog.__init__(self, parent, id, caption, style=style, **kwargs)
+        self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
+
+        self._icon = wx.StaticBitmap(
+            self.panel, wx.ID_ANY,
+            wx.ArtProvider().GetBitmap(
+                wx.ART_QUESTION,
+                client=wx.ART_MESSAGE_BOX))
+
+        self.informLabel = StaticText(
+            parent=self.panel, id=wx.ID_ANY, label=message)
+        self.btnClose = Button(parent=self.panel, id=wx.ID_NO,
+                                  label=label1)
+        self.btnClose.SetFocus()
+        self.btnContinue = Button(parent=self.panel, id=wx.ID_YES,
+                                 label=label2)
+
+        self.btnClose.Bind(wx.EVT_BUTTON, self.OnClose)
+        self.btnContinue.Bind(wx.EVT_BUTTON, self.OnContinue)
+
+        self.__layout()
+
+    def __layout(self):
+        """Do layout"""
+        sizer = wx.BoxSizer(wx.VERTICAL)
+
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer.Add(self.btnClose, flag=wx.RIGHT, border=5)
+        btnSizer.Add(self.btnContinue, flag=wx.RIGHT, border=5)
+
+        bodySizer = wx.BoxSizer(wx.HORIZONTAL)
+        bodySizer.Add(self._icon, flag=wx.RIGHT, border=10)
+        bodySizer.Add(self.informLabel, proportion=1, flag=wx.EXPAND)
+
+        sizer.Add(bodySizer, proportion=1,
+                  flag=wx.EXPAND | wx.ALL, border=15)
+        sizer.Add(btnSizer, proportion=0,
+                  flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
+
+        self.panel.SetSizer(sizer)
+        sizer.Fit(self)
+        self.Layout()
+
+    def OnClose(self, event):
+        self.EndModal(wx.ID_NO)
+
+    def OnContinue(self, event):
+        self.EndModal(wx.ID_YES)
+
+
 class DefaultFontDialog(wx.Dialog):
     """
     Opens a file selection dialog to select default font

@@ -21,8 +21,12 @@ import wx
 
 import grass.script as gs
 from grass.script import gisenv
-from grass.grassdb.checks import mapset_exists, location_exists
-from grass.grassdb.create import create_mapset, get_default_mapset_name
+from grass.pydispatch.signal import Signal
+from grass.grassdb.checks import (
+    mapset_exists,
+    location_exists,
+    get_lockfile_if_present)
+from grass.grassdb.create import create_mapset, get_current_user
 from grass.grassdb.manage import (
     delete_mapset,
     delete_location,
@@ -33,9 +37,10 @@ from grass.grassdb.manage import (
 
 from core import globalvar
 from core.gcmd import GError, GMessage, DecodeString, RunCommand
-from gui_core.dialogs import TextEntryDialog
+from gui_core.dialogs import TextEntryDialog, CustomQuestionDialog
 from location_wizard.dialogs import RegionDef
 from gui_core.widgets import GenericMultiValidator
+
 
 
 def SetSessionMapset(database, location, mapset):
@@ -196,7 +201,7 @@ def create_mapset_interactively(guiparent, grassdb, location):
     """
     dlg = MapsetDialog(
         parent=guiparent,
-        default=get_default_mapset_name(),
+        default=get_current_user(),
         message=_("Name for the new mapset:"),
         caption=_("Create new mapset"),
         database=grassdb,
@@ -690,6 +695,69 @@ def delete_grassdb_interactively(guiparent, grassdb):
                 )
     dlg.Destroy()
     return deleted
+
+
+def switch_mapset_interactively(guiparent, grassdb, location, mapset):
+    """
+    Switch mapset. If mapset indicated by the presence of the lock, it offers
+    the option to force removal of the lock and to switch to the mapset anyway.
+
+    Returns True if switching was successful. Returns False if an error
+    was encountered.
+    """
+    genv = gisenv()
+    changeMapset = Signal('Tree.changeMapset')
+    changeLocation = Signal('Tree.changeLocation')
+    switched = False
+
+    user = get_current_user()
+    lockfile = get_lockfile_if_present(grassdb, location, mapset)
+    if lockfile:
+        dlg = CustomQuestionDialog(
+            parent=guiparent,
+            message=_("User {0} is already running GRASS in selected mapset <{1}>\n"
+                "(file {2} found).\n\n"
+                "Concurrent use not allowed.\n\n"
+                "Do you want to stay in the current mapset or remove .gislock (note that you "
+                "need permission for this operation) and switch to selected mapset?"
+            ).format(user, mapset, lockfile),
+            caption=_("Lock file found"),
+            label1=_("Stay in current mapset"),
+            label2=_("Switch to selected mapset")
+        )
+        if dlg.ShowModal() == wx.ID_YES:
+
+            # Remove lockfile
+            try:
+                os.remove(lockfile)
+            except IOError as e:
+                wx.MessageBox(
+                    parent=guiparent,
+                    caption=_("Error when removing lock file"),
+                    message=_("Unable to remove {0}.\n\n Details: {1}."
+                    ).format(lockfile, e),
+                    style=wx.OK | wx.ICON_ERROR | wx.CENTRE
+                )
+                dlg.Destroy()
+                return switched
+        dlg.Destroy()
+
+    # Switch to mapset in the same location
+    if (grassdb == genv['GISDBASE']
+        and location == genv['LOCATION_NAME']):
+        changeMapset.emit(mapset=mapset)
+    # Switch to mapset in the same grassdb
+    elif grassdb == genv['GISDBASE']:
+        changeLocation.emit(mapset=mapset,
+                            location=location,
+                            dbase=None)
+    # Switch to mapset in a different grassdb
+    else:
+        changeLocation.emit(mapset=mapset,
+                            location=location,
+                            dbase=grassdb)
+    switched = True
+    return switched
 
 
 def import_file(guiparent, filePath):
