@@ -20,7 +20,6 @@ import sys
 import wx
 
 import grass.script as gs
-from grass.script import core as grass
 from grass.script import gisenv
 from grass.grassdb.checks import (
     mapset_exists,
@@ -161,7 +160,7 @@ def check_mapsets_interactively(mapsets, check_permanent):
     Parameter *mapsets* is a list of tuples (database, location, mapset)
     Parameter *check_permanent* is True of False. It depends on whether
     we want to perform this check or not.
-    
+
     Returns messages as list if there was an exception or None whether not.
     """
     messages = []
@@ -170,7 +169,7 @@ def check_mapsets_interactively(mapsets, check_permanent):
 
         # Check if mapset is permanent
         if mapset == "PERMANENT":
-            if check_permanent == True:
+            if check_permanent is True:
                 messages.append(_("Mapset <{}> is required for a valid location.").format(mapset_path))
         # Check if mapset is current
         elif is_mapset_current(grassdb, location, mapset):
@@ -691,14 +690,14 @@ def delete_grassdb_interactively(guiparent, grassdb):
 
     if issue:
         dlg = wx.MessageDialog(
-        parent=guiparent,
-        message=_(
-            "Cannot delete GRASS database from disk for the following reason:\n\n"
-            "{}\n\n"
-            "GRASS database will not be deleted."
-        ).format(issue),
-        caption=_("Unable to delete selected GRASS database"),
-        style=wx.OK | wx.ICON_WARNING
+            parent=guiparent,
+            message=_(
+                "Cannot delete GRASS database from disk for the following reason:\n\n"
+                "{}\n\n"
+                "GRASS database will not be deleted."
+            ).format(issue),
+            caption=_("Unable to delete selected GRASS database"),
+            style=wx.OK | wx.ICON_WARNING
         )
         dlg.ShowModal()
     else:
