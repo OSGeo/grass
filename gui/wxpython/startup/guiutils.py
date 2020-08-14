@@ -147,98 +147,42 @@ class LocationDialog(TextEntryDialog):
                caption=_("Existing location path"))
 
 
-def check_mapset_interactively(grassdb, location, mapset):
+def check_mapset_interactively(grassdb, location, mapset, check_permanent):
     """Check one mapset with user interaction.
 
     This is currently just a convenience wrapper for check_mapsets_interactively().
     """
     mapsets = [(grassdb, location, mapset)]
-    return check_mapsets_interactively(mapsets)
+    return check_mapsets_interactively(mapsets, check_permanent)
 
 
-def check_mapsets_interactively(mapsets):
+def check_mapsets_interactively(mapsets, check_permanent):
     """Check mapsets for different kinds of exceptions.
     Parameter *mapsets* is a list of tuples (database, location, mapset)
+    Parameter *check_permanent* is True of False. It depends on whether
+    we want to perform this check or not.
     
     Returns messages as list if there was an exception or None whether not.
     """
-    def _checkMapsetIsPermanent(mapset):
-        """Check whether mapset is permanent."""
-        if mapset == "PERMANENT":
-            return False
-        return True
-
-    def _isMapsetPermanent(mapset_path):
-        message = _(
-            "Mapset <{}> is required for a valid location.").format(mapset_path)
-        return message
-
-    def _checkMapsetIsCurrent(grassdb, location, mapset):
-        """Check whether mapset is current."""
-        if is_mapset_current(grassdb, location, mapset):
-            return False
-        return True
-
-    def _isMapsetCurrent(mapset_path):
-        message = _(
-            "Mapset <{}> is the current mapset.").format(mapset_path)
-        return message
-
-    def _checkMapsetIsInUse(mapset_path):
-        """Check whether mapset is in use."""
-        if is_mapset_locked(mapset_path):
-            return False
-        return True
-
-    def _isMapsetInUse(mapset_path):
-        message = _(
-            "Mapset <{}> is in use therefore changes are not allowed.").format(mapset_path)
-        return message
-
-    def _checkMapsetOwnership(mapset_path):
-        """Check whether mapset is owned by different user."""
-        if is_different_mapset_owner(mapset_path):
-            return False
-        return True
-
-    def _isMapsetOwnedByDifferentUser(mapset_path):
-        message = _(
-            "Mapset <{}> is owned by a different user therefore changes are not allowed.").format(mapset_path)
-        return message
-
-    def _validateChecks(checks):
-        """
-        Validate given checks.
-
-        Parameter *checks* is a list of tuples consisting of conditions (list of
-        functions which accepts string value and returns T/F) and callbacks (
-        list of functions which is called when condition is not fulfilled and
-        which returns warning message)
-
-        Returns warning message as a string.
-        """
-        for condition, callback in checks:
-            if not condition:
-                message = callback
-                return message
-        return None
-
-    # Check mapsets
-    mapset_check_messages = []
+    messages = []
     for grassdb, location, mapset in mapsets:
         mapset_path = os.path.join(grassdb, location, mapset)
 
-        # Create list of tuples consisting of conditions and callbacks
-        checks = [(_checkMapsetIsPermanent(mapset), _isMapsetPermanent(mapset_path)),
-                  (_checkMapsetIsCurrent(grassdb, location, mapset), _isMapsetCurrent(mapset_path)),
-                  (_checkMapsetIsInUse(mapset_path), _isMapsetInUse(mapset_path)),
-                  (_checkMapsetOwnership(mapset_path), _isMapsetOwnedByDifferentUser(mapset_path))]
+        # Check if mapset is permanent
+        if mapset == "PERMANENT":
+            if check_permanent == True:
+                messages.append(_("Mapset <{}> is required for a valid location.").format(mapset_path))
+        # Check if mapset is current
+        elif is_mapset_current(grassdb, location, mapset):
+            messages.append(_("Mapset <{}> is the current mapset.").format(mapset_path))
+        # Check whether mapset is in use
+        elif is_mapset_locked(mapset_path):
+            messages.append(_("Mapset <{}> is in use therefore changes are not allowed.").format(mapset_path))
+        # Check whether mapset is owned by different user.
+        elif is_different_mapset_owner(mapset_path):
+            messages.append(_("Mapset <{}> is owned by a different user therefore changes are not allowed.").format(mapset_path))
 
-        # Perform particular checks
-        message = _validateChecks(checks)
-        if message:
-            mapset_check_messages.append(message)
-    return mapset_check_messages
+    return messages
 
 
 def check_location_interactively(grassdb, location):
@@ -256,27 +200,14 @@ def check_locations_interactively(locations):
 
     Returns messages as list if there was an exception or None whether not.
     """
-    def _checkLocationIsCurrent(grassdb, location):
-        """Check whether location is current."""
-        if is_location_current(grassdb, location):
-            return False
-        return True
-
-    def _isLocationCurrent(location_path):
-        message = _(
-            "<{}> is the current location.").format(location_path)
-        return message
-
-    location_check_messages = []
+    messages = []
     for grassdb, location in locations:
-
-        # Check location whether is current
         location_path = os.path.join(grassdb, location)
-        if not _checkLocationIsCurrent(grassdb, location):
-            message = _isLocationCurrent(location_path)
-            location_check_messages.append(message)
+
+        # Check if location is current
+        if is_location_current(grassdb, location):
+            messages.append(_("Location <{}> is the current location.").format(location_path))
             continue
-        print(grassdb, location)
 
         # Find mapsets in particular location
         tmp_gisrc_file, env = gs.create_environment(grassdb, location, 'PERMANENT')
@@ -288,7 +219,6 @@ def check_locations_interactively(locations):
             quiet=True,
             env=env).strip()
         g_mapsets = g_mapsets.split(',')
-        print(g_mapsets)
 
         # Append to the list of tuples
         mapsets = []
@@ -298,15 +228,11 @@ def check_locations_interactively(locations):
                 location,
                 g_mapset
             ))
-        print(mapsets)
-
-        # Check mapsets in particular location
-        mapset_check_messages = check_mapsets_interactively(mapsets)
 
         # Concentenate both checks
-        location_check_messages = location_check_messages + mapset_check_messages
-
-    return location_check_messages
+        messages = messages + check_mapsets_interactively(mapsets,
+                                                          check_permanent=False)
+    return messages
 
 
 # TODO: similar to (but not the same as) read_gisrc function in grass.py
@@ -456,7 +382,8 @@ def rename_mapset_interactively(guiparent, grassdb, location, mapset):
     newmapset = None
 
     # Check selected mapset
-    message = check_mapset_interactively(grassdb, location, mapset)
+    message = check_mapset_interactively(grassdb, location, mapset,
+                                         check_permanent=True)
     if message:
         dlg = wx.MessageDialog(
             parent=guiparent,
@@ -601,7 +528,7 @@ def delete_mapsets_interactively(guiparent, mapsets):
     modified = False
 
     # Check selected mapsets
-    messages = check_mapsets_interactively(mapsets)
+    messages = check_mapsets_interactively(mapsets, check_permanent=True)
     if messages:
         dlg = wx.MessageDialog(
             parent=guiparent,
@@ -622,7 +549,6 @@ def delete_mapsets_interactively(guiparent, mapsets):
         deletes.append(mapset_path)
 
     # Display question dialog
-    deletes = "\n".join(deletes)
     dlg = wx.MessageDialog(
         parent=guiparent,
         message=_(
@@ -630,7 +556,7 @@ def delete_mapsets_interactively(guiparent, mapsets):
             " one or more of the following mapsets?\n\n"
             "{}\n\n"
             "All maps included in these mapsets will be permanently deleted!"
-        ).format(deletes),
+        ).format("\n".join(deletes)),
         caption=_("Delete selected mapsets"),
         style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
     )
@@ -707,7 +633,6 @@ def delete_locations_interactively(guiparent, locations):
         deletes.append(location_path)
 
     # Display question dialog
-    deletes = "\n".join(location_path)
     dlg = wx.MessageDialog(
         parent=guiparent,
         message=_(
@@ -715,7 +640,7 @@ def delete_locations_interactively(guiparent, locations):
             " one or more of the following locations?\n\n"
             "{}\n\n"
             "All mapsets included in these locations will be permanently deleted!"
-        ).format(deletes),
+        ).format("\n".join(deletes)),
         caption=_("Delete selected locations"),
         style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
     )
