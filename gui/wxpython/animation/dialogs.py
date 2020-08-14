@@ -1618,7 +1618,7 @@ class ExportDialog(wx.Dialog):
             GError(parent=self, message=_("Export file is missing."))
             return False
         else:
-            if file_path.endswith(file_postfix):
+            if not file_path.endswith(file_postfix):
                 filebrowsebtn.SetValue(file_path + file_postfix)
                 file_path += file_postfix
 
