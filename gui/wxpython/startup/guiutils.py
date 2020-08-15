@@ -21,7 +21,6 @@ import wx
 
 import grass.script as gs
 from grass.script import gisenv
-from grass.pydispatch.signal import Signal
 from grass.grassdb.checks import (
     mapset_exists,
     location_exists,
@@ -37,10 +36,9 @@ from grass.grassdb.manage import (
 
 from core import globalvar
 from core.gcmd import GError, GMessage, DecodeString, RunCommand
-from gui_core.dialogs import TextEntryDialog, CustomQuestionDialog
+from gui_core.dialogs import TextEntryDialog
 from location_wizard.dialogs import RegionDef
 from gui_core.widgets import GenericMultiValidator
-
 
 
 def SetSessionMapset(database, location, mapset):
@@ -651,14 +649,14 @@ def delete_grassdb_interactively(guiparent, grassdb):
 
     if issue:
         dlg = wx.MessageDialog(
-        parent=guiparent,
-        message=_(
-            "Cannot delete GRASS database from disk for the following reason:\n\n"
-            "{}\n\n"
-            "GRASS database will not be deleted."
-        ).format(issue),
-        caption=_("Unable to delete selected GRASS database"),
-        style=wx.OK | wx.ICON_WARNING
+            parent=guiparent,
+            message=_(
+                "Cannot delete GRASS database from disk for the following reason:\n\n"
+                "{}\n\n"
+                "GRASS database will not be deleted."
+            ).format(issue),
+            caption=_("Unable to delete selected GRASS database"),
+            style=wx.OK | wx.ICON_WARNING
         )
         dlg.ShowModal()
     else:
@@ -697,36 +695,35 @@ def delete_grassdb_interactively(guiparent, grassdb):
     return deleted
 
 
-def switch_mapset_interactively(guiparent, grassdb, location, mapset):
+def can_switch_mapset_interactively(guiparent, grassdb, location, mapset):
     """
-    Switch mapset. If mapset indicated by the presence of the lock, it offers
-    the option to force removal of the lock and to switch to the mapset anyway.
+    Checks if mapset is indicated by the presence of the lock and offers
+    the option to force removal of the lock and to switch to the mapset.
 
-    Returns True if switching was successful. Returns False if an error
-    was encountered.
+    Returns True if user wants to switch to the selected mapset in spite of
+    removing lock. Returns False if a user wants to stay in the current
+    mapset or if an error was encountered.
     """
-    genv = gisenv()
-    changeMapset = Signal('Tree.changeMapset')
-    changeLocation = Signal('Tree.changeLocation')
-    switched = False
+    can_switch = True
 
     user = get_current_user()
     lockfile = get_lockfile_if_present(grassdb, location, mapset)
     if lockfile:
-        dlg = CustomQuestionDialog(
+        dlg = wx.MessageDialog(
             parent=guiparent,
-            message=_("User {0} is already running GRASS in selected mapset <{1}>\n"
-                "(file {2} found).\n\n"
-                "Concurrent use not allowed.\n\n"
-                "Do you want to stay in the current mapset or remove .gislock (note that you "
-                "need permission for this operation) and switch to selected mapset?"
-            ).format(user, mapset, lockfile),
+            message=_("User {0} is already running GRASS in selected mapset"
+                      "<{1}>\n (file {2} found).\n\n"
+                      "Concurrent use not allowed.\n\n"
+                      "Do you want to stay in the current mapset or remove"
+                      " .gislock (note that you need permission for this"
+                      " operation) and switch to selected mapset?"
+                      ).format(user, mapset, lockfile),
             caption=_("Lock file found"),
-            label1=_("Stay in current mapset"),
-            label2=_("Switch to selected mapset")
+            style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
         )
+        dlg.SetYesNoLabels("&Switch to selected mapset",
+                           "&Stay in current mapset")
         if dlg.ShowModal() == wx.ID_YES:
-
             # Remove lockfile
             try:
                 os.remove(lockfile)
@@ -735,29 +732,14 @@ def switch_mapset_interactively(guiparent, grassdb, location, mapset):
                     parent=guiparent,
                     caption=_("Error when removing lock file"),
                     message=_("Unable to remove {0}.\n\n Details: {1}."
-                    ).format(lockfile, e),
+                              ).format(lockfile, e),
                     style=wx.OK | wx.ICON_ERROR | wx.CENTRE
                 )
-                dlg.Destroy()
-                return switched
+                can_switch = False
+        else:
+            can_switch = False
         dlg.Destroy()
-
-    # Switch to mapset in the same location
-    if (grassdb == genv['GISDBASE']
-        and location == genv['LOCATION_NAME']):
-        changeMapset.emit(mapset=mapset)
-    # Switch to mapset in the same grassdb
-    elif grassdb == genv['GISDBASE']:
-        changeLocation.emit(mapset=mapset,
-                            location=location,
-                            dbase=None)
-    # Switch to mapset in a different grassdb
-    else:
-        changeLocation.emit(mapset=mapset,
-                            location=location,
-                            dbase=grassdb)
-    switched = True
-    return switched
+    return can_switch
 
 
 def import_file(guiparent, filePath):

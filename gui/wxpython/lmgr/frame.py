@@ -43,6 +43,9 @@ if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
 
 from grass.script import core as grass
 from grass.script.utils import decode
+from startup.guiutils import (
+    can_switch_mapset_interactively
+)
 
 from core.gcmd import RunCommand, GError, GMessage
 from core.settings import UserSettings, GetDisplayVectSettings
@@ -66,6 +69,8 @@ from lmgr.giface import LayerManagerGrassInterface
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
+from datacatalog.tree import DataCatalogTree
+from grass.pydispatch.signal import Signal
 
 
 class GMFrame(wx.Frame):
@@ -186,6 +191,15 @@ class GMFrame(wx.Frame):
 
         self._giface.mapCreated.connect(self.OnMapCreated)
         self._giface.updateMap.connect(self._updateCurrentMap)
+
+        # tree with layers
+        self.tree = DataCatalogTree(self, giface=self._giface)
+        self.showNotification = Signal('DataCatalog..showNotification')
+        self.changeMapset = Signal('DataCatalog..changeMapset')
+        self.changeLocation = Signal('DataCatalog..changeLocation')
+        self.tree.showNotification.connect(self.showNotification)
+        self.tree.changeMapset.connect(self.changeMapset)
+        self.tree.changeLocation.connect(self.changeLocation)
 
         # minimal frame size
         self.SetMinSize(globalvar.GM_WINDOW_MIN_SIZE)
@@ -1072,7 +1086,17 @@ class GMFrame(wx.Frame):
                     message=_(
                         "No location/mapset provided. Operation canceled."))
                 return  # this should not happen
-            self.ChangeLocation(location, mapset)
+            if can_switch_mapset_interactively(self,
+                                   grass.gisenv()['GISDBASE'],
+                                   location,
+                                   mapset):
+                self.changeLocation.emit(mapset=mapset,
+                                    location=location,
+                                    dbase=None)
+                #self.ChangeLocation(location, mapset)
+                self.tree.UpdateCurrentDbLocationMapsetNode()
+                self.tree.ExpandCurrentMapset()
+                self.tree.RefreshItems()
 
     def ChangeLocation(self, location, mapset, dbase=None):
         if dbase:
@@ -1141,7 +1165,15 @@ class GMFrame(wx.Frame):
                 GError(parent=self,
                        message=_("No mapset provided. Operation canceled."))
                 return
-            self.ChangeMapset(mapset)
+            if can_switch_mapset_interactively(self,
+                                               grass.gisenv()['GISDBASE'],
+                                               grass.gisenv()['LOCATION_NAME'],
+                                               mapset):
+                self.changeMapset.emit(mapset=mapset)
+                #self.ChangeLocation(location, mapset)
+                self.tree.UpdateCurrentDbLocationMapsetNode()
+                self.tree.ExpandCurrentMapset()
+                self.tree.RefreshItems()
 
     def ChangeMapset(self, mapset):
         """Change current mapset and update map display title"""

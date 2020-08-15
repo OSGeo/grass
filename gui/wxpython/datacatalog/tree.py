@@ -45,7 +45,7 @@ from startup.guiutils import (
     delete_locations_interactively,
     download_location_interactively,
     delete_grassdb_interactively,
-    switch_mapset_interactively
+    can_switch_mapset_interactively
 )
 
 from grass.pydispatch.signal import Signal
@@ -1262,11 +1262,25 @@ class DataCatalogTree(TreeView):
 
     def OnSwitchMapset(self, event):
         """Switch to location and mapset"""
+        genv = gisenv()
         grassdb = self.selected_grassdb[0].data['name']
         location = self.selected_location[0].data['name']
         mapset = self.selected_mapset[0].data['name']
 
-        if switch_mapset_interactively(self, grassdb, location, mapset):
+        if can_switch_mapset_interactively(self, grassdb, location, mapset):
+            # Switch to mapset in the same location
+            if (grassdb == genv['GISDBASE'] and location == genv['LOCATION_NAME']):
+                self.changeMapset.emit(mapset=mapset)
+            # Switch to mapset in the same grassdb
+            elif grassdb == genv['GISDBASE']:
+                self.changeLocation.emit(mapset=mapset,
+                                         location=location,
+                                         dbase=None)
+            # Switch to mapset in a different grassdb
+            else:
+                self.changeLocation.emit(mapset=mapset,
+                                         location=location,
+                                         dbase=grassdb)
             self.UpdateCurrentDbLocationMapsetNode()
             self.ExpandCurrentMapset()
             self.RefreshItems()
