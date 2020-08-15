@@ -21,6 +21,7 @@ import tempfile
 import getpass
 import sys
 from shutil import copytree, ignore_patterns
+from grass.grassdb.create import create_mapset, get_default_mapset_name
 
 def get_possible_database_path():
     """Looks for directory 'grassdata' (case-insensitive) in standard
@@ -120,6 +121,28 @@ def _copy_startup_location(grassdatabase, startup_location):
     return False
 
 
+def _create_startup_mapset(grassdatabase, startup_location):
+    """Create the new empty startup mapset named after user.
+
+    Returns True if successfully created or False when an error was encountered.
+    """
+    name = get_default_mapset_name()
+    mapset_path = os.path.join(grassdatabase, startup_location, name)
+    counter = 1
+
+    while os.path.exists(mapset_path):
+        name = name + "_" + str(counter)
+        mapset_path = os.path.join(grassdatabase, startup_location, name)
+
+    # Create new startup mapset
+    try:
+        create_mapset(grassdatabase, startup_location, name)
+        return True
+    except (IOError, OSError):
+        pass
+    return False
+
+
 def get_startup_location(grassdatabase):
     """Wrapping function for managing startup location.
 
@@ -130,6 +153,7 @@ def get_startup_location(grassdatabase):
     # Find out if startup location exists
     location = _get_startup_location_in_distribution()
     if location:
-            if _copy_startup_location(grassdatabase, location):
+        if _copy_startup_location(grassdatabase, location):
+            if _create_startup_mapset(grassdatabase, location):
                 return location
     return None
