@@ -69,8 +69,6 @@ from lmgr.giface import LayerManagerGrassInterface
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
-from datacatalog.tree import DataCatalogTree
-from grass.pydispatch.signal import Signal
 
 
 class GMFrame(wx.Frame):
