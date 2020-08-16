@@ -18,6 +18,7 @@ This is for code which depend on something from GUI (wx or wxGUI).
 import os
 import sys
 import wx
+import datetime
 
 import grass.script as gs
 from grass.script import gisenv
@@ -697,8 +698,7 @@ def delete_grassdb_interactively(guiparent, grassdb):
 
 def can_switch_mapset_interactively(guiparent, grassdb, location, mapset):
     """
-    Checks if mapset is indicated by the presence of the lock and offers
-    the option to force removal of the lock and to switch to the mapset.
+    Checks if mapset is locked and offers to remove the lock file.
 
     Returns True if user wants to switch to the selected mapset in spite of
     removing lock. Returns False if a user wants to stay in the current
@@ -708,16 +708,21 @@ def can_switch_mapset_interactively(guiparent, grassdb, location, mapset):
 
     user = get_current_user()
     lockfile = get_lockfile_if_present(grassdb, location, mapset)
+    timestamp = (datetime.datetime.fromtimestamp(
+        os.path.getmtime(lockfile))).replace(microsecond=0)
     if lockfile:
         dlg = wx.MessageDialog(
             parent=guiparent,
-            message=_("User {0} is already running GRASS in selected mapset"
-                      "<{1}>\n (file {2} found).\n\n"
+            message=_("User {user} is already running GRASS in selected mapset "
+                      "<{mapset}>\n (file {lockfile} created {timestamp} "
+                      "found).\n\n"
                       "Concurrent use not allowed.\n\n"
-                      "Do you want to stay in the current mapset or remove"
-                      " .gislock (note that you need permission for this"
-                      " operation) and switch to selected mapset?"
-                      ).format(user, mapset, lockfile),
+                      "Do you want to stay in the current mapset or remove "
+                      ".gislock and switch to selected mapset?"
+                      ).format(user=user,
+                               mapset=mapset,
+                               lockfile=lockfile,
+                               timestamp=timestamp),
             caption=_("Lock file found"),
             style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
         )
@@ -731,8 +736,9 @@ def can_switch_mapset_interactively(guiparent, grassdb, location, mapset):
                 wx.MessageBox(
                     parent=guiparent,
                     caption=_("Error when removing lock file"),
-                    message=_("Unable to remove {0}.\n\n Details: {1}."
-                              ).format(lockfile, e),
+                    message=_("Unable to remove {lockfile}.\n\n Details: {error}."
+                              ).format(lockfile=lockfile,
+                                       error=e),
                     style=wx.OK | wx.ICON_ERROR | wx.CENTRE
                 )
                 can_switch = False

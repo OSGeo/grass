@@ -192,15 +192,6 @@ class GMFrame(wx.Frame):
         self._giface.mapCreated.connect(self.OnMapCreated)
         self._giface.updateMap.connect(self._updateCurrentMap)
 
-        # tree with layers
-        self.tree = DataCatalogTree(self, giface=self._giface)
-        self.showNotification = Signal('DataCatalog..showNotification')
-        self.changeMapset = Signal('DataCatalog..changeMapset')
-        self.changeLocation = Signal('DataCatalog..changeLocation')
-        self.tree.showNotification.connect(self.showNotification)
-        self.tree.changeMapset.connect(self.changeMapset)
-        self.tree.changeLocation.connect(self.changeLocation)
-
         # minimal frame size
         self.SetMinSize(globalvar.GM_WINDOW_MIN_SIZE)
 
@@ -1090,13 +1081,7 @@ class GMFrame(wx.Frame):
                                    grass.gisenv()['GISDBASE'],
                                    location,
                                    mapset):
-                self.changeLocation.emit(mapset=mapset,
-                                    location=location,
-                                    dbase=None)
-                #self.ChangeLocation(location, mapset)
-                self.tree.UpdateCurrentDbLocationMapsetNode()
-                self.tree.ExpandCurrentMapset()
-                self.tree.RefreshItems()
+                self.ChangeLocation(location, mapset)
 
     def ChangeLocation(self, location, mapset, dbase=None):
         if dbase:
@@ -1169,11 +1154,8 @@ class GMFrame(wx.Frame):
                                                grass.gisenv()['GISDBASE'],
                                                grass.gisenv()['LOCATION_NAME'],
                                                mapset):
-                self.changeMapset.emit(mapset=mapset)
-                #self.ChangeLocation(location, mapset)
-                self.tree.UpdateCurrentDbLocationMapsetNode()
-                self.tree.ExpandCurrentMapset()
-                self.tree.RefreshItems()
+                self.ChangeMapset(mapset)
+
 
     def ChangeMapset(self, mapset):
         """Change current mapset and update map display title"""
