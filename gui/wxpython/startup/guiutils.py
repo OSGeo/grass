@@ -18,6 +18,7 @@ This is for code which depend on something from GUI (wx or wxGUI).
 import os
 import sys
 import wx
+from multiprocessing import Queue
 
 import grass.script as gs
 from grass.script import gisenv
@@ -43,6 +44,7 @@ from core.gcmd import GError, GMessage, DecodeString, RunCommand
 from gui_core.dialogs import TextEntryDialog
 from location_wizard.dialogs import RegionDef
 from gui_core.widgets import GenericMultiValidator
+from grass.exceptions import CalledModuleError
 
 
 def SetSessionMapset(database, location, mapset):
@@ -146,91 +148,104 @@ class LocationDialog(TextEntryDialog):
                caption=_("Existing location path"))
 
 
-def check_mapset_interactively(grassdb, location, mapset, check_permanent):
-    """Check one mapset with user interaction.
-
-    This is currently just a convenience wrapper for check_mapsets_interactively().
-    """
-    mapsets = [(grassdb, location, mapset)]
-    return check_mapsets_interactively(mapsets, check_permanent)
-
-
-def check_mapsets_interactively(mapsets, check_permanent):
-    """Check mapsets for different kinds of exceptions.
-    Parameter *mapsets* is a list of tuples (database, location, mapset)
+def get_reasons_mapsets_not_removable(mapsets, check_permanent):
+    """Get reasons why mapsets cannot be removed.
+    Parameter *mapsets* is a list of tuples (database, location, mapset).
     Parameter *check_permanent* is True of False. It depends on whether
-    we want to perform this check or not.
+    we want to check for permanent mapset or not.
 
-    Returns messages as list if there was an exception or None whether not.
+    This is currently just a convenience wrapper for get_reasons_mapset_not_removable().
     """
     messages = []
     for grassdb, location, mapset in mapsets:
-        mapset_path = os.path.join(grassdb, location, mapset)
+        messages += get_reasons_mapset_not_removable(grassdb, location,
+                                                    mapset, check_permanent)
+    return messages
 
-        # Check if mapset is permanent
-        if mapset == "PERMANENT":
-            if check_permanent is True:
-                messages.append(_("Mapset <{}> is required for a valid location.").format(mapset_path))
-        # Check if mapset is current
-        elif is_mapset_current(grassdb, location, mapset):
-            messages.append(_("Mapset <{}> is the current mapset.").format(mapset_path))
-        # Check whether mapset is in use
-        elif is_mapset_locked(mapset_path):
-            messages.append(_("Mapset <{}> is in use therefore changes are not allowed.").format(mapset_path))
-        # Check whether mapset is owned by different user.
-        elif is_different_mapset_owner(mapset_path):
-            messages.append(_("Mapset <{}> is owned by a different user therefore changes are not allowed.").format(mapset_path))
+
+def get_reasons_mapset_not_removable(grassdb, location, mapset, check_permanent):
+    """Get reasons why one mapset cannot be removed.
+    Parameter *check_permanent* is True of False. It depends on whether
+    we want to check for permanent mapset or not.
+
+    Returns messages as list if there were any failed checks or None whether not.
+    """
+    messages = []
+    mapset_path = os.path.join(grassdb, location, mapset)
+
+    # Check if mapset is permanent
+    if check_permanent and mapset == "PERMANENT":
+        messages.append(_("Mapset <{mapset}> is required for a valid location.").format(
+                mapset=mapset_path))
+    # Check if mapset is current
+    elif is_mapset_current(grassdb, location, mapset):
+        messages.append(_("Mapset <{mapset}> is the current mapset.").format(
+                mapset=mapset_path))
+    # Check whether mapset is in use
+    elif is_mapset_locked(mapset_path):
+        messages.append(_("Mapset <{mapset}> is in use.").format(
+                mapset=mapset_path))
+    # Check whether mapset is owned by different user
+    elif is_different_mapset_owner(mapset_path):
+        messages.append(_("Mapset <{mapset}> is owned by a different user.").format(
+                mapset=mapset_path))
 
     return messages
 
 
-def check_location_interactively(grassdb, location):
-    """Check one mapset with user interaction.
-
-    This is currently just a convenience wrapper for check_locations_interactively().
-    """
-    locations = [(grassdb, location)]
-    return check_locations_interactively(locations)
-
-
-def check_locations_interactively(locations):
-    """Check locations for different kinds of exceptions.
-    Parameter *locations* is a list of tuples (database, location)
-
-    Returns messages as list if there was an exception or None whether not.
+def get_reasons_locations_not_removable(locations):
+    """Get reasons why locations cannot be removed.
+    Parameter *locations* is a list of tuples (database, location).
+    This is currently just a convenience wrapper for get_reasons_location_not_removable().
     """
     messages = []
     for grassdb, location in locations:
-        location_path = os.path.join(grassdb, location)
+        messages += get_reasons_location_not_removable(grassdb, location)
+    return messages
 
-        # Check if location is current
-        if is_location_current(grassdb, location):
-            messages.append(_("Location <{}> is the current location.").format(location_path))
-            continue
 
-        # Find mapsets in particular location
-        tmp_gisrc_file, env = gs.create_environment(grassdb, location, 'PERMANENT')
-        env['GRASS_SKIP_MAPSET_OWNER_CHECK'] = '1'
+def get_reasons_location_not_removable(grassdb, location):
+    """Get reasons why one location cannot be removed.
+
+    Returns messages as list if there were any failed checks or None whether not.
+    """
+    messages = []
+    location_path = os.path.join(grassdb, location)
+
+    # Check if location is current
+    if is_location_current(grassdb, location):
+        messages.append(_("Location <{location}> is the current location.").format(
+                location=location_path))
+        return messages
+
+    # Find mapsets in particular location
+    tmp_gisrc_file, env = gs.create_environment(grassdb, location, 'PERMANENT')
+    env['GRASS_SKIP_MAPSET_OWNER_CHECK'] = '1'
+    maps_dict = {}
+    try:
         g_mapsets = gs.read_command(
             'g.mapsets',
             flags='l',
             separator='comma',
             quiet=True,
-            env=env).strip()
-        g_mapsets = g_mapsets.split(',')
+            env=env).strip().split(',')
+    except CalledModuleError:
+        Queue().put(
+            (maps_dict,
+             _("Failed to read mapsets from location <{location}>.").format(
+                 location=location_path)))
+        gs.try_remove(tmp_gisrc_file)
+        return messages
 
-        # Append to the list of tuples
-        mapsets = []
-        for g_mapset in g_mapsets:
-            mapsets.append((
-                grassdb,
-                location,
-                g_mapset
-            ))
+    # Append to the list of tuples
+    mapsets = []
+    for g_mapset in g_mapsets:
+        mapsets.append((grassdb, location, g_mapset))
 
-        # Concentenate both checks
-        messages = messages + check_mapsets_interactively(mapsets,
-                                                          check_permanent=False)
+    # Concentenate both checks
+    messages += get_reasons_mapsets_not_removable(mapsets, check_permanent=False)
+
+    gs.try_remove(tmp_gisrc_file)
     return messages
 
 
@@ -381,7 +396,7 @@ def rename_mapset_interactively(guiparent, grassdb, location, mapset):
     newmapset = None
 
     # Check selected mapset
-    message = check_mapset_interactively(grassdb, location, mapset,
+    message = get_reasons_mapset_not_removable(grassdb, location, mapset,
                                          check_permanent=True)
     if message:
         dlg = wx.MessageDialog(
@@ -436,7 +451,7 @@ def rename_location_interactively(guiparent, grassdb, location):
     newlocation = None
 
     # Check selected location
-    messages = check_location_interactively(grassdb, location)
+    messages = get_reasons_location_not_removable(grassdb, location)
     if messages:
         dlg = wx.MessageDialog(
             parent=guiparent,
@@ -527,7 +542,7 @@ def delete_mapsets_interactively(guiparent, mapsets):
     modified = False
 
     # Check selected mapsets
-    messages = check_mapsets_interactively(mapsets, check_permanent=True)
+    messages = get_reasons_mapsets_not_removable(mapsets, check_permanent=True)
     if messages:
         dlg = wx.MessageDialog(
             parent=guiparent,
@@ -611,7 +626,7 @@ def delete_locations_interactively(guiparent, locations):
     modified = False
 
     # Check selected locations
-    messages = check_locations_interactively(locations)
+    messages = get_reasons_locations_not_removable(locations)
     if messages:
         dlg = wx.MessageDialog(
             parent=guiparent,
