@@ -515,7 +515,7 @@ class GRASSStartup(wx.Frame):
         # If nothing found, try to create GRASS directory and copy startup loc
         if path is None:
             path = create_database_directory()
-            location = get_startup_location(path)
+            grassdatabase, location, mapset_name = get_startup_location(path)
 
         if path:
             try:
@@ -539,6 +539,9 @@ class GRASSStartup(wx.Frame):
                 'A popular choice is "grassdata", located in '
                 'your home directory. '
                 'Press Browse button to select the directory.'))
+
+        self.SetLocation(grassdatabase, location, mapset_name)
+        self.ExitSuccessfully()
 
     def OnCreateLocation(self, event):
         """Location wizard started"""
