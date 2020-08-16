@@ -159,7 +159,7 @@ def get_reasons_mapsets_not_removable(mapsets, check_permanent):
     messages = []
     for grassdb, location, mapset in mapsets:
         messages += get_reasons_mapset_not_removable(grassdb, location,
-                                                    mapset, check_permanent)
+                                                     mapset, check_permanent)
     return messages
 
 
@@ -176,19 +176,19 @@ def get_reasons_mapset_not_removable(grassdb, location, mapset, check_permanent)
     # Check if mapset is permanent
     if check_permanent and mapset == "PERMANENT":
         messages.append(_("Mapset <{mapset}> is required for a valid location.").format(
-                mapset=mapset_path))
+            mapset=mapset_path))
     # Check if mapset is current
     elif is_mapset_current(grassdb, location, mapset):
         messages.append(_("Mapset <{mapset}> is the current mapset.").format(
-                mapset=mapset_path))
+            mapset=mapset_path))
     # Check whether mapset is in use
     elif is_mapset_locked(mapset_path):
         messages.append(_("Mapset <{mapset}> is in use.").format(
-                mapset=mapset_path))
+            mapset=mapset_path))
     # Check whether mapset is owned by different user
     elif is_different_mapset_owner(mapset_path):
         messages.append(_("Mapset <{mapset}> is owned by a different user.").format(
-                mapset=mapset_path))
+            mapset=mapset_path))
 
     return messages
 
@@ -215,7 +215,7 @@ def get_reasons_location_not_removable(grassdb, location):
     # Check if location is current
     if is_location_current(grassdb, location):
         messages.append(_("Location <{location}> is the current location.").format(
-                location=location_path))
+            location=location_path))
         return messages
 
     # Find mapsets in particular location
@@ -397,7 +397,7 @@ def rename_mapset_interactively(guiparent, grassdb, location, mapset):
 
     # Check selected mapset
     message = get_reasons_mapset_not_removable(grassdb, location, mapset,
-                                         check_permanent=True)
+                                               check_permanent=True)
     if message:
         dlg = wx.MessageDialog(
             parent=guiparent,
