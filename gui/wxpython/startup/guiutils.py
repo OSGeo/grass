@@ -711,7 +711,7 @@ def can_switch_mapset_interactively(guiparent, grassdb, location, mapset):
     if lockfile:
         user = get_gislock_owner(lockfile)
         timestamp = (datetime.datetime.fromtimestamp(
-                os.path.getmtime(lockfile))).replace(microsecond=0)
+            os.path.getmtime(lockfile))).replace(microsecond=0)
         dlg = wx.MessageDialog(
             parent=guiparent,
             message=_("User {user} is already running GRASS in selected mapset "
