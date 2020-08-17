@@ -18,7 +18,6 @@ This is for code which depend on something from GUI (wx or wxGUI).
 import os
 import sys
 import wx
-from multiprocessing import Queue
 
 import grass.script as gs
 from grass.script import gisenv
@@ -44,7 +43,6 @@ from core.gcmd import GError, GMessage, DecodeString, RunCommand
 from gui_core.dialogs import TextEntryDialog
 from location_wizard.dialogs import RegionDef
 from gui_core.widgets import GenericMultiValidator
-from grass.exceptions import CalledModuleError
 
 
 def SetSessionMapset(database, location, mapset):
@@ -150,53 +148,59 @@ class LocationDialog(TextEntryDialog):
 
 def get_reasons_mapsets_not_removable(mapsets, check_permanent):
     """Get reasons why mapsets cannot be removed.
+
     Parameter *mapsets* is a list of tuples (database, location, mapset).
-    Parameter *check_permanent* is True of False. It depends on whether
-    we want to check for permanent mapset or not.
-
-    This is currently just a convenience wrapper for get_reasons_mapset_not_removable().
-    """
-    messages = []
-    for grassdb, location, mapset in mapsets:
-        messages += get_reasons_mapset_not_removable(grassdb, location,
-                                                     mapset, check_permanent)
-    return messages
-
-
-def get_reasons_mapset_not_removable(grassdb, location, mapset, check_permanent):
-    """Get reasons why one mapset cannot be removed.
     Parameter *check_permanent* is True of False. It depends on whether
     we want to check for permanent mapset or not.
 
     Returns messages as list if there were any failed checks or None whether not.
     """
     messages = []
+    for grassdb, location, mapset in mapsets:
+        message = get_reason_mapset_not_removable(grassdb, location,
+                                                  mapset, check_permanent)
+        if message:
+            messages.append(message)
+    return messages
+
+
+def get_reason_mapset_not_removable(grassdb, location, mapset, check_permanent):
+    """Get reason why one mapset cannot be removed.
+
+    Parameter *check_permanent* is True of False. It depends on whether
+    we want to check for permanent mapset or not.
+
+    Returns message as string if there was failed check or empty string whether not.
+    """
+    message = None
     mapset_path = os.path.join(grassdb, location, mapset)
 
     # Check if mapset is permanent
     if check_permanent and mapset == "PERMANENT":
-        messages.append(_("Mapset <{mapset}> is required for a valid location.").format(
-            mapset=mapset_path))
+        message = _("Mapset <{mapset}> is required for a valid location.").format(
+            mapset=mapset_path)
     # Check if mapset is current
     elif is_mapset_current(grassdb, location, mapset):
-        messages.append(_("Mapset <{mapset}> is the current mapset.").format(
-            mapset=mapset_path))
+        message = _("Mapset <{mapset}> is the current mapset.").format(
+            mapset=mapset_path)
     # Check whether mapset is in use
     elif is_mapset_locked(mapset_path):
-        messages.append(_("Mapset <{mapset}> is in use.").format(
-            mapset=mapset_path))
+        message = _("Mapset <{mapset}> is in use.").format(
+            mapset=mapset_path)
     # Check whether mapset is owned by different user
     elif is_different_mapset_owner(mapset_path):
-        messages.append(_("Mapset <{mapset}> is owned by a different user.").format(
-            mapset=mapset_path))
+        message = _("Mapset <{mapset}> is owned by a different user.").format(
+            mapset=mapset_path)
 
-    return messages
+    return message
 
 
 def get_reasons_locations_not_removable(locations):
     """Get reasons why locations cannot be removed.
+
     Parameter *locations* is a list of tuples (database, location).
-    This is currently just a convenience wrapper for get_reasons_location_not_removable().
+
+    Returns messages as list if there were any failed checks or None whether not.
     """
     messages = []
     for grassdb, location in locations:
@@ -221,21 +225,13 @@ def get_reasons_location_not_removable(grassdb, location):
     # Find mapsets in particular location
     tmp_gisrc_file, env = gs.create_environment(grassdb, location, 'PERMANENT')
     env['GRASS_SKIP_MAPSET_OWNER_CHECK'] = '1'
-    maps_dict = {}
-    try:
-        g_mapsets = gs.read_command(
-            'g.mapsets',
-            flags='l',
-            separator='comma',
-            quiet=True,
-            env=env).strip().split(',')
-    except CalledModuleError:
-        Queue().put(
-            (maps_dict,
-             _("Failed to read mapsets from location <{location}>.").format(
-                 location=location_path)))
-        gs.try_remove(tmp_gisrc_file)
-        return messages
+
+    g_mapsets = gs.read_command(
+        'g.mapsets',
+        flags='l',
+        separator='comma',
+        quiet=True,
+        env=env).strip().split(',')
 
     # Append to the list of tuples
     mapsets = []
@@ -385,27 +381,26 @@ def create_location_interactively(guiparent, grassdb):
 def rename_mapset_interactively(guiparent, grassdb, location, mapset):
     """Rename mapset with user interaction.
 
-    If PERMANENT mapset, current mapset, mapset in use or mapset owned
-    by a different user is found, rename operation is not performed.
-
-    Exceptions during renaming are handled in this function.
+    Exceptions during renaming are handled in get_reason_mapset_not_removable
+    function.
 
     Returns newmapset if there was a change or None if the mapset cannot be
-    renamed (see above the possible reasons) or if another error was encountered.
+    renamed (see reasons given by get_reason_mapset_not_removable
+    function) or if another error was encountered.
     """
     newmapset = None
 
     # Check selected mapset
-    message = get_reasons_mapset_not_removable(grassdb, location, mapset,
-                                               check_permanent=True)
+    message = get_reason_mapset_not_removable(grassdb, location, mapset,
+                                              check_permanent=True)
     if message:
         dlg = wx.MessageDialog(
             parent=guiparent,
             message=_(
-                "Cannot rename the mapset for the following reason:\n\n"
-                "{}\n\n"
+                "Cannot rename mapset <{mapset}> for the following reason:\n\n"
+                "{reason}\n\n"
                 "No mapset will be renamed."
-            ).format(message[0]),
+            ).format(mapset=mapset, reason=message),
             caption=_("Unable to rename selected mapset"),
             style=wx.OK | wx.ICON_WARNING
         )
@@ -441,12 +436,12 @@ def rename_mapset_interactively(guiparent, grassdb, location, mapset):
 def rename_location_interactively(guiparent, grassdb, location):
     """Rename location with user interaction.
 
-    If current location found, rename operation is not performed.
-
-    Exceptions during renaming are handled in this function.
+    Exceptions during renaming are handled in get_reasons_location_not_removable
+    function.
 
     Returns newlocation if there was a change or None if the location cannot be
-    renamed (see above the possible reasons) or if another error was encountered.
+    renamed (see reasons given by get_reasons_location_not_removable
+    function) or if another error was encountered.
     """
     newlocation = None
 
@@ -456,10 +451,10 @@ def rename_location_interactively(guiparent, grassdb, location):
         dlg = wx.MessageDialog(
             parent=guiparent,
             message=_(
-                "Cannot rename the location for the following reasons:\n\n"
-                "{}\n\n"
+                "Cannot rename location <{location}> for the following reasons:\n\n"
+                "{reasons}\n\n"
                 "No location will be renamed."
-            ).format("\n".join(messages)),
+            ).format(location=location, reasons="\n".join(messages)),
             caption=_("Unable to rename selected location"),
             style=wx.OK | wx.ICON_WARNING
         )
@@ -529,14 +524,14 @@ def delete_mapsets_interactively(guiparent, mapsets):
 
     Parameter *mapsets* is a list of tuples (database, location, mapset).
 
-    If PERMANENT or current mapset found, delete operation is not performed.
+    Exceptions during deletation are handled in get_reasons_mapsets_not_removable
+    function.
 
-    Exceptions during deletation are handled in this function.
-
-    Returns True if there was a change, i.e., all mapsets were successfuly deleted
-    or at least one mapset was deleted. Returns False if one or more mapsets cannot be
-    deleted (see above the possible reasons) or if an error was encountered when
-    deleting the first mapset in the list.
+    Returns True if there was a change, i.e., all mapsets were successfuly
+    deleted or at least one mapset was deleted.
+    Returns False if one or more mapsets cannot be deleted (see reasons given
+    by get_reasons_mapsets_not_removable function) or if an error was
+    encountered when deleting the first mapset in the list.
     """
     deletes = []
     modified = False
@@ -548,13 +543,14 @@ def delete_mapsets_interactively(guiparent, mapsets):
             parent=guiparent,
             message=_(
                 "Cannot delete one or more mapsets for the following reasons:\n\n"
-                "{}\n\n"
+                "{reasons}\n\n"
                 "No mapsets will be deleted."
-            ).format("\n".join(messages)),
+            ).format(reasons="\n".join(messages)),
             caption=_("Unable to delete selected mapsets"),
             style=wx.OK | wx.ICON_WARNING
         )
         dlg.ShowModal()
+        dlg.Destroy()
         return modified
 
     # No error occurs, create list of mapsets for deleting
@@ -568,9 +564,9 @@ def delete_mapsets_interactively(guiparent, mapsets):
         message=_(
             "Do you want to continue with deleting"
             " one or more of the following mapsets?\n\n"
-            "{}\n\n"
+            "{deletes}\n\n"
             "All maps included in these mapsets will be permanently deleted!"
-        ).format("\n".join(deletes)),
+        ).format(deletes="\n".join(deletes)),
         caption=_("Delete selected mapsets"),
         style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
     )
@@ -613,14 +609,14 @@ def delete_locations_interactively(guiparent, locations):
 
     Parameter *locations* is a list of tuples (database, location).
 
-    If current location found, delete operation is not performed.
+    Exceptions during deletation are handled in get_reasons_locations_not_removable
+    function.
 
-    Exceptions during deletation are handled in this function.
-
-    Returns True if there was a change, i.e., all locations were successfuly deleted
-    or at least one location was deleted. Returns False if one or more locations cannot be
-    deleted (see above the possible reasons) or if an error was encountered when
-    deleting the first location in the list.
+    Returns True if there was a change, i.e., all locations were successfuly
+    deleted or at least one location was deleted.
+    Returns False if one or more locations cannot be deleted (see reasons given
+    by get_reasons_locations_not_removable function) or if an error was
+    encountered when deleting the first location in the list.
     """
     deletes = []
     modified = False
@@ -632,13 +628,14 @@ def delete_locations_interactively(guiparent, locations):
             parent=guiparent,
             message=_(
                 "Cannot delete one or more locations for the following reasons:\n\n"
-                "{}\n\n"
+                "{reasons}\n\n"
                 "No locations will be deleted."
-            ).format("\n".join(messages)),
+            ).format(reasons="\n".join(messages)),
             caption=_("Unable to delete selected locations"),
             style=wx.OK | wx.ICON_WARNING
         )
         dlg.ShowModal()
+        dlg.Destroy()
         return modified
 
     # No error occurs, create list of locations for deleting
@@ -652,9 +649,9 @@ def delete_locations_interactively(guiparent, locations):
         message=_(
             "Do you want to continue with deleting"
             " one or more of the following locations?\n\n"
-            "{}\n\n"
+            "{deletes}\n\n"
             "All mapsets included in these locations will be permanently deleted!"
-        ).format("\n".join(deletes)),
+        ).format(deletes="\n".join(deletes)),
         caption=_("Delete selected locations"),
         style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
     )
@@ -708,9 +705,9 @@ def delete_grassdb_interactively(guiparent, grassdb):
             parent=guiparent,
             message=_(
                 "Cannot delete GRASS database from disk for the following reason:\n\n"
-                "{}\n\n"
+                "{issue}\n\n"
                 "GRASS database will not be deleted."
-            ).format(issue),
+            ).format(issue=issue),
             caption=_("Unable to delete selected GRASS database"),
             style=wx.OK | wx.ICON_WARNING
         )
@@ -721,9 +718,9 @@ def delete_grassdb_interactively(guiparent, grassdb):
             message=_(
                 "Do you want to delete"
                 " the following GRASS database from disk?\n\n"
-                "{}\n\n"
+                "{grassdb}\n\n"
                 "The directory will be permanently deleted!"
-            ).format(grassdb),
+            ).format(grassdb=grassdb),
             caption=_("Delete selected GRASS database"),
             style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
         )
