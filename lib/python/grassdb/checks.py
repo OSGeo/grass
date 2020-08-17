@@ -86,6 +86,15 @@ def get_mapset_owner(mapset_path):
         return None
 
 
+def get_gislock_owner(lock_path):
+    """Returns gislock owner name or None if owner name unknown"""
+    try:
+        path = Path(lock_path)
+        return path.owner()
+    except KeyError:
+        return None
+
+
 def is_mapset_locked(mapset_path):
     """Check if the mapset is locked"""
     lock_name = ".gislock"

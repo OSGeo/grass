@@ -25,8 +25,9 @@ from grass.script import gisenv
 from grass.grassdb.checks import (
     mapset_exists,
     location_exists,
-    get_lockfile_if_present)
-from grass.grassdb.create import create_mapset, get_current_user
+    get_lockfile_if_present,
+    get_gislock_owner)
+from grass.grassdb.create import create_mapset, get_default_mapset_name
 from grass.grassdb.manage import (
     delete_mapset,
     delete_location,
@@ -200,7 +201,7 @@ def create_mapset_interactively(guiparent, grassdb, location):
     """
     dlg = MapsetDialog(
         parent=guiparent,
-        default=get_current_user(),
+        default=get_default_mapset_name(),
         message=_("Name for the new mapset:"),
         caption=_("Create new mapset"),
         database=grassdb,
@@ -705,12 +706,12 @@ def can_switch_mapset_interactively(guiparent, grassdb, location, mapset):
     mapset or if an error was encountered.
     """
     can_switch = True
-
-    user = get_current_user()
     lockfile = get_lockfile_if_present(grassdb, location, mapset)
-    timestamp = (datetime.datetime.fromtimestamp(
-        os.path.getmtime(lockfile))).replace(microsecond=0)
+
     if lockfile:
+        user = get_gislock_owner(lockfile)
+        timestamp = (datetime.datetime.fromtimestamp(
+                os.path.getmtime(lockfile))).replace(microsecond=0)
         dlg = wx.MessageDialog(
             parent=guiparent,
             message=_("User {user} is already running GRASS in selected mapset "

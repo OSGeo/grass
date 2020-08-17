@@ -30,8 +30,8 @@ def create_mapset(database, location, mapset):
     # os.chmod(os.path.join(database,location,mapset,'WIND'), 0644)
 
 
-def get_current_user():
-    """Returns current user."""
+def get_default_mapset_name():
+    """Returns default mapset name."""
     try:
         result = getpass.getuser()
         # Raise error if not ascii (not valid mapset name).
