@@ -14,15 +14,23 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Stepan Turek <stepan.turek seznam.cz> (handlers support)
 """
+
+from ctypes import c_char_p, pointer
+
 import wx
 
 from grass import script as grass
+from grass.lib.vector import GV_BOUNDARY, GV_LINE, GV_LINES, Map_info, \
+    Vect_close, Vect_get_line_type, Vect_get_num_lines, Vect_line_alive, \
+    Vect_line_length, Vect_new_cats_struct, Vect_new_line_struct, \
+    Vect_open_old, Vect_read_line
 from grass.pydispatch.signal import Signal
 
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from gui_core.dialogs import CreateNewVector, VectorDialog
 from gui_core.wrap import PseudoDC, Menu
 from vdigit.preferences import VDigitSettingsDialog
+from vnet.vnet_utils import ParseMapStr
 from core.debug import Debug
 from core.settings import UserSettings
 from core.gcmd import GError, RunCommand
@@ -858,6 +866,62 @@ class VDigitToolbar(BaseToolbar):
 
         event.Skip()
 
+    def _topoZeroLengthCheck(self, map_name):
+        """Topology check for lines or boundaries of zero length
+
+        :param str map_name: full vector map name
+
+        :return None/tuple:
+
+        None: topology isn't available for vector map
+
+        tuple: (number of zero lines, number of zero boundaries)
+        """
+
+        map_name, mapset = ParseMapStr(map_name)
+
+        map = pointer(Map_info())
+        ret = Vect_open_old(map,
+                            c_char_p(grass.encode(map_name)),
+                            c_char_p(grass.encode(mapset)))
+        if ret == 1:
+            Vect_close(map)
+        if ret != 2:
+            return None
+
+        points = Vect_new_line_struct()
+        cats = Vect_new_cats_struct()
+        n_zero_lines = n_zero_boundaries = 0
+        nlines = Vect_get_num_lines(map)
+        for line in range(1, nlines + 1):
+            if not Vect_line_alive(map, line):
+                continue
+            ltype = Vect_get_line_type(map, line)
+            if ltype <= GV_LINES:
+                Vect_read_line(map, points, cats, line)
+                length = Vect_line_length(points)
+                if length == 0:
+                    if ltype == GV_LINES:
+                        n_zero_lines += 1
+                    elif ltype == GV_BOUNDARY:
+                        n_zero_boundaries +=1
+        Vect_close(map)
+        return n_zero_lines, n_zero_boundaries
+
+    def _cleanZeroLength(self, map_name):
+        """Clean lines or boundaries of zero length
+
+        :param str map_name: full vector map name
+        """
+
+        output = grass.tempname(length=12, lowercase=True)
+        RunCommand('v.clean', type='line,boundary', tool='rmline',
+                   thres=0.00, input=map_name,
+                   output=output, quiet=True)
+        RunCommand('g.rename',
+                   vector=[output, map_name.split('@')[0]],
+                   quiet=True, overwrite=True)
+
     def StartEditing(self, mapLayer):
         """Start editing selected vector map layer.
 
@@ -881,6 +945,43 @@ class VDigitToolbar(BaseToolbar):
                 RunCommand('v.build', map=mapLayer.GetName())
             else:
                 return
+
+        # check and clean zero length lines, boundaries
+        zero_length = self._topoZeroLengthCheck(
+            map_name=mapLayer.GetName(),
+        )
+
+        if zero_length is None:
+            return
+        else:
+            ltype = None
+            if zero_length[0] > 0 and zero_length[1] == 0:
+                    ltype = 'line(s)'
+            elif zero_length[1] > 0 and zero_length[0] == 0:
+                    ltype = 'boundary(ies)'
+            elif zero_length[0] > 0 and zero_length[1] > 0:
+                ltype = 'line(s)/boundary(ies)'
+
+            if ltype:
+                clean_dlg = wx.MessageDialog(
+                    self.GetParent(),
+                    message=_(
+                        "The vector map contains zero-length {ltype}, "
+                        "to continue editing, you need to clean them. "
+                        "Do you want to clean them?".format(ltype=ltype)
+                    ),
+                    caption=_('Clean?'),
+                    style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
+                )
+                if not clean_dlg.ShowModal() == wx.ID_YES:
+                    clean_dlg.Destroy()
+                    return
+
+                clean_dlg.Destroy()
+
+                wait = wx.BusyCursor()
+                self._cleanZeroLength(map_name=mapLayer.GetName())
+                del wait
 
         # deactive layer
         self.Map.ChangeLayerActive(mapLayer, False)
