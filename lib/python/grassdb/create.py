@@ -31,7 +31,7 @@ def create_mapset(database, location, mapset):
 
 
 def get_default_mapset_name():
-    """Returns default name for a mapset."""
+    """Returns default name for mapset."""
     try:
         result = getpass.getuser()
         # Raise error if not ascii (not valid mapset name).
