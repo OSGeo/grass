@@ -154,7 +154,7 @@ def get_reasons_mapsets_not_removable(mapsets, check_permanent):
     Parameter *check_permanent* is True of False. It depends on whether
     we want to check for permanent mapset or not.
 
-    Returns messages as list if there were any failed checks or None whether not.
+    Returns messages as list if there were any failed checks, otherwise empty list.
     """
     messages = []
     for grassdb, location, mapset in mapsets:
@@ -201,7 +201,7 @@ def get_reasons_locations_not_removable(locations):
 
     Parameter *locations* is a list of tuples (database, location).
 
-    Returns messages as list if there were any failed checks or None whether not.
+    Returns messages as list if there were any failed checks, otherwise empty list.
     """
     messages = []
     for grassdb, location in locations:
@@ -212,7 +212,7 @@ def get_reasons_locations_not_removable(locations):
 def get_reasons_location_not_removable(grassdb, location):
     """Get reasons why one location cannot be removed.
 
-    Returns messages as list if there were any failed checks or None whether not.
+    Returns messages as list if there were any failed checks, otherwise empty list.
     """
     messages = []
     location_path = os.path.join(grassdb, location)
@@ -249,7 +249,7 @@ def get_reasons_location_not_removable(grassdb, location):
 def get_reasons_grassdb_not_removable(grassdb):
     """Get reasons why one grassdb cannot be removed.
 
-    Returns messages as list if there were any failed checks or None whether not.
+    Returns messages as list if there were any failed checks, otherwise empty list.
     """
     messages = []
     genv = gisenv()
@@ -730,7 +730,7 @@ def delete_grassdb_interactively(guiparent, grassdb):
                 "{reasons}\n\n"
                 "GRASS database will not be deleted."
             ).format(reasons="\n".join(messages)),
-            caption=_("Unable to delete selected locations"),
+            caption=_("Unable to delete selected GRASS database"),
             style=wx.OK | wx.ICON_WARNING
         )
         dlg.ShowModal()
