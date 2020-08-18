@@ -1493,7 +1493,7 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Remove GRASS database from data catalog"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRemoveGrassDb, item)
-        if self._restricted or self.selected_grassdb[0].data['name'] == genv['GISDBASE']:
+        if self.selected_grassdb[0].data['name'] == genv['GISDBASE']:
             item.Enable(False)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete GRASS database from disk"))
