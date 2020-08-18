@@ -43,6 +43,9 @@ if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
 
 from grass.script import core as grass
 from grass.script.utils import decode
+from startup.guiutils import (
+    can_switch_mapset_interactive
+)
 
 from core.gcmd import RunCommand, GError, GMessage
 from core.settings import UserSettings, GetDisplayVectSettings
@@ -1062,6 +1065,8 @@ class GMFrame(wx.Frame):
     def OnChangeLocation(self, event):
         """Change current location"""
         dlg = LocationDialog(parent=self)
+        gisenv = grass.gisenv()
+
         if dlg.ShowModal() == wx.ID_OK:
             location, mapset = dlg.GetValues()
             dlg.Destroy()
@@ -1072,7 +1077,11 @@ class GMFrame(wx.Frame):
                     message=_(
                         "No location/mapset provided. Operation canceled."))
                 return  # this should not happen
-            self.ChangeLocation(location, mapset)
+            if can_switch_mapset_interactive(self,
+                                             gisenv['GISDBASE'],
+                                             location,
+                                             mapset):
+                self.ChangeLocation(location, mapset)
 
     def ChangeLocation(self, location, mapset, dbase=None):
         if dbase:
@@ -1132,6 +1141,7 @@ class GMFrame(wx.Frame):
     def OnChangeMapset(self, event):
         """Change current mapset"""
         dlg = MapsetDialog(parent=self)
+        gisenv = grass.gisenv()
 
         if dlg.ShowModal() == wx.ID_OK:
             mapset = dlg.GetMapset()
@@ -1141,7 +1151,11 @@ class GMFrame(wx.Frame):
                 GError(parent=self,
                        message=_("No mapset provided. Operation canceled."))
                 return
-            self.ChangeMapset(mapset)
+            if can_switch_mapset_interactive(self,
+                                             gisenv['GISDBASE'],
+                                             gisenv['LOCATION_NAME'],
+                                             mapset):
+                self.ChangeMapset(mapset)
 
     def ChangeMapset(self, mapset):
         """Change current mapset and update map display title"""

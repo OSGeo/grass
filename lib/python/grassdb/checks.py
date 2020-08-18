@@ -11,6 +11,7 @@ for details.
 
 
 import os
+import datetime
 from pathlib import Path
 from grass.script import gisenv
 
@@ -122,6 +123,24 @@ def get_lockfile_if_present(database, location, mapset):
     if os.path.isfile(lockfile):
         return lockfile
     return None
+
+
+def get_mapset_lock_info(mapset_path):
+    """Get information about .gislock file.
+    Assumes lock file exists, use is_mapset_locked to find out.
+    Returns information as a dictionary with keys
+    'owner' (None if unknown), 'lockpath', and 'timestamp'.
+    """
+    info = {}
+    lock_name = ".gislock"
+    info['lockpath'] = os.path.join(mapset_path, lock_name)
+    try:
+        info['owner'] = Path(info['lockpath']).owner()
+    except KeyError:
+        info['owner'] = None
+    info['timestamp'] = (datetime.datetime.fromtimestamp(
+        os.path.getmtime(info['lockpath']))).replace(microsecond=0)
+    return info
 
 
 def can_start_in_mapset(mapset_path, ignore_lock=False):
