@@ -38,11 +38,13 @@ from grass.grassdb.manage import (
     rename_location,
 )
 
+from core.utils import GetListOfLocations
 from core import globalvar
 from core.gcmd import GError, GMessage, DecodeString, RunCommand
 from gui_core.dialogs import TextEntryDialog
 from location_wizard.dialogs import RegionDef
 from gui_core.widgets import GenericMultiValidator
+
 
 
 def SetSessionMapset(database, location, mapset):
@@ -242,6 +244,31 @@ def get_reasons_location_not_removable(grassdb, location):
     messages += get_reasons_mapsets_not_removable(mapsets, check_permanent=False)
 
     gs.try_remove(tmp_gisrc_file)
+    return messages
+
+
+def get_reasons_grassdb_not_removable(grassdb):
+    """Get reasons why one grassdb cannot be removed.
+
+    Returns messages as list if there were any failed checks or None whether not.
+    """
+    messages = []
+    genv = gisenv()
+
+    # Check if grassdb is current
+    if grassdb == genv['GISDBASE']:
+        messages.append(_("GRASS database <{grassdb}> is the current database.").format(
+            grassdb=grassdb))
+        return messages
+
+    g_locations = GetListOfLocations(grassdb)
+
+    # Append to the list of tuples
+    locations = []
+    for g_location in g_locations:
+        locations.append((grassdb, g_location))
+    messages = get_reasons_locations_not_removable(locations)
+
     return messages
 
 
@@ -692,23 +719,19 @@ def delete_grassdb_interactively(guiparent, grassdb):
     cannot be deleted (see above the possible reasons).
     """
 
-    genv = gisenv()
-    issue = None
     deleted = False
 
-    # Check for current grassdb
-    if (grassdb == genv['GISDBASE']):
-        issue = _("<{}> is current GRASS database.").format(grassdb)
-
-    if issue:
+    # Check selected grassdb
+    messages = get_reasons_grassdb_not_removable(grassdb)
+    if messages:
         dlg = wx.MessageDialog(
             parent=guiparent,
             message=_(
                 "Cannot delete GRASS database from disk for the following reason:\n\n"
-                "{issue}\n\n"
+                "{reasons}\n\n"
                 "GRASS database will not be deleted."
-            ).format(issue=issue),
-            caption=_("Unable to delete selected GRASS database"),
+            ).format(reasons="\n".join(messages)),
+            caption=_("Unable to delete selected locations"),
             style=wx.OK | wx.ICON_WARNING
         )
         dlg.ShowModal()
