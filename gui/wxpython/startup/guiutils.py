@@ -46,7 +46,6 @@ from location_wizard.dialogs import RegionDef
 from gui_core.widgets import GenericMultiValidator
 
 
-
 def SetSessionMapset(database, location, mapset):
     """Sets database, location and mapset for the current session"""
     RunCommand("g.gisenv", set="GISDBASE=%s" % database)
