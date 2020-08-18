@@ -173,7 +173,7 @@ def get_reason_mapset_not_removable(grassdb, location, mapset, check_permanent):
     Parameter *check_permanent* is True of False. It depends on whether
     we want to check for permanent mapset or not.
 
-    Returns message as string if there was failed check or empty string whether not.
+    Returns message as string if there was failed check, otherwise None.
     """
     message = None
     mapset_path = os.path.join(grassdb, location, mapset)
