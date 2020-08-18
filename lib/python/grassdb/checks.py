@@ -109,13 +109,17 @@ def get_lockfile_if_present(database, location, mapset):
 
 def get_mapset_lock_info(mapset_path):
     """Get information about .gislock file.
-
-    Returns information as a dictionary.
+    Assumes lock file exists, use is_mapset_locked to find out.
+    Returns information as a dictionary with keys
+    'owner' (None if unknown), 'lockpath', and 'timestamp'.
     """
     info = {}
     lock_name = ".gislock"
     info['lockpath'] = os.path.join(mapset_path, lock_name)
-    info['owner'] = Path(info['lockpath']).owner()
+    try:
+        info['owner'] = Path(info['lockpath']).owner()
+    except KeyError:
+        info['owner'] = None
     info['timestamp'] = (datetime.datetime.fromtimestamp(
         os.path.getmtime(info['lockpath']))).replace(microsecond=0)
     return info
