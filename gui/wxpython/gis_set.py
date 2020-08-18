@@ -39,7 +39,7 @@ from core.utils import GetListOfLocations, GetListOfMapsets
 from startup.utils import (
     get_possible_database_path,
     create_database_directory,
-    get_startup_location)
+    create_startup_location_in_grassdb)
 from startup.guiutils import (SetSessionMapset,
                               create_mapset_interactively,
                               create_location_interactively,
@@ -514,8 +514,13 @@ class GRASSStartup(wx.Frame):
 
         # If nothing found, try to create GRASS directory and copy startup loc
         if path is None:
-            path = create_database_directory()
-            grassdatabase, location, mapset_name = get_startup_location(path)
+            grassdb = create_database_directory()
+            location = "world_latlong_wgs84"
+            mapset_name = create_startup_location_in_grassdb(grassdb,
+                                                             location)
+            if mapset_name:
+                self.SetLocation(grassdb, location, mapset_name)
+                self.ExitSuccessfully()
 
         if path:
             try:
@@ -540,9 +545,6 @@ class GRASSStartup(wx.Frame):
                 'your home directory. '
                 'Press Browse button to select the directory.'))
 
-        self.SetLocation(grassdatabase, location, mapset_name)
-        self.ExitSuccessfully()
-
     def OnCreateLocation(self, event):
         """Location wizard started"""
         grassdatabase, location, mapset = (
@@ -559,7 +561,6 @@ class GRASSStartup(wx.Frame):
                 self.listOfLocations.index(location))
             self.lbmapsets.SetSelection(0)
             self.SetLocation(grassdatabase, location, mapset)
-
 
     # the event can be refactored out by using lambda in bind
     def OnRenameMapset(self, event):

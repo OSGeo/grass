@@ -106,35 +106,34 @@ def _get_startup_location_in_distribution():
     return None
 
 
-def _copy_startup_location(grassdatabase, startup_location):
+def _copy_startup_location(startup_location, location_in_grassdb):
     """Copy the simple startup_location with some data to GRASS database.
 
-    Returns path to startup location if successfully copied or None
+    Returns True if successfully copied or False
     when an error was encountered.
     """
-    src = startup_location
-    dst = os.path.join(grassdatabase, "world_latlong_wgs84")
-
     # Copy source startup location into GRASS database
     try:
-        copytree(src, dst, ignore=ignore_patterns('*.tmpl','Makefile*'))
-        return dst
+        copytree(startup_location, location_in_grassdb,
+                 ignore=ignore_patterns('*.tmpl', 'Makefile*'))
+        return True
     except (IOError, OSError):
         pass
-    return None
+    return False
 
 
 def _create_startup_mapset(location_path):
     """Create the new empty startup mapset named after user.
 
-    Returns True if successfully created or False when an error was encountered.
+    Returns new mapset name if successfully created or None when
+    an error was encountered.
     """
-    name = get_default_mapset_name()
-    mapset_path = os.path.join(location_path, name)
+    mapset_name = default_name = get_default_mapset_name()
+    mapset_path = os.path.join(location_path, mapset_name)
     counter = 2
 
     while os.path.exists(mapset_path):
-        mapset_name = _("{name}_{counter}").format(name=name,
+        mapset_name = _("{name}_{counter}").format(name=default_name,
                                                    counter=str(counter))
         mapset_path = os.path.join(location_path, mapset_name)
         counter += 1
@@ -143,24 +142,27 @@ def _create_startup_mapset(location_path):
     try:
         grassdatabase, location = os.path.split(location_path)
         create_mapset(grassdatabase, location, mapset_name)
-        return grassdatabase, location, mapset_name
+        return mapset_name
     except (IOError, OSError):
         pass
     return None
 
 
-def get_startup_location(grassdatabase):
-    """Wrapping function for managing startup location.
+def create_startup_location_in_grassdb(grassdatabase, startup_location_name):
+    """Wrapping function for creating whole new startup location in grassdb.
 
-    Returns the copied location on success and None otherwise.
-    Internally resolves all the cases (no location to copy, copying failed
-    and an existing user's copy of the location)."""
+    Returns the newly created mapset on success. Returns None If no location
+    to copy or copying failed."""
 
     # Find out if startup location exists
-    location = _get_startup_location_in_distribution()
-    if location:
-        location_path =_copy_startup_location(grassdatabase, location)
-        if location_path:
-            grassdatabase, location, mapset_name = _create_startup_mapset(location_path)
-            return grassdatabase, location, mapset_name
+    startup_location = _get_startup_location_in_distribution()
+    if not startup_location:
+        return None
+
+    # Copy the simple startup_location with some data to GRASS database.
+    mapset = None
+    location_in_grassdb = os.path.join(grassdatabase, startup_location_name)
+    if _copy_startup_location(startup_location, location_in_grassdb):
+        mapset = _create_startup_mapset(location_in_grassdb)
+        return mapset
     return None
