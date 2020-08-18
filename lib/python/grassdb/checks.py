@@ -11,6 +11,7 @@ for details.
 
 
 import os
+import datetime
 from pathlib import Path
 
 
@@ -86,15 +87,6 @@ def get_mapset_owner(mapset_path):
         return None
 
 
-def get_gislock_owner(lock_path):
-    """Returns gislock owner name or None if owner name unknown"""
-    try:
-        path = Path(lock_path)
-        return path.owner()
-    except KeyError:
-        return None
-
-
 def is_mapset_locked(mapset_path):
     """Check if the mapset is locked"""
     lock_name = ".gislock"
@@ -113,6 +105,20 @@ def get_lockfile_if_present(database, location, mapset):
     if os.path.isfile(lockfile):
         return lockfile
     return None
+
+
+def get_mapset_lock_info(mapset_path):
+    """Get information about .gislock file.
+
+    Returns information as a dictionary.
+    """
+    info = {}
+    lock_name = ".gislock"
+    info['lockpath'] = os.path.join(mapset_path, lock_name)
+    info['owner'] = Path(info['lockpath']).owner()
+    info['timestamp'] = (datetime.datetime.fromtimestamp(
+        os.path.getmtime(info['lockpath']))).replace(microsecond=0)
+    return info
 
 
 def can_start_in_mapset(mapset_path, ignore_lock=False):

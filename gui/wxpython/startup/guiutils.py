@@ -18,15 +18,14 @@ This is for code which depend on something from GUI (wx or wxGUI).
 import os
 import sys
 import wx
-import datetime
 
 import grass.script as gs
 from grass.script import gisenv
 from grass.grassdb.checks import (
     mapset_exists,
     location_exists,
-    get_lockfile_if_present,
-    get_gislock_owner)
+    is_mapset_locked,
+    get_mapset_lock_info)
 from grass.grassdb.create import create_mapset, get_default_mapset_name
 from grass.grassdb.manage import (
     delete_mapset,
@@ -697,7 +696,7 @@ def delete_grassdb_interactively(guiparent, grassdb):
     return deleted
 
 
-def can_switch_mapset_interactively(guiparent, grassdb, location, mapset):
+def can_switch_mapset_interactive(guiparent, grassdb, location, mapset):
     """
     Checks if mapset is locked and offers to remove the lock file.
 
@@ -706,39 +705,41 @@ def can_switch_mapset_interactively(guiparent, grassdb, location, mapset):
     mapset or if an error was encountered.
     """
     can_switch = True
-    lockfile = get_lockfile_if_present(grassdb, location, mapset)
+    mapset_path = os.path.join(grassdb, location, mapset)
 
-    if lockfile:
-        user = get_gislock_owner(lockfile)
-        timestamp = (datetime.datetime.fromtimestamp(
-            os.path.getmtime(lockfile))).replace(microsecond=0)
+    if is_mapset_locked(mapset_path):
+        info = get_mapset_lock_info(mapset_path)
+        user = info['owner']
+        lockpath = info['lockpath']
+        timestamp = info['timestamp']
+
         dlg = wx.MessageDialog(
             parent=guiparent,
             message=_("User {user} is already running GRASS in selected mapset "
-                      "<{mapset}>\n (file {lockfile} created {timestamp} "
+                      "<{mapset}>\n (file {lockpath} created {timestamp} "
                       "found).\n\n"
                       "Concurrent use not allowed.\n\n"
                       "Do you want to stay in the current mapset or remove "
                       ".gislock and switch to selected mapset?"
                       ).format(user=user,
                                mapset=mapset,
-                               lockfile=lockfile,
+                               lockpath=lockpath,
                                timestamp=timestamp),
-            caption=_("Lock file found"),
+            caption=_("Mapset is in use"),
             style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
         )
-        dlg.SetYesNoLabels("&Switch to selected mapset",
-                           "&Stay in current mapset")
+        dlg.SetYesNoLabels("S&witch to selected mapset",
+                           "S&tay in current mapset")
         if dlg.ShowModal() == wx.ID_YES:
             # Remove lockfile
             try:
-                os.remove(lockfile)
+                os.remove(lockpath)
             except IOError as e:
                 wx.MessageBox(
                     parent=guiparent,
                     caption=_("Error when removing lock file"),
-                    message=_("Unable to remove {lockfile}.\n\n Details: {error}."
-                              ).format(lockfile=lockfile,
+                    message=_("Unable to remove {lockpath}.\n\n Details: {error}."
+                              ).format(lockpath=lockpath,
                                        error=e),
                     style=wx.OK | wx.ICON_ERROR | wx.CENTRE
                 )
