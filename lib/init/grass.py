@@ -1182,6 +1182,22 @@ def load_gisrc(gisrc, gisrcrc):
     return mapset_settings
 
 
+def can_start_in_gisrc_mapset(gisrc, ignore_lock=False):
+    """Check if a mapset from a gisrc file is usable for a new session"""
+    from grass.grassdb.checks import can_start_in_mapset
+
+    mapset_settings = MapsetSettings()
+    kv = read_gisrc(gisrc)
+    mapset_settings.gisdbase = kv.get('GISDBASE')
+    mapset_settings.location = kv.get('LOCATION_NAME')
+    mapset_settings.mapset = kv.get('MAPSET')
+    if not mapset_settings.is_valid():
+        return False
+    return can_start_in_mapset(
+        mapset_path=mapset_settings.full_mapset, ignore_lock=ignore_lock
+    )
+
+
 # load environmental variables from grass_env_file
 def load_env(grass_env_file):
     if not os.access(grass_env_file, os.R_OK):
@@ -2286,9 +2302,12 @@ def main():
 
     # Parsing argument to get LOCATION
     if not params.mapset and not params.tmp_location:
+        last_mapset_usable = can_start_in_gisrc_mapset(
+            gisrc=gisrc, ignore_lock=params.force_gislock_removal
+        )
         # Try interactive startup
         # User selects LOCATION and MAPSET if not set
-        if not set_mapset_interactive(grass_gui):
+        if not last_mapset_usable and not set_mapset_interactive(grass_gui):
             # No GUI available, update gisrc file
             fatal(_("<{0}> requested, but not available. Run GRASS in text "
                     "mode (--text) or install missing package (usually "
