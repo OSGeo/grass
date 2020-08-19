@@ -1077,11 +1077,7 @@ class GMFrame(wx.Frame):
                     message=_(
                         "No location/mapset provided. Operation canceled."))
                 return  # this should not happen
-            if can_switch_mapset_interactive(self,
-                                             gisenv['GISDBASE'],
-                                             location,
-                                             mapset):
-                self.ChangeLocation(location, mapset)
+            self.SwitchMapset(gisenv['GISDBASE'], location, mapset)
 
     def ChangeLocation(self, location, mapset, dbase=None):
         if dbase:
@@ -1151,11 +1147,9 @@ class GMFrame(wx.Frame):
                 GError(parent=self,
                        message=_("No mapset provided. Operation canceled."))
                 return
-            if can_switch_mapset_interactive(self,
-                                             gisenv['GISDBASE'],
-                                             gisenv['LOCATION_NAME'],
-                                             mapset):
-                self.ChangeMapset(mapset)
+            self.SwitchMapset(gisenv['GISDBASE'],
+                              gisenv['LOCATION_NAME'],
+                              mapset)
 
     def ChangeMapset(self, mapset):
         """Change current mapset and update map display title"""
@@ -1171,6 +1165,27 @@ class GMFrame(wx.Frame):
             for display in self.GetMapDisplay(onlyCurrent=False):
                 display.SetTitleWithName(str(dispId))  # TODO: signal ?
                 dispId += 1
+
+    def SwitchMapset(self, grassdb, location, mapset):
+        """Switch to location and mapset"""
+        gisenv = grass.gisenv()
+        if can_switch_mapset_interactive(self, grassdb, location, mapset):
+            # Switch to mapset in the same location
+            if (grassdb == gisenv['GISDBASE'] and location == gisenv['LOCATION_NAME']):
+                self.datacatalog.changeMapset.emit(mapset=mapset)
+            # Switch to mapset in the same grassdb
+            elif grassdb == gisenv['GISDBASE']:
+                self.datacatalog.changeLocation.emit(mapset=mapset,
+                                                     location=location,
+                                                     dbase=None)
+            # Switch to mapset in a different grassdb
+            else:
+                self.datacatalog.changeLocation.emit(mapset=mapset,
+                                                     location=location,
+                                                     dbase=grassdb)
+            self.datacatalog.tree.UpdateCurrentDbLocationMapsetNode()
+            self.datacatalog.tree.ExpandCurrentMapset()
+            self.datacatalog.tree.RefreshItems()
 
     def OnChangeCWD(self, event=None, cmd=None):
         """Change current working directory
