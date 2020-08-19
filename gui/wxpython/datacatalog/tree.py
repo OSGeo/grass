@@ -622,6 +622,8 @@ class DataCatalogTree(TreeView):
             self._popupMenuLocation()
         elif self.selected_grassdb[0] and not self.selected_location[0] and len(self.selected_grassdb) == 1:
             self._popupMenuGrassDb()
+        elif len(self.selected_grassdb) > 1 and not self.selected_location[0]:
+            self._popupMenuEmpty()
         elif len(self.selected_location) > 1 and not self.selected_mapset[0]:
             self._popupMenuMultipleLocations()
         elif len(self.selected_mapset) > 1:
