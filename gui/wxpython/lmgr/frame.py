@@ -1062,7 +1062,7 @@ class GMFrame(wx.Frame):
 
     def OnCreateMapset(self, event):
         """Create new mapset"""
-        db_node, loc_node, mapset_node  = self.datacatalog.tree.GetCurrentDbLocationMapsetNode()
+        db_node, loc_node, mapset_node = self.datacatalog.tree.GetCurrentDbLocationMapsetNode()
         self.datacatalog.tree.CreateMapset(db_node, loc_node)
 
     def OnLocationWizard(self, event):
