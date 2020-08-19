@@ -13,6 +13,7 @@ for details.
 import os
 import datetime
 from pathlib import Path
+from grass.script import gisenv
 
 
 def mapset_exists(database, location, mapset):
@@ -57,6 +58,23 @@ def is_location_valid(database, location):
     return os.access(
         os.path.join(database, location, "PERMANENT", "DEFAULT_WIND"), os.F_OK
     )
+
+
+def is_mapset_current(grassdb, location, mapset):
+    genv = gisenv()
+    if (grassdb == genv['GISDBASE'] and
+        location == genv['LOCATION_NAME'] and
+        mapset == genv['MAPSET']):
+        return True
+    return False
+
+
+def is_location_current(grassdb, location):
+    genv = gisenv()
+    if (grassdb == genv['GISDBASE'] and
+        location == genv['LOCATION_NAME']):
+        return True
+    return False
 
 
 def is_current_user_mapset_owner(mapset_path):
