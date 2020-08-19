@@ -483,59 +483,6 @@ class GMFrame(wx.Frame):
         if self.workspaceFile:
             self._setTitle()
 
-    def OnLocationWizard(self, event):
-        """Launch location wizard"""
-        from location_wizard.wizard import LocationWizard
-        from location_wizard.dialogs import RegionDef
-
-        gWizard = LocationWizard(parent=self,
-                                 grassdatabase=grass.gisenv()['GISDBASE'])
-        location = gWizard.location
-
-        if location is not None:
-            dlg = wx.MessageDialog(parent=self,
-                                   message=_('Location <%s> created.\n\n'
-                                             'Do you want to switch to the '
-                                             'new location?') % location,
-                                   caption=_("Switch to new location?"),
-                                   style=wx.YES_NO | wx.NO_DEFAULT |
-                                   wx.ICON_QUESTION | wx.CENTRE)
-
-            ret = dlg.ShowModal()
-            dlg.Destroy()
-            if ret == wx.ID_YES:
-                if RunCommand('g.mapset', parent=self,
-                              location=location,
-                              mapset='PERMANENT') != 0:
-                    return
-
-                # close current workspace and create new one
-                self.OnWorkspaceClose()
-                self.OnWorkspaceNew()
-                GMessage(parent=self,
-                         message=_("Current location is <%(loc)s>.\n"
-                                   "Current mapset is <%(mapset)s>.") %
-                         {'loc': location, 'mapset': 'PERMANENT'})
-
-                # code duplication with gis_set.py
-                dlg = wx.MessageDialog(
-                    parent=self,
-                    message=_(
-                        "Do you want to set the default "
-                        "region extents and resolution now?"),
-                    caption=_("Location <%s> created") %
-                    location,
-                    style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
-                dlg.CenterOnScreen()
-                if dlg.ShowModal() == wx.ID_YES:
-                    dlg.Destroy()
-                    defineRegion = RegionDef(self, location=location)
-                    defineRegion.CenterOnScreen()
-                    defineRegion.ShowModal()
-                    defineRegion.Destroy()
-                else:
-                    dlg.Destroy()
-
     def OnSettingsChanged(self):
         """Here can be functions which have to be called
         after receiving settingsChanged signal.
@@ -1115,28 +1062,13 @@ class GMFrame(wx.Frame):
 
     def OnCreateMapset(self, event):
         """Create new mapset"""
-        dlg = wx.TextEntryDialog(parent=self,
-                                 message=_('Enter name for new mapset:'),
-                                 caption=_('Create new mapset'))
+        db_node, loc_node, mapset_node  = self.datacatalog.tree.GetCurrentDbLocationMapsetNode()
+        self.datacatalog.tree.CreateMapset(db_node, loc_node)
 
-        if dlg.ShowModal() == wx.ID_OK:
-            mapset = dlg.GetValue()
-            if not mapset:
-                GError(parent=self,
-                       message=_("No mapset provided. Operation canceled."))
-                return
-
-            ret = RunCommand('g.mapset',
-                             parent=self,
-                             flags='c',
-                             mapset=mapset)
-            # ensure that DB connection is defined
-            ret += RunCommand('db.connect',
-                              parent=self,
-                              flags='c')
-            if ret == 0:
-                GMessage(parent=self,
-                         message=_("Current mapset is <%s>.") % mapset)
+    def OnLocationWizard(self, event):
+        """Create new location"""
+        db_node, loc_node, mapset_node = self.datacatalog.tree.GetCurrentDbLocationMapsetNode()
+        self.datacatalog.tree.CreateLocation(db_node)
 
     def OnChangeMapset(self, event):
         """Change current mapset"""
