@@ -26,11 +26,26 @@ which in turn take up less space than <em>DCELL</em>s (double precision floating
 A tilted plane in the North Carolina sample dataset region:
 
 <div class="code"><pre>
-g.region -d
+# set computational region
+g.region raster=elev_lid792_1m -p
+
+# get center coordinates as an example
 g.region -c
-r.plane myplane45 dip=45 az=90 east=527500.0 north=165000.0 \
-        elev=1000 type=FCELL
+# get terrain height at point
+r.what map=elev_lid792_1m coordinates=638650.0,220375.0
+# shows elevation: 116.7734
+
+# generate tilted plane
+r.plane myplane30 dip=30 az=75 east=638650.0 north=220375.0 \
+        elev=116.7734 type=FCELL
 </pre></div>
+
+<div align="center" style="margin: 10px">
+<a href="r_plane_3d.png">
+<img src="r_plane_3d.png" width="600" height="360" alt="r.plane example" border="0">
+</a><br>
+<i>Figure: Tilted plane shown in NVIZ along with elevation map</i>
+</div>
 
 
 <h2>AUTHOR</h2>
