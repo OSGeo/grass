@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
     double seg_size;
     int seg_mb, segments_in_memory;
     int have_mask;
+    char *memstr;
 
     int inrastfd, outrastfd;
     DCELL *drastbuf, dval;
@@ -149,7 +150,11 @@ int main(int argc, char *argv[])
     memory_opt->key = "memory";
     memory_opt->type = TYPE_INTEGER;
     memory_opt->required = NO;
-    memory_opt->answer = "300";
+    /* first check MEMORYMB in GISRC */
+    memstr = G_getenv_nofatal("MEMORYMB");
+    if (!memstr)
+       memstr = "300";
+    memory_opt->answer = memstr;
     memory_opt->label = _("Maximum memory to be used (in MB)");
     memory_opt->description = _("Cache size for raster rows");
 

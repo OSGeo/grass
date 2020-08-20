@@ -80,6 +80,7 @@ int main(int argc, char *argv[])
 
     struct Flag *c, *a, *pan_flag;
     struct GModule *module;
+    char *memstr;
 
     G_gisinit(argv[0]);
 
@@ -112,8 +113,13 @@ int main(int argc, char *argv[])
     mem->type = TYPE_DOUBLE;
     mem->key_desc = "memory in MB";
     mem->required = NO;
-    mem->answer = "300";
-    mem->description = _("Amount of memory to use in MB");
+    /* first check MEMORYMB in GISRC */
+    memstr = G_getenv_nofatal("MEMORYMB");
+    if (!memstr)
+       memstr = "300";
+    mem->answer = memstr;
+    mem->label = _("Maximum memory to be used (in MB)");
+    mem->description = _("Cache size for raster rows");
 
     ipolname = make_ipol_list();
 

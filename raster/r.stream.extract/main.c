@@ -67,6 +67,7 @@ int main(int argc, char *argv[])
     double seg2kb;
     int num_open_segs, num_open_array_segs, num_seg_total;
     double memory_divisor, heap_mem, disk_space;
+    char *memstr;
     const char *mapset;
 
     G_gisinit(argv[0]);
@@ -136,7 +137,11 @@ int main(int argc, char *argv[])
     input.memory->key = "memory";
     input.memory->type = TYPE_INTEGER;
     input.memory->required = NO;
-    input.memory->answer = "300";
+    /* first check MEMORYMB in GISRC */
+    memstr = G_getenv_nofatal("MEMORYMB");
+    if (!memstr)
+       memstr = "300";
+    input.memory->answer = memstr;
     input.memory->label = _("Maximum memory to be used (in MB)");
     input.memory->description = _("Cache size for raster rows");
 

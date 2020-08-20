@@ -37,6 +37,7 @@ int main(int argc, char *argv[])
     int cache_mb, use, value_type, type;
     double value;
     char *desc;
+    char *memstr;
 
     G_gisinit(argv[0]);
 
@@ -112,7 +113,11 @@ int main(int argc, char *argv[])
     memory->type = TYPE_INTEGER;
     memory->required = NO;
     memory->multiple = NO;
-    memory->answer = "300";
+    /* first check MEMORYMB in GISRC */
+    memstr = G_getenv_nofatal("MEMORYMB");
+    if (!memstr)
+       memstr = "300";
+    memory->answer = memstr;
     memory->label = _("Maximum memory to be used (in MB)");
     memory->description = _("Cache size for raster rows");
 

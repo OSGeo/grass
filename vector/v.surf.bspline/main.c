@@ -70,6 +70,7 @@ int main(int argc, char *argv[])
 	*stepN_opt, *lambda_f_opt, *type_opt, *dfield_opt, *col_opt, *mask_opt,
 	*memory_opt, *solver, *error, *iter;
     struct Flag *cross_corr_flag, *spline_step_flag;
+    char *memstr;
 
     struct Reg_dimens dims;
     struct Cell_head elaboration_reg, original_reg;
@@ -189,7 +190,11 @@ int main(int argc, char *argv[])
     memory_opt->key = "memory";
     memory_opt->type = TYPE_INTEGER;
     memory_opt->required = NO;
-    memory_opt->answer = "300";
+    /* first check MEMORYMB in GISRC */
+    memstr = G_getenv_nofatal("MEMORYMB");
+    if (!memstr)
+       memstr = "300";
+    memory_opt->answer = memstr;
     memory_opt->label = _("Maximum memory to be used (in MB)");
     memory_opt->description = _("Cache size for raster rows");
 

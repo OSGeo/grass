@@ -67,6 +67,7 @@ int main(int argc, char *argv[])
     struct Flag *flag_abs;
     struct Flag *flag_flat;
     struct GModule *module;
+    char *memstr;
 
     G_gisinit(argv[0]);
 
@@ -212,8 +213,13 @@ int main(int argc, char *argv[])
     opt16->key = "memory";
     opt16->type = TYPE_INTEGER;
     opt16->required = NO;
-    opt16->answer = "300";	/* 300MB default value, please keep r.terraflow in sync */
-    opt16->description = _("Maximum memory to be used with -m flag (in MB)");
+    /* first check MEMORYMB in GISRC */
+    memstr = G_getenv_nofatal("MEMORYMB");
+    if (!memstr)
+       memstr = "300";
+    opt16->answer = memstr;	/* 300MB default value, please keep r.terraflow in sync */
+    opt16->label = _("Maximum memory to be used with -m flag (in MB)");
+    opt16->description = _("Cache size for raster rows");
 
     flag_sfd = G_define_flag();
     flag_sfd->key = 's';

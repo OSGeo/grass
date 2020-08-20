@@ -193,6 +193,7 @@ int main(int argc, char *argv[])
     double peak = 0.0;
     int dtm_dsize, cost_dsize, nearest_size;
     double disk_mb, mem_mb, pq_mb;
+    char *memstr;
     int dir_bin;
     DCELL mysolvedir[2], solvedir[2];
 
@@ -301,8 +302,13 @@ int main(int argc, char *argv[])
     opt10->key_desc = "value";
     opt10->required = NO;
     opt10->multiple = NO;
-    opt10->answer = "300";
+    /* first check MEMORYMB in GISRC */
+    memstr = G_getenv_nofatal("MEMORYMB");
+    if (!memstr)
+       memstr = "300";
+    opt10->answer = memstr;
     opt10->description = _("Maximum memory to be used in MB");
+    opt10->description = _("Cache size for raster rows");
 
     opt15 = G_define_option();
     opt15->key = "walk_coeff";
