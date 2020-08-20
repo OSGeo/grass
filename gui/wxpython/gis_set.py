@@ -43,7 +43,8 @@ from core.gcmd import GError, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets
 from startup.utils import (
     get_possible_database_path,
-    create_database_directory)
+    create_database_directory,
+    create_startup_location_in_grassdb)
 from startup.guiutils import (SetSessionMapset,
                               create_mapset_interactively,
                               create_location_interactively,
@@ -515,9 +516,16 @@ class GRASSStartup(wx.Frame):
         if self.GetRCValue("LOCATION_NAME") != "<UNKNOWN>":
             return
         path = get_possible_database_path()
-        # If nothing found, try to create GRASS directory
+
+        # If nothing found, try to create GRASS directory and copy startup loc
         if path is None:
-            path = create_database_directory()
+            grassdb = create_database_directory()
+            location = "world_latlong_wgs84"
+            mapset_name = create_startup_location_in_grassdb(grassdb,
+                                                             location)
+            if mapset_name:
+                self.SetLocation(grassdb, location, mapset_name)
+                self.ExitSuccessfully()
 
         if path:
             try:
@@ -558,7 +566,6 @@ class GRASSStartup(wx.Frame):
                 self.listOfLocations.index(location))
             self.lbmapsets.SetSelection(0)
             self.SetLocation(grassdatabase, location, mapset)
-
 
     # the event can be refactored out by using lambda in bind
     def OnRenameMapset(self, event):
