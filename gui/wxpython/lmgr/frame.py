@@ -44,7 +44,9 @@ if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
 from grass.script import core as grass
 from grass.script.utils import decode
 from startup.guiutils import (
-    can_switch_mapset_interactive
+    can_switch_mapset_interactive,
+    create_mapset_interactively,
+    create_location_interactively
 )
 
 from core.gcmd import RunCommand, GError, GMessage
@@ -1063,12 +1065,26 @@ class GMFrame(wx.Frame):
     def OnCreateMapset(self, event):
         """Create new mapset"""
         db_node, loc_node, mapset_node = self.datacatalog.tree.GetCurrentDbLocationMapsetNode()
-        self.datacatalog.tree.CreateMapset(db_node, loc_node)
+        mapset = create_mapset_interactively(self, db_node.data['name'],
+                                             loc_node.data['name'])
+        if mapset:
+            self.datacatalog.tree.InsertMapset(name=mapset,
+                              location_node=loc_node)
+        self.datacatalog.tree.ReloadTreeItems()
 
     def OnLocationWizard(self, event):
         """Create new location"""
-        db_node, loc_node, mapset_node = self.datacatalog.tree.GetCurrentDbLocationMapsetNode()
-        self.datacatalog.tree.CreateLocation(db_node)
+        grassdb_node, loc_node, mapset_node = self.datacatalog.tree.GetCurrentDbLocationMapsetNode()
+        grassdatabase, location, mapset = (
+            create_location_interactively(self, grassdb_node.data['name'])
+        )
+        if location:
+            grassdb_nodes = self.datacatalog.tree._model.SearchNodes(name=grassdatabase,
+                                                                     type='grassdb')
+            if not grassdb_nodes:
+                grassdb_node = self.datacatalog.tree.InsertGrassDb(name=grassdatabase)
+            self.datacatalog.tree.InsertLocation(location, grassdb_node)
+        self.datacatalog.tree.ReloadTreeItems()
 
     def OnChangeMapset(self, event):
         """Change current mapset"""
