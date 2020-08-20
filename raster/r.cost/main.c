@@ -261,7 +261,7 @@ int main(int argc, char *argv[])
     if (!memstr)
        memstr = "300";
     opt10->answer = memstr;
-    opt10->description = _("Maximum memory to be used in MB");
+    opt10->label = _("Maximum memory to be used in MB");
     opt10->description = _("Cache size for raster rows");
 
     flag2 = G_define_flag();
