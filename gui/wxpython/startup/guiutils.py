@@ -295,9 +295,10 @@ def check_mapset_name(grassdb, location, mapset_name):
             "another name for your mapset.").format(mapset_name)
     # Check whether mapset exists
     elif mapset_exists(grassdb, location, mapset_name):
-        message = _("Mapset  <{mapset}> already exists. Please consider using "
-                    "another name for your mapset.").format(
-                    mapset=mapset_path)
+        message = _(
+            "Mapset  <{mapset}> already exists. Please consider using "
+            "another name for your mapset.").format(mapset=mapset_path)
+
     return message
 
 
@@ -317,9 +318,10 @@ def check_location_name(grassdb, location_name):
             "and space.").format(location_name, '/"\'@,=*~')
     # Check whether location exists
     elif location_exists(grassdb, location_name):
-        message = _("Location  <{location}> already exists. Please consider using "
-                    "another name for your location.").format(
-                    location=location_path)
+        message = _(
+            "Location  <{location}> already exists. Please consider using "
+            "another name for your location.").format(location=location_path)
+
     return message
 
 

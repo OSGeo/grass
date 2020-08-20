@@ -890,20 +890,22 @@ class DataCatalogTree(TreeView):
                                                           mapset,
                                                           check_permanent=True)
                 if message:
-                    label = _("Cannot rename mapset <{mapset}> for the "
-                              "following reason: {reason}").format(
-                              mapset=mapset, reason=message)
+                    label = _(
+                        "Cannot rename mapset <{mapset}> for the "
+                        "following reason: {reason}").format(
+                        mapset=mapset, reason=message)
                     self.showNotification.emit(message=label)
                     event.Veto()
                     return
             elif node.data['type'] == 'location':
                 location = self.selected_location[0].data['name']
                 messages = get_reasons_location_not_removable(self.selected_grassdb[0].data['name'],
-                                                            location)
+                                                              location)
                 if messages:
-                    label = _("Cannot rename location <{location}> for the "
-                              "following reasons: {reasons}").format(
-                              location=location, reasons="\n".join(messages))
+                    label = _(
+                        "Cannot rename location <{location}> for the "
+                        "following reasons: {reasons}").format(
+                        location=location, reasons="\n".join(messages))
                     self.showNotification.emit(message=label)
                     event.Veto()
                     return
@@ -929,9 +931,10 @@ class DataCatalogTree(TreeView):
                                         self.selected_location[0].data['name'],
                                         new_name)
             if message:
-                label = _("Cannot rename mapset <{mapset}> for the "
-                          "following reason: {reason}").format(
-                          mapset=old_name, reason=message)
+                label = _(
+                    "Cannot rename mapset <{mapset}> for the "
+                    "following reason: {reason}").format(
+                    mapset=old_name, reason=message)
                 self.showNotification.emit(message=label)
                 event.Veto()
                 return
@@ -940,17 +943,19 @@ class DataCatalogTree(TreeView):
                           self.selected_mapset[0].data['name'],
                           new_name)
             self._renameNode(self.selected_mapset[0], new_name)
-            label = _("Renaming mapset <{oldmapset}> to <{newmapset}> completed").format(
-                        oldmapset=old_name, newmapset=new_name)
+            label = _(
+                "Renaming mapset <{oldmapset}> to <{newmapset}> completed").format(
+                oldmapset=old_name, newmapset=new_name)
             self.showNotification.emit(message=label)
 
         elif node.data['type'] == 'location':
             message = check_location_name(self.selected_grassdb[0].data['name'],
                                           new_name)
             if message:
-                label = _("Cannot rename location <{location}> for the "
-                          "following reason: {reason}").format(
-                          location=new_name, reason=message)
+                label = _(
+                    "Cannot rename location <{location}> for the "
+                    "following reason: {reason}").format(
+                    location=new_name, reason=message)
                 self.showNotification.emit(message=label)
                 event.Veto()
                 return
@@ -958,8 +963,9 @@ class DataCatalogTree(TreeView):
                             self.selected_location[0].data['name'],
                             new_name)
             self._renameNode(self.selected_location[0], new_name)
-            label = _("Renaming location <{oldlocation}> to <{newlocation}> completed").format(
-                    oldlocation=old_name, newlocation=new_name)
+            label = _(
+                "Renaming location <{oldlocation}> to <{newlocation}> completed").format(
+                oldlocation=old_name, newlocation=new_name)
             self.showNotification.emit(message=label)
 
     def Rename(self, old, new):
