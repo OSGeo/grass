@@ -865,3 +865,35 @@ def import_file(guiparent, filePath):
                 "this imported map.") % {
                 'name': filePath},
             parent=guiparent)
+
+
+def change_mapset_interactively(guiparent, giface, dbase, location, mapset):
+    """Change mapset, location or db"""
+    if dbase:
+        if RunCommand('g.mapset', parent=guiparent,
+                      location=location,
+                      mapset=mapset,
+                      dbase=dbase) == 0:
+            GMessage(parent=guiparent,
+                     message=_("Current GRASS database is <%(dbase)s>.\n"
+                               "Current location is <%(loc)s>.\n"
+                               "Current mapset is <%(mapset)s>."
+                               ) %
+                     {'dbase': dbase, 'loc': location, 'mapset': mapset})
+            giface.mapsetChanged.emit(dbase, location, mapset)
+    elif location:
+        if RunCommand('g.mapset', parent=guiparent,
+                      location=location,
+                      mapset=mapset) == 0:
+            GMessage(parent=guiparent,
+                     message=_("Current location is <%(loc)s>.\n"
+                               "Current mapset is <%(mapset)s>.") %
+                     {'loc': location, 'mapset': mapset})
+            giface.mapsetChanged.emit(dbase=None, location=location, mapset=mapset)
+    else:
+        if RunCommand('g.mapset',
+                      parent=guiparent,
+                      mapset=mapset) == 0:
+            GMessage(parent=guiparent,
+                     message=_("Current mapset is <%s>.") % mapset)
+            giface.mapsetChanged.emit(dbase=None, location=None, mapset=mapset)

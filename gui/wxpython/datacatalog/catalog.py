@@ -50,8 +50,6 @@ class DataCatalog(wx.Panel):
         self.thread = gThread()
         self._loaded = False
         self.tree.showNotification.connect(self.showNotification)
-        self.tree.changeMapset.connect(self.changeMapset)
-        self.tree.changeLocation.connect(self.changeLocation)
 
         # some layout
         self._layout()

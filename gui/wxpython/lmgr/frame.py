@@ -69,6 +69,7 @@ from lmgr.giface import LayerManagerGrassInterface
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
+from startup.guiutils import change_mapset_interactively
 
 
 class GMFrame(wx.Frame):
@@ -189,6 +190,7 @@ class GMFrame(wx.Frame):
 
         self._giface.mapCreated.connect(self.OnMapCreated)
         self._giface.updateMap.connect(self._updateCurrentMap)
+        self._giface.mapsetChanged.connect(self.OnMapsetChanged)
 
         # minimal frame size
         self.SetMinSize(globalvar.GM_WINDOW_MIN_SIZE)
@@ -320,11 +322,7 @@ class GMFrame(wx.Frame):
             parent=self.notebook, giface=self._giface)
         self.datacatalog.showNotification.connect(
             lambda message: self.SetStatusText(message))
-        self.datacatalog.changeMapset.connect(lambda mapset: self.ChangeMapset(mapset))
-        self.datacatalog.changeLocation.connect(lambda mapset, location, dbase:
-                                                self.ChangeLocation(dbase=dbase,
-                                                                    location=location,
-                                                                    mapset=mapset))
+
         self.notebook.AddPage(
             page=self.datacatalog,
             text=_("Data"),
@@ -1081,37 +1079,10 @@ class GMFrame(wx.Frame):
                                              gisenv['GISDBASE'],
                                              location,
                                              mapset):
-                self.ChangeLocation(location, mapset)
-
-    def ChangeLocation(self, location, mapset, dbase=None):
-        if dbase:
-            if RunCommand('g.mapset', parent=self,
-                          dbase=dbase,
-                          location=location,
-                          mapset=mapset) != 0:
-                return  # error reported
-
-            # close current workspace and create new one
-            self.OnWorkspaceClose()
-            self.OnWorkspaceNew()
-            GMessage(parent=self,
-                     message=_("Current GRASS database is <%(dbase)s>.\n"
-                               "Current location is <%(loc)s>.\n"
-                               "Current mapset is <%(mapset)s>.") %
-                     {'dbase': dbase, 'loc': location, 'mapset': mapset})
-        else:
-            if RunCommand('g.mapset', parent=self,
-                          location=location,
-                          mapset=mapset) != 0:
-                return  # error reported
-
-            # close current workspace and create new one
-            self.OnWorkspaceClose()
-            self.OnWorkspaceNew()
-            GMessage(parent=self,
-                     message=_("Current location is <%(loc)s>.\n"
-                               "Current mapset is <%(mapset)s>.") %
-                     {'loc': location, 'mapset': mapset})
+                change_mapset_interactively(self, self._giface,
+                                            None,
+                                            location,
+                                            mapset)
 
     def OnCreateMapset(self, event):
         """Create new mapset"""
@@ -1155,22 +1126,23 @@ class GMFrame(wx.Frame):
                                              gisenv['GISDBASE'],
                                              gisenv['LOCATION_NAME'],
                                              mapset):
-                self.ChangeMapset(mapset)
+                change_mapset_interactively(self, self._giface,
+                                            None,
+                                            None,
+                                            mapset)
 
-    def ChangeMapset(self, mapset):
-        """Change current mapset and update map display title"""
-        if RunCommand('g.mapset',
-                      parent=self,
-                      mapset=mapset) == 0:
-            GMessage(parent=self,
-                     message=_("Current mapset is <%s>.") % mapset)
-
+    def OnMapsetChanged(self, dbase, location, mapset):
+        if not location:
             # TODO: this does not use the actual names if they were
             # renamed (it just uses the numbers)
             dispId = 1
             for display in self.GetMapDisplay(onlyCurrent=False):
                 display.SetTitleWithName(str(dispId))  # TODO: signal ?
                 dispId += 1
+        else:
+            # close current workspace and create new one
+            self.OnWorkspaceClose()
+            self.OnWorkspaceNew()
 
     def OnChangeCWD(self, event=None, cmd=None):
         """Change current working directory
