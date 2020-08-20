@@ -130,13 +130,6 @@ def _create_startup_mapset(location_path):
     """
     mapset_name = default_name = get_default_mapset_name()
     mapset_path = os.path.join(location_path, mapset_name)
-    counter = 2
-
-    while os.path.exists(mapset_path):
-        mapset_name = _("{name}_{counter}").format(name=default_name,
-                                                   counter=str(counter))
-        mapset_path = os.path.join(location_path, mapset_name)
-        counter += 1
 
     # Create new startup mapset
     try:
