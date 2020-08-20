@@ -273,6 +273,56 @@ def get_reasons_grassdb_not_removable(grassdb):
     return messages
 
 
+def check_mapset_name(grassdb, location, mapset_name):
+    """Check mapset name.
+
+    Returns message as string if there was failed check, otherwise None.
+    """
+    message = None
+    mapset_path = os.path.join(grassdb, location, mapset_name)
+
+    # Check if mapset name is valid
+    if not gs.legal_name(mapset_name):
+        message = _(
+            "Name '{}' is not a valid name for location or mapset. "
+            "Please use only ASCII characters excluding characters {} "
+            "and space.").format(mapset_name, '/"\'@,=*~')
+    # Check reserved mapset name
+    elif mapset_name.lower() == 'ogr':
+        message = _(
+            "Name '{}' is reserved for direct "
+            "read access to OGR layers. Please use "
+            "another name for your mapset.").format(mapset_name)
+    # Check whether mapset exists
+    elif mapset_exists(grassdb, location, mapset_name):
+        message = _("Mapset  <{mapset}> already exists. Please consider using "
+                    "another name for your mapset.").format(
+                    mapset=mapset_path)
+    return message
+
+
+def check_location_name(grassdb, location_name):
+    """Check location name.
+
+    Returns message as string if there was failed check, otherwise None.
+    """
+    message = None
+    location_path = os.path.join(grassdb, location_name)
+
+    # Check if mapset name is valid
+    if not gs.legal_name(location_name):
+        message = _(
+            "Name '{}' is not a valid name for location or mapset. "
+            "Please use only ASCII characters excluding characters {} "
+            "and space.").format(location_name, '/"\'@,=*~')
+    # Check whether location exists
+    elif location_exists(grassdb, location_name):
+        message = _("Location  <{location}> already exists. Please consider using "
+                    "another name for your location.").format(
+                    location=location_path)
+    return message
+
+
 # TODO: similar to (but not the same as) read_gisrc function in grass.py
 def read_gisrc():
     """Read variables from a current GISRC file

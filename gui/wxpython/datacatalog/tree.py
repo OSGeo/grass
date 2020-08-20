@@ -46,7 +46,15 @@ from startup.guiutils import (
     download_location_interactively,
     delete_grassdb_interactively,
     can_switch_mapset_interactive,
-    switch_mapset_interactively
+    switch_mapset_interactively,
+    get_reason_mapset_not_removable,
+    get_reasons_location_not_removable,
+    check_mapset_name,
+    check_location_name
+)
+from grass.grassdb.manage import (
+    rename_mapset,
+    rename_location
 )
 
 from grass.pydispatch.signal import Signal
@@ -854,21 +862,105 @@ class DataCatalogTree(TreeView):
     def OnStartEditLabel(self, node, event):
         """Start label editing"""
         self.DefineItems([node])
-        # TODO: add renaming mapset/location
-        if not self.selected_layer[0]:
+
+        # Not allowed for grassdb
+        if node.data['type'] == 'grassdb':
             event.Veto()
             return
-        Debug.msg(1, "Start label edit {name}".format(name=node.data['name']))
-        label = _("Editing {name}").format(name=node.data['name'])
-        self.showNotification.emit(message=label)
+
+        # When restricted mode is on, only editing a layer in the current mapset is enabled
+        if self._restricted:
+            if node.data['type'] in ('raster', 'raster_3d', 'vector'):
+                genv = gisenv()
+                currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
+                if currentMapset and len(self.selected_layer) == 1:
+                    Debug.msg(1, "Start label edit {name}".format(name=node.data['name']))
+                    label = _("Editing {name}").format(name=node.data['name'])
+                    self.showNotification.emit(message=label)
+                    return
+            label = _("If you want to rename the node, you must allow edits "
+                      "outside of the current mapset")
+            self.showNotification.emit(message=label)
+            event.Veto()
+        else:
+            if node.data['type'] == 'mapset':
+                mapset = self.selected_mapset[0].data['name']
+                message = get_reason_mapset_not_removable(self.selected_grassdb[0].data['name'],
+                                                          self.selected_location[0].data['name'],
+                                                          mapset,
+                                                          check_permanent=True)
+                if message:
+                    label = _("Cannot rename mapset <{mapset}> for the "
+                              "following reason: {reason}").format(
+                              mapset=mapset, reason=message)
+                    self.showNotification.emit(message=label)
+                    event.Veto()
+                    return
+            elif node.data['type'] == 'location':
+                location = self.selected_location[0].data['name']
+                messages = get_reasons_location_not_removable(self.selected_grassdb[0].data['name'],
+                                                            location)
+                if messages:
+                    label = _("Cannot rename location <{location}> for the "
+                              "following reasons: {reasons}").format(
+                              location=location, reasons="\n".join(messages))
+                    self.showNotification.emit(message=label)
+                    event.Veto()
+                    return
+
+            Debug.msg(1, "Start label edit {name}".format(name=node.data['name']))
+            label = _("Editing {name}").format(name=node.data['name'])
+            self.showNotification.emit(message=label)
 
     def OnEditLabel(self, node, event):
         """End label editing"""
-        if self.selected_layer and not event.IsEditCancelled():
-            old_name = node.data['name']
-            Debug.msg(1, "End label edit {name}".format(name=old_name))
-            new_name = event.GetLabel()
+        if event.IsEditCancelled():
+            return
+
+        old_name = node.data['name']
+        Debug.msg(1, "End label edit {name}".format(name=old_name))
+        new_name = event.GetLabel()
+
+        if node.data['type'] in ('raster', 'raster_3d', 'vector'):
             self.Rename(old_name, new_name)
+
+        elif node.data['type'] == 'mapset':
+            message = check_mapset_name(self.selected_grassdb[0].data['name'],
+                                        self.selected_location[0].data['name'],
+                                        new_name)
+            if message:
+                label = _("Cannot rename mapset <{mapset}> for the "
+                          "following reason: {reason}").format(
+                          mapset=old_name, reason=message)
+                self.showNotification.emit(message=label)
+                event.Veto()
+                return
+            rename_mapset(self.selected_grassdb[0].data['name'],
+                          self.selected_location[0].data['name'],
+                          self.selected_mapset[0].data['name'],
+                          new_name)
+            self._renameNode(self.selected_mapset[0], new_name)
+            label = _("Renaming mapset <{oldmapset}> to <{newmapset}> completed").format(
+                        oldmapset=old_name, newmapset=new_name)
+            self.showNotification.emit(message=label)
+
+        elif node.data['type'] == 'location':
+            message = check_location_name(self.selected_grassdb[0].data['name'],
+                                          new_name)
+            if message:
+                label = _("Cannot rename location <{location}> for the "
+                          "following reason: {reason}").format(
+                          location=new_name, reason=message)
+                self.showNotification.emit(message=label)
+                event.Veto()
+                return
+            rename_location(self.selected_grassdb[0].data['name'],
+                            self.selected_location[0].data['name'],
+                            new_name)
+            self._renameNode(self.selected_location[0], new_name)
+            label = _("Renaming location <{oldlocation}> to <{newlocation}> completed").format(
+                    oldlocation=old_name, newlocation=new_name)
+            self.showNotification.emit(message=label)
 
     def Rename(self, old, new):
         """Rename layer"""
