@@ -149,10 +149,11 @@ def _create_startup_mapset(location_path):
 
 
 def create_startup_location_in_grassdb(grassdatabase, startup_location_name):
-    """Wrapping function for creating whole new startup location in grassdb.
+    """Create a new startup location in the given GRASS database.
 
-    Returns the newly created mapset on success. Returns None If no location
-    to copy or copying failed."""
+    Returns the newly created mapset name on success. Returns None if there is
+    no location to copy in the installation or copying failed.
+    """
 
     # Find out if startup location exists
     startup_location = _get_startup_location_in_distribution()
