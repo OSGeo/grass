@@ -55,6 +55,8 @@ output raster map.
 
 <h2>EXAMPLES</h2>
 
+<h3>Clumping of a raster map</h3>
+
 Perform clumping on "lakes" map (North Carolina sample dataset) and
 report area sizes for each lake individually rather by waterbody type:
 
@@ -71,7 +73,29 @@ r.clump lakes out=lakes_individual
 r.report lakes_individual units=h
 </pre></div>
 
-<p>
+<!--
+# in addition to the example above
+g.region raster=lakes
+# needed to draw a "box"
+v.in.region lakes_box
+d.frame -e
+d.frame -c frame=first at=0,100,0,50
+d.rast lakes
+d.vect lakes_box type=boundary
+d.frame -c frame=second at=0,100,50,100
+d.rast lakes_individual
+d.vect lakes_box type=boundary
+-->
+
+<div align="center" style="margin: 10px">
+<a href="r_clump_lakes.png">
+<img src="r_clump_lakes.png" width="600" height="260" alt="r.clump lake clumping example" border="1">
+</a><br>
+<i>Figure: Clumping of rasterized lakes: original lakes map (left) and clumped lakes map (right)</i>
+</div>
+
+<h3>Fuzzy clumping on Landsat bands</h3>
+
 Perform fuzzy clumping on Landsat 7 2002 imagery (North Carolina sample dataset)
 <div class="code"><pre>
 g.region raster=lsat7_2002_10 -p
@@ -82,6 +106,27 @@ r.clump in=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50
 r.clump in=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70 \
         out=lsat7_2002_clump_min10 threshold=0.045 minsize=10
 </pre></div>
+
+
+<!--
+# in addition to the example above
+g.region raster=lsat7_2002_10
+d.frame -e
+d.frame -c frame=first at=0,100,0,33
+d.rgb b=lsat7_2002_10 g=lsat7_2002_20 r=lsat7_2002_30
+d.frame -c frame=second at=0,100,33,66
+d.rast lsat7_2002_clump
+d.frame -c frame=third at=0,100,66,99
+d.rast lsat7_2002_clump_min10
+-->
+
+<div align="center" style="margin: 10px">
+<a href="r_clump_lakes.png">
+<img src="r_clump_lsat.png" width="600" height="178" alt="r.clump example Landsat fuzzy clumping" border="1">
+</a><br>
+<i>Figure: Fuzzy clumping on Landsat bands: original RGB composite (left), 
+           fuzzy clumped map (middle), and fuzzy clumped with minsize map (right)</i>
+</div>
 
 <h2>SEE ALSO</h2>
 
@@ -99,7 +144,7 @@ r.clump in=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50
 <a href="r.support.html">r.support</a>
 </em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Michael Shapiro, U.S. Army Construction Engineering Research
 Laboratory<br>
