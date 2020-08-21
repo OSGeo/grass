@@ -1068,9 +1068,7 @@ class GMFrame(wx.Frame):
         mapset = create_mapset_interactively(self, db_node.data['name'],
                                              loc_node.data['name'])
         if mapset:
-            self.datacatalog.tree.InsertMapset(name=mapset,
-                              location_node=loc_node)
-        self.datacatalog.tree.ReloadTreeItems()
+            self.datacatalog.tree.ReloadTreeItems()
 
     def OnLocationWizard(self, event):
         """Create new location"""
