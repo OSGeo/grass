@@ -937,7 +937,7 @@ int GPJ_transform(const struct pj_info *info_in,
 	/* PROJ 6+: conversion to radians is not always needed:
 	 * if proj_angular_input(info_trans->pj, dir) == 1 
 	 * -> convert from degrees to radians */
-	if (out_is_ll && proj_angular_input(info_trans->pj, dir) == 0) {
+	if (out_is_ll && proj_angular_output(info_trans->pj, dir) == 0) {
 	    out_rad2deg = 0;
 	}
 #endif
@@ -948,7 +948,7 @@ int GPJ_transform(const struct pj_info *info_in,
 	    /* PROJ 6+: conversion to radians is not always needed:
 	     * if proj_angular_input(info_trans->pj, dir) == 1 
 	     * -> convert from degrees to radians */
-	    if (in_is_ll && proj_angular_output(info_trans->pj, dir) == 0) {
+	    if (in_is_ll && proj_angular_input(info_trans->pj, dir) == 0) {
 		in_deg2rad = 0;
 	    }
 #endif
@@ -1152,7 +1152,7 @@ int GPJ_transform_array(const struct pj_info *info_in,
 	/* PROJ 6+: conversion to radians is not always needed:
 	 * if proj_angular_input(info_trans->pj, dir) == 1 
 	 * -> convert from degrees to radians */
-	if (out_is_ll && proj_angular_input(info_trans->pj, dir) == 0) {
+	if (out_is_ll && proj_angular_output(info_trans->pj, dir) == 0) {
 	    out_rad2deg = 0;
 	}
 #endif
@@ -1163,7 +1163,7 @@ int GPJ_transform_array(const struct pj_info *info_in,
 	    /* PROJ 6+: conversion to degrees is not always needed:
 	     * if proj_angular_output(info_trans->pj, dir) == 1 
 	     * -> convert from degrees to radians */
-	    if (in_is_ll && proj_angular_output(info_trans->pj, dir) == 0) {
+	    if (in_is_ll && proj_angular_input(info_trans->pj, dir) == 0) {
 		in_deg2rad = 0;
 	    }
 #endif
