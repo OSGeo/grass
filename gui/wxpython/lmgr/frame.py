@@ -1064,9 +1064,9 @@ class GMFrame(wx.Frame):
 
     def OnCreateMapset(self, event):
         """Create new mapset"""
-        db_node, loc_node, mapset_node = self.datacatalog.tree.GetCurrentDbLocationMapsetNode()
-        mapset = create_mapset_interactively(self, db_node.data['name'],
-                                             loc_node.data['name'])
+        gisenv = grass.gisenv()
+        mapset = create_mapset_interactively(self, gisenv['GISDBASE'],
+                                             gisenv['LOCATION_NAME'])
         if mapset:
             self.datacatalog.tree.ReloadTreeItems()
 
