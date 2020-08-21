@@ -2477,7 +2477,7 @@ class VectGroup(wx.Dialog):
                     line = line.replace('\n', '')
                     if len(line) < 1:
                         continue
-                    checked.append(line)
+                    checked.append(line.split('@')[0])
                 self.listMap.SetCheckedStrings(checked)
             finally:
                 f.close()
