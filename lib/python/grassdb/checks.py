@@ -14,6 +14,7 @@ import os
 import datetime
 from pathlib import Path
 from grass.script import gisenv
+import grass.script as gs
 
 
 def mapset_exists(database, location, mapset):
@@ -60,19 +61,19 @@ def is_location_valid(database, location):
     )
 
 
-def is_mapset_current(grassdb, location, mapset):
+def is_mapset_current(database, location, mapset):
     genv = gisenv()
-    if (grassdb == genv['GISDBASE'] and
-        location == genv['LOCATION_NAME'] and
-        mapset == genv['MAPSET']):
+    if (database == genv['GISDBASE'] and
+            location == genv['LOCATION_NAME'] and
+            mapset == genv['MAPSET']):
         return True
     return False
 
 
-def is_location_current(grassdb, location):
+def is_location_current(database, location):
     genv = gisenv()
-    if (grassdb == genv['GISDBASE'] and
-        location == genv['LOCATION_NAME']):
+    if (database == genv['GISDBASE'] and
+            location == genv['LOCATION_NAME']):
         return True
     return False
 
@@ -305,3 +306,181 @@ def get_location_invalid_suggestion(database, location):
             " Did you mean to specify one of them?"
         ).format(location=location)
     return None
+
+
+def get_mapset_name_invalid_reason(database, location, mapset_name):
+    """Get reasons why mapset name is not valid.
+
+    It gets reasons when:
+     * Name is not valid.
+     * Name is reserved for OGR layers.
+     * Mapset in the same path already exists.
+
+    Returns message as string if there was a reason, otherwise None.
+    """
+    message = None
+    mapset_path = os.path.join(database, location, mapset_name)
+
+    # Check if mapset name is valid
+    if not gs.legal_name(mapset_name):
+        message = _(
+            "Name '{}' is not a valid name for location or mapset. "
+            "Please use only ASCII characters excluding characters {} "
+            "and space.").format(mapset_name, '/"\'@,=*~')
+    # Check reserved mapset name
+    elif mapset_name.lower() == 'ogr':
+        message = _(
+            "Name '{}' is reserved for direct "
+            "read access to OGR layers. Please use "
+            "another name for your mapset.").format(mapset_name)
+    # Check whether mapset exists
+    elif mapset_exists(database, location, mapset_name):
+        message = _(
+            "Mapset  <{mapset}> already exists. Please consider using "
+            "another name for your mapset.").format(mapset=mapset_path)
+
+    return message
+
+
+def get_location_name_invalid_reason(grassdb, location_name):
+    """Get reasons why location name is not valid.
+
+    It gets reasons when:
+     * Name is not valid.
+     * Location in the same path already exists.
+
+    Returns message as string if there was a reason, otherwise None.
+    """
+    message = None
+    location_path = os.path.join(grassdb, location_name)
+
+    # Check if mapset name is valid
+    if not gs.legal_name(location_name):
+        message = _(
+            "Name '{}' is not a valid name for location or mapset. "
+            "Please use only ASCII characters excluding characters {} "
+            "and space.").format(location_name, '/"\'@,=*~')
+    # Check whether location exists
+    elif location_exists(grassdb, location_name):
+        message = _(
+            "Location  <{location}> already exists. Please consider using "
+            "another name for your location.").format(location=location_path)
+
+    return message
+
+
+def is_mapset_name_valid(database, location, mapset_name):
+    """Check if mapset name is valid.
+
+    Returns True if mapset name is valid, otherwise False.
+    """
+    return gs.legal_name(mapset_name) and mapset_name.lower != "ogr" and not \
+        mapset_exists(database, location, mapset_name)
+
+
+def is_location_name_valid(database, location_name):
+    """Check if location name is valid.
+
+    Returns True if location name is valid, otherwise False.
+    """
+    return gs.legal_name(location_name) and not \
+        mapset_exists(database, location_name)
+
+
+def get_reasons_mapsets_not_removable(mapsets, check_permanent):
+    """Get reasons why mapsets cannot be removed.
+
+    Parameter *mapsets* is a list of tuples (database, location, mapset).
+    Parameter *check_permanent* is True of False. It depends on whether
+    we want to check for permanent mapset or not.
+
+    Returns messages as list if there were any failed checks, otherwise empty list.
+    """
+    messages = []
+    for grassdb, location, mapset in mapsets:
+        message = get_reason_mapset_not_removable(grassdb, location,
+                                                  mapset, check_permanent)
+        if message:
+            messages.append(message)
+    return messages
+
+
+def get_reason_mapset_not_removable(grassdb, location, mapset, check_permanent):
+    """Get reason why one mapset cannot be removed.
+
+    Parameter *check_permanent* is True of False. It depends on whether
+    we want to check for permanent mapset or not.
+
+    Returns message as string if there was failed check, otherwise None.
+    """
+    message = None
+    mapset_path = os.path.join(grassdb, location, mapset)
+
+    # Check if mapset is permanent
+    if check_permanent and mapset == "PERMANENT":
+        message = _("Mapset <{mapset}> is required for a valid location.").format(
+            mapset=mapset_path)
+    # Check if mapset is current
+    elif is_mapset_current(grassdb, location, mapset):
+        message = _("Mapset <{mapset}> is the current mapset.").format(
+            mapset=mapset_path)
+    # Check whether mapset is in use
+    elif is_mapset_locked(mapset_path):
+        message = _("Mapset <{mapset}> is in use.").format(
+            mapset=mapset_path)
+    # Check whether mapset is owned by different user
+    elif is_different_mapset_owner(mapset_path):
+        message = _("Mapset <{mapset}> is owned by a different user.").format(
+            mapset=mapset_path)
+
+    return message
+
+
+def get_reasons_locations_not_removable(locations):
+    """Get reasons why locations cannot be removed.
+
+    Parameter *locations* is a list of tuples (database, location).
+
+    Returns messages as list if there were any failed checks, otherwise empty list.
+    """
+    messages = []
+    for grassdb, location in locations:
+        messages += get_reasons_location_not_removable(grassdb, location)
+    return messages
+
+
+def get_reasons_location_not_removable(grassdb, location):
+    """Get reasons why one location cannot be removed.
+
+    Returns messages as list if there were any failed checks, otherwise empty list.
+    """
+    messages = []
+    location_path = os.path.join(grassdb, location)
+
+    # Check if location is current
+    if is_location_current(grassdb, location):
+        messages.append(_("Location <{location}> is the current location.").format(
+            location=location_path))
+        return messages
+
+    # Find mapsets in particular location
+    tmp_gisrc_file, env = gs.create_environment(grassdb, location, 'PERMANENT')
+    env['GRASS_SKIP_MAPSET_OWNER_CHECK'] = '1'
+
+    g_mapsets = gs.read_command(
+        'g.mapsets',
+        flags='l',
+        separator='comma',
+        quiet=True,
+        env=env).strip().split(',')
+
+    # Append to the list of tuples
+    mapsets = []
+    for g_mapset in g_mapsets:
+        mapsets.append((grassdb, location, g_mapset))
+
+    # Concentenate both checks
+    messages += get_reasons_mapsets_not_removable(mapsets, check_permanent=False)
+
+    gs.try_remove(tmp_gisrc_file)
+    return messages

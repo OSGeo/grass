@@ -49,8 +49,8 @@ from startup.guiutils import (
     switch_mapset_interactively,
     get_reason_mapset_not_removable,
     get_reasons_location_not_removable,
-    check_mapset_name,
-    check_location_name
+    get_mapset_name_invalid_reason,
+    get_location_name_invalid_reason
 )
 from grass.grassdb.manage import (
     rename_mapset,
@@ -863,56 +863,44 @@ class DataCatalogTree(TreeView):
         """Start label editing"""
         self.DefineItems([node])
 
-        # Not allowed for grassdb
+        # Not allowed for grassdb node
         if node.data['type'] == 'grassdb':
             event.Veto()
             return
+        # Check selected mapset
+        elif node.data['type'] == 'mapset':
+            mapset = self.selected_mapset[0].data['name']
+            message = get_reason_mapset_not_removable(self.selected_grassdb[0].data['name'],
+                                                      self.selected_location[0].data['name'],
+                                                      mapset,
+                                                      check_permanent=True)
+            if message:
+                self.showNotification.emit(message="")
+                event.Veto()
+                return
+        # Check selected location
+        elif node.data['type'] == 'location':
+            location = self.selected_location[0].data['name']
+            messages = get_reasons_location_not_removable(self.selected_grassdb[0].data['name'],
+                                                          location)
+            if messages:
+                self.showNotification.emit(message="")
+                event.Veto()
+                return
 
         # When restricted mode is on, only editing a layer in the current mapset is enabled
-        if self._restricted:
-            if node.data['type'] in ('raster', 'raster_3d', 'vector'):
-                genv = gisenv()
-                currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
-                if currentMapset and len(self.selected_layer) == 1:
-                    Debug.msg(1, "Start label edit {name}".format(name=node.data['name']))
-                    label = _("Editing {name}").format(name=node.data['name'])
-                    self.showNotification.emit(message=label)
-                    return
-            label = _("If you want to rename the node, you must allow edits "
-                      "outside of the current mapset")
-            self.showNotification.emit(message=label)
-            event.Veto()
-        else:
-            if node.data['type'] == 'mapset':
-                mapset = self.selected_mapset[0].data['name']
-                message = get_reason_mapset_not_removable(self.selected_grassdb[0].data['name'],
-                                                          self.selected_location[0].data['name'],
-                                                          mapset,
-                                                          check_permanent=True)
-                if message:
-                    label = _(
-                        "Cannot rename mapset <{mapset}> for the "
-                        "following reason: {reason}").format(
-                        mapset=mapset, reason=message)
-                    self.showNotification.emit(message=label)
-                    event.Veto()
-                    return
-            elif node.data['type'] == 'location':
-                location = self.selected_location[0].data['name']
-                messages = get_reasons_location_not_removable(self.selected_grassdb[0].data['name'],
-                                                              location)
-                if messages:
-                    label = _(
-                        "Cannot rename location <{location}> for the "
-                        "following reasons: {reasons}").format(
-                        location=location, reasons="\n".join(messages))
-                    self.showNotification.emit(message=label)
-                    event.Veto()
-                    return
-
+        genv = gisenv()
+        currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
+        if not self._restricted or \
+                (self._restricted and node.data['type'] in ('raster', 'raster_3d', 'vector') and
+                currentMapset and len(self.selected_layer) == 1):
             Debug.msg(1, "Start label edit {name}".format(name=node.data['name']))
             label = _("Editing {name}").format(name=node.data['name'])
             self.showNotification.emit(message=label)
+        else:
+            self.showNotification.emit(message="")
+            event.Veto()
+            return
 
     def OnEditLabel(self, node, event):
         """End label editing"""
@@ -927,15 +915,14 @@ class DataCatalogTree(TreeView):
             self.Rename(old_name, new_name)
 
         elif node.data['type'] == 'mapset':
-            message = check_mapset_name(self.selected_grassdb[0].data['name'],
-                                        self.selected_location[0].data['name'],
-                                        new_name)
+            message = get_mapset_name_invalid_reason(
+                            self.selected_grassdb[0].data['name'],
+                            self.selected_location[0].data['name'],
+                            new_name)
             if message:
-                label = _(
-                    "Cannot rename mapset <{mapset}> for the "
-                    "following reason: {reason}").format(
-                    mapset=old_name, reason=message)
-                self.showNotification.emit(message=label)
+                GError(parent=self, message=message,
+                       caption=_("Cannot rename mapset"),
+                       showTraceback=False)
                 event.Veto()
                 return
             rename_mapset(self.selected_grassdb[0].data['name'],
@@ -949,14 +936,13 @@ class DataCatalogTree(TreeView):
             self.showNotification.emit(message=label)
 
         elif node.data['type'] == 'location':
-            message = check_location_name(self.selected_grassdb[0].data['name'],
-                                          new_name)
+            message = get_location_name_invalid_reason(
+                            self.selected_grassdb[0].data['name'],
+                            new_name)
             if message:
-                label = _(
-                    "Cannot rename location <{location}> for the "
-                    "following reason: {reason}").format(
-                    location=new_name, reason=message)
-                self.showNotification.emit(message=label)
+                GError(parent=self, message=message,
+                       caption=_("Cannot rename location"),
+                       showTraceback=False)
                 event.Veto()
                 return
             rename_location(self.selected_grassdb[0].data['name'],
