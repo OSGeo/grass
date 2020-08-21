@@ -1789,7 +1789,7 @@ def csh_startup(location, grass_env_file):
     f.write("alias _location g.gisenv get=LOCATION_NAME\n")
     f.write("alias _mapset g.gisenv get=MAPSET\n")
     f.write("alias precmd \'echo \"Mapset <`_mapset`> in Location <`_location`>\"\'\n")
-    f.write("set prompt=\"GRASS GIS %s > \"\n" % GRASS_VERSION)
+    f.write("set prompt=\"GRASS > \"\n")
 
     # csh shell rc file left for backward compatibility
     path = os.path.join(userhome, ".grass.cshrc")
@@ -1820,6 +1820,7 @@ def csh_startup(location, grass_env_file):
 
 
 def sh_like_startup(location, location_name, grass_env_file, sh):
+    """Start Bash or Z shell (but not sh (Bourne Shell))"""
     if sh == 'bash':
         sh_history = ".bash_history"
         shrc = ".bashrc"
@@ -1866,11 +1867,10 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
 
     if sh == 'zsh':
         f.write("setopt PROMPT_SUBST\n")
-        f.write("PS1='{name} {version} : %1~ > '\n".format(
-            name=grass_name, version=GRASS_VERSION))
+        f.write("PS1='{name} : %1~ > '\n".format(name=grass_name))
     else:
-        f.write("PS1='{name} {version} ({location}):\\w > '\n".format(
-            name=grass_name, version=GRASS_VERSION, location=location_name))
+        f.write("PS1='{name} {db_place}:\\W > '\n".format(
+            name=grass_name, version=GRASS_VERSION, db_place="$_GRASS_DB_PLACE"))
 
     # TODO: have a function and/or module to test this
     mask2d_test = 'test -f "$MAPSET_PATH/cell/MASK"'
@@ -1889,7 +1889,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     f.write(
         """grass_prompt() {{
     MAPSET_PATH="`g.gisenv get=GISDBASE,LOCATION_NAME,MAPSET separator='/'`"
-    LOCATION="$MAPSET_PATH"
+    _GRASS_DB_PLACE="`g.gisenv get=LOCATION_NAME,MAPSET separator='/'`"
     {zsh_addition}
     if {mask2d_test} && {mask3d_test} ; then
         echo "[{both_masks}]"
@@ -1939,12 +1939,13 @@ PROMPT_COMMAND=grass_prompt\n""".format(
 
 
 def default_startup(location, location_name):
+    """Start shell making no assumptions about what is supported in PS1"""
     if WINDOWS:
-        os.environ['PS1'] = "GRASS %s> " % (GRASS_VERSION)
+        os.environ['PS1'] = "GRASS > "
         # "$ETC/run" doesn't work at all???
         process = subprocess.Popen([os.getenv('SHELL')])
     else:
-        os.environ['PS1'] = "GRASS %s (%s):\\w > " % (GRASS_VERSION, location_name)
+        os.environ['PS1'] = "GRASS > "
         process = Popen([gpath("etc", "run"), os.getenv('SHELL')])
 
     return process
