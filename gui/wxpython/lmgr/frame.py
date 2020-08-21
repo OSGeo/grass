@@ -1077,12 +1077,7 @@ class GMFrame(wx.Frame):
             create_location_interactively(self, grassdb_node.data['name'])
         )
         if location:
-            grassdb_nodes = self.datacatalog.tree._model.SearchNodes(name=grassdatabase,
-                                                                     type='grassdb')
-            if not grassdb_nodes:
-                grassdb_node = self.datacatalog.tree.InsertGrassDb(name=grassdatabase)
-            self.datacatalog.tree.InsertLocation(location, grassdb_node)
-        self.datacatalog.tree.ReloadTreeItems()
+            self.datacatalog.tree.ReloadTreeItems()
 
     def OnChangeMapset(self, event):
         """Change current mapset"""
