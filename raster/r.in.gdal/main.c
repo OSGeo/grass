@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
     } parm;
     struct Flag *flag_o, *flag_e, *flag_k, *flag_f, *flag_l, *flag_c, *flag_p,
         *flag_j, *flag_a, *flag_r;
-    char *memstr;
+
 
     /* -------------------------------------------------------------------- */
     /*      Initialize.                                                     */
@@ -145,20 +145,10 @@ int main(int argc, char *argv[])
     parm.band->description = _("Band(s) to select (default is all bands)");
     parm.band->guisection = _("Bands");
 
-    parm.memory = G_define_option();
-    parm.memory->key = "memory";
-    parm.memory->type = TYPE_INTEGER;
-    parm.memory->required = NO;
+    parm.memory = G_define_standard_option(G_OPT_MEMORYMB);
 #if GDAL_VERSION_NUM < 1800
     parm.memory->options = "0-2047";
 #endif
-    /* first check MEMORYMB in GISRC */
-    memstr = G_getenv_nofatal("MEMORYMB");
-    if (!memstr)
-       memstr = "300";
-    parm.memory->answer = memstr;
-    parm.memory->label = _("Maximum memory to be used (in MB)");
-    parm.memory->description = _("Cache size for raster rows");
 
     parm.target = G_define_option();
     parm.target->key = "target";

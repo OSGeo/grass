@@ -241,6 +241,8 @@ typedef enum
 
     G_OPT_I_GROUP,		/*!< old input imagery group */
     G_OPT_I_SUBGROUP,		/*!< old input imagery subgroup */
+
+    G_OPT_MEMORYMB,		/*!< Maximum memory to be used (in MB): cache size for raster rows */
     G_OPT_R_INPUT,		/*!< old input raster map */
     G_OPT_R_INPUTS,		/*!< old input raster maps */
     G_OPT_R_OUTPUT,		/*!< new output raster map */

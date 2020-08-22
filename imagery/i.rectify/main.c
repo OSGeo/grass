@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 				   nearest neighbor, bilinear, cubic */
     struct Flag *c, *a, *t;
     struct GModule *module;
-    char *memstr;
+
 
     G_gisinit(argv[0]);
 
@@ -114,18 +114,7 @@ int main(int argc, char *argv[])
     tres->required = NO;
     tres->description = _("Target resolution (ignored if -c flag used)");
 
-    mem = G_define_option();
-    mem->key = "memory";
-    mem->type = TYPE_DOUBLE;
-    mem->key_desc = "memory in MB";
-    mem->required = NO;
-    /* first check MEMORYMB in GISRC */
-    memstr = G_getenv_nofatal("MEMORYMB");
-    if (!memstr)
-       memstr = "300";
-    mem->answer = memstr;
-    mem->label = _("Maximum memory to be used (in MB)");
-    mem->description = _("Cache size for raster rows");
+    mem = G_define_standard_option(G_OPT_MEMORYMB);
  
     ipolname = make_ipol_list();
 

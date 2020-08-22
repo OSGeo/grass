@@ -67,7 +67,6 @@ int main(int argc, char *argv[])
     double seg2kb;
     int num_open_segs, num_open_array_segs, num_seg_total;
     double memory_divisor, heap_mem, disk_space;
-    char *memstr;
     const char *mapset;
 
     G_gisinit(argv[0]);
@@ -133,17 +132,7 @@ int main(int argc, char *argv[])
     input.min_stream_length->description =
 	_("Applies only to first-order stream segments (springs/stream heads)");
 
-    input.memory = G_define_option();
-    input.memory->key = "memory";
-    input.memory->type = TYPE_INTEGER;
-    input.memory->required = NO;
-    /* first check MEMORYMB in GISRC */
-    memstr = G_getenv_nofatal("MEMORYMB");
-    if (!memstr)
-       memstr = "300";
-    input.memory->answer = memstr;
-    input.memory->label = _("Maximum memory to be used (in MB)");
-    input.memory->description = _("Cache size for raster rows");
+    input.memory = G_define_standard_option(G_OPT_MEMORYMB);
 
     output.stream_rast = G_define_standard_option(G_OPT_R_OUTPUT);
     output.stream_rast->key = "stream_raster";

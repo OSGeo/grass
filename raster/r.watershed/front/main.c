@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     struct Flag *flag_abs;
     struct Flag *flag_flat;
     struct GModule *module;
-    char *memstr;
+
 
     G_gisinit(argv[0]);
 
@@ -209,17 +209,7 @@ int main(int argc, char *argv[])
     opt15->description =
 	_("1 = most diverging flow, 10 = most converging flow. Recommended: 5");
 
-    opt16 = G_define_option();
-    opt16->key = "memory";
-    opt16->type = TYPE_INTEGER;
-    opt16->required = NO;
-    /* first check MEMORYMB in GISRC */
-    memstr = G_getenv_nofatal("MEMORYMB");
-    if (!memstr)
-       memstr = "300";
-    opt16->answer = memstr;	/* 300MB default value, please keep r.terraflow in sync */
-    opt16->label = _("Maximum memory to be used with -m flag (in MB)");
-    opt16->description = _("Cache size for raster rows");
+    opt16 = G_define_standard_option(G_OPT_MEMORYMB);
 
     flag_sfd = G_define_flag();
     flag_sfd->key = 's';

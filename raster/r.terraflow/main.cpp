@@ -128,20 +128,9 @@ parse_args(int argc, char *argv[]) {
       "SFD (D8) direction (meaningful only for MFD flow). "
       "If no answer is given it defaults to infinity.");
 
-  /* main memory */
-  char *memstr;
+  /* raster cache memory */
   struct Option *mem;
-  mem = G_define_option() ;
-  mem->key         = "memory";
-  mem->type        = TYPE_INTEGER;
-  mem->required    = NO;
-  /* first check MEMORYMB in GISRC */
-  memstr = (char *) G_getenv_nofatal("MEMORYMB");
-  if (!memstr)
-     memstr = (char *) "300";
-  mem->answer = memstr;
-  mem->label = _("Maximum memory to be used (in MB)");
-  mem->description = _("Cache size for raster rows");
+  mem = G_define_standard_option(G_OPT_MEMORYMB);
 
   /* temporary STREAM path */
   struct Option *streamdir;
@@ -149,7 +138,7 @@ parse_args(int argc, char *argv[]) {
   streamdir->key        = "directory";
   streamdir->type       = TYPE_STRING;
   streamdir->required   = NO;
-  //streamdir->answer     = "";
+  /* streamdir->answer     = ""; */
   streamdir->description=
      _("Directory to hold temporary files (they can be large)");
 

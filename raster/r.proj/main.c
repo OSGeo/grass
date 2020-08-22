@@ -139,7 +139,6 @@ int main(int argc, char **argv)
 #endif
     struct Cell_head incellhd,	/* cell header of input map     */
       outcellhd;		/* and output map               */
-    char *memstr;
 
 
     G_gisinit(argv[0]);
@@ -187,17 +186,7 @@ int main(int argc, char **argv)
     interpol->guisection = _("Target");
     interpol->descriptions = make_ipol_desc();
 
-    memory = G_define_option();
-    memory->key = "memory";
-    memory->type = TYPE_INTEGER;
-    memory->required = NO;
-    /* first check MEMORYMB in GISRC */
-    memstr = G_getenv_nofatal("MEMORYMB");
-    if (!memstr)
-       memstr = "300";
-    memory->answer = memstr;
-    memory->label = _("Maximum memory to be used (in MB)");
-    memory->description = _("Cache size for raster rows");
+    memory = G_define_standard_option(G_OPT_MEMORYMB);
 
     res = G_define_option();
     res->key = "resolution";

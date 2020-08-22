@@ -34,14 +34,7 @@
 #% description: Input band(s) to select (default is all bands)
 #% guisection: Input
 #%end
-#%option
-#% key: memory
-#% type: integer
-#% required: no
-#% multiple: no
-#% label: Maximum memory to be used (in MB)
-#% description: Cache size for raster rows
-#% answer: 300
+#%option G_OPT_MEMORYMB
 #%end
 #%option G_OPT_R_OUTPUT
 #% description: Name for output raster map

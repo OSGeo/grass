@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
     double peak = 0.0;
     int dsize, nearest_size;
     double disk_mb, mem_mb, pq_mb;
-    char *memstr;
+
     int dir_bin;
     DCELL mysolvedir[2], solvedir[2];
 
@@ -250,19 +250,7 @@ int main(int argc, char *argv[])
 	_("Cost assigned to null cells. By default, null cells are excluded");
     opt6->guisection = _("NULL cells");
 
-    opt10 = G_define_option();
-    opt10->key = "memory";
-    opt10->type = TYPE_INTEGER;
-    opt10->key_desc = "value";
-    opt10->required = NO;
-    opt10->multiple = NO;
-    /* first check MEMORYMB in GISRC */
-    memstr = G_getenv_nofatal("MEMORYMB");
-    if (!memstr)
-       memstr = "300";
-    opt10->answer = memstr;
-    opt10->description = _("Maximum memory to be used in MB");
-    opt10->description = _("Cache size for raster rows");
+    opt10 = G_define_standard_option(G_OPT_MEMORYMB);
 
     flag2 = G_define_flag();
     flag2->key = 'k';

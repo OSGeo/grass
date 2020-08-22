@@ -19,7 +19,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     struct Flag *diagonal, *weighted, *ms_a, *ms_p;
     struct Option *gof, *endt;
     int bands;
-    char *memstr;
+
 
     /* required parameters */
     group = G_define_standard_option(G_OPT_R_INPUTS);
@@ -113,17 +113,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     smooth_weight->guisection = _("Settings");
 #endif
 
-    mem = G_define_option();
-    mem->key = "memory";
-    mem->type = TYPE_INTEGER;
-    mem->required = NO;
-    /* first check MEMORYMB in GISRC */
-    memstr = G_getenv_nofatal("MEMORYMB");
-    if (!memstr)
-       memstr = "300";
-    mem->answer = memstr;
-    mem->label = _("Maximum memory to be used (in MB)");
-    mem->description = _("Cache size for raster rows");
+    mem = G_define_standard_option(G_OPT_MEMORYMB);
 
     /* TODO input for distance function */
 
