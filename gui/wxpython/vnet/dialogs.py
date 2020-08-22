@@ -128,8 +128,7 @@ class VNETDialog(wx.Dialog):
 
         self.mainPanel = Panel(parent=self)
         self.notebook = GNotebook(parent=self.mainPanel,
-                                  style=FN.FNB_FANCY_TABS | FN.FNB_BOTTOM |
-                                  FN.FNB_NO_X_BUTTON)
+                                  style=globalvar.FNPageDStyle)
 
         # statusbar
         self.stPriorities = {'important': 5, 'iformation': 1}
