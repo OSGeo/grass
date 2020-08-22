@@ -869,13 +869,10 @@ class DataCatalogTree(TreeView):
             return
         # Check selected mapset
         elif node.data['type'] == 'mapset':
-            mapset = self.selected_mapset[0].data['name']
-            message = get_reason_mapset_not_removable(self.selected_grassdb[0].data['name'],
-                                                      self.selected_location[0].data['name'],
-                                                      mapset,
-                                                      check_permanent=True)
-            if message:
-                self.showNotification.emit(message="")
+            if get_reason_mapset_not_removable(self.selected_grassdb[0].data['name'],
+                                               self.selected_location[0].data['name'],
+                                               self.selected_mapset[0].data['name']
+                                               check_permanent=True)
                 event.Veto()
                 return
         # Check selected location
