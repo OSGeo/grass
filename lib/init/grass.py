@@ -1886,9 +1886,18 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     ZLOC="Mapset <$z_ms> in <$z_lo>"
     """
     elif sh == "bash":
+        # Append existing history to file ("flush").
+        # Clear the (in-memory) history.
+        # Change the file.
+        # Read history from that file.
         specfic_addition = """
-    history -a
-    HISTFILE=$MAPSET_PATH/{sh_history}
+    if [ "$_grass_old_mapset" != "$MAPSET_PATH" ] ; then
+        history -a
+        history -c
+        HISTFILE="$MAPSET_PATH/{sh_history}"
+        history -r
+        _grass_old_mapset="$MAPSET_PATH"
+    fi
     """.format(sh_history=sh_history)
 
     # double curly brackets means single one for format function
