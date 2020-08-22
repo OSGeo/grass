@@ -311,14 +311,10 @@ class GMFrame(wx.Frame):
                 parent=self, style=globalvar.FNPageDStyle)
         else:
             self.notebook = FormNotebook(parent=self, style=wx.NB_BOTTOM)
-        # create displays notebook widget and add it to main notebook page
-        cbStyle = globalvar.FNPageStyle
-        if globalvar.hasAgw:
-            self.notebookLayers = FN.FlatNotebook(
-                self.notebook, id=wx.ID_ANY, agwStyle=cbStyle)
-        else:
-            self.notebookLayers = FN.FlatNotebook(
-                self.notebook, id=wx.ID_ANY, style=cbStyle)
+
+        # create displays notebook widget
+        self.notebookLayers = GNotebook(parent=self.notebook,
+                                        style=globalvar.FNPageStyle)
         self.notebookLayers.SetTabAreaColour(globalvar.FNPageColor)
         menu = self._createTabMenu()
         self.notebookLayers.SetRightClickMenu(menu)
@@ -2113,7 +2109,8 @@ class GMFrame(wx.Frame):
             dispName = name
         else:
             dispName = "Display " + str(self.displayIndex + 1)
-        self.notebookLayers.AddPage(self.pg_panel, text=dispName, select=True)
+        self.notebookLayers.AddPage(
+            page=self.pg_panel, text=dispName, select=True)
         self.currentPage = self.notebookLayers.GetCurrentPage()
 
         # create layer tree (tree control for managing GIS layers)  and put on
