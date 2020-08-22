@@ -188,7 +188,7 @@ class LayerManagerGrassInterface(object):
         # add: if map should be added to layer tree (questionable attribute)
         self.mapCreated = Signal('LayerManagerGrassInterface.mapCreated')
 
-        self.mapsetChanged = Signal('LayerManagerGrassInterface.mapsetChanged')
+        self.currentMapsetChanged = Signal('LayerManagerGrassInterface.currentMapsetChanged')
 
         # Signal emitted to request updating of map
         self.updateMap = Signal('LayerManagerGrassInterface.updateMap')

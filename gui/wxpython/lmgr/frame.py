@@ -69,7 +69,7 @@ from lmgr.giface import LayerManagerGrassInterface
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
-from startup.guiutils import change_mapset_interactively
+from startup.guiutils import switch_mapset_interactively
 
 
 class GMFrame(wx.Frame):
@@ -190,7 +190,7 @@ class GMFrame(wx.Frame):
 
         self._giface.mapCreated.connect(self.OnMapCreated)
         self._giface.updateMap.connect(self._updateCurrentMap)
-        self._giface.mapsetChanged.connect(self.OnMapsetChanged)
+        self._giface.currentMapsetChanged.connect(self.OnMapsetChanged)
 
         # minimal frame size
         self.SetMinSize(globalvar.GM_WINDOW_MIN_SIZE)
@@ -1079,7 +1079,7 @@ class GMFrame(wx.Frame):
                                              gisenv['GISDBASE'],
                                              location,
                                              mapset):
-                change_mapset_interactively(self, self._giface,
+                switch_mapset_interactively(self, self._giface,
                                             None,
                                             location,
                                             mapset)
@@ -1126,12 +1126,15 @@ class GMFrame(wx.Frame):
                                              gisenv['GISDBASE'],
                                              gisenv['LOCATION_NAME'],
                                              mapset):
-                change_mapset_interactively(self, self._giface,
+                switch_mapset_interactively(self, self._giface,
                                             None,
                                             None,
                                             mapset)
 
     def OnMapsetChanged(self, dbase, location, mapset):
+        """Current mapset changed.
+        If location is None, mapset changed within location.
+        """
         if not location:
             # TODO: this does not use the actual names if they were
             # renamed (it just uses the numbers)

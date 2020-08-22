@@ -46,7 +46,7 @@ from startup.guiutils import (
     download_location_interactively,
     delete_grassdb_interactively,
     can_switch_mapset_interactive,
-    change_mapset_interactively
+    switch_mapset_interactively
 )
 
 from grass.pydispatch.signal import Signal
@@ -266,7 +266,7 @@ class DataCatalogTree(TreeView):
         self.parent = parent
         self.contextMenu.connect(self.OnRightClick)
         self.itemActivated.connect(self.OnDoubleClick)
-        self._giface.mapsetChanged.connect(self._updateAfterMapsetChanged)
+        self._giface.currentMapsetChanged.connect(self._updateAfterMapsetChanged)
         self._iconTypes = ['grassdb', 'location', 'mapset', 'raster',
                            'vector', 'raster_3d']
         self._initImages()
@@ -1272,15 +1272,16 @@ class DataCatalogTree(TreeView):
         if can_switch_mapset_interactive(self, grassdb, location, mapset):
             # Switch to mapset in the same location
             if (grassdb == genv['GISDBASE'] and location == genv['LOCATION_NAME']):
-                change_mapset_interactively(self, self._giface, None, None, mapset)
+                switch_mapset_interactively(self, self._giface, None, None, mapset)
             # Switch to mapset in the same grassdb
             elif grassdb == genv['GISDBASE']:
-                change_mapset_interactively(self, self._giface, None, location, mapset)
+                switch_mapset_interactively(self, self._giface, None, location, mapset)
             # Switch to mapset in a different grassdb
             else:
-                change_mapset_interactively(self, self._giface, grassdb, location, mapset)
+                switch_mapset_interactively(self, self._giface, grassdb, location, mapset)
 
     def _updateAfterMapsetChanged(self):
+        """Update tree after current mapset has changed"""
         self.UpdateCurrentDbLocationMapsetNode()
         self.ExpandCurrentMapset()
         self.RefreshItems()
