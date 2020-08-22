@@ -1837,7 +1837,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     if not sh == "bash":
         os.environ['HISTFILE'] = os.path.join(location, sh_history)
     if not os.getenv('HISTSIZE') and not os.getenv('HISTFILESIZE'):
-        os.environ['HISTSIZE'] = "5000"
+        os.environ['HISTSIZE'] = "3000"
 
     # instead of changing $HOME, start bash with:
     #   --rcfile "$LOCATION/.bashrc" ?
