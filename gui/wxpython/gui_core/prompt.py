@@ -44,7 +44,7 @@ class GPrompt(object):
     See subclass GPromptPopUp and GPromptSTC.
     """
 
-    def __init__(self, parent, menuModel):
+    def __init__(self, parent, giface, menuModel):
         self.parent = parent                 # GConsole
         self.panel = self.parent.GetPanel()
 
@@ -63,8 +63,8 @@ class GPrompt(object):
         # command description (gtask.grassTask)
         self.cmdDesc = None
 
-        self.cmdbuffer = self._readHistory()
-        self.cmdindex = len(self.cmdbuffer)
+        self._loadHistory()
+        giface.currentMapsetChanged.connect(self._loadHistory)
 
         # list of traced commands
         self.commands = list()
@@ -93,6 +93,11 @@ class GPrompt(object):
             fileHistory.close()
 
         return hist
+
+    def _loadHistory(self):
+        """Load history from a history file to data structures"""
+        self.cmdbuffer = self._readHistory()
+        self.cmdindex = len(self.cmdbuffer)
 
     def _getListOfMaps(self):
         """Get list of maps"""
@@ -134,8 +139,8 @@ class GPrompt(object):
 class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
     """Styled wxGUI prompt with autocomplete and calltips"""
 
-    def __init__(self, parent, menuModel, margin=False):
-        GPrompt.__init__(self, parent=parent, menuModel=menuModel)
+    def __init__(self, parent, giface, menuModel, margin=False):
+        GPrompt.__init__(self, parent=parent, giface=giface, menuModel=menuModel)
         wx.stc.StyledTextCtrl.__init__(self, self.panel, id=wx.ID_ANY)
 
         #
