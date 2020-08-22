@@ -33,8 +33,6 @@ class DataCatalog(wx.Panel):
                  title=_("Data catalog"), name='catalog', **kwargs):
         """Panel constructor  """
         self.showNotification = Signal('DataCatalog.showNotification')
-        self.changeMapset = Signal('DataCatalog.changeMapset')
-        self.changeLocation = Signal('DataCatalog.changeLocation')
         self.parent = parent
         self.baseTitle = title
         wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
