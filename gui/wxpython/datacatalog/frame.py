@@ -55,15 +55,6 @@ class DataCatalogFrame(wx.Frame):
         self.tree.ReloadTreeItems()
         self.tree.UpdateCurrentDbLocationMapsetNode()
         self.tree.ExpandCurrentMapset()
-        self.tree.changeMapset.connect(lambda mapset:
-                                       self.ChangeDbLocationMapset(
-                                               location=None,
-                                               mapset=mapset))
-        self.tree.changeLocation.connect(lambda mapset, location, dbase:
-                                         self.ChangeDbLocationMapset(
-                                                 dbase=dbase,
-                                                 location=location,
-                                                 mapset=mapset))
 
         # buttons
         self.btnClose = Button(parent=self.panel, id=wx.ID_CLOSE)
@@ -136,34 +127,6 @@ class DataCatalogFrame(wx.Frame):
     def SetRestriction(self, restrict):
         """Allow editing other mapsets or restrict editing to current mapset"""
         self.tree.SetRestriction(restrict)
-
-    def ChangeDbLocationMapset(self, mapset, location=None, dbase=None):
-        """Change mapset, location or db"""
-        if dbase:
-            if RunCommand('g.mapset', parent=self,
-                          location=location,
-                          mapset=mapset,
-                          dbase=dbase) == 0:
-                GMessage(parent=self,
-                         message=_("Current GRASS database is <%(dbase)s>.\n"
-                                   "Current location is <%(loc)s>.\n"
-                                   "Current mapset is <%(mapset)s>."
-                                   ) %
-                         {'dbase': dbase, 'loc': location, 'mapset': mapset})
-        elif location:
-            if RunCommand('g.mapset', parent=self,
-                          location=location,
-                          mapset=mapset) == 0:
-                GMessage(parent=self,
-                         message=_("Current location is <%(loc)s>.\n"
-                                   "Current mapset is <%(mapset)s>.") %
-                         {'loc': location, 'mapset': mapset})
-        else:
-            if RunCommand('g.mapset',
-                          parent=self,
-                          mapset=mapset) == 0:
-                GMessage(parent=self,
-                         message=_("Current mapset is <%s>.") % mapset)
 
     def Filter(self, text):
         self.tree.Filter(text=text)
