@@ -223,14 +223,14 @@ class PsMapFrame(wx.Frame):
         """
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         if globalvar.hasAgw:
-            self.book = fnb.FlatNotebook(parent=self, id=wx.ID_ANY,
-                                         agwStyle=fnb.FNB_FANCY_TABS | fnb.FNB_BOTTOM |
-                                         fnb.FNB_NO_NAV_BUTTONS | fnb.FNB_NO_X_BUTTON)
+            self.book = fnb.FlatNotebook(parent=self,
+                                         id=wx.ID_ANY,
+                                         agwStyle=globalvar.FNPageDStyle)
         else:
-            self.book = fnb.FlatNotebook(parent=self, id=wx.ID_ANY,
-                                         style=fnb.FNB_FANCY_TABS | fnb.FNB_BOTTOM |
-                                         fnb.FNB_NO_NAV_BUTTONS | fnb.FNB_NO_X_BUTTON)
-        #self.book = fnb.FlatNotebook(self, wx.ID_ANY, style = fnb.FNB_BOTTOM)
+            self.book = fnb.FlatNotebook(parent=self,
+                                         id=wx.ID_ANY,
+                                         style=globalvar.FNPageDStyle)
+
         self.book.AddPage(self.canvas, "Draft mode")
         self.book.AddPage(self.previewCanvas, "Preview")
         self.book.SetSelection(0)

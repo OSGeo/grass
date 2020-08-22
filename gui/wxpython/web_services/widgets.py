@@ -135,8 +135,9 @@ class WSPanel(wx.Panel):
         reqDataBox = StaticBox(
             parent=self, label=_(" Requested data settings "))
         self._nb_sizer = wx.StaticBoxSizer(reqDataBox, wx.VERTICAL)
-        self.notebook = GNotebook(parent=self,
-                                  style=FN.FNB_FANCY_TABS | FN.FNB_NO_X_BUTTON)
+        self.notebook = GNotebook(
+            parent=self,
+            style=FN.FNB_FANCY_TABS | FN.FNB_NO_X_BUTTON | FN.FNB_NODRAG)
 
         self._requestPage()
         self._advancedSettsPage()

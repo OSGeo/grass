@@ -124,11 +124,11 @@ class ModelFrame(wx.Frame):
         self.statusbar = self.CreateStatusBar(number=1)
 
         self.notebook = GNotebook(parent=self,
-                                  style=FN.FNB_FANCY_TABS | FN.FNB_BOTTOM |
-                                  FN.FNB_NO_NAV_BUTTONS | FN.FNB_NO_X_BUTTON)
+                                  style=globalvar.FNPageDStyle)
 
         self.canvas = ModelCanvas(self)
-        self.canvas.SetBackgroundColour(wx.WHITE)
+        self.canvas.SetBackgroundColour(
+            wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOW))
         self.canvas.SetCursor(self.cursors["default"])
 
         self.model = Model(self.canvas)
