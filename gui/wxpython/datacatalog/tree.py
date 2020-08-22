@@ -45,7 +45,8 @@ from startup.guiutils import (
     delete_locations_interactively,
     download_location_interactively,
     delete_grassdb_interactively,
-    can_switch_mapset_interactive
+    can_switch_mapset_interactive,
+    switch_mapset_interactively
 )
 
 from grass.pydispatch.signal import Signal
@@ -262,11 +263,10 @@ class DataCatalogTree(TreeView):
         self._restricted = True
 
         self.showNotification = Signal('Tree.showNotification')
-        self.changeMapset = Signal('Tree.changeMapset')
-        self.changeLocation = Signal('Tree.changeLocation')
         self.parent = parent
         self.contextMenu.connect(self.OnRightClick)
         self.itemActivated.connect(self.OnDoubleClick)
+        self._giface.currentMapsetChanged.connect(self._updateAfterMapsetChanged)
         self._iconTypes = ['grassdb', 'location', 'mapset', 'raster',
                            'vector', 'raster_3d']
         self._initImages()
@@ -1272,20 +1272,19 @@ class DataCatalogTree(TreeView):
         if can_switch_mapset_interactive(self, grassdb, location, mapset):
             # Switch to mapset in the same location
             if (grassdb == genv['GISDBASE'] and location == genv['LOCATION_NAME']):
-                self.changeMapset.emit(mapset=mapset)
+                switch_mapset_interactively(self, self._giface, None, None, mapset)
             # Switch to mapset in the same grassdb
             elif grassdb == genv['GISDBASE']:
-                self.changeLocation.emit(mapset=mapset,
-                                         location=location,
-                                         dbase=None)
+                switch_mapset_interactively(self, self._giface, None, location, mapset)
             # Switch to mapset in a different grassdb
             else:
-                self.changeLocation.emit(mapset=mapset,
-                                         location=location,
-                                         dbase=grassdb)
-            self.UpdateCurrentDbLocationMapsetNode()
-            self.ExpandCurrentMapset()
-            self.RefreshItems()
+                switch_mapset_interactively(self, self._giface, grassdb, location, mapset)
+
+    def _updateAfterMapsetChanged(self):
+        """Update tree after current mapset has changed"""
+        self.UpdateCurrentDbLocationMapsetNode()
+        self.ExpandCurrentMapset()
+        self.RefreshItems()
 
     def OnMetadata(self, event):
         """Show metadata of any raster/vector/3draster"""

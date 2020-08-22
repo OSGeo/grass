@@ -33,8 +33,6 @@ class DataCatalog(wx.Panel):
                  title=_("Data catalog"), name='catalog', **kwargs):
         """Panel constructor  """
         self.showNotification = Signal('DataCatalog.showNotification')
-        self.changeMapset = Signal('DataCatalog.changeMapset')
-        self.changeLocation = Signal('DataCatalog.changeLocation')
         self.parent = parent
         self.baseTitle = title
         wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
@@ -50,8 +48,6 @@ class DataCatalog(wx.Panel):
         self.thread = gThread()
         self._loaded = False
         self.tree.showNotification.connect(self.showNotification)
-        self.tree.changeMapset.connect(self.changeMapset)
-        self.tree.changeLocation.connect(self.changeLocation)
 
         # some layout
         self._layout()
