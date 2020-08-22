@@ -871,31 +871,25 @@ class DataCatalogTree(TreeView):
         elif node.data['type'] == 'mapset':
             if get_reason_mapset_not_removable(self.selected_grassdb[0].data['name'],
                                                self.selected_location[0].data['name'],
-                                               self.selected_mapset[0].data['name']
-                                               check_permanent=True)
+                                               self.selected_mapset[0].data['name'],
+                                               check_permanent=True):
                 event.Veto()
                 return
         # Check selected location
         elif node.data['type'] == 'location':
-            location = self.selected_location[0].data['name']
-            messages = get_reasons_location_not_removable(self.selected_grassdb[0].data['name'],
-                                                          location)
-            if messages:
-                self.showNotification.emit(message="")
+            if get_reasons_location_not_removable(self.selected_grassdb[0].data['name'],
+                                                  self.selected_location[0].data['name']):
                 event.Veto()
                 return
 
         # When restricted mode is on, only editing a layer in the current mapset is enabled
         genv = gisenv()
         currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
-        if not self._restricted or \
-                (self._restricted and node.data['type'] in ('raster', 'raster_3d', 'vector') and
-                currentMapset and len(self.selected_layer) == 1):
-            Debug.msg(1, "Start label edit {name}".format(name=node.data['name']))
-            label = _("Editing {name}").format(name=node.data['name'])
-            self.showNotification.emit(message=label)
-        else:
-            self.showNotification.emit(message="")
+        if self._restricted and node.data['type'] in ('raster', 'raster_3d', 'vector') and \
+                currentMapset and len(self.selected_layer) == 1:
+            return
+        # Otherwise when restricted mode is on, editing is not allowed at all
+        if self._restricted:
             event.Veto()
             return
 

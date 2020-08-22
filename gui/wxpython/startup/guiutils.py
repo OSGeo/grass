@@ -64,7 +64,7 @@ class MapsetDialog(TextEntryDialog):
         self.location = location
 
         validator = GenericValidator(self._isMapsetNameValid,
-                                     self._getMapsetNameInvalidReason)
+                                     self._showMapsetNameInvalidReason)
 
         TextEntryDialog.__init__(
             self, parent=parent,
@@ -74,7 +74,7 @@ class MapsetDialog(TextEntryDialog):
             validator=validator,
         )
 
-    def _getMapsetNameInvalidReason(self, ctrl):
+    def _showMapsetNameInvalidReason(self, ctrl):
         message = get_mapset_name_invalid_reason(self.database,
                                                  self.location,
                                                  ctrl.GetValue())
@@ -82,9 +82,7 @@ class MapsetDialog(TextEntryDialog):
 
     def _isMapsetNameValid(self, text):
         """Check whether user's input location is valid or not."""
-        if is_mapset_name_valid(self.database, self.location, text):
-            return True
-        return False
+        return is_mapset_name_valid(self.database, self.location, text)
 
 
 class LocationDialog(TextEntryDialog):
@@ -93,7 +91,7 @@ class LocationDialog(TextEntryDialog):
         self.database = database
 
         validator = GenericValidator(self._isLocationNameValid,
-                                     self._getLocationNameInvalidReason)
+                                     self._showLocationNameInvalidReason)
 
         TextEntryDialog.__init__(
             self, parent=parent,
@@ -103,16 +101,14 @@ class LocationDialog(TextEntryDialog):
             validator=validator,
         )
 
-    def _getLocationNameInvalidReason(self, ctrl):
+    def _showLocationNameInvalidReason(self, ctrl):
         message = get_location_name_invalid_reason(self.database,
                                                    ctrl.GetValue())
         GError(parent=self, message=message, caption=_("Invalid location name"))
 
     def _isLocationNameValid(self, text):
         """Check whether user's input location is valid or not."""
-        if is_location_name_valid(self.database, text):
-            return True
-        return False
+        return is_location_name_valid(self.database, text)
 
 
 # TODO: similar to (but not the same as) read_gisrc function in grass.py

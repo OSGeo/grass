@@ -384,7 +384,7 @@ def is_location_name_valid(database, location_name):
     Returns True if location name is valid, otherwise False.
     """
     return gs.legal_name(location_name) and not \
-        mapset_exists(database, location_name)
+        location_exists(database, location_name)
 
 
 def get_reasons_mapsets_not_removable(mapsets, check_permanent):
