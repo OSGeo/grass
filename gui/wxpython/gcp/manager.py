@@ -1097,6 +1097,8 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.gr_method = 'nearest'
         # region clipping for georectified map
         self.clip_to_region = False
+        # overwrite result map
+        self.overwrite = False
         # number of GCPs selected to be used for georectification (checked)
         self.GCPcount = 0
         # forward RMS error
@@ -1350,6 +1352,10 @@ class GCP(MapFrame, ColumnSorterMixin):
         textProp['font'] = font
         self.pointsToDrawSrc.SetPropertyVal("text", textProp)
         self.pointsToDrawTgt.SetPropertyVal("text", copy(textProp))
+
+        # overwrite result map
+        self.overwrite = UserSettings.Get(group='gcpman', key='map',
+                                          subkey='overwrite')
 
     def SetGCPSatus(self, item, itemIndex):
         """Before GCP is drawn, decides it's colour and whether it
@@ -1643,6 +1649,60 @@ class GCP(MapFrame, ColumnSorterMixin):
         else:
             return True
 
+    def _getOverWriteDialog(self, maptype, overwrite):
+        """Get overwrite confirm dialog
+
+        :param str maptype: map type
+        :param bool overwrite: overwrite
+
+        :return
+
+        object: overwrite dialog
+
+        None: it isn't necessary to display the overwrite dialog
+        """
+        if maptype == 'raster':
+            self.grwiz.SwitchEnv('source')
+            maps = grass.read_command(
+                'i.group', flags='gl', group=self.xygroup, quiet=True,
+            ).split('\n')
+            self.grwiz.SwitchEnv('target')
+            found_maps = []
+            if maps:
+                for map in maps:
+                    if map:
+                        map_name = map.split('@')[0] + self.extension
+                        found = grass.find_file(
+                            name=map_name, element='cell',
+                            mapset=self.currentmapset,
+                        )
+                        if found['name']:
+                            found_maps.append("<{}>".format(found['name']))
+                map_name = ', '.join(found_maps)
+        else:
+            self.grwiz.SwitchEnv('target')
+            found = grass.find_file(
+                name=self.outname, element='vector',
+                mapset=self.currentmapset,
+            )
+            self.grwiz.SwitchEnv('source')
+            map_name = "<{}>".format(found['name'])
+
+        if found['name'] and not overwrite:
+            overwrite_dlg = wx.MessageDialog(
+                self.GetParent(),
+                message=_(
+                    "The {map_type} map {map_name} exists. "
+                    "Do you want to overwrite?".format(
+                        map_type=maptype,
+                        map_name=map_name,
+                    ),
+                ),
+                caption=_('Overwrite?'),
+                style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
+            )
+            return overwrite_dlg
+
     def OnGeorect(self, event):
         """
         Georectifies map(s) in group using i.rectify or v.transform
@@ -1654,6 +1714,18 @@ class GCP(MapFrame, ColumnSorterMixin):
             return
 
         if maptype == 'raster':
+            overwrite_dlg = self._getOverWriteDialog(
+                maptype=maptype, overwrite=self.overwrite,
+            )
+            if overwrite_dlg:
+                if not overwrite_dlg.ShowModal() == wx.ID_YES:
+                    overwrite_dlg.Destroy()
+                    return
+                overwrite_dlg.Destroy()
+                overwrite = True
+            else:
+                overwrite = self.overwrite
+
             self.grwiz.SwitchEnv('source')
 
             if self.clip_to_region:
@@ -1673,7 +1745,8 @@ class GCP(MapFrame, ColumnSorterMixin):
                                   extension=self.extension,
                                   order=self.gr_order,
                                   method=self.gr_method,
-                                  flags=flags)
+                                  flags=flags,
+                                  overwrite=overwrite)
 
             del busy
 
@@ -1682,6 +1755,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                 print(msg, file=sys.stderr)
 
         elif maptype == 'vector':
+
             # loop through all vectors in VREF
 
             self.grwiz.SwitchEnv('source')
@@ -1701,6 +1775,17 @@ class GCP(MapFrame, ColumnSorterMixin):
             # georectify each vector in VREF using v.rectify
             for vect in vectlist:
                 self.outname = str(vect.split('@')[0]) + self.extension
+                overwrite_dlg = self._getOverWriteDialog(
+                    maptype=maptype, overwrite=self.overwrite,
+                )
+                if overwrite_dlg:
+                    if not overwrite_dlg.ShowModal() == wx.ID_YES:
+                        overwrite_dlg.Destroy()
+                        return
+                    overwrite_dlg.Destroy()
+                    overwrite = True
+                else:
+                    overwrite = self.overwrite
                 self._giface.WriteLog(text=_('Transforming <%s>...') % vect,
                                       notification=Notification.MAKE_VISIBLE)
                 ret = msg = ''
@@ -1717,7 +1802,8 @@ class GCP(MapFrame, ColumnSorterMixin):
                                       input=vect,
                                       output=self.outname,
                                       group=self.xygroup,
-                                      order=self.gr_order)
+                                      order=self.gr_order,
+                                      overwrite=overwrite)
 
                 del busy
 
@@ -3047,6 +3133,17 @@ class GrSettingsDialog(wx.Dialog):
                   flag=wx.EXPAND | wx.ALL, border=5)
         self.check.SetValue(self.parent.clip_to_region)
 
+        # overwrite result map
+        overwrite = UserSettings.Get(group='gcpman', key='map',
+                                     subkey='overwrite')
+        self.overwrite = wx.CheckBox(parent=panel, id=wx.ID_ANY,
+                                     label=_('overwrite result map'))
+        self.Bind(wx.EVT_CHECKBOX, self.OnOverwrite, self.overwrite)
+        sizer.Add(self.overwrite, proportion=0,
+                  flag=wx.EXPAND | wx.ALL, border=5)
+        self.overwrite.SetValue(overwrite)
+        self.parent.overwrite = overwrite
+
         # extension
         sizer.Add(
             StaticText(
@@ -3126,6 +3223,9 @@ class GrSettingsDialog(wx.Dialog):
     def OnClipRegion(self, event):
         self.parent.clip_to_region = event.IsChecked()
 
+    def OnOverwrite(self, event):
+        self.parent.overwrite = event.IsChecked()
+
     def OnExtension(self, event):
         self.parent.extension = self.ext_txt.GetValue()
 
@@ -3189,6 +3289,12 @@ class GrSettingsDialog(wx.Dialog):
             subkey='width',
             value=wx.FindWindowById(
                 self.symbol['width']).GetValue())
+        UserSettings.Set(
+            group='gcpman',
+            key='map',
+            subkey='overwrite',
+            value=self.parent.overwrite,
+        )
 
         srcrender = False
         srcrenderVector = False
