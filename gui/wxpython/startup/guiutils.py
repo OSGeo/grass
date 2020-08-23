@@ -29,7 +29,8 @@ from grass.grassdb.checks import (
     get_reason_mapset_not_removable,
     get_reasons_mapsets_not_removable,
     get_reasons_location_not_removable,
-    get_reasons_locations_not_removable
+    get_reasons_locations_not_removable,
+    get_reasons_grassdb_not_removable
 )
 
 from grass.grassdb.create import create_mapset, get_default_mapset_name
@@ -46,8 +47,6 @@ from core.gcmd import GError, GMessage, DecodeString, RunCommand
 from gui_core.dialogs import TextEntryDialog
 from location_wizard.dialogs import RegionDef
 from gui_core.widgets import GenericValidator
-from core.utils import GetListOfLocations
-from grass.script import gisenv
 
 
 def SetSessionMapset(database, location, mapset):
@@ -160,31 +159,6 @@ def GetVersion():
         grassVersion = versionLine
         grassRevisionStr = ''
     return (grassVersion, grassRevisionStr)
-
-
-def get_reasons_grassdb_not_removable(grassdb):
-    """Get reasons why one grassdb cannot be removed.
-
-    Returns messages as list if there were any failed checks, otherwise empty list.
-    """
-    messages = []
-    genv = gisenv()
-
-    # Check if grassdb is current
-    if grassdb == genv['GISDBASE']:
-        messages.append(_("GRASS database <{grassdb}> is the current database.").format(
-            grassdb=grassdb))
-        return messages
-
-    g_locations = GetListOfLocations(grassdb)
-
-    # Append to the list of tuples
-    locations = []
-    for g_location in g_locations:
-        locations.append((grassdb, g_location))
-    messages = get_reasons_locations_not_removable(locations)
-
-    return messages
 
 
 def create_mapset_interactively(guiparent, grassdb, location):

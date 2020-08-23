@@ -866,32 +866,28 @@ class DataCatalogTree(TreeView):
         # Not allowed for grassdb node
         if node.data['type'] == 'grassdb':
             event.Veto()
-            return
         # Check selected mapset
         elif node.data['type'] == 'mapset':
-            if get_reason_mapset_not_removable(self.selected_grassdb[0].data['name'],
-                                               self.selected_location[0].data['name'],
-                                               self.selected_mapset[0].data['name'],
-                                               check_permanent=True):
+            if (
+                self._restricted
+                or get_reason_mapset_not_removable(self.selected_grassdb[0].data['name'],
+                                                   self.selected_location[0].data['name'],
+                                                   self.selected_mapset[0].data['name'],
+                                                   check_permanent=True)
+            ):
                 event.Veto()
-                return
         # Check selected location
         elif node.data['type'] == 'location':
-            if get_reasons_location_not_removable(self.selected_grassdb[0].data['name'],
-                                                  self.selected_location[0].data['name']):
+            if (
+                self._restricted
+                or get_reasons_location_not_removable(self.selected_grassdb[0].data['name'],
+                                                      self.selected_location[0].data['name'])
+            ):
                 event.Veto()
-                return
-
-        # When restricted mode is on, only editing a layer in the current mapset is enabled
-        genv = gisenv()
-        currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
-        if self._restricted and node.data['type'] in ('raster', 'raster_3d', 'vector') and \
-                currentMapset and len(self.selected_layer) == 1:
-            return
-        # Otherwise when restricted mode is on, editing is not allowed at all
-        if self._restricted:
-            event.Veto()
-            return
+        elif node.data['type'] in ('raster', 'raster_3d', 'vector'):
+            currentGrassDb, currentLocation, currentMapset = self._isCurrent(gisenv())
+            if not currentMapset:
+                event.Veto()
 
     def OnEditLabel(self, node, event):
         """End label editing"""

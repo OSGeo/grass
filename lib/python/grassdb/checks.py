@@ -15,6 +15,7 @@ import datetime
 from pathlib import Path
 from grass.script import gisenv
 import grass.script as gs
+import glob
 
 
 def mapset_exists(database, location, mapset):
@@ -484,3 +485,54 @@ def get_reasons_location_not_removable(grassdb, location):
 
     gs.try_remove(tmp_gisrc_file)
     return messages
+
+
+def get_reasons_grassdb_not_removable(grassdb):
+    """Get reasons why one grassdb cannot be removed.
+
+    Returns messages as list if there were any failed checks, otherwise empty list.
+    """
+    messages = []
+    genv = gisenv()
+
+    # Check if grassdb is current
+    if grassdb == genv['GISDBASE']:
+        messages.append(_("GRASS database <{grassdb}> is the current database.").format(
+            grassdb=grassdb))
+        return messages
+
+    g_locations = get_list_of_locations(grassdb)
+
+    # Append to the list of tuples
+    locations = []
+    for g_location in g_locations:
+        locations.append((grassdb, g_location))
+    messages = get_reasons_locations_not_removable(locations)
+
+    return messages
+
+
+def get_list_of_locations(dbase):
+    """Get list of GRASS locations in given dbase
+
+    :param dbase: GRASS database path
+
+    :return: list of locations (sorted)
+    """
+    listOfLocations = list()
+
+    try:
+        for location in glob.glob(os.path.join(dbase, "*")):
+            try:
+                if os.path.join(
+                        location, "PERMANENT") in glob.glob(
+                        os.path.join(location, "*")):
+                    listOfLocations.append(os.path.basename(location))
+            except:
+                pass
+    except (UnicodeEncodeError, UnicodeDecodeError) as e:
+        raise e
+
+    listOfLocations.sort(key=lambda x: x.lower())
+
+    return listOfLocations
