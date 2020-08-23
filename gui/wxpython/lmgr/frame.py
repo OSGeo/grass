@@ -1072,9 +1072,8 @@ class GMFrame(wx.Frame):
 
     def OnLocationWizard(self, event):
         """Create new location"""
-        grassdb_node, loc_node, mapset_node = self.datacatalog.tree.GetCurrentDbLocationMapsetNode()
         grassdatabase, location, mapset = (
-            create_location_interactively(self, grassdb_node.data['name'])
+            create_location_interactively(self, grass.gisenv()['GISDBASE'])
         )
         if location:
             self.datacatalog.tree.ReloadTreeItems()
