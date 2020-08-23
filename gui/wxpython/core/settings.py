@@ -624,6 +624,9 @@ class Settings:
                     'size': 8,
                     'width': 2,
                 },
+                'map': {
+                    'overwrite': False,
+                },
             },
             'nviz': {
                 'view': {
