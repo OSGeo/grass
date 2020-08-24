@@ -880,7 +880,9 @@ def switch_mapset_interactively(guiparent, giface, dbase, location, mapset):
                                "Current mapset is <%(mapset)s>."
                                ) %
                      {'dbase': dbase, 'loc': location, 'mapset': mapset})
-            giface.currentMapsetChanged.emit(dbase, location, mapset)
+            giface.currentMapsetChanged.emit(dbase=dbase,
+                                             location=location,
+                                             mapset=mapset)
     elif location:
         if RunCommand('g.mapset', parent=guiparent,
                       location=location,
