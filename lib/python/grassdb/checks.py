@@ -375,7 +375,7 @@ def is_mapset_name_valid(database, location, mapset_name):
 
     Returns True if mapset name is valid, otherwise False.
     """
-    return gs.legal_name(mapset_name) and mapset_name.lower != "ogr" and not \
+    return gs.legal_name(mapset_name) and mapset_name.lower() != "ogr" and not \
         mapset_exists(database, location, mapset_name)
 
 
