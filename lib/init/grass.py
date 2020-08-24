@@ -1833,7 +1833,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
             'Only bash-like and zsh shells are supported by sh_like_startup()')
 
     # save command history in mapset dir and remember more
-    # bash histroy file handled in specfic_addition
+    # bash histroy file handled in specific_addition
     if not sh == "bash":
         os.environ['HISTFILE'] = os.path.join(location, sh_history)
     if not os.getenv('HISTSIZE') and not os.getenv('HISTFILESIZE'):
@@ -1878,9 +1878,9 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     mask2d_test = 'test -f "$MAPSET_PATH/cell/MASK"'
     mask3d_test = 'test -d "$MAPSET_PATH/grid3/RASTER3D_MASK"'
 
-    specfic_addition = ""
+    specific_addition = ""
     if sh == 'zsh':
-        specfic_addition = """
+        specific_addition = """
     local z_lo=`g.gisenv get=LOCATION_NAME`
     local z_ms=`g.gisenv get=MAPSET`
     ZLOC="Mapset <$z_ms> in <$z_lo>"
@@ -1890,7 +1890,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
         # Clear the (in-memory) history.
         # Change the file.
         # Read history from that file.
-        specfic_addition = """
+        specific_addition = """
     if [ "$_grass_old_mapset" != "$MAPSET_PATH" ] ; then
         history -a
         history -c
@@ -1906,7 +1906,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
         """grass_prompt() {{
     MAPSET_PATH="`g.gisenv get=GISDBASE,LOCATION_NAME,MAPSET separator='/'`"
     LOCATION="$MAPSET_PATH"
-    {specfic_addition}
+    {specific_addition}
     if {mask2d_test} && {mask3d_test} ; then
         echo "[{both_masks}]"
     elif {mask2d_test} ; then
@@ -1920,7 +1920,7 @@ PROMPT_COMMAND=grass_prompt\n""".format(
             mask2d=_("Raster MASK present"),
             mask3d=_("3D raster MASK present"),
             mask2d_test=mask2d_test, mask3d_test=mask3d_test,
-            specfic_addition=specfic_addition
+            specific_addition=specific_addition
             ))
 
     if sh == 'zsh':
