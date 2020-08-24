@@ -519,20 +519,13 @@ def get_list_of_locations(dbase):
 
     :return: list of locations (sorted)
     """
-    listOfLocations = list()
+    locations = list()
+    for location in glob.glob(os.path.join(dbase, "*")):
+        if os.path.join(
+                location, "PERMANENT") in glob.glob(
+                os.path.join(location, "*")):
+            locations.append(os.path.basename(location))
 
-    try:
-        for location in glob.glob(os.path.join(dbase, "*")):
-            try:
-                if os.path.join(
-                        location, "PERMANENT") in glob.glob(
-                        os.path.join(location, "*")):
-                    listOfLocations.append(os.path.basename(location))
-            except:
-                pass
-    except (UnicodeEncodeError, UnicodeDecodeError) as e:
-        raise e
+    locations.sort(key=lambda x: x.lower())
 
-    listOfLocations.sort(key=lambda x: x.lower())
-
-    return listOfLocations
+    return locations
