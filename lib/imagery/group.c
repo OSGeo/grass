@@ -184,11 +184,16 @@ static int get_ref(const char *group, const char *subgroup, const char *gmapset,
     int n;
     char buf[1024];
     char name[INAME_LEN], mapset[INAME_LEN];
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     char color[20];
     FILE *fd;
 
     I_init_group_ref(ref);
-    
+
+    G_unqualified_name(group, gmapset, xname, xmapset);
+    group = xname;
+    gmapset = xmapset;
+
     if (gmapset == NULL || *gmapset == 0)
         gmapset = G_mapset();
 
