@@ -21,6 +21,7 @@
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
+#include <grass/vect/dig_defines.h>
 
 #include "gis_local_proto.h"
 
@@ -56,10 +57,21 @@ static int G__open(const char *element,
     int is_tmp;
     char path[GPATH_MAX];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    const char *type = NULL;
     
     G__check_gisinit();
 
     is_tmp = (element && strncmp(element, ".tmp", 3) == 0);
+    if (strcmp(name, GV_FRMT_ELEMENT) == 0 ||
+        strcmp(name, GV_COOR_ELEMENT) == 0 ||
+        strcmp(name, GV_HEAD_ELEMENT) == 0 ||
+        strcmp(name, GV_DBLN_ELEMENT) == 0 ||
+        strcmp(name, GV_HIST_ELEMENT) == 0 ||
+        strcmp(name, GV_TOPO_ELEMENT) == 0 ||
+        strcmp(name, GV_SIDX_ELEMENT) == 0 ||
+        strcmp(name, GV_CIDX_ELEMENT) == 0) {
+      type = "vector";
+    }
 
     /* READ */
     if (mode == 0) {
@@ -82,7 +94,7 @@ static int G__open(const char *element,
             G_file_name(path, element, name, mapset);
         }
         else {
-            G_file_name_tmp(path, element, name, mapset);
+            G_file_name_tmp(path, element, name, mapset, type);
         }
         
 	if ((fd = open(path, 0)) < 0)
@@ -108,11 +120,11 @@ static int G__open(const char *element,
         if (!is_tmp)
             G_file_name(path, element, name, mapset);
         else
-            G_file_name_tmp(path, element, name, mapset);
+            G_file_name_tmp(path, element, name, mapset, type);
         
 	if (mode == 1 || access(path, 0) != 0) {
             if (is_tmp)
-                G_make_mapset_element_tmp(element);
+                G_make_mapset_element_tmp(element, type);
             else
                 G_make_mapset_element(element);
 	    close(open(path, O_WRONLY | O_CREAT | O_TRUNC, 0666));
