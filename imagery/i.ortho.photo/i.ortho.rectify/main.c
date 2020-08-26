@@ -81,6 +81,7 @@ int main(int argc, char *argv[])
     struct Flag *c, *a, *pan_flag;
     struct GModule *module;
 
+
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -107,13 +108,7 @@ int main(int argc, char *argv[])
     tres->required = NO;
     tres->description = _("Target resolution (ignored if -c flag used)");
 
-    mem = G_define_option();
-    mem->key = "memory";
-    mem->type = TYPE_DOUBLE;
-    mem->key_desc = "memory in MB";
-    mem->required = NO;
-    mem->answer = "300";
-    mem->description = _("Amount of memory to use in MB");
+    mem = G_define_standard_option(G_OPT_MEMORYMB);
 
     ipolname = make_ipol_list();
 

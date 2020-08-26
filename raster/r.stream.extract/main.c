@@ -132,13 +132,7 @@ int main(int argc, char *argv[])
     input.min_stream_length->description =
 	_("Applies only to first-order stream segments (springs/stream heads)");
 
-    input.memory = G_define_option();
-    input.memory->key = "memory";
-    input.memory->type = TYPE_INTEGER;
-    input.memory->required = NO;
-    input.memory->answer = "300";
-    input.memory->label = _("Maximum memory to be used (in MB)");
-    input.memory->description = _("Cache size for raster rows");
+    input.memory = G_define_standard_option(G_OPT_MEMORYMB);
 
     output.stream_rast = G_define_standard_option(G_OPT_R_OUTPUT);
     output.stream_rast->key = "stream_raster";
