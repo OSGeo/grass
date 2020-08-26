@@ -11,12 +11,12 @@ In this simple example we create several raster maps with random values
 and one elevation map. The random value raster maps are registered in a 
 space time raster dataset. All maps of this space time raster dataset 
 are exported using <b>t.rast.out.vtk</b> into the directory 
-<b>/tmp/test1</b>.
+<b>/tmp/export</b>.
 
 
 <div class="code"><pre>
 mkdir /tmp/export
-t.rast.out.vtk input=precip_abs expdir=/tmp/export elevation=elevation
+t.rast.out.vtk input=precip_abs directory=/tmp/export/ elevation=elevation
 
 ls -1 /tmp/export
 000000_tempmean_monthly.vtk
@@ -37,7 +37,7 @@ ls -1 /tmp/export
 
 <em>
 <a href="r.out.vtk.html">r.out.vtk</a>,
-<a href="http://www.paraview.org">ParaView</a>
+<a href="https://www.paraview.org">ParaView</a>
 </em>
 
 <h2>AUTHOR</h2>
