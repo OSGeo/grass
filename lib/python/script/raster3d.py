@@ -27,7 +27,7 @@ from .utils import float_or_dms, parse_key_val
 from grass.exceptions import CalledModuleError
 
 
-def raster3d_info(map):
+def raster3d_info(map, env=None):
     """Return information about a raster3d map (interface to `r3.info`).
     Example:
 
@@ -38,6 +38,7 @@ def raster3d_info(map):
     0
 
     :param str map: map name
+    :param env: environment
 
     :return: parsed raster3d info
     """
@@ -48,7 +49,7 @@ def raster3d_info(map):
         else:
             return float(s)
 
-    s = read_command('r3.info', flags='rg', map=map)
+    s = read_command('r3.info', flags='rg', map=map, env=env)
     kv = parse_key_val(s)
     for k in ['min', 'max']:
         kv[k] = float_or_null(kv[k])

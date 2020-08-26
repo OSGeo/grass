@@ -24,7 +24,7 @@ from .utils import try_remove
 from grass.exceptions import CalledModuleError
 
 
-def db_describe(table, **args):
+def db_describe(table, env=None, **args):
     """Return the list of columns for a database table
     (interface to `db.describe -c`). Example:
 
@@ -37,6 +37,7 @@ def db_describe(table, **args):
 
     :param str table: table name
     :param list args:
+    :param env: environment
 
     :return: parsed module output
     """
@@ -44,7 +45,7 @@ def db_describe(table, **args):
         args.pop('database')
     if 'driver' in args and args['driver'] == '':
         args.pop('driver')
-    s = read_command('db.describe', flags='c', table=table, **args)
+    s = read_command('db.describe', flags='c', table=table, env=env, **args)
     if not s:
         fatal(_("Unable to describe table <%s>") % table)
 
@@ -66,7 +67,7 @@ def db_describe(table, **args):
     return result
 
 
-def db_table_exist(table, **args):
+def db_table_exist(table, env=None, **args):
     """Check if table exists.
 
     If no driver or database are given, then default settings is used
@@ -81,6 +82,7 @@ def db_table_exist(table, **args):
 
     :param str table: table name
     :param args:
+    :param env: environment
 
     :return: True for success, False otherwise
     """
@@ -88,7 +90,7 @@ def db_table_exist(table, **args):
     ok = True
     try:
         run_command('db.describe', flags='c', table=table,
-                    stdout=nuldev, stderr=nuldev, **args)
+                    stdout=nuldev, stderr=nuldev, env=env, **args)
     except CalledModuleError:
         ok = False
     finally:
@@ -97,7 +99,7 @@ def db_table_exist(table, **args):
     return ok
 
 
-def db_connection(force=False):
+def db_connection(force=False, env=None):
     """Return the current database connection parameters
     (interface to `db.connect -g`). Example:
 
@@ -105,23 +107,25 @@ def db_connection(force=False):
     {'group': '', 'schema': '', 'driver': 'sqlite', 'database': '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'}
 
     :param force True to set up default DB connection if not defined
+    :param env: environment
 
     :return: parsed output of db.connect
     """
     try:
         nuldev = open(os.devnull, 'w')
-        conn = parse_command('db.connect', flags='g', stderr=nuldev)
+        conn = parse_command('db.connect', flags='g', stderr=nuldev, env=env)
         nuldev.close()
     except CalledModuleError:
         conn = None
     
     if not conn and force:
-        run_command('db.connect', flags='c')
-        conn = parse_command('db.connect', flags='g')
+        run_command('db.connect', flags='c', env=env)
+        conn = parse_command('db.connect', flags='g', env=env)
 
     return conn
 
-def db_select(sql=None, filename=None, table=None, **args):
+
+def db_select(sql=None, filename=None, table=None, env=None, **args):
     """Perform SQL select statement
 
     Note: one of <em>sql</em>, <em>filename</em>, or <em>table</em>
@@ -145,8 +149,9 @@ def db_select(sql=None, filename=None, table=None, **args):
     :param str filename: name of file with SQL statements (or None)
     :param str table: name of table to query (or None)
     :param str args:  see \gmod{db.select} arguments
+    :param env: environment
     """
-    fname = tempfile(create=False)
+    fname = tempfile(create=False, env=env)
     if sql:
         args['sql'] = sql
     elif filename:
@@ -162,7 +167,7 @@ def db_select(sql=None, filename=None, table=None, **args):
 
     try:
         run_command('db.select', quiet=True, flags='c',
-                    output=fname, **args)
+                    output=fname, env=env, **args)
     except CalledModuleError:
         fatal(_("Fetching data failed"))
 
@@ -174,7 +179,7 @@ def db_select(sql=None, filename=None, table=None, **args):
     return tuple(result)
 
 
-def db_table_in_vector(table, mapset='.'):
+def db_table_in_vector(table, mapset='.', env=None):
     """Return the name of vector connected to the table.
     By default it check only in the current mapset, because the same table
     name could be used also in other mapset by other vector.
@@ -189,13 +194,14 @@ def db_table_in_vector(table, mapset='.'):
     0
 
     :param str table: name of table to query
+    :param env: environment
     """
     from .vector import vector_db
     nuldev = open(os.devnull, 'w')
     used = []
-    vects = list_strings('vector', mapset=mapset)
+    vects = list_strings('vector', mapset=mapset, env=env)
     for vect in vects:
-        for f in vector_db(vect, stderr=nuldev).values():
+        for f in vector_db(vect, stderr=nuldev, env=env).values():
             if not f:
                 continue
             if f['table'] == table:

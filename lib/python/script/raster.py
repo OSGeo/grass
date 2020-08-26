@@ -33,27 +33,28 @@ if sys.version_info.major >= 3:
     unicode = str
 
 
-def raster_history(map, overwrite=False):
+def raster_history(map, overwrite=False, env=None):
     """Set the command history for a raster map to the command used to
     invoke the script (interface to `r.support`).
 
     :param str map: map name
+    :param env: environment
 
     :return: True on success
     :return: False on failure
 
     """
-    current_mapset = gisenv()['MAPSET']
-    if find_file(name=map)['mapset'] == current_mapset:
+    current_mapset = gisenv(env)['MAPSET']
+    if find_file(name=map, env=env)['mapset'] == current_mapset:
         if overwrite == True:
-            historyfile = tempfile()
+            historyfile = tempfile(env=env)
             f = open(historyfile, 'w')
             f.write(os.environ['CMDLINE'])
             f.close()
-            run_command('r.support', map=map, loadhistory=historyfile)
+            run_command('r.support', map=map, loadhistory=historyfile, env=env)
             try_remove(historyfile)
         else:
-            run_command('r.support', map=map, history=os.environ['CMDLINE'])
+            run_command('r.support', map=map, history=os.environ['CMDLINE'], env=env)
         return True
 
     warning(_("Unable to write history for <%(map)s>. "
@@ -61,7 +62,7 @@ def raster_history(map, overwrite=False):
     return False
 
 
-def raster_info(map):
+def raster_info(map, env=None):
     """Return information about a raster map (interface to
     `r.info -gre`). Example:
 
@@ -69,6 +70,7 @@ def raster_info(map):
     {'creator': '"helena"', 'cols': '1500' ... 'south': 215000.0}
 
     :param str map: map name
+    :param env: environment
 
     :return: parsed raster info
 
@@ -80,7 +82,7 @@ def raster_info(map):
         else:
             return float(s)
 
-    s = read_command('r.info', flags='gre', map=map)
+    s = read_command('r.info', flags='gre', map=map, env=env)
     kv = parse_key_val(s)
     for k in ['min', 'max']:
         kv[k] = float_or_null(kv[k])
