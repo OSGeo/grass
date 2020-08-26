@@ -20,6 +20,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     struct Option *gof, *endt;
     int bands;
 
+
     /* required parameters */
     group = G_define_standard_option(G_OPT_R_INPUTS);
     group->key = "group";
@@ -112,12 +113,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     smooth_weight->guisection = _("Settings");
 #endif
 
-    mem = G_define_option();
-    mem->key = "memory";
-    mem->type = TYPE_INTEGER;
-    mem->required = NO;
-    mem->answer = "300";
-    mem->description = _("Memory in MB");
+    mem = G_define_standard_option(G_OPT_MEMORYMB);
 
     /* TODO input for distance function */
 

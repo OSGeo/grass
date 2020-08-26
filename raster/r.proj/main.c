@@ -186,13 +186,7 @@ int main(int argc, char **argv)
     interpol->guisection = _("Target");
     interpol->descriptions = make_ipol_desc();
 
-    memory = G_define_option();
-    memory->key = "memory";
-    memory->type = TYPE_INTEGER;
-    memory->required = NO;
-    memory->answer = "300";
-    memory->label = _("Maximum memory to be used (in MB)");
-    memory->description = _("Cache size for raster rows");
+    memory = G_define_standard_option(G_OPT_MEMORYMB);
 
     res = G_define_option();
     res->key = "resolution";

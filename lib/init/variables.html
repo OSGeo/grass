@@ -531,6 +531,14 @@ g.gisenv set=DEBUG=0
   <dt>MAPSET</dt>
   <dd>initial mapset</dd>
   
+  <dt>MEMORYMB</dt>
+  <dd>[entire GRASS with focus on raster related data processing]<br>
+    sets the maximum memory to be used (in MB), i.e. the cache size for raster rows
+<div class="code"><pre>
+# set to 6 GB (default: 300 MB)
+g.gisenv set="MEMORYMB=6000"
+</pre></div>
+
   <dt>OVERWRITE</dt>
   <dd>[all modules]<br>
     toggles map overwrite.

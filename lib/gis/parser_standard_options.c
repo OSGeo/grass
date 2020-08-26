@@ -52,6 +52,7 @@
    - G_OPT_I_SUBGROUP
 
   - raster:
+   - G_OPT_MEMORYMB
    - G_OPT_R_INPUT
    - G_OPT_R_INPUTS
    - G_OPT_R_OUTPUT
@@ -137,6 +138,7 @@
 struct Option *G_define_standard_option(int opt)
 {
     struct Option *Opt;
+    char *memstr;
 
     Opt = G_define_option();
 
@@ -245,6 +247,22 @@ struct Option *G_define_standard_option(int opt)
 	break;
 
 	/* raster maps */
+    case G_OPT_MEMORYMB:
+	Opt->key = "memory";
+	Opt->type = TYPE_INTEGER;
+	Opt->key_desc = "memory in MB";
+	Opt->required = NO;
+	Opt->multiple = NO;
+	Opt->answer = "300";
+	/* start dynamic answer */
+	/* check MEMORYMB in GISRC, set with g.gisenv */
+	memstr = G_store(G_getenv_nofatal("MEMORYMB"));
+	if (memstr && *memstr)
+	    Opt->answer = memstr;
+	/* end dynamic answer */
+	Opt->label = _("Maximum memory to be used (in MB)");
+	Opt->description = _("Cache size for raster rows");
+	break;
     case G_OPT_R_INPUT:
 	Opt->key = "input";
 	Opt->type = TYPE_STRING;

@@ -50,7 +50,14 @@ def parse_options(lines, startswith='Opt'):
     def parse_glines(glines):
         res = {}
         key = None
+        dynamic_answer = False
         for line in glines:
+            if line.strip() == "/* start dynamic answer */":
+                dynamic_answer = True
+            if line.strip() == "/* end dynamic answer */":
+                dynamic_answer = False
+            if dynamic_answer or line.startswith('/*'):
+                continue
             if line.startswith('/*'):
                 continue
             if line.startswith(startswith) and line.endswith(';'):

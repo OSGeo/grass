@@ -97,14 +97,7 @@
 #% answer: 0.01
 #% guisection: Spline options
 #%end
-#%option
-#% key: memory
-#% type: integer
-#% required: no
-#% multiple: no
-#% label: Maximum memory to be used (in MB)
-#% description: Cache size for raster rows
-#% answer: 300
+#%option G_OPT_MEMORYMB
 #%end
 
 

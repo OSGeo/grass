@@ -75,14 +75,7 @@
 #% multiple: no
 #%end
 
-#%option
-#% key: memory
-#% type: integer
-#% description: Cache size for raster rows
-#% label: Maximum memory to be used (in MB)
-#% options: 0-2047
-#% answer: 300
-#% multiple: no
+#%option G_OPT_MEMORYMB
 #%end
 
 #%flag

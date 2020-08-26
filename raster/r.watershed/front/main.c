@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
     struct Flag *flag_flat;
     struct GModule *module;
 
+
     G_gisinit(argv[0]);
 
     /* Set description */
@@ -208,12 +209,7 @@ int main(int argc, char *argv[])
     opt15->description =
 	_("1 = most diverging flow, 10 = most converging flow. Recommended: 5");
 
-    opt16 = G_define_option();
-    opt16->key = "memory";
-    opt16->type = TYPE_INTEGER;
-    opt16->required = NO;
-    opt16->answer = "300";	/* 300MB default value, please keep r.terraflow in sync */
-    opt16->description = _("Maximum memory to be used with -m flag (in MB)");
+    opt16 = G_define_standard_option(G_OPT_MEMORYMB);
 
     flag_sfd = G_define_flag();
     flag_sfd->key = 's';

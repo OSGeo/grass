@@ -71,6 +71,7 @@ int main(int argc, char *argv[])
 	*memory_opt, *solver, *error, *iter;
     struct Flag *cross_corr_flag, *spline_step_flag;
 
+
     struct Reg_dimens dims;
     struct Cell_head elaboration_reg, original_reg;
     struct bound_box general_box, overlap_box, original_box;
@@ -185,13 +186,7 @@ int main(int argc, char *argv[])
 
     error = N_define_standard_option(N_OPT_ITERATION_ERROR);
 
-    memory_opt = G_define_option();
-    memory_opt->key = "memory";
-    memory_opt->type = TYPE_INTEGER;
-    memory_opt->required = NO;
-    memory_opt->answer = "300";
-    memory_opt->label = _("Maximum memory to be used (in MB)");
-    memory_opt->description = _("Cache size for raster rows");
+    memory_opt = G_define_standard_option(G_OPT_MEMORYMB);
 
     /*----------------------------------------------------------------*/
     /* Parsing */
