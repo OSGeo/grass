@@ -70,6 +70,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("rectify"));
     G_add_keyword(_("level1"));
+    G_add_keyword(_("geometry"));
 
     module->description =
 	_("Rectifies a vector by computing a coordinate "
