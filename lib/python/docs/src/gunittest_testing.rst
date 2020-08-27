@@ -668,23 +668,6 @@ Analyzing quality of source code
 Besides testing, you can also use some tools to check the quality of your code
 according to various standards and occurrence of certain code patterns.
 
-GRASS GIS source code analysis is performed with `GitHub Actions`_ to build
-(compile), test, and run Python static code analysis, in order to improve
-the overall quality, maintainability and standard compliance of our code.
-
-The C and C++ source code is checked with GCC C/C++ tests including
-GNU C11 and C++11. For Python code, an initial static code analysis/code
-quality check/linting using `Flake8`_ has been implemented. The workflow
-builds and tests GRASS GIS on different Ubuntu versions, Centos as well as
-OSGeo4W. Success, errors and warnings are reported accordingly in the
-GitHub Actions interface for each `pull request`_. This code analysis
-has been set up as a continuous integration (CI) workflow, i.e. after each
-source code change - when submitting a code pull request - it is triggered
-automatically.
-
-Besides core GRASS GIS (`master`_ and `release_branch_7_8`_) also the
-`addons`_ repository has a minimalistic set of source code analysis enabled.
-
 For C/C++ code we additionally use the third party solution `Coverity Scan`_
 where GRASS GIS is registered as project number `1038`_. Also you can use
 `Cppcheck`_ which will show a lot of errors which compilers do not check.
@@ -734,12 +717,6 @@ Further reading
 
 .. _unittest: https://docs.python.org/2/library/unittest.html
 .. _doctest: https://docs.python.org/2/library/doctest.html
-.. _GitHub Actions: https://github.com/OSGeo/grass/actions
-.. _Flake8: https://pypi.org/project/flake8/
-.. _pull request: https://github.com/OSGeo/grass/pulls
-.. _master: https://github.com/OSGeo/grass/
-.. _release_branch_7_8: https://github.com/OSGeo/grass/tree/releasebranch_7_8
-.. _addons: https://github.com/OSGeo/grass-addons/actions
 .. _Coverity Scan: https://scan.coverity.com/
 .. _Travis-CI: https://travis-ci.org/github/OSGeo/grass
 .. _1038: https://scan.coverity.com/projects/1038
