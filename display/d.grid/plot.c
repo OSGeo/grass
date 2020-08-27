@@ -575,10 +575,13 @@ void init_proj(struct pj_info *info_in, struct pj_info *info_out,
         /* Check that datumparams are defined for this location (otherwise
          * the WGS84 values would be meaningless), and if they are set the 
          * input datum to WGS84 */
+#if PROJ_VERSION_MAJOR < 6
+	/* PROJ6+ has its own datum transformation parameters */
         if (G_get_datumparams_from_projinfo(in_proj_info, buff, dum) < 0)
             G_fatal_error(_("WGS84 grid output not possible as this location does not contain\n"
                            "datum transformation parameters. Try running g.setproj."));
         else
+#endif
             G_set_key_value("datum", "wgs84", out_proj_info);
 
         /* set input projection to lat/long */

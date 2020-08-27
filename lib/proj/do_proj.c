@@ -378,7 +378,6 @@ int GPJ_init_transform(const struct pj_info *info_in,
     else if (info_out->pj == NULL) {
 	const char *projstr = NULL;
 	char *indef = NULL;
-	PJ *source_crs;
 	
 	/* Even Rouault:
 	 * if info_in->def contains a +towgs84/+nadgrids clause, 
@@ -391,15 +390,21 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	 * and in that case, take the source CRS with proj_get_source_crs(),
 	 * and do the inverse transform on it */
 
-	source_crs = proj_get_source_crs(NULL, info_in->pj);
-	if (source_crs) {
-	    projstr = proj_as_proj_string(NULL, source_crs, PJ_PROJ_5, NULL);
-	    if (projstr)
-		indef = G_store(projstr);
-	    proj_destroy(source_crs);
+	if (proj_get_type(info_in->pj) == PJ_TYPE_BOUND_CRS) {
+	    PJ *source_crs;
+
+	    G_debug(1, "transform to ll equivalent: found bound crs");
+	    source_crs = proj_get_source_crs(NULL, info_in->pj);
+	    if (source_crs) {
+		projstr = proj_as_proj_string(NULL, source_crs, PJ_PROJ_5, NULL);
+		if (projstr)
+		    indef = G_store(projstr);
+		proj_destroy(source_crs);
+	    }
 	}
 	if (indef == NULL)
 	    indef = G_store(info_in->def);
+	G_debug(1, "ll equivalent definition: %s", indef);
 
 	/* what about axis order?
 	 * is it always enu? 
