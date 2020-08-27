@@ -15,7 +15,7 @@
  * PURPOSE:      calculate a transformation matrix and then convert x,y cell 
  *               coordinates to standard map coordinates for each pixel in the 
  *               image (control points can come from g.gui.gcp)
- * COPYRIGHT:    (C) 2002-2011 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2020 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -83,6 +83,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("imagery"));
     G_add_keyword(_("rectify"));
+    G_add_keyword(_("geometry"));
     module->description =
 	_("Rectifies an image by computing a coordinate "
 	  "transformation for each pixel in the image based on the "

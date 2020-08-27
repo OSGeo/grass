@@ -5,7 +5,7 @@
 # MODULE:    Create 3-Dimensional GCPs from elevation and target image
 # AUTHOR(S): Yann modified the code (was Markus Metz for the GCP manager)
 # PURPOSE:   Georectification and Ground Control Points management for 3D correction.
-# COPYRIGHT: (C) 2012-2017 by Markus Metz, and the GRASS Development Team
+# COPYRIGHT: (C) 2012-2020 by Markus Metz, and the GRASS Development Team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -22,11 +22,12 @@
 #%module
 #% description: Georectifies a map and allows managing Ground Control Points for 3D correction.
 #% keyword: imagery
+#% keyword: GUI
 #% keyword: aerial
 #% keyword: photo
 #% keyword: georectification
+#% keyword: geometry
 #% keyword: GCP
-#% keyword: GUI
 #%end
 
 ##%option G_OPT_M_LOCATION
