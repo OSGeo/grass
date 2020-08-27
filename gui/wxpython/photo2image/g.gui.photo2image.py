@@ -22,9 +22,12 @@
 #%module
 #% description: Corrects scanning distortions of a paper photo.
 #% keyword: imagery
+#% keyword: GUI
 #% keyword: aerial
 #% keyword: photo
-#% keyword: GUI
+#% keyword: georectification
+#% keyword: geometry
+#% keyword: GCP
 #%end
 
 #%option G_OPT_I_GROUP

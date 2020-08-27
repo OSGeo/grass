@@ -8,7 +8,7 @@
  *               Bernhard Reiter <bernhard intevation.de>,
  *               Glynn Clements <glynn gclements.plus.com>
  * PURPOSE:      main menu system
- * COPYRIGHT:    (C) 1999-2017 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2020 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -45,6 +45,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("imagery"));
     G_add_keyword(_("orthorectify"));
+    G_add_keyword(_("geometry"));
     module->description = _("Menu driver for the photo imagery programs.");
 
     group_opt = G_define_standard_option(G_OPT_I_GROUP);

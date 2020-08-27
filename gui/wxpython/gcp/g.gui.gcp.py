@@ -5,7 +5,7 @@
 # MODULE:    GCP Manager
 # AUTHOR(S): Markus Metz
 # PURPOSE:   Georectification and Ground Control Points management.
-# COPYRIGHT: (C) 2012 by Markus Metz, and the GRASS Development Team
+# COPYRIGHT: (C) 2012-2020 by Markus Metz, and the GRASS Development Team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #% keyword: general
 #% keyword: GUI
 #% keyword: georectification
+#% keyword: geometry
 #% keyword: GCP
 #%end
 
