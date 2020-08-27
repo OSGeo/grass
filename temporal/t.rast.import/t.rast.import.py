@@ -47,7 +47,7 @@
 
 #%option G_OPT_M_DIR
 #% key: directory
-#% description: Path to the extraction directory
+#% description: Path to the extraction directory, default is /tmp, respect 'GRASS_RASTER_TMPDIR_MAPSET' shell env var
 #% answer: /tmp
 #%end
 
@@ -104,6 +104,8 @@
 #% description: Create the location specified by the "location" parameter and exit. Do not import the space time raster datasets.
 #%end
 
+import os
+
 import grass.script as grass
 
 
@@ -126,10 +128,36 @@ def main():
     overr = flags["o"]
     create = flags["c"]
 
+    tmp_dir_env = os.getenv('GRASS_RASTER_TMPDIR_MAPSET')
+    if tmp_dir_env:
+        if os.path.isdir(tmp_dir_env):
+            directory = tmp_dir_env
+            grass.warning(
+                _(
+                    "'GRASS_RASTER_TMPDIR_MAPSET' shell env "
+                    "variable value (directory path) <'{new_tmp_dir}'> "
+                    "exist and will be used.".format(
+                        new_tmp_dir=tmp_dir_env,
+                    ),
+                )
+            )
+        else:
+            grass.warning(
+                _(
+                    "'GRASS_RASTER_TMPDIR_MAPSET' shell env "
+                    "variable value (directory path) <'{new_tmp_dir}'> "
+                    "doesn't exist. The default directory "
+                    "will be used <'{def_tmp_dir}'>.".format(
+                        new_tmp_dir=tmp_dir_env,
+                        def_tmp_dir=directory,
+                    ),
+                )
+            )
+
     tgis.init()
 
     tgis.import_stds(input, output, directory, title, descr, location,
-                     link, exp, overr, create, "strds", base, 
+                     link, exp, overr, create, "strds", base,
                      set_current_region, memory)
 
 if __name__ == "__main__":
