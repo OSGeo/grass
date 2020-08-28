@@ -11,6 +11,7 @@ for details.
 
 
 import os
+import sys
 import datetime
 from pathlib import Path
 from grass.script import gisenv
@@ -80,7 +81,8 @@ def is_location_current(database, location):
 
 
 def is_current_user_mapset_owner(mapset_path):
-    """Returns True if mapset owner is the current user"""
+    """Returns True if mapset owner is the current user.
+    On Windows it always returns True."""
     # Note that this does account for libgis built with SKIP_MAPSET_OWN_CHK
     # which disables the ownerships check, i.e., even if it was build with the
     # skip, it still needs the env variable.
@@ -88,6 +90,8 @@ def is_current_user_mapset_owner(mapset_path):
         # Mapset just needs to be accessible for writing.
         return os.access(mapset_path, os.W_OK)
     # Mapset needs to be owned by user.
+    if sys.platform == 'win32':
+        return True
     stat_info = os.stat(mapset_path)
     mapset_uid = stat_info.st_uid
     return mapset_uid == os.getuid()
@@ -99,7 +103,10 @@ def is_different_mapset_owner(mapset_path):
 
 
 def get_mapset_owner(mapset_path):
-    """Returns mapset owner name or None if owner name unknown"""
+    """Returns mapset owner name or None if owner name unknown.
+    On Windows it always returns None."""
+    if sys.platform == 'win32':
+        return None
     try:
         path = Path(mapset_path)
         return path.owner()
