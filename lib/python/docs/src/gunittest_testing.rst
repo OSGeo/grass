@@ -668,9 +668,9 @@ Analyzing quality of source code
 Besides testing, you can also use some tools to check the quality of your code
 according to various standards and occurrence of certain code patterns.
 
-For C/C++ code use third party solution `Coverity Scan`_ where GRASS GIS
-is registered as project number `1038`_. Also you can use `Cppcheck`_
-which will show a lot of errors which compilers do not check.
+For C/C++ code we additionally use the third party solution `Coverity Scan`_
+where GRASS GIS is registered as project number `1038`_. Also you can use
+`Cppcheck`_ which will show a lot of errors which compilers do not check.
 In any case, set your compiler to high error and warning levels,
 check them and fix them in your code. Furthermore, `Travis-CI`_ is used
 to check if the source code can still be compiled after submitting changes
@@ -718,8 +718,8 @@ Further reading
 .. _unittest: https://docs.python.org/2/library/unittest.html
 .. _doctest: https://docs.python.org/2/library/doctest.html
 .. _Coverity Scan: https://scan.coverity.com/
-.. _Travis-CI: https://travis-ci.org/GRASS-GIS/grass-ci
+.. _Travis-CI: https://travis-ci.org/github/OSGeo/grass
 .. _1038: https://scan.coverity.com/projects/1038
 .. _Cppcheck: http://cppcheck.sourceforge.net/
 .. _sandbox: https://svn.osgeo.org/grass/sandbox/wenzeslaus/grass_py_static_check.py
-.. _GRASS GIS sample data: https://grass.osgeo.org/download/sample-data and http://fatra.cnr.ncsu.edu/data/ (nc_spm_full_v2alpha)
+.. _GRASS GIS sample data: https://grass.osgeo.org/download/data/ and http://fatra.cnr.ncsu.edu/data/ (nc_spm_full_v2alpha)
