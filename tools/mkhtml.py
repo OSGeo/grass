@@ -7,7 +7,7 @@
 #               Glynn Clements
 #               Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Create HTML manual page snippets
-# COPYRIGHT:    (C) 2007-2017 by Glynn Clements
+# COPYRIGHT:    (C) 2007-2020 by Glynn Clements
 #                and the GRASS Development Team
 #
 #               This program is free software under the GNU General
@@ -78,9 +78,11 @@ addons_url = "https://github.com/OSGeo/grass-addons/tree/master/"
 header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>GRASS GIS Manual: ${PGM}</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link rel="stylesheet" href="grassdocs.css" type="text/css">
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>${PGM} - GRASS GIS Manual</title>
+ <meta name="Author" content="GRASS Development Team">
+ <meta name="description" content="${PGM}: ${PGM_DESC}">
+ <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>
 <body bgcolor="white">
 <div id="container">
@@ -118,7 +120,7 @@ footer_index = string.Template(
 </p>
 <p>
 &copy; 2003-${YEAR}
-<a href="http://grass.osgeo.org">GRASS Development Team</a>,
+<a href="https://grass.osgeo.org">GRASS Development Team</a>,
 GRASS GIS ${GRASS_VERSION} Reference Manual
 </p>
 
@@ -138,7 +140,7 @@ footer_noindex = string.Template(
 </p>
 <p>
 &copy; 2003-${YEAR}
-<a href="http://grass.osgeo.org">GRASS Development Team</a>,
+<a href="https://grass.osgeo.org">GRASS Development Team</a>,
 GRASS GIS ${GRASS_VERSION} Reference Manual
 </p>
 
@@ -265,7 +267,7 @@ def update_toc(data):
 # process header
 src_data = read_file(src_file)
 name = re.search('(<!-- meta page name:)(.*)(-->)', src_data, re.IGNORECASE)
-pgm_desc = None
+pgm_desc = "GRASS GIS Reference Manual"
 if name:
     pgm = name.group(2).strip().split('-', 1)[0].strip()
     name_desc = re.search('(<!-- meta page name description:)(.*)(-->)', src_data, re.IGNORECASE)
