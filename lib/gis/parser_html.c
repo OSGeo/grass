@@ -3,7 +3,7 @@
   
   \brief GIS Library - Argument parsing functions (HTML output)
   
-  (C) 2001-2009, 2011-2013 by the GRASS Development Team
+  (C) 2001-2009, 2011-2020 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -43,11 +43,23 @@ void G__usage_html(void)
     fprintf(stdout,
 	    "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
     fprintf(stdout, "<html>\n<head>\n");
-    fprintf(stdout, "<title>%s - GRASS GIS manual</title>\n", st->pgm_name);
     fprintf(stdout,
-	    "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n");
+	    " <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n");
+    fprintf(stdout, " <title>%s - GRASS GIS manual</title>\n", st->pgm_name);
+    fprintf(stdout, " <meta name=\"description\" content=\"%s", st->pgm_name);
+    if (st->module_info.description)
+        fprintf(stdout, ": %s\">", st->module_info.description);
+    else
+        fprintf(stderr,"<%s.html> is missing the description", st->pgm_name);
+    fprintf(stdout, "\n");
+    if (st->module_info.keywords) {
+        fprintf(stdout, " <meta name=\"keywords\" content=\"");
+        G__print_keywords(stdout, NULL);
+        fprintf(stdout, "\">");
+	fprintf(stdout, "\n");
+    }
     fprintf(stdout,
-	    "<link rel=\"stylesheet\" href=\"grassdocs.css\" type=\"text/css\">\n");
+	    " <link rel=\"stylesheet\" href=\"grassdocs.css\" type=\"text/css\">\n");
     fprintf(stdout, "</head>\n");
     fprintf(stdout, "<body bgcolor=\"white\">\n");
     fprintf(stdout, "<div id=\"container\">\n\n");
