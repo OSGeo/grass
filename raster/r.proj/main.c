@@ -519,15 +519,9 @@ int main(int argc, char **argv)
 
         G_percent(row, outcellhd.rows - 1, 2);
 
-#if 0
-	/* parallelization does not always work,
-	 * segfaults in the interpolation functions 
-	 * can happen */
 #if defined(_OPENMP)
-        #pragma omp parallel for schedule (static)
+        #pragma omp parallel for ordered schedule(static)
 #endif
-#endif
-
 	for (col = 0; col < outcellhd.cols; col++) {
 	    void *obufptr = (void *)((const unsigned char *)obuffer + col * cell_size);
 
@@ -536,6 +530,9 @@ int main(int argc, char **argv)
 
 	    /* project coordinates in output matrix to       */
 	    /* coordinates in input matrix                   */
+#if defined(_OPENMP)
+            #pragma omp ordered
+#endif
 	    if (GPJ_transform(&iproj, &oproj, &tproj, PJ_INV,
 			      &xcoord1, &ycoord1, NULL) < 0) {
 		G_warning(_("Error in %s"), "GPJ_transform()");
