@@ -52,6 +52,7 @@
 #%end
 
 import grass.script as gscript
+from grass.exceptions import FatalError
 
 
 def main():
@@ -94,7 +95,10 @@ def main():
         # We need to initialize the temporal framework in case
         # a space time dataset was set on the command line so that
         # the AnimLayer() class works correctly
-        tgis.init()
+        try:
+            tgis.init()
+        except FatalError as e:
+            print(e)
 
     layerList = LayerList()
     if rast:
