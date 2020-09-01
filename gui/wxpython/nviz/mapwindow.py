@@ -1350,6 +1350,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             except GException as e:
                 GError(parent=self,
                        message=e.value)
+            # when nviz.tools is not yet ready
+            # during opening 3D view 2nd time
+            except:
+                pass
 
         stop = grass.clock()
 
