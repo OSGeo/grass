@@ -420,6 +420,7 @@ class MapFrame(SingleMapFrame):
             os.environ['GRASS_REGION'] = self.Map.SetRegion(
                 windres=True, windres3=True)
             self.MapWindow3D.GetDisplay().Init()
+            self.MapWindow3D.LoadDataLayers()
             del os.environ['GRASS_REGION']
 
             # switch from MapWindow to MapWindowGL
