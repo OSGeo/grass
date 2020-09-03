@@ -199,7 +199,10 @@ int write_vtk_points(FILE * ascii, struct Map_info *Map, VTKInfo * info,
     /*Write the coordinates into the vtk ascii file */
     /************************************************/
 
-    fprintf(ascii, "POINTS %i float\n", info->maxnumpoints);
+    if (dp > 8)
+        fprintf(ascii, "POINTS %i double\n", info->maxnumpoints);
+    else
+        fprintf(ascii, "POINTS %i float\n", info->maxnumpoints);
 
     /*For every available vector type */
     for (k = 0; k < typenum; k++) {
