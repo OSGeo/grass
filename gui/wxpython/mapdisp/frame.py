@@ -1215,7 +1215,7 @@ class MapFrame(SingleMapFrame):
 
         :param overlayId: id of overlay
         """
-        if self.decorations:
+        if overlayId in self.decorations:
             dlg = self.decorations[overlayId].dialog
             if dlg.IsShown():
                 dlg.SetFocus()
