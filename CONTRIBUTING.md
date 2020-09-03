@@ -63,7 +63,7 @@ upstream	https://github.com/OSGeo/grass.git (push)
 
 It is important that "origin" points to your fork.
 
-### Update before creating a branch
+### Update before creating a feature branch
 
 * Make sure your are using master branch:
 
@@ -110,12 +110,12 @@ git stash apply
 git stash pop
 ```
 
-### Creating a branch
+### Creating a new feature branch
 
-Now you have updated your local master branch, you can create a branch
+Now you have updated your local master branch, you can create a feature branch
 based on it.
 
-* Create a branch and switch to it:
+* Create a new feature branch and switch to it:
 
 ```
 git checkout -b new-feature
@@ -145,7 +145,7 @@ git commit -m "module: added a new feature"
 
 ### Pushing changes to GitHub
 
-* Push your local branch to your fork:
+* Push your local feature branch to your fork:
 
 ```
 git push origin new-feature
@@ -167,7 +167,7 @@ If needed, the maintainers will work with you to improve your changes.
 Once the changes in the pull request are ready to be accepted,
 the maintainers will decide if it is more appropriate to:
 
-* merge your branch,
+* merge your feature branch,
 * squash all commit into one commit, or
 * rebase (i.e., replay) all commits on top of the master branch.
 
