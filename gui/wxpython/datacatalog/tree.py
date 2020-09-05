@@ -478,6 +478,8 @@ class DataCatalogTree(TreeView):
                 queue_list = []
                 loc_list = []
                 location_nodes = []
+                # refresh after each chunk to make GUI more responsive
+                self.RefreshItems()
 
         for node in all_location_nodes:
             self._model.SortChildren(node)
@@ -500,10 +502,11 @@ class DataCatalogTree(TreeView):
                 grassdb_node = grassdb_nodes[0]
             error = self._reloadGrassDBNode(grassdb_node)
             if error:
-                errors.append(error)
+                errors += error
 
         if errors:
-            wx.CallAfter(GWarning, '\n'.join(errors))
+            # WriteWarning/Error results in crash
+            self._giface.WriteLog('\n'.join(errors))
         Debug.msg(1, "Tree filled")
 
         self.UpdateCurrentDbLocationMapsetNode()
@@ -540,7 +543,9 @@ class DataCatalogTree(TreeView):
 
     def ReloadTreeItems(self):
         """Reload dbs, locations, mapsets and layers in the tree."""
+        busy = wx.BusyCursor()
         self._reloadTreeItems()
+        del busy
 
     def ReloadCurrentMapset(self):
         """Reload current mapset tree only."""
