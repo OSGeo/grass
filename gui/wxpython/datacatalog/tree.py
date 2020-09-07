@@ -166,7 +166,12 @@ def getLocationTree(gisdbase, location, queue, mapsets=None):
                 location, len(listOfMaps)))
         for each in listOfMaps:
             ltype, wholename = each.split('/')
-            name, mapset = wholename.split('@')
+            try:
+                name, mapset = wholename.split('@')
+            except:
+                print("ignoring unacceptable map name for data catalog:")
+                print("location:", location, ", map type:", ltype, ", map:", wholename)
+               
             maps_dict[mapset].append({'name': name, 'type': ltype})
 
     queue.put((maps_dict, None))
