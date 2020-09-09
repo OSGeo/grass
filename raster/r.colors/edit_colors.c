@@ -59,13 +59,16 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     struct GModule *module;
     struct maps_info input_maps;
     int stat = -1;
+    int do_scale, rule_is_percent;
+    double scale, offset;
 
     struct {
         struct Flag *r, *w, *l, *d, *g, *a, *n, *e;
     } flag; 
 
     struct {
-        struct Option *maps, *colr, *rast, *volume, *rules, *file;
+        struct Option *maps, *colr, *rast, *volume, *rules, *file,
+		      *scale, *offset;
     } opt;
     
     G_gisinit(argv[0]);
@@ -126,6 +129,24 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     opt.rules->label = _("Path to rules file");
     opt.rules->description = _("\"-\" to read rules from stdin");
     opt.rules->guisection = _("Define");
+
+    opt.offset = G_define_option();
+    opt.offset->key = "offset";
+    opt.offset->type = TYPE_DOUBLE;
+    opt.offset->required = NO;
+    opt.offset->answer = "0";
+    opt.offset->label = _("Offset for color rule values");
+    opt.offset->description = _("New value = (old value + offset) * scale");
+    opt.offset->guisection = _("Define");
+
+    opt.scale = G_define_option();
+    opt.scale->key = "scale";
+    opt.scale->type = TYPE_DOUBLE;
+    opt.scale->required = NO;
+    opt.scale->answer = "1";
+    opt.scale->label = _("Scale for color rule values");
+    opt.scale->description = _("New value = (old value + offset) * scale");
+    opt.scale->guisection = _("Define");
 
     flag.r = G_define_flag();
     flag.r->key = 'r';
@@ -198,6 +219,9 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     style = opt.colr->answer;
     rules = opt.rules->answer;
     file = opt.file->answer;
+
+    offset = atof(opt.offset->answer);
+    scale = atof(opt.scale->answer);
 
     if (opt.rast->answer)
         cmap = opt.rast->answer;
@@ -360,7 +384,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
 	}
 
 	if (i > 0) {
-	    if(has_fcell_type && has_cell_type) {
+	    if (has_fcell_type && has_cell_type) {
 		G_fatal_error("Input maps must have the same cell type. "
 				"Mixing of integer and floating point maps is not supported.");
 	    }
@@ -381,9 +405,12 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
 	}
     }
 
+    rule_is_percent = 0;
+    do_scale = 0;
     if (is_from_stdin) {
-        if (!read_color_rules(stdin, &colors, min, max, has_fcell_type))
+        if (!read_color_rules(stdin, &colors, min, max, has_fcell_type, &rule_is_percent))
             exit(EXIT_FAILURE);
+	do_scale = 1;
     }
     else if (style) {
         /* 
@@ -409,13 +436,27 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
             Rast_make_histogram_log_colors(&colors, &statf, (CELL) min,
                                            (CELL) max);
         }
-	else if (G_find_color_rule(style))
+	else if (G_find_color_rule(style)) {
+	    char path[GPATH_MAX];
+
             Rast_make_fp_colors(&colors, style, min, max);
+
+	    /* check if this style is a percentage style */
+            /* don't bother with native dirsep as not needed for backwards compatibility */
+            G_snprintf(path, GPATH_MAX, "%s/etc/colors/%s", G_gisbase(), style);
+	    rule_is_percent = check_percent_rule(path);
+	    do_scale = 1;
+	}
         else
             G_fatal_error(_("Unknown color request '%s'"), style);
     }
     else if (rules) {
-        if (!Rast_load_fp_colors(&colors, rules, min, max)) {
+	do_scale = 1;
+	/* check if these rules are percentage rules */
+        if (Rast_load_fp_colors(&colors, rules, min, max)) {
+	    rule_is_percent = check_percent_rule(rules);
+	}
+	else {
             /* for backwards compatibility try as std name; remove for GRASS 7 */
             char path[GPATH_MAX];
 
@@ -424,6 +465,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
 
             if (!Rast_load_fp_colors(&colors, path, min, max))
                 G_fatal_error(_("Unable to load rules file <%s>"), rules);
+	    rule_is_percent = check_percent_rule(path);
         }
     }
     else {
@@ -448,6 +490,11 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
 
     if (has_fcell_type)
         Rast_mark_colors_as_fp(&colors);
+
+    if (do_scale && !rule_is_percent && (offset != 0 || scale != 1)) {
+	rescale_colors(&colors_tmp, &colors, offset, scale);
+	colors = colors_tmp;
+    }
 
     if (flag.n->answer)
         Rast_invert_colors(&colors);

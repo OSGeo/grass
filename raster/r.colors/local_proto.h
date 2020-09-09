@@ -47,6 +47,8 @@ void get_fp_stats(struct maps_info *, struct FP_stats *statf,
 int edit_colors(int, char **, int, const char *, const char*);
 
 /* rules.c */
-int read_color_rules(FILE *, struct Colors *, DCELL, DCELL, int);
+int read_color_rules(FILE *, struct Colors *, DCELL, DCELL, int, int *);
+int check_percent_rule(const char *);
+void rescale_colors(struct Colors *, struct Colors *, double, double);
 
 #endif /* __LOCAL_PROTO_H__ */
