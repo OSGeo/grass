@@ -23,7 +23,12 @@ import re
 import copy
 from multiprocessing import Process, Queue, cpu_count
 
+from watchdog.observers import Observer
+from watchdog.events import PatternMatchingEventHandler
+
+
 import wx
+from wx.lib.newevent import NewEvent
 
 from core.gcmd import RunCommand, GError, GMessage, GWarning
 from core.utils import GetListOfLocations
@@ -65,6 +70,9 @@ from grass.grassdb.data import map_exists
 from grass.grassdb.checks import (get_mapset_owner, is_mapset_locked,
                                   is_different_mapset_owner)
 from grass.exceptions import CalledModuleError
+
+
+updateMapset, EVT_UPDATE_MAPSET = NewEvent()
 
 
 def filterModel(model, element=None, name=None):
@@ -171,6 +179,48 @@ def getLocationTree(gisdbase, location, queue, mapsets=None):
 
     queue.put((maps_dict, None))
     gscript.try_remove(tmp_gisrc_file)
+
+class LocationWatch(PatternMatchingEventHandler):
+    def __init__(self, patterns, callback):
+        PatternMatchingEventHandler.__init__(self, patterns=patterns)
+        self.callback = callback
+
+    def on_created(self, event):
+        if event.is_directory:
+            self.callback(event.src_path)
+
+    def on_deleted(self, event):
+        if event.is_directory:
+            self.callback(event.src_path)
+
+    def on_moved(self, event):
+        if event.is_directory:
+            self.callback(event.src_path)      
+ 
+
+class MapWatch(PatternMatchingEventHandler):
+    def __init__(self, patterns, element, event_handler):
+        PatternMatchingEventHandler.__init__(self, patterns=patterns)
+        self.element = element
+        self.event_handler = event_handler
+        
+    def on_created(self, event):
+        if (self.element == 'vector' or self.element == 'raster_3d') and not event.is_directory:
+            return
+        evt = updateMapset(path=event.src_path)
+        wx.PostEvent(self.event_handler, evt)
+
+    def on_deleted(self, event):
+        if (self.element == 'vector' or self.element == 'raster_3d') and not event.is_directory:
+            return
+        evt = updateMapset(path=event.src_path)
+        wx.PostEvent(self.event_handler, evt)
+
+    def on_moved(self, event):
+        if (self.element == 'vector' or self.element == 'raster_3d') and not event.is_directory:
+            return
+        evt = updateMapset(path=event.src_path)
+        wx.PostEvent(self.event_handler, evt)  
 
 
 class NameEntryDialog(TextEntryDialog):
@@ -312,6 +362,10 @@ class DataCatalogTree(TreeView):
                   self._emitSignal(evt.GetItem(), self.endEdit, event=evt))
         self.startEdit.connect(self.OnStartEditLabel)
         self.endEdit.connect(self.OnEditLabel)
+        self.Bind(EVT_UPDATE_MAPSET, self.OnWatchdogMapset)
+        
+        self.observer = Observer()
+        self.scheduled_watches = dict()
 
     def _resetSelectVariables(self):
         """Reset variables related to item selection."""
@@ -491,6 +545,10 @@ class DataCatalogTree(TreeView):
         """Updates grass databases, locations, mapsets and layers in the tree.
         Saves resulting data and error."""
         errors = []
+        if self.observer.is_alive():
+            self.observer.join()
+            self.observer.unschedule_all()
+            self.scheduled_watches = {}
         for grassdatabase in self.grassdatabases:
             grassdb_nodes = self._model.SearchNodes(name=grassdatabase,
                                                     type='grassdb')
@@ -503,6 +561,28 @@ class DataCatalogTree(TreeView):
             error = self._reloadGrassDBNode(grassdb_node)
             if error:
                 errors += error
+                
+            if grassdb_node.data['name'] not in self.scheduled_watches:
+                pattern_raster = os.path.join(grassdb_node.data['name'], '*', '*', 'cell/')
+                pattern_vector = os.path.join(grassdb_node.data['name'], '*', '*', 'vector/')
+                pattern_raster3d = os.path.join(grassdb_node.data['name'], '*', '*', 'grid3/')
+                import glob
+                glob_raster = glob.glob(pattern_raster)
+                glob_vector = glob.glob(pattern_vector)
+                glob_raster3d = glob.glob(pattern_raster3d)
+                glob_raster = [p + '*' for p in glob_raster]
+                glob_vector = [p + '*' for p in glob_vector]
+                glob_raster3d = [p + '*' for p in glob_raster3d]
+                print(pattern_raster)
+                raster_watch = self.observer.schedule(MapWatch(glob_raster, 'raster', self),
+                                                      path=grassdb_node.data['name'], recursive=True)
+#                vector_watch = self.observer.schedule(MapWatch(glob_vector, 'vector', self),
+#                                                      path=grassdb_node.data['name'], recursive=True)
+#                raster3d_watch = self.observer.schedule(MapWatch(glob_raster3d, 'raster_3d', self),
+#                                                        path=grassdb_node.data['name'], recursive=True)
+                self.scheduled_watches[grassdb_node.data['name']] = raster_watch
+#            self.observer.schedule(LocationWatch("*", self.OnWatchdogLocation), path=grassdatabase)
+        self.observer.start()
 
         if errors:
             # WriteWarning/Error results in crash
@@ -511,6 +591,43 @@ class DataCatalogTree(TreeView):
 
         self.UpdateCurrentDbLocationMapsetNode()
         self.RefreshItems()
+
+    def schedule_watch(self, db, element):
+        if element == 'raster':
+            directory = 'cell'
+        elif element == 'vector':
+            directory = 'vector'
+        elif element == 'raster_3d':
+            directory = 'grid3'
+        pattern = os.path.join(db, '*', '*', directory + '/')
+        pattern = [p + '*' for p in glob.glob(pattern)]
+        
+    def OnWatchdogLocation(self, path):
+        print("OnWatchdogLocation")
+        print(path)
+        db = os.path.dirname(path)
+        grassdb_nodes = self._model.SearchNodes(name=db, type='grassdb')
+        if grassdb_nodes:
+            self._reloadGrassDBNode(grassdb_nodes[0])
+            self.UpdateCurrentDbLocationMapsetNode()
+            self.RefreshNode(grassdb_nodes[0], recursive=True)
+
+    def OnWatchdogMapset(self, event):
+        print("OnWatchdogMapset")
+        print(event.path)
+        mapset_path = os.path.dirname(os.path.dirname(os.path.abspath(event.path)))
+        location_path = os.path.dirname(os.path.abspath(mapset_path))
+        db = os.path.dirname(os.path.abspath(location_path))
+        grassdb_nodes = self._model.SearchNodes(name=db, type='grassdb')
+        if grassdb_nodes:
+            location_nodes = self._model.SearchNodes(parent=grassdb_nodes[0],
+                                                     name=os.path.basename(location_path), type='location')
+            if location_nodes:
+                mapset_nodes = self._model.SearchNodes(parent=location_nodes[0],
+                                                       name=os.path.basename(mapset_path), type='mapset')
+                if mapset_nodes:
+                    self._reloadMapsetNode(mapset_nodes[0])
+                    self.RefreshNode(mapset_nodes[0], recursive=True)
 
     def _renameNode(self, node, name):
         """Rename node (map, mapset, location), sort and refresh.
@@ -561,6 +678,15 @@ class DataCatalogTree(TreeView):
             self._model.AppendNode(parent=mapset_node,
                                    data=dict(**item))
         self._model.SortChildren(mapset_node)
+
+#        if mapset_node.data['name'] not in self.scheduled_watches:
+#            loc = mapset_node.parent.data['name']
+#            db = mapset_node.parent.parent.data['name']
+#            path = os.path.join(db, loc, mapset_node.data['name'], 'cell/')
+#            print(path)
+#            if os.path.exists(path):
+#                watch = self.observer.schedule(RasterWatch("*", self.OnWatchdogMapset), path=path)
+#                self.scheduled_watches[mapset_node.data['name']] = watch
 
     def _initImages(self):
         bmpsize = (16, 16)
