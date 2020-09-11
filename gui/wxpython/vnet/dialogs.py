@@ -357,8 +357,9 @@ class VNETDialog(wx.Dialog):
                               name='output')
 
         goutput = self.vnet_mgr.goutput  # TODO make interface
-        self.gwindow = GConsoleWindow(parent=outputPanel, gconsole=goutput)
-
+        self.gwindow = GConsoleWindow(
+            parent=outputPanel, giface=self.giface, gconsole=goutput
+        )
         # Layout
         outputSizer = wx.BoxSizer(wx.VERTICAL)
         outputSizer.Add(self.gwindow, proportion=1, flag=wx.EXPAND)

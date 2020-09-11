@@ -2286,6 +2286,7 @@ class CmdPanel(wx.Panel):
                 guiparent=self.notebook, giface=self._giface)
             self.goutput = GConsoleWindow(
                 parent=self.notebook,
+                giface=self._giface,
                 gconsole=self._gconsole,
                 margin=False)
             self._gconsole.Bind(
