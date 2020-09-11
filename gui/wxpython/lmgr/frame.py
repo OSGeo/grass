@@ -364,6 +364,7 @@ class GMFrame(wx.Frame):
             '^cd$|^cd .*')
         self.goutput = GConsoleWindow(
             parent=self.notebook,
+            giface=self._giface,
             gconsole=self._gconsole,
             menuModel=self._moduleTreeBuilder.GetModel(),
             gcstyle=GC_PROMPT)

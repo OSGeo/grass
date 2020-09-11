@@ -53,7 +53,7 @@ class GConsoleWindow(wx.SplitterWindow):
     """Create and manage output console for commands run by GUI.
     """
 
-    def __init__(self, parent, gconsole, menuModel=None, margin=False,
+    def __init__(self, parent, giface, gconsole, menuModel=None, margin=False,
                  style=wx.TAB_TRAVERSAL | wx.FULL_REPAINT_ON_RESIZE,
                  gcstyle=GC_EMPTY,
                  **kwargs):
@@ -116,7 +116,9 @@ class GConsoleWindow(wx.SplitterWindow):
         # search & command prompt
         # move to the if below
         # search depends on cmd prompt
-        self.cmdPrompt = GPromptSTC(parent=self, menuModel=self._menuModel)
+        self.cmdPrompt = GPromptSTC(
+            parent=self, giface=giface, menuModel=self._menuModel
+        )
         self.cmdPrompt.promptRunCmd.connect(lambda cmd:
                                             self._gconsole.RunCmd(command=cmd))
         self.cmdPrompt.showNotification.connect(self.showNotification)

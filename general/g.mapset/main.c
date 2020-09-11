@@ -202,16 +202,17 @@ int main(int argc, char *argv[])
 
     G_free(mapset_old_path);
 
-    G_important_message(_("Mapset switched. Your shell continues to use the history "
-			  "for the old mapset"));
-
-    if ((shell = getenv("SHELL"))) {
-	if (strstr(shell, "bash")) {
-	    G_important_message(_("You can switch the history by commands:\n"
-				  "history -w; history -r %s/.bash_history; HISTFILE=%s/.bash_history"),
-				mapset_new_path, mapset_new_path);
-	}
-	else if (strstr(shell, "tcsh")) {
+    shell = getenv("SHELL");
+    /* For bash, we support switching of history, others not (yet). */
+    if (shell && strstr(shell, "bash")) {
+	G_important_message(_("Mapset switched."));
+    }
+    else {
+	G_important_message(_("Mapset switched. Your shell continues "
+			      "to use the history for the old mapset"));
+    }
+    if (shell) {
+	if (strstr(shell, "tcsh")) {
 	    G_important_message(_("You can switch the history by commands:\n"
 				  "history -S; history -L %s/.history; setenv histfile=%s/.history"),
 				mapset_new_path, mapset_new_path);
