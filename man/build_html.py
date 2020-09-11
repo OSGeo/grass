@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # utilities for generating HTML indices
-# (c) 2003-2019 by the GRASS Development Team, Markus Neteler, Glynn Clements, Luca Delucchi
+# (c) 2003-2020 by the GRASS Development Team, Markus Neteler, Glynn Clements, Luca Delucchi
 
 import sys
 import os
@@ -33,8 +33,8 @@ header1_tmpl = string.Template(\
 r"""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
- <title>${title}</title>
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>${title} - GRASS GIS Manual</title>
  <meta name="Author" content="GRASS Development Team">
 """)
 

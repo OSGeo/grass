@@ -6,7 +6,7 @@
  *		based upon g.region
  * PURPOSE:	Set the boundary definitions for a raster map.
  * 
- * COPYRIGHT:	(C) 2002 by the GRASS Development Team
+ * COPYRIGHT:	(C) 2002-2020 by the GRASS Development Team
  *
  *		This program is free software under the GPL (>=v2)
  *		Read the file COPYING that comes with GRASS for details.
@@ -50,6 +50,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("metadata"));
+    G_add_keyword(_("geometry"));
+
     module->description =
 	_("Sets the boundary definitions for a raster map.");
 

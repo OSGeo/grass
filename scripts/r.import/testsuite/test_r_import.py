@@ -1,6 +1,8 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
+import grass.script as gs
+
 
 class TestRImportRegion(TestCase):
 
@@ -43,6 +45,28 @@ class TestRImportRegion(TestCase):
         self.assertModule('r.import', input='data/data2.asc', output=self.imported,
                           resample='nearest', extent='region', resolution='region')
         reference = dict(north=223655, south=223600)
+        self.assertRasterFitsInfo(raster=self.imported, reference=reference, precision=1e-6)
+
+    def test_import_use_temp_region(self):
+        """Import in specified region with use_temp_region activated"""
+        self.runModule('g.region', raster='elevation', n=223660, s=223600)
+        gs.use_temp_region()
+        self.runModule('g.region', raster='elevation', n=223630, s=223600)
+        self.assertModule('r.import', input='data/data2.asc', output=self.imported,
+                          resample='nearest', extent='region', resolution='region')
+        reference = dict(north=223630, south=223600, nsres=10, ewres=10)
+        self.assertRasterFitsInfo(raster=self.imported, reference=reference, precision=1e-6)
+
+        self.runModule('g.region', raster='elevation', s=223390, n=223450)
+        self.assertModule('r.import', input='data/data1.tif', output=self.imported,
+                          resample='bilinear', extent='region', overwrite=True)
+        reference = dict(south=223390, north=223450, nsres=10, ewres=10)
+        self.assertRasterFitsInfo(raster=self.imported, reference=reference, precision=1e-6)
+
+        gs.del_temp_region()
+        self.assertModule('r.import', input='data/data2.asc', output=self.imported,
+                          resample='nearest', extent='region', resolution='region', overwrite=True)
+        reference = dict(north=223660, south=223600, nsres=10, ewres=10)
         self.assertRasterFitsInfo(raster=self.imported, reference=reference, precision=1e-6)
 
 

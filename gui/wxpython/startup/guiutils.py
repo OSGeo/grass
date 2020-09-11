@@ -19,16 +19,18 @@ import os
 import sys
 import wx
 
-import grass.script as gs
-from grass.script import gisenv
 from grass.grassdb.checks import (
-    mapset_exists,
-    location_exists,
     is_mapset_locked,
     get_mapset_lock_info,
-    is_different_mapset_owner,
-    is_mapset_current,
-    is_location_current
+    is_mapset_name_valid,
+    is_location_name_valid,
+    get_mapset_name_invalid_reason,
+    get_location_name_invalid_reason,
+    get_reason_mapset_not_removable,
+    get_reasons_mapsets_not_removable,
+    get_reasons_location_not_removable,
+    get_reasons_locations_not_removable,
+    get_reasons_grassdb_not_removable
 )
 
 from grass.grassdb.create import create_mapset, get_default_mapset_name
@@ -40,12 +42,11 @@ from grass.grassdb.manage import (
     rename_location,
 )
 
-from core.utils import GetListOfLocations
 from core import globalvar
 from core.gcmd import GError, GMessage, DecodeString, RunCommand
 from gui_core.dialogs import TextEntryDialog
 from location_wizard.dialogs import RegionDef
-from gui_core.widgets import GenericMultiValidator
+from gui_core.widgets import GenericValidator
 
 
 def SetSessionMapset(database, location, mapset):
@@ -61,11 +62,8 @@ class MapsetDialog(TextEntryDialog):
         self.database = database
         self.location = location
 
-        # list of tuples consisting of conditions and callbacks
-        checks = [(gs.legal_name, self._nameValidationFailed),
-                  (self._checkMapsetNotExists, self._mapsetAlreadyExists),
-                  (self._checkOGR, self._reservedMapsetName)]
-        validator = GenericMultiValidator(checks)
+        validator = GenericValidator(self._isMapsetNameValid,
+                                     self._showMapsetNameInvalidReason)
 
         TextEntryDialog.__init__(
             self, parent=parent,
@@ -75,39 +73,15 @@ class MapsetDialog(TextEntryDialog):
             validator=validator,
         )
 
-    def _nameValidationFailed(self, ctrl):
-        message = _(
-            "Name '{}' is not a valid name for location or mapset. "
-            "Please use only ASCII characters excluding characters {} "
-            "and space.").format(ctrl.GetValue(), '/"\'@,=*~')
-        GError(parent=self, message=message, caption=_("Invalid name"))
+    def _showMapsetNameInvalidReason(self, ctrl):
+        message = get_mapset_name_invalid_reason(self.database,
+                                                 self.location,
+                                                 ctrl.GetValue())
+        GError(parent=self, message=message, caption=_("Invalid mapset name"))
 
-    def _checkOGR(self, text):
-        """Check user's input for reserved mapset name."""
-        if text.lower() == 'ogr':
-            return False
-        return True
-
-    def _reservedMapsetName(self, ctrl):
-        message = _(
-            "Name '{}' is reserved for direct "
-            "read access to OGR layers. Please use "
-            "another name for your mapset.").format(ctrl.GetValue())
-        GError(parent=self, message=message,
-               caption=_("Reserved mapset name"))
-
-    def _checkMapsetNotExists(self, text):
-        """Check whether user's input mapset exists or not."""
-        if mapset_exists(self.database, self.location, text):
-            return False
-        return True
-
-    def _mapsetAlreadyExists(self, ctrl):
-        message = _(
-            "Mapset '{}' already exists. Please consider using "
-            "another name for your mapset.").format(ctrl.GetValue())
-        GError(parent=self, message=message,
-               caption=_("Existing mapset path"))
+    def _isMapsetNameValid(self, text):
+        """Check whether user's input location is valid or not."""
+        return is_mapset_name_valid(self.database, self.location, text)
 
 
 class LocationDialog(TextEntryDialog):
@@ -115,10 +89,8 @@ class LocationDialog(TextEntryDialog):
                  database=None):
         self.database = database
 
-        # list of tuples consisting of conditions and callbacks
-        checks = [(gs.legal_name, self._nameValidationFailed),
-                  (self._checkLocationNotExists, self._locationAlreadyExists)]
-        validator = GenericMultiValidator(checks)
+        validator = GenericValidator(self._isLocationNameValid,
+                                     self._showLocationNameInvalidReason)
 
         TextEntryDialog.__init__(
             self, parent=parent,
@@ -128,149 +100,14 @@ class LocationDialog(TextEntryDialog):
             validator=validator,
         )
 
-    def _nameValidationFailed(self, ctrl):
-        message = _(
-            "Name '{}' is not a valid name for location or mapset. "
-            "Please use only ASCII characters excluding characters {} "
-            "and space.").format(ctrl.GetValue(), '/"\'@,=*~')
-        GError(parent=self, message=message, caption=_("Invalid name"))
+    def _showLocationNameInvalidReason(self, ctrl):
+        message = get_location_name_invalid_reason(self.database,
+                                                   ctrl.GetValue())
+        GError(parent=self, message=message, caption=_("Invalid location name"))
 
-    def _checkLocationNotExists(self, text):
-        """Check whether user's input location exists or not."""
-        if location_exists(self.database, text):
-            return False
-        return True
-
-    def _locationAlreadyExists(self, ctrl):
-        message = _(
-            "Location '{}' already exists. Please consider using "
-            "another name for your location.").format(ctrl.GetValue())
-        GError(parent=self, message=message,
-               caption=_("Existing location path"))
-
-
-def get_reasons_mapsets_not_removable(mapsets, check_permanent):
-    """Get reasons why mapsets cannot be removed.
-
-    Parameter *mapsets* is a list of tuples (database, location, mapset).
-    Parameter *check_permanent* is True of False. It depends on whether
-    we want to check for permanent mapset or not.
-
-    Returns messages as list if there were any failed checks, otherwise empty list.
-    """
-    messages = []
-    for grassdb, location, mapset in mapsets:
-        message = get_reason_mapset_not_removable(grassdb, location,
-                                                  mapset, check_permanent)
-        if message:
-            messages.append(message)
-    return messages
-
-
-def get_reason_mapset_not_removable(grassdb, location, mapset, check_permanent):
-    """Get reason why one mapset cannot be removed.
-
-    Parameter *check_permanent* is True of False. It depends on whether
-    we want to check for permanent mapset or not.
-
-    Returns message as string if there was failed check, otherwise None.
-    """
-    message = None
-    mapset_path = os.path.join(grassdb, location, mapset)
-
-    # Check if mapset is permanent
-    if check_permanent and mapset == "PERMANENT":
-        message = _("Mapset <{mapset}> is required for a valid location.").format(
-            mapset=mapset_path)
-    # Check if mapset is current
-    elif is_mapset_current(grassdb, location, mapset):
-        message = _("Mapset <{mapset}> is the current mapset.").format(
-            mapset=mapset_path)
-    # Check whether mapset is in use
-    elif is_mapset_locked(mapset_path):
-        message = _("Mapset <{mapset}> is in use.").format(
-            mapset=mapset_path)
-    # Check whether mapset is owned by different user
-    elif is_different_mapset_owner(mapset_path):
-        message = _("Mapset <{mapset}> is owned by a different user.").format(
-            mapset=mapset_path)
-
-    return message
-
-
-def get_reasons_locations_not_removable(locations):
-    """Get reasons why locations cannot be removed.
-
-    Parameter *locations* is a list of tuples (database, location).
-
-    Returns messages as list if there were any failed checks, otherwise empty list.
-    """
-    messages = []
-    for grassdb, location in locations:
-        messages += get_reasons_location_not_removable(grassdb, location)
-    return messages
-
-
-def get_reasons_location_not_removable(grassdb, location):
-    """Get reasons why one location cannot be removed.
-
-    Returns messages as list if there were any failed checks, otherwise empty list.
-    """
-    messages = []
-    location_path = os.path.join(grassdb, location)
-
-    # Check if location is current
-    if is_location_current(grassdb, location):
-        messages.append(_("Location <{location}> is the current location.").format(
-            location=location_path))
-        return messages
-
-    # Find mapsets in particular location
-    tmp_gisrc_file, env = gs.create_environment(grassdb, location, 'PERMANENT')
-    env['GRASS_SKIP_MAPSET_OWNER_CHECK'] = '1'
-
-    g_mapsets = gs.read_command(
-        'g.mapsets',
-        flags='l',
-        separator='comma',
-        quiet=True,
-        env=env).strip().split(',')
-
-    # Append to the list of tuples
-    mapsets = []
-    for g_mapset in g_mapsets:
-        mapsets.append((grassdb, location, g_mapset))
-
-    # Concentenate both checks
-    messages += get_reasons_mapsets_not_removable(mapsets, check_permanent=False)
-
-    gs.try_remove(tmp_gisrc_file)
-    return messages
-
-
-def get_reasons_grassdb_not_removable(grassdb):
-    """Get reasons why one grassdb cannot be removed.
-
-    Returns messages as list if there were any failed checks, otherwise empty list.
-    """
-    messages = []
-    genv = gisenv()
-
-    # Check if grassdb is current
-    if grassdb == genv['GISDBASE']:
-        messages.append(_("GRASS database <{grassdb}> is the current database.").format(
-            grassdb=grassdb))
-        return messages
-
-    g_locations = GetListOfLocations(grassdb)
-
-    # Append to the list of tuples
-    locations = []
-    for g_location in g_locations:
-        locations.append((grassdb, g_location))
-    messages = get_reasons_locations_not_removable(locations)
-
-    return messages
+    def _isLocationNameValid(self, text):
+        """Check whether user's input location is valid or not."""
+        return is_location_name_valid(self.database, text)
 
 
 # TODO: similar to (but not the same as) read_gisrc function in grass.py
@@ -880,7 +717,9 @@ def switch_mapset_interactively(guiparent, giface, dbase, location, mapset):
                                "Current mapset is <%(mapset)s>."
                                ) %
                      {'dbase': dbase, 'loc': location, 'mapset': mapset})
-            giface.currentMapsetChanged.emit(dbase, location, mapset)
+            giface.currentMapsetChanged.emit(dbase=dbase,
+                                             location=location,
+                                             mapset=mapset)
     elif location:
         if RunCommand('g.mapset', parent=guiparent,
                       location=location,

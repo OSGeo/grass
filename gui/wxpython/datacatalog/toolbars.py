@@ -34,7 +34,7 @@ icons = {
         label=_("Allow edits outside of the current mapset")),
     'addGrassDB': MetaIcon(
         img='grassdb-add',
-        label=_("Add new GRASS database")),
+        label=_("Add existing or create new database")),
     'addMapset': MetaIcon(
         img='mapset-add',
         label=_("Create new mapset in current location")),

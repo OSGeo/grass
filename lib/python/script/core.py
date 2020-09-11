@@ -904,10 +904,11 @@ def parser():
 # interface to g.tempfile
 
 
-def tempfile(create=True):
+def tempfile(create=True, env=None):
     """Returns the name of a temporary file, created with g.tempfile.
 
     :param bool create: True to create a file
+    :param env: environment
 
     :return: path to a tmp file
     """
@@ -915,12 +916,12 @@ def tempfile(create=True):
     if not create:
         flags += 'd'
 
-    return read_command("g.tempfile", flags=flags, pid=os.getpid()).strip()
+    return read_command("g.tempfile", flags=flags, pid=os.getpid(), env=env).strip()
 
 
-def tempdir():
+def tempdir(env=None):
     """Returns the name of a temporary dir, created with g.tempfile."""
-    tmp = tempfile(create=False)
+    tmp = tempfile(create=False, env=env)
     os.mkdir(tmp)
 
     return tmp
@@ -1144,13 +1145,13 @@ def gisenv(env=None):
 # interface to g.region
 
 
-def locn_is_latlong():
+def locn_is_latlong(env=None):
     """Tests if location is lat/long. Value is obtained
     by checking the "g.region -pu" projection code.
 
     :return: True for a lat/long region, False otherwise
     """
-    s = read_command("g.region", flags='pu')
+    s = read_command("g.region", flags='pu', env=env)
     kv = parse_key_val(s, ':')
     if kv['projection'].split(' ')[0] == '3':
         return True
@@ -1295,7 +1296,7 @@ def del_temp_region():
 # interface to g.findfile
 
 
-def find_file(name, element='cell', mapset=None):
+def find_file(name, element='cell', mapset=None, env=None):
     """Returns the output from running g.findfile as a
     dictionary. Example:
 
@@ -1309,6 +1310,7 @@ def find_file(name, element='cell', mapset=None):
     :param str name: file name
     :param str element: element type (default 'cell')
     :param str mapset: mapset name (default all mapsets in search path)
+    :param env: environment
 
     :return: parsed output of g.findfile
     """
@@ -1319,14 +1321,15 @@ def find_file(name, element='cell', mapset=None):
     # se we ignore return code and just focus on stdout
     process = start_command('g.findfile', flags='n',
                             element=element, file=name, mapset=mapset,
-                            stdout=PIPE)
+                            stdout=PIPE, env=env)
     stdout = process.communicate()[0]
     return parse_key_val(stdout)
 
 # interface to g.list
 
 
-def list_strings(type, pattern=None, mapset=None, exclude=None, flag=''):
+def list_strings(type, pattern=None, mapset=None, exclude=None,
+                 flag='', env=None):
     """List of elements as strings.
 
     Returns the output from running g.list, as a list of qualified
@@ -1338,6 +1341,7 @@ def list_strings(type, pattern=None, mapset=None, exclude=None, flag=''):
     :param str exclude: pattern string to exclude maps from the research
     :param str flag: pattern type: 'r' (basic regexp), 'e' (extended regexp),
                      or '' (glob pattern)
+    :param env: environment
 
     :return: list of elements
     """
@@ -1351,13 +1355,15 @@ def list_strings(type, pattern=None, mapset=None, exclude=None, flag=''):
                              type=type,
                              pattern=pattern,
                              exclude=exclude,
-                             mapset=mapset).splitlines():
+                             mapset=mapset,
+                             env=env).splitlines():
         result.append(line.strip())
 
     return result
 
 
-def list_pairs(type, pattern=None, mapset=None, exclude=None, flag=''):
+def list_pairs(type, pattern=None, mapset=None, exclude=None,
+               flag='', env=None):
     """List of elements as pairs
 
     Returns the output from running g.list, as a list of
@@ -1369,16 +1375,17 @@ def list_pairs(type, pattern=None, mapset=None, exclude=None, flag=''):
     :param str exclude: pattern string to exclude maps from the research
     :param str flag: pattern type: 'r' (basic regexp), 'e' (extended regexp),
                      or '' (glob pattern)
+    :param env: environment
 
     :return: list of elements
     """
     return [tuple(map.split('@', 1)) for map in list_strings(type, pattern,
                                                               mapset, exclude,
-                                                              flag)]
+                                                              flag, env)]
 
 
 def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
-                 flag=''):
+                 flag='', env=None):
     """List of elements grouped by mapsets.
 
     Returns the output from running g.list, as a dictionary where the
@@ -1395,6 +1402,7 @@ def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
     :param str exclude: pattern string to exclude maps from the research
     :param str flag: pattern type: 'r' (basic regexp), 'e' (extended regexp),
                                     or '' (glob pattern)
+    :param env: environment
 
     :return: directory of mapsets/elements
     """
@@ -1411,7 +1419,7 @@ def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
             types[i] = 'raster'
     result = {}
     if check_search_path:
-        for mapset in mapsets(search_path=True):
+        for mapset in mapsets(search_path=True, env=env):
             if store_types:
                 result[mapset] = {}
             else:
@@ -1419,7 +1427,8 @@ def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
 
     mapset = None
     for line in read_command("g.list", quiet=True, flags="m" + flag,
-                             type=types, pattern=pattern, exclude=exclude).splitlines():
+                             type=types, pattern=pattern,
+                             exclude=exclude, env=env).splitlines():
         try:
             name, mapset = line.split('@')
         except ValueError:
@@ -1546,7 +1555,7 @@ def find_program(pgm, *args):
 # interface to g.mapsets
 
 
-def mapsets(search_path=False):
+def mapsets(search_path=False, env=None):
     """List available mapsets
 
     :param bool search_path: True to list mapsets only in search path
@@ -1560,7 +1569,8 @@ def mapsets(search_path=False):
     mapsets = read_command('g.mapsets',
                            flags=flags,
                            sep='newline',
-                           quiet=True)
+                           quiet=True,
+                           env=env)
     if not mapsets:
         fatal(_("Unable to list mapsets"))
 
@@ -1767,6 +1777,17 @@ def legal_name(s):
     return True
 
 
+def sanitize_mapset_environment(env):
+    """Remove environmental variables relevant only
+    for a specific mapset. This should be called
+    when a copy of environment is used with a different mapset."""
+    if "WIND_OVERRIDE" in env:
+        del env["WIND_OVERRIDE"]
+    if "GRASS_REGION" in env:
+        del env["GRASS_REGION"]
+    return env
+
+
 def create_environment(gisdbase, location, mapset):
     """Creates environment to be passed in run_command for example.
     Returns tuple with temporary file path and the environment. The user
@@ -1778,6 +1799,8 @@ def create_environment(gisdbase, location, mapset):
         f.write('GUI: text\n')
     env = os.environ.copy()
     env['GISRC'] = f.name
+    # remove mapset-specific env vars
+    env = sanitize_mapset_environment(env)
     return f.name, env
 
 

@@ -46,7 +46,15 @@ from startup.guiutils import (
     download_location_interactively,
     delete_grassdb_interactively,
     can_switch_mapset_interactive,
-    switch_mapset_interactively
+    switch_mapset_interactively,
+    get_reason_mapset_not_removable,
+    get_reasons_location_not_removable,
+    get_mapset_name_invalid_reason,
+    get_location_name_invalid_reason
+)
+from grass.grassdb.manage import (
+    rename_mapset,
+    rename_location
 )
 
 from grass.pydispatch.signal import Signal
@@ -470,6 +478,8 @@ class DataCatalogTree(TreeView):
                 queue_list = []
                 loc_list = []
                 location_nodes = []
+                # refresh after each chunk to make GUI more responsive
+                self.RefreshItems()
 
         for node in all_location_nodes:
             self._model.SortChildren(node)
@@ -492,10 +502,11 @@ class DataCatalogTree(TreeView):
                 grassdb_node = grassdb_nodes[0]
             error = self._reloadGrassDBNode(grassdb_node)
             if error:
-                errors.append(error)
+                errors += error
 
         if errors:
-            wx.CallAfter(GWarning, '\n'.join(errors))
+            # WriteWarning/Error results in crash
+            self._giface.WriteLog('\n'.join(errors))
         Debug.msg(1, "Tree filled")
 
         self.UpdateCurrentDbLocationMapsetNode()
@@ -532,7 +543,9 @@ class DataCatalogTree(TreeView):
 
     def ReloadTreeItems(self):
         """Reload dbs, locations, mapsets and layers in the tree."""
+        busy = wx.BusyCursor()
         self._reloadTreeItems()
+        del busy
 
     def ReloadCurrentMapset(self):
         """Reload current mapset tree only."""
@@ -854,21 +867,84 @@ class DataCatalogTree(TreeView):
     def OnStartEditLabel(self, node, event):
         """Start label editing"""
         self.DefineItems([node])
-        # TODO: add renaming mapset/location
-        if not self.selected_layer[0]:
+
+        # Not allowed for grassdb node
+        if node.data['type'] == 'grassdb':
             event.Veto()
-            return
-        Debug.msg(1, "Start label edit {name}".format(name=node.data['name']))
-        label = _("Editing {name}").format(name=node.data['name'])
-        self.showNotification.emit(message=label)
+        # Check selected mapset
+        elif node.data['type'] == 'mapset':
+            if (
+                self._restricted
+                or get_reason_mapset_not_removable(self.selected_grassdb[0].data['name'],
+                                                   self.selected_location[0].data['name'],
+                                                   self.selected_mapset[0].data['name'],
+                                                   check_permanent=True)
+            ):
+                event.Veto()
+        # Check selected location
+        elif node.data['type'] == 'location':
+            if (
+                self._restricted
+                or get_reasons_location_not_removable(self.selected_grassdb[0].data['name'],
+                                                      self.selected_location[0].data['name'])
+            ):
+                event.Veto()
+        elif node.data['type'] in ('raster', 'raster_3d', 'vector'):
+            currentGrassDb, currentLocation, currentMapset = self._isCurrent(gisenv())
+            if not currentMapset:
+                event.Veto()
 
     def OnEditLabel(self, node, event):
         """End label editing"""
-        if self.selected_layer and not event.IsEditCancelled():
-            old_name = node.data['name']
-            Debug.msg(1, "End label edit {name}".format(name=old_name))
-            new_name = event.GetLabel()
+        if event.IsEditCancelled():
+            return
+
+        old_name = node.data['name']
+        Debug.msg(1, "End label edit {name}".format(name=old_name))
+        new_name = event.GetLabel()
+
+        if node.data['type'] in ('raster', 'raster_3d', 'vector'):
             self.Rename(old_name, new_name)
+
+        elif node.data['type'] == 'mapset':
+            message = get_mapset_name_invalid_reason(
+                            self.selected_grassdb[0].data['name'],
+                            self.selected_location[0].data['name'],
+                            new_name)
+            if message:
+                GError(parent=self, message=message,
+                       caption=_("Cannot rename mapset"),
+                       showTraceback=False)
+                event.Veto()
+                return
+            rename_mapset(self.selected_grassdb[0].data['name'],
+                          self.selected_location[0].data['name'],
+                          self.selected_mapset[0].data['name'],
+                          new_name)
+            self._renameNode(self.selected_mapset[0], new_name)
+            label = _(
+                "Renaming mapset <{oldmapset}> to <{newmapset}> completed").format(
+                oldmapset=old_name, newmapset=new_name)
+            self.showNotification.emit(message=label)
+
+        elif node.data['type'] == 'location':
+            message = get_location_name_invalid_reason(
+                            self.selected_grassdb[0].data['name'],
+                            new_name)
+            if message:
+                GError(parent=self, message=message,
+                       caption=_("Cannot rename location"),
+                       showTraceback=False)
+                event.Veto()
+                return
+            rename_location(self.selected_grassdb[0].data['name'],
+                            self.selected_location[0].data['name'],
+                            new_name)
+            self._renameNode(self.selected_location[0], new_name)
+            label = _(
+                "Renaming location <{oldlocation}> to <{newlocation}> completed").format(
+                oldlocation=old_name, newlocation=new_name)
+            self.showNotification.emit(message=label)
 
     def Rename(self, old, new):
         """Rename layer"""

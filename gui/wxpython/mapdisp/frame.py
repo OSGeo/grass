@@ -420,6 +420,7 @@ class MapFrame(SingleMapFrame):
             os.environ['GRASS_REGION'] = self.Map.SetRegion(
                 windres=True, windres3=True)
             self.MapWindow3D.GetDisplay().Init()
+            self.MapWindow3D.LoadDataLayers()
             del os.environ['GRASS_REGION']
 
             # switch from MapWindow to MapWindowGL
@@ -1215,12 +1216,13 @@ class MapFrame(SingleMapFrame):
 
         :param overlayId: id of overlay
         """
-        dlg = self.decorations[overlayId].dialog
-        if dlg.IsShown():
-            dlg.SetFocus()
-            dlg.Raise()
-        else:
-            dlg.Show()
+        if overlayId in self.decorations:
+            dlg = self.decorations[overlayId].dialog
+            if dlg.IsShown():
+                dlg.SetFocus()
+                dlg.Raise()
+            else:
+                dlg.Show()
 
     def RemoveOverlay(self, overlayId):
         """Hide overlay.
