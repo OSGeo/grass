@@ -18648,7 +18648,7 @@ msgstr "Montrer les &métadonnées"
 
 #: ../gui/wxpython/datacatalog/tree.py:1022
 msgid "&Switch mapset"
-msgstr "Inverser les jeux de cartes"
+msgstr "Changer de jeux de cartes"
 
 #: ../gui/wxpython/datacatalog/dialogs.py:80
 msgid "Reproject"

@@ -4086,7 +4086,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.import_to_translate.c:14
 msgid "nearest;nearest neighbor;bilinear;bilinear interpolation;bicubic;bicubic interpolation;lanczos;lanczos filter;bilinear_f;bilinear interpolation with fallback;bicubic_f;bicubic interpolation with fallback;lanczos_f;lanczos filter with fallback"
-msgstr ""
+msgstr "nearest;nearest neighbor;bilinear;bilinear interpolation;bicubic;bicubic interpolation;lanczos;lanczos filter;bilinear_f;bilinear interpolation with fallback;bicubic_f;bicubic interpolation with fallback;lanczos_f;lanczos filter with fallback"
 
 #: ../locale/scriptstrings/r.import_to_translate.c:16
 msgid "Output raster map extent"
@@ -19820,7 +19820,7 @@ msgstr ""
 #: ../display/d.legend.vect/main.c:82 ../display/d.legend.vect/main.c:141
 #: ../display/d.legend/main.c:100 ../display/d.legend/main.c:109
 msgid "Title"
-msgstr ""
+msgstr "Titolo"
 
 #: ../display/d.legend.vect/main.c:96 ../display/d.legend.vect/main.c:102
 #: ../display/d.legend.vect/main.c:109 ../display/d.legend.vect/main.c:168

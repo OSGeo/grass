@@ -15506,7 +15506,7 @@ msgstr ""
 
 #: ../gui/wxpython/mapswipe/frame.py:303 ../gui/wxpython/animation/frame.py:162
 msgid "Main Toolbar"
-msgstr ""
+msgstr "Barra de Ferramentas Principal"
 
 #: ../gui/wxpython/mapswipe/frame.py:315 ../gui/wxpython/animation/frame.py:184
 #: ../gui/wxpython/lmgr/frame.py:157
@@ -15596,12 +15596,12 @@ msgstr ""
 #: ../gui/wxpython/animation/data.py:135
 #, python-format
 msgid "File %s not found"
-msgstr ""
+msgstr "Arquivo %s não encontrado"
 
 #: ../gui/wxpython/animation/data.py:144
 #, python-format
 msgid "Animation %d"
-msgstr ""
+msgstr "Animação %d"
 
 #: ../gui/wxpython/animation/nviztask.py:45 ../gui/wxpython/lmgr/frame.py:1432
 #, python-format
@@ -15672,15 +15672,15 @@ msgstr "Adicionar conjunto de dados espaço-temporais ou uma série de camadas p
 
 #: ../gui/wxpython/animation/frame.py:53
 msgid "GRASS GIS Animation tool"
-msgstr ""
+msgstr "Ferramenta de Animação GRASS GIS"
 
 #: ../gui/wxpython/animation/frame.py:172
 msgid "Animation Toolbar"
-msgstr ""
+msgstr "Barra de Ferramentas de Animação"
 
 #: ../gui/wxpython/animation/frame.py:284
 msgid "Loading data"
-msgstr ""
+msgstr "Carregando dados"
 
 #: ../gui/wxpython/animation/frame.py:292
 #, python-brace-format
@@ -15696,7 +15696,7 @@ msgstr "%(from)s %(dash)s %(to)s"
 #: ../gui/wxpython/animation/frame.py:613
 #, python-format
 msgid "to %(to)s"
-msgstr ""
+msgstr "para %(to)s"
 
 #: ../gui/wxpython/animation/provider.py:418
 msgid "Rendering map layers"
@@ -15714,7 +15714,7 @@ msgstr ""
 #: ../gui/wxpython/animation/g.gui.animation.py:92
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
-msgstr ""
+msgstr "%s=, %s=, %s= e %s= são mutuamente excludentes."
 
 #: ../gui/wxpython/animation/dialogs.py:57
 msgid "Adjust speed of animation"
@@ -15731,7 +15731,7 @@ msgstr "Duração do frame"
 #: ../gui/wxpython/animation/dialogs.py:110
 #: ../gui/wxpython/animation/dialogs.py:151
 msgid "ms"
-msgstr ""
+msgstr "ms"
 
 #: ../gui/wxpython/animation/dialogs.py:143
 msgid "Temporal mode"
@@ -15739,7 +15739,7 @@ msgstr "Modo temporal"
 
 #: ../gui/wxpython/animation/dialogs.py:148
 msgid "Time unit:"
-msgstr ""
+msgstr "Unidade de tempo:"
 
 #: ../gui/wxpython/animation/dialogs.py:150
 msgid "Duration of time unit:"
@@ -16147,19 +16147,19 @@ msgstr "O número de mapas no conjunto de dados espaço-temporal deve ser o mesm
 
 #: ../gui/wxpython/animation/utils.py:189
 msgid "The temporal type (absolute/relative) of space-time datasets has to be the same."
-msgstr ""
+msgstr "O tipo temporal (absoluto/relativo) dos conjuntos de dados espaço-temporais deve ser o mesmo."
 
 #: ../gui/wxpython/animation/utils.py:193
 msgid "The map type (point/interval) of space-time datasets has to be the same."
-msgstr ""
+msgstr "O tipo de mapa (ponto/intervalo) dos conjuntos de dados de espaço-tempo deve ser o mesmo."
 
 #: ../gui/wxpython/animation/utils.py:197
 msgid "The temporal extents of maps in space-time datasets have to be the same."
-msgstr ""
+msgstr "A extensão temporal dos mapas nos conjuntos de dados espaço-tempo deve ser a mesma."
 
 #: ../gui/wxpython/animation/utils.py:205
 msgid "The number of maps to animate has to be the same for each map series."
-msgstr ""
+msgstr "O número de mapas para animar deve ser o mesmo para cada série de mapas."
 
 #: ../gui/wxpython/animation/utils.py:210
 msgid "The number of maps to animate has to be the same as the number of maps in temporal dataset."
@@ -16198,12 +16198,12 @@ msgstr "Exportando animação, aguarde..."
 #: ../gui/wxpython/icons/icon.py:40
 #, python-format
 msgid "Unknown iconset '%s', using default 'grass'...\n"
-msgstr ""
+msgstr "Conjunto de ícones desconhecido '%s', usando padrão 'grass'...\n"
 
 #: ../gui/wxpython/icons/icon.py:58
 #, python-format
 msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."
-msgstr ""
+msgstr "Não foi possível carregar o tema de ícone. Razão: %s. Saindo do wxGUI..."
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:138
 msgid "With stvds you have to set 'attr' option"
