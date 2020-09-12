@@ -16418,19 +16418,19 @@ msgstr "STVDS"
 
 #: ../gui/wxpython/tplot/frame.py:282
 msgid "Set title for the plot"
-msgstr ""
+msgstr "Imposta titolo per il grafico"
 
 #: ../gui/wxpython/tplot/frame.py:287
 msgid "Set label for X axis"
-msgstr ""
+msgstr "Imposta etichetta per asse X"
 
 #: ../gui/wxpython/tplot/frame.py:292
 msgid "Set label for Y axis"
-msgstr ""
+msgstr "Imposta etichetta per asse Y"
 
 #: ../gui/wxpython/tplot/frame.py:304
 msgid "Labels"
-msgstr ""
+msgstr "Etichette"
 
 #: ../gui/wxpython/tplot/frame.py:311
 msgid "Path for output CSV file with plotted data"
@@ -16438,7 +16438,7 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:317
 msgid "CVS path"
-msgstr ""
+msgstr "percorso CSV"
 
 #: ../gui/wxpython/tplot/frame.py:323
 msgid "Do you want the CSV header?"

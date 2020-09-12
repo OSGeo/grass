@@ -249,7 +249,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/g.search.modules_to_translate.c:5
 msgid "Keyword to be searched"
-msgstr ""
+msgstr "Zu suchendes Schlagwort"
 
 #: ../locale/scriptstrings/g.search.modules_to_translate.c:6
 msgid "Display only modules where all keywords are available (AND), default: OR"
@@ -2747,7 +2747,7 @@ msgstr ""
 #: ../raster/r.latlong/main.c:58 ../general/g.proj/main.c:65
 #: ../general/g.setproj/main.c:79 ../vector/v.proj/main.c:74
 msgid "projection"
-msgstr ""
+msgstr "Projektion"
 
 #: ../locale/scriptstrings/v.import_to_translate.c:5
 #: ../vector/v.in.ogr/main.c:210
@@ -2859,7 +2859,7 @@ msgstr ""
 #: ../locale/scriptstrings/v.import_to_translate.c:21
 #: ../general/g.proj/main.c:159
 msgid "EPSG projection code"
-msgstr "EPSG Projektions Code"
+msgstr "EPSG Code"
 
 #: ../locale/scriptstrings/v.import_to_translate.c:23
 #: ../general/g.proj/main.c:181
@@ -2891,7 +2891,7 @@ msgstr ""
 #: ../vector/v.in.lidar/main.c:321 ../vector/v.in.ogr/main.c:364
 #: ../vector/v.external/args.c:45
 msgid "Override projection check (use current location's projection)"
-msgstr "Übersteuere die Projektionsprüfung (verwende Projektion der Location)"
+msgstr "Übersteuere die Projektionsprüfung (verwende Projektion der Location)."
 
 #: ../locale/scriptstrings/v.import_to_translate.c:28
 #: ../locale/scriptstrings/r.import_to_translate.c:32
@@ -5521,11 +5521,11 @@ msgstr "Text-Label: 'Schriftgröße' angegeben, also wird 'Größe' ignoriert."
 
 #: ../doc/raster/r.example/main.c:84 ../doc/vector/v.example/main.c:51
 msgid "keyword2"
-msgstr ""
+msgstr "Schlagwort2"
 
 #: ../doc/raster/r.example/main.c:85 ../doc/vector/v.example/main.c:52
 msgid "keyword3"
-msgstr ""
+msgstr "Schlagwort3"
 
 #: ../doc/raster/r.example/main.c:86
 msgid "My first raster module"
@@ -12437,7 +12437,7 @@ msgstr "Kann die Projektionsinformationen der Eingabekarte nicht ins GRASS-Forma
 #: ../vector/v.in.lidar/projection.c:126 ../vector/v.in.ogr/proj.c:352
 #: ../vector/v.external/proj.c:237
 msgid "Over-riding projection check"
-msgstr "Übersteuere die Überprüfung der Projektion."
+msgstr "Übersteuere Projektionsprüfung"
 
 #: ../raster/r.in.lidar/projection.c:139 ../raster/r.in.gdal/proj.c:282
 #: ../raster/r.external/proj.c:282 ../raster3d/r3.in.lidar/projection.c:141
@@ -12775,11 +12775,11 @@ msgstr ""
 
 #: ../raster/r.sunhours/main.c:216
 msgid "Cannot get projection info of current location"
-msgstr ""
+msgstr "Kann die Projektionsinformation der aktuellen Location nicht ermitteln."
 
 #: ../raster/r.sunhours/main.c:219
 msgid "Cannot get projection units of current location"
-msgstr ""
+msgstr "Kann die Einheiten der Projektion der aktuellen Location nicht ermitteln."
 
 #: ../raster/r.sunhours/main.c:222
 msgid "Cannot get projection key values of current location"
@@ -23483,7 +23483,7 @@ msgstr "Erzwinge das Übersteuern der Datumtransformationsinformation des Eingab
 
 #: ../general/g.proj/main.c:194
 msgid "Modify current location projection files"
-msgstr ""
+msgstr "Verändere die Projektion der aktuelle Location"
 
 #: ../general/g.proj/main.c:202
 msgid "Name of new location to create"
@@ -33735,7 +33735,7 @@ msgstr "Keine Datensätze in der Tabelle <%s> selektiert."
 
 #: ../vector/v.in.pdal/projection.c:125
 msgid "Overriding projection check"
-msgstr ""
+msgstr "Übersteuere Projektionsprüfung"
 
 #: ../vector/v.in.pdal/filters.c:46
 #, c-format
@@ -38643,7 +38643,7 @@ msgstr ""
 
 #: ../vector/v.kernel/main.c:218
 msgid "In network mode, normalize values by sum of density multiplied by length of each segment. Integral over the output map then gives 1.0 * multiplier"
-msgstr "Im Netzwerk-Modus: normalisiere Werte durch die Summe der Dichte multipliziert mit der Länge der Segmente. Integral über die Ausgabekarte ergibt 1.0 * multiplier."
+msgstr ""
 
 #: ../vector/v.kernel/main.c:224
 msgid "In network mode, multiply the result by number of input points"

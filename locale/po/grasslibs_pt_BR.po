@@ -980,7 +980,7 @@ msgstr ""
 #: ../lib/ogsf/gsd_img_ppm.c:55 ../lib/ogsf/gsd_img_ppm.c:101
 #, c-format
 msgid "Unable to open file <%s> for writing"
-msgstr ""
+msgstr "Não foi possível abrir arquivo <%s> para escrita"
 
 #: ../lib/ogsf/gk.c:320
 msgid "Need at least 3 keyframes for spline"
@@ -1045,7 +1045,7 @@ msgstr ""
 
 #: ../lib/ogsf/gsdrape.c:207
 msgid "Unable to process vector map - out of memory"
-msgstr ""
+msgstr "Não foi possível processar mapa vetorial - sem memória"
 
 #: ../lib/ogsf/gp3.c:62 ../lib/ogsf/gp3.c:196 ../lib/ogsf/gv3.c:66
 #: ../lib/ogsf/gv3.c:338 ../lib/python/temporal/c_libraries_interface.py:750
@@ -1054,13 +1054,13 @@ msgstr ""
 #: ../lib/vector/Vlib/map.c:275
 #, c-format, python-format
 msgid "Unable to open vector map <%s>"
-msgstr ""
+msgstr "Não foi possível abrir mapa vetorial <%s>"
 
 #: ../lib/ogsf/gp3.c:92 ../lib/vector/Vlib/copy.c:169
 #: ../lib/vector/Vlib/copy.c:246
 #, c-format
 msgid "Unable to read vector map <%s>"
-msgstr ""
+msgstr "Não foi possível ler mapa vetorial <%s>"
 
 #: ../lib/ogsf/gp3.c:148
 #, c-format
@@ -1129,22 +1129,22 @@ msgstr ""
 #: ../lib/ogsf/gsd_legend.c:246
 #, c-format
 msgid "Unable to read color file of raster map <%s>"
-msgstr ""
+msgstr "Não foi possível ler arquivo de cores do mapa raster <%s>"
 
 #: ../lib/ogsf/gsd_legend.c:252
 #, c-format
 msgid "Unable to read category file of raster map <%s>"
-msgstr ""
+msgstr "Não foi possível ler arquivo de categoria do mapa raster <%s>"
 
 #: ../lib/ogsf/gsd_legend.c:269
 #, c-format
 msgid "Unable to read fp range of raster map <%s>"
-msgstr ""
+msgstr "Não foi possível ler intervalo fp do mapa raster <%s>"
 
 #: ../lib/ogsf/gsd_legend.c:281
 #, c-format
 msgid "Unable to read range of raster map <%s>"
-msgstr ""
+msgstr "Não foi possível ler intervalo do mapa raster <%s>"
 
 #: ../lib/ogsf/gsd_legend.c:295
 msgid "Range request error for legend"
@@ -1198,12 +1198,12 @@ msgstr ""
 #: ../lib/python/temporal/c_libraries_interface.py:679
 #, c-format, python-format
 msgid "Unable to open 3D raster map <%s>"
-msgstr ""
+msgstr "Não foi possível abrir mapa raster 3D <%s>"
 
 #: ../lib/ogsf/gvl_file.c:442
 #, c-format
 msgid "Unable to read range of 3D raster map <%s>"
-msgstr ""
+msgstr "Não foi possível ler intervalo do mapa raster 3D <%s>"
 
 #: ../lib/ogsf/gvl_file.c:470
 #: ../lib/python/temporal/c_libraries_interface.py:709
@@ -1211,7 +1211,7 @@ msgstr ""
 #: ../lib/raster3d/close.c:159
 #, c-format, python-format
 msgid "Unable to close 3D raster map <%s>"
-msgstr ""
+msgstr "Não foi possível fechar o mapa raster 3D <%s>"
 
 #: ../lib/ogsf/gsds.c:109
 msgid "Maximum number of datasets exceeded"
@@ -4834,7 +4834,7 @@ msgstr ""
 #: ../lib/gis/get_ellipse.c:263 ../lib/proj/ellipse.c:243
 #, c-format
 msgid "Unable to open ellipsoid table file <%s>"
-msgstr ""
+msgstr "Não foi possível abrir arquivo de tabela elipsóide <%s>"
 
 #: ../lib/gis/get_ellipse.c:344 ../lib/gis/get_ellipse.c:367
 #, c-format
@@ -5027,7 +5027,7 @@ msgstr "Incapaz de abrir %s arquivo <%s>"
 #: ../lib/gis/parser.c:1804
 #, c-format
 msgid "Unable to create %s file <%s>"
-msgstr ""
+msgstr "Não foi possível criar o arquivo %s <%s>"
 
 #: ../lib/gis/parser_standard_options.c:147
 msgid "SQL SELECT statement"
@@ -5927,7 +5927,7 @@ msgstr "segundo"
 #: ../lib/gis/key_value3.c:33
 #, c-format
 msgid "Unable to open output file <%s>: %s"
-msgstr ""
+msgstr "Não foi possível abrir arquivo de saída <%s>: %s"
 
 #: ../lib/gis/key_value3.c:36
 #, c-format
@@ -5942,7 +5942,7 @@ msgstr ""
 #: ../lib/gis/key_value3.c:60
 #, c-format
 msgid "Unable to open input file <%s>: %s"
-msgstr ""
+msgstr "Não foi possível abrir arquivo de entrada <%s>: %s"
 
 #: ../lib/gis/key_value3.c:64
 #, c-format
@@ -6069,7 +6069,7 @@ msgstr "G_spawn: não consegui abrir o arquivo %s"
 
 #: ../lib/gis/spawn.c:503
 msgid "G_spawn: unable to execute command"
-msgstr ""
+msgstr "G_spawn: não foi possível executar comando"
 
 #: ../lib/gis/spawn.c:528 ../lib/gis/spawn.c:536
 #, c-format
@@ -6104,7 +6104,7 @@ msgstr "G_spawn: não consegui duplicar o descritor %d para %d"
 #: ../lib/gis/spawn.c:666
 #, c-format
 msgid "Unable to create a new process: %s"
-msgstr ""
+msgstr "Não foi possível criar um processo novo: %s"
 
 #: ../lib/gis/spawn.c:681
 #, c-format
@@ -6324,7 +6324,7 @@ msgstr ""
 #: ../lib/gis/seek.c:54 ../lib/gis/seek.c:60
 #, c-format
 msgid "Unable to seek: %s"
-msgstr ""
+msgstr "Não foi possível procurar: %s"
 
 #: ../lib/gis/seek.c:58
 msgid "Seek offset out of range"
@@ -6342,12 +6342,12 @@ msgstr "Erro na compressão ZSTD %d: %s"
 #: ../lib/gis/paths.c:201
 #, c-format
 msgid "Unable to open file <%s> for reading"
-msgstr ""
+msgstr "Não foi possível abrir arquivo <%s> para leitura"
 
 #: ../lib/gis/paths.c:217
 #, c-format
 msgid "Unable to fetch security info for <%s>"
-msgstr ""
+msgstr "Não foi possível buscar informações de segurança para <%s>"
 
 #: ../lib/gis/parser_wps.c:490
 msgid "Multiple outputs are not supported by WPS 1.0.0"
@@ -6359,7 +6359,7 @@ msgstr ""
 
 #: ../lib/gis/color_rules.c:292
 msgid "Unable to open color rule"
-msgstr ""
+msgstr "Não foi possível regra de cores"
 
 #: ../lib/gis/color_rules.c:341 ../lib/gis/color_rules.c:352
 #: ../lib/gis/color_rules.c:356 ../lib/gis/color_rules.c:360
@@ -6383,7 +6383,7 @@ msgstr ""
 #: ../lib/gis/mapset_msc.c:94
 #, c-format
 msgid "Unable to access mapset element %s (%s): %s"
-msgstr ""
+msgstr "Não foi possível acessar elemento do mapset %s (%s): %s"
 
 #: ../lib/gis/cmprzlib.c:142
 #, c-format
@@ -6508,12 +6508,12 @@ msgstr ""
 #: ../lib/gis/compress.c:283
 #, c-format
 msgid "Unable to read %d bytes: end of file"
-msgstr ""
+msgstr "Não foi possível ler %d bytes: fim do arquivo"
 
 #: ../lib/gis/compress.c:285
 #, c-format
 msgid "Unable to read %d bytes: %s"
-msgstr ""
+msgstr "Não foi possível ler %d bytes: %s"
 
 #: ../lib/gis/compress.c:360 ../lib/gis/compress.c:383
 #: ../lib/gis/compress.c:424
@@ -6524,13 +6524,13 @@ msgstr ""
 #: ../lib/gis/compress.c:437
 #, c-format
 msgid "Unable to write %d bytes: nothing written"
-msgstr ""
+msgstr "Não foi possível escrever %d bytes: nada escrito"
 
 #: ../lib/gis/compress.c:373 ../lib/gis/compress.c:396
 #: ../lib/gis/compress.c:439
 #, c-format
 msgid "Unable to write %d bytes: %s"
-msgstr ""
+msgstr "Não foi possível escrever %d bytes: %s"
 
 #: ../lib/gis/timestamp.c:292
 #, c-format
@@ -9835,3 +9835,7 @@ msgstr "nome de cor inválido"
 
 #~ msgid "initial GRASS database directory"
 #~ msgstr "Diretório do banco de dados GRASS inicial"
+
+#, c-format
+#~ msgid "Unable to execute command '%s': %s"
+#~ msgstr "Não foi possível executar comando '%s': %s"

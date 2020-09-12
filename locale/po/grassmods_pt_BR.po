@@ -1860,7 +1860,7 @@ msgstr ""
 #: ../vector/v.label/main.c:189 ../vector/v.label/main.c:195
 #: ../vector/v.label/main.c:205
 msgid "Colors"
-msgstr ""
+msgstr "Cores"
 
 #: ../locale/scriptstrings/i.colors.enhance_to_translate.c:12
 msgid "Preserve relative colors, adjust brightness only"
@@ -5783,7 +5783,7 @@ msgstr "Não foi possível obter atributos para cat %d"
 #: ../doc/vector/v.example/main.c:184
 #, c-format
 msgid "Error while retrieving database record for cat %d"
-msgstr ""
+msgstr "Erro ao recuperar o registro do banco de dados para o cat %d"
 
 #: ../doc/vector/v.example/main.c:217
 #, c-format
@@ -25582,7 +25582,7 @@ msgstr ""
 #: ../imagery/i.gensigset/get_train.c:81
 #, c-format
 msgid "%d classes found"
-msgstr ""
+msgstr "%d classes encontradas"
 
 #: ../imagery/i.gensigset/parse.c:29
 msgid "Maximum number of sub-signatures in any class"
@@ -31694,7 +31694,7 @@ msgstr ""
 #: ../vector/v.label/main.c:140 ../vector/v.label/main.c:148
 #: ../vector/v.lrs/v.lrs.label/main.c:181
 msgid "Font"
-msgstr ""
+msgstr "Fonte"
 
 #: ../vector/v.label.sa/main.c:77 ../vector/v.label/main.c:129
 #: ../vector/v.lrs/v.lrs.label/main.c:187
@@ -35889,12 +35889,12 @@ msgstr ""
 #: ../vector/v.what.rast/main.c:295
 #, c-format
 msgid "%d points outside current region were skipped"
-msgstr ""
+msgstr "%d pontos fora da região atual foram ignorados"
 
 #: ../vector/v.what.rast/main.c:299
 #, c-format
 msgid "%d points without category were skipped"
-msgstr ""
+msgstr "%d pontos sem categoria foram ignorados"
 
 #: ../vector/v.what.rast/main.c:570 ../vector/v.what.rast/main.c:610
 #, c-format
@@ -35930,7 +35930,7 @@ msgstr "%d atualizar erros"
 #: ../vector/v.what.rast/main.c:690 ../vector/v.distance/main.c:1752
 #, c-format
 msgid "%d records updated."
-msgstr ""
+msgstr "%d registros atualizados."
 
 #: ../vector/v.net.spanningtree/main.c:48
 msgid "spanning tree"
@@ -36315,8 +36315,8 @@ msgstr ""
 #, c-format
 msgid "%d record selected from table"
 msgid_plural "%d records selected from table"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d registros selecionados da tabela"
+msgstr[1] "%d registros selecionados da tabela"
 
 #: ../vector/v.rectify/cp.c:307 ../vector/v.rectify/cp.c:331
 #, c-format
@@ -44977,3 +44977,7 @@ msgstr "%d áreas representam mais feições (sobreposição) , pois os polígon
 
 #~ msgid "nearest neighbor"
 #~ msgstr "vizinho mais próximo"
+
+#, c-format
+#~ msgid "%d bytes of disk space for temp files."
+#~ msgstr "%d bytes de espaço em disco para arquivos temporários."
