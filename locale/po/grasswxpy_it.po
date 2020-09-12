@@ -1815,7 +1815,7 @@ msgstr "Barra degli strumenti della digitalizzazione"
 
 #: ../gui/wxpython/iclass/frame.py:388
 msgid "Plots"
-msgstr ""
+msgstr "Grafici"
 
 #: ../gui/wxpython/iclass/frame.py:408
 msgid "Preview Display"
@@ -2077,7 +2077,7 @@ msgstr "Percorso al file delle firme spettrali:"
 
 #: ../gui/wxpython/iclass/dialogs.py:730
 msgid "Export training areas"
-msgstr ""
+msgstr "Esporta le aree di addestramento"
 
 #: ../gui/wxpython/iclass/dialogs.py:777 ../gui/wxpython/iscatt/dialogs.py:281
 msgid "Enter name of new vector map:"
@@ -3620,7 +3620,7 @@ msgstr "Strumenti personalizzati"
 #: ../gui/wxpython/core/toolboxes.py:517
 #, python-format
 msgid "List of addons cannot be obtained because g.extension failed. Details: %s"
-msgstr ""
+msgstr "La lista degli addons non può essere ottenuta a causa di un errore di g.extension. Dettagli: %s"
 
 #: ../gui/wxpython/core/toolboxes.py:574
 msgid "Addons"
@@ -3695,7 +3695,7 @@ msgstr "Livello di debug per Wx {0}."
 #: ../gui/wxpython/core/debug.py:53
 #, python-brace-format
 msgid "WARNING: Ignoring unsupported wx debug level (must be >=0 and <=5). {0}\n"
-msgstr ""
+msgstr "ATTENZIONE: Livello di wx debug non supportato (dev'essere >=0 e <=5). {0}\n"
 
 #: ../gui/wxpython/core/settings.py:503
 msgid "Segment break"
@@ -13151,7 +13151,7 @@ msgstr "Licenza"
 
 #: ../gui/wxpython/gui_core/ghelp.py:78
 msgid "Citation"
-msgstr ""
+msgstr "Citazione"
 
 #: ../gui/wxpython/gui_core/ghelp.py:79
 msgid "Authors"
@@ -13192,7 +13192,7 @@ msgstr "Revisione del codice"
 
 #: ../gui/wxpython/gui_core/ghelp.py:169
 msgid "Build Date"
-msgstr ""
+msgstr "Data di compilazione"
 
 #: ../gui/wxpython/gui_core/ghelp.py:223 ../gui/wxpython/gui_core/ghelp.py:481
 msgid "Language"
@@ -14257,7 +14257,7 @@ msgstr "Nessuno sotto gruppo selezionato."
 
 #: ../gui/wxpython/gui_core/dialogs.py:1436
 msgid "Use fully-qualified map names"
-msgstr ""
+msgstr "Usare nomi della mappa completo"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1462
 msgid "Map type:"
@@ -18398,7 +18398,7 @@ msgstr "La mappa di tipo {elem} <{name}> esiste già nel mapset <{mapset}>. Vuoi
 #: ../gui/wxpython/datacatalog/tree.py:302
 #, python-brace-format
 msgid "GRASS locations in {0}"
-msgstr ""
+msgstr "Le Location di GRASS in {0}"
 
 #: ../gui/wxpython/datacatalog/tree.py:583
 #, python-brace-format
@@ -19336,7 +19336,7 @@ msgstr "vuoto"
 #: ../gui/wxpython/gmodeler/model.py:1889
 #, python-brace-format
 msgid "Details: unsupported tag name '{0}'."
-msgstr ""
+msgstr "Dettagli: nome del tag '{0}' non supportato"
 
 #: ../gui/wxpython/gmodeler/model.py:2802
 msgid "Model parameters"
@@ -19380,7 +19380,7 @@ msgstr "Si sta ridisegnando il modello...."
 
 #: ../gui/wxpython/gmodeler/frame.py:321
 msgid "Model computation finished"
-msgstr ""
+msgstr "Esecuzione del modello finito"
 
 #: ../gui/wxpython/gmodeler/frame.py:334
 msgid "Do you want to save changes in the model?"
@@ -19397,7 +19397,7 @@ msgstr "Esci dal Modellizzatore Grafico"
 #: ../gui/wxpython/gmodeler/frame.py:403
 #, python-format
 msgid "%d intermediate maps deleted from current mapset"
-msgstr ""
+msgstr "%d le mappe intermediare eliminate dal mapset corrente"
 
 #: ../gui/wxpython/gmodeler/frame.py:412
 msgid "No intermediate data to delete."
@@ -20647,3 +20647,40 @@ msgid ""
 msgstr ""
 "Le unità dell'attuale proiezione non sono supportate,\n"
 " saranno usati i metri"
+
+#~ msgid "Set title for the plot"
+#~ msgstr "Imposta titolo per il grafico"
+
+#~ msgid "Set label for X axis"
+#~ msgstr "Imposta etichetta per asse X"
+
+#~ msgid "Set label for Y axis"
+#~ msgstr "Imposta etichetta per asse Y"
+
+#~ msgid "Labels"
+#~ msgstr "Etichette"
+
+#~ msgid "CVS path"
+#~ msgstr "percorso CSV"
+
+#~ msgid "Apply SQL statement"
+#~ msgstr "Applica istruzione SQL"
+
+#~ msgid "No table linked to layer <{}>."
+#~ msgstr "Nessuna tabella collegata al layer <{}>"
+
+#~ msgid "No vector map selected"
+#~ msgstr "Nessuna mappa vettoriale selezionata"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Unable to write file '{filePath}'.\n"
+#~ "\n"
+#~ "Details: {error}"
+#~ msgstr ""
+#~ "Impossibile scrivere il file '{filePath}'.\n"
+#~ "\n"
+#~ "Dettagli: {error}"
+
+#~ msgid "Command log saved to '{}'"
+#~ msgstr "Output dei comandi salvati in '{}'"

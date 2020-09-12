@@ -234,7 +234,7 @@ msgstr "Нет памяти"
 #: ../lib/arraystats/class.c:19
 #, c-format
 msgid "Unknown algorithm '%s'"
-msgstr ""
+msgstr "Неизвестный алгоритм '%s'"
 
 #: ../lib/arraystats/class.c:42
 msgid "Discont algorithm currently not available because of bugs"
@@ -242,7 +242,7 @@ msgstr "Алгоритм Discont недоступен из-за ошибок"
 
 #: ../lib/arraystats/class.c:49
 msgid "Classification algorithm failed"
-msgstr ""
+msgstr "Сбой алгоритма классификации"
 
 #: ../lib/arraystats/class.c:227
 msgid "Equiprobable classbreaks currently limited to 10 classes"
@@ -1283,17 +1283,17 @@ msgstr ""
 #: ../lib/display/r_raster.c:150
 #, c-format
 msgid "Unknown display driver <%s>"
-msgstr ""
+msgstr "Неизвестный драйвер дисплея <%s>"
 
 #: ../lib/display/r_raster.c:151
 #, c-format
 msgid "Using display driver <%s>..."
-msgstr ""
+msgstr "Используется драйвер дисплея <%s>..."
 
 #: ../lib/display/tran_colr.c:107 ../lib/display/tran_colr.c:109
 #, c-format
 msgid "[%s]: No such color"
-msgstr "[%s]: Нет цвета"
+msgstr "[%s]: Нет такого цвета"
 
 #: ../lib/nviz/position.c:56
 msgid "Unable to set focus"
@@ -1362,7 +1362,7 @@ msgstr ""
 #: ../lib/cairodriver/read_xid.c:14
 #, c-format
 msgid "Unable to open input file <%s>"
-msgstr ""
+msgstr "Невозможно открыть входной файл <%s>"
 
 #: ../lib/cairodriver/read_xid.c:17
 #, c-format
@@ -6523,7 +6523,7 @@ msgstr "Неизвестный тип поля (поле <%s>)"
 #: ../lib/db/dbmi_client/select.c:119 ../lib/db/dbmi_client/select.c:221
 #: ../lib/db/dbmi_client/select.c:288
 msgid "Missing column name"
-msgstr ""
+msgstr "Не указано имя поля"
 
 #: ../lib/db/dbmi_client/select.c:216 ../lib/db/dbmi_client/select.c:283
 msgid "Missing key column name"
@@ -6639,7 +6639,7 @@ msgstr ""
 #: ../lib/db/dbmi_base/login.c:164
 #, c-format
 msgid "Unable to write file '%s'"
-msgstr ""
+msgstr "Невозможно записать файл '%s'"
 
 #: ../lib/db/dbmi_base/login.c:229
 #, c-format

@@ -1595,7 +1595,7 @@ msgstr "Salir de la herramienta de gráfica"
 
 #: ../gui/wxpython/wxplot/base.py:485
 msgid "Left Mouse Down at Point:"
-msgstr ""
+msgstr "Botón izquierdo del ratón, abajo en el punto:"
 
 #: ../gui/wxpython/wxplot/base.py:534
 msgid "This feature is not yet functional"
@@ -2295,7 +2295,7 @@ msgstr "Modo de acercamiento para gráficas de dispersión (botón derecho del r
 
 #: ../gui/wxpython/iscatt/toolbars.py:66
 msgid "Zoom to scatter plot data extend mode (click on scatter plot for zooming to extend)"
-msgstr ""
+msgstr "Encuadre (Zoom) al modo extendido del diagrama de dispersión de datos, (Haga click para hacer un encuadre o zooming a la extensión)."
 
 #: ../gui/wxpython/iscatt/toolbars.py:69
 msgid "Show/hide class manager"
@@ -2317,7 +2317,7 @@ msgstr "Añadir nuevo vértice"
 
 #: ../gui/wxpython/iscatt/toolbars.py:182
 msgid "Add new vertex to polygon boundary scatter plot"
-msgstr ""
+msgstr "Agregue un nuevo vértice al diagrama de dispersión de límite de polígono."
 
 #: ../gui/wxpython/iscatt/toolbars.py:184
 msgid "Create selection polygon"
@@ -2476,7 +2476,7 @@ msgstr "Color de área seleccionada:"
 
 #: ../gui/wxpython/iscatt/dialogs.py:372 ../gui/wxpython/vnet/dialogs.py:1282
 msgid "Snapping threshold in pixels:"
-msgstr ""
+msgstr "Umbral de ajuste en píxeles:"
 
 #: ../gui/wxpython/iscatt/dialogs.py:373
 msgid "Selected area opacity:"
@@ -2815,7 +2815,7 @@ msgstr "Especificar elipsoide:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1179
 msgid "Earth based"
-msgstr ""
+msgstr "Basado en la tierra."
 
 #: ../gui/wxpython/location_wizard/wizard.py:1182
 msgid "Planetary bodies"
@@ -3702,16 +3702,16 @@ msgstr "Error en %s"
 #: ../gui/wxpython/core/debug.py:48
 #, python-brace-format
 msgid "Wx debug level {0}."
-msgstr ""
+msgstr "Nivel de depuración Wx {0}."
 
 #: ../gui/wxpython/core/debug.py:53
 #, python-brace-format
 msgid "WARNING: Ignoring unsupported wx debug level (must be >=0 and <=5). {0}\n"
-msgstr ""
+msgstr "AVISO: Se está ignorando un nivel de depuración de wx que no está no soportado (Este debe ser >=0 y <=5). {0}\n"
 
 #: ../gui/wxpython/core/settings.py:503
 msgid "Segment break"
-msgstr ""
+msgstr "Ruptura de segmento."
 
 #: ../gui/wxpython/core/settings.py:569
 msgid "Data point"
@@ -7186,7 +7186,7 @@ msgstr "Cambia escala con histograma"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:477
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1403
 msgid "Rescales histogram equalized the range of category values in a raster map layer."
-msgstr ""
+msgstr "Al volver a escalar el histograma, se ha ecualizado el rango de valores de categoría en una capa de mapa ráster."
 
 #: ../gui/wxpython/menustrings.py:485 ../gui/wxpython/menustrings.py:1427
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:478
@@ -7271,7 +7271,7 @@ msgstr "Plano"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:491
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1417
 msgid "Creates raster plane map given dip (inclination), aspect (azimuth) and one point."
-msgstr ""
+msgstr "Crea un mapa ráster que representa un plano, dadas la pendiente (inclinación), aspecto (azimuth) y un punto."
 
 #: ../gui/wxpython/menustrings.py:499 ../gui/wxpython/menustrings.py:1441
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:492
@@ -7669,7 +7669,7 @@ msgstr "Extruir mapa vectorial 3D"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:557
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1483
 msgid "Extrudes flat vector features to 3D vector features with defined height. Optionally the height can be derived from sampling of elevation raster map."
-msgstr ""
+msgstr "Extruye, da elevación a rasgos geográficos representados mediante objetos vectoriales planos, en relación a atributos de objetos vectoriales 3D con altura definida. Opcionalmente, la altura se puede derivar del muestreo de un mapa ráster de elevación."
 
 #: ../gui/wxpython/menustrings.py:565 ../gui/wxpython/menustrings.py:1507
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:558
@@ -7954,7 +7954,7 @@ msgstr "Realiza identificación de grupos."
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:616
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1542
 msgid "Indices for quadrat counts of vector point lists"
-msgstr ""
+msgstr "Índices para recuentos de cuadrantes de listas de puntos vectoriales."
 
 #: ../gui/wxpython/menustrings.py:624 ../gui/wxpython/menustrings.py:749
 #: ../gui/wxpython/menustrings.py:1566 ../gui/wxpython/menustrings.py:1691
@@ -10816,6 +10816,8 @@ msgstr "Asigna subredes al centro más cercano (dirección desde el centro). Nod
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1578
 msgid "Splits net by cost isolines. Splits net to bands between cost isolines (direction from center). Center node must be opened (costs >= 0). Costs of center node are used in calculation."
 msgstr ""
+"Divide la red por isolíneas de costo.\n"
+"Divide la red en bandas entre isolíneas de costo (Con dirección desde el centro). El nodo central debe estar abierto (costes> = 0). Los costos del nodo central se utilizan en el cálculo."
 
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:710
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1636
@@ -10997,7 +10999,7 @@ msgstr ""
 msgid ""
 "Could not calculate new extends.\n"
 "Possible error with i.ortho.transform."
-msgstr ""
+msgstr "No se pudieron calcular las nuevas extensiones. Posible error de i.ortho.transform."
 
 #: ../gui/wxpython/image2target/ii2t_manager.py:2210
 #: ../gui/wxpython/image2target/ii2t_manager.py:2230
@@ -12249,7 +12251,7 @@ msgstr "plano"
 
 #: ../gui/wxpython/nviz/tools.py:875 ../gui/wxpython/nviz/tools.py:1914
 msgid "gouraud"
-msgstr ""
+msgstr "gourard"
 
 #: ../gui/wxpython/nviz/tools.py:883
 msgid "Set to all"
@@ -12283,7 +12285,7 @@ msgstr "superficie"
 
 #: ../gui/wxpython/nviz/tools.py:930
 msgid "Change wire color"
-msgstr ""
+msgstr "Cambio del color de alambre."
 
 #: ../gui/wxpython/nviz/tools.py:941 ../gui/wxpython/nviz/preferences.py:435
 msgid "Fine mode:"
@@ -12492,7 +12494,7 @@ msgstr "Resolución:"
 
 #: ../gui/wxpython/nviz/tools.py:1937
 msgid "Draw wire box"
-msgstr ""
+msgstr "Dibuja una caja de alambre."
 
 #: ../gui/wxpython/nviz/tools.py:1953 ../gui/wxpython/nviz/tools.py:4279
 msgid "List of isosurfaces"
@@ -12807,7 +12809,7 @@ msgstr "z:"
 
 #: ../gui/wxpython/nviz/preferences.py:517
 msgid "wire color:"
-msgstr ""
+msgstr "Color del alambre."
 
 #: ../gui/wxpython/nviz/preferences.py:598
 msgid "Automatic size"
@@ -13098,7 +13100,7 @@ msgstr "Definir los parámetros para el script"
 
 #: ../gui/wxpython/gui_core/pyedit.py:471
 msgid "Specify command line parameters for the script separated by spaces:"
-msgstr ""
+msgstr "Especifique, separando con espacios, los parámetros de la línea de comandos para el guión: "
 
 #: ../gui/wxpython/gui_core/pyedit.py:521
 msgid "Open (Ctrl+O)"
@@ -13477,7 +13479,7 @@ msgstr "Configuraciones de salida"
 
 #: ../gui/wxpython/gui_core/gselect.py:1413
 msgid "Source input"
-msgstr ""
+msgstr "Fuente de entrada."
 
 #: ../gui/wxpython/gui_core/gselect.py:1424
 msgid "Native"
@@ -13602,7 +13604,7 @@ msgstr "Datos de origen no definidos, no se han guardado las configuraciones."
 
 #: ../gui/wxpython/gui_core/gselect.py:2342
 msgid "LineString"
-msgstr ""
+msgstr "Cadena de caracteres."
 
 #: ../gui/wxpython/gui_core/gselect.py:2342
 msgid "Polygon"
@@ -14464,7 +14466,7 @@ msgstr "Archivo &Log"
 
 #: ../gui/wxpython/gui_core/goutput.py:173
 msgid "Toggle to save list of executed commands into a file; content saved when switching off."
-msgstr ""
+msgstr "Alternar para guardar la lista de comandos ejecutados en un archivo; Contenido guardado al apagar."
 
 #: ../gui/wxpython/gui_core/goutput.py:420
 #: ../gui/wxpython/gui_core/goutput.py:516
@@ -16056,7 +16058,7 @@ msgstr "La cantidad máxima de animaciones es %d."
 #: ../gui/wxpython/animation/dialogs.py:887
 #: ../gui/wxpython/animation/controller.py:262
 msgid "More animations are using one window. Please select different window for each animation."
-msgstr "Más animaciones está usando una ventana. Por favor seleccione una ventana diferente para cada animación."
+msgstr "Más animaciones están usando una ventana. Por favor seleccione una ventana diferente para cada animación."
 
 #: ../gui/wxpython/animation/dialogs.py:988
 msgid "Add time stamp"
@@ -17518,6 +17520,8 @@ msgid ""
 "Select areas from the\n"
 "overlaid vector map"
 msgstr ""
+"Seleccione las áreas desde\n"
+"el mapa vectorial superpuesto."
 
 #: ../gui/wxpython/rlisetup/wizard.py:898
 msgid "Choose a method"
@@ -17722,7 +17726,7 @@ msgstr "Tipo de área muestral:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1854
 msgid "Region keyboard values:"
-msgstr ""
+msgstr "Valores de región ingresados mediante teclado:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1868
 #: ../gui/wxpython/rlisetup/wizard.py:1893
@@ -17925,6 +17929,8 @@ msgid ""
 "Error occurred during calling of handler: %s \n"
 "Handler was unregistered."
 msgstr ""
+"Se produjo un error durante la llamada al controlador: %s\n"
+"El manejador no fue registrado."
 
 #: ../gui/wxpython/mapwin/base.py:286
 #, python-format
@@ -17932,11 +17938,13 @@ msgid ""
 "Error occurred during unregistration of handler: %s \n"
 "                                        Handler was unregistered."
 msgstr ""
+"Se produjo un error durante la cancelación del registro del manejador:\n"
+"%s El manejador no fue registrado."
 
 #: ../gui/wxpython/mapwin/base.py:315
 #, python-format
 msgid "Handler: %s was not registered"
-msgstr ""
+msgstr "El controlador: %s, no fue registrado."
 
 #: ../gui/wxpython/mapwin/base.py:319
 #, python-format
@@ -17944,6 +17952,8 @@ msgid ""
 "Error occurred during unregistration of handler: %s \n"
 "                                        Handler was unregistered"
 msgstr ""
+"Se produjo un error durante la cancelación del registro del controlador: %s.\n"
+"El controlador no estaba registrado."
 
 #: ../gui/wxpython/vnet/vnet_core.py:116
 msgid "Unable to perform analysis."
@@ -18025,18 +18035,18 @@ msgstr "No es posible usar ctypes. \n"
 #: ../gui/wxpython/vnet/vnet_core.py:1039
 #: ../gui/wxpython/vnet/vnet_core.py:1062
 msgid "Snapping mode can not be activated."
-msgstr ""
+msgstr "No ha sido posible activar el modo de ajuste."
 
 #: ../gui/wxpython/vnet/vnet_core.py:1069
 msgid "Do you really want to activate snapping and overwrite it?"
-msgstr ""
+msgstr "¿Realmente quiere activar el ajuste y sobrescribirlo?"
 
 #: ../gui/wxpython/vnet/vnet_core.py:1079
 #, python-format
 msgid ""
 "Temporary map '%s' was changed outside vector analysis tool.\n"
 "Do you really want to activate snapping and overwrite it? "
-msgstr ""
+msgstr "El mapa temporal '1%s' se modificó fuera de la herramienta de análisis de vectores. ¿Realmente desea activar el ajuste y sobrescribirlo?"
 
 #: ../gui/wxpython/vnet/vnet_core.py:1084
 msgid "Overwrite map"
@@ -18048,7 +18058,7 @@ msgstr "Insertar puntos a partir del Visualizador de Mapas"
 
 #: ../gui/wxpython/vnet/toolbars.py:55
 msgid "Activate snapping to nodes"
-msgstr ""
+msgstr "Activar el ajuste a los nodos."
 
 #: ../gui/wxpython/vnet/toolbars.py:58
 msgid "Activate mode for turns editing"
@@ -18166,23 +18176,23 @@ msgstr "nuevo punto"
 
 #: ../gui/wxpython/vnet/vnet_data.py:746
 msgid "Arc forward/both direction(s) cost column:"
-msgstr ""
+msgstr "Columna de costo para el arco hacia adelante /ambas direcciones:"
 
 #: ../gui/wxpython/vnet/vnet_data.py:747
 msgid "arc forward/both"
-msgstr ""
+msgstr "Arco, hacia adelante / ambas:"
 
 #: ../gui/wxpython/vnet/vnet_data.py:750
 msgid "Arc backward direction cost column:"
-msgstr ""
+msgstr "Columna de costo del arco en dirección hacia atrás:"
 
 #: ../gui/wxpython/vnet/vnet_data.py:751
 msgid "arc backward"
-msgstr ""
+msgstr "Arco hacia atrás."
 
 #: ../gui/wxpython/vnet/vnet_data.py:754
 msgid "Arcs' cost column (for both directions):"
-msgstr ""
+msgstr "Columna de costo de los arcos (Para ambas direcciones):"
 
 #: ../gui/wxpython/vnet/vnet_data.py:755
 msgid "arc"
@@ -18253,7 +18263,7 @@ msgstr "Herramienta de GRASS GIS para Analisis redes"
 
 #: ../gui/wxpython/vnet/dialogs.py:190
 msgid "Point list toolbar"
-msgstr ""
+msgstr "Barra de herramientas, lista de puntos."
 
 #: ../gui/wxpython/vnet/dialogs.py:197
 msgid "Analysis toolbar"
@@ -20161,27 +20171,27 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/test_mapdisp.py:150
 msgid "Map window test frame"
-msgstr ""
+msgstr "Marco de prueba de la ventana de mapa."
 
 #: ../gui/wxpython/mapdisp/test_mapdisp.py:169
 msgid "Map display test"
-msgstr ""
+msgstr "Prueba de visualización del mapa."
 
 #: ../gui/wxpython/mapdisp/test_mapdisp.py:179
 msgid "Map window API test frame"
-msgstr ""
+msgstr "Marco de prueba de la API (Interfaz de Programación de la Aplicación) de la ventana de Mapa."
 
 #: ../gui/wxpython/mapdisp/test_mapdisp.py:204
 msgid "Map window distance measurement test frame"
-msgstr ""
+msgstr "Marco de prueba de la medición de distancia de la ventana del mapa."
 
 #: ../gui/wxpython/mapdisp/test_mapdisp.py:235
 msgid "Map window profile tool test frame"
-msgstr ""
+msgstr "Marco de prueba de la herramienta perfil, perteneciente a la ventana de mapa."
 
 #: ../gui/wxpython/mapdisp/test_mapdisp.py:282
 msgid "Map window rlisetup test frame"
-msgstr ""
+msgstr "Marco de prueba e rlisetup de la ventana de mapa."
 
 #: ../gui/wxpython/mapdisp/test_mapdisp.py:343
 #, python-format
@@ -20291,7 +20301,7 @@ msgstr "Proyección de fuente:"
 
 #: ../gui/wxpython/web_services/widgets.py:254
 msgid "Advanced request settings"
-msgstr ""
+msgstr "Ajustes de solicitud avanzada."
 
 #: ../gui/wxpython/web_services/widgets.py:262
 msgid "Order of layers in raster"
@@ -20838,11 +20848,101 @@ msgstr "Álgebra temporal de vectores"
 msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
 msgstr "Aplicar operaciones temporales y espaciales sobre un conjunto de datos vectoriales espacio temporales usando álgebra temporal."
 
+msgid "Imports a GRASS GIS specific raster archive file (packed with r.pack) as a raster map"
+msgstr "Importa un archivo ráster específico de GRASS (empaquetado con r.pack) como un mapa ráster"
+
+msgid "Imports a GRASS GIS specific vector archive file (packed with v.pack) as a vector map"
+msgstr "Importa un archivo vectorial específico de GRASS (empaquetado con v.pack) como un mapa vectorial"
+
 #~ msgid "Apply SQL statement"
 #~ msgstr "Aplicar sentencia SQL"
 
-#~ msgid "Imports a GRASS GIS specific raster archive file (packed with r.pack) as a raster map"
-#~ msgstr "Importa un archivo ráster específico de GRASS (empaquetado con r.pack) como un mapa ráster"
+#~ msgid "Set title for the plot"
+#~ msgstr "Definir título del gráfico"
 
-#~ msgid "Imports a GRASS GIS specific vector archive file (packed with v.pack) as a vector map"
-#~ msgstr "Importa un archivo vectorial específico de GRASS (empaquetado con v.pack) como un mapa vectorial"
+#~ msgid "Set label for X axis"
+#~ msgstr "Definir etiqueta para el eje X"
+
+#~ msgid "Set label for Y axis"
+#~ msgstr "Definir etiqueta para el eje Y"
+
+#~ msgid "Labels"
+#~ msgstr "Etiquetas"
+
+#~ msgid "Path for output CSV file with plotted data"
+#~ msgstr "Ruta al archivo CSV de salida con los datos graficados"
+
+#~ msgid "Do you want the CSV header?"
+#~ msgstr "Desea el encabezado del CSV?"
+
+#, python-brace-format
+#~ msgid "{pa} already exists, do you want to overwrite?"
+#~ msgstr "{pa} ya existe. ¿Quiere sobrescribirlo?"
+
+#~ msgid "File exists"
+#~ msgstr "El archivo ya existe"
+
+#~ msgid "Fetching list of modules from GRASS-Addons (be patient)..."
+#~ msgstr "Obteniendo lista de módulos del repositorio de complementos de GRASS (sea paciente)..."
+
+#~ msgid "Installs new extension from GRASS AddOns repository."
+#~ msgstr "Instala una nueva extensión desde el repositorio de complementos de GRASS."
+
+#~ msgid "Name for the new mapset:"
+#~ msgstr "Nombre para el nuevo Directorio de mapas:"
+
+#~ msgid "Most likely the database, location or mapset does not exist"
+#~ msgstr "Probablemente, la base de datos, la Localización o el Directorio de mapas no existan"
+
+#, python-brace-format
+#~ msgid "New name for <{n}>"
+#~ msgstr "Nuevo nombre para <{n}>"
+
+#, python-brace-format
+#~ msgid "Do you really want to delete map(s) <{m}>?"
+#~ msgstr "Realmente desea remover el/los mapa(s) <{m}>?"
+
+#, python-brace-format
+#~ msgid "Do you really want to delete {n} maps?"
+#~ msgstr "Realmente desea remover {n} mapas?"
+
+#~ msgid "No available options"
+#~ msgstr "No hay opciones disponibles"
+
+#~ msgid "Available analyses"
+#~ msgstr "Análisis disponibles"
+
+#~ msgid "Please provive an order value (1 if 4 Fiducials, 2 if 8 Fiducials)"
+#~ msgstr "Por favor proporcione un valor de orden (1 si tiene 4 fiduciales, 2 si tiene 8 fiduciales)."
+
+#, python-format
+#~ msgid ""
+#~ "Temporal GIS error:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Error del GIS Temporal:\n"
+#~ "%s"
+
+#~ msgid "No table linked to layer <{}>."
+#~ msgstr "No se ha ligado tabla alguna a la capa<{}>."
+
+#~ msgid "No vector map selected"
+#~ msgstr "No se ha seleccionado un mapa vectorial."
+
+#, python-brace-format
+#~ msgid ""
+#~ "Unable to write file '{filePath}'.\n"
+#~ "\n"
+#~ "Details: {error}"
+#~ msgstr ""
+#~ "No se puede escribir el archivo '{filePath}'. \n"
+#~ "\n"
+#~ "\n"
+#~ "Detalles: {error}."
+
+#~ msgid "Command log saved to '{}'"
+#~ msgstr "Registro de comandos guardado en '{}'."
+
+#, python-format
+#~ msgid "GRASS GIS %s Startup%s"
+#~ msgstr "GRASS GIS %s inicio%s"

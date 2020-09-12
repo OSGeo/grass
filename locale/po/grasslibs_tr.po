@@ -6654,11 +6654,11 @@ msgstr ""
 
 #: ../lib/db/dbmi_base/error.c:91
 msgid "dbmi: Protocol error"
-msgstr ""
+msgstr "dbmi: Protokol hatası"
 
 #: ../lib/db/dbmi_base/error.c:136
 msgid "dbmi: Out of Memory"
-msgstr ""
+msgstr "dbmi: Yetersiz Bellek"
 
 #: ../lib/db/dbmi_base/error.c:149
 #, c-format

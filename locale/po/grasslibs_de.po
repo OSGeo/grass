@@ -210,7 +210,7 @@ msgstr ""
 #: ../lib/temporal/lib/connect.c:110
 #, c-format
 msgid "Mapset <%s> does not exist."
-msgstr ""
+msgstr "Mapset <%s> existiert nicht."
 
 #: ../lib/rowio/setup.c:61 ../lib/rowio/setup.c:67 ../lib/segment/open.c:98
 #: ../lib/rst/interp_float/segmen2d_parallel.c:78
@@ -4617,11 +4617,11 @@ msgstr ""
 
 #: ../lib/gis/cmprlz4.c:107
 msgid "LZ4 compression error"
-msgstr ""
+msgstr "LZ4-Komprimierungsfehler"
 
 #: ../lib/gis/cmprlz4.c:159
 msgid "LZ4 decompression error"
-msgstr ""
+msgstr "LZ4-Dekompressionsfehler"
 
 #: ../lib/gis/cmprlz4.c:168 ../lib/gis/cmprbzip.c:200
 #, c-format
@@ -5607,11 +5607,11 @@ msgstr ""
 
 #: ../lib/gis/units.c:208
 msgid "square units"
-msgstr ""
+msgstr "Quadrat-Einheiten"
 
 #: ../lib/gis/units.c:208
 msgid "square unit"
-msgstr ""
+msgstr "Quadrat-Einheit"
 
 #: ../lib/gis/units.c:210
 msgid "units"
@@ -5639,11 +5639,11 @@ msgstr "Meter"
 
 #: ../lib/gis/units.c:222
 msgid "square kilometers"
-msgstr ""
+msgstr "Quadratkilometer"
 
 #: ../lib/gis/units.c:222
 msgid "square kilometer"
-msgstr ""
+msgstr "Quadratkilometer"
 
 #: ../lib/gis/units.c:224
 msgid "kilometers"
@@ -5651,7 +5651,7 @@ msgstr "Kilometer"
 
 #: ../lib/gis/units.c:224
 msgid "kilometer"
-msgstr ""
+msgstr "Kilometer"
 
 #: ../lib/gis/units.c:229
 msgid "acres"
@@ -5663,43 +5663,43 @@ msgstr ""
 
 #: ../lib/gis/units.c:237
 msgid "hectares"
-msgstr ""
+msgstr "Hektar"
 
 #: ../lib/gis/units.c:237
 msgid "hectare"
-msgstr ""
+msgstr "Hektar"
 
 #: ../lib/gis/units.c:245
 msgid "square miles"
-msgstr ""
+msgstr "Quadratmeilen"
 
 #: ../lib/gis/units.c:245
 msgid "square mile"
-msgstr ""
+msgstr "Quadratmeile"
 
 #: ../lib/gis/units.c:247
 msgid "miles"
-msgstr ""
+msgstr "Meilen"
 
 #: ../lib/gis/units.c:247
 msgid "mile"
-msgstr ""
+msgstr "Meile"
 
 #: ../lib/gis/units.c:252
 msgid "square feet"
-msgstr ""
+msgstr "Quadratfuß"
 
 #: ../lib/gis/units.c:252
 msgid "square foot"
-msgstr ""
+msgstr "Quadratfuß"
 
 #: ../lib/gis/units.c:254
 msgid "feet"
-msgstr ""
+msgstr "Fuß"
 
 #: ../lib/gis/units.c:254
 msgid "foot"
-msgstr ""
+msgstr "Fuß"
 
 #: ../lib/gis/units.c:259
 msgid "square US feet"
@@ -5727,11 +5727,11 @@ msgstr ""
 
 #: ../lib/gis/units.c:268
 msgid "degrees"
-msgstr ""
+msgstr "Grad"
 
 #: ../lib/gis/units.c:268
 msgid "degree"
-msgstr ""
+msgstr "Grad"
 
 #: ../lib/gis/units.c:272
 msgid "years"
@@ -8465,8 +8465,8 @@ msgstr[1] ""
 #, c-format
 msgid "One vertex registered"
 msgid_plural "%d vertices registered"
-msgstr[0] "Ein Vertex registriert"
-msgstr[1] "%d Vertices registriert"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../lib/vector/Vlib/build_sfa.c:668
 #, c-format

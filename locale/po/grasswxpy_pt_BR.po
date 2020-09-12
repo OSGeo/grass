@@ -1056,7 +1056,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/vclean.py:85
 msgid "remove small areas"
-msgstr ""
+msgstr "remove áreas pequenas"
 
 #: ../gui/wxpython/modules/vclean.py:86
 msgid "remove lines/boundaries of zero length"
@@ -1072,15 +1072,15 @@ msgstr ""
 
 #: ../gui/wxpython/modules/vclean.py:126
 msgid "Select input vector map:"
-msgstr ""
+msgstr "Seleciona mapa vetorial de entrada:"
 
 #: ../gui/wxpython/modules/vclean.py:132
 msgid " Feature type: "
-msgstr ""
+msgstr "Tipo de feição:"
 
 #: ../gui/wxpython/modules/vclean.py:136
 msgid "Select output vector map:"
-msgstr ""
+msgstr "Seleciona mapa vetorial de saída:"
 
 #: ../gui/wxpython/modules/vclean.py:177
 msgid "Copy the current command string to the clipboard (Ctrl+C)"
@@ -1088,11 +1088,11 @@ msgstr ""
 
 #: ../gui/wxpython/modules/vclean.py:222 ../gui/wxpython/psmap/utils.py:106
 msgid "point"
-msgstr ""
+msgstr "ponto"
 
 #: ../gui/wxpython/modules/vclean.py:223
 msgid "line"
-msgstr ""
+msgstr "linha"
 
 #: ../gui/wxpython/modules/vclean.py:224
 msgid "boundary"
@@ -5579,13 +5579,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1179
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1181
 msgid "Shows the extent and resolution of the computational region."
-msgstr ""
+msgstr "Mostra a extensão e resolução da região computacional."
 
 #: ../gui/wxpython/menustrings.py:220 ../gui/wxpython/menustrings.py:1199
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:217
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1180
 msgid "Show region using latitude and longitude"
-msgstr ""
+msgstr "Mostra região usando latitude e longitude"
 
 #: ../gui/wxpython/menustrings.py:222 ../gui/wxpython/menustrings.py:1201
 msgid "Show current region extent in Map Display"
@@ -5599,7 +5599,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:219
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1182
 msgid "Set region"
-msgstr ""
+msgstr "Definir região"
 
 #: ../gui/wxpython/menustrings.py:225 ../gui/wxpython/menustrings.py:1204
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:220
@@ -5625,17 +5625,17 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:229
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:224
 msgid "User access"
-msgstr ""
+msgstr "Acesso de usuário"
 
 #: ../gui/wxpython/menustrings.py:230
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:225
 msgid "Controls access to the current mapset for other users on the system. If no option given, prints current status."
-msgstr ""
+msgstr "Controla o acesso de outros usuários no sistema ao mapset atual. Se nenhuma opção for dada, imprime o status atual."
 
 #: ../gui/wxpython/menustrings.py:231
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:226
 msgid "Change working environment"
-msgstr ""
+msgstr "Modifica ambiente de trabalho"
 
 #: ../gui/wxpython/menustrings.py:232
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:227
@@ -5731,7 +5731,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:252
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:247
 msgid "Manage projections"
-msgstr ""
+msgstr "Gerenciar projeções"
 
 #: ../gui/wxpython/menustrings.py:253
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:248
@@ -5741,12 +5741,12 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:254
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:249
 msgid "Convert coordinates"
-msgstr ""
+msgstr "Converter coordenadas"
 
 #: ../gui/wxpython/menustrings.py:255
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:250
 msgid "Converts coordinates from one projection to another (cs2cs frontend)."
-msgstr ""
+msgstr "Converte coordenadas de uma projeção para outra (cs2cs frontend)."
 
 #: ../gui/wxpython/menustrings.py:256
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:251
@@ -5766,7 +5766,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:259
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:254
 msgid "Manage installed extension"
-msgstr ""
+msgstr "Gerenciar extensões instaladas"
 
 #: ../gui/wxpython/menustrings.py:260
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:255
@@ -5777,7 +5777,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:256
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1990
 msgid "Preferences"
-msgstr ""
+msgstr "Preferências"
 
 #: ../gui/wxpython/menustrings.py:262
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:257
@@ -5788,7 +5788,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:258
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1184
 msgid "&Raster"
-msgstr ""
+msgstr "&Raster"
 
 #: ../gui/wxpython/menustrings.py:264 ../gui/wxpython/menustrings.py:1206
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:259
@@ -5995,7 +5995,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:293
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1219
 msgid "Color tables (stddev)"
-msgstr ""
+msgstr "Tabela de cores (stddev)"
 
 #: ../gui/wxpython/menustrings.py:299 ../gui/wxpython/menustrings.py:1241
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:294
@@ -6025,13 +6025,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1223
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1516
 msgid "Export color table"
-msgstr ""
+msgstr "Exportar tabela de cores"
 
 #: ../gui/wxpython/menustrings.py:303 ../gui/wxpython/menustrings.py:1245
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:298
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1224
 msgid "Exports the color table associated with a raster map."
-msgstr ""
+msgstr "Exporta a tabela de cores associada a um mapa raster."
 
 #: ../gui/wxpython/menustrings.py:304 ../gui/wxpython/menustrings.py:1246
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:299
@@ -6049,7 +6049,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:301
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1227
 msgid "Create RGB"
-msgstr ""
+msgstr "Criar RGB"
 
 #: ../gui/wxpython/menustrings.py:307 ../gui/wxpython/menustrings.py:1249
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:302
@@ -10244,19 +10244,19 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:1047
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1031
 msgid "About system"
-msgstr ""
+msgstr "Sobre o sistema"
 
 #: ../gui/wxpython/menustrings.py:1048
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1032
 msgid "Prints system information"
-msgstr ""
+msgstr "Imprime informação do sistema"
 
 #: ../gui/wxpython/menustrings.py:1049 ../gui/wxpython/menustrings.py:1050
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1033
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1034
 #: ../gui/wxpython/gui_core/ghelp.py:53
 msgid "About GRASS GIS"
-msgstr ""
+msgstr "Sobre GRASS GIS"
 
 #: ../gui/wxpython/menustrings.py:1053
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1037
@@ -11886,7 +11886,7 @@ msgstr ""
 #: ../gui/wxpython/nviz/mapwindow.py:2272 ../gui/wxpython/nviz/tools.py:2679
 #: ../gui/wxpython/nviz/tools.py:2728 ../gui/wxpython/nviz/tools.py:5172
 msgid "constant#"
-msgstr ""
+msgstr "constante#"
 
 #: ../gui/wxpython/nviz/wxnviz.py:33
 msgid "This module requires the NumPy module, which could not be imported. It probably is not installed (it's not part of the standard Python distribution). See the Numeric Python site (http://numpy.scipy.org) for information on downloading source or binaries."
@@ -12024,11 +12024,11 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:525 ../gui/wxpython/animation/toolbars.py:42
 msgid "Pause"
-msgstr ""
+msgstr "Pausar"
 
 #: ../gui/wxpython/nviz/tools.py:527 ../gui/wxpython/animation/toolbars.py:39
 msgid "Stop"
-msgstr ""
+msgstr "Parar"
 
 #: ../gui/wxpython/nviz/tools.py:544
 msgid "Total number of frames :"
@@ -13431,7 +13431,7 @@ msgstr ""
 #: ../gui/wxpython/vnet/dialogs.py:1643
 #: ../gui/wxpython/gmodeler/preferences.py:706
 msgid "Name:"
-msgstr ""
+msgstr "Nome:"
 
 #: ../gui/wxpython/gui_core/gselect.py:1569
 msgid "Choose file"
@@ -14778,7 +14778,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:927
 msgid "Region:"
-msgstr ""
+msgstr "Região:"
 
 #: ../gui/wxpython/psmap/dialogs.py:984
 msgid "Map scale and center"
@@ -14790,11 +14790,11 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:989
 msgid "E:"
-msgstr ""
+msgstr "L:"
 
 #: ../gui/wxpython/psmap/dialogs.py:990
 msgid "N:"
-msgstr ""
+msgstr "N:"
 
 #: ../gui/wxpython/psmap/dialogs.py:997 ../gui/wxpython/psmap/dialogs.py:5860
 msgid "Scale:"
@@ -15492,7 +15492,7 @@ msgstr ""
 
 #: ../gui/wxpython/mapswipe/frame.py:303 ../gui/wxpython/animation/frame.py:160
 msgid "Main Toolbar"
-msgstr ""
+msgstr "Barra de Ferramentas Principal"
 
 #: ../gui/wxpython/mapswipe/frame.py:315 ../gui/wxpython/animation/frame.py:182
 #: ../gui/wxpython/lmgr/frame.py:156
@@ -15509,7 +15509,7 @@ msgstr ""
 #: ../gui/wxpython/lmgr/layertree.py:2001
 #, python-format
 msgid "Map <%s> not found."
-msgstr ""
+msgstr "Mapa <%s> não encontrado."
 
 #: ../gui/wxpython/mapswipe/frame.py:674 ../gui/wxpython/mapdisp/frame.py:897
 msgid "No raster or vector map layer selected for querying."
@@ -15573,7 +15573,7 @@ msgstr "Visualização 3D"
 
 #: ../gui/wxpython/animation/data.py:66
 msgid "No animation name selected."
-msgstr ""
+msgstr "Nome da animação não selecionado."
 
 #: ../gui/wxpython/animation/data.py:132
 msgid "No workspace file selected."
@@ -15582,12 +15582,12 @@ msgstr ""
 #: ../gui/wxpython/animation/data.py:135
 #, python-format
 msgid "File %s not found"
-msgstr ""
+msgstr "Arquivo %s não encontrado"
 
 #: ../gui/wxpython/animation/data.py:144
 #, python-format
 msgid "Animation %d"
-msgstr ""
+msgstr "Animação %d"
 
 #: ../gui/wxpython/animation/nviztask.py:43 ../gui/wxpython/lmgr/frame.py:1391
 #, python-format
@@ -15601,72 +15601,72 @@ msgstr ""
 #: ../gui/wxpython/animation/nviztask.py:53
 #, python-format
 msgid "No 3d view information in workspace file <%s>."
-msgstr ""
+msgstr "Sem informação sobre visualização 3d no arquivo da área de trabalho <%s>."
 
 #: ../gui/wxpython/animation/nviztask.py:285
 msgid "Please add only one layer in the list."
-msgstr ""
+msgstr "Favor adicionar apenas uma camada a lista."
 
 #: ../gui/wxpython/animation/nviztask.py:292
 msgid "No map series nor space-time dataset is added."
-msgstr ""
+msgstr "Não foi adicionado série de mapas ou conjunto de dados espaço-temporal."
 
 #: ../gui/wxpython/animation/toolbars.py:30
 msgid "Change animation speed"
-msgstr ""
+msgstr "Alterar velocidade da animação"
 
 #: ../gui/wxpython/animation/toolbars.py:33
 msgid "Play forward"
-msgstr ""
+msgstr "Tocar para frente"
 
 #: ../gui/wxpython/animation/toolbars.py:36
 msgid "Play back"
-msgstr ""
+msgstr "Tocar para trás"
 
 #: ../gui/wxpython/animation/toolbars.py:45
 msgid "Repeat"
-msgstr ""
+msgstr "Repetir"
 
 #: ../gui/wxpython/animation/toolbars.py:48
 msgid "Play back and forward"
-msgstr ""
+msgstr "Tocar para frente e para trás"
 
 #: ../gui/wxpython/animation/toolbars.py:51
 #: ../gui/wxpython/animation/toolbars.py:52
 #: ../gui/wxpython/animation/dialogs.py:324
 msgid "Add new animation"
-msgstr ""
+msgstr "Adicionar nova animação"
 
 #: ../gui/wxpython/animation/toolbars.py:55
 #: ../gui/wxpython/animation/toolbars.py:56
 msgid "Add, edit or remove animation"
-msgstr ""
+msgstr "Criar editar ou remover animação"
 
 #: ../gui/wxpython/animation/toolbars.py:59
 #: ../gui/wxpython/animation/toolbars.py:60
 #: ../gui/wxpython/animation/dialogs.py:907
 msgid "Export animation"
-msgstr ""
+msgstr "Exportar animação"
 
 #: ../gui/wxpython/animation/toolbars.py:68
 msgid "Add space-time dataset or series of map layers"
-msgstr ""
+msgstr "Adicionar conjunto de dados espaço-temporais ou uma série de camadas"
 
 #: ../gui/wxpython/animation/toolbars.py:69
 msgid "Add space-time dataset or series of map layers for animation"
-msgstr ""
+msgstr "Adicionar conjunto de dados espaço-temporais ou uma série de camadas para a animação"
 
 #: ../gui/wxpython/animation/frame.py:51
 msgid "GRASS GIS Animation tool"
-msgstr ""
+msgstr "Ferramenta de Animação GRASS GIS"
 
 #: ../gui/wxpython/animation/frame.py:170
 msgid "Animation Toolbar"
-msgstr ""
+msgstr "Barra de Ferramentas de Animação"
 
 #: ../gui/wxpython/animation/frame.py:282
 msgid "Loading data"
-msgstr ""
+msgstr "Carregando dados"
 
 #: ../gui/wxpython/animation/frame.py:290
 #, python-brace-format
@@ -15677,12 +15677,12 @@ msgstr ""
 #: ../gui/wxpython/animation/controller.py:598
 #, python-format
 msgid "%(from)s %(dash)s %(to)s"
-msgstr ""
+msgstr "%(from)s %(dash)s %(to)s"
 
 #: ../gui/wxpython/animation/frame.py:610
 #, python-format
 msgid "to %(to)s"
-msgstr ""
+msgstr "para %(to)s"
 
 #: ../gui/wxpython/animation/provider.py:417
 msgid "Rendering map layers"
@@ -15700,32 +15700,32 @@ msgstr ""
 #: ../gui/wxpython/animation/g.gui.animation.py:92
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
-msgstr ""
+msgstr "%s=, %s=, %s= e %s= são mutuamente excludentes."
 
 #: ../gui/wxpython/animation/dialogs.py:53
 msgid "Adjust speed of animation"
-msgstr ""
+msgstr "Ajuste de velocidade da animação"
 
 #: ../gui/wxpython/animation/dialogs.py:100
 msgid "Simple mode"
-msgstr ""
+msgstr "Modo simplificado"
 
 #: ../gui/wxpython/animation/dialogs.py:105
 msgid "Frame duration:"
-msgstr ""
+msgstr "Duração do frame"
 
 #: ../gui/wxpython/animation/dialogs.py:106
 #: ../gui/wxpython/animation/dialogs.py:147
 msgid "ms"
-msgstr ""
+msgstr "ms"
 
 #: ../gui/wxpython/animation/dialogs.py:139
 msgid "Temporal mode"
-msgstr ""
+msgstr "Modo temporal"
 
 #: ../gui/wxpython/animation/dialogs.py:144
 msgid "Time unit:"
-msgstr ""
+msgstr "Unidade de tempo:"
 
 #: ../gui/wxpython/animation/dialogs.py:146
 msgid "Duration of time unit:"
@@ -15733,63 +15733,63 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:218
 msgid "year"
-msgstr ""
+msgstr "ano"
 
 #: ../gui/wxpython/animation/dialogs.py:219
 msgid "month"
-msgstr ""
+msgstr "mês"
 
 #: ../gui/wxpython/animation/dialogs.py:220
 msgid "day"
-msgstr ""
+msgstr "dia"
 
 #: ../gui/wxpython/animation/dialogs.py:221
 msgid "hour"
-msgstr ""
+msgstr "hora"
 
 #: ../gui/wxpython/animation/dialogs.py:222
 msgid "minute"
-msgstr ""
+msgstr "minuto"
 
 #: ../gui/wxpython/animation/dialogs.py:223
 msgid "second"
-msgstr ""
+msgstr "segundo"
 
 #: ../gui/wxpython/animation/dialogs.py:288
 msgid "Animation speed is too high."
-msgstr ""
+msgstr "Velocidade da animação está muito alta."
 
 #: ../gui/wxpython/animation/dialogs.py:326
 msgid "Edit animation"
-msgstr ""
+msgstr "Editar animação"
 
 #: ../gui/wxpython/animation/dialogs.py:344
 msgid "Advanced"
-msgstr ""
+msgstr "Avançado"
 
 #: ../gui/wxpython/animation/dialogs.py:375
 msgid "top left"
-msgstr ""
+msgstr "superior esquerdo"
 
 #: ../gui/wxpython/animation/dialogs.py:376
 msgid "top right"
-msgstr ""
+msgstr "superior direito"
 
 #: ../gui/wxpython/animation/dialogs.py:377
 msgid "bottom left"
-msgstr ""
+msgstr "inferior esquerdo"
 
 #: ../gui/wxpython/animation/dialogs.py:378
 msgid "bottom right"
-msgstr ""
+msgstr "inferior direito"
 
 #: ../gui/wxpython/animation/dialogs.py:394
 msgid "Select 2D or 3D view"
-msgstr ""
+msgstr "Selecionar visualização 2D ou 3D"
 
 #: ../gui/wxpython/animation/dialogs.py:409
 msgid "Window position:"
-msgstr ""
+msgstr "Posição da janela:"
 
 #: ../gui/wxpython/animation/dialogs.py:419
 msgid "View mode:"
@@ -15836,19 +15836,19 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:574
 msgid "Zoom value:"
-msgstr ""
+msgstr "Zoom"
 
 #: ../gui/wxpython/animation/dialogs.py:575
 msgid "N-S/E-W distances in map units used to gradually reduce region."
-msgstr ""
+msgstr "N-S/E-W distâncias em unidades do mapa utilizadas para reduzir gradualmente a região."
 
 #: ../gui/wxpython/animation/dialogs.py:582
 msgid "N-S:"
-msgstr ""
+msgstr "N-S"
 
 #: ../gui/wxpython/animation/dialogs.py:585
 msgid "E-W:"
-msgstr ""
+msgstr "E-W"
 
 #: ../gui/wxpython/animation/dialogs.py:683
 msgid "Only one series or space-time dataset is accepted for 3D mode."
@@ -15882,7 +15882,7 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:887
 #: ../gui/wxpython/animation/controller.py:262
 msgid "More animations are using one window. Please select different window for each animation."
-msgstr ""
+msgstr "Mais animações estão utilizando uma janela. Favor selecionar janelas diferentes para cada animação."
 
 #: ../gui/wxpython/animation/dialogs.py:988
 msgid "Add time stamp"
@@ -16129,23 +16129,23 @@ msgstr ""
 
 #: ../gui/wxpython/animation/utils.py:182
 msgid "The number of maps in space-time datasets has to be the same."
-msgstr ""
+msgstr "O número de mapas no conjunto de dados espaço-temporal deve ser o mesmo."
 
 #: ../gui/wxpython/animation/utils.py:186
 msgid "The temporal type (absolute/relative) of space-time datasets has to be the same."
-msgstr ""
+msgstr "O tipo temporal (absoluto/relativo) dos conjuntos de dados espaço-temporais deve ser o mesmo."
 
 #: ../gui/wxpython/animation/utils.py:190
 msgid "The map type (point/interval) of space-time datasets has to be the same."
-msgstr ""
+msgstr "O tipo de mapa (ponto/intervalo) dos conjuntos de dados de espaço-tempo deve ser o mesmo."
 
 #: ../gui/wxpython/animation/utils.py:194
 msgid "The temporal extents of maps in space-time datasets have to be the same."
-msgstr ""
+msgstr "A extensão temporal dos mapas nos conjuntos de dados espaço-tempo deve ser a mesma."
 
 #: ../gui/wxpython/animation/utils.py:202
 msgid "The number of maps to animate has to be the same for each map series."
-msgstr ""
+msgstr "O número de mapas para animar deve ser o mesmo para cada série de mapas."
 
 #: ../gui/wxpython/animation/utils.py:207
 msgid "The number of maps to animate has to be the same as the number of maps in temporal dataset."
@@ -16154,42 +16154,42 @@ msgstr ""
 #: ../gui/wxpython/animation/controller.py:234
 #, python-format
 msgid "Maximum number of animations is %s."
-msgstr ""
+msgstr "Número máximo de animações são %s."
 
 #: ../gui/wxpython/animation/controller.py:443
 msgid "Failed to display legend."
-msgstr ""
+msgstr "Não foi possível mostrar a legenda."
 
 #: ../gui/wxpython/animation/controller.py:475
 msgid "Inconsistent number of maps, please check input data."
-msgstr ""
+msgstr "Número inconsistente de mapas, favor verificar dados de entrada."
 
 #: ../gui/wxpython/animation/controller.py:505
 msgid "No animation to export."
-msgstr ""
+msgstr "Sem animação para exportar"
 
 #: ../gui/wxpython/animation/controller.py:542
 msgid "Preparing export, please wait..."
-msgstr ""
+msgstr "Preparando exportação, aguarde..."
 
 #: ../gui/wxpython/animation/controller.py:605
 #, python-format
 msgid "%(start)s %(unit)s"
-msgstr ""
+msgstr "%(start)s %(unit)s"
 
 #: ../gui/wxpython/animation/controller.py:624
 msgid "Exporting animation, please wait..."
-msgstr ""
+msgstr "Exportando animação, aguarde..."
 
 #: ../gui/wxpython/icons/icon.py:38
 #, python-format
 msgid "Unknown iconset '%s', using default 'grass'...\n"
-msgstr ""
+msgstr "Conjunto de ícones desconhecido '%s', usando padrão 'grass'...\n"
 
 #: ../gui/wxpython/icons/icon.py:56
 #, python-format
 msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."
-msgstr ""
+msgstr "Não foi possível carregar o tema de ícone. Razão: %s. Saindo do wxGUI..."
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:106
 msgid "With stvds you have to set 'attr' option"

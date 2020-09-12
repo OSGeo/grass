@@ -56,7 +56,7 @@ msgstr "%s : index %d invalide"
 #: ../lib/manage/read_list.c:73
 #, c-format
 msgid "Unable to open data base element list '%s'"
-msgstr "impossible d'ouvrir la liste des objets de base de données '%s'"
+msgstr "Impossible d'ouvrir la liste des objets de base de données '%s'"
 
 #: ../lib/manage/read_list.c:134
 #, c-format
@@ -209,7 +209,7 @@ msgstr "Erreur du programmeur - seul le pilote SQLite est actuellement supporté
 #: ../lib/temporal/lib/connect.c:110
 #, c-format
 msgid "Mapset <%s> does not exist."
-msgstr "Le jeu de cartes <%s> n'existe pas"
+msgstr "Le jeu de cartes <%s> n'existe pas."
 
 #: ../lib/rowio/setup.c:61 ../lib/rowio/setup.c:67 ../lib/segment/open.c:98
 #: ../lib/rst/interp_float/segmen2d_parallel.c:78
@@ -474,7 +474,7 @@ msgstr "Impossible de trouve '%s'"
 #: ../lib/raster/open.c:949
 #, c-format
 msgid "Invalid type: field '%s' in file '%s'"
-msgstr "type invalide: champ '%s' dans le fichier '%s'"
+msgstr "Type invalide: champ '%s' dans le fichier '%s'"
 
 #: ../lib/raster/open.c:954
 #, c-format
@@ -513,7 +513,7 @@ msgstr "invalide"
 #: ../lib/raster/color_read.c:112
 #, c-format
 msgid "Color support for <%s@%s> %s"
-msgstr "support de la couleur pour <%s@%s> %s"
+msgstr "Support de la couleur pour <%s@%s> %s"
 
 #: ../lib/raster/color_write.c:81 ../lib/vector/Vlib/color_write.c:71
 #, c-format
@@ -665,7 +665,7 @@ msgstr "<%s> dans le jeu de données (mapset) <%s>"
 
 #: ../lib/raster/mask_info.c:46
 msgid "none"
-msgstr "Aucun"
+msgstr "aucun"
 
 #: ../lib/raster/mask_info.c:49
 msgid "not known"
@@ -714,7 +714,7 @@ msgstr "Impossible de lire l'histogramme pour [%s dans %s]"
 #: ../lib/raster/histogram.c:66 ../lib/raster/histogram.c:73
 #, c-format
 msgid "Invalid histogram file for [%s in %s]"
-msgstr "fichier d'histogramme invalide pour [%s dans %s]"
+msgstr "Fichier d'histogramme invalide pour [%s dans %s]"
 
 #: ../lib/raster/histogram.c:331
 #, c-format
@@ -735,11 +735,11 @@ msgstr "le pourcentage n'est pas dans l'intervalle 0-100"
 
 #: ../lib/raster/color_rules.c:132
 msgid "invalid value"
-msgstr "Valeur invalide"
+msgstr "valeur invalide"
 
 #: ../lib/raster/color_rules.c:134
 msgid "unknown error"
-msgstr "Erreur inconnue"
+msgstr "erreur inconnue"
 
 #: ../lib/raster/color_rules.c:180
 #, c-format
@@ -782,12 +782,12 @@ msgstr "pas en mesure d'écrire des fichiers f_format pour des couches de cellul
 #: ../lib/raster/history.c:115 ../lib/raster/history.c:123
 #, c-format
 msgid "Unable to get history information for <%s@%s>"
-msgstr "impossible de charger l'historique pour <%s@%s>"
+msgstr "Impossible de charger l'historique pour <%s@%s>"
 
 #: ../lib/raster/history.c:162
 #, c-format
 msgid "Unable to write history information for <%s>"
-msgstr "impossible d'écrire l'historique pour <%s>"
+msgstr "Impossible d'écrire l'historique pour <%s>"
 
 #: ../lib/raster/history.c:235
 #, c-format
@@ -897,7 +897,7 @@ msgstr "G_put_title - impossible de créer le fichier temporaire"
 #: ../lib/raster/put_title.c:53
 #, c-format
 msgid "category information for [%s] in [%s] invalid"
-msgstr "Catégorie invalide pour [%s] dans [%s]"
+msgstr "information de catégorie invalide pour [%s] dans [%s]"
 
 #: ../lib/raster/put_title.c:60
 msgid "G_put_title - can't reopen temp file"
@@ -973,7 +973,7 @@ msgstr "Besoin de au moins 2 images-clef pour l'interpolation"
 #: ../lib/ogsf/gs2.c:1211
 #, c-format
 msgid "no category info"
-msgstr "Pas d'information de catégorie"
+msgstr "pas d'information de catégorie"
 
 #: ../lib/ogsf/gs2.c:1230
 #, c-format
@@ -1520,7 +1520,7 @@ msgstr "Le jeu de données temporel %(sp)s <%(name)s> existe déjà dans la base
 #: ../lib/python/temporal/open_stds.py:160
 #, python-format
 msgid "Overwriting space time %(sp)s dataset <%(name)s> and unregistering all maps"
-msgstr "Écrasement du jeu de données temporel %(sp)s <%(name)s> et désenregistrement de toutes les cartes"
+msgstr "Écrasement du jeu de données temporel %(sp)s <%(name)s> et déréférencement de toutes les cartes"
 
 #: ../lib/python/temporal/open_stds.py:168
 #, python-format
@@ -1609,20 +1609,20 @@ msgstr "Impossible de supprimer le jeu de données <%(ds)s> du type %(type)s de 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1973
 #, python-format
 msgid "Drop map register table: %s"
-msgstr "Supprimer la table d'enregistrement des cartes : %s"
+msgstr "Supprimer la table de registre des cartes : %s"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2028
 msgid "Error in register table request"
-msgstr "Erreur de requête dans la table d'enregistrement"
+msgstr "Erreur de requête dans la table de registre"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2057
 #, python-format
 msgid "Unable to register map in dataset <%(ds)s> of type %(type)s. The mapset of the dataset does not match the current mapset"
-msgstr "Impossible d'enregistrer la carte dans le jeu de données <%(ds)s> de type %(type)s. Le jeu de cartes ne correspond pas au jeu de cartes courant"
+msgstr "Impossible de référencer la carte dans le jeu de données <%(ds)s> de type %(type)s. Le jeu de cartes ne correspond pas au jeu de cartes courant"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2066
 msgid "Only a map that was inserted in the temporal database can be registered in a space time dataset"
-msgstr "Seule une carte qui a été ajoutée dans la base temporelle peut être enregistrée dans le jeu de données temporel"
+msgstr "Seule une carte qui a été ajoutée dans la base temporelle peut être référencée dans le jeu de données temporel"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2089
 #, python-format
@@ -1661,32 +1661,32 @@ msgstr "Les unités de temps relatif du jeu de données <%(id)s> et de la carte 
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2154
 msgid "Only maps from the same mapset can be registered"
-msgstr "Seules les cartes du même jeu de cartes peuvent être enregistrées"
+msgstr "Seules les cartes du même jeu de cartes peuvent être référencées"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2159
 #, python-format
 msgid "Map <%(map)s> with layer %(l)s is already registered."
-msgstr "La carte <%(map)s> avec la couche%(l)s est déjà enregistrée"
+msgstr "La carte <%(map)s> avec la couche%(l)s est déjà référencée."
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2163
 #, python-format
 msgid "Map <%s> is already registered."
-msgstr "La carte <%s> est déjà enregistrée."
+msgstr "La carte <%s> est déjà référencée."
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2211
 #, python-format
 msgid "Unable to unregister map from dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
-msgstr "Impossible de supprimer la carte du jeu de données <%(ds)s> de type %(type)s de la base temporelle.  Le jeu de cartes des données ne correspond pas au jeu de cartes courant"
+msgstr "Impossible de déréférencer la carte du jeu de données <%(ds)s> de type %(type)s de la base temporelle. Le jeu de cartes des données ne correspond pas au jeu de cartes courant"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2224
 #, python-format
 msgid "Map <%(map)s> with layer %(l)s is not registered in space time dataset <%(base)s>"
-msgstr "La carte <%(map)s> avec la couche %(l)s n'est pas enregistrée dans le jeu de données temporel <%(base)s>"
+msgstr "La carte <%(map)s> avec la couche %(l)s n'est pas référencée dans le jeu de données temporel <%(base)s>"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2230
 #, python-format
 msgid "Map <%(map)s> is not registered in space time dataset <%(base)s>"
-msgstr "La carte <%(map)s> n'est pas enregistrée dans le jeu de données temporel <%(base)s>"
+msgstr "La carte <%(map)s> n'est pas référencée dans le jeu de données temporel <%(base)s>"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2285
 #: ../lib/python/temporal/abstract_dataset.py:426
@@ -1700,7 +1700,7 @@ msgstr "Impossible de mettre à jour le jeu de données <%(ds)s> du type %(type)
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2291
 #, python-format
 msgid "Update metadata, spatial and temporal extent from all registered maps of <%s>"
-msgstr "Mettre à jour les métadonnées, l'emprise spatiale et temporelle de toutes les cartes enregistrées de <%s>"
+msgstr "Mettre à jour les métadonnées, l'emprise spatiale et temporelle de toutes les cartes référencées de <%s>"
 
 #: ../lib/python/temporal/abstract_dataset.py:386
 #, python-format
@@ -1776,7 +1776,7 @@ msgstr "Supprimer le jeu de données %s <%s> de la base temporelle"
 #: ../lib/python/temporal/abstract_map_dataset.py:909
 #, python-format
 msgid "Unable to unregister dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the dataset does not match the current mapset"
-msgstr "Impossible de désenregistrer le jeu de données <%(ds)s> de type %(type)s de la base temporelle. Le jeu de cartes ne correspond pas au jeu de cartes courant"
+msgstr "Impossible de déréférencer le jeu de données <%(ds)s> de type %(type)s de la base temporelle. Le jeu de cartes ne correspond pas au jeu de cartes courant"
 
 #: ../lib/python/temporal/register.py:82 ../lib/python/temporal/register.py:85
 #, python-format
@@ -1831,12 +1831,12 @@ msgstr "Impossible de mettre à jour %(t)s carte <%(id)s>. La carte n'existe pas
 #: ../lib/python/temporal/register.py:215
 #, python-format
 msgid "Unable to register %(t)s map <%(id)s> with layer %(l)s. The map has timestamp and the start time is not set."
-msgstr "Impossible d'enregistrer la carte %(t)s <%(id)s> avec la couche %(l)s. La carte a un horodatage et le temps de départ n'est pas défini."
+msgstr "Impossible de référencer la carte %(t)s <%(id)s> avec la couche %(l)s. La carte a un horodatage et le temps de départ n'est pas défini."
 
 #: ../lib/python/temporal/register.py:221
 #, python-format
 msgid "Unable to register %(t)s map <%(id)s>. The map has no timestamp and the start time is not set."
-msgstr "Impossible d'enregistrer la carte %(t)s <%(id)s>. La carte n'a pas d'horodatage et le temps de début n'est pas défini."
+msgstr "Impossible de référencer la carte %(t)s <%(id)s>. La carte n'a pas d'horodatage et le temps de début n'est pas défini."
 
 #: ../lib/python/temporal/register.py:229
 #, python-format
@@ -1851,12 +1851,12 @@ msgstr "%(u)s= doit être défini dans le cas d'un horodatage relatif"
 #: ../lib/python/temporal/register.py:245
 #, python-format
 msgid "Map is already registered in temporal database. Unable to update %(t)s map <%(id)s> with layer %(l)s. Overwrite flag is not set."
-msgstr "La carte existe déjà dans la base temporelle. Impossible de mettre à jour la carte %(t)s <%(id)s> avec la couche %(l)s. L''écrasement automatique n'est pas activé."
+msgstr "La carte est déjà référencée dans la base temporelle. Impossible de mettre à jour la carte %(t)s <%(id)s> avec la couche %(l)s. L''écrasement automatique n'est pas activé."
 
 #: ../lib/python/temporal/register.py:252
 #, python-format
 msgid "Map is already registered in temporal database. Unable to update %(t)s map <%(id)s>. Overwrite flag is not set."
-msgstr "La carte existe déjà dans la base temporelle. Impossible de mettre à jour la carte %(t)s <%(id)s>. L'écrasement automatique n'est pas activé."
+msgstr "La carte est déjà référencée dans la base temporelle. Impossible de mettre à jour la carte %(t)s <%(id)s>. L'écrasement automatique n'est pas activé."
 
 #: ../lib/python/temporal/register.py:276
 #, python-format
@@ -1870,11 +1870,11 @@ msgstr "Impossible de mettre à jour la carte %(t)s <%(id)s>. Les types temporel
 
 #: ../lib/python/temporal/register.py:330
 msgid "Registering maps in the temporal database..."
-msgstr "Enregistrement des cartes dans la base temporelle ..."
+msgstr "Référencement des cartes dans la base temporelle ..."
 
 #: ../lib/python/temporal/register.py:337
 msgid "Registering maps in the space time dataset..."
-msgstr "Enregistrement des cartes dans le jeu de données temporel ..."
+msgstr "Référencement des cartes dans le jeu de données temporel ..."
 
 #: ../lib/python/temporal/register.py:346
 msgid "Updating space time dataset..."
@@ -2000,7 +2000,7 @@ msgstr "Impossible de créer le secteur %(l)s. Raison : %(e)s"
 #: ../lib/python/temporal/stds_import.py:301
 #, python-format
 msgid "Unable to switch to location %s"
-msgstr "impossible de basculer vers le secteur %s"
+msgstr "Impossible de basculer vers le secteur %s"
 
 #: ../lib/python/temporal/stds_import.py:306
 #, python-format
@@ -2028,7 +2028,7 @@ msgstr "Impossible de trouver le raster GeoTIFF <%s> dans l'archive."
 #: ../lib/python/temporal/stds_import.py:411
 #, python-format
 msgid "Unable to find AAIGrid raster file <%s> in archive."
-msgstr "impossible de trouver le raster AAIGrid <%s> dans l'archive."
+msgstr "Impossible de trouver le raster AAIGrid <%s> dans l'archive."
 
 #: ../lib/python/temporal/stds_import.py:417
 #, python-format
@@ -2052,7 +2052,7 @@ msgstr "Le jeu de données <%(sp)s> temporel %(t)s existe déjà. Activez l'écr
 #: ../lib/python/temporal/stds_import.py:456
 #, python-format
 msgid "Overwrite space time %(sp)s dataset <%(id)s> and unregister all maps."
-msgstr "Écrase le jeu de données <%(id)s> temporel %(sp)s et désenregistre toutes les cartes."
+msgstr "Écrase le jeu de données <%(id)s> temporel %(sp)s et déréférence toutes les cartes."
 
 #: ../lib/python/temporal/stds_import.py:468
 #, python-format
@@ -2149,7 +2149,7 @@ msgstr "Plus d'une seule carte trouvée dans un échantillon. Seule la première
 
 #: ../lib/python/temporal/mapcalc.py:173
 msgid "No maps registered in input dataset"
-msgstr "Pas de carte enregistrée dans le jeu de donnés d'entrée"
+msgstr "Pas de carte référencée dans le jeu de donnés d'entrée"
 
 #: ../lib/python/temporal/mapcalc.py:189
 msgid "Starting mapcalc computation..."
@@ -2312,7 +2312,7 @@ msgstr "Mauvais type temporel pour le jeu de données <%s> <%s> est requis"
 
 #: ../lib/python/temporal/temporal_algebra.py:1220
 msgid "Wrong type of input "
-msgstr "Mauvais type d'entrée"
+msgstr "Mauvais type d'entrée "
 
 #: ../lib/python/temporal/temporal_algebra.py:2186
 #, python-format
@@ -2321,11 +2321,11 @@ msgstr "Le jeu de données temporel de type <%(a)s> est différent du type requi
 
 #: ../lib/python/temporal/temporal_algebra.py:2192
 msgid "Maps that should be registered in the resulting space time dataset have different types."
-msgstr "Les cartes qui devraient être enregistrées dans le même jeu de données temporel sont de types différents."
+msgstr "Les cartes qui devraient être référencées dans le même jeu de données temporel sont de types différents."
 
 #: ../lib/python/temporal/temporal_algebra.py:2401
 msgid "Wrong map type. TMAP only supports single maps that are registered in the temporal GRASS database"
-msgstr "Mauvais type de carte. TMAP supporte seulement les cartes simples qui sont enregistrées dans la base temporelle GRASS"
+msgstr "Mauvais type de carte. TMAP supporte seulement les cartes simples qui sont référencées dans la base temporelle GRASS"
 
 #: ../lib/python/temporal/temporal_algebra.py:2429
 msgid "Merging empty map lists"
@@ -2768,7 +2768,7 @@ msgstr "Exécutable {0} introuvable"
 #: ../lib/python/script/core.py:307
 #, python-format
 msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
-msgstr "Pour exécuter le module <%s>, ajouter un tiret-bas à la fin de l'option <%s> pour éviter un conflit avec les mots-clefs Python. Le tiret-bas est obsolète dans GRASS 7.0 et sera supprimé dans la version 7.1"
+msgstr "Pour exécuter le module <%s>, ajouter un tiret-bas à la fin de l'option <%s> pour éviter un conflit avec les mots-clefs Python. Le tiret-bas est obsolète dans GRASS 7.0 et sera supprimé dans la version 7.1."
 
 #: ../lib/python/script/core.py:987
 msgid "Mixing value types. Will try to compare after integer conversion"
@@ -2925,7 +2925,7 @@ msgstr "La carte raster <{0}> existe déjà. Utilisez l'écrasement."
 #: ../lib/python/pygrass/raster/__init__.py:561
 #, python-brace-format
 msgid "Raster map <{0}> does not exist"
-msgstr "La carte raster <{0}> n'existe pas "
+msgstr "La carte raster <{0}> n'existe pas"
 
 #: ../lib/python/pygrass/errors.py:17
 msgid "The map is close!"
@@ -3218,7 +3218,7 @@ msgstr "Impossible de trouver/ouvrir le symbole: '%s'"
 #: ../lib/symbol/read.c:439
 #, c-format
 msgid "Incorrect symbol color: '%s', using default."
-msgstr "Couleur de symbole incorrect: '%s', on utilise la couleur par défaut"
+msgstr "Couleur de symbole incorrect: '%s', on utilise la couleur par défaut."
 
 #: ../lib/imagery/iclass_signatures.c:120
 #, c-format
@@ -3250,12 +3250,12 @@ msgstr "Pas de surface pour la catégorie %d"
 #: ../lib/imagery/iclass.c:127
 #, c-format
 msgid "Raster map <%s@%s> in subgroup <%s> does not exist"
-msgstr "La carte raster <%s@%s> du sous-groupe <%s> n'existe pas "
+msgstr "La carte raster <%s@%s> du sous-groupe <%s> n'existe pas"
 
 #: ../lib/imagery/iclass.c:131
 #, c-format
 msgid "Raster map <%s@%s> in group <%s> does not exist"
-msgstr "La carte raster <%s@%s> du groupe <%s> n'existe pas "
+msgstr "La carte raster <%s@%s> du groupe <%s> n'existe pas"
 
 #: ../lib/imagery/iclass.c:143
 #, c-format
@@ -3280,7 +3280,7 @@ msgstr "Impossible d'ouvrir le fichier [%s] du groupe [%s de %s]"
 #: ../lib/imagery/fopen.c:49
 #, c-format
 msgid "Unable to find file [%s] of group [%s in %s]"
-msgstr "impossible de trouver le fichier [%s] du groupe [%s de %s]"
+msgstr "Impossible de trouver le fichier [%s] du groupe [%s de %s]"
 
 #: ../lib/imagery/fopen.c:79
 #, c-format
@@ -3330,7 +3330,7 @@ msgstr "Fichier <%s> de catégories du raster corrompu (fseek a échoué)"
 #: ../lib/imagery/iscatt_core.c:338
 #, c-format
 msgid "Unable to write into category raster conditions file <%s>"
-msgstr "impossible d'écrire dans le fichier <%s> de catégories du raster"
+msgstr "Impossible d'écrire dans le fichier <%s> de catégories du raster"
 
 #: ../lib/imagery/iscatt_core.c:526
 msgid "Unable to read from category raster condtition file."
@@ -3380,7 +3380,7 @@ msgstr "prepare_signature : la ligne %d a un nombre de points impair."
 
 #: ../lib/imagery/iscatt_core.c:981 ../lib/imagery/iclass_statistics.c:237
 msgid "signature: perimeter points out of order."
-msgstr "signature : points du périmètre hors d'usage"
+msgstr "signature : points du périmètre hors d'usage."
 
 #: ../lib/imagery/iclass_statistics.c:218
 msgid "prepare_signature: outline has odd number of points."
@@ -3486,9 +3486,7 @@ msgstr "Sortie ..."
 
 #: ../lib/init/grass.py:332
 msgid "Usage"
-msgstr ""
-"Utilisation\n"
-" "
+msgstr "Utilisation"
 
 #: ../lib/init/grass.py:333 ../lib/gis/parser_html.c:141
 #: ../lib/gis/parser_rest.c:146
@@ -3606,7 +3604,7 @@ msgstr "l'exécutable fourni sera exécuté dans la sesion GRASS"
 
 #: ../lib/init/grass.py:363
 msgid "GRASS module, script or any other executable"
-msgstr "module, script ou tout autre exécutable GRASS "
+msgstr "module, script ou tout autre exécutable GRASS"
 
 #: ../lib/init/grass.py:364
 msgid "parameters of the executable"
@@ -3688,7 +3686,7 @@ msgstr ""
 #: ../lib/init/grass.py:855 ../lib/gis/make_mapset.c:66
 #, c-format, python-format
 msgid "Location <%s> doesn't exist"
-msgstr "Le secteur <%s> n'existe pas "
+msgstr "Le secteur <%s> n'existe pas"
 
 #: ../lib/init/grass.py:857
 #, python-format
@@ -3774,7 +3772,7 @@ msgid ""
 "Exit was requested in GUI.\n"
 "GRASS GIS will not start. Bye."
 msgstr ""
-"Fermeture demandée depuis l'intergace graphuique.\n"
+"Fermeture demandée depuis l'interface graphique.\n"
 "GRASS ne va pas démarrer. Au revoir."
 
 #: ../lib/init/grass.py:1030
@@ -4526,7 +4524,7 @@ msgstr "Matrice (ou sous-matrice singulière). Solution indéterminée"
 
 #: ../lib/gmath/la.c:573
 msgid "Problem in LA routine."
-msgstr "Problème dans la routine LA"
+msgstr "Problème dans la routine LA."
 
 #: ../lib/gmath/la.c:580
 msgid "Procedure not yet available for selected matrix type"
@@ -4579,7 +4577,7 @@ msgstr "L'index de la ligne spécifié est en dehors de l'intervalle"
 
 #: ../lib/gmath/la.c:874
 msgid "Specified column index is outside range"
-msgstr "l'index de la colonne spécifié est en dehors de l'intervalle"
+msgstr "L'index de la colonne spécifié est en dehors de l'intervalle"
 
 #: ../lib/gmath/la.c:894
 msgid "Unknown vector type."
@@ -4641,7 +4639,7 @@ msgstr "Impossible de résoudre le système d'équations linéaires"
 #: ../lib/gmath/solvers_krylov.c:262
 #, c-format
 msgid "Sparse PCG -- iteration %i error  %g\n"
-msgstr "rares PCG -- itération %i erreur %g\n"
+msgstr "PCG épars -- itération %i erreur %g\n"
 
 #: ../lib/gmath/solvers_krylov.c:264
 #, c-format
@@ -4651,7 +4649,7 @@ msgstr "PCG -- itération %i erreur %g\n"
 #: ../lib/gmath/solvers_krylov.c:490
 #, c-format
 msgid "Sparse CG -- iteration %i error  %g\n"
-msgstr "rares PCG -- itération %i erreur %g\n"
+msgstr "PCG épars -- itération %i erreur %g\n"
 
 #: ../lib/gmath/solvers_krylov.c:492
 #, c-format
@@ -4661,7 +4659,7 @@ msgstr "CG -- itération %i erreur %g\n"
 #: ../lib/gmath/solvers_krylov.c:695
 #, c-format
 msgid "Sparse BiCGStab -- iteration %i error  %g\n"
-msgstr "rares BICGStab -- itération %i erreur %g\n"
+msgstr "BICGStab épars -- itération %i erreur %g\n"
 
 #: ../lib/gmath/solvers_krylov.c:698
 #, c-format
@@ -4708,7 +4706,7 @@ msgstr "    prenant FFT inverse..."
 #: ../lib/gis/lrand48.c:84
 #, c-format
 msgid "gettimeofday failed: %s"
-msgstr "Échec de gettimeofday : %s"
+msgstr "échec de gettimeofday : %s"
 
 #: ../lib/gis/lrand48.c:114
 msgid "Pseudo-random number generator not seeded"
@@ -4742,7 +4740,7 @@ msgstr "Taille de zone tampon %d de destination invalide"
 
 #: ../lib/gis/cmprlz4.c:107
 msgid "LZ4 compression error"
-msgstr "erreur de compression LZ4"
+msgstr "Erreur de compression LZ4"
 
 #: ../lib/gis/cmprlz4.c:159
 msgid "LZ4 decompression error"
@@ -4760,12 +4758,12 @@ msgstr "GRASS doit être compilé avec BZIP2 pour utiliser la compression BZIP2"
 #: ../lib/gis/cmprbzip.c:122
 #, c-format
 msgid "BZIP2 version %s compression error %d"
-msgstr "Erreur de compression %d avec BZIP2 en version %s"
+msgstr "BZIP2 version %s erreur %d de compression"
 
 #: ../lib/gis/cmprbzip.c:189
 #, c-format
 msgid "BZIP2 version %s decompression error %d"
-msgstr "Erreur de décompression %d avec BZIP2 en version %s"
+msgstr "BZIP2 version %s erreur %d de décompression"
 
 #: ../lib/gis/distance.c:154
 #, c-format
@@ -4839,22 +4837,22 @@ msgstr "G_open(write) : impossible d'ouvrir '%s' : %s"
 #: ../lib/gis/get_ellipse.c:263 ../lib/proj/ellipse.c:243
 #, c-format
 msgid "Unable to open ellipsoid table file <%s>"
-msgstr "impossible d'ouvrir la table d'ellipsoïde du fichier %s"
+msgstr "Impossible d'ouvrir la table d'ellipsoïde du fichier <%s>"
 
 #: ../lib/gis/get_ellipse.c:344 ../lib/gis/get_ellipse.c:367
 #, c-format
 msgid "Invalid a: field '%s' in file %s in <%s>"
-msgstr "a invalide: champ '%s' dans le fichier %s de <%s>"
+msgstr "a invalide : champ '%s' dans le fichier %s de <%s>"
 
 #: ../lib/gis/get_ellipse.c:356
 #, c-format
 msgid "Invalid ellipsoid '%s' in file %s in <%s>"
-msgstr "ellipsoïde '%s' invalide dans le fichier %s de <%s>"
+msgstr "Ellipsoïde '%s' invalide dans le fichier %s de <%s>"
 
 #: ../lib/gis/get_ellipse.c:370
 #, c-format
 msgid "Invalid es: field '%s' in file %s in <%s>"
-msgstr "es invalide: champ '%s' dans le fichier %s de <%s>"
+msgstr "es invalide : champ '%s' dans le fichier %s de <%s>"
 
 #: ../lib/gis/get_ellipse.c:383
 #, c-format
@@ -4894,7 +4892,7 @@ msgstr "Votre installation n'inclu pas d'interface graphique. Sortie."
 
 #: ../lib/gis/parser.c:943
 msgid "Unable to determine program name"
-msgstr "impossible de déterminer le nom du programme"
+msgstr "Impossible de déterminer le nom du programme"
 
 #: ../lib/gis/parser.c:965 ../lib/gis/parser.c:984
 #, c-format
@@ -4984,7 +4982,7 @@ msgstr ""
 #: ../lib/gis/parser.c:1588 ../lib/gis/error.c:363
 #, c-format
 msgid "ERROR: "
-msgstr "ERREUR :"
+msgstr "ERREUR : "
 
 #: ../lib/gis/parser.c:1590 ../lib/gis/parser.c:1597
 #, c-format
@@ -5579,7 +5577,7 @@ msgstr "Valeur de profondeur illégale"
 
 #: ../lib/gis/adj_cellhd.c:202
 msgid "Top must be larger than Bottom"
-msgstr "le haut doit être plus grand que le bas"
+msgstr "Le haut doit être plus grand que le bas"
 
 #: ../lib/gis/adj_cellhd.c:276
 #, c-format
@@ -6352,7 +6350,7 @@ msgstr "Impossible d'accéder à l'élément %s du jeu de données (%s): %s"
 #: ../lib/gis/cmprzlib.c:139 ../lib/gis/cmprzlib.c:157
 #, c-format
 msgid "ZLIB compression error %d: %s"
-msgstr "Erreur %d de compression ZLIB : %s "
+msgstr "Erreur %d de compression ZLIB : %s"
 
 #: ../lib/gis/cmprzlib.c:225 ../lib/gis/cmprzlib.c:242
 #, c-format
@@ -7049,7 +7047,7 @@ msgstr "Tentative de supprimer une île d'une surface morte"
 #: ../lib/vector/diglib/plus_area.c:330
 #, c-format
 msgid "Attempt to delete not registered isle %d from area %d"
-msgstr "Tentative de supprimer l'île %d non enregistrée de la zone %d"
+msgstr "Tentative de supprimer l'île %d non référencée de la zone %d"
 
 #: ../lib/vector/diglib/plus_area.c:369
 msgid "Attempt to delete dead area"
@@ -7058,7 +7056,7 @@ msgstr "Tentative de supprimer une surface morte"
 #: ../lib/vector/diglib/plus_area.c:408
 #, c-format
 msgid "Dead centroid %d registered for area (bug in the vector library)"
-msgstr "Centroïde mort %d enregistré pour une surface (bug dans la librairie vecteur)"
+msgstr "Centroïde mort %d référencée pour une surface (bug dans la librairie vecteur)"
 
 #: ../lib/vector/diglib/plus_area.c:431
 #, c-format
@@ -7895,7 +7893,7 @@ msgstr "Le numéro de couche doit être supérieur ou égal à 1"
 
 #: ../lib/vector/Vlib/field.c:96
 msgid "Unable to add attribute link, vector map is not opened in WRITE mode"
-msgstr "Impossible d'ajouter un lien d'attribut, la carte vecteur n'est pas ouverte en ÉCRITURE."
+msgstr "Impossible d'ajouter un lien d'attribut, la carte vecteur n'est pas ouverte en ÉCRITURE"
 
 #: ../lib/vector/Vlib/field.c:103
 msgid "Unable to add attribute link"
@@ -8249,7 +8247,7 @@ msgstr "fonction side != 0 non implémentée"
 
 #: ../lib/vector/Vlib/buffer2.c:890 ../lib/vector/Vlib/buffer2.c:937
 msgid "zero area size"
-msgstr "Surface de taille nulle"
+msgstr "surface de taille nulle"
 
 #: ../lib/vector/Vlib/buffer2.c:896 ../lib/vector/Vlib/buffer2.c:943
 msgid "Line was not closed"
@@ -8306,7 +8304,7 @@ msgstr "Impossible de trouver la table <%s> liée à la couche vectorielle <%s>"
 #: ../lib/vector/Vlib/map.c:472
 #, c-format
 msgid "Table <%s> linked to vector map <%s> does not exist"
-msgstr "La table <%s> liée à la carte vecteur <%s> n'existe pas "
+msgstr "La table <%s> liée à la carte vecteur <%s> n'existe pas"
 
 #: ../lib/vector/Vlib/map.c:485
 #, c-format
@@ -8551,7 +8549,7 @@ msgstr "Vect_read_line_geos(): l'id d'objet %d n'est pas plausible (nombre maxi 
 
 #: ../lib/vector/Vlib/geos.c:60
 msgid "only native format supported"
-msgstr "Seul le format natif est pris en charge"
+msgstr "seul le format natif est pris en charge"
 
 #: ../lib/vector/Vlib/geos.c:65 ../lib/vector/Vlib/geos.c:258
 msgid "Attempt to read dead line"
@@ -8615,23 +8613,23 @@ msgstr "Type d'entité %d non supporté"
 #: ../lib/vector/Vlib/build_sfa.c:339 ../lib/vector/Vlib/build_sfa.c:632
 #: ../lib/vector/Vlib/build_nat.c:74
 msgid "Registering primitives..."
-msgstr "Enregistrement des primitives ... "
+msgstr "Référencement des primitives ..."
 
 #: ../lib/vector/Vlib/build_sfa.c:385 ../lib/vector/Vlib/build_sfa.c:664
 #: ../lib/vector/Vlib/build_nat.c:117
 #, c-format
 msgid "One primitive registered"
 msgid_plural "%d primitives registered"
-msgstr[0] "Une primitive enregistrée"
-msgstr[1] "%d primitives enregistrées"
+msgstr[0] "Une primitive référencée"
+msgstr[1] "%d primitives référencées"
 
 #: ../lib/vector/Vlib/build_sfa.c:386 ../lib/vector/Vlib/build_sfa.c:665
 #: ../lib/vector/Vlib/build_nat.c:118
-#, c-format
+#, fuzzy, c-format
 msgid "One vertex registered"
 msgid_plural "%d vertices registered"
-msgstr[0] "Un sommet enregistré"
-msgstr[1] "%d sommets enregistrés"
+msgstr[0] "Un sommet référencé"
+msgstr[1] "%jd sommets référencés"
 
 #: ../lib/vector/Vlib/build_sfa.c:668
 #, c-format
@@ -9118,7 +9116,7 @@ msgstr "Arc < 1"
 
 #: ../lib/vector/Vlib/net_build.c:539 ../lib/vector/Vlib/net_build.c:840
 msgid "Registering arcs..."
-msgstr "Enregistrement des arcs ... "
+msgstr "Référencement des arcs ..."
 
 #: ../lib/vector/Vlib/net_build.c:558
 #, c-format
@@ -9276,7 +9274,7 @@ msgstr "%s arcs :%d"
 
 #: ../lib/vector/Vlib/overlay.c:72
 msgid "unknown operator"
-msgstr "Opérateur inconnu"
+msgstr "opérateur inconnu"
 
 #: ../lib/vector/Vlib/overlay.c:124
 msgid "Overlay: line/boundary types not supported by AND operator"
@@ -9449,7 +9447,7 @@ msgstr "Impossible de créer le fichier topo pour la carte vecteur <%s>"
 
 #: ../lib/vector/Vlib/build.c:1021
 msgid "Error writing out topo file"
-msgstr "Erreur à l'écriture du fichier topo."
+msgstr "Erreur à l'écriture du fichier topo"
 
 #: ../lib/vector/Vlib/build.c:1210
 msgid "Unable to build spatial index from topology, vector map is not opened at topology level 2"
@@ -9471,7 +9469,7 @@ msgstr "Impossible de créer le fichier d'index spatial pour la couche vectoriel
 
 #: ../lib/vector/Vlib/build.c:1277
 msgid "Error writing out spatial index file"
-msgstr "Erreur à l'écriture du fichier d'index spatial."
+msgstr "Erreur à l'écriture du fichier d'index spatial"
 
 #: ../lib/vector/Vlib/break_polygons.c:102
 msgid "Break polygons: Bug in binary tree!"
@@ -9485,7 +9483,7 @@ msgstr "Coupure des polygones (passe 1 : sélection des points de coupure) ..."
 #: ../lib/vector/Vlib/break_polygons.c:286
 #: ../lib/vector/Vlib/break_polygons.c:552
 msgid "Breaking polygons (pass 2: break at selected points)..."
-msgstr "Coupure dex polygones (passe 2 : coupure aux points sélectionnés) ..."
+msgstr "Coupure des polygones (passe 2 : coupure aux points sélectionnés) ..."
 
 #: ../lib/vector/Vlib/break_polygons.c:398
 #: ../lib/vector/Vlib/break_polygons.c:650
@@ -9503,11 +9501,11 @@ msgstr "Impossible d'ajouter un arc de réseau"
 
 #: ../lib/vector/Vlib/poly.c:268
 msgid "Unable to find point in polygon"
-msgstr "impossible de trouver le points dans le polygone"
+msgstr "Impossible de trouver le points dans le polygone"
 
 #: ../lib/vector/Vlib/poly.c:810
 msgid "conditions failed"
-msgstr "Échec des conditions."
+msgstr "échec des conditions"
 
 #: ../lib/vector/Vlib/build_nat.c:129
 msgid "Building areas..."
@@ -9635,7 +9633,7 @@ msgstr "Échec de détection du chemin de nadgrids, GRASS_PROJSHARE n'est pas d�
 #: ../lib/proj/datum.c:278 ../lib/proj/datum.c:358
 #, c-format
 msgid "Unable to open datum table file <%s>"
-msgstr "impossible d'ouvrir le fichier de datums <%s>"
+msgstr "Impossible d'ouvrir le fichier de datums <%s>"
 
 #: ../lib/proj/datum.c:291 ../lib/proj/datum.c:372
 #, c-format
@@ -9696,7 +9694,7 @@ msgstr "pj_transform() a échoué: %s"
 #: ../lib/lidar/zones.c:476 ../lib/lidar/zones.c:513
 #, c-format
 msgid "<%s> created in database."
-msgstr "<%s> créé dans la base"
+msgstr "<%s> créé dans la base."
 
 #: ../lib/lidar/zones.c:480 ../lib/lidar/zones.c:517
 #, c-format
@@ -10036,7 +10034,7 @@ msgstr "Polygone absurde."
 #~ msgstr "Impossible de créer le contexte (erreur CGL = %d)"
 
 #~ msgid "Unable to register window class"
-#~ msgstr "Impossible d'enregistrer la classe fenêtre"
+#~ msgstr "Impossible de référencer la classe fenêtre"
 
 #~ msgid "Unable to create window"
 #~ msgstr "Impossible de créer la fenêtre"
@@ -10061,3 +10059,260 @@ msgstr "Polygone absurde."
 
 #~ msgid "%d new lines and boundaries"
 #~ msgstr "%d nouvelles lignes et contours"
+
+#~ msgid "Bug in UI description. Missing module description"
+#~ msgstr "Bug dans l'interface de description. Module description manquant"
+
+#~ msgid "Bug in UI description. Missing option key"
+#~ msgstr "Bug dans l'interface de description. Clef d'option manquante"
+
+#, c-format
+#~ msgid "Bug in UI description. Option key <%s> is not valid"
+#~ msgstr "Bug dans l'interface de description. Clef d'option <%s> non valide"
+
+#, c-format
+#~ msgid "Bug in UI description. Description for option <%s> missing"
+#~ msgstr "Bug dans l'interface de description. La description de l'option <%s> est manquante"
+
+#, c-format
+#~ msgid "Bug in UI description. Option '%s' in <%s> does not exist"
+#~ msgstr "Bug dans l'interface de description. L'option  '%s'  n'existe pas dans <%s>"
+
+#~ msgid "GRASS needs to be compiled with ZSTD for ZSTD compression"
+#~ msgstr "GRASS doit être compilé avec ZSTD pour la compression ZSTD"
+
+#, c-format
+#~ msgid "ZSTD compression error %d: %s"
+#~ msgstr "Erreur %d de compression ZSTD : %s"
+
+#, c-format
+#~ msgid "Unable to execute command '%s': %s"
+#~ msgstr "Impossible d'exécuter la commande '%s' : %s"
+
+#~ msgid "Unable to open color rule"
+#~ msgstr "Impossible d'ouvrir les règles de couleur"
+
+#~ msgid "range: map values"
+#~ msgstr "plage : valeurs de la carte"
+
+#, c-format
+#~ msgid "range: %g to %g"
+#~ msgstr "plage : %g à %g"
+
+#~ msgid "Unable to open color descriptions"
+#~ msgstr "Impossible d'ouvrir les descriptions des couleurs"
+
+#, c-format
+#~ msgid "Option <%s> requires all of %s"
+#~ msgstr "L'option <%s> nécessite tous de %s"
+
+#, c-format
+#~ msgid "Option <%s> is mutually exclusive with all of %s"
+#~ msgstr "L'option <%s> est mutualement exclusive avec tous de %s"
+
+#~ msgid "Unable to get image of current GL screen"
+#~ msgstr "Impossible d'obtenir une image de l'écran GL courant"
+
+#~ msgid "Unable to write view"
+#~ msgstr "Impossible d'écrire la vue"
+
+#~ msgid "force removal of .gislock if exists (use with care!). Only with --text flag"
+#~ msgstr "force la suppresion de .gislock s'il existe (utiliser avec précaution). Seulement avec l'option --text"
+
+#~ msgid "use text based interface (skip graphical welcome screen)"
+#~ msgstr "utiliser l'interface en mode texte (saute l'écran graphique d'accueil)"
+
+#~ msgid "use text based interface (show graphical welcome screen)"
+#~ msgstr "utiliser l'interface en mode texte (afficher l'écran graphique d'accueil)"
+
+#~ msgid "initial GRASS database directory"
+#~ msgstr "répertoire initial de la base de données GRASS"
+
+#~ msgid "create temporary location (use with the --exec flag)"
+#~ msgstr "créer un Secteur temporaire (utiliser avec l'option --exec)"
+
+#, python-format
+#~ msgid "Failed to create configuration directory '%s' with error: %s"
+#~ msgstr "Échec de création du répertoire de configuration '%s' avec l'erreur : %s"
+
+#, python-brace-format
+#~ msgid "Empty RC file ({file})"
+#~ msgstr "Fichier RC ({file}) vide"
+
+#, python-brace-format
+#~ msgid "Unable to create new location because the location <{location}> already exists."
+#~ msgstr "Impossible de créer le nouveau Secteur car le Secteur <{location}> existe déjà."
+
+#, python-brace-format
+#~ msgid "Unable to create new location <{location}> because <{path}> is a file."
+#~ msgstr "Impossible de créer le novueau Secteur <{location}> car <{path}> est un fichier."
+
+#, python-brace-format
+#~ msgid "Unable to create new location <{location}> because the directory <{path}> already exists."
+#~ msgstr "Impossible de créer le nouveau Secteur <{location}> car le répertoire <{path}> existe déjà."
+
+#, python-brace-format
+#~ msgid "Unable to create new location in the directory <{path}> for an unknown reason."
+#~ msgstr "Impossible de créer le nouveau Secteur dans le répertoire <{path}> pour une raison inconnue."
+
+#~ msgid "Mapset <{}> already exists. Ignoring the request to create it. Note that this warning may become an error in future versions."
+#~ msgstr "Le jeux de carte <{}> existe déjà. Requête de création ignorée. Cet avertissement pourra devenir une erreur dans les versions futures."
+
+#~ msgid "Creating new GRASS GIS location <{}>..."
+#~ msgstr "Création du nouveau Secteur GRASS <{}> ..."
+
+#~ msgid "Creating new GRASS GIS mapset <{}>..."
+#~ msgstr "Création du nouveau jeux de cartes GRASS <{}> ..."
+
+#, python-brace-format
+#~ msgid "Unable to create new mapset <{mapset}> because <{path}> is a file."
+#~ msgstr "Impossible de créer le novueau jeux de cartes <{mapset}> car <{path}> est un fichier."
+
+#~ msgid "The mapset <{}> is missing the WIND file (computational region). It will be fixed now. Note that this warning may become an error in future versions."
+#~ msgstr "Le jeux de cartes <{}> ne contient pas de fichier WIND (zone de calcul). Cela va être corrigé. Cet avertissement pourra devenir une erreur dans les versions futures."
+
+#~ msgid "GRASS GIS database directory, location and mapset not set properly. Use GUI or command line to set them."
+#~ msgstr "Répertoire de base de données GRASS, Secteur et jeu de cartes non définis correctement. Utiliser l'interface graphique ou la ligne de commande pour les définir."
+
+#, python-brace-format
+#~ msgid ""
+#~ "Error in GUI startup. See messages above (if any) and if necessary, please report this error to the GRASS developers.\n"
+#~ "On systems with package manager, make sure you have the right GUI package, probably named grass-gui, installed.\n"
+#~ "To run GRASS GIS in text mode use the --text flag.\n"
+#~ "Use '--help' for further options\n"
+#~ "     {cmd_name} --help\n"
+#~ "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
+#~ msgstr ""
+#~ "Erreur lors du lancement de l'interface graphique. Lire les messages ci-dessous (s'il y en a), et si nécessaire merci de rapporter cette erreur aux dévelopeurs GRASS. Sur un système avec un gestionnaire de paquets, assurez-vous d'avoir le bon paquet d'interface graphique installé, probablement nommé grass-gui.\n"
+#~ "Pour lancer GRASS en mode texte utilisez l'option --text.\n"
+#~ "Utilisez '--help' pour plus d'options\n"
+#~ "     {cmd_name} --help\n"
+#~ "Voir également : https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
+
+#~ msgid "Coordinate reference system argument (e.g. EPSG) is needed for --tmp-location"
+#~ msgstr "L'argument du système de coordonnées de référence (ex EPSG) est nécessaire pour --tmp-location"
+
+#~ msgid "Only one argument (e.g. EPSG) is needed for --tmp-location, mapset name <{}> provided"
+#~ msgstr "Un seul argument (ex EPSG) est nécessaire pour --tmp-location, le jeu de cartes <{}> est déjà fourni"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Unable to start GRASS GIS. You have the choice to:\n"
+#~ " - Launch the graphical user interface with the '--gui' switch\n"
+#~ "     {cmd_name} --gui\n"
+#~ " - Launch with path to the location/mapset as an argument\n"
+#~ "     {cmd_name} /path/to/location/mapset`\n"
+#~ " - Create a location with '-c' and launch in its PERMANENT mapset\n"
+#~ "     {cmd_name} -c EPSG:number /path/to/location\n"
+#~ "     {cmd_name} -c geofile /path/to/location\n"
+#~ " - Create manually the GISRC file ({gisrcrc})\n"
+#~ " - Use '--help' for further options\n"
+#~ "     {cmd_name} --help\n"
+#~ "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
+#~ msgstr ""
+#~ "Impossible de démarrer GRASS. Vous avez le choix de :\n"
+#~ "- Lancer l'interface graphique avec l'option '--gui'\n"
+#~ "     {cmd_name} --gui\n"
+#~ "- Lancer avec le chemin vers le Secteur/jeu_de_cartes en argument\n"
+#~ "     {cmd_name} /chemin/vers/Secteur/jeu_de_cartes`\n"
+#~ "- Créer manuellement le fichier GISRC ({gisrcrc})\n"
+#~ "- Utiliser l'option '--help' pour plus d'options\n"
+#~ "     {cmd_name} --help\n"
+#~ "Voir également : https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
+
+#, python-brace-format
+#~ msgid "<{0}> requested, but not available. Run GRASS in text mode (--text) or install missing package (usually 'grass-gui')."
+#~ msgstr "<{0}> demandé, mais non disponible. Lancez GRASS en mode texte (--text) ou installez le paquet manquant (généralement 'grass-gui')."
+
+#, c-format
+#~ msgid "Tile raster map <%s> not found"
+#~ msgstr "Carte raster tuillée <%s> non trouvée"
+
+#~ msgid "A virtual raster can not contain itself"
+#~ msgstr "Un raster virtuel ne peut pas se contenir lui-même"
+
+#, c-format
+#~ msgid "Unknown compression method <%s>, using default %s"
+#~ msgstr "Méthode de compression <%s>, utilisation de %s par défaut"
+
+#, c-format
+#~ msgid "No compression is not supported for GRASS raster maps, using default %s"
+#~ msgstr "Pas de compression supportée par les cartes raster GRASS, utilisation de %s par défaut"
+
+#, c-format
+#~ msgid "This GRASS version does not support %s compression, using default %s"
+#~ msgstr "Cette version de GRASS ne supporte pas la compression %s, utilisation de %s par défaut"
+
+#, c-format
+#~ msgid "Unable to read stats file for <%s>"
+#~ msgstr "Impossible de lire le fichier de statistiques pour <%s>"
+
+#, c-format
+#~ msgid "Unable to write stats file for <%s>"
+#~ msgstr "Impossible d'écrire le fichier de statistiques pour <%s>"
+
+#~ msgid "Mixing IDs of areas and primitives"
+#~ msgstr "Mix d'IDs de surfaces et de primitives"
+
+#, c-format
+#~ msgid "Name <%s> is not SQL compliant. Must start with a letter."
+#~ msgstr "Le nom <%s> n'est pas compatible avec le SQL. Il doit commencer par une lettre."
+
+#, c-format
+#~ msgid "Attempt to delete not registered line %d from node %d"
+#~ msgstr "Tentative de supprimer la ligne %d non référencée du noeud %d"
+
+#~ msgid "Cleaning up default sqlite database ..."
+#~ msgstr "Nettoyage de la base de données sqlite par défaut ..."
+
+#~ msgid "Unable to initialise PROJ with the following parameter list:"
+#~ msgstr "Impossible d'initialiser PROJ avec la liste suivante de paramètres :"
+
+#, c-format
+#~ msgid "The PROJ error message: %s"
+#~ msgstr "Message d'erreur PROJ : %s"
+
+#, c-format
+#~ msgid "proj_create() failed for '%s'"
+#~ msgstr "proj_create() a échoué pour '%s'"
+
+#~ msgid "Input coordinate system is NULL"
+#~ msgstr "Le système de coordonnées en entrée est NULL"
+
+#, c-format
+#~ msgid "Unable to create latlong equivalent for '%s'"
+#~ msgstr "Impossible de créer l'équivalent latlong pour '%s'"
+
+#~ msgid "No input projection"
+#~ msgstr "Pas de projection en entrée"
+
+#~ msgid "No transformation object"
+#~ msgstr "Pas d'objet de transformation"
+
+#, c-format
+#~ msgid "proj_trans() failed: %s"
+#~ msgstr "proj_trans() a échoué : %s"
+
+#~ msgid "No output projection"
+#~ msgstr "Pas de projection de sortie"
+
+#, c-format
+#~ msgid "proj_trans() failed: %d"
+#~ msgstr "proj_trans() a échoué : %d"
+
+#~ msgid "Unable to read from category raster condition file."
+#~ msgstr "Impossible de lire le fichier de catégories du raster."
+
+#, c-format
+#~ msgid "Unable to find raster <%s>"
+#~ msgstr "Impossible de trouver le raster <%s>"
+
+#, c-format
+#~ msgid "Unable to open category raster condition file <%s>"
+#~ msgstr "Impossible d'ouvrir le fichier de catégories du raster <%s>"
+
+#~ msgid "Using memory cache"
+#~ msgstr "Utilisation du cache mémoire"
+
+#~ msgid "Using disk cache"
+#~ msgstr "Utilisation du cache disque"

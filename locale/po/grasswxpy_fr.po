@@ -3248,7 +3248,7 @@ msgstr "Surligner seulement la plus haute RMS"
 #: ../gui/wxpython/image2target/ii2t_manager.py:2751
 #: ../gui/wxpython/gcp/manager.py:2678
 msgid "Highlight RMS error > M + SD * factor:"
-msgstr "Surligner erreur RMS > M + V*facteur"
+msgstr "Surligner erreur RMS > M + V*facteur :"
 
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1930
 #: ../gui/wxpython/image2target/ii2t_manager.py:2755
@@ -3374,7 +3374,7 @@ msgstr "Sélectionner la méthode d'interpolation :"
 #: ../gui/wxpython/image2target/ii2t_manager.py:3048
 #: ../gui/wxpython/gcp/manager.py:2975
 msgid "clip to computational region in target location"
-msgstr "Circoncire à la région de calcul dans le secteur cible"
+msgstr "circoncire à la région de calcul dans le secteur cible"
 
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2212
 #: ../gui/wxpython/image2target/ii2t_manager.py:589
@@ -4424,7 +4424,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1090
 #, python-format
 msgid "Name <%(name)s> is not a valid name for location or mapset. Please use only ASCII characters excluding %(chars)s and space."
-msgstr "le nom <%(name)s> n'ets pas un nom valide pour un secteur ou un jeu de cartes. Merci de n'utiliser que des caractères ASCII sans %(chars)s ni espaces."
+msgstr "Le nom <%(name)s> n'ets pas un nom valide pour un secteur ou un jeu de cartes. Merci de n'utiliser que des caractères ASCII sans %(chars)s ni espaces."
 
 #: ../gui/wxpython/gis_set.py:1172
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1095
@@ -4714,7 +4714,7 @@ msgstr "Importer un SRTM HGT"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:59
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1060
 msgid "Imports SRTM HGT files into raster map."
-msgstr "Importer un fichier SRTM HGT vers une carte raster"
+msgstr "Importer un fichier SRTM HGT vers une carte raster."
 
 #: ../gui/wxpython/menustrings.py:59 ../gui/wxpython/menustrings.py:1077
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:60
@@ -4760,7 +4760,7 @@ msgstr "Importer une carte raster en tant qu'archive GRASS GIS (empaquetée avec
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1066
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1212
 msgid "Reproject raster map from different GRASS location"
-msgstr "Reprojeter une carte raster depuis un secteur différent."
+msgstr "Reprojeter une carte raster depuis un secteur différent"
 
 #: ../gui/wxpython/menustrings.py:66 ../gui/wxpython/menustrings.py:292
 #: ../gui/wxpython/menustrings.py:1084 ../gui/wxpython/menustrings.py:1234
@@ -9863,7 +9863,7 @@ msgstr "Accrocher temporellement les cartes du jeu de données temporel"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:947
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1873
 msgid "Lists space time datasets and maps registered in the temporal database."
-msgstr "Lister les jeux de données temporels et cartes enregistrées dans la base de données temporelle."
+msgstr "Lister les jeux de données temporels et cartes référencées dans la base de données temporelle."
 
 #: ../gui/wxpython/menustrings.py:964 ../gui/wxpython/menustrings.py:1906
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:948
@@ -9875,7 +9875,7 @@ msgstr "Gérer les cartes du jeu de données"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:949
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1875
 msgid "Register maps in datasets"
-msgstr "Enregistrer des cartes dans les jeux de données"
+msgstr "Référencer des cartes dans les jeux de données"
 
 #: ../gui/wxpython/menustrings.py:966 ../gui/wxpython/menustrings.py:1908
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
@@ -9885,13 +9885,13 @@ msgstr "Assigne les dates et enregistre les cartes raster, vecteur et raster3d d
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:951
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1877
 msgid "Unregister maps from datasets"
-msgstr "Désenregistrer des cartes de jeux de données"
+msgstr "Déréférencer des cartes de jeux de données"
 
 #: ../gui/wxpython/menustrings.py:968 ../gui/wxpython/menustrings.py:1910
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:952
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1878
 msgid "Unregisters raster, vector and raster3d maps from the temporal database or a specific space time dataset."
-msgstr "Désenregistrer des cartes raster, vecteur et raster3d d'une base temporelle ou d'un jeu de données temporel spécifique."
+msgstr "Déréférencer des cartes raster, vecteur et raster3d d'une base temporelle ou d'un jeu de données temporel spécifique."
 
 #: ../gui/wxpython/menustrings.py:969 ../gui/wxpython/menustrings.py:1911
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:953
@@ -9903,7 +9903,7 @@ msgstr "Lister les rasters du jeu de données"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:954
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1880
 msgid "Lists registered maps of a space time raster dataset."
-msgstr "Lister les cartes enregistrées dans le jeu de données raster temporel."
+msgstr "Lister les cartes référencées dans le jeu de données raster temporel."
 
 #: ../gui/wxpython/menustrings.py:971 ../gui/wxpython/menustrings.py:1913
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:955
@@ -9915,7 +9915,7 @@ msgstr "Lister les vecteurs du jeu de données"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:956
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1882
 msgid "Lists registered maps of a space time vector dataset."
-msgstr "Lister les cartes enregistrées dans le jeux de données vecteur temporel."
+msgstr "Lister les cartes référencées dans le jeux de données vecteur temporel."
 
 #: ../gui/wxpython/menustrings.py:973 ../gui/wxpython/menustrings.py:1915
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:957
@@ -9927,7 +9927,7 @@ msgstr "Lister les rasters 3D du jeu de données"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:958
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1884
 msgid "Lists registered maps of a space time raster3d dataset."
-msgstr "Lister les cartes enregistrées dans un jeux de données temporel raster3d."
+msgstr "Lister les cartes référencées dans un jeux de données temporel raster3d."
 
 #: ../gui/wxpython/menustrings.py:975 ../gui/wxpython/menustrings.py:1917
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:959
@@ -10067,7 +10067,7 @@ msgstr "Interroger la table d'attributs de la carte vecteur"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:981
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1907
 msgid "Prints attributes of vector maps registered in a space time vector dataset."
-msgstr "Afficher les attributs des cartes vecteur enregistrées dans le jeu de données vecteur temporel."
+msgstr "Afficher les attributs des cartes vecteur référencées dans le jeu de données vecteur temporel."
 
 #: ../gui/wxpython/menustrings.py:998 ../gui/wxpython/menustrings.py:1940
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:982
@@ -10247,7 +10247,7 @@ msgstr "Statistiques raster univariées"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1012
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1938
 msgid "Calculates univariate statistics from the non-null cells for each registered raster map of a space time raster dataset."
-msgstr "Calculer les statistiques univariées pour les cellules non nulles de chaque carte raster enregistrée dans un jeu de données temporel."
+msgstr "Calculer les statistiques univariées pour les cellules non nulles de chaque carte raster référencée dans un jeu de données temporel."
 
 #: ../gui/wxpython/menustrings.py:1029 ../gui/wxpython/menustrings.py:1971
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1013
@@ -10259,7 +10259,7 @@ msgstr "Statistiques univariées vectorielles"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1014
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1940
 msgid "Calculates univariate statistics of attributes for each registered vector map of a space time vector dataset"
-msgstr "Calcule les statistiques univariées des attributs de chaque carte vectorielle enregistrée dans un jeu de données vectorielles temporel"
+msgstr "Calcule les statistiques univariées des attributs de chaque carte vectorielle référencée dans un jeu de données vectorielles temporel"
 
 #: ../gui/wxpython/menustrings.py:1031 ../gui/wxpython/menustrings.py:1973
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1015
@@ -10271,7 +10271,7 @@ msgstr "Statistiques raster 3D univariées"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1016
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1942
 msgid "Calculates univariate statistics from the non-null cells for each registered 3D raster map of a space time 3D raster dataset."
-msgstr "Calculer les statistiques univariées pour les cellules non nulles de chaque carte raster 3D enregistrée dans un jeu de données raster 3D temporel."
+msgstr "Calculer les statistiques univariées pour les cellules non nulles de chaque carte raster 3D référencée dans un jeu de données raster 3D temporel."
 
 #: ../gui/wxpython/menustrings.py:1033 ../gui/wxpython/menustrings.py:1975
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1017
@@ -10829,7 +10829,7 @@ msgstr "Compte-rendu et statistiques"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:950
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1876
 msgid "Registers raster, vector and raster3d maps in a space time datasets."
-msgstr "Révérencer des cartes raster, vecteur et raster3d dans des jeux de données spatio-temporels."
+msgstr "Référencer des cartes raster, vecteur et raster3d dans des jeux de données spatio-temporels."
 
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:50
 #: ../gui/wxpython/gcp/mapdisplay.py:50
@@ -10875,7 +10875,7 @@ msgstr "vecteur"
 #: ../gui/wxpython/image2target/ii2t_manager.py:404
 #: ../gui/wxpython/gcp/manager.py:375
 msgid "Select source location:"
-msgstr "Choisir le secteur source : "
+msgstr "Choisir le secteur source :"
 
 #: ../gui/wxpython/image2target/ii2t_manager.py:425
 #: ../gui/wxpython/gcp/manager.py:396
@@ -11066,11 +11066,11 @@ msgstr "N cible :"
 
 #: ../gui/wxpython/image2target/ii2t_manager.py:2587
 msgid "source Z:"
-msgstr "Z source : "
+msgstr "Z source :"
 
 #: ../gui/wxpython/image2target/ii2t_manager.py:2588
 msgid "target Z:"
-msgstr "Z cible : "
+msgstr "Z cible :"
 
 #: ../gui/wxpython/vdigit/mapwindow.py:425
 msgid "Update categories"
@@ -12880,7 +12880,7 @@ msgstr "Résuluats de la requête :"
 
 #: ../gui/wxpython/gui_core/query.py:181
 msgid " "
-msgstr ""
+msgstr " "
 
 #: ../gui/wxpython/gui_core/query.py:270
 msgid "east, north"
@@ -15981,7 +15981,7 @@ msgstr "Modifier les options"
 
 #: ../gui/wxpython/animation/dialogs.py:496
 msgid "3D view parameters"
-msgstr " Paramètres de vue 3D"
+msgstr "Paramètres de vue 3D"
 
 #: ../gui/wxpython/animation/dialogs.py:504
 msgid "Workspace file:"
@@ -16095,7 +16095,7 @@ msgstr "Positionnement en pourcentage des coordonnées de l'écran (X : 0, Y : 0
 
 #: ../gui/wxpython/animation/dialogs.py:1151
 msgid "image sequence"
-msgstr "Séquence d'images"
+msgstr "séquence d'images"
 
 #: ../gui/wxpython/animation/dialogs.py:1151
 msgid "animated GIF"
@@ -16172,7 +16172,7 @@ msgstr "Fichier %s non trouvé."
 
 #: ../gui/wxpython/animation/dialogs.py:1476
 msgid "Decoration image file is missing."
-msgstr "Le fichier de l'image de décoration est manquant"
+msgstr "Le fichier de l'image de décoration est manquant."
 
 #: ../gui/wxpython/animation/dialogs.py:1485
 #, python-format
@@ -16263,7 +16263,7 @@ msgstr "Cliquer et appuyer sur les touches haut et bas pour voir différents for
 
 #: ../gui/wxpython/animation/dialogs.py:2008
 msgid "Learn more about formatting options"
-msgstr "Plus d'infos sur les options de formattage."
+msgstr "Plus d'infos sur les options de formattage"
 
 #: ../gui/wxpython/animation/dialogs.py:2022
 msgid "Display instances with no data"
@@ -17516,6 +17516,8 @@ msgid ""
 "Select areas from the\n"
 "overlaid vector map"
 msgstr ""
+"Sélectionner une zone depuis la\n"
+"carte vecteur supérieure"
 
 #: ../gui/wxpython/rlisetup/wizard.py:898
 msgid "Choose a method"
@@ -17823,7 +17825,7 @@ msgstr "Redimensionner la légende"
 
 #: ../gui/wxpython/mapwin/buffered.py:990
 msgid "Unable to draw registered graphics. The graphics was unregistered."
-msgstr "Impossible de dessiner le graphique enregistré. Le graphique n'était pas enregistré."
+msgstr "Impossible de dessiner le graphique référencé. Le graphique n'était pas référencé."
 
 #: ../gui/wxpython/mapwin/buffered.py:2079
 msgid "Zoom to saved region extents"
@@ -17924,7 +17926,7 @@ msgid ""
 "Handler was unregistered."
 msgstr ""
 "Une erreur est survenue lors de l'appel au gestionnaire : %s\n"
-"Le gestionnaire n'était pas enregistré."
+"Le gestionnaire n'était pas référencé."
 
 #: ../gui/wxpython/mapwin/base.py:286
 #, python-format
@@ -17933,12 +17935,12 @@ msgid ""
 "                                        Handler was unregistered."
 msgstr ""
 "Erreur lors du désenregistrement du gestionnaire : %s\n"
-"le gestionnaire n'était pas enregistré."
+"le gestionnaire n'était pas référencé."
 
 #: ../gui/wxpython/mapwin/base.py:315
 #, python-format
 msgid "Handler: %s was not registered"
-msgstr "Gestionnaire : %s n'était pas enregistré"
+msgstr "Gestionnaire : %s n'était pas référencé"
 
 #: ../gui/wxpython/mapwin/base.py:319
 #, python-format
@@ -17947,7 +17949,7 @@ msgid ""
 "                                        Handler was unregistered"
 msgstr ""
 "Erreur lors du désenregistrement du gestionnaire : %s\n"
-"Le gestionnaire n'était pas enregistré."
+"Le gestionnaire n'était pas référencé."
 
 #: ../gui/wxpython/vnet/vnet_core.py:116
 msgid "Unable to perform analysis."
@@ -18572,7 +18574,7 @@ msgstr "Montrer les &métadonnées"
 
 #: ../gui/wxpython/datacatalog/tree.py:1022
 msgid "&Switch mapset"
-msgstr "Inverser les jeux de cartes"
+msgstr "Changer de jeux de cartes"
 
 #: ../gui/wxpython/datacatalog/dialogs.py:79
 msgid "Reproject"
@@ -21023,6 +21025,12 @@ msgstr "Algèbre temporelle vecteur"
 msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
 msgstr "Applique des opérations spatiales et temporelles sur des jeux de données vecteur temporel à l'aide de l'algèbre temporelle vecteur."
 
+msgid "Imports a GRASS GIS specific raster archive file (packed with r.pack) as a raster map"
+msgstr "Importe un fichier d'archive raster GRASS (empaqueté avec r.pack) en tant que carte raster"
+
+msgid "Imports a GRASS GIS specific vector archive file (packed with v.pack) as a vector map"
+msgstr "Importe un fichier vecteur d'archive GRASS (empaqueté avec r.pack) en tant que carte vecteur"
+
 #~ msgid "Apply SQL statement"
 #~ msgstr "Exécuter la requête SQL"
 
@@ -21032,8 +21040,62 @@ msgstr "Applique des opérations spatiales et temporelles sur des jeux de donné
 #~ msgid "No vector map selected"
 #~ msgstr "Pas de carte vecteur sélectionnée"
 
-#~ msgid "Imports a GRASS GIS specific raster archive file (packed with r.pack) as a raster map"
-#~ msgstr "Importe un fichier d'archive raster GRASS (empaqueté avec r.pack) en tant que carte raster"
+#~ msgid "Set title for the plot"
+#~ msgstr "Définir le titre du graphique"
 
-#~ msgid "Imports a GRASS GIS specific vector archive file (packed with v.pack) as a vector map"
-#~ msgstr "Importe un fichier vecteur d'archive GRASS (empaqueté avec r.pack) en tant que carte vecteur"
+#~ msgid "Set label for X axis"
+#~ msgstr "Définir l'étiquette de l'axe X"
+
+#~ msgid "Set label for Y axis"
+#~ msgstr "Définir l'étiquette de l'axe Y"
+
+#~ msgid "Labels"
+#~ msgstr "Étiquettes"
+
+#~ msgid "Path for output CSV file with plotted data"
+#~ msgstr "Chemin pour le fichier CSV de sortie avec les données affichées"
+
+#~ msgid "CVS path"
+#~ msgstr "chemin CSV"
+
+#~ msgid "Do you want the CSV header?"
+#~ msgstr "Voulez-vous les en-tête CSV ?"
+
+#, python-brace-format
+#~ msgid "{pa} already exists, do you want to overwrite?"
+#~ msgstr "{pa} existe déjà, voulez-vous l'écraser ?"
+
+#~ msgid "File exists"
+#~ msgstr "Le fichier existe"
+
+#~ msgid "Please change name of output CSV file or "
+#~ msgstr "Merci de modifier le nom du fichier CSV de sortie ou"
+
+#~ msgid "Name for the new mapset:"
+#~ msgstr "Nom pour le nouveau jeu de cartes :"
+
+#~ msgid "Code revision"
+#~ msgstr "Révision du code"
+
+#~ msgid "Please provive an order value (1 if 4 Fiducials, 2 if 8 Fiducials)"
+#~ msgstr "Merci de fournir une autre valeur (1 si 4 fiduciaux, 2 si 8 fiduciaux)"
+
+#~ msgid "Please provive an output files extension (used by i.rectify)"
+#~ msgstr "Merci de fournie une extention de fichier (utilisé par i.rectify)"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Unable to write file '{filePath}'.\n"
+#~ "\n"
+#~ "Details: {error}"
+#~ msgstr ""
+#~ "Impossible d'écrire le fichier '{filePath}'.\n"
+#~ "\n"
+#~ "Détails : {error}"
+
+#~ msgid "Command log saved to '{}'"
+#~ msgstr "Log de la commande enregistrée dans '{}'"
+
+#, python-format
+#~ msgid "GRASS GIS %s Startup%s"
+#~ msgstr "Lancement du SIG GRASS %s - %s"

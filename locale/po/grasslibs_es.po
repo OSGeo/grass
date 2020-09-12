@@ -5468,15 +5468,15 @@ msgstr "Coordenadas no válidas."
 
 #: ../lib/gis/adj_cellhd.c:109 ../lib/gis/adj_cellhd.c:249
 msgid "NS resolution has been changed"
-msgstr ""
+msgstr "La resolución N-S, ha sido cambiada."
 
 #: ../lib/gis/adj_cellhd.c:114 ../lib/gis/adj_cellhd.c:254
 msgid "EW resolution has been changed"
-msgstr ""
+msgstr "La resolución E-O, ha sido cambiada."
 
 #: ../lib/gis/adj_cellhd.c:117 ../lib/gis/adj_cellhd.c:257
 msgid "NS and EW resolutions are different"
-msgstr ""
+msgstr "Las resoluciones N-S y E-O, son diferentes."
 
 #: ../lib/gis/adj_cellhd.c:157
 msgid "Illegal n-s resolution value"
@@ -5508,53 +5508,53 @@ msgstr "Valor de profundidad no admitido"
 
 #: ../lib/gis/adj_cellhd.c:202
 msgid "Top must be larger than Bottom"
-msgstr ""
+msgstr "El valor del límite superior, debe ser mayor que el del límite inferior."
 
 #: ../lib/gis/adj_cellhd.c:276
 #, c-format
 msgid "East (%.15g) is not larger than West (%.15g)"
-msgstr ""
+msgstr "El valor de la frontera Este (%.15g) no es mayor que la Oeste (%.15g). "
 
 #: ../lib/gis/adj_cellhd.c:311
 #, c-format
 msgid "Illegal latitude for North: %g"
-msgstr ""
+msgstr "Latitud ilegal para el Norte: %g"
 
 #: ../lib/gis/adj_cellhd.c:313
 #, c-format
 msgid "Illegal latitude for South: %g"
-msgstr ""
+msgstr "Latitud ilegal para el Sur: %g "
 
 #: ../lib/gis/adj_cellhd.c:319
 #, c-format
 msgid "Illegal longitude for West: %g"
-msgstr ""
+msgstr "Valor ilegal de Longitud para el Oeste: %g "
 
 #: ../lib/gis/adj_cellhd.c:323
 #, c-format
 msgid "Illegal longitude for East: %g"
-msgstr ""
+msgstr "Valor ilegal de Longitud para el Este: %g "
 
 #: ../lib/gis/adj_cellhd.c:351
 #, c-format
 msgid "NS extent does not match NS resolution: %g cells difference"
-msgstr ""
+msgstr "La extensión N-S no coincide con la resolución N-S: Existe una diferencia de %g células."
 
 #: ../lib/gis/adj_cellhd.c:360
 #, c-format
 msgid "%g cells missing to reach 90 degree north"
-msgstr ""
+msgstr " Faltan %g celdas para alcanzar los 90 grados Norte."
 
 #: ../lib/gis/adj_cellhd.c:363 ../lib/gis/adj_cellhd.c:377
 #: ../lib/gis/adj_cellhd.c:391
 #, c-format
 msgid "Subtle input data rounding error of north boundary (%g)"
-msgstr ""
+msgstr "Existe un error sutil de redondeo en los datos de entrada de la frontera Norte (%g)."
 
 #: ../lib/gis/adj_cellhd.c:373
 #, c-format
 msgid "90 degree north is exceeded by %g cells"
-msgstr ""
+msgstr " Los 90 grados Norte, han sido excedidos por %g céldas."
 
 #: ../lib/gis/adj_cellhd.c:402
 msgid "Illegal latitude for North"
@@ -5563,13 +5563,13 @@ msgstr "Latitud no admitida para Norte"
 #: ../lib/gis/adj_cellhd.c:410
 #, c-format
 msgid "%g cells missing to reach 90 degree south"
-msgstr ""
+msgstr " Faltan %g celdas para alcanzar los 90 grados Sur."
 
 #: ../lib/gis/adj_cellhd.c:413 ../lib/gis/adj_cellhd.c:427
 #: ../lib/gis/adj_cellhd.c:441
 #, c-format
 msgid "Subtle input data rounding error of south boundary (%g)"
-msgstr ""
+msgstr "Existe un error sutil de redondeo en los datos de entrada de la frontera Sur (%g)."
 
 #: ../lib/gis/adj_cellhd.c:423
 #, c-format
@@ -8555,8 +8555,8 @@ msgstr[1] "%d primitivas registradas"
 #, c-format
 msgid "One vertex registered"
 msgid_plural "%d vertices registered"
-msgstr[0] "Un vértice registrado"
-msgstr[1] "%d vértices registrados"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../lib/vector/Vlib/build_sfa.c:668
 #, c-format

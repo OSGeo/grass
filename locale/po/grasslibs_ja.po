@@ -8465,7 +8465,7 @@ msgstr[0] "プリミティブは登録されました"
 #, c-format
 msgid "One vertex registered"
 msgid_plural "%d vertices registered"
-msgstr[0] "頂点は登録されました"
+msgstr[0] ""
 
 #: ../lib/vector/Vlib/build_sfa.c:668
 #, c-format

@@ -797,7 +797,7 @@ msgstr ""
 #: ../vector/v.distance/main.c:124 ../vector/v.vect.stats/main.c:131
 #: ../vector/v.to.db/main.c:37
 msgid "attribute table"
-msgstr ""
+msgstr "таблица атрибутов"
 
 #: ../locale/scriptstrings/v.db.addtable_to_translate.c:4
 #: ../locale/scriptstrings/db.droptable_to_translate.c:2
@@ -826,7 +826,7 @@ msgstr ""
 #: ../vector/v.in.db/main.c:54 ../vector/v.vect.stats/main.c:132
 #: ../vector/v.to.db/main.c:38
 msgid "database"
-msgstr ""
+msgstr "база данных"
 
 #: ../locale/scriptstrings/v.db.addtable_to_translate.c:5
 msgid "Name of new attribute table (default: vector map name)"
@@ -5592,7 +5592,7 @@ msgstr ""
 #: ../vector/v.edit/select.c:509
 #, c-format
 msgid "Unable to start driver <%s>"
-msgstr ""
+msgstr "Невозможно запустить драйвер <%s>"
 
 #: ../doc/vector/v.example/main.c:142 ../db/db.columns/main.c:62
 #: ../db/db.describe/main.c:67 ../vector/v.out.vtk/writeVTK.c:655
@@ -5605,7 +5605,7 @@ msgstr ""
 #: ../scripts/db.univar/db.univar.py:112
 #, c-format, python-format
 msgid "Unable to describe table <%s>"
-msgstr ""
+msgstr "Невозможно описать таблицу <%s>"
 
 #: ../doc/vector/v.example/main.c:175
 #, c-format
@@ -18883,7 +18883,7 @@ msgstr ""
 #: ../db/db.tables/main.c:50
 #, c-format
 msgid "Unable to open database <%s>"
-msgstr ""
+msgstr "Невозможно открыть базу данных <%s>"
 
 #: ../display/d.vect.thematic/main.c:312
 #, c-format
@@ -28624,7 +28624,7 @@ msgstr ""
 #: ../db/db.drivers/main.c:72 ../db/db.connect/main.c:45
 #: ../db/db.login/main.c:41
 msgid "connection settings"
-msgstr ""
+msgstr "настройки соединения"
 
 #: ../db/db.drivers/main.c:73
 msgid "Lists all database drivers."
@@ -28634,7 +28634,7 @@ msgstr ""
 #: ../db/db.describe/main.c:50 ../db/db.select/main.c:53
 #, c-format
 msgid "Table <%s> not found in database <%s> using driver <%s>"
-msgstr ""
+msgstr "Таблица <%s> не найдена в базе данных <%s> используя драйвер <%s>"
 
 #: ../db/db.columns/main.c:101
 msgid "List all columns for a given table."

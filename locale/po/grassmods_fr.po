@@ -2049,7 +2049,7 @@ msgstr "raster3d"
 #: ../raster3d/r3.null/main.c:182 ../raster3d/r3.in.ascii/main.c:356
 #: ../vector/v.to.rast3/main.c:50 ../vector/v.vol.rst/main.c:236
 msgid "voxel"
-msgstr ""
+msgstr "voxel"
 
 #: ../locale/scriptstrings/t.rast3d.list_to_translate.c:8
 msgid "Order the space time dataset by category"
@@ -4546,7 +4546,7 @@ msgstr ""
 #: ../raster/r.in.lidar/main.c:306 ../raster/r.in.xyz/main.c:328
 #: ../raster3d/r3.in.lidar/main.c:303
 msgid "Scan data file for extent then exit"
-msgstr "Sanner l'emprise des données d'entrée et quitter"
+msgstr "Scanner l'emprise des données d'entrée et quitter"
 
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:11
 #: ../raster/r.in.lidar/main.c:311 ../raster/r.in.xyz/main.c:335
@@ -5681,7 +5681,7 @@ msgstr "Sortie en 'unité de carte au carré'"
 
 #: ../raster/r.surf.area/main.c:153
 msgid "Null value area ignored in calculation:"
-msgstr "Surface de valeurs nulles ignorées dans les calculs : "
+msgstr "Surfaces de valeur nulle ignorées dans les calculs : "
 
 #: ../raster/r.surf.area/main.c:155
 msgid "Plan area used in calculation:"
@@ -5708,7 +5708,7 @@ msgstr "profil"
 #: ../raster/r.profile/main.c:55 ../raster/r.transect/main.c:105
 #: ../vector/v.profile/main.c:155
 msgid "transect"
-msgstr ""
+msgstr "transect"
 
 #: ../raster/r.profile/main.c:57
 msgid "Outputs the raster map layer values lying on user-defined line(s)."
@@ -5720,15 +5720,15 @@ msgstr "Nom du fichier en sortie (utilisez output=- pour le flux de sortie stdou
 
 #: ../raster/r.profile/main.c:70 ../display/d.profile/main.c:203
 msgid "Profile coordinate pairs"
-msgstr ""
+msgstr "Paires de coordonnées du profil"
 
 #: ../raster/r.profile/main.c:76
 msgid "Name of input file containing coordinate pairs"
-msgstr ""
+msgstr "Nom du fichier d'entrée contenant les paires de coordonnées"
 
 #: ../raster/r.profile/main.c:78
 msgid "Use instead of the 'coordinates' option. \"-\" reads from stdin."
-msgstr ""
+msgstr "Utiliser à la place de l'option 'coordonnées'. \"-\" lit depuis l'entrée standard."
 
 #: ../raster/r.profile/main.c:86
 msgid "Resolution along profile (default = current region resolution)"
@@ -5744,21 +5744,21 @@ msgstr "Sortie des valeurs de couleur RRR:GGG:BBB pour chaque point du profil"
 
 #: ../raster/r.profile/main.c:104
 msgid "If units are not specified, current location units are used. Meters are used by default in geographic (latlon) locations."
-msgstr ""
+msgstr "Si les unités ne sont pas spécifiées, les unités du Secteur courant sont utilisées. Les mètres sont utilisés par défaut pour les Secteurs en coordonnées géographiques (lat/lon)."
 
 #: ../raster/r.profile/main.c:118
 msgid "Either use profile option or coordinate_file  option, but not both"
-msgstr ""
+msgstr "Utiliser soit l'option profil soit l'option fichier de coordonnées, mais pas les deux"
 
 #: ../raster/r.profile/main.c:145
 #, c-format
 msgid "Illegal resolution %g [%s]"
-msgstr ""
+msgstr "Résolution %g [%s] non autorisée"
 
 #: ../raster/r.profile/main.c:152
 #, c-format
 msgid "Using resolution: %g [%s]"
-msgstr ""
+msgstr "Utilisation de la résolution : %g [%s]"
 
 #: ../raster/r.profile/main.c:176 ../raster/r.out.ppm3/main.c:133
 #: ../raster/r.recode/main.c:90 ../raster/r.horizon/main.c:385
@@ -5776,7 +5776,7 @@ msgstr "Impossible d'ouvrir le fichier <%s>"
 
 #: ../raster/r.profile/main.c:183
 msgid "Output columns:"
-msgstr ""
+msgstr "Colonnes en sortie : "
 
 #: ../raster/r.profile/main.c:186
 #, c-format
@@ -5790,31 +5790,31 @@ msgstr ""
 
 #: ../raster/r.profile/main.c:190
 msgid " RGB color"
-msgstr ""
+msgstr "Couleur RGB"
 
 #: ../raster/r.profile/main.c:201
 #, c-format
 msgid "Could not open <%s>"
-msgstr ""
+msgstr "Impossible d'ouvrir <%s>"
 
 #: ../raster/r.profile/main.c:208
 #, c-format
 msgid "Invalid coordinates %s %s"
-msgstr "Coordonnées invalides : %s %s"
+msgstr "Coordonnées %s %s invalides"
 
 #: ../raster/r.profile/main.c:279
 #, c-format
 msgid "Approx. transect length: %f [%s]"
-msgstr ""
+msgstr "Longueur approximative du transect : %f [%s]"
 
 #: ../raster/r.profile/main.c:282
 msgid "Endpoint coordinates are outside of current region settings"
-msgstr ""
+msgstr "Les points des extrémités sont en dehors des paramètres de la région courante"
 
 #: ../raster/r.profile/input.c:30 ../raster/r.profile/input.c:47
 #: ../raster/r.profile/input.c:60
 msgid "One coordinate pair per line, please"
-msgstr ""
+msgstr "Une parie de coordonnées par ligne"
 
 #: ../raster/r.sun/main.c:252 ../raster/r.horizon/main.c:181
 #: ../raster/r.sunhours/main.c:73 ../raster/r.sunmask/main.c:117
@@ -6817,12 +6817,12 @@ msgstr ""
 #: ../raster/r.walk/main.c:1498 ../raster/r.cost/main.c:1219
 #, c-format
 msgid "Illegal x coordinate <%s>"
-msgstr "Coordonnée x illégale <%s>"
+msgstr "Coordonnée x non autorisée <%s>"
 
 #: ../raster/r.walk/main.c:1500 ../raster/r.cost/main.c:1221
 #, c-format
 msgid "Illegal y coordinate <%s>"
-msgstr "Coordonnée y illégale <%s>"
+msgstr "Coordonnée y non autorisée <%s>"
 
 #: ../raster/r.walk/main.c:1504 ../raster/r.cost/main.c:1225
 #, c-format
@@ -7092,15 +7092,15 @@ msgstr "Impossible d'ouvrir le fichier de filtre '%s'"
 
 #: ../raster/r.mfilter/getfilt.c:47
 msgid "Illegal filter matrix size specified"
-msgstr "Taille de matrice de filtre spécifiée illégale"
+msgstr "Taille de matrice de filtre spécifiée non autorisée"
 
 #: ../raster/r.mfilter/getfilt.c:50
 msgid "Even filter matrix size specified"
-msgstr ""
+msgstr "Taille de matrice de filtre paire spécifiée"
 
 #: ../raster/r.mfilter/getfilt.c:72
 msgid "Illegal filter matrix"
-msgstr "Matrice de filtre illégale"
+msgstr "Matrice de filtre non autorisée"
 
 #: ../raster/r.mfilter/getfilt.c:80 ../raster/r.mfilter/getfilt.c:107
 #: ../raster/r.mfilter/getfilt.c:124
@@ -7113,7 +7113,7 @@ msgstr "Diviseur de filtre dupliqué"
 
 #: ../raster/r.mfilter/getfilt.c:101
 msgid "Illegal divisor matrix"
-msgstr "Matrice de division illégale"
+msgstr "Matrice de division non autorisée"
 
 #: ../raster/r.mfilter/getfilt.c:110
 msgid "Duplicate filter type specified"
@@ -7538,7 +7538,7 @@ msgstr "Rien à calculer. Utilisez au moins une mesure texturale."
 
 #: ../raster/r.texture/main.c:258 ../raster/r.texture/main.c:268
 msgid "At least one of the requested output maps exists. Use --o to overwrite."
-msgstr ""
+msgstr "Au moins une des carte en sortie existe. Utilisez --o pour écraser."
 
 #: ../raster/r.texture/main.c:301 ../raster/r.carve/raster.c:13
 #: ../imagery/i.zc/main.c:157
@@ -7686,12 +7686,12 @@ msgstr "Les catégories pour la carte raster <%s> sont soit manquantes soit n'on
 #: ../raster/r.stats/main.c:325
 #, c-format
 msgid "Flag '-%c' was given, using cats fp ranges of raster map <%s>, ignoring '%s' option"
-msgstr ""
+msgstr "L'option '-%c' est demandée, utilisation des plages de catégories en flottants pour la carte raster <%s>, l'option '%s' est ignorée"
 
 #: ../raster/r.stats/main.c:331 ../raster/r.contour/main.c:149
 #, c-format
 msgid "Unable to read fp range of raster map <%s>"
-msgstr "Impossible de lire l'intervalle des valeurs en virgule flottante pour la carte raster <%s>"
+msgstr "Impossible de lire l'intervalle des valeurs en flottants pour la carte raster <%s>"
 
 #: ../raster/r.stats/main.c:358 ../raster/r.recode/read_rules.c:35
 #, c-format
@@ -7739,7 +7739,7 @@ msgstr ""
 #: ../imagery/i.rectify/readcell.c:55
 #: ../imagery/i.ortho.photo/i.ortho.rectify/readcell.c:66
 msgid "Unable to open temporary file"
-msgstr ""
+msgstr "Impossible d'ouvrir le fichier temporaire"
 
 #: ../raster/r.stats.quantile/main.c:454
 msgid "Writing output maps"
@@ -8048,7 +8048,7 @@ msgstr ""
 
 #: ../raster/r.li/r.li.daemon/daemon.c:623
 msgid "Illegal areas disposition"
-msgstr "Disposition de zones illégale"
+msgstr "Disposition de zones non autorisée"
 
 #: ../raster/r.li/r.li.daemon/daemon.c:695
 msgid "Cannot make lseek"
@@ -8311,23 +8311,23 @@ msgstr ""
 
 #: ../raster/r.to.rast3/main.c:59 ../raster/r.to.rast3elev/main.c:136
 msgid "Could not close the map"
-msgstr "Impossible de fermer la couche : couche d'entrée introuvable"
+msgstr "Impossible de fermer la couche"
 
 #: ../raster/r.to.rast3/main.c:79
 msgid "2D raster maps which represent the slices"
-msgstr ""
+msgstr "Cartes raster 2D qui représentent les tranches"
 
 #: ../raster/r.to.rast3/main.c:84 ../raster/r.to.rast3elev/main.c:175
 msgid "The maximum tile size in kilo bytes. Default is 32KB."
-msgstr ""
+msgstr "Taille maximale de tuile en kilobits. Par défaut 32KB."
 
 #: ../raster/r.to.rast3/main.c:93
 msgid "Use 3D raster mask (if exists) with output map"
-msgstr ""
+msgstr "Utiliser le masque raster 3D (s'il existe) pour la carte en sortie"
 
 #: ../raster/r.to.rast3/main.c:201
 msgid "Converts 2D raster map slices to one 3D raster volume map."
-msgstr "Convertir des tranches de cartes raster 2D en une carte volumique raster 3D. "
+msgstr "Convertir des tranches de cartes raster 2D en une carte volumique raster 3D."
 
 #: ../raster/r.to.rast3/main.c:213
 msgid "No output map"
@@ -8335,7 +8335,7 @@ msgstr "Aucune couche créée en sortie"
 
 #: ../raster/r.to.rast3/main.c:230
 msgid "The 2D and 3D region settings are different. Using the 3D region settings to adjust the 2D region."
-msgstr ""
+msgstr "Les paramètres de région 2D et 3D sont différents. Utilisation des paramètres de région 3D pour ajuster la région 2D."
 
 #: ../raster/r.to.rast3/main.c:262
 #, c-format
@@ -8348,15 +8348,15 @@ msgstr "Les couches en entrée doivent être composées du même type de donnée
 
 #: ../raster/r.to.rast3/main.c:279 ../raster/r.to.rast3elev/main.c:457
 msgid "Creating 3D raster map"
-msgstr ""
+msgstr "Création de la carte raster 3D"
 
 #: ../raster/r.to.rast3/main.c:291 ../raster/r.to.rast3elev/main.c:443
 msgid "Error opening 3D raster map"
-msgstr ""
+msgstr "Erreur à l'ouverture de la carte raster 3D"
 
 #: ../raster/r.to.rast3/main.c:326 ../raster/r.to.rast3elev/main.c:501
 msgid "Error closing 3d raster map"
-msgstr "Erreur de fermeture du fichier raster 3D"
+msgstr "Erreur à la fermeture de la carte raster 3D"
 
 #: ../raster/r.resamp.rst/main.c:151
 msgid "Reinterpolates and optionally computes topographic analysis from input raster map to a new raster map (possibly with different resolution) using regularized spline with tension and smoothing."
@@ -9802,11 +9802,11 @@ msgstr "Nom de la carte raster des précipitations annuelles [mm/an]"
 
 #: ../raster/r.usler/main.c:63
 msgid "Name for output USLE R raster map [MJ.mm/ha.hr.year]"
-msgstr ""
+msgstr "Nom pour la carte raster de sortie USLE R [MJ.mm/ha.hr.year]"
 
 #: ../raster/r.usler/main.c:70
 msgid "Name of USLE R equation"
-msgstr "Nom de l'équation R USLE"
+msgstr "Nom de l'équation USLE R"
 
 #: ../raster/r.usler/main.c:75
 msgid "Roosle (1975)"
@@ -9834,7 +9834,7 @@ msgstr "Nombre maximum d'itérations"
 
 #: ../raster/r.thin/io.c:98
 msgid "Input raster must be of type CELL."
-msgstr ""
+msgstr "Le raster d'entrée doit être de type CELL."
 
 #. GTC Count of raster rows
 #. GTC Count of window rows
@@ -9844,8 +9844,8 @@ msgstr ""
 #, c-format
 msgid "%d row"
 msgid_plural "%d rows"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d ligne"
+msgstr[1] "%d lignes"
 
 #. GTC Count of raster columns
 #. GTC Count of window columns
@@ -9855,19 +9855,19 @@ msgstr[1] ""
 #, c-format
 msgid "%d column"
 msgid_plural "%d columns"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d colonne"
+msgstr[1] "%d colonnes"
 
 #. GTC First argument is the raster map name, second and third - a string representing number of rows and cols
 #: ../raster/r.thin/io.c:109
 #, c-format
 msgid "Raster map <%s> - %s X %s"
-msgstr ""
+msgstr "Carte raster <%s> - %s X %s"
 
 #: ../raster/r.thin/io.c:122
 #, c-format
 msgid "Unable to create temporary file <%s> -- errno = %d"
-msgstr ""
+msgstr "Impossible de créer le fichier temporaire <%s> -- erreur numéro = %d"
 
 #. GTC %s will be replaced with number of rows and columns
 #: ../raster/r.thin/io.c:176
@@ -10476,31 +10476,31 @@ msgstr ""
 #: ../raster/r.slope.aspect/main.c:152 ../raster/r.param.scale/interface.c:56
 #: ../raster/r.relief/main.c:110 ../imagery/i.topo.corr/main.c:48
 msgid "terrain"
-msgstr ""
+msgstr "terrain"
 
 #: ../raster/r.slope.aspect/main.c:153
 msgid "aspect"
-msgstr ""
+msgstr "orientation"
 
 #: ../raster/r.slope.aspect/main.c:154
 msgid "slope"
-msgstr ""
+msgstr "pente"
 
 #: ../raster/r.slope.aspect/main.c:155
 msgid "curvature"
-msgstr ""
+msgstr "courbure"
 
 #: ../raster/r.slope.aspect/main.c:156
 msgid "Generates raster maps of slope, aspect, curvatures and partial derivatives from an elevation raster map."
-msgstr ""
+msgstr "Génère des cartes raster de pente, orientation, courbure et dérivée partielle depuis une carte raster d'altitudes."
 
 #: ../raster/r.slope.aspect/main.c:158
 msgid "Aspect is calculated counterclockwise from east."
-msgstr ""
+msgstr "L'orientation est calculée en sens anti-horaire depuis l'est"
 
 #: ../raster/r.slope.aspect/main.c:165 ../vector/v.surf.rst/main.c:201
 msgid "Name for output slope raster map"
-msgstr ""
+msgstr "Nom de la carte raster de sortie de pente"
 
 #: ../raster/r.slope.aspect/main.c:166 ../raster/r.slope.aspect/main.c:172
 #: ../raster/r.slope.aspect/main.c:196 ../raster/r.slope.aspect/main.c:203
@@ -10531,7 +10531,7 @@ msgstr "Sorties"
 
 #: ../raster/r.slope.aspect/main.c:171 ../vector/v.surf.rst/main.c:207
 msgid "Name for output aspect raster map"
-msgstr ""
+msgstr "Nom de la carte raster de sortie d'orientation"
 
 #: ../raster/r.slope.aspect/main.c:180
 msgid "Format for reporting the slope"
@@ -10539,43 +10539,43 @@ msgstr "Format de sortie pour la pente"
 
 #: ../raster/r.slope.aspect/main.c:187
 msgid "Type of output aspect and slope maps"
-msgstr "Type de sortie pour les couches d'aspect et de pente"
+msgstr "Type de sortie pour les couches d'orientation et de pente"
 
 #: ../raster/r.slope.aspect/main.c:195 ../vector/v.surf.rst/main.c:213
 msgid "Name for output profile curvature raster map"
-msgstr ""
+msgstr "Nom pour la carte raster de sortie de courbure"
 
 #: ../raster/r.slope.aspect/main.c:202 ../vector/v.surf.rst/main.c:219
 msgid "Name for output tangential curvature raster map"
-msgstr ""
+msgstr "Nom pour la carte raster de sortie de la tangente à la courbure"
 
 #: ../raster/r.slope.aspect/main.c:209
 msgid "Name for output first order partial derivative dx (E-W slope) raster map"
-msgstr ""
+msgstr "Nom pour la carte raster de sortie de la dérivée partielle dx (pente E-O) de premier ordre"
 
 #: ../raster/r.slope.aspect/main.c:216
 msgid "Name for output first order partial derivative dy (N-S slope) raster map"
-msgstr ""
+msgstr "Nom pour la carte raster de sortie de la dérivée partielle dy (pente N-S) de premier ordre"
 
 #: ../raster/r.slope.aspect/main.c:223
 msgid "Name for output second order partial derivative dxx raster map"
-msgstr ""
+msgstr "Nom pour la carte raster de sortie de la dérivée partielle dxx de second ordre"
 
 #: ../raster/r.slope.aspect/main.c:230
 msgid "Name for output second order partial derivative dyy raster map"
-msgstr ""
+msgstr "Nom pour la carte raster de sortie de la dérivée partielle dyy de second ordre"
 
 #: ../raster/r.slope.aspect/main.c:237
 msgid "Name for output second order partial derivative dxy raster map"
-msgstr ""
+msgstr "Nom pour la carte raster de sortie de la dérivée partielle dxy de second ordre"
 
 #: ../raster/r.slope.aspect/main.c:243
 msgid "Multiplicative factor to convert elevation units to horizontal units"
-msgstr ""
+msgstr "Facteur multiplicatif pour convertir les unités d'altitude en unités horizontales"
 
 #: ../raster/r.slope.aspect/main.c:252
 msgid "Minimum slope value (in percent) for which aspect is computed"
-msgstr ""
+msgstr "Valeur de pente minimale (en pourcentage) pour laquelle une orientation est calculée"
 
 #: ../raster/r.slope.aspect/main.c:261
 msgid "Do not align the current region to the raster elevation map"
@@ -10609,62 +10609,62 @@ msgstr "r.slope.aspect ne converti pas les unités horizontales en mètres dans 
 #: ../raster/r.slope.aspect/main.c:968
 #, c-format
 msgid "Elevation products for mapset <%s> in <%s>"
-msgstr ""
+msgstr "Produits d'altitude pour le jeu de cartes <%s> dans <%s>"
 
 #: ../raster/r.slope.aspect/main.c:987
 #, c-format
 msgid "Min computed aspect %.4f, max computed aspect %.4f"
-msgstr ""
+msgstr "Orientation min calculée %.4f, orientation max calculée %.4f"
 
 #: ../raster/r.slope.aspect/main.c:1051
 #, c-format
 msgid "Aspect raster map <%s> complete"
-msgstr ""
+msgstr "Carte raster d'orientation <%s> terminée"
 
 #: ../raster/r.slope.aspect/main.c:1108
 #, c-format
 msgid "Min computed slope %.4f, max computed slope %.4f"
-msgstr ""
+msgstr "Pente minimale calculée %.4f, pente maximale calculée %.4f"
 
 #: ../raster/r.slope.aspect/main.c:1161
 #, c-format
 msgid "Slope raster map <%s> complete"
-msgstr ""
+msgstr "Carte raster de pente <%s> terminée"
 
 #: ../raster/r.slope.aspect/main.c:1233
 #, c-format
 msgid "Profile curve raster map <%s> complete"
-msgstr ""
+msgstr "Carte raster de courbure <%s> terminée"
 
 #: ../raster/r.slope.aspect/main.c:1260
 #, c-format
 msgid "Tangential curve raster map <%s> complete"
-msgstr ""
+msgstr "Carte raster de tangente à la courbure <%s> terminée"
 
 #: ../raster/r.slope.aspect/main.c:1285
 #, c-format
 msgid "E-W slope raster map <%s> complete"
-msgstr ""
+msgstr "Carte raster de pente E-O <%s> terminée"
 
 #: ../raster/r.slope.aspect/main.c:1310
 #, c-format
 msgid "N-S slope raster map <%s> complete"
-msgstr ""
+msgstr "Carte raster de pente N-S <%s> terminée"
 
 #: ../raster/r.slope.aspect/main.c:1335
 #, c-format
 msgid "Dxx raster map <%s> complete"
-msgstr "Carte raster dxx à <%s> complète"
+msgstr "Carte raster dxx  <%s> terminée"
 
 #: ../raster/r.slope.aspect/main.c:1360
 #, c-format
 msgid "Dyy raster map <%s> complete"
-msgstr "Carte raster dyy à <%s> complète"
+msgstr "Carte raster dyy <%s> terminée"
 
 #: ../raster/r.slope.aspect/main.c:1385
 #, c-format
 msgid "Dxy raster map <%s> complete"
-msgstr "Carte raster dxy à <%s> complète"
+msgstr "Carte raster dxy <%s> terminée"
 
 #: ../raster/r.in.ascii/main.c:74
 msgid "Converts a GRASS ASCII raster file to binary raster map."
@@ -10836,11 +10836,11 @@ msgstr "Si l'accumulation est plus grande que d8cut, SFD est utilisé à la plac
 
 #: ../raster/r.stream.extract/main.c:121
 msgid "Montgomery exponent for slope, disabled with 0"
-msgstr ""
+msgstr "Exposant de Montgomery pour la pente, 0 pour désactiver"
 
 #: ../raster/r.stream.extract/main.c:123
 msgid "Montgomery: accumulation is multiplied with pow(slope,mexp) and then compared with threshold"
-msgstr ""
+msgstr "Montgomery : l'accumulation est multipliée par pow(pente,mexp) et ensuite comparée au seuil"
 
 #: ../raster/r.stream.extract/main.c:131
 msgid "Delete stream segments shorter than stream_length cells"
@@ -10881,12 +10881,12 @@ msgstr "d8cut doit être positif ou zéro mais est %f"
 #: ../raster/r.stream.extract/main.c:208
 #, c-format
 msgid "Montgomery exponent must be positive or zero but is %f"
-msgstr ""
+msgstr "L'exposant de Montgomery doit être positif ou zéro mais est %f"
 
 #: ../raster/r.stream.extract/main.c:211
 #, c-format
 msgid "Montgomery exponent is %f, recommended range is 0.0 - 3.0"
-msgstr ""
+msgstr "L'exposant de Montgomery est %f, la plage recommandée est 0.0 - 3.0"
 
 #: ../raster/r.stream.extract/main.c:221
 #, c-format
@@ -10961,7 +10961,7 @@ msgstr "Impossible d'écrire les cartes raster en sortie"
 
 #: ../raster/r.stream.extract/do_astar.c:40
 msgid "A* Search..."
-msgstr ""
+msgstr "Recherche A* ..."
 
 #: ../raster/r.stream.extract/do_astar.c:62
 #, c-format
@@ -11015,7 +11015,7 @@ msgstr ""
 
 #: ../raster/r.stream.extract/init_search.c:24
 msgid "Initializing A* search..."
-msgstr ""
+msgstr "Initialisation de la recherche A*"
 
 #: ../raster/r.stream.extract/dseg.c:19
 msgid "dseg_open(): unable to create segment file"
@@ -11039,7 +11039,7 @@ msgstr ""
 #: ../raster/r.stream.extract/streams.c:128
 #, c-format
 msgid "BUG: stream node %d has only 1 tributary: %d"
-msgstr ""
+msgstr "BUG : le noeud de chenal %d a seulement 1 tributaire : %d"
 
 #: ../raster/r.stream.extract/streams.c:160
 msgid "Calculating flow accumulation..."
@@ -11081,7 +11081,7 @@ msgstr ""
 
 #: ../raster/r.stream.extract/close.c:144
 msgid "Stream id not set while tracing"
-msgstr ""
+msgstr "Id de chenal non défini lors du traçage"
 
 #: ../raster/r.stream.extract/close.c:163
 msgid "Writing attribute data..."
@@ -11111,15 +11111,15 @@ msgstr "Impossible d'écrire la carte vecteur <%s>"
 #, c-format
 msgid "Deleting stream segments shorter than %d cell..."
 msgid_plural "Deleting stream segments shorter than %d cells..."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Suppression des segments de chenaux plus petits que %d cellule ..."
+msgstr[1] "Suppression des segments de chenaux plus petits que %d cellules ..."
 
 #: ../raster/r.stream.extract/del_streams.c:193
 #, c-format
 msgid "%d stream segment deleted"
 msgid_plural "%d stream segments deleted"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d segment de chenal supprimé"
+msgstr[1] "%d segments de chenaux supprimés"
 
 #: ../raster/r.stream.extract/seg.c:45
 #, c-format
@@ -11320,7 +11320,7 @@ msgstr ""
 
 #: ../raster/r.in.gridatb/file_io.c:35
 msgid "Setting window header failed"
-msgstr ""
+msgstr "La définition de l'en-tête de fenêtre a échoué"
 
 #: ../raster/r.in.gridatb/file_io.c:38
 msgid "Rows changed"
@@ -11336,7 +11336,7 @@ msgstr "Importer un fichier de carte GRIDATB.FOR (TOPMODEL) vers une carte raste
 
 #: ../raster/r.in.gridatb/main.c:51
 msgid "GRIDATB i/o map file"
-msgstr "Fichirr de carte GRIDATB"
+msgstr "Fichier de carte GRIDATB"
 
 #: ../raster/r.in.gridatb/main.c:68
 #, c-format
@@ -11666,7 +11666,7 @@ msgstr "%s : ÉTAPE 2 ..."
 #: ../raster/r.cross/main.c:178
 #, c-format
 msgid "%d categories"
-msgstr ""
+msgstr "%d catégories"
 
 #: ../raster/r.cross/cross.c:65
 #, c-format
@@ -11718,7 +11718,7 @@ msgstr "La méthode %s n'est pas compatible avec la pondération, utilisation de
 
 #: ../raster/r.in.lidar/point_binning.c:205 ../raster/r.in.xyz/main.c:483
 msgid "Unable to calculate percentile without the pth option specified!"
-msgstr ""
+msgstr "Impossible de calculer un percentile sans avoir défini l'option pème !"
 
 #: ../raster/r.in.lidar/point_binning.c:217 ../raster/r.in.xyz/main.c:495
 msgid "Unable to calculate trimmed mean without the trim option specified!"
@@ -11799,7 +11799,7 @@ msgstr ""
 
 #: ../raster/r.in.lidar/main.c:169 ../raster/r.in.xyz/main.c:209
 msgid "Skewness of point values in cell"
-msgstr ""
+msgstr "Asymétrie des valeurs de cellule des points"
 
 #: ../raster/r.in.lidar/main.c:170 ../raster/r.in.xyz/main.c:210
 msgid "Trimmed mean of point values in cell"
@@ -12317,19 +12317,19 @@ msgstr "<%s=%s> inconnu %s"
 
 #: ../raster/r.statistics/o_var.c:95 ../raster/r.statistics/o_sdev.c:94
 msgid "o_var: No data in array"
-msgstr ""
+msgstr "o_var : pas de données dans le tableau"
 
 #: ../raster/r.statistics/o_kurt.c:91
 msgid "o_kurto: No data in array"
-msgstr ""
+msgstr "o_kurto : pas de données dans le tableau"
 
 #: ../raster/r.statistics/o_adev.c:93
 msgid "o_adev: No data in array"
-msgstr ""
+msgstr "o_adev : pas de données dans le tableau"
 
 #: ../raster/r.statistics/o_skew.c:91
 msgid "o_skew: No data in array"
-msgstr ""
+msgstr "o_skew : pas de données dans le tableau"
 
 #: ../raster/r.sunhours/main.c:76
 msgid "Calculates solar elevation, solar azimuth, and sun hours."
@@ -13144,7 +13144,7 @@ msgstr "vrange invalide"
 #: ../raster/r.in.xyz/main.c:536
 #, c-format
 msgid "Unable to process the whole map at once. Please set the %s option to some value lower than 100."
-msgstr ""
+msgstr "Impossible de traiter la carte entière en une seule fois. Merci de définir l'option %s à une valeur inférieure à 100."
 
 #: ../raster/r.in.xyz/main.c:589
 msgid "If input is not from a file it is only possible to perform a single pass."
@@ -13536,7 +13536,7 @@ msgstr "Ouverture de %s en écriture ..."
 
 #: ../raster/r.out.vrml/put_grid.c:38
 msgid "Writing vertices..."
-msgstr ""
+msgstr "Écriture des sommets ..."
 
 #: ../raster/r.out.vrml/put_grid.c:83
 msgid "Writing color file..."
@@ -13638,7 +13638,7 @@ msgstr "La valeur en sortie est l'erreur d'interpolation"
 #: ../raster/r.surf.idw/main.c:130
 #, c-format
 msgid "Illegal value for '%s' (%s)"
-msgstr "Valeur illégale pour '%s' (%s)"
+msgstr "Valeur non autorisée pour '%s' (%s)"
 
 #: ../raster/r.surf.idw/main.c:260
 #, c-format
@@ -13808,23 +13808,23 @@ msgstr "Soit tous soit aucun de %s=, %s=, %s= et %s= doivent être fournis"
 #: ../raster3d/r3.in.bin/main.c:424
 #, c-format
 msgid "Illegal north coordinate <%s>"
-msgstr "Coordonnée nord <%s> illégale"
+msgstr "Coordonnée nord <%s> non autorisée"
 
 #: ../raster/r.in.bin/main.c:523 ../raster3d/r3.in.bin/main.c:426
 #, c-format
 msgid "Illegal south coordinate <%s>"
-msgstr "Coordonnée sud <%s> illégale"
+msgstr "Coordonnée sud <%s> non autorisée"
 
 #: ../raster/r.in.bin/main.c:525 ../display/d.grid/main.c:259
 #: ../raster3d/r3.in.bin/main.c:428
 #, c-format
 msgid "Illegal east coordinate <%s>"
-msgstr "Coordonnées est <%s> illégale"
+msgstr "Coordonnées est <%s> non autorisée"
 
 #: ../raster/r.in.bin/main.c:527 ../raster3d/r3.in.bin/main.c:430
 #, c-format
 msgid "Illegal west coordinate <%s>"
-msgstr "Coordonnée ouest <%s> illégale"
+msgstr "Coordonnée ouest <%s> non autorisée"
 
 #: ../raster/r.in.bin/main.c:533 ../raster3d/r3.in.bin/main.c:438
 #, c-format
@@ -14655,7 +14655,7 @@ msgstr "Lister les formats supportés et sortir"
 
 #: ../raster/r.external.out/main.c:277
 msgid "Cease using GDAL and revert to native output"
-msgstr ""
+msgstr "Ne plus utiliser GDAL et revenir à la sortie native"
 
 #: ../raster/r.external.out/main.c:282 ../vector/v.external.out/args.c:74
 msgid "Print current status"
@@ -15508,12 +15508,12 @@ msgstr ""
 
 #: ../raster/r.proj/readcell.c:67
 msgid "Allocating memory and reading input raster map..."
-msgstr ""
+msgstr "Allocation de la mémoire et lecture de la carte raster en entrée"
 
 #: ../raster/r.proj/readcell.c:92 ../imagery/i.rectify/readcell.c:89
 #: ../imagery/i.ortho.photo/i.ortho.rectify/readcell.c:102
 msgid "Error writing segment file"
-msgstr ""
+msgstr "Erreur à l'écriture du fichier segment"
 
 #: ../raster/r.proj/readcell.c:125 ../imagery/i.rectify/readcell.c:116
 #: ../imagery/i.ortho.photo/i.ortho.rectify/readcell.c:132
@@ -15528,7 +15528,7 @@ msgstr ""
 #: ../raster/r.proj/readcell.c:141 ../imagery/i.rectify/readcell.c:128
 #: ../imagery/i.ortho.photo/i.ortho.rectify/readcell.c:144
 msgid "Error reading segment file"
-msgstr ""
+msgstr "Erreur de lecture du fichier segment"
 
 #: ../raster/r.proj/main.c:149
 msgid "Re-projects a raster map from given location to the current location."
@@ -15536,57 +15536,57 @@ msgstr "Reprojeter une carte raster depuis un secteur donné vers le secteur cou
 
 #: ../raster/r.proj/main.c:153
 msgid "Location containing input raster map"
-msgstr ""
+msgstr "Secteur contenant les cartes raster d'entrée"
 
 #: ../raster/r.proj/main.c:154 ../raster/r.proj/main.c:159
 #: ../raster/r.proj/main.c:164 ../vector/v.proj/main.c:79
 #: ../vector/v.proj/main.c:84 ../vector/v.proj/main.c:90
 #: ../vector/v.net.flow/main.c:108 ../vector/v.net.flow/main.c:114
 msgid "Source"
-msgstr ""
+msgstr "Source"
 
 #: ../raster/r.proj/main.c:157
 msgid "Mapset containing input raster map"
-msgstr ""
+msgstr "Jeu de cartes contenant les cartes raster d'entrée"
 
 #: ../raster/r.proj/main.c:158 ../vector/v.proj/main.c:83
 msgid "Default: name of current mapset"
-msgstr ""
+msgstr "Par défaut : nom du jeu de carte courant"
 
 #: ../raster/r.proj/main.c:162
 msgid "Name of input raster map to re-project"
-msgstr ""
+msgstr "Nom de la carte raster a reprojeter"
 
 #: ../raster/r.proj/main.c:167 ../vector/v.proj/main.c:93
 msgid "Path to GRASS database of input location"
-msgstr "Chemin vers la base de données GRASS du Secteur source"
+msgstr "Chemin vers la base de données GRASS du Secteur en entrée"
 
 #: ../raster/r.proj/main.c:171
 msgid "Name for output raster map (default: same as 'input')"
-msgstr ""
+msgstr "Nom pour la carte raster en sortie (par défaut : le même que l'entrée)"
 
 #: ../raster/r.proj/main.c:172 ../raster/r.proj/main.c:183
 #: ../raster/r.proj/main.c:199 ../vector/v.proj/main.c:102
 #: ../vector/v.proj/main.c:107 ../vector/v.proj/main.c:119
 #: ../vector/v.proj/main.c:126
 msgid "Target"
-msgstr ""
+msgstr "Cible"
 
 #: ../raster/r.proj/main.c:198
 msgid "Resolution of output raster map"
-msgstr ""
+msgstr "Résolution de la carte raster en sortie"
 
 #: ../raster/r.proj/main.c:203
 msgid "List raster maps in input mapset and exit"
-msgstr ""
+msgstr "Lister les cartes raster dans le jeu de cartes d'entrée et sortir"
 
 #: ../raster/r.proj/main.c:213
 msgid "Print input map's bounds in the current projection and exit"
-msgstr ""
+msgstr "Afficher les limites de la carte en entrée dans la projection actuelle et sortir"
 
 #: ../raster/r.proj/main.c:219
 msgid "Print input map's bounds in the current projection and exit (shell style)"
-msgstr ""
+msgstr "Afficher les limites de la carte en entrée dans la projection actuelle et sortir (style shell)"
 
 #: ../raster/r.proj/main.c:245 ../display/d.mon/start.c:52
 #: ../imagery/i.gensig/parse.c:50 ../imagery/i.gensigset/parse.c:57
@@ -15594,32 +15594,32 @@ msgstr ""
 #: ../vector/v.external/main.c:137
 #, c-format
 msgid "option <%s>: <%s> exists. To overwrite, use the --overwrite flag"
-msgstr ""
+msgstr "option <%s> : <%s> existe. Pour l'écraser, utiliser l'argument --overwrite"
 
 #: ../raster/r.proj/main.c:252 ../vector/v.proj/main.c:165
 msgid "Input and output locations can not be the same"
-msgstr ""
+msgstr "Les Secteurs d'entrée et de sortie ne peuvent pas être les mêmes"
 
 #: ../raster/r.proj/main.c:254
 msgid "Input and output locations are the same"
-msgstr ""
+msgstr "Les Secteurs d'entrée et de sortie sont les mêmes"
 
 #: ../raster/r.proj/main.c:264
 msgid "Unable to get projection info of output raster map"
-msgstr ""
+msgstr "Impossible d'obtenir les infos de projection de la carte raster en sortie"
 
 #: ../raster/r.proj/main.c:267
 msgid "Unable to get projection units of output raster map"
-msgstr ""
+msgstr "Impossible d'obtenir les unités de projection de la carte raster en sortie"
 
 #: ../raster/r.proj/main.c:270
 msgid "Unable to get projection key values of output raster map"
-msgstr ""
+msgstr "Impossible d'obtenir les valeurs de clef de projection pour la carte raster en sortie"
 
 #: ../raster/r.proj/main.c:279
 #, c-format
 msgid "Mapset <%s> in input location <%s> - %s"
-msgstr ""
+msgstr "Jeu de cartes <%s> dans le Secteur en entrée <%s> - %s"
 
 #: ../raster/r.proj/main.c:281 ../raster/r.in.gdal/main.c:938
 #: ../imagery/i.rectify/target.c:32
@@ -15633,12 +15633,12 @@ msgstr "permission refusée"
 #: ../imagery/i.ortho.photo/i.ortho.rectify/target.c:32
 #: ../vector/v.rectify/target.c:41
 msgid "not found"
-msgstr ""
+msgstr "non trouvé"
 
 #: ../raster/r.proj/main.c:288 ../vector/v.proj/main.c:189
 #, c-format
 msgid "Checking location <%s> mapset <%s>"
-msgstr ""
+msgstr "Vérification du Secteur <%s> jeu de cartes <%s>"
 
 #: ../raster/r.proj/main.c:300 ../vector/v.proj/main.c:206
 #: ../vector/v.select/main.c:89 ../vector/v.in.ogr/main.c:444
@@ -15649,37 +15649,37 @@ msgstr ""
 #: ../scripts/d.frame/d.frame.py:288
 #, c-format, python-format
 msgid "Required parameter <%s> not set"
-msgstr ""
+msgstr "Le paramètre <%s> est requis mais non défini"
 
 #: ../raster/r.proj/main.c:303
 #, c-format
 msgid "Raster map <%s> in location <%s> in mapset <%s> not found"
-msgstr ""
+msgstr "Carte raster <%s> du Secteur <%s> dans le jeu de cartes <%s> non trouvée"
 
 #: ../raster/r.proj/main.c:311
 msgid "Unable to get projection info of input map"
-msgstr ""
+msgstr "Impossible d'obtenir les informations de projection de la carte en entrée"
 
 #: ../raster/r.proj/main.c:314
 msgid "Unable to get projection units of input map"
-msgstr ""
+msgstr "Impossible d'obtenir les unités de projection de la carte en entrée"
 
 #: ../raster/r.proj/main.c:317
 msgid "Unable to get projection key values of input map"
-msgstr ""
+msgstr "Impossible d'obtenir les valeurs de clef de projection de la carte en entrée"
 
 #: ../raster/r.proj/main.c:332
 msgid "Unable to work with unprojected data (xy location)"
-msgstr "Impossible de travailler sur des données non projetées (secteur xy)"
+msgstr "Impossible de travailler sur des données non projetées (Secteur xy)"
 
 #: ../raster/r.proj/main.c:351
 #, c-format
 msgid "Input map <%s@%s> in location <%s>:"
-msgstr ""
+msgstr "Carte en entrée <%s@%s> dans le Secteur <%s> :"
 
 #: ../raster/r.proj/main.c:443
 msgid "Input:"
-msgstr ""
+msgstr "Entrée : "
 
 #: ../raster/r.proj/main.c:444 ../raster/r.proj/main.c:455
 #, c-format
@@ -15714,20 +15714,20 @@ msgstr ""
 #: ../raster/r.proj/main.c:450 ../raster/r.proj/main.c:461
 #, c-format
 msgid "EW-res: %f"
-msgstr "EO-res : %f"
+msgstr "res-EO : %f"
 
 #: ../raster/r.proj/main.c:451 ../raster/r.proj/main.c:462
 #, c-format
 msgid "NS-res: %f"
-msgstr "NS-res : %f"
+msgstr "res-NS : %f"
 
 #: ../raster/r.proj/main.c:454
 msgid "Output:"
-msgstr ""
+msgstr "Sortie :"
 
 #: ../raster/r.proj/main.c:491
 msgid "Projecting..."
-msgstr ""
+msgstr "Reprojection ..."
 
 #: ../raster/r.proj/bordwalk.c:216
 msgid "Input raster map is outside current region"
@@ -21741,7 +21741,7 @@ msgstr "Erreur à la lecture des données binaires"
 #: ../raster3d/r3.in.bin/main.c:154
 #, c-format
 msgid "Loading %s data with %i  bytes ...  (%dx%dx%d)"
-msgstr "Chargement des données %d avec %i octets ... (%dx%dx%dx)"
+msgstr "Chargement des données %s avec %i octets ... (%dx%dx%dx)"
 
 #: ../raster3d/r3.in.bin/main.c:256
 msgid "Imports a binary raster file into a GRASS 3D raster map."
@@ -22057,7 +22057,7 @@ msgstr "Carte raster 3D pour laquelle modifier les valeurs nulles"
 
 #: ../raster3d/r3.null/main.c:85
 msgid "Illegal value for null"
-msgstr "Valeur illégale pour null"
+msgstr "Valeur non autorisée pour null"
 
 #: ../raster3d/r3.null/main.c:122
 msgid "modifyNull: error opening tmp file"
@@ -23739,7 +23739,7 @@ msgstr "La carte raster <%s@%s> est une carte de base. Supprimez d'abord la cart
 #: ../general/g.remove/check_reclass.c:54
 #, c-format
 msgid "Removing information about reclassed map from <%s@%s> failed"
-msgstr "La suppression d'information sur la carte reclassée depuis <%s> a échoué"
+msgstr "La suppression d'information sur la carte reclassée depuis <%s@%s> a échoué"
 
 #: ../general/g.remove/main.c:73
 msgid "Removes data base element files from the user's current mapset using the search pattern."

@@ -435,7 +435,7 @@ msgstr "Kifejezés"
 #: ../gui/wxpython/gui_core/menu.py:174 ../gui/wxpython/gmodeler/model.py:2835
 #: ../gui/wxpython/gmodeler/frame.py:1983
 msgid "&Run"
-msgstr ""
+msgstr "Futtatás"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:163
 msgid "Save expression to file"
@@ -453,7 +453,7 @@ msgstr "Kifejezés betöltése fájlból"
 #: ../gui/wxpython/modules/mcalc_builder.py:169
 #: ../gui/wxpython/gui_core/forms.py:615
 msgid "Copy the current command string to the clipboard"
-msgstr ""
+msgstr "Aktuális parancs szövegének másolása a vágólapra"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:173
 msgid "exponent"
@@ -653,7 +653,7 @@ msgstr "Réteg id"
 #: ../gui/wxpython/gui_core/forms.py:2032
 #: ../gui/wxpython/web_services/widgets.py:937
 msgid "Layer name"
-msgstr ""
+msgstr "Rétegnév"
 
 #: ../gui/wxpython/modules/import_export.py:80
 msgid "Name for output GRASS map (editable)"
@@ -1016,7 +1016,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/vclean.py:75
 msgid "break lines/boundaries"
-msgstr ""
+msgstr "törésvonalak/határok"
 
 #: ../gui/wxpython/modules/vclean.py:76
 msgid "remove duplicates"
@@ -1243,7 +1243,7 @@ msgstr "Vesszővel elválasztott értékek (*.csv)|*.csv"
 #: ../gui/wxpython/gmodeler/frame.py:2077
 #, python-format
 msgid "File <%s> already exists. Do you want to overwrite this file?"
-msgstr ""
+msgstr "<%s> fájl már létezik. Felül akarja írni ezt a fájlt?"
 
 #: ../gui/wxpython/wxplot/profile.py:375
 msgid "Overwrite file?"
@@ -1430,7 +1430,7 @@ msgstr ""
 #: ../gui/wxpython/wxplot/dialogs.py:965 ../gui/wxpython/core/workspace.py:1635
 #: ../gui/wxpython/core/gcmd.py:140 ../gui/wxpython/mapwin/buffered.py:2141
 msgid "Warning"
-msgstr ""
+msgstr "Figyelmeztetés"
 
 #: ../gui/wxpython/wxplot/dialogs.py:986 ../gui/wxpython/wxplot/base.py:521
 #: ../gui/wxpython/wxplot/base.py:598
@@ -1583,7 +1583,7 @@ msgstr ""
 
 #: ../gui/wxpython/wxplot/base.py:485
 msgid "Left Mouse Down at Point:"
-msgstr ""
+msgstr "Bal egérgomb a ponton"
 
 #: ../gui/wxpython/wxplot/base.py:534
 msgid "This feature is not yet functional"
@@ -1716,7 +1716,7 @@ msgstr ""
 
 #: ../gui/wxpython/iclass/toolbars.py:37 ../gui/wxpython/iclass/dialogs.py:280
 msgid "Class manager"
-msgstr ""
+msgstr "Osztály kezelő"
 
 #: ../gui/wxpython/iclass/toolbars.py:40 ../gui/wxpython/iclass/dialogs.py:44
 #: ../gui/wxpython/iscatt/toolbars.py:46
@@ -1886,7 +1886,7 @@ msgstr ""
 
 #: ../gui/wxpython/iclass/frame.py:1101
 msgid "results"
-msgstr ""
+msgstr "eredmények"
 
 #: ../gui/wxpython/iclass/frame.py:1107
 msgid "No imagery group selected."
@@ -1909,7 +1909,7 @@ msgstr ""
 
 #: ../gui/wxpython/iclass/frame.py:1138 ../gui/wxpython/gmodeler/frame.py:562
 msgid "File already exists"
-msgstr ""
+msgstr "A fájl már létezik"
 
 #: ../gui/wxpython/iclass/frame.py:1188
 msgid "No imagery group selected. Operation canceled."
@@ -1987,15 +1987,15 @@ msgstr ""
 
 #: ../gui/wxpython/iclass/dialogs.py:92
 msgid "Name of imagery group:"
-msgstr ""
+msgstr "Képcsoport neve:"
 
 #: ../gui/wxpython/iclass/dialogs.py:107
 msgid "Name of imagery subgroup:"
-msgstr ""
+msgstr "Kép alcsoport neve:"
 
 #: ../gui/wxpython/iclass/dialogs.py:182
 msgid "Please choose a subgroup."
-msgstr ""
+msgstr "Kérjük válasszon egy alcsoportot"
 
 #: ../gui/wxpython/iclass/dialogs.py:186
 #, python-format
@@ -2022,13 +2022,13 @@ msgstr ""
 
 #: ../gui/wxpython/iclass/dialogs.py:257 ../gui/wxpython/gmodeler/dialogs.py:89
 msgid "Name of raster map:"
-msgstr ""
+msgstr "Rasztertérkép neve:"
 
 #: ../gui/wxpython/iclass/dialogs.py:259
 #: ../gui/wxpython/gui_core/dialogs.py:239
 #: ../gui/wxpython/gmodeler/dialogs.py:91
 msgid "Name of vector map:"
-msgstr ""
+msgstr "Vektortérkép neve:"
 
 #: ../gui/wxpython/iclass/dialogs.py:295 ../gui/wxpython/iscatt/frame.py:140
 msgid "Classes"
@@ -2082,7 +2082,7 @@ msgstr ""
 #: ../gui/wxpython/iclass/dialogs.py:835
 #, python-format
 msgid "Vector <%s> exists"
-msgstr ""
+msgstr "<%s> vektor létezik"
 
 #: ../gui/wxpython/iclass/statistics.py:29
 msgid "Loading imagery lib failed"
@@ -2632,23 +2632,23 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:322
 msgid "Choose method for creating a new location"
-msgstr ""
+msgstr "Válasszon módszert az új hely létrehozásához"
 
 #: ../gui/wxpython/location_wizard/wizard.py:329
 msgid "Select EPSG code of spatial reference system"
-msgstr ""
+msgstr "Válasszon EPSG kódot a vetülethez"
 
 #: ../gui/wxpython/location_wizard/wizard.py:335
 msgid "Read projection and datum terms from a georeferenced data file"
-msgstr ""
+msgstr "Olvass be a vetületet és a dátumot egy georeferált adatfájlból"
 
 #: ../gui/wxpython/location_wizard/wizard.py:339
 msgid "Read projection and datum terms from a Well Known Text (WKT) .prj file"
-msgstr ""
+msgstr "Olvass be a vetületet és a dátumot egy Well Known Text (WKT) .prj fájlból"
 
 #: ../gui/wxpython/location_wizard/wizard.py:342
 msgid "Select coordinate system parameters from a list"
-msgstr ""
+msgstr "Válassza ki a koordináta-rendszer paramétereit egy listából"
 
 #: ../gui/wxpython/location_wizard/wizard.py:345
 msgid "Specify projection and datum terms using custom PROJ.4 parameters"
@@ -2656,15 +2656,15 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:348
 msgid "Create a generic Cartesian coordinate system (XY)"
-msgstr ""
+msgstr "Hozzon létre egy általános derékszögű koordináta-rendszert (XY)"
 
 #: ../gui/wxpython/location_wizard/wizard.py:352
 msgid "Simple methods:"
-msgstr ""
+msgstr "Egyszerű módszerek:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:364
 msgid "Advanced methods:"
-msgstr ""
+msgstr "Haladó módszerek:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:467
 msgid "Choose projection"
@@ -2701,7 +2701,7 @@ msgstr "Keresés a leírásban:"
 #: ../gui/wxpython/location_wizard/wizard.py:674
 #, python-format
 msgid "Unable to read list: %s"
-msgstr ""
+msgstr "Nem tudom beolvasni a listát: %s"
 
 #: ../gui/wxpython/location_wizard/wizard.py:779
 msgid "Choose projection parameters"
@@ -2722,29 +2722,29 @@ msgstr "Csak ellipszoid"
 #: ../gui/wxpython/location_wizard/wizard.py:862
 #, python-format
 msgid "You must enter a value for %s"
-msgstr ""
+msgstr "Meg kell adnia egy értéket ehhez %s"
 
 #: ../gui/wxpython/location_wizard/wizard.py:881
 #: ../gui/wxpython/location_wizard/wizard.py:902
 #, python-format
 msgid " Enter parameters for %s projection "
-msgstr ""
+msgstr "Adja meg a paramétereket a %s vetülethez"
 
 #: ../gui/wxpython/location_wizard/wizard.py:932
 #: ../gui/wxpython/gui_core/gselect.py:2100
 #: ../gui/wxpython/gmodeler/dialogs.py:919
 msgid "No"
-msgstr ""
+msgstr "Nem"
 
 #: ../gui/wxpython/location_wizard/wizard.py:932
 #: ../gui/wxpython/gui_core/gselect.py:2102
 #: ../gui/wxpython/gmodeler/dialogs.py:921
 msgid "Yes"
-msgstr ""
+msgstr "Igen"
 
 #: ../gui/wxpython/location_wizard/wizard.py:987
 msgid "Specify geodetic datum"
-msgstr ""
+msgstr "Adja meg a geodéziai dátumot"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1010
 msgid "Ellipsoid"
@@ -2756,7 +2756,7 @@ msgstr "Dátum kód:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1162
 msgid "Specify ellipsoid"
-msgstr ""
+msgstr "Adja meg az ellipszoidot"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1179
 msgid "Earth based"
@@ -2773,7 +2773,7 @@ msgstr "Ellipszoid kód:"
 #: ../gui/wxpython/location_wizard/wizard.py:1338
 #: ../gui/wxpython/location_wizard/wizard.py:1398
 msgid "Select georeferenced file"
-msgstr ""
+msgstr "Válaszon georeferált fájlt"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1343
 msgid "Georeferenced file:"
@@ -2782,7 +2782,7 @@ msgstr "Georeferált fájl:"
 #: ../gui/wxpython/location_wizard/wizard.py:1414
 #: ../gui/wxpython/location_wizard/wizard.py:1472
 msgid "Select Well Known Text (WKT) .prj file"
-msgstr ""
+msgstr "Válasszon Well Known Text (WKT) .prj fájlt"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1419
 msgid "WKT .prj file:"
@@ -2794,7 +2794,7 @@ msgstr "Válasszon EPSG kódot"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1499
 msgid "Path to the EPSG-codes file:"
-msgstr ""
+msgstr "Elérési út az EPSG kódok fájlhoz:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1502
 #: ../gui/wxpython/gui_core/preferences.py:1728
@@ -2819,11 +2819,11 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1714
 msgid "Choose IAU Code"
-msgstr ""
+msgstr "Válasszon IAU kódot"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1723
 msgid "Path to the IAU-codes file:"
-msgstr ""
+msgstr "Elérési út az IAU kódok fájlhoz:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1726
 msgid "IAU code:"
@@ -2831,12 +2831,12 @@ msgstr "IAU kód:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1908
 msgid "Choose IAU codes file"
-msgstr ""
+msgstr "Válasszon IAU kódok fájlt"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1943
 #, python-brace-format
 msgid "Unable to read IAU codes: {0}"
-msgstr ""
+msgstr "Nem tudom beolvasni az IAU kódokat: {0}"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1963
 msgid "Choose method of specifying georeferencing parameters"
@@ -2844,7 +2844,7 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1972
 msgid "Enter PROJ.4 parameters string:"
-msgstr ""
+msgstr "Adja meg a PROJ.! paraméter szövegláncot:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:2028
 #: ../gui/wxpython/location_wizard/wizard.py:2032
@@ -2905,10 +2905,13 @@ msgid ""
 "\n"
 "Details: %(err)s"
 msgstr ""
+"Nem tudom létrehozni az új helyet. <%(loc)s> nem hoztam létre.\n"
+"\n"
+"Részletek: %(err)s"
 
 #: ../gui/wxpython/location_wizard/wizard.py:2425
 msgid "Location wizard canceled. Location not created."
-msgstr ""
+msgstr "a hely varázsló futása megszakadt. A helyet nem hoztam létre."
 
 #: ../gui/wxpython/location_wizard/wizard.py:2558
 msgid "Unable to create new location"
@@ -2921,7 +2924,7 @@ msgstr "Nem tudok új GRASS adatbázist létrehozni"
 #: ../gui/wxpython/location_wizard/wizard.py:2585
 #, python-format
 msgid "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You will need to change the default GIS data directory in the GRASS startup screen."
-msgstr ""
+msgstr "<%(loc)s> helyet a <%(dir)s> GIS adat könyvtárban hoztam létre. Meg kell változtatnia az alapértelmezett GIS adat könyvtárat a GRASS induló képernyőjén."
 
 #: ../gui/wxpython/location_wizard/wizard.py:2590
 msgid "New GIS data directory"
@@ -2933,7 +2936,7 @@ msgstr "EPSG kód hiányzik."
 
 #: ../gui/wxpython/location_wizard/wizard.py:2631
 msgid "IAU code missing."
-msgstr ""
+msgstr "IAU kód hiányzik."
 
 #: ../gui/wxpython/location_wizard/wizard.py:2642
 #: ../gui/wxpython/location_wizard/wizard.py:2651
@@ -3531,7 +3534,7 @@ msgstr ""
 #: ../gui/wxpython/core/render.py:1010 ../gui/wxpython/core/render.py:1013
 #: ../gui/wxpython/core/render.py:1016 ../gui/wxpython/core/gcmd.py:435
 msgid "Details:"
-msgstr ""
+msgstr "Részletek:"
 
 #: ../gui/wxpython/core/render.py:1012
 #, python-format
@@ -3603,25 +3606,25 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:683
 #: ../gui/wxpython/lmgr/frame.py:2570
 msgid "Message"
-msgstr ""
+msgstr "Üzenet"
 
 #: ../gui/wxpython/core/gcmd.py:432
 msgid "Execution failed:"
-msgstr ""
+msgstr "Végrehajtási hiba:"
 
 #: ../gui/wxpython/core/gcmd.py:437 ../gui/wxpython/core/gcmd.py:444
 msgid "Error: "
-msgstr ""
+msgstr "Hiba:"
 
 #: ../gui/wxpython/core/gcmd.py:521
 #, python-format
 msgid "Unable to exectute command: '%s'"
-msgstr ""
+msgstr "Nem tudom végrehajtani a parancsot: '%s'"
 
 #: ../gui/wxpython/core/gcmd.py:747 ../gui/wxpython/gui_core/forms.py:2740
 #, python-format
 msgid "Error in %s"
-msgstr ""
+msgstr "Hiba ebben %s"
 
 #: ../gui/wxpython/core/debug.py:48
 #, python-brace-format
@@ -3803,23 +3806,23 @@ msgstr ""
 #: ../gui/wxpython/core/gconsole.py:526
 #, python-format
 msgid "Module <%s> not found."
-msgstr ""
+msgstr "<%s> modult nem találom."
 
 #: ../gui/wxpython/core/gconsole.py:656 ../gui/wxpython/gmodeler/frame.py:299
 #, python-format
 msgid "%d sec"
-msgstr ""
+msgstr "%d mp"
 
 #: ../gui/wxpython/core/gconsole.py:659 ../gui/wxpython/gmodeler/frame.py:302
 #, python-format
 msgid "%(min)d min %(sec)d sec"
-msgstr ""
+msgstr "%(min)d perc %(sec)d mp"
 
 #: ../gui/wxpython/core/gconsole.py:663 ../gui/wxpython/gui_core/ghelp.py:231
 #: ../gui/wxpython/gmodeler/model.py:1123
 #: ../gui/wxpython/gmodeler/model.py:1229 ../gui/wxpython/gmodeler/frame.py:306
 msgid "unknown"
-msgstr ""
+msgstr "ismeretlen"
 
 #: ../gui/wxpython/core/gconsole.py:667
 msgid "Please note that the data are left in inconsistent state and may be corrupted"
@@ -3827,11 +3830,11 @@ msgstr ""
 
 #: ../gui/wxpython/core/gconsole.py:669
 msgid "Command aborted"
-msgstr ""
+msgstr "Parancs megszakítva"
 
 #: ../gui/wxpython/core/gconsole.py:671 ../gui/wxpython/gmodeler/frame.py:312
 msgid "Command finished"
-msgstr ""
+msgstr "Parancs befejezve"
 
 #: ../gui/wxpython/core/gconsole.py:747 ../gui/wxpython/gui_core/goutput.py:496
 #, python-format
@@ -4375,7 +4378,7 @@ msgstr "Munkaterület mentés fájlba"
 #: ../gui/wxpython/gui_core/forms.py:561
 #: ../gui/wxpython/mapswipe/dialogs.py:193
 msgid "Close"
-msgstr ""
+msgstr "Lezárás"
 
 #: ../gui/wxpython/menustrings.py:14
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:15
@@ -5232,7 +5235,7 @@ msgstr "Térképek kezelése"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1169
 #: ../gui/wxpython/gui_core/forms.py:611
 msgid "Copy"
-msgstr ""
+msgstr "Másolás"
 
 #: ../gui/wxpython/menustrings.py:171 ../gui/wxpython/menustrings.py:1189
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:169
@@ -10248,7 +10251,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1034
 #: ../gui/wxpython/gui_core/ghelp.py:53
 msgid "About GRASS GIS"
-msgstr ""
+msgstr "GRASS GIS névjegy"
 
 #: ../gui/wxpython/menustrings.py:1053
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1037
@@ -10274,7 +10277,7 @@ msgstr "Modell betöltés fájlból"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1978
 #: ../gui/wxpython/gmodeler/frame.py:518
 msgid "Save model"
-msgstr ""
+msgstr "Modell mentés"
 
 #: ../gui/wxpython/menustrings.py:2012
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1980
@@ -10969,7 +10972,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/toolbars.py:108
 msgid "Select area/boundary/centroid tool"
-msgstr ""
+msgstr "Válassza a terület/határ/centrális eszközt"
 
 #: ../gui/wxpython/vdigit/toolbars.py:134
 msgid "Digitize new point"
@@ -11077,7 +11080,7 @@ msgstr "Vektor digitalizálás kézikönyv megjelenítése"
 
 #: ../gui/wxpython/vdigit/toolbars.py:181
 msgid "Additional tools (copy, flip, connect, etc.)"
-msgstr ""
+msgstr "További eszközök (másol, tükröz, összekapcsol, stb.)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:186
 msgid "Undo previous changes"
@@ -11097,7 +11100,7 @@ msgstr "Kiválasztott vonalak/határok megtörése a metszéseknél"
 
 #: ../gui/wxpython/vdigit/toolbars.py:561
 msgid "Connect selected lines/boundaries"
-msgstr ""
+msgstr "Szelektált vonalak/határok összekapcsolása"
 
 #: ../gui/wxpython/vdigit/toolbars.py:563
 msgid "Copy categories"
@@ -11105,7 +11108,7 @@ msgstr "Kategóriák másolása"
 
 #: ../gui/wxpython/vdigit/toolbars.py:565
 msgid "Copy features from (background) vector map"
-msgstr ""
+msgstr "Elemek másolása a (háttér) vektor térképből"
 
 #: ../gui/wxpython/vdigit/toolbars.py:567
 msgid "Copy attributes"
@@ -11117,7 +11120,7 @@ msgstr "Elem típus konverzió"
 
 #: ../gui/wxpython/vdigit/toolbars.py:571
 msgid "Flip selected lines/boundaries"
-msgstr ""
+msgstr "Szelektált vonalak/határok tükrözése"
 
 #: ../gui/wxpython/vdigit/toolbars.py:573
 msgid "Merge selected lines/boundaries"
@@ -11133,7 +11136,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/toolbars.py:579
 msgid "Query features"
-msgstr ""
+msgstr "Elemek lekérdezése"
 
 #: ../gui/wxpython/vdigit/toolbars.py:581
 msgid "Z bulk-labeling of 3D lines"
@@ -11141,11 +11144,11 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/toolbars.py:603 ../gui/wxpython/vdigit/wxdigit.py:63
 msgid "No vector map open for editing."
-msgstr ""
+msgstr "Nincs szerkesztésre megnyitott vektortérkép."
 
 #: ../gui/wxpython/vdigit/toolbars.py:608
 msgid "Select background vector map"
-msgstr ""
+msgstr "Válaszon háttér vektortérképet"
 
 #: ../gui/wxpython/vdigit/toolbars.py:768
 msgid "Vector map is not 3D. Operation canceled."
@@ -11246,7 +11249,7 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:1854
 #: ../gui/wxpython/gmodeler/preferences.py:54
 msgid "General"
-msgstr ""
+msgstr "Általános"
 
 #: ../gui/wxpython/vdigit/preferences.py:161 ../gui/wxpython/nviz/tools.py:1574
 #: ../gui/wxpython/nviz/tools.py:1788 ../gui/wxpython/gmodeler/frame.py:1567
@@ -11349,12 +11352,12 @@ msgstr ""
 #: ../gui/wxpython/vdigit/preferences.py:475
 #: ../gui/wxpython/vdigit/preferences.py:529
 msgid "shorter than"
-msgstr ""
+msgstr "rövidebb mint"
 
 #: ../gui/wxpython/vdigit/preferences.py:475
 #: ../gui/wxpython/vdigit/preferences.py:529
 msgid "longer than"
-msgstr ""
+msgstr "hosszabb mint"
 
 #: ../gui/wxpython/vdigit/preferences.py:514
 msgid "dangle"
@@ -11371,7 +11374,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/preferences.py:593
 msgid "Digitize new feature"
-msgstr ""
+msgstr "Új elem digitalizálás"
 
 #: ../gui/wxpython/vdigit/preferences.py:598
 msgid "Add new record into table"
@@ -11402,7 +11405,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/preferences.py:627
 msgid "Category number"
-msgstr ""
+msgstr "Kategória szám"
 
 #: ../gui/wxpython/vdigit/preferences.py:643
 msgid "Category mode"
@@ -11422,7 +11425,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/preferences.py:673
 msgid "Delete record from table"
-msgstr ""
+msgstr "Rekord törlés a táblából"
 
 #: ../gui/wxpython/vdigit/preferences.py:691
 msgid "Geometry attributes"
@@ -11992,7 +11995,7 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:1864
 #: ../gui/wxpython/web_services/widgets.py:317
 msgid "Background color:"
-msgstr ""
+msgstr "Háttér szín:"
 
 #: ../gui/wxpython/nviz/tools.py:510
 msgid "Press 'Record' button and start changing the view. It is recommended to use fly-through mode (Map Display toolbar) to achieve smooth motion."
@@ -12040,7 +12043,7 @@ msgstr "Válasszon könyvtárat a képekhez"
 
 #: ../gui/wxpython/nviz/tools.py:632 ../gui/wxpython/animation/dialogs.py:1187
 msgid "File prefix:"
-msgstr ""
+msgstr "Fájl előtag:"
 
 #: ../gui/wxpython/nviz/tools.py:638
 msgid "Generated files names will look like this: prefix_1.ppm, prefix_2.ppm, ..."
@@ -12767,15 +12770,15 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/forms.py:596
 msgid "Run the command (Ctrl+R)"
-msgstr ""
+msgstr "Parancs futtatás (Ctrl+R)"
 
 #: ../gui/wxpython/gui_core/forms.py:624
 msgid "Show manual page of the command (Ctrl+H)"
-msgstr ""
+msgstr "Parancs kézikönyv oldal megjelenítése (Ctrl+H)"
 
 #: ../gui/wxpython/gui_core/forms.py:663
 msgid "Add created map(s) into layer tree"
-msgstr ""
+msgstr "Létrehozott térkép hozzáadása a réteg fához"
 
 #: ../gui/wxpython/gui_core/forms.py:693
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
@@ -12815,7 +12818,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/forms.py:2696
 #: ../gui/wxpython/gui_core/toolbars.py:70
 msgid "Select font"
-msgstr ""
+msgstr "Betűkészlet"
 
 #: ../gui/wxpython/gui_core/forms.py:1430 ../gui/wxpython/lmgr/toolbars.py:158
 msgid "Graphical Modeler"
@@ -12870,7 +12873,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/forms.py:1910
 #: ../gui/wxpython/gui_core/gselect.py:1434
 msgid "Directory"
-msgstr ""
+msgstr "Könyvtár"
 
 #: ../gui/wxpython/gui_core/forms.py:2255 ../gui/wxpython/gmodeler/frame.py:171
 msgid "Command output"
@@ -12933,12 +12936,12 @@ msgstr ""
 #: ../gui/wxpython/gui_core/pyedit.py:379
 #: ../gui/wxpython/gmodeler/frame.py:2060
 msgid "Python script (*.py)|*.py"
-msgstr ""
+msgstr "Python szkript (*.py)|*.py"
 
 #: ../gui/wxpython/gui_core/pyedit.py:335
 #: ../gui/wxpython/gmodeler/frame.py:2080
 msgid "Save file"
-msgstr ""
+msgstr "Fájl mentés"
 
 #: ../gui/wxpython/gui_core/pyedit.py:377
 msgid "Open file"
@@ -13032,31 +13035,31 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/ghelp.py:77
 msgid "License"
-msgstr ""
+msgstr "Lincenc"
 
 #: ../gui/wxpython/gui_core/ghelp.py:78
 msgid "Citation"
-msgstr ""
+msgstr "Idézet"
 
 #: ../gui/wxpython/gui_core/ghelp.py:79
 msgid "Authors"
-msgstr ""
+msgstr "Szerzők"
 
 #: ../gui/wxpython/gui_core/ghelp.py:80
 msgid "Contributors"
-msgstr ""
+msgstr "Hozzájárulók"
 
 #: ../gui/wxpython/gui_core/ghelp.py:81
 msgid "Extra contributors"
-msgstr ""
+msgstr "Extra hozzájárulók"
 
 #: ../gui/wxpython/gui_core/ghelp.py:82
 msgid "Translators"
-msgstr ""
+msgstr "Fordítók"
 
 #: ../gui/wxpython/gui_core/ghelp.py:83
 msgid "Translation status"
-msgstr ""
+msgstr "Fordítás státusz"
 
 #: ../gui/wxpython/gui_core/ghelp.py:118 ../gui/wxpython/gui_core/ghelp.py:921
 #: ../gui/wxpython/lmgr/frame.py:87 ../gui/wxpython/lmgr/frame.py:1217
@@ -13065,11 +13068,11 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/ghelp.py:131 ../gui/wxpython/lmgr/frame.py:1241
 msgid "unknown version"
-msgstr ""
+msgstr "ismeretlen verzió"
 
 #: ../gui/wxpython/gui_core/ghelp.py:147
 msgid "Official GRASS site:"
-msgstr ""
+msgstr "Hivatalos GRASS oldal:"
 
 #: ../gui/wxpython/gui_core/ghelp.py:158
 msgid "Code Revision"
@@ -13081,14 +13084,14 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/ghelp.py:223 ../gui/wxpython/gui_core/ghelp.py:481
 msgid "Language"
-msgstr ""
+msgstr "Nyelv"
 
 #: ../gui/wxpython/gui_core/ghelp.py:252 ../gui/wxpython/gui_core/ghelp.py:277
 #: ../gui/wxpython/gui_core/ghelp.py:328 ../gui/wxpython/gui_core/ghelp.py:391
 #: ../gui/wxpython/gui_core/ghelp.py:465 ../gui/wxpython/gui_core/ghelp.py:630
 #, python-format
 msgid "%s file missing"
-msgstr ""
+msgstr "%s fájl hiányzik"
 
 #: ../gui/wxpython/gui_core/ghelp.py:300
 #, python-brace-format
@@ -13109,16 +13112,16 @@ msgstr ""
 #: ../gui/wxpython/gmodeler/frame.py:1778
 #: ../gui/wxpython/web_services/widgets.py:934
 msgid "Name"
-msgstr ""
+msgstr "Név"
 
 #: ../gui/wxpython/gui_core/ghelp.py:397 ../gui/wxpython/gui_core/ghelp.py:399
 #: ../gui/wxpython/gui_core/ghelp.py:477
 msgid "E-mail"
-msgstr ""
+msgstr "E-mail"
 
 #: ../gui/wxpython/gui_core/ghelp.py:397 ../gui/wxpython/gui_core/ghelp.py:399
 msgid "Country"
-msgstr ""
+msgstr "Ország"
 
 #: ../gui/wxpython/gui_core/ghelp.py:399
 msgid "OSGeo_ID"
@@ -13131,7 +13134,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/ghelp.py:534
 #, python-format
 msgid "   %d translated"
-msgstr ""
+msgstr "%d lefordítva"
 
 #: ../gui/wxpython/gui_core/ghelp.py:538 ../gui/wxpython/gui_core/ghelp.py:564
 #, python-format
@@ -13141,25 +13144,25 @@ msgstr ""
 #: ../gui/wxpython/gui_core/ghelp.py:542 ../gui/wxpython/gui_core/ghelp.py:573
 #, python-format
 msgid "   %d untranslated"
-msgstr ""
+msgstr "%d nincs lefordítva"
 
 #: ../gui/wxpython/gui_core/ghelp.py:555
 #, python-format
 msgid "%d translated"
-msgstr ""
+msgstr "%d lefordítva"
 
 #: ../gui/wxpython/gui_core/ghelp.py:627
 #, python-format
 msgid "File <%s> not found"
-msgstr ""
+msgstr "<%s> fájlt nem találom"
 
 #: ../gui/wxpython/gui_core/ghelp.py:800
 msgid "&Next"
-msgstr ""
+msgstr "Következő"
 
 #: ../gui/wxpython/gui_core/ghelp.py:803
 msgid "&Previous"
-msgstr ""
+msgstr "Előző"
 
 #: ../gui/wxpython/gui_core/vselect.py:48
 msgid "category"
@@ -13190,16 +13193,16 @@ msgstr "Nincs kiválasztott térkép réteg. A művelet megszakadt."
 #: ../gui/wxpython/gui_core/vselect.py:297
 #, python-format
 msgid "Failed to query vector map(s) <%s>."
-msgstr ""
+msgstr "Sikertelen vektortérkép(ek) lekérdezés <%s>. "
 
 #: ../gui/wxpython/gui_core/vselect.py:322
 msgid "No features selected"
-msgstr ""
+msgstr "Nincsenek kiválasztott elemek"
 
 #: ../gui/wxpython/gui_core/vselect.py:346
 #, python-format
 msgid "Vector map <%s> was created"
-msgstr ""
+msgstr "<%s> vektortérképet létrehoztam"
 
 #: ../gui/wxpython/gui_core/vselect.py:349
 #, python-format
@@ -13208,6 +13211,9 @@ msgid ""
 "\n"
 "Reason: %s"
 msgstr ""
+"Nem tudtam új vektortérképet létrehozni.\n"
+"\n"
+"Ok: %s"
 
 #: ../gui/wxpython/gui_core/toolbars.py:37
 msgid "Display map"
@@ -13267,7 +13273,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/toolbars.py:59
 msgid "Zoom to selected map layer(s)"
-msgstr ""
+msgstr "Nagyítás a szelektált térkép réteg(ek)re"
 
 #: ../gui/wxpython/gui_core/toolbars.py:61
 msgid "Zoom to computational region extent"
@@ -13275,7 +13281,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/toolbars.py:63
 msgid "Pan"
-msgstr ""
+msgstr "Eltolás"
 
 #: ../gui/wxpython/gui_core/toolbars.py:64
 msgid "Drag with mouse to pan"
@@ -13399,7 +13405,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/gselect.py:1604
 #: ../gui/wxpython/animation/dialogs.py:1196
 msgid "Directory:"
-msgstr ""
+msgstr "Könyvtár:"
 
 #: ../gui/wxpython/gui_core/gselect.py:1522
 #: ../gui/wxpython/gui_core/gselect.py:1605
@@ -13418,7 +13424,7 @@ msgstr ""
 #: ../gui/wxpython/vnet/dialogs.py:1643
 #: ../gui/wxpython/gmodeler/preferences.py:706
 msgid "Name:"
-msgstr ""
+msgstr "Név:"
 
 #: ../gui/wxpython/gui_core/gselect.py:1569
 msgid "Choose file"
@@ -13486,7 +13492,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/widgets.py:113
 msgid " (...)"
-msgstr ""
+msgstr " (...)"
 
 #: ../gui/wxpython/gui_core/widgets.py:854
 #, python-format
@@ -13666,7 +13672,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/preferences.py:806
 #: ../gui/wxpython/animation/dialogs.py:1061
 msgid "Set font"
-msgstr ""
+msgstr "Betűkészlet beállítás"
 
 #: ../gui/wxpython/gui_core/preferences.py:542
 msgid "Language settings"
@@ -13852,7 +13858,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/preferences.py:1661
 #: ../gui/wxpython/gui_core/dialogs.py:351
 msgid "Key column:"
-msgstr ""
+msgstr "Kulcs oszlop"
 
 #: ../gui/wxpython/gui_core/preferences.py:1695
 #: ../gui/wxpython/mapdisp/statusbar.py:824
@@ -14003,7 +14009,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/dialogs.py:471
 #, python-format
 msgid "Vector map <%s> already exists in the current mapset. Do you want to overwrite it?"
-msgstr ""
+msgstr "A <%s> térkép már létezik az aktuális térképcsoportban. Felül akarja írni?"
 
 #: ../gui/wxpython/gui_core/dialogs.py:561
 msgid "Load region:"
@@ -14019,7 +14025,7 @@ msgstr "A névnem kezdődhet '.'-tal és nem tartalmazhat szóközt, idézőjele
 
 #: ../gui/wxpython/gui_core/dialogs.py:635
 msgid "Create or edit imagery groups"
-msgstr ""
+msgstr "Képcsoport létrehozás vagy szerkesztés"
 
 #: ../gui/wxpython/gui_core/dialogs.py:669
 msgid "Apply changes to selected group and close dialog"
@@ -14136,7 +14142,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:1462
 msgid "Map type:"
-msgstr ""
+msgstr "Térkép típus:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1477
 msgid "Select toggle"
@@ -14144,11 +14150,11 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:1484
 msgid "Mapset:"
-msgstr ""
+msgstr "Térképcsoport:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1577
 msgid "Invert selection"
-msgstr ""
+msgstr "Kiválasztás megfordítása"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1720
 #, python-format
@@ -14157,7 +14163,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:1747
 msgid "Set Map Layer Opacity"
-msgstr ""
+msgstr "Térkép réteg átlátszóság"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1778
 #: ../gui/wxpython/psmap/dialogs.py:6389 ../gui/wxpython/psmap/dialogs.py:6416
@@ -14313,7 +14319,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/goutput.py:171
 msgid "&Log file"
-msgstr ""
+msgstr "Napló fájl"
 
 #: ../gui/wxpython/gui_core/goutput.py:173
 msgid "Toggle to save list of executed commands into a file; content saved when switching off."
@@ -15464,7 +15470,7 @@ msgstr ""
 #: ../gui/wxpython/mapswipe/toolbars.py:33
 #: ../gui/wxpython/mapswipe/dialogs.py:44
 msgid "Select raster maps"
-msgstr ""
+msgstr "Válasszon rasztertérképeket"
 
 #: ../gui/wxpython/mapswipe/toolbars.py:36
 #: ../gui/wxpython/mapdisp/toolbars.py:29
@@ -15528,15 +15534,15 @@ msgstr ""
 
 #: ../gui/wxpython/mapswipe/dialogs.py:130
 msgid "Name of top/left raster map:"
-msgstr ""
+msgstr "Bal-felső rasztertérkép neve:"
 
 #: ../gui/wxpython/mapswipe/dialogs.py:139
 msgid "Name of bottom/right raster map:"
-msgstr ""
+msgstr "Jobb-alsó rasztertérkép neve:"
 
 #: ../gui/wxpython/mapswipe/dialogs.py:185
 msgid "Switch to advanced mode"
-msgstr ""
+msgstr "Váltás haladó módra"
 
 #: ../gui/wxpython/mapswipe/dialogs.py:186
 msgid "Cancel"
@@ -15544,7 +15550,7 @@ msgstr "Mégsem"
 
 #: ../gui/wxpython/mapswipe/dialogs.py:192
 msgid "Switch to simple mode"
-msgstr ""
+msgstr "Váltás egyszerű módra"
 
 #: ../gui/wxpython/mapswipe/dialogs.py:217
 msgid "Name of the first map is missing."
@@ -15584,7 +15590,7 @@ msgstr "3D nézet"
 
 #: ../gui/wxpython/animation/data.py:66
 msgid "No animation name selected."
-msgstr ""
+msgstr "Nem választott animáció nevet."
 
 #: ../gui/wxpython/animation/data.py:132
 msgid "No workspace file selected."
@@ -15598,7 +15604,7 @@ msgstr "%s fájlt nem találom"
 #: ../gui/wxpython/animation/data.py:144
 #, python-format
 msgid "Animation %d"
-msgstr ""
+msgstr "Animáció %d"
 
 #: ../gui/wxpython/animation/nviztask.py:43 ../gui/wxpython/lmgr/frame.py:1391
 #, python-format
@@ -15618,7 +15624,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/nviztask.py:292
 msgid "No map series nor space-time dataset is added."
-msgstr ""
+msgstr "Sem térkép sorozatot sem tér-idő adatállományt nem adtak meg."
 
 #: ../gui/wxpython/animation/toolbars.py:30
 msgid "Change animation speed"
@@ -15655,7 +15661,7 @@ msgstr ""
 #: ../gui/wxpython/animation/toolbars.py:60
 #: ../gui/wxpython/animation/dialogs.py:907
 msgid "Export animation"
-msgstr ""
+msgstr "Animáció export"
 
 #: ../gui/wxpython/animation/toolbars.py:68
 msgid "Add space-time dataset or series of map layers"
@@ -15675,7 +15681,7 @@ msgstr "Animáció eszközssor"
 
 #: ../gui/wxpython/animation/frame.py:282
 msgid "Loading data"
-msgstr ""
+msgstr "Adatok betöltése"
 
 #: ../gui/wxpython/animation/frame.py:290
 #, python-brace-format
@@ -15695,7 +15701,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/provider.py:417
 msgid "Rendering map layers"
-msgstr ""
+msgstr "Térkép rétegek rajzolása"
 
 #: ../gui/wxpython/animation/provider.py:530
 msgid "Overlaying map layers"
@@ -15713,11 +15719,11 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:53
 msgid "Adjust speed of animation"
-msgstr ""
+msgstr "Animáció sebesség módosítása"
 
 #: ../gui/wxpython/animation/dialogs.py:100
 msgid "Simple mode"
-msgstr ""
+msgstr "Egyszerű mód"
 
 #: ../gui/wxpython/animation/dialogs.py:105
 msgid "Frame duration:"
@@ -15726,11 +15732,11 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:106
 #: ../gui/wxpython/animation/dialogs.py:147
 msgid "ms"
-msgstr ""
+msgstr "ms"
 
 #: ../gui/wxpython/animation/dialogs.py:139
 msgid "Temporal mode"
-msgstr ""
+msgstr "Idő mód"
 
 #: ../gui/wxpython/animation/dialogs.py:144
 msgid "Time unit:"
@@ -15774,7 +15780,7 @@ msgstr "Animáció szerkesztés"
 
 #: ../gui/wxpython/animation/dialogs.py:344
 msgid "Advanced"
-msgstr ""
+msgstr "Haladó"
 
 #: ../gui/wxpython/animation/dialogs.py:375
 msgid "top left"
@@ -15808,12 +15814,12 @@ msgstr ""
 msgid ""
 "For 3D animation, please select only one space-time dataset\n"
 "or one series of map layers."
-msgstr ""
+msgstr "A 3D animációhoz válasszon csak egy tér-idő datállományt vagy a térképi rétegek egy sorozatát."
 
 #: ../gui/wxpython/animation/dialogs.py:475
 #: ../gui/wxpython/lmgr/layertree.py:111
 msgid "Set options"
-msgstr ""
+msgstr "Beálítások"
 
 #: ../gui/wxpython/animation/dialogs.py:496
 msgid "3D view parameters"
@@ -15837,11 +15843,11 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:558
 msgid "Start region:"
-msgstr ""
+msgstr "Kezdő régió:"
 
 #: ../gui/wxpython/animation/dialogs.py:568
 msgid "End region:"
-msgstr ""
+msgstr "Záró régió:"
 
 #: ../gui/wxpython/animation/dialogs.py:574
 msgid "Zoom value:"
@@ -15861,15 +15867,15 @@ msgstr "K-Ny:"
 
 #: ../gui/wxpython/animation/dialogs.py:683
 msgid "Only one series or space-time dataset is accepted for 3D mode."
-msgstr ""
+msgstr "Csak egy sorozat vagy tér-idő adatállomány fogadható el a 3D módhoz."
 
 #: ../gui/wxpython/animation/dialogs.py:691
 msgid "No map series or space-time dataset added."
-msgstr ""
+msgstr "Nincs térkép sorozat vagy tér-idő adatállomány."
 
 #: ../gui/wxpython/animation/dialogs.py:719
 msgid "Region information is not complete"
-msgstr ""
+msgstr "A régió információ nem teljes"
 
 #: ../gui/wxpython/animation/dialogs.py:753
 msgid "Add, edit or remove animations"
@@ -15886,12 +15892,12 @@ msgstr "Szerkesztés"
 #: ../gui/wxpython/animation/dialogs.py:837
 #, python-format
 msgid "Maximum number of animations is %d."
-msgstr ""
+msgstr "Maximális animáció szám %d."
 
 #: ../gui/wxpython/animation/dialogs.py:887
 #: ../gui/wxpython/animation/controller.py:262
 msgid "More animations are using one window. Please select different window for each animation."
-msgstr ""
+msgstr "Több animáció használ egy ablakot. Kérjük válasszon más ablakot minden animációhoz."
 
 #: ../gui/wxpython/animation/dialogs.py:988
 msgid "Add time stamp"
@@ -15899,11 +15905,11 @@ msgstr "Időbélyeg hozzáadás"
 
 #: ../gui/wxpython/animation/dialogs.py:1030
 msgid "Add time stamp, image or text decoration by one of the buttons above."
-msgstr ""
+msgstr "Adjon időbélyeget, képet vagy szöveges dekorációt a fenti gombok egyikével."
 
 #: ../gui/wxpython/animation/dialogs.py:1032
 msgid "Add image or text decoration by one of the buttons above."
-msgstr ""
+msgstr "Adjon képet vagy szöveges dekorációt a fenti gombok egyikével."
 
 #: ../gui/wxpython/animation/dialogs.py:1053
 msgid "Font settings:"
@@ -15931,7 +15937,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1151
 msgid "image sequence"
-msgstr ""
+msgstr "képsorozat"
 
 #: ../gui/wxpython/animation/dialogs.py:1151
 msgid "animated GIF"
@@ -15947,7 +15953,7 @@ msgstr "AVI"
 
 #: ../gui/wxpython/animation/dialogs.py:1162
 msgid "Export to:"
-msgstr ""
+msgstr "Exportálás ebbe:"
 
 #: ../gui/wxpython/animation/dialogs.py:1189
 msgid "animation_"
@@ -15977,6 +15983,9 @@ msgid ""
 "Please install it first and make sure\n"
 "it's in the PATH variable."
 msgstr ""
+"Az 'ffmpeg'-t nem telepítették.\n"
+"Telepítse előbb egy biztosítsa,\n"
+"hogy a PATH változóban szerepel."
 
 #: ../gui/wxpython/animation/dialogs.py:1287
 msgid "AVI file:"
@@ -15988,7 +15997,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1299
 msgid "Additional options:"
-msgstr ""
+msgstr "További beállítások"
 
 #: ../gui/wxpython/animation/dialogs.py:1303
 msgid "Consider adding '-sameq' or '-qscale 1' if not satisfied with video quality. Options depend on ffmpeg version."
@@ -16002,25 +16011,25 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:1472
 #, python-format
 msgid "File %s not found."
-msgstr ""
+msgstr "%s fájlt nem találom."
 
 #: ../gui/wxpython/animation/dialogs.py:1476
 msgid "Decoration image file is missing."
-msgstr ""
+msgstr "Dekoráció kép fájl hiányzik."
 
 #: ../gui/wxpython/animation/dialogs.py:1485
 #, python-format
 msgid "Directory %s not found."
-msgstr ""
+msgstr "%s könyvtárak nem találom."
 
 #: ../gui/wxpython/animation/dialogs.py:1489
 msgid "Export directory is missing."
-msgstr ""
+msgstr "Export könyvtár hiányzik."
 
 #: ../gui/wxpython/animation/dialogs.py:1493
 #: ../gui/wxpython/animation/dialogs.py:1497
 msgid "Export file is missing."
-msgstr ""
+msgstr "Export fájl hiányzik."
 
 #: ../gui/wxpython/animation/dialogs.py:1535
 msgid "Time stamp"
@@ -16028,31 +16037,31 @@ msgstr "Időbélyeg"
 
 #: ../gui/wxpython/animation/dialogs.py:1613
 msgid "Add space-time dataset layer"
-msgstr ""
+msgstr "Tér-idő adatállomány réteg hozzáadás"
 
 #: ../gui/wxpython/animation/dialogs.py:1638
 msgid "Multiple raster maps"
-msgstr ""
+msgstr "Több rasztertérkép"
 
 #: ../gui/wxpython/animation/dialogs.py:1639
 msgid "Multiple vector maps"
-msgstr ""
+msgstr "Több vektortérkép"
 
 #: ../gui/wxpython/animation/dialogs.py:1640
 msgid "Multiple 3D raster maps"
-msgstr ""
+msgstr "Több 3D rasztertérkép"
 
 #: ../gui/wxpython/animation/dialogs.py:1641
 msgid "Space time raster dataset"
-msgstr ""
+msgstr "Tér-idő raszter adatállomány"
 
 #: ../gui/wxpython/animation/dialogs.py:1642
 msgid "Space time vector dataset"
-msgstr ""
+msgstr "Tér-idő vektor adatállomány"
 
 #: ../gui/wxpython/animation/dialogs.py:1643
 msgid "Space time 3D raster dataset"
-msgstr ""
+msgstr "Tér-idő 3D raszter adatállomány"
 
 #: ../gui/wxpython/animation/dialogs.py:1682
 msgid "Input data type:"
@@ -16064,11 +16073,11 @@ msgstr "Válasszon raszter/vektor térképet."
 
 #: ../gui/wxpython/animation/dialogs.py:1792
 msgid "Please select maps or dataset first."
-msgstr ""
+msgstr "Kérjük először válasszon térképeket vagy adatállományt."
 
 #: ../gui/wxpython/animation/dialogs.py:1821
 msgid "Animation Tool settings"
-msgstr ""
+msgstr "Animáció eszköz beállítások"
 
 #: ../gui/wxpython/animation/dialogs.py:1885
 msgid "Number of parallel processes:"
@@ -16089,7 +16098,7 @@ msgstr "Idő"
 
 #: ../gui/wxpython/animation/dialogs.py:1977
 msgid "Absolute time format:"
-msgstr ""
+msgstr "Abszolút idő formátum:"
 
 #: ../gui/wxpython/animation/dialogs.py:1997
 msgid "Click and then press key up or down to preview different date and time formats. Type custom format string."
@@ -16129,7 +16138,7 @@ msgstr ""
 #: ../gui/wxpython/tplot/frame.py:809 ../gui/wxpython/timeline/frame.py:463
 #, python-format
 msgid "Space time dataset <%s> not found."
-msgstr ""
+msgstr "<%s> tér-adat adathalmazt nem találom"
 
 #: ../gui/wxpython/animation/temporal_manager.py:347
 #, python-format
@@ -16138,11 +16147,11 @@ msgstr ""
 
 #: ../gui/wxpython/animation/utils.py:182
 msgid "The number of maps in space-time datasets has to be the same."
-msgstr ""
+msgstr "A tér-adat adathalmazokban a térképek számának azonosnak kell lennie."
 
 #: ../gui/wxpython/animation/utils.py:186
 msgid "The temporal type (absolute/relative) of space-time datasets has to be the same."
-msgstr ""
+msgstr "A tér-adat adathalmazok idő típusának (abszolút/relatív) azonosnak kell lennie."
 
 #: ../gui/wxpython/animation/utils.py:190
 msgid "The map type (point/interval) of space-time datasets has to be the same."
@@ -16163,7 +16172,7 @@ msgstr ""
 #: ../gui/wxpython/animation/controller.py:234
 #, python-format
 msgid "Maximum number of animations is %s."
-msgstr ""
+msgstr "Az animációk maximális száma %s."
 
 #: ../gui/wxpython/animation/controller.py:443
 msgid "Failed to display legend."
@@ -16171,11 +16180,11 @@ msgstr "Nem tudom a jelmagyarázatot megjeleníteni."
 
 #: ../gui/wxpython/animation/controller.py:475
 msgid "Inconsistent number of maps, please check input data."
-msgstr ""
+msgstr "Inkonzisztens számú térkép, ellenőrizze az input adatokat."
 
 #: ../gui/wxpython/animation/controller.py:505
 msgid "No animation to export."
-msgstr ""
+msgstr "Nincs exportálható animáció."
 
 #: ../gui/wxpython/animation/controller.py:542
 msgid "Preparing export, please wait..."
@@ -16193,12 +16202,12 @@ msgstr "Animáció exportálás, kérem várjon..."
 #: ../gui/wxpython/icons/icon.py:38
 #, python-format
 msgid "Unknown iconset '%s', using default 'grass'...\n"
-msgstr ""
+msgstr "Ismeretlen ikonkészlet '%s', alapértelmezett 'grass'-t használom...\n"
 
 #: ../gui/wxpython/icons/icon.py:56
 #, python-format
 msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."
-msgstr ""
+msgstr "Nem tudom betölteni az ikon témát. Ok: %s. Kilépés a wxGUI-ból..."
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:106
 msgid "With stvds you have to set 'attr' option"
@@ -16309,7 +16318,7 @@ msgstr ""
 #: ../gui/wxpython/tplot/frame.py:682
 #, python-format
 msgid "Temporal resolution: %s"
-msgstr ""
+msgstr "Időbeli felbontás: %s"
 
 #: ../gui/wxpython/tplot/frame.py:594 ../gui/wxpython/tplot/frame.py:646
 #: ../gui/wxpython/tplot/frame.py:684 ../gui/wxpython/timeline/frame.py:373
@@ -16602,7 +16611,7 @@ msgstr "Válassza ki a futtatandó modelt"
 #: ../gui/wxpython/lmgr/frame.py:600 ../gui/wxpython/gmodeler/frame.py:482
 #: ../gui/wxpython/gmodeler/frame.py:542
 msgid "GRASS Model File (*.gxm)|*.gxm"
-msgstr ""
+msgstr "GRASS Model fájl (*.gxm)|*.gxm"
 
 #: ../gui/wxpython/lmgr/frame.py:663 ../gui/wxpython/lmgr/frame.py:2518
 msgid "Do you want to save changes in the workspace?"
@@ -17783,7 +17792,7 @@ msgstr "Térkép csak az aktuális térkép csoportba hozható létre"
 #: ../gui/wxpython/vnet/vnet_core.py:275 ../gui/wxpython/vnet/vnet_core.py:352
 #, python-format
 msgid "Vector map %s already exists. Do you want to overwrite it?"
-msgstr ""
+msgstr "<%s> vektortérkép már létezik. Felül akarja írni?"
 
 #: ../gui/wxpython/vnet/vnet_core.py:278 ../gui/wxpython/vnet/vnet_core.py:355
 msgid "Overwrite vector map"
@@ -17890,7 +17899,7 @@ msgstr ""
 
 #: ../gui/wxpython/vnet/toolbars.py:129
 msgid "Show analysis result"
-msgstr ""
+msgstr "Elemzés eredmény megjelenítése"
 
 #: ../gui/wxpython/vnet/toolbars.py:132
 msgid "Save temporary result"
@@ -18262,7 +18271,7 @@ msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:604
 msgid "Rename map"
-msgstr ""
+msgstr "Térkép átnevezés"
 
 #: ../gui/wxpython/datacatalog/tree.py:616
 #, python-brace-format
@@ -18306,7 +18315,7 @@ msgstr ""
 #: ../gui/wxpython/datacatalog/tree.py:711
 #: ../gui/wxpython/datacatalog/tree.py:713
 msgid "g.copy completed"
-msgstr ""
+msgstr "g.copy-t befejeztem"
 
 #: ../gui/wxpython/datacatalog/tree.py:726
 msgid "Reprojection is not implemented for 3D rasters"
@@ -18315,7 +18324,7 @@ msgstr ""
 #: ../gui/wxpython/datacatalog/tree.py:761
 #: ../gui/wxpython/datacatalog/tree.py:804
 msgid "g.remove completed"
-msgstr ""
+msgstr "g.remove-t befejeztem"
 
 #: ../gui/wxpython/datacatalog/tree.py:788
 #, python-brace-format
@@ -19087,7 +19096,7 @@ msgstr "modell"
 
 #: ../gui/wxpython/gmodeler/model.py:67
 msgid "Script generated by wxGUI Graphical Modeler."
-msgstr ""
+msgstr "wxGUI grafikus modellerrel generált szkript."
 
 #: ../gui/wxpython/gmodeler/model.py:493 ../gui/wxpython/gmodeler/model.py:556
 #, python-format
@@ -19104,7 +19113,7 @@ msgstr "A modell üres. Nincs mit futtatni."
 
 #: ../gui/wxpython/gmodeler/model.py:618 ../gui/wxpython/gmodeler/frame.py:662
 msgid "Validating model..."
-msgstr ""
+msgstr "Modell ellenőrzése..."
 
 #: ../gui/wxpython/gmodeler/model.py:626
 #, python-format
@@ -19112,7 +19121,7 @@ msgid ""
 "Model is not valid. Do you want to run the model anyway?\n"
 "\n"
 "%s"
-msgstr ""
+msgstr "A modell hibás. Mindenképpen futtatni akarja a modellt?"
 
 #: ../gui/wxpython/gmodeler/model.py:629
 msgid "Run model?"
@@ -19218,16 +19227,16 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/frame.py:412
 msgid "No intermediate data to delete."
-msgstr ""
+msgstr "Nincsenek törlendő közbenső adatok."
 
 #: ../gui/wxpython/gmodeler/frame.py:418
 #, python-format
 msgid "Do you want to permanently delete data?%s"
-msgstr ""
+msgstr "Véglegesen törölni akarja az adatokat? %s"
 
 #: ../gui/wxpython/gmodeler/frame.py:420
 msgid "Delete intermediate data?"
-msgstr ""
+msgstr "Közbenső adatok törlése?"
 
 #: ../gui/wxpython/gmodeler/frame.py:440 ../gui/wxpython/gmodeler/frame.py:590
 msgid "Current model is not empty. Do you want to store current settings to model file?"
@@ -19235,11 +19244,11 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/frame.py:443 ../gui/wxpython/gmodeler/frame.py:593
 msgid "Create new model?"
-msgstr ""
+msgstr "Új modell létrehozása?"
 
 #: ../gui/wxpython/gmodeler/frame.py:480
 msgid "Choose model file"
-msgstr ""
+msgstr "Válasszon modell fájlt"
 
 #: ../gui/wxpython/gmodeler/frame.py:503
 #, python-format
@@ -19249,7 +19258,7 @@ msgstr ""
 #: ../gui/wxpython/gmodeler/frame.py:515 ../gui/wxpython/gmodeler/frame.py:559
 #, python-format
 msgid "Model file <%s> already exists. Do you want to overwrite this file?"
-msgstr ""
+msgstr "<%s> modell fájl már létezik. Felül akarja írni ezt a fájlt?"
 
 #: ../gui/wxpython/gmodeler/frame.py:527 ../gui/wxpython/gmodeler/frame.py:577
 #, python-format
@@ -19258,11 +19267,11 @@ msgstr "<%s> fájlt mentettem"
 
 #: ../gui/wxpython/gmodeler/frame.py:540
 msgid "Choose file to save current model"
-msgstr ""
+msgstr "Válasszon fájlt az aktuális modell mentéséhez"
 
 #: ../gui/wxpython/gmodeler/frame.py:659
 msgid "Model is empty. Nothing to validate."
-msgstr ""
+msgstr "A modell üres. Nincs mit ellenőrizni."
 
 #: ../gui/wxpython/gmodeler/frame.py:669
 #, python-format
@@ -19271,15 +19280,18 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"A modell hibás.\n"
+"\n"
+"%s"
 
 #: ../gui/wxpython/gmodeler/frame.py:673
 msgid "Model is valid."
-msgstr ""
+msgstr "A modell hibátlan."
 
 #: ../gui/wxpython/gmodeler/frame.py:735 ../gui/wxpython/gmodeler/frame.py:742
 #, python-format
 msgid "Model exported to <%s>"
-msgstr ""
+msgstr "A modellt exportáltam <%s>"
 
 #: ../gui/wxpython/gmodeler/frame.py:884 ../gui/wxpython/gmodeler/frame.py:1625
 #: ../gui/wxpython/gmodeler/dialogs.py:239
@@ -19292,7 +19304,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/frame.py:931
 msgid "wxGUI Graphical Modeler"
-msgstr ""
+msgstr "wxGUI grafikus modellező"
 
 #: ../gui/wxpython/gmodeler/frame.py:1050
 #, python-format
@@ -19305,7 +19317,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/frame.py:1062
 msgid "Please wait, loading model..."
-msgstr ""
+msgstr "Kérem várjon, modell betöltése..."
 
 #: ../gui/wxpython/gmodeler/frame.py:1128
 msgid "Writing current settings to model file failed."
@@ -19369,15 +19381,15 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/frame.py:1745
 msgid "string"
-msgstr ""
+msgstr "szöveglánc"
 
 #: ../gui/wxpython/gmodeler/frame.py:1748
 msgid "region"
-msgstr ""
+msgstr "régió"
 
 #: ../gui/wxpython/gmodeler/frame.py:1749
 msgid "mapset"
-msgstr ""
+msgstr "térképcsoport"
 
 #: ../gui/wxpython/gmodeler/frame.py:1751
 msgid "dir"
@@ -19417,7 +19429,7 @@ msgstr "Python szkript"
 
 #: ../gui/wxpython/gmodeler/frame.py:1984
 msgid "Run python script"
-msgstr ""
+msgstr "Python szkript futtatása"
 
 #: ../gui/wxpython/gmodeler/frame.py:1987
 msgid "Save python script to file"
@@ -19484,7 +19496,7 @@ msgstr "Tábla:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:416
 msgid "Loop"
-msgstr ""
+msgstr "Ciklus"
 
 #: ../gui/wxpython/gmodeler/preferences.py:528
 msgid "Comment"
@@ -19525,7 +19537,7 @@ msgstr "GRASS megjegyzés hozzáadása a modellhez"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:194
 msgid "Label and comment"
-msgstr ""
+msgstr "Címke és komment"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:292
 msgid ""
@@ -19583,7 +19595,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:487
 msgid "Condition"
-msgstr ""
+msgstr "Feltétel"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:515
 msgid "Loop properties"
@@ -19791,11 +19803,11 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/toolbars.py:73
 msgid "Click mouse to zoom"
-msgstr ""
+msgstr "Kattintson az egérrel a nagyításhoz"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:75
 msgid "Click mouse to unzoom"
-msgstr ""
+msgstr "Kattintson az egérrel a kicsinyítéshez"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:110
 msgid "3D view mode not available"
@@ -19809,7 +19821,7 @@ msgstr "Ok: %s"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:122
 msgid "Vector digitizer not available"
-msgstr ""
+msgstr "Vektor digitalizáló nem érhető el"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:126
 msgid "Note that the wxGUI's vector digitizer is disabled in this installation. Please keep an eye out for updated versions of GRASS. In the meantime you can use \"v.edit\" for non-interactive editing from the Develop vector map menu."
@@ -19907,7 +19919,7 @@ msgstr "Számítási régió mentése névvel bíró régióba"
 
 #: ../gui/wxpython/mapdisp/frame.py:1537
 msgid "Raster Digitizer Toolbar"
-msgstr ""
+msgstr "Raszter digitalizáló eszköztár"
 
 #: ../gui/wxpython/mapdisp/gprint.py:154
 msgid ""
@@ -19946,7 +19958,7 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:418
 msgid "Render"
-msgstr ""
+msgstr "Rajzolás"
 
 #: ../gui/wxpython/mapdisp/statusbar.py:422
 msgid "Enable/disable auto-rendering"
@@ -20003,7 +20015,7 @@ msgstr ""
 #: ../gui/wxpython/mapdisp/statusbar.py:1024
 #: ../gui/wxpython/mapdisp/statusbar.py:1125
 msgid "Error in projection (check the settings)"
-msgstr ""
+msgstr "Hiba a vetületben (ellenőrizze a beállításokat)"
 
 #: ../gui/wxpython/mapdisp/statusbar.py:826
 msgid "Use defined projection"
@@ -20282,3 +20294,27 @@ msgstr ""
 #: ../gui/wxpython/web_services/dialogs.py:1104
 msgid "Unable to fetch data.\n"
 msgstr ""
+
+#~ msgid "Set title for the plot"
+#~ msgstr "Rajz cím"
+
+#~ msgid "Set label for X axis"
+#~ msgstr "X tengely címke"
+
+#~ msgid "Set label for Y axis"
+#~ msgstr "Y tengely címke"
+
+#~ msgid "Labels"
+#~ msgstr "Címkék"
+
+#~ msgid "CVS path"
+#~ msgstr "CVS útvonal"
+
+#~ msgid "Do you want the CSV header?"
+#~ msgstr "Akar CVS fejlécet?"
+
+#~ msgid "File exists"
+#~ msgstr "A fájl létezik"
+
+#~ msgid "Please change name of output CSV file or "
+#~ msgstr "Kérem módosítsa az output CSV fájl nevét vagy"
