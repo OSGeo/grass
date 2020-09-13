@@ -201,8 +201,17 @@ class GrassInterface:
         """
         raise NotImplementedError()
 
+    def UpdateCmdHistory(self, cmd):
+        """Add the command to the current history list shown to the user
 
-class StandaloneGrassInterface():
+        .. note::
+
+            Some implementations may not implement this method or do nothing.
+        """
+        raise NotImplementedError()
+
+
+class StandaloneGrassInterface(GrassInterface):
     """@implements GrassInterface"""
 
     def __init__(self):
@@ -311,4 +320,5 @@ class StandaloneGrassInterface():
         raise NotImplementedError()
 
     def UpdateCmdHistory(self, cmd):
-        raise NotImplementedError()
+        """There is no history displayed to the user, doing nothing"""
+        pass
