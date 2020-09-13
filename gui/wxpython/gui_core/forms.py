@@ -103,7 +103,7 @@ from core import gcmd
 from core import utils
 from core.settings import UserSettings
 from gui_core.widgets import FloatValidator, GNotebook, FormNotebook, FormListbook
-from core.giface import Notification
+from core.giface import Notification, StandaloneGrassInterface
 from gui_core.widgets import LayersList
 from gui_core.wrap import BitmapFromImage, Button, StaticText, StaticBox, SpinCtrl, \
     CheckBox, BitmapButton, TextCtrl, NewId
@@ -3004,7 +3004,7 @@ class GrassGUIApp(wx.App):
 
         self.mf = TaskFrame(
             parent=None,
-            giface=None,
+            giface=StandaloneGrassInterface(),
             task_description=self.grass_task)
         self.mf.CentreOnScreen()
         self.mf.Show(True)
