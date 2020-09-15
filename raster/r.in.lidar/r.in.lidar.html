@@ -537,16 +537,16 @@ Python module:
 
 <div class="code"><pre>
 import glob
-import gscript
+import grass.script as gs
     
 file_list_name = '/home/user/data/filelist.txt'
 with open(, mode='w') as file_list:
     for path in glob.iglob('/home/user/data/lidar/*.las'):
         file_list.write(path + "\n")
 
-gscript.run_command('r.in.lidar', file=file_list_name,
-                    output='mean_height_above_ground',
-                    base_raster='elevation' method='mean')
+gs.run_command('r.in.lidar', file=file_list_name,
+               output='mean_height_above_ground',
+               base_raster='elevation' method='mean')
 </pre></div>
 
 

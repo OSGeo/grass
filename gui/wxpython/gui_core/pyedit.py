@@ -50,11 +50,11 @@ def script_template():
     """The most simple script which runs and gives something"""
     return r"""#!/usr/bin/env python3
 
-import grass.script as gscript
+import grass.script as gs
 
 
 def main():
-    gscript.run_command('g.region', flags='p')
+    gs.run_command('g.region', flags='p')
 
 
 if __name__ == '__main__':
@@ -110,7 +110,7 @@ import sys
 import os
 import atexit
 
-import grass.script as gscript
+import grass.script as gs
 """)
 
     # cleanup()
@@ -121,14 +121,14 @@ RAST_REMOVE = []
 def cleanup():
 """)
     output.write(
-        r"""    gscript.run_command('g.remove', flags='f', type='raster',
-                          name=RAST_REMOVE)
+        r"""    gs.run_command('g.remove', flags='f', type='raster',
+                   name=RAST_REMOVE)
 """)
     output.write("\ndef main():\n")
     output.write(
-        r"""    options, flags = gscript.parser()
-    gscript.run_command('g.remove', flags='f', type='raster',
-                        name=RAST_REMOVE)
+        r"""    options, flags = gs.parser()
+    gs.run_command('g.remove', flags='f', type='raster',
+                   name=RAST_REMOVE)
 """)
 
     output.write("\n    return 0\n")
@@ -146,17 +146,17 @@ def script_example():
     """Example of a simple script"""
     return r"""#!/usr/bin/env python3
 
-import grass.script as gscript
+import grass.script as gs
 
 def main():
     input_raster = 'elevation'
     output_raster = 'high_areas'
-    stats = gscript.parse_command('r.univar', map='elevation', flags='g')
+    stats = gs.parse_command('r.univar', map='elevation', flags='g')
     raster_mean = float(stats['mean'])
     raster_stddev = float(stats['stddev'])
     raster_high = raster_mean + raster_stddev
-    gscript.mapcalc('{r} = {a} > {m}'.format(r=output_raster, a=input_raster,
-                                             m=raster_high))
+    gs.mapcalc('{r} = {a} > {m}'.format(r=output_raster, a=input_raster,
+                                        m=raster_high))
 
 if __name__ == "__main__":
     main()
@@ -187,16 +187,16 @@ def module_example():
 
 import sys
 
-import grass.script as gscript
+import grass.script as gs
 
 
 def main():
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
     araster = options['araster']
     braster = options['braster']
     output = options['output']
 
-    gscript.mapcalc('{r} = {a} + {b}'.format(r=output, a=araster, b=braster))
+    gs.mapcalc('{r} = {a} + {b}'.format(r=output, a=araster, b=braster))
 
     return 0
 
@@ -224,24 +224,24 @@ def module_error_handling_example():
 
 import sys
 
-import grass.script as gscript
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 
 def main():
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
     input_raster = options['input']
     output_raster = options['output']
 
     try:
-        stats = gscript.parse_command('r.univar', map=input_raster, flags='g')
+        stats = gs.parse_command('r.univar', map=input_raster, flags='g')
     except CalledModuleError as e:
-        gscript.fatal('{0}'.format(e))
+        gs.fatal('{0}'.format(e))
     raster_mean = float(stats['mean'])
     raster_stddev = float(stats['stddev'])
     raster_high = raster_mean + raster_stddev
-    gscript.mapcalc('{r} = {i} > {v}'.format(r=output_raster, i=input_raster,
-                                             v=raster_high))
+    gs.mapcalc('{r} = {i} > {v}'.format(r=output_raster, i=input_raster,
+                                        v=raster_high))
     return 0
 
 

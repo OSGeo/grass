@@ -28,11 +28,11 @@
 import sys
 import atexit
 
-import grass.script as grass
+import grass.script as gs
 
 def cleanup():
     # add some cleanup code
-    grass.message(_("Inside cleanup function..."))
+    gs.message(_("Inside cleanup function..."))
 
 def main():
     flag_f = flags['f']
@@ -44,22 +44,22 @@ def main():
     exitcode = 0
 
     if flag_f:
-        grass.message(_("Flag -f set"))
+        gs.message(_("Flag -f set"))
     else:
-        grass.message(_("Flag -f not set"))
+        gs.message(_("Flag -f not set"))
 
     # test if parameter present:
     if option1:
-        grass.message(_("Value of option1 option: '%s'" % option1))
+        gs.message(_("Value of option1 option: '%s'" % option1))
 
-    grass.message(_("Value of raster option: '%s'" % raster))
-    grass.message(_("Value of vector option: '%s'" % vector))
+    gs.message(_("Value of raster option: '%s'" % raster))
+    gs.message(_("Value of vector option: '%s'" % vector))
 
     #### end of your code ####
 
     sys.exit(exitcode)
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     atexit.register(cleanup)
     main()
