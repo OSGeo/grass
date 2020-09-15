@@ -8,14 +8,14 @@ Created on Thu Feb 18 09:42:23 2016
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
-import grass.script as gscript
+import grass.script as gs
 
 
 class TestRaster(TestCase):
     """Test raster functions"""
 
     raster = 'testrasterscript'
-    region = gscript.region()
+    region = gs.region()
     coords = (region['e'] - 1, region['n'] - 1)
 
     @classmethod
@@ -29,15 +29,14 @@ class TestRaster(TestCase):
                       flags='f')
 
     def test_raster_what(self):
-        res = gscript.raster_what(self.raster, [self.coords])[0]
+        res = gs.raster_what(self.raster, [self.coords])[0]
         self.assertEquals(int(res[self.raster]['value']), 100)
 
-        res = gscript.raster_what(self.raster, [self.coords],
-                                  localized=True)[0]
+        res = gs.raster_what(self.raster, [self.coords], localized=True)[0]
         self.assertEquals(int(res[self.raster][_('value')]), 100)
 
     def test_raster_info(self):
-        res = gscript.raster_info(self.raster)
+        res = gs.raster_info(self.raster)
         self.assertEquals(str(res['cols']), str(self.region['cols']))
         self.assertEquals(str(res['north']), str(self.region['n']))
 

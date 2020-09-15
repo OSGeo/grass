@@ -18,16 +18,16 @@
 #%end
 
 
-import grass.script as gscript
+import grass.script as gs
 
 
 def main():
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
     araster = options['araster']
     braster = options['braster']
     output = options['output']
 
-    gscript.mapcalc('{r} = {a} + {b}'.format(r=output, a=araster, b=braster))
+    gs.mapcalc('{r} = {a} + {b}'.format(r=output, a=araster, b=braster))
 
     return 0
 

@@ -12,7 +12,7 @@ and the GRASS GIS Temporal Framework are entirely written in Python.
 A set of packages is provided to the user in order to provide functionality
 at various levels:
 
-* **script package** provides Python interface to launch GRASS GIS modules in scripts
+* **grass.script package** provides Python interface to launch GRASS GIS modules in scripts
 * **PyGRASS** is an object-oriented Python Application 
   Programming Interface (API) for GRASS GIS which uses the GRASS C API as 
   backend but additionally offers a convenient interface to the GRASS GIS 

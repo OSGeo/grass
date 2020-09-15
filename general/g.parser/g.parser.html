@@ -391,7 +391,7 @@ Parameters:
 import os
 import sys
 
-import grass.script as grass
+import grass.script as gs
 
 def main():
     flag_f = flags['f']
@@ -418,7 +418,7 @@ def main():
     return 0
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     sys.exit(main())
 </pre></div>
 
@@ -646,7 +646,7 @@ v.what.rast --script
 
 import sys
 
-import grass.script as grass
+import grass.script as gs
 
 def main():
     # put code here
@@ -654,7 +654,7 @@ def main():
     return 0
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     sys.exit(main())
 </pre></div>
 

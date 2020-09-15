@@ -614,7 +614,7 @@ def write_command(*args, **kwargs):
     Passes all arguments to ``feed_command()``, with the string specified
     by the *stdin* argument fed to the process' standard input.
 
-    >>> gscript.write_command(
+    >>> write_command(
     ...    'v.in.ascii', input='-',
     ...    stdin='%s|%s' % (635818.8, 221342.4),
     ...    output='view_point')

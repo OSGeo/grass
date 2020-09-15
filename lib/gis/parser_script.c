@@ -135,11 +135,11 @@ void G__script(void)
     }
 
     fprintf(fp, "\nimport sys\n");
-    fprintf(fp, "\nimport grass.script as grass\n");
+    fprintf(fp, "\nimport grass.script as gs\n");
     fprintf(fp, "\ndef main():");
     fprintf(fp, "\n    # put code here\n");
     fprintf(fp, "\n    return 0\n");
     fprintf(fp, "\nif __name__ == \"__main__\":");
-    fprintf(fp, "\n    options, flags = grass.parser()");
+    fprintf(fp, "\n    options, flags = gs.parser()");
     fprintf(fp, "\n    sys.exit(main())\n");
 }
