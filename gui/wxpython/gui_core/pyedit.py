@@ -122,7 +122,7 @@ def cleanup():
 """)
     output.write(
         r"""    gs.run_command('g.remove', flags='f', type='raster',
-                          name=RAST_REMOVE)
+                   name=RAST_REMOVE)
 """)
     output.write("\ndef main():\n")
     output.write(
@@ -156,7 +156,7 @@ def main():
     raster_stddev = float(stats['stddev'])
     raster_high = raster_mean + raster_stddev
     gs.mapcalc('{r} = {a} > {m}'.format(r=output_raster, a=input_raster,
-                                             m=raster_high))
+                                        m=raster_high))
 
 if __name__ == "__main__":
     main()

@@ -32,8 +32,7 @@ class TestRaster(TestCase):
         res = gs.raster_what(self.raster, [self.coords])[0]
         self.assertEquals(int(res[self.raster]['value']), 100)
 
-        res = gs.raster_what(self.raster, [self.coords],
-                                  localized=True)[0]
+        res = gs.raster_what(self.raster, [self.coords], localized=True)[0]
         self.assertEquals(int(res[self.raster][_('value')]), 100)
 
     def test_raster_info(self):
