@@ -67,21 +67,21 @@ Usage::
 
     # example calls
     gs.message('Current GRASS GIS 7 environment:')
-    print gs.gisenv()
+    print(gs.gisenv())
 
     gs.message('Available raster maps:')
     for rast in gs.list_strings(type='raster'):
-        print rast
+        print(rast)
 
     gs.message('Available vector maps:')
     for vect in gs.list_strings(type='vector'):
-        print vect
+        print(vect)
 
     # clean up at the end
     gsetup.cleanup()
 
 
-(C) 2010-2019 by the GRASS Development Team
+(C) 2010-2020 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.

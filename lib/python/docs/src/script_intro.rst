@@ -82,7 +82,7 @@ Processing many maps
             stats = gs.parse_command('r.univar', map=raster, flags='g')
             if max_min is None or max_min < stats['min']:
                 max_min = stats['min']
-        print max_min
+        print(max_min)
 
     if __name__ == "__main__":
         main()
