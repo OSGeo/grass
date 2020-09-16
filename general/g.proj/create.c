@@ -10,8 +10,8 @@ void create_location(const char *location)
 {
     int ret;
 
-    ret = G_make_location_epsg(location, &cellhd, projinfo, projunits,
-                               projepsg);
+    ret = G_make_location_crs(location, &cellhd, projinfo, projunits,
+                               projepsg, projwkt, projsrid);
     if (ret == 0)
 	G_message(_("Location <%s> created"), location);
     else if (ret == -1)
@@ -57,6 +57,14 @@ void modify_projinfo()
     if (projepsg != NULL) {
 	G_file_name(path, "", "PROJ_EPSG", "PERMANENT");
 	G_write_key_value_file(path, projepsg);
+    }
+
+    if (projwkt != NULL) {
+	G_write_projwkt(NULL, projwkt);
+    }
+
+    if (projsrid != NULL) {
+	G_write_projsrid(NULL, projsrid);
     }
 
     if ((old_cellhd.zone != cellhd.zone) ||

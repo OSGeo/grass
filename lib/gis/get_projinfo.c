@@ -133,7 +133,7 @@ char *G_get_projwkt(void)
     G_file_name(path, "", WKT_FILE, "PERMANENT");
     if (access(path, 0) != 0) {
 	if (G_projection() != PROJECTION_XY) {
-	    G_warning(_("<%s> file not found for location <%s>"),
+	    G_debug(1, "<%s> file not found for location <%s>",
 		      WKT_FILE, G_location());
 	}
 	return NULL;
@@ -141,7 +141,7 @@ char *G_get_projwkt(void)
 
     fp = fopen(path, "r");
     if (!fp)
-	G_fatal_error(_("Unable to open output file <%s>: %s"), path, strerror(errno));
+	G_fatal_error(_("Unable to open input file <%s>: %s"), path, strerror(errno));
 
     wktstring = G_malloc(1024 * sizeof(char));
     nalloc = 1024;
@@ -166,7 +166,6 @@ char *G_get_projwkt(void)
 		ungetc(c, fp);
 		c = '\n';
 	    }
-
 	}
 
 	if (n == nalloc) {
@@ -200,6 +199,24 @@ char *G_get_projwkt(void)
 /*!
   \brief Get srid (spatial reference id) for the current location
 
+  Typically an srid will be of the form authority NAME:CODE,
+  e.g. EPSG:4326
+
+  This srid is passed to proj_create() using PROJ or
+  OSRSetFromUserInput() using GDAL. Therefore various other forms of
+  srid are possible, e.g. in OSRSetFromUserInput():
+
+   1. Well Known Text definition - passed on to importFromWkt().
+   2. "EPSG:n" - number passed on to importFromEPSG().
+   3. "EPSGA:n" - number passed on to importFromEPSGA().
+   4. "AUTO:proj_id,unit_id,lon0,lat0" - WMS auto projections.
+   5. "urn:ogc:def:crs:EPSG::n" - ogc urns
+   6. PROJ.4 definitions - passed on to importFromProj4().
+   7. filename - file read for WKT, XML or PROJ.4 definition.
+   8. well known name accepted by SetWellKnownGeogCS(), such as NAD27, NAD83, WGS84 or WGS72.
+   9. "IGNF:xxxx", "ESRI:xxxx", etc. from definitions from the PROJ database;
+  10. PROJJSON (PROJ >= 6.2)
+
   \return pointer to srid string
   \return NULL when srid is not available for the current location
 */
@@ -212,18 +229,18 @@ char *G_get_projsrid(void)
     int n, nalloc;
     int c;
 
-    G_file_name(path, "", WKT_FILE, "PERMANENT");
+    G_file_name(path, "", SRID_FILE, "PERMANENT");
     if (access(path, 0) != 0) {
 	if (G_projection() != PROJECTION_XY) {
-	    G_warning(_("<%s> file not found for location <%s>"),
-		      WKT_FILE, G_location());
+	    G_debug(1, "<%s> file not found for location <%s>",
+		      SRID_FILE, G_location());
 	}
 	return NULL;
     }
 
     fp = fopen(path, "r");
     if (!fp)
-	G_fatal_error(_("Unable to open output file <%s>: %s"), path, strerror(errno));
+	G_fatal_error(_("Unable to open input file <%s>: %s"), path, strerror(errno));
 
     sridstring = G_malloc(1024 * sizeof(char));
     nalloc = 1024;
@@ -236,9 +253,19 @@ char *G_get_projsrid(void)
 	    break;
 	}
 
-	/* srid must be the first line */
-	if (c == '\r' || c == '\n')
-	    break;
+	if (c == '\r') {	/* DOS or MacOS9 */
+	    c = fgetc(fp);
+	    if (c != EOF) {
+		if (c != '\n') {	/* MacOS9 - we have to return the char to stream */
+		    ungetc(c, fp);
+		    c = '\n';
+		}
+	    }
+	    else {	/* MacOS9 - we have to return the char to stream */
+		ungetc(c, fp);
+		c = '\n';
+	    }
+	}
 
 	if (n == nalloc) {
 	    sridstring = G_realloc(sridstring, nalloc + 1024);
