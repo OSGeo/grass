@@ -1884,7 +1884,13 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     local z_lo=`g.gisenv get=LOCATION_NAME`
     local z_ms=`g.gisenv get=MAPSET`
     ZLOC="Mapset <$z_ms> in <$z_lo>"
-    """
+    if [ "$_grass_old_mapset" != "$MAPSET_PATH" ] ; then
+        fc -A -I
+        HISTFILE="$MAPSET_PATH/{sh_history}"
+        fc -R
+        _grass_old_mapset="$MAPSET_PATH"
+    fi
+    """.format(sh_history=sh_history)
     elif sh == "bash":
         # Append existing history to file ("flush").
         # Clear the (in-memory) history.
