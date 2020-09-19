@@ -1089,6 +1089,10 @@ void set_option(const char *string)
     *ptr = '\0';
     string++;
 
+    /* an empty string is not a valid answer, skip */
+    if (! *string)
+	return;
+
     /* Find option with best keyword match */
     key_len = strlen(the_key);
     for (at_opt = &st->first_option; at_opt; at_opt = at_opt->next_opt) {
