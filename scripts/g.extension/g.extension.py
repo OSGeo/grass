@@ -763,12 +763,13 @@ def install_extension(source, url, xmlurl):
         else:
             ret1, new_modules_ext, new_files_ext, tmp_dir = install_extension_std_platforms(extension,
                                                             source=source, url=url)
-        edict[extension]['mlist'].extend(new_modules_ext)
-        edict[extension]['flist'].extend(new_files_ext)
-        new_modules.extend(new_modules_ext)
-        ret += ret1
-        if len(edict) > 1:
-            print('-' * 60)
+        if not flags['d'] and not flags['i']:
+            edict[extension]['mlist'].extend(new_modules_ext)
+            edict[extension]['flist'].extend(new_files_ext)
+            new_modules.extend(new_modules_ext)
+            ret += ret1
+            if len(edict) > 1:
+                print('-' * 60)
 
     if flags['d'] or flags['i']:
         return
@@ -1471,7 +1472,7 @@ def install_extension_std_platforms(name, source, url):
         sys.stderr.write(' '.join(make_cmd) + '\n')
         grass.message("\n%s\n" % _("To install run:"))
         sys.stderr.write(' '.join(install_cmd) + '\n')
-        return 0, None, None
+        return 0, None, None, None
 
     os.chdir(os.path.join(TMPDIR, name))
 
@@ -1486,7 +1487,7 @@ def install_extension_std_platforms(name, source, url):
                       ' Please check above error messages.'))
 
     if flags['i']:
-        return 0, None, None
+        return 0, None, None, None
 
     # collect old files
     old_file_list = list()
