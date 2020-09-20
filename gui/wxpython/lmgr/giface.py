@@ -189,6 +189,7 @@ class LayerManagerGrassInterface(object):
         self.mapCreated = Signal('LayerManagerGrassInterface.mapCreated')
 
         self.currentMapsetChanged = Signal('LayerManagerGrassInterface.currentMapsetChanged')
+        self.grassdbChanged = Signal('LayerManagerGrassInterface.grassdbChanged')
 
         # Signal emitted to request updating of map
         self.updateMap = Signal('LayerManagerGrassInterface.updateMap')
