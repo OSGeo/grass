@@ -86,7 +86,8 @@ install-macosxapp:
 	$(INSTALL) app/build_html_user_index.sh ${INST_DIR_TARGET}/etc
 	$(INSTALL) app/build_gui_user_menu.sh ${INST_DIR_TARGET}/etc
 	$(INSTALL) app/python_wrapper ${INST_DIR_TARGET}/bin/python 
-	$(INSTALL_DATA) app/app.icns ${PREFIX_TARGET}/${MACOSX_APP_NAME}/Contents/Resources
+	$(INSTALL_DATA) app/AppIcon.icns ${PREFIX_TARGET}/${MACOSX_APP_NAME}/Contents/Resources
+	$(INSTALL_DATA) app/GRASSDocument_gxw.icns ${PREFIX_TARGET}/${MACOSX_APP_NAME}/Contents/Resources
 	$(INSTALL_DATA) app/${OBJDIR}/Info.plist ${PREFIX_TARGET}/${MACOSX_APP_NAME}/Contents
 	$(INSTALL_DATA) app/PkgInfo ${PREFIX_TARGET}/${MACOSX_APP_NAME}/Contents
 	$(INSTALL) app/${OBJDIR}/GRASS.scpt ${PREFIX_TARGET}/${MACOSX_APP_NAME}/Contents/Resources/Scripts/
@@ -111,7 +112,7 @@ install-basic-macosx:
 	     -e 's#'@LD_LIBRARY_PATH_VAR@'#'$(LD_LIBRARY_PATH_VAR)'#g' \
 	     -e 's#'@CONFIG_PROJSHARE@'#'$(PROJSHARE)'#g' \
 	     $(ARCH_DISTDIR)/$(GRASS_NAME).tmp > $(INST_DIR_TARGET)/$(GRASS_NAME)
-	-chmod a+x $(UNIX_BIN)/$(GRASS_NAME)
+	-chmod a+x $(INST_DIR_TARGET)/$(GRASS_NAME)
 	-rm -f $(INST_DIR_TARGET)/$(GRASS_NAME).tmp
 	-chmod -R a+rX ${PREFIX_TARGET}/${MACOSX_APP_NAME} 2>/dev/null
 	-touch ${PREFIX_TARGET}/${MACOSX_APP_NAME}
