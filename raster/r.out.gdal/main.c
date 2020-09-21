@@ -675,7 +675,7 @@ int main(int argc, char *argv[])
 	    ol[i] = oi;
 	    oi *= 2;
 	}
-	if (GDALBuildOverviews(hDstDS, "NEAREST", n_overviews, ol,
+	if (GDALBuildOverviews(hCurrDS, "NEAREST", n_overviews, ol,
 	                       0, NULL, NULL, NULL) != CE_None) {
 	    G_warning(_("Unable to build overviews"));
 	}
