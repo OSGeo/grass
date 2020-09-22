@@ -138,7 +138,7 @@ int main(int argc, char **argv)
 	par_flat_threshold->type = TYPE_DOUBLE;
 	par_flat_threshold->answer = "1";
 	par_flat_threshold->required = YES;
-	par_flat_threshold->description = _("Flatenss threshold (degrees)");
+	par_flat_threshold->description = _("Flatness threshold (degrees)");
 
 	par_flat_distance = G_define_option();
 	par_flat_distance->key = "dist";
@@ -146,7 +146,7 @@ int main(int argc, char **argv)
 	par_flat_distance->answer = "0";
 	par_flat_distance->required = YES;
 	par_flat_distance->description =
-	    _("Flatenss distance, zero for none");
+	    _("Flatness distance, zero for none");
 
 	par_multi_prefix = G_define_option();
 	par_multi_prefix->key = "prefix";
@@ -242,7 +242,7 @@ int main(int argc, char **argv)
 	/* flatness parameters */
 	flat_threshold = atof(par_flat_threshold->answer);
 	if (flat_threshold <= 0.)
-	    G_fatal_error(_("Flatenss threshold must be grater than 0"));
+	    G_fatal_error(_("Flatness threshold must be grater than 0"));
 	flat_threshold = DEGREE2RAD(flat_threshold);
 
 	flat_distance = atof(par_flat_distance->answer);
@@ -251,7 +251,7 @@ int main(int argc, char **argv)
 	flat_threshold_height = tan(flat_threshold) * flat_distance;
 	if ((flat_distance > 0 && flat_distance <= skip_distance) ||
 	    flat_distance >= search_distance) {
-	    G_warning(_("Flatenss distance should be between skip and search radius. Otherwise ignored"));
+	    G_warning(_("Flatness distance should be between skip and search radius. Otherwise ignored"));
 	    flat_distance = 0;
 	}
 	if (multires) {

@@ -14694,11 +14694,11 @@ msgid "Inner search radius"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:141
-msgid "Flatenss threshold (degrees)"
+msgid "Flatness threshold (degrees)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:149
-msgid "Flatenss distance, zero for none"
+msgid "Flatness distance, zero for none"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:155
@@ -14749,11 +14749,11 @@ msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:245
-msgid "Flatenss threshold must be grater than 0"
+msgid "Flatness threshold must be grater than 0"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:254
-msgid "Flatenss distance should be between skip and search radius. Otherwise ignored"
+msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:272
