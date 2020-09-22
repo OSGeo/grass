@@ -151,7 +151,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("distance"));
     G_add_keyword(_("proximity"));
     module->description =
-	_("Generates a raster map containing distances to nearest raster features.");
+	_("Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell.");
 
     opt.in = G_define_standard_option(G_OPT_R_INPUT);
 
