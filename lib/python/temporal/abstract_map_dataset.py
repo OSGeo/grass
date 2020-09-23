@@ -902,8 +902,8 @@ class AbstractMapDataset(AbstractDataset):
         else:
             self.msgr.debug(1, "Unregister %(type)s map <%(map)s> "
                                "from space time datasets" % {
-                               'type': self.get_type(),
-                               'map': self.get_map_id()})
+                                   'type': self.get_type(),
+                                   'map': self.get_map_id()})
 
         if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
             self.msgr.fatal(_("Unable to unregister dataset <%(ds)s> of type "

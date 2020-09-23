@@ -119,7 +119,7 @@ def discovery():
 # TODO: create a full interface (using grass parser or argparse)
 def main():
     parser = argparse.ArgumentParser(
-    description='Run test files in all testsuite directories starting'
+        description='Run test files in all testsuite directories starting'
                 ' from the current one'
                 ' (runs on active GRASS session)')
     parser.add_argument('--location', dest='location', action='store',

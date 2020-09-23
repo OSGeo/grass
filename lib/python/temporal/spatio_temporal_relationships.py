@@ -594,11 +594,11 @@ def set_temoral_relationship(A, B, relation):
     if relation == "equal" or relation == "equals":
         if A != B:
             if not B.get_equal() or \
-            (B.get_equal() and \
+                (B.get_equal() and \
             A not in B.get_equal()):
                 B.append_equal(A)
             if not A.get_equal() or \
-            (A.get_equal() and \
+                (A.get_equal() and \
             B not in A.get_equal()):
                 A.append_equal(B)
     elif relation == "follows":
@@ -631,20 +631,20 @@ def set_temoral_relationship(A, B, relation):
             A.append_contains(B)
         if relation == "starts":
             if not B.get_starts() or \
-            (B.get_starts() and \
+                (B.get_starts() and \
             A not in B.get_starts()):
                 B.append_starts(A)
             if not A.get_started() or \
-            (A.get_started() and \
+                (A.get_started() and \
             B not in A.get_started()):
                 A.append_started(B)
         if relation == "finishes":
             if not B.get_finishes() or \
-            (B.get_finishes() and \
+                (B.get_finishes() and \
             A not in B.get_finishes()):
                 B.append_finishes(A)
             if not A.get_finished() or \
-            (A.get_finished() and \
+                (A.get_finished() and \
             B not in A.get_finished()):
                 A.append_finished(B)
     elif relation == "contains" or relation == "started" or \
@@ -659,20 +659,20 @@ def set_temoral_relationship(A, B, relation):
             A.append_during(B)
         if relation == "started":
             if not B.get_started() or \
-            (B.get_started() and \
+                (B.get_started() and \
             A not in B.get_started()):
                 B.append_started(A)
             if not A.get_starts() or \
-            (A.get_starts() and \
+                (A.get_starts() and \
             B not in A.get_starts()):
                 A.append_starts(B)
         if relation == "finished":
             if not B.get_finished() or \
-            (B.get_finished() and \
+                (B.get_finished() and \
             A not in B.get_finished()):
                 B.append_finished(A)
             if not A.get_finishes() or \
-            (A.get_finishes() and \
+                (A.get_finishes() and \
             B not in A.get_finishes()):
                 A.append_finishes(B)
     elif relation == "overlaps":
@@ -701,11 +701,11 @@ def set_spatial_relationship(A, B, relation):
     if relation == "equivalent":
         if A != B:
             if not B.get_equivalent() or \
-            (B.get_equivalent() and \
+                (B.get_equivalent() and \
             A not in B.get_equivalent()):
                 B.append_equivalent(A)
             if not A.get_equivalent() or \
-            (A.get_equivalent() and \
+                (A.get_equivalent() and \
             B not in A.get_equivalent()):
                 A.append_equivalent(B)
     elif relation == "overlap":

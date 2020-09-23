@@ -1771,7 +1771,7 @@ def legal_name(s):
     if illegal:
         illegal = ''.join(sorted(set(illegal)))
         warning(_("Illegal filename <%(s)s>. <%(il)s> not allowed.\n") % {
-        's': s, 'il': illegal})
+            's': s, 'il': illegal})
         return False
 
     return True

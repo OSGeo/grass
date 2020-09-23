@@ -239,13 +239,13 @@ def print_vector_dataset_univar_statistics(input, output, twhere, layer, type, c
         if type == "point" or type == "centroid":
             if "mean" in stats:
                 string += fs + str(stats["mean"]) + fs + \
-                str(stats["mean_abs"]) + fs + \
-                str(stats["population_stddev"]) + fs + \
-                str(stats["population_variance"])
+                    str(stats["mean_abs"]) + fs + \
+                    str(stats["population_stddev"]) + fs + \
+                    str(stats["population_variance"])
 
                 string += fs + str(stats["population_coeff_variation"]) + \
-                fs + str(stats["sample_stddev"]) + fs + \
-                str(stats["sample_variance"])
+                    fs + str(stats["sample_stddev"]) + fs + \
+                    str(stats["sample_variance"])
 
                 string += fs + str(stats["kurtosis"]) + fs + \
                           str(stats["skewness"])

@@ -1524,7 +1524,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                         si=shortcut_identifier,
                         orig=self.band_reference.upper(),
                         esc="ESCAPE '\\'"
-                )
+                        )
             else:
                 where += "band_reference = '{}'".format(
                     self.band_reference
