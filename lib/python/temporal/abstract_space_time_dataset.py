@@ -984,8 +984,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             start, end = granule.get_temporal_extent_as_tuple()
 
             where = create_temporal_relation_sql_where_statement(
-                    start, end, use_start, use_during, use_overlap,
-                    use_contain, use_equal, use_follows, use_precedes)
+                start, end, use_start, use_during, use_overlap,
+                use_contain, use_equal, use_follows, use_precedes)
 
             maps = self.get_registered_maps_as_objects(
                 where, "start_time", dbif)

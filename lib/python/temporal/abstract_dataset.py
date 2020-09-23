@@ -78,7 +78,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector,
             self.get_number_of_spatial_relations()
         else:
             return self.get_number_of_temporal_relations() + \
-                   self.get_number_of_spatial_relations()
+                self.get_number_of_spatial_relations()
 
         return None
 

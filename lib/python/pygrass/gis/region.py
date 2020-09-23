@@ -274,7 +274,7 @@ class Region(object):
     #----------MAGIC METHODS----------
     def __repr__(self):
         rg = "Region(north=%g, south=%g, east=%g, west=%g, "\
-                    "nsres=%g, ewres=%g, rows=%i, cols=%i, "\
+            "nsres=%g, ewres=%g, rows=%i, cols=%i, "\
                     "cells=%i, zone=%i, proj=%i)"
         return rg % (self.north, self.south, self.east, self.west,
                      self.nsres, self.ewres, self.rows, self.cols,

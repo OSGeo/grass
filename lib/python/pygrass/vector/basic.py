@@ -541,7 +541,7 @@ class CatsList(object):
 
     def __init__(self, c_cat_list=None):
         self.c_cat_list = c_cat_list if c_cat_list \
-                                     else ctypes.pointer(libvect.cat_list())
+            else ctypes.pointer(libvect.cat_list())
 
     def from_string(self, string):
         """Converts string of categories and cat ranges separated by commas

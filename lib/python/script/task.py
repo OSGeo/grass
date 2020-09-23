@@ -419,14 +419,14 @@ class processTask:
                 suppress_required = False
 
             self.task.flags.append( {
-                    "name"              : p.get('name'),
+                "name"              : p.get('name'),
                     "label"             : self._get_node_text(p, 'label'),
                     "description"       : self._get_node_text(p, 'description'),
                     "guisection"        : self._get_node_text(p, 'guisection'),
                     "suppress_required" : suppress_required,
                     "value"             : False,
                     "hidden"            : hidden
-                    } )
+                } )
 
     def _get_node_text(self, node, tag, default=''):
         """Get node text"""

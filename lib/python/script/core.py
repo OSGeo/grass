@@ -385,7 +385,7 @@ def handle_errors(returncode, result, args, kwargs):
         module, code = get_module_and_code(args, kwargs)
         fatal(_("Module {module} ({code}) failed with"
                 " non-zero return code {returncode}").format(
-                module=module, code=code, returncode=returncode))
+            module=module, code=code, returncode=returncode))
     elif handler.lower() == 'exit':
         sys.exit(returncode)
     else:

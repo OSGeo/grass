@@ -260,7 +260,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
             if where:
                 err += " or where condition is wrong"
             gscript.fatal(_(err) % {
-                            'sp': sp.get_new_map_instance(None).get_type(),
+                'sp': sp.get_new_map_instance(None).get_type(),
                             'i': sp.get_id()})
 
         if rows:

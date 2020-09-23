@@ -272,8 +272,8 @@ class Parameter(object):
             keydescvals = "\n    (%s)" % ', '.join(self.keydescvalues)
         return DOC['param'].format(name=self.name,
                 default=repr(self.default) + ', ' if self.default else '',
-                required='required, ' if self.required else 'optional, ',
-                multi='multi' if self.multiple else '',
-                ptype=self.typedesc, description=self.description,
-                values='\n    Values: {0}'.format(vals)  if vals else '',
-                keydescvalues= keydescvals if self.keydescvalues else '')
+            required='required, ' if self.required else 'optional, ',
+            multi='multi' if self.multiple else '',
+            ptype=self.typedesc, description=self.description,
+            values='\n    Values: {0}'.format(vals)  if vals else '',
+            keydescvalues= keydescvals if self.keydescvalues else '')
