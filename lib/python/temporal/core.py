@@ -463,7 +463,7 @@ def get_available_temporal_mapsets():
             # We need to set non-existing databases in case the mapset is the current mapset
             # to create it
             if (driver == "sqlite" and os.path.exists(database)) or mapset == get_current_mapset():
-                tgis_mapsets[mapset] = (driver,  database)
+                tgis_mapsets[mapset] = (driver, database)
 
             # We need to warn if the connection is defined but the database does not
             # exists
@@ -951,7 +951,7 @@ class SQLDatabaseInterfaceConnection(object):
         self.unique_connections = {}
 
         for mapset in self.tgis_mapsets.keys():
-            driver,  dbstring = self.tgis_mapsets[mapset]
+            driver, dbstring = self.tgis_mapsets[mapset]
 
             if dbstring not in self.unique_connections.keys():
                 self.unique_connections[dbstring] = DBConnection(backend=driver,
@@ -961,14 +961,14 @@ class SQLDatabaseInterfaceConnection(object):
 
         self.msgr = get_tgis_message_interface()
 
-    def get_dbmi(self,  mapset=None):
+    def get_dbmi(self, mapset=None):
         if mapset is None:
             mapset = self.current_mapset
 
         mapset = decode(mapset)
         return self.connections[mapset].dbmi
 
-    def rollback(self,  mapset=None):
+    def rollback(self, mapset=None):
         """
             Roll back the last transaction. This must be called
             in case a new query should be performed after a db error.
@@ -984,7 +984,7 @@ class SQLDatabaseInterfaceConnection(object):
            Supported backends are sqlite3 and postgresql
         """
         for mapset in self.tgis_mapsets.keys():
-            driver,  dbstring = self.tgis_mapsets[mapset]
+            driver, dbstring = self.tgis_mapsets[mapset]
             conn = self.connections[mapset]
             if conn.is_connected() is False:
                 conn.connect(dbstring)
@@ -1049,7 +1049,7 @@ class SQLDatabaseInterfaceConnection(object):
 
         return self.connections[mapset].check_table(table_name)
 
-    def execute(self,  statement,  args=None,  mapset=None):
+    def execute(self, statement, args=None, mapset=None):
         """
 
         :param mapset: The mapset of the abstract dataset or temporal
@@ -1064,9 +1064,9 @@ class SQLDatabaseInterfaceConnection(object):
             self.msgr.fatal(_("Unable to execute sql statement. " +
                               self._create_mapset_error_message(mapset)))
 
-        return self.connections[mapset].execute(statement,  args)
+        return self.connections[mapset].execute(statement, args)
 
-    def fetchone(self,  mapset=None):
+    def fetchone(self, mapset=None):
         if mapset is None:
             mapset = self.current_mapset
 
@@ -1077,7 +1077,7 @@ class SQLDatabaseInterfaceConnection(object):
 
         return self.connections[mapset].fetchone()
 
-    def fetchall(self,  mapset=None):
+    def fetchall(self, mapset=None):
         if mapset is None:
             mapset = self.current_mapset
 
@@ -1176,7 +1176,7 @@ class DBConnection(object):
             if self.connected:
                 self.connection.rollback()
 
-    def connect(self,  dbstring=None):
+    def connect(self, dbstring=None):
         """Connect to the DBMI to execute SQL statements
 
             Supported backends are sqlite3 and postgresql
@@ -1349,7 +1349,7 @@ class DBConnection(object):
 
         return table_exists
 
-    def execute(self, statement,  args=None):
+    def execute(self, statement, args=None):
         """Execute a SQL statement
 
            :param statement: The executable SQL statement or SQL script
@@ -1360,7 +1360,7 @@ class DBConnection(object):
             connected = True
         try:
             if args:
-                self.cursor.execute(statement,  args)
+                self.cursor.execute(statement, args)
             else:
                 self.cursor.execute(statement)
         except:

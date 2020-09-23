@@ -78,7 +78,7 @@ def message_server(lock, conn):
 
         message = data[1]
         # libgis limitation
-        if isinstance(message,  type(" ")):
+        if isinstance(message, type(" ")):
             if len(message) >= 2000:
                 message = message[:1999]
 

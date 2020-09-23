@@ -1775,14 +1775,14 @@ class Area(Geo):
 # Define a dictionary to convert the feature type to name and or object
 #
 
-GV_TYPE = {libvect.GV_POINT:    {'label': 'point',    'obj': Point},
-           libvect.GV_LINE:     {'label': 'line',     'obj': Line},
+GV_TYPE = {libvect.GV_POINT: {'label': 'point', 'obj': Point},
+           libvect.GV_LINE: {'label': 'line', 'obj': Line},
            libvect.GV_BOUNDARY: {'label': 'boundary', 'obj': Boundary},
            libvect.GV_CENTROID: {'label': 'centroid', 'obj': Centroid},
-           libvect.GV_FACE:     {'label': 'face',     'obj': None},
-           libvect.GV_KERNEL:   {'label': 'kernel',   'obj': None},
-           libvect.GV_AREA:     {'label': 'area',     'obj': Area},
-           libvect.GV_VOLUME:   {'label': 'volume',   'obj': None}, }
+           libvect.GV_FACE: {'label': 'face', 'obj': None},
+           libvect.GV_KERNEL: {'label': 'kernel', 'obj': None},
+           libvect.GV_AREA: {'label': 'area', 'obj': Area},
+           libvect.GV_VOLUME: {'label': 'volume', 'obj': None}, }
 
 GEOOBJ = {"areas": Area,
           "dblinks": None,

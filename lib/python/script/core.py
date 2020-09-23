@@ -1185,7 +1185,7 @@ def region(region3d=False, complete=False, env=None):
 
     s = read_command("g.region", flags=flgs, env=env)
     reg = parse_key_val(s, val_type=float)
-    for k in ['projection', 'zone', 'rows',  'cols',  'cells',
+    for k in ['projection', 'zone', 'rows', 'cols', 'cells',
               'rows3', 'cols3', 'cells3', 'depths']:
         if k not in reg:
             continue
@@ -1250,23 +1250,23 @@ def region_env(region3d=False, flags=None, env=None, **kwargs):
         return ''
     reg = parse_key_val(s)
 
-    kwdata = [('north',     'n'),
-              ('south',     's'),
-              ('east',      'e'),
-              ('west',      'w'),
-              ('cols',      'cols'),
-              ('rows',      'rows'),
+    kwdata = [('north', 'n'),
+              ('south', 's'),
+              ('east', 'e'),
+              ('west', 'w'),
+              ('cols', 'cols'),
+              ('rows', 'rows'),
               ('e-w resol', 'ewres'),
               ('n-s resol', 'nsres')]
     if region3d:
-        kwdata += [('top',        't'),
-                   ('bottom',     'b'),
-                   ('cols3',      'cols3'),
-                   ('rows3',      'rows3'),
-                   ('depths',     'depths'),
+        kwdata += [('top', 't'),
+                   ('bottom', 'b'),
+                   ('cols3', 'cols3'),
+                   ('rows3', 'rows3'),
+                   ('depths', 'depths'),
                    ('e-w resol3', 'ewres3'),
                    ('n-s resol3', 'nsres3'),
-                   ('t-b resol',  'tbres')]
+                   ('t-b resol', 'tbres')]
 
     for wkey, rkey in kwdata:
         grass_region += '%s: %s;' % (wkey, reg[rkey])
@@ -1455,22 +1455,22 @@ def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
 # color parsing
 
 named_colors = {
-    "white":   (1.00, 1.00, 1.00),
-    "black":   (0.00, 0.00, 0.00),
-    "red":     (1.00, 0.00, 0.00),
-    "green":   (0.00, 1.00, 0.00),
-    "blue":    (0.00, 0.00, 1.00),
-    "yellow":  (1.00, 1.00, 0.00),
+    "white": (1.00, 1.00, 1.00),
+    "black": (0.00, 0.00, 0.00),
+    "red": (1.00, 0.00, 0.00),
+    "green": (0.00, 1.00, 0.00),
+    "blue": (0.00, 0.00, 1.00),
+    "yellow": (1.00, 1.00, 0.00),
     "magenta": (1.00, 0.00, 1.00),
-    "cyan":    (0.00, 1.00, 1.00),
-    "aqua":    (0.00, 0.75, 0.75),
-    "grey":    (0.75, 0.75, 0.75),
-    "gray":    (0.75, 0.75, 0.75),
-    "orange":  (1.00, 0.50, 0.00),
-    "brown":   (0.75, 0.50, 0.25),
-    "purple":  (0.50, 0.00, 1.00),
-    "violet":  (0.50, 0.00, 1.00),
-    "indigo":  (0.00, 0.50, 1.00)}
+    "cyan": (0.00, 1.00, 1.00),
+    "aqua": (0.00, 0.75, 0.75),
+    "grey": (0.75, 0.75, 0.75),
+    "gray": (0.75, 0.75, 0.75),
+    "orange": (1.00, 0.50, 0.00),
+    "brown": (0.75, 0.50, 0.25),
+    "purple": (0.50, 0.00, 1.00),
+    "violet": (0.50, 0.00, 1.00),
+    "indigo": (0.00, 0.50, 1.00)}
 
 
 def parse_color(val, dflt=None):

@@ -87,7 +87,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             :return: The name of the map register table
         """
 
-        uuid_rand = str(uuid.uuid4()).replace("-",  "")
+        uuid_rand = str(uuid.uuid4()).replace("-", "")
 
         table_name = self.get_new_map_instance(None).get_type() + "_map_register_" + uuid_rand
         return table_name
@@ -1579,7 +1579,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             if order is not None and order != "":
                 sql += " ORDER BY %s" % (order.split(";")[0])
             try:
-                dbif.execute(sql,  mapset=self.base.mapset)
+                dbif.execute(sql, mapset=self.base.mapset)
                 rows = dbif.fetchall(mapset=self.base.mapset)
             except:
                 if connected:
@@ -2110,7 +2110,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 sql = "SELECT id FROM " + \
                     stds_register_table + " WHERE id = (%s)"
             try:
-                dbif.execute(sql, (map_id,),  mapset=self.base.mapset)
+                dbif.execute(sql, (map_id,), mapset=self.base.mapset)
                 row = dbif.fetchone(mapset=self.base.mapset)
             except:
                 self.msgr.warning(_("Error in register table request"))
@@ -2456,7 +2456,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 sql = sql.replace("SPACETIME_REGISTER_TABLE",
                                   stds_register_table)
 
-            dbif.execute(sql,  mapset=self.base.mapset)
+            dbif.execute(sql, mapset=self.base.mapset)
             row = dbif.fetchone(mapset=self.base.mapset)
 
             if row is not None:

@@ -45,7 +45,7 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         tgis.register_maps_in_space_time_dataset(type="raster", name="B", maps="b1,b2",
                                                  start="2001-01-01", increment="2 day", interval=True)
 
-        cls.runModule("v.random", overwrite=True, quiet=True, npoints=20, seed=3,  output='c1')
+        cls.runModule("v.random", overwrite=True, quiet=True, npoints=20, seed=3, output='c1')
 
         tgis.open_new_stds(name="C", type="stvds", temporaltype="absolute",
                            title="B", descr="C", semantic="field", overwrite=True)
@@ -76,8 +76,8 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual(D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
         ta = tgis.TemporalAlgebraParser(run=True, debug=True, dry_run=True)
         pc = ta.parse(expression="R = A {:,during} stvds(C)",
@@ -103,8 +103,8 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual(D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
         ta = tgis.TemporalAlgebraParser(run=True, debug=True,
                                         dry_run=True)
@@ -132,8 +132,8 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual(D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_select_operators4(self):
         """Testing the temporal select operator. Including temporal relations and 
@@ -148,8 +148,8 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual(D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'2 days')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'2 days')
 
     def test_temporal_select_operators5(self):
         """Testing the temporal select operator. Including temporal relations and 
@@ -164,8 +164,8 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual(D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_hash_operator1(self):
         """Testing the hash operator function in conditional statement. """
@@ -181,8 +181,8 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual(D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_hash_operator2(self):
         """Testing the hash operator function in conditional statement. """
@@ -198,8 +198,8 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual(D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_different_stds_handling1(self):
         """Testing the handling of different stds types as output. """
@@ -215,8 +215,8 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual(D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_different_stds_handling2(self):
         """Testing the handling of different stds types as output. """

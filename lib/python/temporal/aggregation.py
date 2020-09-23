@@ -103,7 +103,7 @@ def collect_map_names(sp, dbif, start, end, sampling):
 
 
 def aggregate_raster_maps(inputs, base, start, end, count, method,
-                          register_null, dbif,  offset=0):
+                          register_null, dbif, offset=0):
     """Aggregate a list of raster input maps with r.series
 
        :param inputs: The names of the raster maps to be aggregated
@@ -324,7 +324,7 @@ def aggregate_by_topology(granularity_list, granularity, map_list, topo_list,
                 process_queue.put(mod)
             else:
                 mod = copy.deepcopy(g_copy)
-                mod(raster=[aggregation_list[0],  output_name])
+                mod(raster=[aggregation_list[0], output_name])
                 process_queue.put(mod)
 
     process_queue.wait()

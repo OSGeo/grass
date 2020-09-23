@@ -24,8 +24,8 @@ class AbstractFinder(object):
         self.c_mapinfo = c_mapinfo
         self.table = table
         self.writeable = writeable
-        self.vtype = {'point':    libvect.GV_POINT,  # 1
-                      'line':     libvect.GV_LINE,   # 2
+        self.vtype = {'point': libvect.GV_POINT,  # 1
+                      'line': libvect.GV_LINE,   # 2
                       'boundary': libvect.GV_BOUNDARY,  # 3
                       'centroid': libvect.GV_CENTROID,  # 4
                       'all': -1}

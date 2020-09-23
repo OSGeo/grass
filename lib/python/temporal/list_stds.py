@@ -103,7 +103,7 @@ def get_dataset_list(type, temporal_type, columns=None, where=None,
         if order:
             sql += " ORDER BY " + order
 
-        dbif.execute(sql,  mapset=mapset)
+        dbif.execute(sql, mapset=mapset)
         rows = dbif.fetchall(mapset=mapset)
 
         if rows:

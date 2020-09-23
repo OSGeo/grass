@@ -280,11 +280,11 @@ class SQLDatabaseInterface(DictSQLSerializer):
         #print(sql)
 
         if dbif:
-            dbif.execute(sql,   mapset=self.mapset)
+            dbif.execute(sql, mapset=self.mapset)
         else:
             dbif = SQLDatabaseInterfaceConnection()
             dbif.connect()
-            dbif.execute(sql,   mapset=self.mapset)
+            dbif.execute(sql, mapset=self.mapset)
             dbif.close()
 
     def get_is_in_db_statement(self):
@@ -356,9 +356,9 @@ class SQLDatabaseInterface(DictSQLSerializer):
 
         if dbif:
             if len(args) == 0:
-                dbif.execute(sql,  mapset=self.mapset)
+                dbif.execute(sql, mapset=self.mapset)
             else:
-                dbif.execute(sql, args,  mapset=self.mapset)
+                dbif.execute(sql, args, mapset=self.mapset)
             row = dbif.fetchone(mapset=self.mapset)
         else:
             dbif = SQLDatabaseInterfaceConnection()
