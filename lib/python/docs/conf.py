@@ -35,7 +35,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.environ['GISBASE'], 'etc', 'p
 
 from grass.script import core
 
-footer_tmpl = string.Template(\
+footer_tmpl = string.Template(
     r"""
 {% block footer %}<hr class="header">
 <p><a href="../index.html">Help Index</a> | <a href="../topics.html">Topics Index</a> | <a href="../keywords.html">Keywords Index</a> | <a href="../full_index.html">Full Index</a></p>

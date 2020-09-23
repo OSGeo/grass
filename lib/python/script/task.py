@@ -169,7 +169,7 @@ class grassTask:
                     return p
 
         if raiseError:
-            raise ValueError(_("Parameter element '%(element)s' not found: '%(value)s'") % \
+            raise ValueError(_("Parameter element '%(element)s' not found: '%(value)s'") %
                 {'element': element, 'value': value })
         else:
             return None
@@ -203,7 +203,7 @@ class grassTask:
                     desc = p.get('label', '')
                     if not desc:
                         desc = p['description']
-                    errorList.append(_("Parameter '%(name)s' (%(desc)s) is missing.") % \
+                    errorList.append(_("Parameter '%(name)s' (%(desc)s) is missing.") %
                                      {'name': p['name'], 'desc': desc})
 
         return errorList

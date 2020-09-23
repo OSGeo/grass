@@ -193,8 +193,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
           :return: List of maps from maplistA that fulfil the topological relationships
                   to maplistB specified in topolist.
         """
-        topologylist = ["EQUAL", "FOLLOWS", "PRECEDES", "OVERLAPS", "OVERLAPPED", \
-                        "DURING", "STARTS", "FINISHES", "CONTAINS", "STARTED", \
+        topologylist = ["EQUAL", "FOLLOWS", "PRECEDES", "OVERLAPS", "OVERLAPPED",
+                        "DURING", "STARTS", "FINISHES", "CONTAINS", "STARTED",
                         "FINISHED"]
         complementdict = {"EQUAL": "EQUAL", "FOLLOWS": "PRECEDES",
                           "PRECEDES": "FOLLOWS", "OVERLAPS": "OVERLAPPED",
@@ -342,7 +342,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                                                                                         copy = True, rename = False,
                                                                                         remove = True)
                         # Create overlaid map extent.
-                        returncode = self.overlay_map_extent(map_new, map_j, 'and', \
+                        returncode = self.overlay_map_extent(map_new, map_j, 'and',
                                                                 temp_op = temporal)
                         # Stop the loop if no temporal or spatial relationship exist.
                         if returncode == 0:
@@ -386,7 +386,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                     vectormap = VectorDataset(vectorname + "@" + get_current_mapset())
                     if vectormap.map_exists() and self.overwrite == False:
                         self.msgr.fatal(_("Error vector maps with basename %s exist. "
-                                          "Use --o flag to overwrite existing file") \
+                                          "Use --o flag to overwrite existing file")
                                           % (vectorname))
                 for map_i in t[3]:
                     if "cmd_list" in dir(map_i):
@@ -492,7 +492,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             elif map_i.is_in_db(dbif=dbif) and self.overwrite == False:
                                 # Raise error if map exists and no overwrite flag is given.
                                 self.msgr.fatal(_("Error vector map %s exist in temporal database. "
-                                                  "Use overwrite flag.  : \n%s") \
+                                                  "Use overwrite flag.  : \n%s")
                                                   % (map_i.get_map_id(), cmd.popen.stderr))
                             else:
                                 # Insert map into temporal database.

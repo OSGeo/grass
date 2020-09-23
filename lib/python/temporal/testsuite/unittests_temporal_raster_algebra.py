@@ -347,7 +347,7 @@ class TestTemporalRasterAlgebra(TestCase):
 
         """
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
-        tra.parse(expression='R = if(start_date(A) < "2001-01-03" && A#A == 1, A{+, starts,l}C, A{+, finishes,l}C)', \
+        tra.parse(expression='R = if(start_date(A) < "2001-01-03" && A#A == 1, A{+, starts,l}C, A{+, finishes,l}C)',
                   basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")

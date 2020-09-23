@@ -1761,7 +1761,7 @@ def legal_name(s):
         useful anyway for checking map names and column names.
     """
     if not s or s[0] == '.':
-        warning(_("Illegal filename <%s>. Cannot be 'NULL' or start with " \
+        warning(_("Illegal filename <%s>. Cannot be 'NULL' or start with "
                   "'.'.") % s)
         return False
 

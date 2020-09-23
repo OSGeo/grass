@@ -788,7 +788,7 @@ class VectorTopo(Vector):
         supported = ['point', 'line', 'boundary', 'centroid']
 
         if feature_type.lower() not in supported:
-            raise GrassError("Unsupported feature type <%s>, "\
+            raise GrassError("Unsupported feature type <%s>, "
                              "supported are <%s>" %(feature_type,
                                                    ",".join(supported)))
 

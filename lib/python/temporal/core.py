@@ -456,7 +456,7 @@ def get_available_temporal_mapsets():
         driver = c_library_interface.get_driver_name(mapset)
         database = c_library_interface.get_database_name(mapset)
 
-        message_interface.debug(1, "get_available_temporal_mapsets: "\
+        message_interface.debug(1, "get_available_temporal_mapsets: "
                                    "\n  mapset %s\n  driver %s\n  database %s" %(mapset,
                                    driver, database))
         if driver and database:
@@ -469,7 +469,7 @@ def get_available_temporal_mapsets():
             # We need to warn if the connection is defined but the database does not
             # exists
             if driver == "sqlite" and not os.path.exists(database):
-                message_interface.warning("Temporal database connection defined as:\n" + \
+                message_interface.warning("Temporal database connection defined as:\n" +
                                           database + "\nBut database file does not exist.")
     return tgis_mapsets
 
@@ -651,26 +651,26 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
         if dbif.fetchone()[0]:
             db_exists = True
 
-    backup_howto = _("The format of your actual temporal database is not " \
-                     "supported any more.\n" \
-                     "Please create a backup of your temporal database "\
+    backup_howto = _("The format of your actual temporal database is not "
+                     "supported any more.\n"
+                     "Please create a backup of your temporal database "
                      "to avoid lossing data.\nSOLUTION: ")
     if tgis_db_version > 2:
-        backup_howto += _("Run t.upgrade command installed from " \
+        backup_howto += _("Run t.upgrade command installed from "
                           "GRASS Addons in order to upgrade your temporal database.\n")
     else:
-        backup_howto += _("You need to export it by " \
-                          "restoring the GRASS GIS version used for creating this DB."\
-                          "Notes: Use t.rast.export and t.vect.export "\
-                          "to make a backup of your" \
-                          " existing space time datasets. To save the timestamps of" \
-                          " your existing maps and space time datasets, use " \
-                          "t.rast.list, t.vect.list and t.rast3d.list. "\
-                          "You can register the existing time stamped maps easily if"\
-                          " you export columns=id,start_time,end_time into text "\
-                          "files and use t.register to register them again in new" \
-                          " created space time datasets (t.create). After the backup"\
-                          " remove the existing temporal database, a new one will be"\
+        backup_howto += _("You need to export it by "
+                          "restoring the GRASS GIS version used for creating this DB."
+                          "Notes: Use t.rast.export and t.vect.export "
+                          "to make a backup of your"
+                          " existing space time datasets. To save the timestamps of"
+                          " your existing maps and space time datasets, use "
+                          "t.rast.list, t.vect.list and t.rast3d.list. "
+                          "You can register the existing time stamped maps easily if"
+                          " you export columns=id,start_time,end_time into text "
+                          "files and use t.register to register them again in new"
+                          " created space time datasets (t.create). After the backup"
+                          " remove the existing temporal database, a new one will be"
                           " created automatically.\n")
 
     if db_exists is True:
@@ -897,7 +897,7 @@ def upgrade_temporal_database(dbif):
             "upgrade_db_%s_to_%s.sql" % (upgrade_db_from, tgis_db_version)),
             'r').read()
     except FileNotFoundError:
-        msgr.fatal(_("Unsupported TGIS DB upgrade scenario: from version %s to %s") % \
+        msgr.fatal(_("Unsupported TGIS DB upgrade scenario: from version %s to %s") %
                    (upgrade_db_from, tgis_db_version))
 
     drop_views_sql = open(
@@ -905,7 +905,7 @@ def upgrade_temporal_database(dbif):
         'r').read()
 
     msgr.message(
-        _("Upgrading temporal database <%s> from version %s to %s...") % \
+        _("Upgrading temporal database <%s> from version %s to %s...") %
         (tgis_database_string, upgrade_db_from, tgis_db_version))
     # Drop views
     dbif.execute_transaction(drop_views_sql)
@@ -1112,7 +1112,7 @@ class SQLDatabaseInterfaceConnection(object):
         return("You have no permission to "
                "access mapset <%(mapset)s>, or "
                "mapset <%(mapset)s> has no temporal database. "
-               "Accessible mapsets are: <%(mapsets)s>" % \
+               "Accessible mapsets are: <%(mapsets)s>" %
                {"mapset": decode(mapset),
                 "mapsets":','.join(self.tgis_mapsets.keys())})
 
@@ -1155,8 +1155,8 @@ class DBConnection(object):
         self.dbstring = dbstring
 
         self.msgr = get_tgis_message_interface()
-        self.msgr.debug(1, "DBConnection constructor:"\
-                           "\n  backend: %s"\
+        self.msgr.debug(1, "DBConnection constructor:"
+                           "\n  backend: %s"
                            "\n  dbstring: %s" %(backend, self.dbstring))
 
     def __del__(self):

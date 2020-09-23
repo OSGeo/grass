@@ -792,7 +792,7 @@ class TemporalAlgebraParser(object):
         self.time_suffix = time_suffix
 
         # Topology lists
-        self.temporal_topology_list = ["EQUAL", "FOLLOWS", "PRECEDES", "OVERLAPS", "OVERLAPPED", \
+        self.temporal_topology_list = ["EQUAL", "FOLLOWS", "PRECEDES", "OVERLAPS", "OVERLAPPED",
                                        "DURING", "STARTS", "FINISHES", "CONTAINS", "STARTED", "FINISHED"]
         self.spatial_topology_list = ["EQUIVALENT", "COVER", "OVERLAP", "IN", "CONTAIN", "MEET"]
 
