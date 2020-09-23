@@ -169,7 +169,7 @@ class grassTask:
 
         if raiseError:
             raise ValueError(_("Parameter element '%(element)s' not found: '%(value)s'") % \
-                { 'element' : element, 'value' : value })
+                {'element' : element, 'value' : value })
         else:
             return None
 
@@ -381,7 +381,7 @@ class processTask:
             else:
                 hidden = False
 
-            self.task.params.append( {
+            self.task.params.append({
                 "name"           : p.get('name'),
                 "type"           : p.get('type'),
                 "required"       : required,
@@ -418,7 +418,7 @@ class processTask:
             else:
                 suppress_required = False
 
-            self.task.flags.append( {
+            self.task.flags.append({
                 "name"              : p.get('name'),
                     "label"             : self._get_node_text(p, 'label'),
                     "description"       : self._get_node_text(p, 'description'),

@@ -104,7 +104,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 7, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 month')
        
     def test_common_granularity_2(self):
@@ -123,7 +123,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 7, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 month')
        
 
@@ -143,7 +143,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 6, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 month')
        
 
@@ -163,7 +163,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 6, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 month')
        
     def test_common_granularity_4(self):
@@ -182,7 +182,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 6, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 month')
        
     def test_common_granularity_5(self):
@@ -201,7 +201,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 6, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 month')
          
     def test_common_granularity_6(self):
@@ -220,7 +220,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 3, 1))
         self.assertEqual(end, datetime.datetime(2001, 6, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 month')
        
 

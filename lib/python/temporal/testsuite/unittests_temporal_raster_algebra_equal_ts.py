@@ -74,7 +74,7 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 14)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  False)
+        self.assertEqual(D.check_temporal_topology(),  False)
         self.assertEqual(D.get_granularity(),  None)
 
     def test_complex_operator(self):
@@ -101,7 +101,7 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 14)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  False)
+        self.assertEqual(D.check_temporal_topology(),  False)
         self.assertEqual(D.get_granularity(),  None)
 
     def test_single_map_complex_operator(self):
@@ -128,7 +128,7 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 110)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  None)
 
     def test_single_map_simple_operator(self):
@@ -155,7 +155,7 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 110)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  None)
 
     def test_single_map_complex_operator_right_ts(self):
@@ -183,7 +183,7 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 110)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  False)
+        self.assertEqual(D.check_temporal_topology(),  False)
         self.assertEqual(D.get_granularity(),  None)
 
 

@@ -95,7 +95,7 @@ class TestTemporalRasterAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 7, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 month')
 
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True, dry_run=True)
@@ -126,7 +126,7 @@ class TestTemporalRasterAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 7, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 month')
 
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True, dry_run=True)
@@ -158,7 +158,7 @@ class TestTemporalRasterAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, None)
         self.assertEqual(end, None)
-        self.assertEqual( D.check_temporal_topology(),  False)
+        self.assertEqual(D.check_temporal_topology(),  False)
         self.assertEqual(D.get_granularity(),  None)
 
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True, dry_run=True)
@@ -189,7 +189,7 @@ class TestTemporalRasterAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 5, 6))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 day')
 
     def test_simple_arith_hash_1(self):
@@ -237,7 +237,7 @@ class TestTemporalRasterAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 5, 6))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 day')
 
     def test_simple_arith_if_1(self):
@@ -347,7 +347,7 @@ class TestTemporalRasterAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 3, 1))
         self.assertEqual(end, datetime.datetime(2001, 4, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 month')
 
 

@@ -83,7 +83,7 @@ class TestTemporalRasterAlgebraConditionalComplements(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 7))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_temporal_conditional_complement_right_side_timestamps(self):
@@ -119,7 +119,7 @@ class TestTemporalRasterAlgebraConditionalComplements(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 7))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
 

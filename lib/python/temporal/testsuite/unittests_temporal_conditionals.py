@@ -88,7 +88,7 @@ class TestTemporalConditionals(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 day')
 
     def test_temporal_condition_2(self):
@@ -104,7 +104,7 @@ class TestTemporalConditionals(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 day')
 
     def test_temporal_condition_3(self):
@@ -120,7 +120,7 @@ class TestTemporalConditionals(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 day')
 
     def test_temporal_condition_4(self):
@@ -136,7 +136,7 @@ class TestTemporalConditionals(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 day')
 
     def test_temporal_condition_5(self):
@@ -152,7 +152,7 @@ class TestTemporalConditionals(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 day')
 
     def test_temporal_condition_6(self):
@@ -169,7 +169,7 @@ class TestTemporalConditionals(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 day')
 
     def test_temporal_condition_7(self):
@@ -186,7 +186,7 @@ class TestTemporalConditionals(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'2 days')
 
     def test_temporal_condition_8(self):
@@ -203,7 +203,7 @@ class TestTemporalConditionals(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'2 days')
 
     def test_temporal_condition_9(self):
@@ -220,7 +220,7 @@ class TestTemporalConditionals(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'2 days')
 
     def test_temporal_condition_10(self):
@@ -237,7 +237,7 @@ class TestTemporalConditionals(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2000, 12, 31))
         self.assertEqual(end, datetime.datetime(2001, 1, 6))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'2 days')
 
     def test_temporal_condition_11(self):
@@ -254,7 +254,7 @@ class TestTemporalConditionals(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2000, 12, 31))
         self.assertEqual(end, datetime.datetime(2001, 1, 2))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'2 days')
 
     def test_temporal_condition_12(self):
@@ -271,7 +271,7 @@ class TestTemporalConditionals(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2000, 12, 31))
         self.assertEqual(end, datetime.datetime(2001, 1, 2))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'2 days')
 
     def test_temporal_conditional_13(self):
@@ -289,7 +289,7 @@ class TestTemporalConditionals(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 day')
 
     def test_temporal_condition_else_1(self):
@@ -306,7 +306,7 @@ class TestTemporalConditionals(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 day')
 
     def test_temporal_condition_else_2(self):
@@ -323,7 +323,7 @@ class TestTemporalConditionals(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 day')
 
     def test_temporal_condition_else_3(self):
@@ -340,7 +340,7 @@ class TestTemporalConditionals(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 day')
 
     def test_temporal_condition_else_4(self):
@@ -359,7 +359,7 @@ class TestTemporalConditionals(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2000, 12, 31))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  False)
+        self.assertEqual(D.check_temporal_topology(),  False)
         self.assertEqual(D.get_granularity(),  u'2 days')
 
 if __name__ == '__main__':

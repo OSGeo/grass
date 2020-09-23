@@ -79,7 +79,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_temporal_conditional_1(self):
@@ -97,7 +97,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1,  3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_temporal_conditional_relation_1(self):
@@ -115,7 +115,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  False)
+        self.assertEqual(R.check_temporal_topology(),  False)
         self.assertEqual(R.get_granularity(),  u'2 days')
 
     def test_spatial_conditional_1(self):
@@ -132,7 +132,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatial_conditional_2(self):
@@ -149,7 +149,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatial_conditional_3(self):
@@ -166,7 +166,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatial_conditional_4(self):
@@ -183,7 +183,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatial_conditional_5(self):
@@ -200,7 +200,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'2 days')
 
     def test_spatial_conditional_relation_1(self):
@@ -217,7 +217,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatial_conditional_relation_2(self):
@@ -233,7 +233,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatial_conditional_numeric_relation_1(self):
@@ -249,7 +249,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatial_conditional_numeric_relation_2(self):
@@ -266,7 +266,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatial_conditional_numeric_1(self):
@@ -282,7 +282,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatial_conditional_numeric_2(self):
@@ -298,7 +298,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatial_conditional_numeric_3(self):
@@ -314,7 +314,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatial_conditional_numeric_4(self):
@@ -330,7 +330,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatiotemporal_conditional_1(self):
@@ -346,7 +346,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatiotemporal_conditional_2(self):
@@ -362,7 +362,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatiotemporal_conditional_relation_1(self):
@@ -378,7 +378,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatiotemporal_conditional_relation_2(self):
@@ -394,7 +394,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatiotemporal_conditional_numeric_relation_1(self):
@@ -410,7 +410,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatiotemporal_conditional_numeric_relation_2(self):
@@ -427,7 +427,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatiotemporal_conditional_numeric_1(self):
@@ -443,7 +443,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatiotemporal_conditional_numeric_2(self):
@@ -459,7 +459,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatiotemporal_conditional_numeric_3(self):
@@ -475,7 +475,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
     def test_spatiotemporal_conditional_numeric_4(self):
@@ -491,7 +491,7 @@ class TestTemporalRasterAlgebraConditionals(TestCase):
         start, end = R.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 2))
-        self.assertEqual( R.check_temporal_topology(),  True)
+        self.assertEqual(R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
 

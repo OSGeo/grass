@@ -767,8 +767,8 @@ class DatasetBase(SQLDatabaseInterface):
     def print_info(self):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
-        print( " +-------------------- Basic information -------------------------------------+")
-        print( " | Id: ........................ " + str(self.get_id()))
+        print(" +-------------------- Basic information -------------------------------------+")
+        print(" | Id: ........................ " + str(self.get_id()))
         print(" | Name: ...................... " + str(self.get_name()))
         print(" | Mapset: .................... " + str(self.get_mapset()))
         if self.get_layer():

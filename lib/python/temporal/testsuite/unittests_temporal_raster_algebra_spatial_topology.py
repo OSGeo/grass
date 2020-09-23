@@ -94,7 +94,7 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 8)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  False)
+        self.assertEqual(D.check_temporal_topology(),  False)
         self.assertEqual(D.get_granularity(),  None)
 
     def test_equal_overlap_sum(self):
@@ -124,7 +124,7 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 6)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  False)
+        self.assertEqual(D.check_temporal_topology(),  False)
         self.assertEqual(D.get_granularity(),  None)
 
     def test_equal_overlap_sum_with_null(self):
@@ -154,7 +154,7 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 6)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  False)
+        self.assertEqual(D.check_temporal_topology(),  False)
         self.assertEqual(D.get_granularity(),  None)
 
     def test_equal_contain_sum(self):
@@ -181,7 +181,7 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 5)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  None)
 
     def test_equal_equivalent_contain_sum(self):
@@ -212,7 +212,7 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 8)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  False)
+        self.assertEqual(D.check_temporal_topology(),  False)
         self.assertEqual(D.get_granularity(),  None)
 
     def test_equal_equivalent_compare(self):
@@ -243,7 +243,7 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 8)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  False)
+        self.assertEqual(D.check_temporal_topology(),  False)
         self.assertEqual(D.get_granularity(),  None)
 
 
