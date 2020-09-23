@@ -1101,7 +1101,7 @@ class Line(Geo):
 
         ..
         """
-        match = re.match('LINESTRING\((.*)\)', wkt)
+        match = re.match(r'LINESTRING\((.*)\)', wkt)
         if match:
             self.reset()
             for coord in match.groups()[0].strip().split(','):
