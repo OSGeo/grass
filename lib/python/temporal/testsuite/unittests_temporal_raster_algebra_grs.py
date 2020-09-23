@@ -297,7 +297,7 @@ class TestTemporalRasterAlgebra(TestCase):
     def test_temporal_neighbors(self):
         """Simple temporal neighborhood computation test"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
-        expr ='R = (A[0,0,-1] : D) + (A[0,0,1] : D)'
+        expr = 'R = (A[0,0,-1] : D) + (A[0,0,1] : D)'
         ret = tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
         self.assertEqual(ret, True)
 

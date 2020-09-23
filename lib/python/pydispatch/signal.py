@@ -22,7 +22,7 @@ def _islambda(function):
     >>> _islambda(_islambda)
     False
     """
-    return isinstance(function, type(lambda: None)) and function.__name__== (lambda: None).__name__
+    return isinstance(function, type(lambda: None)) and function.__name__ == (lambda: None).__name__
 
 
 class Signal(object):

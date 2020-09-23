@@ -277,7 +277,7 @@ def aggregate_by_topology(granularity_list, granularity, map_list, topo_list,
 
         if aggregation_list:
             msgr.verbose(_("Aggregating %(len)i raster maps from %(start)s to"
-                           " %(end)s")  %({"len": len(aggregation_list),
+                           " %(end)s")  % ({"len": len(aggregation_list),
                            "start": str(granule.temporal_extent.get_start_time()),
                                "end": str(granule.temporal_extent.get_end_time())}))
 

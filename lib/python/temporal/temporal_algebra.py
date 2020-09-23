@@ -1302,7 +1302,7 @@ class TemporalAlgebraParser(object):
         :raises: This method will raise a syntax error in case the topology name is unknown
         """
         temporal_topo_list = []
-        spatial_topo_list= []
+        spatial_topo_list = []
         # Check if given temporal relation are valid.
         for topo in topolist:
             if topo.upper() not in self.temporal_topology_list and topo.upper() not in self.spatial_topology_list:
@@ -2063,8 +2063,8 @@ class TemporalAlgebraParser(object):
             #self.msgr.fatal("Condition list is not complete. Elements missing")
             for iter in range(len(tvarexpr)):
                 expr = tvarexpr[iter]
-                operator = tvarexpr[iter +1]
-                relexpr = tvarexpr[iter +2]
+                operator = tvarexpr[iter + 1]
+                relexpr = tvarexpr[iter + 2]
                 if all([issubclass(type(ele), list) for ele in [expr,  relexpr]]):
                     resultlist = self.build_spatio_temporal_topology_list(expr, relexpr)
             # Loop through the list, search for map lists or global variables.
@@ -2208,7 +2208,7 @@ class TemporalAlgebraParser(object):
                             if maps_stds_type != self.stdstype:
                                 self.msgr.warning(_("The resulting space time dataset type <%(a)s> is "
                                                     "different from the requested type <%(b)s>"
-                                                    %({"a":maps_stds_type,  "b":self.stdstype})))
+                                                    % ({"a":maps_stds_type,  "b":self.stdstype})))
                         else:
                             map_type_2 = map_i.get_type()
                             if map_type != map_type_2:

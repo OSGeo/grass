@@ -146,7 +146,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                 break
 
             if tok.type == "STVDS" or tok.type == "STRDS" or tok.type == "STR3DS":
-                raise SyntaxError("Syntax error near '%s'" %(tok.type))
+                raise SyntaxError("Syntax error near '%s'" % (tok.type))
 
         self.lexer = TemporalVectorAlgebraLexer()
         self.lexer.build()
@@ -387,7 +387,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                     if vectormap.map_exists() and self.overwrite == False:
                         self.msgr.fatal(_("Error vector maps with basename %s exist. "
                                           "Use --o flag to overwrite existing file") \
-                                          %(vectorname))
+                                          % (vectorname))
                 for map_i in t[3]:
                     if "cmd_list" in dir(map_i):
                         # Execute command list.
@@ -419,7 +419,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
                             if cmd.popen.returncode != 0:
                                 self.msgr.fatal(_("Error starting %s : \n%s")
-                                                  %(cmd.get_bash(),
+                                                  % (cmd.get_bash(),
                                                   cmd.popen.stderr))
                             mapname = cmd.outputs['output'].value
                             if mapname.find("@") >= 0:
@@ -458,7 +458,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             if map_test.map_exists() and self.overwrite is False:
                                 self.msgr.fatal("Error raster maps with basename %s exist. "
                                                 "Use --o flag to overwrite existing file"
-                                                %(mapname))
+                                                % (mapname))
 
                             map_result.set_temporal_extent(map_i.get_temporal_extent())
                             map_result.set_spatial_extent(map_i.get_spatial_extent())
@@ -493,7 +493,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                                 # Raise error if map exists and no overwrite flag is given.
                                 self.msgr.fatal(_("Error vector map %s exist in temporal database. "
                                                   "Use overwrite flag.  : \n%s") \
-                                                  %(map_i.get_map_id(), cmd.popen.stderr))
+                                                  % (map_i.get_map_id(), cmd.popen.stderr))
                             else:
                                 # Insert map into temporal database.
                                 map_i.insert(dbif=dbif)

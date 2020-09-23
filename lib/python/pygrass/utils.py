@@ -14,8 +14,8 @@ from grass.script import utils as grassutils
 from grass.pygrass.errors import GrassError
 
 
-test_vector_name="Utils_test_vector"
-test_raster_name="Utils_test_raster"
+test_vector_name = "Utils_test_vector"
+test_raster_name = "Utils_test_raster"
 
 def looking(obj, filter_string):
     """

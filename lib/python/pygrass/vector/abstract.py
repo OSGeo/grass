@@ -14,7 +14,7 @@ from grass.pygrass.errors import GrassError, OpenError, must_be_open
 from grass.pygrass.vector.table import DBlinks, Link
 from grass.pygrass.vector.find import PointFinder, BboxFinder, PolygonFinder
 
-test_vector_name="abstract_doctest_map"
+test_vector_name = "abstract_doctest_map"
 
 def is_open(c_mapinfo):
     """Return if the Vector is open"""

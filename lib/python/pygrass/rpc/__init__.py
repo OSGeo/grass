@@ -230,8 +230,8 @@ def data_provider_server(lock, conn):
         functions[data[0]](lock, conn, data)
         lock.release()
 
-test_vector_name="data_provider_vector_map"
-test_raster_name="data_provider_raster_map"
+test_vector_name = "data_provider_vector_map"
+test_raster_name = "data_provider_raster_map"
 
 class DataProvider(RPCServerBase):
     """Fast and exit-safe interface to PyGRASS data delivery functions

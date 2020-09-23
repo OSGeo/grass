@@ -334,18 +334,18 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         if cmd_type == 'condition':
             conditionsub = sub_cmdstring(map_i)
             conclusionsub = sub_cmdstring(relmap)
-            cmdstring = "if(%s, %s)" %(conditionsub, conclusionsub)
+            cmdstring = "if(%s, %s)" % (conditionsub, conclusionsub)
         elif cmd_type == 'conclusion':
             thensub = sub_cmdstring(map_i)
             elsesub = sub_cmdstring(relmap)
-            cmdstring = "%s, %s" %(thensub, elsesub)
+            cmdstring = "%s, %s" % (thensub, elsesub)
         elif cmd_type == 'operator':
             leftsub = sub_cmdstring(map_i)
             rightsub = sub_cmdstring(relmap)
             if operator == None:
                 self.msgr.fatal("Error: Can't build command string for map %s, operator is missing"
-                    %(map_i.get_map_id()))
-            cmdstring = "(%s %s %s)" %(leftsub, operator, rightsub)
+                    % (map_i.get_map_id()))
+            cmdstring = "(%s %s %s)" % (leftsub, operator, rightsub)
         return(cmdstring)
 
     def compare_cmd_value(self, map_i, compop, aggregate,
@@ -831,7 +831,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                     # Select dataset entry from database.
                     map_i.select(dbif=self.dbif)
                     # Create command list for map object.
-                    cmdstring = "(%s)" %(map_i.get_map_id())
+                    cmdstring = "(%s)" % (map_i.get_map_id())
                     map_i.cmd_list = cmdstring
             # Return map object.
             t[0] = cmdstring
@@ -952,9 +952,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 mapinput = map_i.get_id()
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_i):
-                    cmdstring = "(%s %s %s)" %(map_i.cmd_list, t[2], t[3])
+                    cmdstring = "(%s %s %s)" % (map_i.cmd_list, t[2], t[3])
                 else:
-                    cmdstring = "(%s %s %s)" %(mapinput, t[2], t[3])
+                    cmdstring = "(%s %s %s)" % (mapinput, t[2], t[3])
                 # Conditional append of module command.
                 map_i.cmd_list = cmdstring
                 # Append map to result map list.
@@ -1003,9 +1003,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 mapinput = map_i.get_id()
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_i):
-                    cmdstring = "(%s %s %s)" %(t[1], t[2], map_i.cmd_list)
+                    cmdstring = "(%s %s %s)" % (t[1], t[2], map_i.cmd_list)
                 else:
-                    cmdstring = "(%s %s %s)" %(t[1], t[2], mapinput)
+                    cmdstring = "(%s %s %s)" % (t[1], t[2], mapinput)
                 # Conditional append of module command.
                 map_i.cmd_list = cmdstring
                 # Append map to result map list.
@@ -1117,9 +1117,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 mapinput = map_i.get_id()
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_i):
-                    cmdstring = "(%s %s %s)" %(map_i.cmd_list, t[2], t[3])
+                    cmdstring = "(%s %s %s)" % (map_i.cmd_list, t[2], t[3])
                 else:
-                    cmdstring = "(%s %s %s)" %(mapinput, t[2], t[3])
+                    cmdstring = "(%s %s %s)" % (mapinput, t[2], t[3])
                 # Conditional append of module command.
                 map_i.cmd_list = cmdstring
                 # Append map to result map list.
@@ -1159,9 +1159,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 mapinput = map_i.get_id()
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_i):
-                    cmdstring = "(%s %s %s)" %(t[1], t[2], map_i.cmd_list)
+                    cmdstring = "(%s %s %s)" % (t[1], t[2], map_i.cmd_list)
                 else:
-                    cmdstring = "(%s %s %s)" %(t[1], t[2], mapinput)
+                    cmdstring = "(%s %s %s)" % (t[1], t[2], mapinput)
                 # Conditional append of module command.
                 map_i.cmd_list = cmdstring
                 # Append map to result map list.
@@ -1256,7 +1256,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                   | number MULT number
                   | number MOD number
         """
-        numstring = "(%s %s %s)" %(t[1], t[2], t[3])
+        numstring = "(%s %s %s)" % (t[1], t[2], t[3])
 
         t[0] = numstring
 
@@ -1300,9 +1300,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map_i in maplist:
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_i):
-                    cmdstring = "%s(%s)" %(t[1].lower(), map_i.cmd_list)
+                    cmdstring = "%s(%s)" % (t[1].lower(), map_i.cmd_list)
                 else:
-                    cmdstring = "%s(%s)" %(t[1].lower(), map_i.get_id())
+                    cmdstring = "%s(%s)" % (t[1].lower(), map_i.get_id())
                 # Set new command list for map.
                 map_i.cmd_list = cmdstring
                 # Append map with updated command list to result list.
@@ -1323,7 +1323,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         mapstring = t[3]
 
         if self.run:
-            cmdstring = "%s(%s)" %(t[1].lower(), mapstring)
+            cmdstring = "%s(%s)" % (t[1].lower(), mapstring)
 
             t[0] = cmdstring
 
@@ -1344,9 +1344,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map_i in maplist:
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_i):
-                    cmdstring = "%s(%s)" %(t[1].lower(), map_i.cmd_list)
+                    cmdstring = "%s(%s)" % (t[1].lower(), map_i.cmd_list)
                 else:
-                    cmdstring = "%s(%s)" %(t[1].lower(), map_i.get_id())
+                    cmdstring = "%s(%s)" % (t[1].lower(), map_i.get_id())
                 # Set new command list for map.
                 map_i.cmd_list = cmdstring
                 # Append map with updated command list to result list.
@@ -1372,9 +1372,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map_i in maplist:
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_i):
-                    cmdstring = "!isnull(%s)" %(map_i.cmd_list)
+                    cmdstring = "!isnull(%s)" % (map_i.cmd_list)
                 else:
-                    cmdstring = "!isnull(%s)" %(map_i.get_id())
+                    cmdstring = "!isnull(%s)" % (map_i.get_id())
                 # Set new command list for map.
                 map_i.cmd_list = cmdstring
                 # Append map with updated command list to result list.
@@ -1400,9 +1400,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map_i in maplist:
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_i):
-                    cmdstring = "%s %s %s" %(map_i.cmd_list, t[2], t[3])
+                    cmdstring = "%s %s %s" % (map_i.cmd_list, t[2], t[3])
                 else:
-                    cmdstring = "%s %s %s" %(map_i.get_id(), t[2], t[3])
+                    cmdstring = "%s %s %s" % (map_i.get_id(), t[2], t[3])
                 # Set new command list for map.
                 map_i.cmd_list = cmdstring
                 # Append map with updated command list to result list.
@@ -1428,9 +1428,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map_i in maplist:
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_i):
-                    cmdstring = "%s" %(map_i.cmd_list)
+                    cmdstring = "%s" % (map_i.cmd_list)
                 else:
-                    cmdstring = "%s" %(map_i.get_id())
+                    cmdstring = "%s" % (map_i.get_id())
                 # Set new command list for map.
                 map_i.cmd_list = cmdstring
                 # Append map with updated command list to result list.
@@ -1646,7 +1646,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             numelse = t[9] + t[10] + t[11]
         numthen = str(numthen)
         numelse = str(numelse)
-        print(numthen + " " +numelse )
+        print(numthen + " " + numelse )
         # Create conditional command map list.
         resultlist = self.build_condition_cmd_list(ifmaplist,
                                                    numthen,
@@ -1864,7 +1864,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         n_maps = obj.td
                 mapinput = map_i.get_id()
                 # Create r.mapcalc expression string for the operation.
-                cmdstring = "(%s)" %(n_maps)
+                cmdstring = "(%s)" % (n_maps)
                 # Append module command.
                 map_i.cmd_list = cmdstring
                 # Append map to result map list.
