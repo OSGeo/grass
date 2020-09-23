@@ -293,7 +293,7 @@ def main_page(results, filename, images, captions, title='Test reports',
             '</tr></thead>'
             '<tbody>'
             .format(title=title)
-            )
+        )
         for result in reversed(results):
             # TODO: include name to summary file
             # now using location or test report directory as name
@@ -412,7 +412,7 @@ def main():
         '<th>Successful files</th><th>Successful tests</th>'
         '</tr></thead>'
         '<tbody>'
-        )
+    )
 
     PlotStyle = namedtuple('PlotStyle',
                            ['linestyle', 'linewidth',

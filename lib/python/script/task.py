@@ -400,7 +400,7 @@ class processTask:
                 "value"          : '',
                 "key_desc"       : key_desc,
                 "hidden"         : hidden
-                })
+            })
 
     def _process_flags(self):
         """Process flags

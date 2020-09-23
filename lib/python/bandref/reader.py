@@ -35,7 +35,7 @@ class BandReferenceReader:
                 raise BandReferenceReaderError(
                     "Unable to parse '{}': {}".format(
                         json_file, e
-                        ))
+                    ))
 
             # check if configuration is valid
             self._check_config(config)

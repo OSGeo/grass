@@ -73,7 +73,7 @@ class TemporalVectorAlgebraLexer(TemporalAlgebraLexer):
        'buff_p'  : 'BUFF_POINT',
        'buff_l'   : 'BUFF_LINE',
        'buff_a'   : 'BUFF_AREA',
-       }
+    }
 
     # This is the list of token names.
     vector_tokens = (
@@ -123,7 +123,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         ('left', 'T_SELECT_OPERATOR', 'T_SELECT', 'T_NOT_SELECT',  'T_HASH_OPERATOR',  'HASH'), # 1
         ('left', 'AND', 'OR', 'T_COMP_OPERATOR', 'T_OVERLAY_OPERATOR', 'DISOR', \
           'NOT', 'XOR'), #2
-        )
+    )
 
     def __init__(self, pid=None, run=False, debug=True, spatial = False):
         TemporalAlgebraParser.__init__(self, pid, run, debug, spatial)

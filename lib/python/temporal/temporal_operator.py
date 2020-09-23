@@ -172,7 +172,7 @@ class TemporalOperatorLexer(object):
         'in'         : "IN",
         'contain'    : "CONTAIN",
         'meet'       : "MEET"
-        }
+    }
 
     # This is the list of token names.
     tokens = (
