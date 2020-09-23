@@ -32,7 +32,7 @@ class VectorTopoTestCase(TestCase):
             cls.vect.close()
 
         """Remove the generated vector map, if exist"""
-        cls.runModule("g.remove", flags='f', type='vector', 
+        cls.runModule("g.remove", flags='f', type='vector',
                       name=cls.tmpname)
 
     def test_getitem_slice(self):

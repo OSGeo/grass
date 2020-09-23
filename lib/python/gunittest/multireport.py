@@ -400,7 +400,7 @@ def main():
             all_results.append(result)
             del result
         except KeyError as e:
-            print('File %s does not have right values (%s)' % (report, e.message)) 
+            print('File %s does not have right values (%s)' % (report, e.message))
 
     locations_main_page = open(os.path.join(output, 'index.html'), 'w')
     locations_main_page.write(

@@ -61,7 +61,7 @@ class TestTemporalAlgebraGranularity(TestCase):
                                                  start="2001-03-01", increment="31 days", interval=True)
         tgis.register_maps_in_space_time_dataset(type="raster", name="D", maps="d3",
                                                  start="2001-05-01", increment="31 days", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="raster", name=None, maps="singletmap", 
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None, maps="singletmap",
                                                 start="2001-01-03", end="2001-01-04")
 
     def tearDown(self):
@@ -99,8 +99,8 @@ class TestTemporalAlgebraGranularity(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 6)
-        self.assertEqual(D.metadata.get_min_min(), 1) 
-        self.assertEqual(D.metadata.get_max_max(), 6) 
+        self.assertEqual(D.metadata.get_min_min(), 1)
+        self.assertEqual(D.metadata.get_max_max(), 6)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 7, 1))
@@ -118,8 +118,8 @@ class TestTemporalAlgebraGranularity(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 6)
-        self.assertEqual(D.metadata.get_min_min(), 1) 
-        self.assertEqual(D.metadata.get_max_max(), 6) 
+        self.assertEqual(D.metadata.get_min_min(), 1)
+        self.assertEqual(D.metadata.get_max_max(), 6)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 7, 1))
@@ -138,8 +138,8 @@ class TestTemporalAlgebraGranularity(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 3)
-        self.assertEqual(D.metadata.get_min_min(), 1) 
-        self.assertEqual(D.metadata.get_max_max(), 5) 
+        self.assertEqual(D.metadata.get_min_min(), 1)
+        self.assertEqual(D.metadata.get_max_max(), 5)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 6, 1))
@@ -158,8 +158,8 @@ class TestTemporalAlgebraGranularity(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 3)
-        self.assertEqual(D.metadata.get_min_min(), 9) 
-        self.assertEqual(D.metadata.get_max_max(), 9) 
+        self.assertEqual(D.metadata.get_min_min(), 9)
+        self.assertEqual(D.metadata.get_max_max(), 9)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 6, 1))
@@ -177,8 +177,8 @@ class TestTemporalAlgebraGranularity(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 3)
-        self.assertEqual(D.metadata.get_min_min(), 9) 
-        self.assertEqual(D.metadata.get_max_max(), 9) 
+        self.assertEqual(D.metadata.get_min_min(), 9)
+        self.assertEqual(D.metadata.get_max_max(), 9)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 6, 1))
@@ -196,8 +196,8 @@ class TestTemporalAlgebraGranularity(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 3)
-        self.assertEqual(D.metadata.get_min_min(), 1) 
-        self.assertEqual(D.metadata.get_max_max(), 5) 
+        self.assertEqual(D.metadata.get_min_min(), 1)
+        self.assertEqual(D.metadata.get_max_max(), 5)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 6, 1))
@@ -215,8 +215,8 @@ class TestTemporalAlgebraGranularity(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 3) 
-        self.assertEqual(D.metadata.get_max_max(), 5) 
+        self.assertEqual(D.metadata.get_min_min(), 3)
+        self.assertEqual(D.metadata.get_max_max(), 5)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 3, 1))
         self.assertEqual(end, datetime.datetime(2001, 6, 1))

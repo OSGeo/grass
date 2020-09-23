@@ -95,7 +95,7 @@ def main():
     
 
     main_report = args.main_report
-    grasssrc = args.grasssrc  # TODO: can be guessed from dist    
+    grasssrc = args.grasssrc  # TODO: can be guessed from dist
     # TODO: create directory according to date and revision and create reports there
 
     # some predefined variables, name of the GRASS launch script + location/mapset
@@ -107,7 +107,7 @@ def main():
     # we assume that GRASS GIS' start script is available and in the PATH
     # the shell=True is here because of MS Windows? (code taken from wiki)
     startcmd = grass7bin + ' --config path'
-    p = subprocess.Popen(startcmd, shell=True, 
+    p = subprocess.Popen(startcmd, shell=True,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = p.communicate()
     if p.returncode != 0:

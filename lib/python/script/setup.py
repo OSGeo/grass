@@ -124,13 +124,13 @@ def set_gui_path():
 def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
     """Initialize system variables to run GRASS modules
 
-    This function is for running GRASS GIS without starting it with the 
-    standard script grassXY. No GRASS modules shall be called before 
-    call of this function but any module or user script can be called 
-    afterwards because a GRASS session has been set up. GRASS Python 
-    libraries are usable as well in general but the ones using C 
-    libraries through ``ctypes`` are not (which is caused by library 
-    path not being updated for the current process which is a common 
+    This function is for running GRASS GIS without starting it with the
+    standard script grassXY. No GRASS modules shall be called before
+    call of this function but any module or user script can be called
+    afterwards because a GRASS session has been set up. GRASS Python
+    libraries are usable as well in general but the ones using C
+    libraries through ``ctypes`` are not (which is caused by library
+    path not being updated for the current process which is a common
     operating system limitation).
 
     To create a GRASS session a ``gisrc`` file is created.

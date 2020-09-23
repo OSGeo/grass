@@ -35,7 +35,7 @@ class TestTemporalVectorAlgebra(TestCase):
         cls.runModule("v.random", overwrite=True, quiet=True, npoints=20, seed=4, output='d2')
         cls.runModule("v.random", overwrite=True, quiet=True, npoints=20, seed=4, output='d3')
         cls.runModule("v.random", overwrite=True, quiet=True, npoints=20, seed=5, output='singletmap')
-        cls.runModule("v.random", overwrite=True, quiet=True, npoints=20, seed=6, output='singlemap')        
+        cls.runModule("v.random", overwrite=True, quiet=True, npoints=20, seed=6, output='singlemap')
 
         tgis.open_new_stds(name="A", type="stvds", temporaltype="absolute",
                                          title="A", descr="A", semantic="field", overwrite=True)
@@ -54,7 +54,7 @@ class TestTemporalVectorAlgebra(TestCase):
                                                  start="2001-01-02", increment="2 day", interval=True)
         tgis.register_maps_in_space_time_dataset(type="vector", name="D", maps="d1,d2,d3",
                                                  start="2001-01-03", increment="1 day", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="vector", name=None, maps="singletmap", 
+        tgis.register_maps_in_space_time_dataset(type="vector", name=None, maps="singletmap",
                                                 start="2001-01-03", end="2001-01-04")
     
     def tearDown(self):
@@ -62,7 +62,7 @@ class TestTemporalVectorAlgebra(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """Remove the temporary region 
+        """Remove the temporary region
         """
         cls.runModule("t.remove", flags="rf", inputs="A,B,C,D", type='stvds', quiet=True)
         cls.del_temp_region()
@@ -76,9 +76,9 @@ class TestTemporalVectorAlgebra(TestCase):
         self.assertTrue(D.is_in_db())
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_number_of_points(), 80) 
-        self.assertEqual(D.metadata.get_number_of_areas(), 0) 
-        self.assertEqual(D.metadata.get_number_of_centroids(), 0) 
+        self.assertEqual(D.metadata.get_number_of_points(), 80)
+        self.assertEqual(D.metadata.get_number_of_areas(), 0)
+        self.assertEqual(D.metadata.get_number_of_centroids(), 0)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
@@ -111,9 +111,9 @@ class TestTemporalVectorAlgebra(TestCase):
         self.assertTrue(D.is_in_db())
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_number_of_points(), 40) 
-        self.assertEqual(D.metadata.get_number_of_areas(), 0) 
-        self.assertEqual(D.metadata.get_number_of_centroids(), 0) 
+        self.assertEqual(D.metadata.get_number_of_points(), 40)
+        self.assertEqual(D.metadata.get_number_of_areas(), 0)
+        self.assertEqual(D.metadata.get_number_of_centroids(), 0)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
@@ -129,9 +129,9 @@ class TestTemporalVectorAlgebra(TestCase):
         self.assertTrue(D.is_in_db())
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_number_of_points(), 0) 
-        self.assertEqual(D.metadata.get_number_of_areas(), 80) 
-        self.assertEqual(D.metadata.get_number_of_centroids(), 80) 
+        self.assertEqual(D.metadata.get_number_of_points(), 0)
+        self.assertEqual(D.metadata.get_number_of_areas(), 80)
+        self.assertEqual(D.metadata.get_number_of_centroids(), 80)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
@@ -147,9 +147,9 @@ class TestTemporalVectorAlgebra(TestCase):
         self.assertTrue(D.is_in_db())
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_number_of_points(), 0) 
-        self.assertEqual(D.metadata.get_number_of_areas(), 20) 
-        self.assertEqual(D.metadata.get_number_of_centroids(), 20) 
+        self.assertEqual(D.metadata.get_number_of_points(), 0)
+        self.assertEqual(D.metadata.get_number_of_areas(), 20)
+        self.assertEqual(D.metadata.get_number_of_centroids(), 20)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))

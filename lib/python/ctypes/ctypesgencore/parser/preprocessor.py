@@ -169,7 +169,7 @@ class PreprocessorParser(object):
                               shell=True,
                               universal_newlines=True,
                               stdout=subprocess.PIPE,
-                              stderr=subprocess.PIPE)        
+                              stderr=subprocess.PIPE)
         try:
             ppout, pperr = pp.communicate()
         except UnicodeError:

@@ -121,7 +121,7 @@ class LineTestCase(TestCase):
             cls.c_mapinfo = None
 
         """Remove the generated vector map, if exist"""
-        cls.runModule("g.remove", flags='f', type='vector', 
+        cls.runModule("g.remove", flags='f', type='vector',
                       name=cls.tmpname)
 
     def test_len(self):
@@ -212,7 +212,7 @@ class NodeTestCase(TestCase):
             cls.c_mapinfo = None
 
         """Remove the generated vector map, if exist"""
-        cls.runModule("g.remove", flags='f', type='vector', 
+        cls.runModule("g.remove", flags='f', type='vector',
                       name=cls.tmpname)
 
     def test_init(self):
@@ -266,7 +266,7 @@ class AreaTestCase(TestCase):
             cls.c_mapinfo = None
 
         """Remove the generated vector map, if exist"""
-        cls.runModule("g.remove", flags='f', type='vector', 
+        cls.runModule("g.remove", flags='f', type='vector',
                       name=cls.tmpname)
 
     def test_init(self):
