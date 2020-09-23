@@ -712,13 +712,13 @@ class GlobalTemporalVar(object):
         self.td           = None
 
     def get_type(self):
-        if self.tfunc != None and self.compop != None and self.value != None:
+        if self.tfunc is not None and self.compop is not None and self.value is not None:
             return("global")
-        elif self.boolean != None:
+        elif self.boolean is not None:
             return("boolean")
-        elif self.relationop != None and self.topology != []:
+        elif self.relationop is not None and self.topology != []:
             return("operator")
-        elif self.td != None:
+        elif self.td is not None:
             return("timediff")
 
     def get_type_value(self):
@@ -921,7 +921,7 @@ class TemporalAlgebraParser(object):
             same object for map name generation in multiple threads.
         """
         self.count += 1
-        if self.pid != None:
+        if self.pid is not None:
             pid = self.pid
         else:
             pid = os.getpid()
@@ -997,19 +997,19 @@ class TemporalAlgebraParser(object):
             # Calculate spatial extent for different overlay operations.
             if bool_op == 'and':
                 overlay_ext = mapA.spatial_intersection(mapB)
-                if overlay_ext != None:
+                if overlay_ext is not None:
                     mapA.set_spatial_extent(overlay_ext)
                 else:
                     returncode = 0
             elif bool_op in ['or', 'xor']:
                 overlay_ext = mapA.spatial_union(mapB)
-                if overlay_ext != None:
+                if overlay_ext is not None:
                     mapA.set_spatial_extent(overlay_ext)
                 else:
                     returncode = 0
             elif bool_op == 'disor':
                 overlay_ext = mapA.spatial_disjoint_union(mapB)
-                if overlay_ext != None:
+                if overlay_ext is not None:
                     mapA.set_spatial_extent(overlay_ext)
                 else:
                     returncode = 0
@@ -1017,25 +1017,25 @@ class TemporalAlgebraParser(object):
             # Calculate temporal extent for different temporal operators.
             if temp_op == 'i':
                 temp_ext = mapA.temporal_intersection(mapB)
-                if temp_ext != None:
+                if temp_ext is not None:
                     mapA.set_temporal_extent(temp_ext)
                 else:
                     returncode = 0
             elif temp_op == 'u':
                 temp_ext = mapA.temporal_union(mapB)
-                if temp_ext != None:
+                if temp_ext is not None:
                     mapA.set_temporal_extent(temp_ext)
                 else:
                     returncode = 0
             elif temp_op == 'd':
                 temp_ext = mapA.temporal_disjoint_union(mapB)
-                if temp_ext != None:
+                if temp_ext is not None:
                     mapA.set_temporal_extent(temp_ext)
                 else:
                     returncode = 0
             elif temp_op == 'r':
                 temp_ext = mapB.get_temporal_extent()
-                if temp_ext != None:
+                if temp_ext is not None:
                     mapA.set_temporal_extent(temp_ext)
                 else:
                     returncode = 0
@@ -1819,7 +1819,7 @@ class TemporalAlgebraParser(object):
                             newextent = map_i.get_temporal_extent()
                         elif toperator == "r":
                             newextent = relationmap.get_temporal_extent()
-                        if newextent != None:
+                        if newextent is not None:
                             start = newextent.get_start_time()
                             end = newextent.get_end_time()
                             #print(map_i.get_id() + ' - start: ' + str(start) + ' end: ' + str(end))

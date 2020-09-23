@@ -342,7 +342,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         elif cmd_type == 'operator':
             leftsub = sub_cmdstring(map_i)
             rightsub = sub_cmdstring(relmap)
-            if operator == None:
+            if operator is None:
                 self.msgr.fatal("Error: Can't build command string for map %s, operator is missing"
                     % (map_i.get_map_id()))
             cmdstring = "(%s %s %s)" % (leftsub, operator, rightsub)

@@ -1817,11 +1817,11 @@ def read_next_line(c_mapinfo, table=None, writeable=False,
 
     # Take care of good memory management
     free_points = False
-    if c_points == None:
+    if c_points is None:
         free_points = True
 
     free_cats = False
-    if c_cats == None:
+    if c_cats is None:
         free_cats = True
 
     c_points = c_points if c_points else ctypes.pointer(libvect.line_pnts())
@@ -1853,11 +1853,11 @@ def read_line(feature_id, c_mapinfo, table=None, writeable=False,
     """
     # Take care of good memory management
     free_points = False
-    if c_points == None:
+    if c_points is None:
         free_points = True
 
     free_cats = False
-    if c_cats == None:
+    if c_cats is None:
         free_cats = True
 
     c_points = c_points if c_points else ctypes.pointer(libvect.line_pnts())
