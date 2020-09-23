@@ -58,6 +58,7 @@ class Vector(Info):
         False
 
     """
+
     def __init__(self, name, mapset='', *args, **kwargs):
         # Set map name and mapset
         super(Vector, self).__init__(name, mapset, *args, **kwargs)
@@ -278,6 +279,7 @@ class VectorTopo(Vector):
 
     ..
     """
+
     def __init__(self, name, mapset='', *args, **kwargs):
         super(VectorTopo, self).__init__(name, mapset, *args, **kwargs)
         self._topo_level = 2

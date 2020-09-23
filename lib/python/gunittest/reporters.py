@@ -320,6 +320,7 @@ class GrassTestFilesMultiReporter(object):
     which has this attribute using the order in which the reporters were
     provided.
     """
+
     def __init__(self, reporters, forgiving=False):
         self.reporters = reporters
         self.forgiving = forgiving

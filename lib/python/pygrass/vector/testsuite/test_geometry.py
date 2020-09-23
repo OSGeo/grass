@@ -365,6 +365,7 @@ class AreaTestCase(TestCase):
                                                              "3.0000000000000000 3.0000000000000000, "\
                                                              "1.0000000000000000 3.0000000000000000, "\
                                                              "1.0000000000000000 1.0000000000000000)")
+
     def test_isles_2(self):
         """Test centroid access"""
         area = Area(v_id=1, c_mapinfo=self.c_mapinfo)

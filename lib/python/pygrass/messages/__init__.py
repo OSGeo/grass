@@ -167,6 +167,7 @@ class Messenger(object):
        grass.exceptions.FatalError: Ohh no no no!
 
     """
+
     def __init__(self, raise_on_error=False):
         self.client_conn = None
         self.server_conn = None

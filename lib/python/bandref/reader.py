@@ -12,6 +12,7 @@ class BandReferenceReaderError(Exception):
 
 class BandReferenceReader:
     """Band references reader"""
+
     def __init__(self):
         self._json_files = glob.glob(
             os.path.join(os.environ['GISBASE'], 'etc', 'g.bands', '*.json')

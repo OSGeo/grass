@@ -66,6 +66,7 @@ class Info(object):
         >>> test_vect.close()
 
     """
+
     def __init__(self, name, mapset='', *aopen, **kwopen):
         self._name = ''
         self._mapset = ''

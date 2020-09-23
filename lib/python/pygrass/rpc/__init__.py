@@ -237,6 +237,7 @@ class DataProvider(RPCServerBase):
     """Fast and exit-safe interface to PyGRASS data delivery functions
 
     """
+
     def __init__(self):
         RPCServerBase.__init__(self)
 

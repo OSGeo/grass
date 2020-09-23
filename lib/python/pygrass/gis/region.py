@@ -101,6 +101,7 @@ class Region(object):
 
     ..
     """
+
     def __init__(self, default=False):
         self.c_region = libgis.Cell_head()
         if default:

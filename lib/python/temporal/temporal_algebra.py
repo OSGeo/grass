@@ -611,6 +611,8 @@ class TemporalAlgebraLexer(object):
 
 
     # Read date string and convert it into a date object
+
+
     def t_DATE(self, t):
         r'"\d\d\d\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"'
         # t.value = int(t.value)
@@ -634,6 +636,7 @@ class TemporalAlgebraLexer(object):
         t.value = int(t.value)
         return t
     # Read in a list of maps.
+
     def  t_LIST(self, t):
         r'[\[][.]*[\]]'
         t.value = list(t.value)
@@ -698,6 +701,7 @@ class GlobalTemporalVar(object):
         But also boolean values, time differences and relation operators for comparison in
         if-statements can be stored in this class.
     """
+
     def __init__(self):
         self.tfunc        = None
         self.compop       = None

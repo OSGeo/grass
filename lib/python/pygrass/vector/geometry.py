@@ -1205,6 +1205,7 @@ class Node(object):
        may happen.
 
     """
+
     def __init__(self, v_id, c_mapinfo, **kwords):
         """Construct a Node object
 
@@ -1431,6 +1432,7 @@ class Centroid(Point):
 class Isle(Geo):
     """An Isle is an area contained by another area.
     """
+
     def __init__(self, **kargs):
         super(Isle, self).__init__(**kargs)
         #self.area_id = area_id

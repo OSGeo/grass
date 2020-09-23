@@ -36,6 +36,7 @@ __version__ = "Revision: 1.1"
 
 class _Parameter:
     """Used to represent default parameter values."""
+
     def __repr__(self):
         return self.__class__.__name__
 

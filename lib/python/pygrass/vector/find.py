@@ -42,6 +42,7 @@ class PointFinder(AbstractFinder):
         of a vector map that are close to a point. The PointFinder class
         is part of a topological vector map object.
     """
+
     def __init__(self, c_mapinfo, table=None, writeable=False):
         """Find geometry feature(s) around a point.
 
@@ -365,6 +366,7 @@ class BboxFinder(AbstractFinder):
     The BboxFinder class is part of a topological vector map object.
 
     """
+
     def __init__(self, c_mapinfo, table=None, writeable=False):
         """Find geometry feature(s)that are insider or intersect
            with a boundingbox.

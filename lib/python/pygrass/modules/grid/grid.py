@@ -409,6 +409,7 @@ class GridModule(object):
     ...                  slope='slope', aspect='aspect', overwrite=True)
     >>> grd.run()
     """
+
     def __init__(self, cmd, width=None, height=None, overlap=0, processes=None,
                  split=False, debug=False, region=None, move=None, log=False,
                  start_row=0, start_col=0, out_prefix='', mapset_prefix=None,

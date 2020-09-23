@@ -1275,6 +1275,7 @@ class CLibrariesInterface(RPCServerBase):
            >>> gscript.del_temp_region()
 
     """
+
     def __init__(self):
         RPCServerBase.__init__(self)
 

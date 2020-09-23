@@ -213,6 +213,7 @@ class ParallelModuleQueue(object):
     0
 
     """
+
     def __init__(self, nprocs=1):
         """Constructor
 
@@ -515,6 +516,7 @@ class Module(object):
     In the Module class we heavily use this language feature to pass arguments
     and keyword arguments to the grass module.
     """
+
     def __init__(self, cmd, *args, **kargs):
         if isinstance(cmd, unicode):
             self.name = str(cmd)

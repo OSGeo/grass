@@ -357,6 +357,7 @@ class SpatioTemporalTopologyBuilder(object):
             ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
 
     """
+
     def __init__(self):
         self._reset()
         # 0001-01-01 00:00:00

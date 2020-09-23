@@ -238,6 +238,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
             "UPDATE raster SET  creation_time = '2001-01-01 00:00:00'  ,mapset = 'PERMANENT'  ,name = 'soil'  ,creator = 'soeren' WHERE id = 'soil@PERMANENT';\\n"
 
     """
+
     def __init__(self, table=None, ident=None):
         """Constructor of this class
 
@@ -793,6 +794,7 @@ class DatasetBase(SQLDatabaseInterface):
 
 class RasterBase(DatasetBase):
     """Time stamped raster map base information class"""
+
     def __init__(self, ident=None, name=None, mapset=None, creator=None,
                  creation_time=None, temporal_type=None):
         DatasetBase.__init__(self, "raster_base", ident, name, mapset,
@@ -801,6 +803,7 @@ class RasterBase(DatasetBase):
 
 class Raster3DBase(DatasetBase):
     """Time stamped 3D raster map base information class"""
+
     def __init__(self, ident=None, name=None, mapset=None, creator=None,
                  creation_time=None, temporal_type=None,):
         DatasetBase.__init__(self, "raster3d_base", ident, name,
@@ -810,6 +813,7 @@ class Raster3DBase(DatasetBase):
 
 class VectorBase(DatasetBase):
     """Time stamped vector map base information class"""
+
     def __init__(self, ident=None, name=None, mapset=None, layer=None,
                  creator=None, creation_time=None, temporal_type=None):
         DatasetBase.__init__(self, "vector_base", ident, name, mapset,
@@ -865,6 +869,7 @@ class STDSBase(DatasetBase):
         semantic_type=average
 
     """
+
     def __init__(self, table=None, ident=None, name=None, mapset=None,
                  semantic_type=None, creator=None, ctime=None,
                  ttype=None, mtime=None):
@@ -928,6 +933,7 @@ class STDSBase(DatasetBase):
 
 class STRDSBase(STDSBase):
     """Space time raster dataset base information class"""
+
     def __init__(self, ident=None, name=None, mapset=None,
                  semantic_type=None, creator=None, ctime=None,
                  ttype=None):
@@ -938,6 +944,7 @@ class STRDSBase(STDSBase):
 
 class STR3DSBase(STDSBase):
     """Space time 3D raster dataset base information class"""
+
     def __init__(self, ident=None, name=None, mapset=None,
                  semantic_type=None, creator=None, ctime=None,
                  ttype=None):
@@ -948,6 +955,7 @@ class STR3DSBase(STDSBase):
 
 class STVDSBase(STDSBase):
     """Space time vector dataset base information class"""
+
     def __init__(self, ident=None, name=None, mapset=None,
                  semantic_type=None, creator=None, ctime=None,
                  ttype=None):
@@ -1042,6 +1050,7 @@ class AbstractSTDSRegister(SQLDatabaseInterface):
 
 class RasterSTDSRegister(AbstractSTDSRegister):
     """Time stamped raster map base information class"""
+
     def __init__(self, ident=None, registered_stds=None):
         AbstractSTDSRegister.__init__(self, "raster_stds_register", ident,
                                       registered_stds)
@@ -1049,6 +1058,7 @@ class RasterSTDSRegister(AbstractSTDSRegister):
 
 class Raster3DSTDSRegister(AbstractSTDSRegister):
     """Time stamped 3D raster map base information class"""
+
     def __init__(self, ident=None, registered_stds=None):
         AbstractSTDSRegister.__init__(self, "raster3d_stds_register", ident,
                                       registered_stds)
@@ -1056,6 +1066,7 @@ class Raster3DSTDSRegister(AbstractSTDSRegister):
 
 class VectorSTDSRegister(AbstractSTDSRegister):
     """Time stamped vector map base information class"""
+
     def __init__(self, ident=None, registered_stds=None):
         AbstractSTDSRegister.__init__(self, "vector_stds_register", ident,
                                       registered_stds)

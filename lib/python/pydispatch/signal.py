@@ -108,6 +108,7 @@ class Signal(object):
     lambda handler: Hello
     """
     # TODO: use the name for debugging
+
     def __init__(self, name):
         """Creates a signal object.
 

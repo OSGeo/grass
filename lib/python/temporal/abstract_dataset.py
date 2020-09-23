@@ -580,6 +580,7 @@ class AbstractDatasetComparisonKeyStartTime(object):
             # Sort the maps in the list by start time
             sorted_map_list = sorted(map_list, key=AbstractDatasetComparisonKeyStartTime)
     """
+
     def __init__(self, obj, *args):
         self.obj = obj
 
@@ -630,6 +631,7 @@ class AbstractDatasetComparisonKeyEndTime(object):
             # Sort the maps in the list by end time
             sorted_map_list = sorted(map_list, key=AbstractDatasetComparisonKeyEndTime)
     """
+
     def __init__(self, obj, *args):
         self.obj = obj
 

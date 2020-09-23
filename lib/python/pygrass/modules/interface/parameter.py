@@ -111,6 +111,7 @@ class Parameter(object):
 
     ...
     """
+
     def __init__(self, xparameter=None, diz=None):
         self._value = None
         self._rawvalue = None

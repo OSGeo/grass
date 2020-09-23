@@ -55,6 +55,7 @@ class grassTask:
     :param str path: full path
     :param blackList: hide some options in the GUI (dictionary)
     """
+
     def __init__(self, path=None, blackList=None):
         self.path = path
         self.name = _('unknown')
@@ -306,6 +307,7 @@ class processTask:
 
     :return: grassTask instance
     """
+
     def __init__(self, tree, task=None, blackList=None):
         if task:
             self.task = task
