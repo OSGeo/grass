@@ -141,7 +141,7 @@ class TestTemporalRasterAlgebra(TestCase):
         maps = D.get_registered_maps_as_objects()
         count = 1
         for map in maps:
-            map_name = "r_2001_01_0%i"%count
+            map_name = "r_2001_01_0%i" %count
             self.assertEqual(map.get_name(), map_name)
             count += 1
 
@@ -183,7 +183,7 @@ class TestTemporalRasterAlgebra(TestCase):
         #r_2001_01_04T00_00_00
         count = 1
         for map in maps:
-            map_name = "r_2001_01_0%iT00_00_00"%count
+            map_name = "r_2001_01_0%iT00_00_00" %count
             self.assertEqual(map.get_name(), map_name)
             count += 1
 

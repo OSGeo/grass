@@ -56,7 +56,7 @@ def _get_raster_image_as_np(lock, conn, data):
         mapset = utils.get_mapset_raster(name, mapset)
 
         if not mapset:
-            raise ValueError("Unable to find raster map <%s>"%(name))
+            raise ValueError("Unable to find raster map <%s>" %(name))
 
         rast = RasterRow(name, mapset)
 
@@ -103,7 +103,7 @@ def _get_vector_table_as_dict(lock, conn, data):
         mapset = utils.get_mapset_vector(name, mapset)
 
         if not mapset:
-            raise ValueError("Unable to find vector map <%s>"%(name))
+            raise ValueError("Unable to find vector map <%s>" %(name))
 
         layer = VectorTopo(name, mapset)
 
@@ -148,7 +148,7 @@ def _get_vector_features_as_wkb_list(lock, conn, data):
         mapset = utils.get_mapset_vector(name, mapset)
 
         if not mapset:
-            raise ValueError("Unable to find vector map <%s>"%(name))
+            raise ValueError("Unable to find vector map <%s>" %(name))
 
         layer = VectorTopo(name, mapset)
 
@@ -436,7 +436,7 @@ if __name__ == "__main__":
     import doctest
     from grass.pygrass.modules import Module
     Module("g.region", n=40, s=0, e=40, w=0, res=10)
-    Module("r.mapcalc", expression="%s = row() + (10 * col())"%(test_raster_name),
+    Module("r.mapcalc", expression="%s = row() + (10 * col())" %(test_raster_name),
                              overwrite=True)
     utils.create_test_vector_map(test_vector_name)
 

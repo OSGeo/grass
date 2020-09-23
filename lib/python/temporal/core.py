@@ -456,7 +456,7 @@ def get_available_temporal_mapsets():
         database = c_library_interface.get_database_name(mapset)
 
         message_interface.debug(1, "get_available_temporal_mapsets: "\
-                                   "\n  mapset %s\n  driver %s\n  database %s"%(mapset,
+                                   "\n  mapset %s\n  driver %s\n  database %s" %(mapset,
                                    driver, database))
         if driver and database:
             # Check if the temporal sqlite database exists
@@ -564,7 +564,7 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
     msgr = get_tgis_message_interface()
     msgr.debug(1, "Initiate the temporal database")
 
-    msgr.debug(1, ("Raise on error id: %s"%str(raise_on_error)))
+    msgr.debug(1, ("Raise on error id: %s" %str(raise_on_error)))
 
     ciface = get_tgis_c_library_interface()
     driver_string = ciface.get_driver_name()
@@ -1156,7 +1156,7 @@ class DBConnection(object):
         self.msgr = get_tgis_message_interface()
         self.msgr.debug(1, "DBConnection constructor:"\
                            "\n  backend: %s"\
-                           "\n  dbstring: %s"%(backend, self.dbstring))
+                           "\n  dbstring: %s" %(backend, self.dbstring))
 
     def __del__(self):
         if self.connected is True:

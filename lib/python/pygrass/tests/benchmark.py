@@ -16,7 +16,7 @@ import cProfile
 import sys, os
 from jinja2 import Template
 sys.path.append(os.getcwd())
-sys.path.append("%s/.."%(os.getcwd()))
+sys.path.append("%s/.." %(os.getcwd()))
 
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster

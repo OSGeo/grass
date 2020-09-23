@@ -281,7 +281,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                     # Generate an intermediate name
                     name = self.generate_map_name()
                     # Put it into the removalbe map list
-                    self.removable_maps[name] = VectorDataset(name + "@%s"%(self.mapset))
+                    self.removable_maps[name] = VectorDataset(name + "@%s" %(self.mapset))
                     map_i.set_id(name + "@" + self.mapset)
                     # Set second input for overlay module.
                     mapbinput = relationmap.get_id()

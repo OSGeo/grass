@@ -787,7 +787,7 @@ class VectorTopo(Vector):
 
         if feature_type.lower() not in supported:
             raise GrassError("Unsupported feature type <%s>, "\
-                             "supported are <%s>"%(feature_type,
+                             "supported are <%s>" %(feature_type,
                                                    ",".join(supported)))
 
         if bbox is None:
@@ -814,9 +814,9 @@ class VectorTopo(Vector):
                                                        ctypes.byref(error))
                 if not barray:
                     if error == -1:
-                        raise GrassError(_("Unable to read line of feature %i"%(f_id)))
+                        raise GrassError(_("Unable to read line of feature %i" %(f_id)))
                     if error == -2:
-                        print("Empty feature %i"%(f_id))
+                        print("Empty feature %i" %(f_id))
                     continue
 
                 ok = libvect.Vect_cat_get(ctypes.byref(line_c), field,
@@ -903,7 +903,7 @@ class VectorTopo(Vector):
                                                        a_id,
                                                        ctypes.byref(size))
                 if not barray:
-                    raise GrassError(_("Unable to read area with id %i"%(a_id)))
+                    raise GrassError(_("Unable to read area with id %i" %(a_id)))
 
                 pcat = None
                 c_ok = libvect.Vect_get_area_cats(self.c_mapinfo, a_id,

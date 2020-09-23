@@ -226,7 +226,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            """
         # The grass module
 
-        command = "# %s \n"%(str(datetime.today().strftime("%Y-%m-%d %H:%M:%S")))
+        command = "# %s \n" %(str(datetime.today().strftime("%Y-%m-%d %H:%M:%S")))
         command += os.path.basename(sys.argv[0])
 
         # We will wrap the command line to fit into 80 character

@@ -676,7 +676,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         new_map = Raster3DDataset(newident)
                     if new_map.map_exists() and self.overwrite is False:
                         self.msgr.fatal("Error maps with basename %s exist. "
-                                        "Use --o flag to overwrite existing file"%newident)
+                                        "Use --o flag to overwrite existing file" %newident)
 
                 # The second loop creates the resulting raster maps
                 count = 0
@@ -738,7 +738,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                             process_queue.put(m)
 
                     else:
-                        self.msgr.error(_("Error computing map <%s>"%map_i.get_id()))
+                        self.msgr.error(_("Error computing map <%s>" %map_i.get_id()))
                     count += 1
 
                 if self.dry_run is False:
@@ -782,7 +782,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                     elif map_i.is_in_db(dbif) and self.overwrite is False:
                         # Raise error if map exists and no overwrite flag is given.
                         self.msgr.fatal("Error raster map %s exist in temporal database. "
-                                        "Use overwrite flag."%map_i.get_map_id())
+                                        "Use overwrite flag." %map_i.get_map_id())
                     else:
                         # Insert map into temporal database.
                         if self.dry_run is False:
