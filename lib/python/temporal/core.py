@@ -63,7 +63,8 @@ def profile_function(func):
     do_profiling = os.getenv("GRASS_TGIS_PROFILE")
 
     if do_profiling == "True" or do_profiling == "1":
-        import cProfile, pstats
+        import cProfile
+        import pstats
         try:
             import StringIO as io
         except ImportError:

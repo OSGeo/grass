@@ -13,7 +13,8 @@ import time
 import collections
 import copy
 import cProfile
-import sys, os
+import sys
+import os
 from jinja2 import Template
 sys.path.append(os.getcwd())
 sys.path.append("%s/.." %(os.getcwd()))

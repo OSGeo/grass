@@ -67,7 +67,9 @@ sources and tools:
 
 """
 
-import os, sys, time
+import os
+import sys
+import time
 import zlib
 
 try:
