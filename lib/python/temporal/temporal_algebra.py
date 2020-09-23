@@ -755,7 +755,7 @@ class TemporalAlgebraParser(object):
     # Setting equal precedence level for select and hash operations.
     precedence = (
         ('left', 'T_SELECT_OPERATOR', 'T_SELECT', 'T_NOT_SELECT', 'T_HASH_OPERATOR', 'HASH'), # 1
-        ('left', 'AND', 'OR', 'T_COMP_OPERATOR'), #2
+        ('left', 'AND', 'OR', 'T_COMP_OPERATOR'),  # 2
     )
 
     def __init__(self, pid=None, run=True, debug=False, spatial=False,

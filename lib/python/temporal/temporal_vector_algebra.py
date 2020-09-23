@@ -122,7 +122,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
     precedence = (
         ('left', 'T_SELECT_OPERATOR', 'T_SELECT', 'T_NOT_SELECT', 'T_HASH_OPERATOR', 'HASH'), # 1
         ('left', 'AND', 'OR', 'T_COMP_OPERATOR', 'T_OVERLAY_OPERATOR', 'DISOR', \
-          'NOT', 'XOR'), #2
+          'NOT', 'XOR'),  # 2
     )
 
     def __init__(self, pid=None, run=False, debug=True, spatial = False):
