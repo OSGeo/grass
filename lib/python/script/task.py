@@ -288,7 +288,7 @@ class grassTask:
 
         :param opts list of flags and parameters"""
         for opt in opts:
-            if opt[0] ==  '-':  # flag
+            if opt[0] == '-':  # flag
                 self.set_flag(opt.lstrip('-'), True)
             else:  # parameter
                 key, value = opt.split('=', 1)

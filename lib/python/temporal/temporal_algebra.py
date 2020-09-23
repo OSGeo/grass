@@ -1834,7 +1834,7 @@ class TemporalAlgebraParser(object):
                     resultdict[map_i.get_id()] = map_i
             if unchanged == True:
                 if self.debug:
-                    print('Leave temporal extend of result map: ' +  map_i.get_map_id() + ' unchanged.')
+                    print('Leave temporal extend of result map: ' + map_i.get_map_id() + ' unchanged.')
 
         resultlist = resultdict.values()
         # Sort list of maps chronological.

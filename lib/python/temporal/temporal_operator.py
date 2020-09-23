@@ -636,7 +636,7 @@ class TemporalOperatorParser(object):
             rel_list = rel_list + t[3]
         else:
             rel_list.append(t[3])
-        t[0] =  rel_list
+        t[0] = rel_list
 
     def p_temporal_operator(self, t):
         # The list of relations.

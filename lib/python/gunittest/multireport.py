@@ -125,7 +125,7 @@ def plot_percent_successful(x, xticks, xlabels, successes, filename, style):
 
     step = 5
     ymin = int(min(successes) / step) * step
-    ymax =  int(smax / step) * step
+    ymax = int(smax / step) * step
     percents = range(ymin, ymax + step + 1, step)
     graph.set_yticks(percents)
     graph.set_yticklabels(['%d%%' % p for p in percents])

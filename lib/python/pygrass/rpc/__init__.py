@@ -71,13 +71,13 @@ def _get_raster_image_as_np(lock, conn, data):
                 if "south" in extent:
                     reg.south = extent["south"]
                 if "east" in extent:
-                    reg.east =  extent["east"]
+                    reg.east = extent["east"]
                 if "west" in extent:
-                    reg.west =  extent["west"]
+                    reg.west = extent["west"]
                 if "rows" in extent:
-                    reg.rows =  extent["rows"]
+                    reg.rows = extent["rows"]
                 if "cols" in extent:
-                    reg.cols =  extent["cols"]
+                    reg.cols = extent["cols"]
                 reg.adjust()
 
             array = raster2numpy_img(name, reg, color)

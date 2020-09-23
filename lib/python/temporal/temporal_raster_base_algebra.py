@@ -582,7 +582,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             # Check if only direct conclusion is a numeric statements.
             elif all([isinstance(thenlist, str), isinstance(elselist, list)]):
                 listinput = elselist
-                numinput =  thenlist
+                numinput = thenlist
                 for map_i in listinput:
                     # Create r.mapcalc expression string for the operation.
                     cmdstring = self.build_command_string(numinput,

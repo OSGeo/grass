@@ -392,7 +392,7 @@ class Info(object):
             self.layer = self.dblinks.by_layer(layer).layer
             self.table = self.dblinks.by_layer(layer).table()
             self.n_lines = self.table.n_rows()
-        self.writeable =  self.mapset == utils.getenv("MAPSET")
+        self.writeable = self.mapset == utils.getenv("MAPSET")
         # Initialize the finder
         self.find = {'by_point': PointFinder(self.c_mapinfo, self.table,
                                              self.writeable),
