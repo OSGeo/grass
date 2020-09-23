@@ -70,9 +70,9 @@ class TemporalVectorAlgebraLexer(TemporalAlgebraLexer):
 
     # Buffer functions from v.buffer
     vector_buff_functions = {
-       'buff_p'  : 'BUFF_POINT',
-       'buff_l'   : 'BUFF_LINE',
-       'buff_a'   : 'BUFF_AREA',
+       'buff_p': 'BUFF_POINT',
+       'buff_l': 'BUFF_LINE',
+       'buff_a': 'BUFF_AREA',
     }
 
     # This is the list of token names.
@@ -196,12 +196,12 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         topologylist = ["EQUAL", "FOLLOWS", "PRECEDES", "OVERLAPS", "OVERLAPPED", \
                         "DURING", "STARTS", "FINISHES", "CONTAINS", "STARTED", \
                         "FINISHED"]
-        complementdict = {"EQUAL": "EQUAL", "FOLLOWS" : "PRECEDES",
-                          "PRECEDES" : "FOLLOWS", "OVERLAPS" : "OVERLAPPED",
-                          "OVERLAPPED" : "OVERLAPS", "DURING" : "CONTAINS",
-                          "CONTAINS" : "DURING", "STARTS" : "STARTED",
-                          "STARTED" : "STARTS", "FINISHES" : "FINISHED",
-                          "FINISHED" : "FINISHES"}
+        complementdict = {"EQUAL": "EQUAL", "FOLLOWS": "PRECEDES",
+                          "PRECEDES": "FOLLOWS", "OVERLAPS": "OVERLAPPED",
+                          "OVERLAPPED": "OVERLAPS", "DURING": "CONTAINS",
+                          "CONTAINS": "DURING", "STARTS": "STARTED",
+                          "STARTED": "STARTS", "FINISHES": "FINISHED",
+                          "FINISHED": "FINISHES"}
         resultdict = {}
         # Check if given temporal relation are valid.
         for topo in topolist:
@@ -211,7 +211,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         # Create temporal topology for maplistA to maplistB.
         tb = SpatioTemporalTopologyBuilder()
         # Dictionary with different spatial variables used for topology builder.
-        spatialdict = {'strds' : '2D', 'stvds' : '2D', 'str3ds' : '3D'}
+        spatialdict = {'strds': '2D', 'stvds': '2D', 'str3ds': '3D'}
         # Build spatial temporal topology
         if self.spatial:
             tb.build(maplistA, maplistB, spatial = spatialdict[self.stdstype])

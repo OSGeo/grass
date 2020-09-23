@@ -64,12 +64,12 @@ def vector_db(map, env=None, **kwargs):
             name = ''
 
         result[int(layer)] = {
-            'layer'    : int(layer),
-            'name'     : name,
-            'table'    : f[1],
-            'key'      : f[2],
-            'database' : f[3],
-            'driver'   : f[4] }
+            'layer': int(layer),
+            'name': name,
+            'table': f[1],
+            'key': f[2],
+            'database': f[3],
+            'driver': f[4] }
 
     return result
 

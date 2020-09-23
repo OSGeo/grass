@@ -462,7 +462,7 @@ def get_available_temporal_mapsets():
             # Check if the temporal sqlite database exists
             # We need to set non-existing databases in case the mapset is the current mapset
             # to create it
-            if (driver == "sqlite" and os.path.exists(database)) or mapset == get_current_mapset() :
+            if (driver == "sqlite" and os.path.exists(database)) or mapset == get_current_mapset():
                 tgis_mapsets[mapset] = (driver,  database)
 
             # We need to warn if the connection is defined but the database does not

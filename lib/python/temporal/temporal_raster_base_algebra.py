@@ -75,26 +75,26 @@ class TemporalRasterAlgebraLexer(TemporalAlgebraLexer):
 
     # Supported r.mapcalc functions.
     mapcalc_functions = {
-        'exp'     : 'EXP',
-        'log'     : 'LOG',
-        'sqrt'    : 'SQRT',
-        'abs'     : 'ABS',
-        'cos'     : 'COS',
-        'acos'    : 'ACOS',
-        'sin'     : 'SIN',
-        'asin'    : 'ASIN',
-        'tan'     : 'TAN',
-        'double'  : 'DOUBLE',
-        'float'   : 'FLOATEXP',
-        'int'     : 'INTEXP',
-        'isnull'  : 'ISNULL',
+        'exp': 'EXP',
+        'log': 'LOG',
+        'sqrt': 'SQRT',
+        'abs': 'ABS',
+        'cos': 'COS',
+        'acos': 'ACOS',
+        'sin': 'SIN',
+        'asin': 'ASIN',
+        'tan': 'TAN',
+        'double': 'DOUBLE',
+        'float': 'FLOATEXP',
+        'int': 'INTEXP',
+        'isnull': 'ISNULL',
         'isntnull': 'ISNTNULL',
-        'null'    : 'NULL',
-        'exist'   : 'EXIST',
+        'null': 'NULL',
+        'exist': 'EXIST',
     }
 
     # Functions that defines single maps with time stamp and without temporal extent.
-    map_functions = {'map' : 'MAP'}
+    map_functions = {'map': 'MAP'}
 
     # This is the list of token names.
     raster_tokens = (
@@ -257,7 +257,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         # Build spatio-temporal topology
         if len(spatial_topo_list) > 0:
             # Dictionary with different spatial variables used for topology builder.
-            spatialdict = {'strds' : '2D', 'stvds' : '2D', 'str3ds' : '3D'}
+            spatialdict = {'strds': '2D', 'stvds': '2D', 'str3ds': '3D'}
             tb.build(maplistA, maplistB, spatial=spatialdict[self.stdstype])
         else:
             tb.build(maplistA, maplistB)
@@ -456,7 +456,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         print("map command string", cmdstring)
         return(cmdstring)
 
-    def set_temporal_extent_list(self, maplist, topolist=["EQUAL"], temporal='l' ,
+    def set_temporal_extent_list(self, maplist, topolist=["EQUAL"], temporal='l',
                                  cmd_bool=False, cmd_type=None,  operator=None):
         """ Change temporal extent of map list based on temporal relations to
         other map list and given temporal operator.
@@ -560,7 +560,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                                                                           conclusion_topolist)
             conclusionlist = self.set_temporal_extent_list(conclusiontopolist,
                                                            topolist=conclusion_topolist,
-                                                           temporal=temporal ,
+                                                           temporal=temporal,
                                                            cmd_bool=True,
                                                            cmd_type="conclusion")
         # Check if any conclusion is a numeric statements.

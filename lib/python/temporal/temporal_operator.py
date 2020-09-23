@@ -153,25 +153,25 @@ class TemporalOperatorLexer(object):
     # Functions that defines topological relations.
     relations = {
         # temporal relations
-        'equal'      : "EQUAL",
-        'follows'    : "FOLLOWS",
-        'precedes'   : "PRECEDES",
-        'overlaps'   : "OVERLAPS",
-        'overlapped' : "OVERLAPPED",
-        'during'     : "DURING",
-        'starts'     : "STARTS",
-        'finishes'   : "FINISHES",
-        'contains'   : "CONTAINS",
-        'started'    : "STARTED",
-        'finished'   : "FINISHED",
-        'over'       : "OVER",
+        'equal': "EQUAL",
+        'follows': "FOLLOWS",
+        'precedes': "PRECEDES",
+        'overlaps': "OVERLAPS",
+        'overlapped': "OVERLAPPED",
+        'during': "DURING",
+        'starts': "STARTS",
+        'finishes': "FINISHES",
+        'contains': "CONTAINS",
+        'started': "STARTED",
+        'finished': "FINISHED",
+        'over': "OVER",
         # spatial relations
-        'equivalent' : "EQUIVALENT",
-        'cover'      : "COVER",
-        'overlap'    : "OVERLAP",
-        'in'         : "IN",
-        'contain'    : "CONTAIN",
-        'meet'       : "MEET"
+        'equivalent': "EQUIVALENT",
+        'cover': "COVER",
+        'overlap': "OVERLAP",
+        'in': "IN",
+        'contain': "CONTAIN",
+        'meet': "MEET"
     }
 
     # This is the list of token names.

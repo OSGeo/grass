@@ -481,30 +481,30 @@ class TemporalAlgebraLexer(object):
     # Functions that defines an if condition, temporal buffering, snapping and
     # selection of maps with temporal extent.
     conditional_functions = {
-        'if'    : 'IF',
+        'if': 'IF',
         'buff_t': 'BUFF_T',
-        'tsnap'  : 'TSNAP',
-        'tshift' : 'TSHIFT',
-        'tmap' : 'TMAP',
-        'merge' : 'MERGE',
-        'strds' : 'STRDS',
-        'str3ds' : 'STR3DS',
-        'stvds' : 'STVDS',
+        'tsnap': 'TSNAP',
+        'tshift': 'TSHIFT',
+        'tmap': 'TMAP',
+        'merge': 'MERGE',
+        'strds': 'STRDS',
+        'str3ds': 'STR3DS',
+        'stvds': 'STVDS',
     }
 
     # Variables with date and time strings
     datetime_functions = {
-        'start_time'     : 'START_TIME',     # start time as HH::MM:SS
-        'start_date'     : 'START_DATE',     # start date as yyyy-mm-DD
-        'start_datetime' : 'START_DATETIME', # start datetime as yyyy-mm-DD HH:MM:SS
-        'end_time'       : 'END_TIME',       # end time as HH:MM:SS
-        'end_date'       : 'END_DATE',       # end date as yyyy-mm-DD
-        'end_datetime'   : 'END_DATETIME',   # end datetime as  yyyy-mm-DD HH:MM:SS
+        'start_time': 'START_TIME',     # start time as HH::MM:SS
+        'start_date': 'START_DATE',     # start date as yyyy-mm-DD
+        'start_datetime': 'START_DATETIME', # start datetime as yyyy-mm-DD HH:MM:SS
+        'end_time': 'END_TIME',       # end time as HH:MM:SS
+        'end_date': 'END_DATE',       # end date as yyyy-mm-DD
+        'end_datetime': 'END_DATETIME',   # end datetime as  yyyy-mm-DD HH:MM:SS
     }
 
     # Time functions
     time_functions = {
-        'td'          : 'TD',            # The size of the current
+        'td': 'TD',            # The size of the current
                                          # sample time interval in days and
                                          # fraction of days for absolute time,
                                          # and in relative units in case of relative time.
@@ -523,24 +523,24 @@ class TemporalAlgebraLexer(object):
                                          # fraction of days for absolute time,
                                          # and in relative units in case of relative time.
                                          # The end_time() will be represented by null() in case of a time instance.
-        'start_doy'   : 'START_DOY',     # Day of year (doy) from the start time [1 - 366]
-        'start_dow'   : 'START_DOW',     # Day of week (dow) from the start time [1 - 7], the start of the week is Monday == 1
-        'start_year'  : 'START_YEAR',    # The year of the start time [0 - 9999]
-        'start_month' : 'START_MONTH',   # The month of the start time [1 - 12]
-        'start_week'  : 'START_WEEK',    # Week of year of the start time [1 - 54]
-        'start_day'   : 'START_DAY',     # Day of month from the start time [1 - 31]
-        'start_hour'  : 'START_HOUR',    # The hour of the start time [0 - 23]
+        'start_doy': 'START_DOY',     # Day of year (doy) from the start time [1 - 366]
+        'start_dow': 'START_DOW',     # Day of week (dow) from the start time [1 - 7], the start of the week is Monday == 1
+        'start_year': 'START_YEAR',    # The year of the start time [0 - 9999]
+        'start_month': 'START_MONTH',   # The month of the start time [1 - 12]
+        'start_week': 'START_WEEK',    # Week of year of the start time [1 - 54]
+        'start_day': 'START_DAY',     # Day of month from the start time [1 - 31]
+        'start_hour': 'START_HOUR',    # The hour of the start time [0 - 23]
         'start_minute': 'START_MINUTE',  # The minute of the start time [0 - 59]
         'start_second': 'START_SECOND',  # The second of the start time [0 - 59]
-        'end_doy'     : 'END_DOY',       # Day of year (doy) from the end time [1 - 366]
-        'end_dow'     : 'END_DOW',       # Day of week (dow) from the end time [1 - 7], the start of the week is Monday == 1
-        'end_year'    : 'END_YEAR',      # The year of the end time [0 - 9999]
-        'end_month'   : 'END_MONTH',     # The month of the end time [1 - 12]
-        'end_week'    : 'END_WEEK',      # Week of year of the end time [1 - 54]
-        'end_day'     : 'END_DAY',       # Day of month from the start time [1 - 31]
-        'end_hour'    : 'END_HOUR',      # The hour of the end time [0 - 23]
-        'end_minute'  : 'END_MINUTE',    # The minute of the end time [0 - 59]
-        'end_second'  : 'END_SECOND',    # The second of the end time [0 - 59]
+        'end_doy': 'END_DOY',       # Day of year (doy) from the end time [1 - 366]
+        'end_dow': 'END_DOW',       # Day of week (dow) from the end time [1 - 7], the start of the week is Monday == 1
+        'end_year': 'END_YEAR',      # The year of the end time [0 - 9999]
+        'end_month': 'END_MONTH',     # The month of the end time [1 - 12]
+        'end_week': 'END_WEEK',      # Week of year of the end time [1 - 54]
+        'end_day': 'END_DAY',       # Day of month from the start time [1 - 31]
+        'end_hour': 'END_HOUR',      # The hour of the end time [0 - 23]
+        'end_minute': 'END_MINUTE',    # The minute of the end time [0 - 59]
+        'end_second': 'END_SECOND',    # The second of the end time [0 - 59]
     }
 
     # This is the list of token names.
@@ -1484,7 +1484,7 @@ class TemporalAlgebraParser(object):
         tb = SpatioTemporalTopologyBuilder()
         if len(spatial_topo_list) > 0:
             # Dictionary with different spatial variables used for topology builder.
-            spatialdict = {'strds' : '2D', 'stvds' : '2D', 'str3ds' : '3D'}
+            spatialdict = {'strds': '2D', 'stvds': '2D', 'str3ds': '3D'}
             tb.build(maplistA, maplistB, spatial=spatialdict[self.stdstype])
         else:
             tb.build(maplistA, maplistB)
@@ -1784,7 +1784,7 @@ class TemporalAlgebraParser(object):
         # Create temporal topology for maplistA to maplistB.
         tb = SpatioTemporalTopologyBuilder()
         # Dictionary with different spatial variables used for topology builder.
-        spatialdict = {'strds' : '2D', 'stvds' : '2D', 'str3ds' : '3D'}
+        spatialdict = {'strds': '2D', 'stvds': '2D', 'str3ds': '3D'}
         # Build spatial temporal topology for maplistB to maplistB.
         if self.spatial:
             tb.build(maplistA, maplistB, spatial = spatialdict[self.stdstype])
@@ -1820,7 +1820,7 @@ class TemporalAlgebraParser(object):
                             end = newextent.get_end_time()
                             #print(map_i.get_id() + ' - start: ' + str(start) + ' end: ' + str(end))
                             # Track changes in temporal extents of maps.
-                            if map_start != start or map_end != end :
+                            if map_start != start or map_end != end:
                                 unchanged = False
                             if map_i.is_time_absolute():
                                 map_i.set_absolute_time(start, end)
@@ -1879,14 +1879,14 @@ class TemporalAlgebraParser(object):
               2000-01-01 00:00:00
 
         """
-        tvardict = {"START_DOY" : None, "START_DOW" : None, "START_YEAR" : None,
-            "START_MONTH" : None, "START_WEEK" : None, "START_DAY" : None,
-            "START_HOUR" : None, "START_MINUTE" : None, "START_SECOND" : None,
-            "END_DOY" : None, "END_DOW" : None, "END_YEAR" : None,
-            "END_MONTH" : None, "END_WEEK" : None, "END_DAY" : None,
-            "END_HOUR" : None, "END_MINUTE" : None, "END_SECOND" : None,
-            "START_DATE" : None, "START_DATETIME" : None, "START_TIME" : None,
-            "END_DATE" : None, "END_DATETIME" : None, "END_TIME" : None}
+        tvardict = {"START_DOY": None, "START_DOW": None, "START_YEAR": None,
+            "START_MONTH": None, "START_WEEK": None, "START_DAY": None,
+            "START_HOUR": None, "START_MINUTE": None, "START_SECOND": None,
+            "END_DOY": None, "END_DOW": None, "END_YEAR": None,
+            "END_MONTH": None, "END_WEEK": None, "END_DAY": None,
+            "END_HOUR": None, "END_MINUTE": None, "END_SECOND": None,
+            "START_DATE": None, "START_DATETIME": None, "START_TIME": None,
+            "END_DATE": None, "END_DATETIME": None, "END_TIME": None}
 
         # Compute temporal function only for maps with absolute time reference.
         if map.is_time_absolute:
@@ -1989,7 +1989,7 @@ class TemporalAlgebraParser(object):
                 map_i.condition_value = boolname
         return(maplist)
 
-    def eval_map_list(self, maplist ,thenlist, topolist=["EQUAL"]):
+    def eval_map_list(self, maplist,thenlist, topolist=["EQUAL"]):
         """ This function transfers boolean values from temporal expression
              from one map list to another by their topology. These boolean
              values are added to the maps as condition_value.
@@ -2051,7 +2051,7 @@ class TemporalAlgebraParser(object):
         # of conditions.
 
         # Check if the input expression is a valid single global variable.
-        if isinstance(tvarexpr, GlobalTemporalVar) and tvarexpr.get_type() == "global" :
+        if isinstance(tvarexpr, GlobalTemporalVar) and tvarexpr.get_type() == "global":
             # Use method eval_global_var to evaluate expression.
             resultlist = self.eval_global_var(tvarexpr, thenlist)
         # Check if a given list is a list of maps.
@@ -2438,10 +2438,10 @@ class TemporalAlgebraParser(object):
             # Return map object.
             t[0] = [map_i]
         else:
-            t[0] = "tmap(",  t[3] , ")"
+            t[0] = "tmap(",  t[3], ")"
 
         if self.debug:
-            print("tmap(", t[3] , ")")
+            print("tmap(", t[3], ")")
 
     def p_expr_tmerge_function(self, t):
         # Merge two maplists of same STDS type into a result map list.
@@ -3034,7 +3034,7 @@ class TemporalAlgebraParser(object):
 
         if self.debug:
             if len(t) == 10:
-                print(str(t[3]) + "* = tshift(", str(t[3]), "," , '"', str(t[6]), str(t[7]), '"', ")")
+                print(str(t[3]) + "* = tshift(", str(t[3]), ",", '"', str(t[6]), str(t[7]), '"', ")")
             elif len(t) == 7:
                 print(str(t[3]) + "* = tshift(", str(t[3]), ",", str(t[5]), ")")
 
