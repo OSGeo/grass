@@ -120,8 +120,8 @@ def discovery():
 def main():
     parser = argparse.ArgumentParser(
         description='Run test files in all testsuite directories starting'
-                ' from the current one'
-                ' (runs on active GRASS session)')
+        ' from the current one'
+        ' (runs on active GRASS session)')
     parser.add_argument('--location', dest='location', action='store',
                         help='Name of location where to perform test', required=True)
     parser.add_argument('--location-type', dest='location_type', action='store',

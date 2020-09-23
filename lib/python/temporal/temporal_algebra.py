@@ -505,24 +505,24 @@ class TemporalAlgebraLexer(object):
     # Time functions
     time_functions = {
         'td': 'TD',            # The size of the current
-                                         # sample time interval in days and
-                                         # fraction of days for absolute time,
-                                         # and in relative units in case of relative time.
+        # sample time interval in days and
+        # fraction of days for absolute time,
+        # and in relative units in case of relative time.
         #'start_td'    : 'START_TD',     # The time difference between the start
-                                         # time of the sample space time raster
-                                         # dataset and the start time of the
-                                         # current sample interval or instance.
-                                         # The time is measured in days and
-                                         # fraction of days for absolute time,
-                                         # and in relative units in case of relative time.
+        # time of the sample space time raster
+        # dataset and the start time of the
+        # current sample interval or instance.
+        # The time is measured in days and
+        # fraction of days for absolute time,
+        # and in relative units in case of relative time.
         #'end_td'      : 'END_TD',       # The time difference between the
-                                         # start time of the sample
-                                         # space time raster dataset and the
-                                         # end time of the current sample interval.
-                                         # The time is measured in days and
-                                         # fraction of days for absolute time,
-                                         # and in relative units in case of relative time.
-                                         # The end_time() will be represented by null() in case of a time instance.
+        # start time of the sample
+        # space time raster dataset and the
+        # end time of the current sample interval.
+        # The time is measured in days and
+        # fraction of days for absolute time,
+        # and in relative units in case of relative time.
+        # The end_time() will be represented by null() in case of a time instance.
         'start_doy': 'START_DOY',     # Day of year (doy) from the start time [1 - 366]
         'start_dow': 'START_DOW',     # Day of week (dow) from the start time [1 - 7], the start of the week is Monday == 1
         'start_year': 'START_YEAR',    # The year of the start time [0 - 9999]
