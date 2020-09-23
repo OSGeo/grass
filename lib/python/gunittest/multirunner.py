@@ -71,7 +71,7 @@ def main():
                         dest='location_types',
                     default=[], metavar='TYPE',
                     help='Add repeated values to a list',
-                    )
+                        )
     parser.add_argument('--grassbin', required=True,
                         help='Use file timestamp instead of date in test summary')
     # TODO: rename since every src can be used?

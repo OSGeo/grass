@@ -55,7 +55,7 @@ class BandReferenceReader:
                 if item not in items.keys():
                     raise BandReferenceReaderError(
                         "Invalid band definition: <{}> is missing".format(item
-                ))
+                                                                          ))
             if len(items['bands']) < 1:
                 raise BandReferenceReaderError(
                     "Invalid band definition: no bands defined"
