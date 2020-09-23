@@ -315,7 +315,7 @@ def _available_mapsets(lock, conn, data):
                 mapset_list.append(char_list)
 
             libgis.G_debug(1, "c_library_server._available_mapsets: \n  mapset:  %s\n"
-                              "  has permission %i\n  in search path: %i" %(char_list,
+                              "  has permission %i\n  in search path: %i" % (char_list,
                               permission, in_search_path))
             count += 1
 

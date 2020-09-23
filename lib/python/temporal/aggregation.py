@@ -318,7 +318,7 @@ def aggregate_by_topology(granularity_list, granularity, map_list, topo_list,
                     msgr.warning(_("The limit of open files (%i) was "
                                    "reached (%i). The module r.series will "
                                    "be run with flag z, to avoid open "
-                                   "files limit exceeding." %(int(file_limit),
+                                   "files limit exceeding." % (int(file_limit),
                                                              len(aggregation_list))))
                     mod(flags="z")
                 process_queue.put(mod)

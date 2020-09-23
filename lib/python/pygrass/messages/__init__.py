@@ -100,7 +100,7 @@ def message_server(lock, conn):
         elif message_type == "WARNING":
             libgis.G_warning(message)
         elif message_type == "ERROR":
-            libgis.G_important_message("ERROR: %s" %message)
+            libgis.G_important_message("ERROR: %s" % message)
         # This is for testing only
         elif message_type == "FATAL":
             libgis.G_fatal_error(message)

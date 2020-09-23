@@ -630,7 +630,7 @@ if __name__ == "__main__":
 
     utils.create_test_vector_map(test_vector_name)
     run_command("g.region", n=50, s=0, e=60, w=0, res=1)
-    run_command("r.mapcalc", expression="%s = 1" %(test_raster_name),
+    run_command("r.mapcalc", expression="%s = 1" % (test_raster_name),
                              overwrite=True)
     run_command("g.region", n=40, s=0, e=40, w=0, res=2)
 

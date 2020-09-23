@@ -925,7 +925,7 @@ class TemporalAlgebraParser(object):
             pid = self.pid
         else:
             pid = os.getpid()
-        name = "tmp_map_name_%i_%i" %(pid, self.count)
+        name = "tmp_map_name_%i_%i" % (pid, self.count)
         self.names[name] = name
         return name
 
@@ -1124,7 +1124,7 @@ class TemporalAlgebraParser(object):
 
         for key in map_names.keys():
             if map_names[key]:
-                self.msgr.message(_("Removing un-needed or empty %s maps" %(key)))
+                self.msgr.message(_("Removing un-needed or empty %s maps" % (key)))
                 self._remove_maps(map_names[key], key)
 
     def _remove_maps(self,
@@ -2247,7 +2247,7 @@ class TemporalAlgebraParser(object):
 
                             if map_result.map_exists() and self.overwrite == False:
                                 self.msgr.fatal("Error raster maps with basename %s exist. "
-                                                "Use --o flag to overwrite existing file" %map_i.get_id())
+                                                "Use --o flag to overwrite existing file" % map_i.get_id())
 
                             map_result.set_temporal_extent(map_i.get_temporal_extent())
                             map_result.set_spatial_extent(map_i.get_spatial_extent())
@@ -2312,7 +2312,7 @@ class TemporalAlgebraParser(object):
                             elif map_i.is_in_db(dbif) and self.overwrite is False:
                                 # Raise error if map exists and no overwrite flag is given.
                                 self.msgr.fatal("Error map %s exist in temporal database. "
-                                                "Use overwrite flag." %map_i.get_map_id())
+                                                "Use overwrite flag." % map_i.get_map_id())
                             else:
                                 # Insert map into temporal database.
                                 if self.dry_run is False:
@@ -2323,7 +2323,7 @@ class TemporalAlgebraParser(object):
                             success = resultstds.register_map(map_i, dbif)
                             if not success:
                                 self.msgr.warning("Unabe to register map layers "
-                                                  "in STDS %s" %(t[1]))
+                                                  "in STDS %s" % (t[1]))
 
                     if self.dry_run is False:
                         resultstds.update_from_registered_maps(dbif)
@@ -2334,7 +2334,7 @@ class TemporalAlgebraParser(object):
 
                 elif num == 0:
                     self.msgr.warning("Empty result space time dataset. "
-                                      "No map has been registered in %s" %(t[1]))
+                                      "No map has been registered in %s" % (t[1]))
                     # Open connection to temporal database.
                     # Create result space time dataset.
                     if self.dry_run is False:
