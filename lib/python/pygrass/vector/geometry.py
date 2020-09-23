@@ -1884,4 +1884,3 @@ if __name__ == "__main__":
     mset = get_mapset_vector(test_vector_name, mapset='')
     if mset:
         run_command("g.remove", flags='f', type='vector', name=test_vector_name)
-

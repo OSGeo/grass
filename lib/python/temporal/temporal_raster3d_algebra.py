@@ -139,5 +139,3 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-
-

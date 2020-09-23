@@ -21,4 +21,3 @@ VTYPE = {'point': libvect.GV_POINT,  # 1
          'kernel': libvect.GV_KERNEL,  # 6
          'area': libvect.GV_AREA,  # 7
          'volume': libvect.GV_VOLUME}  # 8
-

@@ -643,4 +643,3 @@ if __name__ == "__main__":
     mset = utils.get_mapset_raster(test_raster_name, mapset='')
     if mset:
         run_command("g.remove", flags='f', type='raster', name=test_raster_name)
-
