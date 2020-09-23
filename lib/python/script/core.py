@@ -51,7 +51,7 @@ class Popen(subprocess.Popen):
         if (sys.platform == 'win32'
             and isinstance(args, list)
             and not kwargs.get('shell', False)
-            and kwargs.get('executable') is None):
+                and kwargs.get('executable') is None):
             cmd = shutil_which(args[0])
             if cmd is None:
                 raise OSError(_("Cannot find the executable {0}")
