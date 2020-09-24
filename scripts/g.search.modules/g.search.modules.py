@@ -23,7 +23,7 @@
 #% multiple: yes
 #% type: string
 #% description: Keyword to be searched
-#% required : yes
+#% required : no
 #%end
 #%flag
 #% key: a
@@ -94,7 +94,7 @@ def main():
 
     if exact_keywords:
         keywords = options['keyword'].split(',')
-    elif options['keyword'] == '*':
+    elif not options['keyword']:
         keywords = ['']
     else:
         keywords = options['keyword'].lower().split(',')
