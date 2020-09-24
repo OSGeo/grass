@@ -27,9 +27,14 @@
 #include <proj_api.h>
 #define PJ_FWD 	 1
 #define PJ_INV 	-1
+/* PROJ_VERSION_MAJOR is not set in the old PROJ API */
+#define PROJ_VERSION_MAJOR 4
 #endif
 #ifdef HAVE_OGR
 #    include <ogr_srs_api.h>
+#    if PROJ_VERSION_MAJOR >= 6 && GDAL_VERSION_MAJOR < 3
+#        error "PROJ 6+ requires GDAL 3+"
+#    endif
 #endif
 
 /* Data Files */
@@ -60,6 +65,7 @@ struct gpj_datum
     double dx, dy, dz;
 };
 
+/* no longer needed with PROJ6+ */
 struct gpj_datum_transform_list
 {
 

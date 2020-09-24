@@ -398,6 +398,8 @@ int G_read_ellipsoid_table(int);
 struct Key_Value *G_get_projunits(void);
 struct Key_Value *G_get_projinfo(void);
 struct Key_Value *G_get_projepsg(void);
+char *G_get_projwkt(void);
+char *G_get_projsrid(void);
 
 /* get_window.c */
 void G_get_window(struct Cell_head *);
@@ -522,6 +524,11 @@ int G_make_location(const char *, struct Cell_head *, const struct Key_Value *,
 		    const struct Key_Value *);
 int G_make_location_epsg(const char *, struct Cell_head *, const struct Key_Value *,
 			 const struct Key_Value *, const struct Key_Value *);
+int G_make_location_crs(const char *, struct Cell_head *, const struct Key_Value *,
+			const struct Key_Value *, const struct Key_Value *,
+			const char *, const char *);
+int G_write_projsrid(const char *, const char *);
+int G_write_projwkt(const char *, const char *);
 int G_compare_projections(const struct Key_Value *, const struct Key_Value *,
 			  const struct Key_Value *, const struct Key_Value *);
 

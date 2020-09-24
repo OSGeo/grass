@@ -23,11 +23,16 @@
 
 #include "local_proto.h"
 
-struct Key_Value *projinfo, *projunits, *projepsg;
+struct Key_Value *projinfo = NULL,
+                 *projunits = NULL,
+		 *projepsg = NULL;
+char *projsrid = NULL, *projwkt = NULL;
 struct Cell_head cellhd;
 
 int main(int argc, char *argv[])
 {
+    /* TODO: replace most of these flags with an option to select the
+     * output format */
     struct Flag *printinfo,	/* Print contents of PROJ_INFO & PROJ_UNITS */
 	*shellinfo,             /* Print in shell script style              */
 	*printproj4,		/* Print projection in PROJ.4 format        */
@@ -42,6 +47,7 @@ int main(int argc, char *argv[])
     
     struct Option *location,	/* Name of new location to create           */
 #ifdef HAVE_OGR
+	*insrid,		/* spatial reference id (auth name + code   */
 	*inepsg,		/* EPSG projection code                     */
 	*inwkt,			/* Input file with projection in WKT format */
 	*inproj4,		/* Projection in PROJ.4 format              */
@@ -141,6 +147,15 @@ int main(int argc, char *argv[])
 		     "description");
     inwkt->description = _("'-' for standard input");
 
+    insrid = G_define_option();
+    insrid->key = "srid";
+    insrid->type = TYPE_STRING;
+    insrid->key_desc = "params";
+    insrid->required = NO;
+    insrid->guisection = _("Specification");
+    insrid->label = _("Spatial reference ID with authority name and code");
+    insrid->description = _("E.g. EPSG:4326 or urn:ogc:def:crs:EPSG::4326");
+
     inproj4 = G_define_option();
     inproj4->key = "proj4";
     inproj4->type = TYPE_STRING;
@@ -228,10 +243,12 @@ int main(int argc, char *argv[])
 	printwkt->answer = 1;
 
     formats = ((ingeo->answer ? 1 : 0) + (inwkt->answer ? 1 : 0) +
-	       (inproj4->answer ? 1 : 0) + (inepsg->answer ? 1 : 0));
+	       (inproj4->answer ? 1 : 0) + (inepsg->answer ? 1 : 0) +
+	       (insrid->answer ? 1 : 0));
     if (formats > 1)
-	G_fatal_error(_("Only one of '%s', '%s', '%s' or '%s' options may be specified"),
-		      ingeo->key, inwkt->key, inproj4->key, inepsg->key);
+	G_fatal_error(_("Only one of '%s', '%s', '%s', '%s' or '%s' options may be specified"),
+		      ingeo->key, inwkt->key, inproj4->key, inepsg->key,
+		      insrid->key);
 
     /* List supported datums if requested; code originally 
      * from G_ask_datum_name() (formerly in libgis) */
@@ -249,6 +266,7 @@ int main(int argc, char *argv[])
 
     epsg = inepsg->answer;
     projinfo = projunits = projepsg = NULL;
+    projsrid = projwkt = NULL;
 
     /* Input */
     /* We can only have one input source, hence if..else construct */
@@ -261,6 +279,9 @@ int main(int argc, char *argv[])
     else if (inwkt->answer)
 	/* Input in WKT format */
 	input_wkt(inwkt->answer);
+    else if (insrid->answer)
+	/* Input as spatial reference ID */
+	input_srid(insrid->answer);
     else if (inproj4->answer)
 	/* Input in PROJ.4 format */
 	input_proj4(inproj4->answer);
@@ -279,12 +300,11 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Projection files missing"));
 
     /* Override input datum if requested */
-    if(datum->answer)
+    if (datum->answer)
 	set_datum(datum->answer);
 
     /* Set Datum Parameters if necessary or requested */
     set_datumtrans(atoi(dtrans->answer), forcedatumtrans->answer);
-
 
     /* Output */
     /* Only allow one output format at a time, to reduce confusion */

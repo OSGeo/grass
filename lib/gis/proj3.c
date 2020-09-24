@@ -11,6 +11,9 @@
   \author Original author CERL
  */
 
+/* TODO: the G_database_*() functions should be renamed to G_location_*()
+ * because they apply to a GRASS location, not to a GRASS database */
+
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>

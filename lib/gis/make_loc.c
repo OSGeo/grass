@@ -18,9 +18,11 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include <unistd.h>
 #include <sys/stat.h>
 #include <math.h>
+#include <grass/glocale.h>
 
 /*!
  * \brief Create a new location
@@ -140,6 +142,77 @@ int G_make_location_epsg(const char *location_name,
     if (proj_epsg != NULL) {
 	G_file_name(path, "", "PROJ_EPSG", "PERMANENT");
 	G_write_key_value_file(path, proj_epsg);
+    }
+
+    return 0;
+}
+
+/*!
+ * \brief Create a new location
+ * 
+ * This function creates a new location in the current database,
+ * initializes the projection, default window and current window,
+ * and sets WKT, srid, and EPSG code if present
+ *
+ * \param location_name Name of the new location. Should not include
+ *                      the full path, the location will be created within
+ *                      the current database.
+ * \param wind          default window setting for the new location.
+ *                      All fields should be set in this
+ *                      structure, and care should be taken to ensure that
+ *                      the proj/zone fields match the definition in the
+ *                      proj_info parameter(see G_set_cellhd_from_projinfo()).
+ *
+ * \param proj_info     projection definition suitable to write to the
+ *                      PROJ_INFO file, or NULL for PROJECTION_XY.
+ *
+ * \param proj_units    projection units suitable to write to the PROJ_UNITS
+ *                      file, or NULL.
+ * 
+ * \param proj_epsg     EPSG code suitable to write to the PROJ_EPSG
+ *                      file, or NULL.
+ *
+ * \param proj_wkt      WKT defintion suitable to write to the PROJ_WKT
+ *                      file, or NULL.
+ *
+ * \param proj_srid     Spatial reference ID suitable to write to the PROJ_SRID
+ *                      file, or NULL.
+ *
+ * \return 0 on success
+ * \return -1 to indicate a system error (check errno).
+ * \return -2 failed to create projection file (currently not used)
+ * \return -3 illegal name 
+ */
+int G_make_location_crs(const char *location_name,
+			struct Cell_head *wind,
+			const struct Key_Value *proj_info,
+			const struct Key_Value *proj_units,
+			const struct Key_Value *proj_epsg,
+			const char *proj_wkt,
+			const char *proj_srid)
+{
+    int ret;
+    char path[GPATH_MAX];
+
+    ret = G_make_location(location_name, wind, proj_info, proj_units);
+
+    if (ret != 0)
+	return ret;
+
+    /* Write out PROJ_EPSG if epsg code is available. */
+    if (proj_epsg != NULL) {
+	G_file_name(path, "", "PROJ_EPSG", "PERMANENT");
+	G_write_key_value_file(path, proj_epsg);
+    }
+
+    /* Write out PROJ_WKT if WKT is available. */
+    if (proj_wkt != NULL) {
+	G_write_projwkt(location_name, proj_wkt);
+    }
+
+    /* Write out PROJ_SRID if srid is available. */
+    if (proj_srid != NULL) {
+	G_write_projsrid(location_name, proj_srid);
     }
 
     return 0;
@@ -431,4 +504,102 @@ int G_compare_projections(const struct Key_Value *proj_info1,
     /* -------------------------------------------------------------------- */
 
     return 1;
+}
+
+/*!
+   \brief Write WKT definition to file
+   
+   Any WKT string and version recognized by PROJ is supported.
+
+   \param location_name name of the location to write the WKT definition
+   \param wktstring pointer to WKT string
+
+   \return 0 success
+   \return -1 error writing
+ */
+
+int G_write_projwkt(const char *location_name, const char *wktstring)
+{
+    FILE *fp;
+    char path[GPATH_MAX];
+    int err, n;
+
+    if (!wktstring)
+	return 0;
+
+    if (location_name && *location_name)
+	sprintf(path, "%s/%s/%s/%s", G_gisdbase(), location_name, "PERMANENT", WKT_FILE);
+    else
+	G_file_name(path, "", WKT_FILE, "PERMANENT");
+
+    fp = fopen(path, "w");
+
+    if (!fp)
+	G_fatal_error(_("Unable to open output file <%s>: %s"), path, strerror(errno));
+
+    err = 0;
+    n = strlen(wktstring);
+    if (wktstring[n - 1] != '\n') {
+	if (n != fprintf(fp, "%s\n", wktstring))
+	    err = -1;
+    }
+    else {
+	if (n != fprintf(fp, "%s", wktstring))
+	    err = -1;
+    }
+
+    if (fclose(fp) != 0)
+	G_fatal_error(_("Error closing output file <%s>: %s"), path, strerror(errno));
+
+    return err;
+}
+
+
+/*!
+   \brief Write srid (spatial reference id) to file
+
+    A srid consists of an authority name and code and must be known to
+    PROJ.
+
+   \param location_name name of the location to write the srid
+   \param sridstring pointer to srid string
+
+   \return 0 success
+   \return -1 error writing
+ */
+
+int G_write_projsrid(const char *location_name, const char *sridstring)
+{
+    FILE *fp;
+    char path[GPATH_MAX];
+    int err, n;
+
+    if (!sridstring)
+	return 0;
+
+    if (location_name && *location_name)
+	sprintf(path, "%s/%s/%s/%s", G_gisdbase(), location_name, "PERMANENT", SRID_FILE);
+    else
+	G_file_name(path, "", SRID_FILE, "PERMANENT");
+
+    fp = fopen(path, "w");
+
+    if (!fp)
+	G_fatal_error(_("Unable to open output file <%s>: %s"), path, strerror(errno));
+
+    err = 0;
+    n = strlen(sridstring);
+    if (sridstring[n - 1] != '\n') {
+	if (n != fprintf(fp, "%s\n", sridstring))
+	    err = -1;
+    }
+    else {
+	if (n != fprintf(fp, "%s", sridstring))
+	    err = -1;
+    }
+
+    if (fclose(fp) != 0)
+	G_fatal_error(_("Error closing output file <%s>: %s"), path, strerror(errno));
+
+    return err;
 }

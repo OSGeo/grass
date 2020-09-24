@@ -117,6 +117,8 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define PROJECTION_FILE "PROJ_INFO"
 #define UNIT_FILE       "PROJ_UNITS"
 #define EPSG_FILE       "PROJ_EPSG"
+#define WKT_FILE        "PROJ_WKT"
+#define SRID_FILE       "PROJ_SRID"
 
 #ifdef __MINGW32__
 #define CONFIG_DIR "GRASS7"

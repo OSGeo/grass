@@ -27,7 +27,8 @@
 
 static int check_xy(int shell);
 
-/* print projection information gathered from one of the possible inputs */
+/* print projection information gathered from one of the possible inputs
+ * in GRASS format */
 void print_projinfo(int shell)
 {
     int i;
@@ -123,43 +124,75 @@ void print_datuminfo(void)
     return;
 }
 
+/* print input projection information in PROJ format */
 void print_proj4(int dontprettify)
 {
     struct pj_info pjinfo;
-    char *proj4, *proj4mod, *i;
+    char *i, *projstrmod;
+    const char *projstr;
     const char *unfact;
 
     if (check_xy(FALSE))
 	return;
 
-    if (pj_get_kv(&pjinfo, projinfo, projunits) == -1)
-        G_fatal_error(_("Unable to convert projection information to PROJ format"));
-    proj4 = pjinfo.def;
-#ifdef HAVE_PROJ_H
-    proj_destroy(pjinfo.pj);
-#else
-    pj_free(pjinfo.pj);
-#endif
-    /* GRASS-style PROJ.4 strings don't include a unit factor as this is
-     * handled separately in GRASS - must include it here though */
-    unfact = G_find_key_value("meters", projunits);
-    if (unfact != NULL && (strcmp(pjinfo.proj, "ll") != 0))
-	G_asprintf(&proj4mod, "%s +to_meter=%s", proj4, unfact);
-    else
-	proj4mod = G_store(proj4);
+    projstr = NULL;
+    projstrmod = NULL;
 
-    for (i = proj4mod; *i; i++) {
+#if PROJ_VERSION_MAJOR >= 6
+    /* PROJ6+: create a PJ object from wkt or srid,
+     * then get PROJ string using PROJ API */
+    {
+	PJ *obj = NULL;
+
+	if (projwkt) {
+	    obj = proj_create_from_wkt(NULL, projwkt, NULL, NULL, NULL);
+	}
+	if (!obj && projsrid) {
+	    obj = proj_create(NULL, projsrid);
+	}
+	if (obj) {
+	    projstr = proj_as_proj_string(NULL, obj, PJ_PROJ_5, NULL);
+
+	    if (projstr)
+		projstr = G_store(projstr);
+	    proj_destroy(obj);
+	}
+    }
+#endif
+
+    if (!projstr) {
+	if (pj_get_kv(&pjinfo, projinfo, projunits) == -1)
+	    G_fatal_error(_("Unable to convert projection information to PROJ format"));
+	projstr = pjinfo.def;
+#if PROJ_VERSION_MAJOR >= 5
+	proj_destroy(pjinfo.pj);
+#else
+	pj_free(pjinfo.pj);
+#endif
+
+	/* GRASS-style PROJ.4 strings don't include a unit factor as this is
+	 * handled separately in GRASS - must include it here though */
+	unfact = G_find_key_value("meters", projunits);
+	if (unfact != NULL && (strcmp(pjinfo.proj, "ll") != 0))
+	    G_asprintf(&projstrmod, "%s +to_meter=%s", projstr, unfact);
+	else
+	    projstrmod = G_store(projstr);
+    }
+    if (!projstrmod)
+	projstrmod = G_store(projstr);
+
+    for (i = projstrmod; *i; i++) {
 	/* Don't print the first space */
-	if (i == proj4mod && *i == ' ')
+	if (i == projstrmod && *i == ' ')
 	    continue;
 
-	if (*i == ' ' && *(i+1) == '+' && !(dontprettify))
+	if (*i == ' ' && *(i + 1) == '+' && !(dontprettify))
 	    fputc('\n', stdout);
 	else
 	    fputc(*i, stdout);
     }
     fputc('\n', stdout);
-    G_free(proj4mod);
+    G_free(projstrmod);
 
     return;
 }
@@ -172,8 +205,65 @@ void print_wkt(int esristyle, int dontprettify)
     if (check_xy(FALSE))
 	return;
 
+    outwkt = NULL;
+
+#if PROJ_VERSION_MAJOR >= 6
+    /* print WKT2 using GDAL OSR interface */
+    {
+	OGRSpatialReferenceH hSRS;
+	const char *tmpwkt;
+	const char **papszOptions = NULL;
+
+	papszOptions = G_calloc(3, sizeof(char *));
+	if (dontprettify)
+	    papszOptions[0] = G_store("MULTILINE=NO");
+	else
+	    papszOptions[0] = G_store("MULTILINE=YES");
+	if (esristyle)
+	    papszOptions[1] = G_store("FORMAT=WKT1_ESRI");
+	else
+	    papszOptions[1] = G_store("FORMAT=WKT2");
+	papszOptions[2] = NULL;
+
+	hSRS = NULL;
+
+	if (projsrid) {
+	    PJ *obj;
+
+	    obj = proj_create(NULL, projsrid);
+	    if (!obj)
+		G_fatal_error(_("Unable to create PROJ definition from srid <%s>"), projsrid);
+	    tmpwkt = proj_as_wkt(NULL, obj, PJ_WKT2_2019, NULL);
+	    hSRS = OSRNewSpatialReference(tmpwkt);
+	    OSRExportToWktEx(hSRS, &outwkt, papszOptions);
+	}
+	if (!outwkt && projwkt) {
+	    hSRS = OSRNewSpatialReference(projwkt);
+	    OSRExportToWktEx(hSRS, &outwkt, papszOptions);
+	}
+	if (!outwkt && projepsg) {
+	    int epsg_num;
+
+	    epsg_num = atoi(G_find_key_value("epsg", projepsg));
+
+	    OSRImportFromEPSG(hSRS, epsg_num);
+	    OSRExportToWktEx(hSRS, &outwkt, papszOptions);
+	}
+	if (!outwkt) {
+	    /* use GRASS proj info + units */
+	    projwkt = GPJ_grass_to_wkt2(projinfo, projunits, projepsg, esristyle,
+				      !(dontprettify));
+	    hSRS = OSRNewSpatialReference(projwkt);
+	    OSRExportToWktEx(hSRS, &outwkt, papszOptions);
+	}
+	if (hSRS)
+	    OSRDestroySpatialReference(hSRS);
+    }
+#else
     outwkt = GPJ_grass_to_wkt2(projinfo, projunits, projepsg, esristyle,
 			      !(dontprettify));
+#endif
+
     if (outwkt != NULL) {
 	fprintf(stdout, "%s\n", outwkt);
 	G_free(outwkt);
