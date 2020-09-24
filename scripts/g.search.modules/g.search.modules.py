@@ -94,6 +94,8 @@ def main():
 
     if exact_keywords:
         keywords = options['keyword'].split(',')
+    elif options['keyword'] == '*':
+        keywords = ['']
     else:
         keywords = options['keyword'].lower().split(',')
 
