@@ -168,7 +168,7 @@ int main(int argc, char **argv)
 	par_multi_start->type = TYPE_DOUBLE;
 	par_multi_start->answer = "0";
 	par_multi_start->description =
-	    _("Distance where serch will start in multiple mode (zero to omit)");
+	    _("Distance where search will start in multiple mode (zero to omit)");
 	par_multi_start->guisection = _("Multires");
 
 	flag_units = G_define_flag();
