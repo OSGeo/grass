@@ -22,8 +22,9 @@
 #% key: keyword
 #% multiple: yes
 #% type: string
-#% description: Keyword to be searched
-#% required : yes
+#% label: Keyword to be searched
+#% description: List all modules if not given
+#% required : no
 #%end
 #%flag
 #% key: a
@@ -92,10 +93,14 @@ def main():
     else:
         COLORIZE = flags['c']
 
-    if exact_keywords:
-        keywords = options['keyword'].split(',')
+    keywords = None
+    if options['keyword']:
+        if exact_keywords:
+            keywords = options['keyword'].split(',')
+        else:
+            keywords = options['keyword'].lower().split(',')
     else:
-        keywords = options['keyword'].lower().split(',')
+        NOT = None
 
     modules = _search_module(keywords, AND, NOT, manpages, exact_keywords)
 
@@ -181,7 +186,7 @@ def colorize(text, attrs=None, pattern=None):
         return colored(text, attrs=attrs)
 
 
-def _search_module(keywords, logical_and=False, invert=False, manpages=False,
+def _search_module(keywords=None, logical_and=False, invert=False, manpages=False,
                    exact_keywords=False):
     """Search modules by given keywords
 
@@ -225,38 +230,42 @@ def _search_module(keywords, logical_and=False, invert=False, manpages=False,
         description = item.find('description').text
         module_keywords = item.find('keywords').text
 
-        found = [False]
-        if logical_and:
-            found = [False] * len(keywords)
+        if not keywords:
+            # list all modules
+            found = [True]
+        else:
+            found = [False]
+            if logical_and:
+                found = [False] * len(keywords)
 
-        for idx in range(len(keywords)):
-            keyword = keywords[idx]
-            keyword_found = False
+            for idx in range(len(keywords)):
+                keyword = keywords[idx]
+                keyword_found = False
 
-            if exact_keywords:
-                keyword_found = _exact_search(keyword, module_keywords)
-            else:
-                keyword_found = _basic_search(keyword, name, description,
-                                              module_keywords)
-
-            # meta-modules (i.sentinel, r.modis, ...) do not have descriptions
-            # and keywords, but they have a manpage
-            # TODO change the handling of meta-modules
-            if (description and module_keywords) and not keyword_found and manpages:
-                keyword_found = _manpage_search(keyword, name)
-
-            if keyword_found:
-                if logical_and:
-                    found[idx] = True
+                if exact_keywords:
+                    keyword_found = _exact_search(keyword, module_keywords)
                 else:
-                    found = [True]
+                    keyword_found = _basic_search(keyword, name, description,
+                                                  module_keywords)
 
-                description = colorize(description,
-                                       attrs=['underline'],
-                                       pattern=keyword)
-                module_keywords = colorize(module_keywords,
+                # meta-modules (i.sentinel, r.modis, ...) do not have descriptions
+                # and keywords, but they have a manpage
+                # TODO change the handling of meta-modules
+                if (description and module_keywords) and not keyword_found and manpages:
+                    keyword_found = _manpage_search(keyword, name)
+
+                if keyword_found:
+                    if logical_and:
+                        found[idx] = True
+                    else:
+                        found = [True]
+
+                    description = colorize(description,
                                            attrs=['underline'],
                                            pattern=keyword)
+                    module_keywords = colorize(module_keywords,
+                                               attrs=['underline'],
+                                               pattern=keyword)
 
         add = False not in found
         if invert:
