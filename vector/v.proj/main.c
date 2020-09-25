@@ -36,7 +36,6 @@ int main(int argc, char *argv[])
 {
     int i, type, stat;
     int day, yr, Out_proj;
-    int out_zone = 0;
     int overwrite;		/* overwrite output map */
     const char *mapset;
     const char *omap_name, *map_name, *iset_name, *iloc_name;
@@ -408,8 +407,7 @@ int main(int argc, char *argv[])
     Vect_hist_copy(&Map, &Out_Map);
     Vect_hist_command(&Out_Map);
 
-    out_zone = info_out.zone;
-    Vect_set_zone(&Out_Map, out_zone);
+    Vect_set_zone(&Out_Map, G_zone());
 
     /* Read and write header info */
     sprintf(date, "%s", G_date());
