@@ -1,18 +1,5 @@
 [flake8]
 ignore =
-    E722, # do not use bare 'except'
-    E741, # ambiguous variable name 'l'
-    F401, # '.reader.BandReferenceReader' imported but unused
-    F403, # 'from ctypes import *' used; unable to detect undefined names
-    F405, # 'RasterRow' may be undefined, or defined from star imports: ctypes, grass.pygrass.raster, grass.pygrass.vector
-    F841, # local variable 't0' is assigned to but never used
-    W605, # invalid escape sequence '\_'
-    E265, # block comment should start with '# '
-    E266, # too many leading '#' for block comment
-    F821, # undefined name '_'
-    W293, # blank line contains whitespace
-    W503, # line break before binary operator
-    W504, # line break after binary operator
     E121, # continuation line under-indented for hanging indent
     E125, # continuation line with same indent as next logical line
     E127, # continuation line over-indented for visual indent
@@ -24,12 +11,25 @@ ignore =
     E231, # missing whitespace after ':'
     E251, # unexpected spaces around keyword / parameter equals
     E261, # at least two spaces before inline comment
+    E265, # block comment should start with '# '
+    E266, # too many leading '#' for block comment
     E271, # multiple spaces after keyword
     E272, # multiple spaces before keyword
-    E501, # line too long (183 > 150 characters)
     E302, # expected 2 blank lines, found 1
     E303, # too many blank lines (3)
     E305, # expected 2 blank lines after class or function definition, found 1
+    E501, # line too long (183 > 150 characters)
+    E722, # do not use bare 'except'
+    E741, # ambiguous variable name 'l'
+    F401, # '.reader.BandReferenceReader' imported but unused
+    F403, # 'from ctypes import *' used; unable to detect undefined names
+    F405, # 'RasterRow' may be undefined, or defined from star imports: ctypes, grass.pygrass.raster, grass.pygrass.vector
+    F821, # undefined name '_'
+    F841, # local variable 't0' is assigned to but never used
+    W293, # blank line contains whitespace
+    W503, # line break before binary operator
+    W504, # line break after binary operator
+    W605, # invalid escape sequence '\_'
 
 per-file-ignores =
     # C wrappers call libgis.G_gisinit before importing other modules.
