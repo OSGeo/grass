@@ -384,7 +384,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                     # Check if resultmap names exist in GRASS database.
                     vectorname = self.basename + "_" + str(i).zfill(leadzero)
                     vectormap = VectorDataset(vectorname + "@" + get_current_mapset())
-                    if vectormap.map_exists() and self.overwrite == False:
+                    if vectormap.map_exists() and self.overwrite is False:
                         self.msgr.fatal(_("Error vector maps with basename %s exist. "
                                           "Use --o flag to overwrite existing file")
                                           % (vectorname))
@@ -489,7 +489,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             if map_i.is_in_db(dbif=dbif) and self.overwrite:
                                 # Update map in temporal database.
                                 map_i.update_all(dbif=dbif)
-                            elif map_i.is_in_db(dbif=dbif) and self.overwrite == False:
+                            elif map_i.is_in_db(dbif=dbif) and self.overwrite is False:
                                 # Raise error if map exists and no overwrite flag is given.
                                 self.msgr.fatal(_("Error vector map %s exist in temporal database. "
                                                   "Use overwrite flag.  : \n%s")

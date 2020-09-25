@@ -921,15 +921,15 @@ class AbstractMapDataset(AbstractDataset):
         # For each stds in which the map is registered
         if datasets is not None:
             for dataset in datasets:
-                    # Create a space time dataset object to remove the map
-                    # from its register
-                    stds = self.get_new_stds_instance(dataset)
-                    stds.metadata.select(dbif)
-                    statement += stds.unregister_map(self, dbif, False)
-                    # Take care to update the space time dataset after
-                    # the map has been unregistered
-                    if update is True and execute is True:
-                        stds.update_from_registered_maps(dbif)
+                # Create a space time dataset object to remove the map
+                # from its register
+                stds = self.get_new_stds_instance(dataset)
+                stds.metadata.select(dbif)
+                statement += stds.unregister_map(self, dbif, False)
+                # Take care to update the space time dataset after
+                # the map has been unregistered
+                if update is True and execute is True:
+                    stds.update_from_registered_maps(dbif)
 
         if execute:
             dbif.execute_transaction(statement)

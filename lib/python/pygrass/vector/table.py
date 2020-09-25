@@ -851,7 +851,7 @@ class DBlinks(object):
 
         """
         if isinstance(item, int):
-                return self.by_index(item)
+            return self.by_index(item)
         else:
             return self.by_name(item)
 

@@ -46,7 +46,7 @@ def raster_history(map, overwrite=False, env=None):
     """
     current_mapset = gisenv(env)['MAPSET']
     if find_file(name=map, env=env)['mapset'] == current_mapset:
-        if overwrite == True:
+        if overwrite is True:
             historyfile = tempfile(env=env)
             f = open(historyfile, 'w')
             f.write(os.environ['CMDLINE'])

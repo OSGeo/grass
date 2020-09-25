@@ -851,7 +851,7 @@ class TemporalAlgebraParser(object):
                 if tokens[count - 2] == "MAP" or tokens[count - 2] == "TMAP":
                     ignore = True
 
-            if tok.type == "NAME" and ignore == False:
+            if tok.type == "NAME" and ignore is False:
                 name_list.append(tok.value)
             count += 1
 
@@ -1120,7 +1120,7 @@ class TemporalAlgebraParser(object):
 
         if self.removable_maps:
             for map in self.removable_maps.values():
-                    map_names[map.get_type()].append(map.get_name())
+                map_names[map.get_type()].append(map.get_name())
 
         for key in map_names.keys():
             if map_names[key]:
@@ -1836,7 +1836,7 @@ class TemporalAlgebraParser(object):
                     if self.debug:
                         print('Topologic relation: ' + topo.upper() + ' not found.')
                     resultdict[map_i.get_id()] = map_i
-            if unchanged == True:
+            if unchanged is True:
                 if self.debug:
                     print('Leave temporal extend of result map: ' + map_i.get_map_id() + ' unchanged.')
 
@@ -2245,7 +2245,7 @@ class TemporalAlgebraParser(object):
 
                             map_result = map_i.get_new_instance(newident + "@" + self.mapset)
 
-                            if map_result.map_exists() and self.overwrite == False:
+                            if map_result.map_exists() and self.overwrite is False:
                                 self.msgr.fatal("Error raster maps with basename %s exist. "
                                                 "Use --o flag to overwrite existing file" % map_i.get_id())
 
@@ -2430,7 +2430,7 @@ class TemporalAlgebraParser(object):
                 # Create empty map dataset.
                 map_i = dataset_factory(self.maptype, id_input)
                 # Check for occurrence of space time dataset.
-                if map_i.map_exists() == False:
+                if map_i.map_exists() is False:
                     raise FatalError(_("%s map <%s> not found in GRASS spatial database") %
                                       (map_i.get_type(), id_input))
                 else:
@@ -2656,7 +2656,7 @@ class TemporalAlgebraParser(object):
             t[0] = resultlist
 
         if self.debug:
-                print(t[1], t[3], t[5], t[6])
+            print(t[1], t[3], t[5], t[6])
 
     def p_t_var_expr_time(self, t):
         # Examples:

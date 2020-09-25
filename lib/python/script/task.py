@@ -428,7 +428,7 @@ class processTask:
                 "suppress_required": suppress_required,
                 "value": False,
                 "hidden": hidden
-                } )
+            } )
 
     def _get_node_text(self, node, tag, default=''):
         """Get node text"""

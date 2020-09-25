@@ -824,7 +824,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 # Create empty map dataset.
                 map_i = dataset_factory(self.maptype, id_input)
                 # Check for occurrence of space time dataset.
-                if map_i.map_exists() == False:
+                if map_i.map_exists() is False:
                     raise FatalError(_("%s map <%s> not found in GRASS spatial database") %
                         (map_i.get_type(), id_input))
                 else:

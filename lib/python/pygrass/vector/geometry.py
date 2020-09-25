@@ -337,14 +337,14 @@ class Geo(object):
     def __del__(self):
         """Take care of the allocated line_pnts and line_cats allocation
         """
-        if self._free_points == True and self.c_points:
+        if self._free_points is True and self.c_points:
             if self.c_points.contents.alloc_points > 0:
                 #print("G_free(points) [%i]"%(self.c_points.contents.alloc_points))
                 libgis.G_free(self.c_points.contents.x)
                 libgis.G_free(self.c_points.contents.y)
                 if self.c_points.contents.z:
                     libgis.G_free(self.c_points.contents.z)
-        if self._free_cats == True and self.c_cats:
+        if self._free_cats is True and self.c_cats:
             if self.c_cats.contents.alloc_cats > 0:
                 #print("G_free(cats) [%i]"%(self.c_cats.contents.alloc_cats))
                 libgis.G_free(self.c_cats.contents.cat)
