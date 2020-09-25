@@ -130,6 +130,7 @@ ENV GRASS_BUILD_PACKAGES="\
       gcc \
       gdal-dev \
       geos-dev \
+      git \
       gnutls-dev \
       libc6-compat \
       libjpeg-turbo-dev \
