@@ -479,7 +479,11 @@ int Vect_set_zone(struct Map_info *Map, int zone)
  */
 int Vect_get_zone(const struct Map_info *Map)
 {
-    return Map->head.plani_zone;
+    /* return Map->head.plani_zone; */
+
+    /* use utm zone of current location,
+     * a vector in a given location can not be in a different CRS */
+    return G_zone();
 }
 
 /*!
