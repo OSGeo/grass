@@ -214,10 +214,12 @@ git fetch --all --prune && git checkout releasebranch_7_8 && \
 
 ### Upload source code tarball to OSGeo servers
 
+Note: grasslxd only reachable via jumphost - https://wiki.osgeo.org/wiki/SAC_Service_Status#GRASS_GIS_server
+
 ```bash
 # Store the source tarball (twice) in (use scp -p FILES grass:):
-SERVER1=grass.osgeo.org
-SERVER1DIR=/var/www/grass/grass-cms/grass$MAJOR$MINOR/source/
+SERVER1=grasslxd
+SERVER1DIR=/var/www/code_and_data/grass$MAJOR$MINOR/source/
 SERVER2=upload.osgeo.org
 SERVER2DIR=/osgeo/download/grass/grass$MAJOR$MINOR/source/
 echo $SERVER1:$SERVER1DIR
