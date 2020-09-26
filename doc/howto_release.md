@@ -272,7 +272,26 @@ TODO: git tags
 
 #### Write announcement and publish it
 
-- store in trac:
+To easily generate the entries for the trac Wiki release pages, use a `git log` approach:
+
+- List of latest changes (example, get from GitHub release page)
+   - https://github.com/OSGeo/grass/compare/releasebranch_7_8@%7B05-05-20%7D...releasebranch_7_8@%7B09-26-20%7D
+- identify start and end commit hash
+- extract entries from oneline git log and prepare for trac Wiki copy-paste:
+
+```
+#START=76d5988
+#END=8a81328
+##git log --oneline | sed -n "+^$START+,+^$END+p;+^$END+q"
+
+# verify
+git log --oneline | sed -n '/^76d5988/,/^8a81328/p;/^8a81328/q' | tac
+
+# prepare for trac Wiki release page
+git log --oneline | sed -n '/^76d5988/,/^8a81328/p;/^8a81328/q' | cut -d' ' -f2- | sed 's+^+ * G78:+g' | sort -u
+```
+
+- store entries in trac, by section:
     - <https://trac.osgeo.org/grass/wiki/Release/7.8.x-News>
     - <https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures78>  <- add content
       of major changes only
@@ -280,9 +299,9 @@ TODO: git tags
 - ~~store in Web as announces/announce_grass$MAJOR$MINOR$RELEASE.html <- how?
   with protected PHP upload page?~~ (dropped since CMS)
 
-#### Only when new major release
+#### Only in case of new major release
 
-- update cronjob 'cron_grass_HEAD_src_snapshot.sh' on grass.osgeo.org to next
+- update cronjob '[cron_grass_HEAD_src_snapshot.sh](https://github.com/OSGeo/grass-addons/tree/master/tools/cronjobs_osgeo_lxd)' on grass.osgeo.org to next
   but one release tag for the differences
 - wiki updates, only when new major release:
     - {{cmd|xxxx}} macro: <https://grasswiki.osgeo.org/wiki/Template:Cmd>
