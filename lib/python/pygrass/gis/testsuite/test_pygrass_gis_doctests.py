@@ -37,9 +37,9 @@ def load_tests(loader, tests, ignore):
     utils.create_test_vector_map(gis.test_vector_name)
     utils.create_test_vector_map(gis.region.test_vector_name)
     run_command("g.region", n=50, s=0, e=60, w=0, res=1)
-    run_command("r.mapcalc", expression="%s = 1"%(gis.test_raster_name),
+    run_command("r.mapcalc", expression="%s = 1" % (gis.test_raster_name),
                              overwrite=True)
-    run_command("r.mapcalc", expression="%s = 1"%(gis.region.test_raster_name),
+    run_command("r.mapcalc", expression="%s = 1" % (gis.region.test_raster_name),
                              overwrite=True)
     run_command("g.region", n=40, s=0, e=40, w=0, res=2)
 

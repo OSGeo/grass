@@ -35,7 +35,7 @@ def load_tests(loader, tests, ignore):
     from grass.pygrass import utils
     from grass.pygrass.modules import Module
     Module("g.region", n=40, s=0, e=40, w=0, res=10)
-    Module("r.mapcalc", expression="%s = row() + (10 * col())"%(pygrpc.test_raster_name),
+    Module("r.mapcalc", expression="%s = row() + (10 * col())" % (pygrpc.test_raster_name),
                              overwrite=True)
     utils.create_test_vector_map(pygrpc.test_vector_name)
     

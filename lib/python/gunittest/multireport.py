@@ -125,7 +125,7 @@ def plot_percent_successful(x, xticks, xlabels, successes, filename, style):
 
     step = 5
     ymin = int(min(successes) / step) * step
-    ymax =  int(smax / step) * step
+    ymax = int(smax / step) * step
     percents = range(ymin, ymax + step + 1, step)
     graph.set_yticks(percents)
     graph.set_yticklabels(['%d%%' % p for p in percents])
@@ -293,7 +293,7 @@ def main_page(results, filename, images, captions, title='Test reports',
             '</tr></thead>'
             '<tbody>'
             .format(title=title)
-            )
+        )
         for result in reversed(results):
             # TODO: include name to summary file
             # now using location or test report directory as name
@@ -400,7 +400,7 @@ def main():
             all_results.append(result)
             del result
         except KeyError as e:
-            print('File %s does not have right values (%s)' % (report, e.message)) 
+            print('File %s does not have right values (%s)' % (report, e.message))
 
     locations_main_page = open(os.path.join(output, 'index.html'), 'w')
     locations_main_page.write(
@@ -412,7 +412,7 @@ def main():
         '<th>Successful files</th><th>Successful tests</th>'
         '</tr></thead>'
         '<tbody>'
-        )
+    )
 
     PlotStyle = namedtuple('PlotStyle',
                            ['linestyle', 'linewidth',

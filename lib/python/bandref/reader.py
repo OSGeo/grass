@@ -12,6 +12,7 @@ class BandReferenceReaderError(Exception):
 
 class BandReferenceReader:
     """Band references reader"""
+
     def __init__(self):
         self._json_files = glob.glob(
             os.path.join(os.environ['GISBASE'], 'etc', 'g.bands', '*.json')
@@ -35,7 +36,7 @@ class BandReferenceReader:
                 raise BandReferenceReaderError(
                     "Unable to parse '{}': {}".format(
                         json_file, e
-                ))
+                    ))
 
             # check if configuration is valid
             self._check_config(config)
@@ -55,7 +56,7 @@ class BandReferenceReader:
                 if item not in items.keys():
                     raise BandReferenceReaderError(
                         "Invalid band definition: <{}> is missing".format(item
-                ))
+                                                                          ))
             if len(items['bands']) < 1:
                 raise BandReferenceReaderError(
                     "Invalid band definition: no bands defined"

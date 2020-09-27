@@ -47,6 +47,7 @@ class MetaModule(object):
        >>> v.import_
        Module('v.import')
     """
+
     def __init__(self, prefix, cls=None):
         self.prefix = prefix
         self.cls = cls if cls else Module

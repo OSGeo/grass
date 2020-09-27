@@ -36,7 +36,7 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
 
         tgis.register_maps_in_space_time_dataset(type="raster", name="A", maps="a1,a2,a3,a4",
                                                  start="2001-01-01", interval=False)
-        tgis.register_maps_in_space_time_dataset(type="raster", name=None,  maps="singletmap",
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None, maps="singletmap",
                                                 start="2001-01-01")
 
     def tearDown(self):
@@ -64,7 +64,7 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
 
         """
         ta = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = A + A",   basename="r", overwrite=True)
+        ta.parse(expression="R = A + A", basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -74,8 +74,8 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 14)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  False)
-        self.assertEqual(D.get_granularity(),  None)
+        self.assertEqual(D.check_temporal_topology(), False)
+        self.assertEqual(D.get_granularity(), None)
 
     def test_complex_operator(self):
         """Test implicit aggregation
@@ -91,7 +91,7 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
 
         """
         ta = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = A {+, equal,l} A",   basename="r", overwrite=True)
+        ta.parse(expression="R = A {+, equal,l} A", basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -101,8 +101,8 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 14)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  False)
-        self.assertEqual(D.get_granularity(),  None)
+        self.assertEqual(D.check_temporal_topology(), False)
+        self.assertEqual(D.get_granularity(), None)
 
     def test_single_map_complex_operator(self):
         """Test implicit aggregation
@@ -118,7 +118,7 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
 
         """
         ta = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = tmap(singletmap) {+, equal,l} A",   basename="r", overwrite=True)
+        ta.parse(expression="R = tmap(singletmap) {+, equal,l} A", basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -128,8 +128,8 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 110)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  None)
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), None)
 
     def test_single_map_simple_operator(self):
         """Test implicit aggregation
@@ -145,7 +145,7 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
 
         """
         ta = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = tmap(singletmap) + A",   basename="r", overwrite=True)
+        ta.parse(expression="R = tmap(singletmap) + A", basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -155,8 +155,8 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 110)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  None)
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), None)
 
     def test_single_map_complex_operator_right_ts(self):
         """Test implicit aggregation
@@ -173,7 +173,7 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
 
         """
         ta = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = tmap(singletmap) {+, equal,r} A",   basename="r", overwrite=True)
+        ta.parse(expression="R = tmap(singletmap) {+, equal,r} A", basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -183,8 +183,8 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 110)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  False)
-        self.assertEqual(D.get_granularity(),  None)
+        self.assertEqual(D.check_temporal_topology(), False)
+        self.assertEqual(D.get_granularity(), None)
 
 
 if __name__ == '__main__':

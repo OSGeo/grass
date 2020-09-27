@@ -213,6 +213,7 @@ class ParallelModuleQueue(object):
     0
 
     """
+
     def __init__(self, nprocs=1):
         """Constructor
 
@@ -515,6 +516,7 @@ class Module(object):
     In the Module class we heavily use this language feature to pass arguments
     and keyword arguments to the grass module.
     """
+
     def __init__(self, cmd, *args, **kargs):
         if isinstance(cmd, unicode):
             self.name = str(cmd)
@@ -692,10 +694,10 @@ class Module(object):
             cmd_params=('\n' +  # go to a new line
              # give space under the function name
              (' ' * (len(self.name) + 1))).join([', '.join(
-             # transform each parameter in string
-             [str(param) for param in line if param is not None])
-             # make a list of parameters with only 3 param per line
-             for line in zip_longest(*[iter(self.params_list)] * 3)]),)
+                 # transform each parameter in string
+                 [str(param) for param in line if param is not None])
+                 # make a list of parameters with only 3 param per line
+                 for line in zip_longest(*[iter(self.params_list)] * 3)]),)
         params = '\n'.join([par.__doc__ for par in self.params_list])
         flags = self.flags.__doc__
         return '\n'.join([head, params, DOC['flag_head'], flags, DOC['foot']])

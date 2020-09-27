@@ -15,8 +15,8 @@ from grass.pygrass.errors import GrassError
 from grass.pygrass.shell.conversion import dict2html
 from grass.pygrass.utils import get_mapset_vector, get_mapset_raster
 
-test_vector_name="Region_test_vector"
-test_raster_name="Region_test_raster"
+test_vector_name = "Region_test_vector"
+test_raster_name = "Region_test_raster"
 
 class Region(object):
     """This class is design to easily access and modify GRASS computational
@@ -101,6 +101,7 @@ class Region(object):
 
     ..
     """
+
     def __init__(self, default=False):
         self.c_region = libgis.Cell_head()
         if default:
@@ -274,8 +275,8 @@ class Region(object):
     #----------MAGIC METHODS----------
     def __repr__(self):
         rg = "Region(north=%g, south=%g, east=%g, west=%g, "\
-                    "nsres=%g, ewres=%g, rows=%i, cols=%i, "\
-                    "cells=%i, zone=%i, proj=%i)"
+            "nsres=%g, ewres=%g, rows=%i, cols=%i, "\
+            "cells=%i, zone=%i, proj=%i)"
         return rg % (self.north, self.south, self.east, self.west,
                      self.nsres, self.ewres, self.rows, self.cols,
                      self.cells, self.zone, self.proj)
@@ -629,7 +630,7 @@ if __name__ == "__main__":
 
     utils.create_test_vector_map(test_vector_name)
     run_command("g.region", n=50, s=0, e=60, w=0, res=1)
-    run_command("r.mapcalc", expression="%s = 1"%(test_raster_name),
+    run_command("r.mapcalc", expression="%s = 1" % (test_raster_name),
                              overwrite=True)
     run_command("g.region", n=40, s=0, e=40, w=0, res=2)
 
@@ -642,4 +643,3 @@ if __name__ == "__main__":
     mset = utils.get_mapset_raster(test_raster_name, mapset='')
     if mset:
         run_command("g.remove", flags='f', type='raster', name=test_raster_name)
-

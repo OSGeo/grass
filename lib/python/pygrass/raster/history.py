@@ -14,6 +14,7 @@ from grass.pygrass.utils import decode
 class History(object):
     """History class help to manage all the metadata of a raster map
     """
+
     def __init__(self, name, mapset='', mtype='',
                  creator='', src1='', src2='', keyword='',
                  date='', title=''):

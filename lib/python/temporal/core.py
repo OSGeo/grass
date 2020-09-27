@@ -63,7 +63,8 @@ def profile_function(func):
     do_profiling = os.getenv("GRASS_TGIS_PROFILE")
 
     if do_profiling == "True" or do_profiling == "1":
-        import cProfile, pstats
+        import cProfile
+        import pstats
         try:
             import StringIO as io
         except ImportError:
@@ -455,20 +456,20 @@ def get_available_temporal_mapsets():
         driver = c_library_interface.get_driver_name(mapset)
         database = c_library_interface.get_database_name(mapset)
 
-        message_interface.debug(1, "get_available_temporal_mapsets: "\
-                                   "\n  mapset %s\n  driver %s\n  database %s"%(mapset,
+        message_interface.debug(1, "get_available_temporal_mapsets: "
+                                   "\n  mapset %s\n  driver %s\n  database %s" % (mapset,
                                    driver, database))
         if driver and database:
             # Check if the temporal sqlite database exists
             # We need to set non-existing databases in case the mapset is the current mapset
             # to create it
-            if (driver == "sqlite" and os.path.exists(database)) or mapset == get_current_mapset() :
-                tgis_mapsets[mapset] = (driver,  database)
+            if (driver == "sqlite" and os.path.exists(database)) or mapset == get_current_mapset():
+                tgis_mapsets[mapset] = (driver, database)
 
             # We need to warn if the connection is defined but the database does not
             # exists
             if driver == "sqlite" and not os.path.exists(database):
-                message_interface.warning("Temporal database connection defined as:\n" + \
+                message_interface.warning("Temporal database connection defined as:\n" +
                                           database + "\nBut database file does not exist.")
     return tgis_mapsets
 
@@ -564,7 +565,7 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
     msgr = get_tgis_message_interface()
     msgr.debug(1, "Initiate the temporal database")
 
-    msgr.debug(1, ("Raise on error id: %s"%str(raise_on_error)))
+    msgr.debug(1, ("Raise on error id: %s" % str(raise_on_error)))
 
     ciface = get_tgis_c_library_interface()
     driver_string = ciface.get_driver_name()
@@ -650,26 +651,26 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
         if dbif.fetchone()[0]:
             db_exists = True
 
-    backup_howto = _("The format of your actual temporal database is not " \
-                     "supported any more.\n" \
-                     "Please create a backup of your temporal database "\
+    backup_howto = _("The format of your actual temporal database is not "
+                     "supported any more.\n"
+                     "Please create a backup of your temporal database "
                      "to avoid lossing data.\nSOLUTION: ")
     if tgis_db_version > 2:
-        backup_howto += _("Run t.upgrade command installed from " \
+        backup_howto += _("Run t.upgrade command installed from "
                           "GRASS Addons in order to upgrade your temporal database.\n")
     else:
-        backup_howto += _("You need to export it by " \
-                          "restoring the GRASS GIS version used for creating this DB."\
-                          "Notes: Use t.rast.export and t.vect.export "\
-                          "to make a backup of your" \
-                          " existing space time datasets. To save the timestamps of" \
-                          " your existing maps and space time datasets, use " \
-                          "t.rast.list, t.vect.list and t.rast3d.list. "\
-                          "You can register the existing time stamped maps easily if"\
-                          " you export columns=id,start_time,end_time into text "\
-                          "files and use t.register to register them again in new" \
-                          " created space time datasets (t.create). After the backup"\
-                          " remove the existing temporal database, a new one will be"\
+        backup_howto += _("You need to export it by "
+                          "restoring the GRASS GIS version used for creating this DB."
+                          "Notes: Use t.rast.export and t.vect.export "
+                          "to make a backup of your"
+                          " existing space time datasets. To save the timestamps of"
+                          " your existing maps and space time datasets, use "
+                          "t.rast.list, t.vect.list and t.rast3d.list. "
+                          "You can register the existing time stamped maps easily if"
+                          " you export columns=id,start_time,end_time into text "
+                          "files and use t.register to register them again in new"
+                          " created space time datasets (t.create). After the backup"
+                          " remove the existing temporal database, a new one will be"
                           " created automatically.\n")
 
     if db_exists is True:
@@ -896,7 +897,7 @@ def upgrade_temporal_database(dbif):
             "upgrade_db_%s_to_%s.sql" % (upgrade_db_from, tgis_db_version)),
             'r').read()
     except FileNotFoundError:
-        msgr.fatal(_("Unsupported TGIS DB upgrade scenario: from version %s to %s") % \
+        msgr.fatal(_("Unsupported TGIS DB upgrade scenario: from version %s to %s") %
                    (upgrade_db_from, tgis_db_version))
 
     drop_views_sql = open(
@@ -904,7 +905,7 @@ def upgrade_temporal_database(dbif):
         'r').read()
 
     msgr.message(
-        _("Upgrading temporal database <%s> from version %s to %s...") % \
+        _("Upgrading temporal database <%s> from version %s to %s...") %
         (tgis_database_string, upgrade_db_from, tgis_db_version))
     # Drop views
     dbif.execute_transaction(drop_views_sql)
@@ -951,7 +952,7 @@ class SQLDatabaseInterfaceConnection(object):
         self.unique_connections = {}
 
         for mapset in self.tgis_mapsets.keys():
-            driver,  dbstring = self.tgis_mapsets[mapset]
+            driver, dbstring = self.tgis_mapsets[mapset]
 
             if dbstring not in self.unique_connections.keys():
                 self.unique_connections[dbstring] = DBConnection(backend=driver,
@@ -961,14 +962,14 @@ class SQLDatabaseInterfaceConnection(object):
 
         self.msgr = get_tgis_message_interface()
 
-    def get_dbmi(self,  mapset=None):
+    def get_dbmi(self, mapset=None):
         if mapset is None:
             mapset = self.current_mapset
 
         mapset = decode(mapset)
         return self.connections[mapset].dbmi
 
-    def rollback(self,  mapset=None):
+    def rollback(self, mapset=None):
         """
             Roll back the last transaction. This must be called
             in case a new query should be performed after a db error.
@@ -984,7 +985,7 @@ class SQLDatabaseInterfaceConnection(object):
            Supported backends are sqlite3 and postgresql
         """
         for mapset in self.tgis_mapsets.keys():
-            driver,  dbstring = self.tgis_mapsets[mapset]
+            driver, dbstring = self.tgis_mapsets[mapset]
             conn = self.connections[mapset]
             if conn.is_connected() is False:
                 conn.connect(dbstring)
@@ -1049,7 +1050,7 @@ class SQLDatabaseInterfaceConnection(object):
 
         return self.connections[mapset].check_table(table_name)
 
-    def execute(self,  statement,  args=None,  mapset=None):
+    def execute(self, statement, args=None, mapset=None):
         """
 
         :param mapset: The mapset of the abstract dataset or temporal
@@ -1064,9 +1065,9 @@ class SQLDatabaseInterfaceConnection(object):
             self.msgr.fatal(_("Unable to execute sql statement. " +
                               self._create_mapset_error_message(mapset)))
 
-        return self.connections[mapset].execute(statement,  args)
+        return self.connections[mapset].execute(statement, args)
 
-    def fetchone(self,  mapset=None):
+    def fetchone(self, mapset=None):
         if mapset is None:
             mapset = self.current_mapset
 
@@ -1077,7 +1078,7 @@ class SQLDatabaseInterfaceConnection(object):
 
         return self.connections[mapset].fetchone()
 
-    def fetchall(self,  mapset=None):
+    def fetchall(self, mapset=None):
         if mapset is None:
             mapset = self.current_mapset
 
@@ -1111,7 +1112,7 @@ class SQLDatabaseInterfaceConnection(object):
         return("You have no permission to "
                "access mapset <%(mapset)s>, or "
                "mapset <%(mapset)s> has no temporal database. "
-               "Accessible mapsets are: <%(mapsets)s>" % \
+               "Accessible mapsets are: <%(mapsets)s>" %
                {"mapset": decode(mapset),
                 "mapsets":','.join(self.tgis_mapsets.keys())})
 
@@ -1154,9 +1155,9 @@ class DBConnection(object):
         self.dbstring = dbstring
 
         self.msgr = get_tgis_message_interface()
-        self.msgr.debug(1, "DBConnection constructor:"\
-                           "\n  backend: %s"\
-                           "\n  dbstring: %s"%(backend, self.dbstring))
+        self.msgr.debug(1, "DBConnection constructor:"
+                           "\n  backend: %s"
+                           "\n  dbstring: %s" % (backend, self.dbstring))
 
     def __del__(self):
         if self.connected is True:
@@ -1176,7 +1177,7 @@ class DBConnection(object):
             if self.connected:
                 self.connection.rollback()
 
-    def connect(self,  dbstring=None):
+    def connect(self, dbstring=None):
         """Connect to the DBMI to execute SQL statements
 
             Supported backends are sqlite3 and postgresql
@@ -1349,7 +1350,7 @@ class DBConnection(object):
 
         return table_exists
 
-    def execute(self, statement,  args=None):
+    def execute(self, statement, args=None):
         """Execute a SQL statement
 
            :param statement: The executable SQL statement or SQL script
@@ -1360,7 +1361,7 @@ class DBConnection(object):
             connected = True
         try:
             if args:
-                self.cursor.execute(statement,  args)
+                self.cursor.execute(statement, args)
             else:
                 self.cursor.execute(statement)
         except:

@@ -134,6 +134,7 @@ class RasterDataset(AbstractMapDataset):
             >>> gs.del_temp_region()
 
     """
+
     def __init__(self, ident):
         AbstractMapDataset.__init__(self)
         self.reset(ident)
@@ -524,6 +525,7 @@ class Raster3DDataset(AbstractMapDataset):
             >>> gs.del_temp_region()
 
     """
+
     def __init__(self, ident):
         AbstractMapDataset.__init__(self)
         self.reset(ident)
@@ -867,6 +869,7 @@ class VectorDataset(AbstractMapDataset):
             >>> gs.del_temp_region()
 
     """
+
     def __init__(self, ident):
         AbstractMapDataset.__init__(self)
         self.reset(ident)
@@ -1103,6 +1106,7 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
 
         ...
     """
+
     def __init__(self, ident):
         AbstractSpaceTimeDataset.__init__(self, ident)
 

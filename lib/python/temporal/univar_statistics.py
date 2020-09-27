@@ -189,7 +189,7 @@ def print_vector_dataset_univar_statistics(input, output, twhere, layer, type, c
         string += "min" + fs + "max" + fs + "range"
         if type == "point" or type == "centroid":
             string += fs + "mean" + fs + "mean_abs" + fs + "population_stddev" +\
-                      fs + "population_variance" + fs
+                fs + "population_variance" + fs
             string += "population_coeff_variation" + fs + \
                 "sample_stddev" + fs + "sample_variance" + fs
             string += "kurtosis" + fs + "skewness"
@@ -239,13 +239,13 @@ def print_vector_dataset_univar_statistics(input, output, twhere, layer, type, c
         if type == "point" or type == "centroid":
             if "mean" in stats:
                 string += fs + str(stats["mean"]) + fs + \
-                str(stats["mean_abs"]) + fs + \
-                str(stats["population_stddev"]) + fs + \
-                str(stats["population_variance"])
+                    str(stats["mean_abs"]) + fs + \
+                    str(stats["population_stddev"]) + fs + \
+                    str(stats["population_variance"])
 
                 string += fs + str(stats["population_coeff_variation"]) + \
-                fs + str(stats["sample_stddev"]) + fs + \
-                str(stats["sample_variance"])
+                    fs + str(stats["sample_stddev"]) + fs + \
+                    str(stats["sample_variance"])
 
                 string += fs + str(stats["kurtosis"]) + fs + \
                           str(stats["skewness"])
@@ -254,9 +254,9 @@ def print_vector_dataset_univar_statistics(input, output, twhere, layer, type, c
             if extended is True:
                 if "first_quartile" in stats:
                     string += fs + str(stats["first_quartile"]) + fs + \
-                              str(stats["median"]) + fs + \
-                              str(stats["third_quartile"]) + fs + \
-                              str(stats["percentile_90"])
+                        str(stats["median"]) + fs + \
+                        str(stats["third_quartile"]) + fs + \
+                        str(stats["percentile_90"])
                 else:
                     string += fs + fs + fs + fs
 

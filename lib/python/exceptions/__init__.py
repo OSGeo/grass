@@ -41,6 +41,7 @@ class ScriptError(Exception):
         >>> print(error)
         My error message!
     """
+
     def __init__(self, value):
         self.value = value
 
@@ -62,6 +63,7 @@ class CalledModuleError(subprocess.CalledProcessError):
     :param rc: process returncode
     :param error: errors provided by the module (stderr)
     """
+
     def __init__(self, module, code, returncode, errors=None):
         # CalledProcessError has undocumented constructor
         super(CalledModuleError, self).__init__(returncode, module)

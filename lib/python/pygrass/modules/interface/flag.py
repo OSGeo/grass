@@ -24,6 +24,7 @@ class Flag(object):
     >>> flag.special
     True
     """
+
     def __init__(self, xflag=None, diz=None):
         self.value = False
         diz = read.element2dict(xflag) if xflag is not None else diz
