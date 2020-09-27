@@ -75,6 +75,7 @@ class TemporalExtent(SQLDatabaseInterface):
         end_time='1'
 
     """
+
     def __init__(self, table=None, ident=None, start_time=None, end_time=None):
 
         SQLDatabaseInterface.__init__(self, table, ident)
@@ -1047,6 +1048,7 @@ class AbsoluteTemporalExtent(TemporalExtent):
 
         start_time and end_time must be of type datetime
     """
+
     def __init__(self, table=None, ident=None, start_time=None, end_time=None):
 
         TemporalExtent.__init__(
@@ -1123,6 +1125,7 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
             map_time=interval
 
     """
+
     def __init__(self, table=None, ident=None, start_time=None, end_time=None,
                  granularity=None, map_time=None):
         AbsoluteTemporalExtent.__init__(
@@ -1246,6 +1249,7 @@ class RelativeTemporalExtent(TemporalExtent):
             unit=years
 
     """
+
     def __init__(self, table=None, ident=None, start_time=None, end_time=None,
                  unit=None):
 
@@ -1372,6 +1376,7 @@ class STDSRelativeTime(RelativeTemporalExtent):
             map_time=interval
 
     """
+
     def __init__(self, table=None, ident=None, start_time=None, end_time=None,
                  unit=None, granularity=None, map_time=None):
         RelativeTemporalExtent.__init__(

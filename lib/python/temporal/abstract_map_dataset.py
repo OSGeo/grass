@@ -902,8 +902,8 @@ class AbstractMapDataset(AbstractDataset):
         else:
             self.msgr.debug(1, "Unregister %(type)s map <%(map)s> "
                                "from space time datasets" % {
-                               'type': self.get_type(),
-                               'map': self.get_map_id()})
+                                   'type': self.get_type(),
+                                   'map': self.get_map_id()})
 
         if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
             self.msgr.fatal(_("Unable to unregister dataset <%(ds)s> of type "
@@ -921,15 +921,15 @@ class AbstractMapDataset(AbstractDataset):
         # For each stds in which the map is registered
         if datasets is not None:
             for dataset in datasets:
-                    # Create a space time dataset object to remove the map
-                    # from its register
-                    stds = self.get_new_stds_instance(dataset)
-                    stds.metadata.select(dbif)
-                    statement += stds.unregister_map(self, dbif, False)
-                    # Take care to update the space time dataset after
-                    # the map has been unregistered
-                    if update is True and execute is True:
-                        stds.update_from_registered_maps(dbif)
+                # Create a space time dataset object to remove the map
+                # from its register
+                stds = self.get_new_stds_instance(dataset)
+                stds.metadata.select(dbif)
+                statement += stds.unregister_map(self, dbif, False)
+                # Take care to update the space time dataset after
+                # the map has been unregistered
+                if update is True and execute is True:
+                    stds.update_from_registered_maps(dbif)
 
         if execute:
             dbif.execute_transaction(statement)

@@ -36,7 +36,7 @@ def getmaprow_DCELL(fd, buf, row, l):
     return 1
 
 get_row = {
-    'CELL':  CMPFUNC(getmaprow_CELL),
+    'CELL': CMPFUNC(getmaprow_CELL),
     'FCELL': CMPFUNC(getmaprow_FCELL),
     'DCELL': CMPFUNC(getmaprow_DCELL),
 }

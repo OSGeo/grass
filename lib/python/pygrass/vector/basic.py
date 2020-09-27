@@ -38,6 +38,7 @@ class Bbox(object):
 
     ..
     """
+
     def __init__(self, north=0, south=0, east=0, west=0, top=0, bottom=0):
         self.c_bbox = ctypes.pointer(libvect.bound_box())
         self.north = north
@@ -161,6 +162,7 @@ class Bbox(object):
 
 class BoxList(object):
     """Instantiate a BoxList class to create a list of Bounding Box"""
+
     def __init__(self, boxlist=None):
         self.c_boxlist = ctypes.pointer(libvect.boxlist())
         # if set to 0, the list will hold only ids and no boxes
@@ -300,6 +302,7 @@ class BoxList(object):
 class Ilist(object):
     """Instantiate a list of integer using the C GRASS struct ``ilist``,
     the class contains this struct as ``c_ilist`` attribute. """
+
     def __init__(self, integer_list=None):
         self.c_ilist = ctypes.pointer(libvect.struct_ilist())
         if integer_list is not None:
@@ -541,7 +544,7 @@ class CatsList(object):
 
     def __init__(self, c_cat_list=None):
         self.c_cat_list = c_cat_list if c_cat_list \
-                                     else ctypes.pointer(libvect.cat_list())
+            else ctypes.pointer(libvect.cat_list())
 
     def from_string(self, string):
         """Converts string of categories and cat ranges separated by commas

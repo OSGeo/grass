@@ -121,7 +121,7 @@ class LineTestCase(TestCase):
             cls.c_mapinfo = None
 
         """Remove the generated vector map, if exist"""
-        cls.runModule("g.remove", flags='f', type='vector', 
+        cls.runModule("g.remove", flags='f', type='vector',
                       name=cls.tmpname)
 
     def test_len(self):
@@ -212,7 +212,7 @@ class NodeTestCase(TestCase):
             cls.c_mapinfo = None
 
         """Remove the generated vector map, if exist"""
-        cls.runModule("g.remove", flags='f', type='vector', 
+        cls.runModule("g.remove", flags='f', type='vector',
                       name=cls.tmpname)
 
     def test_init(self):
@@ -266,7 +266,7 @@ class AreaTestCase(TestCase):
             cls.c_mapinfo = None
 
         """Remove the generated vector map, if exist"""
-        cls.runModule("g.remove", flags='f', type='vector', 
+        cls.runModule("g.remove", flags='f', type='vector',
                       name=cls.tmpname)
 
     def test_init(self):
@@ -360,11 +360,12 @@ class AreaTestCase(TestCase):
         isle = isles[0]
 
         self.assertEqual(isle.area(), 4.0)
-        self.assertEqual(isle.points().to_wkt(), "LINESTRING (1.0000000000000000 1.0000000000000000, "\
-                                                             "3.0000000000000000 1.0000000000000000, "\
-                                                             "3.0000000000000000 3.0000000000000000, "\
-                                                             "1.0000000000000000 3.0000000000000000, "\
+        self.assertEqual(isle.points().to_wkt(), "LINESTRING (1.0000000000000000 1.0000000000000000, "
+                                                             "3.0000000000000000 1.0000000000000000, "
+                                                             "3.0000000000000000 3.0000000000000000, "
+                                                             "1.0000000000000000 3.0000000000000000, "
                                                              "1.0000000000000000 1.0000000000000000)")
+
     def test_isles_2(self):
         """Test centroid access"""
         area = Area(v_id=1, c_mapinfo=self.c_mapinfo)

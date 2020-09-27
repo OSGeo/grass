@@ -52,6 +52,7 @@ class Category(list):
     existing Python category class are copied.
 
     """
+
     def __init__(self, name, mapset='', mtype='CELL', *args, **kargs):
         self.name = name
         self.mapset = mapset

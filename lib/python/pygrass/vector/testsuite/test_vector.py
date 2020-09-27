@@ -32,12 +32,12 @@ class VectorTopoTestCase(TestCase):
             cls.vect.close()
 
         """Remove the generated vector map, if exist"""
-        cls.runModule("g.remove", flags='f', type='vector', 
+        cls.runModule("g.remove", flags='f', type='vector',
                       name=cls.tmpname)
 
     def test_getitem_slice(self):
         """Test that getitem handle correctly the slice starting from 1"""
-        vcoords =  ((10.0, 6.0), (12.0, 6.0))
+        vcoords = ((10.0, 6.0), (12.0, 6.0))
         with VectorTopo(self.tmpname, mode="r") as vect:
             coords = tuple([pnt.coords() for pnt in vect[:3]])
             self.assertTupleEqual(vcoords, coords)

@@ -488,7 +488,7 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None,
 
 ##############################################################################
 
-def register_map_object_list(type,  map_list, output_stds,
+def register_map_object_list(type, map_list, output_stds,
                              delete_empty=False, unit=None, dbif=None):
     """Register a list of AbstractMapDataset objects in the temporal database
        and optional in a space time dataset.
@@ -504,7 +504,7 @@ def register_map_object_list(type,  map_list, output_stds,
     import grass.pygrass.modules as pymod
     import copy
 
-    dbif,  connected = init_dbif(dbif)
+    dbif, connected = init_dbif(dbif)
 
     filename = gscript.tempfile(True)
     file = open(filename, 'w')
@@ -526,11 +526,11 @@ def register_map_object_list(type,  map_list, output_stds,
                     empty_maps.append(map_layer)
                     continue
 
-        start,  end = map_layer.get_temporal_extent_as_tuple()
+        start, end = map_layer.get_temporal_extent_as_tuple()
         id = map_layer.get_id()
         if not end:
             end = start
-        string = "%s|%s|%s\n" % (id,  str(start),  str(end))
+        string = "%s|%s|%s\n" % (id, str(start), str(end))
         file.write(string)
     file.close()
 

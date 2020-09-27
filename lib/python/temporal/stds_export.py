@@ -399,13 +399,13 @@ def export_stds(input, output, compression, directory, where, format_="pack",
     read_file.write("Files:\n")
     if type_ == "strds":
         if format_ == "GTiff":
-                                # 123456789012345678901234567890
+            # 123456789012345678901234567890
             read_file.write("       *.tif  -- GeoTIFF raster files\n")
             read_file.write("     *.color  -- GRASS GIS raster color rules\n")
         elif format_ == "pack":
             read_file.write("      *.pack  -- GRASS raster files packed with r.pack\n")
     elif type_ == "stvds":
-                                # 123456789012345678901234567890
+        # 123456789012345678901234567890
         if format_ == "GML":
             read_file.write("       *.xml  -- Vector GML files\n")
         else:

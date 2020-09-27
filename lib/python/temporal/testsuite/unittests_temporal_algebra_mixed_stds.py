@@ -45,7 +45,7 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         tgis.register_maps_in_space_time_dataset(type="raster", name="B", maps="b1,b2",
                                                  start="2001-01-01", increment="2 day", interval=True)
 
-        cls.runModule("v.random", overwrite=True, quiet=True, npoints=20, seed=3,  output='c1')
+        cls.runModule("v.random", overwrite=True, quiet=True, npoints=20, seed=3, output='c1')
 
         tgis.open_new_stds(name="C", type="stvds", temporaltype="absolute",
                            title="B", descr="C", semantic="field", overwrite=True)
@@ -71,13 +71,13 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         D = tgis.open_old_stds("R", type="str3ds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 2) 
-        self.assertEqual(D.metadata.get_max_max(), 3) 
+        self.assertEqual(D.metadata.get_min_min(), 2)
+        self.assertEqual(D.metadata.get_max_max(), 3)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
         ta = tgis.TemporalAlgebraParser(run=True, debug=True, dry_run=True)
         pc = ta.parse(expression="R = A {:,during} stvds(C)",
@@ -98,13 +98,13 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         D = tgis.open_old_stds("R", type="str3ds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 2) 
-        self.assertEqual(D.metadata.get_max_max(), 3) 
+        self.assertEqual(D.metadata.get_min_min(), 2)
+        self.assertEqual(D.metadata.get_max_max(), 3)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
         ta = tgis.TemporalAlgebraParser(run=True, debug=True,
                                         dry_run=True)
@@ -118,7 +118,7 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         self.assertEqual(pc["STDS"]["stdstype"], "str3ds")
 
     def test_temporal_select_operators3(self):
-        """Testing the temporal select operator. Including temporal relations 
+        """Testing the temporal select operator. Including temporal relations
             and negation operation. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(expression="R = A {!:,during} stvds(C)",
@@ -127,19 +127,19 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         D = tgis.open_old_stds("R", type="str3ds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 1) 
-        self.assertEqual(D.metadata.get_max_max(), 4) 
+        self.assertEqual(D.metadata.get_min_min(), 1)
+        self.assertEqual(D.metadata.get_max_max(), 4)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_select_operators4(self):
-        """Testing the temporal select operator. Including temporal relations and 
+        """Testing the temporal select operator. Including temporal relations and
             temporal operators. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression="V = C {:,contains} str3ds(A)",  
+        ta.parse(expression="V = C {:,contains} str3ds(A)",
                  stdstype='stvds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("V", type="stvds")
@@ -148,14 +148,14 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'2 days')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'2 days')
 
     def test_temporal_select_operators5(self):
-        """Testing the temporal select operator. Including temporal relations and 
+        """Testing the temporal select operator. Including temporal relations and
             temporal operators. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = A {:,during} strds(B)",  
+        ta.parse(expression="R = A {:,during} strds(B)",
                  stdstype='str3ds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="str3ds")
@@ -164,59 +164,59 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_hash_operator1(self):
         """Testing the hash operator function in conditional statement. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = if(A {#,during} stvds(C) == 1, A)",  
+        ta.parse(expression="R = if(A {#,during} stvds(C) == 1, A)",
                  stdstype='str3ds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="str3ds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 2) 
-        self.assertEqual(D.metadata.get_max_max(), 3) 
+        self.assertEqual(D.metadata.get_min_min(), 2)
+        self.assertEqual(D.metadata.get_max_max(), 3)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_hash_operator2(self):
         """Testing the hash operator function in conditional statement. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = if({during}, stvds(C) {#,contains} A == 2, A)",  
+        ta.parse(expression="R = if({during}, stvds(C) {#,contains} A == 2, A)",
                  stdstype='str3ds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="str3ds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 2) 
-        self.assertEqual(D.metadata.get_max_max(), 3) 
+        self.assertEqual(D.metadata.get_min_min(), 2)
+        self.assertEqual(D.metadata.get_max_max(), 3)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual(D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_different_stds_handling1(self):
         """Testing the handling of different stds types as output. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = if({during}, stvds(C) {#,contains} str3ds(A) == 2, str3ds(A))",  
+        ta.parse(expression="R = if({during}, stvds(C) {#,contains} str3ds(A) == 2, str3ds(A))",
                  stdstype='strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="str3ds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 2) 
-        self.assertEqual(D.metadata.get_max_max(), 3) 
+        self.assertEqual(D.metadata.get_min_min(), 2)
+        self.assertEqual(D.metadata.get_max_max(), 3)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual(D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_different_stds_handling2(self):
         """Testing the handling of different stds types as output. """

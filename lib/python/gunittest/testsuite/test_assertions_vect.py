@@ -59,6 +59,7 @@ V_UNIVAR_SCHOOLS_EXTENDED = dict(
 class TestVectorInfoAssertions(TestCase):
     """Test assertions of map meta and statistics"""
     # pylint: disable=R0904
+
     def test_assertVectorFitsUnivar(self):
         self.assertVectorFitsUnivar(map='schools', column='CORECAPACI',
                                     reference=V_UNIVAR_SCHOOLS_WIDTH_SUBSET,

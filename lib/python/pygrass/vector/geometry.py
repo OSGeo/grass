@@ -337,14 +337,14 @@ class Geo(object):
     def __del__(self):
         """Take care of the allocated line_pnts and line_cats allocation
         """
-        if self._free_points == True and self.c_points:
+        if self._free_points is True and self.c_points:
             if self.c_points.contents.alloc_points > 0:
                 #print("G_free(points) [%i]"%(self.c_points.contents.alloc_points))
                 libgis.G_free(self.c_points.contents.x)
                 libgis.G_free(self.c_points.contents.y)
                 if self.c_points.contents.z:
                     libgis.G_free(self.c_points.contents.z)
-        if self._free_cats == True and self.c_cats:
+        if self._free_cats is True and self.c_cats:
             if self.c_cats.contents.alloc_cats > 0:
                 #print("G_free(cats) [%i]"%(self.c_cats.contents.alloc_cats))
                 libgis.G_free(self.c_cats.contents.cat)
@@ -1205,6 +1205,7 @@ class Node(object):
        may happen.
 
     """
+
     def __init__(self, v_id, c_mapinfo, **kwords):
         """Construct a Node object
 
@@ -1431,6 +1432,7 @@ class Centroid(Point):
 class Isle(Geo):
     """An Isle is an area contained by another area.
     """
+
     def __init__(self, **kargs):
         super(Isle, self).__init__(**kargs)
         #self.area_id = area_id
@@ -1775,14 +1777,14 @@ class Area(Geo):
 # Define a dictionary to convert the feature type to name and or object
 #
 
-GV_TYPE = {libvect.GV_POINT:    {'label': 'point',    'obj': Point},
-           libvect.GV_LINE:     {'label': 'line',     'obj': Line},
+GV_TYPE = {libvect.GV_POINT: {'label': 'point', 'obj': Point},
+           libvect.GV_LINE: {'label': 'line', 'obj': Line},
            libvect.GV_BOUNDARY: {'label': 'boundary', 'obj': Boundary},
            libvect.GV_CENTROID: {'label': 'centroid', 'obj': Centroid},
-           libvect.GV_FACE:     {'label': 'face',     'obj': None},
-           libvect.GV_KERNEL:   {'label': 'kernel',   'obj': None},
-           libvect.GV_AREA:     {'label': 'area',     'obj': Area},
-           libvect.GV_VOLUME:   {'label': 'volume',   'obj': None}, }
+           libvect.GV_FACE: {'label': 'face', 'obj': None},
+           libvect.GV_KERNEL: {'label': 'kernel', 'obj': None},
+           libvect.GV_AREA: {'label': 'area', 'obj': Area},
+           libvect.GV_VOLUME: {'label': 'volume', 'obj': None}, }
 
 GEOOBJ = {"areas": Area,
           "dblinks": None,
@@ -1815,11 +1817,11 @@ def read_next_line(c_mapinfo, table=None, writeable=False,
 
     # Take care of good memory management
     free_points = False
-    if c_points == None:
+    if c_points is None:
         free_points = True
 
     free_cats = False
-    if c_cats == None:
+    if c_cats is None:
         free_cats = True
 
     c_points = c_points if c_points else ctypes.pointer(libvect.line_pnts())
@@ -1851,11 +1853,11 @@ def read_line(feature_id, c_mapinfo, table=None, writeable=False,
     """
     # Take care of good memory management
     free_points = False
-    if c_points == None:
+    if c_points is None:
         free_points = True
 
     free_cats = False
-    if c_cats == None:
+    if c_cats is None:
         free_cats = True
 
     c_points = c_points if c_points else ctypes.pointer(libvect.line_pnts())
@@ -1882,4 +1884,3 @@ if __name__ == "__main__":
     mset = get_mapset_vector(test_vector_name, mapset='')
     if mset:
         run_command("g.remove", flags='f', type='vector', name=test_vector_name)
-

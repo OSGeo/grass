@@ -103,7 +103,7 @@ def get_dataset_list(type, temporal_type, columns=None, where=None,
         if order:
             sql += " ORDER BY " + order
 
-        dbif.execute(sql,  mapset=mapset)
+        dbif.execute(sql, mapset=mapset)
         rows = dbif.fetchall(mapset=mapset)
 
         if rows:
@@ -260,8 +260,8 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
             if where:
                 err += " or where condition is wrong"
             gscript.fatal(_(err) % {
-                            'sp': sp.get_new_map_instance(None).get_type(),
-                            'i': sp.get_id()})
+                'sp': sp.get_new_map_instance(None).get_type(),
+                'i': sp.get_id()})
 
         if rows:
             if method == "comma":

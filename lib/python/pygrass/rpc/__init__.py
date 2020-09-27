@@ -56,7 +56,7 @@ def _get_raster_image_as_np(lock, conn, data):
         mapset = utils.get_mapset_raster(name, mapset)
 
         if not mapset:
-            raise ValueError("Unable to find raster map <%s>"%(name))
+            raise ValueError("Unable to find raster map <%s>" % (name))
 
         rast = RasterRow(name, mapset)
 
@@ -71,13 +71,13 @@ def _get_raster_image_as_np(lock, conn, data):
                 if "south" in extent:
                     reg.south = extent["south"]
                 if "east" in extent:
-                    reg.east =  extent["east"]
+                    reg.east = extent["east"]
                 if "west" in extent:
-                    reg.west =  extent["west"]
+                    reg.west = extent["west"]
                 if "rows" in extent:
-                    reg.rows =  extent["rows"]
+                    reg.rows = extent["rows"]
                 if "cols" in extent:
-                    reg.cols =  extent["cols"]
+                    reg.cols = extent["cols"]
                 reg.adjust()
 
             array = raster2numpy_img(name, reg, color)
@@ -103,7 +103,7 @@ def _get_vector_table_as_dict(lock, conn, data):
         mapset = utils.get_mapset_vector(name, mapset)
 
         if not mapset:
-            raise ValueError("Unable to find vector map <%s>"%(name))
+            raise ValueError("Unable to find vector map <%s>" % (name))
 
         layer = VectorTopo(name, mapset)
 
@@ -148,7 +148,7 @@ def _get_vector_features_as_wkb_list(lock, conn, data):
         mapset = utils.get_mapset_vector(name, mapset)
 
         if not mapset:
-            raise ValueError("Unable to find vector map <%s>"%(name))
+            raise ValueError("Unable to find vector map <%s>" % (name))
 
         layer = VectorTopo(name, mapset)
 
@@ -230,13 +230,14 @@ def data_provider_server(lock, conn):
         functions[data[0]](lock, conn, data)
         lock.release()
 
-test_vector_name="data_provider_vector_map"
-test_raster_name="data_provider_raster_map"
+test_vector_name = "data_provider_vector_map"
+test_raster_name = "data_provider_raster_map"
 
 class DataProvider(RPCServerBase):
     """Fast and exit-safe interface to PyGRASS data delivery functions
 
     """
+
     def __init__(self):
         RPCServerBase.__init__(self)
 
@@ -436,7 +437,7 @@ if __name__ == "__main__":
     import doctest
     from grass.pygrass.modules import Module
     Module("g.region", n=40, s=0, e=40, w=0, res=10)
-    Module("r.mapcalc", expression="%s = row() + (10 * col())"%(test_raster_name),
+    Module("r.mapcalc", expression="%s = row() + (10 * col())" % (test_raster_name),
                              overwrite=True)
     utils.create_test_vector_map(test_vector_name)
 

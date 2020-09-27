@@ -153,26 +153,26 @@ class TemporalOperatorLexer(object):
     # Functions that defines topological relations.
     relations = {
         # temporal relations
-        'equal'      : "EQUAL",
-        'follows'    : "FOLLOWS",
-        'precedes'   : "PRECEDES",
-        'overlaps'   : "OVERLAPS",
-        'overlapped' : "OVERLAPPED",
-        'during'     : "DURING",
-        'starts'     : "STARTS",
-        'finishes'   : "FINISHES",
-        'contains'   : "CONTAINS",
-        'started'    : "STARTED",
-        'finished'   : "FINISHED",
-        'over'       : "OVER",
+        'equal': "EQUAL",
+        'follows': "FOLLOWS",
+        'precedes': "PRECEDES",
+        'overlaps': "OVERLAPS",
+        'overlapped': "OVERLAPPED",
+        'during': "DURING",
+        'starts': "STARTS",
+        'finishes': "FINISHES",
+        'contains': "CONTAINS",
+        'started': "STARTED",
+        'finished': "FINISHED",
+        'over': "OVER",
         # spatial relations
-        'equivalent' : "EQUIVALENT",
-        'cover'      : "COVER",
-        'overlap'    : "OVERLAP",
-        'in'         : "IN",
-        'contain'    : "CONTAIN",
-        'meet'       : "MEET"
-        }
+        'equivalent': "EQUIVALENT",
+        'cover': "COVER",
+        'overlap': "OVERLAP",
+        'in': "IN",
+        'contain': "CONTAIN",
+        'meet': "MEET"
+    }
 
     # This is the list of token names.
     tokens = (
@@ -314,14 +314,14 @@ class TemporalOperatorParser(object):
         self.optype = optype
 
         if optype not in self.optype_list:
-            raise SyntaxError("Unknown optype %s, must be one of %s"%(self.optype, str(self.optype_list)))
+            raise SyntaxError("Unknown optype %s, must be one of %s" % (self.optype, str(self.optype_list)))
         self.expression = expression
         self.parser.parse(expression)
 
     # Error rule for syntax errors.
     def p_error(self, t):
         raise SyntaxError("Unexpected syntax error in expression"
-                          " \"%s\" at position %i near %s"%(self.expression,
+                          " \"%s\" at position %i near %s" % (self.expression,
                                                             t.lexpos,
                                                             t.value))
 
@@ -337,7 +337,7 @@ class TemporalOperatorParser(object):
         """
         # Check for correct type.
         if not self.optype == 'relation':
-            raise SyntaxError("Wrong optype \"%s\" must be \"relation\""%self.optype)
+            raise SyntaxError("Wrong optype \"%s\" must be \"relation\"" % self.optype)
         else:
             # Set three operator components.
             if isinstance(t[2], list):
@@ -359,7 +359,7 @@ class TemporalOperatorParser(object):
                  | CLPAREN AND AND COMMA relationlist CRPAREN
         """
         if not self.optype == 'boolean':
-            raise SyntaxError("Wrong optype \"%s\" must be \"boolean\""%self.optype)
+            raise SyntaxError("Wrong optype \"%s\" must be \"boolean\"" % self.optype)
         else:
             # Set three operator components.
             if isinstance(t[5], list):
@@ -386,7 +386,7 @@ class TemporalOperatorParser(object):
                  | CLPAREN AND AND COMMA relationlist COMMA AND CRPAREN
         """
         if not self.optype == 'boolean':
-            raise SyntaxError("Wrong optype \"%s\" must be \"boolean\""%self.optype)
+            raise SyntaxError("Wrong optype \"%s\" must be \"boolean\"" % self.optype)
         else:
             # Set three operator components.
             if isinstance(t[5], list):
@@ -409,7 +409,7 @@ class TemporalOperatorParser(object):
                  | CLPAREN AND AND COMMA relationlist COMMA temporal CRPAREN
         """
         if not self.optype == 'boolean':
-            raise SyntaxError("Wrong optype \"%s\" must be \"boolean\""%self.optype)
+            raise SyntaxError("Wrong optype \"%s\" must be \"boolean\"" % self.optype)
         else:
             # Set three operator components.
             if isinstance(t[5], list):
@@ -436,7 +436,7 @@ class TemporalOperatorParser(object):
                  | CLPAREN AND AND COMMA relationlist COMMA AND COMMA temporal CRPAREN
         """
         if not self.optype == 'boolean':
-            raise SyntaxError("Wrong optype \"%s\" must be \"relation\""%self.optype)
+            raise SyntaxError("Wrong optype \"%s\" must be \"relation\"" % self.optype)
         else:
             # Set three operator components.
             if isinstance(t[5], list):
@@ -462,7 +462,7 @@ class TemporalOperatorParser(object):
                  | CLPAREN select COMMA relationlist COMMA temporal CRPAREN
         """
         if not self.optype == 'select':
-            raise SyntaxError("Wrong optype \"%s\" must be \"select\""%self.optype)
+            raise SyntaxError("Wrong optype \"%s\" must be \"select\"" % self.optype)
         else:
             if len(t) == 4:
                 # Set three operator components.
@@ -498,7 +498,7 @@ class TemporalOperatorParser(object):
                  | CLPAREN HASH COMMA relationlist COMMA temporal CRPAREN
         """
         if not self.optype == 'hash':
-            raise SyntaxError("Wrong optype \"%s\" must be \"hash\""%self.optype)
+            raise SyntaxError("Wrong optype \"%s\" must be \"hash\"" % self.optype)
         else:
             if len(t) == 4:
                 # Set three operator components.
@@ -534,7 +534,7 @@ class TemporalOperatorParser(object):
                  | CLPAREN arithmetic COMMA relationlist COMMA temporal CRPAREN
         """
         if not self.optype == 'raster':
-            raise SyntaxError("Wrong optype \"%s\" must be \"raster\""%self.optype)
+            raise SyntaxError("Wrong optype \"%s\" must be \"raster\"" % self.optype)
         else:
             if len(t) == 4:
                 # Set three operator components.
@@ -570,7 +570,7 @@ class TemporalOperatorParser(object):
                  | CLPAREN overlay COMMA relationlist COMMA temporal CRPAREN
         """
         if not self.optype == 'overlay':
-            raise SyntaxError("Wrong optype \"%s\" must be \"overlay\""%self.optype)
+            raise SyntaxError("Wrong optype \"%s\" must be \"overlay\"" % self.optype)
         else:
             if len(t) == 4:
                 # Set three operator components.
@@ -636,7 +636,7 @@ class TemporalOperatorParser(object):
             rel_list = rel_list + t[3]
         else:
             rel_list.append(t[3])
-        t[0] =  rel_list
+        t[0] = rel_list
 
     def p_temporal_operator(self, t):
         # The list of relations.

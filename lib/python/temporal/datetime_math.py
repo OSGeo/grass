@@ -911,7 +911,7 @@ suffix_units = {"years": "%Y",
                 "minute": "%Y_%m_%d_%H_%M"}
 
 
-def create_suffix_from_datetime(start_time,  granularity):
+def create_suffix_from_datetime(start_time, granularity):
     """Create a datetime string based on a datetime object and a provided
        granularity that can be used as suffix for map names.
 

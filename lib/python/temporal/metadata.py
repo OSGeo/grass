@@ -75,6 +75,7 @@ class RasterMetadataBase(SQLDatabaseInterface):
             max=100.0
 
     """
+
     def __init__(self, table=None, ident=None, datatype=None, cols=None,
                  rows=None, number_of_cells=None, nsres=None, ewres=None,
                  min=None, max=None):
@@ -315,6 +316,7 @@ class RasterMetadata(RasterMetadataBase):
             max=100.0
 
     """
+
     def __init__(self, ident=None, datatype=None,
                  cols=None, rows=None, number_of_cells=None, nsres=None,
                  ewres=None, min=None, max=None, band_reference=None):
@@ -423,6 +425,7 @@ class Raster3DMetadata(RasterMetadataBase):
             tbres=0.1
 
     """
+
     def __init__(self, ident=None, datatype=None,
                  cols=None, rows=None, depths=None, number_of_cells=None,
                  nsres=None, ewres=None, tbres=None, min=None, max=None):
@@ -561,6 +564,7 @@ class VectorMetadata(SQLDatabaseInterface):
             volumes=12
 
     """
+
     def __init__(self, ident=None, is_3d=False, number_of_points=None,
                  number_of_lines=None, number_of_boundaries=None,
                  number_of_centroids=None, number_of_faces=None,
@@ -852,6 +856,7 @@ class STDSMetadataBase(SQLDatabaseInterface):
             number_of_maps=None
 
     """
+
     def __init__(self, table=None, ident=None, title=None, description=None,
                  command=None):
 
@@ -1044,6 +1049,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
             max_max=None
 
     """
+
     def __init__(self, table=None, ident=None, title=None, description=None,
                  aggregation_type=None):
 
@@ -1275,6 +1281,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
             raster_register=None
 
     """
+
     def __init__(self, ident=None, raster_register=None, title=None,
                  description=None):
 
@@ -1387,6 +1394,7 @@ class STR3DSMetadata(STDSRasterMetadataBase):
             raster3d_register=None
 
         """
+
     def __init__(self, ident=None, raster3d_register=None, title=None,
                  description=None):
 
@@ -1531,6 +1539,7 @@ class STVDSMetadata(STDSMetadataBase):
             volumes=None
 
     """
+
     def __init__(self, ident=None, vector_register=None, title=None,
                  description=None):
 

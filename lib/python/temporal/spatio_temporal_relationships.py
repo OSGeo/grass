@@ -357,6 +357,7 @@ class SpatioTemporalTopologyBuilder(object):
             ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
 
     """
+
     def __init__(self):
         self._reset()
         # 0001-01-01 00:00:00
@@ -594,104 +595,104 @@ def set_temoral_relationship(A, B, relation):
     if relation == "equal" or relation == "equals":
         if A != B:
             if not B.get_equal() or \
-            (B.get_equal() and \
+                (B.get_equal() and
             A not in B.get_equal()):
                 B.append_equal(A)
             if not A.get_equal() or \
-            (A.get_equal() and \
+                (A.get_equal() and
             B not in A.get_equal()):
                 A.append_equal(B)
     elif relation == "follows":
         if not B.get_follows() or \
-            (B.get_follows() and \
-            A not in B.get_follows()):
+            (B.get_follows() and
+                A not in B.get_follows()):
             B.append_follows(A)
         if not A.get_precedes() or \
             (A.get_precedes() and
-            B not in A.get_precedes()):
+                B not in A.get_precedes()):
             A.append_precedes(B)
     elif relation == "precedes":
         if not B.get_precedes() or \
-            (B.get_precedes() and \
-            A not in B.get_precedes()):
+            (B.get_precedes() and
+                A not in B.get_precedes()):
             B.append_precedes(A)
         if not A.get_follows() or \
-            (A.get_follows() and \
-            B not in A.get_follows()):
+            (A.get_follows() and
+                B not in A.get_follows()):
             A.append_follows(B)
     elif relation == "during" or relation == "starts" or \
             relation == "finishes":
         if not B.get_during() or \
-            (B.get_during() and \
-            A not in B.get_during()):
+            (B.get_during() and
+                A not in B.get_during()):
             B.append_during(A)
         if not A.get_contains() or \
-            (A.get_contains() and \
-            B not in A.get_contains()):
+            (A.get_contains() and
+                B not in A.get_contains()):
             A.append_contains(B)
         if relation == "starts":
             if not B.get_starts() or \
-            (B.get_starts() and \
+                (B.get_starts() and
             A not in B.get_starts()):
                 B.append_starts(A)
             if not A.get_started() or \
-            (A.get_started() and \
+                (A.get_started() and
             B not in A.get_started()):
                 A.append_started(B)
         if relation == "finishes":
             if not B.get_finishes() or \
-            (B.get_finishes() and \
+                (B.get_finishes() and
             A not in B.get_finishes()):
                 B.append_finishes(A)
             if not A.get_finished() or \
-            (A.get_finished() and \
+                (A.get_finished() and
             B not in A.get_finished()):
                 A.append_finished(B)
     elif relation == "contains" or relation == "started" or \
             relation == "finished":
         if not B.get_contains() or \
-            (B.get_contains() and \
-            A not in B.get_contains()):
+            (B.get_contains() and
+                A not in B.get_contains()):
             B.append_contains(A)
         if not A.get_during() or \
-            (A.get_during() and \
-            B not in A.get_during()):
+            (A.get_during() and
+                B not in A.get_during()):
             A.append_during(B)
         if relation == "started":
             if not B.get_started() or \
-            (B.get_started() and \
+                (B.get_started() and
             A not in B.get_started()):
                 B.append_started(A)
             if not A.get_starts() or \
-            (A.get_starts() and \
+                (A.get_starts() and
             B not in A.get_starts()):
                 A.append_starts(B)
         if relation == "finished":
             if not B.get_finished() or \
-            (B.get_finished() and \
+                (B.get_finished() and
             A not in B.get_finished()):
                 B.append_finished(A)
             if not A.get_finishes() or \
-            (A.get_finishes() and \
+                (A.get_finishes() and
             B not in A.get_finishes()):
                 A.append_finishes(B)
     elif relation == "overlaps":
         if not B.get_overlaps() or \
-            (B.get_overlaps() and \
-            A not in B.get_overlaps()):
+            (B.get_overlaps() and
+                A not in B.get_overlaps()):
             B.append_overlaps(A)
         if not A.get_overlapped() or \
-            (A.get_overlapped() and \
-            B not in A.get_overlapped()):
+            (A.get_overlapped() and
+                B not in A.get_overlapped()):
             A.append_overlapped(B)
     elif relation == "overlapped":
         if not B.get_overlapped() or \
-            (B.get_overlapped() and \
-            A not in B.get_overlapped()):
+            (B.get_overlapped() and
+                A not in B.get_overlapped()):
             B.append_overlapped(A)
         if not A.get_overlaps() or \
-            (A.get_overlaps() and \
-            B not in A.get_overlaps()):
+            (A.get_overlaps() and
+                B not in A.get_overlaps()):
             A.append_overlaps(B)
 
 ###############################################################################
@@ -701,66 +702,66 @@ def set_spatial_relationship(A, B, relation):
     if relation == "equivalent":
         if A != B:
             if not B.get_equivalent() or \
-            (B.get_equivalent() and \
+                (B.get_equivalent() and
             A not in B.get_equivalent()):
                 B.append_equivalent(A)
             if not A.get_equivalent() or \
-            (A.get_equivalent() and \
+                (A.get_equivalent() and
             B not in A.get_equivalent()):
                 A.append_equivalent(B)
     elif relation == "overlap":
         if not B.get_overlap() or \
-            (B.get_overlap() and \
-            A not in B.get_overlap()):
+            (B.get_overlap() and
+                A not in B.get_overlap()):
             B.append_overlap(A)
         if not A.get_overlap() or \
             (A.get_overlap() and
-            B not in A.get_overlap()):
+                B not in A.get_overlap()):
             A.append_overlap(B)
     elif relation == "meet":
         if not B.get_meet() or \
-            (B.get_meet() and \
-            A not in B.get_meet()):
+            (B.get_meet() and
+                A not in B.get_meet()):
             B.append_meet(A)
         if not A.get_meet() or \
             (A.get_meet() and
-            B not in A.get_meet()):
+                B not in A.get_meet()):
             A.append_meet(B)
     elif relation == "contain":
         if not B.get_contain() or \
-            (B.get_contain() and \
-            A not in B.get_contain()):
+            (B.get_contain() and
+                A not in B.get_contain()):
             B.append_contain(A)
         if not A.get_in() or \
-            (A.get_in() and \
-            B not in A.get_in()):
+            (A.get_in() and
+                B not in A.get_in()):
             A.append_in(B)
     elif relation == "in":
         if not B.get_in() or \
-            (B.get_in() and \
-            A not in B.get_in()):
+            (B.get_in() and
+                A not in B.get_in()):
             B.append_in(A)
         if not A.get_contain() or \
-            (A.get_contain() and \
-            B not in A.get_contain()):
+            (A.get_contain() and
+                B not in A.get_contain()):
             A.append_contain(B)
     elif relation == "cover":
         if not B.get_cover() or \
-            (B.get_cover() and \
-            A not in B.get_cover()):
+            (B.get_cover() and
+                A not in B.get_cover()):
             B.append_cover(A)
         if not A.get_covered() or \
-            (A.get_covered() and \
-            B not in A.get_covered()):
+            (A.get_covered() and
+                B not in A.get_covered()):
             A.append_covered(B)
     elif relation == "covered":
         if not B.get_covered() or \
-            (B.get_covered() and \
-            A not in B.get_covered()):
+            (B.get_covered() and
+                A not in B.get_covered()):
             B.append_covered(A)
         if not A.get_cover() or \
-            (A.get_cover() and \
-            B not in A.get_cover()):
+            (A.get_cover() and
+                B not in A.get_cover()):
             A.append_cover(B)
 
 ###############################################################################

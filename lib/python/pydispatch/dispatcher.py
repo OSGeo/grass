@@ -36,6 +36,7 @@ __version__ = "Revision: 1.1"
 
 class _Parameter:
     """Used to represent default parameter values."""
+
     def __repr__(self):
         return self.__class__.__name__
 
@@ -203,7 +204,7 @@ def disconnect(receiver, signal=Any, sender=Any, weak=True):
     """
     if signal is None:
         raise errors.DispatcherTypeError(
-            'Signal cannot be None (receiver=%r sender=%r)' % (receiver, 
+            'Signal cannot be None (receiver=%r sender=%r)' % (receiver,
                                                                sender)
         )
     if weak: receiver = saferef.safeRef(receiver)

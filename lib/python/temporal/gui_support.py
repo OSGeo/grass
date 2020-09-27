@@ -107,7 +107,7 @@ def tlist(type, dbif=None):
             sql += " WHERE mapset = '%s'" % (mapset)
             sql += " ORDER BY id"
 
-            dbif.execute(sql,  mapset=mapset)
+            dbif.execute(sql, mapset=mapset)
             rows = dbif.fetchall(mapset=mapset)
 
             # Append the ids of the space time datasets

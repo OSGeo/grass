@@ -67,7 +67,9 @@ sources and tools:
 
 """
 
-import os, sys, time
+import os
+import sys
+import time
 import zlib
 
 try:
@@ -511,6 +513,7 @@ class ShowFrameTag(ControlTag):
 
 class SetBackgroundTag(ControlTag):
     """ Set the color in 0-255, or 0-1 (if floats given). """
+
     def __init__(self, *rgb):
         self.tagtype = 9
         if len(rgb) == 1:

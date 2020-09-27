@@ -55,6 +55,7 @@ class grassTask:
     :param str path: full path
     :param blackList: hide some options in the GUI (dictionary)
     """
+
     def __init__(self, path=None, blackList=None):
         self.path = path
         self.name = _('unknown')
@@ -168,8 +169,8 @@ class grassTask:
                     return p
 
         if raiseError:
-            raise ValueError(_("Parameter element '%(element)s' not found: '%(value)s'") % \
-                { 'element' : element, 'value' : value })
+            raise ValueError(_("Parameter element '%(element)s' not found: '%(value)s'") %
+                {'element': element, 'value': value })
         else:
             return None
 
@@ -202,7 +203,7 @@ class grassTask:
                     desc = p.get('label', '')
                     if not desc:
                         desc = p['description']
-                    errorList.append(_("Parameter '%(name)s' (%(desc)s) is missing.") % \
+                    errorList.append(_("Parameter '%(name)s' (%(desc)s) is missing.") %
                                      {'name': p['name'], 'desc': desc})
 
         return errorList
@@ -288,7 +289,7 @@ class grassTask:
 
         :param opts list of flags and parameters"""
         for opt in opts:
-            if opt[0] ==  '-':  # flag
+            if opt[0] == '-':  # flag
                 self.set_flag(opt.lstrip('-'), True)
             else:  # parameter
                 key, value = opt.split('=', 1)
@@ -306,6 +307,7 @@ class processTask:
 
     :return: grassTask instance
     """
+
     def __init__(self, tree, task=None, blackList=None):
         if task:
             self.task = task
@@ -381,26 +383,26 @@ class processTask:
             else:
                 hidden = False
 
-            self.task.params.append( {
-                "name"           : p.get('name'),
-                "type"           : p.get('type'),
-                "required"       : required,
-                "multiple"       : multiple,
-                "label"          : self._get_node_text(p, 'label'),
-                "description"    : self._get_node_text(p, 'description'),
-                'gisprompt'      : gisprompt,
-                'age'            : age,
-                'element'        : element,
-                'prompt'         : prompt,
-                "guisection"     : self._get_node_text(p, 'guisection'),
-                "guidependency"  : self._get_node_text(p, 'guidependency'),
-                "default"        : self._get_node_text(p, 'default'),
-                "values"         : values,
-                "values_desc"    : values_desc,
-                "value"          : '',
-                "key_desc"       : key_desc,
-                "hidden"         : hidden
-                })
+            self.task.params.append({
+                "name": p.get('name'),
+                "type": p.get('type'),
+                "required": required,
+                "multiple": multiple,
+                "label": self._get_node_text(p, 'label'),
+                "description": self._get_node_text(p, 'description'),
+                'gisprompt': gisprompt,
+                'age': age,
+                'element': element,
+                'prompt': prompt,
+                "guisection": self._get_node_text(p, 'guisection'),
+                "guidependency": self._get_node_text(p, 'guidependency'),
+                "default": self._get_node_text(p, 'default'),
+                "values": values,
+                "values_desc": values_desc,
+                "value": '',
+                "key_desc": key_desc,
+                "hidden": hidden
+            })
 
     def _process_flags(self):
         """Process flags
@@ -418,15 +420,15 @@ class processTask:
             else:
                 suppress_required = False
 
-            self.task.flags.append( {
-                    "name"              : p.get('name'),
-                    "label"             : self._get_node_text(p, 'label'),
-                    "description"       : self._get_node_text(p, 'description'),
-                    "guisection"        : self._get_node_text(p, 'guisection'),
-                    "suppress_required" : suppress_required,
-                    "value"             : False,
-                    "hidden"            : hidden
-                    } )
+            self.task.flags.append({
+                "name": p.get('name'),
+                "label": self._get_node_text(p, 'label'),
+                "description": self._get_node_text(p, 'description'),
+                "guisection": self._get_node_text(p, 'guisection'),
+                "suppress_required": suppress_required,
+                "value": False,
+                "hidden": hidden
+            } )
 
     def _get_node_text(self, node, tag, default=''):
         """Get node text"""

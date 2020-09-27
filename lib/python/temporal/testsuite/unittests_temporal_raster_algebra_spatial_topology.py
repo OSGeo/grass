@@ -52,7 +52,7 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
         tgis.register_maps_in_space_time_dataset(type="raster", name="B", maps="b1,b2,b3,b4",
                                                  start="2001-01-01", interval=False)
 
-        tgis.register_maps_in_space_time_dataset(type="raster", name=None,  maps="singletmap",
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None, maps="singletmap",
                                                  start="2001-01-01")
 
     def tearDown(self):
@@ -84,7 +84,7 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
 
         """
         ta = tgis.TemporalRasterAlgebraParser(run=True, debug=True, spatial=True)
-        ta.parse(expression="R = A {+,equal|equivalent,l} B",   basename="r", overwrite=True)
+        ta.parse(expression="R = A {+,equal|equivalent,l} B", basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -94,8 +94,8 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 8)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  False)
-        self.assertEqual(D.get_granularity(),  None)
+        self.assertEqual(D.check_temporal_topology(), False)
+        self.assertEqual(D.get_granularity(), None)
 
     def test_equal_overlap_sum(self):
         """Spatial topology distinction with equal timestamps
@@ -114,7 +114,7 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
 
         """
         ta = tgis.TemporalRasterAlgebraParser(run=True, debug=True, spatial=True)
-        ta.parse(expression="R = A {+,equal|overlap,l} B",   basename="r", overwrite=True)
+        ta.parse(expression="R = A {+,equal|overlap,l} B", basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -124,8 +124,8 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 6)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  False)
-        self.assertEqual(D.get_granularity(),  None)
+        self.assertEqual(D.check_temporal_topology(), False)
+        self.assertEqual(D.get_granularity(), None)
 
     def test_equal_overlap_sum_with_null(self):
         """Spatial topology distinction with equal timestamps
@@ -154,8 +154,8 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 6)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  False)
-        self.assertEqual(D.get_granularity(),  None)
+        self.assertEqual(D.check_temporal_topology(), False)
+        self.assertEqual(D.get_granularity(), None)
 
     def test_equal_contain_sum(self):
         """Spatial topology distinction with equal timestamps
@@ -171,7 +171,7 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
 
         """
         ta = tgis.TemporalRasterAlgebraParser(run=True, debug=True, spatial=True)
-        ta.parse(expression="R = A {+,equal|contain,l} B",   basename="r", overwrite=True)
+        ta.parse(expression="R = A {+,equal|contain,l} B", basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -181,8 +181,8 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 5)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  None)
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), None)
 
     def test_equal_equivalent_contain_sum(self):
         """Spatial topology distinction with equal timestamps
@@ -202,7 +202,7 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
 
         """
         ta = tgis.TemporalRasterAlgebraParser(run=True, debug=True, spatial=True)
-        ta.parse(expression="R = A {+,equal|equivalent|contain,l} B",   basename="r", overwrite=True)
+        ta.parse(expression="R = A {+,equal|equivalent|contain,l} B", basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -212,8 +212,8 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 8)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  False)
-        self.assertEqual(D.get_granularity(),  None)
+        self.assertEqual(D.check_temporal_topology(), False)
+        self.assertEqual(D.get_granularity(), None)
 
     def test_equal_equivalent_compare(self):
         """Test implicit aggregation
@@ -243,8 +243,8 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
         self.assertEqual(D.metadata.get_max_max(), 8)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual( D.check_temporal_topology(),  False)
-        self.assertEqual(D.get_granularity(),  None)
+        self.assertEqual(D.check_temporal_topology(), False)
+        self.assertEqual(D.get_granularity(), None)
 
 
 if __name__ == '__main__':

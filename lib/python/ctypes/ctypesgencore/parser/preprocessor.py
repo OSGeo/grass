@@ -169,7 +169,7 @@ class PreprocessorParser(object):
                               shell=True,
                               universal_newlines=True,
                               stdout=subprocess.PIPE,
-                              stderr=subprocess.PIPE)        
+                              stderr=subprocess.PIPE)
         try:
             ppout, pperr = pp.communicate()
         except UnicodeError:
@@ -178,7 +178,7 @@ class PreprocessorParser(object):
             if sys.platform == 'darwin':
                 pp = subprocess.Popen(cmd,
                                       shell=True,
-                                      universal_newlines=False, #read as binary
+                                      universal_newlines=False,  # read as binary
                                       stdout=subprocess.PIPE,
                                       stderr=subprocess.PIPE)
                 ppout, pperr = pp.communicate()

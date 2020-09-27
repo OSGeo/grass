@@ -84,6 +84,7 @@ class SpatialExtent(SQLDatabaseInterface):
             bottom=-20.0
 
     """
+
     def __init__(self, table=None, ident=None, north=None, south=None,
                  east=None, west=None, top=None, bottom=None, proj="XY"):
 

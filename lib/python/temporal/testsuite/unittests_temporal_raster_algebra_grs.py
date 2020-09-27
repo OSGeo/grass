@@ -60,9 +60,9 @@ class TestTemporalRasterAlgebra(TestCase):
                                                  start="2001-03-01", increment="5 days", interval=True)
         tgis.register_maps_in_space_time_dataset(type="raster", name="D", maps="d3",
                                                  start="2001-05-01", increment="5 days", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="raster", name=None,  maps="singletmap", 
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None, maps="singletmap",
                                                 start="2001-03-01", end="2001-04-01")
-        tgis.register_maps_in_space_time_dataset(type="raster", name=None,  maps="nullmap",
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None, maps="nullmap",
                                                 start="2001-01-01", end="2001-07-01")
         
     def tearDown(self):
@@ -72,7 +72,7 @@ class TestTemporalRasterAlgebra(TestCase):
     @classmethod
     def tearDownClass(cls):
         return
-        """Remove the temporary region 
+        """Remove the temporary region
         """
         cls.runModule("t.remove", flags="rf", inputs="A,B,C,D", quiet=True)
         cls.runModule("t.unregister", maps="singletmap", quiet=True)
@@ -82,7 +82,7 @@ class TestTemporalRasterAlgebra(TestCase):
         """Simple arithmetik test"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         expr = "R = if(C == 9,  A - 1)"
-        ret = tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
+        ret = tra.setup_common_granularity(expression=expr, lexer = tgis.TemporalRasterAlgebraLexer())
         self.assertEqual(ret, True)
         
         tra.parse(expression=expr, basename="r", overwrite=True)
@@ -95,11 +95,11 @@ class TestTemporalRasterAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 7, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 month')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 month')
 
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True, dry_run=True)
-        tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
+        tra.setup_common_granularity(expression=expr, lexer = tgis.TemporalRasterAlgebraLexer())
         pc = tra.parse(expression=expr, basename="r", overwrite=True)
 
         self.assertEqual(len(pc["register"]), 6)
@@ -113,7 +113,7 @@ class TestTemporalRasterAlgebra(TestCase):
         """Simple arithmetik test"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         expr = "R = A + B + C"
-        ret = tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
+        ret = tra.setup_common_granularity(expression=expr, lexer = tgis.TemporalRasterAlgebraLexer())
         self.assertEqual(ret, True)
 
         tra.parse(expression=expr, basename="r", overwrite=True)
@@ -126,11 +126,11 @@ class TestTemporalRasterAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 7, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 month')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 month')
 
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True, dry_run=True)
-        tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
+        tra.setup_common_granularity(expression=expr, lexer = tgis.TemporalRasterAlgebraLexer())
         pc = tra.parse(expression=expr, basename="r", overwrite=True)
 
         self.assertEqual(len(pc["register"]), 6)
@@ -158,11 +158,11 @@ class TestTemporalRasterAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, None)
         self.assertEqual(end, None)
-        self.assertEqual( D.check_temporal_topology(),  False)
-        self.assertEqual(D.get_granularity(),  None)
+        self.assertEqual(D.check_temporal_topology(), False)
+        self.assertEqual(D.get_granularity(), None)
 
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True, dry_run=True)
-        tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
+        tra.setup_common_granularity(expression=expr, lexer = tgis.TemporalRasterAlgebraLexer())
         pc = tra.parse(expression=expr, basename="r", overwrite=True)
 
         print(pc)
@@ -176,7 +176,7 @@ class TestTemporalRasterAlgebra(TestCase):
         """Simple arithmetik test"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         expr = "R = if(D == 11,  A - 1, A + 1)"
-        ret = tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
+        ret = tra.setup_common_granularity(expression=expr, lexer = tgis.TemporalRasterAlgebraLexer())
         self.assertEqual(ret, True)
 
         tra.parse(expression=expr, basename="r", overwrite=True)
@@ -189,8 +189,8 @@ class TestTemporalRasterAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 5, 6))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_simple_arith_hash_1(self):
         """Simple arithmetic test including the hash operator"""
@@ -224,7 +224,7 @@ class TestTemporalRasterAlgebra(TestCase):
         """Simple arithmetic test"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         expr = 'R = A + td(A:D)'
-        ret = tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
+        ret = tra.setup_common_granularity(expression=expr, lexer = tgis.TemporalRasterAlgebraLexer())
         self.assertEqual(ret, True)
 
         tra.parse(expression=expr, basename="r", overwrite=True)
@@ -237,14 +237,14 @@ class TestTemporalRasterAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 5, 6))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_simple_arith_if_1(self):
         """Simple arithmetic test with if condition"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         expr = 'R = if(start_date(A) >= "2001-02-01", A + A)'
-        ret = tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
+        ret = tra.setup_common_granularity(expression=expr, lexer = tgis.TemporalRasterAlgebraLexer())
         self.assertEqual(ret, True)
 
         tra.parse(expression=expr, basename="r", overwrite=True)
@@ -262,7 +262,7 @@ class TestTemporalRasterAlgebra(TestCase):
         """Simple arithmetic test with if condition"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         expr = 'R = if(A#A == 1, A - A)'
-        ret = tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
+        ret = tra.setup_common_granularity(expression=expr, lexer = tgis.TemporalRasterAlgebraLexer())
         self.assertEqual(ret, True)
 
         tra.parse(expression=expr, basename="r", overwrite=True)
@@ -280,7 +280,7 @@ class TestTemporalRasterAlgebra(TestCase):
         """Complex arithmetic test with if condition"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         expr = 'R = if(start_date(A) < "2001-03-01" && A#A == 1, A+C, A-C)'
-        ret = tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
+        ret = tra.setup_common_granularity(expression=expr, lexer = tgis.TemporalRasterAlgebraLexer())
         self.assertEqual(ret, True)
 
         tra.parse(expression=expr, basename="r", overwrite=True)
@@ -297,8 +297,8 @@ class TestTemporalRasterAlgebra(TestCase):
     def test_temporal_neighbors(self):
         """Simple temporal neighborhood computation test"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
-        expr ='R = (A[0,0,-1] : D) + (A[0,0,1] : D)'
-        ret = tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
+        expr = 'R = (A[0,0,-1] : D) + (A[0,0,1] : D)'
+        ret = tra.setup_common_granularity(expression=expr, lexer = tgis.TemporalRasterAlgebraLexer())
         self.assertEqual(ret, True)
 
         tra.parse(expression=expr, basename="r", overwrite=True)
@@ -316,7 +316,7 @@ class TestTemporalRasterAlgebra(TestCase):
         """Test STDS + single map without timestamp"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         expr = "R = A + map(singletmap)"
-        ret = tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
+        ret = tra.setup_common_granularity(expression=expr, lexer = tgis.TemporalRasterAlgebraLexer())
         self.assertEqual(ret, True)
 
         tra.parse(expression=expr, basename="r", overwrite=True)
@@ -334,7 +334,7 @@ class TestTemporalRasterAlgebra(TestCase):
         """Test STDS + single map with and without timestamp"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         expr = "R = tmap(singletmap) + A + map(singletmap)"
-        ret = tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
+        ret = tra.setup_common_granularity(expression=expr, lexer = tgis.TemporalRasterAlgebraLexer())
         self.assertEqual(ret, True)
 
         tra.parse(expression=expr, basename="r", overwrite=True)
@@ -347,8 +347,8 @@ class TestTemporalRasterAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 3, 1))
         self.assertEqual(end, datetime.datetime(2001, 4, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 month')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 month')
 
 
 if __name__ == '__main__':

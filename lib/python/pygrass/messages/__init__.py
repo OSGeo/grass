@@ -78,7 +78,7 @@ def message_server(lock, conn):
 
         message = data[1]
         # libgis limitation
-        if isinstance(message,  type(" ")):
+        if isinstance(message, type(" ")):
             if len(message) >= 2000:
                 message = message[:1999]
 
@@ -100,7 +100,7 @@ def message_server(lock, conn):
         elif message_type == "WARNING":
             libgis.G_warning(message)
         elif message_type == "ERROR":
-            libgis.G_important_message("ERROR: %s"%message)
+            libgis.G_important_message("ERROR: %s" % message)
         # This is for testing only
         elif message_type == "FATAL":
             libgis.G_fatal_error(message)
@@ -167,6 +167,7 @@ class Messenger(object):
        grass.exceptions.FatalError: Ohh no no no!
 
     """
+
     def __init__(self, raise_on_error=False):
         self.client_conn = None
         self.server_conn = None

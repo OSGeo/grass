@@ -911,7 +911,7 @@ def test_spatial_extent_intersection():
 
     if C.get_north() != B.get_north() or C.get_south() != B.get_south() or \
         C.get_west() != B.get_west() or C.get_east() != B.get_east() or \
-        C.get_bottom() != B.get_bottom() or C.get_top() != B.get_top():
+            C.get_bottom() != B.get_bottom() or C.get_top() != B.get_top():
         core.fatal("Wrong intersection computation")
 
     B = SpatialExtent(

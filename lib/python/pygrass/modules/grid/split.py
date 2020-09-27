@@ -81,7 +81,7 @@ def split_region_tiles(region=None, width=100, height=100, overlap=0):
 
 
 def get_overlap_region_tiles(region=None, width=100, height=100, overlap=0):
-    """Get the Bbox of the overlapped region. 
+    """Get the Bbox of the overlapped region.
 
     :param region: a Region object to split
     :type region: Region object
