@@ -645,7 +645,6 @@ class DataCatalogTree(TreeView):
         """Rename node (map, mapset, location), sort and refresh.
         Should be called after actual renaming of a map, mapset, location."""
         node.data['name'] = name
-        print('rename')
         self._model.SortChildren(node.parent)
         self.RefreshNode(node.parent, recursive=True)
 
