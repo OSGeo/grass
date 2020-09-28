@@ -494,7 +494,7 @@ int main(int argc, char **argv)
     if (multires) {
 	PATTERN *multi_patterns;
 	MULTI multiple_output[5];	/* ten form maps + all forms */
-	char *postfixes[] = { "scale_300", "scale_100", "scale_50", "scale_20" "scale_10" };	/* in pixels */
+	char *postfixes[] = { "scale_300", "scale_100", "scale_50", "scale_20", "scale_10" };	/* in pixels */
 	num_of_steps = 5;
 	multi_patterns = G_malloc(num_of_steps * sizeof(PATTERN));
 	/* prepare outputs */
