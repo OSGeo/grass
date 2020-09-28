@@ -716,6 +716,13 @@ class MapCalcFrame(wx.Frame):
             ltype = 'raster_3d'
         self._giface.mapCreated.emit(
             name=name, ltype=ltype, add=self.addbox.IsChecked())
+        gisenv = grass.gisenv()
+        self._giface.grassdbChanged.emit(grassdb=gisenv['GISDBASE'],
+                                         location=gisenv['LOCATION_NAME'],
+                                         mapset=gisenv['MAPSET'],
+                                         action='new',
+                                         newname=name.split('@')[0],
+                                         element=ltype)
 
     def OnSaveExpression(self, event):
         """Saves expression to file

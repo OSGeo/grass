@@ -452,6 +452,13 @@ class RDigitController(wx.EvtHandler):
         self._editedRaster = name
         self._mapType = mapType
         self.newRasterCreated.emit(name=name)
+        gisenv = gcore.gisenv()
+        self._giface.grassdbChanged.emit(grassdb=gisenv['GISDBASE'],
+                                         location=gisenv['LOCATION_NAME'],
+                                         mapset=gisenv['MAPSET'],
+                                         action='new',
+                                         newname=name.split('@')[0],
+                                         element='raster')
 
     def _backupRaster(self, name):
         """Creates a temporary backup raster necessary for undo behavior.
