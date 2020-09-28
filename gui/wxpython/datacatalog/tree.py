@@ -1531,6 +1531,7 @@ class DataCatalogTree(TreeView):
                                       location=location)
                 if node:
                     self._reloadLocationNode(node)
+                    self.UpdateCurrentDbLocationMapsetNode()
                     self.RefreshNode(node, recursive=True)
             elif action == 'rename':
                 node = self.GetDbNode(grassdb=grassdb,
