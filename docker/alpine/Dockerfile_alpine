@@ -21,6 +21,7 @@ ENV PACKAGES="\
       flex \
       freetype \
       gdal \
+      gdal-tools \
       gettext \
       geos \
       gnutls \
