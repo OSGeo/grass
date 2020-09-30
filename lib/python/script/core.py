@@ -1513,7 +1513,7 @@ def verbosity():
     """Return the verbosity level selected by GRASS_VERBOSE
 
     Currently, there are 5 levels of verbosity:
-    -1 nothing will be printed (also fatal errors and warnings will be also discarded)
+    -1 nothing will be printed (also fatal errors and warnings will be discarded)
      0 nothing will be printed except of fatal errors and warnings. Triggered by --q or --quiet flag.
      1 only progress information (percent) and important messages will be printed
      2 all messages will be printed
