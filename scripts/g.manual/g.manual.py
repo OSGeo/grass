@@ -37,7 +37,7 @@
 #%flag
 #% key: o
 #% label: Display online manuals instead of locally installed
-#% description: Use online manuals available at http://grass.osgeo.org website. This flag has no effect when displaying MAN text pages.
+#% description: Use online manuals available at https://grass.osgeo.org website. This flag has no effect when displaying MAN text pages.
 #%end
 #%option
 #% key: entry
@@ -69,9 +69,9 @@ def start_browser(entry):
 
     if flags['o']:
         major, minor, patch = grass.version()['version'].split('.')
-        url_path = 'http://grass.osgeo.org/grass%s%s/manuals/%s.html' % (major, minor, entry)
+        url_path = 'https://grass.osgeo.org/grass%s%s/manuals/%s.html' % (major, minor, entry)
         if urlopen(url_path).getcode() != 200:
-            url_path = 'http://grass.osgeo.org/grass%s%s/manuals/addons/%s.html' % (
+            url_path = 'https://grass.osgeo.org/grass%s%s/manuals/addons/%s.html' % (
                 major, minor, entry)
     else:
         path = os.path.join(gisbase, 'docs', 'html', entry + '.html')

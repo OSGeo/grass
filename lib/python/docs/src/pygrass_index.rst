@@ -48,9 +48,9 @@ References
   Geo-Information. 2(1):201-219. `doi:10.3390/ijgi2010201
   <http://dx.doi.org/10.3390/ijgi2010201>`_
 * `Python related articles in the GRASS GIS Wiki
-  <http://grasswiki.osgeo.org/wiki/Category:Python>`_
+  <https://grasswiki.osgeo.org/wiki/Category:Python>`_
 * `GRASS GIS 7 Programmer's Manual
-  <http://grass.osgeo.org/programming7/>`_
+  <https://grass.osgeo.org/programming7/>`_
 
 This project has been funded with support from the `Google Summer of
 Code 2012

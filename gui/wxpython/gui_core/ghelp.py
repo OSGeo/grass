@@ -904,7 +904,7 @@ def ShowAboutDialog(prgName, startYear):
                 'grass.ico'),
             wx.BITMAP_TYPE_ICO))
     info.SetName(prgName)
-    info.SetWebSite('http://grass.osgeo.org')
+    info.SetWebSite('https://grass.osgeo.org')
     info.SetDescription(
         _grassDevTeam(startYear) +
         '\n\n' +

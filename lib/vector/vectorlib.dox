@@ -1,6 +1,6 @@
 /*! \page vectorlib GRASS Vector Library
 
-by GRASS Development Team (http://grass.osgeo.org)
+by GRASS Development Team (https://grass.osgeo.org)
 
 \tableofcontents
 
@@ -294,7 +294,7 @@ Information about categories holds \ref line_cats data structure.
 \section vlibAttributes Attributes
 
 For a user-centric view about attribute management, see the explanations
-in the <a href="http://grasswiki.osgeo.org/wiki/Vector_Database_Management">GRASS GIS Wiki</a>.
+in the <a href="https://grasswiki.osgeo.org/wiki/Vector_Database_Management">GRASS GIS Wiki</a>.
 
 The attribute data are stored in external database. Connection with the
 database is done through drivers based on \ref dbmilib. Records in a

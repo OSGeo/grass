@@ -55,7 +55,7 @@ echo " <link rel=\"stylesheet\" href=\"grassdocs.css\" type=\"text/css\">
 <h2>GRASS GIS $GRASSVERSION Reference Manual</h2>
 
 <p>Geographic Resources Analysis Support System, commonly referred to as
-<a href=\"http://grass.osgeo.org\">GRASS</a>, 
+<a href=\"https://grass.osgeo.org\">GRASS</a>, 
 is a Geographic Information System (GIS) used for geospatial data management
 and analysis, image processing, graphics/maps production, spatial modeling,
 and visualization. GRASS is currently used in academic and commercial settings
@@ -74,7 +74,7 @@ write_html_footer()
 # $1: filename
 echo "<hr class=\"header\">" >> $1
 echo "<p><a href=\"$GISBASE/docs/html/index.html\">Help Index</a> | <a href=\"$GISBASE/docs/html/full_index.html\">Full Index</a> | <a href=\"$HTMLDIR/addon_index.html\">Addon Index</a><br>" >> $1
-echo "&copy; 2003-2008 <a href=\"http://grass.osgeo.org\">GRASS Development Team</a></p>" >> $1
+echo "&copy; 2003-2008 <a href=\"https://grass.osgeo.org\">GRASS Development Team</a></p>" >> $1
 echo "</body>" >> $1   
 echo "</html>" >> $1
 }

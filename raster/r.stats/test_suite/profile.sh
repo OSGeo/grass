@@ -1,4 +1,4 @@
-# NC dataset, http://grass.osgeo.org/download/sample-data/
+# NC dataset, https://grass.osgeo.org/download/data/
 
 OUTFILE=callgrind.out.1196
 MAP=elevation

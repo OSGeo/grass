@@ -3,12 +3,12 @@ Introduction to Vector classes
 
 Details about the GRASS GIS vector architecture can be found in the
 `GRASS GIS 7 Programmer's Manual: GRASS Vector Library
-<http://grass.osgeo.org/programming7/vectorlib.html>`_.
+<https://grass.osgeo.org/programming7/vectorlib.html>`_.
 
 PyGRASS has two classes for vector maps: :ref:`Vector-label` and
 :ref:`VectorTopo-label`.  As the names suggest, the Vector class is
 for vector maps, while VectorTopo opens vector maps with `GRASS GIS
-topology <http://grass.osgeo.org/programming7/vlibTopology.html>`_.
+topology <https://grass.osgeo.org/programming7/vlibTopology.html>`_.
 VectorTopo is an extension of the Vector class, so supports all the
 Vector class methods, with additions. The classes are part of the
 :mod:`~pygrass.vector` module.
@@ -345,4 +345,4 @@ Now, find an area with an island inside... ::
     >>> isle.bbox()
     Bbox(199947.296494, 199280.969494, 754920.623987, 754351.812986)
 
-.. _Vector library: http://grass.osgeo.org/programming7/vectorlib.html
+.. _Vector library: https://grass.osgeo.org/programming7/vectorlib.html
