@@ -488,7 +488,7 @@ class PyEditController(object):
         # not using g.manual because it does not show
         entry = 'libpython/script_intro.html'
         major, minor, patch = gscript.version()['version'].split('.')
-        url = 'http://grass.osgeo.org/grass%s%s/manuals/%s' % (
+        url = 'https://grass.osgeo.org/grass%s%s/manuals/%s' % (
             major, minor, entry)
         open_url(url)
 
