@@ -156,4 +156,4 @@ the code due to the dynamic nature of Python, there is a large number
 of tools such as *pep8* or *pylint* which can help you to identify problems
 in you Python code.
 
-.. _C API documentation: http://grass.osgeo.org/programming7/gis_8h.html
+.. _C API documentation: https://grass.osgeo.org/programming7/gis_8h.html
