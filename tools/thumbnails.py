@@ -5,7 +5,7 @@
 #  AUTHOR: Vaclav Petras (non-PPM version using r.mapcalc)
 #          Glynn Clements (Python version)
 #      Earlier Bourne script version by Hamish Bowman,
-#      http://grasswiki.osgeo.org/wiki/Talk:Color_tables
+#      https://grasswiki.osgeo.org/wiki/Talk:Color_tables
 #
 #   (C) 2009-2017 by the GRASS Development Team
 #       This program is free software under the GNU General Public
