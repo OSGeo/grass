@@ -35,7 +35,7 @@ def tlist_grouped(type, group_type=False, dbif=None):
     :return: directory of mapsets/elements
     """
     result = {}
-    dbif, connected = init_dbif(dbif)
+    dbif = init_dbif(dbif)
 
     mapset = None
     if type == 'stds':
@@ -70,7 +70,7 @@ def tlist_grouped(type, group_type=False, dbif=None):
             else:
                 result[mapset].append(name)
 
-    if connected is True:
+    if dbif is not None and dbif.is_connected() is True:
         dbif.close()
 
     return result
@@ -87,7 +87,7 @@ def tlist(type, dbif=None):
     """
     id = None
     sp = dataset_factory(type, id)
-    dbif, connected = init_dbif(dbif)
+    dbif = init_dbif(dbif)
 
     mapsets = get_available_temporal_mapsets()
 
@@ -115,7 +115,7 @@ def tlist(type, dbif=None):
                 for col in row:
                     output.append(str(col))
 
-    if connected is True:
+    if dbif is not None and dbif.is_connected() is True:
         dbif.close()
 
     return output

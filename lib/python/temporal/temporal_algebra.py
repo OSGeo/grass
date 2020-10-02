@@ -858,7 +858,7 @@ class TemporalAlgebraParser(object):
         grans = []
         start_times = []
         ttypes = {}
-        dbif, connected = init_dbif(self.dbif)
+        dbif = init_dbif(self.dbif)
 
         for name in name_list:
             stds = open_old_stds(name, stdstype, dbif)
@@ -2182,7 +2182,7 @@ class TemporalAlgebraParser(object):
         """
 
         if self.run:
-            dbif, connected = init_dbif(self.dbif)
+            dbif = init_dbif(self.dbif)
             map_type = None
             if isinstance(t[3], list):
                 num = len(t[3])
@@ -2343,7 +2343,7 @@ class TemporalAlgebraParser(object):
                                                    'mean', dbif,
                                                    overwrite=self.overwrite)
 
-            if connected:
+            if dbif is not None and dbif.is_connected():
                 dbif.close()
             t[0] = t[3]
         else:

@@ -347,7 +347,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector,
            :param dbif: The database interface to be used
         """
 
-        dbif, connected = init_dbif(dbif)
+        dbif = init_dbif(dbif)
 
         self.base.select(dbif)
         self.temporal_extent.select(dbif)
@@ -356,7 +356,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector,
         if self.is_stds() is False:
             self.stds_register.select(dbif)
 
-        if connected:
+        if dbif is not None and dbif.is_connected():
             dbif.close()
 
     def is_in_db(self, dbif=None):
@@ -389,7 +389,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector,
                               "mapset") % {"ds": self.get_id(),
                                            "type": self.get_type()})
 
-        dbif, connected = init_dbif(dbif)
+        dbif = init_dbif(dbif)
 
         # Build the INSERT SQL statement
         statement = self.base.get_insert_statement_mogrified(dbif)
@@ -401,11 +401,11 @@ class AbstractDataset(SpatialTopologyDatasetConnector,
 
         if execute:
             dbif.execute_transaction(statement)
-            if connected:
+            if dbif is not None and dbif.is_connected():
                 dbif.close()
             return ""
 
-        if connected:
+        if dbif is not None and dbif.is_connected():
             dbif.close()
         return statement
 
@@ -429,7 +429,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector,
                               "mapset") % {"ds": self.get_id(),
                                            "type": self.get_type()})
 
-        dbif, connected = init_dbif(dbif)
+        dbif = init_dbif(dbif)
 
         # Build the UPDATE SQL statement
         statement = self.base.get_update_statement_mogrified(dbif, ident)
@@ -444,11 +444,11 @@ class AbstractDataset(SpatialTopologyDatasetConnector,
 
         if execute:
             dbif.execute_transaction(statement)
-            if connected:
+            if dbif is not None and dbif.is_connected():
                 dbif.close()
             return ""
 
-        if connected:
+        if dbif is not None and dbif.is_connected():
             dbif.close()
         return statement
 
@@ -472,7 +472,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector,
                               "mapset") % {"ds": self.get_id(),
                                            "type": self.get_type()})
 
-        dbif, connected = init_dbif(dbif)
+        dbif = init_dbif(dbif)
 
         # Build the UPDATE SQL statement
         statement = self.base.get_update_all_statement_mogrified(dbif, ident)
@@ -488,11 +488,11 @@ class AbstractDataset(SpatialTopologyDatasetConnector,
 
         if execute:
             dbif.execute_transaction(statement)
-            if connected:
+            if dbif is not None and dbif.is_connected():
                 dbif.close()
             return ""
 
-        if connected:
+        if dbif is not None and dbif.is_connected():
             dbif.close()
         return statement
 

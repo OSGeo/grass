@@ -68,7 +68,7 @@ def open_old_stds(name, type, dbif=None):
     else:
         msgr.fatal(_("Unknown type: %s") % (type))
 
-    dbif, connected = init_dbif(dbif)
+    dbif = init_dbif(dbif)
 
     if not sp.is_in_db(dbif):
         dbif.close()
@@ -77,7 +77,7 @@ def open_old_stds(name, type, dbif=None):
                     'name': name})
     # Read content from temporal database
     sp.select(dbif)
-    if connected:
+    if dbif is not None and dbif.is_connected():
         dbif.close()
 
     return sp
@@ -128,14 +128,14 @@ def check_new_stds(name, type, dbif=None, overwrite=False):
         msgr.error(_("Unknown type: %s") % (type))
         return None
 
-    dbif, connected = init_dbif(dbif)
+    dbif = init_dbif(dbif)
 
     if sp.is_in_db(dbif) and overwrite is False:
         msgr.fatal(_("Space time %(sp)s dataset <%(name)s> is already in the"
                      " database. Use the overwrite flag.") % {
                    'sp': sp.get_new_map_instance(None).get_type(),
                    'name': name})
-    if connected:
+    if dbif is not None and dbif.is_connected():
         dbif.close()
 
     return sp
@@ -161,7 +161,7 @@ def open_new_stds(name, type, temporaltype, title, descr, semantic,
 
        This function will raise a FatalError in case of an error.
     """
-    dbif, connected = init_dbif(dbif)
+    dbif = init_dbif(dbif)
     msgr = get_tgis_message_interface()
     sp = check_new_stds(name, type, dbif, overwrite)
 
@@ -182,7 +182,7 @@ def open_new_stds(name, type, temporaltype, title, descr, semantic,
 
     sp.insert(dbif)
 
-    if connected:
+    if dbif is not None and dbif.is_connected():
         dbif.close()
 
     return sp
@@ -208,19 +208,19 @@ def check_new_map_dataset(name, layer=None, type="raster",
     mapset = get_current_mapset()
     msgr = get_tgis_message_interface()
 
-    dbif, connected = init_dbif(dbif)
+    dbif = init_dbif(dbif)
     map_id = AbstractMapDataset.build_id(name, mapset, layer)
 
     new_map = dataset_factory(type, map_id)
     # Check if new map is in the temporal database
     if new_map.is_in_db(dbif):
         if not overwrite:
-            if connected:
+            if dbif is not None and dbif.is_connected():
                 dbif.close()
             msgr.fatal(_("Map <%s> is already in temporal database,"
                          " use overwrite flag to overwrite") % (map_id))
 
-    if connected:
+    if dbif is not None and dbif.is_connected():
         dbif.close()
 
     return new_map
@@ -246,7 +246,7 @@ def open_new_map_dataset(name, layer=None, type="raster",
 
     mapset = get_current_mapset()
 
-    dbif, connected = init_dbif(dbif)
+    dbif = init_dbif(dbif)
     new_map = check_new_map_dataset(name, layer, type, overwrite, dbif)
 
     # Check if new map is in the temporal database
@@ -259,7 +259,7 @@ def open_new_map_dataset(name, layer=None, type="raster",
     if temporal_extent:
         new_map.set_temporal_extent(temporal_extent)
 
-    if connected:
+    if dbif is not None and dbif.is_connected():
         dbif.close()
 
     return new_map

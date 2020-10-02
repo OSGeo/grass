@@ -76,7 +76,7 @@ def get_dataset_list(type, temporal_type, columns=None, where=None,
     id = None
     sp = dataset_factory(type, id)
 
-    dbif, connected = init_dbif(dbif)
+    dbif = init_dbif(dbif)
 
     mapsets = get_available_temporal_mapsets()
 
@@ -109,7 +109,7 @@ def get_dataset_list(type, temporal_type, columns=None, where=None,
         if rows:
             result[mapset] = rows
 
-    if connected:
+    if dbif is not None and dbif.is_connected():
         dbif.close()
 
     return result
@@ -151,7 +151,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
         :param outpath: The path to file where to save output
     """
 
-    dbif, connected = init_dbif(dbif)
+    dbif = init_dbif(dbif)
     msgr = get_tgis_message_interface()
 
     sp = open_old_stds(input, type, dbif)
@@ -312,7 +312,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                         print(output)
     if outpath:
         outfile.close()
-    if connected:
+    if dbif is not None and dbif.is_connected():
         dbif.close()
 
 ###############################################################################
