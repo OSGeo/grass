@@ -1,14 +1,14 @@
-# This package depends on automagic byte compilation
-# https://fedoraproject.org/wiki/Changes/No_more_automagic_Python_bytecompilation_phase_2
-%global _python_bytecompile_extra 1
-
 %global shortver 78
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:		grass
-Version:	7.8.3
-Release:	5%{?dist}
+Version:	7.8.4
+Release:	1%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
+
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%bcond_without flexiblas
+%endif
 
 %if 0%{?rhel} >= 7
 %define __python %{__python3}
@@ -23,12 +23,17 @@ Summary:	GRASS GIS - Geographic Resources Analysis Support System
 License:	GPLv2+
 URL:		https://grass.osgeo.org
 Source0:	https://grass.osgeo.org/%{name}%{shortver}/source/%{name}-%{version}.tar.gz
-Source2:	%{name}-config.h
+# needed?
+# Source2:	%%{name}-config.h
 
 Patch1:		grass-7.8.0-buildroot.diff
 
 BuildRequires:	bison
-BuildRequires:	blas-devel
+%if %{with flexiblas}
+BuildRequires:	flexiblas-devel
+%else
+BuildRequires:	blas-devel, lapack-devel
+%endif
 BuildRequires:	cairo-devel
 BuildRequires:	gcc-c++
 BuildRequires:	desktop-file-utils
@@ -40,7 +45,7 @@ BuildRequires:	freetype-devel
 BuildRequires:	gdal-devel
 BuildRequires:	geos-devel
 BuildRequires:	gettext
-BuildRequires:	lapack-devel
+BuildRequires:	laszip-devel
 %if (0%{?rhel} > 6 || 0%{?fedora})
 BuildRequires:	libappstream-glib
 %endif
@@ -96,6 +101,9 @@ BuildRequires:	python3-pillow
 # EPEL6
 BuildRequires:	python-imaging
 %endif
+BuildRequires:	PDAL
+BuildRequires:	PDAL-libs
+BuildRequires:	PDAL-devel
 BuildRequires:	readline-devel
 BuildRequires:	sqlite-devel
 BuildRequires:	subversion
@@ -138,8 +146,10 @@ Requires:	python3-dateutil
 %if 0%{?rhel} && 0%{?rhel} < 7
 Requires: wxPython
 %else
-Requires: python3-wxpython4
+Requires:	python3-wxpython4
 %endif
+Requires:	PDAL
+Requires:	PDAL-libs
 
 %if "%{_lib}" == "lib"
 %global cpuarch 32
@@ -185,6 +195,10 @@ GRASS GIS development headers
 # Correct mysql_config query
 sed -i -e 's/--libmysqld-libs/--libs/g' configure
 
+%if %{with flexiblas}
+sed -i -e 's/-lblas/-lflexiblas/g' -e 's/-llapack/-lflexiblas/g' configure
+%endif
+
 # Fixup shebangs
 find -name \*.pl | xargs sed -i -e 's,#!/usr/bin/env perl,#!%{__perl},'
 
@@ -207,11 +221,16 @@ CXXFLAGS="-std=c++98 ${CFLAGS}"
 	--with-fftw \
 	--with-blas \
 	--with-lapack \
+%if %{with flexiblas}
+	--with-blas-includes=%{_includedir}/flexiblas \
+	--with-lapack-includes=%{_includedir}/flexiblas \
+%endif
 	--with-cairo \
 %if (0%{?rhel} > 6 || 0%{?fedora})
 	--with-freetype \
 %endif
 	--with-nls \
+	--with-pdal \
 	--with-readline \
 	--with-regex \
 	--with-openmp \
@@ -272,7 +291,8 @@ install -p -m 644 %{name}.pc %{buildroot}%{_libdir}/pkgconfig
 # Create multilib header
 mv %{buildroot}%{_libdir}/%{name}%{shortver}/include/%{name}/config.h \
    %{buildroot}%{_libdir}/%{name}%{shortver}/include/%{name}/config-%{cpuarch}.h
-install -p -m 644 %{SOURCE2} %{buildroot}%{_libdir}/%{name}%{shortver}/include/%{name}/config.h
+# needed?
+# install -p -m 644 %%{SOURCE2} %%{buildroot}%%{_libdir}/%%{name}%%{shortver}/include/%%{name}/config.h
 
 # Make man pages available on the system, convert to utf8 and avoid name conflict
 mkdir -p %{buildroot}%{_mandir}/man1
@@ -298,7 +318,7 @@ appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/org.osge
 #rm -rf %%{buildroot}%%{_prefix}/%%{name}-%%{version}
 
 # Finally move entire tree to shortver subdir
-#mv %{buildroot}%{_libdir}/%{name}-%{version} %{buildroot}%{_libdir}/%{name}%{shortver}
+#mv %%{buildroot}%%{_libdir}/%%{name}-%%{version} %%{buildroot}%%{_libdir}/%%{name}%%{shortver}
 
 # rpm macro for version checking (not from buildroot!)
 mkdir -p ${RPM_BUILD_ROOT}%{macrosdir}
@@ -364,6 +384,26 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
+* Mon Oct 05 2020 Markus Neteler <neteler@mundialis.de> - 7.8.4-1
+- New upstream version GRASS GIS 7.8.4
+- disabled %{name}-config.h
+
+* Thu Aug 27 2020 Iñaki Úcar <iucar@fedoraproject.org> - 7.8.3-10
+- https://fedoraproject.org/wiki/Changes/FlexiBLAS_as_BLAS/LAPACK_manager
+
+* Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 7.8.3-9
+- Second attempt - Rebuilt for
+  https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
+* Tue Jul 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 7.8.3-8
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
+* Fri Jun 26 2020 Markus Neteler <neteler@mundialis.de> - 7.8.3-7
+- added PDAL support
+
+* Sun Jun 21 2020 Markus Neteler <neteler@mundialis.de> - 7.8.3-6
+- disable automagic byte compilation (BZ#1847153)
+
 * Tue May 26 2020 Markus Neteler <neteler@mundialis.de> - 7.8.3-5
 - fixed wxPython for F33 (BZ#1836761)
 
