@@ -14746,7 +14746,7 @@ msgid "Distance step for every iteration (zero to omit)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:171
-msgid "Distance where serch will start in multiple mode (zero to omit)"
+msgid "Distance where search will start in multiple mode (zero to omit)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:177
