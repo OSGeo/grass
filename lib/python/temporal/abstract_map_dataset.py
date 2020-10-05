@@ -428,11 +428,11 @@ class AbstractMapDataset(AbstractDataset):
                                            "type": self.get_type()})
 
         if self.set_absolute_time(start_time, end_time):
-            dbif, connected = init_dbif(dbif)
+            dbif, connection_state_changed = init_dbif(dbif)
             self.absolute_time.update_all(dbif)
             self.base.update(dbif)
 
-            if connected:
+            if connection_state_changed:
                 dbif.close()
 
             if get_enable_timestamp_write():
@@ -524,11 +524,11 @@ class AbstractMapDataset(AbstractDataset):
                                            "type": self.get_type()})
 
         if self.set_relative_time(start_time, end_time, unit):
-            dbif, connected = init_dbif(dbif)
+            dbif, connection_state_changed = init_dbif(dbif)
             self.relative_time.update_all(dbif)
             self.base.update(dbif)
 
-            if connected:
+            if connection_state_changed:
                 dbif.close()
 
             if get_enable_timestamp_write():
@@ -844,7 +844,7 @@ class AbstractMapDataset(AbstractDataset):
                               "mapset") % {"ds": self.get_id(),
                                            "type": self.get_type()})
 
-        dbif, connected = init_dbif(dbif)
+        dbif, connection_state_changed = init_dbif(dbif)
         statement = ""
 
         if self.is_in_db(dbif):
@@ -872,7 +872,7 @@ class AbstractMapDataset(AbstractDataset):
 
         self.reset(None)
 
-        if connected:
+        if connection_state_changed:
             dbif.close()
 
         return statement
@@ -913,7 +913,7 @@ class AbstractMapDataset(AbstractDataset):
                                            "type": self.get_type()})
 
         statement = ""
-        dbif, connected = init_dbif(dbif)
+        dbif, connection_state_changed = init_dbif(dbif)
 
         # Get all datasets in which this map is registered
         datasets = self.get_registered_stds(dbif)
@@ -935,7 +935,7 @@ class AbstractMapDataset(AbstractDataset):
             dbif.execute_transaction(statement)
             statement = ""
 
-        if connected:
+        if connection_state_changed:
             dbif.close()
 
         return statement
@@ -949,7 +949,7 @@ class AbstractMapDataset(AbstractDataset):
            :return: A list of ids of all space time datasets in
                         which this map is registered
         """
-        dbif, connected = init_dbif(dbif)
+        dbif, connection_state_changed = init_dbif(dbif)
 
         self.stds_register.select(dbif)
         datasets = self.stds_register.get_registered_stds()
@@ -959,7 +959,7 @@ class AbstractMapDataset(AbstractDataset):
         else:
             datasets = None
 
-        if connected:
+        if connection_state_changed:
             dbif.close
 
         return datasets
@@ -976,7 +976,7 @@ class AbstractMapDataset(AbstractDataset):
 
            :return: The SQL statements if execute=False, else an empty string
         """
-        dbif, connected = init_dbif(dbif=dbif)
+        dbif, connection_state_changed = init_dbif(dbif=dbif)
 
         datasets = self.get_registered_stds(dbif=dbif)
 
@@ -989,7 +989,7 @@ class AbstractMapDataset(AbstractDataset):
 
         # Check if the dataset is already present
         if stds_id in datasets:
-            if connected:
+            if connection_state_changed:
                 dbif.close
             return ""
 
@@ -1004,7 +1004,7 @@ class AbstractMapDataset(AbstractDataset):
         else:
             statement = self.stds_register.get_update_statement_mogrified(dbif=dbif)
 
-        if connected:
+        if connection_state_changed:
             dbif.close
 
         return statement
@@ -1022,19 +1022,19 @@ class AbstractMapDataset(AbstractDataset):
 
            :return: The SQL statements if execute=False, else an empty string
         """
-        dbif, connected = init_dbif(dbif)
+        dbif, connection_state_changed = init_dbif(dbif)
 
         datasets = self.get_registered_stds(dbif=dbif)
 
         # Check if no datasets are present
         if datasets is None:
-            if connected:
+            if connection_state_changed:
                 dbif.close
             return ""
 
         # Check if the dataset is already present
         if stds_id not in datasets:
-            if connected:
+            if connection_state_changed:
                 dbif.close
             return ""
 
@@ -1049,7 +1049,7 @@ class AbstractMapDataset(AbstractDataset):
         else:
             statement = self.stds_register.get_update_statement_mogrified(dbif=dbif)
 
-        if connected:
+        if connection_state_changed:
             dbif.close
 
         return statement
