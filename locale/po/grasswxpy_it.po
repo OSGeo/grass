@@ -4545,7 +4545,7 @@ msgstr "Importa dati raster in una mappa raster di GRASS usando la libreria GDAL
 
 #: ../gui/wxpython/menustrings.py:39 ../gui/wxpython/menustrings.py:1056
 msgid "Import of common raster formats"
-msgstr "Importa formati raster comuni"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:41 ../gui/wxpython/menustrings.py:1058
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:42
@@ -4717,7 +4717,7 @@ msgstr "Importa dati raster in una mappa vettoriale di GRASS usando la libreria 
 
 #: ../gui/wxpython/menustrings.py:69 ../gui/wxpython/menustrings.py:1086
 msgid "Import of common vector formats"
-msgstr "Importa formati vettoriali comuni"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:71 ../gui/wxpython/menustrings.py:1088
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:72
@@ -5090,7 +5090,7 @@ msgstr "Esporta mappa vettoriale"
 
 #: ../gui/wxpython/menustrings.py:131 ../gui/wxpython/menustrings.py:1148
 msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to OGC GeoPackage format."
-msgstr "Esporta una mappa vettoriale in qualsiasi dei formati vettoriali supportati da OGR. Di default una mappa vettoriale è esportata nel formato OGC GeoPackage."
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:132 ../gui/wxpython/menustrings.py:1149
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:133
@@ -5124,7 +5124,7 @@ msgstr "Esporta PostGIS"
 
 #: ../gui/wxpython/menustrings.py:137 ../gui/wxpython/menustrings.py:1154
 msgid "Exports a vector map layer to PostGIS feature table."
-msgstr "Esporta una mappa vettoriale in una tabella di PostGIS."
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:139 ../gui/wxpython/menustrings.py:1156
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:139
@@ -5563,11 +5563,11 @@ msgstr "Lancia script"
 
 #: ../gui/wxpython/menustrings.py:209
 msgid "Simple Python Editor"
-msgstr "Semplice editor Python"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:210
 msgid "Launches Simple Python Editor."
-msgstr "Apre l'editor semplice di Python"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:211
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:209
@@ -5629,11 +5629,11 @@ msgstr "Mostra region usando latitudine e longitudine"
 
 #: ../gui/wxpython/menustrings.py:221 ../gui/wxpython/menustrings.py:1198
 msgid "Show current region extent in Map Display"
-msgstr "Mostra l'estensione della region corrente nel Map Display"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:222 ../gui/wxpython/menustrings.py:1199
 msgid "Shows the extent of the computational region in Map Display."
-msgstr "Mostra l'estensione della region computazionale nel Map Display"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:223 ../gui/wxpython/menustrings.py:1200
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:219
@@ -8987,7 +8987,7 @@ msgstr "Calcola la correzione topografica della riflettanza."
 
 #: ../gui/wxpython/menustrings.py:816 ../gui/wxpython/menustrings.py:1756
 msgid "Orthophoto tools"
-msgstr "Strument ortofoto"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:817 ../gui/wxpython/menustrings.py:1757
 msgid "Manage GCPs for 3D correction"
