@@ -319,7 +319,7 @@ int main(int argc, char **argv)
     /* apparently the +over switch must be set in the input projection,
      * not the output latlon projection */
     if (curr_proj == PROJECTION_LL)
-	G_set_key_value("+over", "defined", in_proj_info);
+	G_set_key_value("over", "defined", in_proj_info);
 
     if ((in_unit_info = G_get_projunits()) == NULL)
 	G_fatal_error(_("Unable to get projection units of input map"));

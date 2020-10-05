@@ -233,7 +233,7 @@ int main(int argc, char *argv[])
 	/* apparently the +over switch must be set in the input projection,
 	 * not the output latlon projection */
 	if (Out_proj == PROJECTION_LL && nowrap == 1)
-	    G_set_key_value("+over", "defined", in_proj_keys);
+	    G_set_key_value("over", "defined", in_proj_keys);
 
 	in_unit_keys = G_get_projunits();
 	if (in_unit_keys == NULL)
