@@ -22,6 +22,7 @@ import string
 import re
 from datetime import datetime
 import locale
+import json
 
 try:
     # Python 2 import
@@ -264,6 +265,29 @@ def update_toc(data):
 
     return '\n'.join(ret_data)
 
+
+def get_addon_path(pgm):
+    """Check if pgm is in addons list and get addon path
+
+    :param pgm str: pgm
+
+    :return tuple: (True, path) if pgm is addon else (None, None)
+    """
+    addon_base = os.getenv('GRASS_ADDON_BASE')
+    if addon_base:
+        """'addons_paths.json' is file created during install extension
+        check get_addons_paths() function in the g.extension.py file
+        """
+        addons_paths = os.path.join(addon_base, 'addons_paths.json')
+        if os.path.exists(addons_paths):
+            with open(addons_paths, 'r') as f:
+                addons_paths = json.load(f)
+            for addon in addons_paths['tree']:
+                if pgm in addon['path']:
+                    return True, addon['path']
+    return None, None
+
+
 # process header
 src_data = read_file(src_file)
 name = re.search('(<!-- meta page name:)(.*)(-->)', src_data, re.IGNORECASE)
@@ -382,11 +406,24 @@ if sys.platform == 'win32':
     url_source = url_source.replace(os.path.sep, '/')
 
 if index_name:
-    sys.stdout.write(sourcecode.substitute(URL_SOURCE=url_source, PGM=pgm,
-                                           URL_LOG=url_source.replace('grass/tree',  'grass/commits')))
+    tree = 'grass/tree'
+    commits = 'grass/commits'
+    is_addon, addon_path = get_addon_path(pgm=pgm)
+    if is_addon:
+        # Fix gui/wxpython addon url path
+        url_source = urlparse.urljoin(
+            os.environ['SOURCE_URL'], addon_path.split('/', 1)[1],
+        )
+        tree = 'grass-addons/tree'
+        commits = 'grass-addons/commits'
+
+    sys.stdout.write(sourcecode.substitute(
+        URL_SOURCE=url_source, PGM=pgm, URL_LOG=url_source.replace(
+            tree,  commits)))
     sys.stdout.write(footer_index.substitute(INDEXNAME=index_name,
                                              INDEXNAMECAP=index_name_cap,
-                                             YEAR=year, GRASS_VERSION=grass_version))
+                                             YEAR=year,
+                                             GRASS_VERSION=grass_version))
 else:
     sys.stdout.write(footer_noindex.substitute(YEAR=year,
                                                GRASS_VERSION=grass_version))

@@ -130,6 +130,7 @@
 
 from __future__ import print_function
 import fileinput
+import http
 import os
 import sys
 import re
@@ -137,10 +138,12 @@ import atexit
 import shutil
 import zipfile
 import tempfile
+import json
 import xml.etree.ElementTree as etree
 from distutils.dir_util import copy_tree
 
-from six.moves.urllib.request import urlopen, urlretrieve, ProxyHandler, build_opener, install_opener
+from six.moves.urllib.request import ProxyHandler, Request, build_opener, \
+    install_opener, urlopen, urlretrieve
 from six.moves.urllib.error import HTTPError, URLError
 
 # Get the XML parsing exceptions to catch. The behavior changed with Python 2.7
@@ -159,6 +162,70 @@ from grass.script import task as gtask
 # temp dir
 REMOVE_TMPDIR = True
 PROXIES = {}
+
+HTTP_STATUS_CODES = list(http.HTTPStatus)
+
+
+def urlopen_(url, response_format, headers={}, *args, **kwargs):
+    """Wrapper around urlopen. Same function as 'urlopen', but with the
+    ability to define headers.
+
+    :param str url: url address
+    :param str response_format: content type
+    :param dict headers: https(s) headers
+
+    :return response: urllib.request.urlopen response object
+    """
+    try:
+        request = Request(url, headers=headers)
+        response = urlopen(request, *args, **kwargs)
+
+        if not response.code == 200:
+            index = HTTP_STATUS_CODES.index(response.code)
+            desc = HTTP_STATUS_CODES[index].description
+            gscript.fatal(
+                _(
+                    "Download file from <{url}>, "
+                    "return status code {code}, "
+                    "{desc}".format(
+                        url=url,
+                        code=response.code,
+                        desc=desc,
+                    ),
+                ),
+            )
+        if response_format not in response.getheader('Content-Type'):
+            gscript.fatal(
+                _(
+                    "Wrong downloaded file format. "
+                    "Check url <{url}>. Allowed file format is "
+                    "{response_format}.".format(
+                        url=url,
+                        response_format=response_format,
+                    ),
+                ),
+            )
+        return response
+
+    except HTTPError as err:
+        gscript.fatal(
+            _(
+                "Download file from <{url}>, "
+                "return status code {code}, ".format(
+                    url=url,
+                    code=err,
+                ),
+            ),
+        )
+    except URLError:
+        gscript.fatal(
+            _(
+                "Download file from <{url}>, "
+                "failed. Check internet connection.".format(
+                    url=url,
+                ),
+            ),
+        )
 
 
 def etree_fromfile(filename):
@@ -1383,7 +1450,7 @@ def download_source_code(source, url, name, outdev,
 def install_extension_std_platforms(name, source, url):
     """Install extension on standard platforms"""
     gisbase = os.getenv('GISBASE')
-    source_url = "https://trac.osgeo.org/grass/browser/grass-addons/grass7/"
+    source_url = 'https://github.com/OSGeo/grass-addons/tree/master/grass7/'
 
     if source == 'official':
         gscript.message(_("Fetching <%s> from "
@@ -2108,6 +2175,26 @@ def resolve_source_code(url=None, name=None):
         return 'svn', url
 
 
+def get_addons_paths():
+    """Get and save extensions paths as 'extensions_paths.json' json file
+    in the $GRASS_ADDON_BASE dir. The file serves as a list of all addons,
+    and their paths (mkhmtl.py tool)
+    """
+    url = 'https://api.github.com/repos/OSGeo/grass-addons/git/trees/'\
+        'master?recursive=1'
+    addons_paths = json.loads(
+        gscript.decode(
+            urlopen_(
+                url=url,
+                response_format='application/json',
+            ).read(),
+        )
+    )
+    with open(os.path.join(options['prefix'], 'addons_paths.json'),
+              'w') as f:
+        json.dump(addons_paths, f)
+
+
 def main():
     # check dependencies
     if not flags['a'] and sys.platform != "win32":
@@ -2155,6 +2242,7 @@ def main():
 
     if options['operation'] == 'add':
         check_dirs()
+        get_addons_paths()
         source, url = resolve_source_code(name=options['extension'],
                                           url=original_url)
         xmlurl = resolve_xmlurl_prefix(original_url, source=source)
