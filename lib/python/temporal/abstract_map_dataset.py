@@ -1034,7 +1034,7 @@ class AbstractMapDataset(AbstractDataset):
 
         # Check if the dataset is already present
         if stds_id not in datasets:
-            if connected:
+            if dbif is not None and dbif.is_connected():
                 dbif.close
             return ""
 
