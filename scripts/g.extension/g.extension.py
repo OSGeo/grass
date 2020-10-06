@@ -167,8 +167,7 @@ HTTP_STATUS_CODES = list(http.HTTPStatus)
 
 
 def download_addons_paths_file(
-        url, response_format, headers={}, *args, **kwargs,
-):
+        url, response_format, headers={}, *args, **kwargs):
     """Download Add-Ons paths json file
 
     :param str url: url address
