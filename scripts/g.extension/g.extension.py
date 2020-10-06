@@ -166,9 +166,10 @@ PROXIES = {}
 HTTP_STATUS_CODES = list(http.HTTPStatus)
 
 
-def urlopen_(url, response_format, headers={}, *args, **kwargs):
-    """Wrapper around urlopen. Same function as 'urlopen', but with the
-    ability to define headers.
+def download_addons_paths_file(
+        url, response_format, headers={}, *args, **kwargs,
+):
+    """Download Add-Ons paths json file
 
     :param str url: url address
     :param str response_format: content type
@@ -2175,22 +2176,24 @@ def resolve_source_code(url=None, name=None):
         return 'svn', url
 
 
-def get_addons_paths():
+def get_addons_paths(gg_addons_base_dir):
     """Get and save extensions paths as 'extensions_paths.json' json file
     in the $GRASS_ADDON_BASE dir. The file serves as a list of all addons,
     and their paths (mkhmtl.py tool)
     """
+    get_addons_paths.json_file = 'addons_paths.json'
+
     url = 'https://api.github.com/repos/OSGeo/grass-addons/git/trees/'\
         'master?recursive=1'
     addons_paths = json.loads(
         gscript.decode(
-            urlopen_(
+            download_addons_paths_file(
                 url=url,
                 response_format='application/json',
             ).read(),
         )
     )
-    with open(os.path.join(options['prefix'], 'addons_paths.json'),
+    with open(os.path.join(gg_addons_base_dir, get_addons_paths.json_file),
               'w') as f:
         json.dump(addons_paths, f)
 
@@ -2215,7 +2218,6 @@ def main():
     # define path
     options['prefix'] = resolve_install_prefix(path=options['prefix'],
                                                to_system=flags['s'])
-
     # list available extensions
     if flags['l'] or flags['c'] or (flags['g'] and not flags['a']):
         # using dummy extension, we don't need any extension URL now,
@@ -2242,7 +2244,7 @@ def main():
 
     if options['operation'] == 'add':
         check_dirs()
-        get_addons_paths()
+        get_addons_paths(gg_addons_base_dir=options['prefix'])
         source, url = resolve_source_code(name=options['extension'],
                                           url=original_url)
         xmlurl = resolve_xmlurl_prefix(original_url, source=source)
