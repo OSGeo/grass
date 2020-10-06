@@ -555,6 +555,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	    if ((in_proj_info = G_get_projinfo()) == NULL)
 		G_fatal_error(_("Can't get projection info of current location"));
 	    /* do not wrap to -180, 180, otherwise east can be < west */
+	    /* TODO: for PROJ 6+, the +over switch must be added to the
+	     * transformation pipeline if authority:name or WKt are used 
+	     * as crs definition */
 	    G_set_key_value("over", "defined", in_proj_info);
 
 	    if ((in_unit_info = G_get_projunits()) == NULL)
