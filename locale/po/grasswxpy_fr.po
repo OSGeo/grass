@@ -4548,7 +4548,7 @@ msgstr "Fermer tous les fenêtres d'affichage de cartes"
 
 #: ../gui/wxpython/menustrings.py:37 ../gui/wxpython/menustrings.py:1054
 msgid "Simplified raster import with reprojection"
-msgstr "Import raster simplifié avec reprojection"
+msgstr "Importation raster simplifié avec reprojection"
 
 #: ../gui/wxpython/menustrings.py:38 ../gui/wxpython/menustrings.py:40
 #: ../gui/wxpython/menustrings.py:1055 ../gui/wxpython/menustrings.py:1057
@@ -4559,7 +4559,7 @@ msgstr "Importer des données raster en utilisant la librairie GDAL."
 
 #: ../gui/wxpython/menustrings.py:39 ../gui/wxpython/menustrings.py:1056
 msgid "Import of common raster formats"
-msgstr "Import de raster de formats communs"
+msgstr "Importation de raster de formats communs"
 
 #: ../gui/wxpython/menustrings.py:41 ../gui/wxpython/menustrings.py:1058
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:42
@@ -4720,7 +4720,7 @@ msgstr "Reprojeter une carte raster depuis un secteur donné vers le secteur cou
 
 #: ../gui/wxpython/menustrings.py:67 ../gui/wxpython/menustrings.py:1084
 msgid "Simplified vector import with reprojection"
-msgstr "Import vecteur simplifié avec reprojection"
+msgstr "Importation vecteur simplifié avec reprojection"
 
 #: ../gui/wxpython/menustrings.py:68 ../gui/wxpython/menustrings.py:70
 #: ../gui/wxpython/menustrings.py:1085 ../gui/wxpython/menustrings.py:1087
@@ -4731,7 +4731,7 @@ msgstr "Importer des cartes vecteur en utilisant la librairie OGR."
 
 #: ../gui/wxpython/menustrings.py:69 ../gui/wxpython/menustrings.py:1086
 msgid "Import of common vector formats"
-msgstr "Import de vecteur de formats communs"
+msgstr "Importation de vecteur de formats communs"
 
 #: ../gui/wxpython/menustrings.py:71 ../gui/wxpython/menustrings.py:1088
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:72
@@ -4825,7 +4825,7 @@ msgstr "Dépaqueter une carte vecteur"
 
 #: ../gui/wxpython/menustrings.py:87 ../gui/wxpython/menustrings.py:1104
 msgid "Imports a GRASS GIS specific vector archive file (packed with v.pack) as a vector map"
-msgstr "Importe un fichier vecteur d'archive GRASS (empaqueté avec r.pack) en tant que carte vecteur"
+msgstr "Importe un fichier vecteur d'archive GRASS (empaqueté avec v.pack) en tant que carte vecteur"
 
 #: ../gui/wxpython/menustrings.py:88 ../gui/wxpython/menustrings.py:570
 #: ../gui/wxpython/menustrings.py:1105 ../gui/wxpython/menustrings.py:1510
@@ -5577,7 +5577,7 @@ msgstr "Lancer un fichier de script."
 
 #: ../gui/wxpython/menustrings.py:209
 msgid "Simple Python Editor"
-msgstr "Éditeur Python simple"
+msgstr "Editeur Python simple"
 
 #: ../gui/wxpython/menustrings.py:210
 msgid "Launches Simple Python Editor."
@@ -8116,7 +8116,7 @@ msgstr "Allouer des sous-réseaux"
 
 #: ../gui/wxpython/menustrings.py:656 ../gui/wxpython/menustrings.py:1596
 msgid "Allocates subnets for nearest centers. Center node must be opened (costs >= 0). Costs of center node are used in calculation."
-msgstr "Allouer les sous-réseaux pour le centre le plus proche. Le noeud centrql doit être ouvert (coûts >=0). Les coûts du noeud central sont utilisés dans les calculs."
+msgstr "Allouer les sous-réseaux pour le centre le plus proche. Le noeud central doit être ouvert (coûts >=0). Les coûts du noeud central sont utilisés dans les calculs."
 
 #: ../gui/wxpython/menustrings.py:657 ../gui/wxpython/menustrings.py:1597
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:651
@@ -8295,7 +8295,7 @@ msgstr "Superposer des cartes vectorielles"
 
 #: ../gui/wxpython/menustrings.py:686 ../gui/wxpython/menustrings.py:1626
 msgid "Clip vector maps"
-msgstr "rogner les cartes vecteur"
+msgstr "Rogner les cartes vecteur"
 
 #: ../gui/wxpython/menustrings.py:687 ../gui/wxpython/menustrings.py:1627
 msgid "Extracts features of input map which overlay features of clip map."
@@ -9009,7 +9009,7 @@ msgstr "Gérer les points de correction 3D"
 
 #: ../gui/wxpython/menustrings.py:818 ../gui/wxpython/menustrings.py:1758
 msgid "Georectifies a map and allows managing GCP for 3D correction."
-msgstr "Géorectifie une carte et permet de gérdr les points de correction 3D."
+msgstr "Géorectifie une carte et permet de gérder les points de correction 3D."
 
 #: ../gui/wxpython/menustrings.py:819 ../gui/wxpython/menustrings.py:1759
 msgid "Corrects scanning distortions"
@@ -9833,7 +9833,7 @@ msgstr "Référencer des cartes dans les jeux de données"
 
 #: ../gui/wxpython/menustrings.py:965 ../gui/wxpython/menustrings.py:1905
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
-msgstr "Assigne les dates et référence les cartes raster, vecteur et raster3d dans un jeu de données temporel."
+msgstr "Assigner des horodatages et enregistrer des cartes raster, vecteur et raster3d dans un jeu de données temporel."
 
 #: ../gui/wxpython/menustrings.py:966 ../gui/wxpython/menustrings.py:1906
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:951
@@ -10749,7 +10749,7 @@ msgstr "Importer des données raster en utilisant la lirairie GDAL et la reproje
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:64
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1065
 msgid "Imports a raster map as GRASS GIS specific archive file (packed with r.pack)"
-msgstr "Importer une carte raster en tant qu'archive GRASS GIS (empaquetée avec r.pack)"
+msgstr "Importe un fichier d'archive raster GRASS (empaqueté avec r.pack) en tant que carte raster"
 
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:71
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1072
@@ -13115,7 +13115,7 @@ msgstr "Désactiver l'écrasement"
 
 #: ../gui/wxpython/gui_core/pyedit.py:584
 msgid "GRASS GIS Simple Python Editor"
-msgstr "SIG GRASS Editeur Python"
+msgstr "SIG GRASS Editeur Python simple"
 
 #: ../gui/wxpython/gui_core/menu.py:153
 msgid "Double-click or Ctrl-Enter to run selected module"

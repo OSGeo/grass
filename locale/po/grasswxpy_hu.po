@@ -12985,7 +12985,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:584
 msgid "GRASS GIS Simple Python Editor"
-msgstr ""
+msgstr "GRASS GIS Egyszerű Python szerkesztő"
 
 #: ../gui/wxpython/gui_core/menu.py:153
 msgid "Double-click or Ctrl-Enter to run selected module"
