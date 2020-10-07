@@ -10380,3 +10380,6 @@ msgstr "options : arch, build, compilateur, path, révision, révision_svn, vers
 
 #~ msgid "Name <%s> is not SQL compliant. Must start with a letter."
 #~ msgstr "Le nom <%s> n'est pas compatible avec le SQL. Il doit commencer par une lettre."
+
+#~ msgid "Maximum memory to be used (in MB)"
+#~ msgstr "Maximum de mémoire à utiliser (en MB)"

@@ -39450,7 +39450,7 @@ msgstr ""
 
 #: ../vector/v.out.postgis/main.c:52
 msgid "Exports a vector map layer to PostGIS feature table."
-msgstr ""
+msgstr "将矢量地图导出为PostGIS格式数据。"
 
 #: ../vector/v.out.postgis/main.c:103
 #, c-format
