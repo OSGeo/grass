@@ -4440,7 +4440,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:37 ../gui/wxpython/menustrings.py:1054
 msgid "Simplified raster import with reprojection"
-msgstr ""
+msgstr "재투영과 동시에 단순화된 래스터 가져오기"
 
 #: ../gui/wxpython/menustrings.py:38 ../gui/wxpython/menustrings.py:40
 #: ../gui/wxpython/menustrings.py:1055 ../gui/wxpython/menustrings.py:1057
@@ -4451,7 +4451,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:39 ../gui/wxpython/menustrings.py:1056
 msgid "Import of common raster formats"
-msgstr ""
+msgstr "일반적인 래스터 서식 가져오기"
 
 #: ../gui/wxpython/menustrings.py:41 ../gui/wxpython/menustrings.py:1058
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:42
@@ -4612,7 +4612,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:67 ../gui/wxpython/menustrings.py:1084
 msgid "Simplified vector import with reprojection"
-msgstr ""
+msgstr "재투영과 동시에 단순화된 벡터 가져오기"
 
 #: ../gui/wxpython/menustrings.py:68 ../gui/wxpython/menustrings.py:70
 #: ../gui/wxpython/menustrings.py:1085 ../gui/wxpython/menustrings.py:1087
@@ -4623,7 +4623,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:69 ../gui/wxpython/menustrings.py:1086
 msgid "Import of common vector formats"
-msgstr ""
+msgstr "일반적인 벡터 서식 가져오기"
 
 #: ../gui/wxpython/menustrings.py:71 ../gui/wxpython/menustrings.py:1088
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:72
@@ -5535,11 +5535,11 @@ msgstr "위도 및 경도를 이용한 영역 보기"
 
 #: ../gui/wxpython/menustrings.py:221 ../gui/wxpython/menustrings.py:1198
 msgid "Show current region extent in Map Display"
-msgstr ""
+msgstr "지도 디스플레이 내 현재 영역의 범위 보기"
 
 #: ../gui/wxpython/menustrings.py:222 ../gui/wxpython/menustrings.py:1199
 msgid "Shows the extent of the computational region in Map Display."
-msgstr ""
+msgstr "지도 디스플레이 내 계산 영역의 범위를 보여 줍니다."
 
 #: ../gui/wxpython/menustrings.py:223 ../gui/wxpython/menustrings.py:1200
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:219
@@ -8008,7 +8008,7 @@ msgstr "서브넷 할당"
 
 #: ../gui/wxpython/menustrings.py:656 ../gui/wxpython/menustrings.py:1596
 msgid "Allocates subnets for nearest centers. Center node must be opened (costs >= 0). Costs of center node are used in calculation."
-msgstr ""
+msgstr "최근접 중심을 위한 서브넷을 할당합니다. 중심 교점이 열려 있어야 합니다 (비용 >= 0). 중심 교점의 비용은 계산에 사용됩니다."
 
 #: ../gui/wxpython/menustrings.py:657 ../gui/wxpython/menustrings.py:1597
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:651
@@ -9725,7 +9725,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:965 ../gui/wxpython/menustrings.py:1905
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
-msgstr ""
+msgstr "타임스탬프를 할당하고 시공간 자료세트 안에 래스터, 벡터, 그리고 3차원 래스터 지도를 등록합니다."
 
 #: ../gui/wxpython/menustrings.py:966 ../gui/wxpython/menustrings.py:1906
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:951

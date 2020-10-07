@@ -5464,11 +5464,11 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:209
 msgid "Simple Python Editor"
-msgstr ""
+msgstr "Egyszerű Python szerkesztő"
 
 #: ../gui/wxpython/menustrings.py:210
 msgid "Launches Simple Python Editor."
-msgstr ""
+msgstr "Egyszerű Python szerkesztő indítása."
 
 #: ../gui/wxpython/menustrings.py:211
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:209
@@ -8182,7 +8182,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:686 ../gui/wxpython/menustrings.py:1626
 msgid "Clip vector maps"
-msgstr ""
+msgstr "Vektor térkép vágás"
 
 #: ../gui/wxpython/menustrings.py:687 ../gui/wxpython/menustrings.py:1627
 msgid "Extracts features of input map which overlay features of clip map."
@@ -8888,7 +8888,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:816 ../gui/wxpython/menustrings.py:1756
 msgid "Orthophoto tools"
-msgstr ""
+msgstr "Ortofotó eszközök"
 
 #: ../gui/wxpython/menustrings.py:817 ../gui/wxpython/menustrings.py:1757
 msgid "Manage GCPs for 3D correction"
@@ -8900,7 +8900,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:819 ../gui/wxpython/menustrings.py:1759
 msgid "Corrects scanning distortions"
-msgstr ""
+msgstr "Szkennelési torzítás korrekciója"
 
 #: ../gui/wxpython/menustrings.py:820 ../gui/wxpython/menustrings.py:1760
 msgid "Corrects scanning distortions of a scanned aerial photo."
@@ -12985,7 +12985,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:584
 msgid "GRASS GIS Simple Python Editor"
-msgstr ""
+msgstr "GRASS GIS Egyszerű Python szerkesztő"
 
 #: ../gui/wxpython/gui_core/menu.py:153
 msgid "Double-click or Ctrl-Enter to run selected module"

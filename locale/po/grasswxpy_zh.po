@@ -5025,7 +5025,7 @@ msgstr "导出为PostGIS格式数据"
 
 #: ../gui/wxpython/menustrings.py:137 ../gui/wxpython/menustrings.py:1154
 msgid "Exports a vector map layer to PostGIS feature table."
-msgstr ""
+msgstr "将矢量地图导出为PostGIS格式数据。"
 
 #: ../gui/wxpython/menustrings.py:139 ../gui/wxpython/menustrings.py:1156
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:139
