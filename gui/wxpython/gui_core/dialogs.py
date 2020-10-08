@@ -36,7 +36,7 @@ import six
 import wx
 
 from grass.script import core as grass
-from grass.script.utils import natural_sort, try_remove
+from grass.script.utils import naturally_sorted, try_remove
 
 from grass.pydispatch.signal import Signal
 
@@ -1562,7 +1562,7 @@ class MapLayersDialogBase(wx.Dialog):
         :param str mapset: mapset name
         """
         self.map_layers = grass.list_grouped(type=type)[mapset]
-        self.layers.Set(natural_sort(self.map_layers))
+        self.layers.Set(naturally_sorted(self.map_layers))
 
         # check all items by default
         for item in range(self.layers.GetCount()):
@@ -1628,7 +1628,7 @@ class MapLayersDialogBase(wx.Dialog):
                     list.append(layer)
             except:
                 pass
-        list = natural_sort(list)
+        list = naturally_sorted(list)
 
         self.layers.Set(list)
         self.OnSelectAll(None)
@@ -2587,7 +2587,7 @@ class DefaultFontDialog(wx.Dialog):
             fontlist.append(longname)
             fontdict[longname] = shortname
             fontdict_reverse[shortname] = longname
-        fontlist = natural_sort(list(set(fontlist)))
+        fontlist = naturally_sorted(list(set(fontlist)))
 
         return fontdict, fontdict_reverse, fontlist
 
