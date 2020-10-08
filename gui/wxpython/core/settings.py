@@ -25,10 +25,33 @@ import os
 import sys
 import copy
 import wx
+import json
 
 from core import globalvar
 from core.gcmd import GException, GError
 from core.utils import GetSettingsPath, PathJoin, rgb2str
+
+
+class SettingsJSONEncoder(json.JSONEncoder):
+    def iterencode(self, obj):
+        def color(item):
+            if isinstance(item, tuple):
+                return "#{0:02x}{1:02x}{2:02x}".format(*item)
+            if isinstance(item, list):
+                return [color(e) for e in item]
+            if isinstance(item, dict):
+                return {key: color(value) for key, value in item.items()}
+            else:
+                return item
+
+        return super(SettingsJSONEncoder, self).iterencode(color(obj))
+
+
+def settings_JSON_decode_hook(obj):
+    for k, v in obj.items():
+        if isinstance(v, str) and v.startswith('#') and len(v) == 7:
+            obj[k] = tuple(int(v.lstrip('#')[i:i + 2], 16) for i in (0, 2, 4))
+    return obj
 
 
 class Settings:
@@ -36,7 +59,8 @@ class Settings:
 
     def __init__(self):
         # settings file
-        self.filePath = os.path.join(GetSettingsPath(), 'wx')
+        self.filePath = os.path.join(GetSettingsPath(), 'wx.json')
+        self.legacyFilePath = os.path.join(GetSettingsPath(), 'wx')
 
         # key/value separator
         self.sep = ';'
@@ -150,7 +174,7 @@ class Settings:
             'appearance': {
                 'outputfont': {
                     'type': 'Courier New',
-                    'size': '10',
+                    'size': 10,
                 },
                 # expand/collapse element list
                 'elementListExpand': {
@@ -216,7 +240,7 @@ class Settings:
                     'selection': 0,
                 },
                 'nvizDepthBuffer': {
-                    'value': '16',
+                    'value': 16,
                 },
             },
             #
@@ -979,7 +1003,10 @@ class Settings:
         if settings is None:
             settings = self.userSettings
 
-        self._readFile(self.filePath, settings)
+        if os.path.exists(self.filePath):
+            self._readFile(settings)
+        elif os.path.exists(self.legacyFilePath):
+            self._readLegacyFile(settings)
 
         # set environment variables
         font = self.Get(group='display', key='font', subkey='type')
@@ -989,24 +1016,34 @@ class Settings:
         if enc:
             os.environ["GRASS_ENCODING"] = enc
 
-    def _readFile(self, filename, settings=None):
-        """Read settings from file to dict
+    def _readFile(self, settings=None):
+        """Read settings from file (wx.json) to dict,
+        assumes file exists.
 
-        :param filename: settings file path
+        :param settings: dict where to store settings (None for self.userSettings)
+        """
+        try:
+            with open(self.filePath, 'r') as f:
+                settings.update(json.load(f, object_hook=settings_JSON_decode_hook))
+        except json.JSONDecodeError as e:
+            sys.stderr.write(
+                _("Unable to read settings file <{path}>:\n{err}").format(path=self.filePath, err=e))
+
+    def _readLegacyFile(self, settings=None):
+        """Read settings from legacy file (wx) to dict,
+        assumes file exists.
+
         :param settings: dict where to store settings (None for self.userSettings)
         """
         if settings is None:
             settings = self.userSettings
 
-        if not os.path.exists(filename):
-            return
-
         try:
-            fd = open(filename, "r")
+            fd = open(self.legacyFilePath, "r")
         except IOError:
             sys.stderr.write(
                 _("Unable to read settings file <%s>\n") %
-                filename)
+                self.legacyFilePath)
             return
 
         try:
@@ -1034,7 +1071,7 @@ class Settings:
                 "Error: Reading settings from file <%(file)s> failed.\n"
                 "\t\tDetails: %(detail)s\n"
                 "\t\tLine: '%(line)s'\n") % {
-                'file': filename, 'detail': e, 'line': line},
+                'file': self.legacyFilePath, 'detail': e, 'line': line},
                 file=sys.stderr)
             fd.close()
 
@@ -1052,57 +1089,16 @@ class Settings:
             except:
                 GError(_('Unable to create settings directory'))
                 return
-
         try:
-            newline = '\n'
-            file = open(self.filePath, "w")
-            for group in list(settings.keys()):
-                for key in list(settings[group].keys()):
-                    subkeys = list(settings[group][key].keys())
-                    file.write('%s%s%s%s' % (group, self.sep, key, self.sep))
-                    for idx in range(len(subkeys)):
-                        value = settings[group][key][subkeys[idx]]
-                        if isinstance(value, dict):
-                            if idx > 0:
-                                file.write(
-                                    '%s%s%s%s%s' %
-                                    (newline, group, self.sep, key, self.sep))
-                            file.write('%s%s' % (subkeys[idx], self.sep))
-                            kvalues = list(settings[group][key][subkeys[idx]].keys())
-                            srange = range(len(kvalues))
-                            for sidx in srange:
-                                svalue = self._parseValue(
-                                    settings[group][key][
-                                        subkeys[idx]][
-                                        kvalues[sidx]])
-                                file.write('%s%s%s' % (kvalues[sidx], self.sep,
-                                                       svalue))
-                                if sidx < len(kvalues) - 1:
-                                    file.write('%s' % self.sep)
-                        else:
-                            if idx > 0 and isinstance(
-                                    settings[group][key][subkeys[idx - 1]],
-                                    dict):
-                                file.write(
-                                    '%s%s%s%s%s' %
-                                    (newline, group, self.sep, key, self.sep))
-                            value = self._parseValue(
-                                settings[group][key][subkeys[idx]])
-                            file.write(
-                                '%s%s%s' %
-                                (subkeys[idx], self.sep, value))
-                            if idx < len(subkeys) - 1 and not isinstance(
-                                    settings[group][key][subkeys[idx + 1]],
-                                    dict):
-                                file.write('%s' % self.sep)
-                    file.write(newline)
+            with open(self.filePath, 'w') as f:
+                print('dump')
+                json.dump(settings, f, indent=2, cls=SettingsJSONEncoder)
         except IOError as e:
             raise GException(e)
         except Exception as e:
             raise GException(_('Writing settings to file <%(file)s> failed.'
                                '\n\nDetails: %(detail)s') %
                              {'file': self.filePath, 'detail': e})
-        file.close()
         return self.filePath
 
     def _parseValue(self, value, read=False):
