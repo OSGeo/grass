@@ -332,16 +332,35 @@ def split(s):
 #    http://stackoverflow.com/questions/4836710/
 #    does-python-have-a-built-in-function-for-string-natural-sort/4836734#4836734
 def natural_sort(l):
-    """Returns sorted strings using natural sort
+    """Returns sorted list using natural sort
+    (deprecated, use naturally_sorted)
+    """
+    return naturally_sorted(l)
+
+
+def naturally_sorted(l, key=None):
+    """Returns sorted list using natural sort
+    """
+    copy_l = l[:]
+    naturally_sort(copy_l, key)
+    return copy_l
+
+
+def naturally_sort(l, key=None):
+    """Sorts lists using natural sort
     """
 
     def convert(text):
         return int(text) if text.isdigit() else text.lower()
 
-    def alphanum_key(key):
-        return [convert(c) for c in re.split('([0-9]+)', key)]
+    def alphanum_key(actual_key):
+        if key:
+            sort_key = key(actual_key)
+        else:
+            sort_key = actual_key
+        return [convert(c) for c in re.split('([0-9]+)', sort_key)]
 
-    return sorted(l, key=alphanum_key)
+    l.sort(key=alphanum_key)
 
 
 def get_lib_path(modname, libname=None):
