@@ -1515,13 +1515,13 @@ def verbosity():
     Currently, there are 5 levels of verbosity:
     -1 nothing will be printed (also fatal errors and warnings will be discarded)
 
-    0 only errors and warnings are printed, triggered by <tt>--q</tt> or <tt>--quiet</tt> flag.
+    0 only errors and warnings are printed, triggered by "--q" or "--quiet" flag.
 
     1 progress information (percent) and important messages will be printed
 
     2 all messages will be printed
 
-    3 also verbose messages will be printed. Triggered by <tt>--v or <tt>--verbose</tt> flag.
+    3 also verbose messages will be printed. Triggered by "--v" or "--verbose" flag.
     """
     vbstr = os.getenv('GRASS_VERBOSE')
     if vbstr:
