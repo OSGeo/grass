@@ -2403,9 +2403,6 @@ class LocationWizard(wx.Object):
                         'err': msg})
         else:  # -> canceled
             self.wizard.Destroy()
-            GMessage(parent=self.parent,
-                     message=_("Location wizard canceled. "
-                               "Location not created."))
 
         self.__cleanUp()
 
