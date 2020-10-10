@@ -33,7 +33,15 @@ from core.utils import GetSettingsPath, PathJoin, rgb2str
 
 
 class SettingsJSONEncoder(json.JSONEncoder):
+    """Custom JSON encoder"""
+    def default(self, obj):
+        """Encode not automatically serializable objects"""
+        if isinstance(obj, (wx.FontFamily, wx.FontStyle, wx.FontWeight)):
+            return int(obj)
+        return json.JSONEncoder.default(self, obj)
+
     def iterencode(self, obj):
+        """Encode color tuple"""
         def color(item):
             if isinstance(item, tuple):
                 return "#{0:02x}{1:02x}{2:02x}".format(*item)
@@ -48,6 +56,7 @@ class SettingsJSONEncoder(json.JSONEncoder):
 
 
 def settings_JSON_decode_hook(obj):
+    """Decode hex color saved in settings into tuple"""
     for k, v in obj.items():
         if isinstance(v, str) and v.startswith('#') and len(v) == 7:
             obj[k] = tuple(int(v.lstrip('#')[i:i + 2], 16) for i in (0, 2, 4))
@@ -1091,7 +1100,6 @@ class Settings:
                 return
         try:
             with open(self.filePath, 'w') as f:
-                print('dump')
                 json.dump(settings, f, indent=2, cls=SettingsJSONEncoder)
         except IOError as e:
             raise GException(e)
