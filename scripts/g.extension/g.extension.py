@@ -118,9 +118,16 @@
 #% description: Operate on toolboxes instead of single modules (experimental)
 #% suppress_required: yes
 #%end
+#%flag
+#% key: j
+#% description: Generates JSON file containing the download URLs of the official Addons
+#% guisection: Install
+#% suppress_required: yes
+#%end
+
 
 #%rules
-#% required: extension, -l, -c, -g, -a
+#% required: extension, -l, -c, -g, -a, -j
 #% exclusive: extension, -l, -c, -g
 #% exclusive: extension, -l, -c, -a
 #%end
@@ -168,7 +175,8 @@ HTTP_STATUS_CODES = list(http.HTTPStatus)
 
 def download_addons_paths_file(
         url, response_format, headers={}, *args, **kwargs):
-    """Download Add-Ons paths json file
+    """Generates JSON file containing the download URLs of the official
+    Addons
 
     :param str url: url address
     :param str response_format: content type
@@ -2217,6 +2225,11 @@ def main():
     # define path
     options['prefix'] = resolve_install_prefix(path=options['prefix'],
                                                to_system=flags['s'])
+
+    if flags['j']:
+        get_addons_paths(gg_addons_base_dir=options['prefix'])
+        return 0
+
     # list available extensions
     if flags['l'] or flags['c'] or (flags['g'] and not flags['a']):
         # using dummy extension, we don't need any extension URL now,
