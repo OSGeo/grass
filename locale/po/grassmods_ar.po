@@ -12241,7 +12241,7 @@ msgstr "عرض قائمة مستويات الكنتور"
 
 #: ../raster/r.contour/main.c:140
 #, fuzzy, c-format
-msgid "Neither <%s> nor <%s> option must be specified"
+msgid "Either <%s> or <%s> option must be specified"
 msgstr "طبقتين يجب تحديدهم"
 
 #: ../raster/r.contour/main.c:183 ../raster/r.stream.extract/close.c:194
