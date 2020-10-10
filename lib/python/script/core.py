@@ -8,7 +8,7 @@ Usage:
     from grass.script import core as grass
     grass.parser()
 
-(C) 2008-2014 by the GRASS Development Team
+(C) 2008-2020 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -1435,7 +1435,19 @@ def overwrite():
 
 
 def verbosity():
-    """Return the verbosity level selected by GRASS_VERBOSE"""
+    """Return the verbosity level selected by GRASS_VERBOSE
+
+    Currently, there are 5 levels of verbosity:
+    -1 nothing will be printed (also fatal errors and warnings will be discarded)
+
+    0 only errors and warnings are printed, triggered by "--q" or "--quiet" flag.
+
+    1 progress information (percent) and important messages will be printed
+
+    2 all messages will be printed
+
+    3 also verbose messages will be printed. Triggered by "--v" or "--verbose" flag.
+    """
     vbstr = os.getenv('GRASS_VERBOSE')
     if vbstr:
         return int(vbstr)
