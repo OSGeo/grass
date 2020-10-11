@@ -2403,9 +2403,6 @@ class LocationWizard(wx.Object):
                         'err': msg})
         else:  # -> canceled
             self.wizard.Destroy()
-            GMessage(parent=self.parent,
-                     message=_("Location wizard canceled. "
-                               "Location not created."))
 
         self.__cleanUp()
 
@@ -2555,17 +2552,6 @@ class LocationWizard(wx.Object):
                            (_("Unable to create new GRASS Database"),
                             database))
                     return None
-
-            wx.MessageBox(
-                parent=self.wizard,
-                message=_(
-                    "Location <%(loc)s> will be created "
-                    "in GIS data directory <%(dir)s>. "
-                    "You will need to change the default GIS "
-                    "data directory in the GRASS startup screen.") %
-                {'loc': location, 'dir': database},
-                caption=_("New GIS data directory"),
-                style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
 
             # location created in alternate GISDbase
             self.altdb = True
