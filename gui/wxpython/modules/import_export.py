@@ -464,6 +464,7 @@ class GdalImportDialog(ImportDialog):
     def reload(self, data, listData):
 
         self.list.LoadData(listData)
+        self.list.SelectAll(select=True)
         self.layersData = data
 
     def OnRun(self, event):
@@ -614,6 +615,7 @@ class OgrImportDialog(ImportDialog):
     def reload(self, data, listData):
 
         self.list.LoadData(listData)
+        self.list.SelectAll(select=True)
         self.layersData = data
 
     def OnRun(self, event):
@@ -955,6 +957,7 @@ class ReprojectionDialog(wx.Dialog):
             self.list.SetColumnWidth(col=i, width=width[i])
 
         self.list.LoadData(data)
+        self.list.SelectAll(True)
 
         self.labelText = StaticText(parent=self.panel, id=wx.ID_ANY, label=_(
             "Projection of following layers do not match with projection of current location. "))
