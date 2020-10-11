@@ -2553,17 +2553,6 @@ class LocationWizard(wx.Object):
                             database))
                     return None
 
-            wx.MessageBox(
-                parent=self.wizard,
-                message=_(
-                    "Location <%(loc)s> will be created "
-                    "in GIS data directory <%(dir)s>. "
-                    "You will need to change the default GIS "
-                    "data directory in the GRASS startup screen.") %
-                {'loc': location, 'dir': database},
-                caption=_("New GIS data directory"),
-                style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
-
             # location created in alternate GISDbase
             self.altdb = True
 
