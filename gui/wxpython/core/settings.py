@@ -33,9 +33,16 @@ from core.utils import GetSettingsPath, PathJoin, rgb2str
 
 
 class SettingsJSONEncoder(json.JSONEncoder):
-    """Custom JSON encoder"""
+    """Custom JSON encoder.
+
+    Encodes color represented internally as tuple
+    to hexadecimal color (tuple is represented as
+    list in JSON, however GRASS expects tuple for colors).
+    """
     def default(self, obj):
-        """Encode not automatically serializable objects"""
+        """Encode not automatically serializable objects.
+        """
+        # we could use dictionary mapping as in wxplot
         if isinstance(obj, (wx.FontFamily, wx.FontStyle, wx.FontWeight)):
             return int(obj)
         return json.JSONEncoder.default(self, obj)
@@ -44,7 +51,10 @@ class SettingsJSONEncoder(json.JSONEncoder):
         """Encode color tuple"""
         def color(item):
             if isinstance(item, tuple):
-                return "#{0:02x}{1:02x}{2:02x}".format(*item)
+                if len(item) == 3:
+                    return "#{0:02x}{1:02x}{2:02x}".format(*item)
+                if len(item) == 4:
+                    return "#{0:02x}{1:02x}{2:02x}{3:02x}".format(*item)
             if isinstance(item, list):
                 return [color(e) for e in item]
             if isinstance(item, dict):
@@ -57,9 +67,12 @@ class SettingsJSONEncoder(json.JSONEncoder):
 
 def settings_JSON_decode_hook(obj):
     """Decode hex color saved in settings into tuple"""
+    def colorhex2tuple(hexcode):
+        return tuple(int(hexcode.lstrip('#')[i:i + 2], 16) for i in range(0, len(hexcode) - 2, 2))
+
     for k, v in obj.items():
-        if isinstance(v, str) and v.startswith('#') and len(v) == 7:
-            obj[k] = tuple(int(v.lstrip('#')[i:i + 2], 16) for i in (0, 2, 4))
+        if isinstance(v, str) and v.startswith('#') and len(v) in [7, 9]:
+            obj[k] = colorhex2tuple(v)
     return obj
 
 
