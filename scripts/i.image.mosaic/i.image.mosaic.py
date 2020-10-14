@@ -45,7 +45,7 @@ def copy_colors(fh, map, offset):
             if f[0] in ['nv', 'default']:
                 continue
             f[0] = str(float(f[0]) + offset)
-        out = ' '.join(f) + '\n' 
+        out = ' '.join(f) + '\n'
         fh.write(out.encode('utf-8'))
     p.wait()
 
