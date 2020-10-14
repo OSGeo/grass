@@ -44,7 +44,7 @@ class Layer(object):
         return self._pydata[0].keys()
 
     def __str__(self):
-        return self.maplayer.name
+        return '' if self.maplayer.name is None else self.maplayer.name
 
 
 class LayerList(object):
@@ -187,6 +187,8 @@ class LayerManagerGrassInterface(object):
         # attributes: name: map name, ltype: map type,
         # add: if map should be added to layer tree (questionable attribute)
         self.mapCreated = Signal('LayerManagerGrassInterface.mapCreated')
+
+        self.currentMapsetChanged = Signal('LayerManagerGrassInterface.currentMapsetChanged')
 
         # Signal emitted to request updating of map
         self.updateMap = Signal('LayerManagerGrassInterface.updateMap')

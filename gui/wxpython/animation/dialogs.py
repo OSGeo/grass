@@ -1189,6 +1189,7 @@ class ExportDialog(wx.Dialog):
         choices = [_("image sequence"), _("animated GIF"), _("SWF"), _("AVI")]
         self.formatChoice = wx.Choice(parent=panel, id=wx.ID_ANY,
                                       choices=choices)
+        self.formatChoice.SetSelection(0)
         self.formatChoice.Bind(
             wx.EVT_CHOICE,
             lambda event: self.ChangeFormat(
@@ -1527,12 +1528,25 @@ class ExportDialog(wx.Dialog):
                         "Export directory is missing."))
                 return
         elif self.formatChoice.GetSelection() == 1:
-            if not self.gifBrowse.GetValue():
-                GError(parent=self, message=_("Export file is missing."))
+            if not self._export_file_validation(
+                    filebrowsebtn=self.gifBrowse,
+                    file_path=self.gifBrowse.GetValue(),
+                    file_postfix='.gif',
+            ):
                 return
         elif self.formatChoice.GetSelection() == 2:
-            if not self.swfBrowse.GetValue():
-                GError(parent=self, message=_("Export file is missing."))
+            if not self._export_file_validation(
+                    filebrowsebtn=self.swfBrowse,
+                    file_path=self.swfBrowse.GetValue(),
+                    file_postfix='.swf',
+            ):
+                return
+        elif self.formatChoice.GetSelection() == 3:
+            if not self._export_file_validation(
+                    filebrowsebtn=self.aviBrowse,
+                    file_path=self.aviBrowse.GetValue(),
+                    file_postfix='.avi',
+            ):
                 return
 
         # hide only to keep previous values
@@ -1583,6 +1597,59 @@ class ExportDialog(wx.Dialog):
         self.hidevbox.Show(self.posBox, False)
         self.hidevbox.Show(self.informBox, True)
         self.hidevbox.Layout()
+
+    def _export_file_validation(self, filebrowsebtn, file_path,
+                                file_postfix):
+        """File validation before export
+
+        :param obj filebrowsebutton: filebrowsebutton widget
+        :param str file_path: exported file path
+        :param str file_postfix: exported file postfix
+        (.gif, .swf, .avi)
+
+        :return bool: True if validation is ok
+        """
+
+        file_path_does_not_exist_err_message = _(
+            "Exported file directory '{base_dir}' "
+            "does not exist."
+        )
+        if not file_path:
+            GError(parent=self, message=_("Export file is missing."))
+            return False
+        else:
+            if not file_path.endswith(file_postfix):
+                filebrowsebtn.SetValue(file_path + file_postfix)
+                file_path += file_postfix
+
+            base_dir = os.path.dirname(file_path)
+            if not os.path.exists(base_dir):
+                GError(
+                    parent=self,
+                    message=file_path_does_not_exist_err_message.format(
+                        base_dir=base_dir,
+                    ),
+                )
+                return False
+
+            if os.path.exists(file_path):
+                overwrite_dlg = wx.MessageDialog(
+                    self.GetParent(),
+                    message=_(
+                        "Exported animation file <{file}> exists. "
+                        "Do you want to overwrite it?".format(
+                            file=file_path,
+                        ),
+                    ),
+                    caption=_("Overwrite?"),
+                    style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
+                )
+                if not overwrite_dlg.ShowModal() == wx.ID_YES:
+                    overwrite_dlg.Destroy()
+                    return False
+                overwrite_dlg.Destroy()
+
+        return True
 
 
 class AnimSimpleLayerManager(SimpleLayerManager):
@@ -2030,7 +2097,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.tempFormat.Bind(
             wx.EVT_TEXT, lambda evt: self._setTimeFormat(
                 self.tempFormat.GetValue()))
-        self.tempFormat.SetToolTipString(
+        self.tempFormat.SetToolTip(
             _(
                 "Click and then press key up or down to preview "
                 "different date and time formats. "

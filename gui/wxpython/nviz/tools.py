@@ -55,12 +55,9 @@ from gui_core.gselect import Select
 from gui_core.wrap import Window, SpinCtrl, PseudoDC, ToggleButton, Button, \
     TextCtrl, StaticText, StaticBox, CheckListBox, ColourSelect
 from core.debug import Debug
-try:
-    from nviz.mapwindow import wxUpdateProperties, wxUpdateView,\
-        wxUpdateLight, wxUpdateCPlane
-    import wxnviz
-except ImportError:
-    pass
+from nviz.mapwindow import wxUpdateProperties, wxUpdateView,\
+    wxUpdateLight, wxUpdateCPlane
+from .wxnviz import DM_FLAT, DM_GOURAUD, MAX_ISOSURFS
 
 
 class NvizToolWindow(FN.FlatNotebook):
@@ -2714,7 +2711,9 @@ class NvizToolWindow(FN.FlatNotebook):
         for vtype in ('points', 'lines'):
             checklist = self.FindWindowById(
                 self.win['vector'][vtype]['surface'])
-            checklist.Delete(checklist.FindString(name))
+            item = checklist.FindString(name)
+            if item > wx.NOT_FOUND:
+                checklist.Delete(item)
 
         if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
@@ -4240,7 +4239,7 @@ class NvizToolWindow(FN.FlatNotebook):
         delete = self.FindWindowById(self.win['volume']['btnDelete'])
         moveDown = self.FindWindowById(self.win['volume']['btnMoveDown'])
         moveUp = self.FindWindowById(self.win['volume']['btnMoveUp'])
-        if nitems >= wxnviz.MAX_ISOSURFS:
+        if nitems >= MAX_ISOSURFS:
             # disable add button on max
             add.Enable(False)
         else:
@@ -4317,9 +4316,9 @@ class NvizToolWindow(FN.FlatNotebook):
 
         mode = 0
         if selection == 0:
-            mode |= wxnviz.DM_FLAT
+            mode |= DM_FLAT
         else:
-            mode |= wxnviz.DM_GOURAUD
+            mode |= DM_GOURAUD
 
         if self.FindWindowById(self.win['volume']['draw'][
                                'mode']).GetSelection() == 0:

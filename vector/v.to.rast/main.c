@@ -107,14 +107,7 @@ int main(int argc, char *argv[])
     val_opt->answer = "1";
     val_opt->description = _("Raster value (for use=val)");
     
-    memory = G_define_option();
-    memory->key = "memory";
-    memory->type = TYPE_INTEGER;
-    memory->required = NO;
-    memory->multiple = NO;
-    memory->answer = "300";
-    memory->label = _("Maximum memory to be used (in MB)");
-    memory->description = _("Cache size for raster rows");
+    memory = G_define_standard_option(G_OPT_MEMORYMB);
 
     dense_flag = G_define_flag();
     dense_flag->key = 'd';

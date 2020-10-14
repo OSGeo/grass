@@ -1126,6 +1126,7 @@ class TestCase(unittest.TestCase):
     # but for "integration" tests  (script-like tests with more than one module)
     # it would be better to be able to use this multiple times
     # TODO: enable merging streams?
+
     def assertModule(self, module, msg=None, **kwargs):
         """Run PyGRASS module in controlled way and assert non-zero return code.
 

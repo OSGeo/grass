@@ -15,24 +15,12 @@ Please allow us to extend our most cordial thanks to all of you. If
 you contributed to GRASS at any point during its existence, please let
 us know your name and e-mail address so we can add your name.
 
-Active parts of the program have authors dating back to GRASS's
-inception in 1982. Please check the GRASS 1.x - 7.x credits list at:
- http://grass.osgeo.org/home/credits/
 
+GRASS 7+ major project contributors
+------------------------------------
 
-GRASS 6.0 was made up of entirely new code for much of the vector and 
-database management subsystems. The raster, display, and projection 
-subsystems are largely directly inherited from GRASS 5.4 without change. 
-The core GIS, GUI, and build subsystems are a hybrid of old and new code.
-
-Thus we must also thank and credit the members of the 5.0 + 6.x core
-development team, listed below, as many are still active in the
-project and GRASS GIS owes much of itself to the generosity of their
-bright minds.
-
-
-Email addresses below have been spam-proofed to protect the innocent;
-add "@" and "." as needed.
+A list of recently active contributors is available at
+https://github.com/OSGeo/grass/graphs/contributors
 
 A list of contributors with write access is available in
 https://github.com/OSGeo/grass/blob/master/contributors.csv
@@ -43,8 +31,10 @@ https://github.com/OSGeo/grass/blob/master/contributors_extra.csv
 A list of translators is available in
 https://github.com/OSGeo/grass/blob/master/translators.csv
 
+(note: email addresses below have been spam-proofed to protect the innocent;
+add "@" and "." as needed.)
 
-Summary view:
+Summary view (sometimes outdated):
 https://www.openhub.net/p/grass_gis
 
 
@@ -70,7 +60,7 @@ INSTITUTIONAL SUPPORT
  - The Open Source Geospatial Foundation (http://www.osgeo.org)
 
 FURTHER CONTRIBUTORS
- - See: http://grass.osgeo.org/home/credits/
+ - See: https://grass.osgeo.org/about/credits/
 
 [please complete and correct as needed !]
 
@@ -80,7 +70,7 @@ Google Summer of Code awards
  See https://trac.osgeo.org/grass/wiki/GSoC
  - Wolf Bergenheim, Anne Ghisla, Hamish Bowman: Mentor team leads
  - Anna Petrasova: 3D raster flow line computation; 2014
- - Matej Krejci: Metadata for GRASS GIS maps and datasets; 2014
+ - Matej Krejci: Metadata for GRASS GIS maps and datasets; 2014, 2015
  - Vaclav Petras: Testing framework for GRASS GIS; 2014
  - Thomas Leppelt: Temporal algebra; 2013
  - Stepan Turek: GUI analysis tools; 2012, 2013
@@ -98,15 +88,21 @@ Google Summer of Code awards
  - Martin Landa: wxNVIZ; 2008, 2010
  - Daniel Bundala: v.generalize; 2007
  - Maximilian Maldacke: v.net.visibility; 2007
-
+ - Adam Laža: cartography suite in GRASS GIS wxGUI; 2016
+ - Ondřej Pešek: PyQt implementation of GUI forms generated automatically from XML; 2016
+ - Mayank Agrawal: WebGRASS; 2016
+ - Zechariah Krautwurst: GRASS GIS Locations Created From Public Data; 2017
+ - Ondřej Pešek: SOS tools in GRASS GIS; 2017
+ - Roberta Fagadini: Sentinel-2 cloud and shadow detection; 2018
+ - Sanjeet Bhatti: Full support of Python 3; 2018
 
 
 Contributions specific to GRASS 6.2 - 6.4
 -----------------------------------------
-[work in progress: please complete and correct, this list may be incomplete]
+[please complete and correct as this list may be incomplete]
 
 INSTITUTIONAL SUPPORT
- - The Open Source Geospatial Foundation (http://www.osgeo.org)
+ - The Open Source Geospatial Foundation (https://www.osgeo.org)
 
 Additional authors:
 
@@ -275,7 +271,7 @@ GRASS GIS 5.4 Author List
 -------------------------
 
 Please check additionally the GRASS 1.x-5.0 credits list at:
- http://grass.osgeo.org/home/credits/
+ https://grass.osgeo.org/about/credits/
 
 While it is impossible for us to give credit to everyone (past 
 and present) who has contributed to GRASS, the following is the 
@@ -363,7 +359,7 @@ Former GRASS 4.2.0 development:
 Former GRASS 4 development (1984 to 1995):
    U.S. Army Construction Engineering Research Laboratories  (CERL)
    Jim Westervelt, Michael Shapiro, Chris Rewerts, Robert Lozar, David Gerdes, ...
-   See: http://grass.osgeo.org/home/credits/
+   See: https://grass.osgeo.org/about/credits/
 
 Former Institutions
  - University of Illinois at Urbana-Champaign, USA
@@ -381,16 +377,39 @@ Former Institutions
  - Baylor University: Hosting the user mailing list, 1998-5/2006
 
 
-Contact:
+
+GRASS 5 and 6 major project contributors
+----------------------------------------
+
+Thus we must thank and credit the members of the 5.0 + 6.x core
+development team, listed below, as many are still active in the
+project and GRASS GIS owes much of itself to the generosity of their
+bright minds.
+
+GRASS 6.0 was made up of entirely new code for much of the vector and 
+database management subsystems. The raster, display, and projection 
+subsystems are largely directly inherited from GRASS 5.4 without change. 
+The core GIS, GUI, and build subsystems are a hybrid of old and new code.
+
+
+
+GRASS 1 to 4 major project contributors
+---------------------------------------
+
+Active parts of the program have authors dating back to GRASS's
+inception in 1982. Please check the GRASS GIS credits list at:
+ https://grass.osgeo.org/home/credits/
+
+
+Contact
+-------
 
  GRASS Development Team
  c/o Markus Neteler
- Fondazione Edmund Mach (FEM)
- Research and Innovation Centre
- 38010 S. Michele all'Adige (Trento), Italy
+ mundialis GmbH & Co. KG
+ Kölnstrasse 99
+ 53111 Bonn, Germany
  neteler AT osgeo.org
 
-Internet:  http://grass.osgeo.org/   (main site)
-           http://grass.osgeo.org/mirrors/ (list of mirrors)
-
-with a worldwide distribution network.
+Internet:  https://grass.osgeo.org/   (main site)
+           https://github.com/OSGeo/grass/ (main source code repository)

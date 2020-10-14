@@ -28,6 +28,13 @@ except ImportError:
 
 class TestSearchModule(TestCase):
 
+    def test_all_output(self):
+        module = SimpleModule('g.search.modules', flags="g")
+        self.assertModule(module)
+        stdout = decode(module.outputs.stdout).split()
+        # we expect at least 100 hits since we search for all modules
+        assert(len(stdout) > 100)
+
     def test_terminal_output(self):
         """ """
         module = SimpleModule('g.search.modules', keyword="water")
@@ -44,7 +51,7 @@ class TestSearchModule(TestCase):
         self.assertEqual(stdout[3]['name'], 'r.water.outlet', 'r.water.outlet')
         self.assertTrue('keywords' in stdout[3]['attributes'])
 
-    def test_shell_outout(self):
+    def test_shell_output(self):
         module = SimpleModule('g.search.modules', keyword="water", flags="g")
         self.assertModule(module)
         stdout = decode(module.outputs.stdout).split()

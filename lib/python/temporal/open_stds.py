@@ -120,7 +120,7 @@ def check_new_stds(name, type, dbif=None, overwrite=False):
             msgr.fatal(_("Illegal dataset name <{}>. "
                          "Character '.' not allowed.").format(name))
         sp = dataset_factory("strds", id)
-    elif type == "str3ds" or type == "raster3d" or type == "rast3d "or type == "raster_3d":
+    elif type == "str3ds" or type == "raster3d" or type == "rast3d " or type == "raster_3d":
         sp = dataset_factory("str3ds", id)
     elif type == "stvds" or type == "vect" or type == "vector":
         sp = dataset_factory("stvds", id)

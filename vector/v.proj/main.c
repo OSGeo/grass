@@ -36,7 +36,6 @@ int main(int argc, char *argv[])
 {
     int i, type, stat;
     int day, yr, Out_proj;
-    int out_zone = 0;
     int overwrite;		/* overwrite output map */
     const char *mapset;
     const char *omap_name, *map_name, *iset_name, *iloc_name;
@@ -232,9 +231,12 @@ int main(int argc, char *argv[])
 	    exit(EXIT_FAILURE);
 
 	/* apparently the +over switch must be set in the input projection,
-	 * not the output latlon projection */
+	 * not the output latlon projection
+	 * TODO: for PROJ 6+, the +over switch must be added to the
+	 * transformation pipeline if authority:name or WKt are used as
+	 * crs definition */
 	if (Out_proj == PROJECTION_LL && nowrap == 1)
-	    G_set_key_value("+over", "defined", in_proj_keys);
+	    G_set_key_value("over", "defined", in_proj_keys);
 
 	in_unit_keys = G_get_projunits();
 	if (in_unit_keys == NULL)
@@ -408,8 +410,7 @@ int main(int argc, char *argv[])
     Vect_hist_copy(&Map, &Out_Map);
     Vect_hist_command(&Out_Map);
 
-    out_zone = info_out.zone;
-    Vect_set_zone(&Out_Map, out_zone);
+    Vect_set_zone(&Out_Map, G_zone());
 
     /* Read and write header info */
     sprintf(date, "%s", G_date());

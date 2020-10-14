@@ -135,6 +135,7 @@ class RasterRow(RasterAbstractBase):
         False
 
     """
+
     def __init__(self, name, mapset='', *args, **kargs):
         super(RasterRow, self).__init__(name, mapset, *args, **kargs)
 
@@ -229,6 +230,7 @@ class RasterRowIO(RasterRow):
     """Raster_row_cache_access": The same as "Raster_row_access" but uses
     the ROWIO library for cached row access
     """
+
     def __init__(self, name, *args, **kargs):
         self.rowio = RowIO()
         super(RasterRowIO, self).__init__(name, *args, **kargs)
@@ -308,6 +310,7 @@ class RasterSegment(RasterAbstractBase):
           faster
 
     """
+
     def __init__(self, name, srows=64, scols=64, maxmem=100,
                  *args, **kargs):
         self.segment = Segment(srows, scols, maxmem)

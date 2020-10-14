@@ -247,6 +247,11 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                         "and restart GUI.")
             GMessage(message)
 
+    def GetContentScaleFactor(self):
+        if sys.platform == "darwin" and not CheckWxVersion(version=[4, 1, 0]):
+            return 1
+        return super().GetContentScaleFactor()
+
     def InitFly(self):
         """Initialize fly through dictionary"""
         fly = {'interval': 10,             # interval for timerFly
@@ -1345,6 +1350,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             except GException as e:
                 GError(parent=self,
                        message=e.value)
+            # when nviz.tools is not yet ready
+            # during opening 3D view 2nd time
+            except:
+                pass
 
         stop = grass.clock()
 

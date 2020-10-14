@@ -4,12 +4,12 @@ Functions to use GRASS 2D and 3D rasters with NumPy.
 Usage:
 
 >>> from __future__ import print_function
->>> import grass.script as gscript
+>>> import grass.script as gs
 >>> from grass.script import array as garray
 >>>
 >>> # We create a temporary region that is only valid in this python session
-... gscript.use_temp_region()
->>> gscript.run_command("g.region", n=80, e=120, t=60, s=0, w=0, b=0, res=20, res3=20)
+... gs.use_temp_region()
+>>> gs.run_command("g.region", n=80, e=120, t=60, s=0, w=0, b=0, res=20, res3=20)
 0
 >>>
 >>> # Lets create a raster map numpy array
@@ -124,8 +124,8 @@ from grass.exceptions import CalledModuleError
 ###############################################################################
 
 class _tempfile(object):
-    def __init__(self):
-        self.filename = gcore.tempfile()
+    def __init__(self, env=None):
+        self.filename = gcore.tempfile(env=env)
 
     def __del__(self):
         try_remove(self.filename)
@@ -133,18 +133,19 @@ class _tempfile(object):
 ###############################################################################
 
 class array(numpy.memmap):
-    def __new__(cls, mapname=None, null=None, dtype=numpy.double):
+    def __new__(cls, mapname=None, null=None, dtype=numpy.double, env=None):
         """Define new numpy array
 
         :param cls:
         :param dtype: data type (default: numpy.double)
+        :param env: environment
         """
-        reg = gcore.region()
+        reg = gcore.region(env=env)
         r = reg['rows']
         c = reg['cols']
         shape = (r, c)
 
-        tempfile = _tempfile()
+        tempfile = _tempfile(env)
         if mapname:
             kind = numpy.dtype(dtype).kind
             size = numpy.dtype(dtype).itemsize
@@ -167,7 +168,8 @@ class array(numpy.memmap):
                 bytes=size,
                 null=null,
                 quiet=True,
-                overwrite=True)
+                overwrite=True,
+                env=env)
 
         self = numpy.memmap.__new__(
             cls,
@@ -178,6 +180,7 @@ class array(numpy.memmap):
 
         self.tempfile = tempfile
         self.filename = tempfile.filename
+        self._env = env
         return self
 
     def read(self, mapname, null=None):
@@ -253,7 +256,7 @@ class array(numpy.memmap):
         else:
             raise ValueError(_('Invalid kind <%s>') % kind)
 
-        reg = gcore.region()
+        reg = gcore.region(env=self._env)
 
         try:
             gcore.run_command(
@@ -271,7 +274,8 @@ class array(numpy.memmap):
                 east=reg['e'],
                 west=reg['w'],
                 rows=reg['rows'],
-                cols=reg['cols'])
+                cols=reg['cols'],
+                env=self._env)
         except CalledModuleError:
             return 1
         else:
@@ -281,11 +285,12 @@ class array(numpy.memmap):
 
 
 class array3d(numpy.memmap):
-    def __new__(cls, mapname=None, null=None, dtype=numpy.double):
+    def __new__(cls, mapname=None, null=None, dtype=numpy.double, env=None):
         """Define new 3d numpy array
 
         :param cls:
         :param dtype: data type (default: numpy.double)
+        :param env: environment
         """
         reg = gcore.region(True)
         r = reg['rows3']
@@ -316,7 +321,8 @@ class array3d(numpy.memmap):
                 bytes=size,
                 null=null,
                 quiet=True,
-                overwrite=True)
+                overwrite=True,
+                env=env)
 
         self = numpy.memmap.__new__(
             cls,
@@ -327,6 +333,7 @@ class array3d(numpy.memmap):
 
         self.tempfile = tempfile
         self.filename = tempfile.filename
+        self._env = env
 
         return self
 
@@ -398,7 +405,7 @@ class array3d(numpy.memmap):
         else:
             raise ValueError(_('Invalid kind <%s>') % kind)
 
-        reg = gcore.region(True)
+        reg = gcore.region(True, env=self._env)
 
         try:
             gcore.run_command(
@@ -418,7 +425,8 @@ class array3d(numpy.memmap):
                 west=reg['w'],
                 depths=reg['depths'],
                 rows=reg['rows3'],
-                cols=reg['cols3'])
+                cols=reg['cols3'],
+                env=self._env)
 
         except CalledModuleError:
             return 1

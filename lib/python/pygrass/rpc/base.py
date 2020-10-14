@@ -121,7 +121,7 @@ class RPCServerBase(object):
             time.sleep(0.2)
             self._check_restart_server(caller="Server check thread")
             self.threadLock.acquire()
-            if self.stopThread == True:
+            if self.stopThread is True:
                 self.threadLock.release()
                 return
             self.threadLock.release()
@@ -155,7 +155,7 @@ class RPCServerBase(object):
         self.start_server()
 
         if self.stopped is not True:
-            logging.warning("Needed to restart the libgis server, caller: %s"%(caller))
+            logging.warning("Needed to restart the libgis server, caller: %s" % (caller))
 
         self.threadLock.release()
         self.stopped = False
@@ -167,10 +167,10 @@ class RPCServerBase(object):
 
         try:
             ret = self.client_conn.recv()
-            if isinstance(ret,  FatalError):
+            if isinstance(ret, FatalError):
                 raise ret
             return ret
-        except (EOFError,  IOError,  FatalError) as e:
+        except (EOFError, IOError, FatalError) as e:
             # The pipe was closed by the checker thread because
             # the server process was killed
             raise FatalError("Exception raised: " + str(e) + " Message: " + message)

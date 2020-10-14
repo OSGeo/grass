@@ -103,7 +103,7 @@ def collect_map_names(sp, dbif, start, end, sampling):
 
 
 def aggregate_raster_maps(inputs, base, start, end, count, method,
-                          register_null, dbif,  offset=0):
+                          register_null, dbif, offset=0):
     """Aggregate a list of raster input maps with r.series
 
        :param inputs: The names of the raster maps to be aggregated
@@ -277,9 +277,9 @@ def aggregate_by_topology(granularity_list, granularity, map_list, topo_list,
 
         if aggregation_list:
             msgr.verbose(_("Aggregating %(len)i raster maps from %(start)s to"
-                           " %(end)s")  %({"len": len(aggregation_list),
+                           " %(end)s")  % ({"len": len(aggregation_list),
                            "start": str(granule.temporal_extent.get_start_time()),
-                           "end": str(granule.temporal_extent.get_end_time())}))
+                               "end": str(granule.temporal_extent.get_end_time())}))
 
             if granule.is_time_absolute() is True and time_suffix == 'gran':
                 suffix = create_suffix_from_datetime(granule.temporal_extent.get_start_time(),
@@ -315,16 +315,16 @@ def aggregate_by_topology(granularity_list, granularity, map_list, topo_list,
                 mod = copy.deepcopy(r_series)
                 mod(file=filename, output=output_name)
                 if len(aggregation_list) > int(file_limit):
-                    msgr.warning(_("The limit of open files (%i) was "\
-                                   "reached (%i). The module r.series will "\
-                                   "be run with flag z, to avoid open "\
-                                   "files limit exceeding."%(int(file_limit),
+                    msgr.warning(_("The limit of open files (%i) was "
+                                   "reached (%i). The module r.series will "
+                                   "be run with flag z, to avoid open "
+                                   "files limit exceeding." % (int(file_limit),
                                                              len(aggregation_list))))
                     mod(flags="z")
                 process_queue.put(mod)
             else:
                 mod = copy.deepcopy(g_copy)
-                mod(raster=[aggregation_list[0],  output_name])
+                mod(raster=[aggregation_list[0], output_name])
                 process_queue.put(mod)
 
     process_queue.wait()

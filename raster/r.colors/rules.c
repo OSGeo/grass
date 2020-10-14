@@ -30,8 +30,10 @@ static int read_rule(void *, DCELL, DCELL, DCELL *, int *, int *, int *,
 static void badrule(int, const char *, int);
 static int show_colors(FILE *);
 
+static int rule_is_percent = 0;
+
 int read_color_rules(FILE * fp, struct Colors *colors, DCELL min, DCELL max,
-		     int is_fp)
+		     int is_fp, int *is_percent)
 {
     DCELL rulemin, rulemax;
 
@@ -64,7 +66,76 @@ int read_color_rules(FILE * fp, struct Colors *colors, DCELL min, DCELL max,
 	G_warning(_("Your color rules do not cover the whole range of data!\n (rules %f to %f but data %f to %f)"),
 		  rulemin, rulemax, min, max);
 
+    *is_percent = rule_is_percent;
+
     return 1;
+}
+
+int check_percent_rule(const char *path)
+{
+    FILE *fp;
+    char buf[1024];
+
+    fp = fopen(path, "r");
+    if (!fp)
+	G_fatal_error(_("Unable to open color rule"));
+
+    rule_is_percent = 0;
+    while (G_getl2(buf, sizeof(buf), fp)) {
+	char value[80], color[80];
+	double x;
+	char c;
+
+	G_strip(buf);
+
+	if (*buf == '\0')
+	    continue;
+	if (*buf == '#')
+	    continue;
+
+	if (sscanf(buf, "%s %[^\n]", value, color) != 2)
+	    continue;
+
+	if (sscanf(value, "%lf%c", &x, &c) == 2 && c == '%') {
+	    rule_is_percent = 1;
+	    break;
+	}
+    }
+    fclose(fp);
+
+    return rule_is_percent;
+}
+
+void rescale_colors(struct Colors *colors_tmp, struct Colors *colors,
+                    double offset, double scale)
+{
+    int i, rcount;
+    unsigned char r1, g1, b1, r2, g2, b2;
+    int red, grn, blu;
+    DCELL dmin, dmax;
+
+    Rast_init_colors(colors_tmp);
+
+    Rast_get_default_color(&red, &grn, &blu, colors);
+    Rast_set_default_color(red, grn, blu, colors_tmp);
+
+    Rast_get_null_value_color(&red, &grn, &blu, colors);
+    Rast_set_null_value_color(red, grn, blu, colors_tmp);
+
+    rcount = Rast_colors_count(colors);
+    for (i = 0; i < rcount; i++) {
+
+	Rast_get_fp_color_rule(&dmin, &r1, &g1, &b1,
+			       &dmax, &r2, &g2, &b2,
+			       colors, i);
+
+	dmin = (dmin + offset) * scale;
+	dmax = (dmax + offset) * scale;
+
+	Rast_add_d_color_rule(&dmin, r1, g1, b1,
+			      &dmax, r2, g2, b2, colors_tmp);
+
+    }
 }
 
 static int read_rule(void *closure, DCELL min, DCELL max,
@@ -79,6 +150,9 @@ static int read_rule(void *closure, DCELL min, DCELL max,
     for (;;) {
 	char buf[1024];
 	int ret, i;
+	char value[80], color[80];
+	double x;
+	char c;
 
 	if (tty)
 	    fprintf(stderr, "> ");
@@ -111,6 +185,12 @@ static int read_rule(void *closure, DCELL min, DCELL max,
 	    fprintf(stderr, _("or an R:G:B triplet, e.g.: 0:127:255\n"));
 
 	    continue;
+	}
+
+	if (sscanf(buf, "%s %[^\n]", value, color) == 2) {
+	    if (sscanf(value, "%lf%c", &x, &c) == 2 && c == '%') {
+		rule_is_percent = 1;
+	    }
 	}
 
 	ret =

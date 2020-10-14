@@ -113,6 +113,15 @@ class Settings:
                     },
                 },
             },
+            #
+            # datacatalog
+            #
+            'datacatalog': {
+                # grassdb string
+                'grassdbs': {
+                    'listAsString': ""
+                },
+            },
             'manager': {
                 # show opacity level widget
                 'changeOpacityLevel': {
@@ -623,6 +632,9 @@ class Settings:
                     'unused': True,
                     'size': 8,
                     'width': 2,
+                },
+                'map': {
+                    'overwrite': False,
                 },
             },
             'nviz': {

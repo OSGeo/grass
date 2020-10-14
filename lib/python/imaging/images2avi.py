@@ -42,7 +42,9 @@ import os
 import time
 import subprocess
 import shutil
+
 from grass.imaging import images2ims
+import grass.script as gscript
 
 
 def _cleanDir(tempDir):
@@ -58,7 +60,7 @@ def _cleanDir(tempDir):
 
 
 def writeAvi(filename, images, duration=0.1, encoding='mpeg4',
-             inputOptions='', outputOptions=''):
+             inputOptions='', outputOptions='', bg_task=False):
     """Export movie to a AVI file, which is encoded with the given
     encoding. Hint for Windows users: the 'msmpeg4v2' codec is
     natively supported on Windows.
@@ -77,13 +79,17 @@ def writeAvi(filename, images, duration=0.1, encoding='mpeg4',
     :param str encoding: the encoding type
     :param inputOptions:
     :param outputOptions:
+    :param bool bg_task: if thread background task, not raise but
+    return error message
+
+    :return str: error message
     """
 
     # Get fps
     try:
-        fps = float(1.0/duration)
+        fps = float(1.0 / duration)
     except Exception:
-        raise ValueError("Invalid duration parameter for writeAvi.")
+        raise ValueError(_('Invalid duration parameter for writeAvi.'))
 
     # Determine temp dir and create images
     tempDir = os.path.join(os.path.expanduser('~'), '.tempIms')
@@ -113,15 +119,28 @@ def writeAvi(filename, images, duration=0.1, encoding='mpeg4',
     outPut = S.stdout.read()
 
     if S.wait():
-        # An error occurred, show
-        print(outPut)
-        print(S.stderr.read())
         # Clean up
         _cleanDir(tempDir)
-        raise RuntimeError("Could not write avi.")
+        if bg_task:
+            return gscript.decode(outPut) + '\n' + gscript.decode(
+                S.stderr.read()) + '\n' + _('Could not write avi.')
+        else:
+            # An error occurred, show
+            print(gscript.decode(outPut))
+            print(gscript.decode(S.stderr.read()))
+            raise RuntimeError(_('Could not write avi.'))
     else:
-        # Copy avi
-        shutil.copy(os.path.join(tempDir, 'output.avi'), filename)
+        try:
+            # Copy avi
+            shutil.copy(os.path.join(tempDir, 'output.avi'), filename)
+        except Exception as err:
+            # Clean up
+            _cleanDir(tempDir)
+            if bg_task:
+                return str(err)
+            else:
+                raise
+
         # Clean up
         _cleanDir(tempDir)
 

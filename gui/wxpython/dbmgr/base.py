@@ -1173,7 +1173,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         # sql statement box
         FNPageStyle = FN.FNB_NO_NAV_BUTTONS | \
-            FN.FNB_NO_X_BUTTON
+            FN.FNB_NO_X_BUTTON | FN.FNB_NODRAG | FN.FNB_FANCY_TABS
         if globalvar.hasAgw:
             dbmStyle = {'agwStyle': FNPageStyle}
         else:
@@ -3804,7 +3804,7 @@ class FieldStatistics(wx.Frame):
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         txtSizer.Add(self.text, proportion=1, flag=wx.EXPAND |
-                     wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
+                     wx.ALL, border=5)
 
         self.sp.SetSizer(txtSizer)
         self.sp.SetAutoLayout(True)
@@ -3816,13 +3816,13 @@ class FieldStatistics(wx.Frame):
         line = wx.StaticLine(parent=self.panel, id=wx.ID_ANY,
                              size=(20, -1), style=wx.LI_HORIZONTAL)
         sizer.Add(line, proportion=0, flag=wx.GROW |
-                  wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border=3)
+                  wx.LEFT | wx.RIGHT, border=3)
 
         # buttons
         btnSizer.Add(self.btnClipboard, proportion=0,
-                     flag=wx.ALIGN_LEFT | wx.ALL, border=5)
+                     flag=wx.ALL, border=5)
         btnSizer.Add(self.btnCancel, proportion=0,
-                     flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
+                     flag=wx.ALL, border=5)
         sizer.Add(
             btnSizer,
             proportion=0,

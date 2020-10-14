@@ -42,12 +42,12 @@ class PyShellWindow(wx.Panel):
         wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
 
         self.intro = _("Welcome to wxGUI Interactive Python Shell %s") % VERSION + "\n\n" + \
-            _("Type %s for more GRASS scripting related information.") % "\"help(grass)\"" + "\n" + \
+            _("Type %s for more GRASS scripting related information.") % "\"help(gs)\"" + "\n" + \
             _("Type %s to add raster or vector to the layer tree.") % "\"AddLayer()\"" + "\n\n"
         # useStockId should be False on macOS
         self.shell = PyShell(parent=self, id=wx.ID_ANY,
                              introText=self.intro,
-                             locals={'grass': grass,
+                             locals={'gs': grass,
                                      'AddLayer': self.AddLayer},
                              useStockId=(sys.platform != "darwin"))
 

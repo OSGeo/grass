@@ -33,7 +33,7 @@ from .core import *
 from grass.exceptions import CalledModuleError
 
 
-def vector_db(map, **args):
+def vector_db(map, env=None, **kwargs):
     """Return the database connection details for a vector map
     (interface to `v.db.connect -g`). Example:
 
@@ -41,12 +41,13 @@ def vector_db(map, **args):
     {1: {'layer': 1, ... 'table': 'geology'}}
 
     :param str map: vector map
-    :param args: other v.db.connect's arguments
+    :param kwargs: other v.db.connect's arguments
+    :param env: environment
 
     :return: dictionary
     """
     s = read_command('v.db.connect', quiet=True, flags='g', map=map, sep=';',
-                     **args)
+                     env=env, **kwargs)
     result = {}
 
     for l in s.splitlines():
@@ -63,27 +64,28 @@ def vector_db(map, **args):
             name = ''
 
         result[int(layer)] = {
-            'layer'    : int(layer),
-            'name'     : name,
-            'table'    : f[1],
-            'key'      : f[2],
-            'database' : f[3],
-            'driver'   : f[4] }
+            'layer': int(layer),
+            'name': name,
+            'table': f[1],
+            'key': f[2],
+            'database': f[3],
+            'driver': f[4] }
 
     return result
 
 
-def vector_layer_db(map, layer):
+def vector_layer_db(map, layer, env=None):
     """Return the database connection details for a vector map layer.
     If db connection for given layer is not defined, fatal() is called.
 
     :param str map: map name
     :param layer: layer number
+    :param env: environment
 
     :return: parsed output
     """
     try:
-        f = vector_db(map)[int(layer)]
+        f = vector_db(map, env=env)[int(layer)]
     except KeyError:
         fatal(_("Database connection not defined for layer %s") % layer)
 
@@ -92,7 +94,7 @@ def vector_layer_db(map, layer):
 # run "v.info -c ..." and parse output
 
 
-def vector_columns(map, layer=None, getDict=True, **args):
+def vector_columns(map, layer=None, getDict=True, env=None, **kwargs):
     """Return a dictionary (or a list) of the columns for the
     database table connected to a vector map (interface to `v.info -c`).
 
@@ -118,12 +120,13 @@ def vector_columns(map, layer=None, getDict=True, **args):
     :param layer: layer number or name (None for all layers)
     :param bool getDict: True to return dictionary of columns otherwise list
                          of column names is returned
-    :param args: (v.info's arguments)
+    :param kwargs: (v.info's arguments)
+    :param env: environment
 
     :return: dictionary/list of columns
     """
     s = read_command('v.info', flags='c', map=map, layer=layer, quiet=True,
-                     **args)
+                     env=env, **kwargs)
     if getDict:
         result = dict()
     else:
@@ -140,20 +143,21 @@ def vector_columns(map, layer=None, getDict=True, **args):
     return result
 
 
-def vector_history(map, replace=False):
+def vector_history(map, replace=False, env=None):
     """Set the command history for a vector map to the command used to
     invoke the script (interface to `v.support`).
 
     :param str map: mapname
     :param bool replace: Replace command line instead of appending it
+    :param env: environment
 
     :return: v.support output
     """
     run_command('v.support', map=map, cmdhist=os.environ['CMDLINE'],
-                flags='h' if replace else None)
+                flags='h' if replace else None, env=env)
 
 
-def vector_info_topo(map, layer=1):
+def vector_info_topo(map, layer=1, env=None):
     """Return information about a vector map (interface to `v.info -t`).
     Example:
 
@@ -164,10 +168,12 @@ def vector_info_topo(map, layer=1):
 
     :param str map: map name
     :param int layer: layer number
+    :param env: environment
 
     :return: parsed output
     """
-    s = read_command('v.info', flags='t', layer=layer, map=map)
+    s = read_command('v.info', flags='t', layer=layer, map=map,
+                     env=env)
     ret = parse_key_val(s, val_type=int)
     if 'map3d' in ret:
         ret['map3d'] = bool(ret['map3d'])
@@ -175,7 +181,7 @@ def vector_info_topo(map, layer=1):
     return ret
 
 
-def vector_info(map, layer=1):
+def vector_info(map, layer=1, env=None):
     """Return information about a vector map (interface to
     `v.info`). Example:
 
@@ -184,11 +190,13 @@ def vector_info(map, layer=1):
 
     :param str map: map name
     :param int layer: layer number
+    :param env: environment
 
     :return: parsed vector info
     """
 
-    s = read_command('v.info', flags='get', layer=layer, map=map)
+    s = read_command('v.info', flags='get', layer=layer, map=map,
+                     env=env)
 
     kv = parse_key_val(s)
     for k in ['north', 'south', 'east', 'west', 'top', 'bottom']:
@@ -207,7 +215,7 @@ def vector_info(map, layer=1):
     return kv
 
 
-def vector_db_select(map, layer=1, **kwargs):
+def vector_db_select(map, layer=1, env=None, **kwargs):
     """Get attribute data of selected vector map layer.
 
     Function returns list of columns and dictionary of values ordered by
@@ -223,13 +231,14 @@ def vector_db_select(map, layer=1, **kwargs):
     :param str map: map name
     :param int layer: layer number
     :param kwargs: v.db.select options
+    :param env: environment
 
     :return: dictionary ('columns' and 'values')
     """
     try:
-        key = vector_db(map=map)[layer]['key']
+        key = vector_db(map=map, env=env)[layer]['key']
     except KeyError:
-        error(_('Missing layer %(layer)d in vector map <%(map)s>') % \
+        error(_('Missing layer %(layer)d in vector map <%(map)s>') %
               {'layer': layer, 'map': map})
         return {'columns': [], 'values': {}}
 
@@ -241,7 +250,8 @@ def vector_db_select(map, layer=1, **kwargs):
             debug("Adding key column to the output")
             kwargs['columns'] += ',' + key
 
-    ret = read_command('v.db.select', map=map, layer=layer, **kwargs)
+    ret = read_command('v.db.select', map=map, layer=layer,
+                       env=env, **kwargs)
 
     if not ret:
         error(_('vector_db_select() failed'))
@@ -273,7 +283,9 @@ json = None
 orderedDict = None
 
 
-def vector_what(map, coord, distance=0.0, ttype=None, encoding=None, skip_attributes=False, layer=None, multiple=False):
+def vector_what(map, coord, distance=0.0, ttype=None,
+                encoding=None, skip_attributes=False,
+                layer=None, multiple=False, env=None):
     """Query vector map at given locations
 
     To query one vector map at one location
@@ -334,12 +346,14 @@ def vector_what(map, coord, distance=0.0, ttype=None, encoding=None, skip_attrib
     :param layer: layer number or list of layers (one for each vector),
                   if None, all layers (-1) are used
     :param multiple: find multiple features within threshold distance
+    :param env: environment
 
     :return: parsed list
     """
-    if "LC_ALL" in os.environ:
-        locale = os.environ["LC_ALL"]
-        os.environ["LC_ALL"] = "C"
+    if not env:
+        env = os.environ.copy()
+    if "LC_ALL" in env:
+        env["LC_ALL"] = "C"
 
     if isinstance(map, (bytes, unicode)):
         map_list = [map]
@@ -380,13 +394,10 @@ def vector_what(map, coord, distance=0.0, ttype=None, encoding=None, skip_attrib
         cmdParams['type'] = ','.join(ttype)
 
     try:
-        ret = read_command('v.what',
+        ret = read_command('v.what', env=env,
                            **cmdParams).strip()
     except CalledModuleError as e:
         raise ScriptError(e.msg)
-
-    if "LC_ALL" in os.environ:
-        os.environ["LC_ALL"] = locale
 
     data = list()
     if not ret:

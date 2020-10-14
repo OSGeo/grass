@@ -258,6 +258,7 @@ class RasterAbstractBase(object):
     * Renaming, deletion, ...
 
     """
+
     def __init__(self, name, mapset="", *aopen, **kwopen):
         """The constructor need at least the name of the map
         *optional* field is the `mapset`.

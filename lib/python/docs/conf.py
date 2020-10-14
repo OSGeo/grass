@@ -12,7 +12,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os
+import sys
+import os
 from datetime import date
 import string
 from shutil import copy
@@ -34,11 +35,11 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.environ['GISBASE'], 'etc', 'p
 
 from grass.script import core
 
-footer_tmpl = string.Template(\
-r"""
+footer_tmpl = string.Template(
+    r"""
 {% block footer %}<hr class="header">
 <p><a href="../index.html">Help Index</a> | <a href="../topics.html">Topics Index</a> | <a href="../keywords.html">Keywords Index</a> | <a href="../full_index.html">Full Index</a></p>
-<p>&copy; 2003-${year} <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${grass_version} Reference Manual</p>
+<p>&copy; 2003-${year} <a href="https://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${grass_version} Reference Manual</p>
 {% endblock %}
 """)
 
@@ -46,7 +47,7 @@ grass_version = core.version()['version']
 today = date.today()
 
 copy("_templates/layout.html.template", "_templates/layout.html")
-with open("_templates/layout.html", "a+b") as f:
+with open("_templates/layout.html", "a") as f:
     f.write(footer_tmpl.substitute(grass_version=grass_version, year=today.year))
     f.close()
 
@@ -221,14 +222,14 @@ htmlhelp_basename = 'PythonLibdoc'
 # -- Options for LaTeX output ---------------------------------------------
 
 latex_elements = {
-# The paper size ('letterpaper' or 'a4paper').
-'papersize': 'a4paper',
+    # The paper size ('letterpaper' or 'a4paper').
+    'papersize': 'a4paper',
 
-# The font size ('10pt', '11pt' or '12pt').
-'pointsize': '10pt',
+    # The font size ('10pt', '11pt' or '12pt').
+    'pointsize': '10pt',
 
-# Additional stuff for the LaTeX preamble.
-#'preamble': '',
+    # Additional stuff for the LaTeX preamble.
+    #'preamble': '',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples

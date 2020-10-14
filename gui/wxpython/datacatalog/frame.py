@@ -52,18 +52,9 @@ class DataCatalogFrame(wx.Frame):
 
         # tree
         self.tree = DataCatalogTree(parent=self.panel, giface=self._giface)
-        self.tree.InitTreeItems()
+        self.tree.ReloadTreeItems()
         self.tree.UpdateCurrentDbLocationMapsetNode()
         self.tree.ExpandCurrentMapset()
-        self.tree.changeMapset.connect(lambda mapset:
-                                       self.ChangeDbLocationMapset(
-                                               location=None,
-                                               mapset=mapset))
-        self.tree.changeLocation.connect(lambda mapset, location, dbase:
-                                         self.ChangeDbLocationMapset(
-                                                 dbase=dbase,
-                                                 location=location,
-                                                 mapset=mapset))
 
         # buttons
         self.btnClose = Button(parent=self.panel, id=wx.ID_CLOSE)
@@ -110,46 +101,32 @@ class DataCatalogFrame(wx.Frame):
         self.tree.ReloadCurrentMapset()
 
     def OnAddGrassDB(self, event):
-        """Add an existing grass database"""
+        """Add grass database"""
         dlg = wx.DirDialog(self, _("Choose GRASS data directory:"),
                            os.getcwd(), wx.DD_DEFAULT_STYLE)
         if dlg.ShowModal() == wx.ID_OK:
             grassdatabase = dlg.GetPath()
             self.tree.InsertGrassDb(name=grassdatabase)
-
         dlg.Destroy()
+
+    def OnCreateMapset(self, event):
+        """Create new mapset in current location"""
+        db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
+        self.tree.CreateMapset(db_node, loc_node)
+
+    def OnCreateLocation(self, event):
+        """Create new location"""
+        db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
+        self.tree.CreateLocation(db_node)
+
+    def OnDownloadLocation(self, event):
+        """Download location online"""
+        db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
+        self.tree.DownloadLocation(db_node)
 
     def SetRestriction(self, restrict):
         """Allow editing other mapsets or restrict editing to current mapset"""
         self.tree.SetRestriction(restrict)
-
-    def ChangeDbLocationMapset(self, mapset, location=None, dbase=None):
-        """Change mapset, location or db"""
-        if dbase:
-            if RunCommand('g.mapset', parent=self,
-                          location=location,
-                          mapset=mapset,
-                          dbase=dbase) == 0:
-                GMessage(parent=self,
-                         message=_("Current GRASS database is <%(dbase)s>.\n"
-                                   "Current location is <%(loc)s>.\n"
-                                   "Current mapset is <%(mapset)s>."
-                                   ) %
-                         {'dbase': dbase, 'loc': location, 'mapset': mapset})
-        elif location:
-            if RunCommand('g.mapset', parent=self,
-                          location=location,
-                          mapset=mapset) == 0:
-                GMessage(parent=self,
-                         message=_("Current location is <%(loc)s>.\n"
-                                   "Current mapset is <%(mapset)s>.") %
-                         {'loc': location, 'mapset': mapset})
-        else:
-            if RunCommand('g.mapset',
-                          parent=self,
-                          mapset=mapset) == 0:
-                GMessage(parent=self,
-                         message=_("Current mapset is <%s>.") % mapset)
 
     def Filter(self, text):
         self.tree.Filter(text=text)

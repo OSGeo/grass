@@ -103,7 +103,7 @@ from core import gcmd
 from core import utils
 from core.settings import UserSettings
 from gui_core.widgets import FloatValidator, GNotebook, FormNotebook, FormListbook
-from core.giface import Notification
+from core.giface import Notification, StandaloneGrassInterface
 from gui_core.widgets import LayersList
 from gui_core.wrap import BitmapFromImage, Button, CancelButton, StaticText, \
     StaticBox, SpinCtrl, CheckBox, BitmapButton, TextCtrl, NewId
@@ -607,7 +607,6 @@ class TaskFrame(wx.Frame):
                 parent=self.panel, id=wx.ID_OK, label=_("&Run"))
             self.btn_run.SetToolTip(_("Run the command (Ctrl+R)"))
             self.btn_run.SetDefault()
-            self.btn_run.SetForegroundColour(wx.Colour(35, 142, 35))
 
             btnsizer.Add(self.btn_run, proportion=0,
                          flag=wx.ALL | wx.ALIGN_CENTER,
@@ -1453,7 +1452,8 @@ class CmdPanel(wx.Panel):
                                     for layer in layers:
                                         if layer.type != p.get('prompt'):
                                             continue
-                                        mapList.append(str(layer))
+                                        if str(layer):
+                                            mapList.append(str(layer))
                         selection = gselect.Select(
                             parent=which_panel, id=wx.ID_ANY,
                             size=globalvar.DIALOG_GSELECT_SIZE, type=elem,
@@ -2279,6 +2279,7 @@ class CmdPanel(wx.Panel):
                 guiparent=self.notebook, giface=self._giface)
             self.goutput = GConsoleWindow(
                 parent=self.notebook,
+                giface=self._giface,
                 gconsole=self._gconsole,
                 margin=False)
             self._gconsole.Bind(
@@ -2996,7 +2997,7 @@ class GrassGUIApp(wx.App):
 
         self.mf = TaskFrame(
             parent=None,
-            giface=None,
+            giface=StandaloneGrassInterface(),
             task_description=self.grass_task)
         self.mf.CentreOnScreen()
         self.mf.Show(True)

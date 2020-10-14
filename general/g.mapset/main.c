@@ -202,25 +202,19 @@ int main(int argc, char *argv[])
 
     G_free(mapset_old_path);
 
-    G_important_message(_("Mapset switched. Your shell continues to use the history "
-			  "for the old mapset"));
-
-    if ((shell = getenv("SHELL"))) {
-	if (strstr(shell, "bash")) {
-	    G_important_message(_("You can switch the history by commands:\n"
-				  "history -w; history -r %s/.bash_history; HISTFILE=%s/.bash_history"),
-				mapset_new_path, mapset_new_path);
-	}
-	else if (strstr(shell, "tcsh")) {
-	    G_important_message(_("You can switch the history by commands:\n"
-				  "history -S; history -L %s/.history; setenv histfile=%s/.history"),
-				mapset_new_path, mapset_new_path);
-	}
-	else if (strstr(shell, "zsh")) {
-	    G_important_message(_("You can switch the history by commands:\n"
-				  "fc -W; fc -R %s/.zsh_history; HISTFILE=%s/.zsh_history"),
-				mapset_new_path, mapset_new_path);
-	}
+    shell = getenv("SHELL");
+    /* For bash and zsh, we support switching of history, tcsh not (yet). */
+    if (shell && (strstr(shell, "bash") || strstr(shell, "zsh"))) {
+	G_important_message(_("Mapset switched."));
+    }
+    else {
+	G_important_message(_("Mapset switched. Your shell continues "
+			      "to use the history for the old mapset"));
+    }
+    if (shell && strstr(shell, "tcsh")) {
+	G_important_message(_("You can switch the history by commands:\n"
+			      "history -S; history -L %s/.history; setenv histfile=%s/.history"),
+			      mapset_new_path, mapset_new_path);
     }
 
     G_verbose_message(_("Your current mapset is <%s>"), mapset_new);

@@ -8,7 +8,7 @@ Usage:
     from grass.script import core as grass
     grass.parser()
 
-(C) 2008-2014 by the GRASS Development Team
+(C) 2008-2020 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -28,9 +28,10 @@ import codecs
 import string
 import random
 import pipes
+from tempfile import NamedTemporaryFile
 import types as python_types
 
-from .utils import KeyValue, parse_key_val, basename, encode, decode
+from .utils import KeyValue, parse_key_val, basename, encode, decode, try_remove
 from grass.exceptions import ScriptError, CalledModuleError
 
 # PY2/PY3 compat
@@ -50,7 +51,7 @@ class Popen(subprocess.Popen):
         if (sys.platform == 'win32'
             and isinstance(args, list)
             and not kwargs.get('shell', False)
-            and kwargs.get('executable') is None):
+                and kwargs.get('executable') is None):
             cmd = shutil_which(args[0])
             if cmd is None:
                 raise OSError(_("Cannot find the executable {0}")
@@ -384,7 +385,7 @@ def handle_errors(returncode, result, args, kwargs):
         module, code = get_module_and_code(args, kwargs)
         fatal(_("Module {module} ({code}) failed with"
                 " non-zero return code {returncode}").format(
-                module=module, code=code, returncode=returncode))
+            module=module, code=code, returncode=returncode))
     elif handler.lower() == 'exit':
         sys.exit(returncode)
     else:
@@ -613,7 +614,7 @@ def write_command(*args, **kwargs):
     Passes all arguments to ``feed_command()``, with the string specified
     by the *stdin* argument fed to the process' standard input.
 
-    >>> gscript.write_command(
+    >>> write_command(
     ...    'v.in.ascii', input='-',
     ...    stdin='%s|%s' % (635818.8, 221342.4),
     ...    output='view_point')
@@ -903,10 +904,11 @@ def parser():
 # interface to g.tempfile
 
 
-def tempfile(create=True):
+def tempfile(create=True, env=None):
     """Returns the name of a temporary file, created with g.tempfile.
 
     :param bool create: True to create a file
+    :param env: environment
 
     :return: path to a tmp file
     """
@@ -914,12 +916,12 @@ def tempfile(create=True):
     if not create:
         flags += 'd'
 
-    return read_command("g.tempfile", flags=flags, pid=os.getpid()).strip()
+    return read_command("g.tempfile", flags=flags, pid=os.getpid(), env=env).strip()
 
 
-def tempdir():
+def tempdir(env=None):
     """Returns the name of a temporary dir, created with g.tempfile."""
-    tmp = tempfile(create=False)
+    tmp = tempfile(create=False, env=env)
     os.mkdir(tmp)
 
     return tmp
@@ -1143,13 +1145,13 @@ def gisenv(env=None):
 # interface to g.region
 
 
-def locn_is_latlong():
+def locn_is_latlong(env=None):
     """Tests if location is lat/long. Value is obtained
     by checking the "g.region -pu" projection code.
 
     :return: True for a lat/long region, False otherwise
     """
-    s = read_command("g.region", flags='pu')
+    s = read_command("g.region", flags='pu', env=env)
     kv = parse_key_val(s, ':')
     if kv['projection'].split(' ')[0] == '3':
         return True
@@ -1183,7 +1185,7 @@ def region(region3d=False, complete=False, env=None):
 
     s = read_command("g.region", flags=flgs, env=env)
     reg = parse_key_val(s, val_type=float)
-    for k in ['projection', 'zone', 'rows',  'cols',  'cells',
+    for k in ['projection', 'zone', 'rows', 'cols', 'cells',
               'rows3', 'cols3', 'cells3', 'depths']:
         if k not in reg:
             continue
@@ -1248,23 +1250,23 @@ def region_env(region3d=False, flags=None, env=None, **kwargs):
         return ''
     reg = parse_key_val(s)
 
-    kwdata = [('north',     'n'),
-              ('south',     's'),
-              ('east',      'e'),
-              ('west',      'w'),
-              ('cols',      'cols'),
-              ('rows',      'rows'),
+    kwdata = [('north', 'n'),
+              ('south', 's'),
+              ('east', 'e'),
+              ('west', 'w'),
+              ('cols', 'cols'),
+              ('rows', 'rows'),
               ('e-w resol', 'ewres'),
               ('n-s resol', 'nsres')]
     if region3d:
-        kwdata += [('top',        't'),
-                   ('bottom',     'b'),
-                   ('cols3',      'cols3'),
-                   ('rows3',      'rows3'),
-                   ('depths',     'depths'),
+        kwdata += [('top', 't'),
+                   ('bottom', 'b'),
+                   ('cols3', 'cols3'),
+                   ('rows3', 'rows3'),
+                   ('depths', 'depths'),
                    ('e-w resol3', 'ewres3'),
                    ('n-s resol3', 'nsres3'),
-                   ('t-b resol',  'tbres')]
+                   ('t-b resol', 'tbres')]
 
     for wkey, rkey in kwdata:
         grass_region += '%s: %s;' % (wkey, reg[rkey])
@@ -1294,7 +1296,7 @@ def del_temp_region():
 # interface to g.findfile
 
 
-def find_file(name, element='cell', mapset=None):
+def find_file(name, element='cell', mapset=None, env=None):
     """Returns the output from running g.findfile as a
     dictionary. Example:
 
@@ -1308,6 +1310,7 @@ def find_file(name, element='cell', mapset=None):
     :param str name: file name
     :param str element: element type (default 'cell')
     :param str mapset: mapset name (default all mapsets in search path)
+    :param env: environment
 
     :return: parsed output of g.findfile
     """
@@ -1318,14 +1321,15 @@ def find_file(name, element='cell', mapset=None):
     # se we ignore return code and just focus on stdout
     process = start_command('g.findfile', flags='n',
                             element=element, file=name, mapset=mapset,
-                            stdout=PIPE)
+                            stdout=PIPE, env=env)
     stdout = process.communicate()[0]
     return parse_key_val(stdout)
 
 # interface to g.list
 
 
-def list_strings(type, pattern=None, mapset=None, exclude=None, flag=''):
+def list_strings(type, pattern=None, mapset=None, exclude=None,
+                 flag='', env=None):
     """List of elements as strings.
 
     Returns the output from running g.list, as a list of qualified
@@ -1337,6 +1341,7 @@ def list_strings(type, pattern=None, mapset=None, exclude=None, flag=''):
     :param str exclude: pattern string to exclude maps from the research
     :param str flag: pattern type: 'r' (basic regexp), 'e' (extended regexp),
                      or '' (glob pattern)
+    :param env: environment
 
     :return: list of elements
     """
@@ -1350,13 +1355,15 @@ def list_strings(type, pattern=None, mapset=None, exclude=None, flag=''):
                              type=type,
                              pattern=pattern,
                              exclude=exclude,
-                             mapset=mapset).splitlines():
+                             mapset=mapset,
+                             env=env).splitlines():
         result.append(line.strip())
 
     return result
 
 
-def list_pairs(type, pattern=None, mapset=None, exclude=None, flag=''):
+def list_pairs(type, pattern=None, mapset=None, exclude=None,
+               flag='', env=None):
     """List of elements as pairs
 
     Returns the output from running g.list, as a list of
@@ -1368,16 +1375,17 @@ def list_pairs(type, pattern=None, mapset=None, exclude=None, flag=''):
     :param str exclude: pattern string to exclude maps from the research
     :param str flag: pattern type: 'r' (basic regexp), 'e' (extended regexp),
                      or '' (glob pattern)
+    :param env: environment
 
     :return: list of elements
     """
     return [tuple(map.split('@', 1)) for map in list_strings(type, pattern,
                                                               mapset, exclude,
-                                                              flag)]
+                                                              flag, env)]
 
 
 def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
-                 flag=''):
+                 flag='', env=None):
     """List of elements grouped by mapsets.
 
     Returns the output from running g.list, as a dictionary where the
@@ -1394,6 +1402,7 @@ def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
     :param str exclude: pattern string to exclude maps from the research
     :param str flag: pattern type: 'r' (basic regexp), 'e' (extended regexp),
                                     or '' (glob pattern)
+    :param env: environment
 
     :return: directory of mapsets/elements
     """
@@ -1410,7 +1419,7 @@ def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
             types[i] = 'raster'
     result = {}
     if check_search_path:
-        for mapset in mapsets(search_path=True):
+        for mapset in mapsets(search_path=True, env=env):
             if store_types:
                 result[mapset] = {}
             else:
@@ -1418,7 +1427,8 @@ def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
 
     mapset = None
     for line in read_command("g.list", quiet=True, flags="m" + flag,
-                             type=types, pattern=pattern, exclude=exclude).splitlines():
+                             type=types, pattern=pattern,
+                             exclude=exclude, env=env).splitlines():
         try:
             name, mapset = line.split('@')
         except ValueError:
@@ -1445,22 +1455,22 @@ def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
 # color parsing
 
 named_colors = {
-    "white":   (1.00, 1.00, 1.00),
-    "black":   (0.00, 0.00, 0.00),
-    "red":     (1.00, 0.00, 0.00),
-    "green":   (0.00, 1.00, 0.00),
-    "blue":    (0.00, 0.00, 1.00),
-    "yellow":  (1.00, 1.00, 0.00),
+    "white": (1.00, 1.00, 1.00),
+    "black": (0.00, 0.00, 0.00),
+    "red": (1.00, 0.00, 0.00),
+    "green": (0.00, 1.00, 0.00),
+    "blue": (0.00, 0.00, 1.00),
+    "yellow": (1.00, 1.00, 0.00),
     "magenta": (1.00, 0.00, 1.00),
-    "cyan":    (0.00, 1.00, 1.00),
-    "aqua":    (0.00, 0.75, 0.75),
-    "grey":    (0.75, 0.75, 0.75),
-    "gray":    (0.75, 0.75, 0.75),
-    "orange":  (1.00, 0.50, 0.00),
-    "brown":   (0.75, 0.50, 0.25),
-    "purple":  (0.50, 0.00, 1.00),
-    "violet":  (0.50, 0.00, 1.00),
-    "indigo":  (0.00, 0.50, 1.00)}
+    "cyan": (0.00, 1.00, 1.00),
+    "aqua": (0.00, 0.75, 0.75),
+    "grey": (0.75, 0.75, 0.75),
+    "gray": (0.75, 0.75, 0.75),
+    "orange": (1.00, 0.50, 0.00),
+    "brown": (0.75, 0.50, 0.25),
+    "purple": (0.50, 0.00, 1.00),
+    "violet": (0.50, 0.00, 1.00),
+    "indigo": (0.00, 0.50, 1.00)}
 
 
 def parse_color(val, dflt=None):
@@ -1500,7 +1510,19 @@ def overwrite():
 
 
 def verbosity():
-    """Return the verbosity level selected by GRASS_VERBOSE"""
+    """Return the verbosity level selected by GRASS_VERBOSE
+
+    Currently, there are 5 levels of verbosity:
+    -1 nothing will be printed (also fatal errors and warnings will be discarded)
+
+    0 only errors and warnings are printed, triggered by "--q" or "--quiet" flag.
+
+    1 progress information (percent) and important messages will be printed
+
+    2 all messages will be printed
+
+    3 also verbose messages will be printed. Triggered by "--v" or "--verbose" flag.
+    """
     vbstr = os.getenv('GRASS_VERBOSE')
     if vbstr:
         return int(vbstr)
@@ -1545,7 +1567,7 @@ def find_program(pgm, *args):
 # interface to g.mapsets
 
 
-def mapsets(search_path=False):
+def mapsets(search_path=False, env=None):
     """List available mapsets
 
     :param bool search_path: True to list mapsets only in search path
@@ -1559,7 +1581,8 @@ def mapsets(search_path=False):
     mapsets = read_command('g.mapsets',
                            flags=flags,
                            sep='newline',
-                           quiet=True)
+                           quiet=True,
+                           env=env)
     if not mapsets:
         fatal(_("Unable to list mapsets"))
 
@@ -1588,19 +1611,17 @@ def create_location(dbase, location, epsg=None, proj4=None, filename=None,
     :param bool overwrite: True to overwrite location if exists(WARNING:
                            ALL DATA from existing location ARE DELETED!)
     """
-    gisdbase = None
-    if epsg or proj4 or filename or wkt:
-        # FIXME: changing GISDBASE mid-session is not background-job safe
-        gisdbase = gisenv()['GISDBASE']
-        run_command('g.gisenv', set='GISDBASE=%s' % dbase)
     # create dbase if not exists
     if not os.path.exists(dbase):
-            os.mkdir(dbase)
-
+        os.mkdir(dbase)
+    if epsg or proj4 or filename or wkt:
+        # here the location shouldn't really matter
+        tmp_gisrc, env = create_environment(dbase, gisenv()['LOCATION_NAME'], 'PERMANENT')
     # check if location already exists
     if os.path.exists(os.path.join(dbase, location)):
         if not overwrite:
             warning(_("Location <%s> already exists. Operation canceled.") % location)
+            try_remove(tmp_gisrc)
             return
         else:
             warning(_("Location <%s> already exists and will be overwritten") % location)
@@ -1615,27 +1636,27 @@ def create_location(dbase, location, epsg=None, proj4=None, filename=None,
 
     if epsg:
         ps = pipe_command('g.proj', quiet=True, flags='t', epsg=epsg,
-                          location=location, stderr=PIPE, **kwargs)
+                          location=location, stderr=PIPE, env=env, **kwargs)
     elif proj4:
         ps = pipe_command('g.proj', quiet=True, flags='t', proj4=proj4,
-                          location=location, stderr=PIPE, **kwargs)
+                          location=location, stderr=PIPE, env=env, **kwargs)
     elif filename:
         ps = pipe_command('g.proj', quiet=True, georef=filename,
-                          location=location, stderr=PIPE)
+                          location=location, stderr=PIPE, env=env)
     elif wkt:
         if os.path.isfile(wkt):
             ps = pipe_command('g.proj', quiet=True, wkt=wkt, location=location,
-                              stderr=PIPE)
+                              stderr=PIPE, env=env)
         else:
             ps = pipe_command('g.proj', quiet=True, wkt='-', location=location,
-                              stderr=PIPE, stdin=PIPE)
+                              stderr=PIPE, stdin=PIPE, env=env)
             stdin = encode(wkt)
     else:
         _create_location_xy(dbase, location)
 
     if epsg or proj4 or filename or wkt:
         error = ps.communicate(stdin)[1]
-        run_command('g.gisenv', set='GISDBASE=%s' % gisdbase)
+        try_remove(tmp_gisrc)
 
         if ps.returncode != 0 and error:
             raise ScriptError(repr(error))
@@ -1752,7 +1773,7 @@ def legal_name(s):
         useful anyway for checking map names and column names.
     """
     if not s or s[0] == '.':
-        warning(_("Illegal filename <%s>. Cannot be 'NULL' or start with " \
+        warning(_("Illegal filename <%s>. Cannot be 'NULL' or start with "
                   "'.'.") % s)
         return False
 
@@ -1762,25 +1783,37 @@ def legal_name(s):
     if illegal:
         illegal = ''.join(sorted(set(illegal)))
         warning(_("Illegal filename <%(s)s>. <%(il)s> not allowed.\n") % {
-        's': s, 'il': illegal})
+            's': s, 'il': illegal})
         return False
 
     return True
 
 
+def sanitize_mapset_environment(env):
+    """Remove environmental variables relevant only
+    for a specific mapset. This should be called
+    when a copy of environment is used with a different mapset."""
+    if "WIND_OVERRIDE" in env:
+        del env["WIND_OVERRIDE"]
+    if "GRASS_REGION" in env:
+        del env["GRASS_REGION"]
+    return env
+
+
 def create_environment(gisdbase, location, mapset):
     """Creates environment to be passed in run_command for example.
     Returns tuple with temporary file path and the environment. The user
-    of this function is responsile for deleting the file."""
-    tmp_gisrc_file = tempfile()
-    with open(tmp_gisrc_file, 'w') as f:
+    of this function is responsible for deleting the file."""
+    with NamedTemporaryFile(mode='w', delete=False) as f:
         f.write('MAPSET: {mapset}\n'.format(mapset=mapset))
         f.write('GISDBASE: {g}\n'.format(g=gisdbase))
         f.write('LOCATION_NAME: {l}\n'.format(l=location))
         f.write('GUI: text\n')
     env = os.environ.copy()
-    env['GISRC'] = tmp_gisrc_file
-    return tmp_gisrc_file, env
+    env['GISRC'] = f.name
+    # remove mapset-specific env vars
+    env = sanitize_mapset_environment(env)
+    return f.name, env
 
 
 if __name__ == '__main__':

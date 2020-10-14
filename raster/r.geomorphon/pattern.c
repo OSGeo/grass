@@ -125,13 +125,13 @@ int calc_pattern(PATTERN * pattern, int row, int cur_row, int col)
 	    fabs(nadir_angle) > nadir_threshold) {
 	    if (fabs(nadir_angle) < fabs(zenith_angle)) {
 		pattern->pattern[i] = 1;
-		pattern->elevation[i] = zenith_height;	/* ZMIANA! */
+		pattern->elevation[i] = zenith_height;	/* A CHANGE! */
 		pattern->distance[i] = zenith_distance;
 		pattern->num_positives++;
 	    }
 	    if (fabs(nadir_angle) > fabs(zenith_angle)) {
 		pattern->pattern[i] = -1;
-		pattern->elevation[i] = nadir_height;	/* ZMIANA! */
+		pattern->elevation[i] = nadir_height;	/* A CHANGE! */
 		pattern->distance[i] = nadir_distance;
 		pattern->num_negatives++;
 	    }

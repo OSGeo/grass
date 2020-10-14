@@ -33,8 +33,6 @@ class DataCatalog(wx.Panel):
                  title=_("Data catalog"), name='catalog', **kwargs):
         """Panel constructor  """
         self.showNotification = Signal('DataCatalog.showNotification')
-        self.changeMapset = Signal('DataCatalog.changeMapset')
-        self.changeLocation = Signal('DataCatalog.changeLocation')
         self.parent = parent
         self.baseTitle = title
         wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
@@ -50,8 +48,6 @@ class DataCatalog(wx.Panel):
         self.thread = gThread()
         self._loaded = False
         self.tree.showNotification.connect(self.showNotification)
-        self.tree.changeMapset.connect(self.changeMapset)
-        self.tree.changeLocation.connect(self.changeLocation)
 
         # some layout
         self._layout()
@@ -75,7 +71,7 @@ class DataCatalog(wx.Panel):
         if self._loaded:
             return
 
-        self.thread.Run(callable=self.tree.InitTreeItems,
+        self.thread.Run(callable=self.tree.ReloadTreeItems,
                         ondone=lambda event: self.LoadItemsDone())
 
     def LoadItemsDone(self):
@@ -93,14 +89,28 @@ class DataCatalog(wx.Panel):
         self.tree.ReloadCurrentMapset()
 
     def OnAddGrassDB(self, event):
-        """Add an existing grass database"""
+        """Add grass database"""
         dlg = wx.DirDialog(self, _("Choose GRASS data directory:"),
                            os.getcwd(), wx.DD_DEFAULT_STYLE)
         if dlg.ShowModal() == wx.ID_OK:
             grassdatabase = dlg.GetPath()
             self.tree.InsertGrassDb(name=grassdatabase)
-
         dlg.Destroy()
+
+    def OnCreateMapset(self, event):
+        """Create new mapset in current location"""
+        db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
+        self.tree.CreateMapset(db_node, loc_node)
+
+    def OnCreateLocation(self, event):
+        """Create new location"""
+        db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
+        self.tree.CreateLocation(db_node)
+
+    def OnDownloadLocation(self, event):
+        """Download location to current grass database"""
+        db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
+        self.tree.DownloadLocation(db_node)
 
     def SetRestriction(self, restrict):
         """Allow editing other mapsets or restrict editing to current mapset"""

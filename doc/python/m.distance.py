@@ -46,7 +46,7 @@
 
 import os, sys
 
-import grass.script as grass
+import grass.script as gs
 
 from grass.lib.gis import *
 
@@ -84,7 +84,7 @@ def main():
                 p = None
     
     if len(coords) < 2:
-       grass.fatal("A minimum of two input coordinate pairs are needed")
+       gs.fatal("A minimum of two input coordinate pairs are needed")
     
     # init variables
     overall_distance = 0.0
@@ -141,10 +141,10 @@ def main():
     # we don't need this, but just to have a look
     if proj_type == 1:
         G_database_units_to_meters_factor()
-        grass.message("Location units are %s" % G_database_unit_name(True).lower())
+        gs.message("Location units are %s" % G_database_unit_name(True).lower())
     
     return 0
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     sys.exit(main())

@@ -454,7 +454,7 @@ g.region -e
 <h3>Serpent Mound dataset</h3>
 
 This example is analogous to the example used in the GRASS wiki page for
-<a href="http://grasswiki.osgeo.org/wiki/LIDAR#Import_LAS_as_raster_DEM">importing LAS as raster DEM</a>.
+<a href="https://grasswiki.osgeo.org/wiki/LIDAR#Import_LAS_as_raster_DEM">importing LAS as raster DEM</a>.
 <p>The sample LAS data are in the file "Serpent Mound Model LAS Data.las", 
 available at 
 <a href="http://www.appliedimagery.com/downloads/sampledata/Serpent%20Mound%20Model%20LAS%20Data.las">appliedimagery.com</a>:
@@ -537,16 +537,16 @@ Python module:
 
 <div class="code"><pre>
 import glob
-import gscript
+import grass.script as gs
     
 file_list_name = '/home/user/data/filelist.txt'
 with open(, mode='w') as file_list:
     for path in glob.iglob('/home/user/data/lidar/*.las'):
         file_list.write(path + "\n")
 
-gscript.run_command('r.in.lidar', file=file_list_name,
-                    output='mean_height_above_ground',
-                    base_raster='elevation' method='mean')
+gs.run_command('r.in.lidar', file=file_list_name,
+               output='mean_height_above_ground',
+               base_raster='elevation' method='mean')
 </pre></div>
 
 

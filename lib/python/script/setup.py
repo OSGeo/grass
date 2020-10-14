@@ -59,29 +59,29 @@ Usage::
     sys.path.append(grass_pydir)
 
     # import (some) GRASS Python bindings
-    import grass.script as gscript
+    import grass.script as gs
     import grass.script.setup as gsetup
 
     # launch session
     rcfile = gsetup.init(gisbase, gisdb, location, mapset)
 
     # example calls
-    gscript.message('Current GRASS GIS 7 environment:')
-    print gscript.gisenv()
+    gs.message('Current GRASS GIS 7 environment:')
+    print(gs.gisenv())
 
-    gscript.message('Available raster maps:')
-    for rast in gscript.list_strings(type='raster'):
-        print rast
+    gs.message('Available raster maps:')
+    for rast in gs.list_strings(type='raster'):
+        print(rast)
 
-    gscript.message('Available vector maps:')
-    for vect in gscript.list_strings(type='vector'):
-        print vect
+    gs.message('Available vector maps:')
+    for vect in gs.list_strings(type='vector'):
+        print(vect)
 
     # clean up at the end
     gsetup.cleanup()
 
 
-(C) 2010-2019 by the GRASS Development Team
+(C) 2010-2020 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -124,13 +124,13 @@ def set_gui_path():
 def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
     """Initialize system variables to run GRASS modules
 
-    This function is for running GRASS GIS without starting it with the 
-    standard script grassXY. No GRASS modules shall be called before 
-    call of this function but any module or user script can be called 
-    afterwards because a GRASS session has been set up. GRASS Python 
-    libraries are usable as well in general but the ones using C 
-    libraries through ``ctypes`` are not (which is caused by library 
-    path not being updated for the current process which is a common 
+    This function is for running GRASS GIS without starting it with the
+    standard script grassXY. No GRASS modules shall be called before
+    call of this function but any module or user script can be called
+    afterwards because a GRASS session has been set up. GRASS Python
+    libraries are usable as well in general but the ones using C
+    libraries through ``ctypes`` are not (which is caused by library
+    path not being updated for the current process which is a common
     operating system limitation).
 
     To create a GRASS session a ``gisrc`` file is created.
@@ -139,13 +139,13 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
     Basic usage::
 
         # ... setup GISBASE and PYTHON path before import
-        import grass.script as gscript
-        gisrc = gscript.setup.init("/usr/bin/grass7",
-                                   "/home/john/grassdata",
-                                   "nc_spm_08", "user1")
+        import grass.script as gs
+        gisrc = gs.setup.init("/usr/bin/grass7",
+                              "/home/john/grassdata",
+                              "nc_spm_08", "user1")
         # ... use GRASS modules here
         # end the session
-        gscript.setup.finish()
+        gs.setup.finish()
 
     :param gisbase: path to GRASS installation
     :param dbase: path to GRASS database (default: '')
@@ -258,9 +258,9 @@ def finish():
     called
     
     Basic usage::
-        import grass.script as gscript
+        import grass.script as gs
 
-        gscript.setup.cleanup()
+        gs.setup.cleanup()
     """
 
     clean_default_db()

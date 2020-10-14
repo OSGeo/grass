@@ -14,7 +14,7 @@ from grass.pygrass.errors import GrassError, OpenError, must_be_open
 from grass.pygrass.vector.table import DBlinks, Link
 from grass.pygrass.vector.find import PointFinder, BboxFinder, PolygonFinder
 
-test_vector_name="abstract_doctest_map"
+test_vector_name = "abstract_doctest_map"
 
 def is_open(c_mapinfo):
     """Return if the Vector is open"""
@@ -66,6 +66,7 @@ class Info(object):
         >>> test_vect.close()
 
     """
+
     def __init__(self, name, mapset='', *aopen, **kwopen):
         self._name = ''
         self._mapset = ''
@@ -392,7 +393,7 @@ class Info(object):
             self.layer = self.dblinks.by_layer(layer).layer
             self.table = self.dblinks.by_layer(layer).table()
             self.n_lines = self.table.n_rows()
-        self.writeable =  self.mapset == utils.getenv("MAPSET")
+        self.writeable = self.mapset == utils.getenv("MAPSET")
         # Initialize the finder
         self.find = {'by_point': PointFinder(self.c_mapinfo, self.table,
                                              self.writeable),

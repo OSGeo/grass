@@ -1,4 +1,10 @@
 [![Build Status](https://travis-ci.com/OSGeo/grass.svg?branch=master)](https://travis-ci.com/OSGeo/grass)
+[![GCC C/C++ standards check](https://github.com/OSGeo/grass/workflows/GCC%20C/C++%20standards%20check/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3A%22GCC+C%2FC%2B%2B+standards+check%22)
+[![Python code quality check](https://github.com/OSGeo/grass/workflows/Python%20code%20quality%20check/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3A%22Python+code+quality+check%22)
+[![General linting](https://github.com/OSGeo/grass/workflows/General%20linting/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3A%22General+linting%22)
+[![CI](https://github.com/OSGeo/grass/workflows/CI/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3ACI)
+[![OSGeo4W](https://github.com/OSGeo/grass/workflows/OSGeo4W/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3AOSGeo4W)
+[![Centos](https://github.com/OSGeo/grass/workflows/CentOS/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3ACentOS)
 
 # GRASS GIS Repository
 
@@ -22,56 +28,18 @@ Want to become a core developer? See
 
 > See INSTALL file.
 
-Yes, you should really read [INSTALL](INSTALL).
-
-## How to generate the 'Programmer's Manual'
-
-This needs doxygen (<http://www.doxygen.org>) and optionally
-Graphviz dot (<http://www.research.att.com/sw/tools/graphviz/>).
-
-To build the GRASS programmer's documentation, run
-
-```
-make htmldocs
-```
-
-or to generate documentation as single html file
-(recommended for simple reading)
-
-```
-make htmldocs-single
-```
-
-here. This takes quite some time. The result is in `lib/html/index.html`
-which refers to further document repositories in
-
-```
-lib/vector/html/index.html
-lib/db/html/index.html
-lib/gis/html/index.html
-```
-
-The master file is: `./grasslib.dox` where all sub-documents have to
-be linked into.
-
-To generate the documents in PDF format, run
-
-```
-make pdfdocs
-```
-
-An online version is available [here](https://grass.osgeo.org/programming7/)
+Yes, you should really read [INSTALL](INSTALL). In addition, there are detailed [compile instructions](https://grasswiki.osgeo.org/wiki/Compile_and_Install) in the Wiki.
 
 ## Docker
 
-Build using the downloaded source code (in the directory with the
-source code):
+Build a docker image using the downloaded source code (run this in the directory 
+containing the source code):
 
 ```
 docker build -t grassgis79 .
 ```
 
-A test run (assuming you have existing GRASS GIS location; it can be
+A test run (assuming you have the existing GRASS GIS test location; it can be
 downloaded from
 [here](https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.zip))
 
@@ -107,4 +75,42 @@ this issue, clean all the compiled files from the source code:
 
 ```
 make distclean
+```
+
+## How to generate the 'Programmer's Manual'
+
+You can generate locally the [GRASS GIS Programmer's Manual](https://grass.osgeo.org/programming7/).
+
+This needs doxygen (<http://www.doxygen.org>) and optionally
+Graphviz dot (<http://www.research.att.com/sw/tools/graphviz/>).
+
+To build the GRASS programmer's documentation, run
+
+```
+make htmldocs
+```
+
+or to generate documentation as single html file
+(recommended for simple reading)
+
+```
+make htmldocs-single
+```
+
+here. This takes quite some time. The result is in `lib/html/index.html`
+which refers to further document repositories in
+
+```
+lib/vector/html/index.html
+lib/db/html/index.html
+lib/gis/html/index.html
+```
+
+The master file is: `./grasslib.dox` where all sub-documents have to
+be linked into.
+
+To generate the documents in PDF format, run
+
+```
+make pdfdocs
 ```

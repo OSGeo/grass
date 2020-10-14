@@ -4086,7 +4086,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.import_to_translate.c:14
 msgid "nearest;nearest neighbor;bilinear;bilinear interpolation;bicubic;bicubic interpolation;lanczos;lanczos filter;bilinear_f;bilinear interpolation with fallback;bicubic_f;bicubic interpolation with fallback;lanczos_f;lanczos filter with fallback"
-msgstr ""
+msgstr "nearest;nearest neighbor;bilinear;bilinear interpolation;bicubic;bicubic interpolation;lanczos;lanczos filter;bilinear_f;bilinear interpolation with fallback;bicubic_f;bicubic interpolation with fallback;lanczos_f;lanczos filter with fallback"
 
 #: ../locale/scriptstrings/r.import_to_translate.c:16
 msgid "Output raster map extent"
@@ -10757,7 +10757,7 @@ msgstr "Livelli delle isoipse"
 
 #: ../raster/r.contour/main.c:140
 #, c-format
-msgid "Neither <%s> nor <%s> option must be specified"
+msgid "Either <%s> or <%s> option must be specified"
 msgstr ""
 
 #: ../raster/r.contour/main.c:183 ../raster/r.stream.extract/close.c:194
@@ -14694,11 +14694,11 @@ msgid "Inner search radius"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:141
-msgid "Flatenss threshold (degrees)"
+msgid "Flatness threshold (degrees)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:149
-msgid "Flatenss distance, zero for none"
+msgid "Flatness distance, zero for none"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:155
@@ -14715,7 +14715,7 @@ msgid "Distance step for every iteration (zero to omit)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:171
-msgid "Distance where serch will start in multiple mode (zero to omit)"
+msgid "Distance where search will start in multiple mode (zero to omit)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:177
@@ -14749,11 +14749,11 @@ msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:245
-msgid "Flatenss threshold must be grater than 0"
+msgid "Flatness threshold must be grater than 0"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:254
-msgid "Flatenss distance should be between skip and search radius. Otherwise ignored"
+msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:272
@@ -19820,7 +19820,7 @@ msgstr ""
 #: ../display/d.legend.vect/main.c:82 ../display/d.legend.vect/main.c:141
 #: ../display/d.legend/main.c:100 ../display/d.legend/main.c:109
 msgid "Title"
-msgstr ""
+msgstr "Titolo"
 
 #: ../display/d.legend.vect/main.c:96 ../display/d.legend.vect/main.c:102
 #: ../display/d.legend.vect/main.c:109 ../display/d.legend.vect/main.c:168
@@ -38613,7 +38613,7 @@ msgid "Only calculate optimal radius and exit (no map is written)"
 msgstr ""
 
 #: ../vector/v.kernel/main.c:218
-msgid "In network mode, normalize values by sum of density multiplied by length of each segment. Integral over the output map then gives 1.0 * mult"
+msgid "In network mode, normalize values by sum of density multiplied by length of each segment. Integral over the output map then gives 1.0 * multiplier"
 msgstr ""
 
 #: ../vector/v.kernel/main.c:224
@@ -39660,7 +39660,7 @@ msgstr ""
 
 #: ../vector/v.out.postgis/main.c:52
 msgid "Exports a vector map layer to PostGIS feature table."
-msgstr ""
+msgstr "Esporta una mappa vettoriale in una tabella di PostGIS."
 
 #: ../vector/v.out.postgis/main.c:103
 #, c-format

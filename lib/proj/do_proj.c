@@ -378,7 +378,6 @@ int GPJ_init_transform(const struct pj_info *info_in,
     else if (info_out->pj == NULL) {
 	const char *projstr = NULL;
 	char *indef = NULL;
-	PJ *source_crs;
 	
 	/* Even Rouault:
 	 * if info_in->def contains a +towgs84/+nadgrids clause, 
@@ -391,15 +390,21 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	 * and in that case, take the source CRS with proj_get_source_crs(),
 	 * and do the inverse transform on it */
 
-	source_crs = proj_get_source_crs(NULL, info_in->pj);
-	if (source_crs) {
-	    projstr = proj_as_proj_string(NULL, source_crs, PJ_PROJ_5, NULL);
-	    if (projstr)
-		indef = G_store(projstr);
-	    proj_destroy(source_crs);
+	if (proj_get_type(info_in->pj) == PJ_TYPE_BOUND_CRS) {
+	    PJ *source_crs;
+
+	    G_debug(1, "transform to ll equivalent: found bound crs");
+	    source_crs = proj_get_source_crs(NULL, info_in->pj);
+	    if (source_crs) {
+		projstr = proj_as_proj_string(NULL, source_crs, PJ_PROJ_5, NULL);
+		if (projstr)
+		    indef = G_store(projstr);
+		proj_destroy(source_crs);
+	    }
 	}
 	if (indef == NULL)
 	    indef = G_store(info_in->def);
+	G_debug(1, "ll equivalent definition: %s", indef);
 
 	/* what about axis order?
 	 * is it always enu? 
@@ -438,35 +443,41 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	G_debug(1, "source proj string: %s", info_in->def);
 	G_debug(1, "source type: %s", get_pj_type_string(info_in->pj));
 	indefcrs = info_in->def;
-	source_crs = proj_get_source_crs(NULL, info_in->pj);
-	if (source_crs) {
-	    const char *projstr;
 
-	    projstr = proj_as_proj_string(NULL, source_crs, PJ_PROJ_5, NULL);
-	    if (projstr) {
-		indefcrs = G_store(projstr);
-		G_debug(1, "Input CRS definition converted from '%s' to '%s'",
-		        info_in->def, indefcrs);
+	if (proj_get_type(info_in->pj) == PJ_TYPE_BOUND_CRS) {
+	    source_crs = proj_get_source_crs(NULL, info_in->pj);
+	    if (source_crs) {
+		const char *projstr;
+
+		projstr = proj_as_proj_string(NULL, source_crs, PJ_PROJ_5, NULL);
+		if (projstr) {
+		    indefcrs = G_store(projstr);
+		    G_message("Input CRS definition converted from '%s' to '%s'",
+			    info_in->def, indefcrs);
+		}
+		proj_destroy(source_crs);
+		source_crs = NULL;
 	    }
-	    proj_destroy(source_crs);
-	    source_crs = NULL;
 	}
 
 	G_debug(1, "target proj string: %s", info_out->def);
 	G_debug(1, "target type: %s", get_pj_type_string(info_out->pj));
 	outdefcrs = info_out->def;
-	target_crs = proj_get_source_crs(NULL, info_out->pj);
-	if (target_crs) {
-	    const char *projstr;
 
-	    projstr = proj_as_proj_string(NULL, target_crs, PJ_PROJ_5, NULL);
-	    if (projstr) {
-		outdefcrs = G_store(projstr);
-		G_debug(1, "Output CRS definition converted from '%s' to '%s'",
-		        info_out->def, outdefcrs);
+	if (proj_get_type(info_out->pj) == PJ_TYPE_BOUND_CRS) {
+	    target_crs = proj_get_source_crs(NULL, info_out->pj);
+	    if (target_crs) {
+		const char *projstr;
+
+		projstr = proj_as_proj_string(NULL, target_crs, PJ_PROJ_5, NULL);
+		if (projstr) {
+		    outdefcrs = G_store(projstr);
+		    G_message("Output CRS definition converted from '%s' to '%s'",
+			    info_out->def, outdefcrs);
+		}
+		proj_destroy(target_crs);
+		target_crs = NULL;
 	    }
-	    proj_destroy(target_crs);
-	    target_crs = NULL;
 	}
 
 	/* PROJ6+: EPSG must be uppercase EPSG */
@@ -675,11 +686,18 @@ int GPJ_init_transform(const struct pj_info *info_in,
 			      info_trans->def);
 		}
 		else {
-		    proj_destroy(info_trans->pj);
-		    info_trans->pj = pj_norm;
-		    projstr = proj_as_proj_string(NULL, info_trans->pj,
-						    PJ_PROJ_5, NULL);
-		    info_trans->def = G_store(projstr);
+		    projstr = proj_as_proj_string(NULL, pj_norm,
+						  PJ_PROJ_5, NULL);
+		    if (projstr && *projstr) {
+			proj_destroy(info_trans->pj);
+			info_trans->pj = pj_norm;
+			info_trans->def = G_store(projstr);
+		    }
+		    else {
+			proj_destroy(pj_norm);
+			G_warning(_("No PROJ definition for normalized version of '%s'"),
+			      info_trans->def);
+		    }
 		}
 		if (op_count > 1) {
 		    G_important_message(_("Selected pipeline:"));
@@ -712,8 +730,11 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	    /* try proj_create() with +proj=pipeline +step +inv %s +step %s" */
 	    G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s +step %s",
 		       indef, outdef);
+	    G_important_message(_("Using simplified pipeline '%s'"),
+			        info_trans->def);
 
 	    info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
+	    G_debug(1, "proj_create() pipeline: %s", info_trans->def);
 	}
 
 	if (pj_area)
@@ -937,7 +958,7 @@ int GPJ_transform(const struct pj_info *info_in,
 	/* PROJ 6+: conversion to radians is not always needed:
 	 * if proj_angular_input(info_trans->pj, dir) == 1 
 	 * -> convert from degrees to radians */
-	if (out_is_ll && proj_angular_input(info_trans->pj, dir) == 0) {
+	if (out_is_ll && proj_angular_output(info_trans->pj, dir) == 0) {
 	    out_rad2deg = 0;
 	}
 #endif
@@ -948,7 +969,7 @@ int GPJ_transform(const struct pj_info *info_in,
 	    /* PROJ 6+: conversion to radians is not always needed:
 	     * if proj_angular_input(info_trans->pj, dir) == 1 
 	     * -> convert from degrees to radians */
-	    if (in_is_ll && proj_angular_output(info_trans->pj, dir) == 0) {
+	    if (in_is_ll && proj_angular_input(info_trans->pj, dir) == 0) {
 		in_deg2rad = 0;
 	    }
 #endif
@@ -1152,7 +1173,7 @@ int GPJ_transform_array(const struct pj_info *info_in,
 	/* PROJ 6+: conversion to radians is not always needed:
 	 * if proj_angular_input(info_trans->pj, dir) == 1 
 	 * -> convert from degrees to radians */
-	if (out_is_ll && proj_angular_input(info_trans->pj, dir) == 0) {
+	if (out_is_ll && proj_angular_output(info_trans->pj, dir) == 0) {
 	    out_rad2deg = 0;
 	}
 #endif
@@ -1163,7 +1184,7 @@ int GPJ_transform_array(const struct pj_info *info_in,
 	    /* PROJ 6+: conversion to degrees is not always needed:
 	     * if proj_angular_output(info_trans->pj, dir) == 1 
 	     * -> convert from degrees to radians */
-	    if (in_is_ll && proj_angular_output(info_trans->pj, dir) == 0) {
+	    if (in_is_ll && proj_angular_input(info_trans->pj, dir) == 0) {
 		in_deg2rad = 0;
 	    }
 #endif

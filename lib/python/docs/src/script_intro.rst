@@ -1,5 +1,5 @@
-GRASS GIS Python scripting with script package
-==============================================
+GRASS GIS Python scripting with grass.script package
+====================================================
 
 Parts of the API
 ----------------
@@ -20,10 +20,10 @@ First, try a standard command in Console tab in Layer Manager in GRASS GUI::
 We are running *r.info* with an option ``map`` set to ``elevation`` Now,
 switch to Python tab and type the same command but in Python syntax::
 
-    grass.read_command('r.info', map='elevation', flags='g')
+    gs.read_command('r.info', map='elevation', flags='g')
 
 We used function ``read_command()`` from the ``grass.script`` package
-which is imported under the name ``grass`` in the Python tab in GRASS
+which is imported under the name ``gs`` in the Python tab in GRASS
 GUI. There are also other functions besides ``read_command()`` most
 notably ``run_command()``, ``write_command()`` and ``parse_command()``.
 The first parameter for functions from this group is the name of the
@@ -52,17 +52,17 @@ To launch a Python script from GUI, use File -> Launch Python script.
 
 ::
 
-    import grass.script as gscript
+    import grass.script as gs
 
     def main():
         input_raster = 'elevation'
         output_raster = 'high_areas'
-        stats = gscript.parse_command('r.univar', map='elevation', flags='g')
+        stats = gs.parse_command('r.univar', map='elevation', flags='g')
         raster_mean = float(stats['mean'])
         raster_stddev = float(stats['stddev'])
         raster_high = raster_mean + raster_stddev
-        gscript.mapcalc('{r} = {a} > {m}'.format(r=output_raster, a=input_raster,
-                                                 m=raster_high))
+        gs.mapcalc('{r} = {a} > {m}'.format(r=output_raster, a=input_raster,
+                                            m=raster_high))
 
     if __name__ == "__main__":
         main()
@@ -73,16 +73,16 @@ Processing many maps
 
 ::
 
-    import grass.script as gscript
+    import grass.script as gs
 
     def main():
         rasters = ['lsat7_2002_10', 'lsat7_2002_20', 'lsat7_2002_30', 'lsat7_2002_40']
         max_min = None
         for raster in rasters:
-            stats = gscript.parse_command('r.univar', map=raster, flags='g')
+            stats = gs.parse_command('r.univar', map=raster, flags='g')
             if max_min is None or max_min < stats['min']:
                 max_min = stats['min']
-        print max_min
+        print(max_min)
 
     if __name__ == "__main__":
         main()
@@ -115,16 +115,16 @@ Providing GRASS module interface to a script
 
     import sys
 
-    import grass.script as gscript
+    import grass.script as gs
 
 
     def main():
-        options, flags = gscript.parser()
+        options, flags = gs.parser()
         araster = options['araster']
         braster = options['braster']
         output = options['output']
 
-        gscript.mapcalc('{r} = {a} + {b}'.format(r=output, a=araster, b=braster))
+        gs.mapcalc('{r} = {a} + {b}'.format(r=output, a=araster, b=braster))
 
         return 0
 
@@ -156,4 +156,4 @@ the code due to the dynamic nature of Python, there is a large number
 of tools such as *pep8* or *pylint* which can help you to identify problems
 in you Python code.
 
-.. _C API documentation: http://grass.osgeo.org/programming7/gis_8h.html
+.. _C API documentation: https://grass.osgeo.org/programming7/gis_8h.html

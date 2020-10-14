@@ -91,6 +91,7 @@ class Filters(object):
     'SELECT cat, area FROM table WHERE area<10000 ORDER BY area LIMIT 10;'
 
     """
+
     def __init__(self, tname):
         self.tname = tname
         self._select = None
@@ -199,6 +200,7 @@ class Columns(object):
     'table_doctest_map'                                   #doctest: +SKIP
 
     """
+
     def __init__(self, tname, connection, key='cat'):
         self.tname = tname
         self.conn = connection
@@ -626,6 +628,7 @@ class Link(object):
     >>> link = Link(c_fieldinfo = ctypes.pointer(libvect.field_info()))
 
     """
+
     def _get_layer(self):
         return self.c_fieldinfo.contents.number
 
@@ -832,6 +835,7 @@ class DBlinks(object):
     >>> cens.close()
 
     """
+
     def __init__(self, c_mapinfo):
         self.c_mapinfo = c_mapinfo
 
@@ -847,7 +851,7 @@ class DBlinks(object):
 
         """
         if isinstance(item, int):
-                return self.by_index(item)
+            return self.by_index(item)
         else:
             return self.by_name(item)
 
@@ -969,6 +973,7 @@ class Table(object):
     Columns([('cat', 'int4'), ...])
 
     """
+
     def _get_name(self):
         """Private method to return the name of table"""
         return self._name

@@ -38,6 +38,13 @@ solution.
 
 <p>The <b>-e</b> and <b>-g</b> flags are not mutually exclusive.
 
+<p><b>offset</b> and <b>scale</b> modify color rules to match the
+values of a raster map using the formula <em>new_value = (old_value +
+offset) x scale</em>. For example, if the units of a raster map are
+Kelvin x 50, the color rules <em>celsius</em> can be applied with
+<em>offset=273.15</em> and <em>scale=50</em>.
+
+
 <p>If the user specifies the <b>-w</b> flag, the current color table file for
 the input map will not be overwritten. This means that the color table is
 created only if the <i>map</i> does not already have a color table. If this
@@ -299,7 +306,7 @@ r.colors map=current_raster -n rast=current_raster
 </em>
 
 <p>See also wiki
-page <a href="http://grasswiki.osgeo.org/wiki/Color_tables">Color
+page <a href="https://grasswiki.osgeo.org/wiki/Color_tables">Color
 tables</a> (from GRASS User Wiki)
 
 <p><a href="http://colorbrewer.org">ColorBrewer</a> is an online tool designed to

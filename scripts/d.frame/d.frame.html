@@ -38,6 +38,7 @@ g.region raster=elevation
 d.frame -e
 
 # create a first frame and display 'landuse96_28m' raster map including text label
+# order: bottom,top,left,right - in percent 
 d.frame -c frame=first at=0,50,0,50
 d.rast landuse96_28m
 d.text text='Landuse' bgcolor=220:220:220 color=black size=6

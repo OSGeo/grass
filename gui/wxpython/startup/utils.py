@@ -9,6 +9,7 @@ This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Vaclav Petras <wenzeslaus gmail com>
+@author Linda Kladivova <l.kladivova@seznam.cz>
 
 This file should not use (import) anything from GUI code (wx or wxGUI).
 This can potentially be part of the Python library (i.e. it needs to
@@ -17,10 +18,11 @@ solve the errors etc. in a general manner).
 
 
 import os
-import shutil
 import tempfile
 import getpass
 import sys
+from shutil import copytree, ignore_patterns
+from grass.grassdb.create import create_mapset, get_default_mapset_name
 
 
 def get_possible_database_path():
@@ -90,87 +92,71 @@ def create_database_directory():
     return None
 
 
-def get_lockfile_if_present(database, location, mapset):
-    """Return path to lock if present, None otherwise
+def _get_startup_location_in_distribution():
+    """Check for startup location directory in distribution.
 
-    Returns the path as a string or None if nothing was found, so the
-    return value can be used to test if the lock is present.
+    Returns startup location if found or None if nothing was found.
     """
-    lock_name = ".gislock"
-    lockfile = os.path.join(database, location, mapset, lock_name)
-    if os.path.isfile(lockfile):
-        return lockfile
-    else:
+    gisbase = os.getenv("GISBASE")
+    startup_location = os.path.join(gisbase, "demolocation")
+
+    # Find out if startup location exists
+    if os.path.exists(startup_location):
+        return startup_location
+    return None
+
+
+def _copy_startup_location(startup_location, location_in_grassdb):
+    """Copy the simple startup_location with some data to GRASS database.
+
+    Returns True if successfully copied or False
+    when an error was encountered.
+    """
+    # Copy source startup location into GRASS database
+    try:
+        copytree(startup_location, location_in_grassdb,
+                 ignore=ignore_patterns('*.tmpl', 'Makefile*'))
+        return True
+    except (IOError, OSError):
+        pass
+    return False
+
+
+def _create_startup_mapset(location_path):
+    """Create the new empty startup mapset named after user.
+
+    Returns new mapset name if successfully created or None when
+    an error was encountered.
+    """
+    mapset_name = default_name = get_default_mapset_name()
+    mapset_path = os.path.join(location_path, mapset_name)
+
+    # Create new startup mapset
+    try:
+        grassdatabase, location = os.path.split(location_path)
+        create_mapset(grassdatabase, location, mapset_name)
+        return mapset_name
+    except (IOError, OSError):
+        pass
+    return None
+
+
+def create_startup_location_in_grassdb(grassdatabase, startup_location_name):
+    """Create a new startup location in the given GRASS database.
+
+    Returns the newly created mapset name on success. Returns None if there is
+    no location to copy in the installation or copying failed.
+    """
+
+    # Find out if startup location exists
+    startup_location = _get_startup_location_in_distribution()
+    if not startup_location:
         return None
 
-
-def create_mapset(database, location, mapset):
-    """Creates a mapset in a specified location"""
-    location_path = os.path.join(database, location)
-    mapset_path = os.path.join(location_path, mapset)
-    # create an empty directory
-    os.mkdir(mapset_path)
-    # copy DEFAULT_WIND file and its permissions from PERMANENT
-    # to WIND in the new mapset
-    region_path1 = os.path.join(location_path, "PERMANENT", "DEFAULT_WIND")
-    region_path2 = os.path.join(location_path, mapset, "WIND")
-    shutil.copy(region_path1, region_path2)
-    # set permissions to u+rw,go+r (disabled; why?)
-    # os.chmod(os.path.join(database,location,mapset,'WIND'), 0644)
-
-
-def delete_mapset(database, location, mapset):
-    """Deletes a specified mapset"""
-    if mapset == "PERMANENT":
-        # TODO: translatable or not?
-        raise ValueError(
-            "Mapset PERMANENT cannot be deleted" " (whole location can be)"
-        )
-    shutil.rmtree(os.path.join(database, location, mapset))
-
-
-def delete_location(database, location):
-    """Deletes a specified location"""
-    shutil.rmtree(os.path.join(database, location))
-
-
-def rename_mapset(database, location, old_name, new_name):
-    """Rename mapset from *old_name* to *new_name*"""
-    location_path = os.path.join(database, location)
-    os.rename(
-        os.path.join(location_path, old_name), os.path.join(location_path, new_name)
-    )
-
-
-def rename_location(database, old_name, new_name):
-    """Rename location from *old_name* to *new_name*"""
-    os.rename(os.path.join(database, old_name), os.path.join(database, new_name))
-
-
-def mapset_exists(database, location, mapset):
-    """Returns True whether mapset path exists."""
-    location_path = os.path.join(database, location)
-    mapset_path = os.path.join(location_path, mapset)
-    if os.path.exists(mapset_path):
-        return True
-    return False
-
-
-def location_exists(database, location):
-    """Returns True whether location path exists."""
-    location_path = os.path.join(database, location)
-    if os.path.exists(location_path):
-        return True
-    return False
-
-
-def get_default_mapset_name():
-    """Returns default name for mapset."""
-    try:
-        defaultName = getpass.getuser()
-        defaultName.encode("ascii")
-    except UnicodeEncodeError:
-        # raise error if not ascii (not valid mapset name)
-        defaultName = "user"
-
-    return defaultName
+    # Copy the simple startup_location with some data to GRASS database.
+    mapset = None
+    location_in_grassdb = os.path.join(grassdatabase, startup_location_name)
+    if _copy_startup_location(startup_location, location_in_grassdb):
+        mapset = _create_startup_mapset(location_in_grassdb)
+        return mapset
+    return None

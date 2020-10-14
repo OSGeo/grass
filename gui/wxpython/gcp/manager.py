@@ -60,7 +60,7 @@ from core.giface import Notification
 from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, \
     CheckListBox, TextCtrl, Menu, ListCtrl, BitmapFromImage, CheckListCtrlMixin
 
-from location_wizard.wizard import TitledPage as TitledPage
+from location_wizard.wizard import GridBagSizerTitledPage as TitledPage
 
 #
 # global variables
@@ -222,7 +222,29 @@ class GCPWizard(object):
                 render=False)
 
             self.SwitchEnv('target')
-            if tgt_map['raster']:
+
+            web_service_layer = self.mappage.GetWebServiceLayers(
+                name=tgt_map['raster'])
+
+            if tgt_map['raster'] and web_service_layer:
+                #
+                # add web service layer to target map
+                #
+
+                rendertype = web_service_layer['type']
+                cmdlist = web_service_layer['cmd']
+                name = tgt_map['raster']
+
+                self.TgtMap.AddLayer(
+                    ltype=rendertype,
+                    command=cmdlist,
+                    active=True,
+                    name=name,
+                    hidden=False,
+                    opacity=1.0,
+                    render=False)
+
+            elif tgt_map['raster']:
                 #
                 # add raster layer to target map
                 #
@@ -719,6 +741,8 @@ class DispMapPage(TitledPage):
 
         self.parent = parent
         global maptype
+        self.web_servc_lyrs_root_node_name = \
+            _("Map Display Web Service Layer(s)")
 
         #
         # layout
@@ -762,7 +786,8 @@ class DispMapPage(TitledPage):
 
         self.tgtrastselection = Select(
             self, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
-            type='raster', updateOnPopup=False)
+            type='raster', updateOnPopup=False,
+            extraItems=self.GetSelectTargetRasterExtraItems())
 
         self.sizer.Add(
             self.tgtrastselection,
@@ -893,22 +918,25 @@ class DispMapPage(TitledPage):
                                     self.parent.grouppage.xygroup,
                                     'VREF')
 
-            f = open(vgrpfile)
+            error_message = _(
+                'No maps in selected group <%s>.\n'
+                'Please edit group or select another group.') % \
+                self.parent.grouppage.xygroup
+
             try:
-                for vect in f.readlines():
-                    vect = vect.strip('\n')
-                    if len(vect) < 1:
-                        continue
-                    self.parent.src_maps.append(vect)
-            finally:
-                f.close()
+                with open(vgrpfile) as f:
+                    for vect in f.readlines():
+                        vect = vect.strip('\n')
+                        if len(vect) < 1:
+                            continue
+                        self.parent.src_maps.append(vect)
+            except FileNotFoundError:
+                GError(parent=self, message=error_message,
+                       showTraceback=False)
+                return
 
             if len(self.parent.src_maps) < 1:
-                GError(
-                    parent=self, message=_(
-                        'No maps in selected group <%s>.\n'
-                        'Please edit group or select another group.') %
-                    self.parent.grouppage.xygroup)
+                GError(parent=self, message=error_message)
                 return
 
         # filter out all maps not in group
@@ -928,6 +956,35 @@ class DispMapPage(TitledPage):
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
 
+    def GetWebServiceLayers(self, ltype=("wms"), name=None):
+        """Get Map Display web service layer(s).
+
+        :param ltype: map layer type
+        :param name: map layer name
+
+        :return: web service layer(s) dict
+        {
+            web_service_map_layer_name: {'type': ltype, 'cmd': [cmd list]},
+           ...
+        }
+        :return: None when web service map layer name doesn't exist
+       """
+        layers = {}
+        for layer in self.parent._giface.GetLayerList():
+            if layer.type in ltype:
+                layers[str(layer)] = {
+                    'type' : layer.type,
+                    'cmd': layer.cmd
+                }
+        if name:
+            return layers.get(name)
+        return layers
+
+    def GetSelectTargetRasterExtraItems(self):
+        """Get select target raster widget extra items."""
+        return {
+            self.web_servc_lyrs_root_node_name: self.GetWebServiceLayers().keys()
+        }
 
 class GCP(MapFrame, ColumnSorterMixin):
     """
@@ -1040,6 +1097,8 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.gr_method = 'nearest'
         # region clipping for georectified map
         self.clip_to_region = False
+        # overwrite result map
+        self.overwrite = False
         # number of GCPs selected to be used for georectification (checked)
         self.GCPcount = 0
         # forward RMS error
@@ -1293,6 +1352,10 @@ class GCP(MapFrame, ColumnSorterMixin):
         textProp['font'] = font
         self.pointsToDrawSrc.SetPropertyVal("text", textProp)
         self.pointsToDrawTgt.SetPropertyVal("text", copy(textProp))
+
+        # overwrite result map
+        self.overwrite = UserSettings.Get(group='gcpman', key='map',
+                                          subkey='overwrite')
 
     def SetGCPSatus(self, item, itemIndex):
         """Before GCP is drawn, decides it's colour and whether it
@@ -1586,6 +1649,60 @@ class GCP(MapFrame, ColumnSorterMixin):
         else:
             return True
 
+    def _getOverWriteDialog(self, maptype, overwrite):
+        """Get overwrite confirm dialog
+
+        :param str maptype: map type
+        :param bool overwrite: overwrite
+
+        :return
+
+        object: overwrite dialog
+
+        None: it isn't necessary to display the overwrite dialog
+        """
+        if maptype == 'raster':
+            self.grwiz.SwitchEnv('source')
+            maps = grass.read_command(
+                'i.group', flags='gl', group=self.xygroup, quiet=True,
+            ).split('\n')
+            self.grwiz.SwitchEnv('target')
+            found_maps = []
+            if maps:
+                for map in maps:
+                    if map:
+                        map_name = map.split('@')[0] + self.extension
+                        found = grass.find_file(
+                            name=map_name, element='cell',
+                            mapset=self.currentmapset,
+                        )
+                        if found['name']:
+                            found_maps.append("<{}>".format(found['name']))
+                map_name = ', '.join(found_maps)
+        else:
+            self.grwiz.SwitchEnv('target')
+            found = grass.find_file(
+                name=self.outname, element='vector',
+                mapset=self.currentmapset,
+            )
+            self.grwiz.SwitchEnv('source')
+            map_name = "<{}>".format(found['name'])
+
+        if found['name'] and not overwrite:
+            overwrite_dlg = wx.MessageDialog(
+                self.GetParent(),
+                message=_(
+                    "The {map_type} map {map_name} exists. "
+                    "Do you want to overwrite?".format(
+                        map_type=maptype,
+                        map_name=map_name,
+                    ),
+                ),
+                caption=_('Overwrite?'),
+                style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
+            )
+            return overwrite_dlg
+
     def OnGeorect(self, event):
         """
         Georectifies map(s) in group using i.rectify or v.transform
@@ -1597,6 +1714,18 @@ class GCP(MapFrame, ColumnSorterMixin):
             return
 
         if maptype == 'raster':
+            overwrite_dlg = self._getOverWriteDialog(
+                maptype=maptype, overwrite=self.overwrite,
+            )
+            if overwrite_dlg:
+                if not overwrite_dlg.ShowModal() == wx.ID_YES:
+                    overwrite_dlg.Destroy()
+                    return
+                overwrite_dlg.Destroy()
+                overwrite = True
+            else:
+                overwrite = self.overwrite
+
             self.grwiz.SwitchEnv('source')
 
             if self.clip_to_region:
@@ -1616,7 +1745,8 @@ class GCP(MapFrame, ColumnSorterMixin):
                                   extension=self.extension,
                                   order=self.gr_order,
                                   method=self.gr_method,
-                                  flags=flags)
+                                  flags=flags,
+                                  overwrite=overwrite)
 
             del busy
 
@@ -1625,6 +1755,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                 print(msg, file=sys.stderr)
 
         elif maptype == 'vector':
+
             # loop through all vectors in VREF
 
             self.grwiz.SwitchEnv('source')
@@ -1644,6 +1775,17 @@ class GCP(MapFrame, ColumnSorterMixin):
             # georectify each vector in VREF using v.rectify
             for vect in vectlist:
                 self.outname = str(vect.split('@')[0]) + self.extension
+                overwrite_dlg = self._getOverWriteDialog(
+                    maptype=maptype, overwrite=self.overwrite,
+                )
+                if overwrite_dlg:
+                    if not overwrite_dlg.ShowModal() == wx.ID_YES:
+                        overwrite_dlg.Destroy()
+                        return
+                    overwrite_dlg.Destroy()
+                    overwrite = True
+                else:
+                    overwrite = self.overwrite
                 self._giface.WriteLog(text=_('Transforming <%s>...') % vect,
                                       notification=Notification.MAKE_VISIBLE)
                 ret = msg = ''
@@ -1660,7 +1802,8 @@ class GCP(MapFrame, ColumnSorterMixin):
                                       input=vect,
                                       output=self.outname,
                                       group=self.xygroup,
-                                      order=self.gr_order)
+                                      order=self.gr_order,
+                                      overwrite=overwrite)
 
                 del busy
 
@@ -2420,7 +2563,7 @@ class VectGroup(wx.Dialog):
                     line = line.replace('\n', '')
                     if len(line) < 1:
                         continue
-                    checked.append(line)
+                    checked.append(line.split('@')[0])
                 self.listMap.SetCheckedStrings(checked)
             finally:
                 f.close()
@@ -2875,7 +3018,8 @@ class GrSettingsDialog(wx.Dialog):
         self.parent.grwiz.SwitchEnv('target')
         self.tgtrastselection = Select(
             panel, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
-            type='raster', updateOnPopup=False)
+            type='raster', updateOnPopup=False,
+            extraItems=self.parent.grwiz.mappage.GetSelectTargetRasterExtraItems())
         self.tgtrastselection.SetElementList('cell')
         self.tgtrastselection.GetElementList()
 
@@ -2989,6 +3133,17 @@ class GrSettingsDialog(wx.Dialog):
                   flag=wx.EXPAND | wx.ALL, border=5)
         self.check.SetValue(self.parent.clip_to_region)
 
+        # overwrite result map
+        overwrite = UserSettings.Get(group='gcpman', key='map',
+                                     subkey='overwrite')
+        self.overwrite = wx.CheckBox(parent=panel, id=wx.ID_ANY,
+                                     label=_('overwrite result map'))
+        self.Bind(wx.EVT_CHECKBOX, self.OnOverwrite, self.overwrite)
+        sizer.Add(self.overwrite, proportion=0,
+                  flag=wx.EXPAND | wx.ALL, border=5)
+        self.overwrite.SetValue(overwrite)
+        self.parent.overwrite = overwrite
+
         # extension
         sizer.Add(
             StaticText(
@@ -3068,6 +3223,9 @@ class GrSettingsDialog(wx.Dialog):
     def OnClipRegion(self, event):
         self.parent.clip_to_region = event.IsChecked()
 
+    def OnOverwrite(self, event):
+        self.parent.overwrite = event.IsChecked()
+
     def OnExtension(self, event):
         self.parent.extension = self.ext_txt.GetValue()
 
@@ -3131,6 +3289,12 @@ class GrSettingsDialog(wx.Dialog):
             subkey='width',
             value=wx.FindWindowById(
                 self.symbol['width']).GetValue())
+        UserSettings.Set(
+            group='gcpman',
+            key='map',
+            subkey='overwrite',
+            value=self.parent.overwrite,
+        )
 
         srcrender = False
         srcrenderVector = False
@@ -3170,7 +3334,27 @@ class GrSettingsDialog(wx.Dialog):
             tgt_map['raster'] = self.new_tgt_map['raster']
             tgt_map['vector'] = self.new_tgt_map['vector']
 
-            if tgt_map['raster'] != '':
+            web_service_layer = self.parent.grwiz.mappage.GetWebServiceLayers(
+                name=tgt_map['raster'])
+
+            if tgt_map['raster'] != '' and web_service_layer:
+                #
+                # add web service layer to target map
+                #
+                rendertype = web_service_layer['type']
+                cmdlist = web_service_layer['cmd']
+                name = tgt_map['raster']
+
+                self.parent.grwiz.TgtMap.AddLayer(
+                    ltype=rendertype,
+                    command=cmdlist,
+                    active=True,
+                    name=name,
+                    hidden=False,
+                    opacity=1.0,
+                    render=False)
+
+            elif tgt_map['raster'] != '':
                 cmdlist = ['d.rast', 'map=%s' % tgt_map['raster']]
                 name, found = utils.GetLayerNameFromCmd(cmdlist)
                 self.parent.grwiz.TgtMap.AddLayer(

@@ -39,18 +39,18 @@ class RasterDataset(AbstractMapDataset):
 
         .. code-block:: python
 
-            >>> import grass.script as grass
+            >>> import grass.script as gs
             >>> import grass.temporal as tgis
             >>> init()
-            >>> grass.use_temp_region()
-            >>> grass.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
+            >>> gs.use_temp_region()
+            >>> gs.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
             ... t=1.0, b=0.0, res=10.0)
             0
-            >>> grass.run_command("r.mapcalc", overwrite=True, quiet=True,
+            >>> gs.run_command("r.mapcalc", overwrite=True, quiet=True,
             ... expression="strds_map_test_case = 1")
             0
-            >>> grass.run_command("r.timestamp", map="strds_map_test_case",
-            ...                   date="15 jan 1999", quiet=True)
+            >>> gs.run_command("r.timestamp", map="strds_map_test_case",
+            ...                date="15 jan 1999", quiet=True)
             0
             >>> mapset = tgis.get_current_mapset()
             >>> name = "strds_map_test_case"
@@ -87,8 +87,8 @@ class RasterDataset(AbstractMapDataset):
              | Minimum value:.............. 1.0
              | Maximum value:.............. 1.0
 
-            >>> grass.run_command("r.timestamp", map="strds_map_test_case",
-            ...                   date="2 years", quiet=True)
+            >>> gs.run_command("r.timestamp", map="strds_map_test_case",
+            ...                date="2 years", quiet=True)
             0
             >>> rmap.read_timestamp_from_grass()
             True
@@ -129,11 +129,12 @@ class RasterDataset(AbstractMapDataset):
             >>> rmap.is_time_relative()
             False
 
-            >>> grass.run_command("g.remove", flags="f", type="raster", name=name, quiet=True)
+            >>> gs.run_command("g.remove", flags="f", type="raster", name=name, quiet=True)
             0
-            >>> grass.del_temp_region()
+            >>> gs.del_temp_region()
 
     """
+
     def __init__(self, ident):
         AbstractMapDataset.__init__(self)
         self.reset(ident)
@@ -429,17 +430,17 @@ class Raster3DDataset(AbstractMapDataset):
 
         .. code-block:: python
 
-            >>> import grass.script as grass
+            >>> import grass.script as gs
             >>> init()
-            >>> grass.use_temp_region()
-            >>> grass.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
+            >>> gs.use_temp_region()
+            >>> gs.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
             ... t=100.0, b=0.0, res=10.0, res3=10.0)
             0
-            >>> grass.run_command("r3.mapcalc", overwrite=True, quiet=True,
-            ...                   expression="str3ds_map_test_case = 1")
+            >>> gs.run_command("r3.mapcalc", overwrite=True, quiet=True,
+            ...                expression="str3ds_map_test_case = 1")
             0
-            >>> grass.run_command("r3.timestamp", map="str3ds_map_test_case",
-            ...                   date="15 jan 1999", quiet=True)
+            >>> gs.run_command("r3.timestamp", map="str3ds_map_test_case",
+            ...                date="15 jan 1999", quiet=True)
             0
             >>> mapset = get_current_mapset()
             >>> name = "str3ds_map_test_case"
@@ -478,8 +479,8 @@ class Raster3DDataset(AbstractMapDataset):
              | Number of depths:........... 10
              | Top-Bottom resolution:...... 10.0
 
-            >>> grass.run_command("r3.timestamp", map="str3ds_map_test_case",
-            ...                   date="2 years", quiet=True)
+            >>> gs.run_command("r3.timestamp", map="str3ds_map_test_case",
+            ...                date="2 years", quiet=True)
             0
             >>> r3map.read_timestamp_from_grass()
             True
@@ -519,11 +520,12 @@ class Raster3DDataset(AbstractMapDataset):
             True
             >>> r3map.is_time_relative()
             False
-            >>> grass.run_command("g.remove", flags="f", type="raster_3d", name=name, quiet=True)
+            >>> gs.run_command("g.remove", flags="f", type="raster_3d", name=name, quiet=True)
             0
-            >>> grass.del_temp_region()
+            >>> gs.del_temp_region()
 
     """
+
     def __init__(self, ident):
         AbstractMapDataset.__init__(self)
         self.reset(ident)
@@ -779,17 +781,17 @@ class VectorDataset(AbstractMapDataset):
 
         .. code-block:: python
 
-            >>> import grass.script as grass
+            >>> import grass.script as gs
             >>> init()
-            >>> grass.use_temp_region()
-            >>> grass.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
+            >>> gs.use_temp_region()
+            >>> gs.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
             ... t=1.0, b=0.0, res=10.0)
             0
-            >>> grass.run_command("v.random", overwrite=True, output="stvds_map_test_case",
+            >>> gs.run_command("v.random", overwrite=True, output="stvds_map_test_case",
             ... n=100, zmin=0, zmax=100, flags="z", column="elevation", quiet=True)
             0
-            >>> grass.run_command("v.timestamp", map="stvds_map_test_case",
-            ...                   date="15 jan 1999", quiet=True)
+            >>> gs.run_command("v.timestamp", map="stvds_map_test_case",
+            ...                date="15 jan 1999", quiet=True)
             0
             >>> mapset = get_current_mapset()
             >>> name = "stvds_map_test_case"
@@ -823,8 +825,8 @@ class VectorDataset(AbstractMapDataset):
              | Number of holes ............ 0
              | Number of volumes .......... 0
 
-            >>> grass.run_command("v.timestamp", map="stvds_map_test_case",
-            ...                   date="2 years", quiet=True)
+            >>> gs.run_command("v.timestamp", map="stvds_map_test_case",
+            ...                date="2 years", quiet=True)
             0
             >>> vmap.read_timestamp_from_grass()
             True
@@ -862,11 +864,12 @@ class VectorDataset(AbstractMapDataset):
             True
             >>> vmap.is_time_relative()
             False
-            >>> grass.run_command("g.remove", flags="f", type="vector", name=name, quiet=True)
+            >>> gs.run_command("g.remove", flags="f", type="vector", name=name, quiet=True)
             0
-            >>> grass.del_temp_region()
+            >>> gs.del_temp_region()
 
     """
+
     def __init__(self, ident):
         AbstractMapDataset.__init__(self)
         self.reset(ident)
@@ -1103,6 +1106,7 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
 
         ...
     """
+
     def __init__(self, ident):
         AbstractSpaceTimeDataset.__init__(self, ident)
 

@@ -186,13 +186,7 @@ int main(int argc, char **argv)
     interpol->guisection = _("Target");
     interpol->descriptions = make_ipol_desc();
 
-    memory = G_define_option();
-    memory->key = "memory";
-    memory->type = TYPE_INTEGER;
-    memory->required = NO;
-    memory->answer = "300";
-    memory->label = _("Maximum memory to be used (in MB)");
-    memory->description = _("Cache size for raster rows");
+    memory = G_define_standard_option(G_OPT_MEMORYMB);
 
     res = G_define_option();
     res->key = "resolution";
@@ -323,9 +317,12 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Unable to get projection info of input map"));
 
     /* apparently the +over switch must be set in the input projection,
-     * not the output latlon projection */
+     * not the output latlon projection
+     * TODO: for PROJ 6+, the +over switch must be added to the
+     * transformation pipeline if authority:name or WKt are used as
+     * crs definition */
     if (curr_proj == PROJECTION_LL)
-	G_set_key_value("+over", "defined", in_proj_info);
+	G_set_key_value("over", "defined", in_proj_info);
 
     if ((in_unit_info = G_get_projunits()) == NULL)
 	G_fatal_error(_("Unable to get projection units of input map"));

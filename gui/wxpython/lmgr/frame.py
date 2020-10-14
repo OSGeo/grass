@@ -43,6 +43,9 @@ if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
 
 from grass.script import core as grass
 from grass.script.utils import decode
+from startup.guiutils import (
+    can_switch_mapset_interactive
+)
 
 from core.gcmd import RunCommand, GError, GMessage
 from core.settings import UserSettings, GetDisplayVectSettings
@@ -66,6 +69,7 @@ from lmgr.giface import LayerManagerGrassInterface
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
+from startup.guiutils import switch_mapset_interactively
 
 
 class GMFrame(wx.Frame):
@@ -186,6 +190,7 @@ class GMFrame(wx.Frame):
 
         self._giface.mapCreated.connect(self.OnMapCreated)
         self._giface.updateMap.connect(self._updateCurrentMap)
+        self._giface.currentMapsetChanged.connect(self.OnMapsetChanged)
 
         # minimal frame size
         self.SetMinSize(globalvar.GM_WINDOW_MIN_SIZE)
@@ -310,31 +315,38 @@ class GMFrame(wx.Frame):
             parent=self.notebook, giface=self._giface)
         self.datacatalog.showNotification.connect(
             lambda message: self.SetStatusText(message))
-        self.datacatalog.changeMapset.connect(lambda mapset: self.ChangeMapset(mapset))
-        self.datacatalog.changeLocation.connect(lambda mapset, location, dbase:
-                                                self.ChangeLocation(dbase=dbase,
-                                                                    location=location,
-                                                                    mapset=mapset))
+
         self.notebook.AddPage(
             page=self.datacatalog,
             text=_("Data"),
             name='catalog')
 
         # create displays notebook widget
-        cbStyle = globalvar.FNPageStyle
-        if globalvar.hasAgw:
-            self.notebookLayers = FN.FlatNotebook(
-                self.notebook, id=wx.ID_ANY, agwStyle=cbStyle)
-        else:
-            self.notebookLayers = FN.FlatNotebook(
-                self.notebook, id=wx.ID_ANY, style=cbStyle)
+        self.notebookLayers = GNotebook(parent=self.notebook,
+                                        style=globalvar.FNPageStyle)
         self.notebookLayers.SetTabAreaColour(globalvar.FNPageColor)
         menu = self._createTabMenu()
         self.notebookLayers.SetRightClickMenu(menu)
         self.notebook.AddPage(
             page=self.notebookLayers,
-            text=_("Layers"),
+            text=_("Display"),
             name='layers')
+
+        # create 'search module' notebook page
+        if not UserSettings.Get(
+                group='manager', key='hideTabs', subkey='search'):
+            self.search = SearchModuleWindow(
+                parent=self.notebook, handlerObj=self,
+                giface=self._giface,
+                model=self._moduleTreeBuilder.GetModel())
+            self.search.showNotification.connect(
+                lambda message: self.SetStatusText(message))
+            self.notebook.AddPage(
+                page=self.search,
+                text=_("Modules"),
+                name='search')
+        else:
+            self.search = None
 
         # create 'command output' text area
         self._gconsole = GConsole(
@@ -345,6 +357,7 @@ class GMFrame(wx.Frame):
             '^cd$|^cd .*')
         self.goutput = GConsoleWindow(
             parent=self.notebook,
+            giface=self._giface,
             gconsole=self._gconsole,
             menuModel=self._moduleTreeBuilder.GetModel(),
             gcstyle=GC_PROMPT)
@@ -364,22 +377,6 @@ class GMFrame(wx.Frame):
                             lambda event: self.RunSpecialCmd(event.cmd))
 
         self._setCopyingOfSelectedText()
-
-        # create 'search module' notebook page
-        if not UserSettings.Get(
-                group='manager', key='hideTabs', subkey='search'):
-            self.search = SearchModuleWindow(
-                parent=self.notebook, handlerObj=self,
-                giface=self._giface,
-                model=self._moduleTreeBuilder.GetModel())
-            self.search.showNotification.connect(
-                lambda message: self.SetStatusText(message))
-            self.notebook.AddPage(
-                page=self.search,
-                text=_("Modules"),
-                name='search')
-        else:
-            self.search = None
 
         # create 'python shell' notebook page
         if not UserSettings.Get(
@@ -1048,6 +1045,8 @@ class GMFrame(wx.Frame):
     def OnChangeLocation(self, event):
         """Change current location"""
         dlg = LocationDialog(parent=self)
+        gisenv = grass.gisenv()
+
         if dlg.ShowModal() == wx.ID_OK:
             location, mapset = dlg.GetValues()
             dlg.Destroy()
@@ -1058,37 +1057,14 @@ class GMFrame(wx.Frame):
                     message=_(
                         "No location/mapset provided. Operation canceled."))
                 return  # this should not happen
-            self.ChangeLocation(location, mapset)
-
-    def ChangeLocation(self, location, mapset, dbase=None):
-        if dbase:
-            if RunCommand('g.mapset', parent=self,
-                          dbase=dbase,
-                          location=location,
-                          mapset=mapset) != 0:
-                return  # error reported
-
-            # close current workspace and create new one
-            self.OnWorkspaceClose()
-            self.OnWorkspaceNew()
-            GMessage(parent=self,
-                     message=_("Current GRASS database is <%(dbase)s>.\n"
-                               "Current location is <%(loc)s>.\n"
-                               "Current mapset is <%(mapset)s>.") %
-                     {'dbase': dbase, 'loc': location, 'mapset': mapset})
-        else:
-            if RunCommand('g.mapset', parent=self,
-                          location=location,
-                          mapset=mapset) != 0:
-                return  # error reported
-
-            # close current workspace and create new one
-            self.OnWorkspaceClose()
-            self.OnWorkspaceNew()
-            GMessage(parent=self,
-                     message=_("Current location is <%(loc)s>.\n"
-                               "Current mapset is <%(mapset)s>.") %
-                     {'loc': location, 'mapset': mapset})
+            if can_switch_mapset_interactive(self,
+                                             gisenv['GISDBASE'],
+                                             location,
+                                             mapset):
+                switch_mapset_interactively(self, self._giface,
+                                            None,
+                                            location,
+                                            mapset)
 
     def OnCreateMapset(self, event):
         """Create new mapset"""
@@ -1118,6 +1094,7 @@ class GMFrame(wx.Frame):
     def OnChangeMapset(self, event):
         """Change current mapset"""
         dlg = MapsetDialog(parent=self)
+        gisenv = grass.gisenv()
 
         if dlg.ShowModal() == wx.ID_OK:
             mapset = dlg.GetMapset()
@@ -1127,22 +1104,30 @@ class GMFrame(wx.Frame):
                 GError(parent=self,
                        message=_("No mapset provided. Operation canceled."))
                 return
-            self.ChangeMapset(mapset)
+            if can_switch_mapset_interactive(self,
+                                             gisenv['GISDBASE'],
+                                             gisenv['LOCATION_NAME'],
+                                             mapset):
+                switch_mapset_interactively(self, self._giface,
+                                            None,
+                                            None,
+                                            mapset)
 
-    def ChangeMapset(self, mapset):
-        """Change current mapset and update map display title"""
-        if RunCommand('g.mapset',
-                      parent=self,
-                      mapset=mapset) == 0:
-            GMessage(parent=self,
-                     message=_("Current mapset is <%s>.") % mapset)
-
+    def OnMapsetChanged(self, dbase, location, mapset):
+        """Current mapset changed.
+        If location is None, mapset changed within location.
+        """
+        if not location:
             # TODO: this does not use the actual names if they were
             # renamed (it just uses the numbers)
             dispId = 1
             for display in self.GetMapDisplay(onlyCurrent=False):
                 display.SetTitleWithName(str(dispId))  # TODO: signal ?
                 dispId += 1
+        else:
+            # close current workspace and create new one
+            self.OnWorkspaceClose()
+            self.OnWorkspaceNew()
 
     def OnChangeCWD(self, event=None, cmd=None):
         """Change current working directory
@@ -2119,7 +2104,8 @@ class GMFrame(wx.Frame):
             dispName = name
         else:
             dispName = "Display " + str(self.displayIndex + 1)
-        self.notebookLayers.AddPage(self.pg_panel, text=dispName, select=True)
+        self.notebookLayers.AddPage(
+            page=self.pg_panel, text=dispName, select=True)
         self.currentPage = self.notebookLayers.GetCurrentPage()
 
         # create layer tree (tree control for managing GIS layers)  and put on

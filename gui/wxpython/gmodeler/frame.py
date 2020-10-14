@@ -124,11 +124,11 @@ class ModelFrame(wx.Frame):
         self.statusbar = self.CreateStatusBar(number=1)
 
         self.notebook = GNotebook(parent=self,
-                                  style=FN.FNB_FANCY_TABS | FN.FNB_BOTTOM |
-                                  FN.FNB_NO_NAV_BUTTONS | FN.FNB_NO_X_BUTTON)
+                                  style=globalvar.FNPageDStyle)
 
         self.canvas = ModelCanvas(self)
-        self.canvas.SetBackgroundColour(wx.WHITE)
+        self.canvas.SetBackgroundColour(
+            wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOW))
         self.canvas.SetCursor(self.cursors["default"])
 
         self.model = Model(self.canvas)
@@ -140,7 +140,9 @@ class ModelFrame(wx.Frame):
         self.pythonPanel = PythonPanel(parent=self)
 
         self._gconsole = GConsole(guiparent=self)
-        self.goutput = GConsoleWindow(parent=self, gconsole=self._gconsole)
+        self.goutput = GConsoleWindow(
+            parent=self, giface=giface, gconsole=self._gconsole
+        )
         self.goutput.showNotification.connect(
             lambda message: self.SetStatusText(message))
 
@@ -794,7 +796,7 @@ class ModelFrame(wx.Frame):
     def OnAddAction(self, event):
         """Add action to model"""
         if self.searchDialog is None:
-            self.searchDialog = ModelSearchDialog(self)
+            self.searchDialog = ModelSearchDialog(parent=self, giface=self._giface)
             self.searchDialog.CentreOnParent()
         else:
             self.searchDialog.Reset()

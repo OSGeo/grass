@@ -859,156 +859,6 @@ def create_location(gisdbase, location, geostring):
         fatal(err.value.strip('"').strip("'").replace('\\n', os.linesep))
 
 
-# TODO: distinguish between valid for getting maps and usable as current
-# https://lists.osgeo.org/pipermail/grass-dev/2016-September/082317.html
-# interface created according to the current usage
-def is_mapset_valid(full_mapset):
-    """Return True if GRASS Mapset is valid"""
-    # WIND is created from DEFAULT_WIND by `g.region -d` and functions
-    # or modules which create a new mapset. Most modules will fail if
-    # WIND doesn't exist (assuming that neither GRASS_REGION nor
-    # WIND_OVERRIDE environmental variables are set).
-    return os.access(os.path.join(full_mapset, "WIND"), os.R_OK)
-
-
-def is_location_valid(gisdbase, location):
-    """Return True if GRASS Location is valid
-
-    :param gisdbase: Path to GRASS GIS database directory
-    :param location: name of a Location
-    """
-    # DEFAULT_WIND file should not be required until you do something
-    # that actually uses them. The check is just a heuristic; a directory
-    # containing a PERMANENT/DEFAULT_WIND file is probably a GRASS
-    # location, while a directory lacking it probably isn't.
-    return os.access(os.path.join(gisdbase, location,
-                                  "PERMANENT", "DEFAULT_WIND"), os.F_OK)
-
-
-# basically checking location, possibly split into two functions
-# (mapset one can call location one)
-def get_mapset_invalid_reason(gisdbase, location, mapset):
-    """Returns a message describing what is wrong with the Mapset
-
-    The goal is to provide the most suitable error message
-    (rather than to do a quick check).
-
-    :param gisdbase: Path to GRASS GIS database directory
-    :param location: name of a Location
-    :param mapset: name of a Mapset
-    :returns: translated message
-    """
-    full_location = os.path.join(gisdbase, location)
-    full_mapset = os.path.join(full_location, mapset)
-    # first checking the location validity
-    # perhaps a special set of checks with different messages mentioning mapset
-    # will be needed instead of the same set of messages used for location
-    location_msg = get_location_invalid_reason(
-        gisdbase, location, none_for_no_reason=True
-    )
-    if location_msg:
-        return location_msg
-    # if location is valid, check mapset
-    elif mapset not in os.listdir(full_location):
-        return _("Mapset <{mapset}> doesn't exist in GRASS Location <{loc}>. "
-                 "A new mapset can be created by '-c' switch.").format(
-                     mapset=mapset, loc=location)
-    elif not os.path.isdir(full_mapset):
-        return _("<%s> is not a GRASS Mapset"
-                 " because it is not a directory") % mapset
-    elif not os.path.isfile(os.path.join(full_mapset, 'WIND')):
-        return _("<%s> is not a valid GRASS Mapset"
-                 " because it does not have a WIND file") % mapset
-    # based on the is_mapset_valid() function
-    elif not os.access(os.path.join(full_mapset, "WIND"), os.R_OK):
-        return _("<%s> is not a valid GRASS Mapset"
-                 " because its WIND file is not readable") % mapset
-    else:
-        return _("Mapset <{mapset}> or Location <{location}> is"
-                 " invalid for an unknown reason").format(
-                     mapset=mapset, location=location)
-
-
-def get_location_invalid_reason(gisdbase, location, none_for_no_reason=False):
-    """Returns a message describing what is wrong with the Location
-
-    The goal is to provide the most suitable error message
-    (rather than to do a quick check).
-
-    By default, when no reason is found, a message about unknown reason is
-    returned. This applies also to the case when this function is called on
-    a valid location (e.g. as a part of larger investigation).
-    ``none_for_no_reason=True`` allows the function to be used as part of other
-    diagnostic. When this function fails to find reason for invalidity, other
-    the caller can continue the investigation in their context.
-
-    :param gisdbase: Path to GRASS GIS database directory
-    :param location: name of a Location
-    :param none_for_no_reason: When True, return None when reason is unknown
-    :returns: translated message or None
-    """
-    full_location = os.path.join(gisdbase, location)
-    full_permanent = os.path.join(full_location, 'PERMANENT')
-
-    # directory
-    if not os.path.exists(full_location):
-        return _("Location <%s> doesn't exist") % full_location
-    # permament mapset
-    elif 'PERMANENT' not in os.listdir(full_location):
-        return _("<%s> is not a valid GRASS Location"
-                 " because PERMANENT Mapset is missing") % full_location
-    elif not os.path.isdir(full_permanent):
-        return _("<%s> is not a valid GRASS Location"
-                 " because PERMANENT is not a directory") % full_location
-    # partially based on the is_location_valid() function
-    elif not os.path.isfile(os.path.join(full_permanent,
-                                         'DEFAULT_WIND')):
-        return _("<%s> is not a valid GRASS Location"
-                 " because PERMANENT Mapset does not have a DEFAULT_WIND file"
-                 " (default computational region)") % full_location
-    # no reason for invalidity found (might be valid)
-    if none_for_no_reason:
-        return None
-    else:
-        return _("Location <{location}> is"
-                 " invalid for an unknown reason").format(location=full_location)
-
-
-def dir_contains_location(path):
-    """Return True if directory *path* contains a valid location"""
-    if not os.path.isdir(path):
-        return False
-    for name in os.listdir(path):
-        if os.path.isdir(os.path.join(path, name)):
-            if is_location_valid(path, name):
-                return True
-    return False
-
-
-def get_location_invalid_suggestion(gisdbase, location_name):
-    """Return suggestion what to do when specified location is not valid
-
-    It gives suggestion when:
-     * A mapset was specified instead of a location.
-     * A GRASS database was specified instead of a location.
-    """
-    full_path = os.path.join(gisdbase, location_name)
-    # a common error is to use mapset instead of location,
-    # if that's the case, include that info into the message
-    if is_mapset_valid(full_path):
-        return _(
-            "<{loc}> looks like a mapset, not a location."
-            " Did you mean just <{one_dir_up}>?").format(
-                loc=location_name, one_dir_up=gisdbase)
-    # confusion about what is database and what is location
-    elif dir_contains_location(full_path):
-        return _(
-            "It looks like <{loc}> contains locations."
-            " Did you mean to specify one of them?").format(
-                loc=location_name)
-    return None
-
-
 def can_create_location(gisdbase, location):
     """Checks if location can be created"""
     path = os.path.join(gisdbase, location)
@@ -1027,6 +877,8 @@ def cannot_create_location_reason(gisdbase, location):
     :param location: name of a Location
     :returns: translated message
     """
+    from grass.grassdb.checks import is_location_valid
+
     path = os.path.join(gisdbase, location)
     if is_location_valid(gisdbase, location):
         return _("Unable to create new location because"
@@ -1054,6 +906,14 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
 
     tmp_location requires tmpdir (which is used as gisdbase)
     """
+    from grass.grassdb.checks import (
+        is_mapset_valid,
+        is_location_valid,
+        get_mapset_invalid_reason,
+        get_location_invalid_reason,
+        get_location_invalid_suggestion,
+        mapset_exists,
+    )
     # TODO: arg param seems to be always the mapset parameter (or a dash
     # in a distant past), refactor
     l = arg
@@ -1116,7 +976,12 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
             if not create_new:
                 # 'path' is not a valid mapset and user does not
                 # want to create anything new
-                fatal(get_mapset_invalid_reason(gisdbase, location_name, mapset))
+                reason = get_mapset_invalid_reason(gisdbase, location_name, mapset)
+                if not mapset_exists(gisdbase, location_name, mapset):
+                    suggestion = _("A new mapset can be created using '-c' flag.")
+                else:
+                    suggestion = _("Maybe you meant a different directory.")
+                fatal("{reason}\n{suggestion}".format(**locals()))
             else:
                 # 'path' is not valid and the user wants to create
                 # mapset on the fly
@@ -1315,6 +1180,22 @@ def load_gisrc(gisrc, gisrcrc):
                     mapset=mapset_settings.mapset,
                     file=gisrcrc))
     return mapset_settings
+
+
+def can_start_in_gisrc_mapset(gisrc, ignore_lock=False):
+    """Check if a mapset from a gisrc file is usable for a new session"""
+    from grass.grassdb.checks import can_start_in_mapset
+
+    mapset_settings = MapsetSettings()
+    kv = read_gisrc(gisrc)
+    mapset_settings.gisdbase = kv.get('GISDBASE')
+    mapset_settings.location = kv.get('LOCATION_NAME')
+    mapset_settings.mapset = kv.get('MAPSET')
+    if not mapset_settings.is_valid():
+        return False
+    return can_start_in_mapset(
+        mapset_path=mapset_settings.full_mapset, ignore_lock=ignore_lock
+    )
 
 
 # load environmental variables from grass_env_file
@@ -1758,11 +1639,45 @@ def run_batch_job(batch_job):
         batch_job = quote(batch_job)
         proc = Popen(batch_job, shell=True)
     else:
+        def script_path(batch_job):
+            """Adjust script path
+
+            :param batch_job list: index 0, script path
+
+            :return str or None: script path or None
+            """
+            script_in_addon_path = None
+            if 'GRASS_ADDON_BASE' in os.environ:
+                script_in_addon_path = os.path.join(
+                    os.environ['GRASS_ADDON_BASE'],
+                    'scripts',
+                    batch_job[0],
+                )
+            if script_in_addon_path and \
+               os.path.exists(script_in_addon_path):
+                batch_job[0] = script_in_addon_path
+                return script_in_addon_path
+            elif os.path.exists(batch_job[0]):
+                return batch_job[0]
+
         try:
-            proc = Popen(batch_job, shell=False)
+            script = script_path(batch_job)
+            proc = Popen(batch_job, shell=False, env=os.environ)
         except OSError as error:
-            fatal(_("Execution of <{cmd}> failed:\n"
-                    "{error}").format(cmd=batch_job_string, error=error))
+            error_message = _("Execution of <{cmd}> failed:\n"
+                              "{error}").format(
+                                  cmd=batch_job_string,
+                                  error=error,
+                              )
+            # No such file or directory
+            if error.errno == errno.ENOENT:
+                if script and os.access(batch_job[0], os.X_OK):
+                    # Allow run py script with CRLF line terminators
+                    proc = Popen([sys.executable] + batch_job, shell=False)
+                else:
+                    fatal(error_message)
+            else:
+                fatal(error_message)
     returncode = proc.wait()
     message(_("Execution of <%s> finished.") % batch_job_string)
     return returncode
@@ -1874,7 +1789,7 @@ def csh_startup(location, grass_env_file):
     f.write("alias _location g.gisenv get=LOCATION_NAME\n")
     f.write("alias _mapset g.gisenv get=MAPSET\n")
     f.write("alias precmd \'echo \"Mapset <`_mapset`> in Location <`_location`>\"\'\n")
-    f.write("set prompt=\"GRASS GIS %s > \"\n" % GRASS_VERSION)
+    f.write("set prompt=\"GRASS > \"\n")
 
     # csh shell rc file left for backward compatibility
     path = os.path.join(userhome, ".grass.cshrc")
@@ -1905,6 +1820,7 @@ def csh_startup(location, grass_env_file):
 
 
 def sh_like_startup(location, location_name, grass_env_file, sh):
+    """Start Bash or Z shell (but not sh (Bourne Shell))"""
     if sh == 'bash':
         sh_history = ".bash_history"
         shrc = ".bashrc"
@@ -1918,7 +1834,9 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
             'Only bash-like and zsh shells are supported by sh_like_startup()')
 
     # save command history in mapset dir and remember more
-    os.environ['HISTFILE'] = os.path.join(location, sh_history)
+    # bash histroy file handled in specific_addition
+    if not sh == "bash":
+        os.environ['HISTFILE'] = os.path.join(location, sh_history)
     if not os.getenv('HISTSIZE') and not os.getenv('HISTFILESIZE'):
         os.environ['HISTSIZE'] = "3000"
 
@@ -1936,6 +1854,8 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     f = open(shell_rc_file, 'w')
 
     if sh == 'zsh':
+        if not os.getenv('SAVEHIST'):
+            os.environ['SAVEHIST'] = os.getenv('HISTSIZE')
         f.write('test -r {home}/.alias && source {home}/.alias\n'.format(
             home=userhome))
     else:
@@ -1949,31 +1869,50 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
 
     if sh == 'zsh':
         f.write("setopt PROMPT_SUBST\n")
-        f.write("PS1='{name} {version} : %1~ > '\n".format(
-            name=grass_name, version=GRASS_VERSION))
+        f.write("PS1='{name} : %1~ > '\n".format(name=grass_name))
     else:
-        f.write("PS1='{name} {version} ({location}):\\w > '\n".format(
-            name=grass_name, version=GRASS_VERSION, location=location_name))
+        f.write("PS1='{name} {db_place}:\\W > '\n".format(
+            name=grass_name, version=GRASS_VERSION, db_place="$_GRASS_DB_PLACE"))
 
     # TODO: have a function and/or module to test this
     mask2d_test = 'test -f "$MAPSET_PATH/cell/MASK"'
     mask3d_test = 'test -d "$MAPSET_PATH/grid3/RASTER3D_MASK"'
 
-    zsh_addition = ""
+    specific_addition = ""
     if sh == 'zsh':
-        zsh_addition = """
+        specific_addition = """
     local z_lo=`g.gisenv get=LOCATION_NAME`
     local z_ms=`g.gisenv get=MAPSET`
     ZLOC="Mapset <$z_ms> in <$z_lo>"
-    """
+    if [ "$_grass_old_mapset" != "$MAPSET_PATH" ] ; then
+        fc -A -I
+        HISTFILE="$MAPSET_PATH/{sh_history}"
+        fc -R
+        _grass_old_mapset="$MAPSET_PATH"
+    fi
+    """.format(sh_history=sh_history)
+    elif sh == "bash":
+        # Append existing history to file ("flush").
+        # Clear the (in-memory) history.
+        # Change the file.
+        # Read history from that file.
+        specific_addition = """
+    if [ "$_grass_old_mapset" != "$MAPSET_PATH" ] ; then
+        history -a
+        history -c
+        HISTFILE="$MAPSET_PATH/{sh_history}"
+        history -r
+        _grass_old_mapset="$MAPSET_PATH"
+    fi
+    """.format(sh_history=sh_history)
 
     # double curly brackets means single one for format function
     # setting LOCATION for backwards compatibility
     f.write(
         """grass_prompt() {{
     MAPSET_PATH="`g.gisenv get=GISDBASE,LOCATION_NAME,MAPSET separator='/'`"
-    LOCATION="$MAPSET_PATH"
-    {zsh_addition}
+    _GRASS_DB_PLACE="`g.gisenv get=LOCATION_NAME,MAPSET separator='/'`"
+    {specific_addition}
     if {mask2d_test} && {mask3d_test} ; then
         echo "[{both_masks}]"
     elif {mask2d_test} ; then
@@ -1987,7 +1926,7 @@ PROMPT_COMMAND=grass_prompt\n""".format(
             mask2d=_("Raster MASK present"),
             mask3d=_("3D raster MASK present"),
             mask2d_test=mask2d_test, mask3d_test=mask3d_test,
-            zsh_addition=zsh_addition
+            specific_addition=specific_addition
             ))
 
     if sh == 'zsh':
@@ -2022,12 +1961,13 @@ PROMPT_COMMAND=grass_prompt\n""".format(
 
 
 def default_startup(location, location_name):
+    """Start shell making no assumptions about what is supported in PS1"""
     if WINDOWS:
-        os.environ['PS1'] = "GRASS %s> " % (GRASS_VERSION)
+        os.environ['PS1'] = "GRASS > "
         # "$ETC/run" doesn't work at all???
         process = subprocess.Popen([os.getenv('SHELL')])
     else:
-        os.environ['PS1'] = "GRASS %s (%s):\\w > " % (GRASS_VERSION, location_name)
+        os.environ['PS1'] = "GRASS > "
         process = Popen([gpath("etc", "run"), os.getenv('SHELL')])
 
     return process
@@ -2385,9 +2325,12 @@ def main():
 
     # Parsing argument to get LOCATION
     if not params.mapset and not params.tmp_location:
+        last_mapset_usable = can_start_in_gisrc_mapset(
+            gisrc=gisrc, ignore_lock=params.force_gislock_removal
+        )
         # Try interactive startup
         # User selects LOCATION and MAPSET if not set
-        if not set_mapset_interactive(grass_gui):
+        if not last_mapset_usable and not set_mapset_interactive(grass_gui):
             # No GUI available, update gisrc file
             fatal(_("<{0}> requested, but not available. Run GRASS in text "
                     "mode (--text) or install missing package (usually "

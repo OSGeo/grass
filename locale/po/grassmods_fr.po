@@ -1071,7 +1071,7 @@ msgstr "Ne pas activer la compression"
 
 #: ../locale/scriptstrings/v.clip_to_translate.c:1
 msgid "Extracts features of input map which overlay features of clip map."
-msgstr ""
+msgstr "Extraire les entités de la carte d'entrée qui chevauchent les entités de la carte de sélection."
 
 #: ../locale/scriptstrings/v.clip_to_translate.c:3
 #: ../vector/v.overlay/main.c:66
@@ -3260,7 +3260,7 @@ msgstr "Ne pas inclure de nom de colonnes en sortie"
 
 #: ../locale/scriptstrings/v.unpack_to_translate.c:1
 msgid "Imports a GRASS GIS specific vector archive file (packed with v.pack) as a vector map"
-msgstr ""
+msgstr "Importe un fichier vecteur d'archive GRASS (empaqueté avec v.pack) en tant que carte vecteur"
 
 #: ../locale/scriptstrings/v.unpack_to_translate.c:5
 #: ../locale/scriptstrings/r.unpack_to_translate.c:5
@@ -3393,7 +3393,7 @@ msgstr "Nom de la table en sortie (par défaut : nom en entrée)"
 
 #: ../locale/scriptstrings/r.unpack_to_translate.c:1
 msgid "Imports a GRASS GIS specific raster archive file (packed with r.pack) as a raster map"
-msgstr ""
+msgstr "Importe un fichier d'archive raster GRASS (empaqueté avec r.pack) en tant que carte raster"
 
 #: ../locale/scriptstrings/r.unpack_to_translate.c:6
 msgid "Name for output raster map (default: taken from input file internals)"
@@ -3882,7 +3882,7 @@ msgstr "Nom de la colonne d'attributs utilisée pour dissoudre les contours comm
 
 #: ../locale/scriptstrings/r.mapcalc.simple_to_translate.c:1
 msgid "Calculates a new raster map from a simple r.mapcalc expression."
-msgstr ""
+msgstr "Calculer une nouvelle carte raster depuis une expression r.mapcalc simple."
 
 #: ../locale/scriptstrings/r.mapcalc.simple_to_translate.c:4
 msgid "simple"
@@ -10752,7 +10752,7 @@ msgstr ""
 
 #: ../raster/r.contour/main.c:140
 #, c-format
-msgid "Neither <%s> nor <%s> option must be specified"
+msgid "Either <%s> or <%s> option must be specified"
 msgstr ""
 
 #: ../raster/r.contour/main.c:183 ../raster/r.stream.extract/close.c:194
@@ -12454,7 +12454,7 @@ msgstr ""
 
 #: ../raster/r.mapcalc/main.c:72
 msgid "Raster map calculator."
-msgstr ""
+msgstr "Calculatrice raster."
 
 #: ../raster/r.mapcalc/main.c:79
 msgid "Expression to evaluate"
@@ -14666,7 +14666,7 @@ msgstr ""
 
 #: ../raster/r.geomorphon/main.c:103
 msgid "Calculates geomorphons (terrain forms) and associated geometry using machine vision approach."
-msgstr ""
+msgstr "Calculer la morphologie (forme du terrain) et les géométries associées à l'aide d'une approche de vision machine."
 
 #: ../raster/r.geomorphon/main.c:105
 msgid "geomorphons"
@@ -14689,11 +14689,11 @@ msgid "Inner search radius"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:141
-msgid "Flatenss threshold (degrees)"
+msgid "Flatness threshold (degrees)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:149
-msgid "Flatenss distance, zero for none"
+msgid "Flatness distance, zero for none"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:155
@@ -14710,7 +14710,7 @@ msgid "Distance step for every iteration (zero to omit)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:171
-msgid "Distance where serch will start in multiple mode (zero to omit)"
+msgid "Distance where search will start in multiple mode (zero to omit)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:177
@@ -14744,11 +14744,11 @@ msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:245
-msgid "Flatenss threshold must be grater than 0"
+msgid "Flatness threshold must be grater than 0"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:254
-msgid "Flatenss distance should be between skip and search radius. Otherwise ignored"
+msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:272
@@ -34287,7 +34287,7 @@ msgstr ""
 
 #: ../vector/v.profile/main.c:156
 msgid "Vector map profiling tool"
-msgstr ""
+msgstr "Outil de profilage de la carte vecteur"
 
 #: ../vector/v.profile/main.c:172
 msgid "Use features only from specified layer"
@@ -37496,7 +37496,7 @@ msgstr ""
 
 #: ../vector/v.voronoi/main.c:127
 msgid "Creates a Voronoi diagram constrained to the extents of the current region from an input vector map containing points or centroids."
-msgstr ""
+msgstr "Créer un diagramme de Voronoi contraint dans l'emprise de la région courante depuis une carte vecteur d'entrée contenant des points ou centroïdes."
 
 #: ../vector/v.voronoi/main.c:131
 msgid "Name of input vector map"
@@ -38570,7 +38570,7 @@ msgid "Only calculate optimal radius and exit (no map is written)"
 msgstr ""
 
 #: ../vector/v.kernel/main.c:218
-msgid "In network mode, normalize values by sum of density multiplied by length of each segment. Integral over the output map then gives 1.0 * mult"
+msgid "In network mode, normalize values by sum of density multiplied by length of each segment. Integral over the output map then gives 1.0 * multiplier"
 msgstr ""
 
 #: ../vector/v.kernel/main.c:224

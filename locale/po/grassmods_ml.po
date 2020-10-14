@@ -9,6 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-26 11:25+0100\n"
 "PO-Revision-Date: 2017-05-23 21:08+0200\n"
+"Last-Translator: \n"
 "Language-Team: Malayalam (https://www.transifex.com/grass-gis/teams/45198/ml/)\n"
 "Language: ml\n"
 "MIME-Version: 1.0\n"
@@ -10737,7 +10738,7 @@ msgstr ""
 
 #: ../raster/r.contour/main.c:140
 #, c-format
-msgid "Neither <%s> nor <%s> option must be specified"
+msgid "Either <%s> or <%s> option must be specified"
 msgstr ""
 
 #: ../raster/r.contour/main.c:183 ../raster/r.stream.extract/close.c:194
@@ -14670,11 +14671,11 @@ msgid "Inner search radius"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:141
-msgid "Flatenss threshold (degrees)"
+msgid "Flatness threshold (degrees)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:149
-msgid "Flatenss distance, zero for none"
+msgid "Flatness distance, zero for none"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:155
@@ -14691,7 +14692,7 @@ msgid "Distance step for every iteration (zero to omit)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:171
-msgid "Distance where serch will start in multiple mode (zero to omit)"
+msgid "Distance where search will start in multiple mode (zero to omit)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:177
@@ -14725,11 +14726,11 @@ msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:245
-msgid "Flatenss threshold must be grater than 0"
+msgid "Flatness threshold must be grater than 0"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:254
-msgid "Flatenss distance should be between skip and search radius. Otherwise ignored"
+msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:272
@@ -38490,7 +38491,7 @@ msgid "Only calculate optimal radius and exit (no map is written)"
 msgstr ""
 
 #: ../vector/v.kernel/main.c:218
-msgid "In network mode, normalize values by sum of density multiplied by length of each segment. Integral over the output map then gives 1.0 * mult"
+msgid "In network mode, normalize values by sum of density multiplied by length of each segment. Integral over the output map then gives 1.0 * multiplier"
 msgstr ""
 
 #: ../vector/v.kernel/main.c:224

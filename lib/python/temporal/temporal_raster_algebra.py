@@ -95,7 +95,7 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
                 break
 
             if tok.type == "STVDS" or tok.type == "STRDS" or tok.type == "STR3DS":
-                raise SyntaxError("Syntax error near '%s'" %(tok.type))
+                raise SyntaxError("Syntax error near '%s'" % (tok.type))
 
         self.lexer = TemporalRasterAlgebraLexer()
         self.lexer.build()
@@ -162,13 +162,13 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
                     map_new.set_temporal_extent(map_i_t_extent)
                     # Create r.mapcalc expression string for the operation.
                     if "cmd_list" in dir(map_new) and len(t) == 5:
-                        cmdstring = "%s" %(map_new.cmd_list)
+                        cmdstring = "%s" % (map_new.cmd_list)
                     elif "cmd_list" not in dir(map_new) and len(t) == 5:
-                        cmdstring = "%s" %(map_n.get_id())
+                        cmdstring = "%s" % (map_n.get_id())
                     elif "cmd_list" in dir(map_new) and len(t) in (7, 9):
-                        cmdstring = "%s[%s,%s]" %(map_new.cmd_list, row_neigbour, col_neigbour)
+                        cmdstring = "%s[%s,%s]" % (map_new.cmd_list, row_neigbour, col_neigbour)
                     elif "cmd_list" not in dir(map_new) and len(t) in (7, 9):
-                        cmdstring = "%s[%s,%s]" %(map_n.get_id(), row_neigbour, col_neigbour)
+                        cmdstring = "%s[%s,%s]" % (map_n.get_id(), row_neigbour, col_neigbour)
                     # Set new command list for map.
                     map_new.cmd_list = cmdstring
                     # Append map with updated command list to result list.
@@ -181,5 +181,3 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-
-

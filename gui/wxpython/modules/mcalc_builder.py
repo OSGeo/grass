@@ -156,7 +156,6 @@ class MapCalcFrame(wx.Frame):
             parent=self.panel,
             id=wx.ID_ANY,
             label=_("&Run"))
-        self.btn_run.SetForegroundColour(wx.Colour(35, 142, 35))
         self.btn_run.SetDefault()
         self.btn_close = CancelButton(parent=self.panel)
         self.btn_save = Button(parent=self.panel, id=wx.ID_SAVE)

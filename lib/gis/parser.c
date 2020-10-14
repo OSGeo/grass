@@ -899,7 +899,7 @@ int G__uses_new_gisprompt(void)
 /*!
   \brief Print list of keywords (internal use only)
 
-  If <em>format</em> function is NULL than list of keywords is printed
+  If <em>format</em> function is NULL then list of keywords is printed
   comma-separated.
 
   \param[out] fd file where to print
@@ -1088,6 +1088,10 @@ void set_option(const char *string)
 	*ptr = *string;
     *ptr = '\0';
     string++;
+
+    /* an empty string is not a valid answer, skip */
+    if (! *string)
+	return;
 
     /* Find option with best keyword match */
     key_len = strlen(the_key);

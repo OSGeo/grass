@@ -111,6 +111,23 @@ can be controlled with the solver option (blue).</i>
 </table>
 </center>
 
+<p>
+Multiple directions can be solved as in the above example with the 
+following steps:
+<ol>
+    <li>Create multiple directions with <b>r.cost</b>/<b>r.walk</b> 
+    using the <b>-b</b> flag</li>
+    <li>Extract paths using <b>r.path format=bitmask</b></li>
+    <li>Calculate the distance from NULL cells to paths using 
+    <b>r.grow.distance -n input=&lt;paths from r.path&gt;</b></li>
+    <li>Invert the sign of the distances with <b>r.mapcalc</b> because 
+    for the solver smaller is better, and here we want to get the 
+    center of an area with multiple directions</li>
+    <li>Use thise negative distances as solver for a second pass of 
+    <b>r.cost</b></li>
+    <li>Extract paths again with <b>r.path</b> to get a geometrically 
+    optimized solution</li>
+</ol>
 
 <h2>NULL CELLS</h2>
 

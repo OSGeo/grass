@@ -4549,7 +4549,7 @@ msgstr "Cerrar todas las ventanas de visualización de mapas"
 
 #: ../gui/wxpython/menustrings.py:37 ../gui/wxpython/menustrings.py:1054
 msgid "Simplified raster import with reprojection"
-msgstr "Importación simplificada de mapas ráster con reproyección"
+msgstr "Importación simplificada de mapas raster con reproyección"
 
 #: ../gui/wxpython/menustrings.py:38 ../gui/wxpython/menustrings.py:40
 #: ../gui/wxpython/menustrings.py:1055 ../gui/wxpython/menustrings.py:1057
@@ -9006,7 +9006,7 @@ msgstr "Herramientas para ortofotos"
 
 #: ../gui/wxpython/menustrings.py:817 ../gui/wxpython/menustrings.py:1757
 msgid "Manage GCPs for 3D correction"
-msgstr "Gestionar Los puntos de control en el terreno (GCP's), para corrección 3D."
+msgstr "Gestionar los puntos de control en el terreno (GCP's), para corrección 3D."
 
 #: ../gui/wxpython/menustrings.py:818 ../gui/wxpython/menustrings.py:1758
 msgid "Georectifies a map and allows managing GCP for 3D correction."
@@ -13116,7 +13116,7 @@ msgstr "Desactivar sobreescribir"
 
 #: ../gui/wxpython/gui_core/pyedit.py:584
 msgid "GRASS GIS Simple Python Editor"
-msgstr "Editor Python Simple de GRASS GIS"
+msgstr "Editor Simple para Python de GRASS GIS"
 
 #: ../gui/wxpython/gui_core/menu.py:153
 msgid "Double-click or Ctrl-Enter to run selected module"

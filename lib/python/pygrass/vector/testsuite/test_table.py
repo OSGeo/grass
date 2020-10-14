@@ -22,7 +22,7 @@ if sys.version_info.major >= 3:
     long = int
 
 # dictionary that generate random data
-COL2VALS = {'INT': lambda n:     np.random.randint(9, size=n),
+COL2VALS = {'INT': lambda n: np.random.randint(9, size=n),
             'INTEGER': lambda n: np.random.randint(9, size=n),
             'INTEGER PRIMARY KEY': lambda n: np.arange(1, n+1, dtype=long),
             'REAL': lambda n: np.random.rand(n),

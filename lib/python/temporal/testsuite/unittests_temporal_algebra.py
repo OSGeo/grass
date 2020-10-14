@@ -55,7 +55,7 @@ class TestTemporalAlgebra(TestCase):
                                                  start="2001-01-02", increment="2 day", interval=True)
         tgis.register_maps_in_space_time_dataset(type="raster", name="D", maps="d1,d2,d3",
                                                  start="2001-01-03", increment="1 day", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="raster", name=None,  maps="singletmap",
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None, maps="singletmap",
                                                  start="2001-01-03", end="2001-01-04")
 
     def tearDown(self):
@@ -71,7 +71,7 @@ class TestTemporalAlgebra(TestCase):
     def test_temporal_select1(self):
         """Testing the temporal select operator with equal relations. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = A : A",  stdstype = 'strds', basename="r", overwrite=True)
+        ta.parse(expression="R = A : A", stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
@@ -82,13 +82,13 @@ class TestTemporalAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_select2(self):
         """Testing the temporal select operator with equal relations. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = A : D",  stdstype = 'strds', basename="r", overwrite=True)
+        ta.parse(expression="R = A : D", stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
@@ -99,13 +99,13 @@ class TestTemporalAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_select3(self):
         """Testing the temporal select operator with equal relations. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = A !: D",  stdstype = 'strds', basename="r", overwrite=True)
+        ta.parse(expression="R = A !: D", stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
@@ -116,13 +116,13 @@ class TestTemporalAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_select_operators1(self):
         """Testing the temporal select operator. Including temporal relations. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = A {:,during} C",  stdstype = 'strds', basename="r", overwrite=True)
+        ta.parse(expression="R = A {:,during} C", stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
@@ -133,13 +133,13 @@ class TestTemporalAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_select_operators2(self):
         """Testing the temporal select operator. Including temporal relations. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = A {:,equal|during} C",  stdstype = 'strds', basename="r", overwrite=True)
+        ta.parse(expression="R = A {:,equal|during} C", stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
@@ -150,14 +150,14 @@ class TestTemporalAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_select_operators3(self):
         """Testing the temporal select operator. Including temporal relations
             and negation operation. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = A {!:,during} C",  stdstype = 'strds', basename="r", overwrite=True)
+        ta.parse(expression="R = A {!:,during} C", stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
@@ -168,14 +168,14 @@ class TestTemporalAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_select_operators4(self):
         """Testing the temporal select operator. Including temporal relations and
             temporal operators. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = A {:,during,d} C",  stdstype = 'strds', basename="r", overwrite=True)
+        ta.parse(expression="R = A {:,during,d} C", stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
@@ -191,14 +191,14 @@ class TestTemporalAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  False)
-        self.assertEqual(D.get_granularity(),  u'2 days')
+        self.assertEqual(D.check_temporal_topology(), False)
+        self.assertEqual(D.get_granularity(), u'2 days')
 
     def test_temporal_select_operators5(self):
         """Testing the temporal select operator. Including temporal relations and
             temporal operators. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = C {:,contains} A",  stdstype = 'strds', basename="r", overwrite=True)
+        ta.parse(expression="R = C {:,contains} A", stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
@@ -214,13 +214,13 @@ class TestTemporalAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'2 days')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'2 days')
 
     def test_temporal_extent1(self):
         """Testing the temporal extent operators. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = A {:,during,r} C",  stdstype = 'strds', basename="r", overwrite=True)
+        ta.parse(expression="R = A {:,during,r} C", stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
@@ -232,13 +232,13 @@ class TestTemporalAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  False)
-        self.assertEqual(D.get_granularity(),  u'2 days')
+        self.assertEqual(D.check_temporal_topology(), False)
+        self.assertEqual(D.get_granularity(), u'2 days')
 
     def test_temporal_extent2(self):
         """Testing the temporal extent operators. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = A {:,during,d} C",  stdstype = 'strds', basename="r", overwrite=True)
+        ta.parse(expression="R = A {:,during,d} C", stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
@@ -250,13 +250,13 @@ class TestTemporalAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  False)
-        self.assertEqual(D.get_granularity(),  u'2 days')
+        self.assertEqual(D.check_temporal_topology(), False)
+        self.assertEqual(D.get_granularity(), u'2 days')
 
     def test_temporal_extent3(self):
         """Testing the temporal extent operators. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = A {:,during,u} C",  stdstype = 'strds', basename="r", overwrite=True)
+        ta.parse(expression="R = A {:,during,u} C", stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
@@ -272,13 +272,13 @@ class TestTemporalAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  False)
-        self.assertEqual(D.get_granularity(),  u'2 days')
+        self.assertEqual(D.check_temporal_topology(), False)
+        self.assertEqual(D.get_granularity(), u'2 days')
 
     def test_temporal_hash1(self):
         """Testing the hash function in conditional statement. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = if(A # D == 1, A)",  stdstype = 'strds', basename="r", overwrite=True)
+        ta.parse(expression="R = if(A # D == 1, A)", stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
@@ -290,13 +290,13 @@ class TestTemporalAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_hash_operator1(self):
         """Testing the hash operator function in conditional statement. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression="R = if(A {#,during} C == 1, A)",  stdstype = 'strds',
+        ta.parse(expression="R = if(A {#,during} C == 1, A)", stdstype = 'strds',
                                        basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -309,8 +309,8 @@ class TestTemporalAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_hash_operator2(self):
         """Testing the hash operator function in conditional statement. """
@@ -328,13 +328,13 @@ class TestTemporalAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_tmap_function1(self):
         """Testing the tmap function. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression='R = tmap(singletmap)',  stdstype = 'strds', basename="r", overwrite=True)
+        ta.parse(expression='R = tmap(singletmap)', stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
@@ -346,13 +346,13 @@ class TestTemporalAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_tmap_function2(self):
         """Testing the tmap function. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression='R = A : tmap(singletmap)',  stdstype = 'strds', basename="r", overwrite=True)
+        ta.parse(expression='R = A : tmap(singletmap)', stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
@@ -364,13 +364,13 @@ class TestTemporalAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_merge_function1(self):
         """Testing the merge function. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression='R = merge(A,D)',  stdstype = 'strds', basename="r", overwrite=True)
+        ta.parse(expression='R = merge(A,D)', stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
@@ -382,13 +382,13 @@ class TestTemporalAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 6))
-        self.assertEqual( D.check_temporal_topology(),  False)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), False)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_merge_function2(self):
         """Testing the merge function. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
-        ta.parse(expression='R = merge(A, B {!:,contains} A)',  stdstype = 'strds', basename="r", overwrite=True)
+        ta.parse(expression='R = merge(A, B {!:,contains} A)', stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
@@ -400,8 +400,8 @@ class TestTemporalAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual(D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
 class TestTemporalAlgebraDryRun(TestCase):
 
@@ -443,7 +443,7 @@ class TestTemporalAlgebraDryRun(TestCase):
                                                  start="2001-01-02", increment="2 day", interval=True)
         tgis.register_maps_in_space_time_dataset(type="raster", name="D", maps="d1,d2,d3",
                                                  start="2001-01-03", increment="1 day", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="raster", name=None,  maps="singletmap",
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None, maps="singletmap",
                                                  start="2001-01-03", end="2001-01-04")
 
     @classmethod

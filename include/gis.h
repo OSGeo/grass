@@ -117,6 +117,8 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define PROJECTION_FILE "PROJ_INFO"
 #define UNIT_FILE       "PROJ_UNITS"
 #define EPSG_FILE       "PROJ_EPSG"
+#define WKT_FILE        "PROJ_WKT"
+#define SRID_FILE       "PROJ_SRID"
 
 #ifdef __MINGW32__
 #define CONFIG_DIR "GRASS7"
@@ -241,6 +243,8 @@ typedef enum
 
     G_OPT_I_GROUP,		/*!< old input imagery group */
     G_OPT_I_SUBGROUP,		/*!< old input imagery subgroup */
+
+    G_OPT_MEMORYMB,		/*!< Maximum memory to be used (in MB): cache size for raster rows */
     G_OPT_R_INPUT,		/*!< old input raster map */
     G_OPT_R_INPUTS,		/*!< old input raster maps */
     G_OPT_R_OUTPUT,		/*!< new output raster map */

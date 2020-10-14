@@ -5563,7 +5563,7 @@ msgstr "Lancia script"
 
 #: ../gui/wxpython/menustrings.py:209
 msgid "Simple Python Editor"
-msgstr "Semplice editor Python"
+msgstr "Semplice editor di Python"
 
 #: ../gui/wxpython/menustrings.py:210
 msgid "Launches Simple Python Editor."
@@ -8987,7 +8987,7 @@ msgstr "Calcola la correzione topografica della riflettanza."
 
 #: ../gui/wxpython/menustrings.py:816 ../gui/wxpython/menustrings.py:1756
 msgid "Orthophoto tools"
-msgstr "Strument ortofoto"
+msgstr "Strumenti ortofoto"
 
 #: ../gui/wxpython/menustrings.py:817 ../gui/wxpython/menustrings.py:1757
 msgid "Manage GCPs for 3D correction"
@@ -13097,7 +13097,7 @@ msgstr "Disattiva la sovrascrittura "
 
 #: ../gui/wxpython/gui_core/pyedit.py:584
 msgid "GRASS GIS Simple Python Editor"
-msgstr "GRASS GIS semplice editor Python"
+msgstr "GRASS GIS semplice editor di Python"
 
 #: ../gui/wxpython/gui_core/menu.py:153
 msgid "Double-click or Ctrl-Enter to run selected module"
@@ -16418,19 +16418,19 @@ msgstr "STVDS"
 
 #: ../gui/wxpython/tplot/frame.py:282
 msgid "Set title for the plot"
-msgstr ""
+msgstr "Imposta titolo per il grafico"
 
 #: ../gui/wxpython/tplot/frame.py:287
 msgid "Set label for X axis"
-msgstr ""
+msgstr "Imposta etichetta per asse X"
 
 #: ../gui/wxpython/tplot/frame.py:292
 msgid "Set label for Y axis"
-msgstr ""
+msgstr "Imposta etichetta per asse Y"
 
 #: ../gui/wxpython/tplot/frame.py:304
 msgid "Labels"
-msgstr ""
+msgstr "Etichette"
 
 #: ../gui/wxpython/tplot/frame.py:311
 msgid "Path for output CSV file with plotted data"
@@ -16438,7 +16438,7 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:317
 msgid "CVS path"
-msgstr ""
+msgstr "percorso CSV"
 
 #: ../gui/wxpython/tplot/frame.py:323
 msgid "Do you want the CSV header?"

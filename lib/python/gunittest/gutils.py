@@ -28,7 +28,7 @@ def is_map_in_mapset(name, type, mapset=None):
     and it does not care that the map is accessible in other mapset.
 
     :param name: name of the map
-    :param type: data type ('raster', 'raster3d', and 'vector') 
+    :param type: data type ('raster', 'raster3d', and 'vector')
     """
     if not mapset:
         mapset = get_current_mapset()

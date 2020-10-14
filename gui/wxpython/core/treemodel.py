@@ -18,6 +18,8 @@ This program is free software under the GNU General Public License
 import six
 import weakref
 
+from grass.script.utils import naturally_sort
+
 
 class TreeModel(object):
     """Class represents a tree structure with hidden root.
@@ -117,7 +119,7 @@ class TreeModel(object):
     def GetIndexOfNode(self, node):
         """Method used for communication between view (VirtualTree) and model."""
         index = []
-        return self._getIndex(node, index)
+        return tuple(self._getIndex(node, index))
 
     def _getIndex(self, node, index):
         if node.parent:
@@ -147,9 +149,9 @@ class TreeModel(object):
             del node.children[:]
 
     def SortChildren(self, node):
-        """Sorts children alphabetically based on label."""
+        """Sorts children with 'natural sort' based on label."""
         if node.children:
-            node.children.sort(key=lambda node: node.label)
+            naturally_sort(node.children, key=lambda node: node.label)
 
     def __str__(self):
         """Print tree."""

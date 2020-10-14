@@ -555,7 +555,10 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	    if ((in_proj_info = G_get_projinfo()) == NULL)
 		G_fatal_error(_("Can't get projection info of current location"));
 	    /* do not wrap to -180, 180, otherwise east can be < west */
-	    G_set_key_value("+over", "defined", in_proj_info);
+	    /* TODO: for PROJ 6+, the +over switch must be added to the
+	     * transformation pipeline if authority:name or WKt are used 
+	     * as crs definition */
+	    G_set_key_value("over", "defined", in_proj_info);
 
 	    if ((in_unit_info = G_get_projunits()) == NULL)
 		G_fatal_error(_("Can't get projection units of current location"));
@@ -569,10 +572,13 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
 	    G_set_key_value("proj", "ll", out_proj_info);
 
+#if PROJ_VERSION_MAJOR < 6
+	    /* PROJ6+ has its own datum transformation parameters */
 	    if (G_get_datumparams_from_projinfo(in_proj_info, buff, dum) < 0)
 		G_fatal_error(_("WGS84 output not possible as this location does not contain "
 			       "datum transformation parameters. Try running g.setproj."));
 	    else
+#endif
 		G_set_key_value("datum", "wgs84", out_proj_info);
 
 	    G_set_key_value("unit", "degree", out_unit_info);

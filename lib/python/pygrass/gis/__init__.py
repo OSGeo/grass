@@ -127,6 +127,7 @@ class Gisdbase(object):
 
     ..
     """
+
     def __init__(self, gisdbase=''):
         self.name = gisdbase
 
@@ -198,6 +199,7 @@ class Location(object):
 
     ..
     """
+
     def __init__(self, location='', gisdbase=''):
         self.gisdbase = gisdbase
         self.name = location
@@ -287,6 +289,7 @@ class Mapset(object):
 
     ..
     """
+
     def __init__(self, mapset='', location='', gisdbase=''):
         self.gisdbase = gisdbase
         self.location = location
@@ -393,6 +396,7 @@ class Mapset(object):
 class VisibleMapset(object):
     """VisibleMapset object
     """
+
     def __init__(self, mapset, location='', gisdbase=''):
         self.mapset = mapset
         self.location = Location(location, gisdbase)

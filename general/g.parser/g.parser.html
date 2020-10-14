@@ -80,7 +80,7 @@ or <tt>label</tt>.
 <p>
 The parsers allows using predefined <em>standardized options and
 flags</em>, see the list
-of <a href="http://grass.osgeo.org/programming7/parser__standard__options_8c.html#a1a5da9db1229a9bbc59d16ae84540bb8">options</a> and <a href="http://grass.osgeo.org/programming7/parser__standard__options_8c.html#ad081e95e5d4dc3daab9c820d962e6902">flags</a>
+of <a href="https://grass.osgeo.org/programming7/parser__standard__options_8c.html#a1a5da9db1229a9bbc59d16ae84540bb8">options</a> and <a href="https://grass.osgeo.org/programming7/parser__standard__options_8c.html#ad081e95e5d4dc3daab9c820d962e6902">flags</a>
 in the programmer manual. Eg. the option
 
 <div class="code"><pre>
@@ -195,7 +195,7 @@ The parser has the ability to specify option relationships.
 
 <p>
 For C, the relevant functions are those in
-<a href="http://grass.osgeo.org/programming7/parser__dependencies_8c.html">lib/gis/parser_dependencies.c</a>.
+<a href="https://grass.osgeo.org/programming7/parser__dependencies_8c.html">lib/gis/parser_dependencies.c</a>.
 
 <p>
 For scripts, relationships are specified using a "rules" section, e.g.
@@ -391,7 +391,7 @@ Parameters:
 import os
 import sys
 
-import grass.script as grass
+import grass.script as gs
 
 def main():
     flag_f = flags['f']
@@ -418,7 +418,7 @@ def main():
     return 0
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     sys.exit(main())
 </pre></div>
 
@@ -646,7 +646,7 @@ v.what.rast --script
 
 import sys
 
-import grass.script as grass
+import grass.script as gs
 
 def main():
     # put code here
@@ -654,7 +654,7 @@ def main():
     return 0
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     sys.exit(main())
 </pre></div>
 
@@ -674,7 +674,7 @@ Overview table: <a href="parser_standard_options.html">Parser standard options</
 
 <p>
 Related Wiki pages:
-<a href="http://grasswiki.osgeo.org/wiki/Category:Linking_to_other_languages">Using GRASS GIS with other programming languages</a>
+<a href="https://grasswiki.osgeo.org/wiki/Category:Linking_to_other_languages">Using GRASS GIS with other programming languages</a>
 
 <h2>AUTHOR</h2>
 

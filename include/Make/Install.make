@@ -71,7 +71,7 @@ install-check-writable:
 	fi
 
 install-check-prefix:
-	@ result=`echo "$(INST_DIR)" | awk '{ if ($$1 ~ /grass/) print $$1 }'`; \
+	@ result=`echo "$(INST_DIR)" | awk '{ if (tolower($$1) ~ /grass/) print $$1 }'`; \
 	if [ "$$result" = "" ] ; then \
 		echo "WARNING: Your install directory $(INST_DIR)" >&2 ; \
 		echo "  does not contain the word 'grass'." >&2 ; \

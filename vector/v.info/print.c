@@ -21,6 +21,23 @@ void format_double(double value, char *buf)
     G_trim_decimal(buf);
 }
 
+/* convert UTM zone number X to XN or XS */
+static char *format_zone(int zone_num)
+{
+    char *zone_str = NULL;
+
+    if (zone_num < -60 || zone_num > 60)
+	G_asprintf(&zone_str, _("%s"), "invalid");
+    else if (zone_num == 0)
+	G_asprintf(&zone_str, _("%s"), "unspecified");
+    else if (zone_num < 0)
+	G_asprintf(&zone_str, "%dS", -zone_num);
+    else
+	G_asprintf(&zone_str, "%dN", zone_num);
+
+    return zone_str;
+}
+
 void print_region(const struct Map_info *Map)
 {
     char tmp1[1024], tmp2[1024];
@@ -492,18 +509,14 @@ void print_info(const struct Map_info *Map)
     /* Vect_get_proj_name() and _zone() are typically unset?! */
     if (G_projection() == PROJECTION_UTM) {
         int utm_zone;
+	char *utm_zone_str;
 
         utm_zone = Vect_get_zone(Map);
-        if (utm_zone < 0 || utm_zone > 60)
-            strcpy(tmp1, _("invalid"));
-        else if (utm_zone == 0)
-            strcpy(tmp1, _("unspecified"));
-        else
-            sprintf(tmp1, "%d", utm_zone);
+	utm_zone_str = format_zone(utm_zone);
 
         G_saprintf(line, "  %s: %s (%s %s)",
                 _("Projection"), Vect_get_proj_name(Map),
-                _("zone"), tmp1);
+                _("zone"), utm_zone_str);
     }
     else
         G_saprintf(line, "  %s: %s",
