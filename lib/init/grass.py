@@ -1782,7 +1782,7 @@ def csh_startup(location, grass_env_file):
 
     f = open(cshrc, 'w')
     f.write("set home = %s\n" % userhome)
-    f.write("set history = 3000 savehist = 3000  noclobber ignoreeof\n")
+    f.write("set history = -1 savehist = -1  noclobber ignoreeof\n")
     f.write("set histfile = %s\n" % os.path.join(os.getenv('HOME'),
                                                  ".history"))
 
@@ -1838,7 +1838,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     if not sh == "bash":
         os.environ['HISTFILE'] = os.path.join(location, sh_history)
     if not os.getenv('HISTSIZE') and not os.getenv('HISTFILESIZE'):
-        os.environ['HISTSIZE'] = "3000"
+        os.environ['HISTSIZE'] = "-1"
 
     # instead of changing $HOME, start bash with:
     #   --rcfile "$LOCATION/.bashrc" ?
