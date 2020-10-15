@@ -171,11 +171,11 @@ static int quant_parse_file(FILE * fd, struct Quant *quant)
     int foundNegInf = 0, foundPosInf = 0;
 
     while (fgets(buf, sizeof(buf), fd)) {
-	if (strncmp(buf, "truncate", 8) == 0) {
+	if (strlen(buf) >= 8 && strncmp(buf, "truncate", 8) == 0) {
 	    quant->truncate_only = 1;
 	    return 1;
 	}
-	if (strncmp(buf, "round", 5) == 0) {
+	if (strlen(buf) >= 5 && strncmp(buf, "round", 5) == 0) {
 	    quant->round_only = 1;
 	    return 1;
 	}
