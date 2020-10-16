@@ -1518,7 +1518,7 @@ class OptDialog(wx.Dialog):
     def UpdateSettings(self):
         """Apply settings to each map and to entire plot"""
         self.raster[self.map]['pcolor'] = self.FindWindowById(
-            self.wxId['pcolor']).GetColour()
+            self.wxId['pcolor']).GetColour().Get()
         self.properties['raster']['pcolor'] = self.raster[self.map]['pcolor']
 
         self.raster[self.map]['plegend'] = self.FindWindowById(
@@ -1561,7 +1561,7 @@ class OptDialog(wx.Dialog):
 
         if self.plottype == 'profile':
             self.properties['marker']['color'] = self.FindWindowById(
-                self.wxId['marker']['color']).GetColour()
+                self.wxId['marker']['color']).GetColour().Get()
             self.properties['marker']['fill'] = self.FindWindowById(
                 self.wxId['marker']['fill']).GetStringSelection()
             self.properties['marker']['size'] = self.FindWindowById(
@@ -1572,7 +1572,7 @@ class OptDialog(wx.Dialog):
                 self.wxId['marker']['legend']).GetValue()
 
         self.properties['grid']['color'] = self.FindWindowById(
-            self.wxId['grid']['color']).GetColour()
+            self.wxId['grid']['color']).GetColour().Get()
         self.properties['grid']['enabled'] = self.FindWindowById(
             self.wxId['grid']['enabled']).IsChecked()
 
