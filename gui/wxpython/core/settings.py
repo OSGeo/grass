@@ -68,7 +68,8 @@ class SettingsJSONEncoder(json.JSONEncoder):
 def settings_JSON_decode_hook(obj):
     """Decode hex color saved in settings into tuple"""
     def colorhex2tuple(hexcode):
-        return tuple(int(hexcode.lstrip('#')[i:i + 2], 16) for i in range(0, len(hexcode) - 2, 2))
+        hexcode = hexcode.lstrip('#')
+        return tuple(int(hexcode[i:i + 2], 16) for i in range(0, len(hexcode), 2))
 
     for k, v in obj.items():
         if isinstance(v, str) and v.startswith('#') and len(v) in [7, 9]:
