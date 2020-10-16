@@ -1067,27 +1067,24 @@ class GListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin,
         self.PopupMenu(menu)
         menu.Destroy()
 
-    def OnSelectAll(self, event):
-        """Select all items"""
+    def SelectAll(self, select=True):
+        """Check or uncheck all items"""
         item = -1
-
         while True:
             item = self.GetNextItem(item)
             if item == -1:
                 break
-            self.CheckItem(item, True)
+            self.CheckItem(item, select)
+
+    def OnSelectAll(self, event):
+        """Check all items"""
+        self.SelectAll(select=True)
 
         event.Skip()
 
     def OnSelectNone(self, event):
-        """Deselect items"""
-        item = -1
-
-        while True:
-            item = self.GetNextItem(item, wx.LIST_STATE_SELECTED)
-            if item == -1:
-                break
-            self.CheckItem(item, False)
+        """Uncheck items"""
+        self.SelectAll(select=False)
 
         event.Skip()
 
