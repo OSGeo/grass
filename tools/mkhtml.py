@@ -35,7 +35,6 @@ try:
 except:
     import urllib.parse as urlparse
 
-
 if sys.version_info[0] == 2:
     PY2 = True
 else:
@@ -281,7 +280,9 @@ def get_addon_path(pgm):
             with open(addons_paths, 'r') as f:
                 addons_paths = json.load(f)
             for addon in addons_paths['tree']:
-                if pgm in addon['path']:
+                split_path = addon['path'].split('/')
+                root_dir, module_dir = split_path[0], split_path[-1]
+                if 'grass7' == root_dir and pgm == module_dir:
                     return True, addon['path']
     return None, None
 
