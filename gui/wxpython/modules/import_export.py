@@ -264,7 +264,7 @@ class ImportDialog(wx.Dialog):
     def _validateOutputMapName(self):
         """Enable/disable output map name validation according the
         overwrite state"""
-        if not self.overwrite.IsChecked() or \
+        if not self.overwrite.IsChecked() or not \
            UserSettings.Get(group='cmd', key='overwrite',
                             subkey='enabled'):
             if not self.list.GetValidator().\
