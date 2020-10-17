@@ -53,8 +53,6 @@ class DataCatalogFrame(wx.Frame):
         # tree
         self.tree = DataCatalogTree(parent=self.panel, giface=self._giface)
         self.tree.ReloadTreeItems()
-        self.tree.UpdateCurrentDbLocationMapsetNode()
-        self.tree.ExpandCurrentMapset()
 
         # buttons
         self.btnClose = Button(parent=self.panel, id=wx.ID_CLOSE)
@@ -94,7 +92,6 @@ class DataCatalogFrame(wx.Frame):
     def OnReloadTree(self, event):
         """Reload whole tree"""
         self.tree.ReloadTreeItems()
-        self.tree.ExpandCurrentMapset()
 
     def OnReloadCurrentMapset(self, event):
         """Reload current mapset tree only"""
