@@ -489,8 +489,9 @@ class DataCatalogTree(TreeView):
 
     def _reloadTreeItems(self):
         """Updates grass databases, locations, mapsets and layers in the tree.
-        Saves resulting data and error. It runs in thread, so it should not
-        directly interact with GUI.
+
+        It runs in thread, so it should not directly interact with GUI.
+        In case of any errors it returns the errors as a list of strings, otherwise None.
         """
         errors = []
         for grassdatabase in self.grassdatabases:
