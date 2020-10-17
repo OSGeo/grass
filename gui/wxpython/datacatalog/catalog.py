@@ -18,7 +18,6 @@ for details.
 import wx
 import os
 
-from core.gthread import gThread
 from core.debug import Debug
 from datacatalog.tree import DataCatalogTree
 from datacatalog.toolbars import DataCatalogToolbar
@@ -45,8 +44,6 @@ class DataCatalog(wx.Panel):
 
         # tree with layers
         self.tree = DataCatalogTree(self, giface=giface)
-        self.thread = gThread()
-        self._loaded = False
         self.tree.showNotification.connect(self.showNotification)
 
         # some layout
@@ -68,21 +65,11 @@ class DataCatalog(wx.Panel):
         self.Layout()
 
     def LoadItems(self):
-        if self._loaded:
-            return
-
-        self.thread.Run(callable=self.tree.ReloadTreeItems,
-                        ondone=lambda event: self.LoadItemsDone())
-
-    def LoadItemsDone(self):
-        self._loaded = True
-        self.tree.UpdateCurrentDbLocationMapsetNode()
-        self.tree.ExpandCurrentMapset()
+        self.tree.ReloadTreeItems()
 
     def OnReloadTree(self, event):
         """Reload whole tree"""
-        self.tree.ReloadTreeItems()
-        self.tree.ExpandCurrentMapset()
+        self.LoadItems()
 
     def OnReloadCurrentMapset(self, event):
         """Reload current mapset tree only"""
