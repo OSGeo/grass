@@ -28,6 +28,7 @@ import wx
 from core.gcmd import RunCommand, GError, GMessage, GWarning
 from core.utils import GetListOfLocations
 from core.debug import Debug
+from core.gthread import gThread
 from gui_core.dialogs import TextEntryDialog
 from core.giface import StandaloneGrassInterface
 from core.treemodel import TreeModel, DictNode
@@ -278,6 +279,7 @@ class DataCatalogTree(TreeView):
         self._iconTypes = ['grassdb', 'location', 'mapset', 'raster',
                            'vector', 'raster_3d']
         self._initImages()
+        self.thread = gThread()
 
         self._resetSelectVariables()
         self._resetCopyVariables()
@@ -478,8 +480,6 @@ class DataCatalogTree(TreeView):
                 queue_list = []
                 loc_list = []
                 location_nodes = []
-                # refresh after each chunk to make GUI more responsive
-                self.RefreshItems()
 
         for node in all_location_nodes:
             self._model.SortChildren(node)
@@ -489,7 +489,9 @@ class DataCatalogTree(TreeView):
 
     def _reloadTreeItems(self):
         """Updates grass databases, locations, mapsets and layers in the tree.
-        Saves resulting data and error."""
+        Saves resulting data and error. It runs in thread, so it should not
+        directly interact with GUI.
+        """
         errors = []
         for grassdatabase in self.grassdatabases:
             grassdb_nodes = self._model.SearchNodes(name=grassdatabase,
@@ -505,12 +507,8 @@ class DataCatalogTree(TreeView):
                 errors += error
 
         if errors:
-            # WriteWarning/Error results in crash
-            self._giface.WriteLog('\n'.join(errors))
-        Debug.msg(1, "Tree filled")
-
-        self.UpdateCurrentDbLocationMapsetNode()
-        self.RefreshItems()
+            return errors
+        return None
 
     def _renameNode(self, node, name):
         """Rename node (map, mapset, location), sort and refresh.
@@ -543,9 +541,18 @@ class DataCatalogTree(TreeView):
 
     def ReloadTreeItems(self):
         """Reload dbs, locations, mapsets and layers in the tree."""
-        busy = wx.BusyCursor()
-        self._reloadTreeItems()
-        del busy
+        self.busy = wx.BusyCursor()
+        self.thread.Run(callable=self._reloadTreeItems,
+                        ondone=self._loadItemsDone)
+
+    def _loadItemsDone(self, event):
+        Debug.msg(1, "Tree filled")
+        del self.busy
+        if event.ret is not None:
+            self._giface.WriteWarning('\n'.join(event.ret))
+        self.UpdateCurrentDbLocationMapsetNode()
+        self.RefreshItems()
+        self.ExpandCurrentMapset()
 
     def ReloadCurrentMapset(self):
         """Reload current mapset tree only."""
