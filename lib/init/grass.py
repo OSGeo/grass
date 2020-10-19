@@ -1782,7 +1782,7 @@ def csh_startup(location, grass_env_file):
 
     f = open(cshrc, 'w')
     f.write("set home = %s\n" % userhome)
-    f.write("set history = -1 savehist = -1  noclobber ignoreeof\n")
+    f.write("set history = 10000000 savehist = (10000000 merge) noclobber ignoreeof\n")
     f.write("set histfile = %s\n" % os.path.join(os.getenv('HOME'),
                                                  ".history"))
 
@@ -1837,8 +1837,10 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     # bash histroy file handled in specific_addition
     if not sh == "bash":
         os.environ['HISTFILE'] = os.path.join(location, sh_history)
+    # set bash history to record an unlimited command history
     if not os.getenv('HISTSIZE') and not os.getenv('HISTFILESIZE'):
         os.environ['HISTSIZE'] = "-1"
+        os.environ['HISTFILESIZE'] = os.getenv('HISTSIZE')
 
     # instead of changing $HOME, start bash with:
     #   --rcfile "$LOCATION/.bashrc" ?
@@ -1854,8 +1856,12 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     f = open(shell_rc_file, 'w')
 
     if sh == 'zsh':
+        # zsh does not have an unlimited history setting, so 1e8 is set as a proxy  
         if not os.getenv('SAVEHIST'):
-            os.environ['SAVEHIST'] = os.getenv('HISTSIZE')
+            os.environ['SAVEHIST'] = 100000000
+            os.environ['HISTSIZE'] = os.getenv('SAVEHIST')
+            
+    
         f.write('test -r {home}/.alias && source {home}/.alias\n'.format(
             home=userhome))
     else:
