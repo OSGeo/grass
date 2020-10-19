@@ -66,9 +66,9 @@ int main(int argc, char **argv)
 	{PK, 56, 0, 0, "summit"},
 	{RI, 200, 0, 0, "ridge"},
 	{SH, 255, 80, 20, "shoulder"},
-	{CV, 250, 210, 60, "spur"},
+	{SP, 250, 210, 60, "spur"},
 	{SL, 255, 255, 60, "slope"},
-	{CN, 180, 230, 20, "hollow"},
+	{HL, 180, 230, 20, "hollow"},
 	{FS, 60, 250, 150, "footslope"},
 	{VL, 0, 0, 255, "valley"},
 	{PT, 0, 0, 56, "depression"},
@@ -371,7 +371,7 @@ int main(int argc, char **argv)
 		    continue;
 		}		/* end null value */
 		{
-		    int cur_form, small_form;
+		    FORMS cur_form;
 
 		    search_distance = search_dist;
 		    skip_distance = skip_dist;
@@ -386,8 +386,9 @@ int main(int argc, char **argv)
 		    /* correction of forms */
 		    if (extended && search_distance > 10 * max_resolution) {
 			/* 1) remove extensive innatural forms: ridges, peaks, shoulders and footslopes */
-			if ((cur_form == 4 || cur_form == 8 || cur_form == 2
-			     || cur_form == 3)) {
+			if ((cur_form == SH || cur_form == FS || cur_form == PK
+			     || cur_form == RI)) {
+			    FORMS small_form;
 			    search_distance =
 				(search_dist / 2. <
 				 4 * max_resolution) ? 4 *
@@ -400,9 +401,9 @@ int main(int argc, char **argv)
 			    small_form =
 				determine_form(pattern->num_negatives,
 					       pattern->num_positives);
-			    if (cur_form == 4 || cur_form == 8)
-				cur_form = (small_form == 1) ? 1 : cur_form;
-			    if (cur_form == 2 || cur_form == 3)
+			    if (cur_form == SH || cur_form == FS)
+				cur_form = (small_form == FL) ? FL : cur_form;
+			    if (cur_form == PK || cur_form == RI)
 				cur_form = small_form;
 			}
 			/* 3) Depressions */
