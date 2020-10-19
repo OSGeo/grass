@@ -1965,7 +1965,9 @@ class PsMapBufferedWindow(wx.Window):
                 rect = self.pdcObj.GetIdBounds(id)
                 self.instruction[id]['rect'] = self.CanvasPaperCoordinates(
                     rect=rect, canvasToPaper=True)
-                rect.OffsetXY(rect.GetWidth() / 2, rect.GetHeight() / 2)
+                rect.Offset(
+                    dx=rect.GetWidth() / 2, dy=rect.GetHeight() / 2,
+                )
                 self.instruction[id]['where'] = self.CanvasPaperCoordinates(
                     rect=rect, canvasToPaper=True)[: 2]
                 self.RecalculateEN()
