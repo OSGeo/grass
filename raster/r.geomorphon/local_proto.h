@@ -53,6 +53,9 @@
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
 
+/* Number of cardinal directions. */
+#define NUM_DIRS 8
+
 typedef char *STRING;
 
 typedef struct
@@ -87,10 +90,10 @@ typedef struct
     int num_negatives;
     unsigned char positives;
     unsigned char negatives;
-    int pattern[8];
-    float elevation[8];
-    double distance[8];
-    double x[8], y[8];		/* cartesian coordinates of geomorphon */
+    int pattern[NUM_DIRS];
+    float elevation[NUM_DIRS];
+    double distance[NUM_DIRS];
+    double x[NUM_DIRS], y[NUM_DIRS];		/* cartesian coordinates of geomorphon */
 } PATTERN;
 
 typedef enum

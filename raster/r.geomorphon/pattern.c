@@ -4,8 +4,8 @@
  * 3|2|1
  * 4|0|8
  * 5|6|7 */
-static int nextr[8] = { -1, -1, -1, 0, 1, 1, 1, 0 };
-static int nextc[8] = { 1, 0, -1, -1, -1, 0, 1, 1 };
+static int nextr[NUM_DIRS] = { -1, -1, -1, 0, 1, 1, 1, 0 };
+static int nextc[NUM_DIRS] = { 1, 0, -1, -1, -1, 0, 1, 1 };
 
 int calc_pattern(PATTERN * pattern, int row, int cur_row, int col)
 {
@@ -27,7 +27,7 @@ int calc_pattern(PATTERN * pattern, int row, int cur_row, int col)
     pattern->positives = 0;
     pattern->negatives = 0;
 
-    for (i = 0; i < 8; ++i) {
+    for (i = 0; i < NUM_DIRS; ++i) {
 	/* reset patterns */
 	pattern->pattern[i] = 0;
 	pattern->elevation[i] = 0.;
