@@ -1858,7 +1858,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     if sh == 'zsh':
         # zsh does not have an unlimited history setting, so 1e8 is set as a proxy  
         if not os.getenv('SAVEHIST'):
-            os.environ['SAVEHIST'] = 100000000
+            os.environ['SAVEHIST'] = "100000000"
             os.environ['HISTSIZE'] = os.getenv('SAVEHIST')
             
     
