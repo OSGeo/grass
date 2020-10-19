@@ -1914,7 +1914,7 @@ class PsMapBufferedWindow(wx.Window):
                         pPaper = points[0]
                     pCanvas = self.CanvasPaperCoordinates(
                         rect=Rect2DPS(pPaper, (0, 0)), canvasToPaper=False)[:2]
-                    bounds = wx.RectPP(pCanvas, pos)
+                    bounds = wx.Rect(pCanvas, pos)
                     self.DrawGraphics(
                         drawid=self.dragId,
                         shape='line',
