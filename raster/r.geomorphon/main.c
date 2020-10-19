@@ -490,7 +490,7 @@ int main(int argc, char **argv)
 
 	G_done_msg(" ");
 	exit(EXIT_SUCCESS);
-    }				/* end of multiresolution */
+    }				/* end of NOT multiresolution */
 
     if (multires) {
 	PATTERN *multi_patterns;
@@ -550,6 +550,6 @@ int main(int argc, char **argv)
 	}
 	G_message("Multiresolution Done!");
 	exit(EXIT_SUCCESS);
-    }
+    }				/* end of multiresolution */
 
 }

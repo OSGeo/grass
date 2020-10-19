@@ -131,7 +131,7 @@ typedef struct
     char *label;
 } FCOLORS;
 
-/* variables */
+/* main */
 GLOBAL MAPS elevation;
 GLOBAL int nrows, ncols, row_radius_size, row_buffer_size;
 GLOBAL int search_cells, skip_cells, step_cells, start_cells;
@@ -142,8 +142,6 @@ GLOBAL double flat_threshold, flat_threshold_height;
 GLOBAL double H, V;
 GLOBAL struct Cell_head window;
 GLOBAL int cell_step;
-
-/* main */
 GLOBAL unsigned int global_ternary_codes[6562];
 
 /* memory */
@@ -155,8 +153,10 @@ int free_map(FCELL ** map, int n);
 int write_form_cat_colors(char *raster, CATCOLORS * ccolors);
 int write_contrast_colors(char *);
 
-/* geom */
+/* pattern */
 int calc_pattern(PATTERN * pattern, int row, int cur_row, int col);
+
+/* geom */
 unsigned int ternary_rotate(unsigned int value);
 FORMS determine_form(int num_plus, int num_minus);
 int determine_binary(int *pattern, int sign);
