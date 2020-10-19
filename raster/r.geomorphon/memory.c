@@ -104,18 +104,18 @@ int write_form_cat_colors(char *raster, CATCOLORS * ccolors)
 {
     struct Colors colors;
     struct Categories cats;
-    int i;
+    FORMS i;
 
     Rast_init_colors(&colors);
 
-    for (i = 1; i < CNT; ++i)
+    for (i = FL; i < CNT; ++i)
 	Rast_add_color_rule(&ccolors[i].cat, ccolors[i].r, ccolors[i].g,
 			    ccolors[i].b, &ccolors[i].cat, ccolors[i].r,
 			    ccolors[i].g, ccolors[i].b, &colors, CELL_TYPE);
     Rast_write_colors(raster, G_mapset(), &colors);
     Rast_free_colors(&colors);
     Rast_init_cats("Forms", &cats);
-    for (i = 1; i < CNT; ++i)
+    for (i = FL; i < CNT; ++i)
 	Rast_set_cat(&ccolors[i].cat, &ccolors[i].cat, ccolors[i].label,
 		     &cats, CELL_TYPE);
     Rast_write_cats(raster, &cats);

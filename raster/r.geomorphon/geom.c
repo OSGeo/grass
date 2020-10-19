@@ -44,7 +44,7 @@ unsigned int ternary_rotate(unsigned int value)
     return code < rev_code ? code : rev_code;
 }
 
-int determine_form(int num_minus, int num_plus)
+FORMS determine_form(int num_minus, int num_plus)
 {
     /* determine form according number of positives and negatives
      * simple approach to determine form pattern */
@@ -54,28 +54,16 @@ int determine_form(int num_minus, int num_plus)
 	/*       0   1   2   3   4   5   6   7   8  */
 	/* 0 */ {FL, FL, FL, FS, FS, VL, VL, VL, PT},
 	/* 1 */ {FL, FL, FS, FS, FS, VL, VL, VL, __},
-	/* 2 */ {FL, SH, SL, SL, CN, CN, VL, __, __},
-	/* 3 */ {SH, SH, SL, SL, SL, CN, __, __, __},
-	/* 4 */ {SH, SH, CV, SL, SL, __, __, __, __},
-	/* 5 */ {RI, RI, CV, CV, __, __, __, __, __},
+	/* 2 */ {FL, SH, SL, SL, HL, HL, VL, __, __},
+	/* 3 */ {SH, SH, SL, SL, SL, HL, __, __, __},
+	/* 4 */ {SH, SH, SP, SL, SL, __, __, __, __},
+	/* 5 */ {RI, RI, SP, SP, __, __, __, __, __},
 	/* 6 */ {RI, RI, RI, __, __, __, __, __, __},
 	/* 7 */ {RI, RI, __, __, __, __, __, __, __},
 	/* 8 */ {PK, __, __, __, __, __, __, __, __},
     };
+    /* (See the FORMS enum for the legend.) */
 
-    /* legend:
-       FL,  flat
-       PK,  peak, summit
-       RI,  ridge
-       SH,  shoulder
-       CV,  convex
-       SL,  slope
-       CN,  concave
-       FS,  footslope
-       VL,  valley
-       PT,  pit, depression
-       __  error, impossible
-     */
     return forms[num_minus][num_plus];
 }
 
