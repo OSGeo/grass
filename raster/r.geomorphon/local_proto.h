@@ -100,16 +100,16 @@ typedef enum
 {
     ZERO,			/* zero cats do not accept zero category */
     FL,				/* flat */
-    PK,				/* peak, summit */
+    PK,				/* peak (summit) */
     RI,				/* ridge */
     SH,				/* shoulder */
-    CV,				/* convex slope */
+    SP,				/* spur (convex slope) */
     SL,				/* slope */
-    CN,				/* concave slope */
+    HL,				/* hollow (concave slope) */
     FS,				/* footslope */
     VL,				/* valley */
-    PT,				/* pit, depression */
-    __,				/* error */
+    PT,				/* pit (depression) */
+    __,				/* error (impossible) */
     CNT				/* counter */
 } FORMS;
 
@@ -158,7 +158,7 @@ int write_contrast_colors(char *);
 /* geom */
 int calc_pattern(PATTERN * pattern, int row, int cur_row, int col);
 unsigned int ternary_rotate(unsigned int value);
-int determine_form(int num_plus, int num_minus);
+FORMS determine_form(int num_plus, int num_minus);
 int determine_binary(int *pattern, int sign);
 int determine_ternary(int *pattern);
 int rotate(unsigned char binary);
