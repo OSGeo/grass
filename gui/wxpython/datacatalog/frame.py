@@ -6,7 +6,7 @@
 Classes:
  - datacatalog::DataCatalogFrame
 
-(C) 2014-2018 by Tereza Fiedlerova, and the GRASS Development Team
+(C) 2014-2020 by Tereza Fiedlerova, and the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -14,17 +14,14 @@ for details.
 
 @author Tereza Fiedlerova (original author)
 @author Martin Landa <landa.martin gmail.com> (various improvements)
+@author Anna Petrasova (simplify)
 """
 
 import os
-import sys
-
 import wx
 
 from core.globalvar import ICONDIR
-from core.gcmd import RunCommand, GMessage
-from datacatalog.tree import DataCatalogTree
-from datacatalog.toolbars import DataCatalogToolbar
+from datacatalog.catalog import DataCatalog
 from gui_core.wrap import Button
 
 
@@ -44,15 +41,7 @@ class DataCatalogFrame(wx.Frame):
 
         self._giface = giface
         self.panel = wx.Panel(self)
-
-        self.toolbar = DataCatalogToolbar(parent=self)
-        # workaround for http://trac.wxwidgets.org/ticket/13888
-        if sys.platform != 'darwin':
-            self.SetToolBar(self.toolbar)
-
-        # tree
-        self.tree = DataCatalogTree(parent=self.panel, giface=self._giface)
-        self.tree.ReloadTreeItems()
+        self.catalogpanel = DataCatalog(self.panel, giface=giface)
 
         # buttons
         self.btnClose = Button(parent=self.panel, id=wx.ID_CLOSE)
@@ -60,14 +49,14 @@ class DataCatalogFrame(wx.Frame):
         self.btnClose.SetDefault()
 
         # events
-        self.btnClose.Bind(wx.EVT_BUTTON, self.OnCloseWindow)
-        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+        self.btnClose.Bind(wx.EVT_BUTTON, lambda evt: self.Close())
 
         self._layout()
+        self.catalogpanel.LoadItems()
 
     def _layout(self):
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self.tree, proportion=1, flag=wx.EXPAND)
+        sizer.Add(self.catalogpanel, proportion=1, flag=wx.EXPAND)
 
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.AddStretchSpacer()
@@ -80,50 +69,4 @@ class DataCatalogFrame(wx.Frame):
         self.panel.SetSizer(sizer)
         sizer.Fit(self.panel)
 
-        self.SetMinSize((400, 500))
-
-    def OnCloseWindow(self, event):
-        """Cancel button pressed"""
-        if not isinstance(event, wx.CloseEvent):
-            self.Destroy()
-
-        event.Skip()
-
-    def OnReloadTree(self, event):
-        """Reload whole tree"""
-        self.tree.ReloadTreeItems()
-
-    def OnReloadCurrentMapset(self, event):
-        """Reload current mapset tree only"""
-        self.tree.ReloadCurrentMapset()
-
-    def OnAddGrassDB(self, event):
-        """Add grass database"""
-        dlg = wx.DirDialog(self, _("Choose GRASS data directory:"),
-                           os.getcwd(), wx.DD_DEFAULT_STYLE)
-        if dlg.ShowModal() == wx.ID_OK:
-            grassdatabase = dlg.GetPath()
-            self.tree.InsertGrassDb(name=grassdatabase)
-        dlg.Destroy()
-
-    def OnCreateMapset(self, event):
-        """Create new mapset in current location"""
-        db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
-        self.tree.CreateMapset(db_node, loc_node)
-
-    def OnCreateLocation(self, event):
-        """Create new location"""
-        db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
-        self.tree.CreateLocation(db_node)
-
-    def OnDownloadLocation(self, event):
-        """Download location online"""
-        db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
-        self.tree.DownloadLocation(db_node)
-
-    def SetRestriction(self, restrict):
-        """Allow editing other mapsets or restrict editing to current mapset"""
-        self.tree.SetRestriction(restrict)
-
-    def Filter(self, text):
-        self.tree.Filter(text=text)
+        self.SetMinSize((450, 500))
