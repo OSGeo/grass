@@ -40,12 +40,12 @@ import grass.script as gscript
 def copy_colors(fh, map, offset):
     p = gscript.pipe_command('r.colors.out', map=map)
     for line in p.stdout:
-        f = line.rstrip('\r\n').split(' ')
+        f = gscript.decode(line).rstrip('\r\n').split(' ')
         if offset:
             if f[0] in ['nv', 'default']:
                 continue
             f[0] = str(float(f[0]) + offset)
-        fh.write(' '.join(f) + '\n')
+        fh.write(gscript.encode(' '.join(f) + '\n'))
     p.wait()
 
 
