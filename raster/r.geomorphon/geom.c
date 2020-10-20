@@ -38,10 +38,10 @@ unsigned int ternary_rotate(unsigned int value)
 	    tmp_rev_code += tmp_rev_pattern[i] * power;
 	    power *= 3;
 	}
-	code = tmp_code < code ? tmp_code : code;
-	rev_code = tmp_rev_code < rev_code ? tmp_rev_code : rev_code;
+	code = MIN(tmp_code, code);
+	rev_code = MIN(tmp_rev_code, rev_code);
     }
-    return code < rev_code ? code : rev_code;
+    return MIN(code, rev_code);
 }
 
 FORMS determine_form(int num_minus, int num_plus)
@@ -81,7 +81,7 @@ int determine_binary(int *pattern, int sign)
 	    test = binary;
 	else
 	    test = (binary << i) | (binary >> (NUM_DIRS - i));
-	result = (result < test) ? result : test;
+	result = MIN(result, test);
     }
     return (int)result;
 }
@@ -98,7 +98,7 @@ int rotate(unsigned char binary)
 	    test = binary;
 	else
 	    test = (binary << i) | (binary >> (NUM_DIRS - i));
-	result = (result < test) ? result : test;
+	result = MIN(result, test);
     }
     return (int)result;
 }
@@ -144,8 +144,8 @@ float range(float *elevation)
     int i;
 
     for (i = 0; i < NUM_DIRS; i++) {
-	max = elevation[i] > max ? elevation[i] : max;
-	min = elevation[i] < min ? elevation[i] : min;
+	max = MAX(elevation[i], max);
+	min = MIN(elevation[i], min);
     }
 
     return max - min;
@@ -235,15 +235,15 @@ int shape(PATTERN * pattern, int pattern_size, float *azimuth,
     for (i = 1; i < NUM_DIRS; ++i) {
 	rx = pattern->x[i] * cosine - pattern->y[i] * sine;
 	ry = pattern->x[i] * sine + pattern->y[i] * cosine;
-	rxmin = rx < rxmin ? rx : rxmin;
-	rxmax = rx > rxmax ? rx : rxmax;
-	rymin = ry < rymin ? ry : rymin;
-	rymax = ry > rymax ? ry : rymax;
+	rxmin = MIN(rx, rxmin);
+	rxmax = MAX(rx, rxmax);
+	rymin = MIN(ry, rymin);
+	rymax = MAX(ry, rymax);
     }
     rx = (rxmax - rxmin);
     ry = (rymax - rymin);
     *elongation = rx > ry ? (float)rx / ry : (float)ry / rx;
-    *width = rx > ry ? ry : rx;
+    *width = MIN(rx, ry);
 
     return 0;
 }

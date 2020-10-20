@@ -15,7 +15,7 @@ int pattern_matching(int *pattern)
 	    test = binary;
 	else
 	    test = (binary << i) | (binary >> (NUM_DIRS - i));
-	result = (result < test) ? result : test;
+	result = MIN(result, test);
     }
     return ((result & source) == source) ? 1 : 0;
 
