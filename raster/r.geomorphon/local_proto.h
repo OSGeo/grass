@@ -48,10 +48,13 @@
 #define DEGREE2RAD(a) ((a)/(180/PI))
 #define RAD2DEGREE(a) ((a)*(180/PI))
 
-#undef MIN
-#undef MAX
+#ifndef MAX
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
+#endif
+
+#ifndef MIN
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
+#endif
 
 /* Number of cardinal directions. */
 #define NUM_DIRS 8
