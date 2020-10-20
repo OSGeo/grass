@@ -2,6 +2,15 @@
 
 typedef struct
 {
+    int cat;
+    int r;
+    int g;
+    int b;
+    char *label;
+} CATCOLORS;
+
+typedef struct
+{
     double cat;
     int r;
     int g;
@@ -111,11 +120,25 @@ int free_map(FCELL ** map, int n)
     return 0;
 }
 
-int write_form_cat_colors(char *raster, CATCOLORS * ccolors)
+int write_form_cat_colors(char *raster)
 {
     struct Colors colors;
     struct Categories cats;
     FORMS i;
+    const CATCOLORS ccolors[CNT] = {	/* colors and cats for forms */
+	{ZERO, 0, 0, 0, "forms"},
+	{FL, 220, 220, 220, "flat"},
+	{PK, 56, 0, 0, "summit"},
+	{RI, 200, 0, 0, "ridge"},
+	{SH, 255, 80, 20, "shoulder"},
+	{SP, 250, 210, 60, "spur"},
+	{SL, 255, 255, 60, "slope"},
+	{HL, 180, 230, 20, "hollow"},
+	{FS, 60, 250, 150, "footslope"},
+	{VL, 0, 0, 255, "valley"},
+	{PT, 0, 0, 56, "depression"},
+	{__, 255, 0, 255, "ERROR"}
+    };
 
     Rast_init_colors(&colors);
 

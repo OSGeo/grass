@@ -74,15 +74,6 @@ typedef enum
     CNT				/* counter */
 } FORMS;
 
-typedef struct
-{
-    int cat;
-    int r;
-    int g;
-    int b;
-    char *label;
-} CATCOLORS;
-
 /* main */
 GLOBAL MAPS elevation;
 GLOBAL int ncols, row_radius_size, row_buffer_size;
@@ -97,7 +88,7 @@ GLOBAL unsigned int global_ternary_codes[6562];
 int open_map(MAPS * rast);
 int shift_buffers(int row);
 int free_map(FCELL ** map, int n);
-int write_form_cat_colors(char *raster, CATCOLORS * ccolors);
+int write_form_cat_colors(char *raster);
 int write_contrast_colors(char *);
 
 /* pattern */
