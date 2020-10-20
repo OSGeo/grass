@@ -81,21 +81,6 @@ int main(int argc, char **argv)
 	 "Geometry", FCELL_TYPE, -1, NULL}
     };				/* adding more maps change IOSIZE macro */
 
-    CATCOLORS ccolors[CNT] = {	/* colors and cats for forms */
-	{ZERO, 0, 0, 0, "forms"},
-	{FL, 220, 220, 220, "flat"},
-	{PK, 56, 0, 0, "summit"},
-	{RI, 200, 0, 0, "ridge"},
-	{SH, 255, 80, 20, "shoulder"},
-	{SP, 250, 210, 60, "spur"},
-	{SL, 255, 255, 60, "slope"},
-	{HL, 180, 230, 20, "hollow"},
-	{FS, 60, 250, 150, "footslope"},
-	{VL, 0, 0, 255, "valley"},
-	{PT, 0, 0, 56, "depression"},
-	{__, 255, 0, 255, "ERROR"}
-    };
-
     struct GModule *module;
     struct Option
 	*opt_input,
@@ -506,7 +491,7 @@ int main(int argc, char **argv)
 	    }
 
 	if (opt_output[o_forms]->answer)
-	    write_form_cat_colors(opt_output[o_forms]->answer, ccolors);
+	    write_form_cat_colors(opt_output[o_forms]->answer);
 	if (opt_output[o_intensity]->answer)
 	    write_contrast_colors(opt_output[o_intensity]->answer);
 	if (opt_output[o_exposition]->answer)
