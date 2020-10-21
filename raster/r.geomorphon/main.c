@@ -122,7 +122,7 @@ int main(int argc, char **argv)
 	opt_input->required = rasters[0].required;
 	opt_input->description = _(rasters[0].description);
 
-	for (i = 1; i < io_size; ++i) {	/* WARNING: loop starts from one, zero is for input */
+	for (i = o_forms; i < io_size; ++i) {
 	    opt_output[i] = G_define_standard_option(G_OPT_R_OUTPUT);
 	    opt_output[i]->key = rasters[i].name;
 	    opt_output[i]->required = NO;
@@ -201,7 +201,7 @@ int main(int argc, char **argv)
 	double ns_resolution;
 
 	multires = (par_multi_prefix->answer) ? 1 : 0;
-	for (i = 1; i < io_size; ++i)	/* check for outputs */
+	for (i = o_forms; i < io_size; ++i)	/* check for outputs */
 	    if (opt_output[i]->answer) {
 		if (G_legal_filename(opt_output[i]->answer) < 0)
 		    G_fatal_error(_("<%s> is an illegal file name"),
@@ -330,7 +330,7 @@ int main(int argc, char **argv)
 
 	cell_step = 1;
 	/* prepare outputs */
-	for (i = 1; i < io_size; ++i)
+	for (i = o_forms; i < io_size; ++i)
 	    if (opt_output[i]->answer) {
 		rasters[i].fd =
 		    Rast_open_new(opt_output[i]->answer,
@@ -359,7 +359,7 @@ int main(int argc, char **argv)
 		    col > ncols - (skip_cells + 2) ||
 		    Rast_is_f_null_value(&elevation.elev[cur_row][col])) {
 		    /* set outputs to NULL and do nothing if source value is null   or border */
-		    for (i = 1; i < io_size; ++i)
+		    for (i = o_forms; i < io_size; ++i)
 			if (opt_output[i]->answer) {
 			    pointer_buf = rasters[i].buffer;
 			    switch (rasters[i].out_data_type) {
@@ -472,7 +472,7 @@ int main(int argc, char **argv)
 	    }			/* end for col */
 
 	    /* write existing outputs */
-	    for (i = 1; i < io_size; ++i)
+	    for (i = o_forms; i < io_size; ++i)
 		if (opt_output[i]->answer)
 		    Rast_put_row(rasters[i].fd, rasters[i].buffer,
 				 rasters[i].out_data_type);
@@ -481,7 +481,7 @@ int main(int argc, char **argv)
 
 	/* finish and close */
 	free_map(elevation.elev, row_buffer_size + 1);
-	for (i = 1; i < io_size; ++i)
+	for (i = o_forms; i < io_size; ++i)
 	    if (opt_output[i]->answer) {
 		G_free(rasters[i].buffer);
 		Rast_close(rasters[i].fd);
