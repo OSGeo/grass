@@ -19,31 +19,9 @@
 #define PI2 (2*atan(1))
 #endif
 
-#ifndef PI4			/* PI/4 */
-#define PI4 (atan(1))
-#endif
-
 #ifndef PI
 #define PI (4*atan(1))
 #endif
-
-#ifndef M2PI			/* 2*PI */
-#define M2PI (8*atan(1))
-#endif
-
-#ifndef GRADE
-#define GRADE (atan(1)/45)
-#endif
-
-
-#ifndef PI2PERCENT
-#define PI2PERCENT (50/atan(1))
-#endif
-
-#ifndef UNKNOWN
-#define UNKNOWN -1
-#endif
-
 
 #define DEGREE2RAD(a) ((a)/(180/PI))
 #define RAD2DEGREE(a) ((a)*(180/PI))
@@ -59,8 +37,6 @@
 /* Number of cardinal directions. */
 #define NUM_DIRS 8
 
-typedef char *STRING;
-
 typedef struct
 {
     char elevname[150];
@@ -68,24 +44,6 @@ typedef struct
     FCELL **elev;
     int fd;			/* file descriptor */
 } MAPS;
-
-typedef struct
-{				/* struct is used both for interface and output */
-    char *name;
-    int required;
-    char *description;
-    char *gui;
-    RASTER_MAP_TYPE out_data_type;
-    int fd;
-    void *buffer;
-} IO;
-
-typedef struct
-{
-    char name[100];
-    int fd;
-    CELL *forms_buffer;
-} MULTI;
 
 typedef struct
 {
@@ -125,33 +83,19 @@ typedef struct
     char *label;
 } CATCOLORS;
 
-typedef struct
-{
-    double cat;
-    int r;
-    int g;
-    int b;
-    char *label;
-} FCOLORS;
-
 /* main */
 GLOBAL MAPS elevation;
-GLOBAL int nrows, ncols, row_radius_size, row_buffer_size;
-GLOBAL int search_cells, skip_cells, step_cells, start_cells;
-GLOBAL int num_of_steps;
-GLOBAL double search_distance, skip_distance, flat_distance;
-GLOBAL double start_distance, step_distance;	/* multiresolution mode */
+GLOBAL int ncols, row_radius_size, row_buffer_size;
+GLOBAL int skip_cells;
+GLOBAL double search_distance, flat_distance;
 GLOBAL double flat_threshold, flat_threshold_height;
-GLOBAL double H, V;
 GLOBAL struct Cell_head window;
 GLOBAL int cell_step;
 GLOBAL unsigned int global_ternary_codes[6562];
 
 /* memory */
 int open_map(MAPS * rast);
-int create_maps(void);
 int shift_buffers(int row);
-int get_cell(int col, float *buf_row, void *buf, RASTER_MAP_TYPE raster_type);
 int free_map(FCELL ** map, int n);
 int write_form_cat_colors(char *raster, CATCOLORS * ccolors);
 int write_contrast_colors(char *);
@@ -173,13 +117,4 @@ int shape(PATTERN * pattern, int pattern_size, float *azimuth,
 	  float *elongation, float *width);
 float extends(PATTERN * pattern, int pattern_size);
 int radial2cartesian(PATTERN *);
-
-/* multires */
-int reset_multi_patterns(void);
-int calc_multi_patterns(int row, int cur_row, int col);
-int update_pattern(int k, int i,
-		   double zenith_height, double zenith_distance,
-		   double zenith_angle, double nadir_height,
-		   double nadir_distance, double nadir_angle);
-
 #endif
