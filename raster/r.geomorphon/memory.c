@@ -1,5 +1,16 @@
 #include "local_proto.h"
 
+typedef struct
+{
+    double cat;
+    int r;
+    int g;
+    int b;
+    char *label;
+} FCOLORS;
+
+static int get_cell(int, float *, void *, RASTER_MAP_TYPE);
+
 int open_map(MAPS * rast)
 {
 
@@ -35,7 +46,7 @@ int open_map(MAPS * rast)
     return 0;
 }
 
-int get_cell(int col, float *buf_row, void *buf, RASTER_MAP_TYPE raster_type)
+static int get_cell(int col, float *buf_row, void *buf, RASTER_MAP_TYPE raster_type)
 {
 
     switch (raster_type) {

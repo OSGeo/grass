@@ -21,11 +21,32 @@
 
 #define MAIN
 #include "local_proto.h"
+
+#define UNKNOWN -1
+
 typedef enum
 { i_dem, o_forms, o_ternary, o_positive, o_negative, o_intensity,
 	o_exposition,
     o_range, o_variance, o_elongation, o_azimuth, o_extend, o_width, io_size
 } outputs;
+
+typedef struct
+{				/* struct is used both for interface and output */
+    char *name;
+    int required;
+    char *description;
+    char *gui;
+    RASTER_MAP_TYPE out_data_type;
+    int fd;
+    void *buffer;
+} IO;
+
+typedef struct
+{
+    char name[100];
+    int fd;
+    CELL *forms_buffer;
+} MULTI;
 
 int main(int argc, char **argv)
 {
@@ -91,7 +112,12 @@ int main(int argc, char **argv)
     int i;
     int meters = 0, multires = 0, extended = 0;	/* flags */
     int row, cur_row, col;
+    int nrows;
     int pattern_size;
+    int search_cells, step_cells, start_cells;
+    int num_of_steps;
+    double start_distance, step_distance;	/* multiresolution mode */
+    double skip_distance;
     double max_resolution;
     char prefix[20];
 
