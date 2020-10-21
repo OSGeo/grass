@@ -129,21 +129,24 @@ float intensity(float *elevation, int pattern_size)
 float exposition(float *elevation)
 {
     /* calculate relative elevation of the central cell against its visibility */
-    float max = 0.;
+    float max;
     int i;
 
-    for (i = 0; i < NUM_DIRS; i++)
-	max = fabs(elevation[i]) > fabs(max) ? elevation[i] : max;
+    max = elevation[0];
+    for (i = 1; i < NUM_DIRS; i++)
+	if (fabs(elevation[i]) > fabs(max))
+	    max = elevation[i];
     return -max;
 }
 
 float range(float *elevation)
 {
     /* calculate relative difference in visible range of central cell */
-    float max = -90000000000., min = 9000000000000.;	/* should be enough */
+    float max, min;
     int i;
 
-    for (i = 0; i < NUM_DIRS; i++) {
+    max = min = elevation[0];
+    for (i = 1; i < NUM_DIRS; i++) {
 	max = MAX(elevation[i], max);
 	min = MIN(elevation[i], min);
     }
