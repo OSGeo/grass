@@ -1837,8 +1837,9 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     # bash histroy file handled in specific_addition
     if not sh == "bash":
         os.environ['HISTFILE'] = os.path.join(location, sh_history)
-    # set bash history to record an unlimited command history
-    if not os.getenv('HISTSIZE') and not os.getenv('HISTFILESIZE'):
+
+    if sh == "bash":
+        # set bash history to record an unlimited command history
         os.environ['HISTSIZE'] = "-1"
         os.environ['HISTFILESIZE'] = os.getenv('HISTSIZE')
 
@@ -1856,12 +1857,10 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     f = open(shell_rc_file, 'w')
 
     if sh == 'zsh':
-        # zsh does not have an unlimited history setting, so 1e8 is set as a proxy  
-        if not os.getenv('SAVEHIST'):
-            os.environ['SAVEHIST'] = "100000000"
-            os.environ['HISTSIZE'] = os.getenv('SAVEHIST')
-            
-    
+        # zsh does not have an unlimited history setting, so 1e8 is set as a proxy
+        os.environ['SAVEHIST'] = "100000000"
+        os.environ['HISTSIZE'] = os.getenv('SAVEHIST')
+
         f.write('test -r {home}/.alias && source {home}/.alias\n'.format(
             home=userhome))
     else:
