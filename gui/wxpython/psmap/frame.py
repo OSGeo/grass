@@ -1979,10 +1979,10 @@ class PsMapBufferedWindow(wx.Window):
                 yDiff = newRect[1] - oldRect[1]
                 self.instruction[id]['rect'] = newRect
 
-                point1 = wx.Point2D(
-                    xDiff, yDiff) + self.instruction[id]['where'][0]
-                point2 = wx.Point2D(
-                    xDiff, yDiff) + self.instruction[id]['where'][1]
+                point1 = wx.Point2D(*self.instruction[id]['where'][0])
+                point2 = wx.Point2D(*self.instruction[id]['where'][1])
+                point1 += wx.Point2D(xDiff, yDiff)
+                point2 += wx.Point2D(xDiff, yDiff)
                 self.instruction[id]['where'] = [point1, point2]
 
                 self.RecalculateEN()
