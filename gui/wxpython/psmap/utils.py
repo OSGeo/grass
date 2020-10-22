@@ -402,7 +402,7 @@ def getRasterType(map):
     if map is None:
         map = ''
     file = grass.find_file(name=map, element='cell')
-    if file['file']:
+    if file.get('file'):
         rasterType = grass.raster_info(map)['datatype']
         return rasterType
     else:
