@@ -238,7 +238,7 @@ class StaticText(wx.StaticText):
 
     def SetToolTip(self, tip):
         if wxPythonPhoenix:
-            wx.StaticText.SetToolTip(self, tipString=tip)
+            wx.StaticText.SetToolTip(self, tip)
         else:
             wx.StaticText.SetToolTipString(self, tip)
 
@@ -327,7 +327,7 @@ class ListCtrl(wx.ListCtrl):
         else:
             return super(ListCtrl, self).IsChecked(item)
 
-           
+
 if CheckWxVersion([4, 1, 0]):
     class CheckListCtrlMixin():
         """This class pretends to be deprecated CheckListCtrlMixin mixin and
