@@ -615,7 +615,7 @@ class IClassMapFrame(DoubleMapFrame):
         vname = self._getTempVectorName()
         # avoid deleting temporary map
         os.environ['GRASS_VECTOR_TEMPORARY'] = '1'
-        if digitClass.CopyMap(vname, tmp=True) == -1:
+        if digitClass.CopyMap(vname, tmp=True, update=True) == -1:
             GError(
                 parent=self,
                 message=_("Unable to copy vector features from <%s>") %
