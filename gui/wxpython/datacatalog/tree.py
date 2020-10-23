@@ -543,8 +543,27 @@ class DataCatalogTree(TreeView):
     def ReloadTreeItems(self):
         """Reload dbs, locations, mapsets and layers in the tree."""
         self.busy = wx.BusyCursor()
+        self._quickLoading()
         self.thread.Run(callable=self._reloadTreeItems,
                         ondone=self._loadItemsDone)
+
+    def _quickLoading(self):
+        """Quick loading of locations to show
+        something when loading for the first time"""
+        if self._model.root.children:
+            return
+        gisenv = gscript.gisenv()
+        for grassdatabase in self.grassdatabases:
+            grassdb_node = self._model.AppendNode(parent=self._model.root,
+                                                  data=dict(type='grassdb',
+                                                            name=grassdatabase))
+            for location in GetListOfLocations(grassdatabase):
+                self._model.AppendNode(parent=grassdb_node,
+                                       data=dict(type='location',
+                                                 name=location))
+            self.RefreshItems()
+            if grassdatabase == gisenv['GISDBASE']:
+                self.ExpandNode(grassdb_node, recursive=False)
 
     def _loadItemsDone(self, event):
         Debug.msg(1, "Tree filled")

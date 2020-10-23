@@ -413,6 +413,7 @@ class GMFrame(wx.Frame):
             FN.EVT_FLATNOTEBOOK_PAGE_CLOSING,
             self.OnCBPageClosing)
 
+        wx.CallAfter(self.datacatalog.LoadItems)
         return self.notebook
 
     def AddNvizTools(self, firstTime):
@@ -649,8 +650,6 @@ class GMFrame(wx.Frame):
         page = event.GetSelection()
         if page == self.notebook.GetPageIndexByName('output'):
             wx.CallAfter(self.goutput.ResetFocus)
-        elif page == self.notebook.GetPageIndexByName('catalog'):
-            wx.CallAfter(self.datacatalog.LoadItems)
         self.SetStatusText('', 0)
 
         event.Skip()
