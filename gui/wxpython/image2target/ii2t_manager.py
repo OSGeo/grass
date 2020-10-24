@@ -1814,6 +1814,7 @@ class GCP(MapFrame, ColumnSorterMixin):
             self.TgtMap.Clean()
 
             self.grwiz.Cleanup()
+            self._mgr.UnInit()
 
             self.Destroy()
 
