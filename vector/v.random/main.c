@@ -667,7 +667,7 @@ int main(int argc, char *argv[])
             cat = i + 1;
             
             if (!notable) {
-                if (parm.input->answer) {
+                if (parm.input->answer && field > 0) {
                     Vect_cat_get(Cats, field, &cat_area);
 
                     cats_array[i].cat = cat;
