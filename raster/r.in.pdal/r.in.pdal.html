@@ -144,7 +144,7 @@ from 5 to 25 percent.</dd>
 Note that different statistics have different memory requirements
 (see below for details).
 
-<h3>Filtering</h3>
+<h3>Filtering and selection</h3>
 
 Points falling outside the current computational region will be skipped.
 This includes points falling <em>exactly</em> on the southern region
@@ -218,6 +218,16 @@ smooth the stddev map before further use.)
 <p>
 Note that proper filtering of the input points in not only critical for
 the analysis itself but it can also speed up the processing.
+
+<p>
+LiDAR points can contain a lot of attributes besides their coordinates.
+By default <em>r.in.lidar</em> will use point Z coordinate as the output
+raster value source. The <em>variable</em> parameter allows to use different
+point attributes as an output instead of Z value. In case if other than Z
+value is choosen, output map type will be set to CELL. Explanation
+of various attributes can be found in LAS Specification chapter "Point
+Data Records". Be ware - not all attributes might be present and also
+their value ranges and meaning might vary between LAS file producers.
 
 <h3>Reduction to a base raster</h3>
 

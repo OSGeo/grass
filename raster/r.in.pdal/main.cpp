@@ -305,6 +305,40 @@ int main(int argc, char *argv[])
                                "If not specified, all points are imported.");
     class_opt->guisection = _("Selection");
 
+    Option *variable_opt = G_define_option();
+    variable_opt->key = "variable";
+    variable_opt->type = TYPE_STRING;
+    variable_opt->required = NO;
+    variable_opt->label = _("Variable to use for raster values");
+    variable_opt->options =
+	"z,intensity,number,returns,direction,angle,abs_angle,class,source";
+    variable_opt->answer = const_cast<char*>("z");
+    variable_opt->guisection = _("Selection");
+    G_asprintf((char **)&(variable_opt->descriptions),
+               "z;%s;"
+               "intensity;%s;"
+               "number;%s;"
+               "returns;%s;"
+               "direction;%s;"
+               "angle;%s;"
+               "class;%s;"
+               "source;%s",
+               _("Z coordinate"),
+               /* GTC: LAS LiDAR point property */
+               _("Intensity"),
+               /* GTC: LAS LiDAR point property */
+               _("Return number"),
+               /* GTC: LAS LiDAR point property */
+               _("Number of returns"),
+               /* GTC: LAS LiDAR point property */
+               _("Scan direction"),
+               /* GTC: LAS LiDAR point property */
+               _("Scan angle"),
+               /* GTC: LAS LiDAR point property */
+               _("Point class value"),
+               /* GTC: LAS LiDAR point property */
+               _("Source ID"));
+
     Flag *extract_ground_flag = G_define_flag();
     extract_ground_flag->key = 'j';
     extract_ground_flag->label =
@@ -487,6 +521,33 @@ int main(int argc, char *argv[])
 
     if (point_binning.method == METHOD_N)
         rtype = CELL_TYPE;
+
+    if (!(strcmp(variable_opt->answer, "z") == 0)) {
+        /* Should we enfocte the CELL type? */
+        rtype = CELL_TYPE;
+
+        if (strcmp(variable_opt->answer, "intensity") == 0) {
+            dim_to_use_as_z = pdal::Dimension::Id::Intensity;
+        }
+        else if (strcmp(variable_opt->answer, "number") == 0) {
+            dim_to_use_as_z = pdal::Dimension::Id::ReturnNumber;
+        }
+        else if (strcmp(variable_opt->answer, "returns") == 0) {
+            dim_to_use_as_z = pdal::Dimension::Id::NumberOfReturns;
+        }
+        else if (strcmp(variable_opt->answer, "direction") == 0) {
+            dim_to_use_as_z = pdal::Dimension::Id::ScanDirectionFlag;
+        }
+        else if (strcmp(variable_opt->answer, "angle") == 0) {
+            dim_to_use_as_z = pdal::Dimension::Id::ScanAngleRank;
+        }
+        else if (strcmp(variable_opt->answer, "class") == 0) {
+            dim_to_use_as_z = pdal::Dimension::Id::Classification;
+        }
+        else if (strcmp(variable_opt->answer, "source") == 0) {
+            dim_to_use_as_z = pdal::Dimension::Id::PointSourceId;
+        }
+    }
 
     if (res_opt->answer) {
         /* align to resolution */
