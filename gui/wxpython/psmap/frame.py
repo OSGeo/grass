@@ -240,6 +240,24 @@ class PsMapFrame(wx.Frame):
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
 
+    def _checkMapFrameExists(self, type_id):
+        """Check if map frame exists
+
+        :param int type_id: type id (raster, vector,...)
+
+        :return bool: False if map frame doesn't exists
+        """
+        if self.instruction.FindInstructionByType('map'):
+            mapId = self.instruction.FindInstructionByType('map').id
+        else:
+            mapId = None
+
+        if not type_id:
+            if not mapId:
+                GMessage(message=_("Please, create map frame first."))
+                return False
+        return True
+
     def InstructionFile(self):
         """Creates mapping instructions"""
 
@@ -653,15 +671,9 @@ class PsMapFrame(wx.Frame):
             id = self.instruction.FindInstructionByType('raster').id
         else:
             id = None
-        if self.instruction.FindInstructionByType('map'):
-            mapId = self.instruction.FindInstructionByType('map').id
-        else:
-            mapId = None
 
-        if not id:
-            if not mapId:
-                GMessage(message=_("Please, create map frame first."))
-                return
+        if not self._checkMapFrameExists(type_id=id):
+            return
 
 ##        dlg = RasterDialog(self, id = id, settings = self.instruction)
 # dlg.ShowModal()
@@ -679,14 +691,9 @@ class PsMapFrame(wx.Frame):
             id = self.instruction.FindInstructionByType('vector').id
         else:
             id = None
-        if self.instruction.FindInstructionByType('map'):
-            mapId = self.instruction.FindInstructionByType('map').id
-        else:
-            mapId = None
-        if not id:
-            if not mapId:
-                GMessage(message=_("Please, create map frame first."))
-                return
+
+        if not self._checkMapFrameExists(type_id=id):
+            return
 
 ##        dlg = MainVectorDialog(self, id = id, settings = self.instruction)
 # dlg.ShowModal()
@@ -864,6 +871,9 @@ class PsMapFrame(wx.Frame):
             id = self.instruction.FindInstructionByType('labels').id
         else:
             id = None
+
+        if not self._checkMapFrameExists(type_id=id):
+            return
 
         if 'labels' not in self.openDialogs:
             dlg = LabelsDialog(self, id=id, settings=self.instruction)
