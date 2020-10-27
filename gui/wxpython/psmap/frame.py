@@ -1914,7 +1914,7 @@ class PsMapBufferedWindow(wx.Window):
                         pPaper = points[0]
                     pCanvas = self.CanvasPaperCoordinates(
                         rect=Rect2DPS(pPaper, (0, 0)), canvasToPaper=False)[:2]
-                    bounds = wx.RectPP(pCanvas, pos)
+                    bounds = wx.Rect(pCanvas, pos)
                     self.DrawGraphics(
                         drawid=self.dragId,
                         shape='line',
@@ -1965,7 +1965,9 @@ class PsMapBufferedWindow(wx.Window):
                 rect = self.pdcObj.GetIdBounds(id)
                 self.instruction[id]['rect'] = self.CanvasPaperCoordinates(
                     rect=rect, canvasToPaper=True)
-                rect.OffsetXY(rect.GetWidth() / 2, rect.GetHeight() / 2)
+                rect.Offset(
+                    dx=rect.GetWidth() / 2, dy=rect.GetHeight() / 2,
+                )
                 self.instruction[id]['where'] = self.CanvasPaperCoordinates(
                     rect=rect, canvasToPaper=True)[: 2]
                 self.RecalculateEN()
@@ -1979,10 +1981,10 @@ class PsMapBufferedWindow(wx.Window):
                 yDiff = newRect[1] - oldRect[1]
                 self.instruction[id]['rect'] = newRect
 
-                point1 = wx.Point2D(
-                    xDiff, yDiff) + self.instruction[id]['where'][0]
-                point2 = wx.Point2D(
-                    xDiff, yDiff) + self.instruction[id]['where'][1]
+                point1 = wx.Point2D(*self.instruction[id]['where'][0])
+                point2 = wx.Point2D(*self.instruction[id]['where'][1])
+                point1 += wx.Point2D(xDiff, yDiff)
+                point2 += wx.Point2D(xDiff, yDiff)
                 self.instruction[id]['where'] = [point1, point2]
 
                 self.RecalculateEN()

@@ -1,5 +1,5 @@
 This is the draft pseudocode for the region growing segmentation algorithm.  More information, references, requirements, etc are at the wiki:
-http://grass.osgeo.org/wiki/GRASS_GSoC_2012_Image_Segmentation
+https://grass.osgeo.org/wiki/GRASS_GSoC_2012_Image_Segmentation
 
 For anyone interested in background discussion, Rev 51907 includes original comments and discussion between EM, MM, and ML.  All comments were combined (and new threads started!) after that revision.
 

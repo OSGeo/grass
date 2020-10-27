@@ -35,14 +35,14 @@ interface is well worth the shortened user learning curve. Moreover,
 system enables to generate module interface descriptions which can
 be used by GUI to generate a graphical interface for a module.
 
-\note There are also standard options and flags which ensures even
+\note There are also standard options and flags, which ensure even
 better standardization of names, values and descriptions.
 
 
 \section gislibcmd_Description Description
 
-The GRASS parser is a collection of functions and
-structures that are defined in the GRASS gis.h header file. These
+The GRASS parser is the collection of functions and
+structures defined in the GRASS gis.h header file. These
 structures and functions allow the programmer to define the options and
 flags that make up the valid command line input of a GRASS command.
 
@@ -51,7 +51,7 @@ The parser functions behave in one of three ways:
 <ul>
 <li> If no command line arguments are entered by the user, the parser
 searches for a completely interactive version of the command. If the
-interactive version is found, control is passed over to this
+interactive version is found, control is passed over to that
 version.
 
 <li> If command line arguments are entered but they are a subset of the
@@ -59,8 +59,8 @@ options and flags that the programmer has defined as required
 arguments, three things happen. The parser will pass an error message
 to the user indicating which required options and/or flags were
 missing from the command line, the parser will then display a complete
-usage message for that command, and finally the parser cancels
-execution of the command.
+usage message for that command, and finally the parser will terminate
+the command.
 
 <li> If all necessary options and flags are entered on the command line
 by the user, the parser executes the command with the given options
@@ -79,18 +79,18 @@ the GRASS gis.h header file.
 This is a basic list of members of the Option and Flag
 structures. A comprehensive description of all elements of these two
 structures and their possible values can be found in
-\ref Complete_Structure_Members_Description.
+\ref Complete_Structure_Members_Table.
 
 \subsection Option_structure Option structure
 
 The basic usage of the Option structure is as follows.
-You create a pointer to the Option structure.
+You declare a pointer to the Option structure.
 
 \code
 struct Option *opt;
 \endcode
 
-And then you call G_define_option() function which allocates memory for
+And then you call G_define_option() function, which allocates memory for
 the Option structure and returns a pointer to it.
 
 \code
@@ -99,24 +99,24 @@ opt = G_define_option();
 
 Then you set the structure members, basic members are:
 
- - <tt>key</tt> - Option name that user will use
- - <tt>description</tt> - Option description that is shown to the user
- - <tt>type</tt> - Variable type of the user's answer to the option
- - <tt>required</tt> - If this option is required on the command line?
+ - <tt>key</tt> - The option name on the command line.
+ - <tt>description</tt> - The option description to display to the user.
+ - <tt>type</tt> - Variable type of the user's answer to the option.
+ - <tt>required</tt> - Whether this option is mandatory or not.
 
-For full list of members see Option structure documentation.
+For the full list of members see the Option structure documentation.
 
 
 \subsection Flag_structure Flag structure
 
 The basic usage of the Flag structure is as follows.
-You create a pointer to the Flag structure.
+You declare a pointer to the Flag structure.
 
 \code
 struct Flag *flag;
 \endcode
 
-And then you call G_define_flag() function which allocates memory for
+And then you call G_define_flag() function, which allocates memory for
 the Flag structure and returns a pointer to it.
 
 \code
@@ -125,37 +125,37 @@ flag = G_define_flag()
 
 Then you set the structure members, basic members are:
 
- - <tt>key</tt> - Single letter used for flag name
- - <tt>description</tt> - Flag description that is shown to the user
+ - <tt>key</tt> - A single letter flag name on the command line.
+ - <tt>description</tt> - The flag description to display to the user.
 
-For full list of members see Flag structure documentation.
+For the full list of members see the Flag structure documentation.
 
 
 \subsection Running_Parser Running Parser
 
-To process and check the command line parameters of you module,
-you need to call G_parser() function.
+To process and check the command line parameters of your module,
+you need to call the G_parser() function.
 
 The command line parameters <i>argv</i> and the number of parameters
-<i>argc</i> from the main() routine are should be passed directly to
-G_parser() function. G_parser() function accepts the command line input
+<i>argc</i> from the main() routine should be passed directly to the
+G_parser() function. The function accepts the command line input
 entered by the user, and parses this input according to the input
 options and/or flags that were defined by the programmer.
 
-G_parser() returns 0 if successful. If not successful, a usage
-statement is displayed that describes the expected and/or required
-options and flags and a non-zero value is returned.
+G_parser() returns 0 if successful. If not successful, it displays
+a usage statement, which describes the expected and/or required
+options and flags, and returns a non-zero value.
 
 
 \subsection Parser_Additional_checks Additional checks of command line parameters
 
-When a G_parser() function is not sufficient to check all the details
-about the options and flags and their combinations, programmer has
-to add additional checks which are needed. If these checks are not
-successful programmer can call G_usage() function.
+When the G_parser() function is not sufficient to check all the details
+about the options and flags and their combinations, the code has to
+implement the required logic through custom additional checks. The code will
+typically call the G_usage() function if these checks are not successful.
 
-Calls to G_usage() allow the programmer to print the usage message at
-any time. This will explain the allowed and required command line
+G_usage() prints a usage message, which
+explains the allowed and the required command line
 input to the user. This description is given according to the
 programmer's definitions for options and flags. This function becomes
 useful when the user enters options and/or flags on the command line
@@ -163,18 +163,18 @@ that are syntactically valid to the parser, but functionally invalid
 for the command (e.g. an invalid file name).
 
 For example, the parser logic doesn't directly support grouping
-options. If two options be specified together or not at all, the
+options. If two options must be specified together or not at all, the
 parser must be told that these options are not required and the
-programmer must check that if one is specified the other must be as
-well. If this additional check fails, then G_parser() will
-succeed, but the programmer can then call G_usage() to print
-the standard usage message and print additional information about how
+programmer must check that if one option is specified the other is as well.
+If this additional check fails after G_parser() has succeeded, the
+programmer can then call G_usage() to print the standard usage message
+and then would separately need to print the additional information on how
 the two options work together.
 
 
-\subsection Parser_Displaying_multiple_answers Displaying multiple answers default values
+\subsection Parser_Displaying_multiple_answers Multiple answer default values
 
-Providing multiple default values (answers) for option with allows
+Providing multiple default values (answers) for an option that allows
 multiple values is possible using:
 
 \code
@@ -184,7 +184,7 @@ opt->multiple = YES;
 opt->answers  = def;
 \endcode
 
-The programmer may not forget last NULL value.
+The programmer must not forget the last NULL value.
 
 <em>New in GRASS 5.</em>
 
@@ -194,24 +194,23 @@ The programmer may not forget last NULL value.
 This is mainly historical feature which enables to disable interactive
 prompting in command line.
 
-When a user calls a command with no arguments on the command line, the
-parser will enter its own standardized interactive session in which
-all flags and options are presented to the user for input. A call to
-G_disable_interactive() disables the parser's interactive prompting.
+When a user runs a command with no arguments on the command line, the
+parser will enter its own standardized interactive session and prompt the
+user for all flags and options interactively. A call to
+G_disable_interactive() disables this feature.
 
 
 \section Parser_Programming_Examples Parser Programming Examples
 
 The use of the parser in the programming process is demonstrated
-here. Both a basic step by step example and full code example are
+here. Both a basic step by step example and a full code example are
 presented.
 
 
 \subsection Step_by_Step_Use_of_the_Parser Step by Step Use of the Parser
 
 
-These are the four basic steps to follow to implement the use of the
-GRASS parser in a GRASS command:
+Below are four basic steps to use the GRASS parser in a GRASS command:
 
 \subsubsection gislib_cmdline_Allocate Allocate memory for Flags and Options
 Options and flags are pointers to structures (Option and Flag structures)
@@ -234,8 +233,7 @@ flag = G_define_flag();   /* Request a pointer to memory for each flag */
 
 \subsubsection gislib_cmdline_Define Define members of Flag and Option structures
 
-The programmer should define the characteristics of each option and
-flag desired as outlined by the following example:
+Define the characteristics of each required option and flag, for example:
 
 \code
 opt->key = "option";                 /* The name of this option is "option". */
@@ -248,8 +246,8 @@ flag->description = _("Flag test");  /* The flag description is "Flag test" */
 \endcode
 
 \note There are more options defined in \ref Complete_Structure_Members_Table.
-You should for sure explore <tt>label</tt> member, <tt>options</tt> member
-and <tt>multiple</tt> member.
+You should for sure explore the <b>label</b>, the <b>options</b>
+and the <b>multiple</b> structure members.
 
 
 \subsubsection gislib_cmdline_Call Call the parser
@@ -270,12 +268,12 @@ if (G_parser(argc, argv))    /* Returns 0 if successful, non-zero otherwise */
 
 \subsubsection gislib_cmdline_Extracting Extracting information from the parser structures
 
-The following lines will extract the information form option and flag
-and print it to the standard output.
+The following code extracts the information about an option and a flag
+and prints it to the standard output.
 
 \code
 fprintf(stdout, "For the option "%s" you chose: <%s>\n", opt->description, opt->answer);
-fprintf(stdout, "The flag "-%s" is %s set.\n", flag->key, flag->answer ? "" : "not");
+fprintf(stdout, "The flag "-%s" is %s.\n", flag->key, flag->answer ? "set" : "not set");
 \endcode
 
 
@@ -284,18 +282,18 @@ fprintf(stdout, "The flag "-%s" is %s set.\n", flag->key, flag->answer ? "" : "n
 Once such a module has been compiled
 (see \ref Compiling_and_Installing_GRASS_Modules), execution will result
 in the following user interface scenarios. Lines that begin with '$' (dollar sign)
-imply user entered commands on the command line.
+indicate a command line session with user commands.
 
 \verbatim
 $ r.mysample --help
 \endverbatim
 
-This is a standard user call for basic help information on the
+This is a standard user request for basic help information on the
 module. The command line options (in this case, <tt>--help</tt>) are sent to
 the parser via G_parser(). The parser recognizes the <tt>--help</tt>
-command line option and returns a list of options and/or flags that
-are applicable for the specific command. Note how the programmer
-provided option and flag information is captured in the output.
+command line option and returns the list of options and/or flags that
+are applicable for the specific command. Note how the option and the flag
+information specified above appears in the output.
 
 \verbatim
 r.mysample [-t] option=name
@@ -307,13 +305,13 @@ Parameters:
 option Option test
 \endverbatim
 
-Now the following command is executed:
+Now consider the following command:
 
 \verbatim
-# r.mysample -t
+$ r.mysample -t
 \endverbatim
 
-This command line does not contain the required option. Note that the
+This command does not contain the required option. Note that the
 output provides this information along with the standard usage message
 (as already shown above):
 
@@ -367,7 +365,7 @@ default: cmd
 \endverbatim
 
 The sample C code follows (the usual name of the file with the main
-function is <tt>%main.c</tt>. You might experiment with this code to
+function is <tt>%main.c</tt>). You can experiment with this code to
 familiarize yourself with the parser.
 
 \note This example includes some of the advanced structure
@@ -413,8 +411,8 @@ int main(int argc, char *argv[])
 
     G_message("For the option <%s> you chose: <%s>",
 	      opt->description, opt->answer);
-    G_message("The flag <%s> is: %s set", flag->key,
-	      flag->answer ? "" : "not");
+    G_message("The flag <%s> is: %s", flag->key,
+	      flag->answer ? "set" : "not set");
     G_message("You specified the following coordinates:");
 
     for (n=0; coor->answers[n] != NULL; n+=2) {
@@ -425,9 +423,9 @@ int main(int argc, char *argv[])
 }
 \endcode
 
-\note This example defines option for coordinates in its own way to
+\note This example defines the option for coordinates in its own way to
 demonstrate usage of particular parser features. However, it must be noted
-that there is standardized option G_OPT_M_COORDS which should be used for
+that there is a standardized G_OPT_M_COORDS option, which should be used for
 coordinates.
 
 
@@ -438,25 +436,25 @@ coordinates.
 
 <table>
 <tr>
- <td>structure member</td>
- <td>C type</td>
- <td>required</td>
- <td>default</td>
- <td> description and example</td>
+ <th>structure member</th>
+ <th>C type</th>
+ <th>required</th>
+ <th>default</th>
+ <th> description and example</th>
 </tr><tr>
  <td>key</td>
  <td> char</td>
  <td> YES</td>
  <td> none</td>
- <td> Key char used on command line<br>
-      flag->key = 'f' ;</td>
+ <td> Key char used on command line.<br>
+      <tt>flag->key = 'f' ;</tt></td>
 </tr><tr>
  <td>Description</td>
  <td> char *</td>
  <td> YES</td>
  <td> none</td>
- <td> String describing flag meaning<br>
-      flag->description = _("run in fast mode") ;</td>
+ <td> A string describing the flag meaning.<br>
+      <tt>flag->description = _("run in fast mode") ;</tt></td>
 </tr><tr>
  <td>answer</td>
  <td> char</td>
@@ -471,11 +469,11 @@ coordinates.
 
 <table>
 <tr>
- <td>structure member</td>
- <td>C type </td>
- <td>required </td>
- <td>default </td>
- <td>description and example</td>
+ <th>structure member</th>
+ <th>C type </th>
+ <th>required </th>
+ <th>default </th>
+ <th>description and example</th>
 </tr>
 <tr>
  <td>key </td>
@@ -483,7 +481,7 @@ coordinates.
  <td>YES </td>
  <td>none </td>
  <td>Key word used on command line.<br>
- opt->key = "map" ;</td>
+ <tt>opt->key = "map" ;</tt></td>
 </tr>
 <tr>
  <td>type </td>
@@ -494,23 +492,23 @@ coordinates.
  TYPE_STRING <br>
  TYPE_INTEGER <br>
  TYPE_DOUBLE <br>
- opt->type = TYPE_STRING ;</td>
+ <tt>opt->type = TYPE_STRING ;</tt></td>
 </tr>
 <tr>
  <td>Description </td>
  <td>char * </td>
  <td>YES </td>
  <td>none </td>
- <td>String describing option along with gettext macro for internationalization
- opt->description = _("Map name") ;</td>
+ <td>A string describing the option along with the gettext macro for internationalization.<br>
+ <tt>opt->description = _("Map name") ;</tt></td>
 </tr>
 <tr>
  <td>answer </td>
  <td>char * </td>
  <td>NO </td>
  <td>NULL </td>
- <td>Default and parser-returned answer to an option.<br>
- opt->answer = "defaultmap" ;</td>
+ <td>The default and the parser-returned answer to the option.<br>
+ <tt>opt->answer = "defaultmap" ;</tt></td>
 </tr>
 <tr>
  <td>key_desc </td>
@@ -520,15 +518,15 @@ coordinates.
  <td>Single word describing the key. Commas in this string denote 
  to the parser that several comma-separated arguments are expected 
  from the user as one answer. For example, if a pair of coordinates 
- is desired, this element might be defined as follows.<br>
-  opt->key_desc = "x,y" ; </td>
+ is desired, this element should be defined as follows.<br>
+  <tt>opt->key_desc = "x,y" ;</tt></td>
 </tr>
 <tr>
- <td>structure member</td>
- <td>C type </td>
- <td>required </td>
- <td>default </td>
- <td>description and example</td>
+ <th>structure member</th>
+ <th>C type </th>
+ <th>required </th>
+ <th>default </th>
+ <th>description and example</th>
 </tr>
 <tr>
  <td>multiple </td>
@@ -537,24 +535,27 @@ coordinates.
  <td>NO </td>
  <td>Indicates whether the user can provide multiple answers or not. 
  YES and NO are defined in "gis.h" and should be used (NO is 
- the default.) Multiple is used in conjunction with the answers 
- structure member below. opt->multiple = NO ;</td>
+ the default.) <b>multiple</b> is used in conjunction with the <b>answers</b>
+ structure member below.<br>
+ <tt>opt->multiple = NO ;</tt></td>
 </tr>
 <tr>
  <td>answers </td>
  <td>  </td>
  <td>NO </td>
  <td>NULL </td>
- <td>Multiple parser-returned answers to an option. N/A</td>
+ <td>Multiple parser-returned answers to an option.<br>
+ N/A</td>
 </tr>
 <tr>
  <td>required </td>
  <td>int </td>
  <td>NO </td>
  <td>NO </td>
- <td>Indicates whether user MUST provide the option on the command 
+ <td>Indicates whether the user MUST provide the option on the command 
  line. YES and NO are defined in "gis.h" and should be used (NO 
- is the default.) opt->required = YES ;</td>
+ is the default).<br>
+ <tt>opt->required = YES ;</tt></td>
 </tr>
 <tr>
  <td>options </td>
@@ -562,27 +563,27 @@ coordinates.
  <td>NO </td>
  <td>NULL </td>
  <td>Approved values or range of values. <br>
-  opt->options = "red,blue,white" ;<br>
+  <tt>opt->options = "red,blue,white" ;</tt><br>
   For integers and doubles, the following format is available: <br>
- opt->options = "0-1000" ;</td>
+ <tt>opt->options = "0-1000" ;</tt></td>
 </tr>
 <tr>
  <td>gisprompt</td>
  <td>char *</td>
  <td>NO</td>
  <td>NULL</td>
- <td>Interactive prompt guidance. There are three comma separated 
- parts to this argument which guide the use of the standard GRASS 
+ <td>Interactive prompt guidance. There are three comma-separated 
+ parts to this argument, which guide the standard GRASS 
  file name prompting routines.<br>
- opt->gisprompt = "old,cell,raster" ;</td>
+ <tt>opt->gisprompt = "old,cell,raster" ;</tt></td>
 </tr>
 <tr>
  <td>checker</td>
  <td>char *()</td>
  <td>NO</td>
  <td>NULL</td>
- <td>Routine to check the answer to an option<br>
-   m opt->checker = my_routine() ;</td>
+ <td>A routine to check an answer to the option.<br>
+ <tt>opt->checker = my_routine() ;</tt></td>
 </tr>
 </table>
 
@@ -590,7 +591,7 @@ coordinates.
 \section Description_of_Complex_Structure_Members Description of Complex Structure Members 
 
 What follows are explanations of possibly confusing structure
-members. It is intended to clarify and supplement the structures table
+members. They are intended to clarify and supplement the structures table
 above.
 
 \subsection Answer_member_of_the_Flag_and_Option_structures Answer member of the Flag and Option structures
@@ -601,58 +602,58 @@ that use the parser.
 <b>(1) To set the default answer to an option:</b>
 
 If a default state is desired for a programmer-defined option, the
-programmer may define the Option structure member "answer" before
+programmer may define the Option structure member <b>answer</b> before
 calling G_parser() in his module. After the G_parser() call, the
-answer member will hold this preset default value if the user did
+<b>answer</b> member will hold this preset default value if the user did
 <i>not</i> enter an option that has the default answer member value.
 
-<b>(2) To obtain the command-line answer to an option or flag:</b>
+<b>(2) To obtain the command-line answer to an option or a flag:</b>
 
-After a call to G_parser(), the answer member will contain one of two
+After a call to G_parser(), the <b>answer</b> member will contain one of the two
 values:
 
- - (a) If the user provided an option, and answered this option on the
-command line, the default value of the answer member (as described
-above) is replaced by the user's input.
+ - (a) If the user provided an option and answered this option on the
+command line, the user's input will replace the default value of the
+<b>answer</b> member as described above.
 
  - (b) If the user provided an option, but did <i>not</i> answer this
 option on the command line, the default is not used. The user may use
 the default answer to an option by withholding mention of the option
 on the command line. But if the user enters an option without an
-answer, the default answer member value will be replaced and set to a
-NULL value by G_parser().
+answer, G_parser() will replace the default <b>answer</b> member value with
+NULL.
 
-As an example, please review the use of answer members in the structures 
-implemented in \ref Full_Module_Example.
+As an example, please review the use of <b>answer</b> members in the structures 
+implemented in \ref gislibcmd_Full_Module_Example.
 
 
 \subsection Multiple_and_Answers_Members Multiple and Answers Members
 
-The functionality of the answers structure member is reliant on the 
-programmer's definition of the multiple structure member. If the multiple 
-member is set to NO, the answer member is used to obtain the answer to an 
+The functionality of the <b>answers</b> structure member is reliant on the 
+programmer's definition of the <b>multiple</b> structure member. If the <b>multiple</b>
+member is set to NO, the <b>answer</b> member is used to obtain the answer to an 
 option as described above.
 
-If the multiple structure member is set to YES, the programmer has
-told G_parser() to capture multiple answers. Multiple answers are
+If the <b>multiple</b> structure member is set to YES, it
+tells G_parser() to capture multiple answers. Multiple answers are
 separated by <em>commas</em> on the command line after an option.
 
 <b>Note:</b> G_parser() does not recognize any character other than a
 comma to delimit multiple answers.
 
 After the programmer has set up an option to receive multiple answers,
-these the answers are stored in the answers member of the Option
-structure. The answers member is an array that contains each
+these answers are stored in the <b>answers</b> member of the Option
+structure. The <b>answers</b> member is an array that contains each
 individual user-entered answer. The elements of this array are the
-type specified by the programmer using the type member. The answers
+type specified by the programmer using the <b>type</b> member. The <b>answers</b>
 array contains however many comma-delimited answers the user entered,
 followed (terminated) by a NULL array element.
 
-For example, here is a sample definition of an Option using multiple
-and answers structure members:
+Below is an example definition of an Option using the <b>multiple</b>
+and the <b>answers</b> structure members:
 
 \code
-opt->key ="option";
+opt->key = "option";
 opt->description = _("option example");
 opt->type = TYPE_INTEGER;
 opt->required = NO;
@@ -660,15 +661,14 @@ opt->multiple = YES;
 \endcode
 
 The above definition would ask the user for multiple integer answers
-to the option. If in response to a routine that contained the above
-code, the user entered "option=1,3,8,15" on the command line, the
-answers array would contain the following values:
+to the option. If in response the user entered "option=1,3,8,15" on the
+command line, the <b>answers</b> array would contain the following values:
 
 \code
-answers[0] == 1
-answers[1] == 3
-answers[2] == 8
-answers[3] == 15
+answers[0] == "1"
+answers[1] == "3"
+answers[2] == "8"
+answers[3] == "15"
 answers[4] == NULL
 \endcode
 
@@ -693,55 +693,55 @@ opt->multiple = NO;
 The answer to this option would <i>not</i> be stored in the answer
 member, but in the answers member. If the user entered
 "coordinate=112,225" on the command line in response to a routine that
-contains the above option definition, the answers array would have the
+contains the above option definition, the <b>answers</b> array would have the
 following values after the call to G_parser():
 
 \code
-answers[0] == 112
-answers[1] == 225
+answers[0] == "112"
+answers[1] == "225"
 answers[2] == NULL
 \endcode
 
 Note that "coordinate=112" would not be valid, as it does not contain both 
-components of an answer as defined by the key_desc structure member.
+components of an answer as defined by the <b>key_desc</b> structure member.
 
-If the multiple structure member were set to YES instead of NO in the
-example above, the answers are stored sequentially in the answers
+If the <b>multiple</b> structure member was set to YES instead of NO in the
+example above, the answers would be stored sequentially in the <b>answers</b>
 member.  For example, if the user wanted to enter the coordinates
 (112,225), (142,155), and (43,201), his response on the command line
 would be "coordinate=112,225,142,155,43,201". Note that G_parser()
-recognizes only a comma for both the key_desc member, and for multiple
+recognizes only a comma for both the <b>key_desc</b> member, and multiple
 answers.
 
-The answers array would have the following values after a call to 
+The <b>answers</b> array would have the following values after a call to 
 G_parser():
 
 \code
-answers[0] == 112 answers[1] == 225
-answers[2] == 142 answers[3] == 155
-answers[4] == 43 answers[5] == 201
+answers[0] == "112" answers[1] == "225"
+answers[2] == "142" answers[3] == "155"
+answers[4] == "43" answers[5] == "201"
 answers[6] == NULL
 \endcode
 
 <B>Note.</B> In this case as well, neither "coordinate=112" nor
 "coordinate=112,225,142" would be valid command line arguments, as
 they do not contain even pairs of coordinates. Each answer's format
-(as described by the key_desc member) must be fulfilled completely.
+(as described by the <b>key_desc</b> member) must be fulfilled completely.
 
-The overall function of the key_desc and multiple structure members is
-very similar. The key_desc member is used to specify the number of
+The overall function of the <b>key_desc</b> and the <b>multiple</b> structure members is
+very similar. The <b>key_desc</b> member is used to specify the number of
 <i>required</i> components of a single option answer (e.g. a
-multi-valued coordinate.) The multiple member tells G_parser() to ask
+multi-valued coordinate.) The <b>multiple</b> member tells G_parser() to ask
 the user for multiple instances of the compound answer as defined by
-the format in the key_desc structure member.
+the format in the <b>key_desc</b> structure member.
 
-Another function of the key_desc structure member is to explain to the
+Another function of the <b>key_desc</b> structure member is to explain to the
 user the type of information expected as an answer. The coordinate
 example is explained above.
 
 The usage message that is displayed by G_parser() in case of an error,
 or by G_usage() on programmer demand, is shown below. The Option
-"option" for the command <tt>a.out</tt> does not have its key_desc
+"option" for the command <tt>a.out</tt> does not have its <b>key_desc</b>
 structure member defined.
 
 \verbatim
@@ -751,8 +751,8 @@ a.out option=name
 \endverbatim
 
 The use of "name" is a G_parser() standard. If the programmer defines
-the key_desc structure member before a call to G_parser(), the
-value of the key_desc member replaces "name". Thus, if the key_desc
+the <b>key_desc</b> structure member before a call to G_parser(), the
+value of the <b>key_desc</b> member replaces "name". Thus, if the <b>key_desc</b>
 member is set to "x,y" as was used in an example above, the following
 usage message would be displayed:
 
@@ -762,17 +762,17 @@ Usage:
 a.out option=x,y
 \endverbatim
 
-The key_desc structure member can be used by the programmer to clarify
-the usage message as well as specify single or multiple required
+The <b>key_desc</b> structure member can be used by the programmer to clarify
+the usage message as well as to specify single or multiple required
 components of a single option answer.
 
 \subsection gisprompt_Member gisprompt Member
 
-The <em>gisprompt</em> Option structure item requires a bit more
+The <b>gisprompt</b> Option structure member requires a bit more
 description. The three comma-separated (no spaces allowed)
 sub-arguments are defined as follows:
 
- - First argument: "old" results in a call to the GRASS library
+ - The first argument: "old" results in a call to the GRASS library
 subroutine G_open_old(), "new" to G_open_new(), otherwise "any" or
 "mapset".
 
@@ -780,18 +780,18 @@ subroutine G_open_old(), "new" to G_open_new(), otherwise "any" or
 (overwrite) flag will be listed in the module's interface
 (<tt>--help</tt> output, manual page, GUI dialog, etc).
 
-  - If an option which has "new" as the first component is given, the
+  - If an option that has "new" as the first component is given, the
 parser checks whether the entity (map, etc.) already exists.
 
- - Second argument: This is identical to the "element" argument in the
+ - The second argument: this is identical to the "element" argument in the
 above subroutine calls. It specifies a directory inside the mapset
-that may contain the user's response. In other words the second field
+that may contain the user's response. In other words, the second field
 is used to determine where to look for the file (i.e. if the option
 has "new,cell,...", it will look in the "cell" directory). The second
 field should be the name of one of the standard subdirectories of the
 mapset, as listed in $GISBASE/etc/element_list.
 
- - Third argument: Identical to the "prompt" argument in the above
+ - The third argument: identical to the "prompt" argument in the above
 subroutine calls. This is a string presented to the user that
 describes the type of data element being requested.
 
@@ -809,26 +809,26 @@ flags to obtain a machine-readable description of the module's
 interface. How the GUI interprets this is up to the GUI.
 
 
-\section gislibcmd_Standard_options Standard options
+\section gislibcmd_Standard_options Standard options and flags
 
-There are standard options which ensures consistency in names
-and values of options. There are also standard flags which does the same.
+There are standard options and standard flags, they ensure consistency
+in names and values.
 
-Options are defined by the G_define_standard_option() function
-and flags are defined by the function G_define_standard_flag().
-Both the options and flags are defined dynamically, so to get see
+Standard options are defined by the G_define_standard_option() function
+and standard flags are defined by the G_define_standard_flag() function.
+Both the options and the flags are defined dynamically, so to see
 the values of all members you need to open the file parser_standard_options.c.
 
-The function G_define_standard_option() accepts one value of an STD_OPT
-enum defined in the file gis.h. When the G_define_standard_option() function
+The function G_define_standard_option() accepts one value of the STD_OPT
+enum defined in the gis.h file. The G_define_standard_option() function
 calls the G_define_option() function, so there is no need to call
-it separately. The same applies also for standard flags which
-uses the G_define_standard_flag() function and STD_OPT enum.
+the latter separately. The same convention applies to standard flags too,
+which use the G_define_standard_flag() function and the STD_OPT enum.
 
-Besides name and value standard options also defines label, description
-allowed values, their descriptions etc. The similar applies for the
-flags, too. After defining a standard option or flag you can still change
-individual parameters to exactly fit your needs.
+Besides a name and a value, standard options also define a label, a description,
+allowed values, their descriptions etc. Standard flags use a similar approach.
+After defining a standard option or a standard flag you can still assign custom
+values to individual structure members as required instead of the default values.
 
 
 \section gislibcmd_FAQ Command line parsing FAQ
@@ -841,12 +841,11 @@ Yes. Options and flags can be given in any order.
 
 \par In what order does the parser present options and flags?
 
-Flags and options are presented by the usage message in the order that
-the programmer defines them using calls to G_define_option()
-and G_define_flag().
+Flags and options appear in the usage message according to the order
+of the G_define_option() and the G_define_flag() function calls.
 
 
-\par Is a user required to use full option names?
+\par Is the user required to use full option names?
 
 No. Users are required to type in only as many characters of an option name 
 as is necessary to make the option choice unambiguous. If, for example, 
@@ -854,30 +853,30 @@ there are two options, "input=" and "output=", the following would be
 valid command line arguments:
 
 \verbatim
-# command i=map1 o=map2
+$ command i=map1 o=map2
 
-# command in=map1 out=map2
+$ command in=map1 out=map2
 \endverbatim
 
 
 \par Are options standardized at all?
 
-Yes. There are a few conventions. Options which identify a single input map 
+Yes. There are a few conventions. Options that identify a single input map 
 are usually "map=", not "raster=" or "vector=". In the case of an 
-input and output map the convention is: "input=xx output=yy". By passing 
+input and an output map the convention is "input=xx output=yy". By passing 
 the '--help' flag to existing GRASS commands, it is likely that you will 
-find other conventions. The desire is to make it as easy as possible for the 
-user to remember (or guess correctly) what the command line syntax is for a 
+find other conventions. The intent is to make it as easy as possible for the 
+user to remember (or to guess correctly) what the command line syntax is for a 
 given command.
 
 To ensure maximal consistency, the most common options such as the options
 named above are defined as standard options and are available through
-G_define_standard_option() function. For flags you can use G_define_standard_flag()
-function.
+G_define_standard_option() function. For flags you can use the
+G_define_standard_flag() function.
 
 \par How does a programmer query for coordinates?
 
-There is standardized option G_OPT_M_COORDS which should be used for
+There is the standardized G_OPT_M_COORDS option, which should be used for
 coordinates.
 
 See the source code for the GRASS commands <tt>r.drain</tt> or
@@ -886,13 +885,13 @@ See the source code for the GRASS commands <tt>r.drain</tt> or
 
 \par How does a programmer define that the option is a set of values?
 
-For any user input that requires a set of arguments (like a pair of
+For any user input that requires a tuple of values (like a pair of
 map coordinates) the programmer specifies the number of arguments in
-the key_desc member of the Option structure. For example, if
-opt-&gt;key_desc was set to "x,y", the parser will require that the
-user enter a pair of arguments separated only by a comma.
+the <b>key_desc</b> member of the Option structure. For example, if
+<b>key_desc</b> was set to "x,y", the parser would require that the
+user enters a pair of arguments separated only with a comma.
 
-\note There is standardized option G_OPT_M_COORDS which should be used for
+\note There is the standardized G_OPT_M_COORDS option, which should be used for
 coordinates.
 
 
@@ -900,10 +899,10 @@ coordinates.
 
 GRASS 4.0 introduced a new method for driving GRASS interactive and
 non-interactive modules as described in \ref
-Compiling_and_Installing_GRASS_Programs. Here is a short overview.
+Compiling_and_Installing_GRASS_Modules. Here is a short overview.
 
 For most modules a user runs a front-end module out of the GRASS bin
-directory which in turn looks for the existence of interactive and
+directory, which in turn looks for the existence of interactive and
 non-interactive versions of the module. If an interactive version
 exists and the user provided no command line arguments, then that
 version is executed.

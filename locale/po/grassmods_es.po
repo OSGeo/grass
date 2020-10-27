@@ -1074,7 +1074,7 @@ msgstr "Cambiar a desactivar la compresión"
 
 #: ../locale/scriptstrings/v.clip_to_translate.c:1
 msgid "Extracts features of input map which overlay features of clip map."
-msgstr ""
+msgstr "Extrae características del mapa de entrada que se superponen con el mapa de corte."
 
 #: ../locale/scriptstrings/v.clip_to_translate.c:3
 #: ../vector/v.overlay/main.c:66
@@ -3263,7 +3263,7 @@ msgstr "No incluir nombres de columna en la salida"
 
 #: ../locale/scriptstrings/v.unpack_to_translate.c:1
 msgid "Imports a GRASS GIS specific vector archive file (packed with v.pack) as a vector map"
-msgstr ""
+msgstr "Importa un archivo vectorial específico de GRASS (empaquetado con v.pack) como un mapa vectorial"
 
 #: ../locale/scriptstrings/v.unpack_to_translate.c:5
 #: ../locale/scriptstrings/r.unpack_to_translate.c:5
@@ -3396,7 +3396,7 @@ msgstr "Nombre para tabla de salida (predeterminado: nombre de entrada)"
 
 #: ../locale/scriptstrings/r.unpack_to_translate.c:1
 msgid "Imports a GRASS GIS specific raster archive file (packed with r.pack) as a raster map"
-msgstr ""
+msgstr "Importa un archivo ráster específico de GRASS (empaquetado con r.pack) como un mapa ráster"
 
 #: ../locale/scriptstrings/r.unpack_to_translate.c:6
 msgid "Name for output raster map (default: taken from input file internals)"
@@ -4258,7 +4258,7 @@ msgstr "Nombre de archivo geonames descomprimido (con extensión .txt)"
 
 #: ../locale/scriptstrings/t.register_to_translate.c:1
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
-msgstr ""
+msgstr "Asigna estampa temporal y registra mapas de tipo ráster, vectorial y ráster 3D en un conjunto de datos espacio temporal."
 
 #: ../locale/scriptstrings/t.register_to_translate.c:4
 msgid "register"
@@ -10761,7 +10761,7 @@ msgstr "Niveles de contorno"
 
 #: ../raster/r.contour/main.c:140
 #, c-format
-msgid "Neither <%s> nor <%s> option must be specified"
+msgid "Either <%s> or <%s> option must be specified"
 msgstr "Ni la opción <%s> ni <%s> deben ser especificadas"
 
 #: ../raster/r.contour/main.c:183 ../raster/r.stream.extract/close.c:194
@@ -14725,7 +14725,7 @@ msgid "Distance step for every iteration (zero to omit)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:171
-msgid "Distance where serch will start in multiple mode (zero to omit)"
+msgid "Distance where search will start in multiple mode (zero to omit)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:177
@@ -30889,7 +30889,7 @@ msgstr "Exporta un mapa vectorial a cualquiera de los formatos vectoriales OGR s
 
 #: ../vector/v.out.ogr/main.c:89
 msgid "By default a vector map layer is exported to OGC GeoPackage format."
-msgstr ""
+msgstr "Los mapas vectoriales se exportan por defecto en el formato GeoPackage"
 
 #: ../vector/v.out.ogr/main.c:172
 msgid "Volumes will be exported as sets of faces"
@@ -34351,7 +34351,7 @@ msgstr "No se puede leer la id área %d del mapa vectorial<%s>"
 
 #: ../vector/v.profile/main.c:156
 msgid "Vector map profiling tool"
-msgstr ""
+msgstr "Herramienta de elaboración de perfiles de mapas vectoriales"
 
 #: ../vector/v.profile/main.c:172
 msgid "Use features only from specified layer"
@@ -37568,7 +37568,7 @@ msgstr "esqueleto"
 
 #: ../vector/v.voronoi/main.c:127
 msgid "Creates a Voronoi diagram constrained to the extents of the current region from an input vector map containing points or centroids."
-msgstr ""
+msgstr "Crea un diagrama Voronoi limitado a la extensión de la región actual a partir de un mapa vectorial de entrada que contiene puntos o centroides."
 
 #: ../vector/v.voronoi/main.c:131
 msgid "Name of input vector map"

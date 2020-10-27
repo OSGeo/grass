@@ -38,7 +38,7 @@ footer_tmpl = string.Template(
     r"""
 {% block footer %}<hr class="header">
 <p><a href="../index.html">Help Index</a> | <a href="../topics.html">Topics Index</a> | <a href="../keywords.html">Keywords Index</a> | <a href="../full_index.html">Full Index</a></p>
-<p>&copy; 2003-${year} <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${grass_version} Reference Manual</p>
+<p>&copy; 2003-${year} <a href="https://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${grass_version} Reference Manual</p>
 {% endblock %}
 """)
 

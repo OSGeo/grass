@@ -11,7 +11,7 @@
 *		This technology is currently capable of "experimental" stage.
 *
 * COPYRIGHT:	(C) 2002,2012 by the GRASS Development Team
-*		(C) Scientific idea of geomotrphon copyrighted to authors.
+*		(C) Scientific idea of geomorphon copyrighted to authors.
 *
 *		This program is free software under the GNU General Public
 *		License (>=v2). Read the file COPYING that comes with GRASS
@@ -168,7 +168,7 @@ int main(int argc, char **argv)
 	par_multi_start->type = TYPE_DOUBLE;
 	par_multi_start->answer = "0";
 	par_multi_start->description =
-	    _("Distance where serch will start in multiple mode (zero to omit)");
+	    _("Distance where search will start in multiple mode (zero to omit)");
 	par_multi_start->guisection = _("Multires");
 
 	flag_units = G_define_flag();
@@ -494,7 +494,7 @@ int main(int argc, char **argv)
     if (multires) {
 	PATTERN *multi_patterns;
 	MULTI multiple_output[5];	/* ten form maps + all forms */
-	char *postfixes[] = { "scale_300", "scale_100", "scale_50", "scale_20" "scale_10" };	/* in pixels */
+	char *postfixes[] = { "scale_300", "scale_100", "scale_50", "scale_20", "scale_10" };	/* in pixels */
 	num_of_steps = 5;
 	multi_patterns = G_malloc(num_of_steps * sizeof(PATTERN));
 	/* prepare outputs */
