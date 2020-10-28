@@ -6451,7 +6451,7 @@ class PointDialog(PsmapDialog):
             style=fs.FS_RIGHT)
         self.rotCtrl.SetFormat("%f")
         self.rotCtrl.SetDigits(1)
-        
+
         self.rotCtrl.SetToolTip(
             _("Counterclockwise rotation in degrees"))
         self.rotCtrl.SetValue(float(self.pointDict['rotate']))
@@ -6880,7 +6880,7 @@ class LabelsDialog(PsmapDialog):
         self.select = Select(
             parent=panel,
             multiple=True,
-            type='labels',
+            type='label',
             fullyQualified=False)
         self.select.SetValue(','.join(self.labelsDict['labels']))
         self.select.SetFocus()
