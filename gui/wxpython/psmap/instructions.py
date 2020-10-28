@@ -97,12 +97,13 @@ class Instruction:
         for each in self.instruction:
             if each.id == id:
                 if each.type == 'map':
-                    # must remove raster, vector layers too
+                    # must remove raster, vector layers, labels too
                     vektor = self.FindInstructionByType('vector', list=True)
                     vProperties = self.FindInstructionByType(
                         'vProperties', list=True)
                     raster = self.FindInstructionByType('raster', list=True)
-                    for item in vektor + vProperties + raster:
+                    labels = self.FindInstructionByType('labels', list=True)
+                    for item in vektor + vProperties + raster + labels:
                         if item in self.instruction:
                             self.instruction.remove(item)
 
@@ -120,7 +121,9 @@ class Instruction:
             self.instruction.append(instruction)
         # add to drawable objects
         if instruction.type not in (
-                'page', 'raster', 'vector', 'vProperties', 'initMap'):
+                'page', 'raster', 'vector', 'vProperties', 'initMap',
+                'labels',
+        ):
             if instruction.type == 'map':
                 self.objectsToDraw.insert(0, instruction.id)
             else:
