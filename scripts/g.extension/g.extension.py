@@ -149,8 +149,7 @@ import json
 import xml.etree.ElementTree as etree
 from distutils.dir_util import copy_tree
 
-from six.moves.urllib.request import ProxyHandler, Request, build_opener, \
-    install_opener, urlopen, urlretrieve
+from six.moves.urllib import request as urlrequest
 from six.moves.urllib.error import HTTPError, URLError
 
 # Get the XML parsing exceptions to catch. The behavior changed with Python 2.7
@@ -169,24 +168,42 @@ from grass.script import task as gtask
 # temp dir
 REMOVE_TMPDIR = True
 PROXIES = {}
-
+HEADERS = {
+    "User-Agent": "Mozilla/5.0",
+}
 HTTP_STATUS_CODES = list(http.HTTPStatus)
 
 
+def urlretrieve(url, filename, *args, **kwargs):
+    """Same function as 'urlretrieve', but with the ability to
+    define headers.
+    """
+    request = urlrequest.Request(url, headers=HEADERS)
+    response = urlrequest.urlopen(request, *args, **kwargs)
+    with open(filename, 'wb') as f:
+        f.write(response.read())
+
+
+def urlopen(url, *args, **kwargs):
+    """Wrapper around urlopen. Same function as 'urlopen', but with the
+    ability to define headers.
+    """
+    request = urlrequest.Request(url, headers=HEADERS)
+    return urlrequest.urlopen(request, *args, **kwargs)
+
+
 def download_addons_paths_file(
-        url, response_format, headers={}, *args, **kwargs):
+        url, response_format, *args, **kwargs):
     """Generates JSON file containing the download URLs of the official
     Addons
 
     :param str url: url address
     :param str response_format: content type
-    :param dict headers: https(s) headers
 
     :return response: urllib.request.urlopen response object
     """
     try:
-        request = Request(url, headers=headers)
-        response = urlopen(request, *args, **kwargs)
+        response = urlopen(url, *args, **kwargs)
 
         if not response.code == 200:
             index = HTTP_STATUS_CODES.index(response.code)
@@ -1994,7 +2011,7 @@ KNOWN_HOST_SERVICES_INFO = {
         'ignored_suffixes': ['.zip', '.tar.gz', '.tar.bz2', '.tar'],
         'possible_starts': ['', 'https://', 'http://'],
         'url_start': 'https://',
-        'url_end': '/repository/archive.zip',
+        'url_end': '/-/archive/master/{name}-master.zip',
     },
     'Bitbucket': {
         'domain': 'bitbucket.org',
@@ -2009,11 +2026,14 @@ KNOWN_HOST_SERVICES_INFO = {
 # https://gitlab.com/user/reponame/repository/archive.zip?ref=b%C3%A9po
 
 
-def resolve_known_host_service(url):
+def resolve_known_host_service(url, name):
     """Determine source type and full URL for known hosting service
 
     If the service is not determined from the provided URL, tuple with
     is two ``None`` values is returned.
+
+    :param url: URL
+    :param name: module name
     """
     match = None
     actual_start = None
@@ -2038,7 +2058,8 @@ def resolve_known_host_service(url):
             actual_start = ''
         url = '{prefix}{base}{suffix}'.format(prefix=actual_start,
                                               base=url.rstrip('/'),
-                                              suffix=match['url_end'])
+                                              suffix=match['url_end'].format(
+                                                  name=name))
         gscript.verbose(_("Will use the following URL for download: {0}")
                         .format(url))
         return 'remote_zip', url
@@ -2103,9 +2124,9 @@ def resolve_source_code(url=None, name=None):
     GitLab:
 
     >>> resolve_source_code('gitlab.com/JoeUser/GrassModule') # doctest: +SKIP
-    ('remote_zip', 'https://gitlab.com/JoeUser/GrassModule/repository/archive.zip')
+    ('remote_zip', 'https://gitlab.com/JoeUser/GrassModule/-/archive/master/GrassModule-master.zip')
     >>> resolve_source_code('https://gitlab.com/JoeUser/GrassModule') # doctest: +SKIP
-    ('remote_zip', 'https://gitlab.com/JoeUser/GrassModule/repository/archive.zip')
+    ('remote_zip', 'https://gitlab.com/JoeUser/GrassModule/-/archive/master/GrassModule-master.zip')
 
     Bitbucket:
 
@@ -2168,7 +2189,7 @@ def resolve_source_code(url=None, name=None):
                 return suffix, os.path.abspath(url)
     # Handle remote URLs
     else:
-        source, resolved_url = resolve_known_host_service(url)
+        source, resolved_url = resolve_known_host_service(url, name)
         if source:
             return source, resolved_url
         # we allow URL to end with =zip or ?zip and not only .zip
@@ -2218,9 +2239,9 @@ def main():
         PROXIES = {}
         for ptype, purl in (p.split('=') for p in options['proxy'].split(',')):
             PROXIES[ptype] = purl
-        proxy = ProxyHandler(PROXIES)
-        opener = build_opener(proxy)
-        install_opener(opener)
+        proxy = urlrequest.ProxyHandler(PROXIES)
+        opener = urlrequest.build_opener(proxy)
+        urlrequest.install_opener(opener)
 
     # define path
     options['prefix'] = resolve_install_prefix(path=options['prefix'],
