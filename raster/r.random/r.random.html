@@ -1,19 +1,19 @@
 <h2>DESCRIPTION</h2>
 <p>The program <em>r.random</em> allows the user to create a
-raster map layer and/or a vector points map containing 
+raster map and/or a vector points map containing
 coordinates of points whose locations have been randomly
 determined.  The program locates these randomly generated
 vector points (sites) within the current geographic region and mask (if
 any), on non-NULL category value data areas within a
-user-specified raster map layer. If the user sets the
+user-specified raster map. If the user sets the
 <b>-z</b> flag, points will be randomly generated across all
 cells (even those with NULL values).
 
 <p>The category values and
 corresponding category names already associated with the
-random point locations in the <em>input</em> map layer are
-assigned to these points in the <em>raster_output</em> map
-layer. If the <b>-z</b> is specified, then a unique entry
+random point locations in the <em>input</em> map are
+assigned to these points in the <em>raster</em> map.
+If the <b>-z</b> is specified, then a unique entry
 is made for the value used where the <em>input</em> was NULL.
 This value is at least 1 less than the smallest value in the
 <em>input</em> raster and is given a medium gray color.
@@ -21,9 +21,9 @@ This value is at least 1 less than the smallest value in the
 <h2>NOTES</h2>
 <p>If a <em>cover</em> raster map is specified and the <em>cover</em> map
 contains NULL (no data) values, these points are suppressed in the
-resulting <em>vector_output</em> or <em>raster_output</em> map.
+resulting <em>vector</em> or <em>raster</em> map.
 
-<p>The <em>vector_output</em> file created by <em>r.random</em>
+<p>The <em>vector</em> file created by <em>r.random</em>
 contains vector points that represent the <em>center points</em> of the
 randomly generated cells.  A <em>value</em> attribute contains the cell value
 of the <em>input</em> raster (or the assigned value
@@ -38,33 +38,40 @@ to <em>v.surf.rst</em> and other vector modules.
 
 <p>The user may specify the quantity of random locations to be
 generated either as a <em>positive integer</em> (e.g., 10),
-or as a <em>percentage of the raster map layer's cells</em> 
-(e.g., 10%, or 3.05%).  The number of cells considered for 
+or as a <em>percentage of the raster map's cells</em>
+(e.g., 10%, or 3.05%).  The number of cells considered for
 the percentage reflects whether or not the <b>-z</b> flag
 was given. Options are 0-100; percentages less than
 one percent may be stated as decimals.
 
-<p>Flag <b>-i</b> prints the raster map's name and location, 
-the total number of cells under the current region settings, and
-the number of NULL valued cells under the current region settings.
-Then module exits without doing anything.  Useful for deciding on the number
-of sites to have <em>r.random</em> create.
-<b>WARNING:</b> this feature may be removed in future. Use 
-<a href="g.region.html">g.region</a> and 
-<a href="r.report.html">r.report</a>
-instead.
+To decide on the number
+of points to have <em>r.random</em> create,
+use <em><a href="r.univar.html">r.univar</a></em>,
+<em><a href="g.region.html">g.region</a></em>, or
+<em><a href="r.report.html">r.report</a></em>.
+<em>r.univar</em> is the fastest way to obtain number of
+non-NULL cells and NULL cells in a raster map
+given the current computational region and raster mask:
+
+<div class="code"><pre>
+r.univar map=inputmap
+</pre></div>
+
+Alternatively, you can use the following to examine the computational
+region and the raster map:
+
 <div class="code"><pre>
 g.region -p
 r.report map=inputmap units=c null=* nsteps=1
 </pre></div>
 
-<p>To create random vector point locations within some, but not all, 
-non-zero categories of the input raster map layer, 
-the user must first create a reclassified raster map layer 
-of the original raster map layer (e.g., using the GRASS 
-program <em><a href="r.reclass.html">r.reclass</a></em>) 
-that contains only the desired categories, 
-and then use the reclassed raster map layer as input to <em>r.random</em>.
+<p>To create random vector point locations within some, but not all,
+non-zero categories of the input raster map,
+the user must first create a reclassified raster map
+of the original raster map (e.g., using the GRASS
+program <em><a href="r.reclass.html">r.reclass</a></em>)
+that contains only the desired categories,
+and then use the reclassed raster map as input to <em>r.random</em>.
 
 <h2>EXAMPLES</h2>
 <p>Random vector elevation points sampled from elevation map in the
@@ -76,7 +83,6 @@ r.random elevation.10m vector=elevrand n=100
 v.db.select elevrand
 v.univar elevrand col=value type=point
 </pre></div>
-
 
 <p>Random vector elevation points sampled from elevation map in the
 Spearfish region with collocated values sampled from landuse map,
@@ -95,12 +101,6 @@ cat|value|covervalue
 ...
 </pre></div>
 
-<h2>KNOWN ISSUES</h2>
-
-It's not possible to use the <b>-i</b> flag and not also specify the <b>n</b> 
-parameter.
-
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -109,7 +109,6 @@ parameter.
 <a href="v.random.html">v.random</a><br>
 <a href="v.surf.rst.html">v.surf.rst</a>
 </em>
-
 
 <h2>AUTHOR</h2>
 
