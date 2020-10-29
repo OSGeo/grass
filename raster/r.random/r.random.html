@@ -73,10 +73,10 @@ r.report map=inputmap units=c null=* nsteps=1
 </pre></div>
 
 <p>To create random vector point locations within some, but not all,
-non-zero categories of the input raster map,
+categories of a integer input raster map (aka CELL raster map),
 the user must first create a reclassified raster map
 of the original raster map (e.g., using the GRASS
-program <em><a href="r.reclass.html">r.reclass</a></em>)
+module <em><a href="r.reclass.html">r.reclass</a></em>)
 that contains only the desired categories,
 and then use the reclassed raster map as input to <em>r.random</em>.
 
