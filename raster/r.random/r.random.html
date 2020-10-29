@@ -3,7 +3,7 @@
 raster map and/or a vector points map containing
 coordinates of points whose locations have been randomly
 determined.  The program locates these randomly generated
-vector points (sites) within the current geographic region and mask (if
+vector points within the current geographic region and mask (if
 any), on non-NULL category value data areas within a
 user-specified raster map. If the user sets the
 <b>-n</b> flag, points will be randomly generated across all
@@ -45,7 +45,7 @@ was given. Options are 0-100; fractions of percent may be
 stated as decimals (e.g., 66.67%, or 0.05%).
 
 To decide on the number
-of points to have <em>r.random</em> create,
+of points <em>r.random</em> will create,
 use <em><a href="r.univar.html">r.univar</a></em>,
 <em><a href="g.region.html">g.region</a></em>, or
 <em><a href="r.report.html">r.report</a></em>.
@@ -56,6 +56,11 @@ given the current computational region and raster mask:
 <div class="code"><pre>
 r.univar map=inputmap
 </pre></div>
+
+The text output contains total number of null and non-null cells
+(called <code>cells</code> in the machine-readable shell script style output),
+total null cells (<code>null_cells</code>),
+and number of non-null cells (<code>n</code>).
 
 Alternatively, you can use the following to examine the computational
 region and the raster map:
