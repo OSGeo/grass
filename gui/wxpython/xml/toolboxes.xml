@@ -761,8 +761,8 @@
         <label>Raster series aggregation</label>
       </module-item>
       <module-item name="r.series.accumulate">
-        <label>Raster series accumulation</label> 
-      </module-item> 
+        <label>Raster series accumulation</label>
+      </module-item>
       <separator/>
       <module-item name="r.stats.zonal">
         <label>Statistical overlay</label>
@@ -1067,9 +1067,9 @@
         <label>Regularized spline tension</label>
       </module-item>
       <separator/>
-      <module-item name="r.series.interp"> 
-        <label>Raster series interpolation</label> 
-      </module-item> 
+      <module-item name="r.series.interp">
+        <label>Raster series interpolation</label>
+      </module-item>
       <separator/>
       <module-item name="r.fillnulls">
         <label>Fill NULL cells</label>
@@ -2006,13 +2006,17 @@
         <label>Attribute table manager</label>
       </module-item>
       <wxgui-item name="CartographicComposer"/>
+      <wxgui-item name="CorrectsScanningDistortions"/>
+      <wxgui-item name="DataCatalog"/>
       <wxgui-item name="Georectify"/>
       <wxgui-item name="GraphicalModeler"/>
       <wxgui-item name="InteractiveInputForSupervisedClassification"/>
+      <wxgui-item name="ManagingGCPsfor3DCorrection"/>
       <wxgui-item name="MapSwipe"/>
+      <wxgui-item name="SetUpSamplingAndAnalysisFramework"/>
       <wxgui-item name="TplotTool"/>
       <wxgui-item name="TimelineTool"/>
+      <wxgui-item name="VDigit"/>
     </items>
   </toolbox>
 </toolboxes>
-
