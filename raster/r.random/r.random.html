@@ -19,7 +19,6 @@ is made for the value used where the <em>input</em> was NULL.
 This value is at least 1 less than the smallest value in the
 <em>input</em> raster and is given a medium gray color.
 
-<h2>NOTES</h2>
 <p>If a <em>cover</em> raster map is specified and the <em>cover</em> map
 contains NULL (no data) values, these points are suppressed in the
 resulting <em>vector</em> or <em>raster</em> map.
@@ -44,6 +43,8 @@ or as a <em>percentage of the raster map's cells</em>
 the percentage reflects whether or not the <b>-n</b> flag
 was given. Options are 0-100; fractions of percent may be
 stated as decimals (e.g., 66.67%, or 0.05%).
+
+<h2>NOTES</h2>
 
 To decide on the number
 of points <em>r.random</em> will create,
@@ -80,6 +81,7 @@ that contains only the desired categories,
 and then use the reclassed raster map as input to <em>r.random</em>.
 
 <h2>EXAMPLES</h2>
+
 <p>Random vector elevation points sampled from elevation map in the
 Spearfish region, result stored in 2D vector map:
 
@@ -136,10 +138,10 @@ cat|value|covervalue
     </li>
 </ul>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Dr. James Hinthorne,
-GIS Laboratory, 
+GIS Laboratory,
 Central Washington University
 <p>Modified for GRASS 5.0 by Eric G. Miller
 <p>Cover map support by Markus Neteler, 2007
