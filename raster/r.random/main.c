@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
 
     flag.zero = G_define_flag();
     flag.zero->key = 'n';
-    flag.zero->description = _("Generate points also for NULL category");
+    flag.zero->description = _("Generate points also for NULL cells");
     flag.zero->guisection = _("Output");
 
     flag.z_geometry = G_define_flag();

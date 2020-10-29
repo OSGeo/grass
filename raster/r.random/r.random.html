@@ -1,18 +1,19 @@
 <h2>DESCRIPTION</h2>
-<p>The program <em>r.random</em> allows the user to create a
+
+<p>The module <em>r.random</em> allows the user to create a
 raster map and/or a vector points map containing
 coordinates of points whose locations have been randomly
-determined.  The program locates these randomly generated
-vector points within the current geographic region and mask (if
-any), on non-NULL category value data areas within a
+determined. The module places these randomly generated
+vector points within the current computational region and raster mask (if
+any), on non-NULL raster cells in a
 user-specified raster map. If the user sets the
 <b>-n</b> flag, points will be randomly generated across all
 cells (even those with NULL values).
 
-<p>The category values and
-corresponding category names already associated with the
+<p>The cell values and
+corresponding category names (if present) associated with the
 random point locations in the <em>input</em> map are
-assigned to these points in the <em>raster</em> map.
+assigned to the newly generated cells in the <em>raster</em> map.
 If the <b>-n</b> is specified, then a unique entry
 is made for the value used where the <em>input</em> was NULL.
 This value is at least 1 less than the smallest value in the
