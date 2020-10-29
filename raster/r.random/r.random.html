@@ -6,14 +6,14 @@ determined.  The program locates these randomly generated
 vector points (sites) within the current geographic region and mask (if
 any), on non-NULL category value data areas within a
 user-specified raster map. If the user sets the
-<b>-z</b> flag, points will be randomly generated across all
+<b>-n</b> flag, points will be randomly generated across all
 cells (even those with NULL values).
 
 <p>The category values and
 corresponding category names already associated with the
 random point locations in the <em>input</em> map are
 assigned to these points in the <em>raster</em> map.
-If the <b>-z</b> is specified, then a unique entry
+If the <b>-n</b> is specified, then a unique entry
 is made for the value used where the <em>input</em> was NULL.
 This value is at least 1 less than the smallest value in the
 <em>input</em> raster and is given a medium gray color.
@@ -27,7 +27,7 @@ resulting <em>vector</em> or <em>raster</em> map.
 contains vector points that represent the <em>center points</em> of the
 randomly generated cells.  A <em>value</em> attribute contains the cell value
 of the <em>input</em> raster (or the assigned value
-when <b>-z</b> is used). <br>
+when <b>-n</b> is used). <br>
 If a <em>cover</em> map is additionally specified, a second
 column  <em>covervalue</em> is populated with raster values from
 the <em>cover</em> map.
@@ -40,9 +40,9 @@ to <em>v.surf.rst</em> and other vector modules.
 generated either as a <em>positive integer</em> (e.g., 10),
 or as a <em>percentage of the raster map's cells</em>
 (e.g., 10%, or 3.05%).  The number of cells considered for
-the percentage reflects whether or not the <b>-z</b> flag
-was given. Options are 0-100; percentages less than
-one percent may be stated as decimals.
+the percentage reflects whether or not the <b>-n</b> flag
+was given. Options are 0-100; fractions of percent may be
+stated as decimals (e.g., 66.67%, or 0.05%).
 
 To decide on the number
 of points to have <em>r.random</em> create,
@@ -90,7 +90,7 @@ result stored in 3D vector map:
 
 <div class="code"><pre>
 g.region raster=elevation.10m -p
-r.random -d elevation.10m cover=landcover.30m vector=luserand3d n=100
+r.random -z elevation.10m cover=landcover.30m vector=luserand3d n=100
 
 # data output (value: elevation, covervalue: landuse class):
 v.db.select luserand3d

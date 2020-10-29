@@ -107,12 +107,12 @@ int main(int argc, char *argv[])
     flag.gen_seed->guisection = _("Input");
 
     flag.zero = G_define_flag();
-    flag.zero->key = 'z';
+    flag.zero->key = 'n';
     flag.zero->description = _("Generate points also for NULL category");
     flag.zero->guisection = _("Output");
 
     flag.z_geometry = G_define_flag();
-    flag.z_geometry->key = 'd';
+    flag.z_geometry->key = 'z';
     flag.z_geometry->label = _("Generate vector points as 3D points");
     flag.z_geometry->description = _("Input raster values will be used for Z coordinates");
     flag.z_geometry->guisection = _("Output");
