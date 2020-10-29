@@ -591,6 +591,13 @@ class GMFrame(wx.Frame):
         win.CentreOnScreen()
         win.Show()
 
+    def OnDataCatalog(self, event=None, cmd=None):
+        """Launch Data Catalog"""
+        from datacatalog.frame import DataCatalogFrame
+        win = DataCatalogFrame(parent=self, giface=self._giface)
+        win.CentreOnScreen()
+        win.Show()
+
     def OnDone(self, event):
         """Command execution finished"""
         if hasattr(self, "model"):

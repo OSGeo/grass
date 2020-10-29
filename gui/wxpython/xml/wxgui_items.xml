@@ -346,6 +346,7 @@
   <wxgui-item name="SetUpSamplingAndAnalysisFramework">
     <label>Set up sampling and analysis framework</label>
     <handler>OnRLiSetup</handler>
+    <related-module>g.gui.rlisetup</related-module>
     <description>Configuration editor for r.li.'index'</description>
     <keywords>raster,landscape structure analysis</keywords>
   </wxgui-item>
@@ -398,5 +399,18 @@
     <command>g.gui.photo2image</command>
     <description>Corrects scanning distortions of a scanned aerial photo.</description>
     <keywords>general,gui,imagery,georectification,orthophoto</keywords>
+  </wxgui-item>
+  <wxgui-item name="DataCatalog">
+    <label>Data Catalog</label>
+    <handler>OnDataCatalog</handler>
+    <related-module>g.gui.datacatalog</related-module>
+    <description>Launch Data Catalog.</description>
+    <keywords>general,gui,data,catalog</keywords>
+  </wxgui-item>
+  <wxgui-item name="VDigit">
+    <label>Vector digitizer</label>
+    <command>g.gui.vdigit</command>
+    <description>Interactive editing and digitization of vector maps.</description>
+    <keywords>general,gui,vector,editing,digitizer</keywords>
   </wxgui-item>
 </wxgui-items>
