@@ -5,7 +5,7 @@
 #include "local_proto.h"
 
 
-int make_support(struct rr_state *theState, int percent, double percentage)
+int make_support(struct rr_state *theState, int percent, double percentage, long seed_value)
 {
     char title[100];
     struct History hist;
@@ -43,17 +43,17 @@ int make_support(struct rr_state *theState, int percent, double percentage)
 	if (percent)
 	    Rast_format_history(
 		&hist, HIST_DATSRC_2,
-		"Random points over %.2f percent of the base map <%s>",
-		percentage, inraster);
+		"Random points for %.2f percent of input cells with random seed %ld",
+		percentage, seed_value);
 	else
 	    Rast_format_history(
 		&hist, HIST_DATSRC_2,
 #ifdef HAVE_LONG_LONG_INT
-		"%llu random points on the base map <%s>",
+		"%llu random points with random seed %ld",
 #else
-		"%lu random points on the base map <%s>",
+		"%lu random points with random seed %ld",
 #endif
-		theState->nRand, theState->inraster);
+		theState->nRand, seed_value);
 
 	Rast_command_history(&hist);
 	Rast_write_history(theState->outraster, &hist);

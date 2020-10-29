@@ -214,7 +214,7 @@ int main(int argc, char *argv[])
     execute_random(&myState);
 
     if (myState.outraster)
-	make_support(&myState, percent, percentage);
+	make_support(&myState, percent, percentage, seed_value);
 
     return EXIT_SUCCESS;
 }
