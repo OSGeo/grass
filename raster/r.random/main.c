@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("level1"));
 
     module->label =
-	_("Creates a randomly placed raster cells or vector points");
+	_("Creates randomly placed raster cells or vector points");
     module->description =
 	_("Creates a raster map and vector point map "
 	  "containing randomly located cells and points.");
