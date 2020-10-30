@@ -59,9 +59,11 @@ int main(int argc, char *argv[])
     G_add_keyword(_("random"));
     G_add_keyword(_("level1"));
 
+    module->label =
+	_("Creates a randomly placed raster cells or vector points");
     module->description =
 	_("Creates a raster map and vector point map "
-	  "containing randomly located cells or points.");
+	  "containing randomly located cells and points.");
 
     parm.input = G_define_standard_option(G_OPT_R_INPUT);
     parm.input->description = _("Name of input raster map");
