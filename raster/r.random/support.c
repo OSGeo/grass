@@ -39,7 +39,7 @@ int make_support(struct rr_state *theState, int percent, double percentage, long
     /* write history for output raster */
     if (Rast_read_history(theState->outraster, G_mapset(), &hist) >= 0) {
 	Rast_short_history(theState->outraster, "raster", &hist);
-	Rast_format_history(&hist, HIST_DATSRC_1, "Based on map <%s>", inraster);
+	Rast_format_history(&hist, HIST_DATSRC_1, "Values based on map <%s>", inraster);
 	if (percent)
 	    Rast_format_history(
 		&hist, HIST_DATSRC_2,
