@@ -42,13 +42,13 @@ class TestRasterTile(TestCase):
 
     def test_random_raster(self):
         """Testing r.random  runs successfully"""
-        self.assertModule('r.random', input=self.input, npoints=self.npoints, raster=self.raster)
+        self.assertModule('r.random', input=self.input, npoints=self.npoints, raster=self.raster, seed=1)
         # check if random raster was created
         self.assertRasterExists(self.raster, msg="landcover_1m_raster_random was not created")
 
     def test_random_vector(self):
         """Testing r.random  runs successfully"""
-        self.assertModule('r.random', input=self.input, npoints=self.npoints, vector=self.vector)
+        self.assertModule('r.random', input=self.input, npoints=self.npoints, vector=self.vector, seed=1)
         # check if random vector was created
         self.assertVectorExists(self.vector, msg="landcover_1m_vector_random was not created")
         topology = dict(points=20,primitives=20)
@@ -56,14 +56,14 @@ class TestRasterTile(TestCase):
 
     def test_random_raster_flag_z(self):
         """Testing r.random  runs successfully"""
-        self.assertModule('r.random', flags='z', input=self.input, npoints=self.npoints, raster=self.raster+'_null')
+        self.assertModule('r.random', flags='z', input=self.input, npoints=self.npoints, raster=self.raster+'_null', seed=1)
         # check if random raster ( with NULL values )  was created
         self.assertRasterExists(self.raster, msg="landcover_1m_raster_random_null was not created")
 
 
     def test_vector_random_flag_z(self):
         """Testing r.random  runs successfully"""
-        self.assertModule('r.random', flags='z', input=self.input, npoints=self.npoints, vector=self.vector+'_null')
+        self.assertModule('r.random', flags='z', input=self.input, npoints=self.npoints, vector=self.vector+'_null', seed=1)
         # check if random vector ( with NULL values ) was created
         self.assertVectorExists(self.vector+'_null', msg="landcover_1m_vector_random_null was not created")
         topology = dict(points=20,primitives=20)
@@ -71,27 +71,27 @@ class TestRasterTile(TestCase):
 
     def test_random_raster_flag_b(self):
         """Testing r.random  runs successfully"""
-        self.assertModule('r.random', flags='b', input=self.input, npoints=self.npoints, raster=self.raster+'_without_topology')
+        self.assertModule('r.random', flags='b', input=self.input, npoints=self.npoints, raster=self.raster+'_without_topology', seed=1)
         # check if random raster ( without topology )  was created
         self.assertRasterExists(self.raster, msg="landcover_1m_raster_random_without_topologywas not created")
 
     def test_vector_random_flag_b(self):
         """Testing r.random  runs successfully"""
-        self.assertModule('r.random', flags='b', input=self.input, npoints=self.npoints, vector=self.vector+'_without_topology')
+        self.assertModule('r.random', flags='b', input=self.input, npoints=self.npoints, vector=self.vector+'_without_topology', seed=1)
         # check if random vector ( without topology ) was created
         self.assertVectorExists(self.vector+'_without_topology', msg="landcover_1m_vector_random_without_topology was not created")
         topology = dict(points=20,primitives=20)
         self.assertVectorFitsTopoInfo(vector=self.vector+'_without_topology', reference=topology)
 
-    def test_random_raster_flag_d(self):
+    def test_random_raster_flag_z(self):
         """Testing r.random  runs successfully"""
-        self.assertModule('r.random', flags='d', input=self.input, npoints=self.npoints, raster=self.raster+'_3D')
+        self.assertModule('r.random', flags='z', input=self.input, npoints=self.npoints, raster=self.raster+'_3D', seed=1)
         # check if random raster ( 3D points )  was created
         self.assertRasterExists(self.raster, msg="landcover_1m_raster_random_3D not created")
 
-    def test_vector_random_flag_d(self):
+    def test_vector_random_flag_z(self):
         """Testing r.random  runs successfully"""
-        self.assertModule('r.random', flags='d', input=self.input, npoints=self.npoints, vector=self.vector+'_3D')
+        self.assertModule('r.random', flags='z', input=self.input, npoints=self.npoints, vector=self.vector+'_3D', seed=1)
         # check if random vector ( 3D points ) was created
         self.assertVectorExists(self.vector+'_3D', msg="landcover_1m_vector_random_3D was not created")
         topology = dict(points=20,primitives=20)
@@ -100,13 +100,13 @@ class TestRasterTile(TestCase):
 
     def test_random_raster_cover(self):
         """Testing r.random  runs successfully"""
-        self.assertModule('r.random',input='landuse96_28m', npoints=self.npoints, cover='landcover_1m', raster=self.raster+'_cover_landcover_1m')
+        self.assertModule('r.random',input='landuse96_28m', npoints=self.npoints, cover='landcover_1m', raster=self.raster+'_cover_landcover_1m', seed=1)
         # check if random raster ( 3D points )  was created
         self.assertRasterExists(self.raster+'_cover_landcover_1m', msg="landcover_1m_raster_random_cover_landcover_1m was not created")
 
-    def test_vector_random_flag_d(self):
+    def test_random_vector_cover(self):
         """Testing r.random  runs successfully"""
-        self.assertModule('r.random',input='landuse96_28m', npoints=self.npoints, cover='landcover_1m', vector=self.vector+'_cover_landcover_1m')
+        self.assertModule('r.random',input='landuse96_28m', npoints=self.npoints, cover='landcover_1m', vector=self.vector+'_cover_landcover_1m', seed=1)
         # check if random vector ( 3D points ) was created
         self.assertVectorExists(self.vector+'_cover_landcover_1m', msg="landcover_1m_vector_cover_landcover_1m was not created")
         topology = dict(points=20, primitives=20)
