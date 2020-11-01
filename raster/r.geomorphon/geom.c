@@ -5,6 +5,17 @@ static double coss[NUM_DIRS] = { 0.7071067812, 1, 0.7071067812, 0, -0.7071067812
 
 /* DIRS in DEGREES from NORTH: 45,0,315,270,225,180,135,90 */
 
+#define TERNARY_MAX 6561 /* 3**8 */
+static unsigned int global_ternary_codes[TERNARY_MAX];
+
+void generate_ternary_codes()
+{
+    unsigned i;
+
+    for (i = 0; i < TERNARY_MAX; ++i)
+	global_ternary_codes[i] = ternary_rotate(i);
+}
+
 unsigned int ternary_rotate(unsigned int value)
 {
     /* this function returns rotated and mirrored

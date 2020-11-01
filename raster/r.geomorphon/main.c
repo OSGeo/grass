@@ -301,9 +301,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    /* generate global ternary codes */
-    for (i = 0; i < 6561; ++i)
-	global_ternary_codes[i] = ternary_rotate(i);
+    generate_ternary_codes();
 
     /* open DEM */
     strcpy(elevation.elevname, opt_input->answer);
