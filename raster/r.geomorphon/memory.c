@@ -37,7 +37,8 @@ int open_map(MAPS * rast)
     Rast_get_cellhd(rast->elevname, mapset, &cellhd);
     rast->raster_type = Rast_map_type(rast->elevname, mapset);
 
-    if (window.ew_res < cellhd.ew_res || window.ns_res < cellhd.ns_res)
+    if (window.ew_res + 1e-10 < cellhd.ew_res ||
+	window.ns_res + 1e-10 < cellhd.ns_res)
 	G_warning(_("Region resolution shoudn't be lesser than map %s resolution. Run g.region raster=%s to set proper resolution"),
 		  rast->elevname, rast->elevname);
 
