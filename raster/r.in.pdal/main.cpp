@@ -305,16 +305,16 @@ int main(int argc, char *argv[])
                                "If not specified, all points are imported.");
     class_opt->guisection = _("Selection");
 
-    Option *variable_opt = G_define_option();
-    variable_opt->key = "variable";
-    variable_opt->type = TYPE_STRING;
-    variable_opt->required = NO;
-    variable_opt->label = _("Variable to use for raster values");
-    variable_opt->options =
-	"z,intensity,number,returns,direction,angle,abs_angle,class,source";
-    variable_opt->answer = const_cast<char*>("z");
-    variable_opt->guisection = _("Selection");
-    G_asprintf((char **)&(variable_opt->descriptions),
+    Option *dimension_opt = G_define_option();
+    dimension_opt->key = "dimension";
+    dimension_opt->type = TYPE_STRING;
+    dimension_opt->required = NO;
+    dimension_opt->label = _("Dimension (variable) to use for raster values");
+    dimension_opt->options =
+	"z,intensity,number,returns,direction,angle,class,source";
+    dimension_opt->answer = const_cast<char*>("z");
+    dimension_opt->guisection = _("Selection");
+    G_asprintf((char **)&(dimension_opt->descriptions),
                "z;%s;"
                "intensity;%s;"
                "number;%s;"
@@ -339,6 +339,14 @@ int main(int argc, char *argv[])
                /* GTC: LAS LiDAR point property */
                _("Source ID"));
 
+    Option *user_dimension_opt = G_define_option();
+    user_dimension_opt->key = "user_dimension";
+    user_dimension_opt->type = TYPE_STRING;
+    user_dimension_opt->required = NO;
+    user_dimension_opt->label = _("Custom dimension (variable) to use for raster values");
+    user_dimension_opt->description = _("PDAL dimension name");
+    user_dimension_opt->guisection = _("Selection");
+    
     Flag *extract_ground_flag = G_define_flag();
     extract_ground_flag->key = 'j';
     extract_ground_flag->label =
@@ -522,29 +530,29 @@ int main(int argc, char *argv[])
     if (point_binning.method == METHOD_N)
         rtype = CELL_TYPE;
 
-    if (!(strcmp(variable_opt->answer, "z") == 0)) {
+    if (!user_dimension_opt->answer && !(strcmp(dimension_opt->answer, "z") == 0)) {
         /* Should we enfocte the CELL type? */
         rtype = CELL_TYPE;
 
-        if (strcmp(variable_opt->answer, "intensity") == 0) {
+        if (strcmp(dimension_opt->answer, "intensity") == 0) {
             dim_to_use_as_z = pdal::Dimension::Id::Intensity;
         }
-        else if (strcmp(variable_opt->answer, "number") == 0) {
+        else if (strcmp(dimension_opt->answer, "number") == 0) {
             dim_to_use_as_z = pdal::Dimension::Id::ReturnNumber;
         }
-        else if (strcmp(variable_opt->answer, "returns") == 0) {
+        else if (strcmp(dimension_opt->answer, "returns") == 0) {
             dim_to_use_as_z = pdal::Dimension::Id::NumberOfReturns;
         }
-        else if (strcmp(variable_opt->answer, "direction") == 0) {
+        else if (strcmp(dimension_opt->answer, "direction") == 0) {
             dim_to_use_as_z = pdal::Dimension::Id::ScanDirectionFlag;
         }
-        else if (strcmp(variable_opt->answer, "angle") == 0) {
+        else if (strcmp(dimension_opt->answer, "angle") == 0) {
             dim_to_use_as_z = pdal::Dimension::Id::ScanAngleRank;
         }
-        else if (strcmp(variable_opt->answer, "class") == 0) {
+        else if (strcmp(dimension_opt->answer, "class") == 0) {
             dim_to_use_as_z = pdal::Dimension::Id::Classification;
         }
-        else if (strcmp(variable_opt->answer, "source") == 0) {
+        else if (strcmp(dimension_opt->answer, "source") == 0) {
             dim_to_use_as_z = pdal::Dimension::Id::PointSourceId;
         }
     }
@@ -781,6 +789,17 @@ int main(int argc, char *argv[])
         if (dim_to_use_as_z == pdal::Dimension::Id::Unknown)
             G_fatal_error(_("Cannot identify the height dimension"
                             " (probably something changed in PDAL)"));
+    }
+
+    if (user_dimension_opt->answer) {
+        dim_to_use_as_z = point_layout->findDim(user_dimension_opt->answer);
+        if (dim_to_use_as_z == pdal::Dimension::Id::Unknown)
+            G_fatal_error(_("Cannot identify the requested dimension. "
+                            "Check dimension name spelling."));
+        if (!(strcmp(dimension_opt->answer, "z") == 0))
+            G_warning(_("Both dimension and user dimension parameters are specified. "
+                        "Using '%s' as the dimension to import."),
+                        user_dimension_opt->answer);
     }
 
     // this is just for sure, we tested the individual dimensions before

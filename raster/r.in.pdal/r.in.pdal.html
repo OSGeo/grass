@@ -222,12 +222,17 @@ the analysis itself but it can also speed up the processing.
 <p>
 LiDAR points can contain a lot of attributes besides their coordinates.
 By default <em>r.in.lidar</em> will use point Z coordinate as the output
-raster value source. The <em>variable</em> parameter allows to use different
+raster value source. The <em>dimension</em> option allows to use different
 point attributes as an output instead of Z value. In case if other than Z
 value is choosen, output map type will be set to CELL. Explanation
 of various attributes can be found in LAS Specification chapter "Point
 Data Records". Be ware - not all attributes might be present and also
 their value ranges and meaning might vary between LAS file producers.
+
+<p>
+PDAL supports creation of custom dimensions (point attributes) in LAS files.
+Use <em>user_dimension</em> option to provide name of any dimension for
+import. This option supersedes one specified by <em>dimension</em> option.
 
 <h3>Reduction to a base raster</h3>
 
