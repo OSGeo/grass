@@ -607,7 +607,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         :param exclude: True to exclude, False for forcing the list
         :param node: parent node
         """
-        elist = grass.natural_sort(elist)
+        elist = grass.naturally_sorted(elist)
         for elem in elist:
             if elem != '':
                 fullqElem = elem + '@' + mapset

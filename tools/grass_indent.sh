@@ -4,7 +4,7 @@
 
 # Should be in sync with:
 #     https://trac.osgeo.org/grass/wiki/Submitting/C
-#     http://grasswiki.osgeo.org/wiki/Development#Explanation_of_C_indentation_rules
+#     https://grasswiki.osgeo.org/wiki/Development#Explanation_of_C_indentation_rules
 
 # Dependencies:
 #     indent

@@ -30,7 +30,7 @@ between  LOSs angle (zenith and nadir) that is considered significantly
 different from the horizon. Two lines-of-sight are necessary due to zenith
 LOS only, does not detect positive forms correctly.
 
-<p> There are 38 = 6561 possible ternary patterns (8-tuplets). However by
+<p> There are 3**8 = 6561 possible ternary patterns (8-tuples). However by
 eliminating all patterns that are results of either rotation or reflection
 of other patterns wa set of 498 patterns remain referred as geomorphons.
 This is a comprehensive and exhaustive set of idealized landforms that are
@@ -45,7 +45,7 @@ Using small value of L results in the map that correctly identifies
 landforms if their size is smaller than L; landforms having larger sizes
 are broken down into components. Using larger values of L allows
 simultaneous identification of landforms on variety of sizes in expense of
-recognition smaller, second-order forms. There are two addational
+recognition smaller, second-order forms. There are two additional
 parameters: <b>skip radius</b> used to eliminate impact of small
 irregularities. On the contrary <b>flatness distance</b> eliminates the
 impact of very high distance (in meters) of search radius which may not
@@ -56,45 +56,45 @@ especially with low resolution DEMS.
 <h2>OPTIONS</h2>
 <DL>
 <DT><b>-m</b></DT>
-<DD>All distance parameters (search, skip, flat distances) are supplied as meters instead of cells (default). To avoid situation when supplied distances is smaller than one cell program first check if supplied distance is longer than one cell in both NS and WE directions. For LatLong projection only NS distance checked, because in latitude angular unit comprise always bigger or equal distance than longitude one. If distance is supplied in cells, For all projections is recalculated into meters according formula: <code>number_of_cells*resolution_along_NS_direction</code>. It is important if geomorphons are calculate for large areas in LatLong projecton.</DD>
+<DD>All distance parameters (search, skip, flat distances) are supplied as meters instead of cells (default). To avoid situation when supplied distances is smaller than one cell program first check if supplied distance is longer than one cell in both NS and WE directions. For LatLong projection only NS distance checked, because in latitude angular unit comprise always bigger or equal distance than longitude one. If distance is supplied in cells, For all projections is recalculated into meters according formula: <code>number_of_cells*resolution_along_NS_direction</code>. It is important if geomorphons are calculated for large areas in LatLong projection.</DD>
 <DT><b>elevation</b></DT>
 <DD>Digital elevation model. Data can be of any type and any projection. During calculation DEM is stored as floating point raster.</DD>
 <DT><b>search</b></DT>
-<DD>Determines length on the geodesic distances in all eight directions where line-of-sight is calculated. To speed up calculation is determines only these cells which centers falls into the distance</DD>
+<DD>Determines length on the geodesic distances in all eight directions where line-of-sight is calculated. To speed up calculation is determines only these cells which centers falls into the distance.</DD>
 <DT><b>skip</b></DT>
 <DD>Determines length on the geodesic distances at the beginning of calculation all eight directions where line-of-sight is yet calculated. To speed up calculation this distance is always recalculated into number of cell which are skipped at the beginning of every line-of-sight and is equal in all direction.  This parameter eliminates forms of very small extend, smaller than skip parameter.</DD>
 <DT><b>flat</b></DT>
 <DD>The difference (in degrees) between zenith and nadir line-of-sight which indicate flat direction. If higher threshold produce more flat maps. If resolution of the map is low (more than 1 km per cell) threshold should be very small (much smaller than 1 degree) because on such distance 1 degree of difference means several meters of high difference.</DD>
 <DT><b>dist</b></DT>
-<DD>>Flat distance. This is additional parameter defining the distance above which the threshold starts to decrease to avoid problems with pseudo-flat line-of-sights if real elevation difference appears on the distance where its value is higher DO POPRAWKI </DD>
-<DT><b>form</b></DT>
+<DD>>Flat distance. This is additional parameter defining the distance above which the threshold starts to decrease to avoid problems with pseudo-flat line-of-sights if real elevation difference appears on the distance where its value is higher (TO BE CORRECTED).</DD>
+<DT><b>forms</b></DT>
 <DD>Returns geomorphic map with 10 most popular terrestrial forms. Legend for forms, its definition by the number of <em>+</em> and <em>-</em> and its idealized  visualisation are presented at the image.
 <center>
 	
 <h3>Forms represented by geomorphons:</h3>
 <img src="legend.png" border="1"><br>
 </center></DD>
-<DT><b>pattern</b></DT>
-<DD>returns code of one of 498 unique ternary patterns for every cell. The code is a decimal representation o 8-tuple minimalised patterns written in ternary system. Full list of patterns is available in source code directory as patterns.txt. This map can be used to create alternative form classification using supervised approach</DD>
-<DT><b>positive and negative</b></DT>
-<DD>returns codes binary patterns for zenith (positive) and nadir (negative) line of sights. The code is a decimal representation o 8-tuple minimalised patterns written in binary system. Full list of patterns is available in source code directory as patterns.txt</DD>
+<DT><b>ternary</b></DT>
+<DD>returns code of one of 498 unique ternary patterns for every cell. The code is a decimal representation of 8-tuple minimalised patterns written in ternary system. Full list of patterns is available in source code directory as patterns.txt. This map can be used to create alternative form classification using supervised approach.</DD>
+<DT><b>positive</b> and <b>negative</b></DT>
+<DD>returns codes binary patterns for zenith (positive) and nadir (negative) line of sights. The code is a decimal representation of 8-tuple minimalised patterns written in binary system. Full list of patterns is available in source code directory as patterns.txt.</DD>
 </DL>
-<P><em>NOTE: parameters below are very experimental. The usefulness of these parameters are currently under investigation</em></P>
+<P><em>NOTE: parameters below are very experimental. The usefulness of these parameters are currently under investigation.</em></P>
 <DL>
 <DT><b>intensity</b></DT>
-<DD>returns avarage difference between central cell of geomorphon and eight cells in visibility neighbourhood. This parameter shows local (as is visible) exposition/abasment of the form in the terrain</DD>
+<DD>returns avarage difference between central cell of geomorphon and eight cells in visibility neighbourhood. This parameter shows local (as is visible) exposition/abasement of the form in the terrain.</DD>
 <DT><b>range</b></DT>
 <DD>returns difference between minimum and maximum values of visibility neighbourhood.</DD>
 <DT><b>variance</b></DT>
-<DD>returns variance (difference between particular values and mean value) ofvisibility neighbourhood.</DD>
+<DD>returns variance (difference between particular values and mean value) of visibility neighbourhood.</DD>
 <DT><b>extend</b></DT>
 <DD>returns area of the polygon created by the 8 points where line-of-sight cuts the terrain (see image in description section).</DD>
 <DT><b>azimuth</b></DT>
-<DD>returns orientation of the poligon constituting geomorphon. This orientation is currentlyb calculated as a orientation of least square fit line to the eight verticles of this polygon.</DD>
+<DD>returns orientation of the polygon constituting geomorphon. This orientation is currently calculated as a orientation of least square fit line to the eight verticles of this polygon.</DD>
 <DT><b>elongation</b></DT>
-<DD>returns proportion between sides of the bounding box rectangle calculated for geomorphon rotated to fit lest square line.</DD>
+<DD>returns proportion between sides of the bounding box rectangle calculated for geomorphon rotated to fit least square line.</DD>
 <DT><b>width</b></DT>
-<DD>returns length of the shorter side of the bounding box rectangle calculated for geomorphon rotated to fit lest square line.</DD>
+<DD>returns length of the shorter side of the bounding box rectangle calculated for geomorphon rotated to fit least square line.</DD>
 
 
 <h2>NOTES</h2>
@@ -104,7 +104,7 @@ free parameters used in calculation. However, in practice there are some
 issues on DEM resolution and search radius. Low resolution DEM especially
 above 1 km per cell requires smaller than default flatness threshold. On
 the other hand, only forms with high local elevation difference will be
-detected correctly. It results form fact that on very high distance (of
+detected correctly. It results from fact that on very high distance (of
 order of kilometers or higher) even relatively high elevation difference
 will be recognized as flat. For example at the distance of 8 km (8 cells
 with 1 km resolution DEM) an relative elevation difference of at least 136

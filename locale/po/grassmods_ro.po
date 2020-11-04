@@ -10752,7 +10752,7 @@ msgstr ""
 
 #: ../raster/r.contour/main.c:140
 #, c-format
-msgid "Neither <%s> nor <%s> option must be specified"
+msgid "Either <%s> or <%s> option must be specified"
 msgstr ""
 
 #: ../raster/r.contour/main.c:183 ../raster/r.stream.extract/close.c:194
@@ -14713,7 +14713,7 @@ msgid "Distance step for every iteration (zero to omit)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:171
-msgid "Distance where serch will start in multiple mode (zero to omit)"
+msgid "Distance where search will start in multiple mode (zero to omit)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:177

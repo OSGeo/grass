@@ -219,7 +219,7 @@ int shape(PATTERN * pattern, int pattern_size, float *azimuth,
     int i;
     double avg_x = 0, avg_y = 0;
     double avg_x_y = 0;
-    double avg_x_square;
+    double avg_x_square = 0;
     double rx, ry;
     double sine, cosine;
     double result;
@@ -242,7 +242,9 @@ int shape(PATTERN * pattern, int pattern_size, float *azimuth,
     /* rotation */
     sine = sin(result);
     cosine = cos(result);
-    for (i = 0; i < 8; ++i) {
+    rxmin = rxmax = pattern->x[0] * cosine - pattern->y[0] * sine;
+    rymin = rymax = pattern->x[0] * sine + pattern->y[0] * cosine;
+    for (i = 1; i < 8; ++i) {
 	rx = pattern->x[i] * cosine - pattern->y[i] * sine;
 	ry = pattern->x[i] * sine + pattern->y[i] * cosine;
 	rxmin = rx < rxmin ? rx : rxmin;

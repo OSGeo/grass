@@ -1814,6 +1814,7 @@ class GCP(MapFrame, ColumnSorterMixin):
             self.TgtMap.Clean()
 
             self.grwiz.Cleanup()
+            self._mgr.UnInit()
 
             self.Destroy()
 
@@ -2755,11 +2756,10 @@ class GrSettingsDialog(wx.Dialog):
             parent=panel, id=wx.ID_ANY,
             label=_("Highlight RMS error > M + SD * factor:"))
         rmslabel.SetToolTip(
-            wx.ToolTip(
-                _(
-                    "Highlight GCPs with an RMS error larger than \n"
-                    "mean + standard deviation * given factor. \n"
-                    "Recommended values for this factor are between 1 and 2.")))
+            _(
+                "Highlight GCPs with an RMS error larger than \n"
+                "mean + standard deviation * given factor. \n"
+                "Recommended values for this factor are between 1 and 2."))
         rmsgridSizer.Add(
             rmslabel,
             flag=wx.ALIGN_CENTER_VERTICAL,

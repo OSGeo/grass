@@ -10733,7 +10733,7 @@ msgstr ""
 
 #: ../raster/r.contour/main.c:140
 #, c-format
-msgid "Neither <%s> nor <%s> option must be specified"
+msgid "Either <%s> or <%s> option must be specified"
 msgstr ""
 
 #: ../raster/r.contour/main.c:183 ../raster/r.stream.extract/close.c:194
@@ -14680,7 +14680,7 @@ msgid "Distance step for every iteration (zero to omit)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:171
-msgid "Distance where serch will start in multiple mode (zero to omit)"
+msgid "Distance where search will start in multiple mode (zero to omit)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:177
@@ -39450,7 +39450,7 @@ msgstr ""
 
 #: ../vector/v.out.postgis/main.c:52
 msgid "Exports a vector map layer to PostGIS feature table."
-msgstr ""
+msgstr "将矢量地图导出为PostGIS格式数据。"
 
 #: ../vector/v.out.postgis/main.c:103
 #, c-format

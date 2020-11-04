@@ -440,7 +440,7 @@ class PyEditController(object):
 
         Asks user if replacement is OK depending on the state of the editor.
         Use before replacing all editor content by some other text.
-        
+
         :param by_message: message used to ask user if it is OK to replace
             the content with something else; special values are 'template',
             'example' and 'file' which will use predefined messages, otherwise
@@ -488,7 +488,7 @@ class PyEditController(object):
         # not using g.manual because it does not show
         entry = 'libpython/script_intro.html'
         major, minor, patch = gscript.version()['version'].split('.')
-        url = 'http://grass.osgeo.org/grass%s%s/manuals/%s' % (
+        url = 'https://grass.osgeo.org/grass%s%s/manuals/%s' % (
             major, minor, entry)
         open_url(url)
 
@@ -530,6 +530,8 @@ class PyEditToolbar(BaseToolbar):
                                       label=_('Activate overwrite')),
             'overwriteFalse': MetaIcon(img='unlocked',
                                        label=_('Deactive overwrite')),
+            'quit': MetaIcon(img='quit',
+                             label=_('Quit Simple Python Editor')),
         }
 
         # workaround for http://trac.wxwidgets.org/ticket/13888
@@ -555,6 +557,8 @@ class PyEditToolbar(BaseToolbar):
                                      (None, ),
                                      ("help", BaseIcons['help'],
                                       self.parent.OnHelp),
+                                     ('quit', self.icons['quit'],
+                                      self.parent.OnClose),
                                      ))
 
     # TODO: add overwrite also to the menu and sync with toolbar

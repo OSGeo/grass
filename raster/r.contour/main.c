@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     if (!levels->answers && !step->answer) {
-        G_fatal_error(_("Neither <%s> nor <%s> option must be specified"),
+        G_fatal_error(_("Either <%s> or <%s> option must be specified"),
                       levels->key, step->key);
     }
 

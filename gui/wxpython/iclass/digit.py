@@ -129,13 +129,15 @@ class IClassVDigit(IVDigit):
         for cat in cats:
             Vedit_delete_areas_cat(self.poMapInfo, 1, cat)
 
-    def CopyMap(self, name, tmp=False):
+    def CopyMap(self, name, tmp=False, update=False):
         """Make a copy of open vector map
 
         Note: Attributes are not copied
 
         :param name: name for a copy
         :param tmp: True for temporary map
+        :param bool update: True if copy target vector map (poMapInfoNew)
+        exist
 
         :return: number of copied features
         :return: -1 on error
@@ -147,13 +149,23 @@ class IClassVDigit(IVDigit):
         poMapInfoNew = pointer(Map_info())
 
         if not tmp:
-            open_fn = Vect_open_new
+            if update:
+                open_fn = Vect_open_update
+            else:
+                open_fn = Vect_open_new
         else:
-            open_fn = Vect_open_tmp_new
+            if update:
+                open_fn = Vect_open_tmp_update
+            else:
+                open_fn = Vect_open_tmp_new
 
-        is3D = bool(Vect_is_3d(self.poMapInfo))
-        if open_fn(poMapInfoNew, name, is3D) == -1:
-            return -1
+        if update:
+            if open_fn(poMapInfoNew, name, '') == -1:
+                return -1
+        else:
+            is3D = bool(Vect_is_3d(self.poMapInfo))
+            if open_fn(poMapInfoNew, name, is3D) == -1:
+                return -1
 
         verbose = G_verbose()
         G_set_verbose(-1)      # be silent
