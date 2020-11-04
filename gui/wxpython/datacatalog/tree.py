@@ -184,23 +184,6 @@ def getLocationTree(gisdbase, location, queue, mapsets=None):
     queue.put((maps_dict, None))
     gscript.try_remove(tmp_gisrc_file)
 
-class LocationWatch(PatternMatchingEventHandler):
-    def __init__(self, patterns, callback):
-        PatternMatchingEventHandler.__init__(self, patterns=patterns)
-        self.callback = callback
-
-    def on_created(self, event):
-        if event.is_directory:
-            self.callback(event.src_path)
-
-    def on_deleted(self, event):
-        if event.is_directory:
-            self.callback(event.src_path)
-
-    def on_moved(self, event):
-        if event.is_directory:
-            self.callback(event.src_path)      
- 
 
 class MapWatch(PatternMatchingEventHandler):
     def __init__(self, patterns, element, event_handler):
@@ -307,7 +290,15 @@ class DataCatalogNode(DictNode):
 
 
 class DataCatalogTree(TreeView):
+    """Tree structure visualizing and managing grass database.
+    Uses virtual tree and model defined in core/treemodel.py.
 
+    When changes to data are initiated from inside, the model
+    and the tree are not changed directly, rather a grassdbChanged
+    signal needs to be emitted and the handler of the signal
+    takes care of the refresh. At the same time, watchdog (if installed)
+    monitors changes in current mapset and refreshes the tree.
+    """
     def __init__(
             self, parent, model=None, giface=None,
             style=wx.TR_HIDE_ROOT | wx.TR_EDIT_LABELS |
@@ -604,7 +595,7 @@ class DataCatalogTree(TreeView):
         try:
             self.observer.start()
         except OSError:
-            # on linux inotify exceeds limits
+            # in case inotify on linux exceeds limits
             watchdog_used = False
             return
 
@@ -1183,8 +1174,8 @@ class DataCatalogTree(TreeView):
                     self._giface.grassdbChanged.emit(grassdb=self.selected_grassdb[0].data['name'],
                                                      location=self.selected_location[0].data['name'],
                                                      mapset=self.selected_mapset[0].data['name'],
+                                                     map=new_name,
                                                      element=node,
-                                                     newname=new_name,
                                                      action='new')
                     # remove old
                     if not self.copy_mode:
@@ -1231,7 +1222,7 @@ class DataCatalogTree(TreeView):
                                          location=sMapset.parent.data['name'],
                                          mapset=sMapset.data['name'],
                                          element=cLayer.data['type'],
-                                         newname=name,
+                                         map=name,
                                          action='new')
         if not cMode:
             self._removeMapAfterCopy(cLayer, cMapset, iEnv)
@@ -1517,7 +1508,7 @@ class DataCatalogTree(TreeView):
             else:
                 switch_mapset_interactively(self, self._giface, grassdb, location, mapset)
 
-    def _updateAfterGrassdbChanged(self, action, element, grassdb, location=None, mapset=None,
+    def _updateAfterGrassdbChanged(self, action, element, grassdb, location, mapset=None,
                                    map=None, newname=None):
         """Update tree after grassdata changed"""
         if element == 'mapset':
@@ -1557,6 +1548,9 @@ class DataCatalogTree(TreeView):
                 if node:
                     self._renameNode(node, newname)
         elif element in ('raster', 'vector', 'raster_3d'):
+            # when watchdog is used, it watches current mapset,
+            # so we don't process any signals here,
+            # instead the watchdog handler takes care of refreshing tree
             if (watchdog_used and grassdb == self.current_grassdb_node.data['name']
                and location == self.current_location_node.data['name']
                and mapset == self.current_mapset_node.data['name']):
@@ -1566,9 +1560,11 @@ class DataCatalogTree(TreeView):
                                       location=location,
                                       mapset=mapset)
                 if node:
-                    if newname:
-                        self.InsertLayer(name=newname, mapset_node=node,
-                                         element_name=element)
+                    if map:
+                        # check if map already exists
+                        if not self._model.SearchNodes(parent=node, name=newname, type=element):
+                            self.InsertLayer(name=newname, mapset_node=node,
+                                             element_name=element)
                     else:
                         # we know some maps created
                         self._reloadMapsetNode(node)

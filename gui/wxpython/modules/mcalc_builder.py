@@ -721,7 +721,7 @@ class MapCalcFrame(wx.Frame):
                                          location=gisenv['LOCATION_NAME'],
                                          mapset=gisenv['MAPSET'],
                                          action='new',
-                                         newname=name.split('@')[0],
+                                         map=name.split('@')[0],
                                          element=ltype)
 
     def OnSaveExpression(self, event):

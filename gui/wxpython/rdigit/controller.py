@@ -457,7 +457,7 @@ class RDigitController(wx.EvtHandler):
                                          location=gisenv['LOCATION_NAME'],
                                          mapset=gisenv['MAPSET'],
                                          action='new',
-                                         newname=name.split('@')[0],
+                                         map=name.split('@')[0],
                                          element='raster')
 
     def _backupRaster(self, name):

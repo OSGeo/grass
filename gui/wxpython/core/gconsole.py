@@ -742,7 +742,7 @@ class GConsole(wx.EvtHandler):
                                                              location=gisenv['LOCATION_NAME'],
                                                              mapset=gisenv['MAPSET'],
                                                              action='new',
-                                                             newname=lname.split('@')[0],
+                                                             map=lname.split('@')[0],
                                                              element=prompt)
         if name == 'r.mask':
             self.updateMap.emit()

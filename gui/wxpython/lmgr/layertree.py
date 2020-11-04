@@ -1316,7 +1316,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         event.Skip()
 
-    def OnGrassDBChanged(self, action, element, grassdb, location=None,
+    def OnGrassDBChanged(self, action, element, grassdb, location,
                          mapset=None, map=None, newname=None):
         """Handler of giface.grassDbChanged signal, updates layers in tree.
          Covers cases when map or mapset is deleted or renamed."""
