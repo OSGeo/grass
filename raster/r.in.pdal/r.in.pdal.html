@@ -128,6 +128,9 @@ cell. Coefficient of variance is given in percentage and defined as
 <tt>(stddev/mean)*100</tt>.</dd>
 <dt>median</dt>
 <dd>This computes the median of point values for each cell</dd>
+<dt>mode</dt>
+<dd>This computes the mode (the most common value) of point values for each cell.
+If there are more than one mode for a cell, an arbitrary one will be selected.</dd>
 <dt>percentile</dt>
 <dd>p<sup><i>th</i></sup> (nth) percentile of points in cell</dd>
 <dt>skewness</dt>
@@ -364,7 +367,7 @@ while <em>stddev, variance</em>, and <em>coeff_var</em> will use more.
 <p>
 The memory usage for regular statistics mentioned above is based solely
 on region (raster) size.
-However, the aggregate functions <em>median, percentile, skewness</em>
+However, the aggregate functions <em>median, mode, percentile, skewness</em>
 and <em>trimmean</em> will use more memory and may not be
 appropriate for use with arbitrarily large input files without
 a small value for the <b>percent</b> option because unlike
