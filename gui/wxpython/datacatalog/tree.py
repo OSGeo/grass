@@ -294,6 +294,22 @@ class DataCatalogTree(TreeView):
             self.grassdatabases.append(currentDB)
             self._saveGrassDBs()
 
+        self.ReloadTreeItems()
+
+        # If demolocation, show the map world layer in the Map Display
+        if (self.current_location_node.data['name'] == "world_latlong_wgs84"
+        and self.current_mapset_node.data['name'] == "PERMANENT"):
+            layerItem = self._model.SearchNodes(
+            parent = self.current_mapset_node,
+            name="country_boundaries",
+            type='vector')
+            if layerItem:
+                self.selected_layer = []
+                self.selected_mapset = []
+                self.selected_layer.append(layerItem[0])
+                self.selected_mapset.append(self.current_mapset_node)
+                self.DisplayLayer()
+
         self.beginDrag = Signal('DataCatalogTree.beginDrag')
         self.endDrag = Signal('DataCatalogTree.endDrag')
         self.startEdit = Signal('DataCatalogTree.startEdit')

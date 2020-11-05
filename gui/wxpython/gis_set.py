@@ -524,7 +524,7 @@ class GRASSStartup(wx.Frame):
             mapset_name = create_startup_location_in_grassdb(grassdb,
                                                              location)
             if mapset_name:
-                self.SetLocation(grassdb, location, mapset_name)
+                self.SetLocation(grassdb, location, "PERMANENT")
                 self.ExitSuccessfully()
 
         if path:
