@@ -87,6 +87,12 @@ public:
         // to tell user that they have points right on the border)
         int arr_row = (int)((region_->north - y) / region_->ns_res);
         int arr_col = (int)((x - region_->west) / region_->ew_res);
+
+        if (arr_row >= region_->rows || arr_col >= region_->cols) {
+            G_message(_("A point on the edge of computational region detected. Ignoring."));
+            return false;
+        }
+
         update_value(point_binning_, bin_index_nodes_, cols_,
                      arr_row, arr_col, rtype_, x, y, z);
         n_processed++;

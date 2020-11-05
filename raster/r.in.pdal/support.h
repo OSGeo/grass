@@ -34,9 +34,10 @@
 #define METHOD_VARIANCE    8
 #define METHOD_COEFF_VAR   9
 #define METHOD_MEDIAN     10
-#define METHOD_PERCENTILE 11
-#define METHOD_SKEWNESS   12
-#define METHOD_TRIMMEAN   13
+#define METHOD_MODE       11
+#define METHOD_PERCENTILE 12
+#define METHOD_SKEWNESS   13
+#define METHOD_TRIMMEAN   14
 
 int blank_array(void *, int, int, RASTER_MAP_TYPE, int);
 

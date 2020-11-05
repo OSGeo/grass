@@ -74,7 +74,8 @@ int main(int argc, char *argv[])
     struct BinIndex bin_index_nodes;
     bin_index_nodes.num_nodes = 0;
     bin_index_nodes.max_nodes = 0;
-    bin_index_nodes.nodes = 0;
+    bin_index_nodes.znodes = 0;
+    bin_index_nodes.cntnodes = 0;
 
     struct Cell_head cellhd, loc_wind;
 
@@ -114,7 +115,7 @@ int main(int argc, char *argv[])
     method_opt->required = NO;
     method_opt->description = _("Statistic to use for raster values");
     method_opt->options =
-	"n,min,max,range,sum,mean,stddev,variance,coeff_var,median,percentile,skewness,trimmean";
+	"n,min,max,range,sum,mean,stddev,variance,coeff_var,median,mode,percentile,skewness,trimmean";
     method_opt->answer = const_cast<char*>("mean");
     method_opt->guisection = _("Statistic");
     G_asprintf((char **)&(method_opt->descriptions),
@@ -128,6 +129,7 @@ int main(int argc, char *argv[])
                "variance;%s;"
                "coeff_var;%s;"
                "median;%s;"
+               "mode;%s;"
                "percentile;%s;"
                "skewness;%s;"
                "trimmean;%s",
@@ -141,6 +143,7 @@ int main(int argc, char *argv[])
                _("Variance of point values in cell"),
                _("Coefficient of variance of point values in cell"),
                _("Median value of point values in cell"),
+               _("Mode value of point values in cell"),
                _("pth (nth) percentile of point values in cell"),
                _("Skewness of point values in cell"),
                _("Trimmed mean of point values in cell"));

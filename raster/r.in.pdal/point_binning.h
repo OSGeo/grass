@@ -20,17 +20,25 @@
 /* forward declaration */
 struct Map_info;
 
-struct node
+struct z_node
 {
     int next;
     double z;
+};
+
+struct cnt_node
+{
+    int next;
+    double value;
+    int count;
 };
 
 struct BinIndex
 {
     int num_nodes;
     int max_nodes;
-    struct node *nodes;
+    struct z_node *znodes;
+    struct cnt_node *cntnodes;
 };
 
 struct PointBinning
@@ -42,7 +50,8 @@ struct PointBinning
     int bin_max;
     int bin_sum;
     int bin_sumsq;
-    int bin_index;
+    int bin_z_index;
+    int bin_cnt_index;
     int bin_coordinates;
 
     void *n_array;
@@ -70,9 +79,14 @@ void point_binning_allocate(struct PointBinning *point_binning, int rows,
 void point_binning_free(struct PointBinning *point_binning,
                         struct BinIndex *bin_index_nodes);
 
-int update_bin_index(struct BinIndex *bin_index, void *index_array,
+int update_bin_z_index(struct BinIndex *bin_index, void *index_array,
                      int cols, int row, int col,
                      double value);
+
+int update_bin_cnt_index(struct BinIndex *bin_index, void *index_array,
+                     int cols, int row, int col,
+                     double value);
+
 void write_variance(void *raster_row, void *n_array, void *sum_array,
                     void *sumsq_array, int row, int cols,
                     RASTER_MAP_TYPE rtype, int method);
