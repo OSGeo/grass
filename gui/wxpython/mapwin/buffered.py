@@ -869,7 +869,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         updTime = time.time()
         self.lastUpdateMapReq = updTime
 
-        if self.updDelay <= 0.0:
+        if self.updDelay < 0.0:
             self._runUpdateMap()
         else:
             self.timerRunId = self.renderTimingThr.GetId()
