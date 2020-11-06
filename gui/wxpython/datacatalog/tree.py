@@ -299,7 +299,7 @@ class DataCatalogTree(TreeView):
         # If demolocation, show the map world layer in the Map Display
         location = gisenv()['LOCATION_NAME']
         mapset = gisenv()['MAPSET']
-        if (location  == "world_latlong_wgs84"
+        if (location == "world_latlong_wgs84"
         and mapset == "PERMANENT"):
             self.DefineDemolocation('country_boundaries', 'vector')
 
@@ -632,7 +632,7 @@ class DataCatalogTree(TreeView):
             grassdbItem, locationItem, mapsetItem = self.GetCurrentDbLocationMapsetNode()
             if mapsetItem:
                 layerItem = self._model.SearchNodes(
-                    parent = mapsetItem,
+                    parent=mapsetItem,
                     name=layer_name,
                     type=type)
                 print(mapsetItem.data["name"])
