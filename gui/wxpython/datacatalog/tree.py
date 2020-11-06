@@ -297,18 +297,11 @@ class DataCatalogTree(TreeView):
         self.ReloadTreeItems()
 
         # If demolocation, show the map world layer in the Map Display
-        if (self.current_location_node.data['name'] == "world_latlong_wgs84"
-        and self.current_mapset_node.data['name'] == "PERMANENT"):
-            layerItem = self._model.SearchNodes(
-            parent = self.current_mapset_node,
-            name="country_boundaries",
-            type='vector')
-            if layerItem:
-                self.selected_layer = []
-                self.selected_mapset = []
-                self.selected_layer.append(layerItem[0])
-                self.selected_mapset.append(self.current_mapset_node)
-                self.DisplayLayer()
+        location = gisenv()['LOCATION_NAME']
+        mapset = gisenv()['MAPSET']
+        if (location  == "world_latlong_wgs84"
+        and mapset == "PERMANENT"):
+            self.DefineDemolocation('country_boundaries', 'vector')
 
         self.beginDrag = Signal('DataCatalogTree.beginDrag')
         self.endDrag = Signal('DataCatalogTree.endDrag')
@@ -630,6 +623,29 @@ class DataCatalogTree(TreeView):
         self.mixed = False
         if len(set(mixed)) > 1:
             self.mixed = True
+
+    def DefineDemolocation(self, layer_name, type):
+        """Set selected items for Demolocation and display world map layer."""
+        if not isinstance(self._giface, StandaloneGrassInterface):
+            self._resetSelectVariables()
+            mixed = []
+            grassdbItem, locationItem, mapsetItem = self.GetCurrentDbLocationMapsetNode()
+            if mapsetItem:
+                layerItem = self._model.SearchNodes(
+                    parent = mapsetItem,
+                    name=layer_name,
+                    type=type)
+                print(mapsetItem.data["name"])
+                print(locationItem.data["name"])
+                print(grassdbItem.data["name"])
+                print(layerItem[0].data["name"])
+                if layerItem:
+                    self.selected_layer.append(layerItem[0])
+                    self.selected_mapset.append(layerItem[0].parent)
+                    self.selected_location.append(layerItem[0].parent.parent)
+                    self.selected_grassdb.append(layerItem[0].parent.parent.parent)
+                    mixed.append('layer')
+                    self.DisplayLayer()
 
     def OnSelChanged(self, event):
         self.selected_layer = None
