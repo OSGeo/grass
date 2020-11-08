@@ -43,9 +43,9 @@ r.resamp.interp input=elev_state_500m output=elev_state_50m method=bilinear
 # create tiles from resulting large 50 m elevation map
 r.tile input=elev_state_50m output=elev_state_50m_tile_ width=1000 height=1000 overlap=0
 # for convenience, dump list of tile names to a file
-g.list type=raster pattern=elev_state_50m_tile_* output=tilelist
+g.list type=raster pattern=elev_state_50m_tile_* output=tilelist.csv
 # build a mosaik as VRT from tile list
-r.buildvrt file=tilelist output=elev_state_50m_vrt
+r.buildvrt file=tilelist.csv output=elev_state_50m_vrt
 </pre></div>
 
 <h2>SEE ALSO</h2>
