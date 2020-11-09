@@ -114,6 +114,19 @@ def get_mapset_owner(mapset_path):
         return None
 
 
+def is_current_mapset_in_demolocation():
+    genv = gisenv()
+    if genv['LOCATION_NAME'] == "world_latlong_wgs84":
+        return True
+    return False
+
+
+def get_demolocation_layer_info():
+    ltype = "vector"
+    lname = "country_boundaries@PERMANENT"
+    return ltype, lname
+
+
 def is_mapset_locked(mapset_path):
     """Check if the mapset is locked"""
     lock_name = ".gislock"

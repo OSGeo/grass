@@ -70,6 +70,7 @@ from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
 from startup.guiutils import switch_mapset_interactively
+from grass.grassdb.checks import is_current_mapset_in_demolocation, get_demolocation_layer_info
 
 
 class GMFrame(wx.Frame):
@@ -262,6 +263,14 @@ class GMFrame(wx.Frame):
         if self.currentPage:
             self.GetMapDisplay().Raise()
         wx.CallAfter(self.Raise)
+
+        # if demolocation, add demo layer to map layer tree
+        if is_current_mapset_in_demolocation():
+            ltype, lname, = get_demolocation_layer_info()
+            self.GetLayerTree().AddLayer(ltype=ltype,
+                                         lname=lname,
+                                         lchecked=True,
+                                         lcmd=['d.vect', 'map=%s' % lname])
 
     def _setTitle(self):
         """Set frame title"""
