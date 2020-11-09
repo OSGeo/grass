@@ -37,10 +37,6 @@ try:
     import wx.lib.agw.flatnotebook as FN
 except ImportError:
     import wx.lib.flatnotebook as FN
-try:
-    import wx.lib.agw.infobar as IB
-except ImportError:
-    import wx.lib.infobar as IB
 
 if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
     sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
@@ -75,58 +71,6 @@ from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
 from startup.guiutils import switch_mapset_interactively
 from grass.grassdb.checks import is_current_mapset_in_demolocation, get_demolocation_layer_info
-
-
-class NotificationManager(IB.InfoBar):
-    """
-    Creates structure for notifications
-    """
-    def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition,
-                 size=wx.DefaultSize, style=0, name='InfoBar'):
-        IB.InfoBar.__init__(self, parent, id=id, pos=pos, size=size,
-                            style=style, name=name)
-
-        self.settings = {'Information InfoBar': {'icon': wx.ICON_INFORMATION,
-                                                 'bgcolor': wx.Colour(255, 248, 220),
-                                                 'frcolor': wx.Colour(10, 10, 10)},
-                         'Warning InfoBar': {'icon': wx.ICON_WARNING,
-                                             'bgcolor': wx.Colour(205, 92, 92),
-                                             'frcolor': wx.Colour(255, 255, 255)},
-                         'Question InfoBar': {'icon': wx.ICON_QUESTION,
-                                             'bgcolor': wx.Colour(224, 255, 255),
-                                             'frcolor': wx.Colour(10, 10, 10)},
-                         'Error InfoBar': {'icon': wx.ICON_ERROR,
-                                             'bgcolor': wx.Colour(wx.RED),
-                                             'frcolor': wx.Colour(255, 255, 255)}
-                         }
-
-    def displayNewLocationSuggestion(self):
-        text =_("Hello GRASS GIS user, you are now in demolocation.\n\n"
-               "To import your own data, first, define its coordinate \n\n"
-               "system through creating a newlocation. Then you can create \n\n"
-               "your mapset, switch to it (make it current) and import data. \n\n"
-               "If you are still confused about GRASS GIS data hiearchy, \n\n"
-               "please watch the following video..."
-            )
-        self.SetBackgroundColour(self.settings['Information InfoBar']['bgcolor'])
-        self.SetOwnForegroundColour(self.settings['Information InfoBar']['frcolor'])
-        self.AddButton(wx.NewId(), 'Look at video')
-        self.AddButton(wx.NewId(), 'Check documentation')
-        self.ShowMessage(text, self.settings['Information InfoBar']['icon'])
-
-    def displayLastMapsetInUseWarning(self):
-        text =_("Last used mapset is used by another process. GRASS GIS started in Demolocation."
-            )
-        self.SetBackgroundColour(self.settings['Warning InfoBar']['bgcolor'])
-        self.SetOwnForegroundColour(self.settings['Warning InfoBar']['frcolor'])
-        self.ShowMessage(text, self.settings['Warning InfoBar']['icon'])
-
-    def displayLastMapsetNotFoundWarning(self):
-        text =_("Last used mapset was not found. GRASS GIS started in Demolocation."
-            )
-        self.SetBackgroundColour(self.settings['Warning InfoBar']['bgcolor'])
-        self.SetOwnForegroundColour(self.settings['Warning InfoBar']['frcolor'])
-        self.ShowMessage(text, self.settings['Warning InfoBar']['icon'])
 
 
 class GMFrame(wx.Frame):
@@ -327,8 +271,6 @@ class GMFrame(wx.Frame):
                                          lname=lname,
                                          lchecked=True,
                                          lcmd=['d.vect', 'map=%s' % lname])
-            NotificationManager(IB.InfoBar)
-            NotificationManager.displayNewLocationSuggestion()
 
     def _setTitle(self):
         """Set frame title"""
