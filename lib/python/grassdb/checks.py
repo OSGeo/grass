@@ -115,16 +115,11 @@ def get_mapset_owner(mapset_path):
 
 
 def is_current_mapset_in_demolocation():
-    genv = gisenv()
-    if genv['LOCATION_NAME'] == "world_latlong_wgs84":
-        return True
-    return False
+    return gisenv()['LOCATION_NAME'] == "world_latlong_wgs84"
 
 
 def get_demolocation_layer_info():
-    ltype = "vector"
-    lname = "country_boundaries@PERMANENT"
-    return ltype, lname
+    return "vector", "country_boundaries@PERMANENT"
 
 
 def is_mapset_locked(mapset_path):
