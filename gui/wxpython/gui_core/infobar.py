@@ -18,7 +18,9 @@ class NotificationManager(IB.InfoBar):
 
         self.displayInfoBar = Signal('NotificationManager.displayInfoBar')
         self.displayInfoBar.connect(
-                lambda text, flag, button_dict: self.SetNotification(text, flag, button_dict))
+            lambda text, flag, button_dict: self.SetNotification(text,
+                                                                 flag,
+                                                                 button_dict))
 
         self.SetBackgroundColour(wx.Colour(255, 248, 220))
         self.SetOwnForegroundColour(wx.Colour(10, 10, 10))
@@ -44,9 +46,3 @@ class NotificationManager(IB.InfoBar):
         if self.buttons_ids:
             for i in self.buttons_ids:
                 self.RemoveButton(i)
-
-
-
-
-
-
