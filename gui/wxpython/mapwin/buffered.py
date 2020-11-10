@@ -290,7 +290,7 @@ class BufferedMapWindow(MapWindowBase, Window):
                 self.Bind(wx.EVT_MENU,
                           lambda evt: self.overlays[idlist[0]].StartResizing(),
                           id=resizeLegendId)
-                menu.Append(resizeLegendId, _("Resize and reposition legend"))
+                menu.Append(resizeLegendId, _("Resize and move legend"))
 
             activateId = NewId()
             self.Bind(wx.EVT_MENU,
