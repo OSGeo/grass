@@ -64,7 +64,8 @@ class GPrompt(object):
         self.cmdDesc = None
 
         self._loadHistory()
-        giface.currentMapsetChanged.connect(self._loadHistory)
+        if giface:
+            giface.currentMapsetChanged.connect(self._loadHistory)
 
         # list of traced commands
         self.commands = list()
