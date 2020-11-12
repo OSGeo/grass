@@ -25,8 +25,7 @@ class TestTRast3dAlgebra(TestCase):
         os.putenv("GRASS_OVERWRITE",  "1")
         tgis.init(True) # Raise on error instead of exit(1)
         cls.use_temp_region()
-        ret = grass.script.run_command("g.region", n=80.0, s=0.0, e=120.0,
-                                       w=0.0, t=100.0, b=0.0, res=10.0)
+
 
         cls.runModule("r3.mapcalc", overwrite=True, quiet=True, expression="a1 = 1")
         cls.runModule("r3.mapcalc", overwrite=True, quiet=True, expression="a2 = 2")

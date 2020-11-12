@@ -392,7 +392,6 @@ class TestTRastAlgebra(TestCase):
 
         D = tgis.open_old_stds("R", type="strds")
         
-        maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 1)
         self.assertEqual(D.metadata.get_min_min(), 99) 
         self.assertEqual(D.metadata.get_max_max(), 99) 
@@ -409,7 +408,6 @@ class TestTRastAlgebra(TestCase):
 
         D = tgis.open_old_stds("R", type="strds")
         
-        maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 1)
         self.assertEqual(D.metadata.get_min_min(), 100) 
         self.assertEqual(D.metadata.get_max_max(), 100) 
@@ -426,7 +424,6 @@ class TestTRastAlgebra(TestCase):
 
         D = tgis.open_old_stds("R", type="strds")
         
-        maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 101) 
         self.assertEqual(D.metadata.get_max_max(), 104) 
@@ -443,7 +440,6 @@ class TestTRastAlgebra(TestCase):
 
         D = tgis.open_old_stds("R", type="strds")
         
-        maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 100) 
         self.assertEqual(D.metadata.get_max_max(), 400) 
