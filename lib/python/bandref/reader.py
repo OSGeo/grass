@@ -7,6 +7,12 @@ from collections import OrderedDict
 
 import grass.script as gs
 
+# band reference should be required to have the format
+# <shortcut>_<band>
+# instead, the sensor name should be stored somewhere else,
+# and band names should be STAC common names
+# custom names must be possible
+
 class BandReferenceReaderError(Exception):
     pass
 
@@ -165,9 +171,11 @@ class BandReferenceReader:
         try:
             shortcut, band = band_reference.split('_')
         except ValueError:
-            raise BandReferenceReaderError("Invalid band identifier <{}>".format(
-                band_reference
-            ))
+            # raise BandReferenceReaderError("Invalid band identifier <{}>".format(
+            #    band_reference
+            # ))
+            shortcut = "unknown"
+            band = band_reference
 
         for filename, config in self.config.items():
             for root in config.keys():
