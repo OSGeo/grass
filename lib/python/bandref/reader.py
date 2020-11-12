@@ -10,7 +10,7 @@ import grass.script as gs
 # band reference should be required to have the format
 # <shortcut>_<band>
 # instead, the sensor name should be stored somewhere else,
-# and band names should be STAC common names
+# and band names should be STAC common names (https://stacspec.org/)
 # custom names must be possible
 
 class BandReferenceReaderError(Exception):
