@@ -106,6 +106,6 @@ float range(float *elevation);
 float variance(float *elevation, int n);
 int shape(PATTERN * pattern, int pattern_size, float *azimuth,
 	  float *elongation, float *width);
-float extends(PATTERN * pattern, int pattern_size);
+float extends(PATTERN * pattern);
 int radial2cartesian(PATTERN *);
 #endif

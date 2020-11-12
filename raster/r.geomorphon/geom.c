@@ -201,7 +201,7 @@ int radial2cartesian(PATTERN * pattern)
     return 0;
 }
 
-float extends(PATTERN * pattern, int pattern_size)
+float extends(PATTERN * pattern)
 {
     int i, j;
     float area = 0;

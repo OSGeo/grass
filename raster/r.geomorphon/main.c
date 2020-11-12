@@ -456,7 +456,7 @@ int main(int argc, char **argv)
 		}
 		if (opt_output[o_extend]->answer)
 		    ((FCELL *) rasters[o_extend].buffer)[col] =
-			extends(pattern, pattern_size) / area_of_octagon;
+			extends(pattern) / area_of_octagon;
 
 	    }			/* end for col */
 
