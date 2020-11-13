@@ -79,6 +79,11 @@ import math
 import atexit
 import grass.script as grass
 
+from grass.script.setup import set_gui_path
+set_gui_path()
+
+from gui_core.wrap import ClientDC, Menu, Panel
+
 try:
     import wx
 except ImportError:
@@ -103,7 +108,7 @@ wind_keys = {
     'cols': ('cols', int),
 }
 
-gray12_bits = '\x00\x00\x22\x22\x00\x00\x88\x88\x00\x00\x22\x22\x00\x00\x88\x88\x00\x00\x22\x22\x00\x00\x88\x88\x00\x00\x22\x22\x00\x00\x88\x88'
+gray12_bits = b'\x00\x00\x22\x22\x00\x00\x88\x88\x00\x00\x22\x22\x00\x00\x88\x88\x00\x00\x22\x22\x00\x00\x88\x88\x00\x00\x22\x22\x00\x00\x88\x88'
 
 
 def run(cmd, **kwargs):
@@ -129,7 +134,7 @@ class OverviewCanvas(wx.ScrolledWindow):
 
         run('r.out.ppm', input=app.inmap, output=app.tempfile)
 
-        self.image = wx.BitmapFromImage(wx.Image(app.tempfile))
+        self.image = wx.Bitmap(wx.Image(app.tempfile))
         grass.try_remove(app.tempfile)
 
         app.force_window()
@@ -201,7 +206,6 @@ class Canvas(wx.ScrolledWindow):
         h = app.rows * self.size
 
         self.SetVirtualSize((w, h))
-        self.SetVirtualSizeHints(50, 50)
         self.SetScrollRate(1, 1)
 
         self.Bind(wx.EVT_LEFT_DOWN, self.OnMouse)
@@ -212,7 +216,7 @@ class Canvas(wx.ScrolledWindow):
         self.row = 0
         self.col = 0
 
-        self.gray12 = wx.BitmapFromBits(gray12_bits, 16, 16)
+        self.gray12 = wx.Bitmap(bits=gray12_bits, width=16, height=16)
 
     def OnMouse(self, ev):
         oldrow = self.row
@@ -225,8 +229,8 @@ class Canvas(wx.ScrolledWindow):
         col = x / self.size
         row = y / self.size
 
-        self.row = row
-        self.col = col
+        self.row = int(row)
+        self.col = int(col)
 
         if ev.Moving():
             self.refresh_cell(oldrow, oldcol)
@@ -294,7 +298,7 @@ class Canvas(wx.ScrolledWindow):
         dx, dy = x1 - x0, y1 - y0
         px, py = -dy, dx
 
-        r, g, b = wx.NamedColor(fill)
+        r, g, b, a = wx.Colour(fill).Get()
         if r + g + b > 384:
             line = 'black'
         else:
@@ -307,10 +311,11 @@ class Canvas(wx.ScrolledWindow):
         dc.SetPen(wx.NullPen)
 
     def paint_rect(self, dc, x, y, w, h):
-        c0 = (x + 0) / self.size
-        c1 = (x + w + 1) / self.size
-        r0 = (y + 0) / self.size
-        r1 = (y + h + 1) / self.size
+        c0 = int((x + 0) / self.size)
+        c1 = int((x + w + 1) / self.size)
+        r0 = int((y + 0) / self.size)
+        r1 = int((y + h + 1) / self.size)
+
         for r in range(r0, r1 + 1):
             for c in range(c0, c1 + 1):
                 self.paint_cell(dc, r, c)
@@ -359,12 +364,11 @@ class Canvas(wx.ScrolledWindow):
         self.RefreshRect((x, y, self.size, self.size))
 
 
-class ColorPanel(wx.Panel):
+class ColorPanel(Panel):
 
     def __init__(self, **kwargs):
-        wx.Panel.__init__(self, **kwargs)
-        self.SetBackgroundStyle(wx.BG_STYLE_COLOUR)
-        self.stipple = wx.BitmapFromBits(gray12_bits, 16, 16)
+        Panel.__init__(self, **kwargs)
+        self.stipple = wx.Bitmap(bits=gray12_bits, width=16, height=16)
         self.null_bg = True
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnErase)
 
@@ -376,7 +380,7 @@ class ColorPanel(wx.Panel):
 
         dc = ev.GetDC()
         if not dc:
-            dc = wx.ClientDC(self)
+            dc = ClientDC(self)
 
         brush = wx.Brush('black', style=wx.STIPPLE)
         brush.SetStipple(self.stipple)
@@ -385,11 +389,11 @@ class ColorPanel(wx.Panel):
         dc.SetBackground(wx.NullBrush)
 
     def SetNullBackgroundColour(self):
-        wx.Panel.SetBackgroundColour(self, 'gray')
+        Panel.SetBackgroundColour(self, 'gray')
         self.null_bg = True
 
     def SetBackgroundColour(self, color):
-        wx.Panel.SetBackgroundColour(self, color)
+        Panel.SetBackgroundColour(self, color)
         self.null_bg = False
 
 
@@ -401,15 +405,15 @@ class MainWindow(wx.Frame):
 
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
-        filemenu = wx.Menu()
+        filemenu = Menu()
         filemenu.Append(wx.ID_SAVE, "&Save", "Save changes")
         filemenu.Append(wx.ID_EXIT, "E&xit", "Terminate the program")
         menubar = wx.MenuBar()
         menubar.Append(filemenu, "&File")
         self.SetMenuBar(menubar)
 
-        wx.EVT_MENU(self, wx.ID_SAVE, self.OnSave)
-        wx.EVT_MENU(self, wx.ID_EXIT, self.OnExit)
+        self.Bind(wx.EVT_MENU, self.OnSave)
+        self.Bind(wx.EVT_MENU, self.OnExit)
 
         sizer = wx.BoxSizer(orient=wx.VERTICAL)
 
@@ -434,7 +438,7 @@ class MainWindow(wx.Frame):
 
         self.Bind(wx.EVT_TEXT_ENTER, self.OnReturn, source=self.newval)
 
-        sizer.AddSizer(tools, proportion=0, flag=wx.EXPAND)
+        sizer.Add(tools, proportion=0, flag=wx.EXPAND)
 
         self.SetSizerAndFit(sizer)
         self.SetSize((app.width, app.height))
@@ -523,24 +527,24 @@ class Application(wx.App):
             quiet=True,
             overwrite=True)
         outf = p.stdin
-        outf.write("north: %f\n" % self.wind['n'])
-        outf.write("south: %f\n" % self.wind['s'])
-        outf.write("east: %f\n" % self.wind['e'])
-        outf.write("west: %f\n" % self.wind['w'])
-        outf.write("rows: %d\n" % self.wind['rows'])
-        outf.write("cols: %d\n" % self.wind['cols'])
-        outf.write("null: *\n")
+        outf.write(grass.encode("north: %f\n" % self.wind['n']))
+        outf.write(grass.encode("south: %f\n" % self.wind['s']))
+        outf.write(grass.encode("east: %f\n" % self.wind['e']))
+        outf.write(grass.encode("west: %f\n" % self.wind['w']))
+        outf.write(grass.encode("rows: %d\n" % self.wind['rows']))
+        outf.write(grass.encode("cols: %d\n" % self.wind['cols']))
+        outf.write(grass.encode("null: *\n"))
 
         for row in range(self.wind['rows']):
             for col in range(self.wind['cols']):
                 if col > 0:
-                    outf.write(" ")
+                    outf.write(grass.encode(" "))
                 val = self.values[row][col]
                 if val and self.changed[row][col]:
-                    outf.write("%s" % val)
+                    outf.write(grass.encode("%s" % val))
                 else:
-                    outf.write('*')
-            outf.write("\n")
+                    outf.write(grass.encode('*'))
+            outf.write(grass.encode("\n"))
 
         outf.close()
         p.wait()
@@ -557,7 +561,7 @@ class Application(wx.App):
     def read_header(self, infile):
         wind = {}
         for i in range(6):
-            line = infile.readline().rstrip('\r\n')
+            line = grass.decode(infile.readline()).rstrip('\r\n')
             f = line.split(':')
             key = f[0]
             val = f[1].strip()
@@ -568,7 +572,7 @@ class Application(wx.App):
     def read_data(self, infile):
         values = []
         for row in range(self.wind['rows']):
-            line = infile.readline().rstrip('\r\n')
+            line = grass.decode(infile.readline()).rstrip('\r\n')
             values.append(line.split())
         return values
 
@@ -628,11 +632,13 @@ class Application(wx.App):
         self.wind['cols'] = self.cols
 
     def change_window(self):
+        wait = wx.BusyCursor()
         self.save_map()
         self.update_window()
         self.load_map()
         self.load_aspect()
         self.refresh_canvas()
+        del wait
 
     def force_window(self):
         if self.origin_x < 0:
