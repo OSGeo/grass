@@ -1822,10 +1822,18 @@ def csh_startup(location, grass_env_file):
 def sh_like_startup(location, location_name, grass_env_file, sh):
     """Start Bash or Z shell (but not sh (Bourne Shell))"""
     if sh == 'bash':
+        # set bash history to record an unlimited command history
+        sh_history_limit = "-1" # unlimited
+        os.environ['HISTSIZE'] = sh_history_limit
+        os.environ['HISTFILESIZE'] = sh_history_limit
         sh_history = ".bash_history"
         shrc = ".bashrc"
         grass_shrc = ".grass.bashrc"
     elif sh == 'zsh':
+        # zsh does not have an unlimited history setting, so 1e8 is set as a proxy
+        sh_history_limit = "100000000" # proxy for unlimited
+        os.environ['SAVEHIST'] = sh_history_limit
+        os.environ['HISTSIZE'] = sh_history_limit
         sh_history = ".zsh_history"
         shrc = ".zshrc"
         grass_shrc = ".grass.zshrc"
@@ -1837,11 +1845,6 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     # bash histroy file handled in specific_addition
     if not sh == "bash":
         os.environ['HISTFILE'] = os.path.join(location, sh_history)
-
-    if sh == "bash":
-        # set bash history to record an unlimited command history
-        os.environ['HISTSIZE'] = "-1"
-        os.environ['HISTFILESIZE'] = os.getenv('HISTSIZE')
 
     # instead of changing $HOME, start bash with:
     #   --rcfile "$LOCATION/.bashrc" ?
@@ -1857,10 +1860,6 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     f = open(shell_rc_file, 'w')
 
     if sh == 'zsh':
-        # zsh does not have an unlimited history setting, so 1e8 is set as a proxy
-        os.environ['SAVEHIST'] = "100000000"
-        os.environ['HISTSIZE'] = os.getenv('SAVEHIST')
-
         f.write('test -r {home}/.alias && source {home}/.alias\n'.format(
             home=userhome))
     else:
