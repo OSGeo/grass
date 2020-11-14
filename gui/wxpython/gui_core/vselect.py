@@ -274,9 +274,7 @@ class VectorSelectBase():
                 self.UnregisterMapEvtHandler()
                 GError(
                     _(
-                        "Selected raster map layer <{}> "
-                        "isn't supported. Please select vector map layer. "
-                        "Operation canceled.".format(layerSelected),
+                        "No vector map layer selected. Operation canceled."
                     ),
                 )
             else:
