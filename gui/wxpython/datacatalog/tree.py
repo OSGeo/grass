@@ -21,7 +21,6 @@ for details.
 import os
 import re
 import copy
-import webbrowser
 from multiprocessing import Process, Queue, cpu_count
 
 import wx
@@ -31,7 +30,6 @@ from core.utils import GetListOfLocations
 from core.debug import Debug
 from core.gthread import gThread
 from gui_core.dialogs import TextEntryDialog
-from gui_core.infobar import NotificationManager
 from core.giface import StandaloneGrassInterface
 from core.treemodel import TreeModel, DictNode
 from gui_core.treeview import TreeView
@@ -66,9 +64,7 @@ import grass.script as gscript
 from grass.script import gisenv
 from grass.grassdb.data import map_exists
 from grass.grassdb.checks import (get_mapset_owner, is_mapset_locked,
-                                  is_different_mapset_owner,
-                                  is_current_mapset_in_demolocation,
-                                  get_datacatalog_notification_items)
+                                  is_different_mapset_owner)
 from grass.exceptions import CalledModuleError
 
 
@@ -299,17 +295,6 @@ class DataCatalogTree(TreeView):
         if currentDB not in self.grassdatabases:
             self.grassdatabases.append(currentDB)
             self._saveGrassDBs()
-
-        # Create infobar instance
-        self._infoBar = NotificationManager(self)
-
-        # Display first-time user info bar if Demolocation
-        if is_current_mapset_in_demolocation:
-            def OnLearnMore():
-                return webbrowser.open("https://grass.osgeo.org/grass79/manuals/grass_database.html")
-            button_dict = {"Learn More": OnLearnMore}
-            text, flag = get_datacatalog_notification_items("LocationSuggestionForNewUser")
-            self._infoBar.displayInfoBar.emit(text=text, flag=wx.ICON_INFORMATION, button_dict=button_dict)
 
         self.beginDrag = Signal('DataCatalogTree.beginDrag')
         self.endDrag = Signal('DataCatalogTree.endDrag')

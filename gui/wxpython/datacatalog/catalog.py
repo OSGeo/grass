@@ -17,12 +17,16 @@ for details.
 
 import wx
 import os
+import webbrowser
 
 from core.debug import Debug
 from datacatalog.tree import DataCatalogTree
 from datacatalog.toolbars import DataCatalogToolbar
+from gui_core.infobar import InfoManager
 
 from grass.pydispatch.signal import Signal
+
+from grass.grassdb.checks import is_current_mapset_in_demolocation
 
 
 class DataCatalog(wx.Panel):
@@ -52,17 +56,28 @@ class DataCatalog(wx.Panel):
     def _layout(self):
         """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
-
         sizer.Add(self.toolbar, proportion=0,
                   flag=wx.EXPAND)
-
         sizer.Add(self.tree.GetControl(), proportion=1,
                   flag=wx.EXPAND)
+
+        # infobar instance
+        self.infoManager = InfoManager(guiparent=self, sizer=sizer)
+
+        # Show infobar for first-time user
+        if is_current_mapset_in_demolocation:
+            button_dict = {"Learn More": self._onLearnMore}
+            self.infoManager.ShowInfoBar1(button_dict)
+            self.infoManager.ShowInfoBar2()
+            sizer = self.infoManager.sizer
 
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
 
         self.Layout()
+
+    def _onLearnMore(self):
+        webbrowser.open("https://grass.osgeo.org/grass79/manuals/grass_database.html")
 
     def LoadItems(self):
         self.tree.ReloadTreeItems()

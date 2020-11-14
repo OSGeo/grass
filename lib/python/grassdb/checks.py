@@ -139,46 +139,6 @@ def get_lockfile_if_present(database, location, mapset):
     return None
 
 
-def get_datacatalog_notification_items(title):
-    """
-    Return text and flag for Info Bar according to notification title.
-    """
-    if title == "LocationSuggestionForNewUser":
-        text = _(
-            "GRASS GIS has opened in a world wide, latitude-longitude system in degrees.\n\n"
-            "To import your own data, first, define its coordinate \n\n"
-            "system through creating a new location. Then you can create \n\n"
-            "a mapset, switch to it (make it current) and import data. \n\n"
-            "To learm more about GRASS GIS data hierarchy, \n\n"
-            "please refer to the documentation."
-        )
-        flag = wx.ICON_INFORMATION
-
-    elif title == "LastMapsetInUse":
-        text = _(
-            "GRASS GIS has started in default world wide location \n\n"
-            "because the last used mapset is used by another process."
-        )
-        flag = wx.ICON_WARNING
-
-    elif title == "LastMapsetNotFound":
-        text = _(
-            "GRASS GIS has started in default world wide location \n\n"
-            "because the last used mapset was not found."
-        )
-        flag = wx.ICON_WARNING
-
-    elif title == "NewMapsetSuggestion":
-        text = _(
-            "You have created new location. Would you like to create \n\n"
-            "a new mapset within this location?"
-        )
-        flag = wx.ICON_QUESTION
-    else:
-        return None, None
-    return text, flag
-
-
 def get_mapset_lock_info(mapset_path):
     """Get information about .gislock file.
     Assumes lock file exists, use is_mapset_locked to find out.
