@@ -433,7 +433,9 @@ class PsMapFrame(wx.Frame):
             try:
                 im = PILImage.open(event.userData['filename'])
                 if self.instruction[self.pageId]['Orientation'] == 'Landscape':
-                    im = im.rotate(270)
+                    import numpy as np
+                    im_array = np.array(im)
+                    im = PILImage.fromarray(np.rot90(im_array, 3))
 
                 # hack for Windows, change method for loading EPS
                 if sys.platform == 'win32':
