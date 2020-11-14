@@ -25,15 +25,14 @@ class InfoBar(IB.InfoBar):
         # icon, text, close button
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.buttonBoxSizer = wx.BoxSizer(wx.VERTICAL)
-        self.buttonBoxSizer.Add(self._button, wx.SizerFlags().Top().Border(wx.ALL,5))
+        self.buttonBoxSizer.Add(self._button, wx.SizerFlags().Top().Border(wx.ALL, 5))
 
-        sizer.Add(self._icon, wx.SizerFlags().Top().Border(wx.ALL,5))
+        sizer.Add(self._icon, wx.SizerFlags().Top().Border(wx.ALL, 5))
         sizer.Add(self._text, proportion=1,
-                      flag=wx.EXPAND | wx.ALL, border=5)
-        sizer.Add(self.buttonBoxSizer, wx.SizerFlags().Top().Border(wx.ALL,5))
+                  flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(self.buttonBoxSizer, wx.SizerFlags().Top().Border(wx.ALL, 5))
 
         self.SetSizer(sizer)
-
 
     def AddButton(self, btnid, label, bitmap=wx.NullBitmap):
         """
@@ -48,8 +47,7 @@ class InfoBar(IB.InfoBar):
         button = wx.Button(self, btnid, label)
 
         # Add another button under close button
-        self.buttonBoxSizer.Add(button, wx.SizerFlags().Top().Border(wx.ALL,5))
-
+        self.buttonBoxSizer.Add(button, wx.SizerFlags().Top().Border(wx.ALL, 5))
 
         if self.IsShown():
             self.UpdateParent()
@@ -136,8 +134,9 @@ class InfoManager:
         infoBar = InfoBar(self.guiparent)
         self.sizer.Add(infoBar, wx.SizerFlags().Expand())
         self._fitLayout()
-        infoBar.ShowMessage(_("You have created new location. Would you like to create"
-            "a new mapset within this location?"
+        infoBar.ShowMessage(_(
+            "You have created new location. Would you like"
+            "to create a new mapset within this location?"
         ), wx.ICON_INFORMATION)
 
     def _fitLayout(self):

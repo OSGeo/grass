@@ -13,7 +13,6 @@ for details.
 import os
 import sys
 import datetime
-import wx
 from pathlib import Path
 from grass.script import gisenv
 import grass.script as gs
