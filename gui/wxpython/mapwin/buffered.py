@@ -296,7 +296,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             self.Bind(wx.EVT_MENU,
                       lambda evt: self.overlayActivated.emit(overlayId=idlist[0]),
                       id=activateId)
-            menu.Append(removeId, self.overlays[idlist[0]].activateLabel)
+            menu.Append(activateId, self.overlays[idlist[0]].activateLabel)
         self.PopupMenu(menu)
         menu.Destroy()
 
