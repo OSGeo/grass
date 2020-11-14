@@ -269,10 +269,15 @@ class VectorSelectBase():
             return None
 
         if layerSelected:
-            mapName = str(layerSelected)
-            if self.mapName is not None:
-                if self.mapName != mapName:
-                    self.Reset()
+            if layerSelected.type != 'vector':
+                mapName = None
+                self.UnregisterMapEvtHandler()
+                GError(_("No vector map layer selected. Operation canceled."))
+            else:
+                mapName = str(layerSelected)
+                if self.mapName is not None:
+                    if self.mapName != mapName:
+                        self.Reset()
         else:
             mapName = None
             self.UnregisterMapEvtHandler()
