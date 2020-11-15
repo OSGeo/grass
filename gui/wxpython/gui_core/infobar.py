@@ -71,12 +71,10 @@ class InfoBar(IB.InfoBar):
 
     def OnButton(self, event):
         """
-        Hides infobar and removes buttons.
+        Hides and deletes infobar.
         """
         self.DoHide()
-        if self.buttons_ids:
-            for i in self.buttons_ids:
-                self.RemoveButton(i)
+        self.Destroy()
 
 
 class InfoManager:
