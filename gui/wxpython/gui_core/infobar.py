@@ -52,19 +52,21 @@ class InfoBar(IB.InfoBar):
         if self.IsShown():
             self.UpdateParent()
 
+        return button
+
     def CreateButton(self, button_dict):
         """
         Sets buttons for notification.
         Parameter *button_dict* is dictionary or button names and their events:
-        {button_name, event}
+        {button_name, evt}
         """
         if button_dict:
             for button_name in button_dict:
                 button_id = wx.NewId()
-                event = button_dict[button_name]
-                self.AddButton(button_id, button_name)
-                if event:
-                    self.Bind(wx.EVT_BUTTON, event)
+                evt = button_dict[button_name]
+                button = self.AddButton(button_id, button_name)
+                if evt:
+                    self.Bind(wx.EVT_BUTTON, evt, button)
                 self.buttons_ids.append(button_id)
 
     def OnButton(self, event):
@@ -101,10 +103,11 @@ class InfoManager:
             "please look to the documentation."
         ).format(db=gisenv()['GISDBASE']), wx.ICON_INFORMATION)
 
-    def ShowInfoBar2(self):
+    def ShowInfoBar2(self, button_dict):
         infoBar = InfoBar(self.guiparent)
         self.sizer.Add(infoBar, wx.SizerFlags().Expand())
         self._fitLayout()
+        infoBar.CreateButton(button_dict)
         infoBar.ShowMessage(_(
             "GRASS GIS has opened in a world wide, latitude-longitude system in degrees. "
             "To import your own data, first, define its coordinate "

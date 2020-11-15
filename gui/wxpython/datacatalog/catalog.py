@@ -66,9 +66,10 @@ class DataCatalog(wx.Panel):
 
         # Show infobar for first-time user
         if is_current_mapset_in_demolocation:
-            button_dict = {"Learn More": self._onLearnMore}
-            self.infoManager.ShowInfoBar1(button_dict)
-            self.infoManager.ShowInfoBar2()
+            button_dict1 = {"Learn More": self._onLearnMore}
+            button_dict2 = {"Create new Location": self.OnCreateLocation}
+            self.infoManager.ShowInfoBar1(button_dict1)
+            self.infoManager.ShowInfoBar2(button_dict2)
             sizer = self.infoManager.sizer
 
         self.SetAutoLayout(True)
@@ -76,7 +77,7 @@ class DataCatalog(wx.Panel):
 
         self.Layout()
 
-    def _onLearnMore(self):
+    def _onLearnMore(self, event):
         webbrowser.open("https://grass.osgeo.org/grass79/manuals/grass_database.html")
 
     def LoadItems(self):
