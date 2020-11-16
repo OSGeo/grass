@@ -529,6 +529,10 @@ class RenderMapMgr(wx.EvtHandler):
                 # is rendered but its size differes from current env
                 if not layer.forceRender and (size[0] != w or size[1] != h):
                     layer.forceRender = True
+            # Force render cmd (e.g. d.mon start=wx0 && d.rast elevation)
+            # mapfile size is default d.mon size 720 x 480
+            elif not size and layer.IsRendered():
+                layer.forceRender = True
 
     def UpdateRenderEnv(self, env):
         self._render_env.update(env)
