@@ -507,7 +507,7 @@ class MapApp(wx.App):
             toolbars.append('map')
 
         if __name__ == "__main__":
-            self.cmdTimeStamp = os.path.getmtime(monFile['cmd'])
+            self.cmdTimeStamp = 0 # fake initial timestamp
             self.Map = DMonMap(giface=self._giface, cmdfile=monFile['cmd'],
                                mapfile=monFile['map'])
 
