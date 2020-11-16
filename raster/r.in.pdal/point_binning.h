@@ -93,6 +93,9 @@ void write_variance(void *raster_row, void *n_array, void *sum_array,
 void write_median(struct BinIndex *bin_index, void *raster_row,
                   void *index_array, int row, int cols,
                   RASTER_MAP_TYPE rtype);
+void write_mode(struct BinIndex *bin_index, void *raster_row,
+                  void *index_array, int row, int cols,
+                  RASTER_MAP_TYPE rtype);
 void write_percentile(struct BinIndex *bin_index, void *raster_row,
                       void *index_array, int row, int cols,
                       RASTER_MAP_TYPE rtype, int pth);
@@ -102,6 +105,9 @@ void write_skewness(struct BinIndex *bin_index, void *raster_row,
 void write_trimmean(struct BinIndex *bin_index, void *raster_row,
                     void *index_array, int row, int cols,
                     RASTER_MAP_TYPE rtype, double trim);
+void write_sidn(struct BinIndex *bin_index, void *raster_row,
+                  void *index_array, int row, int cols,
+                  RASTER_MAP_TYPE rtype, int min);
 
 /* forward declarations */
 struct Map_info;

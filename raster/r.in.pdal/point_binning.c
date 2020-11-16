@@ -203,6 +203,8 @@ void point_binning_set(struct PointBinning *point_binning, char *method,
        percentile       n               array index to linked list
        skewness         n               array index to linked list
        trimmean         n               array index to linked list
+       sidnmax          n               array index to linked list
+       sidnmin          n               array index to linked list
      */
     point_binning->method = METHOD_NONE;
     point_binning->bin_n = FALSE;
@@ -294,6 +296,14 @@ void point_binning_set(struct PointBinning *point_binning, char *method,
             G_fatal_error(_("Unable to calculate trimmed mean without the trim option specified!"));
         point_binning->method = METHOD_TRIMMEAN;
         point_binning->bin_z_index = TRUE;
+    }
+    if (strcmp(method, "sidnmax") == 0) {
+        point_binning->method = METHOD_SIDNMAX;
+        point_binning->bin_cnt_index = TRUE;
+    }
+    if (strcmp(method, "sidnmin") == 0) {
+        point_binning->method = METHOD_SIDNMIN;
+        point_binning->bin_cnt_index = TRUE;
     }
     if (bin_coordinates) {
         /* x, y */
@@ -767,6 +777,39 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
     }
 }
 
+void write_sidn(struct BinIndex *bin_index, void *raster_row,
+                  void *index_array, int row, int cols, RASTER_MAP_TYPE rtype,
+                  int min)
+{
+    size_t n_offset;
+    int col;
+    int node_id, head_id;
+    void *ptr = raster_row;
+    int count;
+
+    for (col = 0; col < cols; col++) {
+        n_offset = ((size_t) row * cols + col) * Rast_cell_size(CELL_TYPE);
+        if (Rast_is_null_value(index_array + n_offset, CELL_TYPE))      /* no points in cell */
+            Rast_set_c_value(ptr, 0, rtype);
+        else {
+
+            head_id = Rast_get_c_value(index_array + n_offset, CELL_TYPE);
+            node_id = head_id;
+
+            count = bin_index->cntnodes[node_id].count;
+            while (node_id != -1) {
+                if (min && bin_index->cntnodes[node_id].count < count)
+                    count = bin_index->cntnodes[node_id].count;
+                else if (!min && bin_index->cntnodes[node_id].count > count)
+                    count = bin_index->cntnodes[node_id].count;
+                node_id = bin_index->cntnodes[node_id].next;
+            }
+            Rast_set_c_value(ptr, count, rtype);
+        }
+        ptr = G_incr_void_ptr(ptr, Rast_cell_size(rtype));
+    }
+}
+
 void write_values(struct PointBinning *point_binning,
                   struct BinIndex *bin_index_nodes, void *raster_row, int row,
                   int cols, RASTER_MAP_TYPE rtype,
@@ -867,6 +910,14 @@ void write_values(struct PointBinning *point_binning,
         write_trimmean(bin_index_nodes, raster_row,
                        point_binning->index_array, row, cols, rtype,
                        point_binning->trim);
+        break;
+    case METHOD_SIDNMAX:
+        write_sidn(bin_index_nodes, raster_row, point_binning->index_array,
+                     row, cols, rtype, 0);
+        break;
+    case METHOD_SIDNMIN:
+        write_sidn(bin_index_nodes, raster_row, point_binning->index_array,
+                     row, cols, rtype, 1);
         break;
 
     default:

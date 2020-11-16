@@ -142,6 +142,16 @@ computed after discarding values at the low end and at the high end.
 How many values to discard is given by the <b>trim</b> option
 in percent. In statistics the usual percentage of trimmed values ranges
 from 5 to 25 percent.</dd>
+<dt>sidnmax</dt>
+<dd>Maximum number of points in cell per source ID.
+Points are counted for each source separately and largest count
+is used as the final cell value. Corresponds to majority density (<i>Dmax</i>)
+as defined by Smeeckaert et al., 2013.</dd>
+<dt>sidnmin</dt>
+<dd>Minimum number of points in cell per source ID.
+Points are counted for each source separately and smallest count
+is used as the final cell value. Corresponds to minority density (<i>Dmin</i>)
+as defined by Smeeckaert et al., 2013.</dd>
 </dl>
 
 Note that different statistics have different memory requirements

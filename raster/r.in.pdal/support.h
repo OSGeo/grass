@@ -38,6 +38,8 @@
 #define METHOD_PERCENTILE 12
 #define METHOD_SKEWNESS   13
 #define METHOD_TRIMMEAN   14
+#define METHOD_SIDNMAX    15
+#define METHOD_SIDNMIN    16
 
 int blank_array(void *, int, int, RASTER_MAP_TYPE, int);
 

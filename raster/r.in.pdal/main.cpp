@@ -115,7 +115,8 @@ int main(int argc, char *argv[])
     method_opt->required = NO;
     method_opt->description = _("Statistic to use for raster values");
     method_opt->options =
-	"n,min,max,range,sum,mean,stddev,variance,coeff_var,median,mode,percentile,skewness,trimmean";
+        "n,min,max,range,sum,mean,stddev,variance,coeff_var,median,mode,"
+        "percentile,skewness,trimmean,sidnmax,sidnmin";
     method_opt->answer = const_cast<char*>("mean");
     method_opt->guisection = _("Statistic");
     G_asprintf((char **)&(method_opt->descriptions),
@@ -132,7 +133,9 @@ int main(int argc, char *argv[])
                "mode;%s;"
                "percentile;%s;"
                "skewness;%s;"
-               "trimmean;%s",
+               "trimmean;%s;"
+               "sidnmax;%s;"
+               "sidnmin;%s;",
                _("Number of points in cell"),
                _("Minimum value of point values in cell"),
                _("Maximum value of point values in cell"),
@@ -146,7 +149,9 @@ int main(int argc, char *argv[])
                _("Mode value of point values in cell"),
                _("pth (nth) percentile of point values in cell"),
                _("Skewness of point values in cell"),
-               _("Trimmed mean of point values in cell"));
+               _("Trimmed mean of point values in cell"),
+               _("Maximum number of points in cell per source ID"),
+               _("Minimum number of points in cell per source ID"));
 
     Option *type_opt = G_define_standard_option(G_OPT_R_TYPE);
     type_opt->required = NO;
@@ -423,7 +428,6 @@ int main(int argc, char *argv[])
     G_option_required(input_opt, file_list_opt, NULL);
     G_option_exclusive(input_opt, file_list_opt, NULL);
     // TODO: implement usage of z and i in the level of r.in.lidar
-    // TODO: implement replacement of z and i using PDAL dimensions
     // G_option_exclusive(intens_flag, intens_import_flag, NULL);
     G_option_requires(base_rast_res_flag, base_raster_opt, NULL);
     G_option_exclusive(reproject_flag, over_flag, NULL);
@@ -444,6 +448,14 @@ int main(int argc, char *argv[])
     if (trim_opt->answer != NULL && strcmp(method_opt->answer, "trimmean") != 0) {
         G_fatal_error(_("Trim option can be used only with trimmean method"));
     }
+
+    /* Point density counting does not require any dimension information */
+    if ((strcmp(method_opt->answer, "sidnmax") == 0 ||
+        strcmp(method_opt->answer, "sidnmin") == 0 ||
+        strcmp(method_opt->answer, "n") == 0) &&
+        (user_dimension_opt->answer ||
+        !(strcmp(dimension_opt->answer, "z") == 0)))
+            G_warning(_("Binning methods 'n', 'sidnmax' and 'sidnmin' are ignoring specified dimension"));
 
     struct StringList infiles;
 
@@ -530,8 +542,10 @@ int main(int argc, char *argv[])
     else
         rtype = FCELL_TYPE;
 
-    if (point_binning.method == METHOD_N)
-        rtype = CELL_TYPE;
+    if (point_binning.method == METHOD_N ||
+        point_binning.method == METHOD_SIDNMAX ||
+        point_binning.method == METHOD_SIDNMIN)
+            rtype = CELL_TYPE;
 
     if (!user_dimension_opt->answer && !(strcmp(dimension_opt->answer, "z") == 0)) {
         /* Should we enfocte the CELL type? */
@@ -559,6 +573,10 @@ int main(int argc, char *argv[])
             dim_to_use_as_z = pdal::Dimension::Id::PointSourceId;
         }
     }
+
+    if (point_binning.method == METHOD_SIDNMAX ||
+        point_binning.method == METHOD_SIDNMIN)
+            dim_to_use_as_z = pdal::Dimension::Id::PointSourceId;
 
     if (res_opt->answer) {
         /* align to resolution */
