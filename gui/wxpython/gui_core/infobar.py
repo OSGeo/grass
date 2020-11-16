@@ -54,19 +54,17 @@ class InfoBar(IB.InfoBar):
 
         return button
 
-    def CreateButton(self, button_dict):
+    def CreateButton(self, buttons):
         """
         Sets buttons for notification.
-        Parameter *button_dict* is dictionary or button names and their events:
-        {button_name, evt}
+        Parameter *buttons* is a list of tuples (button_name, event)
         """
-        if button_dict:
-            for button_name in button_dict:
+        if buttons:
+            for button_name, event in buttons:
                 button_id = wx.NewId()
-                evt = button_dict[button_name]
                 button = self.AddButton(button_id, button_name)
-                if evt:
-                    self.Bind(wx.EVT_BUTTON, evt, button)
+                if event:
+                    self.Bind(wx.EVT_BUTTON, event, button)
                 self.buttons_ids.append(button_id)
 
     def OnButton(self, event):
