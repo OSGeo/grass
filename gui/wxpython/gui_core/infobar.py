@@ -54,7 +54,7 @@ class InfoBar(IB.InfoBar):
 
         return button
 
-    def CreateButton(self, buttons):
+    def SetButtons(self, buttons):
         """
         Sets buttons for notification.
         Parameter *buttons* is a list of tuples (button_name, event)
@@ -83,11 +83,11 @@ class InfoManager:
         self.guiparent = guiparent
         self.sizer = sizer
 
-    def ShowInfoBar1(self, button_dict):
+    def ShowInfoBar1(self, buttons):
         infoBar = InfoBar(self.guiparent)
         self.sizer.Add(infoBar, wx.SizerFlags().Expand())
         self._fitLayout()
-        infoBar.CreateButton(button_dict)
+        infoBar.SetButtons(buttons)
         infoBar.ShowMessage(_(
             "GRASS GIS is a geodata analysis system which keeps its own data hierarchy. The database {db} has "
             "the character of a working directory. "
@@ -99,11 +99,11 @@ class InfoManager:
             "please look to the documentation."
         ).format(db=gisenv()['GISDBASE']), wx.ICON_INFORMATION)
 
-    def ShowInfoBar2(self, button_dict):
+    def ShowInfoBar2(self, buttons):
         infoBar = InfoBar(self.guiparent)
         self.sizer.Add(infoBar, wx.SizerFlags().Expand())
         self._fitLayout()
-        infoBar.CreateButton(button_dict)
+        infoBar.SetButtons(buttons)
         infoBar.ShowMessage(_(
             "GRASS GIS has opened in a world wide, latitude-longitude system in degrees. "
             "To import your own data, first, define its coordinate "
