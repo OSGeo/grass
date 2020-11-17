@@ -27,9 +27,9 @@ relevant data element directory(ies) under the user's current mapset.
 <h3>Behavior on error</h3>
 
 Errors typically occur when a map or other element does not exist,
-<b>from</b> and <b>to</b> are the same,  <b>to</b> element
+<b>from</b> and <b>to</b> are the same, <b>to</b> element
 already exists and overwriting (e.g., by <b>--overwrite</b>) is not
-enabled or <b>to</b> element has an illegal name.
+enabled, or the <b>to</b> element has an illegal name.
  
 When only one map or other element is requested to be copied and the copying
 is not possible or fails, an error is reported.
@@ -39,7 +39,7 @@ If multiple maps or other elements are copied in one command,
 <em>g.copy</em> attempts to copy as much as possible
 even when problems occur with one of the elements.
 In that case, copying of the element causing problems is skipped, and
-<em>g.copy</em> proceeds with copying the  remaining elements.
+<em>g.copy</em> proceeds with copying the remaining elements.
 
 If nothing can be copied or an error occurred during one of the copy
 operations, an error message is reported after other possible copy
