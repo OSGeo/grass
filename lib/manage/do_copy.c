@@ -40,7 +40,7 @@ int M_do_copy(int n, const char *old, const char *mapset, const char *new)
 
     G_debug(3, "Copy %s", list[n].alias);
 
-    G_message(_("Copy %s <%s> to current mapset as <%s>"),
+    G_message(_("Copying %s <%s> to current mapset as <%s>"),
 	      list[n].maindesc, G_fully_qualified_name(old, mapset), new);
 
     M__hold_signals(1);
