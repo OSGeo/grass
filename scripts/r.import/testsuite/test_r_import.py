@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -29,7 +31,7 @@ class TestRImportRegion(TestCase):
                           resample='bilinear')
         reference = dict(north=223490, south=223390, east=636820, west=636710,
                          nsres=10, ewres=10, datatype='FCELL')
-        self.assertRasterFitsInfo(raster=self.imported, reference=reference)
+        self.assertRasterFitsInfo(raster=self.imported, reference=reference, precision=1e-6)
 
     def test_import_asc_custom_res(self):
         """Import ASC in different projection, with specified resolution"""

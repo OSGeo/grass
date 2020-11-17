@@ -241,7 +241,7 @@ def main():
     TGTGISRC = os.environ['GISRC']
     SRCGISRC = grass.tempfile()
 
-    TMPLOC = 'temp_import_location_' + str(os.getpid())
+    TMPLOC = grass.append_node_pid("tmp_v_import_location")
 
     f = open(SRCGISRC, 'w')
     f.write('MAPSET: PERMANENT\n')
@@ -289,7 +289,8 @@ def main():
         os.environ['GISRC'] = str(TGTGISRC)
 
         # v.in.region in tgt
-        vreg = 'vreg_' + str(os.getpid())
+        vreg = grass.append_node_pid("tmp_v_import_region")
+
         grass.run_command('v.in.region', output=vreg, quiet=True)
 
         # reproject to src
