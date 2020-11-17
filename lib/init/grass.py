@@ -1782,7 +1782,7 @@ def csh_startup(location, grass_env_file):
 
     f = open(cshrc, 'w')
     f.write("set home = %s\n" % userhome)
-    f.write("set history = 3000 savehist = 3000  noclobber ignoreeof\n")
+    f.write("set history = 10000000 savehist = (10000000 merge) noclobber ignoreeof\n")
     f.write("set histfile = %s\n" % os.path.join(os.getenv('HOME'),
                                                  ".history"))
 
@@ -1822,10 +1822,18 @@ def csh_startup(location, grass_env_file):
 def sh_like_startup(location, location_name, grass_env_file, sh):
     """Start Bash or Z shell (but not sh (Bourne Shell))"""
     if sh == 'bash':
+        # set bash history to record an unlimited command history
+        sh_history_limit = "-1" # unlimited
+        os.environ['HISTSIZE'] = sh_history_limit
+        os.environ['HISTFILESIZE'] = sh_history_limit
         sh_history = ".bash_history"
         shrc = ".bashrc"
         grass_shrc = ".grass.bashrc"
     elif sh == 'zsh':
+        # zsh does not have an unlimited history setting, so 1e8 is set as a proxy
+        sh_history_limit = "100000000" # proxy for unlimited
+        os.environ['SAVEHIST'] = sh_history_limit
+        os.environ['HISTSIZE'] = sh_history_limit
         sh_history = ".zsh_history"
         shrc = ".zshrc"
         grass_shrc = ".grass.zshrc"
@@ -1837,8 +1845,6 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     # bash histroy file handled in specific_addition
     if not sh == "bash":
         os.environ['HISTFILE'] = os.path.join(location, sh_history)
-    if not os.getenv('HISTSIZE') and not os.getenv('HISTFILESIZE'):
-        os.environ['HISTSIZE'] = "3000"
 
     # instead of changing $HOME, start bash with:
     #   --rcfile "$LOCATION/.bashrc" ?
@@ -1854,8 +1860,6 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     f = open(shell_rc_file, 'w')
 
     if sh == 'zsh':
-        if not os.getenv('SAVEHIST'):
-            os.environ['SAVEHIST'] = os.getenv('HISTSIZE')
         f.write('test -r {home}/.alias && source {home}/.alias\n'.format(
             home=userhome))
     else:
