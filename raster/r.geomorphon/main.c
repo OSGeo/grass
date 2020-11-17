@@ -22,24 +22,11 @@
 #define MAIN
 #include "local_proto.h"
 
-#define UNKNOWN -1
-
 typedef enum
-{ i_dem, o_forms, o_ternary, o_positive, o_negative, o_intensity,
+{ o_forms, o_ternary, o_positive, o_negative, o_intensity,
 	o_exposition,
-    o_range, o_variance, o_elongation, o_azimuth, o_extend, o_width, io_size
+    o_range, o_variance, o_elongation, o_azimuth, o_extend, o_width, o_size
 } outputs;
-
-typedef struct
-{				/* struct is used both for interface and output */
-    char *name;
-    int required;
-    char *description;
-    char *gui;
-    RASTER_MAP_TYPE out_data_type;
-    int fd;
-    void *buffer;
-} IO;
 
 typedef struct
 {
@@ -50,41 +37,48 @@ typedef struct
 
 int main(int argc, char **argv)
 {
-    IO rasters[] = {		/* rasters stores output buffers */
-	{"elevation", YES, "Name of input elevation raster map", "input", UNKNOWN, -1, NULL},	/* WARNING: this one map is input */
-	{"forms", NO, "Most common geomorphic forms", "Patterns", CELL_TYPE,
+    struct
+    {				/* struct is used both for interface and output */
+	const char *name;
+	const char *description;
+	const char *gui;
+	RASTER_MAP_TYPE out_data_type;
+	int fd;
+	void *buffer;
+    } rasters[] = {		/* rasters stores output buffers */
+	{"forms", "Most common geomorphic forms", "Patterns", CELL_TYPE,
 	 -1, NULL},
-	{"ternary", NO, "Code of ternary patterns", "Patterns", CELL_TYPE, -1,
+	{"ternary", "Code of ternary patterns", "Patterns", CELL_TYPE, -1,
 	 NULL},
-	{"positive", NO, "Code of binary positive patterns", "Patterns",
+	{"positive", "Code of binary positive patterns", "Patterns",
 	 CELL_TYPE, -1, NULL},
-	{"negative", NO, "Code of binary negative patterns", "Patterns",
+	{"negative", "Code of binary negative patterns", "Patterns",
 	 CELL_TYPE, -1, NULL},
-	{"intensity", NO,
+	{"intensity",
 	 "Rasters containing mean relative elevation of the form", "Geometry",
 	 FCELL_TYPE, -1, NULL},
-	{"exposition", NO,
+	{"exposition",
 	 "Rasters containing maximum difference between extend and central cell",
 	 "Geometry", FCELL_TYPE, -1, NULL},
-	{"range", NO,
+	{"range",
 	 "Rasters containing difference between max and min elevation of the form extend",
 	 "Geometry", FCELL_TYPE, -1, NULL},
-	{"variance", NO, "Rasters containing variance of form boundary",
+	{"variance", "Rasters containing variance of form boundary",
 	 "Geometry", FCELL_TYPE, -1, NULL},
-	{"elongation", NO, "Rasters containing local elongation", "Geometry",
+	{"elongation", "Rasters containing local elongation", "Geometry",
 	 FCELL_TYPE, -1, NULL},
-	{"azimuth", NO, "Rasters containing local azimuth of the elongation",
+	{"azimuth", "Rasters containing local azimuth of the elongation",
 	 "Geometry", FCELL_TYPE, -1, NULL},
-	{"extend", NO, "Rasters containing local extend (area) of the form",
+	{"extend", "Rasters containing local extend (area) of the form",
 	 "Geometry", FCELL_TYPE, -1, NULL},
-	{"width", NO, "Rasters containing local width of the form",
+	{"width", "Rasters containing local width of the form",
 	 "Geometry", FCELL_TYPE, -1, NULL}
-    };				/* adding more maps change IOSIZE macro */
+    };
 
     struct GModule *module;
     struct Option
 	*opt_input,
-	*opt_output[io_size],
+	*opt_output[o_size],
 	*par_search_radius,
 	*par_skip_radius,
 	*par_flat_threshold,
@@ -118,11 +112,8 @@ int main(int argc, char **argv)
 	G_add_keyword(_("machine vision geomorphometry"));
 
 	opt_input = G_define_standard_option(G_OPT_R_ELEV);
-	opt_input->key = rasters[0].name;
-	opt_input->required = rasters[0].required;
-	opt_input->description = _(rasters[0].description);
 
-	for (i = 1; i < io_size; ++i) {	/* WARNING: loop starts from one, zero is for input */
+	for (i = o_forms; i < o_size; ++i) {
 	    opt_output[i] = G_define_standard_option(G_OPT_R_OUTPUT);
 	    opt_output[i]->key = rasters[i].name;
 	    opt_output[i]->required = NO;
@@ -201,7 +192,7 @@ int main(int argc, char **argv)
 	double ns_resolution;
 
 	multires = (par_multi_prefix->answer) ? 1 : 0;
-	for (i = 1; i < io_size; ++i)	/* check for outputs */
+	for (i = o_forms; i < o_size; ++i)	/* check for outputs */
 	    if (opt_output[i]->answer) {
 		if (G_legal_filename(opt_output[i]->answer) < 0)
 		    G_fatal_error(_("<%s> is an illegal file name"),
@@ -330,7 +321,7 @@ int main(int argc, char **argv)
 
 	cell_step = 1;
 	/* prepare outputs */
-	for (i = 1; i < io_size; ++i)
+	for (i = o_forms; i < o_size; ++i)
 	    if (opt_output[i]->answer) {
 		rasters[i].fd =
 		    Rast_open_new(opt_output[i]->answer,
@@ -359,7 +350,7 @@ int main(int argc, char **argv)
 		    col > ncols - (skip_cells + 2) ||
 		    Rast_is_f_null_value(&elevation.elev[cur_row][col])) {
 		    /* set outputs to NULL and do nothing if source value is null   or border */
-		    for (i = 1; i < io_size; ++i)
+		    for (i = o_forms; i < o_size; ++i)
 			if (opt_output[i]->answer) {
 			    pointer_buf = rasters[i].buffer;
 			    switch (rasters[i].out_data_type) {
@@ -472,7 +463,7 @@ int main(int argc, char **argv)
 	    }			/* end for col */
 
 	    /* write existing outputs */
-	    for (i = 1; i < io_size; ++i)
+	    for (i = o_forms; i < o_size; ++i)
 		if (opt_output[i]->answer)
 		    Rast_put_row(rasters[i].fd, rasters[i].buffer,
 				 rasters[i].out_data_type);
@@ -481,7 +472,7 @@ int main(int argc, char **argv)
 
 	/* finish and close */
 	free_map(elevation.elev, row_buffer_size + 1);
-	for (i = 1; i < io_size; ++i)
+	for (i = o_forms; i < o_size; ++i)
 	    if (opt_output[i]->answer) {
 		G_free(rasters[i].buffer);
 		Rast_close(rasters[i].fd);
