@@ -142,7 +142,7 @@ int Vect__read_head(struct Map_info *Map)
 	while (*ptr == ' ')
 	    ptr++;
 
-	if (strncmp(buff, "ORGANIZATION:", sizeof(char) * 12) == 0)
+	if (strncmp(buff, "ORGANIZATION:", sizeof(char) * 13) == 0)
 	    Vect_set_organization(Map, ptr);
 	else if (strncmp(buff, "DIGIT DATE:", sizeof(char) * 11) == 0)
 	    Vect_set_date(Map, ptr);

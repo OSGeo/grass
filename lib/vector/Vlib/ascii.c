@@ -275,7 +275,7 @@ int Vect_read_ascii_head(FILE *dascii, struct Map_info *Map)
 	while (*ptr == ' ')
 	    ptr++;
 
-	if (strncmp(buff, "ORGANIZATION:", 12) == 0)
+	if (strncmp(buff, "ORGANIZATION:", 13) == 0)
 	    Vect_set_organization(Map, ptr);
 	else if (strncmp(buff, "DIGIT DATE:", 11) == 0)
 	    Vect_set_date(Map, ptr);
