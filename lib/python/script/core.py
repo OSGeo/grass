@@ -940,6 +940,8 @@ def tempname(length, lowercase=False):
 
     >>> tempname(12)
     'tmp_MxMa1kAS13s9'
+
+    .. seealso:: functions :func:`append_uuid()`, :func:`append_random()`
     """
 
     chars = string.ascii_lowercase + string.digits
@@ -1760,6 +1762,10 @@ def debug_level(force=False):
             sys.stderr.write(_("WARNING: Ignoring unsupported debug level (must be >=0 and <=5). {0}\n").format(e))
 
     return _debug_level
+
+
+# TODO: Move legal_name() to utils or a new dedicated "name" module.
+# TODO: Remove the pygrass backwards compatibility version of it?
 
 
 def legal_name(s):
