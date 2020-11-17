@@ -82,7 +82,6 @@ GLOBAL double search_distance, flat_distance;
 GLOBAL double flat_threshold, flat_threshold_height;
 GLOBAL struct Cell_head window;
 GLOBAL int cell_step;
-GLOBAL unsigned int global_ternary_codes[6562];
 
 /* memory */
 int open_map(MAPS * rast);
@@ -95,6 +94,7 @@ int write_contrast_colors(char *);
 int calc_pattern(PATTERN * pattern, int row, int cur_row, int col);
 
 /* geom */
+void generate_ternary_codes();
 unsigned int ternary_rotate(unsigned int value);
 FORMS determine_form(int num_plus, int num_minus);
 int determine_binary(int *pattern, int sign);
@@ -106,6 +106,6 @@ float range(float *elevation);
 float variance(float *elevation, int n);
 int shape(PATTERN * pattern, int pattern_size, float *azimuth,
 	  float *elongation, float *width);
-float extends(PATTERN * pattern, int pattern_size);
+float extends(PATTERN * pattern);
 int radial2cartesian(PATTERN *);
 #endif

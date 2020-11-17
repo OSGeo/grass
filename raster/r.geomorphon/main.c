@@ -301,9 +301,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    /* generate global ternary codes */
-    for (i = 0; i < 6561; ++i)
-	global_ternary_codes[i] = ternary_rotate(i);
+    generate_ternary_codes();
 
     /* open DEM */
     strcpy(elevation.elevname, opt_input->answer);
@@ -458,7 +456,7 @@ int main(int argc, char **argv)
 		}
 		if (opt_output[o_extend]->answer)
 		    ((FCELL *) rasters[o_extend].buffer)[col] =
-			extends(pattern, pattern_size) / area_of_octagon;
+			extends(pattern) / area_of_octagon;
 
 	    }			/* end for col */
 
