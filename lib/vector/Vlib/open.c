@@ -1483,7 +1483,7 @@ char *Vect__get_element_path(char *file_path,
     
     Vect__get_path(path, Map);
     if (Map->temporary)
-        G_file_name_tmp(file_path, path, element, Map->mapset);
+        G_file_name_tmp(file_path, path, element, Map->mapset, "vector");
     else
         G_file_name(file_path, path, element, Map->mapset);
 

@@ -37,7 +37,7 @@
 
 #%option G_OPT_M_DIR
 #% key: directory
-#% description: Path to the work directory, default is /tmp
+#% description: Path to the work directory, default is /tmp, respect 'GRASS_RASTER_TMPDIR_MAPSET' shell env var
 #% required: no
 #% answer: /tmp
 #%end
@@ -102,6 +102,8 @@
 #%option G_OPT_T_WHERE
 #%end
 
+import os
+
 import grass.script as grass
 
 
@@ -128,6 +130,33 @@ def main():
             grass.warning(_("Createopt, metaopt and nodata options are not "
                             "working with pack and AAIGrid formats, "
                             "they will be skipped"))
+
+    tmp_dir_env = os.getenv('GRASS_RASTER_TMPDIR_MAPSET')
+    if tmp_dir_env:
+        if os.path.isdir(tmp_dir_env):
+            directory = tmp_dir_env
+            grass.warning(
+                _(
+                    "'GRASS_RASTER_TMPDIR_MAPSET' shell env "
+                    "variable value (directory path) <'{new_tmp_dir}'> "
+                    "exist and will be used.".format(
+                        new_tmp_dir=tmp_dir_env,
+                    ),
+                )
+            )
+        else:
+            grass.warning(
+                _(
+                    "'GRASS_RASTER_TMPDIR_MAPSET' shell env "
+                    "variable value (directory path) <'{new_tmp_dir}'> "
+                    "doesn't exist. The default directory "
+                    "will be used <'{def_tmp_dir}'>.".format(
+                        new_tmp_dir=tmp_dir_env,
+                        def_tmp_dir=directory,
+                    ),
+                )
+            )
+
     # Make sure the temporal database exists
     tgis.init()
     # Export the space time raster dataset

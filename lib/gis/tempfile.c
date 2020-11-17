@@ -85,7 +85,7 @@ char *G_tempfile_pid(int pid)
     do {
 	int uniq = G_counter_next(&unique);
 	sprintf(name, "%d.%d", pid, uniq);
-	G_file_name(path, element, name, G_mapset());
+	G_file_name_tmp(path, element, name, G_mapset(), NULL);
     }
     while (access(path, F_OK) == 0);
 
@@ -101,7 +101,7 @@ char *G_tempfile_pid(int pid)
  */
 void G_temp_element(char *element)
 {
-    G__temp_element(element, FALSE);
+    G__temp_element(element, TRUE);
 }
 
 /*!
@@ -124,7 +124,7 @@ void G__temp_element(char *element, int tmp)
     if (!tmp)
         G_make_mapset_element(element);
     else
-        G_make_mapset_element_tmp(element);
+        G_make_mapset_element_tmp(element, NULL);
     
     G_debug(2, "G__temp_element(): %s (tmp=%d)", element, tmp);
 }

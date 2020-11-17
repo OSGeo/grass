@@ -53,11 +53,11 @@ int G_make_mapset_element(const char *p_element)
    \return 0 no element defined
    \return 1 on success
  */
-int G_make_mapset_element_tmp(const char *p_element)
+int G_make_mapset_element_tmp(const char *p_element, const char *type)
 {
     char path[GPATH_MAX];
     
-    G_file_name_tmp(path, NULL, NULL, G_mapset());
+    G_file_name_tmp(path, NULL, NULL, G_mapset(), type);
     return make_mapset_element(path, p_element);
 }
 

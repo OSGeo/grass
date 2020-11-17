@@ -20,6 +20,7 @@
 static char *file_name(char *, const char *, const char *,
                        const char *, const char *, const char *);
 static void append_char(char*, char);
+char *strsep_(char **, const char *);
 
 /*!
   \brief Builds full path names to GIS data files
@@ -79,16 +80,53 @@ char *G_file_name_misc(char *path,
 */
 char *G_file_name_tmp(char *path,
                       const char *element,
-                      const char *name, const char *mapset)
+                      const char *name, const char *mapset,
+                      const char *type)
 {
     const char *env, *tmp_path;
+    const char path_sep =
+    #ifdef _WIN32
+        '\\';
+    #else
+        '/';
+    #endif
 
     tmp_path = NULL;
-    env = getenv("GRASS_VECTOR_TMPDIR_MAPSET");
-    if (env && strcmp(env, "0") == 0) {
+    if (type && strcmp(type, "vector") == 0) {
+      env = getenv("GRASS_VECTOR_TMPDIR_MAPSET");
+      if (env && strcmp(env, "0") == 0)
         tmp_path = getenv("TMPDIR");
+      else if (env)
+        tmp_path = getenv("GRASS_VECTOR_TMPDIR_MAPSET");
     }
-    
+    else if (element) {
+        int c = 1;
+        char *found;
+        char *e;
+        e = strdup(element);
+        while ((found = strsep_(&e, &path_sep))) {
+            if (c == 3 && strcmp(found, "vector") == 0) {
+                env = getenv("GRASS_VECTOR_TMPDIR_MAPSET");
+                if (env && strcmp(env, "0") == 0)
+                    tmp_path = getenv("TMPDIR");
+                else if (env)
+                    tmp_path = getenv("GRASS_VECTOR_TMPDIR_MAPSET");
+               break;
+            }
+            c++;
+        }
+        G_free(e);
+    }
+    if (!type && !tmp_path) {
+        env = getenv("GRASS_RASTER_TMPDIR_MAPSET");
+        if (env && strcmp(env, "0") == 0)
+            tmp_path = getenv("TMPDIR");
+        else if (env)
+            tmp_path = getenv("GRASS_RASTER_TMPDIR_MAPSET");
+    }
+
+    G_debug(2, "G_file_name_tmp(): path = %s, tmp_path = %s", path, tmp_path);
+
     return file_name(path, NULL, element, name, mapset, tmp_path);
 }
 
@@ -158,4 +196,22 @@ void append_char(char* s, char c)
         int len = strlen(s);
         s[len] = c;
         s[len+1] = '\0';
+}
+
+char *strsep_(char **stringp, const char *delim)
+{
+  char *start = *stringp;
+  char *p;
+
+  p = (start != NULL) ? strpbrk(start, delim) : NULL;
+
+  if (p == NULL)
+       *stringp = NULL;
+  else
+  {
+      *p = "\0";
+      *stringp = p + 1;
+  }
+
+  return start;
 }

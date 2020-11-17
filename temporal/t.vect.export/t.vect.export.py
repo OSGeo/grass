@@ -37,7 +37,7 @@
 
 #%option G_OPT_M_DIR
 #% key: directory
-#% description: Path to the work directory, default is /tmp
+#% description: Path to the work directory, default is /tmp, respect 'GRASS_VECTOR_TMPDIR_MAPSET' shell env var
 #% required: no
 #% answer: /tmp
 #%end
@@ -81,6 +81,32 @@ def main():
     directory = options["directory"]
     where = options["where"]
     _format = options["format"]
+
+    tmp_dir_env = os.getenv('GRASS_VECTOR_TMPDIR_MAPSET')
+    if tmp_dir_env:
+        if os.path.isdir(tmp_dir_env):
+            directory = tmp_dir_env
+            grass.warning(
+                _(
+                    "'GRASS_VECTOR_TMPDIR_MAPSET' shell env "
+                    "variable value (directory path) <'{new_tmp_dir}'> "
+                    "exist and will be used.".format(
+                        new_tmp_dir=tmp_dir_env,
+                    ),
+                )
+            )
+        else:
+            grass.warning(
+                _(
+                    "'GRASS_VECTOR_TMPDIR_MAPSET' shell env "
+                    "variable value (directory path) <'{new_tmp_dir}'> "
+                    "doesn't exist. The default directory "
+                    "will be used <'{def_tmp_dir}'>.".format(
+                        new_tmp_dir=tmp_dir_env,
+                        def_tmp_dir=directory,
+                    ),
+                )
+            )
 
     # Make sure the temporal database exists
     tgis.init()
