@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #include <process.h>
 #else
 #include <sys/wait.h>
