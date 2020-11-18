@@ -23,7 +23,16 @@ import re
 import copy
 from multiprocessing import Process, Queue, cpu_count
 
+watchdog_used = True
+try:
+    from watchdog.observers import Observer
+    from watchdog.events import PatternMatchingEventHandler
+except ImportError:
+    watchdog_used = False
+
+
 import wx
+from wx.lib.newevent import NewEvent
 
 from core.gcmd import RunCommand, GError, GMessage, GWarning
 from core.utils import GetListOfLocations
@@ -66,6 +75,9 @@ from grass.grassdb.data import map_exists
 from grass.grassdb.checks import (get_mapset_owner, is_mapset_locked,
                                   is_different_mapset_owner)
 from grass.exceptions import CalledModuleError
+
+
+updateMapset, EVT_UPDATE_MAPSET = NewEvent()
 
 
 def filterModel(model, element=None, name=None):
@@ -174,6 +186,41 @@ def getLocationTree(gisdbase, location, queue, mapsets=None):
     gscript.try_remove(tmp_gisrc_file)
 
 
+class MapWatch(PatternMatchingEventHandler):
+    """Monitors file events (create, delete, move files) using watchdog
+    to inform about changes in current mapset. One instance monitors
+    only one element (raster, vector, raster_3d).
+    Patterns are not used/needed in this case, use just '*' for matching
+    everything. When file/directory change is detected, wx event is dispatched
+    to event handler (can't use Signals because this is different thread),
+    containing info about the change."""
+    def __init__(self, patterns, element, event_handler):
+        PatternMatchingEventHandler.__init__(self, patterns=patterns)
+        self.element = element
+        self.event_handler = event_handler
+        
+    def on_created(self, event):
+        if (self.element == 'vector' or self.element == 'raster_3d') and not event.is_directory:
+            return
+        evt = updateMapset(src_path=event.src_path, event_type=event.event_type,
+                           is_directory=event.is_directory, dest_path=None)
+        wx.PostEvent(self.event_handler, evt)
+
+    def on_deleted(self, event):
+        if (self.element == 'vector' or self.element == 'raster_3d') and not event.is_directory:
+            return
+        evt = updateMapset(src_path=event.src_path, event_type=event.event_type,
+                           is_directory=event.is_directory, dest_path=None)
+        wx.PostEvent(self.event_handler, evt)
+
+    def on_moved(self, event):
+        if (self.element == 'vector' or self.element == 'raster_3d') and not event.is_directory:
+            return
+        evt = updateMapset(src_path=event.src_path, event_type=event.event_type,
+                           is_directory=event.is_directory, dest_path=event.dest_path)
+        wx.PostEvent(self.event_handler, evt)  
+
+
 class NameEntryDialog(TextEntryDialog):
 
     def __init__(self, element, mapset, env, **kwargs):
@@ -251,7 +298,15 @@ class DataCatalogNode(DictNode):
 
 
 class DataCatalogTree(TreeView):
+    """Tree structure visualizing and managing grass database.
+    Uses virtual tree and model defined in core/treemodel.py.
 
+    When changes to data are initiated from inside, the model
+    and the tree are not changed directly, rather a grassdbChanged
+    signal needs to be emitted and the handler of the signal
+    takes care of the refresh. At the same time, watchdog (if installed)
+    monitors changes in current mapset and refreshes the tree.
+    """
     def __init__(
             self, parent, model=None, giface=None,
             style=wx.TR_HIDE_ROOT | wx.TR_EDIT_LABELS |
@@ -276,6 +331,7 @@ class DataCatalogTree(TreeView):
         self.contextMenu.connect(self.OnRightClick)
         self.itemActivated.connect(self.OnDoubleClick)
         self._giface.currentMapsetChanged.connect(self._updateAfterMapsetChanged)
+        self._giface.grassdbChanged.connect(self._updateAfterGrassdbChanged)
         self._iconTypes = ['grassdb', 'location', 'mapset', 'raster',
                            'vector', 'raster_3d']
         self._initImages()
@@ -314,6 +370,9 @@ class DataCatalogTree(TreeView):
                   self._emitSignal(evt.GetItem(), self.endEdit, event=evt))
         self.startEdit.connect(self.OnStartEditLabel)
         self.endEdit.connect(self.OnEditLabel)
+        self.Bind(EVT_UPDATE_MAPSET, self.OnWatchdogMapsetReload)
+        
+        self.observer = None
 
     def _resetSelectVariables(self):
         """Reset variables related to item selection."""
@@ -511,6 +570,73 @@ class DataCatalogTree(TreeView):
             return errors
         return None
 
+    def ScheduleWatchCurrentMapset(self):
+        """Using watchdog library, sets up watching of current mapset folder
+        to detect changes not captured by other means (e.g. from command line).
+        Schedules 3 watches (raster, vector, 3D raster).
+        If watchdog observers are active, it restarts the observers in current mapset.
+        """
+        global watchdog_used
+        if not watchdog_used:
+            return
+
+        if self.observer and self.observer.is_alive():
+            self.observer.stop()
+            self.observer.join()
+            self.observer.unschedule_all()
+        self.observer = Observer()
+
+        gisenv = gscript.gisenv()
+        for element, directory in (('raster', 'cell'), ('vector', 'vector'), ('raster_3d', 'grid3')):
+            path = os.path.join(gisenv['GISDBASE'], gisenv['LOCATION_NAME'],
+                                gisenv['MAPSET'], directory)
+            if not os.path.exists(path):
+                try:
+                    os.mkdir(path)
+                except OSError:
+                    pass
+            if os.path.exists(path):
+                self.observer.schedule(MapWatch("*", element, self), path=path, recursive=False)
+        try:
+            self.observer.start()
+        except OSError:
+            # in case inotify on linux exceeds limits
+            watchdog_used = False
+            return
+
+    def OnWatchdogMapsetReload(self, event):
+        """Reload mapset node associated with watchdog event"""
+        mapset_path = os.path.dirname(os.path.dirname(os.path.abspath(event.src_path)))
+        location_path = os.path.dirname(os.path.abspath(mapset_path))
+        db = os.path.dirname(os.path.abspath(location_path))
+        node = self.GetDbNode(grassdb=db, location=os.path.basename(location_path),
+                              mapset=os.path.basename(mapset_path))
+        if node:
+            self._reloadMapsetNode(node)
+            self.RefreshNode(node, recursive=True)
+
+    def GetDbNode(self, grassdb, location=None, mapset=None, map=None, map_type=None):
+        """Returns node representing db/location/mapset/map or None if not found."""
+        grassdb_nodes = self._model.SearchNodes(name=grassdb, type='grassdb')
+        if grassdb_nodes:
+            if not location:
+                return grassdb_nodes[0]
+            location_nodes = self._model.SearchNodes(parent=grassdb_nodes[0],
+                                                     name=location, type='location')
+            if location_nodes:
+                if not mapset:
+                    return location_nodes[0]
+                mapset_nodes = self._model.SearchNodes(parent=location_nodes[0],
+                                                       name=mapset, type='mapset')
+                if mapset_nodes:
+                    if not map:
+                        return mapset_nodes[0]
+                    map_nodes = self._model.SearchNodes(parent=mapset_nodes[0],
+                                                        name=map, type=map_type)
+                    if map_nodes:
+                        return map_nodes[0]
+        return None
+
     def _renameNode(self, node, name):
         """Rename node (map, mapset, location), sort and refresh.
         Should be called after actual renaming of a map, mapset, location."""
@@ -571,6 +697,7 @@ class DataCatalogTree(TreeView):
         if event.ret is not None:
             self._giface.WriteWarning('\n'.join(event.ret))
         self.UpdateCurrentDbLocationMapsetNode()
+        self.ScheduleWatchCurrentMapset()
         self.RefreshItems()
         self.ExpandCurrentMapset()
 
@@ -844,8 +971,11 @@ class DataCatalogTree(TreeView):
         mapset = create_mapset_interactively(self, grassdb_node.data['name'],
                                              location_node.data['name'])
         if mapset:
-            self.InsertMapset(name=mapset,
-                              location_node=location_node)
+            self._giface.grassdbChanged.emit(grassdb=grassdb_node.data['name'],
+                                             location=location_node.data['name'],
+                                             mapset=mapset,
+                                             element='mapset',
+                                             action='new')
 
     def OnCreateMapset(self, event):
         """Create new mapset"""
@@ -859,10 +989,10 @@ class DataCatalogTree(TreeView):
             create_location_interactively(self, grassdb_node.data['name'])
         )
         if location:
-            grassdb_nodes = self._model.SearchNodes(name=grassdatabase, type='grassdb')
-            if not grassdb_nodes:
-                grassdb_node = self.InsertGrassDb(name=grassdatabase)
-            self.InsertLocation(location, grassdb_node)
+            self._giface.grassdbChanged.emit(grassdb=grassdatabase,
+                                             location=location,
+                                             element='location',
+                                             action='new')
 
     def OnCreateLocation(self, event):
         """Create new location"""
@@ -878,7 +1008,12 @@ class DataCatalogTree(TreeView):
                 self.selected_location[0].data['name'],
                 self.selected_mapset[0].data['name'])
         if newmapset:
-            self._renameNode(self.selected_mapset[0], newmapset)
+            self._giface.grassdbChanged.emit(grassdb=self.selected_grassdb[0].data['name'],
+                                             location=self.selected_location[0].data['name'],
+                                             mapset=self.selected_mapset[0].data['name'],
+                                             element='mapset',
+                                             action='rename',
+                                             newname=newmapset)
 
     def OnRenameLocation(self, event):
         """
@@ -889,7 +1024,11 @@ class DataCatalogTree(TreeView):
                 self.selected_grassdb[0].data['name'],
                 self.selected_location[0].data['name'])
         if newlocation:
-            self._renameNode(self.selected_location[0], newlocation)
+            self._giface.grassdbChanged.emit(grassdb=self.selected_grassdb[0].data['name'],
+                                             location=self.selected_location[0].data['name'],
+                                             element='location',
+                                             action='rename',
+                                             newname=newlocation)
 
     def OnStartEditLabel(self, node, event):
         """Start label editing"""
@@ -989,12 +1128,18 @@ class DataCatalogTree(TreeView):
         else:
             renamed, cmd = self._runCommand(
                 'g.rename', raster3d=string, env=env)
+        gscript.try_remove(gisrc)
         if renamed == 0:
-            self._renameNode(self.selected_layer[0], new)
             self.showNotification.emit(
                 message=_("{cmd} -- completed").format(cmd=cmd))
             Debug.msg(1, "LAYER RENAMED TO: " + new)
-        gscript.try_remove(gisrc)
+            self._giface.grassdbChanged.emit(grassdb=self.selected_grassdb[0].data['name'],
+                                             location=self.selected_location[0].data['name'],
+                                             mapset=self.selected_mapset[0].data['name'],
+                                             map=old,
+                                             element=self.selected_layer[0].data['type'],
+                                             newname=new,
+                                             action='rename')
 
     def OnPasteMap(self, event):
         # copying between mapsets of one location
@@ -1055,14 +1200,17 @@ class DataCatalogTree(TreeView):
                     pasted, cmd = self._runCommand('g.copy', raster_3d=string, env=env)
                     node = 'raster_3d'
                 if pasted == 0:
-                    self.InsertLayer(name=new_name, mapset_node=self.selected_mapset[0],
-                                     element_name=node)
                     Debug.msg(1, "COPIED TO: " + new_name)
                     if self.copy_mode:
                         self.showNotification.emit(message=_("g.copy completed"))
                     else:
                         self.showNotification.emit(message=_("g.copy completed"))
-
+                    self._giface.grassdbChanged.emit(grassdb=self.selected_grassdb[0].data['name'],
+                                                     location=self.selected_location[0].data['name'],
+                                                     mapset=self.selected_mapset[0].data['name'],
+                                                     map=new_name,
+                                                     element=node,
+                                                     action='new')
                     # remove old
                     if not self.copy_mode:
                         self._removeMapAfterCopy(self.copy_layer[i], self.copy_mapset[i], env2)
@@ -1083,8 +1231,9 @@ class DataCatalogTree(TreeView):
                     if not new_name:
                         continue
                 callback = lambda gisrc2=gisrc2, gisrc=gisrc, cLayer=self.copy_layer[i], \
-                                  cMapset=self.copy_mapset[i], cMode=self.copy_mode, name=new_name: \
-                                  self._onDoneReprojection(env2, gisrc2, gisrc, cLayer, cMapset, cMode, name)
+                                  cMapset=self.copy_mapset[i], cMode=self.copy_mode, \
+                                  sMapset=self.selected_mapset[0], name=new_name: \
+                                  self._onDoneReprojection(env2, gisrc2, gisrc, cLayer, cMapset, cMode, sMapset, name)
                 dlg = CatalogReprojectionDialog(self, self._giface,
                                                 self.copy_grassdb[i].data['name'],
                                                 self.copy_location[i].data['name'],
@@ -1102,23 +1251,31 @@ class DataCatalogTree(TreeView):
         self.ExpandNode(self.selected_mapset[0], recursive=True)
         self._resetCopyVariables()
 
-    def _onDoneReprojection(self, iEnv, iGisrc, oGisrc, cLayer, cMapset, cMode, name):
-        self.InsertLayer(name=name, mapset_node=self.selected_mapset[0],
-                         element_name=cLayer.data['type'])
+    def _onDoneReprojection(self, iEnv, iGisrc, oGisrc, cLayer, cMapset, cMode, sMapset, name):
+        self._giface.grassdbChanged.emit(grassdb=sMapset.parent.parent.data['name'],
+                                         location=sMapset.parent.data['name'],
+                                         mapset=sMapset.data['name'],
+                                         element=cLayer.data['type'],
+                                         map=name,
+                                         action='new')
         if not cMode:
             self._removeMapAfterCopy(cLayer, cMapset, iEnv)
         gscript.try_remove(iGisrc)
         gscript.try_remove(oGisrc)
-        self.ExpandNode(self.selected_mapset[0], recursive=True)
+        self.ExpandNode(sMapset, recursive=True)
 
     def _removeMapAfterCopy(self, cLayer, cMapset, env):
         removed, cmd = self._runCommand('g.remove', type=cLayer.data['type'],
                                         name=cLayer.data['name'], flags='f', env=env)
         if removed == 0:
-            self._model.RemoveNode(cLayer)
-            self.RefreshNode(cMapset, recursive=True)
             Debug.msg(1, "LAYER " + cLayer.data['name'] + " DELETED")
             self.showNotification.emit(message=_("g.remove completed"))
+            self._giface.grassdbChanged.emit(grassdb=cMapset.parent.parent.data['name'],
+                                             location=cMapset.parent.data['name'],
+                                             mapset=cMapset.data['name'],
+                                             map=cLayer.data['name'],
+                                             element=cLayer.data['type'],
+                                             action='delete')
 
     def InsertLayer(self, name, mapset_node, element_name):
         """Insert layer into model and refresh tree"""
@@ -1191,19 +1348,16 @@ class DataCatalogTree(TreeView):
                 removed, cmd = self._runCommand(
                         'g.remove', flags='f', type=self.selected_layer[i].data['type'],
                         name=self.selected_layer[i].data['name'], env=env)
+                gscript.try_remove(gisrc)
                 if removed == 0:
-                    self._model.RemoveNode(self.selected_layer[i])
-                    self.RefreshNode(self.selected_mapset[i], recursive=True)
+                    self._giface.grassdbChanged.emit(grassdb=self.selected_grassdb[i].data['name'],
+                                                     location=self.selected_location[i].data['name'],
+                                                     mapset=self.selected_mapset[i].data['name'],
+                                                     element=self.selected_layer[i].data['type'],
+                                                     map=self.selected_layer[i].data['name'],
+                                                     action='delete')
                     Debug.msg(1, "LAYER " + self.selected_layer[i].data['name'] + " DELETED")
 
-                    # remove map layer from layer tree if exists
-                    if not isinstance(self._giface, StandaloneGrassInterface):
-                        name = self.selected_layer[i].data['name'] + '@' + self.selected_mapset[i].data['name']
-                        layers = self._giface.GetLayerList().GetLayersByName(name)
-                        for layer in layers:
-                            self._giface.GetLayerList().DeleteLayer(layer)
-
-                gscript.try_remove(gisrc)
             self.UnselectAll()
             self.showNotification.emit(message=_("g.remove completed"))
 
@@ -1212,6 +1366,7 @@ class DataCatalogTree(TreeView):
         Delete selected mapset or mapsets
         """
         mapsets = []
+        changes = []
         for i in range(len(self.selected_mapset)):
             # Append to the list of tuples
             mapsets.append((
@@ -1219,30 +1374,34 @@ class DataCatalogTree(TreeView):
                 self.selected_location[i].data['name'],
                 self.selected_mapset[i].data['name']
             ))
+            changes.append(dict(grassdb=self.selected_grassdb[i].data['name'],
+                                location=self.selected_location[i].data['name'],
+                                mapset=self.selected_mapset[i].data['name'],
+                                action='delete',
+                                element='mapset'))
         if delete_mapsets_interactively(self, mapsets):
-            locations = set([each for each in self.selected_location])
-            for loc_node in locations:
-                self._reloadLocationNode(loc_node)
-                self.UpdateCurrentDbLocationMapsetNode()
-                self.RefreshNode(loc_node, recursive=True)
+            for change in changes:
+                self._giface.grassdbChanged.emit(**change)
 
     def OnDeleteLocation(self, event):
         """
         Delete selected location or locations
         """
         locations = []
+        changes = []
         for i in range(len(self.selected_location)):
             # Append to the list of tuples
             locations.append((
                 self.selected_grassdb[i].data['name'],
                 self.selected_location[i].data['name']
             ))
+            changes.append(dict(grassdb=self.selected_grassdb[i].data['name'],
+                                location=self.selected_location[i].data['name'],
+                                action='delete',
+                                element='location'))
         if delete_locations_interactively(self, locations):
-            grassdbs = set([each for each in self.selected_grassdb])
-            for grassdb_node in grassdbs:
-                self._reloadGrassDBNode(grassdb_node)
-                self.UpdateCurrentDbLocationMapsetNode()
-                self.RefreshNode(grassdb_node, recursive=True)
+            for change in changes:
+                self._giface.grassdbChanged.emit(**change)
 
     def DownloadLocation(self, grassdb_node):
         """
@@ -1383,11 +1542,91 @@ class DataCatalogTree(TreeView):
             else:
                 switch_mapset_interactively(self, self._giface, grassdb, location, mapset)
 
+    def _updateAfterGrassdbChanged(self, action, element, grassdb, location, mapset=None,
+                                   map=None, newname=None):
+        """Update tree after grassdata changed"""
+        if element == 'mapset':
+            if action == 'new':
+                node = self.GetDbNode(grassdb=grassdb,
+                                      location=location)
+                if node:
+                    self.InsertMapset(name=mapset, location_node=node)
+            elif action == 'delete':
+                node = self.GetDbNode(grassdb=grassdb,
+                                      location=location)
+                if node:
+                    self._reloadLocationNode(node)
+                    self.UpdateCurrentDbLocationMapsetNode()
+                    self.RefreshNode(node, recursive=True)
+            elif action == 'rename':
+                node = self.GetDbNode(grassdb=grassdb,
+                                      location=location,
+                                      mapset=mapset)
+                if node:
+                    self._renameNode(node, newname)
+        elif element == 'location':
+            if action == 'new':
+                node = self.GetDbNode(grassdb=grassdb)
+                if not node:
+                    node = self.InsertGrassDb(name=grassdb)
+                if node:
+                    self.InsertLocation(location, node)
+            elif action == 'delete':
+                node = self.GetDbNode(grassdb=grassdb)
+                if node:
+                    self._reloadGrassDBNode(node)
+                    self.RefreshNode(node, recursive=True)
+            elif action == 'rename':
+                node = self.GetDbNode(grassdb=grassdb,
+                                      location=location)
+                if node:
+                    self._renameNode(node, newname)
+        elif element in ('raster', 'vector', 'raster_3d'):
+            # when watchdog is used, it watches current mapset,
+            # so we don't process any signals here,
+            # instead the watchdog handler takes care of refreshing tree
+            if (watchdog_used and grassdb == self.current_grassdb_node.data['name']
+               and location == self.current_location_node.data['name']
+               and mapset == self.current_mapset_node.data['name']):
+                return
+            if action == 'new':
+                node = self.GetDbNode(grassdb=grassdb,
+                                      location=location,
+                                      mapset=mapset)
+                if node:
+                    if map:
+                        # check if map already exists
+                        if not self._model.SearchNodes(parent=node, name=newname, type=element):
+                            self.InsertLayer(name=newname, mapset_node=node,
+                                             element_name=element)
+                    else:
+                        # we know some maps created
+                        self._reloadMapsetNode(node)
+                        self.RefreshNode(node)
+            elif action == 'delete':
+                node = self.GetDbNode(grassdb=grassdb,
+                                      location=location,
+                                      mapset=mapset,
+                                      map=map,
+                                      map_type=element)
+                if node:
+                    self._model.RemoveNode(node)
+                    self.RefreshNode(node.parent, recursive=True)
+            elif action == 'rename':
+                node = self.GetDbNode(grassdb=grassdb,
+                                      location=location,
+                                      mapset=mapset,
+                                      map=map,
+                                      map_type=element)
+                if node:
+                    self._renameNode(node, newname)
+
     def _updateAfterMapsetChanged(self):
         """Update tree after current mapset has changed"""
         self.UpdateCurrentDbLocationMapsetNode()
         self.ExpandCurrentMapset()
         self.RefreshItems()
+        self.ScheduleWatchCurrentMapset()
 
     def OnMetadata(self, event):
         """Show metadata of any raster/vector/3draster"""
