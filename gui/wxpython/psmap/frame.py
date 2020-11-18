@@ -258,6 +258,14 @@ class PsMapFrame(wx.Frame):
                 return False
         return True
 
+    def _switchToPage(self, page_index=0):
+        """Switch to page (default to Draft page)
+
+        :param int page_index: page index where you want to switch
+        """
+        self.book.SetSelection(page_index)
+        self.currentPage = page_index
+
     def InstructionFile(self):
         """Creates mapping instructions"""
 
@@ -794,6 +802,7 @@ class PsMapFrame(wx.Frame):
         """Add point action selected"""
         self.mouse["use"] = "addPoint"
         self.canvas.SetCursor(self.cursors["cross"])
+        self._switchToPage()
 
     def AddPoint(self, id=None, coordinates=None):
         """Add point and open property dialog.
@@ -819,6 +828,7 @@ class PsMapFrame(wx.Frame):
         """Add line action selected"""
         self.mouse["use"] = "addLine"
         self.canvas.SetCursor(self.cursors["cross"])
+        self._switchToPage()
 
     def AddLine(self, id=None, coordinates=None):
         """Add line and open property dialog.
@@ -844,6 +854,7 @@ class PsMapFrame(wx.Frame):
         """Add rectangle action selected"""
         self.mouse["use"] = "addRectangle"
         self.canvas.SetCursor(self.cursors["cross"])
+        self._switchToPage()
 
     def AddRectangle(self, id=None, coordinates=None):
         """Add rectangle and open property dialog.
@@ -1210,7 +1221,9 @@ class PsMapFrame(wx.Frame):
 
     def OnPageChanging(self, event):
         """Flatnotebook page is changing"""
-        if self.currentPage == 0 and self.mouse['use'] == 'addMap':
+        if self.currentPage == 0 and self.mouse['use'] in [
+                'addMap', 'addPoint', 'addLine', 'addRectangle'
+        ]:
             event.Veto()
 
     def OnHelp(self, event):
