@@ -187,6 +187,13 @@ def getLocationTree(gisdbase, location, queue, mapsets=None):
 
 
 class MapWatch(PatternMatchingEventHandler):
+    """Monitors file events (create, delete, move files) using watchdog
+    to inform about changes in current mapset. One instance monitors
+    only one element (raster, vector, raster_3d).
+    Patterns are not used/needed in this case, use just '*' for matching
+    everything. When file/directory change is detected, wx event is dispatched
+    to event handler (can't use Signals because this is different thread),
+    containing info about the change."""
     def __init__(self, patterns, element, event_handler):
         PatternMatchingEventHandler.__init__(self, patterns=patterns)
         self.element = element
