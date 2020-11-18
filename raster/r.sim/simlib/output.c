@@ -767,7 +767,6 @@ int output_et()
 	Rast_free_colors(&colors);
 	/*  } */
     }
-    free_walkers();
 
     return 1;
 }
