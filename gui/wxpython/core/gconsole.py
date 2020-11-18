@@ -737,6 +737,13 @@ class GConsole(wx.EvtHandler):
                                 'fullname']:
                             self.mapCreated.emit(
                                 name=lname, ltype=prompt, add=event.addLayer)
+                            gisenv = grass.gisenv()
+                            self._giface.grassdbChanged.emit(grassdb=gisenv['GISDBASE'],
+                                                             location=gisenv['LOCATION_NAME'],
+                                                             mapset=gisenv['MAPSET'],
+                                                             action='new',
+                                                             map=lname.split('@')[0],
+                                                             element=prompt)
         if name == 'r.mask':
             self.updateMap.emit()
 
