@@ -486,6 +486,7 @@ int main(int argc, char **argv)
          opt_at, opt_fontsize, opt_tstep, opt_range, histo,
          hidestr, log_scale, 1, digits, units);
 
+    D_save_command(G_recreate_command());
     D_close_driver();
 
     exit(EXIT_SUCCESS);
