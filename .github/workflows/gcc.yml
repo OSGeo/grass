@@ -8,13 +8,13 @@ jobs:
   build:
     name: ${{ matrix.c }} & ${{ matrix.cpp }}
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         c:
         - gnu99
         - gnu11
-        # - gnu17  # not available in Ubuntu 18.04
+        - gnu17
         cpp:
         - c++11
         - c++14
@@ -34,10 +34,10 @@ jobs:
         mkdir $HOME/install
     - name: Ensure one core for compilation
       run: |
-        echo "::set-env name=MAKEFLAGS::-j1"
+        echo "MAKEFLAGS=-j1" >> $GITHUB_ENV
     - name: Set LD_LIBRARY_PATH for compilation
       run: |
-        echo "::set-env name=LD_LIBRARY_PATH::$HOME/install/lib"
+        echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
     - name: Build
       env:
         # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
