@@ -8,7 +8,7 @@
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
   
-  \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
+  \author Lars Ahlzen <lars ahlzen.com> (original contributor)
   \author Glynn Clements  
 */
 
@@ -42,7 +42,7 @@ static char *convert(const char *in)
 	size_t ret;
 	iconv_t cd;
 
-	if ((cd = iconv_open("UTF-8", encoding)) < 0)
+	if ((cd = iconv_open("UTF-8", encoding)) == (iconv_t) -1)
 	    G_fatal_error(_("Unable to convert from <%s> to UTF-8"),
 			  encoding);
 
@@ -340,4 +340,3 @@ void Cairo_font_info(char ***list, int *count)
     font_list_fc(list, count, 1);
 #endif
 }
-
