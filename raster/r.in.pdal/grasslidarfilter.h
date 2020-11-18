@@ -38,16 +38,23 @@ class GrassLidarFilter : public pdal::Filter, public pdal::Streamable
 {
 public:
     GrassLidarFilter() :
-        n_processed_(0), n_passed_(0),
-        n_outside_(0), zrange_filtered_(0), irange_filtered_(0),
-        return_filtered_(0), n_class_filtered_(0),
-        use_spatial_filter_(false),
-        use_zrange_ (false), use_irange_(false),
-        use_return_filter_(false), use_class_filter_(false),
-        base_segment_(nullptr),
-        zscale_(1), iscale_(1),
         dim_to_use_as_z_(pdal::Dimension::Id::Z),
-        dim_to_use_as_i_(pdal::Dimension::Id::Intensity)
+        dim_to_use_as_i_(pdal::Dimension::Id::Intensity),
+        use_spatial_filter_(false),
+        use_zrange_ (false),
+        use_irange_(false),
+        n_processed_(0),
+        n_passed_(0),
+        n_outside_(0),
+        zrange_filtered_(0),
+        irange_filtered_(0),
+        return_filtered_(0),
+        n_class_filtered_(0),
+        zscale_(1),
+        iscale_(1),
+        use_class_filter_(false),
+        use_return_filter_(false),
+        base_segment_(nullptr)
     {}
     std::string getName() const
     {

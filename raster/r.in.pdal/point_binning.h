@@ -29,7 +29,7 @@ struct z_node
 struct cnt_node
 {
     int next;
-    double value;
+    CELL value;
     int count;
 };
 
@@ -85,7 +85,7 @@ int update_bin_z_index(struct BinIndex *bin_index, void *index_array,
 
 int update_bin_cnt_index(struct BinIndex *bin_index, void *index_array,
                      int cols, int row, int col,
-                     double value);
+                     int value);
 
 void write_variance(void *raster_row, void *n_array, void *sum_array,
                     void *sumsq_array, int row, int cols,
@@ -94,8 +94,7 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
                   void *index_array, int row, int cols,
                   RASTER_MAP_TYPE rtype);
 void write_mode(struct BinIndex *bin_index, void *raster_row,
-                  void *index_array, int row, int cols,
-                  RASTER_MAP_TYPE rtype);
+                  void *index_array, int row, int cols);
 void write_percentile(struct BinIndex *bin_index, void *raster_row,
                       void *index_array, int row, int cols,
                       RASTER_MAP_TYPE rtype, int pth);
@@ -106,8 +105,7 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
                     void *index_array, int row, int cols,
                     RASTER_MAP_TYPE rtype, double trim);
 void write_sidn(struct BinIndex *bin_index, void *raster_row,
-                  void *index_array, int row, int cols,
-                  RASTER_MAP_TYPE rtype, int min);
+                  void *index_array, int row, int cols, int min);
 
 /* forward declarations */
 struct Map_info;

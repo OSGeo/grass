@@ -30,7 +30,7 @@
 extern "C"
 {
 #include <grass/gis.h>
-#include <grass/vector.h>
+#include <grass/raster.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 }
@@ -543,12 +543,18 @@ int main(int argc, char *argv[])
         rtype = FCELL_TYPE;
 
     if (point_binning.method == METHOD_N ||
+        point_binning.method == METHOD_MODE ||
         point_binning.method == METHOD_SIDNMAX ||
-        point_binning.method == METHOD_SIDNMIN)
+        point_binning.method == METHOD_SIDNMIN) {
+            if (rtype != CELL_TYPE)
+                G_warning(_("Output map type set to CELL"));
             rtype = CELL_TYPE;
+    }
 
     if (!user_dimension_opt->answer && !(strcmp(dimension_opt->answer, "z") == 0)) {
         /* Should we enfocte the CELL type? */
+        if (rtype != CELL_TYPE)
+                G_warning(_("Output map type set to CELL"));
         rtype = CELL_TYPE;
 
         if (strcmp(dimension_opt->answer, "intensity") == 0) {
@@ -652,7 +658,7 @@ int main(int argc, char *argv[])
     pdal::StageFactory factory;
     pdal::MergeFilter merge_filter;
     /* loop of input files */
-    for (unsigned i = 0; i < infiles.num_items; i++) {
+    for (int i = 0; i < infiles.num_items; i++) {
         const char* infile = infiles.items[i];
         std::string pdal_read_driver = factory.inferReaderDriver(infile);
         if (pdal_read_driver.empty())
@@ -868,7 +874,15 @@ int main(int argc, char *argv[])
 
     Rast_short_history(outmap, "raster", &history);
     Rast_command_history(&history);
-    Rast_set_history(&history, HIST_DATSRC_1, infile);
+
+    // Hist fields are limited to 4096
+    char file_list[4096];
+    if (file_list_opt->answer)
+        G_snprintf(file_list, sizeof(file_list), "%s", file_list_opt->answer);
+    else
+        G_snprintf(file_list, sizeof(file_list), "%s", input_opt->answer);
+
+    Rast_set_history(&history, HIST_DATSRC_1, file_list);
     Rast_write_history(outmap, &history);
 
     /* set computation region to the new raster map */
