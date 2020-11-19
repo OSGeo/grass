@@ -17,8 +17,10 @@ This program is free software under the GNU General Public License
 @author Milena Nowotarska (menu customization)
 @author Robert Szczepanek (menu customization)
 @author Vaclav Petras <wenzeslaus gmail.com> (menu customization)
+@author Tomas Zigo <tomas.zigo slovanet.sk> RecentFilesMenu
 """
 import re
+import os
 import wx
 
 from core import globalvar
@@ -305,3 +307,119 @@ class SearchModuleWindow(wx.Panel):
             label = data['description']
 
         self.showNotification.emit(message=label)
+
+
+class RecentFilesMenu:
+    """Add recent files history menu
+
+    Signal FileRequested is emitted if you request file from recent
+    files menu
+    :param str path: file path you requested
+    :param bool file_exists: file path exists or not
+    :param obj file_history: file history obj instance
+
+
+    :param str app_name: required for group name of recent files path
+    written into the .recent_files file
+    :param obj parent_menu: menu widget instance where be inserted
+    recent files menu on the specified position
+    :param int pos: position (index) where insert recent files menu in
+    the parent menu
+    :param int history_len: the maximum number of file paths written
+    into the .recent_files file to app name group
+    """
+
+    recent_files = '.recent_files'
+
+    def __init__(self, app_name, parent_menu, pos, history_len=10):
+        self._history_len = history_len
+        self._parent_menu = parent_menu
+        self._pos = pos
+
+        self.file_requested = Signal('RecentFilesMenu.FileRequested')
+
+        self._filehistory = wx.FileHistory(maxFiles=history_len)
+        # Recent files path stored in GRASS GIS config dir in the
+        # .recent_files file in the group by application name
+        self._config = wx.FileConfig(
+            style=wx.CONFIG_USE_LOCAL_FILE,
+            localFilename=os.path.join(
+                utils.GetSettingsPath(), self.recent_files,
+            ),
+        )
+        self._config.SetPath(strPath=app_name)
+        self._filehistory.Load(self._config)
+        self.RemoveNonExistentFiles()
+
+        self.recent = wx.Menu()
+        self._filehistory.UseMenu(self.recent)
+        self._filehistory.AddFilesToMenu()
+
+        # Show recent files menu if count of items in menu > 0
+        if self._filehistory.GetCount() > 0:
+            self._insertMenu()
+
+    def _insertMenu(self):
+        """Insert recent files menu into the parent menu on the
+        specified position if count of menu items > 0"""
+
+        self._parent_menu.Insert(
+            pos=self._pos, id=wx.ID_ANY, text=_('&Recent Files'),
+            submenu=self.recent,
+        )
+        self.recent.Bind(
+            wx.EVT_MENU_RANGE, self._onFileHistory,
+            id=wx.ID_FILE1, id2=wx.ID_FILE + self._history_len,
+        )
+
+    def _onFileHistory(self, event):
+        """Choose recent file from menu event"""
+
+        file_exists = True
+        file_index = event.GetId() - wx.ID_FILE1
+        path = self._filehistory.GetHistoryFile(file_index)
+
+        if not os.path.exists(path):
+            self.RemoveFileFromHistory(file_index)
+            file_exists = False
+        self.file_requested.emit(
+            path=path, file_exists=file_exists,
+            file_history=self._filehistory,
+        )
+
+    def AddFileToHistory(self, filename):
+        """Add file to history, and save history into '.recent_files'
+        file
+
+        :param str filename: file path
+
+        :return None
+        """
+
+        if self._filehistory.GetCount() == 0:
+            self._insertMenu()
+        if filename:
+            self._filehistory.AddFileToHistory(filename)
+            self._filehistory.Save(self._config)
+            self._config.Flush()
+
+    def RemoveFileFromHistory(self, file_index):
+        """Remove file from the history.
+
+        :param int file_index: filed index
+
+        :return: None
+        """
+        self._filehistory.RemoveFileFromHistory(i=file_index)
+        self._filehistory.Save(self._config)
+        self._config.Flush()
+
+    def RemoveNonExistentFiles(self):
+        """Remove non existent files from the history"""
+        for i in reversed(range(0, self._filehistory.GetCount())):
+            file = self._filehistory.GetHistoryFile(index=i)
+            if not os.path.exists(file):
+                self._filehistory.RemoveFileFromHistory(i=i)
+
+        self._filehistory.Save(self._config)
+        self._config.Flush()
