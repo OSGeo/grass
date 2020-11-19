@@ -15,11 +15,11 @@
 #endif
 
 
-#ifndef PI2			/* PI/2 */
+#ifndef PI2                     /* PI/2 */
 #define PI2 (2*atan(1))
 #endif
 
-#ifndef PI4			/* PI/4 */
+#ifndef PI4                     /* PI/4 */
 #define PI4 (atan(1))
 #endif
 
@@ -27,7 +27,7 @@
 #define PI (4*atan(1))
 #endif
 
-#ifndef M2PI			/* 2*PI */
+#ifndef M2PI                    /* 2*PI */
 #define M2PI (8*atan(1))
 #endif
 
@@ -60,11 +60,11 @@ typedef struct
     char elevname[150];
     RASTER_MAP_TYPE raster_type;
     FCELL **elev;
-    int fd;			/* file descriptor */
+    int fd;                     /* file descriptor */
 } MAPS;
 
 typedef struct
-{				/* struct is used both for interface and output */
+{                               /* struct is used both for interface and output */
     char *name;
     int required;
     char *description;
@@ -90,24 +90,24 @@ typedef struct
     int pattern[8];
     float elevation[8];
     double distance[8];
-    double x[8], y[8];		/* cartesian coordinates of geomorphon */
+    double x[8], y[8];          /* cartesian coordinates of geomorphon */
 } PATTERN;
 
 typedef enum
 {
-    ZERO,			/* zero cats do not accept zero category */
-    FL,				/* flat */
-    PK,				/* peak, summit */
-    RI,				/* ridge */
-    SH,				/* shoulder */
-    CV,				/* convex slope */
-    SL,				/* slope */
-    CN,				/* concave slope */
-    FS,				/* footslope */
-    VL,				/* valley */
-    PT,				/* pit, depression */
-    __,				/* error */
-    CNT				/* counter */
+    ZERO,                       /* zero cats do not accept zero category */
+    FL,                         /* flat */
+    PK,                         /* peak, summit */
+    RI,                         /* ridge */
+    SH,                         /* shoulder */
+    CV,                         /* convex slope */
+    SL,                         /* slope */
+    CN,                         /* concave slope */
+    FS,                         /* footslope */
+    VL,                         /* valley */
+    PT,                         /* pit, depression */
+    __,                         /* error */
+    CNT                         /* counter */
 } FORMS;
 
 typedef struct
@@ -134,7 +134,7 @@ GLOBAL int nrows, ncols, row_radius_size, row_buffer_size;
 GLOBAL int search_cells, skip_cells, step_cells, start_cells;
 GLOBAL int num_of_steps;
 GLOBAL double search_distance, skip_distance, flat_distance;
-GLOBAL double start_distance, step_distance;	/* multiresolution mode */
+GLOBAL double start_distance, step_distance;    /* multiresolution mode */
 GLOBAL double flat_threshold, flat_threshold_height;
 GLOBAL double H, V;
 GLOBAL struct Cell_head window;
@@ -164,7 +164,7 @@ float exposition(float *elevation);
 float range(float *elevation);
 float variance(float *elevation, int n);
 int shape(PATTERN * pattern, int pattern_size, float *azimuth,
-	  float *elongation, float *width);
+          float *elongation, float *width);
 float extends(PATTERN * pattern, int pattern_size);
 int radial2cartesian(PATTERN *);
 
@@ -172,8 +172,8 @@ int radial2cartesian(PATTERN *);
 int reset_multi_patterns(void);
 int calc_multi_patterns(int row, int cur_row, int col);
 int update_pattern(int k, int i,
-		   double zenith_height, double zenith_distance,
-		   double zenith_angle, double nadir_height,
-		   double nadir_distance, double nadir_angle);
+                   double zenith_height, double zenith_distance,
+                   double zenith_angle, double nadir_height,
+                   double nadir_distance, double nadir_angle);
 
 #endif
