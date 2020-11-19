@@ -33,7 +33,7 @@ from core.gcmd import GError
 from gui_core.pystc import PyStc
 from core import globalvar
 from core.menutree import MenuTreeModelBuilder
-from gui_core.menu import Menu
+from gui_core.menu import RecentFilesMenu, Menu
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
 from core.debug import Debug
@@ -269,42 +269,107 @@ class PyEditController(object):
         self.overwrite = False
         self.parameters = None
 
+        # Get first (File) menu
+        menu = guiparent.menubar.GetMenu(0)
+        self.recent_files = RecentFilesMenu(
+            app_name='pyedit', parent_menu=menu, pos=1,
+        ) # pos=1 recent files menu position (index) in the parent (File) menu
+
+        self.recent_files.file_requested.connect(self.OpenRecentFile)
+
+    def _openFile(self, file_path):
+        """Try open file and read content
+
+        :param str file_path: file path
+
+        :return str or None: file content or None
+        """
+        try:
+            with open(file_path, 'r') as f:
+                content = f.read()
+                return content
+        except PermissionError:
+            GError(
+                message=_(
+                    "Permission denied <{}>. Please change file "
+                    "permission for reading.".format(file_path)
+                ),
+                parent=self.guiparent,
+                showTraceback=False,
+            )
+        except IOError:
+            GError(
+                message=_("Couldn't read file <{}>.".format(file_path)),
+                parent=self.guiparent,
+            )
+
+    def _writeFile(self, file_path, content, additional_err_message=''):
+        """Try open file and write content
+
+        :param str file_path: file path
+        :param str content: content written to the file
+        :param str additional_err_message: additional error message
+
+        :return None or True: file written or None
+        """
+        try:
+            with open(file_path, 'w') as f:
+                f.write(content)
+                return True
+        except PermissionError:
+            GError(
+                message=_(
+                    "Permission denied <{}>. Please change file "
+                    "permission for writting.{}".format(
+                        file_path, additional_err_message,
+                    ),
+                ),
+                parent=self.guiparent,
+                showTraceback=False,
+            )
+        except IOError:
+            GError(
+                message=_(
+                    "Couldn't write file <{}>.{}".
+                    format(file_path, additional_err_message),
+                ),
+                parent=self.guiparent,
+            )
+
     def OnRun(self, event):
         """Run Python script"""
         if not self.filename:
             self.filename = gscript.tempfile() + '.py'
             self.tempfile = True
-            try:
-                fd = open(self.filename, "w")
-                fd.write(self.body.GetText())
-            except IOError as e:
-                GError(_("Unable to launch Python script. %s") % e,
-                       parent=self.guiparent)
-                return
-            finally:
-                fd.close()
+            file_is_written = self._writeFile(
+                file_path=self.filename, content=self.body.GetText(),
+                additional_err_message=" Unable to launch Python script.",
+
+            )
+            if file_is_written:
                 mode = stat.S_IMODE(os.lstat(self.filename)[stat.ST_MODE])
                 os.chmod(self.filename, mode | stat.S_IXUSR)
         else:
             # always save automatically before running
-            fd = open(self.filename, "w")
-            try:
-                fd.write(self.body.GetText())
-            finally:
-                fd.close()
-            # set executable file
-            # (not sure if needed every time but useful for opened files)
-            os.chmod(self.filename, stat.S_IRWXU | stat.S_IWUSR)
+            file_is_written = self._writeFile(
+                file_path=self.filename, content=self.body.GetText(),
+                additional_err_message=" Unable to launch Python script.",
+            )
+            if file_is_written:
+                # set executable file
+                # (not sure if needed every time but useful for opened files)
+                os.chmod(self.filename, stat.S_IRWXU | stat.S_IWUSR)
 
-        # run in console as other modules, avoid Python shell which
-        # carries variables over to the next execution
-        env = os.environ.copy()
-        if self.overwrite:
-            env['GRASS_OVERWRITE'] = '1'
-        cmd = [fd.name]
-        if self.parameters:
-            cmd.extend(self.parameters)
-        self.giface.RunCmd(cmd, env=env)
+        if file_is_written:
+            # run in console as other modules, avoid Python shell which
+            # carries variables over to the next execution
+            env = os.environ.copy()
+            if self.overwrite:
+                env['GRASS_OVERWRITE'] = '1'
+            cmd = [self.filename]
+            if self.parameters:
+                cmd.extend(self.parameters)
+            self.giface.RunCmd(cmd, env=env)
 
     def SaveAs(self):
         """Save python script to file"""
@@ -349,14 +414,12 @@ class PyEditController(object):
     def Save(self):
         """Save current content to a file and set executable permissions"""
         assert self.filename
-        fd = open(self.filename, "w")
-        try:
-            fd.write(self.body.GetText())
-        finally:
-            fd.close()
-
-        # executable file
-        os.chmod(self.filename, stat.S_IRWXU | stat.S_IWUSR)
+        file_is_written = self._writeFile(
+                 file_path=self.filename, content=self.body.GetText(),
+             )
+        if file_is_written:
+            # executable file
+            os.chmod(self.filename, stat.S_IRWXU | stat.S_IWUSR)
 
     def OnSave(self, event):
         """Save python script to file
@@ -367,6 +430,11 @@ class PyEditController(object):
             self.Save()
         else:
             self.SaveAs()
+
+        if self.filename:
+            self.recent_files.AddFileToHistory(
+                filename=self.filename,
+            )
 
     def IsModified(self):
         """Check if python script has been modified"""
@@ -387,11 +455,11 @@ class PyEditController(object):
         if not filename:
             return
 
-        fd = open(filename, "r")
-        try:
-            self.body.SetText(fd.read())
-        finally:
-            fd.close()
+        content = self._openFile(file_path=filename)
+        if content:
+            self.body.SetText(content)
+        else:
+            return
 
         self.filename = filename
         self.tempfile = False
@@ -400,6 +468,36 @@ class PyEditController(object):
         """Handle open event but ask about replacing content first"""
         if self.CanReplaceContent('file'):
             self.Open()
+            if self.filename:
+                self.recent_files.AddFileToHistory(
+                    filename=self.filename,
+                )
+
+    def OpenRecentFile(self, path, file_exists, file_history):
+        """Try open recent file and read content
+
+        :param str path: file path
+        :param bool file_exists: file path exists
+        :param bool file_history: file history obj instance
+
+        :return: None
+        """
+        if not file_exists:
+            GError(
+                _(
+                    "File <{}> doesn't exist."
+                    "It was probably moved or deleted.".format(path)
+                ),
+                parent=self.guiparent,
+            )
+        else:
+            if self.CanReplaceContent(by_message='file'):
+                self.filename = path
+                content = self._openFile(file_path=path)
+                if content:
+                    self.body.SetText(content)
+                    file_history.AddFileToHistory(filename=path)  # move up the list
+                    self.tempfile = False
 
     def IsEmpty(self):
         """Check if python script is empty"""
@@ -418,22 +516,27 @@ class PyEditController(object):
     def SetScriptTemplate(self, event):
         if self.CanReplaceContent('template'):
             self.body.SetText(script_template())
+            self.filename = None
 
     def SetModuleTemplate(self, event):
         if self.CanReplaceContent('template'):
             self.body.SetText(module_template())
+            self.filename = None
 
     def SetScriptExample(self, event):
         if self.CanReplaceContent('example'):
             self.body.SetText(script_example())
+            self.filename = None
 
     def SetModuleExample(self, event):
         if self.CanReplaceContent('example'):
             self.body.SetText(module_example())
+            self.filename = None
 
     def SetModuleErrorHandlingExample(self, event):
         if self.CanReplaceContent('example'):
             self.body.SetText(module_error_handling_example())
+            self.filename = None
 
     def CanReplaceContent(self, by_message):
         """Check with user if we can replace content by something else
