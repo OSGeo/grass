@@ -65,7 +65,7 @@ jobs:
         echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
     - name: Set LD_LIBRARY_PATH for compilation
       run: |
-        echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV"
+        echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
     - name: Build
       run: .github/workflows/build.sh $HOME/install
     - name: Add the bin directory to PATH
