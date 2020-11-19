@@ -8,7 +8,7 @@ jobs:
 
   flake8-lib-python:
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v1
@@ -27,7 +27,7 @@ jobs:
 
   flake8-wxgui:
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v1
@@ -46,7 +46,7 @@ jobs:
 
   flake8-scripts:
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v1
@@ -65,7 +65,7 @@ jobs:
 
   flake8-temporal-modules:
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v1
