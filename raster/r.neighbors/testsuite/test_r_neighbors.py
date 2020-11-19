@@ -530,10 +530,10 @@ class TestNeighbors(TestCase):
         self.to_remove.extend(outputs)
         self.assertModule(
             "r.neighbors",
-            flags="c",
             input="elevation",
             size=7,
-            gauss=2.0,
+            weighting_function="gaussian",
+            weighting_factor=2.0,
             output=",".join(outputs),
             method=list(self.test_options[test_case].keys()),
         )
@@ -557,6 +557,7 @@ class TestNeighbors(TestCase):
             "r.neighbors",
             input="elevation",
             size=5,
+            weighting_function="file",
             output=",".join(outputs),
             method=list(self.test_options[test_case].keys()),
             weight=weights,
@@ -569,6 +570,7 @@ class TestNeighbors(TestCase):
             input="elevation",
             flags="c",
             size=5,
+            weighting_function="file",
             output="{}_fails".format(test_case),
             method="sum",
             weight=weights,
