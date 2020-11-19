@@ -14,6 +14,7 @@ jobs:
         os:
         - ubuntu-16.04
         - ubuntu-18.04
+        - ubuntu-20.04
       fail-fast: false
 
     steps:
@@ -29,10 +30,10 @@ jobs:
         mkdir $HOME/install
     - name: Ensure one core for compilation
       run: |
-        echo "::set-env name=MAKEFLAGS::-j1"
+        echo "MAKEFLAGS=-j1" >> $GITHUB_ENV
     - name: Set LD_LIBRARY_PATH for compilation
       run: |
-        echo "::set-env name=LD_LIBRARY_PATH::$HOME/install/lib"
+        echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
     - name: Build
       run: .github/workflows/build.sh $HOME/install
 
@@ -45,6 +46,7 @@ jobs:
         os:
         - ubuntu-16.04
         - ubuntu-18.04
+        - ubuntu-20.04
       fail-fast: false
 
     steps:
@@ -60,15 +62,15 @@ jobs:
         mkdir $HOME/install
     - name: Set number of cores for compilation
       run: |
-        echo "::set-env name=MAKEFLAGS::-j$(nproc)"
+        echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
     - name: Set LD_LIBRARY_PATH for compilation
       run: |
-        echo "::set-env name=LD_LIBRARY_PATH::$HOME/install/lib"
+        echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV"
     - name: Build
       run: .github/workflows/build.sh $HOME/install
     - name: Add the bin directory to PATH
       run: |
-        echo "::add-path::$HOME/install/bin"
+        echo "$HOME/install/bin" >> $GITHUB_PATH
     - name: Test executing of the grass command
       run: .github/workflows/test_simple.sh
     - name: Run tests
