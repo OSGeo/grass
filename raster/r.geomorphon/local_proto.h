@@ -15,7 +15,7 @@
 #endif
 
 
-#ifndef PI2			/* PI/2 */
+#ifndef PI2                     /* PI/2 */
 #define PI2 (2*atan(1))
 #endif
 
@@ -42,7 +42,7 @@ typedef struct
     char elevname[150];
     RASTER_MAP_TYPE raster_type;
     FCELL **elev;
-    int fd;			/* file descriptor */
+    int fd;                     /* file descriptor */
 } MAPS;
 
 typedef struct
@@ -54,24 +54,24 @@ typedef struct
     int pattern[NUM_DIRS];
     float elevation[NUM_DIRS];
     double distance[NUM_DIRS];
-    double x[NUM_DIRS], y[NUM_DIRS];		/* cartesian coordinates of geomorphon */
+    double x[NUM_DIRS], y[NUM_DIRS];    /* cartesian coordinates of geomorphon */
 } PATTERN;
 
 typedef enum
 {
-    ZERO,			/* zero cats do not accept zero category */
-    FL,				/* flat */
-    PK,				/* peak (summit) */
-    RI,				/* ridge */
-    SH,				/* shoulder */
-    SP,				/* spur (convex slope) */
-    SL,				/* slope */
-    HL,				/* hollow (concave slope) */
-    FS,				/* footslope */
-    VL,				/* valley */
-    PT,				/* pit (depression) */
-    __,				/* error (impossible) */
-    CNT				/* counter */
+    ZERO,                       /* zero cats do not accept zero category */
+    FL,                         /* flat */
+    PK,                         /* peak (summit) */
+    RI,                         /* ridge */
+    SH,                         /* shoulder */
+    SP,                         /* spur (convex slope) */
+    SL,                         /* slope */
+    HL,                         /* hollow (concave slope) */
+    FS,                         /* footslope */
+    VL,                         /* valley */
+    PT,                         /* pit (depression) */
+    __,                         /* error (impossible) */
+    CNT                         /* counter */
 } FORMS;
 
 /* main */
@@ -105,7 +105,7 @@ float exposition(float *elevation);
 float range(float *elevation);
 float variance(float *elevation, int n);
 int shape(PATTERN * pattern, int pattern_size, float *azimuth,
-	  float *elongation, float *width);
+          float *elongation, float *width);
 float extends(PATTERN * pattern);
 int radial2cartesian(PATTERN *);
 #endif
