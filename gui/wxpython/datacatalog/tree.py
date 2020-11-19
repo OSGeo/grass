@@ -29,6 +29,7 @@ try:
     from watchdog.events import PatternMatchingEventHandler
 except ImportError:
     watchdog_used = False
+    PatternMatchingEventHandler = object
 
 
 import wx
@@ -1596,8 +1597,8 @@ class DataCatalogTree(TreeView):
                 if node:
                     if map:
                         # check if map already exists
-                        if not self._model.SearchNodes(parent=node, name=newname, type=element):
-                            self.InsertLayer(name=newname, mapset_node=node,
+                        if not self._model.SearchNodes(parent=node, name=map, type=element):
+                            self.InsertLayer(name=map, mapset_node=node,
                                              element_name=element)
                     else:
                         # we know some maps created
