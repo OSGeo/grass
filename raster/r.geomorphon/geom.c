@@ -78,6 +78,30 @@ FORMS determine_form(int num_minus, int num_plus)
     return forms[num_minus][num_plus];
 }
 
+/*
+ * Return the degree of difference between the actual landform and the
+ * nominal landform based on the definitions in the plugin manual and the
+ * original paper.
+ */
+int form_deviation(const unsigned num_minus, const unsigned num_plus)
+{
+    const int dev[9][9] = {
+        /* minus ------------- plus ---------------- */
+        /*       0   1   2   3   4   5   6   7   8  */
+        /* 0 */ {0,  1,  2,  0,  1,  1,  0,  1,  0},
+        /* 1 */ {1,  2,  2,  1,  2,  2,  1,  2, -1},
+        /* 2 */ {2,  2,  2,  1,  2,  1,  2, -1, -1},
+        /* 3 */ {0,  1,  1,  0,  1,  0, -1, -1, -1},
+        /* 4 */ {1,  2,  2,  1,  2, -1, -1, -1, -1},
+        /* 5 */ {1,  2,  1,  0, -1, -1, -1, -1, -1},
+        /* 6 */ {0,  1,  2, -1, -1, -1, -1, -1, -1},
+        /* 7 */ {1,  2, -1, -1, -1, -1, -1, -1, -1},
+        /* 8 */ {0, -1, -1, -1, -1, -1, -1, -1, -1},
+    };
+
+    return (num_minus < 9 && num_plus < 9) ? dev[num_minus][num_plus] : -1;
+}
+
 int determine_binary(int *pattern, int sign)
 {
     /* extract binary pattern for zenith (+) or nadir (-) from unrotated ternary pattern */
@@ -117,12 +141,17 @@ int rotate(unsigned char binary)
 int determine_ternary(int *pattern)
 {
     /* extract rotated and mirrored ternary pattern form unrotated ternary pattern */
+    return global_ternary_codes[preliminary_ternary(pattern)];
+}
+
+int preliminary_ternary(const int *pattern)
+{
     unsigned ternary_code = 0;
     int power, i;
 
     for (i = 0, power = 1; i < NUM_DIRS; ++i, power *= 3)
         ternary_code += (pattern[i] + 1) * power;
-    return global_ternary_codes[ternary_code];
+    return ternary_code;
 }
 
 float intensity(float *elevation, int pattern_size)
@@ -201,6 +230,10 @@ int radial2cartesian(PATTERN * pattern)
     return 0;
 }
 
+/*
+ * Return area in square metres of the octagon of the geomorphon mesh
+ * projection onto the horizontal plane.
+ */
 float extends(PATTERN * pattern)
 {
     int i, j;
@@ -212,6 +245,69 @@ float extends(PATTERN * pattern)
             (pattern->x[i] * pattern->y[j] - pattern->x[j] * pattern->y[i]);
     }
     return fabs(area) / 2.;
+}
+
+static double distance_3d(const double x1, const double y1, const double z1,
+                          const double x2, const double y2, const double z2)
+{
+    const double dx = x2 - x1, dy = y2 - y1, dz = z2 - z1;
+
+    return sqrt(dx * dx + dy * dy + dz * dz);
+}
+
+/*
+ * Return perimeter length in metres of the same plane figure as above.
+ */
+double octa_perimeter(const PATTERN * p)
+{
+    unsigned i, j;
+    double ret = 0.0;
+
+    for (i = 0, j = 1; i < NUM_DIRS; ++i, ++j) {
+        j = j < NUM_DIRS ? j : 0;
+        ret += distance_3d(p->x[i], p->y[i], 0, p->x[j], p->y[j], 0);
+    }
+    return ret;
+}
+
+/*
+ * Return perimeter length in metres of the geomorphon shape mesh.
+ */
+double mesh_perimeter(const PATTERN * p)
+{
+    unsigned i, j;
+    double ret = 0.0;
+
+    for (i = 0, j = 1; i < NUM_DIRS; ++i, ++j) {
+        j = j < NUM_DIRS ? j : 0;
+        ret += distance_3d(p->x[i], p->y[i], p->elevation[i],
+                           p->x[j], p->y[j], p->elevation[j]);
+    }
+    return ret;
+}
+
+/*
+ * Return area in square metres of the 8 triangles that constitute the
+ * geomorphon mesh.
+ */
+double mesh_area(const PATTERN * p)
+{
+    unsigned i, j;
+    double ret = 0.0;
+
+    for (i = 0, j = 1; i < NUM_DIRS; ++i, ++j) {
+        double a, b, c, s;
+
+        j = j < NUM_DIRS ? j : 0;
+        a = distance_3d(0, 0, 0, p->x[i], p->y[i], p->elevation[i]);
+        b = distance_3d(0, 0, 0, p->x[j], p->y[j], p->elevation[j]);
+        c = distance_3d(p->x[i], p->y[i], p->elevation[i],
+                        p->x[j], p->y[j], p->elevation[j]);
+        s = (a + b + c) / 2.0;
+        /* Ready for the Heron's formula. */
+        ret += sqrt(s * (s - a) * (s - b) * (s - c));
+    }
+    return ret;
 }
 
 int shape(PATTERN * pattern, int pattern_size, float *azimuth,
