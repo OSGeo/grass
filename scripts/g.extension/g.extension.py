@@ -2277,7 +2277,9 @@ def main():
 
     if options['operation'] == 'add':
         check_dirs()
-        get_addons_paths(gg_addons_base_dir=options['prefix'])
+        # check if extension is from official github or other http/https sources
+        if original_url == '' or original_url.startswith('http'):
+            get_addons_paths(gg_addons_base_dir=options['prefix'])
         source, url = resolve_source_code(name=options['extension'],
                                           url=original_url)
         xmlurl = resolve_xmlurl_prefix(original_url, source=source)
