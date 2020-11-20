@@ -3,8 +3,10 @@ import sys
 import re
 import os
 
-if len(sys.argv) == 1 or len(sys.argv) == 4 or len(sys.argv) > 5 or re.match('^-*help', sys.argv[1]):
-    print('Usage: gridatb.to.arc.py gridatb_file arc_file [xllcorner yllcorner]')
+if len(sys.argv) == 1 or len(sys.argv) == 4 or len(sys.argv) > 5 or \
+   re.match('^-*help', sys.argv[1]):
+    print('Usage: gridatb.to.arc.py gridatb_file arc_file'
+          ' [xllcorner yllcorner]')
     exit()
 
 xllcorner = 0

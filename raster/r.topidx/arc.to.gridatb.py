@@ -3,6 +3,7 @@ import sys
 import re
 import os
 
+
 def match(pattern, string):
     m = re.match(pattern, string, re.IGNORECASE)
     if m:
@@ -11,6 +12,7 @@ def match(pattern, string):
     else:
         match.value = None
         return False
+
 
 if len(sys.argv) != 3 or re.match('^-*help', sys.argv[1]):
     print('Usage: arc.to.gridatb.py arc_file gridatb_file')
@@ -67,7 +69,8 @@ arc.to.gridatb.py {infname} {outfname}
 {ncols} {nrows} {cellsize}
 ''')
 for inline in inf:
-    outline = re.sub(f'(?=^|[ \t]*){nodata_value}(\.0*)?(?=([ \t]*|$))', '9999.00', inline)
+    outline = re.sub(f'(?=^|[ \t]*){nodata_value}(\\.0*)?(?=([ \t]*|$))',
+                     '9999.00', inline)
     outf.write(outline)
 
 inf.close()
