@@ -393,26 +393,60 @@ class RDigitController(wx.EvtHandler):
         self._editOldRaster = True
         return True
 
-    def SelectNewMap(self):
+    def SelectNewMap(
+            self, standalone=False, mapName=None, bgMap=None,
+            mapType=None,
+
+    ):
         """After selecting new raster, shows dialog to choose name,
-        background map and type of the new map."""
-        dlg = NewRasterDialog(parent=self._mapWindow)
-        dlg.CenterOnParent()
-        if dlg.ShowModal() == wx.ID_OK:
+        background map and type of the new map.
+
+        :params standalone, mapName, bgMap, mapType: if digitizer is
+        launched as standalone module
+
+        :param bool standalone: if digitizer is launched as standalone
+        module
+        :param str mapName: edited raster map name
+        :param str bgMap: background raster map name
+        :param str mapType: raster map type CELL, FCELL, DCELL
+        """
+        if standalone:
             try:
-                self._createNewMap(mapName=dlg.GetMapName(),
-                                   backgroundMap=dlg.GetBackgroundMapName(),
-                                   mapType=dlg.GetMapType())
+                self._createNewMap(
+                    mapName=mapName, backgroundMap=bgMap,
+                    mapType=mapType,
+                )
             except ScriptError:
-                GError(parent=self._mapWindow, message=_(
-                    "Failed to create new raster map."))
+                GError(
+                    parent=self._mapWindow, message=_(
+                        "Failed to create new raster map."
+                    ),
+                )
                 return False
-            finally:
-                dlg.Destroy()
             return True
         else:
-            dlg.Destroy()
-            return False
+            dlg = NewRasterDialog(parent=self._mapWindow)
+            dlg.CenterOnParent()
+            if dlg.ShowModal() == wx.ID_OK:
+                try:
+                    self._createNewMap(
+                        mapName=dlg.GetMapName(),
+                        backgroundMap=dlg.GetBackgroundMapName(),
+                        mapType=dlg.GetMapType(),
+                    )
+                except ScriptError:
+                    GError(
+                        parent=self._mapWindow, message=_(
+                            "Failed to create new raster map."
+                        ),
+                    )
+                    return False
+                finally:
+                    dlg.Destroy()
+                return True
+            else:
+                dlg.Destroy()
+                return False
 
     def _createNewMap(self, mapName, backgroundMap, mapType):
         """Creates a new raster map based on specified background and type."""

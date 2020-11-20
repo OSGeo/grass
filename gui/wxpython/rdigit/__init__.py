@@ -1,4 +1,6 @@
 all = [
     'controller',
-    'toolbars'
+    'toolbars',
+    'dialogs',
+    'g.gui.rdigit',
 ]
