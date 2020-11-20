@@ -3041,7 +3041,7 @@ class TemporalAlgebraParser(object):
 
     def p_expr_time_const(self, t):
         # Examples
-        # start_doy(A, -1)  # Get the start DOY from the preceding map 
+        # start_doy(A, -1)  # Get the start DOY from the preceding map
         #                     of the time series as a numerical constant
         #                     for the mapcalculator expression
 
@@ -3084,6 +3084,7 @@ class TemporalAlgebraParser(object):
 
     # Handle errors.
     def p_error(self, t):
+
         if t:
             raise SyntaxError("syntax error on line %d, position %i token %s near '%s' expression '%s'" %
                               (t.lineno, t.lexpos, t.type, t.value, self.expression))
