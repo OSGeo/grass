@@ -13,7 +13,7 @@ def match(pattern, string):
         return False
 
 if len(sys.argv) != 3 or re.match('^-*help', sys.argv[1]):
-    print('Usage: arc.to.gridatb.py arc_file gridatb_file');
+    print('Usage: arc.to.gridatb.py arc_file gridatb_file')
     exit()
 
 infname = sys.argv[1]
