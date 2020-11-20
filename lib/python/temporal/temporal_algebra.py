@@ -3083,7 +3083,7 @@ class TemporalAlgebraParser(object):
 
 
     def p_error(self, t):
-    # Handle errors.
+        # Handle errors.
         if t:
             raise SyntaxError("syntax error on line %d, position %i token %s near '%s' expression '%s'" %
                               (t.lineno, t.lexpos, t.type, t.value, self.expression))
