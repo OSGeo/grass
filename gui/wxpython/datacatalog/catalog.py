@@ -72,6 +72,7 @@ class DataCatalog(wx.Panel):
 
         self.SetAutoLayout(True)
         self.SetSizer(self.sizer)
+        self.Fit()
 
         self.Layout()
 

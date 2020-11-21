@@ -19,11 +19,10 @@ class InfoManagerDataCatalog:
         self.sizer.Add(infoBar, wx.SizerFlags().Expand())
         infoBar.SetButtons(buttons)
         infoBar.ShowMessage(_(
-            "GRASS is using the following structure of data organization:"
-            "The Database {db} has the character of a working directory. "
-            "The Location (Project) defines in which coordinate system you will work. "
-            "The Mapset (Subproject) contains GIS data related to one project task. To store general spatial data, "
-            "you can use PERMANENT Mapset which is created automagically when creating a new Location. "
+            "GRASS is using the following structure of data organization:\n"
+            "The Database {db} has the character of a working directory.\n"
+            "The Location (Project) defines in which coordinate system you will work.\n"
+            "The Mapset (Subproject) contains GIS data related to one project task."
         ).format(db=gisenv()['GISDBASE']), wx.ICON_INFORMATION)
 
     def ShowInfoBar2(self, buttons):
