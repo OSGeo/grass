@@ -52,7 +52,7 @@ class InfoBar(IB.InfoBar):
         if bitmap.IsOk():
             # Add the bitmap to the button
             button.SetBitmap(bitmap, wx.LEFT)
-            button.SetBitmapMargins((2, 2)) # default is 4 but that seems too big to me.
+            button.SetBitmapMargins((2, 2))  # default is 4 but that seems too big to me.
 
         if wx.Platform == '__WXMAC__':
             # smaller buttons look better in the(narrow)info bar under OS X
@@ -85,8 +85,3 @@ class InfoBar(IB.InfoBar):
         """
         self.DoHide()
         self.Destroy()
-
-
-
-
-

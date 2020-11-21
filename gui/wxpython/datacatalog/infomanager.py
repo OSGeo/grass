@@ -5,6 +5,7 @@ import webbrowser
 from gui_core.infobar import InfoBar
 from grass.script import gisenv
 
+
 class InfoManagerDataCatalog:
     """
     Infobar Manager
