@@ -55,32 +55,30 @@ class DataCatalog(wx.Panel):
 
     def _layout(self):
         """Do layout"""
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self.toolbar, proportion=0,
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.sizer.Add(self.toolbar, proportion=0,
                   flag=wx.EXPAND)
-        sizer.Add(self.tree.GetControl(), proportion=1,
+        self.sizer.Add(self.tree.GetControl(), proportion=1,
                   flag=wx.EXPAND)
 
-        # infobar instance
-        self.infoManager = InfoManager(guiparent=self, sizer=sizer)
+        #infobar instance
+        self.infoManager = InfoManager(guiparent=self, sizer=self.sizer)
 
         # Show infobar for first-time user
         if is_current_mapset_in_demolocation:
-            buttons1 = []
-            buttons2 = []
-            buttons1.append(("Learn More", self._onLearnMore))
-            buttons2.append(("Create new Location", self.OnCreateLocation))
+            buttons1 = [("Learn More", self._onLearnMore)]
+            buttons2 = [("Create new Location", self.OnCreateLocation)]
             self.infoManager.ShowInfoBar1(buttons1)
             self.infoManager.ShowInfoBar2(buttons2)
-            sizer = self.infoManager.sizer
 
         self.SetAutoLayout(True)
-        self.SetSizer(sizer)
+        self.SetSizer(self.sizer)
 
         self.Layout()
 
     def _onLearnMore(self, event):
         webbrowser.open("https://grass.osgeo.org/grass79/manuals/grass_database.html")
+        event.Skip()
 
     def LoadItems(self):
         self.tree.ReloadTreeItems()

@@ -16,56 +16,70 @@ class InfoBar(IB.InfoBar):
     def __init__(self, parent):
         IB.InfoBar.__init__(self, parent)
 
-        self.SetBackgroundColour(wx.Colour(255, 248, 220))
-        self._text.SetOwnForegroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
-
-        self.buttons_ids = []
+        colBg = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
+        self.SetBackgroundColour(colBg)
+        self.SetOwnForegroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT))
+        self._text.SetBackgroundColour(colBg)
+        self._button.SetBackgroundColour(colBg)
 
         # LAYOUT
-        # icon, text, close button
-        sizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.buttonBoxSizer = wx.BoxSizer(wx.VERTICAL)
-        self.buttonBoxSizer.Add(self._button, wx.SizerFlags().Top().Border(wx.ALL, 5))
-
-        sizer.Add(self._icon, wx.SizerFlags().Top().Border(wx.ALL, 5))
-        sizer.Add(self._text, proportion=1,
-                  flag=wx.EXPAND | wx.ALL, border=5)
-        sizer.Add(self.buttonBoxSizer, wx.SizerFlags().Top().Border(wx.ALL, 5))
-
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        self.subSizerText = wx.BoxSizer(wx.HORIZONTAL)
+        self.subSizerButtons = wx.BoxSizer(wx.HORIZONTAL)
+        self.subSizerText.Add(self._icon, wx.SizerFlags().Centre().Border())
+        self.subSizerText.Add(self._text, 200, wx.ALIGN_CENTER_VERTICAL)
+        self.subSizerText.AddStretchSpacer()
+        self.subSizerText.Add(self._button, wx.SizerFlags().Centre().Border())
+        self.subSizerButtons.AddStretchSpacer()
+        sizer.Add(self.subSizerText, wx.SizerFlags().Expand())
+        sizer.Add(self.subSizerButtons, wx.SizerFlags().Expand())
         self.SetSizer(sizer)
 
     def AddButton(self, btnid, label, bitmap=wx.NullBitmap):
         """
-        Adds a button to be shown in the info bar and
-        does not remove Close button.
+        Adds a button to be shown in the info bar.
         """
         sizer = self.GetSizer()
 
         if not sizer:
             raise Exception("must be created first")
 
+        # user-added buttons replace the standard close button so remove it if we
+        # hadn't done it yet
+        if sizer.Detach(self._button):
+            self._button.Hide()
+
         button = wx.Button(self, btnid, label)
 
-        # Add another button under close button
-        self.buttonBoxSizer.Add(button, wx.SizerFlags().Top().Border(wx.ALL, 5))
+        if bitmap.IsOk():
+            # Add the bitmap to the button
+            button.SetBitmap(bitmap, wx.LEFT)
+            button.SetBitmapMargins((2, 2)) # default is 4 but that seems too big to me.
+
+        if wx.Platform == '__WXMAC__':
+            # smaller buttons look better in the(narrow)info bar under OS X
+            button.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
+
+        num_items = self.subSizerButtons.GetItemCount()
+        if num_items == 1:
+            self.subSizerButtons.Add(button, wx.SizerFlags().Centre().Border())
+            self.subSizerButtons.Add(self._button, wx.SizerFlags().Centre().Border())
+            self._button.Show()
+        else:
+            self.subSizerButtons.Insert(num_items - 1, button, wx.SizerFlags().Centre().Border())
 
         if self.IsShown():
             self.UpdateParent()
-
-        return button
 
     def SetButtons(self, buttons):
         """
         Sets buttons for notification.
         Parameter *buttons* is a list of tuples (button_name, event)
         """
-        if buttons:
-            for button_name, event in buttons:
-                button_id = wx.NewId()
-                button = self.AddButton(button_id, button_name)
-                if event:
-                    self.Bind(wx.EVT_BUTTON, event, button)
-                self.buttons_ids.append(button_id)
+        for button_name, evt_handler in buttons:
+            button_id = wx.NewId()
+            self.AddButton(button_id, button_name)
+            self.Bind(wx.EVT_BUTTON, evt_handler, id=button_id)
 
     def OnButton(self, event):
         """
@@ -86,59 +100,26 @@ class InfoManager:
     def ShowInfoBar1(self, buttons):
         infoBar = InfoBar(self.guiparent)
         self.sizer.Add(infoBar, wx.SizerFlags().Expand())
-        self._fitLayout()
         infoBar.SetButtons(buttons)
         infoBar.ShowMessage(_(
-            "GRASS GIS is a geodata analysis system which keeps its own data hierarchy. The database {db} has "
-            "the character of a working directory. "
-            "It contains Locations (Projects) that can have different coordinate systems (CRS). "
-            "In Location we can find Mapsets that always "
-            "have the same CRS as given Location. To store general spatial data, "
-            "you can use PERMANENT Mapset which is created automatically when creating a new Location. "
-            "To learn more about GRASS GIS data hierarchy, "
-            "please look to the documentation."
+            "GRASS is using the following structure of data organization:"
+            "The Database {db} has the character of a working directory. "
+            "The Location (Project) defines in which coordinate system you will work. "
+            "The Mapset (Subproject) contains GIS data related to one project task. To store general spatial data, "
+            "you can use PERMANENT Mapset which is created automagically when creating a new Location. "
         ).format(db=gisenv()['GISDBASE']), wx.ICON_INFORMATION)
 
     def ShowInfoBar2(self, buttons):
         infoBar = InfoBar(self.guiparent)
         self.sizer.Add(infoBar, wx.SizerFlags().Expand())
-        self._fitLayout()
         infoBar.SetButtons(buttons)
         infoBar.ShowMessage(_(
-            "GRASS GIS has opened in a world wide, latitude-longitude system in degrees. "
-            "To import your own data, first, define its coordinate "
-            "system through creating a new location. Then you can create "
-            "a mapset, switch to it (make it current) and import data."
+            "In GRASS you can be sure that your data will not be displayed in a "
+            "different coordinate system than the one you defined. "
+            "Now, you are in a world wide, latitude-longitude system in degrees. "
+            "If you are planning to work with data in a different system, "
+            "please, create new Location. You can do it through right click"
+            "on the Database node in Data tab or simply click here: "
         ), wx.ICON_INFORMATION)
 
-    def ShowInfoBar3(self):
-        infoBar = InfoBar(self.guiparent)
-        self.sizer.Add(infoBar, wx.SizerFlags().Expand())
-        self._fitLayout()
-        infoBar.ShowMessage(_(
-            "GRASS GIS has started in default world wide location"
-            "because the last used mapset is used by another process."
-        ), wx.ICON_WARNING)
 
-    def ShowInfoBar4(self):
-        infoBar = InfoBar(self.guiparent)
-        self.sizer.Add(infoBar, wx.SizerFlags().Expand())
-        self._fitLayout()
-        infoBar.ShowMessage(_(
-            "GRASS GIS has started in default world wide location"
-            "because the last used mapset was not found."
-        ), wx.ICON_WARNING)
-
-    def ShowInfoBar5(self):
-        infoBar = InfoBar(self.guiparent)
-        self.sizer.Add(infoBar, wx.SizerFlags().Expand())
-        self._fitLayout()
-        infoBar.ShowMessage(_(
-            "You have created new location. Would you like"
-            "to create a new mapset within this location?"
-        ), wx.ICON_INFORMATION)
-
-    def _fitLayout(self):
-        self.guiparent.SetAutoLayout(True)
-        self.guiparent.SetSizer(self.sizer)
-        self.guiparent.Fit()
