@@ -34,8 +34,8 @@ class InfoManagerDataCatalog:
             "different coordinate system than the one you defined. "
             "Now, you are in a world wide, latitude-longitude system in degrees. "
             "If you are planning to work with data in a different system, "
-            "please, create new Location. You can do it through right click"
-            "on the Database node in Data tab or simply click here: "
+            "please, create new Location. You can do it through right click "
+            "on the Database node in Data tab or simply click here:"
         ), wx.ICON_INFORMATION)
 
     def _onLearnMore(self, event):
