@@ -39,6 +39,7 @@ import atexit
 
 import grass.script as grass
 from grass.exceptions import CalledModuleError
+from grass.script import sql_type_is_float
 
 
 def cleanup():
@@ -76,12 +77,15 @@ def main():
                           (int(layer), 'column'))
             layer = '1'
         try:
-            coltype = grass.vector_columns(input, layer)[column]
+            column_type = grass.vector_columns(input, layer)[column]['type']
         except KeyError:
             grass.fatal(_('Column <%s> not found') % column)
 
-        if coltype['type'] not in ('INTEGER', 'SMALLINT', 'CHARACTER', 'TEXT'):
-            grass.fatal(_("Key column must be of type integer or string"))
+        if sql_type_is_float(column_type):
+            grass.fatal(_("Column <{column}> is {column_type} and floating point"
+                          " types cannot be used for dissolving."
+                          " Use a column which is an integer or text.").format(
+                              column=column, column_type=column_type)
 
         f = grass.vector_layer_db(input, layer)
 
