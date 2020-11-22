@@ -118,7 +118,10 @@ def main():
         cmd = sqliteload + cmd
 
     grass.verbose("SQL: \"%s\"" % cmd)
-    grass.write_command('db.execute', input='-', database=database, driver=driver, stdin=cmd)
+    grass.write_command('db.execute', input='-',
+                        database=database, driver=driver,
+                        stdin=cmd,
+                        errors="exit")
 
     # write cmd history:
     grass.vector_history(vector)
