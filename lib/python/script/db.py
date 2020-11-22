@@ -231,3 +231,52 @@ def db_commit_transaction(driver):
     if driver in ('sqlite', 'pg', 'mysql'):
         return 'COMMIT'
     return ''
+
+
+_SQL_INT_TYPES = [
+    "INT",
+    "INTEGER",
+    "TINYINT",
+    "SMALLINT",
+    "MEDIUMINT",
+    "BIGINT",
+    "UNSIGNED BIG INT",
+    "INT2",
+    "INT8",
+]
+
+
+_SQL_FLOAT_TYPES = [
+    "REAL",
+    "DOUBLE",
+    "DOUBLE PRECISION",
+    "FLOAT",
+    "FLOATING POINT",
+]
+
+
+_SQL_NUMERIC_TYPES = _SQL_INT_TYPES + _SQL_FLOAT_TYPES
+
+
+def sql_type_is_int(sql_type):
+    """Return True if SQL type is integral
+
+    Returns True for known integral types, False otherwise.
+    """
+    return sql_type.upper() in _SQL_INT_TYPES
+
+
+def sql_type_is_float(sql_type):
+    """Return True if SQL type is floating point
+
+    Returns True for known floating point types, False otherwise.
+    """
+    return sql_type.upper() in _SQL_FLOAT_TYPES
+
+
+def sql_type_is_numeric(sql_type):
+    """Return True if SQL type is numeric
+
+    Returns True for known integral and floating point types, False otherwise.
+    """
+    return sql_type.upper() in _SQL_NUMERIC_TYPES
