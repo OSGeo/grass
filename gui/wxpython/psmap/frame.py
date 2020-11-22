@@ -202,7 +202,6 @@ class PsMapFrame(wx.Frame):
         # workaround for http://trac.wxwidgets.org/ticket/13628
         self.SetSize(self.GetBestSize())
 
-        self.Bind(fnb.EVT_FLATNOTEBOOK_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(fnb.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         self.Bind(EVT_CMD_DONE, self.OnCmdDone)
@@ -1219,13 +1218,6 @@ class PsMapFrame(wx.Frame):
         else:
             self.SetStatusText('')
 
-    def OnPageChanging(self, event):
-        """Flatnotebook page is changing"""
-        if self.currentPage == 0 and self.mouse['use'] in [
-                'addMap', 'addPoint', 'addLine', 'addRectangle'
-        ]:
-            event.Veto()
-
     def OnHelp(self, event):
         """Show help"""
         if self.parent and self.parent.GetName() == 'LayerManager':
@@ -1503,24 +1495,27 @@ class PsMapBufferedWindow(wx.Window):
     def MouseActions(self, event):
         """Mouse motion and button click notifier
         """
+        disable = self.preview and self.mouse['use'] in ('pointer', 'resize',
+                                                         'addMap', 'addPoint',
+                                                         'addLine', 'addRectangle')
         # zoom with mouse wheel
         if event.GetWheelRotation() != 0:
             self.OnMouseWheel(event)
 
         # left mouse button pressed
-        elif event.LeftDown():
+        elif event.LeftDown() and not disable:
             self.OnLeftDown(event)
 
         # left mouse button released
-        elif event.LeftUp():
+        elif event.LeftUp() and not disable:
             self.OnLeftUp(event)
 
         # dragging
-        elif event.Dragging():
+        elif event.Dragging() and not disable:
             self.OnDragging(event)
 
         # double click
-        elif event.ButtonDClick():
+        elif event.ButtonDClick() and not disable:
             self.OnButtonDClick(event)
 
         # middle mouse button pressed
