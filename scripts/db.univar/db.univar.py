@@ -115,7 +115,7 @@ def main():
                                 " but column <{column_name}> is {column_type}."
                                 " Use a column which is an integer"
                                 " or floating point number.").format(
-                                    column_name=cname, column_type=ctype)
+                                    column_name=cname, column_type=ctype))
     if not found:
         gscript.fatal(_("Column <%s> not found in table <%s>") % (column, table))
 
