@@ -1,11 +1,11 @@
 <h2>DESCRIPTION</h2>
 
 <em><b>r.neighbors</b></em> looks at each cell in a raster input
-file, and examines the values assigned to the
-cells in some user-defined "neighborhood" around it.  It
+map, and examines the values assigned to the
+cells in some user-defined "neighborhood" around it. It
 outputs a new raster map layer in which each cell is
 assigned a value that is some (user-specified)
-function of the values in that cell's neighborhood.  For
+function of the values in that cell's neighborhood. For
 example, each cell in the output layer might be assigned a
 value equal to the average of the values
 appearing in its 3 x 3 cell "neighborhood" in the input
@@ -59,20 +59,31 @@ Without using the selection map, the output map would look like this:
 </pre></div>
 
 <p>It is also possible to weigh cells within the neighborhood. This can
-be either done with a custom weights matrix with the <em><b>weight</b></em> option
-or by giving factors for mathematical functions in the <em><b>gauss</b></em> or
-<em><b>exponent</b></em> option.
-<p>In the <em><b>gauss</b></em> option, the user specifies the sigma value (&sigma;)
-for the gauss filter, that represents the standard deviation of the gaussian
-distribution. The weighting formula for the gaussian filter is defined as follows:
+be either done with a custom weights matrix or by specifying a weighting
+function.
+
+<p>In order to use a custom weights matrix, <i>file</i> needs to be
+specified as a <b>weighting_function</b> and a path to a text file
+containing the weights needs to be given in the <b>weight</b> option.
+
+<p>Alternatively, <i>gaussian</i> and <i>exponential</i> weighting
+functions can be selected as weighting function.
+
+<p>For the <i>gaussian</i> weighting function, the user specifies the
+sigma value (&sigma;) for the gauss filter in the <b>weighting_factor</b>
+option. The sigma value represents the standard deviation of the gaussian
+distribution, where the weighting formula for the gaussian filter is
+defined as follows:
 <p>exp(-(x&#42;x+y&#42;y)/(2&#42;&sigma;&#94;2))/(2&#42;&pi;&#42;&sigma;&#94;2)
 <p>Lower values for sigma result in a steeper curve, so that more weight
 is put on cells close to the center of the moving window with a steeper
 decrease in weights with distance from the center.
-<p>In the <em><b>exponent</b></em> option, the user specifies a factor for an
-exponential kernel. Negative factors result in negative exponential
-decrease in weights from the center cell. The weighting formula for the
-exponential kernel is defined as follows:
+
+<p>For the <i>exponential</i> weighting function, the user specifies a
+factor for an exponential kernel in the <b>weighting_factor</b>.
+Negative factors result in negative exponential decrease in weights from
+the center cell. The weighting formula for the exponential kernel is
+defined as follows:
 <p>exp(factor*sqrt(x&#42;x+y&#42;y))
 <p>Stronger negative values for the factor result in a steeper curve,
 so that more weight is put on cells close to the center of the moving
@@ -86,7 +97,7 @@ These options are described further below.
 
 <p>
 <em>Neighborhood Operation Methods:</em>
-The <b>neighborhood</b> operators determine what new 
+The <b>neighborhood</b> operators determine what new
 value a center cell in a neighborhood will have after examining
 values inside its neighboring cells.
 Each cell in a raster map layer becomes the center cell of a neighborhood 
@@ -208,13 +219,15 @@ For example, a size value of 3 will result in
 <p>
 <em>Matrix weights:</em>
 A custom matrix can be used if none of the neighborhood operation
-methods are desirable by using the <b>weight</b>.  This option must
+methods are desirable by using the <b>weight</b>. This option must
 be used in conjunction with the <b>size</b> option to specify the
-matrix size.  The weights desired are to be entered into a text file.
-For example, to calculate the focal mean with a matrix <b>size</b> of
-3,
+matrix size and <i>file</i> needs to be specified as
+<b>weighting_function</b>. The weights desired are to be entered into a
+text file. For example, to calculate the focal mean with a matrix
+<b>size</b> of 3,
 <div class="code"><pre>
-r.neigbors in=input.map out=output.map size=3 weight=weights.txt
+r.neigbors in=input.map out=output.map size=3 weighting_function=file \
+weight=weights.txt
 </pre></div>
 
 The contents of the weight.txt file:
@@ -235,7 +248,7 @@ This corresponds to the following 3x3 matrix:
 +-+-+-+
 </pre></div>
 
-To calculate an annulus shaped neighborhood the contents of weight.txt file 
+To calculate an annulus shaped neighborhood the contents of weight.txt file
 may be e.g. for size=5:
 <div class="code"><pre>
  0 1 1 1 0
@@ -421,7 +434,7 @@ r.neighbors input=random_cells output=counts method=count
 
 Optionally - exclude centre cell from the count (= only look around)
 <div class="code"><pre>
-r.mapcalc "cound_around = if( isnull(random_cells), counts, counts - 1)"
+r.mapcalc "count_around = if( isnull(random_cells), counts, counts - 1)"
 </pre></div>
 
 
