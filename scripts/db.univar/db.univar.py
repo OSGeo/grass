@@ -60,6 +60,7 @@ import atexit
 import math
 
 import grass.script as gscript
+from grass.script import sql_type_is_numeric
 
 
 def cleanup():
@@ -87,25 +88,6 @@ def sortfile(infile, outfile):
     outf.close()
 
 
-SQL_INT_TYPES = [
-    "INT",
-    "INTEGER",
-    "TINYINT",
-    "SMALLINT",
-    "MEDIUMINT",
-    "BIGINT",
-    "UNSIGNED BIG INT",
-    "INT2",
-    "INT8",
-]
-SQL_FLOAT_TYPES = [
-    "REAL",
-    "DOUBLE",
-    "DOUBLE PRECISION",
-    "FLOAT",
-    "FLOATING POINT",
-]
-
 def main():
     global tmp
     tmp = gscript.tempfile()
@@ -121,8 +103,6 @@ def main():
 
     perc = [float(p) for p in perc.split(',')]
 
-    numeric_types = SQL_INT_TYPES + SQL_FLOAT_TYPES
-
     desc_table = gscript.db_describe(table, database=database, driver=driver)
     if not desc_table:
         gscript.fatal(_("Unable to describe table <%s>") % table)
@@ -130,8 +110,12 @@ def main():
     for cname, ctype, cwidth in desc_table['cols']:
         if cname == column:
             found = True
-            if ctype not in numeric_types:
-                gscript.fatal(_("Column <%s> is not numeric") % cname)
+            if not sql_type_is_numeric(ctype):
+                gscript.fatal(_("Only numeric types can be used for statistics,"
+                                " but column <{column_name}> is {column_type}."
+                                " Use a column which is an integer"
+                                " or floating point number.").format(
+                                    column_name=cname, column_type=ctype)
     if not found:
         gscript.fatal(_("Column <%s> not found in table <%s>") % (column, table))
 
