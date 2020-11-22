@@ -85,7 +85,7 @@ def main():
             grass.fatal(_("Column <{column}> is {column_type} and floating point"
                           " types cannot be used for dissolving."
                           " Use a column which is an integer or text.").format(
-                              column=column, column_type=column_type)
+                              column=column, column_type=column_type))
 
         f = grass.vector_layer_db(input, layer)
 
@@ -93,15 +93,15 @@ def main():
 
         tmpfile = '%s_%s' % (output, tmp)
 
+        grass.run_command('v.reclass', input=input, output=tmpfile,
+                              layer=layer, column=column, errors="exit")
+
         try:
-            grass.run_command('v.reclass', input=input, output=tmpfile,
-                              layer=layer, column=column)
             grass.run_command('v.extract', flags='d', input=tmpfile,
-                              output=output, type='area', layer=layer)
-        except CalledModuleError as e:
-            grass.fatal(_("Final extraction steps failed."
-                          " Check above error messages and"
-                          " see following details:\n%s") % e)
+                              output=output, type='area', layer=layer, errors="exit")
+        except CalledModuleError:
+            grass.fatal(_("The final extraction step with v.extract failed."
+                          " Check above error messages."))
 
     # write cmd history:
     grass.vector_history(output)
