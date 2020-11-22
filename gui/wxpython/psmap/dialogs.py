@@ -1161,7 +1161,6 @@ class MapFramePanel(Panel):
 
         # bindings
         self.scaleChoice.Bind(wx.EVT_CHOICE, self.OnScaleChoice)
-        self.select.GetTextCtrl().Bind(wx.EVT_TEXT, self.OnMap)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnElementType, self.vectorTypeRadio)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnElementType, self.rasterTypeRadio)
         self.Bind(wx.EVT_CHECKBOX, self.OnBorder, self.borderCheck)
