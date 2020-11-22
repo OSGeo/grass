@@ -55,6 +55,7 @@
 import sys
 import os
 import grass.script as grass
+from grass.script import sql_type_is_numeric
 
 
 def main():
@@ -104,7 +105,7 @@ def main():
         if not value:
             grass.fatal(_('Either <value> or <qcolumn> must be given'))
         # we insert a value
-        if coltype.upper() not in ["INTEGER", "DOUBLE PRECISION"]:
+        if not sql_type_is_numeric(coltype):
             value = "'%s'" % value
 
     cmd = "UPDATE %s SET %s=%s" % (table, column, value)
