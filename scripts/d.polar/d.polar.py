@@ -69,9 +69,9 @@ def plot_xgraph():
     p = gcore.Popen(['xgraph'], stdin=gcore.PIPE)
     for point in sine_cosine_replic + newline + outercircle + newline + vector:
         if isinstance(point, tuple):
-            p.stdin.write("%f %f\n" % point)
+            p.stdin.write(gcore.encode("%f %f\n" % point))
         else:
-            p.stdin.write(point + '\n')
+            p.stdin.write(gcore.encode(point + '\n'))
     p.stdin.close()
     p.wait()
 
@@ -174,9 +174,9 @@ def plot_dgraph():
     p = gcore.feed_command('d.graph', env=tenv)
     for point in lines:
         if isinstance(point, tuple):
-            p.stdin.write("%f %f\n" % point)
+            p.stdin.write(gcore.encode("%f %f\n" % point))
         else:
-            p.stdin.write(point + '\n')
+            p.stdin.write(gcore.encode(point + '\n'))
     p.stdin.close()
     p.wait()
 
@@ -227,14 +227,14 @@ def plot_eps(psout):
     averagedirectionlegendy = 1.85 * halfframe
 
     ##########
-    outf = file(psout, 'w')
+    outf = open(psout, 'w')
 
     prolog = os.path.join(
         os.environ['GISBASE'],
         'etc',
         'd.polar',
         'ps_defs.eps')
-    inf = file(prolog)
+    inf = open(prolog)
     shutil.copyfileobj(inf, outf)
     inf.close()
 
@@ -418,6 +418,18 @@ def main():
     if eps and xgraph:
         gcore.fatal(_("Please select only one output method"))
 
+    if eps:
+        if os.sep in eps and not os.path.exists(os.path.dirname(eps)):
+            gcore.fatal(_("EPS output file path <{}>, doesn't exists. "
+                          "Set new output file path.".format(eps)))
+        else:
+            eps = basename(eps, 'eps') + '.eps'
+        if not eps.endswith('.eps'):
+            eps += '.eps'
+        if os.path.exists(eps) and not os.getenv('GRASS_OVERWRITE'):
+            gcore.fatal(_("option <output>: <{}> exists. To overwrite, "
+                          "use the --overwrite flag.".format(eps)))
+
     # check if we have xgraph (if no EPS output requested)
     if xgraph and not gcore.find_program('xgraph'):
         gcore.fatal(
@@ -428,11 +440,11 @@ def main():
     #################################
     # this file contains everything:
     rawfile = tmp + "_raw"
-    rawf = file(rawfile, 'w')
+    rawf = open(rawfile, 'w')
     gcore.run_command('r.stats', flags='1', input=map, stdout=rawf)
     rawf.close()
 
-    rawf = file(rawfile)
+    rawf = open(rawfile)
     totalnumber = 0
     for line in rawf:
         totalnumber += 1
@@ -444,7 +456,7 @@ def main():
     # wipe out NULL data and undef data if defined by user
     # - generate degree binned to integer, eliminate NO DATA (NULL):
     # change 360 to 0 to close polar diagram:
-    rawf = file(rawfile)
+    rawf = open(rawfile)
     nvals = 0
     sumcos = 0
     sumsin = 0
@@ -509,8 +521,7 @@ def main():
     # Now output:
 
     if eps:
-        psout = basename(eps, 'eps') + '.eps'
-        plot_eps(psout)
+        plot_eps(psout=eps)
     elif xgraph:
         plot_xgraph()
     else:
