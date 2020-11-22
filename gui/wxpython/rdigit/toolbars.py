@@ -143,7 +143,7 @@ class RDigitToolbar(BaseToolbar):
         items.insert(0, new)
         self._mapSelectionCombo.SetItems(items)
 
-    def OnMapSelection(self, event):
+    def OnMapSelection(self, event=None):
         """!Either map to edit or create new map selected."""
         idx = self._mapSelectionCombo.GetSelection()
         if idx == 0:
