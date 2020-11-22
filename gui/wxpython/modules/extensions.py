@@ -215,9 +215,9 @@ class InstallExtensionWindow(wx.Frame):
                 callable=self.modelBuilder.Load,
                 url='', # self.repo.GetValue().strip(),
                 ondone=lambda event: self._fetchDone())
-        except GException as e:
+        except GException as error:
             self._fetchDone()
-            GError(unicode(e), parent=self, showTraceback=False)
+            GError(str(error), parent=self, showTraceback=False)
 
     def _fetchDone(self):
         self.tree.RefreshItems()
