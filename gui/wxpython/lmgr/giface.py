@@ -44,7 +44,7 @@ class Layer(object):
         return self._pydata[0].keys()
 
     def __str__(self):
-        return '' if self.maplayer.name is None else self.maplayer.name
+        return '' if (self.maplayer is None or self.maplayer.name is None) else self.maplayer.name
 
 
 class LayerList(object):
