@@ -682,8 +682,10 @@ def RunCommand(prog, flags="", overwrite=False, quiet=False,
     :param parse: fn to parse stdout (e.g. grass.parse_key_val) or None
     :param stdin: stdin or None
     :param getErrorMsg: get error messages on failure
-    :param env: optional environment
+    :param env: environment (optional, uses os.environ if not provided)
     :param kwargs: program parameters
+
+    The environment passed to the function (env or os.environ) is not modified (a copy is used internally).
 
     :return: returncode (read == False and getErrorMsg == False)
     :return: returncode, messages (read == False and getErrorMsg == True)
@@ -704,7 +706,10 @@ def RunCommand(prog, flags="", overwrite=False, quiet=False,
     if stdin:
         kwargs['stdin'] = subprocess.PIPE
 
-    if not env:
+    # Do not change the environment, only a local copy.
+    if env:
+        env = env.copy()
+    else:
         env = os.environ.copy()
 
     if parent:
