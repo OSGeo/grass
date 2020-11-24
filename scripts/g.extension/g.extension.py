@@ -182,7 +182,7 @@ def download_addons_paths_file(
     :param str response_format: content type
     :param dict headers: https(s) headers
 
-    :return response: urllib.request.urlopen response object
+    :return response: urllib.request.urlopen response object or None
     """
     try:
         request = Request(url, headers=headers)
@@ -216,15 +216,28 @@ def download_addons_paths_file(
         return response
 
     except HTTPError as err:
-        gscript.fatal(
-            _(
-                "Download file from <{url}>, "
-                "return status code {code}, ".format(
-                    url=url,
-                    code=err,
+        if (
+                err.code == 403 and
+                err.msg == 'rate limit exceeded'
+        ):
+            gscript.warning(
+                _(
+                    "The download of the json file with add-ons paths "
+                    "from the github server wasn't successful, "
+                    "{}. The previous downloaded json file "
+                    " will be used if exists.".format(err.msg)
                 ),
-            ),
-        )
+            )
+        else:
+            gscript.fatal(
+                _(
+                    "Download file from <{url}>, "
+                    "return status code {code}, ".format(
+                        url=url,
+                        code=err,
+                    ),
+                ),
+            )
     except URLError:
         gscript.fatal(
             _(
@@ -2192,17 +2205,15 @@ def get_addons_paths(gg_addons_base_dir):
 
     url = 'https://api.github.com/repos/OSGeo/grass-addons/git/trees/'\
         'master?recursive=1'
-    addons_paths = json.loads(
-        gscript.decode(
-            download_addons_paths_file(
-                url=url,
-                response_format='application/json',
-            ).read(),
-        )
+
+    response = download_addons_paths_file(
+        url=url, response_format='application/json',
     )
-    with open(os.path.join(gg_addons_base_dir, get_addons_paths.json_file),
-              'w') as f:
-        json.dump(addons_paths, f)
+    if response:
+        addons_paths = json.loads(gscript.decode(response.read()))
+        with open(os.path.join(gg_addons_base_dir, get_addons_paths.json_file),
+                  'w') as f:
+            json.dump(addons_paths, f)
 
 
 def main():
@@ -2256,7 +2267,12 @@ def main():
 
     if options['operation'] == 'add':
         check_dirs()
-        get_addons_paths(gg_addons_base_dir=options['prefix'])
+        if original_url == '':
+            """
+            Query GitHub API only if extension will be downloaded
+            from official GRASS GIS addon repository
+            """
+            get_addons_paths(gg_addons_base_dir=options['prefix'])
         source, url = resolve_source_code(name=options['extension'],
                                           url=original_url)
         xmlurl = resolve_xmlurl_prefix(original_url, source=source)
