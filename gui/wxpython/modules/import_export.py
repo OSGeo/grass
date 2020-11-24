@@ -42,7 +42,7 @@ from gui_core.forms import CmdPanel
 from gui_core.gselect import OgrTypeSelect, GdalSelect, SubGroupSelect
 from gui_core.widgets import GListCtrl, GNotebook, LayersList, \
     LayersListValidator
-from gui_core.wrap import Button, CancelButton, StaticText, StaticBox
+from gui_core.wrap import Button, CloseButton, StaticText, StaticBox
 from core.utils import GetValidLayerName
 from core.settings import UserSettings, GetDisplayVectSettings
 
@@ -116,7 +116,7 @@ class ImportDialog(wx.Dialog):
         # buttons
         #
         # cancel
-        self.btn_close = CancelButton(parent=self.panel)
+        self.btn_close = CloseButton(parent=self.panel)
         self.btn_close.SetToolTip(_("Close dialog"))
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
         # run

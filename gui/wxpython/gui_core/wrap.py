@@ -202,6 +202,16 @@ class CancelButton(Button):
         else:
             self.SetLabel(_("&Cancel"))
 
+class CloseButton(Button):
+    """Wrapper around a Close labeled Button with stock id wx.ID_CANCEL
+    to disable default key binding on certain platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        Button.__init__(self, *args, **kwargs)
+        self.SetId(wx.ID_CANCEL)
+        if sys.platform == "darwin" and not CheckWxVersion([4, 1, 0]):
+            self.SetLabel(_("Close"))
+        else:
+            self.SetLabel(_("&Close"))
 
 class ApplyButton(Button):
     """Wrapper around a Button with stock id wx.ID_APPLY,

@@ -105,7 +105,7 @@ from core.settings import UserSettings
 from gui_core.widgets import FloatValidator, GNotebook, FormNotebook, FormListbook
 from core.giface import Notification, StandaloneGrassInterface
 from gui_core.widgets import LayersList
-from gui_core.wrap import BitmapFromImage, Button, CancelButton, StaticText, \
+from gui_core.wrap import BitmapFromImage, Button, CloseButton, StaticText, \
     StaticBox, SpinCtrl, CheckBox, BitmapButton, TextCtrl, NewId
 from core.debug import Debug
 
@@ -572,7 +572,7 @@ class TaskFrame(wx.Frame):
         # buttons
         btnsizer = wx.BoxSizer(orient=wx.HORIZONTAL)
         # cancel
-        self.btn_cancel = CancelButton(parent=self.panel)
+        self.btn_cancel = CloseButton(parent=self.panel)
         self.btn_cancel.SetToolTip(
             _("Close this window without executing the command (Ctrl+Q)"))
         btnsizer.Add(

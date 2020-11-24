@@ -42,7 +42,7 @@ from core.gcmd import GMessage
 from core.debug import Debug
 from dbmgr.base import DbMgrBase
 from gui_core.widgets import GNotebook
-from gui_core.wrap import Button, ClearButton
+from gui_core.wrap import Button, ClearButton, CloseButton
 
 
 class AttributeManager(wx.Frame, DbMgrBase):
@@ -136,7 +136,7 @@ class AttributeManager(wx.Frame, DbMgrBase):
             wx.CallAfter(self.notebook.SetSelection, 0)  # select browse tab
 
         # buttons
-        self.btnClose = Button(parent=self.panel, id=wx.ID_CANCEL, label=_("Close"))
+        self.btnClose = CloseButton(parent=self.panel)
         self.btnClose.SetToolTip(_("Close Attribute Table Manager"))
         self.btnReload = Button(parent=self.panel, id=wx.ID_REFRESH)
         self.btnReload.SetToolTip(

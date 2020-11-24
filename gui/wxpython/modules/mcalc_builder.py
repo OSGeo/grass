@@ -28,7 +28,7 @@ from core.giface import StandaloneGrassInterface
 from gui_core.gselect import Select
 from gui_core.forms import GUI
 from gui_core.widgets import IntegerValidator
-from gui_core.wrap import Button, CancelButton, ClearButton, TextCtrl, \
+from gui_core.wrap import Button, ClearButton, CloseButton, TextCtrl, \
     StaticText, StaticBox
 from core.settings import UserSettings
 
@@ -157,7 +157,7 @@ class MapCalcFrame(wx.Frame):
             id=wx.ID_ANY,
             label=_("&Run"))
         self.btn_run.SetDefault()
-        self.btn_close = CancelButton(parent=self.panel)
+        self.btn_close = CloseButton(parent=self.panel)
         self.btn_save = Button(parent=self.panel, id=wx.ID_SAVE)
         self.btn_save.SetToolTip(_('Save expression to file'))
         self.btn_load = Button(parent=self.panel, id=wx.ID_ANY,
