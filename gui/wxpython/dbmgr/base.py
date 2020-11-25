@@ -287,12 +287,24 @@ class VirtualAttributeList(ListCtrl,
 
             record = record.split(fs)
             if len(columns) != len(record):
-                GError(parent=self,
-                       message=_("Inconsistent number of columns "
-                                 "in the table <%(table)s>.") %
-                       {'table': tableName})
+                # Assuming there will be always at least one.
+                last = record[-1]
+                show_max = 3
+                if len(record) > show_max:
+                    record = record[:show_max]
+                # TODO: The real fix here is to use JSON output from v.db.select or
+                # proper CSV output and real CSV reader here (Python csv and json packages).
+                raise GException(
+                    _(
+                        "Unable to read the table <{table}> from the database due"
+                        " to seemingly inconsistent number of columns in the data transfer."
+                        " Check row: {row}..."
+                        " Likely, a newline character is present in the attribute value starting with: '{value}'"
+                        " Use the v.db.select module to investigate."
+                    ).format(table=tableName, row=" | ".join(record), value=last)
+                )
                 self.columns = {}  # because of IsEmpty method
-                return
+                return None
 
             self.AddDataRow(i, record, columns, keyId)
 
