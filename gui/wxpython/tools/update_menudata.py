@@ -73,12 +73,12 @@ def updateData(data, modules):
               'vcolors']
 
     menu_modules = list()
-    for node in data.tree.getiterator():
+    for node in data.tree.iter():
         if node.tag != 'menuitem':
             continue
 
         item = dict()
-        for child in node.getchildren():
+        for child in node:
             item[child.tag] = child.text
 
         if 'command' not in item:
