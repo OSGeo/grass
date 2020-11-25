@@ -515,6 +515,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("statistics"));
+    G_add_keyword(_("zonal statistics"));
     G_add_keyword(_("percentile"));
     G_add_keyword(_("quantile"));
     module->description = _("Compute category quantiles using two passes.");
