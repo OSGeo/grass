@@ -123,15 +123,16 @@ def main():
                 if not os.path.exists(f_tmp_dir):
                     os.mkdir(f_tmp_dir)
                 path = os.path.join(vrt_files[f], element, f)
-                grass.debug("copying vrt file {}".format(path))
-                if os.path.isfile(path):
-                    shutil.copyfile(
-                        path, os.path.join(f_tmp_dir, element),
-                    )
-                else:
-                    shutil.copytree(
-                        path, os.path.join(f_tmp_dir, element),
-                    )
+                if os.path.exists(path):
+                    grass.debug("copying vrt file {}".format(path))
+                    if os.path.isfile(path):
+                        shutil.copyfile(
+                            path, os.path.join(f_tmp_dir, element),
+                        )
+                    else:
+                        shutil.copytree(
+                            path, os.path.join(f_tmp_dir, element),
+                        )
 
     if not os.listdir(tmp_dir):
         grass.fatal(_("No raster map components found"))
