@@ -209,7 +209,7 @@ class ProcessWorkspaceFile:
         :param node: display tree node
         :param inGroup: in group -> index of group item otherwise -1
         """
-        for item in node.getchildren():
+        for item in node:
             if item.tag == 'group':
                 # -> group
                 self.layers.append({
