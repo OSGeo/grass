@@ -85,7 +85,7 @@ def main():
         # print proj info and exit
         try:
             for fname in ['PROJ_INFO', 'PROJ_UNITS']:
-                f = tar.extractfile('{}/{}'.format(data_name, fname))
+                f = tar.extractfile('{}/{}'.format(data_names[0], fname))
                 sys.stdout.write(f.read().decode())
         except KeyError:
             grass.fatal(_("Pack file unreadable: file '{}' missing".format(fname)))
@@ -165,21 +165,12 @@ def main():
                               " use the -o flag to ignore them and use"
                               " current location definition."))
 
-    # Vrt raster map, raster maps postfix e.g. 'map-000-001'
-    r = re.compile(r"[-]\d+(?:\.\d+)?[-]\d+(?:\.\d+)?$")
-
     maps = []
     vrt_file = None
-    # install in $MAPSET
     for index, data in enumerate(data_names):
-        map_postfix = ''
 
-        if index > 0 and data == map_name:
+        if index > 0:
             map_name = data
-
-        match = re.search(r, data)
-        if match:
-            map_postfix = data[match.span(0)[0]:match.span(0)[1]]
 
         for element in [
                 'cats', 'cell', 'cellhd', 'cell_misc', 'colr', 'fcell',
@@ -196,14 +187,13 @@ def main():
             if element == 'cell_misc':
                 if index > 0:
                     maps.append(
-                        "{map_name}{postfix}@{mapset}".format(
-                            map_name=map_name, postfix=map_postfix,
-                            mapset=gisenv['MAPSET'],
+                        "{map_name}@{mapset}".format(
+                            map_name=map_name, mapset=gisenv['MAPSET'],
                         ),
                     )
 
                 path = os.path.join(
-                    mset_dir, element, map_name + map_postfix,
+                    mset_dir, element, map_name,
                 )
                 if index == 0:
                     vrt_file = os.path.join(path, 'vrt')
@@ -213,10 +203,9 @@ def main():
                 shutil.copytree(src_path, path)
             else:
                 shutil.copyfile(
-                    src_path, os.path.join(
-                        mset_dir, element, map_name + map_postfix,
-                    )
+                    src_path, os.path.join(mset_dir, element, map_name),
                 )
+
     # Update vrt file
     if maps:
         if vrt_file and os.path.exists(vrt_file):
