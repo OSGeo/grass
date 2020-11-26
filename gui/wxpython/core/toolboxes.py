@@ -413,7 +413,7 @@ def _expandToolboxes(node, toolboxes):
             continue
         for subtoolbox in n.findall('./items/subtoolbox'):
             items = n.find('./items')
-            idx = items.getchildren().index(subtoolbox)
+            idx = list(items).index(subtoolbox)
 
             if has_xpath:
                 toolbox = toolboxes.find(
@@ -450,7 +450,7 @@ def _expandUserToolboxesItem(node, toolboxes):
 
     for n in node.findall('./items/user-toolboxes-list'):
         items = node.find('./items')
-        idx = items.getchildren().index(n)
+        idx = list(items).index(n)
         el = etree.Element(
             'toolbox', attrib={
                 'name': 'GeneratedUserToolboxesList'})
@@ -531,7 +531,7 @@ def _expandAddonsItem(node):
     for n in addonsTags:
         # find parent is not possible with implementation of etree (in 2.7)
         items = node.find('./menubar')
-        idx = items.getchildren().index(n)
+        idx = list(items).index(n)
         # do not set name since it is already in menudata file
         # attib={'name': 'AddonsList'}
         el = etree.Element('menu')
@@ -570,9 +570,8 @@ def _expandItems(node, items, itemTag):
 
         if moduleNode is None:  # module not available in dist
             continue
-        mItemChildren = moduleItem.getchildren()
-        tagList = [n.tag for n in mItemChildren]
-        for node in moduleNode.getchildren():
+        tagList = [n.tag for n in moduleItem]
+        for node in moduleNode:
             if node.tag not in tagList:
                 moduleItem.append(node)
 
