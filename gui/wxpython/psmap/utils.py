@@ -184,14 +184,14 @@ def convertRGB(rgb):
             return None
 
 
-def PaperMapCoordinates(mapInstr, x, y, paperToMap=True):
+def PaperMapCoordinates(mapInstr, x, y, paperToMap=True, env=None):
     """Converts paper (inch) coordinates <-> map coordinates.
 
     :param mapInstr: map frame instruction
     :param x,y: paper coords in inches or mapcoords in map units
     :param paperToMap: specify conversion direction
     """
-    region = grass.region()
+    region = grass.region(env=env)
     mapWidthPaper = mapInstr['rect'].GetWidth()
     mapHeightPaper = mapInstr['rect'].GetHeight()
     mapWidthEN = region['e'] - region['w']
@@ -221,7 +221,7 @@ def PaperMapCoordinates(mapInstr, x, y, paperToMap=True):
         return xPaper, yPaper
 
 
-def AutoAdjust(self, scaleType, rect, map=None, mapType=None, region=None):
+def AutoAdjust(self, scaleType, rect, env, map=None, mapType=None, region=None):
     """Computes map scale, center and map frame rectangle to fit region
     (scale is not fixed)
     """
@@ -230,17 +230,17 @@ def AutoAdjust(self, scaleType, rect, map=None, mapType=None, region=None):
         res = ''
         if mapType == 'raster':
             try:
-                res = grass.read_command("g.region", flags='gu', raster=map)
+                res = grass.read_command("g.region", flags='gu', raster=map, env=env)
             except grass.ScriptError:
                 pass
         elif mapType == 'vector':
-            res = grass.read_command("g.region", flags='gu', vector=map)
+            res = grass.read_command("g.region", flags='gu', vector=map, env=env)
         currRegionDict = grass.parse_key_val(res, val_type=float)
     elif scaleType == 1 and region:  # saved region
-        res = grass.read_command("g.region", flags='gu', region=region)
+        res = grass.read_command("g.region", flags='gu', region=region, env=env)
         currRegionDict = grass.parse_key_val(res, val_type=float)
     elif scaleType == 2:  # current region
-        currRegionDict = grass.region()
+        currRegionDict = grass.region(env=None)
 
     else:
         return None, None, None
@@ -290,21 +290,21 @@ def AutoAdjust(self, scaleType, rect, map=None, mapType=None, region=None):
     return scale, (cE, cN), Rect2D(x, y, rWNew, rHNew)  # inch
 
 
-def SetResolution(dpi, width, height):
+def SetResolution(dpi, width, height, env):
     """If resolution is too high, lower it
 
     :param dpi: max DPI
     :param width: map frame width
     :param height: map frame height
     """
-    region = grass.region()
+    region = grass.region(env=env)
     if region['cols'] > width * dpi or region['rows'] > height * dpi:
         rows = height * dpi
         cols = width * dpi
-        RunCommand('g.region', rows=rows, cols=cols)
+        env['GRASS_REGION'] = grass.region_env(rows=rows, cols=cols, env=env)
 
 
-def ComputeSetRegion(self, mapDict):
+def ComputeSetRegion(self, mapDict, env):
     """Computes and sets region from current scale, map center
     coordinates and map rectangle
     """
@@ -339,16 +339,18 @@ def ComputeSetRegion(self, mapDict):
             rasterId = None
 
         if rasterId:
-            RunCommand('g.region', n=ceil(centerN + rectHalfMeter[1]),
-                       s=floor(centerN - rectHalfMeter[1]),
-                       e=ceil(centerE + rectHalfMeter[0]),
-                       w=floor(centerE - rectHalfMeter[0]),
-                       rast=self.instruction[rasterId]['raster'])
+            env['GRASS_REGION'] = grass.region_env(n=ceil(centerN + rectHalfMeter[1]),
+                                                   s=floor(centerN - rectHalfMeter[1]),
+                                                   e=ceil(centerE + rectHalfMeter[0]),
+                                                   w=floor(centerE - rectHalfMeter[0]),
+                                                   rast=self.instruction[rasterId]['raster'],
+                                                   env=env)
         else:
-            RunCommand('g.region', n=ceil(centerN + rectHalfMeter[1]),
-                       s=floor(centerN - rectHalfMeter[1]),
-                       e=ceil(centerE + rectHalfMeter[0]),
-                       w=floor(centerE - rectHalfMeter[0]))
+            env['GRASS_REGION'] = grass.region_env(n=ceil(centerN + rectHalfMeter[1]),
+                                                   s=floor(centerN - rectHalfMeter[1]),
+                                                   e=ceil(centerE + rectHalfMeter[0]),
+                                                   w=floor(centerE - rectHalfMeter[0]),
+                                                   env=env)
 
 
 def projInfo():
@@ -375,10 +377,11 @@ def projInfo():
     return projinfo
 
 
-def GetMapBounds(filename, portrait=True):
+def GetMapBounds(filename, env, portrait=True):
     """Run ps.map -b to get information about map bounding box
 
     :param filename: psmap input file
+    :param env: enironment with GRASS_REGION defined
     :param portrait: page orientation"""
     orient = ''
     if not portrait:
@@ -390,7 +393,7 @@ def GetMapBounds(filename, portrait=True):
                     flags='b' +
                     orient,
                     quiet=True,
-                    input=filename).strip().split('=')[1].split(',')))
+                    input=filename, env=env).strip().split('=')[1].split(',')))
     except (grass.ScriptError, IndexError):
         GError(message=_("Unable to run `ps.map -b`"))
         return None
