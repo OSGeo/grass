@@ -37,8 +37,7 @@ struct BinIndex
 {
     int num_nodes;
     int max_nodes;
-    struct z_node *znodes;
-    struct cnt_node *cntnodes;
+    void *nodes;
 };
 
 struct PointBinning

@@ -74,8 +74,7 @@ int main(int argc, char *argv[])
     struct BinIndex bin_index_nodes;
     bin_index_nodes.num_nodes = 0;
     bin_index_nodes.max_nodes = 0;
-    bin_index_nodes.znodes = 0;
-    bin_index_nodes.cntnodes = 0;
+    bin_index_nodes.nodes = NULL;
 
     struct Cell_head cellhd, loc_wind;
 

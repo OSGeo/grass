@@ -24,31 +24,17 @@
 #include <math.h>
 
 
-#define SIZE_INCREMENT 10
+#define SIZE_INCREMENT 16
 
-static int new_z_node(struct BinIndex *bin_index)
+static int new_node(struct BinIndex *bin_index, size_t size)
 {
     int n = bin_index->num_nodes++;
 
     if (bin_index->num_nodes >= bin_index->max_nodes) {
         bin_index->max_nodes += SIZE_INCREMENT;
-        bin_index->znodes = G_realloc(bin_index->znodes,
+        bin_index->nodes = G_realloc(bin_index->nodes,
                                      (size_t) bin_index->max_nodes *
-                                     sizeof(struct z_node));
-    }
-
-    return n;
-}
-
-static int new_cnt_node(struct BinIndex *bin_index)
-{
-    int n = bin_index->num_nodes++;
-
-    if (bin_index->num_nodes >= bin_index->max_nodes) {
-        bin_index->max_nodes += SIZE_INCREMENT;
-        bin_index->cntnodes = G_realloc(bin_index->cntnodes,
-                                     (size_t) bin_index->max_nodes *
-                                     sizeof(struct cnt_node));
+                                     size);
     }
 
     return n;
@@ -64,31 +50,31 @@ static int add_z_node(struct BinIndex *bin_index, int head, double z)
     node_id = head_id;
     last_id = head_id;
 
-    while (node_id != -1 && bin_index->znodes[node_id].z < z) {
+    while (node_id != -1 && ((struct z_node *)bin_index->nodes)[node_id].z < z) {
         last_id = node_id;
-        node_id = bin_index->znodes[node_id].next;
+        node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
     }
 
     /* end of list, simply append */
     if (node_id == -1) {
-        newnode_id = new_z_node(bin_index);
-        bin_index->znodes[newnode_id].next = -1;
-        bin_index->znodes[newnode_id].z = z;
-        bin_index->znodes[last_id].next = newnode_id;
+        newnode_id = new_node(bin_index, sizeof(struct z_node));
+        ((struct z_node *)bin_index->nodes)[newnode_id].next = -1;
+        ((struct z_node *)bin_index->nodes)[newnode_id].z = z;
+        ((struct z_node *)bin_index->nodes)[last_id].next = newnode_id;
         return -1;
     }
     else if (node_id == head_id) {      /* pole position, insert as head */
-        newnode_id = new_z_node(bin_index);
-        bin_index->znodes[newnode_id].next = head_id;
+        newnode_id = new_node(bin_index, sizeof(struct z_node));
+        ((struct z_node *)bin_index->nodes)[newnode_id].next = head_id;
         head_id = newnode_id;
-        bin_index->znodes[newnode_id].z = z;
+        ((struct z_node *)bin_index->nodes)[newnode_id].z = z;
         return (head_id);
     }
     else {                      /* somewhere in the middle, insert */
-        newnode_id = new_z_node(bin_index);
-        bin_index->znodes[newnode_id].z = z;
-        bin_index->znodes[newnode_id].next = node_id;
-        bin_index->znodes[last_id].next = newnode_id;
+        newnode_id = new_node(bin_index, sizeof(struct z_node));
+        ((struct z_node *)bin_index->nodes)[newnode_id].z = z;
+        ((struct z_node *)bin_index->nodes)[newnode_id].next = node_id;
+        ((struct z_node *)bin_index->nodes)[last_id].next = newnode_id;
         return -1;
     }
 }
@@ -100,19 +86,19 @@ static int add_cnt_node(struct BinIndex *bin_index, int head, int value)
     head_id = head;
     node_id = head_id;
 
-    while (bin_index->cntnodes[node_id].next != -1) {
-        if (bin_index->cntnodes[node_id].value == value) {
-            bin_index->cntnodes[node_id].count++;
+    while (((struct cnt_node *)bin_index->nodes)[node_id].next != -1) {
+        if (((struct cnt_node *)bin_index->nodes)[node_id].value == value) {
+            ((struct cnt_node *)bin_index->nodes)[node_id].count++;
             return node_id;
         }
-        node_id = bin_index->cntnodes[node_id].next;
+        node_id = ((struct cnt_node *)bin_index->nodes)[node_id].next;
     }
 
-    newnode_id = new_cnt_node(bin_index);
-    bin_index->cntnodes[newnode_id].next = -1;
-    bin_index->cntnodes[newnode_id].value = value;
-    bin_index->cntnodes[newnode_id].count = 1;
-    bin_index->cntnodes[node_id].next = newnode_id;
+    newnode_id = new_node(bin_index, sizeof(struct cnt_node));
+    ((struct cnt_node *)bin_index->nodes)[newnode_id].next = -1;
+    ((struct cnt_node *)bin_index->nodes)[newnode_id].value = value;
+    ((struct cnt_node *)bin_index->nodes)[newnode_id].count = 1;
+    ((struct cnt_node *)bin_index->nodes)[node_id].next = newnode_id;
     return -1;
 }
 
@@ -132,9 +118,9 @@ int update_bin_z_index(struct BinIndex *bin_index, void *index_array,
 
     /* first node */
     if (Rast_is_null_value(ptr, CELL_TYPE)) {
-        head_id = new_z_node(bin_index);
-        bin_index->znodes[head_id].next = -1;
-        bin_index->znodes[head_id].z = value;
+        head_id = new_node(bin_index, sizeof(struct z_node));
+        ((struct z_node *)bin_index->nodes)[head_id].next = -1;
+        ((struct z_node *)bin_index->nodes)[head_id].z = value;
         /* store index to head */
         Rast_set_c_value(ptr, head_id, CELL_TYPE);
     }
@@ -166,17 +152,15 @@ int update_bin_cnt_index(struct BinIndex *bin_index, void *index_array,
 
     /* first node */
     if (Rast_is_null_value(ptr, CELL_TYPE)) {
-        head_id = new_cnt_node(bin_index);
-        bin_index->cntnodes[head_id].next = -1;
-        bin_index->cntnodes[head_id].value = value;
-        bin_index->cntnodes[head_id].count = 1;
+        head_id = new_node(bin_index, sizeof(struct cnt_node));
+        ((struct cnt_node *)bin_index->nodes)[head_id].next = -1;
+        ((struct cnt_node *)bin_index->nodes)[head_id].value = value;
+        ((struct cnt_node *)bin_index->nodes)[head_id].count = 1;
         /* store index to head */
         Rast_set_c_value(ptr, head_id, CELL_TYPE);
     }
     /* head is already there */
     else {
-
-        /* get index to head */
         head_id = Rast_get_c_value(ptr, CELL_TYPE);
         head_id = add_cnt_node(bin_index, head_id, value);
     }
@@ -442,19 +426,12 @@ void point_binning_free(struct PointBinning *point_binning,
         G_free(point_binning->sum_array);
     if (point_binning->bin_sumsq)
         G_free(point_binning->sumsq_array);
-    if (point_binning->bin_z_index) {
+    if (point_binning->bin_z_index || point_binning->bin_cnt_index) {
         G_free(point_binning->index_array);
-        G_free(bin_index_nodes->znodes);
+        G_free(bin_index_nodes->nodes);
         bin_index_nodes->num_nodes = 0;
         bin_index_nodes->max_nodes = 0;
-        bin_index_nodes->znodes = NULL;
-    }
-    if (point_binning->bin_cnt_index) {
-        G_free(point_binning->index_array);
-        G_free(bin_index_nodes->cntnodes);
-        bin_index_nodes->num_nodes = 0;
-        bin_index_nodes->max_nodes = 0;
-        bin_index_nodes->cntnodes = NULL;
+        bin_index_nodes->nodes = NULL;
     }
     if (point_binning->bin_coordinates) {
         G_free(point_binning->x_array);
@@ -532,18 +509,18 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
 
             while (node_id != -1) {     /* count number of points in cell */
                 n++;
-                node_id = bin_index->znodes[node_id].next;
+                node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
             }
 
             if (n == 1)         /* only one point, use that */
-                Rast_set_d_value(ptr, bin_index->znodes[head_id].z, rtype);
+                Rast_set_d_value(ptr, ((struct z_node *)bin_index->nodes)[head_id].z, rtype);
             else if (n % 2 != 0) {      /* odd number of points: median_i = (n + 1) / 2 */
                 n = (n + 1) / 2;
                 node_id = head_id;
                 for (j = 1; j < n; j++) /* get "median element" */
-                    node_id = bin_index->znodes[node_id].next;
+                    node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
 
-                Rast_set_d_value(ptr, bin_index->znodes[node_id].z, rtype);
+                Rast_set_d_value(ptr, ((struct z_node *)bin_index->nodes)[node_id].z, rtype);
             }
             else {              /* even number of points: median = (val_below + val_above) / 2 */
 
@@ -551,10 +528,10 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
                 n = floor(z);
                 node_id = head_id;
                 for (j = 1; j < n; j++) /* get element "below" */
-                    node_id = bin_index->znodes[node_id].next;
+                    node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
 
-                z = (bin_index->znodes[node_id].z +
-                     bin_index->znodes[bin_index->znodes[node_id].next].z) / 2;
+                z = (((struct z_node *)bin_index->nodes)[node_id].z +
+                     ((struct z_node *)bin_index->nodes)[((struct z_node *)bin_index->nodes)[node_id].next].z) / 2;
                 Rast_set_d_value(ptr, z, rtype);
             }
         }
@@ -581,11 +558,11 @@ void write_mode(struct BinIndex *bin_index, void *raster_row,
             while (node_id != -1) {
                 if (mode_node == -1)
                     mode_node = node_id;
-                else if (bin_index->cntnodes[node_id].count > bin_index->cntnodes[mode_node].count)
+                else if (((struct cnt_node *)bin_index->nodes)[node_id].count > ((struct cnt_node *)bin_index->nodes)[mode_node].count)
                     mode_node = node_id;
-                node_id = bin_index->cntnodes[node_id].next;
+                node_id = ((struct cnt_node *)bin_index->nodes)[node_id].next;
             }
-            Rast_set_c_value(ptr, bin_index->cntnodes[mode_node].value, CELL_TYPE);
+            Rast_set_c_value(ptr, ((struct cnt_node *)bin_index->nodes)[mode_node].value, CELL_TYPE);
         }
         ptr = G_incr_void_ptr(ptr, Rast_cell_size(CELL_TYPE));
     }
@@ -614,7 +591,7 @@ void write_percentile(struct BinIndex *bin_index, void *raster_row,
 
             while (node_id != -1) {     /* count number of points in cell */
                 n++;
-                node_id = bin_index->znodes[node_id].next;
+                node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
             }
 
             z = (pth * (n + 1)) / 100.0;
@@ -630,14 +607,14 @@ void write_percentile(struct BinIndex *bin_index, void *raster_row,
 
             node_id = head_id;
             for (j = 1; j < r_low; j++) /* search lower value */
-                node_id = bin_index->znodes[node_id].next;
+                node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
 
-            z = bin_index->znodes[node_id].z;    /* save lower value */
+            z = ((struct z_node *)bin_index->nodes)[node_id].z;    /* save lower value */
             node_id = head_id;
             for (j = 1; j < r_up; j++)  /* search upper value */
-                node_id = bin_index->znodes[node_id].next;
+                node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
 
-            z = (z + bin_index->znodes[node_id].z) / 2;
+            z = (z + ((struct z_node *)bin_index->nodes)[node_id].z) / 2;
             Rast_set_d_value(ptr, z, rtype);
         }
         ptr = G_incr_void_ptr(ptr, Rast_cell_size(rtype));
@@ -672,20 +649,20 @@ void write_skewness(struct BinIndex *bin_index, void *raster_row,
             skew = 0.0;         /* skewness */
 
             while (node_id != -1) {
-                z = bin_index->znodes[node_id].z;
+                z = ((struct z_node *)bin_index->nodes)[node_id].z;
                 n++;
                 sum += z;
                 sumsq += (z * z);
-                node_id = bin_index->znodes[node_id].next;
+                node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
             }
 
             if (n > 1) {        /* if n == 1, skew is "0.0" */
                 mean = sum / n;
                 node_id = head_id;
                 while (node_id != -1) {
-                    z = bin_index->znodes[node_id].z;
+                    z = ((struct z_node *)bin_index->nodes)[node_id].z;
                     sumdev += pow((z - mean), 3);
-                    node_id = bin_index->znodes[node_id].next;
+                    node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
                 }
 
                 variance = (sumsq - sum * sum / n) / n;
@@ -723,18 +700,18 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
             n = 0;
             while (node_id != -1) {     /* count number of points in cell */
                 n++;
-                node_id = bin_index->znodes[node_id].next;
+                node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
             }
 
             if (1 == n)
-                mean = bin_index->znodes[head_id].z;
+                mean = ((struct z_node *)bin_index->nodes)[head_id].z;
             else {
                 k = floor(trim * n + 0.5);      /* number of ranks to discard on each tail */
 
                 if (k > 0 && (n - 2 * k) > 0) { /* enough elements to discard */
                     node_id = head_id;
                     for (j = 0; j < k; j++)     /* move to first rank to consider */
-                        node_id = bin_index->znodes[node_id].next;
+                        node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
 
                     j = k + 1;
                     k = n - k;
@@ -743,8 +720,8 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
 
                     while (j <= k) {    /* get values in interval */
                         n++;
-                        sum += bin_index->znodes[node_id].z;
-                        node_id = bin_index->znodes[node_id].next;
+                        sum += ((struct z_node *)bin_index->nodes)[node_id].z;
+                        node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
                         j++;
                     }
                 }
@@ -754,8 +731,8 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
                     sum = 0.0;
                     while (node_id != -1) {
                         n++;
-                        sum += bin_index->znodes[node_id].z;
-                        node_id = bin_index->znodes[node_id].next;
+                        sum += ((struct z_node *)bin_index->nodes)[node_id].z;
+                        node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
                     }
                 }
                 mean = sum / n;
@@ -784,13 +761,13 @@ void write_sidn(struct BinIndex *bin_index, void *raster_row,
             head_id = Rast_get_c_value(((char *)index_array) + n_offset, CELL_TYPE);
             node_id = head_id;
 
-            count = bin_index->cntnodes[node_id].count;
+            count = ((struct cnt_node *)bin_index->nodes)[node_id].count;
             while (node_id != -1) {
-                if (min && bin_index->cntnodes[node_id].count < count)
-                    count = bin_index->cntnodes[node_id].count;
-                else if (!min && bin_index->cntnodes[node_id].count > count)
-                    count = bin_index->cntnodes[node_id].count;
-                node_id = bin_index->cntnodes[node_id].next;
+                if (min && ((struct cnt_node *)bin_index->nodes)[node_id].count < count)
+                    count = ((struct cnt_node *)bin_index->nodes)[node_id].count;
+                else if (!min && ((struct cnt_node *)bin_index->nodes)[node_id].count > count)
+                    count = ((struct cnt_node *)bin_index->nodes)[node_id].count;
+                node_id = ((struct cnt_node *)bin_index->nodes)[node_id].next;
             }
             Rast_set_c_value(ptr, count, CELL_TYPE);
         }
