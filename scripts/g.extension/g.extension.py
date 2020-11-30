@@ -75,7 +75,7 @@
 #% description: Specific branch to fetch addon from (only used when fetching from git)
 #% required: no
 #% multiple: no
-#% answer: master
+#% answer: main
 #%end
 
 #%flag
@@ -1497,7 +1497,7 @@ def download_source_code(source, url, name, outdev,
 def install_extension_std_platforms(name, source, url, branch):
     """Install extension on standard platforms"""
     gisbase = os.getenv('GISBASE')
-    source_url = 'https://github.com/OSGeo/grass-addons/tree/{branch}/grass7/'.format(branch=branch)
+    source_url = 'https://github.com/OSGeo/grass-addons/tree/master/grass7/'
 
     if source == 'official':
         gscript.message(_("Fetching <%s> from "
@@ -2229,7 +2229,7 @@ def resolve_source_code(url=None, name=None, branch=None):
         return 'svn', url
 
 
-def get_addons_paths(gg_addons_base_dir, branch):
+def get_addons_paths(gg_addons_base_dir):
     """Get and save extensions paths as 'extensions_paths.json' json file
     in the $GRASS_ADDON_BASE dir. The file serves as a list of all addons,
     and their paths (mkhmtl.py tool)
@@ -2237,7 +2237,7 @@ def get_addons_paths(gg_addons_base_dir, branch):
     get_addons_paths.json_file = 'addons_paths.json'
 
     url = 'https://api.github.com/repos/OSGeo/grass-addons/git/trees/'\
-        '{branch}?recursive=1'
+        'master?recursive=1'
 
     response = download_addons_paths_file(
         url=url, response_format='application/json',
