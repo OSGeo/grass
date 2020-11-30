@@ -1464,7 +1464,11 @@ def download_source_code(source, url, name, outdev,
         try:
             response = urlopen(url)
         except URLError:
-            grass.fatal(_("Extension <%s> not found") % name)
+            # Try download add-on from 'master' branch
+            try:
+                response = urlopen(url.replace('main', 'master'))
+            except URLError:
+                grass.fatal(_("Extension <%s> not found") % name)
         with open(zip_name, 'wb') as out_file:
             shutil.copyfileobj(response, out_file)
         extract_zip(name=zip_name, directory=directory, tmpdir=tmpdir)
