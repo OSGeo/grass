@@ -39,6 +39,7 @@ import atexit
 
 import grass.script as grass
 from grass.exceptions import CalledModuleError
+from grass.script import sql_type_is_float
 
 
 def cleanup():
@@ -76,12 +77,15 @@ def main():
                           (int(layer), 'column'))
             layer = '1'
         try:
-            coltype = grass.vector_columns(input, layer)[column]
+            column_type = grass.vector_columns(input, layer)[column]['type']
         except KeyError:
             grass.fatal(_('Column <%s> not found') % column)
 
-        if coltype['type'] not in ('INTEGER', 'SMALLINT', 'CHARACTER', 'TEXT'):
-            grass.fatal(_("Key column must be of type integer or string"))
+        if sql_type_is_float(column_type):
+            grass.fatal(_("Column <{column}> is {column_type} and floating point"
+                          " types cannot be used for dissolving."
+                          " Use a column which is an integer or text.").format(
+                              column=column, column_type=column_type))
 
         f = grass.vector_layer_db(input, layer)
 
@@ -89,15 +93,15 @@ def main():
 
         tmpfile = '%s_%s' % (output, tmp)
 
+        grass.run_command('v.reclass', input=input, output=tmpfile,
+                              layer=layer, column=column, errors="exit")
+
         try:
-            grass.run_command('v.reclass', input=input, output=tmpfile,
-                              layer=layer, column=column)
             grass.run_command('v.extract', flags='d', input=tmpfile,
-                              output=output, type='area', layer=layer)
-        except CalledModuleError as e:
-            grass.fatal(_("Final extraction steps failed."
-                          " Check above error messages and"
-                          " see following details:\n%s") % e)
+                              output=output, type='area', layer=layer, errors="exit")
+        except CalledModuleError:
+            grass.fatal(_("The final extraction step with v.extract failed."
+                          " Check above error messages."))
 
     # write cmd history:
     grass.vector_history(output)

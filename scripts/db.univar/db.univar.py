@@ -60,6 +60,7 @@ import atexit
 import math
 
 import grass.script as gscript
+from grass.script import sql_type_is_numeric
 
 
 def cleanup():
@@ -109,8 +110,12 @@ def main():
     for cname, ctype, cwidth in desc_table['cols']:
         if cname == column:
             found = True
-            if ctype not in ('INTEGER', 'DOUBLE PRECISION'):
-                gscript.fatal(_("Column <%s> is not numeric") % cname)
+            if not sql_type_is_numeric(ctype):
+                gscript.fatal(_("Only numeric types can be used for statistics,"
+                                " but column <{column_name}> is {column_type}."
+                                " Use a column which is an integer"
+                                " or floating point number.").format(
+                                    column_name=cname, column_type=ctype))
     if not found:
         gscript.fatal(_("Column <%s> not found in table <%s>") % (column, table))
 
