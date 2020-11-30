@@ -255,14 +255,9 @@ def download_addons_paths_file(
                 ),
             )
         else:
-            gscript.fatal(
-                _(
-                    "Download file from <{url}>, "
-                    "return status code {code}, ".format(
-                        url=url,
-                        code=err,
-                    ),
-                ),
+            return download_addons_paths_file(
+                url=url.replace('main', 'master'),
+                response_format=response_format,
             )
     except URLError:
         gscript.fatal(
@@ -2241,7 +2236,7 @@ def get_addons_paths(gg_addons_base_dir):
     get_addons_paths.json_file = 'addons_paths.json'
 
     url = 'https://api.github.com/repos/OSGeo/grass-addons/git/trees/'\
-        'master?recursive=1'
+        'main?recursive=1'
 
     response = download_addons_paths_file(
         url=url, response_format='application/json',
