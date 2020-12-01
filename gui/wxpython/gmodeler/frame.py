@@ -375,7 +375,7 @@ class ModelFrame(wx.Frame):
         dlg = PreferencesDialog(parent=self, giface=self._giface)
         dlg.CenterOnParent()
 
-        dlg.ShowModal()
+        dlg.Show()
         self.canvas.Refresh()
 
     def OnHelp(self, event):
