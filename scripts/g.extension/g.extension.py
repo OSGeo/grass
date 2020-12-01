@@ -1475,7 +1475,7 @@ def download_source_code(source, url, name, outdev,
                     response = urlopen(url)
                 except URLError:
                     grass.fatal(_("Extension <{name}> not found. Please check "
-                                  "'url' and 'branch' options".format(name)))
+                                  "'url' and 'branch' options".format(name=name)))
             else:
                 grass.fatal(_("Extension <%s> not found") % name)
 
