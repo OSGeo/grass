@@ -29,7 +29,7 @@ from wx.py.version import VERSION
 import grass.script as grass
 from grass.script.utils import try_remove
 
-from gui_core.wrap import Button
+from gui_core.wrap import Button, ClearButton
 
 
 class PyShellWindow(wx.Panel):
@@ -44,14 +44,16 @@ class PyShellWindow(wx.Panel):
         self.intro = _("Welcome to wxGUI Interactive Python Shell %s") % VERSION + "\n\n" + \
             _("Type %s for more GRASS scripting related information.") % "\"help(gs)\"" + "\n" + \
             _("Type %s to add raster or vector to the layer tree.") % "\"AddLayer()\"" + "\n\n"
+        # useStockId should be False on macOS
         self.shell = PyShell(parent=self, id=wx.ID_ANY,
                              introText=self.intro,
                              locals={'gs': grass,
-                                     'AddLayer': self.AddLayer})
+                                     'AddLayer': self.AddLayer},
+                             useStockId=(sys.platform != "darwin"))
 
         sys.displayhook = self._displayhook
 
-        self.btnClear = Button(self, wx.ID_CLEAR)
+        self.btnClear = ClearButton(self)
         self.btnClear.Bind(wx.EVT_BUTTON, self.OnClear)
         self.btnClear.SetToolTip(_("Delete all text from the shell"))
 

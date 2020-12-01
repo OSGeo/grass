@@ -15,6 +15,7 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
+import sys
 import wx
 import wx.lib.agw.floatspin as fs
 import wx.lib.colourselect as csel
@@ -176,6 +177,52 @@ class Button(wx.Button):
             wx.Button.SetToolTip(self, tipString=tip)
         else:
             wx.Button.SetToolTipString(self, tip)
+
+
+class ClearButton(Button):
+    """Wrapper around a Button with stock id wx.ID_CLEAR,
+    to disable default key binding on certain platforms"""
+    def __init__(self, *args, **kwargs):
+        Button.__init__(self, *args, **kwargs)
+        self.SetId(wx.ID_CLEAR)
+        if sys.platform == "darwin":
+            self.SetLabel(_("Clear"))
+        else:
+            self.SetLabel(_("&Clear"))
+
+
+class CancelButton(Button):
+    """Wrapper around a Button with stock id wx.ID_CANCEL, to disable
+    default key binding on certain platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        Button.__init__(self, *args, **kwargs)
+        self.SetId(wx.ID_CANCEL)
+        if sys.platform == "darwin" and not CheckWxVersion([4, 1, 0]):
+            self.SetLabel(_("Cancel"))
+        else:
+            self.SetLabel(_("&Cancel"))
+
+class CloseButton(Button):
+    """Wrapper around a Close labeled Button with stock id wx.ID_CANCEL
+    to disable default key binding on certain platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        Button.__init__(self, *args, **kwargs)
+        self.SetId(wx.ID_CANCEL)
+        if sys.platform == "darwin" and not CheckWxVersion([4, 1, 0]):
+            self.SetLabel(_("Close"))
+        else:
+            self.SetLabel(_("&Close"))
+
+class ApplyButton(Button):
+    """Wrapper around a Button with stock id wx.ID_APPLY,
+    to disable default key binding on certain platforms"""
+    def __init__(self, *args, **kwargs):
+        Button.__init__(self, *args, **kwargs)
+        self.SetId(wx.ID_APPLY)
+        if sys.platform == "darwin":
+            self.SetLabel(_("Apply"))
+        else:
+            self.SetLabel(_("&Apply"))
 
 
 class RadioButton(wx.RadioButton):
