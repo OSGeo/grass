@@ -124,7 +124,9 @@ class DarwinLibraryLoader(LibraryLoader):
         dyld_fallback_library_path = _environ_path("DYLD_FALLBACK_LIBRARY_PATH")
         if not dyld_fallback_library_path:
             dyld_fallback_library_path = [os.path.expanduser('~/lib'),
-                                          '/usr/local/lib', '/usr/lib']
+                                          '/usr/local/lib', '/usr/lib',
+                                          os.path.join(sys.prefix, 'lib')]
+        dyld_fallback_library_path.extend(_environ_path('LD_RUN_PATH'))
 
         dirs = []
 
