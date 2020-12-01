@@ -751,7 +751,7 @@ class SwipeMapFrame(DoubleMapFrame):
             self._preferencesDialog = dlg
             self._preferencesDialog.CenterOnParent()
 
-        self._preferencesDialog.ShowModal()
+        self._preferencesDialog.Show()
 
     def OnCloseWindow(self, event):
         self.GetFirstMap().Clean()
