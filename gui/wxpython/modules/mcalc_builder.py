@@ -28,8 +28,8 @@ from core.giface import StandaloneGrassInterface
 from gui_core.gselect import Select
 from gui_core.forms import GUI
 from gui_core.widgets import IntegerValidator
-from gui_core.wrap import Button, TextCtrl, StaticText, \
-    StaticBox
+from gui_core.wrap import Button, ClearButton, CloseButton, TextCtrl, \
+    StaticText, StaticBox
 from core.settings import UserSettings
 
 
@@ -150,7 +150,7 @@ class MapCalcFrame(wx.Frame):
         #
         # Buttons
         #
-        self.btn_clear = Button(parent=self.panel, id=wx.ID_CLEAR)
+        self.btn_clear = ClearButton(parent=self.panel)
         self.btn_help = Button(parent=self.panel, id=wx.ID_HELP)
         self.btn_run = Button(
             parent=self.panel,
@@ -158,13 +158,14 @@ class MapCalcFrame(wx.Frame):
             label=_("&Run"))
         self.btn_run.SetForegroundColour(wx.Colour(35, 142, 35))
         self.btn_run.SetDefault()
-        self.btn_close = Button(parent=self.panel, id=wx.ID_CLOSE)
+        self.btn_close = CloseButton(parent=self.panel)
         self.btn_save = Button(parent=self.panel, id=wx.ID_SAVE)
         self.btn_save.SetToolTip(_('Save expression to file'))
         self.btn_load = Button(parent=self.panel, id=wx.ID_ANY,
                                label=_("&Load"))
         self.btn_load.SetToolTip(_('Load expression from file'))
-        self.btn_copy = Button(parent=self.panel, id=wx.ID_COPY)
+        self.btn_copy = Button(
+            parent=self.panel, id=wx.ID_ANY, label=_("Copy"))
         self.btn_copy.SetToolTip(
             _("Copy the current command string to the clipboard"))
 
@@ -324,9 +325,8 @@ class MapCalcFrame(wx.Frame):
         self.btn_help.Bind(wx.EVT_BUTTON, self.OnHelp)
         self.btn_save.Bind(wx.EVT_BUTTON, self.OnSaveExpression)
         self.btn_load.Bind(wx.EVT_BUTTON, self.OnLoadExpression)
-        self.btn_copy.Bind(wx.EVT_BUTTON, self.OnCopy)
+        self.btn_copy.Bind(wx.EVT_BUTTON, self.OnCopyCommand)
 
-        # self.mapselect.Bind(wx.EVT_TEXT, self.OnSelectTextEvt)
         self.mapselect.Bind(wx.EVT_TEXT, self.OnSelect)
         self.function.Bind(wx.EVT_COMBOBOX, self._return_funct)
         self.function.Bind(wx.EVT_TEXT_ENTER, self.OnSelect)
@@ -336,6 +336,12 @@ class MapCalcFrame(wx.Frame):
         self.randomSeed.Bind(wx.EVT_CHECKBOX, self.OnUpdateStatusBar)
         self.randomSeed.Bind(wx.EVT_CHECKBOX, self.OnSeedFlag)
         self.randomSeedText.Bind(wx.EVT_TEXT, self.OnUpdateStatusBar)
+
+        # bind closing to ESC
+        self.Bind(wx.EVT_MENU, self.OnClose, id=wx.ID_CANCEL)
+        accelTableList = [(wx.ACCEL_NORMAL, wx.WXK_ESCAPE, wx.ID_CANCEL)]
+        accelTable = wx.AcceleratorTable(accelTableList)
+        self.SetAcceleratorTable(accelTable)
 
         self._layout()
 
@@ -776,7 +782,7 @@ class MapCalcFrame(wx.Frame):
 
         dlg.Destroy()
 
-    def OnCopy(self, event):
+    def OnCopyCommand(self, event):
         command = self._getCommand()
         cmddata = wx.TextDataObject()
         cmddata.SetText(command)

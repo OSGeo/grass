@@ -41,7 +41,7 @@ from core.gcmd import RunCommand, GMessage, GWarning
 from gui_core.forms import CmdPanel
 from gui_core.gselect import OgrTypeSelect, GdalSelect, SubGroupSelect
 from gui_core.widgets import LayersList, GListCtrl, GNotebook
-from gui_core.wrap import Button, StaticText, StaticBox
+from gui_core.wrap import Button, CloseButton, StaticText, StaticBox
 from core.utils import GetValidLayerName
 from core.settings import UserSettings, GetDisplayVectSettings
 
@@ -114,14 +114,12 @@ class ImportDialog(wx.Dialog):
         # buttons
         #
         # cancel
-        self.btn_close = Button(parent=self.panel, id=wx.ID_CLOSE)
+        self.btn_close = CloseButton(parent=self.panel)
         self.btn_close.SetToolTip(_("Close dialog"))
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
         # run
         self.btn_run = Button(
-            parent=self.panel,
-            id=wx.ID_OK,
-            label=_("&Import"))
+            parent=self.panel, id=wx.ID_OK, label=_("&Import"))
         self.btn_run.SetToolTip(_("Import selected layers"))
         self.btn_run.SetDefault()
         self.btn_run.Bind(wx.EVT_BUTTON, self.OnRun)
@@ -136,13 +134,6 @@ class ImportDialog(wx.Dialog):
                               name='source')
 
         self.createSettingsPage()
-
-        # Enable copying to clipboard with cmd+c from dialog on macOS
-        # (default key binding will close the dialog), trac #3592
-        if sys.platform == "darwin":
-            self.Bind(wx.EVT_MENU, self.OnCopyToClipboard, id=wx.ID_COPY)
-            self.accel_tbl = wx.AcceleratorTable([(wx.ACCEL_CTRL, ord("C"), wx.ID_COPY)])
-            self.SetAcceleratorTable(self.accel_tbl)
 
     def createSettingsPage(self):
 
@@ -316,13 +307,6 @@ class ImportDialog(wx.Dialog):
     def OnCmdDone(self, event):
         """Do what has to be done after importing"""
         pass
-
-    def OnCopyToClipboard(self, event):
-        """Copy selected text in dialog to the clipboard"""
-        try:
-            wx.Window.FindFocus().Copy()
-        except:
-            pass
 
     def _getLayersToReprojetion(self, projMatch_idx, grassName_idx):
         """If there are layers with different projection from loation projection,
