@@ -1152,10 +1152,13 @@ class PsMapFrame(wx.Frame):
             if itype in ('map', 'vector', 'raster', 'labels'):
 
                 if itype == 'raster':  # set resolution
-                    info = grass.raster_info(self.instruction[id]['raster'])
-                    self.env['GRASS_REGION'] = grass.region_env(nsres=info['nsres'],
-                                                                ewres=info['ewres'],
-                                                                env=self.env)
+                    try:
+                        info = grass.raster_info(self.instruction[id]['raster'])
+                        self.env['GRASS_REGION'] = grass.region_env(nsres=info['nsres'],
+                                                                    ewres=info['ewres'],
+                                                                    env=self.env)
+                    except grass.CalledModuleError:  # fails after switching location
+                        pass
                     # change current raster in raster legend
 
                 if 'rasterLegend' in self.openDialogs:

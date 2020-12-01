@@ -452,7 +452,9 @@ class Instruction:
                 id = NewId()  # !vProperties expect subtype
                 if i == 'vProperties':
                     id = kwargs['id']
-                    newInstr = myInstrDict[i](id, subType=instruction[1:])
+                    newInstr = myInstrDict[i](
+                        id, subType=instruction[1:], env=self.env,
+                    )
                 elif i in ('image', 'northArrow'):
                     commentFound = False
                     for line in text:

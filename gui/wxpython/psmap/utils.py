@@ -226,24 +226,28 @@ def AutoAdjust(self, scaleType, rect, env, map=None, mapType=None, region=None):
     (scale is not fixed)
     """
     currRegionDict = {}
-    if scaleType == 0 and map:  # automatic, region from raster or vector
-        res = ''
-        if mapType == 'raster':
-            try:
-                res = grass.read_command("g.region", flags='gu', raster=map, env=env)
-            except grass.ScriptError:
-                pass
-        elif mapType == 'vector':
-            res = grass.read_command("g.region", flags='gu', vector=map, env=env)
-        currRegionDict = grass.parse_key_val(res, val_type=float)
-    elif scaleType == 1 and region:  # saved region
-        res = grass.read_command("g.region", flags='gu', region=region, env=env)
-        currRegionDict = grass.parse_key_val(res, val_type=float)
-    elif scaleType == 2:  # current region
-        currRegionDict = grass.region(env=None)
+    try:
+        if scaleType == 0 and map:  # automatic, region from raster or vector
+            res = ''
+            if mapType == 'raster':
+                try:
+                    res = grass.read_command("g.region", flags='gu', raster=map, env=env)
+                except grass.ScriptError:
+                    pass
+            elif mapType == 'vector':
+                res = grass.read_command("g.region", flags='gu', vector=map, env=env)
+            currRegionDict = grass.parse_key_val(res, val_type=float)
+        elif scaleType == 1 and region:  # saved region
+            res = grass.read_command("g.region", flags='gu', region=region, env=env)
+            currRegionDict = grass.parse_key_val(res, val_type=float)
+        elif scaleType == 2:  # current region
+            currRegionDict = grass.region(env=None)
 
-    else:
-        return None, None, None
+        else:
+            return None, None, None
+    # fails after switching location
+    except (grass.ScriptError, grass.CalledModuleError):
+        pass
 
     if not currRegionDict:
         return None, None, None
