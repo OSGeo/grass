@@ -40,6 +40,9 @@
 #define METHOD_TRIMMEAN   14
 #define METHOD_SIDNMAX    15
 #define METHOD_SIDNMIN    16
+#define METHOD_EV1        17
+#define METHOD_EV2        18
+#define METHOD_EV3        19
 
 int blank_array(void *, int, int, RASTER_MAP_TYPE, int);
 

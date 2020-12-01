@@ -33,6 +33,14 @@ struct cnt_node
     int count;
 };
 
+struct com_node
+{
+    int n;
+    double *meanx;
+    double *meany;
+    double *comoment;
+};
+
 struct BinIndex
 {
     int num_nodes;
@@ -51,6 +59,7 @@ struct PointBinning
     int bin_sumsq;
     int bin_z_index;
     int bin_cnt_index;
+    int bin_eigenvalues;
     int bin_coordinates;
 
     void *n_array;

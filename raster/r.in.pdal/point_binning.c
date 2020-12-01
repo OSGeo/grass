@@ -18,6 +18,7 @@
 #include <grass/glocale.h>
 #include <grass/raster.h>
 #include <grass/vector.h>
+#include <grass/gmath.h>
 
 #include <stdlib.h>
 #include <string.h>
@@ -168,6 +169,61 @@ int update_bin_cnt_index(struct BinIndex *bin_index, void *index_array,
     return 0;
 }
 
+
+/* Co-moment value update */
+void update_com_node(struct com_node *cn, int item, double x, double y)
+{
+    double dx;
+
+    dx = x - cn->meanx[item];
+    cn->meanx[item] = cn->meanx[item] + (dx / cn->n);
+    cn->meany[item] = cn->meany[item] + (y - cn->meany[item]) / cn->n;
+    cn->comoment[item] = cn->comoment[item] + dx * (y - cn->meany[item]);
+}
+
+
+int update_bin_com_index(struct BinIndex *bin_index, void *index_array,
+                     int cols, int row, int col,
+                     double x, double y, double z)
+{
+    int node_id;
+    void *ptr = index_array;
+
+    ptr =
+        G_incr_void_ptr(ptr,
+                        (((size_t) row * cols) +
+                         col) * Rast_cell_size(CELL_TYPE));
+
+    if (Rast_is_null_value(ptr, CELL_TYPE)) {
+        node_id = new_node(bin_index, sizeof(struct com_node));
+
+        ((struct com_node *)bin_index->nodes)[node_id].n = 0;
+        ((struct com_node *)bin_index->nodes)[node_id].meanx = (double *)G_calloc(6, sizeof(double));
+        ((struct com_node *)bin_index->nodes)[node_id].meany = (double *)G_calloc(6, sizeof(double));
+        ((struct com_node *)bin_index->nodes)[node_id].comoment = (double *)G_calloc(6, sizeof(double));
+
+        /* store index to node */
+        Rast_set_c_value(ptr, node_id, CELL_TYPE);
+    }
+    /* node is already there */
+    else {
+        node_id = Rast_get_c_value(ptr, CELL_TYPE);
+    }
+
+    /* update values */
+    ((struct com_node *)bin_index->nodes)[node_id].n++;
+    update_com_node(&(((struct com_node *)bin_index->nodes)[node_id]), 0, x, x);
+    update_com_node(&(((struct com_node *)bin_index->nodes)[node_id]), 1, x, y);
+    update_com_node(&(((struct com_node *)bin_index->nodes)[node_id]), 2, x, z);
+    update_com_node(&(((struct com_node *)bin_index->nodes)[node_id]), 3, y, y);
+    update_com_node(&(((struct com_node *)bin_index->nodes)[node_id]), 4, x, z);
+    update_com_node(&(((struct com_node *)bin_index->nodes)[node_id]), 5, z, z);
+
+    /* for consistency with functions from support.c */
+    return 0;
+}
+
+
 void point_binning_set(struct PointBinning *point_binning, char *method,
                        char *percentile, char *trim, int bin_coordinates)
 {
@@ -198,6 +254,7 @@ void point_binning_set(struct PointBinning *point_binning, char *method,
     point_binning->bin_sumsq = FALSE;
     point_binning->bin_z_index = FALSE;
     point_binning->bin_cnt_index = FALSE;
+    point_binning->bin_eigenvalues = FALSE;
     point_binning->bin_coordinates = FALSE;
 
     point_binning->n_array = NULL;
@@ -288,6 +345,18 @@ void point_binning_set(struct PointBinning *point_binning, char *method,
     if (strcmp(method, "sidnmin") == 0) {
         point_binning->method = METHOD_SIDNMIN;
         point_binning->bin_cnt_index = TRUE;
+    }
+    if (strcmp(method, "ev1") == 0) {
+        point_binning->method = METHOD_EV1;
+        point_binning->bin_eigenvalues = TRUE;
+    }
+    if (strcmp(method, "ev2") == 0) {
+        point_binning->method = METHOD_EV2;
+        point_binning->bin_eigenvalues = TRUE;
+    }
+    if (strcmp(method, "ev3") == 0) {
+        point_binning->method = METHOD_EV3;
+        point_binning->bin_eigenvalues = TRUE;
     }
     if (bin_coordinates) {
         /* x, y */
@@ -396,7 +465,9 @@ void point_binning_allocate(struct PointBinning *point_binning, int rows,
             G_calloc((size_t) rows * (cols + 1), Rast_cell_size(rtype));
         blank_array(point_binning->sumsq_array, rows, cols, rtype, 0);
     }
-    if (point_binning->bin_z_index || point_binning->bin_cnt_index) {
+    if (point_binning->bin_z_index ||
+        point_binning->bin_cnt_index ||
+        point_binning->bin_eigenvalues) {
         G_debug(2, "allocating index_array");
         point_binning->index_array =
             G_calloc((size_t) rows * (cols + 1), Rast_cell_size(CELL_TYPE));
@@ -426,7 +497,9 @@ void point_binning_free(struct PointBinning *point_binning,
         G_free(point_binning->sum_array);
     if (point_binning->bin_sumsq)
         G_free(point_binning->sumsq_array);
-    if (point_binning->bin_z_index || point_binning->bin_cnt_index) {
+    if (point_binning->bin_z_index ||
+        point_binning->bin_cnt_index ||
+        point_binning->bin_eigenvalues) {
         G_free(point_binning->index_array);
         G_free(bin_index_nodes->nodes);
         bin_index_nodes->num_nodes = 0;
@@ -775,6 +848,52 @@ void write_sidn(struct BinIndex *bin_index, void *raster_row,
     }
 }
 
+void write_ev(struct BinIndex *bin_index, void *raster_row, void *index_array,
+              int row, int cols, RASTER_MAP_TYPE rtype, int method)
+{
+    void *ptr = raster_row;
+    double **cov_matrix = G_alloc_matrix(3, 3);
+    double *ev = (double *)G_malloc(3 * sizeof(double));
+
+    for (int col = 0; col < cols; col++) {
+        size_t n_offset = ((size_t) row * cols + col) * Rast_cell_size(CELL_TYPE);
+        if (Rast_is_null_value(((char *)index_array) + n_offset, CELL_TYPE))      /* no points in cell */
+            Rast_set_null_value(ptr, 1, rtype);
+        else {
+            int node_id;
+            struct com_node cn;
+
+            node_id = Rast_get_c_value(((char *)index_array) + n_offset, CELL_TYPE);
+            cn = ((struct com_node *)bin_index->nodes)[node_id];
+
+            cov_matrix[0][0] = cn.comoment[0] / cn.n;
+            cov_matrix[0][1] = cov_matrix[1][0] = cn.comoment[1] / cn.n;
+            cov_matrix[0][2] = cov_matrix[2][0] = cn.comoment[2] / cn.n;
+            cov_matrix[1][1] = cn.comoment[3] / cn.n;
+            cov_matrix[1][2] = cov_matrix[2][1] = cn.comoment[4] / cn.n;
+            cov_matrix[2][2] = cn.comoment[5] / cn.n;
+
+            G_math_eigval(cov_matrix, ev, 3);
+
+            switch (method) {
+                case METHOD_EV1:
+                    Rast_set_d_value(ptr, ev[0], rtype);
+                    break;
+                case METHOD_EV2:
+                    Rast_set_d_value(ptr, ev[1], rtype);
+                    break;
+                case METHOD_EV3:
+                    Rast_set_d_value(ptr, ev[1], rtype);
+                    break;
+            }
+        }
+        ptr = G_incr_void_ptr(ptr, Rast_cell_size(CELL_TYPE));
+    }
+
+    G_free_matrix(cov_matrix);
+    G_free(ev);
+}
+
 void write_values(struct PointBinning *point_binning,
                   struct BinIndex *bin_index_nodes, void *raster_row, int row,
                   int cols, RASTER_MAP_TYPE rtype,
@@ -884,6 +1003,12 @@ void write_values(struct PointBinning *point_binning,
         write_sidn(bin_index_nodes, raster_row, point_binning->index_array,
                      row, cols, 1);
         break;
+    case METHOD_EV1:
+    case METHOD_EV2:
+    case METHOD_EV3:
+        write_ev(bin_index_nodes, raster_row, point_binning->index_array,
+                 row, cols, rtype, point_binning->method);
+        break;
 
     default:
         G_debug(2, "No method selected");
@@ -978,6 +1103,10 @@ void update_value(struct PointBinning *point_binning,
     if (point_binning->bin_cnt_index)
         update_bin_cnt_index(bin_index_nodes, point_binning->index_array, cols,
                          arr_row, arr_col, z);
+    if (point_binning->bin_eigenvalues)
+        update_bin_com_index(bin_index_nodes, point_binning->index_array,
+                             cols, arr_row, arr_col,
+                             x, y, z);
     if (point_binning->bin_coordinates) {
         /* this assumes that n is already computed for this xyz */
         void *ptr = get_cell_ptr(point_binning->n_array, cols, arr_row,

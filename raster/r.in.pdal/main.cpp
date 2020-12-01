@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
     method_opt->description = _("Statistic to use for raster values");
     method_opt->options =
         "n,min,max,range,sum,mean,stddev,variance,coeff_var,median,mode,"
-        "percentile,skewness,trimmean,sidnmax,sidnmin";
+        "percentile,skewness,trimmean,sidnmax,sidnmin,ev1,ev2,ev3";
     method_opt->answer = const_cast<char*>("mean");
     method_opt->guisection = _("Statistic");
     G_asprintf((char **)&(method_opt->descriptions),
@@ -134,7 +134,10 @@ int main(int argc, char *argv[])
                "skewness;%s;"
                "trimmean;%s;"
                "sidnmax;%s;"
-               "sidnmin;%s;",
+               "sidnmin;%s;"
+               "ev1;%s;"
+               "ev2;%s;"
+               "ev3;%s;",
                _("Number of points in cell"),
                _("Minimum value of point values in cell"),
                _("Maximum value of point values in cell"),
@@ -150,7 +153,10 @@ int main(int argc, char *argv[])
                _("Skewness of point values in cell"),
                _("Trimmed mean of point values in cell"),
                _("Maximum number of points in cell per source ID"),
-               _("Minimum number of points in cell per source ID"));
+               _("Minimum number of points in cell per source ID"),
+               _("First eigenvalue of point x, y, z coordinates"),
+               _("Second eigenvalue of point x, y, z coordinates"),
+               _("Third eigenvalue of point x, y, z coordinates"));
 
     Option *type_opt = G_define_standard_option(G_OPT_R_TYPE);
     type_opt->required = NO;
@@ -451,10 +457,13 @@ int main(int argc, char *argv[])
     /* Point density counting does not require any dimension information */
     if ((strcmp(method_opt->answer, "sidnmax") == 0 ||
         strcmp(method_opt->answer, "sidnmin") == 0 ||
-        strcmp(method_opt->answer, "n") == 0) &&
+        strcmp(method_opt->answer, "n") == 0 ||
+        strcmp(method_opt->answer, "ev1") == 0 ||
+        strcmp(method_opt->answer, "ev2") == 0 ||
+        strcmp(method_opt->answer, "ev3") == 0) &&
         (user_dimension_opt->answer ||
         !(strcmp(dimension_opt->answer, "z") == 0)))
-            G_warning(_("Binning methods 'n', 'sidnmax' and 'sidnmin' are ignoring specified dimension"));
+            G_warning(_("Binning methods 'n', 'sidnmax', 'sidnmin' and eigenvalues are ignoring specified dimension"));
 
     struct StringList infiles;
 
@@ -582,6 +591,12 @@ int main(int argc, char *argv[])
     if (point_binning.method == METHOD_SIDNMAX ||
         point_binning.method == METHOD_SIDNMIN)
             dim_to_use_as_z = pdal::Dimension::Id::PointSourceId;
+
+    if (dim_to_use_as_z != pdal::Dimension::Id::Z && (
+        strcmp(method_opt->answer, "ev1") == 0 ||
+        strcmp(method_opt->answer, "ev2") == 0 ||
+        strcmp(method_opt->answer, "ev3") == 0))
+            dim_to_use_as_z = pdal::Dimension::Id::Z;
 
     if (res_opt->answer) {
         /* align to resolution */
