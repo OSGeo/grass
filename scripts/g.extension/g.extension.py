@@ -1232,7 +1232,8 @@ def install_extension_win(name):
     os.chdir(TMPDIR)  # this is just to not leave something behind
     srcdir = os.path.join(TMPDIR, name)
     download_source_code(source=source, url=url, name=name,
-                         outdev=outdev, directory=srcdir, tmpdir=TMPDIR)
+                         outdev=outdev, directory=srcdir, tmpdir=TMPDIR,
+                         branch=branch)
 
     # collect module names and file names
     module_list = list()
@@ -1444,26 +1445,40 @@ extract_tar.supported_formats = ['tar.gz', 'gz', 'bz2', 'tar', 'gzip', 'targz']
 
 
 def download_source_code(source, url, name, outdev,
-                         directory=None, tmpdir=None):
+                         directory=None, tmpdir=None, branch=None):
     """Get source code to a local directory for compilation"""
-    gscript.verbose("Downloading source code for <{name}> from <{url}>"
-                    " which is identified as '{source}' type of source..."
-                    .format(source=source, url=url, name=name))
+    gscript.verbose(_("Type of source identified as '{source}'.")
+                    .format(source=source))
     if source == 'official':
+        gscript.message(_("Fetching <%s> from "
+                          "GRASS GIS Addons repository (be patient)...") % name)
         download_source_code_official_github(url, name, outdev, directory)
     elif source == 'svn':
+        gscript.message(_("Fetching <{name}> from "
+                          "<{url}> (be patient)...").format(name=name, url=url))
         download_source_code_svn(url, name, outdev, directory)
     elif source in ['remote_zip']:  # , 'official'
+        gscript.message(_("Fetching <{name}> from "
+                          "<{url}> (be patient)...").format(name=name, url=url))
         # we expect that the module.zip file is not by chance in the archive
         zip_name = os.path.join(tmpdir, 'extension.zip')
         try:
             response = urlopen(url)
         except URLError:
-            # Try download add-on from 'master' branch
-            try:
-                response = urlopen(url.replace('main', 'master'))
-            except URLError:
+            # Try download add-on from 'master' branch if default "main" fails
+            if branch == "main":
+                try:
+                    url = url.replace('main', 'master')
+                    gscript.message(_("Failed with default branch. "
+                                    "Try again from <{url}>...")
+                                    .format(url=url))
+                    response = urlopen(url)
+                except URLError:
+                    grass.fatal(_("Extension <%s> not found. Please check "
+                                  "'url' and 'branch' options".format(name)))
+            else:
                 grass.fatal(_("Extension <%s> not found") % name)
+
         with open(zip_name, 'wb') as out_file:
             shutil.copyfileobj(response, out_file)
         extract_zip(name=zip_name, directory=directory, tmpdir=tmpdir)
@@ -1498,13 +1513,6 @@ def install_extension_std_platforms(name, source, url, branch):
     gisbase = os.getenv('GISBASE')
     source_url = 'https://github.com/OSGeo/grass-addons/tree/master/grass7/'
 
-    if source == 'official':
-        gscript.message(_("Fetching <%s> from "
-                          "GRASS GIS Addons repository (be patient)...") % name)
-    else:
-        gscript.message(_("Fetching <{name}> from "
-                          "<{url}> (be patient)...").format(name=name, url=url))
-
     # to hide non-error messages from subprocesses
     if grass.verbosity() <= 2:
         outdev = open(os.devnull, 'w')
@@ -1514,7 +1522,8 @@ def install_extension_std_platforms(name, source, url, branch):
     os.chdir(TMPDIR)  # this is just to not leave something behind
     srcdir = os.path.join(TMPDIR, name)
     download_source_code(source=source, url=url, name=name,
-                         outdev=outdev, directory=srcdir, tmpdir=TMPDIR)
+                         outdev=outdev, directory=srcdir, tmpdir=TMPDIR,
+                         branch=branch)
     os.chdir(srcdir)
 
     # collect module names
