@@ -314,7 +314,7 @@ class AnimationFrame(wx.Frame):
                 lambda: self.controller.UpdateAnimations())
             dlg.CenterOnParent()
 
-        self.dialogs['preferences'].ShowModal()
+        self.dialogs['preferences'].Show()
 
     def OnHelp(self, event):
         RunCommand('g.manual',
