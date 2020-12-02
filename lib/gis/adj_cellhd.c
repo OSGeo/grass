@@ -54,33 +54,39 @@ void G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
 
     if (!row_flag) {
 	if (cellhd->ns_res <= 0)
-	    G_fatal_error(_("Illegal n-s resolution value <%lf>"), cellhd->ns_res);
+	    G_fatal_error(_("Illegal n-s resolution value: %lf"), cellhd->ns_res);
     }
     else {
 	if (cellhd->rows <= 0)
-	    G_fatal_error(_("Illegal row value"));
+	    G_fatal_error(_("Illegal number of rows: %d"), cellhd->rows);
     }
     if (!col_flag) {
 	if (cellhd->ew_res <= 0)
-	    G_fatal_error(_("Illegal e-w resolution value"));
+	    G_fatal_error(_("Illegal e-w resolution value: %lf"), cellhd->ew_res);
     }
     else {
 	if (cellhd->cols <= 0)
-	    G_fatal_error(_("Illegal col value"));
+	    G_fatal_error(_("Illegal number of columns: %d"), cellhd->cols);
     }
 
     /* check the edge values */
     if (cellhd->north <= cellhd->south) {
 	if (cellhd->proj == PROJECTION_LL)
-	    G_fatal_error(_("North must be north of South"));
+	    G_fatal_error(_("North must be north of South,"
+			    " but %lf (north) <= %lf (south"),
+			  cellhd->north, cellhd->south);
 	else
-	    G_fatal_error(_("North must be larger than South"));
+	    G_fatal_error(_("North must be larger than South,"
+			    " but %lf (north) <= %lf (south"),
+		          cellhd->north, cellhd->south);
     }
 
     ll_wrap(cellhd);
 
     if (cellhd->east <= cellhd->west)
-	G_fatal_error(_("East must be larger than West"));
+	G_fatal_error(_("East must be larger than West,"
+			" but %lf (east) <= %lf (west)"),
+		      cellhd->east, cellhd->west);
 
     /* compute rows and columns, if not set */
     if (!row_flag) {
@@ -98,8 +104,12 @@ void G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
 	    cellhd->cols = 1;
     }
 
-    if (cellhd->cols < 0 || cellhd->rows < 0) {
-	G_fatal_error(_("Invalid coordinates"));
+    if (cellhd->cols < 0) {
+	G_fatal_error(_("Invalid coordinates: negative number of columns"));
+    }
+
+    if (cellhd->rows < 0) {
+	G_fatal_error(_("Invalid coordinates: negative number of rows"));
     }
 
     /* (re)compute the resolutions */
