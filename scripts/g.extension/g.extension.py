@@ -1470,7 +1470,7 @@ def download_source_code(source, url, name, outdev,
                 try:
                     url = url.replace('main', 'master')
                     gscript.message(_("Failed with default branch. "
-                                    "Try again from <{url}>...")
+                                    "Trying again from <{url}>...")
                                     .format(url=url))
                     response = urlopen(url)
                 except URLError:
