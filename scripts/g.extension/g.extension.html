@@ -185,7 +185,13 @@ g.extension extension=r.stream.distance operation=remove
 Simple URL to GitHub, GitLab, Bitbucket repositories:
 
 <div class="code"><pre>
-g.extension r.example url=github.com/johnsmith/r.example
+g.extension r.example.plus url="https://github.com/wenzeslaus/r.example.plus"
+</pre></div>
+
+Simple URL to GitHub, GitLab, Bitbucket repositories from a specific (e.g. development) branch:
+
+<div class="code"><pre>
+g.extension r.example.plus url="https://github.com/wenzeslaus/r.example.plus" branch=master
 </pre></div>
 
 Simple URL to OSGeo Trac (downloads a ZIP file, requires download to be enabled in Trac):
