@@ -34,7 +34,7 @@ static int string_list_add_item(struct StringList *string_list, char *item)
     if (string_list->num_items >= string_list->max_items) {
         string_list->max_items += SIZE_INCREMENT;
         string_list->items = G_realloc(string_list->items,
-                                       (size_t) string_list->max_items *
+                                       (size_t)string_list->max_items *
                                        sizeof(char *));
     }
     /* n contains the index */

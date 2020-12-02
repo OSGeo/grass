@@ -1,3 +1,4 @@
+
  /****************************************************************************
  *
  * MODULE:    r.in.pdal
@@ -44,7 +45,6 @@ extern "C"
 #include "projection.h"
 #include "filters.h"
 #include "point_binning.h"
-#include "support.h"
 #include "string_list.h"
 }
 
@@ -67,11 +67,12 @@ int main(int argc, char *argv[])
     void *raster_row;
     struct Cell_head region;
     struct Cell_head input_region;
-    int rows, last_rows, cols;		/* scan box size */
+    int rows, last_rows, cols;  /* scan box size */
 
     char buff[BUFFSIZE];
 
     struct BinIndex bin_index_nodes;
+
     bin_index_nodes.num_nodes = 0;
     bin_index_nodes.max_nodes = 0;
     bin_index_nodes.nodes = NULL;
@@ -81,6 +82,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     GModule *module = G_define_module();
+
     G_add_keyword(_("raster"));
     G_add_keyword(_("import"));
     G_add_keyword(_("LIDAR"));
@@ -89,26 +91,32 @@ int main(int argc, char *argv[])
     G_add_keyword(_("aggregation"));
     G_add_keyword(_("binning"));
     module->description =
-	_("Creates a raster map from LAS LiDAR points using univariate statistics.");
+        _("Creates a raster map from LAS LiDAR points using univariate statistics.");
 
     Option *input_opt = G_define_standard_option(G_OPT_F_BIN_INPUT);
+
     input_opt->required = NO;
     input_opt->label = _("LAS input file");
-    input_opt->description = _("LiDAR input files in LAS format (*.las or *.laz)");
+    input_opt->description =
+        _("LiDAR input files in LAS format (*.las or *.laz)");
     input_opt->guisection = _("Input");
 
     Option *output_opt = G_define_standard_option(G_OPT_R_OUTPUT);
+
     output_opt->required = NO;
     output_opt->guisection = _("Output");
 
     Option *file_list_opt = G_define_standard_option(G_OPT_F_INPUT);
+
     file_list_opt->key = "file";
     file_list_opt->label = _("File containing names of LAS input files");
-    file_list_opt->description = _("LiDAR input files in LAS format (*.las or *.laz)");
+    file_list_opt->description =
+        _("LiDAR input files in LAS format (*.las or *.laz)");
     file_list_opt->required = NO;
     file_list_opt->guisection = _("Input");
 
     Option *method_opt = G_define_option();
+
     method_opt->key = "method";
     method_opt->type = TYPE_STRING;
     method_opt->required = NO;
@@ -116,7 +124,8 @@ int main(int argc, char *argv[])
     method_opt->options =
         "n,min,max,range,sum,mean,stddev,variance,coeff_var,median,mode,"
         "percentile,skewness,trimmean,sidnmax,sidnmin,ev1,ev2,ev3";
-    method_opt->answer = const_cast<char*>("mean");
+    method_opt->answer = const_cast < char *>("mean");
+
     method_opt->guisection = _("Statistic");
     G_asprintf((char **)&(method_opt->descriptions),
                "n;%s;"
@@ -159,10 +168,12 @@ int main(int argc, char *argv[])
                _("Third eigenvalue of point x, y, z coordinates"));
 
     Option *type_opt = G_define_standard_option(G_OPT_R_TYPE);
+
     type_opt->required = NO;
-    type_opt->answer = const_cast<char*>("FCELL");
+    type_opt->answer = const_cast < char *>("FCELL");
 
     Option *base_raster_opt = G_define_standard_option(G_OPT_R_INPUT);
+
     base_raster_opt->key = "base_raster";
     base_raster_opt->required = NO;
     base_raster_opt->label =
@@ -173,39 +184,48 @@ int main(int argc, char *argv[])
     base_raster_opt->guisection = _("Transform");
 
     Option *zrange_opt = G_define_option();
+
     zrange_opt->key = "zrange";
     zrange_opt->type = TYPE_DOUBLE;
     zrange_opt->required = NO;
     zrange_opt->key_desc = "min,max";
     zrange_opt->label = _("Filter range for Z data (min,max)");
-    zrange_opt->description = _("Applied after base_raster transformation step");
+    zrange_opt->description =
+        _("Applied after base_raster transformation step");
     zrange_opt->guisection = _("Selection");
 
     Option *zscale_opt = G_define_option();
+
     zscale_opt->key = "zscale";
     zscale_opt->type = TYPE_DOUBLE;
     zscale_opt->required = NO;
-    zscale_opt->answer = const_cast<char*>("1.0");
+    zscale_opt->answer = const_cast < char *>("1.0");
+
     zscale_opt->description = _("Scale to apply to Z data");
     zscale_opt->guisection = _("Transform");
 
     Option *irange_opt = G_define_option();
+
     irange_opt->key = "intensity_range";
     irange_opt->type = TYPE_DOUBLE;
     irange_opt->required = NO;
     irange_opt->key_desc = "min,max";
-    irange_opt->description = _("Filter range for intensity values (min,max)");
+    irange_opt->description =
+        _("Filter range for intensity values (min,max)");
     irange_opt->guisection = _("Selection");
 
     Option *iscale_opt = G_define_option();
+
     iscale_opt->key = "intensity_scale";
     iscale_opt->type = TYPE_DOUBLE;
     iscale_opt->required = NO;
-    iscale_opt->answer = const_cast<char*>("1.0");
+    iscale_opt->answer = const_cast < char *>("1.0");
+
     iscale_opt->description = _("Scale to apply to intensity values");
     iscale_opt->guisection = _("Transform");
 
     Flag *reproject_flag = G_define_flag();
+
     reproject_flag->key = 'w';
     reproject_flag->label =
         _("Reproject to location's coordinate system if needed");
@@ -217,56 +237,67 @@ int main(int argc, char *argv[])
 
     // TODO: from the API it seems that also prj file path and proj string will work
     Option *input_srs_opt = G_define_option();
+
     input_srs_opt->key = "input_srs";
     input_srs_opt->type = TYPE_STRING;
     input_srs_opt->required = NO;
     input_srs_opt->label =
-            _("Input dataset projection (WKT or EPSG, e.g. EPSG:4326)");
+        _("Input dataset projection (WKT or EPSG, e.g. EPSG:4326)");
     input_srs_opt->description =
-            _("Override input dataset coordinate system using EPSG code"
-              " or WKT definition");
+        _("Override input dataset coordinate system using EPSG code"
+          " or WKT definition");
     input_srs_opt->guisection = _("Projection");
 
     Option *max_ground_window_opt = G_define_option();
+
     max_ground_window_opt->key = "max_ground_window_size";
     max_ground_window_opt->type = TYPE_DOUBLE;
     max_ground_window_opt->required = NO;
-    max_ground_window_opt->answer = const_cast<char*>("33");
+    max_ground_window_opt->answer = const_cast < char *>("33");
+
     max_ground_window_opt->description =
         _("Maximum window size for ground filter");
     max_ground_window_opt->guisection = _("Ground filter");
 
     Option *ground_slope_opt = G_define_option();
+
     ground_slope_opt->key = "ground_slope";
     ground_slope_opt->type = TYPE_DOUBLE;
     ground_slope_opt->required = NO;
-    ground_slope_opt->answer = const_cast<char*>("1.0");
+    ground_slope_opt->answer = const_cast < char *>("1.0");
+
     ground_slope_opt->description = _("Slope for ground filter");
     ground_slope_opt->guisection = _("Ground filter");
 
     Option *max_ground_distance_opt = G_define_option();
+
     max_ground_distance_opt->key = "max_ground_distance";
     max_ground_distance_opt->type = TYPE_DOUBLE;
     max_ground_distance_opt->required = NO;
-    max_ground_distance_opt->answer = const_cast<char*>("2.5");
+    max_ground_distance_opt->answer = const_cast < char *>("2.5");
+
     max_ground_distance_opt->description =
         _("Maximum distance for ground filter");
     max_ground_distance_opt->guisection = _("Ground filter");
 
     Option *init_ground_distance_opt = G_define_option();
+
     init_ground_distance_opt->key = "initial_ground_distance";
     init_ground_distance_opt->type = TYPE_DOUBLE;
     init_ground_distance_opt->required = NO;
-    init_ground_distance_opt->answer = const_cast<char*>("0.15");
+    init_ground_distance_opt->answer = const_cast < char *>("0.15");
+
     init_ground_distance_opt->description =
         _("Initial distance for ground filter");
     init_ground_distance_opt->guisection = _("Ground filter");
 
     Option *ground_cell_size_opt = G_define_option();
+
     ground_cell_size_opt->key = "ground_cell_size";
     ground_cell_size_opt->type = TYPE_DOUBLE;
     ground_cell_size_opt->required = NO;
-    ground_cell_size_opt->answer = const_cast<char*>("1");
+    ground_cell_size_opt->answer = const_cast < char *>("1");
+
     ground_cell_size_opt->description =
         _("Initial distance for ground filter");
     ground_cell_size_opt->guisection = _("Ground filter");
@@ -274,6 +305,7 @@ int main(int argc, char *argv[])
     /* I would prefer to call the following "percentile", but that has too
      * much namespace overlap with the "percent" option above */
     Option *pth_opt = G_define_option();
+
     pth_opt->key = "pth";
     pth_opt->type = TYPE_INTEGER;
     pth_opt->required = NO;
@@ -282,24 +314,27 @@ int main(int argc, char *argv[])
     pth_opt->guisection = _("Statistic");
 
     Option *trim_opt = G_define_option();
+
     trim_opt->key = "trim";
     trim_opt->type = TYPE_DOUBLE;
     trim_opt->required = NO;
     trim_opt->options = "0-50";
-    trim_opt->label = _("Discard given percentage of the smallest and largest values");
+    trim_opt->label =
+        _("Discard given percentage of the smallest and largest values");
     trim_opt->description =
-	_("Discard <trim> percent of the smallest and <trim> percent of the largest observations");
+        _("Discard <trim> percent of the smallest and <trim> percent of the largest observations");
     trim_opt->guisection = _("Statistic");
 
     Option *res_opt = G_define_option();
+
     res_opt->key = "resolution";
     res_opt->type = TYPE_DOUBLE;
     res_opt->required = NO;
-    res_opt->description =
-	_("Output raster resolution");
+    res_opt->description = _("Output raster resolution");
     res_opt->guisection = _("Output");
 
     Option *filter_opt = G_define_option();
+
     filter_opt->key = "return_filter";
     filter_opt->type = TYPE_STRING;
     filter_opt->required = NO;
@@ -309,6 +344,7 @@ int main(int argc, char *argv[])
     filter_opt->guisection = _("Selection");
 
     Option *class_opt = G_define_option();
+
     class_opt->key = "class_filter";
     class_opt->type = TYPE_INTEGER;
     class_opt->multiple = YES;
@@ -319,13 +355,15 @@ int main(int argc, char *argv[])
     class_opt->guisection = _("Selection");
 
     Option *dimension_opt = G_define_option();
+
     dimension_opt->key = "dimension";
     dimension_opt->type = TYPE_STRING;
     dimension_opt->required = NO;
     dimension_opt->label = _("Dimension (variable) to use for raster values");
     dimension_opt->options =
-	"z,intensity,number,returns,direction,angle,class,source";
-    dimension_opt->answer = const_cast<char*>("z");
+        "z,intensity,number,returns,direction,angle,class,source";
+    dimension_opt->answer = const_cast < char *>("z");
+
     dimension_opt->guisection = _("Selection");
     G_asprintf((char **)&(dimension_opt->descriptions),
                "z;%s;"
@@ -333,10 +371,7 @@ int main(int argc, char *argv[])
                "number;%s;"
                "returns;%s;"
                "direction;%s;"
-               "angle;%s;"
-               "class;%s;"
-               "source;%s",
-               _("Z coordinate"),
+               "angle;%s;" "class;%s;" "source;%s", _("Z coordinate"),
                /* GTC: LAS LiDAR point property */
                _("Intensity"),
                /* GTC: LAS LiDAR point property */
@@ -353,17 +388,19 @@ int main(int argc, char *argv[])
                _("Source ID"));
 
     Option *user_dimension_opt = G_define_option();
+
     user_dimension_opt->key = "user_dimension";
     user_dimension_opt->type = TYPE_STRING;
     user_dimension_opt->required = NO;
-    user_dimension_opt->label = _("Custom dimension (variable) to use for raster values");
+    user_dimension_opt->label =
+        _("Custom dimension (variable) to use for raster values");
     user_dimension_opt->description = _("PDAL dimension name");
     user_dimension_opt->guisection = _("Selection");
-    
+
     Flag *extract_ground_flag = G_define_flag();
+
     extract_ground_flag->key = 'j';
-    extract_ground_flag->label =
-        _("Classify and extract ground points");
+    extract_ground_flag->label = _("Classify and extract ground points");
     extract_ground_flag->description =
         _("This assignes class 2 to the groud points");
     extract_ground_flag->guisection = _("Ground filter");
@@ -374,11 +411,13 @@ int main(int argc, char *argv[])
     // and it would Classify ground and extract non-ground
     // probably better if only one step is required to get ground and non-ground
     Flag *classify_ground_flag = G_define_flag();
+
     classify_ground_flag->key = 'k';
     classify_ground_flag->description = _("Classify ground points");
     classify_ground_flag->guisection = _("Ground filter");
 
     Flag *height_filter_flag = G_define_flag();
+
     height_filter_flag->key = 'h';
     height_filter_flag->label =
         _("Compute height for points as a difference from ground");
@@ -387,12 +426,14 @@ int main(int argc, char *argv[])
     height_filter_flag->guisection = _("Transform");
 
     Flag *approx_ground_flag = G_define_flag();
+
     approx_ground_flag->key = 'm';
     approx_ground_flag->description =
         _("Use approximate algorithm in ground filter");
     approx_ground_flag->guisection = _("Ground filter");
 
     Flag *extents_flag = G_define_flag();
+
     extents_flag->key = 'e';
     extents_flag->label =
         _("Use the extent of the input for the raster extent");
@@ -402,6 +443,7 @@ int main(int argc, char *argv[])
     extents_flag->guisection = _("Output");
 
     Flag *set_region_flag = G_define_flag();
+
     set_region_flag->key = 'n';
     set_region_flag->label =
         _("Set computation region to match the new raster map");
@@ -411,6 +453,7 @@ int main(int argc, char *argv[])
     set_region_flag->guisection = _("Output");
 
     Flag *over_flag = G_define_flag();
+
     over_flag->key = 'o';
     over_flag->label =
         _("Override projection check (use current location's projection)");
@@ -421,6 +464,7 @@ int main(int argc, char *argv[])
     // TODO: review r.in.lidar scanning and print and add it here
 
     Flag *base_rast_res_flag = G_define_flag();
+
     base_rast_res_flag->key = 'd';
     base_rast_res_flag->label =
         _("Use base raster resolution instead of computational region");
@@ -450,26 +494,28 @@ int main(int argc, char *argv[])
     }
 
     /* Trim option is used only for trimmean method */
-    if (trim_opt->answer != NULL && strcmp(method_opt->answer, "trimmean") != 0) {
+    if (trim_opt->answer != NULL &&
+        strcmp(method_opt->answer, "trimmean") != 0) {
         G_fatal_error(_("Trim option can be used only with trimmean method"));
     }
 
     /* Point density counting does not require any dimension information */
     if ((strcmp(method_opt->answer, "sidnmax") == 0 ||
-        strcmp(method_opt->answer, "sidnmin") == 0 ||
-        strcmp(method_opt->answer, "n") == 0 ||
-        strcmp(method_opt->answer, "ev1") == 0 ||
-        strcmp(method_opt->answer, "ev2") == 0 ||
-        strcmp(method_opt->answer, "ev3") == 0) &&
+         strcmp(method_opt->answer, "sidnmin") == 0 ||
+         strcmp(method_opt->answer, "n") == 0 ||
+         strcmp(method_opt->answer, "ev1") == 0 ||
+         strcmp(method_opt->answer, "ev2") == 0 ||
+         strcmp(method_opt->answer, "ev3") == 0) &&
         (user_dimension_opt->answer ||
-        !(strcmp(dimension_opt->answer, "z") == 0)))
-            G_warning(_("Binning methods 'n', 'sidnmax', 'sidnmin' and eigenvalues are ignoring specified dimension"));
+         !(strcmp(dimension_opt->answer, "z") == 0)))
+        G_warning(_("Binning methods 'n', 'sidnmax', 'sidnmin' and eigenvalues are ignoring specified dimension"));
 
     struct StringList infiles;
 
     if (file_list_opt->answer) {
         if (access(file_list_opt->answer, F_OK) != 0)
-            G_fatal_error(_("File <%s> does not exist"), file_list_opt->answer);
+            G_fatal_error(_("File <%s> does not exist"),
+                          file_list_opt->answer);
         string_list_from_file(&infiles, file_list_opt->answer);
     }
     else {
@@ -501,10 +547,10 @@ int main(int argc, char *argv[])
     double xmax = 0;
     double ymax = 0;
     bool use_spatial_filter = false;
+
     use_spatial_filter = spatial_filter_from_current_region(&xmin,
                                                             &ymin,
-                                                            &xmax,
-                                                            &ymax);
+                                                            &xmax, &ymax);
 
     double zrange_min, zrange_max;
     bool use_zrange = zrange_filter_from_option(zrange_opt, &zrange_min,
@@ -541,7 +587,7 @@ int main(int argc, char *argv[])
     }
 
     point_binning_set(&point_binning, method_opt->answer, pth_opt->answer,
-                      trim_opt->answer, FALSE);
+                      trim_opt->answer);
 
     if (strcmp("CELL", type_opt->answer) == 0)
         rtype = CELL_TYPE;
@@ -554,15 +600,16 @@ int main(int argc, char *argv[])
         point_binning.method == METHOD_MODE ||
         point_binning.method == METHOD_SIDNMAX ||
         point_binning.method == METHOD_SIDNMIN) {
-            if (rtype != CELL_TYPE)
-                G_warning(_("Output map type set to CELL"));
-            rtype = CELL_TYPE;
+        if (rtype != CELL_TYPE)
+            G_warning(_("Output map type set to CELL"));
+        rtype = CELL_TYPE;
     }
 
-    if (!user_dimension_opt->answer && !(strcmp(dimension_opt->answer, "z") == 0)) {
+    if (!user_dimension_opt->answer &&
+        !(strcmp(dimension_opt->answer, "z") == 0)) {
         /* Should we enfocte the CELL type? */
         if (rtype != CELL_TYPE)
-                G_warning(_("Output map type set to CELL"));
+            G_warning(_("Output map type set to CELL"));
         rtype = CELL_TYPE;
 
         if (strcmp(dimension_opt->answer, "intensity") == 0) {
@@ -590,20 +637,21 @@ int main(int argc, char *argv[])
 
     if (point_binning.method == METHOD_SIDNMAX ||
         point_binning.method == METHOD_SIDNMIN)
-            dim_to_use_as_z = pdal::Dimension::Id::PointSourceId;
+        dim_to_use_as_z = pdal::Dimension::Id::PointSourceId;
 
-    if (dim_to_use_as_z != pdal::Dimension::Id::Z && (
-        strcmp(method_opt->answer, "ev1") == 0 ||
-        strcmp(method_opt->answer, "ev2") == 0 ||
-        strcmp(method_opt->answer, "ev3") == 0))
-            dim_to_use_as_z = pdal::Dimension::Id::Z;
+    if (dim_to_use_as_z != pdal::Dimension::Id::Z &&
+        (strcmp(method_opt->answer, "ev1") == 0 ||
+         strcmp(method_opt->answer, "ev2") == 0 ||
+         strcmp(method_opt->answer, "ev3") == 0))
+        dim_to_use_as_z = pdal::Dimension::Id::Z;
 
     if (res_opt->answer) {
         /* align to resolution */
         res = atof(res_opt->answer);
 
         if (!G_scan_resolution(res_opt->answer, &res, region.proj))
-            G_fatal_error(_("Invalid input <%s=%s>"), res_opt->key, res_opt->answer);
+            G_fatal_error(_("Invalid input <%s=%s>"), res_opt->key,
+                          res_opt->answer);
 
         if (res <= 0)
             G_fatal_error(_("Option '%s' must be > 0.0"), res_opt->key);
@@ -626,9 +674,9 @@ int main(int argc, char *argv[])
     cols = region.cols;
 
     G_debug(2, "region.n=%f  region.s=%f  region.ns_res=%f", region.north,
-	    region.south, region.ns_res);
+            region.south, region.ns_res);
     G_debug(2, "region.rows=%d  [box_rows=%d]  region.cols=%d", region.rows,
-	    rows, region.cols);
+            rows, region.cols);
 
     /* using segment library for the base raster */
     // TODO: use segment library also for the binning removing the
@@ -636,6 +684,7 @@ int main(int argc, char *argv[])
     // TODO: remove hardcoded memory requirements, let user supply it
     int use_segment = 0;
     int use_base_raster_res = 0;
+
     /* TODO: see if the input region extent is smaller than the raster
      * if yes, the we need to load the whole base raster if the -e
      * flag was defined (alternatively clip the regions) */
@@ -649,11 +698,13 @@ int main(int argc, char *argv[])
             /* read raster actual extent and resolution */
             Rast_get_cellhd(base_raster_opt->answer, "", &input_region);
             /* TODO: make it only as small as the output is or points are */
-            Rast_set_input_window(&input_region);  /* we have split window */
-        } else {
+            Rast_set_input_window(&input_region);       /* we have split window */
+        }
+        else {
             Rast_get_input_window(&input_region);
         }
-        rast_segment_open(&base_segment, base_raster_opt->answer, &base_raster_data_type);
+        rast_segment_open(&base_segment, base_raster_opt->answer,
+                          &base_raster_data_type);
     }
 
     // TODO: use memory requirements supplied by user
@@ -668,16 +719,16 @@ int main(int argc, char *argv[])
 
     G_message(_("Reading data..."));
 
-    std::vector<pdal::Stage*> readers;
+    std::vector < pdal::Stage * >readers;
     pdal::StageFactory factory;
     pdal::MergeFilter merge_filter;
     /* loop of input files */
     for (int i = 0; i < infiles.num_items; i++) {
-        const char* infile = infiles.items[i];
+        const char *infile = infiles.items[i];
+
         std::string pdal_read_driver = factory.inferReaderDriver(infile);
         if (pdal_read_driver.empty())
-            G_fatal_error("Cannot determine input file type of <%s>",
-                          infile);
+            G_fatal_error("Cannot determine input file type of <%s>", infile);
 
         pdal::Options las_opts;
         pdal::Option las_opt("filename", infile);
@@ -685,8 +736,9 @@ int main(int argc, char *argv[])
         // stages created by factory are destroyed with the factory
         pdal::Stage * reader = factory.createStage(pdal_read_driver);
         if (!reader)
-            G_fatal_error("PDAL reader creation failed, a wrong format of <%s>",
-                          infile);
+            G_fatal_error
+                ("PDAL reader creation failed, a wrong format of <%s>",
+                 infile);
         reader->setOptions(las_opts);
         readers.push_back(reader);
         merge_filter.setInput(*reader);
@@ -702,11 +754,12 @@ int main(int argc, char *argv[])
     if (reproject_flag->answer) {
         G_message(_("Reprojecting the input to the location projection"));
         char *proj_wkt = location_projection_as_wkt(false);
+
         pdal::Options o4;
         // TODO: try catch for user input error
         if (input_srs_opt->answer)
-            o4.add<std::string>("in_srs", input_srs_opt->answer);
-        o4.add<std::string>("out_srs", proj_wkt);
+            o4.add < std::string > ("in_srs", input_srs_opt->answer);
+        o4.add < std::string > ("out_srs", proj_wkt);
         reprojection_filter.setOptions(o4);
         reprojection_filter.setInput(*last_stage);
         last_stage = &reprojection_filter;
@@ -718,24 +771,21 @@ int main(int argc, char *argv[])
         if (classify_ground_flag->answer)
             G_message(_("Classifying ground points"));
         pdal::Options groundOptions;
-        groundOptions.add<double>("max_window_size",
-                                  atof(max_ground_window_opt->answer));
-        groundOptions.add<double>("slope",
-                                  atof(ground_slope_opt->answer));
-        groundOptions.add<double>("max_distance",
-                                  atof(max_ground_distance_opt->answer));
-        groundOptions.add<double>("initial_distance",
-                                  atof(init_ground_distance_opt->answer));
-        groundOptions.add<double>("cell_size",
-                                  atof(ground_cell_size_opt->answer));
-        groundOptions.add<bool>("classify",
-                                classify_ground_flag->answer);
-        groundOptions.add<bool>("extract",
-                                extract_ground_flag->answer);
-        groundOptions.add<bool>("approximate",
-                                approx_ground_flag->answer);
-        groundOptions.add<bool>("debug", false);
-        groundOptions.add<uint32_t>("verbose", 0);
+        groundOptions.add < double >("max_window_size",
+                                     atof(max_ground_window_opt->answer));
+        groundOptions.add < double >("slope", atof(ground_slope_opt->answer));
+        groundOptions.add < double >("max_distance",
+                                     atof(max_ground_distance_opt->answer));
+        groundOptions.add < double >("initial_distance",
+                                     atof(init_ground_distance_opt->answer));
+        groundOptions.add < double >("cell_size",
+                                     atof(ground_cell_size_opt->answer));
+        groundOptions.add < bool >("classify", classify_ground_flag->answer);
+        groundOptions.add < bool >("extract", extract_ground_flag->answer);
+        groundOptions.add < bool >("approximate", approx_ground_flag->answer);
+        groundOptions.add < bool >("debug", false);
+
+        groundOptions.add < uint32_t > ("verbose", 0);
 
         // TODO: free this or change pointer type to shared
         pdal::Stage * ground_stage(factory.createStage("filters.ground"));
@@ -760,6 +810,7 @@ int main(int argc, char *argv[])
     }
 
     GrassLidarFilter grass_filter;
+
     if (use_spatial_filter)
         grass_filter.set_spatial_filter(xmin, xmax, ymin, ymax);
     if (use_zrange)
@@ -771,6 +822,7 @@ int main(int argc, char *argv[])
     grass_filter.setInput(*last_stage);
 
     GrassRasterWriter binning_writer;
+
     binning_writer.setInput(grass_filter);
     //stream_filter.setInput(*last_stage);
     // there is no difference between 1 and 10k points in memory
@@ -786,13 +838,13 @@ int main(int argc, char *argv[])
                               " the location projection"));
     }
     else if (!reproject_flag->answer) {
-        pdal::SpatialReference spatial_reference = merge_filter.getSpatialReference();
+        pdal::SpatialReference spatial_reference =
+            merge_filter.getSpatialReference();
         if (spatial_reference.empty())
             G_fatal_error(_("The input dataset has undefined projection"));
-        std::string dataset_wkt =
-            spatial_reference.
-            getWKT();
+        std::string dataset_wkt = spatial_reference.getWKT();
         bool proj_match = is_wkt_projection_same_as_loc(dataset_wkt.c_str());
+
         if (!proj_match)
             wkt_projection_mismatch_report(dataset_wkt.c_str());
     }
@@ -839,8 +891,8 @@ int main(int argc, char *argv[])
                             "Check dimension name spelling."));
         if (!(strcmp(dimension_opt->answer, "z") == 0))
             G_warning(_("Both dimension and user dimension parameters are specified. "
-                        "Using '%s' as the dimension to import."),
-                        user_dimension_opt->answer);
+                       "Using '%s' as the dimension to import."),
+                      user_dimension_opt->answer);
     }
 
     // this is just for sure, we tested the individual dimensions before
@@ -851,18 +903,19 @@ int main(int argc, char *argv[])
                       pdal::Dimension::name(dim_to_use_as_z).c_str());
 
     // TODO: add percentage printing to one of the filters
-    binning_writer.set_binning(&region, &point_binning, &bin_index_nodes, rtype, cols);
+    binning_writer.set_binning(&region, &point_binning, &bin_index_nodes,
+                               rtype, cols);
     binning_writer.dim_to_use_as_z(dim_to_use_as_z);
 
     // run the actual processing
     binning_writer.execute(point_table);
 
     /* calc stats and output */
-	G_message(_("Writing output raster map..."));
+    G_message(_("Writing output raster map..."));
     for (int row = 0; row < rows; row++) {
-        /* potentially vector writing can be independent on the binning */
+        /* assemble final values into a row */
         write_values(&point_binning, &bin_index_nodes, raster_row, row,
-                     cols, rtype, NULL);
+                     cols, rtype);
         G_percent(row, rows, 10);
 
         /* write out line of raster data */
@@ -873,7 +926,7 @@ int main(int argc, char *argv[])
     if (use_segment)
         Segment_close(&base_segment);
 
-    G_percent(1, 1, 1);		/* flush */
+    G_percent(1, 1, 1);         /* flush */
     G_free(raster_row);
 
     G_message(_(GPOINT_COUNT_FORMAT " points found in input file(s)"),
@@ -891,6 +944,7 @@ int main(int argc, char *argv[])
 
     // Hist fields are limited to 4096
     char file_list[4096];
+
     if (file_list_opt->answer)
         G_snprintf(file_list, sizeof(file_list), "%s", file_list_opt->answer);
     else
@@ -906,8 +960,9 @@ int main(int argc, char *argv[])
 
     if (infiles.num_items > 1) {
         sprintf(buff, _("Raster map <%s> created."
-                        " " GPOINT_COUNT_FORMAT " points from %d files found in region."),
-                outmap, grass_filter.num_passed(), infiles.num_items);
+                        " " GPOINT_COUNT_FORMAT
+                        " points from %d files found in region."), outmap,
+                grass_filter.num_passed(), infiles.num_items);
     }
     else {
         sprintf(buff, _("Raster map <%s> created."

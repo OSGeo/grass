@@ -1,3 +1,4 @@
+
  /****************************************************************************
  *
  * MODULE:    r.in.pdal
@@ -34,14 +35,14 @@ extern "C"
 /* All GRASS GIS filters which are similar across multiple modules
  * put together as one PDAL Stage class.
  */
-class GrassLidarFilter : public pdal::Filter, public pdal::Streamable
+class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
 {
-public:
-    GrassLidarFilter() :
+  public:
+    GrassLidarFilter():
         dim_to_use_as_z_(pdal::Dimension::Id::Z),
         dim_to_use_as_i_(pdal::Dimension::Id::Intensity),
         use_spatial_filter_(false),
-        use_zrange_ (false),
+        use_zrange_(false),
         use_irange_(false),
         n_processed_(0),
         n_passed_(0),
@@ -53,9 +54,9 @@ public:
         zscale_(1),
         iscale_(1),
         use_class_filter_(false),
-        use_return_filter_(false),
-        base_segment_(nullptr)
-    {}
+        use_return_filter_(false), base_segment_(nullptr)
+    {
+    }
     std::string getName() const
     {
         return "filters.grasslidar";
@@ -97,36 +98,61 @@ public:
         class_filter_ = class_filter;
         n_class_filtered_ = 0;
     }
-    void set_base_raster(SEGMENT *base_segment,
-                         struct Cell_head *region,
-                         RASTER_MAP_TYPE rtype)
+    void set_base_raster(SEGMENT * base_segment,
+                         struct Cell_head *region, RASTER_MAP_TYPE rtype)
     {
         base_segment_ = base_segment;
-        input_region_ =  region;
+        input_region_ = region;
         base_raster_data_type_ = rtype;
     }
-    void set_z_scale(double scale) { zscale_ = scale; }
-    void set_intensity_scale(double scale) { iscale_ = scale; }
+    void set_z_scale(double scale)
+    {
+        zscale_ = scale;
+    }
+    void set_intensity_scale(double scale)
+    {
+        iscale_ = scale;
+    }
 
-    gpoint_count num_processed() { return n_processed_; }
-    gpoint_count num_passed() { return n_passed_; }
-    gpoint_count num_return_filtered() { return return_filtered_; }
-    gpoint_count num_class_filtered() { return n_class_filtered_; }
-    gpoint_count num_zrange_filtered() { return zrange_filtered_; }
-    gpoint_count num_irange_filtered() { return irange_filtered_; }
-    gpoint_count num_spatially_filtered() { return n_outside_; }
+    gpoint_count num_processed()
+    {
+        return n_processed_;
+    }
+    gpoint_count num_passed()
+    {
+        return n_passed_;
+    }
+    gpoint_count num_return_filtered()
+    {
+        return return_filtered_;
+    }
+    gpoint_count num_class_filtered()
+    {
+        return n_class_filtered_;
+    }
+    gpoint_count num_zrange_filtered()
+    {
+        return zrange_filtered_;
+    }
+    gpoint_count num_irange_filtered()
+    {
+        return irange_filtered_;
+    }
+    gpoint_count num_spatially_filtered()
+    {
+        return n_outside_;
+    }
 
-private:
-    virtual void filter(pdal::PointView& view)
+  private:
+    virtual void filter(pdal::PointView & view)
     {
         pdal::PointRef p(view, 0);
-        for (pdal::PointId idx = 0; idx < view.size(); ++idx)
-        {
+        for (pdal::PointId idx = 0; idx < view.size(); ++idx) {
             p.setPointId(idx);
             processOne(p);
         }
     }
-    virtual bool processOne(pdal::PointRef& point);
+    virtual bool processOne(pdal::PointRef & point);
 
     // TODO: define the dimension!
     pdal::Dimension::Id dim_to_use_as_z_;
@@ -164,8 +190,8 @@ private:
     RASTER_MAP_TYPE base_raster_data_type_;
 
     // not implemented
-    GrassLidarFilter& operator=(const GrassLidarFilter&);
-    GrassLidarFilter(const GrassLidarFilter&);
+    GrassLidarFilter & operator=(const GrassLidarFilter &);
+    GrassLidarFilter(const GrassLidarFilter &);
 };
 
 

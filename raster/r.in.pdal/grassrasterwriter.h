@@ -1,3 +1,4 @@
+
 /***************************************************************************
  *
  * MODULE:    r.in.pdal
@@ -35,11 +36,12 @@ extern "C"
 
 
 /* Binning code wrapped as a PDAL Writer class */
-class GrassRasterWriter : public pdal::Writer, public pdal::Streamable
+class GrassRasterWriter:public pdal::Writer, public pdal::Streamable
 {
-public:
-    GrassRasterWriter() : n_processed(0)
-    {}
+  public:
+    GrassRasterWriter():n_processed(0)
+    {
+    }
 
     std::string getName() const
     {
@@ -49,8 +51,7 @@ public:
     void set_binning(struct Cell_head *region,
                      struct PointBinning *point_binning,
                      struct BinIndex *bin_index_nodes,
-                     RASTER_MAP_TYPE rtype,
-                     int cols)
+                     RASTER_MAP_TYPE rtype, int cols)
     {
         region_ = region;
         point_binning_ = point_binning;
@@ -66,19 +67,18 @@ public:
     virtual void write(const pdal::PointViewPtr view)
     {
         pdal::PointRef p(*view, 0);
-        for (pdal::PointId idx = 0; idx < view->size(); ++idx)
-        {
+        for (pdal::PointId idx = 0; idx < view->size(); ++idx) {
             p.setPointId(idx);
             processOne(p);
         }
     }
-    virtual bool processOne(pdal::PointRef& point)
+    virtual bool processOne(pdal::PointRef & point)
     {
         using namespace pdal::Dimension;
 
-        double x = point.getFieldAs<double>(Id::X);
-        double y = point.getFieldAs<double>(Id::Y);
-        double z = point.getFieldAs<double>(dim_to_use_as_z_);
+        double x = point.getFieldAs < double >(Id::X);
+        double y = point.getFieldAs < double >(Id::Y);
+        double z = point.getFieldAs < double >(dim_to_use_as_z_);
 
         // TODO: check the bounds and report discrepancies in
         // number of filtered out vs processed to the user
@@ -99,12 +99,14 @@ public:
         return true;
     }
     gpoint_count n_processed;
-private:
+
+  private:
     struct Cell_head *region_;
     struct PointBinning *point_binning_;
     struct BinIndex *bin_index_nodes_;
     RASTER_MAP_TYPE rtype_;
     int cols_;
+
     pdal::Dimension::Id dim_to_use_as_z_;
 };
 
