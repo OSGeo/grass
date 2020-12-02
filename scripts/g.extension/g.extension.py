@@ -1469,7 +1469,7 @@ def download_source_code(source, url, name, outdev,
             if branch == "main":
                 try:
                     url = url.replace('main', 'master')
-                    gscript.message(_("Failed with default branch. "
+                    gscript.message(_("Expected default branch not found. "
                                     "Trying again from <{url}>...")
                                     .format(url=url))
                     response = urlopen(url)
