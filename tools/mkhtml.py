@@ -112,11 +112,11 @@ footer_index = string.Template(
 """<hr class="header">
 <p>
 <a href="index.html">Main index</a> |
-<a href="${INDEXNAME}.html">${INDEXNAMECAP} index</a> |
-<a href="topics.html">Topics index</a> |
-<a href="keywords.html">Keywords index</a> |
-<a href="graphical_index.html">Graphical index</a> |
-<a href="full_index.html">Full index</a>
+<a href="${HTML_PAGE_FOOTER_PAGES_PATH}${INDEXNAME}.html">${INDEXNAMECAP} index</a> |
+<a href="${HTML_PAGE_FOOTER_PAGES_PATH}topics.html">Topics index</a> |
+<a href="${HTML_PAGE_FOOTER_PAGES_PATH}keywords.html">Keywords index</a> |
+<a href="${HTML_PAGE_FOOTER_PAGES_PATH}graphical_index.html">Graphical index</a> |
+<a href="${HTML_PAGE_FOOTER_PAGES_PATH}full_index.html">Full index</a>
 </p>
 <p>
 &copy; 2003-${YEAR}
@@ -133,10 +133,10 @@ footer_noindex = string.Template(
 """<hr class="header">
 <p>
 <a href="index.html">Main index</a> |
-<a href="topics.html">Topics index</a> |
-<a href="keywords.html">Keywords index</a> |
-<a href="graphical_index.html">Graphical index</a> |
-<a href="full_index.html">Full index</a>
+<a href="${HTML_PAGE_FOOTER_PAGES_PATH}topics.html">Topics index</a> |
+<a href="${HTML_PAGE_FOOTER_PAGES_PATH}keywords.html">Keywords index</a> |
+<a href="${HTML_PAGE_FOOTER_PAGES_PATH}graphical_index.html">Graphical index</a> |
+<a href="${HTML_PAGE_FOOTER_PAGES_PATH}full_index.html">Full index</a>
 </p>
 <p>
 &copy; 2003-${YEAR}
@@ -406,6 +406,9 @@ else:
 if sys.platform == 'win32':
     url_source = url_source.replace(os.path.sep, '/')
 
+html_page_footer_pages_path = os.getenv('HTML_PAGE_FOOTER_PAGES_PATH') if \
+    os.getenv('HTML_PAGE_FOOTER_PAGES_PATH') else ''
+
 if index_name:
     tree = 'grass/tree'
     commits = 'grass/commits'
@@ -421,10 +424,20 @@ if index_name:
     sys.stdout.write(sourcecode.substitute(
         URL_SOURCE=url_source, PGM=pgm, URL_LOG=url_source.replace(
             tree,  commits)))
-    sys.stdout.write(footer_index.substitute(INDEXNAME=index_name,
-                                             INDEXNAMECAP=index_name_cap,
-                                             YEAR=year,
-                                             GRASS_VERSION=grass_version))
+    sys.stdout.write(
+        footer_index.substitute(
+            INDEXNAME=index_name,
+            INDEXNAMECAP=index_name_cap,
+            YEAR=year,
+            GRASS_VERSION=grass_version,
+            HTML_PAGE_FOOTER_PAGES_PATH=html_page_footer_pages_path,
+        ),
+    )
 else:
-    sys.stdout.write(footer_noindex.substitute(YEAR=year,
-                                               GRASS_VERSION=grass_version))
+    sys.stdout.write(
+        footer_noindex.substitute(
+            YEAR=year,
+            GRASS_VERSION=grass_version,
+            HTML_PAGE_FOOTER_PAGES_PATH=html_page_footer_pages_path,
+        ),
+    )
