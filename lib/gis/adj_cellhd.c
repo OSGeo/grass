@@ -59,7 +59,9 @@ void G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
     }
     else {
 	if (cellhd->rows <= 0)
-	    G_fatal_error(_("Illegal number of rows: %d"), cellhd->rows);
+	    G_fatal_error(_("Illegal number of rows: %d"
+			    " (resolution is %f)"),
+			  cellhd->rows, cellhd->ns_res);
     }
     if (!col_flag) {
 	if (cellhd->ew_res <= 0)
@@ -68,7 +70,9 @@ void G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
     }
     else {
 	if (cellhd->cols <= 0)
-	    G_fatal_error(_("Illegal number of columns: %d"), cellhd->cols);
+	    G_fatal_error(_("Illegal number of columns: %d"
+			    " (resolution is %f)"),
+			  cellhd->cols, cellhd->ew_res);
     }
 
     /* check the edge values */
@@ -173,9 +177,13 @@ void G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
     }
     else {
 	if (cellhd->rows <= 0)
-	    G_fatal_error(_("Illegal number of rows: %d"), cellhd->rows);
+	    G_fatal_error(_("Illegal number of rows: %d"
+			    " (resolution is %f)"),
+			  cellhd->rows, cellhd->ns_res);
 	if (cellhd->rows3 <= 0)
-	    G_fatal_error(_("Illegal number of rows for 3D: %d"), cellhd->rows3);
+	    G_fatal_error(_("Illegal number of rows for 3D: %d"
+			    " (resolution is %f)"),
+			  cellhd->rows3, cellhd->ns_res3);
     }
     if (!col_flag) {
 	if (cellhd->ew_res <= 0)
@@ -187,10 +195,13 @@ void G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
     }
     else {
 	if (cellhd->cols <= 0)
-	    G_fatal_error(_("Illegal number of columns: %d"), cellhd->cols);
+	    G_fatal_error(_("Illegal number of columns: %d"
+			    " (resolution is %f)"),
+			  cellhd->cols, cellhd->ew_res);
 	if (cellhd->cols3 <= 0)
-	    G_fatal_error(_("Illegal number of columns for 3D: %d"),
-			  cellhd->cols);
+	    G_fatal_error(_("Illegal number of columns for 3D: %d"
+			    " (resolution is %f)"),
+			  cellhd->cols3, cellhd->ew_res3);
     }
     if (!depth_flag) {
 	if (cellhd->tb_res <= 0)
