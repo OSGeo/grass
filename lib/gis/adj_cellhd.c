@@ -54,24 +54,24 @@ void G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
 
     if (!row_flag) {
 	if (cellhd->ns_res <= 0)
-	    G_fatal_error(_("Illegal n-s resolution value: %lf"),
+	    G_fatal_error(_("Illegal n-s resolution value: %g"),
 			  cellhd->ns_res);
     }
     else {
 	if (cellhd->rows <= 0)
 	    G_fatal_error(_("Illegal number of rows: %d"
-			    " (resolution is %f)"),
+			    " (resolution is %g)"),
 			  cellhd->rows, cellhd->ns_res);
     }
     if (!col_flag) {
 	if (cellhd->ew_res <= 0)
-	    G_fatal_error(_("Illegal e-w resolution value: %lf"),
+	    G_fatal_error(_("Illegal e-w resolution value: %g"),
 			  cellhd->ew_res);
     }
     else {
 	if (cellhd->cols <= 0)
 	    G_fatal_error(_("Illegal number of columns: %d"
-			    " (resolution is %f)"),
+			    " (resolution is %g)"),
 			  cellhd->cols, cellhd->ew_res);
     }
 
@@ -79,11 +79,11 @@ void G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
     if (cellhd->north <= cellhd->south) {
 	if (cellhd->proj == PROJECTION_LL)
 	    G_fatal_error(_("North must be north of South,"
-			    " but %lf (north) <= %lf (south"),
+			    " but %g (north) <= %g (south"),
 			  cellhd->north, cellhd->south);
 	else
 	    G_fatal_error(_("North must be larger than South,"
-			    " but %lf (north) <= %lf (south"),
+			    " but %g (north) <= %g (south"),
 		          cellhd->north, cellhd->south);
     }
 
@@ -91,7 +91,7 @@ void G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
 
     if (cellhd->east <= cellhd->west)
 	G_fatal_error(_("East must be larger than West,"
-			" but %lf (east) <= %lf (west)"),
+			" but %g (east) <= %g (west)"),
 		      cellhd->east, cellhd->west);
 
     /* compute rows and columns, if not set */
@@ -169,43 +169,43 @@ void G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
 
     if (!row_flag) {
 	if (cellhd->ns_res <= 0)
-	    G_fatal_error(_("Illegal n-s resolution value: %lf"),
+	    G_fatal_error(_("Illegal n-s resolution value: %g"),
 			  cellhd->ns_res);
 	if (cellhd->ns_res3 <= 0)
-	    G_fatal_error(_("Illegal n-s resolution value for 3D: %lf"),
+	    G_fatal_error(_("Illegal n-s resolution value for 3D: %g"),
 			  cellhd->ns_res3);
     }
     else {
 	if (cellhd->rows <= 0)
 	    G_fatal_error(_("Illegal number of rows: %d"
-			    " (resolution is %f)"),
+			    " (resolution is %g)"),
 			  cellhd->rows, cellhd->ns_res);
 	if (cellhd->rows3 <= 0)
 	    G_fatal_error(_("Illegal number of rows for 3D: %d"
-			    " (resolution is %f)"),
+			    " (resolution is %g)"),
 			  cellhd->rows3, cellhd->ns_res3);
     }
     if (!col_flag) {
 	if (cellhd->ew_res <= 0)
-	    G_fatal_error(_("Illegal e-w resolution value: %lf"),
+	    G_fatal_error(_("Illegal e-w resolution value: %g"),
 			  cellhd->ew_res);
 	if (cellhd->ew_res3 <= 0)
-	    G_fatal_error(_("Illegal e-w resolution value for 3D: %lf"),
-			  cellhd->ew_res);
+	    G_fatal_error(_("Illegal e-w resolution value for 3D: %g"),
+			  cellhd->ew_res3);
     }
     else {
 	if (cellhd->cols <= 0)
 	    G_fatal_error(_("Illegal number of columns: %d"
-			    " (resolution is %f)"),
+			    " (resolution is %g)"),
 			  cellhd->cols, cellhd->ew_res);
 	if (cellhd->cols3 <= 0)
 	    G_fatal_error(_("Illegal number of columns for 3D: %d"
-			    " (resolution is %f)"),
+			    " (resolution is %g)"),
 			  cellhd->cols3, cellhd->ew_res3);
     }
     if (!depth_flag) {
 	if (cellhd->tb_res <= 0)
-	    G_fatal_error(_("Illegal t-b resolution value: %lf"),
+	    G_fatal_error(_("Illegal t-b resolution value: %g"),
 			  cellhd->tb_res);
     }
     else {
@@ -217,11 +217,11 @@ void G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
     if (cellhd->north <= cellhd->south) {
 	if (cellhd->proj == PROJECTION_LL)
 	    G_fatal_error(_("North must be north of South,"
-			    " but %lf (north) <= %lf (south"),
+			    " but %g (north) <= %g (south"),
 			  cellhd->north, cellhd->south);
 	else
 	    G_fatal_error(_("North must be larger than South,"
-			    " but %lf (north) <= %lf (south"),
+			    " but %g (north) <= %g (south"),
 		          cellhd->north, cellhd->south);
     }
 
@@ -229,12 +229,12 @@ void G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
 
     if (cellhd->east <= cellhd->west)
 	G_fatal_error(_("East must be larger than West,"
-			" but %lf (east) <= %lf (west)"),
+			" but %g (east) <= %g (west)"),
 		      cellhd->east, cellhd->west);
 
     if (cellhd->top <= cellhd->bottom)
 	G_fatal_error(_("Top must be larger than Bottom,"
-			" but %lf (top) <= %lf (bottom)"),
+			" but %g (top) <= %g (bottom)"),
 		      cellhd->top, cellhd->bottom);
 
     /* compute rows and columns, if not set */
