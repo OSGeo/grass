@@ -284,9 +284,8 @@ def etree_fromurl(url):
 
 def check_progs():
     """Check if the necessary programs are available"""
-    # TODO: we need svn for the Subversion repo downloads
-    # also git would be tested once supported
-    for prog in ('make', 'gcc'):
+    # git to be tested once supported instead of `svn`
+    for prog in ('make', 'gcc', 'svn'):
         if not grass.find_program(prog, '--help'):
             grass.fatal(_("'%s' required. Please install '%s' first.")
                         % (prog, prog))
