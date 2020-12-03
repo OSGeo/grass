@@ -267,7 +267,29 @@ class LegendController(OverlayController):
         self._activateLabel = _("Raster legend properties")
         # default is in the center to avoid trimmed legend on the edge
         self._defaultAt = 'at=5,50,47,50'
+        self._actualAt = self._defaultAt
         self._cmd = ['d.legend', self._defaultAt]
+
+    def SetCmd(self, cmd):
+        """Overriden method
+
+        Required for setting default or actual raster legend position.
+        """
+        hasAt = False
+        for i in cmd:
+            if i.startswith("at="):
+                hasAt = True
+                # reset coordinates, 'at' values will be used, see GetCoords
+                self._coords = None
+                break
+        if not hasAt:
+            if self._actualAt != self._defaultAt:
+                cmd.append(self._actualAt)
+            else:
+                cmd.append(self._defaultAt)
+        self._cmd = cmd
+
+    cmd = property(fset=SetCmd, fget=OverlayController.GetCmd)
 
     def GetPlacement(self, screensize):
         if not hasPIL:
@@ -330,6 +352,7 @@ class LegendController(OverlayController):
                 break
 
         self._coords = None
+        self._actualAt = atStr
         self.Show()
 
     def StartResizing(self):
