@@ -216,13 +216,8 @@ int display_area(struct Map_info *Map, struct cat_list *Clist, const struct Cell
 
 	/* boundary */
 	if (bcolor) {
-	    if (custom_rgb) {
-		D_RGB_color((unsigned char)red, (unsigned char)grn,
-			    (unsigned char)blu);
-	    }
-	    else {
-		D_RGB_color(bcolor->r, bcolor->g, bcolor->b);
-	    }
+	    /* Use the boundary color regardless of color table, RGB col... */
+	    D_RGB_color(bcolor->r, bcolor->g, bcolor->b);
 	    /* use different user defined render methods */
 	    D_polyline_abs(APoints->x, APoints->y, APoints->n_points);
 	    for (i = 0; i < n_isles; i++) {
