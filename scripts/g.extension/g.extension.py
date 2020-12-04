@@ -1239,10 +1239,10 @@ def install_extension_win(name):
     for r, d, f in os.walk(srcdir):
         for file in f:
             if file.endswith('.py'):
-                modulename = file.rstrip(".py")
+                modulename = file.rsplit('.py')[0]
                 module_list.append(modulename)
             if file.endswith('.exe'):
-                modulename = file.rstrip(".exe")
+                modulename = file.rsplit('.exe')[0]
                 module_list.append(modulename)
     # remove duplicates in case there are .exe wrappers for python scripts
     module_list = set(module_list)
