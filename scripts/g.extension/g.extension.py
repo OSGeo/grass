@@ -1525,6 +1525,8 @@ def install_extension_std_platforms(name, source, url, branch):
                          branch=branch)
     os.chdir(srcdir)
 
+    pgm_not_found_message = _('Module name not found.'
+                              ' Check module Makefile syntax (PGM variable).')
     # collect module names
     module_list = list()
     for r, d, f in os.walk(srcdir):
@@ -1533,9 +1535,15 @@ def install_extension_std_platforms(name, source, url, branch):
                 # get the module name: PGM = <module name>
                 with open(os.path.join(r, 'Makefile')) as fp:
                     for line in fp.readlines():
-                        if "PGM =" in line:
-                            modulename = line.split('=')[1].strip()
-                            module_list.append(modulename)
+                        if "PGM" in line:
+                            try:
+                                modulename = line.split('=')[1].strip()
+                                if modulename:
+                                    module_list.append(modulename)
+                                else:
+                                    grass.error(pgm_not_found_message)
+                            except IndexError:
+                                grass.error(pgm_not_found_message)
 
     # change shebang from python to python3
     pyfiles = []
