@@ -37,6 +37,7 @@ import os
 import sys
 import locale
 import six
+import functools
 
 import wx
 import wx.lib.mixins.listctrl as listmix
@@ -637,11 +638,6 @@ class ItemList(ListCtrl,
         if self.sourceData:
             self.SortListItems(col=0, ascending=True)
 
-        #
-        # bindings
-        #
-        self.Bind(wx.EVT_LIST_COL_CLICK, self.OnColumnClick)
-
     def Populate(self, data=None, update=False):
         """Populate and sort list.
         Returns sorted list."""
@@ -678,21 +674,6 @@ class ItemList(ListCtrl,
                           message=_("Unable to read list: %s") % e,
                           caption=_("Error"), style=wx.OK | wx.ICON_ERROR)
 
-    def OnColumnClick(self, event):
-        """Sort by column"""
-        self._col = event.GetColumn()
-
-        # remove duplicated arrow symbol from column header
-        # FIXME: should be done automatically
-        info = wx.ListItem()
-        info.m_mask = wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE
-        info.m_image = -1
-        for column in range(self.GetColumnCount()):
-            info.m_text = self.GetColumn(column).GetText()
-            self.SetColumn(column, info)
-
-        event.Skip()
-
     def GetSortImages(self):
         """Used by the ColumnSorterMixin, see wx/lib/mixins/listctrl.py"""
         return (self.sm_dn, self.sm_up)
@@ -709,11 +690,7 @@ class ItemList(ListCtrl,
     def SortItems(self, sorter=cmp):
         """Sort items"""
         items = list(self.itemDataMap.keys())
-        if sys.version_info[0] >= 3:
-            # not sure what Sorter is needed for
-            items.sort()
-        else:
-            items.sort(self.Sorter)
+        items.sort(key=functools.cmp_to_key(self.Sorter))
         self.itemIndexMap = items
 
         # redraw the list
