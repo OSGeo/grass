@@ -1232,8 +1232,7 @@ def install_extension_win(name):
     os.chdir(TMPDIR)  # this is just to not leave something behind
     srcdir = os.path.join(TMPDIR, name)
     download_source_code(source=source, url=url, name=name,
-                         outdev=outdev, directory=srcdir, tmpdir=TMPDIR,
-                         branch=branch)
+                         outdev=outdev, directory=srcdir, tmpdir=TMPDIR)
 
     # collect module names and file names
     module_list = list()
