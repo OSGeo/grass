@@ -67,6 +67,13 @@ especially with low resolution DEMS.
 <DD>The difference (in degrees) between zenith and nadir line-of-sight which indicate flat direction. If higher threshold produce more flat maps. If resolution of the map is low (more than 1 km per cell) threshold should be very small (much smaller than 1 degree) because on such distance 1 degree of difference means several meters of high difference.</DD>
 <DT><b>dist</b></DT>
 <DD>>Flat distance. This is additional parameter defining the distance above which the threshold starts to decrease to avoid problems with pseudo-flat line-of-sights if real elevation difference appears on the distance where its value is higher (TO BE CORRECTED).</DD>
+<DT><b>comparison</b></DT>
+<DD>Comparison mode for zenith/nadir line-of-sight search. "anglev1" is
+the original r.geomorphon comparison mode. "anglev2" is an improved
+mode, which better handles angle thresholds and zenith/nadir angles
+that are exactly equal. "anglev2_distance" in addition to that takes
+the zenith/nadir distances into account when the angles are exactly
+equal.</DD>
 <DT><b>forms</b></DT>
 <DD>Returns geomorphic map with 10 most popular terrestrial forms. Legend for forms, its definition by the number of <em>+</em> and <em>-</em> and its idealized  visualisation are presented at the image.
 <center>

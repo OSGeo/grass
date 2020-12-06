@@ -84,6 +84,7 @@ int main(int argc, char **argv)
         *par_skip_radius,
         *par_flat_threshold,
         *par_flat_distance,
+        *par_comparison,
         *par_multi_prefix, *par_multi_step, *par_multi_start;
     struct Flag *flag_units, *flag_extended;
 
@@ -151,6 +152,15 @@ int main(int argc, char **argv)
         par_flat_distance->description =
             _("Flatness distance, zero for none");
 
+        par_comparison = G_define_option();
+        par_comparison->key = "comparison";
+        par_comparison->type = TYPE_STRING;
+        par_comparison->options = "anglev1,anglev2,anglev2_distance";
+        par_comparison->answer = "anglev1";
+        par_comparison->required = NO;
+        par_comparison->description =
+            _("Comparison mode for zenith/nadir line-of-sight search");
+
         par_multi_prefix = G_define_option();
         par_multi_prefix->key = "prefix";
         par_multi_prefix->type = TYPE_STRING;
@@ -193,6 +203,14 @@ int main(int argc, char **argv)
         double ns_resolution;
 
         multires = (par_multi_prefix->answer) ? 1 : 0;
+        if (!strcmp(par_comparison->answer, "anglev1"))
+            compmode = ANGLEV1;
+        else if (!strcmp(par_comparison->answer, "anglev2"))
+            compmode = ANGLEV2;
+        else if (!strcmp(par_comparison->answer, "anglev2_distance"))
+            compmode = ANGLEV2_DISTANCE;
+        else
+            G_fatal_error(_("Failed parsing <%s>"), par_comparison->answer);
         for (i = o_forms; i < o_size; ++i)      /* check for outputs */
             if (opt_output[i]->answer) {
                 if (G_legal_filename(opt_output[i]->answer) < 0)

@@ -82,6 +82,13 @@ GLOBAL double search_distance, flat_distance;
 GLOBAL double flat_threshold, flat_threshold_height;
 GLOBAL struct Cell_head window;
 GLOBAL int cell_step;
+/* Zenith/nadir comparison modes. */
+GLOBAL enum
+{
+    ANGLEV1,
+    ANGLEV2,
+    ANGLEV2_DISTANCE
+} compmode;
 
 /* memory */
 int open_map(MAPS * rast);
