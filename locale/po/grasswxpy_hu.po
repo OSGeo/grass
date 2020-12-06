@@ -19189,7 +19189,10 @@ msgid ""
 "Model is not valid. Do you want to run the model anyway?\n"
 "\n"
 "%s"
-msgstr "A modell hibás. Mindenképpen futtatni akarja a modellt?"
+msgstr ""
+"A modell hibás. Mindenképpen futtatni akarja a modellt?\n"
+"\n"
+"%s"
 
 #: ../gui/wxpython/gmodeler/model.py:631
 msgid "Run model?"
