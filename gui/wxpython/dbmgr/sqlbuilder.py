@@ -802,7 +802,7 @@ class SQLBuilderUpdate(SQLBuilder):
                     colstr = sqlstr[idx1:].strip()
 
                 cols = [col.split('=')[0].strip() for col in colstr.split(',')]
-                if unicode(value) in cols:
+                if value in cols:
                     self.text_sql.SetInsertionPoint(curspos)
                     wx.CallAfter(self.text_sql.SetFocus)
                     return
