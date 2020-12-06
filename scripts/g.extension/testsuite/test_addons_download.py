@@ -1,5 +1,5 @@
 """
-TEST:      test_addons_modules.py
+TEST:      test_addons_download.py
 
 AUTHOR(S): Stefan Blumentrath <stefan dot blumentrath at nina dot no)
            based on test_addons_modules.py by
