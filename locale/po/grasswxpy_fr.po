@@ -21116,10 +21116,10 @@ msgid "Please provide an output files extension (used by i.rectify)"
 msgstr "Merci de fournir une extention de fichier (utilisé par i.rectify)"
 
 msgid "Creates a raster map from LAS LiDAR points using univariate statistics."
-msgstr "Créer une carte raster à partir de statistiques univariées sur des points LIDAR LAS."
+msgstr ""
 
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with libLAS."
-msgstr "Convertir des nuages de points LIDAR LAS vers une carte vecteur GRASS avec libLAS"
+msgstr ""
 
 msgid "Simplified raster map calculator"
 msgstr "Calculatrice raster simplifiée"

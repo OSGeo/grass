@@ -236,7 +236,7 @@ msgstr "Mostra l'anteprima della mappa (è utilizzato l'attuale estensione del M
 #: ../gui/wxpython/modules/colorrules.py:621
 #: ../gui/wxpython/modules/colorrules.py:1891
 msgid "No valid color rules given."
-msgstr ""
+msgstr "Regole dei colori fornite non valide"
 
 #: ../gui/wxpython/modules/colorrules.py:678
 #, python-format
@@ -1552,7 +1552,7 @@ msgstr "Mostra legend"
 #: ../gui/wxpython/wxplot/dialogs.py:1598
 #, python-format
 msgid "Plot settings saved to file '%s'."
-msgstr ""
+msgstr "Impostazioni del grafico salvate nel file '%s'."
 
 #: ../gui/wxpython/wxplot/base.py:39
 msgid "Draw/re-draw plot"
@@ -2609,7 +2609,7 @@ msgstr "Questa opzione permette di impostare la regione computazionale di defaul
 
 #: ../gui/wxpython/location_wizard/wizard.py:186
 msgid "Create user mapset"
-msgstr ""
+msgstr "Crea il mapset dell'utente"
 
 #: ../gui/wxpython/location_wizard/wizard.py:187
 msgid "This option allows creating user mapset immediately after new location is created. Note that GRASS always creates PERMANENT mapset."
@@ -2950,7 +2950,7 @@ msgstr "Impossibile creare nuova location"
 
 #: ../gui/wxpython/location_wizard/wizard.py:2576
 msgid "Unable to create new GRASS Database"
-msgstr ""
+msgstr "Impossibile creare il nuovo Database di GRASS"
 
 #: ../gui/wxpython/location_wizard/wizard.py:2588
 #, python-format
@@ -3141,22 +3141,22 @@ msgstr "usare"
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1540
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1558
 msgid "source X"
-msgstr ""
+msgstr "sorgente X"
 
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1541
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1559
 msgid "source Y"
-msgstr ""
+msgstr "sorgente Y"
 
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1542
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1560
 msgid "target X"
-msgstr ""
+msgstr "destinazione X"
 
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1543
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1561
 msgid "target Y"
-msgstr ""
+msgstr "destinazione Y"
 
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1544
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1562
@@ -3194,19 +3194,19 @@ msgstr "Punto di controllo sul terreno."
 
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1769
 msgid "source X:"
-msgstr ""
+msgstr "sorgente X:"
 
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1770
 msgid "target X:"
-msgstr ""
+msgstr "destinazione X:"
 
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1771
 msgid "source Y:"
-msgstr ""
+msgstr "sorgente Y:"
 
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1772
 msgid "target Y:"
-msgstr ""
+msgstr "destinazione Y:"
 
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1908
 #: ../gui/wxpython/image2target/ii2t_manager.py:2734
@@ -4263,7 +4263,7 @@ msgstr "Impossibile eliminare la location"
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:774
 #, python-brace-format
 msgid "Unicode error detected. Check your locale settings. Details: {0}"
-msgstr ""
+msgstr "Errore di Unicode rilevato. Controllare le impostazioni locali. Dettagli: {0}"
 
 #: ../gui/wxpython/gis_set.py:805
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:786
@@ -4534,7 +4534,7 @@ msgstr "Chiudi tutte le finestre per la visualizzazione della mappa"
 
 #: ../gui/wxpython/menustrings.py:37 ../gui/wxpython/menustrings.py:1054
 msgid "Simplified raster import with reprojection"
-msgstr ""
+msgstr "Importa in modo semplificato raster affettuando riproiezione"
 
 #: ../gui/wxpython/menustrings.py:38 ../gui/wxpython/menustrings.py:40
 #: ../gui/wxpython/menustrings.py:1055 ../gui/wxpython/menustrings.py:1057
@@ -4684,7 +4684,7 @@ msgstr "Estrai mappa raster"
 
 #: ../gui/wxpython/menustrings.py:63 ../gui/wxpython/menustrings.py:1080
 msgid "Imports a GRASS GIS specific raster archive file (packed with r.pack) as a raster map"
-msgstr ""
+msgstr "Importa una mappa raster come un file di archivio specifico per GRASS GIS (creato con r.pack)"
 
 #: ../gui/wxpython/menustrings.py:64 ../gui/wxpython/menustrings.py:290
 #: ../gui/wxpython/menustrings.py:1081 ../gui/wxpython/menustrings.py:1230
@@ -4706,7 +4706,7 @@ msgstr "Riproietta un raster da una location data alla location corrente"
 
 #: ../gui/wxpython/menustrings.py:67 ../gui/wxpython/menustrings.py:1084
 msgid "Simplified vector import with reprojection"
-msgstr ""
+msgstr "Importa in modo semplificato vettoriali affettuando riproiezione"
 
 #: ../gui/wxpython/menustrings.py:68 ../gui/wxpython/menustrings.py:70
 #: ../gui/wxpython/menustrings.py:1085 ../gui/wxpython/menustrings.py:1087
@@ -4811,7 +4811,7 @@ msgstr "Estrai mappa vettoriale"
 
 #: ../gui/wxpython/menustrings.py:87 ../gui/wxpython/menustrings.py:1104
 msgid "Imports a GRASS GIS specific vector archive file (packed with v.pack) as a vector map"
-msgstr ""
+msgstr "Importa una mappa vettoriale come un file di archivio specifico per GRASS GIS (creato con v.pack)"
 
 #: ../gui/wxpython/menustrings.py:88 ../gui/wxpython/menustrings.py:570
 #: ../gui/wxpython/menustrings.py:1105 ../gui/wxpython/menustrings.py:1510
@@ -6325,7 +6325,7 @@ msgstr "Assegna il valore di ogni cella in output come una funzione dei valori a
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:344
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1270
 msgid "Raster series accumulation"
-msgstr ""
+msgstr "Somma serie di raster"
 
 #: ../gui/wxpython/menustrings.py:349 ../gui/wxpython/menustrings.py:1289
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:345
@@ -10735,7 +10735,7 @@ msgstr "Importa dati raster in una mappa raster di GRASS usando la libreria GDAL
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:64
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1065
 msgid "Imports a raster map as GRASS GIS specific archive file (packed with r.pack)"
-msgstr ""
+msgstr "Importa una mappa raster come un file di archivio specifico per GRASS GIS (creato con r.pack)"
 
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:71
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1072
@@ -10935,12 +10935,16 @@ msgid ""
 "Could not calculate RMS Error.\n"
 "Possible error with i.ortho.transform."
 msgstr ""
+"Non è possibile calcolare l'errore RMS.\n"
+"Possibile un errore con i.ortho.transform."
 
 #: ../gui/wxpython/image2target/ii2t_manager.py:2003
 msgid ""
 "Could not calculate new extends.\n"
 "Possible error with i.ortho.transform."
 msgstr ""
+"Non è possibile calcolare la nuova estensione.\n"
+"Possibile un errore con i.ortho.transform."
 
 #: ../gui/wxpython/image2target/ii2t_manager.py:2215
 #: ../gui/wxpython/image2target/ii2t_manager.py:2235
@@ -11773,7 +11777,7 @@ msgstr "Non ci sono abbastanza punti per linea"
 
 #: ../gui/wxpython/startup/guiutils.py:51
 msgid "Name for the new mapset:"
-msgstr ""
+msgstr "Nome per il nuovo mapset:"
 
 #: ../gui/wxpython/startup/locdownload.py:150
 #, python-brace-format
@@ -11783,12 +11787,12 @@ msgstr "Il file ZIP non è leggibile: {0}"
 #: ../gui/wxpython/startup/locdownload.py:169
 #, python-brace-format
 msgid "Archive file is unreadable: {0}"
-msgstr ""
+msgstr "Il file archivio non è leggibile: {0}"
 
 #: ../gui/wxpython/startup/locdownload.py:201
 #, python-brace-format
 msgid "Download of <{url}> failed or file <{name}> is not a ZIP file"
-msgstr ""
+msgstr "Scaricamento di <{url}> è fallito o il file <{name}> is not a file ZIP"
 
 #: ../gui/wxpython/startup/locdownload.py:217
 #, python-brace-format
@@ -11824,12 +11828,12 @@ msgstr "Scaricamento falliro: %s"
 
 #: ../gui/wxpython/startup/locdownload.py:384
 msgid "Download completed. The downloaded sample data is listed in the location/mapset tabs upon closing of this window"
-msgstr ""
+msgstr "Scaricamento completato. I dati di esempio scaricati sono visibili nel pannello location/mapset una volta chiusa questa finestra"
 
 #: ../gui/wxpython/startup/locdownload.py:406
 #, python-format
 msgid "Location named <%s> already exists, rename it first"
-msgstr ""
+msgstr "La location <%s> esiste già, prima rinominarla"
 
 #: ../gui/wxpython/startup/locdownload.py:458
 msgid "GRASS GIS Location Download"
@@ -13053,15 +13057,15 @@ msgstr "Apre file"
 
 #: ../gui/wxpython/gui_core/pyedit.py:451
 msgid "Replace the content by the template?"
-msgstr ""
+msgstr "Sostituire il contenuto con quello del template?"
 
 #: ../gui/wxpython/gui_core/pyedit.py:453
 msgid "Replace the content by the example?"
-msgstr ""
+msgstr "Sostituire il contenuto con quello dell'esempio?"
 
 #: ../gui/wxpython/gui_core/pyedit.py:455
 msgid "Replace the current content by the file content?"
-msgstr ""
+msgstr "Sostituire il contenuto corrente con il contenuto del file?"
 
 #: ../gui/wxpython/gui_core/pyedit.py:461
 msgid "Replace content"
@@ -13463,7 +13467,7 @@ msgstr "Impostazioni degli output"
 
 #: ../gui/wxpython/gui_core/gselect.py:1409
 msgid "Source input"
-msgstr ""
+msgstr "Sorgente di input"
 
 #: ../gui/wxpython/gui_core/gselect.py:1420
 msgid "Native"
@@ -14433,7 +14437,7 @@ msgstr "Pulisci il contenuto della finestra di output"
 
 #: ../gui/wxpython/gui_core/goutput.py:163
 msgid "Clear command prompt content"
-msgstr ""
+msgstr "Pulisci il contenuto della prompt dei comandi"
 
 #: ../gui/wxpython/gui_core/goutput.py:166
 msgid "Save output window content to the file"
@@ -16438,7 +16442,7 @@ msgstr "Etichette"
 
 #: ../gui/wxpython/tplot/frame.py:311
 msgid "Path for output CSV file with plotted data"
-msgstr ""
+msgstr "Percorso per il file di CSV di output con i dati rappresentati"
 
 #: ../gui/wxpython/tplot/frame.py:317
 msgid "CVS path"
@@ -16446,7 +16450,7 @@ msgstr "percorso CSV"
 
 #: ../gui/wxpython/tplot/frame.py:323
 msgid "Do you want the CSV header?"
-msgstr ""
+msgstr "È richiesto l'header del CSV"
 
 #: ../gui/wxpython/tplot/frame.py:364 ../gui/wxpython/tplot/frame.py:842
 #: ../gui/wxpython/tplot/frame.py:846 ../gui/wxpython/tplot/frame.py:867
@@ -16473,11 +16477,11 @@ msgstr "I dataset hanno diverse unità di tempo, ciò non è permesso."
 #: ../gui/wxpython/tplot/frame.py:455
 #, python-brace-format
 msgid "Category {ca} is not on vector map {ma} and it will be not used"
-msgstr ""
+msgstr "La categoria {ca} non è nella mappa vettoriale {ma} e non sarà usata"
 
 #: ../gui/wxpython/tplot/frame.py:474
 msgid "Both coordinates and categories are set, coordinates will be used. The use categories remove text from coordinate form"
-msgstr ""
+msgstr "Entrambe le coordinate e le categorie sono impostate, le coordinate saranno utilizzate. Per "
 
 #: ../gui/wxpython/tplot/frame.py:479
 msgid "With Vector temporal dataset you have to select an attribute column"
@@ -16509,7 +16513,7 @@ msgstr "C'è stato un problema nei dati dal dataset temporale raster. Lista dei 
 #: ../gui/wxpython/tplot/frame.py:729
 #, python-brace-format
 msgid "Problem getting data from vector temporal dataset. Empty list of values for cat {ca}."
-msgstr ""
+msgstr "C'è stato un problema ottenendo i dati dalla cat {ca}."
 
 #: ../gui/wxpython/tplot/frame.py:776
 msgid "Problem getting data from vector temporal dataset. Empty list of values."
@@ -16518,11 +16522,11 @@ msgstr ""
 #: ../gui/wxpython/tplot/frame.py:802
 #, python-brace-format
 msgid "{pa} already exists, do you want to overwrite?"
-msgstr ""
+msgstr "{pa} esiste già, si vuole sovrascriverlo?"
 
 #: ../gui/wxpython/tplot/frame.py:804
 msgid "File exists"
-msgstr ""
+msgstr "I file esistono"
 
 #: ../gui/wxpython/tplot/frame.py:809
 msgid "Please change name of output CSV file or "
@@ -17854,7 +17858,7 @@ msgstr "Nascondi barra degli strumenti"
 
 #: ../gui/wxpython/mapwin/buffered.py:267
 msgid "Show toolbars"
-msgstr ""
+msgstr "Visualizza le barre degli strumenti"
 
 #: ../gui/wxpython/mapwin/buffered.py:274
 msgid "Hide statusbar"
@@ -20028,7 +20032,7 @@ msgstr "Aggiunge legenda per raster"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:39
 msgid "Add vector legend"
-msgstr ""
+msgstr "Aggiungi legenda vettoriale"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:43
 msgid "Analyze map"
@@ -20874,10 +20878,74 @@ msgid "Please provide an order value (1 if 4 Fiducials, 2 if 8 Fiducials)"
 msgstr "Fornire il valore dell'ordine (1 se 4 punti fiduciali, 2 se 8 punti fiduciali)"
 
 msgid "Creates a raster map from LAS LiDAR points using univariate statistics."
-msgstr "Crea un raster da punti LAS LiDAR usando statistiche univariate"
+msgstr ""
 
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with libLAS."
-msgstr "Converte nuvole di punti LAS LiDAR in un vettoriale GRASS usando libLAS."
+msgstr ""
 
 msgid "Animation already axists"
 msgstr "Animazione già esistente"
+
+#, python-brace-format
+#~ msgid "Exported file directory '{base_dir}' does not exist."
+#~ msgstr "La directory esportata '{base_dir}' non esiste."
+
+#, python-brace-format
+#~ msgid "Exported animation file <{file}> exists. Do you want to overwrite it?"
+#~ msgstr "Il file dell'animazione esportato <{file}> esiste. Si vuole sovrascriverlo?"
+
+#~ msgid "Fetching list of modules from GRASS-Addons (be patient)..."
+#~ msgstr "Scaricando la lista dei moduli da GRASS-Addons (attenedere)..."
+
+#~ msgid "Installs new extension from GRASS AddOns repository."
+#~ msgstr "Installa nuova estensione da GRASS AddOns repository."
+
+#~ msgid "Download in progress, wait until it is finished 0%"
+#~ msgstr "Scaricamento in progresso, aspettare fino che non è finito 0%"
+
+#, python-brace-format
+#~ msgid "Download in progress, wait until it is finished {0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed"
+#~ msgstr "Scaricamento in progresso, aspettare fino che non è finito {0}%,{1} MB, {2} KB/s, {3:0f} secondi passati"
+
+#, python-brace-format
+#~ msgid "Download file from <{url}>, return status code {code}, "
+#~ msgstr "File scaricato da <{url}>, codice dello stato di ritorno {code},"
+
+#, python-brace-format
+#~ msgid "Download file from <{url}>, failed. Check internet connection."
+#~ msgstr "File scaricato da <{url}>, fallito. Controllare la connessione internet."
+
+#~ msgid "Abort"
+#~ msgstr "Termina"
+
+#~ msgid "Abort download location"
+#~ msgstr "Termina lo scaricamento della location"
+
+#~ msgid "Download"
+#~ msgstr "Scarica"
+
+#~ msgid "Close all Map Displays"
+#~ msgstr "Chiudi tutte le finestre per la visualizzazione della mappa"
+
+#, python-brace-format
+#~ msgid "New name for <{n}>"
+#~ msgstr "Nuovo nome per <{n}>"
+
+#~ msgid "No available options"
+#~ msgstr "Opzioni non disponibili"
+
+#~ msgid "Raster map calculator."
+#~ msgstr "Calcolatore per raster map algebra"
+
+#~ msgid "No vector map layer selected. Operation canceled."
+#~ msgstr "Nessun layer vettoriale selezionato. Operazione cancellata."
+
+#~ msgid "No vector maps."
+#~ msgstr "Nessuna mappa vettoriale."
+
+#, python-brace-format
+#~ msgid "The {map_type} map {map_name} exists. Do you want to overwrite?"
+#~ msgstr "La mappa {map_type} {map_name} esiste. Si vuole sovrascriverlo?"
+
+#~ msgid "overwrite result map"
+#~ msgstr "Sovrascrivi mappa del risultato"
