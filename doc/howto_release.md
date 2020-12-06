@@ -29,7 +29,7 @@ master .po files
 
 ```bash
 cd locale
-sh ~/software/grass_addons_git/tools/transifex_merge.sh
+sh ~/software/grass-addons/tools/transifex_merge.sh
 make
 make verify
 # ... then fix .po files as needed.
@@ -59,8 +59,8 @@ Now check if configure still works.
 If yes, submit to git:
 
 ```bash
-git add config.guess config.sub configure
 git checkout -b config_sub_update_r78
+git add config.guess config.sub configure
 git commit -m"config.guess + config.sub: updated from http://git.savannah.gnu.org/cgit/config.git/plain/" config.guess config.sub configure
 # test by running ./configure
 
