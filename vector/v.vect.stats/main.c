@@ -284,8 +284,8 @@ int main(int argc, char *argv[])
     if ((mapset = G_find_vector2(area_opt->answer, "")) == NULL)
 	G_fatal_error(_("Vector map <%s> not found"), area_opt->answer);
     if (!print_flag->answer && strcmp(mapset, G_mapset()) != 0)
-	G_fatal_error(_("Vector map <%s> is not in user mapset and cannot be updated"),
-		      area_opt->answer);
+	G_fatal_error(_("Vector map <%s> is not in the current mapset <%s> and cannot be updated"),
+		      area_opt->answer, G_mapset());
 
     Vect_set_open_level(2);
     if (Vect_open_old(&AIn, area_opt->answer, mapset) < 0)
