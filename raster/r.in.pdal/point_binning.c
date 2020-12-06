@@ -79,11 +79,11 @@ void point_binning_set(struct PointBinning *point_binning, char *method,
        min              min
        max              max
        range            min max         max - min
-       sum              sum
+       sum              sum c
        mean             sum n           sum/n
-       stddev           sum sumsq n     sqrt((sumsq - sum*sum/n)/n)
-       variance         sum sumsq n     (sumsq - sum*sum/n)/n
-       coeff_var        sum sumsq n     sqrt((sumsq - sum*sum/n)/n) / (sum/n)
+       stddev           mean m2 n       sqrt((sumsq - sum*sum/n)/n)
+       variance         mean m2 n       (sumsq - sum*sum/n)/n
+       coeff_var        mean m2 n       sqrt((sumsq - sum*sum/n)/n) / (sum/n)
        median           n               array index to linked list
        mode             n               array index to linked list
        percentile       n               array index to linked list
@@ -98,7 +98,7 @@ void point_binning_set(struct PointBinning *point_binning, char *method,
     point_binning->bin_min = FALSE;
     point_binning->bin_max = FALSE;
     point_binning->bin_sum = FALSE;
-    point_binning->bin_sumsq = FALSE;
+    point_binning->bin_m2 = FALSE;
     point_binning->bin_z_index = FALSE;
     point_binning->bin_cnt_index = FALSE;
     point_binning->bin_eigenvalues = FALSE;
@@ -107,8 +107,10 @@ void point_binning_set(struct PointBinning *point_binning, char *method,
     point_binning->n_array = NULL;
     point_binning->min_array = NULL;
     point_binning->max_array = NULL;
+    point_binning->mean_array = NULL;
     point_binning->sum_array = NULL;
-    point_binning->sumsq_array = NULL;
+    point_binning->c_array = NULL;
+    point_binning->m2_array = NULL;
     point_binning->index_array = NULL;
     point_binning->x_array = NULL;
     point_binning->y_array = NULL;
@@ -141,21 +143,15 @@ void point_binning_set(struct PointBinning *point_binning, char *method,
     }
     if (strcmp(method, "stddev") == 0) {
         point_binning->method = METHOD_STDDEV;
-        point_binning->bin_sum = TRUE;
-        point_binning->bin_sumsq = TRUE;
-        point_binning->bin_n = TRUE;
+        point_binning->bin_m2 = TRUE;
     }
     if (strcmp(method, "variance") == 0) {
         point_binning->method = METHOD_VARIANCE;
-        point_binning->bin_sum = TRUE;
-        point_binning->bin_sumsq = TRUE;
-        point_binning->bin_n = TRUE;
+        point_binning->bin_m2 = TRUE;
     }
     if (strcmp(method, "coeff_var") == 0) {
         point_binning->method = METHOD_COEFF_VAR;
-        point_binning->bin_sum = TRUE;
-        point_binning->bin_sumsq = TRUE;
-        point_binning->bin_n = TRUE;
+        point_binning->bin_m2 = TRUE;
     }
     if (strcmp(method, "median") == 0) {
         point_binning->method = METHOD_MEDIAN;
@@ -234,12 +230,21 @@ void point_binning_allocate(struct PointBinning *point_binning, int rows,
         point_binning->sum_array =
             G_calloc((size_t)rows * (cols + 1), Rast_cell_size(rtype));
         blank_array(point_binning->sum_array, rows, cols, rtype, 0);
-    }
-    if (point_binning->bin_sumsq) {
-        G_debug(2, "allocating sumsq_array");
-        point_binning->sumsq_array =
+        point_binning->c_array =
             G_calloc((size_t)rows * (cols + 1), Rast_cell_size(rtype));
-        blank_array(point_binning->sumsq_array, rows, cols, rtype, 0);
+        blank_array(point_binning->c_array, rows, cols, rtype, 0);
+    }
+    if (point_binning->bin_m2) {
+        G_debug(2, "allocating m2_array");
+        point_binning->m2_array =
+            G_calloc((size_t)rows * (cols + 1), Rast_cell_size(rtype));
+        blank_array(point_binning->m2_array, rows, cols, rtype, 0);
+        point_binning->mean_array =
+            G_calloc((size_t)rows * (cols + 1), Rast_cell_size(rtype));
+        blank_array(point_binning->mean_array, rows, cols, rtype, -1);
+        point_binning->n_array =
+            G_calloc((size_t)rows * (cols + 1), Rast_cell_size(CELL_TYPE));
+        blank_array(point_binning->n_array, rows, cols, CELL_TYPE, 0);
     }
     if (point_binning->bin_z_index ||
         point_binning->bin_cnt_index || point_binning->bin_eigenvalues) {
@@ -260,10 +265,15 @@ void point_binning_free(struct PointBinning *point_binning,
         G_free(point_binning->min_array);
     if (point_binning->bin_max)
         G_free(point_binning->max_array);
-    if (point_binning->bin_sum)
+    if (point_binning->bin_sum) {
         G_free(point_binning->sum_array);
-    if (point_binning->bin_sumsq)
-        G_free(point_binning->sumsq_array);
+        G_free(point_binning->c_array);
+    }
+    if (point_binning->bin_m2) {
+        G_free(point_binning->m2_array);
+        G_free(point_binning->mean_array);
+        G_free(point_binning->n_array);
+    }
     if (point_binning->bin_z_index ||
         point_binning->bin_cnt_index || point_binning->bin_eigenvalues) {
         G_free(point_binning->index_array);
@@ -305,10 +315,8 @@ void write_values(struct PointBinning *point_binning,
         break;
 
     case METHOD_SUM:
-        Rast_raster_cpy(raster_row,
-                        ((char *)point_binning->sum_array) +
-                        ((size_t)row * cols * Rast_cell_size(rtype)), cols,
-                        rtype);
+        write_sum(raster_row, point_binning->sum_array,
+                  point_binning->c_array, row, cols, rtype);
         break;
 
     case METHOD_RANGE:         /* (max-min) */
@@ -322,6 +330,7 @@ void write_values(struct PointBinning *point_binning,
             double max =
                 Rast_get_d_value(((char *)point_binning->max_array) + offset,
                                  rtype);
+
             Rast_set_d_value(ptr, max - min, rtype);
             ptr = G_incr_void_ptr(ptr, Rast_cell_size(rtype));
         }
@@ -330,16 +339,14 @@ void write_values(struct PointBinning *point_binning,
     case METHOD_MEAN:          /* (sum / n) */
         ptr = raster_row;
         for (col = 0; col < cols; col++) {
-            size_t offset =
-                ((size_t)row * cols + col) * Rast_cell_size(rtype);
             size_t n_offset =
                 ((size_t)row * cols + col) * Rast_cell_size(CELL_TYPE);
             int n =
                 Rast_get_c_value(((char *)point_binning->n_array) + n_offset,
                                  CELL_TYPE);
             double sum =
-                Rast_get_d_value(((char *)point_binning->sum_array) + offset,
-                                 rtype);
+                get_sum(point_binning->sum_array, point_binning->c_array,
+                        row, cols, col, rtype);
 
             if (n == 0)
                 Rast_set_null_value(ptr, 1, rtype);
@@ -354,7 +361,7 @@ void write_values(struct PointBinning *point_binning,
     case METHOD_VARIANCE:      /*  (sumsq - sum*sum/n)/n */
     case METHOD_COEFF_VAR:     /*  100 * stdev / mean    */
         write_variance(raster_row, point_binning->n_array,
-                       point_binning->sum_array, point_binning->sumsq_array,
+                       point_binning->mean_array, point_binning->m2_array,
                        row, cols, rtype, point_binning->method);
         break;
 
@@ -422,11 +429,11 @@ void update_value(struct PointBinning *point_binning,
         update_max(point_binning->max_array, cols, arr_row, arr_col, rtype,
                    z);
     if (point_binning->bin_sum)
-        update_sum(point_binning->sum_array, cols, arr_row, arr_col, rtype,
-                   z);
-    if (point_binning->bin_sumsq)
-        update_sumsq(point_binning->sumsq_array, cols, arr_row, arr_col,
-                     rtype, z);
+        update_sum(point_binning->sum_array, point_binning->c_array, cols,
+                   arr_row, arr_col, rtype, z);
+    if (point_binning->bin_m2)
+        update_m2(point_binning->n_array, point_binning->mean_array,
+                  point_binning->m2_array, cols, arr_row, arr_col, rtype, z);
     if (point_binning->bin_z_index)
         update_bin_z_index(bin_index_nodes, point_binning->index_array, cols,
                            arr_row, arr_col, z);

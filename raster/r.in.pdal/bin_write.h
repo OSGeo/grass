@@ -20,6 +20,8 @@
 /* forward declaration for point_binning.h */
 struct BinIndex;
 
+double get_sum(void *, void *, int, int, int, RASTER_MAP_TYPE);
+void write_sum(void *, void *, void *, int, int, RASTER_MAP_TYPE);
 void write_variance(void *, void *, void *,
                     void *, int, int, RASTER_MAP_TYPE, int);
 void write_median(struct BinIndex *, void *,

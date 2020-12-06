@@ -77,7 +77,7 @@ struct PointBinning
     int bin_min;
     int bin_max;
     int bin_sum;
-    int bin_sumsq;
+    int bin_m2;
     int bin_z_index;
     int bin_cnt_index;
     int bin_eigenvalues;
@@ -87,7 +87,9 @@ struct PointBinning
     void *min_array;
     void *max_array;
     void *sum_array;
-    void *sumsq_array;
+    void *c_array;
+    void *mean_array;
+    void *m2_array;
     void *index_array;
     void *x_array;
     void *y_array;

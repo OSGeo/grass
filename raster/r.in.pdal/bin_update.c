@@ -11,6 +11,7 @@
  */
 
 #include <stddef.h>
+#include <stdlib.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -89,28 +90,58 @@ void update_max(void *array, int cols, int row, int col,
     return;
 }
 
-
-void update_sum(void *array, int cols, int row, int col,
+/* Implements improved Kahan–Babuska algorithm by Neumaier, A. 1974 */
+void update_sum(void *sum_array, void *c_array, int cols, int row, int col,
                 RASTER_MAP_TYPE map_type, double value)
 {
-    void *ptr = get_cell_ptr(array, cols, row, col, map_type);
-    DCELL old_val;
+    DCELL old_sum, old_c, tmp;
+    void *s_ptr = get_cell_ptr(sum_array, cols, row, col, map_type);
+    void *c_ptr = get_cell_ptr(c_array, cols, row, col, map_type);
 
-    old_val = Rast_get_d_value(ptr, map_type);
-    Rast_set_d_value(ptr, value + old_val, map_type);
+    old_sum = Rast_get_d_value(s_ptr, map_type);
+    old_c = Rast_get_d_value(c_ptr, map_type);
+    tmp = old_sum + value;
+
+    if (abs(old_sum) >= abs(value))
+        Rast_set_d_value(c_ptr, old_c + (old_sum - tmp) + value, map_type);
+    else
+        Rast_set_d_value(c_ptr, old_c + (value - tmp) + old_sum, map_type);
+
+    Rast_set_d_value(s_ptr, tmp, map_type);
 
     return;
 }
 
 
-void update_sumsq(void *array, int cols, int row, int col,
-                  RASTER_MAP_TYPE map_type, double value)
+/* Implements Welford algorithm */
+void update_m2(void *n_array, void *mean_array, void *m2_array, int cols,
+               int row, int col, RASTER_MAP_TYPE map_type, double value)
 {
-    void *ptr = get_cell_ptr(array, cols, row, col, map_type);
-    DCELL old_val;
+    int n;
+    double m2, mean, d1, d2;
+    void *n_ptr = get_cell_ptr(n_array, cols, row, col, CELL_TYPE);
+    void *mean_ptr = get_cell_ptr(mean_array, cols, row, col, map_type);
+    void *m2_ptr = get_cell_ptr(m2_array, cols, row, col, map_type);
 
-    old_val = Rast_get_d_value(ptr, map_type);
-    Rast_set_d_value(ptr, (value * value) + old_val, map_type);
+    n = Rast_get_c_value(n_ptr, CELL_TYPE);
+    mean = Rast_get_d_value(mean_ptr, map_type);
+    m2 = Rast_get_d_value(m2_ptr, map_type);
+
+    n++;
+    Rast_set_c_value(n_ptr, n, CELL_TYPE);
+
+    if (n == 1) {
+        Rast_set_d_value(mean_ptr, value, map_type);
+        return;
+    }
+
+    d1 = value - mean;
+    mean = mean + (d1 / n);
+    d2 = value - mean;
+    m2 = m2 + (d1 * d2);
+
+    Rast_set_d_value(mean_ptr, mean, map_type);
+    Rast_set_d_value(m2_ptr, m2, map_type);
 
     return;
 }
@@ -134,7 +165,7 @@ void update_moving_mean(void *array, int cols, int row, int col,
 
 /* add node to sorted, single linked list
  * returns id if head has to be saved to index array, otherwise -1 */
-static int add_z_node(struct BinIndex *bin_index, int head, double z)
+int add_z_node(struct BinIndex *bin_index, int head, double z)
 {
     int node_id, last_id, newnode_id, head_id;
 
@@ -173,19 +204,21 @@ static int add_z_node(struct BinIndex *bin_index, int head, double z)
 }
 
 
-static int add_cnt_node(struct BinIndex *bin_index, int head, int value)
+void add_cnt_node(struct BinIndex *bin_index, int head, int value)
 {
-    int node_id, newnode_id, head_id;
+    int node_id, newnode_id, head_id, next;
 
     head_id = head;
     node_id = head_id;
+    next = node_id;
 
-    while (((struct cnt_node *)bin_index->nodes)[node_id].next != -1) {
+    while (next != -1) {
+        node_id = next;
         if (((struct cnt_node *)bin_index->nodes)[node_id].value == value) {
             ((struct cnt_node *)bin_index->nodes)[node_id].count++;
-            return node_id;
+            return;
         }
-        node_id = ((struct cnt_node *)bin_index->nodes)[node_id].next;
+        next = ((struct cnt_node *)bin_index->nodes)[node_id].next;
     }
 
     newnode_id = new_node(bin_index, sizeof(struct cnt_node));
@@ -193,7 +226,7 @@ static int add_cnt_node(struct BinIndex *bin_index, int head, int value)
     ((struct cnt_node *)bin_index->nodes)[newnode_id].value = value;
     ((struct cnt_node *)bin_index->nodes)[newnode_id].count = 1;
     ((struct cnt_node *)bin_index->nodes)[node_id].next = newnode_id;
-    return -1;
+    return;
 }
 
 
@@ -256,7 +289,7 @@ void update_bin_cnt_index(struct BinIndex *bin_index, void *index_array,
     /* head is already there */
     else {
         head_id = Rast_get_c_value(ptr, CELL_TYPE);
-        head_id = add_cnt_node(bin_index, head_id, value);
+        add_cnt_node(bin_index, head_id, value);
     }
 
     return;
@@ -264,7 +297,7 @@ void update_bin_cnt_index(struct BinIndex *bin_index, void *index_array,
 
 
 /* Co-moment value update */
-static void update_com_node(struct com_node *cn, int item, double x, double y)
+void update_com_node(struct com_node *cn, int item, double x, double y)
 {
     double dx;
 

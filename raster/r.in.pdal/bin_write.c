@@ -23,8 +23,35 @@
 #include "bin_write.h"
 
 
-void write_variance(void *raster_row, void *n_array, void *sum_array,
-                    void *sumsq_array, int row, int cols,
+/* Get error corrected sum */
+double get_sum(void *sum_array, void *c_array,
+               int row, int cols, int col, RASTER_MAP_TYPE rtype)
+{
+    size_t offset = ((size_t)row * cols + col) * Rast_cell_size(rtype);
+    double sum = Rast_get_d_value(((char *)sum_array) + offset, rtype);
+    double c = Rast_get_d_value(((char *)c_array) + offset, rtype);
+
+    return sum + c;
+}
+
+
+void write_sum(void *raster_row, void *sum_array, void *c_array,
+               int row, int cols, RASTER_MAP_TYPE rtype)
+{
+    int col;
+    void *ptr = raster_row;
+
+    for (col = 0; col < cols; col++) {
+        double sum = get_sum(sum_array, c_array, row, cols, col, rtype);
+
+        Rast_set_d_value(ptr, sum, rtype);
+        ptr = G_incr_void_ptr(ptr, Rast_cell_size(rtype));
+    }
+}
+
+
+void write_variance(void *raster_row, void *n_array, void *mean_array,
+                    void *m2_array, int row, int cols,
                     RASTER_MAP_TYPE rtype, int method)
 {
     double variance;
@@ -36,37 +63,26 @@ void write_variance(void *raster_row, void *n_array, void *sum_array,
         size_t n_offset =
             ((size_t)row * cols + col) * Rast_cell_size(CELL_TYPE);
         int n = Rast_get_c_value(((char *)n_array) + n_offset, CELL_TYPE);
-        double sum = Rast_get_d_value(((char *)sum_array) + offset, rtype);
-        double sumsq =
-            Rast_get_d_value(((char *)sumsq_array) + offset, rtype);
+        double mean = Rast_get_d_value(((char *)mean_array) + offset, rtype);
+        double m2 = Rast_get_d_value(((char *)m2_array) + offset, rtype);
 
         if (n == 0)
             Rast_set_null_value(ptr, 1, rtype);
         else if (n == 1)
             Rast_set_d_value(ptr, 0.0, rtype);
         else {
-            variance = (sumsq - sum * sum / n) / n;
+            variance = m2 / n;
+
             if (variance < GRASS_EPSILON)
                 variance = 0.0;
 
-            /* nan test */
-            if (variance != variance)
-                Rast_set_null_value(ptr, 1, rtype);
-            else {
+            if (method == METHOD_STDDEV)
+                variance = sqrt(variance);
 
-                if (method == METHOD_STDDEV)
-                    variance = sqrt(variance);
+            else if (method == METHOD_COEFF_VAR)
+                variance = 100 * sqrt(variance) / mean;
 
-                else if (method == METHOD_COEFF_VAR)
-                    variance = 100 * sqrt(variance) / (sum / n);
-
-                /* nan test */
-                if (variance != variance)
-                    variance = 0.0;     /* OK for n > 0 ? */
-
-                Rast_set_d_value(ptr, variance, rtype);
-            }
-
+            Rast_set_d_value(ptr, variance, rtype);
         }
         ptr = G_incr_void_ptr(ptr, Rast_cell_size(rtype));
     }
@@ -103,8 +119,8 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
 
             if (n == 1)         /* only one point, use that */
                 Rast_set_d_value(ptr,
-                                 ((struct z_node *)bin_index->nodes)[head_id].
-                                 z, rtype);
+                                 ((struct z_node *)bin_index->
+                                  nodes)[head_id].z, rtype);
             else if (n % 2 != 0) {      /* odd number of points: median_i = (n + 1) / 2 */
                 n = (n + 1) / 2;
                 node_id = head_id;
@@ -113,8 +129,8 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
                         ((struct z_node *)bin_index->nodes)[node_id].next;
 
                 Rast_set_d_value(ptr,
-                                 ((struct z_node *)bin_index->nodes)[node_id].
-                                 z, rtype);
+                                 ((struct z_node *)bin_index->
+                                  nodes)[node_id].z, rtype);
             }
             else {              /* even number of points: median = (val_below + val_above) / 2 */
 
@@ -126,9 +142,9 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
                         ((struct z_node *)bin_index->nodes)[node_id].next;
 
                 z = (((struct z_node *)bin_index->nodes)[node_id].z +
-                     ((struct z_node *)bin_index->
-                      nodes)[((struct z_node *)bin_index->nodes)[node_id].
-                             next].z) / 2;
+                     ((struct z_node *)
+                      bin_index->nodes)[((struct z_node *)bin_index->
+                                         nodes)[node_id].next].z) / 2;
                 Rast_set_d_value(ptr, z, rtype);
             }
         }
@@ -141,7 +157,7 @@ void write_mode(struct BinIndex *bin_index, void *raster_row,
                 void *index_array, int row, int cols)
 {
     int col;
-    int node_id, head_id;
+    int node_id;
     void *ptr = raster_row;
 
     for (col = 0; col < cols; col++) {
@@ -152,23 +168,22 @@ void write_mode(struct BinIndex *bin_index, void *raster_row,
         else {
             int mode_node = -1;
 
-            head_id =
+            node_id =
                 Rast_get_c_value(((char *)index_array) + n_offset, CELL_TYPE);
-            node_id = head_id;
 
             while (node_id != -1) {
                 if (mode_node == -1)
                     mode_node = node_id;
-                else if (((struct cnt_node *)bin_index->nodes)[node_id].
-                         count >
-                         ((struct cnt_node *)bin_index->nodes)[mode_node].
-                         count)
+                else if (((struct cnt_node *)bin_index->
+                          nodes)[node_id].count >
+                         ((struct cnt_node *)bin_index->
+                          nodes)[mode_node].count)
                     mode_node = node_id;
                 node_id = ((struct cnt_node *)bin_index->nodes)[node_id].next;
             }
             Rast_set_c_value(ptr,
-                             ((struct cnt_node *)bin_index->nodes)[mode_node].
-                             value, CELL_TYPE);
+                             ((struct cnt_node *)bin_index->
+                              nodes)[mode_node].value, CELL_TYPE);
         }
         ptr = G_incr_void_ptr(ptr, Rast_cell_size(CELL_TYPE));
     }
@@ -367,7 +382,7 @@ void write_sidn(struct BinIndex *bin_index, void *raster_row,
                 void *index_array, int row, int cols, int min)
 {
     int col;
-    int node_id, head_id;
+    int node_id;
     void *ptr = raster_row;
     int count;
 
@@ -378,11 +393,11 @@ void write_sidn(struct BinIndex *bin_index, void *raster_row,
             Rast_set_c_value(ptr, 0, CELL_TYPE);
         else {
 
-            head_id =
+            node_id =
                 Rast_get_c_value(((char *)index_array) + n_offset, CELL_TYPE);
-            node_id = head_id;
 
             count = ((struct cnt_node *)bin_index->nodes)[node_id].count;
+            node_id = ((struct cnt_node *)bin_index->nodes)[node_id].next;
             while (node_id != -1) {
                 if (min &&
                     ((struct cnt_node *)bin_index->nodes)[node_id].count <
@@ -390,8 +405,8 @@ void write_sidn(struct BinIndex *bin_index, void *raster_row,
                     count =
                         ((struct cnt_node *)bin_index->nodes)[node_id].count;
                 else if (!min &&
-                         ((struct cnt_node *)bin_index->nodes)[node_id].
-                         count > count)
+                         ((struct cnt_node *)bin_index->
+                          nodes)[node_id].count > count)
                     count =
                         ((struct cnt_node *)bin_index->nodes)[node_id].count;
                 node_id = ((struct cnt_node *)bin_index->nodes)[node_id].next;
