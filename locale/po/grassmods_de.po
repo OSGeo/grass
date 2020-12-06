@@ -39585,7 +39585,7 @@ msgstr "Zone"
 
 #: ../vector/v.info/print.c:539
 msgid "Digitization threshold"
-msgstr "Digitalisierungs-Schwellwert:"
+msgstr "Digitalisierungs-Schwellwert"
 
 #: ../vector/v.info/print.c:541
 msgid "Comment"
