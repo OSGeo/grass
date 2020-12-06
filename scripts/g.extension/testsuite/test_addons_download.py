@@ -24,8 +24,8 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.utils import silent_rmtree
 
-# Set to True if test is supposed to run
-skip = False
+# Set to False if test is supposed to run
+skip = True
 
 
 class TestModuleDownloadFromDifferentSources(TestCase):
