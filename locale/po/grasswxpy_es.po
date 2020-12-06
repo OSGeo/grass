@@ -20891,10 +20891,10 @@ msgid "Fetch list of available modules from GRASS Addons SVN repository"
 msgstr "Buscar lista de módulos disponibles en los complementos del repositorio SVN de GRASS"
 
 msgid "Creates a raster map from LAS LiDAR points using univariate statistics."
-msgstr "Crea un mapa ráster a partir de puntos LAS LiDAR usando estadísticas univariadas."
+msgstr ""
 
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with libLAS."
-msgstr "Convierte nubes de puntos LAS LiDAR a un mapa vectorial GRASS con libLAS."
+msgstr ""
 
 msgid "Animation already axists"
 msgstr "La animación ya existe"

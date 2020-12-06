@@ -207,7 +207,7 @@ msgstr "Gruppo"
 
 #: ../lib/temporal/lib/default_name.c:69
 msgid "Programmer error - only SQLite driver is currently supported"
-msgstr ""
+msgstr "Errore nel programma - solo il driver SQLite è attualmente supportato"
 
 #: ../lib/temporal/lib/connect.c:110
 #, c-format
@@ -4758,11 +4758,11 @@ msgstr ""
 
 #: ../lib/gis/cmprlz4.c:121
 msgid "LZ4 compression error"
-msgstr ""
+msgstr "Errore nella compressione LZ4"
 
 #: ../lib/gis/cmprlz4.c:177
 msgid "LZ4 decompression error"
-msgstr ""
+msgstr "Errore nella decompressione LZ4"
 
 #: ../lib/gis/cmprlz4.c:186 ../lib/gis/cmprbzip.c:219 ../lib/gis/cmprzstd.c:206
 #: ../lib/gis/cmprzlib.c:215
@@ -5700,15 +5700,15 @@ msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:543
 msgid "Invalid South"
-msgstr ""
+msgstr "Sud invalido"
 
 #: ../lib/gis/adj_cellhd.c:548
 msgid "Invalid West"
-msgstr ""
+msgstr "Ovest invalido"
 
 #: ../lib/gis/adj_cellhd.c:553
 msgid "Invalid East"
-msgstr ""
+msgstr "Esr invalido"
 
 #: ../lib/gis/adj_cellhd.c:606
 #, c-format
@@ -5778,19 +5778,19 @@ msgstr "unità"
 
 #: ../lib/gis/units.c:215
 msgid "square meters"
-msgstr ""
+msgstr "metri quadri"
 
 #: ../lib/gis/units.c:215
 msgid "square meter"
-msgstr ""
+msgstr "metro quadro"
 
 #: ../lib/gis/units.c:217
 msgid "meters"
-msgstr ""
+msgstr "metri"
 
 #: ../lib/gis/units.c:217
 msgid "meter"
-msgstr ""
+msgstr "metro"
 
 #: ../lib/gis/units.c:222
 msgid "square kilometers"
@@ -5802,7 +5802,7 @@ msgstr "chilometro quadro"
 
 #: ../lib/gis/units.c:224
 msgid "kilometers"
-msgstr ""
+msgstr "chilometri"
 
 #: ../lib/gis/units.c:224
 msgid "kilometer"

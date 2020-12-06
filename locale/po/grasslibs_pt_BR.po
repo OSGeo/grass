@@ -3681,7 +3681,7 @@ msgstr "Linha inválida no arquivo RC ({arquivo}): '{linha}' ({erro})\n"
 #: ../lib/init/grass.py:546
 #, python-brace-format
 msgid "Empty RC file ({file})"
-msgstr "Arquivo RC vazio ({arquivo})"
+msgstr "Arquivo RC vazio ({file})"
 
 #: ../lib/init/grass.py:596
 #, python-format

@@ -10762,7 +10762,7 @@ msgstr "Niveles de contorno"
 #: ../raster/r.contour/main.c:140
 #, c-format
 msgid "Either <%s> or <%s> option must be specified"
-msgstr "Ni la opción <%s> ni <%s> deben ser especificadas"
+msgstr ""
 
 #: ../raster/r.contour/main.c:183 ../raster/r.stream.extract/close.c:194
 #: ../vector/v.net.distance/main.c:291 ../vector/v.in.lidar/attributes.c:135
