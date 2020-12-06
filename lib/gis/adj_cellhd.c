@@ -54,33 +54,45 @@ void G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
 
     if (!row_flag) {
 	if (cellhd->ns_res <= 0)
-	    G_fatal_error(_("Illegal n-s resolution value <%lf>"), cellhd->ns_res);
+	    G_fatal_error(_("Illegal n-s resolution value: %g"),
+			  cellhd->ns_res);
     }
     else {
 	if (cellhd->rows <= 0)
-	    G_fatal_error(_("Illegal row value"));
+	    G_fatal_error(_("Illegal number of rows: %d"
+			    " (resolution is %g)"),
+			  cellhd->rows, cellhd->ns_res);
     }
     if (!col_flag) {
 	if (cellhd->ew_res <= 0)
-	    G_fatal_error(_("Illegal e-w resolution value"));
+	    G_fatal_error(_("Illegal e-w resolution value: %g"),
+			  cellhd->ew_res);
     }
     else {
 	if (cellhd->cols <= 0)
-	    G_fatal_error(_("Illegal col value"));
+	    G_fatal_error(_("Illegal number of columns: %d"
+			    " (resolution is %g)"),
+			  cellhd->cols, cellhd->ew_res);
     }
 
     /* check the edge values */
     if (cellhd->north <= cellhd->south) {
 	if (cellhd->proj == PROJECTION_LL)
-	    G_fatal_error(_("North must be north of South"));
+	    G_fatal_error(_("North must be north of South,"
+			    " but %g (north) <= %g (south"),
+			  cellhd->north, cellhd->south);
 	else
-	    G_fatal_error(_("North must be larger than South"));
+	    G_fatal_error(_("North must be larger than South,"
+			    " but %g (north) <= %g (south"),
+		          cellhd->north, cellhd->south);
     }
 
     ll_wrap(cellhd);
 
     if (cellhd->east <= cellhd->west)
-	G_fatal_error(_("East must be larger than West"));
+	G_fatal_error(_("East must be larger than West,"
+			" but %g (east) <= %g (west)"),
+		      cellhd->east, cellhd->west);
 
     /* compute rows and columns, if not set */
     if (!row_flag) {
@@ -98,8 +110,11 @@ void G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
 	    cellhd->cols = 1;
     }
 
-    if (cellhd->cols < 0 || cellhd->rows < 0) {
-	G_fatal_error(_("Invalid coordinates"));
+    if (cellhd->cols < 0) {
+	G_fatal_error(_("Invalid coordinates: negative number of columns"));
+    }
+    if (cellhd->rows < 0) {
+	G_fatal_error(_("Invalid coordinates: negative number of rows"));
     }
 
     /* (re)compute the resolutions */
@@ -154,52 +169,73 @@ void G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
 
     if (!row_flag) {
 	if (cellhd->ns_res <= 0)
-	    G_fatal_error(_("Illegal n-s resolution value"));
+	    G_fatal_error(_("Illegal n-s resolution value: %g"),
+			  cellhd->ns_res);
 	if (cellhd->ns_res3 <= 0)
-	    G_fatal_error(_("Illegal n-s3 resolution value"));
+	    G_fatal_error(_("Illegal n-s resolution value for 3D: %g"),
+			  cellhd->ns_res3);
     }
     else {
 	if (cellhd->rows <= 0)
-	    G_fatal_error(_("Illegal row value"));
+	    G_fatal_error(_("Illegal number of rows: %d"
+			    " (resolution is %g)"),
+			  cellhd->rows, cellhd->ns_res);
 	if (cellhd->rows3 <= 0)
-	    G_fatal_error(_("Illegal row3 value"));
+	    G_fatal_error(_("Illegal number of rows for 3D: %d"
+			    " (resolution is %g)"),
+			  cellhd->rows3, cellhd->ns_res3);
     }
     if (!col_flag) {
 	if (cellhd->ew_res <= 0)
-	    G_fatal_error(_("Illegal e-w resolution value"));
+	    G_fatal_error(_("Illegal e-w resolution value: %g"),
+			  cellhd->ew_res);
 	if (cellhd->ew_res3 <= 0)
-	    G_fatal_error(_("Illegal e-w3 resolution value"));
+	    G_fatal_error(_("Illegal e-w resolution value for 3D: %g"),
+			  cellhd->ew_res3);
     }
     else {
 	if (cellhd->cols <= 0)
-	    G_fatal_error(_("Illegal col value"));
+	    G_fatal_error(_("Illegal number of columns: %d"
+			    " (resolution is %g)"),
+			  cellhd->cols, cellhd->ew_res);
 	if (cellhd->cols3 <= 0)
-	    G_fatal_error(_("Illegal col3 value"));
+	    G_fatal_error(_("Illegal number of columns for 3D: %d"
+			    " (resolution is %g)"),
+			  cellhd->cols3, cellhd->ew_res3);
     }
     if (!depth_flag) {
 	if (cellhd->tb_res <= 0)
-	    G_fatal_error(_("Illegal t-b3 resolution value"));
+	    G_fatal_error(_("Illegal t-b resolution value: %g"),
+			  cellhd->tb_res);
     }
     else {
 	if (cellhd->depths <= 0)
-	    G_fatal_error(_("Illegal depths value"));
+	    G_fatal_error(_("Illegal depths value: %d"), cellhd->depths);
     }
 
     /* check the edge values */
     if (cellhd->north <= cellhd->south) {
 	if (cellhd->proj == PROJECTION_LL)
-	    G_fatal_error(_("North must be north of South"));
+	    G_fatal_error(_("North must be north of South,"
+			    " but %g (north) <= %g (south"),
+			  cellhd->north, cellhd->south);
 	else
-	    G_fatal_error(_("North must be larger than South"));
+	    G_fatal_error(_("North must be larger than South,"
+			    " but %g (north) <= %g (south"),
+		          cellhd->north, cellhd->south);
     }
 
     ll_wrap(cellhd);
 
     if (cellhd->east <= cellhd->west)
-	G_fatal_error(_("East must be larger than West"));
+	G_fatal_error(_("East must be larger than West,"
+			" but %g (east) <= %g (west)"),
+		      cellhd->east, cellhd->west);
 
     if (cellhd->top <= cellhd->bottom)
-	G_fatal_error(_("Top must be larger than Bottom"));
+	G_fatal_error(_("Top must be larger than Bottom,"
+			" but %g (top) <= %g (bottom)"),
+		      cellhd->top, cellhd->bottom);
 
     /* compute rows and columns, if not set */
     if (!row_flag) {
@@ -237,9 +273,14 @@ void G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
 	    cellhd->depths = 1;
     }
 
-    if (cellhd->cols < 0 || cellhd->rows < 0 || cellhd->cols3 < 0 ||
-	cellhd->rows3 < 0 || cellhd->depths < 0) {
-	G_fatal_error(_("Invalid coordinates"));
+    if (cellhd->cols < 0 || cellhd->cols3 < 0) {
+	G_fatal_error(_("Invalid coordinates: negative number of columns"));
+    }
+    if (cellhd->rows < 0 || cellhd->rows3 < 0) {
+	G_fatal_error(_("Invalid coordinates: negative number of rows"));
+    }
+    if (cellhd->depths < 0) {
+	G_fatal_error(_("Invalid coordinates: negative number of depths"));
     }
 
     /* (re)compute the resolutions */
