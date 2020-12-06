@@ -493,7 +493,7 @@ class GConsole(wx.EvtHandler):
                     task = GUI(show=None).ParseCommand(command)
                 except GException as e:
                     GError(parent=self._guiparent,
-                           message=unicode(e),
+                           message=str(e),
                            showTraceback=False)
                     return
 
