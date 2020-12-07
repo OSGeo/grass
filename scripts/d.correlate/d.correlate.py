@@ -67,12 +67,12 @@ def main():
                                     stdin="%s %s" % (i, j))
                 line += 1
 
-                ofile = file(tmpfile, 'w')
+                ofile = open(tmpfile, 'w')
                 gcore.run_command('r.stats', flags='cnA', input=(i, j),
                                   stdout=ofile)
                 ofile.close()
 
-                ifile = file(tmpfile, 'r')
+                ifile = open(tmpfile, 'r')
                 first = True
                 for l in ifile:
                     f = l.rstrip('\r\n').split(' ')
@@ -98,12 +98,12 @@ def main():
                 p = gcore.feed_command('d.graph', color=color)
                 ofile = p.stdin
 
-                ifile = file(tmpfile, 'r')
+                ifile = open(tmpfile, 'r')
                 for l in ifile:
                     f = l.rstrip('\r\n').split(' ')
                     x = float(f[0])
                     y = float(f[1])
-                    ofile.write("icon + 0.1 %f %f\n" % ((x - minx + 1) * kx,
+                    ofile.write(b"icon + 0.1 %f %f\n" % ((x - minx + 1) * kx,
                                                         (y - miny + 1) * ky))
                 ifile.close()
 
