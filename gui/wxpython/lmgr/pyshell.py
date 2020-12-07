@@ -45,17 +45,17 @@ class PyShellWindow(wx.Panel):
         self.intro = _("Welcome to wxGUI Interactive Python Shell %s") % VERSION + "\n\n" + \
             _("Type %s for more GRASS scripting related information.") % "\"help(gs)\"" + "\n" + \
             _("Type %s to add raster or vector to the layer tree.") % "\"AddLayer()\"" + "\n\n"
+
+        shellargs = dict(
+            parent=self,
+            id=wx.ID_ANY,
+            introText=self.intro,
+            locals={"gs": grass, "AddLayer": self.AddLayer},
+        )
+        # useStockId (available since wxPython 4.0.2) should be False on macOS
         if sys.platform == "darwin" and CheckWxVersion([4, 0, 2]):
-            self.shell = PyShell(parent=self, id=wx.ID_ANY,
-                                 introText=self.intro,
-                                 locals={'gs': grass,
-                                         'AddLayer': self.AddLayer},
-                                 useStockId=False)
-        else:
-            self.shell = PyShell(parent=self, id=wx.ID_ANY,
-                                 introText=self.intro,
-                                 locals={'gs': grass,
-                                         'AddLayer': self.AddLayer})
+            shellargs["useStockId"] = False
+        self.shell = PyShell(**shellargs)
 
         sys.displayhook = self._displayhook
 
