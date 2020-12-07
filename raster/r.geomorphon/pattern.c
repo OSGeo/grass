@@ -156,7 +156,8 @@ int calc_pattern(PATTERN * pattern, int row, int cur_row, int col,
             if (oneoff) {
                 char step_name[32];
 
-                snprintf(step_name, sizeof(step_name), "step_%u", j);
+                snprintf(step_name, sizeof(step_name), "step_%u",
+                         (unsigned)j);
                 prof_dbl(step_name, height);
             }
             j += cell_step;

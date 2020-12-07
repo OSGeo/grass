@@ -24,6 +24,8 @@
 #define MAIN
 #include "local_proto.h"
 
+#define WINDOW_THRESHOLD 100000000
+
 typedef enum
 { o_forms, o_ternary, o_positive, o_negative, o_intensity,
     o_exposition,
@@ -62,7 +64,7 @@ static const char *form_long_name(const FORMS f)
      * The list below is the same as in the documentation and the original paper.
      * The values in ccolors[] are different for PK and PT.
      */
-    const const char *form_long_names[] = {
+    const char *form_long_names[] = {
         /* skip 0 */
         [FL] = "flat",
         [PK] = "peak",
@@ -466,7 +468,7 @@ int main(int argc, char **argv)
             unsigned long window_square = nrows * ncols;
             unsigned long search_square = 4 * search_cells * search_cells;
 
-            if (window_square > 100000000 &&
+            if (window_square > WINDOW_THRESHOLD &&
                 window_square / search_square > 10)
                 G_warning(_("There may be a notable processing delay because the "
                            "computational region is %lu times larger than necessary"),
