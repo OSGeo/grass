@@ -30,6 +30,7 @@ import grass.script as grass
 from grass.script.utils import try_remove
 
 from gui_core.wrap import Button, ClearButton
+from core.globalvar import CheckWxVersion
 
 
 class PyShellWindow(wx.Panel):
@@ -44,12 +45,17 @@ class PyShellWindow(wx.Panel):
         self.intro = _("Welcome to wxGUI Interactive Python Shell %s") % VERSION + "\n\n" + \
             _("Type %s for more GRASS scripting related information.") % "\"help(gs)\"" + "\n" + \
             _("Type %s to add raster or vector to the layer tree.") % "\"AddLayer()\"" + "\n\n"
-        # useStockId should be False on macOS
-        self.shell = PyShell(parent=self, id=wx.ID_ANY,
-                             introText=self.intro,
-                             locals={'gs': grass,
-                                     'AddLayer': self.AddLayer},
-                             useStockId=(sys.platform != "darwin"))
+        if sys.platform == "darwin" and CheckWxVersion([4, 0, 2]):
+            self.shell = PyShell(parent=self, id=wx.ID_ANY,
+                                 introText=self.intro,
+                                 locals={'gs': grass,
+                                         'AddLayer': self.AddLayer},
+                                 useStockId=False)
+        else:
+            self.shell = PyShell(parent=self, id=wx.ID_ANY,
+                                 introText=self.intro,
+                                 locals={'gs': grass,
+                                         'AddLayer': self.AddLayer})
 
         sys.displayhook = self._displayhook
 
