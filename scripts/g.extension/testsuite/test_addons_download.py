@@ -30,8 +30,6 @@ skip = True
 
 class TestModuleDownloadFromDifferentSources(TestCase):
 
-    url = "https://github.com/wenzeslaus/r.example.plus"
-    path = os.path.join("data", "sample_modules")
     # MS Windows install function requires absolute paths
     install_prefix = os.path.abspath("gextension_test_install_path")
 
