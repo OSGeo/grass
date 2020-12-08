@@ -2298,7 +2298,7 @@ def main():
     token_tags = {
         "gitlab": "Bearer",
         "github": "token"
-        }
+    }
 
     hosting = [token_tags[key] for key in token_tags if key in original_url]
     token = os.getenv('PRIVATE_ACCESS_TOKEN')
