@@ -57,14 +57,6 @@ especially with low resolution DEMS.
 <DL>
 <DT><b>-m</b></DT>
 <DD>All distance parameters (search, skip, flat distances) are supplied as meters instead of cells (default). To avoid situation when supplied distances is smaller than one cell program first check if supplied distance is longer than one cell in both NS and WE directions. For LatLong projection only NS distance checked, because in latitude angular unit comprise always bigger or equal distance than longitude one. If distance is supplied in cells, For all projections is recalculated into meters according formula: <code>number_of_cells*resolution_along_NS_direction</code>. It is important if geomorphons are calculated for large areas in LatLong projection.</DD>
-<DT><b>-1</b></DT>
-<DD>Do a one-off geomorphon computation and print the result. In the
-current implementation the one-off mode is mutually exclusive with any
-raster output parameters, but other parameters and flags (such as
-<b>elevation</b>, <b>search</b>, <b>-m</b> and <b>-e</b>) work as usual.
-When this flag is specified, the <b>coordinates</b> parameter must be
-specified too. In this mode setting the <b>comparison</b> parameter to
-"anglev2_distance" will produce the most accurate results.</DD>
 <DT><b>elevation</b></DT>
 <DD>Digital elevation model. Data can be of any type and any projection. During calculation DEM is stored as floating point raster.</DD>
 <DT><b>search</b></DT>
@@ -94,21 +86,25 @@ equal.</DD>
 <DT><b>positive</b> and <b>negative</b></DT>
 <DD>returns codes binary patterns for zenith (positive) and nadir (negative) line of sights. The code is a decimal representation of 8-tuple minimalised patterns written in binary system. Full list of patterns is available in source code directory as patterns.txt.</DD>
 <DT><b>coordinates</b></DT>
-<DD>The central point of the single geomorphon to compute. The point must
-be within the computational region, which should be large enough to
+<DD>The central point of a single geomorphon to profile. Only the
+landform and the final geomorphon appear in the console output, use the
+<b>profiledata</b> option to get the complete data. The central point
+must be within the computational region, which should be large enough to
 accommodate the search radius. Setting the region larger than that will
 not produce more accurate data, but in the current implementation will
 slow the computation down. For the best results remember to align the
-region to the raster cells.</DD>
+region to the raster cells. Profiling is mutually exclusive with any
+raster outputs, but other parameters and flags (such as
+<b>elevation</b>, <b>search</b>, <b>comparison</b>, <b>-m</b> and
+<b>-e</b>) work as usual.</DD>
 <DT><b>profiledata</b></DT>
-<DD>If specified, the file name for the profile data of the geomorphon,
-"-" means to write to the standard output. The data is in a
-machine-readable format and it includes assorted values describing the
-one-off geomorphon computation context and parameters, as well as its
-intermediate and final results.</DD>
+<DD>The output file name for the complete profile data, "-" means to
+write to the standard output. The data is in a machine-readable format
+and it includes assorted values describing the computation context and
+parameters, as well as its intermediate and final results.</DD>
 <DT><b>profileformat</b></DT>
-<DD>Format of the geomorphon profile data: "json" (the default), "yaml"
-or "xml".</DD>
+<DD>Format of the profile data: "json" (the default),
+"yaml" or "xml".</DD>
 </DL>
 <P><em>NOTE: parameters below are very experimental. The usefulness of these parameters are currently under investigation.</em></P>
 <DL>

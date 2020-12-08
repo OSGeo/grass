@@ -164,7 +164,7 @@ int main(int argc, char **argv)
         *par_profiledata,
         *par_profileformat,
         *par_multi_prefix, *par_multi_step, *par_multi_start;
-    struct Flag *flag_units, *flag_extended, *flag_oneoff;
+    struct Flag *flag_units, *flag_extended;
 
     struct History history;
 
@@ -275,22 +275,16 @@ int main(int argc, char **argv)
         flag_extended->key = 'e';
         flag_extended->description = _("Use extended form correction");
 
-        flag_oneoff = G_define_flag();
-        flag_oneoff->key = '1';
-        flag_oneoff->description =
-            _("Compute a one-off geomorphon for the specified coordinates only");
-        flag_oneoff->guisection = _("One-off");
-
         par_coords = G_define_standard_option(G_OPT_M_COORDS);
-        par_coords->description = _("Coordinates for the one-off mode");
-        par_coords->guisection = _("One-off");
+        par_coords->description = _("Coordinates to profile");
+        par_coords->guisection = _("Profile");
 
         par_profiledata = G_define_standard_option(G_OPT_F_OUTPUT);
         par_profiledata->key = "profiledata";
         par_profiledata->required = NO;
         par_profiledata->description =
-            _("Profile data output file for the one-off mode (\"-\" for stdout)");
-        par_profiledata->guisection = _("One-off");
+            _("Profile output file name (\"-\" for stdout)");
+        par_profiledata->guisection = _("Profile");
 
         par_profileformat = G_define_option();
         par_profileformat->key = "profileformat";
@@ -298,9 +292,8 @@ int main(int argc, char **argv)
         par_profileformat->options = "json,yaml,xml";
         par_profileformat->answer = "json";
         par_profileformat->required = NO;
-        par_profileformat->description =
-            _("Profile data format for the one-off mode");
-        par_profileformat->guisection = _("One-off");
+        par_profileformat->description = _("Profile output format");
+        par_profileformat->guisection = _("Profile");
 
         if (G_parser(argc, argv))
             exit(EXIT_FAILURE);
@@ -320,7 +313,7 @@ int main(int argc, char **argv)
             compmode = ANGLEV2_DISTANCE;
         else
             G_fatal_error(_("Failed parsing <%s>"), par_comparison->answer);
-        oneoff = flag_oneoff->answer;
+        oneoff = par_coords->answer != NULL;
         for (i = o_forms; i < o_size; ++i)      /* check for outputs */
             if (opt_output[i]->answer) {
                 if (G_legal_filename(opt_output[i]->answer) < 0)
@@ -341,12 +334,9 @@ int main(int argc, char **argv)
 
         if (oneoff) {
             if (num_outputs || multires)
-                G_fatal_error(_("The <-%c> flag is mutually exclusive with raster outputs"),
-                              flag_oneoff->key);
+                G_fatal_error(_("<%s> is mutually exclusive with raster outputs"),
+                              par_coords->key);
 
-            if (!par_coords->answer)
-                G_fatal_error(_("The <-%c> flag requires the <%s> parameter"),
-                              flag_oneoff->key, par_coords->key);
             if (!G_scan_easting
                 (par_coords->answers[0], &oneoff_easting, G_projection()))
                 G_fatal_error(_("Illegal east coordinate <%s>"),
@@ -798,7 +788,7 @@ int main(int argc, char **argv)
              * at all, do not fail to fail now.
              */
             if (!oneoff_done) {
-                G_fatal_error(_("Failed to do the one-off computation, please check the parameters"));
+                G_fatal_error(_("Failed to profile the computation, please check the parameters"));
                 exit(EXIT_FAILURE);
             }
         }
