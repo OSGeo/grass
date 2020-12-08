@@ -245,12 +245,20 @@ static unsigned write_indent(FILE * f, unsigned char indent)
     return 1;
 }
 
-static char *quote_string(const char *v)
+static const char *quote_val(const toktype t, const char *v)
 {
     static char buf[MAX_STR_LEN + 2];
 
-    G_snprintf(buf, sizeof(buf), "\"%s\"", v);
-    return buf;
+    switch (t) {
+    case T_EAS:
+    case T_NOR:
+    case T_RES:
+    case T_STR:
+        G_snprintf(buf, sizeof(buf), "\"%s\"", v);
+        return buf;
+    default:
+        return v;
+    }
 }
 
 static const char *format_token_common(const struct token *t)
@@ -270,13 +278,15 @@ static const char *format_token_common(const struct token *t)
         return buf;
     case T_EAS:
         G_format_easting(t->dbl_val, buf, G_projection());
-        return quote_string(buf);
+        return buf;
     case T_NOR:
         G_format_northing(t->dbl_val, buf, G_projection());
-        return quote_string(buf);
+        return buf;
     case T_RES:
         G_format_resolution(t->dbl_val, buf, G_projection());
-        return quote_string(buf);
+        return buf;
+    case T_STR:
+        return t->str_val;
     case T_MTR:
         G_snprintf(buf, sizeof(buf), "%.2f", t->dbl_val);
         return buf;
@@ -315,11 +325,8 @@ static unsigned write_json(FILE * f)
             WRITE_INDENT(f, indent);
             WRITE_VAL(f, "}%s\n", comma);
             continue;
-        case T_STR:
-            val = quote_string(token[i].str_val);
-            break;
         default:
-            val = format_token_common(token + i);
+            val = quote_val(token[i].type, format_token_common(token + i));
             break;
         }
         if (!val)
@@ -353,11 +360,8 @@ static unsigned write_yaml(FILE * f)
                 return 0;
             indent--;
             continue;
-        case T_STR:
-            val = quote_string(token[i].str_val);
-            break;
         default:
-            val = format_token_common(token + i);
+            val = quote_val(token[i].type, format_token_common(token + i));
             break;
         }
         if (!val)
@@ -412,9 +416,6 @@ static unsigned write_xml(FILE * f)
             WRITE_INDENT(f, indent);
             WRITE_VAL(f, "</%s>\n", val);
             continue;
-        case T_STR:
-            val = token[i].str_val;
-            break;
         default:
             val = format_token_common(token + i);
             break;
