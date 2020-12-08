@@ -606,7 +606,7 @@ int main(int argc, char **argv)
                         if (!profile_file) {
                             oneoff_done = 1;
                             /* Break out of both loops. */
-                            row = nrows;
+                            row = nrows - 1;
                             break;
                         }
 
@@ -694,7 +694,7 @@ int main(int argc, char **argv)
                         else
                             G_important_message(_("Failed writing profile data"));
                         /* Break out of both loops. */
-                        row = nrows;
+                        row = nrows - 1;
                         break;
                     }           /* end of one-off mode */
 
