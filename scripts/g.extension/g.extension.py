@@ -2202,6 +2202,17 @@ def resolve_source_code(url=None, name=None, branch=None):
                 pass
             # Test if github repo exists (need to use API)
             try:
+                # Check token scopes (permission)
+                open_url = urlopen("https://api.github.com/users/{}".format(
+                    *url.split('/')[-2:-1]))
+                scopes = open_url.getheader('X-OAuth-Scopes')
+                if 'repo' not in scopes:
+                    grass.fatal(
+                        _("Your access token don't have permission to "
+                          "read private repository info. Add 'repo' "
+                          "scope which define the access for personal token "
+                          "on the url <https://github.com/settings/tokens>")
+                    )
                 open_url = urlopen('https://api.github.com/repos/{}/{}'.format(*url.split("/")[-2:]))
                 open_url.close()
                 url_validated = True
