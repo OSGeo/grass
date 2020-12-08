@@ -355,10 +355,7 @@ int main(int argc, char **argv)
                 if (!strcmp(par_profiledata->answer, "-"))
                     profile_file = stdout;
                 else {
-                    if (G_legal_filename(par_profiledata->answer) < 0)
-                        G_fatal_error(_("<%s> is an illegal file name"),
-                                      par_profiledata->answer);
-                    profile_file = G_fopen_new("", par_profiledata->answer);
+                    profile_file = fopen(par_profiledata->answer, "w");
                     if (!profile_file)
                         G_fatal_error(_("Failed to open output file <%s>: %d (%s)"),
                                       par_profiledata->answer, errno,
@@ -780,7 +777,7 @@ int main(int argc, char **argv)
         G_done_msg(" ");
 
         if (oneoff) {
-            if (profile_file)
+            if (profile_file && strcmp(par_profiledata->answer, "-"))
                 fclose(profile_file);
             /*
              * In case all the earlier checks had not detected some edge case
