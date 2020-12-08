@@ -2200,6 +2200,20 @@ def resolve_source_code(url=None, name=None, branch=None):
                 url_validated = True
             except:
                 pass
+            # Test if github repo exists (need to use API)
+            try:
+                open_url = urlopen('https://api.github.com/repos/{}/{}'.format(*url.split("/")[-2:]))
+                open_url.close()
+                url_validated = True
+            except:
+                pass
+            # Test if gitlab repo exists (need to use API)
+            try:
+                open_url = urlopen('https://gitlab.com/api/v4/projects/{}%2F{}'.format(*url.split("/")[-2:]))
+                open_url.close()
+                url_validated = True
+            except:
+                pass
         else:
             try:
                 open_url = urlopen('http://' + url)
@@ -2280,6 +2294,18 @@ def main():
         proxy = urlrequest.ProxyHandler(PROXIES)
         opener = urlrequest.build_opener(proxy)
         urlrequest.install_opener(opener)
+
+    token_tags = {
+        "gitlab": "Bearer",
+        "github": "token"
+        }
+
+    hosting = [token_tags[key] for key in token_tags if key in original_url]
+    token = os.getenv('PRIVATE_ACCESS_TOKEN')
+
+    if token and hosting:
+        global HEADERS
+        HEADERS["Authorization"] = "{} {}".format(hosting[0], token)
 
     # define path
     options['prefix'] = resolve_install_prefix(path=options['prefix'],
