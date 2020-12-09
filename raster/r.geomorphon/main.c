@@ -81,35 +81,6 @@ static const char *form_long_name(const FORMS f)
     return (f >= FL && f <= PT) ? form_long_names[f] : form_long_names[__];
 }
 
-static char ternary_char(const int t)
-{
-    switch (t) {
-    case -1:
-        return '-';
-    case 0:
-        return '0';
-    case 1:
-        return '+';
-    default:
-        return '?';
-    }
-}
-
-static void print_geomorphon(const FORMS f, const PATTERN * p)
-{
-    G_message(_("Landform: %u (%s, %s)"), f, form_short_name(f),
-              form_long_name(f));
-    G_message(_("Geomorphon:"));
-    G_message("+--N--+");
-    G_message("|%c %c %c|", ternary_char(p->pattern[2]),
-              ternary_char(p->pattern[1]), ternary_char(p->pattern[0]));
-    G_message("|%c * %c|", ternary_char(p->pattern[3]),
-              ternary_char(p->pattern[7]));
-    G_message("|%c %c %c|", ternary_char(p->pattern[4]),
-              ternary_char(p->pattern[5]), ternary_char(p->pattern[6]));
-    G_message("+--S--+");
-}
-
 int main(int argc, char **argv)
 {
     struct
@@ -600,7 +571,6 @@ int main(int argc, char **argv)
                         char buf[BUFSIZ];
                         float azimuth, elongation, width;
 
-                        print_geomorphon(cur_form, pattern);
                         if (!profile_file) {
                             oneoff_done = 1;
                             /* Break out of both loops. */
