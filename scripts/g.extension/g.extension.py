@@ -2334,17 +2334,16 @@ def main():
     if token and hosting:
         HEADERS['Authorization'] = "{} {}".format(hosting[0], token)
 
-
     # Get token from input option
     token_input = False
     if options['token']:
         if options['token'] == "-":
-            token_input = sys.stdin.read().rstrip()
+            token_input = sys.stdin.readline().rstrip()
             if not token_input:
                 grass.fatal(_('No token specified. Please try again.'))
         else:
             try:
-                with open(options['token'], 'r') as tokenfile:
+                with open(options['token']) as tokenfile:
                     token_input = tokenfile.readline().rstrip()
                     if not token_input:
                         grass.fatal(
