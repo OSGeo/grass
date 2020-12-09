@@ -24,7 +24,8 @@ smooth the interpolation. With a small <b>lambda</b>, the
 interpolated surface closely follows observation points; a larger value
 will produce a smoother interpolation. Reasonable values are 0.0001,
 0.001, 0.005, 0.01, 0.02, 0.05, 0.1 (needs more testing). For seamless
-NULL cell interpolation, a small value is required and default is set to 0.005.
+NULL cell interpolation, a small value is required. The default <b>lambda</b>
+value is set to 0.01.
 <p>
 From a theoretical perspective, the interpolating procedure takes place in two
 parts: the first is an estimate of the linear coefficients of a spline function;
