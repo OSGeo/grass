@@ -2340,9 +2340,34 @@ def main():
     if options['token']:
         if options['token'] == "-":
             token_input = sys.stdin.read().rstrip()
+            if not token_input:
+                grass.fatal(_('No token specified. Please try again.'))
         else:
-            with open(options['token'], 'r') as tokenfile:
-                token_input = tokenfile.readlines()[0].rstrip()
+            try:
+                with open(options['token'], 'r') as tokenfile:
+                    token_input = tokenfile.readline().rstrip()
+                    if not token_input:
+                        grass.fatal(
+                            _("Token file is empty <{}>. "
+                              "Please check token file content.".format(
+                                  options['token']))
+                        )
+            except FileNotFoundError:
+                grass.fatal(
+                    _("No such file or directory <{}>. "
+                      "Please check token file path.".format(
+                          options['token']))
+                )
+            except PermissionError:
+                grass.fatal(
+                    _("Permission denied <{}>. Please change token file "
+                      "permission for reading.".format(options['token']))
+                )
+            except IOError:
+                grass.fatal(
+                    _("Couldn't read token file <{}>.".format(
+                        options['token']))
+                )
 
     if token and token_input:
         gscript.warning(_("Personal Access Token provided both via input \
