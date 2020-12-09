@@ -278,6 +278,9 @@ int main(int argc, char **argv)
         par_coords = G_define_standard_option(G_OPT_M_COORDS);
         par_coords->description = _("Coordinates to profile");
         par_coords->guisection = _("Profile");
+        G_option_excludes(par_coords, par_multi_prefix, NULL);
+        for (i = o_forms; i < o_size; i++)
+            G_option_excludes(par_coords, opt_output[i], NULL);
 
         par_profiledata = G_define_standard_option(G_OPT_F_OUTPUT);
         par_profiledata->key = "profiledata";
@@ -285,6 +288,7 @@ int main(int argc, char **argv)
         par_profiledata->description =
             _("Profile output file name (\"-\" for stdout)");
         par_profiledata->guisection = _("Profile");
+        G_option_requires(par_profiledata, par_coords, NULL);
 
         par_profileformat = G_define_option();
         par_profileformat->key = "profileformat";
@@ -294,6 +298,7 @@ int main(int argc, char **argv)
         par_profileformat->required = NO;
         par_profileformat->description = _("Profile output format");
         par_profileformat->guisection = _("Profile");
+        G_option_requires(par_profileformat, par_profiledata, NULL);
 
         if (G_parser(argc, argv))
             exit(EXIT_FAILURE);
@@ -333,10 +338,6 @@ int main(int argc, char **argv)
         G_begin_distance_calculations();
 
         if (oneoff) {
-            if (num_outputs || multires)
-                G_fatal_error(_("<%s> is mutually exclusive with raster outputs"),
-                              par_coords->key);
-
             if (!G_scan_easting
                 (par_coords->answers[0], &oneoff_easting, G_projection()))
                 G_fatal_error(_("Illegal east coordinate <%s>"),
