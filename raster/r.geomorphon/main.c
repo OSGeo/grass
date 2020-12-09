@@ -153,7 +153,7 @@ int main(int argc, char **argv)
     char prefix[20];
     double oneoff_easting, oneoff_northing;
     int oneoff_row, oneoff_col;
-    FILE *profile_file = NULL;
+    FILE *profile_file;
 
     G_gisinit(argv[0]);
 
@@ -255,6 +255,7 @@ int main(int argc, char **argv)
 
         par_profiledata = G_define_standard_option(G_OPT_F_OUTPUT);
         par_profiledata->key = "profiledata";
+        par_profiledata->answer = "-";
         par_profiledata->required = NO;
         par_profiledata->description =
             _("Profile output file name (\"-\" for stdout)");
@@ -269,7 +270,7 @@ int main(int argc, char **argv)
         par_profileformat->required = NO;
         par_profileformat->description = _("Profile output format");
         par_profileformat->guisection = _("Profile");
-        G_option_requires(par_profileformat, par_profiledata, NULL);
+        G_option_requires(par_profileformat, par_coords, NULL);
 
         if (G_parser(argc, argv))
             exit(EXIT_FAILURE);
@@ -323,16 +324,14 @@ int main(int argc, char **argv)
                 oneoff_col < 0 || oneoff_col >= ncols)
                 G_fatal_error(_("The coordinates are outside of the computational region"));
 
-            if (par_profiledata->answer) {
-                if (!strcmp(par_profiledata->answer, "-"))
-                    profile_file = stdout;
-                else {
-                    profile_file = fopen(par_profiledata->answer, "w");
-                    if (!profile_file)
-                        G_fatal_error(_("Failed to open output file <%s>: %d (%s)"),
-                                      par_profiledata->answer, errno,
-                                      strerror(errno));
-                }
+            if (!strcmp(par_profiledata->answer, "-"))
+                profile_file = stdout;
+            else {
+                profile_file = fopen(par_profiledata->answer, "w");
+                if (!profile_file)
+                    G_fatal_error(_("Failed to open output file <%s>: %d (%s)"),
+                                  par_profiledata->answer, errno,
+                                  strerror(errno));
             }
         }
 
@@ -571,13 +570,6 @@ int main(int argc, char **argv)
                         char buf[BUFSIZ];
                         float azimuth, elongation, width;
 
-                        if (!profile_file) {
-                            oneoff_done = 1;
-                            /* Break out of both loops. */
-                            row = nrows - 1;
-                            break;
-                        }
-
                         radial2cartesian(pattern);
                         shape(pattern, pattern_size, &azimuth, &elongation,
                               &width);
@@ -748,7 +740,7 @@ int main(int argc, char **argv)
         G_done_msg(" ");
 
         if (oneoff) {
-            if (profile_file && strcmp(par_profiledata->answer, "-"))
+            if (strcmp(par_profiledata->answer, "-"))
                 fclose(profile_file);
             /*
              * In case all the earlier checks had not detected some edge case
