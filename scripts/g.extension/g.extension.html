@@ -88,11 +88,22 @@ For well known general hosting services, namely GitHub, GitLab and Bitbucket,
 <em>g.extension</em> supports the download of a repository as a ZIP file.
 Here the user only needs to provide a base URL to the repository web page
 (with or without the <tt>https://</tt> part).
-For GitLab and Bitbucket, the latest source code in the default branch is 
-downloaded, for GitHub, the latest source code in the master branch is downloaded.
-Of course, a user can still specify the full URL of a ZIP file
-and install a specific branch or release in this way (ZIP file mechanism
-will be applied).
+If not otherwise specified in the <b>branch</b> option, the default branch 
+(main or master) is downloaded. Of course, a user can still specify the full 
+URL of a ZIP file and install a specific branch, commit or release in this way 
+(ZIP file mechanism will be applied).
+
+<p>
+For GitHub and GitLab authentication with a Personal Access Token (PAT) 
+is supported in order to access private repositories. For PAT authentication, 
+first a Personal Access Token needs to be acquired from either
+<a href="https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html">
+GitLab</a> or <a href="https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token">
+GitHub</a>. For security reasons it is recommended to pass PATs either 
+through environment variables or files to the command. <em>g.extension</em> 
+will automatically check for an environment variable named
+PERSONAL_ACCESS_TOKEN and use it for authentication, unless a PAT is 
+provided through the <b>token</b> option.
 
 <p>
 For the official repository, <em>g.extension</em> supports listing available
@@ -192,6 +203,13 @@ Simple URL to GitHub, GitLab, Bitbucket repositories from a specific (e.g. devel
 
 <div class="code"><pre>
 g.extension r.example.plus url="https://github.com/wenzeslaus/r.example.plus" branch=master
+</pre></div>
+
+Private GitHub or GitLab repository with token authentication:
+
+<div class="code"><pre>
+export PERSONAL_ACCESS_TOKEN=my_personal_access_token
+g.extension my_private_repo url="https://github.com/my_user/my_private_repo"
 </pre></div>
 
 Simple URL to OSGeo Trac (downloads a ZIP file, requires download to be enabled in Trac):
