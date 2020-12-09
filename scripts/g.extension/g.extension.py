@@ -81,7 +81,7 @@
 #% key: token
 #% type: string
 #% key_desc: token
-#% description: Private Access Token (PAT) for authentication to private git repositories
+#% description: Personal Access Token (PAT) for authentication to private git repositories
 #% required: no
 #% multiple: no
 #%end
@@ -2327,7 +2327,7 @@ def main():
     hosting = [token_tags[key] for key in token_tags if key in original_url]
 
     # Get token from hardcoded environment variable
-    token = os.getenv('PRIVATE_ACCESS_TOKEN')
+    token = os.getenv('PERSONAL_ACCESS_TOKEN')
 
     global HEADERS
     # Set authorization method according to supported hosting service
@@ -2336,16 +2336,21 @@ def main():
 
 
     # Get token from input option
-    token_input = options['token']
+    if options['token']:
+        if options['token'] == "-":
+            token_input = sys.stdin.read().rstrip()
+        else:
+            with open(options['token'], 'r') as tokenfile:
+                token_input = tokenfile.readlines()[0].rstrip()
 
     if token and token_input:
-        gscript.warning(_("Private Access Token provided both via input \
+        gscript.warning(_("Personal Access Token provided both via input \
                            option and environment variable. Using the \
                            token from the input option."))
 
     # Let input option override environment variable
     if token_input:
-        HEADERS['Authorization'] = "{} {}".format(hosting[0], token)
+        HEADERS['Authorization'] = "{} {}".format(hosting[0], token_input)
 
     # define path
     options['prefix'] = resolve_install_prefix(path=options['prefix'],
