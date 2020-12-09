@@ -77,6 +77,14 @@
 #% multiple: no
 #% answer: main
 #%end
+#%option G_OPT_F_INPUT
+#% key: token
+#% type: string
+#% key_desc: token
+#% description: Private Access Token (PAT) for authentication to private git repositories
+#% required: no
+#% multiple: no
+#%end
 
 #%flag
 #% key: l
@@ -2223,7 +2231,7 @@ def resolve_source_code(url=None, name=None, branch=None):
                 pass
             # Test if gitlab repo exists (need to use API)
             try:
-                open_url = urlopen('https://gitlab.com/api/v4/projects/{}%2F{}'.format(*url.split("/")[-2:]))
+                open_url = urlopen("https://gitlab.com/api/v4/projects/{}%2F{}".format(*url.split('/')[-2:]))
                 open_url.close()
                 url_validated = True
             except:
@@ -2309,17 +2317,35 @@ def main():
         opener = urlrequest.build_opener(proxy)
         urlrequest.install_opener(opener)
 
+    # Check if authorization is supposed to be set in the request header
     token_tags = {
-        "gitlab": "Bearer",
-        "github": "token"
+        'gitlab': "Bearer",
+        'github': "token"
     }
 
+    # Check if url belongs to a hosting service with supported authentication
     hosting = [token_tags[key] for key in token_tags if key in original_url]
+
+    # Get token from hardcoded environment variable
     token = os.getenv('PRIVATE_ACCESS_TOKEN')
 
+    global HEADERS
+    # Set authorization method according to supported hosting service
     if token and hosting:
-        global HEADERS
-        HEADERS["Authorization"] = "{} {}".format(hosting[0], token)
+        HEADERS['Authorization'] = "{} {}".format(hosting[0], token)
+
+
+    # Get token from input option
+    token_input = options['token']
+
+    if token and token_input:
+        gscript.warning(_("Private Access Token provided both via input \
+                           option and environment variable. Using the \
+                           token from the input option."))
+
+    # Let input option override environment variable
+    if token_input:
+        HEADERS['Authorization'] = "{} {}".format(hosting[0], token)
 
     # define path
     options['prefix'] = resolve_install_prefix(path=options['prefix'],
