@@ -2336,6 +2336,7 @@ def main():
 
 
     # Get token from input option
+    token_input = False
     if options['token']:
         if options['token'] == "-":
             token_input = sys.stdin.read().rstrip()
