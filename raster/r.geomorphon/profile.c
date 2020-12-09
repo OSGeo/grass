@@ -8,10 +8,6 @@
 #define MAX_TOKENS 20000
 #define MAX_STACK_ELEMS 100
 
-/* Key names for the types that have both string and numeric representation. */
-#define KEY_STRING "string"
-#define KEY_FLOAT "float"
-
 #define WRITE_INDENT(f, indent) \
     if (!write_indent((f), (indent))) \
 	return 0
@@ -99,32 +95,19 @@ void prof_dbl(const char *key, const double val)
     prof_dbl_internal(T_DBL, key, val);
 }
 
-/*
- * For the three types below generate both string and float tokens because for
- * some projections the values may be difficult to translate outside of GRASS.
- */
 void prof_eas(const char *key, const double val)
 {
-    prof_sso(key);
-    prof_dbl_internal(T_DBL, KEY_FLOAT, val);
-    prof_dbl_internal(T_EAS, KEY_STRING, val);
-    prof_eso();
+    prof_dbl_internal(T_EAS, key, val);
 }
 
 void prof_nor(const char *key, const double val)
 {
-    prof_sso(key);
-    prof_dbl_internal(T_DBL, KEY_FLOAT, val);
-    prof_dbl_internal(T_NOR, KEY_STRING, val);
-    prof_eso();
+    prof_dbl_internal(T_NOR, key, val);
 }
 
 void prof_res(const char *key, const double val)
 {
-    prof_sso(key);
-    prof_dbl_internal(T_DBL, KEY_FLOAT, val);
-    prof_dbl_internal(T_RES, KEY_STRING, val);
-    prof_eso();
+    prof_dbl_internal(T_RES, key, val);
 }
 
 void prof_mtr(const char *key, const double val)
@@ -225,7 +208,7 @@ void prof_pattern(const double o_elevation, const PATTERN * p)
 void prof_map_info()
 {
     prof_sso("map_info");
-    prof_str("elevname", elevation.elevname);
+    prof_str("elevation_name", elevation.elevname);
     prof_int("projection", G_projection());
     prof_nor("north", window.north);
     prof_nor("south", window.south);

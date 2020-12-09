@@ -675,8 +675,8 @@ int main(int argc, char **argv)
                          * otherwise changing existing data, increment the
                          * major version and reset the minor version.
                          */
-                        prof_int("format_ver_major", 0);
-                        prof_int("format_ver_minor", 7);
+                        prof_int("format_version_major", 0);
+                        prof_int("format_version_minor", 8);
                         prof_utc("timestamp", time(NULL));
                         G_snprintf(buf, sizeof(buf),
                                    "r.geomorphon GRASS GIS %s [%s]",
