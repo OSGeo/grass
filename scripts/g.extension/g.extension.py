@@ -2035,6 +2035,14 @@ def resolve_xmlurl_prefix(url, source=None):
     return url
 
 
+"""
+Installation of Add-On from GitLab private repository must be handled
+in the different way, check 'GitLab private repo' key
+
+GitLab issue:
+https://gitlab.com/gitlab-org/gitlab/-/issues/28978
+"""
+
 KNOWN_HOST_SERVICES_INFO = {
     'OSGeo Trac': {
         'domain': 'trac.osgeo.org',
@@ -2057,6 +2065,9 @@ KNOWN_HOST_SERVICES_INFO = {
         'url_start': 'https://',
         'url_end': '/-/archive/{branch}/{name}-{branch}.zip',
     },
+    'GitLab private repo': {
+        'url': 'https://gitlab.com/api/v4/projects/{project_id}/repository/archive.zip?sha={branch}',
+    },
     'Bitbucket': {
         'domain': 'bitbucket.org',
         'ignored_suffixes': ['.zip', '.tar.gz', '.gz', '.bz2'],
@@ -2070,7 +2081,9 @@ KNOWN_HOST_SERVICES_INFO = {
 # https://gitlab.com/user/reponame/repository/archive.zip?ref=b%C3%A9po
 
 
-def resolve_known_host_service(url, name, branch):
+def resolve_known_host_service(
+        url, name, branch, gitlab_private_repo_id=None,
+):
     """Determine source type and full URL for known hosting service
 
     If the service is not determined from the provided URL, tuple with
@@ -2078,7 +2091,15 @@ def resolve_known_host_service(url, name, branch):
 
     :param url: URL
     :param name: module name
+    :param gitlab_private_repo_id: GitLab private repo id
     """
+
+    if gitlab_private_repo_id:
+        return 'remote_zip', KNOWN_HOST_SERVICES_INFO\
+            ['GitLab private repo']['url'].format(
+                project_id=gitlab_private_repo_id, branch=branch,
+            )
+
     match = None
     actual_start = None
     for key, value in KNOWN_HOST_SERVICES_INFO.items():
@@ -2201,6 +2222,7 @@ def resolve_source_code(url=None, name=None, branch=None):
     url = url[6:] if url.startswith('file://') else url
     if not os.path.exists(url):
         url_validated = False
+        gitlab_private_repo_id = None
         if url.startswith('http'):
             try:
                 open_url = urlopen(url)
@@ -2232,6 +2254,7 @@ def resolve_source_code(url=None, name=None, branch=None):
             # Test if gitlab repo exists (need to use API)
             try:
                 open_url = urlopen("https://gitlab.com/api/v4/projects/{}%2F{}".format(*url.split('/')[-2:]))
+                gitlab_private_repo_id = json.loads(open_url.read())['id']
                 open_url.close()
                 url_validated = True
             except:
@@ -2264,7 +2287,9 @@ def resolve_source_code(url=None, name=None, branch=None):
                 return suffix, os.path.abspath(url)
     # Handle remote URLs
     else:
-        source, resolved_url = resolve_known_host_service(url, name, branch)
+        source, resolved_url = resolve_known_host_service(
+            url, name, branch, gitlab_private_repo_id,
+        )
         if source:
             return source, resolved_url
         # we allow URL to end with =zip or ?zip and not only .zip
