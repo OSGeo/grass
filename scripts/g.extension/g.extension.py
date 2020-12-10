@@ -2257,6 +2257,9 @@ def resolve_source_code(url=None, name=None, branch=None):
                 gitlab_private_repo_id = json.loads(open_url.read())['id']
                 open_url.close()
                 url_validated = True
+            except HTTPError as err:
+                if (err.code == 429 and err.msg == 'Too Many Requests'):
+                    gscript.warning(_('GitLab API rate limit exceeded.'))
             except:
                 pass
         else:
