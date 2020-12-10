@@ -118,11 +118,12 @@ int main(int argc, char **argv)
     /* Colors */
     color_opt = G_define_standard_option(G_OPT_CN);
     color_opt->label = _("Feature color");
+    color_opt->answer = "0:29:57";
     color_opt->guisection = _("Colors");
     
     fcolor_opt = G_define_standard_option(G_OPT_CN);
     fcolor_opt->key = "fill_color";
-    fcolor_opt->answer = "200:200:200";
+    fcolor_opt->answer = "0:103:204";
     fcolor_opt->label = _("Area fill color");
     fcolor_opt->guisection = _("Colors");
 
