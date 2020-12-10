@@ -2241,7 +2241,7 @@ def resolve_source_code(url=None, name=None, branch=None):
                         _("Your access token don't have permission to "
                           "read private repository info. Add 'repo' "
                           "scope which define the access for personal token "
-                          "on the url <https://github.com/settings/tokens>")
+                          "on the url <https://github.com/settings/tokens>.")
                     )
                 open_url = urlopen('https://api.github.com/repos/{}/{}'.format(*url.split("/")[-2:]))
                 open_url.close()
