@@ -2247,7 +2247,7 @@ def resolve_source_code(url=None, name=None, branch=None):
                 open_url.close()
                 url_validated = True
             except HTTPError as err:
-                if (err.code == 403 and err.msg == 'rate limit exceeded'):
+                if (err.code == 403 and err.msg == 'Forbidden'):
                     gscript.warning(_('GitHub API rate limit exceeded.'))
             except:
                 pass
