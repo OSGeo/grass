@@ -66,6 +66,8 @@ def decode(bytes_):
         return bytes_.decode(enc)
     return unicode(bytes_)
 
+html_page_footer_pages_path = os.getenv('HTML_PAGE_FOOTER_PAGES_PATH') if \
+    os.getenv('HTML_PAGE_FOOTER_PAGES_PATH') else ''
 
 pgm = sys.argv[1]
 
@@ -311,6 +313,27 @@ else:
 
 if not re.search('<html>', src_data, re.IGNORECASE):
     tmp_data = read_file(tmp_file)
+    """
+    Adjusting keywords html pages paths if add-on html man page
+    stored on the server
+    """
+    if html_page_footer_pages_path:
+        new_keywords_paths = []
+        orig_keywords_paths = re.search(
+            r'<h[1-9]>KEYWORDS</h[1-9]>(.*?)<h[1-9]>',
+            tmp_data, re.DOTALL,
+        ).group(1)
+        for i in orig_keywords_paths.split(','):
+            index = i.index('href="') + len('href="')
+            new_keywords_paths.append(
+                i[:index] + html_page_footer_pages_path + i[index:],
+            )
+        if new_keywords_paths:
+            tmp_data = tmp_data.replace(
+                orig_keywords_paths,
+                ','.join(new_keywords_paths) if len(new_keywords_paths) > 1
+                else new_keywords_paths[0],
+            )
     if not re.search('<html>', tmp_data, re.IGNORECASE):
         sys.stdout.write(header_tmpl.substitute(PGM=pgm, PGM_DESC=pgm_desc))
     if tmp_data:
@@ -405,9 +428,6 @@ else:
     url_source = urlparse.urljoin(source_url, pgmdir)
 if sys.platform == 'win32':
     url_source = url_source.replace(os.path.sep, '/')
-
-html_page_footer_pages_path = os.getenv('HTML_PAGE_FOOTER_PAGES_PATH') if \
-    os.getenv('HTML_PAGE_FOOTER_PAGES_PATH') else ''
 
 if index_name:
     tree = 'grass/tree'
