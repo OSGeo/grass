@@ -253,11 +253,8 @@ int main(int argc, char **argv)
     setname = imapset->answer ? imapset->answer : G_store(G_mapset());
     if (strcmp(inlocation->answer, G_location()) == 0 &&
         (!indbase->answer || strcmp(indbase->answer, G_gisdbase()) == 0))
-#if 0
-	G_fatal_error(_("Input and output locations can not be the same"));
-#else
 	G_warning(_("Input and output locations are the same"));
-#endif
+
     G_get_window(&outcellhd);
 
     if (gprint_bounds->answer && !print_bounds->answer)
@@ -525,13 +522,9 @@ int main(int argc, char **argv)
 
         G_percent(row, outcellhd.rows - 1, 2);
 
-#if 0
-	/* parallelization does not always work,
-	 * segfaults in the interpolation functions 
-	 * can happen */
-        #pragma omp parallel for schedule (static)
+#if defined(_OPENMP)
+        #pragma omp parallel for ordered schedule(static)
 #endif
-
 	for (col = 0; col < outcellhd.cols; col++) {
 	    void *obufptr = (void *)((const unsigned char *)obuffer + col * cell_size);
 
@@ -540,6 +533,9 @@ int main(int argc, char **argv)
 
 	    /* project coordinates in output matrix to       */
 	    /* coordinates in input matrix                   */
+#if defined(_OPENMP)
+            #pragma omp ordered
+#endif
 	    if (GPJ_transform(&iproj, &oproj, &tproj, PJ_INV,
 			      &xcoord1, &ycoord1, NULL) < 0) {
 		G_warning(_("Error in %s"), "GPJ_transform()");

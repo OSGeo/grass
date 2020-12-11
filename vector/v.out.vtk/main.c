@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     dp_opt->type = TYPE_INTEGER;
     dp_opt->required = NO;
     dp_opt->description =
-	_("Number of significant digits (floating point only)");
+	_("Number of significant digits");
 
     scale = G_define_option();
     scale->key = "zscale";
@@ -152,8 +152,8 @@ int main(int argc, char *argv[])
     if (dp_opt->answer) {
 	if (sscanf(dp_opt->answer, "%d", &dp) != 1)
 	    G_fatal_error(_("Failed to interpret 'dp' parameter as an integer"));
-	if (dp > 8 || dp < 0)
-	    G_fatal_error(_("dp has to be from 0 to 8"));
+	if (dp > 16 || dp < 0)
+	    G_fatal_error(_("dp has to be from 0 to 16"));
     }
     else {
 	dp = 8;			/*This value is taken from the lib settings in G_feature_easting */
