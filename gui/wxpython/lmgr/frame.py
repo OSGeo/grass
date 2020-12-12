@@ -70,7 +70,7 @@ from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
 from startup.guiutils import switch_mapset_interactively
-from grass.grassdb.checks import is_current_mapset_in_demolocation, get_demolocation_layer_info
+from grass.grassdb.checks import is_current_mapset_in_demolocation
 
 
 class GMFrame(wx.Frame):
@@ -266,7 +266,8 @@ class GMFrame(wx.Frame):
 
         # if demolocation, add demo layer to map layer tree
         if is_current_mapset_in_demolocation():
-            ltype, lname, = get_demolocation_layer_info()
+            ltype = "vector"
+            lname = "country_boundaries@PERMANENT"
             self.GetLayerTree().AddLayer(ltype=ltype,
                                          lname=lname,
                                          lchecked=True,
