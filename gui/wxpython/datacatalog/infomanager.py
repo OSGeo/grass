@@ -18,24 +18,16 @@ class InfoManagerDataCatalog:
         infoBar = InfoBar(self.guiparent)
         self.sizer.Add(infoBar, wx.SizerFlags().Expand())
         infoBar.SetButtons(buttons)
+        genv = gisenv()
         infoBar.ShowMessage(_(
-            "GRASS is using the following structure of data organization:\n"
-            "The Database {db} has the character of a working directory.\n"
-            "The Location (Project) defines in which coordinate system you will work.\n"
-            "The Mapset (Subproject) contains GIS data related to one project task."
-        ).format(db=gisenv()['GISDBASE']), wx.ICON_INFORMATION)
-
-    def ShowInfoBar2(self, buttons):
-        infoBar = InfoBar(self.guiparent)
-        self.sizer.Add(infoBar, wx.SizerFlags().Expand())
-        infoBar.SetButtons(buttons)
-        infoBar.ShowMessage(_(
-            "In GRASS you can be sure that your data will not be displayed in a "
-            "different coordinate system than the one you defined. "
-            "Now, you are in a world wide, latitude-longitude system in degrees. "
-            "If you are planning to work with data in a different system, "
-            "please, create new Location. You can do it through right click "
-            "on the Database node in Data tab or simply click here:"
+            "GRASS helps you organize your data using Locations (projects) "
+            "which contain Mapsets (subprojects). All data in one Location is "
+            "in the same coordinate reference system (CRS).\n\n"
+            "You are currently in Mapset PERMANENT in Location {loc} which uses "
+            "WGS 84 (EPSG:4326). Consider creating a new Location with a CRS "
+            "specific to your area. You can do it now or anytime later from "
+            "the toolbar above."
+        ).format(loc=genv['LOCATION_NAME']
         ), wx.ICON_INFORMATION)
 
     def _onLearnMore(self, event):

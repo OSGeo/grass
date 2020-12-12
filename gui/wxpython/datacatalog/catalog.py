@@ -65,10 +65,9 @@ class DataCatalog(wx.Panel):
 
         # Show infobar for first-time user
         if is_current_mapset_in_demolocation:
-            buttons1 = [("Learn More", self.infoManager._onLearnMore)]
-            buttons2 = [("Create new Location", self.OnCreateLocation)]
+            buttons1 = [("Create new Location now", self.OnCreateLocation),
+                        ("Learn More", self.infoManager._onLearnMore)]
             self.infoManager.ShowInfoBar1(buttons1)
-            self.infoManager.ShowInfoBar2(buttons2)
 
         self.SetAutoLayout(True)
         self.SetSizer(self.sizer)
