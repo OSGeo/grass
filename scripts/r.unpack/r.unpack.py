@@ -41,6 +41,7 @@
 #%end
 
 import os
+import re
 import sys
 import shutil
 import tarfile
@@ -73,7 +74,10 @@ def main():
     os.chdir(tmp_dir)
     tar = tarfile.TarFile.open(name=input_base, mode='r')
     try:
-        data_name = tar.getnames()[0]
+        data_names = [
+            tarinfo.name for tarinfo in tar.getmembers()
+            if '/' not in tarinfo.name
+        ]
     except:
         grass.fatal(_("Pack file unreadable"))
 
@@ -81,7 +85,7 @@ def main():
         # print proj info and exit
         try:
             for fname in ['PROJ_INFO', 'PROJ_UNITS']:
-                f = tar.extractfile('{}/{}'.format(data_name, fname))
+                f = tar.extractfile('{}/{}'.format(data_names[0], fname))
                 sys.stdout.write(f.read().decode())
         except KeyError:
             grass.fatal(_("Pack file unreadable: file '{}' missing".format(fname)))
@@ -92,7 +96,7 @@ def main():
     if options['output']:
         map_name = options['output']
     else:
-        map_name = data_name.split('@')[0]
+        map_name = data_names[0].split('@')[0]
 
     gfile = grass.find_file(name=map_name, element='cell', mapset='.')
     if gfile['file']:
@@ -105,7 +109,7 @@ def main():
     # extract data
     tar.extractall()
     tar.close()
-    os.chdir(data_name)
+    os.chdir(data_names[0])
 
     if os.path.exists('cell'):
         pass
@@ -161,20 +165,53 @@ def main():
                               " use the -o flag to ignore them and use"
                               " current location definition."))
 
-    # install in $MAPSET
-    for element in ['cats', 'cell', 'cellhd', 'cell_misc', 'colr', 'fcell', 'hist']:
-        if not os.path.exists(element):
-            continue
-        path = os.path.join(mset_dir, element)
-        if not os.path.exists(path):
-            os.mkdir(path)
-        if element == 'cell_misc':
-            path = os.path.join(mset_dir, element, map_name)
-            if os.path.exists(path):
-                shutil.rmtree(path)
-            shutil.copytree('cell_misc', path)
-        else:
-            shutil.copyfile(element, os.path.join(mset_dir, element, map_name))
+    maps = []
+    vrt_file = None
+    for index, data in enumerate(data_names):
+
+        if index > 0:
+            map_name = data
+
+        for element in [
+                'cats', 'cell', 'cellhd', 'cell_misc', 'colr', 'fcell',
+                'hist'
+        ]:
+            src_path = os.path.join(tmp_dir, data, element)
+            if not os.path.exists(src_path):
+                continue
+
+            path = os.path.join(mset_dir, element)
+            if not os.path.exists(path):
+                os.mkdir(path)
+
+            if element == 'cell_misc':
+                if index > 0:
+                    maps.append(
+                        "{map_name}@{mapset}".format(
+                            map_name=map_name, mapset=gisenv['MAPSET'],
+                        ),
+                    )
+
+                path = os.path.join(
+                    mset_dir, element, map_name,
+                )
+                if index == 0:
+                    vrt_file = os.path.join(path, 'vrt')
+
+                if os.path.exists(path):
+                    shutil.rmtree(path)
+                shutil.copytree(src_path, path)
+            else:
+                shutil.copyfile(
+                    src_path, os.path.join(mset_dir, element, map_name),
+                )
+
+    # Update vrt file
+    if maps:
+        if vrt_file and os.path.exists(vrt_file):
+            files = '\n'.join(maps)
+            with open(vrt_file, 'w') as f:
+                f.write(files)
 
     grass.message(_('Raster map <{name}> unpacked'.format(name=map_name)))
 

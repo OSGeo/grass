@@ -397,8 +397,8 @@ class TimelineFrame(wx.Frame):
             datasets = self._checkDatasets(datasets)
             if not datasets:
                 return
-        except GException as e:
-            GError(parent=self, message=unicode(e), showTraceback=False)
+        except GException as error:
+            GError(parent=self, message=str(error), showTraceback=False)
             return
 
         self.datasets = datasets
@@ -509,8 +509,8 @@ class TimelineFrame(wx.Frame):
             datasets = self._checkDatasets(datasets)
             if not datasets:
                 return
-        except GException as e:
-            GError(parent=self, message=unicode(e), showTraceback=False)
+        except GException as error:
+            GError(parent=self, message=str(error), showTraceback=False)
             return
         self.datasets = datasets
         self.datasetSelect.SetValue(

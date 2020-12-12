@@ -191,6 +191,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("display"));
     G_add_keyword(_("profile"));
     G_add_keyword(_("raster"));
+    G_add_keyword(_("plot"));
     module->description = _("Plots profile of a transect.");
 
     /* set up command line */

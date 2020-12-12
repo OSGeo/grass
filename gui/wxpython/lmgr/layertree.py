@@ -238,6 +238,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.Bind(wx.EVT_IDLE, self.OnIdle)
         self.Bind(wx.EVT_MOTION, self.OnMotion)
 
+        self._giface.grassdbChanged.connect(self.OnGrassDBChanged)
+
     def _setIcons(self, il):
         self._icon = {}
         for iconName in ("layerRaster", "layerRaster_3d", "layerRgb",
@@ -1038,7 +1040,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnVectorColorTable(self, event):
         """Set color table for vector map"""
         name = self.GetLayerInfo(self.layer_selected, key='maplayer').GetName()
-        GUI(parent=self, centreOnParent=self.centreFromsOnParent).ParseCommand(
+        GUI(parent=self, giface=self._giface, centreOnParent=self.centreFromsOnParent).ParseCommand(
             ['v.colors', 'map=%s' % name])
 
     def OnCopyMap(self, event):
@@ -1314,6 +1316,60 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         event.Skip()
 
+    def OnGrassDBChanged(self, action, element, grassdb, location,
+                         mapset=None, map=None, newname=None):
+        """Handler of giface.grassDbChanged signal, updates layers in tree.
+         Covers cases when map or mapset is deleted or renamed."""
+        gisenv = grass.gisenv()
+        if not (gisenv['GISDBASE'] == grassdb
+                and gisenv['LOCATION_NAME'] == location):
+            return
+        if action not in ('delete', 'rename'):
+            return
+        if element in ('raster', 'vector', 'raster_3d'):
+            name = map + '@' + mapset if '@' not in map else map
+            items = self.FindItemByData(key='name', value=name)
+            if items:
+                for item in reversed(items):
+                    if action == 'delete':
+                        self.Delete(item)
+                    elif action == 'rename':
+                        # rename in command
+                        cmd = self.GetLayerInfo(item, key='cmd')
+                        for i in range(1, len(cmd)):
+                            if map in cmd[i].split('=')[-1]:
+                                cmd[i] = cmd[i].replace(map, newname)
+                        self.SetLayerInfo(item, key='cmd', value=cmd)
+                        self.ChangeLayer(item)
+                        # change label if not edited
+                        label = self.GetLayerInfo(item, key='label')
+                        if not label:
+                            newlabel = self.GetItemText(item).replace(map, newname)
+                            self.SetItemText(item, newlabel)
+        elif element == 'mapset':
+            items = []
+            item = self.GetFirstChild(self.root)[0]
+            while item and item.IsOk():
+                cmd = self.GetLayerInfo(item, key='cmd')
+                for each in cmd:
+                    if '@' + mapset in each:
+                        items.append(item)
+                        break
+                item = self.GetNextItem(item)
+            for item in reversed(items):
+                if action == 'delete':
+                    self.Delete(item)
+                elif action == 'rename':
+                    # rename in command
+                    cmd = self.GetLayerInfo(item, key='cmd')
+                    for i in range(1, len(cmd)):
+                        if mapset in cmd[i].split('=')[-1]:
+                            cmd[i] = cmd[i].replace(mapset, newname)
+                    self.SetLayerInfo(item, key='cmd', value=cmd)
+                    self.ChangeLayer(item)
+                    newlabel = self.GetItemText(item).replace('@' + mapset, '@' + newname)
+                    self.SetItemText(item, newlabel)
+
     def AddLayer(self, ltype, lname=None, lchecked=None, lopacity=1.0,
                  lcmd=None, lgroup=None, lvdigit=None, lnviz=None,
                  multiple=True, loadWorkspace=False):
@@ -1554,7 +1610,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         cmd = None
         if self.GetLayerInfo(layer, key='cmd'):
-            module = GUI(parent=self, show=show,
+            module = GUI(parent=self, giface=self._giface, show=show,
                          centreOnParent=self.centreFromsOnParent)
             module.ParseCommand(self.GetLayerInfo(layer, key='cmd'),
                                 completed=(self.GetOptData, layer, params))
@@ -1569,7 +1625,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 cmd += GetDisplayVectSettings()
 
         if cmd:
-            module = GUI(parent=self, centreOnParent=self.centreFromsOnParent)
+            module = GUI(parent=self, giface=self._giface,
+                         centreOnParent=self.centreFromsOnParent)
             module.ParseCommand(cmd,
                                 completed=(self.GetOptData, layer, params))
 
@@ -1785,7 +1842,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
             if digitToolbar.GetLayer() == mapLayer:
                 self._setGradient('vdigit')
-            elif bgmap == mapLayer.GetName():
+            elif mapLayer and bgmap == mapLayer.GetName():
                 self._setGradient('bgmap')
             else:
                 self._setGradient()

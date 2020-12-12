@@ -30,8 +30,8 @@ jobs:
         ./Anaconda3-2020.02-Linux-x86_64.sh -b
     - name: Set variables with conda executable and activate
       run: |
-        echo "::set-env name=CONDA::/github/home/anaconda3/bin/conda"
-        echo "::set-env name=CONDA_ACTIVATE::/github/home/anaconda3/bin/activate"
+        echo "CONDA=/github/home/anaconda3/bin/conda" >> $GITHUB_ENV
+        echo "CONDA_ACTIVATE=/github/home/anaconda3/bin/activate" >> $GITHUB_ENV
     - name: Get GRASS GIS runtime conda dependencies
       run: |
         source $CONDA_ACTIVATE
@@ -41,17 +41,17 @@ jobs:
         mkdir $HOME/install
     - name: Set number of cores for compilation
       run: |
-        echo "::set-env name=MAKEFLAGS::-j$(nproc)"
+        echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
     - name: Set LD_LIBRARY_PATH for compilation
       run: |
-        echo "::set-env name=LD_LIBRARY_PATH::$HOME/install/lib"
+        echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
     - name: Build
       run: |
         source $CONDA_ACTIVATE
         .github/workflows/build_centos.sh $HOME/install
     - name: Add the bin directory to PATH
       run: |
-        echo "::add-path::$HOME/install/bin"
+        echo "$HOME/install/bin" >> $GITHUB_PATH
     - name: Test executing of the grass command
       run: |
         source $CONDA_ACTIVATE

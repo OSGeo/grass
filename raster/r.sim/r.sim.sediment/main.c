@@ -434,6 +434,7 @@ int main(int argc, char *argv[])
 	if (ii != 1)
 	    G_fatal_error(_("Cannot write raster maps"));
     }
+    free_walkers();
 
     /* Exit with Success */
     exit(EXIT_SUCCESS);

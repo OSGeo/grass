@@ -528,6 +528,11 @@ class MapFrame(SingleMapFrame):
             self.toolbars['map'].combo.SetValue(_("Vector digitizer"))
             self._addToolbarVDigit()
 
+        # raster digitizer
+        elif name == "rdigit":
+            self.toolbars['map'].combo.SetValue(_("Raster digitizer"))
+            self.AddRDigit()
+
         if fixed:
             self.toolbars['map'].combo.Disable()
 
@@ -1579,15 +1584,20 @@ class MapFrame(SingleMapFrame):
     def QuitRDigit(self):
         """Calls digitizer cleanup, removes digitizer object and disconnects
         signals from Map."""
-        self.rdigit.CleanUp()
-        # disconnect updating layers
-        self.GetMap().layerAdded.disconnect(self._updateRDigitLayers)
-        self.GetMap().layerRemoved.disconnect(self._updateRDigitLayers)
-        self.GetMap().layerChanged.disconnect(self._updateRDigitLayers)
-        self._toolSwitcher.toggleToolChanged.disconnect(self.toolbars['rdigit'].CheckSelectedTool)
+        if not self.IsStandalone():
+            self.rdigit.CleanUp()
+            # disconnect updating layers
+            self.GetMap().layerAdded.disconnect(self._updateRDigitLayers)
+            self.GetMap().layerRemoved.disconnect(self._updateRDigitLayers)
+            self.GetMap().layerChanged.disconnect(self._updateRDigitLayers)
+            self._toolSwitcher.toggleToolChanged.disconnect(
+                self.toolbars['rdigit'].CheckSelectedTool,
+            )
 
-        self.RemoveToolbar('rdigit', destroy=True)
-        self.rdigit = None
+            self.RemoveToolbar('rdigit', destroy=True)
+            self.rdigit = None
+        else:
+            self.Close()
 
     def QuitVDigit(self):
         """Quit VDigit"""

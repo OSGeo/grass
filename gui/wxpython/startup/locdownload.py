@@ -84,7 +84,7 @@ LOCATIONS = [
     },
     {
         "label": "Natural Earth Dataset in WGS84",
-        "url": "https://github.com/baharmon/natural-earth-dataset/archive/natural-earth.zip",
+        "url": "https://zenodo.org/record/3968936/files/natural-earth-dataset.tar.gz",
         "size": "207 MB",
         "epsg": "4326",
         "license": "ODC Public Domain Dedication and License 1.0",

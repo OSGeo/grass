@@ -37,7 +37,8 @@ from grass.pydispatch.signal import Signal
 
 from core.gcmd import RunCommand, GError, GMessage
 from dbmgr.vinfo import CreateDbInfoDesc, VectorDBInfo, GetUnicodeValue
-from gui_core.wrap import Button, TextCtrl, StaticText, StaticBox
+from gui_core.wrap import ApplyButton, Button, ClearButton, CloseButton, \
+    TextCtrl, StaticText, StaticBox
 
 import grass.script as grass
 
@@ -128,11 +129,11 @@ class SQLBuilder(wx.Frame):
         #
         # buttons
         #
-        self.btn_clear = Button(parent=self.panel, id=wx.ID_CLEAR)
+        self.btn_clear = ClearButton(parent=self.panel)
         self.btn_clear.SetToolTip(_("Set SQL statement to default"))
-        self.btn_apply = Button(parent=self.panel, id=wx.ID_APPLY)
+        self.btn_apply = ApplyButton(parent=self.panel)
         self.btn_apply.SetToolTip(_("Apply SQL statement"))
-        self.btn_close = Button(parent=self.panel, id=wx.ID_CLOSE)
+        self.btn_close = CloseButton(parent=self.panel)
         self.btn_close.SetToolTip(_("Close the dialog"))
 
         self.btn_logic = {'is': ['=', ],
@@ -802,7 +803,7 @@ class SQLBuilderUpdate(SQLBuilder):
                     colstr = sqlstr[idx1:].strip()
 
                 cols = [col.split('=')[0].strip() for col in colstr.split(',')]
-                if unicode(value) in cols:
+                if value in cols:
                     self.text_sql.SetInsertionPoint(curspos)
                     wx.CallAfter(self.text_sql.SetFocus)
                     return

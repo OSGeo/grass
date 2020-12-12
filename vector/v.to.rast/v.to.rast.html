@@ -111,11 +111,17 @@ r.mapcalc "route_slope_dir = abs(atan(tan(slope) * cos(aspect - busroute11_dir))
 Slope in degrees along bus route
 </center>
 
-<h3>Convert a vector polygon map to raster including descriptive labels (Spearfish)</h3>
+<h3>Convert a vector polygon map to raster including descriptive labels</h3>
 
+In this example, the ZIP code vector map is rasterized (North Carolina
+sample dataset):
+
+<!-- unfortunately attribute ZIPNUM is double precision and not integer -->
 <div class="code"><pre>
-v.to.rast input=fields output=myfields use=attr attribute_column=cat label_column=label
-r.category myfields
+# rasterize ZIP codes at 50m raster resolution
+g.region vector=zipcodes_wake res=50 -ap
+# vector to raster conversion, with category labels
+v.to.rast input=zipcodes_wake output=myzipcodes use=attr attribute_column="ZIPNUM" label_column="NAME"
 </pre></div>
 
 
@@ -172,5 +178,3 @@ GRASS 6.3 code cleanup and label support: Brad Douglas
 <p>
 <i>Last changed: $Date$</i>
 -->
-
-

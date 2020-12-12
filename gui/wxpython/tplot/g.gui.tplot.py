@@ -25,6 +25,7 @@
 #% keywords: general
 #% keywords: GUI
 #% keywords: temporal
+#% keywords: plot
 #%end
 
 #%flag

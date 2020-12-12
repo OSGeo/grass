@@ -81,16 +81,58 @@ def main():
     olddir = os.getcwd()
 
     # copy elements
-    for element in ['cats', 'cell', 'cellhd', 'colr', 'fcell', 'hist']:
+    info = grass.parse_command('r.info', flags='e', map=infile)
+    vrt_files = {}
+    if info['maptype'] == 'virtual':
+        map_file = grass.find_file(
+            name=infile, element='cell_misc',
+        )
+        if map_file['file']:
+            vrt = os.path.join(map_file['file'], 'vrt')
+            if os.path.exists(vrt):
+                with open(vrt, 'r') as f:
+                    for r in f.readlines():
+                        map, mapset = r.split('@')
+                        map_basedir = os.path.sep.join(
+                            os.path.normpath(
+                                map_file['file'],
+                            ).split(os.path.sep)[:-2],
+                        )
+                        vrt_files[map] = map_basedir
+
+    for element in [
+            'cats', 'cell', 'cellhd', 'cell_misc', 'colr', 'fcell',
+            'hist',
+    ]:
         path = os.path.join(basedir, element, infile)
         if os.path.exists(path):
             grass.debug('copying %s' % path)
-            shutil.copyfile(path,
-                            os.path.join(tmp_dir, element))
+            if os.path.isfile(path):
+                shutil.copyfile(
+                    path, os.path.join(tmp_dir, element),
+                )
+            else:
+                shutil.copytree(
+                    path, os.path.join(tmp_dir, element),
+                )
 
-    if os.path.exists(os.path.join(basedir, 'cell_misc', infile)):
-        shutil.copytree(os.path.join(basedir, 'cell_misc', infile),
-                        os.path.join(tmp_dir, 'cell_misc'))
+        # Copy vrt files
+        if vrt_files:
+            for f in vrt_files.keys():
+                f_tmp_dir = os.path.join(tmp, f)
+                if not os.path.exists(f_tmp_dir):
+                    os.mkdir(f_tmp_dir)
+                path = os.path.join(vrt_files[f], element, f)
+                if os.path.exists(path):
+                    grass.debug("copying vrt file {}".format(path))
+                    if os.path.isfile(path):
+                        shutil.copyfile(
+                            path, os.path.join(f_tmp_dir, element),
+                        )
+                    else:
+                        shutil.copytree(
+                            path, os.path.join(f_tmp_dir, element),
+                        )
 
     if not os.listdir(tmp_dir):
         grass.fatal(_("No raster map components found"))
@@ -111,6 +153,10 @@ def main():
     else:
         tar = tarfile.TarFile.open(name=outfile_base, mode='w:gz')
     tar.add(infile, recursive=True)
+    if vrt_files:
+        for f in vrt_files.keys():
+            tar.add(f, recursive=True)
+
     tar.close()
     try:
         shutil.move(outfile_base, outfile)

@@ -398,14 +398,15 @@ class SwipeMapFrame(DoubleMapFrame):
             self.rasters['first'], self.rasters['second'] = first, second
             res1 = self.SetFirstRaster(name=self.rasters['first'])
             res2 = self.SetSecondRaster(name=self.rasters['second'])
-            if not (res1 and res2) and first and second:
+            if not (res1 and res2) and (first or second):
                 message = ''
-                if not res1:
+                if first and not res1:
                     message += _("Map <%s> not found. ") % self.rasters[
                         'first']
-                if not res2:
+                if second and not res2:
                     message += _("Map <%s> not found.") % self.rasters[
                         'second']
+                if message:
                     GError(parent=self, message=message)
                     return
             self.ZoomToMap()
@@ -420,25 +421,27 @@ class SwipeMapFrame(DoubleMapFrame):
 
     def SetFirstRaster(self, name):
         """Set raster map to first Map"""
-        raster = grass.find_file(name=name, element='cell')
-        if raster['fullname']:
-            self.rasters['first'] = raster['fullname']
-            self.SetLayer(
-                name=raster['fullname'],
-                mapInstance=self.GetFirstMap())
-            return True
+        if name:
+            raster = grass.find_file(name=name, element='cell')
+            if raster.get('fullname'):
+                self.rasters['first'] = raster['fullname']
+                self.SetLayer(
+                    name=raster['fullname'],
+                    mapInstance=self.GetFirstMap())
+                return True
 
         return False
 
     def SetSecondRaster(self, name):
         """Set raster map to second Map"""
-        raster = grass.find_file(name=name, element='cell')
-        if raster['fullname']:
-            self.rasters['second'] = raster['fullname']
-            self.SetLayer(
-                name=raster['fullname'],
-                mapInstance=self.GetSecondMap())
-            return True
+        if name:
+            raster = grass.find_file(name=name, element='cell')
+            if raster.get('fullname'):
+                self.rasters['second'] = raster['fullname']
+                self.SetLayer(
+                    name=raster['fullname'],
+                    mapInstance=self.GetSecondMap())
+                return True
 
         return False
 
@@ -748,7 +751,7 @@ class SwipeMapFrame(DoubleMapFrame):
             self._preferencesDialog = dlg
             self._preferencesDialog.CenterOnParent()
 
-        self._preferencesDialog.ShowModal()
+        self._preferencesDialog.Show()
 
     def OnCloseWindow(self, event):
         self.GetFirstMap().Clean()

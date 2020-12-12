@@ -59,7 +59,7 @@ static int G__open(const char *element,
     
     G__check_gisinit();
 
-    is_tmp = (element && strncmp(element, ".tmp", 3) == 0);
+    is_tmp = (element && strncmp(element, ".tmp", 4) == 0);
 
     /* READ */
     if (mode == 0) {
