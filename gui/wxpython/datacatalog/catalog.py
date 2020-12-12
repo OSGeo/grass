@@ -63,10 +63,8 @@ class DataCatalog(wx.Panel):
     def _layout(self):
         """Do layout"""
         self.sizer = wx.BoxSizer(wx.VERTICAL)
-        self.sizer.Add(self.toolbar, proportion=0,
-                  flag=wx.EXPAND)
-        self.sizer.Add(self.tree.GetControl(), proportion=1,
-                  flag=wx.EXPAND)
+        self.sizer.Add(self.toolbar, proportion=0, flag=wx.EXPAND)
+        self.sizer.Add(self.tree.GetControl(), proportion=1, flag=wx.EXPAND)
 
         # infobar instance
         self.infoBarDataCatalog = InfoBar(self)

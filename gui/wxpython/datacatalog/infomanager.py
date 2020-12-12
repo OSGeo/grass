@@ -24,8 +24,7 @@ class InfoManagerDataCatalog:
             "WGS 84 (EPSG:4326). Consider creating a new Location with a CRS "
             "specific to your area. You can do it now or anytime later from "
             "the toolbar above."
-        ).format(loc=gisenv()['LOCATION_NAME']
-        ), wx.ICON_INFORMATION)
+        ).format(loc=gisenv()['LOCATION_NAME']), wx.ICON_INFORMATION)
 
     def _onLearnMore(self, event):
         webbrowser.open("https://grass.osgeo.org/grass79/manuals/grass_database.html")
