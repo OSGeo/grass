@@ -53,6 +53,7 @@ class InfoBar(IB.InfoBar):
             # Add the bitmap to the button
             button.SetBitmap(bitmap, wx.LEFT)
             button.SetBitmapMargins((2, 2))  # default is 4 but that seems too big to me.
+            button.Show()
 
         if wx.Platform == '__WXMAC__':
             # smaller buttons look better in the(narrow)info bar under OS X
@@ -74,14 +75,16 @@ class InfoBar(IB.InfoBar):
         Sets buttons for notification.
         Parameter *buttons* is a list of tuples (button_name, event)
         """
-        for button_name, evt_handler in buttons:
+        for button_name, evt_handler, bitmap in buttons:
             button_id = wx.NewId()
-            self.AddButton(button_id, button_name)
+            if bitmap:
+                self.AddButton(button_id, button_name, bitmap)
+            else:
+                self.AddButton(button_id, button_name)
             self.Bind(wx.EVT_BUTTON, evt_handler, id=button_id)
 
     def OnButton(self, event):
         """
-        Hides and deletes infobar.
+        Hides infobar.
         """
         self.DoHide()
-        self.Destroy()

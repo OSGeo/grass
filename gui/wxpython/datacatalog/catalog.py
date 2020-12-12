@@ -17,15 +17,23 @@ for details.
 
 import wx
 import os
+from icons.icon import MetaIcon
 
 from core.debug import Debug
 from datacatalog.tree import DataCatalogTree
 from datacatalog.toolbars import DataCatalogToolbar
+from gui_core.infobar import InfoBar
 from datacatalog.infomanager import InfoManagerDataCatalog
 
 from grass.pydispatch.signal import Signal
 
 from grass.grassdb.checks import is_current_mapset_in_demolocation
+
+icons = {
+    'addLocation': MetaIcon(
+        img='location-add',
+        label=_("Create new location in current GRASS database"))
+}
 
 
 class DataCatalog(wx.Panel):
@@ -60,14 +68,18 @@ class DataCatalog(wx.Panel):
         self.sizer.Add(self.tree.GetControl(), proportion=1,
                   flag=wx.EXPAND)
 
-        #infobar instance
-        self.infoManager = InfoManagerDataCatalog(guiparent=self, sizer=self.sizer)
+        # infobar instance
+        self.infoBarDataCatalog = InfoBar(self)
 
-        # Show infobar for first-time user
+        # instance of infobar manager for data catalog
+        self.infoManagerDataCatalog = InfoManagerDataCatalog(infobar=self.infoBarDataCatalog,
+                                                             sizer=self.sizer)
+
+        # Show first infobar for first-time user
         if is_current_mapset_in_demolocation:
-            buttons1 = [("Create new Location now", self.OnCreateLocation),
-                        ("Learn More", self.infoManager._onLearnMore)]
-            self.infoManager.ShowInfoBar1(buttons1)
+            buttons1 = [("Create new Location", self.OnCreateLocation, icons['addLocation'].GetBitmap()),
+                        ("Learn More", self.infoManagerDataCatalog._onLearnMore, None)]
+            self.infoManagerDataCatalog.ShowInfoBar1(buttons1)
 
         self.SetAutoLayout(True)
         self.SetSizer(self.sizer)
@@ -104,7 +116,6 @@ class DataCatalog(wx.Panel):
         """Create new location"""
         db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
         self.tree.CreateLocation(db_node)
-        event.Skip()
 
     def OnDownloadLocation(self, event):
         """Download location to current grass database"""
