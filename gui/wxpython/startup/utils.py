@@ -22,7 +22,6 @@ import tempfile
 import getpass
 import sys
 from shutil import copytree, ignore_patterns
-from grass.grassdb.create import create_mapset, get_default_mapset_name
 
 
 def get_possible_database_path():
