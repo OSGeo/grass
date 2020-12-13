@@ -17,7 +17,7 @@ class InfoManagerDataCatalog:
         self.sizer.Add(self.infoBar, wx.SizerFlags().Expand())
         self.infoBar.SetButtons(buttons)
         self.infoBar.ShowMessage(_(
-            "GRASS helps you organize your data using Locations (projects) "
+            "GRASS GIS helps you organize your data using Locations (projects) "
             "which contain Mapsets (subprojects). All data in one Location is "
             "in the same coordinate reference system (CRS).\n\n"
             "You are currently in Mapset PERMANENT in Location {loc} which uses "
