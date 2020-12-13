@@ -46,13 +46,13 @@ class InfoBar(IB.InfoBar):
         if sizer.Detach(self._button):
             self._button.Hide()
 
-        button = wx.Button(self, btnid, label)
-
         if bitmap.IsOk():
             # Add the bitmap to the button
+            button = wx.BitmapButton(self, id=btnid, bitmap=bitmap, name="Create new Location")
             button.SetBitmap(bitmap, wx.LEFT)
             button.SetBitmapMargins((2, 2))  # default is 4 but that seems too big to me.
-            button.Show()
+        else:
+            button = wx.Button(self, btnid, label)
 
         if wx.Platform == '__WXMAC__':
             # smaller buttons look better in the(narrow)info bar under OS X
