@@ -38,6 +38,7 @@ extern "C"
 
 #include "grasslidarfilter.h"
 #include "grassrasterwriter.h"
+#include "info.h"
 
 extern "C"
 {
@@ -473,6 +474,17 @@ int main(int argc, char *argv[])
           " resolution instead of computational region resolution");
     base_rast_res_flag->guisection = _("Transform");
 
+    Flag *print_info_flag = G_define_flag();
+
+    print_info_flag->key = 'p';
+    print_info_flag->description = _("Print LAS file info and exit");
+
+    Flag *print_extent_flag = G_define_flag();
+
+    print_extent_flag->key = 'g';
+    print_extent_flag->description =
+        _("Print data file extent in shell script style and then exit");
+
 
     G_option_required(input_opt, file_list_opt, NULL);
     G_option_exclusive(input_opt, file_list_opt, NULL);
@@ -481,9 +493,35 @@ int main(int argc, char *argv[])
     G_option_requires(base_rast_res_flag, base_raster_opt, NULL);
     G_option_exclusive(reproject_flag, over_flag, NULL);
     G_option_exclusive(extract_ground_flag, classify_ground_flag, NULL);
+    G_option_required(output_opt, print_extent_flag, print_info_flag, NULL);
+
 
     if (G_parser(argc, argv))
         return EXIT_FAILURE;
+
+    /* Get input file list. Needs to be done before printing extent. */
+    struct StringList infiles;
+
+    if (file_list_opt->answer) {
+        if (access(file_list_opt->answer, F_OK) != 0)
+            G_fatal_error(_("File <%s> does not exist"),
+                          file_list_opt->answer);
+        string_list_from_file(&infiles, file_list_opt->answer);
+    }
+    else {
+        string_list_from_one_item(&infiles, input_opt->answer);
+    }
+
+    /* If we print extent, there is no need to validate rest of the input */
+    if (print_extent_flag->answer) {
+        print_extent(&infiles);
+        exit(0);
+    }
+
+    if (print_info_flag->answer) {
+        // TODO: add print_info() to info.cpp
+        G_fatal_error("LAS info printing not implemented.");
+    }
 
     /* we could use rules but this gives more info and allows continuing */
     if (set_region_flag->answer && !(extents_flag->answer || res_opt->answer)) {
@@ -510,17 +548,6 @@ int main(int argc, char *argv[])
          !(strcmp(dimension_opt->answer, "z") == 0)))
         G_warning(_("Binning methods 'n', 'sidnmax', 'sidnmin' and eigenvalues are ignoring specified dimension"));
 
-    struct StringList infiles;
-
-    if (file_list_opt->answer) {
-        if (access(file_list_opt->answer, F_OK) != 0)
-            G_fatal_error(_("File <%s> does not exist"),
-                          file_list_opt->answer);
-        string_list_from_file(&infiles, file_list_opt->answer);
-    }
-    else {
-        string_list_from_one_item(&infiles, input_opt->answer);
-    }
 
     /* parse input values */
     outmap = output_opt->answer;
