@@ -39,7 +39,7 @@ class InfoBar(IB.InfoBar):
         """
         sizer = self.GetSizer()
 
-        assert sizer != None, "Sizer must be created first"
+        assert sizer is not None, "Sizer must be created first"
 
         # user-added buttons replace the standard close button so remove it if we
         # hadn't done it yet
