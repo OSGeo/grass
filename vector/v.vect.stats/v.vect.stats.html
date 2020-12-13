@@ -6,49 +6,49 @@ Optionally statistics on point attributes in <em>points</em> are
 calculated for each area. The results are either uploaded to the
 attribute table of the vector map <em>areas</em> or printed to stdout.
 
-<p>
-<em>Statistical Methods:</em>
+<h3>Statistical methods</h3>
+
 Using numeric attribute values of all points falling into a given area,
-a new value is detmined with the selected method.
+a new value is determined with the selected method.
 <em>v.vect.stats</em> can perform the following operations:
 
 <p><dl>
 
-<dt><b>sum</b> 
+<dt><b>sum</b>
 <dd>The sum of values.
 
-<dt><b>average</b> 
+<dt><b>average</b>
 <dd>The average value of all point attributes (sum / count).
 
-<dt><b>median</b> 
+<dt><b>median</b>
 <dd>The value found half-way through a list of the
 attribute values, when these are ranged in numerical order.
 
-<dt><b>mode</b> 
+<dt><b>mode</b>
 <dd>The most frequently occurring value.
 
-<dt><b>minimum</b> 
+<dt><b>minimum</b>
 <dd>The minimum observed value.
 
-<dt><b>min_cat</b> 
+<dt><b>min_cat</b>
 <dd>The point category corresponding to the minimum observed value.
 
-<dt><b>maximum</b> 
+<dt><b>maximum</b>
 <dd>The maximum observed value.
 
-<dt><b>max_cat</b> 
+<dt><b>max_cat</b>
 <dd>The point category corresponding to the maximum observed value.
 
-<dt><b>range</b> 
+<dt><b>range</b>
 <dd>The range of the observed values.
 
-<dt><b>stddev</b> 
+<dt><b>stddev</b>
 <dd>The statistical standard deviation of the attribute values.
 
-<dt><b>variance</b> 
+<dt><b>variance</b>
 <dd>The statistical variance of the attribute values.
 
-<dt><b>diversity</b> 
+<dt><b>diversity</b>
 <dd>The number of different attribute values.
 
 </dl>
@@ -184,8 +184,8 @@ User should note that some of the points may be outside the grid
 since the hexagons cannot cover all the area around the edges
 (the computational region extent needs to be enlarged if all points
 should be considered).
-The last command sets the vector map color table to <tt>viridis</tt>
-based on the <tt>count</tt> column.
+The last command sets the vector map color table to <code>viridis</code>
+based on the <code>count</code> column.
 
 <div class="code"><pre>
 v.colors map=hexagons use=attr column=average color=viridis
@@ -240,13 +240,34 @@ associated with point, standard deviation)
 
 <h2>SEE ALSO</h2>
 
-<em>
-<a href="v.distance.html">v.distance</a>,
-<a href="r.distance.html">r.distance</a>,
-<a href="v.rast.stats.html">v.rast.stats</a>,
-<a href="v.what.vect.html">v.what.vect</a>,
-<a href="v.mkgrid.html">v.mkgrid</a>
-</em>
+<ul>
+    <li>
+        <em><a href="v.rast.stats.html">v.rast.stats</a></em>
+        for zonal statistics of raster maps using vector zones
+        (univariate statistics of a raster map),
+    </li>
+    <li>
+        <em><a href="r.stats.zonal.html">r.stats.zonal</a></em>
+        for zonal statistics of raster map using raster zones
+        (univariate statistics using two raster maps),
+    </li>
+    <li>
+        <em><a href="v.what.vect.html">v.what.vect</a></em>
+        for querying one vector map by another,
+    </li>
+    <li>
+        <em><a href="v.distance.html">v.distance</a></em>
+        for finding nearest features,
+    </li>
+    <li>
+        <em><a href="r.distance.html">r.distance</a></em>
+        for computing distances between objects in raster maps,
+    </li>
+    <li>
+        <em><a href="v.mkgrid.html">v.mkgrid</a></em>
+        for creating vector grids to aggregate point data.
+    </li>
+</ul>
 
 
 <h2>AUTHOR</h2>

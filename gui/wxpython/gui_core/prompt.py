@@ -64,7 +64,8 @@ class GPrompt(object):
         self.cmdDesc = None
 
         self._loadHistory()
-        giface.currentMapsetChanged.connect(self._loadHistory)
+        if giface:
+            giface.currentMapsetChanged.connect(self._loadHistory)
 
         # list of traced commands
         self.commands = list()
@@ -473,9 +474,9 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                                     self.toComplete['cmd']).count('.')
                                 self.autoCompList.append(
                                     command.split('.', dotNumber)[-1])
-                        except UnicodeDecodeError as e:  # TODO: fix it
+                        except UnicodeDecodeError as error:
                             sys.stderr.write(
-                                DecodeString(command) + ": " + unicode(e))
+                                DecodeString(command) + ": " + str(error))
 
             except (KeyError, TypeError):
                 return

@@ -25,6 +25,10 @@ import locale
 import shlex
 import re
 import time
+import platform
+import uuid
+import random
+import string
 
 
 if sys.version_info.major >= 3:
@@ -486,3 +490,138 @@ def clock():
     if sys.version_info > (3,2):
         return time.perf_counter()
     return time.clock()
+
+
+def legalize_vector_name(name, fallback_prefix="x"):
+    """Make *name* usable for vectors, tables, and columns
+
+    The returned string is a name usable for vectors, tables, and columns,
+    i.e., it is a vector legal name which is a string containing only
+    lowercase and uppercase ASCII letters, digits, and underscores.
+
+    Invalid characters are replaced by underscores.
+    If the name starts with an invalid character, the name is prefixed with
+    *fallback_prefix*. This increases the length of the resulting name by the
+    length of the prefix.
+
+    The *fallback_prefix* can be empty which is useful when the *name* is later
+    used as a suffix for some other valid name.
+
+    ValueError is raised when provided *name* is empty or *fallback_prefix*
+    does not start with a valid character.
+    """
+    # The implementation is based on Vect_legal_filename().
+    if not name:
+        raise ValueError("name cannot be empty")
+    if fallback_prefix and re.match("[^A-Za-z]", fallback_prefix[0]):
+        raise ValueError("fallback_prefix must start with an ASCII letter")
+    if fallback_prefix and re.match("[^A-Za-z]", name[0], flags=re.ASCII):
+        # We prefix here rather than just replace, because in cases of unique
+        # identifiers, e.g., columns or node names, replacing the first
+        # character by the same replacement character increases chances of
+        # conflict (e.g. column names 10, 20, 30).
+        name = "{fallback_prefix}{name}".format(**locals())
+    name = re.sub("[^A-Za-z0-9_]", "_", name, flags=re.ASCII)
+    keywords = ["and", "or", "not"]
+    if name in keywords:
+        name = "{name}_".format(**locals())
+    return name
+
+
+def append_node_pid(name):
+    """Add node name and PID to a name (string)
+
+    For the result to be unique, the name needs to be unique within a process.
+    Given that, the result will be unique enough for use in temporary maps
+    and other elements on single machine or an HPC cluster.
+
+    The returned string is a name usable for vectors, tables, and columns
+    (vector legal name) as long as provided argument *name* is.
+
+    >>> append_node_pid("tmp_raster_1")
+
+    ..note::
+
+        Before you use this function for creating temporary files (i.e., normal
+        files on disk, not maps and other mapset elements), see functions
+        designed for it in the GRASS GIS or standard Python library. These
+        take care of collisions already on different levels.
+    """
+    # We are using this node as a suffix, so we don't need to make sure it
+    # is prefixed with additional character(s) since that's exactly what
+    # happens in this function.
+    # Note that this may still cause collisions when nodes are named in a way
+    # that they collapse into the same name after the replacements are done,
+    # but we consider that unlikely given that
+    # nodes will be likely already named as something close to what we need.
+    node = legalize_vector_name(platform.node(), fallback_prefix="")
+    pid = os.getpid()
+    return "{name}_{node}_{pid}".format(**locals())
+
+
+def append_uuid(name):
+    """Add UUID4 to a name (string)
+
+    To generate a name of an temporary mapset element which is unique in a
+    system, use :func:`append_node_pid()` in a combination with a name unique
+    within your process.
+
+    To avoid collisions, never shorten the name obtained from this function.
+    A shortened UUID does not have the collision guarantees the full UUID has.
+
+    For a random name of a given shorter size, see :func:`append_random()`.
+
+    >>> append_uuid("tmp")
+
+    ..note::
+
+        See the note about creating temporary files in the
+        :func:`append_node_pid()` description.
+    """
+    suffix = uuid.uuid4().hex
+    return "{name}_{suffix}".format(**locals())
+
+
+def append_random(name, suffix_length=None, total_length=None):
+    """Add a random part to of a specified length to a name (string)
+
+    >>> append_random("tmp", 8)
+    >>> append_random("tmp", total_length=16)
+
+    ..note::
+
+        Note that this will be influeced by the random seed set for the Python
+        random package.
+
+    ..note::
+
+        See the note about creating temporary files in the
+        :func:`append_node_pid()` description.
+    """
+    if suffix_length and total_length:
+        raise ValueError(
+            "Either suffix_length or total_length can be provided, not both"
+        )
+    if not suffix_length and not total_length:
+        raise ValueError(
+            "suffix_length or total_length has to be provided"
+        )
+    if total_length:
+        # remove len of name and one underscore
+        name_length = len(name)
+        suffix_length = total_length - name_length - 1
+        if suffix_length <= 0:
+            raise ValueError(
+                "No characters left for the suffix:"
+                " total_length <{total_length}> is too small"
+                " or name <{name}> ({name_length}) is too long".format(
+                    **locals()
+                )
+            )
+    # We don't do lower and upper case because that could cause conflicts in
+    # contexts which are case-insensitive.
+    # We use lowercase because that's what is in UUID4 hex string.
+    allowed_chars = string.ascii_lowercase + string.digits
+    # The following can be shorter with random.choices from Python 3.6.
+    suffix = ''.join(random.choice(allowed_chars) for _ in range(suffix_length))
+    return "{name}_{suffix}".format(**locals())

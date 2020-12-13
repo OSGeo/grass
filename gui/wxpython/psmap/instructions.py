@@ -57,12 +57,13 @@ def NewId():
 class Instruction:
     """Class which represents instruction file"""
 
-    def __init__(self, parent, objectsToDraw):
+    def __init__(self, parent, objectsToDraw, env):
 
         self.parent = parent
         self.objectsToDraw = objectsToDraw
         # here are kept objects like mapinfo, rasterlegend, etc.
         self.instruction = list()
+        self.env = env
 
     def __str__(self):
         """Returns text for instruction file"""
@@ -97,12 +98,13 @@ class Instruction:
         for each in self.instruction:
             if each.id == id:
                 if each.type == 'map':
-                    # must remove raster, vector layers too
+                    # must remove raster, vector layers, labels too
                     vektor = self.FindInstructionByType('vector', list=True)
                     vProperties = self.FindInstructionByType(
                         'vProperties', list=True)
                     raster = self.FindInstructionByType('raster', list=True)
-                    for item in vektor + vProperties + raster:
+                    labels = self.FindInstructionByType('labels', list=True)
+                    for item in vektor + vProperties + raster + labels:
                         if item in self.instruction:
                             self.instruction.remove(item)
 
@@ -120,7 +122,9 @@ class Instruction:
             self.instruction.append(instruction)
         # add to drawable objects
         if instruction.type not in (
-                'page', 'raster', 'vector', 'vProperties', 'initMap'):
+                'page', 'raster', 'vector', 'vProperties', 'initMap',
+                'labels',
+        ):
             if instruction.type == 'map':
                 self.objectsToDraw.insert(0, instruction.id)
             else:
@@ -161,12 +165,13 @@ class Instruction:
         # then run ps.map -b to get information for maploc
         # compute scale and center
         map = self.FindInstructionByType('map')
-        region = grass.region()
+        region = grass.region(env=self.env)
         map['center'] = (region['n'] + region['s']
                          ) / 2, (region['w'] + region['e']) / 2
         mapRect = GetMapBounds(
             self.filename, portrait=(
-                orientation == 'Portrait'))
+                orientation == 'Portrait'),
+            env=self.env)
         map['rect'] = mapRect
         proj = projInfo()
         toM = 1.0
@@ -182,7 +187,8 @@ class Instruction:
         SetResolution(
             dpi=300,
             width=map['rect'].width,
-            height=map['rect'].height)
+            height=map['rect'].height,
+            env=self.env)
 
         # read file again, now with information about map bounds
         isBuffer = False
@@ -389,7 +395,7 @@ class Instruction:
 
         page = self.FindInstructionByType('page')
         if not page:
-            page = PageSetup(NewId())
+            page = PageSetup(NewId(), env=self.env)
             self.AddInstruction(page)
         else:
             page['Orientation'] = orientation
@@ -446,7 +452,9 @@ class Instruction:
                 id = NewId()  # !vProperties expect subtype
                 if i == 'vProperties':
                     id = kwargs['id']
-                    newInstr = myInstrDict[i](id, subType=instruction[1:])
+                    newInstr = myInstrDict[i](
+                        id, subType=instruction[1:], env=self.env,
+                    )
                 elif i in ('image', 'northArrow'):
                     commentFound = False
                     for line in text:
@@ -455,9 +463,9 @@ class Instruction:
                     if i == 'image' and commentFound or \
                        i == 'northArrow' and not commentFound:
                         continue
-                    newInstr = myInstrDict[i](id, settings=self)
+                    newInstr = myInstrDict[i](id, settings=self, env=self.env)
                 else:
-                    newInstr = myInstrDict[i](id)
+                    newInstr = myInstrDict[i](id, env=self.env)
                 ok = newInstr.Read(instruction, text, **kwargs)
                 if ok:
                     self.AddInstruction(newInstr)
@@ -473,7 +481,7 @@ class Instruction:
 
     def SetRegion(self, regionInstruction):
         """Sets region from file comment or sets current region in case of no comment"""
-        map = MapFrame(NewId())
+        map = MapFrame(NewId(), env=self.env)
         self.AddInstruction(map)
         if regionInstruction:
             cmd = cmdlist_to_tuple(regionInstruction.strip('# ').split())
@@ -496,16 +504,14 @@ class Instruction:
                 map['scaleType'] = 2
         else:
             map['scaleType'] = 2
-            grass.del_temp_region()
-            region = grass.region()
-            grass.use_temp_region()
+            region = grass.region(env=None)
             cmd = ['g.region', region]
         cmdString = GetCmdString(cmd).replace('g.region', '')
         GMessage(
             _("Instruction file will be loaded with following region: %s\n") %
             cmdString)
         try:
-            RunCommand(cmd[0], **cmd[1])
+            self.env['GRASS_REGION'] = grass.region_env(env=self.env, **cmd[1])
 
         except grass.ScriptError as e:
             GError(_("Region cannot be set\n%s") % e)
@@ -515,8 +521,9 @@ class Instruction:
 class InstructionObject:
     """Abtract class representing single instruction"""
 
-    def __init__(self, id):
+    def __init__(self, id, env):
         self.id = id
+        self.env = env
 
         # default values
         self.defaultInstruction = dict()
@@ -553,7 +560,7 @@ class InstructionObject:
     def PercentToReal(self, e, n):
         """Converts text coordinates from percent of region to map coordinates"""
         e, n = float(e.strip('%')), float(n.strip('%'))
-        region = grass.region()
+        region = grass.region(env=self.env)
         N = region['s'] + (region['n'] - region['s']) / 100 * n
         E = region['w'] + (region['e'] - region['w']) / 100 * e
         return E, N
@@ -562,8 +569,8 @@ class InstructionObject:
 class InitMap(InstructionObject):
     """Class representing virtual map"""
 
-    def __init__(self, id):
-        InstructionObject.__init__(self, id=id)
+    def __init__(self, id, env):
+        InstructionObject.__init__(self, id=id, env=env)
         self.type = 'initMap'
 
         # default values
@@ -575,8 +582,8 @@ class InitMap(InstructionObject):
 class MapFrame(InstructionObject):
     """Class representing map (instructions maploc, scale, border)"""
 
-    def __init__(self, id):
-        InstructionObject.__init__(self, id=id)
+    def __init__(self, id, env):
+        InstructionObject.__init__(self, id=id, env=env)
         self.type = 'map'
         # default values
         self.defaultInstruction = dict(
@@ -600,7 +607,7 @@ class MapFrame(InstructionObject):
         comment = ''
 
         # region settings
-        region = grass.region()
+        region = grass.region(env=self.env)
         if self.instruction['scaleType'] == 0:  # match map
             map = self.instruction['map']
             if self.instruction['mapType'] == 'raster':
@@ -721,8 +728,8 @@ class MapFrame(InstructionObject):
 class PageSetup(InstructionObject):
     """Class representing page instruction"""
 
-    def __init__(self, id):
-        InstructionObject.__init__(self, id=id)
+    def __init__(self, id, env):
+        InstructionObject.__init__(self, id=id, env=env)
         self.type = 'page'
         # default values
         self.defaultInstruction = dict(
@@ -815,8 +822,8 @@ class PageSetup(InstructionObject):
 class Mapinfo(InstructionObject):
     """Class representing mapinfo instruction"""
 
-    def __init__(self, id):
-        InstructionObject.__init__(self, id=id)
+    def __init__(self, id, env):
+        InstructionObject.__init__(self, id=id, env=env)
         self.type = 'mapinfo'
         # default values
         self.defaultInstruction = dict(
@@ -888,8 +895,8 @@ class Mapinfo(InstructionObject):
 class Text(InstructionObject):
     """Class representing text instruction"""
 
-    def __init__(self, id):
-        InstructionObject.__init__(self, id=id)
+    def __init__(self, id, env):
+        InstructionObject.__init__(self, id=id, env=env)
         self.type = 'text'
         # default values
         self.defaultInstruction = dict(
@@ -987,7 +994,8 @@ class Text(InstructionObject):
         instr['where'] = PaperMapCoordinates(
             mapInstr=map, x=instr['east'],
             y=instr['north'],
-            paperToMap=False)
+            paperToMap=False,
+            env=self.env)
         self.instruction.update(instr)
 
         return True
@@ -996,8 +1004,8 @@ class Text(InstructionObject):
 class Image(InstructionObject):
     """Class representing eps instruction - image"""
 
-    def __init__(self, id, settings):
-        InstructionObject.__init__(self, id=id)
+    def __init__(self, id, settings, env):
+        InstructionObject.__init__(self, id=id, env=env)
         self.settings = settings
         self.type = 'image'
         # default values
@@ -1079,7 +1087,8 @@ class Image(InstructionObject):
             mapInstr=mapInstr,
             x=self.instruction['east'],
             y=self.instruction['north'],
-            paperToMap=False)
+            paperToMap=False,
+            env=self.env)
         w = self.unitConv.convert(
             value=instr['size'][0],
             fromUnit='point', toUnit='inch')
@@ -1107,7 +1116,8 @@ class Image(InstructionObject):
                 mapInstr=self.settings[mapId],
                 x=center[0],
                 y=center[1],
-                paperToMap=True)
+                paperToMap=True,
+                env=self.env)
 
             self.instruction['east'], self.instruction['north'] = ENCenter
         else:
@@ -1115,7 +1125,8 @@ class Image(InstructionObject):
                 mapInstr=self.settings[mapId],
                 x=self.instruction['east'],
                 y=self.instruction['north'],
-                paperToMap=False)
+                paperToMap=False,
+                env=self.env)
             w = self.unitConv.convert(
                 value=self.instruction['size'][0],
                 fromUnit='point', toUnit='inch')
@@ -1126,7 +1137,8 @@ class Image(InstructionObject):
             y -= h * self.instruction['scale'] / 2
             e, n = PaperMapCoordinates(
                 mapInstr=self.settings[mapId],
-                x=x, y=y, paperToMap=True)
+                x=x, y=y, paperToMap=True,
+                env=self.env)
             self.instruction['east'], self.instruction['north'] = e, n
 
     def GetImageOrigSize(self, imagePath):
@@ -1155,8 +1167,8 @@ class Image(InstructionObject):
 class NorthArrow(Image):
     """Class representing eps instruction -- North Arrow"""
 
-    def __init__(self, id, settings):
-        Image.__init__(self, id=id, settings=settings)
+    def __init__(self, id, settings, env):
+        Image.__init__(self, id=id, settings=settings, env=env)
         self.type = 'northArrow'
 
     def __str__(self):
@@ -1182,8 +1194,8 @@ class NorthArrow(Image):
 class Point(InstructionObject):
     """Class representing point instruction"""
 
-    def __init__(self, id):
-        InstructionObject.__init__(self, id=id)
+    def __init__(self, id, env):
+        InstructionObject.__init__(self, id=id, env=env)
         self.type = 'point'
         # default values
         self.defaultInstruction = dict(symbol=os.path.join('basic', 'x'),
@@ -1242,7 +1254,8 @@ class Point(InstructionObject):
             mapInstr=mapInstr,
             x=self.instruction['east'],
             y=self.instruction['north'],
-            paperToMap=False)
+            paperToMap=False,
+            env=self.env)
         w = h = self.unitConv.convert(
             value=instr['size'],
             fromUnit='point', toUnit='inch')
@@ -1258,8 +1271,8 @@ class Point(InstructionObject):
 class Line(InstructionObject):
     """Class representing line instruction"""
 
-    def __init__(self, id):
-        InstructionObject.__init__(self, id=id)
+    def __init__(self, id, env):
+        InstructionObject.__init__(self, id=id, env=env)
         self.type = 'line'
         # default values
         self.defaultInstruction = dict(color='0:0:0', width=2,
@@ -1308,11 +1321,13 @@ class Line(InstructionObject):
         e1, n1 = PaperMapCoordinates(
             mapInstr=mapInstr, x=self.instruction['east1'],
             y=self.instruction['north1'],
-            paperToMap=False)
+            paperToMap=False,
+            env=self.env)
         e2, n2 = PaperMapCoordinates(
             mapInstr=mapInstr, x=self.instruction['east2'],
             y=self.instruction['north2'],
-            paperToMap=False)
+            paperToMap=False,
+            env=self.env)
         instr['where'] = [wx.Point2D(e1, n1), wx.Point2D(e2, n2)]
         instr['rect'] = Rect2DPP(instr['where'][0], instr['where'][1])
         self.instruction.update(instr)
@@ -1323,8 +1338,8 @@ class Line(InstructionObject):
 class Rectangle(InstructionObject):
     """Class representing rectangle instruction"""
 
-    def __init__(self, id):
-        InstructionObject.__init__(self, id=id)
+    def __init__(self, id, env):
+        InstructionObject.__init__(self, id=id, env=env)
         self.type = 'rectangle'
         # default values
         self.defaultInstruction = dict(color='0:0:0', fcolor='none', width=2,
@@ -1375,11 +1390,13 @@ class Rectangle(InstructionObject):
         e1, n1 = PaperMapCoordinates(
             mapInstr=mapInstr, x=self.instruction['east1'],
             y=self.instruction['north1'],
-            paperToMap=False)
+            paperToMap=False,
+            env=self.env)
         e2, n2 = PaperMapCoordinates(
             mapInstr=mapInstr, x=self.instruction['east2'],
             y=self.instruction['north2'],
-            paperToMap=False)
+            paperToMap=False,
+            env=self.env)
         instr['rect'] = Rect2DPP(wx.Point2D(e1, n1), wx.Point2D(e2, n2))
         self.instruction.update(instr)
 
@@ -1389,8 +1406,8 @@ class Rectangle(InstructionObject):
 class Scalebar(InstructionObject):
     """Class representing scalebar instruction"""
 
-    def __init__(self, id):
-        InstructionObject.__init__(self, id=id)
+    def __init__(self, id, env):
+        InstructionObject.__init__(self, id=id, env=env)
         self.type = 'scalebar'
         # default values
         self.defaultInstruction = dict(unit='inch', where=(1, 1),
@@ -1487,8 +1504,8 @@ class Scalebar(InstructionObject):
 class RasterLegend(InstructionObject):
     """Class representing colortable instruction"""
 
-    def __init__(self, id):
-        InstructionObject.__init__(self, id=id)
+    def __init__(self, id, env):
+        InstructionObject.__init__(self, id=id, env=env)
         self.type = 'rasterLegend'
         # default values
         self.defaultInstruction = dict(rLegend=False, unit='inch', rasterDefault=True, raster=None,
@@ -1662,8 +1679,8 @@ class RasterLegend(InstructionObject):
 class VectorLegend(InstructionObject):
     """Class representing colortable instruction"""
 
-    def __init__(self, id):
-        InstructionObject.__init__(self, id=id)
+    def __init__(self, id, env):
+        InstructionObject.__init__(self, id=id, env=env)
         self.type = 'vectorLegend'
         # default values
         self.defaultInstruction = dict(
@@ -1754,8 +1771,8 @@ class VectorLegend(InstructionObject):
 class Raster(InstructionObject):
     """Class representing raster instruction"""
 
-    def __init__(self, id):
-        InstructionObject.__init__(self, id=id)
+    def __init__(self, id, env):
+        InstructionObject.__init__(self, id=id, env=env)
         self.type = 'raster'
         # default values
         self.defaultInstruction = dict(isRaster=False, raster=None)
@@ -1789,8 +1806,8 @@ class Raster(InstructionObject):
 class Vector(InstructionObject):
     """Class keeps vector layers"""
 
-    def __init__(self, id):
-        InstructionObject.__init__(self, id=id)
+    def __init__(self, id, env):
+        InstructionObject.__init__(self, id=id, env=env)
         self.type = 'vector'
         # default values
         self.defaultInstruction = dict(
@@ -1841,8 +1858,8 @@ class Vector(InstructionObject):
 class VProperties(InstructionObject):
     """Class represents instructions vareas, vlines, vpoints"""
 
-    def __init__(self, id, subType):
-        InstructionObject.__init__(self, id=id)
+    def __init__(self, id, subType, env):
+        InstructionObject.__init__(self, id=id, env=env)
         self.type = 'vProperties'
         self.subType = subType
         # default values
@@ -2104,8 +2121,8 @@ class VProperties(InstructionObject):
 class Labels(InstructionObject):
     """Class representing labels instruction"""
 
-    def __init__(self, id):
-        InstructionObject.__init__(self, id=id)
+    def __init__(self, id, env):
+        InstructionObject.__init__(self, id=id, env=env)
         self.type = 'labels'
         # default values
         self.defaultInstruction = dict(labels=[])

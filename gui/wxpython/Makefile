@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-SUBDIRS = docs animation datacatalog mapswipe gmodeler rlisetup psmap dbmgr vdigit iclass gcp timeline tplot photo2image image2target
+SUBDIRS = docs animation datacatalog mapswipe gmodeler rlisetup psmap dbmgr vdigit rdigit iclass gcp timeline tplot photo2image image2target
 EXTRA_CLEAN_FILES = menustrings.py build_ext.pyc xml/menudata.xml xml/module_tree_menudata.xml */*.pyc
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make

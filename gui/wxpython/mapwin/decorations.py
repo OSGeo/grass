@@ -46,6 +46,7 @@ class OverlayController(object):
         self._cmd = None   # to be set by user
         self._name = None  # to be defined by subclass
         self._removeLabel = None  # to be defined by subclass
+        self._activateLabel = None  # to be defined by subclass
         self._id = NewId()
         self._dialog = None
 
@@ -95,6 +96,11 @@ class OverlayController(object):
         return self._removeLabel
 
     removeLabel = property(fget=GetRemoveLabel)
+
+    def GetActivateLabel(self):
+        return self._activateLabel
+
+    activateLabel = property(fget=GetActivateLabel)
 
     def GetId(self):
         return self._id
@@ -195,6 +201,7 @@ class DtextController(OverlayController):
         OverlayController.__init__(self, renderer, giface)
         self._name = 'text'
         self._removeLabel = _("Remove text")
+        self._activateLabel = _("Text properties")
         self._defaultAt = 'at=50,50'
         self._cmd = ['d.text', self._defaultAt]
 
@@ -218,6 +225,7 @@ class BarscaleController(OverlayController):
         OverlayController.__init__(self, renderer, giface)
         self._name = 'barscale'
         self._removeLabel = _("Remove scale bar")
+        self._activateLabel = _("Scale bar properties")
         # different from default because the reference point is not in the
         # middle
         self._defaultAt = 'at=0,98'
@@ -230,6 +238,7 @@ class ArrowController(OverlayController):
         OverlayController.__init__(self, renderer, giface)
         self._name = 'arrow'
         self._removeLabel = _("Remove north arrow")
+        self._activateLabel = _("North arrow properties")
         # different from default because the reference point is not in the
         # middle
         self._defaultAt = 'at=85.0,25.0'
@@ -241,7 +250,8 @@ class LegendVectController(OverlayController):
     def __init__(self, renderer, giface):
         OverlayController.__init__(self, renderer, giface)
         self._name = 'vectleg'
-        self._removeLabel = _("Remove vector legend")
+        self._removeLabel = _("Remove legend")
+        self._activateLabel = _("Vector legend properties")
         # different from default because the reference point is not in the
         # middle
         self._defaultAt = 'at=20.0,80.0'
@@ -254,9 +264,32 @@ class LegendController(OverlayController):
         OverlayController.__init__(self, renderer, giface)
         self._name = 'legend'
         self._removeLabel = _("Remove legend")
+        self._activateLabel = _("Raster legend properties")
         # default is in the center to avoid trimmed legend on the edge
         self._defaultAt = 'at=5,50,47,50'
+        self._actualAt = self._defaultAt
         self._cmd = ['d.legend', self._defaultAt]
+
+    def SetCmd(self, cmd):
+        """Overriden method
+
+        Required for setting default or actual raster legend position.
+        """
+        hasAt = False
+        for i in cmd:
+            if i.startswith("at="):
+                hasAt = True
+                # reset coordinates, 'at' values will be used, see GetCoords
+                self._coords = None
+                break
+        if not hasAt:
+            if self._actualAt != self._defaultAt:
+                cmd.append(self._actualAt)
+            else:
+                cmd.append(self._defaultAt)
+        self._cmd = cmd
+
+    cmd = property(fset=SetCmd, fget=OverlayController.GetCmd)
 
     def GetPlacement(self, screensize):
         if not hasPIL:
@@ -319,6 +352,7 @@ class LegendController(OverlayController):
                 break
 
         self._coords = None
+        self._actualAt = atStr
         self.Show()
 
     def StartResizing(self):

@@ -2,8 +2,12 @@
 
 <em>r.stats.zonal</em> is a tool to analyse exploratory statistics of a 
 floating-point "cover layer" according to how it intersects with objects
-in a "base layer". A variety of standard statistical measures are possible
-(called "zonal statistics" in some GIS).
+in a "base layer". A variety of standard statistical measures are possible.
+This type of analysis is often called <em>zonal statistics</em>.
+The zones are specified as the <b>base</b> raster map and
+the statistics are computed from cells in the <b>cover</b> raster map.
+Notably, the output of this module is spatial:
+The resulting values are recorded as cell values in the <b>output</b> raster map.
 
 <h2>NOTES</H2>
 
@@ -31,11 +35,29 @@ r.colors zipcodes_elev_avg color=elevation -g
 </pre></div>
 
 <h2>SEE ALSO</h2>
-<em>
-<a href="r.quantile.html">r.quantile</a>,
-<a href="r.stats.quantile.html">r.stats.quantile</a>,
-<a href="r.statistics.html">r.statistics</a>
-</em>
+
+<ul>
+    <li>
+        <em><a href="r.stats.quantile.html">r.stats.quantile</a></em>
+        for computing quantiles in zones (objects in base raster map),
+    </li>
+    <li>
+        <em><a href="r.quantile.html">r.quantile</a></em>
+        for computing quantiles of a whole raster map,
+    </li>
+    <li>
+        <em><a href="r.statistics.html">r.statistics</a></em>
+        for categorical (integer) zonal statistics,
+    </li>
+    <li>
+        <em><a href="r.univar.html">r.univar</a></em>
+        for zonal statistics with textual (non-spatial) output,
+    </li>
+    <li>
+        <em><a href="v.vect.stats.html">v.vect.stats</a></em>
+        for statistics of vector points in vector areas.
+    </li>
+</ul>
 
 <h2>AUTHOR</h2>
 Glynn Clements
