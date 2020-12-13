@@ -266,10 +266,8 @@ class GMFrame(wx.Frame):
 
         # if demolocation, add demo layer to map layer tree
         if is_current_mapset_in_demolocation():
-            ltype = "vector"
-            lname = "country_boundaries@PERMANENT"
-            self.GetLayerTree().AddLayer(ltype=ltype,
-                                         lname=lname,
+            self.GetLayerTree().AddLayer(ltype="vector",
+                                         lname="country_boundaries@PERMANENT",
                                          lchecked=True,
                                          lcmd=['d.vect', 'map=%s' % lname])
 
