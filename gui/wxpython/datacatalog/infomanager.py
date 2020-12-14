@@ -5,7 +5,7 @@ from grass.script import gisenv
 
 
 class DataCatalogInfoManager:
-    """Manager for all things info bar in Data Catalog"""
+    """Manager for all things related to info bar in Data Catalog"""
     def __init__(self, parent, infobar, giface=None):
         self.infoBar = infobar
         self._giface = giface
