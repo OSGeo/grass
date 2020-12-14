@@ -17,7 +17,6 @@ for details.
 
 import wx
 import os
-from icons.icon import MetaIcon
 
 from core.debug import Debug
 from datacatalog.tree import DataCatalogTree
@@ -28,12 +27,6 @@ from datacatalog.infomanager import DataCatalogInfoManager
 from grass.pydispatch.signal import Signal
 
 from grass.grassdb.checks import is_current_mapset_in_demolocation
-
-icons = {
-    'addLocation': MetaIcon(
-        img='location-add',
-        label=_("Create new location in current GRASS database"))
-}
 
 
 class DataCatalog(wx.Panel):
