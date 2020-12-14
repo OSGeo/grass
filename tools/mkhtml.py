@@ -66,6 +66,7 @@ def decode(bytes_):
         return bytes_.decode(enc)
     return unicode(bytes_)
 
+
 html_page_footer_pages_path = os.getenv('HTML_PAGE_FOOTER_PAGES_PATH') if \
     os.getenv('HTML_PAGE_FOOTER_PAGES_PATH') else ''
 
@@ -320,17 +321,19 @@ if not re.search('<html>', src_data, re.IGNORECASE):
         orig_keywords_paths = re.search(
             r'<h[1-9]>KEYWORDS</h[1-9]>(.*?)<h[1-9]>',
             tmp_data, re.DOTALL,
-        ).group(1)
-        for i in orig_keywords_paths.split(','):
-            index = i.index('href="') + len('href="')
-            new_keywords_paths.append(
-                i[:index] + html_page_footer_pages_path + i[index:],
-            )
+        )
+        if orig_keywords_paths:
+            search_txt = 'href="'
+            for i in orig_keywords_paths.group(1).split(','):
+                if search_txt in i:
+                    index = i.index(search_txt) + len(search_txt)
+                    new_keywords_paths.append(
+                        i[:index] + html_page_footer_pages_path + i[index:],
+                    )
         if new_keywords_paths:
             tmp_data = tmp_data.replace(
-                orig_keywords_paths,
-                ','.join(new_keywords_paths) if len(new_keywords_paths) > 1
-                else new_keywords_paths[0],
+                orig_keywords_paths.group(1),
+                ','.join(new_keywords_paths),
             )
     if not re.search('<html>', tmp_data, re.IGNORECASE):
         sys.stdout.write(header_tmpl.substitute(PGM=pgm, PGM_DESC=pgm_desc))
