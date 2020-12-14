@@ -6,14 +6,12 @@ from grass.script import gisenv
 
 class DataCatalogInfoManager:
     """Manager for all things info bar in Data Catalog"""
-    def __init__(self, parent, infobar, sizer, giface=None):
+    def __init__(self, parent, infobar, giface=None):
         self.infoBar = infobar
-        self.sizer = sizer
         self._giface = giface
 
     def ShowDataStructureInfo(self, buttons):
         """Show info about the data hierarchy focused on the first-time user"""
-        self.sizer.Add(self.infoBar, wx.SizerFlags().Expand())
         self.infoBar.SetButtons(buttons)
         self.infoBar.ShowMessage(_(
             "GRASS GIS helps you organize your data using Locations (projects) "

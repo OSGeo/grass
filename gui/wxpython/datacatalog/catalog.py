@@ -59,8 +59,12 @@ class DataCatalog(wx.Panel):
         self.tree.showNotification.connect(self.showNotification)
 
         # infobar for data catalog
-        self.infobar = InfoBar(self)
+        self.infoBar = InfoBar(self)
 
+        # infobar manager for data catalog
+        self.infoManager = DataCatalogInfoManager(self,
+                                                  infobar=self.infoBar,
+                                                  giface=self.giface)
         # some layout
         self._layout()
 
@@ -70,14 +74,10 @@ class DataCatalog(wx.Panel):
         self.sizer.Add(self.toolbar, proportion=0, flag=wx.EXPAND)
         self.sizer.Add(self.tree.GetControl(), proportion=1, flag=wx.EXPAND)
 
-        # instance of infobar manager for data catalog
-        self.infoManager = DataCatalogInfoManager(self,
-                                                  infobar=self.infobar,
-                                                  sizer=self.sizer,
-                                                  giface=self.giface)
-
         # Show first infobar for first-time user
         if is_current_mapset_in_demolocation():
+            num_items = self.sizer.GetItemCount()
+            self.sizer.Insert(num_items - 1, self.infoBar, wx.SizerFlags().Expand())
             buttons1 = [("Create new Location", self.OnCreateLocation),
                         ("Learn More", self.infoManager._onLearnMore)]
             self.infoManager.ShowDataStructureInfo(buttons1)
