@@ -25,9 +25,6 @@ typedef enum
     T_INT,                      /* integer             */
     T_BLN,                      /* boolean             */
     T_DBL,                      /* double              */
-    T_EAS,                      /* easting             */
-    T_NOR,                      /* northing            */
-    T_RES,                      /* resolution          */
     T_MTR,                      /* metres              */
     T_STR,                      /* string              */
     T_SSO,                      /* start of sub-object */
@@ -92,21 +89,6 @@ static void prof_dbl_internal(const toktype type, const char *key,
 void prof_dbl(const char *key, const double val)
 {
     prof_dbl_internal(T_DBL, key, val);
-}
-
-void prof_eas(const char *key, const double val)
-{
-    prof_dbl_internal(T_EAS, key, val);
-}
-
-void prof_nor(const char *key, const double val)
-{
-    prof_dbl_internal(T_NOR, key, val);
-}
-
-void prof_res(const char *key, const double val)
-{
-    prof_dbl_internal(T_RES, key, val);
 }
 
 void prof_mtr(const char *key, const double val)
@@ -195,12 +177,12 @@ void prof_pattern(const double o_elevation, const PATTERN * p)
 
     prof_sso("easting");
     for (i = 0; i < NUM_DIRS; i++)
-        prof_eas(dirname[i], p->e[i]);
+        prof_dbl(dirname[i], p->e[i]);
     prof_eso();
 
     prof_sso("northing");
     for (i = 0; i < NUM_DIRS; i++)
-        prof_nor(dirname[i], p->n[i]);
+        prof_dbl(dirname[i], p->n[i]);
     prof_eso();
 }
 
@@ -209,14 +191,14 @@ void prof_map_info()
     prof_sso("map_info");
     prof_str("elevation_name", elevation.elevname);
     prof_int("projection", G_projection());
-    prof_nor("north", window.north);
-    prof_nor("south", window.south);
-    prof_eas("east", window.east);
-    prof_eas("west", window.west);
+    prof_dbl("north", window.north);
+    prof_dbl("south", window.south);
+    prof_dbl("east", window.east);
+    prof_dbl("west", window.west);
     prof_int("rows", Rast_window_rows());
     prof_int("cols", Rast_window_cols());
-    prof_res("ewres", window.ew_res);
-    prof_res("nsres", window.ns_res);
+    prof_dbl("ewres", window.ew_res);
+    prof_dbl("nsres", window.ns_res);
     prof_eso();
 }
 
@@ -231,16 +213,10 @@ static const char *quote_val(const toktype t, const char *v)
 {
     static char buf[MAX_STR_LEN + 2];
 
-    switch (t) {
-    case T_EAS:
-    case T_NOR:
-    case T_RES:
-    case T_STR:
-        G_snprintf(buf, sizeof(buf), "\"%s\"", v);
-        return buf;
-    default:
+    if (t != T_STR)
         return v;
-    }
+    G_snprintf(buf, sizeof(buf), "\"%s\"", v);
+    return buf;
 }
 
 static const char *format_token_common(const struct token *t)
@@ -257,15 +233,6 @@ static const char *format_token_common(const struct token *t)
         if (isnan(t->dbl_val))
             return "null";
         G_snprintf(buf, sizeof(buf), "%.8f", t->dbl_val);
-        return buf;
-    case T_EAS:
-        G_format_easting(t->dbl_val, buf, G_projection());
-        return buf;
-    case T_NOR:
-        G_format_northing(t->dbl_val, buf, G_projection());
-        return buf;
-    case T_RES:
-        G_format_resolution(t->dbl_val, buf, G_projection());
         return buf;
     case T_STR:
         return t->str_val;

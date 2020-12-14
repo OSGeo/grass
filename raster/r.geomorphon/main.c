@@ -575,8 +575,8 @@ int main(int argc, char **argv)
                               &width);
                         prof_map_info();
                         prof_sso("computation_parameters");
-                        prof_eas("easting", oneoff_easting);
-                        prof_nor("northing", oneoff_northing);
+                        prof_dbl("easting", oneoff_easting);
+                        prof_dbl("northing", oneoff_northing);
                         prof_mtr("search_m", search_distance);
                         prof_int("search_cells", search_cells);
                         prof_mtr("skip_m", skip_distance);
@@ -600,9 +600,9 @@ int main(int argc, char **argv)
                         prof_int("ternary_6561",
                                  preliminary_ternary(pattern->pattern));
                         prof_int("pattern_size", pattern_size);
-                        prof_eas("origin_easting",
+                        prof_dbl("origin_easting",
                                  Rast_col_to_easting(col + 0.5, &window));
-                        prof_nor("origin_northing",
+                        prof_dbl("origin_northing",
                                  Rast_row_to_northing(row + 0.5, &window));
                         prof_pattern(elevation.elev[cur_row][col], pattern);
                         prof_eso();     /* intermediate_data */
@@ -638,7 +638,7 @@ int main(int argc, char **argv)
                          * major version and reset the minor version.
                          */
                         prof_int("format_version_major", 0);
-                        prof_int("format_version_minor", 8);
+                        prof_int("format_version_minor", 9);
                         prof_utc("timestamp", time(NULL));
                         G_snprintf(buf, sizeof(buf),
                                    "r.geomorphon GRASS GIS %s [%s]",
