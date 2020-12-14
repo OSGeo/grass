@@ -339,13 +339,13 @@ class Settings:
             #
             'vectorLayer': {
                 'featureColor': {
-                    'color': (0, 0, 0),
+                    'color': (0, 29, 57),
                     'transparent': {
                         'enabled': False
                     }
                 },
                 'areaFillColor': {
-                    'color': (200, 200, 200),
+                    'color': (0, 103, 204),
                     'transparent': {
                         'enabled': False
                     }
