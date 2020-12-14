@@ -5,10 +5,8 @@ import webbrowser
 from grass.script import gisenv
 
 
-class InfoManagerDataCatalog:
-    """
-    InfoBar Manager for Data Catalog
-    """
+class DataCatalogInfoManager:
+    """Manager for all things info bar in Data Catalog"""
     def __init__(self, infobar, sizer):
         self.infoBar = infobar
         self.sizer = sizer
