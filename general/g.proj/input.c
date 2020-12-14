@@ -471,10 +471,11 @@ int input_georef(char *geofile)
 		  geofile);
 
     set_authnamecode(hSRS);
-    OSRDestroySpatialReference(hSRS);
 
     if (ogr_ds)
 	OGR_DS_Destroy(ogr_ds);
+    else
+	OSRDestroySpatialReference(hSRS);
 
     return ret;
 }
