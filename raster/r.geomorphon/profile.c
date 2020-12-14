@@ -30,7 +30,6 @@ typedef enum
     T_RES,                      /* resolution          */
     T_MTR,                      /* metres              */
     T_STR,                      /* string              */
-    T_UTC,                      /* timestamp, UTC      */
     T_SSO,                      /* start of sub-object */
     T_ESO,                      /* end of sub-object   */
 } toktype;
@@ -271,6 +270,8 @@ static const char *format_token_common(const struct token *t)
     case T_STR:
         return t->str_val;
     case T_MTR:
+        if (isnan(t->dbl_val))
+            return "null";
         G_snprintf(buf, sizeof(buf), "%.2f", t->dbl_val);
         return buf;
     default:
