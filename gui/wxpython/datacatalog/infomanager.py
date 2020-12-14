@@ -26,5 +26,5 @@ class DataCatalogInfoManager:
         ).format(loc=gisenv()['LOCATION_NAME']), wx.ICON_INFORMATION)
 
     def _onLearnMore(self, event):
-        webbrowser.open("https://grass.osgeo.org/grass79/manuals/grass_database.html")
+        self._giface.Help(entry="grass_database")
         event.Skip()
