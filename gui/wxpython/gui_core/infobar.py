@@ -14,11 +14,17 @@ class InfoBar(IB.InfoBar):
     def __init__(self, parent):
         IB.InfoBar.__init__(self, parent)
 
-        colBg = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
-        self.SetBackgroundColour(colBg)
-        self.SetOwnForegroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT))
-        self._text.SetBackgroundColour(colBg)
-        self._button.SetBackgroundColour(colBg)
+self._background_color = wx.SystemSettings.GetColour(
+            wx.SYS_COLOUR_HIGHLIGHT
+        )
+        self._foreground_color = wx.SystemSettings.GetColour(
+            wx.SYS_COLOUR_HIGHLIGHTTEXT
+        )
+        self.SetBackgroundColour(self._background_color)
+        self.SetForegroundColour(self._foreground_color)
+        self._text.SetBackgroundColour(self._background_color)
+        self._text.SetForegroundColour(self._foreground_color)
+        self._button.SetBackgroundColour(self._background_color)
 
         # LAYOUT
         sizer = wx.BoxSizer(wx.VERTICAL)
