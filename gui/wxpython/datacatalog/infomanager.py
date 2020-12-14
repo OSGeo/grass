@@ -11,7 +11,8 @@ class DataCatalogInfoManager:
         self.infoBar = infobar
         self.sizer = sizer
 
-    def ShowInfoBar1(self, buttons):
+    def ShowDataStructureInfo(self, buttons):
+    """Show info about the data hierarchy focused on the first-time user"""
         self.sizer.Add(self.infoBar, wx.SizerFlags().Expand())
         self.infoBar.SetButtons(buttons)
         self.infoBar.ShowMessage(_(
