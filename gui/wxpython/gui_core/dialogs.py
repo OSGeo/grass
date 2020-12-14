@@ -1973,7 +1973,7 @@ class ImageSizeDialog(wx.Dialog):
         btnsizer.Realize()
 
         sizer.Add(btnsizer, proportion=0,
-                  flag=wx.EXPAND | wx.ALIGN_RIGHT | wx.ALL, border=5)
+                  flag=wx.EXPAND | wx.ALL, border=5)
 
         self.panel.SetSizer(sizer)
         sizer.Fit(self.panel)
