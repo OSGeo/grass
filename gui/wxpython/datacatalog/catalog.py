@@ -23,7 +23,7 @@ from core.debug import Debug
 from datacatalog.tree import DataCatalogTree
 from datacatalog.toolbars import DataCatalogToolbar
 from gui_core.infobar import InfoBar
-from datacatalog.infomanager import InfoManagerDataCatalog
+from datacatalog.infomanager import DataCatalogInfoManager
 
 from grass.pydispatch.signal import Signal
 
@@ -45,6 +45,7 @@ class DataCatalog(wx.Panel):
         self.showNotification = Signal('DataCatalog.showNotification')
         self.parent = parent
         self.baseTitle = title
+        self.giface = giface
         wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
         self.SetName("DataCatalog")
 
@@ -57,6 +58,9 @@ class DataCatalog(wx.Panel):
         self.tree = DataCatalogTree(self, giface=giface)
         self.tree.showNotification.connect(self.showNotification)
 
+        # infobar for data catalog
+        self.infobar = InfoBar(self)
+
         # some layout
         self._layout()
 
@@ -66,18 +70,17 @@ class DataCatalog(wx.Panel):
         self.sizer.Add(self.toolbar, proportion=0, flag=wx.EXPAND)
         self.sizer.Add(self.tree.GetControl(), proportion=1, flag=wx.EXPAND)
 
-        # infobar instance
-        self.infoBarDataCatalog = InfoBar(self)
-
         # instance of infobar manager for data catalog
-        self.infoManagerDataCatalog = InfoManagerDataCatalog(infobar=self.infoBarDataCatalog,
-                                                             sizer=self.sizer)
+        self.infoManager = DataCatalogInfoManager(self,
+                                                  infobar=self.infobar,
+                                                  sizer=self.sizer,
+                                                  giface=self.giface)
 
         # Show first infobar for first-time user
         if is_current_mapset_in_demolocation():
-            buttons1 = [("Create new Location", self.OnCreateLocation, icons['addLocation'].GetBitmap()),
-                        ("Learn More", self.infoManagerDataCatalog._onLearnMore, None)]
-            self.infoManagerDataCatalog.ShowInfoBar1(buttons1)
+            buttons1 = [("Create new Location", self.OnCreateLocation),
+                        ("Learn More", self.infoManager._onLearnMore)]
+            self.infoManager.ShowDataStructureInfo(buttons1)
 
         self.SetAutoLayout(True)
         self.SetSizer(self.sizer)

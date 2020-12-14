@@ -12,7 +12,7 @@ class InfoBar(IB.InfoBar):
     def __init__(self, parent):
         IB.InfoBar.__init__(self, parent)
 
-self._background_color = wx.SystemSettings.GetColour(
+        self._background_color = wx.SystemSettings.GetColour(
             wx.SYS_COLOUR_HIGHLIGHT
         )
         self._foreground_color = wx.SystemSettings.GetColour(
@@ -37,7 +37,7 @@ self._background_color = wx.SystemSettings.GetColour(
         sizer.Add(self.subSizerButtons, wx.SizerFlags().Expand())
         self.SetSizer(sizer)
 
-    def AddButton(self, btnid, label, bitmap=wx.NullBitmap):
+    def AddButton(self, btnid, label):
         """
         Adds a button to be shown in the info bar.
         """
@@ -50,13 +50,9 @@ self._background_color = wx.SystemSettings.GetColour(
         if sizer.Detach(self._button):
             self._button.Hide()
 
-        if bitmap.IsOk():
-            # Add the bitmap to the button
-            button = wx.BitmapButton(self, id=btnid, bitmap=bitmap, name="Create new Location")
-            button.SetBitmap(bitmap, wx.LEFT)
-            button.SetBitmapMargins((2, 2))  # default is 4 but that seems too big to me.
-        else:
-            button = wx.Button(self, btnid, label)
+        button = wx.Button(self, btnid, label)
+        button.SetBackgroundColour(self._background_color)
+        button.SetForegroundColour(self._foreground_color)
 
         if wx.Platform == '__WXMAC__':
             # smaller buttons look better in the(narrow)info bar under OS X
@@ -78,12 +74,9 @@ self._background_color = wx.SystemSettings.GetColour(
         Sets buttons for notification.
         Parameter *buttons* is a list of tuples (button_name, event)
         """
-        for button_name, evt_handler, bitmap in buttons:
+        for button_name, evt_handler in buttons:
             button_id = wx.NewId()
-            if bitmap:
-                self.AddButton(button_id, button_name, bitmap)
-            else:
-                self.AddButton(button_id, button_name)
+            self.AddButton(button_id, button_name)
             self.Bind(wx.EVT_BUTTON, evt_handler, id=button_id)
 
     def OnButton(self, event):
