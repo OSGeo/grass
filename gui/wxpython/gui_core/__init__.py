@@ -3,6 +3,7 @@ all = [
     'widgets',
     'preferences',
     'menu',
+    'infobar',
     'dialogs',
     'mapwindow',
     'mapdisp',
