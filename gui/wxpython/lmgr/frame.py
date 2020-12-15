@@ -426,13 +426,16 @@ class GMFrame(wx.Frame):
             exists = grass.find_file(name=layer_name, element="vector")["name"]
             if not exists:
                 # Do not fail nor report errors to the first-time user when not found.
-                Debug.msg(5, f"GMFrame._show_demo_map(): {layer_name} does not exist")
+                Debug.msg(
+                    5,
+                    "GMFrame._show_demo_map(): {} does not exist".format(layer_name)
+                )
                 return
             self.GetLayerTree().AddLayer(
                 ltype="vector",
                 lname=layer_name,
                 lchecked=True,
-                lcmd=["d.vect", f"map={layer_name}"],
+                lcmd=["d.vect", "map={}".format(layer_name)],
             )
         if is_current_mapset_in_demolocation():
             # Show only after everything is initialized for proper map alignment.
