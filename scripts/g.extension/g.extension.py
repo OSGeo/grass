@@ -2044,7 +2044,7 @@ KNOWN_HOST_SERVICES_INFO = {
         'url_end': '?format=zip',
     },
     'GitHub': {
-        'url': 'https://api.github.com/repos/{owner}/test/zipball/{branch}',
+        'url': 'https://api.github.com/repos/{owner}/{repository}/zipball/{branch}',
     },
     'GitLab': {
         'url': 'https://gitlab.com/api/v4/projects/{project_id}/repository/archive.zip?sha={branch}',
@@ -2079,7 +2079,8 @@ def resolve_known_host_service(
     if github_repo_owner:
         return 'remote_zip', KNOWN_HOST_SERVICES_INFO\
             ['GitHub']['url'].format(
-                owner=github_repo_owner, branch=branch,
+                owner=github_repo_owner, repository= url.split('/')[-1],
+                branch=branch,
             )
 
     if gitlab_repo_id:
