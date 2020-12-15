@@ -69,6 +69,7 @@ from lmgr.giface import LayerManagerGrassInterface
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
+from grass.grassdb.checks import is_current_mapset_in_demolocation
 from startup.guiutils import (
     switch_mapset_interactively,
     create_mapset_interactively,
@@ -260,6 +261,8 @@ class GMFrame(wx.Frame):
             self.GetMapDisplay().Raise()
         wx.CallAfter(self.Raise)
 
+        self._show_demo_map()
+
     def _setTitle(self):
         """Set frame title"""
         if self.workspaceFile:
@@ -412,6 +415,31 @@ class GMFrame(wx.Frame):
 
         wx.CallAfter(self.datacatalog.LoadItems)
         return self.notebook
+
+    def _show_demo_map(self):
+        """If in demolocation, add demo map to map display
+
+        This provides content for first-time user experience.
+        """
+        def show_demo():
+            layer_name = "country_boundaries@PERMANENT"
+            exists = grass.find_file(name=layer_name, element="vector")["name"]
+            if not exists:
+                # Do not fail nor report errors to the first-time user when not found.
+                Debug.msg(
+                    5,
+                    "GMFrame._show_demo_map(): {} does not exist".format(layer_name)
+                )
+                return
+            self.GetLayerTree().AddLayer(
+                ltype="vector",
+                lname=layer_name,
+                lchecked=True,
+                lcmd=["d.vect", "map={}".format(layer_name)],
+            )
+        if is_current_mapset_in_demolocation():
+            # Show only after everything is initialized for proper map alignment.
+            wx.CallLater(1000, show_demo)
 
     def AddNvizTools(self, firstTime):
         """Add nviz notebook page
