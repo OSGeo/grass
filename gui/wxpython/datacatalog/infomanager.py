@@ -6,19 +6,21 @@ from grass.script import gisenv
 
 class DataCatalogInfoManager:
     """Manager for all things related to info bar in Data Catalog"""
-    def __init__(self, parent, infobar, giface=None):
+    def __init__(self, infobar, giface):
         self.infoBar = infobar
         self._giface = giface
 
-    def ShowDataStructureInfo(self, buttons):
+    def ShowDataStructureInfo(self, OnCreateLocation):
         """Show info about the data hierarchy focused on the first-time user"""
+        buttons = [("Create new Location", OnCreateLocation),
+                   ("Learn More", self._onLearnMore)]
         self.infoBar.SetButtons(buttons)
         self.infoBar.ShowMessage(_(
             "GRASS GIS helps you organize your data using Locations (projects) "
             "which contain Mapsets (subprojects). All data in one Location is "
             "in the same coordinate reference system (CRS).\n\n"
-            "You are currently in Mapset PERMANENT in Location {loc} which uses "
-            "WGS 84 (EPSG:4326). Consider creating a new Location with a CRS "
+            "You are currently in Mapset PERMANENT in default Location {loc} "
+            "which uses WGS 84 (EPSG:4326). Consider creating a new Location with a CRS "
             "specific to your area. You can do it now or anytime later from "
             "the toolbar above."
         ).format(loc=gisenv()['LOCATION_NAME']), wx.ICON_INFORMATION)

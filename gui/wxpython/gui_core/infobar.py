@@ -12,12 +12,14 @@ class InfoBar(IB.InfoBar):
     def __init__(self, parent):
         IB.InfoBar.__init__(self, parent)
 
+        self.button_ids = []
+
         self._background_color = wx.SystemSettings.GetColour(
             wx.SYS_COLOUR_HIGHLIGHT
-        )
+        ).ChangeLightness(100)
         self._foreground_color = wx.SystemSettings.GetColour(
             wx.SYS_COLOUR_HIGHLIGHTTEXT
-        )
+        ).ChangeLightness(100)
         self.SetBackgroundColour(self._background_color)
         self.SetForegroundColour(self._foreground_color)
         self._text.SetBackgroundColour(self._background_color)
@@ -76,8 +78,21 @@ class InfoBar(IB.InfoBar):
         """
         for button_name, evt_handler in buttons:
             button_id = wx.NewId()
+            self.button_ids.append(button_id)
             self.AddButton(button_id, button_name)
             self.Bind(wx.EVT_BUTTON, evt_handler, id=button_id)
+
+    def RemoveButtons(self):
+        """
+        Removes buttons from info bar.
+        """
+        items = self.subSizerButtons.GetChildren()
+        for item in reversed(items):
+            if not item.IsSpacer():
+                window = item.GetWindow()
+                if window.GetId() in self.button_ids:
+                    self.subSizerButtons.Detach(window)
+                    window.Destroy()
 
     def OnButton(self, event):
         """

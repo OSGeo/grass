@@ -55,31 +55,30 @@ class DataCatalog(wx.Panel):
         self.infoBar = InfoBar(self)
 
         # infobar manager for data catalog
-        self.infoManager = DataCatalogInfoManager(self,
-                                                  infobar=self.infoBar,
+        self.infoManager = DataCatalogInfoManager(infobar=self.infoBar,
                                                   giface=self.giface)
         # some layout
         self._layout()
 
+        # show data structure infobar for first-time user with proper layout
+        if is_current_mapset_in_demolocation():
+            wx.CallLater(2000, self.showDataStructureInfo)
+
     def _layout(self):
         """Do layout"""
-        self.sizer = wx.BoxSizer(wx.VERTICAL)
-        self.sizer.Add(self.toolbar, proportion=0, flag=wx.EXPAND)
-        self.sizer.Add(self.tree.GetControl(), proportion=1, flag=wx.EXPAND)
-
-        # Show first infobar for first-time user
-        if is_current_mapset_in_demolocation():
-            self.sizer.Insert(1, self.infoBar,
-                              proportion=0, flag=wx.EXPAND)
-            buttons1 = [("Create new Location", self.OnCreateLocation),
-                        ("Learn More", self.infoManager._onLearnMore)]
-            self.infoManager.ShowDataStructureInfo(buttons1)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self.toolbar, proportion=0, flag=wx.EXPAND)
+        sizer.Add(self.infoBar, proportion=0, flag=wx.EXPAND)
+        sizer.Add(self.tree.GetControl(), proportion=1, flag=wx.EXPAND)
 
         self.SetAutoLayout(True)
-        self.SetSizer(self.sizer)
+        self.SetSizer(sizer)
         self.Fit()
 
         self.Layout()
+
+    def showDataStructureInfo(self):
+        self.infoManager.ShowDataStructureInfo(self.OnCreateLocation)
 
     def LoadItems(self):
         self.tree.ReloadTreeItems()
