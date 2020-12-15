@@ -114,6 +114,10 @@ def get_mapset_owner(mapset_path):
         return None
 
 
+def is_current_mapset_in_demolocation():
+    return gisenv()['LOCATION_NAME'] == "world_latlong_wgs84"
+
+
 def is_mapset_locked(mapset_path):
     """Check if the mapset is locked"""
     lock_name = ".gislock"
