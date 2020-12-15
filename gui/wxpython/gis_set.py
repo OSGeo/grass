@@ -521,10 +521,9 @@ class GRASSStartup(wx.Frame):
         if path is None:
             grassdb = create_database_directory()
             location = "world_latlong_wgs84"
-            mapset_name = create_startup_location_in_grassdb(grassdb,
-                                                             location)
-            if mapset_name:
-                self.SetLocation(grassdb, location, mapset_name)
+            if create_startup_location_in_grassdb(grassdb,
+                                                  location):
+                self.SetLocation(grassdb, location, "PERMANENT")
                 self.ExitSuccessfully()
 
         if path:
