@@ -246,6 +246,7 @@ void print_wkt(int esristyle, int dontprettify)
 
 	    epsg_num = atoi(G_find_key_value("epsg", projepsg));
 
+	    hSRS = OSRNewSpatialReference(NULL);
 	    OSRImportFromEPSG(hSRS, epsg_num);
 	    OSRExportToWktEx(hSRS, &outwkt, papszOptions);
 	}
