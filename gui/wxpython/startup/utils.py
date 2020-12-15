@@ -22,7 +22,6 @@ import tempfile
 import getpass
 import sys
 from shutil import copytree, ignore_patterns
-from grass.grassdb.create import create_mapset, get_default_mapset_name
 
 
 def get_possible_database_path():
@@ -122,41 +121,22 @@ def _copy_startup_location(startup_location, location_in_grassdb):
     return False
 
 
-def _create_startup_mapset(location_path):
-    """Create the new empty startup mapset named after user.
-
-    Returns new mapset name if successfully created or None when
-    an error was encountered.
-    """
-    mapset_name = default_name = get_default_mapset_name()
-    mapset_path = os.path.join(location_path, mapset_name)
-
-    # Create new startup mapset
-    try:
-        grassdatabase, location = os.path.split(location_path)
-        create_mapset(grassdatabase, location, mapset_name)
-        return mapset_name
-    except (IOError, OSError):
-        pass
-    return None
-
-
 def create_startup_location_in_grassdb(grassdatabase, startup_location_name):
     """Create a new startup location in the given GRASS database.
 
-    Returns the newly created mapset name on success. Returns None if there is
-    no location to copy in the installation or copying failed.
+    Returns True if a new startup location successfully created
+    in the given GRASS database.
+    Returns False if there is no location to copy in the installation
+    or copying failed.
     """
 
     # Find out if startup location exists
     startup_location = _get_startup_location_in_distribution()
     if not startup_location:
-        return None
+        return False
 
-    # Copy the simple startup_location with some data to GRASS database.
-    mapset = None
+    # Copy the simple startup_location with some data to GRASS database
     location_in_grassdb = os.path.join(grassdatabase, startup_location_name)
     if _copy_startup_location(startup_location, location_in_grassdb):
-        mapset = _create_startup_mapset(location_in_grassdb)
-        return mapset
-    return None
+        return True
+    return False
