@@ -1,3 +1,20 @@
+"""
+@package gui_core.infobar
+
+@brief Wrapper around wx.InfoBar
+
+Classes:
+- gui_core::InfoBar
+
+(C) 2020 by the GRASS Development Team
+
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
+
+@author Linda Kladivova
+@author Anna Petrasova <kratochanna gmail.com>
+@author Vaclav Petras <wenzeslaus gmail.com>
+"""
 
 import wx
 import wx.aui
@@ -14,12 +31,13 @@ class InfoBar(IB.InfoBar):
 
         self.button_ids = []
 
+        # some system themes have alpha, remove it
         self._background_color = wx.SystemSettings.GetColour(
             wx.SYS_COLOUR_HIGHLIGHT
-        ).ChangeLightness(100)
+        ).Get(False)
         self._foreground_color = wx.SystemSettings.GetColour(
             wx.SYS_COLOUR_HIGHLIGHTTEXT
-        ).ChangeLightness(100)
+        ).Get(False)
         self.SetBackgroundColour(self._background_color)
         self.SetForegroundColour(self._foreground_color)
         self._text.SetBackgroundColour(self._background_color)
@@ -31,13 +49,21 @@ class InfoBar(IB.InfoBar):
         self.subSizerText = wx.BoxSizer(wx.HORIZONTAL)
         self.subSizerButtons = wx.BoxSizer(wx.HORIZONTAL)
         self.subSizerText.Add(self._icon, wx.SizerFlags().Centre().Border())
-        self.subSizerText.Add(self._text, 200, wx.ALIGN_CENTER_VERTICAL)
-        self.subSizerText.AddStretchSpacer()
+        self.subSizerText.Add(self._text, 1, wx.ALIGN_CENTER_VERTICAL)
         self.subSizerButtons.AddStretchSpacer()
         self.subSizerButtons.Add(self._button, wx.SizerFlags().Centre().Border())
         sizer.Add(self.subSizerText, wx.SizerFlags().Expand())
         sizer.Add(self.subSizerButtons, wx.SizerFlags().Expand())
         self.SetSizer(sizer)
+
+    def ShowMessage(self, message, icon, buttons=None):
+        """Show message with buttons (optional).
+        Buttons are list of tuples (label, handler)"""
+        self.Hide()
+        self.RemoveButtons()
+        if buttons:
+            self.SetButtons(buttons)
+        super().ShowMessage(message, icon)
 
     def AddButton(self, btnid, label):
         """
@@ -93,9 +119,3 @@ class InfoBar(IB.InfoBar):
                 if window.GetId() in self.button_ids:
                     self.subSizerButtons.Detach(window)
                     window.Destroy()
-
-    def OnButton(self, event):
-        """
-        Hides infobar.
-        """
-        self.DoHide()
