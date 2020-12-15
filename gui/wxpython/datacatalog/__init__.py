@@ -2,5 +2,6 @@ all = [
     'catalog',
     'frame',
     'tree',
-    'dialogs'
+    'dialogs',
+    'infomanager'
 ]
