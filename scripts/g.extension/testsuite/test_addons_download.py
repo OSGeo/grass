@@ -121,6 +121,29 @@ class TestModuleDownloadFromDifferentSources(TestCase):
             self.assertFileExists(file)
 
     @unittest.skipIf(skip, "Skipping as chosen...")
+    def test_github_install_official_multimodule(self):
+        """Test installing multi-module extension from official addons repository"""
+        i_sentinel_files = [
+            os.path.join(
+                self.install_prefix, "scripts", "i.sentinel.parallel.download"
+            ),
+            os.path.join(
+                self.install_prefix, "docs", "html", "i.sentinel.parallel.download.html"
+            ),
+            os.path.join(self.install_prefix, "scripts", "i.sentinel.import"),
+            os.path.join(self.install_prefix, "docs", "html", "i.sentinel.import.html"),
+        ]
+        self.assertModule(
+            "g.extension", extension="i.sentinel", url=None, prefix=self.install_prefix
+        )
+
+        for file in i_sentinel_files:
+            self.assertFileExists(file)
+            if not file.endswith("html"):
+                print(file)
+                self.assertModule(file, **{"help": True})
+
+    @unittest.skipIf(skip, "Skipping as chosen...")
     def test_windows_install(self):
         """Test function for installing extension on MS Windows"""
 
