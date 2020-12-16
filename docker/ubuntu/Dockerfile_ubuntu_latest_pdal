@@ -103,7 +103,7 @@ COPY . /src/grass_build/
 WORKDIR /src/grass_build
 
 # Cleanup potentially leftover GISRC file with wrong path to "demolocation"
-RUN rm -f /src/grass_build/dist.x86_64-pc-linux-gnu/demolocation/.grassrc79
+RUN rm -f /src/grass_build/dist.*/demolocation/.grassrc79
 
 # Set environmental variables for GRASS GIS compilation, without debug symbols
 # Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
