@@ -39,11 +39,11 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
 {
   public:
     GrassLidarFilter():
-        dim_to_use_as_z_(pdal::Dimension::Id::Z),
-        dim_to_use_as_i_(pdal::Dimension::Id::Intensity),
+        dim_to_import_(pdal::Dimension::Id::Z),
         use_spatial_filter_(false),
         use_zrange_(false),
         use_irange_(false),
+        use_drange_(false),
         xmin_(0),
         xmax_(0),
         ymin_(0),
@@ -52,15 +52,19 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
         zmax_(0),
         imin_(0),
         imax_(0),
+        dmin_(0),
+        dmax_(0),
         n_processed_(0),
         n_passed_(0),
         n_outside_(0),
         zrange_filtered_(0),
         irange_filtered_(0),
+        drange_filtered_(0),
         return_filtered_(0),
         n_class_filtered_(0),
         zscale_(1),
         iscale_(1),
+        dscale_(1),
         use_class_filter_(false),
         use_return_filter_(false), base_segment_(nullptr)
     {
@@ -68,6 +72,11 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
     std::string getName() const
     {
         return "filters.grasslidar";
+    }
+
+    void dim_to_import(pdal::Dimension::Id dim_to_import)
+    {
+        dim_to_import_ = dim_to_import;
     }
 
     void set_spatial_filter(double xmin, double xmax,
@@ -93,6 +102,13 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
         imin_ = min;
         imax_ = max;
         irange_filtered_ = 0;
+    }
+    void set_drange_filter(double min, double max)
+    {
+        use_drange_ = true;
+        dmin_ = min;
+        dmax_ = max;
+        drange_filtered_ = 0;
     }
     void set_return_filter(ReturnFilter return_filter)
     {
@@ -121,6 +137,10 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
     {
         iscale_ = scale;
     }
+    void set_d_scale(double scale)
+    {
+        dscale_ = scale;
+    }
 
     gpoint_count num_processed()
     {
@@ -146,6 +166,10 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
     {
         return irange_filtered_;
     }
+    gpoint_count num_drange_filtered()
+    {
+        return drange_filtered_;
+    }
     gpoint_count num_spatially_filtered()
     {
         return n_outside_;
@@ -162,13 +186,12 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
     }
     virtual bool processOne(pdal::PointRef & point);
 
-    // TODO: define the dimension!
-    pdal::Dimension::Id dim_to_use_as_z_;
-    pdal::Dimension::Id dim_to_use_as_i_;
+    pdal::Dimension::Id dim_to_import_;
 
     bool use_spatial_filter_;
     bool use_zrange_;
     bool use_irange_;
+    bool use_drange_;
     double xmin_;
     double xmax_;
     double ymin_;
@@ -177,16 +200,20 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
     double zmax_;
     double imin_;
     double imax_;
+    double dmin_;
+    double dmax_;
     gpoint_count n_processed_;
     gpoint_count n_passed_;
     gpoint_count n_outside_;
     gpoint_count zrange_filtered_;
     gpoint_count irange_filtered_;
+    gpoint_count drange_filtered_;
     gpoint_count return_filtered_;
     gpoint_count n_class_filtered_;
 
     double zscale_;
     double iscale_;
+    double dscale_;
 
     bool use_class_filter_;
     ClassFilter class_filter_;

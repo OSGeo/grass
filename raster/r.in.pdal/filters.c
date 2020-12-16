@@ -60,40 +60,20 @@ int spatial_filter_from_current_region(double *xmin, double *ymin,
     return TRUE;
 }
 
-int zrange_filter_from_option(struct Option *option, double *zmin,
-                              double *zmax)
+int range_filter_from_option(struct Option *option, double *min, double *max)
 {
     if (option->answer != NULL) {
         if (option->answers[0] == NULL || option->answers[1] == NULL)
-            G_fatal_error(_("Invalid zrange <%s>"), option->answer);
-        sscanf(option->answers[0], "%lf", zmin);
-        sscanf(option->answers[1], "%lf", zmax);
+            G_fatal_error(_("Invalid range <%s> for option <%s>"),
+                          option->answer, option->key);
+        sscanf(option->answers[0], "%lf", min);
+        sscanf(option->answers[1], "%lf", max);
         /* for convenience, switch order to make valid input */
-        if (*zmin > *zmax) {
-            double tmp = *zmax;
+        if (*min > *max) {
+            double tmp = *max;
 
-            *zmax = *zmin;
-            *zmin = tmp;
-        }
-        return TRUE;
-    }
-    return FALSE;
-}
-
-int irange_filter_from_option(struct Option *option, double *imin,
-                              double *imax)
-{
-    if (option->answer != NULL) {
-        if (option->answers[0] == NULL || option->answers[1] == NULL)
-            G_fatal_error(_("Invalid irange <%s>"), option->answer);
-        sscanf(option->answers[0], "%lf", imin);
-        sscanf(option->answers[1], "%lf", imax);
-        /* for convenience, switch order to make valid input */
-        if (*imin > *imax) {
-            double tmp = *imax;
-
-            *imax = *imin;
-            *imin = tmp;
+            *max = *min;
+            *min = tmp;
         }
         return TRUE;
     }

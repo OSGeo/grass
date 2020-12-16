@@ -33,10 +33,7 @@ int spatial_filter_from_option(struct Option *option, double *xmin,
 int spatial_filter_from_current_region(double *xmin, double *ymin,
                                        double *xmax, double *ymax);
 
-int zrange_filter_from_option(struct Option *option,
-                              double *zmin, double *zmax);
-int irange_filter_from_option(struct Option *option,
-                              double *imin, double *imax);
+int range_filter_from_option(struct Option *option, double *min, double *max);
 
 int return_filter_create_from_string(struct ReturnFilter *return_filter,
                                      const char *name);

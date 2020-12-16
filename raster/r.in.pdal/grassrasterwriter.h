@@ -60,9 +60,9 @@ class GrassRasterWriter:public pdal::Writer, public pdal::Streamable
         cols_ = cols;
     }
 
-    void dim_to_use_as_z(pdal::Dimension::Id dim_to_use_as_z)
+    void dim_to_import(pdal::Dimension::Id dim_to_import)
     {
-        dim_to_use_as_z_ = dim_to_use_as_z;
+        dim_to_import_ = dim_to_import;
     }
 
     void set_output_scale(double scale)
@@ -85,7 +85,7 @@ class GrassRasterWriter:public pdal::Writer, public pdal::Streamable
 
         double x = point.getFieldAs < double >(Id::X);
         double y = point.getFieldAs < double >(Id::Y);
-        double z = point.getFieldAs < double >(dim_to_use_as_z_);
+        double z = point.getFieldAs < double >(dim_to_import_);
 
         z *= scale_;
 
@@ -118,7 +118,7 @@ class GrassRasterWriter:public pdal::Writer, public pdal::Streamable
     int cols_;
     double scale_;
 
-    pdal::Dimension::Id dim_to_use_as_z_;
+    pdal::Dimension::Id dim_to_import_;
 };
 
 #endif // GRASSRASTERWRITER_H

@@ -224,6 +224,16 @@ int main(int argc, char *argv[])
     iscale_opt->description = _("Scale to apply to intensity values");
     iscale_opt->guisection = _("Transform");
 
+    Option *drange_opt = G_define_option();
+
+    drange_opt->key = "drange";
+    drange_opt->type = TYPE_DOUBLE;
+    drange_opt->required = NO;
+    drange_opt->key_desc = "min,max";
+    drange_opt->description =
+        _("Filter range for output dimension values (min,max)");
+    drange_opt->guisection = _("Selection");
+
     Option *dscale_opt = G_define_option();
 
     dscale_opt->key = "dscale";
@@ -505,19 +515,21 @@ int main(int argc, char *argv[])
     }
 
     double zrange_min, zrange_max;
-    bool use_zrange = zrange_filter_from_option(zrange_opt, &zrange_min,
-                                                &zrange_max);
+    bool use_zrange = range_filter_from_option(zrange_opt, &zrange_min,
+                                               &zrange_max);
     double irange_min, irange_max;
-    bool use_irange = irange_filter_from_option(irange_opt, &irange_min,
-                                                &irange_max);
+    bool use_irange = range_filter_from_option(irange_opt, &irange_min,
+                                               &irange_max);
+    double drange_min, drange_max;
+    bool use_drange = range_filter_from_option(drange_opt, &drange_min,
+                                               &drange_max);
     struct ReturnFilter return_filter_struct;
     bool use_return_filter =
         return_filter_create_from_string(&return_filter_struct,
                                          return_filter_opt->answer);
     struct ClassFilter class_filter;
     bool use_class_filter = class_filter_create_from_strings(&class_filter,
-                                                             class_filter_opt->
-                                                             answers);
+                                                             class_filter_opt->answers);
 
     point_binning_set(&point_binning, method_opt->answer, pth_opt->answer,
                       trim_opt->answer);
@@ -541,7 +553,7 @@ int main(int argc, char *argv[])
 
     /* Set up output dimension */
     // we use full qualification because the dim ns contains too general names
-    pdal::Dimension::Id dim_to_use_as_z = pdal::Dimension::Id::Z;
+    pdal::Dimension::Id dim_to_import = pdal::Dimension::Id::Z;
 
     if (!user_dimension_opt->answer &&
         !(strcmp(dimension_opt->answer, "z") == 0)) {
@@ -551,37 +563,37 @@ int main(int argc, char *argv[])
         rtype = CELL_TYPE;
 
         if (strcmp(dimension_opt->answer, "intensity") == 0) {
-            dim_to_use_as_z = pdal::Dimension::Id::Intensity;
+            dim_to_import = pdal::Dimension::Id::Intensity;
         }
         else if (strcmp(dimension_opt->answer, "number") == 0) {
-            dim_to_use_as_z = pdal::Dimension::Id::ReturnNumber;
+            dim_to_import = pdal::Dimension::Id::ReturnNumber;
         }
         else if (strcmp(dimension_opt->answer, "returns") == 0) {
-            dim_to_use_as_z = pdal::Dimension::Id::NumberOfReturns;
+            dim_to_import = pdal::Dimension::Id::NumberOfReturns;
         }
         else if (strcmp(dimension_opt->answer, "direction") == 0) {
-            dim_to_use_as_z = pdal::Dimension::Id::ScanDirectionFlag;
+            dim_to_import = pdal::Dimension::Id::ScanDirectionFlag;
         }
         else if (strcmp(dimension_opt->answer, "angle") == 0) {
-            dim_to_use_as_z = pdal::Dimension::Id::ScanAngleRank;
+            dim_to_import = pdal::Dimension::Id::ScanAngleRank;
         }
         else if (strcmp(dimension_opt->answer, "class") == 0) {
-            dim_to_use_as_z = pdal::Dimension::Id::Classification;
+            dim_to_import = pdal::Dimension::Id::Classification;
         }
         else if (strcmp(dimension_opt->answer, "source") == 0) {
-            dim_to_use_as_z = pdal::Dimension::Id::PointSourceId;
+            dim_to_import = pdal::Dimension::Id::PointSourceId;
         }
     }
 
     if (point_binning.method == METHOD_SIDNMAX ||
         point_binning.method == METHOD_SIDNMIN)
-        dim_to_use_as_z = pdal::Dimension::Id::PointSourceId;
+        dim_to_import = pdal::Dimension::Id::PointSourceId;
 
-    if (dim_to_use_as_z != pdal::Dimension::Id::Z &&
+    if (dim_to_import != pdal::Dimension::Id::Z &&
         (strcmp(method_opt->answer, "ev1") == 0 ||
          strcmp(method_opt->answer, "ev2") == 0 ||
          strcmp(method_opt->answer, "ev3") == 0))
-        dim_to_use_as_z = pdal::Dimension::Id::Z;
+        dim_to_import = pdal::Dimension::Id::Z;
 
     /* Set up axis and output value scaling */
     double zscale = 1.0;
@@ -596,10 +608,9 @@ int main(int argc, char *argv[])
     if (dscale_opt->answer)
         dscale = atof(dscale_opt->answer);
 
-    if (zscale_opt->answer && dim_to_use_as_z == pdal::Dimension::Id::Z)
+    if (zscale_opt->answer && dim_to_import == pdal::Dimension::Id::Z)
         output_scale = zscale;
-    if (iscale_opt->answer &&
-        dim_to_use_as_z == pdal::Dimension::Id::Intensity)
+    if (iscale_opt->answer && dim_to_import == pdal::Dimension::Id::Intensity)
         output_scale = iscale;
     if (dscale_opt->answer)
         output_scale = dscale;
@@ -736,12 +747,15 @@ int main(int argc, char *argv[])
         grass_filter.set_zrange_filter(zrange_min, zrange_max);
     if (use_irange)
         grass_filter.set_irange_filter(irange_min, irange_max);
+    if (use_drange)
+        grass_filter.set_drange_filter(drange_min, drange_max);
     if (use_return_filter)
         grass_filter.set_return_filter(return_filter_struct);
     if (use_class_filter)
         grass_filter.set_class_filter(class_filter);
     grass_filter.set_z_scale(zscale);   // Default is 1 == no scale
     grass_filter.set_intensity_scale(iscale);
+    grass_filter.set_d_scale(dscale);
     grass_filter.setInput(*last_stage);
 
     GrassRasterWriter binning_writer;
@@ -800,8 +814,8 @@ int main(int argc, char *argv[])
     G_message(_("Scanning points..."));
 
     if (user_dimension_opt->answer) {
-        dim_to_use_as_z = point_layout->findDim(user_dimension_opt->answer);
-        if (dim_to_use_as_z == pdal::Dimension::Id::Unknown)
+        dim_to_import = point_layout->findDim(user_dimension_opt->answer);
+        if (dim_to_import == pdal::Dimension::Id::Unknown)
             G_fatal_error(_("Cannot identify the requested dimension. "
                             "Check dimension name spelling."));
         if (!(strcmp(dimension_opt->answer, "z") == 0))
@@ -812,15 +826,16 @@ int main(int argc, char *argv[])
 
     // this is just for sure, we tested the individual dimensions before
     // TODO: should we test Z explicitly as well?
-    if (!point_layout->hasDim(dim_to_use_as_z))
+    if (!point_layout->hasDim(dim_to_import))
         G_fatal_error(_("Dataset doesn't have requested dimension '%s'"
                         " (possibly a programming error)"),
-                      pdal::Dimension::name(dim_to_use_as_z).c_str());
+                      pdal::Dimension::name(dim_to_import).c_str());
 
     // TODO: add percentage printing to one of the filters
     binning_writer.set_binning(&region, &point_binning, &bin_index_nodes,
                                rtype, cols);
-    binning_writer.dim_to_use_as_z(dim_to_use_as_z);
+    binning_writer.dim_to_import(dim_to_import);
+    grass_filter.dim_to_import(dim_to_import);
 
     // run the actual processing
     binning_writer.execute(point_table);
@@ -892,6 +907,8 @@ int main(int argc, char *argv[])
               grass_filter.num_zrange_filtered());
     G_message("Filtered i range " GPOINT_COUNT_FORMAT " points.",
               grass_filter.num_irange_filtered());
+    G_message("Filtered d range " GPOINT_COUNT_FORMAT " points.",
+              grass_filter.num_drange_filtered());
     G_message("Filtered class " GPOINT_COUNT_FORMAT " points.",
               grass_filter.num_class_filtered());
     G_message("Filtered return " GPOINT_COUNT_FORMAT " points.",

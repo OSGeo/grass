@@ -26,7 +26,7 @@ bool GrassLidarFilter::processOne(pdal::PointRef & point)
 
     double x = point.getFieldAs < double >(Id::X);
     double y = point.getFieldAs < double >(Id::Y);
-    double z = point.getFieldAs < double >(dim_to_use_as_z_);
+    double z = point.getFieldAs < double >(Id::Z);
 
     n_processed_++;
 
@@ -39,11 +39,20 @@ bool GrassLidarFilter::processOne(pdal::PointRef & point)
         }
     }
     if (use_irange_) {
-        double intensity = point.getFieldAs < double >(dim_to_use_as_i_);
+        double intensity = point.getFieldAs < double >(Id::Intensity);
 
         intensity *= iscale_;
         if (intensity < imin_ || intensity > imax_) {
             irange_filtered_++;
+            return false;
+        }
+    }
+    if (use_drange_) {
+        double value = point.getFieldAs < double >(dim_to_import_);
+
+        value *= dscale_;
+        if (value < dmin_ || value > dmax_) {
+            drange_filtered_++;
             return false;
         }
     }
