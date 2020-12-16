@@ -206,7 +206,7 @@ int main(int argc, char *argv[])
 
     Option *irange_opt = G_define_option();
 
-    irange_opt->key = "intensity_range";
+    irange_opt->key = "irange";
     irange_opt->type = TYPE_DOUBLE;
     irange_opt->required = NO;
     irange_opt->key_desc = "min,max";
@@ -216,13 +216,23 @@ int main(int argc, char *argv[])
 
     Option *iscale_opt = G_define_option();
 
-    iscale_opt->key = "intensity_scale";
+    iscale_opt->key = "iscale";
     iscale_opt->type = TYPE_DOUBLE;
     iscale_opt->required = NO;
     iscale_opt->answer = const_cast < char *>("1.0");
 
     iscale_opt->description = _("Scale to apply to intensity values");
     iscale_opt->guisection = _("Transform");
+
+    Option *dscale_opt = G_define_option();
+
+    dscale_opt->key = "dscale";
+    dscale_opt->type = TYPE_DOUBLE;
+    dscale_opt->required = NO;
+    dscale_opt->label = _("Scale to apply to output dimension values");
+    dscale_opt->description =
+        _("Use if output dimension is not Z or intensity");
+    dscale_opt->guisection = _("Transform");
 
     Flag *reproject_flag = G_define_flag();
 
@@ -279,26 +289,28 @@ int main(int argc, char *argv[])
     res_opt->description = _("Output raster resolution");
     res_opt->guisection = _("Output");
 
-    Option *filter_opt = G_define_option();
+    Option *return_filter_opt = G_define_option();
 
-    filter_opt->key = "return_filter";
-    filter_opt->type = TYPE_STRING;
-    filter_opt->required = NO;
-    filter_opt->label = _("Only import points of selected return type");
-    filter_opt->description = _("If not specified, all points are imported");
-    filter_opt->options = "first,last,mid";
-    filter_opt->guisection = _("Selection");
+    return_filter_opt->key = "return_filter";
+    return_filter_opt->type = TYPE_STRING;
+    return_filter_opt->required = NO;
+    return_filter_opt->label =
+        _("Only import points of selected return type");
+    return_filter_opt->description =
+        _("If not specified, all points are imported");
+    return_filter_opt->options = "first,last,mid";
+    return_filter_opt->guisection = _("Selection");
 
-    Option *class_opt = G_define_option();
+    Option *class_filter_opt = G_define_option();
 
-    class_opt->key = "class_filter";
-    class_opt->type = TYPE_INTEGER;
-    class_opt->multiple = YES;
-    class_opt->required = NO;
-    class_opt->label = _("Only import points of selected class(es)");
-    class_opt->description = _("Input is comma separated integers. "
-                               "If not specified, all points are imported.");
-    class_opt->guisection = _("Selection");
+    class_filter_opt->key = "class_filter";
+    class_filter_opt->type = TYPE_INTEGER;
+    class_filter_opt->multiple = YES;
+    class_filter_opt->required = NO;
+    class_filter_opt->label = _("Only import points of selected class(es)");
+    class_filter_opt->description = _("Input is comma separated integers. "
+                                      "If not specified, all points are imported.");
+    class_filter_opt->guisection = _("Selection");
 
     Option *dimension_opt = G_define_option();
 
@@ -396,8 +408,6 @@ int main(int argc, char *argv[])
 
     G_option_required(input_opt, file_list_opt, NULL);
     G_option_exclusive(input_opt, file_list_opt, NULL);
-    // TODO: implement usage of z and i in the level of r.in.lidar
-    // G_option_exclusive(intens_flag, intens_import_flag, NULL);
     G_option_requires(base_rast_res_flag, base_raster_opt, NULL);
     G_option_exclusive(reproject_flag, over_flag, NULL);
     G_option_required(output_opt, print_extent_flag, print_info_flag, NULL);
@@ -422,7 +432,7 @@ int main(int argc, char *argv[])
     /* If we print extent, there is no need to validate rest of the input */
     if (print_extent_flag->answer) {
         print_extent(&infiles);
-        exit(0);
+        exit(EXIT_SUCCESS);
     }
 
     if (print_info_flag->answer) {
@@ -458,7 +468,11 @@ int main(int argc, char *argv[])
 
     /* parse input values */
     outmap = output_opt->answer;
+    if (input_opt->answer && access(input_opt->answer, F_OK) != 0) {
+        G_fatal_error(_("Input file <%s> does not exist"), input_opt->answer);
+    }
 
+    /* Set up input extent for point spatial filter */
     double xmin = 0;
     double ymin = 0;
     double xmax = 0;
@@ -483,17 +497,7 @@ int main(int argc, char *argv[])
         use_spatial_filter = true;
     }
 
-    if (input_opt->answer && access(input_opt->answer, F_OK) != 0) {
-        G_fatal_error(_("Input file <%s> does not exist"), input_opt->answer);
-    }
-
-    // we use full qualification because the dim ns contains too general names
-    pdal::Dimension::Id dim_to_use_as_z = pdal::Dimension::Id::Z;
-
-    double zscale = 1.0;
-    double iscale = 1.0;
-    double res = 0.0;
-
+    /* Set up filtering options */
     if (!extents_flag->answer) {
         use_spatial_filter = spatial_filter_from_current_region(&xmin,
                                                                 &ymin,
@@ -509,21 +513,16 @@ int main(int argc, char *argv[])
     struct ReturnFilter return_filter_struct;
     bool use_return_filter =
         return_filter_create_from_string(&return_filter_struct,
-                                         filter_opt->answer);
+                                         return_filter_opt->answer);
     struct ClassFilter class_filter;
-    bool use_class_filter =
-        class_filter_create_from_strings(&class_filter, class_opt->answers);
-
-    /* TODO: we already used zscale */
-    /* TODO: we don't report intensity range */
-    if (zscale_opt->answer)
-        zscale = atof(zscale_opt->answer);
-    if (iscale_opt->answer)
-        iscale = atof(iscale_opt->answer);
+    bool use_class_filter = class_filter_create_from_strings(&class_filter,
+                                                             class_filter_opt->
+                                                             answers);
 
     point_binning_set(&point_binning, method_opt->answer, pth_opt->answer,
                       trim_opt->answer);
 
+    /* Set up output map type */
     if (strcmp("CELL", type_opt->answer) == 0)
         rtype = CELL_TYPE;
     else if (strcmp("DCELL", type_opt->answer) == 0)
@@ -539,6 +538,10 @@ int main(int argc, char *argv[])
             G_warning(_("Output map type set to CELL"));
         rtype = CELL_TYPE;
     }
+
+    /* Set up output dimension */
+    // we use full qualification because the dim ns contains too general names
+    pdal::Dimension::Id dim_to_use_as_z = pdal::Dimension::Id::Z;
 
     if (!user_dimension_opt->answer &&
         !(strcmp(dimension_opt->answer, "z") == 0)) {
@@ -579,6 +582,29 @@ int main(int argc, char *argv[])
          strcmp(method_opt->answer, "ev2") == 0 ||
          strcmp(method_opt->answer, "ev3") == 0))
         dim_to_use_as_z = pdal::Dimension::Id::Z;
+
+    /* Set up axis and output value scaling */
+    double zscale = 1.0;
+    double iscale = 1.0;
+    double dscale = 1.0;
+    double output_scale = 1.0;
+
+    if (zscale_opt->answer)
+        zscale = atof(zscale_opt->answer);
+    if (iscale_opt->answer)
+        iscale = atof(iscale_opt->answer);
+    if (dscale_opt->answer)
+        dscale = atof(dscale_opt->answer);
+
+    if (zscale_opt->answer && dim_to_use_as_z == pdal::Dimension::Id::Z)
+        output_scale = zscale;
+    if (iscale_opt->answer &&
+        dim_to_use_as_z == pdal::Dimension::Id::Intensity)
+        output_scale = iscale;
+    if (dscale_opt->answer)
+        output_scale = dscale;
+
+    double res = 0.0;
 
     if (res_opt->answer) {
         /* align to resolution */
@@ -701,6 +727,7 @@ int main(int argc, char *argv[])
         last_stage = &reprojection_filter;
     }
 
+    /* Enable all filters */
     GrassLidarFilter grass_filter;
 
     if (use_spatial_filter)
@@ -713,10 +740,13 @@ int main(int argc, char *argv[])
         grass_filter.set_return_filter(return_filter_struct);
     if (use_class_filter)
         grass_filter.set_class_filter(class_filter);
+    grass_filter.set_z_scale(zscale);   // Default is 1 == no scale
+    grass_filter.set_intensity_scale(iscale);
     grass_filter.setInput(*last_stage);
 
     GrassRasterWriter binning_writer;
 
+    binning_writer.set_output_scale(output_scale);
     binning_writer.setInput(grass_filter);
     //stream_filter.setInput(*last_stage);
     // there is no difference between 1 and 10k points in memory

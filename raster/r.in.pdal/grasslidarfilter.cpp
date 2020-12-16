@@ -42,7 +42,7 @@ bool GrassLidarFilter::processOne(pdal::PointRef & point)
         double intensity = point.getFieldAs < double >(dim_to_use_as_i_);
 
         intensity *= iscale_;
-        if (z < imin_ || z > imax_) {
+        if (intensity < imin_ || intensity > imax_) {
             irange_filtered_++;
             return false;
         }

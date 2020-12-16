@@ -59,9 +59,15 @@ class GrassRasterWriter:public pdal::Writer, public pdal::Streamable
         rtype_ = rtype;
         cols_ = cols;
     }
+
     void dim_to_use_as_z(pdal::Dimension::Id dim_to_use_as_z)
     {
         dim_to_use_as_z_ = dim_to_use_as_z;
+    }
+
+    void set_output_scale(double scale)
+    {
+        scale_ = scale;
     }
 
     virtual void write(const pdal::PointViewPtr view)
@@ -72,6 +78,7 @@ class GrassRasterWriter:public pdal::Writer, public pdal::Streamable
             processOne(p);
         }
     }
+
     virtual bool processOne(pdal::PointRef & point)
     {
         using namespace pdal::Dimension;
@@ -79,6 +86,8 @@ class GrassRasterWriter:public pdal::Writer, public pdal::Streamable
         double x = point.getFieldAs < double >(Id::X);
         double y = point.getFieldAs < double >(Id::Y);
         double z = point.getFieldAs < double >(dim_to_use_as_z_);
+
+        z *= scale_;
 
         // TODO: check the bounds and report discrepancies in
         // number of filtered out vs processed to the user
@@ -98,6 +107,7 @@ class GrassRasterWriter:public pdal::Writer, public pdal::Streamable
         n_processed++;
         return true;
     }
+
     gpoint_count n_processed;
 
   private:
@@ -106,6 +116,7 @@ class GrassRasterWriter:public pdal::Writer, public pdal::Streamable
     struct BinIndex *bin_index_nodes_;
     RASTER_MAP_TYPE rtype_;
     int cols_;
+    double scale_;
 
     pdal::Dimension::Id dim_to_use_as_z_;
 };

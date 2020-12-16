@@ -324,6 +324,20 @@ the <em>resolution</em> parameter. Also here it is recommended to verify
 and optimize the resulting region settings with <em>g.region</em> prior
 to importing the dataset.
 
+<h3>Transformation</h3>
+<p>
+Point Z axis values can be altered by scaling parameter set by <em>zscale</em>.
+Each point X axis value is multiplied by provided value before any
+filtering or further transformation takes place. In the same way acts
+<em>iscale</em> parameter – values are multiplied before range filter
+<em>irange</em> is applied (if present).
+<p>
+Output value scaling can be performed independently of filtering by providing
+<em>dscale</em> parameter. This scaling parameter is applied only to
+output value independently of its dimension. Thus if <em>zrange</em> and
+<em>dscale</em> are set for Z output dimension, filtering by <em>zrange</em> 
+will be done with unscaled values but output will be scaled by <em>dscale</em>.
+<em>dscale</em> takes precedence over <em>zscale</em> and <em>iscale</em>.
 
 <h2>NOTES</h2>
 
