@@ -454,17 +454,35 @@ int main(int argc, char *argv[])
          strcmp(method_opt->answer, "ev3") == 0) &&
         (user_dimension_opt->answer ||
          !(strcmp(dimension_opt->answer, "z") == 0)))
-        G_warning(_("Binning methods 'n', 'sidnmax', 'sidnmin' and eigenvalues are ignoring specified dimension"));
-
+        G_warning(_("Binning methods 'n', 'sidnmax', 'sidnmin' and "
+                    "eigenvalues are ignoring specified dimension"));
 
     /* parse input values */
     outmap = output_opt->answer;
+
+    double xmin = 0;
+    double ymin = 0;
+    double xmax = 0;
+    double ymax = 0;
+    bool use_spatial_filter = false;
 
     Rast_get_window(&region);
     /* G_get_window seems to be unreliable if the location has been changed */
     G_get_set_window(&loc_wind);        /* TODO: v.in.lidar uses G_get_default_window() */
 
-    // TODO: Implement -e flag to get bounds and set region accordingly
+    /* Region is set based on whole point cloud that could be larger than imported part */
+    if (extents_flag->answer) {
+        double min_x, max_x, min_y, max_y, min_z, max_z;
+
+        get_extent(&infiles, &min_x, &max_x, &min_y, &max_y, &min_z, &max_z);
+
+        region.east = xmax = max_x;
+        region.west = xmin = min_x;
+        region.north = ymax = max_y;
+        region.south = ymin = min_y;
+
+        use_spatial_filter = true;
+    }
 
     if (input_opt->answer && access(input_opt->answer, F_OK) != 0) {
         G_fatal_error(_("Input file <%s> does not exist"), input_opt->answer);
@@ -477,15 +495,12 @@ int main(int argc, char *argv[])
     double iscale = 1.0;
     double res = 0.0;
 
-    double xmin = 0;
-    double ymin = 0;
-    double xmax = 0;
-    double ymax = 0;
-    bool use_spatial_filter = false;
-
-    use_spatial_filter = spatial_filter_from_current_region(&xmin,
-                                                            &ymin,
-                                                            &xmax, &ymax);
+    if (!extents_flag->answer) {
+        use_spatial_filter = spatial_filter_from_current_region(&xmin,
+                                                                &ymin,
+                                                                &xmax,
+                                                                &ymax);
+    }
 
     double zrange_min, zrange_max;
     bool use_zrange = zrange_filter_from_option(zrange_opt, &zrange_min,
@@ -604,6 +619,7 @@ int main(int argc, char *argv[])
         /* align to current region */
         Rast_align_window(&region, &loc_wind);
     }
+
     Rast_set_output_window(&region);
     rows = region.rows;
     cols = region.cols;

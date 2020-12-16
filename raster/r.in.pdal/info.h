@@ -25,6 +25,8 @@ extern "C"
 #include "string_list.h"
 }
 
+void get_extent(struct StringList *, double *, double *,
+                double *, double *, double *, double *);
 void print_extent(struct StringList *);
 
 #endif // INFO_H
