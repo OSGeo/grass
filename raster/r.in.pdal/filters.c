@@ -80,6 +80,26 @@ int zrange_filter_from_option(struct Option *option, double *zmin,
     return FALSE;
 }
 
+int irange_filter_from_option(struct Option *option, double *imin,
+                              double *imax)
+{
+    if (option->answer != NULL) {
+        if (option->answers[0] == NULL || option->answers[1] == NULL)
+            G_fatal_error(_("Invalid irange <%s>"), option->answer);
+        sscanf(option->answers[0], "%lf", imin);
+        sscanf(option->answers[1], "%lf", imax);
+        /* for convenience, switch order to make valid input */
+        if (*imin > *imax) {
+            double tmp = *imax;
+
+            *imax = *imin;
+            *imin = tmp;
+        }
+        return TRUE;
+    }
+    return FALSE;
+}
+
 int return_filter_create_from_string(struct ReturnFilter *return_filter,
                                      const char *name)
 {

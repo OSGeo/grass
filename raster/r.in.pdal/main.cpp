@@ -58,7 +58,6 @@ int main(int argc, char *argv[])
     char *infile, *outmap;
     int percent;
     double d_tmp;
-    double irange_min, irange_max;
 
     RASTER_MAP_TYPE rtype, base_raster_data_type;
     struct History history;
@@ -498,13 +497,15 @@ int main(int argc, char *argv[])
     if (!extents_flag->answer) {
         use_spatial_filter = spatial_filter_from_current_region(&xmin,
                                                                 &ymin,
-                                                                &xmax,
-                                                                &ymax);
+                                                                &xmax, &ymax);
     }
 
     double zrange_min, zrange_max;
     bool use_zrange = zrange_filter_from_option(zrange_opt, &zrange_min,
                                                 &zrange_max);
+    double irange_min, irange_max;
+    bool use_irange = irange_filter_from_option(irange_opt, &irange_min,
+                                                &irange_max);
     struct ReturnFilter return_filter_struct;
     bool use_return_filter =
         return_filter_create_from_string(&return_filter_struct,
@@ -519,22 +520,6 @@ int main(int argc, char *argv[])
         zscale = atof(zscale_opt->answer);
     if (iscale_opt->answer)
         iscale = atof(iscale_opt->answer);
-
-    // TODO: handle intensity the same way as Z
-    /* parse irange */
-    if (irange_opt->answer != NULL) {
-        if (irange_opt->answers[0] == NULL)
-            G_fatal_error(_("Invalid %s"), irange_opt->key);
-
-        sscanf(irange_opt->answers[0], "%lf", &irange_min);
-        sscanf(irange_opt->answers[1], "%lf", &irange_max);
-
-        if (irange_min > irange_max) {
-            d_tmp = irange_max;
-            irange_max = irange_min;
-            irange_min = d_tmp;
-        }
-    }
 
     point_binning_set(&point_binning, method_opt->answer, pth_opt->answer,
                       trim_opt->answer);
@@ -722,6 +707,8 @@ int main(int argc, char *argv[])
         grass_filter.set_spatial_filter(xmin, xmax, ymin, ymax);
     if (use_zrange)
         grass_filter.set_zrange_filter(zrange_min, zrange_max);
+    if (use_irange)
+        grass_filter.set_irange_filter(irange_min, irange_max);
     if (use_return_filter)
         grass_filter.set_return_filter(return_filter_struct);
     if (use_class_filter)
