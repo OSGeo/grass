@@ -1,15 +1,13 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
-LABEL authors="Carmen Tawalika,Markus Neteler,Anika Bettge"
-LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,bettge@mundialis.de"
+LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann"
+LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
 
 ENV DEBIAN_FRONTEND noninteractive
 
 # define versions to be used
-ARG PDAL_VERSION=1.8.0
-ARG PROJ_VERSION=4.9.3
-ARG PROJ_DATUMGRID_VERSION=1.8
-ARG LAZ_PERF_VERSION=1.3.0
+ARG PDAL_VERSION=2.2.0
+ARG LAZ_PERF_VERSION=1.5.0
 
 SHELL ["/bin/bash", "-c"]
 
@@ -48,6 +46,7 @@ RUN apt-get update && apt-get upgrade -y && \
     libopenjp2-7-dev \
     libpnglite-dev \
     libpq-dev \
+    libproj-dev \
     libpython3-all-dev \
     libsqlite3-dev \
     libtiff-dev \
@@ -58,6 +57,8 @@ RUN apt-get update && apt-get upgrade -y && \
     moreutils \
     ncurses-bin \
     netcdf-bin \
+    proj-bin \
+    proj-data \
     python3 \
     python3-dateutil \
     python3-dev \
@@ -80,19 +81,6 @@ RUN apt-get update && apt-get upgrade -y && \
 RUN echo LANG="en_US.UTF-8" > /etc/default/locale
 RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
 
-## install the latest projection library for GRASS GIS
-WORKDIR /src
-RUN wget -q http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz && \
-    tar xzf proj-${PROJ_VERSION}.tar.gz && \
-    cd /src/proj-${PROJ_VERSION}/ && \
-    wget -q http://download.osgeo.org/proj/proj-datumgrid-${PROJ_DATUMGRID_VERSION}.zip && \
-    cd nad && \
-    unzip ../proj-datumgrid-${PROJ_DATUMGRID_VERSION}.zip && \
-    cd .. && \
-    ./configure --prefix=/usr/ && \
-    make && \
-    make install
-
 ## install laz-perf
 RUN apt-get install cmake
 WORKDIR /src
@@ -105,7 +93,7 @@ RUN wget -q https://github.com/hobu/laz-perf/archive/${LAZ_PERF_VERSION}.tar.gz 
     make && \
     make install
 
-## fetch vertical datums and store into PROJ dir
+## fetch vertical datums for PDAL and store into PROJ dir
 WORKDIR /src
 RUN mkdir vdatum && \
     cd vdatum && \
@@ -157,6 +145,9 @@ RUN wget -q \
 WORKDIR /src
 COPY . /src/grass_build/
 WORKDIR /src/grass_build
+
+# Cleanup potentially leftover GISRC file with wrong path to "demolocation"
+RUN rm -f /src/grass_build/dist.x86_64-pc-linux-gnu/demolocation/.grassrc79
 
 # Set environmental variables for GRASS GIS compilation, without debug symbols
 # Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols

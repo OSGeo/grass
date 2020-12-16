@@ -1,7 +1,7 @@
-FROM ubuntu:19.10
+FROM ubuntu:20.04
 
-LABEL authors="Carmen Tawalika,Markus Neteler,Anika Bettge"
-LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,bettge@mundialis.de"
+LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann"
+LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -81,8 +81,7 @@ RUN apt-get update && apt-get upgrade -y && \
 RUN echo LANG="en_US.UTF-8" > /etc/default/locale
 RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
 
-## TODO check if still needed
-## fetch vertical datums and store into PROJ dir
+## fetch vertical datums for PDAL and store into PROJ dir
 WORKDIR /src
 RUN mkdir vdatum && \
     cd vdatum && \
@@ -102,6 +101,9 @@ RUN mkdir vdatum && \
 WORKDIR /src
 COPY . /src/grass_build/
 WORKDIR /src/grass_build
+
+# Cleanup potentially leftover GISRC file with wrong path to "demolocation"
+RUN rm -f /src/grass_build/dist.x86_64-pc-linux-gnu/demolocation/.grassrc79
 
 # Set environmental variables for GRASS GIS compilation, without debug symbols
 # Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
