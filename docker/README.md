@@ -5,12 +5,10 @@
 | Base image   | Docker tag      | GRASS GIS  | PROJ  | GDAL  | PDAL  | Python | Image size |
 |--------------|-----------------|------------|-------|-------|-------|--------|------------|
 | Ubuntu 20.04 | latest-ubuntu   | 7.9.dev    | 6.3.1 | 3.0.4 | 2.2.0 | 3.8.5  | 1.04 GB    |
-| Ubuntu 19.10 | latest-ubuntu19 | 7.9.dev    | 5.2.0 | 2.4.2 | 1.9.1 | 3.7.5  |  850 MB    |
 | Debian 10.1  | latest-debian   | 7.9.dev    | 5.2.0 | 2.4.0 | 1.8.0 | 3.7.3  | 1.14 GB    |
 | Alpine 3.12  | latest-alpine   | 7.9.dev    | 7.0.1 | 3.1.2 | 2.1.0 | 3.5.8  |  385 MB    |
 |--------------|-----------------|------------|-------|-------|-------|--------|------------|
 | Ubuntu 20.04 | stable-ubuntu   | 7.8 branch | 6.3.1 | 3.0.4 | 2.2.0 | 3.8.5  | 1.04 GB    |
-| Ubuntu 19.10 | stable-ubuntu19 | 7.8 branch | 5.2.0 | 2.4.2 | 1.9.1 | 3.7.5  |  850 MB    |
 | Debian 10.1  | stable-debian   | 7.8 branch | 5.2.0 | 2.4.0 | 1.8.0 | 3.7.3  | 1.14 GB    |
 | Alpine 3.12  | stable-alpine   | 7.8 branch | 7.0.1 | 3.1.2 | 2.1.0 | 3.5.8  |  385 MB    |
 
