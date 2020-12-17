@@ -1535,15 +1535,15 @@ def install_extension_std_platforms(name, source, url, branch):
                 # get the module name: PGM = <module name>
                 with open(os.path.join(r, 'Makefile')) as fp:
                     for line in fp.readlines():
-                        if "PGM" in line:
+                        if re.match(r'PGM.*.=|PGM=', line):
                             try:
                                 modulename = line.split('=')[1].strip()
                                 if modulename:
                                     module_list.append(modulename)
                                 else:
-                                    grass.error(pgm_not_found_message)
+                                    grass.fatal(pgm_not_found_message)
                             except IndexError:
-                                grass.error(pgm_not_found_message)
+                                grass.fatal(pgm_not_found_message)
 
     # change shebang from python to python3
     pyfiles = []
