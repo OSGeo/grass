@@ -74,7 +74,8 @@ import grass.script as gscript
 from grass.script import gisenv
 from grass.grassdb.data import map_exists
 from grass.grassdb.checks import (get_mapset_owner, is_mapset_locked,
-                                  is_different_mapset_owner)
+                                  is_different_mapset_owner,
+                                  is_current_mapset_in_demolocation)
 from grass.exceptions import CalledModuleError
 
 
@@ -985,7 +986,14 @@ class DataCatalogTree(TreeView):
     def CreateLocation(self, grassdb_node):
         """
         Creates new location interactively and adds it to the tree.
+        Returns tuple of booleans (location_created, is_user_in_demolocation).
         """
+        location_created = False
+        is_user_in_demolocation = False
+
+        if is_current_mapset_in_demolocation():
+            is_user_in_demolocation = True
+
         grassdatabase, location, mapset = (
             create_location_interactively(self, grassdb_node.data['name'])
         )
@@ -994,10 +1002,15 @@ class DataCatalogTree(TreeView):
                                              location=location,
                                              element='location',
                                              action='new')
+            self.SwitchMapset(grassdatabase, location, mapset)
+            location_created = True
+        return (location_created, is_user_in_demolocation)
 
     def OnCreateLocation(self, event):
         """Create new location"""
-        self.CreateLocation(self.selected_grassdb[0])
+        location_created, is_user_in_demolocation = (
+            self.CreateLocation(self.selected_grassdb[0])
+        )
 
     def OnRenameMapset(self, event):
         """
@@ -1525,14 +1538,12 @@ class DataCatalogTree(TreeView):
                 event.Veto()
                 return
 
-    def OnSwitchMapset(self, event):
-        """Switch to location and mapset"""
-        genv = gisenv()
-        grassdb = self.selected_grassdb[0].data['name']
-        location = self.selected_location[0].data['name']
-        mapset = self.selected_mapset[0].data['name']
-
+    def SwitchMapset(self, grassdb, location, mapset):
+        """
+        Switch to location and mapset interactively.
+        """
         if can_switch_mapset_interactive(self, grassdb, location, mapset):
+            genv = gisenv()
             # Switch to mapset in the same location
             if (grassdb == genv['GISDBASE'] and location == genv['LOCATION_NAME']):
                 switch_mapset_interactively(self, self._giface, None, None, mapset)
@@ -1542,6 +1553,13 @@ class DataCatalogTree(TreeView):
             # Switch to mapset in a different grassdb
             else:
                 switch_mapset_interactively(self, self._giface, grassdb, location, mapset)
+
+    def OnSwitchMapset(self, event):
+        """Switch to location and mapset"""
+        grassdb = self.selected_grassdb[0].data['name']
+        location = self.selected_location[0].data['name']
+        mapset = self.selected_mapset[0].data['name']
+        self.SwitchMapset(grassdb, location, mapset)
 
     def _updateAfterGrassdbChanged(self, action, element, grassdb, location, mapset=None,
                                    map=None, newname=None):

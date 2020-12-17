@@ -43,5 +43,19 @@ class DataCatalogInfoManager:
         ).format(loc=gisenv()['LOCATION_NAME'])
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
 
+    def ShowImportDataInfo(self, OnImportOgrLayersHandler, OnImportGdalLayersHandler):
+        """Show info about the data import focused on the first-time user"""
+        buttons = [("Import vector data", OnImportOgrLayersHandler),
+                   ("Import raster data", OnImportGdalLayersHandler)]
+        message = _(
+            "You have successfully created a new Location {loc}. "
+            "Currently you are in its PERMANENT Mapset which is used for "
+            "storing your base maps to make it readily avaliable in other "
+            "Mapsets. You can create new Mapsets for different tasks by right "
+            "clicking on the Location name.\n\n"
+            "To import data, go to the File menu or use the buttons below."
+        ).format(loc=gisenv()['LOCATION_NAME'])
+        self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
+
     def _onLearnMore(self, event):
         self._giface.Help(entry="grass_database")
