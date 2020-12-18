@@ -49,8 +49,8 @@ jobs:
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v1
+    ##- name: Autobuild
+    ##  uses: github/codeql-action/autobuild@v1
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 https://git.io/JvXDl
@@ -62,6 +62,29 @@ jobs:
     #- run: |
     #   make bootstrap
     #   make release
+
+    - name: Get dependencies
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y wget git gawk findutils
+        xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
+            sudo apt-get install -y --no-install-recommends --no-install-suggests
+    - name: Create installation directory
+      run: |
+        mkdir $HOME/install
+    - name: Ensure one core for compilation
+      run: |
+        echo "MAKEFLAGS=-j1" >> $GITHUB_ENV
+    - name: Set LD_LIBRARY_PATH for compilation
+      run: |
+        echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
+    - name: Build
+      env:
+        # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
+        CFLAGS: "-std=${{ matrix.c }}"
+        # TODO: -pedantic-errors here won't compile
+        CXXFLAGS: "-std=${{ matrix.cpp }}"
+      run: .github/workflows/build.sh $HOME/install
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
