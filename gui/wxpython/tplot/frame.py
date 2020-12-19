@@ -1125,7 +1125,7 @@ class DataCursor(object):
         self.formatFunction = formatFunction
         self.offsets = offsets
         self.display_all = display_all
-        if not cbook.iterable(artists):
+        if not np.iterable(artists):
             artists = [artists]
         self.artists = artists
         self.convert = convert
