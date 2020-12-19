@@ -50,7 +50,7 @@ class DataCatalogInfoManager:
         message = _(
             "You have successfully created a new Location {loc}. "
             "Currently you are in its PERMANENT Mapset which is used for "
-            "storing your base maps to make it readily avaliable in other "
+            "storing your base maps to make them readily available in other "
             "Mapsets. You can create new Mapsets for different tasks by right "
             "clicking on the Location name.\n\n"
             "To import data, go to the File menu or use the buttons below."

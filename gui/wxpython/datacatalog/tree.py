@@ -329,6 +329,7 @@ class DataCatalogTree(TreeView):
         self._restricted = True
 
         self.showNotification = Signal('Tree.showNotification')
+        self.showImportDataInfo = Signal('Tree.showImportDataInfo')
         self.parent = parent
         self.contextMenu.connect(self.OnRightClick)
         self.itemActivated.connect(self.OnDoubleClick)
@@ -986,14 +987,8 @@ class DataCatalogTree(TreeView):
     def CreateLocation(self, grassdb_node):
         """
         Creates new location interactively and adds it to the tree.
-        Returns tuple of booleans (location_created, is_user_in_demolocation).
+        Returns True if location successfully created.
         """
-        location_created = False
-        is_user_in_demolocation = False
-
-        if is_current_mapset_in_demolocation():
-            is_user_in_demolocation = True
-
         grassdatabase, location, mapset = (
             create_location_interactively(self, grassdb_node.data['name'])
         )
@@ -1002,15 +997,16 @@ class DataCatalogTree(TreeView):
                                              location=location,
                                              element='location',
                                              action='new')
+
+            # show data import infobar for first-time user with proper layout
+            if is_current_mapset_in_demolocation():
+                self.showImportDataInfo.emit()
+
             self.SwitchMapset(grassdatabase, location, mapset)
-            location_created = True
-        return (location_created, is_user_in_demolocation)
 
     def OnCreateLocation(self, event):
         """Create new location"""
-        location_created, is_user_in_demolocation = (
-            self.CreateLocation(self.selected_grassdb[0])
-        )
+        self.CreateLocation(self.selected_grassdb[0])
 
     def OnRenameMapset(self, event):
         """

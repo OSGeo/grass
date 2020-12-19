@@ -57,6 +57,8 @@ class DataCatalog(wx.Panel):
         # infobar manager for data catalog
         self.infoManager = DataCatalogInfoManager(infobar=self.infoBar,
                                                   giface=self.giface)
+        self.tree.showImportDataInfo.connect(self.showImportDataInfo())
+
         # some layout
         self._layout()
 
@@ -125,10 +127,7 @@ class DataCatalog(wx.Panel):
     def OnCreateLocation(self, event):
         """Create new location"""
         db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
-        location_created, is_user_in_demolocation = self.tree.CreateLocation(db_node)
-        if location_created and is_user_in_demolocation:
-            # show data import infobar for first-time user with proper layout
-            wx.CallLater(2000, self.showImportDataInfo)
+        self.tree.CreateLocation(db_node)
 
     def OnDownloadLocation(self, event):
         """Download location to current grass database"""
