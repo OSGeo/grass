@@ -1136,7 +1136,7 @@ class DataCursor(object):
         for ax in self.axes:
             self.annotations[ax] = self.annotate(ax)
         for artist in self.artists:
-            artist.set_picker(tolerance)
+            artist.set_pickradius(tolerance)
         for fig in self.figures:
             fig.canvas.mpl_connect('pick_event', self)
             fig.canvas.mpl_connect('key_press_event', self.keyPressed)
