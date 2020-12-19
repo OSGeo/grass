@@ -986,8 +986,9 @@ class DataCatalogTree(TreeView):
 
     def CreateLocation(self, grassdb_node):
         """
-        Creates new location interactively and adds it to the tree.
-        Returns True if location successfully created.
+        Creates new location interactively and adds it to the tree and switch
+        to its new PERMANENT mapset.
+        If a user was in Demolocation, it shows data import infobar.
         """
         grassdatabase, location, mapset = (
             create_location_interactively(self, grassdb_node.data['name'])
