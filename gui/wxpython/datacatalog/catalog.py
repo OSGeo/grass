@@ -57,7 +57,7 @@ class DataCatalog(wx.Panel):
         # infobar manager for data catalog
         self.infoManager = DataCatalogInfoManager(infobar=self.infoBar,
                                                   giface=self.giface)
-        self.tree.showImportDataInfo.connect(self.showImportDataInfo())
+        self.tree.showImportDataInfo.connect(self.showImportDataInfo)
 
         # some layout
         self._layout()

@@ -1003,6 +1003,7 @@ class DataCatalogTree(TreeView):
             if is_current_mapset_in_demolocation():
                 self.showImportDataInfo.emit()
 
+            # switch to PERMANENT mapset in newly created location
             self.SwitchMapset(grassdatabase, location, mapset)
 
     def OnCreateLocation(self, event):
