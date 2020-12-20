@@ -35,8 +35,8 @@ int V1_close_nat(struct Map_info *Map)
 {
     struct Coor_info CInfo;
 
-    G_debug(1, "V1_close_nat(): name = %s mapset= %s", Map->name,
-	    Map->mapset);
+    G_debug(1, "V1_close_nat(): name = %s subproject= %s", Map->name,
+	    Map->subproject);
     if (!VECT_OPEN(Map))
 	return 1;
 
@@ -61,7 +61,7 @@ int V1_close_nat(struct Map_info *Map)
         delete = TRUE;
         if (Map->temporary == TEMPORARY_MAP_ENV && env) {
             if (G_strcasecmp(env, "move") == 0) {
-                /* copy temporary vector map to the current mapset */
+                /* copy temporary vector map to the current subproject */
                 char path_tmp[GPATH_MAX], path_map[GPATH_MAX];
                     
                 G_debug(1, "V1_close_nat(): temporary map <%s> TO BE MOVED TO"
@@ -69,12 +69,12 @@ int V1_close_nat(struct Map_info *Map)
                         Map->name);
                 Vect__get_element_path(path_tmp, Map, NULL);
 
-                G_file_name(path_map, GV_DIRECTORY, NULL, Map->mapset);
+                G_file_name(path_map, GV_DIRECTORY, NULL, Map->subproject);
                 if (access(path_map, 0) != 0 && G_mkdir(path_map) != 0)
                     G_fatal_error(_("Unable to create '%s': %s"),
                                   path_map, strerror(errno));
 
-                G_file_name(path_map, GV_DIRECTORY, Map->name, Map->mapset);
+                G_file_name(path_map, GV_DIRECTORY, Map->name, Map->subproject);
 
                 G_debug(1, "V1_close_nat(): %s -> %s", path_tmp, path_map);
                 if (0 != G_recursive_copy(path_tmp, path_map))

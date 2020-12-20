@@ -25,7 +25,7 @@
 
 void read_labels(struct Map *map)
 {
-    if (Rast_read_cats(map->name, map->mapset, &map->labels) < 0)
+    if (Rast_read_cats(map->name, map->subproject, &map->labels) < 0)
 	exit(1);
 }
 

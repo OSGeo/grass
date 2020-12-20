@@ -9,7 +9,7 @@ extern func interpolate;	/* interpolation routine */
 
 extern int seg_mb_img, seg_mb_elev;
 extern char *elev_name;
-extern char *elev_mapset;
+extern char *elev_subproject;
 extern struct Cell_head target_window;
 
 #include "local_proto.h"

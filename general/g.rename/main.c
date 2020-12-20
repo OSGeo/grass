@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option **parm;
     int nlist;
-    const char *mapset;
+    const char *subproject;
     int result = EXIT_SUCCESS;
 
     G_gisinit(argv[0]);
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("map management"));
     G_add_keyword(_("rename"));
     module->description =
-	_("Renames data base element files in the user's current mapset.");
+	_("Renames data base element files in the user's current subproject.");
     module->overwrite = 1;
 
     parm = (struct Option **)G_calloc(nlist, sizeof(struct Option *));
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    mapset = G_mapset();
+    subproject = G_subproject();
 
     for (n = 0; n < nlist; n++) {
 	int i;
@@ -72,12 +72,12 @@ int main(int argc, char *argv[])
 
 	    old = parm[n]->answers[i++];
 	    new = parm[n]->answers[i++];
-	    if (!M_find(n, old, mapset)) {
+	    if (!M_find(n, old, subproject)) {
 		G_warning(_("%s <%s> not found"), M_get_list(n)->maindesc, old);
 		continue;
 	    }
-	    if (M_find(n, new, mapset) && !(module->overwrite)) {
-		G_warning(_("<%s> already exists in mapset <%s>"), new,
+	    if (M_find(n, new, subproject) && !(module->overwrite)) {
+		G_warning(_("<%s> already exists in subproject <%s>"), new,
 			  M_find(n, new, ""));
 		continue;
 	    }
@@ -97,20 +97,20 @@ int main(int argc, char *argv[])
 	    }
 
 	    if (!renamed && strcmp(parm[n]->key, "raster") == 0) {
-		update_reclass_maps(new, mapset);
-		update_base_map(old, new, mapset);
+		update_reclass_maps(new, subproject);
+		update_base_map(old, new, subproject);
 	    }
 	}
     }
     exit(result);
 }
 
-void update_reclass_maps(const char *name, const char *mapset)
+void update_reclass_maps(const char *name, const char *subproject)
 {
     int nrmaps;
     char **rmaps;
 
-    if (Rast_is_reclassed_to(name, mapset, &nrmaps, &rmaps) <= 0)
+    if (Rast_is_reclassed_to(name, subproject, &nrmaps, &rmaps) <= 0)
 	return;
 
     G_message(_("Updating reclass maps"));
@@ -127,7 +127,7 @@ void update_reclass_maps(const char *name, const char *mapset)
 	    sprintf(buf2, "%s", str + 1);
 	}
 	else {
-	    sprintf(buf2, "%s", mapset);
+	    sprintf(buf2, "%s", subproject);
 	}
 	G_file_name(buf1, "cellhd", buf3, buf2);
 
@@ -151,28 +151,28 @@ void update_reclass_maps(const char *name, const char *mapset)
 	fp = fopen(buf1, "w");
 	fprintf(fp, "reclass\n");
 	fprintf(fp, "name: %s\n", name);
-	fprintf(fp, "mapset: %s\n", mapset);
+	fprintf(fp, "subproject: %s\n", subproject);
 	fwrite(str, l, 1, fp);
 	G_free(str);
 	fclose(fp);
     }
 }
 
-void update_base_map(const char *old, const char *new, const char *mapset)
+void update_base_map(const char *old, const char *new, const char *subproject)
 {
     int i, nrmaps, found;
-    char bname[GNAME_MAX], bmapset[GMAPSET_MAX], rpath[GPATH_MAX];
+    char bname[GNAME_MAX], bsubproject[GMAPSET_MAX], rpath[GPATH_MAX];
     char *xold, *xnew, **rmaps;
     FILE *fp;
 
-    if (Rast_is_reclass(new, mapset, bname, bmapset) <= 0)
+    if (Rast_is_reclass(new, subproject, bname, bsubproject) <= 0)
 	return;
 
-    if (Rast_is_reclassed_to(bname, bmapset, &nrmaps, &rmaps) <= 0)
+    if (Rast_is_reclassed_to(bname, bsubproject, &nrmaps, &rmaps) <= 0)
 	nrmaps = 0;
 
     found = 0;
-    xold = G_fully_qualified_name(old, mapset);
+    xold = G_fully_qualified_name(old, subproject);
     for (i = 0; i < nrmaps; i++) {
 	if (strcmp(xold, rmaps[i]) == 0) {
 	    found = 1;
@@ -182,20 +182,20 @@ void update_base_map(const char *old, const char *new, const char *mapset)
 
     if (!found) {
 	G_fatal_error(_("Unable to find reclass information for <%s> in "
-			"base map <%s@%s>"), xold, bname, bmapset);
+			"base map <%s@%s>"), xold, bname, bsubproject);
     }
 
-    G_message(_("Updating base map <%s@%s>"), bname, bmapset);
+    G_message(_("Updating base map <%s@%s>"), bname, bsubproject);
 
-    G_file_name_misc(rpath, "cell_misc", "reclassed_to", bname, bmapset);
+    G_file_name_misc(rpath, "cell_misc", "reclassed_to", bname, bsubproject);
 
     fp = fopen(rpath, "w");
     if (fp == NULL) {
 	G_fatal_error(_("Unable to update dependency file in <%s@%s>"),
-		  bname, bmapset);
+		  bname, bsubproject);
     }
 
-    xnew = G_fully_qualified_name(new, mapset);
+    xnew = G_fully_qualified_name(new, subproject);
     for (; *rmaps; rmaps++) {
 	if (strcmp(xold, *rmaps) == 0) {
 	    fprintf(fp, "%s\n", xnew);

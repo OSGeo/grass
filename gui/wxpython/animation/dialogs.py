@@ -1878,7 +1878,7 @@ class AddTemporalLayerDialog(wx.Dialog):
 
         dlg.layerType.SetSelection(index)
         dlg.LoadMapLayers(dlg.GetLayerType(cmd=True),
-                          dlg.mapset.GetStringSelection())
+                          dlg.subproject.GetStringSelection())
         dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_OK:
             self.tselect.SetValue(','.join(dlg.GetMapLayers()))

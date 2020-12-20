@@ -15,7 +15,7 @@ struct colortable
     double lwidth;	/* line width for columns and tickbars */
     char *font;
     char *name;
-    const char *mapset;
+    const char *subproject;
     int fontsize;
     PSCOLOR color;	/* text color, it seems */
     int cols;		/* number of columns */

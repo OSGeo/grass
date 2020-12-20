@@ -485,7 +485,7 @@ N_data_star *N_callback_template_2d(void *data, N_geom_data * geom, int col,
  * ******************** N_assemble_les_2d ************************ * 
  * *************************************************************** */
 /*!
- * \brief Assemble a linear equation system (les) based on 2d location data (raster) and active cells
+ * \brief Assemble a linear equation system (les) based on 2d project data (raster) and active cells
  *
  * This function calls #N_assemble_les_2d_param
  *
@@ -499,7 +499,7 @@ N_les *N_assemble_les_2d(int les_type, N_geom_data * geom,
 }
 
 /*!
- * \brief Assemble a linear equation system (les) based on 2d location data (raster) and active cells
+ * \brief Assemble a linear equation system (les) based on 2d project data (raster) and active cells
  *
  * This function calls #N_assemble_les_2d_param
  *
@@ -513,7 +513,7 @@ N_les *N_assemble_les_2d_active(int les_type, N_geom_data * geom,
 }
 
 /*!
- * \brief Assemble a linear equation system (les) based on 2d location data (raster) and active and dirichlet cells
+ * \brief Assemble a linear equation system (les) based on 2d project data (raster) and active and dirichlet cells
  *
  * This function calls #N_assemble_les_2d_param
  *
@@ -528,14 +528,14 @@ N_les *N_assemble_les_2d_dirichlet(int les_type, N_geom_data * geom,
 }
 
 /*!
- * \brief Assemble a linear equation system (les) based on 2d location data  (raster)
+ * \brief Assemble a linear equation system (les) based on 2d project data  (raster)
  *
  * 
  * The linear equation system type can be set to N_NORMAL_LES to create a regular
  * matrix, or to N_SPARSE_LES to create a sparse matrix. This function returns
  * a new created linear equation system which can be solved with 
  * linear equation solvers. An 2d array with start values and an 2d status array
- * must be provided as well as the location geometry and a void pointer to data 
+ * must be provided as well as the project geometry and a void pointer to data 
  * passed to the callback which creates the les row entries. This callback
  * must be defined in the N_les_callback_2d strcuture.
  *
@@ -942,7 +942,7 @@ int make_les_entry_2d(int i, int j, int offset_i, int offset_j, int count,
  * ******************** N_assemble_les_3d ************************ * 
  * *************************************************************** */
 /*!
- * \brief Assemble a linear equation system (les) based on 3d location data (g3d) active cells
+ * \brief Assemble a linear equation system (les) based on 3d project data (g3d) active cells
  *
  * This function calls #N_assemble_les_3d_param
  * */
@@ -955,7 +955,7 @@ N_les *N_assemble_les_3d(int les_type, N_geom_data * geom,
 }
 
 /*!
- * \brief Assemble a linear equation system (les) based on 3d location data (g3d) active cells
+ * \brief Assemble a linear equation system (les) based on 3d project data (g3d) active cells
  *
  * This function calls #N_assemble_les_3d_param
  * */
@@ -968,7 +968,7 @@ N_les *N_assemble_les_3d_active(int les_type, N_geom_data * geom,
 }
 
 /*!
- * \brief Assemble a linear equation system (les) based on 3d location data (g3d) active and dirichlet cells
+ * \brief Assemble a linear equation system (les) based on 3d project data (g3d) active and dirichlet cells
  *
  * This function calls #N_assemble_les_3d_param
  * */
@@ -982,13 +982,13 @@ N_les *N_assemble_les_3d_dirichlet(int les_type, N_geom_data * geom,
 }
 
 /*!
- * \brief Assemble a linear equation system (les) based on 3d location data (g3d)
+ * \brief Assemble a linear equation system (les) based on 3d project data (g3d)
  *
  * The linear equation system type can be set to N_NORMAL_LES to create a regular
  * matrix, or to N_SPARSE_LES to create a sparse matrix. This function returns
  * a new created linear equation system which can be solved with 
  * linear equation solvers. An 3d array with start values and an 3d status array
- * must be provided as well as the location geometry and a void pointer to data 
+ * must be provided as well as the project geometry and a void pointer to data 
  * passed to the callback which creates the les row entries. This callback
  * must be defined in the N_les_callback_3d structure.
  * 

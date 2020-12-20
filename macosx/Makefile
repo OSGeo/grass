@@ -22,7 +22,7 @@ LN_DIR = /bin/ln -sfh
 # get python version - use python in path, should be config'd python
 PYVER = `python -V 2>&1 | cut -d \  -f 2 | cut -d . -f 1,2`
 
-# packagemaker location, options and behaviour changed in xcode 3
+# packagemaker project, options and behaviour changed in xcode 3
 ifeq ($(findstring darwin8,$(ARCH)),darwin8)
 XCODE_VER = xcode2
 PACKAGEMAKER = /Developer/Tools/packagemaker
@@ -45,7 +45,7 @@ install-macosx: install-macosxapp install-basic-macosx macosx-support-dir bundle
 	echo ${ARCH_DISTDIR}/${MACOSX_APP_NAME}
 
 # create a packagemaker installer package.
-# pretty much the same as install, but needs intermediate install location
+# pretty much the same as install, but needs intermediate install project
 # to assemble package parts.
 
 bindist-macosx: INST_DIR_TARGET = ${MACOSX_BUNDLE_PREFIX}
@@ -100,7 +100,7 @@ install-basic-macosx:
 	-sed -e 's#'$(GISBASE)'#'$(INST_DIR)'#g' \
 		${GISBASE}/etc/fontcap > ${INST_DIR_TARGET}/etc/fontcap
 	-sed -e 's#'$(GISBASE)'#'$(INST_DIR)'#g' \
-		${GISBASE}/demolocation/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR) > ${INST_DIR_TARGET}/demolocation/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
+		${GISBASE}/demoproject/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR) > ${INST_DIR_TARGET}/demoproject/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
 	sed -e 's#^\(GRASS_HOME.[^=]*\).*#\1= $(INST_DIR)#g' \
 		-e 's#$(GISBASE)#$(INST_DIR)#g' \
 		-e "s#-isysroot /.*MacOSX.*\.sdk##g" \

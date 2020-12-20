@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     struct line_cats *Cats;
     int i, atype, with_z;
     int nlines, n;
-    char *mapset;
+    char *subproject;
     struct GModule *module;
     struct Option *in_opt, *out_opt;
     struct Flag *poly_f;
@@ -59,11 +59,11 @@ int main(int argc, char *argv[])
     G_begin_cell_area_calculations();
 
     /* open input vector */
-    if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL)
+    if ((subproject = G_find_vector2(in_opt->answer, "")) == NULL)
 	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
 
     Vect_set_open_level(2);
-    if (Vect_open_old(&In, in_opt->answer, mapset) < 0)
+    if (Vect_open_old(&In, in_opt->answer, subproject) < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
 
     with_z = Vect_is_3d(&In);
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 	Vect_close(&In);
 	Vect_close(&Out);
 
-	if (Vect_open_update(&Out, out_opt->answer, G_mapset()) < 0)
+	if (Vect_open_update(&Out, out_opt->answer, G_subproject()) < 0)
 	    G_fatal_error(_("Unable to open vector map <%s>"), out_opt->answer);
 
 	/* Count number of areas and total area in input */

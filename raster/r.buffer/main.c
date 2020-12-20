@@ -43,7 +43,7 @@ int count_rows_with_data;
 int main(int argc, char *argv[])
 {
     struct Distance *pd;
-    const char *input, *output, *mapset;
+    const char *input, *output, *subproject;
     char **zone_list;
     double to_meters;
     const char *units;
@@ -107,8 +107,8 @@ int main(int argc, char *argv[])
     ZEROFLAG = 0;		/* default: use NULL for non-data cells */
     ZEROFLAG = (flag2->answer);
 
-    mapset = G_find_raster2(input, "");
-    if (mapset == NULL)
+    subproject = G_find_raster2(input, "");
+    if (subproject == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), input);
 
     /* parse units */
@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
      *         2 == distance zone #1,   3 == distance zone #2, etc.
      */
 
-    read_input_map(input, mapset, ZEROFLAG);
+    read_input_map(input, subproject, ZEROFLAG);
 
     offset = 0;
 

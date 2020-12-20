@@ -40,7 +40,7 @@ static void compose_line(FILE *, const char *, ...);
 
 int main(int argc, char **argv)
 {
-    const char *name, *mapset;
+    const char *name, *subproject;
     const char *title;
     char tmp1[100], tmp2[100], tmp3[100];
     char timebuff[256];
@@ -106,7 +106,7 @@ int main(int argc, char **argv)
                       hflag->key, gflag->key, rflag->key, eflag->key);
 
     name = G_store(opt1->answer);
-    if ((mapset = G_find_raster2(name, "")) == NULL)
+    if ((subproject = G_find_raster2(name, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
     Rast_get_cellhd(name, "", &cellhd);
@@ -157,9 +157,9 @@ int main(int argc, char **argv)
 
 	compose_line(out, "Map:      %-29.29s  Date: %s", name,
 		     hist_ok ? Rast_get_history(&hist, HIST_MAPID) : "??");
-	compose_line(out, "Mapset:   %-29.29s  Login of Creator: %s",
-		     mapset, hist_ok ? Rast_get_history(&hist, HIST_CREATOR) : "??");
-	compose_line(out, "Location: %s", G_location());
+	compose_line(out, "Subproject:   %-29.29s  Login of Creator: %s",
+		     subproject, hist_ok ? Rast_get_history(&hist, HIST_CREATOR) : "??");
+	compose_line(out, "Project: %s", G_project());
 	compose_line(out, "DataBase: %s", G_gisdbase());
 	compose_line(out, "Title:    %s", title);
 
@@ -281,8 +281,8 @@ int main(int argc, char **argv)
 
 	    divider('|');
 
-	    compose_line(out, "  Reclassification of [%s] in mapset [%s]",
-			 reclass.name, reclass.mapset);
+	    compose_line(out, "  Reclassification of [%s] in subproject [%s]",
+			 reclass.name, reclass.subproject);
 
 	    printline("");
 	    printline("        Category        Original categories");
@@ -391,14 +391,14 @@ int main(int argc, char **argv)
 
 	if (sflag->answer) {
 
-	    if (Rast_read_rstats(name, mapset, &rstats) < 0) {
+	    if (Rast_read_rstats(name, subproject, &rstats) < 0) {
 		DCELL *dbuf, val;
 		int fd, r, c;
 		int first = 1;
 
 		Rast_set_input_window(&cellhd);
 		dbuf = Rast_allocate_d_input_buf();
-		fd = Rast_open_old(name, mapset);
+		fd = Rast_open_old(name, subproject);
 
 		for (r = 0; r < cellhd.rows; r++) {
 		    Rast_get_d_row(fd, dbuf, r);
@@ -465,13 +465,13 @@ int main(int argc, char **argv)
 	}
 
 	if (eflag->answer) {
-            char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
-            G_unqualified_name(name, mapset, xname, xmapset);
+            char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
+            G_unqualified_name(name, subproject, xname, xsubproject);
 
             fprintf(out, "map=%s\n", xname);
 	    fprintf(out, "maptype=%s\n", hist_ok ? Rast_get_history(&hist, HIST_MAPTYPE) : "??");
-            fprintf(out, "mapset=%s\n", mapset);
-            fprintf(out, "location=%s\n", G_location());
+            fprintf(out, "subproject=%s\n", subproject);
+            fprintf(out, "project=%s\n", G_project());
             fprintf(out, "database=%s\n", G_gisdbase());
             fprintf(out, "date=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_MAPID) : "??");
             fprintf(out, "creator=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_CREATOR) : "??");

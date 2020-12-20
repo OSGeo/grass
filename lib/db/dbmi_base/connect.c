@@ -49,8 +49,8 @@ int db_set_connection(dbConnection * connection)
        if ( connection->hostName )
        G_setenv("DB_HOST", connection->hostName);
 
-       if ( connection->location )
-       G_setenv("DB_LOCATION", connection->location);
+       if ( connection->project )
+       G_setenv("DB_LOCATION", connection->project);
 
        if ( connection->user )
        G_setenv("DB_USER", connection->user);
@@ -63,7 +63,7 @@ int db_set_connection(dbConnection * connection)
 }
 
 /*!
-  \brief Get default DB connection settings for the current mapset
+  \brief Get default DB connection settings for the current subproject
   
   \param[out] connection pointer to dbConnection to be modified
 

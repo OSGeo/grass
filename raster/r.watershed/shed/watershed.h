@@ -44,7 +44,7 @@ BASIN {
 };
 
 MAP {
-    char *name, *mapset;
+    char *name, *subproject;
     BASIN *basins;		/* array of basins */
     struct Categories cats;
     char do_cats;

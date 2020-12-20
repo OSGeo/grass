@@ -4,7 +4,7 @@
   \brief GIS Library - Getting ellipsoid parameters from the database.
 
   This routine returns the ellipsoid parameters from the database.
-  If the PROJECTION_FILE exists in the PERMANENT mapset, read info
+  If the PROJECTION_FILE exists in the PERMANENT subproject, read info
   from that file, otherwise return WGS 84 values.
 
   New 05/2000 by al: for datum shift the f parameter is needed too.

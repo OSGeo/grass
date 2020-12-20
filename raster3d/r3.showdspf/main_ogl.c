@@ -107,7 +107,7 @@ int main(int argc, char **argv)
     int i, fdes[2];
     void *g3map;
     RASTER3D_Region g3reg;
-    char *p, *mapset;
+    char *p, *subproject;
     double dmin, dmax;
     fd_set set;
     struct timeval timeout;
@@ -167,12 +167,12 @@ int main(int argc, char **argv)
 	Rast3d_set_error_fun(Rast3d_print_error);
 
 	/* open g3 file for reading */
-	if (NULL == (mapset = G_find_file2("grid3", g3->answer, ""))) {
+	if (NULL == (subproject = G_find_file2("grid3", g3->answer, ""))) {
 	    sprintf(buff, "Unable to find 3D raster map for <%s>", g3->answer);
 	    G_fatal_error(buff);
 	}
 
-	g3map = Rast3d_open_cell_old(g3->answer, mapset, RASTER3D_DEFAULT_WINDOW,
+	g3map = Rast3d_open_cell_old(g3->answer, subproject, RASTER3D_DEFAULT_WINDOW,
 				RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
 	if (NULL == g3map) {
@@ -193,18 +193,18 @@ int main(int argc, char **argv)
 	/* open display file for reading */
 	/* changes 9/2000: Bev Wallace <beverly.t.wallace@lmco.com> */
 	/*    sprintf(buff,"grid3/%s/dsp", g3->answer);
-	 *   if(NULL == (mapset = G_find_file2 (buff, dsp, ""))){
+	 *   if(NULL == (subproject = G_find_file2 (buff, dsp, ""))){
 	 */
-	/* Remove the mapset within buff, add to G_find_file2 - Bev Wallace */
+	/* Remove the subproject within buff, add to G_find_file2 - Bev Wallace */
 	i = strcspn(wname, "@");
 	if (i > 0)
 	    wname[i] = (char)NULL;
 	sprintf(buff, "grid3/%s/dsp", wname);
-	if (NULL == (mapset = G_find_file2(buff, dsp, mapset))) {
+	if (NULL == (subproject = G_find_file2(buff, dsp, subproject))) {
 	    sprintf(buff, "Unable to find display file for <%s>", dsp);
 	    G_fatal_error(buff);
 	}
-	if ((Headfax.dspfinfp = G_fopen_old(buff, dsp, mapset)) == NULL) {
+	if ((Headfax.dspfinfp = G_fopen_old(buff, dsp, subproject)) == NULL) {
 	    fprintf(stderr, "Unable to open <%s> for reading\n",
 		    Headfax.dspfinfp);
 	    exit(EXIT_FAILURE);

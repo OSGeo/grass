@@ -32,7 +32,7 @@ int M__empty(char *elem)
     char dir[1024];
     int any;
 
-    G_file_name(dir, elem, "", G_mapset());
+    G_file_name(dir, elem, "", G_subproject());
 
     any = 0;
     if ((dirp = opendir(dir)) != NULL) {

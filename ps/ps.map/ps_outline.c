@@ -30,7 +30,7 @@ double e1, e2, e3, n1, n2, n3;
    *--*--* n3
  */
 /* the ps_outline function creates a vector map called "tmp.outl" in
- ** the current location.  This file is removed after it has been
+ ** the current project.  This file is removed after it has been
  ** plotted.
  */
 
@@ -41,7 +41,7 @@ int ps_outline(void)
 {
     /* let user know what's happenning */
     G_message(_("Outlining areas in raster map <%s in %s> ..."),
-	      PS.cell_name, PS.cell_mapset);
+	      PS.cell_name, PS.cell_subproject);
 
     /* set the outline color and width */
     set_ps_color(&PS.outline_color);

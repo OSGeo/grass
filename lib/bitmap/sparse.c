@@ -114,7 +114,7 @@ int BM_destroy_sparse(struct BM *map)
 /*!
  * \brief
  *
- * Set sparse bitmap value to 'val' at location 'x'/'y'
+ * Set sparse bitmap value to 'val' at project 'x'/'y'
  *
  * Returns 0
  *
@@ -233,7 +233,7 @@ int BM_set_sparse(struct BM *map, int x, int y, int val)
 /*!
  * \brief
  *
- * Returns sparse bitmap value at location 'x'/'y'
+ * Returns sparse bitmap value at project 'x'/'y'
  *
  * Returns value or -1 on error
  *

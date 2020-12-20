@@ -2,9 +2,9 @@
 
 The <em>g.copy</em> module creates a copy of existing raster maps,
 vector maps, or other elements. The copy is always created in
-the current mapset. The source data can be in the current mapset,
-in an explicitly specified mapset, or in a mapset which is in the
-current mapset search path (typically the PERMANENT mapset).
+the current subproject. The source data can be in the current subproject,
+in an explicitly specified subproject, or in a subproject which is in the
+current subproject search path (typically the PERMANENT subproject).
 
 <p>
 The maps and other elements to copy are specified in pairs
@@ -13,16 +13,16 @@ Although typically only one map is copied in one module call,
 multiple pairs can be provided for each type and multiple types
 can be provided at the same time.
 
-<h3>Relation to mapsets</h3>
+<h3>Relation to subprojects</h3>
 
-A user may access data stored under the other mapsets listed in their
-mapset search path. However, the user may only modify data stored
-under their own current mapset. <em>g.copy</em> allows the user to copy
-existing data files <b>from</b> other mapsets <b>to</b> the user's
-current mapset (<code>g.mapset -p</code>). The files to be copied must exist in the
-user's current mapset search path (<code>g.mapsets -p</code>) and location;
+A user may access data stored under the other subprojects listed in their
+subproject search path. However, the user may only modify data stored
+under their own current subproject. <em>g.copy</em> allows the user to copy
+existing data files <b>from</b> other subprojects <b>to</b> the user's
+current subproject (<code>g.subproject -p</code>). The files to be copied must exist in the
+user's current subproject search path (<code>g.subprojects -p</code>) and project;
 output is sent to the
-relevant data element directory(ies) under the user's current mapset.
+relevant data element directory(ies) under the user's current subproject.
 
 <h3>Behavior on error</h3>
 
@@ -61,27 +61,27 @@ g.copy raster=soils,soils.ph vector=roads,rds.old
 </pre></div>
 
 <p>
-Data files can also be specified by their mapsets.  For
+Data files can also be specified by their subprojects.  For
 example, the below command copies the raster map named
-<em>soils</em> from the mapset <em>wilson</em> to a new
+<em>soils</em> from the subproject <em>wilson</em> to a new
 file called <em>soils</em> to be placed under the user's
-current mapset:
+current subproject:
 
 <div class="code"><pre>
 g.copy raster=soils@wilson,soils
 </pre></div>
 
-If no mapset name is specified, <em>g.copy</em> searches for the
-named <b>from</b> map in each of the mapset directories listed in the
-user's current mapset search path in the order in which mapsets are
-listed there (see <em><a href="g.mapsets.html">g.mapsets</a></em>).
+If no subproject name is specified, <em>g.copy</em> searches for the
+named <b>from</b> map in each of the subproject directories listed in the
+user's current subproject search path in the order in which subprojects are
+listed there (see <em><a href="g.subprojects.html">g.subprojects</a></em>).
 
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="g.access.html">g.access</a>,
 <a href="g.list.html">g.list</a>,
-<a href="g.mapsets.html">g.mapsets</a>,
+<a href="g.subprojects.html">g.subprojects</a>,
 <a href="g.remove.html">g.remove</a>,
 <a href="g.rename.html">g.rename</a>
 </em>

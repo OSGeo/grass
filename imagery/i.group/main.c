@@ -35,11 +35,11 @@ static int remove_group_files(char group[INAME_LEN], char **rasters, int k);
 static int remove_subgroup_files(char group[INAME_LEN],
 				 char subgroup[INAME_LEN], char **rasters,
 				 int k);
-static void print_subgroups(const char *group, const char *mapset, int simple);
+static void print_subgroups(const char *group, const char *subproject, int simple);
 
 int main(int argc, char *argv[])
 {
-    char group[GNAME_MAX], mapset[GMAPSET_MAX];
+    char group[GNAME_MAX], subproject[GMAPSET_MAX];
     char xgroup[GNAME_MAX];
     char **rasters = NULL;
     int m, k = 0;
@@ -149,17 +149,17 @@ int main(int argc, char *argv[])
     if (k < 1 && !(l->answer || s->answer))	/* remove if input is requirement */
 	G_fatal_error(_("No input raster map(s) specified"));
 
-    /* Get groups mapset. Remove @mapset if group contains
+    /* Get groups subproject. Remove @subproject if group contains
      */
     strcpy(xgroup, grp->answer);
-    can_edit = G_unqualified_name(xgroup, G_mapset(), group, mapset) != -1;
+    can_edit = G_unqualified_name(xgroup, G_subproject(), group, subproject) != -1;
     
     if (r->answer && can_edit) {
 	/* Remove files from Group */
 
 	if (I_find_group(group) == 0) {
 	    G_fatal_error(_
-			  ("Specified group does not exist in current mapset"));
+			  ("Specified group does not exist in current subproject"));
 	}
 
 	if (sgrp->answer) {
@@ -176,14 +176,14 @@ int main(int argc, char *argv[])
     else {
 	if (l->answer || s->answer) {
 	    /* List raster maps in group */
-        if (!I_find_group2(group, mapset))
+        if (!I_find_group2(group, subproject))
             G_fatal_error(_("Group <%s> not found"), group);
 
 	    struct Ref ref;
 
 	    if (sgrp->answer) {
 		/* list subgroup files */
-		I_get_subgroup_ref2(group, sgrp->answer, mapset, &ref);
+		I_get_subgroup_ref2(group, sgrp->answer, subproject, &ref);
 		if (simple_flag->answer) {
 		    G_message(_
 			      ("Subgroup <%s> of group <%s> references the following raster maps:"),
@@ -194,11 +194,11 @@ int main(int argc, char *argv[])
 		    I_list_subgroup(group, sgrp->answer, &ref, stdout);
 	    }
 	    else if (s->answer) {
-		print_subgroups(group, mapset, simple_flag->answer);
+		print_subgroups(group, subproject, simple_flag->answer);
 	    }
 	    else {
 		/* list group files */
-		I_get_group_ref2(group, mapset, &ref);
+		I_get_group_ref2(group, subproject, &ref);
 		if (simple_flag->answer) {
 		    G_message(_
 			      ("Group <%s> references the following raster maps:"),
@@ -212,7 +212,7 @@ int main(int argc, char *argv[])
 	else {
         if (!can_edit) {
             /* GTC Group refers to an image group */
-            G_fatal_error(_("Only groups from the current mapset can be edited"));
+            G_fatal_error(_("Only groups from the current subproject can be edited"));
         }
 	    /* Create or update Group REF */
 	    if (I_find_group(group) == 0)
@@ -244,7 +244,7 @@ static int add_or_update_group(char group[INAME_LEN], char **rasters, int k)
 {
     int m, n, skip;
     struct Ref ref;
-    const char *mapset;
+    const char *subproject;
 
     I_get_group_ref(group, &ref);
 
@@ -254,27 +254,27 @@ static int add_or_update_group(char group[INAME_LEN], char **rasters, int k)
             G_warning(_("No input raster maps defined"));
             return 0;
         }
-	if ((mapset = G_find_raster(rasters[m], "")) == NULL) {
+	if ((subproject = G_find_raster(rasters[m], "")) == NULL) {
 	    G_warning(_("Raster map <%s> not found. Skipped."), rasters[m]);
             skip = 1;
             continue;
         }
 
 	G_message(_("Adding raster map <%s> to group"),
-		  G_fully_qualified_name(rasters[m], mapset));
+		  G_fully_qualified_name(rasters[m], subproject));
 
 	/* Go through existing files to check for duplicates */
 	for (n = 0; n < ref.nfiles; n++) {
 	    if (strcmp(rasters[m], ref.file[n].name) == 0) {
 		G_message(_("Raster map <%s> exists in group. Skipped."),
-			  G_fully_qualified_name(rasters[m], mapset));
+			  G_fully_qualified_name(rasters[m], subproject));
 		skip = 1;
 		continue;
 	    }
 	}
 
 	if (skip == 0)
-	    I_add_file_to_group_ref(rasters[m], mapset, &ref);
+	    I_add_file_to_group_ref(rasters[m], subproject, &ref);
     }
 
     G_debug(1, "writing group REF");
@@ -290,13 +290,13 @@ static int add_or_update_subgroup(char group[INAME_LEN],
 {
     int m, n, skip;
     struct Ref ref;
-    const char *mapset;
+    const char *subproject;
 
     I_get_subgroup_ref(group, subgroup, &ref);
 
     for (m = 0; m < k; m++) {
 	skip = 0;
-	if ((mapset = G_find_raster(rasters[m], "")) == NULL) {
+	if ((subproject = G_find_raster(rasters[m], "")) == NULL) {
             G_warning(_("Raster map <%s> not found. Skipped."),
                       rasters[m]);
             skip = 1;
@@ -304,20 +304,20 @@ static int add_or_update_subgroup(char group[INAME_LEN],
         }
 
 	G_message(_("Adding raster map <%s> to subgroup"),
-		  G_fully_qualified_name(rasters[m], mapset));
+		  G_fully_qualified_name(rasters[m], subproject));
 
 	/* Go through existing files to check for duplicates */
 	for (n = 0; n < ref.nfiles; n++) {
 	    if (strcmp(rasters[m], ref.file[n].name) == 0) {
 		G_message(_
 			  ("Raster map <%s> exists in subgroup. Skipping..."),
-			  G_fully_qualified_name(rasters[m], mapset));
+			  G_fully_qualified_name(rasters[m], subproject));
 		skip = 1;
 		continue;
 	    }
 	}
 	if (skip == 0)
-	    I_add_file_to_group_ref(rasters[m], mapset, &ref);
+	    I_add_file_to_group_ref(rasters[m], subproject, &ref);
     }
 
     G_debug(1, "writing subgroup REF");
@@ -332,9 +332,9 @@ static int remove_group_files(char group[INAME_LEN], char **rasters, int k)
     int m, n, skip;
     struct Ref ref;
     struct Ref ref_tmp;
-    const char *mapset;
+    const char *subproject;
     char tmp_name[INAME_LEN];
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 
     I_get_group_ref(group, &ref_tmp);
     I_init_group_ref(&ref);
@@ -347,20 +347,20 @@ static int remove_group_files(char group[INAME_LEN], char **rasters, int k)
 	/* Parse through supplied rasters */
 	for (n = 0; n < k; n++) {
 	    strcpy(tmp_name, rasters[n]);
-	    mapset = G_mapset();
+	    subproject = G_subproject();
 
-	    /* Parse out mapset */
-	    if (G_name_is_fully_qualified(rasters[n], xname, xmapset)) {
+	    /* Parse out subproject */
+	    if (G_name_is_fully_qualified(rasters[n], xname, xsubproject)) {
 		strcpy(tmp_name, xname);
-		mapset = xmapset;
+		subproject = xsubproject;
 	    }
 
 	    G_debug(3, "tmp_name %s, ref_tmp.file[%d].name: %s", tmp_name, m,
 		    ref_tmp.file[m].name);
 	    if ((strcmp(tmp_name, ref_tmp.file[m].name) == 0) &&
-		(strcmp(mapset, ref_tmp.file[m].mapset) == 0)) {
+		(strcmp(subproject, ref_tmp.file[m].subproject) == 0)) {
 		G_message(_("Removing raster map <%s> from group"),
-			  G_fully_qualified_name(tmp_name, mapset));
+			  G_fully_qualified_name(tmp_name, subproject));
 		skip = 1;
 		break;
 	    }
@@ -368,7 +368,7 @@ static int remove_group_files(char group[INAME_LEN], char **rasters, int k)
 
 	if (skip == 0) {
 	    I_add_file_to_group_ref(ref_tmp.file[m].name,
-				    ref_tmp.file[m].mapset, &ref);
+				    ref_tmp.file[m].subproject, &ref);
 	}
     }
 
@@ -390,9 +390,9 @@ static int remove_subgroup_files(char group[INAME_LEN],
     int m, n, skip;
     struct Ref ref;
     struct Ref ref_tmp;
-    const char *mapset;
+    const char *subproject;
     char tmp_name[INAME_LEN];
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 
     I_get_subgroup_ref(group, subgroup, &ref_tmp);
     I_init_group_ref(&ref);
@@ -404,22 +404,22 @@ static int remove_subgroup_files(char group[INAME_LEN],
 	/* Parse through supplied rasters */
 	for (n = 0; n < k; n++) {
 	    strcpy(tmp_name, rasters[n]);
-	    mapset = G_mapset();
+	    subproject = G_subproject();
 
-	    /* Parse out mapset */
-	    if (G_name_is_fully_qualified(rasters[n], xname, xmapset)) {
+	    /* Parse out subproject */
+	    if (G_name_is_fully_qualified(rasters[n], xname, xsubproject)) {
 		strcpy(tmp_name, xname);
-		mapset = xmapset;
+		subproject = xsubproject;
 	    }
 
 	    G_debug(3, "tmp_name %s, ref_tmp.file[%d].name: %s", tmp_name, m,
 		    ref_tmp.file[m].name);
-	    G_debug(3, "mapset %s, ref_tmp.file[%d].mapset: %s", mapset, m,
-		    ref_tmp.file[m].mapset);
+	    G_debug(3, "subproject %s, ref_tmp.file[%d].subproject: %s", subproject, m,
+		    ref_tmp.file[m].subproject);
 	    if ((strcmp(tmp_name, ref_tmp.file[m].name) == 0) &&
-		(strcmp(mapset, ref_tmp.file[m].mapset) == 0)) {
+		(strcmp(subproject, ref_tmp.file[m].subproject) == 0)) {
 		G_message(_("Removing raster map <%s> from subgroup"),
-			  G_fully_qualified_name(tmp_name, mapset));
+			  G_fully_qualified_name(tmp_name, subproject));
 		skip = 1;
 		break;
 	    }
@@ -427,7 +427,7 @@ static int remove_subgroup_files(char group[INAME_LEN],
 
 	if (skip == 0) {
 	    I_add_file_to_group_ref(ref_tmp.file[m].name,
-				    ref_tmp.file[m].mapset, &ref);
+				    ref_tmp.file[m].subproject, &ref);
 	}
     }
 
@@ -441,14 +441,14 @@ static int remove_subgroup_files(char group[INAME_LEN],
     return 0;
 }
 
-static void print_subgroups(const char *group, const char *mapset, int simple)
+static void print_subgroups(const char *group, const char *subproject, int simple)
 {
     int subgs_num, i;
     int len, tot_len;
     int max;
     char **subgs;
 
-    subgs = I_list_subgroups2(group, mapset, &subgs_num);
+    subgs = I_list_subgroups2(group, subproject, &subgs_num);
     if (simple)
 	for (i = 0; i < subgs_num; i++)
 	    fprintf(stdout, "%s\n", subgs[i]);

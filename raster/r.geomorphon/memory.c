@@ -24,18 +24,18 @@ int open_map(MAPS * rast)
 {
 
     int row, col;
-    char *mapset;
+    char *subproject;
     struct Cell_head cellhd;
     void *tmp_buf;
 
-    mapset = (char *)G_find_raster2(rast->elevname, "");
+    subproject = (char *)G_find_raster2(rast->elevname, "");
 
-    if (mapset == NULL)
+    if (subproject == NULL)
         G_fatal_error(_("Raster map <%s> not found"), rast->elevname);
 
-    rast->fd = Rast_open_old(rast->elevname, mapset);
-    Rast_get_cellhd(rast->elevname, mapset, &cellhd);
-    rast->raster_type = Rast_map_type(rast->elevname, mapset);
+    rast->fd = Rast_open_old(rast->elevname, subproject);
+    Rast_get_cellhd(rast->elevname, subproject, &cellhd);
+    rast->raster_type = Rast_map_type(rast->elevname, subproject);
 
     if (window.ew_res + 1e-10 < cellhd.ew_res ||
         window.ns_res + 1e-10 < cellhd.ns_res)
@@ -149,7 +149,7 @@ int write_form_cat_colors(char *raster)
         Rast_add_color_rule(&ccolors[i].cat, ccolors[i].r, ccolors[i].g,
                             ccolors[i].b, &ccolors[i].cat, ccolors[i].r,
                             ccolors[i].g, ccolors[i].b, &colors, CELL_TYPE);
-    Rast_write_colors(raster, G_mapset(), &colors);
+    Rast_write_colors(raster, G_subproject(), &colors);
     Rast_free_colors(&colors);
     Rast_init_cats("Forms", &cats);
     for (i = FL; i < CNT; ++i)
@@ -186,7 +186,7 @@ int write_contrast_colors(char *raster)
                               fcolors[i].b, &fcolors[i + 1].cat,
                               fcolors[i + 1].r, fcolors[i + 1].g,
                               fcolors[i + 1].b, &colors);
-    Rast_write_colors(raster, G_mapset(), &colors);
+    Rast_write_colors(raster, G_subproject(), &colors);
     Rast_free_colors(&colors);
     /*
        Rast_init_cats("Forms", &cats);

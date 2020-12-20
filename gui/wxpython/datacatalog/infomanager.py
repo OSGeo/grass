@@ -28,16 +28,16 @@ class DataCatalogInfoManager:
         self.infoBar = infobar
         self._giface = giface
 
-    def ShowDataStructureInfo(self, onCreateLocationHandler):
+    def ShowDataStructureInfo(self, onCreateProjectHandler):
         """Show info about the data hierarchy focused on the first-time user"""
-        buttons = [("Create new Location", onCreateLocationHandler),
+        buttons = [("Create new Project", onCreateProjectHandler),
                    ("Learn More", self._onLearnMore)]
         message = _(
-            "GRASS GIS helps you organize your data using Locations (projects) "
-            "which contain Mapsets (subprojects). All data in one Location is "
+            "GRASS GIS helps you organize your data using Projects (projects) "
+            "which contain Subprojects (subprojects). All data in one Project is "
             "in the same coordinate reference system (CRS).\n\n"
-            "You are currently in Mapset PERMANENT in default Location {loc} "
-            "which uses WGS 84 (EPSG:4326). Consider creating a new Location with a CRS "
+            "You are currently in Subproject PERMANENT in default Project {loc} "
+            "which uses WGS 84 (EPSG:4326). Consider creating a new Project with a CRS "
             "specific to your area. You can do it now or anytime later from "
             "the toolbar above."
         ).format(loc=gisenv()['LOCATION_NAME'])

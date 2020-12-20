@@ -22,7 +22,7 @@ contained in the raster map shown on the left.
       000000001000000000000000 444443321233444444444444 
 
       Category 0: No roads
-      Category 1: Road location 
+      Category 1: Road project 
       Category 2: Buffer Zone 1 around roads 
       Category 3: Buffer Zone 2 around roads 
       Category 4: Buffer Zone 3 around roads 
@@ -51,8 +51,8 @@ category values of interest spread throughout the area.
 <p>
 <em>r.buffer</em> measures distances from center of cell to
 center of cell using Euclidean distance measure for
-planimetric locations (like UTM) and using ellipsoidal
-geodesic distance measure for latitude/longitude locations.
+planimetric projects (like UTM) and using ellipsoidal
+geodesic distance measure for latitude/longitude projects.
 <p>
 <em>r.buffer</em> calculates distance zones from all cells having
 non-NULL category values in the <b>input</b> map. If the user wishes
@@ -89,7 +89,7 @@ Result:
 
 <div class="code"><pre>
 r.category input=roads.buf
-      1       distances calculated from these locations
+      1       distances calculated from these projects
       2       0-100 meters
       3       100-200 meters
       4       200-300 meters

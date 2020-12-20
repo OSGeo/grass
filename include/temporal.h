@@ -7,7 +7,7 @@
 
 
 #define TGISDB_DEFAULT_DRIVER "sqlite"
-/* Default path in the current location */
+/* Default path in the current project */
 #define TGISDB_DEFAULT_SQLITE_PATH "tgis/sqlite.db"
 
 
@@ -17,8 +17,8 @@ const char *tgis_get_default_driver_name(void);
 char *tgis_get_default_database_name(void);
 char *tgis_get_driver_name(void);
 char *tgis_get_database_name(void);
-char *tgis_get_mapset_driver_name(const char*);
-char *tgis_get_mapset_database_name(const char*);
+char *tgis_get_subproject_driver_name(const char*);
+char *tgis_get_subproject_database_name(const char*);
 int tgis_set_default_connection(void);
 
 
@@ -44,7 +44,7 @@ int tgis_set_default_connection(void);
 /*! A simple structure to organize time stamped maps*/
 typedef struct _tgisMap {
     char *name;
-    char *mapset;
+    char *subproject;
     struct TimeStamp ts;
 } tgisMap;
 
@@ -75,7 +75,7 @@ void tgis_init_map_list(tgisMapList *list);
 void tgis_free_map_list(tgisMapList *list);
 tgisMapList * tgis_new_map_list();
 /*! Insert a new map to the map list */
-void tgis_map_list_insert(tgisMapList *list, char *name, char*mapset, struct TimeStamp *ts);
+void tgis_map_list_insert(tgisMapList *list, char *name, char*subproject, struct TimeStamp *ts);
 /*! Add a new map to the map list */
 void tgis_map_list_add(tgisMapList *list, tgisMap *map);
 
@@ -132,7 +132,7 @@ typedef struct _tgisDatasetList
  */
 typedef struct _tgisDataset {
     char *name;          /* The name of this dataset */
-    char *mapset;        /* The mapset of this dataset */
+    char *subproject;        /* The subproject of this dataset */
     char *creator;       /* The creator of this dataset */
     DateTime creation_time; /* The creation time of this dataset */
     char temporal_type;  /* The temporal type of this dataset: TGIS_ABSOLUTE_TIME, 
@@ -179,7 +179,7 @@ void tgis_init_dataset_list(tgisDatasetList *list);
 void tgis_free_dataset_list(tgisDatasetList *list);
 tgisDatasetList * tgis_new_dataset_list();
 /*! Insert a new dataset to the dataset list */
-void tgis_dataset_list_insert(tgisDatasetList *list, char *name, char *mapset, char *creator, 
+void tgis_dataset_list_insert(tgisDatasetList *list, char *name, char *subproject, char *creator, 
                            DateTime *creation_time, char temporal_type, 
                            struct TimeStamp *ts, tgisExtent *extent, void *metadata, 
                            char dataset_type, char is_stds);
@@ -227,17 +227,17 @@ int tgis_register_maps(tgisMapList *list, char map_type, char *stds_name);
 int tgis_unregister_maps(tgisMapList *list, char map_type, char *stds_name);
 
 /*! Get all maps that are registered in a space time dataset */
-tgisDatasetList *tgis_get_registered_maps(char *stds_name, char *mapset, 
+tgisDatasetList *tgis_get_registered_maps(char *stds_name, char *subproject, 
                                           char stds_type, char *order,
                                           char *where);
 
 /* stds.c */
 /*! Get all stds from the temporal database */
-tgisDatasetList *tgis_get_registered_stds(char *stds_name, char *mapset, 
+tgisDatasetList *tgis_get_registered_stds(char *stds_name, char *subproject, 
                                           char stds_type, char temporal_type, 
                                           char *order, char *where);
 
 /*! Get the information about a specific space time dataset from the temporal database */
-tgisDataset *tgis_get_stds_info(char *stds_name, char *mapset, char stds_type);
+tgisDataset *tgis_get_stds_info(char *stds_name, char *subproject, char stds_type);
 
 #endif

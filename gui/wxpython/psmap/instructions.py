@@ -70,8 +70,8 @@ class Instruction:
         comment = "# timestamp: " + strftime("%Y-%m-%d %H:%M",
                                              localtime()) + '\n'
         env = grass.gisenv()
-        comment += "# location: %s\n" % env['LOCATION_NAME']
-        comment += "# mapset: %s\n" % env['MAPSET']
+        comment += "# project: %s\n" % env['LOCATION_NAME']
+        comment += "# subproject: %s\n" % env['MAPSET']
         comment += "# page orientation: %s\n" % self.FindInstructionByType('page')[
             'Orientation']
         border = ''

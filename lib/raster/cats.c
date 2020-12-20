@@ -82,34 +82,34 @@ static int cmp(const void *, const void *);
 static void write_cats(const char *element, const char *name,
 		       struct Categories *cats);
 static CELL read_cats(const char *element, const char *name,
-		      const char *mapset, struct Categories *pcats, int full);
+		      const char *subproject, struct Categories *pcats, int full);
 
 static struct Categories save_cats;
 
 /*!
  * \brief Read raster category file
  *
- * The category file for raster map <i>name</i> in <i>mapset</i> is
+ * The category file for raster map <i>name</i> in <i>subproject</i> is
  * read into the <i>cats</i> structure. If there is an error reading
  * the category file, a diagnostic message is printed and -1 is
  * returned. Otherwise, 0 is returned.
  *
  * \param name raster map name
- * \param mapset mapset name
+ * \param subproject subproject name
  * \param[out] pcats pointer to Cats structure
  * 
  * \return -1 on error
  * \return 0 on success
  */
 int Rast_read_cats(const char *name,
-		   const char *mapset, struct Categories *pcats)
+		   const char *subproject, struct Categories *pcats)
 {
-    switch (read_cats("cats", name, mapset, pcats, 1)) {
+    switch (read_cats("cats", name, subproject, pcats, 1)) {
     case -2:
-	G_warning(_("Category support for <%s@%s> missing"), name, mapset);
+	G_warning(_("Category support for <%s@%s> missing"), name, subproject);
 	break;
     case -1:
-	G_warning(_("Category support for <%s@%s> invalid"), name, mapset);
+	G_warning(_("Category support for <%s@%s> invalid"), name, subproject);
 	break;
     default:
 	return 0;
@@ -125,29 +125,29 @@ int Rast_read_cats(const char *name,
  *
  * \todo: To be moved to the vector library
  *
- * The category  file for vector  map <i>name</i> in  <i>mapset</i> is
+ * The category  file for vector  map <i>name</i> in  <i>subproject</i> is
  * read into the  <i>cats</i> structure. If there is  an error reading
  * the  category file,  a  diagnostic  message is  printed  and -1  is
  * returned. Otherwise, 0 is returned.
  *
  * \param name vector map name
- * \param mapset mapset name
+ * \param subproject subproject name
  * \param[out] pcats pointer to Cats structure
  * 
  * \return -1 on error
  * \return 0 on success
  */
 int Rast_read_vector_cats(const char *name,
-			  const char *mapset, struct Categories *pcats)
+			  const char *subproject, struct Categories *pcats)
 {
-    switch (read_cats("dig_cats", name, mapset, pcats, 1)) {
+    switch (read_cats("dig_cats", name, subproject, pcats, 1)) {
     case -2:
 	G_warning(_("Category support for vector map <%s@%s> missing"),
-		  name, mapset);
+		  name, subproject);
 	break;
     case -1:
 	G_warning(_("Category support for vector map <%s@%s> invalid"),
-		  name, mapset);
+		  name, subproject);
 	break;
     default:
 	return 0;
@@ -163,18 +163,18 @@ int Rast_read_vector_cats(const char *name,
    of type CELL.
 
    \param name raster map name
-   \param mapset mapset name
+   \param subproject subproject name
 
    \return -1 on error
    \return number of cats
  */
-CELL Rast_get_max_c_cat(const char *name, const char *mapset)
+CELL Rast_get_max_c_cat(const char *name, const char *subproject)
 {
     struct Range range;
     CELL min, max;
 
     /* return the max category number */
-    if (Rast_read_range(name, mapset, &range) < 0)
+    if (Rast_read_range(name, subproject, &range) < 0)
 	return -1;
     Rast_get_range_min_max(&range, &min, &max);
     if (Rast_is_c_null_value(&max))
@@ -184,7 +184,7 @@ CELL Rast_get_max_c_cat(const char *name, const char *mapset)
 
 static CELL read_cats(const char *element,
 		      const char *name,
-		      const char *mapset, struct Categories *pcats, int full)
+		      const char *subproject, struct Categories *pcats, int full)
 {
     FILE *fd;
     char buff[1024];
@@ -197,9 +197,9 @@ static CELL read_cats(const char *element,
     if (strncmp(element, "dig", 3) == 0)
 	fp_map = 0;
     else
-	fp_map = Rast_map_is_fp(name, mapset);
+	fp_map = Rast_map_is_fp(name, subproject);
 
-    if (!(fd = G_fopen_old(element, name, mapset)))
+    if (!(fd = G_fopen_old(element, name, subproject)))
 	return -2;
 
     /* Read the number of categories */
@@ -928,7 +928,7 @@ int Rast_set_cat(const void *rast1, const void *rast2,
  * \todo To be removed, replaced by Rast_write_cats().
  *
  * Writes the category file for the raster map <i>name</i> in the
- * current mapset from the <i>cats</i> structure.
+ * current subproject from the <i>cats</i> structure.
  *
  * \param name map name
  * \param cats pointer to Categories structure
@@ -985,7 +985,7 @@ static void write_cats(const char *element, const char *name,
     if (strncmp(element, "dig", 3) == 0)
 	fp_map = 0;
     else
-	fp_map = Rast_map_is_fp(name, G_mapset());
+	fp_map = Rast_map_is_fp(name, G_subproject());
     if (!fp_map)
 	Rast_sort_cats(cats);
 

@@ -27,29 +27,29 @@ static int list_element(FILE *, const char *, const char *, const char *,
 /*!
   \brief General purpose list function
   
-  Will list files from all mapsets in the mapset list for a specified
+  Will list files from all subprojects in the subproject list for a specified
   database element.
   
   Note: output is to stdout piped thru the more utility
   
   \code
-  lister (char *name char *mapset, char* buf)
+  lister (char *name char *subproject, char* buf)
   \endcode
   
-  Given file <em>name</em>, and <em>mapset</em>, lister() should
+  Given file <em>name</em>, and <em>subproject</em>, lister() should
   copy a string into 'buf' when called with name == "", should set
-  buf to general title for mapset list.
+  buf to general title for subproject list.
   
   \param element    database element (eg, "cell", "cellhd", etc.)
   \param desc       description for element (if NULL, element is used)
-  \param mapset     mapset to be listed "" to list all mapsets in mapset search list 
-                    "." will list current mapset
+  \param subproject     subproject to be listed "" to list all subprojects in subproject search list 
+                    "." will list current subproject
   \param lister     if given will call this routine to get a list title.
                     NULL if no titles desired. 
 */
 void G_list_element(const char *element,
 		    const char *desc,
-		    const char *mapset,
+		    const char *subproject,
 		    int (*lister) (const char *, const char *, const char *))
 {
     struct Popen pager;
@@ -68,23 +68,23 @@ void G_list_element(const char *element,
     fprintf(more, "----------------------------------------------\n");
 
     /*
-     * if no specific mapset is requested, list the mapsets
-     * from the mapset search list
-     * otherwise just list the specified mapset
+     * if no specific subproject is requested, list the subprojects
+     * from the subproject search list
+     * otherwise just list the specified subproject
      */
-    if (mapset == 0 || *mapset == 0)
-	for (n = 0; (mapset = G_get_mapset_name(n)); n++)
-	    count += list_element(more, element, desc, mapset, lister);
+    if (subproject == 0 || *subproject == 0)
+	for (n = 0; (subproject = G_get_subproject_name(n)); n++)
+	    count += list_element(more, element, desc, subproject, lister);
     else
-	count += list_element(more, element, desc, mapset, lister);
+	count += list_element(more, element, desc, subproject, lister);
 
     if (count == 0) {
-	if (mapset == 0 || *mapset == 0)
-	    fprintf(more, _("no %s files available in current mapset\n"),
+	if (subproject == 0 || *subproject == 0)
+	    fprintf(more, _("no %s files available in current subproject\n"),
 		    desc);
 	else
-	    fprintf(more, _("no %s files available in mapset <%s>\n"),
-		    desc, mapset);
+	    fprintf(more, _("no %s files available in subproject <%s>\n"),
+		    desc, subproject);
 
 	fprintf(more, "----------------------------------------------\n");
     }
@@ -94,7 +94,7 @@ void G_list_element(const char *element,
     G_close_pager(&pager);
 }
 
-static int list_element(FILE *out, const char *element, const char *desc, const char *mapset,
+static int list_element(FILE *out, const char *element, const char *desc, const char *subproject,
 			int (*lister)(const char *, const char *, const char *))
 {
     char path[GPATH_MAX];
@@ -103,19 +103,19 @@ static int list_element(FILE *out, const char *element, const char *desc, const 
     int i;
 
     /*
-     * convert . to current mapset
+     * convert . to current subproject
      */
-    if (strcmp(mapset, ".") == 0)
-	mapset = G_mapset();
+    if (strcmp(subproject, ".") == 0)
+	subproject = G_subproject();
 
 
     /*
-     * get the full name of the GIS directory within the mapset
+     * get the full name of the GIS directory within the subproject
      * and list its contents (if it exists)
      *
      * if lister() routine is given, the ls command must give 1 name
      */
-    G_file_name(path, element, "", mapset);
+    G_file_name(path, element, "", subproject);
     if (access(path, 0) != 0) {
 	fprintf(out, "\n");
 	return count;
@@ -129,13 +129,13 @@ static int list_element(FILE *out, const char *element, const char *desc, const 
     list = G_ls2(path, &count);
 
     if (count > 0) {
-	fprintf(out, _("%s files available in mapset <%s>:\n"), desc, mapset);
+	fprintf(out, _("%s files available in subproject <%s>:\n"), desc, subproject);
 	if (lister) {
 	    char title[400];
 	    char name[GNAME_MAX];
 
 	    *name = *title = 0;
-	    lister(name, mapset, title);
+	    lister(name, subproject, title);
 	    if (*title)
 		fprintf(out, "\n%-18s %-.60s\n", name, title);
 	}
@@ -145,7 +145,7 @@ static int list_element(FILE *out, const char *element, const char *desc, const 
 	for (i = 0; i < count; i++) {
 	    char title[400];
 
-	    lister(list[i], mapset, title);
+	    lister(list[i], subproject, title);
 	    fprintf(out, "%-18s %-.60s\n", list[i], title);
 	}
     }
@@ -168,13 +168,13 @@ static int list_element(FILE *out, const char *element, const char *desc, const 
  
   \param element element type (G_ELEMENT_RASTER, G_ELEMENT_VECTOR, G_ELEMENT_REGION )
   \param gisbase path to GISBASE
-  \param location location name
-  \param mapset mapset name
+  \param project project name
+  \param subproject subproject name
 
  \return zero terminated array of element names
 */
-char **G_list(int element, const char *gisbase, const char *location,
-	      const char *mapset)
+char **G_list(int element, const char *gisbase, const char *project,
+	      const char *subproject)
 {
     char *el;
     char *buf;
@@ -204,10 +204,10 @@ char **G_list(int element, const char *gisbase, const char *location,
 	G_fatal_error(_("G_list: Unknown element type"));
     }
 
-    buf = (char *)G_malloc(strlen(gisbase) + strlen(location)
-			   + strlen(mapset) + strlen(el) + 4);
+    buf = (char *)G_malloc(strlen(gisbase) + strlen(project)
+			   + strlen(subproject) + strlen(el) + 4);
 
-    sprintf(buf, "%s/%s/%s/%s", gisbase, location, mapset, el);
+    sprintf(buf, "%s/%s/%s/%s", gisbase, project, subproject, el);
 
     dirp = opendir(buf);
     G_free(buf);

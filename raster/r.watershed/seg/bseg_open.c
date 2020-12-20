@@ -14,7 +14,7 @@ int bseg_open(BSEG * bseg, int srows, int scols, int nsegs_in_memory)
     bseg->filename = NULL;
     bseg->fd = -1;
     bseg->name = NULL;
-    bseg->mapset = NULL;
+    bseg->subproject = NULL;
 
     filename = G_tempfile();
     if (0 > (errflag = Segment_open(&(bseg->seg), filename, Rast_window_rows(),

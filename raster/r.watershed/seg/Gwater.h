@@ -110,7 +110,7 @@ extern char ele_name[GNAME_MAX], pit_name[GNAME_MAX];
 extern char run_name[GNAME_MAX], ob_name[GNAME_MAX];
 extern char ril_name[GNAME_MAX], rtn_name[GNAME_MAX], dep_name[GNAME_MAX];
 
-extern const char *this_mapset;
+extern const char *this_subproject;
 extern char seg_name[GNAME_MAX], bas_name[GNAME_MAX], haf_name[GNAME_MAX], thr_name[8];
 extern char ls_name[GNAME_MAX], st_name[GNAME_MAX], sl_name[GNAME_MAX], sg_name[GNAME_MAX];
 extern char wat_name[GNAME_MAX], asp_name[GNAME_MAX];

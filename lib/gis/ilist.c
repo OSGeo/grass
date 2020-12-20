@@ -35,7 +35,7 @@ void G_free_ilist(struct ilist *list)
  * \brief Return a new integer list.
  * 
  * G_fatal_error() will be invoked by the
- * allocation function.
+ * alproject function.
  *
  * \return list The pointer to a new allocated integer list
  *
@@ -67,8 +67,8 @@ void G_init_ilist(struct ilist *list)
  * \brief Add item to ilist
  *
  *  This function adds an integer to the list but does not check for duplicates.
- *  In case reallocation fails, G_fatal_error() will be invoked by the
- *  allocation function.
+ *  In case realproject fails, G_fatal_error() will be invoked by the
+ *  alproject function.
  *
  * \param list The ilist pointer
  * \param val The value to attach

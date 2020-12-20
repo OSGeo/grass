@@ -43,7 +43,7 @@ int main(int argc, char **argv)
     struct Option *lfield_opt, *pfield_opt;
     struct Option *driver_opt, *database_opt, *table_opt, *thresh_opt;
     struct GModule *module;
-    const char *mapset;
+    const char *subproject;
     struct Map_info LMap, PMap;
     struct line_cats *LCats, *PCats;
     struct line_pnts *LPoints, *PPoints;
@@ -122,21 +122,21 @@ int main(int argc, char **argv)
     thresh = atof(thresh_opt->answer);
 
     /* Open input lines */
-    mapset = G_find_vector2(lines_opt->answer, NULL);
-    if (mapset == NULL)
+    subproject = G_find_vector2(lines_opt->answer, NULL);
+    if (subproject == NULL)
 	G_fatal_error(_("Vector map <%s> not found"), lines_opt->answer);
 
     Vect_set_open_level(2);
-    if (Vect_open_old(&LMap, lines_opt->answer, mapset) < 0)
+    if (Vect_open_old(&LMap, lines_opt->answer, subproject) < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), lines_opt->answer);
 
     /* Open input points */
-    mapset = G_find_vector2(points_opt->answer, NULL);
-    if (mapset == NULL)
+    subproject = G_find_vector2(points_opt->answer, NULL);
+    if (subproject == NULL)
 	G_fatal_error(_("Vector map <%s> not found"), points_opt->answer);
 
     Vect_set_open_level(2);
-    if (Vect_open_old(&PMap, points_opt->answer, mapset) < 0)
+    if (Vect_open_old(&PMap, points_opt->answer, subproject) < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), points_opt->answer);
 
     db_init_handle(&rshandle);

@@ -32,9 +32,9 @@ FILE *I_fopen_group_ref_old(const char *group)
     return I_fopen_group_file_old(group, "REF");
 }
 
-FILE *I_fopen_group_ref_old2(const char *group, const char *mapset)
+FILE *I_fopen_group_ref_old2(const char *group, const char *subproject)
 {
-    return I_fopen_group_file_old2(group, mapset, "REF");
+    return I_fopen_group_file_old2(group, subproject, "REF");
 }
 
 /*
@@ -59,11 +59,11 @@ FILE *I_fopen_subgroup_ref_old(const char *group, const char *subgroup)
     return fd;
 }
 
-FILE *I_fopen_subgroup_ref_old2(const char *group, const char *subgroup, const char *mapset)
+FILE *I_fopen_subgroup_ref_old2(const char *group, const char *subgroup, const char *subproject)
 {
     FILE *fd;
 
-    fd = I_fopen_subgroup_file_old2(group, subgroup, mapset, "REF");
+    fd = I_fopen_subgroup_file_old2(group, subgroup, subproject, "REF");
     return fd;
 }
 

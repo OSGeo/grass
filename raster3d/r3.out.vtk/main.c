@@ -47,7 +47,7 @@ static void open_write_vector_maps(input_maps * in, RASTER3D_Region region,
                                    FILE * fp, int dp);
 
 /*opens a raster input map */
-static int open_input_map(const char *name, const char *mapset);
+static int open_input_map(const char *name, const char *subproject);
 
 /*Check if all maps are available */
 static void check_input_maps(void);
@@ -92,12 +92,12 @@ input_maps *create_input_maps_struct(void)
 /* Open the raster input map *********************************************** */
 
 /* ************************************************************************* */
-int open_input_map(const char *name, const char *mapset)
+int open_input_map(const char *name, const char *subproject)
 {
-    G_debug(3, "Open raster file %s in mapset %s", name, mapset);
+    G_debug(3, "Open raster file %s in subproject %s", name, subproject);
 
     /* open raster map */
-    return Rast_open_old(name, mapset);
+    return Rast_open_old(name, subproject);
 }
 
 
@@ -108,7 +108,7 @@ int open_input_map(const char *name, const char *mapset)
 void check_input_maps(void)
 {
     int i = 0;
-    const char *mapset, *name;
+    const char *subproject, *name;
 
     /*Check top and bottom if surface is requested */
     if (param.structgrid->answer) {
@@ -116,20 +116,20 @@ void check_input_maps(void)
         if (!param.top->answer || !param.bottom->answer)
             Rast3d_fatal_error(_("Specify top and bottom map"));
 
-        mapset = NULL;
+        subproject = NULL;
         name = NULL;
         name = param.top->answer;
-        mapset = G_find_raster2(name, "");
-        if (mapset == NULL) {
+        subproject = G_find_raster2(name, "");
+        if (subproject == NULL) {
             Rast3d_fatal_error(_("Top cell map <%s> not found"),
                            param.top->answer);
         }
 
-        mapset = NULL;
+        subproject = NULL;
         name = NULL;
         name = param.bottom->answer;
-        mapset = G_find_raster2(name, "");
-        if (mapset == NULL) {
+        subproject = G_find_raster2(name, "");
+        if (subproject == NULL) {
             Rast3d_fatal_error(_("Bottom cell map <%s> not found"),
                            param.bottom->answer);
         }
@@ -364,7 +364,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     int dp, i, changemask = 0;
     int rows, cols;
-    const char *mapset, *name;
+    const char *subproject, *name;
     double scale = 1.0, llscale = 1.0;
 
     input_maps *in;
@@ -459,19 +459,19 @@ int main(int argc, char *argv[])
         }
 
         /*open top */
-        mapset = NULL;
+        subproject = NULL;
         name = NULL;
         name = param.top->answer;
-        mapset = G_find_raster2(name, "");
-        in->top = open_input_map(name, mapset);
+        subproject = G_find_raster2(name, "");
+        in->top = open_input_map(name, subproject);
         in->topMapType = Rast_get_map_type(in->top);
 
         /*open bottom */
-        mapset = NULL;
+        subproject = NULL;
         name = NULL;
         name = param.bottom->answer;
-        mapset = G_find_raster2(name, "");
-        in->bottom = open_input_map(name, mapset);
+        subproject = G_find_raster2(name, "");
+        in->bottom = open_input_map(name, subproject);
         in->bottomMapType = Rast_get_map_type(in->bottom);
 
         /* Write the vtk-header and the points */

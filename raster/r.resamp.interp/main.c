@@ -373,7 +373,7 @@ int main(int argc, char *argv[])
     if (Rast_read_colors(rastin->answer, "", &colors) < 0)
 	G_fatal_error(_("Unable to read color table for %s"), rastin->answer);
     Rast_mark_colors_as_fp(&colors);
-    Rast_write_colors(rastout->answer, G_mapset(), &colors);
+    Rast_write_colors(rastout->answer, G_subproject(), &colors);
 
     return (EXIT_SUCCESS);
 }

@@ -8,7 +8,7 @@
  *               Multiple features by Huidae Cho <grass4u gmail.com>
  *
  * PURPOSE:      To select and report attribute information for objects at a
- *               user specified location. This replaces d.what.vect by removing
+ *               user specified project. This replaces d.what.vect by removing
  *               the interactive component to enable its use with the new
  *               gis.m and future GUI.
  *
@@ -62,7 +62,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("vector"));
     G_add_keyword(_("querying"));
     G_add_keyword(_("position"));
-    module->description = _("Queries a vector map at given locations.");
+    module->description = _("Queries a vector map at given projects.");
 
     opt.map = G_define_standard_option(G_OPT_V_MAPS);
 

@@ -4,7 +4,7 @@
  *   char *name        name of map file
  *   char *title       new title
  *
- *   changes the title for the cell file 'name' in  current mapset
+ *   changes the title for the cell file 'name' in  current subproject
  *
  *   returns  1 if ok, -1 if error
  *************************************************************/
@@ -15,18 +15,18 @@
 
 int Rast_put_cell_title(const char *name, const char *title)
 {
-    const char *mapset;
+    const char *subproject;
     FILE *in, *out;
     char *tempfile;
     int line;
     char buf[1024];
 
-    mapset = G_mapset();
+    subproject = G_subproject();
     in = out = 0;
-    in = G_fopen_old("cats", name, mapset);
+    in = G_fopen_old("cats", name, subproject);
     if (!in) {
 	G_warning(_("category information for [%s] in [%s]"
-		    " missing or invalid"), name, mapset);
+		    " missing or invalid"), name, subproject);
 	return -1;
     }
 
@@ -51,7 +51,7 @@ int Rast_put_cell_title(const char *name, const char *title)
     /* must be #cats line, title line, and label for cat 0 */
     if (line < 3) {
 	G_warning(_("category information for [%s] in [%s] invalid"),
-		  name, mapset);
+		  name, subproject);
 	return -1;
     }
 
@@ -65,7 +65,7 @@ int Rast_put_cell_title(const char *name, const char *title)
     if (!out) {
 	fclose(in);
 	G_warning(_("can't write category information for [%s] in [%s]"),
-		  name, mapset);
+		  name, subproject);
 	return -1;
     }
 

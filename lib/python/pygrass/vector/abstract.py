@@ -67,12 +67,12 @@ class Info(object):
 
     """
 
-    def __init__(self, name, mapset='', *aopen, **kwopen):
+    def __init__(self, name, subproject='', *aopen, **kwopen):
         self._name = ''
-        self._mapset = ''
-        # Set map name and mapset
+        self._subproject = ''
+        # Set map name and subproject
         self.name = name
-        self.mapset = mapset
+        self.subproject = subproject
         self._aopen = aopen
         self._kwopen = kwopen
         self.c_mapinfo = ctypes.pointer(libvect.Map_info())
@@ -114,17 +114,17 @@ class Info(object):
     name = property(fget=_get_name, fset=_set_name,
                     doc="Set or obtain the Vector name")
 
-    def _get_mapset(self):
-        """Private method to obtain the Vector mapset"""
-        return self._mapset
+    def _get_subproject(self):
+        """Private method to obtain the Vector subproject"""
+        return self._subproject
 
-    def _set_mapset(self, mapset):
-        """Private method to change the Vector mapset"""
-        if mapset:
-            self._mapset = mapset
+    def _set_subproject(self, subproject):
+        """Private method to change the Vector subproject"""
+        if subproject:
+            self._subproject = subproject
 
-    mapset = property(fget=_get_mapset, fset=_set_mapset,
-                      doc="Set or obtain the Vector mapset")
+    subproject = property(fget=_get_subproject, fset=_set_subproject,
+                      doc="Set or obtain the Vector subproject")
 
     def _get_organization(self):
         """Private method to obtain the Vector organization"""
@@ -283,11 +283,11 @@ class Info(object):
     def exist(self):
         """Return if the Vector exists or not"""
         if self.name:
-            if self.mapset == '':
-                mapset = utils.get_mapset_vector(self.name, self.mapset)
-                self.mapset = mapset if mapset else ''
-                return True if mapset else False
-            return bool(utils.get_mapset_vector(self.name, self.mapset))
+            if self.subproject == '':
+                subproject = utils.get_subproject_vector(self.name, self.subproject)
+                self.subproject = subproject if subproject else ''
+                return True if subproject else False
+            return bool(utils.get_subproject_vector(self.name, self.subproject))
         else:
             return False
 
@@ -353,11 +353,11 @@ class Info(object):
             # open in READ mode
             if self.mode == 'r':
                 openvect = libvect.Vect_open_old2(self.c_mapinfo, self.name,
-                                                  self.mapset, str(layer))
+                                                  self.subproject, str(layer))
             # open in READ and WRITE mode
             elif self.mode == 'rw':
                 openvect = libvect.Vect_open_update2(self.c_mapinfo, self.name,
-                                                     self.mapset, str(layer))
+                                                     self.subproject, str(layer))
 
             # instantiate class attributes
             self.dblinks = DBlinks(self.c_mapinfo)
@@ -393,7 +393,7 @@ class Info(object):
             self.layer = self.dblinks.by_layer(layer).layer
             self.table = self.dblinks.by_layer(layer).table()
             self.n_lines = self.table.n_rows()
-        self.writeable = self.mapset == utils.getenv("MAPSET")
+        self.writeable = self.subproject == utils.getenv("MAPSET")
         # Initialize the finder
         self.find = {'by_point': PointFinder(self.c_mapinfo, self.table,
                                              self.writeable),
@@ -433,7 +433,7 @@ class Info(object):
         self.close()
         libvect.Vect_set_open_level(1)
         if libvect.Vect_open_old2(self.c_mapinfo, self.name,
-                                  self.mapset, '0') != 1:
+                                  self.subproject, '0') != 1:
             str_err = 'Error when trying to open the vector map.'
             raise GrassError(str_err)
         # Vect_build returns 1 on success and 0 on error (bool approach)

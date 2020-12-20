@@ -471,7 +471,7 @@ int main(int argc, char *argv[])
 	Rast_write_cats(outputs[i].name, &ncb.cats);
 
 	if (copycolr && outputs[i].copycolr)
-	    Rast_write_colors(outputs[i].name, G_mapset(), &colr);
+	    Rast_write_colors(outputs[i].name, G_subproject(), &colr);
 
 	Rast_short_history(outputs[i].name, "raster", &history);
 	Rast_command_history(&history);

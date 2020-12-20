@@ -231,7 +231,7 @@ int Gs_numtype(const char *filename, int *negflag)
 {
     CELL max = 0, min = 0;
     struct Range range;
-    const char *mapset;
+    const char *subproject;
     int shortbits, charbits, bitplace;
     static int max_short, max_char;
     static int first = 1;
@@ -259,19 +259,19 @@ int Gs_numtype(const char *filename, int *negflag)
 	first = 0;
     }
 
-    mapset = G_find_raster2(filename, "");
-    if (!mapset) {
+    subproject = G_find_raster2(filename, "");
+    if (!subproject) {
 	G_warning(_("Raster map <%s> not found"), filename);
 	return -1;
     }
 
-    if (Rast_map_is_fp(filename, mapset)) {
+    if (Rast_map_is_fp(filename, subproject)) {
 	G_debug(3, "Gs_numtype(): fp map detected");
 
 	return (ATTY_FLOAT);
     }
 
-    if (-1 == Rast_read_range(filename, mapset, &range)) {
+    if (-1 == Rast_read_range(filename, subproject, &range)) {
 	return (-1);
     }
 
@@ -575,7 +575,7 @@ int Gs_loadmap_as_bitmap(struct Cell_head *wind, const char *map_name,
  */
 int Gs_build_256lookup(const char *filename, int *buff)
 {
-    const char *mapset;
+    const char *subproject;
     struct Colors colrules;
     CELL min, max, cats[256];
     int i;
@@ -583,13 +583,13 @@ int Gs_build_256lookup(const char *filename, int *buff)
 
     G_debug(3, "building color table");
 
-    mapset = G_find_raster2(filename, "");
-    if (!mapset) {
+    subproject = G_find_raster2(filename, "");
+    if (!subproject) {
 	G_warning(_("Raster map <%s> not found"), filename);
 	return 0;
     }
 
-    Rast_read_colors(filename, mapset, &colrules);
+    Rast_read_colors(filename, subproject, &colrules);
     Rast_get_c_color_range(&min, &max, &colrules);
 
     if (min < 0 || max > 255) {
@@ -635,13 +635,13 @@ int Gs_build_256lookup(const char *filename, int *buff)
  */
 void Gs_pack_colors(const char *filename, int *buff, int rows, int cols)
 {
-    const char *mapset;
+    const char *subproject;
     struct Colors colrules;
     unsigned char *r, *g, *b, *set;
     int *cur, i, j;
 
-    mapset = G_find_raster2(filename, "");
-    if (!mapset) {
+    subproject = G_find_raster2(filename, "");
+    if (!subproject) {
 	G_warning(_("Raster map <%s> not found"), filename);
 	return;
     }
@@ -651,12 +651,12 @@ void Gs_pack_colors(const char *filename, int *buff, int rows, int cols)
     b = (unsigned char *)G_malloc(cols);
     set = (unsigned char *)G_malloc(cols);
 
-    Rast_read_colors(filename, mapset, &colrules);
+    Rast_read_colors(filename, subproject, &colrules);
 
     cur = buff;
 
     G_message(_("Translating colors from raster map <%s>..."),
-	      G_fully_qualified_name(filename, mapset));
+	      G_fully_qualified_name(filename, subproject));
 
     for (i = 0; i < rows; i++) {
 	Rast_lookup_c_colors(cur, r, g, b, set, cols, &colrules);
@@ -705,14 +705,14 @@ void Gs_pack_colors(const char *filename, int *buff, int rows, int cols)
 void Gs_pack_colors_float(const char *filename, float *fbuf, int *ibuf,
 			  int rows, int cols)
 {
-    const char *mapset;
+    const char *subproject;
     struct Colors colrules;
     unsigned char *r, *g, *b, *set;
     int i, j, *icur;
     FCELL *fcur;
 
-    mapset = G_find_raster2(filename, "");
-    if (!mapset) {
+    subproject = G_find_raster2(filename, "");
+    if (!subproject) {
 	G_warning(_("Raster map <%s> not found"), filename);
 	return;
     }
@@ -722,13 +722,13 @@ void Gs_pack_colors_float(const char *filename, float *fbuf, int *ibuf,
     b = (unsigned char *)G_malloc(cols);
     set = (unsigned char *)G_malloc(cols);
 
-    Rast_read_colors(filename, mapset, &colrules);
+    Rast_read_colors(filename, subproject, &colrules);
 
     fcur = fbuf;
     icur = ibuf;
 
     G_message(_("Translating colors from raster map <%s>..."),
-	      G_fully_qualified_name(filename, mapset));
+	      G_fully_qualified_name(filename, subproject));
     
     for (i = 0; i < rows; i++) {
 	Rast_lookup_f_colors(fcur, r, g, b, set, cols, &colrules);
@@ -776,19 +776,19 @@ void Gs_pack_colors_float(const char *filename, float *fbuf, int *ibuf,
 int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
 {
     struct Categories cats;
-    const char *mapset;
+    const char *subproject;
     CELL *buf;
     DCELL *dbuf;
     RASTER_MAP_TYPE map_type;
     int fd = -1;
 
-    if ((mapset = G_find_raster2(filename, "")) == NULL) {
+    if ((subproject = G_find_raster2(filename, "")) == NULL) {
 	G_warning(_("Raster map <%s> not found"), filename);
 	return 0;
     }
 
-    if (-1 != Rast_read_cats(filename, mapset, &cats)) {
-	fd = Rast_open_old(filename, mapset);
+    if (-1 != Rast_read_cats(filename, subproject, &cats)) {
+	fd = Rast_open_old(filename, subproject);
 	map_type = Rast_get_map_type(fd);
 
 	if (map_type == CELL_TYPE) {
@@ -853,16 +853,16 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
 int Gs_save_3dview(const char *vname, geoview * gv, geodisplay * gd,
 		   struct Cell_head *w, geosurf * defsurf)
 {
-    const char *mapset;
+    const char *subproject;
     struct G_3dview v;
     float zmax, zmin;
 
     GS_get_zrange(&zmin, &zmax, 0);
 
     G_get_3dview_defaults(&v, w);
-    mapset = G_mapset();
+    subproject = G_subproject();
 
-    if (mapset != NULL) {
+    if (subproject != NULL) {
 	if (defsurf) {
 	    if (defsurf->draw_mode & DM_WIRE_POLY) {
 		v.display_type = 3;
@@ -930,7 +930,7 @@ int Gs_save_3dview(const char *vname, geoview * gv, geodisplay * gd,
 	v.surfonly = 0;		/* N/A - now uses constant color */
 	strcpy((v.pgm_id), "Nvision-ALPHA!");
 
-	return (G_put_3dview(vname, mapset, &v, w));
+	return (G_put_3dview(vname, subproject, &v, w));
     }
     else {
 	return (-1);
@@ -951,15 +951,15 @@ int Gs_save_3dview(const char *vname, geoview * gv, geodisplay * gd,
 int Gs_load_3dview(const char *vname, geoview * gv, geodisplay * gd,
 		   struct Cell_head *w, geosurf * defsurf)
 {
-    const char *mapset;
+    const char *subproject;
     struct G_3dview v;
     int ret = -1;
     float pt[3];
 
-    mapset = G_find_file2("3d.view", vname, "");
+    subproject = G_find_file2("3d.view", vname, "");
 
-    if (mapset != NULL) {
-	ret = G_get_3dview(vname, mapset, &v);
+    if (subproject != NULL) {
+	ret = G_get_3dview(vname, subproject, &v);
     }
 
     if (ret >= 0) {

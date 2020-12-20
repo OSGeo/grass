@@ -35,7 +35,7 @@ static int init(void);
 /**
  * \brief Initialize GRASS GIS engine.
  *
- * Initializes GIS engine and ensures a valid mapset is available.
+ * Initializes GIS engine and ensures a valid subproject is available.
  *
  * \return always returns 0 on success
  * \return exit() is called on error

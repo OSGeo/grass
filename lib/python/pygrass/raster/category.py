@@ -53,9 +53,9 @@ class Category(list):
 
     """
 
-    def __init__(self, name, mapset='', mtype='CELL', *args, **kargs):
+    def __init__(self, name, subproject='', mtype='CELL', *args, **kargs):
         self.name = name
-        self.mapset = mapset
+        self.subproject = subproject
         self.c_cats = libraster.Categories()
         libraster.Rast_init_cats("", ctypes.byref(self.c_cats))
         self._mtype = mtype
@@ -224,17 +224,17 @@ class Category(list):
     def read(self):
         """Read categories from a raster map
 
-        The category file for raster map name in mapset is read into the
+        The category file for raster map name in subproject is read into the
         cats structure. If there is an error reading the category file,
         a diagnostic message is printed.
 
         int Rast_read_cats(const char * 	name,
-                           const char * 	mapset,
+                           const char * 	subproject,
                            struct Categories * 	pcats
                            )
         """
         self.reset()
-        err = libraster.Rast_read_cats(self.name, self.mapset,
+        err = libraster.Rast_read_cats(self.name, self.subproject,
                                        ctypes.byref(self.c_cats))
         if err == -1:
             raise GrassError("Can not read the categories.")
@@ -243,7 +243,7 @@ class Category(list):
 
     def write(self):
         """Writes the category file for the raster map name in the current
-           mapset from the cats structure.
+           subproject from the cats structure.
 
         void Rast_write_cats(const char * 	name,
                              struct Categories * 	cats

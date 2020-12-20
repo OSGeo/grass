@@ -72,7 +72,7 @@ class SpatioTemporalTopologyBuilder(object):
                 first = first.next()
 
             # Dictionary like accessed
-            map = tb["name@mapset"]
+            map = tb["name@subproject"]
 
             >>> # Example with two lists of maps
             >>> import grass.temporal as tgis

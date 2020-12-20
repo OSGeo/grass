@@ -6,20 +6,20 @@ from grass.script.setup import set_gui_path
 set_gui_path()
 
 from core.gcmd import RunCommand
-from gui_core.preferences import MapsetAccess
+from gui_core.preferences import SubprojectAccess
 
 
 def main():
     app = wx.App()
 
-    dlg = MapsetAccess(parent=None)
+    dlg = SubprojectAccess(parent=None)
     dlg.CenterOnScreen()
 
     if dlg.ShowModal() == wx.ID_OK:
-        ms = dlg.GetMapsets()
-        RunCommand('g.mapsets',
+        ms = dlg.GetSubprojects()
+        RunCommand('g.subprojects',
                    parent=None,
-                   mapset='%s' % ','.join(ms),
+                   subproject='%s' % ','.join(ms),
                    operation='set')
 
     dlg.Destroy()

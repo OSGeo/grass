@@ -1,9 +1,9 @@
 /*!
  * \file lib/gis/make_loc.c
  *
- * \brief GIS Library - Functions to create a new location
+ * \brief GIS Library - Functions to create a new project
  *
- * Creates a new location automatically given a "Cell_head", PROJ_INFO
+ * Creates a new project automatically given a "Cell_head", PROJ_INFO
  * and PROJ_UNITS information.
  *
  * (C) 2000-2013 by the GRASS Development Team
@@ -25,15 +25,15 @@
 #include <grass/glocale.h>
 
 /*!
- * \brief Create a new location
+ * \brief Create a new project
  * 
- * This function creates a new location in the current database,
+ * This function creates a new project in the current database,
  * initializes the projection, default window and current window.
  *
- * \param location_name Name of the new location. Should not include
- *                      the full path, the location will be created within
+ * \param project_name Name of the new project. Should not include
+ *                      the full path, the project will be created within
  *                      the current database.
- * \param wind          default window setting for the new location.
+ * \param wind          default window setting for the new project.
  *                      All fields should be set in this
  *                      structure, and care should be taken to ensure that
  *                      the proj/zone fields match the definition in the
@@ -50,30 +50,30 @@
  * \return -2 failed to create projection file (currently not used)
  * \return -3 illegal name 
  */
-int G_make_location(const char *location_name,
+int G_make_project(const char *project_name,
                     struct Cell_head *wind,
                     const struct Key_Value *proj_info,
                     const struct Key_Value *proj_units)
 {
     char path[GPATH_MAX];
 
-    /* check if location name is legal */
-    if (G_legal_filename(location_name) != 1)
+    /* check if project name is legal */
+    if (G_legal_filename(project_name) != 1)
         return -3;
 
-    /* Try to create the location directory, under the gisdbase. */
-    sprintf(path, "%s/%s", G_gisdbase(), location_name);
+    /* Try to create the project directory, under the gisdbase. */
+    sprintf(path, "%s/%s", G_gisdbase(), project_name);
     if (G_mkdir(path) != 0)
 	return -1;
 
-    /* Make the PERMANENT mapset. */
-    sprintf(path, "%s/%s/%s", G_gisdbase(), location_name, "PERMANENT");
+    /* Make the PERMANENT subproject. */
+    sprintf(path, "%s/%s/%s", G_gisdbase(), project_name, "PERMANENT");
     if (G_mkdir(path) != 0) {
 	return -1;
     }
 
-    /* make these the new current location and mapset */
-    G_setenv_nogisrc("LOCATION_NAME", location_name);
+    /* make these the new current project and subproject */
+    G_setenv_nogisrc("LOCATION_NAME", project_name);
     G_setenv_nogisrc("MAPSET", "PERMANENT");
 
     /* Create the default, and current window files */
@@ -95,16 +95,16 @@ int G_make_location(const char *location_name,
 }
 
 /*!
- * \brief Create a new location
+ * \brief Create a new project
  * 
- * This function creates a new location in the current database,
+ * This function creates a new project in the current database,
  * initializes the projection, default window and current window,
  * and sets the EPSG code if present
  *
- * \param location_name Name of the new location. Should not include
- *                      the full path, the location will be created within
+ * \param project_name Name of the new project. Should not include
+ *                      the full path, the project will be created within
  *                      the current database.
- * \param wind          default window setting for the new location.
+ * \param wind          default window setting for the new project.
  *                      All fields should be set in this
  *                      structure, and care should be taken to ensure that
  *                      the proj/zone fields match the definition in the
@@ -124,7 +124,7 @@ int G_make_location(const char *location_name,
  * \return -2 failed to create projection file (currently not used)
  * \return -3 illegal name 
  */
-int G_make_location_epsg(const char *location_name,
+int G_make_project_epsg(const char *project_name,
 			 struct Cell_head *wind,
 			 const struct Key_Value *proj_info,
 			 const struct Key_Value *proj_units,
@@ -133,7 +133,7 @@ int G_make_location_epsg(const char *location_name,
     int ret;
     char path[GPATH_MAX];
 
-    ret = G_make_location(location_name, wind, proj_info, proj_units);
+    ret = G_make_project(project_name, wind, proj_info, proj_units);
 
     if (ret != 0)
 	return ret;
@@ -148,16 +148,16 @@ int G_make_location_epsg(const char *location_name,
 }
 
 /*!
- * \brief Create a new location
+ * \brief Create a new project
  * 
- * This function creates a new location in the current database,
+ * This function creates a new project in the current database,
  * initializes the projection, default window and current window,
  * and sets WKT, srid, and EPSG code if present
  *
- * \param location_name Name of the new location. Should not include
- *                      the full path, the location will be created within
+ * \param project_name Name of the new project. Should not include
+ *                      the full path, the project will be created within
  *                      the current database.
- * \param wind          default window setting for the new location.
+ * \param wind          default window setting for the new project.
  *                      All fields should be set in this
  *                      structure, and care should be taken to ensure that
  *                      the proj/zone fields match the definition in the
@@ -183,7 +183,7 @@ int G_make_location_epsg(const char *location_name,
  * \return -2 failed to create projection file (currently not used)
  * \return -3 illegal name 
  */
-int G_make_location_crs(const char *location_name,
+int G_make_project_crs(const char *project_name,
 			struct Cell_head *wind,
 			const struct Key_Value *proj_info,
 			const struct Key_Value *proj_units,
@@ -194,7 +194,7 @@ int G_make_location_crs(const char *location_name,
     int ret;
     char path[GPATH_MAX];
 
-    ret = G_make_location(location_name, wind, proj_info, proj_units);
+    ret = G_make_project(project_name, wind, proj_info, proj_units);
 
     if (ret != 0)
 	return ret;
@@ -207,12 +207,12 @@ int G_make_location_crs(const char *location_name,
 
     /* Write out PROJ_WKT if WKT is available. */
     if (proj_wkt != NULL) {
-	G_write_projwkt(location_name, proj_wkt);
+	G_write_projwkt(project_name, proj_wkt);
     }
 
     /* Write out PROJ_SRID if srid is available. */
     if (proj_srid != NULL) {
-	G_write_projsrid(location_name, proj_srid);
+	G_write_projsrid(project_name, proj_srid);
     }
 
     return 0;
@@ -511,14 +511,14 @@ int G_compare_projections(const struct Key_Value *proj_info1,
    
    Any WKT string and version recognized by PROJ is supported.
 
-   \param location_name name of the location to write the WKT definition
+   \param project_name name of the project to write the WKT definition
    \param wktstring pointer to WKT string
 
    \return 0 success
    \return -1 error writing
  */
 
-int G_write_projwkt(const char *location_name, const char *wktstring)
+int G_write_projwkt(const char *project_name, const char *wktstring)
 {
     FILE *fp;
     char path[GPATH_MAX];
@@ -527,8 +527,8 @@ int G_write_projwkt(const char *location_name, const char *wktstring)
     if (!wktstring)
 	return 0;
 
-    if (location_name && *location_name)
-	sprintf(path, "%s/%s/%s/%s", G_gisdbase(), location_name, "PERMANENT", WKT_FILE);
+    if (project_name && *project_name)
+	sprintf(path, "%s/%s/%s/%s", G_gisdbase(), project_name, "PERMANENT", WKT_FILE);
     else
 	G_file_name(path, "", WKT_FILE, "PERMANENT");
 
@@ -561,14 +561,14 @@ int G_write_projwkt(const char *location_name, const char *wktstring)
     A srid consists of an authority name and code and must be known to
     PROJ.
 
-   \param location_name name of the location to write the srid
+   \param project_name name of the project to write the srid
    \param sridstring pointer to srid string
 
    \return 0 success
    \return -1 error writing
  */
 
-int G_write_projsrid(const char *location_name, const char *sridstring)
+int G_write_projsrid(const char *project_name, const char *sridstring)
 {
     FILE *fp;
     char path[GPATH_MAX];
@@ -577,8 +577,8 @@ int G_write_projsrid(const char *location_name, const char *sridstring)
     if (!sridstring)
 	return 0;
 
-    if (location_name && *location_name)
-	sprintf(path, "%s/%s/%s/%s", G_gisdbase(), location_name, "PERMANENT", SRID_FILE);
+    if (project_name && *project_name)
+	sprintf(path, "%s/%s/%s/%s", G_gisdbase(), project_name, "PERMANENT", SRID_FILE);
     else
 	G_file_name(path, "", SRID_FILE, "PERMANENT");
 

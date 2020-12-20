@@ -57,7 +57,7 @@ int check_raster(char *raster_name)
 	G_fatal_error(_("Unable to open raster map <%s>"), raster_name);
     }
     /* Uncomment to work in full raster map
-       if (G_get_cellhd(raster_name, mapset, &cellhd) < 0) {
+       if (G_get_cellhd(raster_name, subproject, &cellhd) < 0) {
        G_warning(_("Unable to read header of raster map <%s>"), raster_name);
        return -1;
        }

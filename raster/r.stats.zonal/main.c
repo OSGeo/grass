@@ -523,7 +523,7 @@ int main(int argc, char **argv)
 	Rast_write_history(output, &history);
 
 	if (Rast_read_colors(covermap, "", &colors) > 0)
-	    Rast_write_colors(output, G_mapset(), &colors);
+	    Rast_write_colors(output, G_subproject(), &colors);
     }
 
     return 0;

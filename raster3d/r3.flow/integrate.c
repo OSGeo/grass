@@ -131,7 +131,7 @@ static int rk45_next(RASTER3D_Region * region, struct Gradient_info *gradient_in
     }
     *velocity = sqrt(vel_sq);
 
-    if (!Rast3d_is_valid_location
+    if (!Rast3d_is_valid_project
 	(region, next_point[1], next_point[0], next_point[2]))
 	return -1;
 

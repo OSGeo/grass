@@ -37,7 +37,7 @@ int V1_close_ogr(struct Map_info *Map)
 #ifdef HAVE_OGR
     struct Format_info_ogr *ogr_info;
     
-    G_debug(3, "V1_close_ogr() name = %s mapset = %s", Map->name, Map->mapset);
+    G_debug(3, "V1_close_ogr() name = %s subproject = %s", Map->name, Map->subproject);
     
     if (!VECT_OPEN(Map))
 	return -1;
@@ -47,7 +47,7 @@ int V1_close_ogr(struct Map_info *Map)
         (Map->mode == GV_MODE_WRITE || Map->mode == GV_MODE_RW)) {
         /* write header */
         Vect__write_head(Map);
-        if (G_find_file2("", "OGR", G_mapset())) {
+        if (G_find_file2("", "OGR", G_subproject())) {
             /* write frmt file for created PG-link */
             Vect_save_frmt(Map);
         }
@@ -92,14 +92,14 @@ int V2_close_ogr(struct Map_info *Map)
 #ifdef HAVE_OGR
     struct Format_info_ogr *ogr_info;
   
-    G_debug(3, "V2_close_ogr() name = %s mapset = %s", Map->name, Map->mapset);
+    G_debug(3, "V2_close_ogr() name = %s subproject = %s", Map->name, Map->subproject);
 
     if (!VECT_OPEN(Map))
 	return -1;
 
     ogr_info = &(Map->fInfo.ogr);
     
-    /* write fidx for maps in the current mapset */
+    /* write fidx for maps in the current subproject */
     if (Vect_save_fidx(Map, &(ogr_info->offset)) != 1)
 	G_warning(_("Unable to save feature index file for vector map <%s>"),
 		  Map->name);

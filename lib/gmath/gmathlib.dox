@@ -14,7 +14,7 @@ The gmath library provides many common mathematical functions to be used in GRAS
  <li>Linear algebra functions of type blas level 1, 2 and 3 </li>
  <li>Iterative and direct linear algebra solver for sparse, band and dense matrices </li>
  <li>Eigenvalue and single value decomposition methods </li>
- <li>Memory allocation methods for vectors and matrices </li>
+ <li>Memory alproject methods for vectors and matrices </li>
  <li>Fast fourier transformation and many more </li>
 </ul>
 The GRASS numerical math interface also makes use of 3d party libraries to
@@ -41,14 +41,14 @@ Several GRASS modules implement there own numerical functions.
 The goal is to collect all these functions in the GRASS numerical math interface,
 to standardize them and to modify all modules to make use of the gmath interface.
 
-\subsection memalloc Memory allocation functions
+\subsection memalloc Memory alproject functions
 
-GMATH provides several functions for vector and matrix memory allocation of different
+GMATH provides several functions for vector and matrix memory alproject of different
 types. These functions should be used to allocate vectors and matrices which are
 used by gmath linear algebra functions.
 
 <P>
-Matrix and vector allocation for real types
+Matrix and vector alproject for real types
 <P>
 double *G_alloc_vector(size_t)<br>
 double **G_alloc_matrix(int, int)<br>
@@ -60,7 +60,7 @@ void G_free_fvector(float *)<br>
 void G_free_fmatrix(float **)<br>
 
 <P>
-Matrix and vector allocation for integer types
+Matrix and vector alproject for integer types
 <P>
 int *G_alloc_ivector(size_t)<br>
 int **G_alloc_imatrix(int, int)<br>
@@ -189,7 +189,7 @@ many common mathematical functions. Currently GRASS uses only the linear algebra
 part of the library. These functions are available via wrapping functions.<br><br>
 
 The wrapper integrates the ccmath library functions into the gmath
-structure. Hence only gmath memory allocation function should be used to create
+structure. Hence only gmath memory alproject function should be used to create
 vector and matrix structures used by ccmath.
 
 This is the documentation of the linear algebra part of the the ccmath library used by GRASS.

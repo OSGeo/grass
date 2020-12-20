@@ -39,7 +39,7 @@
 #% guisection: Formatting
 #% required: no
 #% multiple: yes
-#% options: id,name,layer,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,points,lines,boundaries,centroids,faces,kernels,primitives,nodes,areas,islands,holes,volumes
+#% options: id,name,layer,creator,subproject,temporal_type,creation_time,start_time,end_time,north,south,west,east,points,lines,boundaries,centroids,faces,kernels,primitives,nodes,areas,islands,holes,volumes
 #% answer: start_time
 #%end
 
@@ -50,8 +50,8 @@
 #% guisection: Selection
 #% required: no
 #% multiple: yes
-#% options: id,name,layer,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,points,lines,boundaries,centroids,faces,kernels,primitives,nodes,areas,islands,holes,volumes
-#% answer: name,layer,mapset,start_time,end_time
+#% options: id,name,layer,creator,subproject,temporal_type,creation_time,start_time,end_time,north,south,west,east,points,lines,boundaries,centroids,faces,kernels,primitives,nodes,areas,islands,holes,volumes
+#% answer: name,layer,subproject,start_time,end_time
 #%end
 
 #%option G_OPT_T_WHERE

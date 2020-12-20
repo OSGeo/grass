@@ -47,7 +47,7 @@ class MapFrame(SingleMapFrame):
     """
 
     def __init__(self, parent, giface,
-                 title=_("GRASS GIS Manage Location of Tick Points on a Scanned Photo"),
+                 title=_("GRASS GIS Manage Project of Tick Points on a Scanned Photo"),
                  toolbars=["gcpdisp"], Map=None, auimgr=None,
                  name='GCPMapWindow', **kwargs):
         """Main map display window with toolbars, statusbar and

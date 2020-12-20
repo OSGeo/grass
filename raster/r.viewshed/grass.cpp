@@ -13,7 +13,7 @@
  * Date:         april 2011 
  * 
  * PURPOSE: To calculate the viewshed (the visible cells in the
- * raster) for the given viewpoint (observer) location.  The
+ * raster) for the given viewpoint (observer) project.  The
  * visibility model is the following: Two points in the raster are
  * considered visible to each other if the cells where they belong are
  * visible to each other.  Two cells are visible to each other if the
@@ -196,23 +196,23 @@ init_event_list_in_memory(AEvent * eventList, char *rastName,
     (*data)[1] = (*data)[0] + Rast_window_cols();
     (*data)[2] = (*data)[1] + Rast_window_cols();
 
-    /*get the mapset name */
-    const char *mapset;
+    /*get the subproject name */
+    const char *subproject;
 
-    mapset = G_find_raster(rastName, "");
-    if (mapset == NULL)
+    subproject = G_find_raster(rastName, "");
+    if (subproject == NULL)
 	G_fatal_error(_("Raster map [%s] not found"), rastName);
 
     /*open map */
     int infd;
 
-    if ((infd = Rast_open_old(rastName, mapset)) < 0)
+    if ((infd = Rast_open_old(rastName, subproject)) < 0)
 	G_fatal_error(_("Cannot open raster file [%s]"), rastName);
 
     /*get the data_type */
     RASTER_MAP_TYPE data_type;
 
-    /* data_type = G_raster_map_type(rastName, mapset); */
+    /* data_type = G_raster_map_type(rastName, subproject); */
     data_type = G_SURFACE_TYPE;
 
     /*buffer to hold 3 rows */
@@ -423,22 +423,22 @@ AMI_STREAM < AEvent > *init_event_list(char *rastName, Viewpoint * vp,
     AMI_STREAM < AEvent > *eventList = new AMI_STREAM < AEvent > ();
     assert(eventList);
 
-    /*determine which mapset we are in */
-    const char *mapset;
+    /*determine which subproject we are in */
+    const char *subproject;
 
-    mapset = G_find_raster(rastName, "");
-    if (mapset == NULL)
+    subproject = G_find_raster(rastName, "");
+    if (subproject == NULL)
 	G_fatal_error(_("Raster map [%s] not found"), rastName);
 
     /*open map */
     int infd;
 
-    if ((infd = Rast_open_old(rastName, mapset)) < 0)
+    if ((infd = Rast_open_old(rastName, subproject)) < 0)
 	G_fatal_error(_("Cannot open raster file [%s]"), rastName);
 
     RASTER_MAP_TYPE data_type;
 
-    /* data_type = G_raster_map_type(rastName, mapset); */
+    /* data_type = G_raster_map_type(rastName, subproject); */
     data_type = G_SURFACE_TYPE;
     G_SURFACE_T **inrast;
     int nrows = Rast_window_rows();
@@ -690,23 +690,23 @@ save_vis_elev_to_GRASS(Grid * visgrid, char *elevfname, char *visfname,
     G_message(_("Saving grid to <%s>"), visfname);
     assert(visgrid && elevfname && visfname);
 
-    /*get the mapset name */
-    const char *mapset;
+    /*get the subproject name */
+    const char *subproject;
 
-    mapset = G_find_raster(elevfname, "");
-    if (mapset == NULL)
+    subproject = G_find_raster(elevfname, "");
+    if (subproject == NULL)
 	G_fatal_error(_("Raster map [%s] not found"), elevfname);
 
     /*open elevation map */
     int elevfd;
 
-    if ((elevfd = Rast_open_old(elevfname, mapset)) < 0)
+    if ((elevfd = Rast_open_old(elevfname, subproject)) < 0)
 	G_fatal_error(_("Cannot open raster file [%s]"), elevfname);
 
     /*get elevation data_type */
     RASTER_MAP_TYPE elev_data_type;
 
-    elev_data_type = Rast_map_type(elevfname, mapset);
+    elev_data_type = Rast_map_type(elevfname, subproject);
 
     /* create the visibility raster of same type */
     int visfd;
@@ -921,23 +921,23 @@ save_io_vis_and_elev_to_GRASS(IOVisibilityGrid * visgrid, char *elevfname,
     G_message(_("Saving grid to <%s>"), visfname);
     assert(visfname && visgrid);
 
-    /*get mapset name and data type */
-    const char *mapset;
+    /*get subproject name and data type */
+    const char *subproject;
 
-    mapset = G_find_raster(elevfname, "");
-    if (mapset == NULL)
+    subproject = G_find_raster(elevfname, "");
+    if (subproject == NULL)
 	G_fatal_error(_("Opening <%s>: cannot find raster"), elevfname);
 
     /*open elevation map */
     int elevfd;
 
-    if ((elevfd = Rast_open_old(elevfname, mapset)) < 0)
+    if ((elevfd = Rast_open_old(elevfname, subproject)) < 0)
 	G_fatal_error(_("Cannot open raster file [%s]"), elevfname);
 
     /*get elevation data_type */
     RASTER_MAP_TYPE elev_data_type;
 
-    elev_data_type = Rast_map_type(elevfname, mapset);
+    elev_data_type = Rast_map_type(elevfname, subproject);
 
     /* open visibility raster */
     int visfd;

@@ -149,7 +149,7 @@ PERMANENT
 
   <dt>GRASS_FONT_CAP</dt>
   <dd>[g.mkfontcap, d.font, display drivers]<br>
-    specifies an alternative location (to <tt>$GISBASE/etc/fontcap</tt>) for 
+    specifies an alternative project (to <tt>$GISBASE/etc/fontcap</tt>) for 
     the font configuration file.</dd>
   
   <dt>GRASS_FULL_OPTION_NAMES</dt>
@@ -302,7 +302,7 @@ PERMANENT
       <li><tt>keep</tt> - the temporary vector map is not deleted when
       closing the map.
       <li><tt>move</tt> - the temporary vector map is moved to the
-      current mapset when closing the map.</li>
+      current subproject when closing the map.</li>
       <li><tt>delete</tt> - the temporary vector map is deleted when
       closing the map.
       </li>
@@ -523,13 +523,13 @@ g.gisenv set=DEBUG=0
   <dd>See <tt>GRASS_GUI</tt> environmental variable for details.</dd>
   
   <dt>LOCATION</dt>
-  <dd>full path to location directory</dd>
+  <dd>full path to project directory</dd>
   
   <dt>LOCATION_NAME</dt>
-  <dd>initial location name</dd>
+  <dd>initial project name</dd>
   
   <dt>MAPSET</dt>
-  <dd>initial mapset</dd>
+  <dd>initial subproject</dd>
   
   <dt>MEMORYMB</dt>
   <dd>[entire GRASS with focus on raster related data processing]<br>

@@ -213,5 +213,5 @@ void SaveMap(int NumMap, int MapSeed)
     Rast_add_c_color_rule(&Low, LowColor, LowColor, LowColor,
 			  &High, HighColor, HighColor, HighColor, &Colr);
 
-    Rast_write_colors(OutNames[NumMap], G_mapset(), &Colr);
+    Rast_write_colors(OutNames[NumMap], G_subproject(), &Colr);
 }

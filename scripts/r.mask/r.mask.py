@@ -99,8 +99,8 @@ def main():
     if not remove and not raster and not vector:
         grass.fatal(_("Either parameter <raster> or parameter <vector> is required"))
 
-    mapset = grass.gisenv()['MAPSET']
-    exists = bool(grass.find_file('MASK', element='cell', mapset=mapset)['file'])
+    subproject = grass.gisenv()['MAPSET']
+    exists = bool(grass.find_file('MASK', element='cell', subproject=subproject)['file'])
 
     if remove:
         # -> remove
@@ -118,7 +118,7 @@ def main():
         # -> create
         if exists:
             if not grass.overwrite():
-                grass.fatal(_("MASK already found in current mapset. Delete first or overwrite."))
+                grass.fatal(_("MASK already found in current subproject. Delete first or overwrite."))
             else:
                 grass.warning(_("MASK already exists and will be overwritten"))
                 grass.run_command('g.remove', flags='f', quiet=True,

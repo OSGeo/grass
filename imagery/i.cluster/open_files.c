@@ -7,7 +7,7 @@
 
 int open_files(void)
 {
-    char *name, *mapset;
+    char *name, *subproject;
     FILE *fd;
     int n, missing;
 
@@ -18,11 +18,11 @@ int open_files(void)
     missing = 0;
     for (n = 0; n < ref.nfiles; n++) {
 	name = ref.file[n].name;
-	mapset = ref.file[n].mapset;
-	if (G_find_raster(name, mapset) == NULL) {
+	subproject = ref.file[n].subproject;
+	if (G_find_raster(name, subproject) == NULL) {
 	    missing = 1;
 	    G_warning(_("Raster map <%s> do not exists in subgroup <%s>"),
-		      G_fully_qualified_name(name, mapset), subgroup);
+		      G_fully_qualified_name(name, subproject), subgroup);
 	}
     }
     if (missing)
@@ -43,8 +43,8 @@ int open_files(void)
 	cell[n] = Rast_allocate_d_buf();
 	
 	name = ref.file[n].name;
-	mapset = ref.file[n].mapset;
-	cellfd[n] = Rast_open_old(name, mapset);
+	subproject = ref.file[n].subproject;
+	cellfd[n] = Rast_open_old(name, subproject);
     }
 
     I_init_signatures(&in_sig, ref.nfiles);

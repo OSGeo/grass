@@ -2,13 +2,13 @@
 
 <em>r.info</em> reports some basic information about a
 user-specified raster map layer.  This map layer must exist
-in the user's current mapset search path.  Information
+in the user's current subproject search path.  Information
 about the map's boundaries, resolution, projection, data
-type, category number, data base location and mapset, 
+type, category number, data base project and subproject, 
 the timestamp and history are put into a table and written to standard
 output. The types of information listed can also be found
 in the <i>cats</i>, <i>cellhd</i>, and <i>hist</i>
-directories under the mapset in which the named map is
+directories under the subproject in which the named map is
 stored.
 
 <p>
@@ -41,8 +41,8 @@ Below is a full report produced by <em>r.info</em> for the raster map
 r.info slope
  +----------------------------------------------------------------------------+
  | Map:      slope                          Date: Tue Nov  7 01:11:23 2006    |
- | Mapset:   PERMANENT                      Login of Creator: helena          |
- | Location: nc_spm_08_grass7                                                 |
+ | Subproject:   PERMANENT                      Login of Creator: helena          |
+ | Project: nc_spm_08_grass7                                                 |
  | DataBase: /grassdata                                                       |
  | Title:    South-West Wake county: slope in degrees ( slope_ned10m )        |
  | Timestamp: none                                                            |
@@ -107,8 +107,8 @@ Output the extended map data metadata in shell style:
 <div class="code"><pre>
 r.info -e slope
 map=slope
-mapset=PERMANENT
-location=nc_spm_08_grass7
+subproject=PERMANENT
+project=nc_spm_08_grass7
 database=/grassdata
 date="Tue Nov  7 01:11:23 2006"
 creator="helena"
@@ -126,7 +126,7 @@ comments="slope map elev = elev_ned10mzfactor = 1.00 format = degreesmin_slp_all
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="g.mapsets.html">g.mapsets</a>,
+<a href="g.subprojects.html">g.subprojects</a>,
 <a href="r.coin.html">r.coin</a>,
 <a href="r.describe.html">r.describe</a>,
 <a href="r.report.html">r.report</a>,

@@ -25,7 +25,7 @@
  *
  *  ------Rev 4.+ arguments --------------------------------------
  *    Input arguments:
- *             m.setproj set=mapset for output project info file
+ *             m.setproj set=subproject for output project info file
  *                    proj=projection of the output project info file
  *
  *   1.2 Changed by Morten Hulden 10/10/99 to add support for more projections        
@@ -78,14 +78,14 @@ int main(int argc, char *argv[])
     G_add_keyword(_("general"));
     G_add_keyword(_("projection"));
     module->description =
-	_("Interactively reset the location's projection settings.");
+	_("Interactively reset the project's projection settings.");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
 
-    if (strcmp(G_mapset(), "PERMANENT") != 0)
-	G_fatal_error(_("You must be in the PERMANENT mapset to run g.setproj"));
+    if (strcmp(G_subproject(), "PERMANENT") != 0)
+	G_fatal_error(_("You must be in the PERMANENT subproject to run g.setproj"));
 
 	/***
          * no longer necessary, table is a static struct 
@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
 
     /* get the output projection parameters, if existing */
     /* Check for ownership here */
-    stat = G_mapset_permissions(set_name);
+    stat = G_subproject_permissions(set_name);
     if (stat == 0) {
 	G_fatal_error(_("PERMANENT: permission denied"));
     }
@@ -118,10 +118,10 @@ int main(int argc, char *argv[])
 	fclose(FPROJ);
 	buf = G_find_key_value("name", old_proj_keys);
 	fprintf(stderr,
-		"\nWARNING: A projection file already exists for this location\n(Filename '%s')\n",
+		"\nWARNING: A projection file already exists for this project\n(Filename '%s')\n",
 		path);
 	fprintf(stderr,
-		"\nThis file contains all the parameters for the location's projection:\n  %s\n",
+		"\nThis file contains all the parameters for the project's projection:\n  %s\n",
 		buf);
 	fprintf(stderr,
 		"\n    Overriding this information implies that the old projection parameters\n"
@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
     case 0:			/* No projection/units */
 	if (!exist) {
 	    /* leap frog over code, and just make sure we remove the file */
-	    G_warning(_("XY-location cannot be projected"));
+	    G_warning(_("XY-project cannot be projected"));
 	    goto write_file;
 	    break;
 	}
@@ -202,7 +202,7 @@ int main(int argc, char *argv[])
 
     sph_check = 0;
     if (G_yes
-	(_("Do you wish to specify a geodetic datum for this location?"),
+	(_("Do you wish to specify a geodetic datum for this project?"),
 	 1)) {
 	char lbuf[100], lbufa[100];
 
@@ -642,7 +642,7 @@ int main(int argc, char *argv[])
     if (G_put_element_window(&cellhd, "", "DEFAULT_WIND") < 0)
 	G_fatal_error(_("Unable to write to DEFAULT_WIND region file"));
     fprintf(stderr,
-	    _("\nProjection information has been recorded for this location\n\n"));
+	    _("\nProjection information has been recorded for this project\n\n"));
     if ((old_zone != zone) | (old_proj != cellhd.proj)) {
 	G_message(_("The geographic region information in WIND is now obsolete"));
 	G_message(_("Run g.region -d to update it"));

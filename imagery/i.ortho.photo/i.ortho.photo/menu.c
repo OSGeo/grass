@@ -86,7 +86,7 @@ int main(int argc, char **argv)
     /*----------------------*/
     strncpy(group.name, group_opt->answer, 99);
     group.name[99] = '\0';
-    /* strip off mapset if it's there: I_() fns only work with current mapset */
+    /* strip off subproject if it's there: I_() fns only work with current subproject */
     if ((p = strchr(group.name, '@')))
 	*p = 0;
 

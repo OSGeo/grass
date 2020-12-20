@@ -412,7 +412,7 @@ int do_profile(double e1, double e2, double n1, double n2,
 
 /*****************************
  * read_rast
- * function to get raster value at set location
+ * function to get raster value at set project
  * and output nviz script
 *****************************/
 int read_rast

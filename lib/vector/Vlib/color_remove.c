@@ -20,29 +20,29 @@
   \brief Remove color table of raster map
 
   \param name name of raster map
-  \param mapset name of mapset 
+  \param subproject name of subproject 
 
   \return -1 on error
   \return 0 color table not found
   \return 1 on success
 */
-int Vect_remove_colors(const char *name, const char *mapset)
+int Vect_remove_colors(const char *name, const char *subproject)
 {
     char element[GPATH_MAX];
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
     int stat;
 
-    if (G_name_is_fully_qualified(name, xname, xmapset)) {
-	if (strcmp(xmapset, mapset) != 0)
+    if (G_name_is_fully_qualified(name, xname, xsubproject)) {
+	if (strcmp(xsubproject, subproject) != 0)
 	    return -1;
 	name = xname;
     }
 
     /* get rid of existing colr2, if any */
-    sprintf(element, "%s/%s", GV_COLR2_DIRECTORY, mapset);
+    sprintf(element, "%s/%s", GV_COLR2_DIRECTORY, subproject);
     stat = G_remove(element, name);
 
-    if (strcmp(mapset, G_mapset()) == 0) {
+    if (strcmp(subproject, G_subproject()) == 0) {
 	sprintf(element, "%s/%s", GV_DIRECTORY, name);
 	stat = G_remove(element, GV_COLR_ELEMENT);
     }

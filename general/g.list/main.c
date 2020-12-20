@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 	struct Option *pattern;
 	struct Option *exclude;
 	struct Option *separator;
-	struct Option *mapset;
+	struct Option *subproject;
 	struct Option *region;
 	struct Option *output;
     } opt;
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 	struct Flag *regex;
 	struct Flag *extended;
 	struct Flag *type;
-	struct Flag *mapset;
+	struct Flag *subproject;
 	struct Flag *pretty;
 	struct Flag *full;
     } flag;
@@ -94,12 +94,12 @@ int main(int argc, char *argv[])
     opt.exclude->description = _("Map name exclusion pattern (default: none)");
     opt.exclude->guisection = _("Pattern");
 
-    opt.mapset = G_define_standard_option(G_OPT_M_MAPSET);
-    opt.mapset->multiple = YES;
-    opt.mapset->label =
-	_("Name of mapset to list (default: current search path)");
-    opt.mapset->description =
-	_("'.' for current mapset; '*' for all mapsets in location");
+    opt.subproject = G_define_standard_option(G_OPT_M_MAPSET);
+    opt.subproject->multiple = YES;
+    opt.subproject->label =
+	_("Name of subproject to list (default: current search path)");
+    opt.subproject->description =
+	_("'.' for current subproject; '*' for all subprojects in project");
     opt.separator = G_define_standard_option(G_OPT_F_SEP);
     opt.separator->answer = "newline";
     opt.separator->guisection = _("Print");
@@ -137,10 +137,10 @@ int main(int argc, char *argv[])
     flag.type->description = _("Print data types");
     flag.type->guisection = _("Print");
 
-    flag.mapset = G_define_flag();
-    flag.mapset->key = 'm';
-    flag.mapset->description = _("Print fully-qualified map names (including mapsets)");
-    flag.mapset->guisection = _("Print");
+    flag.subproject = G_define_flag();
+    flag.subproject->key = 'm';
+    flag.subproject->description = _("Print fully-qualified map names (including subprojects)");
+    flag.subproject->guisection = _("Print");
 
     flag.pretty = G_define_flag();
     flag.pretty->key = 'p';
@@ -153,8 +153,8 @@ int main(int argc, char *argv[])
     flag.full->guisection = _("Print");
 
     G_option_excludes(opt.region, flag.pretty, flag.full, NULL);
-    G_option_excludes(flag.pretty, flag.mapset, flag.type, NULL);
-    G_option_excludes(flag.full, flag.mapset, flag.type, NULL);
+    G_option_excludes(flag.pretty, flag.subproject, flag.type, NULL);
+    G_option_excludes(flag.full, flag.subproject, flag.type, NULL);
     G_option_exclusive(flag.pretty, flag.full, NULL);
     G_option_exclusive(flag.regex, flag.extended, NULL);
 
@@ -225,10 +225,10 @@ int main(int argc, char *argv[])
 	else if (strcmp(opt.region->answer, ".") == 0)
 	    G_get_window(&window);
 	else {
-	    char name[GNAME_MAX], mapset[GMAPSET_MAX];
+	    char name[GNAME_MAX], subproject[GMAPSET_MAX];
 
-	    if (G_name_is_fully_qualified(opt.region->answer, name, mapset))
-		G_get_element_window(&window, "windows", name, mapset);
+	    if (G_name_is_fully_qualified(opt.region->answer, name, subproject))
+		G_get_element_window(&window, "windows", name, subproject);
 	    else
 		G_get_element_window(&window, "windows", opt.region->answer, "");
 	}
@@ -249,25 +249,25 @@ int main(int argc, char *argv[])
 	num_types = i;
     }
 
-    if (opt.mapset->answers && opt.mapset->answers[0]) {
-	const char *mapset;
+    if (opt.subproject->answers && opt.subproject->answers[0]) {
+	const char *subproject;
 
 	G_create_alt_search_path();
-	for (i = 0; (mapset = opt.mapset->answers[i]); i++) {
-	    if (strcmp(mapset, "*") == 0) {
-		/* all mapsets from current location */
+	for (i = 0; (subproject = opt.subproject->answers[i]); i++) {
+	    if (strcmp(subproject, "*") == 0) {
+		/* all subprojects from current project */
 		char **ms;
 
-		ms = G_get_available_mapsets();
-		for (j = 0; (mapset = ms[j]); j++)
-		    G_add_mapset_to_search_path(mapset);
+		ms = G_get_available_subprojects();
+		for (j = 0; (subproject = ms[j]); j++)
+		    G_add_subproject_to_search_path(subproject);
 		continue;
 	    }
-	    else if (strcmp(mapset, ".") == 0)
-		mapset = G_mapset();
-	    else if (G_mapset_permissions(mapset) == -1)
-		G_fatal_error(_("Mapset <%s> does not exist"), mapset);
-	    G_add_mapset_to_search_path(mapset);
+	    else if (strcmp(subproject, ".") == 0)
+		subproject = G_subproject();
+	    else if (G_subproject_permissions(subproject) == -1)
+		G_fatal_error(_("Subproject <%s> does not exist"), subproject);
+	    G_add_subproject_to_search_path(subproject);
 	}
     }
 
@@ -300,14 +300,14 @@ int main(int argc, char *argv[])
 
 	    if (access(lister, X_OK) == 0) {	/* execute permission? */
 		const char **args;
-		const char *mapset;
+		const char *subproject;
 
-		for (j = 0; (mapset = G_get_mapset_name(j)); j++);
+		for (j = 0; (subproject = G_get_subproject_name(j)); j++);
 		args = (const char **)G_calloc(j + 2, sizeof(char *));
 
 		args[0] = lister;
-		for (j = 0; (mapset = G_get_mapset_name(j)); j++)
-		    args[j + 1] = mapset;
+		for (j = 0; (subproject = G_get_subproject_name(j)); j++)
+		    args[j + 1] = subproject;
 		args[j + 1] = NULL;
 
 		G_vspawn_ex(lister, args);
@@ -317,17 +317,17 @@ int main(int argc, char *argv[])
 	else if (flag.pretty->answer)
 	    M_do_list(n, "");
 	else {
-	    const char *mapset;
+	    const char *subproject;
 
-	    for (j = 0; (mapset = G_get_mapset_name(j)); j++)
-		make_list(&el, &lcount, &lalloc, elem, mapset, 
+	    for (j = 0; (subproject = G_get_subproject_name(j)); j++)
+		make_list(&el, &lcount, &lalloc, elem, subproject, 
 			  use_region ? &window : NULL);
 	}
     }
 
     if (!flag.pretty->answer && !flag.full->answer) {
 	print_list(fp, el, lcount, separator, flag.type->answer,
-		  flag.mapset->answer);
+		  flag.subproject->answer);
     }
 
     if (el)

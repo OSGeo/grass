@@ -93,9 +93,9 @@ int main(int argc, char *argv[])
 	int overwrite, map_type;
 	
 	overwrite = G_check_overwrite(argc, argv);
-	if (G_find_vector2(params.map->answer, G_mapset()) &&
-	    (!G_find_file("", "OGR", G_mapset()) &&
-	     !G_find_file("", "PG", G_mapset()))) {
+	if (G_find_vector2(params.map->answer, G_subproject()) &&
+	    (!G_find_file("", "OGR", G_subproject()) &&
+	     !G_find_file("", "PG", G_subproject()))) {
 	    if (!overwrite)
 		G_fatal_error(_("Vector map <%s> already exists"),
 			      params.map->answer);
@@ -133,9 +133,9 @@ int main(int argc, char *argv[])
     }
     else {			/* open selected vector file */
 	if (action_mode == MODE_ADD)	/* write */
-	    ret = Vect_open_update2(&Map, params.map->answer, G_mapset(), params.fld->answer);
+	    ret = Vect_open_update2(&Map, params.map->answer, G_subproject(), params.fld->answer);
 	else			/* read-only -- select features */
-	    ret = Vect_open_old2(&Map, params.map->answer, G_mapset(), params.fld->answer);
+	    ret = Vect_open_old2(&Map, params.map->answer, G_subproject(), params.fld->answer);
 	
 	if (ret < 2)
 	    G_fatal_error(_("Unable to open vector map <%s> on topological level. "
@@ -151,13 +151,13 @@ int main(int argc, char *argv[])
 
 	while (params.bmaps->answers[i]) {
 	    const char *bmap = params.bmaps->answers[i];
-	    const char *mapset = G_find_vector2(bmap, "");
-	    if (!mapset)
+	    const char *subproject = G_find_vector2(bmap, "");
+	    if (!subproject)
 		G_fatal_error(_("Vector map <%s> not found"), bmap);
 
 	    if (strcmp(
-		    G_fully_qualified_name(params.map->answer, G_mapset()),
-		    G_fully_qualified_name(bmap, mapset)) == 0) {
+		    G_fully_qualified_name(params.map->answer, G_subproject()),
+		    G_fully_qualified_name(bmap, subproject)) == 0) {
 		G_fatal_error(_("Unable to open vector map <%s> as the background map. "
 			       "It is given as vector map to be edited."),
 			      bmap);
@@ -240,7 +240,7 @@ int main(int argc, char *argv[])
 	    }
 	    Vect_close(&Map);
 
-	    if (Vect_open_update2(&Map, params.map->answer, G_mapset(), params.fld->answer) < 0)
+	    if (Vect_open_update2(&Map, params.map->answer, G_subproject(), params.fld->answer) < 0)
 		G_fatal_error(_("Unable to open vector map <%s>"),
 				params.map->answer);
 	}

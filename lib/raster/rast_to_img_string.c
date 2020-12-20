@@ -60,7 +60,7 @@ int Rast_map_to_img_str(char *name, int color_mode, unsigned char* result)
     unsigned char *set = NULL, *red = NULL, *green = NULL, 
                   *blue = NULL;
     unsigned char alpha;
-    const char *mapset = NULL;
+    const char *subproject = NULL;
     CELL *cell_buf = NULL;
     FCELL *fcell_buf = NULL;
     DCELL *dcell_buf = NULL;
@@ -76,9 +76,9 @@ int Rast_map_to_img_str(char *name, int color_mode, unsigned char* result)
     if(color_mode > 3 || color_mode < 1)
         return(-1);
 
-    mapset = G_find_raster2(name, "");
+    subproject = G_find_raster2(name, "");
     
-    if(!mapset)
+    if(!subproject)
         return(0);
     
     map = Rast_open_old(name, "");
@@ -92,7 +92,7 @@ int Rast_map_to_img_str(char *name, int color_mode, unsigned char* result)
     blue = G_malloc(cols);
     set  = G_malloc(cols);
 
-    Rast_read_colors(name, mapset, &colors);
+    Rast_read_colors(name, subproject, &colors);
 
     rtype = Rast_get_map_type(map);
     if (rtype == CELL_TYPE)

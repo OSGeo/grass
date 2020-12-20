@@ -16,7 +16,7 @@ from grass.exceptions import ImplementationError
 from datetime import datetime
 from abc import ABCMeta, abstractmethod
 from .core import get_tgis_c_library_interface, get_enable_timestamp_write, \
-    get_enable_mapset_check, get_current_mapset, init_dbif
+    get_enable_subproject_check, get_current_subproject, init_dbif
 from .abstract_dataset import AbstractDataset
 from .temporal_extent import RelativeTemporalExtent, AbsoluteTemporalExtent
 from .datetime_math import datetime_to_grass_datetime_string, \
@@ -148,44 +148,44 @@ class AbstractMapDataset(AbstractDataset):
            in grass and must not be equal to the
            primary key identifier (id) of the map in the database.
            Since vector maps may have layer information,
-           the unique id is a combination of name, layer and mapset.
+           the unique id is a combination of name, layer and subproject.
 
            Use get_map_id() every time your need to access the grass map
            in the file system but not to identify
            map information in the temporal database.
 
-           :return: The map id "name@mapset"
+           :return: The map id "name@subproject"
         """
         return self.base.get_map_id()
 
     @staticmethod
-    def build_id(name, mapset, layer=None):
+    def build_id(name, subproject, layer=None):
         """Convenient method to build the unique identifier
 
-           Existing layer and mapset definitions in the name
+           Existing layer and subproject definitions in the name
            string will be reused
 
            :param name: The name of the map
-           :param mapset: The mapset in which the map is located
+           :param subproject: The subproject in which the map is located
            :param layer: The layer of the vector map, use None in case no
                          layer exists
 
-           :return: the id of the map as "name(:layer)@mapset" while layer is
+           :return: the id of the map as "name(:layer)@subproject" while layer is
                     optional
         """
 
-        # Check if the name includes any mapset
+        # Check if the name includes any subproject
         if name.find("@") >= 0:
-            name, mapset = name.split("@")
+            name, subproject = name.split("@")
 
         # Check for layer number in map name
         if name.find(":") >= 0:
             name, layer = name.split(":")
 
         if layer is not None:
-            return "%s:%s@%s" % (name, layer, mapset)
+            return "%s:%s@%s" % (name, layer, subproject)
         else:
-            return "%s@%s" % (name, mapset)
+            return "%s@%s" % (name, subproject)
 
     def get_layer(self):
         """Return the layer of the map
@@ -420,11 +420,11 @@ class AbstractMapDataset(AbstractDataset):
            :param dbif: The database interface to be used
            """
 
-        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
+        if get_enable_subproject_check() is True and self.get_subproject() != get_current_subproject():
             self.msgr.fatal(_("Unable to update dataset <%(ds)s> of type "
-                              "%(type)s in the temporal database. The mapset "
+                              "%(type)s in the temporal database. The subproject "
                               "of the dataset does not match the current "
-                              "mapset") % {"ds": self.get_id(),
+                              "subproject") % {"ds": self.get_id(),
                                            "type": self.get_type()})
 
         if self.set_absolute_time(start_time, end_time):
@@ -516,11 +516,11 @@ class AbstractMapDataset(AbstractDataset):
            :param unit: The relative time unit
            :param dbif: The database interface to be used
         """
-        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
+        if get_enable_subproject_check() is True and self.get_subproject() != get_current_subproject():
             self.msgr.fatal(_("Unable to update dataset <%(ds)s> of type "
-                              "%(type)s in the temporal database. The mapset "
+                              "%(type)s in the temporal database. The subproject "
                               "of the dataset does not match the current "
-                              "mapset") % {"ds": self.get_id(),
+                              "subproject") % {"ds": self.get_id(),
                                            "type": self.get_type()})
 
         if self.set_relative_time(start_time, end_time, unit):
@@ -837,11 +837,11 @@ class AbstractMapDataset(AbstractDataset):
            :return: The SQL statements if execute=False, else an empty string,
                     None in case of a failure
         """
-        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
+        if get_enable_subproject_check() is True and self.get_subproject() != get_current_subproject():
             self.msgr.fatal(_("Unable to delete dataset <%(ds)s> of type "
-                              "%(type)s from the temporal database. The mapset"
+                              "%(type)s from the temporal database. The subproject"
                               " of the dataset does not match the current "
-                              "mapset") % {"ds": self.get_id(),
+                              "subproject") % {"ds": self.get_id(),
                                            "type": self.get_type()})
 
         dbif, connected = init_dbif(dbif)
@@ -905,11 +905,11 @@ class AbstractMapDataset(AbstractDataset):
                                    'type': self.get_type(),
                                    'map': self.get_map_id()})
 
-        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
+        if get_enable_subproject_check() is True and self.get_subproject() != get_current_subproject():
             self.msgr.fatal(_("Unable to unregister dataset <%(ds)s> of type "
-                              "%(type)s from the temporal database. The mapset"
+                              "%(type)s from the temporal database. The subproject"
                               " of the dataset does not match the current "
-                              "mapset") % {"ds": self.get_id(),
+                              "subproject") % {"ds": self.get_id(),
                                            "type": self.get_type()})
 
         statement = ""

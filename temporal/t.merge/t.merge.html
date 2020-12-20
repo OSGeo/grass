@@ -5,7 +5,7 @@ time datasets in a single output dataset. The datasets to merge can be
 either space time raster, 3D raster or vector datasets and must have 
 the same temporal type (absolute or relative).
 <p>
-Existing space time datasets located in the current mapset can be 
+Existing space time datasets located in the current subproject can be 
 specified as output as well. The maps from the input space time 
 datasets will be added to the output.
 <p>
@@ -15,9 +15,9 @@ different input space time datasets.
 
 <h2>NOTES</h2>
 
-Temporal databases stored in other mapsets can be used as long as they
-are in the user's current mapset search path (managed with
-<a href="g.mapsets.html">g.mapsets</a>).
+Temporal databases stored in other subprojects can be used as long as they
+are in the user's current subproject search path (managed with
+<a href="g.subprojects.html">g.subprojects</a>).
 
 <h2>Examples</h2>
 
@@ -44,7 +44,7 @@ t.info precipitation_daily_1
  +-------------------- Basic information -------------------------------------+
  | Id: ........................ precipitation_daily_1@soeren
  | Name: ...................... precipitation_daily_1
- | Mapset: .................... soeren
+ | Subproject: .................... soeren
  | Creator: ................... soeren
  | Temporal type: ............. absolute
  | Creation time: ............. 2014-11-23 15:26:57.395355
@@ -110,7 +110,7 @@ t.info precipitation_daily_2
  +-------------------- Basic information -------------------------------------+
  | Id: ........................ precipitation_daily_2@soeren
  | Name: ...................... precipitation_daily_2
- | Mapset: .................... soeren
+ | Subproject: .................... soeren
  | Creator: ................... soeren
  | Temporal type: ............. absolute
  | Creation time: ............. 2014-11-23 15:27:20.165074
@@ -168,7 +168,7 @@ t.info precipitation_daily_3
  +-------------------- Basic information -------------------------------------+
  | Id: ........................ precipitation_daily_3@soeren
  | Name: ...................... precipitation_daily_3
- | Mapset: .................... soeren
+ | Subproject: .................... soeren
  | Creator: ................... soeren
  | Temporal type: ............. absolute
  | Creation time: ............. 2014-11-23 15:27:44.069272

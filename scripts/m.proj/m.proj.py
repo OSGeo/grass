@@ -67,12 +67,12 @@ COPYRIGHT: (c) 2006-2019 Hamish Bowman, and the GRASS Development Team
 #%end
 #%flag
 #% key: i
-#% description: Use LL WGS84 as input and current location as output projection
+#% description: Use LL WGS84 as input and current project as output projection
 #% guisection: Projections
 #%end
 #%flag
 #% key: o
-#% description: Use current location as input and LL WGS84 as output projection
+#% description: Use current project as input and LL WGS84 as output projection
 #% guisection: Projections
 #%end
 #%flag
@@ -161,8 +161,8 @@ def main():
     # set up projection params
     s = gcore.read_command("g.proj", flags='j')
     kv = parse_key_val(s)
-    if "XY location" in kv['+proj'] and (ll_in or ll_out):
-        gcore.fatal(_("Unable to project to or from a XY location"))
+    if "XY project" in kv['+proj'] and (ll_in or ll_out):
+        gcore.fatal(_("Unable to project to or from a XY project"))
 
     in_proj = None
 
@@ -181,7 +181,7 @@ def main():
             gcore.fatal(_("Invalid PROJ.4 input specification"))
 
     if not in_proj:
-        gcore.verbose("Assuming current location as input")
+        gcore.verbose("Assuming current project as input")
         in_proj = gcore.read_command('g.proj', flags='jf')
 
     in_proj = in_proj.strip()

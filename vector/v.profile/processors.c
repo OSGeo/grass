@@ -9,7 +9,7 @@
 
 extern Result *resultset;
 
-/* For batch memory allocation */
+/* For batch memory alproject */
 static size_t alloc_size = 0;
 
 /* Add point to result data set */

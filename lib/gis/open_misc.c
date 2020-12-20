@@ -33,33 +33,33 @@
 
 static int G__open_misc(const char *dir,
 			const char *element,
-			const char *name, const char *mapset, int mode)
+			const char *name, const char *subproject, int mode)
 {
     int fd;
     char path[GPATH_MAX];
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 
 
     G__check_gisinit();
 
     /* READ */
     if (mode == 0) {
-	if (G_name_is_fully_qualified(name, xname, xmapset)) {
-	    if (*mapset && strcmp(xmapset, mapset) != 0) {
- 		G_warning(_("G__open_misc(read): mapset <%s> doesn't match xmapset <%s>"),
- 			  mapset, xmapset);
+	if (G_name_is_fully_qualified(name, xname, xsubproject)) {
+	    if (*subproject && strcmp(xsubproject, subproject) != 0) {
+ 		G_warning(_("G__open_misc(read): subproject <%s> doesn't match xsubproject <%s>"),
+ 			  subproject, xsubproject);
 		return -1;
 	    }
 	    name = xname;
-	    mapset = xmapset;
+	    subproject = xsubproject;
 	}
 
-	mapset = G_find_file2_misc(dir, element, name, mapset);
+	subproject = G_find_file2_misc(dir, element, name, subproject);
 
-	if (!mapset)
+	if (!subproject)
 	    return -1;
 
-	G_file_name_misc(path, dir, element, name, mapset);
+	G_file_name_misc(path, dir, element, name, subproject);
 
 	if ((fd = open(path, 0)) < 0)
 	    G_warning("G__open_misc(read): Unable to open '%s': %s",
@@ -68,11 +68,11 @@ static int G__open_misc(const char *dir,
     }
     /* WRITE */
     if (mode == 1 || mode == 2) {
-	mapset = G_mapset();
-	if (G_name_is_fully_qualified(name, xname, xmapset)) {
-	    if (strcmp(xmapset, mapset) != 0) {
- 		G_warning(_("G__open_misc(write): xmapset <%s> != G_mapset() <%s>"),
-			  xmapset, mapset);
+	subproject = G_subproject();
+	if (G_name_is_fully_qualified(name, xname, xsubproject)) {
+	    if (strcmp(xsubproject, subproject) != 0) {
+ 		G_warning(_("G__open_misc(write): xsubproject <%s> != G_subproject() <%s>"),
+			  xsubproject, subproject);
 		return -1;
 	    }
 	    name = xname;
@@ -81,9 +81,9 @@ static int G__open_misc(const char *dir,
 	if (G_legal_filename(name) == -1)
 	    return -1;
 
-	G_file_name_misc(path, dir, element, name, mapset);
+	G_file_name_misc(path, dir, element, name, subproject);
 	if (mode == 1 || access(path, 0) != 0) {
-	    G__make_mapset_element_misc(dir, name);
+	    G__make_subproject_element_misc(dir, name);
 	    close(creat(path, 0666));
 	}
 
@@ -100,7 +100,7 @@ static int G__open_misc(const char *dir,
  * \brief open a new database file
  *
  * The database file <b>name</b> under the <b>element</b> in the
- * current mapset is created and opened for writing (but not reading).
+ * current subproject is created and opened for writing (but not reading).
  * The UNIX open( ) routine is used to open the file. If the file does not exist,
  * -1 is returned. Otherwise the file is positioned at the end of the file and
  * the file descriptor from the open( ) is returned.
@@ -112,7 +112,7 @@ static int G__open_misc(const char *dir,
 
 int G_open_new_misc(const char *dir, const char *element, const char *name)
 {
-    return G__open_misc(dir, element, name, G_mapset(), 1);
+    return G__open_misc(dir, element, name, G_subproject(), 1);
 }
 
 
@@ -120,21 +120,21 @@ int G_open_new_misc(const char *dir, const char *element, const char *name)
  * \brief open a database file for reading
  *
  * The database file <b>name</b> under the
- * <b>element</b> in the specified <b>mapset</b> is opened for reading (but
+ * <b>element</b> in the specified <b>subproject</b> is opened for reading (but
  * not for writing).
  * The UNIX open( ) routine is used to open the file. If the file does not exist,
  * -1 is returned. Otherwise the file descriptor from the open( ) is returned.
  *
  *  \param element
  *  \param name
- *  \param mapset
+ *  \param subproject
  *  \return int
  */
 
 int G_open_old_misc(const char *dir, const char *element, const char *name,
-		    const char *mapset)
+		    const char *subproject)
 {
-    return G__open_misc(dir, element, name, mapset, 0);
+    return G__open_misc(dir, element, name, subproject, 0);
 }
 
 
@@ -142,7 +142,7 @@ int G_open_old_misc(const char *dir, const char *element, const char *name,
  * \brief open a database file for update
  *
  * The database file <b>name</b> under the <b>element</b> in the
- * current mapset is opened for reading and writing.
+ * current subproject is opened for reading and writing.
  * The UNIX open( ) routine is used to open the file. If the file does not exist,
  * -1 is returned. Otherwise the file is positioned at the end of the file and
  * the file descriptor from the open( ) is returned.
@@ -156,7 +156,7 @@ int G_open_update_misc(const char *dir, const char *element, const char *name)
 {
     int fd;
 
-    fd = G__open_misc(dir, element, name, G_mapset(), 2);
+    fd = G__open_misc(dir, element, name, G_subproject(), 2);
     if (fd >= 0)
 	lseek(fd, 0L, SEEK_END);
 
@@ -168,7 +168,7 @@ int G_open_update_misc(const char *dir, const char *element, const char *name)
  * \brief open a new database file
  *
  * The database file <b>name</b> under the <b>element</b> in the
- * current mapset is created and opened for writing (but not reading).
+ * current subproject is created and opened for writing (but not reading).
  * The UNIX fopen( ) routine, with "w" write mode, is used to open the file.  If
  * the file does not exist, the NULL pointer is returned. Otherwise the file is
  * positioned at the end of the file and the file descriptor from the fopen( ) is
@@ -183,7 +183,7 @@ FILE *G_fopen_new_misc(const char *dir, const char *element, const char *name)
 {
     int fd;
 
-    fd = G__open_misc(dir, element, name, G_mapset(), 1);
+    fd = G__open_misc(dir, element, name, G_subproject(), 1);
     if (fd < 0)
 	return (FILE *) 0;
 
@@ -195,7 +195,7 @@ FILE *G_fopen_new_misc(const char *dir, const char *element, const char *name)
  * \brief open a database file for reading
  *
  * The database file <b>name</b> under the
- * <b>element</b> in the specified <b>mapset</b> is opened for reading (but
+ * <b>element</b> in the specified <b>subproject</b> is opened for reading (but
  * not for writing).
  * The UNIX fopen( ) routine, with "r" read mode, is used to open the file.  If
  * the file does not exist, the NULL pointer is returned. Otherwise the file
@@ -203,16 +203,16 @@ FILE *G_fopen_new_misc(const char *dir, const char *element, const char *name)
  *
  *  \param element
  *  \param name
- *  \param mapset
+ *  \param subproject
  *  \return FILE * 
  */
 
 FILE *G_fopen_old_misc(const char *dir, const char *element, const char *name,
-		       const char *mapset)
+		       const char *subproject)
 {
     int fd;
 
-    fd = G__open_misc(dir, element, name, mapset, 0);
+    fd = G__open_misc(dir, element, name, subproject, 0);
     if (fd < 0)
 	return (FILE *) 0;
 
@@ -224,7 +224,7 @@ FILE *G_fopen_append_misc(const char *dir, const char *element,
 {
     int fd;
 
-    fd = G__open_misc(dir, element, name, G_mapset(), 2);
+    fd = G__open_misc(dir, element, name, G_subproject(), 2);
     if (fd < 0)
 	return (FILE *) 0;
     lseek(fd, 0L, SEEK_END);
@@ -237,7 +237,7 @@ FILE *G_fopen_modify_misc(const char *dir, const char *element,
 {
     int fd;
 
-    fd = G__open_misc(dir, element, name, G_mapset(), 2);
+    fd = G__open_misc(dir, element, name, G_subproject(), 2);
     if (fd < 0)
 	return (FILE *) 0;
     lseek(fd, 0L, SEEK_END);

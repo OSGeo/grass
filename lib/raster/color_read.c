@@ -26,7 +26,7 @@ static int read_old_colors(FILE *, struct Colors *);
   \brief Read color table of raster map
   
   The color table for the raster map <i>name</i> in the specified
-  <i>mapset</i> is read into the <i>colors</i> structure. If the data
+  <i>subproject</i> is read into the <i>colors</i> structure. If the data
   layer has no color table, a default color table is generated and 0
   is returned. If there is an error reading the color table, a
   diagnostic message is printed and -1 is returned. If the color
@@ -39,20 +39,20 @@ static int read_old_colors(FILE *, struct Colors *);
   Note: If a secondary color file for map name <i>name</i> exists in
   the current project, that color file is read.  This allows the
   user to define their own color lookup tables for cell maps found
-  in other mapsets.
+  in other subprojects.
   
   Warning message is printed if the color file is
   missing or invalid.
   
   \param name map name
-  \param mapset mapset name
+  \param subproject subproject name
   \param[out] colors pointer to Colors structure
   
   \return -1 on error
   \return 0 if missing, but default colors generated
   \return 1 on success
 */
-int Rast_read_colors(const char *name, const char *mapset,
+int Rast_read_colors(const char *name, const char *subproject,
 		     struct Colors *colors)
 {
     int fp;
@@ -64,26 +64,26 @@ int Rast_read_colors(const char *name, const char *mapset,
     CELL min, max;
     DCELL dmin, dmax;
 
-    fp = Rast_map_is_fp(name, mapset);
+    fp = Rast_map_is_fp(name, subproject);
     Rast_init_colors(colors);
 
     strcpy(xname, name);
-    mapset = G_find_raster(xname, mapset);
+    subproject = G_find_raster(xname, subproject);
     name = xname;
 
     if (fp)
 	Rast_mark_colors_as_fp(colors);
 
-    /* first look for secondary color table in current mapset */
-    sprintf(buf, "colr2/%s", mapset);
-    if (Rast__read_colors(buf, name, G_mapset(), colors) >= 0)
+    /* first look for secondary color table in current subproject */
+    sprintf(buf, "colr2/%s", subproject);
+    if (Rast__read_colors(buf, name, G_subproject(), colors) >= 0)
 	return 1;
 
     /* now look for the regular color table */
-    switch (Rast__read_colors("colr", name, mapset, colors)) {
+    switch (Rast__read_colors("colr", name, subproject, colors)) {
     case -2:
 	if (!fp) {
-	    if (Rast_read_range(name, mapset, &range) >= 0) {
+	    if (Rast_read_range(name, subproject, &range) >= 0) {
 		Rast_get_range_min_max(&range, &min, &max);
 		if (!Rast_is_c_null_value(&min) &&
 		    !Rast_is_c_null_value(&max))
@@ -92,7 +92,7 @@ int Rast_read_colors(const char *name, const char *mapset,
 	    }
 	}
 	else {
-	    if (Rast_read_fp_range(name, mapset, &drange) >= 0) {
+	    if (Rast_read_fp_range(name, subproject, &drange) >= 0) {
 		Rast_get_fp_range_min_max(&drange, &dmin, &dmax);
 		if (!Rast_is_d_null_value(&dmin) &&
 		    !Rast_is_d_null_value(&dmax))
@@ -109,18 +109,18 @@ int Rast_read_colors(const char *name, const char *mapset,
 	return 1;
     }
 
-    G_warning(_("Color support for <%s@%s> %s"), name, mapset, err);
+    G_warning(_("Color support for <%s@%s> %s"), name, subproject, err);
     return -1;
 }
 
 int Rast__read_colors(const char *element, const char *name,
-		      const char *mapset, struct Colors *colors)
+		      const char *subproject, struct Colors *colors)
 {
     FILE *fd;
     int stat;
     char buf[1024];
 
-    if (!(fd = G_fopen_old(element, name, mapset)))
+    if (!(fd = G_fopen_old(element, name, subproject)))
 	return -2;
 
     /*

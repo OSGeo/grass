@@ -12,7 +12,7 @@ import ctypes
 #
 from grass.pygrass.vector.vector_type import VTYPE
 from grass.pygrass.errors import GrassError, must_be_open
-from grass.pygrass.gis import Location
+from grass.pygrass.gis import Project
 
 from grass.pygrass.vector.geometry import GEOOBJ as _GEOOBJ
 from grass.pygrass.vector.geometry import read_line, read_next_line
@@ -50,7 +50,7 @@ class Vector(Info):
         >>> test_vect = Vector(test_vector_name)
         >>> test_vect.is_open()
         False
-        >>> test_vect.mapset
+        >>> test_vect.subproject
         ''
         >>> test_vect.exist()
         True
@@ -59,9 +59,9 @@ class Vector(Info):
 
     """
 
-    def __init__(self, name, mapset='', *args, **kwargs):
-        # Set map name and mapset
-        super(Vector, self).__init__(name, mapset, *args, **kwargs)
+    def __init__(self, name, subproject='', *args, **kwargs):
+        # Set map name and subproject
+        super(Vector, self).__init__(name, subproject, *args, **kwargs)
         self._topo_level = 1
         self._class_name = 'Vector'
         self.overwrite = False
@@ -69,7 +69,7 @@ class Vector(Info):
 
     def __repr__(self):
         if self.exist():
-            return "%s(%r, %r)" % (self._class_name, self.name, self.mapset)
+            return "%s(%r, %r)" % (self._class_name, self.name, self.subproject)
         else:
             return "%s(%r)" % (self._class_name, self.name)
 
@@ -250,8 +250,8 @@ class Vector(Info):
         >>> mytest_vect.close()
         >>> remove('mytest_vect', 'vect')
         """
-        loc = Location()
-        path = join(loc.path(), self.mapset, 'vector', self.name, 'colr')
+        loc = Project()
+        path = join(loc.path(), self.subproject, 'vector', self.name, 'colr')
         return True if exists(path) else False
 
 
@@ -280,8 +280,8 @@ class VectorTopo(Vector):
     ..
     """
 
-    def __init__(self, name, mapset='', *args, **kwargs):
-        super(VectorTopo, self).__init__(name, mapset, *args, **kwargs)
+    def __init__(self, name, subproject='', *args, **kwargs):
+        super(VectorTopo, self).__init__(name, subproject, *args, **kwargs)
         self._topo_level = 2
         self._class_name = 'VectorTopo'
 
@@ -930,8 +930,8 @@ if __name__ == "__main__":
     doctest.testmod()
 
     """Remove the generated vector map, if exist"""
-    from grass.pygrass.utils import get_mapset_vector
+    from grass.pygrass.utils import get_subproject_vector
     from grass.script.core import run_command
-    mset = get_mapset_vector(test_vector_name, mapset='')
+    mset = get_subproject_vector(test_vector_name, subproject='')
     if mset:
         run_command("g.remove", flags='f', type='vector', name=test_vector_name)

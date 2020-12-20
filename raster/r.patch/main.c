@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
         if (cats_ok)
     	    Rast_write_cats(new_name, &cats);
 	if (colr_ok)
-	    Rast_write_colors(new_name, G_mapset(), &colr);
+	    Rast_write_colors(new_name, G_subproject(), &colr);
     }
 
     Rast_short_history(new_name, "raster", &history);

@@ -445,7 +445,7 @@ int main(int argc, char *argv[])
         
         Rast_init_colors(&colors);
         Rast_make_colors(&colors, "gdd", 0, 6000);
-        Rast_write_colors(out->name, G_mapset(), &colors);
+        Rast_write_colors(out->name, G_subproject(), &colors);
     }
     
     exit(EXIT_SUCCESS);

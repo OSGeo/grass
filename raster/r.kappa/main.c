@@ -154,16 +154,16 @@ int main(int argc, char **argv)
 static void layer(const char *s)
 {
     char name[GNAME_MAX];
-    const char *mapset;
+    const char *subproject;
     int n;
 
     strcpy(name, s);
-    if ((mapset = G_find_raster2(name, "")) == NULL)
+    if ((subproject = G_find_raster2(name, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), s);
 
     n = nlayers++;
     layers = (LAYER *) G_realloc(layers, 2 * sizeof(LAYER));
     layers[n].name = G_store(name);
-    layers[n].mapset = mapset;
-    Rast_read_cats(name, mapset, &layers[n].labels);
+    layers[n].subproject = subproject;
+    Rast_read_cats(name, subproject, &layers[n].labels);
 }

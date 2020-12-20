@@ -163,7 +163,7 @@ void split_poly(ta, pnum, t)
 	    new_pnum = pnum + 1;
 	    n_verts = 0;
 
-	    /* 1st vert will be the location where the first xing occurs */
+	    /* 1st vert will be the project where the first xing occurs */
 	    /* not only are the vertices stored in the poly_info variable
 	     ** but also the data values at these vertices must be stored */
 	    Polys[new_pnum].data[n_verts] = zz;
@@ -212,7 +212,7 @@ void split_poly(ta, pnum, t)
 	    side = xing[1];
 	    n_verts = 0;
 
-	    /* 1st vert will be the location that xing occurs */
+	    /* 1st vert will be the project that xing occurs */
 	    Polys[new_pnum].data[n_verts] = zz;
 	    side_to_xy(&Polys[new_pnum].verts[n_verts << 1], &(Polys[pnum]),
 		       zz, side);

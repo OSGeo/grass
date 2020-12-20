@@ -5,10 +5,10 @@ from grass.script.raster import mapcalc as rmapcalc
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from grass.gunittest.gutils import get_current_mapset
+from grass.gunittest.gutils import get_current_subproject
 from grass.gunittest.gmodules import SimpleModule
 
-# when used user1 must be replaced by current mapset
+# when used user1 must be replaced by current subproject
 REMOVE_RASTERS = """raster/test_map_0@user1
 raster/test_map_1@user1
 raster/test_map_2@user1
@@ -61,7 +61,7 @@ class GMRemoveTest(TestCase):
         self.assertModule(module)
         self.assertMultiLineEqual(module.outputs.stdout,
                                   REMOVE_RASTERS.replace('user1',
-                                                         get_current_mapset()))
+                                                         get_current_subproject()))
 
         module = SimpleModule('g.remove', type='raster',
                               pattern='test_map_*,*two', flags='f')
@@ -83,7 +83,7 @@ class GMRemoveTest(TestCase):
                                   'raster/test_apples@user1\n'
                                   'raster/test_apples_big@user1\n'
                                   'raster/test_oranges@user1\n'.replace(
-                                      'user1', get_current_mapset()))
+                                      'user1', get_current_subproject()))
         module = SimpleModule('g.remove', type='raster',
                               pattern='test_{apples,oranges}{_small,_big,*}',
                               flags='f')

@@ -87,7 +87,7 @@ int calculateIndex(char *file, rli_func *f,
 
     if (parsed == MVWIN) {
 	/* struct Cell_head cellhd_r, cellhd_new;
-	   char *mapset; */
+	   char *subproject; */
 	/*creating new raster file */
 	mv_fd = Rast_open_new(output, DCELL_TYPE);
 

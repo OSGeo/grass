@@ -25,7 +25,7 @@ include $(MODULE_TOPDIR)/include/Make/Compile.make
 DATE := $(shell date '+%d_%m_%Y')
 
 DIRS = \
-	demolocation \
+	demoproject \
 	tools \
 	include \
 	lib \

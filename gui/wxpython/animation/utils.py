@@ -58,31 +58,31 @@ class ReplayMode:
 
 
 def validateTimeseriesName(timeseries, etype='strds'):
-    """Checks if space time dataset exists and completes missing mapset.
+    """Checks if space time dataset exists and completes missing subproject.
 
     Raises GException if dataset doesn't exist.
     """
     trastDict = tgis.tlist_grouped(etype)
     if timeseries.find("@") >= 0:
-        nameShort, mapset = timeseries.split('@', 1)
-        if nameShort in trastDict[mapset]:
+        nameShort, subproject = timeseries.split('@', 1)
+        if nameShort in trastDict[subproject]:
             return timeseries
         else:
             raise GException(
                 _("Space time dataset <%s> not found.") %
                 timeseries)
 
-    mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
-    for mapset in mapsets:
-        if mapset in trastDict.keys():
-            if timeseries in trastDict[mapset]:
-                return timeseries + "@" + mapset
+    subprojects = tgis.get_tgis_c_library_interface().available_subprojects()
+    for subproject in subprojects:
+        if subproject in trastDict.keys():
+            if timeseries in trastDict[subproject]:
+                return timeseries + "@" + subproject
 
     raise GException(_("Space time dataset <%s> not found.") % timeseries)
 
 
 def validateMapNames(names, etype):
-    """Checks if maps exist and completes missing mapset.
+    """Checks if maps exist and completes missing subproject.
 
     Input is list of map names.
     Raises GException if map doesn't exist.
@@ -92,17 +92,17 @@ def validateMapNames(names, etype):
     newNames = []
     for name in names:
         if name.find("@") >= 0:
-            nameShort, mapset = name.split('@', 1)
-            if nameShort in mapDict[mapset]:
+            nameShort, subproject = name.split('@', 1)
+            if nameShort in mapDict[subproject]:
                 newNames.append(name)
             else:
                 raise GException(_("Map <%s> not found.") % name)
         else:
             found = False
-            for mapset, mapNames in six.iteritems(mapDict):
+            for subproject, mapNames in six.iteritems(mapDict):
                 if name in mapNames:
                     found = True
-                    newNames.append(name + "@" + mapset)
+                    newNames.append(name + "@" + subproject)
             if not found:
                 raise GException(_("Map <%s> not found.") % name)
     return newNames
@@ -125,23 +125,23 @@ def getRegisteredMaps(timeseries, etype):
 
 def getNameAndLayer(name):
     """Checks whether map name contains layer
-    and returns map name with mapset (when there was mapset)
+    and returns map name with subproject (when there was subproject)
     and layer (can be None).
 
-    >>> getNameAndLayer('name:2@mapset')
-    ('name@mapset', '2')
-    >>> getNameAndLayer('name@mapset')
-    ('name@mapset', None)
+    >>> getNameAndLayer('name:2@subproject')
+    ('name@subproject', '2')
+    >>> getNameAndLayer('name@subproject')
+    ('name@subproject', None)
     >>> getNameAndLayer('name:2')
     ('name', '2')
     """
-    mapset = layer = None
+    subproject = layer = None
     if '@' in name:
-        name, mapset = name.split('@')
+        name, subproject = name.split('@')
     if ':' in name:
         name, layer = name.split(':')
-    if mapset:
-        name = name + '@' + mapset
+    if subproject:
+        name = name + '@' + subproject
     return name, layer
 
 

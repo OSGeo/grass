@@ -357,25 +357,25 @@ class Nviz(object):
         :return: object id
         :return: -1 on failure
         """
-        mapset = G_find_raster2(name, "")
-        if mapset is None:
+        subproject = G_find_raster2(name, "")
+        if subproject is None:
             G_warning(_("Raster map <%s> not found"), name)
             return -1
 
         # topography
         id = Nviz_new_map_obj(MAP_OBJ_SURF,
-                              G_fully_qualified_name(name, mapset), 0.0,
+                              G_fully_qualified_name(name, subproject), 0.0,
                               self.data)
 
         if color_name:      # check for color map
-            mapset = G_find_raster2(color_name, "")
-            if mapset is None:
+            subproject = G_find_raster2(color_name, "")
+            if subproject is None:
                 G_warning(_("Raster map <%s> not found"), color_name)
                 GS_delete_surface(id)
                 return -1
 
             Nviz_set_attr(id, MAP_OBJ_SURF, ATT_COLOR, MAP_ATT,
-                          G_fully_qualified_name(color_name, mapset), -1.0,
+                          G_fully_qualified_name(color_name, subproject), -1.0,
                           self.data)
 
         elif color_value:   # check for color value
@@ -385,7 +385,7 @@ class Nviz(object):
 
         else:               # use by default elevation map for coloring
             Nviz_set_attr(id, MAP_OBJ_SURF, ATT_COLOR, MAP_ATT,
-                          G_fully_qualified_name(name, mapset), -1.0,
+                          G_fully_qualified_name(name, subproject), -1.0,
                           self.data)
 
         # if (i > 1)
@@ -445,18 +445,18 @@ class Nviz(object):
             surf_list = GS_get_surf_list(byref(nsurf))
             GS_set_att_const(surf_list[0], ATT_TRANSP, 255)
 
-        mapset = G_find_vector2(name, "")
-        if mapset is None:
+        subproject = G_find_vector2(name, "")
+        if subproject is None:
             G_warning(_("Vector map <%s> not found"),
                       name)
 
         if points:
             id = Nviz_new_map_obj(MAP_OBJ_SITE,
-                                  G_fully_qualified_name(name, mapset), 0.0,
+                                  G_fully_qualified_name(name, subproject), 0.0,
                                   self.data)
         else:
             id = Nviz_new_map_obj(MAP_OBJ_VECT,
-                                  G_fully_qualified_name(name, mapset), 0.0,
+                                  G_fully_qualified_name(name, subproject), 0.0,
                                   self.data)
 
         Debug.msg(1, "Nviz::LoadVector(): name=%s -> id=%d", name, id)
@@ -515,27 +515,27 @@ class Nviz(object):
         :return: object id
         :return: -1 on failure
         """
-        mapset = G_find_raster3d(name, "")
-        if mapset is None:
+        subproject = G_find_raster3d(name, "")
+        if subproject is None:
             G_warning(_("3d raster map <%s> not found"),
                       name)
             return -1
 
         # topography
         id = Nviz_new_map_obj(MAP_OBJ_VOL,
-                              G_fully_qualified_name(name, mapset), 0.0,
+                              G_fully_qualified_name(name, subproject), 0.0,
                               self.data)
 
         if color_name:      # check for color map
-            mapset = G_find_raster3d(color_name, "")
-            if mapset is None:
+            subproject = G_find_raster3d(color_name, "")
+            if subproject is None:
                 G_warning(_("3d raster map <%s> not found"),
                           color_name)
                 GVL_delete_vol(id)
                 return -1
 
             Nviz_set_attr(id, MAP_OBJ_VOL, ATT_COLOR, MAP_ATT,
-                          G_fully_qualified_name(color_name, mapset), -1.0,
+                          G_fully_qualified_name(color_name, subproject), -1.0,
                           self.data)
         elif color_value:   # check for color value
             Nviz_set_attr(id, MAP_OBJ_VOL, ATT_COLOR, CONST_ATT,
@@ -543,7 +543,7 @@ class Nviz(object):
                           self.data)
         else:               # use by default elevation map for coloring
             Nviz_set_attr(id, MAP_OBJ_VOL, ATT_COLOR, MAP_ATT,
-                          G_fully_qualified_name(name, mapset), -1.0,
+                          G_fully_qualified_name(name, subproject), -1.0,
                           self.data)
 
         Debug.msg(1, "Nviz::LoadVolume(): name=%s -> id=%d", name, id)
@@ -1052,17 +1052,17 @@ class Nviz(object):
 
         return 1
 
-    def ReadVectorColors(self, name, mapset):
+    def ReadVectorColors(self, name, subproject):
         """Read vector colors
 
         :param name: vector map name
-        :param mapset: mapset name (empty string (\c "") for search path)
+        :param subproject: subproject name (empty string (\c "") for search path)
 
         :return: -1 on error
         :return: 0 if color table missing
         :return: 1 on success (color table found)
         """
-        return Vect_read_colors(name, mapset, self.color)
+        return Vect_read_colors(name, subproject, self.color)
 
     def CheckColorTable(self, id, type):
         """Check if color table exists.

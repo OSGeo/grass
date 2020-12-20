@@ -348,7 +348,7 @@ int get_control_points(char *group, char *pfile, int order, int use3d,
 	    exit(0);
 
 	sprintf(msg, _("Control Point file for group <%s@%s> - "),
-		group, G_mapset());
+		group, G_subproject());
 		
 	ret = I_compute_georef_equations(&cp, E12, N12, E21, N21, order);
     }

@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
 	for (;;) {
 	    char buf[GNAME_MAX];
 	    char *name;
-	    const char *mapset;
+	    const char *subproject;
 	    struct input *p;
 
 	    if (!G_getl2(buf, sizeof(buf), in))
@@ -143,17 +143,17 @@ int main(int argc, char *argv[])
 		continue;
 
 	    name = buf;
-	    if ((mapset = G_find_raster(name, "")) == NULL)
+	    if ((subproject = G_find_raster(name, "")) == NULL)
 		G_fatal_error(_("Input raster map <%s> not found"), name);
 
 	    if (strcmp(name, parm.output->answer) == 0)
 		G_fatal_error(_("Input and output raster map can not be identical"));
 
-	    Rast_read_fp_range(name, mapset, &fprange);
+	    Rast_read_fp_range(name, subproject, &fprange);
 	    dmin = fprange.min;
 	    if (Rast_is_d_null_value(&dmin)) {
 		G_verbose_message(_("Input map <%s@%s> is all NULL, skipping"),
-		                  name, mapset);
+		                  name, subproject);
 		continue;
 	    }
 
@@ -164,9 +164,9 @@ int main(int argc, char *argv[])
 	    p = &inputs[num_inputs++];
 
 	    p->name = G_store(name);
-            p->mapset = G_store(mapset);
-	    p->maptype = Rast_map_type(p->name, p->mapset);
-	    Rast_get_cellhd(p->name, p->mapset, &(p->cellhd));
+            p->subproject = G_store(subproject);
+	    p->maptype = Rast_map_type(p->name, p->subproject);
+	    Rast_get_cellhd(p->name, p->subproject, &(p->cellhd));
 	}
 	fclose(in);
 
@@ -192,30 +192,30 @@ int main(int argc, char *argv[])
 	j = 0;
     	for (i = 0; i < num_inputs; i++) {
 	    char *name;
-	    const char *mapset;
+	    const char *subproject;
 	    struct input *p = &inputs[i];
 
 	    name = parm.input->answers[i];
-	    if ((mapset = G_find_raster(name, "")) == NULL)
+	    if ((subproject = G_find_raster(name, "")) == NULL)
 		G_fatal_error(_("Input raster map <%s> not found"), name);
 
 	    if (strcmp(name, parm.output->answer) == 0)
 		G_fatal_error(_("Input and output raster map can not be identical"));
 
-	    Rast_read_fp_range(name, mapset, &fprange);
+	    Rast_read_fp_range(name, subproject, &fprange);
 	    dmin = fprange.min;
 	    if (Rast_is_d_null_value(&dmin)) {
 		G_verbose_message(_("Input map <%s@%s> is all NULL, skipping"),
-		                  name, mapset);
+		                  name, subproject);
 		continue;
 	    }
 
 	    p = &inputs[j++];
 
 	    p->name = G_store(name);
-            p->mapset = G_store(mapset);
-	    p->maptype = Rast_map_type(p->name, p->mapset);
-	    Rast_get_cellhd(p->name, p->mapset, &(p->cellhd));
+            p->subproject = G_store(subproject);
+	    p->maptype = Rast_map_type(p->name, p->subproject);
+	    Rast_get_cellhd(p->name, p->subproject, &(p->cellhd));
     	}
 	num_inputs = j;
     }
@@ -231,7 +231,7 @@ int main(int argc, char *argv[])
 
     Rast_set_d_null_value(&dmin, 1);
     Rast_set_d_null_value(&dmax, 1);
-    if (Rast_read_fp_range(inputs[0].name, inputs[0].mapset, &fprange) == 1) {
+    if (Rast_read_fp_range(inputs[0].name, inputs[0].subproject, &fprange) == 1) {
 	dmin = fprange.min;
 	dmax = fprange.max;
     }
@@ -239,7 +239,7 @@ int main(int argc, char *argv[])
     Rast_set_d_null_value(&(ostats.sumsq), 1);
     ostats.count = 0;
     have_stats = 1;
-    if (Rast_read_rstats(inputs[0].name, inputs[0].mapset, &rstats) == 1) {
+    if (Rast_read_rstats(inputs[0].name, inputs[0].subproject, &rstats) == 1) {
 	ostats.sum = rstats.sum;
 	ostats.sumsq = rstats.sumsq;
 	ostats.count = rstats.count;
@@ -272,7 +272,7 @@ int main(int argc, char *argv[])
 	if (cellhd.west > p->cellhd.west)
 	    cellhd.west = p->cellhd.west;
 
-	if (Rast_read_fp_range(p->name, p->mapset, &fprange) == 1) {
+	if (Rast_read_fp_range(p->name, p->subproject, &fprange) == 1) {
 	    if (Rast_is_d_null_value(&dmin)) {
 		dmin = fprange.min;
 		dmax = fprange.max;
@@ -285,7 +285,7 @@ int main(int argc, char *argv[])
 	    }
 	}
 	if (have_stats && 
-	    Rast_read_rstats(p->name, p->mapset, &rstats) == 1) {
+	    Rast_read_rstats(p->name, p->subproject, &rstats) == 1) {
 	    ostats.sum += rstats.sum;
 	    ostats.sumsq += rstats.sumsq;
 	    ostats.count += rstats.count;

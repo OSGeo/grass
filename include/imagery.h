@@ -20,7 +20,7 @@ struct Ref_Color
 struct Ref_Files
 {
     char name[INAME_LEN];	/* length is not in sync with other definitions */
-    char mapset[INAME_LEN];
+    char subproject[INAME_LEN];
 };
 
 struct Ref

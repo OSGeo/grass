@@ -21,36 +21,36 @@ temporal modules that are based on the GRASS GIS temporal framework.
 <h3>Temporal data management in general</h3>
 
 Space time datasets are stored in a temporal database. A core principle
-of the temporal framework is that temporal databases are mapset
+of the temporal framework is that temporal databases are subproject
 specific. A new temporal database is created when a temporal command is
-invoked in a mapset that does not contain any temporal databases yet.
-For example, when a mapset was recently created.
+invoked in a subproject that does not contain any temporal databases yet.
+For example, when a subproject was recently created.
 <p>
-<b>Therefore, as space-time datasets are mapset specific, they can only
-register raster, 3D raster or vector maps from the same mapset.</b>
+<b>Therefore, as space-time datasets are subproject specific, they can only
+register raster, 3D raster or vector maps from the same subproject.</b>
 <p>
 By default, space-time datasets can not register maps from other
-mapsets. This is a security measure, since the registration of maps in
+subprojects. This is a security measure, since the registration of maps in
 a space-time dataset will always modify the metadata of the registered
 map. This is critical if:
 <ul>
-    <li>The user has no write access to the maps from other mapsets
+    <li>The user has no write access to the maps from other subprojects
 		he/she wants to register</li>
-    <li>If registered maps are removed from other mapsets, the temporal
+    <li>If registered maps are removed from other subprojects, the temporal
 		database will not be updated and will contain ghost maps</li>
 </ul>
 
 SQLite3 or PostgreSQL are supported as temporal database backends.
-Temporal databases stored in other mapsets can be accessed as long as
-those other mapsets are in the user's current mapset search path
-(managed with <a href="g.mapsets.html">g.mapsets</a>). Access to
-space-time datasets from other mapsets is read-only. They can not be
+Temporal databases stored in other subprojects can be accessed as long as
+those other subprojects are in the user's current subproject search path
+(managed with <a href="g.subprojects.html">g.subprojects</a>). Access to
+space-time datasets from other subprojects is read-only. They can not be
 modified or removed.
 <p>
 Connection settings are performed with <a href="t.connect.html">t.connect</a>.
 By default, a SQLite3 database is
-created in the current mapset to store all space-time datasets and
-registered time series maps in that mapset.
+created in the current subproject to store all space-time datasets and
+registered time series maps in that subproject.
 <p>
 New space-time datasets are created in the temporal database with
 <a href="t.create.html">t.create</a>. The name of the new dataset, the
@@ -82,7 +82,7 @@ The module <a href="t.remove.html">t.remove</a> will remove the
 space-time datasets from the temporal database and optionally all
 registered maps. It will take care of multiple map registration, hence
 if maps are registered in several space-time datasets in the current
-mapset. Use <a href="t.support.html">t.support</a> to modify the
+subproject. Use <a href="t.support.html">t.support</a> to modify the
 metadata of space time datasets or to update the metadata that is
 derived from registered maps. This module also checks for removed and
 modified maps and updates the space-time datasets accordingly. Rename a
@@ -146,7 +146,7 @@ Several modules in the temporal framework have a <em>where</em> option.
 This option allows performing different selections of maps registered
 in the temporal database and in space-time datasets. The columns that
 can be used to perform these selections are: <i>id, name, creator,
-mapset, temporal_type, creation_time, start_time, end_time, north,
+subproject, temporal_type, creation_time, start_time, end_time, north,
 south, west, east, nsres, ewres, cols, rows, number_of_cells, min and
 max</i>. Note that for vector time series, i.e. stvds, some of the
 columns that can be queried to list/select vector maps differ from

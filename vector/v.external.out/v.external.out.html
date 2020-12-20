@@ -88,7 +88,7 @@ geodata in GRASS while writing out the results directly eg. in ESRI
 Shapefile format:
 
 <div class="code"><pre>
-# register Shapefile in GRASS mapset:
+# register Shapefile in GRASS subproject:
 v.external input=/path/to/shapefiles layer=cities
 
 # define output directory for GRASS calculation results:
@@ -113,7 +113,7 @@ PostGIS data can be accessed directly using <em>GRASS-PostGIS data
 provider</em> (GRASS must be compiled with PostgreSQL support).
 
 <div class="code"><pre>
-# register PostGIS table in GRASS mapset:
+# register PostGIS table in GRASS subproject:
 v.external output=PG:dbname=gisdb layer=cities
 
 # define output PostGIS database for GRASS calculation results stored as simple features:

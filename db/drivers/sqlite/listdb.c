@@ -48,14 +48,14 @@ int db__driver_list_databases(dbString* path, int npaths,
     }
 
     if (strcmp(db_get_string(path), "") == 0) {
-        /* current location */
+        /* current project */
         char *cpath;
         dbString spath;
 
         *handles = NULL;
         *count = 0;
         
-        cpath = G_mapset_path();
+        cpath = G_subproject_path();
         
         db_init_string(&spath);
         db_set_string(&spath, cpath);

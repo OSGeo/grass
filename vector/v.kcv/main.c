@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 
     /* open input vector */
     Vect_set_open_level(2);
-    if (Vect_open_old2(&Map, map_opt->answer, G_mapset(), field_opt->answer) < 2) {
+    if (Vect_open_old2(&Map, map_opt->answer, G_subproject(), field_opt->answer) < 2) {
 	G_fatal_error(_("Unable to open vector map <%s> at topological level %d"),
 		      map_opt->answer, 2);
     }
@@ -165,8 +165,8 @@ int main(int argc, char *argv[])
     if (nlinks < 1) {
 	Vect_set_open_level(1);
 	Vect_close(&Map);
-	if (Vect_open_update_head(&Map, map_opt->answer, G_mapset()) < 1)
-	    G_fatal_error(_("Unable to modify vector map stored in other mapset"));
+	if (Vect_open_update_head(&Map, map_opt->answer, G_subproject()) < 1)
+	    G_fatal_error(_("Unable to modify vector map stored in other subproject"));
 	Vect_map_add_dblink(&Map, layer, Fi->name, Fi->table, Fi->key,
 			    Fi->database, Fi->driver);
 	Vect_close(&Map);
@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
 	G_important_message(_("Select privileges were granted on the table"));
 
 	Vect_set_open_level(2);
-	if (Vect_open_old2(&Map, map_opt->answer, G_mapset(), field_opt->answer) < 2) {
+	if (Vect_open_old2(&Map, map_opt->answer, G_subproject(), field_opt->answer) < 2) {
 	    G_fatal_error(_("Unable to open vector map <%s> at topological level %d"),
 			  map_opt->answer, 2);
 	}

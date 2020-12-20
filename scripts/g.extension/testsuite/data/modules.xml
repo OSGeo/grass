@@ -21,7 +21,7 @@
         </binary>
     </task>
     <task name="g.copyall">
-        <description>Copies all or a filtered subset of files of selected type from another mapset to the current working mapset</description>
+        <description>Copies all or a filtered subset of files of selected type from another subproject to the current working subproject</description>
         <keywords>copy,general</keywords>
         <binary>
             <file>scripts/g.copyall</file>
@@ -39,7 +39,7 @@
         </binary>
     </task>
     <task name="g.proj.all">
-        <description>Reprojects raster and vector maps from given location and mapset to current mapset.</description>
+        <description>Reprojects raster and vector maps from given project and subproject to current subproject.</description>
         <keywords>general,projection,transformation</keywords>
         <binary>
             <file>scripts/g.proj.all</file>

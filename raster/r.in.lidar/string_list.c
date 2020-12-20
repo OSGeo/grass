@@ -39,7 +39,7 @@ void string_list_from_file(struct StringList *string_list, char *filename)
         string_list_add_item(string_list, line);
         line = G_malloc(GPATH_MAX);
     }
-    /* last allocation was not necessary */
+    /* last alproject was not necessary */
     G_free(line);
     fclose(file);
 }

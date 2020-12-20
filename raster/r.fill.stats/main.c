@@ -681,7 +681,7 @@ void build_weights_matrix(double radius, double power, double res_x,
             else {
                 W = ((pow(1 - (C / max), power)));
             }
-            /* exclude neighborhood locations that are farther
+            /* exclude neighborhood projects that are farther
                from the center than the user-defined distance
                plus a tolerance of half the current region's
                cell diagonal */
@@ -743,7 +743,7 @@ int main(int argc, char *argv[])
     /* program settings */
     char *input;
     char *output;
-    char *mapset;
+    char *subproject;
     double radius = 1.0;
     unsigned long min_cells = 12;
     double power = 2.0;
@@ -1023,21 +1023,21 @@ int main(int argc, char *argv[])
     }
 
     /* open raster input map and get its storage type */
-    mapset = G_find_raster(input, "");
-    if (!mapset)
+    subproject = G_find_raster(input, "");
+    if (!subproject)
         G_fatal_error(_("Raster map <%s> not found"), input);
-    Rast_get_cellhd(input, mapset, &cellhd);
-    in_fd = Rast_open_old(input, mapset);
+    Rast_get_cellhd(input, subproject, &cellhd);
+    in_fd = Rast_open_old(input, subproject);
     IN_TYPE = Rast_get_map_type(in_fd);
 
     /* minimum and maximum values for interpolating range */
     if (IN_TYPE == CELL_TYPE) {
-        Rast_read_range(input, mapset, &int_range);
+        Rast_read_range(input, subproject, &int_range);
         min = (double)int_range.min;
         max = (double)int_range.max;
     }
     else {
-        Rast_read_fp_range(input, mapset, &fp_range);
+        Rast_read_fp_range(input, subproject, &fp_range);
         min = (double)fp_range.min;
         max = (double)fp_range.max;
     }

@@ -222,7 +222,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("topology"));
     G_add_keyword(_("geometry"));
     G_add_keyword(_("snapping"));
-    G_add_keyword(_("create location"));
+    G_add_keyword(_("create project"));
     module->description = _("Imports vector data into a GRASS vector map using OGR library.");
 
     param.dsn = G_define_option();
@@ -314,10 +314,10 @@ int main(int argc, char *argv[])
     param.snap->description = _("'-1' for no snap");
 
     param.outloc = G_define_option();
-    param.outloc->key = "location";
+    param.outloc->key = "project";
     param.outloc->type = TYPE_STRING;
     param.outloc->required = NO;
-    param.outloc->description = _("Name for new location to create");
+    param.outloc->description = _("Name for new project to create");
     param.outloc->key_desc = "name";
     param.outloc->guisection = _("Output");
     
@@ -383,9 +383,9 @@ int main(int argc, char *argv[])
     flag.over = G_define_flag();
     flag.over->key = 'o';
     flag.over->label =
-	_("Override projection check (use current location's projection)");
+	_("Override projection check (use current project's projection)");
     flag.over->description =
-	_("Assume that the dataset has the same projection as the current location");
+	_("Assume that the dataset has the same projection as the current project");
 
     flag.proj = G_define_flag();
     flag.proj->key = 'j';
@@ -404,7 +404,7 @@ int main(int argc, char *argv[])
     flag.extend->label =
 	_("Extend region extents based on new dataset");
     flag.extend->description =
-	_("Also updates the default region if in the PERMANENT mapset");
+	_("Also updates the default region if in the PERMANENT subproject");
 
     flag.tolower = G_define_flag();
     flag.tolower->key = 'w';
@@ -415,12 +415,12 @@ int main(int argc, char *argv[])
     flag.no_import = G_define_flag();
     flag.no_import->key = 'i';
     flag.no_import->description =
-	_("Create the location specified by the \"location\" parameter and exit."
+	_("Create the project specified by the \"project\" parameter and exit."
           " Do not import the vector data.");
     flag.no_import->guisection = _("Output");
     
-    /* The parser checks if the map already exists in current mapset, this is
-     * wrong if location options is used, so we switch out the check and do it
+    /* The parser checks if the map already exists in current subproject, this is
+     * wrong if project options is used, so we switch out the check and do it
      * in the module after the parser */
     overwrite = G_check_overwrite(argc, argv);
 
@@ -748,7 +748,7 @@ int main(int argc, char *argv[])
     }
 
     /* Check if the output map exists */
-    if (G_find_vector2(output, G_mapset()) && !overwrite) {
+    if (G_find_vector2(output, G_subproject()) && !overwrite) {
 	ds_close(Ogr_ds);
 	G_fatal_error(_("Vector map <%s> already exists"),
 		      output);
@@ -774,7 +774,7 @@ int main(int argc, char *argv[])
 
     /* create spatial filters */
     if (param.outloc->answer && flag.region->answer) {
-	G_warning(_("When creating a new location, the current region "
+	G_warning(_("When creating a new project, the current region "
 	          "can not be used as spatial filter, disabling"));
 	flag.region->answer = 0;
     }
@@ -931,8 +931,8 @@ int main(int argc, char *argv[])
 	with_z = !flag.force2d->answer;
 
     /* open output vector */
-    /* strip any @mapset from vector output name */
-    G_find_vector(output, G_mapset());
+    /* strip any @subproject from vector output name */
+    G_find_vector(output, G_subproject());
 
     if (Vect_open_new(&Map, output, with_z) < 0)
 	G_fatal_error(_("Unable to create vector map <%s>"), output);
@@ -2006,7 +2006,7 @@ int main(int argc, char *argv[])
     /*      Extend current window based on dataset.                         */
     /* -------------------------------------------------------------------- */
     if (flag.extend->answer) {
-	if (strcmp(G_mapset(), "PERMANENT") == 0)
+	if (strcmp(G_subproject(), "PERMANENT") == 0)
 	    /* fixme: expand WIND and DEFAULT_WIND independently. (currently 
 		WIND gets forgotten and DEFAULT_WIND is expanded for both) */
 	    G_get_default_window(&cur_wind);
@@ -2026,12 +2026,12 @@ int main(int argc, char *argv[])
 				  / cur_wind.ew_res);
 	cur_wind.east = cur_wind.west + cur_wind.cols * cur_wind.ew_res;
 
-	if (strcmp(G_mapset(), "PERMANENT") == 0) {
+	if (strcmp(G_subproject(), "PERMANENT") == 0) {
 	    G_put_element_window(&cur_wind, "", "DEFAULT_WIND");
-	    G_message(_("Default region for this location updated"));
+	    G_message(_("Default region for this project updated"));
 	}
 	G_put_window(&cur_wind);
-	G_message(_("Region for the current mapset updated"));
+	G_message(_("Region for the current subproject updated"));
     }
 
     if (input3d && flag.force2d->answer)

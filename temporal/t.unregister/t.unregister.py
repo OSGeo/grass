@@ -73,7 +73,7 @@ def main():
     if not maps and not file:
         grass.fatal(_("%s= or %s= must be specified") % ("input", "file"))
 
-    mapset = grass.gisenv()["MAPSET"]
+    subproject = grass.gisenv()["MAPSET"]
 
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
@@ -96,7 +96,7 @@ def main():
         # Build the maplist
         for count in range(len(maplist)):
             mapname = maplist[count]
-            mapid = dummy.build_id(mapname, mapset)
+            mapid = dummy.build_id(mapname, subproject)
             maplist[count] = mapid
 
     # Read the map list from file
@@ -110,7 +110,7 @@ def main():
                 break
 
             mapname = line.strip()
-            mapid = dummy.build_id(mapname, mapset)
+            mapid = dummy.build_id(mapname, subproject)
             maplist.append(mapid)
 
     num_maps = len(maplist)

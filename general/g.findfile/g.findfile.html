@@ -1,11 +1,11 @@
 <h2>DESCRIPTION</h2>
 
 <em>g.findfile</em> is designed for Bourne shell or Python scripts
-that need to search for mapset <em>elements</em>, including: raster,
+that need to search for subproject <em>elements</em>, including: raster,
 vector maps, region definitions
 and <em><a href="i.group.html">imagery</a></em> groups.
 <p>The list of <b>element</b> names to search for is not fixed; any
-subdirectory of the mapset directory is a valid <b>element</b> name.
+subdirectory of the subproject directory is a valid <b>element</b> name.
 <p>However, the user can find the list of standard GRASS <b>element</b>
 names in the file <tt>$GISBASE/etc/element_list</tt>. This is the file
 which <em><a href="g.remove.html">g.remove</a></em>, <em><a href="g.rename.html">g.rename</a></em>
@@ -18,20 +18,20 @@ need to be deleted/renamed/copied for a given entity type.
 
 <div class="code"><pre>
 name='<em>file_name</em>'
-mapset='<em>mapset_name</em>'
+subproject='<em>subproject_name</em>'
 file='<em>unix_filename</em>'
 fullname='<em>grass_fullname</em>'
 </pre></div>
 
 The output is <em>Bash</em> commands to set the variable
 <em>name</em> to the GRASS data base file name,
-<em>mapset</em> to the mapset in which the file resides,
+<em>subproject</em> to the subproject in which the file resides,
 and <em>file</em> to the full UNIX path name for the named
 file. These variables may be set in the <em>Bash</em>
 as follows:
 
 <div class="code"><pre>
-eval `g.findfile element=name mapset=name file=name`
+eval `g.findfile element=name subproject=name file=name`
 </pre></div>
 
 <h2>EXAMPLES</h2>
@@ -49,7 +49,7 @@ will be set as follows:
 
 <div class="code"><pre>
 name=
-mapset=
+subproject=
 fullname=
 file=
 </pre></div>
@@ -92,7 +92,7 @@ gcore.find_file('elevation', element = 'cell')
 <em>
 <a href="g.filename.html">g.filename</a>,
 <a href="g.gisenv.html">g.gisenv</a>,
-<a href="g.mapsets.html">g.mapsets</a>,
+<a href="g.subprojects.html">g.subprojects</a>,
 <a href="g.parser.html">g.parser</a>
 </em>
 

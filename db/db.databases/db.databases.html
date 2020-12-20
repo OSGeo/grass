@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>db.databases</em> lists all databases for a given <b>driver</b>
-and optionally <b>location</b>. 
+and optionally <b>project</b>. 
 
 <h2>NOTES</h2>
 
@@ -10,12 +10,12 @@ Currently supported database drivers are
 and <em><a href="grass-odbc.html">ODBC</a></em>.
 
 <p>
-Default <b>location</b> for SQLite driver is the full path for the
-current mapset. For PostgreSQL driver it's empty connection string.
+Default <b>project</b> for SQLite driver is the full path for the
+current subproject. For PostgreSQL driver it's empty connection string.
 
 <h2>EXAMPLES</h2>
 
-List SQLite databases in the current mapset:
+List SQLite databases in the current subproject:
 
 <div class="code"><pre>
 db.databases driver=sqlite
@@ -25,14 +25,14 @@ db.databases driver=sqlite
 List SQLite databases in a given directory:
 
 <div class="code"><pre>
-db.databases driver=sqlite location=/opt/sqlite
+db.databases driver=sqlite project=/opt/sqlite
 </pre></div>
 
 <p>
 List PostgreSQL databases from database server running on given port:
 
 <div class="code"><pre>
-db.databases driver=pg location="host=server_name port=5333"
+db.databases driver=pg project="host=server_name port=5333"
 </pre></div>
 
 <h2>SEE ALSO</h2>

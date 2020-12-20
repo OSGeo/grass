@@ -20,7 +20,7 @@
   \param Map pointer to Map_info
   \param BgMap, nbgmaps list of background vector maps for snapping
   \param List list of selected lines
-  \param coord points location
+  \param coord points project
   \param thresh_coords threshold value for selecting lines
   \param thresh_snap threshold value used for snapping
   \param move_x,move_y,move_z direction (move_z is used when map is 3D)
@@ -185,7 +185,7 @@ int Vedit_move_vertex(struct Map_info *Map, struct Map_info **BgMap,
   
   \param Map pointer to Map_info
   \param List list of lines
-  \param coord points location
+  \param coord points project
   \param thresh find line in given threshold
   
   \return number of add vertices
@@ -275,7 +275,7 @@ int Vedit_add_vertex(struct Map_info *Map, struct ilist *List,
   
   \param Map pointer to Map_info
   \param List list of selected lines
-  \param coord points location
+  \param coord points project
   \param thresh threshold value to find a line
   
   \return number of removed vertices

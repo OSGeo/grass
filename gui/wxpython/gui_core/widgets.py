@@ -1000,8 +1000,8 @@ class LayersListValidator(GenericValidator):
 
     def Validate(self, win, validate_all=False):
         """Validate output map existence"""
-        mapset = grass.gisenv()['MAPSET']
-        maps = grass.list_grouped(type=self._condition)[mapset]
+        subproject = grass.gisenv()['MAPSET']
+        maps = grass.list_grouped(type=self._condition)[subproject]
 
         # Check all selected layers
         if validate_all:

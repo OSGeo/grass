@@ -1,7 +1,7 @@
 /*!
  * \file lib/gis/alloc.c
  *
- * \brief GIS Library - Memory allocation routines.
+ * \brief GIS Library - Memory alproject routines.
  *
  * (C) 1999-2009 by the GRASS Development Team
  *
@@ -16,13 +16,13 @@
 #include <grass/glocale.h>
 
 /*!
- * \brief Memory allocation.
+ * \brief Memory alproject.
  *
  * Allocates a block of memory at least <i>n</i> bytes which is
  * aligned properly for all data types. A pointer to the aligned block
  * is returned.
  *
- * Dies with error message on memory allocation fail.
+ * Dies with error message on memory alproject fail.
  *
  * \param file file name
  * \param line line number
@@ -52,13 +52,13 @@ void *G__malloc(const char *file, int line, size_t n)
 }
 
 /*!
- * \brief Memory allocation.
+ * \brief Memory alproject.
  *
  * Allocates a properly aligned block of memory <i>n</i>*<i>m</i>
  * bytes in length, initializes the allocated memory to zero, and
  * returns a pointer to the allocated block of memory.
  *
- * Dies with error message on memory allocation fail.
+ * Dies with error message on memory alproject fail.
  *
  * <b>Note:</b> Allocating memory for reading and writing raster maps
  * is discussed in \ref Allocating_Raster_I_O_Buffers.
@@ -95,7 +95,7 @@ void *G__calloc(const char *file, int line, size_t m, size_t n)
 
 
 /*!
- * \brief Memory reallocation.
+ * \brief Memory realproject.
  *
  * Changes the <i>size</i> of a previously allocated block of memory
  * at <i>ptr</i> and returns a pointer to the new block of memory. The

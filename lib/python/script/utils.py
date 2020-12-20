@@ -543,7 +543,7 @@ def append_node_pid(name):
     ..note::
 
         Before you use this function for creating temporary files (i.e., normal
-        files on disk, not maps and other mapset elements), see functions
+        files on disk, not maps and other subproject elements), see functions
         designed for it in the GRASS GIS or standard Python library. These
         take care of collisions already on different levels.
     """
@@ -562,7 +562,7 @@ def append_node_pid(name):
 def append_uuid(name):
     """Add UUID4 to a name (string)
 
-    To generate a name of an temporary mapset element which is unique in a
+    To generate a name of an temporary subproject element which is unique in a
     system, use :func:`append_node_pid()` in a combination with a name unique
     within your process.
 

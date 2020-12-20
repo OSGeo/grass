@@ -35,12 +35,12 @@ else:
 G_gisinit('')
 
 # find map in search path
-mapset = G_find_raster2(input, '')
-if not mapset:
+subproject = G_find_raster2(input, '')
+if not subproject:
     sys.exit("Raster map <%s> not found" % input)
 
 # determine the inputmap type (CELL/FCELL/DCELL)
-data_type = Rast_map_type(input, mapset)
+data_type = Rast_map_type(input, subproject)
 
 if data_type == CELL_TYPE:
     ptype = POINTER(c_int)
@@ -54,7 +54,7 @@ elif data_type == DCELL_TYPE:
 
 print("Raster map <%s> contains data type %s." % (input, type_name))
 
-in_fd   = Rast_open_old(input, mapset)
+in_fd   = Rast_open_old(input, subproject)
 in_rast = Rast_allocate_buf(data_type)
 in_rast = cast(c_void_p(in_rast), ptype)
 
@@ -70,7 +70,7 @@ for row_n in range(rows):
     print(row_n, in_rast[0:cols])
     # TODO check for NULL
 
-# closed map and cleanup memory allocation
+# closed map and cleanup memory alproject
 Rast_close(in_fd)
 G_free(in_rast)
 

@@ -2,7 +2,7 @@
 /**************************************************************
 * I_find_camera (camera)
 *
-* Look for the named camera reference file in the current mapset
+* Look for the named camera reference file in the current subproject
 **************************************************************/
 #include <grass/gis.h>
 
@@ -11,7 +11,7 @@ int I_find_camera(char *camera)
     if (camera == NULL || *camera == 0)
 	return 0;
 
-    return G_find_file("camera", camera, G_mapset()) != NULL;
+    return G_find_file("camera", camera, G_subproject()) != NULL;
 }
 
 int I_find_camera_file(char *camera, char *file)
@@ -25,5 +25,5 @@ int I_find_camera_file(char *camera, char *file)
 
     sprintf(element, "camera");
 
-    return G_find_file(element, camera, G_mapset()) != NULL;
+    return G_find_file(element, camera, G_subproject()) != NULL;
 }

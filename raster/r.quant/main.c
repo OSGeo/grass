@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
     for (noi = 0; input->answers[noi]; noi++) {
 	name[noi] = G_store(input->answers[noi]);
 
-	if (Rast_map_type(name[noi], G_mapset()) == CELL_TYPE)
+	if (Rast_map_type(name[noi], G_subproject()) == CELL_TYPE)
 	    G_fatal_error(_("%s is integer map, it can't be quantized"),
 			  name[noi]);
     }
@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
     }				/* use rules */
 
     for (i = 0; i < noi; i++) {
-	Rast_write_quant(name[i], G_mapset(), &quant_struct);
+	Rast_write_quant(name[i], G_subproject(), &quant_struct);
 	G_message(_("New quant table created for %s"), name[i]);
     }
 

@@ -154,7 +154,7 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    /* set input vector map name and mapset */
+    /* set input vector map name and subproject */
     if (options.file->answer && strcmp(options.file->answer, "-") != 0) {
         if (NULL == freopen(options.file->answer, "w", stdout))
             G_fatal_error(_("Unable to open file <%s> for writing"),

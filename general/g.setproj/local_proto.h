@@ -4,7 +4,7 @@
 #define SP_NOCHANGE  2
 #define SP_UNKNOWN   3
 
-/* $GISBASE-relative locations of parameter files */
+/* $GISBASE-relative projects of parameter files */
 #define STP1927PARAMS "/etc/proj/state27"
 #define STP1983PARAMS "/etc/proj/state83"
 

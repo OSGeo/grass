@@ -27,7 +27,7 @@
 
     /* read the input map. convert non-nulls to 1 */
 
-int read_input_map(char *input, char *mapset, int ZEROFLAG)
+int read_input_map(char *input, char *subproject, int ZEROFLAG)
 {
     int fd;
     int row;
@@ -38,7 +38,7 @@ int read_input_map(char *input, char *mapset, int ZEROFLAG)
 
     map = (MAPTYPE *) G_malloc((size_t) window.rows * window.cols * sizeof(MAPTYPE));
 
-    fd = Rast_open_old(input, mapset);
+    fd = Rast_open_old(input, subproject);
 
     cell = Rast_allocate_c_buf();
 
@@ -50,7 +50,7 @@ int read_input_map(char *input, char *mapset, int ZEROFLAG)
     maxcol = 0;
 
     G_message(_("Reading input raster map <%s>..."),
-	      G_fully_qualified_name(input, mapset));
+	      G_fully_qualified_name(input, subproject));
 
     count_rows_with_data = 0;
 

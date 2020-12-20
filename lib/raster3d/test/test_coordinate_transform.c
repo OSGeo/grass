@@ -83,10 +83,10 @@ int test_coordinate_transform(void)
     east=  9999.9;
     top =  999.9;
 
-    Rast3d_location2coord(&(map->region), north, east, top, &col, &row, &depth);
-    printf("Rast3d_location2coord col %i row %i depth %i\n", col, row, depth);
+    Rast3d_project2coord(&(map->region), north, east, top, &col, &row, &depth);
+    printf("Rast3d_project2coord col %i row %i depth %i\n", col, row, depth);
     if(region.cols - 1 != col || 0 != row || region.depths - 1 != depth) {
-        G_message("Error in Rast3d_location2coord");
+        G_message("Error in Rast3d_project2coord");
         sum++;
     }
 
@@ -96,10 +96,10 @@ int test_coordinate_transform(void)
     east= 5000.0;
     top = 0.0;
 
-    Rast3d_location2coord(&(map->region), north, east, top, &col, &row, &depth);
-    printf("Rast3d_location2coord col %i row %i depth %i\n", col, row, depth);
+    Rast3d_project2coord(&(map->region), north, east, top, &col, &row, &depth);
+    printf("Rast3d_project2coord col %i row %i depth %i\n", col, row, depth);
     if(0 != col || 15 != row || 0 != depth) {
-        G_message("Error in Rast3d_location2coord");
+        G_message("Error in Rast3d_project2coord");
         sum++;
     }
 
@@ -110,10 +110,10 @@ int test_coordinate_transform(void)
     east= 7499.9;
     top = 500.0;
 
-    Rast3d_location2coord(&(map->region), north, east, top, &col, &row, &depth);
-    printf("Rast3d_location2coord col %i row %i depth %i\n", col, row, depth);
+    Rast3d_project2coord(&(map->region), north, east, top, &col, &row, &depth);
+    printf("Rast3d_project2coord col %i row %i depth %i\n", col, row, depth);
     if((region.cols - 1)/2 != col || (region.rows - 1)/2 != row || (region.depths - 1)/2 != depth) {
-        G_message("Error in Rast3d_location2coord");
+        G_message("Error in Rast3d_project2coord");
         sum++;
     }
 
@@ -123,10 +123,10 @@ int test_coordinate_transform(void)
     east= 7000.1;
     top = 800.1;
 
-    Rast3d_location2coord(&(map->region), north, east, top, &col, &row, &depth);
-    printf("Rast3d_location2coord col %i row %i depth %i\n", col, row, depth);
+    Rast3d_project2coord(&(map->region), north, east, top, &col, &row, &depth);
+    printf("Rast3d_project2coord col %i row %i depth %i\n", col, row, depth);
     if(4 != col || map->region.rows - 5 != row || 4 != depth) {
-        G_message("Error in Rast3d_location2coord");
+        G_message("Error in Rast3d_project2coord");
         sum++;
     }
 
@@ -136,10 +136,10 @@ int test_coordinate_transform(void)
     east= 6999.9;
     top = 799.9;
 
-    Rast3d_location2coord(&(map->region), north, east, top, &col, &row, &depth);
-    printf("Rast3d_location2coord col %i row %i depth %i\n", col, row, depth);
+    Rast3d_project2coord(&(map->region), north, east, top, &col, &row, &depth);
+    printf("Rast3d_project2coord col %i row %i depth %i\n", col, row, depth);
     if(3 != col || map->region.rows - 4 != row || 3 != depth) {
-        G_message("Error in Rast3d_location2coord");
+        G_message("Error in Rast3d_project2coord");
         sum++;
     }
 

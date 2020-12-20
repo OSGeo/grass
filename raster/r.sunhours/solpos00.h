@@ -275,25 +275,25 @@ struct posdata
    azim       L_SOLAZM   elevetr, declin, latitude, hrang
    cosinc     L_TILT     azim, aspect, tilt, zenref, coszen,etrn
    coszen     L_REFRAC   elevetr, press, temp
-   dayang     L_GEOM     All date, time, and location inputs
-   declin     L_GEOM     All date, time, and location inputs
-   eclong     L_GEOM     All date, time, and location inputs
-   ecobli     L_GEOM     All date, time, and location inputs
-   ectime     L_GEOM     All date, time, and location inputs
+   dayang     L_GEOM     All date, time, and project inputs
+   declin     L_GEOM     All date, time, and project inputs
+   eclong     L_GEOM     All date, time, and project inputs
+   ecobli     L_GEOM     All date, time, and project inputs
+   ectime     L_GEOM     All date, time, and project inputs
    elevetr    L_ZENETR   declin, latitude, hrang
    elevref    L_REFRAC   elevetr, press, temp
    eqntim     L_TST      hrang, hour, minute, second, interval
-   erv        L_GEOM     All date, time, and location inputs
+   erv        L_GEOM     All date, time, and project inputs
    etr        L_ETR      coszen, solcon, erv
    etrn       L_ETR      coszen, solcon, erv
    etrtilt    L_TILT     azim, aspect, tilt, zenref, coszen, etrn
-   gmst       L_GEOM     All date, time, and location inputs
-   hrang      L_GEOM     All date, time, and location inputs
-   julday     L_GEOM     All date, time, and location inputs
-   lmst       L_GEOM     All date, time, and location inputs
-   mnanom     L_GEOM     All date, time, and location inputs
-   mnlong     L_GEOM     All date, time, and location inputs
-   rascen     L_GEOM     All date, time, and location inputs
+   gmst       L_GEOM     All date, time, and project inputs
+   hrang      L_GEOM     All date, time, and project inputs
+   julday     L_GEOM     All date, time, and project inputs
+   lmst       L_GEOM     All date, time, and project inputs
+   mnanom     L_GEOM     All date, time, and project inputs
+   mnlong     L_GEOM     All date, time, and project inputs
+   rascen     L_GEOM     All date, time, and project inputs
    prime      L_PRIME    amass
    sbcf       L_SBCF     latitude, declin, ssha, sbwid, sbrad, sbsky
    ssha       L_SRHA     latitude, declin
@@ -302,7 +302,7 @@ struct posdata
    tst        L_TST      hrang, hour, minute, second, interval
    tstfix     L_TST      hrang, hour, minute, second, interval
    unprime    L_PRIME    amass
-   utime      L_GEOM     All date, time, and location inputs
+   utime      L_GEOM     All date, time, and project inputs
    zenetr     L_ZENETR   declination, latitude, hrang
    zenref     L_REFRAC   elevetr, press, temp
 
@@ -313,7 +313,7 @@ struct posdata
 *
 *    This function calculates the apparent solar position and intensity
 *    (theoretical maximum solar energy) based on the date, time, and
-*    location on Earth. (DEFAULT values are from the optional S_posinit
+*    project on Earth. (DEFAULT values are from the optional S_posinit
 *    function.)
 *
 *    Requires:
@@ -325,10 +325,10 @@ struct posdata
 *            hour
 *            minute
 *            second
-*        Location:
+*        Project:
 *            latitude
 *            longitude
-*        Location/time adjuster:
+*        Project/time adjuster:
 *            timezone
 *        Atmospheric pressure and temperature:
 *            press     DEFAULT 1013.0 mb

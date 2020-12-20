@@ -70,7 +70,7 @@ def main():
     output = options['output']
     key = options['key']
 
-    mapset = grass.gisenv()['MAPSET']
+    subproject = grass.gisenv()['MAPSET']
 
     if db_table:
         input = db_table
@@ -127,7 +127,7 @@ def main():
                             stdin="UPDATE %s SET %s=cat" % (output, key))
 
     # ... and immediately drop the empty geometry
-    vectfile = grass.find_file(output, element='vector', mapset=mapset)['file']
+    vectfile = grass.find_file(output, element='vector', subproject=subproject)['file']
     if not vectfile:
         grass.fatal(_("Something went wrong. Should not happen"))
     else:

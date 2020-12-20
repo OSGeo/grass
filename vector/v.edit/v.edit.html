@@ -83,7 +83,7 @@ Additional parameters for vector feature specification are:
     from background map, not from currently modified vector map.</li>
 
     <li><b>move</b> - Move selected features of existing vector map
-    relatively to their current location. This tool requires
+    relatively to their current project. This tool requires
     <b>move</b> option. The option defines coordinates of the movement
     direction. Moved features can be snapped (defined by <b>snap</b>
     parameter) to nodes or vertices based on threshold
@@ -106,7 +106,7 @@ Additional parameters for vector feature specification are:
     module <em><a href="v.build.polylines.html">v.build.polylines</a></em>.</li>
 
     <li><b>break</b> - Split given vector line or boundary into two
-    lines on location given by <b>coords</b>. If <b>coords</b> not
+    lines on project given by <b>coords</b>. If <b>coords</b> not
     given, breaks all selected lines at each intersection (based
     on <em><a href="v.clean.html">v.clean</a></em>, <tt>tool=break</tt>).</li>
     
@@ -142,7 +142,7 @@ Additional parameters for vector feature specification are:
     lines to boundaries and boundaries to lines.
 
     <li><b>vertexadd</b> - Add vertex(ces) to the given vector lines
-    or boundaries. Location of the new vertex is given by <b>coord</b>
+    or boundaries. Project of the new vertex is given by <b>coord</b>
     option. If -1 is given only first found line or boundary in bounding
     box is modified.</li>
 

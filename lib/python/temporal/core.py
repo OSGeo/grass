@@ -128,37 +128,37 @@ def get_tgis_dbmi_paramstyle():
     global tgis_dbmi_paramstyle
     return tgis_dbmi_paramstyle
 
-# We need to access the current mapset quite often in the framework, so we make
+# We need to access the current subproject quite often in the framework, so we make
 # a global variable that will be initiated when init() is called
-current_mapset = None
-current_location = None
+current_subproject = None
+current_project = None
 current_gisdbase = None
 
 ###############################################################################
 
 
-def get_current_mapset():
-    """Return the current mapset
+def get_current_subproject():
+    """Return the current subproject
 
-       This is the fastest way to receive the current mapset.
-       The current mapset is set by init() and stored in a global variable.
+       This is the fastest way to receive the current subproject.
+       The current subproject is set by init() and stored in a global variable.
        This function provides access to this global variable.
     """
-    global current_mapset
-    return current_mapset
+    global current_subproject
+    return current_subproject
 
 ###############################################################################
 
 
-def get_current_location():
-    """Return the current location
+def get_current_project():
+    """Return the current project
 
-       This is the fastest way to receive the current location.
-       The current location is set by init() and stored in a global variable.
+       This is the fastest way to receive the current project.
+       The current project is set by init() and stored in a global variable.
        This function provides access to this global variable.
     """
-    global current_location
-    return current_location
+    global current_project
+    return current_project
 
 ###############################################################################
 
@@ -176,13 +176,13 @@ def get_current_gisdbase():
 ###############################################################################
 
 # If this global variable is set True, then maps can only be registered in
-# space time datasets with the same mapset. In addition, only maps in the
-# current mapset can be inserted, updated or deleted from the temporal database.
+# space time datasets with the same subproject. In addition, only maps in the
+# current subproject can be inserted, updated or deleted from the temporal database.
 # Overwrite this global variable by: g.gisenv set="TGIS_DISABLE_MAPSET_CHECK=True"
 # ATTENTION: Be aware to face corrupted temporal database in case this global
 #            variable is set to False. This feature is highly
 #            experimental and violates the grass permission guidance.
-enable_mapset_check = True
+enable_subproject_check = True
 # If this global variable is set True, the timestamps of maps will be written
 # as textfiles for each map that will be inserted or updated in the temporal
 # database using the C-library timestamp interface.
@@ -193,13 +193,13 @@ enable_mapset_check = True
 enable_timestamp_write = True
 
 
-def get_enable_mapset_check():
-    """Return True if the mapsets should be checked while insert, update,
+def get_enable_subproject_check():
+    """Return True if the subprojects should be checked while insert, update,
        delete requests and space time dataset registration.
 
        If this global variable is set True, then maps can only be registered
-       in space time datasets with the same mapset. In addition, only maps in
-       the current mapset can be inserted, updated or deleted from the temporal
+       in space time datasets with the same subproject. In addition, only maps in
+       the current subproject can be inserted, updated or deleted from the temporal
        database.
        Overwrite this global variable by: g.gisenv set="TGIS_DISABLE_MAPSET_CHECK=True"
 
@@ -210,8 +210,8 @@ def get_enable_mapset_check():
            experimental and violates the grass permission guidance.
 
     """
-    global enable_mapset_check
-    return enable_mapset_check
+    global enable_subproject_check
+    return enable_subproject_check
 
 
 def get_enable_timestamp_write():
@@ -397,7 +397,7 @@ def get_tgis_metadata(dbif=None):
 ###############################################################################
 
 # The temporal database string set with t.connect
-# with substituted GRASS variables gisdbase, location and mapset
+# with substituted GRASS variables gisdbase, project and subproject
 tgis_database_string = None
 
 
@@ -405,7 +405,7 @@ def get_tgis_database_string():
     """Return the preprocessed temporal database string
 
        This string is the temporal database string set with t.connect
-       that was processed to substitue location, gisdbase and mapset
+       that was processed to substitue project, gisdbase and subproject
        variables.
     """
     global tgis_database_string
@@ -437,41 +437,41 @@ def stop_subprocesses():
 atexit.register(stop_subprocesses)
 
 
-def get_available_temporal_mapsets():
-    """Return a list of of mapset names with temporal database driver and names
-        that are accessible from the current mapset.
+def get_available_temporal_subprojects():
+    """Return a list of of subproject names with temporal database driver and names
+        that are accessible from the current subproject.
 
-        :returns: A dictionary, mapset names are keys, the tuple (driver,
+        :returns: A dictionary, subproject names are keys, the tuple (driver,
                   database) are the values
     """
     global c_library_interface
     global message_interface
 
-    mapsets = c_library_interface.available_mapsets()
+    subprojects = c_library_interface.available_subprojects()
     
-    tgis_mapsets = {}
+    tgis_subprojects = {}
 
-    for mapset in mapsets:
-        mapset = mapset
-        driver = c_library_interface.get_driver_name(mapset)
-        database = c_library_interface.get_database_name(mapset)
+    for subproject in subprojects:
+        subproject = subproject
+        driver = c_library_interface.get_driver_name(subproject)
+        database = c_library_interface.get_database_name(subproject)
 
-        message_interface.debug(1, "get_available_temporal_mapsets: "
-                                   "\n  mapset %s\n  driver %s\n  database %s" % (mapset,
+        message_interface.debug(1, "get_available_temporal_subprojects: "
+                                   "\n  subproject %s\n  driver %s\n  database %s" % (subproject,
                                    driver, database))
         if driver and database:
             # Check if the temporal sqlite database exists
-            # We need to set non-existing databases in case the mapset is the current mapset
+            # We need to set non-existing databases in case the subproject is the current subproject
             # to create it
-            if (driver == "sqlite" and os.path.exists(database)) or mapset == get_current_mapset():
-                tgis_mapsets[mapset] = (driver, database)
+            if (driver == "sqlite" and os.path.exists(database)) or subproject == get_current_subproject():
+                tgis_subprojects[subproject] = (driver, database)
 
             # We need to warn if the connection is defined but the database does not
             # exists
             if driver == "sqlite" and not os.path.exists(database):
                 message_interface.warning("Temporal database connection defined as:\n" +
                                           database + "\nBut database file does not exist.")
-    return tgis_mapsets
+    return tgis_subprojects
 
 ###############################################################################
 
@@ -523,17 +523,17 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
                                       upgrade_temporal_database().
     """
     # We need to set the correct database backend and several global variables
-    # from the GRASS mapset specific environment variables of g.gisenv and t.connect
+    # from the GRASS subproject specific environment variables of g.gisenv and t.connect
     global tgis_backend
     global tgis_database
     global tgis_database_string
     global tgis_dbmi_paramstyle
     global tgis_db_version
     global raise_on_error
-    global enable_mapset_check
+    global enable_subproject_check
     global enable_timestamp_write
-    global current_mapset
-    global current_location
+    global current_subproject
+    global current_project
     global current_gisdbase
 
     raise_on_error = raise_fatal_error
@@ -544,8 +544,8 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
     grassenv = gscript.gisenv()
 
     # Set the global variable for faster access
-    current_mapset = grassenv["MAPSET"]
-    current_location = grassenv["LOCATION_NAME"]
+    current_subproject = grassenv["MAPSET"]
+    current_project = grassenv["LOCATION_NAME"]
     current_gisdbase = grassenv["GISDBASE"]
 
     # Check environment variable GRASS_TGIS_RAISE_ON_ERROR
@@ -571,11 +571,11 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
     driver_string = ciface.get_driver_name()
     database_string = ciface.get_database_name()
 
-    # Set the mapset check and the timestamp write
+    # Set the subproject check and the timestamp write
     if "TGIS_DISABLE_MAPSET_CHECK" in grassenv:
         if gscript.encode(grassenv["TGIS_DISABLE_MAPSET_CHECK"]) == "True" or \
            gscript.encode(grassenv["TGIS_DISABLE_MAPSET_CHECK"]) == "1":
-            enable_mapset_check = False
+            enable_subproject_check = False
             msgr.warning("TGIS_DISABLE_MAPSET_CHECK is True")
 
     if "TGIS_DISABLE_TIMESTAMP_WRITE" in grassenv:
@@ -944,49 +944,49 @@ def _create_tgis_metadata_table(content, dbif=None):
 
 class SQLDatabaseInterfaceConnection(object):
     def __init__(self):
-        self.tgis_mapsets = get_available_temporal_mapsets()
-        self.current_mapset = get_current_mapset()
+        self.tgis_subprojects = get_available_temporal_subprojects()
+        self.current_subproject = get_current_subproject()
         self.connections = {}
         self.connected = False
 
         self.unique_connections = {}
 
-        for mapset in self.tgis_mapsets.keys():
-            driver, dbstring = self.tgis_mapsets[mapset]
+        for subproject in self.tgis_subprojects.keys():
+            driver, dbstring = self.tgis_subprojects[subproject]
 
             if dbstring not in self.unique_connections.keys():
                 self.unique_connections[dbstring] = DBConnection(backend=driver,
                                                                  dbstring=dbstring)
 
-            self.connections[mapset] = self.unique_connections[dbstring]
+            self.connections[subproject] = self.unique_connections[dbstring]
 
         self.msgr = get_tgis_message_interface()
 
-    def get_dbmi(self, mapset=None):
-        if mapset is None:
-            mapset = self.current_mapset
+    def get_dbmi(self, subproject=None):
+        if subproject is None:
+            subproject = self.current_subproject
 
-        mapset = decode(mapset)
-        return self.connections[mapset].dbmi
+        subproject = decode(subproject)
+        return self.connections[subproject].dbmi
 
-    def rollback(self, mapset=None):
+    def rollback(self, subproject=None):
         """
             Roll back the last transaction. This must be called
             in case a new query should be performed after a db error.
 
             This is only relevant for postgresql database.
         """
-        if mapset is None:
-            mapset = self.current_mapset
+        if subproject is None:
+            subproject = self.current_subproject
 
     def connect(self):
         """Connect to the DBMI to execute SQL statements
 
            Supported backends are sqlite3 and postgresql
         """
-        for mapset in self.tgis_mapsets.keys():
-            driver, dbstring = self.tgis_mapsets[mapset]
-            conn = self.connections[mapset]
+        for subproject in self.tgis_subprojects.keys():
+            driver, dbstring = self.tgis_subprojects[subproject]
+            conn = self.connections[subproject]
             if conn.is_connected() is False:
                 conn.connect(dbstring)
 
@@ -998,7 +998,7 @@ class SQLDatabaseInterfaceConnection(object):
     def close(self):
         """Close the DBMI connection
 
-           There may be several temporal databases in a location, hence
+           There may be several temporal databases in a project, hence
            close all temporal databases that have been opened.
         """
         for key in self.unique_connections.keys():
@@ -1006,90 +1006,90 @@ class SQLDatabaseInterfaceConnection(object):
 
         self.connected = False
 
-    def mogrify_sql_statement(self, content, mapset=None):
+    def mogrify_sql_statement(self, content, subproject=None):
         """Return the SQL statement and arguments as executable SQL string
 
            :param content: The content as tuple with two entries, the first
                            entry is the SQL statement with DBMI specific
                            place holder (?), the second entry is the argument
                            list that should substitute the place holder.
-           :param mapset: The mapset of the abstract dataset or temporal
-                          database location, if None the current mapset
+           :param subproject: The subproject of the abstract dataset or temporal
+                          database project, if None the current subproject
                           will be used
         """
-        if mapset is None:
-            mapset = self.current_mapset
+        if subproject is None:
+            subproject = self.current_subproject
 
-        mapset = decode(mapset)
-        if mapset not in self.tgis_mapsets.keys():
+        subproject = decode(subproject)
+        if subproject not in self.tgis_subprojects.keys():
             self.msgr.fatal(_("Unable to mogrify sql statement. " +
-                              self._create_mapset_error_message(mapset)))
+                              self._create_subproject_error_message(subproject)))
 
-        return self.connections[mapset].mogrify_sql_statement(content)
+        return self.connections[subproject].mogrify_sql_statement(content)
 
-    def check_table(self, table_name, mapset=None):
+    def check_table(self, table_name, subproject=None):
         """Check if a table exists in the temporal database
 
            :param table_name: The name of the table to be checked for existence
-           :param mapset: The mapset of the abstract dataset or temporal
-                          database location, if None the current mapset
+           :param subproject: The subproject of the abstract dataset or temporal
+                          database project, if None the current subproject
                           will be used
            :returns: True if the table exists, False otherwise
 
            TODO:
-           There may be several temporal databases in a location, hence
-           the mapset is used to query the correct temporal database.
+           There may be several temporal databases in a project, hence
+           the subproject is used to query the correct temporal database.
         """
-        if mapset is None:
-            mapset = self.current_mapset
+        if subproject is None:
+            subproject = self.current_subproject
 
-        mapset = decode(mapset)
-        if mapset not in self.tgis_mapsets.keys():
+        subproject = decode(subproject)
+        if subproject not in self.tgis_subprojects.keys():
             self.msgr.fatal(_("Unable to check table. " +
-                              self._create_mapset_error_message(mapset)))
+                              self._create_subproject_error_message(subproject)))
 
-        return self.connections[mapset].check_table(table_name)
+        return self.connections[subproject].check_table(table_name)
 
-    def execute(self, statement, args=None, mapset=None):
+    def execute(self, statement, args=None, subproject=None):
         """
 
-        :param mapset: The mapset of the abstract dataset or temporal
-                       database location, if None the current mapset
+        :param subproject: The subproject of the abstract dataset or temporal
+                       database project, if None the current subproject
                        will be used
         """
-        if mapset is None:
-            mapset = self.current_mapset
+        if subproject is None:
+            subproject = self.current_subproject
 
-        mapset = decode(mapset)
-        if mapset not in self.tgis_mapsets.keys():
+        subproject = decode(subproject)
+        if subproject not in self.tgis_subprojects.keys():
             self.msgr.fatal(_("Unable to execute sql statement. " +
-                              self._create_mapset_error_message(mapset)))
+                              self._create_subproject_error_message(subproject)))
 
-        return self.connections[mapset].execute(statement, args)
+        return self.connections[subproject].execute(statement, args)
 
-    def fetchone(self, mapset=None):
-        if mapset is None:
-            mapset = self.current_mapset
+    def fetchone(self, subproject=None):
+        if subproject is None:
+            subproject = self.current_subproject
 
-        mapset = decode(mapset)
-        if mapset not in self.tgis_mapsets.keys():
+        subproject = decode(subproject)
+        if subproject not in self.tgis_subprojects.keys():
             self.msgr.fatal(_("Unable to fetch one. " +
-                              self._create_mapset_error_message(mapset)))
+                              self._create_subproject_error_message(subproject)))
 
-        return self.connections[mapset].fetchone()
+        return self.connections[subproject].fetchone()
 
-    def fetchall(self, mapset=None):
-        if mapset is None:
-            mapset = self.current_mapset
+    def fetchall(self, subproject=None):
+        if subproject is None:
+            subproject = self.current_subproject
 
-        mapset = decode(mapset)
-        if mapset not in self.tgis_mapsets.keys():
+        subproject = decode(subproject)
+        if subproject not in self.tgis_subprojects.keys():
             self.msgr.fatal(_("Unable to fetch all. " +
-                              self._create_mapset_error_message(mapset)))
+                              self._create_subproject_error_message(subproject)))
 
-        return self.connections[mapset].fetchall()
+        return self.connections[subproject].fetchall()
 
-    def execute_transaction(self, statement, mapset=None):
+    def execute_transaction(self, statement, subproject=None):
         """Execute a transactional SQL statement
 
            The BEGIN and END TRANSACTION statements will be added automatically
@@ -1097,24 +1097,24 @@ class SQLDatabaseInterfaceConnection(object):
 
            :param statement: The executable SQL statement or SQL script
         """
-        if mapset is None:
-            mapset = self.current_mapset
+        if subproject is None:
+            subproject = self.current_subproject
 
-        mapset = decode(mapset)
-        if mapset not in self.tgis_mapsets.keys():
+        subproject = decode(subproject)
+        if subproject not in self.tgis_subprojects.keys():
             self.msgr.fatal(_("Unable to execute transaction. " +
-                              self._create_mapset_error_message(mapset)))
+                              self._create_subproject_error_message(subproject)))
 
-        return self.connections[mapset].execute_transaction(statement)
+        return self.connections[subproject].execute_transaction(statement)
 
-    def _create_mapset_error_message(self, mapset):
+    def _create_subproject_error_message(self, subproject):
 
         return("You have no permission to "
-               "access mapset <%(mapset)s>, or "
-               "mapset <%(mapset)s> has no temporal database. "
-               "Accessible mapsets are: <%(mapsets)s>" %
-               {"mapset": decode(mapset),
-                "mapsets":','.join(self.tgis_mapsets.keys())})
+               "access subproject <%(subproject)s>, or "
+               "subproject <%(subproject)s> has no temporal database. "
+               "Accessible subprojects are: <%(subprojects)s>" %
+               {"subproject": decode(subproject),
+                "subprojects":','.join(self.tgis_subprojects.keys())})
 
 ###############################################################################
 
@@ -1184,7 +1184,7 @@ class DBConnection(object):
 
             param dbstring: The database connection string
         """
-        # Connection in the current mapset
+        # Connection in the current subproject
         if dbstring is None:
             dbstring = self.dbstring
         
@@ -1217,7 +1217,7 @@ class DBConnection(object):
     def close(self):
         """Close the DBMI connection
            TODO:
-           There may be several temporal databases in a location, hence
+           There may be several temporal databases in a project, hence
            close all temporal databases that have been opened. Use a dictionary
            to manage different connections.
         """
@@ -1229,14 +1229,14 @@ class DBConnection(object):
         """Return the SQL statement and arguments as executable SQL string
 
            TODO:
-           Use the mapset argument to identify the correct database driver
+           Use the subproject argument to identify the correct database driver
 
            :param content: The content as tuple with two entries, the first
                            entry is the SQL statement with DBMI specific
                            place holder (?), the second entry is the argument
                            list that should substitute the place holder.
-           :param mapset: The mapset of the abstract dataset or temporal
-                          database location, if None the current mapset
+           :param subproject: The subproject of the abstract dataset or temporal
+                          database project, if None the current subproject
                           will be used
 
            Usage:
@@ -1315,14 +1315,14 @@ class DBConnection(object):
         """Check if a table exists in the temporal database
 
            :param table_name: The name of the table to be checked for existence
-           :param mapset: The mapset of the abstract dataset or temporal
-                          database location, if None the current mapset
+           :param subproject: The subproject of the abstract dataset or temporal
+                          database project, if None the current subproject
                           will be used
            :returns: True if the table exists, False otherwise
 
            TODO:
-           There may be several temporal databases in a location, hence
-           the mapset is used to query the correct temporal database.
+           There may be several temporal databases in a project, hence
+           the subproject is used to query the correct temporal database.
         """
         table_exists = False
         connected = False
@@ -1384,7 +1384,7 @@ class DBConnection(object):
             return self.cursor.fetchall()
         return None
 
-    def execute_transaction(self, statement, mapset=None):
+    def execute_transaction(self, statement, subproject=None):
         """Execute a transactional SQL statement
 
            The BEGIN and END TRANSACTION statements will be added automatically

@@ -17,7 +17,7 @@
 
 const char
  *rast_out_name,		/* Name of the raster output file.      */
- *mapset_out;
+ *subproject_out;
 
 int
   fd_out,			/* File descriptor of output raster     */
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 
     G_debug(1, "Steps %d", Steps);
 
-    mapset_out = G_mapset();	/* Set output to current mapset.  */
+    subproject_out = G_subproject();	/* Set output to current subproject.  */
 
 
     /*--------------------------------------------------------------------*/

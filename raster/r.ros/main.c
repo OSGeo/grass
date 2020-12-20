@@ -227,7 +227,7 @@ int main(int argc, char *argv[])
     parm.model->label = _("Raster map containing fuel models");
     parm.model->description =
 	_("Name of an "
-	  "existing raster map layer in the user's current mapset search path containing "
+	  "existing raster map layer in the user's current subproject search path containing "
 	  "the standard fuel models defined by the USDA Forest Service. Valid values "
 	  "are 1-13; other numbers are recognized as barriers by r.ros.");
 
@@ -238,7 +238,7 @@ int main(int argc, char *argv[])
 	_("Raster map containing the 1-hour fuel moisture (%)");
 	parm.mois_1h->description =
 	_("Name of an existing raster map layer in "
-	  "the user's current mapset search path containing the 1-hour (<.25\") "
+	  "the user's current subproject search path containing the 1-hour (<.25\") "
 	  "fuel moisture (percentage content multiplied by 100).");
 
     parm.mois_10h = G_define_standard_option(G_OPT_R_INPUT);
@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
 	_("Raster map containing the 10-hour fuel moisture (%)");
     parm.mois_10h->description =
 	_("Name of an existing raster map layer in the "
-	  "user's current mapset search path containing the 10-hour (.25-1\") fuel "
+	  "user's current subproject search path containing the 10-hour (.25-1\") fuel "
 	  "moisture (percentage content multiplied by 100).");
 
     parm.mois_100h = G_define_standard_option(G_OPT_R_INPUT);
@@ -258,7 +258,7 @@ int main(int argc, char *argv[])
 	_("Raster map containing the 100-hour fuel moisture (%)");
     parm.mois_100h->description =
 	_("Name of an existing raster map layer in the "
-	  "user's current mapset search path containing the 100-hour (1-3\") fuel moisture "
+	  "user's current subproject search path containing the 100-hour (1-3\") fuel moisture "
 	  "(percentage content multiplied by 100).");
 
     parm.mois_live = G_define_standard_option(G_OPT_R_INPUT);
@@ -267,7 +267,7 @@ int main(int argc, char *argv[])
 	_("Raster map containing live fuel moisture (%)");
     parm.mois_live->description =
 	_("Name of an existing raster map layer in the "
-	  "user's current mapset search path containing live (herbaceous) fuel "
+	  "user's current subproject search path containing live (herbaceous) fuel "
 	  "moisture (percentage content multiplied by 100).");
 
     parm.vel = G_define_standard_option(G_OPT_R_INPUT);
@@ -277,7 +277,7 @@ int main(int argc, char *argv[])
 	_("Raster map containing midflame wind velocities (ft/min)");
     parm.vel->description =
 	_("Name of an existing raster map layer in the user's "
-	  "current mapset search path containing wind velocities at half of the average "
+	  "current subproject search path containing wind velocities at half of the average "
 	  "flame height (feet/minute).");
 
     parm.dir = G_define_standard_option(G_OPT_R_INPUT);
@@ -287,7 +287,7 @@ int main(int argc, char *argv[])
 	_("Name of raster map containing wind directions (degree)");
     parm.dir->description =
 	_("Name of an existing raster map "
-	  "layer in the user's current mapset search path containing wind direction, "
+	  "layer in the user's current subproject search path containing wind direction, "
 	  "clockwise from north (degree).");
 
     parm.slope = G_define_standard_option(G_OPT_R_INPUT);
@@ -297,7 +297,7 @@ int main(int argc, char *argv[])
 	_("Name of raster map containing slope (degree)");
     parm.slope->description =
 	_("Name of an existing raster map layer "
-	  "in the user's current mapset search path containing "
+	  "in the user's current subproject search path containing "
 	  "topographic slope (degree).");
 
     parm.aspect = G_define_standard_option(G_OPT_R_INPUT);
@@ -307,7 +307,7 @@ int main(int argc, char *argv[])
 	_("Raster map containing aspect (degree, CCW from E)");
     parm.aspect->description =
 	_("Name of an existing "
-	  "raster map layer in the user's current mapset search path containing "
+	  "raster map layer in the user's current subproject search path containing "
 	  "topographic aspect, counterclockwise from east (GRASS convention) "
 	  "in degrees.");
 
@@ -317,7 +317,7 @@ int main(int argc, char *argv[])
 	_("Raster map containing elevation (m, required for spotting)");
     parm.elev->description =
 	_("Name of an existing raster map "
-	  "layer in the user's current mapset search path containing elevation (meters). "
+	  "layer in the user's current subproject search path containing elevation (meters). "
 	  "Option is required from spotting distance computation "
 	  "(when spotting_distance option is provided)");
 

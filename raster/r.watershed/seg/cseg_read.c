@@ -5,16 +5,16 @@
 
 static char *me = "cseg_read_cell";
 
-int cseg_read_cell(CSEG * cseg, char *map_name, char *mapset)
+int cseg_read_cell(CSEG * cseg, char *map_name, char *subproject)
 {
     GW_LARGE_INT row, rows;
     int map_fd;
     CELL *buffer;
 
     cseg->name = NULL;
-    cseg->mapset = NULL;
+    cseg->subproject = NULL;
 
-    map_fd = Rast_open_old(map_name, mapset);
+    map_fd = Rast_open_old(map_name, subproject);
     rows = Rast_window_rows();
     buffer = Rast_allocate_c_buf();
     for (row = 0; row < rows; row++) {
@@ -23,7 +23,7 @@ int cseg_read_cell(CSEG * cseg, char *map_name, char *mapset)
 	    G_free(buffer);
 	    Rast_close(map_fd);
 	    G_warning("%s(): unable to segment put row for [%s] in [%s]",
-		      me, map_name, mapset);
+		      me, map_name, subproject);
 	    return (-1);
 	}
     }
@@ -32,7 +32,7 @@ int cseg_read_cell(CSEG * cseg, char *map_name, char *mapset)
     G_free(buffer);
 
     cseg->name = G_store(map_name);
-    cseg->mapset = G_store(mapset);
+    cseg->subproject = G_store(subproject);
 
     return 0;
 }

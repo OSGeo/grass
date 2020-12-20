@@ -35,9 +35,9 @@
 /**
  * \fn int G_math_findzc (double conv[], int size, double zc[], double thresh, int num_orients)
  *
- * \brief Finds locations and orientations of zero crossings.
+ * \brief Finds projects and orientations of zero crossings.
  *
- * Finds the locations and orientations of zero crossings in the input 
+ * Finds the projects and orientations of zero crossings in the input 
  * array <b>conv</b>, which is the result of the convolution of the
  * Marr-Hildreth operator with the image. The output array is <b>zc</b>, 
  * which is non-zero only at zero crossing pixels. At those pixels, the

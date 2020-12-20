@@ -27,7 +27,7 @@
 int main(int argc, char *argv[])
 {
     int i, n, nlist;
-    const char *mapset;
+    const char *subproject;
     struct GModule *module;
     struct Option **parm;
     char *from, *to;
@@ -44,8 +44,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("copy"));
     module->label = _("Creates copies of maps and other elements");
     module->description =
-	_("Copies available data files in the current mapset "
-	  "search path to the user's current mapset.");
+	_("Copies available data files in the current subproject "
+	  "search path to the user's current subproject.");
     module->overwrite = 1;
 
     parm = (struct Option **) G_calloc(nlist, sizeof(struct Option *));
@@ -64,18 +64,18 @@ int main(int argc, char *argv[])
 	while (parm[n]->answers[i]) {
 	    from = parm[n]->answers[i++];
 	    to = parm[n]->answers[i++];
-	    mapset = M_find(n, from, "");
-	    if (!mapset) {
+	    subproject = M_find(n, from, "");
+	    if (!subproject) {
 		G_warning(_("<%s> does not exist. Skipping."), from);
 		continue;
 	    }
-	    if (G_strcasecmp(mapset, G_mapset()) == 0 &&
+	    if (G_strcasecmp(subproject, G_subproject()) == 0 &&
 		G_strcasecmp(from, to) == 0) {
 		G_warning(_("%s=%s,%s: files are the same, no copy required. Skipping."),
 			  parm[n]->key, from, to);
 		continue;
 	    }
-	    if (M_find(n, to, G_mapset()) && !(module->overwrite)) {
+	    if (M_find(n, to, G_subproject()) && !(module->overwrite)) {
 		G_warning(_("<%s> already exists and"
 			    " overwrite is not enabled. Skipping."), to);
 		continue;
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 		G_warning(_("<%s> is an illegal file name. Skipping."), to);
 		continue;
 	    }
-	    if (M_do_copy(n, from, mapset, to) == 1) {
+	    if (M_do_copy(n, from, subproject, to) == 1) {
 		result = EXIT_FAILURE;
 	    }
 	    else {

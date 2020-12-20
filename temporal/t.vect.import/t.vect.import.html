@@ -16,8 +16,8 @@ exchange.
 <h2>EXAMPLE</h2>
 
 In this example, five vector maps are created and registered in a single space time 
-vector dataset named <em>random_locations</em>. Each vector map represents
-random locations within the boundary of the state taken at 1 month intervals.
+vector dataset named <em>random_projects</em>. Each vector map represents
+random projects within the boundary of the state taken at 1 month intervals.
 The space time dataset is then exported and re-imported.
 
 <div class="code"><pre>
@@ -29,23 +29,23 @@ for i in `seq 1 5` ; do
 done
 
 t.create type=stvds temporaltype=absolute \
-         output=random_locations \
-         title="Random locations" \
-         description="Vector test dataset with random locations"
+         output=random_projects \
+         title="Random projects" \
+         description="Vector test dataset with random projects"
 
-t.register -i type=vector input=random_locations \
+t.register -i type=vector input=random_projects \
            file=map_list.txt start="2012-01-01" increment="1 months"
 
-t.vect.list random_locations
+t.vect.list random_projects
 
-t.vect.export input=random_locations output=random_locations.tar.gz \
+t.vect.export input=random_projects output=random_projects.tar.gz \
               compression=gzip
 
-t.vect.import input=random_locations.tar.gz output=new_random_locations \
+t.vect.import input=random_projects.tar.gz output=new_random_projects \
               basename=new_map directory=/tmp
 
-t.vect.list new_random_locations
-id|name|layer|mapset|start_time|end_time
+t.vect.list new_random_projects
+id|name|layer|subproject|start_time|end_time
 new_map_1@user1|new_map_1|None|user1|2012-01-01 00:00:00|2012-02-01 00:00:00
 new_map_2@user1|new_map_2|None|user1|2012-02-01 00:00:00|2012-03-01 00:00:00
 new_map_3@user1|new_map_3|None|user1|2012-03-01 00:00:00|2012-04-01 00:00:00

@@ -1,10 +1,10 @@
 <h2>DESCRIPTION</h2>
 
 The module <em>r3.out.netcdf</em> exports a 3D raster map as netCDF file.
-Maps are valid 3D raster maps in the current mapset search path. The
+Maps are valid 3D raster maps in the current subproject search path. The
 <em>output</em> parameter is the name of a netCDF file that will be
 written in the current working directory. The module is sensitive
-to mapset region settings (set with <em>g.region</em>) and the vertical unit settings
+to subproject region settings (set with <em>g.region</em>) and the vertical unit settings
 of the 3D raster map. The vertical unit can be set with <a href="r3.support.html">r3.support</a>.
 
 <h2>Note</h2>
@@ -48,8 +48,8 @@ r3.mapcalc --o expr="volume_float = float(col() + row() + depth())"
 r3.info volume_float
  +----------------------------------------------------------------------------+
  | Layer:    volume_float                   Date: Thu Jun 14 08:40:56 2012    |
- | Mapset:   PERMANENT                      Login of Creator: soeren          |
- | Location: TestLL                                                           |
+ | Subproject:   PERMANENT                      Login of Creator: soeren          |
+ | Project: TestLL                                                           |
  | DataBase: /1/soeren/grassdata                                              |
  | Title:    volume_float                                                     |
  | Units:    none                                                             |

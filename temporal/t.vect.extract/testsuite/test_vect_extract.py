@@ -20,7 +20,7 @@ class TestVectorExtraction(TestCase):
         cls.use_temp_region()
          
         cls.runModule("g.region", s=0, n=80, w=0, e=120, res=10)
-        # Use always the current mapset as temporal database
+        # Use always the current subproject as temporal database
         for i in range(1, 11):
             cls.runModule("v.random", output="a{c}".format(c=i), npoints=20,
                           overwrite=True)

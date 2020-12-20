@@ -49,16 +49,16 @@ def _get_raster_image_as_np(lock, conn, data):
     array = None
     try:
         name = data[1]
-        mapset = data[2]
+        subproject = data[2]
         extent = data[3]
         color = data[4]
 
-        mapset = utils.get_mapset_raster(name, mapset)
+        subproject = utils.get_subproject_raster(name, subproject)
 
-        if not mapset:
+        if not subproject:
             raise ValueError("Unable to find raster map <%s>" % (name))
 
-        rast = RasterRow(name, mapset)
+        rast = RasterRow(name, subproject)
 
         if rast.exist():
 
@@ -91,21 +91,21 @@ def _get_vector_table_as_dict(lock, conn, data):
 
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
-       :param data: The list of data entries [function_id, name, mapset, where]
+       :param data: The list of data entries [function_id, name, subproject, where]
 
     """
     ret = None
     try:
         name = data[1]
-        mapset = data[2]
+        subproject = data[2]
         where = data[3]
 
-        mapset = utils.get_mapset_vector(name, mapset)
+        subproject = utils.get_subproject_vector(name, subproject)
 
-        if not mapset:
+        if not subproject:
             raise ValueError("Unable to find vector map <%s>" % (name))
 
-        layer = VectorTopo(name, mapset)
+        layer = VectorTopo(name, subproject)
 
         if layer.exist() is True:
             layer.open("r")
@@ -132,25 +132,25 @@ def _get_vector_features_as_wkb_list(lock, conn, data):
 
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
-       :param data: The list of data entries [function_id,name,mapset,extent,
+       :param data: The list of data entries [function_id,name,subproject,extent,
                                               feature_type, field]
 
     """
     wkb_list = None
     try:
         name = data[1]
-        mapset = data[2]
+        subproject = data[2]
         extent = data[3]
         feature_type = data[4]
         field = data[5]
         bbox = None
 
-        mapset = utils.get_mapset_vector(name, mapset)
+        subproject = utils.get_subproject_vector(name, subproject)
 
-        if not mapset:
+        if not subproject:
             raise ValueError("Unable to find vector map <%s>" % (name))
 
-        layer = VectorTopo(name, mapset)
+        layer = VectorTopo(name, subproject)
 
         if layer.exist() is True:
             if extent is not None:
@@ -251,7 +251,7 @@ class DataProvider(RPCServerBase):
         self.server.daemon = True
         self.server.start()
 
-    def get_raster_image_as_np(self, name, mapset=None, extent=None, color="RGB"):
+    def get_raster_image_as_np(self, name, subproject=None, extent=None, color="RGB"):
         """Return the attribute table of a vector map as dictionary.
 
            See documentation of: pygrass.raster.raster2numpy_img
@@ -299,10 +299,10 @@ class DataProvider(RPCServerBase):
         """
         self.check_server()
         self.client_conn.send([RPCDefs.GET_RASTER_IMAGE_AS_NP,
-                               name, mapset, extent, color])
+                               name, subproject, extent, color])
         return self.safe_receive("get_raster_image_as_np")
 
-    def get_vector_table_as_dict(self, name, mapset=None, where=None):
+    def get_vector_table_as_dict(self, name, subproject=None, where=None):
         """Return the attribute table of a vector map as dictionary.
 
            See documentation of: pygrass.vector.VectorTopo::table_to_dict
@@ -332,10 +332,10 @@ class DataProvider(RPCServerBase):
         """
         self.check_server()
         self.client_conn.send([RPCDefs.GET_VECTOR_TABLE_AS_DICT,
-                               name, mapset, where])
+                               name, subproject, where])
         return self.safe_receive("get_vector_table_as_dict")
 
-    def get_vector_features_as_wkb_list(self, name, mapset=None, extent=None,
+    def get_vector_features_as_wkb_list(self, name, subproject=None, extent=None,
                                         feature_type="point", field=1):
         """Return the features of a vector map as wkb list.
 
@@ -429,7 +429,7 @@ class DataProvider(RPCServerBase):
         """
         self.check_server()
         self.client_conn.send([RPCDefs.GET_VECTOR_FEATURES_AS_WKB,
-                               name, mapset, extent, feature_type, field])
+                               name, subproject, extent, feature_type, field])
         return self.safe_receive("get_vector_features_as_wkb_list")
 
 
@@ -444,9 +444,9 @@ if __name__ == "__main__":
     doctest.testmod()
 
     """Remove the generated maps, if exist"""
-    mset = utils.get_mapset_raster(test_raster_name, mapset='')
+    mset = utils.get_subproject_raster(test_raster_name, subproject='')
     if mset:
         Module("g.remove", flags='f', type='raster', name=test_raster_name)
-    mset = utils.get_mapset_vector(test_vector_name, mapset='')
+    mset = utils.get_subproject_vector(test_vector_name, subproject='')
     if mset:
         Module("g.remove", flags='f', type='vector', name=test_vector_name)

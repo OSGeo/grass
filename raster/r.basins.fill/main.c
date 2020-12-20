@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
 
     partfd = Rast_open_c_new(part_name);
 
-    /* run through file and set streams to zero at locations where ridges exist */
+    /* run through file and set streams to zero at projects where ridges exist */
     for (row = 0; row < nrows; row++) {
 	for (col = 0; col < ncols; col++)
 	    if (ridge[row * ncols + col] != 0)

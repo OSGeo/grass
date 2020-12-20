@@ -30,7 +30,7 @@
 /**
  * \fn double *G_alloc_vector (size_t n)
  *
- * \brief Vector matrix memory allocation.
+ * \brief Vector matrix memory alproject.
  *
  * Allocate a vector (array) of <b>n</b> doubles initialized to zero.
  *
@@ -47,7 +47,7 @@ double *G_alloc_vector(size_t n)
 /**
  * \fn double **G_alloc_matrix (int rows,int cols)
  *
- * \brief Matrix memory allocation.
+ * \brief Matrix memory alproject.
  *
  * Allocate a matrix of <b>rows</b> by <b>cols</b> doubles initialized
  * to zero.
@@ -74,7 +74,7 @@ double **G_alloc_matrix(int rows, int cols)
 /**
  * \fn float *G_alloc_fvector (size_t n)
  *
- * \brief Floating point vector memory allocation.
+ * \brief Floating point vector memory alproject.
  *
  * Allocate a vector (array) of <b>n</b> floats initialized to zero.
  *
@@ -91,7 +91,7 @@ float *G_alloc_fvector(size_t n)
 /**
  * \fn float **G_alloc_fmatrix (int rows, int cols)
  *
- * \brief Floating point matrix memory allocation.
+ * \brief Floating point matrix memory alproject.
  *
  * Allocate a matrix of <b>rows</b> by <b>cols</b> floats initialized
  * to zero.
@@ -118,7 +118,7 @@ float **G_alloc_fmatrix(int rows, int cols)
 /**
  * \fn void G_free_vector (double *v)
  *
- * \brief Vector memory deallocation.
+ * \brief Vector memory dealproject.
  *
  * Deallocate a vector (array) of doubles.
  *
@@ -138,7 +138,7 @@ void G_free_vector(double *v)
 /**
  * \fn void G_free_fvector (float *v)
  *
- * \brief Vector memory deallocation.
+ * \brief Vector memory dealproject.
  *
  * Deallocate a vector (array) of floats.
  *
@@ -158,7 +158,7 @@ void G_free_fvector(float *v)
 /**
  * \fn void G_free_matrix (double **m)
  *
- * \brief Matrix memory deallocation.
+ * \brief Matrix memory dealproject.
  *
  * Deallocate a matrix of doubles.
  *
@@ -179,7 +179,7 @@ void G_free_matrix(double **m)
 /**
  * \fn void G_free_fmatrix (float **m)
  *
- * \brief Floating point matrix memory deallocation.
+ * \brief Floating point matrix memory dealproject.
  *
  * Deallocate a matrix of floats.
  *

@@ -1,7 +1,7 @@
 #!/bin/sh
 # Here we test the limit of the number of layers
 # @preprocess 
-# The region setting should work for UTM and LL test locations
+# The region setting should work for UTM and LL test projects
 
 # temporary disabled test for performance reason
 exit

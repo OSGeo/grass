@@ -30,7 +30,7 @@ static struct line_cats *Vect__new_cats_struct(void);
    \brief Creates and initializes line_cats structure.
 
    This structure is used for reading and writing vector cats. The
-   library routines handle all memory allocation.
+   library routines handle all memory alproject.
    
    To free allocated memory call Vect_destroy_cats_struct().
 
@@ -51,7 +51,7 @@ struct line_cats *Vect_new_cats_struct()
    \brief Creates and initializes line_cats structure (lower level fn)
 
    This structure is used for reading and writing vector cats. The
-   library routines handle all memory allocation.
+   library routines handle all memory alproject.
 
    \return struct line_cats *
  */

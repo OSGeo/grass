@@ -27,10 +27,10 @@
 int main(int argc, char *argv[])
 {
     char file[GPATH_MAX], name[GNAME_MAX];
-    const char *search_mapset, *mapset;
+    const char *search_subproject, *subproject;
     struct GModule *module;
     struct Option *elem_opt;
-    struct Option *mapset_opt;
+    struct Option *subproject_opt;
     struct Option *file_opt;
     struct Flag *n_flag, *l_flag;
 
@@ -58,12 +58,12 @@ int main(int argc, char *argv[])
     file_opt->required = YES;
     file_opt->description = _("Name of an existing map");
 
-    mapset_opt = G_define_option();
-    mapset_opt->key = "mapset";
-    mapset_opt->type = TYPE_STRING;
-    mapset_opt->required = NO;
-    mapset_opt->label = _("Name of a mapset (default: search path)");
-    mapset_opt->description = _("'.' for current mapset");
+    subproject_opt = G_define_option();
+    subproject_opt->key = "subproject";
+    subproject_opt->type = TYPE_STRING;
+    subproject_opt->required = NO;
+    subproject_opt->label = _("Name of a subproject (default: search path)");
+    subproject_opt->description = _("'.' for current subproject");
 
     n_flag = G_define_flag();
     n_flag->key = 'n';
@@ -82,40 +82,40 @@ int main(int argc, char *argv[])
 	return EXIT_SUCCESS;
     }
 
-    search_mapset = mapset_opt->answer;
-    if (!search_mapset) {
-	search_mapset = G_store("");
+    search_subproject = subproject_opt->answer;
+    if (!search_subproject) {
+	search_subproject = G_store("");
     }
-    if (strcmp(".", search_mapset) == 0)
-	search_mapset = G_mapset();
+    if (strcmp(".", search_subproject) == 0)
+	search_subproject = G_subproject();
     
-    if (mapset_opt->answer && strlen(mapset_opt->answer) > 0) {
-	char **map_mapset = G_tokenize(file_opt->answer, "@");
+    if (subproject_opt->answer && strlen(subproject_opt->answer) > 0) {
+	char **map_subproject = G_tokenize(file_opt->answer, "@");
 
-	if (G_number_of_tokens(map_mapset) > 1) {
-	    if (strcmp(map_mapset[1], mapset_opt->answer))
-		G_fatal_error(_("Parameter 'file' contains reference to <%s> mapset, "
-				"but mapset parameter <%s> does not correspond"),
-			      map_mapset[1], mapset_opt->answer);
+	if (G_number_of_tokens(map_subproject) > 1) {
+	    if (strcmp(map_subproject[1], subproject_opt->answer))
+		G_fatal_error(_("Parameter 'file' contains reference to <%s> subproject, "
+				"but subproject parameter <%s> does not correspond"),
+			      map_subproject[1], subproject_opt->answer);
 	    else
 		strcpy(name, file_opt->answer);
 	}
-	if (G_number_of_tokens(map_mapset) == 1)
+	if (G_number_of_tokens(map_subproject) == 1)
 	    strcpy(name, file_opt->answer);
-	G_free_tokens(map_mapset);
+	G_free_tokens(map_subproject);
     }
     else
 	strcpy(name, file_opt->answer);
 
-    mapset = G_find_file2(elem_opt->answer, name, search_mapset);
-    if (mapset) {
-	char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    subproject = G_find_file2(elem_opt->answer, name, search_subproject);
+    if (subproject) {
+	char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 	const char *qchar = n_flag->answer ? "" : "'";
-	const char *qual = G_fully_qualified_name(name, mapset);
-	G_unqualified_name(name, mapset, xname, xmapset);
-	G_file_name(file, elem_opt->answer, name, mapset);
+	const char *qual = G_fully_qualified_name(name, subproject);
+	G_unqualified_name(name, subproject, xname, xsubproject);
+	G_file_name(file, elem_opt->answer, name, subproject);
 	fprintf(stdout, "name=%s%s%s\n", qchar, xname, qchar);
-	fprintf(stdout, "mapset=%s%s%s\n", qchar, xmapset, qchar);
+	fprintf(stdout, "subproject=%s%s%s\n", qchar, xsubproject, qchar);
 	fprintf(stdout, "fullname=%s%s%s\n", qchar, qual, qchar);
 	fprintf(stdout, "file=%s%s%s\n", qchar, file, qchar);
 
@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
     }
     else {
 	fprintf(stdout, "name=\n");
-	fprintf(stdout, "mapset=\n");
+	fprintf(stdout, "subproject=\n");
 	fprintf(stdout, "fullname=\n");
 	fprintf(stdout, "file=\n");
     }

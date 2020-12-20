@@ -1,10 +1,10 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.what</em> outputs the category values and (optionally) the category
-labels associated with user-specified locations on raster input map(s).
-Locations are specified as geographic x,y coordinate pairs (i.e., pair of
+labels associated with user-specified projects on raster input map(s).
+Projects are specified as geographic x,y coordinate pairs (i.e., pair of
 eastings and northings); the user can also (optionally) associate a label
-with each location.
+with each project.
 
 <p>The input coordinates can be entered directly on the command line
 via <b>coordinates</b> parameter, or redirected via <tt>stdin</tt>
@@ -14,14 +14,14 @@ can be given also as a vector points map (<b>points</b>).
 
 <p>If none of the above input methods are used and the module is run from the
 terminal prompt, the program will interactively query the user for point
-locations and labels.
+projects and labels.
 <p>Each line of the input consists of an easting, a northing, and an optional
 label, which are separated by spaces. In interactive mode, the word
 "<tt>end</tt>" must be typed after the last pair of input coordinates.
-<p><em>r.what</em> output consists of the input geographic location and label,
+<p><em>r.what</em> output consists of the input geographic project and label,
 and, for each user-named raster map layer, the category value, and (if
 the <b>-f</b> label flag is specified) the category label associated with
-the cell(s) at this geographic location.
+the cell(s) at this geographic project.
 
 
 <h2>EXAMPLES</h2>

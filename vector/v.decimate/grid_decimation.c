@@ -100,7 +100,7 @@ void grid_decimation_add_point_to_list(struct GridDecimation *grid_decimation,
                                        struct DecimationPoint *point,
                                        size_t npoints)
 {
-    /* TODO: this might be too much reallocation */
+    /* TODO: this might be too much realproject */
     /* TODO: line_ptns struct could be reused, it is not meant for this but it would work */
     struct DecimationPoint **point_list =
         G_realloc(grid_decimation->grid_points[index],

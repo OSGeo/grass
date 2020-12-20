@@ -11,8 +11,8 @@ used in PreferencesDialog.
 Classes:
  - preferences::PreferencesBaseDialog
  - preferences::PreferencesDialog
- - preferences::MapsetAccess
- - preferences::CheckListMapset
+ - preferences::SubprojectAccess
+ - preferences::CheckListSubproject
 
 (C) 2007-2017 by the GRASS Development Team
 
@@ -45,7 +45,7 @@ from grass.exceptions import OpenError
 
 from core import globalvar
 from core.gcmd import RunCommand, GError
-from core.utils import ListOfMapsets, GetColorTables, ReadEpsgCodes
+from core.utils import ListOfSubprojects, GetColorTables, ReadEpsgCodes
 from core.settings import UserSettings
 from core.globalvar import wxPythonPhoenix, CheckWxVersion
 from gui_core.dialogs import SymbolDialog, DefaultFontDialog
@@ -1708,7 +1708,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                 "displayed in the lower-left of the Map "
                 "Display\nwindow's status bar. It is purely "
                 "cosmetic and does not affect the working "
-                "location's\nprojection in any way. You will "
+                "project's\nprojection in any way. You will "
                 "need to enable the Projection check box in "
                 "the drop-down\nmenu located at the bottom "
                 "of the Map Display window.\n"))
@@ -2097,48 +2097,48 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.FindWindowById(scrollId).Enable(enable)
 
 
-class MapsetAccess(wx.Dialog):
+class SubprojectAccess(wx.Dialog):
     """Controls setting options and displaying/hiding map overlay
     decorations
     """
 
     def __init__(self, parent, id=wx.ID_ANY,
-                 title=_('Manage access to mapsets'),
+                 title=_('Manage access to subprojects'),
                  size=(350, 400),
                  style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
         wx.Dialog.__init__(self, parent, id, title, size=size, style=style)
 
-        self.all_mapsets_ordered = ListOfMapsets(get='ordered')
-        self.accessible_mapsets = ListOfMapsets(get='accessible')
-        self.curr_mapset = grass.gisenv()['MAPSET']
+        self.all_subprojects_ordered = ListOfSubprojects(get='ordered')
+        self.accessible_subprojects = ListOfSubprojects(get='accessible')
+        self.curr_subproject = grass.gisenv()['MAPSET']
 
-        # make a checklistbox from available mapsets and check those that are
+        # make a checklistbox from available subprojects and check those that are
         # active
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         label = StaticText(
             parent=self, id=wx.ID_ANY, label=_(
-                "Check a mapset to make it accessible, uncheck it to hide it.\n"
+                "Check a subproject to make it accessible, uncheck it to hide it.\n"
                 "  Notes:\n"
-                "    - The current mapset is always accessible.\n"
-                "    - You may only write to the current mapset.\n"
-                "    - You may only write to mapsets which you own."))
+                "    - The current subproject is always accessible.\n"
+                "    - You may only write to the current subproject.\n"
+                "    - You may only write to subprojects which you own."))
 
         sizer.Add(label, proportion=0,
                   flag=wx.ALL, border=5)
 
-        self.mapsetlb = CheckListMapset(parent=self)
-        self.mapsetlb.LoadData()
+        self.subprojectlb = CheckListSubproject(parent=self)
+        self.subprojectlb.LoadData()
 
-        sizer.Add(self.mapsetlb, proportion=1,
+        sizer.Add(self.subprojectlb, proportion=1,
                   flag=wx.ALL | wx.EXPAND, border=5)
 
-        # check all accessible mapsets
-        for mset in self.accessible_mapsets:
-            self.mapsetlb.CheckItem(self.all_mapsets_ordered.index(mset), True)
+        # check all accessible subprojects
+        for mset in self.accessible_subprojects:
+            self.subprojectlb.CheckItem(self.all_subprojects_ordered.index(mset), True)
 
-        # FIXME (howto?): grey-out current mapset
-        #self.mapsetlb.Enable(0, False)
+        # FIXME (howto?): grey-out current subproject
+        #self.subprojectlb.Enable(0, False)
 
         # dialog buttons
         line = wx.StaticLine(parent=self, id=wx.ID_ANY,
@@ -2165,21 +2165,21 @@ class MapsetAccess(wx.Dialog):
 
         self.SetMinSize(size)
 
-    def GetMapsets(self):
-        """Get list of checked mapsets"""
+    def GetSubprojects(self):
+        """Get list of checked subprojects"""
         ms = []
         i = 0
-        for mset in self.all_mapsets_ordered:
-            if self.mapsetlb.IsItemChecked(i):
+        for mset in self.all_subprojects_ordered:
+            if self.subprojectlb.IsItemChecked(i):
                 ms.append(mset)
             i += 1
 
         return ms
 
 
-class CheckListMapset(
+class CheckListSubproject(
         ListCtrl, listmix.ListCtrlAutoWidthMixin, CheckListCtrlMixin):
-    """List of mapset/owner/group"""
+    """List of subproject/owner/group"""
 
     def __init__(self, parent, log=None):
         self.parent = parent
@@ -2194,19 +2194,19 @@ class CheckListMapset(
 
     def LoadData(self):
         """Load data into list"""
-        self.InsertColumn(0, _('Mapset'))
+        self.InsertColumn(0, _('Subproject'))
         self.InsertColumn(1, _('Owner'))
         ### self.InsertColumn(2, _('Group'))
         gisenv = grass.gisenv()
-        locationPath = os.path.join(
+        projectPath = os.path.join(
             gisenv['GISDBASE'],
             gisenv['LOCATION_NAME'])
 
-        for mapset in self.parent.all_mapsets_ordered:
-            index = self.InsertItem(self.GetItemCount(), mapset)
-            mapsetPath = os.path.join(locationPath,
-                                      mapset)
-            stat_info = os.stat(mapsetPath)
+        for subproject in self.parent.all_subprojects_ordered:
+            index = self.InsertItem(self.GetItemCount(), subproject)
+            subprojectPath = os.path.join(projectPath,
+                                      subproject)
+            stat_info = os.stat(subprojectPath)
             if havePwd:
                 try:
                     self.SetItem(
@@ -2226,7 +2226,7 @@ class CheckListMapset(
         ### self.SetColumnWidth(col = 1, width = wx.LIST_AUTOSIZE)
 
     def OnCheckItem(self, index, flag):
-        """Mapset checked/unchecked"""
-        mapset = self.parent.all_mapsets_ordered[index]
-        if mapset == self.parent.curr_mapset:
+        """Subproject checked/unchecked"""
+        subproject = self.parent.all_subprojects_ordered[index]
+        if subproject == self.parent.curr_subproject:
             self.CheckItem(index, True)

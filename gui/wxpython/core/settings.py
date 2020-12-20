@@ -935,7 +935,7 @@ class Settings:
             for key in list(self.userSettings[group].keys()):
                 self.internalSettings[group][key] = {}
 
-        # self.internalSettings['general']["mapsetPath"]['value'] = self.GetMapsetPath()
+        # self.internalSettings['general']["subprojectPath"]['value'] = self.GetSubprojectPath()
         self.internalSettings['appearance']['elementListExpand']['choices'] = \
             (_("Collapse all except PERMANENT and current"),
              _("Collapse all except PERMANENT"),
@@ -1022,7 +1022,7 @@ class Settings:
             'choices'] = (_("cross"), _("box"), _("circle"))
 
     def ReadSettingsFile(self, settings=None):
-        """Reads settings file (mapset, location, gisdbase)"""
+        """Reads settings file (subproject, project, gisdbase)"""
         if settings is None:
             settings = self.userSettings
 

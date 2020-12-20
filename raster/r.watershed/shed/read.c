@@ -11,19 +11,19 @@ int read_basins(char *haf_name, OUTPUT * output)
     CELL v, *buf, *bas_buf, b;
     CAT *cat;
     MAP *map;
-    char *mapset;
+    char *subproject;
     B_FACTS *facts;
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
     buf = Rast_allocate_c_buf();
     bas_buf = Rast_allocate_c_buf();
-    mapset = G_find_raster(haf_name, "");
-    if (!mapset) {
+    subproject = G_find_raster(haf_name, "");
+    if (!subproject) {
 	G_fatal_error(_("unable to open basin/half basin map"));
     }
 
-    bas_fd = Rast_open_old(haf_name, mapset);
+    bas_fd = Rast_open_old(haf_name, subproject);
     facts = output->basin_facts;
     for (r = nrows - 1; r >= 0; r--) {
 	Rast_get_c_row(bas_fd, bas_buf, r);
@@ -37,7 +37,7 @@ int read_basins(char *haf_name, OUTPUT * output)
     tot_basins = output->num_basins;
     for (m = 0; m < output->num_maps; m++) {
 	map = &(output->maps[m]);
-	Rast_read_cats(map->name, map->mapset, &(map->cats));
+	Rast_read_cats(map->name, map->subproject, &(map->cats));
 	map->basins = (BASIN *) G_malloc(tot_basins * sizeof(BASIN));
 	for (r = 0; r < tot_basins; r++) {
 	    map->basins[r].first_cat.num_cat = -1;
@@ -45,7 +45,7 @@ int read_basins(char *haf_name, OUTPUT * output)
 	    map->basins[r].first_cat.nxt = NULL;
 	    map->basins[r].sum_values = 0.0;
 	}
-	fd = Rast_open_old(map->name, map->mapset);
+	fd = Rast_open_old(map->name, map->subproject);
 	for (r = 0; r < nrows; r++) {
 	    Rast_get_c_row(fd, buf, r);
 	    Rast_get_c_row(bas_fd, bas_buf, r);

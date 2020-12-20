@@ -4,7 +4,7 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-int zoom(struct Cell_head *window, const char *name, const char *mapset)
+int zoom(struct Cell_head *window, const char *name, const char *subproject)
 {
     int fd;
     void *raster, *rast_ptr;
@@ -19,7 +19,7 @@ int zoom(struct Cell_head *window, const char *name, const char *mapset)
     nrows = window->rows;
     ncols = window->cols;
 
-    fd = Rast_open_old(name, mapset);
+    fd = Rast_open_old(name, subproject);
     map_type = Rast_get_map_type(fd);
     raster = Rast_allocate_buf(map_type);
 

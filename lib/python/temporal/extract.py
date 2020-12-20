@@ -8,7 +8,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from .core import get_tgis_message_interface, get_current_mapset, SQLDatabaseInterfaceConnection
+from .core import get_tgis_message_interface, get_current_subproject, SQLDatabaseInterfaceConnection
 from .abstract_map_dataset import AbstractMapDataset
 from .open_stds import open_old_stds, check_new_stds, open_new_stds
 from .datetime_math import create_suffix_from_datetime
@@ -57,7 +57,7 @@ def extract_dataset(input, output, type, where, expression, base, time_suffix,
     if expression and not base:
         msgr.fatal(_("You need to specify the base name of new created maps"))
 
-    mapset = get_current_mapset()
+    subproject = get_current_subproject()
 
     dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
@@ -67,7 +67,7 @@ def extract_dataset(input, output, type, where, expression, base, time_suffix,
     new_sp = check_new_stds(output, type, dbif, gscript.overwrite())
     if type == "vector":
         rows = sp.get_registered_maps(
-            "id,name,mapset,layer", where, "start_time", dbif)
+            "id,name,subproject,layer", where, "start_time", dbif)
     else:
         rows = sp.get_registered_maps("id", where, "start_time", dbif)
 
@@ -112,9 +112,9 @@ def extract_dataset(input, output, type, where, expression, base, time_suffix,
                     expr = "%s = %s" % (map_name, expr)
 
                     # We need to build the id
-                    map_id = AbstractMapDataset.build_id(map_name, mapset)
+                    map_id = AbstractMapDataset.build_id(map_name, subproject)
                 else:
-                    map_id = AbstractMapDataset.build_id(map_name, mapset,
+                    map_id = AbstractMapDataset.build_id(map_name, subproject,
                                                          row["layer"])
 
                 new_map = sp.get_new_map_instance(map_id)
@@ -148,13 +148,13 @@ def extract_dataset(input, output, type, where, expression, base, time_suffix,
                     if row["layer"]:
                         proc_list.append(Process(target=run_vector_extraction,
                                                  args=(row["name"] + "@" +
-                                                       row["mapset"], map_name,
+                                                       row["subproject"], map_name,
                                                        row["layer"], vtype,
                                                        expression)))
                     else:
                         proc_list.append(Process(target=run_vector_extraction,
                                                  args=(row["name"] + "@" +
-                                                       row["mapset"], map_name,
+                                                       row["subproject"], map_name,
                                                        layer, vtype,
                                                        expression)))
 

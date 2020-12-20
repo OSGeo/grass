@@ -9,10 +9,10 @@
 
 /*---------------------------------------------------------------------------*/
 
-void *Rast3d_open_cell_old_no_header(const char *name, const char *mapset)
+void *Rast3d_open_cell_old_no_header(const char *name, const char *subproject)
 {
     RASTER3D_Map *map;
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 
     Rast3d_init_defaults();
 
@@ -27,12 +27,12 @@ void *Rast3d_open_cell_old_no_header(const char *name, const char *mapset)
 	return (void *)NULL;
     }
 
-    G_unqualified_name(name, mapset, xname, xmapset);
+    G_unqualified_name(name, subproject, xname, xsubproject);
 
     map->fileName = G_store(xname);
-    map->mapset = G_store(xmapset);
+    map->subproject = G_store(xsubproject);
 
-    map->data_fd = G_open_old_misc(RASTER3D_DIRECTORY, RASTER3D_CELL_ELEMENT, xname, xmapset);
+    map->data_fd = G_open_old_misc(RASTER3D_DIRECTORY, RASTER3D_CELL_ELEMENT, xname, xsubproject);
     if (map->data_fd < 0) {
 	Rast3d_error(_("Rast3d_open_cell_old_no_header: error in G_open_old"));
 	return (void *)NULL;
@@ -50,7 +50,7 @@ void *Rast3d_open_cell_old_no_header(const char *name, const char *mapset)
 /*!
  * \brief 
  *
- * Opens existing g3d-file <em>name</em> in <em>mapset</em>.
+ * Opens existing g3d-file <em>name</em> in <em>subproject</em>.
  * Tiles are stored in memory with <em>type</em> which must be any of FCELL_TYPE,
  * DCELL_TYPE, or RASTER3D_TILE_SAME_AS_FILE. <em>cache</em> specifies the
  * cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,
@@ -67,14 +67,14 @@ void *Rast3d_open_cell_old_no_header(const char *name, const char *mapset)
  * otherwise.
  *
  *  \param name
- *  \param mapset
+ *  \param subproject
  *  \param window
  *  \param type
  *  \param cache
  *  \return void * 
  */
 
-void *Rast3d_open_cell_old(const char *name, const char *mapset,
+void *Rast3d_open_cell_old(const char *name, const char *subproject,
 		      RASTER3D_Region * window, int typeIntern, int cache)
 {
     RASTER3D_Map *map;
@@ -88,7 +88,7 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
     int version;
     double north, south, east, west, top, bottom;
 
-    map = Rast3d_open_cell_old_no_header(name, mapset);
+    map = Rast3d_open_cell_old_no_header(name, subproject);
     if (map == NULL) {
 	Rast3d_error(_("Rast3d_open_cell_old: error in Rast3d_open_cell_old_no_header"));
 	return (void *)NULL;
@@ -186,7 +186,7 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
 /*!
  * \brief 
  *
- * Opens new g3d-file with <em>name</em> in the current mapset. Tiles
+ * Opens new g3d-file with <em>name</em> in the current subproject. Tiles
  * are stored in memory with <em>type</em> which must be one of FCELL_TYPE,
  * DCELL_TYPE, or RASTER3D_TILE_SAME_AS_FILE. <em>cache</em> specifies the
  * cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,
@@ -212,7 +212,7 @@ void *Rast3d_open_cell_new(const char *name, int typeIntern, int cache,
     RASTER3D_Map *map;
     int nofHeaderBytes, dummy = 0, compression, precision;
     long ldummy = 0;
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 
     Rast3d_init_defaults();
     if (!Rast3d_mask_open_old()) {
@@ -229,13 +229,13 @@ void *Rast3d_open_cell_new(const char *name, int typeIntern, int cache,
 	return (void *)NULL;
     }
 
-    if (G_unqualified_name(name, G_mapset(), xname, xmapset) < 0) {
-	G_warning(_("map <%s> is not in the current mapset"), name);
+    if (G_unqualified_name(name, G_subproject(), xname, xsubproject) < 0) {
+	G_warning(_("map <%s> is not in the current subproject"), name);
 	return (void *)NULL;
     }
 
     map->fileName = G_store(xname);
-    map->mapset = G_store(xmapset);
+    map->subproject = G_store(xsubproject);
 
     map->tempName = G_tempfile();
     map->data_fd = open(map->tempName, O_RDWR | O_CREAT | O_TRUNC, 0666);
@@ -244,7 +244,7 @@ void *Rast3d_open_cell_new(const char *name, int typeIntern, int cache,
 	return (void *)NULL;
     }
 
-    Rast3d_make_mapset_map_directory(map->fileName);
+    Rast3d_make_subproject_map_directory(map->fileName);
 
     /* XDR support has been removed */
     map->useXdr = RASTER3D_NO_XDR;

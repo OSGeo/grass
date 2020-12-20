@@ -78,7 +78,7 @@ typedef struct expr_list
 
 extern int list_length(expr_list * l);
 extern void define_variable(expression * e);
-extern char *composite(const char *name, const char *mapset);
+extern char *composite(const char *name, const char *subproject);
 extern expr_list *list(expression * exp, expr_list * next);
 extern expr_list *singleton(expression * e1);
 extern expr_list *pair(expression * e1, expression * e2);

@@ -54,7 +54,7 @@ class GPrompt(object):
         self._menuModel = menuModel
 
         self.mapList = self._getListOfMaps()
-        self.mapsetList = utils.ListOfMapsets()
+        self.subprojectList = utils.ListOfSubprojects()
 
         # auto complete items
         self.autoCompList = list()
@@ -65,7 +65,7 @@ class GPrompt(object):
 
         self._loadHistory()
         if giface:
-            giface.currentMapsetChanged.connect(self._loadHistory)
+            giface.currentSubprojectChanged.connect(self._loadHistory)
 
         # list of traced commands
         self.commands = list()
@@ -336,7 +336,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 word = self.GetWordLeft(withDelimiter=True)
 
                 if word[0] == '=' and word[-1] == '@':
-                    toComplete['entity'] = 'mapsets'
+                    toComplete['entity'] = 'subprojects'
                 elif word[0] == '=':
                     # get name of parameter
                     paramName = self.GetWordLeft(
@@ -519,15 +519,15 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 self.autoCompList = self.cmdDesc.get_param(param)['values']
             self.ShowList()
 
-        # complete mapset ('@')
+        # complete subproject ('@')
         elif event.GetKeyCode() == 64:
             self.autoCompList = list()
             self.InsertText(pos, '@')
             self.CharRight()
             self.toComplete = self.EntityToComplete()
 
-            if self.toComplete['entity'] == 'mapsets':
-                self.autoCompList = self.mapsetList
+            if self.toComplete['entity'] == 'subprojects':
+                self.autoCompList = self.subprojectList
             self.ShowList()
 
         # complete after pressing CTRL + Space

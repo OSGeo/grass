@@ -60,7 +60,7 @@ int get_stats(void)
             argv[argc++] = "sort=desc";
         
 	for (i = 0; i < nlayers; i++) {
-	    char *name = G_fully_qualified_name(layers[i].name, layers[i].mapset);
+	    char *name = G_fully_qualified_name(layers[i].name, layers[i].subproject);
 	    char *buf = G_malloc(6 + strlen(name) + 1);
 
 	    sprintf(buf, "input=%s", name);

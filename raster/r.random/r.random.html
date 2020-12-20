@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 <p>The program <em>r.random</em> allows the user to create a
 raster map layer and/or a vector points map containing 
-coordinates of points whose locations have been randomly
+coordinates of points whose projects have been randomly
 determined.  The program locates these randomly generated
 vector points (sites) within the current geographic region and mask (if
 any), on non-NULL category value data areas within a
@@ -11,7 +11,7 @@ cells (even those with NULL values).
 
 <p>The category values and
 corresponding category names already associated with the
-random point locations in the <em>input</em> map layer are
+random point projects in the <em>input</em> map layer are
 assigned to these points in the <em>raster_output</em> map
 layer. If the <b>-z</b> is specified, then a unique entry
 is made for the value used where the <em>input</em> was NULL.
@@ -36,7 +36,7 @@ the <em>cover</em> map.
 topology to minimize the required resources. This is suitable input
 to <em>v.surf.rst</em> and other vector modules.
 
-<p>The user may specify the quantity of random locations to be
+<p>The user may specify the quantity of random projects to be
 generated either as a <em>positive integer</em> (e.g., 10),
 or as a <em>percentage of the raster map layer's cells</em> 
 (e.g., 10%, or 3.05%).  The number of cells considered for 
@@ -44,7 +44,7 @@ the percentage reflects whether or not the <b>-z</b> flag
 was given. Options are 0-100; percentages less than
 one percent may be stated as decimals.
 
-<p>Flag <b>-i</b> prints the raster map's name and location, 
+<p>Flag <b>-i</b> prints the raster map's name and project, 
 the total number of cells under the current region settings, and
 the number of NULL valued cells under the current region settings.
 Then module exits without doing anything.  Useful for deciding on the number
@@ -58,7 +58,7 @@ g.region -p
 r.report map=inputmap units=c null=* nsteps=1
 </pre></div>
 
-<p>To create random vector point locations within some, but not all, 
+<p>To create random vector point projects within some, but not all, 
 non-zero categories of the input raster map layer, 
 the user must first create a reclassified raster map layer 
 of the original raster map layer (e.g., using the GRASS 

@@ -89,30 +89,30 @@ int select_target_env(void)
 
 static int get_target(void)
 {
-    char location[GMAPSET_MAX];
-    char mapset[GMAPSET_MAX];
+    char project[GMAPSET_MAX];
+    char subproject[GMAPSET_MAX];
     char buf[1024];
     int stat;
 
-    if (!I_get_target(group.name, location, mapset)) {
+    if (!I_get_target(group.name, project, subproject)) {
 	sprintf(buf, _("Target information for group <%s> missing"), group.name);
 	goto error;
     }
 
-    sprintf(buf, "%s/%s", G_gisdbase(), location);
+    sprintf(buf, "%s/%s", G_gisdbase(), project);
     if (access(buf, 0) != 0) {
-	sprintf(buf, _("Target location <%s> not found"), location);
+	sprintf(buf, _("Target project <%s> not found"), project);
 	goto error;
     }
     select_target_env();
-    G_setenv_nogisrc("LOCATION_NAME", location);
-    stat = G_mapset_permissions(mapset);
+    G_setenv_nogisrc("LOCATION_NAME", project);
+    stat = G_subproject_permissions(subproject);
     if (stat > 0) {
-	G_setenv_nogisrc("MAPSET", mapset);
+	G_setenv_nogisrc("MAPSET", subproject);
 	select_current_env();
 	return 1;
     }
-    sprintf(buf, _("Mapset <%s> in target location <%s> - "), mapset, location);
+    sprintf(buf, _("Subproject <%s> in target project <%s> - "), subproject, project);
     strcat(buf, stat == 0 ? _("permission denied") : _("not found"));
   error:
     strcat(buf, "\n");
@@ -555,7 +555,7 @@ int main(int argc, char **argv)
 
     parse_format();
 
-    /* I_compute_ortho_equations() must be run in the target location */
+    /* I_compute_ortho_equations() must be run in the target project */
     select_target_env();
     compute_transformation();
     select_current_env();

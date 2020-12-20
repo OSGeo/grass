@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     const char *dspout;
     void *g3map;
     RASTER3D_Region g3reg;
-    const char *mapset;
+    const char *subproject;
     double dmin, dmax;
     struct GModule *module;
 
@@ -146,20 +146,20 @@ int main(int argc, char *argv[])
 
     if (NULL ==
 	(dspout =
-	 check_get_any_dspname(out->answer, name->answer, G_mapset())))
+	 check_get_any_dspname(out->answer, name->answer, G_subproject())))
 	exit(EXIT_FAILURE);
 
     Rast3d_set_error_fun(Rast3d_print_error);
 
     /* open g3 file for reading and writing */
-    if (NULL == (mapset = G_find_file2("grid3", name->answer, "")))
+    if (NULL == (subproject = G_find_file2("grid3", name->answer, "")))
 	G_fatal_error(_("Not able to find grid3 file for [%s]"),
 		      name->answer);
 
-    g3map = Rast3d_open_cell_old(name->answer, mapset, &g3reg,
+    g3map = Rast3d_open_cell_old(name->answer, subproject, &g3reg,
 			    RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
     /*
-       g3map = Rast3d_open_cell_old (name->answer, mapset, RASTER3D_DEFAULT_WINDOW,
+       g3map = Rast3d_open_cell_old (name->answer, subproject, RASTER3D_DEFAULT_WINDOW,
        RASTER3D_TILE_SAME_AS_FILE,
        RASTER3D_USE_CACHE_DEFAULT);
      */

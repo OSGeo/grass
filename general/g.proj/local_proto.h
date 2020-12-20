@@ -27,7 +27,7 @@ int set_datum(char *);
 int set_datumtrans(int, int);
 
 /* create.c */
-void create_location(const char *);
+void create_project(const char *);
 void modify_projinfo();
 
 /* list_codes.c */

@@ -49,13 +49,13 @@ int Rast__check_for_auto_masking(void)
     /* if(R__.mask_fd > 0) G_free (R__.mask_buf); */
 
     /* look for the existence of the MASK file */
-    R__.auto_mask = (G_find_raster("MASK", G_mapset()) != 0);
+    R__.auto_mask = (G_find_raster("MASK", G_subproject()) != 0);
 
     if (R__.auto_mask <= 0)
 	return 0;
 
     /* check MASK projection/zone against current region */
-    Rast_get_cellhd("MASK", G_mapset(), &cellhd);
+    Rast_get_cellhd("MASK", G_subproject(), &cellhd);
     if (cellhd.zone != G_zone() || cellhd.proj != G_projection()) {
 	R__.auto_mask = 0;
 	return 0;
@@ -63,7 +63,7 @@ int Rast__check_for_auto_masking(void)
 
     if (R__.mask_fd >= 0)
 	Rast_unopen(R__.mask_fd);
-    R__.mask_fd = Rast__open_old("MASK", G_mapset());
+    R__.mask_fd = Rast__open_old("MASK", G_subproject());
     if (R__.mask_fd < 0) {
 	R__.auto_mask = 0;
 	G_warning(_("Unable to open automatic MASK file"));

@@ -35,7 +35,7 @@ int read_colortable(void)
 {
     char buf[1024];
     char *key, *data;
-    char name[GNAME_MAX], mapset[GMAPSET_MAX];
+    char name[GNAME_MAX], subproject[GMAPSET_MAX];
     int fontsize, cols, nodata, tickbar, discrete;
     double w, h, x, y, lw;
     int range_override;
@@ -93,9 +93,9 @@ int read_colortable(void)
 	}
 
 	if (KEY("raster")) {
-	    if (scan_gis("cell", "raster", key, data, name, mapset, 0)) {
+	    if (scan_gis("cell", "raster", key, data, name, subproject, 0)) {
 		ct.name = G_store(name);
-		ct.mapset = G_store(mapset);
+		ct.subproject = G_store(subproject);
 		continue;
 	    }
 	}
@@ -182,13 +182,13 @@ int read_colortable(void)
 	}
 	else {
 	    ct.name = PS.cell_name;
-	    ct.mapset = PS.cell_mapset;
+	    ct.subproject = PS.cell_subproject;
 	}
     }
 
     /* set default if legend type was not specified */
     if (ct.discrete == -1) {
-	if (Rast_map_is_fp(ct.name, ct.mapset))
+	if (Rast_map_is_fp(ct.name, ct.subproject))
 	    ct.discrete = FALSE;
 	else
 	    ct.discrete = TRUE;

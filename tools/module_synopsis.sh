@@ -179,7 +179,7 @@ photo.camera: Creates or modifies entries in a camera reference file.
 photo.elev: Selects target elevation model for ortho-rectification.
 photo.init: Creates or modifies entries in a camera initial exposure station file for imagery group referenced by a sub-block.
 photo.rectify: Rectifies an image by using the image to photo coordinate transformation matrix created by photo.2image and the rectification parameters created by photo.2target.
-photo.target: Selects target location and mapset for ortho-rectification.
+photo.target: Selects target project and subproject for ortho-rectification.
 EOF
 
 ## with --dictionary-order db.* ends up in the middle of the d.* cmds

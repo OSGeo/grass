@@ -2,7 +2,7 @@
 /**
    \file lib/proj/datum.c
 
-   \brief GProj library - Functions for reading datum parameters from the location database
+   \brief GProj library - Functions for reading datum parameters from the project database
 
    \author Andreas Lange <andreas.lange rhein-main.de>, Paul Kelly <paul-grass stjohnspoint.co.uk>
 
@@ -67,7 +67,7 @@ int GPJ_get_datum_by_name(const char *name, struct gpj_datum *dstruct)
  * really be used where user interaction to choose a set of parameters
  * is not desirable. Use of this function is not likely to result in
  * selection of the optimum set of datum transformation parameters
- * for the location
+ * for the project
  *
  * \param name      String containing GRASS datum name for which default
  *                  parameters are to be retrieved
@@ -112,9 +112,9 @@ int GPJ_get_default_datum_params_by_name(const char *name, char **params)
 /**
  *  
  * \brief Extract the datum transformation-related parameters for
- *  the current location.
+ *  the current project.
  * 
- *  This function can be used to test if a location's co-ordinate
+ *  This function can be used to test if a project's co-ordinate
  *  system set-up supports datum transformation.
  *  
  * \param name      Pointer to a pointer which will have memory 
@@ -148,7 +148,7 @@ int GPJ_get_datum_params(char **name, char **params)
  * \brief Extract the datum transformation-related parameters from a 
  *  set of general PROJ_INFO parameters.
  * 
- *  This function can be used to test if a location's co-ordinate
+ *  This function can be used to test if a project's co-ordinate
  *  system set-up supports datum transformation.
  *  
  * \param projinfo  Set of key_value pairs containing

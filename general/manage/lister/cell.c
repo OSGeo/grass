@@ -21,11 +21,11 @@ int main(int argc, char *argv[])
     exit(0);
 }
 
-int lister(char *name, char *mapset, char *title)
+int lister(char *name, char *subproject, char *title)
 {
     *title = 0;
     if (*name)
-	strcpy(title, Rast_get_cell_title(name, mapset));
+	strcpy(title, Rast_get_cell_title(name, subproject));
 
     return 0;
 }

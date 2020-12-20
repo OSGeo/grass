@@ -211,7 +211,7 @@ static void write_colors_int(int c)
 	    Rast_set_c_color((CELL) i, v, v, v, &colors);
 	}
 
-    Rast_write_colors(ch->name, G_mapset(), &colors);
+    Rast_write_colors(ch->name, G_subproject(), &colors);
 }
 
 static void write_colors_float(int c)
@@ -227,7 +227,7 @@ static void write_colors_float(int c)
 			  &i1, 255, 255, 255,
 			  &colors);
 
-    Rast_write_colors(ch->name, G_mapset(), &colors);
+    Rast_write_colors(ch->name, G_subproject(), &colors);
 }
 
 static void print_header(void)

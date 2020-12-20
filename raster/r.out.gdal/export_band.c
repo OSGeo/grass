@@ -31,7 +31,7 @@ int exact_range_check(double, double, GDALDataType, const char *);
  * -2 if selected GDAL datatype could not hold all values
  * */
 int exact_checks(GDALDataType export_datatype,
-		const char *name, const char *mapset,
+		const char *name, const char *subproject,
 		struct Cell_head *cellhead, RASTER_MAP_TYPE maptype,
 		double nodataval, const char *nodatakey,
 		int default_nodataval)
@@ -44,7 +44,7 @@ int exact_checks(GDALDataType export_datatype,
     int ret = 0;
 
     /* Open GRASS raster */
-    fd = Rast_open_old(name, mapset);
+    fd = Rast_open_old(name, subproject);
 
     /* Create GRASS raster buffer */
     void *bufer = Rast_allocate_buf(maptype);
@@ -212,7 +212,7 @@ int exact_checks(GDALDataType export_datatype,
  * -1 on raster data read/write error
  * */
 int export_band(GDALDatasetH hMEMDS, int band,
-		const char *name, const char *mapset,
+		const char *name, const char *subproject,
 		struct Cell_head *cellhead, RASTER_MAP_TYPE maptype,
 		double nodataval, int suppress_main_colortable, 
 		int no_metadata, int writenodata)
@@ -232,7 +232,7 @@ int export_band(GDALDatasetH hMEMDS, int band,
     char *units;
 
     /* Open GRASS raster */
-    fd = Rast_open_old(name, mapset);
+    fd = Rast_open_old(name, subproject);
 
     /* Get raster band  */
     GDALRasterBandH hBand = GDALGetRasterBand(hMEMDS, band);
@@ -245,12 +245,12 @@ int export_band(GDALDatasetH hMEMDS, int band,
     if (!no_metadata)
 	GDALSetDescription(hBand, name);
 
-    units = Rast_read_units(name, mapset);
+    units = Rast_read_units(name, subproject);
     if (units)
 	GDALSetRasterUnitType(hBand, units);
 
     /* Get min/max values. */
-    if (Rast_read_fp_range(name, mapset, &sRange) == -1) {
+    if (Rast_read_fp_range(name, subproject, &sRange) == -1) {
 	bHaveMinMax = FALSE;
     }
     else {
@@ -259,7 +259,7 @@ int export_band(GDALDatasetH hMEMDS, int band,
     }
 
     /* use default color rules if no color rules are given */
-    if (Rast_read_colors(name, mapset, &sGrassColors) >= 0) {
+    if (Rast_read_colors(name, subproject, &sGrassColors) >= 0) {
 	int maxcolor, i;
 	CELL min, max;
 	char key[200];

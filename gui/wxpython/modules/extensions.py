@@ -519,7 +519,7 @@ class ManageExtensionWindow(wx.Frame):
 
 
 class CheckListExtension(GListCtrl):
-    """List of mapset/owner/group"""
+    """List of subproject/owner/group"""
 
     def __init__(self, parent):
         GListCtrl.__init__(self, parent)

@@ -285,7 +285,7 @@ class ExportCategoryRaster(wx.Dialog):
             flag=wx.ALL,
             border=3)
         self.vectorNameCtrl = Select(parent=self.panel, type='raster',
-                                     mapsets=[grass.gisenv()['MAPSET']],
+                                     subprojects=[grass.gisenv()['MAPSET']],
                                      size=globalvar.DIALOG_GSELECT_SIZE)
         if self.rasterName:
             self.vectorNameCtrl.SetValue(self.rasterName)

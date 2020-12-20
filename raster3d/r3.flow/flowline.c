@@ -68,7 +68,7 @@ static double get_map_value(RASTER3D_Region * region, RASTER3D_Map *map,
     int col, row, depth;
     double val;
 
-    Rast3d_location2coord(region, north, east, top, &col, &row, &depth);
+    Rast3d_project2coord(region, north, east, top, &col, &row, &depth);
     Rast3d_get_value(map, col, row, depth, &val,
 		     DCELL_TYPE);
 
@@ -171,7 +171,7 @@ void compute_flowline(RASTER3D_Region * region, const struct Seed *seed,
 		Vect_append_point(points, point[0], point[1], point[2]);
 	}
 	if (seed->flowaccum) {
-	    Rast3d_location2coord(region, new_point[1], new_point[0],
+	    Rast3d_project2coord(region, new_point[1], new_point[0],
 				  new_point[2], &col, &row, &depth);
 	    if (!(last_col == col && last_row == row && last_depth == depth)) {
 		value = Rast3d_get_float(flowacc, col, row, depth);

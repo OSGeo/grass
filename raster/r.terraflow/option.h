@@ -42,7 +42,7 @@ typedef struct {
 
 
   int   mem;           /* main memory, in MB */
-  char* streamdir;     /* location of temposary STREAMs */
+  char* streamdir;     /* project of temposary STREAMs */
 
   char* stats;         /* stats file */
   int verbose;         /* 1 if verbose, 0 otherwise */

@@ -19,7 +19,7 @@
 /*!
  * \brief Writes the region (window)
  *
- * Writes the region file (WIND) in the user's current mapset
+ * Writes the region file (WIND) in the user's current subproject
  * or when environmental variable \c WIND_OVERRIDE is set,
  * it writes the region to file specified by \c WIND_OVERRIDE variable.
  *
@@ -54,7 +54,7 @@ int G_put_window(const struct Cell_head *window)
 /*!
  * \brief Write the region
  *
- * Writes the region file (WIND) in the user's current mapset
+ * Writes the region file (WIND) in the user's current subproject
  * from region. 
 
  * <b>Warning:</b> Since this routine actually changes the 

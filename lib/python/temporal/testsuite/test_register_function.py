@@ -22,7 +22,7 @@ class TestRasterRegisterFunctions(TestCase):
         """Initiate the temporal GIS and set the region
         """
         os.putenv("GRASS_OVERWRITE", "1")
-        # Use always the current mapset as temporal database
+        # Use always the current subproject as temporal database
         cls.runModule("g.gisenv", set="TGIS_USE_CURRENT_MAPSET=1")
         tgis.init()
         cls.use_temp_region()
@@ -70,13 +70,13 @@ class TestRasterRegisterFunctions(TestCase):
                  maps="register_map_1,register_map_2",
                  start="2001-01-01", increment="1 day", interval=True)
 
-        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
+        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_subproject())
         map.select()
         start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 2))
 
-        map = tgis.RasterDataset("register_map_2@" + tgis.get_current_mapset())
+        map = tgis.RasterDataset("register_map_2@" + tgis.get_current_subproject())
         map.select()
         start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
@@ -95,19 +95,19 @@ class TestRasterRegisterFunctions(TestCase):
         """
 
         ciface = tgis.get_tgis_c_library_interface()
-        ciface.write_raster_timestamp("register_map_1", tgis.get_current_mapset(), "1 Jan 2001/2 Jan 2001")
-        ciface.write_raster_timestamp("register_map_2", tgis.get_current_mapset(), "2 Jan 2001/3 Jan 2001")
+        ciface.write_raster_timestamp("register_map_1", tgis.get_current_subproject(), "1 Jan 2001/2 Jan 2001")
+        ciface.write_raster_timestamp("register_map_2", tgis.get_current_subproject(), "2 Jan 2001/3 Jan 2001")
 
         tgis.register_maps_in_space_time_dataset(type="raster", name=self.strds_abs.get_name(),
                                                  maps="register_map_1,register_map_2")
 
-        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
+        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_subproject())
         map.select()
         start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 2))
 
-        map = tgis.RasterDataset("register_map_2@" + tgis.get_current_mapset())
+        map = tgis.RasterDataset("register_map_2@" + tgis.get_current_subproject())
         map.select()
         start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
@@ -126,14 +126,14 @@ class TestRasterRegisterFunctions(TestCase):
         """
 
         ciface = tgis.get_tgis_c_library_interface()
-        ciface.write_raster_timestamp("register_map_1", tgis.get_current_mapset(), "1 Jan 2001/2 Jan 2001")
+        ciface.write_raster_timestamp("register_map_1", tgis.get_current_subproject(), "1 Jan 2001/2 Jan 2001")
 
         tgis.register_maps_in_space_time_dataset(type="raster", name=self.strds_abs.get_name(),
                                                  maps="register_map_1",
                                                  start="2001-02-01", increment="1 day",
                                                  interval=True)
 
-        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
+        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_subproject())
         map.select()
         start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 2, 1))
@@ -153,14 +153,14 @@ class TestRasterRegisterFunctions(TestCase):
 
         ciface = tgis.get_tgis_c_library_interface()
         # Set the timestamp as relative time
-        ciface.write_raster_timestamp("register_map_1", tgis.get_current_mapset(), "1 day")
+        ciface.write_raster_timestamp("register_map_1", tgis.get_current_subproject(), "1 day")
 
         tgis.register_maps_in_space_time_dataset(type="raster", name=self.strds_abs.get_name(),
                                                  maps="register_map_1",
                                                  start="2001-02-01", increment="1 day",
                                                  interval=True)
 
-        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
+        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_subproject())
         map.select()
         start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 2, 1))
@@ -179,13 +179,13 @@ class TestRasterRegisterFunctions(TestCase):
                  maps="register_map_1,register_map_2",
                  start="2001-01-01", increment="1 day", interval=True)
 
-        map_1 = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
+        map_1 = tgis.RasterDataset("register_map_1@" + tgis.get_current_subproject())
         map_1.select()
         start, end = map_1.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 2))
 
-        map_2 = tgis.RasterDataset("register_map_2@" + tgis.get_current_mapset())
+        map_2 = tgis.RasterDataset("register_map_2@" + tgis.get_current_subproject())
         map_2.select()
         start, end = map_2.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
@@ -209,17 +209,17 @@ class TestRasterRegisterFunctions(TestCase):
                  maps="register_map_1,register_map_2,register_map_null",
                  start="2001-01-01 10:30:01", increment="8 hours", interval=False)
 
-        map_1 = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
+        map_1 = tgis.RasterDataset("register_map_1@" + tgis.get_current_subproject())
         map_1.select()
         start, end = map_1.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1, 10, 30, 1))
 
-        map_2 = tgis.RasterDataset("register_map_2@" + tgis.get_current_mapset())
+        map_2 = tgis.RasterDataset("register_map_2@" + tgis.get_current_subproject())
         map_2.select()
         start, end = map_2.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1, 18, 30, 1))
 
-        map_3 = tgis.RasterDataset("register_map_null@" + tgis.get_current_mapset())
+        map_3 = tgis.RasterDataset("register_map_null@" + tgis.get_current_subproject())
         map_3.select()
         start, end = map_3.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2, 2, 30, 1))
@@ -234,7 +234,7 @@ class TestRasterRegisterFunctions(TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 1, 10, 30, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 1, 18, 30, 1))
 
-        map_3 = tgis.VectorDataset("register_map_null@" + tgis.get_current_mapset())
+        map_3 = tgis.VectorDataset("register_map_null@" + tgis.get_current_subproject())
         self.assertEqual(map_3.map_exists(), False)
 
     def test_absolute_time_3(self):
@@ -244,18 +244,18 @@ class TestRasterRegisterFunctions(TestCase):
         """
 
         ciface = tgis.get_tgis_c_library_interface()
-        ciface.write_raster_timestamp("register_map_1", tgis.get_current_mapset(), "1 Jan 2001 10:30:01")
-        ciface.write_raster_timestamp("register_map_2", tgis.get_current_mapset(), "1 Jan 2001 18:30:01")
+        ciface.write_raster_timestamp("register_map_1", tgis.get_current_subproject(), "1 Jan 2001 10:30:01")
+        ciface.write_raster_timestamp("register_map_2", tgis.get_current_subproject(), "1 Jan 2001 18:30:01")
 
         tgis.register_maps_in_space_time_dataset(type="raster", name=None,
                  maps="register_map_1,register_map_2")
 
-        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
+        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_subproject())
         map.select()
         start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1, 10, 30, 1))
 
-        map = tgis.RasterDataset("register_map_2@" + tgis.get_current_mapset())
+        map = tgis.RasterDataset("register_map_2@" + tgis.get_current_subproject())
         map.select()
         start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1, 18, 30, 1))
@@ -269,14 +269,14 @@ class TestRasterRegisterFunctions(TestCase):
                                                  maps="register_map_1,register_map_2", start=0,
                                                  increment=1, unit="day", interval=True)
 
-        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
+        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_subproject())
         map.select()
         start, end, unit = map.get_relative_time()
         self.assertEqual(start, 0)
         self.assertEqual(end, 1)
         self.assertEqual(unit, "day")
 
-        map = tgis.RasterDataset("register_map_2@" + tgis.get_current_mapset())
+        map = tgis.RasterDataset("register_map_2@" + tgis.get_current_subproject())
         map.select()
         start, end, unit = map.get_relative_time()
         self.assertEqual(start, 1)
@@ -295,20 +295,20 @@ class TestRasterRegisterFunctions(TestCase):
            C-interface before registration.
         """
         ciface = tgis.get_tgis_c_library_interface()
-        ciface.write_raster_timestamp("register_map_1", tgis.get_current_mapset(), "1000000 seconds/1500000 seconds")
-        ciface.write_raster_timestamp("register_map_2", tgis.get_current_mapset(), "1500000 seconds/2000000 seconds")
+        ciface.write_raster_timestamp("register_map_1", tgis.get_current_subproject(), "1000000 seconds/1500000 seconds")
+        ciface.write_raster_timestamp("register_map_2", tgis.get_current_subproject(), "1500000 seconds/2000000 seconds")
 
         tgis.register_maps_in_space_time_dataset(type="raster", name=self.strds_rel.get_name(),
                                                  maps="register_map_1,register_map_2")
 
-        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
+        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_subproject())
         map.select()
         start, end, unit = map.get_relative_time()
         self.assertEqual(start, 1000000)
         self.assertEqual(end, 1500000)
         self.assertEqual(unit, "seconds")
 
-        map = tgis.RasterDataset("register_map_2@" + tgis.get_current_mapset())
+        map = tgis.RasterDataset("register_map_2@" + tgis.get_current_subproject())
         map.select()
         start, end, unit = map.get_relative_time()
         self.assertEqual(start, 1500000)
@@ -328,14 +328,14 @@ class TestRasterRegisterFunctions(TestCase):
                  maps="register_map_1,register_map_2",
                  start=0, increment=1, unit="day", interval=True)
 
-        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
+        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_subproject())
         map.select()
         start, end, unit = map.get_relative_time()
         self.assertEqual(start, 0)
         self.assertEqual(end, 1)
         self.assertEqual(unit, "day")
 
-        map = tgis.RasterDataset("register_map_2@" + tgis.get_current_mapset())
+        map = tgis.RasterDataset("register_map_2@" + tgis.get_current_subproject())
         map.select()
         start, end, unit = map.get_relative_time()
         self.assertEqual(start, 1)
@@ -349,14 +349,14 @@ class TestRasterRegisterFunctions(TestCase):
                  maps="register_map_1,register_map_2",
                  start=1000000, increment=500000, unit="seconds", interval=True)
 
-        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
+        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_subproject())
         map.select()
         start, end, unit = map.get_relative_time()
         self.assertEqual(start, 1000000)
         self.assertEqual(end, 1500000)
         self.assertEqual(unit, "seconds")
 
-        map = tgis.RasterDataset("register_map_2@" + tgis.get_current_mapset())
+        map = tgis.RasterDataset("register_map_2@" + tgis.get_current_subproject())
         map.select()
         start, end, unit = map.get_relative_time()
         self.assertEqual(start, 1500000)
@@ -368,20 +368,20 @@ class TestRasterRegisterFunctions(TestCase):
            the C-interface.
         """
         ciface = tgis.get_tgis_c_library_interface()
-        ciface.write_raster_timestamp("register_map_1", tgis.get_current_mapset(), "1000000 seconds/1500000 seconds")
-        ciface.write_raster_timestamp("register_map_2", tgis.get_current_mapset(), "1500000 seconds/2000000 seconds")
+        ciface.write_raster_timestamp("register_map_1", tgis.get_current_subproject(), "1000000 seconds/1500000 seconds")
+        ciface.write_raster_timestamp("register_map_2", tgis.get_current_subproject(), "1500000 seconds/2000000 seconds")
 
         tgis.register_maps_in_space_time_dataset(type="raster", name=None,
                  maps="register_map_1,register_map_2")
 
-        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
+        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_subproject())
         map.select()
         start, end, unit = map.get_relative_time()
         self.assertEqual(start, 1000000)
         self.assertEqual(end, 1500000)
         self.assertEqual(unit, "seconds")
 
-        map = tgis.RasterDataset("register_map_2@" + tgis.get_current_mapset())
+        map = tgis.RasterDataset("register_map_2@" + tgis.get_current_subproject())
         map.select()
         start, end, unit = map.get_relative_time()
         self.assertEqual(start, 1500000)
@@ -396,7 +396,7 @@ class TestVectorRegisterFunctions(TestCase):
         """Initiate the temporal GIS and set the region
         """
         os.putenv("GRASS_OVERWRITE", "1")
-        # Use always the current mapset as temporal database
+        # Use always the current subproject as temporal database
         cls.runModule("g.gisenv", set="TGIS_USE_CURRENT_MAPSET=1")
         tgis.init()
         cls.use_temp_region()
@@ -445,13 +445,13 @@ class TestVectorRegisterFunctions(TestCase):
                  maps="register_map_1,register_map_2",
                  start="2001-01-01", increment="1 day", interval=True)
 
-        map = tgis.VectorDataset("register_map_1@" + tgis.get_current_mapset())
+        map = tgis.VectorDataset("register_map_1@" + tgis.get_current_subproject())
         map.select()
         start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 2))
 
-        map = tgis.VectorDataset("register_map_2@" + tgis.get_current_mapset())
+        map = tgis.VectorDataset("register_map_2@" + tgis.get_current_subproject())
         map.select()
         start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
@@ -470,19 +470,19 @@ class TestVectorRegisterFunctions(TestCase):
         """
 
         ciface = tgis.get_tgis_c_library_interface()
-        ciface.write_vector_timestamp("register_map_1", tgis.get_current_mapset(), "1 Jan 2001/2 Jan 2001")
-        ciface.write_vector_timestamp("register_map_2", tgis.get_current_mapset(), "2 Jan 2001/3 Jan 2001")
+        ciface.write_vector_timestamp("register_map_1", tgis.get_current_subproject(), "1 Jan 2001/2 Jan 2001")
+        ciface.write_vector_timestamp("register_map_2", tgis.get_current_subproject(), "2 Jan 2001/3 Jan 2001")
 
         tgis.register_maps_in_space_time_dataset(type="vector", name=self.stvds_abs.get_name(),
                                                  maps="register_map_1,register_map_2")
 
-        map = tgis.VectorDataset("register_map_1@" + tgis.get_current_mapset())
+        map = tgis.VectorDataset("register_map_1@" + tgis.get_current_subproject())
         map.select()
         start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 2))
 
-        map = tgis.VectorDataset("register_map_2@" + tgis.get_current_mapset())
+        map = tgis.VectorDataset("register_map_2@" + tgis.get_current_subproject())
         map.select()
         start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
@@ -501,14 +501,14 @@ class TestVectorRegisterFunctions(TestCase):
         """
 
         ciface = tgis.get_tgis_c_library_interface()
-        ciface.write_vector_timestamp("register_map_1", tgis.get_current_mapset(), "1 Jan 2001/2 Jan 2001")
+        ciface.write_vector_timestamp("register_map_1", tgis.get_current_subproject(), "1 Jan 2001/2 Jan 2001")
 
         tgis.register_maps_in_space_time_dataset(type="vector", name=self.stvds_abs.get_name(),
                                                  maps="register_map_1",
                                                  start="2001-02-01", increment="1 day",
                                                  interval=True)
 
-        map = tgis.VectorDataset("register_map_1@" + tgis.get_current_mapset())
+        map = tgis.VectorDataset("register_map_1@" + tgis.get_current_subproject())
         map.select()
         start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 2, 1))
@@ -528,13 +528,13 @@ class TestVectorRegisterFunctions(TestCase):
                  maps="register_map_1,register_map_2",
                  start="2001-01-01", increment="1 day", interval=True)
 
-        map_1 = tgis.VectorDataset("register_map_1@" + tgis.get_current_mapset())
+        map_1 = tgis.VectorDataset("register_map_1@" + tgis.get_current_subproject())
         map_1.select()
         start, end = map_1.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 2))
 
-        map_2 = tgis.VectorDataset("register_map_2@" + tgis.get_current_mapset())
+        map_2 = tgis.VectorDataset("register_map_2@" + tgis.get_current_subproject())
         map_2.select()
         start, end = map_2.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
@@ -560,19 +560,19 @@ class TestVectorRegisterFunctions(TestCase):
                  maps="register_map_1,register_map_2,register_map_empty",
                  start="2001-01-01", increment="1 day", interval=True)
 
-        map_1 = tgis.VectorDataset("register_map_1@" + tgis.get_current_mapset())
+        map_1 = tgis.VectorDataset("register_map_1@" + tgis.get_current_subproject())
         map_1.select()
         start, end = map_1.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 2))
 
-        map_2 = tgis.VectorDataset("register_map_2@" + tgis.get_current_mapset())
+        map_2 = tgis.VectorDataset("register_map_2@" + tgis.get_current_subproject())
         map_2.select()
         start, end = map_2.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
 
-        map_3 = tgis.VectorDataset("register_map_empty@" + tgis.get_current_mapset())
+        map_3 = tgis.VectorDataset("register_map_empty@" + tgis.get_current_subproject())
         map_3.select()
         start, end = map_3.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
@@ -588,7 +588,7 @@ class TestVectorRegisterFunctions(TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
 
-        map_3 = tgis.VectorDataset("register_map_empty@" + tgis.get_current_mapset())
+        map_3 = tgis.VectorDataset("register_map_empty@" + tgis.get_current_subproject())
         self.assertEqual(map_3.map_exists(), False)
 
 

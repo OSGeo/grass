@@ -75,23 +75,23 @@ class GrassTestFilesInvoker(object):
     # not stdout and stderr if they contain test results
     # we can also save only failed tests, or generate only if assert fails
     def __init__(self, start_dir,
-                 clean_mapsets=True, clean_outputs=True, clean_before=True,
+                 clean_subprojects=True, clean_outputs=True, clean_before=True,
                  testsuite_dir='testsuite', file_anonymizer=None):
         """
 
-        :param bool clean_mapsets: if the mapsets should be removed
+        :param bool clean_subprojects: if the subprojects should be removed
         :param bool clean_outputs: meaning is unclear: random tests outputs,
             saved images from maps, profiling?
-        :param bool clean_before: if mapsets, outputs, and results
+        :param bool clean_before: if subprojects, outputs, and results
             should be removed before the tests start
             (advantageous when the previous run left everything behind)
         """
         self.start_dir = start_dir
-        self.clean_mapsets = clean_mapsets
+        self.clean_subprojects = clean_subprojects
         self.clean_outputs = clean_outputs
         self.clean_before = clean_before
         self.testsuite_dir = testsuite_dir  # TODO: solve distribution of this constant
-        # reporter is created for each call of run_in_location()
+        # reporter is created for each call of run_in_project()
         self.reporter = None
 
         self.testsuite_dirs = None
@@ -100,33 +100,33 @@ class GrassTestFilesInvoker(object):
         else:
             self._file_anonymizer = file_anonymizer
 
-    def _create_mapset(self, gisdbase, location, module):
-        """Create mapset according to information in module.
+    def _create_subproject(self, gisdbase, project, module):
+        """Create subproject according to information in module.
 
         :param loader.GrassTestPythonModule module:
         """
-        # TODO: use g.mapset -c, no need to duplicate functionality
+        # TODO: use g.subproject -c, no need to duplicate functionality
         # using path.sep but also / and \ for cases when it is confused
         # (namely the case of Unix path on MS Windows)
         # replace . to get rid of unclean path
         # TODO: clean paths
         # note that backslash cannot be at the end of raw string
         dir_as_name = module.tested_dir.translate(maketrans(r'/\.', '___'))
-        mapset = dir_as_name + '_' + module.name
+        subproject = dir_as_name + '_' + module.name
         # TODO: use grass module to do this? but we are not in the right gisdbase
-        mapset_dir = os.path.join(gisdbase, location, mapset)
+        subproject_dir = os.path.join(gisdbase, project, subproject)
         if self.clean_before:
-            silent_rmtree(mapset_dir)
-        os.mkdir(mapset_dir)
-        # TODO: default region in mapset will be what?
+            silent_rmtree(subproject_dir)
+        os.mkdir(subproject_dir)
+        # TODO: default region in subproject will be what?
         # copy DEFAULT_WIND file from PERMANENT to WIND
-        # TODO: this should be a function in grass.script (used also in gis_set.py, PyGRASS also has its way with Mapset)
+        # TODO: this should be a function in grass.script (used also in gis_set.py, PyGRASS also has its way with Subproject)
         # TODO: are premisions an issue here?
-        shutil.copy(os.path.join(gisdbase, location, 'PERMANENT', 'DEFAULT_WIND'),
-                    os.path.join(mapset_dir, 'WIND'))
-        return mapset, mapset_dir
+        shutil.copy(os.path.join(gisdbase, project, 'PERMANENT', 'DEFAULT_WIND'),
+                    os.path.join(subproject_dir, 'WIND'))
+        return subproject, subproject_dir
 
-    def _run_test_module(self, module, results_dir, gisdbase, location):
+    def _run_test_module(self, module, results_dir, gisdbase, project):
         """Run one test file."""
         self.testsuite_dirs[module.tested_dir].append(module.name)
         cwd = os.path.join(results_dir, module.tested_dir, module.name)
@@ -140,8 +140,8 @@ class GrassTestFilesInvoker(object):
         ensure_dir(os.path.abspath(cwd))
         # TODO: put this to constructor and copy here again
         env = os.environ.copy()
-        mapset, mapset_dir = self._create_mapset(gisdbase, location, module)
-        gisrc = gsetup.write_gisrc(gisdbase, location, mapset)
+        subproject, subproject_dir = self._create_subproject(gisdbase, project, module)
+        gisrc = gsetup.write_gisrc(gisdbase, project, subproject)
 
         # here is special setting of environmental variables for running tests
         # some of them might be set from outside in the future and if the list
@@ -236,12 +236,12 @@ class GrassTestFilesInvoker(object):
         # TODO: add some try-except or with for better error handling
         os.remove(gisrc)
         # TODO: only if clean up
-        if self.clean_mapsets:
-            shutil.rmtree(mapset_dir)
+        if self.clean_subprojects:
+            shutil.rmtree(subproject_dir)
 
-    def run_in_location(self, gisdbase, location, location_type,
+    def run_in_project(self, gisdbase, project, project_type,
                         results_dir):
-        """Run tests in a given location
+        """Run tests in a given project
 
         Returns an object with counting attributes of GrassTestFilesCountingReporter,
         i.e., a file-oriented reporter as opposed to testsuite-oriented one.
@@ -258,23 +258,23 @@ class GrassTestFilesInvoker(object):
                     file_anonymizer=self._file_anonymizer,
                     main_page_name='testfiles.html'),
                 GrassTestFilesKeyValueReporter(
-                    info=dict(location=location, location_type=location_type))
+                    info=dict(project=project, project_type=project_type))
             ])
         self.testsuite_dirs = collections.defaultdict(list)  # reset list of dirs each time
         # TODO: move constants out of loader class or even module
         modules = discover_modules(start_dir=self.start_dir,
-                                   grass_location=location_type,
+                                   grass_project=project_type,
                                    file_regexp=r'.*\.(py|sh)$',
                                    skip_dirs=GrassTestLoader.skip_dirs,
                                    testsuite_dir=GrassTestLoader.testsuite_dir,
-                                   all_locations_value=GrassTestLoader.all_tests_value,
-                                   universal_location_value=GrassTestLoader.universal_tests_value,
+                                   all_projects_value=GrassTestLoader.all_tests_value,
+                                   universal_project_value=GrassTestLoader.universal_tests_value,
                                    import_modules=False)
 
         self.reporter.start(results_dir)
         for module in modules:
             self._run_test_module(module=module, results_dir=results_dir,
-                                  gisdbase=gisdbase, location=location)
+                                  gisdbase=gisdbase, project=project)
         self.reporter.finish()
 
         # TODO: move this to some (new?) reporter
@@ -282,7 +282,7 @@ class GrassTestFilesInvoker(object):
         with open(os.path.join(results_dir, 'index.html'), 'w') as main_index:
             main_index.write(
                 '<html><body>'
-                '<h1>Tests for &lt;{location}&gt;'
+                '<h1>Tests for &lt;{project}&gt;'
                 ' using &lt;{type}&gt; type tests</h1>'
                 '<ul>'
                 '<li><a href="testsuites.html">Results by testsuites</a>'
@@ -290,7 +290,7 @@ class GrassTestFilesInvoker(object):
                 '<li><a href="testfiles.html">Results by test files</a></li>'
                 '<ul>'
                 '</body></html>'
-                .format(location=location, type=location_type))
+                .format(project=project, type=project_type))
 
         testsuite_dir_reporter = TestsuiteDirReporter(
             main_page_name='testsuites.html', testsuite_page_name='index.html',

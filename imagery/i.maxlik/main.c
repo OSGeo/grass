@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     {
 	struct Option *group, *subgroup, *sigfile, *class, *reject;
     } parm;
-    char xmapset[GMAPSET_MAX];
+    char xsubproject[GMAPSET_MAX];
 
     G_gisinit(argv[0]);
 
@@ -102,8 +102,8 @@ int main(int argc, char *argv[])
     subgroup = parm.subgroup->answer;
     sigfile = parm.sigfile->answer;
     
-    if (G_unqualified_name(parm.class->answer, G_mapset(), class_name, xmapset) < 0)
-        G_fatal_error(_("<%s> does not match the current mapset"), xmapset);
+    if (G_unqualified_name(parm.class->answer, G_subproject(), class_name, xsubproject) < 0)
+        G_fatal_error(_("<%s> does not match the current subproject"), xsubproject);
     
     if (G_legal_filename(class_name) < 0)
         G_fatal_error(_("<%s> is an illegal file name"), class_name);
@@ -161,15 +161,15 @@ int main(int argc, char *argv[])
 
 	Rast_set_c_color((CELL) 0, 0, 255, 0, &colr);
 	Rast_set_c_color((CELL) 17, 255, 0, 0, &colr);
-	Rast_write_colors(reject_name, G_mapset(), &colr);
+	Rast_write_colors(reject_name, G_subproject(), &colr);
 	Rast_free_colors(&colr);
     }
 
     /* associate the output files with the group */
     I_get_group_ref(group, &group_ref);
-    I_add_file_to_group_ref(class_name, G_mapset(), &group_ref);
+    I_add_file_to_group_ref(class_name, G_subproject(), &group_ref);
     if (reject_cell)
-	I_add_file_to_group_ref(reject_name, G_mapset(), &group_ref);
+	I_add_file_to_group_ref(reject_name, G_subproject(), &group_ref);
 
     I_put_group_ref(group, &group_ref);
     make_history(class_name, group, subgroup, sigfile);

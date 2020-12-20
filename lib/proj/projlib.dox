@@ -29,7 +29,7 @@ preparations to set up the parameter strings and init the info-structures,
 while lib/proj/do_proj.c contains the actual projection calls.
 
 Files lib/proj/ellipse.c and lib/proj/datum.c contain functions for
-querying GRASS locations and users for ellipsoid and datum information
+querying GRASS projects and users for ellipsoid and datum information
 (some of these functions were included in the GIS library in earlier
 versions of GRASS).
 

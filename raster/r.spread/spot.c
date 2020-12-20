@@ -74,7 +74,7 @@ void spot(struct costHa *pres_cell, int dir /* direction of forward ROS */ )
     int land_distc;		/* land_dist in cell counts */
     int row, col;
 
-    /* Find the (cell) location spotting might reach */
+    /* Find the (cell) project spotting might reach */
 
     land_dist = pick_dist(DATA(map_spotdist, pres_cell->row, pres_cell->col));
 

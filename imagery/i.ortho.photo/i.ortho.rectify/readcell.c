@@ -36,7 +36,7 @@ struct cache *readcell(int fdi, int size, int target_env)
     G_srand48(0);
 
 
-    /* Temporary file must be created in the same location/mapset 
+    /* Temporary file must be created in the same project/subproject 
      * where the module was called */
     if (target_env)
 	select_current_env();

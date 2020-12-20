@@ -130,9 +130,9 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
  - manage:      \ref managelib
  - symbol:	\ref symbol (Drawing symbols for %point %vector data library)
 
-\section location File structure of GRASS Location
+\section project File structure of GRASS Project
 
-A GRASS <b>raster map</b> consists of several files in several subdirectories in a mapset,
+A GRASS <b>raster map</b> consists of several files in several subdirectories in a subproject,
 organized as follows:
 <dl>
  <dt><b>cellhd/</b></dt>

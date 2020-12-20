@@ -39,7 +39,7 @@ extern CPLErr Rast_gdal_raster_IO(GDALRasterBandH, GDALRWFlag,
 struct tileinfo		/* Information for tiles */
 {
     char *name;			/* Name of open file            */
-    char *mapset;		/* Mapset of open file          */
+    char *subproject;		/* Subproject of open file          */
     struct Cell_head cellhd;	/* Cell header                  */
     struct ilist *clist;	/* columns inside current region */
 };
@@ -76,7 +76,7 @@ struct fileinfo			/* Information for opened cell files */
     char *null_temp_name;	/* Temporary name for NEW NULL files */
     int null_file_exists;	/* for existing raster maps     */
     char *name;			/* Name of open file            */
-    char *mapset;		/* Mapset of open file          */
+    char *subproject;		/* Subproject of open file          */
     int io_error;		/* io error warning given       */
     struct Quant quant;
     struct GDAL_link *gdal;

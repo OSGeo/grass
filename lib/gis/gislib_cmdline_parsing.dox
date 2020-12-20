@@ -774,7 +774,7 @@ sub-arguments are defined as follows:
 
  - The first argument: "old" results in a call to the GRASS library
 subroutine G_open_old(), "new" to G_open_new(), otherwise "any" or
-"mapset".
+"subproject".
 
   - If any option has "new" as the first component, the <tt>--o</tt>
 (overwrite) flag will be listed in the module's interface
@@ -784,12 +784,12 @@ subroutine G_open_old(), "new" to G_open_new(), otherwise "any" or
 parser checks whether the entity (map, etc.) already exists.
 
  - The second argument: this is identical to the "element" argument in the
-above subroutine calls. It specifies a directory inside the mapset
+above subroutine calls. It specifies a directory inside the subproject
 that may contain the user's response. In other words, the second field
 is used to determine where to look for the file (i.e. if the option
 has "new,cell,...", it will look in the "cell" directory). The second
 field should be the name of one of the standard subdirectories of the
-mapset, as listed in $GISBASE/etc/element_list.
+subproject, as listed in $GISBASE/etc/element_list.
 
  - The third argument: identical to the "prompt" argument in the above
 subroutine calls. This is a string presented to the user that

@@ -131,7 +131,7 @@ Rast3d_read_header(RASTER3D_Map * map, int *proj, int *zone, double *north,
     struct Key_Value *headerKeys;
     char path[GPATH_MAX];
 
-    Rast3d_filename(path, RASTER3D_HEADER_ELEMENT, map->fileName, map->mapset);
+    Rast3d_filename(path, RASTER3D_HEADER_ELEMENT, map->fileName, map->subproject);
     if (access(path, R_OK) != 0) {
 	Rast3d_error("Rast3d_read_header: unable to find [%s]", path);
 	return 0;
@@ -186,8 +186,8 @@ Rast3d_write_header(RASTER3D_Map * map, int proj, int zone, double north, double
 	return 0;
     }
 
-    Rast3d_filename(path, RASTER3D_HEADER_ELEMENT, map->fileName, map->mapset);
-    Rast3d_make_mapset_map_directory(map->fileName);
+    Rast3d_filename(path, RASTER3D_HEADER_ELEMENT, map->fileName, map->subproject);
+    Rast3d_make_subproject_map_directory(map->fileName);
     G_write_key_value_file(path, headerKeys);
 
     G_free_key_value(headerKeys);

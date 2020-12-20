@@ -203,7 +203,7 @@ int main(int argc, char *argv[])
 	sprintf(buf, "GISDBASE: %s\n", G_gisdbase());
 	Vect_hist_write(&Map, buf);
 	sprintf(buf, "LOCATION: %s MAPSET: %s USER: %s DATE: %s\n",
-		G_location(), G_mapset(), G_whoami(), G_date());
+		G_project(), G_subproject(), G_whoami(), G_date());
 	Vect_hist_write(&Map, buf);
     }
 

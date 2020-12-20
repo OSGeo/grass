@@ -207,7 +207,7 @@ class RenderWMSMgr(wx.EvtHandler):
             try:
                 if r[0] in ['e-w resol3', 'n-s resol3', 'rows3', 'cols3',
                             'depths']:
-                    # ignore 3D region values (causing problems in latlong locations)
+                    # ignore 3D region values (causing problems in latlong projects)
                     continue
                 if r[0] in ['cols', 'rows', 'zone', 'proj']:
                     region[r[0]] = int(r[1])

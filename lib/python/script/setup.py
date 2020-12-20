@@ -15,9 +15,9 @@ Usage::
     # the following path is the default path on MS Windows
     # gisdb = os.path.join(os.path.expanduser("~"), "Documents/grassdata")
 
-    # specify (existing) Location and Mapset
-    location = "nc_spm_08"
-    mapset = "user1"
+    # specify (existing) Project and Subproject
+    project = "nc_spm_08"
+    subproject = "user1"
 
     # path to the GRASS GIS launch script
     # we assume that the GRASS GIS start script is available and on PATH
@@ -63,7 +63,7 @@ Usage::
     import grass.script.setup as gsetup
 
     # launch session
-    rcfile = gsetup.init(gisbase, gisdb, location, mapset)
+    rcfile = gsetup.init(gisbase, gisdb, project, subproject)
 
     # example calls
     gs.message('Current GRASS GIS 7 environment:')
@@ -104,13 +104,13 @@ import tempfile as tmpfile
 windows = sys.platform == 'win32'
 
 
-def write_gisrc(dbase, location, mapset):
+def write_gisrc(dbase, project, subproject):
     """Write the ``gisrc`` file and return its path."""
     gisrc = tmpfile.mktemp()
     with open(gisrc, 'w') as rc:
         rc.write("GISDBASE: %s\n" % dbase)
-        rc.write("LOCATION_NAME: %s\n" % location)
-        rc.write("MAPSET: %s\n" % mapset)
+        rc.write("LOCATION_NAME: %s\n" % project)
+        rc.write("MAPSET: %s\n" % subproject)
     return gisrc
 
 
@@ -121,7 +121,7 @@ def set_gui_path():
         sys.path.insert(0, gui_path)
 
 
-def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
+def init(gisbase, dbase='', project='demoproject', subproject='PERMANENT'):
     """Initialize system variables to run GRASS modules
 
     This function is for running GRASS GIS without starting it with the
@@ -149,8 +149,8 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
 
     :param gisbase: path to GRASS installation
     :param dbase: path to GRASS database (default: '')
-    :param location: location name (default: 'demolocation')
-    :param mapset: mapset within given location (default: 'PERMANENT')
+    :param project: project name (default: 'demoproject')
+    :param subproject: subproject within given project (default: 'PERMANENT')
     
     :returns: path to ``gisrc`` file (to be deleted later)
     """
@@ -182,7 +182,7 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
         os.environ['@LD_LIBRARY_PATH_VAR@'] = ''
     os.environ['@LD_LIBRARY_PATH_VAR@'] += os.pathsep + os.path.join(gisbase, 'lib')
 
-    # TODO: lock the mapset?
+    # TODO: lock the subproject?
     os.environ['GIS_LOCK'] = str(os.getpid())
 
     # Set GRASS_PYTHON and PYTHONPATH to find GRASS Python modules
@@ -201,12 +201,12 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
     os.environ['PYTHONPATH'] = path
 
     # TODO: isn't this contra-productive? may fail soon since we cannot
-    # write to the installation (applies also to defaults for Location
-    # and mapset) I don't see what would be the use case here.
+    # write to the installation (applies also to defaults for Project
+    # and subproject) I don't see what would be the use case here.
     if not dbase:
         dbase = gisbase
 
-    os.environ['GISRC'] = write_gisrc(dbase, location, mapset)
+    os.environ['GISRC'] = write_gisrc(dbase, project, subproject)
     return os.environ['GISRC']
 
 
@@ -265,7 +265,7 @@ def finish():
 
     clean_default_db()
     clean_temp()
-    # TODO: unlock the mapset?
+    # TODO: unlock the subproject?
     # unset the GISRC and delete the file
     from grass.script import utils as gutils
     gutils.try_remove(os.environ['GISRC'])

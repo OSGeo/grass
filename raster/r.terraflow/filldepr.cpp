@@ -82,7 +82,7 @@ ext_fill_depression(AMI_STREAM<boundaryType> *boundaryStr,
 
 
 /************************************************************/ 
-/* inside the function memory allocation is done with malloc/calloc
+/* inside the function memory alproject is done with malloc/calloc
 and not with new; memory check should be done prior to this function
 to decide whether there's enough available memory to run it*/
 /************************************************************/ 

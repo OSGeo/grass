@@ -5,7 +5,7 @@
 <b>grass79</b> [<b>-h</b> | <b>-help</b> | <b>--help</b>] [<b>-v</b> | <b>--version</b>] |
 [<b>-c</b> | <b>-c geofile</b> | <b>-c EPSG:code[:datum_trans]</b>] | <b>-e</b> | <b>-f</b> |
 [<b>--text</b> | <b>--gtext</b> | <b>--gui</b>] | <b>--config</b> |
-[<b>--tmp-location</b> | <b>--tmp-mapset</b>]
+[<b>--tmp-project</b> | <b>--tmp-subproject</b>]
     [[[<b>&lt;GISDBASE&gt;/</b>]<b>&lt;LOCATION&gt;/</b>]
     	<b>&lt;MAPSET&gt;</b>]
 [<b>--exec EXECUTABLE</b>]
@@ -21,19 +21,19 @@
 <dd> Prints the version of GRASS and exits
 
 <dt><b>-c</b>
-<dd> Creates new GRASS unprojected location in specified GISDBASE
+<dd> Creates new GRASS unprojected project in specified GISDBASE
 
 <dt><b>-c geofile</b>
-<dd> Creates new GRASS projected location in specified GISDBASE based on georeferenced file
+<dd> Creates new GRASS projected project in specified GISDBASE based on georeferenced file
 
 <dt><b>-c EPSG:code</b>
-<dd> Creates new GRASS projected location in specified GISDBASE with given EPSG code
+<dd> Creates new GRASS projected project in specified GISDBASE with given EPSG code
 
 <dt><b>-c EPSG:code:datum_trans</b>
-<dd> Creates new GRASS projected location in specified GISDBASE with given EPSG code and datum transform parameters
+<dd> Creates new GRASS projected project in specified GISDBASE with given EPSG code and datum transform parameters
 
 <dt><b>-e</b>
-<dd> Exit after creation of location or mapset. Only with <b>-c</b> flag
+<dd> Exit after creation of project or subproject. Only with <b>-c</b> flag
 
 <dt><b>-f</b>
 <dd> Forces removal of .gislock if exists (use with care!). Only with --text flag
@@ -54,15 +54,15 @@
 <dt><b>--exec EXECUTABLE</b>
 <dd> Execute GRASS module or script. The provided executable will be executed in a GRASS GIS non-interactive session.
 
-<dt><b>--tmp-location</b>
-<dd> Run using a temporary location which is created based on the given
+<dt><b>--tmp-project</b>
+<dd> Run using a temporary project which is created based on the given
 coordinate reference system and deleted at the end of the execution
 (use with the --exec flag).
-The active mapset will be the PERMANENT mapset.
+The active subproject will be the PERMANENT subproject.
 
-<dt><b>--tmp-mapset</b>
-<dd> Run using a temporary mapset which is created in the specified
-location and deleted at the end of the execution
+<dt><b>--tmp-subproject</b>
+<dd> Run using a temporary subproject which is created in the specified
+project and deleted at the end of the execution
 (use with the --exec flag).
 
 </dl>
@@ -75,10 +75,10 @@ location and deleted at the end of the execution
     (e.g., <tt>/usr/local/share/grassdata</tt>)
 
 <dt><b>LOCATION</b>
-<dd> Initial location directory which is a subdirectory of GISDBASE
+<dd> Initial project directory which is a subdirectory of GISDBASE
 
 <dt><b>MAPSET</b>
-<dd> Initial mapset directory which is a subdirectory of LOCATION
+<dd> Initial subproject directory which is a subdirectory of LOCATION
 </dl>
 
 <i>Note</i>: These parameters must be specified in one of the
@@ -97,12 +97,12 @@ line arguments and then initialize GRASS for the user. Since GRASS
 modules require a specific environment, this program must be called
 before any other GRASS module can run. The command line arguments are
 optional and provide the user with a method to indicate the desired
-user interface, as well as the desired mapset to work on.
+user interface, as well as the desired subproject to work on.
 
 <p>The startup program will remember both the desired user interface
-and mapset. Thus, the next time the user runs GRASS, typing
+and subproject. Thus, the next time the user runs GRASS, typing
 <em>grass79</em> (without any options) will start GRASS with the
-previous settings for the user interface and mapset selected.
+previous settings for the user interface and subproject selected.
 
 <p>If you specify a graphical user interface (<b>--gui</b>)
 the <em>grass79</em> program will try to verify that the system you
@@ -130,7 +130,7 @@ version parameters, with the options:
 <h2>SAMPLE DATA</h2>
 
 The GRASS GIS project provides several free sample geospatial datasets
-as ready-to-use locations. They are available to download at
+as ready-to-use projects. They are available to download at
 <a href="https://grass.osgeo.org/download/sample-data/">https://grass.osgeo.org/download/sample-data/</a>.
 
 The "North Carolina data set" is a modern package of geospatial data from
@@ -245,48 +245,48 @@ script. The script file must have its executable bit set.
 <dl>
 <dt><b>grass79</b>
 <dd> Start GRASS using the default user interface. The user will be
-    prompted to choose the appropriate location and mapset.
+    prompted to choose the appropriate project and subproject.
 
 <dt><b>grass79 --gui</b>
 <dd> Start GRASS using the graphical user interface. The user will be
-    prompted to choose the appropriate location and mapset.
+    prompted to choose the appropriate project and subproject.
 
 <dt><b>grass79 --text</b>
 <dd> Start GRASS using the text-based user interface. Appropriate
-location and mapset must be set by environmental variables (see
+project and subproject must be set by environmental variables (see
 examples below) otherwise taken from the last GRASS session.</dd>
 
 <dt><b>grass79 --gtext</b>
 <dd> Start GRASS using the text-based user interface. The user will be
-    prompted to choose the appropriate location and mapset.
+    prompted to choose the appropriate project and subproject.
 
 <dt><b>grass79 $HOME/grassdata/spearfish70/user1</b>
 <dd> Start GRASS using the default user interface and automatically
-    launch into the given mapset, bypassing the mapset selection menu.
+    launch into the given subproject, bypassing the subproject selection menu.
 
 <dt><b>grass79 --gui -</b>
 <dd> Start GRASS using the graphical user interface and try to
-    obtain the location and mapset from environment variables.
+    obtain the project and subproject from environment variables.
 
-<dt><b>grass79 -c EPSG:4326 $HOME/grassdata/mylocation</b>
-<dd> Creates a new GRASS location with EPSG code 4326 (latitude-longitude, WGS84)
+<dt><b>grass79 -c EPSG:4326 $HOME/grassdata/myproject</b>
+<dd> Creates a new GRASS project with EPSG code 4326 (latitude-longitude, WGS84)
     in the specified GISDBASE
 
-<dt><b>grass79 -c EPSG:5514:3 $HOME/grassdata/mylocation</b>
-<dd> Creates a new GRASS location with EPSG code 5514 (S-JTSK / Krovak
+<dt><b>grass79 -c EPSG:5514:3 $HOME/grassdata/myproject</b>
+<dd> Creates a new GRASS project with EPSG code 5514 (S-JTSK / Krovak
     East North - SJTSK) with datum transformation parameters used in
     Czech Republic in the specified GISDBASE
 
 <dt><b>grass79 -c XY $HOME/grassdata/gnomonic --exec g.proj -c proj4='+proj=gnom +lat_0=90 +lon_0=-50'</b>
-<dd>  Creates a new GRASS location from PROJ definition string
+<dd>  Creates a new GRASS project from PROJ definition string
     (here: <a href="https://proj4.org/operations/projections/gnom.html">gnomonic</a>)
     in the specified GISDBASE
 
-<dt><b>grass79 -c myvector.shp $HOME/grassdata/mylocation</b>
-<dd> Creates a new GRASS location based on georeferenced Shapefile
+<dt><b>grass79 -c myvector.shp $HOME/grassdata/myproject</b>
+<dd> Creates a new GRASS project based on georeferenced Shapefile
 
-<dt><b>grass79 -c myraster.tif $HOME/grassdata/mylocation</b>
-<dd> Creates a new GRASS location based on georeferenced GeoTIFF file
+<dt><b>grass79 -c myraster.tif $HOME/grassdata/myproject</b>
+<dd> Creates a new GRASS project based on georeferenced GeoTIFF file
 </dl>
 
 <h3>Batch jobs with the exec interface</h3>
@@ -298,14 +298,14 @@ r.out.gdal input=basin_50K output=basins.tiff
 Region issues ignored.
 -->
 
-Creating a new Location based on a geodata file's projection (<b>-c</b>)
+Creating a new Project based on a geodata file's projection (<b>-c</b>)
 and exit (<b>-e</b>) immediately:
 
 <div class="code"><pre>
 grass79 -c elevation.tiff -e /path/to/grassdata/test1/
 </pre></div>
 
-Linking external raster data to PERMANENT Mapset:
+Linking external raster data to PERMANENT Subproject:
 
 <div class="code"><pre>
 grass79 /path/to/grassdata/test1/PERMANENT/ --exec r.external input=basins.tiff output=basins
@@ -373,81 +373,81 @@ for vector in gs.list_strings(type='vector'):
     print(vector)
 </pre></div>
 
-<h4>Using temporary location</h4>
+<h4>Using temporary project</h4>
 
-Creating a new temporary location based on a georeferenced file's
+Creating a new temporary project based on a georeferenced file's
 projection coordinate reference system (CRS) and simultaneously starting
 computation in a shell script:
 
 <div class="code"><pre>
-grass79 --tmp-location elevation.tiff --exec test.sh
+grass79 --tmp-project elevation.tiff --exec test.sh
 </pre></div>
 
 The same, but using an EPSG code and a Python script:
 
 <div class="code"><pre>
-grass79 --tmp-location EPSG:3358 --exec test.py
+grass79 --tmp-project EPSG:3358 --exec test.py
 </pre></div>
 
-Finally, for special cases, we can create an XY location without any CRS:
+Finally, for special cases, we can create an XY project without any CRS:
 
 <div class="code"><pre>
-grass79 --tmp-location XY --exec test.py
+grass79 --tmp-project XY --exec test.py
 </pre></div>
 
-Temporary location is automatically deleted after computation,
+Temporary project is automatically deleted after computation,
 so the script is expected to export, link or otherwise preserve the
 output data before ending.
 
 <p>
 A single command can be also executed, e.g. to examine properties of the
-temporary location:
+temporary project:
 
 <div class="code"><pre>
-grass79 --tmp-location EPSG:3358 --exec g.proj -p
+grass79 --tmp-project EPSG:3358 --exec g.proj -p
 </pre></div>
 
-A temporary XY location with single command is useful, e.g. to show
+A temporary XY project with single command is useful, e.g. to show
 help text of a module:
 
 <div class="code"><pre>
-grass79 --tmp-location XY --exec r.neighbors --help
+grass79 --tmp-project XY --exec r.neighbors --help
 </pre></div>
 
 
-<h4>Using temporary mapset</h4>
+<h4>Using temporary subproject</h4>
 
 <p>
 A single command can be executed, e.g., to examine properties of a
-location (here using the NC SPM sample location):
+project (here using the NC SPM sample project):
 
 <div class="code"><pre>
-grass79 --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec g.proj -p
+grass79 --tmp-subproject /path/to/grassdata/nc_spm_08/ --exec g.proj -p
 </pre></div>
 
 Computation in a Python script can be executed in the same way:
 
 <div class="code"><pre>
-grass79 --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py
+grass79 --tmp-subproject /path/to/grassdata/nc_spm_08/ --exec processing.py
 </pre></div>
 
 Additional parameters are just passed to the script, so we can run the
 script with different sets of parameters (here 5, 8 and 3, 9) in
-different temporary mapsets which is good for parallel processing.
+different temporary subprojects which is good for parallel processing.
 
 <div class="code"><pre>
-grass79 --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py 5 8
-grass79 --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py 3 9
+grass79 --tmp-subproject /path/to/grassdata/nc_spm_08/ --exec processing.py 5 8
+grass79 --tmp-subproject /path/to/grassdata/nc_spm_08/ --exec processing.py 3 9
 </pre></div>
 
 The same applies to Bash scripts (and other scripts supported on you
 platform):
 
 <div class="code"><pre>
-grass79 --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.sh 5 8
+grass79 --tmp-subproject /path/to/grassdata/nc_spm_08/ --exec processing.sh 5 8
 </pre></div>
 
-The temporary mapset is automatically deleted after computation,
+The temporary subproject is automatically deleted after computation,
 so the script is expected to export, link or otherwise preserve the
 output data before ending.
 

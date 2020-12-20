@@ -100,7 +100,7 @@ int db_set_default_connection(void)
     G_debug(1,
 	    "Creating new default DB params with db_set_default_connection()");
 
-    /* do not use default DB connection settings for the current mapset */
+    /* do not use default DB connection settings for the current subproject */
     G_zero(&connection, sizeof(dbConnection));
 
     if (strcmp(DB_DEFAULT_DRIVER, "dbf") == 0) {
@@ -110,15 +110,15 @@ int db_set_default_connection(void)
 	connection.databaseName = "$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/";
 	db_set_connection(&connection);
 
-	sprintf(buf, "%s/%s/dbf", G_location_path(), G_mapset());
-	G_make_mapset_element("dbf");
+	sprintf(buf, "%s/%s/dbf", G_project_path(), G_subproject());
+	G_make_subproject_element("dbf");
     }
     else if (strcmp(DB_DEFAULT_DRIVER, "sqlite") == 0) {
 	/* Set default values and create sqlite db dir */
 
 	connection.driverName = "sqlite";
 	/*
-	 * TODO: Use one DB for entire mapset (LFS problems?)
+	 * TODO: Use one DB for entire subproject (LFS problems?)
 	 *      or per-map DBs in $MASPET/vector/mapname/sqlite.db (how to set that here?)
 	 *      or $MAPSET/sqlite/mapname.sql as with dbf?
 	 */
@@ -132,7 +132,7 @@ int db_set_default_connection(void)
 	  */
 	connection.databaseName =
 	    "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db";
-	G_make_mapset_element("sqlite");
+	G_make_subproject_element("sqlite");
 	db_set_connection(&connection);
     }
     else

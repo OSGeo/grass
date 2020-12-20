@@ -136,8 +136,8 @@ class RasterRow(RasterAbstractBase):
 
     """
 
-    def __init__(self, name, mapset='', *args, **kargs):
-        super(RasterRow, self).__init__(name, mapset, *args, **kargs)
+    def __init__(self, name, subproject='', *args, **kargs):
+        super(RasterRow, self).__init__(name, subproject, *args, **kargs)
 
     # mode = "r", method = "row",
     @must_be_open
@@ -203,7 +203,7 @@ class RasterRow(RasterAbstractBase):
                 self.cats.mtype = self.mtype
                 self.cats.read()
                 self.hist.read()
-                self._fd = libraster.Rast_open_old(self.name, self.mapset)
+                self._fd = libraster.Rast_open_old(self.name, self.subproject)
                 self._gtype = libraster.Rast_get_map_type(self._fd)
                 self.mtype = RTYPE_STR[self._gtype]
             else:
@@ -535,7 +535,7 @@ class RasterSegment(RasterAbstractBase):
 
             # We copy the raster map content into the segments
             if self.mode == "rw" or self.mode == "r":
-                self._fd = libraster.Rast_open_old(self.name, self.mapset)
+                self._fd = libraster.Rast_open_old(self.name, self.subproject)
                 self._gtype = libraster.Rast_get_map_type(self._fd)
                 self.mtype = RTYPE_STR[self._gtype]
                 # initialize the segment, I need to determine the mtype of the
@@ -613,13 +613,13 @@ def random_map(mapname, mtype, overwrite=True, factor=100):
     return random_map
 
 
-def raster2numpy(rastname, mapset=''):
+def raster2numpy(rastname, subproject=''):
     """Return a numpy array from a raster map
 
     :param str rastname: the name of raster map
-    :parar str mapset: the name of mapset containig raster map
+    :parar str subproject: the name of subproject containig raster map
     """
-    with RasterRow(rastname, mapset=mapset, mode='r') as rast:
+    with RasterRow(rastname, subproject=subproject, mode='r') as rast:
         return np.array(rast)
 
 
@@ -742,11 +742,11 @@ if __name__ == "__main__":
     doctest.testmod()
 
     """Remove the generated vector map, if exist"""
-    mset = utils.get_mapset_raster(test_raster_name, mapset='')
+    mset = utils.get_subproject_raster(test_raster_name, subproject='')
     if mset:
         Module("g.remove", flags='f', type='raster', name=test_raster_name)
-    mset = utils.get_mapset_raster(test_raster_name + "_segment",
-                                   mapset='')
+    mset = utils.get_subproject_raster(test_raster_name + "_segment",
+                                   subproject='')
     if mset:
         Module("g.remove", flags='f', type='raster',
                name=test_raster_name + "_segment")

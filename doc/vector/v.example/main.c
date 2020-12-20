@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     static struct line_pnts *Points;
     struct line_cats *Cats;
     int i, type, cat, ncols, nrows, col, more, open3d;
-    char *mapset, sql[200];
+    char *subproject, sql[200];
     struct GModule *module;	/* GRASS module for parsing arguments */
     struct Option *old, *new;
     dbDriver *driver;
@@ -66,12 +66,12 @@ int main(int argc, char *argv[])
     Cats = Vect_new_cats_struct();
 
     /* Check 1) output is legal vector name; 2) if can find input map; 
-       3) if input was found in current mapset, check if input != output.
+       3) if input was found in current subproject, check if input != output.
        lib/vector/Vlib/legal_vname.c
      */
     Vect_check_input_output_name(old->answer, new->answer, G_FATAL_EXIT);
 
-    if ((mapset = (char *)G_find_vector2(old->answer, "")) == NULL)
+    if ((subproject = (char *)G_find_vector2(old->answer, "")) == NULL)
 	G_fatal_error(_("Vector map <%s> not found"), old->answer);
 
     /* Predetermine level at which a map will be opened for reading 
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
     /* Open existing vector for reading
        lib/vector/Vlib/open.c
      */
-    if (1 > Vect_open_old(&In, old->answer, mapset))
+    if (1 > Vect_open_old(&In, old->answer, subproject))
 	G_fatal_error(_("Unable to open vector map <%s>"), old->answer);
 
     /* Check if old vector is 3D. We should preserve 3D data. */

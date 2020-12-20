@@ -45,7 +45,7 @@ static int is_red(struct RB_NODE *);
 
 
 /* create new tree and initialize
- * returns pointer to new tree, NULL for memory allocation error
+ * returns pointer to new tree, NULL for memory alproject error
  */
 struct RB_TREE *rbtree_create(rb_compare_fn *compare, size_t rb_datasize)
 {

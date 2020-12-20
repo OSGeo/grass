@@ -219,7 +219,7 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
         if (skip_feat)
             continue;
         
-	/* Allocation is handled for line_pnts */
+	/* Alproject is handled for line_pnts */
 	if (0 >
 	    Vect_copy_xyz_to_pnts(Points, xarray, yarray, zarray, n_points)) {
 	    G_warning(_("Unable to copy points"));

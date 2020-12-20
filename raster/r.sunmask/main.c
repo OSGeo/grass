@@ -276,7 +276,7 @@ int main(int argc, char *argv[])
 	locparms = 0;
 
     if (solparms && locparms)	/* both defined */
-	G_fatal_error(_("Either define sun position or location/date/time parameters"));
+	G_fatal_error(_("Either define sun position or project/date/time parameters"));
 
     if (!solparms && !locparms)	/* nothing defined */
 	G_fatal_error(_("Neither sun position nor east/north, date/time/timezone definition are complete"));

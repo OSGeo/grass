@@ -16,7 +16,7 @@
  *
  *  Writes the
  * categories stored in the <em>cats</em> structure into the categories file for
- * map <em>name</em> in the current mapset.  See <em>Rast_write_cats</em>
+ * map <em>name</em> in the current subproject.  See <em>Rast_write_cats</em>
  * (Raster_Category_File) for details and return values.
  *
  *  \param name
@@ -74,7 +74,7 @@ int Rast3d_write_cats(const char *name, struct Categories *cats)
 /*---------------------------------------------------------------------------*/
 
 static int
-read_cats(const char *name, const char *mapset, struct Categories *pcats)
+read_cats(const char *name, const char *subproject, struct Categories *pcats)
  /* adapted from G__read_cats */
 {
     FILE *fd;
@@ -84,7 +84,7 @@ read_cats(const char *name, const char *mapset, struct Categories *pcats)
     int old;
     long num = -1;
 
-    fd = G_fopen_old_misc(RASTER3D_DIRECTORY, RASTER3D_CATS_ELEMENT, name, mapset);
+    fd = G_fopen_old_misc(RASTER3D_DIRECTORY, RASTER3D_CATS_ELEMENT, name, subproject);
     if (!fd)
 	return -2;
 
@@ -163,23 +163,23 @@ read_cats(const char *name, const char *mapset, struct Categories *pcats)
 /*!
  * \brief 
  *
- * Reads the categories file for map <em>name</em> in <em>mapset</em> and
+ * Reads the categories file for map <em>name</em> in <em>subproject</em> and
  * stores the categories in the <em>pcats</em> structure.  See <em>Rast_read_cats</em>
  * (Raster_Category_File) for details and return values.
  *
  *  \param name
- *  \param mapset
+ *  \param subproject
  *  \param pcats
  *  \return int
  */
 
 int
-Rast3d_read_cats(const char *name, const char *mapset, struct Categories *pcats)
+Rast3d_read_cats(const char *name, const char *subproject, struct Categories *pcats)
  /* adapted from Rast_read_cats */
 {
     const char *type;
 
-    switch (read_cats(name, mapset, pcats)) {
+    switch (read_cats(name, subproject, pcats)) {
     case -2:
 	type = "missing";
 	break;
@@ -190,7 +190,7 @@ Rast3d_read_cats(const char *name, const char *mapset, struct Categories *pcats)
 	return 0;
     }
 
-    G_warning("category support for [%s] in mapset [%s] %s",
-	      name, mapset, type);
+    G_warning("category support for [%s] in subproject [%s] %s",
+	      name, subproject, type);
     return -1;
 }

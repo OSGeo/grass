@@ -161,7 +161,7 @@ int test_put_get_value_dcell(void)
     /* Write everything to the disk and reopen the map */
     Rast3d_flush_all_tiles(map);
     Rast3d_close(map);
-    map = Rast3d_open_cell_old("test_put_get_value_dcell", G_mapset(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
+    map = Rast3d_open_cell_old("test_put_get_value_dcell", G_subproject(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
 
 
     G_message("Get the value of x == 9 y == 14 z == 4 -> x + y + z = 27");
@@ -257,7 +257,7 @@ int test_put_get_value_fcell(void)
     Rast3d_flush_all_tiles(map);
     Rast3d_close(map);
 
-    map = Rast3d_open_cell_old("test_put_get_value_fcell", G_mapset(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
+    map = Rast3d_open_cell_old("test_put_get_value_fcell", G_subproject(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
 
        /* Reread the map and compare the expected results */
 
@@ -411,7 +411,7 @@ int test_put_get_value_resampling(void)
 
     Rast3d_adjust_region(&window);
 
-    map = Rast3d_open_cell_old("test_put_get_value_resample", G_mapset(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
+    map = Rast3d_open_cell_old("test_put_get_value_resample", G_subproject(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
 
     /* The window has the 8x resolution as the map region */
     Rast3d_set_window_map(map, &window);

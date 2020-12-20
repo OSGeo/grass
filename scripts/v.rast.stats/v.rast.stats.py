@@ -111,17 +111,17 @@ def main():
 
     ### setup enviro vars ###
     env = grass.gisenv()
-    mapset = env['MAPSET']
+    subproject = env['MAPSET']
 
     vs = vector.split('@')
     if len(vs) > 1:
-        vect_mapset = vs[1]
+        vect_subproject = vs[1]
     else:
-        vect_mapset = mapset
+        vect_subproject = subproject
 
-    # does map exist in CURRENT mapset?
-    if vect_mapset != mapset or not grass.find_file(vector, 'vector', mapset)['file']:
-        grass.fatal(_("Vector map <%s> not found in current mapset") % vector)
+    # does map exist in CURRENT subproject?
+    if vect_subproject != subproject or not grass.find_file(vector, 'vector', subproject)['file']:
+        grass.fatal(_("Vector map <%s> not found in current subproject") % vector)
 
     # check if DBF driver used, in this case cut to 10 chars col names:
     try:

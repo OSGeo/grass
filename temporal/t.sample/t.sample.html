@@ -83,7 +83,7 @@ t.register type=raster -i input=A file="${n1}" start="2001-01-01" increment="1 m
 # Raster map layer in A
 t.rast.list A
 
-name|mapset|start_time|end_time
+name|subproject|start_time|end_time
 a1|PERMANENT|2001-01-01 00:00:00|2001-02-01 00:00:00
 a2|PERMANENT|2001-02-01 00:00:00|2001-03-01 00:00:00
 a3|PERMANENT|2001-03-01 00:00:00|2001-04-01 00:00:00
@@ -97,7 +97,7 @@ t.register type=vector input=P file="${n2}"
 # Vector map layer in P
 t.vect.list P
 
-name|layer|mapset|start_time|end_time
+name|layer|subproject|start_time|end_time
 pnts1|None|PERMANENT|2001-01-01 00:00:00|2001-03-01 00:00:00
 pnts2|None|PERMANENT|2001-05-01 00:00:00|2001-07-01 00:00:00
 

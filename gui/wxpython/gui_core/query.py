@@ -268,9 +268,9 @@ def PrepareQueryResults(coordinates, result):
     for part in result:
         if 'Map' in part:
             itemText = part['Map']
-            if 'Mapset' in part:
-                itemText += '@' + part['Mapset']
-                del part['Mapset']
+            if 'Subproject' in part:
+                itemText += '@' + part['Subproject']
+                del part['Subproject']
             del part['Map']
             if part:
                 data.append({itemText: part})

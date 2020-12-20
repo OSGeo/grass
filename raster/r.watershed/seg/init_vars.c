@@ -144,7 +144,7 @@ int init_vars(int argc, char *argv[])
 	       "SECTION 1 beginning: Initiating Variables. %d sections total.",
 	       tot_parts), tot_parts);
 
-    this_mapset = G_mapset();
+    this_subproject = G_subproject();
     /* for sd factor
        if (dep_flag)        {
        if (sscanf (dep_name, "%lf", &dep_slope) != 1)       {

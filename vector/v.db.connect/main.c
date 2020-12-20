@@ -154,8 +154,8 @@ int main(int argc, char **argv)
 	    G_fatal_error(_("Unable to open vector map <%s>"), inopt->answer);
     }
     else {
-	if (Vect_open_update_head(&Map, inopt->answer, G_mapset()) < 1)
-	    G_fatal_error(_("Unable to modify vector map stored in other mapset"));
+	if (Vect_open_update_head(&Map, inopt->answer, G_subproject()) < 1)
+	    G_fatal_error(_("Unable to modify vector map stored in other subproject"));
 	Vect_hist_command(&Map);
     }
 

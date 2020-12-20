@@ -17,7 +17,7 @@ for details.
 :authors: Soeren Gebbert
 """
 from __future__ import print_function
-from .core import get_current_mapset, get_tgis_message_interface, SQLDatabaseInterfaceConnection
+from .core import get_current_subproject, get_tgis_message_interface, SQLDatabaseInterfaceConnection
 from .datetime_math import time_delta_to_relative_time
 from .factory import dataset_factory
 
@@ -33,7 +33,7 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
         the map names are separated by comma.
 
         In case a layer is present, the names map ids are extended
-        in this form: "name:layer@mapset"
+        in this form: "name:layer@subproject"
 
         Attention: Do not use the comma as separator for printing
 
@@ -56,7 +56,7 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
 
         :return: The map matrix or None if nothing found
     """
-    mapset = get_current_mapset()
+    subproject = get_current_subproject()
     msgr = get_tgis_message_interface()
 
     # Make a method list
@@ -73,7 +73,7 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
         if input.find("@") >= 0:
             id = input
         else:
-            id = input + "@" + mapset
+            id = input + "@" + subproject
 
         st = dataset_factory(intype, id)
         sts.append(st)
@@ -81,7 +81,7 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
     if sampler.find("@") >= 0:
         sid = sampler
     else:
-        sid = sampler + "@" + mapset
+        sid = sampler + "@" + subproject
 
     sst = dataset_factory(sampletype, sid)
 

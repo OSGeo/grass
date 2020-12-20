@@ -313,8 +313,8 @@ Geographic Resources Analysis Support System (GRASS GIS).
           [-e] [-f] [--text | --gtext | --gui] [--config param]
           [[[GISDBASE/]LOCATION/]MAPSET]
   $CMD_NAME [FLAG]... GISDBASE/LOCATION/MAPSET --exec EXECUTABLE [EPARAM]...
-  $CMD_NAME --tmp-location [geofile | EPSG | XY] --exec EXECUTABLE [EPARAM]...
-  $CMD_NAME --tmp-mapset GISDBASE/LOCATION/ --exec EXECUTABLE [EPARAM]...
+  $CMD_NAME --tmp-project [geofile | EPSG | XY] --exec EXECUTABLE [EPARAM]...
+  $CMD_NAME --tmp-subproject GISDBASE/LOCATION/ --exec EXECUTABLE [EPARAM]...
 
 {flags}:
   -h or --help                   {help_flag}
@@ -332,19 +332,19 @@ Geographic Resources Analysis Support System (GRASS GIS).
                                    {config_detail}
   --exec EXECUTABLE              {exec_}
                                    {exec_detail}
-  --tmp-location                 {tmp_location}
-                                   {tmp_location_detail}
-  --tmp-mapset                   {tmp_mapset}
-                                   {tmp_mapset_detail}
+  --tmp-project                 {tmp_project}
+                                   {tmp_project_detail}
+  --tmp-subproject                   {tmp_subproject}
+                                   {tmp_subproject_detail}
 
 {params}:
   GISDBASE                       {gisdbase}
                                    {gisdbase_detail}
-  LOCATION                       {location}
-                                   {location_detail}
-  MAPSET                         {mapset}
+  LOCATION                       {project}
+                                   {project_detail}
+  MAPSET                         {subproject}
 
-  GISDBASE/LOCATION/MAPSET       {full_mapset}
+  GISDBASE/LOCATION/MAPSET       {full_subproject}
 
   EXECUTABLE                     {executable}
   EPARAM                         {executable_params}
@@ -367,8 +367,8 @@ def help_message(default_gui):
             flags=_("Flags"),
             help_flag=_("print this help message"),
             version_flag=_("show version information and exit"),
-            create=_("create given database, location or mapset if it doesn't exist"),
-            exit_after=_("exit after creation of location or mapset. Only with -c flag"),
+            create=_("create given database, project or subproject if it doesn't exist"),
+            exit_after=_("exit after creation of project or subproject. Only with -c flag"),
             force_removal=_("force removal of .gislock if exists (use with care!). Only with --text flag"),
             text=_("use text based interface (skip graphical welcome screen)"),
             text_detail=_("and set as default"),
@@ -380,11 +380,11 @@ def help_message(default_gui):
             config_detail=_("options: arch,build,compiler,date,path,revision,svn_revision,version"),
             params=_("Parameters"),
             gisdbase=_("initial GRASS database directory"),
-            gisdbase_detail=_("directory containing Locations"),
-            location=_("initial GRASS Location"),
-            location_detail=_("directory containing Mapsets with one common coordinate system (projection)"),
-            mapset=_("initial GRASS Mapset"),
-            full_mapset=_("fully qualified initial Mapset directory"),
+            gisdbase_detail=_("directory containing Projects"),
+            project=_("initial GRASS Project"),
+            project_detail=_("directory containing Subprojects with one common coordinate system (projection)"),
+            subproject=_("initial GRASS Subproject"),
+            full_subproject=_("fully qualified initial Subproject directory"),
             env_vars=_("Environment variables relevant for startup"),
             gui_var=_("select GUI (text, gui, gtext)"),
             html_var=_("set html web browser for help pages"),
@@ -397,10 +397,10 @@ def help_message(default_gui):
             executable=_("GRASS module, script or any other executable"),
             executable_params=_("parameters of the executable"),
             standard_flags=_("standard flags"),
-            tmp_location=_("create temporary location (use with the --exec flag)"),
-            tmp_location_detail=_("created in a temporary directory and deleted at exit"),
-            tmp_mapset=_("create temporary mapset (use with the --exec flag)"),
-            tmp_mapset_detail=_("created in the specified location and deleted at exit"),
+            tmp_project=_("create temporary project (use with the --exec flag)"),
+            tmp_project_detail=_("created in a temporary directory and deleted at exit"),
+            tmp_subproject=_("create temporary subproject (use with the --exec flag)"),
+            tmp_subproject_detail=_("created in the specified project and deleted at exit"),
         )
     )
     s = t.substitute(CMD_NAME=CMD_NAME, DEFAULT_GUI=default_gui,
@@ -415,7 +415,7 @@ def get_grass_config_dir():
     it if it does not exist.
 
     Configuration directory is for example used for grass env file
-    (the one which caries mapset settings from session to session).
+    (the one which caries subproject settings from session to session).
     """
     if sys.platform == 'win32':
         grass_config_dirname = "GRASS7"
@@ -825,13 +825,13 @@ def save_gui(gisrc, grass_gui):
         write_gisrc(kv, gisrc)
 
 
-def create_location(gisdbase, location, geostring):
-    """Create GRASS Location using georeferenced file or EPSG
+def create_project(gisdbase, project, geostring):
+    """Create GRASS Project using georeferenced file or EPSG
 
     EPSG code format is ``EPSG:code`` or ``EPSG:code:datum_trans``.
 
     :param gisdbase: Path to GRASS GIS database directory
-    :param location: name of new Location
+    :param project: name of new Project
     :param geostring: path to a georeferenced file or EPSG code
     """
     if gpath('etc', 'python') not in sys.path:
@@ -840,89 +840,89 @@ def create_location(gisdbase, location, geostring):
 
     try:
         if geostring and geostring.upper().find('EPSG:') > -1:
-            # create location using EPSG code
+            # create project using EPSG code
             epsg = geostring.split(':', 1)[1]
             if ':' in epsg:
                 epsg, datum_trans = epsg.split(':', 1)
             else:
                 datum_trans = None
-            gcore.create_location(gisdbase, location,
+            gcore.create_project(gisdbase, project,
                                   epsg=epsg, datum_trans=datum_trans)
         elif geostring == 'XY':
-            # create an XY location
-            gcore.create_location(gisdbase, location)
+            # create an XY project
+            gcore.create_project(gisdbase, project)
         else:
-            # create location using georeferenced file
-            gcore.create_location(gisdbase, location,
+            # create project using georeferenced file
+            gcore.create_project(gisdbase, project,
                                   filename=geostring)
     except gcore.ScriptError as err:
         fatal(err.value.strip('"').strip("'").replace('\\n', os.linesep))
 
 
-def can_create_location(gisdbase, location):
-    """Checks if location can be created"""
-    path = os.path.join(gisdbase, location)
+def can_create_project(gisdbase, project):
+    """Checks if project can be created"""
+    path = os.path.join(gisdbase, project)
     if os.path.exists(path):
         return False
     return True
 
 
-def cannot_create_location_reason(gisdbase, location):
-    """Returns a message describing why location cannot be created
+def cannot_create_project_reason(gisdbase, project):
+    """Returns a message describing why project cannot be created
 
     The goal is to provide the most suitable error message
     (rather than to do a quick check).
 
     :param gisdbase: Path to GRASS GIS database directory
-    :param location: name of a Location
+    :param project: name of a Project
     :returns: translated message
     """
-    from grass.grassdb.checks import is_location_valid
+    from grass.grassdb.checks import is_project_valid
 
-    path = os.path.join(gisdbase, location)
-    if is_location_valid(gisdbase, location):
-        return _("Unable to create new location because"
-                 " the location <{location}>"
+    path = os.path.join(gisdbase, project)
+    if is_project_valid(gisdbase, project):
+        return _("Unable to create new project because"
+                 " the project <{project}>"
                  " already exists.").format(**locals())
     elif os.path.isfile(path):
-        return _("Unable to create new location <{location}> because"
+        return _("Unable to create new project <{project}> because"
                  " <{path}> is a file.").format(**locals())
     elif os.path.isdir(path):
-        return _("Unable to create new location <{location}> because"
+        return _("Unable to create new project <{project}> because"
                  " the directory <{path}>"
                  " already exists.").format(**locals())
     else:
-        return _("Unable to create new location in"
+        return _("Unable to create new project in"
                  " the directory <{path}>"
                  " for an unknown reason.").format(**locals())
 
 
-def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
-               tmp_location=False, tmp_mapset=False, tmpdir=None):
-    """Selected Location and Mapset are checked and created if requested
+def set_subproject(gisrc, arg=None, geofile=None, create_new=False,
+               tmp_project=False, tmp_subproject=False, tmpdir=None):
+    """Selected Project and Subproject are checked and created if requested
 
     The gisrc (GRASS environment file) is written at the end
     (nothing is returned).
 
-    tmp_location requires tmpdir (which is used as gisdbase)
+    tmp_project requires tmpdir (which is used as gisdbase)
     """
     from grass.grassdb.checks import (
-        is_mapset_valid,
-        is_location_valid,
-        get_mapset_invalid_reason,
-        get_location_invalid_reason,
-        get_location_invalid_suggestion,
-        mapset_exists,
+        is_subproject_valid,
+        is_project_valid,
+        get_subproject_invalid_reason,
+        get_project_invalid_reason,
+        get_project_invalid_suggestion,
+        subproject_exists,
     )
-    # TODO: arg param seems to be always the mapset parameter (or a dash
+    # TODO: arg param seems to be always the subproject parameter (or a dash
     # in a distant past), refactor
     l = arg
     if l:
         # TODO: the block below could be just one line: os.path.abspath(l)
         # abspath both resolves relative paths and normalizes the path
         # so that trailing / is stripped away and split then always returns
-        # non-empty element as the last element (which is good for both mapset
-        # and location split)
+        # non-empty element as the last element (which is good for both subproject
+        # and project split)
         if l == '.':
             l = os.getcwd()
         elif not os.path.isabs(l):
@@ -930,126 +930,126 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
         if l.endswith(os.path.sep):
             l = l.rstrip(os.path.sep)
             # now we can get the last element by split on the first go
-            # and it works for the last element being mapset or location
+            # and it works for the last element being subproject or project
 
-        if tmp_mapset:
-            # We generate a random name and then create the mapset as usual.
-            mapset = "tmp_" + uuid.uuid4().hex
+        if tmp_subproject:
+            # We generate a random name and then create the subproject as usual.
+            subproject = "tmp_" + uuid.uuid4().hex
             create_new = True
         else:
-            l, mapset = os.path.split(l)
-        l, location_name = os.path.split(l)
+            l, subproject = os.path.split(l)
+        l, project_name = os.path.split(l)
         gisdbase = l
 
     # all was None for tmp loc so that case goes here quickly
     # TODO: but the above code needs review anyway
-    if tmp_location:
+    if tmp_project:
         # set gisdbase to temporary directory
         gisdbase = tmpdir
         # we are already in a unique directory, so we can use fixed name
-        location_name = "tmploc"
-        # we need only one mapset
-        mapset = "PERMANENT"
-        debug("Using temporary location <{gdb}{sep}{lc}>".format(
-            gdb=gisdbase, lc=location_name, sep=os.path.sep))
+        project_name = "tmploc"
+        # we need only one subproject
+        subproject = "PERMANENT"
+        debug("Using temporary project <{gdb}{sep}{lc}>".format(
+            gdb=gisdbase, lc=project_name, sep=os.path.sep))
 
-    if gisdbase and location_name and mapset:
-        path = os.path.join(gisdbase, location_name, mapset)
-        # check if 'path' is a valid GRASS location/mapset
-        path_is_valid_mapset = is_mapset_valid(path)
+    if gisdbase and project_name and subproject:
+        path = os.path.join(gisdbase, project_name, subproject)
+        # check if 'path' is a valid GRASS project/subproject
+        path_is_valid_subproject = is_subproject_valid(path)
 
-        if path_is_valid_mapset and tmp_mapset:
-            # If we would be creating the mapset directory at the same time as
+        if path_is_valid_subproject and tmp_subproject:
+            # If we would be creating the subproject directory at the same time as
             # generating the name, we could just try another name in case of
             # conflict. Conflict is unlikely, but it would be worth considering
             # it during refactoring of this code.
-            fatal(_("Mapset <{}> already exists."
-                    " Unable to create a new temporary mapset of that name.")
+            fatal(_("Subproject <{}> already exists."
+                    " Unable to create a new temporary subproject of that name.")
                   .format(path))
-        elif path_is_valid_mapset and create_new:
-            warning(_("Mapset <{}> already exists. Ignoring the"
+        elif path_is_valid_subproject and create_new:
+            warning(_("Subproject <{}> already exists. Ignoring the"
                       " request to create it. Note that this warning"
                       " may become an error in future versions.")
                     .format(path))
 
-        if not path_is_valid_mapset:
+        if not path_is_valid_subproject:
             if not create_new:
-                # 'path' is not a valid mapset and user does not
+                # 'path' is not a valid subproject and user does not
                 # want to create anything new
-                reason = get_mapset_invalid_reason(gisdbase, location_name, mapset)
-                if not mapset_exists(gisdbase, location_name, mapset):
-                    suggestion = _("A new mapset can be created using '-c' flag.")
+                reason = get_subproject_invalid_reason(gisdbase, project_name, subproject)
+                if not subproject_exists(gisdbase, project_name, subproject):
+                    suggestion = _("A new subproject can be created using '-c' flag.")
                 else:
                     suggestion = _("Maybe you meant a different directory.")
                 fatal("{reason}\n{suggestion}".format(**locals()))
             else:
                 # 'path' is not valid and the user wants to create
-                # mapset on the fly
-                # check if 'location_name' is a valid GRASS location
-                if not is_location_valid(gisdbase, location_name):
-                    if not (tmp_location or tmp_mapset):
-                        # 'location_name' is not a valid GRASS location
+                # subproject on the fly
+                # check if 'project_name' is a valid GRASS project
+                if not is_project_valid(gisdbase, project_name):
+                    if not (tmp_project or tmp_subproject):
+                        # 'project_name' is not a valid GRASS project
                         # and user requested its creation, so we parsed
                         # the path wrong and need to move one level
-                        # and use 'PERMANENT' mapset
+                        # and use 'PERMANENT' subproject
                         # (we already got that right in case of tmploc)
-                        gisdbase = os.path.join(gisdbase, location_name)
-                        location_name = mapset
-                        mapset = "PERMANENT"
-                    if tmp_mapset:
-                        suggestion = get_location_invalid_suggestion(
-                            gisdbase, location_name)
-                        reason = get_location_invalid_reason(
-                            gisdbase, location_name)
+                        gisdbase = os.path.join(gisdbase, project_name)
+                        project_name = subproject
+                        subproject = "PERMANENT"
+                    if tmp_subproject:
+                        suggestion = get_project_invalid_suggestion(
+                            gisdbase, project_name)
+                        reason = get_project_invalid_reason(
+                            gisdbase, project_name)
                         if suggestion:
                             fatal("{reason}\n{suggestion}".format(**locals()))
                         else:
                             fatal(reason)
-                    if not can_create_location(gisdbase, location_name):
-                        fatal(cannot_create_location_reason(
-                            gisdbase, location_name))
-                    # create new location based on the provided EPSG/...
-                    message(_("Creating new GRASS GIS location <{}>...")
-                            .format(location_name))
-                    create_location(gisdbase, location_name, geofile)
+                    if not can_create_project(gisdbase, project_name):
+                        fatal(cannot_create_project_reason(
+                            gisdbase, project_name))
+                    # create new project based on the provided EPSG/...
+                    message(_("Creating new GRASS GIS project <{}>...")
+                            .format(project_name))
+                    create_project(gisdbase, project_name, geofile)
                 else:
-                    # 'location_name' is a valid GRASS location,
-                    # create new mapset
-                    message(_("Creating new GRASS GIS mapset <{}>...")
-                            .format(mapset))
+                    # 'project_name' is a valid GRASS project,
+                    # create new subproject
+                    message(_("Creating new GRASS GIS subproject <{}>...")
+                            .format(subproject))
                     if os.path.isfile(path):
-                        # not a valid mapset, but dir exists, assuming
-                        # broken/incomplete mapset
-                        fatal(_("Unable to create new mapset <{mapset}>"
+                        # not a valid subproject, but dir exists, assuming
+                        # broken/incomplete subproject
+                        fatal(_("Unable to create new subproject <{subproject}>"
                                 " because <{path}> is a file.")
-                              .format(mapset=mapset, path=path))
+                              .format(subproject=subproject, path=path))
                     elif os.path.isdir(path):
-                        # not a valid mapset, but dir exists, assuming
-                        # broken/incomplete mapset
-                        warning(_("The mapset <{}> is missing the WIND file"
+                        # not a valid subproject, but dir exists, assuming
+                        # broken/incomplete subproject
+                        warning(_("The subproject <{}> is missing the WIND file"
                                   " (computational region). It will be"
                                   " fixed now. Note that this warning"
                                   " may become an error in future versions.")
-                                .format(mapset))
+                                .format(subproject))
                     else:
-                        # create mapset directory
+                        # create subproject directory
                         os.mkdir(path)
-                        if tmp_mapset:
-                            # The tmp location is handled by (re-)using the
+                        if tmp_subproject:
+                            # The tmp project is handled by (re-)using the
                             # tmpdir, but we need to take care of the tmp
-                            # mapset which is only a subtree in an existing
-                            # location. We simply remove the tree at exit.
-                            # All mapset cleaning functions should succeed
+                            # subproject which is only a subtree in an existing
+                            # project. We simply remove the tree at exit.
+                            # All subproject cleaning functions should succeed
                             # because they are called before exit or registered
                             # only later (and thus called before this one).
                             # (Theoretically, they could be disabled if that's
-                            # just cleaning a files in the mapset directory.)
+                            # just cleaning a files in the subproject directory.)
                             atexit.register(
                                 lambda: shutil.rmtree(path, ignore_errors=True)
                             )
-                    # make directory a mapset, add the region
-                    # copy PERMANENT/DEFAULT_WIND to <mapset>/WIND
-                    s = readfile(os.path.join(gisdbase, location_name,
+                    # make directory a subproject, add the region
+                    # copy PERMANENT/DEFAULT_WIND to <subproject>/WIND
+                    s = readfile(os.path.join(gisdbase, project_name,
                                               "PERMANENT", "DEFAULT_WIND"))
                     writefile(os.path.join(path, "WIND"), s)
 
@@ -1059,17 +1059,17 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
             kv = {}
 
         kv['GISDBASE'] = gisdbase
-        kv['LOCATION_NAME'] = location_name
-        kv['MAPSET'] = mapset
+        kv['LOCATION_NAME'] = project_name
+        kv['MAPSET'] = subproject
         write_gisrc(kv, gisrc)
     else:
-        fatal(_("GRASS GIS database directory, location and mapset"
+        fatal(_("GRASS GIS database directory, project and subproject"
                 " not set properly."
                 " Use GUI or command line to set them."))
 
 
-def set_mapset_interactive(grass_gui):
-    """User selects Location and Mapset in an interative way
+def set_subproject_interactive(grass_gui):
+    """User selects Project and Subproject in an interative way
 
     The gisrc (GRASS environment file) is written at the end.
     """
@@ -1129,72 +1129,72 @@ def gui_startup(grass_gui):
 
 # we don't follow the LOCATION_NAME legacy naming here but we have to still
 # translate to it, so always double check
-class MapsetSettings(object):
-    """Holds GRASS GIS database directory, Location and Mapset
+class SubprojectSettings(object):
+    """Holds GRASS GIS database directory, Project and Subproject
 
     Provides few convenient functions.
     """
     def __init__(self):
         self.gisdbase = None
-        self.location = None
-        self.mapset = None
-        self._full_mapset = None
+        self.project = None
+        self.subproject = None
+        self._full_subproject = None
 
-    # TODO: perhaps full_mapset would be better as mapset_path
+    # TODO: perhaps full_subproject would be better as subproject_path
     # TODO: works only when set for the first time
     # this follows the current usage but we must invalidate when
     # the others are changed (use properties for that)
     @property
-    def full_mapset(self):
-        if self._full_mapset is None:
-            self._full_mapset = os.path.join(self.gisdbase, self.location,
-                                             self.mapset)
-        return self._full_mapset
+    def full_subproject(self):
+        if self._full_subproject is None:
+            self._full_subproject = os.path.join(self.gisdbase, self.project,
+                                             self.subproject)
+        return self._full_subproject
 
     # TODO: perhaps conversion to bool would be nicer
     def is_valid(self):
-        return self.gisdbase and self.location and self.mapset
+        return self.gisdbase and self.project and self.subproject
 
 
 # TODO: does it really makes sense to tell user about gisrcrc?
 # anything could have happened in between loading from gisrcrc and now
 # (we do e.g. GUI or creating loctation)
 def load_gisrc(gisrc, gisrcrc):
-    """Get the settings of Location and Mapset from the gisrc file
+    """Get the settings of Project and Subproject from the gisrc file
 
-    :returns: MapsetSettings object
+    :returns: SubprojectSettings object
     """
-    mapset_settings = MapsetSettings()
+    subproject_settings = SubprojectSettings()
     kv = read_gisrc(gisrc)
-    mapset_settings.gisdbase = kv.get('GISDBASE')
-    mapset_settings.location = kv.get('LOCATION_NAME')
-    mapset_settings.mapset = kv.get('MAPSET')
-    if not mapset_settings.is_valid():
+    subproject_settings.gisdbase = kv.get('GISDBASE')
+    subproject_settings.project = kv.get('LOCATION_NAME')
+    subproject_settings.subproject = kv.get('MAPSET')
+    if not subproject_settings.is_valid():
         fatal(_("Error reading data path information from g.gisenv.\n"
                 "GISDBASE={gisdbase}\n"
-                "LOCATION_NAME={location}\n"
-                "MAPSET={mapset}\n\n"
+                "LOCATION_NAME={project}\n"
+                "MAPSET={subproject}\n\n"
                 "Check the <{file}> file.").format(
-                    gisdbase=mapset_settings.gisdbase,
-                    location=mapset_settings.location,
-                    mapset=mapset_settings.mapset,
+                    gisdbase=subproject_settings.gisdbase,
+                    project=subproject_settings.project,
+                    subproject=subproject_settings.subproject,
                     file=gisrcrc))
-    return mapset_settings
+    return subproject_settings
 
 
-def can_start_in_gisrc_mapset(gisrc, ignore_lock=False):
-    """Check if a mapset from a gisrc file is usable for a new session"""
-    from grass.grassdb.checks import can_start_in_mapset
+def can_start_in_gisrc_subproject(gisrc, ignore_lock=False):
+    """Check if a subproject from a gisrc file is usable for a new session"""
+    from grass.grassdb.checks import can_start_in_subproject
 
-    mapset_settings = MapsetSettings()
+    subproject_settings = SubprojectSettings()
     kv = read_gisrc(gisrc)
-    mapset_settings.gisdbase = kv.get('GISDBASE')
-    mapset_settings.location = kv.get('LOCATION_NAME')
-    mapset_settings.mapset = kv.get('MAPSET')
-    if not mapset_settings.is_valid():
+    subproject_settings.gisdbase = kv.get('GISDBASE')
+    subproject_settings.project = kv.get('LOCATION_NAME')
+    subproject_settings.subproject = kv.get('MAPSET')
+    if not subproject_settings.is_valid():
         return False
-    return can_start_in_mapset(
-        mapset_path=mapset_settings.full_mapset, ignore_lock=ignore_lock
+    return can_start_in_subproject(
+        subproject_path=subproject_settings.full_subproject, ignore_lock=ignore_lock
     )
 
 
@@ -1445,29 +1445,29 @@ def set_language(grass_config_dir):
 
 
 # TODO: grass_gui parameter is a hack and should be removed, see below
-def lock_mapset(mapset_path, force_gislock_removal, user, grass_gui):
-    """Lock the mapset and return name of the lock file
+def lock_subproject(subproject_path, force_gislock_removal, user, grass_gui):
+    """Lock the subproject and return name of the lock file
 
     Behavior on error must be changed somehow; now it fatals but GUI case is
     unresolved.
     """
-    if not os.path.exists(mapset_path):
-        fatal(_("Path '%s' doesn't exist") % mapset_path)
-    if not os.access(mapset_path, os.W_OK):
-        error = _("Path '%s' not accessible.") % mapset_path
-        stat_info = os.stat(mapset_path)
-        mapset_uid = stat_info.st_uid
-        if mapset_uid != os.getuid():
-            # GTC %s is mapset's folder path
-            error = "%s\n%s" % (error, _("You are not the owner of '%s'.") % mapset_path)
+    if not os.path.exists(subproject_path):
+        fatal(_("Path '%s' doesn't exist") % subproject_path)
+    if not os.access(subproject_path, os.W_OK):
+        error = _("Path '%s' not accessible.") % subproject_path
+        stat_info = os.stat(subproject_path)
+        subproject_uid = stat_info.st_uid
+        if subproject_uid != os.getuid():
+            # GTC %s is subproject's folder path
+            error = "%s\n%s" % (error, _("You are not the owner of '%s'.") % subproject_path)
         fatal(error)
     # Check for concurrent use
-    lockfile = os.path.join(mapset_path, ".gislock")
+    lockfile = os.path.join(subproject_path, ".gislock")
     ret = call([gpath("etc", "lock"), lockfile, "%d" % os.getpid()])
     msg = None
     if ret == 2:
         if not force_gislock_removal:
-            msg = _("%(user)s is currently running GRASS in selected mapset"
+            msg = _("%(user)s is currently running GRASS in selected subproject"
                     " (file %(file)s found). Concurrent use not allowed.\n"
                     "You can force launching GRASS using -f flag"
                     " (note that you need permission for this operation)."
@@ -1476,7 +1476,7 @@ def lock_mapset(mapset_path, force_gislock_removal, user, grass_gui):
                         'user': user, 'file': lockfile})
         else:
             try_remove(lockfile)
-            message(_("%(user)s is currently running GRASS in selected mapset"
+            message(_("%(user)s is currently running GRASS in selected subproject"
                       " (file %(file)s found). Forcing to launch GRASS..." % {
                           'user': user, 'file': lockfile}))
     elif ret != 0:
@@ -1492,19 +1492,19 @@ def lock_mapset(mapset_path, force_gislock_removal, user, grass_gui):
             # TODO: here we probably miss fatal or exit, needs to be added
         else:
             fatal(msg)
-    debug("Mapset <{mapset}> locked using '{lockfile}'".format(
-        mapset=mapset_path, lockfile=lockfile))
+    debug("Subproject <{subproject}> locked using '{lockfile}'".format(
+        subproject=subproject_path, lockfile=lockfile))
     return lockfile
 
 
 # TODO: the gisrcrc here does not make sense, remove it from load_gisrc
-def unlock_gisrc_mapset(gisrc, gisrcrc):
-    """Unlock mapset from the gisrc file"""
+def unlock_gisrc_subproject(gisrc, gisrcrc):
+    """Unlock subproject from the gisrc file"""
     settings = load_gisrc(gisrc, gisrcrc)
-    lockfile = os.path.join(settings.full_mapset, ".gislock")
+    lockfile = os.path.join(settings.full_subproject, ".gislock")
     # this fails silently, perhaps a warning would be helpful to
     # catch cases when removal was not possible due to e.g. another
-    # session force-removing the file (unlocking the mapset)
+    # session force-removing the file (unlocking the subproject)
     try_remove(lockfile)
 
 
@@ -1516,12 +1516,12 @@ def make_fontcap():
         call(["g.mkfontcap"])
 
 
-def ensure_db_connected(mapset):
+def ensure_db_connected(subproject):
     """Predefine default driver if DB connection not defined
 
-    :param mapset: full path to the mapset
+    :param subproject: full path to the subproject
     """
-    if not os.access(os.path.join(mapset, "VAR"), os.F_OK):
+    if not os.access(os.path.join(subproject, "VAR"), os.F_OK):
         call(['db.connect', '-c', '--quiet'])
 
 
@@ -1770,9 +1770,9 @@ def show_info(shellname, grass_gui, default_gui):
     message("")
 
 
-def csh_startup(location, grass_env_file):
+def csh_startup(project, grass_env_file):
     userhome = os.getenv('HOME')      # save original home
-    home = location
+    home = project
     os.environ['HOME'] = home
 
     cshrc = os.path.join(home, ".cshrc")
@@ -1786,9 +1786,9 @@ def csh_startup(location, grass_env_file):
     f.write("set histfile = %s\n" % os.path.join(os.getenv('HOME'),
                                                  ".history"))
 
-    f.write("alias _location g.gisenv get=LOCATION_NAME\n")
-    f.write("alias _mapset g.gisenv get=MAPSET\n")
-    f.write("alias precmd \'echo \"Mapset <`_mapset`> in Location <`_location`>\"\'\n")
+    f.write("alias _project g.gisenv get=LOCATION_NAME\n")
+    f.write("alias _subproject g.gisenv get=MAPSET\n")
+    f.write("alias precmd \'echo \"Subproject <`_subproject`> in Project <`_project`>\"\'\n")
     f.write("set prompt=\"GRASS > \"\n")
 
     # csh shell rc file left for backward compatibility
@@ -1819,7 +1819,7 @@ def csh_startup(location, grass_env_file):
     return process
 
 
-def sh_like_startup(location, location_name, grass_env_file, sh):
+def sh_like_startup(project, project_name, grass_env_file, sh):
     """Start Bash or Z shell (but not sh (Bourne Shell))"""
     if sh == 'bash':
         # set bash history to record an unlimited command history
@@ -1841,17 +1841,17 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
         raise ValueError(
             'Only bash-like and zsh shells are supported by sh_like_startup()')
 
-    # save command history in mapset dir and remember more
+    # save command history in subproject dir and remember more
     # bash histroy file handled in specific_addition
     if not sh == "bash":
-        os.environ['HISTFILE'] = os.path.join(location, sh_history)
+        os.environ['HISTFILE'] = os.path.join(project, sh_history)
 
     # instead of changing $HOME, start bash with:
     #   --rcfile "$LOCATION/.bashrc" ?
     #   if so, must care be taken to explicitly call .grass.bashrc et al
     #   for non-interactive bash batch jobs?
     userhome = os.getenv('HOME')      # save original home
-    home = location                   # save .bashrc in $LOCATION
+    home = project                   # save .bashrc in $LOCATION
     os.environ['HOME'] = home
 
     shell_rc_file = os.path.join(home, shrc)
@@ -1887,12 +1887,12 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
         specific_addition = """
     local z_lo=`g.gisenv get=LOCATION_NAME`
     local z_ms=`g.gisenv get=MAPSET`
-    ZLOC="Mapset <$z_ms> in <$z_lo>"
-    if [ "$_grass_old_mapset" != "$MAPSET_PATH" ] ; then
+    ZLOC="Subproject <$z_ms> in <$z_lo>"
+    if [ "$_grass_old_subproject" != "$MAPSET_PATH" ] ; then
         fc -A -I
         HISTFILE="$MAPSET_PATH/{sh_history}"
         fc -R
-        _grass_old_mapset="$MAPSET_PATH"
+        _grass_old_subproject="$MAPSET_PATH"
     fi
     """.format(sh_history=sh_history)
     elif sh == "bash":
@@ -1901,12 +1901,12 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
         # Change the file.
         # Read history from that file.
         specific_addition = """
-    if [ "$_grass_old_mapset" != "$MAPSET_PATH" ] ; then
+    if [ "$_grass_old_subproject" != "$MAPSET_PATH" ] ; then
         history -a
         history -c
         HISTFILE="$MAPSET_PATH/{sh_history}"
         history -r
-        _grass_old_mapset="$MAPSET_PATH"
+        _grass_old_subproject="$MAPSET_PATH"
     fi
     """.format(sh_history=sh_history)
 
@@ -1964,7 +1964,7 @@ PROMPT_COMMAND=grass_prompt\n""".format(
     return process
 
 
-def default_startup(location, location_name):
+def default_startup(project, project_name):
     """Start shell making no assumptions about what is supported in PS1"""
     if WINDOWS:
         os.environ['PS1'] = "GRASS > "
@@ -2111,10 +2111,10 @@ class Parameters(object):
         self.create_new = None
         self.exit_grass = None
         self.force_gislock_removal = None
-        self.mapset = None
+        self.subproject = None
         self.geofile = None
-        self.tmp_location = False
-        self.tmp_mapset = False
+        self.tmp_project = False
+        self.tmp_subproject = False
 
 
 def parse_cmdline(argv, default_gui):
@@ -2143,7 +2143,7 @@ def parse_cmdline(argv, default_gui):
         # Check if the -wxpython flag was given
         elif i in ["-wxpython", "-wx", "--wxpython", "--wx"]:
             params.grass_gui = 'wxpython'
-        # Check if the user wants to create a new mapset
+        # Check if the user wants to create a new subproject
         elif i == "-c":
             params.create_new = True
         elif i == "-e":
@@ -2153,22 +2153,22 @@ def parse_cmdline(argv, default_gui):
         elif i == "--config":
             print_params()
             sys.exit()
-        elif i == "--tmp-location":
-            params.tmp_location = True
-        elif i == "--tmp-mapset":
-            params.tmp_mapset = True
+        elif i == "--tmp-project":
+            params.tmp_project = True
+        elif i == "--tmp-subproject":
+            params.tmp_subproject = True
         else:
             args.append(i)
     if len(args) > 1:
-        params.mapset = args[1]
+        params.subproject = args[1]
         params.geofile = args[0]
     elif len(args) == 1:
-        if params.tmp_location:
+        if params.tmp_project:
             params.geofile = args[0]
         else:
-            params.mapset = args[0]
+            params.subproject = args[0]
     else:
-        params.mapset = None
+        params.subproject = None
     return params
 
 
@@ -2176,24 +2176,24 @@ def validate_cmdline(params):
     """ Validate the cmdline params and exit if necessary. """
     if params.exit_grass and not params.create_new:
         fatal(_("Flag -e requires also flag -c"))
-    if params.tmp_location and params.tmp_mapset:
+    if params.tmp_project and params.tmp_subproject:
         fatal(_(
-            "Either --tmp-location or --tmp-mapset can be used, not both").format(
-                params.mapset)
+            "Either --tmp-project or --tmp-subproject can be used, not both").format(
+                params.subproject)
         )
-    if params.tmp_location and not params.geofile:
+    if params.tmp_project and not params.geofile:
         fatal(
             _(
                 "Coordinate reference system argument (e.g. EPSG)"
-                " is needed for --tmp-location"
+                " is needed for --tmp-project"
             )
         )
-    if params.tmp_location and params.mapset:
+    if params.tmp_project and params.subproject:
         fatal(
             _(
                 "Only one argument (e.g. EPSG) is needed for"
-                " --tmp-location, mapset name <{}> provided"
-            ).format(params.mapset)
+                " --tmp-project, subproject name <{}> provided"
+            ).format(params.subproject)
         )
 
 
@@ -2239,7 +2239,7 @@ def main():
     except ValueError:
         params = parse_cmdline(sys.argv[1:], default_gui=default_gui)
     validate_cmdline(params)
-    # For now, we allow, but not advertise/document, --tmp-location
+    # For now, we allow, but not advertise/document, --tmp-project
     # without --exec (usefulness to be evaluated).
 
     grass_gui = params.grass_gui  # put it to variable, it is used a lot
@@ -2255,7 +2255,7 @@ def main():
         # nothing was provided in the command line).
         grass_gui = default_gui
 
-    # TODO: with --tmp-location there is no point in loading settings
+    # TODO: with --tmp-project there is no point in loading settings
     # i.e. rc file from home dir, but the code is too spread out
     # to disable it at this point
     gisrcrc = get_gisrc_from_config_dir(grass_config_dir, batch_job)
@@ -2293,18 +2293,18 @@ def main():
 
     # First time user - GISRC is defined in the GRASS script
     if not os.access(gisrc, os.F_OK):
-        if grass_gui == 'text' and not params.mapset:
+        if grass_gui == 'text' and not params.subproject:
             fatal(_("Unable to start GRASS GIS. You have the choice to:\n"
                     " - Launch the graphical user interface with"
                     " the '--gui' switch\n"
                     "     {cmd_name} --gui\n"
                     " - Launch with path to "
-                    "the location/mapset as an argument\n"
-                    "     {cmd_name} /path/to/location/mapset`\n"
-                    " - Create a location with '-c' and launch in its"
-                    " PERMANENT mapset\n"
-                    "     {cmd_name} -c EPSG:number /path/to/location\n"
-                    "     {cmd_name} -c geofile /path/to/location\n"
+                    "the project/subproject as an argument\n"
+                    "     {cmd_name} /path/to/project/subproject`\n"
+                    " - Create a project with '-c' and launch in its"
+                    " PERMANENT subproject\n"
+                    "     {cmd_name} -c EPSG:number /path/to/project\n"
+                    "     {cmd_name} -c geofile /path/to/project\n"
                     " - Create manually the GISRC file ({gisrcrc})\n"
                     " - Use '--help' for further options\n"
                     "     {cmd_name} --help\n"
@@ -2328,32 +2328,32 @@ def main():
         save_gui(gisrc, grass_gui)
 
     # Parsing argument to get LOCATION
-    if not params.mapset and not params.tmp_location:
-        last_mapset_usable = can_start_in_gisrc_mapset(
+    if not params.subproject and not params.tmp_project:
+        last_subproject_usable = can_start_in_gisrc_subproject(
             gisrc=gisrc, ignore_lock=params.force_gislock_removal
         )
         # Try interactive startup
         # User selects LOCATION and MAPSET if not set
-        if not last_mapset_usable and not set_mapset_interactive(grass_gui):
+        if not last_subproject_usable and not set_subproject_interactive(grass_gui):
             # No GUI available, update gisrc file
             fatal(_("<{0}> requested, but not available. Run GRASS in text "
                     "mode (--text) or install missing package (usually "
                     "'grass-gui').").format(grass_gui))
     else:
         # Try non-interactive start up
-        if params.tmp_location:
+        if params.tmp_project:
             # tmp loc requires other things to be set as well
-            set_mapset(gisrc=gisrc, geofile=params.geofile,
+            set_subproject(gisrc=gisrc, geofile=params.geofile,
                        create_new=True,
-                       tmp_location=params.tmp_location, tmpdir=tmpdir)
+                       tmp_project=params.tmp_project, tmpdir=tmpdir)
         elif params.create_new and params.geofile:
-            set_mapset(gisrc=gisrc, arg=params.mapset,
+            set_subproject(gisrc=gisrc, arg=params.subproject,
                        geofile=params.geofile, create_new=True)
-        elif params.tmp_mapset:
-            set_mapset(gisrc=gisrc, arg=params.mapset,
-                       tmp_mapset=params.tmp_mapset)
+        elif params.tmp_subproject:
+            set_subproject(gisrc=gisrc, arg=params.subproject,
+                       tmp_subproject=params.tmp_subproject)
         else:
-            set_mapset(gisrc=gisrc, arg=params.mapset,
+            set_subproject(gisrc=gisrc, arg=params.subproject,
                        create_new=params.create_new)
 
     # Set GISDBASE, LOCATION_NAME, MAPSET, LOCATION from $GISRC
@@ -2363,28 +2363,28 @@ def main():
     # TODO: perhaps gisrcrc should be removed from here
     # alternatively, we can check validity here with all the info we have
     # about what was used to create gisrc
-    mapset_settings = load_gisrc(gisrc, gisrcrc=gisrcrc)
+    subproject_settings = load_gisrc(gisrc, gisrcrc=gisrcrc)
 
-    location = mapset_settings.full_mapset
+    project = subproject_settings.full_subproject
 
     # check and create .gislock file
-    lock_mapset(mapset_settings.full_mapset, user=user,
+    lock_subproject(subproject_settings.full_subproject, user=user,
                 force_gislock_removal=params.force_gislock_removal,
                 grass_gui=grass_gui)
-    # unlock the mapset which is current at the time of turning off
-    # in case mapset was changed
-    atexit.register(lambda: unlock_gisrc_mapset(gisrc, gisrcrc))
-    # We now own the mapset (set and lock), so we can clean temporary
+    # unlock the subproject which is current at the time of turning off
+    # in case subproject was changed
+    atexit.register(lambda: unlock_gisrc_subproject(gisrc, gisrcrc))
+    # We now own the subproject (set and lock), so we can clean temporary
     # files which previous session may have left behind. We do it even
     # for first time user because the cost is low and first time user
-    # doesn't necessarily mean that the mapset is used for the first time.
+    # doesn't necessarily mean that the subproject is used for the first time.
     clean_temp()
 
     # build user fontcap if specified but not present
     make_fontcap()
 
     # TODO: is this really needed? Modules should call this when/if required.
-    ensure_db_connected(location)
+    ensure_db_connected(project)
 
     # Display the version and license info
     # only non-error, interactive version continues from here
@@ -2393,7 +2393,7 @@ def main():
         clean_all()
         sys.exit(returncode)
     elif params.exit_grass:
-        # clean always at exit, cleans whatever is current mapset based on
+        # clean always at exit, cleans whatever is current subproject based on
         # the GISRC env variable
         clean_all()
         sys.exit(0)
@@ -2407,21 +2407,21 @@ def main():
                 message(_("Launching <%s> GUI in the background, please wait...")
                         % grass_gui)
             if sh in ['csh', 'tcsh']:
-                shell_process = csh_startup(mapset_settings.full_mapset,
+                shell_process = csh_startup(subproject_settings.full_subproject,
                                             grass_env_file)
             elif sh in ['zsh']:
-                shell_process = sh_like_startup(mapset_settings.full_mapset,
-                                                mapset_settings.location,
+                shell_process = sh_like_startup(subproject_settings.full_subproject,
+                                                subproject_settings.project,
                                                 grass_env_file,
                                                 "zsh")
             elif sh in ['bash', 'msh', 'cygwin']:
-                shell_process = sh_like_startup(mapset_settings.full_mapset,
-                                                mapset_settings.location,
+                shell_process = sh_like_startup(subproject_settings.full_subproject,
+                                                subproject_settings.project,
                                                 grass_env_file,
                                                 "bash")
             else:
-                shell_process = default_startup(mapset_settings.full_mapset,
-                                                mapset_settings.location)
+                shell_process = default_startup(subproject_settings.full_subproject,
+                                                subproject_settings.project)
         else:
             shell_process = None
 
@@ -2446,7 +2446,7 @@ def main():
 
         # here we are at the end of grass session
         clean_all()
-        if not params.tmp_location:
+        if not params.tmp_project:
             writefile(gisrcrc, readfile(gisrc))
         # After this point no more grass modules may be called
         # done message at last: no atexit.register()

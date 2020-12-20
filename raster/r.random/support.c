@@ -37,7 +37,7 @@ int make_support(struct rr_state *theState, int percent, double percentage)
     }
 
     /* write history for output raster */
-    if (Rast_read_history(theState->outraster, G_mapset(), &hist) >= 0) {
+    if (Rast_read_history(theState->outraster, G_subproject(), &hist) >= 0) {
 	Rast_short_history(theState->outraster, "raster", &hist);
 	Rast_format_history(&hist, HIST_DATSRC_1, "Based on map <%s>", inraster);
 	if (percent)
@@ -63,7 +63,7 @@ int make_support(struct rr_state *theState, int percent, double percentage)
     if (theState->outvector) {
 	struct Map_info map;
 
-	if (Vect_open_old(&map, theState->outvector, G_mapset()) < 0)
+	if (Vect_open_old(&map, theState->outvector, G_subproject()) < 0)
 	    G_fatal_error(_("Unable to open vector map <%s>"),
 			    theState->outvector);
 	Vect_hist_command(&map);
@@ -77,7 +77,7 @@ int make_support(struct rr_state *theState, int percent, double percentage)
 				nulls.data.v, 127, 127, 127, &clr,
 				nulls.type);
 	}
-	Rast_write_colors(theState->outraster, G_mapset(), &clr);
+	Rast_write_colors(theState->outraster, G_subproject(), &clr);
     }
 
     return 0;

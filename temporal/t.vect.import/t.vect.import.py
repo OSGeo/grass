@@ -26,7 +26,7 @@
 #% keyword: import
 #% keyword: vector
 #% keyword: time
-#% keyword: create location
+#% keyword: create project
 #%end
 
 #%option G_OPT_F_INPUT
@@ -66,27 +66,27 @@
 #%end
 
 #%option
-#% key: location
+#% key: project
 #% type: string
-#% description: Create a new location and import the data into it. Do not run this module in parallel or interrupt it when a new location should be created
+#% description: Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created
 #% required: no
 #% multiple: no
 #%end
 
 #%flag
 #% key: e
-#% description: Extend location extents based on new dataset
+#% description: Extend project extents based on new dataset
 #%end
 
 #%flag
 #% key: o
-#% label: Override projection check (use current location's projection)
-#% description: Assume that the dataset has same projection as the current location
+#% label: Override projection check (use current project's projection)
+#% description: Assume that the dataset has same projection as the current project
 #%end
 
 #%flag
 #% key: c
-#% description: Create the location specified by the "location" parameter and exit. Do not import the space time vector datasets.
+#% description: Create the project specified by the "project" parameter and exit. Do not import the space time vector datasets.
 #%end
 
 import grass.script as grass
@@ -102,7 +102,7 @@ def main():
     directory = options["directory"]
     title = options["title"]
     descr = options["description"]
-    location = options["location"]
+    project = options["project"]
     base = options["basename"]
     exp = flags["e"]
     overr = flags["o"]
@@ -110,7 +110,7 @@ def main():
 
     tgis.init()
 
-    tgis.import_stds(input, output, directory, title, descr, location,
+    tgis.import_stds(input, output, directory, title, descr, project,
                      None, exp, overr, create, "stvds", base)
 
 if __name__ == "__main__":

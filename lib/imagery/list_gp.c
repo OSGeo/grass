@@ -36,7 +36,7 @@ int I_list_group(const char *group, const struct Ref *ref, FILE * fd)
     }
     max = 0;
     for (i = 0; i < ref->nfiles; i++) {
-	sprintf(buf, "<%s@%s>", ref->file[i].name, ref->file[i].mapset);
+	sprintf(buf, "<%s@%s>", ref->file[i].name, ref->file[i].subproject);
 	len = strlen(buf) + 4;
 	if (len > max)
 	    max = len;
@@ -45,7 +45,7 @@ int I_list_group(const char *group, const struct Ref *ref, FILE * fd)
     fprintf(fd, "-------------\n");
     tot_len = 0;
     for (i = 0; i < ref->nfiles; i++) {
-	sprintf(buf, "<%s@%s>", ref->file[i].name, ref->file[i].mapset);
+	sprintf(buf, "<%s@%s>", ref->file[i].name, ref->file[i].subproject);
 	tot_len += max;
 	if (tot_len > 78) {
 	    fprintf(fd, "\n");
@@ -64,7 +64,7 @@ int I_list_group(const char *group, const struct Ref *ref, FILE * fd)
  * \brief Prints maps in a group (simple version)
  *
  * Same as I_list_group(), but without all the fancy stuff.
- * Prints one map per line in map@mapset form.
+ * Prints one map per line in map@subproject form.
  *
  * \param ref group reference (set with I_get_group_ref())
  * \param fd where to print (typically stdout)
@@ -78,7 +78,7 @@ int I_list_group_simple(const struct Ref *ref, FILE * fd)
 	return 0;
 
     for (i = 0; i < ref->nfiles; i++)
-	fprintf(fd, "%s@%s\n", ref->file[i].name, ref->file[i].mapset);
+	fprintf(fd, "%s@%s\n", ref->file[i].name, ref->file[i].subproject);
 
     return 0;
 }

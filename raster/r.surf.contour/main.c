@@ -81,8 +81,8 @@ int main(int argc, char *argv[])
     alt_row = (DCELL *) G_malloc(ncols * sizeof(DCELL));
     seen = flag_create(nrows, ncols);
     mask = flag_create(nrows, ncols);
-    if (NULL != G_find_file("cell", "MASK", G_mapset())) {
-	file_fd = Rast_open_old("MASK", G_mapset());
+    if (NULL != G_find_file("cell", "MASK", G_subproject())) {
+	file_fd = Rast_open_old("MASK", G_subproject());
 	for (r = 0; r < nrows; r++) {
 	    Rast_get_d_row_nomask(file_fd, alt_row, r);
 	    for (c = 0; c < ncols; c++)

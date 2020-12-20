@@ -1157,7 +1157,7 @@ class PsMapFrame(wx.Frame):
                         self.env['GRASS_REGION'] = grass.region_env(nsres=info['nsres'],
                                                                     ewres=info['ewres'],
                                                                     env=self.env)
-                    except grass.CalledModuleError:  # fails after switching location
+                    except grass.CalledModuleError:  # fails after switching project
                         pass
                     # change current raster in raster legend
 

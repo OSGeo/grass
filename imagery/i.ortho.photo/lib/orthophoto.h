@@ -18,7 +18,7 @@ struct Ortho_Image_Group_Ref
     struct Ortho_Image_Group_Ref_Files
     {
 	char name[GNAME_MAX];
-	char mapset[GMAPSET_MAX];
+	char subproject[GMAPSET_MAX];
     } *file;
     struct Ortho_Ref_Color
     {

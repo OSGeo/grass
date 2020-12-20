@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
     /*If automatic flag, just forget the rest of options */
     if (flag2->answer)
 	G_verbose_message(_("Automatic mode selected"));
-    /*If not automatic & all pixels locations in col/row given */
+    /*If not automatic & all pixels projects in col/row given */
     else if (!flag2->answer &&
 	     input_row_wet->answer &&
 	     input_col_wet->answer &&
@@ -219,13 +219,13 @@ int main(int argc, char *argv[])
 	m_col_wet = atof(input_col_wet->answer);
 	m_row_dry = atof(input_row_dry->answer);
 	m_col_dry = atof(input_col_dry->answer);
-	/*If pixels locations are in projected coordinates */
+	/*If pixels projects are in projected coordinates */
 	if (flag3->answer)
 	    G_verbose_message(_("Manual wet/dry pixels in image coordinates"));
 	G_verbose_message(_("Wet Pixel=> x:%f y:%f"), m_col_wet, m_row_wet);
 	G_verbose_message(_("Dry Pixel=> x:%f y:%f"), m_col_dry, m_row_dry);
     }
-    /*If not automatic & missing any of the pixel location, Fatal Error */
+    /*If not automatic & missing any of the pixel project, Fatal Error */
     else {
 	G_fatal_error(_("Either auto-mode either wet/dry pixels coordinates should be provided!"));
     }
@@ -254,7 +254,7 @@ int main(int argc, char *argv[])
     inrast_eact = Rast_allocate_d_buf();
 
     /***************************************************/
-    /* Setup pixel location variables */
+    /* Setup pixel project variables */
 
     /***************************************************/
     stepx = cellhd.ew_res;

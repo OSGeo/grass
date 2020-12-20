@@ -10,7 +10,7 @@ static void write_history(int, char *, double **, double *);
 
 void write_support(int bands, char *inname, char *outname, double **eigmat, double *eigval)
 {
-    const char *mapset = G_mapset();
+    const char *subproject = G_subproject();
     struct Colors colors;
     struct FPRange range;
     DCELL min, max;
@@ -20,17 +20,17 @@ void write_support(int bands, char *inname, char *outname, double **eigmat, doub
     }
     else {
 	/* make grey scale color table */
-	Rast_read_fp_range(outname, mapset, &range);
+	Rast_read_fp_range(outname, subproject, &range);
 	Rast_get_fp_range_min_max(&range, &min, &max);
 
 	Rast_make_grey_scale_fp_colors(&colors, min, max);
 
     }
 
-    if (Rast_map_is_fp(outname, mapset))
+    if (Rast_map_is_fp(outname, subproject))
 	Rast_mark_colors_as_fp(&colors);
 
-    Rast_write_colors(outname, mapset, &colors);
+    Rast_write_colors(outname, subproject, &colors);
 
     write_history(bands, outname, eigmat, eigval);
 }

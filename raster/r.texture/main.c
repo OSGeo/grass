@@ -252,7 +252,7 @@ int main(int argc, char *argv[])
 	    for (j = 0; j < 4; j++) {
 		sprintf(mapname[i * 4 + j], "%s%s_%d", result,
 		        menu[measure_idx[i]].suffix, j * 45);
-		if (!G_find_raster(mapname[i * 4 + j], G_mapset()) || overwrite) {
+		if (!G_find_raster(mapname[i * 4 + j], G_subproject()) || overwrite) {
 			outfd[i * 4 + j] = Rast_open_new(mapname[i * 4 + j], out_data_type);
 	        } else {
 		        G_fatal_error(_("At least one of the requested output maps exists. Use --o to overwrite."));
@@ -262,7 +262,7 @@ int main(int argc, char *argv[])
 	else {
 	    sprintf(mapname[i], "%s%s", result,
 	            menu[measure_idx[i]].suffix);
-	    if (!G_find_raster(mapname[i], G_mapset()) || overwrite) {
+	    if (!G_find_raster(mapname[i], G_subproject()) || overwrite) {
 		    outfd[i] = Rast_open_new(mapname[i], out_data_type);
 	    } else {
 		    G_fatal_error(_("At least one of the requested output maps exists. Use --o to overwrite."));

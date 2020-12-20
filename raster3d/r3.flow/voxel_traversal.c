@@ -86,7 +86,7 @@ void traverse(RASTER3D_Region * region, double *start, double *end,
 	(*coordinates)[count * 3 + 2] = z;
 	count++;
 
-	/* reallocation for cases when the steps would be too big */
+	/* realproject for cases when the steps would be too big */
 	if (*size <= count) {
 	    *size = 2 * (*size);
 	    *coordinates = G_realloc(*coordinates, (*size) * 3 * sizeof(int));

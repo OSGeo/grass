@@ -1,12 +1,12 @@
 /* chk_dbase.c */
-int can_make_location(char *, char *);
+int can_make_project(char *, char *);
 
 /* clean_temp.c */
 int find_process(int);
 
 /* set_data.c */
-int list_locations(const char *);
-int list_mapsets(const char *, const char *);
+int list_projects(const char *);
+int list_subprojects(const char *, const char *);
 int first_word(char *);
 int hit_return(void);
 
@@ -14,13 +14,13 @@ int hit_return(void);
 int find_process(int);
 
 /* mke_loc.c */
-int make_location(const char *, const char *);
+int make_project(const char *, const char *);
 
-/* mke_mapset.c */
-int make_mapset(const char *, const char *);
+/* mke_subproject.c */
+int make_subproject(const char *, const char *);
 
 /* other.c */
-int mapset_permissions(const char *);
-int mapset_message(const char *);
-int mapset_question(const char *);
+int subproject_permissions(const char *);
+int subproject_message(const char *);
+int subproject_question(const char *);
 int printfile(const char *);

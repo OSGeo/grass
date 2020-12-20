@@ -257,7 +257,7 @@ int V2_delete_line_sfa(struct Map_info *Map, off_t line)
     }
     /* Delete reference from area */
     if (plus->built >= GV_BUILD_CENTROIDS && type == GV_CENTROID) {
-	/* for OGR mapsets, virtual centroid will be removed when
+	/* for OGR subprojects, virtual centroid will be removed when
 	 * polygon is removed */
     }
 

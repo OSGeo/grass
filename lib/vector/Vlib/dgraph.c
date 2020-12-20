@@ -430,7 +430,7 @@ void pg_addedge(struct planar_graph *pg, int v1, int v2)
 
     if (pg->ecount == pg->eallocated) {
 	G_fatal_error(_("Trying to add more edges to the planar_graph "
-			"than the initial allocation size allows"));
+			"than the initial alproject size allows"));
     }
     e = &(pg->e[pg->ecount]);
     e->v1 = v1;

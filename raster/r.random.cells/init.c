@@ -41,8 +41,8 @@ void Init()
 
     Cells = FlagCreate(Rs, Cs);
     CellCount = 0;
-    if (G_find_raster2("MASK", G_mapset())) {
-	FD = Rast_open_old("MASK", G_mapset());
+    if (G_find_raster2("MASK", G_subproject())) {
+	FD = Rast_open_old("MASK", G_subproject());
 	{
 	    for (row = 0; row < Rs; row++) {
 		Rast_get_c_row_nomask(FD, CellBuffer, row);

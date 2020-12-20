@@ -46,7 +46,7 @@ int Vect_hist_command(struct Map_info *Map)
         return -1;
 
     sprintf(buf, "LOCATION: %s MAPSET: %s USER: %s DATE: %s\n",
-	    G_location(), G_mapset(), G_whoami(), G_date());	/* Needed ? */
+	    G_project(), G_subproject(), G_whoami(), G_date());	/* Needed ? */
     if (0 > Vect_hist_write(Map, buf))
         return -1;
 

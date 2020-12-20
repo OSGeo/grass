@@ -12,7 +12,7 @@ VECTFILES := $(foreach map,$(DBFMAPS),$(foreach file,$(MAPFILES),vector/$(map)/$
 SRC := $(SRCFILES) $(DBFFILES) $(SQLITEFILES) $(VECTFILES)
 SRCDIRS := PERMANENT PERMANENT/vector PERMANENT/dbf PERMANENT/sqlite $(patsubst %,PERMANENT/vector/%,$(DBFMAPS)) $(patsubst %,PERMANENT/vector/%,$(SQLITEMAPS))
 
-DSTDIR = $(ARCH_DISTDIR)/demolocation
+DSTDIR = $(ARCH_DISTDIR)/demoproject
 DST := $(patsubst %,$(DSTDIR)/PERMANENT/%,$(SRC))
 DSTDIRS := $(patsubst %,$(DSTDIR)/%,$(SRCDIRS))
 RCFILE = $(DSTDIR)/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)

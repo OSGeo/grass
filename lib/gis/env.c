@@ -87,15 +87,15 @@ void G_init_env(void)
 }
 
 /*!
- * \brief Force to read the mapset environment file VAR
+ * \brief Force to read the subproject environment file VAR
  * 
- * The mapset specific VAR file of the mapset set with G_setenv()
+ * The subproject specific VAR file of the subproject set with G_setenv()
  * will be read into memory, ignoring if it was readed before. 
  * Existing values will be overwritten, new values appended.
  * 
  * \return
  */ 
-void G__read_mapset_env(void)
+void G__read_subproject_env(void)
 {
     force_read_env(G_VAR_MAPSET);
 }
@@ -318,7 +318,7 @@ static FILE *open_env(const char *mode, int loc)
 	/* TODO: better place ? */
 	read_env(G_VAR_GISRC);
 
-	sprintf(buf, "%s/%s/VAR", G_location_path(), G_mapset());
+	sprintf(buf, "%s/%s/VAR", G_project_path(), G_subproject());
     }
 
     return fopen(buf, mode);
@@ -347,14 +347,14 @@ const char *G_getenv(const char *name)
 /*!
   \brief Get variable from specific place
   
-  Locations:
+  Projects:
    - G_VAR_GISRC
    - G_VAR_MAPSET
 
   G_fatal_error() is called when variable is not found.
   
   \param name variable name
-  \param loc location (G_VAR_GISRC, G_VAR_MAPSET)
+  \param loc project (G_VAR_GISRC, G_VAR_MAPSET)
    
   \return variable value
   \return NULL if not found
@@ -392,7 +392,7 @@ const char *G_getenv_nofatal(const char *name)
   \brief Get environment variable from specific place
   
   \param name variable name
-  \param loc location (G_VAR_GISRC, G_VAR_MAPSET)
+  \param loc project (G_VAR_GISRC, G_VAR_MAPSET)
   
   \return char pointer to value for name
   \return NULL if name not set
@@ -429,7 +429,7 @@ void G_setenv(const char *name, const char *value)
   
   \param name variable name
   \param value variable value
-  \param loc location (G_VAR_GISRC, G_VAR_MAPSET)
+  \param loc project (G_VAR_GISRC, G_VAR_MAPSET)
 
 */
 void G_setenv2(const char *name, const char *value, int loc)
@@ -456,7 +456,7 @@ void G_setenv_nogisrc(const char *name, const char *value)
   
   \param name variable name
   \param value variable value
-  \param loc location (G_VAR_GISRC, G_VAR_MAPSET)
+  \param loc project (G_VAR_GISRC, G_VAR_MAPSET)
 */
 void G_setenv_nogisrc2(const char *name, const char *value, int loc)
 {
@@ -484,7 +484,7 @@ void G_unsetenv(const char *name)
   Updates .gisrc
   
   \param name variable name
-  \param loc location (G_VAR_GISRC, G_VAR_MAPSET)
+  \param loc project (G_VAR_GISRC, G_VAR_MAPSET)
 */
 void G_unsetenv2(const char *name, int loc)
 {

@@ -168,7 +168,7 @@ void Vect_destroy_map_struct(struct Map_info *);
 int Vect_read_header(struct Map_info *);
 int Vect_write_header(const struct Map_info *);
 const char *Vect_get_name(const struct Map_info *);
-const char *Vect_get_mapset(const struct Map_info *);
+const char *Vect_get_subproject(const struct Map_info *);
 const char *Vect_get_full_name(const struct Map_info *);
 const char *Vect_get_finfo_dsn_name(const struct Map_info *);
 char *Vect_get_finfo_layer_name(const struct Map_info *);

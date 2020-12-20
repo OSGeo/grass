@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
     unsigned int x, y, z;
     double dmin, dmax;
     int zone, n_zones, use_zone = 0;
-    const char *mapset, *name;
+    const char *subproject, *name;
 
     struct GModule *module;
 
@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
 
     /* open 3D zoning raster with default region */
     if ((zonemap = param.zonefile->answer) != NULL) {
-	if (NULL == (mapset = G_find_raster3d(zonemap, "")))
+	if (NULL == (subproject = G_find_raster3d(zonemap, "")))
 	    Rast3d_fatal_error(_("3D raster map <%s> not found"), zonemap);
 
 	zmap =
@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
 
 	zmap_type = Rast3d_tile_type_map(zmap);
 	
-	if (Rast3d_read_cats(zonemap, mapset, &(zone_info.cats)))
+	if (Rast3d_read_cats(zonemap, subproject, &(zone_info.cats)))
 	    G_warning("No category support for zoning raster");
 	    
 	Rast3d_range_init(zmap);

@@ -708,7 +708,7 @@ MELEMENT *row_lists(
     for (row = 0, Rptr = rowlist; row < rows; row++, Rptr++)
 	Rptr->prior = Rptr;
 
-    /* enter data by allocation of individual matrix elements */
+    /* enter data by alproject of individual matrix elements */
     *npts = 0;
     G_message(_("Reading raster map <%s>..."), input);
 

@@ -184,7 +184,7 @@ Structure Map_info is used by modules like this:
 \code{.c}
 struct Map_info In, Out;
 \endcode
-So, no pointers, no allocation, no deallocation.
+So, no pointers, no alproject, no dealproject.
 </ul>
 As a rule of thumb, whenever you use some \c Vect_new_*() function, there
 should also be a corresponding \c Vect_destroy_*() function. These deallocating

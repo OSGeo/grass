@@ -4,8 +4,8 @@
  *	collect_ori.c	in ~/r.spread2
  *
  *	functin to collect the spread origins from the source map and
- *	put them into a min-heap; also marks the origin locations and
- *	the other locations to avoid redundant computation and to be
+ *	put them into a min-heap; also marks the origin projects and
+ *	the other projects to avoid redundant computation and to be
  *	able to terminate.
  *********************************************************************/
 

@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
     /* Open dig_att */
     att = NULL;
     if (ver == 4 && !pnt) {
-	if (G_find_file("dig_att", output, G_mapset()) != NULL)
+	if (G_find_file("dig_att", output, G_subproject()) != NULL)
 	    G_fatal_error(_("dig_att file already exist"));
 
 	if ((att = G_fopen_new("dig_att", output)) == NULL)

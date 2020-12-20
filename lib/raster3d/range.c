@@ -56,7 +56,7 @@ Rast3d_range_update_from_tile(RASTER3D_Map * map, const void *tile, int rows, in
 /*---------------------------------------------------------------------------*/
 
 int
-Rast3d_read_range(const char *name, const char *mapset, struct FPRange *drange)
+Rast3d_read_range(const char *name, const char *subproject, struct FPRange *drange)
  /* adapted from Rast_read_fp_range */
 {
     int fd;
@@ -68,9 +68,9 @@ Rast3d_read_range(const char *name, const char *mapset, struct FPRange *drange)
 
     fd = -1;
 
-    fd = G_open_old_misc(RASTER3D_DIRECTORY, RASTER3D_RANGE_ELEMENT, name, mapset);
+    fd = G_open_old_misc(RASTER3D_DIRECTORY, RASTER3D_RANGE_ELEMENT, name, subproject);
     if (fd < 0) {
-	G_warning(_("Unable to open range file for [%s in %s]"), name, mapset);
+	G_warning(_("Unable to open range file for [%s in %s]"), name, subproject);
 	return -1;
     }
 
@@ -85,7 +85,7 @@ Rast3d_read_range(const char *name, const char *mapset, struct FPRange *drange)
 
     if (bytes_read != 2 * RASTER3D_XDR_DOUBLE_LENGTH) {
 	close(fd);
-	G_warning(_("Error reading range file for [%s in %s]"), name, mapset);
+	G_warning(_("Error reading range file for [%s in %s]"), name, subproject);
 	return 2;
     }
 
@@ -113,7 +113,7 @@ int Rast3d_range_load(RASTER3D_Map * map)
 {
     if (map->operation == RASTER3D_WRITE_DATA)
 	return 1;
-    if (Rast3d_read_range(map->fileName, map->mapset, &(map->range)) == -1) {
+    if (Rast3d_read_range(map->fileName, map->subproject, &(map->range)) == -1) {
 	return 0;
     }
 
@@ -169,7 +169,7 @@ static int writeRange(const char *name, struct FPRange *range)
   error:
     close(fd);
     G_remove_misc(RASTER3D_DIRECTORY, RASTER3D_RANGE_ELEMENT, name);	/* remove the old file with this name */
-    G_warning("can't write range file for [%s in %s]", name, G_mapset());
+    G_warning("can't write range file for [%s in %s]", name, G_subproject());
     return -1;
 }
 
@@ -190,7 +190,7 @@ int Rast3d_range_write(RASTER3D_Map * map)
 {
     char path[GPATH_MAX];
 
-    Rast3d_filename(path, RASTER3D_RANGE_ELEMENT, map->fileName, map->mapset);
+    Rast3d_filename(path, RASTER3D_RANGE_ELEMENT, map->fileName, map->subproject);
     remove(path);
 
     if (writeRange(map->fileName, &(map->range)) == -1) {

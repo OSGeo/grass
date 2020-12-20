@@ -16,7 +16,7 @@ extern struct Cell_head window;
 struct _layer_
 {
     const char *name;
-    const char *mapset;
+    const char *subproject;
     struct Categories labels;
     int nlen;			/* num chars of largest cat when printed */
     int clen;			/* num chars for cat label when printed */

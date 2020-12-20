@@ -28,7 +28,7 @@ static int check_coor(struct Map_info *Map);
 /*!
   \brief Open existing vector map (level 1)
   
-  Map->name and Map->mapset must be set before.
+  Map->name and Map->subproject must be set before.
   
   \param Map pointer to Map_info structure
   \param update non-zero for write mode, otherwise read-only
@@ -41,8 +41,8 @@ int V1_open_old_nat(struct Map_info *Map, int update)
     char path[GPATH_MAX];
     struct Coor_info CInfo;
 
-    G_debug(1, "V1_open_old_nat(): name = %s mapset = %s", Map->name,
-	    Map->mapset);
+    G_debug(1, "V1_open_old_nat(): name = %s subproject = %s", Map->name,
+	    Map->subproject);
 
     Vect__get_path(path, Map);
     dig_file_init(&(Map->dig_fp));
@@ -50,7 +50,7 @@ int V1_open_old_nat(struct Map_info *Map, int update)
 	Map->dig_fp.file = G_fopen_modify(path, GV_COOR_ELEMENT);
     else
 	Map->dig_fp.file =
-	    G_fopen_old(path, GV_COOR_ELEMENT, Map->mapset);
+	    G_fopen_old(path, GV_COOR_ELEMENT, Map->subproject);
     
     if (Map->dig_fp.file == NULL) {
         G_warning(_("Unable to open coor file for vector map <%s>"),
@@ -150,11 +150,11 @@ int check_coor(struct Map_info *Map)
 
     if (dif > 0) {
 	G_warning(_("Coor file of vector map <%s@%s> is larger than it should be "
-		   "(%ld bytes excess)"), Map->name, Map->mapset, dif);
+		   "(%ld bytes excess)"), Map->name, Map->subproject, dif);
     }
     else if (dif < 0) {
 	G_warning(_("Coor file of vector <%s@%s> is shorter than it should be "
-		   "(%ld bytes missing)."), Map->name, Map->mapset, -dif);
+		   "(%ld bytes missing)."), Map->name, Map->subproject, -dif);
     }
     return 1;
 }

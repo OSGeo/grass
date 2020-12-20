@@ -4,7 +4,7 @@
 GRASS start-up screen.
 
 Initialization module for wxPython GRASS GUI.
-Location/mapset management (selection, creation, etc.).
+Project/subproject management (selection, creation, etc.).
 
 Classes:
  - gis_set::GRASSStartup
@@ -35,8 +35,8 @@ import wx.lib.mixins.listctrl as listmix
 from grass.script import core as grass
 
 from core.gcmd import GMessage, GError, DecodeString, RunCommand
-from core.utils import GetListOfLocations, GetListOfMapsets
-from location_wizard.dialogs import RegionDef
+from core.utils import GetListOfProjects, GetListOfSubprojects
+from project_wizard.dialogs import RegionDef
 from gui_core.dialogs import TextEntryDialog
 from gui_core.widgets import GenericValidator, StaticWrapText
 from gui_core.wrap import Button, ListCtrl, StaticText, \
@@ -61,11 +61,11 @@ class GRASSStartup(wx.Frame):
         self.gisdbase = self.GetRCValue("GISDBASE")
 
         #
-        # list of locations/mapsets
+        # list of projects/subprojects
         #
-        self.listOfLocations = []
-        self.listOfMapsets = []
-        self.listOfMapsetsSelectable = []
+        self.listOfProjects = []
+        self.listOfSubprojects = []
+        self.listOfSubprojectsSelectable = []
 
         wx.Frame.__init__(self, parent=parent, id=id, style=style)
 
@@ -117,12 +117,12 @@ class GRASSStartup(wx.Frame):
         self.gisdbase_box = StaticBox(
             parent=self.panel, id=wx.ID_ANY, label=" %s " %
             _("1. Select GRASS GIS database directory"))
-        self.location_box = StaticBox(
+        self.project_box = StaticBox(
             parent=self.panel, id=wx.ID_ANY, label=" %s " %
-            _("2. Select GRASS Location"))
-        self.mapset_box = StaticBox(
+            _("2. Select GRASS Project"))
+        self.subproject_box = StaticBox(
             parent=self.panel, id=wx.ID_ANY, label=" %s " %
-            _("3. Select GRASS Mapset"))
+            _("3. Select GRASS Subproject"))
 
         self.lmessage = StaticText(parent=self.panel)
         # It is not clear if all wx versions supports color, so try-except.
@@ -135,30 +135,30 @@ class GRASSStartup(wx.Frame):
             pass
 
         self.gisdbase_panel = wx.Panel(parent=self.panel)
-        self.location_panel = wx.Panel(parent=self.panel)
-        self.mapset_panel = wx.Panel(parent=self.panel)
+        self.project_panel = wx.Panel(parent=self.panel)
+        self.subproject_panel = wx.Panel(parent=self.panel)
 
         self.ldbase = StaticText(
             parent=self.gisdbase_panel, id=wx.ID_ANY,
-            label=_("GRASS GIS database directory contains Locations."))
+            label=_("GRASS GIS database directory contains Projects."))
 
-        self.llocation = StaticWrapText(
-            parent=self.location_panel, id=wx.ID_ANY,
-            label=_("All data in one Location is in the same "
+        self.lproject = StaticWrapText(
+            parent=self.project_panel, id=wx.ID_ANY,
+            label=_("All data in one Project is in the same "
                     " coordinate reference system (projection)."
-                    " One Location can be one project."
-                    " Location contains Mapsets."),
+                    " One Project can be one project."
+                    " Project contains Subprojects."),
             style=wx.ALIGN_LEFT)
 
-        self.lmapset = StaticWrapText(
-            parent=self.mapset_panel, id=wx.ID_ANY,
-            label=_("Mapset contains GIS data related"
+        self.lsubproject = StaticWrapText(
+            parent=self.subproject_panel, id=wx.ID_ANY,
+            label=_("Subproject contains GIS data related"
                     " to one project, task within one project,"
                     " subregion or user."),
             style=wx.ALIGN_LEFT)
 
         try:
-            for label in [self.ldbase, self.llocation, self.lmapset]:
+            for label in [self.ldbase, self.lproject, self.lsubproject]:
                 label.SetForegroundColour(
                     wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
         except AttributeError:
@@ -174,52 +174,52 @@ class GRASSStartup(wx.Frame):
         self.bhelp = Button(parent=self.panel, id=wx.ID_HELP)
         self.bbrowse = Button(parent=self.gisdbase_panel, id=wx.ID_ANY,
                               label=_("&Browse"))
-        self.bmapset = Button(parent=self.mapset_panel, id=wx.ID_ANY,
-                              # GTC New mapset
+        self.bsubproject = Button(parent=self.subproject_panel, id=wx.ID_ANY,
+                              # GTC New subproject
                               label=_("&New"))
-        self.bmapset.SetToolTip(_("Create a new Mapset in selected Location"))
-        self.bwizard = Button(parent=self.location_panel, id=wx.ID_ANY,
-                              # GTC New location
+        self.bsubproject.SetToolTip(_("Create a new Subproject in selected Project"))
+        self.bwizard = Button(parent=self.project_panel, id=wx.ID_ANY,
+                              # GTC New project
                               label=_("N&ew"))
         self.bwizard.SetToolTip(
             _(
-                "Create a new location using location wizard."
-                " After location is created successfully,"
+                "Create a new project using project wizard."
+                " After project is created successfully,"
                 " GRASS session is started."))
-        self.rename_location_button = Button(parent=self.location_panel, id=wx.ID_ANY,
-                                             # GTC Rename location
+        self.rename_project_button = Button(parent=self.project_panel, id=wx.ID_ANY,
+                                             # GTC Rename project
                                              label=_("Ren&ame"))
-        self.rename_location_button.SetToolTip(_("Rename selected location"))
-        self.delete_location_button = Button(parent=self.location_panel, id=wx.ID_ANY,
-                                             # GTC Delete location
+        self.rename_project_button.SetToolTip(_("Rename selected project"))
+        self.delete_project_button = Button(parent=self.project_panel, id=wx.ID_ANY,
+                                             # GTC Delete project
                                              label=_("De&lete"))
-        self.delete_location_button.SetToolTip(_("Delete selected location"))
-        self.rename_mapset_button = Button(parent=self.mapset_panel, id=wx.ID_ANY,
-                                           # GTC Rename mapset
+        self.delete_project_button.SetToolTip(_("Delete selected project"))
+        self.rename_subproject_button = Button(parent=self.subproject_panel, id=wx.ID_ANY,
+                                           # GTC Rename subproject
                                            label=_("&Rename"))
-        self.rename_mapset_button.SetToolTip(_("Rename selected mapset"))
-        self.delete_mapset_button = Button(parent=self.mapset_panel, id=wx.ID_ANY,
-                                           # GTC Delete mapset
+        self.rename_subproject_button.SetToolTip(_("Rename selected subproject"))
+        self.delete_subproject_button = Button(parent=self.subproject_panel, id=wx.ID_ANY,
+                                           # GTC Delete subproject
                                            label=_("&Delete"))
-        self.delete_mapset_button.SetToolTip(_("Delete selected mapset"))
+        self.delete_subproject_button.SetToolTip(_("Delete selected subproject"))
 
         # textinputs
         self.tgisdbase = TextCtrl(
             parent=self.gisdbase_panel, id=wx.ID_ANY, value="", size=(
                 300, -1), style=wx.TE_PROCESS_ENTER)
 
-        # Locations
-        self.lblocations = GListBox(parent=self.location_panel,
+        # Projects
+        self.lbprojects = GListBox(parent=self.project_panel,
                                     id=wx.ID_ANY, size=(180, 200),
-                                    choices=self.listOfLocations)
-        self.lblocations.SetColumnWidth(0, 180)
+                                    choices=self.listOfProjects)
+        self.lbprojects.SetColumnWidth(0, 180)
 
         # TODO: sort; but keep PERMANENT on top of list
-        # Mapsets
-        self.lbmapsets = GListBox(parent=self.mapset_panel,
+        # Subprojects
+        self.lbsubprojects = GListBox(parent=self.subproject_panel,
                                   id=wx.ID_ANY, size=(180, 200),
-                                  choices=self.listOfMapsets)
-        self.lbmapsets.SetColumnWidth(0, 180)
+                                  choices=self.listOfSubprojects)
+        self.lbsubprojects.SetColumnWidth(0, 180)
 
         # layout & properties, first do layout so everything is created
         self._do_layout()
@@ -230,17 +230,17 @@ class GRASSStartup(wx.Frame):
         self.bstart.Bind(wx.EVT_BUTTON, self.OnStart)
         self.bexit.Bind(wx.EVT_BUTTON, self.OnExit)
         self.bhelp.Bind(wx.EVT_BUTTON, self.OnHelp)
-        self.bmapset.Bind(wx.EVT_BUTTON, self.OnCreateMapset)
+        self.bsubproject.Bind(wx.EVT_BUTTON, self.OnCreateSubproject)
         self.bwizard.Bind(wx.EVT_BUTTON, self.OnWizard)
 
-        self.rename_location_button.Bind(wx.EVT_BUTTON, self.RenameLocation)
-        self.delete_location_button.Bind(wx.EVT_BUTTON, self.DeleteLocation)
-        self.rename_mapset_button.Bind(wx.EVT_BUTTON, self.RenameMapset)
-        self.delete_mapset_button.Bind(wx.EVT_BUTTON, self.DeleteMapset)
+        self.rename_project_button.Bind(wx.EVT_BUTTON, self.RenameProject)
+        self.delete_project_button.Bind(wx.EVT_BUTTON, self.DeleteProject)
+        self.rename_subproject_button.Bind(wx.EVT_BUTTON, self.RenameSubproject)
+        self.delete_subproject_button.Bind(wx.EVT_BUTTON, self.DeleteSubproject)
 
-        self.lblocations.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnSelectLocation)
-        self.lbmapsets.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnSelectMapset)
-        self.lbmapsets.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.OnStart)
+        self.lbprojects.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnSelectProject)
+        self.lbsubprojects.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnSelectSubproject)
+        self.lbsubprojects.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.OnStart)
         self.tgisdbase.Bind(wx.EVT_TEXT_ENTER, self.OnSetDatabase)
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
@@ -252,12 +252,12 @@ class GRASSStartup(wx.Frame):
 
         self.bstart.SetToolTip(_("Enter GRASS session"))
         self.bstart.Enable(False)
-        self.bmapset.Enable(False)
-        # this all was originally a choice, perhaps just mapset needed
-        self.rename_location_button.Enable(False)
-        self.delete_location_button.Enable(False)
-        self.rename_mapset_button.Enable(False)
-        self.delete_mapset_button.Enable(False)
+        self.bsubproject.Enable(False)
+        # this all was originally a choice, perhaps just subproject needed
+        self.rename_project_button.Enable(False)
+        self.delete_project_button.Enable(False)
+        self.rename_subproject_button.Enable(False)
+        self.delete_subproject_button.Enable(False)
 
         # set database
         if not self.gisdbase:
@@ -275,49 +275,49 @@ class GRASSStartup(wx.Frame):
                           style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
 
         self.OnSetDatabase(None)
-        location = self.GetRCValue("LOCATION_NAME")
-        if location == "<UNKNOWN>":
+        project = self.GetRCValue("LOCATION_NAME")
+        if project == "<UNKNOWN>":
             return
-        if not os.path.isdir(os.path.join(self.gisdbase, location)):
-            location = None
+        if not os.path.isdir(os.path.join(self.gisdbase, project)):
+            project = None
 
-        # list of locations
-        self.UpdateLocations(self.gisdbase)
+        # list of projects
+        self.UpdateProjects(self.gisdbase)
         try:
-            self.lblocations.SetSelection(self.listOfLocations.index(location),
+            self.lbprojects.SetSelection(self.listOfProjects.index(project),
                                           force=True)
-            self.lblocations.EnsureVisible(
-                self.listOfLocations.index(location))
+            self.lbprojects.EnsureVisible(
+                self.listOfProjects.index(project))
         except ValueError:
             sys.stderr.write(
-                _("ERROR: Location <%s> not found\n") %
+                _("ERROR: Project <%s> not found\n") %
                 self.GetRCValue("LOCATION_NAME"))
-            if len(self.listOfLocations) > 0:
-                self.lblocations.SetSelection(0, force=True)
-                self.lblocations.EnsureVisible(0)
-                location = self.listOfLocations[0]
+            if len(self.listOfProjects) > 0:
+                self.lbprojects.SetSelection(0, force=True)
+                self.lbprojects.EnsureVisible(0)
+                project = self.listOfProjects[0]
             else:
                 return
 
-        # list of mapsets
-        self.UpdateMapsets(os.path.join(self.gisdbase, location))
-        mapset = self.GetRCValue("MAPSET")
-        if mapset:
+        # list of subprojects
+        self.UpdateSubprojects(os.path.join(self.gisdbase, project))
+        subproject = self.GetRCValue("MAPSET")
+        if subproject:
             try:
-                self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset),
+                self.lbsubprojects.SetSelection(self.listOfSubprojects.index(subproject),
                                             force=True)
-                self.lbmapsets.EnsureVisible(self.listOfMapsets.index(mapset))
+                self.lbsubprojects.EnsureVisible(self.listOfSubprojects.index(subproject))
             except ValueError:
-                sys.stderr.write(_("ERROR: Mapset <%s> not found\n") % mapset)
-                self.lbmapsets.SetSelection(0, force=True)
-                self.lbmapsets.EnsureVisible(0)
+                sys.stderr.write(_("ERROR: Subproject <%s> not found\n") % subproject)
+                self.lbsubprojects.SetSelection(0, force=True)
+                self.lbsubprojects.EnsureVisible(0)
 
     def _do_layout(self):
         sizer = wx.BoxSizer(wx.VERTICAL)
         self.sizer = sizer  # for the layout call after changing message
         dbase_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        location_mapset_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        project_subproject_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
         gisdbase_panel_sizer = wx.BoxSizer(wx.VERTICAL)
         gisdbase_boxsizer = wx.StaticBoxSizer(self.gisdbase_box, wx.VERTICAL)
@@ -348,7 +348,7 @@ class GRASSStartup(wx.Frame):
 
         gisdbase_panel_sizer.Fit(self.gisdbase_panel)
 
-        # location and mapset lists
+        # project and subproject lists
 
         def layout_list_box(box, panel, list_box, buttons, description):
             panel_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -380,26 +380,26 @@ class GRASSStartup(wx.Frame):
                             border=1)
             return box_sizer
 
-        location_boxsizer = layout_list_box(
-            box=self.location_box,
-            panel=self.location_panel,
-            list_box=self.lblocations,
-            buttons=[self.bwizard, self.rename_location_button,
-                     self.delete_location_button],
-            description=self.llocation)
-        mapset_boxsizer = layout_list_box(
-            box=self.mapset_box,
-            panel=self.mapset_panel,
-            list_box=self.lbmapsets,
-            buttons=[self.bmapset, self.rename_mapset_button,
-                     self.delete_mapset_button],
-            description=self.lmapset)
+        project_boxsizer = layout_list_box(
+            box=self.project_box,
+            panel=self.project_panel,
+            list_box=self.lbprojects,
+            buttons=[self.bwizard, self.rename_project_button,
+                     self.delete_project_button],
+            description=self.lproject)
+        subproject_boxsizer = layout_list_box(
+            box=self.subproject_box,
+            panel=self.subproject_panel,
+            list_box=self.lbsubprojects,
+            buttons=[self.bsubproject, self.rename_subproject_button,
+                     self.delete_subproject_button],
+            description=self.lsubproject)
 
-        # location and mapset sizer
-        location_mapset_sizer.Add(location_boxsizer, proportion=1,
+        # project and subproject sizer
+        project_subproject_sizer.Add(project_boxsizer, proportion=1,
                                   flag=wx.LEFT | wx.RIGHT | wx.EXPAND,
                                   border=3)
-        location_mapset_sizer.Add(mapset_boxsizer, proportion=1,
+        project_subproject_sizer.Add(subproject_boxsizer, proportion=1,
                                   flag=wx.RIGHT | wx.EXPAND,
                                   border=3)
 
@@ -437,7 +437,7 @@ class GRASSStartup(wx.Frame):
                   proportion=0,
                   flag=wx.ALIGN_CENTER_VERTICAL |
                   wx.ALIGN_LEFT | wx.ALL | wx.EXPAND, border=5)
-        sizer.Add(location_mapset_sizer, proportion=1,
+        sizer.Add(project_subproject_sizer, proportion=1,
                   flag=wx.RIGHT | wx.LEFT | wx.EXPAND,
                   border=1)
         sizer.Add(btns_sizer, proportion=0,
@@ -518,21 +518,21 @@ class GRASSStartup(wx.Frame):
             return None
 
     def OnWizard(self, event):
-        """Location wizard started"""
-        from location_wizard.wizard import LocationWizard
-        gWizard = LocationWizard(parent=self,
+        """Project wizard started"""
+        from project_wizard.wizard import ProjectWizard
+        gWizard = ProjectWizard(parent=self,
                                  grassdatabase=self.tgisdbase.GetValue())
-        if gWizard.location is not None:
+        if gWizard.project is not None:
             self.tgisdbase.SetValue(gWizard.grassdatabase)
             self.OnSetDatabase(None)
-            self.UpdateMapsets(os.path.join(self.gisdbase, gWizard.location))
-            self.lblocations.SetSelection(
-                self.listOfLocations.index(
-                    gWizard.location))
-            self.lbmapsets.SetSelection(0)
-            self.SetLocation(self.gisdbase, gWizard.location, 'PERMANENT')
+            self.UpdateSubprojects(os.path.join(self.gisdbase, gWizard.project))
+            self.lbprojects.SetSelection(
+                self.listOfProjects.index(
+                    gWizard.project))
+            self.lbsubprojects.SetSelection(0)
+            self.SetProject(self.gisdbase, gWizard.project, 'PERMANENT')
             if gWizard.georeffile:
-                message = _("Do you want to import <%(name)s> to the newly created location?") % {
+                message = _("Do you want to import <%(name)s> to the newly created project?") % {
                     'name': gWizard.georeffile}
                 dlg = wx.MessageDialog(parent=self, message=message, caption=_(
                     "Import data?"), style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
@@ -541,17 +541,17 @@ class GRASSStartup(wx.Frame):
                     self.ImportFile(gWizard.georeffile)
                 dlg.Destroy()
             if gWizard.default_region:
-                defineRegion = RegionDef(self, location=gWizard.location)
+                defineRegion = RegionDef(self, project=gWizard.project)
                 defineRegion.CenterOnParent()
                 defineRegion.ShowModal()
                 defineRegion.Destroy()
 
-            if gWizard.user_mapset:
+            if gWizard.user_subproject:
                 dlg = TextEntryDialog(
                     parent=self,
-                    message=_("New mapset:"),
-                    caption=_("Create new mapset"),
-                    defaultValue=self._getDefaultMapsetName(),
+                    message=_("New subproject:"),
+                    caption=_("Create new subproject"),
+                    defaultValue=self._getDefaultSubprojectName(),
                     validator=GenericValidator(
                         grass.legal_name,
                         self._nameValidationFailed
@@ -561,8 +561,8 @@ class GRASSStartup(wx.Frame):
                 help = dlg.FindWindowById(wx.ID_HELP)
                 help.Bind(wx.EVT_BUTTON, self.OnHelp)
                 if dlg.ShowModal() == wx.ID_OK:
-                    mapsetName = dlg.GetValue()
-                    self.CreateNewMapset(mapsetName)
+                    subprojectName = dlg.GetValue()
+                    self.CreateNewSubproject(subprojectName)
 
     def ImportFile(self, filePath):
         """Tries to import file as vector or raster.
@@ -599,301 +599,301 @@ class GRASSStartup(wx.Frame):
             GMessage(
                 message=_(
                     "Data file <%(name)s> imported successfully. "
-                    "The location's default region was set from this imported map.") % {
+                    "The project's default region was set from this imported map.") % {
                     'name': filePath},
                 parent=self)
 
     # the event can be refactored out by using lambda in bind
-    def RenameMapset(self, event):
-        """Rename selected mapset
+    def RenameSubproject(self, event):
+        """Rename selected subproject
         """
-        location = self.listOfLocations[self.lblocations.GetSelection()]
-        mapset = self.listOfMapsets[self.lbmapsets.GetSelection()]
-        if mapset == 'PERMANENT':
+        project = self.listOfProjects[self.lbprojects.GetSelection()]
+        subproject = self.listOfSubprojects[self.lbsubprojects.GetSelection()]
+        if subproject == 'PERMANENT':
             GMessage(
                 parent=self, message=_(
-                    'Mapset <PERMANENT> is required for valid GRASS location.\n\n'
-                    'This mapset cannot be renamed.'))
+                    'Subproject <PERMANENT> is required for valid GRASS project.\n\n'
+                    'This subproject cannot be renamed.'))
             return
 
         dlg = TextEntryDialog(
             parent=self,
             message=_('Current name: %s\n\nEnter new name:') %
-            mapset,
-            caption=_('Rename selected mapset'),
+            subproject,
+            caption=_('Rename selected subproject'),
             validator=GenericValidator(
                 grass.legal_name,
                 self._nameValidationFailed))
 
         if dlg.ShowModal() == wx.ID_OK:
-            newmapset = dlg.GetValue()
-            if newmapset == mapset:
+            newsubproject = dlg.GetValue()
+            if newsubproject == subproject:
                 dlg.Destroy()
                 return
 
-            if newmapset in self.listOfMapsets:
+            if newsubproject in self.listOfSubprojects:
                 wx.MessageBox(
                     parent=self, caption=_('Message'), message=_(
-                        'Unable to rename mapset.\n\n'
-                        'Mapset <%s> already exists in location.') %
-                    newmapset, style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+                        'Unable to rename subproject.\n\n'
+                        'Subproject <%s> already exists in project.') %
+                    newsubproject, style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
             else:
                 try:
-                    os.rename(os.path.join(self.gisdbase, location, mapset),
-                              os.path.join(self.gisdbase, location, newmapset))
-                    self.OnSelectLocation(None)
-                    self.lbmapsets.SetSelection(
-                        self.listOfMapsets.index(newmapset))
+                    os.rename(os.path.join(self.gisdbase, project, subproject),
+                              os.path.join(self.gisdbase, project, newsubproject))
+                    self.OnSelectProject(None)
+                    self.lbsubprojects.SetSelection(
+                        self.listOfSubprojects.index(newsubproject))
                 except Exception as e:
                     wx.MessageBox(
                         parent=self,
                         caption=_('Error'),
-                        message=_('Unable to rename mapset.\n\n%s') %
+                        message=_('Unable to rename subproject.\n\n%s') %
                         e,
                         style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
 
         dlg.Destroy()
 
-    def RenameLocation(self, event):
-        """Rename selected location
+    def RenameProject(self, event):
+        """Rename selected project
         """
-        location = self.listOfLocations[self.lblocations.GetSelection()]
+        project = self.listOfProjects[self.lbprojects.GetSelection()]
 
         dlg = TextEntryDialog(
             parent=self,
             message=_('Current name: %s\n\nEnter new name:') %
-            location,
-            caption=_('Rename selected location'),
+            project,
+            caption=_('Rename selected project'),
             validator=GenericValidator(
                 grass.legal_name,
                 self._nameValidationFailed))
 
         if dlg.ShowModal() == wx.ID_OK:
-            newlocation = dlg.GetValue()
-            if newlocation == location:
+            newproject = dlg.GetValue()
+            if newproject == project:
                 dlg.Destroy()
                 return
 
-            if newlocation in self.listOfLocations:
+            if newproject in self.listOfProjects:
                 wx.MessageBox(
                     parent=self, caption=_('Message'), message=_(
-                        'Unable to rename location.\n\n'
-                        'Location <%s> already exists in GRASS database.') %
-                    newlocation, style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+                        'Unable to rename project.\n\n'
+                        'Project <%s> already exists in GRASS database.') %
+                    newproject, style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
             else:
                 try:
-                    os.rename(os.path.join(self.gisdbase, location),
-                              os.path.join(self.gisdbase, newlocation))
-                    self.UpdateLocations(self.gisdbase)
-                    self.lblocations.SetSelection(
-                        self.listOfLocations.index(newlocation))
-                    self.UpdateMapsets(newlocation)
+                    os.rename(os.path.join(self.gisdbase, project),
+                              os.path.join(self.gisdbase, newproject))
+                    self.UpdateProjects(self.gisdbase)
+                    self.lbprojects.SetSelection(
+                        self.listOfProjects.index(newproject))
+                    self.UpdateSubprojects(newproject)
                 except Exception as e:
                     wx.MessageBox(
                         parent=self,
                         caption=_('Error'),
-                        message=_('Unable to rename location.\n\n%s') %
+                        message=_('Unable to rename project.\n\n%s') %
                         e,
                         style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
 
         dlg.Destroy()
 
-    def DeleteMapset(self, event):
-        """Delete selected mapset
+    def DeleteSubproject(self, event):
+        """Delete selected subproject
         """
-        location = self.listOfLocations[self.lblocations.GetSelection()]
-        mapset = self.listOfMapsets[self.lbmapsets.GetSelection()]
-        if mapset == 'PERMANENT':
+        project = self.listOfProjects[self.lbprojects.GetSelection()]
+        subproject = self.listOfSubprojects[self.lbsubprojects.GetSelection()]
+        if subproject == 'PERMANENT':
             GMessage(
                 parent=self, message=_(
-                    'Mapset <PERMANENT> is required for valid GRASS location.\n\n'
-                    'This mapset cannot be deleted.'))
+                    'Subproject <PERMANENT> is required for valid GRASS project.\n\n'
+                    'This subproject cannot be deleted.'))
             return
 
         dlg = wx.MessageDialog(
             parent=self,
             message=_(
-                "Do you want to continue with deleting mapset <%(mapset)s> "
-                "from location <%(location)s>?\n\n"
-                "ALL MAPS included in this mapset will be "
+                "Do you want to continue with deleting subproject <%(subproject)s> "
+                "from project <%(project)s>?\n\n"
+                "ALL MAPS included in this subproject will be "
                 "PERMANENTLY DELETED!") %
-            {'mapset': mapset, 'location': location},
-            caption=_("Delete selected mapset"),
+            {'subproject': subproject, 'project': project},
+            caption=_("Delete selected subproject"),
             style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
 
         if dlg.ShowModal() == wx.ID_YES:
             try:
-                shutil.rmtree(os.path.join(self.gisdbase, location, mapset))
-                self.OnSelectLocation(None)
-                self.lbmapsets.SetSelection(0)
+                shutil.rmtree(os.path.join(self.gisdbase, project, subproject))
+                self.OnSelectProject(None)
+                self.lbsubprojects.SetSelection(0)
             except:
-                wx.MessageBox(message=_('Unable to delete mapset'))
+                wx.MessageBox(message=_('Unable to delete subproject'))
 
         dlg.Destroy()
 
-    def DeleteLocation(self, event):
+    def DeleteProject(self, event):
         """
-        Delete selected location
+        Delete selected project
         """
 
-        location = self.listOfLocations[self.lblocations.GetSelection()]
+        project = self.listOfProjects[self.lbprojects.GetSelection()]
 
         dlg = wx.MessageDialog(
             parent=self,
             message=_(
                 "Do you want to continue with deleting "
-                "location <%s>?\n\n"
-                "ALL MAPS included in this location will be "
+                "project <%s>?\n\n"
+                "ALL MAPS included in this project will be "
                 "PERMANENTLY DELETED!") %
-            (location),
-            caption=_("Delete selected location"),
+            (project),
+            caption=_("Delete selected project"),
             style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
 
         if dlg.ShowModal() == wx.ID_YES:
             try:
-                shutil.rmtree(os.path.join(self.gisdbase, location))
-                self.UpdateLocations(self.gisdbase)
-                self.lblocations.SetSelection(0)
-                self.OnSelectLocation(None)
-                self.lbmapsets.SetSelection(0)
+                shutil.rmtree(os.path.join(self.gisdbase, project))
+                self.UpdateProjects(self.gisdbase)
+                self.lbprojects.SetSelection(0)
+                self.OnSelectProject(None)
+                self.lbsubprojects.SetSelection(0)
             except:
-                wx.MessageBox(message=_('Unable to delete location'))
+                wx.MessageBox(message=_('Unable to delete project'))
 
         dlg.Destroy()
 
-    def UpdateLocations(self, dbase):
-        """Update list of locations"""
+    def UpdateProjects(self, dbase):
+        """Update list of projects"""
         try:
-            self.listOfLocations = GetListOfLocations(dbase)
+            self.listOfProjects = GetListOfProjects(dbase)
         except (UnicodeEncodeError, UnicodeDecodeError) as e:
             GError(parent=self,
                    message=_("Unicode error detected. "
                              "Check your locale settings. Details: {0}").format(e),
                    showTraceback=False)
 
-        self.lblocations.Clear()
-        self.lblocations.InsertItems(self.listOfLocations, 0)
+        self.lbprojects.Clear()
+        self.lbprojects.InsertItems(self.listOfProjects, 0)
 
-        if len(self.listOfLocations) > 0:
+        if len(self.listOfProjects) > 0:
             self._hideMessage()
-            self.lblocations.SetSelection(0)
+            self.lbprojects.SetSelection(0)
         else:
-            self.lblocations.SetSelection(wx.NOT_FOUND)
-            self._showWarning(_("No GRASS Location found in '%s'."
-                                " Create a new Location or choose different"
+            self.lbprojects.SetSelection(wx.NOT_FOUND)
+            self._showWarning(_("No GRASS Project found in '%s'."
+                                " Create a new Project or choose different"
                                 " GRASS database directory.")
                               % self.gisdbase)
 
-        return self.listOfLocations
+        return self.listOfProjects
 
-    def UpdateMapsets(self, location):
-        """Update list of mapsets"""
-        self.FormerMapsetSelection = wx.NOT_FOUND  # for non-selectable item
+    def UpdateSubprojects(self, project):
+        """Update list of subprojects"""
+        self.FormerSubprojectSelection = wx.NOT_FOUND  # for non-selectable item
 
-        self.listOfMapsetsSelectable = list()
-        self.listOfMapsets = GetListOfMapsets(self.gisdbase, location)
+        self.listOfSubprojectsSelectable = list()
+        self.listOfSubprojects = GetListOfSubprojects(self.gisdbase, project)
 
-        self.lbmapsets.Clear()
+        self.lbsubprojects.Clear()
 
-        # disable mapset with denied permission
-        locationName = os.path.basename(location)
+        # disable subproject with denied permission
+        projectName = os.path.basename(project)
 
-        ret = RunCommand('g.mapset',
+        ret = RunCommand('g.subproject',
                          read=True,
                          flags='l',
-                         location=locationName,
+                         project=projectName,
                          gisdbase=self.gisdbase)
 
         if ret:
             for line in ret.splitlines():
-                self.listOfMapsetsSelectable += line.split(' ')
+                self.listOfSubprojectsSelectable += line.split(' ')
         else:
             RunCommand("g.gisenv",
                        set="GISDBASE=%s" % self.gisdbase)
             RunCommand("g.gisenv",
-                       set="LOCATION_NAME=%s" % locationName)
+                       set="LOCATION_NAME=%s" % projectName)
             RunCommand("g.gisenv",
                        set="MAPSET=PERMANENT")
             # first run only
-            self.listOfMapsetsSelectable = copy.copy(self.listOfMapsets)
+            self.listOfSubprojectsSelectable = copy.copy(self.listOfSubprojects)
 
         disabled = []
         idx = 0
-        for mapset in self.listOfMapsets:
-            if mapset not in self.listOfMapsetsSelectable or \
+        for subproject in self.listOfSubprojects:
+            if subproject not in self.listOfSubprojectsSelectable or \
                     os.path.isfile(os.path.join(self.gisdbase,
-                                                locationName,
-                                                mapset, ".gislock")):
+                                                projectName,
+                                                subproject, ".gislock")):
                 disabled.append(idx)
             idx += 1
 
-        self.lbmapsets.InsertItems(self.listOfMapsets, 0, disabled=disabled)
+        self.lbsubprojects.InsertItems(self.listOfSubprojects, 0, disabled=disabled)
 
-        return self.listOfMapsets
+        return self.listOfSubprojects
 
-    def OnSelectLocation(self, event):
-        """Location selected"""
+    def OnSelectProject(self, event):
+        """Project selected"""
         if event:
-            self.lblocations.SetSelection(event.GetIndex())
+            self.lbprojects.SetSelection(event.GetIndex())
 
-        if self.lblocations.GetSelection() != wx.NOT_FOUND:
-            self.UpdateMapsets(
+        if self.lbprojects.GetSelection() != wx.NOT_FOUND:
+            self.UpdateSubprojects(
                 os.path.join(
                     self.gisdbase,
-                    self.listOfLocations[
-                        self.lblocations.GetSelection()]))
+                    self.listOfProjects[
+                        self.lbprojects.GetSelection()]))
         else:
-            self.listOfMapsets = []
+            self.listOfSubprojects = []
 
         disabled = []
         idx = 0
         try:
-            locationName = self.listOfLocations[
-                self.lblocations.GetSelection()]
+            projectName = self.listOfProjects[
+                self.lbprojects.GetSelection()]
         except IndexError:
-            locationName = ''
+            projectName = ''
 
-        for mapset in self.listOfMapsets:
-            if mapset not in self.listOfMapsetsSelectable or \
+        for subproject in self.listOfSubprojects:
+            if subproject not in self.listOfSubprojectsSelectable or \
                     os.path.isfile(os.path.join(self.gisdbase,
-                                                locationName,
-                                                mapset, ".gislock")):
+                                                projectName,
+                                                subproject, ".gislock")):
                 disabled.append(idx)
             idx += 1
 
-        self.lbmapsets.Clear()
-        self.lbmapsets.InsertItems(self.listOfMapsets, 0, disabled=disabled)
+        self.lbsubprojects.Clear()
+        self.lbsubprojects.InsertItems(self.listOfSubprojects, 0, disabled=disabled)
 
-        if len(self.listOfMapsets) > 0:
-            self.lbmapsets.SetSelection(0)
-            if locationName:
-                # enable start button when location and mapset is selected
+        if len(self.listOfSubprojects) > 0:
+            self.lbsubprojects.SetSelection(0)
+            if projectName:
+                # enable start button when project and subproject is selected
                 self.bstart.Enable()
                 self.bstart.SetFocus()
-                self.bmapset.Enable()
-                # replacing disabled choice, perhaps just mapset needed
-                self.rename_location_button.Enable()
-                self.delete_location_button.Enable()
-                self.rename_mapset_button.Enable()
-                self.delete_mapset_button.Enable()
+                self.bsubproject.Enable()
+                # replacing disabled choice, perhaps just subproject needed
+                self.rename_project_button.Enable()
+                self.delete_project_button.Enable()
+                self.rename_subproject_button.Enable()
+                self.delete_subproject_button.Enable()
         else:
-            self.lbmapsets.SetSelection(wx.NOT_FOUND)
+            self.lbsubprojects.SetSelection(wx.NOT_FOUND)
             self.bstart.Enable(False)
-            self.bmapset.Enable(False)
-            # this all was originally a choice, perhaps just mapset needed
-            self.rename_location_button.Enable(False)
-            self.delete_location_button.Enable(False)
-            self.rename_mapset_button.Enable(False)
-            self.delete_mapset_button.Enable(False)
+            self.bsubproject.Enable(False)
+            # this all was originally a choice, perhaps just subproject needed
+            self.rename_project_button.Enable(False)
+            self.delete_project_button.Enable(False)
+            self.rename_subproject_button.Enable(False)
+            self.delete_subproject_button.Enable(False)
 
-    def OnSelectMapset(self, event):
-        """Mapset selected"""
-        self.lbmapsets.SetSelection(event.GetIndex())
+    def OnSelectSubproject(self, event):
+        """Subproject selected"""
+        self.lbsubprojects.SetSelection(event.GetIndex())
 
-        if event.GetText() not in self.listOfMapsetsSelectable:
-            self.lbmapsets.SetSelection(self.FormerMapsetSelection)
+        if event.GetText() not in self.listOfSubprojectsSelectable:
+            self.lbsubprojects.SetSelection(self.FormerSubprojectSelection)
         else:
-            self.FormerMapsetSelection = event.GetIndex()
+            self.FormerSubprojectSelection = event.GetIndex()
             event.Skip()
 
     def OnSetDatabase(self, event):
@@ -905,9 +905,9 @@ class GRASSStartup(wx.Frame):
             return
 
         self.gisdbase = self.tgisdbase.GetValue()
-        self.UpdateLocations(self.gisdbase)
+        self.UpdateProjects(self.gisdbase)
 
-        self.OnSelectLocation(None)
+        self.OnSelectProject(None)
 
     def OnBrowse(self, event):
         """'Browse' button clicked"""
@@ -926,38 +926,38 @@ class GRASSStartup(wx.Frame):
 
         dlg.Destroy()
 
-    def OnCreateMapset(self, event):
-        """Create new mapset"""
+    def OnCreateSubproject(self, event):
+        """Create new subproject"""
         dlg = TextEntryDialog(
             parent=self,
-            message=_('Enter name for new mapset:'),
-            caption=_('Create new mapset'),
-            defaultValue=self._getDefaultMapsetName(),
+            message=_('Enter name for new subproject:'),
+            caption=_('Create new subproject'),
+            defaultValue=self._getDefaultSubprojectName(),
             validator=GenericValidator(
                 grass.legal_name,
                 self._nameValidationFailed))
         if dlg.ShowModal() == wx.ID_OK:
-            mapset = dlg.GetValue()
-            return self.CreateNewMapset(mapset=mapset)
+            subproject = dlg.GetValue()
+            return self.CreateNewSubproject(subproject=subproject)
         else:
             return False
 
-    def CreateNewMapset(self, mapset):
-        if mapset in self.listOfMapsets:
+    def CreateNewSubproject(self, subproject):
+        if subproject in self.listOfSubprojects:
             GMessage(parent=self,
-                     message=_("Mapset <%s> already exists.") % mapset)
+                     message=_("Subproject <%s> already exists.") % subproject)
             return False
 
-        if mapset.lower() == 'ogr':
+        if subproject.lower() == 'ogr':
             dlg1 = wx.MessageDialog(
                 parent=self,
                 message=_(
-                    "Mapset <%s> is reserved for direct "
+                    "Subproject <%s> is reserved for direct "
                     "read access to OGR layers. Please consider to use "
-                    "another name for your mapset.\n\n"
-                    "Are you really sure that you want to create this mapset?") %
-                mapset,
-                caption=_("Reserved mapset name"),
+                    "another name for your subproject.\n\n"
+                    "Are you really sure that you want to create this subproject?") %
+                subproject,
+                caption=_("Reserved subproject name"),
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
             ret = dlg1.ShowModal()
             dlg1.Destroy()
@@ -967,49 +967,49 @@ class GRASSStartup(wx.Frame):
 
         try:
             self.gisdbase = self.tgisdbase.GetValue()
-            location = self.listOfLocations[self.lblocations.GetSelection()]
-            os.mkdir(os.path.join(self.gisdbase, location, mapset))
+            project = self.listOfProjects[self.lbprojects.GetSelection()]
+            os.mkdir(os.path.join(self.gisdbase, project, subproject))
             # copy WIND file and its permissions from PERMANENT and set
             # permissions to u+rw,go+r
             shutil.copy(
                 os.path.join(
                     self.gisdbase,
-                    location,
+                    project,
                     'PERMANENT',
                     'WIND'),
                 os.path.join(
                     self.gisdbase,
-                    location,
-                    mapset))
-            # os.chmod(os.path.join(database,location,mapset,'WIND'), 0644)
-            self.OnSelectLocation(None)
-            self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
+                    project,
+                    subproject))
+            # os.chmod(os.path.join(database,project,subproject,'WIND'), 0644)
+            self.OnSelectProject(None)
+            self.lbsubprojects.SetSelection(self.listOfSubprojects.index(subproject))
             self.bstart.SetFocus()
 
             return True
         except Exception as e:
             GError(parent=self,
-                   message=_("Unable to create new mapset: %s") % e,
+                   message=_("Unable to create new subproject: %s") % e,
                    showTraceback=False)
             return False
 
     def OnStart(self, event):
         """'Start GRASS' button clicked"""
         dbase = self.tgisdbase.GetValue()
-        location = self.listOfLocations[self.lblocations.GetSelection()]
-        mapset = self.listOfMapsets[self.lbmapsets.GetSelection()]
+        project = self.listOfProjects[self.lbprojects.GetSelection()]
+        subproject = self.listOfSubprojects[self.lbsubprojects.GetSelection()]
 
-        lockfile = os.path.join(dbase, location, mapset, '.gislock')
+        lockfile = os.path.join(dbase, project, subproject, '.gislock')
         if os.path.isfile(lockfile):
             dlg = wx.MessageDialog(
                 parent=self,
                 message=_(
-                    "GRASS is already running in selected mapset <%(mapset)s>\n"
+                    "GRASS is already running in selected subproject <%(subproject)s>\n"
                     "(file %(lock)s found).\n\n"
                     "Concurrent use not allowed.\n\n"
                     "Do you want to try to remove .gislock (note that you "
                     "need permission for this operation) and continue?") %
-                {'mapset': mapset, 'lock': lockfile},
+                {'subproject': subproject, 'lock': lockfile},
                 caption=_("Lock file found"),
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE)
 
@@ -1039,22 +1039,22 @@ class GRASSStartup(wx.Frame):
                     return
             else:
                 return
-        self.SetLocation(dbase, location, mapset)
+        self.SetProject(dbase, project, subproject)
         self.ExitSuccessfully()
 
-    def SetLocation(self, dbase, location, mapset):
+    def SetProject(self, dbase, project, subproject):
         RunCommand("g.gisenv",
                    set="GISDBASE=%s" % dbase)
         RunCommand("g.gisenv",
-                   set="LOCATION_NAME=%s" % location)
+                   set="LOCATION_NAME=%s" % project)
         RunCommand("g.gisenv",
-                   set="MAPSET=%s" % mapset)
+                   set="MAPSET=%s" % subproject)
 
-    def _getDefaultMapsetName(self):
-        """Returns default name for mapset."""
+    def _getDefaultSubprojectName(self):
+        """Returns default name for subproject."""
         try:
             defaultName = getpass.getuser()
-            # raise error if not ascii (not valid mapset name)
+            # raise error if not ascii (not valid subproject name)
             defaultName.encode('ascii')
         except:  # whatever might go wrong
             defaultName = 'user'
@@ -1083,7 +1083,7 @@ class GRASSStartup(wx.Frame):
 
     def _nameValidationFailed(self, ctrl):
         message = _(
-            "Name <%(name)s> is not a valid name for location or mapset. "
+            "Name <%(name)s> is not a valid name for project or subproject. "
             "Please use only ASCII characters excluding %(chars)s "
             "and space.") % {
             'name': ctrl.GetValue(),
@@ -1093,7 +1093,7 @@ class GRASSStartup(wx.Frame):
 
 class GListBox(ListCtrl, listmix.ListCtrlAutoWidthMixin):
     """Use wx.ListCtrl instead of wx.ListBox, different style for
-    non-selectable items (e.g. mapsets with denied permission)"""
+    non-selectable items (e.g. subprojects with denied permission)"""
 
     def __init__(self, parent, id, size,
                  choices, disabled=[]):

@@ -15,7 +15,7 @@ extern char *cellinp;
 extern char *cellout;
 extern char *scol;
 extern char *maskmap;
-extern char *mapset;
+extern char *subproject;
 extern char *devi;
 extern char *outz, *gradient, *aspect1, *aspect2, *ncurv, *gcurv, *mcurv;
 extern char *cvdev;

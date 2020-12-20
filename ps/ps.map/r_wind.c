@@ -13,7 +13,7 @@ static char *help[] = {
     ""
 };
 
-int read_wind(char *name, char *mapset)
+int read_wind(char *name, char *subproject)
 {
     char fullname[100];
     char buf[1024];
@@ -26,9 +26,9 @@ int read_wind(char *name, char *mapset)
     double east, west, incr;
     struct Cell_head window;
 
-    sprintf(fullname, "%s in %s", name, mapset);
+    sprintf(fullname, "%s in %s", name, subproject);
 
-    G_get_element_window(&window, "windows", name, mapset);
+    G_get_element_window(&window, "windows", name, subproject);
 
     width = 1.;
     color_R = color_G = color_B = 0;
@@ -39,12 +39,12 @@ int read_wind(char *name, char *mapset)
 
 	if (KEY("width")) {
 	    width = -1.;
-	    *mapset = 0;
-	    if (sscanf(data, "%lf%s", &width, mapset) < 1 || width < 0.) {
+	    *subproject = 0;
+	    if (sscanf(data, "%lf%s", &width, subproject) < 1 || width < 0.) {
 		width = 1.;
 		error(key, data, "illegal width (wind)");
 	    }
-	    if (mapset[0] == 'i')
+	    if (subproject[0] == 'i')
 		width = width / 72.0;
 	    continue;
 	}

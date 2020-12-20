@@ -298,7 +298,7 @@ int main(int argc, char **argv)
 
     if (r_used) {
 	Rast_close(r_file);
-	Rast_write_colors(name_r, G_mapset(), &gray_colors);
+	Rast_write_colors(name_r, G_subproject(), &gray_colors);
 	Rast_short_history(name_r, "raster", &history);
 	Rast_command_history(&history);
 	Rast_write_history(name_r, &history);
@@ -306,7 +306,7 @@ int main(int argc, char **argv)
     }
     if (g_used) {
 	Rast_close(g_file);
-	Rast_write_colors(name_g, G_mapset(), &gray_colors);
+	Rast_write_colors(name_g, G_subproject(), &gray_colors);
 	Rast_short_history(name_g, "raster", &history);
 	Rast_command_history(&history);
 	Rast_write_history(name_g, &history);
@@ -314,7 +314,7 @@ int main(int argc, char **argv)
     }
     if (b_used) {
 	Rast_close(b_file);
-	Rast_write_colors(name_b, G_mapset(), &gray_colors);
+	Rast_write_colors(name_b, G_subproject(), &gray_colors);
 	Rast_short_history(name_b, "raster", &history);
 	Rast_command_history(&history);
 	Rast_write_history(name_b, &history);

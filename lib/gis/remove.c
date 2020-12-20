@@ -28,7 +28,7 @@ static int G__remove(int misc, const char *dir, const char *element,
  * \brief Remove a database file.
  *
  * The file or directory <i>name</i> under the database <i>element</i>
- * directory in the current mapset is removed.
+ * directory in the current subproject is removed.
  * 
  * If <i>name</i> is a directory, everything within the directory is
  * removed as well.
@@ -50,7 +50,7 @@ int G_remove(const char *element, const char *name)
  * \brief Remove a database misc file.
  *
  * The file or directory <i>name</i> under the database <i>element</i>
- * directory in the current mapset is removed.
+ * directory in the current subproject is removed.
  * 
  * If <i>name</i> is a directory, everything within the directory is
  * removed as well.
@@ -71,13 +71,13 @@ static int G__remove(int misc, const char *dir, const char *element,
 		     const char *name)
 {
     char path[GPATH_MAX];
-    const char *mapset;
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    const char *subproject;
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 
-    /* name in mapset legal only if mapset is current mapset */
-    mapset = G_mapset();
-    if (G_name_is_fully_qualified(name, xname, xmapset)) {
-	if (strcmp(mapset, xmapset) != 0)
+    /* name in subproject legal only if subproject is current subproject */
+    subproject = G_subproject();
+    if (G_name_is_fully_qualified(name, xname, xsubproject)) {
+	if (strcmp(subproject, xsubproject) != 0)
 	    return -1;
 	name = xname;
     }
@@ -86,9 +86,9 @@ static int G__remove(int misc, const char *dir, const char *element,
 	return -1;
 
     if (misc)
-	G_file_name_misc(path, dir, element, name, mapset);
+	G_file_name_misc(path, dir, element, name, subproject);
     else
-	G_file_name(path, element, name, mapset);
+	G_file_name(path, element, name, subproject);
 
     /* if file does not exist, return 0 */
     if (access(path, 0) != 0)

@@ -52,10 +52,10 @@ Center nodes can also be assigned to vector nodes using
 
 <h2>EXAMPLES</h2>
 
-<p>1. Subnetwork allocation using distance:
+<p>1. Subnetwork alproject using distance:
 <p><img src="v_net_alloc.png" alt="v.net.alloc example using distance" border="1">
 <br>
-<p>2. Subnetwork allocation using traveling time:
+<p>2. Subnetwork alproject using traveling time:
 <p><img src="v_net_alloc_time.png" alt="v.net.alloc example using time" border="1">
 <br>
 
@@ -141,7 +141,7 @@ v.db.update myroads_net_time layer=3 col=cost val="length / speed * 60"
 # set backward costs
 v.db.update myroads_net_time layer=3 col=bcost val="length / speed * 60"
 
-# subnetwork allocation with fastest paths
+# subnetwork alproject with fastest paths
 v.net.alloc in=myroads_net_time arc_layer=3 node_layer=2 arc_column=cost arc_backward_column=bcost out=myroads_net_alloc_time center_cats=1-3
 </pre></div>
 
@@ -165,11 +165,11 @@ d.vect myroads_net_time col=red icon=basic/triangle fcol=green size=12 type=poin
 <p>Example 3: <em>Differences between costs from centers and costs to centers</em><br>
 
 Each lane of the two-lane road is a one-way road.
-<p>1. Subnetwork allocation from centers:
+<p>1. Subnetwork alproject from centers:
 <p><img src="v_net_alloc_from_centers.png" alt="v.net.alloc example from centers" border="1">
 <br>
 A center reaches any point following the one-way lanes.
-<p>2. Subnetwork allocation to centers:
+<p>2. Subnetwork alproject to centers:
 <p><img src="v_net_alloc_to_centers.png" alt="v.net.alloc example to centers" border="1">
 <br>
 Any node reaches reaches the nearest center following the one-way lanes.

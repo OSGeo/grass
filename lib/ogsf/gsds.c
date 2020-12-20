@@ -70,7 +70,7 @@ static dataset *get_dataset(int);
 static int get_type(dataset *);
 
 static dataset *Data[MAX_DS];
-static dataset Ds[MAX_DS];	/* trying to avoid allocation */
+static dataset Ds[MAX_DS];	/* trying to avoid alproject */
 
 static int Numsets = 0;
 
@@ -86,7 +86,7 @@ static int init_gsds(void)
     int i;
 
     for (i = 0; i < MAX_DS; i++) {
-	/* avoiding dynamic allocation */
+	/* avoiding dynamic alproject */
 	Data[i] = &(Ds[i]);
     }
 

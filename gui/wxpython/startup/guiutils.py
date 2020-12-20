@@ -20,50 +20,50 @@ import sys
 import wx
 
 from grass.grassdb.checks import (
-    is_mapset_locked,
-    get_mapset_lock_info,
-    is_mapset_name_valid,
-    is_location_name_valid,
-    get_mapset_name_invalid_reason,
-    get_location_name_invalid_reason,
-    get_reason_mapset_not_removable,
-    get_reasons_mapsets_not_removable,
-    get_reasons_location_not_removable,
-    get_reasons_locations_not_removable,
+    is_subproject_locked,
+    get_subproject_lock_info,
+    is_subproject_name_valid,
+    is_project_name_valid,
+    get_subproject_name_invalid_reason,
+    get_project_name_invalid_reason,
+    get_reason_subproject_not_removable,
+    get_reasons_subprojects_not_removable,
+    get_reasons_project_not_removable,
+    get_reasons_projects_not_removable,
     get_reasons_grassdb_not_removable
 )
 
-from grass.grassdb.create import create_mapset, get_default_mapset_name
+from grass.grassdb.create import create_subproject, get_default_subproject_name
 from grass.grassdb.manage import (
-    delete_mapset,
-    delete_location,
+    delete_subproject,
+    delete_project,
     delete_grassdb,
-    rename_mapset,
-    rename_location,
+    rename_subproject,
+    rename_project,
 )
 
 from core import globalvar
 from core.gcmd import GError, GMessage, DecodeString, RunCommand
 from gui_core.dialogs import TextEntryDialog
-from location_wizard.dialogs import RegionDef
+from project_wizard.dialogs import RegionDef
 from gui_core.widgets import GenericValidator
 
 
-def SetSessionMapset(database, location, mapset):
-    """Sets database, location and mapset for the current session"""
+def SetSessionSubproject(database, project, subproject):
+    """Sets database, project and subproject for the current session"""
     RunCommand("g.gisenv", set="GISDBASE=%s" % database)
-    RunCommand("g.gisenv", set="LOCATION_NAME=%s" % location)
-    RunCommand("g.gisenv", set="MAPSET=%s" % mapset)
+    RunCommand("g.gisenv", set="LOCATION_NAME=%s" % project)
+    RunCommand("g.gisenv", set="MAPSET=%s" % subproject)
 
 
-class MapsetDialog(TextEntryDialog):
+class SubprojectDialog(TextEntryDialog):
     def __init__(self, parent=None, default=None, message=None, caption=None,
-                 database=None, location=None):
+                 database=None, project=None):
         self.database = database
-        self.location = location
+        self.project = project
 
-        validator = GenericValidator(self._isMapsetNameValid,
-                                     self._showMapsetNameInvalidReason)
+        validator = GenericValidator(self._isSubprojectNameValid,
+                                     self._showSubprojectNameInvalidReason)
 
         TextEntryDialog.__init__(
             self, parent=parent,
@@ -73,24 +73,24 @@ class MapsetDialog(TextEntryDialog):
             validator=validator,
         )
 
-    def _showMapsetNameInvalidReason(self, ctrl):
-        message = get_mapset_name_invalid_reason(self.database,
-                                                 self.location,
+    def _showSubprojectNameInvalidReason(self, ctrl):
+        message = get_subproject_name_invalid_reason(self.database,
+                                                 self.project,
                                                  ctrl.GetValue())
-        GError(parent=self, message=message, caption=_("Invalid mapset name"))
+        GError(parent=self, message=message, caption=_("Invalid subproject name"))
 
-    def _isMapsetNameValid(self, text):
-        """Check whether user's input location is valid or not."""
-        return is_mapset_name_valid(self.database, self.location, text)
+    def _isSubprojectNameValid(self, text):
+        """Check whether user's input project is valid or not."""
+        return is_subproject_name_valid(self.database, self.project, text)
 
 
-class LocationDialog(TextEntryDialog):
+class ProjectDialog(TextEntryDialog):
     def __init__(self, parent=None, default=None, message=None, caption=None,
                  database=None):
         self.database = database
 
-        validator = GenericValidator(self._isLocationNameValid,
-                                     self._showLocationNameInvalidReason)
+        validator = GenericValidator(self._isProjectNameValid,
+                                     self._showProjectNameInvalidReason)
 
         TextEntryDialog.__init__(
             self, parent=parent,
@@ -100,14 +100,14 @@ class LocationDialog(TextEntryDialog):
             validator=validator,
         )
 
-    def _showLocationNameInvalidReason(self, ctrl):
-        message = get_location_name_invalid_reason(self.database,
+    def _showProjectNameInvalidReason(self, ctrl):
+        message = get_project_name_invalid_reason(self.database,
                                                    ctrl.GetValue())
-        GError(parent=self, message=message, caption=_("Invalid location name"))
+        GError(parent=self, message=message, caption=_("Invalid project name"))
 
-    def _isLocationNameValid(self, text):
-        """Check whether user's input location is valid or not."""
-        return is_location_name_valid(self.database, text)
+    def _isProjectNameValid(self, text):
+        """Check whether user's input project is valid or not."""
+        return is_project_name_valid(self.database, text)
 
 
 # TODO: similar to (but not the same as) read_gisrc function in grass.py
@@ -161,48 +161,48 @@ def GetVersion():
     return (grassVersion, grassRevisionStr)
 
 
-def create_mapset_interactively(guiparent, grassdb, location):
+def create_subproject_interactively(guiparent, grassdb, project):
     """
-    Create new mapset
+    Create new subproject
     """
-    dlg = MapsetDialog(
+    dlg = SubprojectDialog(
         parent=guiparent,
-        default=get_default_mapset_name(),
-        message=_("Name for the new mapset:"),
-        caption=_("Create new mapset"),
+        default=get_default_subproject_name(),
+        message=_("Name for the new subproject:"),
+        caption=_("Create new subproject"),
         database=grassdb,
-        location=location,
+        project=project,
     )
 
-    mapset = None
+    subproject = None
     if dlg.ShowModal() == wx.ID_OK:
-        mapset = dlg.GetValue()
+        subproject = dlg.GetValue()
         try:
-            create_mapset(grassdb, location, mapset)
+            create_subproject(grassdb, project, subproject)
         except OSError as err:
-            mapset = None
+            subproject = None
             GError(
                 parent=guiparent,
-                message=_("Unable to create new mapset: {}").format(err),
+                message=_("Unable to create new subproject: {}").format(err),
                 showTraceback=False,
             )
     dlg.Destroy()
-    return mapset
+    return subproject
 
 
-def create_location_interactively(guiparent, grassdb):
+def create_project_interactively(guiparent, grassdb):
     """
-    Create new location using Location Wizard.
+    Create new project using Project Wizard.
 
-    Returns tuple (database, location, mapset) where mapset is "PERMANENT"
-    by default or another mapset a user created and may want to switch to.
+    Returns tuple (database, project, subproject) where subproject is "PERMANENT"
+    by default or another subproject a user created and may want to switch to.
     """
-    from location_wizard.wizard import LocationWizard
+    from project_wizard.wizard import ProjectWizard
 
-    gWizard = LocationWizard(parent=guiparent,
+    gWizard = ProjectWizard(parent=guiparent,
                              grassdatabase=grassdb)
 
-    if gWizard.location is None:
+    if gWizard.project is None:
         gWizard_output = (None, None, None)
         # Returns Nones after Cancel
         return gWizard_output
@@ -210,7 +210,7 @@ def create_location_interactively(guiparent, grassdb):
     if gWizard.georeffile:
         message = _(
             "Do you want to import {}"
-            "to the newly created location?"
+            "to the newly created project?"
         ).format(gWizard.georeffile)
         dlg = wx.MessageDialog(parent=guiparent,
                                message=message,
@@ -223,235 +223,235 @@ def create_location_interactively(guiparent, grassdb):
         dlg.Destroy()
 
     if gWizard.default_region:
-        defineRegion = RegionDef(guiparent, location=gWizard.location)
+        defineRegion = RegionDef(guiparent, project=gWizard.project)
         defineRegion.CenterOnParent()
         defineRegion.ShowModal()
         defineRegion.Destroy()
 
-    if gWizard.user_mapset:
-        mapset = create_mapset_interactively(guiparent,
+    if gWizard.user_subproject:
+        subproject = create_subproject_interactively(guiparent,
                                              gWizard.grassdatabase,
-                                             gWizard.location)
-        # Returns database and location created by user
-        # and a mapset user may want to switch to
-        gWizard_output = (gWizard.grassdatabase, gWizard.location,
-                          mapset)
+                                             gWizard.project)
+        # Returns database and project created by user
+        # and a subproject user may want to switch to
+        gWizard_output = (gWizard.grassdatabase, gWizard.project,
+                          subproject)
     else:
-        # Returns PERMANENT mapset when user mapset not defined
-        gWizard_output = (gWizard.grassdatabase, gWizard.location,
+        # Returns PERMANENT subproject when user subproject not defined
+        gWizard_output = (gWizard.grassdatabase, gWizard.project,
                           "PERMANENT")
     return gWizard_output
 
 
-def rename_mapset_interactively(guiparent, grassdb, location, mapset):
-    """Rename mapset with user interaction.
+def rename_subproject_interactively(guiparent, grassdb, project, subproject):
+    """Rename subproject with user interaction.
 
-    Exceptions during renaming are handled in get_reason_mapset_not_removable
+    Exceptions during renaming are handled in get_reason_subproject_not_removable
     function.
 
-    Returns newmapset if there was a change or None if the mapset cannot be
-    renamed (see reasons given by get_reason_mapset_not_removable
+    Returns newsubproject if there was a change or None if the subproject cannot be
+    renamed (see reasons given by get_reason_subproject_not_removable
     function) or if another error was encountered.
     """
-    newmapset = None
+    newsubproject = None
 
-    # Check selected mapset
-    message = get_reason_mapset_not_removable(grassdb, location, mapset,
+    # Check selected subproject
+    message = get_reason_subproject_not_removable(grassdb, project, subproject,
                                               check_permanent=True)
     if message:
         dlg = wx.MessageDialog(
             parent=guiparent,
             message=_(
-                "Cannot rename mapset <{mapset}> for the following reason:\n\n"
+                "Cannot rename subproject <{subproject}> for the following reason:\n\n"
                 "{reason}\n\n"
-                "No mapset will be renamed."
-            ).format(mapset=mapset, reason=message),
-            caption=_("Unable to rename selected mapset"),
+                "No subproject will be renamed."
+            ).format(subproject=subproject, reason=message),
+            caption=_("Unable to rename selected subproject"),
             style=wx.OK | wx.ICON_WARNING
         )
         dlg.ShowModal()
         dlg.Destroy()
-        return newmapset
+        return newsubproject
 
     # Display question dialog
-    dlg = MapsetDialog(
+    dlg = SubprojectDialog(
         parent=guiparent,
-        default=mapset,
-        message=_("Current name: {}\n\nEnter new name:").format(mapset),
-        caption=_("Rename selected mapset"),
+        default=subproject,
+        message=_("Current name: {}\n\nEnter new name:").format(subproject),
+        caption=_("Rename selected subproject"),
         database=grassdb,
-        location=location,
+        project=project,
     )
     if dlg.ShowModal() == wx.ID_OK:
-        newmapset = dlg.GetValue()
+        newsubproject = dlg.GetValue()
         try:
-            rename_mapset(grassdb, location, mapset, newmapset)
+            rename_subproject(grassdb, project, subproject, newsubproject)
         except OSError as err:
-            newmapset = None
+            newsubproject = None
             wx.MessageBox(
                 parent=guiparent,
                 caption=_("Error"),
-                message=_("Unable to rename mapset.\n\n{}").format(err),
+                message=_("Unable to rename subproject.\n\n{}").format(err),
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
     dlg.Destroy()
-    return newmapset
+    return newsubproject
 
 
-def rename_location_interactively(guiparent, grassdb, location):
-    """Rename location with user interaction.
+def rename_project_interactively(guiparent, grassdb, project):
+    """Rename project with user interaction.
 
-    Exceptions during renaming are handled in get_reasons_location_not_removable
+    Exceptions during renaming are handled in get_reasons_project_not_removable
     function.
 
-    Returns newlocation if there was a change or None if the location cannot be
-    renamed (see reasons given by get_reasons_location_not_removable
+    Returns newproject if there was a change or None if the project cannot be
+    renamed (see reasons given by get_reasons_project_not_removable
     function) or if another error was encountered.
     """
-    newlocation = None
+    newproject = None
 
-    # Check selected location
-    messages = get_reasons_location_not_removable(grassdb, location)
+    # Check selected project
+    messages = get_reasons_project_not_removable(grassdb, project)
     if messages:
         dlg = wx.MessageDialog(
             parent=guiparent,
             message=_(
-                "Cannot rename location <{location}> for the following reasons:\n\n"
+                "Cannot rename project <{project}> for the following reasons:\n\n"
                 "{reasons}\n\n"
-                "No location will be renamed."
-            ).format(location=location, reasons="\n".join(messages)),
-            caption=_("Unable to rename selected location"),
+                "No project will be renamed."
+            ).format(project=project, reasons="\n".join(messages)),
+            caption=_("Unable to rename selected project"),
             style=wx.OK | wx.ICON_WARNING
         )
         dlg.ShowModal()
         dlg.Destroy()
-        return newlocation
+        return newproject
 
     # Display question dialog
-    dlg = LocationDialog(
+    dlg = ProjectDialog(
         parent=guiparent,
-        default=location,
-        message=_("Current name: {}\n\nEnter new name:").format(location),
-        caption=_("Rename selected location"),
+        default=project,
+        message=_("Current name: {}\n\nEnter new name:").format(project),
+        caption=_("Rename selected project"),
         database=grassdb,
     )
     if dlg.ShowModal() == wx.ID_OK:
-        newlocation = dlg.GetValue()
+        newproject = dlg.GetValue()
         try:
-            rename_location(grassdb, location, newlocation)
+            rename_project(grassdb, project, newproject)
         except OSError as err:
-            newlocation = None
+            newproject = None
             wx.MessageBox(
                 parent=guiparent,
                 caption=_("Error"),
-                message=_("Unable to rename location.\n\n{}").format(err),
+                message=_("Unable to rename project.\n\n{}").format(err),
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
     dlg.Destroy()
-    return newlocation
+    return newproject
 
 
-def download_location_interactively(guiparent, grassdb):
+def download_project_interactively(guiparent, grassdb):
     """
-    Download new location using Location Wizard.
+    Download new project using Project Wizard.
 
-    Returns tuple (database, location, mapset) where mapset is "PERMANENT"
-    by default or in future it could be the mapset the user may want to
+    Returns tuple (database, project, subproject) where subproject is "PERMANENT"
+    by default or in future it could be the subproject the user may want to
     switch to.
     """
-    from startup.locdownload import LocationDownloadDialog
+    from startup.locdownload import ProjectDownloadDialog
 
     result = (None, None, None)
-    loc_download = LocationDownloadDialog(parent=guiparent,
+    loc_download = ProjectDownloadDialog(parent=guiparent,
                                           database=grassdb)
     loc_download.Centre()
     loc_download.ShowModal()
 
-    if loc_download.GetLocation() is not None:
-        # Returns database and location created by user
-        # and a mapset user may want to switch to
-        result = (grassdb, loc_download.GetLocation(), "PERMANENT")
+    if loc_download.GetProject() is not None:
+        # Returns database and project created by user
+        # and a subproject user may want to switch to
+        result = (grassdb, loc_download.GetProject(), "PERMANENT")
     loc_download.Destroy()
     return result
 
 
-def delete_mapset_interactively(guiparent, grassdb, location, mapset):
-    """Delete one mapset with user interaction.
+def delete_subproject_interactively(guiparent, grassdb, project, subproject):
+    """Delete one subproject with user interaction.
 
-    This is currently just a convenience wrapper for delete_mapsets_interactively().
+    This is currently just a convenience wrapper for delete_subprojects_interactively().
     """
-    mapsets = [(grassdb, location, mapset)]
-    return delete_mapsets_interactively(guiparent, mapsets)
+    subprojects = [(grassdb, project, subproject)]
+    return delete_subprojects_interactively(guiparent, subprojects)
 
 
-def delete_mapsets_interactively(guiparent, mapsets):
-    """Delete multiple mapsets with user interaction.
+def delete_subprojects_interactively(guiparent, subprojects):
+    """Delete multiple subprojects with user interaction.
 
-    Parameter *mapsets* is a list of tuples (database, location, mapset).
+    Parameter *subprojects* is a list of tuples (database, project, subproject).
 
-    Exceptions during deletation are handled in get_reasons_mapsets_not_removable
+    Exceptions during deletation are handled in get_reasons_subprojects_not_removable
     function.
 
-    Returns True if there was a change, i.e., all mapsets were successfuly
-    deleted or at least one mapset was deleted.
-    Returns False if one or more mapsets cannot be deleted (see reasons given
-    by get_reasons_mapsets_not_removable function) or if an error was
-    encountered when deleting the first mapset in the list.
+    Returns True if there was a change, i.e., all subprojects were successfuly
+    deleted or at least one subproject was deleted.
+    Returns False if one or more subprojects cannot be deleted (see reasons given
+    by get_reasons_subprojects_not_removable function) or if an error was
+    encountered when deleting the first subproject in the list.
     """
     deletes = []
     modified = False
 
-    # Check selected mapsets
-    messages = get_reasons_mapsets_not_removable(mapsets, check_permanent=True)
+    # Check selected subprojects
+    messages = get_reasons_subprojects_not_removable(subprojects, check_permanent=True)
     if messages:
         dlg = wx.MessageDialog(
             parent=guiparent,
             message=_(
-                "Cannot delete one or more mapsets for the following reasons:\n\n"
+                "Cannot delete one or more subprojects for the following reasons:\n\n"
                 "{reasons}\n\n"
-                "No mapsets will be deleted."
+                "No subprojects will be deleted."
             ).format(reasons="\n".join(messages)),
-            caption=_("Unable to delete selected mapsets"),
+            caption=_("Unable to delete selected subprojects"),
             style=wx.OK | wx.ICON_WARNING
         )
         dlg.ShowModal()
         dlg.Destroy()
         return modified
 
-    # No error occurs, create list of mapsets for deleting
-    for grassdb, location, mapset in mapsets:
-        mapset_path = os.path.join(grassdb, location, mapset)
-        deletes.append(mapset_path)
+    # No error occurs, create list of subprojects for deleting
+    for grassdb, project, subproject in subprojects:
+        subproject_path = os.path.join(grassdb, project, subproject)
+        deletes.append(subproject_path)
 
     # Display question dialog
     dlg = wx.MessageDialog(
         parent=guiparent,
         message=_(
             "Do you want to continue with deleting"
-            " one or more of the following mapsets?\n\n"
+            " one or more of the following subprojects?\n\n"
             "{deletes}\n\n"
-            "All maps included in these mapsets will be permanently deleted!"
+            "All maps included in these subprojects will be permanently deleted!"
         ).format(deletes="\n".join(deletes)),
-        caption=_("Delete selected mapsets"),
+        caption=_("Delete selected subprojects"),
         style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
     )
     if dlg.ShowModal() == wx.ID_YES:
         try:
-            for grassdb, location, mapset in mapsets:
-                delete_mapset(grassdb, location, mapset)
+            for grassdb, project, subproject in subprojects:
+                delete_subproject(grassdb, project, subproject)
                 modified = True
             dlg.Destroy()
             return modified
         except OSError as error:
             wx.MessageBox(
                 parent=guiparent,
-                caption=_("Error when deleting mapsets"),
+                caption=_("Error when deleting subprojects"),
                 message=_(
-                    "The following error occured when deleting mapset <{path}>:"
+                    "The following error occured when deleting subproject <{path}>:"
                     "\n\n{error}\n\n"
-                    "Deleting of mapsets was interrupted."
+                    "Deleting of subprojects was interrupted."
                 ).format(
-                    path=os.path.join(grassdb, location, mapset),
+                    path=os.path.join(grassdb, project, subproject),
                     error=error,
                 ),
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
@@ -460,83 +460,83 @@ def delete_mapsets_interactively(guiparent, mapsets):
     return modified
 
 
-def delete_location_interactively(guiparent, grassdb, location):
-    """Delete one location with user interaction.
+def delete_project_interactively(guiparent, grassdb, project):
+    """Delete one project with user interaction.
 
-    This is currently just a convenience wrapper for delete_locations_interactively().
+    This is currently just a convenience wrapper for delete_projects_interactively().
     """
-    locations = [(grassdb, location)]
-    return delete_locations_interactively(guiparent, locations)
+    projects = [(grassdb, project)]
+    return delete_projects_interactively(guiparent, projects)
 
 
-def delete_locations_interactively(guiparent, locations):
-    """Delete multiple locations with user interaction.
+def delete_projects_interactively(guiparent, projects):
+    """Delete multiple projects with user interaction.
 
-    Parameter *locations* is a list of tuples (database, location).
+    Parameter *projects* is a list of tuples (database, project).
 
-    Exceptions during deletation are handled in get_reasons_locations_not_removable
+    Exceptions during deletation are handled in get_reasons_projects_not_removable
     function.
 
-    Returns True if there was a change, i.e., all locations were successfuly
-    deleted or at least one location was deleted.
-    Returns False if one or more locations cannot be deleted (see reasons given
-    by get_reasons_locations_not_removable function) or if an error was
-    encountered when deleting the first location in the list.
+    Returns True if there was a change, i.e., all projects were successfuly
+    deleted or at least one project was deleted.
+    Returns False if one or more projects cannot be deleted (see reasons given
+    by get_reasons_projects_not_removable function) or if an error was
+    encountered when deleting the first project in the list.
     """
     deletes = []
     modified = False
 
-    # Check selected locations
-    messages = get_reasons_locations_not_removable(locations)
+    # Check selected projects
+    messages = get_reasons_projects_not_removable(projects)
     if messages:
         dlg = wx.MessageDialog(
             parent=guiparent,
             message=_(
-                "Cannot delete one or more locations for the following reasons:\n\n"
+                "Cannot delete one or more projects for the following reasons:\n\n"
                 "{reasons}\n\n"
-                "No locations will be deleted."
+                "No projects will be deleted."
             ).format(reasons="\n".join(messages)),
-            caption=_("Unable to delete selected locations"),
+            caption=_("Unable to delete selected projects"),
             style=wx.OK | wx.ICON_WARNING
         )
         dlg.ShowModal()
         dlg.Destroy()
         return modified
 
-    # No error occurs, create list of locations for deleting
-    for grassdb, location in locations:
-        location_path = os.path.join(grassdb, location)
-        deletes.append(location_path)
+    # No error occurs, create list of projects for deleting
+    for grassdb, project in projects:
+        project_path = os.path.join(grassdb, project)
+        deletes.append(project_path)
 
     # Display question dialog
     dlg = wx.MessageDialog(
         parent=guiparent,
         message=_(
             "Do you want to continue with deleting"
-            " one or more of the following locations?\n\n"
+            " one or more of the following projects?\n\n"
             "{deletes}\n\n"
-            "All mapsets included in these locations will be permanently deleted!"
+            "All subprojects included in these projects will be permanently deleted!"
         ).format(deletes="\n".join(deletes)),
-        caption=_("Delete selected locations"),
+        caption=_("Delete selected projects"),
         style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
     )
     if dlg.ShowModal() == wx.ID_YES:
         try:
-            for grassdb, location in locations:
-                delete_location(grassdb, location)
+            for grassdb, project in projects:
+                delete_project(grassdb, project)
                 modified = True
             dlg.Destroy()
             return modified
         except OSError as error:
             wx.MessageBox(
                 parent=guiparent,
-                caption=_("Error when deleting locations"),
+                caption=_("Error when deleting projects"),
                 message=_(
-                    "The following error occured when deleting location <{path}>:"
+                    "The following error occured when deleting project <{path}>:"
                     "\n\n{error}\n\n"
-                    "Deleting of locations was interrupted."
+                    "Deleting of projects was interrupted."
                 ).format(
-                    path=os.path.join(grassdb, location),
+                    path=os.path.join(grassdb, project),
                     error=error,
                 ),
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
@@ -609,40 +609,40 @@ def delete_grassdb_interactively(guiparent, grassdb):
     return deleted
 
 
-def can_switch_mapset_interactive(guiparent, grassdb, location, mapset):
+def can_switch_subproject_interactive(guiparent, grassdb, project, subproject):
     """
-    Checks if mapset is locked and offers to remove the lock file.
+    Checks if subproject is locked and offers to remove the lock file.
 
-    Returns True if user wants to switch to the selected mapset in spite of
+    Returns True if user wants to switch to the selected subproject in spite of
     removing lock. Returns False if a user wants to stay in the current
-    mapset or if an error was encountered.
+    subproject or if an error was encountered.
     """
     can_switch = True
-    mapset_path = os.path.join(grassdb, location, mapset)
+    subproject_path = os.path.join(grassdb, project, subproject)
 
-    if is_mapset_locked(mapset_path):
-        info = get_mapset_lock_info(mapset_path)
+    if is_subproject_locked(subproject_path):
+        info = get_subproject_lock_info(subproject_path)
         user = info['owner'] if info['owner'] else _('unknown')
         lockpath = info['lockpath']
         timestamp = info['timestamp']
 
         dlg = wx.MessageDialog(
             parent=guiparent,
-            message=_("User {user} is already running GRASS in selected mapset "
-                      "<{mapset}>\n (file {lockpath} created {timestamp} "
+            message=_("User {user} is already running GRASS in selected subproject "
+                      "<{subproject}>\n (file {lockpath} created {timestamp} "
                       "found).\n\n"
                       "Concurrent use not allowed.\n\n"
-                      "Do you want to stay in the current mapset or remove "
-                      ".gislock and switch to selected mapset?"
+                      "Do you want to stay in the current subproject or remove "
+                      ".gislock and switch to selected subproject?"
                       ).format(user=user,
-                               mapset=mapset,
+                               subproject=subproject,
                                lockpath=lockpath,
                                timestamp=timestamp),
-            caption=_("Mapset is in use"),
+            caption=_("Subproject is in use"),
             style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
         )
-        dlg.SetYesNoLabels("S&witch to selected mapset",
-                           "S&tay in current mapset")
+        dlg.SetYesNoLabels("S&witch to selected subproject",
+                           "S&tay in current subproject")
         if dlg.ShowModal() == wx.ID_YES:
             # Remove lockfile
             try:
@@ -698,43 +698,43 @@ def import_file(guiparent, filePath):
         GMessage(
             message=_(
                 "Data file <%(name)s> imported successfully. "
-                "The location's default region was set from "
+                "The project's default region was set from "
                 "this imported map.") % {
                 'name': filePath},
             parent=guiparent)
 
 
-def switch_mapset_interactively(guiparent, giface, dbase, location, mapset):
-    """Switch current mapset. Emits giface.currentMapsetChanged signal."""
+def switch_subproject_interactively(guiparent, giface, dbase, project, subproject):
+    """Switch current subproject. Emits giface.currentSubprojectChanged signal."""
     if dbase:
-        if RunCommand('g.mapset', parent=guiparent,
-                      location=location,
-                      mapset=mapset,
+        if RunCommand('g.subproject', parent=guiparent,
+                      project=project,
+                      subproject=subproject,
                       dbase=dbase) == 0:
             GMessage(parent=guiparent,
                      message=_("Current GRASS database is <%(dbase)s>.\n"
-                               "Current location is <%(loc)s>.\n"
-                               "Current mapset is <%(mapset)s>."
+                               "Current project is <%(loc)s>.\n"
+                               "Current subproject is <%(subproject)s>."
                                ) %
-                     {'dbase': dbase, 'loc': location, 'mapset': mapset})
-            giface.currentMapsetChanged.emit(dbase=dbase,
-                                             location=location,
-                                             mapset=mapset)
-    elif location:
-        if RunCommand('g.mapset', parent=guiparent,
-                      location=location,
-                      mapset=mapset) == 0:
+                     {'dbase': dbase, 'loc': project, 'subproject': subproject})
+            giface.currentSubprojectChanged.emit(dbase=dbase,
+                                             project=project,
+                                             subproject=subproject)
+    elif project:
+        if RunCommand('g.subproject', parent=guiparent,
+                      project=project,
+                      subproject=subproject) == 0:
             GMessage(parent=guiparent,
-                     message=_("Current location is <%(loc)s>.\n"
-                               "Current mapset is <%(mapset)s>.") %
-                     {'loc': location, 'mapset': mapset})
-            giface.currentMapsetChanged.emit(dbase=None,
-                                             location=location,
-                                             mapset=mapset)
+                     message=_("Current project is <%(loc)s>.\n"
+                               "Current subproject is <%(subproject)s>.") %
+                     {'loc': project, 'subproject': subproject})
+            giface.currentSubprojectChanged.emit(dbase=None,
+                                             project=project,
+                                             subproject=subproject)
     else:
-        if RunCommand('g.mapset',
+        if RunCommand('g.subproject',
                       parent=guiparent,
-                      mapset=mapset) == 0:
+                      subproject=subproject) == 0:
             GMessage(parent=guiparent,
-                     message=_("Current mapset is <%s>.") % mapset)
-            giface.currentMapsetChanged.emit(dbase=None, location=None, mapset=mapset)
+                     message=_("Current subproject is <%s>.") % subproject)
+            giface.currentSubprojectChanged.emit(dbase=None, project=None, subproject=subproject)

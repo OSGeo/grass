@@ -65,7 +65,7 @@ def main():
         grass.fatal(_("Unable to pack vector map <%s>. Only native format supported.") %
                     gfile['fullname'])
 
-    # split the name if there is the mapset name
+    # split the name if there is the subproject name
     if infile.find('@'):
         infile = infile.split('@')[0]
 

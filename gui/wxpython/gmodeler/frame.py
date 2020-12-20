@@ -410,7 +410,7 @@ class ModelFrame(wx.Frame):
             self._gconsole.RunCmd(['g.remove', '-f', 'type=vector',
                                    'name=%s' % ','.join(vect)])
 
-        self.SetStatusText(_("%d intermediate maps deleted from current mapset") %
+        self.SetStatusText(_("%d intermediate maps deleted from current subproject") %
                            int(len(rast) + len(rast3d) + len(vect)))
 
     def OnDeleteData(self, event):
@@ -1754,7 +1754,7 @@ class VariablePanel(wx.Panel):
                                        _("raster"),
                                        _("vector"),
                                        _("region"),
-                                       _("mapset"),
+                                       _("subproject"),
                                        _("file"),
                                        _("dir")])
         self.type.SetSelection(2)  # string

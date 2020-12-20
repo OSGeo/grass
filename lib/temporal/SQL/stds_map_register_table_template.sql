@@ -7,7 +7,7 @@
 -- Author: Soeren Gebbert soerengebbert <at> googlemail <dot> com
 --#############################################################################
 
--- SPACETIME_NAME is a placeholder for specific stds name (SQL compliant): name_mapset
+-- SPACETIME_NAME is a placeholder for specific stds name (SQL compliant): name_subproject
 -- GRASS_MAP is a placeholder for specific map type: raster, raster3d or vector
 
 -- This table stores the.ids of the GRASS_MAP maps registered in the current spacetime GRASS_MAP table

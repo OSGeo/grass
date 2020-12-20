@@ -614,7 +614,7 @@ def initialize_vars():
 #       prec     - Precedence level
 #       lr_next  - Next LR item. Example, if we are ' E -> E . PLUS E'
 #                  then lr_next refers to 'E -> E PLUS . E'
-#       lr_index - LR item index (location of the ".") in the prod list.
+#       lr_index - LR item index (project of the ".") in the prod list.
 #       lookaheads - LALR lookahead symbols for this item
 #       len      - Length of the production (number of symbols on right hand side)
 # -----------------------------------------------------------------------------

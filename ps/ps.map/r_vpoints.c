@@ -38,7 +38,7 @@ static char *help[] = {
     ""
 };
 
-int read_vpoints(char *name, char *mapset)
+int read_vpoints(char *name, char *subproject)
 {
     char fullname[100];
     char buf[1024];
@@ -51,10 +51,10 @@ int read_vpoints(char *name, char *mapset)
 
     vector_alloc();		/* allocate space */
 
-    sprintf(fullname, "%s in %s", name, mapset);
+    sprintf(fullname, "%s in %s", name, subproject);
 
     Vect_set_open_level(2);
-    if (2 > Vect_open_old(&Map, name, mapset)) {
+    if (2 > Vect_open_old(&Map, name, subproject)) {
 	error(fullname, "", "can't open vector map");
 	gobble_input();
 	return 0;
@@ -65,7 +65,7 @@ int read_vpoints(char *name, char *mapset)
 
     vector.layer[vec].type = VPOINTS;
     vector.layer[vec].name = G_store(name);
-    vector.layer[vec].mapset = G_store(mapset);
+    vector.layer[vec].subproject = G_store(subproject);
     vector.layer[vec].ltype = GV_POINT;
     vector.layer[vec].masked = 0;
 
@@ -135,13 +135,13 @@ int read_vpoints(char *name, char *mapset)
 
 	if (KEY("width")) {
 	    width = -1.;
-	    *mapset = 0;
-	    if (sscanf(data, "%lf%s", &width, mapset) < 1 || width < 0.) {
+	    *subproject = 0;
+	    if (sscanf(data, "%lf%s", &width, subproject) < 1 || width < 0.) {
 		width = 1.;
 		error(key, data, "illegal width (vpoints)");
 		continue;
 	    }
-	    if (mapset[0] == 'i')
+	    if (subproject[0] == 'i')
 		width = width / 72.;
 	    vector.layer[vec].width = width;
 	    continue;

@@ -171,12 +171,12 @@ def main():
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    mapset = tgis.get_current_mapset()
+    subproject = tgis.get_current_subproject()
 
     if input.find("@") >= 0:
         id = input
     else:
-        id = input + "@" + mapset
+        id = input + "@" + subproject
 
     input_strds = tgis.SpaceTimeRasterDataset(id)
 
@@ -199,7 +199,7 @@ def main():
         if occurrence.find("@") >= 0:
             occurrence_id = occurrence
         else:
-            occurrence_id = occurrence + "@" + mapset
+            occurrence_id = occurrence + "@" + subproject
 
         occurrence_strds = tgis.SpaceTimeRasterDataset(occurrence_id)
         if occurrence_strds.is_in_db(dbif):
@@ -221,7 +221,7 @@ def main():
         if indicator.find("@") >= 0:
             indicator = indicator
         else:
-            indicator_id = indicator + "@" + mapset
+            indicator_id = indicator + "@" + subproject
 
         indicator_strds = tgis.SpaceTimeRasterDataset(indicator_id)
         if indicator_strds.is_in_db(dbif):
@@ -240,7 +240,7 @@ def main():
         if minimum.find("@") >= 0:
             minimum_id = minimum
         else:
-            minimum_id = minimum + "@" + mapset
+            minimum_id = minimum + "@" + subproject
 
         minimum_strds = tgis.SpaceTimeRasterDataset(minimum_id)
         if not minimum_strds.is_in_db():
@@ -259,7 +259,7 @@ def main():
         if maximum.find("@") >= 0:
             maximum_id = maximum
         else:
-            maximum_id = maximum + "@" + mapset
+            maximum_id = maximum + "@" + subproject
 
         maximum_strds = tgis.SpaceTimeRasterDataset(maximum_id)
         if not maximum_strds.is_in_db():
@@ -319,7 +319,7 @@ def main():
         grass.message(_("Processing cycle %s - %s"%(str(start), str(end))))
 
         count = compute_occurrence(occurrence_maps, input_strds, input_maps,
-                                   start, base, count, time_suffix, mapset,
+                                   start, base, count, time_suffix, subproject,
                                    where, reverse, range_, minimum_strds,
                                    maximum_strds, dbif)
 
@@ -343,7 +343,7 @@ def main():
                 else:
                     indicator_map_name = tgis.create_numeric_suffix(base + "_indicator",
                                                                     indi_count, time_suffix)
-                indicator_map_id = dummy.build_id(indicator_map_name, mapset)
+                indicator_map_id = dummy.build_id(indicator_map_name, subproject)
                 indicator_map = input_strds.get_new_map_instance(indicator_map_id)
 
                 # Check if new map is in the temporal database
@@ -492,7 +492,7 @@ def create_strds_register_maps(in_strds, out_strds, out_maps, register_null,
 ############################################################################
 
 def compute_occurrence(occurrence_maps, input_strds, input_maps, start, base,
-                       count, tsuffix, mapset, where, reverse, range_,
+                       count, tsuffix, subproject, where, reverse, range_,
                        minimum_strds, maximum_strds, dbif):
 
     if minimum_strds:
@@ -536,7 +536,7 @@ def compute_occurrence(occurrence_maps, input_strds, input_maps, start, base,
         else:
             occurrence_map_name = tgis.create_numeric_suffix(base, count, tsuffix)
 
-        occurrence_map_id = map.build_id(occurrence_map_name, mapset)
+        occurrence_map_id = map.build_id(occurrence_map_name, subproject)
         occurrence_map = input_strds.get_new_map_instance(occurrence_map_id)
 
         # Check if new map is in the temporal database

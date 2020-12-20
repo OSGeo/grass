@@ -67,10 +67,10 @@ def main():
     columns = options['columns']
     key = options['key']
 
-    # does map exist in CURRENT mapset?
-    mapset = grass.gisenv()['MAPSET']
-    if not grass.find_file(vector, element='vector', mapset=mapset)['file']:
-        grass.fatal(_("Vector map <%s> not found in current mapset") % vector)
+    # does map exist in CURRENT subproject?
+    subproject = grass.gisenv()['MAPSET']
+    if not grass.find_file(vector, element='vector', subproject=subproject)['file']:
+        grass.fatal(_("Vector map <%s> not found in current subproject") % vector)
 
     map_name = vector.split('@')[0]
 
@@ -89,7 +89,7 @@ def main():
 
     # check if DB parameters are set, and if not set them.
     grass.run_command('db.connect', flags='c', quiet=True)
-    grass.verbose(_("Creating new DB connection based on default mapset settings..."))
+    grass.verbose(_("Creating new DB connection based on default subproject settings..."))
     kv = grass.db_connection()
     database = kv['database']
     driver = kv['driver']

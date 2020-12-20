@@ -1,10 +1,10 @@
 #!/bin/sh
-# Test the import of space time raster datasets creating new locations
+# Test the import of space time raster datasets creating new projects
 
 # We need to set a specific region in the
 # @preprocess step of this test. We generate
 # raster with r.mapcalc and create a space time raster datasets
-# The region setting should work for UTM and LL test locations
+# The region setting should work for UTM and LL test projects
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
 mkdir test
@@ -40,20 +40,20 @@ t.rast.export input=precip_abs1 output=strds_export_pack.tar.gz compression=gzip
 
 g.proj -p
 
-# Import the data into a new location
-t.rast.import --o location=new_test_1 input=strds_export.tar.bz2 output=precip_abs1 directory=test\
+# Import the data into a new project
+t.rast.import --o project=new_test_1 input=strds_export.tar.bz2 output=precip_abs1 directory=test\
               title="A test" description="Description of a test"
 ls -la $GISDBASE/new_test_1/PERMANENT
 
-t.rast.import --o location=new_test_2 input=strds_export.tar.bz2 output=precip_abs1 directory=test\
+t.rast.import --o project=new_test_2 input=strds_export.tar.bz2 output=precip_abs1 directory=test\
           -l  title="A test" description="Description of a test"
 ls -la $GISDBASE/new_test_2/PERMANENT
 
-t.rast.import --o location=new_test_3 input=strds_export.tar.bz2 output=precip_abs1 directory=test\
+t.rast.import --o project=new_test_3 input=strds_export.tar.bz2 output=precip_abs1 directory=test\
           -c  title="A test" description="Description of a test"
 ls -la $GISDBASE/new_test_3/PERMANENT
 
-t.rast.import --o location=new_test_4 input=strds_export_pack.tar.gz output=precip_abs1 directory=test\
+t.rast.import --o project=new_test_4 input=strds_export_pack.tar.gz output=precip_abs1 directory=test\
               title="A test" description="Description of a test"
 ls -la $GISDBASE/new_test_4/PERMANENT
 
@@ -63,7 +63,7 @@ g.remove -f type=raster name=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 rm -rf test
 rm strds_export.tar.bz2
 rm strds_export_pack.tar.gz
-# Remove the newly created locations
+# Remove the newly created projects
 rm -rf $GISDBASE/new_test_1
 rm -rf $GISDBASE/new_test_2
 rm -rf $GISDBASE/new_test_3

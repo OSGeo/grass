@@ -52,12 +52,12 @@ def main():
     columns = options['columns']
     columns = [col.strip() for col in columns.split(',')]
 
-    # does map exist in CURRENT mapset?
-    mapset = grass.gisenv()['MAPSET']
-    exists = bool(grass.find_file(map, element='vector', mapset=mapset)['file'])
+    # does map exist in CURRENT subproject?
+    subproject = grass.gisenv()['MAPSET']
+    exists = bool(grass.find_file(map, element='vector', subproject=subproject)['file'])
 
     if not exists:
-        grass.fatal(_("Vector map <%s> not found in current mapset") % map)
+        grass.fatal(_("Vector map <%s> not found in current subproject") % map)
 
     try:
         f = grass.vector_db(map)[int(layer)]

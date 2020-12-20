@@ -30,8 +30,8 @@
 #%end
 #%flag
 #% key: o
-#% label: Override projection check (use current location's projection)
-#% description: Assume that the dataset has same projection as the current location
+#% label: Override projection check (use current project's projection)
+#% description: Assume that the dataset has same projection as the current project
 #% guisection: Output settings
 #%end
 #%flag
@@ -98,7 +98,7 @@ def main():
     else:
         map_name = data_names[0].split('@')[0]
 
-    gfile = grass.find_file(name=map_name, element='cell', mapset='.')
+    gfile = grass.find_file(name=map_name, element='cell', subproject='.')
     if gfile['file']:
         if os.environ.get('GRASS_OVERWRITE', '0') != '1':
             grass.fatal(_('Raster map <{name}> already exists'.format(name=map_name)))
@@ -122,7 +122,7 @@ def main():
     # check projection compatibility in a rather crappy way
 
     if flags['o']:
-        grass.warning(_("Overriding projection check (using current location's projection)."))
+        grass.warning(_("Overriding projection check (using current project's projection)."))
 
     else:
 
@@ -135,8 +135,8 @@ def main():
         if not os.path.exists(proj_info_file_1):
             if os.path.exists(proj_info_file_2):
                 grass.fatal(
-                    _("PROJ_INFO file is missing, unpack raster map in XY (unprojected) location."))
-            skip_projection_check = True  # XY location
+                    _("PROJ_INFO file is missing, unpack raster map in XY (unprojected) project."))
+            skip_projection_check = True  # XY project
 
         if not skip_projection_check:
             if not grass.compare_key_value_text_files(filename_a=proj_info_file_1,
@@ -156,14 +156,14 @@ def main():
 
                 if diff_result_1:
                     grass.warning(_("Difference between PROJ_INFO file of packed map "
-                                    "and of current location:\n{diff}").format(diff=''.join(diff_result_1)))
+                                    "and of current project:\n{diff}").format(diff=''.join(diff_result_1)))
                 if diff_result_2:
                     grass.warning(_("Difference between PROJ_UNITS file of packed map "
-                                    "and of current location:\n{diff}").format(diff=''.join(diff_result_2)))
-                grass.fatal(_("Projection of dataset does not appear to match current location."
+                                    "and of current project:\n{diff}").format(diff=''.join(diff_result_2)))
+                grass.fatal(_("Projection of dataset does not appear to match current project."
                               " In case of no significant differences in the projection definitions,"
                               " use the -o flag to ignore them and use"
-                              " current location definition."))
+                              " current project definition."))
 
     maps = []
     vrt_file = None
@@ -187,8 +187,8 @@ def main():
             if element == 'cell_misc':
                 if index > 0:
                     maps.append(
-                        "{map_name}@{mapset}".format(
-                            map_name=map_name, mapset=gisenv['MAPSET'],
+                        "{map_name}@{subproject}".format(
+                            map_name=map_name, subproject=gisenv['MAPSET'],
                         ),
                     )
 

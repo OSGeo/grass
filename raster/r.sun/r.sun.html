@@ -48,7 +48,7 @@ with the <a href="r.info.html">r.info</a> command.
 The solar incidence angle raster map <i>incidout</i> is computed specifying 
 elevation raster map <i>elevation</i>, aspect raster map <i>aspect</i>, slope 
 steepness raster map <i>slope,</i> given the day <i>day</i> and local time
-<i>time</i>. There is no need to define latitude for locations with known
+<i>time</i>. There is no need to define latitude for projects with known
 and defined projection/coordinate system (check it with the <a href="g.proj.html">
 g.proj</a>
  command). If you have undefined projection, (x,y) system, etc. then the latitude
@@ -213,7 +213,7 @@ Europe the timezone offset is +1, +2 when daylight saving time is in effect.
 <!-- WE DON'T KNOW, check source code:
 If the user use the <em>civil_time</em> parameter, also the longitude needs to
 be supplied as a raster map with the <em>long_in</em> parameter. Within a
-latlon location, such a map can be easily made with:
+latlon project, such a map can be easily made with:
 
 <div class="code"><pre>
 r.mapcalc "lon_raster = x()"

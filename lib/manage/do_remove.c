@@ -34,10 +34,10 @@ int M_do_remove(int n, const char *old)
     int i, ret;
 
     /* int len; */
-    const char *mapset;
+    const char *subproject;
     int result = 0;
     int removed = 0;
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 
     G_message(_("Removing %s <%s>"), list[n].maindesc, old);
 
@@ -45,15 +45,15 @@ int M_do_remove(int n, const char *old)
 
     M__hold_signals(1);
 
-    if (G_name_is_fully_qualified(old, xname, xmapset)) {
-	if (strcmp(xmapset, G_mapset()) != 0)
-	    G_fatal_error("%s is not in the current mapset (%s)", old,
-			  G_mapset());
+    if (G_name_is_fully_qualified(old, xname, xsubproject)) {
+	if (strcmp(xsubproject, G_subproject()) != 0)
+	    G_fatal_error("%s is not in the current subproject (%s)", old,
+			  G_subproject());
 	old = xname;
     }
 
     if (G_strcasecmp(list[n].alias, "vector") == 0) {
-	if ((mapset = G_find_vector2(old, "")) == NULL) {
+	if ((subproject = G_find_vector2(old, "")) == NULL) {
 	    G_warning(_("Vector map <%s> not found"), old);
 	}
 	else {
@@ -69,12 +69,12 @@ int M_do_remove(int n, const char *old)
     }
     else {
 	if (G_strcasecmp(list[n].alias, "raster") == 0) {
-	    if ((mapset = G_find_raster2(old, "")) == NULL)
+	    if ((subproject = G_find_raster2(old, "")) == NULL)
 		G_warning(_("Raster map <%s> not found"), old);
 	}
 
 	if (G_strcasecmp(list[n].alias, "raster_3d") == 0) {
-	    if ((mapset = G_find_raster3d(old, "")) == NULL)
+	    if ((subproject = G_find_raster3d(old, "")) == NULL)
 		G_warning(_("3D raster map <%s> not found"), old);
 	}
 
@@ -99,7 +99,7 @@ int M_do_remove(int n, const char *old)
     if (G_strcasecmp(list[n].element[0], "cell") == 0) {
 	char colr2[GPATH_MAX];
 
-	G_snprintf(colr2, GPATH_MAX, "colr2/%s", G_mapset());
+	G_snprintf(colr2, GPATH_MAX, "colr2/%s", G_subproject());
 	switch (G_remove(colr2, old)) {
 	case -1:
 	    G_warning(_("Unable to remove %s"), colr2);

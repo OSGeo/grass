@@ -8,7 +8,7 @@
 # @preprocess step of this test. We generate
 # raster with r.mapcalc and create several space time raster datasets
 # with absolute time
-# The region setting should work for UTM and LL test locations
+# The region setting should work for UTM and LL test projects
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
 # Generate data

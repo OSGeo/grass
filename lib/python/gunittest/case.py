@@ -26,7 +26,7 @@ from .checkers import (check_text_ellipsis,
                        text_to_keyvalue, keyvalue_equals, diff_keyvalue,
                        file_md5, text_file_md5, files_equal_md5)
 from .utils import safe_repr
-from .gutils import is_map_in_mapset
+from .gutils import is_map_in_subproject
 
 pyversion = sys.version_info[0]
 if pyversion == 2:
@@ -509,7 +509,7 @@ class TestCase(unittest.TestCase):
 
     def _get_detailed_message_about_no_map(self, name, type):
         msg = ("There is no map <{n}> of type <{t}>"
-               " in the current mapset".format(n=name, t=type))
+               " in the current subproject".format(n=name, t=type))
         related = call_module('g.list', type='raster,raster3d,vector',
                               flags='imt', pattern='*' + name + '*')
         if related:
@@ -520,38 +520,38 @@ class TestCase(unittest.TestCase):
         return msg
 
     def assertRasterExists(self, name, msg=None):
-        """Checks if the raster map exists in current mapset"""
-        if not is_map_in_mapset(name, type='raster'):
+        """Checks if the raster map exists in current subproject"""
+        if not is_map_in_subproject(name, type='raster'):
             stdmsg = self._get_detailed_message_about_no_map(name, 'raster')
             self.fail(self._formatMessage(msg, stdmsg))
 
     def assertRasterDoesNotExist(self, name, msg=None):
-        """Checks if the raster map does not exist in current mapset"""
-        if is_map_in_mapset(name, type='raster'):
+        """Checks if the raster map does not exist in current subproject"""
+        if is_map_in_subproject(name, type='raster'):
             stdmsg = self._get_detailed_message_about_no_map(name, 'raster')
             self.fail(self._formatMessage(msg, stdmsg))
 
     def assertRaster3dExists(self, name, msg=None):
-        """Checks if the 3D raster map exists in current mapset"""
-        if not is_map_in_mapset(name, type='raster3d'):
+        """Checks if the 3D raster map exists in current subproject"""
+        if not is_map_in_subproject(name, type='raster3d'):
             stdmsg = self._get_detailed_message_about_no_map(name, 'raster3d')
             self.fail(self._formatMessage(msg, stdmsg))
 
     def assertRaster3dDoesNotExist(self, name, msg=None):
-        """Checks if the 3D raster map does not exist in current mapset"""
-        if is_map_in_mapset(name, type='raster3d'):
+        """Checks if the 3D raster map does not exist in current subproject"""
+        if is_map_in_subproject(name, type='raster3d'):
             stdmsg = self._get_detailed_message_about_no_map(name, 'raster3d')
             self.fail(self._formatMessage(msg, stdmsg))
 
     def assertVectorExists(self, name, msg=None):
-        """Checks if the vector map exists in current mapset"""
-        if not is_map_in_mapset(name, type='vector'):
+        """Checks if the vector map exists in current subproject"""
+        if not is_map_in_subproject(name, type='vector'):
             stdmsg = self._get_detailed_message_about_no_map(name, 'vector')
             self.fail(self._formatMessage(msg, stdmsg))
 
     def assertVectorDoesNotExist(self, name, msg=None):
-        """Checks if the vector map does not exist in current mapset"""
-        if is_map_in_mapset(name, type='vector'):
+        """Checks if the vector map does not exist in current subproject"""
+        if is_map_in_subproject(name, type='vector'):
             stdmsg = self._get_detailed_message_about_no_map(name, 'vector')
             self.fail(self._formatMessage(msg, stdmsg))
 

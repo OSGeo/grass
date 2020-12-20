@@ -1,7 +1,7 @@
 """
-@package location_wizard.wizard
+@package project_wizard.wizard
 
-@brief Location wizard - creates a new GRASS Location. User can choose
+@brief Project wizard - creates a new GRASS Project. User can choose
 from multiple methods.
 
 Classes:
@@ -20,7 +20,7 @@ Classes:
  - wizard::IAUPage
  - wizard::CustomPage
  - wizard::SummaryPage
- - wizard::LocationWizard
+ - wizard::ProjectWizard
  - wizard::WizardWithHelpButton
 
 (C) 2007-2016 by the GRASS Development Team
@@ -58,9 +58,9 @@ from core.gcmd import RunCommand, GError, GMessage, GWarning
 from gui_core.widgets import GenericMultiValidator
 from gui_core.wrap import SpinCtrl, SearchCtrl, StaticText, \
     TextCtrl, Button, CheckBox, StaticBox, NewId, ListCtrl, HyperlinkCtrl
-from location_wizard.dialogs import SelectTransformDialog
+from project_wizard.dialogs import SelectTransformDialog
 
-from grass.grassdb.checks import location_exists
+from grass.grassdb.checks import project_exists
 from grass.script import decode
 from grass.script import core as grass
 from grass.exceptions import OpenError
@@ -160,11 +160,11 @@ class GridBagSizerTitledPage(TitledPage):
 
 
 class DatabasePage(TitledPage):
-    """Wizard page for setting GIS data directory and location name"""
+    """Wizard page for setting GIS data directory and project name"""
 
     def __init__(self, wizard, parent, grassdatabase):
         TitledPage.__init__(self, wizard, _(
-            "Define new GRASS Location"))
+            "Define new GRASS Project"))
 
         # grid definition
         self.sizer = wx.GridBagSizer(vgap=0, hgap=0)
@@ -173,7 +173,7 @@ class DatabasePage(TitledPage):
 
         # definition of variables
         self.grassdatabase = grassdatabase
-        self.location = ''
+        self.project = ''
         self.locTitle = ''
 
         # browse button
@@ -181,12 +181,12 @@ class DatabasePage(TitledPage):
 
         # text controls
         self.tgisdbase = self.MakeLabel(grassdatabase)
-        self.tlocation = self.MakeTextCtrl("newLocation", size=(400, -1))
-        self.tlocation.SetFocus()
+        self.tproject = self.MakeTextCtrl("newProject", size=(400, -1))
+        self.tproject.SetFocus()
 
         checks = [(grass.legal_name, self._nameValidationFailed),
-                  (self._checkLocationNotExists, self._locationAlreadyExists)]
-        self.tlocation.SetValidator(
+                  (self._checkProjectNotExists, self._projectAlreadyExists)]
+        self.tproject.SetValidator(
             GenericMultiValidator(checks))
         self.tlocTitle = self.MakeTextCtrl(size=(400, -1))
 
@@ -207,12 +207,12 @@ class DatabasePage(TitledPage):
             self.MakeLabel(
                 "%s:" %
                 _("Name"),
-                tooltip=_("Name of location directory in GIS Data Directory")),
+                tooltip=_("Name of project directory in GIS Data Directory")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
             pos=(1, 1)
         )
-        self.sizer.Add(self.tlocation,
+        self.sizer.Add(self.tproject,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
@@ -228,7 +228,7 @@ class DatabasePage(TitledPage):
                 "%s:" %
                 _("Description"),
                 tooltip=_(
-                    "Description of location directory in GIS Data Directory")),
+                    "Description of project directory in GIS Data Directory")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_TOP | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
             pos=(3, 1)
@@ -244,7 +244,7 @@ class DatabasePage(TitledPage):
                        wx.ALL, border=5,
                        pos=(4, 2))
 
-        self.sizer.Add(self.MakeLabel(_("Location will be created in GRASS database:")),
+        self.sizer.Add(self.MakeLabel(_("Project will be created in GRASS database:")),
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=2,
@@ -263,31 +263,31 @@ class DatabasePage(TitledPage):
         # bindings
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.tgisdbase.Bind(wx.EVT_TEXT, self.OnChangeName)
-        self.tlocation.Bind(wx.EVT_TEXT, self.OnChangeName)
+        self.tproject.Bind(wx.EVT_TEXT, self.OnChangeName)
         self.Bind(wx.EVT_BUTTON, self.OnBrowse, self.bbrowse)
 
     def _nameValidationFailed(self, ctrl):
         message = _(
-            "Name '{}' is not a valid name for location. "
+            "Name '{}' is not a valid name for project. "
             "Please use only ASCII characters excluding characters {} "
             "and space.").format(ctrl.GetValue(), '/"\'@,=*~')
         GError(parent=self, message=message, caption=_("Invalid name"))
 
-    def _checkLocationNotExists(self, text):
-        """Check whether user's input location exists or not."""
-        if location_exists(self.tgisdbase.GetLabel(), text):
+    def _checkProjectNotExists(self, text):
+        """Check whether user's input project exists or not."""
+        if project_exists(self.tgisdbase.GetLabel(), text):
             return False
         return True
 
-    def _locationAlreadyExists(self, ctrl):
+    def _projectAlreadyExists(self, ctrl):
         message = _(
-            "Location '{}' already exists. Please consider using "
-            "another name for your location.").format(ctrl.GetValue())
+            "Project '{}' already exists. Please consider using "
+            "another name for your project.").format(ctrl.GetValue())
         GError(parent=self, message=message,
-               caption=_("Existing location path"))
+               caption=_("Existing project path"))
 
     def OnChangeName(self, event):
-        """Name for new location was changed"""
+        """Name for new project was changed"""
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
         if len(event.GetString()) > 0:
             if not nextButton.IsEnabled():
@@ -309,20 +309,20 @@ class DatabasePage(TitledPage):
 
     def OnPageChanging(self, event=None):
 
-        self.location = self.tlocation.GetValue()
+        self.project = self.tproject.GetValue()
         self.grassdatabase = self.tgisdbase.GetLabel()
         self.locTitle = self.tlocTitle.GetValue()
         if os.linesep in self.locTitle or \
                 len(self.locTitle) > 255:
             GWarning(
                 parent=self, message=_(
-                    "Title of the location is limited only to one line and "
+                    "Title of the project is limited only to one line and "
                     "256 characters. The rest of the text will be ignored."))
             self.locTitle = self.locTitle.split(os.linesep)[0][:255]
 
 
 class CoordinateSystemPage(TitledPage):
-    """Wizard page for choosing method for location creation"""
+    """Wizard page for choosing method for project creation"""
 
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _(
@@ -2030,7 +2030,7 @@ class CustomPage(TitledPage):
 
 class SummaryPage(TitledPage):
     """Shows summary result of choosing coordinate system parameters
-    prior to creating location"""
+    prior to creating project"""
 
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Summary"))
@@ -2051,7 +2051,7 @@ class SummaryPage(TitledPage):
 
         # labels
         self.ldatabase = self.MakeLabel()
-        self.llocation = self.MakeLabel()
+        self.lproject = self.MakeLabel()
         self.llocTitle = self.MakeLabel(parent=self.panelTitle)
         self.lprojection = self.MakeLabel(parent=self.panelProj)
         self.lproj4string = self.MakeLabel(parent=self.panelProj4string)
@@ -2089,10 +2089,10 @@ class SummaryPage(TitledPage):
         self.sizer.Add(self.ldatabase,
                        flag=wx.ALIGN_LEFT | wx.ALL,
                        border=5, pos=(1, 1))
-        self.sizer.Add(self.MakeLabel(_("Location Name:")),
+        self.sizer.Add(self.MakeLabel(_("Project Name:")),
                        flag=wx.ALIGN_LEFT | wx.ALL,
                        border=5, pos=(2, 0))
-        self.sizer.Add(self.llocation,
+        self.sizer.Add(self.lproject,
                        flag=wx.ALIGN_LEFT | wx.ALL,
                        border=5, pos=(2, 1))
         self.sizer.Add(self.MakeLabel(_("Description:")),
@@ -2123,11 +2123,11 @@ class SummaryPage(TitledPage):
         self.sizer.AddGrowableRow(5, 5)
 
     def OnEnterPage(self, event):
-        """Insert values into text controls for summary of location
+        """Insert values into text controls for summary of project
         creation options
         """
         database = self.parent.startpage.grassdatabase
-        location = self.parent.startpage.location
+        project = self.parent.startpage.project
         proj4string = self.parent.CreateProj4String()
         iauproj4string = self.parent.iaupage.epsgparams
         epsgcode = self.parent.epsgpage.epsgcode
@@ -2138,7 +2138,7 @@ class SummaryPage(TitledPage):
         # print coordsys,proj4string
         if coordsys in ('proj', 'epsg', 'iau', 'wkt', 'file'):
             extra_opts = {}
-            extra_opts['location'] = 'location'
+            extra_opts['project'] = 'project'
             extra_opts['getErrorMsg'] = True
             extra_opts['read'] = True
 
@@ -2192,7 +2192,7 @@ class SummaryPage(TitledPage):
         datumdesc = self.parent.datumpage.datumdesc
         # print projdesc,ellipsedesc,datumdesc
         self.ldatabase.SetLabel(database)
-        self.llocation.SetLabel(location)
+        self.lproject.SetLabel(project)
         self.llocTitle.SetLabel(self.parent.startpage.locTitle)
 
         label = ''
@@ -2231,9 +2231,9 @@ class SummaryPage(TitledPage):
     def OnFinish(self, event):
         dlg = wx.MessageDialog(
             parent=self.wizard,
-            message=_("Do you want to create GRASS location <%s>?") %
-            location,
-            caption=_("Create new location?"),
+            message=_("Do you want to create GRASS project <%s>?") %
+            project,
+            caption=_("Create new project?"),
             style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
 
         if dlg.ShowModal() == wx.ID_NO:
@@ -2244,7 +2244,7 @@ class SummaryPage(TitledPage):
             event.Skip()
 
 
-class LocationWizard(wx.Object):
+class ProjectWizard(wx.Object):
     """Start wizard here and finish wizard here
     """
 
@@ -2265,12 +2265,12 @@ class LocationWizard(wx.Object):
         self.datum_trans = None
         self.proj4string = ''
 
-        # file from which new location is created
+        # file from which new project is created
         self.georeffile = None
 
         # additional settings
         self.default_region = False
-        self.user_mapset = False
+        self.user_subproject = False
 
         #
         # define wizard pages
@@ -2278,7 +2278,7 @@ class LocationWizard(wx.Object):
         self.wizard = WizardWithHelpButton(
             parent,
             id=wx.ID_ANY,
-            title=_("Define new GRASS Location"))
+            title=_("Define new GRASS Project"))
         self.wizard.Bind(wiz.EVT_WIZARD_HELP, self.OnHelp)
 
         self.startpage = DatabasePage(self.wizard, self, grassdatabase)
@@ -2351,10 +2351,10 @@ class LocationWizard(wx.Object):
         size = self.wizard.GetPageSize()
         self.wizard.SetPageSize((size[0], size[1] + 75))
 
-        # new location created?
-        self.location = None
+        # new project created?
+        self.project = None
 
-        # location created in different GIS database?
+        # project created in different GIS database?
         self.altdb = False
 
         #
@@ -2364,7 +2364,7 @@ class LocationWizard(wx.Object):
             msg = self.OnWizFinished()
             if not msg:
                 self.wizard.Destroy()
-                self.location = self.startpage.location
+                self.project = self.startpage.project
                 self.grassdatabase = self.startpage.grassdatabase
                 self.georeffile = self.filepage.georeffile
                 # FIXME here was code for setting default region, what for is this if:
@@ -2373,10 +2373,10 @@ class LocationWizard(wx.Object):
             else:  # -> error
                 self.wizard.Destroy()
                 GError(parent=self.parent,
-                       message="%s" % _("Unable to create new location. "
-                                        "Location <%(loc)s> not created.\n\n"
+                       message="%s" % _("Unable to create new project. "
+                                        "Project <%(loc)s> not created.\n\n"
                                         "Details: %(err)s") %
-                       {'loc': self.startpage.location,
+                       {'loc': self.startpage.project,
                         'err': msg})
         else:  # -> canceled
             self.wizard.Destroy()
@@ -2498,21 +2498,21 @@ class LocationWizard(wx.Object):
         f.close()
 
     def OnWizFinished(self):
-        """Wizard finished, create new location
+        """Wizard finished, create new project
 
         :return: error message on error
         :return: None on success
         """
         database = self.startpage.grassdatabase
-        location = self.startpage.location
+        project = self.startpage.project
 
-        # location already exists?
-        if os.path.isdir(os.path.join(database, location)):
+        # project already exists?
+        if os.path.isdir(os.path.join(database, project)):
             GError(parent=self.wizard,
                    message="%s <%s>: %s" %
-                   (_("Unable to create new location"),
-                    os.path.join(database, location),
-                    _("Location already exists in GRASS Database.")))
+                   (_("Unable to create new project"),
+                    os.path.join(database, project),
+                    _("Project already exists in GRASS Database.")))
             return None
 
         # current GISDbase or a new one?
@@ -2530,18 +2530,18 @@ class LocationWizard(wx.Object):
                             database))
                     return None
 
-            # location created in alternate GISDbase
+            # project created in alternate GISDbase
             self.altdb = True
 
         global coordsys
         try:
             if coordsys == "xy":
-                grass.create_location(dbase=self.startpage.grassdatabase,
-                                      location=self.startpage.location,
+                grass.create_project(dbase=self.startpage.grassdatabase,
+                                      project=self.startpage.project,
                                       desc=self.startpage.locTitle)
             elif coordsys == "proj":
-                grass.create_location(dbase=self.startpage.grassdatabase,
-                                      location=self.startpage.location,
+                grass.create_project(dbase=self.startpage.grassdatabase,
+                                      project=self.startpage.project,
                                       proj4=self.CreateProj4String(),
                                       datum=self.datumpage.datum,
                                       datum_trans=self.datum_trans,
@@ -2551,8 +2551,8 @@ class LocationWizard(wx.Object):
                 if self.datum_trans is not None:
                     addl_opts['datum_trans'] = self.datum_trans
 
-                grass.create_location(dbase=self.startpage.grassdatabase,
-                                      location=self.startpage.location,
+                grass.create_project(dbase=self.startpage.grassdatabase,
+                                      project=self.startpage.project,
                                       proj4=self.custompage.customstring,
                                       desc=self.startpage.locTitle,
                                       **addl_opts)
@@ -2560,8 +2560,8 @@ class LocationWizard(wx.Object):
                 if not self.epsgpage.epsgcode:
                     return _('EPSG code missing.')
 
-                grass.create_location(dbase=self.startpage.grassdatabase,
-                                      location=self.startpage.location,
+                grass.create_project(dbase=self.startpage.grassdatabase,
+                                      project=self.startpage.project,
                                       epsg=self.epsgpage.epsgcode,
                                       datum=self.datumpage.datum,
                                       datum_trans=self.datum_trans,
@@ -2570,8 +2570,8 @@ class LocationWizard(wx.Object):
                 if not self.iaupage.epsgcode:
                     return _('IAU code missing.')
 
-                grass.create_location(dbase=self.startpage.grassdatabase,
-                                      location=self.startpage.location,
+                grass.create_project(dbase=self.startpage.grassdatabase,
+                                      project=self.startpage.project,
                                       proj4=self.iaupage.epsgparams,
                                       datum=self.datumpage.datum,
                                       datum_trans=self.datum_trans,
@@ -2581,16 +2581,16 @@ class LocationWizard(wx.Object):
                         not os.path.isfile(self.filepage.georeffile):
                     return _("File <%s> not found." % self.filepage.georeffile)
 
-                grass.create_location(dbase=self.startpage.grassdatabase,
-                                      location=self.startpage.location,
+                grass.create_project(dbase=self.startpage.grassdatabase,
+                                      project=self.startpage.project,
                                       filename=self.filepage.georeffile,
                                       desc=self.startpage.locTitle)
             elif coordsys == "wkt":
                 if not self.wktpage.wktstring:
                     return _('WKT string missing.')
 
-                grass.create_location(dbase=self.startpage.grassdatabase,
-                                      location=self.startpage.location,
+                grass.create_project(dbase=self.startpage.grassdatabase,
+                                      project=self.startpage.project,
                                       wkt=self.wktpage.wktstring,
                                       desc=self.startpage.locTitle)
 

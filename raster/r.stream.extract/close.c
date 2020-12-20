@@ -311,7 +311,7 @@ int close_maps(char *stream_rast, char *stream_vect, char *dir_rast)
 
 	Rast_init_colors(&colors);
 	Rast_make_aspect_colors(&colors, -8, 8);
-	Rast_write_colors(dir_rast, G_mapset(), &colors);
+	Rast_write_colors(dir_rast, G_subproject(), &colors);
     }
 
     /* close stream vector */

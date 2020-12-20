@@ -37,9 +37,9 @@ int main(int argc, char *argv[])
     double N_extension, E_extension, edgeE, edgeN;
     int dim_vect, nparameters, BW, npoints;
     double mean, lambda;
-    const char *dvr, *db, *mapset;
+    const char *dvr, *db, *subproject;
     char table_name[GNAME_MAX];
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 
     int last_row, last_column, flag_auxiliar = FALSE;
     int filter_mode;
@@ -172,13 +172,13 @@ int main(int argc, char *argv[])
         Vect_check_input_output_name(in_opt->answer, out_opt->answer,
                                      G_FATAL_EXIT);
 
-    if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL) {
+    if ((subproject = G_find_vector2(in_opt->answer, "")) == NULL) {
 	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
     }
 
     /* Setting auxiliary table's name */
     if (out_opt->answer) {
-        if (G_name_is_fully_qualified(out_opt->answer, xname, xmapset)) {
+        if (G_name_is_fully_qualified(out_opt->answer, xname, xsubproject)) {
             sprintf(table_name, "%s_aux", xname);
         }
         else
@@ -201,7 +201,7 @@ int main(int argc, char *argv[])
 
     /* Open input vector */
     Vect_set_open_level(1);	/* WITHOUT TOPOLOGY */
-    if (1 > Vect_open_old(&In, in_opt->answer, mapset))
+    if (1 > Vect_open_old(&In, in_opt->answer, subproject))
 	G_fatal_error(_("Unable to open vector map <%s> at the topological level"),
 		      in_opt->answer);
 
@@ -395,7 +395,7 @@ int main(int argc, char *argv[])
 		mean = P_Mean_Calc(&elaboration_reg, observ, npoints);
 
 		/* Least Squares system */
-		G_debug(1, "Allocation memory for bilinear interpolation");
+		G_debug(1, "Alproject memory for bilinear interpolation");
 		BW = P_get_BandWidth(P_BILINEAR, nsply);	/* Bilinear interpolation */
 		N = G_alloc_matrix(nparameters, BW);	/* Normal matrix */
 		TN = G_alloc_vector(nparameters);	/* vector */

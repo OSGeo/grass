@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 				   and header information of rasters */
     char *name;			/* input raster name */
     char *result;		/* output raster name */
-    char *mapset;		/* mapset name */
+    char *subproject;		/* subproject name */
     void *inrast;		/* input buffer */
     unsigned char *outrast;	/* output buffer */
     int nrows, ncols;
@@ -98,20 +98,20 @@ int main(int argc, char *argv[])
     name = input->answer;
     result = output->answer;
 
-    /* returns NULL if the map was not found in any mapset, 
-     * mapset name otherwise */
-    mapset = (char *) G_find_raster2(name, "");
-    if (mapset == NULL)
+    /* returns NULL if the map was not found in any subproject, 
+     * subproject name otherwise */
+    subproject = (char *) G_find_raster2(name, "");
+    if (subproject == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
     /* determine the inputmap type (CELL/FCELL/DCELL) */
-    data_type = Rast_map_type(name, mapset);
+    data_type = Rast_map_type(name, subproject);
 
     /* Rast_open_old - returns file destriptor (>0) */
-    infd = Rast_open_old(name, mapset);
+    infd = Rast_open_old(name, subproject);
 
     /* controlling, if we can open input raster */
-    Rast_get_cellhd(name, mapset, &cellhd);
+    Rast_get_cellhd(name, subproject, &cellhd);
 
     G_debug(3, "number of rows %d", cellhd.rows);
 

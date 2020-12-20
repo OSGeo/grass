@@ -460,7 +460,7 @@ void v5dPrintStruct(const v5dstruct * v)
 
 
 /*
- * Compute the location of a compressed grid within a file.
+ * Compute the project of a compressed grid within a file.
  * Input:  v - pointer to v5dstruct describing the file header.
  *         time, var - which timestep and variable.
  * Return:  file offset in bytes

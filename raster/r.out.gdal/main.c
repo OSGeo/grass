@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
 
     struct Cell_head cellhead;
     struct Ref ref;
-    const char *mapset, *gdal_formats = NULL;
+    const char *subproject, *gdal_formats = NULL;
     RASTER_MAP_TYPE maptype, testmaptype;
     int bHaveMinMax;
     double dfCellMin, export_min;
@@ -266,12 +266,12 @@ int main(int argc, char *argv[])
     }
     
     /* Find input GRASS raster.. */
-    mapset = G_find_raster2(input->answer, "");
+    subproject = G_find_raster2(input->answer, "");
 
-    if (mapset != NULL) {
+    if (subproject != NULL) {
 	/* Add input to "group". "Group" with 1 raster (band) will exist only in memory. */
 	I_init_group_ref(&ref);
-	I_add_file_to_group_ref(input->answer, mapset, &ref);
+	I_add_file_to_group_ref(input->answer, subproject, &ref);
     }
     else {
 	/* Maybe input is group. Try to read group file */
@@ -383,7 +383,7 @@ int main(int argc, char *argv[])
     export_max = TYPE_FLOAT64_MAX;
     for (band = 0; band < ref.nfiles; band++) {
 	if (Rast_read_fp_range
-	    (ref.file[band].name, ref.file[band].mapset, &sRange) == -1) {
+	    (ref.file[band].name, ref.file[band].subproject, &sRange) == -1) {
 	    bHaveMinMax = FALSE;
 	    G_warning(_("Could not read data range of raster <%s>"),
 		      ref.file[band].name);
@@ -413,7 +413,7 @@ int main(int argc, char *argv[])
     /* GDAL datatype not set by user, determine suitable datatype */
     if (datatype == GDT_Unknown) {
 	/* Use raster data type from first GRASS raster in a group */
-	maptype = Rast_map_type(ref.file[0].name, ref.file[0].mapset);
+	maptype = Rast_map_type(ref.file[0].name, ref.file[0].subproject);
 	if (maptype == FCELL_TYPE) {
 	    datatype = GDT_Float32;
 	}
@@ -462,7 +462,7 @@ int main(int argc, char *argv[])
 	/* Precision tests */
 	for (band = 0; band < ref.nfiles; band++) {
 	    testmaptype =
-		Rast_map_type(ref.file[band].name, ref.file[band].mapset);
+		Rast_map_type(ref.file[band].name, ref.file[band].subproject);
 	    /* Exporting floating point rasters to some integer type ? */
 	    if ((testmaptype == FCELL_TYPE || testmaptype == DCELL_TYPE) &&
 		(datatype == GDT_Byte || datatype == GDT_Int16 ||
@@ -528,12 +528,12 @@ int main(int argc, char *argv[])
 	if (ref.nfiles > 1) {
 	    G_verbose_message(_("Checking options for raster map <%s> (band %d)..."),
 			      G_fully_qualified_name(ref.file[band].name,
-						     ref.file[band].mapset),
+						     ref.file[band].subproject),
 			      band + 1);
 	}
 
 	retval = exact_checks
-	    (datatype, ref.file[band].name, ref.file[band].mapset,
+	    (datatype, ref.file[band].name, ref.file[band].subproject,
 	     &cellhead, maptype, nodataval, nodataopt->key,
 	     default_nodataval);
 
@@ -636,13 +636,13 @@ int main(int argc, char *argv[])
 	if (ref.nfiles > 1) {
 	    G_verbose_message(_("Exporting raster map <%s> (band %d)..."),
 			      G_fully_qualified_name(ref.file[band].name,
-						     ref.file[band].mapset),
+						     ref.file[band].subproject),
 			      band + 1);
 	}
 
 	retval = export_band
 	    (hCurrDS, band + 1, ref.file[band].name,
-	     ref.file[band].mapset, &cellhead, maptype, nodataval,
+	     ref.file[band].subproject, &cellhead, maptype, nodataval,
 	     flag_c->answer, flag_m->answer, (nodataopt->answer != NULL));
 
 	/* read/write error */
@@ -652,7 +652,7 @@ int main(int argc, char *argv[])
 	}
 	else if (flag_t->answer) {
 	    retval = export_attr(hCurrDS, band + 1, ref.file[band].name,
-	                         ref.file[band].mapset, maptype);
+	                         ref.file[band].subproject, maptype);
 	}
     }
 

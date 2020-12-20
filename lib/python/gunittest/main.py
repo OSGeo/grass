@@ -29,21 +29,21 @@ import grass.script.core as gcore
 class GrassTestProgram(TestProgram):
     """A class to be used by individual test files (wrapped in the function)"""
 
-    def __init__(self, exit_at_end, grass_location, clean_outputs=True,
+    def __init__(self, exit_at_end, grass_project, clean_outputs=True,
                  unittest_argv=None, module=None,
                  verbosity=1,
                  failfast=None, catchbreak=None):
         """Prepares the tests in GRASS way and then runs the tests.
 
-        :param bool clean_outputs: if outputs in mapset and in ?
+        :param bool clean_outputs: if outputs in subproject and in ?
         """
         self.test = None
-        self.grass_location = grass_location
+        self.grass_project = grass_project
         # it is unclear what the exact behavior is in unittest
         # buffer stdout and stderr during tests
         buffer_stdout_stderr = False
 
-        grass_loader = GrassTestLoader(grass_location=self.grass_location)
+        grass_loader = GrassTestLoader(grass_project=self.grass_project)
 
         text_result = TextTestResult(stream=sys.stderr,
                                      descriptions=True,
@@ -89,7 +89,7 @@ def test():
     # TODO: add some message somewhere
 
     # TODO: enable passing omit to exclude also gunittest or nothing
-    program = GrassTestProgram(module='__main__', exit_at_end=False, grass_location='all')
+    program = GrassTestProgram(module='__main__', exit_at_end=False, grass_project='all')
     # TODO: check if we are in the directory where the test file is
     # this will ensure that data directory is available when it is requested
 
@@ -110,7 +110,7 @@ def discovery():
         python main.py discovery [start_directory]
     """
 
-    program = GrassTestProgram(grass_location='nc', exit_at_end=False)
+    program = GrassTestProgram(grass_project='nc', exit_at_end=False)
 
     sys.exit(not program.result.wasSuccessful())
 
@@ -122,12 +122,12 @@ def main():
         description='Run test files in all testsuite directories starting'
         ' from the current one'
         ' (runs on active GRASS session)')
-    parser.add_argument('--location', dest='location', action='store',
-                        help='Name of location where to perform test', required=True)
-    parser.add_argument('--location-type', dest='location_type', action='store',
+    parser.add_argument('--project', dest='project', action='store',
+                        help='Name of project where to perform test', required=True)
+    parser.add_argument('--project-type', dest='project_type', action='store',
                         default='nc',
                         help='Type of tests which should be run'
-                             ' (tag corresponding to location)')
+                             ' (tag corresponding to project)')
     parser.add_argument('--grassdata', dest='gisdbase', action='store',
                         default=None,
                         help='GRASS data(base) (GISDBASE) directory'
@@ -144,8 +144,8 @@ def main():
     if gisdbase is None:
         # here we already rely on being in GRASS session
         gisdbase = gcore.gisenv()['GISDBASE']
-    location = args.location
-    location_type = args.location_type
+    project = args.project
+    project_type = args.project_type
 
     if not gisdbase:
         sys.stderr.write("GISDBASE (grassdata directory)"
@@ -155,10 +155,10 @@ def main():
         sys.stderr.write("GISDBASE (grassdata directory) <%s>"
                          " does not exist\n" % gisdbase)
         sys.exit(1)
-    if not os.path.exists(os.path.join(gisdbase, location)):
-        sys.stderr.write("GRASS Location <{loc}>"
+    if not os.path.exists(os.path.join(gisdbase, project)):
+        sys.stderr.write("GRASS Project <{loc}>"
                          " does not exist in GRASS Database <{db}>\n".format(
-                             loc=location, db=gisdbase))
+                             loc=project, db=gisdbase))
         sys.exit(1)
     results_dir = args.output
     silent_rmtree(results_dir)  # TODO: too brute force?
@@ -170,12 +170,12 @@ def main():
         file_anonymizer=FileAnonymizer(paths_to_remove=[abs_start_dir]))
     # TODO: remove also results dir from files
     # as an enhancemnt
-    # we can just iterate over all locations available in database
-    # but the we don't know the right location type (category, label, shortcut)
-    reporter = invoker.run_in_location(
+    # we can just iterate over all projects available in database
+    # but the we don't know the right project type (category, label, shortcut)
+    reporter = invoker.run_in_project(
         gisdbase=gisdbase,
-        location=location,
-        location_type=location_type,
+        project=project,
+        project_type=project_type,
         results_dir=results_dir
     )
     if reporter.file_pass_per >= args.min_success:

@@ -31,12 +31,12 @@ This example shows several options that are available for map layers listing.
 <h3>Default query</h3>
 
 The following command is the default one, returning standard information
-like name, mapset, start_time, end_time of each map in the space time dataset
+like name, subproject, start_time, end_time of each map in the space time dataset
 <p>
 
 <div class="code"><pre>
 t.rast.list tempmean_monthly
-name|mapset|start_time|end_time
+name|subproject|start_time|end_time
 2009_01_tempmean|climate_2000_2012|2009-01-01 00:00:00|2009-02-01 00:00:00
 2009_02_tempmean|climate_2000_2012|2009-02-01 00:00:00|2009-03-01 00:00:00
 ....
@@ -139,7 +139,7 @@ distance from the first map:
 
 <div class="code"><pre>
 t.rast.list method=delta input=tempmean_monthly
-id|name|mapset|start_time|end_time|interval_length|distance_from_begin
+id|name|subproject|start_time|end_time|interval_length|distance_from_begin
 2009_01_tempmean@climate_2000_2012|2009_01_tempmean|climate_2000_2012|2009-01-01 00:00:00|2009-02-01 00:00:00|31.0|0.0
 2009_02_tempmean@climate_2000_2012|2009_02_tempmean|climate_2000_2012|2009-02-01 00:00:00|2009-03-01 00:00:00|28.0|31.0
 2009_03_tempmean@climate_2000_2012|2009_03_tempmean|climate_2000_2012|2009-03-01 00:00:00|2009-04-01 00:00:00|31.0|59.0
@@ -156,7 +156,7 @@ dataset is used for sampling.
 
 <div class="code"><pre>
 t.rast.list  method=gran input=tempmean_monthly
-id|name|mapset|start_time|end_time|interval_length|distance_from_begin
+id|name|subproject|start_time|end_time|interval_length|distance_from_begin
 2009_01_tempmean@climate_2009_2012|2009_01_tempmean|climate_2009_2012|2009-01-01 00:00:00|2009-02-01 00:00:00|31.0|0.0
 2009_02_tempmean@climate_2009_2012|2009_02_tempmean|climate_2009_2012|2009-02-01 00:00:00|2009-03-01 00:00:00|28.0|31.0
 2009_03_tempmean@climate_2009_2012|2009_03_tempmean|climate_2009_2012|2009-03-01 00:00:00|2009-04-01 00:00:00|31.0|59.0
@@ -171,7 +171,7 @@ id|name|mapset|start_time|end_time|interval_length|distance_from_begin
 
 <div class="code"><pre>
 t.rast.list  method=gran input=tempmean_monthly gran="2 months"
-id|name|mapset|start_time|end_time|interval_length|distance_from_begin
+id|name|subproject|start_time|end_time|interval_length|distance_from_begin
 2009_01_tempmean@climate_2009_2012|2009_01_tempmean|climate_2009_2012|2009-01-01 00:00:00|2009-03-01 00:00:00|59.0|0.0
 2009_03_tempmean@climate_2009_2012|2009_03_tempmean|climate_2009_2012|2009-03-01 00:00:00|2009-05-01 00:00:00|61.0|59.0
 2009_05_tempmean@climate_2009_2012|2009_05_tempmean|climate_2009_2012|2009-05-01 00:00:00|2009-07-01 00:00:00|61.0|120.0

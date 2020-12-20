@@ -46,48 +46,48 @@ def findfiles(dirpath, match=None):
     return res
 
 
-def findmaps(type, pattern=None, mapset='', location='', gisdbase=''):
+def findmaps(type, pattern=None, subproject='', project='', gisdbase=''):
     """Return a list of tuple contining the names of the:
 
         * map
-        * mapset,
-        * location,
+        * subproject,
+        * project,
         * gisdbase
 
     """
-    from grass.pygrass.gis import Gisdbase, Location, Mapset
+    from grass.pygrass.gis import Gisdbase, Project, Subproject
 
-    def find_in_location(type, pattern, location):
+    def find_in_project(type, pattern, project):
         res = []
-        for msetname in location.mapsets():
-            mset = Mapset(msetname, location.name, location.gisdbase)
-            res.extend([(m, mset.name, mset.location, mset.gisdbase)
+        for msetname in project.subprojects():
+            mset = Subproject(msetname, project.name, project.gisdbase)
+            res.extend([(m, mset.name, mset.project, mset.gisdbase)
                         for m in mset.glist(type, pattern)])
         return res
 
     def find_in_gisdbase(type, pattern, gisdbase):
         res = []
-        for loc in gisdbase.locations():
-            res.extend(find_in_location(type, pattern,
-                                        Location(loc, gisdbase.name)))
+        for loc in gisdbase.projects():
+            res.extend(find_in_project(type, pattern,
+                                        Project(loc, gisdbase.name)))
         return res
 
-    if gisdbase and location and mapset:
-        mset = Mapset(mapset, location, gisdbase)
-        return [(m, mset.name, mset.location, mset.gisdbase)
+    if gisdbase and project and subproject:
+        mset = Subproject(subproject, project, gisdbase)
+        return [(m, mset.name, mset.project, mset.gisdbase)
                 for m in mset.glist(type, pattern)]
-    elif gisdbase and location:
-        loc = Location(location, gisdbase)
-        return find_in_location(type, pattern, loc)
+    elif gisdbase and project:
+        loc = Project(project, gisdbase)
+        return find_in_project(type, pattern, loc)
     elif gisdbase:
         gis = Gisdbase(gisdbase)
         return find_in_gisdbase(type, pattern, gis)
-    elif location:
-        loc = Location(location)
-        return find_in_location(type, pattern, loc)
-    elif mapset:
-        mset = Mapset(mapset)
-        return [(m, mset.name, mset.location, mset.gisdbase)
+    elif project:
+        loc = Project(project)
+        return find_in_project(type, pattern, loc)
+    elif subproject:
+        mset = Subproject(subproject)
+        return [(m, mset.name, mset.project, mset.gisdbase)
                 for m in mset.glist(type, pattern)]
     else:
         gis = Gisdbase()
@@ -142,24 +142,24 @@ def getenv(env):
     return decode(libgis.G_getenv_nofatal(env))
 
 
-def get_mapset_raster(mapname, mapset=''):
-    """Return the mapset of the raster map
+def get_subproject_raster(mapname, subproject=''):
+    """Return the subproject of the raster map
 
-    >>> get_mapset_raster(test_raster_name) == getenv("MAPSET")
+    >>> get_subproject_raster(test_raster_name) == getenv("MAPSET")
     True
 
     """
-    return decode(libgis.G_find_raster2(mapname, mapset))
+    return decode(libgis.G_find_raster2(mapname, subproject))
 
 
-def get_mapset_vector(mapname, mapset=''):
-    """Return the mapset of the vector map
+def get_subproject_vector(mapname, subproject=''):
+    """Return the subproject of the vector map
 
-    >>> get_mapset_vector(test_vector_name) == getenv("MAPSET")
+    >>> get_subproject_vector(test_vector_name) == getenv("MAPSET")
     True
 
     """
-    return decode(libgis.G_find_vector2(mapname, mapset))
+    return decode(libgis.G_find_vector2(mapname, subproject))
 
 
 def is_clean_name(name):
@@ -311,7 +311,7 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
 def r_export(rast, output='', fmt='png', **kargs):
     from grass.pygrass.modules import Module
     if rast.exist():
-        output = output if output else "%s_%s.%s" % (rast.name, rast.mapset,
+        output = output if output else "%s_%s.%s" % (rast.name, rast.subproject,
                                                      fmt)
         Module('r.out.%s' % fmt, input=rast.fullname(), output=output,
                overwrite=True, **kargs)
@@ -393,7 +393,7 @@ def create_test_vector_map(map_name="test_vector"):
     """This functions creates a vector map layer with points, lines, boundaries,
        centroids, areas, isles and attributes for testing purposes
 
-       This should be used in doc and unit tests to create location/mapset
+       This should be used in doc and unit tests to create project/subproject
        independent vector map layer. This map includes 3 points, 3 lines,
        11 boundaries and 4 centroids. The attribute table contains cat, name
        and value columns.
@@ -472,7 +472,7 @@ def create_test_stream_network_map(map_name="streams"):
        a stream network with two different graphs. The first graph
        contains a loop, the second can be used as directed graph.
 
-       This should be used in doc and unit tests to create location/mapset
+       This should be used in doc and unit tests to create project/subproject
        independent vector map layer.
 
         param map_name: The vector map name that should be used
@@ -555,9 +555,9 @@ if __name__ == "__main__":
     doctest.testmod()
 
     """Remove the generated vector map, if exist"""
-    mset = utils.get_mapset_vector(test_vector_name, mapset='')
+    mset = utils.get_subproject_vector(test_vector_name, subproject='')
     if mset:
         run_command("g.remove", flags='f', type='vector', name=test_vector_name)
-    mset = utils.get_mapset_raster(test_raster_name, mapset='')
+    mset = utils.get_subproject_raster(test_raster_name, subproject='')
     if mset:
         run_command("g.remove", flags='f', type='raster', name=test_raster_name)

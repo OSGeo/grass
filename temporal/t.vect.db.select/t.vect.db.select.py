@@ -80,13 +80,13 @@ def main():
 
     sp = tgis.open_old_stds(input, "stvds")
 
-    rows = sp.get_registered_maps("name,layer,mapset,start_time,end_time",
+    rows = sp.get_registered_maps("name,layer,subproject,start_time,end_time",
                                   tempwhere, "start_time", None)
 
     col_names = ""
     if rows:
         for row in rows:
-            vector_name = "%s@%s" % (row["name"], row["mapset"])
+            vector_name = "%s@%s" % (row["name"], row["subproject"])
             # In case a layer is defined in the vector dataset,
             # we override the option layer
             if row["layer"]:

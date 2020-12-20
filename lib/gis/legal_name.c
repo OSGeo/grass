@@ -56,7 +56,7 @@ int G_legal_filename(const char *s)
  * Check: 
  *  1) output is legal map name,
  *  2) if can find input map, and
- *  3) if input was found in current mapset, check if input != output.
+ *  3) if input was found in current subproject, check if input != output.
  *
  * \param input input map name
  * \param output output map name
@@ -68,7 +68,7 @@ int G_legal_filename(const char *s)
 int G_check_input_output_name(const char *input, const char *output,
 			      int error)
 {
-    const char *mapset;
+    const char *subproject;
 
     if (output == NULL)
 	return 0;		/* don't die on undefined parameters */
@@ -87,9 +87,9 @@ int G_check_input_output_name(const char *input, const char *output,
 	}
     }
 
-    mapset = G_find_raster2(input, "");
+    subproject = G_find_raster2(input, "");
 
-    if (mapset == NULL) {
+    if (subproject == NULL) {
 	if (error == G_FATAL_EXIT) {
 	    G_fatal_error(_("Raster map <%s> not found"), input);
 	}
@@ -102,7 +102,7 @@ int G_check_input_output_name(const char *input, const char *output,
 	}
     }
 
-    if (strcmp(mapset, G_mapset()) == 0) {
+    if (strcmp(subproject, G_subproject()) == 0) {
 	char nm[1000], ms[1000];
 	const char *in;
 

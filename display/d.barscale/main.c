@@ -212,7 +212,7 @@ int main(int argc, char **argv)
 
     G_get_window(&W);
     if (W.proj == PROJECTION_LL)
-        G_fatal_error(_("%s does not work with a latitude-longitude location"),
+        G_fatal_error(_("%s does not work with a latitude-longitude project"),
                       argv[0]);
 
 

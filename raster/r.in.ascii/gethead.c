@@ -68,7 +68,7 @@ int getgrdhead(FILE * fd, struct Cell_head *cellhd)
 
     cellhd->ew_res = (double)(xmax - xmin) / (nc - 1);
     cellhd->ns_res = (double)(ymax - ymin) / (nr - 1);
-    /* the Surfer grid specifies x,y locations of gridded points.  The GRASS raster
+    /* the Surfer grid specifies x,y projects of gridded points.  The GRASS raster
        specifies an area covered by rectangular cells centerd at gridded points.
        That difference requires an adjustment */
     cellhd->north = ymax + cellhd->ns_res / 2.;

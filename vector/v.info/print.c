@@ -207,10 +207,10 @@ void print_shell(const struct Map_info *Map, const char *field_opt)
     
     fprintf(stdout, "name=%s\n",
             Vect_get_name(Map));
-    fprintf(stdout, "mapset=%s\n",
-            Vect_get_mapset(Map));
-    fprintf(stdout, "location=%s\n",
-            G_location());
+    fprintf(stdout, "subproject=%s\n",
+            Vect_get_subproject(Map));
+    fprintf(stdout, "project=%s\n",
+            G_project());
     fprintf(stdout, "database=%s\n",
             G_gisdbase());
     fprintf(stdout, "title=%s\n",
@@ -334,12 +334,12 @@ void print_info(const struct Map_info *Map)
     G_saprintf(line, "%-17s%s", _("Name:"),
             Vect_get_name(Map));
     printline(line);
-    G_saprintf(line, "%-17s%s", _("Mapset:"),
-            Vect_get_mapset(Map));
+    G_saprintf(line, "%-17s%s", _("Subproject:"),
+            Vect_get_subproject(Map));
     printline(line);
     
-    G_saprintf(line, "%-17s%s", _("Location:"),
-            G_location());
+    G_saprintf(line, "%-17s%s", _("Project:"),
+            G_project());
     printline(line);
     G_saprintf(line, "%-17s%s", _("Database:"),
             G_gisdbase());
@@ -505,7 +505,7 @@ void print_info(const struct Map_info *Map)
     }
 
     printline("");
-    /* this differs from r.info in that proj info IS taken from the map here, not the location settings */
+    /* this differs from r.info in that proj info IS taken from the map here, not the project settings */
     /* Vect_get_proj_name() and _zone() are typically unset?! */
     if (G_projection() == PROJECTION_UTM) {
         int utm_zone;

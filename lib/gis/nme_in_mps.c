@@ -15,32 +15,32 @@
 #include <grass/gis.h>
 
 /*!
-  \brief Check if map name is fully qualified (map @ mapset)
+  \brief Check if map name is fully qualified (map @ subproject)
   
   Returns a fully qualified name for the file <i>name</i> in
-  <i>mapset</i>. Currently this string is in the form
-  <i>name@mapset</i>, but the programmer should pretend not to know this
+  <i>subproject</i>. Currently this string is in the form
+  <i>name@subproject</i>, but the programmer should pretend not to know this
   and always call this routine to get the fully qualified name.
 
   Note:
    - <i>name</i> is char array of size GNAME_MAX
-   - <i>mapset</i> is char array of size GMAPSET_MAX
+   - <i>subproject</i> is char array of size GMAPSET_MAX
 
   \param fullname full map name
   \param[out] name map name
-  \param[out] mapset mapset name
+  \param[out] subproject subproject name
   
   \return 1 if input map name is fully qualified
   \return 0 if input map name is not fully qualified
  */
-int G_name_is_fully_qualified(const char *fullname, char *name, char *mapset)
+int G_name_is_fully_qualified(const char *fullname, char *name, char *subproject)
 {
     const char *p;
     char *q;
 
-    /* search for name@mapset */
+    /* search for name@subproject */
 
-    *name = *mapset = 0;
+    *name = *subproject = 0;
 
     for (p = fullname; *p; p++)
 	if (*p == '@')
@@ -55,12 +55,12 @@ int G_name_is_fully_qualified(const char *fullname, char *name, char *mapset)
 	*q++ = *fullname++;
     *q = 0;
 
-    /* copy the mapset part */
+    /* copy the subproject part */
     p++;			/* skip the @ */
-    q = mapset;
+    q = subproject;
     while ((*q++ = *p++)) ;
 
-    return (*name && *mapset);
+    return (*name && *subproject);
 }
 
 
@@ -68,8 +68,8 @@ int G_name_is_fully_qualified(const char *fullname, char *name, char *mapset)
    \brief Get fully qualified element name
 
    Returns a fully qualified name for GIS element <i>name</i> in
-   <i>mapset</i>. Currently this string is in the form
-   <b>name@mapset</b>, but the programmer should pretend not to know
+   <i>subproject</i>. Currently this string is in the form
+   <b>name@subproject</b>, but the programmer should pretend not to know
    this and always call this routine to get the fully qualified name.
 
    String is allocated by G_store().
@@ -78,15 +78,15 @@ int G_name_is_fully_qualified(const char *fullname, char *name, char *mapset)
    #include <grass/gis.h>
    int main(char *argc, char **argv)
    {
-       char name[GNAME_MAX], *mapset, *fqn;
+       char name[GNAME_MAX], *subproject, *fqn;
        char command[1024];
 
        G_gisinit(argv[0]);
-       mapset = G_find_rast(name, "");
-       if (mapset == NULL)
+       subproject = G_find_rast(name, "");
+       if (subproject == NULL)
            exit(EXIT_SUCCESS);
 
-       fqn = G_fully_qualified_name (name, mapset);
+       fqn = G_fully_qualified_name (name, subproject);
        printf (stdout, "map='%s'", fqn);
 
        exit(EXIT_SUCCESS);
@@ -94,59 +94,59 @@ int G_name_is_fully_qualified(const char *fullname, char *name, char *mapset)
    \endcode
 
    \param name element name
-   \param mapset mapset name
+   \param subproject subproject name
 
-   \return pointer to full element name (map@mapset)
+   \return pointer to full element name (map@subproject)
  */
-char *G_fully_qualified_name(const char *name, const char *mapset)
+char *G_fully_qualified_name(const char *name, const char *subproject)
 {
     char fullname[GNAME_MAX + GMAPSET_MAX];
 
-    if (strchr(name, '@') || strlen(mapset) < 1) {
+    if (strchr(name, '@') || strlen(subproject) < 1) {
 	sprintf(fullname, "%s", name);
     }
     else {
-	sprintf(fullname, "%s@%s", name, mapset);
+	sprintf(fullname, "%s@%s", name, subproject);
     }
 
     return G_store(fullname);
 }
 
 /*!
-  \brief Returns unqualified map name (without @ mapset)
+  \brief Returns unqualified map name (without @ subproject)
 
   Returns an unqualified name for the file <i>name</i> in
-  <i>mapset</i>.
+  <i>subproject</i>.
 
   Note:
    - <i>name, xname</i> are char array of size GNAME_MAX
-   - <i>mapset, xmapset</i> are char array of size GMAPSET_MAX
+   - <i>subproject, xsubproject</i> are char array of size GMAPSET_MAX
 
   \param name map name
-  \param mapset mapset to check or NULL
+  \param subproject subproject to check or NULL
   \param[out] xname map name
-  \param[out] xmapset mapset name
+  \param[out] xsubproject subproject name
 
   \return  1 if input map name is fully qualified
   \return  0 if name is not fully qualified
-  \return -1 if input mapset invalid (mapset != xmapset)
+  \return -1 if input subproject invalid (subproject != xsubproject)
  */
-int G_unqualified_name(const char *name, const char *mapset,
-		       char *xname, char *xmapset)
+int G_unqualified_name(const char *name, const char *subproject,
+		       char *xname, char *xsubproject)
 {
-    if (G_name_is_fully_qualified(name, xname, xmapset)) {
+    if (G_name_is_fully_qualified(name, xname, xsubproject)) {
         /* name is fully qualified */
-	if (mapset && *mapset && strcmp(mapset, xmapset) != 0)
+	if (subproject && *subproject && strcmp(subproject, xsubproject) != 0)
 	    return -1;
 	return 1;
     }
 
     /* name is not fully qualified */
     strcpy(xname, name);
-    if (mapset)
-        strcpy(xmapset, mapset);
+    if (subproject)
+        strcpy(xsubproject, subproject);
     else
-        xmapset[0] = '\0';
+        xsubproject[0] = '\0';
     
     return 0;
 }

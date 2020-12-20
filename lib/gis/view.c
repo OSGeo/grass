@@ -160,14 +160,14 @@ int G_get_3dview_defaults(struct G_3dview *v, struct Cell_head *w)
  * SURFACEONLY<br>
  *
  * \param[in] fname file name
- * \param[in] mapset
+ * \param[in] subproject
  * \param[in] View
  * \param[in] Win
  * \return 1 on success
  * \return -1 on error
  */
 
-int G_put_3dview(const char *fname, const char *mapset,
+int G_put_3dview(const char *fname, const char *subproject,
 		 const struct G_3dview *View, const struct Cell_head *Win)
 {
     FILE *fp;
@@ -240,7 +240,7 @@ int G_put_3dview(const char *fname, const char *mapset,
  * against the current window since boundaries weren't saved.
  *
  * \param[in] fname
- * \param[in] mapset
+ * \param[in] subproject
  * \param[in,out] View
  * \return -1 on error
  * \return 1 on success
@@ -248,7 +248,7 @@ int G_put_3dview(const char *fname, const char *mapset,
  * \return 0 if is older format (through 4.0)
  */
 
-int G_get_3dview(const char *fname, const char *mapset, struct G_3dview *View)
+int G_get_3dview(const char *fname, const char *subproject, struct G_3dview *View)
 {
     struct Cell_head curwin;
     FILE *fp;
@@ -256,9 +256,9 @@ int G_get_3dview(const char *fname, const char *mapset, struct G_3dview *View)
     int lap, v_maj, v_min, wind_keys = 0, reqkeys = 0;
     int current = 0;		/* current version flag */
 
-    mapset = G_find_file2("3d.view", fname, mapset);
-    if (mapset != NULL) {
-	if (NULL == (fp = G_fopen_old("3d.view", fname, mapset))) {
+    subproject = G_find_file2("3d.view", fname, subproject);
+    if (subproject != NULL) {
+	if (NULL == (fp = G_fopen_old("3d.view", fname, subproject))) {
 	    G_warning(_("Unable to open %s for reading"), fname);
 	    return (-1);
 	}

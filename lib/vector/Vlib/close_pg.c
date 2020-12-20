@@ -38,7 +38,7 @@ int V1_close_pg(struct Map_info *Map)
 #ifdef HAVE_POSTGRES
     struct Format_info_pg *pg_info;
 
-    G_debug(3, "V2_close_pg() name = %s mapset = %s", Map->name, Map->mapset);
+    G_debug(3, "V2_close_pg() name = %s subproject = %s", Map->name, Map->subproject);
 
     if (!VECT_OPEN(Map))
         return -1;
@@ -112,7 +112,7 @@ int V1_close_pg(struct Map_info *Map)
 int V2_close_pg(struct Map_info *Map)
 {
 #ifdef HAVE_POSTGRES
-    G_debug(3, "V2_close_pg() name = %s mapset = %s", Map->name, Map->mapset);
+    G_debug(3, "V2_close_pg() name = %s subproject = %s", Map->name, Map->subproject);
 
     if (!VECT_OPEN(Map))
         return -1;
@@ -134,7 +134,7 @@ int V2_close_pg(struct Map_info *Map)
         return 0;
     }
     
-    /* write fidx for maps in the current mapset */
+    /* write fidx for maps in the current subproject */
     if (Vect_save_fidx(Map, &(Map->fInfo.pg.offset)) != 1)
         G_warning(_("Unable to save feature index file for vector map <%s>"),
                   Map->name);

@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
     /* check the number of input bands */
     bands = refs.nfiles;
 
-    /*memory allocation*/
+    /*memory alproject*/
     mu = G_alloc_matrix(nclass, bands);
     w = G_alloc_matrix(bands, bands);
     p = G_alloc_matrix(bands, bands);
@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
 	outbandmin[i] = (CELL) 0;
 
 	datafds[i] = Rast_open_old(refs.file[i - 1].name,
-				   refs.file[i - 1].mapset);
+				   refs.file[i - 1].subproject);
 
 	sprintf(tempname, "%s.%d", out_opt->answer, i);
 	outfds[i] = Rast_open_c_new(tempname);
@@ -231,7 +231,7 @@ int main(int argc, char *argv[])
 	sprintf(tempname, "%s.%d", out_opt->answer, i);
 
 	/* write a color table */
-	Rast_write_colors(tempname, G_mapset(), &color_tbl);
+	Rast_write_colors(tempname, G_subproject(), &color_tbl);
     }
 
     I_free_signatures(&sigs);

@@ -137,7 +137,7 @@ class VectorCleaningFrame(wx.Frame):
                                       label=_('Select output vector map:'))
         self.selectionOutput = Select(parent=self.panel, id=wx.ID_ANY,
                                       size=globalvar.DIALOG_GSELECT_SIZE,
-                                      mapsets=[grass.gisenv()['MAPSET'], ],
+                                      subprojects=[grass.gisenv()['MAPSET'], ],
                                       fullyQualified=False,
                                       type='vector')
 

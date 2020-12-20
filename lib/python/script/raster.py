@@ -44,8 +44,8 @@ def raster_history(map, overwrite=False, env=None):
     :return: False on failure
 
     """
-    current_mapset = gisenv(env)['MAPSET']
-    if find_file(name=map, env=env)['mapset'] == current_mapset:
+    current_subproject = gisenv(env)['MAPSET']
+    if find_file(name=map, env=env)['subproject'] == current_subproject:
         if overwrite is True:
             historyfile = tempfile(env=env)
             f = open(historyfile, 'w')
@@ -58,7 +58,7 @@ def raster_history(map, overwrite=False, env=None):
         return True
 
     warning(_("Unable to write history for <%(map)s>. "
-              "Raster map <%(map)s> not found in current mapset." % {'map': map, 'map': map}))
+              "Raster map <%(map)s> not found in current subproject." % {'map': map, 'map': map}))
     return False
 
 

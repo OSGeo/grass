@@ -92,13 +92,13 @@ class NewRasterDialog(wx.Dialog):
                 "Please specify name for a new raster map"))
         else:
             found = gcore.find_file(
-                name=mapName, mapset=gcore.gisenv()['MAPSET'])
-            if found and found['mapset'] == gcore.gisenv()['MAPSET']:
+                name=mapName, subproject=gcore.gisenv()['MAPSET'])
+            if found and found['subproject'] == gcore.gisenv()['MAPSET']:
                 dlgOverwrite = wx.MessageDialog(
                     self.GetParent(),
                     message=_(
                         "Raster map <%s> already exists "
-                        "in the current mapset. "
+                        "in the current subproject. "
                         "Do you want to overwrite it?") %
                     mapName,
                     caption=_("Overwrite?"),

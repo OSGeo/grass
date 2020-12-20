@@ -53,7 +53,7 @@ void G_init_tempfile(void)
  *
  * <b>Note:</b> It is recommended to <i>unlink()</i> (remove) the 
  * temp file on exit/error. Only if GRASS is left with 'exit', the GIS 
- * mapset management will clean up the temp directory (ETC/clean_temp).
+ * subproject management will clean up the temp directory (ETC/clean_temp).
  *
  * \return pointer to a character string containing the name. The name 
  * is copied to allocated memory and may be released by the unix free() 
@@ -85,7 +85,7 @@ char *G_tempfile_pid(int pid)
     do {
 	int uniq = G_counter_next(&unique);
 	sprintf(name, "%d.%d", pid, uniq);
-	G_file_name(path, element, name, G_mapset());
+	G_file_name(path, element, name, G_subproject());
     }
     while (access(path, F_OK) == 0);
 
@@ -108,7 +108,7 @@ void G_temp_element(char *element)
  * \brief Populates element with a path string (internal use only!)
  *
  * \param[out] element element name
- * \param tmp TRUE to use G_make_mapset_element_tmp() instead of G_make_mapset_element()
+ * \param tmp TRUE to use G_make_subproject_element_tmp() instead of G_make_subproject_element()
  */
 void G__temp_element(char *element, int tmp)
 {
@@ -122,9 +122,9 @@ void G__temp_element(char *element, int tmp)
     }
     
     if (!tmp)
-        G_make_mapset_element(element);
+        G_make_subproject_element(element);
     else
-        G_make_mapset_element_tmp(element);
+        G_make_subproject_element_tmp(element);
     
     G_debug(2, "G__temp_element(): %s (tmp=%d)", element, tmp);
 }

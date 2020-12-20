@@ -33,8 +33,8 @@ from nviz.main import NvizSettings
 from grass.script import core as gcore
 
 
-def get_database_location_mapset():
-    """Returns GRASS database, location, and mapset as a tuple"""
+def get_database_project_subproject():
+    """Returns GRASS database, project, and subproject as a tuple"""
     gisenv = gcore.gisenv()
     return (gisenv['GISDBASE'],
             gisenv['LOCATION_NAME'],
@@ -196,12 +196,12 @@ class ProcessWorkspaceFile:
         session = self.root.find('session')
         if session is None:
             self.database = None
-            self.location = None
-            self.mapset = None
+            self.project = None
+            self.subproject = None
             return
         self.database = self.__filterValue(self.__getNodeText(session, 'database'))
-        self.location = self.__filterValue(self.__getNodeText(session, 'location'))
-        self.mapset = self.__filterValue(self.__getNodeText(session, 'mapset'))
+        self.project = self.__filterValue(self.__getNodeText(session, 'project'))
+        self.subproject = self.__filterValue(self.__getNodeText(session, 'subproject'))
 
     def __processLayers(self, node, inGroup=-1):
         """Process layers/groups of selected display
@@ -841,16 +841,16 @@ class WriteWorkspaceFile(object):
 
         self.indent = + 4
 
-        database, location, mapset = get_database_location_mapset()
+        database, project, subproject = get_database_project_subproject()
 
         file.write('{indent}<session>\n'.format(indent=' ' * self.indent))
         self.indent += 4
         file.write('{indent}<database>{database}</database>\n'.format(
             indent=' ' * self.indent, database=database))
-        file.write('{indent}<location>{location}</location>\n'.format(
-            indent=' ' * self.indent, location=location))
-        file.write('{indent}<mapset>{mapset}</mapset>\n'.format(
-            indent=' ' * self.indent, mapset=mapset))
+        file.write('{indent}<project>{project}</project>\n'.format(
+            indent=' ' * self.indent, project=project))
+        file.write('{indent}<subproject>{subproject}</subproject>\n'.format(
+            indent=' ' * self.indent, subproject=subproject))
         self.indent -= 4
         file.write('{indent}</session>\n'.format(indent=' ' * self.indent))
 

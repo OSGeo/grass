@@ -233,12 +233,12 @@ void Rast_init_gdal(void)
   \brief Get GDAL link settings for given raster map
 
   \param name map name
-  \param mapset name of mapset
+  \param subproject name of subproject
 
   \return pointer to GDAL_link structure
   \return NULL if link not found
 */
-struct GDAL_link *Rast_get_gdal_link(const char *name, const char *mapset)
+struct GDAL_link *Rast_get_gdal_link(const char *name, const char *subproject)
 {
 #ifdef GDAL_LINK
     GDALDatasetH data;
@@ -256,14 +256,14 @@ struct GDAL_link *Rast_get_gdal_link(const char *name, const char *mapset)
     DCELL null_val;
     int hflip, vflip;
 
-    if (!G_find_raster2(name, mapset))
+    if (!G_find_raster2(name, subproject))
 	return NULL;
 
-    map_type = Rast_map_type(name, mapset);
+    map_type = Rast_map_type(name, subproject);
     if (map_type < 0)
 	return NULL;
 
-    fp = G_fopen_old_misc("cell_misc", "gdal", name, mapset);
+    fp = G_fopen_old_misc("cell_misc", "gdal", name, subproject);
     if (!fp)
 	return NULL;
     key_val = G_fread_key_value(fp);
@@ -377,7 +377,7 @@ static void read_gdal_options(void)
     struct Key_Value *key_val;
     const char *p;
 
-    fp = G_fopen_old("", "GDAL", G_mapset());
+    fp = G_fopen_old("", "GDAL", G_subproject());
     if (!fp)
 	G_fatal_error(_("Unable to open GDAL file"));
     key_val = G_fread_key_value(fp);
@@ -392,10 +392,10 @@ static void read_gdal_options(void)
     else {
 	char path[GPATH_MAX];
 
-	G_file_name(path, p, "", G_mapset());
+	G_file_name(path, p, "", G_subproject());
 	st->opts.dir = G_store(path);
 	if (access(path, 0) != 0)
-	    G_make_mapset_element(p);
+	    G_make_subproject_element(p);
     }
 
     p = G_find_key_value("extension", key_val);

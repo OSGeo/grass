@@ -63,7 +63,7 @@ int Rast3d_mask_close()
 
 int Rast3d_mask_file_exists(void)
 {
-    return G_find_file_misc(RASTER3D_DIRECTORY, RASTER3D_CELL_ELEMENT, RASTER3D_MASK_MAP, G_mapset()) != NULL;
+    return G_find_file_misc(RASTER3D_DIRECTORY, RASTER3D_CELL_ELEMENT, RASTER3D_MASK_MAP, G_subproject()) != NULL;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -83,7 +83,7 @@ int Rast3d_mask_open_old(void)
     if (!Rast3d_maskMapExistsVar)
 	return 1;
 
-    if ((Rast3d_maskMap = Rast3d_open_cell_old(RASTER3D_MASK_MAP, G_mapset(),
+    if ((Rast3d_maskMap = Rast3d_open_cell_old(RASTER3D_MASK_MAP, G_subproject(),
 				       RASTER3D_DEFAULT_WINDOW, FCELL_TYPE,
 				       maskOpenOldCacheDefault))
 	== NULL) {
@@ -257,7 +257,7 @@ void Rast3d_mask_double(RASTER3D_Map * map, int x, int y, int z, double *value)
  *  Replaces the values stored in <em>tile</em> (with <em>tileIndex</em>) for 
  *  which <em>Rast3d_is_masked</em> returns 1 with NULL-values. Does not change
  *  the remaining values. The values are assumed to be of <em>type</em>. 
- *  Whether replacement is performed or not only depends on location of the
+ *  Whether replacement is performed or not only depends on project of the
  *  cells of the tile and not on the status of the mask for <em>map</em>
  *  (i.e. turned on or off).
  *

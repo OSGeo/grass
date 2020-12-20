@@ -33,17 +33,17 @@ int PS_colortable(void)
 
     /* let user know what's happenning */
     G_message(_("Creating color table for <%s in %s>..."),
-	      ct.name, ct.mapset);
+	      ct.name, ct.subproject);
 
-    if (Rast_read_cats(ct.name, ct.mapset, &PS.cats) == -1) {
+    if (Rast_read_cats(ct.name, ct.subproject, &PS.cats) == -1) {
 	G_warning(_("Category file for <%s> not available"), ct.name);
 	return 1;
     }
 
-    if (Rast_read_colors(ct.name, ct.mapset, &colors) == -1)
+    if (Rast_read_colors(ct.name, ct.subproject, &colors) == -1)
 	G_warning(_("Unable to read colors for colorbar"));
 
-    rast_type = Rast_map_type(ct.name, ct.mapset);
+    rast_type = Rast_map_type(ct.name, ct.subproject);
 
     do_color = (PS.grey == 0 && PS.level == 2);
 
@@ -62,17 +62,17 @@ int PS_colortable(void)
     fontsize = (double)ct.fontsize;
     fprintf(PS.fp, "(%s) FN %.1f SF\n", ct.font, fontsize);
 
-    /* set colortable location */
+    /* set colortable project */
     dy = 1.5 * fontsize;
 
     if (ct.y < PS.top_marg) {
-	G_warning(_("Colorbar y location beyond page margins. Adjusting."));
+	G_warning(_("Colorbar y project beyond page margins. Adjusting."));
 	ct.y = PS.top_marg;
     }
     t = 72.0 * (PS.page_height - ct.y);
 
     if (ct.x < PS.left_marg) {
-	G_warning(_("Colorbar x location beyond page margins. Adjusting."));
+	G_warning(_("Colorbar x project beyond page margins. Adjusting."));
 	ct.x = PS.left_marg + 0.1;
     }
     l = 72.0 * ct.x + 0.5;

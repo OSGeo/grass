@@ -67,7 +67,7 @@ int set_paper(char *pname)
 }
 
 /* Reset map size and position */
-void reset_map_location(void)
+void reset_map_project(void)
 {
     double w, h;
 

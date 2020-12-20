@@ -193,7 +193,7 @@ static int close_old(int fd)
     if (fcb->cellhd.compressed)
 	G_free(fcb->row_ptr);
     G_free(fcb->col_map);
-    G_free(fcb->mapset);
+    G_free(fcb->subproject);
     G_free(fcb->data);
     G_free(fcb->name);
     if (fcb->reclass_flag)
@@ -257,12 +257,12 @@ static void write_support_files(int fd)
 	   }
 	 */
 	Rast_quant_round(&fcb->quant);
-	Rast_write_quant(fcb->name, fcb->mapset, &fcb->quant);
+	Rast_write_quant(fcb->name, fcb->subproject, &fcb->quant);
     }
     else {
 	/* remove cell_misc/name/f_quant */
 	G_file_name_misc(path, "cell_misc", QUANT_FILE, fcb->name,
-			  fcb->mapset);
+			  fcb->subproject);
 	remove(path);
     }
 
@@ -308,17 +308,17 @@ static int close_new_gdal(int fd, int ok)
 	}
 
 	/* create path : full null file name */
-	G__make_mapset_element_misc("cell_misc", fcb->name);
+	G__make_subproject_element_misc("cell_misc", fcb->name);
 	G_file_name_misc(path, "cell_misc", NULL_FILE, fcb->name,
-			  G_mapset());
+			  G_subproject());
 	remove(path);
 	G_file_name_misc(path, "cell_misc", NULLC_FILE, fcb->name,
-			  G_mapset());
+			  G_subproject());
 	remove(path);
 
 	/* write 0-length cell file */
-	G_make_mapset_element("cell");
-	G_file_name(path, "cell", fcb->name, fcb->mapset);
+	G_make_subproject_element("cell");
+	G_file_name(path, "cell", fcb->name, fcb->subproject);
 	cell_fd = creat(path, 0666);
 	close(cell_fd);
 
@@ -326,18 +326,18 @@ static int close_new_gdal(int fd, int ok)
 	    write_fp_format(fd);
 
 	    /* write 0-length fcell file */
-	    G_make_mapset_element("fcell");
-	    G_file_name(path, "fcell", fcb->name, fcb->mapset);
+	    G_make_subproject_element("fcell");
+	    G_file_name(path, "fcell", fcb->name, fcb->subproject);
 	    cell_fd = creat(path, 0666);
 	    close(cell_fd);
 	}
 	else {
 	    /* remove fcell/name file */
-	    G_file_name(path, "fcell", fcb->name, fcb->mapset);
+	    G_file_name(path, "fcell", fcb->name, fcb->subproject);
 	    remove(path);
 	    /* remove cell_misc/name/f_format */
 	    G_file_name_misc(path, "cell_misc", FORMAT_FILE, fcb->name,
-			      fcb->mapset);
+			      fcb->subproject);
 	    remove(path);
 	}
 
@@ -358,7 +358,7 @@ static int close_new_gdal(int fd, int ok)
 	write_support_files(fd);
 
     G_free(fcb->name);
-    G_free(fcb->mapset);
+    G_free(fcb->subproject);
 
     if (fcb->map_type != CELL_TYPE)
 	Rast_quant_free(&fcb->quant);
@@ -408,15 +408,15 @@ static int close_new(int fd, int ok)
 	fcb->null_fd = -1;
 
 	/* create path : full null file name */
-	G__make_mapset_element_misc("cell_misc", fcb->name);
-	G_file_name_misc(path, "cell_misc", NULL_FILE, fcb->name, G_mapset());
+	G__make_subproject_element_misc("cell_misc", fcb->name);
+	G_file_name_misc(path, "cell_misc", NULL_FILE, fcb->name, G_subproject());
 	remove(path);
-	G_file_name_misc(path, "cell_misc", NULLC_FILE, fcb->name, G_mapset());
+	G_file_name_misc(path, "cell_misc", NULLC_FILE, fcb->name, G_subproject());
 	remove(path);
 
 	G_file_name_misc(path, "cell_misc",
 			 fcb->null_row_ptr ? NULLC_FILE : NULL_FILE,
-			 fcb->name, G_mapset());
+			 fcb->name, G_subproject());
 
 	if (fcb->null_cur_row > 0) {
 	    /* if temporary NULL file exists, write it into cell_misc/name/null */
@@ -446,20 +446,20 @@ static int close_new(int fd, int ok)
 	    write_fp_format(fd);
 
 	    /* now write 0-length cell file */
-	    G_make_mapset_element("cell");
+	    G_make_subproject_element("cell");
 	    cell_fd =
-		creat(G_file_name(path, "cell", fcb->name, fcb->mapset),
+		creat(G_file_name(path, "cell", fcb->name, fcb->subproject),
 		      0666);
 	    close(cell_fd);
 	    CELL_DIR = "fcell";
 	}
 	else {
 	    /* remove fcell/name file */
-	    G_file_name(path, "fcell", fcb->name, fcb->mapset);
+	    G_file_name(path, "fcell", fcb->name, fcb->subproject);
 	    remove(path);
 	    /* remove cell_misc/name/f_format */
 	    G_file_name_misc(path, "cell_misc", FORMAT_FILE, fcb->name,
-			      fcb->mapset);
+			      fcb->subproject);
 	    remove(path);
 	    CELL_DIR = "cell";
 	}
@@ -493,7 +493,7 @@ static int close_new(int fd, int ok)
      */
     stat = 1;
     if (ok && (fcb->temp_name != NULL)) {
-	G_file_name(path, CELL_DIR, fcb->name, fcb->mapset);
+	G_file_name(path, CELL_DIR, fcb->name, fcb->subproject);
 	remove(path);
 	if (rename(fcb->temp_name, path)) {
 	    G_warning(_("Unable to rename cell file '%s' to '%s': %s"),
@@ -514,7 +514,7 @@ static int close_new(int fd, int ok)
 	write_support_files(fd);
 
     G_free(fcb->name);
-    G_free(fcb->mapset);
+    G_free(fcb->subproject);
 
     G_free(fcb->null_bits);
 
@@ -543,15 +543,15 @@ void Rast__close_null(int fd)
     fcb->null_fd = -1;
 
     /* create path : full null file name */
-    G__make_mapset_element_misc("cell_misc", fcb->name);
-    G_file_name_misc(path, "cell_misc", NULL_FILE, fcb->name, G_mapset());
+    G__make_subproject_element_misc("cell_misc", fcb->name);
+    G_file_name_misc(path, "cell_misc", NULL_FILE, fcb->name, G_subproject());
     remove(path);
-    G_file_name_misc(path, "cell_misc", NULLC_FILE, fcb->name, G_mapset());
+    G_file_name_misc(path, "cell_misc", NULLC_FILE, fcb->name, G_subproject());
     remove(path);
 
     G_file_name_misc(path, "cell_misc",
 		     fcb->null_row_ptr ? NULLC_FILE : NULL_FILE,
-		     fcb->name, G_mapset());
+		     fcb->name, G_subproject());
 
     if (rename(fcb->null_temp_name, path))
 	G_warning(_("Unable to rename null file '%s' to '%s': %s"),
@@ -561,7 +561,7 @@ void Rast__close_null(int fd)
     G_free(fcb->null_temp_name);
 
     G_free(fcb->name);
-    G_free(fcb->mapset);
+    G_free(fcb->subproject);
 
     G_free(fcb->null_bits);
 
@@ -590,8 +590,8 @@ static void write_fp_format(int fd)
     if (fcb->open_mode == OPEN_NEW_COMPRESSED)
 	G_set_key_value("lzw_compression_bits", "-1", format_kv);
 
-    G__make_mapset_element_misc("cell_misc", fcb->name);
-    G_file_name_misc(path, "cell_misc", FORMAT_FILE, fcb->name, fcb->mapset);
+    G__make_subproject_element_misc("cell_misc", fcb->name);
+    G_file_name_misc(path, "cell_misc", FORMAT_FILE, fcb->name, fcb->subproject);
     G_write_key_value_file(path, format_kv);
 
     G_free_key_value(format_kv);

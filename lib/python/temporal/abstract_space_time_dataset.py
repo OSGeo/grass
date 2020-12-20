@@ -17,8 +17,8 @@ import os
 import copy
 from datetime import datetime
 from abc import ABCMeta, abstractmethod
-from .core import init_dbif, get_sql_template_path, get_tgis_metadata, get_current_mapset, \
-    get_enable_mapset_check
+from .core import init_dbif, get_sql_template_path, get_tgis_metadata, get_current_subproject, \
+    get_enable_subproject_check
 from .abstract_dataset import AbstractDataset, AbstractDatasetComparisonKeyStartTime
 from .temporal_granularity import check_granularity_string, compute_absolute_time_granularity,\
     compute_relative_time_granularity
@@ -1579,8 +1579,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             if order is not None and order != "":
                 sql += " ORDER BY %s" % (order.split(";")[0])
             try:
-                dbif.execute(sql, mapset=self.base.mapset)
-                rows = dbif.fetchall(mapset=self.base.mapset)
+                dbif.execute(sql, subproject=self.base.subproject)
+                rows = dbif.fetchall(subproject=self.base.subproject)
             except:
                 if connected:
                     dbif.close()
@@ -1692,12 +1692,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                    granularity
 
         """
-        if get_enable_mapset_check() is True and \
-           self.get_mapset() != get_current_mapset():
+        if get_enable_subproject_check() is True and \
+           self.get_subproject() != get_current_subproject():
             self.msgr.fatal(_("Unable to shift dataset <%(ds)s> of type "
-                              "%(type)s in the temporal database. The mapset "
+                              "%(type)s in the temporal database. The subproject "
                               "of the dataset does not match the current "
-                              "mapset") % ({"ds": self.get_id()},
+                              "subproject") % ({"ds": self.get_id()},
                                            {"type": self.get_type()}))
 
         if not check_granularity_string(gran, self.get_temporal_type()):
@@ -1861,12 +1861,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         """
 
-        if get_enable_mapset_check() is True and \
-           self.get_mapset() != get_current_mapset():
+        if get_enable_subproject_check() is True and \
+           self.get_subproject() != get_current_subproject():
             self.msgr.fatal(_("Unable to snap dataset <%(ds)s> of type "
-                              "%(type)s in the temporal database. The mapset "
+                              "%(type)s in the temporal database. The subproject "
                               "of the dataset does not match the current "
-                              "mapset") % ({"ds": self.get_id()},
+                              "subproject") % ({"ds": self.get_id()},
                                            {"type": self.get_type()}))
 
         dbif, connected = init_dbif(dbif)
@@ -1960,15 +1960,15 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
            Renaming does not work with Postgresql yet.
 
-           :param ident: The new identifier "name@mapset"
+           :param ident: The new identifier "name@subproject"
            :param dbif: The database interface to be used
         """
 
-        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
+        if get_enable_subproject_check() is True and self.get_subproject() != get_current_subproject():
             self.msgr.fatal(_("Unable to rename dataset <%(ds)s> of type "
-                              "%(type)s in the temporal database. The mapset "
+                              "%(type)s in the temporal database. The subproject "
                               "of the dataset does not match the current "
-                              "mapset") % ({"ds": self.get_id()},
+                              "subproject") % ({"ds": self.get_id()},
                                            {"type": self.get_type()}))
 
         dbif, connected = init_dbif(dbif)
@@ -2043,12 +2043,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                             "database") % (self.get_new_map_instance(ident=None).get_type(),
                                            self.get_id()))
 
-        if get_enable_mapset_check() is True and \
-           self.get_mapset() != get_current_mapset():
+        if get_enable_subproject_check() is True and \
+           self.get_subproject() != get_current_subproject():
             self.msgr.fatal(_("Unable to delete dataset <%(ds)s> of type "
-                              "%(type)s from the temporal database. The mapset"
+                              "%(type)s from the temporal database. The subproject"
                               " of the dataset does not match the current "
-                              "mapset") % {"ds": self.get_id(),
+                              "subproject") % {"ds": self.get_id(),
                                            "type": self.get_type()})
 
         statement = ""
@@ -2110,8 +2110,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 sql = "SELECT id FROM " + \
                     stds_register_table + " WHERE id = (%s)"
             try:
-                dbif.execute(sql, (map_id,), mapset=self.base.mapset)
-                row = dbif.fetchone(mapset=self.base.mapset)
+                dbif.execute(sql, (map_id,), subproject=self.base.subproject)
+                row = dbif.fetchone(subproject=self.base.subproject)
             except:
                 self.msgr.warning(_("Error in register table request"))
                 raise
@@ -2140,11 +2140,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            :return: True if success, False otherwise
         """
 
-        if get_enable_mapset_check() is True and \
-           self.get_mapset() != get_current_mapset():
+        if get_enable_subproject_check() is True and \
+           self.get_subproject() != get_current_subproject():
             self.msgr.fatal(_("Unable to register map in dataset <%(ds)s> of "
-                              "type %(type)s. The mapset of the dataset does "
-                              "not match the current mapset") %
+                              "type %(type)s. The subproject of the dataset does "
+                              "not match the current subproject") %
                             {"ds": self.get_id(), "type": self.get_type()})
 
         dbif, connected = init_dbif(dbif)
@@ -2182,11 +2182,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # Get basic info
         map_id = map.base.get_id()
-        map_mapset = map.base.get_mapset()
+        map_subproject = map.base.get_subproject()
         map_rel_time_unit = map.get_relative_time_unit()
         map_ttype = map.get_temporal_type()
 
-        stds_mapset = self.base.get_mapset()
+        stds_subproject = self.base.get_subproject()
         stds_register_table = self.get_map_register()
         stds_ttype = self.get_temporal_type()
 
@@ -2237,9 +2237,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                                   "<%(id)s> and map <%(map)s> are different") %
                                 {'id': self.get_id(), 'map': map.get_map_id()})
 
-        if get_enable_mapset_check() is True and stds_mapset != map_mapset:
+        if get_enable_subproject_check() is True and stds_subproject != map_subproject:
             dbif.close()
-            self.msgr.fatal(_("Only maps from the same mapset can be registered"))
+            self.msgr.fatal(_("Only maps from the same subproject can be registered"))
 
         # Check if map is already registered
         if self.is_map_registered(map_id, dbif=dbif):
@@ -2294,12 +2294,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                    string, None in case of a failure
         """
 
-        if get_enable_mapset_check() is True and \
-           self.get_mapset() != get_current_mapset():
+        if get_enable_subproject_check() is True and \
+           self.get_subproject() != get_current_subproject():
             self.msgr.fatal(_("Unable to unregister map from dataset <%(ds)s>"
                               " of type %(type)s in the temporal database."
-                              " The mapset of the dataset does not match the"
-                              " current mapset") % {"ds": self.get_id(),
+                              " The subproject of the dataset does not match the"
+                              " current subproject") % {"ds": self.get_id(),
                                                     "type": self.get_type()})
 
         statement = ""
@@ -2368,12 +2368,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            :param dbif: The database interface to be used
         """
 
-        if get_enable_mapset_check() is True and \
-           self.get_mapset() != get_current_mapset():
+        if get_enable_subproject_check() is True and \
+           self.get_subproject() != get_current_subproject():
             self.msgr.fatal(_("Unable to update dataset <%(ds)s> of type "
-                              "%(type)s in the temporal database. The mapset"
+                              "%(type)s in the temporal database. The subproject"
                               " of the dataset does not match the current "
-                              "mapset") % {"ds": self.get_id(),
+                              "subproject") % {"ds": self.get_id(),
                                            "type": self.get_type()})
 
         self.msgr.verbose(_("Update metadata, spatial and temporal extent from"
@@ -2391,7 +2391,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # Get basic info
         stds_name = self.base.get_name()
-        stds_mapset = self.base.get_mapset()
+        stds_subproject = self.base.get_subproject()
         sql_path = get_sql_template_path()
         stds_register_table = self.get_map_register()
 
@@ -2456,8 +2456,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 sql = sql.replace("SPACETIME_REGISTER_TABLE",
                                   stds_register_table)
 
-            dbif.execute(sql, mapset=self.base.mapset)
-            row = dbif.fetchone(mapset=self.base.mapset)
+            dbif.execute(sql, subproject=self.base.subproject)
+            row = dbif.fetchone(subproject=self.base.subproject)
 
             if row is not None:
                 # This seems to be a bug in sqlite3 Python driver

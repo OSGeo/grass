@@ -5,7 +5,7 @@
 # MODULE:       t.vect.observe.strds
 # AUTHOR(S):    Soeren Gebbert
 #
-# PURPOSE:      Observe specific locations in a space time raster dataset over a period of time using vector points
+# PURPOSE:      Observe specific projects in a space time raster dataset over a period of time using vector points
 # COPYRIGHT:    (C) 2011-2017 by the GRASS Development Team
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 #############################################################################
 
 #%module
-#% description: Observes specific locations in a space time raster dataset over a period of time using vector points.
+#% description: Observes specific projects in a space time raster dataset over a period of time using vector points.
 #% keyword: temporal
 #% keyword: sampling
 #% keyword: vector
@@ -103,7 +103,7 @@ def main():
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    mapset = grass.gisenv()["MAPSET"]
+    subproject = grass.gisenv()["MAPSET"]
 
     out_sp = tgis.check_new_stds(output, "stvds", dbif, overwrite)
 
@@ -114,7 +114,7 @@ def main():
     # Single space time raster dataset
     if len(strds_names) == 1:
         rows = first_strds.get_registered_maps(
-            columns="name,mapset,start_time,end_time", 
+            columns="name,subproject,start_time,end_time", 
             order="start_time", dbif=dbif)
 
         if not rows:
@@ -125,7 +125,7 @@ def main():
         for row in rows:
             start = row["start_time"]
             end = row["end_time"]
-            raster_maps = [row["name"] + "@" + row["mapset"],]
+            raster_maps = [row["name"] + "@" + row["subproject"],]
 
             s = Sample(start, end, raster_maps)
             samples.append(s)
@@ -278,7 +278,7 @@ def main():
                             (vectmap, count, str(raster_names)))
 
         vect = out_sp.get_new_map_instance(dummy.build_id(vectmap,
-                                                          mapset, str(count)))
+                                                          subproject, str(count)))
         vect.load()
         
         start = sample.start

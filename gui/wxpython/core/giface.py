@@ -222,18 +222,18 @@ class StandaloneGrassInterface(GrassInterface):
         # add: if map should be added to layer tree (questionable attribute)
         self.mapCreated = Signal('StandaloneGrassInterface.mapCreated')
 
-        # Signal for communicating current mapset has been switched
-        self.currentMapsetChanged = Signal('StandaloneGrassInterface.currentMapsetChanged')
+        # Signal for communicating current subproject has been switched
+        self.currentSubprojectChanged = Signal('StandaloneGrassInterface.currentSubprojectChanged')
 
         # Signal for communicating something in current grassdb has changed.
         # Parameters:
         # action: required, is one of 'new', 'rename', 'delete'
-        # element: required, can be one of 'grassdb', 'location', 'mapset', 'raster', 'vector' and 'raster_3d'
+        # element: required, can be one of 'grassdb', 'project', 'subproject', 'raster', 'vector' and 'raster_3d'
         # grassdb: path to grass db, required
-        # location: location name, required
-        # mapset: mapset name, required when element is 'mapset', 'raster', 'vector' or 'raster_3d'
+        # project: project name, required
+        # subproject: subproject name, required when element is 'subproject', 'raster', 'vector' or 'raster_3d'
         # map: map name, required when element is 'raster', 'vector' or 'raster_3d'
-        # newname: new name (of mapset, map), required with action='rename'
+        # newname: new name (of subproject, map), required with action='rename'
         self.grassdbChanged = Signal('StandaloneGrassInterface.grassdbChanged')
 
         # Signal emitted to request updating of map

@@ -93,8 +93,8 @@
 #%end
 #%flag
 #% key: o
-#% label: Override projection check (use current location's projection)
-#% description: Assume that the dataset has the same projection as the current location
+#% label: Override projection check (use current project's projection)
+#% description: Assume that the dataset has the same projection as the current project
 #%end
 
 import sys
@@ -116,7 +116,7 @@ GISDBASE = None
 def cleanup():
     if TGTGISRC:
         os.environ['GISRC'] = str(TGTGISRC)
-    # remove temp location
+    # remove temp project
     if TMPLOC:
         grass.try_rmdir(os.path.join(GISDBASE, TMPLOC))
     if SRCGISRC:
@@ -135,7 +135,7 @@ def GDAL_COMPUTE_VERSION(maj, min, rev):
 
 
 def is_projection_matching(OGRdatasource):
-    """Returns True if current location projection
+    """Returns True if current project projection
     matches dataset projection, otherwise False"""
     try:
         grass.run_command('v.in.ogr', input=OGRdatasource, flags='j',
@@ -231,17 +231,17 @@ def main():
     tgtloc = grassenv['LOCATION_NAME']
 
     # make sure target is not xy
-    if grass.parse_command('g.proj', flags='g')['name'] == 'xy_location_unprojected':
+    if grass.parse_command('g.proj', flags='g')['name'] == 'xy_project_unprojected':
         grass.fatal(
-            _("Coordinate reference system not available for current location <%s>") %
+            _("Coordinate reference system not available for current project <%s>") %
             tgtloc)
 
-    tgtmapset = grassenv['MAPSET']
+    tgtsubproject = grassenv['MAPSET']
     GISDBASE = grassenv['GISDBASE']
     TGTGISRC = os.environ['GISRC']
     SRCGISRC = grass.tempfile()
 
-    TMPLOC = grass.append_node_pid("tmp_v_import_location")
+    TMPLOC = grass.append_node_pid("tmp_v_import_project")
 
     f = open(SRCGISRC, 'w')
     f.write('MAPSET: PERMANENT\n')
@@ -252,8 +252,8 @@ def main():
 
     tgtsrs = grass.read_command('g.proj', flags='j', quiet=True)
 
-    # create temp location from input without import
-    grass.verbose(_("Creating temporary location for <%s>...") % OGRdatasource)
+    # create temp project from input without import
+    grass.verbose(_("Creating temporary project for <%s>...") % OGRdatasource)
     try:
         if OGRdatasource.lower().endswith("gml"):
             try:
@@ -263,12 +263,12 @@ def main():
             if int(gdal.VersionInfo('VERSION_NUM')) < GDAL_COMPUTE_VERSION(2, 4, 1):
                 fix_gfsfile(OGRdatasource)
         grass.run_command('v.in.ogr', input=OGRdatasource,
-                          location=TMPLOC, flags='i',
+                          project=TMPLOC, flags='i',
                           quiet=True, overwrite=overwrite, **vopts)
     except CalledModuleError:
-        grass.fatal(_("Unable to create location from OGR datasource <%s>") % OGRdatasource)
+        grass.fatal(_("Unable to create project from OGR datasource <%s>") % OGRdatasource)
 
-    # switch to temp location
+    # switch to temp project
     os.environ['GISRC'] = str(SRCGISRC)
 
     if options['epsg']:  # force given EPSG
@@ -281,11 +281,11 @@ def main():
     grass.verbose(grass.read_command('g.proj', flags='p').rstrip(os.linesep))
 
     # make sure input is not xy
-    if grass.parse_command('g.proj', flags='g')['name'] == 'xy_location_unprojected':
+    if grass.parse_command('g.proj', flags='g')['name'] == 'xy_project_unprojected':
         grass.fatal(_("Coordinate reference system not available for input <%s>") % OGRdatasource)
 
     if options['extent'] == 'region':
-        # switch to target location
+        # switch to target project
         os.environ['GISRC'] = str(TGTGISRC)
 
         # v.in.region in tgt
@@ -294,19 +294,19 @@ def main():
         grass.run_command('v.in.region', output=vreg, quiet=True)
 
         # reproject to src
-        # switch to temp location
+        # switch to temp project
         os.environ['GISRC'] = str(SRCGISRC)
         try:
             grass.run_command('v.proj', input=vreg, output=vreg,
-                              location=tgtloc, mapset=tgtmapset, quiet=True, overwrite=overwrite)
+                              project=tgtloc, subproject=tgtsubproject, quiet=True, overwrite=overwrite)
         except CalledModuleError:
-            grass.fatal(_("Unable to reproject to source location"))
+            grass.fatal(_("Unable to reproject to source project"))
 
         # set region from region vector
         grass.run_command('g.region', res='1')
         grass.run_command('g.region', vector=vreg)
 
-    # import into temp location
+    # import into temp project
     grass.message(_("Importing <%s> ...") % OGRdatasource)
     try:
         if OGRdatasource.lower().endswith("gml"):
@@ -321,16 +321,16 @@ def main():
     except CalledModuleError:
         grass.fatal(_("Unable to import OGR datasource <%s>") % OGRdatasource)
 
-    # if output is not define check source mapset
+    # if output is not define check source subproject
     if not output:
         output = grass.list_grouped('vector')['PERMANENT'][0]
 
-    # switch to target location
+    # switch to target project
     os.environ['GISRC'] = str(TGTGISRC)
 
     # check if map exists
     if not grass.overwrite() and \
-       grass.find_file(output, element='vector', mapset='.')['mapset']:
+       grass.find_file(output, element='vector', subproject='.')['subproject']:
         grass.fatal(_("option <%s>: <%s> exists.") % ('output', output))
 
     if options['extent'] == 'region':
@@ -340,8 +340,8 @@ def main():
     # v.proj
     grass.message(_("Reprojecting <%s>...") % output)
     try:
-        grass.run_command('v.proj', location=TMPLOC,
-                          mapset='PERMANENT', input=output, overwrite=overwrite)
+        grass.run_command('v.proj', project=TMPLOC,
+                          subproject='PERMANENT', input=output, overwrite=overwrite)
     except CalledModuleError:
         grass.fatal(_("Unable to to reproject vector <%s>") % output)
 

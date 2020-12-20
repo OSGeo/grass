@@ -91,7 +91,7 @@ class ImportDialog(wx.Dialog):
 
         self.override = wx.CheckBox(
             parent=self.panel, id=wx.ID_ANY,
-            label=_("Override projection check (use current location's projection)"))
+            label=_("Override projection check (use current project's projection)"))
 
         self.overwrite = wx.CheckBox(
             parent=self.panel, id=wx.ID_ANY,
@@ -314,9 +314,9 @@ class ImportDialog(wx.Dialog):
             for i in range(1, nBands + 1):
                 nameOrig = name
                 if nBands > 1:
-                    mapName, mapsetName = name.split('@')
+                    mapName, subprojectName = name.split('@')
                     mapName += '.%d' % i
-                    name = mapName + '@' + mapsetName
+                    name = mapName + '@' + subprojectName
 
                 cmd = ['d.rast',
                        'map=%s' % name]
@@ -944,7 +944,7 @@ class ReprojectionDialog(wx.Dialog):
         self.list.SelectAll(True)
 
         self.labelText = StaticText(parent=self.panel, id=wx.ID_ANY, label=_(
-            "Projection of following layers do not match with projection of current location. "))
+            "Projection of following layers do not match with projection of current project. "))
 
         label = _("Layers to be reprojected")
         self.layerBox.SetLabel(" %s - %s " %

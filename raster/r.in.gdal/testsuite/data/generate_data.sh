@@ -1,5 +1,5 @@
 #!/bin/bash
-# This script requires the graass7 North Caroline location
+# This script requires the graass7 North Caroline project
 
 export GRASS_OVERWRITE=1
 

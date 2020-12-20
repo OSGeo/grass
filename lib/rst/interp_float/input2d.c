@@ -40,7 +40,7 @@
 struct BM *IL_create_bitmask(struct interp_params *params)
 {
     int i, j, cfmask = -1, irev, MASKfd;
-    const char *mapsetm;
+    const char *subprojectm;
     CELL *cellmask, *MASK;
     struct BM *bitmask;
 
@@ -53,13 +53,13 @@ struct BM *IL_create_bitmask(struct interp_params *params)
 	bitmask = BM_create(params->nsizc, params->nsizr);
 
 	if (params->maskmap != NULL) {
-	    mapsetm = G_find_raster2(params->maskmap, "");
-	    if (!mapsetm)
+	    subprojectm = G_find_raster2(params->maskmap, "");
+	    if (!subprojectm)
 		G_fatal_error(_("Mask raster map <%s> not found"),
 			      params->maskmap);
 
 	    cellmask = Rast_allocate_c_buf();
-	    cfmask = Rast_open_old(params->maskmap, mapsetm);
+	    cfmask = Rast_open_old(params->maskmap, subprojectm);
 	}
 	else
 	    cellmask = NULL;

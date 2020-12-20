@@ -57,12 +57,12 @@ int main(int argc, char *argv[])
     parse_command_line(argc, argv);
 
     if (!options.print && !options.total) {
-        const char *mapset;
+        const char *subproject;
 
-        mapset = G_find_vector2(options.name, "");
-        if (!mapset || (strcmp(mapset, G_mapset()) != 0))
-            G_fatal_error(_("Vector map <%s> not found in the current mapset. "
-                            "Unable to modify vector maps from different mapsets."),
+        subproject = G_find_vector2(options.name, "");
+        if (!subproject || (strcmp(subproject, G_subproject()) != 0))
+            G_fatal_error(_("Vector map <%s> not found in the current subproject. "
+                            "Unable to modify vector maps from different subprojects."),
                           options.name);
     }
 

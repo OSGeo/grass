@@ -1,13 +1,13 @@
 
 /**********************************************************************
  *
- *  Rast3d_read_history (name, mapset, hist)
+ *  Rast3d_read_history (name, subproject, hist)
  *      char *name                   name of map
- *      char *mapset                 mapset that map belongs to
+ *      char *subproject                 subproject that map belongs to
  *      struct History *hist        structure to hold history info
  *
  *  Reads the history information associated with map layer "map"
- *  in mapset "mapset" into the structure "hist".
+ *  in subproject "subproject" into the structure "hist".
  *
  *   returns:    0  if successful
  *              -1  on fail
@@ -35,13 +35,13 @@
 #include <grass/raster.h>
 
 /*simple error message */
-void SimpleErrorMessage(FILE * fd, const char *name, const char *mapset)
+void SimpleErrorMessage(FILE * fd, const char *name, const char *subproject)
 {
     if (fd != NULL)
 	fclose(fd);
 
-    G_warning(_("can't get history information for [%s] in mapset [%s]"),
-	      name, mapset);
+    G_warning(_("can't get history information for [%s] in subproject [%s]"),
+	      name, subproject);
     return;
 }
 
@@ -49,32 +49,32 @@ void SimpleErrorMessage(FILE * fd, const char *name, const char *mapset)
  * \brief read raster3d History file
  *
  * This routine reads the History file for
- * the raster3d file <b>name</b> in <b>mapset</b> into the <b>History</b>
+ * the raster3d file <b>name</b> in <b>subproject</b> into the <b>History</b>
  * structure.
  * A diagnostic message is printed and -1 is returned if there is an error
  * reading the History file. Otherwise, 0 is returned.
  * A warning message is printed if the file is incorrect.
  *
  *  \param name
- *  \param mapset
+ *  \param subproject
  *  \param history
  *  \return int
  */
 
-int Rast3d_read_history(const char *name, const char *mapset, struct History *hist)
+int Rast3d_read_history(const char *name, const char *subproject, struct History *hist)
 {
     FILE *fp;
 
     G_zero(hist, sizeof(struct History));
 
-    fp = G_fopen_old_misc(RASTER3D_DIRECTORY, RASTER3D_HISTORY_ELEMENT, name, mapset);
+    fp = G_fopen_old_misc(RASTER3D_DIRECTORY, RASTER3D_HISTORY_ELEMENT, name, subproject);
     if (!fp)
 	return -2;
 
     if (Rast__read_history(hist, fp) == 0)
 	return 0;
 
-    SimpleErrorMessage(fp, name, mapset);
+    SimpleErrorMessage(fp, name, subproject);
     return -1;
 }
 
@@ -83,7 +83,7 @@ int Rast3d_read_history(const char *name, const char *mapset, struct History *hi
  * \brief write raster3d History file
  *
  * This routine writes the History file for the raster3d file
- * <b>name</b> in the current mapset from the <b>History</b> structure.
+ * <b>name</b> in the current subproject from the <b>History</b> structure.
  * A diagnostic message is printed and -1 is returned if there is an error
  * writing the History file. Otherwise, 0 is returned.
  * <b>Note.</b> The <b>history</b> structure should first be initialized

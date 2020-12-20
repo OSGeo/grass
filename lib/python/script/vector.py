@@ -286,9 +286,9 @@ orderedDict = None
 def vector_what(map, coord, distance=0.0, ttype=None,
                 encoding=None, skip_attributes=False,
                 layer=None, multiple=False, env=None):
-    """Query vector map at given locations
+    """Query vector map at given projects
 
-    To query one vector map at one location
+    To query one vector map at one project
 
     ::
 
@@ -297,7 +297,7 @@ def vector_what(map, coord, distance=0.0, ttype=None,
 
         [{'Category': 8, 'Map': 'archsites', 'Layer': 1, 'Key_column': 'cat',
           'Database': '/home/martin/grassdata/spearfish60/PERMANENT/dbf/',
-          'Mapset': 'PERMANENT', 'Driver': 'dbf',
+          'Subproject': 'PERMANENT', 'Driver': 'dbf',
           'Attributes': {'str1': 'No_Name', 'cat': '8'},
           'Table': 'archsites', 'Type': 'Point', 'Id': 8}]
 
@@ -313,7 +313,7 @@ def vector_what(map, coord, distance=0.0, ttype=None,
         new_bug_sites 1 {'str1': 'Beetle_site', 'GRASSRGB': '', 'cat': '80'}
         new_bug_sites 2 {'cat': '80'}
 
-    To query more vector maps at one location
+    To query more vector maps at one project
 
     ::
 
@@ -324,7 +324,7 @@ def vector_what(map, coord, distance=0.0, ttype=None,
         archsites {'str1': 'No_Name', 'cat': '8'}
         roads {'label': 'interstate', 'cat': '1'}
 
-    To query one vector map at more locations
+    To query one vector map at more projects
 
     ::
 

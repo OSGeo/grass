@@ -49,6 +49,6 @@
 struct file_info
 {
     FILE *fp;
-    char *mapset;
+    char *subproject;
     char name[GPATH_MAX];
 };

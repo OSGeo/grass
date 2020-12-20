@@ -19,7 +19,7 @@ int stats(void)
 {
     char buf[1024];
     char mname[GNAME_MAX], rname[GNAME_MAX];
-    const char *mmapset, *rmapset;
+    const char *msubproject, *rsubproject;
     int i, nl;
     size_t ns;
     FILE *fd;
@@ -28,13 +28,13 @@ int stats(void)
     int argc = 0;
 
     strcpy(mname, maps[1]);
-    mmapset = G_find_raster2(mname, "");
-    if (mmapset == NULL)
+    msubproject = G_find_raster2(mname, "");
+    if (msubproject == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), maps[0]);
 
     strcpy(rname, maps[0]);
-    rmapset = G_find_raster2(rname, "");
-    if (rmapset == NULL)
+    rsubproject = G_find_raster2(rname, "");
+    if (rsubproject == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), maps[1]);
 
     stats_file = G_tempfile();
@@ -46,8 +46,8 @@ int stats(void)
     argv[argc++] = "separator=:";
 
     sprintf(buf, "input=%s,%s",
-	    G_fully_qualified_name(mname, mmapset),
-	    G_fully_qualified_name(rname, rmapset));
+	    G_fully_qualified_name(mname, msubproject),
+	    G_fully_qualified_name(rname, rsubproject));
     argv[argc++] = buf;
 
     argv[argc++] = SF_REDIRECT_FILE;

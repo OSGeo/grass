@@ -158,11 +158,11 @@ def main():
     output = options['output']
     one = flags['1']
 
-    # are we in LatLong location?
+    # are we in LatLong project?
     s = grass.read_command("g.proj", flags='j')
     kv = grass.parse_key_val(s)
     if '+proj' not in kv.keys() or kv['+proj'] != 'longlat':
-        grass.fatal(_("This module only operates in LatLong locations"))
+        grass.fatal(_("This module only operates in LatLong projects"))
 
     # use these from now on:
     infile = input

@@ -45,10 +45,10 @@ static void fft_colors(const char *name)
     DCELL min, max;
 
     /* make a real component color table */
-    Rast_read_fp_range(name, G_mapset(), &range);
+    Rast_read_fp_range(name, G_subproject(), &range);
     Rast_get_fp_range_min_max(&range, &min, &max);
     Rast_make_grey_scale_fp_colors(&colors, min, max);
-    Rast_write_colors(name, G_mapset(), &colors);
+    Rast_write_colors(name, G_subproject(), &colors);
 }
 
 int main(int argc, char *argv[])

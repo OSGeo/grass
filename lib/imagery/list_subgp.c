@@ -15,7 +15,7 @@
 #include <grass/imagery.h>
 #include <grass/glocale.h>
 
-char **list_subgroups(char *group, const char *mapset, int *subgs_num)
+char **list_subgroups(char *group, const char *subproject, int *subgs_num)
 {
     /* Unlike I_list_subgroup and I_list_subgroup_simple this function 
        returns array of subgroup names, it does not use fprintf. 
@@ -28,11 +28,11 @@ char **list_subgroups(char *group, const char *mapset, int *subgs_num)
 
     *subgs_num = 0;
 
-    if (I_find_group2(group, mapset) == 0)
+    if (I_find_group2(group, subproject) == 0)
 	return NULL;
 
     sprintf(buf, "group/%s/subgroup", group);
-    G_file_name(path, buf, "", mapset);
+    G_file_name(path, buf, "", subproject);
 
     if (!G_lstat(path, &sb) == 0 || !S_ISDIR(sb.st_mode))
 	return NULL;
@@ -52,21 +52,21 @@ char **list_subgroups(char *group, const char *mapset, int *subgs_num)
 char **I_list_subgroups(const char *group, int *subgs_num)
 {
     
-    return list_subgroups(group, G_mapset(), subgs_num);
+    return list_subgroups(group, G_subproject(), subgs_num);
 }
 
 /*!
  * \brief Get list of subgroups which a group contatins.
  *  
  * \param group group name
- * \param mapset mapset name
+ * \param subproject subproject name
  * \param[out] subgs_num number of subgroups which the group contains
  * \return array of subgroup names
  */
 
-char **I_list_subgroups2(const char *group, const char *mapset, int *subgs_num)
+char **I_list_subgroups2(const char *group, const char *subproject, int *subgs_num)
 {
-    return list_subgroups(group, mapset, subgs_num);
+    return list_subgroups(group, subproject, subgs_num);
 }
 
 /*!
@@ -93,7 +93,7 @@ int I_list_subgroup(const char *group,
     }
     max = 0;
     for (i = 0; i < ref->nfiles; i++) {
-	sprintf(buf, "<%s@%s>", ref->file[i].name, ref->file[i].mapset);
+	sprintf(buf, "<%s@%s>", ref->file[i].name, ref->file[i].subproject);
 	len = strlen(buf) + 4;
 	if (len > max)
 	    max = len;
@@ -105,7 +105,7 @@ int I_list_subgroup(const char *group,
     fprintf(fd, "-------------\n");
     tot_len = 0;
     for (i = 0; i < ref->nfiles; i++) {
-	sprintf(buf, "<%s@%s>", ref->file[i].name, ref->file[i].mapset);
+	sprintf(buf, "<%s@%s>", ref->file[i].name, ref->file[i].subproject);
 	tot_len += max;
 	if (tot_len > 78) {
 	    fprintf(fd, "\n");
@@ -124,13 +124,13 @@ int I_list_subgroup(const char *group,
  * \brief Prints maps in a subgroup (simple version)
  *
  * Same as I_list_subgroup(), but without all the fancy stuff.
- * Prints one map per line in map@mapset form.
+ * Prints one map per line in map@subproject form.
  *
  * \param ref group reference (set with I_get_subgroup_ref())
  * \param fd where to print (typically stdout)
  * \return 0
  */
-/* same as above, but one map per line in map@mapset form */
+/* same as above, but one map per line in map@subproject form */
 int I_list_subgroup_simple(const struct Ref *ref, FILE * fd)
 {
     return I_list_group_simple(ref, fd);

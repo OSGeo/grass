@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       g.mapsets
+ * MODULE:       g.subprojects
  * AUTHOR(S):    Michael Shapiro (CERL),
  *               Greg Koerper (ManTech Environmental Technology) (original contributors), 
  *               Glynn Clements <glynn gclements.plus.com>
@@ -10,7 +10,7 @@
  *               Moritz Lennert <mlennert club.worldonline.be>,
  *               Martin Landa <landa.martin gmail.com>,
  *               Huidae Cho <grass4u gmail.com>
- * PURPOSE:      set current mapset path
+ * PURPOSE:      set current subproject path
  * COPYRIGHT:    (C) 1994-2009, 2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -33,13 +33,13 @@
 #define OP_ADD 2
 #define OP_REM 3
 
-static void append_mapset(char **, const char *);
+static void append_subproject(char **, const char *);
 
 int main(int argc, char *argv[])
 {
     int n, i;
     int skip;
-    const char *cur_mapset, *mapset;
+    const char *cur_subproject, *subproject;
     char **ptr;
     char **tokens;
     int no_tokens;
@@ -48,12 +48,12 @@ int main(int argc, char *argv[])
     char *path, *fs;
     int operation, nchoices;
     
-    char **mapset_name;
-    int nmapsets;
+    char **subproject_name;
+    int nsubprojects;
     
     struct GModule *module;    
     struct _opt {
-        struct Option *mapset, *op, *fs;
+        struct Option *subproject, *op, *fs;
         struct Flag *print, *list, *dialog;
     } opt;
 
@@ -63,14 +63,14 @@ int main(int argc, char *argv[])
     G_add_keyword(_("general"));
     G_add_keyword(_("settings"));
     G_add_keyword(_("search path"));
-    module->label = _("Modifies/prints the user's current mapset search path.");
+    module->label = _("Modifies/prints the user's current subproject search path.");
     module->description = _("Affects the user's access to data existing "
-                            "under the other mapsets in the current location.");
+                            "under the other subprojects in the current project.");
 
-    opt.mapset = G_define_standard_option(G_OPT_M_MAPSET);
-    opt.mapset->required = YES;
-    opt.mapset->multiple = YES;
-    opt.mapset->description = _("Name(s) of existing mapset(s) to add/remove or set");
+    opt.subproject = G_define_standard_option(G_OPT_M_MAPSET);
+    opt.subproject->required = YES;
+    opt.subproject->multiple = YES;
+    opt.subproject->description = _("Name(s) of existing subproject(s) to add/remove or set");
     
     opt.op = G_define_option();
     opt.op->key = "operation";
@@ -88,30 +88,30 @@ int main(int argc, char *argv[])
     
     opt.list = G_define_flag();
     opt.list->key = 'l';
-    opt.list->description = _("List all available mapsets in alphabetical order");
+    opt.list->description = _("List all available subprojects in alphabetical order");
     opt.list->guisection = _("Print");
     opt.list->suppress_required = YES;
 
     opt.print = G_define_flag();
     opt.print->key = 'p';
-    opt.print->description = _("Print mapsets in current search path");
+    opt.print->description = _("Print subprojects in current search path");
     opt.print->guisection = _("Print");
     opt.print->suppress_required = YES;
 
     opt.dialog = G_define_flag();
     opt.dialog->key = 's';
-    opt.dialog->description = _("Launch mapset selection GUI dialog");
+    opt.dialog->description = _("Launch subproject selection GUI dialog");
     opt.dialog->suppress_required = YES;
     
     path = NULL;
-    mapset_name = NULL;
-    nmapsets = nchoices = 0;
+    subproject_name = NULL;
+    nsubprojects = nchoices = 0;
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
     operation = OP_UKN;
-    if (opt.mapset->answer && opt.op->answer) {
+    if (opt.subproject->answer && opt.op->answer) {
         switch(opt.op->answer[0]) {
         case 's':
             operation = OP_SET;
@@ -130,56 +130,56 @@ int main(int argc, char *argv[])
     
     fs = G_option_to_separator(opt.fs);
 
-    /* list available mapsets */
+    /* list available subprojects */
     if (opt.list->answer) {
         if (opt.print->answer)
             G_warning(_("Flag -%c ignored"), opt.print->key);
         if (opt.dialog->answer)
             G_warning(_("Flag -%c ignored"), opt.dialog->key);
-        if (opt.mapset->answer)
-            G_warning(_("Option <%s> ignored"), opt.mapset->key);
-        mapset_name = get_available_mapsets(&nmapsets);
-        list_available_mapsets((const char **)mapset_name, nmapsets, fs);
+        if (opt.subproject->answer)
+            G_warning(_("Option <%s> ignored"), opt.subproject->key);
+        subproject_name = get_available_subprojects(&nsubprojects);
+        list_available_subprojects((const char **)subproject_name, nsubprojects, fs);
         exit(EXIT_SUCCESS);
     }
 
     if (opt.print->answer) {
         if (opt.dialog->answer)
             G_warning(_("Flag -%c ignored"), opt.dialog->key);
-        if (opt.mapset->answer)
-            G_warning(_("Option <%s> ignored"), opt.mapset->key);
-        list_accessible_mapsets(fs);
+        if (opt.subproject->answer)
+            G_warning(_("Option <%s> ignored"), opt.subproject->key);
+        list_accessible_subprojects(fs);
         exit(EXIT_SUCCESS);
     }
     
     /* show GUI dialog */
     if (opt.dialog->answer) {
-        if (opt.mapset->answer)
-            G_warning(_("Option <%s> ignored"), opt.mapset->key);
-        sprintf(path_buf, "%s/gui/wxpython/modules/mapsets_picker.py", G_gisbase());
-        G_spawn(getenv("GRASS_PYTHON"), "mapsets_picker.py", path_buf, NULL);
+        if (opt.subproject->answer)
+            G_warning(_("Option <%s> ignored"), opt.subproject->key);
+        sprintf(path_buf, "%s/gui/wxpython/modules/subprojects_picker.py", G_gisbase());
+        G_spawn(getenv("GRASS_PYTHON"), "subprojects_picker.py", path_buf, NULL);
         exit(EXIT_SUCCESS);
     }
 
-    cur_mapset = G_mapset();
+    cur_subproject = G_subproject();
     
     /* modify search path */
     if (operation == OP_SET) {
         int cur_found;
         
         cur_found = FALSE;
-        for (ptr = opt.mapset->answers; *ptr != NULL; ptr++) {
-            mapset = substitute_mapset(*ptr);
-            if (G_mapset_permissions(mapset) < 0)
-                G_fatal_error(_("Mapset <%s> not found"), mapset);
-            if (strcmp(mapset, cur_mapset) == 0)
+        for (ptr = opt.subproject->answers; *ptr != NULL; ptr++) {
+            subproject = substitute_subproject(*ptr);
+            if (G_subproject_permissions(subproject) < 0)
+                G_fatal_error(_("Subproject <%s> not found"), subproject);
+            if (strcmp(subproject, cur_subproject) == 0)
                 cur_found = TRUE;
             nchoices++;
-            append_mapset(&path, mapset);
+            append_subproject(&path, subproject);
         }
         if (!cur_found)
-            G_warning(_("Current mapset (<%s>) must always included in the search path"),
-                      cur_mapset);
+            G_warning(_("Current subproject (<%s>) must always included in the search path"),
+                      cur_subproject);
     }
     else if (operation == OP_ADD) {
         /* add to existing search path */
@@ -190,28 +190,28 @@ int main(int argc, char *argv[])
             path = NULL;
         }
 
-        /* read existing mapsets from SEARCH_PATH */
-        for (n = 0; (oldname = G_get_mapset_name(n)); n++)
-            append_mapset(&path, oldname);
+        /* read existing subprojects from SEARCH_PATH */
+        for (n = 0; (oldname = G_get_subproject_name(n)); n++)
+            append_subproject(&path, oldname);
 
-        /* fetch and add new mapsets from param list */
-        for (ptr = opt.mapset->answers; *ptr != NULL; ptr++) {
+        /* fetch and add new subprojects from param list */
+        for (ptr = opt.subproject->answers; *ptr != NULL; ptr++) {
 
-            mapset = substitute_mapset(*ptr);
+            subproject = substitute_subproject(*ptr);
 
-            if (G_is_mapset_in_search_path(mapset)) {
-                G_message(_("Mapset <%s> already in the path"), mapset);
+            if (G_is_subproject_in_search_path(subproject)) {
+                G_message(_("Subproject <%s> already in the path"), subproject);
                 continue;
             }
             
-            if (G_mapset_permissions(mapset) < 0)
-                G_fatal_error(_("Mapset <%s> not found"), mapset);
+            if (G_subproject_permissions(subproject) < 0)
+                G_fatal_error(_("Subproject <%s> not found"), subproject);
             else
-                G_verbose_message(_("Mapset <%s> added to search path"),
-                                  mapset);
+                G_verbose_message(_("Subproject <%s> added to search path"),
+                                  subproject);
 
             nchoices++;
-            append_mapset(&path, mapset);
+            append_subproject(&path, subproject);
         }
     }
     else if (operation == OP_REM) {
@@ -224,29 +224,29 @@ int main(int argc, char *argv[])
             path = NULL;
         }
         
-        /* read existing mapsets from SEARCH_PATH */
-        for (n = 0; (oldname = G_get_mapset_name(n)); n++) {
+        /* read existing subprojects from SEARCH_PATH */
+        for (n = 0; (oldname = G_get_subproject_name(n)); n++) {
             found = FALSE;
             
-            for (ptr = opt.mapset->answers; *ptr && !found; ptr++)
+            for (ptr = opt.subproject->answers; *ptr && !found; ptr++)
 
-                mapset = substitute_mapset(*ptr);
+                subproject = substitute_subproject(*ptr);
             
-                if (strcmp(oldname, mapset) == 0)
+                if (strcmp(oldname, subproject) == 0)
                     found = TRUE;
             
                 if (found) {
-                    if (strcmp(oldname, cur_mapset) == 0)
-                        G_warning(_("Current mapset (<%s>) must always included in the search path"),
-                                  cur_mapset);
+                    if (strcmp(oldname, cur_subproject) == 0)
+                        G_warning(_("Current subproject (<%s>) must always included in the search path"),
+                                  cur_subproject);
                     else
-                        G_verbose_message(_("Mapset <%s> removed from search path"),
+                        G_verbose_message(_("Subproject <%s> removed from search path"),
                                           oldname);
                     continue;
                 }
                 
                 nchoices++;
-                append_mapset(&path, oldname);
+                append_subproject(&path, oldname);
         }
     }
     /* stuffem sets nchoices */
@@ -256,16 +256,16 @@ int main(int argc, char *argv[])
         if (path)
             G_free(path);
         
-        if (nmapsets) {
-            for(nmapsets--; nmapsets >= 0; nmapsets--)
-                G_free(mapset_name[nmapsets]);
-            G_free(mapset_name);
+        if (nsubprojects) {
+            for(nsubprojects--; nsubprojects >= 0; nsubprojects--)
+                G_free(subproject_name[nsubprojects]);
+            G_free(subproject_name);
         }
         
         exit(EXIT_SUCCESS);
     }
     
-    /* note I'm assuming that mapsets cannot have ' 's in them */
+    /* note I'm assuming that subprojects cannot have ' 's in them */
     tokens = G_tokenize(path, " ");
 
     fp = G_fopen_new("", "SEARCH_PATH");
@@ -273,18 +273,18 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Unable to open SEARCH_PATH for write"));
 
     /*
-     * make sure current mapset is specified in the list if not add it
+     * make sure current subproject is specified in the list if not add it
      * to the head of the list
      */
     
     skip = 0;
     for (n = 0; n < nchoices; n++)
-        if (strcmp(cur_mapset, tokens[n]) == 0) {
+        if (strcmp(cur_subproject, tokens[n]) == 0) {
             skip = 1;
             break;
         }
     if (!skip) {
-        fprintf(fp, "%s\n", cur_mapset);
+        fprintf(fp, "%s\n", cur_subproject);
     }
 
     /*
@@ -312,23 +312,23 @@ int main(int argc, char *argv[])
     if (path)
         G_free(path);
 
-    if (nmapsets) {
-        for(nmapsets--; nmapsets >= 0; nmapsets--)
-            G_free(mapset_name[nmapsets]);
-        G_free(mapset_name);
+    if (nsubprojects) {
+        for(nsubprojects--; nsubprojects >= 0; nsubprojects--)
+            G_free(subproject_name[nsubprojects]);
+        G_free(subproject_name);
     }
 
     exit(EXIT_SUCCESS);
 }
 
-void append_mapset(char **path, const char *mapset)
+void append_subproject(char **path, const char *subproject)
 {
     int len = (*path == NULL ? 0 : strlen(*path));
 
-    *path = (char *)G_realloc(*path, len + strlen(mapset) + 2);
+    *path = (char *)G_realloc(*path, len + strlen(subproject) + 2);
     if (!len)
         *path[0] = '\0';
-    strcat(*path, mapset);
+    strcat(*path, subproject);
     strcat(*path, " ");
     return;
 }

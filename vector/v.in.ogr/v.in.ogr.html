@@ -2,7 +2,7 @@
 
 <em>v.in.ogr</em> imports vector data from files and database connections
 supported by the <a href="http://www.gdal.org/">OGR</a> library) into the
-current location and mapset.
+current project and subproject.
 
 <p>
 If the <b>layer</b> parameter is not given, all available OGR layers
@@ -49,7 +49,7 @@ non-topological software.
 
 <p>
 The <b>min_area</b> threshold value is being specified as area size in
-map units with the exception of latitude-longitude locations in which
+map units with the exception of latitude-longitude projects in which
 it is being specified solely in square meters.
 
 <p>
@@ -72,34 +72,34 @@ using <em><a href="v.extract.html">v.extract</a></em> with the desired
 category value or <b>where</b> statement and the <b>-d</b> flag to
 dissolve common boundaries.
 
-<h2>Location Creation</h2>
+<h2>Project Creation</h2>
 
 <em>v.in.ogr</em> attempts to preserve projection information when
 importing datasets if the source format includes projection
 information, and if the OGR driver supports it.  If the projection of
 the source dataset does not match the projection of the current
-location <em>v.in.ogr</em> will report an error message
+project <em>v.in.ogr</em> will report an error message
 (&quot;Projection of dataset does not appear to match current
-location&quot;).
+project&quot;).
 
 <p>
 If the user wishes to ignore the difference between the apparent
-coordinate system of the source data and the current location, they
+coordinate system of the source data and the current project, they
 may pass the <b>-o</b> flag to override the projection check.
 
 <p>
 If the user wishes to import the data with the full projection
 definition, it is possible to have <em>v.in.ogr</em> automatically
-create a new location based on the projection and extents of the file
+create a new project based on the projection and extents of the file
 being read. This is accomplished by passing the name to be used for
-the new location via the <b>location</b> parameter.  Upon completion
-of the command, a new location will have been created (with only a
-PERMANENT mapset), and the vector map will have been imported with the
-indicated <b>output</b> name into the PERMANENT mapset.
+the new project via the <b>project</b> parameter.  Upon completion
+of the command, a new project will have been created (with only a
+PERMANENT subproject), and the vector map will have been imported with the
+indicated <b>output</b> name into the PERMANENT subproject.
 <p>
 An interesting wrapper command around <em>v.in.ogr</em> is
 <a href="v.import.html">v.import</a> which reprojects (if needed) the
-vector dataset during import to the projection of the current location.
+vector dataset during import to the projection of the current project.
 
 <h2>NOTES</h2>
 
@@ -449,13 +449,13 @@ see <a href="https://www.sqlite.org/lang_keywords.html">here</a>.
 <h3>Projection errors</h3>
 
 <div class="code"><pre>
-Projection of dataset does not appear to match the current location.
+Projection of dataset does not appear to match the current project.
 </pre></div>
 
-Here you need to create or use a location whose projection matches that
-of the vector data you wish to import. Try using <b>location</b> parameter to
-create a new location based upon the projection information in the file. If
-desired, you can then re-project it to another location
+Here you need to create or use a project whose projection matches that
+of the vector data you wish to import. Try using <b>project</b> parameter to
+create a new project based upon the projection information in the file. If
+desired, you can then re-project it to another project
 with <em><a href="v.proj.html">v.proj</a></em>.
 
 <h2>REFERENCES</h2>
@@ -487,7 +487,7 @@ GRASS GIS Wiki page: Import of <a href="https://grasswiki.osgeo.org/wiki/Global_
 
 Original author: Radim Blazek, ITC-irst, Trento, Italy
 <br>
-Location and spatial extent support by Markus Neteler and Paul Kelly
+Project and spatial extent support by Markus Neteler and Paul Kelly
 <br>
 Various improvements by Markus Metz
 <br>

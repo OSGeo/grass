@@ -1,7 +1,7 @@
 /*
  * find_3dcell (cell)
  *
- * Find the a 3dcell in the current mapset
+ * Find the a 3dcell in the current subproject
  **************************************************************/
 #include <grass/gis.h>
 #include <grass/raster3d.h>
@@ -11,7 +11,7 @@ int g3_find_dsp_file(cell, file, mset)
      char *cell, *mset;
      char *file;
 {
-    char element[100], name[GNAME_MAX], mapset[GMAPSET_MAX],
+    char element[100], name[GNAME_MAX], subproject[GMAPSET_MAX],
 	tofind[GNAME_MAX];
 
     if (file == NULL || *file == 0)
@@ -19,7 +19,7 @@ int g3_find_dsp_file(cell, file, mset)
 
     strcpy(tofind, file);
 
-    if (G_name_is_fully_qualified(cell, name, mapset))
+    if (G_name_is_fully_qualified(cell, name, subproject))
 	sprintf(element, "grid3/%s/dsp", name);
     else
 	sprintf(element, "grid3/%s/dsp", cell);

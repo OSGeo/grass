@@ -1595,10 +1595,10 @@ int check_overwrite(void)
                         if (access(opt->answers[i], F_OK) == 0)
                             found = TRUE;
 		    }
-                    else if (strcmp(element, "mapset") != 0) {
+                    else if (strcmp(element, "subproject") != 0) {
                         /* TODO: also other elements should be
                            probably skipped */
-                        if (G_find_file(element, opt->answers[i], G_mapset())) {
+                        if (G_find_file(element, opt->answers[i], G_subproject())) {
                             found = TRUE;
                         }
 		    }

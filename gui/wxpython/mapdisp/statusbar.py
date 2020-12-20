@@ -877,7 +877,7 @@ class SbMask(SbItem):
 
     def Update(self):
         if grass.find_file(name='MASK', element='cell',
-                           mapset=grass.gisenv()['MAPSET'])['name']:
+                           subproject=grass.gisenv()['MAPSET'])['name']:
             self.Show()
         else:
             self.Hide()

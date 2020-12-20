@@ -2,7 +2,7 @@
 from grass_session import Session
 import grass.script as gs
 
-with Session(gisdb="/grassdata/", location="test", mapset="PERMANENT", create_opts='EPSG:25832'):
+with Session(gisdb="/grassdata/", project="test", subproject="PERMANENT", create_opts='EPSG:25832'):
     print("Tests for PROJ, GDAL, PDAL, GRASS")
 
     # simple test: just scan the LAZ file

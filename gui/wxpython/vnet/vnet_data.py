@@ -949,7 +949,7 @@ class VNETTmpVectMaps:
         currMapSet = grass.gisenv()['MAPSET']
         tmpMap = grass.find_file(name=mapName,
                                  element='vector',
-                                 mapset=currMapSet)
+                                 subproject=currMapSet)
 
         fullName = tmpMap["fullname"]
         # map already exists
@@ -1067,7 +1067,7 @@ class VectMap:
 
         existsMap = grass.find_file(name=self.fullName,
                                     element='vector',
-                                    mapset=grass.gisenv()['MAPSET'])
+                                    subproject=grass.gisenv()['MAPSET'])
 
         if not existsMap["name"]:
             self.DeleteRenderLayer()

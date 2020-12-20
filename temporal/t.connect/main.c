@@ -4,7 +4,7 @@
  * MODULE:       t.connect
  * AUTHOR(S):    Soeren Gebbert, based on db.connect
  *
- * PURPOSE:      Prints/sets general temporal GIS database connection for current mapset.
+ * PURPOSE:      Prints/sets general temporal GIS database connection for current subproject.
  * COPYRIGHT:    (C) 2002-2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("settings"));
     G_add_keyword(_("metadata"));
     module->description =
-	_("Prints/sets general temporal GIS database connection for current mapset.");
+	_("Prints/sets general temporal GIS database connection for current subproject.");
 
     print = G_define_flag();
     print->key = 'p';

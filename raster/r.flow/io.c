@@ -43,13 +43,13 @@
 static const char *tmp_name(const char *fullname)
 {
     char element[1024];
-    const char *mapset = G_mapset();
-    const char *location = G_location_path();
+    const char *subproject = G_subproject();
+    const char *project = G_project_path();
     const char *el = element;
 
     G_temp_element(element);
-    while (*fullname++ == *location++) ;
-    while (*fullname++ == *mapset++) ;
+    while (*fullname++ == *project++) ;
+    while (*fullname++ == *subproject++) ;
     while (*fullname++ == *el++) ;
 
     return fullname;
@@ -59,15 +59,15 @@ static const char *tmp_name(const char *fullname)
 
 static int open_existing_cell_file(char *fname, struct Cell_head *chd)
 {
-    const char *mapset = G_find_raster(fname, "");
+    const char *subproject = G_find_raster(fname, "");
 
-    if (mapset == NULL)
+    if (subproject == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), fname);
 
     if (chd)
-	Rast_get_cellhd(fname, mapset, chd);
+	Rast_get_cellhd(fname, subproject, chd);
 
-    return Rast_open_old(fname, mapset);
+    return Rast_open_old(fname, subproject);
 }
 
 static int compare_regions(const struct Cell_head *a, const struct Cell_head *b)
@@ -137,14 +137,14 @@ void read_input_files(void)
 static int open_segment_file(const char *name, layer l, int new)
 {
     int fd;
-    const char *mapset;
+    const char *subproject;
 
     if (new == TEMP)
 	G_temp_element(string);
     else
 	sprintf(string, "cell_misc/%s", parm.elevin);
 
-    if (new || !(mapset = G_find_file2(string, name, ""))) {
+    if (new || !(subproject = G_find_file2(string, name, ""))) {
 	if ((fd = G_open_new(string, name)) < 0)
 	    G_fatal_error(_("Cannot create segment file %s"), name);
 
@@ -153,7 +153,7 @@ static int open_segment_file(const char *name, layer l, int new)
 			   sizeof(DCELL)) < 1)
 	    G_fatal_error(_("Cannot format segment file %s"), name);
 	close(fd);
-	mapset = G_mapset();
+	subproject = G_subproject();
     }
 
     if ((fd = G_open_update(string, name)) < 0)
@@ -196,7 +196,7 @@ void close_files(void)
 
 void write_density_file(void)
 {
-    const char *mapset;
+    const char *subproject;
     int dsfd, row, col;
     double dsmax = 0.0;
     struct Colors colors;
@@ -238,9 +238,9 @@ void write_density_file(void)
     val2 = (CELL) dsmax;
     Rast_add_c_color_rule(&val1, 0, 0, 255, &val2, 0, 0, 0, &colors);
 
-    if ((mapset = G_find_file("cell", parm.dsout, "")) == NULL)
+    if ((subproject = G_find_file("cell", parm.dsout, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), parm.dsout);
 
-    Rast_write_colors(parm.dsout, mapset, &colors);
+    Rast_write_colors(parm.dsout, subproject, &colors);
     Rast_free_colors(&colors);
 }

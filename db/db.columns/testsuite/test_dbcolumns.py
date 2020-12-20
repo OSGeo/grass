@@ -18,7 +18,7 @@ SHAPE_Area
 
 class TestDbColumns(TestCase):
     invect = 'zipcodes'
-    mapset = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
+    subproject = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
 
     @classmethod
     def setUpClass(cls):
@@ -26,7 +26,7 @@ class TestDbColumns(TestCase):
 
     def test_dbcols(self):
         cols = read_command('db.columns', table=self.invect,
-                            database=self.mapset)
+                            database=self.subproject)
         self.assertEqual(first=cols, second=output)
 
 if __name__ == '__main__':

@@ -91,7 +91,7 @@ int close_array_seg(void)
 	    Rast_put_row(map_fd, cellrow, CELL_TYPE);
 	}
 	Rast_close(map_fd);
-	Rast_write_colors(seg_name, this_mapset, &colors);
+	Rast_write_colors(seg_name, this_subproject, &colors);
     }
 
     /* basins map */
@@ -106,7 +106,7 @@ int close_array_seg(void)
 	    Rast_put_row(map_fd, cellrow, CELL_TYPE);
 	}
 	Rast_close(map_fd);
-	Rast_write_colors(bas_name, this_mapset, &colors);
+	Rast_write_colors(bas_name, this_subproject, &colors);
     }
 
     /* half_basins map */
@@ -121,7 +121,7 @@ int close_array_seg(void)
 	    Rast_put_row(map_fd, cellrow, CELL_TYPE);
 	}
 	Rast_close(map_fd);
-	Rast_write_colors(haf_name, this_mapset, &colors);
+	Rast_write_colors(haf_name, this_subproject, &colors);
     }
 
     if (seg_flag || bas_flag || haf_flag)

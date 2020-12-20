@@ -40,7 +40,7 @@ int D__overlay_mode = 0;	/* external for now, but to be fixed later */
  * \brief Configure raster overlay mode
  *
  * This routine determines if D_draw_raster() draws in overlay mode
- * (locations with category 0 are left untouched) or not (colored with
+ * (projects with category 0 are left untouched) or not (colored with
  * the color for category 0).
  *
  * \param n 1 (TRUE) for overlay mode; 0 (FALSE) otherwise

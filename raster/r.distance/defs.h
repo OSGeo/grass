@@ -30,17 +30,17 @@ struct EdgeList			/* keep track of edge cells */
 	CELL cat;		/* category number */
 	int *row, *col;		/* arrays of pixels indexes */
 	int ncells;		/* count of edges cells with this cat */
-	int nalloc;		/* length of allocation for row,col */
+	int nalloc;		/* length of alproject for row,col */
     } *catlist;			/* array of cat:edgelists */
     int ncats;			/* number of cats */
-    int nalloc;			/* length of allocation for catlist */
+    int nalloc;			/* length of alproject for catlist */
     int count;			/* total number of edge cells */
 };
 
 struct Map
 {
     const char *name;		/* raster map name */
-    const char *mapset;		/* raster map mapset */
+    const char *subproject;		/* raster map subproject */
     const char *fullname;	/* raster map fully qualified name */
     struct Categories labels;	/* category labels */
     struct EdgeList edges;	/* edge cells */

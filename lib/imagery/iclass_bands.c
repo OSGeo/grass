@@ -40,7 +40,7 @@ void open_band_files(struct Ref *refer, CELL *** band_buffer, int **band_fd)
 {
     int n, nbands;
 
-    char *name, *mapset;
+    char *name, *subproject;
 
     G_debug(3, "open_band_files()");
 
@@ -52,8 +52,8 @@ void open_band_files(struct Ref *refer, CELL *** band_buffer, int **band_fd)
     for (n = 0; n < nbands; n++) {
 	(*band_buffer)[n] = Rast_allocate_c_buf();
 	name = refer->file[n].name;
-	mapset = refer->file[n].mapset;
-	(*band_fd)[n] = Rast_open_old(name, mapset);
+	subproject = refer->file[n].subproject;
+	(*band_fd)[n] = Rast_open_old(name, subproject);
     }
 }
 

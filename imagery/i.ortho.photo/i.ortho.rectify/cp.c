@@ -10,7 +10,7 @@ int get_conz_points(struct Ortho_Image_Group *group)
 	group->control_points.count = 0;
 
     sprintf(msg, _("Control Z Point file for group <%s@%s> - "),
-	    group->name, G_mapset());
+	    group->name, G_subproject());
 
     G_verbose_message(_("Computing equations..."));
 
@@ -45,7 +45,7 @@ int get_ref_points(struct Ortho_Image_Group *group)
 	exit(0);
 
     sprintf(msg, _("Reference Point file for group <%s@%s> - "),
-	    group->name, G_mapset());
+	    group->name, G_subproject());
 
     Compute_ref_equation(group);
     switch (group->ref_equation_stat) {

@@ -34,7 +34,7 @@ import wx.lib.scrolledpanel as scrolled
 
 from gui_core import gselect
 from gui_core.wrap import Button, StaticText, TextCtrl
-from location_wizard.wizard import GridBagSizerTitledPage as TitledPage
+from project_wizard.wizard import GridBagSizerTitledPage as TitledPage
 from rlisetup.functions import checkValue, retRLiPath
 from rlisetup.sampling_frame import RLiSetupMapPanel
 from grass.script import core as grass
@@ -973,7 +973,7 @@ class SamplingAreasPage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
     def OnEnterPage(self, event):
-        """Insert values into text controls for summary of location
+        """Insert values into text controls for summary of project
         creation options
         """
         self.SetVal(None)
@@ -1668,7 +1668,7 @@ class VectorAreasPage(TitledPage):
         self.outname = "{pref}{cat}".format(pref=self.outpref, cat=cat)
         # check if raster already axist
 
-        if len(grass.list_strings('raster', pattern=self.outname, mapset='.')
+        if len(grass.list_strings('raster', pattern=self.outname, subproject='.')
                ) == 1 and not self.parent.samplingareapage.overwriteTemp:
             GError(parent=self, message=_("The raster map <%s> already exists."
                                           " Please remove or rename the maps "
@@ -1842,7 +1842,7 @@ class SummaryPage(TitledPage):
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
 
     def OnEnterPage(self, event):
-        """Insert values into text controls for summary of location
+        """Insert values into text controls for summary of project
         creation options
         """
         self.conftxt.SetLabel(self.parent.startpage.conf_name)

@@ -32,39 +32,39 @@ library).
 GRASS allows the user to specify raster map names (or any other
 GIS database file) either as a simple <em>unqualified</em> name, such as
 "soils", or in case of input raster maps also as a <em>fully qualified</em> 
-name, such as "soils@mapset", where <i>mapset</i> is the mapset where the raster
+name, such as "soils@subproject", where <i>subproject</i> is the subproject where the raster
 map is to be found. Often only the unqualified raster map name is
-provided on the command line and searched in all mapsets indicated in
-the mapset search path (SEARCH_PATH file in the actual mapset; managed
-with <tt>g.mapsets</tt> command).
+provided on the command line and searched in all subprojects indicated in
+the subproject search path (SEARCH_PATH file in the actual subproject; managed
+with <tt>g.subprojects</tt> command).
 
 The following routines search the database for raster map files:
 
  - G_find_raster()
 
-Looks for the raster file in the database. If found, the mapset where
+Looks for the raster file in the database. If found, the subproject where
 the raster file lives is returned. If not found, the NULL pointer is
 returned. If the user specifies a fully qualified raster map name which
 exists, then G_find_raster() modifies <i>name</i> by removing
-the "@<I>mapset</I>".
+the "@<I>subproject</I>".
 
-For example, to find a raster map in all mapsets listed the mapset search
+For example, to find a raster map in all subprojects listed the subproject search
 path:
 
 \code
 char name[GNAME_MAX];
-char *mapset;
+char *subproject;
 
-if ((mapset = G_find_raster(name,"")) == NULL)
+if ((subproject = G_find_raster(name,"")) == NULL)
   /* not found */
 \endcode
 
-To check that the raster map exists in the current mapset:
+To check that the raster map exists in the current subproject:
 
 \code
 char name[GNAME_MAX];
 
-if (G_find_raster(name, G_mapset()) == NULL)
+if (G_find_raster(name, G_subproject()) == NULL)
   /* not found */
 \endcode
 
@@ -74,7 +74,7 @@ The following routine opens the raster map file for <em>reading</em>.
 
  - Rast_open_old()
 
-This routine opens the raster map in given mapset for reading. A
+This routine opens the raster map in given subproject for reading. A
 nonnegative file descriptor is returned if the open is
 successful. Otherwise a diagnostic message is printed and a negative
 value is returned. This routine does quite a bit of work. Since GRASS
@@ -87,7 +87,7 @@ the various raster map formats (CELL, FCELL, DCELL) is also done.
 \section Creating_and_Opening_New_Raster_Files Creating and Opening New Raster Files
 
 The following routines create a new raster map in the current
-mapset and open it for <em>writing</em>. G_legal_filename() should be
+subproject and open it for <em>writing</em>. G_legal_filename() should be
 called first to make sure that raster map name is a valid name.
 
 <b>Note:</b> It is not an error for raster map to already exist. New
@@ -295,7 +295,7 @@ GIS_Library_Data_Structures.
 
  - Rast_get_cellhd()
 
-The raster header for the raster file in the specified mapset is read
+The raster header for the raster file in the specified subproject is read
 into the Cell_head structure.
 
 <b>Note:</b> If the raster file is a reclassified, the raster header
@@ -318,7 +318,7 @@ region). It also makes projection-specific adjustments.
  - Rast_put_cellhd()
 
 This routine writes the information from the Cell_head structure to
-the raster header file for the map layer in the current mapset.
+the raster header file for the map layer in the current subproject.
 
 <b>Note:</b> Programmers should have no reason to use this routine. It
 is used by Rast_close() to give new raster files correct header
@@ -423,7 +423,7 @@ returned.
 
  - Rast_write_cats()
 
-Writes the category file for the raster file in the current mapset
+Writes the category file for the raster file in the current subproject
 from the <i>cats</i> structure. Returns 1 if successful. Otherwise, -1
 is returned (no diagnostic is printed).
 
@@ -440,7 +440,7 @@ not have a title, then a pointer to the empty string "" is returned.
 If it is only desired to change the title for a map layer, it is not
 necessary to read the entire category file into memory, change the
 title, and rewrite the category file. This routine changes the title
-for the raster file in the current mapset directly in the category
+for the raster file in the current subproject directly in the category
 file. It returns a pointer to the title.
 
 
@@ -513,7 +513,7 @@ The following routines read, create, modify, and write color tables.
 
  - Rast_read_colors()
 
-The color table for the raster file in the specified mapset is read
+The color table for the raster file in the specified subproject is read
 into the <em>colors</em> structure. If the data layer has no color
 table, a default color table is generated and 0 is returned. If there
 is an error reading the color table, a diagnostic message is printed
@@ -522,7 +522,7 @@ and -1 is returned. If the color table is read ok, 1 is returned.
  - Rast_write_colors()
 
 Write map layer color table. The color table is written for the raster
-file in the specified mapset from the <em>colors</em> structure. If
+file in the specified subproject from the <em>colors</em> structure. If
 there is an error, -1 is returned. No diagnostic is
 printed. Otherwise, 1 is returned.
 
@@ -531,16 +531,16 @@ Rast_init_colors() to initialize the structure and Rast_add_color_rule() to
 set the category colors.
 
 <b>Note:</b> The calling sequence for this function deserves special
-attention. The <em>mapset</em> parameter seems to imply that it is
+attention. The <em>subproject</em> parameter seems to imply that it is
 possible to overwrite the color table for a raster file which is in
-another mapset. However, this is not what actually happens. It is very
+another subproject. However, this is not what actually happens. It is very
 useful for users to create their own color tables for raster files in
-other mapsets, but without overwriting other users' color tables for
-the same raster file. If <em>mapset</em> is the current mapset, then
+other subprojects, but without overwriting other users' color tables for
+the same raster file. If <em>subproject</em> is the current subproject, then
 the color file for <em>name</em> will be overwritten by the new color
-table. But if <em>mapset</em> is not the current mapset, then the
-color table is actually written in the current mapset under the
-<tt>colr2</tt> element as: <tt>colr2/mapset/name</tt>.
+table. But if <em>subproject</em> is not the current subproject, then the
+color table is actually written in the current subproject under the
+<tt>colr2</tt> element as: <tt>colr2/subproject/name</tt>.
 
 
 \section Lookup_Up_Raster_Colors Lookup Up Raster Colors
@@ -712,7 +712,7 @@ raster map into the History structure.
  - Rast_write_history()
 
 Writes raster history file. This routine writes the history file for
-the raster map in the current mapset from the History structure.
+the raster map in the current subproject from the History structure.
 
 <b>Note:</b> The History structure should first be
 initialized using Rast_short_history().
@@ -744,7 +744,7 @@ file. Otherwise, 0 is returned.
  - Rast_write_range()
 
 Write raster range file. This routine writes the range information for
-the raster map in the current mapset from the <i>range</i>
+the raster map in the current subproject from the <i>range</i>
 structure. A diagnostic message is printed and -1 is returned if there
 is an error writing the range file. Otherwise, 0 is returned.
 
@@ -998,7 +998,7 @@ Returns the storage type for raster map:
 
  - Rast_open_new()
 
-Creates new raster map in the current mapset. Calls G_open_map_new()
+Creates new raster map in the current subproject. Calls G_open_map_new()
 for raster type <tt>CELL_TYPE</tt>, G_open_fp_map_new() for
 floating-point raster map. The use of this routine by applications is
 discouraged since its use would override user preferences (what
@@ -1558,11 +1558,11 @@ New functions to support quantization of floating-point to integer:
  - Rast_write_quant()
 
 Writes the <tt>f_quant</tt> file for the raster map. If
-mapset==Rast_mapset() i.e. the map is in current mapset, then the
+subproject==Rast_subproject() i.e. the map is in current subproject, then the
 original quant file in <tt>cell_misc/map/f_quant</tt> is
-written. Othewise is written into <tt>quant2/mapset/name</tt> (much
-like colr2 element). This results in map&#64;mapset being read using
-quant rules stored Rast_mapset(). See Rast_read_quant() for detailes.
+written. Othewise is written into <tt>quant2/subproject/name</tt> (much
+like colr2 element). This results in map&#64;subproject being read using
+quant rules stored Rast_subproject(). See Rast_read_quant() for detailes.
 
  - Rast_set_quant_rules()
 
@@ -1574,8 +1574,8 @@ to convert floats to ints.
  - Rast_read_quant()
 
 Reads quantization rules for raster map and stores them in the
-quantization structure. If the map is in another mapset, first checks
-for quant2 table for this map in current mapset.
+quantization structure. If the map is in another subproject, first checks
+for quant2 table for this map in current subproject.
 
  - Rast_quant_init()
 
@@ -1921,7 +1921,7 @@ in the <tt>Makefile</tt>.
 
 <b>TODO: Reorder functions</b>
 
-\subsection MemoryAllocation Memory allocation
+\subsection MemoryAlproject Memory alproject
  - Rast_allocate_c_buf()
  - Rast_allocate_f_buf()
  - Rast_allocate_d_buf()

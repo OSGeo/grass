@@ -43,7 +43,7 @@ class RasterRowTestCase(TestCase):
         r = RasterRow(self.name)
         r.open(mode='r')
         self.assertEqual(r.name, self.name)
-        fullname = "{name}@{mapset}".format(name=r.name, mapset=r.mapset)
+        fullname = "{name}@{subproject}".format(name=r.name, subproject=r.subproject)
         self.assertEqual(r.fullname(), fullname)
         r.close()
 

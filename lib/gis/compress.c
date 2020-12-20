@@ -32,7 +32,7 @@
  *     unsigned char *dst;                                          *
  * ---------------------------------------------------------------- *
  * This is the basic function for reading a compressed chunk of a   *
- * data file.  The file descriptor should be in the proper location *
+ * data file.  The file descriptor should be in the proper project *
  * and the 'dst' array should have enough space for the data.       *
  * 'nbytes' is the size of 'dst'.  The 'rbytes' parameter is the    *
  * number of bytes to read (knowable from the offsets index). For   *
@@ -45,7 +45,7 @@
  *        -1  -- Error Reading or Decompressing data.               *
  *        -2  -- Not enough space in dst.  You must make dst larger *
  *               and then call the function again (remembering to   *
- *               reset the file descriptor to it's proper location. *
+ *               reset the file descriptor to it's proper project. *
  *                                                                  *
  * ================================================================ *
  * int                                                              *
@@ -55,7 +55,7 @@
  * ---------------------------------------------------------------- *
  * This is the basic function for writing and compressing a data    *
  * chunk to a file.  The file descriptor should be in the correct   *
- * location prior to this call. The function will compress 'nbytes' *
+ * project prior to this call. The function will compress 'nbytes' *
  * of 'src' and write it to the file 'fd'.  Returns the number of   *
  * bytes written or an error code:                                  *
  *                                                                  *

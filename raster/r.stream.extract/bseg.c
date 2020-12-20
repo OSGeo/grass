@@ -11,7 +11,7 @@ int bseg_open(BSEG *bseg, int srows, int scols, int nsegs_in_memory)
     bseg->filename = NULL;
     bseg->fd = -1;
     bseg->name = NULL;
-    bseg->mapset = NULL;
+    bseg->subproject = NULL;
 
     filename = G_tempfile();
     if (0 > (errflag = Segment_open(&(bseg->seg), filename, Rast_window_rows(),
@@ -56,9 +56,9 @@ int bseg_close(BSEG *bseg)
 	G_free(bseg->name);
 	bseg->name = NULL;
     }
-    if (bseg->mapset) {
-	G_free(bseg->mapset);
-	bseg->mapset = NULL;
+    if (bseg->subproject) {
+	G_free(bseg->subproject);
+	bseg->subproject = NULL;
     }
     return 0;
 }
@@ -91,7 +91,7 @@ int bseg_get(BSEG *bseg, char *value, GW_LARGE_INT row, GW_LARGE_INT col)
 }
 
 
-int bseg_read_raster(BSEG *bseg, char *map_name, char *mapset)
+int bseg_read_raster(BSEG *bseg, char *map_name, char *subproject)
 {
     int row, rows;
     int col, cols;
@@ -100,9 +100,9 @@ int bseg_read_raster(BSEG *bseg, char *map_name, char *mapset)
     char cbuf;
 
     bseg->name = NULL;
-    bseg->mapset = NULL;
+    bseg->subproject = NULL;
 
-    map_fd = Rast_open_old(map_name, mapset);
+    map_fd = Rast_open_old(map_name, subproject);
     rows = Rast_window_rows();
     cols = Rast_window_cols();
     buffer = Rast_allocate_c_buf();
@@ -118,7 +118,7 @@ int bseg_read_raster(BSEG *bseg, char *map_name, char *mapset)
     G_free(buffer);
 
     bseg->name = G_store(map_name);
-    bseg->mapset = G_store(mapset);
+    bseg->subproject = G_store(subproject);
 
     return 0;
 }

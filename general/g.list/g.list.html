@@ -22,7 +22,7 @@ fully-qualified map names):
 g.list type=vector -m
 </pre></div>
 
-List all raster and vector maps ordered by mapset:
+List all raster and vector maps ordered by subproject:
 <div class="code"><pre>
 g.list type=raster -p
 </pre></div>
@@ -37,47 +37,47 @@ List all available GRASS data base files:
 g.list type=all
 </pre></div>
 
-<h3>Mapset search path</h3>
+<h3>Subproject search path</h3>
 
-If <b>mapset</b> is not specified, then <em>g.list</em> searches for
-data files in the mapsets that are included in the search path
-(defined by <em><a href="g.mapsets.html">g.mapsets</a></em>).
-See <tt>g.mapsets -p</tt>.
+If <b>subproject</b> is not specified, then <em>g.list</em> searches for
+data files in the subprojects that are included in the search path
+(defined by <em><a href="g.subprojects.html">g.subprojects</a></em>).
+See <tt>g.subprojects -p</tt>.
 
 <div class="code"><pre>
 g.list rast -p
 
-raster map(s) available in mapset &lt;user1&gt;:
+raster map(s) available in subproject &lt;user1&gt;:
 dmt
 ...
-raster map(s) available in mapset &lt;PERMANENT&gt;:
+raster map(s) available in subproject &lt;PERMANENT&gt;:
 aspect
 ...
 </pre></div>
 
-Option <b>mapset</b>=. (one dot) lists only data files from
-the current mapset:
+Option <b>subproject</b>=. (one dot) lists only data files from
+the current subproject:
 
 <div class="code"><pre>
-g.list rast mapset=.
+g.list rast subproject=.
 ...
 </pre></div>
 
 <!-- better quote * as "*"? -->
-Similarly, <b>mapset</b>=* (one asterisk) prints data files from all
-available mapsets also including those that are not listed in the
-current search path (see <tt>g.mapsets -l</tt>).
+Similarly, <b>subproject</b>=* (one asterisk) prints data files from all
+available subprojects also including those that are not listed in the
+current search path (see <tt>g.subprojects -l</tt>).
 
 <div class="code"><pre>
-g.list rast mapset=* -p
+g.list rast subproject=* -p
 
-raster map(s) available in mapset &lt;landsat&gt;:
+raster map(s) available in subproject &lt;landsat&gt;:
 lsat5_1987_10
 ...
-raster map(s) available in mapset &lt;user1&gt;:
+raster map(s) available in subproject &lt;user1&gt;:
 dmt
 ...
-raster map(s) available in mapset &lt;PERMANENT&gt;:
+raster map(s) available in subproject &lt;PERMANENT&gt;:
 aspect
 ...
 </pre></div>
@@ -107,20 +107,20 @@ g.list type=raster pattern="N45E00?.meters"
 Use of <b>exclude</b> parameter:
 <div class="code"><pre>
 # without exclude:
-  g.list rast pat="r*" mapset=PERMANENT
+  g.list rast pat="r*" subproject=PERMANENT
   railroads
   roads
   rstrct.areas
   rushmore
 
 # exclude only complete word(s):
-  g.list rast pat="r*" exclude=roads mapset=PERMANENT
+  g.list rast pat="r*" exclude=roads subproject=PERMANENT
   railroads
   rstrct.areas
   rushmore
 
 # exclude with wildcard:
-  g.list rast pat="r*" exclude="*roads*" mapset=PERMANENT
+  g.list rast pat="r*" exclude="*roads*" subproject=PERMANENT
   rstrct.areas
   rushmore
 </pre></div>
@@ -172,7 +172,7 @@ g.list -r type=vector pattern='^tmp[0-9]$' region=.
 </pre></div>
 
 List all raster and vector maps whose region overlaps with the default region
-of the PERMANENT mapset in the current location (DEFAULT_WIND):
+of the PERMANENT subproject in the current project (DEFAULT_WIND):
 <div class="code"><pre>
 g.list type=rast,vect region=*
 </pre></div>

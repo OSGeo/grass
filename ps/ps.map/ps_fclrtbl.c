@@ -44,10 +44,10 @@ int PS_fcolortable(void)
 
     /* let user know what's happenning */
     G_message(_("Creating color table for <%s in %s>..."),
-	      ct.name, ct.mapset);
+	      ct.name, ct.subproject);
 
     /* Get color range */
-    if (Rast_read_fp_range(ct.name, ct.mapset, &range) == -1) {
+    if (Rast_read_fp_range(ct.name, ct.subproject, &range) == -1) {
 	G_warning(_("Range information not available (run r.support)"));
 	return 1;
     }
@@ -65,7 +65,7 @@ int PS_fcolortable(void)
 	return 1;
     }
 
-    if (Rast_read_colors(ct.name, ct.mapset, &colors) == -1)
+    if (Rast_read_colors(ct.name, ct.subproject, &colors) == -1)
 	G_warning(_("Unable to read colors for colorbar"));
 
     do_color = (PS.grey == 0 && PS.level == 2);
@@ -75,7 +75,7 @@ int PS_fcolortable(void)
     set_font_size(ct.fontsize);
     set_ps_color(&ct.color);
 
-    /* set colortable location,  */
+    /* set colortable project,  */
     /* if height and width are not given, calculate defaults */
     if (ct.width <= 0)
 	ct.width = 2 * ct.fontsize / 72.0;
@@ -94,23 +94,23 @@ int PS_fcolortable(void)
 
     /* reset position to get at least something in BBox */
     if (ct.y < PS.top_marg) {	/* higher than top margin */
-	G_warning(_("Colorbar y location beyond page margins. Adjusting."));
+	G_warning(_("Colorbar y project beyond page margins. Adjusting."));
 	ct.y = PS.top_marg + 0.1;
     }
     else if (ct.y > PS.page_height - PS.bot_marg) {
 	/* lower than bottom margin - simply move one inch up from bottom margin */
-	G_warning(_("Colorbar y location beyond page margins. Adjusting."));
+	G_warning(_("Colorbar y project beyond page margins. Adjusting."));
 	ct.y = PS.page_height - PS.bot_marg - 1;
     }
     t = 72.0 * (PS.page_height - ct.y);
 
     if (ct.x < PS.left_marg) {
-	G_warning(_("Colorbar x location beyond page margins. Adjusting."));
+	G_warning(_("Colorbar x project beyond page margins. Adjusting."));
 	ct.x = PS.left_marg + 0.1;
     }
     else if (ct.x > PS.page_width - PS.right_marg) {
 	/* move 1 inch to the left from right marg */
-	G_warning(_("Colorbar x location beyond page margins. Adjusting."));
+	G_warning(_("Colorbar x project beyond page margins. Adjusting."));
 	ct.x = PS.page_width - PS.right_marg - 1;
     }
     l = 72.0 * ct.x;
@@ -311,7 +311,7 @@ int PS_fcolortable(void)
 
 
     /* print units label, if present */
-    units = Rast_read_units(ct.name, ct.mapset);
+    units = Rast_read_units(ct.name, ct.subproject);
     if (!units)
         units = "";
 

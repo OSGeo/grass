@@ -45,7 +45,7 @@ class TestRasterExtraction(TestCase):
     def setUp(self):
         """Create input data for transient groundwater flow computation
         """
-        # Use always the current mapset as temporal database
+        # Use always the current subproject as temporal database
         self.runModule("r.mapcalc", expression="prec_1 = 100",  overwrite=True)
         self.runModule("r.mapcalc", expression="prec_2 = 200",  overwrite=True)
         self.runModule("r.mapcalc", expression="prec_3 = 300",  overwrite=True)

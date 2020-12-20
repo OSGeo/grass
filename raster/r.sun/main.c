@@ -101,7 +101,7 @@ const char *insol_time = NULL;
 const char *diff_rad = NULL;
 const char *refl_rad = NULL;
 const char *glob_rad = NULL;
-const char *mapset = NULL;
+const char *subproject = NULL;
 const char *per;
 
 size_t decimals;
@@ -790,15 +790,15 @@ int main(int argc, char *argv[])
 
 	if ((in_proj_info = G_get_projinfo()) == NULL)
 	    G_fatal_error(
-		_("Can't get projection info of current location"));
+		_("Can't get projection info of current project"));
 
 	if ((in_unit_info = G_get_projunits()) == NULL)
 	    G_fatal_error(
-		_("Can't get projection units of current location"));
+		_("Can't get projection units of current project"));
 
 	if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
 	    G_fatal_error(
-		_("Can't get projection key values of current location"));
+		_("Can't get projection key values of current project"));
 
 	G_free_key_value(in_proj_info);
 	G_free_key_value(in_unit_info);
@@ -811,7 +811,7 @@ int main(int argc, char *argv[])
     }
 
     if ((latin != NULL || longin != NULL) && (G_projection() == PROJECTION_LL))
-	G_warning(_("latin and longin raster maps have no effect when in a Lat/Lon location"));
+	G_warning(_("latin and longin raster maps have no effect when in a Lat/Lon project"));
 	/* true about longin= when civiltime is used? */
 	/* civiltime needs longin= but not latin= for non-LL projections -
 	     better would be it just use pj_proj() if it needs those?? */
@@ -976,10 +976,10 @@ int INPUT_part(int offset, double *zmax)
 	 * 
 	 * horizonbuf[0]=Rast_allocate_f_buf();
 	 * sprintf(shad_filename, "%s_%02d", horizon, arrayNumInt);
-	 * if((mapset=G_find_raster2(shad_filename,""))==NULL)
+	 * if((subproject=G_find_raster2(shad_filename,""))==NULL)
 	 * G_message("Horizon file no. %d not found\n", arrayNumInt);
 	 * 
-	 * fd_shad[0] = Rast_open_old(shad_filename,mapset);
+	 * fd_shad[0] = Rast_open_old(shad_filename,subproject);
 	 * }
 	 * else
 	 * {
@@ -1837,7 +1837,7 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 	}
 	sunVarGeom.zmax = zmax;
         shadowoffset_base = (j % (numRows)) * n * arrayNumInt;
-    #pragma omp parallel firstprivate(q1,tan_lam_l,z1,i,shadowoffset,longitTime,coslat,coslatsq,func,latitude,longitude,sin_phi_l,latid_l,sin_u,cos_u,sin_v,cos_v,lum, gridGeom,sunGeom,sunVarGeom,sunSlopeGeom,sunRadVar, elevin,aspin,slopein,civiltime,linkein,albedo,latin,coefbh,coefdh,incidout,longin,horizon,beam_rad,insol_time,diff_rad,refl_rad,glob_rad,mapset,per,decimals,str_step )
+    #pragma omp parallel firstprivate(q1,tan_lam_l,z1,i,shadowoffset,longitTime,coslat,coslatsq,func,latitude,longitude,sin_phi_l,latid_l,sin_u,cos_u,sin_v,cos_v,lum, gridGeom,sunGeom,sunVarGeom,sunSlopeGeom,sunRadVar, elevin,aspin,slopein,civiltime,linkein,albedo,latin,coefbh,coefdh,incidout,longin,horizon,beam_rad,insol_time,diff_rad,refl_rad,glob_rad,subproject,per,decimals,str_step )
     {
       #pragma omp for schedule(dynamic) 
 	for (i = 0; i < n; i++) {

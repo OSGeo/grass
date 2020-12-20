@@ -62,7 +62,7 @@ dbDriver *db_start_driver(const char *name)
      * This is necessary when application is running without GISRC file and all
      * gis variables are set by application. 
      * Even if GISRC is set, application may change some variables during runtime,
-     * if for example reads data from different gdatabase, location or mapset*/
+     * if for example reads data from different gdatabase, project or subproject*/
 
     /* setenv() is not portable, putenv() is POSIX, putenv() in glibc 2.0-2.1.1 doesn't conform to SUSv2,
      * G_putenv() as well, but that is what we want, makes a copy of string */

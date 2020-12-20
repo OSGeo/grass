@@ -10,9 +10,9 @@ int cseg_close(CSEG * cseg)
 	G_free(cseg->name);
 	cseg->name = NULL;
     }
-    if (cseg->mapset) {
-	G_free(cseg->mapset);
-	cseg->mapset = NULL;
+    if (cseg->subproject) {
+	G_free(cseg->subproject);
+	cseg->subproject = NULL;
     }
     return 0;
 }

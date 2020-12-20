@@ -11,7 +11,7 @@
  *               Hamish Bowman <hamish_b yahoo.com>, 
  *               Jan-Oliver Wagner <jan intevation.de>, 
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>
- * PURPOSE:      interactive query of location in active display
+ * PURPOSE:      interactive query of project in active display
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("querying"));
     module->description =
 	_("Identifies the geographic coordinates associated with "
-	  "point locations given in display coordinates.");
+	  "point projects given in display coordinates.");
 
     coords = G_define_option();
     coords->key = "at";
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
     wgs84->key = 'w';
     wgs84->description =
 	_("Output lat/long referenced to WGS84 ellipsoid using datum "
-	  "transformation parameters defined in current location (if available)");
+	  "transformation parameters defined in current project (if available)");
 
     dcoord = G_define_flag();
     dcoord->key = 'f';
@@ -104,13 +104,13 @@ int main(int argc, char **argv)
 
 	/* read current projection info */
 	if ((in_proj_info = G_get_projinfo()) == NULL)
-	    G_fatal_error(_("Can't get projection info of current location"));
+	    G_fatal_error(_("Can't get projection info of current project"));
 
 	if ((in_unit_info = G_get_projunits()) == NULL)
-	    G_fatal_error(_("Can't get projection units of current location"));
+	    G_fatal_error(_("Can't get projection units of current project"));
 
 	if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
-	    G_fatal_error(_("Can't get projection key values of current location"));
+	    G_fatal_error(_("Can't get projection key values of current project"));
 
 	if (wgs84->answer) {
 	    struct Key_Value *out_proj_info, *out_unit_info;
@@ -121,13 +121,13 @@ int main(int argc, char **argv)
 	    /* set output projection to lat/long */
 	    G_set_key_value("proj", "ll", out_proj_info);
 
-	    /* Check that datumparams are defined for this location (otherwise
+	    /* Check that datumparams are defined for this project (otherwise
 	     * the WGS84 values would be meaningless), and if they are set the 
 	     * output datum to WGS84 */
 #if PROJ_VERSION_MAJOR < 6
 	    /* PROJ6+ has its own datum transformation parameters */
 	    if (G_get_datumparams_from_projinfo(in_proj_info, buff, dum) < 0)
-		G_fatal_error(_("WGS84 output not possible as this location does not contain\n"
+		G_fatal_error(_("WGS84 output not possible as this project does not contain\n"
 			       "datum transformation parameters. Try running g.setproj."));
 	    else
 #endif

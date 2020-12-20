@@ -61,7 +61,7 @@ int main(int argc, char **argv)
     struct Option *width, *depth;
     struct Flag *noflat;
 
-    const char *vmapset, *rmapset;
+    const char *vsubproject, *rsubproject;
     int infd, outfd;
     struct Map_info Map;
     struct Map_info outMap;
@@ -154,17 +154,17 @@ int main(int argc, char **argv)
     parm.noflat = noflat->answer;
 
     /* open input files */
-    if ((vmapset = G_find_vector2(parm.invect->answer, "")) == NULL)
+    if ((vsubproject = G_find_vector2(parm.invect->answer, "")) == NULL)
 	G_fatal_error(_("Vector map <%s> not found"), parm.invect->answer);
 
     Vect_set_open_level(2);
-    if (Vect_open_old(&Map, parm.invect->answer, vmapset) < 0)
+    if (Vect_open_old(&Map, parm.invect->answer, vsubproject) < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), parm.invect->answer);
 
-    if ((rmapset = G_find_file2("cell", parm.inrast->answer, "")) == NULL)
+    if ((rsubproject = G_find_file2("cell", parm.inrast->answer, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), parm.inrast->answer);
 
-    infd = Rast_open_old(parm.inrast->answer, rmapset);
+    infd = Rast_open_old(parm.inrast->answer, rsubproject);
 
     parm.raster_type = Rast_get_map_type(infd);
 
@@ -210,7 +210,7 @@ static int init_projection(struct Cell_head *window, int *wrap_ncols)
 	*wrap_ncols =
 	    (360.0 - (window->east - window->west)) / window->ew_res + 1.1;
 #else
-	G_fatal_error(_("Lat/Long location is not supported by %s. Please reproject map first."),
+	G_fatal_error(_("Lat/Long project is not supported by %s. Please reproject map first."),
 		      G_program_name());
 #endif
     }

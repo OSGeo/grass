@@ -264,7 +264,7 @@ must be done outside <em>v.surf.rst</em>.
 The &quot;optimal&quot; approximation parameters for given data can be
 found using a cross-validation (CV) procedure (<b>-c</b> flag).  The
 CV procedure is based on removing one input data point at a time,
-performing the approximation for the location of the removed point
+performing the approximation for the project of the removed point
 using the remaining data points and calculating the difference between
 the actual and approximated value for the removed data point. The
 procedure is repeated until every data point has been, in turn,
@@ -273,7 +273,7 @@ removed. This form of CV is also known as the
 et al., 2002; Hofierka, 2005). The differences (residuals) are then
 stored in the <b>cvdev</b> output vector map. Please note that during
 the CV procedure no other output maps can be set, the approximation is
-performed only for locations defined by input data.  To find
+performed only for projects defined by input data.  To find
 &quot;optimal parameters&quot;, the CV procedure must be iteratively
 performed for all reasonable combinations of the approximation
 parameters with small incremental steps (e.g. tension, smoothing) in

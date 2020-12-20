@@ -4,7 +4,7 @@
 BIN_DIST_FILES = $(FILES) \
 	$(GRASS_NAME).tmp \
 	bin \
-	demolocation \
+	demoproject \
 	docs \
 	driver \
 	etc \
@@ -92,7 +92,7 @@ STARTUP = $(UNIX_BIN)/$(GRASS_NAME)
 endif
 
 FONTCAP = etc/fontcap
-TMPGISRC = demolocation/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
+TMPGISRC = demoproject/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
 PLATMAKE = include/Make/Platform.make
 GRASSMAKE = include/Make/Grass.make
 
@@ -199,7 +199,7 @@ srcdist: distclean
 	-mv ./grass-$(GRASS_VERSION_NUMBER)/debian .
 	@ #we use -h to get the linked files into as real files:
 	tar cvfzh grass-$(GRASS_VERSION_NUMBER).tar.gz ./grass-$(GRASS_VERSION_NUMBER)/* --exclude=.git
-	@ # restore src code location:
+	@ # restore src code project:
 	-mv ./grass-$(GRASS_VERSION_NUMBER)/* .
 	-rmdir ./grass-$(GRASS_VERSION_NUMBER)
 	@ echo "Distribution source package: grass-$(GRASS_VERSION_NUMBER).tar.gz ready. Calculating MD5 sum..."
@@ -212,7 +212,7 @@ srclibsdist: distclean
 	@ # needed to store code in package with grass-version path:
 	-cp -L * ./grass-lib-$(GRASS_VERSION_NUMBER)
 	-cp -rL tools ./grass-lib-$(GRASS_VERSION_NUMBER)
-	-cp -rL demolocation ./grass-lib-$(GRASS_VERSION_NUMBER)
+	-cp -rL demoproject ./grass-lib-$(GRASS_VERSION_NUMBER)
 	-cp -rL include ./grass-lib-$(GRASS_VERSION_NUMBER)
 	-cp -rL --parents lib/external/shapelib ./grass-lib-$(GRASS_VERSION_NUMBER)
 	-cp -rL --parents lib/external/bwidget ./grass-lib-$(GRASS_VERSION_NUMBER)

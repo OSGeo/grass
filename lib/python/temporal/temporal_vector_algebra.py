@@ -53,7 +53,7 @@ import grass.pygrass.modules as pygrass
 
 import copy
 from .temporal_algebra import TemporalAlgebraLexer, TemporalAlgebraParser, GlobalTemporalVar
-from .core import init_dbif, get_current_mapset
+from .core import init_dbif, get_current_subproject
 from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
 from .open_stds import open_new_stds
 from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
@@ -281,8 +281,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                     # Generate an intermediate name
                     name = self.generate_map_name()
                     # Put it into the removalbe map list
-                    self.removable_maps[name] = VectorDataset(name + "@%s" % (self.mapset))
-                    map_i.set_id(name + "@" + self.mapset)
+                    self.removable_maps[name] = VectorDataset(name + "@%s" % (self.subproject))
+                    map_i.set_id(name + "@" + self.subproject)
                     # Set second input for overlay module.
                     mapbinput = relationmap.get_id()
                     # Create module command in PyGRASS for v.overlay and v.patch.
@@ -383,7 +383,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                 for i in range(num):
                     # Check if resultmap names exist in GRASS database.
                     vectorname = self.basename + "_" + str(i).zfill(leadzero)
-                    vectormap = VectorDataset(vectorname + "@" + get_current_mapset())
+                    vectormap = VectorDataset(vectorname + "@" + get_current_subproject())
                     if vectormap.map_exists() and self.overwrite is False:
                         self.msgr.fatal(_("Error vector maps with basename %s exist. "
                                           "Use --o flag to overwrite existing file")
@@ -400,7 +400,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                                                  cmd.inputs["binput"].value):
                                         #self.msgr.message("Check if map <" + name + "> exists")
                                         if name.find("@") < 0:
-                                            name = name + "@" + get_current_mapset()
+                                            name = name + "@" + get_current_subproject()
                                         tmp_map = map_i.get_new_instance(name)
                                         if not tmp_map.map_exists():
                                             raise Exception
@@ -425,7 +425,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             if mapname.find("@") >= 0:
                                 map_test = map_i.get_new_instance(mapname)
                             else:
-                                map_test = map_i.get_new_instance(mapname + "@" + self.mapset)
+                                map_test = map_i.get_new_instance(mapname + "@" + self.subproject)
                             if not map_test.map_exists():
                                 returncode = 1
                                 break
@@ -433,14 +433,14 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             # We remove the invalid vector name from the remove list.
                             if map_i.get_name() in self.removable_maps:
                                 self.removable_maps.pop(map_i.get_name())
-                            mapset = map_i.get_mapset()
+                            subproject = map_i.get_subproject()
                             # Change map name to given basename.
                             newident = self.basename + "_" + str(count).zfill(leadzero)
                             m = copy.deepcopy(self.m_rename)
                             m.inputs["vector"].value = (map_i.get_name(),newident)
                             m.flags["overwrite"].value = self.overwrite
                             m.run()
-                            map_i.set_id(newident + "@" + mapset)
+                            map_i.set_id(newident + "@" + subproject)
                             count += 1
                             register_list.append(map_i)
                     else:
@@ -453,7 +453,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                         if map_test_extent != map_i_extent:
                             # Create new map with basename
                             newident = self.basename + "_" + str(count).zfill(leadzero)
-                            map_result = map_i.get_new_instance(newident + "@" + self.mapset)
+                            map_result = map_i.get_new_instance(newident + "@" + self.subproject)
 
                             if map_test.map_exists() and self.overwrite is False:
                                 self.msgr.fatal("Error raster maps with basename %s exist. "

@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.walk</em> computes anisotropic cumulative cost of moving between
-different geographic locations on an input elevation raster map whose
+different geographic projects on an input elevation raster map whose
 cell category values represent elevation combined with an input raster
 map layer whose cell values represent friction cost.
 
@@ -73,7 +73,7 @@ total cost = movement time cost + lambda * friction costs * delta_S
 <p>
 For a more accurate result, the "knight's move" option can be used
 (although it is more time consuming). In the diagram below, the center
-location (O) represents a grid cell from which cumulative distances
+project (O) represents a grid cell from which cumulative distances
 are calculated. Those neighbours marked with an x are always
 considered for cumulative cost updates. With the "knight's move"
 option, the neighbours marked with a K are also considered.

@@ -60,22 +60,22 @@ file contains names separated by spaces in following order ([ ] -
 optional):
 
 \verbatim
-map[@mapset] layer table [key [database [driver]]]
+map[@subproject] layer table [key [database [driver]]]
 \endverbatim
 
 If key, database or driver are omitted (on second and higher row only)
 the last definition is used. When reading a vector map from another
-mapset (if mapset is specified along with map name), definitions in
+subproject (if subproject is specified along with map name), definitions in
 the related "dbln" file may overwrite the DBMI definition in the
-current mapset. This means that the map-wise definition is always
+current subproject. This means that the map-wise definition is always
 "stronger".
 
-Wild cards <b>*</b> and <b>?</b> may be used in map and mapset names.
+Wild cards <b>*</b> and <b>?</b> may be used in map and subproject names.
 
 Variables $GISDBASE, $LOCATION_NAME, $MAPSET, and $MAP may be used in
 table, key, database and driver names (function
-Vect_subst_var()). Note that $MAPSET is not the current mapset but
-mapset of the map the rule is defined for.
+Vect_subst_var()). Note that $MAPSET is not the current subproject but
+subproject of the map the rule is defined for.
 
 Note that vector features in GRASS vector maps may have attributes in
 different tables or may be without attributes. Boundaries form areas
@@ -109,7 +109,7 @@ called "id".
 * 1 $MAP id $GISDBASE/$LOCATION_NAME/$MAPSET/dbf dbf
 \endverbatim 
 
-Similar as above but all dbf files are in one directory dbf/ in mapset
+Similar as above but all dbf files are in one directory dbf/ in subproject
 and names of dbf files are $MAP.dbf
 
 \verbatim
@@ -130,7 +130,7 @@ water@PERMANENT 1 myrivers id /home/guser/mydbf dbf
 \endverbatim
 
 This definion overwrites the definition saved in PERMANENT/VAR and
-links the water map from PERMANENT mapset to the user's table.
+links the water map from PERMANENT subproject to the user's table.
 
 Modules should be written so that connections to databases for each
 vector layer are independent. It should be possible to read attributes

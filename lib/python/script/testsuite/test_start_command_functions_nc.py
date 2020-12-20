@@ -1,4 +1,4 @@
-"""Tests of start_command function family in nc location"""
+"""Tests of start_command function family in nc project"""
 
 LOCATION = 'nc'
 

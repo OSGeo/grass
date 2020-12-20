@@ -11,12 +11,12 @@ is sufficient to define the connection (see next step).
 <h2>Connecting GRASS to SQLite</h2>
 
 The database name 'sqlite.db' is at user's choice.
-Also the file storage location can be freely chosen. If the database
+Also the file storage project can be freely chosen. If the database
 does not exist, it will be automatically created when database content
 is created:
 
 <div class="code"><pre>
-# example for storing DB in mapset directory (keep single quotes):
+# example for storing DB in subproject directory (keep single quotes):
 db.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 db.connect -p
 </pre></div>
@@ -35,7 +35,7 @@ All SQL operators supported by SQLite.
 <h2>Browsing table data in DB</h2>
 
 A convenient SQLite front-end is <a href="http://sqlitebrowser.sourceforge.net/">sqlitebrowser</a>.
-To open a DB file stored within the current mapset,
+To open a DB file stored within the current subproject,
 the following way is suggested (corresponds to above database connection):
 
 <div class="code"><pre>

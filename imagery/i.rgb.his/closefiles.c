@@ -15,31 +15,31 @@ int closefiles(char *h_name, char *i_name, char *s_name,
     struct Range range;
     struct History history;
     CELL min, max;
-    const char *mapset;
+    const char *subproject;
 
     for (i = 0; i < 3; i++) {
 	Rast_close(fd_output[i]);
 	G_free(rowbuf[i]);
     }
 
-    mapset = G_mapset();
+    subproject = G_subproject();
 
     /* write colors */
     /*   set to 0,max_level instead of min,max ?? */
-    Rast_read_range(h_name, mapset, &range);
+    Rast_read_range(h_name, subproject, &range);
     Rast_get_range_min_max(&range, &min, &max);
     Rast_make_grey_scale_colors(&colors, min, max);
-    Rast_write_colors(h_name, mapset, &colors);
+    Rast_write_colors(h_name, subproject, &colors);
 
-    Rast_read_range(i_name, mapset, &range);
+    Rast_read_range(i_name, subproject, &range);
     Rast_get_range_min_max(&range, &min, &max);
     Rast_make_grey_scale_colors(&colors, min, max);
-    Rast_write_colors(i_name, mapset, &colors);
+    Rast_write_colors(i_name, subproject, &colors);
 
-    Rast_read_range(s_name, mapset, &range);
+    Rast_read_range(s_name, subproject, &range);
     Rast_get_range_min_max(&range, &min, &max);
     Rast_make_grey_scale_colors(&colors, min, max);
-    Rast_write_colors(s_name, mapset, &colors);
+    Rast_write_colors(s_name, subproject, &colors);
 
     /* write metadata */
     Rast_short_history(h_name, "raster", &history);

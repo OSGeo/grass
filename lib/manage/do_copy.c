@@ -26,13 +26,13 @@
 
   \param n   element id
   \param old source name
-  \param mapset name of source mapset
+  \param subproject name of source subproject
   \param new destination name
 
   \return 0 on success
   \return 1 on error
 */
-int M_do_copy(int n, const char *old, const char *mapset, const char *new)
+int M_do_copy(int n, const char *old, const char *subproject, const char *new)
 {
     int i, ret;
     char path[GPATH_MAX], path2[GPATH_MAX];
@@ -40,32 +40,32 @@ int M_do_copy(int n, const char *old, const char *mapset, const char *new)
 
     G_debug(3, "Copy %s", list[n].alias);
 
-    G_message(_("Copying %s <%s> to current mapset as <%s>"),
-	      list[n].maindesc, G_fully_qualified_name(old, mapset), new);
+    G_message(_("Copying %s <%s> to current subproject as <%s>"),
+	      list[n].maindesc, G_fully_qualified_name(old, subproject), new);
 
     M__hold_signals(1);
     if (G_strcasecmp(list[n].alias, "vector") == 0) {
-	ret = Vect_copy(old, mapset, new);
+	ret = Vect_copy(old, subproject, new);
 	if (ret == -1) {
-	    G_warning(_("Unable to copy <%s> to current mapset as <%s>"),
-		      G_fully_qualified_name(old, mapset), new);
+	    G_warning(_("Unable to copy <%s> to current subproject as <%s>"),
+		      G_fully_qualified_name(old, subproject), new);
 	    result = 1;
 	}
     }
     else {
 	for (i = 0; i < list[n].nelem; i++) {
-	    G_make_mapset_element(list[n].element[i]);
-	    G_file_name(path, list[n].element[i], old, mapset);
+	    G_make_subproject_element(list[n].element[i]);
+	    G_file_name(path, list[n].element[i], old, subproject);
 	    if (access(path, 0) != 0) {
 		G_remove(list[n].element[i], new);
 		G_verbose_message(_("%s is missing"), list[n].desc[i]);
 
 		continue;
 	    }
-	    G_file_name(path2, list[n].element[i], new, G_mapset());
+	    G_file_name(path2, list[n].element[i], new, G_subproject());
 	    if (G_recursive_copy(path, path2) == 1) {
-		G_warning(_("Unable to copy <%s> to current mapset as <%s>"),
-			  G_fully_qualified_name(old, mapset), new);
+		G_warning(_("Unable to copy <%s> to current subproject as <%s>"),
+			  G_fully_qualified_name(old, subproject), new);
 		result = 1;
 	    }
 	    else {
@@ -78,7 +78,7 @@ int M_do_copy(int n, const char *old, const char *mapset, const char *new)
     if (G_strcasecmp(list[n].element[0], "cell") == 0) {
 	char colr2[GNAME_MAX];
 
-	sprintf(colr2, "colr2/%s", G_mapset());
+	sprintf(colr2, "colr2/%s", G_subproject());
 	G_remove(colr2, new);
     }
     M__hold_signals(0);

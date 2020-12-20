@@ -28,7 +28,7 @@ char *explain_perms(int group, int other, int will)
     if (will)
 	verb = _("have");
 
-    sprintf(buf, _("%s %s %s %saccess to mapset %s"),
-	    who, will ? _("will") : _("now"), verb, read, G_mapset());
+    sprintf(buf, _("%s %s %s %saccess to subproject %s"),
+	    who, will ? _("will") : _("now"), verb, read, G_subproject());
     return buf;
 }

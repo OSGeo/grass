@@ -265,11 +265,11 @@ class VNETManager:
         mapName, mapSet = ParseMapStr(outputMap)
         if mapSet != grass.gisenv()['MAPSET']:
             GMessage(parent=self,
-                     message=_("Map can be created only in current mapset"))
+                     message=_("Map can be created only in current subproject"))
             return False
         existsMap = grass.find_file(name=mapName,
                                     element='vector',
-                                    mapset=grass.gisenv()['MAPSET'])
+                                    subproject=grass.gisenv()['MAPSET'])
         if existsMap["name"]:
             dlg = wx.MessageDialog(parent=self.guiparent,
                                    message=_("Vector map %s already exists. " +
@@ -331,7 +331,7 @@ class VNETManager:
         mapToAdd = self.results["vect_map"].GetVectMapName()
         mapToAddEx = grass.find_file(name=mapToAdd,
                                      element='vector',
-                                     mapset=grass.gisenv()['MAPSET'])
+                                     subproject=grass.gisenv()['MAPSET'])
 
         if not mapToAddEx["name"]:
             GMessage(parent=self.guiparent,
@@ -342,11 +342,11 @@ class VNETManager:
         mapName, mapSet = ParseMapStr(addedMap)
         if mapSet != grass.gisenv()['MAPSET']:
             GMessage(parent=self.guiparent, message=_(
-                "Map can be saved only to currently set mapset"))
+                "Map can be saved only to currently set subproject"))
             return
         existsMap = grass.find_file(name=mapName,
                                     element='vector',
-                                    mapset=grass.gisenv()['MAPSET'])
+                                    subproject=grass.gisenv()['MAPSET'])
         if existsMap["name"]:
             dlg = wx.MessageDialog(parent=self.guiparent,
                                    message=_("Vector map %s already exists. " +

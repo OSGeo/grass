@@ -488,8 +488,8 @@ class RDigitController(wx.EvtHandler):
         self.newRasterCreated.emit(name=name)
         gisenv = gcore.gisenv()
         self._giface.grassdbChanged.emit(grassdb=gisenv['GISDBASE'],
-                                         location=gisenv['LOCATION_NAME'],
-                                         mapset=gisenv['MAPSET'],
+                                         project=gisenv['LOCATION_NAME'],
+                                         subproject=gisenv['MAPSET'],
                                          action='new',
                                          map=name.split('@')[0],
                                          element='raster')

@@ -109,8 +109,8 @@ private:
 //  // private methods, only called by operators new and delete.
 
 public: //  Need to be accessible from pqueue constructor
-  MM_err register_allocation  (size_t sz);
-  MM_err register_deallocation(size_t sz);
+  MM_err register_alproject  (size_t sz);
+  MM_err register_dealproject(size_t sz);
 
   
 public:

@@ -15,7 +15,7 @@
  *               output vector paths 2/2009
  *               
  * PURPOSE:      This is the main program for tracing out the path that a
- *               drop of water would take if released at a certain location
+ *               drop of water would take if released at a certain project
  *               on an input elevation map.  
  * COPYRIGHT:    (C) 2000,2009 by the GRASS Development Team
  *

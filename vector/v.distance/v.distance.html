@@ -6,7 +6,7 @@ the vectors' relationships (distance, category, etc.) may be uploaded to
 the attribute table attached to the first vector map, or printed to
 'stdout'. A new vector map may be created where lines connecting
 nearest points on features are written. <b>dmin</b> and/or
-<b>dmax</b> can be used to limit the search radius (in lat-long locations
+<b>dmax</b> can be used to limit the search radius (in lat-long projects
 to be given in meters since they are calculated as geodesic distances on
 a sphere).
 
@@ -36,7 +36,7 @@ area is used as common point, or the first intersection point.
 
 <p>
 For anything else than points to lines, there can be several common
-locations with zero distance, and the common location would then be the
+projects with zero distance, and the common project would then be the
 result of an overlay consisting of several points, lines, or areas.
 <em>v.distance</em> selects in these cases a single point, and does
 not create an overlay
@@ -44,7 +44,7 @@ like <em><a href="v.overlay.html">v.overlay</a></em>. In this
 implementation, any shared point is as good as any other. Calculating
 an intersection is costlier than to check if a vertex is inside a
 polygon. For example, if a vertex of the boundary of the 'to' area is
-inside the 'from' area, it is a common location. For speed reasons,
+inside the 'from' area, it is a common project. For speed reasons,
 the distance is then set to zero and no further tests are done.
 
 
@@ -56,7 +56,7 @@ updated to NULL.
 <p>The upload <b>column</b>(s) must already exist. Create one with
 <em><a href="v.db.addcolumn.html">v.db.addcolumn</a></em>.
 
-<p>In lat-long locations <em>v.distance</em> gives distances
+<p>In lat-long projects <em>v.distance</em> gives distances
 (<em>dist</em>, <em>from_along</em>, and <em>to_along</em>) not in
 degrees but in meters calculated as geodesic distances on a sphere.
 
@@ -182,7 +182,7 @@ v.univar vdistance_vectors column=length
 
 <h3>Print distance between points</h3>
 
-Example for a Latitude-longitude location (EPSG 4326):
+Example for a Latitude-longitude project (EPSG 4326):
 <div class="code"><pre>
 # points along the equator
 echo "0|-61|1" | v.in.ascii output=pnt1 input=-
@@ -196,7 +196,7 @@ from_cat|distance
 
 <h3>Print distance matrix</h3>
 
-North Carolina sample data location
+North Carolina sample data project
 
 <p>As linear matrix:
 <div class="code"><pre>

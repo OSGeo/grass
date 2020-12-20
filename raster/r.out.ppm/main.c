@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
     }
     else {
 	map = p = rast->answer;
-	/* knock off any GRASS location suffix */
+	/* knock off any GRASS project suffix */
 	if ((char *)NULL != (p = strrchr(map, '@'))) {
 	    if (p != map)
 		*p = '\0';

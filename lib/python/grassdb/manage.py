@@ -14,18 +14,18 @@ import os
 import shutil
 
 
-def delete_mapset(database, location, mapset):
-    """Deletes a specified mapset"""
-    if mapset == "PERMANENT":
+def delete_subproject(database, project, subproject):
+    """Deletes a specified subproject"""
+    if subproject == "PERMANENT":
         raise ValueError(
-            _("Mapset PERMANENT cannot be deleted (a whole location can be)")
+            _("Subproject PERMANENT cannot be deleted (a whole project can be)")
         )
-    shutil.rmtree(os.path.join(database, location, mapset))
+    shutil.rmtree(os.path.join(database, project, subproject))
 
 
-def delete_location(database, location):
-    """Deletes a specified location"""
-    shutil.rmtree(os.path.join(database, location))
+def delete_project(database, project):
+    """Deletes a specified project"""
+    shutil.rmtree(os.path.join(database, project))
 
 
 def delete_grassdb(database):
@@ -33,16 +33,16 @@ def delete_grassdb(database):
     shutil.rmtree(database)
 
 
-def rename_mapset(database, location, old_name, new_name):
-    """Rename mapset from *old_name* to *new_name*"""
+def rename_subproject(database, project, old_name, new_name):
+    """Rename subproject from *old_name* to *new_name*"""
     if old_name == "PERMANENT":
-        raise ValueError(_("Mapset PERMANENT cannot be renamed"))
-    location_path = os.path.join(database, location)
+        raise ValueError(_("Subproject PERMANENT cannot be renamed"))
+    project_path = os.path.join(database, project)
     os.rename(
-        os.path.join(location_path, old_name), os.path.join(location_path, new_name)
+        os.path.join(project_path, old_name), os.path.join(project_path, new_name)
     )
 
 
-def rename_location(database, old_name, new_name):
-    """Rename location from *old_name* to *new_name*"""
+def rename_project(database, old_name, new_name):
+    """Rename project from *old_name* to *new_name*"""
     os.rename(os.path.join(database, old_name), os.path.join(database, new_name))

@@ -8,13 +8,13 @@
 
 int open_files(void)
 {
-    char *name, *mapset;
+    char *name, *subproject;
     FILE *fd;
     int n;
 
     I_init_group_ref(&Ref);
     if (!I_find_group(group))
-	G_fatal_error(_("Group <%s> not found in current mapset"), group);
+	G_fatal_error(_("Group <%s> not found in current subproject"), group);
 
     if (!I_find_subgroup(group, subgroup))
 	G_fatal_error(_("Subgroup <%s> in group <%s> not found"),
@@ -37,8 +37,8 @@ int open_files(void)
     for (n = 0; n < Ref.nfiles; n++) {
 	cell[n] = Rast_allocate_d_buf();
 	name = Ref.file[n].name;
-	mapset = Ref.file[n].mapset;
-	cellfd[n] = Rast_open_old(name, mapset);
+	subproject = Ref.file[n].subproject;
+	cellfd[n] = Rast_open_old(name, subproject);
     }
 
     I_init_signatures(&S, Ref.nfiles);

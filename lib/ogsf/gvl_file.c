@@ -48,7 +48,7 @@ typedef struct
 } slice_data;
 
 static geovol_file *Data[MAX_VOL_FILES];
-static geovol_file Df[MAX_VOL_FILES];	/* trying to avoid allocation */
+static geovol_file Df[MAX_VOL_FILES];	/* trying to avoid alproject */
 
 static int Numfiles = 0;
 
@@ -72,7 +72,7 @@ static int init_volfiles(void)
     RASTER3D_Region *w3;
 
     for (i = 0; i < MAX_VOL_FILES; i++) {
-	/* avoiding dynamic allocation */
+	/* avoiding dynamic alproject */
 	Data[i] = &(Df[i]);
     }
 
@@ -417,20 +417,20 @@ int gvl_file_free_datah(int id)
 void *open_g3d_file(const char *filename, IFLAG * type, double *min,
 		    double *max)
 {
-    const char *mapset;
+    const char *subproject;
     int itype;
     void *map;
 
-    /* search for g3d file a return his mapset */
-    mapset = G_find_raster3d(filename, "");
-    if (!mapset) {
+    /* search for g3d file a return his subproject */
+    subproject = G_find_raster3d(filename, "");
+    if (!subproject) {
 	G_warning(_("3D raster map <%s> not found"), filename);
 	return (NULL);
     }
 
     /* open g3d file */
     map =
-	Rast3d_open_cell_old(filename, mapset, RASTER3D_DEFAULT_WINDOW,
+	Rast3d_open_cell_old(filename, subproject, RASTER3D_DEFAULT_WINDOW,
 			RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
     if (!map) {
 	G_warning(_("Unable to open 3D raster map <%s>"), filename);

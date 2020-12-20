@@ -185,17 +185,17 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     if (bands > 1 || !I_find_group(group->answers[0])) {
 	/* create group from input is raster map(s) */
 	char name[GNAME_MAX];
-	const char *mapset;
+	const char *subproject;
 
 	for (bands = 0; group->answers[bands] != NULL; bands++) {
-	    /* strip @mapset, do not modify opt_in->answers */
+	    /* strip @subproject, do not modify opt_in->answers */
 	    strcpy(name, group->answers[bands]);
-	    mapset = G_find_raster(name, "");
-	    if (!mapset)
+	    subproject = G_find_raster(name, "");
+	    if (!subproject)
 		G_fatal_error(_("Raster map <%s> not found"),
 			      group->answers[bands]);
 	    /* Add input to group. */
-	    I_add_file_to_group_ref(name, mapset, &globals->Ref);
+	    I_add_file_to_group_ref(name, subproject, &globals->Ref);
 	}
 
 	globals->image_group = NULL;
@@ -203,7 +203,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     else {
 	/* input is group. Try to read group file */
 	if (!I_get_group_ref(group->answers[0], &globals->Ref))
-	    G_fatal_error(_("Group <%s> not found in the current mapset"),
+	    G_fatal_error(_("Group <%s> not found in the current subproject"),
 			  group->answers[0]);
 
 	if (globals->Ref.nfiles <= 0)
@@ -325,10 +325,10 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     }
     else {
 	globals->bounds_map = bounds->answer;
-	if ((globals->bounds_mapset = G_find_raster(globals->bounds_map, "")) == NULL) {
+	if ((globals->bounds_subproject = G_find_raster(globals->bounds_map, "")) == NULL) {
 	    G_fatal_error(_("Segmentation constraint/boundary raster map not found"));
 	}
-	if (Rast_map_type(globals->bounds_map, globals->bounds_mapset) !=
+	if (Rast_map_type(globals->bounds_map, globals->bounds_subproject) !=
 	    CELL_TYPE) {
 	    G_fatal_error(_("Segmentation constraint raster map must be CELL type (integers)"));
 	}

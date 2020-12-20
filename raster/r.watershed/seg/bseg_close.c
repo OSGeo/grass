@@ -9,9 +9,9 @@ int bseg_close(BSEG * bseg)
 	G_free(bseg->name);
 	bseg->name = NULL;
     }
-    if (bseg->mapset) {
-	G_free(bseg->mapset);
-	bseg->mapset = NULL;
+    if (bseg->subproject) {
+	G_free(bseg->subproject);
+	bseg->subproject = NULL;
     }
     return 0;
 }

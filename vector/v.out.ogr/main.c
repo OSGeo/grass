@@ -199,9 +199,9 @@ int main(int argc, char *argv[])
     ftype = Vect_option_to_types(options.otype);
 
     if (!options.layer->answer) {
-	char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+	char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 
-	if (G_name_is_fully_qualified(options.input->answer, xname, xmapset))
+	if (G_name_is_fully_qualified(options.input->answer, xname, xsubproject))
 	    options.layer->answer = G_store(xname);
 	else
 	    options.layer->answer = G_store(options.input->answer);

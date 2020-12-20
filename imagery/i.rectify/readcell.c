@@ -48,7 +48,7 @@ struct cache *readcell(int fdi, int size)
     c->refs = (int *)G_malloc(nblocks * sizeof(int));
 
     if (nblocks < nx * ny) {
-	/* Temporary file must be created in input location */
+	/* Temporary file must be created in input project */
 	filename = G_tempfile();
 	c->fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
 	if (c->fd < 0)

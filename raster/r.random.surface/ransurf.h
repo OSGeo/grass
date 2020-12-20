@@ -42,7 +42,7 @@ extern CELL *CellBuffer;
 extern FILTER *AllFilters, Filter;
 extern CATINFO CatInfo;
 extern int *Seeds, Seed, NumSeeds, Low, High, NumMaps, NumFilters, OutFD;
-extern char Buf[240], **OutNames, *TheoryName, *Mapset;
+extern char Buf[240], **OutNames, *TheoryName, *Subproject;
 extern struct Flag *Uniform;
 
     /* please, remove before GRASS 7 released */

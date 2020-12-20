@@ -1,7 +1,7 @@
 /*!
-   \file lib/gis/mapset_msc.c
+   \file lib/gis/subproject_msc.c
 
-   \brief GIS library - Mapset user permission routines.
+   \brief GIS library - Subproject user permission routines.
 
    (C) 1999-2014 The GRASS development team
 
@@ -19,28 +19,28 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-static int make_mapset_element(const char *, const char *);
+static int make_subproject_element(const char *, const char *);
 
 /*!
-   \brief Create element in the current mapset.
+   \brief Create element in the current subproject.
 
-   Make the specified element in the current mapset will check for the
+   Make the specified element in the current subproject will check for the
    existence of the element and do nothing if it is found so this
    routine can be called even if the element already exists.
    
    Calls G_fatal_error() on failure.
    
-   \param p_element element to be created in mapset
+   \param p_element element to be created in subproject
 
    \return 0 no element defined
    \return 1 on success
  */
-int G_make_mapset_element(const char *p_element)
+int G_make_subproject_element(const char *p_element)
 {
     char path[GPATH_MAX];
     
-    G_file_name(path, NULL, NULL, G_mapset());
-    return make_mapset_element(path, p_element);
+    G_file_name(path, NULL, NULL, G_subproject());
+    return make_subproject_element(path, p_element);
 }
 
 /*!
@@ -48,20 +48,20 @@ int G_make_mapset_element(const char *p_element)
 
    See G_file_name_tmp() for details.
 
-   \param p_element element to be created in mapset
+   \param p_element element to be created in subproject
 
    \return 0 no element defined
    \return 1 on success
  */
-int G_make_mapset_element_tmp(const char *p_element)
+int G_make_subproject_element_tmp(const char *p_element)
 {
     char path[GPATH_MAX];
     
-    G_file_name_tmp(path, NULL, NULL, G_mapset());
-    return make_mapset_element(path, p_element);
+    G_file_name_tmp(path, NULL, NULL, G_subproject());
+    return make_subproject_element(path, p_element);
 }
 
-int make_mapset_element(const char *p_path, const char *p_element)
+int make_subproject_element(const char *p_path, const char *p_element)
 {
     char path[GPATH_MAX], *p;
     const char *element;
@@ -87,11 +87,11 @@ int make_mapset_element(const char *p_path, const char *p_element)
 	    *p = 0;
 	    if (access(path, 0) != 0) { /* directory not yet created */
 		if (G_mkdir(path) != 0)
-		    G_fatal_error(_("Unable to make mapset element %s (%s): %s"),
+		    G_fatal_error(_("Unable to make subproject element %s (%s): %s"),
 				  p_element, path, strerror(errno));
 	    }
 	    if (access(path, 0) != 0)  /* directory not accessible */
-		G_fatal_error(_("Unable to access mapset element %s (%s): %s"),
+		G_fatal_error(_("Unable to access subproject element %s (%s): %s"),
 			      p_element, path, strerror(errno));
 	    if (*element == 0)
 		return 1;
@@ -101,20 +101,20 @@ int make_mapset_element(const char *p_path, const char *p_element)
 }
 
 /*!
-   \brief Create misc element in the current mapset.
+   \brief Create misc element in the current subproject.
 
    \param dir directory path
-   \param name element to be created in mapset
+   \param name element to be created in subproject
 
    \return 0 no element defined
    \return 1 on success
  */
-int G__make_mapset_element_misc(const char *dir, const char *name)
+int G__make_subproject_element_misc(const char *dir, const char *name)
 {
     char buf[GNAME_MAX * 2 + 1];
 
     sprintf(buf, "%s/%s", dir, name);
-    return G_make_mapset_element(buf);
+    return G_make_subproject_element(buf);
 }
 
 static int check_owner(const struct stat *info)
@@ -134,20 +134,20 @@ static int check_owner(const struct stat *info)
 }
 
 /*!
-   \brief Check for user mapset permission
+   \brief Check for user subproject permission
 
-   \param mapset mapset name
+   \param subproject subproject name
 
-   \return 1 mapset exists, and user has permission
-   \return 0 mapset exists, BUT user denied permission
-   \return -1 mapset does not exist
+   \return 1 subproject exists, and user has permission
+   \return 0 subproject exists, BUT user denied permission
+   \return -1 subproject does not exist
  */
-int G_mapset_permissions(const char *mapset)
+int G_subproject_permissions(const char *subproject)
 {
     char path[GPATH_MAX];
     struct stat info;
 
-    G_file_name(path, "", "", mapset);
+    G_file_name(path, "", "", subproject);
 
     if (G_stat(path, &info) != 0)
 	return -1;
@@ -161,23 +161,23 @@ int G_mapset_permissions(const char *mapset)
 }
 
 /*!
-   \brief Check for user mapset permission
+   \brief Check for user subproject permission
 
    \param gisdbase full path to GISDBASE
-   \param location location name
-   \param mapset mapset name
+   \param project project name
+   \param subproject subproject name
 
-   \return 1 mapset exists, and user has permission
-   \return 0 mapset exists, BUT user denied permission
-   \return -1 mapset does not exist
+   \return 1 subproject exists, and user has permission
+   \return 0 subproject exists, BUT user denied permission
+   \return -1 subproject does not exist
  */
-int G_mapset_permissions2(const char *gisdbase, const char *location,
-			   const char *mapset)
+int G_subproject_permissions2(const char *gisdbase, const char *project,
+			   const char *subproject)
 {
     char path[GPATH_MAX];
     struct stat info;
 
-    sprintf(path, "%s/%s/%s", gisdbase, location, mapset);
+    sprintf(path, "%s/%s/%s", gisdbase, project, subproject);
 
     if (G_stat(path, &info) != 0)
 	return -1;

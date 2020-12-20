@@ -39,7 +39,7 @@ int write_output_map(char *output, int offset)
     fd_out = Rast_open_c_new(output);
 
     if (offset)
-	fd_in = Rast_open_old(output, G_mapset());
+	fd_in = Rast_open_old(output, G_subproject());
 
     cell = Rast_allocate_c_buf();
     G_message(_("Writing output raster map <%s>..."), output);

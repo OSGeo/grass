@@ -102,21 +102,21 @@ int close_array_seg(void)
 	G_percent(nrows, nrows, 1);	/* finish it */
 	G_free(cellrow);
 	Rast_close(map_fd);
-	Rast_write_colors(seg_name, this_mapset, &colors);
+	Rast_write_colors(seg_name, this_subproject, &colors);
     }
 
     /* basins map */
     if (bas_flag) {
 	G_message(_("Closing basins map"));
 	cseg_write_cellfile(&bas, bas_name);
-	Rast_write_colors(bas_name, this_mapset, &colors);
+	Rast_write_colors(bas_name, this_subproject, &colors);
     }
 
     /* half.basins map */
     if (haf_flag) {
 	G_message(_("Closing half basins map"));
 	cseg_write_cellfile(&haf, haf_name);
-	Rast_write_colors(haf_name, this_mapset, &colors);
+	Rast_write_colors(haf_name, this_subproject, &colors);
     }
 
     if (seg_flag || bas_flag || haf_flag)

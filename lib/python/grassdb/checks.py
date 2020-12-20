@@ -19,19 +19,19 @@ import grass.script as gs
 import glob
 
 
-def mapset_exists(database, location, mapset):
-    """Returns True whether mapset path exists."""
-    location_path = os.path.join(database, location)
-    mapset_path = os.path.join(location_path, mapset)
-    if os.path.exists(mapset_path):
+def subproject_exists(database, project, subproject):
+    """Returns True whether subproject path exists."""
+    project_path = os.path.join(database, project)
+    subproject_path = os.path.join(project_path, subproject)
+    if os.path.exists(subproject_path):
         return True
     return False
 
 
-def location_exists(database, location):
-    """Returns True whether location path exists."""
-    location_path = os.path.join(database, location)
-    if os.path.exists(location_path):
+def project_exists(database, project):
+    """Returns True whether project path exists."""
+    project_path = os.path.join(database, project)
+    if os.path.exists(project_path):
         return True
     return False
 
@@ -39,114 +39,114 @@ def location_exists(database, location):
 # TODO: distinguish between valid for getting maps and usable as current
 # https://lists.osgeo.org/pipermail/grass-dev/2016-September/082317.html
 # interface created according to the current usage
-def is_mapset_valid(mapset_path):
-    """Return True if GRASS Mapset is valid"""
+def is_subproject_valid(subproject_path):
+    """Return True if GRASS Subproject is valid"""
     # WIND is created from DEFAULT_WIND by `g.region -d` and functions
-    # or modules which create a new mapset. Most modules will fail if
+    # or modules which create a new subproject. Most modules will fail if
     # WIND doesn't exist (assuming that neither GRASS_REGION nor
     # WIND_OVERRIDE environmental variables are set).
-    return os.access(os.path.join(mapset_path, "WIND"), os.R_OK)
+    return os.access(os.path.join(subproject_path, "WIND"), os.R_OK)
 
 
-def is_location_valid(database, location):
-    """Return True if GRASS Location is valid
+def is_project_valid(database, project):
+    """Return True if GRASS Project is valid
 
     :param database: Path to GRASS GIS database directory
-    :param location: name of a Location
+    :param project: name of a Project
     """
     # DEFAULT_WIND file should not be required until you do something
     # that actually uses them. The check is just a heuristic; a directory
     # containing a PERMANENT/DEFAULT_WIND file is probably a GRASS
-    # location, while a directory lacking it probably isn't.
+    # project, while a directory lacking it probably isn't.
     return os.access(
-        os.path.join(database, location, "PERMANENT", "DEFAULT_WIND"), os.F_OK
+        os.path.join(database, project, "PERMANENT", "DEFAULT_WIND"), os.F_OK
     )
 
 
-def is_mapset_current(database, location, mapset):
+def is_subproject_current(database, project, subproject):
     genv = gisenv()
     if (database == genv['GISDBASE'] and
-            location == genv['LOCATION_NAME'] and
-            mapset == genv['MAPSET']):
+            project == genv['LOCATION_NAME'] and
+            subproject == genv['MAPSET']):
         return True
     return False
 
 
-def is_location_current(database, location):
+def is_project_current(database, project):
     genv = gisenv()
     if (database == genv['GISDBASE'] and
-            location == genv['LOCATION_NAME']):
+            project == genv['LOCATION_NAME']):
         return True
     return False
 
 
-def is_current_user_mapset_owner(mapset_path):
-    """Returns True if mapset owner is the current user.
+def is_current_user_subproject_owner(subproject_path):
+    """Returns True if subproject owner is the current user.
     On Windows it always returns True."""
     # Note that this does account for libgis built with SKIP_MAPSET_OWN_CHK
     # which disables the ownerships check, i.e., even if it was build with the
     # skip, it still needs the env variable.
     if os.environ.get("GRASS_SKIP_MAPSET_OWNER_CHECK", None):
-        # Mapset just needs to be accessible for writing.
-        return os.access(mapset_path, os.W_OK)
-    # Mapset needs to be owned by user.
+        # Subproject just needs to be accessible for writing.
+        return os.access(subproject_path, os.W_OK)
+    # Subproject needs to be owned by user.
     if sys.platform == 'win32':
         return True
-    stat_info = os.stat(mapset_path)
-    mapset_uid = stat_info.st_uid
-    return mapset_uid == os.getuid()
+    stat_info = os.stat(subproject_path)
+    subproject_uid = stat_info.st_uid
+    return subproject_uid == os.getuid()
 
 
-def is_different_mapset_owner(mapset_path):
-    """Returns True if mapset owner is different from the current user"""
-    return not is_current_user_mapset_owner(mapset_path)
+def is_different_subproject_owner(subproject_path):
+    """Returns True if subproject owner is different from the current user"""
+    return not is_current_user_subproject_owner(subproject_path)
 
 
-def get_mapset_owner(mapset_path):
-    """Returns mapset owner name or None if owner name unknown.
+def get_subproject_owner(subproject_path):
+    """Returns subproject owner name or None if owner name unknown.
     On Windows it always returns None."""
     if sys.platform == 'win32':
         return None
     try:
-        path = Path(mapset_path)
+        path = Path(subproject_path)
         return path.owner()
     except KeyError:
         return None
 
 
-def is_current_mapset_in_demolocation():
+def is_current_subproject_in_demoproject():
     return gisenv()['LOCATION_NAME'] == "world_latlong_wgs84"
 
 
-def is_mapset_locked(mapset_path):
-    """Check if the mapset is locked"""
+def is_subproject_locked(subproject_path):
+    """Check if the subproject is locked"""
     lock_name = ".gislock"
-    lockfile = os.path.join(mapset_path, lock_name)
+    lockfile = os.path.join(subproject_path, lock_name)
     return os.path.exists(lockfile)
 
 
-def get_lockfile_if_present(database, location, mapset):
+def get_lockfile_if_present(database, project, subproject):
     """Return path to lock if present, None otherwise
 
     Returns the path as a string or None if nothing was found, so the
     return value can be used to test if the lock is present.
     """
     lock_name = ".gislock"
-    lockfile = os.path.join(database, location, mapset, lock_name)
+    lockfile = os.path.join(database, project, subproject, lock_name)
     if os.path.isfile(lockfile):
         return lockfile
     return None
 
 
-def get_mapset_lock_info(mapset_path):
+def get_subproject_lock_info(subproject_path):
     """Get information about .gislock file.
-    Assumes lock file exists, use is_mapset_locked to find out.
+    Assumes lock file exists, use is_subproject_locked to find out.
     Returns information as a dictionary with keys
     'owner' (None if unknown), 'lockpath', and 'timestamp'.
     """
     info = {}
     lock_name = ".gislock"
-    info['lockpath'] = os.path.join(mapset_path, lock_name)
+    info['lockpath'] = os.path.join(subproject_path, lock_name)
     try:
         info['owner'] = Path(info['lockpath']).owner()
     except KeyError:
@@ -156,343 +156,343 @@ def get_mapset_lock_info(mapset_path):
     return info
 
 
-def can_start_in_mapset(mapset_path, ignore_lock=False):
-    """Check if a mapset from a gisrc file is usable for new session"""
-    if not is_mapset_valid(mapset_path):
+def can_start_in_subproject(subproject_path, ignore_lock=False):
+    """Check if a subproject from a gisrc file is usable for new session"""
+    if not is_subproject_valid(subproject_path):
         return False
-    if not is_current_user_mapset_owner(mapset_path):
+    if not is_current_user_subproject_owner(subproject_path):
         return False
-    if not ignore_lock and is_mapset_locked(mapset_path):
+    if not ignore_lock and is_subproject_locked(subproject_path):
         return False
     return True
 
 
-def dir_contains_location(path):
-    """Return True if directory *path* contains a valid location"""
+def dir_contains_project(path):
+    """Return True if directory *path* contains a valid project"""
     if not os.path.isdir(path):
         return False
     for name in os.listdir(path):
         if os.path.isdir(os.path.join(path, name)):
-            if is_location_valid(path, name):
+            if is_project_valid(path, name):
                 return True
     return False
 
 
-# basically checking location, possibly split into two functions
-# (mapset one can call location one)
-def get_mapset_invalid_reason(database, location, mapset, none_for_no_reason=False):
-    """Returns a message describing what is wrong with the Mapset
+# basically checking project, possibly split into two functions
+# (subproject one can call project one)
+def get_subproject_invalid_reason(database, project, subproject, none_for_no_reason=False):
+    """Returns a message describing what is wrong with the Subproject
 
     The goal is to provide the most suitable error message
     (rather than to do a quick check).
 
     :param database: Path to GRASS GIS database directory
-    :param location: name of a Location
-    :param mapset: name of a Mapset
+    :param project: name of a Project
+    :param subproject: name of a Subproject
     :returns: translated message
     """
     # Since we are trying to get the one most likely message, we need all
     # those return statements here.
     # pylint: disable=too-many-return-statements
-    location_path = os.path.join(database, location)
-    mapset_path = os.path.join(location_path, mapset)
-    # first checking the location validity
-    # perhaps a special set of checks with different messages mentioning mapset
-    # will be needed instead of the same set of messages used for location
-    location_msg = get_location_invalid_reason(
-        database, location, none_for_no_reason=True
+    project_path = os.path.join(database, project)
+    subproject_path = os.path.join(project_path, subproject)
+    # first checking the project validity
+    # perhaps a special set of checks with different messages mentioning subproject
+    # will be needed instead of the same set of messages used for project
+    project_msg = get_project_invalid_reason(
+        database, project, none_for_no_reason=True
     )
-    if location_msg:
-        return location_msg
-    # if location is valid, check mapset
-    if mapset not in os.listdir(location_path):
+    if project_msg:
+        return project_msg
+    # if project is valid, check subproject
+    if subproject not in os.listdir(project_path):
         # TODO: remove the grass.py specific wording
         return _(
-            "Mapset <{mapset}> doesn't exist in GRASS Location <{location}>"
-        ).format(mapset=mapset, location=location)
-    if not os.path.isdir(mapset_path):
-        return _("<%s> is not a GRASS Mapset because it is not a directory") % mapset
-    if not os.path.isfile(os.path.join(mapset_path, "WIND")):
+            "Subproject <{subproject}> doesn't exist in GRASS Project <{project}>"
+        ).format(subproject=subproject, project=project)
+    if not os.path.isdir(subproject_path):
+        return _("<%s> is not a GRASS Subproject because it is not a directory") % subproject
+    if not os.path.isfile(os.path.join(subproject_path, "WIND")):
         return (
             _(
-                "<%s> is not a valid GRASS Mapset"
+                "<%s> is not a valid GRASS Subproject"
                 " because it does not have a WIND file"
             )
-            % mapset
+            % subproject
         )
-    # based on the is_mapset_valid() function
-    if not os.access(os.path.join(mapset_path, "WIND"), os.R_OK):
+    # based on the is_subproject_valid() function
+    if not os.access(os.path.join(subproject_path, "WIND"), os.R_OK):
         return (
             _(
-                "<%s> is not a valid GRASS Mapset"
+                "<%s> is not a valid GRASS Subproject"
                 " because its WIND file is not readable"
             )
-            % mapset
+            % subproject
         )
     # no reason for invalidity found (might be valid)
     if none_for_no_reason:
         return None
     return _(
-        "Mapset <{mapset}> or Location <{location}> is invalid for an unknown reason"
-    ).format(mapset=mapset, location=location)
+        "Subproject <{subproject}> or Project <{project}> is invalid for an unknown reason"
+    ).format(subproject=subproject, project=project)
 
 
-def get_location_invalid_reason(database, location, none_for_no_reason=False):
-    """Returns a message describing what is wrong with the Location
+def get_project_invalid_reason(database, project, none_for_no_reason=False):
+    """Returns a message describing what is wrong with the Project
 
     The goal is to provide the most suitable error message
     (rather than to do a quick check).
 
     By default, when no reason is found, a message about unknown reason is
     returned. This applies also to the case when this function is called on
-    a valid location (e.g. as a part of larger investigation).
+    a valid project (e.g. as a part of larger investigation).
     ``none_for_no_reason=True`` allows the function to be used as part of other
     diagnostic. When this function fails to find reason for invalidity, other
     the caller can continue the investigation in their context.
 
     :param database: Path to GRASS GIS database directory
-    :param location: name of a Location
+    :param project: name of a Project
     :param none_for_no_reason: When True, return None when reason is unknown
     :returns: translated message or None
     """
-    location_path = os.path.join(database, location)
-    permanent_path = os.path.join(location_path, "PERMANENT")
+    project_path = os.path.join(database, project)
+    permanent_path = os.path.join(project_path, "PERMANENT")
 
     # directory
-    if not os.path.exists(location_path):
-        return _("Location <%s> doesn't exist") % location_path
-    # permament mapset
-    if "PERMANENT" not in os.listdir(location_path):
+    if not os.path.exists(project_path):
+        return _("Project <%s> doesn't exist") % project_path
+    # permament subproject
+    if "PERMANENT" not in os.listdir(project_path):
         return (
             _(
-                "<%s> is not a valid GRASS Location"
-                " because PERMANENT Mapset is missing"
+                "<%s> is not a valid GRASS Project"
+                " because PERMANENT Subproject is missing"
             )
-            % location_path
+            % project_path
         )
     if not os.path.isdir(permanent_path):
         return (
             _(
-                "<%s> is not a valid GRASS Location"
+                "<%s> is not a valid GRASS Project"
                 " because PERMANENT is not a directory"
             )
-            % location_path
+            % project_path
         )
-    # partially based on the is_location_valid() function
+    # partially based on the is_project_valid() function
     if not os.path.isfile(os.path.join(permanent_path, "DEFAULT_WIND")):
         return (
             _(
-                "<%s> is not a valid GRASS Location"
-                " because PERMANENT Mapset does not have a DEFAULT_WIND file"
+                "<%s> is not a valid GRASS Project"
+                " because PERMANENT Subproject does not have a DEFAULT_WIND file"
                 " (default computational region)"
             )
-            % location_path
+            % project_path
         )
     # no reason for invalidity found (might be valid)
     if none_for_no_reason:
         return None
-    return _("Location <{location_path}> is invalid for an unknown reason").format(
-        location_path=location_path
+    return _("Project <{project_path}> is invalid for an unknown reason").format(
+        project_path=project_path
     )
 
 
-def get_location_invalid_suggestion(database, location):
-    """Return suggestion what to do when specified location is not valid
+def get_project_invalid_suggestion(database, project):
+    """Return suggestion what to do when specified project is not valid
 
     It gives suggestion when:
-     * A mapset was specified instead of a location.
-     * A GRASS database was specified instead of a location.
+     * A subproject was specified instead of a project.
+     * A GRASS database was specified instead of a project.
     """
-    location_path = os.path.join(database, location)
-    # a common error is to use mapset instead of location,
+    project_path = os.path.join(database, project)
+    # a common error is to use subproject instead of project,
     # if that's the case, include that info into the message
-    if is_mapset_valid(location_path):
+    if is_subproject_valid(project_path):
         return _(
-            "<{location}> looks like a mapset, not a location."
+            "<{project}> looks like a subproject, not a project."
             " Did you mean just <{one_dir_up}>?"
-        ).format(location=location, one_dir_up=database)
-    # confusion about what is database and what is location
-    if dir_contains_location(location_path):
+        ).format(project=project, one_dir_up=database)
+    # confusion about what is database and what is project
+    if dir_contains_project(project_path):
         return _(
-            "It looks like <{location}> contains locations."
+            "It looks like <{project}> contains projects."
             " Did you mean to specify one of them?"
-        ).format(location=location)
+        ).format(project=project)
     return None
 
 
-def get_mapset_name_invalid_reason(database, location, mapset_name):
-    """Get reasons why mapset name is not valid.
+def get_subproject_name_invalid_reason(database, project, subproject_name):
+    """Get reasons why subproject name is not valid.
 
     It gets reasons when:
      * Name is not valid.
      * Name is reserved for OGR layers.
-     * Mapset in the same path already exists.
+     * Subproject in the same path already exists.
 
     Returns message as string if there was a reason, otherwise None.
     """
     message = None
-    mapset_path = os.path.join(database, location, mapset_name)
+    subproject_path = os.path.join(database, project, subproject_name)
 
-    # Check if mapset name is valid
-    if not gs.legal_name(mapset_name):
+    # Check if subproject name is valid
+    if not gs.legal_name(subproject_name):
         message = _(
-            "Name '{}' is not a valid name for location or mapset. "
+            "Name '{}' is not a valid name for project or subproject. "
             "Please use only ASCII characters excluding characters {} "
-            "and space.").format(mapset_name, '/"\'@,=*~')
-    # Check reserved mapset name
-    elif mapset_name.lower() == 'ogr':
+            "and space.").format(subproject_name, '/"\'@,=*~')
+    # Check reserved subproject name
+    elif subproject_name.lower() == 'ogr':
         message = _(
             "Name '{}' is reserved for direct "
             "read access to OGR layers. Please use "
-            "another name for your mapset.").format(mapset_name)
-    # Check whether mapset exists
-    elif mapset_exists(database, location, mapset_name):
+            "another name for your subproject.").format(subproject_name)
+    # Check whether subproject exists
+    elif subproject_exists(database, project, subproject_name):
         message = _(
-            "Mapset  <{mapset}> already exists. Please consider using "
-            "another name for your mapset.").format(mapset=mapset_path)
+            "Subproject  <{subproject}> already exists. Please consider using "
+            "another name for your subproject.").format(subproject=subproject_path)
 
     return message
 
 
-def get_location_name_invalid_reason(grassdb, location_name):
-    """Get reasons why location name is not valid.
+def get_project_name_invalid_reason(grassdb, project_name):
+    """Get reasons why project name is not valid.
 
     It gets reasons when:
      * Name is not valid.
-     * Location in the same path already exists.
+     * Project in the same path already exists.
 
     Returns message as string if there was a reason, otherwise None.
     """
     message = None
-    location_path = os.path.join(grassdb, location_name)
+    project_path = os.path.join(grassdb, project_name)
 
-    # Check if mapset name is valid
-    if not gs.legal_name(location_name):
+    # Check if subproject name is valid
+    if not gs.legal_name(project_name):
         message = _(
-            "Name '{}' is not a valid name for location or mapset. "
+            "Name '{}' is not a valid name for project or subproject. "
             "Please use only ASCII characters excluding characters {} "
-            "and space.").format(location_name, '/"\'@,=*~')
-    # Check whether location exists
-    elif location_exists(grassdb, location_name):
+            "and space.").format(project_name, '/"\'@,=*~')
+    # Check whether project exists
+    elif project_exists(grassdb, project_name):
         message = _(
-            "Location  <{location}> already exists. Please consider using "
-            "another name for your location.").format(location=location_path)
+            "Project  <{project}> already exists. Please consider using "
+            "another name for your project.").format(project=project_path)
 
     return message
 
 
-def is_mapset_name_valid(database, location, mapset_name):
-    """Check if mapset name is valid.
+def is_subproject_name_valid(database, project, subproject_name):
+    """Check if subproject name is valid.
 
-    Returns True if mapset name is valid, otherwise False.
+    Returns True if subproject name is valid, otherwise False.
     """
-    return gs.legal_name(mapset_name) and mapset_name.lower() != "ogr" and not \
-        mapset_exists(database, location, mapset_name)
+    return gs.legal_name(subproject_name) and subproject_name.lower() != "ogr" and not \
+        subproject_exists(database, project, subproject_name)
 
 
-def is_location_name_valid(database, location_name):
-    """Check if location name is valid.
+def is_project_name_valid(database, project_name):
+    """Check if project name is valid.
 
-    Returns True if location name is valid, otherwise False.
+    Returns True if project name is valid, otherwise False.
     """
-    return gs.legal_name(location_name) and not \
-        location_exists(database, location_name)
+    return gs.legal_name(project_name) and not \
+        project_exists(database, project_name)
 
 
-def get_reasons_mapsets_not_removable(mapsets, check_permanent):
-    """Get reasons why mapsets cannot be removed.
+def get_reasons_subprojects_not_removable(subprojects, check_permanent):
+    """Get reasons why subprojects cannot be removed.
 
-    Parameter *mapsets* is a list of tuples (database, location, mapset).
+    Parameter *subprojects* is a list of tuples (database, project, subproject).
     Parameter *check_permanent* is True of False. It depends on whether
-    we want to check for permanent mapset or not.
+    we want to check for permanent subproject or not.
 
     Returns messages as list if there were any failed checks, otherwise empty list.
     """
     messages = []
-    for grassdb, location, mapset in mapsets:
-        message = get_reason_mapset_not_removable(grassdb, location,
-                                                  mapset, check_permanent)
+    for grassdb, project, subproject in subprojects:
+        message = get_reason_subproject_not_removable(grassdb, project,
+                                                  subproject, check_permanent)
         if message:
             messages.append(message)
     return messages
 
 
-def get_reason_mapset_not_removable(grassdb, location, mapset, check_permanent):
-    """Get reason why one mapset cannot be removed.
+def get_reason_subproject_not_removable(grassdb, project, subproject, check_permanent):
+    """Get reason why one subproject cannot be removed.
 
     Parameter *check_permanent* is True of False. It depends on whether
-    we want to check for permanent mapset or not.
+    we want to check for permanent subproject or not.
 
     Returns message as string if there was failed check, otherwise None.
     """
     message = None
-    mapset_path = os.path.join(grassdb, location, mapset)
+    subproject_path = os.path.join(grassdb, project, subproject)
 
-    # Check if mapset is permanent
-    if check_permanent and mapset == "PERMANENT":
-        message = _("Mapset <{mapset}> is required for a valid location.").format(
-            mapset=mapset_path)
-    # Check if mapset is current
-    elif is_mapset_current(grassdb, location, mapset):
-        message = _("Mapset <{mapset}> is the current mapset.").format(
-            mapset=mapset_path)
-    # Check whether mapset is in use
-    elif is_mapset_locked(mapset_path):
-        message = _("Mapset <{mapset}> is in use.").format(
-            mapset=mapset_path)
-    # Check whether mapset is owned by different user
-    elif is_different_mapset_owner(mapset_path):
-        message = _("Mapset <{mapset}> is owned by a different user.").format(
-            mapset=mapset_path)
+    # Check if subproject is permanent
+    if check_permanent and subproject == "PERMANENT":
+        message = _("Subproject <{subproject}> is required for a valid project.").format(
+            subproject=subproject_path)
+    # Check if subproject is current
+    elif is_subproject_current(grassdb, project, subproject):
+        message = _("Subproject <{subproject}> is the current subproject.").format(
+            subproject=subproject_path)
+    # Check whether subproject is in use
+    elif is_subproject_locked(subproject_path):
+        message = _("Subproject <{subproject}> is in use.").format(
+            subproject=subproject_path)
+    # Check whether subproject is owned by different user
+    elif is_different_subproject_owner(subproject_path):
+        message = _("Subproject <{subproject}> is owned by a different user.").format(
+            subproject=subproject_path)
 
     return message
 
 
-def get_reasons_locations_not_removable(locations):
-    """Get reasons why locations cannot be removed.
+def get_reasons_projects_not_removable(projects):
+    """Get reasons why projects cannot be removed.
 
-    Parameter *locations* is a list of tuples (database, location).
+    Parameter *projects* is a list of tuples (database, project).
 
     Returns messages as list if there were any failed checks, otherwise empty list.
     """
     messages = []
-    for grassdb, location in locations:
-        messages += get_reasons_location_not_removable(grassdb, location)
+    for grassdb, project in projects:
+        messages += get_reasons_project_not_removable(grassdb, project)
     return messages
 
 
-def get_reasons_location_not_removable(grassdb, location):
-    """Get reasons why one location cannot be removed.
+def get_reasons_project_not_removable(grassdb, project):
+    """Get reasons why one project cannot be removed.
 
     Returns messages as list if there were any failed checks, otherwise empty list.
     """
     messages = []
-    location_path = os.path.join(grassdb, location)
+    project_path = os.path.join(grassdb, project)
 
-    # Check if location is current
-    if is_location_current(grassdb, location):
-        messages.append(_("Location <{location}> is the current location.").format(
-            location=location_path))
+    # Check if project is current
+    if is_project_current(grassdb, project):
+        messages.append(_("Project <{project}> is the current project.").format(
+            project=project_path))
         return messages
 
-    # Find mapsets in particular location
-    tmp_gisrc_file, env = gs.create_environment(grassdb, location, 'PERMANENT')
+    # Find subprojects in particular project
+    tmp_gisrc_file, env = gs.create_environment(grassdb, project, 'PERMANENT')
     env['GRASS_SKIP_MAPSET_OWNER_CHECK'] = '1'
 
-    g_mapsets = gs.read_command(
-        'g.mapsets',
+    g_subprojects = gs.read_command(
+        'g.subprojects',
         flags='l',
         separator='comma',
         quiet=True,
         env=env).strip().split(',')
 
     # Append to the list of tuples
-    mapsets = []
-    for g_mapset in g_mapsets:
-        mapsets.append((grassdb, location, g_mapset))
+    subprojects = []
+    for g_subproject in g_subprojects:
+        subprojects.append((grassdb, project, g_subproject))
 
     # Concentenate both checks
-    messages += get_reasons_mapsets_not_removable(mapsets, check_permanent=False)
+    messages += get_reasons_subprojects_not_removable(subprojects, check_permanent=False)
 
     gs.try_remove(tmp_gisrc_file)
     return messages
@@ -512,31 +512,31 @@ def get_reasons_grassdb_not_removable(grassdb):
             grassdb=grassdb))
         return messages
 
-    g_locations = get_list_of_locations(grassdb)
+    g_projects = get_list_of_projects(grassdb)
 
     # Append to the list of tuples
-    locations = []
-    for g_location in g_locations:
-        locations.append((grassdb, g_location))
-    messages = get_reasons_locations_not_removable(locations)
+    projects = []
+    for g_project in g_projects:
+        projects.append((grassdb, g_project))
+    messages = get_reasons_projects_not_removable(projects)
 
     return messages
 
 
-def get_list_of_locations(dbase):
-    """Get list of GRASS locations in given dbase
+def get_list_of_projects(dbase):
+    """Get list of GRASS projects in given dbase
 
     :param dbase: GRASS database path
 
-    :return: list of locations (sorted)
+    :return: list of projects (sorted)
     """
-    locations = list()
-    for location in glob.glob(os.path.join(dbase, "*")):
+    projects = list()
+    for project in glob.glob(os.path.join(dbase, "*")):
         if os.path.join(
-                location, "PERMANENT") in glob.glob(
-                os.path.join(location, "*")):
-            locations.append(os.path.basename(location))
+                project, "PERMANENT") in glob.glob(
+                os.path.join(project, "*")):
+            projects.append(os.path.basename(project))
 
-    locations.sort(key=lambda x: x.lower())
+    projects.sort(key=lambda x: x.lower())
 
-    return locations
+    return projects

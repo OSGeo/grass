@@ -148,7 +148,7 @@ int fdcell, fdcout;
 const char *input;
 const char *cellinp;
 const char *cellout;
-const char *mapset;
+const char *subproject;
 
 const char *scol;
 const char *outz;
@@ -611,11 +611,11 @@ int main(int argc, char *argv[])
 
     if (ii > 0) {
 	if ((cellinp != NULL) && (cellout != NULL)) {
-	    mapset = NULL;
-	    mapset = G_find_raster2(cellinp, "");
-	    if (mapset == NULL)
+	    subproject = NULL;
+	    subproject = G_find_raster2(cellinp, "");
+	    if (subproject == NULL)
 		G_fatal_error(_("Raster map <%s> not found"), cellinp);
-	    fdcell = Rast_open_old(cellinp, mapset);
+	    fdcell = Rast_open_old(cellinp, subproject);
 	    fdcout = Rast_open_fp_new(cellout);
 	    zero_array_cell = (FCELL *) G_malloc(sizeof(FCELL) * n_cols);
 	    if (!zero_array_cell) {

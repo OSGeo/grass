@@ -125,11 +125,11 @@ int main(int argc, char *argv[])
 	    continue;
 	}
         /* Check if the coordinates are located in the cube */
-	if (!Rast3d_is_valid_location(&(map->region), Points->y[0], Points->x[0], Points->z[0])) {
+	if (!Rast3d_is_valid_project(&(map->region), Points->y[0], Points->x[0], Points->z[0])) {
 	    continue;
 	}
         /* Convert the north, east and top coorindate into row, col and depth*/
-        Rast3d_location2coord2(&(map->region), Points->y[0], Points->x[0], Points->z[0], &col, &row, &depth);
+        Rast3d_project2coord2(&(map->region), Points->y[0], Points->x[0], Points->z[0], &col, &row, &depth);
 
 	if (ctype == DB_C_TYPE_INT) {
 	    int ivalue;

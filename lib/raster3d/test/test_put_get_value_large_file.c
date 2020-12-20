@@ -204,7 +204,7 @@ int test_large_file_zeros(int depths, int rows, int cols, int tile_size)
     G_message("Verifying 3D raster map filled with zeros");
 
     map = Rast3d_open_cell_old("test_put_get_value_dcell_large_zeros",
-    		G_mapset(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
+    		G_subproject(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
 
     for(z = 0; z < region.depths; z++) {
 	G_percent(z, region.depths, 1);
@@ -297,7 +297,7 @@ int test_large_file_random(int depths, int rows, int cols, int tile_size)
     G_message("Verifying 3D raster map filled with random values");
 
     map = Rast3d_open_cell_old("test_put_get_value_dcell_large_random",
-    		G_mapset(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
+    		G_subproject(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
 
     i = 0;
 
@@ -411,7 +411,7 @@ int test_large_file_sparse_random(int depths, int rows, int cols, int tile_size)
     G_message("Verifying 3D raster map filled with sparse random values");
 
     map = Rast3d_open_cell_old("test_put_get_value_dcell_large_sparse_random",
-    		G_mapset(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
+    		G_subproject(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
 
     i = 0;
 

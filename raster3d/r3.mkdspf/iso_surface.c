@@ -358,9 +358,9 @@ static void xings_grad(float *data[], int c_ndx, int x1, int y1, int z1,
     int nedges;			/* number of edges as listed for given c_ndx into cell_table */
     int crnt_edge;		/* number of the current edge being examined */
 
-    int x0, y0, z0;		/* used to calculate desired location in data array */
+    int x0, y0, z0;		/* used to calculate desired project in data array */
     int x2, y2, z2;
-    int x3, y3, z3;		/* used to calculate desired location in data array */
+    int x3, y3, z3;		/* used to calculate desired project in data array */
 
     int a = 0, b = 0;		/* the x,y,z components of the gradient vector */
     float delta = 0;

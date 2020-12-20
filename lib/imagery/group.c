@@ -20,7 +20,7 @@
 * I_put_group_ref (group, &Ref);
 * I_get_subgroup_ref_file (group, subgroup, &Ref);
 * I_put_subgroup_ref_file (group, subgroup, &Ref);
-* I_add_file_to_group_ref (name, mapset, &Ref)
+* I_add_file_to_group_ref (name, subproject, &Ref)
 * I_transfer_group_ref_file (&Src_ref, n, &Dst_ref)
 * I_init_group_ref (&Ref);
 * I_free_group_ref (&Ref);
@@ -34,7 +34,7 @@ static int get_ref(const char *, const char *, const char *, struct Ref *);
 static int set_color(const char *, const char *, const char *, struct Ref *);
 static int put_ref(const char *, const char *, const struct Ref *);
 
-/* get current group name from file GROUPFILE in current mapset */
+/* get current group name from file GROUPFILE in current subproject */
 int I_get_group(char *group)
 {
     FILE *fd;
@@ -42,7 +42,7 @@ int I_get_group(char *group)
 
     *group = 0;
     G_suppress_warnings(1);
-    fd = G_fopen_old("", GROUPFILE, G_mapset());
+    fd = G_fopen_old("", GROUPFILE, G_subproject());
     G_suppress_warnings(0);
     if (fd == NULL)
 	return 0;
@@ -51,7 +51,7 @@ int I_get_group(char *group)
     return stat;
 }
 
-/* write group name to file GROUPFILE in current mapset */
+/* write group name to file GROUPFILE in current subproject */
 int I_put_group(const char *group)
 {
     FILE *fd;
@@ -64,7 +64,7 @@ int I_put_group(const char *group)
     return 1;
 }
 
-/* get current subgroup for group in current mapset */
+/* get current subgroup for group in current subproject */
 int I_get_subgroup(const char *group, char *subgroup)
 {
     FILE *fd;
@@ -83,7 +83,7 @@ int I_get_subgroup(const char *group, char *subgroup)
     return stat;
 }
 
-/* write current subgroup to group in current mapset */
+/* write current subgroup to group in current subproject */
 int I_put_subgroup(const char *group, const char *subgroup)
 {
     FILE *fd;
@@ -125,14 +125,14 @@ int I_get_group_ref(const char *group, struct Ref *ref)
  * Returns 1 if successful; 0 otherwise (but no error messages are printed).
  *
  *  \param group
- *  \param mapset
+ *  \param subproject
  *  \param ref
  *  \return int
  */
 
-int I_get_group_ref2(const char *group, const char *mapset, struct Ref *ref)
+int I_get_group_ref2(const char *group, const char *subproject, struct Ref *ref)
 {
-    return get_ref(group, "", mapset, ref);
+    return get_ref(group, "", subproject, ref);
 }
 
 
@@ -167,51 +167,51 @@ int I_get_subgroup_ref(const char *group,
  *
  *  \param group
  *  \param subgroup
- *  \param mapset
+ *  \param subproject
  *  \param ref
  *  \return int
  */
 int I_get_subgroup_ref2(const char *group,
-		       const char *subgroup, const char *mapset,
+		       const char *subgroup, const char *subproject,
                struct Ref *ref)
 {
-    return get_ref(group, subgroup, mapset, ref);
+    return get_ref(group, subgroup, subproject, ref);
 }
 
 
-static int get_ref(const char *group, const char *subgroup, const char *gmapset, struct Ref *ref)
+static int get_ref(const char *group, const char *subgroup, const char *gsubproject, struct Ref *ref)
 {
     int n;
     char buf[1024];
-    char name[INAME_LEN], mapset[INAME_LEN];
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char name[INAME_LEN], subproject[INAME_LEN];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
     char color[20];
     FILE *fd;
 
     I_init_group_ref(ref);
 
-    G_unqualified_name(group, gmapset, xname, xmapset);
+    G_unqualified_name(group, gsubproject, xname, xsubproject);
     group = xname;
-    gmapset = xmapset;
+    gsubproject = xsubproject;
 
-    if (gmapset == NULL || *gmapset == 0)
-        gmapset = G_mapset();
+    if (gsubproject == NULL || *gsubproject == 0)
+        gsubproject = G_subproject();
 
     G_suppress_warnings(1);
     if (*subgroup == 0)
-	fd = I_fopen_group_ref_old2(group, gmapset);
+	fd = I_fopen_group_ref_old2(group, gsubproject);
     else
-	fd = I_fopen_subgroup_ref_old2(group, subgroup, gmapset);
+	fd = I_fopen_subgroup_ref_old2(group, subgroup, gsubproject);
     G_suppress_warnings(0);
     if (!fd)
 	return 0;
 
     while (G_getl2(buf, sizeof buf, fd)) {
-	n = sscanf(buf, "%255s %255s %15s", name, mapset, color);  /* better use INAME_LEN */
+	n = sscanf(buf, "%255s %255s %15s", name, subproject, color);  /* better use INAME_LEN */
 	if (n == 2 || n == 3) {
-	    I_add_file_to_group_ref(name, mapset, ref);
+	    I_add_file_to_group_ref(name, subproject, ref);
 	    if (n == 3)
-		set_color(name, mapset, color, ref);
+		set_color(name, subproject, color, ref);
 	}
     }
     /* make sure we have a color assignment */
@@ -221,14 +221,14 @@ static int get_ref(const char *group, const char *subgroup, const char *gmapset,
     return 1;
 }
 
-static int set_color(const char *name, const char *mapset, const char *color,
+static int set_color(const char *name, const char *subproject, const char *color,
 		     struct Ref *ref)
 {
     int n;
 
     for (n = 0; n < ref->nfiles; n++) {
 	if (strcmp(ref->file[n].name, name) == 0
-	    && strcmp(ref->file[n].mapset, mapset) == 0)
+	    && strcmp(ref->file[n].subproject, subproject) == 0)
 	    break;
     }
 
@@ -357,7 +357,7 @@ static int put_ref(const char *group, const char *subgroup,
 	return 0;
 
     for (n = 0; n < ref->nfiles; n++) {
-	fprintf(fd, "%s %s", ref->file[n].name, ref->file[n].mapset);
+	fprintf(fd, "%s %s", ref->file[n].name, ref->file[n].subproject);
 	if (n == ref->red.n || n == ref->grn.n || n == ref->blu.n) {
 	    fprintf(fd, " ");
 	    if (n == ref->red.n)
@@ -378,7 +378,7 @@ static int put_ref(const char *group, const char *subgroup,
  * \brief add file name to Ref structure
  *
  * This routine adds the file
- * <b>name</b> and <b>mapset</b> to the list contained in the <b>ref</b>
+ * <b>name</b> and <b>subproject</b> to the list contained in the <b>ref</b>
  * structure, if it is not already in the list.  The <b>ref</b> structure must
  * have been properly initialized. This routine is used by programs, such as
  * <i>i.maxlik</i>, to add to the group new raster maps created from files
@@ -388,19 +388,19 @@ static int put_ref(const char *group, const char *subgroup,
  * Imagery_Library_Data_Structures.
  *
  *  \param name
- *  \param mapset
+ *  \param subproject
  *  \param ref
  *  \return int
  */
 
-int I_add_file_to_group_ref(const char *name, const char *mapset,
+int I_add_file_to_group_ref(const char *name, const char *subproject,
 			    struct Ref *ref)
 {
     int n;
 
     for (n = 0; n < ref->nfiles; n++) {
 	if (strcmp(ref->file[n].name, name) == 0
-	    && strcmp(ref->file[n].mapset, mapset) == 0)
+	    && strcmp(ref->file[n].subproject, subproject) == 0)
 	    return n;
     }
 
@@ -414,7 +414,7 @@ int I_add_file_to_group_ref(const char *name, const char *mapset,
 	    (struct Ref_Files *)G_malloc(ref->nfiles *
 					 sizeof(struct Ref_Files));
     strcpy(ref->file[n].name, name);
-    strcpy(ref->file[n].mapset, mapset);
+    strcpy(ref->file[n].subproject, subproject);
     return n;
 }
 
@@ -423,7 +423,7 @@ int I_add_file_to_group_ref(const char *name, const char *mapset,
  * \brief copy Ref lists
  *
  * This routine is used to copy file names from one
- * <i>Ref</i> structure to another. The name and mapset for file <b>n</b>
+ * <i>Ref</i> structure to another. The name and subproject for file <b>n</b>
  * from the <b>src</b> structure are copied into the <b>dst</b> structure
  * (which must be properly initialized).
  * For example, the following code copies one <i>Ref</i> structure to another:
@@ -450,7 +450,7 @@ int I_transfer_group_ref_file(const struct Ref *ref2, int n, struct Ref *ref1)
     int k;
 
     /* insert old name into new ref */
-    k = I_add_file_to_group_ref(ref2->file[n].name, ref2->file[n].mapset,
+    k = I_add_file_to_group_ref(ref2->file[n].name, ref2->file[n].subproject,
 				ref1);
 
     /* preserve color assignment */

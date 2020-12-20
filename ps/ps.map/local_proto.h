@@ -194,7 +194,7 @@ int read_cell(char *, char *);
 
 /* read_cfg.c */
 int set_paper(char *);
-void reset_map_location(void);
+void reset_map_project(void);
 void print_papers(void);
 
 /* r_border.c */

@@ -5,7 +5,7 @@
 * I_fopen_cam_file_append()
 * I_fopen_cam_file_old()
 *
-* fopen new camera files in the current mapset
+* fopen new camera files in the current subproject
 * fopen old camera files anywhere
 *******************************************************/
 static int error(char *, char *, char *);
@@ -34,7 +34,7 @@ FILE *I_fopen_cam_file_old(char *camera)
 {
     FILE *fd;
 
-    fd = G_fopen_old("camera", camera, G_mapset());
+    fd = G_fopen_old("camera", camera, G_subproject());
     if (!fd)
 	error(camera, "can't open ", "");
     return fd;
@@ -45,7 +45,7 @@ static int error(char *camera, char *msga, char *msgb)
     char buf[100];
 
     sprintf(buf, "%s camera file [%s] in [%s %s] %s",
-	    msga, camera, G_location(), G_mapset(), msgb);
+	    msga, camera, G_project(), G_subproject(), msgb);
     G_warning("%s", buf);
 
     return 0;

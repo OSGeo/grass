@@ -2,7 +2,7 @@
 
 <em>t.connect</em> allows the user to set the temporal database connection.
 The default setting is that the temporal database of
-type <em>sqlite3</em> is located in the current mapset directory.
+type <em>sqlite3</em> is located in the current subproject directory.
 
 <p>The <b>-p</b> flag will display the current temporal database connection parameters.
 <p>The <b>-pg</b> flag will display the current temporal database connection parameters
@@ -16,10 +16,10 @@ default values.
 Setting the connection with <em>t.connect</em> will not test the connection for validity.
 Hence a database connection will not be established.
 <p>
-The connection values are stored in the mapset's <tt>VAR</tt> file.
+The connection values are stored in the subproject's <tt>VAR</tt> file.
 The <b>-d</b> flag will set the default
 TGIS connection parameters.
-A SQLite database "tgis/sqlite.db" will be created in the current mapset directory.
+A SQLite database "tgis/sqlite.db" will be created in the current subproject directory.
 It will be located in the "tgis" sub-directory to not
 interfere with the <em>sqlite3</em> database used for vector attribute storage.
 <p>
@@ -28,9 +28,9 @@ temporal database or you need concurrent read and write access in the
 temporal database, consider to use a PostgreSQL connection instead.
 <p>
 Be aware that you have to set the PostgreSQL connection explicitly in
-every mapset that should store temporal information in the temporal database.
+every subproject that should store temporal information in the temporal database.
 <p>
-PostgreSQL and SQLite databases can not be mixed in a location.
+PostgreSQL and SQLite databases can not be mixed in a project.
 
 <h2>EXAMPLES</h2>
 
@@ -48,7 +48,7 @@ t.info -s
 <h3>PostgreSQL</h3>
 
 When using a PostgreSQL database, the user will need to specify the TGIS
-database connection for each mapset.
+database connection for each subproject.
 
 <div class="code"><pre>
 t.connect driver=pg database="dbname=grass_test user=soeren password=abcdefgh"

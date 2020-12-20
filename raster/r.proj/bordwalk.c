@@ -4,11 +4,11 @@
  *
  * bordwalk.c - projects the border cell centers of a map or region
  * to check whether they are inside the borders of another map/region 
- * in a different location, and adjusts the cell header so
+ * in a different project, and adjusts the cell header so
  * only overlapping areas are included. The function is called by main,
  * first to project the output region into the input map and trim the
  * borders of this in order to get a smaller map, and faster and less hungry 
- * memory allocation. Then main calls the function again, but reversed,
+ * memory alproject. Then main calls the function again, but reversed,
  * to project the input map on the output region, trimming this down to 
  * the smallest possible rectangular region.
  * 

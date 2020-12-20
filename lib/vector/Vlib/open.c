@@ -149,7 +149,7 @@ int Vect_set_open_level(int level)
  
  \param[out] Map pointer to Map_info structure
  \param name name of vector map to open
- \param mapset mapset name ("" for search path)
+ \param subproject subproject name ("" for search path)
  \param layer layer name (OGR format only)
  \param update non-zero to open for update otherwise read-only mode
  \param head_only read only header info from 'head', 'dbln', 'topo',
@@ -159,19 +159,19 @@ int Vect_set_open_level(int level)
  \return level of openness (1, 2)
  \return -1 in error
 */
-int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
+int Vect__open_old(struct Map_info *Map, const char *name, const char *subproject,
                    const char *layer, int update, int head_only, int is_tmp)
 {
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
     char path[GPATH_MAX];
     FILE *fp;
     int level, level_request;
     int format, ret;
-    int ogr_mapset;
-    const char *fmapset;
+    int ogr_subproject;
+    const char *fsubproject;
 
-    G_debug(1, "Vect__open_old(): name = %s, mapset = %s, layer = %s, update = %d, "
-            "head_only = %d, is_tmp = %d", name, mapset, layer ? layer : "NULL", update, head_only,
+    G_debug(1, "Vect__open_old(): name = %s, subproject = %s, layer = %s, update = %d, "
+            "head_only = %d, is_tmp = %d", name, subproject, layer ? layer : "NULL", update, head_only,
             is_tmp);
     
     if (update && !is_tmp) {
@@ -195,61 +195,61 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
     /* initialize Map->plus */
     dig_init_plus(&(Map->plus));
 
-    /* check OGR mapset */
-    ogr_mapset = FALSE;
-    if (G_name_is_fully_qualified(name, xname, xmapset)) {
-        if (strcasecmp(xmapset, "ogr") == 0) {
-            /* unique OGR mapset detected */
-            G_debug(1, "OGR mapset detected");
-            ogr_mapset = TRUE;
+    /* check OGR subproject */
+    ogr_subproject = FALSE;
+    if (G_name_is_fully_qualified(name, xname, xsubproject)) {
+        if (strcasecmp(xsubproject, "ogr") == 0) {
+            /* unique OGR subproject detected */
+            G_debug(1, "OGR subproject detected");
+            ogr_subproject = TRUE;
             Map->fInfo.ogr.dsn = G_store(xname);
             if (layer) {
                 Map->fInfo.ogr.layer_name = G_store(layer); /* no layer to be open */
             }
         }
         Map->name = G_store(xname);
-        Map->mapset = G_store(xmapset);
+        Map->subproject = G_store(xsubproject);
     }
     else {
         Map->name = G_store(name);
 
         Map->temporary = is_tmp;
-        /* temporary maps can be accessed only in the current mapset */
-        if (mapset)
-            Map->mapset = G_store(mapset);
+        /* temporary maps can be accessed only in the current subproject */
+        if (subproject)
+            Map->subproject = G_store(subproject);
         else
-            Map->mapset = G_store("");
+            Map->subproject = G_store("");
     }
 
     Vect__get_path(path, Map);
 
-    if (!ogr_mapset) {
-        /* try to find vector map (not for OGR mapset) */
+    if (!ogr_subproject) {
+        /* try to find vector map (not for OGR subproject) */
         if (!Map->temporary) {
-            fmapset = G_find_vector2(Map->name, Map->mapset);
-            if (fmapset == NULL) {
-                if (mapset && strcmp(mapset, G_mapset()) == 0)
-                    G_fatal_error(_("Vector map <%s> not found in current mapset"),
+            fsubproject = G_find_vector2(Map->name, Map->subproject);
+            if (fsubproject == NULL) {
+                if (subproject && strcmp(subproject, G_subproject()) == 0)
+                    G_fatal_error(_("Vector map <%s> not found in current subproject"),
                                   Vect_get_name(Map));
                 else
                     G_fatal_error(_("Vector map <%s> not found"),
                                   Vect_get_full_name(Map));
                 return -1;
             }
-            Map->mapset = G_store(fmapset);
+            Map->subproject = G_store(fsubproject);
         }
         else {
             char file_path[GPATH_MAX];
-            /* reduce to current mapset if search path was set */
-            if(strcmp(Map->mapset, "") == 0)
-                Map->mapset = G_store(G_mapset());
-            /* temporary map: reduce to current mapset if search path
+            /* reduce to current subproject if search path was set */
+            if(strcmp(Map->subproject, "") == 0)
+                Map->subproject = G_store(G_subproject());
+            /* temporary map: reduce to current subproject if search path
              * was set */
-            if (strcmp(Map->mapset, "") == 0)
-                Map->mapset = G_store(G_mapset());
+            if (strcmp(Map->subproject, "") == 0)
+                Map->subproject = G_store(G_subproject());
             else {
-                if (strcmp(Map->mapset, G_mapset()) != 0) {
-                    G_warning(_("Temporary vector maps can be accessed only in the current mapset"));
+                if (strcmp(Map->subproject, G_subproject()) != 0) {
+                    G_warning(_("Temporary vector maps can be accessed only in the current subproject"));
                     return -1;
                 }
             }
@@ -270,24 +270,24 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
         }
     }
     
-    Map->location = G_store(G_location());
+    Map->project = G_store(G_project());
     Map->gisdbase = G_store(G_gisdbase());
     
-    if (update && !ogr_mapset && (0 != strcmp(Map->mapset, G_mapset()))) {
-        G_warning(_("Vector map which is not in the current mapset cannot be opened for update"));
+    if (update && !ogr_subproject && (0 != strcmp(Map->subproject, G_subproject()))) {
+        G_warning(_("Vector map which is not in the current subproject cannot be opened for update"));
         return -1;
     }
 
-    G_debug(1, "Map: name = %s, mapset = %s, temporary = %d", Map->name, Map->mapset,
+    G_debug(1, "Map: name = %s, subproject = %s, temporary = %d", Map->name, Map->subproject,
             Map->temporary);
 
     /* read vector format information */
-    if (ogr_mapset) {
+    if (ogr_subproject) {
         format = GV_FORMAT_OGR_DIRECT;
     }
     else {
         format = 0;
-        fp = G_fopen_old(path, GV_FRMT_ELEMENT, Map->mapset);
+        fp = G_fopen_old(path, GV_FRMT_ELEMENT, Map->subproject);
         if (fp == NULL) {
             G_debug(1, "Vector format: %d (native)", format);
             format = GV_FORMAT_NATIVE;
@@ -306,8 +306,8 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
     }
     Map->format = format;
 
-    /* read vector head (ignored for OGR mapset) */
-    if (!ogr_mapset && Vect__read_head(Map) != 0) {
+    /* read vector head (ignored for OGR subproject) */
+    if (!ogr_subproject && Vect__read_head(Map) != 0) {
         G_fatal_error(_("Unable to read header file of vector map <%s>"),
                       Vect_get_full_name(Map));
     }
@@ -414,7 +414,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
         }
 #endif
         if (level_request == 2 && level < 2) {
-            if (!ogr_mapset) {
+            if (!ogr_subproject) {
                 /* for direct OGR read access is built pseudo-topology on the fly */
                 G_warning(_("Unable to open vector map <%s> on level %d. "
                             "Try to rebuild vector topology with v.build."),
@@ -428,7 +428,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
     }
 
     /* open level 1 files / sources (format specific) */
-    if (!head_only || ogr_mapset || format == GV_FORMAT_POSTGIS) {
+    if (!head_only || ogr_subproject || format == GV_FORMAT_POSTGIS) {
         /* no need to open coordinates */
         if (0 != (*Open_old_array[format][1]) (Map, update)) {  /* cannot open */
             if (level >= 2) {   /* support files opened */
@@ -438,7 +438,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
 			  Vect_get_full_name(Map));
             return -1;
         }
-        if (ogr_mapset && !head_only && level_request != 1) {
+        if (ogr_subproject && !head_only && level_request != 1) {
             /* build pseudo-topology on the fly */
             int verbose;
             verbose = G_verbose();
@@ -501,7 +501,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
     Vect_read_dblinks(Map);
 
     /* open history file */
-    if (update && !ogr_mapset) {                /* native only */
+    if (update && !ogr_subproject) {                /* native only */
         Map->hist_fp = G_fopen_modify(path, GV_HIST_ELEMENT);
         if (Map->hist_fp == NULL) {
             G_warning(_("Unable to open history file for vector map <%s>"),
@@ -516,7 +516,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
     else {
         if (Map->format == GV_FORMAT_NATIVE || Map->format == GV_FORMAT_OGR ||
             Map->format == GV_FORMAT_POSTGIS) {
-            Map->hist_fp = G_fopen_old(path, GV_HIST_ELEMENT, Map->mapset);
+            Map->hist_fp = G_fopen_old(path, GV_HIST_ELEMENT, Map->subproject);
             /* If NULL (does not exist) then Vect_hist_read() handle that */
         }
         else {
@@ -564,21 +564,21 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
   
   \param[out] Map pointer to Map_info structure
   \param name name of vector map to open
-  \param mapset mapset name ("" for search path)
+  \param subproject subproject name ("" for search path)
   
   \return 1 open on level 1 (without topology)
   \return 2 open on level 2 (with topology)
   \return -1 on error
 */
-int Vect_open_old(struct Map_info *Map, const char *name, const char *mapset)
+int Vect_open_old(struct Map_info *Map, const char *name, const char *subproject)
 {
-    return Vect__open_old(Map, name, mapset, NULL, FALSE, FALSE, FALSE);
+    return Vect__open_old(Map, name, subproject, NULL, FALSE, FALSE, FALSE);
 }
 
 /*!
   \brief Open existing temporary vector map for reading
   
-  Temporary vector maps are stored in the current mapset (directory
+  Temporary vector maps are stored in the current subproject (directory
   <tt>.tmp/<hostname>/vector</tt>).
 
   Calls G_fatal_error() on failure.
@@ -587,15 +587,15 @@ int Vect_open_old(struct Map_info *Map, const char *name, const char *mapset)
   
   \param[out] Map pointer to Map_info structure
   \param name name of vector map to open
-  \param mapset mapset name ("" for search path)
+  \param subproject subproject name ("" for search path)
   
   \return 1 open on level 1 (without topology)
   \return 2 open on level 2 (with topology)
   \return -1 on error
 */
-int Vect_open_tmp_old(struct Map_info *Map, const char *name, const char *mapset)
+int Vect_open_tmp_old(struct Map_info *Map, const char *name, const char *subproject)
 {
-    return Vect__open_old(Map, name, mapset, NULL, FALSE, FALSE, TRUE);
+    return Vect__open_old(Map, name, subproject, NULL, FALSE, FALSE, TRUE);
 }
 
 /*!
@@ -605,17 +605,17 @@ int Vect_open_tmp_old(struct Map_info *Map, const char *name, const char *mapset
 
   \param[out] Map pointer to Map_info structure
   \param name name of vector map to open (datasource for direct OGR access)
-  \param mapset mapset name ("" for search path, "OGR" for direct OGR access)
+  \param subproject subproject name ("" for search path, "OGR" for direct OGR access)
   \param layer layer name (OGR layer for direct OGR access)
   
   \return 1 open on level 1 (without topology)
   \return 2 open on level 2 (with topology)
   \return -1 on error
 */
-int Vect_open_old2(struct Map_info *Map, const char *name, const char *mapset,
+int Vect_open_old2(struct Map_info *Map, const char *name, const char *subproject,
                    const char *layer)
 {
-    return Vect__open_old(Map, name, mapset, layer, FALSE, FALSE, FALSE);
+    return Vect__open_old(Map, name, subproject, layer, FALSE, FALSE, FALSE);
 }
 
 /*!
@@ -631,21 +631,21 @@ int Vect_open_old2(struct Map_info *Map, const char *name, const char *mapset,
 
   \param[out] Map pointer to Map_info structure
   \param name name of vector map to update
-  \param mapset mapset name
+  \param subproject subproject name
   
   \return 1 open on level 1 (without topology)
   \return 2 open on level 2 (with topology)
   \return -1 on error
 */
-int Vect_open_update(struct Map_info *Map, const char *name, const char *mapset)
+int Vect_open_update(struct Map_info *Map, const char *name, const char *subproject)
 {
-    return Vect__open_old(Map, name, mapset, NULL, TRUE, FALSE, FALSE);
+    return Vect__open_old(Map, name, subproject, NULL, TRUE, FALSE, FALSE);
 }
 
 /*!
   \brief Open existing temporary vector map for reading/writing
   
-  Temporary vector maps are stored in the current mapset (directory
+  Temporary vector maps are stored in the current subproject (directory
   <tt>.tmp/<hostname>/vector</tt>).
 
   By default list of updated features is not maintained, see
@@ -657,15 +657,15 @@ int Vect_open_update(struct Map_info *Map, const char *name, const char *mapset)
 
   \param[out] Map pointer to Map_info structure
   \param name name of vector map to update
-  \param mapset mapset name
+  \param subproject subproject name
   
   \return 1 open on level 1 (without topology)
   \return 2 open on level 2 (with topology)
   \return -1 on error
 */
-int Vect_open_tmp_update(struct Map_info *Map, const char *name, const char *mapset)
+int Vect_open_tmp_update(struct Map_info *Map, const char *name, const char *subproject)
 {
-    return Vect__open_old(Map, name, mapset, NULL, TRUE, FALSE, TRUE);
+    return Vect__open_old(Map, name, subproject, NULL, TRUE, FALSE, TRUE);
 }
 
 /*!
@@ -678,16 +678,16 @@ int Vect_open_tmp_update(struct Map_info *Map, const char *name, const char *map
     
   \param[out] Map pointer to Map_info structure
   \param name name of vector map to open (datasource for direct OGR access)
-  \param mapset mapset name ("" for search path, "OGR" for direct OGR access)
+  \param subproject subproject name ("" for search path, "OGR" for direct OGR access)
   \param layer layer name (OGR layer for direct OGR access)
   
   \return 1 open on level 1 (without topology)
   \return 2 open on level 2 (with topology)
   \return -1 on error 
 */
-int Vect_open_update2(struct Map_info *Map, const char *name, const char *mapset, const char *layer)
+int Vect_open_update2(struct Map_info *Map, const char *name, const char *subproject, const char *layer)
 {
-    return Vect__open_old(Map, name, mapset, layer, TRUE, FALSE, FALSE);
+    return Vect__open_old(Map, name, subproject, layer, TRUE, FALSE, FALSE);
 }
 
 /*! 
@@ -702,15 +702,15 @@ int Vect_open_update2(struct Map_info *Map, const char *name, const char *mapset
    
   \param[out] Map pointer to Map_info structure
   \param name name of vector map to read
-  \param mapset mapset name ("" for search path)
+  \param subproject subproject name ("" for search path)
   
   \return 1 open on level 1 (without topology)
   \return 2 open on level 2 (with topology)
   \return -1 on error 
 */
-int Vect_open_old_head(struct Map_info *Map, const char *name, const char *mapset)
+int Vect_open_old_head(struct Map_info *Map, const char *name, const char *subproject)
 {
-    return Vect__open_old(Map, name, mapset, NULL, FALSE, TRUE, FALSE);
+    return Vect__open_old(Map, name, subproject, NULL, FALSE, TRUE, FALSE);
 }
 
 /*! 
@@ -722,22 +722,22 @@ int Vect_open_old_head(struct Map_info *Map, const char *name, const char *mapse
    
   \param[out] Map pointer to Map_info structure
   \param name name of vector map to read (dsn for OGR)
-  \param mapset mapset name ("" for search path)
+  \param subproject subproject name ("" for search path)
   \param layer layer name (OGR format)
   
   \param[out] Map pointer to Map_info structure
   \param name name of vector map to open (datasource for direct OGR access)
-  \param mapset mapset name ("" for search path, "OGR" for direct OGR access)
+  \param subproject subproject name ("" for search path, "OGR" for direct OGR access)
   \param layer layer name (OGR layer for direct OGR access)
   
   \return 1 open on level 1 (without topology)
   \return 2 open on level 2 (with topology)
   \return -1 on error 
 */
-int Vect_open_old_head2(struct Map_info *Map, const char *name, const char *mapset,
+int Vect_open_old_head2(struct Map_info *Map, const char *name, const char *subproject,
                         const char *layer)
 {
-    return Vect__open_old(Map, name, mapset, layer, FALSE, TRUE, FALSE);
+    return Vect__open_old(Map, name, subproject, layer, FALSE, TRUE, FALSE);
 }
 
 /*!  \brief Open header file of existing vector map for updating
@@ -745,22 +745,22 @@ int Vect_open_old_head2(struct Map_info *Map, const char *name, const char *maps
   
   \param[out] Map pointer to Map_info structure
   \param name name of vector map to update
-  \param mapset mapset name
+  \param subproject subproject name
   
   \return 1 open on level 1 (without topology)
   \return 2 open on level 2 (with topology)
   \return -1 on error 
 */
 int Vect_open_update_head(struct Map_info *Map, const char *name,
-                          const char *mapset)
+                          const char *subproject)
 {
-    return Vect__open_old(Map, name, mapset, NULL, TRUE, TRUE, FALSE);
+    return Vect__open_old(Map, name, subproject, NULL, TRUE, TRUE, FALSE);
 }
 
 int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
 {
     int ret;
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 
     G_debug(1, "Vect_open_new(): name = %s with_z = %d is_tmp = %d",
             name, with_z, is_tmp);
@@ -772,10 +772,10 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
     Vect__init_head(Map);
 
     /* check for fully-qualified map name */
-    if (G_name_is_fully_qualified(name, xname, xmapset)) {
-        if (strcmp(xmapset, G_mapset()) != 0) {
-            G_warning(_("Unable to create vector map: <%s> is not in the current mapset (%s)"),
-                      name, G_mapset());
+    if (G_name_is_fully_qualified(name, xname, xsubproject)) {
+        if (strcmp(xsubproject, G_subproject()) != 0) {
+            G_warning(_("Unable to create vector map: <%s> is not in the current subproject (%s)"),
+                      name, G_subproject());
             return -1;
         }
         name = xname;
@@ -790,8 +790,8 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
 
     /* store basic info */
     Map->name      = G_store(name);
-    Map->mapset    = G_store(G_mapset());
-    Map->location  = G_store(G_location());
+    Map->subproject    = G_store(G_subproject());
+    Map->project  = G_store(G_project());
     Map->gisdbase  = G_store(G_gisdbase());
     Map->temporary = is_tmp;
     
@@ -817,7 +817,7 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
 
         env = getenv("GRASS_VECTOR_TEMPORARY");
         if (!Map->temporary || (env && strcmp(env, "move") == 0)) {
-            if (G_find_vector2(name, G_mapset()) != NULL) {
+            if (G_find_vector2(name, G_subproject()) != NULL) {
                 G_warning(_("Vector map <%s> already exists and will be overwritten"),
                           name);
                 
@@ -906,7 +906,7 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
   Vect_set_updated() for details.
   
   By default map format is native (GV_FORMAT_NATIVE). If OGR file is
-  found in the current mapset then the map (ie. OGR layer) is created
+  found in the current subproject then the map (ie. OGR layer) is created
   in given OGR datasource (GV_FORMAT_OGR). Similarly if PG file exists
   then the map (ie. PostGIS table) is created using PostGIS interface
   (GV_FORMAT_POSTGIS). The format of map is stored in Map->format.
@@ -931,7 +931,7 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 /*!
   \brief Create new temporary vector map
 
-  Temporary vector maps are stored in the current mapset (directory
+  Temporary vector maps are stored in the current subproject (directory
   <tt>.tmp/<hostname>/vector</tt>). If the map already exists, it is
   overwritten.
 
@@ -1101,8 +1101,8 @@ int Vect_open_topo(struct Map_info *Map, int head_only)
     struct Coor_info CInfo;
     struct Plus_head *Plus;
 
-    G_debug(1, "Vect_open_topo(): name = %s mapset = %s", Map->name,
-            Map->mapset);
+    G_debug(1, "Vect_open_topo(): name = %s subproject = %s", Map->name,
+            Map->subproject);
 
     Plus = &(Map->plus);
 
@@ -1113,11 +1113,11 @@ int Vect_open_topo(struct Map_info *Map, int head_only)
     }
 
     dig_file_init(&fp);
-    fp.file = G_fopen_old(path, GV_TOPO_ELEMENT, Map->mapset);
+    fp.file = G_fopen_old(path, GV_TOPO_ELEMENT, Map->subproject);
 
     if (fp.file == NULL) {      /* topo file is not available */
         G_debug(1, "Cannot open topo file for vector '%s@%s'.",
-                Map->name, Map->mapset);
+                Map->name, Map->subproject);
         return -1;
     }
 
@@ -1147,7 +1147,7 @@ int Vect_open_topo(struct Map_info *Map, int head_only)
      */
     if (err) {
         G_warning(_("Please rebuild topology for vector map <%s@%s>"),
-                  Map->name, Map->mapset);
+                  Map->name, Map->subproject);
         return -1;
     }
 
@@ -1179,8 +1179,8 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
     struct Coor_info CInfo;
     struct Plus_head *Plus;
 
-    G_debug(1, "Vect_open_sidx(): name = %s mapset= %s mode = %s", Map->name,
-            Map->mapset, mode == 0 ? "old" : (mode == 1 ? "update" : "new"));
+    G_debug(1, "Vect_open_sidx(): name = %s subproject= %s mode = %s", Map->name,
+            Map->subproject, mode == 0 ? "old" : (mode == 1 ? "update" : "new"));
 
     Plus = &(Map->plus);
 
@@ -1199,11 +1199,11 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
         if (access(file_path, F_OK) != 0)       /* does not exist */
             return 1;
 
-        Plus->spidx_fp.file = G_fopen_old(path, GV_SIDX_ELEMENT, Map->mapset);
+        Plus->spidx_fp.file = G_fopen_old(path, GV_SIDX_ELEMENT, Map->subproject);
         
         if (Plus->spidx_fp.file == NULL) {  /* sidx file is not available */
             G_debug(1, "Cannot open spatial index file for vector '%s@%s'.",
-                    Map->name, Map->mapset);
+                    Map->name, Map->subproject);
             return -1;
         }
 
@@ -1246,7 +1246,7 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
          */
         if (err) {
             G_warning(_("Please rebuild topology for vector map <%s@%s>"),
-                      Map->name, Map->mapset);
+                      Map->name, Map->subproject);
             fclose(Plus->spidx_fp.file);
             return -1;
         }
@@ -1292,7 +1292,7 @@ int map_format(struct Map_info *Map)
     if (Map->temporary || getenv("GRASS_VECTOR_EXTERNAL_IGNORE"))
         return format;
     
-    if (G_find_file2("", "OGR", G_mapset())) {
+    if (G_find_file2("", "OGR", G_subproject())) {
         /* OGR */
         FILE *fp;
         const char *p;
@@ -1312,7 +1312,7 @@ int map_format(struct Map_info *Map)
             format = GV_FORMAT_NATIVE;
             Map->temporary = TEMPORARY_MAP;
         }
-        fp = G_fopen_old("", "OGR", G_mapset());
+        fp = G_fopen_old("", "OGR", G_subproject());
         if (!fp) {
             G_fatal_error(_("Unable to open OGR file"));
         }
@@ -1337,7 +1337,7 @@ int map_format(struct Map_info *Map)
     }
     
     def_file = getenv("GRASS_VECTOR_PGFILE");  /* GRASS_VECTOR_PGFILE defined by v.out.postgis */
-    if (G_find_file2("", def_file ? def_file : "PG", G_mapset())) {
+    if (G_find_file2("", def_file ? def_file : "PG", G_subproject())) {
         /* PostGIS */
         if (Map->fInfo.ogr.driver_name) {
             G_warning(_("OGR output also detected, using OGR"));
@@ -1350,7 +1350,7 @@ int map_format(struct Map_info *Map)
             struct Format_info_pg *pg_info;
             
             G_debug(2, " using PostGIS format");
-            fp = G_fopen_old("", def_file ? def_file : "PG", G_mapset());
+            fp = G_fopen_old("", def_file ? def_file : "PG", G_subproject());
             if (!fp) {
                 G_fatal_error(_("Unable to open PG file"));
             }
@@ -1483,9 +1483,9 @@ char *Vect__get_element_path(char *file_path,
     
     Vect__get_path(path, Map);
     if (Map->temporary)
-        G_file_name_tmp(file_path, path, element, Map->mapset);
+        G_file_name_tmp(file_path, path, element, Map->subproject);
     else
-        G_file_name(file_path, path, element, Map->mapset);
+        G_file_name(file_path, path, element, Map->subproject);
 
     return file_path;
 }

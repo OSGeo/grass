@@ -157,7 +157,7 @@ private:
      cannot know it in advance; estimate it roughly and then reallocate
      it dynamically on request;
      
-     TO DO: dynamic reallocation with a bigger nb of external buffer
+     TO DO: dynamic realproject with a bigger nb of external buffer
      if structure becomes full */
   unsigned short max_nbuf;
   

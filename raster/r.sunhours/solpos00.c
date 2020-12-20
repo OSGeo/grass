@@ -64,7 +64,7 @@
 *              S_init(struct posdata*)  [optional]
 *              .
 *              .
-*              [set time and location parameters before S_solpos call]
+*              [set time and project parameters before S_solpos call]
 *              .
 *              .
 *              int retval = S_solpos(struct posdata*)
@@ -165,10 +165,10 @@ static void localtrig(struct posdata *pdat, struct trigdata *tdat);
 *            minute
 *            second
 *            interval  DEFAULT 0
-*        Location:
+*        Project:
 *            latitude
 *            longitude
-*        Location/time adjuster:
+*        Project/time adjuster:
 *            timezone
 *        Atmospheric pressure and temperature:
 *            press     DEFAULT 1013.0 mb
@@ -256,7 +256,7 @@ long S_solpos(struct posdata *pdat)
 *
 *    NOTE: This function is optional if you initialize ALL input parameters
 *          in your calling code.  Note that the required parameters of date
-*          and location are deliberately initialized out of bounds to force
+*          and project are deliberately initialized out of bounds to force
 *          the user to enter real-world values.
 *
 *    Requires: Pointer to a posdata structure, members of which are
@@ -333,7 +333,7 @@ static long int validate(struct posdata *pdat)
 	if ((pdat->interval < 0) || (pdat->interval > 28800))
 	    retval |= (1L << S_INTRVL_ERROR);
 
-	/* No absurd locations, please. */
+	/* No absurd projects, please. */
 	if (fabs(pdat->longitude) > 180.0)
 	    retval |= (1L << S_LON_ERROR);
 	if (fabs(pdat->latitude) > 90.0)
@@ -447,7 +447,7 @@ static void doy2dom(struct posdata *pdat)
 /*============================================================================
 *    Local Void function geometry
 *
-*    Does the underlying geometry for a given time and location
+*    Does the underlying geometry for a given time and project
 *----------------------------------------------------------------------------*/
 static void geometry(struct posdata *pdat)
 {

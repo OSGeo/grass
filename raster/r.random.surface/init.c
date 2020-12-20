@@ -37,12 +37,12 @@ void Init(void)
     else
 	MinRes = NS;
 
-    if (NULL == G_find_file("cell", "MASK", G_mapset())) {
+    if (NULL == G_find_file("cell", "MASK", G_subproject())) {
 	MapCount = Rs * Cs;
 	FDM = -1;
     }
     else {
-	FDM = Rast_open_old("MASK", G_mapset());
+	FDM = Rast_open_old("MASK", G_subproject());
 	{
 	    MapCount = 0;
 	    CellBuffer = Rast_allocate_c_buf();

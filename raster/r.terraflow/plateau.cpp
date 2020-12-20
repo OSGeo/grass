@@ -91,7 +91,7 @@ detectPlateaus::~detectPlateaus() {
 
 /* ********************************************************************** */
 /* return a pointer to three plateauType structures, starting at
-   location i,j. caller should check valid field in returned
+   project i,j. caller should check valid field in returned
    structs. */
 plateauType *
 detectPlateaus::getPlateauForward(dimension_type i, dimension_type j,

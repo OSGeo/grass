@@ -59,7 +59,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     int cf1 = 0, cf2 = 0, cf3 = 0, cf4 = 0, cf5 = 0, cf6 = 0;	/* cell file descriptors */
     int nrows, ncols;		/* current region rows and columns */
     int i;			/* loop counter */
-    const char *mapset;
+    const char *subproject;
     float dat1, dat2;
     struct Colors colors, colors2;
     double value1, value2;
@@ -76,7 +76,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     /* change region to output cell file region */
     G_verbose_message(_("Temporarily changing the region to desired resolution..."));
     Rast_set_output_window(outhd);
-    mapset = G_mapset();
+    subproject = G_subproject();
 
     cell1 = Rast_allocate_f_output_buf();
 
@@ -255,7 +255,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 	    }
 
 	    Rast_write_colors(params->elev, maps, &colors2);
-	    Rast_quantize_fp_map_range(params->elev, mapset,
+	    Rast_quantize_fp_map_range(params->elev, subproject,
 				    zminac - 0.5, zmaxac + 0.5,
 				    (CELL) (zminac - 0.5),
 				    (CELL) (zmaxac + 0.5));
@@ -297,7 +297,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		return -1;
 	    }
 	    Rast_write_colors(params->slope, maps, &colors);
-	    Rast_quantize_fp_map_range(params->slope, mapset, 0., 90., 0, 90);
+	    Rast_quantize_fp_map_range(params->slope, subproject, 0., 90., 0, 90);
 
 	    do_history(params->slope, input, params);
 	}
@@ -328,7 +328,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		return -1;
 	    }
 	    Rast_write_colors(params->aspect, maps, &colors);
-	    Rast_quantize_fp_map_range(params->aspect, mapset, 0., 360., 0, 360);
+	    Rast_quantize_fp_map_range(params->aspect, subproject, 0., 360., 0, 360);
 
 	    do_history(params->aspect, input, params);
 	}
@@ -381,7 +381,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 
 		fprintf(stderr, "color map written\n");
 
-		Rast_quantize_fp_map_range(params->pcurv, mapset,
+		Rast_quantize_fp_map_range(params->pcurv, subproject,
 					dat1, dat2,
 					(CELL) (dat1 * MULT),
 					(CELL) (dat2 * MULT));
@@ -396,7 +396,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		    return -1;
 		}
 		Rast_write_colors(params->tcurv, maps, &colors);
-		Rast_quantize_fp_map_range(params->tcurv, mapset,
+		Rast_quantize_fp_map_range(params->tcurv, subproject,
 					dat1, dat2, (CELL) (dat1 * MULT),
 					(CELL) (dat2 * MULT));
 
@@ -411,7 +411,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		    return -1;
 		}
 		Rast_write_colors(params->mcurv, maps, &colors);
-		Rast_quantize_fp_map_range(params->mcurv, mapset,
+		Rast_quantize_fp_map_range(params->mcurv, subproject,
 					dat1, dat2,
 					(CELL) (dat1 * MULT),
 					(CELL) (dat2 * MULT));

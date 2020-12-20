@@ -115,13 +115,13 @@ static int copy_file(const char *src, const char *dst)
    Note: Output vector map is overwritten if exists!
 
    \param in name if vector map to be copied
-   \param mapset mapset name where the input map is located
-   \param out name for output vector map (new map is created in current mapset)
+   \param subproject subproject name where the input map is located
+   \param out name for output vector map (new map is created in current subproject)
 
    \return -1 error
    \return 0 success
  */
-int Vect_copy(const char *in, const char *mapset, const char *out)
+int Vect_copy(const char *in, const char *subproject, const char *out)
 {
     int i, ret;
     struct Map_info In, Out;
@@ -131,28 +131,28 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
         GV_TOPO_ELEMENT, GV_SIDX_ELEMENT, GV_CIDX_ELEMENT,
         NULL
     };
-    const char *inmapset;
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    const char *insubproject;
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 
-    G_debug(2, "Copy vector '%s' in '%s' to '%s'", in, mapset, out);
+    G_debug(2, "Copy vector '%s' in '%s' to '%s'", in, subproject, out);
     /* check for [A-Za-z][A-Za-z0-9_]* in name */
     if (Vect_legal_filename(out) < 0)
         G_fatal_error(_("Vector map name is not SQL compliant"));
 
-    inmapset = G_find_vector2(in, mapset);
-    if (!inmapset) {
-        G_warning(_("Unable to find vector map <%s> in <%s>"), in, mapset);
+    insubproject = G_find_vector2(in, subproject);
+    if (!insubproject) {
+        G_warning(_("Unable to find vector map <%s> in <%s>"), in, subproject);
         return -1;
     }
-    mapset = inmapset;
+    subproject = insubproject;
 
-    /* remove mapset from fully qualified name, confuses G_file_name() */
-    if (G_name_is_fully_qualified(in, xname, xmapset)) {
+    /* remove subproject from fully qualified name, confuses G_file_name() */
+    if (G_name_is_fully_qualified(in, xname, xsubproject)) {
         in = xname;
     }
 
     /* Delete old vector if it exists */
-    if (G_find_vector2(out, G_mapset())) {
+    if (G_find_vector2(out, G_subproject())) {
         G_warning(_("Vector map <%s> already exists and will be overwritten"),
                   out);
         ret = Vect_delete(out);
@@ -163,16 +163,16 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
     }
 
     /* Copy the directory */
-    G_make_mapset_element(GV_DIRECTORY);
+    G_make_subproject_element(GV_DIRECTORY);
     sprintf(buf, "%s/%s", GV_DIRECTORY, out);
-    G_make_mapset_element(buf);
+    G_make_subproject_element(buf);
 
     i = 0;
     while (files[i]) {
         sprintf(buf, "%s/%s", in, files[i]);
-        G_file_name(old_path, GV_DIRECTORY, buf, mapset);
+        G_file_name(old_path, GV_DIRECTORY, buf, subproject);
         sprintf(buf, "%s/%s", out, files[i]);
-        G_file_name(new_path, GV_DIRECTORY, buf, G_mapset());
+        G_file_name(new_path, GV_DIRECTORY, buf, G_subproject());
 
         if (access(old_path, F_OK) == 0) {      /* file exists? */
             G_debug(2, "copy %s to %s", old_path, new_path);
@@ -184,12 +184,12 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
         i++;
     }
 
-    G_file_name(old_path, GV_DIRECTORY, in, mapset);
-    G_file_name(new_path, GV_DIRECTORY, out, G_mapset());
+    G_file_name(old_path, GV_DIRECTORY, in, subproject);
+    G_file_name(new_path, GV_DIRECTORY, out, G_subproject());
 
     /* Open input */
     Vect_set_open_level(1);
-    if (Vect_open_old_head(&In, in, mapset) < 0)
+    if (Vect_open_old_head(&In, in, subproject) < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), in);
 
     if (In.format != GV_FORMAT_NATIVE) {        /* Done */
@@ -199,7 +199,7 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
 
     /* Open output */
     Vect_set_open_level(1);
-    if (Vect_open_update_head(&Out, out, G_mapset()) < 0)
+    if (Vect_open_update_head(&Out, out, G_subproject()) < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), out);
 
     /* Copy tables */
@@ -217,7 +217,7 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
 }
 
 /*!
-   \brief Rename existing vector map (in the current mapset).
+   \brief Rename existing vector map (in the current subproject).
 
    Attribute tables are created in the same database where input tables were stored.
 
@@ -238,7 +238,7 @@ int Vect_rename(const char *in, const char *out)
     struct field_info *Fin, *Fout;
     int *fields;
     dbDriver *driver;
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 
     G_debug(2, "Rename vector '%s' to '%s'", in, out);
     /* check for [A-Za-z][A-Za-z0-9_]* in name */
@@ -246,14 +246,14 @@ int Vect_rename(const char *in, const char *out)
         G_fatal_error(_("Vector map name is not SQL compliant"));
 
     /* Delete old vector if it exists */
-    if (G_find_vector2(out, G_mapset())) {
+    if (G_find_vector2(out, G_subproject())) {
         G_warning(_("Vector map <%s> already exists and will be overwritten"),
                   out);
         Vect_delete(out);
     }
 
-    /* remove mapset from fully qualified name */
-    if (G_name_is_fully_qualified(in, xname, xmapset)) {
+    /* remove subproject from fully qualified name */
+    if (G_name_is_fully_qualified(in, xname, xsubproject)) {
         in = xname;
     }
 
@@ -271,7 +271,7 @@ int Vect_rename(const char *in, const char *out)
 
     /* Rename all tables if the format is native */
     Vect_set_open_level(1);
-    if (Vect_open_update_head(&Map, out, G_mapset()) < 0)
+    if (Vect_open_update_head(&Map, out, G_subproject()) < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), out);
 
     if (Map.format != GV_FORMAT_NATIVE) {       /* Done */
@@ -360,7 +360,7 @@ int Vect_rename(const char *in, const char *out)
 /*!
    \brief Delete vector map including attribute tables
 
-   Vector map must be located in current mapset.
+   Vector map must be located in current subproject.
    
    \param map name of vector map to be delete 
 
@@ -385,8 +385,8 @@ int Vect__delete(const char *map, int is_tmp)
 {
     int ret;
     char path[GPATH_MAX], path_buf[GPATH_MAX];
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
-    const char *tmp, *mapset, *env;
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
+    const char *tmp, *subproject, *env;
     
     struct Map_info Map;
     
@@ -395,12 +395,12 @@ int Vect__delete(const char *map, int is_tmp)
 
     G_debug(3, "Delete vector '%s' (is_tmp = %d)", map, is_tmp);
 
-    mapset = G_mapset();
+    subproject = G_subproject();
     
-    /* remove mapset from fully qualified name */
-    if (G_name_is_fully_qualified(map, xname, xmapset)) {
-        if (strcmp(mapset, xmapset) != 0)
-            G_warning(_("Ignoring invalid mapset: %s"), xmapset);
+    /* remove subproject from fully qualified name */
+    if (G_name_is_fully_qualified(map, xname, xsubproject)) {
+        if (strcmp(subproject, xsubproject) != 0)
+            G_warning(_("Ignoring invalid subproject: %s"), xsubproject);
         map = xname;
     }
 
@@ -410,7 +410,7 @@ int Vect__delete(const char *map, int is_tmp)
     }
 
     Vect_set_open_level(1); /* Topo not needed */
-    ret = Vect__open_old(&Map, map, mapset, NULL, FALSE, TRUE, is_tmp);
+    ret = Vect__open_old(&Map, map, subproject, NULL, FALSE, TRUE, is_tmp);
     if (ret < 1) {
         if (is_tmp)
             return 0; /* temporary vector map doesn't exist */

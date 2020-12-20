@@ -76,7 +76,7 @@ l: 1,2,3,4,5
 mixed: hello,8,-25,world!,4-1,5:2,0.1,-9.6
 '''
 
-# file location/PERMANENT/PROJ_INFO
+# file project/PERMANENT/PROJ_INFO
 PROJ_INFO_TEXT_1 = """name: Lambert Conformal Conic
 proj: lcc
 datum: nad83
@@ -91,7 +91,7 @@ y_0: 0
 no_defs: defined
 """
 
-# file location/PERMANENT/PROJ_UNITS
+# file project/PERMANENT/PROJ_UNITS
 PROJ_UNITS_TEXT_1 = """unit: Meter
 units: Meters
 meters: 1

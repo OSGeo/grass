@@ -196,7 +196,7 @@ int main(int argc, char *argv[])
 	}
 
 	if (targets <= 0)
-	    G_fatal_error(_("There are no valid locations in the current region"));
+	    G_fatal_error(_("There are no valid projects in the current region"));
 
 	myState.nRand = targets;
     }

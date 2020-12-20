@@ -18,14 +18,14 @@ void make_colors(struct Colors *colors, const char *style, DCELL min, DCELL max,
 	G_fatal_error(_("Color table <%s> not supported"), "grey.eq");
 	/*
 	  if (!have_stats)
-	  have_stats = get_stats(name, mapset, &statf);
+	  have_stats = get_stats(name, subproject, &statf);
 	  Rast_make_histogram_eq_colors(&colors, &statf);
 	*/
     } else if (strcmp(style, "grey.log") == 0) {
 	G_fatal_error(_("Color table <%s> not supported"), "grey.log");
 	/*
 	  if (!have_stats)
-	  have_stats = get_stats(name, mapset, &statf);
+	  have_stats = get_stats(name, subproject, &statf);
 	  Rast_make_histogram_log_colors(&colors, &statf, (CELL) min,
 	  (CELL) max);
 	*/

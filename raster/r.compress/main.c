@@ -114,53 +114,53 @@ static int process(char *name, int uncompress)
     int quant_ok = 0;
     off_t newsize, oldsize, diff;
     RASTER_MAP_TYPE map_type;
-    char rname[GNAME_MAX], rmapset[GMAPSET_MAX];
-    const char *mapset;
+    char rname[GNAME_MAX], rsubproject[GMAPSET_MAX];
+    const char *subproject;
     int data_fd;
     char *sizestr;
 
-    mapset = G_find_raster(name, G_mapset());
-    if (mapset == NULL) {
+    subproject = G_find_raster(name, G_subproject());
+    if (subproject == NULL) {
         G_warning(_("Raster map <%s> not found"), name);
         return 1;
     }
-    if (strcmp(mapset, G_mapset())) {
-	G_warning(_("Raster map <%s> is not in the current mapset"), name);
+    if (strcmp(subproject, G_subproject())) {
+	G_warning(_("Raster map <%s> is not in the current subproject"), name);
 	return 1;
     }
-    if (Rast_is_reclass(name, G_mapset(), rname, rmapset) > 0) {
+    if (Rast_is_reclass(name, G_subproject(), rname, rsubproject) > 0) {
 	G_warning(uncompress
 		  ?
-		  _("<%s> is a reclass file of map <%s> in mapset <%s> - can't uncompress")
+		  _("<%s> is a reclass file of map <%s> in subproject <%s> - can't uncompress")
 		  :
-		  _("<%s> is a reclass file of map <%s> in mapset <%s> - can't compress"),
-		  name, rname, rmapset);
+		  _("<%s> is a reclass file of map <%s> in subproject <%s> - can't compress"),
+		  name, rname, rsubproject);
 	return 1;
     }
-    if (G_find_file2_misc("cell_misc", "gdal", name, G_mapset())) {
+    if (G_find_file2_misc("cell_misc", "gdal", name, G_subproject())) {
 	G_warning(_("<%s> is a GDAL-linked map - can't (un)compress"), name);
 	return 1;
     }
-    if (G_find_file2_misc("cell_misc", "vrt", name, G_mapset())) {
+    if (G_find_file2_misc("cell_misc", "vrt", name, G_subproject())) {
 	G_warning(_("<%s> is a virtual raster map - can't (un)compress"), name);
 	return 1;
     }
 
-    map_type = Rast_map_type(name, G_mapset());
+    map_type = Rast_map_type(name, G_subproject());
 
-    colr_ok = Rast_read_colors(name, G_mapset(), &colr) > 0;
-    hist_ok = Rast_read_history(name, G_mapset(), &hist) >= 0;
-    cats_ok = Rast_read_cats(name, G_mapset(), &cats) >= 0;
+    colr_ok = Rast_read_colors(name, G_subproject(), &colr) > 0;
+    hist_ok = Rast_read_history(name, G_subproject(), &hist) >= 0;
+    cats_ok = Rast_read_cats(name, G_subproject(), &cats) >= 0;
 
     if (map_type != CELL_TYPE) {
 	Rast_quant_init(&quant);
-	quant_ok = Rast_read_quant(name, G_mapset(), &quant);
+	quant_ok = Rast_read_quant(name, G_subproject(), &quant);
 	G_suppress_warnings(0);
 
-	data_fd = G_open_old("fcell", name, G_mapset());
+	data_fd = G_open_old("fcell", name, G_subproject());
     }
     else
-	data_fd = G_open_old("cell", name, G_mapset());
+	data_fd = G_open_old("cell", name, G_subproject());
 
     oldsize = lseek(data_fd, (off_t) 0, SEEK_END);
     close(data_fd);
@@ -169,24 +169,24 @@ static int process(char *name, int uncompress)
 	return 1;
 
     if (colr_ok) {
-	Rast_write_colors(name, G_mapset(), &colr);
+	Rast_write_colors(name, G_subproject(), &colr);
 	Rast_free_colors(&colr);
     }
     if (hist_ok)
 	Rast_write_history(name, &hist);
     if (cats_ok) {
-	cats.num = Rast_get_max_c_cat(name, G_mapset());
+	cats.num = Rast_get_max_c_cat(name, G_subproject());
 	Rast_write_cats(name, &cats);
 	Rast_free_cats(&cats);
     }
     if (map_type != CELL_TYPE && quant_ok)
-	Rast_write_quant(name, G_mapset(), &quant);
+	Rast_write_quant(name, G_subproject(), &quant);
 
     if (map_type != CELL_TYPE) {
-	data_fd = G_open_old("fcell", name, G_mapset());
+	data_fd = G_open_old("fcell", name, G_subproject());
     }
     else
-	data_fd = G_open_old("cell", name, G_mapset());
+	data_fd = G_open_old("cell", name, G_subproject());
 
     newsize = lseek(data_fd, (off_t) 0, SEEK_END);
     close(data_fd);
@@ -237,7 +237,7 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
     void *rast;
     char *cname;
 
-    Rast_get_cellhd(name, G_mapset(), &cellhd);
+    Rast_get_cellhd(name, G_subproject(), &cellhd);
     cname = getenv("GRASS_COMPRESSOR");
     if (cname && *cname) {
        if (G_compressor_number(cname) < 1)
@@ -269,7 +269,7 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
 
     Rast_set_window(&cellhd);
 
-    old = Rast_open_old(name, G_mapset());
+    old = Rast_open_old(name, G_subproject());
 
     if (uncompress) {
 	if (map_type == CELL_TYPE) {
@@ -308,35 +308,35 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
 static int pprint(char *name, int shell_style)
 {
     struct Cell_head cellhd;
-    char rname[GNAME_MAX], rmapset[GMAPSET_MAX];
-    const char *mapset;
+    char rname[GNAME_MAX], rsubproject[GMAPSET_MAX];
+    const char *subproject;
     RASTER_MAP_TYPE map_type;
 
-    mapset = G_find_raster(name, G_mapset());
-    if (mapset == NULL) {
+    subproject = G_find_raster(name, G_subproject());
+    if (subproject == NULL) {
         G_warning(_("Raster map <%s> not found"), name);
         return 1;
     }
-    if (strcmp(mapset, G_mapset())) {
-	G_warning(_("Raster map <%s> is not in the current mapset"), name);
+    if (strcmp(subproject, G_subproject())) {
+	G_warning(_("Raster map <%s> is not in the current subproject"), name);
 	return 1;
     }
-    if (G_find_file2_misc("cell_misc", "gdal", name, G_mapset())) {
+    if (G_find_file2_misc("cell_misc", "gdal", name, G_subproject())) {
         G_message(_("<%s> is a GDAL-linked map"), name);
         return 1;
     }
-    if (G_find_file2_misc("cell_misc", "vrt", name, G_mapset())) {
+    if (G_find_file2_misc("cell_misc", "vrt", name, G_subproject())) {
         G_message(_("<%s> is a virtual raster map"), name);
         return 1;
     }
-    if (Rast_is_reclass(name, G_mapset(), rname, rmapset) > 0) {
-        G_message(_("<%s> is a reclass file of map <%s> in mapset <%s>"),
-                  name, rname, rmapset);
+    if (Rast_is_reclass(name, G_subproject(), rname, rsubproject) > 0) {
+        G_message(_("<%s> is a reclass file of map <%s> in subproject <%s>"),
+                  name, rname, rsubproject);
         return 1;
     }
 
-    Rast_get_cellhd(name, G_mapset(), &cellhd);
-    map_type = Rast_map_type(name, G_mapset());
+    Rast_get_cellhd(name, G_subproject(), &cellhd);
+    map_type = Rast_map_type(name, G_subproject());
 
     /* Integer (CELL) compression:
      *    cellhd.compressed == 0: uncompressed
@@ -364,7 +364,7 @@ static int pprint(char *name, int shell_style)
 			     (map_type == FCELL_TYPE ? "FCELL" : "??"))));
 	}
 
-	if (G_find_file2_misc("cell_misc", NULLC_FILE, name, G_mapset())) {
+	if (G_find_file2_misc("cell_misc", NULLC_FILE, name, G_subproject())) {
 	    G_message(_("<%s> has a compressed NULL file"), name);
 	}
 	else {
@@ -380,7 +380,7 @@ static int pprint(char *name, int shell_style)
 	    fprintf(stdout, "|NONE");
 	else
 	    fprintf(stdout, "|%s", G_compressor_name(cellhd.compressed));
-	if (G_find_file2_misc("cell_misc", NULLC_FILE, name, G_mapset()))
+	if (G_find_file2_misc("cell_misc", NULLC_FILE, name, G_subproject()))
 	    fprintf(stdout, "|YES\n");
 	else
 	    fprintf(stdout, "|NO\n");

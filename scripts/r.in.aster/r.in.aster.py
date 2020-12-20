@@ -107,12 +107,12 @@ def main():
     # create temporary file to hold gdalwarp output before importing to GRASS
     tempfile = grass.read_command("g.tempfile", pid=os.getpid()).strip() + '.tif'
 
-    # get projection information for current GRASS location
+    # get projection information for current GRASS project
     proj = grass.read_command('g.proj', flags='jf').strip()
 
-    # currently only runs in projected location
-    if "XY location" in proj:
-        grass.fatal(_("This module needs to be run in a projected location (found: %s)") % proj)
+    # currently only runs in projected project
+    if "XY project" in proj:
+        grass.fatal(_("This module needs to be run in a projected project (found: %s)") % proj)
 
     # process list of bands
     allbands = ['1', '2', '3n', '3b', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14']

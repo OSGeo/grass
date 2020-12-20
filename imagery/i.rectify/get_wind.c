@@ -17,11 +17,11 @@ int get_ref_window(struct Ref *ref, int *ref_list, struct Cell_head *cellhd)
 
 	if (count++ == 0) {
 	    Rast_get_cellhd(ref->file[i].name,
-			    ref->file[i].mapset, cellhd);
+			    ref->file[i].subproject, cellhd);
 	}
 	else {
 	    Rast_get_cellhd(ref->file[i].name,
-			    ref->file[i].mapset, &win);
+			    ref->file[i].subproject, &win);
 	    /* max extends */
 	    if (cellhd->north < win.north)
 		cellhd->north = win.north;

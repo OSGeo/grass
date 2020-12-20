@@ -74,27 +74,27 @@ decimation parameters:
 </table>
 
 
-<h2>Location Creation</h2>
+<h2>Project Creation</h2>
 
 <em>v.in.lidar</em> attempts to preserve projection information when importing
 datasets if the source format includes projection information, and if
 the LAS driver supports it.  If the projection of the source dataset does
-not match the projection of the current location <em>v.in.lidar</em> will 
+not match the projection of the current project <em>v.in.lidar</em> will 
 report an error message ("<tt>Projection of dataset does not appear to 
-match current location</tt>") and then report the PROJ_INFO parameters of
+match current project</tt>") and then report the PROJ_INFO parameters of
 the source dataset.
 
 <p>If the user wishes to ignore the difference between the apparent coordinate
-system of the source data and the current location, they may pass the 
+system of the source data and the current project, they may pass the 
 <b>-o</b> flag to override the projection check.
 
 <p>If the user wishes to import the data with the full projection definition,
-it is possible to have <em>v.in.lidar</em> automatically create a new location based
+it is possible to have <em>v.in.lidar</em> automatically create a new project based
 on the projection and extents of the file being read.  This is accomplished
-by passing the name to be used for the new location via the <b>location</b>
-parameter.  Upon completion of the command, a new location will have been
-created (with only a PERMANENT mapset), and the vector map will have been
-imported with the indicated <b>output</b> name into the PERMANENT mapset.
+by passing the name to be used for the new project via the <b>project</b>
+parameter.  Upon completion of the command, a new project will have been
+created (with only a PERMANENT subproject), and the vector map will have been
+imported with the indicated <b>output</b> name into the PERMANENT subproject.
 
 <h2>NOTES</h2>
 The typical file extensions for the LAS format are .las and .laz (compressed). 
@@ -114,10 +114,10 @@ available at
   # print LAS file info
   v.in.lidar -p input="Serpent Mound Model LAS Data.las"
 
-  # create location with projection information of the LAS data
-  v.in.lidar -i input="Serpent Mound Model LAS Data.las" location=Serpent_Mound
+  # create project with projection information of the LAS data
+  v.in.lidar -i input="Serpent Mound Model LAS Data.las" project=Serpent_Mound
 
-  # quit and restart GRASS in the newly created location "Serpent_Mound"
+  # quit and restart GRASS in the newly created project "Serpent_Mound"
   # real import of LiDAR LAS data, without topology and without attribute table
   v.in.lidar -tb input="Serpent Mound Model LAS Data.las" output=Serpent_Mound_Model_pts
 </pre></div>

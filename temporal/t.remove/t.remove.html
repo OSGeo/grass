@@ -5,7 +5,7 @@ STVDS) from the temporal database. In other words, by default it deletes
 the relevant database entries but not the maps.
 <p>
 Optionally, also the raster, 3D raster and vector maps of the space time
-datasets can be removed from the current mapset using the <b>-r</b> (recursive)
+datasets can be removed from the current subproject using the <b>-r</b> (recursive)
 and <b>-f</b> (force) flags. This recursive removal only works if both flags
 are checked together (use <b>-rf</b>).
 
@@ -25,7 +25,7 @@ raster maps) are removed:
 t.create output=precip_months_sum semantictype=mean \
   title="Monthly sum of precipitation" \
   description="Monthly sum of precipitation for the \
-  North Carolina sample data location"
+  North Carolina sample data project"
 
 #Register maps from sample dataset (selecting a subset with g.list)
 t.register -i type=raster input=precip_months_sum \

@@ -31,17 +31,17 @@ void Rast_init_histogram(struct Histogram *histogram)
  * \brief read the histogram information
  *
  *  Reads the histogram information associated with map layer "map"
- *  in mapset "mapset" into the structure "histogram".
+ *  in subproject "subproject" into the structure "histogram".
  *
  *  note:   a warning message is printed if the file is missing or incorrect
  * \param name: name of map
- * \param mapset: mapset that map belongs to 
+ * \param subproject: subproject that map belongs to 
  * \param histogram: struct for histogram
  * \return 1  if successful,
  *         0  if no histogram file,
  */
 
-int Rast_read_histogram(const char *name, const char *mapset,
+int Rast_read_histogram(const char *name, const char *subproject,
 			struct Histogram *histogram)
 {
     FILE *fd = NULL;
@@ -51,26 +51,26 @@ int Rast_read_histogram(const char *name, const char *mapset,
 
     Rast_init_histogram(histogram);
 
-    if (!G_find_file2_misc("cell_misc", "histogram", name, mapset)) {
+    if (!G_find_file2_misc("cell_misc", "histogram", name, subproject)) {
 	G_warning(_("Histogram for [%s in %s] missing (run r.support)"), name,
-		  mapset);
+		  subproject);
 	return 0;
     }
 
-    fd = G_fopen_old_misc("cell_misc", "histogram", name, mapset);
+    fd = G_fopen_old_misc("cell_misc", "histogram", name, subproject);
     if (!fd)
-	G_fatal_error(_("Can't read histogram for [%s in %s]"), name, mapset);
+	G_fatal_error(_("Can't read histogram for [%s in %s]"), name, subproject);
 
     while (fgets(buf, sizeof buf, fd)) {
 	if (sscanf(buf, "%ld:%ld", &cat, &count) != 2)
 	    G_fatal_error(_("Invalid histogram file for [%s in %s]"),
-			  name, mapset);
+			  name, subproject);
 	Rast_extend_histogram((CELL) cat, count, histogram);
     }
     fclose(fd);
 
     if (histogram->num == 0)
-	G_fatal_error(_("Invalid histogram file for [%s in %s]"), name, mapset);
+	G_fatal_error(_("Invalid histogram file for [%s in %s]"), name, subproject);
 
     Rast_sort_histogram(histogram);
 

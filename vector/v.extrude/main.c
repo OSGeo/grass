@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
     /* trace elevation */
     trace = flag.trace->answer ? TRUE : FALSE;
     
-    /* set input vector map name and mapset */
+    /* set input vector map name and subproject */
     Vect_check_input_output_name(opt.input->answer, opt.output->answer, G_FATAL_EXIT);
 
     Points = Vect_new_line_struct();

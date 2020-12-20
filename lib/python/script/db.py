@@ -179,10 +179,10 @@ def db_select(sql=None, filename=None, table=None, env=None, **args):
     return tuple(result)
 
 
-def db_table_in_vector(table, mapset='.', env=None):
+def db_table_in_vector(table, subproject='.', env=None):
     """Return the name of vector connected to the table.
-    By default it check only in the current mapset, because the same table
-    name could be used also in other mapset by other vector.
+    By default it check only in the current subproject, because the same table
+    name could be used also in other subproject by other vector.
     It returns None if no vectors are connected to the table.
 
     >>> run_command('g.copy', vector='firestations,myfirestations')
@@ -199,7 +199,7 @@ def db_table_in_vector(table, mapset='.', env=None):
     from .vector import vector_db
     nuldev = open(os.devnull, 'w')
     used = []
-    vects = list_strings('vector', mapset=mapset, env=env)
+    vects = list_strings('vector', subproject=subproject, env=env)
     for vect in vects:
         for f in vector_db(vect, stderr=nuldev, env=env).values():
             if not f:

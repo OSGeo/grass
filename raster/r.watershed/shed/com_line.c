@@ -9,7 +9,7 @@
 int com_line_Gwater(INPUT * input, OUTPUT * output)
 {
     struct Cell_head *window;
-    char map_layer[48], buf[100], *prog_name, *mapset;
+    char map_layer[48], buf[100], *prog_name, *subproject;
     double d;
     int i;
 
@@ -69,31 +69,31 @@ int com_line_Gwater(INPUT * input, OUTPUT * output)
     G_message(_("\nIf you hit <return> by itself for the next question, this"));
     G_message(_("program will terminate."));
 
-    mapset = G_ask_old("What is the name of the elevation map layer?",
+    subproject = G_ask_old("What is the name of the elevation map layer?",
 		       map_layer, "cell", "cell");
-    if (!mapset)
+    if (!subproject)
 	exit(EXIT_FAILURE);
     if (input->fast)
-	com_line_add(&(input->com_line_ram), " el=", map_layer, mapset);
+	com_line_add(&(input->com_line_ram), " el=", map_layer, subproject);
     if (input->slow)
-	com_line_add(&(input->com_line_seg), " el=", map_layer, mapset);
+	com_line_add(&(input->com_line_seg), " el=", map_layer, subproject);
 
     G_message(_("\nOne of the options for %s is a `depression map'.  A"),
 	      prog_name);
-    G_message(_("depression map indicates all the locations in the current map window where"));
+    G_message(_("depression map indicates all the projects in the current map window where"));
     G_message(_("water accumulates and does not leave by the edge of the map. Lakes without"));
     G_message(_("outlet streams and sinkholes are examples of `depressions'.  If you wish to"));
     G_message(_("have a depression map, prepare a map where non-zero values indicate the"));
-    G_message(_("locations where depressions occur.\n"));
+    G_message(_("projects where depressions occur.\n"));
     G_message(_("Hit <return> by itself for the next question if there is no depression map."));
 
-    mapset = G_ask_old("What is the name of the depression map layer?",
+    subproject = G_ask_old("What is the name of the depression map layer?",
 		       map_layer, "cell", "cell");
-    if (mapset) {
+    if (subproject) {
 	if (input->fast)
-	    com_line_add(&(input->com_line_ram), " de=", map_layer, mapset);
+	    com_line_add(&(input->com_line_ram), " de=", map_layer, subproject);
 	if (input->slow)
-	    com_line_add(&(input->com_line_seg), " de=", map_layer, mapset);
+	    com_line_add(&(input->com_line_seg), " de=", map_layer, subproject);
     }
 
     G_message(_("\nThe %s program will divide the elevation map into a number of"),
@@ -181,17 +181,17 @@ int com_line_Gwater(INPUT * input, OUTPUT * output)
     case 7:			/* needs an overland flow map */
 	G_message(_("\nIf you hit <return> by itself for the next question, this"));
 	G_message(_("program will terminate."));
-	mapset = G_ask_old("What is the name of the overland flow map layer?",
+	subproject = G_ask_old("What is the name of the overland flow map layer?",
 			   map_layer, "cell", "cell");
-	if (!mapset)
+	if (!subproject)
 	    exit(EXIT_FAILURE);
 	if (input->fast) {
-	    com_line_add(&(input->com_line_ram), " ov=", map_layer, mapset);
+	    com_line_add(&(input->com_line_ram), " ov=", map_layer, subproject);
 	    basin_com_add(&(input->com_line_ram), d,
 			  (window->ns_res * window->ew_res), window);
 	}
 	if (input->slow) {
-	    com_line_add(&(input->com_line_seg), " ov=", map_layer, mapset);
+	    com_line_add(&(input->com_line_seg), " ov=", map_layer, subproject);
 	    basin_com_add(&(input->com_line_seg), d,
 			  (window->ns_res * window->ew_res), window);
 	}
@@ -204,8 +204,8 @@ int com_line_Gwater(INPUT * input, OUTPUT * output)
 
     strcpy(buf, "Please name the output watershed basin map:");
     do {
-	mapset = G_ask_new(buf, input->haf_name, "cell", "");
-    } while (NULL == mapset);
+	subproject = G_ask_new(buf, input->haf_name, "cell", "");
+    } while (NULL == subproject);
 
     if (input->fast)
 	com_line_add(&(input->com_line_ram), " ba=", input->haf_name, NULL);
@@ -279,8 +279,8 @@ int com_line_Gwater(INPUT * input, OUTPUT * output)
     G_message(_("%s to work properly."), G_program_name());
     strcpy(buf, "Please name the accumulation map:");
     do {
-	mapset = G_ask_new(buf, input->accum_name, "cell", "");
-    } while (NULL == mapset);
+	subproject = G_ask_new(buf, input->accum_name, "cell", "");
+    } while (NULL == subproject);
 
     if (input->fast)
 	com_line_add(&(input->com_line_ram), " ac=", input->accum_name, NULL);
@@ -298,45 +298,45 @@ int com_line_Gwater(INPUT * input, OUTPUT * output)
 
     sprintf(buf, "Would you like any of these maps to be created?");
     if (G_yes(buf, 1)) {
-	mapset = G_ask_new("", map_layer, "cell", "stream channel");
-	if (mapset != NULL) {
+	subproject = G_ask_new("", map_layer, "cell", "stream channel");
+	if (subproject != NULL) {
 	    if (input->fast)
 		com_line_add(&(input->com_line_ram), " se=", map_layer, NULL);
 	    if (input->slow)
 		com_line_add(&(input->com_line_seg), " se=", map_layer, NULL);
 	}
-	mapset = G_ask_new("", map_layer, "cell", "half basin");
-	if (mapset != NULL) {
+	subproject = G_ask_new("", map_layer, "cell", "half basin");
+	if (subproject != NULL) {
 	    if (input->fast)
 		com_line_add(&(input->com_line_ram), " ha=", map_layer, NULL);
 	    if (input->slow)
 		com_line_add(&(input->com_line_seg), " ha=", map_layer, NULL);
 	}
-	mapset = G_ask_new("", map_layer, "cell", "overland aspect");
-	if (mapset != NULL) {
+	subproject = G_ask_new("", map_layer, "cell", "overland aspect");
+	if (subproject != NULL) {
 	    if (input->fast)
 		com_line_add(&(input->com_line_ram), " dr=", map_layer, NULL);
 	    if (input->slow)
 		com_line_add(&(input->com_line_seg), " dr=", map_layer, NULL);
 	}
-	mapset = G_ask_new("", map_layer, "cell", "display");
-	if (mapset != NULL) {
+	subproject = G_ask_new("", map_layer, "cell", "display");
+	if (subproject != NULL) {
 	    if (input->fast)
 		com_line_add(&(input->com_line_ram), " di=", map_layer, NULL);
 	    if (input->slow)
 		com_line_add(&(input->com_line_seg), " di=", map_layer, NULL);
 	}
 	i = 0;
-	mapset = G_ask_new("", map_layer, "cell", "Slope Length");
-	if (mapset != NULL) {
+	subproject = G_ask_new("", map_layer, "cell", "Slope Length");
+	if (subproject != NULL) {
 	    i = 1;
 	    if (input->fast)
 		com_line_add(&(input->com_line_ram), " LS=", map_layer, NULL);
 	    if (input->slow)
 		com_line_add(&(input->com_line_seg), " LS=", map_layer, NULL);
 	}
-	mapset = G_ask_new("", map_layer, "cell", "Slope Steepness");
-	if (mapset != NULL) {
+	subproject = G_ask_new("", map_layer, "cell", "Slope Steepness");
+	if (subproject != NULL) {
 	    i = 1;
 	    if (input->fast)
 		com_line_add(&(input->com_line_ram), " S=", map_layer, NULL);
@@ -351,8 +351,8 @@ int com_line_Gwater(INPUT * input, OUTPUT * output)
 	    G_message(_("where the value indicates the percent of disturbed (barren) land in that cell."));
 	    G_message(_("Type <return> if you do not have a disturbed land map layer."));
 
-	    mapset = G_ask_old("", map_layer, "cell", "disturbed land");
-	    if (mapset != NULL) {
+	    subproject = G_ask_old("", map_layer, "cell", "disturbed land");
+	    if (subproject != NULL) {
 		if (input->fast)
 		    com_line_add(&(input->com_line_ram), " r=", map_layer,
 				 NULL);
@@ -398,19 +398,19 @@ int com_line_Gwater(INPUT * input, OUTPUT * output)
 
 	    /*       12345678901234567890123456789012345678901234567890123456789012345678901234567890 */
 	    G_message(_("\nRoads, ditches, changes in ground cover, and other factors will stop"));
-	    G_message(_("slope length.  You may input a raster map indicating the locations of these"));
+	    G_message(_("slope length.  You may input a raster map indicating the projects of these"));
 	    G_message(_("blocking factors.\n"));
 	    G_message(_("Hit <return> by itself for the next question if there is no blocking map."));
 
-	    mapset = G_ask_old("What is the name of the blocking map layer?",
+	    subproject = G_ask_old("What is the name of the blocking map layer?",
 			       map_layer, "cell", "cell");
-	    if (mapset) {
+	    if (subproject) {
 		if (input->fast)
 		    com_line_add(&(input->com_line_ram), " ob=", map_layer,
-				 mapset);
+				 subproject);
 		if (input->slow)
 		    com_line_add(&(input->com_line_seg), " ob=", map_layer,
-				 mapset);
+				 subproject);
 	    }
 	}
     }
@@ -418,14 +418,14 @@ int com_line_Gwater(INPUT * input, OUTPUT * output)
     return 0;
 }
 
-int com_line_add(char **com_line, char *prompt, char *map_layer, char *mapset)
+int com_line_add(char **com_line, char *prompt, char *map_layer, char *subproject)
 {
     strcat(*com_line, prompt);
     strcat(*com_line, "\"");
     strcat(*com_line, map_layer);
-    if (mapset) {
+    if (subproject) {
 	strcat(*com_line, "@");
-	strcat(*com_line, mapset);
+	strcat(*com_line, subproject);
     }
     strcat(*com_line, "\"");
 

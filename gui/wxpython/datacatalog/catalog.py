@@ -26,7 +26,7 @@ from datacatalog.infomanager import DataCatalogInfoManager
 
 from grass.pydispatch.signal import Signal
 
-from grass.grassdb.checks import is_current_mapset_in_demolocation
+from grass.grassdb.checks import is_current_subproject_in_demoproject
 
 
 class DataCatalog(wx.Panel):
@@ -61,7 +61,7 @@ class DataCatalog(wx.Panel):
         self._layout()
 
         # show data structure infobar for first-time user with proper layout
-        if is_current_mapset_in_demolocation():
+        if is_current_subproject_in_demoproject():
             wx.CallLater(2000, self.showDataStructureInfo)
 
     def _layout(self):
@@ -78,7 +78,7 @@ class DataCatalog(wx.Panel):
         self.Layout()
 
     def showDataStructureInfo(self):
-        self.infoManager.ShowDataStructureInfo(self.OnCreateLocation)
+        self.infoManager.ShowDataStructureInfo(self.OnCreateProject)
 
     def LoadItems(self):
         self.tree.ReloadTreeItems()
@@ -87,9 +87,9 @@ class DataCatalog(wx.Panel):
         """Reload whole tree"""
         self.LoadItems()
 
-    def OnReloadCurrentMapset(self, event):
-        """Reload current mapset tree only"""
-        self.tree.ReloadCurrentMapset()
+    def OnReloadCurrentSubproject(self, event):
+        """Reload current subproject tree only"""
+        self.tree.ReloadCurrentSubproject()
 
     def OnAddGrassDB(self, event):
         """Add grass database"""
@@ -100,23 +100,23 @@ class DataCatalog(wx.Panel):
             self.tree.InsertGrassDb(name=grassdatabase)
         dlg.Destroy()
 
-    def OnCreateMapset(self, event):
-        """Create new mapset in current location"""
-        db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
-        self.tree.CreateMapset(db_node, loc_node)
+    def OnCreateSubproject(self, event):
+        """Create new subproject in current project"""
+        db_node, loc_node, subproject_node = self.tree.GetCurrentDbProjectSubprojectNode()
+        self.tree.CreateSubproject(db_node, loc_node)
 
-    def OnCreateLocation(self, event):
-        """Create new location"""
-        db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
-        self.tree.CreateLocation(db_node)
+    def OnCreateProject(self, event):
+        """Create new project"""
+        db_node, loc_node, subproject_node = self.tree.GetCurrentDbProjectSubprojectNode()
+        self.tree.CreateProject(db_node)
 
-    def OnDownloadLocation(self, event):
-        """Download location to current grass database"""
-        db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
-        self.tree.DownloadLocation(db_node)
+    def OnDownloadProject(self, event):
+        """Download project to current grass database"""
+        db_node, loc_node, subproject_node = self.tree.GetCurrentDbProjectSubprojectNode()
+        self.tree.DownloadProject(db_node)
 
     def SetRestriction(self, restrict):
-        """Allow editing other mapsets or restrict editing to current mapset"""
+        """Allow editing other subprojects or restrict editing to current subproject"""
         self.tree.SetRestriction(restrict)
 
     def Filter(self, text):

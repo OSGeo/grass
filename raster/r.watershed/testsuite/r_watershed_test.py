@@ -61,25 +61,25 @@ class TestWatershed(TestCase):
                           drainage=self.drainage, basin=self.basin, stream=self.stream,
                           half_basin=self.halfbasin, length_slope=self.slopelength,
                           slope_steepness=self.slopesteepness)
-        # check to see if accumulation output is in mapset
+        # check to see if accumulation output is in subproject
         self.assertRasterExists(self.accumulation,
                                 msg='accumulation output was not created')
-        # check to see if drainage output is in mapset
+        # check to see if drainage output is in subproject
         self.assertRasterExists(self.drainage,
                                 msg='drainage output was not created')
-        # check to see if basin output is in mapset
+        # check to see if basin output is in subproject
         self.assertRasterExists(self.basin,
                                 msg='basin output was not created')
-        # check to see if stream output is in mapset
+        # check to see if stream output is in subproject
         self.assertRasterExists(self.stream,
                                 msg='stream output was not created')
-        # check to see if half.basin output is in mapset
+        # check to see if half.basin output is in subproject
         self.assertRasterExists(self.halfbasin,
                                 msg='half.basin output was not created')
-        # check to see if length.slope output is in mapset
+        # check to see if length.slope output is in subproject
         self.assertRasterExists(self.slopelength,
                                 msg='length.slope output was not created')
-        # check to see if slope.steepness output is in mapset
+        # check to see if slope.steepness output is in subproject
         self.assertRasterExists(self.slopesteepness,
                                 msg='slope.steepness output was not created')
 

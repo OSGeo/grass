@@ -4,7 +4,7 @@
  * MODULE:       v.perturb
  * AUTHOR(S):    James Darrell McCauley darrell@mccauley-usa.com
  * 	         http://mccauley-usa.com/
- * PURPOSE:      Random location perturbations of vector points
+ * PURPOSE:      Random project perturbations of vector points
  *
  * COPYRIGHT:    (C) 1994-2009 by James Darrell McCauley and the GRASS Development Team
  *
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("level1"));
  
     module->description =
-	_("Random location perturbations of vector points.");
+	_("Random project perturbations of vector points.");
 
     parm.in = G_define_standard_option(G_OPT_V_INPUT);
 

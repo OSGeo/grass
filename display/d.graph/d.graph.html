@@ -30,7 +30,7 @@ GRASS GUI interface.
 <p>The default coordinate system used is 0-100 percent of the active frame 
 in x and similarly 0-100 in y,
 regardless of the graphics monitor display frame size and aspect. 
-The (0,0) location is the lower left corner of the active graphics 
+The (0,0) project is the lower left corner of the active graphics 
 monitor display frame. All values may be floating point.
 If the <b>-m</b> flag is given, geographic coordinates will be used instead.
 
@@ -62,7 +62,7 @@ If the <b>-m</b> flag is given, geographic coordinates will be used instead.
 <dd>A line of comment which is ignored in the processing.</dd>
 
 <dt><a name="move"></a><b>move</b> <em>xpos ypos</em></dt>
-<dd>The current location is updated to <em>xpos ypos</em>. 
+<dd>The current project is updated to <em>xpos ypos</em>. 
 
 Unless the <b>-m</b> flag is used,
 values are stated as a percent of the active display frame's 
@@ -71,8 +71,8 @@ and may be floating point values. Values are between 0-100.
 <b>Note.</b> A space must separate <em>xpos</em> and <em>ypos</em>.</dd>
 
 <dt><a name="draw"></a><b>draw</b> <em>xpos ypos</em></dt>
-<dd>A line is drawn in the current color from the current location to the new 
-location <em>xpos ypos</em>, which then becomes the current location. 
+<dd>A line is drawn in the current color from the current project to the new 
+project <em>xpos ypos</em>, which then becomes the current project. 
 Unless the <b>-m</b> flag is used,
 values are stated as a percent of the active display frame's 
 horizontal (<em>xpos</em>) and vertical (<em>ypos</em>) size, 
@@ -117,8 +117,8 @@ an R:G:B triplet (separated by colons),
 or the word "none" (draws in the default background color).</dd>
 
 <dt><a name="text"></a><b>text</b> <em>line-of-text</em></dt>
-<dd>The stated text is drawn at the current location using the current color, 
-and the new current location is then positioned at the end of the text string.</dd>
+<dd>The stated text is drawn at the current project using the current color, 
+and the new current project is then positioned at the end of the text string.</dd>
 
 <dt><a name="size"></a><b>size</b> <em>xper yper</em></dt>
 <dd>Subsequent text will be drawn such that the text is 
@@ -135,7 +135,7 @@ scaling.
 <em>xper</em> and <em>yper</em> options define the center of the icon and
 are given as a percentage of the display frame (<tt>0,0</tt> is lower left).
 The symbol can be any of those stored in <tt>$GISBASE/etc/symbol/</tt>
-(e.g. <i>basic/circle</i>) or stored in the user's mapset directory in the
+(e.g. <i>basic/circle</i>) or stored in the user's subproject directory in the
 form <tt>$MAPSET/symbol/</tt><em>type/name</em>.
 The colors may be either a standard color name, an R:G:B triplet,
 or "none". If using an R:G:B triplet, each color value can range from 0-255.
@@ -148,7 +148,7 @@ If not specified the default <em>line_color</em> is black and the default
 
 <dt><a name="icon"></a><b>icon</b> <em>type size x y</em></dt>
 <dd>Draws an icon of types <em>o</em>, <em>x</em>, or <em>+</em> 
-with specified <em>size</em> (in %) at location <em>x,y</em>. 
+with specified <em>size</em> (in %) at project <em>x,y</em>. 
 Note: type <em>o</em> designates a square.</dd>
 
 <dt><a name="width"></a><b>width</b> <em>value</em></dt>
@@ -200,10 +200,10 @@ EOF
 
 <h2>NOTES</h2>
 
-<em>d.graph</em> remembers the last screen location (<em>xpos ypos</em>) to which 
+<em>d.graph</em> remembers the last screen project (<em>xpos ypos</em>) to which 
 the user moved, even after the user erases the display frame. 
 If the user runs <em>d.graph</em> repeatedly, and wishes to start anew with 
-the default (xpos ypos) screen location, the user should <em>clear</em> the 
+the default (xpos ypos) screen project, the user should <em>clear</em> the 
 display frame between runs of <em>d.graph</em>.
 
 <h2>LIMITATIONS</h2>

@@ -1,0 +1,185 @@
+<h2>DESCRIPTION</h2>
+
+For basic information about GRASS <em>subproject</em>, <em>project</em>
+and <em>data base</em> refer to <a href="helptext.html">GRASS
+Quickstart</a>.
+
+<p>
+A <em>subproject</em> holds a distinct set of data layers, each relevant
+to the same (or a subset of the same) geographic region, and each
+drawn in the same map coordinate system.  At the outset of every GRASS
+session, the user identifies a GRASS data base, project, and subproject
+that are to be the user's <em>current data base</em>, <em>current
+project</em>, and <em>current subproject</em> for the duration of the
+session; any maps created by the user during the session will be
+stored under the <em>current subproject</em> set at the session's outset
+(see <em><a href="g.subproject.html">g.subproject</a></em> [without an "s"]
+and <em><a href="g.gisenv.html">g.gisenv</a></em> for changing the
+subproject with a session).
+
+<p>
+The user can add, modify, and delete data layers that exist under
+their <em>current subproject</em>. Although the user can
+also <em>access</em> (i.e., use) data that are stored under
+<em>other</em> subprojects in the same GRASS project using the
+<tt>mapname@subprojectname</tt> notation or subproject search path, the user
+can only make permanent changes (create or modify data)
+located in the <em>current subproject</em>.  The user's
+<em>subproject search path</em> lists the order in which other subprojects in
+the same GRASS project can be searched and their data accessed by the
+user. The user can modify the listing and order in which these subprojects
+are accessed by modifying the subproject search path; this can be done
+using the <em>g.subprojects</em> command. This program allows the user to
+use other's relevant map data without altering the original data
+layer, and without taking up disk space with a copy of the original
+map. The <tt>mapname@subprojectname</tt> notation may be used irrespective
+of the subproject search path, i.e., any map found in another subproject with
+sufficient <em><a href="g.access.html">g.access</a></em> privileges
+may be called in such a manner.
+
+<p>
+<em>g.subprojects</em> shows the user available subprojects under the current
+GRASS project, lists subprojects to which the user currently has access,
+and lists the order in which accessible subprojects will be accessed by
+GRASS programs searching for data files.  The user is then given the
+opportunity to add or delete subproject names from the search path, or
+modify the order in which subprojects will be accessed.
+
+<p>
+When the user specifies the name of a data base element file (e.g., a
+particular vector map, raster map, <a href="i.group.html">imagery</a>
+group file, etc.) to a GRASS program, the program searches for the
+named file under each of the subprojects listed in the user's subproject
+search path in the order listed there until the program finds a file
+of the given name. Users can also specify a file by its subproject, to
+make explicit the subproject from which the file is to be drawn; e.g., the
+command:
+
+<div class="code"><pre>
+g.copy raster=soils@PERMANENT,my_soils
+</pre></div>
+
+ensures that a new file named <tt>my_soils</tt> is to be a copy of
+the file <tt>soils</tt> from the subproject PERMANENT.
+
+<p>
+In each project there is the special subproject <b>PERMANENT</b> included
+in the subproject search path, as this subproject typically contains base maps
+relevant to many applications. Often, other subprojects which contain sets
+of interpreted maps will be likewise included in the user's subproject search path.
+Suppose, for example, that the subproject <em>Soil_Maps</em> contains
+interpreted soils map layers to which the user wants access. The
+subproject <em>Soil_Maps</em> should then be included in the user's
+<em>search path</em> variable.
+
+<p>
+The <em>subproject search path</em> is saved as part of the current
+subproject. When the user works with that subproject in subsequent GRASS
+sessions, the previously saved subproject search path will be used (and
+will continue to be used until it is modified by the user
+with <em>g.subprojects</em>).
+
+<h2>NOTES</h2>
+
+By default <em>g.subprojects</em> adds to the current <em>subproject search
+path</em> subprojects named by <b>subproject</b> option. Alternatively subprojects
+can be removed (<b>operation=remove</b>) from the search path or
+defined by <b>operation=set</b>.
+
+<p>
+Users can restrict others' access to their subproject files through use
+of <em><a href="g.access.html">g.access</a></em>. Subprojects to which
+access is restricted can still be listed in another's subproject search
+path; however, access to these subprojects will remain restricted.
+
+<h2>EXAMPLES</h2>
+
+<h3>Selecting subprojects with the graphical subproject manager</h3>
+
+Using the <b>-s</b> flag, a convenient graphical subproject manager can
+be opened to select and deselect other subprojects (the actual subproject and
+the PERMANENT subproject are always selected):
+
+<div class="code"><pre>
+g.subprojects -s
+</pre></div>
+
+<center>
+<img src="g_subprojects_gui.png"><br>
+</center>
+
+
+<h3>Print available subprojects</h3>
+All available subprojects in the current project can be printed out by
+
+<div class="code"><pre>
+g.subprojects -l
+
+Available subprojects:
+PERMANENT user1 user2
+</pre></div>
+
+<h3>Add new subproject</h3>
+
+Add subproject 'user2' to the current subproject search path
+
+<div class="code"><pre>
+g.subprojects subproject=user2 operation=add
+</pre></div>
+
+The current subproject search path is changed accordingly
+
+<div class="code"><pre>
+g.subprojects -p
+
+Accessible subprojects:
+user1 user2
+</pre></div>
+
+<h3>Overwrite current search path</h3>
+
+Overwrite current search path
+
+<div class="code"><pre>
+g.subprojects subproject=user1,PERMANENT operation=set
+</pre></div>
+
+<h3>Using shortcuts for search path</h3>
+
+The current subproject can be defined by a shortcut &quot;.&quot; (dot)
+
+<div class="code"><pre>
+g.subprojects subproject=.,PERMANENT operation=set
+</pre></div>
+
+<i>Note:</i> The current subproject will be always included in the search
+path on the first position even if you change its position or omit the
+current subproject from the <b>subproject</b> option.
+
+<div class="code"><pre>
+g.subprojects -p
+
+Accessible subprojects:
+user1 PERMANENT
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="g.access.html">g.access</a>,
+  <a href="g.copy.html">g.copy</a>,
+  <a href="g.gisenv.html">g.gisenv</a>,
+  <a href="g.list.html">g.list</a>,
+  <a href="g.subproject.html">g.subproject</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Michael Shapiro, U.S.Army Construction Engineering Research Laboratory<br>
+Greg Koerper, ManTech Environmental Technology, Inc.<br>
+Updated to GRASS 7 by Martin Landa, Czech Technical University in Prague, Czech Republic
+
+<!--
+<p>
+<i>Last changed: $Date$</i>
+-->

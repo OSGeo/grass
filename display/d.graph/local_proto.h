@@ -1,4 +1,4 @@
-/* allocation.c */
+/* alproject.c */
 void *falloc(int, int);
 void *frealloc(void *, int, int);
 

@@ -18,7 +18,7 @@
    \brief Writes the raster file header.
 
    Writes the cell file header information associated with map layer "map"
-   into current mapset from the structure "cellhd".
+   into current subproject from the structure "cellhd".
 
    \param name name of map
    \param cellhd structure holding cell header info

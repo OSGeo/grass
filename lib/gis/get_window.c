@@ -30,7 +30,7 @@ static struct state *st = &state;
   \brief Get the current region
   
   Reads the region as stored in the WIND file in the user's current
-  mapset into region.
+  subproject into region.
   
   3D values are set to defaults if not available in WIND file.  An
   error message is printed and exit() is called if there is a problem
@@ -64,9 +64,9 @@ void G_get_window(struct Cell_head *window)
     else {
 	char *wind = getenv("WIND_OVERRIDE");
 	if (wind)
-	    G_get_element_window(&st->dbwindow, "windows", wind, G_mapset());
+	    G_get_element_window(&st->dbwindow, "windows", wind, G_subproject());
 	else
-	    G_get_element_window(&st->dbwindow, "", "WIND", G_mapset());
+	    G_get_element_window(&st->dbwindow, "", "WIND", G_subproject());
     }
 
     *window = st->dbwindow;
@@ -82,7 +82,7 @@ void G_get_window(struct Cell_head *window)
 /*!
   \brief Get the default region
   
-  Reads the default region for the location into <i>region.</i> 3D
+  Reads the default region for the project into <i>region.</i> 3D
   values are set to defaults if not available in WIND file.
   
   An error message is printed and exit() is called if there is a
@@ -103,24 +103,24 @@ void G_get_default_window(struct Cell_head *window)
   \param[out] window pointer to Cell_head
   \param element element type
   \param name element name
-  \param mapset mapset name
+  \param subproject subproject name
 */
 void G_get_element_window(struct Cell_head *window,
-                          const char *element, const char *name, const char *mapset)
+                          const char *element, const char *name, const char *subproject)
 {
     FILE *fp;
 
     G_zero(window, sizeof(struct Cell_head));
 
     /* Read from file */
-    fp = G_fopen_old(element, name, mapset);
+    fp = G_fopen_old(element, name, subproject);
     if (!fp)
 	G_fatal_error(_("Unable to open element file <%s> for <%s@%s>"),
-			element, name, mapset);
+			element, name, subproject);
 
     G_fseek(fp, 0, SEEK_END);
     if (!G_ftell(fp))
-        G_fatal_error(_("Region file %s/%s/%s is empty"), mapset, element, name);
+        G_fatal_error(_("Region file %s/%s/%s is empty"), subproject, element, name);
     G_fseek(fp, 0, SEEK_SET);
     G__read_Cell_head(fp, window, 0);
     fclose(fp);

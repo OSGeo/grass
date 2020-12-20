@@ -27,35 +27,35 @@
 /*!
   \brief Lowest level open routine.
 
-  Opens the file <i>name</i> in <i>element</i> ("cell", etc.) in mapset <i>mapset</i>
+  Opens the file <i>name</i> in <i>element</i> ("cell", etc.) in subproject <i>subproject</i>
   according to the i/o <i>mode</i>.
 
-   - mode = 0 (read) will look for <i>name</i> in <i>mapset</i> and
+   - mode = 0 (read) will look for <i>name</i> in <i>subproject</i> and
                open the file for read only the file must exist
  
    - mode = 1 (write) will create an empty file <i>name</i> in the
-               current mapset and open the file for write only
-               <i>mapset</i> ignored
+               current subproject and open the file for write only
+               <i>subproject</i> ignored
 
-   - mode = 2 (read and write) will open a file in the current mapset
+   - mode = 2 (read and write) will open a file in the current subproject
                for reading and writing creating a new file if
-               necessary <i>mapset</i> ignored
+               necessary <i>subproject</i> ignored
 
   \param element database element name
   \param name map file name
-  \param mapset mapset containing map <i>name</i>
+  \param subproject subproject containing map <i>name</i>
   \param mode r/w mode 0=read, 1=write, 2=read/write
  
   \return open file descriptor (int)
   \return -1 could not open
 */
 static int G__open(const char *element,
-		   const char *name, const char *mapset, int mode)
+		   const char *name, const char *subproject, int mode)
 {
     int fd;
     int is_tmp;
     char path[GPATH_MAX];
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
     
     G__check_gisinit();
 
@@ -63,26 +63,26 @@ static int G__open(const char *element,
 
     /* READ */
     if (mode == 0) {
-	if (G_name_is_fully_qualified(name, xname, xmapset)) {
-	    if (*mapset && strcmp(xmapset, mapset) != 0) {
-		G_warning(_("G__open(read): mapset <%s> doesn't match xmapset <%s>"),
-			  mapset, xmapset);
+	if (G_name_is_fully_qualified(name, xname, xsubproject)) {
+	    if (*subproject && strcmp(xsubproject, subproject) != 0) {
+		G_warning(_("G__open(read): subproject <%s> doesn't match xsubproject <%s>"),
+			  subproject, xsubproject);
 		return -1;
 	    }
 	    name = xname;
-	    mapset = xmapset;
+	    subproject = xsubproject;
 	}
 
         if (!is_tmp) {
-            mapset = G_find_file2(element, name, mapset);
+            subproject = G_find_file2(element, name, subproject);
             
-            if (!mapset)
+            if (!subproject)
                 return -1;
 
-            G_file_name(path, element, name, mapset);
+            G_file_name(path, element, name, subproject);
         }
         else {
-            G_file_name_tmp(path, element, name, mapset);
+            G_file_name_tmp(path, element, name, subproject);
         }
         
 	if ((fd = open(path, 0)) < 0)
@@ -92,11 +92,11 @@ static int G__open(const char *element,
     }
     /* WRITE */
     if (mode == 1 || mode == 2) {
-	mapset = G_mapset();
-	if (G_name_is_fully_qualified(name, xname, xmapset)) {
-	    if (strcmp(xmapset, mapset) != 0) {
-		G_warning(_("G__open(write): xmapset <%s> != G_mapset() <%s>"),
-			  xmapset, mapset);
+	subproject = G_subproject();
+	if (G_name_is_fully_qualified(name, xname, xsubproject)) {
+	    if (strcmp(xsubproject, subproject) != 0) {
+		G_warning(_("G__open(write): xsubproject <%s> != G_subproject() <%s>"),
+			  xsubproject, subproject);
 		return -1;
 	    }
 	    name = xname;
@@ -106,15 +106,15 @@ static int G__open(const char *element,
 	    return -1;
 
         if (!is_tmp)
-            G_file_name(path, element, name, mapset);
+            G_file_name(path, element, name, subproject);
         else
-            G_file_name_tmp(path, element, name, mapset);
+            G_file_name_tmp(path, element, name, subproject);
         
 	if (mode == 1 || access(path, 0) != 0) {
             if (is_tmp)
-                G_make_mapset_element_tmp(element);
+                G_make_subproject_element_tmp(element);
             else
-                G_make_mapset_element(element);
+                G_make_subproject_element(element);
 	    close(open(path, O_WRONLY | O_CREAT | O_TRUNC, 0666));
 	}
 
@@ -129,11 +129,11 @@ static int G__open(const char *element,
 /*!
   \brief Open a new database file
 
-  Creates <i>name</i> in the current mapset and opens it
+  Creates <i>name</i> in the current subproject and opens it
   for write only.
   
   The database file <i>name</i> under the <i>element</i> in the
-  current mapset is created and opened for writing (but not reading).
+  current subproject is created and opened for writing (but not reading).
   The UNIX open() routine is used to open the file. If the file does
   not exist, -1 is returned. Otherwise the file is positioned at the
   end of the file and the file descriptor from the open() is returned.
@@ -147,7 +147,7 @@ static int G__open(const char *element,
 
 int G_open_new(const char *element, const char *name)
 {
-    return G__open(element, name, G_mapset(), 1);
+    return G__open(element, name, G_subproject(), 1);
 }
 
 
@@ -155,28 +155,28 @@ int G_open_new(const char *element, const char *name)
   \brief Open a database file for reading
   
   The database file <i>name</i> under the <i>element</i> in the
-  specified <i>mapset</i> is opened for reading (but not for writing).
+  specified <i>subproject</i> is opened for reading (but not for writing).
   The UNIX open() routine is used to open the file. If the file does
   not exist, -1 is returned. Otherwise the file descriptor from the
   open() is returned.
   
   \param element database element name
   \param name map file name
-  \param mapset mapset containing map <i>name</i>
+  \param subproject subproject containing map <i>name</i>
 
   \return open file descriptor (int)
   \return -1 could not open
 */
-int G_open_old(const char *element, const char *name, const char *mapset)
+int G_open_old(const char *element, const char *name, const char *subproject)
 {
-    return G__open(element, name, mapset, 0);
+    return G__open(element, name, subproject, 0);
 }
 
 /*!
   \brief Open a database file for update
  
   The database file <i>name</i> under the <i>element</i> in the
-  current mapset is opened for reading and writing.  The UNIX open()
+  current subproject is opened for reading and writing.  The UNIX open()
   routine is used to open the file. If the file does not exist, -1 is
   returned. Otherwise the file is positioned at the end of the file
   and the file descriptor from the open() is returned.
@@ -192,7 +192,7 @@ int G_open_update(const char *element, const char *name)
 {
     int fd;
 
-    fd = G__open(element, name, G_mapset(), 2);
+    fd = G__open(element, name, G_subproject(), 2);
     if (fd >= 0)
 	lseek(fd, 0L, SEEK_END);
 
@@ -204,7 +204,7 @@ int G_open_update(const char *element, const char *name)
   \brief Open a new database file
   
   The database file <i>name</i> under the <i>element</i> in the
-  current mapset is created and opened for writing (but not reading).
+  current subproject is created and opened for writing (but not reading).
   The UNIX fopen() routine, with "w" write mode, is used to open the
   file.  If the file does not exist, the NULL pointer is
   returned. Otherwise the file is positioned at the end of the file
@@ -221,7 +221,7 @@ FILE *G_fopen_new(const char *element, const char *name)
 {
     int fd;
 
-    fd = G__open(element, name, G_mapset(), 1);
+    fd = G__open(element, name, G_subproject(), 1);
     if (fd < 0) {
         G_debug(1, "G_fopen_new(): element = %s, name = %s : NULL",
                 element, name);
@@ -237,7 +237,7 @@ FILE *G_fopen_new(const char *element, const char *name)
   \brief Open a database file for reading
   
   The database file <i>name</i> under the <i>element</i> in the
-  specified <i>mapset</i> is opened for reading (but not for writing).
+  specified <i>subproject</i> is opened for reading (but not for writing).
   The UNIX fopen() routine, with "r" read mode, is used to open the
   file.  If the file does not exist, the NULL pointer is
   returned. Otherwise the file descriptor from the fopen() is
@@ -245,16 +245,16 @@ FILE *G_fopen_new(const char *element, const char *name)
  
   \param element database element name
   \param name map file name
-  \param mapset mapset name containing map <i>name</i>
+  \param subproject subproject name containing map <i>name</i>
 
   \return open file descriptor (FILE *)
   \return NULL on error
 */
-FILE *G_fopen_old(const char *element, const char *name, const char *mapset)
+FILE *G_fopen_old(const char *element, const char *name, const char *subproject)
 {
     int fd;
 
-    fd = G__open(element, name, mapset, 0);
+    fd = G__open(element, name, subproject, 0);
     if (fd < 0)
 	return (FILE *) NULL;
 
@@ -266,7 +266,7 @@ FILE *G_fopen_old(const char *element, const char *name, const char *mapset)
   \brief Open a database file for update (append mode)
   
   The database file <i>name</i> under the <i>element</i> in the
-  current mapset is opened for for writing. The UNIX fopen() routine,
+  current subproject is opened for for writing. The UNIX fopen() routine,
   with "a" append mode, is used to open the file.  If the file does not
   exist, the NULL pointer is returned. Otherwise the file descriptor
   from the fopen() is returned.
@@ -281,7 +281,7 @@ FILE *G_fopen_append(const char *element, const char *name)
 {
     int fd;
 
-    fd = G__open(element, name, G_mapset(), 2);
+    fd = G__open(element, name, G_subproject(), 2);
     if (fd < 0)
 	return (FILE *) 0;
     lseek(fd, 0L, SEEK_END);
@@ -294,7 +294,7 @@ FILE *G_fopen_append(const char *element, const char *name)
   \brief Open a database file for update (r+ mode)
   
   The database file <i>name</i> under the <i>element</i> in the
-  current mapset is opened for for writing. The UNIX fopen() routine,
+  current subproject is opened for for writing. The UNIX fopen() routine,
   with "r+" append mode, is used to open the file.  If the file does not
   exist, the NULL pointer is returned. Otherwise the file descriptor
   from the fopen() is returned.
@@ -309,7 +309,7 @@ FILE *G_fopen_modify(const char *element, const char *name)
 {
     int fd;
 
-    fd = G__open(element, name, G_mapset(), 2);
+    fd = G__open(element, name, G_subproject(), 2);
     if (fd < 0)
 	return (FILE *) 0;
     lseek(fd, 0L, SEEK_END);

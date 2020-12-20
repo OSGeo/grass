@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("import"));
-    G_add_keyword(_("create location"));
+    G_add_keyword(_("create project"));
     module->description =
 	_("Imports raster data into a GRASS raster map using GDAL library.");
 
@@ -154,9 +154,9 @@ int main(int argc, char *argv[])
     parm.target->key = "target";
     parm.target->type = TYPE_STRING;
     parm.target->required = NO;
-    parm.target->label = _("Name of GCPs target location");
+    parm.target->label = _("Name of GCPs target project");
     parm.target->description =
-	_("Name of location to create or to read projection from for GCPs transformation");
+	_("Name of project to create or to read projection from for GCPs transformation");
     parm.target->key_desc = "name";
     parm.target->guisection = _("Projection");
     
@@ -193,10 +193,10 @@ int main(int argc, char *argv[])
     parm.map_names_file->guisection = _("Metadata");
 
     parm.outloc = G_define_option();
-    parm.outloc->key = "location";
+    parm.outloc->key = "project";
     parm.outloc->type = TYPE_STRING;
     parm.outloc->required = NO;
-    parm.outloc->description = _("Name for new location to create");
+    parm.outloc->description = _("Name for new project to create");
     parm.outloc->key_desc = "name";
 
     parm.rat = G_define_option();
@@ -224,9 +224,9 @@ int main(int argc, char *argv[])
     flag_o = G_define_flag();
     flag_o->key = 'o';
     flag_o->label =
-	_("Override projection check (use current location's projection)");
+	_("Override projection check (use current project's projection)");
     flag_o->description =
-	_("Assume that the dataset has same projection as the current location");
+	_("Assume that the dataset has same projection as the current project");
     flag_o->guisection = _("Projection");
  
     flag_j = G_define_flag();
@@ -241,7 +241,7 @@ int main(int argc, char *argv[])
     flag_e->key = 'e';
     flag_e->label = _("Extend region extents based on new dataset");
     flag_e->description =
-	_("Also updates the default region if in the PERMANENT mapset");
+	_("Also updates the default region if in the PERMANENT subproject");
     flag_e->guisection = _("Region");
  
     flag_f = G_define_flag();
@@ -269,7 +269,7 @@ int main(int argc, char *argv[])
     flag_c = G_define_flag();
     flag_c->key = 'c';
     flag_c->description =
-	_("Create the location specified by the \"location\" parameter and exit."
+	_("Create the project specified by the \"project\" parameter and exit."
           " Do not import the raster file.");
 
     flag_r = G_define_flag();
@@ -287,11 +287,11 @@ int main(int argc, char *argv[])
     /* 1. list supported formats */
     /* 2. print input bands */
     /* 3. open input */
-    /* 4. check projection / create location */ 
+    /* 4. check projection / create project */ 
     /* 5. open output */
 
-    /* The parser checks if the map already exists in current mapset, this is
-     * wrong if location options is used, so we switch out the check and do it
+    /* The parser checks if the map already exists in current subproject, this is
+     * wrong if project options is used, so we switch out the check and do it
      * in the module after the parser */
     overwrite = G_check_overwrite(argc, argv);
 
@@ -354,15 +354,15 @@ int main(int argc, char *argv[])
     /* -------------------------------------------------------------------- */
     if (parm.target->answer && parm.outloc->answer
 	&& strcmp(parm.target->answer, parm.outloc->answer) == 0) {
-	G_fatal_error(_("You have to specify a target location different from output location"));
+	G_fatal_error(_("You have to specify a target project different from output project"));
     }
 
     if (flag_c->answer && parm.outloc->answer == NULL ) {
-	G_fatal_error(_("You need to specify valid location name."));
+	G_fatal_error(_("You need to specify valid project name."));
     }
 
     if (flag_l->answer && G_projection() != PROJECTION_LL)
-	G_fatal_error(_("The '-l' flag only works in Lat/Lon locations"));
+	G_fatal_error(_("The '-l' flag only works in Lat/Lon projects"));
 
     if (num_digits < 0)
         G_fatal_error(_("The number of digits for band numbering must be equal or greater than 0"));
@@ -378,7 +378,7 @@ int main(int argc, char *argv[])
 
     croptoregion = flag_r->answer;
     if (flag_r->answer && parm.outloc->answer) {
-	G_warning(_("Disabling '-r' flag for new location"));
+	G_warning(_("Disabling '-r' flag for new project"));
 	croptoregion = 0; 
     }
 
@@ -524,7 +524,7 @@ int main(int argc, char *argv[])
 
     if (output && !parm.outloc->answer &&
         GDALGetRasterCount(hDS) == 1) {	/* Check if the map exists */
-	if (G_find_raster2(output, G_mapset())) {
+	if (G_find_raster2(output, G_subproject())) {
 	    if (overwrite)
 		G_warning(_("Raster map <%s> already exists and will be overwritten"),
 			  output);
@@ -817,7 +817,7 @@ int main(int argc, char *argv[])
 		sprintf(szBandName, "%s.%s", output, suffix);
 
             if (!parm.outloc->answer) {	/* Check if the map exists */
-              if (G_find_raster2(szBandName, G_mapset())) {
+              if (G_find_raster2(szBandName, G_subproject())) {
                 if (overwrite)
                   G_warning(_("Raster map <%s> already exists and will be overwritten"),
                             szBandName);
@@ -883,16 +883,16 @@ int main(int argc, char *argv[])
 
 	    create_target = 0;
 	    if (parm.target->answer) {
-		char target_mapset[GMAPSET_MAX];
+		char target_subproject[GMAPSET_MAX];
 		
-		/* does the target location exist? */
+		/* does the target project exist? */
 		G_create_alt_env();
 		G_setenv_nogisrc("LOCATION_NAME", parm.target->answer);
-		sprintf(target_mapset, "PERMANENT");	/* must exist */
-		G_setenv_nogisrc("MAPSET", target_mapset);
+		sprintf(target_subproject, "PERMANENT");	/* must exist */
+		G_setenv_nogisrc("MAPSET", target_subproject);
 
-		if (G_mapset_permissions(target_mapset) == -1) {
-		    /* create target location later */
+		if (G_subproject_permissions(target_subproject) == -1) {
+		    /* create target project later */
 		    create_target = 1;
 		}
 		G_switch_env();
@@ -931,7 +931,7 @@ int main(int argc, char *argv[])
 				       "GPJ_transform()", iGCP);
 		}
 
-		/* figure out legal e, w, n, s values for new target location */
+		/* figure out legal e, w, n, s values for new target project */
 		if (create_target) {
 		    if (emin > pasGCPs[iGCP].dfGCPX)
 			emin = pasGCPs[iGCP].dfGCPX;
@@ -946,11 +946,11 @@ int main(int argc, char *argv[])
 
 	    I_put_control_points(output, &sPoints);
 	    if (create_target) {
-		/* create target location */
+		/* create target project */
 		if (GPJ_wkt_to_grass(&gcpcellhd, &proj_info,
 				     &proj_units, GDALGetGCPProjection(hDS), 0) < 0) {
 		    G_warning(_("Unable to convert input map projection to GRASS "
-				    "format; cannot create new location."));
+				    "format; cannot create new project."));
 		}
 		else {
 		    gcpcellhd.west = emin;
@@ -971,19 +971,19 @@ int main(int argc, char *argv[])
 		    G_adjust_Cell_head(&gcpcellhd, 1, 1);
 
 		    G_create_alt_env();
-		    if (0 != G_make_location(parm.target->answer, &gcpcellhd,
+		    if (0 != G_make_project(parm.target->answer, &gcpcellhd,
 					     proj_info, proj_units)) {
-			G_fatal_error(_("Unable to create new location <%s>"),
+			G_fatal_error(_("Unable to create new project <%s>"),
 				      parm.target->answer);
 		    }
-		    /* switch back to import location */
+		    /* switch back to import project */
 		    G_switch_env();
 
-		    G_message(_("Location <%s> created"), parm.target->answer);
+		    G_message(_("Project <%s> created"), parm.target->answer);
 		    /* set the group's target */
 		    I_put_target(output, parm.target->answer, "PERMANENT");
 		    G_message(_("The target for the output group <%s> has been set to "
-				"location <%s>, mapset <PERMANENT>."),
+				"project <%s>, subproject <PERMANENT>."),
 				output, parm.target->answer);
 		}
 	    }
@@ -1000,7 +1000,7 @@ int main(int argc, char *argv[])
     /*      Extend current window based on dataset.                         */
     /* -------------------------------------------------------------------- */
     if (flag_e->answer && !croptoregion) {
-	if (strcmp(G_mapset(), "PERMANENT") == 0)
+	if (strcmp(G_subproject(), "PERMANENT") == 0)
 	    /* fixme: expand WIND and DEFAULT_WIND independently. (currently
 		WIND gets forgotten and DEFAULT_WIND is expanded for both) */
 	    G_get_default_window(&cur_wind);
@@ -1020,12 +1020,12 @@ int main(int argc, char *argv[])
 				  / cur_wind.ew_res);
 	cur_wind.east = cur_wind.west + cur_wind.cols * cur_wind.ew_res;
 
-	if (strcmp(G_mapset(), "PERMANENT") == 0) {
+	if (strcmp(G_subproject(), "PERMANENT") == 0) {
 	    G_put_element_window(&cur_wind, "", "DEFAULT_WIND");
-	    G_message(_("Default region for this location updated"));
+	    G_message(_("Default region for this project updated"));
 	}
 	G_put_window(&cur_wind);
-	G_message(_("Region for the current mapset updated"));
+	G_message(_("Region for the current subproject updated"));
     }
 
     exit(EXIT_SUCCESS);
@@ -1044,9 +1044,9 @@ static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
     struct Key_Value *proj_info = NULL, *proj_units = NULL;
     char errbuf[1024];
     int permissions;
-    char target_mapset[GMAPSET_MAX];
+    char target_subproject[GMAPSET_MAX];
     struct Key_Value *out_proj_info,	/* projection information of    */
-     *out_unit_info;		/* input and output mapsets     */
+     *out_unit_info;		/* input and output subprojects     */
 
     /* -------------------------------------------------------------------- */
     /*      Translate GCP WKT coordinate system into GRASS format.          */
@@ -1057,38 +1057,38 @@ static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
 	G_fatal_error(_("Unable to translate projection key values of input GCPs"));
 
     /* -------------------------------------------------------------------- */
-    /*      Get the projection of the target location.                      */
+    /*      Get the projection of the target project.                      */
     /* -------------------------------------------------------------------- */
 
-    /* Change to user defined target location for GCPs transformation */
+    /* Change to user defined target project for GCPs transformation */
     G_create_alt_env();
     G_setenv_nogisrc("LOCATION_NAME", (char *)pszDstLoc);
-    sprintf(target_mapset, "PERMANENT");	/* to find PROJ_INFO */
+    sprintf(target_subproject, "PERMANENT");	/* to find PROJ_INFO */
 
-    permissions = G_mapset_permissions(target_mapset);
+    permissions = G_subproject_permissions(target_subproject);
     if (permissions >= 0) {
 
-	/* Get projection info from target location */
+	/* Get projection info from target project */
 	if ((out_proj_info = G_get_projinfo()) == NULL)
-	    G_fatal_error(_("Unable to get projection info of target location"));
+	    G_fatal_error(_("Unable to get projection info of target project"));
 	if ((out_unit_info = G_get_projunits()) == NULL)
-	    G_fatal_error(_("Unable to get projection units of target location"));
+	    G_fatal_error(_("Unable to get projection units of target project"));
 	if (pj_get_kv(oproj, out_proj_info, out_unit_info) < 0)
-	    G_fatal_error(_("Unable to get projection key values of target location"));
+	    G_fatal_error(_("Unable to get projection key values of target project"));
 	tproj->def = NULL;
 	if (GPJ_init_transform(iproj, oproj, tproj) < 0)
 	    G_fatal_error(_("Unable to initialize coordinate transformation"));
     }
-    else {			/* can't access target mapset */
-	/* access to mapset PERMANENT in target location is not required */
-	sprintf(errbuf, _("Mapset <%s> in target location <%s> - "),
-		target_mapset, pszDstLoc);
+    else {			/* can't access target subproject */
+	/* access to subproject PERMANENT in target project is not required */
+	sprintf(errbuf, _("Subproject <%s> in target project <%s> - "),
+		target_subproject, pszDstLoc);
 	strcat(errbuf, permissions == 0 ? _("permission denied")
 	       : _("not found"));
 	G_fatal_error("%s", errbuf);
     }				/* permission check */
 
-    /* And switch back to original location */
+    /* And switch back to original project */
     G_switch_env();
 }
 
@@ -1209,15 +1209,15 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	    bufComplex = (float *)G_malloc(sizeof(float) * ncols_gdal * 2);
 
 	if (group_ref != NULL) {
-	    I_add_file_to_group_ref(outputReal, G_mapset(), group_ref);
-	    I_add_file_to_group_ref(outputImg, G_mapset(), group_ref);
+	    I_add_file_to_group_ref(outputReal, G_subproject(), group_ref);
+	    I_add_file_to_group_ref(outputImg, G_subproject(), group_ref);
 	}
     }
     else {
 	cf = Rast_open_new(output, data_type);
 
 	if (group_ref != NULL)
-	    I_add_file_to_group_ref((char *)output, G_mapset(), group_ref);
+	    I_add_file_to_group_ref((char *)output, G_subproject(), group_ref);
 
 	cell_gdal = G_malloc(Rast_cell_size(data_type) * ncols_gdal);
 	if (use_cell_gdal)
@@ -1515,7 +1515,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	    GDALmetadata++;
 	}
 	if (have_colors)
-	    Rast_write_colors((char *)output, G_mapset(), &colors);
+	    Rast_write_colors((char *)output, G_subproject(), &colors);
 
 	Rast_free_colors(&colors);
     }
@@ -1708,7 +1708,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	    have_colors = Rast_colors_count(&colors) > 0;
 	    
 	    if (have_colors)
-		Rast_write_colors((char *)output, G_mapset(), &colors);
+		Rast_write_colors((char *)output, G_subproject(), &colors);
 
 	    Rast_free_colors(&colors);
 	}
@@ -1736,7 +1736,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	    Rast_set_c_color(iColor, sEntry.c1, sEntry.c2, sEntry.c3, &colors);
 	}
 
-	Rast_write_colors((char *)output, G_mapset(), &colors);
+	Rast_write_colors((char *)output, G_subproject(), &colors);
 	Rast_free_colors(&colors);
 	have_colors = 1;
     }
@@ -1752,7 +1752,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 
 	    Rast_init_colors(&colors);
 	    Rast_make_grey_scale_colors(&colors, 0, 255);	/* full range */
-	    Rast_write_colors((char *)output, G_mapset(), &colors);
+	    Rast_write_colors((char *)output, G_subproject(), &colors);
 	    Rast_free_colors(&colors);
 	}
 	if ((GDALGetRasterDataType(hBand) == GDT_UInt16)) {
@@ -1763,12 +1763,12 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 
 	    G_verbose_message(_("Setting grey color table for <%s> (16bit, image range)"),
 			      output);
-	    Rast_read_range((char *)output, G_mapset(), &range);
+	    Rast_read_range((char *)output, G_subproject(), &range);
 	    Rast_get_range_min_max(&range, &min, &max);
 
 	    Rast_init_colors(&colors);
 	    Rast_make_grey_scale_colors(&colors, min, max);	/* image range */
-	    Rast_write_colors((char *)output, G_mapset(), &colors);
+	    Rast_write_colors((char *)output, G_subproject(), &colors);
 	    Rast_free_colors(&colors);
 	}
     }

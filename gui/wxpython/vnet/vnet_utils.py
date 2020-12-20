@@ -31,7 +31,7 @@ except ImportError:
 
 
 def ParseMapStr(mapStr):
-    """Create full map name (add current mapset if it is not present in name)"""
+    """Create full map name (add current subproject if it is not present in name)"""
     mapValSpl = mapStr.strip().split("@")
     if len(mapValSpl) > 1:
         mapSet = mapValSpl[1]

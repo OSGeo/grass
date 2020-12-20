@@ -28,8 +28,8 @@ static int parse_vallist(char **, d_Mask *);
 
 int main(int argc, char *argv[])
 {
-    const char *name, *mapset;
-    char rname[GNAME_MAX], rmapset[GMAPSET_MAX];
+    const char *name, *subproject;
+    char rname[GNAME_MAX], rsubproject[GMAPSET_MAX];
     char path[GPATH_MAX];
     int row, col, fd;
     unsigned char *null_bits;
@@ -125,24 +125,24 @@ int main(int argc, char *argv[])
     recreate = flags.z->answer;
 
     name = parms.map->answer;
-    mapset = G_find_raster2(name, "");
-    if (mapset == NULL)
+    subproject = G_find_raster2(name, "");
+    if (subproject == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
-    is_reclass = (Rast_is_reclass(name, mapset, rname, rmapset) > 0);
+    is_reclass = (Rast_is_reclass(name, subproject, rname, rsubproject) > 0);
     if (is_reclass)
 	G_fatal_error(_("Raster map <%s> is a reclass of map <%s@%s>. "
 			"Consider to generate a copy with r.mapcalc. Exiting."),
-		      name, rname, rmapset);
+		      name, rname, rsubproject);
     if (G_find_file2_misc("cell_misc", "vrt", name, "")) {
         G_fatal_error(_("<%s> is a virtual raster map. "
 	                "Consider to generate a copy with r.mapcalc. Exiting."),
 		      name);
     }
 
-    if (strcmp(mapset, G_mapset()) != 0)
-	G_fatal_error(_("Raster map <%s> is not in your mapset <%s>"),
-		      name, G_mapset());
+    if (strcmp(subproject, G_subproject()) != 0)
+	G_fatal_error(_("Raster map <%s> is not in your subproject <%s>"),
+		      name, G_subproject());
     
     if (parms.null->answer) {
 	if (sscanf(parms.null->answer, "%lf", &new_null) == 1)
@@ -152,9 +152,9 @@ int main(int argc, char *argv[])
 			  parms.null->answer);
     }
 
-    map_type = Rast_map_type(name, mapset);
+    map_type = Rast_map_type(name, subproject);
 
-    if (only_null && G_find_file2_misc("cell_misc", "null", name, mapset))
+    if (only_null && G_find_file2_misc("cell_misc", "null", name, subproject))
 	G_fatal_error(_("Raster map <%s> already has a null bitmap file"), name);
 
     if (map_type == CELL_TYPE) {
@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
 
     parse_vallist(parms.setnull->answers, &d_mask);
 
-    Rast_get_cellhd(name, mapset, &cellhd);
+    Rast_get_cellhd(name, subproject, &cellhd);
 
     if (create) {
 	/* write a file of no-nulls */
@@ -210,13 +210,13 @@ int main(int argc, char *argv[])
 	G_debug(1, "NULL compression is currently %s", donullcompr ? "enabled" : "disabled");
 
 	if (donullcompr) {
-	    if (G_find_file2_misc("cell_misc", "nullcmpr", name, mapset)) {
+	    if (G_find_file2_misc("cell_misc", "nullcmpr", name, subproject)) {
 		G_message(_("The NULL file is already compressed, nothing to do."));
 		exit(EXIT_SUCCESS);
 	    }
 	}
 	else {
-	    if (G_find_file2_misc("cell_misc", "null", name, mapset)) {
+	    if (G_find_file2_misc("cell_misc", "null", name, subproject)) {
 		G_message(_("The NULL file is already uncompressed, nothing to do."));
 		exit(EXIT_SUCCESS);
 	    }
@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
 	Rast__init_null_bits(null_bits, cellhd.cols);
 
 	Rast_set_window(&cellhd);
-	in_fd = Rast_open_old(name, mapset);
+	in_fd = Rast_open_old(name, subproject);
 	fd = Rast__open_null_write(name);
 
 	G_verbose_message(_("Writing new null file for raster map <%s>..."),
@@ -250,9 +250,9 @@ int main(int argc, char *argv[])
 	/* remove NULL file */
 	G_verbose_message(_("Removing null file for raster map <%s>..."),
 			   name);
-	G_file_name_misc(path, "cell_misc", "null", name, mapset);
+	G_file_name_misc(path, "cell_misc", "null", name, subproject);
 	unlink(path);
-	G_file_name_misc(path, "cell_misc", "nullcmpr", name, mapset);
+	G_file_name_misc(path, "cell_misc", "nullcmpr", name, subproject);
 	unlink(path);
 
 	G_done_msg(_("Raster map <%s> modified."), name);
@@ -260,7 +260,7 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
-    process(name, mapset, change_null, map_type);
+    process(name, subproject, change_null, map_type);
 
     exit(EXIT_SUCCESS);
 }
@@ -327,7 +327,7 @@ int parse_d_mask_rule(char *vallist, d_Mask * d_mask, char *where)
     return 0;
 }
 
-int process(const char *name, const char *mapset, int change_null, RASTER_MAP_TYPE map_type)
+int process(const char *name, const char *subproject, int change_null, RASTER_MAP_TYPE map_type)
 {
     struct Colors colr;
     struct History hist;
@@ -339,44 +339,44 @@ int process(const char *name, const char *mapset, int change_null, RASTER_MAP_TY
     int quant_ok;
 
     G_suppress_warnings(1);
-    colr_ok = Rast_read_colors(name, mapset, &colr) > 0;
-    hist_ok = Rast_read_history(name, mapset, &hist) >= 0;
-    cats_ok = Rast_read_cats(name, mapset, &cats) >= 0;
+    colr_ok = Rast_read_colors(name, subproject, &colr) > 0;
+    hist_ok = Rast_read_history(name, subproject, &hist) >= 0;
+    cats_ok = Rast_read_cats(name, subproject, &cats) >= 0;
 
     if (map_type != CELL_TYPE) {
 	Rast_quant_init(&quant);
-	quant_ok = Rast_read_quant(name, mapset, &quant);
+	quant_ok = Rast_read_quant(name, subproject, &quant);
 	G_suppress_warnings(0);
     }
 
-    if (doit(name, mapset, change_null, map_type))
+    if (doit(name, subproject, change_null, map_type))
 	return 1;
 
     if (colr_ok) {
-	Rast_write_colors(name, mapset, &colr);
+	Rast_write_colors(name, subproject, &colr);
 	Rast_free_colors(&colr);
     }
     if (hist_ok)
 	Rast_write_history(name, &hist);
     if (cats_ok) {
-	cats.num = Rast_get_max_c_cat(name, mapset);
+	cats.num = Rast_get_max_c_cat(name, subproject);
 	Rast_write_cats(name, &cats);
 	Rast_free_cats(&cats);
     }
     if (map_type != CELL_TYPE && quant_ok)
-	Rast_write_quant(name, mapset, &quant);
+	Rast_write_quant(name, subproject, &quant);
 
     return 0;
 }
 
-int doit(const char *name, const char *mapset, int change_null, RASTER_MAP_TYPE map_type)
+int doit(const char *name, const char *subproject, int change_null, RASTER_MAP_TYPE map_type)
 {
     int new, old, row;
     void *rast;
 
     Rast_set_window(&cellhd);
 
-    old = Rast_open_old(name, mapset);
+    old = Rast_open_old(name, subproject);
 
     new = Rast_open_new(name, map_type);
 

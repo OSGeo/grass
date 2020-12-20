@@ -4,7 +4,7 @@
  * AUTHOR(S):    James Darrell McCauley darrell@mccauley-usa.com
  * 	                          http://mccauley-usa.com/
  *               OGR support by Martin Landa <landa.martin gmail.com>
- * PURPOSE:      GRASS program to sample a raster map at site locations (based on s.qcount)
+ * PURPOSE:      GRASS program to sample a raster map at site projects (based on s.qcount)
  *
  * Modification History:
  * <03 Mar 1993> - began coding (jdm)

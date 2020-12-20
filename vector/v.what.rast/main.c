@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
 
     /* Open vector */
     open_level = Vect_open_old2(&Map, opt.vect->answer,
-                                print_flag->answer ? "" : G_mapset(),
+                                print_flag->answer ? "" : G_subproject(),
                                 opt.field->answer);
     if (open_level < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), opt.vect->answer);

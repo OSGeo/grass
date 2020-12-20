@@ -55,7 +55,7 @@ int cmp_ngbr(struct ngbr_stats *a, struct ngbr_stats *b)
 
 
 /* create new tree and initialize
- * returns pointer to new tree, NULL for memory allocation error
+ * returns pointer to new tree, NULL for memory alproject error
  */
 struct NB_TREE *nbtree_create(int nbands, size_t rb_datasize)
 {

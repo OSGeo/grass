@@ -42,7 +42,7 @@ void interface(int argc, char **argv)
 
     G_gisinit(argv[0]);		/* GRASS function which MUST be called  */
     /* first to check for valid database    */
-    /* and mapset and prompt user for input. */
+    /* and subproject and prompt user for input. */
 
 
     /*--------------------------------------------------------------------------*/

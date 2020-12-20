@@ -30,7 +30,7 @@ void projection_mismatch_report(struct Cell_head cellhd,
 
     strcpy(error_msg,
            _("Projection of dataset does not"
-             " appear to match current location.\n\n"));
+             " appear to match current project.\n\n"));
 
     /* TODO: output this info sorted by key: */
     if (loc_wind.proj != cellhd.proj || err != -2) {
@@ -88,9 +88,9 @@ void projection_mismatch_report(struct Cell_head cellhd,
     sprintf(error_msg + strlen(error_msg),
             _("\nIn case of no significant differences in the projection definitions,"
              " use the -o flag to ignore them and use"
-             " current location definition.\n"));
+             " current project definition.\n"));
     strcat(error_msg,
-           _("Consider generating a new location with 'location' parameter"
+           _("Consider generating a new project with 'project' parameter"
              " from input data set.\n"));
     G_fatal_error("%s", error_msg);
 }
@@ -111,7 +111,7 @@ void projection_check_wkt(struct Cell_head cellhd,
         G_warning(_("Unable to convert input map projection information to "
                     "GRASS format for checking"));
 
-    /* Does the projection of the current location match the dataset? */
+    /* Does the projection of the current project match the dataset? */
 
     /* fetch LOCATION PROJ info */
     if (loc_wind.proj != PROJECTION_XY) {
@@ -134,7 +134,7 @@ void projection_check_wkt(struct Cell_head cellhd,
                                    proj_info, proj_units, err);
     }
     else if (verbose) {
-        G_message(_("Projection of input dataset and current location "
+        G_message(_("Projection of input dataset and current project "
                     "appear to match"));
     }
 }

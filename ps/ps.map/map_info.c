@@ -23,7 +23,7 @@ int map_info(void)
     fontsize = (double)m_info.fontsize;
     fprintf(PS.fp, "(%s) FN %.1f SF\n", m_info.font, fontsize);
 
-    /* get text location */
+    /* get text project */
     dy = fontsize;
 
     if (m_info.x > 0.0)

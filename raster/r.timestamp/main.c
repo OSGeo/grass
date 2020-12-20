@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     struct Option *map, *date;
     struct TimeStamp ts;
     char *name;
-    const char *mapset;
+    const char *subproject;
     int modify;
 
     G_gisinit(argv[0]);
@@ -57,13 +57,13 @@ int main(int argc, char *argv[])
     modify = date->answer != NULL;
 
     if (modify)
-	mapset = G_find_raster(name, G_mapset());
+	subproject = G_find_raster(name, G_subproject());
     else
-	mapset = G_find_raster(name, "");
+	subproject = G_find_raster(name, "");
 
-    if (mapset == NULL) {
+    if (subproject == NULL) {
 	G_fatal_error(_("Raster map <%s> not found %s"), name,
-		      modify ? "in current mapset" : "");
+		      modify ? "in current subproject" : "");
 	exit(EXIT_FAILURE);
     }
 

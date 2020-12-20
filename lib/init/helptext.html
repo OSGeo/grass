@@ -38,7 +38,7 @@ LOCATION are created automatically when GRASS is started the first
 time with a new LOCATION. It is important to understand that each
 projection stays in its own LOCATION.
 <p>
-See the "Location Wizard"&nbsp;<img src="circle_4.png" alt="[(4)]"> to
+See the "Project Wizard"&nbsp;<img src="circle_4.png" alt="[(4)]"> to
 easily create a new LOCATION from scratch from a geocoded file, by
 defining the parameters or by selecting the corresponding EPSG projection
 code.
@@ -52,9 +52,9 @@ Each LOCATION can have many MAPSETs. Each MAPSET is a LOCATION's
 subdirectory. New MAPSET can be added at GRASS startup (see related
 button).
 
-<h3><img src="circle_4.png" alt="[(4)]">&nbsp;Location Wizard</h3>
+<h3><img src="circle_4.png" alt="[(4)]">&nbsp;Project Wizard</h3>
 
-The "Location Wizard" let's you easily create a new LOCATION. You
+The "Project Wizard" let's you easily create a new LOCATION. You
 will be guided through a series of dialogues to browse and select
 predefined projections (also via EPSG code) or to define individual
 projections. You can also create new LOCATION easily from a georeferenced
@@ -63,7 +63,7 @@ rules to define the default raster resolution for a new LOCATION.
 
 <h3><img src="circle_5.png" alt="[(5)]">&nbsp;Download a sample LOCATION</h3>
 
-In the "Location Wizard" there is also a Download button that allows you to
+In the "Project Wizard" there is also a Download button that allows you to
 directly download a ready-to-use LOCATION into the DATABASE. You can
 choose among different sample LOCATIONS that are currently available at the
 <a href="https://grass.osgeo.org/download/sample-data/">Download</a>
@@ -77,7 +77,7 @@ one, you can enter GRASS. The graphical user interface
 menu system, map visualization tool, digitizer, and more.
 
 
-<h2>2. Background: GRASS GIS Location structure</h2>
+<h2>2. Background: GRASS GIS Project structure</h2>
 
 A LOCATION is simply a set of directories which contains the GRASS
 data of a project. Within each LOCATION, a mandatory "PERMANENT"
@@ -88,8 +88,8 @@ definitions. It can be used to store the base cartography in it as
 
 <!-- original drawing: ../../doc/grass_database.svg -->
 <center>
-  <img src="grass_database.png" alt="[GRASS GIS Location structure]" style="padding:5px;" border="1"><br>
-  <i>Fig. 1: GRASS GIS 7 location structure</i>
+  <img src="grass_database.png" alt="[GRASS GIS Project structure]" style="padding:5px;" border="1"><br>
+  <i>Fig. 1: GRASS GIS 7 project structure</i>
 </center>
 
 <h3>Creating and maintaining MAPSETs</h3>
@@ -103,9 +103,9 @@ MAPSET, each user can also read map layers in other users' MAPSETs,
 but s/he can modify or remove only the map layers in his/her own
 MAPSET.
 <p>
-You can learn more about mapsets and how to seamlessly access maps
+You can learn more about subprojects and how to seamlessly access maps
 found in another MAPSET of the same LOCATION in the
-<a href="g.mapsets.html">g.mapsets</a> documentation.
+<a href="g.subprojects.html">g.subprojects</a> documentation.
 
 <h3>The role of the "PERMANENT" MAPSET</h3>
 When creating a new LOCATION, GRASS GIS automatically creates a special
@@ -118,10 +118,10 @@ data (e.g. an elevation model), accessible but write-protected to all
 users who are working in the same LOCATION as the database owner.
 To manipulate or add data to PERMANENT, the owner would start
 GRASS and choose the relevant LOCATION and the PERMANENT MAPSET.  This
-mapset also contains the DEFAULT_WIND file, which holds the default
+subproject also contains the DEFAULT_WIND file, which holds the default
 region boundary coordinate values for the LOCATION (which all users
 will inherit when they start using the database). Additionally, in 
-all mapsets a WIND file is kept, for storing the current boundary 
+all subprojects a WIND file is kept, for storing the current boundary 
 coordinate values and the currently selected raster resolution.  Users
 have the option of switching back to the default region at any time.
 
@@ -147,9 +147,9 @@ directory.
 Now you are ready to select a sample dataset in the GRASS GIS startup screen
 (see above) and start the session.
 
-<h2>4. Creating a New Location with the Location Wizard</h2>
+<h2>4. Creating a New Project with the Project Wizard</h2>
 The <a href="wxGUI.html">wxGUI</a> graphical user interface provides a
-graphical "Location Wizard" which lets you easily create a
+graphical "Project Wizard" which lets you easily create a
 new LOCATION for own data. You will be guided through a series of dialogues to
 browse and select predefined projections (also via EPSG code) or to
 define individual projections. The rules to define the resolution as
@@ -169,24 +169,24 @@ and display them. If your LOCATION is empty you can import your data from
 the menu: Go to "File" -&gt; "Import raster/vector data" (see also the
 related Wiki page on <a href="https://grasswiki.osgeo.org/wiki/Importing_data">Importing data</a>).
 
-<h2>5. Text-based startup and location creation</h2>
+<h2>5. Text-based startup and project creation</h2>
 
 GRASS GIS can be run entirely without using the graphical user interface.
 For a first time startup, the following steps have to be followed:
 
 <ol>
 <li> Create the GRASS GIS database directory (with a file manager; or on command line: <tt>mkdir /home/user/grassdata</tt></li>
-<li> Create a new location, including it's default PERMANENT mapset,
-     without entering the new location:
+<li> Create a new project, including it's default PERMANENT subproject,
+     without entering the new project:
 <ul>
     <li>Using an EPSG code:<br>
-        &nbsp;<tt>grass79 -e -c EPSG:32630 /home/user/grassdata/mylocation</tt></li>
+        &nbsp;<tt>grass79 -e -c EPSG:32630 /home/user/grassdata/myproject</tt></li>
     <li>Using a georeferenced raster or vector file:<br>
-        &nbsp;<tt>grass79 -e -c MyGeoReferenceFile.tif /home/user/grassdata/mylocation</tt></li>
+        &nbsp;<tt>grass79 -e -c MyGeoReferenceFile.tif /home/user/grassdata/myproject</tt></li>
 </ul></li>
-<li> Create new mapset within the new location and launch GRASS GIS within
-     that mapset: <br>
-        &nbsp;<tt>grass79 -c /home/user/grassdata/mylocation/mymapset</tt>
+<li> Create new subproject within the new project and launch GRASS GIS within
+     that subproject: <br>
+        &nbsp;<tt>grass79 -c /home/user/grassdata/myproject/mysubproject</tt>
 </ol>
 
 

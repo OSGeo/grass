@@ -1830,7 +1830,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
         # if new region has been calculated, set the values
         if newreg != {}:
-            # LL locations
+            # LL projects
             if self.Map.projinfo['proj'] == 'll':
                 self.Map.region['n'] = min(self.Map.region['n'], 90.0)
                 self.Map.region['s'] = max(self.Map.region['s'], -90.0)
@@ -2190,7 +2190,7 @@ class BufferedMapWindow(MapWindowBase, Window):
     def Distance(self, beginpt, endpt, screen=True):
         """Calculates distance
 
-        Ctypes required for LL-locations
+        Ctypes required for LL-projects
 
         :param beginpt: first point
         :param endpt: second point

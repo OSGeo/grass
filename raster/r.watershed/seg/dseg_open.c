@@ -14,7 +14,7 @@ int dseg_open(DSEG * dseg, int srows, int scols, int nsegs_in_memory)
     dseg->filename = NULL;
     dseg->fd = -1;
     dseg->name = NULL;
-    dseg->mapset = NULL;
+    dseg->subproject = NULL;
 
     filename = G_tempfile();
     if (0 > (errflag = Segment_open(&(dseg->seg), filename, Rast_window_rows(),

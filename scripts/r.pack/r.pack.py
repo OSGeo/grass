@@ -48,9 +48,9 @@ def cleanup():
 def main():
     infile = options['input']
     compression_off = flags['c']
-    mapset = None
+    subproject = None
     if '@' in infile:
-        infile, mapset = infile.split('@')
+        infile, subproject = infile.split('@')
 
     if options['output']:
         outfile_path, outfile_base = os.path.split(os.path.abspath(options['output']))
@@ -65,7 +65,7 @@ def main():
     os.mkdir(tmp_dir)
     grass.debug('tmp_dir = %s' % tmp_dir)
 
-    gfile = grass.find_file(name=infile, element='cell', mapset=mapset)
+    gfile = grass.find_file(name=infile, element='cell', subproject=subproject)
     if not gfile['name']:
         grass.fatal(_("Raster map <%s> not found") % infile)
 
@@ -92,7 +92,7 @@ def main():
             if os.path.exists(vrt):
                 with open(vrt, 'r') as f:
                     for r in f.readlines():
-                        map, mapset = r.split('@')
+                        map, subproject = r.split('@')
                         map_basedir = os.path.sep.join(
                             os.path.normpath(
                                 map_file['file'],

@@ -3,7 +3,7 @@ from grass.gunittest.main import test
 
 
 class TestVInfo(TestCase):
-    """Test the shell output of v.info that is not location/mapset or user dependent
+    """Test the shell output of v.info that is not project/subproject or user dependent
     """
 
     test_vinfo_no_db = 'test_vinfo_no_db'

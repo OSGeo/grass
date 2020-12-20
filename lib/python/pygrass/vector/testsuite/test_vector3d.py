@@ -14,7 +14,7 @@ from grass.script.core import run_command
 from grass.pygrass.vector import VectorTopo
 from grass.pygrass.vector.geometry import Point
 from grass.pygrass.gis.region import Region
-from grass.pygrass.utils import get_mapset_vector
+from grass.pygrass.utils import get_subproject_vector
 
 
 def generate_coordinates(number, bbox=None, with_z=False):

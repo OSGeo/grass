@@ -11,8 +11,8 @@
   \author Original author CERL
  */
 
-/* TODO: the G_database_*() functions should be renamed to G_location_*()
- * because they apply to a GRASS location, not to a GRASS database */
+/* TODO: the G_database_*() functions should be renamed to G_project_*()
+ * because they apply to a GRASS project, not to a GRASS database */
 
 #include <string.h>
 #include <grass/gis.h>
@@ -40,7 +40,7 @@ static void init(void)
 }
 
 /*!
-  \brief Get units (localized) name for the current location
+  \brief Get units (localized) name for the current project
   
   Returns a string describing the database grid units. It returns a
   plural form (eg. 'feet') if <i>plural</i> is non-zero. Otherwise it
@@ -58,7 +58,7 @@ const char *G_database_unit_name(int plural)
 }
 
 /*!
-  \brief Get units id for the current location
+  \brief Get units id for the current project
   
   \return units id
 */
@@ -99,7 +99,7 @@ int G_database_unit()
 }
 
 /*!
-  \brief Query cartographic projection for the current location
+  \brief Query cartographic projection for the current project
   
   Returns a pointer to a string which is a printable name for
   projection code <i>proj</i> (as returned by G_projection). Returns
@@ -172,7 +172,7 @@ double G_database_units_to_meters_factor(void)
 }
 
 /*!
-  \brief Get datum name for the current location
+  \brief Get datum name for the current project
   
   Returns a pointer to the name of the map datum of the current
   database. If there is no map datum explicitely associated with the
@@ -202,7 +202,7 @@ const char *G_database_datum_name(void)
 }
 
 /*!
-  \brief Get ellipsoid name for the current location
+  \brief Get ellipsoid name for the current project
   
   \return pointer to valid name if ok
   \return NULL on error
@@ -226,7 +226,7 @@ const char *G_database_ellipse_name(void)
 }
 
 /*!
-  \brief Get EPGS code for the current location
+  \brief Get EPGS code for the current project
   
   \return pointer to valid EPSG code on success
   \return NULL on error

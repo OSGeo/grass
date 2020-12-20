@@ -46,7 +46,7 @@ typedef struct _dglHeap
 
     long index;			/* last node / number of current nodes (complete-binary-tree array representation ...) */
     long count;			/* number of allocated nodes in ->pnode array */
-    long block;			/* allocation block size expressed in number of nodes */
+    long block;			/* alproject block size expressed in number of nodes */
     dglHeapNode_s *pnode;	/* the node-array */
 
 } dglHeap_s;

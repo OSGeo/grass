@@ -122,12 +122,12 @@ static void print_status(void)
     struct Key_Value *key_val;
     const char *p;
 
-    if (!G_find_file2("", "GDAL", G_mapset())) {
+    if (!G_find_file2("", "GDAL", G_subproject())) {
 	fprintf(stdout, "Not using GDAL\n");
 	return;
     }
 
-    fp = G_fopen_old("", "GDAL", G_mapset());
+    fp = G_fopen_old("", "GDAL", G_subproject());
     if (!fp)
 	G_fatal_error(_("Unable to open GDAL file"));
     key_val = G_fread_key_value(fp);

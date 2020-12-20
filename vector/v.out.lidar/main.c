@@ -665,7 +665,7 @@ int main(int argc, char **argv)
                                   las_header, write_mode);
     write_context.las_writer = las_writer;
 
-    /* to avoid allocation for each point we are writing */
+    /* to avoid alproject for each point we are writing */
     write_context.las_point = LASPoint_Create();
     LASPoint_SetHeader(write_context.las_point, las_header);
     write_context.las_color = LASColor_Create();
@@ -714,7 +714,7 @@ int main(int argc, char **argv)
     if (!use_color_attributes && !no_color_table_flag->answer
         && !(write_context.rgb_layer)) {
         int has_colors = Vect_read_colors(Vect_get_name(&vinput),
-                                          Vect_get_mapset(&vinput),
+                                          Vect_get_subproject(&vinput),
                                           &color_table);
         if (has_colors)
             write_context.color_table = &color_table;

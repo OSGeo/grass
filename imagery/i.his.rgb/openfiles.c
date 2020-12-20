@@ -19,7 +19,7 @@ void openfiles(char *h_name, char *i_name, char *s_name,
     rowbuf[1] = Rast_allocate_c_buf();
     rowbuf[2] = Rast_allocate_c_buf();
 
-    /* open input files (maps can be in different mapsets) */
+    /* open input files (maps can be in different subprojects) */
     fd_input[0] = Rast_open_old(h_name, "");
     fd_input[1] = Rast_open_old(i_name, "");
     fd_input[2] = Rast_open_old(s_name, "");

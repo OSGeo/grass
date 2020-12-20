@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 When a user runs GRASS, certain variables are set specifying the GRASS
-data base, location, mapset, peripheral device drivers, etc., being
+data base, project, subproject, peripheral device drivers, etc., being
 used in the current GRASS session. These variable name settings are
 recognized as long as the user is running a GRASS session.
 
@@ -41,10 +41,10 @@ are essential.
 <dt><em>GISDBASE</em>
 <dd>The <em>GISDBASE</em> is a directory in which all users' GRASS
 data are stored. Within the <em>GISDBASE</em>, data are segregated
-into subdirectories (called &quot;locations&quot;) based on the map
+into subdirectories (called &quot;projects&quot;) based on the map
 coordinate system used and the geographic extent of the data.  Each
-&quot;location&quot; directory itself contains subdirectories called
-&quot;mapsets&quot;; each &quot;mapset&quot; stores &quot;data base
+&quot;project&quot; directory itself contains subdirectories called
+&quot;subprojects&quot;; each &quot;subproject&quot; stores &quot;data base
 elements&quot; - the directories (e.g.,
 the <tt>cell</tt>, <tt>cellhd</tt>, <tt>vector</tt>, etc., directories)
 in which GRASS data files are actually stored.
@@ -52,40 +52,40 @@ in which GRASS data files are actually stored.
 <dt><em>LOCATION_NAME</em>
 
 <dd>The user must choose to work with the data under a single GRASS
-location within any given GRASS session; this location is then called
-the <em>current GRASS location</em>, and is specified by the variable
+project within any given GRASS session; this project is then called
+the <em>current GRASS project</em>, and is specified by the variable
 <em>LOCATION_NAME</em>. The <em>LOCATION_NAME</em> is the GRASS data
-base location whose data will be affected by any GRASS commands issued
+base project whose data will be affected by any GRASS commands issued
 during the user's current GRASS session, and is a subdirectory of the
-current <em>GISDBASE</em>. Each &quot;location&quot; directory can
-contain multiple &quot;mapset&quot; directories (including the special
-mapset <em>PERMANENT</em>).  Maps stored under the same
+current <em>GISDBASE</em>. Each &quot;project&quot; directory can
+contain multiple &quot;subproject&quot; directories (including the special
+subproject <em>PERMANENT</em>).  Maps stored under the same
 GRASS <em>LOCATION_NAME</em> (and/or within the same <em>MAPSET</em>)
 must use the same coordinate system and typically fall within the
-boundaries of the same geographic region (aka, &quot;location&quot;).
+boundaries of the same geographic region (aka, &quot;project&quot;).
 
 <dt><em>MAPSET</em>
 
-<dd>Each &quot;mapset&quot; contains a set of maps relevant to the
+<dd>Each &quot;subproject&quot; contains a set of maps relevant to the
 <em>LOCATION_NAME</em> directory in which it appears.
-Each <em>LOCATION_NAME</em> can contain multiple mapsets. (Mapsets
+Each <em>LOCATION_NAME</em> can contain multiple subprojects. (Subprojects
 which fall under the same <em>LOCATION_NAME</em> all contain data
 geographically relevant to the <em>LOCATION_NAME</em>, and all store
 data in the same map coordinate system.  Frequently, maps are placed
-into different mapsets to distinguish file ownership - e.g., each user
-might have one or more own mapset(s), storing any maps that the user has
+into different subprojects to distinguish file ownership - e.g., each user
+might have one or more own subproject(s), storing any maps that the user has
 created and/or are relevant to the own work.) During each GRASS session, the
-user must choose one mapset to be the <em>current mapset</em>; the current
-mapset setting is given by <em>MAPSET</em>, and is a subdirectory
+user must choose one subproject to be the <em>current subproject</em>; the current
+subproject setting is given by <em>MAPSET</em>, and is a subdirectory
 of <em>LOCATION_NAME</em>.  During a single GRASS session, the user
-can use available data in any of the mapsets stored under the
+can use available data in any of the subprojects stored under the
 current <em>LOCATION_NAME</em> directory that are in the user's
-mapset search path and accessible by the user.  However, within a
+subproject search path and accessible by the user.  However, within a
 single GRASS session, the user only has <em>write</em> access to data
-stored under the <em>current mapset</em> (specified by the
+stored under the <em>current subproject</em> (specified by the
 variable <em>MAPSET</em>).
 
-<p>Each &quot;mapset&quot; stores GRASS data base elements (i.e., the
+<p>Each &quot;subproject&quot; stores GRASS data base elements (i.e., the
 directories in which GRASS data files are stored).  Any maps created
 or modified by the user in the current GRASS session will be stored
 here. The <em>MAPSET</em> directory <em>PERMANENT</em> is generally
@@ -98,12 +98,12 @@ working under each <em>LOCATION_NAME</em>.
 Once within a GRASS session, GRASS users have access only to the data
 under a single GRASS data base directory (the <em>current GRASS data
 base</em>, specified by the variable <em>GISDBASE</em>), and to a
-single GRASS location directory (the <em>current location</em>,
+single GRASS project directory (the <em>current project</em>,
 specified by the variable <em>LOCATION_NAME</em>).  Within a single
 session, the user may only <em>modify</em> the data in the
-<em>current mapset</em> (specified by the variable
+<em>current subproject</em> (specified by the variable
 <em>MAPSET</em>), but may <em>use</em> data available under other
-mapsets under the same <em>LOCATION_NAME</em>.
+subprojects under the same <em>LOCATION_NAME</em>.
 
 <p>All of these names must be legal names on the user's current system.
 <!--For UNIX users, names less than 14 characters and containing no
@@ -114,7 +114,7 @@ used in place of a blank for multiple-word names.
 -->
 
 <p>
-The full path to the current mapset is determined
+The full path to the current subproject is determined
 from <em>GISDBASE</em>, <em>LOCATION_NAME</em>, <em>MAPSET</em>
 variables, in the example
 above: <tt>/opt/grassdata/spearfish/PERMANENT</tt>. The full path can
@@ -144,7 +144,7 @@ compatible with some other UNIX shells.
 <p>
 By default the GRASS variables are stored in <em>gisrc</em> file
 (defined by environmental
-variable <em>GISRC</em>). If <b>store=mapset</b> is given than the
+variable <em>GISRC</em>). If <b>store=subproject</b> is given than the
 variables are stored in <tt>$GISDBASE/$LOCATION_NAME/$MAPSET/VAR</tt>.
   
 <h3>GRASS Debugging</h3>
@@ -183,7 +183,7 @@ from <a href="wxGUI.html">wxGUI</a>.
   <a href="g.access.html">g.access</a>,
   <a href="g.filename.html">g.filename</a>,
   <a href="g.findfile.html">g.findfile</a>,
-  <a href="g.mapsets.html">g.mapsets</a>
+  <a href="g.subprojects.html">g.subprojects</a>
 </em>
 
 <p>

@@ -19,7 +19,7 @@
 #define PERMANENT "PERMANENT"
 
 /*!
-  \brief Gets units information for location
+  \brief Gets units information for project
 
   Note: Allocated Key_Value structure should be freed by
   G_free_key_value().
@@ -37,8 +37,8 @@ struct Key_Value *G_get_projunits(void)
     G_file_name(path, "", UNIT_FILE, PERMANENT);
     if (access(path, 0) != 0) {
 	if (G_projection() != PROJECTION_XY) {
-	    G_warning(_("<%s> file not found for location <%s>"),
-		      UNIT_FILE, G_location());
+	    G_warning(_("<%s> file not found for project <%s>"),
+		      UNIT_FILE, G_project());
 	}
 	return NULL;
     }
@@ -48,7 +48,7 @@ struct Key_Value *G_get_projunits(void)
 }
 
 /*!
-  \brief Gets projection information for location
+  \brief Gets projection information for project
   
   Note: Allocated Key_Value structure should be freed by
   G_free_key_value().
@@ -66,8 +66,8 @@ struct Key_Value *G_get_projinfo(void)
     G_file_name(path, "", PROJECTION_FILE, PERMANENT);
     if (access(path, 0) != 0) {
 	if (G_projection() != PROJECTION_XY) {
-	    G_warning(_("<%s> file not found for location <%s>"),
-		      PROJECTION_FILE, G_location());
+	    G_warning(_("<%s> file not found for project <%s>"),
+		      PROJECTION_FILE, G_project());
 	}
 	return NULL;
     }
@@ -87,13 +87,13 @@ struct Key_Value *G_get_projinfo(void)
 }
 
 /*!
-  \brief Gets EPSG information for the current location
+  \brief Gets EPSG information for the current project
   
   Note: Allocated Key_Value structure should be freed by
   G_free_key_value().
   
   \return pointer to Key_Value structure with key/value pairs
-  \return NULL when EPSG code is not defined for location
+  \return NULL when EPSG code is not defined for project
 */
 
 /* superseded by G_get_projsrid(), keep for backwards compatibility */ 
@@ -105,8 +105,8 @@ struct Key_Value *G_get_projepsg(void)
     G_file_name(path, "", EPSG_FILE, PERMANENT);
     if (access(path, 0) != 0) {
 	if (G_projection() != PROJECTION_XY) {
-            G_debug(1, "<%s> file not found for location <%s>",
-                    EPSG_FILE, G_location());
+            G_debug(1, "<%s> file not found for project <%s>",
+                    EPSG_FILE, G_project());
 	}
 	return NULL;
     }
@@ -116,10 +116,10 @@ struct Key_Value *G_get_projepsg(void)
 }
 
 /*!
-  \brief Get WKT information for the current location
+  \brief Get WKT information for the current project
 
   \return pointer to WKT string
-  \return NULL when WKT is not available for the current location
+  \return NULL when WKT is not available for the current project
 */
 
 char *G_get_projwkt(void)
@@ -133,8 +133,8 @@ char *G_get_projwkt(void)
     G_file_name(path, "", WKT_FILE, "PERMANENT");
     if (access(path, 0) != 0) {
 	if (G_projection() != PROJECTION_XY) {
-	    G_debug(1, "<%s> file not found for location <%s>",
-		      WKT_FILE, G_location());
+	    G_debug(1, "<%s> file not found for project <%s>",
+		      WKT_FILE, G_project());
 	}
 	return NULL;
     }
@@ -197,7 +197,7 @@ char *G_get_projwkt(void)
 }
 
 /*!
-  \brief Get srid (spatial reference id) for the current location
+  \brief Get srid (spatial reference id) for the current project
 
   Typically an srid will be of the form authority NAME:CODE,
   e.g. EPSG:4326
@@ -218,7 +218,7 @@ char *G_get_projwkt(void)
   10. PROJJSON (PROJ >= 6.2)
 
   \return pointer to srid string
-  \return NULL when srid is not available for the current location
+  \return NULL when srid is not available for the current project
 */
 
 char *G_get_projsrid(void)
@@ -232,8 +232,8 @@ char *G_get_projsrid(void)
     G_file_name(path, "", SRID_FILE, "PERMANENT");
     if (access(path, 0) != 0) {
 	if (G_projection() != PROJECTION_XY) {
-	    G_debug(1, "<%s> file not found for location <%s>",
-		      SRID_FILE, G_location());
+	    G_debug(1, "<%s> file not found for project <%s>",
+		      SRID_FILE, G_project());
 	}
 	return NULL;
     }

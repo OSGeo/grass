@@ -33,15 +33,15 @@ int read_group(void)
     grp.name[0] = G_store(grp.ref.file[grp.ref.red.n].name);
     grp.name[1] = G_store(grp.ref.file[grp.ref.grn.n].name);
     grp.name[2] = G_store(grp.ref.file[grp.ref.blu.n].name);
-    grp.mapset[0] = G_store(grp.ref.file[grp.ref.red.n].mapset);
-    grp.mapset[1] = G_store(grp.ref.file[grp.ref.grn.n].mapset);
-    grp.mapset[2] = G_store(grp.ref.file[grp.ref.blu.n].mapset);
+    grp.subproject[0] = G_store(grp.ref.file[grp.ref.red.n].subproject);
+    grp.subproject[1] = G_store(grp.ref.file[grp.ref.grn.n].subproject);
+    grp.subproject[2] = G_store(grp.ref.file[grp.ref.blu.n].subproject);
 
 
     /* read in colors */
     for (i = 0; i < 3; i++) {
-	if (Rast_read_colors(grp.name[i], grp.mapset[i], &(grp.colors[i])) == -1) {
-	    sprintf(fullname, "%s in %s", grp.name[i], grp.mapset[i]);
+	if (Rast_read_colors(grp.name[i], grp.subproject[i], &(grp.colors[i])) == -1) {
+	    sprintf(fullname, "%s in %s", grp.name[i], grp.subproject[i]);
 	    error(fullname, "", "can't read color table");
 	    return 0;
 	}
@@ -49,7 +49,7 @@ int read_group(void)
 
     /* open raster maps for reading */
     for (i = 0; i < 3; i++)
-	grp.fd[i] = Rast_open_old(grp.name[i], grp.mapset[i]);
+	grp.fd[i] = Rast_open_old(grp.name[i], grp.subproject[i]);
 
     strcpy(PS.celltitle, grp.group_name);
     G_strip(PS.celltitle);

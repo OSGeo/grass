@@ -161,14 +161,14 @@ int main(int argc, char *argv[])
 	if (opt_title->answer != NULL)
 	    strcpy(title, opt_title->answer);
 	else
-	    sprintf(title, "clump of <%s@%s>", name, G_mapset());
+	    sprintf(title, "clump of <%s@%s>", name, G_subproject());
 	Rast_put_cell_title(OUTPUT, title);
 
 	/* colors */
-	range_return = Rast_read_range(OUTPUT, G_mapset(), &range);
+	range_return = Rast_read_range(OUTPUT, G_subproject(), &range);
 	Rast_get_range_min_max(&range, &min, &max);
 	Rast_make_random_colors(&colr, min, max);
-	Rast_write_colors(OUTPUT, G_mapset(), &colr);
+	Rast_write_colors(OUTPUT, G_subproject(), &colr);
 
 	/* history */
 	Rast_short_history(OUTPUT, "raster", &hist);

@@ -2,8 +2,8 @@
 
 # assumes full NC SPM
 
-# execute the following in old version in a separate mapset
-# the switch to another mapset and execute it with a new version
+# execute the following in old version in a separate subproject
+# the switch to another subproject and execute it with a new version
 
 g.region rural_1m res=2 -p
 v.surf.rst -d input=elev_lid792_bepts elevation=elev_lid792_2m slope=dx_2m aspect=dy_2m tension=15 smooth=1.5 npmin=150
@@ -16,7 +16,7 @@ r.sim.sediment elevation=elev_lid792_2m dx=dx_2m dy=dy_2m water_depth=wdp_2m det
 
 g.copy rast=disch_2m.120,disch_2m
 
-# execute the following only in one of the mapsets
+# execute the following only in one of the subprojects
 
 REF_MAPSET=rsim_before
 

@@ -63,7 +63,7 @@ int load_vectors(const struct Option *elev_map,
     int i, id;
     int nvects;
 
-    const char *mapset;
+    const char *subproject;
 
     double x, y, z;
 
@@ -79,13 +79,13 @@ int load_vectors(const struct Option *elev_map,
     nvects = 0;
 
     for (i = 0; vect->answers[i]; i++) {
-	mapset = G_find_vector2(vect->answers[i], "");
-	if (mapset == NULL) {
+	subproject = G_find_vector2(vect->answers[i], "");
+	if (subproject == NULL) {
 	    G_fatal_error(_("Vector map <%s> not found"), vect->answers[i]);
 	}
 	id = Nviz_new_map_obj(map_obj_type,
 			      G_fully_qualified_name(vect->answers[i],
-						     mapset), 0.0, data);
+						     subproject), 0.0, data);
 
 	/* set position */
 	x = atof(position->answers[i * 3 + 0]);

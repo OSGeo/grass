@@ -30,6 +30,6 @@ void projection_check_wkt(struct Cell_head cellhd,
 
 int is_wkt_projection_same_as_loc(const char *wkt);
 void wkt_projection_mismatch_report(const char *wkt);
-char *location_projection_as_wkt(int prettify);
+char *project_projection_as_wkt(int prettify);
 
 #endif /* PROJECTION_CHECKS_H */

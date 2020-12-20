@@ -561,7 +561,7 @@ void init_proj(struct pj_info *info_in, struct pj_info *info_out,
     in_proj_info = G_get_projinfo();
     in_unit_info = G_get_projunits();
     if (pj_get_kv(info_in, in_proj_info, in_unit_info) < 0)
-        G_fatal_error(_("Can't get projection key values of current location"));
+        G_fatal_error(_("Can't get projection key values of current project"));
 
     /* Out Info for ll projection */
     info_out->pj = NULL;
@@ -572,13 +572,13 @@ void init_proj(struct pj_info *info_in, struct pj_info *info_out,
         out_proj_info = G_create_key_value();
         out_unit_info = G_create_key_value();
 
-        /* Check that datumparams are defined for this location (otherwise
+        /* Check that datumparams are defined for this project (otherwise
          * the WGS84 values would be meaningless), and if they are set the 
          * input datum to WGS84 */
 #if PROJ_VERSION_MAJOR < 6
 	/* PROJ6+ has its own datum transformation parameters */
         if (G_get_datumparams_from_projinfo(in_proj_info, buff, dum) < 0)
-            G_fatal_error(_("WGS84 grid output not possible as this location does not contain\n"
+            G_fatal_error(_("WGS84 grid output not possible as this project does not contain\n"
                            "datum transformation parameters. Try running g.setproj."));
         else
 #endif

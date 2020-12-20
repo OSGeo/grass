@@ -52,7 +52,7 @@ static int close_new(RASTER3D_Map * map)
     close(map->data_fd);
 
     /* finally move tempfile to data file */
-    Rast3d_filename(path, RASTER3D_CELL_ELEMENT, map->fileName, map->mapset);
+    Rast3d_filename(path, RASTER3D_CELL_ELEMENT, map->fileName, map->subproject);
 #ifdef __MINGW32__
     if (CopyFile(map->tempName, path, FALSE) == 0) {
 #else

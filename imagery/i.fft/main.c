@@ -47,11 +47,11 @@ static void fft_colors(const char *name)
     struct FPRange range;
     DCELL min, max;
 
-    Rast_read_fp_range(name, G_mapset(), &range);
+    Rast_read_fp_range(name, G_subproject(), &range);
     Rast_get_fp_range_min_max(&range, &min, &max);
     Rast_make_wave_colors(&wave, min, max);
     Rast_abs_log_colors(&colors, &wave, 100);
-    Rast_write_colors(name, G_mapset(), &colors);
+    Rast_write_colors(name, G_subproject(), &colors);
     Rast_free_colors(&colors);
 }
 

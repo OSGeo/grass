@@ -4,13 +4,13 @@
 #include "local_proto.h"
 
 int scan_gis(char *element, char *desc, char *key, char *data,
-	     char *name, char *mapset, int gobble)
+	     char *name, char *subproject, int gobble)
 {
     const char *ms;
 
 
-    *mapset = 0;
-    if (sscanf(data, "%s %s", name, mapset) < 1) {
+    *subproject = 0;
+    if (sscanf(data, "%s %s", name, subproject) < 1) {
 	error(key, data, "illegal request (scan_gis)");
 	if (gobble)
 	    gobble_input();
@@ -19,18 +19,18 @@ int scan_gis(char *element, char *desc, char *key, char *data,
 
     if (strcmp(name, "list") == 0) {
 	if (isatty(0))
-	    G_list_element(element, desc, mapset, (int (*)())NULL);
+	    G_list_element(element, desc, subproject, (int (*)())NULL);
 	reject();
 	return 0;
     }
 
-    ms = G_find_file2(element, name, mapset);
+    ms = G_find_file2(element, name, subproject);
     if (ms == NULL) {
 	error(key, data, "not found");
 	if (gobble)
 	    gobble_input();
 	return 0;
     }
-    strcpy(mapset, ms);
+    strcpy(subproject, ms);
     return 1;
 }

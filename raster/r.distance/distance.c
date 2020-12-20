@@ -82,21 +82,21 @@ find_minimum_distance(const struct CatEdgeList *list1, const struct CatEdgeList 
 int null_distance(const char *name1, const char *name2, int *zerro_row, int *zerro_col)
 {
     RASTER_MAP_TYPE maptype1, maptype2;
-    const char *mapset;
+    const char *subproject;
     int mapd1, mapd2;
     void *inrast1, *inrast2;
     int nrows, ncols, row, col;
     void *cell1, *cell2;
 
     /* NOTE: no need to control, if the map exists. it should be checked in edge.c */
-    mapset = G_find_raster2(name1, "");
-    maptype1 = Rast_map_type(name1, mapset);
-    mapd1 = Rast_open_old(name1, mapset);
+    subproject = G_find_raster2(name1, "");
+    maptype1 = Rast_map_type(name1, subproject);
+    mapd1 = Rast_open_old(name1, subproject);
     inrast1 = Rast_allocate_buf(maptype1);
 
-    mapset = G_find_raster2(name2, "");
-    maptype2 = Rast_map_type(name2, mapset);
-    mapd2 = Rast_open_old(name2, mapset);
+    subproject = G_find_raster2(name2, "");
+    maptype2 = Rast_map_type(name2, subproject);
+    mapd2 = Rast_open_old(name2, subproject);
     inrast2 = Rast_allocate_buf(maptype2);
 
     G_message(_("Reading maps  <%s,%s> while finding 0 distance ..."), name1,

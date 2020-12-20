@@ -43,8 +43,8 @@ image processing in GRASS.
 
 <P>
 The following routines interactively prompt the user for a group name
-in the current mapset (This library only works with groups in the
-current mapset. Other mapsets, even those in the user's mapset search
+in the current subproject (This library only works with groups in the
+current subproject. Other subprojects, even those in the user's subproject search
 path, are ignored.) In each, the <B>prompt</B> string will be printed
 as the first line of the full prompt which asks the user to enter a
 group name. If <B>prompt</B> is the empty string "", then an
@@ -65,7 +65,7 @@ user cancels the request, 0 is returned; otherwise, 1 is returned.
 int I_ask_group_old() prompt for an existing group
 
 Asks the user to enter the name of an existing <B>group</B> in the
-current mapset.
+current subproject.
 
 <P>
 <B>Note.</B> The user is not warned if the <B>group</B> exists. The
@@ -94,7 +94,7 @@ exists. The following routine provides this service:
 <P>
 int I_find_group() does group exist?  
 
-Returns 1 if the specified <B>group</B> exists in the current mapset;
+Returns 1 if the specified <B>group</B> exists in the current subproject;
 0 otherwise.
 
 
@@ -171,7 +171,7 @@ this routine automatically.
 <P>
 int I_add_file_to_group_ref() add file name to Ref structure
 
-This routine adds the file <B>name</B> and <B>mapset</B> to the list
+This routine adds the file <B>name</B> and <B>subproject</B> to the list
 contained in the <B>ref</B> structure, if it is not already in the
 list.  The <B>ref</B> structure must have been properly
 initialized. This routine is used by programs, such as
@@ -187,7 +187,7 @@ Imagery_Library_Data_Structures.
 int I_transfer_group_ref_file() copy Ref lists
 
 This routine is used to copy file names from one <I>Ref</I> structure
-to another. The name and mapset for file <B>n</B> from the <B>src</B>
+to another. The name and subproject for file <B>n</B> from the <B>src</B>
 structure are copied into the <B>dst</B> structure (which must be
 properly initialized).
 
@@ -226,7 +226,7 @@ The following two routines read and write the TARGET file.
 <P>
 int I_get_target() read target information
 
-Reads the target <B>location</B> and <B>mapset</B> from the TARGET
+Reads the target <B>project</B> and <B>subproject</B> from the TARGET
 file for the specified group. Returns 1 if successful; 0 otherwise
 (and prints a diagnostic error). This routine is used by
 <I>g.gui.gcp</I> and <I>i.rectify</I> and probably should not be used
@@ -238,7 +238,7 @@ by other programs.
 <P>
 int I_put_target() write target information
 
-Writes the target <B>location</B> and <B>mapset</B> to the TARGET file
+Writes the target <B>project</B> and <B>subproject</B> to the TARGET file
 for the specified <B>group.</B> Returns 1 if successful; 0 otherwise
 (but no error messages are printed).
 
@@ -349,7 +349,7 @@ int nfiles; /* number of REF files */
 struct Ref_Files
 {
   char name[INAME_LEN]; /* REF file name */
-  char mapset[INAME_LEN]; /* REF file mapset */
+  char subproject[INAME_LEN]; /* REF file subproject */
 } *file;
 
 
@@ -368,7 +368,7 @@ int n; /* index into Ref_Files */
 \endverbatim
 
 The <I>Ref</I> structure has <I>nfiles</I> (the number of raster
-files), <I>file</I> (the name and mapset of each file), and
+files), <I>file</I> (the name and subproject of each file), and
 <I>red,grn,blu</I> (color information for the group or subgroup) Note:
 The red,grn,blu elements are expected to change as the imagery code
 develops. Do not reference them. Pretend they do not exist.
@@ -378,7 +378,7 @@ There is no function interface to the <I>nfiles</I> and <I>file</I>
 elements in the structure. This means that the programmer must
 reference the elements of the structure directly (The nfiles and file
 elements are not expected to change in the future). The name and
-<I>mapset for the i th file are file[i].name, and file[i].mapset.</I>
+<I>subproject for the i th file are file[i].name, and file[i].subproject.</I>
 
 <P>
 For example, to print out the names of the raster files in the structure:
@@ -394,7 +394,7 @@ struct Ref ref;
 ...
 
 for (i = 0; i<ref.nfiles; i++)
-  fprintf(stdout, "%s in %s\n", ref.file[i].name, ref.file[i].mapset);
+  fprintf(stdout, "%s in %s\n", ref.file[i].name, ref.file[i].subproject);
 \endverbatim
 
 \subsection struct_Control_Points struct Control_Points 

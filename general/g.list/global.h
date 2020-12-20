@@ -13,7 +13,7 @@ struct elist
 {
     char *type;
     char *name;
-    char *mapset;
+    char *subproject;
 };
 
 void make_list(struct elist **, int *, int *, const struct list *, const char *,

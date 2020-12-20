@@ -227,9 +227,9 @@ SYMBOL *err(FILE * fp, SYMBOL * s, char *msg)
 
 /* 
  *  Read symbol specified by name.
- *  Name: group/name | group/name@mapset 
+ *  Name: group/name | group/name@subproject 
  *        (later add syntax to prefer symbol from GISBASE)
- *  S_read() searches first in mapsets (standard GRASS search) and
+ *  S_read() searches first in subprojects (standard GRASS search) and
  *   then in GISBASE/etc/symbol/ 
  */
 SYMBOL *S_read(const char *sname)
@@ -257,7 +257,7 @@ SYMBOL *S_read(const char *sname)
     strcpy(group, sname);
     c = strchr(group, '/');
     if (c == NULL) {
-	G_warning(_("Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"),
+	G_warning(_("Incorrect symbol name: '%s' (should be: group/name or group/name@subproject)"),
 		  sname);
 	return NULL;
     }
@@ -268,11 +268,11 @@ SYMBOL *S_read(const char *sname)
 
     G_debug(3, "  group: '%s' name: '%s'", group, name);
 
-    /* Search in mapsets */
+    /* Search in subprojects */
     sprintf(buf, "symbol/%s", group);
     ms = G_find_file(buf, name, NULL);
 
-    if (ms != NULL) {		/* Found in mapsets */
+    if (ms != NULL) {		/* Found in subprojects */
 	fp = G_fopen_old(buf, name, ms);
     }
     else {			/* Search in GISBASE */

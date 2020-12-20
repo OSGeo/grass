@@ -11,7 +11,7 @@ struct _gstats_
 struct _layer_
 {
     const char *name;
-    const char *mapset;
+    const char *subproject;
     struct Categories labels;
 };
 

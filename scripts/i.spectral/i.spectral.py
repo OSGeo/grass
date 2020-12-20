@@ -5,7 +5,7 @@
 # MODULE:       i.spectral
 # AUTHOR(S):    Markus Neteler, 18. August 1998
 #               Converted to Python by Glynn Clements
-# PURPOSE:      Displays spectral response at user specified locations in
+# PURPOSE:      Displays spectral response at user specified projects in
 #               group or raster images
 # COPYRIGHT:    (C) 1999-2013 by the GRASS Development Team
 #
@@ -26,7 +26,7 @@
 #
 
 #%Module
-#% description: Displays spectral response at user specified locations in group or images.
+#% description: Displays spectral response at user specified projects in group or images.
 #% keyword: imagery
 #% keyword: querying
 #% keyword: raster

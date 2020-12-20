@@ -2,18 +2,18 @@
 
 <em>r.external.out</em> instructs GRASS GIS to write subsequently generated
 raster maps as data files (e.g. GeoTIFF) using GDAL instead of storing them
-in GRASS raster format in the current mapset.
+in GRASS raster format in the current subproject.
 <p>
 Any new raster map is immediately written out through GDAL as a file.
 
 <h2>NOTES</h2>
 
 A relative directory path (parameter <em>directory</em>) is interpreted
-relative to the current mapset directory, not the current directory where
+relative to the current subproject directory, not the current directory where
 the command was launched. An unspecified or empty directory (which will
 occur if the user passes a simple filename for <em>output</em>) results
 in the output file being placed in the "gdal/" subdirectory of the 
-current mapset directory.
+current subproject directory.
 
 
 <h2>EXAMPLES</h2>
@@ -52,7 +52,7 @@ The module <em>r.external.out</em> can be used along with
 while writing out the results directly in GeoTIFF:
 
 <div class="code"><pre>
-# register GeoTIFF file to be used in current mapset:
+# register GeoTIFF file to be used in current subproject:
 r.external input=terra_lst1km20030314.LST_Day.tif output=modis_celsius
 
 # define output directory for files resulting from GRASS calculation:

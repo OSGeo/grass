@@ -25,20 +25,20 @@ static void append_char(char*, char);
   \brief Builds full path names to GIS data files
 
   If <i>name</i> is of the form "nnn@ppp" then path is set as if name
-  had been "nnn" and mapset had been "ppp" (mapset parameter itself is
+  had been "nnn" and subproject had been "ppp" (subproject parameter itself is
   ignored in this case).
   
   \param[out] path buffer to hold resultant full path to file
   \param element database element (eg, "cell", "cellhd", "vector", etc)
   \param name name of file to build path to (fully qualified names allowed)
-  \param mapset mapset name
+  \param subproject subproject name
 
   \return pointer to <i>path</i> buffer
 */
 char *G_file_name(char *path,
-		   const char *element, const char *name, const char *mapset)
+		   const char *element, const char *name, const char *subproject)
 {
-    return file_name(path, NULL, element, name, mapset, NULL);
+    return file_name(path, NULL, element, name, subproject, NULL);
 }
 
 /*!
@@ -48,16 +48,16 @@ char *G_file_name(char *path,
   \param dir misc directory
   \param element database element (eg, "cell", "cellhd", "vector", etc)
   \param name name of file to build path to (fully qualified names allowed)
-  \param mapset mapset name
+  \param subproject subproject name
 
   \return pointer to <i>path</i> buffer
 */
 char *G_file_name_misc(char *path,
 			const char *dir,
 			const char *element,
-			const char *name, const char *mapset)
+			const char *name, const char *subproject)
 {
-    return file_name(path, dir, element, name, mapset, NULL);
+    return file_name(path, dir, element, name, subproject, NULL);
 }
 
 /*!
@@ -73,13 +73,13 @@ char *G_file_name_misc(char *path,
   \param[out] path buffer to hold resultant full path to file
   \param element database element (eg, "cell", "cellhd", "vector", etc)
   \param name name of file to build path to (fully qualified names allowed)
-  \param mapset mapset name
+  \param subproject subproject name
 
   \return pointer to <i>path</i> buffer
 */
 char *G_file_name_tmp(char *path,
                       const char *element,
-                      const char *name, const char *mapset)
+                      const char *name, const char *subproject)
 {
     const char *env, *tmp_path;
 
@@ -89,12 +89,12 @@ char *G_file_name_tmp(char *path,
         tmp_path = getenv("TMPDIR");
     }
     
-    return file_name(path, NULL, element, name, mapset, tmp_path);
+    return file_name(path, NULL, element, name, subproject, tmp_path);
 }
 
 char *file_name(char *path,
                 const char *dir, const char *element, const char *name,
-                const char *mapset, const char *base)
+                const char *subproject, const char *base)
 {
     const char *pname = name;
     
@@ -103,23 +103,23 @@ char *file_name(char *path,
     }
     else {
         char xname[GNAME_MAX];
-        char xmapset[GMAPSET_MAX];
-        char *location = G__location_path();
+        char xsubproject[GMAPSET_MAX];
+        char *project = G__project_path();
         
         /*
          * if a name is given, build a file name
-         * must split the name into name, mapset if it is
-         * in the name@mapset format
+         * must split the name into name, subproject if it is
+         * in the name@subproject format
          */
-        if (name && *name && G_name_is_fully_qualified(name, xname, xmapset)) {
+        if (name && *name && G_name_is_fully_qualified(name, xname, xsubproject)) {
             pname = xname;
-            sprintf(path, "%s%c%s", location, HOST_DIRSEP, xmapset);
+            sprintf(path, "%s%c%s", project, HOST_DIRSEP, xsubproject);
         }
-        else if (mapset && *mapset)
-            sprintf(path, "%s%c%s", location, HOST_DIRSEP, mapset);
+        else if (subproject && *subproject)
+            sprintf(path, "%s%c%s", project, HOST_DIRSEP, subproject);
         else
-            sprintf(path, "%s%c%s", location, HOST_DIRSEP, G_mapset());
-        G_free(location);
+            sprintf(path, "%s%c%s", project, HOST_DIRSEP, G_subproject());
+        G_free(project);
     }
 
     if (dir && *dir) { /* misc element */

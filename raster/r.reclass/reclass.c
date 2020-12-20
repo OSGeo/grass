@@ -77,7 +77,7 @@ static void init_reclass(struct Reclass *rec, const RULE * rules)
     if (default_rule && !Rast_is_c_null_value(&DEFAULT)) {
 	struct Range range;
 
-	Rast_read_range(rec->name, rec->mapset, &range);
+	Rast_read_range(rec->name, rec->subproject, &range);
 	Rast_get_range_min_max(&range, &rec->min, &rec->max);
 	if (!Rast_is_c_null_value(&rec->min) && !Rast_is_c_null_value(&rec->max))
 	    first = 0;
@@ -154,7 +154,7 @@ static void set_cats(struct Categories *cats, /* const */ int *is_default,
     int cats_read = 0;
 
     if (default_rule && default_to_itself)
-	cats_read = (Rast_read_cats(rec->name, rec->mapset, &old_cats) >= 0);
+	cats_read = (Rast_read_cats(rec->name, rec->subproject, &old_cats) >= 0);
 
     if (cats_read) {
 	int i;
@@ -187,12 +187,12 @@ static int _reclass( /* const */ RULE * rules, struct Categories *cats,
 
 static int re_reclass( /* const */ RULE * rules, struct Categories *cats,
 		      /* const */ struct Reclass *old, struct Reclass *new,
-		      const char *input_name, const char *input_mapset)
+		      const char *input_name, const char *input_subproject)
 {
     struct Reclass mid;
 
     mid.name = G_store(input_name);
-    mid.mapset = G_store(input_mapset);
+    mid.subproject = G_store(input_subproject);
 
     _reclass(rules, cats, &mid);
 
@@ -201,7 +201,7 @@ static int re_reclass( /* const */ RULE * rules, struct Categories *cats,
     return 0;
 }
 
-int reclass(const char *old_name, const char *old_mapset,
+int reclass(const char *old_name, const char *old_subproject,
 	    const char *new_name, RULE *rules, struct Categories *cats,
 	    const char *title)
 {
@@ -211,24 +211,24 @@ int reclass(const char *old_name, const char *old_mapset,
     FILE *fd;
     char buf[GNAME_MAX + GMAPSET_MAX];
 
-    is_reclass = Rast_get_reclass(old_name, old_mapset, &old);
+    is_reclass = Rast_get_reclass(old_name, old_subproject, &old);
     if (is_reclass < 0)
 	G_fatal_error(_("Cannot read header file of <%s@%s>"), old_name,
-		      old_mapset);
+		      old_subproject);
 
     if (is_reclass) {
 	new.name = G_store(old.name);
-	new.mapset = G_store(old.mapset);
-	re_reclass(rules, cats, &old, &new, old_name, old_mapset);
+	new.subproject = G_store(old.subproject);
+	re_reclass(rules, cats, &old, &new, old_name, old_subproject);
     }
     else {
 	new.name = G_store(old_name);
-	new.mapset = G_store(old_mapset);
+	new.subproject = G_store(old_subproject);
 	_reclass(rules, cats, &new);
     }
 
-    if (G_find_file2("cell", new_name, G_mapset()) &&
-	Rast_map_type(new_name, G_mapset()) != CELL_TYPE) {
+    if (G_find_file2("cell", new_name, G_subproject()) &&
+	Rast_map_type(new_name, G_subproject()) != CELL_TYPE) {
 	M_read_list(FALSE, NULL);
         if (M_do_remove(M_get_element("raster"), new_name) == 1)
 	    G_fatal_error(_("Cannot overwrite existing raster map <%s>"),
@@ -239,7 +239,7 @@ int reclass(const char *old_name, const char *old_mapset,
 	G_fatal_error(_("Cannot create reclass file of <%s>"), new_name);
 
     if (!title) {
-	G_snprintf(buf, sizeof(buf), "Reclass of %s in %s", new.name, new.mapset);
+	G_snprintf(buf, sizeof(buf), "Reclass of %s in %s", new.name, new.subproject);
 	title = buf;
     }
 
@@ -256,8 +256,8 @@ int reclass(const char *old_name, const char *old_mapset,
 
     Rast_short_history(new_name, "reclass", &hist);
     Rast_set_history(&hist, HIST_DATSRC_1, "Reclassified map based on:");
-    Rast_format_history(&hist, HIST_DATSRC_2, "  Map [%s] in mapset [%s]",
-			new.name, new.mapset);
+    Rast_format_history(&hist, HIST_DATSRC_2, "  Map [%s] in subproject [%s]",
+			new.name, new.subproject);
 
     Rast_command_history(&hist);
     Rast_write_history(new_name, &hist);

@@ -290,7 +290,7 @@ static int write_timestamp(const char *maptype, const char *dir,
     fd = G_fopen_new_misc(dir, "timestamp", name);
     if (fd == NULL) {
 	G_warning(_("Unable to create timestamp file for %s map <%s@%s>"),
-		  maptype, name, G_mapset());
+		  maptype, name, G_subproject());
 	return -1;
     }
 
@@ -299,7 +299,7 @@ static int write_timestamp(const char *maptype, const char *dir,
     if (stat == 0)
 	return 1;
     G_warning(_("Invalid timestamp specified for %s map <%s@%s>"),
-	      maptype, name, G_mapset());
+	      maptype, name, G_subproject());
     return -2;
 }
 
@@ -309,7 +309,7 @@ static int write_timestamp(const char *maptype, const char *dir,
   \param maptype map type
   \param dir directory
   \param name map name
-  \param mapset mapset name
+  \param subproject subproject name
   \param ts pointer to TimeStamp
   
   \return 0 no timestamp file
@@ -318,18 +318,18 @@ static int write_timestamp(const char *maptype, const char *dir,
   \return -2 error - invalid datetime values in timestamp file
 */
 static int read_timestamp(const char *maptype, const char *dir,
-			  const char *name, const char *mapset,
+			  const char *name, const char *subproject,
 			  struct TimeStamp *ts)
 {
     FILE *fd;
     int stat;
 
-    if (!G_find_file2_misc(dir, "timestamp", name, mapset))
+    if (!G_find_file2_misc(dir, "timestamp", name, subproject))
 	return 0;
-    fd = G_fopen_old_misc(dir, "timestamp", name, mapset);
+    fd = G_fopen_old_misc(dir, "timestamp", name, subproject);
     if (fd == NULL) {
 	G_warning(_("Unable to open timestamp file for %s map <%s@%s>"),
-		  maptype, name, mapset);
+		  maptype, name, subproject);
 	return -1;
     }
 
@@ -338,7 +338,7 @@ static int read_timestamp(const char *maptype, const char *dir,
     if (stat == 0)
 	return 1;
     G_warning(_("Invalid timestamp file for %s map <%s@%s>"),
-	      maptype, name, mapset);
+	      maptype, name, subproject);
     return -2;
 }
 
@@ -346,14 +346,14 @@ static int read_timestamp(const char *maptype, const char *dir,
   \brief Check if timestamp for raster map exists
   
   \param name map name
-  \param mapset mapset name
+  \param subproject subproject name
 
   \return 1 on success
   \return 0 no timestamp present
 */
-int G_has_raster_timestamp(const char *name, const char *mapset)
+int G_has_raster_timestamp(const char *name, const char *subproject)
 {
-    if (!G_find_file2_misc(RAST_MISC, "timestamp", name, mapset))
+    if (!G_find_file2_misc(RAST_MISC, "timestamp", name, subproject))
 	return 0;
 
     return 1;
@@ -363,16 +363,16 @@ int G_has_raster_timestamp(const char *name, const char *mapset)
   \brief Read timestamp from raster map
   
   \param name map name
-  \param mapset mapset the map lives in
+  \param subproject subproject the map lives in
   \param[out] ts TimeStamp struct to populate
 
   \return 1 on success
   \return 0 or negative on error
 */
-int G_read_raster_timestamp(const char *name, const char *mapset,
+int G_read_raster_timestamp(const char *name, const char *subproject,
 			    struct TimeStamp *ts)
 {
-    return read_timestamp("raster", RAST_MISC, name, mapset, ts);
+    return read_timestamp("raster", RAST_MISC, name, subproject, ts);
 }
 
 /*!
@@ -394,7 +394,7 @@ int G_write_raster_timestamp(const char *name, const struct TimeStamp *ts)
 /*!
   \brief Remove timestamp from raster map
   
-  Only timestamp files in current mapset can be removed.
+  Only timestamp files in current subproject can be removed.
 
   \param name map name
 
@@ -412,12 +412,12 @@ int G_remove_raster_timestamp(const char *name)
   
   \param name map name
   \param layer The layer names, in case of NULL, layer one is assumed
-  \param mapset mapset name
+  \param subproject subproject name
 
   \return 1 on success
   \return 0 no timestamp present
 */
-int G_has_vector_timestamp(const char *name, const char *layer, const char *mapset)
+int G_has_vector_timestamp(const char *name, const char *layer, const char *subproject)
 {
     char dir[GPATH_MAX];
     char path[GPATH_MAX + GNAME_MAX];
@@ -429,7 +429,7 @@ int G_has_vector_timestamp(const char *name, const char *layer, const char *maps
         G_snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
 
     G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
-    G_file_name(path, dir, ele, mapset);
+    G_file_name(path, dir, ele, subproject);
 
     G_debug(1, "Check for timestamp <%s>", path);
 
@@ -444,7 +444,7 @@ int G_has_vector_timestamp(const char *name, const char *layer, const char *maps
   
   \param name map name
   \param layer The layer names, in case of NULL, layer one is assumed
-  \param mapset mapset name
+  \param subproject subproject name
   \param[out] ts TimeStamp struct to populate
 
   \return 1 on success
@@ -453,7 +453,7 @@ int G_has_vector_timestamp(const char *name, const char *layer, const char *maps
   \return -2 invalid time stamp
 */
 int G_read_vector_timestamp(const char *name, const char *layer, 
-                            const char *mapset, struct TimeStamp *ts)
+                            const char *subproject, struct TimeStamp *ts)
 {
     FILE *fd;
     int stat;
@@ -461,7 +461,7 @@ int G_read_vector_timestamp(const char *name, const char *layer,
     char ele[GNAME_MAX];
 
     /* In case no timestamp file is present return 0 */
-    if (G_has_vector_timestamp(name, layer, mapset) != 1)
+    if (G_has_vector_timestamp(name, layer, subproject) != 1)
 	return 0;
 
     if(layer != NULL)
@@ -473,11 +473,11 @@ int G_read_vector_timestamp(const char *name, const char *layer,
 
     G_debug(1, "Read timestamp <%s/%s>", dir, ele);
 
-    fd = G_fopen_old(dir, ele, mapset);
+    fd = G_fopen_old(dir, ele, subproject);
     
     if (fd == NULL) {
 	G_warning(_("Unable to open timestamp file for vector map <%s@%s>"),
-		  name, G_mapset());
+		  name, G_subproject());
 	return -1;
     }
 
@@ -486,7 +486,7 @@ int G_read_vector_timestamp(const char *name, const char *layer,
     if (stat == 0)
 	return 1;
     G_warning(_("Invalid timestamp file for vector map <%s@%s>"),
-	        name, mapset);
+	        name, subproject);
     return -2;
 }
 
@@ -522,7 +522,7 @@ int G_write_vector_timestamp(const char *name, const char *layer, const struct T
     
     if (fd == NULL) {
 	G_warning(_("Unable to create timestamp file for vector map <%s@%s>"),
-		  name, G_mapset());
+		  name, G_subproject());
 	return -1;
     }
 
@@ -531,14 +531,14 @@ int G_write_vector_timestamp(const char *name, const char *layer, const struct T
     if (stat == 0)
 	return 1;
     G_warning(_("Invalid timestamp specified for vector map <%s@%s>"),
-	      name, G_mapset());
+	      name, G_subproject());
     return -2;
 }
 
 /*!
   \brief Remove timestamp from vector map
   
-  Only timestamp files in current mapset can be removed.
+  Only timestamp files in current subproject can be removed.
 
   \param name map name
   \param layer The layer names, in case of NULL, layer one is assumed
@@ -565,14 +565,14 @@ int G_remove_vector_timestamp(const char *name, const char *layer)
   \brief Check if timestamp for 3D raster map exists
   
   \param name map name
-  \param mapset mapset name
+  \param subproject subproject name
 
   \return 1 on success
   \return 0 no timestamp present
 */
-int G_has_raster3d_timestamp(const char *name, const char *mapset)
+int G_has_raster3d_timestamp(const char *name, const char *subproject)
 {
-    if (!G_find_file2_misc(GRID3, "timestamp", name, mapset))
+    if (!G_find_file2_misc(GRID3, "timestamp", name, subproject))
 	return 0;
 
     return 1;
@@ -582,16 +582,16 @@ int G_has_raster3d_timestamp(const char *name, const char *mapset)
   \brief Read timestamp from 3D raster map
   
   \param name map name
-  \param mapset mapset name
+  \param subproject subproject name
   \param[out] ts TimeStamp struct to populate
 
   \return 1 on success
   \return 0 or negative on error
 */
-int G_read_raster3d_timestamp(const char *name, const char *mapset,
+int G_read_raster3d_timestamp(const char *name, const char *subproject,
 			   struct TimeStamp *ts)
 {
-    return read_timestamp("raster3d", GRID3, name, mapset, ts);
+    return read_timestamp("raster3d", GRID3, name, subproject, ts);
 }
 
 /*!
@@ -613,7 +613,7 @@ int G_write_raster3d_timestamp(const char *name, const struct TimeStamp *ts)
 /*!
   \brief Remove timestamp from 3D raster map
   
-  Only timestamp files in current mapset can be removed.
+  Only timestamp files in current subproject can be removed.
 
   \param name map name
 

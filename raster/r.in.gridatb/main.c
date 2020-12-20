@@ -25,7 +25,7 @@
 struct Cell_head cellhd;
 FCELL *cell;
 const char *file;
-const char *mapset, *oname;
+const char *subproject, *oname;
 
 int main(int argc, char **argv)
 {
@@ -62,7 +62,7 @@ int main(int argc, char **argv)
     file = params.input->answer;
     oname = params.output->answer;
 
-    mapset = G_mapset();
+    subproject = G_subproject();
 
     if (check_ready())
 	G_fatal_error(_("File not found: %s"), file);

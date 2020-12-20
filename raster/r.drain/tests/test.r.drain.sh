@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# to be run in the North Carolina location
+# to be run in the North Carolina project
 
 export GRASS_OVERWRITE=1
 

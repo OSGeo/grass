@@ -147,13 +147,13 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
         if len(params) < 1:
             return mapname, False
 
-        # need to add mapset for all maps
-        mapsets = {}
+        # need to add subproject for all maps
+        subprojects = {}
         for i, p, v in params:
             if p == 'layer':
                 continue
             mapname = v
-            mapset = ''
+            subproject = ''
             if fullyQualified and '@' not in mapname:
                 if layerType in ('raster', 'vector',
                                  'raster_3d', 'rgb', 'his'):
@@ -164,23 +164,23 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
                             findType = 'grid3'
                         else:
                             findType = layerType
-                        mapset = grass.find_file(
-                            mapname, element=findType)['mapset']
+                        subproject = grass.find_file(
+                            mapname, element=findType)['subproject']
                     except AttributeError:  # not found
                         return '', False
-                    if not mapset:
+                    if not subproject:
                         found = False
                 else:
-                    mapset = ''  # grass.gisenv()['MAPSET']
-            mapsets[i] = mapset
+                    subproject = ''  # grass.gisenv()['MAPSET']
+            subprojects[i] = subproject
 
         # update dcmd
         for i, p, v in params:
             if p == 'layer':
                 continue
             dcmd[i] = p + '=' + v
-            if i in mapsets and mapsets[i]:
-                dcmd[i] += '@' + mapsets[i]
+            if i in subprojects and subprojects[i]:
+                dcmd[i] += '@' + subprojects[i]
 
         maps = list()
         ogr = False
@@ -206,9 +206,9 @@ def GetValidLayerName(name):
 
     # check if name is fully qualified
     if '@' in retName:
-        retName, mapset = retName.split('@')
+        retName, subproject = retName.split('@')
     else:
-        mapset = None
+        subproject = None
 
     cIdx = 0
     retNameList = list(retName)
@@ -224,8 +224,8 @@ def GetValidLayerName(name):
             not (retName[0] >= 'a' and retName[0] <= 'z'):
         retName = 'x' + retName[1:]
 
-    if mapset:
-        retName = retName + '@' + mapset
+    if subproject:
+        retName = retName + '@' + subproject
 
     return retName
 
@@ -269,47 +269,47 @@ def ListOfCatsToRange(cats):
     return catstr.strip(',')
 
 
-def ListOfMapsets(get='ordered'):
-    """Get list of available/accessible mapsets
+def ListOfSubprojects(get='ordered'):
+    """Get list of available/accessible subprojects
 
     :param str get: method ('all', 'accessible', 'ordered')
 
-    :return: list of mapsets
+    :return: list of subprojects
     :return: None on error
     """
-    mapsets = []
+    subprojects = []
 
     if get == 'all' or get == 'ordered':
-        ret = RunCommand('g.mapsets',
+        ret = RunCommand('g.subprojects',
                          read=True,
                          quiet=True,
                          flags='l',
                          sep='newline')
 
         if ret:
-            mapsets = ret.splitlines()
-            ListSortLower(mapsets)
+            subprojects = ret.splitlines()
+            ListSortLower(subprojects)
         else:
             return None
 
     if get == 'accessible' or get == 'ordered':
-        ret = RunCommand('g.mapsets',
+        ret = RunCommand('g.subprojects',
                          read=True,
                          quiet=True,
                          flags='p',
                          sep='newline')
         if ret:
             if get == 'accessible':
-                mapsets = ret.splitlines()
+                subprojects = ret.splitlines()
             else:
-                mapsets_accessible = ret.splitlines()
-                for mapset in mapsets_accessible:
-                    mapsets.remove(mapset)
-                mapsets = mapsets_accessible + mapsets
+                subprojects_accessible = ret.splitlines()
+                for subproject in subprojects_accessible:
+                    subprojects.remove(subproject)
+                subprojects = subprojects_accessible + subprojects
         else:
             return None
 
-    return mapsets
+    return subprojects
 
 
 def ListSortLower(list):
@@ -531,7 +531,7 @@ def ReprojectCoordinates(coord, projOut, projIn=None, flags=''):
 
     :param coord: coordinates given as tuple
     :param projOut: output projection
-    :param projIn: input projection (use location projection settings)
+    :param projIn: input projection (use project projection settings)
 
     :return: reprojected coordinates (returned as tuple)
     """
@@ -562,63 +562,63 @@ def ReprojectCoordinates(coord, projOut, projIn=None, flags=''):
     return (None, None)
 
 
-def GetListOfLocations(dbase):
-    """Get list of GRASS locations in given dbase
+def GetListOfProjects(dbase):
+    """Get list of GRASS projects in given dbase
 
     :param dbase: GRASS database path
 
-    :return: list of locations (sorted)
+    :return: list of projects (sorted)
     """
-    listOfLocations = list()
+    listOfProjects = list()
 
     try:
-        for location in glob.glob(os.path.join(dbase, "*")):
+        for project in glob.glob(os.path.join(dbase, "*")):
             try:
                 if os.path.join(
-                        location, "PERMANENT") in glob.glob(
-                        os.path.join(location, "*")):
-                    listOfLocations.append(os.path.basename(location))
+                        project, "PERMANENT") in glob.glob(
+                        os.path.join(project, "*")):
+                    listOfProjects.append(os.path.basename(project))
             except:
                 pass
     except (UnicodeEncodeError, UnicodeDecodeError) as e:
         raise e
 
-    ListSortLower(listOfLocations)
+    ListSortLower(listOfProjects)
 
-    return listOfLocations
+    return listOfProjects
 
 
-def GetListOfMapsets(dbase, location, selectable=False):
-    """Get list of mapsets in given GRASS location
+def GetListOfSubprojects(dbase, project, selectable=False):
+    """Get list of subprojects in given GRASS project
 
     :param dbase: GRASS database path
-    :param location: GRASS location
-    :param selectable: True to get list of selectable mapsets, otherwise all
+    :param project: GRASS project
+    :param selectable: True to get list of selectable subprojects, otherwise all
 
-    :return: list of mapsets - sorted (PERMANENT first)
+    :return: list of subprojects - sorted (PERMANENT first)
     """
-    listOfMapsets = list()
+    listOfSubprojects = list()
 
     if selectable:
-        ret = RunCommand('g.mapset',
+        ret = RunCommand('g.subproject',
                          read=True,
                          flags='l',
-                         location=location,
+                         project=project,
                          dbase=dbase)
 
         if not ret:
-            return listOfMapsets
+            return listOfSubprojects
 
         for line in ret.rstrip().splitlines():
-            listOfMapsets += line.split(' ')
+            listOfSubprojects += line.split(' ')
     else:
-        for mapset in glob.glob(os.path.join(dbase, location, "*")):
-            if os.path.isdir(mapset) and os.path.isfile(
-                    os.path.join(dbase, location, mapset, "WIND")):
-                listOfMapsets.append(os.path.basename(mapset))
+        for subproject in glob.glob(os.path.join(dbase, project, "*")):
+            if os.path.isdir(subproject) and os.path.isfile(
+                    os.path.join(dbase, project, subproject, "WIND")):
+                listOfSubprojects.append(os.path.basename(subproject))
 
-    ListSortLower(listOfMapsets)
-    return listOfMapsets
+    ListSortLower(listOfSubprojects)
+    return listOfSubprojects
 
 
 def GetColorTables():
@@ -811,7 +811,7 @@ def GetSettingsPath():
 
     verFd.close()
 
-    # keep location of settings files rc and wx in sync with lib/init/grass.py
+    # keep project of settings files rc and wx in sync with lib/init/grass.py
     if sys.platform == 'win32':
         return os.path.join(os.getenv('APPDATA'), 'GRASS%d' % version)
 
@@ -826,7 +826,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
 
     :param key: env key
     :param value: env value
-    :param envFile: path to the environmental file (None for default location)
+    :param envFile: path to the environmental file (None for default project)
     """
     windows = sys.platform == 'win32'
     if not envFile:

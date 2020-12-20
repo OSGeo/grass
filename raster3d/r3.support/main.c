@@ -31,7 +31,7 @@
 
 int main(int argc, char *argv[])
 {
-    const char *mapset;
+    const char *subproject;
     struct GModule *module;
     struct Option *raster, *title_opt, *history_opt;
     struct Option *datasrc1_opt, *datasrc2_opt, *datadesc_opt;
@@ -128,10 +128,10 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    /* Make sure raster exists and set mapset */
+    /* Make sure raster exists and set subproject */
     infile = raster->answer;
-    mapset = G_find_raster3d(infile, G_mapset());	/* current mapset only for editing */
-    if (!mapset || strcmp(mapset, G_mapset()) != 0)
+    subproject = G_find_raster3d(infile, G_subproject());	/* current subproject only for editing */
+    if (!subproject || strcmp(subproject, G_subproject()) != 0)
 	G_fatal_error(_("3D raster map <%s> not found"), infile);
 
     if (title_opt->answer) {
@@ -208,7 +208,7 @@ int main(int argc, char *argv[])
     if(units_opt->answer || vunits_opt->answer) {
         RASTER3D_Map *map;
         
-        map = Rast3d_open_cell_old(raster->answer, G_mapset(), \
+        map = Rast3d_open_cell_old(raster->answer, G_subproject(), \
                 RASTER3D_DEFAULT_WINDOW, RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
         
         /* Modify the units */

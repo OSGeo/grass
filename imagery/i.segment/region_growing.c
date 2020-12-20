@@ -246,7 +246,7 @@ int region_growing(struct globals *globals)
     threshold = alpha2;
     G_debug(1, "Squared threshold: %g", threshold);
 
-    Rast_get_cellhd(globals->Ref.file[0].name, globals->Ref.file[0].mapset, &cellhd);
+    Rast_get_cellhd(globals->Ref.file[0].name, globals->Ref.file[0].subproject, &cellhd);
     divisor = cellhd.rows + cellhd.cols;
 
     /* TODO: renumber seeds */

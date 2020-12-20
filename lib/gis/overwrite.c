@@ -20,7 +20,7 @@
  *
  * Check variables OVERWRITE, GRASS_OVERWRITE and '--o' flag.
  *
- * The parser G_parser() checks if the map already exists in current mapset,
+ * The parser G_parser() checks if the map already exists in current subproject,
  * we can switch out the check and do it
  * in the module after the parser.
  *

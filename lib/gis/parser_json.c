@@ -20,7 +20,7 @@
 
 void check_create_import_opts(struct Option *, char *, FILE *);
 void check_create_export_opts(struct Option *, char *, FILE *);
-char *check_mapset_in_layer_name(char *, int);
+char *check_subproject_in_layer_name(char *, int);
 
 /*!
   \brief This function generates actinia JSON process chain building blocks
@@ -368,8 +368,8 @@ void check_create_import_opts(struct Option *opt, char *element, FILE *fp)
     }
 
     fprintf(fp, "\"param\": \"%s\", ", opt->key);
-    /* In case of import the mapset must be removed always */
-    fprintf(fp, "\"value\": \"%s\"", check_mapset_in_layer_name(tokens[0], has_import));
+    /* In case of import the subproject must be removed always */
+    fprintf(fp, "\"value\": \"%s\"", check_subproject_in_layer_name(tokens[0], has_import));
     fprintf(fp, "}");
 
     G_free_tokens(tokens);
@@ -416,9 +416,9 @@ void check_create_export_opts(struct Option *opt, char *element, FILE *fp)
 
     fprintf(fp, "\"param\": \"%s\", ", opt->key);
     if (has_file_export == 1) {
-        fprintf(fp, "\"value\": \"$file::%s\"", check_mapset_in_layer_name(tokens[0], 1));
+        fprintf(fp, "\"value\": \"$file::%s\"", check_subproject_in_layer_name(tokens[0], 1));
     } else {
-        fprintf(fp, "\"value\": \"%s\"", check_mapset_in_layer_name(tokens[0], 1));
+        fprintf(fp, "\"value\": \"%s\"", check_subproject_in_layer_name(tokens[0], 1));
     }
     fprintf(fp, "}");
 
@@ -426,19 +426,19 @@ void check_create_export_opts(struct Option *opt, char *element, FILE *fp)
 }
 
 /*
-  \brief Check if the current mapset is present in the layer name and remove it
+  \brief Check if the current subproject is present in the layer name and remove it
 
-  The flag always_remove tells this function to always remove all mapset names.
+  The flag always_remove tells this function to always remove all subproject names.
 
-  \return pointer to the layer name without the current mapset
+  \return pointer to the layer name without the current subproject
 */
-char *check_mapset_in_layer_name(char *layer_name, int always_remove)
+char *check_subproject_in_layer_name(char *layer_name, int always_remove)
 {
     int i = 0;
     char **tokens;
-    const char *mapset;
+    const char *subproject;
 
-    mapset = G_mapset();
+    subproject = G_subproject();
 
     tokens = G_tokenize(layer_name, "@");
 
@@ -451,7 +451,7 @@ char *check_mapset_in_layer_name(char *layer_name, int always_remove)
     if (always_remove == 1)
         return tokens[0];
 
-    if (i > 1 && G_strcasecmp(mapset, tokens[1]) == 0)
+    if (i > 1 && G_strcasecmp(subproject, tokens[1]) == 0)
         return tokens[0];
 
     return layer_name;

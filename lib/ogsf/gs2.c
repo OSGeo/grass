@@ -1610,7 +1610,7 @@ int GS_load_att_map(int id, const char *filename, int att)
     geosurf *gs;
     unsigned int changed;
     unsigned int atty;
-    const char *mapset;
+    const char *subproject;
     struct Cell_head rast_head;
     int reuse, begin, hdata, ret, neg, has_null;
     typbuff *tbuff;
@@ -1638,21 +1638,21 @@ int GS_load_att_map(int id, const char *filename, int att)
     begin = hdata = 1;
 
     /* Get MAPSET to ensure names are fully qualified */
-    mapset = G_find_raster2(filename, "");
-    if (mapset == NULL) {
+    subproject = G_find_raster2(filename, "");
+    if (subproject == NULL) {
 	/* Check for valid filename */
 	G_warning("Raster map <%s> not found", filename);
 	return -1;
     }
     
     /* Check to see if map is in Region */
-    Rast_get_cellhd(filename, mapset, &rast_head);
+    Rast_get_cellhd(filename, subproject, &rast_head);
     if (rast_head.north <= wind.south ||
 	rast_head.south >= wind.north ||
 	rast_head.east <= wind.west || rast_head.west >= wind.east) {
 
 	G_warning(_("Raster map <%s> is outside of current region. Load failed."),
-		  G_fully_qualified_name(filename, mapset));
+		  G_fully_qualified_name(filename, subproject));
     }
 
     while (!reuse && (0 < hdata)) {

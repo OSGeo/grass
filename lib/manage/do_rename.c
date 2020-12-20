@@ -35,7 +35,7 @@ int M_do_rename(int n, const char *old, const char *new)
 {
     int i, ret;
     int len;
-    const char *mapset;
+    const char *subproject;
     int result = 0;
     int renamed = 0;
 
@@ -50,7 +50,7 @@ int M_do_rename(int n, const char *old, const char *new)
     M__hold_signals(1);
 
     if (G_strcasecmp(list[n].alias, "vector") == 0) {
-	if ((mapset = G_find_vector2(old, "")) == NULL) {
+	if ((subproject = G_find_vector2(old, "")) == NULL) {
 	    G_warning(_("Vector map <%s> not found"), old);
 	}
 	else {
@@ -67,12 +67,12 @@ int M_do_rename(int n, const char *old, const char *new)
     }
     else {
 	if (G_strcasecmp(list[n].alias, "raster") == 0) {
-	    if ((mapset = G_find_raster2(old, "")) == NULL)
+	    if ((subproject = G_find_raster2(old, "")) == NULL)
 		G_warning(_("Raster map <%s> not found"), old);
 	}
 
 	if (G_strcasecmp(list[n].alias, "raster_3d") == 0) {
-	    if ((mapset = G_find_raster3d(old, "")) == NULL)
+	    if ((subproject = G_find_raster3d(old, "")) == NULL)
 		G_warning(_("3D raster map <%s> not found"), old);
 	}
 
@@ -96,7 +96,7 @@ int M_do_rename(int n, const char *old, const char *new)
 	if (G_strcasecmp(list[n].element[0], "cell") == 0) {
 	    char colr2[50];
 
-	    sprintf(colr2, "colr2/%s", G_mapset());
+	    sprintf(colr2, "colr2/%s", G_subproject());
 	    G_remove(colr2, new);
 	    switch (G_rename(colr2, old, new)) {
 	    case -1:

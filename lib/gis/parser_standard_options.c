@@ -684,24 +684,24 @@ struct Option *G_define_standard_option(int opt)
 	break;
 
     case G_OPT_M_MAPSET:
-	Opt->key = "mapset";
+	Opt->key = "subproject";
 	Opt->type = TYPE_STRING;
 	Opt->required = NO;
 	Opt->multiple = NO;
 	Opt->key_desc = "name";
-	Opt->gisprompt = "old,mapset,mapset";
-	Opt->label = _("Name of mapset (default: current search path)");
-	Opt->description = _("'.' for current mapset");
+	Opt->gisprompt = "old,subproject,subproject";
+	Opt->label = _("Name of subproject (default: current search path)");
+	Opt->description = _("'.' for current subproject");
 	break;
 	
     case G_OPT_M_LOCATION:
-	Opt->key = "location";
+	Opt->key = "project";
 	Opt->type = TYPE_STRING;
 	Opt->required = NO;
 	Opt->multiple = NO;
-	Opt->label = _("Location name");
-	Opt->description = _("Location name (not location path)");
-	Opt->gisprompt = "old,location,location";
+	Opt->label = _("Project name");
+	Opt->description = _("Project name (not project path)");
+	Opt->gisprompt = "old,project,project";
 	Opt->key_desc = "name";
 	break;
 

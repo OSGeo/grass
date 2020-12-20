@@ -59,7 +59,7 @@ int stop_wx(const char *name)
     FILE *fp;
     
     mon_path = get_path(name, FALSE);
-    G_file_name(pid_file, mon_path, "pid", G_mapset());
+    G_file_name(pid_file, mon_path, "pid", G_subproject());
     
     fp = fopen(pid_file, "r");
     if (!fp) {

@@ -321,7 +321,7 @@ class TimelineFrame(wx.Frame):
         plots = []
         lookUp = LookUp(self.timeData)
         for i, name in enumerate(self.datasets):
-            # just name; with mapset it would be long
+            # just name; with subproject it would be long
             yticksNames.append(name[0])
             name = name[0] + '@' + name[1]
             yticksPos.append(i)
@@ -439,14 +439,14 @@ class TimelineFrame(wx.Frame):
 
         Reports also type of dataset (e.g. 'strds').
 
-        :return: (mapName, mapset, type)
+        :return: (mapName, subproject, type)
         """
         validated = []
         tDict = tgis.tlist_grouped('stds', group_type=True, dbif=self.dbif)
-        # nested list with '(map, mapset, etype)' items
-        allDatasets = [[[(map, mapset, etype) for map in maps]
+        # nested list with '(map, subproject, etype)' items
+        allDatasets = [[[(map, subproject, etype) for map in maps]
                         for etype, maps in six.iteritems(etypesDict)]
-                       for mapset, etypesDict in six.iteritems(tDict)]
+                       for subproject, etypesDict in six.iteritems(tDict)]
         # flatten this list
         if allDatasets:
             allDatasets = reduce(
@@ -456,20 +456,20 @@ class TimelineFrame(wx.Frame):
                     lambda x,
                     y: x + y,
                     allDatasets))
-            mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
+            subprojects = tgis.get_tgis_c_library_interface().available_subprojects()
             allDatasets = [
                 i
                 for i in sorted(
-                    allDatasets, key=lambda l: mapsets.index(l[1]))]
+                    allDatasets, key=lambda l: subprojects.index(l[1]))]
 
         for dataset in datasets:
             errorMsg = _("Space time dataset <%s> not found.") % dataset
             if dataset.find("@") >= 0:
-                nameShort, mapset = dataset.split('@', 1)
-                indices = [n for n, (mapName, mapsetName, etype) in enumerate(
-                    allDatasets) if nameShort == mapName and mapsetName == mapset]
+                nameShort, subproject = dataset.split('@', 1)
+                indices = [n for n, (mapName, subprojectName, etype) in enumerate(
+                    allDatasets) if nameShort == mapName and subprojectName == subproject]
             else:
-                indices = [n for n, (mapName, mapset, etype) in enumerate(
+                indices = [n for n, (mapName, subproject, etype) in enumerate(
                     allDatasets) if dataset == mapName]
 
             if len(indices) == 0:
@@ -481,9 +481,9 @@ class TimelineFrame(wx.Frame):
                         "Please specify the space time dataset <%s>." %
                         dataset),
                     caption=_("Ambiguous dataset name"),
-                    choices=[("%(map)s@%(mapset)s: %(etype)s" %
+                    choices=[("%(map)s@%(subproject)s: %(etype)s" %
                               {'map': allDatasets[i][0],
-                               'mapset': allDatasets[i][1],
+                               'subproject': allDatasets[i][1],
                                'etype': allDatasets[i][2]}) for i in indices],
                     style=wx.CHOICEDLG_STYLE | wx.OK)
                 if dlg.ShowModal() == wx.ID_OK:
@@ -562,7 +562,7 @@ def InfoFormat(timeData, datasetName, mapIndex):
     """Formats information about dataset"""
     text = []
     etype = timeData[datasetName]['elementType']
-    name, mapset = datasetName.split('@')
+    name, subproject = datasetName.split('@')
     if etype == 'strds':
         text.append(_("Space time raster dataset: %s") % name)
     elif etype == 'stvds':
@@ -570,7 +570,7 @@ def InfoFormat(timeData, datasetName, mapIndex):
     elif etype == 'str3ds':
         text.append(_("Space time 3D raster dataset: %s") % name)
 
-    text.append(_("Mapset: %s") % mapset)
+    text.append(_("Subproject: %s") % subproject)
     text.append(_("Map name: %s") % timeData[datasetName]['names'][mapIndex])
     text.append(
         _("Start time: %s") %
@@ -588,7 +588,7 @@ def InfoFormat(timeData, datasetName, mapIndex):
 
 
 class DataCursor(object):
-    """A simple data cursor widget that displays the x,y location of a
+    """A simple data cursor widget that displays the x,y project of a
     matplotlib artist when it is selected.
 
 

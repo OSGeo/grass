@@ -117,9 +117,9 @@ class WMSBase(object):
             self.params['proj_name'] = "SRS"
 
         # read projection info
-        self.proj_location = grass.read_command('g.proj',
+        self.proj_project = grass.read_command('g.proj',
                                                 flags='jf').rstrip('\n')
-        self.proj_location = self._modifyProj(self.proj_location)
+        self.proj_project = self._modifyProj(self.proj_project)
 
         self.source_epsg = str(GetEpsg(self.params['srs']))
         self.target_epsg = None
@@ -127,7 +127,7 @@ class WMSBase(object):
         if 'epsg' in target_crs.keys():
             self.target_epsg = target_crs['epsg']
             if self.source_epsg != self.target_epsg:
-                grass.warning(_("SRS differences: WMS source EPSG %s != location EPSG %s (use srs=%s to adjust)") %
+                grass.warning(_("SRS differences: WMS source EPSG %s != project EPSG %s (use srs=%s to adjust)") %
                               (self.source_epsg, self.target_epsg, self.target_epsg))
 
         self.proj_srs = grass.read_command('g.proj',
@@ -137,7 +137,7 @@ class WMSBase(object):
 
         self.proj_srs = self._modifyProj(self.proj_srs)
 
-        if not self.proj_srs or not self.proj_location:
+        if not self.proj_srs or not self.proj_project:
             grass.fatal(_("Unable to get projection info"))
 
         self.region = options['region']
@@ -302,11 +302,11 @@ class WMSBase(object):
         bbox_region_items = {'maxy': 'n', 'miny': 's', 'maxx': 'e', 'minx': 'w'}
         bbox = {}
 
-        if self.proj_srs == self.proj_location:  # TODO: do it better
+        if self.proj_srs == self.proj_project:  # TODO: do it better
             for bbox_item, region_item in bbox_region_items.items():
                 bbox[bbox_item] = self.region[region_item]
 
-        # if location projection and wms query projection are
+        # if project projection and wms query projection are
         # different, corner points of region are transformed into wms
         # projection and then bbox is created from extreme coordinates
         # of the transformed points
@@ -330,7 +330,7 @@ class WMSBase(object):
 
             points = grass.read_command('m.proj', flags='d',
                                         proj_out=self.proj_srs,
-                                        proj_in=self.proj_location,
+                                        proj_in=self.proj_project,
                                         input=temp_region,
                                         quiet=True)  # TODO: stdin
             grass.try_remove(temp_region)
@@ -380,7 +380,7 @@ class WMSBase(object):
             and self.source_epsg == self.target_epsg:
             do_reproject = False
         # TODO: correctly compare source and target crs
-        if do_reproject and self.proj_srs == self.proj_location:
+        if do_reproject and self.proj_srs == self.proj_project:
             do_reproject = False
         if do_reproject:
             grass.message(_("Reprojecting raster..."))
@@ -403,14 +403,14 @@ class WMSBase(object):
                 if self.temp_map_bands_num == 3:
                     ps = grass.Popen(['gdalwarp',
                                       '-s_srs', '%s' % self.proj_srs,
-                                      '-t_srs', '%s' % self.proj_location,
+                                      '-t_srs', '%s' % self.proj_project,
                                       '-r', gdal_method, '-dstalpha',
                                       self.temp_map, self.temp_warpmap], stdout=nuldev)
                 # RGBA rasters
                 else:
                     ps = grass.Popen(['gdalwarp',
                                       '-s_srs', '%s' % self.proj_srs,
-                                      '-t_srs', '%s' % self.proj_location,
+                                      '-t_srs', '%s' % self.proj_project,
                                       '-r', gdal_method,
                                       self.temp_map, self.temp_warpmap], stdout=nuldev)
                 ps.wait()
@@ -423,7 +423,7 @@ class WMSBase(object):
             if ps.returncode != 0:
                 grass.fatal(_('%s failed') % 'gdalwarp')
             grass.try_remove(self.temp_map)
-        # raster projection is same as projection of location
+        # raster projection is same as projection of project
         else:
             self.temp_warpmap = self.temp_map
             self.temp_files_to_cleanup.remove(self.temp_map)
@@ -464,7 +464,7 @@ class GRASSImporter:
         maps = []
         for suffix in ('.red', '.green', '.blue', '.alpha', self.original_mask_suffix):
             rast = self.opt_output + suffix
-            if grass.find_file(rast, element='cell', mapset='.')['file']:
+            if grass.find_file(rast, element='cell', subproject='.')['file']:
                 maps.append(rast)
 
         if len(maps) != 0:
@@ -482,7 +482,7 @@ class GRASSImporter:
 
             # restore original mask, if exists
             if grass.find_file(self.opt_output + self.original_mask_suffix,
-                               element='cell', mapset='.')['name']:
+                               element='cell', subproject='.')['name']:
                 try:
                     mask_copy = self.opt_output + self.original_mask_suffix
                     grass.run_command('g.copy', quiet=True,
@@ -493,13 +493,13 @@ class GRASSImporter:
         # remove temporary created rasters
         maps = []
         rast = self.opt_output + '.alpha'
-        if grass.find_file(rast, element='cell', mapset='.')['file']:
+        if grass.find_file(rast, element='cell', subproject='.')['file']:
             maps.append(rast)
 
         if self.cleanup_bands:
             for suffix in ('.red', '.green', '.blue', self.original_mask_suffix):
                 rast = self.opt_output + suffix
-                if grass.find_file(rast, element='cell', mapset='.')['file']:
+                if grass.find_file(rast, element='cell', subproject='.')['file']:
                     maps.append(rast)
 
         if maps:
@@ -515,7 +515,7 @@ class GRASSImporter:
 
         maplist = grass.read_command('g.list', type = 'raster',
                                      pattern = '%s*' % (self.opt_output),
-                                     mapset = '.', separator = ',').rstrip('\n')
+                                     subproject = '.', separator = ',').rstrip('\n')
 
         if len(maplist) == 0:
             grass.fatal(_('WMS import failed, nothing imported'))
@@ -542,7 +542,7 @@ class GRASSImporter:
         # with r.in.gdal
 
         # setting region for full extend of imported raster
-        if grass.find_file(self.opt_output + '.red', element='cell', mapset='.')['file']:
+        if grass.find_file(self.opt_output + '.red', element='cell', subproject='.')['file']:
             region_map = self.opt_output + '.red'
         else:
             region_map = self.opt_output
@@ -551,9 +551,9 @@ class GRASSImporter:
         # mask created from alpha layer, which describes real extend
         # of warped layer (may not be a rectangle), also mask contains
         # transparent parts of raster
-        if grass.find_file(self.opt_output + '.alpha', element='cell', mapset='.')['name']:
+        if grass.find_file(self.opt_output + '.alpha', element='cell', subproject='.')['name']:
             # saving current mask (if exists) into temp raster
-            if grass.find_file('MASK', element='cell', mapset='.')['name']:
+            if grass.find_file('MASK', element='cell', subproject='.')['name']:
                 try:
                     mask_copy = self.opt_output + self.original_mask_suffix
                     grass.run_command('g.copy', quiet=True,
@@ -576,13 +576,13 @@ class GRASSImporter:
                 # use the MASK to set NULL vlues
                 for suffix in ('.red', '.green', '.blue'):
                     rast = self.opt_output + suffix
-                    if grass.find_file(rast, element='cell', mapset='.')['file']:
+                    if grass.find_file(rast, element='cell', subproject='.')['file']:
                         grass.run_command('g.rename', rast='%s,%s' % (rast, rast + '_null'), quiet = True)
                         grass.run_command('r.mapcalc', expression = '%s = %s' % (rast, rast + '_null'), quiet = True)
                         grass.run_command('g.remove', type='raster', name='%s' % (rast + '_null'), flags = 'f', quiet = True)
 
         # TODO one band + alpha band?
-        if grass.find_file(self.opt_output + '.red', element='cell', mapset='.')['file'] and self.cleanup_bands:
+        if grass.find_file(self.opt_output + '.red', element='cell', subproject='.')['file'] and self.cleanup_bands:
             try:
                 grass.run_command('r.composite',
                                   quiet=True, overwrite=True,

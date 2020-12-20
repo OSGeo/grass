@@ -28,7 +28,7 @@ Generally, the vector data model is used to describe geographic
 phenomena which may be represented by geometric entities like
 <em>points</em>, <em>lines</em>, and <em>areas</em>. The GRASS vector
 data model includes the description of <em>topology</em>, where
-besides the coordinates describing the location of the primitives
+besides the coordinates describing the project of the primitives
 (points, lines, boundaries, centroids, faces, kernels, and volumes),
 their spatial relations are also stored. In general, topological GIS
 requires a data structure where the common boundary between two
@@ -148,12 +148,12 @@ int main
     struct Map_info Map;
     struct line_pnts *Points;
     struct line_cat *Cats;
-    const char *name, *mapset;
+    const char *name, *subproject;
 
     /* set open level to 1: no topology */
     Vect_set_open_level(1);
 
-    if (Vect_open_old(&Map, name, mapset) < 1)
+    if (Vect_open_old(&Map, name, subproject) < 1)
 	G_fatal_error(_("Failed to open vector '%s'"), name);
 
     /* rewind vector file */
@@ -183,9 +183,9 @@ int main
     struct Map_info Map;
     struct line_pnts *Points;
     struct line_cat *Cats;
-    const char *name, *mapset;
+    const char *name, *subproject;
 
-    if (Vect_open_old(&Map, name, mapset) < 2)
+    if (Vect_open_old(&Map, name, subproject) < 2)
 	G_fatal_error(_("Failed to open vector '%s'"), name);
 
     Points = Vect_new_line_struct();
@@ -215,9 +215,9 @@ int main
     int area, nareas;
     struct Map_info Map;
     struct line_cat *Cats;
-    const char *name, *mapset;
+    const char *name, *subproject;
 
-    if (Vect_open_old(&Map, name, mapset) < 2)
+    if (Vect_open_old(&Map, name, subproject) < 2)
 	G_fatal_error(_("Failed to open vector '%s'"), name);
 
     Points = Vect_new_line_struct();
@@ -303,7 +303,7 @@ layer identifies table and the category identifies record.  I.e., for
 any unique combination
 
 \verbatim
-map+mapset+layer+category
+map+subproject+layer+category
 \endverbatim
 
 there exists one unique combination

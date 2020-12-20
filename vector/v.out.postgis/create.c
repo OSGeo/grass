@@ -74,7 +74,7 @@ char *create_pgfile(const char *dsn, const char *schema, const char *olink,
             G_strip(tokens[1]);
             
             if (strcmp(tokens[0], "srid") == 0 && (epsg && strcmp(tokens[1], epsg) != 0))
-                G_warning(_("EPSG code defined for current location (%s) is overridden by %s"),
+                G_warning(_("EPSG code defined for current project (%s) is overridden by %s"),
                           epsg, tokens[1]);
             
 	    G_set_key_value(tokens[0], tokens[1], key_val);

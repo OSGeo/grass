@@ -31,7 +31,7 @@
 * Addition of IRS-1C LISS, Feb 2009: Markus Neteler
 
 * input elevation/visibility map: efficient cache with dynamic memory 
-* allocation: Markus Metz, Apr 2011
+* alproject: Markus Metz, Apr 2011
 
 ***************************************************************************/
 
@@ -440,7 +440,7 @@ static void copy_colors(const char *iname, char *oname)
     struct Colors colors;
 
     Rast_read_colors(iname, "", &colors);
-    Rast_write_colors(oname, G_mapset(), &colors);
+    Rast_write_colors(oname, G_subproject(), &colors);
 }
 
 

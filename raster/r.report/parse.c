@@ -262,14 +262,14 @@ int parse_units(char *s)
 int parse_layer(char *s)
 {
     char name[GNAME_MAX];
-    const char *mapset;
+    const char *subproject;
     struct FPRange fp_range;
     int n;
 
     strcpy(name, s);
-    mapset = G_find_raster2(name, "");
+    subproject = G_find_raster2(name, "");
 
-    if (mapset == NULL)
+    if (subproject == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), s);
 
     n = nlayers++;
@@ -278,21 +278,21 @@ int parse_layer(char *s)
     DMAX = (DCELL *) G_realloc(DMAX, (nlayers + 1) * sizeof(DCELL));
     DMIN = (DCELL *) G_realloc(DMIN, (nlayers + 1) * sizeof(DCELL));
     if (!as_int)
-	is_fp[n] = Rast_map_is_fp(name, mapset);
+	is_fp[n] = Rast_map_is_fp(name, subproject);
     else
 	is_fp[n] = 0;
     if (is_fp[n]) {
-	if (Rast_read_fp_range(name, mapset, &fp_range) < 0)
+	if (Rast_read_fp_range(name, subproject, &fp_range) < 0)
 	    G_fatal_error(_("Unable to read fp range for raster map <%s>"),
 			  name);
 	Rast_get_fp_range_min_max(&fp_range, &DMIN[n], &DMAX[n]);
     }
 
     layers[n].name = G_store(name);
-    layers[n].mapset = mapset;
-    if (Rast_read_cats(name, mapset, &layers[n].labels) < 0)
+    layers[n].subproject = subproject;
+    if (Rast_read_cats(name, subproject, &layers[n].labels) < 0)
 	G_fatal_error(_("Unable to read category file of raster map <%s@%s>"),
-		      name, mapset);
+		      name, subproject);
 
     return 0;
 }

@@ -290,9 +290,9 @@ int main(int argc, char *argv[])
     over_flag = G_define_flag();
     over_flag->key = 'o';
     over_flag->label =
-        _("Override projection check (use current location's projection)");
+        _("Override projection check (use current project's projection)");
     over_flag->description =
-        _("Assume that the dataset has same projection as the current location");
+        _("Assume that the dataset has same projection as the current project");
 
     print_flag = G_define_flag();
     print_flag->key = 'p';
@@ -634,7 +634,7 @@ int main(int argc, char *argv[])
                 }
             }
 
-            Rast3d_location2coord(&binning.region, north, east, top, &col, &row,
+            Rast3d_project2coord(&binning.region, north, east, top, &col, &row,
                                   &depth);
             if (col >= binning.region.cols || row >= binning.region.rows ||
                 depth >= binning.region.depths || col < 0 || row < 0 ||

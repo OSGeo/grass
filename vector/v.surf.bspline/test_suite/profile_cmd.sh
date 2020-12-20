@@ -1,4 +1,4 @@
-# nc2008/grass7 mapset
+# nc2008/grass7 subproject
 
 OUTFILE=callgrind.out.1196
 

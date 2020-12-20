@@ -87,12 +87,12 @@ int open_file(char *name)
     CELL *buf;
     char *tmpstr1, *tmpstr2;
     char rname[GNAME_MAX];
-    char rmapset[GMAPSET_MAX];
+    char rsubproject[GMAPSET_MAX];
 
     /* open raster map */
     cell_file = Rast_open_old(name, "");
 
-    if (Rast_is_reclass(name, "", rname, rmapset) <= 0 &&
+    if (Rast_is_reclass(name, "", rname, rsubproject) <= 0 &&
 	Rast_get_map_type(cell_file) != CELL_TYPE) {
 	Rast_close(cell_file);
 	G_fatal_error(_("Input raster must be of type CELL."));

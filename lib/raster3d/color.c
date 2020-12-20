@@ -33,15 +33,15 @@ int Rast3d_remove_color(const char *name)
 /*---------------------------------------------------------------------------*/
 
 /*!
-   \brief Reads color file for map \p name in \p mapset into the Colors structure.
+   \brief Reads color file for map \p name in \p subproject into the Colors structure.
 
    \param name 3D raster map name
-   \param mapset mapset name
+   \param subproject subproject name
    \param colors colors to be associated with a map
 
    \see Rast3d_write_colors, Rast_read_colors
 */
-int Rast3d_read_colors(const char *name, const char *mapset, struct Colors *colors)
+int Rast3d_read_colors(const char *name, const char *subproject, struct Colors *colors)
  /* adapted from Rast_read_colors */
 {
     const char *err;
@@ -52,9 +52,9 @@ int Rast3d_read_colors(const char *name, const char *mapset, struct Colors *colo
 
     Rast_mark_colors_as_fp(colors);
 
-    switch (read_colors(name, mapset, colors)) {
+    switch (read_colors(name, subproject, colors)) {
     case -2:
-	if (Rast3d_read_range(name, mapset, &drange) >= 0) {
+	if (Rast3d_read_range(name, subproject, &drange) >= 0) {
 	    Rast_get_fp_range_min_max(&drange, &dmin, &dmax);
 	    if (!Rast_is_d_null_value(&dmin) && !Rast_is_d_null_value(&dmax))
 		Rast_make_fp_colors(colors, DEFAULT_COLOR_TABLE, dmin, dmax);
@@ -69,18 +69,18 @@ int Rast3d_read_colors(const char *name, const char *mapset, struct Colors *colo
 	return 1;
     }
 
-    G_warning("color support for [%s] in mapset [%s] %s", name, mapset, err);
+    G_warning("color support for [%s] in subproject [%s] %s", name, subproject, err);
     return -1;
 }
 
-static int read_colors(const char *name, const char *mapset,
+static int read_colors(const char *name, const char *subproject,
 		       struct Colors *colors)
 {
     FILE *fd;
     int stat;
     char buf[1024];
 
-    fd = G_fopen_old_misc(RASTER3D_DIRECTORY, RASTER3D_COLOR_ELEMENT, name, mapset);
+    fd = G_fopen_old_misc(RASTER3D_DIRECTORY, RASTER3D_COLOR_ELEMENT, name, subproject);
     if (!fd)
 	return -2;
 
@@ -337,21 +337,21 @@ static int read_old_colors(FILE * fd, struct Colors *colors)
 /*---------------------------------------------------------------------------*/
 
 /*!
-   \brief Writes the \p colors for map \p name in \p mapset into a color file.
+   \brief Writes the \p colors for map \p name in \p subproject into a color file.
 
    \param name 3D raster map name
-   \param mapset mapset name
+   \param subproject subproject name
    \param colors colors to be associated with a map
 
    \see Rast3d_read_colors, Rast3d_remove_color, Rast_write_colors
 */
-int Rast3d_write_colors(const char *name, const char *mapset, struct Colors *colors)
+int Rast3d_write_colors(const char *name, const char *subproject, struct Colors *colors)
  /* adapted from Rast_write_colors */
 {
     FILE *fd;
 
-    if (strcmp(mapset, G_mapset()) != 0) {
-	G_warning(_("mapset <%s> is not the current mapset"), mapset);
+    if (strcmp(subproject, G_subproject()) != 0) {
+	G_warning(_("subproject <%s> is not the current subproject"), subproject);
 	return -1;
     }
 

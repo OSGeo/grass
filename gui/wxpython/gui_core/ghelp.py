@@ -663,7 +663,7 @@ class HelpFrame(wx.Dialog):
     If parent is None, application TopLevelWindow is used (wxPython
     standard behaviour).
 
-    Currently not used (was in location wizard before)
+    Currently not used (was in project wizard before)
     due to unsolved problems - window sometimes does not respond.
     """
 

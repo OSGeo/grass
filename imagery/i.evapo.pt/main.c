@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
 
     /* generate color table between -20 and 20 */
     Rast_make_rainbow_colors(&color, -20, 20);
-    Rast_write_colors(ETa, G_mapset(), &color);
+    Rast_write_colors(ETa, G_subproject(), &color);
 
     Rast_short_history(ETa, "raster", &history);
     Rast_command_history(&history);

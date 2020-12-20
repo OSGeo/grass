@@ -222,7 +222,7 @@ void RTreeCopyNode(struct RTree_Node *, struct RTree_Node *, struct RTree *);
 void RTreeFreeNode(struct RTree_Node *);
 void RTreeDestroyNode(struct RTree_Node *, int);
 
-/* RTree rectangle allocation and deletion */
+/* RTree rectangle alproject and deletion */
 struct RTree_Rect *RTreeAllocRect(struct RTree *t);
 void RTreeFreeRect(struct RTree_Rect *r);
 RectReal *RTreeAllocBoundary(struct RTree *t);

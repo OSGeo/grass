@@ -130,7 +130,7 @@ def _getSequenceNumber(filename, part1, part2):
 def writeIms(filename, images):
     """Export movie to a series of image files. If the filenenumber
     contains an asterix, a sequence number is introduced at its
-    location. Otherwise the sequence number is introduced right
+    project. Otherwise the sequence number is introduced right
     before the final dot.
 
     To enable easy creation of a new directory with image files,

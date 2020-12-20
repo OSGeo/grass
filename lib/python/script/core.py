@@ -1148,7 +1148,7 @@ def gisenv(env=None):
 
 
 def locn_is_latlong(env=None):
-    """Tests if location is lat/long. Value is obtained
+    """Tests if project is lat/long. Value is obtained
     by checking the "g.region -pu" projection code.
 
     :return: True for a lat/long region, False otherwise
@@ -1298,7 +1298,7 @@ def del_temp_region():
 # interface to g.findfile
 
 
-def find_file(name, element='cell', mapset=None, env=None):
+def find_file(name, element='cell', subproject=None, env=None):
     """Returns the output from running g.findfile as a
     dictionary. Example:
 
@@ -1311,7 +1311,7 @@ def find_file(name, element='cell', mapset=None, env=None):
 
     :param str name: file name
     :param str element: element type (default 'cell')
-    :param str mapset: mapset name (default all mapsets in search path)
+    :param str subproject: subproject name (default all subprojects in search path)
     :param env: environment
 
     :return: parsed output of g.findfile
@@ -1322,7 +1322,7 @@ def find_file(name, element='cell', mapset=None, env=None):
     # g.findfile returns non-zero when file was not found
     # se we ignore return code and just focus on stdout
     process = start_command('g.findfile', flags='n',
-                            element=element, file=name, mapset=mapset,
+                            element=element, file=name, subproject=subproject,
                             stdout=PIPE, env=env)
     stdout = process.communicate()[0]
     return parse_key_val(stdout)
@@ -1330,7 +1330,7 @@ def find_file(name, element='cell', mapset=None, env=None):
 # interface to g.list
 
 
-def list_strings(type, pattern=None, mapset=None, exclude=None,
+def list_strings(type, pattern=None, subproject=None, exclude=None,
                  flag='', env=None):
     """List of elements as strings.
 
@@ -1339,7 +1339,7 @@ def list_strings(type, pattern=None, mapset=None, exclude=None,
 
     :param str type: element type (raster, vector, raster_3d, region, ...)
     :param str pattern: pattern string
-    :param str mapset: mapset name (if not given use search path)
+    :param str subproject: subproject name (if not given use search path)
     :param str exclude: pattern string to exclude maps from the research
     :param str flag: pattern type: 'r' (basic regexp), 'e' (extended regexp),
                      or '' (glob pattern)
@@ -1357,23 +1357,23 @@ def list_strings(type, pattern=None, mapset=None, exclude=None,
                              type=type,
                              pattern=pattern,
                              exclude=exclude,
-                             mapset=mapset,
+                             subproject=subproject,
                              env=env).splitlines():
         result.append(line.strip())
 
     return result
 
 
-def list_pairs(type, pattern=None, mapset=None, exclude=None,
+def list_pairs(type, pattern=None, subproject=None, exclude=None,
                flag='', env=None):
     """List of elements as pairs
 
     Returns the output from running g.list, as a list of
-    (name, mapset) pairs
+    (name, subproject) pairs
 
     :param str type: element type (raster, vector, raster_3d, region, ...)
     :param str pattern: pattern string
-    :param str mapset: mapset name (if not given use search path)
+    :param str subproject: subproject name (if not given use search path)
     :param str exclude: pattern string to exclude maps from the research
     :param str flag: pattern type: 'r' (basic regexp), 'e' (extended regexp),
                      or '' (glob pattern)
@@ -1382,31 +1382,31 @@ def list_pairs(type, pattern=None, mapset=None, exclude=None,
     :return: list of elements
     """
     return [tuple(map.split('@', 1)) for map in list_strings(type, pattern,
-                                                              mapset, exclude,
+                                                              subproject, exclude,
                                                               flag, env)]
 
 
 def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
                  flag='', env=None):
-    """List of elements grouped by mapsets.
+    """List of elements grouped by subprojects.
 
     Returns the output from running g.list, as a dictionary where the
-    keys are mapset names and the values are lists of maps in that
-    mapset. Example:
+    keys are subproject names and the values are lists of maps in that
+    subproject. Example:
 
     >>> list_grouped('vect', pattern='*roads*')['PERMANENT']
     ['railroads', 'roadsmajor']
 
     :param str type: element type (raster, vector, raster_3d, region, ...) or list of elements
     :param str pattern: pattern string
-    :param str check_search_path: True to add mapsets for the search path
+    :param str check_search_path: True to add subprojects for the search path
                                   with no found elements
     :param str exclude: pattern string to exclude maps from the research
     :param str flag: pattern type: 'r' (basic regexp), 'e' (extended regexp),
                                     or '' (glob pattern)
     :param env: environment
 
-    :return: directory of mapsets/elements
+    :return: directory of subprojects/elements
     """
     if isinstance(type, str) or len(type) == 1:
         types = [type]
@@ -1421,36 +1421,36 @@ def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
             types[i] = 'raster'
     result = {}
     if check_search_path:
-        for mapset in mapsets(search_path=True, env=env):
+        for subproject in subprojects(search_path=True, env=env):
             if store_types:
-                result[mapset] = {}
+                result[subproject] = {}
             else:
-                result[mapset] = []
+                result[subproject] = []
 
-    mapset = None
+    subproject = None
     for line in read_command("g.list", quiet=True, flags="m" + flag,
                              type=types, pattern=pattern,
                              exclude=exclude, env=env).splitlines():
         try:
-            name, mapset = line.split('@')
+            name, subproject = line.split('@')
         except ValueError:
             warning(_("Invalid element '%s'") % line)
             continue
 
         if store_types:
             type_, name = name.split('/')
-            if mapset in result:
-                if type_ in result[mapset]:
-                    result[mapset][type_].append(name)
+            if subproject in result:
+                if type_ in result[subproject]:
+                    result[subproject][type_].append(name)
                 else:
-                    result[mapset][type_] = [name, ]
+                    result[subproject][type_] = [name, ]
             else:
-                result[mapset] = {type_: [name, ]}
+                result[subproject] = {type_: [name, ]}
         else:
-            if mapset in result:
-                result[mapset].append(name)
+            if subproject in result:
+                result[subproject].append(name)
             else:
-                result[mapset] = [name, ]
+                result[subproject] = [name, ]
 
     return result
 
@@ -1566,68 +1566,68 @@ def find_program(pgm, *args):
 
     return found
 
-# interface to g.mapsets
+# interface to g.subprojects
 
 
-def mapsets(search_path=False, env=None):
-    """List available mapsets
+def subprojects(search_path=False, env=None):
+    """List available subprojects
 
-    :param bool search_path: True to list mapsets only in search path
+    :param bool search_path: True to list subprojects only in search path
 
-    :return: list of mapsets
+    :return: list of subprojects
     """
     if search_path:
         flags = 'p'
     else:
         flags = 'l'
-    mapsets = read_command('g.mapsets',
+    subprojects = read_command('g.subprojects',
                            flags=flags,
                            sep='newline',
                            quiet=True,
                            env=env)
-    if not mapsets:
-        fatal(_("Unable to list mapsets"))
+    if not subprojects:
+        fatal(_("Unable to list subprojects"))
 
-    return mapsets.splitlines()
+    return subprojects.splitlines()
 
 # interface to `g.proj -c`
 
 
-def create_location(dbase, location, epsg=None, proj4=None, filename=None,
+def create_project(dbase, project, epsg=None, proj4=None, filename=None,
                     wkt=None, datum=None, datum_trans=None, desc=None,
                     overwrite=False):
-    """Create new location
+    """Create new project
 
     Raise ScriptError on error.
 
     :param str dbase: path to GRASS database
-    :param str location: location name to create
-    :param epsg: if given create new location based on EPSG code
-    :param proj4: if given create new location based on Proj4 definition
-    :param str filename: if given create new location based on georeferenced file
-    :param str wkt: if given create new location based on WKT definition
+    :param str project: project name to create
+    :param epsg: if given create new project based on EPSG code
+    :param proj4: if given create new project based on Proj4 definition
+    :param str filename: if given create new project based on georeferenced file
+    :param str wkt: if given create new project based on WKT definition
                     (can be path to PRJ file or WKT string)
     :param datum: GRASS format datum code
     :param datum_trans: datum transformation parameters (used for epsg and proj4)
-    :param desc: description of the location (creates MYNAME file)
-    :param bool overwrite: True to overwrite location if exists(WARNING:
-                           ALL DATA from existing location ARE DELETED!)
+    :param desc: description of the project (creates MYNAME file)
+    :param bool overwrite: True to overwrite project if exists(WARNING:
+                           ALL DATA from existing project ARE DELETED!)
     """
     # create dbase if not exists
     if not os.path.exists(dbase):
         os.mkdir(dbase)
     if epsg or proj4 or filename or wkt:
-        # here the location shouldn't really matter
+        # here the project shouldn't really matter
         tmp_gisrc, env = create_environment(dbase, gisenv()['LOCATION_NAME'], 'PERMANENT')
-    # check if location already exists
-    if os.path.exists(os.path.join(dbase, location)):
+    # check if project already exists
+    if os.path.exists(os.path.join(dbase, project)):
         if not overwrite:
-            warning(_("Location <%s> already exists. Operation canceled.") % location)
+            warning(_("Project <%s> already exists. Operation canceled.") % project)
             try_remove(tmp_gisrc)
             return
         else:
-            warning(_("Location <%s> already exists and will be overwritten") % location)
-            shutil.rmtree(os.path.join(dbase, location))
+            warning(_("Project <%s> already exists and will be overwritten") % project)
+            shutil.rmtree(os.path.join(dbase, project))
 
     stdin = None
     kwargs = dict()
@@ -1638,23 +1638,23 @@ def create_location(dbase, location, epsg=None, proj4=None, filename=None,
 
     if epsg:
         ps = pipe_command('g.proj', quiet=True, flags='t', epsg=epsg,
-                          location=location, stderr=PIPE, env=env, **kwargs)
+                          project=project, stderr=PIPE, env=env, **kwargs)
     elif proj4:
         ps = pipe_command('g.proj', quiet=True, flags='t', proj4=proj4,
-                          location=location, stderr=PIPE, env=env, **kwargs)
+                          project=project, stderr=PIPE, env=env, **kwargs)
     elif filename:
         ps = pipe_command('g.proj', quiet=True, georef=filename,
-                          location=location, stderr=PIPE, env=env)
+                          project=project, stderr=PIPE, env=env)
     elif wkt:
         if os.path.isfile(wkt):
-            ps = pipe_command('g.proj', quiet=True, wkt=wkt, location=location,
+            ps = pipe_command('g.proj', quiet=True, wkt=wkt, project=project,
                               stderr=PIPE, env=env)
         else:
-            ps = pipe_command('g.proj', quiet=True, wkt='-', location=location,
+            ps = pipe_command('g.proj', quiet=True, wkt='-', project=project,
                               stderr=PIPE, stdin=PIPE, env=env)
             stdin = encode(wkt)
     else:
-        _create_location_xy(dbase, location)
+        _create_project_xy(dbase, project)
 
     if epsg or proj4 or filename or wkt:
         error = ps.communicate(stdin)[1]
@@ -1664,7 +1664,7 @@ def create_location(dbase, location, epsg=None, proj4=None, filename=None,
             raise ScriptError(repr(error))
 
     try:
-        fd = codecs.open(os.path.join(dbase, location, 'PERMANENT', 'MYNAME'),
+        fd = codecs.open(os.path.join(dbase, project, 'PERMANENT', 'MYNAME'),
                          encoding='utf-8', mode='w')
         if desc:
             fd.write(desc + os.linesep)
@@ -1675,19 +1675,19 @@ def create_location(dbase, location, epsg=None, proj4=None, filename=None,
         raise ScriptError(repr(e))
 
 
-def _create_location_xy(database, location):
-    """Create unprojected location
+def _create_project_xy(database, project):
+    """Create unprojected project
 
     Raise ScriptError on error.
 
-    :param database: GRASS database where to create new location
-    :param location: location name
+    :param database: GRASS database where to create new project
+    :param project: project name
     """
     cur_dir = os.getcwd()
     try:
         os.chdir(database)
-        os.mkdir(location)
-        os.mkdir(os.path.join(location, 'PERMANENT'))
+        os.mkdir(project)
+        os.mkdir(os.path.join(project, 'PERMANENT'))
 
         # create DEFAULT_WIND and WIND files
         regioninfo = ['proj:       0',
@@ -1709,14 +1709,14 @@ def _create_location_xy(database, location):
                       'n-s resol3: 1',
                       't-b resol:  1']
 
-        defwind = open(os.path.join(location,
+        defwind = open(os.path.join(project,
                                     "PERMANENT", "DEFAULT_WIND"), 'w')
         for param in regioninfo:
             defwind.write(param + '%s' % os.linesep)
         defwind.close()
 
-        shutil.copy(os.path.join(location, "PERMANENT", "DEFAULT_WIND"),
-                    os.path.join(location, "PERMANENT", "WIND"))
+        shutil.copy(os.path.join(project, "PERMANENT", "DEFAULT_WIND"),
+                    os.path.join(project, "PERMANENT", "WIND"))
 
         os.chdir(cur_dir)
     except OSError as e:
@@ -1795,10 +1795,10 @@ def legal_name(s):
     return True
 
 
-def sanitize_mapset_environment(env):
+def sanitize_subproject_environment(env):
     """Remove environmental variables relevant only
-    for a specific mapset. This should be called
-    when a copy of environment is used with a different mapset."""
+    for a specific subproject. This should be called
+    when a copy of environment is used with a different subproject."""
     if "WIND_OVERRIDE" in env:
         del env["WIND_OVERRIDE"]
     if "GRASS_REGION" in env:
@@ -1806,19 +1806,19 @@ def sanitize_mapset_environment(env):
     return env
 
 
-def create_environment(gisdbase, location, mapset):
+def create_environment(gisdbase, project, subproject):
     """Creates environment to be passed in run_command for example.
     Returns tuple with temporary file path and the environment. The user
     of this function is responsible for deleting the file."""
     with NamedTemporaryFile(mode='w', delete=False) as f:
-        f.write('MAPSET: {mapset}\n'.format(mapset=mapset))
+        f.write('MAPSET: {subproject}\n'.format(subproject=subproject))
         f.write('GISDBASE: {g}\n'.format(g=gisdbase))
-        f.write('LOCATION_NAME: {l}\n'.format(l=location))
+        f.write('LOCATION_NAME: {l}\n'.format(l=project))
         f.write('GUI: text\n')
     env = os.environ.copy()
     env['GISRC'] = f.name
-    # remove mapset-specific env vars
-    env = sanitize_mapset_environment(env)
+    # remove subproject-specific env vars
+    env = sanitize_subproject_environment(env)
     return f.name, env
 
 
