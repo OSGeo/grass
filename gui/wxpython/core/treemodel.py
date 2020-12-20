@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 """
 import six
 import weakref
+import copy
 
 from grass.script.utils import naturally_sort
 
@@ -153,6 +154,37 @@ class TreeModel(object):
         if node.children:
             naturally_sort(node.children, key=lambda node: node.label)
 
+    def Filtered(self, **kwargs):
+        """Filters model based on parameters in kwargs
+        that are passed to node's match function.
+        Copies tree and returns a filtered copy."""
+        def _filter(node):
+            if node.children:
+                to_remove = []
+                for child in node.children:
+                    match = _filter(child)
+                    if not match:
+                        to_remove.append(child)
+                for child in reversed(to_remove):
+                    fmodel.RemoveNode(child)
+                if node.children:
+                    return True
+            return node.match(**kwargs)
+
+        fmodel = copy.deepcopy(self)
+        _filter(fmodel.root)
+
+        return fmodel
+
+    def GetLeafCount(self, node):
+        """Returns the number of leaves in a node."""
+        if node.children:
+            count = 0
+            for child in node.children:
+                count += self.GetLeafCount(child)
+            return count
+        return 1
+
     def __str__(self):
         """Print tree."""
         text = []
@@ -225,21 +257,30 @@ class ModuleNode(DictNode):
         keywords or description."""
         if not self.data:
             return False
-        if key not in ('command', 'keywords', 'description'):
-            return False
-        try:
-            text = self.data[key]
-        except KeyError:
-            return False
-        if not text:
-            return False
-        if case_sensitive:
-            # start supported but unused, so testing last
-            return value in text or value == '*'
+        if isinstance(key, str):
+            keys = [key]
         else:
-            # this works fully only for English and requires accents
-            # to be exact match (even Python 3 casefold() does not help)
-            return value.lower() in text.lower() or value == '*'
+            keys = key
+
+        for key in keys:
+            if key not in ('command', 'keywords', 'description'):
+                return False
+            try:
+                text = self.data[key]
+            except KeyError:
+                return False
+            if not text:
+                return False
+            if case_sensitive:
+                # start supported but unused, so testing last
+                if value in text or value == '*':
+                    return True
+            else:
+                # this works fully only for English and requires accents
+                # to be exact match (even Python 3 casefold() does not help)
+                if value.lower() in text.lower() or value == '*':
+                    return True
+        return False
 
 
 def main():

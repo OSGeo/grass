@@ -82,55 +82,6 @@ from grass.exceptions import CalledModuleError
 updateMapset, EVT_UPDATE_MAPSET = NewEvent()
 
 
-def filterModel(model, element=None, name=None):
-    """Filter tree model based on type or name of map using regular expressions.
-    Copies tree and remove nodes which don't match."""
-    fmodel = copy.deepcopy(model)
-    nodesToRemove = []
-    if name:
-        try:
-            regex = re.compile(name)
-        except:
-            return fmodel
-    for gisdbase in fmodel.root.children:
-        for location in gisdbase.children:
-            for mapset in location.children:
-                for layer in mapset.children:
-                    if element and layer.data['type'] != element:
-                        nodesToRemove.append(layer)
-                        continue
-                    if name and regex.search(layer.data['name']) is None:
-                        nodesToRemove.append(layer)
-
-    for node in reversed(nodesToRemove):
-        fmodel.RemoveNode(node)
-
-    cleanUpTree(fmodel)
-    return fmodel
-
-
-def cleanUpTree(model):
-    """Removes empty element/mapsets/locations nodes.
-    It first removes empty elements, then mapsets, then locations"""
-    # removes empty mapsets
-    nodesToRemove = []
-    for gisdbase in model.root.children:
-        for location in gisdbase.children:
-            for mapset in location.children:
-                if not mapset.children:
-                    nodesToRemove.append(mapset)
-    for node in reversed(nodesToRemove):
-        model.RemoveNode(node)
-    # removes empty locations
-    nodesToRemove = []
-    for gisdbase in model.root.children:
-        for location in gisdbase.children:
-            if not location.children:
-                nodesToRemove.append(location)
-    for node in reversed(nodesToRemove):
-        model.RemoveNode(node)
-
-
 def getLocationTree(gisdbase, location, queue, mapsets=None):
     """Creates dictionary with mapsets, elements, layers for given location.
     Returns tuple with the dictionary and error (or None)"""
@@ -284,7 +235,7 @@ class DataCatalogNode(DictNode):
 
         return _("{name}").format(**data)
 
-    def match(self, **kwargs):
+    def match(self, exact=True, **kwargs):
         """Method used for searching according to given parameters.
 
         :param value: dictionary value to be matched
@@ -293,9 +244,22 @@ class DataCatalogNode(DictNode):
         if not kwargs:
             return False
 
-        for key in kwargs:
-            if not (key in self.data and self.data[key] == kwargs[key]):
-                return False
+        if exact:
+            for key in kwargs:
+                if not (key in self.data and self.data[key] == kwargs[key]):
+                    return False
+            return True
+        # for filtering            
+        if (
+            'type' in kwargs and 'type' in self.data
+            and kwargs['type'] != self.data['type']
+        ):
+            return False
+        if (
+            'name' in kwargs and 'name' in self.data
+            and not kwargs['name'].search(self.data['name'])
+        ):
+            return False
         return True
 
 
@@ -1696,10 +1660,15 @@ class DataCatalogTree(TreeView):
             element = None
             name = text.strip()
 
-        self._model = filterModel(self._orig_model, name=name, element=element)
+        if element:
+            self._model = self._orig_model.Filtered(exact=False, name=re.compile(name), type=element)
+        else:
+            self._model = self._orig_model.Filtered(exact=False, name=re.compile(name))
         self.UpdateCurrentDbLocationMapsetNode()
         self.RefreshItems()
         self.ExpandCurrentMapset()
+        if self._model.GetLeafCount(self._model.root) <= 50:
+            self.ExpandAll()
 
     def _getNewMapName(self, message, title, value, element, mapset, env):
         """Dialog for simple text entry"""

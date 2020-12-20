@@ -135,6 +135,20 @@ class AbstractTreeViewMixin(VirtualTree):
             self.Expand(item)
         self.EnsureVisible(item)
 
+    def ExpandAll(self):
+        """Expand all items.
+        """
+        def _expand(item, root=False):
+            if not root:
+                self.Expand(item)
+            child, cookie = self.GetFirstChild(item)
+            while child:
+                _expand(child)
+                child, cookie = self.GetNextChild(item, cookie)
+
+        item = self.GetRootItem()
+        _expand(item, True)
+
     def IsNodeExpanded(self, node):
         """Check if node is expanded"""
         index = self._model.GetIndexOfNode(node)
