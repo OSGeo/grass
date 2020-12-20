@@ -18,7 +18,7 @@ while traveling along polylines. The user can assign individual costs
 to all lines and/or nodes of a vector map and later calculate least costly
 path connections based on the accumulated costs. Applications are
 transport analysis, connectivity and more. Implemented applications
-cover shortest/fastest path, traveling salesman (round trip), allocation of
+cover shortest/fastest path, traveling salesman (round trip), alproject of
 sources (creation of subnetworks), minimum Steiner trees (star-like
 connections), and iso-distances (from centers).
 
@@ -172,7 +172,7 @@ typedef struct _dglGraph
 
 	void *				pNodeTree;	// pointer to tree of nodes	
 	void *				pEdgeTree;	//pointer to tree of edges
-	dglByte_t * 			pNodeBuffer;	//pointer to node buffer. this points contiguous memory location containing pointers to nodes of  graph.
+	dglByte_t * 			pNodeBuffer;	//pointer to node buffer. this points contiguous memory project containing pointers to nodes of  graph.
 	dglInt32_t			iNodeBuffer; //current index of node being accessed. This is used as offset index from pNodeBuffer
 	dglByte_t * 			pEdgeBuffer; //pointer to edge buffer. this points to contiguous memory ,containing pointer to edgesets passing through each node. Here as per i remember means orignating.
 	dglInt32_t			iEdgeBuffer; // offset index counter for edge buffer.
@@ -210,7 +210,7 @@ structure is a memory area indexed as
 #define DGL_IN_SIZE_v1			DGL_IN_ATTR_v1
 \endverbatim
 
-Similarly pEdgeBuffer is a contiguous memory locations contains
+Similarly pEdgeBuffer is a contiguous memory projects contains
 pointer to edgesets passing through each node.  These edgesets can be
 transversed using dglEdgesetTraverser_s structure defined in
 dglib/graph.h .

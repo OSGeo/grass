@@ -6,7 +6,7 @@
 --#############################################################################
 
 -- SPACETIME_REGISTER_TABLE is a placeholder for specific stds map register table name (SQL compliant)
--- SPACETIME_ID is a placeholder for specific stds id: name@mapset
+-- SPACETIME_ID is a placeholder for specific stds id: name@subproject
 
 -- Update the vector features and topology 
 UPDATE stvds_metadata SET points = 

@@ -5,7 +5,7 @@
 # We specific a small region in the
 # @preprocess step and generate
 # raster data with r.mapcalc
-# The region setting should work for UTM and LL test locations
+# The region setting should work for UTM and LL test projects
 g.region s=0 n=90 w=0 e=100 b=0 t=50 res=10 res3=10 -p3
 # To test r.colors, we need several maps of different types
 r.mapcalc --o expr="test_elev_int = int(if(row() == 2, null(), row()))"

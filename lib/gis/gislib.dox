@@ -65,7 +65,7 @@ This chapter is divided as follows:
 
 - \subpage TimeStamp_functions
 
-- \subpage Memory_Allocation
+- \subpage Memory_Alproject
 
 \section gislibintro Introduction
 
@@ -80,7 +80,7 @@ some general purpose routines (string manipulation, user information,
 etc.) which are not tied directly to database processing.
 
 
-It is assumed that the reader has read \ref location for a general
+It is assumed that the reader has read \ref project for a general
 description of GRASS databases, \ref Raster_File_Processing for
 details about raster map layers in GRASS, and \ref Region_and_Mask
 (<b>???</b>) which discusses regions and masks. The routines in the
@@ -112,7 +112,7 @@ library routines are called.
 G_gisinit() initialize GIS library.
 
 This routine reads the user's GRASS environment file into memory and
-makes sure that the user has selected a valid database and mapset. It
+makes sure that the user has selected a valid database and subproject. It
 also initializes hidden variables used by other routines. If the
 user's database information is invalid, an error message is printed
 and the module exits.  The <b>program_name</b> is stored for later
@@ -195,23 +195,23 @@ the GRASS environment.
 
 The following four routines can be used freely by the programmer:
 
- - G_location() current location name
+ - G_project() current project name
 
-Returns the name of the current database location. This routine should
-be used by modules that need to display the current location to the
-user. See \ref Locations for an explanation of locations.
+Returns the name of the current database project. This routine should
+be used by modules that need to display the current project to the
+user. See \ref Projects for an explanation of projects.
 
- - G_mapset() current mapset name
+ - G_subproject() current subproject name
 
-Returns the name of the current mapset in the current location. This
-routine is often used when accessing files in the current mapset. See
-\ref Mapsets for an explanation of mapsets.
+Returns the name of the current subproject in the current project. This
+routine is often used when accessing files in the current subproject. See
+\ref Subprojects for an explanation of subprojects.
 
- - G_myname() location title
+ - G_myname() project title
 
-Returns a one line title for the database location. This title is read
-from the file MYNAME in the PERMANENT mapset. See also \ref
-Permanent_Mapset for a discussion of the PERMANENT mapset.
+Returns a one line title for the database project. This title is read
+from the file MYNAME in the PERMANENT subproject. See also \ref
+Permanent_Subproject for a discussion of the PERMANENT subproject.
 
  - G_gisbase() top level module directory 
 
@@ -246,13 +246,13 @@ bypass the normal database access routines.</B>
  - G_gisdbase() top level database directory
 
 Returns the full UNIX path name of the directory which holds the
-database locations. See \ref GISDBASE for a full explanation of this
+database projects. See \ref GISDBASE for a full explanation of this
 directory.
 
- - G_location_path() current location directory
+ - G_project_path() current project directory
 
-Returns the full UNIX path name of the current database location. For
-example, if the user is working in location <I>spearfish</I> in the
+Returns the full UNIX path name of the current database project. For
+example, if the user is working in project <I>spearfish</I> in the
 <tt>/home/user/grassdata</tt> database directory, this routine will
 return a string which looks like
 <tt>/home/user/grassdata/spearfish</tt>.
@@ -285,12 +285,12 @@ writes the new value to the user's GRASS environment file.
 \section dbaseaccess Fundamental Database Access Routines
 
 
-In general, a user can only access data in the current location. For most
-modules, it's meaningless to access data from a different location as
+In general, a user can only access data in the current project. For most
+modules, it's meaningless to access data from a different project as
 the projection will be wrong. A handful of modules (e.g. r.proj,
-v.proj) support accessing data from a different location, and in such
-cases there's no need for the user to own the source mapset, or even
-to own any mapset in the source location.
+v.proj) support accessing data from a different project, and in such
+cases there's no need for the user to own the source subproject, or even
+to own any subproject in the source project.
 
 Since r54264, it is possible to bypass the ownership check by setting
 GRASS_SKIP_MAPSET_OWNER_CHECK to any non-empty string. This was added
@@ -298,28 +298,28 @@ mostly for accessing VFAT/NTFS-format external drives or network
 shares where the ownership checks don't behave correctly. It should
 not be used on multi-user systems, nor set by programs.
 
-But other than that, a user cannot make a mapset the current mapset (i.e.
+But other than that, a user cannot make a subproject the current subproject (i.e.
 the one a user can modify) unless the user owns it. The user can access data from
-any mapset for which they have the relevant filesystem permissions
+any subproject for which they have the relevant filesystem permissions
 (i.e. read permission for files, execute permission for the ancestor
 directories, read permission for any directories which need to be
 enumerated).
 
 Originally this restriction was related to locking (the lock file was
 created in the user's home directory, so being able to set the current
-mapset to a directory which the user didn't own meant that they could have
-multiple sessions modifying a mapset concurrently).
+subproject to a directory which the user didn't own meant that they could have
+multiple sessions modifying a subproject concurrently).
 
-That's no longer an issue (the lock file is created in the mapset
+That's no longer an issue (the lock file is created in the subproject
 directory). However, the other issue is that allowing someone other
 than the owner to modify the directory can result in problems for its
 owner.
 
 Creating a new map typically creates a subdirectory of cell_misc for
 that map, and some files within it (e.g. a "null" file). Any new files
-and subdirectories will be owned by their creator (not the mapset's
+and subdirectories will be owned by their creator (not the subproject's
 owner) and will have permissions determined by the current umask. The
-result is that there's no guarantee that tha mapset's owner will be
+result is that there's no guarantee that tha subproject's owner will be
 able to delete (or even access) such files or directories.
 
 In short, it's a safety mechanism against people trying to share
@@ -337,7 +337,7 @@ Raster_File_Processing), vector files (see \ref
 Vector_File_Processing), etc., should be used instead.
 
 In the descriptions below, the term database <i>element</i> is used.
-Elements are subdirectories within a mapset and are associated with a
+Elements are subdirectories within a subproject and are associated with a
 specific GRASS data type. For example, raster files live in the "cell"
 and "fcell" element. See \ref Elements for more details.
 
@@ -345,17 +345,17 @@ and "fcell" element. See \ref Elements for more details.
 \subsection Fully_Qualified_File_Names Fully Qualified File Names
 
 All GRASS routines which access database files must be given both the
-file name and the mapset where the file resides. Often the name and
-the mapset are 2 distinct character strings. However, there is a need
+file name and the subproject where the file resides. Often the name and
+the subproject are 2 distinct character strings. However, there is a need
 for a single character string which contains both the name and the
-mapset (e.g., for interactive interfacing to command-line
+subproject (e.g., for interactive interfacing to command-line
 programs). This form of the name is known as the <em>fully qualified
 file name</em> and is built by the following routine:
 
  - G_fully_qualified_name()
   
 Returns a fully qualified name for the file <i>name</i> in
-<i>mapset</i> Currently this string is in the form <i>name@mapset</i>,
+<i>subproject</i> Currently this string is in the form <i>name@subproject</i>,
 but the programmer should pretend not to know this and always call
 this routine to get the fully qualified name.
 
@@ -368,16 +368,16 @@ interfaces with the command-line version of <tt>d.rast</tt>:
 
 int main(int argc, char *argv[])
 {
-    char name[GNAME_MAX], *mapset, *fqn;
+    char name[GNAME_MAX], *subproject, *fqn;
     char command[1024];
 
     G_gisinit(argv[0]);
-    mapset = G_ask_cell_old("", name);
+    subproject = G_ask_cell_old("", name);
 
-    if (mapset == NULL)
+    if (subproject == NULL)
         exit(EXIT_SUCCESS);
 
-    fqn = G_fully_qualified_name(name, mapset);
+    fqn = G_fully_qualified_name(name, subproject);
     sprintf(command, "d.rast map='%s'", fqn);
     G_spawn(command, "d.rast", NULL);
     exit(EXIT_SUCCESS);
@@ -388,44 +388,44 @@ int main(int argc, char *argv[])
 
 Command line driven module requires a database file name as one of the
 command arguments. In this case, the programmer must search the
-database to find the mapset where the file resides.
+database to find the subproject where the file resides.
 
 The following routines search the database for files:
 
  - G_find_file()
   
 Look for the file <i>name</i> under the specified <i>element</i> in
-the database. The <i>mapset</i> parameter can either be the empty
-string "", which means search all the mapsets in the user's current
-mapset search path, or it can be a specific mapset, which means. Look
-for the file only in this one mapset (for example, in the current
-mapset).
+the database. The <i>subproject</i> parameter can either be the empty
+string "", which means search all the subprojects in the user's current
+subproject search path, or it can be a specific subproject, which means. Look
+for the file only in this one subproject (for example, in the current
+subproject).
 
-If found, the mapset where the file lives is returned. If not found,
+If found, the subproject where the file lives is returned. If not found,
 the NULL pointer is returned.
 
 If the user specifies a fully qualified file name, (i.e, a name that
-also contains the mapset; see \ref Fully_Qualified_File_Names) then
-G_find_file() modifies <em>name</em> by eliminating the mapset from
+also contains the subproject; see \ref Fully_Qualified_File_Names) then
+G_find_file() modifies <em>name</em> by eliminating the subproject from
 the <em>name</em>.
 
 For example, to find a "paint/labels" file anywhere in the database:
 
 \code
 char name[GNAME_MAX];
-char *mapset;
+char *subproject;
 
-if ((mapset = G_find_file("paint/labels", name, "")) == NULL)
+if ((subproject = G_find_file("paint/labels", name, "")) == NULL)
 
 /* not found */
 \endcode
 
-To check that the file exists in the current mapset:
+To check that the file exists in the current subproject:
 
 \code
 char name[GNAME_MAX];
 
-if (G_find_file("paint/labels", name, G_mapset()) == NULL)
+if (G_find_file("paint/labels", name, G_subproject()) == NULL)
 
 /* not found */
 \endcode
@@ -442,13 +442,13 @@ routine checks for legal file names:
   
 \subsection Opening_an_Existing_Database_File_for_Reading Opening an Existing Database File for Reading
 
-The following routines open the file <i>name</i> in <i>mapset</i> from
+The following routines open the file <i>name</i> in <i>subproject</i> from
 the specified database <i>element</i> for <b>reading</b> (but not for
-writing). The file <i>name</i> and <i>mapset</i> can be obtained using
+writing). The file <i>name</i> and <i>subproject</i> can be obtained using
 G_find_file().
 
 The database file <i>name</i> under the <i>element</i> in the
-specified <i>mapset</i> is opened for reading (but not for writing).
+specified <i>subproject</i> is opened for reading (but not for writing).
 
  - G_open_old()
 
@@ -464,12 +464,12 @@ returned. Otherwise the file descriptor from the fopen() is returned.
 
 \subsection Opening_an_Existing_Database_File_for_Update Opening an Existing Database File for Update
 
-The following routines open the file <i>name</i> in the current mapset
+The following routines open the file <i>name</i> in the current subproject
 from the specified database <i>element</i> for <b>writing</b>. The
 file must exist. Its <i>name</i> can be obtained using G_find_file().
 
 The database file <i>name</i> under the <i>element</i> in the current
-mapset is opened for reading and writing.
+subproject is opened for reading and writing.
 
  - G_open_update()
 
@@ -488,8 +488,8 @@ the file descriptor from the fopen() is returned.
 \subsection Creating_and_Opening_a_New_Database_File Creating and Opening a New Database File
 
 The following routines create the new file <i>name</i> in the current
-mapset (GRASS does not allow files to be created outside the current
-mapset; see \ref Database_Access_Rules) under the specified database
+subproject (GRASS does not allow files to be created outside the current
+subproject; see \ref Database_Access_Rules) under the specified database
 <i>element</i> and open it for writing. The database <i>element</i> is
 created, if it does not already exist.
 
@@ -501,7 +501,7 @@ removed and recreated empty. G_find_file() could be used to see if
 <i>name</i> exists.
 
 The database file <i>name</i> under the <i>element</i> in the current
-mapset is created and opened for writing (but not reading).
+subproject is created and opened for writing (but not reading).
 
  - G_open_new()
   
@@ -520,9 +520,9 @@ the file descriptor from the fopen() is returned.
 \subsection Database_File_Management Database File Management
 
 The following routines allow the renaming and removal of database
-files in the current mapset (These functions only apply to the current
-mapset since GRASS does permit users to modify things in mapsets other
-than the current mapset; see \ref Database_Access_Rules).
+files in the current subproject (These functions only apply to the current
+subproject since GRASS does permit users to modify things in subprojects other
+than the current subproject; see \ref Database_Access_Rules).
 
  - G_rename() rename a database file
   
@@ -541,7 +541,7 @@ The region concept is explained in \ref Region. It can be thought of as a
 two-dimensional matrix with known boundaries and rectangular cells.
 
 There are logically two different regions. The first is the database
-region that the user has set in the current mapset. The other is the
+region that the user has set in the current subproject. The other is the
 region that is active in the module. This active module region is what
 controls reading and writing of raster file data. The vector map
 export does not take care for the active region settings.
@@ -567,7 +567,7 @@ probably be used instead).
  - G_get_window()
 
 Reads the database region as stored in the WIND file in the user's
-current mapset into region.
+current subproject into region.
 
 An error message is printed and exit() is called if there is a problem
 reading the region.
@@ -580,7 +580,7 @@ G_window_rows() and G_window_cols().
 
  - G_put_window()
 
-Writes the database region file (WIND) in the user's current mapset
+Writes the database region file (WIND) in the user's current subproject
 from region.
 
 <b>Warning:</b> Since this routine actually changes the database
@@ -589,11 +589,11 @@ change the region. It is probably fair to say that only the
 <tt>g.region</tt> should call this routine.
 
 There is another database region. This region is the default region
-for the location. The default region provides the user with a
+for the project. The default region provides the user with a
 "starting" region, i.e., a region to begin with and return to as a
 reference point. The GRASS modules <tt>g.region</tt> allow the user to
 set their database region from the default region (see \ref
-Permanent_Mapset for a discussion of the default region).  The
+Permanent_Subproject for a discussion of the default region).  The
 following routine reads this region:
 
  - G_get_default_window()
@@ -1443,8 +1443,8 @@ operational way by GRASS.
 
 See documentation of History structure for details.
 
-The <i>mapid</i> and <i>mapset</i> are the raster file name and
-mapset, <i>title</i> is the raster file title, <i>creator</i> is the
+The <i>mapid</i> and <i>subproject</i> are the raster file name and
+subproject, <i>title</i> is the raster file title, <i>creator</i> is the
 user who created the file, <i>maptype</i> is the map type (which
 should always be "raster"), <i>datasrc_1</i> and <i>datasrc_2</i>
 describe the original data source, <i>keywrd</i> is a one-line data
@@ -1457,7 +1457,7 @@ this structure. The programmer must manipulate the contents directly.
 
 <b>Note:</b> Some of the information in this structure is not
 meaningful. For example, if the raster file is renamed, or copied
-into another mapset, the <i>mapid</i> and <i>mapset</i> will no longer
+into another subproject, the <i>mapid</i> and <i>subproject</i> will no longer
 be correct. Also the <i>title</i> does not reflect the true raster
 file title. The true title is maintained in the category file.
 
@@ -1527,7 +1527,7 @@ struct TimeStamp {
 \endcode
 
 Using the G_*_timestamp() routines reads/writes a timestamp file in 
-the cell_misc/rastername mapset element.
+the cell_misc/rastername subproject element.
 
 A TimeStamp can be one DateTime, or two DateTimes representing a 
 range. When preparing to write a TimeStamp, the programmer should
@@ -1580,17 +1580,17 @@ writing (overwrites any existing information in TimeStamp).
 
  - G_remove_grid3_timestamp()
 
-Only timestamp files in current mapset can be removed.
+Only timestamp files in current subproject can be removed.
 
  - G_read_grid3_timestamp()
 
 See \ref DateTime_Library for a complete discussion of GRASS datetime
 routines.
 
-\section Memory_Allocation Memory Allocation
+\section Memory_Alproject Memory Alproject
 
-The following routines provide memory allocation capability. They are
-simply calls to the UNIX suite of memory allocation routines malloc(),
+The following routines provide memory alproject capability. They are
+simply calls to the UNIX suite of memory alproject routines malloc(),
 realloc() and calloc(), except that if there is not enough memory,
 they print a diagnostic message to that effect and then call exit().
 

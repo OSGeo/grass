@@ -10,7 +10,7 @@
 -- The metadata table 
 
 CREATE TABLE  vector_metadata (
-  id VARCHAR NOT NULL,    -- The id (PK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary key
+  id VARCHAR NOT NULL,    -- The id (PK) is the unique identifier for all tables, it is based on name and subproject (name@subproject) and is used as primary key
   is_3d BOOLEAN,          -- This is 1 if the vector map is 3d and 0 otherwise 
   points INTEGER,         -- The number of points
   lines INTEGER,          -- The number of lines

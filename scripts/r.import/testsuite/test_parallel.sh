@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Test parallel calls of r.import in Bash.
-# To test the reprojection, it needs to run in a location other than
+# To test the reprojection, it needs to run in a project other than
 # WGS84 (that's the CRS of imported file used) or r.import may (should)
 # skip the reprojection part of the code.
 # Imported raster map presence or absence based on a search pattern is
@@ -72,7 +72,7 @@ done
 wait
 
 EXPECTED=$NUM_PARALLELS
-NUM=$(g.list type=raster pattern='test_parallel_par_*' mapset=. | wc -l)
+NUM=$(g.list type=raster pattern='test_parallel_par_*' subproject=. | wc -l)
 
 if [ ${NUM} -ne ${EXPECTED} ]
 then

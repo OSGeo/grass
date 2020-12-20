@@ -7,7 +7,7 @@
 -- Create the views to access all columns for the absolute and relative time
 
 CREATE VIEW vector_view_abs_time AS SELECT 
-            A1.id, A1.mapset,
+            A1.id, A1.subproject,
             A1.name, A1.layer, A1.temporal_type,
             A1.creation_time, 
             A1.creator, 
@@ -24,7 +24,7 @@ CREATE VIEW vector_view_abs_time AS SELECT
             A1.id = A4.id AND A1.id = A5.id;
 
 CREATE VIEW vector_view_rel_time AS SELECT 
-            A1.id, A1.mapset,
+            A1.id, A1.subproject,
             A1.name, A1.layer, A1.temporal_type,
             A1.creation_time,
             A1.creator, 

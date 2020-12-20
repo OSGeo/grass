@@ -8,9 +8,9 @@
 -- STDS is a placeholder for specific space-time dataset type: strds, str3ds, stvds
 
 CREATE TABLE  STDS_base (
-  id VARCHAR NOT NULL,                 -- Id of the space-time dataset, name@mapset this is the primary key
+  id VARCHAR NOT NULL,                 -- Id of the space-time dataset, name@subproject this is the primary key
   name VARCHAR NOT NULL,               -- name of the space-time dataset
-  mapset VARCHAR NOT NULL,             -- mapset of the space-time dataset
+  subproject VARCHAR NOT NULL,             -- subproject of the space-time dataset
   creator VARCHAR NOT NULL,            -- Name of the creator
   temporal_type VARCHAR NOT NULL,      -- The temporal type of the dataset "absolute" or "relative" 
   semantic_type VARCHAR NOT NULL,      -- The semantic data description used for aggregation/decomposition algorithm selection: min, max, mean or sum

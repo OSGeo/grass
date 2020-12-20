@@ -1,7 +1,7 @@
 # This script tests r.pack and r.unpack
 
 # We specify a small region in the @preprocess step
-# The region setting should work for UTM and LL test locations
+# The region setting should work for UTM and LL test projects
 g.region s=0 n=70 w=0 e=100 b=0 t=50 -p
 
 # Map generation

@@ -27,7 +27,7 @@ RASTER3D_DEFAULT_CACHE_SIZE. Default is 1000.
 \section Directory_Structure Directory Structure
 
 <P>
-The file format consists of a mapset element <EM>grid3</EM> which contains a
+The file format consists of a subproject element <EM>grid3</EM> which contains a
 directory for every map. The elements for each map are
 
 <P>
@@ -253,7 +253,7 @@ Binary files not in RASTER3D format can be read by the library. The
 following actions have to be taken: 
 
 <P>
-Make a new map directory in the <EM>grid3</EM> element of the mapset (say <EM>mymap</EM>).
+Make a new map directory in the <EM>grid3</EM> element of the subproject (say <EM>mymap</EM>).
   Copy the file into <EM>mymap/cell</EM> and generate a header file <EM>mymap/cellhd</EM>.
 
 <P>
@@ -331,7 +331,7 @@ at any time later in the program. The resampling method can be the default
 nearest neighbor method as well as an application provided method.
 <BR>
 <P>
-The default <EM>3d</EM> window file is <EM>WIND3</EM> located in the mapset.
+The default <EM>3d</EM> window file is <EM>WIND3</EM> located in the subproject.
 Application programs should use <TT>Rast3d_useWindowParams()</TT> to allow the
 user to overwrite this default.
 
@@ -581,17 +581,17 @@ int Rast3d_getFileType(int type)
 The window is set from a <EM>3d</EM> window file.
 
 <P>
-The default <EM>3d</EM> window file is <EM>WIND3</EM> located in the current mapset.
+The default <EM>3d</EM> window file is <EM>WIND3</EM> located in the current subproject.
 
 <P>
 Possible choices for <EM>3d</EM> window files are <EM>name</EM> which refers to a
 window file in the <EM>3d</EM> window database located at <EM>windows3d</EM> of the
-current mapset; or file names which are identified by a leading <EM><TT>"/"</TT></EM> 
+current subproject; or file names which are identified by a leading <EM><TT>"/"</TT></EM> 
 or <EM><TT>"."</TT></EM>; or fully qualified
-names, i.e. <EM>file@mapset</EM> which refer to window files in the <EM>3d</EM> window 
-database of mapset.  Note, that names <EM>WIND3</EM> and <EM>WIND3@mapset</EM> do not 
+names, i.e. <EM>file@subproject</EM> which refer to window files in the <EM>3d</EM> window 
+database of subproject.  Note, that names <EM>WIND3</EM> and <EM>WIND3@subproject</EM> do not 
 specify the default window name in the (current)
-mapset but rather a window file in the window database of the (current) mapset.
+subproject but rather a window file in the window database of the (current) subproject.
 
 <P>
 Environment variable RASTER3D_DEFAULT_WINDOW3D.
@@ -673,8 +673,8 @@ void Rast3d_fatalError(char (*msg)(char *)) This function prints the
 \subsection Opening_and_Closing_RASTER3D_Files Opening and Closing RASTER3D Files
 
 <P>
-void  *Rast3d_openCellOld(char *name, char *mapset, RASTER3D_Region *window,
-  int type, int cache)Opens existing g3d-file <EM>name</EM> in <EM>mapset</EM>.
+void  *Rast3d_openCellOld(char *name, char *subproject, RASTER3D_Region *window,
+  int type, int cache)Opens existing g3d-file <EM>name</EM> in <EM>subproject</EM>.
 
 <P>
 Tiles are stored in memory with <EM>type</EM> which must be any of FCELL_TYPE,
@@ -697,7 +697,7 @@ Returns a pointer to the cell structure ... if successful, NULL ...
 
 <P>
 void  *Rast3d_openCellNew(char *name, int type, int cache, RASTER3D_Region
-  *region)Opens new g3d-file with <EM>name</EM> in the current mapset. Tiles
+  *region)Opens new g3d-file with <EM>name</EM> in the current subproject. Tiles
   are stored in memory with <EM>type</EM> which must be one of FCELL_TYPE,
   DCELL_TYPE, or RASTER3D_TILE_SAME_AS_FILE. <EM>cache</EM> specifies the
   cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,
@@ -716,7 +716,7 @@ Returns a pointer to the cell structure ... if successful,
 void  *Rast3d_openCellNewParam(char *name, int typeIntern, int cache,
   RASTER3D_Region *region, int type, int doLzw, int doRle, int precision, int tileX,
   int tileY, int tileZ)Opens new g3d-file with <EM>name</EM> in the current
-  mapset. Tiles are stored in memory with <EM>typeIntern</EM> which must be one of
+  subproject. Tiles are stored in memory with <EM>typeIntern</EM> which must be one of
   FCELL_TYPE, DCELL_TYPE, or RASTER3D_TILE_SAME_AS_FILE. <EM>cache</EM> specifies
   the cache-mode used and must be either RASTER3D_NO_CACHE,
   RASTER3D_USE_CACHE_DEFAULT, RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y,
@@ -751,7 +751,7 @@ Returns 1 ... if successful, 0 ...  otherwise.
 <P>
 void *Rast3d_open_new_opt_tile_size(const char *name, int cache, RASTER3D_Region * region, int type, int maxSize)
 
-Opens new g3d-file with <em>name</em> in the current mapset. This method tries to compute
+Opens new g3d-file with <em>name</em> in the current subproject. This method tries to compute
 optimal tile size based on the number of rows, cols and depths and the maximum allowed tile size in KB.
 Tiles are stored in memory using RASTER3D_TILE_SAME_AS_FILE method. <em>cache</em> specifies the
 cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,
@@ -1329,12 +1329,12 @@ Returns 1 if <EM>tileIndex</EM> is a valid index for <EM>map</EM>.
 Returns 0 otherwise.
 
 <P>
-int Rast3d_isValidLocation(void *map, double north, double west, double
+int Rast3d_isValidProject(void *map, double north, double west, double
   bottom) Returns 1 if region-coordinates <EM>(north, west, bottom)</EM> are
   inside the region of <EM>map</EM>. Returns 0 otherwise.
 
 <P>
-void Rast3d_location2coord(void *map, double north, double west, double
+void Rast3d_project2coord(void *map, double north, double west, double
   bottom, int *x, *y, *z) Converts region-coordinates <EM>(north, west,
     bottom)</EM> into cell-coordinates <EM>(x, y, z)</EM>.
 
@@ -1398,8 +1398,8 @@ Applications can use the standard GRASS functions to work with histories,
 except for the file manipulations.
 
 <P>
-int Rast3d_readHistory(char *name, char *mapset, struct History *hist)
-  Reads the history file for map <EM>name</EM> in <EM>mapset</EM> and
+int Rast3d_readHistory(char *name, char *subproject, struct History *hist)
+  Reads the history file for map <EM>name</EM> in <EM>subproject</EM> and
   stores the history in the <EM>hist</EM> structure.  See <EM>G_read_history</EM>
   (Raster_History_File) for details and return values.
 
@@ -1407,7 +1407,7 @@ int Rast3d_readHistory(char *name, char *mapset, struct History *hist)
 int Rast3d_writeHistory(char *name, struct History *hist) 
   Writes the
   history stored in the <EM>hist</EM> structure into the categories file for
-  map <EM>name</EM> in the current mapset.  See <EM>G_write_history</EM>
+  map <EM>name</EM> in the current subproject.  See <EM>G_write_history</EM>
   (Raster_History_File) for details and return values.
 
 <P>
@@ -1485,7 +1485,7 @@ void Rast3d_maskTile(void *map, int tileIndex, char *tile, int type)
 Replaces the values stored in <EM>tile</EM> (with <EM>tileIndex</EM>) for 
 which <EM>Rast3d_isMasked</EM> returns 1 with NULL-values. Does not change
 the remaining values. The values are assumed to be of <EM>type</EM>. 
-Whether replacement is performed or not only depends on location of the
+Whether replacement is performed or not only depends on project of the
 cells of the tile and not on the status of the mask for <EM>map</EM>
 (i.e. turned on or off).
 
@@ -1517,7 +1517,7 @@ provided to pass a window pointer when opening a map.
 int Rast3d_readWindow(RASTER3D_Region *window, char *windowName) Reads
   <EM>window</EM> from the file specified by <EM>windowName</EM>. The name is
   converted by the rules defined in window defaults. A NULL pointer indicates
-  the <EM>WIND3</EM> file in the current mapset.
+  the <EM>WIND3</EM> file in the current subproject.
 
 <P>
 Returns
@@ -1528,7 +1528,7 @@ Returns
 int Rast3d_writeWindow(RASTER3D_Region *window, char *windowName)
         Writes <EM>window</EM> to the file specified by <EM>windowName</EM>. The name
         is converted by the rules defined in window defaults. A NULL pointer
-        indicates the <EM>WIND3</EM> file in the current mapset.
+        indicates the <EM>WIND3</EM> file in the current subproject.
 
 <P>
 Returns
@@ -1610,8 +1610,8 @@ void Rast3d_getRegionValue(void *map, double north, double east, double
   <EM>value</EM> is of <EM>type</EM>.
 
 <P>
-void Rast3d_readRegionMap(char *name, char *mapset, RASTER3D_Region *region)
-Returns in <EM>region</EM> the region information for 3d cell <EM>name@mapset</EM>.
+void Rast3d_readRegionMap(char *name, char *subproject, RASTER3D_Region *region)
+Returns in <EM>region</EM> the region information for 3d cell <EM>name@subproject</EM>.
 
 <P>
 
@@ -1665,13 +1665,13 @@ Returns
         0 ... otherwise.
 
 <P>
-int Rast3d_makeMapsetMapDirectory(char *mapName)
-Creates the 3d mapset element for map <EM>mapName</EM>.
+int Rast3d_makeSubprojectMapDirectory(char *mapName)
+Creates the 3d subproject element for map <EM>mapName</EM>.
 
 <P>
-int Rast3d_filename(char *path, *elementName, *mapName, *mapset)
+int Rast3d_filename(char *path, *elementName, *mapName, *subproject)
 Returns in <EM>path</EM> the path for element <EM>elementName</EM> for map
-<EM>mapName</EM> in <EM>mapset</EM>. Note, an error occurs if <EM>mapName</EM>
+<EM>mapName</EM> in <EM>subproject</EM>. Note, an error occurs if <EM>mapName</EM>
 is fully qualified.
 
 <P>
@@ -1714,9 +1714,9 @@ and in DCELL_TYPE otherwise.
 The source code can be found in <EM>changetype.c</EM>.
 
 <P>
-void Rast3d_compareFiles(char *f1, char *mapset1, char *f2, char *mapset2)
-Compares the cell-values of file <EM>f1</EM> in mapset
-<EM>mapset1</EM> and file <EM>f2</EM> in mapset <EM>mapset2</EM>.
+void Rast3d_compareFiles(char *f1, char *subproject1, char *f2, char *subproject2)
+Compares the cell-values of file <EM>f1</EM> in subproject
+<EM>subproject1</EM> and file <EM>f2</EM> in subproject <EM>subproject2</EM>.
 The values are compared up to precision.
 Terminates in error if the files don't match.
 This function uses the more advanced features of the cache.

@@ -2,7 +2,7 @@
 
 # Script to test i.topo.corr with a synthetic map
 #
-# Use North Carolina location to test:
+# Use North Carolina project to test:
 #   grass79 ~/grassdata/nc_spm_08_grass7/user1
 
 if test "$GISBASE" = ""; then
@@ -12,7 +12,7 @@ fi
 
 export GRASS_OVERWRITE=1
 
-# we use the NC location, time zone UTM-5
+# we use the NC project, time zone UTM-5
 g.region n=308500 s=215000 w=630000 e=704800 nsres=250 ewres=250 -pa
 
 # note: no daylight saving time in summer 1954!

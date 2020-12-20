@@ -101,7 +101,7 @@ done
 wait
 
 EXPECTED=$NUM_PARALLELS
-NUM=$(g.list type=raster pattern="${MAP_PARALLEL_PATTERN}" mapset=. | wc -l)
+NUM=$(g.list type=raster pattern="${MAP_PARALLEL_PATTERN}" subproject=. | wc -l)
 
 if [ ${NUM} -ne ${EXPECTED} ]
 then
@@ -124,7 +124,7 @@ done
 wait
 
 EXPECTED=$(( $NUM_PARALLELS * $NUM_NEST ))
-NUM=$(g.list type=raster pattern="${MAP_NEST_PATTERN}" mapset=. | wc -l)
+NUM=$(g.list type=raster pattern="${MAP_NEST_PATTERN}" subproject=. | wc -l)
 
 if [ ${NUM} -ne ${EXPECTED} ]
 then

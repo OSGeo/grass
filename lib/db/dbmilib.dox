@@ -31,7 +31,7 @@ default DBMI driver is defined in dbmi.h
 In general records in table are linked to vector entities by field number
 and category number.  The field number identifies a database table and the
 category number identifies the record record. I.e. for unique combination
-<tt>mapset + map + field + category</tt> exists one unique combination
+<tt>subproject + map + field + category</tt> exists one unique combination
 <tt>driver + database + table + row</tt>. Each element may have none, one or
 more categories (cats). More cats are distinguished by field number (field).
 The flexibility of this approach even supports the extreme case, that one
@@ -59,7 +59,7 @@ programming. There are three groups:
 
 \section dbmiBase DBMI BASE functions
 
-Allocation:
+Alproject:
 
  - db_store()
  

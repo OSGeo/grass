@@ -5,7 +5,7 @@
 # We set up a specific region in the
 # @preprocess step of this test. We generate
 # voxel data with r3.mapcalc. The region setting 
-# should work for UTM and LL test locations
+# should work for UTM and LL test projects
 g.region s=-90 n=90 w=-180 e=180 b=0 t=5 res=10 res3=10 tbres=1 -p3
 # We create several (float, double, null value) voxel map
 # with value = col + row + depth. 

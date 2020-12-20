@@ -2,7 +2,7 @@
 
 # We specific a small region in the
 # @preprocess step
-# The region setting should work for UTM and LL test locations
+# The region setting should work for UTM and LL test projects
 g.region s=0 n=70 w=0 e=100 b=0 t=50 res=10 res3=10 -p3
 
 # Create the volume and the sampling vector map

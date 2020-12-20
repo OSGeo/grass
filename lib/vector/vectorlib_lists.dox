@@ -363,7 +363,7 @@ programming. The programmer should use only routines with this prefix.
 
  - Vect_get_map_name()
 
- - Vect_get_mapset()
+ - Vect_get_subproject()
 
  - Vect_get_name()
 

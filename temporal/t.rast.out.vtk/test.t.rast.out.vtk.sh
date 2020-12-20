@@ -4,7 +4,7 @@
 # We need to set a specific region in the
 # @preprocess step of this test. We generate
 # raster with r.mapcalc and create a space time raster datasets
-# The region setting should work for UTM and LL test locations
+# The region setting should work for UTM and LL test projects
 g.region s=0 n=80 w=0 e=120 res=0.5 -p
 
 # Generate data

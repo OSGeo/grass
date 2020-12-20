@@ -1,6 +1,6 @@
 #!/usr/bin/sh
 
-# Test for temporal algebra in LatLon location.
+# Test for temporal algebra in LatLon project.
 n1=`g.tempfile pid=1 -d`
 n2=`g.tempfile pid=2 -d`
 n3=`g.tempfile pid=3 -d`

@@ -8,7 +8,7 @@
 --#############################################################################
 
 -- SPACETIME_REGISTER_TABLE is a placeholder for specific stds map register table name (SQL compliant)
--- SPACETIME_ID is a placeholder for specific stds id: name@mapset
+-- SPACETIME_ID is a placeholder for specific stds id: name@subproject
 -- GRASS_MAP is a placeholder for specific map type: raster, raster3d or vector
 -- STDS is a placeholder for specific space-time dataset type: strds, str3ds, stvds
 

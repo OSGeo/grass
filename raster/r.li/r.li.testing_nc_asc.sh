@@ -9,7 +9,7 @@ mkdir -p $G_RLI
 echo "SAMPLINGFRAME 0|0|1|1
 SAMPLEAREA 0.0|0.0|1.0|1.0" > $G_RLI/landcover_whole_whole # GRASS7
 
-# North Carolina location:
+# North Carolina project:
 export GRASS_OVERWRITE=1
 g.region raster=landclass96 -p
 RASTER_MAP=landclass96

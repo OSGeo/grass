@@ -11,7 +11,7 @@ Libraries
   icons
   iscatt
   lmgr
-  location_wizard
+  project_wizard
   mapdisp
   mapwin
   menustrings

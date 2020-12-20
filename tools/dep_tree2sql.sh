@@ -75,7 +75,7 @@
 # 	      library      |   object   |    symbol     
 # 	-------------------+------------+---------------
 # 	 libgrass_manage.a | add_elem.o | add_element
-# 	 libgrass_manage.a | ask.o      | ask_in_mapset
+# 	 libgrass_manage.a | ask.o      | ask_in_subproject
 # 	 libgrass_manage.a | ask.o      | ask_new
 # 	 libgrass_manage.a | ask.o      | ask_old
 # 	 libgrass_manage.a | copyfile.o | copyfile

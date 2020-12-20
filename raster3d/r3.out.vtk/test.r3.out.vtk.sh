@@ -6,7 +6,7 @@
 # We need to set a specific region in the
 # @preprocess step of this test. We generate
 # raster and voxel data with r.mapcalc and r3.mapcalc
-# The region setting should work for UTM and LL test locations
+# The region setting should work for UTM and LL test projects
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 # Now generate two elevation maps, we have 8 rows and use
 # them for elevation computation. The rows are counted from north
