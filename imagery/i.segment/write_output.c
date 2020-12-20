@@ -53,7 +53,7 @@ int write_ids(struct globals *globals)
     /* set colors */
     Rast_init_colors(&colors);
     Rast_make_random_colors(&colors, 1, maxid);
-    Rast_write_colors(globals->out_name, G_mapset(), &colors);
+    Rast_write_colors(globals->out_name, G_subproject(), &colors);
 
     Rast_short_history(globals->out_name, "raster", &hist);
     Rast_command_history(&hist);
@@ -107,10 +107,10 @@ int write_gof_rg(struct globals *globals)
     G_debug(1, "Opening input rasters...");
     for (n = 0; n < globals->Ref.nfiles; n++) {
 	inbuf[n] = Rast_allocate_d_buf();
-	in_fd[n] = Rast_open_old(globals->Ref.file[n].name, globals->Ref.file[n].mapset);
+	in_fd[n] = Rast_open_old(globals->Ref.file[n].name, globals->Ref.file[n].subproject);
 
 	/* returns -1 on error, 2 on empty range, quitting either way. */
-	if (Rast_read_fp_range(globals->Ref.file[n].name, globals->Ref.file[n].mapset, &fp_range[n]) != 1)
+	if (Rast_read_fp_range(globals->Ref.file[n].name, globals->Ref.file[n].subproject, &fp_range[n]) != 1)
 	    G_fatal_error(_("No min/max found in raster map <%s>"),
 			  globals->Ref.file[n].name);
 	Rast_get_fp_range_min_max(&(fp_range[n]), &min[n], &max[n]);
@@ -192,7 +192,7 @@ int write_gof_rg(struct globals *globals)
 
     Rast_init_colors(&colors);
     Rast_make_grey_scale_fp_colors(&colors, mingood, 1);
-    Rast_write_colors(globals->gof, G_mapset(), &colors);
+    Rast_write_colors(globals->gof, G_subproject(), &colors);
 
     Rast_short_history(globals->gof, "raster", &hist);
     Rast_command_history(&hist);
@@ -262,8 +262,8 @@ int write_bands_ms(struct globals *globals)
     for (n = 0; n < globals->nbands; n++) {
 	Rast_close(out_fd[n]);
 
-	Rast_read_colors(globals->Ref.file[n].name, globals->Ref.file[n].mapset, &colors);
-	Rast_write_colors(name[n], G_mapset(), &colors);
+	Rast_read_colors(globals->Ref.file[n].name, globals->Ref.file[n].subproject, &colors);
+	Rast_write_colors(name[n], G_subproject(), &colors);
 
 	Rast_short_history(name[n], "raster", &hist);
 	Rast_command_history(&hist);

@@ -37,7 +37,7 @@ static void rast_segment_load(SEGMENT * segment, int rowio,
 void rast_segment_open(SEGMENT * segment, const char *name,
                        RASTER_MAP_TYPE * map_type)
 {
-    /* TODO: check if not passing the mapset is OK */
+    /* TODO: check if not passing the subproject is OK */
     int rowio = Rast_open_old(name, "");
 
     *map_type = Rast_get_map_type(rowio);

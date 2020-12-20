@@ -26,7 +26,7 @@ v.db.select geology column=GEO_NAME,SHAPE_area
 # import of CSV table
 db.in.ogr input=nc_geology.csv output=nc_geology
 
-# work on copy of geology map in current mapset
+# work on copy of geology map in current subproject
 g.copy vector=geology,mygeology
 
 # check column names of vector map attributes

@@ -31,7 +31,7 @@
 /*!
    \brief Open existing OGR layer on non-topological level
 
-   Note: Map->name, Map->mapset, Map->fInfo.ogr.dsn and
+   Note: Map->name, Map->subproject, Map->fInfo.ogr.dsn and
    Map->fInfo.ogr.layer_name must be set before.
 
    \param[in,out] Map pointer to Map_info structure
@@ -138,8 +138,8 @@ int V2_open_old_ogr(struct Map_info *Map)
 {
 #ifdef HAVE_OGR
 
-    G_debug(3, "V2_open_old_ogr(): name = %s mapset = %s", Map->name,
-	    Map->mapset);
+    G_debug(3, "V2_open_old_ogr(): name = %s subproject = %s", Map->name,
+	    Map->subproject);
 
     if (Vect_open_fidx(Map, &(Map->fInfo.ogr.offset)) != 0) {
 	G_warning(_("Unable to open feature index file for vector map <%s>"),
@@ -252,12 +252,12 @@ int Vect_open_fidx(struct Map_info *Map, struct Format_info_offset *offset)
     struct gvfile fp;
     struct Port_info port;
     
-    G_debug(1, "Vect_open_fidx(): name = %s mapset = %s format = %d",
-	    Map->name, Map->mapset, Map->format);
+    G_debug(1, "Vect_open_fidx(): name = %s subproject = %s format = %d",
+	    Map->name, Map->subproject, Map->format);
     
     sprintf(elem, "%s/%s", GV_DIRECTORY, Map->name);
     dig_file_init(&fp);
-    fp.file = G_fopen_old(elem, GV_FIDX_ELEMENT, Map->mapset);
+    fp.file = G_fopen_old(elem, GV_FIDX_ELEMENT, Map->subproject);
     if (fp.file == NULL) {
         G_debug(1, "unable to open fidx file for vector map <%s>",
                 Vect_get_full_name(Map));

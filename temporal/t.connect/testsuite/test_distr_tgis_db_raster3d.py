@@ -16,22 +16,22 @@ import os
 
 class testRaster3dExtraction(TestCase):
 
-    mapsets_to_remove = []
+    subprojects_to_remove = []
     outfile = 'rast3dlist.txt'
     gisenv = SimpleModule('g.gisenv', get='MAPSET')
     TestCase.runModule(gisenv, expecting_stdout=True)
-    old_mapset = gisenv.outputs.stdout.strip()
+    old_subproject = gisenv.outputs.stdout.strip()
 
     @classmethod
     def setUpClass(cls):
         os.putenv("GRASS_OVERWRITE", "1")
         for i in range(1, 5):
-            mapset_name = "test3d%i" % i
-            cls.runModule("g.mapset", flags="c", mapset=mapset_name)
-            cls.mapsets_to_remove.append(mapset_name)
+            subproject_name = "test3d%i" % i
+            cls.runModule("g.subproject", flags="c", subproject=subproject_name)
+            cls.subprojects_to_remove.append(subproject_name)
             cls.runModule("g.region", s=0, n=80,
                           w=0, e=120, b=0, t=50, res=10, res3=10)
-            # Use always the current mapset as temporal database
+            # Use always the current subproject as temporal database
             cls.runModule("r3.mapcalc", expression="a1 = 100")
             cls.runModule("r3.mapcalc", expression="a2 = 200")
             cls.runModule("r3.mapcalc", expression="a3 = 300")
@@ -45,10 +45,10 @@ class testRaster3dExtraction(TestCase):
                 maps="a1,a2,a3",
                 start="2001-01-01", increment="%i months" % i)
 
-        # Add the new mapsets to the search path
-        for mapset in cls.mapsets_to_remove:
-            cls.runModule("g.mapset", mapset=mapset)
-            cls.runModule("g.mapsets", operation="add", mapset=','.join(cls.mapsets_to_remove))
+        # Add the new subprojects to the search path
+        for subproject in cls.subprojects_to_remove:
+            cls.runModule("g.subproject", subproject=subproject)
+            cls.runModule("g.subprojects", operation="add", subproject=','.join(cls.subprojects_to_remove))
 
     @classmethod
     def tearDownClass(cls):
@@ -57,14 +57,14 @@ class testRaster3dExtraction(TestCase):
         gisdbase = gisenv.outputs.stdout.strip()
         gisenv = SimpleModule('g.gisenv', get='LOCATION_NAME')
         cls.runModule(gisenv, expecting_stdout=True)
-        location = gisenv.outputs.stdout.strip()
-        cls.runModule("g.mapset", mapset=cls.old_mapset)
-        for mapset_name in cls.mapsets_to_remove:
-            mapset_path = os.path.join(gisdbase, location, mapset_name)
-            silent_rmtree(mapset_path)
+        project = gisenv.outputs.stdout.strip()
+        cls.runModule("g.subproject", subproject=cls.old_subproject)
+        for subproject_name in cls.subprojects_to_remove:
+            subproject_path = os.path.join(gisdbase, project, subproject_name)
+            silent_rmtree(subproject_path)
 
     def test_tlist(self):
-        self.runModule("g.mapset", mapset="test3d1")
+        self.runModule("g.subproject", subproject="test3d1")
 
         list_string = """A|test3d1|2001-01-01 00:00:00|2001-04-01 00:00:00|3
                                 A|test3d2|2001-01-01 00:00:00|2001-07-01 00:00:00|3
@@ -73,7 +73,7 @@ class testRaster3dExtraction(TestCase):
 
         t_list = SimpleModule(
             "t.list", quiet=True,
-            columns=["name", "mapset,start_time", "end_time", "number_of_maps"],
+            columns=["name", "subproject,start_time", "end_time", "number_of_maps"],
             type="str3ds", where='name = "A"')
         self.assertModule(t_list)
 
@@ -84,7 +84,7 @@ class testRaster3dExtraction(TestCase):
 
         t_list = SimpleModule(
             "t.list", quiet=True,
-            columns=["name", "mapset,start_time", "end_time", "number_of_maps"],
+            columns=["name", "subproject,start_time", "end_time", "number_of_maps"],
             type="str3ds", where='name = "A"', output=self.outfile)
         self.assertModule(t_list)
         self.assertFileExists(self.outfile)
@@ -97,7 +97,7 @@ class testRaster3dExtraction(TestCase):
             os.remove(self.outfile)
 
     def test_trast_list(self):
-        self.runModule("g.mapset", mapset="test3d1")
+        self.runModule("g.subproject", subproject="test3d1")
 
         list_string = """a1|test3d1|2001-01-01 00:00:00|2001-02-01 00:00:00
                                 a2|test3d1|2001-02-01 00:00:00|2001-03-01 00:00:00
@@ -163,10 +163,10 @@ class testRaster3dExtraction(TestCase):
             os.remove(self.outfile)
 
     def test_strds_info(self):
-        self.runModule("g.mapset", mapset="test3d4")
+        self.runModule("g.subproject", subproject="test3d4")
         tinfo_string = """id=A@test3d1
                                     name=A
-                                    mapset=test3d1
+                                    subproject=test3d1
                                     start_time='2001-01-01 00:00:00'
                                     end_time='2001-04-01 00:00:00'
                                     granularity='1 month'"""
@@ -176,10 +176,10 @@ class testRaster3dExtraction(TestCase):
         self.assertModuleKeyValue(
             module=info, reference=tinfo_string, precision=2, sep="=")
 
-        self.runModule("g.mapset", mapset="test3d3")
+        self.runModule("g.subproject", subproject="test3d3")
         tinfo_string = """id=A@test3d2
                                     name=A
-                                    mapset=test3d2
+                                    subproject=test3d2
                                     start_time='2001-01-01 00:00:00'
                                     end_time='2001-07-01 00:00:00'
                                     granularity='2 months'"""
@@ -189,10 +189,10 @@ class testRaster3dExtraction(TestCase):
         self.assertModuleKeyValue(
             module=info, reference=tinfo_string, precision=2, sep="=")
 
-        self.runModule("g.mapset", mapset="test3d2")
+        self.runModule("g.subproject", subproject="test3d2")
         tinfo_string = """id=A@test3d3
                                     name=A
-                                    mapset=test3d3
+                                    subproject=test3d3
                                     start_time='2001-01-01 00:00:00'
                                     end_time='2001-10-01 00:00:00'
                                     granularity='3 months'"""
@@ -202,10 +202,10 @@ class testRaster3dExtraction(TestCase):
         self.assertModuleKeyValue(
             module=info, reference=tinfo_string, precision=2, sep="=")
 
-        self.runModule("g.mapset", mapset="test3d1")
+        self.runModule("g.subproject", subproject="test3d1")
         tinfo_string = """id=A@test3d4
                                     name=A
-                                    mapset=test3d4
+                                    subproject=test3d4
                                     start_time='2001-01-01 00:00:00'
                                     end_time='2002-01-01 00:00:00'
                                     granularity='4 months'"""
@@ -216,10 +216,10 @@ class testRaster3dExtraction(TestCase):
             module=info, reference=tinfo_string, precision=2, sep="=")
 
     def test_raster_info(self):
-        self.runModule("g.mapset", mapset="test3d3")
+        self.runModule("g.subproject", subproject="test3d3")
         tinfo_string = """id=a1@test3d1
                                 name=a1
-                                mapset=test3d1
+                                subproject=test3d1
                                 temporal_type=absolute
                                 start_time='2001-01-01 00:00:00'
                                 end_time='2001-02-01 00:00:00'"""
@@ -231,7 +231,7 @@ class testRaster3dExtraction(TestCase):
 
         tinfo_string = """id=a1@test3d2
                                 name=a1
-                                mapset=test3d2
+                                subproject=test3d2
                                 temporal_type=absolute
                                 start_time='2001-01-01 00:00:00'
                                 end_time='2001-03-01 00:00:00'"""
@@ -243,7 +243,7 @@ class testRaster3dExtraction(TestCase):
 
         tinfo_string = """id=a1@test3d3
                                 name=a1
-                                mapset=test3d3
+                                subproject=test3d3
                                 temporal_type=absolute
                                 start_time='2001-01-01 00:00:00'
                                 end_time='2001-04-01 00:00:00'"""
@@ -255,7 +255,7 @@ class testRaster3dExtraction(TestCase):
 
         tinfo_string = """id=a1@test3d4
                                 name=a1
-                                mapset=test3d4
+                                subproject=test3d4
                                 temporal_type=absolute
                                 start_time='2001-01-01 00:00:00'
                                 end_time='2001-05-01 00:00:00'"""

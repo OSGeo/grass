@@ -31,17 +31,17 @@
 #%end
 
 ##%option G_OPT_M_LOCATION
-##% key: source_location
-##% label: The name of the source location (has no projection)
-##% description: The name of the source location (has no projection)
+##% key: source_project
+##% label: The name of the source project (has no projection)
+##% description: The name of the source project (has no projection)
 ###% section: source
 ##% required: yes
 ##%end
 
 ##%option G_OPT_M_MAPSET
-##% key: source_mapset
-##% label: The name of the source mapset (has no projection)
-##% description: The name of the source mapset (has no projection)
+##% key: source_subproject
+##% label: The name of the source subproject (has no projection)
+##% description: The name of the source subproject (has no projection)
 ###% section: source
 ##% required: yes
 ##%end
@@ -60,8 +60,8 @@
 
 ##%option G_OPT_R_INPUT
 ##% key: target_image
-##% label: The name of the image that is already georeferenced used to find location of GCPs
-##% description: The name of the image that is already georeferenced used to find the location of GCPs
+##% label: The name of the image that is already georeferenced used to find project of GCPs
+##% description: The name of the image that is already georeferenced used to find the project of GCPs
 ###% section: target
 ##% required: no
 ##%end
@@ -128,15 +128,15 @@ def main():
     else:
         os.environ['GRASS_RENDER_IMMEDIATE'] = 'cairo'
 
-#    if options['source_location']:
-#        src_loc = options['source_location']
+#    if options['source_project']:
+#        src_loc = options['source_project']
 #    else:
-#        gscript.fatal(_("No georeferenced source location provided"))
+#        gscript.fatal(_("No georeferenced source project provided"))
 
-#    if options['source_mapset']:
-#        src_mpt = options['source_mapset']
+#    if options['source_subproject']:
+#        src_mpt = options['source_subproject']
 #    else:
-#        gscript.fatal(_("No georeferenced source mapset provided"))
+#        gscript.fatal(_("No georeferenced source subproject provided"))
 
 #    if options['source_group']:
 #        src_grp = options['source_group']

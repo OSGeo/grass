@@ -389,22 +389,22 @@ static int use_r_out(void)
 static void mlist(const char *element, const char *wildarg, const char *outfile)
 {
     int n;
-    const char *mapset;
+    const char *subproject;
 
-    for (n = 0; (mapset = G_get_mapset_name(n)); n++) {
+    for (n = 0; (subproject = G_get_subproject_name(n)); n++) {
 	char type_arg[GNAME_MAX];
 	char pattern_arg[GNAME_MAX];
-	char mapset_arg[GMAPSET_MAX];
+	char subproject_arg[GMAPSET_MAX];
 
-	if (strcmp(mapset, ".") == 0)
-	    mapset = G_mapset();
+	if (strcmp(subproject, ".") == 0)
+	    subproject = G_subproject();
 
 	sprintf(type_arg, "type=%s", element);
 	sprintf(pattern_arg, "pattern=%s", wildarg);
-	sprintf(mapset_arg, "mapset=%s", mapset);
+	sprintf(subproject_arg, "subproject=%s", subproject);
 
 	G_spawn_ex("g.list", "g.list",
-		   type_arg, pattern_arg, mapset_arg,
+		   type_arg, pattern_arg, subproject_arg,
 		   SF_REDIRECT_FILE, SF_STDOUT, SF_MODE_APPEND, outfile,
 		   NULL);
     }

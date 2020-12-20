@@ -59,7 +59,7 @@ void find_edge_cells(struct Map *map, int null)
 	buf2[col] = 0;
     }
 
-    fd = Rast_open_old(map->name, map->mapset);
+    fd = Rast_open_old(map->name, map->subproject);
 
     init_edge_list(map);
 

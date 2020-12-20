@@ -34,8 +34,8 @@
 int main(int argc, char *argv[])
 {
     char rname[GNAME_MAX];	/* Reclassed map name */
-    char rmapset[GMAPSET_MAX];	/* Reclassed mapset   */
-    const char *mapset;		/* Raster mapset      */
+    char rsubproject[GMAPSET_MAX];	/* Reclassed subproject   */
+    const char *subproject;		/* Raster subproject      */
     struct Cell_head cellhd;
     struct GModule *module;
     struct Option *raster, *title_opt, *history_opt;
@@ -140,14 +140,14 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    /* Make sure raster exists and set mapset */
+    /* Make sure raster exists and set subproject */
     infile = raster->answer;
-    mapset = G_find_raster2(infile, G_mapset());	/* current mapset only for editing */
-    if (!mapset || strcmp(mapset, G_mapset()) != 0)
-	G_fatal_error(_("Raster map <%s> not found in current mapset"), infile);
+    subproject = G_find_raster2(infile, G_subproject());	/* current subproject only for editing */
+    if (!subproject || strcmp(subproject, G_subproject()) != 0)
+	G_fatal_error(_("Raster map <%s> not found in current subproject"), infile);
 
     Rast_get_cellhd(raster->answer, "", &cellhd);
-    is_reclass = (Rast_is_reclass(raster->answer, "", rname, rmapset) > 0);
+    is_reclass = (Rast_is_reclass(raster->answer, "", rname, rsubproject) > 0);
 
     if (title_opt->answer) {
         Rast_put_cell_title(raster->answer, title_opt->answer);
@@ -304,9 +304,9 @@ int main(int argc, char *argv[])
 	/* Write a file of no-nulls */
 	G_message(_("Removing null file for [%s]...\n"), raster->answer);
 
-	G_file_name_misc(path, "cell_misc", "null", raster->answer, G_mapset());
+	G_file_name_misc(path, "cell_misc", "null", raster->answer, G_subproject());
 	unlink(path);
-	G_file_name_misc(path, "cell_misc", "nullcmpr", raster->answer, G_mapset());
+	G_file_name_misc(path, "cell_misc", "nullcmpr", raster->answer, G_subproject());
 	unlink(path);
 
 	G_done_msg(_("Done."));

@@ -278,7 +278,7 @@ class TestGdalImportFails(TestCase):
                               output="test_gdal_import_map")
 
     def test_error_handling_2(self):
-        # No location specified
+        # No project specified
         self.assertModuleFail("r.in.gdal",
                               input="data/elevation.nc",
                               flags="c",

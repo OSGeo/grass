@@ -94,7 +94,7 @@ def file_matches(filename, patterns):
 def starts_with_module(string, module):
     # not solving:
     # module = module.replace('wxGUI.', 'g.gui.')
-    # TODO: matches g.mapsets images for g.mapset and d.rast.num for d.rast
+    # TODO: matches g.subprojects images for g.subproject and d.rast.num for d.rast
     if string.startswith(module.replace('.', '_')):
         return True
     if string.startswith(module.replace('.', '')):
@@ -110,7 +110,7 @@ def get_module_image(module, images):
         if starts_with_module(image, module):
             candidates.append(image)
     if len(candidates) == 1:
-        # matches g.mapsets images for g.mapset and d.rast.num for d.rast
+        # matches g.subprojects images for g.subproject and d.rast.num for d.rast
         return candidates[0]
     if not candidates:
         return None

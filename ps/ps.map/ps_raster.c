@@ -100,7 +100,7 @@ int PS_raster_plot(void)
     /* let user know what's happenning */
     if (PS.do_raster)
 	G_message(_("Reading raster map <%s>..."),
-		  G_fully_qualified_name(PS.cell_name, PS.cell_mapset));
+		  G_fully_qualified_name(PS.cell_name, PS.cell_subproject));
     else
 	G_message(_("Reading raster maps in group <%s>..."),
 		  grp.group_name);

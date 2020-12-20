@@ -22,7 +22,7 @@
   \brief Write color table for vector map
   
   The color table is written for the vector map <i>name</i> in the
-  specified <i>mapset</i> from the <i>colors</i> structure.
+  specified <i>subproject</i> from the <i>colors</i> structure.
   
   The <i>colors</i> structure must be created properly, i.e.,
   Rast_init_colors() to initialize the structure and
@@ -31,16 +31,16 @@
   color tables, such as Rast_read_colors() or Rast_make_ramp_colors().
   
   <b>Note:</b> The calling sequence for this function deserves
-  special attention. The <i>mapset</i> parameter seems to imply that
+  special attention. The <i>subproject</i> parameter seems to imply that
   it is possible to overwrite the color table for a vector map which
-  is in another mapset. However, this is not what actually
+  is in another subproject. However, this is not what actually
   happens. It is very useful for users to create their own color
-  tables for vector maps in other mapsets, but without overwriting
-  other users' color tables for the same raster map. If <i>mapset</i>
-  is the current mapset, then the color file for <i>name</i> will be
-  overwritten by the new color table. But if <i>mapset</i> is not the
-  current mapset, then the color table is actually written in the
-  current mapset under the <tt>colr2</tt> element as:
+  tables for vector maps in other subprojects, but without overwriting
+  other users' color tables for the same raster map. If <i>subproject</i>
+  is the current subproject, then the color file for <i>name</i> will be
+  overwritten by the new color table. But if <i>subproject</i> is not the
+  current subproject, then the color table is actually written in the
+  current subproject under the <tt>colr2</tt> element as:
   <tt>vector/name/colr2</tt>.
   
   The rules are written out using floating-point format, removing
@@ -53,38 +53,38 @@
   export to sites which don't yet have 4.0
   
   \param name vector map name
-  \param mapset mapset name
+  \param subproject subproject name
   \param colors pointer to structure Colors which holds color info
   
   \return void
 */
-void Vect_write_colors(const char *name, const char *mapset,
+void Vect_write_colors(const char *name, const char *subproject,
 		       struct Colors *colors)
 {
     char element[GPATH_MAX];
     const char *cname;
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
     FILE *fd;
     
-    if (G_name_is_fully_qualified(name, xname, xmapset)) {
-	if (strcmp(xmapset, mapset) != 0)
-	    G_fatal_error(_("Qualified name <%s> doesn't match mapset <%s>"),
-			  name, mapset);
+    if (G_name_is_fully_qualified(name, xname, xsubproject)) {
+	if (strcmp(xsubproject, subproject) != 0)
+	    G_fatal_error(_("Qualified name <%s> doesn't match subproject <%s>"),
+			  name, subproject);
 	name = xname;
-	mapset = xmapset;
+	subproject = xsubproject;
     }
     
     /*
-      if mapset is current mapset, write original color table
+      if subproject is current subproject, write original color table
       else write secondary color table
     */
-    if (strcmp(mapset, G_mapset()) == 0) {
+    if (strcmp(subproject, G_subproject()) == 0) {
 	cname = GV_COLR_ELEMENT;
 	sprintf(element, "%s/%s", GV_DIRECTORY, name);
     }
     else {
 	cname = name;
-	sprintf(element, "%s/%s", GV_COLR2_DIRECTORY, mapset);
+	sprintf(element, "%s/%s", GV_COLR2_DIRECTORY, subproject);
     }
 
     if (!(fd = G_fopen_new(element, cname)))

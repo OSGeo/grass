@@ -736,7 +736,7 @@ int gvl_isosurf_calc(geovol * gvol)
  */
 void gvl_write_char(int pos, unsigned char **data, unsigned char c)
 {
-    /* check to need allocation memory */
+    /* check to need alproject memory */
     if ((pos % BUFFER_SIZE) == 0) {
 	*data = (char *)G_realloc(*data,
 				  sizeof(char) * ((pos / BUFFER_SIZE) +

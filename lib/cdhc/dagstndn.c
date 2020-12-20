@@ -11,7 +11,7 @@ double *Cdhc_dagostino_d(double *x, int n)
     double d, s, t = 0., *xcopy, m2, s1 = 0., s2, mn = 0.0;
 
     if ((xcopy = (double *)malloc(n * sizeof(double))) == NULL) {
-	fprintf(stderr, "Memory allocation error\n");
+	fprintf(stderr, "Memory alproject error\n");
 	exit(EXIT_FAILURE);
     }
 

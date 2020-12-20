@@ -75,7 +75,7 @@ typedef struct RASTER3D_Map
 
     char *fileName;
     char *tempName;
-    char *mapset;
+    char *subproject;
 
     /* operation performed on map */
     int operation;		/* RASTER3D_WRITE_DATA or RASTER3D_READ_DATA */

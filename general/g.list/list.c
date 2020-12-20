@@ -13,7 +13,7 @@ static int region_overlaps(const struct Cell_head *, const char *, const char *,
 static int compare_elist(const void *, const void *);
 
 void make_list(struct elist **el, int *lcount, int *lalloc,
-	       const struct list *elem, const char *mapset,
+	       const struct list *elem, const char *subproject,
 	       const struct Cell_head *window)
 {
     char path[GPATH_MAX];
@@ -25,7 +25,7 @@ void make_list(struct elist **el, int *lcount, int *lalloc,
     element = elem->element[0];
     alias = elem->alias;
 
-    G_file_name(path, element, "", mapset);
+    G_file_name(path, element, "", subproject);
     if (access(path, 0) != 0)
 	return;
 
@@ -41,7 +41,7 @@ void make_list(struct elist **el, int *lcount, int *lalloc,
     else
 	type = TYPE_OTHERS;
 
-    /* Suppress "... found in more mapsets" warnings from G_find_file2. */
+    /* Suppress "... found in more subprojects" warnings from G_find_file2. */
     G_suppress_warnings(1);
 
     if (*lcount + count > *lalloc) {
@@ -55,13 +55,13 @@ void make_list(struct elist **el, int *lcount, int *lalloc,
 	if (window) {
 	    /* If the map region doesn't overlap with the input region, don't
 	     * print the map. */
-	    if (!region_overlaps(window, list[i], mapset, type))
+	    if (!region_overlaps(window, list[i], subproject, type))
 		continue;
 	}
 
 	(*el)[*lcount].type = G_store(alias);
 	(*el)[*lcount].name = list[i];
-	(*el)[*lcount].mapset = G_store(mapset);
+	(*el)[*lcount].subproject = G_store(subproject);
 	(*lcount)++;
     }
 
@@ -71,7 +71,7 @@ void make_list(struct elist **el, int *lcount, int *lalloc,
 }
 
 void print_list(FILE *fp, struct elist *el, int count, const char *separator,
-		int add_type, int add_mapset)
+		int add_type, int add_subproject)
 {
     int i;
 
@@ -81,7 +81,7 @@ void print_list(FILE *fp, struct elist *el, int count, const char *separator,
     qsort(el, count, sizeof(struct elist), compare_elist);
 
     for (i = 0; i < count; i++) {
-	int need_mapset = 0;
+	int need_subproject = 0;
 
 	if (i != 0)
 	    fprintf(fp, "%s", separator);
@@ -91,21 +91,21 @@ void print_list(FILE *fp, struct elist *el, int count, const char *separator,
 
 	fprintf(fp, "%s", el[i].name);
 
-	if (!add_mapset) {
+	if (!add_subproject) {
 	    if (i + 1 < count)
-		need_mapset = strcmp(el[i].name, el[i + 1].name) == 0;
-	    if (!need_mapset && i > 0)
-		need_mapset = strcmp(el[i].name, el[i - 1].name) == 0;
+		need_subproject = strcmp(el[i].name, el[i + 1].name) == 0;
+	    if (!need_subproject && i > 0)
+		need_subproject = strcmp(el[i].name, el[i - 1].name) == 0;
 	}
-	if (add_mapset || need_mapset)
-	    fprintf(fp, "@%s", el[i].mapset);
+	if (add_subproject || need_subproject)
+	    fprintf(fp, "@%s", el[i].subproject);
     }
 
     fflush(fp);
 }
 
 static int region_overlaps(const struct Cell_head *window, const char *name,
-			   const char *mapset, int type)
+			   const char *subproject, int type)
 {
     int has_region;
     struct Cell_head map_window;
@@ -115,21 +115,21 @@ static int region_overlaps(const struct Cell_head *window, const char *name,
 
     switch (type) {
     case TYPE_RAST:
-	Rast_get_cellhd(name, mapset, &map_window);
+	Rast_get_cellhd(name, subproject, &map_window);
 	has_region = 1;
 	break;
     case TYPE_RAST3D:
-	if (Rast3d_read_region_map(name, mapset, &region3d) < 0)
+	if (Rast3d_read_region_map(name, subproject, &region3d) < 0)
 	    G_fatal_error(_("Unable to read header of 3D raster map <%s@%s>"),
-			  name, mapset);
+			  name, subproject);
 	Rast3d_region_to_cell_head(&region3d, &map_window);
 	has_region = 1;
 	break;
     case TYPE_VECT:
 	Vect_set_open_level(2);
-	if (Vect_open_old_head(&Map, name, mapset) < 2)
+	if (Vect_open_old_head(&Map, name, subproject) < 2)
 	    G_fatal_error(_("Unable to open vector map <%s@%s> on topological level"),
-			  name, mapset);
+			  name, subproject);
 	Vect_get_map_box(&Map, &box);
 	Vect_close(&Map);
 
@@ -165,7 +165,7 @@ static int compare_elist(const void *a, const void *b)
 
     if (!(ret = strcmp(al->type, bl->type))) {
 	if (!(ret = strcmp(al->name, bl->name)))
-	    ret = strcmp(al->mapset, bl->mapset);
+	    ret = strcmp(al->subproject, bl->subproject);
     }
 
     return ret;

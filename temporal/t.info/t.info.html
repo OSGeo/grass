@@ -5,7 +5,7 @@ registered in the temporal database in human readable or shell script
 style. Datasets are raster, 3D raster and vector maps as well as their
 corresponding space time datasets (STRDS, STR3DS and STVDS). This
 module reports the information that are stored in the temporal
-database. These are basic information (id, name, mapset, creator,
+database. These are basic information (id, name, subproject, creator,
 creation time, temporal type), the temporal and spatial extent and
 dataset type specific metadata. The user has to utilize <em>r.info</em>,
 <em>r3.info</em>, <em>v.info</em> to report detailed information about
@@ -17,9 +17,9 @@ can be reported.
 
 <h2>NOTES</h2>
 
-Temporal databases stored in other mapsets can be used as long as they
-are in the user's current mapset search path (managed with
-<a href="g.mapsets.html">g.mapsets</a>).
+Temporal databases stored in other subprojects can be used as long as they
+are in the user's current subproject search path (managed with
+<a href="g.subprojects.html">g.subprojects</a>).
 
 <h2>EXAMPLES</h2>
 
@@ -50,7 +50,7 @@ t.info input=tempmean_monthly
  +-------------------- Basic information -------------------------------------+
  | Id: ........................ tempmean_monthly@climate_2000_2012
  | Name: ...................... tempmean_monthly
- | Mapset: .................... climate_2000_2012
+ | Subproject: .................... climate_2000_2012
  | Creator: ................... lucadelu
  | Temporal type: ............. absolute
  | Creation time: ............. 2014-11-27 08:50:48.443229
@@ -110,7 +110,7 @@ t.info input=2009_01_tempmean type=raster
  +-------------------- Basic information -------------------------------------+
  | Id: ........................ 2009_01_tempmean@climate_2000_2012
  | Name: ...................... 2009_01_tempmean
- | Mapset: .................... climate_2000_2012
+ | Subproject: .................... climate_2000_2012
  | Creator: ................... lucadelu
  | Temporal type: ............. absolute
  | Creation time: ............. 2014-11-27 09:44:26.280147

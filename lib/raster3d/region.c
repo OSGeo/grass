@@ -229,17 +229,17 @@ void Rast3d_region_copy(RASTER3D_Region * regionDest, RASTER3D_Region * regionSr
 /*---------------------------------------------------------------------------*/
 
 int
-Rast3d_read_region_map(const char *name, const char *mapset, RASTER3D_Region * region)
+Rast3d_read_region_map(const char *name, const char *subproject, RASTER3D_Region * region)
 {
     char fullName[GPATH_MAX];
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 
-    if (G_name_is_fully_qualified(name, xname, xmapset))
-    Rast3d_filename(fullName, RASTER3D_HEADER_ELEMENT, xname, xmapset);
+    if (G_name_is_fully_qualified(name, xname, xsubproject))
+    Rast3d_filename(fullName, RASTER3D_HEADER_ELEMENT, xname, xsubproject);
     else {
-    if (!mapset || !*mapset)
-        mapset = G_find_raster3d(name, "");
-    Rast3d_filename(fullName, RASTER3D_HEADER_ELEMENT, name, mapset);
+    if (!subproject || !*subproject)
+        subproject = G_find_raster3d(name, "");
+    Rast3d_filename(fullName, RASTER3D_HEADER_ELEMENT, name, subproject);
     }
     return Rast3d_read_window(region, fullName);
 }
@@ -260,7 +260,7 @@ Rast3d_read_region_map(const char *name, const char *mapset, RASTER3D_Region * r
  *  \return int
  */
 
-int Rast3d_is_valid_location(RASTER3D_Region *region, double north, double east, double top)
+int Rast3d_is_valid_project(RASTER3D_Region *region, double north, double east, double top)
 {
     return ((north >= region->south) && (north <= region->north) &&
         (east >= region->west) && (east <= region->east) &&
@@ -287,7 +287,7 @@ int Rast3d_is_valid_location(RASTER3D_Region *region, double north, double east,
  */
 
 void
-Rast3d_location2coord(RASTER3D_Region *region, double north, double east, double top,
+Rast3d_project2coord(RASTER3D_Region *region, double north, double east, double top,
            int *x, int *y, int *z)
 {
     double col, row, depth;
@@ -318,12 +318,12 @@ Rast3d_location2coord(RASTER3D_Region *region, double north, double east, double
  */
 
 void
-Rast3d_location2coord_double(RASTER3D_Region *region, double north, double east, double top,
+Rast3d_project2coord_double(RASTER3D_Region *region, double north, double east, double top,
            double *x, double *y, double *z)
 {
     LOCATION_TO_COORD(region, north, east, top, x, y, z);
 
-    G_debug(4, "Rast3d_location2coord_double x %f y %f z %f\n", *x, *y, *z);
+    G_debug(4, "Rast3d_project2coord_double x %f y %f z %f\n", *x, *y, *z);
 }
 
 /*!
@@ -331,7 +331,7 @@ Rast3d_location2coord_double(RASTER3D_Region *region, double north, double east,
  *
  *  Converts region-coordinates <em>(north, east,
  *  top)</em> into cell-coordinates <em>(x, y, z)</em>.
- *  This function calls Rast3d_fatal_error in case location is not in window.
+ *  This function calls Rast3d_fatal_error in case project is not in window.
  *
  *  \param region
  *  \param north
@@ -344,11 +344,11 @@ Rast3d_location2coord_double(RASTER3D_Region *region, double north, double east,
  */
 
 void
-Rast3d_location2coord2(RASTER3D_Region *region, double north, double east, double top,
+Rast3d_project2coord2(RASTER3D_Region *region, double north, double east, double top,
            int *x, int *y, int *z)
 {
-    if (!Rast3d_is_valid_location(region, north, east, top))
-    Rast3d_fatal_error("Rast3d_location2coord2: location not in region");
+    if (!Rast3d_is_valid_project(region, north, east, top))
+    Rast3d_fatal_error("Rast3d_project2coord2: project not in region");
 
     double col, row, depth;
     LOCATION_TO_COORD(region, north, east, top, &col, &row, &depth);
@@ -389,9 +389,9 @@ Rast3d_location2coord2(RASTER3D_Region *region, double north, double east, doubl
  */
 
 void
-Rast3d_coord2location(RASTER3D_Region * region, double x, double y, double z, double *north, double *east, double *top)
+Rast3d_coord2project(RASTER3D_Region * region, double x, double y, double z, double *north, double *east, double *top)
 {
     COORD_TO_LOCATION(region, x, y, z, north, east, top);
 
-    G_debug(4, "Rast3d_coord2location north %g east %g top %g\n", *north, *east, *top);
+    G_debug(4, "Rast3d_coord2project north %g east %g top %g\n", *north, *east, *top);
 }

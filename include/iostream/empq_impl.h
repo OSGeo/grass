@@ -145,9 +145,9 @@ template<class T, class Key>
   //ESTIMATE AVAILABLE MEMORY BEFORE ALLOCATION
   AMI_err ae;
   size_t mm_avail = getAvailableMemory();
-  printf("EM_PQUEUE:available memory before allocation: %.2fMB\n",
+  printf("EM_PQUEUE:available memory before alproject: %.2fMB\n",
  	       mm_avail/(float)(1<<20));
-  printf("EM_PQUEUE:available memory before allocation: %ldB\n",
+  printf("EM_PQUEUE:available memory before alproject: %ldB\n",
 		 mm_avail);
 
 
@@ -182,9 +182,9 @@ template<class T, class Key>
   //____________________________________________________________
   //some memory checks- make sure the empq fits in memory !!
 
-  //estimate available memory after allocation 
+  //estimate available memory after alproject 
   mm_avail = getAvailableMemory();
-  printf("EM_PQUEUE: available memory after allocation: %.2fMB\n", 
+  printf("EM_PQUEUE: available memory after alproject: %.2fMB\n", 
 	       mm_avail/(float)(1<<20));
   
   //estimate AMI_STREAM memory usage
@@ -239,7 +239,7 @@ em_pqueue<T,Key>::em_pqueue() {
   AMI_err ae;
   //available memory
   size_t mm_avail = getAvailableMemory();
-  printf("EM_PQUEUE:available memory before allocation: %.2fMB\n", 
+  printf("EM_PQUEUE:available memory before alproject: %.2fMB\n", 
 	       mm_avail/(float)(1<<20));
   cout.flush();
 
@@ -346,7 +346,7 @@ em_pqueue<T,Key>::em_pqueue() {
   //  assert(N < buf_arity * (buf_arity + 1) * bufsize);
   //assert(N < maxlen());  
   mm_avail = getAvailableMemory();
-  printf("EM_PQUEUE: available memory after allocation: %.2fMB\n", 
+  printf("EM_PQUEUE: available memory after alproject: %.2fMB\n", 
 	       mm_avail/(float)(1<<20));
 }
 
@@ -475,7 +475,7 @@ em_pqueue<T,Key>::em_pqueue(MinMaxHeap<T> *im, AMI_STREAM<T> *amis) {
 
   //estimate available remaining memory 
   size_t mm_avail = getAvailableMemory();
-  printf("EM_PQUEUE: available memory after allocation: %.2fMB\n", 
+  printf("EM_PQUEUE: available memory after alproject: %.2fMB\n", 
 	 mm_avail/(float)(1<<20));
   
   //last thing: insert the input stream in external buffers

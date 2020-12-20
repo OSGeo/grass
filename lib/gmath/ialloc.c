@@ -31,7 +31,7 @@
 /**
  * \fn int *G_alloc_ivector (size_t n)
  *
- * \brief Vector matrix memory allocation.
+ * \brief Vector matrix memory alproject.
  *
  * Allocate a vector (array) of <b>n</b> integers initialized to zero.
  *
@@ -46,7 +46,7 @@ int *G_alloc_ivector(size_t n)
 /**
  * \fn int **G_alloc_imatrix (int rows, int cols)
  *
- * \brief Matrix memory allocation.
+ * \brief Matrix memory alproject.
  *
  * Allocate a matrix of <b>rows</b> by <b>cols</b> integers initialized
  * to zero.
@@ -71,7 +71,7 @@ int **G_alloc_imatrix(int rows, int cols)
 /**
  * \fn void G_free_ivector(int *v)
  *
- * \brief Vector memory deallocation.
+ * \brief Vector memory dealproject.
  *
  * Deallocate a vector (array) of integers.
  *
@@ -89,7 +89,7 @@ void G_free_ivector(int *v)
 /**
  * \fn int G_free_imatrix (int **m)
  *
- * \brief Matrix memory deallocation.
+ * \brief Matrix memory dealproject.
  *
  * Deallocate a matrix of integers.
  *

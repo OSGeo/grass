@@ -18,14 +18,14 @@ char *maskinfo(void)
     int first, next;
 
     results = NULL;
-    if (G_find_raster("MASK", G_mapset()) == NULL)
+    if (G_find_raster("MASK", G_subproject()) == NULL)
 	return "none";
-    if (Rast_get_reclass("MASK", G_mapset(), &reclass) <= 0) {
-	sprintf(text, "MASK in %s", G_mapset());
+    if (Rast_get_reclass("MASK", G_subproject(), &reclass) <= 0) {
+	sprintf(text, "MASK in %s", G_subproject());
 	return append(results, text);
     }
 
-    sprintf(text, "%s in %s", reclass.name, reclass.mapset);
+    sprintf(text, "%s in %s", reclass.name, reclass.subproject);
     results = append(results, text);
     next = 0;
     first = 1;

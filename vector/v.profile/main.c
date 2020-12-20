@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
     /* GCC */
     int ncols = 0;
     double xval, yval, bufsize;
-    const char *mapset, *pro_mapset;
+    const char *subproject, *pro_subproject;
     char sql[200], *fs;
 
     struct GModule *module;
@@ -355,18 +355,18 @@ int main(int argc, char *argv[])
     }
     else {
         /* Check provided profile map name validity */
-        if ((pro_mapset = G_find_vector2(inline_map->answer, "")) == NULL)
+        if ((pro_subproject = G_find_vector2(inline_map->answer, "")) == NULL)
             G_fatal_error(_("Vector map <%s> not found"), inline_map->answer);
     }
 
-    if ((mapset = G_find_vector2(old_map->answer, "")) == NULL)
+    if ((subproject = G_find_vector2(old_map->answer, "")) == NULL)
         G_fatal_error(_("Vector map <%s> not found"), old_map->answer);
 
     if (Vect_set_open_level(2))
         G_fatal_error(_("Unable to set predetermined vector open level"));
 
     /* Open existing vector map for reading */
-    if (Vect_open_old(&In, old_map->answer, mapset) < 1)
+    if (Vect_open_old(&In, old_map->answer, subproject) < 1)
         G_fatal_error(_("Unable to open vector map <%s>"), old_map->answer);
 
     /* Process input as 3D only if it's required */
@@ -389,8 +389,8 @@ int main(int argc, char *argv[])
 
     /* Get profile line from an existing vector map */
     if (inline_map->answer != NULL) {
-        /* If we get here, pro_mapset is inicialized */
-        if (1 > Vect_open_old(&Pro, inline_map->answer, pro_mapset))
+        /* If we get here, pro_subproject is inicialized */
+        if (1 > Vect_open_old(&Pro, inline_map->answer, pro_subproject))
             G_fatal_error(_("Unable to open vector map <%s>"),
                           inline_map->answer);
         if (inline_where->answer != NULL) {

@@ -14,12 +14,12 @@ specified to select a subset of the requested datasets.
 <h2>NOTES</h2>
 
 The SQL <em>where</em> and <em>sort</em> expression will be applied for
-each temporal database that was found in accessible mapsets. Hence
-sorting works only on mapset basis.
+each temporal database that was found in accessible subprojects. Hence
+sorting works only on subproject basis.
 <p>
-Temporal databases stored in other mapsets can be used as long as they
-are in the user's current mapset search path (managed with
-<a href="g.mapsets.html">g.mapsets</a>).
+Temporal databases stored in other subprojects can be used as long as they
+are in the user's current subproject search path (managed with
+<a href="g.subprojects.html">g.subprojects</a>).
 
 <h2>EXAMPLES</h2>
 
@@ -28,22 +28,22 @@ Obtain the list of space time raster dataset(s):
 <div class="code"><pre>
 t.list strds
 ----------------------------------------------
-Space time raster datasets with absolute time available in mapset &#60;climate_2000_2012&#62;:
+Space time raster datasets with absolute time available in subproject &#60;climate_2000_2012&#62;:
 tempmean_monthly@climate_2000_2012
 </pre></div>
 
-Obtain the list of space time raster datasets in a specific mapset (Note 
-that the target mapset must be in the user's search path):
+Obtain the list of space time raster datasets in a specific subproject (Note 
+that the target subproject must be in the user's search path):
 
 <div class="code"><pre>
 # strds in PERMANENT
-t.list strds where="mapset = 'PERMANENT'"
+t.list strds where="subproject = 'PERMANENT'"
 ----------------------------------------------
 
 # strds in climate_2000_2012
-t.list strds where="mapset = 'climate_2000_2012'"
+t.list strds where="subproject = 'climate_2000_2012'"
 ----------------------------------------------
-Space time raster datasets with absolute time available in mapset &#60;climate_2000_2012&#62;:
+Space time raster datasets with absolute time available in subproject &#60;climate_2000_2012&#62;:
 precip_abs@climate_2000_2012
 precipitation@climate_2000_2012
 tempmean@climate_2000_2012
@@ -57,19 +57,19 @@ href="g.list.html">g.list</a>.
 # strds whose name start with "precip"
 t.list type=strds where="name LIKE 'precip%'"
 ----------------------------------------------
-Space time raster datasets with absolute time available in mapset &#60;climate_1970_2012&#62;:
+Space time raster datasets with absolute time available in subproject &#60;climate_1970_2012&#62;:
 precip_abs@climate_1970_2012
 precipitation@climate_1970_2012
 </pre></div>
 
 The user can also obtain the list of time stamped raster maps. These maps 
 might be registered in strds or not. The output of the following command 
-can vary according to the accessible mapsets specified through 
-<a href="g.mapsets.html">g.mapsets</a>.
+can vary according to the accessible subprojects specified through 
+<a href="g.subprojects.html">g.subprojects</a>.
 
 <div class="code"><pre>
 t.list raster
-Time stamped raster maps with absolute time available in mapset &#60;climate_2000_2012&#62;:
+Time stamped raster maps with absolute time available in subproject &#60;climate_2000_2012&#62;:
 2009_01_tempmean@climate_2000_2012
 2009_02_tempmean@climate_2000_2012
 2009_03_tempmean@climate_2000_2012

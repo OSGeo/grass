@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
 	_("Raster map containing base ROS (cm/min)");
     parm.base->description =
 	_("Name of an existing raster map layer in the user's "
-	  "current mapset search path containing the ROS values in the directions "
+	  "current subproject search path containing the ROS values in the directions "
 	  "perpendicular to maximum ROSes' (cm/minute). These ROSes are also the ones "
 	  "without the effect of directional factors.");
     
@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
 	_("Raster map containing maximal ROS (cm/min)");
 	parm.max->description =
 	_("Name of an existing raster map layer in the user's current "
-	  "mapset search path containing the maximum ROS values (cm/minute).");
+	  "subproject search path containing the maximum ROS values (cm/minute).");
 
     parm.dir = G_define_option();
     parm.dir->key = "direction_ros";
@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
 	_("Raster map containing directions of maximal ROS (degree)");
     parm.dir->description =
 	_("Name of an existing raster map layer in the user's "
-	  "current mapset search path containing directions of the maximum ROSes, "
+	  "current subproject search path containing directions of the maximum ROSes, "
 	  "clockwise from north (degree)."); /* TODO: clockwise from north? see r.ros */
 
     parm.start = G_define_option();
@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
 	_("Raster map containing starting sources");
     parm.start->description =
 	_("Name of an existing raster map layer in the "
-	  "user's current mapset search path containing starting locations of the "
+	  "user's current subproject search path containing starting projects of the "
 	  "spread phenomenon. Any positive integers in this map are recognized as "
 	  "starting sources (seeds).");
 
@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
 	_("Raster map containing maximal spotting distance (m, required with -s)");
     parm.spotdist->description =
 	_("Name of an existing raster map layer in "
-	  "the user's current mapset search path containing the maximum potential "
+	  "the user's current subproject search path containing the maximum potential "
 	  "spotting distances (meters).");
 
     parm.velocity = G_define_option();
@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
 	_("Raster map containing midflame wind speed (ft/min, required with -s)");
     parm.velocity->description =
 	_("Name of an existing raster map layer in the "
-	  "user's current mapset search path containing wind velocities at half of "
+	  "user's current subproject search path containing wind velocities at half of "
 	  "the average flame height (feet/minute).");
 
     parm.mois = G_define_option();
@@ -203,7 +203,7 @@ int main(int argc, char *argv[])
 	_("Raster map containing fine fuel moisture of the cell receiving a spotting firebrand (%, required with -s)");
     parm.mois->description =
 	_("Name of an existing raster map layer in the "
-	  "user's current mapset search path containing the 1-hour (<.25\") fuel "
+	  "user's current subproject search path containing the 1-hour (<.25\") fuel "
 	  "moisture (percentage content multiplied by 100).");
 
     parm.least = G_define_option();
@@ -266,7 +266,7 @@ int main(int argc, char *argv[])
 	_("Name of raster map as a display backdrop");
     parm.backdrop->description =
 	_("Name of an existing raster map layer in the "
-	  "user's current mapset search path to be used as the background on which "
+	  "user's current subproject search path to be used as the background on which "
 	  "the \"live\" movement will be shown.");
 
     parm.out = G_define_option();

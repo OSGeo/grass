@@ -104,12 +104,12 @@ public:
     // MEMORY_LOG(str);
     
     lastindex = 0;
-    MY_LOG_DEBUG_ID("minmaxheap: allocation");
+    MY_LOG_DEBUG_ID("minmaxheap: alproject");
 	A = allocateHeap(maxsize);
   };
   
   virtual ~BasicMinMaxHeap(void) { 
-    MY_LOG_DEBUG_ID("minmaxheap: deallocation");
+    MY_LOG_DEBUG_ID("minmaxheap: dealproject");
 	freeHeap(A);
   };
 
@@ -521,7 +521,7 @@ template <class T>
 void BasicMinMaxHeap<T>::insert(const T& elt) {
 #ifdef SAVE_MEMORY 
   if (!A) {
-    MY_LOG_DEBUG_ID("minmaxheap: re-allocation");
+    MY_LOG_DEBUG_ID("minmaxheap: re-alproject");
     A = allocateHeap(maxsize);
   }
 #endif
@@ -636,7 +636,7 @@ template <class T>
 void BasicMinMaxHeap<T>::reset() {
 #ifdef SAVE_MEMORY
   assert(empty());
-  MY_LOG_DEBUG_ID("minmaxheap: deallocation");
+  MY_LOG_DEBUG_ID("minmaxheap: dealproject");
   freeHeap(A);
   A = NULL;
 #endif

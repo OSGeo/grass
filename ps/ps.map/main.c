@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
 
     /* PS.map_* variables are set to 0 (not defined) and then may be
      * reset by 'maploc'.  When script is read, main() should call
-     * reset_map_location() to reset map size to fit to paper */
+     * reset_map_project() to reset map size to fit to paper */
 
     G_zero(&PS, sizeof(struct PS_data));
 
@@ -236,16 +236,16 @@ int main(int argc, char *argv[])
     else
 	PS.fp = NULL;
 
-    /* get current mapset */
-    PS.cell_mapset = G_mapset();
+    /* get current subproject */
+    PS.cell_subproject = G_subproject();
 
     /* get current window */
     Rast_get_window(&PS.w);
 
     read_instructions(copies_set, can_reset_scale);
 
-    /* reset map location base on 'paper' on 'location' */
-    reset_map_location();
+    /* reset map project base on 'paper' on 'project' */
+    reset_map_project();
 
     if (bflag->answer) {
 	map_setup();

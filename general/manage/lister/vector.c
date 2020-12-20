@@ -22,13 +22,13 @@ int main(int argc, char *argv[])
     exit(0);
 }
 
-int lister(char *name, char *mapset, char *title)
+int lister(char *name, char *subproject, char *title)
 {
     struct Map_info Map;
 
     *title = 0;
     if (*name) {
-	if (Vect_open_old_head(&Map, name, mapset) < 0)
+	if (Vect_open_old_head(&Map, name, subproject) < 0)
 	    G_fatal_error(_("Unable to open vector map <%s>"), name);
 	strcpy(title, Vect_get_map_name(&Map));
 	Vect_close(&Map);

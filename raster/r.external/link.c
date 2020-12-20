@@ -174,7 +174,7 @@ void write_fp_quant(const char *output)
     Rast_quant_init(&quant);
     Rast_quant_round(&quant);
 
-    Rast_write_quant(output, G_mapset(), &quant);
+    Rast_write_quant(output, G_subproject(), &quant);
 }
 
 void create_map(const char *input, int band, const char *output,
@@ -204,7 +204,7 @@ void create_map(const char *input, int band, const char *output,
     Rast_set_history(&history, HIST_DATSRC_1, buf);
     Rast_write_history(output, &history);
 
-    Rast_write_colors(output, G_mapset(), &info->colors);
+    Rast_write_colors(output, G_subproject(), &info->colors);
     Rast_init_cats(NULL, &cats);
     Rast_write_cats((char *)output, &cats);
 
@@ -214,7 +214,7 @@ void create_map(const char *input, int band, const char *output,
     /* get stats for this raster band */
     G_remove_misc("cell_misc", "stats", output);
 
-    outfd = Rast_open_old(output, G_mapset());
+    outfd = Rast_open_old(output, G_subproject());
     if (info->data_type == CELL_TYPE) {
 	int r;
 	struct Range range;

@@ -53,10 +53,10 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
     int np, i, n, nareas, nl = 0, area, type, is3d;
     struct Cell_head wind;
     float vect[2][3];
-    const char *mapset;
+    const char *subproject;
 
-    mapset = G_find_vector2(grassname, "");
-    if (!mapset) {
+    subproject = G_find_vector2(grassname, "");
+    if (!subproject) {
 	G_warning(_("Vector map <%s> not found"), grassname);
 	return NULL;
     }
@@ -64,7 +64,7 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
     Vect_set_open_level(2);
     if (Vect_open_old(&map, grassname, "") == -1) {
 	G_warning(_("Unable to open vector map <%s>"),
-		  G_fully_qualified_name(grassname, mapset));
+		  G_fully_qualified_name(grassname, subproject));
 	return NULL;
     }
 
@@ -267,12 +267,12 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
 
     if (!nl) {
 	G_warning(_("No features from vector map <%s> fall within current region"),
-		  G_fully_qualified_name(grassname, mapset));
+		  G_fully_qualified_name(grassname, subproject));
 	return (NULL);
     }
     else {
 	G_message(_("Vector map <%s> loaded (%d features)"),
-		  G_fully_qualified_name(grassname, mapset), nl);
+		  G_fully_qualified_name(grassname, subproject), nl);
     }
 
     *nlines = nl;
@@ -320,7 +320,7 @@ int Gv_load_vect_thematic(geovect *gv, struct Colors *colors)
     int nvals, cat, nlines, nskipped;
     int red, blu, grn;
     const char *str;
-    const char *mapset;
+    const char *subproject;
 
     dbDriver *driver;
     dbValue value;
@@ -328,15 +328,15 @@ int Gv_load_vect_thematic(geovect *gv, struct Colors *colors)
     if(!gv || !gv->tstyle || !gv->filename)
 	return -1;
 
-    mapset = G_find_vector2(gv->filename, "");
-    if (!mapset) {
+    subproject = G_find_vector2(gv->filename, "");
+    if (!subproject) {
 	G_fatal_error(_("Vector map <%s> not found"), gv->filename);
     }
     
     Vect_set_open_level(1);
     if (Vect_open_old(&Map, gv->filename, "") == -1) {
 	G_fatal_error(_("Unable to open vector map <%s>"),
-		      G_fully_qualified_name(gv->filename, mapset));
+		      G_fully_qualified_name(gv->filename, subproject));
     }
     
     Fi = Vect_get_field(&Map, gv->tstyle->layer);
@@ -351,7 +351,7 @@ int Gv_load_vect_thematic(geovect *gv, struct Colors *colors)
 			Fi->database, Fi->driver);
     }
     G_message(_("Loading thematic vector layer <%s>..."),
-	      G_fully_qualified_name(gv->filename, mapset));
+	      G_fully_qualified_name(gv->filename, subproject));
     nlines = nskipped = 0;
     for(gvt = gv->lines; gvt; gvt = gvt->next) {
 	gvt->style = (gvstyle *) G_malloc(sizeof(gvstyle));

@@ -598,7 +598,7 @@ class HistRasterDialog(wx.Dialog):
             self.rasterList = ret
         else:
             wx.MessageBox(
-                message=_("Selected group must be in current mapset"),
+                message=_("Selected group must be in current subproject"),
                 caption=_('Invalid input'),
                 style=wx.OK | wx.ICON_ERROR)
 

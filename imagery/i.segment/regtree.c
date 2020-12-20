@@ -49,7 +49,7 @@ int compare_regstat(struct reg_stats *a, struct reg_stats *b)
 
 
 /* create new tree and initialize
- * returns pointer to new tree, NULL for memory allocation error
+ * returns pointer to new tree, NULL for memory alproject error
  */
 struct RG_TREE *rgtree_create(int nbands, size_t rb_datasize)
 {

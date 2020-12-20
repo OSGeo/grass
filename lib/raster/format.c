@@ -160,7 +160,7 @@ int Rast__read_row_ptrs(int fd)
 
     if (read_row_ptrs(nrows, old, fcb->row_ptr, fcb->data_fd) < 0) {
 	G_warning(_("Fail of initial read of compressed file [%s in %s]"),
-		  fcb->name, fcb->mapset);
+		  fcb->name, fcb->subproject);
 	return -1;
     }
 
@@ -174,7 +174,7 @@ int Rast__read_null_row_ptrs(int fd, int null_fd)
 
     if (read_row_ptrs(nrows, 0, fcb->null_row_ptr, null_fd) < 0) {
 	G_warning(_("Fail of initial read of compressed null file [%s in %s]"),
-		  fcb->name, fcb->mapset);
+		  fcb->name, fcb->subproject);
 	return -1;
     }
 

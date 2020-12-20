@@ -51,8 +51,8 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     int have_stats = 0;
     struct FPRange range;
     DCELL min, max;
-    const char *name = NULL, *mapset = NULL;
-    const char *style = NULL, *cmap = NULL, *cmapset = NULL;
+    const char *name = NULL, *subproject = NULL;
+    const char *style = NULL, *cmap = NULL, *csubproject = NULL;
     const char *rules = NULL, *file = NULL;
     int has_cell_type = 0;
     int has_fcell_type = 0;
@@ -243,7 +243,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
 		G_fatal_error(_("Unable to open %s file <%s>"), maptype, file);
 
 	input_maps.names = (char **)G_calloc(100, sizeof(char *));
-	input_maps.mapsets = (char **)G_calloc(100, sizeof(char *));
+	input_maps.subprojects = (char **)G_calloc(100, sizeof(char *));
 	input_maps.map_types = (int*)G_calloc(100, sizeof(int));
 	input_maps.min = (DCELL*)G_calloc(100, sizeof(DCELL));
 	input_maps.max = (DCELL*)G_calloc(100, sizeof(DCELL));
@@ -264,7 +264,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
 	    if (num_maps >= max_maps) {
 		max_maps += 100;
 		input_maps.names = (char **)G_realloc(input_maps.names, max_maps * sizeof(char *));
-		input_maps.mapsets = (char **)G_realloc(input_maps.mapsets, max_maps * sizeof(char *));
+		input_maps.subprojects = (char **)G_realloc(input_maps.subprojects, max_maps * sizeof(char *));
 		input_maps.map_types = (int*)G_realloc(input_maps.map_types, max_maps * sizeof(int));
 		input_maps.min = (DCELL*)G_realloc(input_maps.min, max_maps * sizeof(DCELL));
 		input_maps.max = (DCELL*)G_realloc(input_maps.max, max_maps * sizeof(DCELL));
@@ -275,12 +275,12 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
 
 	    /* Switch between raster and volume */
 	    if (type == RASTER3D_TYPE) {
-		input_maps.mapsets[num_maps] = G_store(G_find_raster3d(input_maps.names[num_maps], ""));
+		input_maps.subprojects[num_maps] = G_store(G_find_raster3d(input_maps.names[num_maps], ""));
 	    }
 	    else {
-		input_maps.mapsets[num_maps] = G_store(G_find_raster2(input_maps.names[num_maps], ""));
+		input_maps.subprojects[num_maps] = G_store(G_find_raster2(input_maps.names[num_maps], ""));
 	    }
-	    if (input_maps.mapsets[num_maps] == NULL)
+	    if (input_maps.subprojects[num_maps] == NULL)
 		G_fatal_error(_("%s map <%s> not found"), Maptype, input_maps.names[num_maps]);
 
 	    num_maps++;
@@ -299,7 +299,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
 		input_maps.num++;
 	}
 	input_maps.names = (char **)G_calloc(input_maps.num, sizeof(char *));
-	input_maps.mapsets = (char **)G_calloc(input_maps.num, sizeof(char *));
+	input_maps.subprojects = (char **)G_calloc(input_maps.num, sizeof(char *));
 	input_maps.map_types = (int*)G_calloc(input_maps.num, sizeof(int));
 	input_maps.min = (DCELL*)G_calloc(input_maps.num, sizeof(DCELL));
 	input_maps.max = (DCELL*)G_calloc(input_maps.num, sizeof(DCELL));
@@ -309,12 +309,12 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
 
 	    /* Switch between raster and volume */
 	    if (type == RASTER3D_TYPE) {
-		input_maps.mapsets[i] = G_store(G_find_raster3d(input_maps.names[i], ""));
+		input_maps.subprojects[i] = G_store(G_find_raster3d(input_maps.names[i], ""));
 	    }
 	    else {
-		input_maps.mapsets[i] = G_store(G_find_raster2(input_maps.names[i], ""));
+		input_maps.subprojects[i] = G_store(G_find_raster2(input_maps.names[i], ""));
 	    }
-	    if (input_maps.mapsets[i] == NULL)
+	    if (input_maps.subprojects[i] == NULL)
 		G_fatal_error(_("%s map <%s> not found"), Maptype, input_maps.names[i]);
 	}
     }
@@ -322,12 +322,12 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     if (remove) {
     	for (i = 0; i < input_maps.num; i++) {
 	    name = input_maps.names[i];
-	    mapset = input_maps.mapsets[i];
+	    subproject = input_maps.subprojects[i];
 
 	    if (type == RASTER3D_TYPE) {
 		    stat = Rast3d_remove_color(name);
 	    } else {
-		    stat = Rast_remove_colors(name, mapset);
+		    stat = Rast_remove_colors(name, subproject);
 	    }
 	    if (stat < 0)
 		    G_fatal_error(_("Unable to remove color table of %s map <%s>"), maptype, name);
@@ -341,13 +341,13 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
 
     for (i = 0; i < input_maps.num; i++) {
 	name = input_maps.names[i];
-	mapset = input_maps.mapsets[i];
+	subproject = input_maps.subprojects[i];
 
 	if (type == RASTER3D_TYPE) {
-	    have_colors = Rast3d_read_colors(name, mapset, &colors);
+	    have_colors = Rast3d_read_colors(name, subproject, &colors);
 	}
 	else {
-	    have_colors = Rast_read_colors(name, mapset, &colors);
+	    have_colors = Rast_read_colors(name, subproject, &colors);
 	}
 	/*
 	  if (have_colors >= 0)
@@ -366,21 +366,21 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     min = max = 0;
     for (i = 0; i < input_maps.num; i++) {
 	name = input_maps.names[i];
-	mapset = input_maps.mapsets[i];
+	subproject = input_maps.subprojects[i];
 
 	if (type == RASTER3D_TYPE) {
 	    input_maps.map_types[i] = 1; /* 3D raster maps are always floating point */
 	    has_fcell_type = 1;
-	    Rast3d_read_range(name, mapset, &range);
+	    Rast3d_read_range(name, subproject, &range);
 	}
 	else {
-	    input_maps.map_types[i] = Rast_map_is_fp(name, mapset);
+	    input_maps.map_types[i] = Rast_map_is_fp(name, subproject);
 	    if(input_maps.map_types[i] == 1)
 		has_fcell_type = 1;
 	    else
 		has_cell_type = 1;
 
-	    Rast_read_fp_range(name, mapset, &range);
+	    Rast_read_fp_range(name, subproject, &range);
 	}
 
 	if (i > 0) {
@@ -471,19 +471,19 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     else {
         /* use color from another map (cmap) */
         if (opt.rast->answer) {
-            cmapset = G_find_raster2(cmap, "");
-            if (cmapset == NULL)
+            csubproject = G_find_raster2(cmap, "");
+            if (csubproject == NULL)
                 G_fatal_error(_("Raster map <%s> not found"), cmap);
 
-            if (Rast_read_colors(cmap, cmapset, &colors) < 0)
+            if (Rast_read_colors(cmap, csubproject, &colors) < 0)
                 G_fatal_error(_("Unable to read color table for raster map <%s>"), cmap);
         }
 	else {
-            cmapset = G_find_raster3d(cmap, "");
-            if (cmapset == NULL)
+            csubproject = G_find_raster3d(cmap, "");
+            if (csubproject == NULL)
                 G_fatal_error(_("3D raster map <%s> not found"), cmap);
 
-            if (Rast3d_read_colors(cmap, cmapset, &colors) < 0)
+            if (Rast3d_read_colors(cmap, csubproject, &colors) < 0)
                 G_fatal_error(_("Unable to read color table for 3D raster map <%s>"), cmap);
         }
     }
@@ -526,15 +526,15 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
 
     for (i = 0; i < input_maps.num; i++) {
 	name = input_maps.names[i];
-	mapset = input_maps.mapsets[i];
+	subproject = input_maps.subprojects[i];
 
 	if (input_maps.map_types[i])
 	    Rast_mark_colors_as_fp(&colors);
 	if (type == RASTER3D_TYPE) {
-	    Rast3d_write_colors(name, mapset, &colors);
+	    Rast3d_write_colors(name, subproject, &colors);
 	}
 	else {
-	    Rast_write_colors(name, mapset, &colors);
+	    Rast_write_colors(name, subproject, &colors);
 	}
 	G_message(_("Color table for %s map <%s> set to '%s'"), maptype, name,
 		  is_from_stdin ? "rules" : style ? style : rules ? rules :

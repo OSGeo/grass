@@ -5,24 +5,24 @@
  *   returns a printable text of mask information
  *
  ************************************************************
- * Rast__mask_info (name, mapset)
+ * Rast__mask_info (name, subproject)
  *
- *      char name[GNAME_MAX], mapset[GMAPSET_MAX];
+ *      char name[GNAME_MAX], subproject[GMAPSET_MAX];
  *
  * function:
  *   determine the status off the automatic masking
  *   and the name of the cell file which forms the mask
  *
- *   (the mask file is actually MASK in the current mapset,
+ *   (the mask file is actually MASK in the current subproject,
  *   but is usually a reclassed cell file, and the reclass
- *   name and mapset are returned)
+ *   name and subproject are returned)
  *
  * returns:
- *   -1   no masking (name, mapset undefined)
- *        name, mapset are undefined
+ *   -1   no masking (name, subproject undefined)
+ *        name, subproject are undefined
  *
  *    1   mask file present, masking on
- *        name, mapset hold mask file name, mapset
+ *        name, subproject hold mask file name, subproject
  *
  ***************************************************************/
 
@@ -36,11 +36,11 @@ char *Rast_mask_info(void)
 {
     char text[GNAME_MAX + GMAPSET_MAX + 16];
     char name[GNAME_MAX];
-    char mapset[GMAPSET_MAX];
+    char subproject[GMAPSET_MAX];
 
-    switch (Rast__mask_info(name, mapset)) {
+    switch (Rast__mask_info(name, subproject)) {
     case 1:
-	sprintf(text, _("<%s> in mapset <%s>"), name, mapset);
+	sprintf(text, _("<%s> in subproject <%s>"), name, subproject);
 	break;
     case -1:
 	strcpy(text, _("none"));
@@ -53,19 +53,19 @@ char *Rast_mask_info(void)
     return G_store(text);
 }
 
-int Rast__mask_info(char *name, char *mapset)
+int Rast__mask_info(char *name, char *subproject)
 {
-    char rname[GNAME_MAX], rmapset[GMAPSET_MAX];
+    char rname[GNAME_MAX], rsubproject[GMAPSET_MAX];
 
     strcpy(name, "MASK");
-    strcpy(mapset, G_mapset());
+    strcpy(subproject, G_subproject());
 
-    if (!G_find_raster(name, mapset))
+    if (!G_find_raster(name, subproject))
 	return -1;
 
-    if (Rast_is_reclass(name, mapset, rname, rmapset) > 0) {
+    if (Rast_is_reclass(name, subproject, rname, rsubproject) > 0) {
 	strcpy(name, rname);
-	strcpy(mapset, rmapset);
+	strcpy(subproject, rsubproject);
     }
 
     return 1;

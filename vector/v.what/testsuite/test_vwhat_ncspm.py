@@ -11,11 +11,11 @@ out1 = u"""East: 636661
 North: 226489
 ------------------------------------------------------------------
 Map: schools 
-Mapset: PERMANENT
+Subproject: PERMANENT
 Nothing found.
 ------------------------------------------------------------------
 Map: roadsmajor 
-Mapset: PERMANENT
+Subproject: PERMANENT
 Type: Line
 Id: 231
 Length: 2321.407296
@@ -23,11 +23,11 @@ Layer: 1
 Category: 231
 ------------------------------------------------------------------
 Map: elev_points 
-Mapset: PERMANENT
+Subproject: PERMANENT
 Nothing found.
 ------------------------------------------------------------------
 Map: geology 
-Mapset: PERMANENT
+Subproject: PERMANENT
 Type: Area
 Sq Meters: 261215323.454
 Hectares: 26121.532
@@ -42,11 +42,11 @@ out2 = u"""East: 636661
 North: 226489
 ------------------------------------------------------------------
 Map: schools 
-Mapset: PERMANENT
+Subproject: PERMANENT
 Nothing found.
 ------------------------------------------------------------------
 Map: roadsmajor 
-Mapset: PERMANENT
+Subproject: PERMANENT
 Type: Line
 Id: 231
 Length: 2321.407296
@@ -66,11 +66,11 @@ OBJECTID : 231
 SHAPE_LEN : 7616.150435
 ------------------------------------------------------------------
 Map: elev_points 
-Mapset: PERMANENT
+Subproject: PERMANENT
 Nothing found.
 ------------------------------------------------------------------
 Map: geology 
-Mapset: PERMANENT
+Subproject: PERMANENT
 Type: Area
 Sq Meters: 261215323.454
 Hectares: 26121.532
@@ -98,10 +98,10 @@ out3 = u"""East=636661
 North=226489
 
 Map=schools
-Mapset=PERMANENT
+Subproject=PERMANENT
 
 Map=roadsmajor
-Mapset=PERMANENT
+Subproject=PERMANENT
 Type=Line
 Id=231
 Length=2321.407296
@@ -120,10 +120,10 @@ OBJECTID=231
 SHAPE_LEN=7616.150435
 
 Map=elev_points
-Mapset=PERMANENT
+Subproject=PERMANENT
 
 Map=geology
-Mapset=PERMANENT
+Subproject=PERMANENT
 Type=Area
 Sq_Meters=261215323.454
 Hectares=26121.532
@@ -150,19 +150,19 @@ out4 = u"""East: 636661
 North: 226489
 ------------------------------------------------------------------
 Map: schools 
-Mapset: PERMANENT
+Subproject: PERMANENT
 Nothing found.
 ------------------------------------------------------------------
 Map: roadsmajor 
-Mapset: PERMANENT
+Subproject: PERMANENT
 Nothing found.
 ------------------------------------------------------------------
 Map: elev_points 
-Mapset: PERMANENT
+Subproject: PERMANENT
 Nothing found.
 ------------------------------------------------------------------
 Map: geology 
-Mapset: PERMANENT
+Subproject: PERMANENT
 Type: Area
 Sq Meters: 261215323.454
 Hectares: 26121.532

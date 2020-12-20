@@ -261,10 +261,10 @@ class MapFrame(SingleMapFrame):
         raw title and doesn't add or modify anything.
         """
         gisenv = grass.gisenv()
-        title = _("GRASS GIS Map Display: %(name)s - %(loc)s/%(mapset)s") % {
+        title = _("GRASS GIS Map Display: %(name)s - %(loc)s/%(subproject)s") % {
             'name': name,
             'loc': gisenv["LOCATION_NAME"],
-            'mapset': gisenv["MAPSET"]}
+            'subproject': gisenv["MAPSET"]}
 
         self.SetTitle(title)
 
@@ -1028,7 +1028,7 @@ class MapFrame(SingleMapFrame):
         if len(vectQuery) > 0:
             self._highlighter_layer.SetLayer(vectQuery[0]['Layer'])
             self._highlighter_layer.SetMap(
-                vectQuery[0]['Map'] + '@' + vectQuery[0]['Mapset']
+                vectQuery[0]['Map'] + '@' + vectQuery[0]['Subproject']
             )
             tmp = list()
             for i in vectQuery:
@@ -1556,7 +1556,7 @@ class MapFrame(SingleMapFrame):
                 evt.value,
                 evt.text))
         rasters = self.GetMap().GetListOfLayers(
-            ltype='raster', mapset=grass.gisenv()['MAPSET'])
+            ltype='raster', subproject=grass.gisenv()['MAPSET'])
         self.toolbars['rdigit'].UpdateRasterLayers(rasters)
         self.toolbars['rdigit'].SelectDefault()
 
@@ -1576,10 +1576,10 @@ class MapFrame(SingleMapFrame):
         self.rdigit.Start()
 
     def _updateRDigitLayers(self, layer):
-        mapset = grass.gisenv()['MAPSET']
+        subproject = grass.gisenv()['MAPSET']
         self.toolbars['rdigit'].UpdateRasterLayers(
             rasters=self.GetMap().GetListOfLayers(
-                ltype='raster', mapset=mapset))
+                ltype='raster', subproject=subproject))
 
     def QuitRDigit(self):
         """Calls digitizer cleanup, removes digitizer object and disconnects

@@ -44,7 +44,7 @@ int cmp_wnd(const void *a, const void *b)
     return 0;
 }
 
-struct R_vrt *Rast_get_vrt(const char *vname, const char *vmapset)
+struct R_vrt *Rast_get_vrt(const char *vname, const char *vsubproject)
 {
     FILE *fp;
     int talloc, tilecount;
@@ -56,10 +56,10 @@ struct R_vrt *Rast_get_vrt(const char *vname, const char *vmapset)
     tilecount = 0;
     ti = NULL;
 
-    if (!G_find_raster2(vname, vmapset))
+    if (!G_find_raster2(vname, vsubproject))
 	return NULL;
 
-    fp = G_fopen_old_misc("cell_misc", "vrt", vname, vmapset);
+    fp = G_fopen_old_misc("cell_misc", "vrt", vname, vsubproject);
     if (!fp)
 	return NULL;
 
@@ -68,7 +68,7 @@ struct R_vrt *Rast_get_vrt(const char *vname, const char *vmapset)
     while (1) {
 	char buf[GNAME_MAX];
 	char *name;
-	const char *mapset;
+	const char *subproject;
 	struct tileinfo *p;
 
 	if (!G_getl2(buf, sizeof(buf), fp))
@@ -79,7 +79,7 @@ struct R_vrt *Rast_get_vrt(const char *vname, const char *vmapset)
 	    continue;
 
 	name = buf;
-	if ((mapset = G_find_raster(name, "")) == NULL)
+	if ((subproject = G_find_raster(name, "")) == NULL)
 	    G_fatal_error(_("Tile raster map <%s> not found"), name);
 
 	if (strcmp(name, vname) == 0)
@@ -92,8 +92,8 @@ struct R_vrt *Rast_get_vrt(const char *vname, const char *vmapset)
 	p = &ti[tilecount];
 
 	p->name = G_store(name);
-	p->mapset = G_store(mapset);
-	Rast_get_cellhd(p->name, p->mapset, &(p->cellhd));
+	p->subproject = G_store(subproject);
+	Rast_get_cellhd(p->name, p->subproject, &(p->cellhd));
 	p->clist = NULL;
 
 	if (rd_window->proj == PROJECTION_LL) {
@@ -157,7 +157,7 @@ void Rast_close_vrt(struct R_vrt *vrt)
 	p = &(vrt->tileinfo[i]);
 	
 	G_free(p->name);
-	G_free(p->mapset);
+	G_free(p->subproject);
 	if (p->clist)
 	    G_free_ilist(p->clist);
     }
@@ -199,7 +199,7 @@ int Rast_get_vrt_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
 	     * after this function returns */
 	    Rast_set_null_value(tmpbuf, rd_window->cols, data_type);
 	    /* avoid Rast__check_for_auto_masking() */
-	    tfd = Rast__open_old(p->name, p->mapset);
+	    tfd = Rast__open_old(p->name, p->subproject);
 	    Rast_get_row_nomask(tfd, tmpbuf, row, data_type);
 	    Rast_unopen(tfd);
 	    

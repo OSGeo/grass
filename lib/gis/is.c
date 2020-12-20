@@ -57,28 +57,28 @@ int G_is_gisbase(const char *path)
 
 
 /**
- * \brief Test if specified directory is location.
+ * \brief Test if specified directory is project.
  *
  * \param[in] path Path to directory
- * \return 1 The directory is location
- * \return 0 The directory is not location
+ * \return 1 The directory is project
+ * \return 0 The directory is not project
  */
 
-int G_is_location(const char *path)
+int G_is_project(const char *path)
 {
     return test_path_file(path, "PERMANENT/DEFAULT_WIND");
 }
 
 
 /**
- * \brief Test if specified directory is mapset.
+ * \brief Test if specified directory is subproject.
  *
  * \param[in] path Path to directory
- * \return 1 The directory is mapset
- * \return 0 The directory is not mapset
+ * \return 1 The directory is subproject
+ * \return 0 The directory is not subproject
  */
 
-int G_is_mapset(const char *path)
+int G_is_subproject(const char *path)
 {
     return test_path_file(path, "WIND");
 }

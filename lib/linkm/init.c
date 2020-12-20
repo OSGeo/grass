@@ -10,7 +10,7 @@
  * AUTHOR(S):    David Gerdes 1992, US Army Construction Engineering Research Lab
  *
  * PURPOSE:      Outputs a raster map layer showing the cumulative cost
- *               of moving between different geographic locations on an
+ *               of moving between different geographic projects on an
  *               input raster map layer whose cell category values
  *               represent cost.
  *

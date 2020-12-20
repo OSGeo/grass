@@ -739,8 +739,8 @@ class GConsole(wx.EvtHandler):
                                 name=lname, ltype=prompt, add=event.addLayer)
                             gisenv = grass.gisenv()
                             self._giface.grassdbChanged.emit(grassdb=gisenv['GISDBASE'],
-                                                             location=gisenv['LOCATION_NAME'],
-                                                             mapset=gisenv['MAPSET'],
+                                                             project=gisenv['LOCATION_NAME'],
+                                                             subproject=gisenv['MAPSET'],
                                                              action='new',
                                                              map=lname.split('@')[0],
                                                              element=prompt)

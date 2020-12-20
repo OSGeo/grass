@@ -68,10 +68,10 @@ def retRLiPath():
 
 
 def checkMapExists(name, typ='raster'):
-    """Check if a map already exist in the working mapset"""
+    """Check if a map already exist in the working subproject"""
     env = grass.gisenv()
-    mapset = env['MAPSET']
-    mapp = grass.find_file(name, typ, mapset)
+    subproject = env['MAPSET']
+    mapp = grass.find_file(name, typ, subproject)
     if mapp.name != '':
         return True
     else:
@@ -134,7 +134,7 @@ def sampleAreaVector(vect, rast, vect_cats, layer='1', overwrite=False,
         # check if raster already axist
 
         if len(grass.list_strings('raster', pattern=rast_name,
-                                  mapset='.')) == 1 and not overwrite:
+                                  subproject='.')) == 1 and not overwrite:
             GError(message=_("The raster map <%s> already exists."
                              " Please remove or rename the maps "
                              "with the prefix '%s' or select the "

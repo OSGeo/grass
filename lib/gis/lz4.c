@@ -476,7 +476,7 @@ typedef enum { clearedTable = 0, byPtr, byU32, byU16 } tableType_t;
  *                   entries in the current context that refer to positions
  *                   preceding the beginning of the current compression are
  *                   ignored. Instead, ctx->dictCtx->dictionary and ctx->dictCtx
- *                   ->dictSize describe the location and size of the preceding
+ *                   ->dictSize describe the project and size of the preceding
  *                   content, and matches are found by looking in the ctx
  *                   ->dictCtx->hashTable.
  */
@@ -1346,7 +1346,7 @@ int LZ4_compress_forceExtDict (LZ4_stream_t* LZ4_dict, const char* source, char*
 
 
 /*! LZ4_saveDict() :
- *  If previously compressed data block is not guaranteed to remain available at its memory location,
+ *  If previously compressed data block is not guaranteed to remain available at its memory project,
  *  save it into a safer place (char* safeBuffer).
  *  Note : you don't need to call LZ4_loadDict() afterwards,
  *         dictionary is immediately usable, you can therefore call LZ4_compress_fast_continue().

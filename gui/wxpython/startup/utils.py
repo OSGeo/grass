@@ -26,7 +26,7 @@ from shutil import copytree, ignore_patterns
 
 def get_possible_database_path():
     """Looks for directory 'grassdata' (case-insensitive) in standard
-    locations to detect existing GRASS Database.
+    projects to detect existing GRASS Database.
 
     Returns the path as a string or None if nothing was found.
     """
@@ -49,7 +49,7 @@ def get_possible_database_path():
 
 def create_database_directory():
     """Creates the standard GRASS GIS directory.
-    Creates database directory named grassdata in the standard location
+    Creates database directory named grassdata in the standard project
     according to the platform.
 
     Returns the new path as a string or None if nothing was found or created.
@@ -91,29 +91,29 @@ def create_database_directory():
     return None
 
 
-def _get_startup_location_in_distribution():
-    """Check for startup location directory in distribution.
+def _get_startup_project_in_distribution():
+    """Check for startup project directory in distribution.
 
-    Returns startup location if found or None if nothing was found.
+    Returns startup project if found or None if nothing was found.
     """
     gisbase = os.getenv("GISBASE")
-    startup_location = os.path.join(gisbase, "demolocation")
+    startup_project = os.path.join(gisbase, "demoproject")
 
-    # Find out if startup location exists
-    if os.path.exists(startup_location):
-        return startup_location
+    # Find out if startup project exists
+    if os.path.exists(startup_project):
+        return startup_project
     return None
 
 
-def _copy_startup_location(startup_location, location_in_grassdb):
-    """Copy the simple startup_location with some data to GRASS database.
+def _copy_startup_project(startup_project, project_in_grassdb):
+    """Copy the simple startup_project with some data to GRASS database.
 
     Returns True if successfully copied or False
     when an error was encountered.
     """
-    # Copy source startup location into GRASS database
+    # Copy source startup project into GRASS database
     try:
-        copytree(startup_location, location_in_grassdb,
+        copytree(startup_project, project_in_grassdb,
                  ignore=ignore_patterns('*.tmpl', 'Makefile*'))
         return True
     except (IOError, OSError):
@@ -121,22 +121,22 @@ def _copy_startup_location(startup_location, location_in_grassdb):
     return False
 
 
-def create_startup_location_in_grassdb(grassdatabase, startup_location_name):
-    """Create a new startup location in the given GRASS database.
+def create_startup_project_in_grassdb(grassdatabase, startup_project_name):
+    """Create a new startup project in the given GRASS database.
 
-    Returns True if a new startup location successfully created
+    Returns True if a new startup project successfully created
     in the given GRASS database.
-    Returns False if there is no location to copy in the installation
+    Returns False if there is no project to copy in the installation
     or copying failed.
     """
 
-    # Find out if startup location exists
-    startup_location = _get_startup_location_in_distribution()
-    if not startup_location:
+    # Find out if startup project exists
+    startup_project = _get_startup_project_in_distribution()
+    if not startup_project:
         return False
 
-    # Copy the simple startup_location with some data to GRASS database
-    location_in_grassdb = os.path.join(grassdatabase, startup_location_name)
-    if _copy_startup_location(startup_location, location_in_grassdb):
+    # Copy the simple startup_project with some data to GRASS database
+    project_in_grassdb = os.path.join(grassdatabase, startup_project_name)
+    if _copy_startup_project(startup_project, project_in_grassdb):
         return True
     return False

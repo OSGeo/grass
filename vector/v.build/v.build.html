@@ -16,8 +16,8 @@ more information on GRASS vector data model.
 <h2>NOTES</h2>
 
 <em>v.build</em> creates support files only for vector maps located in
-the user's current mapset. It's not possible to rebuild support files
-(<b>option=build</b>) for vector maps from other mapsets.
+the user's current subproject. It's not possible to rebuild support files
+(<b>option=build</b>) for vector maps from other subprojects.
 
 <p>
 In case of errors, the user can optionally generate an <b>error</b>
@@ -56,13 +56,13 @@ v.build map=urbanarea option=build
 </pre></div>
 
 Note that the vector map <i>urbanarea</i> must be located in the
-current mapset.
+current subproject.
 
 <h3>Dump topology or indices</h3>
 
 Dump options print topology, spatial, category or feature index to
 standard output. Such information can be printed also for vector maps
-from other mapsets. A description of the vector topology is available in
+from other subprojects. A description of the vector topology is available in
 the <a href="https://grass.osgeo.org/programming7/vlibTopology.html">GRASS GIS 7 Programmer's Manual</a>,
 section "Vector library topology management".
 

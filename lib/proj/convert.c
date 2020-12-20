@@ -27,7 +27,7 @@
 #include <cpl_csv.h>
 #include "local_proto.h"
 
-/* GRASS relative location of OGR co-ordinate system lookup tables */
+/* GRASS relative project of OGR co-ordinate system lookup tables */
 #define CSVDIR "/etc/proj/ogr_csv"
 
 static void DatumNameMassage(char **);

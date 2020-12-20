@@ -21,7 +21,7 @@ class MetaModule(object):
        >>> g_list.required
        ['type']
        >>> g_list.inputs.type = 'raster'
-       >>> g_list.inputs.mapset = 'PERMANENT'
+       >>> g_list.inputs.subproject = 'PERMANENT'
        >>> g_list.stdout_ = -1
        >>> g_list.run()
        Module('g.list')

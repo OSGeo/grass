@@ -58,7 +58,7 @@
 #% description: Sort the maps by category
 #% required: no
 #% multiple: yes
-#% options: id, name, creator, mapset, creation_time, modification_time, start_time, end_time, north, south, west, east, min, max
+#% options: id, name, creator, subproject, creation_time, modification_time, start_time, end_time, north, south, west, east, min, max
 #% answer: start_time
 #%end
 
@@ -165,8 +165,8 @@ def main():
                 if out_map.find("@") >= 0:
                     id = out_map
                 else:
-                    mapset = grass.gisenv()["MAPSET"]
-                    id = out_map + "@" + mapset
+                    subproject = grass.gisenv()["MAPSET"]
+                    id = out_map + "@" + subproject
 
                 map = sp.get_new_map_instance(id)
                 map.load()

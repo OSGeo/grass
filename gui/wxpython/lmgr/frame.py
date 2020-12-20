@@ -44,13 +44,13 @@ if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
 from grass.script import core as grass
 from grass.script.utils import decode
 from startup.guiutils import (
-    can_switch_mapset_interactive
+    can_switch_subproject_interactive
 )
 
 from core.gcmd import RunCommand, GError, GMessage
 from core.settings import UserSettings, GetDisplayVectSettings
 from core.utils import SetAddOnPath, GetLayerNameFromCmd, command2ltype
-from gui_core.preferences import MapsetAccess, PreferencesDialog
+from gui_core.preferences import SubprojectAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
 from gui_core.widgets import GNotebook, FormNotebook
@@ -58,7 +58,7 @@ from core.workspace import ProcessWorkspaceFile, ProcessGrcFile, WriteWorkspaceF
 from core.gconsole import GConsole, EVT_IGNORED_CMD_RUN
 from core.giface import Notification
 from gui_core.goutput import GConsoleWindow, GC_PROMPT
-from gui_core.dialogs import LocationDialog, MapsetDialog, CreateNewVector, GroupDialog, MapLayersDialog, QuitDialog
+from gui_core.dialogs import ProjectDialog, SubprojectDialog, CreateNewVector, GroupDialog, MapLayersDialog, QuitDialog
 from gui_core.menu import SearchModuleWindow
 from gui_core.menu import Menu as GMenu
 from core.debug import Debug
@@ -69,11 +69,11 @@ from lmgr.giface import LayerManagerGrassInterface
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
-from grass.grassdb.checks import is_current_mapset_in_demolocation
+from grass.grassdb.checks import is_current_subproject_in_demoproject
 from startup.guiutils import (
-    switch_mapset_interactively,
-    create_mapset_interactively,
-    create_location_interactively
+    switch_subproject_interactively,
+    create_subproject_interactively,
+    create_project_interactively
 )
 
 
@@ -195,7 +195,7 @@ class GMFrame(wx.Frame):
 
         self._giface.mapCreated.connect(self.OnMapCreated)
         self._giface.updateMap.connect(self._updateCurrentMap)
-        self._giface.currentMapsetChanged.connect(self.OnMapsetChanged)
+        self._giface.currentSubprojectChanged.connect(self.OnSubprojectChanged)
 
         # minimal frame size
         self.SetMinSize(globalvar.GM_WINDOW_MIN_SIZE)
@@ -417,7 +417,7 @@ class GMFrame(wx.Frame):
         return self.notebook
 
     def _show_demo_map(self):
-        """If in demolocation, add demo map to map display
+        """If in demoproject, add demo map to map display
 
         This provides content for first-time user experience.
         """
@@ -437,7 +437,7 @@ class GMFrame(wx.Frame):
                 lchecked=True,
                 lcmd=["d.vect", "map={}".format(layer_name)],
             )
-        if is_current_mapset_in_demolocation():
+        if is_current_subproject_in_demoproject():
             # Show only after everything is initialized for proper map alignment.
             wx.CallLater(1000, show_demo)
 
@@ -503,17 +503,17 @@ class GMFrame(wx.Frame):
         if self.workspaceFile:
             self._setTitle()
 
-    def OnLocationWizard(self, event):
-        """Launch location wizard"""
+    def OnProjectWizard(self, event):
+        """Launch project wizard"""
         gisenv = grass.gisenv()
-        grassdb, location, mapset = (
-            create_location_interactively(self, gisenv['GISDBASE'])
+        grassdb, project, subproject = (
+            create_project_interactively(self, gisenv['GISDBASE'])
         )
-        if location:
+        if project:
             self._giface.grassdbChanged.emit(grassdb=gisenv['GISDBASE'],
-                                             location=location,
+                                             project=project,
                                              action='new',
-                                             element='location')
+                                             element='project')
 
     def OnSettingsChanged(self):
         """Here can be functions which have to be called
@@ -611,17 +611,17 @@ class GMFrame(wx.Frame):
             parent=self)
         dlg.Destroy()
 
-    def OnMapsets(self, event):
-        """Launch mapset access dialog
+    def OnSubprojects(self, event):
+        """Launch subproject access dialog
         """
-        dlg = MapsetAccess(parent=self, id=wx.ID_ANY)
+        dlg = SubprojectAccess(parent=self, id=wx.ID_ANY)
         dlg.CenterOnScreen()
 
         if dlg.ShowModal() == wx.ID_OK:
-            ms = dlg.GetMapsets()
-            RunCommand('g.mapsets',
+            ms = dlg.GetSubprojects()
+            RunCommand('g.subprojects',
                        parent=self,
-                       mapset='%s' % ','.join(ms),
+                       subproject='%s' % ','.join(ms),
                        operation='set')
 
     def OnCBPageChanged(self, event):
@@ -948,11 +948,11 @@ class GMFrame(wx.Frame):
                      message=_("Selected map layer is not vector."))
             return
 
-        if mapLayer.GetMapset() != grass.gisenv()['MAPSET']:
+        if mapLayer.GetSubproject() != grass.gisenv()['MAPSET']:
             GMessage(
                 parent=self, message=_(
                     "Editing is allowed only for vector maps from the "
-                    "current mapset."))
+                    "current subproject."))
             return
 
         if not tree.GetLayerInfo(layer):
@@ -1039,69 +1039,69 @@ class GMFrame(wx.Frame):
         self._gconsole.WriteCmdLog(_("Launching script '%s'...") % filename)
         self._gconsole.RunCmd([filename])
 
-    def OnChangeLocation(self, event):
-        """Change current location"""
-        dlg = LocationDialog(parent=self)
+    def OnChangeProject(self, event):
+        """Change current project"""
+        dlg = ProjectDialog(parent=self)
         gisenv = grass.gisenv()
 
         if dlg.ShowModal() == wx.ID_OK:
-            location, mapset = dlg.GetValues()
+            project, subproject = dlg.GetValues()
             dlg.Destroy()
 
-            if not location or not mapset:
+            if not project or not subproject:
                 GError(
                     parent=self,
                     message=_(
-                        "No location/mapset provided. Operation canceled."))
+                        "No project/subproject provided. Operation canceled."))
                 return  # this should not happen
-            if can_switch_mapset_interactive(self,
+            if can_switch_subproject_interactive(self,
                                              gisenv['GISDBASE'],
-                                             location,
-                                             mapset):
-                switch_mapset_interactively(self, self._giface,
+                                             project,
+                                             subproject):
+                switch_subproject_interactively(self, self._giface,
                                             None,
-                                            location,
-                                            mapset)
+                                            project,
+                                            subproject)
 
-    def OnCreateMapset(self, event):
-        """Create new mapset"""
+    def OnCreateSubproject(self, event):
+        """Create new subproject"""
         gisenv = grass.gisenv()
-        mapset = create_mapset_interactively(self, gisenv['GISDBASE'],
+        subproject = create_subproject_interactively(self, gisenv['GISDBASE'],
                                              gisenv['LOCATION_NAME'])
-        if mapset:
+        if subproject:
             self._giface.grassdbChanged.emit(grassdb=gisenv['GISDBASE'],
-                                             location=gisenv['LOCATION_NAME'],
-                                             mapset=mapset,
+                                             project=gisenv['LOCATION_NAME'],
+                                             subproject=subproject,
                                              action='new',
-                                             element='mapset')
+                                             element='subproject')
 
-    def OnChangeMapset(self, event):
-        """Change current mapset"""
-        dlg = MapsetDialog(parent=self)
+    def OnChangeSubproject(self, event):
+        """Change current subproject"""
+        dlg = SubprojectDialog(parent=self)
         gisenv = grass.gisenv()
 
         if dlg.ShowModal() == wx.ID_OK:
-            mapset = dlg.GetMapset()
+            subproject = dlg.GetSubproject()
             dlg.Destroy()
 
-            if not mapset:
+            if not subproject:
                 GError(parent=self,
-                       message=_("No mapset provided. Operation canceled."))
+                       message=_("No subproject provided. Operation canceled."))
                 return
-            if can_switch_mapset_interactive(self,
+            if can_switch_subproject_interactive(self,
                                              gisenv['GISDBASE'],
                                              gisenv['LOCATION_NAME'],
-                                             mapset):
-                switch_mapset_interactively(self, self._giface,
+                                             subproject):
+                switch_subproject_interactively(self, self._giface,
                                             None,
                                             None,
-                                            mapset)
+                                            subproject)
 
-    def OnMapsetChanged(self, dbase, location, mapset):
-        """Current mapset changed.
-        If location is None, mapset changed within location.
+    def OnSubprojectChanged(self, dbase, project, subproject):
+        """Current subproject changed.
+        If project is None, subproject changed within project.
         """
-        if not location:
+        if not project:
             # TODO: this does not use the actual names if they were
             # renamed (it just uses the numbers)
             dispId = 1
@@ -1372,19 +1372,19 @@ class GMFrame(wx.Frame):
         self.workspaceFile = filename
         self._setTitle()
 
-    def _tryToSwitchMapsetFromWorkspaceFile(self, gxwXml):
-        returncode, errors = RunCommand('g.mapset',
+    def _tryToSwitchSubprojectFromWorkspaceFile(self, gxwXml):
+        returncode, errors = RunCommand('g.subproject',
                       dbase=gxwXml.database,
-                      location=gxwXml.location,
-                      mapset=gxwXml.mapset,
+                      project=gxwXml.project,
+                      subproject=gxwXml.subproject,
                       getErrorMsg=True,
                       )
         if returncode != 0:
             # TODO: use the function from grass.py
-            reason = _("Most likely the database, location or mapset"
+            reason = _("Most likely the database, project or subproject"
                        " does not exist")
             details = errors
-            message = _("Unable to change to location and mapset"
+            message = _("Unable to change to project and subproject"
                         " specified in the workspace.\n"
                         "Reason: {reason}\nDetails: {details}\n\n"
                         "Do you want to proceed with opening"
@@ -1398,13 +1398,13 @@ class GMFrame(wx.Frame):
             if dlg.ShowModal() in [wx.ID_NO, wx.ID_CANCEL]:
                 return False
         else:
-            # TODO: copy from ChangeLocation function
+            # TODO: copy from ChangeProject function
             GMessage(
                 parent=self,
-                message=_("Current location is <%(loc)s>.\n"
-                          "Current mapset is <%(mapset)s>.") %
-                          {'loc': gxwXml.location,
-                           'mapset': gxwXml.mapset})
+                message=_("Current project is <%(loc)s>.\n"
+                          "Current subproject is <%(subproject)s>.") %
+                          {'loc': gxwXml.project,
+                           'subproject': gxwXml.subproject})
         return True
 
     def LoadWorkspaceFile(self, filename):
@@ -1427,11 +1427,11 @@ class GMFrame(wx.Frame):
                 filename)
             return False
 
-        if gxwXml.database and gxwXml.location and gxwXml.mapset:
-            if not self._tryToSwitchMapsetFromWorkspaceFile(gxwXml):
+        if gxwXml.database and gxwXml.project and gxwXml.subproject:
+            if not self._tryToSwitchSubprojectFromWorkspaceFile(gxwXml):
                 return False
 
-        # the really busy part starts here (mapset change is fast)
+        # the really busy part starts here (subproject change is fast)
         busy = wx.BusyInfo(_("Please wait, loading workspace..."),
                            parent=self)
         wx.GetApp().Yield()

@@ -7,7 +7,7 @@ out1 = u"""East: 634243
 North: 226193
 ------------------------------------------------------------------
 Map: test_vector 
-Mapset: ...
+Subproject: ...
 Type: Area
 Sq Meters: 633834.281
 Hectares: 63.383
@@ -28,7 +28,7 @@ out2 = u"""East: 634243
 North: 226193
 ------------------------------------------------------------------
 Map: test_vector 
-Mapset: ...
+Subproject: ...
 Type: Area
 Sq Meters: 633834.281
 Hectares: 63.383
@@ -74,7 +74,7 @@ out3 = u"""East=634243
 North=226193
 
 Map=test_vector
-Mapset=...
+Subproject=...
 Type=Area
 Sq_Meters=633834.281
 Hectares=63.383
@@ -116,7 +116,7 @@ out4 = u"""East=634243
 North=226193
 
 Map=test_vector
-Mapset=...
+Subproject=...
 Type=Area
 Sq_Meters=633834.281
 Hectares=63.383
@@ -143,7 +143,7 @@ out5 = u"""East=634243
 North=226193
 
 Map=test_vector
-Mapset=...
+Subproject=...
 Type=Area
 Sq_Meters=633834.281
 Hectares=63.383

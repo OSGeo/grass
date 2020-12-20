@@ -37,7 +37,7 @@ void make_link(const struct input *inputs, int num_inputs,
     for (i = 0; i < num_inputs; i++) {
 	const struct input *p = &inputs[i];
 	
-	fprintf(fp, "%s@%s\n", p->name, p->mapset);
+	fprintf(fp, "%s@%s\n", p->name, p->subproject);
     }
 
     fclose(fp);
@@ -80,7 +80,7 @@ void write_fp_quant(const char *output)
     Rast_quant_init(&quant);
     Rast_quant_round(&quant);
 
-    Rast_write_quant(output, G_mapset(), &quant);
+    Rast_write_quant(output, G_subproject(), &quant);
 }
 
 void create_map(const struct input *inputs, int num_inputs, const char *output,
@@ -129,8 +129,8 @@ void create_map(const struct input *inputs, int num_inputs, const char *output,
     Rast_set_history(&history, HIST_DATSRC_1, buf);
     Rast_write_history(output, &history);
 
-    if (Rast_read_colors(inputs[0].name, inputs[0].mapset, &colors) == 1)
-	Rast_write_colors(output, G_mapset(), &colors);
+    if (Rast_read_colors(inputs[0].name, inputs[0].subproject, &colors) == 1)
+	Rast_write_colors(output, G_subproject(), &colors);
     Rast_init_cats(NULL, &cats);
     Rast_write_cats((char *)output, &cats);
 

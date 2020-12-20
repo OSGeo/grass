@@ -32,20 +32,20 @@ int load_rasters3d(const struct GParams *params, nv_data * data)
 {
     int i, nvol, id;
     float x, y, z;
-    const char *mapset;
+    const char *subproject;
 
     nvol = opt_get_num_answers(params->volume);
 
     for (i = 0; i < nvol; i++) {
-	mapset = G_find_raster3d(params->volume->answers[i], "");
-	if (mapset == NULL) {
+	subproject = G_find_raster3d(params->volume->answers[i], "");
+	if (subproject == NULL) {
 	    G_fatal_error(_("3d raster map <%s> not found"),
 			  params->volume->answers[i]);
 	}
 
 	id = Nviz_new_map_obj(MAP_OBJ_VOL,
 			      G_fully_qualified_name(params->volume->
-						     answers[i], mapset), 0.0,
+						     answers[i], subproject), 0.0,
 			      data);
 
 	/* set position */
@@ -86,7 +86,7 @@ int add_isosurfs(const struct GParams *params, nv_data * data)
 	nshine_const;
     int res, draw_mode;
     char **tokens;
-    const char *mapset, *style;
+    const char *subproject, *style;
 
     vol_list = GVL_get_vol_list(&nvols);
 
@@ -126,10 +126,10 @@ int add_isosurfs(const struct GParams *params, nv_data * data)
 
 	if (i < ncolor_map &&
 	    strcmp(params->isosurf_color_map->answers[i], "")) {
-	    mapset =
+	    subproject =
 		G_find_raster3d(params->isosurf_color_map->answers[i], "");
 
-	    if (mapset == NULL) {
+	    if (subproject == NULL) {
 		G_fatal_error(_("3d raster map <%s> not found"),
 			      params->isosurf_color_map->answers[i]);
 	    }

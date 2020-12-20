@@ -380,7 +380,7 @@ int main(int argc, char **argv)
     if (val_name) {
 	if (Rast_read_colors(in_name, "", &colors) < 0)
 	    G_fatal_error(_("Unable to read color table for raster map <%s>"), in_name);
-	Rast_write_colors(val_name, G_mapset(), &colors);
+	Rast_write_colors(val_name, G_subproject(), &colors);
 
 	Rast_short_history(val_name, "raster", &hist);
 	Rast_set_history(&hist, HIST_DATSRC_1, in_name);

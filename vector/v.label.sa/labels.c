@@ -333,7 +333,7 @@ void label_candidates(label_t * labels, int n_labels)
 {
     int i;
 
-    /* generate candidate location for each label based on feture type
+    /* generate candidate project for each label based on feture type
      * see chapter 5 of MERL-TR-96-04 */
     fprintf(stderr, "Generating label candidates: ...");
     for (i = 0; i < n_labels; i++) {

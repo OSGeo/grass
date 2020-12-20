@@ -17,7 +17,7 @@
  *               for details.
  *
  *  TODO:        - Option to create 3D output;
- *               - Test with lat/lon location, feets and other crap;
+ *               - Test with lat/lon project, feets and other crap;
  *               - In progress: Add different debug level messages;
  *               - In progress: Option to output resulting lake area and volume.
  *
@@ -372,7 +372,7 @@ int main(int argc, char *argv[])
 				  &max_depth, 0, 50, 170, &colr);
     }
 
-    Rast_write_colors(lakemap, G_mapset(), &colr);
+    Rast_write_colors(lakemap, G_subproject(), &colr);
 
     Rast_short_history(lakemap, "raster", &history);
     Rast_command_history(&history);

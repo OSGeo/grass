@@ -26,7 +26,7 @@ struct PS_data
     struct Colors colors;
     struct Categories cats;
     CELL min_color, max_color;
-    const char *cell_mapset;
+    const char *cell_subproject;
     char *cell_name;
     char *plfile;
     char *commentfile;

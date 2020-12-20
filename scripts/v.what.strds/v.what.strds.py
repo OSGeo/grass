@@ -136,7 +136,7 @@ def main():
     # Single space time raster dataset
     if len(strds_names) == 1:
         granu = first_strds.get_granularity()
-        rows = first_strds.get_registered_maps("name,mapset,start_time,end_time",
+        rows = first_strds.get_registered_maps("name,subproject,start_time,end_time",
                                                tempwhere, "start_time",
                                                dbif)
 
@@ -147,7 +147,7 @@ def main():
         for row in rows:
             start = row["start_time"]
             end = row["end_time"]
-            raster_maps = [row["name"] + "@" + row["mapset"], ]
+            raster_maps = [row["name"] + "@" + row["subproject"], ]
 
             s = Sample(start, end, raster_maps, first_strds.get_name(), granu)
             samples.append(s)

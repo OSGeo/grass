@@ -12,7 +12,7 @@
 #               License (>=v2). Read the file COPYING that comes with GRASS
 #               for details.
 #
-# TODO: - implement g.findfile for 3 and 4 maps (currently only current mapset supported)
+# TODO: - implement g.findfile for 3 and 4 maps (currently only current subproject supported)
 #            [done for 2 maps]
 #       - fix isnull() in r.mapcalc for 3 and 4 maps composites
 #            [done for 2 maps]

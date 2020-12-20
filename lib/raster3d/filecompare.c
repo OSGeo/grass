@@ -346,23 +346,23 @@ static void compareFilesNocache(void *map, void *map2)
 /*!
  * \brief 
  *
- * Compares the cell-values of file <em>f1</em> in mapset
- * <em>mapset1</em> and file <em>f2</em> in mapset <em>mapset2</em>.
+ * Compares the cell-values of file <em>f1</em> in subproject
+ * <em>subproject1</em> and file <em>f2</em> in subproject <em>subproject2</em>.
  * The values are compared up to precision.
  * Terminates in error if the files don't match.
  * This function uses the more advanced features of the cache.
  * The source code can be found in <em>filecompare.c</em>.
  *
  *  \param f1
- *  \param mapset1
+ *  \param subproject1
  *  \param f2
- *  \param mapset2
+ *  \param subproject2
  *  \return void
  */
 
 void
-Rast3d_compare_files(const char *f1, const char *mapset1, const char *f2,
-		 const char *mapset2)
+Rast3d_compare_files(const char *f1, const char *subproject1, const char *f2,
+		 const char *subproject2)
 {
     void *map, *map2;
     double n1 = 0, n2 = 0;
@@ -376,14 +376,14 @@ Rast3d_compare_files(const char *f1, const char *mapset1, const char *f2,
 
     printf("\nComparing %s and %s\n", f1, f2);
 
-    map = Rast3d_open_cell_old(f1, mapset1, RASTER3D_DEFAULT_WINDOW,
+    map = Rast3d_open_cell_old(f1, subproject1, RASTER3D_DEFAULT_WINDOW,
 			  RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
     if (map == NULL)
 	Rast3d_fatal_error("Rast3d_compare_files: error in Rast3d_open_cell_old");
 
     Rast3d_print_header(map);
 
-    map2 = Rast3d_open_cell_old(f2, mapset2, RASTER3D_DEFAULT_WINDOW,
+    map2 = Rast3d_open_cell_old(f2, subproject2, RASTER3D_DEFAULT_WINDOW,
 			   RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
     if (map2 == NULL)
 	Rast3d_fatal_error("Rast3d_compare_files: error in Rast3d_open_cell_old");

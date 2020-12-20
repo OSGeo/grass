@@ -5,7 +5,7 @@
 # AUTHOR(S):    Radim Blazek
 #               Converted to Python by Glynn Clements
 #               Update for GRASS 7 by Markus Metz
-# PURPOSE:      Reconnect all vector maps from the current mapset
+# PURPOSE:      Reconnect all vector maps from the current subproject
 # COPYRIGHT:    (C) 2004, 2012 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Reconnects attribute tables for all vector maps from the current mapset to a new database.
+#% description: Reconnects attribute tables for all vector maps from the current subproject to a new database.
 #% keyword: vector
 #% keyword: attribute table
 #% keyword: database
@@ -56,7 +56,7 @@ import string
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
 
-# substitute variables (gisdbase, location_name, mapset)
+# substitute variables (gisdbase, project_name, subproject)
 
 
 def substitute_db(database):
@@ -192,9 +192,9 @@ def main():
         gscript.fatal(_("Old and new database connection is identical. "
                         "Nothing to do."))
 
-    mapset = gscript.gisenv()['MAPSET']
+    subproject = gscript.gisenv()['MAPSET']
 
-    vectors = gscript.list_grouped('vect')[mapset]
+    vectors = gscript.list_grouped('vect')[subproject]
     num_vectors = len(vectors)
 
     if flags['c']:
@@ -203,7 +203,7 @@ def main():
 
     i = 0
     for vect in vectors:
-        vect = "%s@%s" % (vect, mapset)
+        vect = "%s@%s" % (vect, subproject)
         i += 1
         gscript.message(_("%s\nReconnecting vector map <%s> "
                           "(%d of %d)...\n%s") %

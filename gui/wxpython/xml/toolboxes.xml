@@ -310,7 +310,7 @@
       </module-item>
       <separator/>
       <module-item name="r.proj">
-        <label>Reproject raster map from different GRASS location</label>
+        <label>Reproject raster map from different GRASS project</label>
       </module-item>
     </items>
   </toolbox>
@@ -353,7 +353,7 @@
       </module-item>
       <separator/>
       <module-item name="v.proj">
-        <label>Reproject vector map from different GRASS location</label>
+        <label>Reproject vector map from different GRASS project</label>
       </module-item>
     </items>
   </toolbox>
@@ -590,16 +590,16 @@
   <toolbox name="GRASSWorkingEnvironment">
     <label>GRASS working environment</label>
     <items>
-      <wxgui-item name="MapsetAccess"/>
+      <wxgui-item name="SubprojectAccess"/>
       <module-item name="g.access">
         <label>User access</label>
       </module-item>
       <separator/>
-      <module-item name="g.mapset">
+      <module-item name="g.subproject">
         <label>Change working environment</label>
       </module-item>
-      <wxgui-item name="ChangeLocationAndMapset"/>
-      <wxgui-item name="ChangeMapset"/>
+      <wxgui-item name="ChangeProjectAndSubproject"/>
+      <wxgui-item name="ChangeSubproject"/>
       <wxgui-item name="ChangeWorkingDirectory"/>
       <separator/>
       <wxgui-item name="ShowSettings"/>
@@ -607,8 +607,8 @@
         <label>Change settings</label>
       </module-item>
       <separator/>
-      <wxgui-item name="CreateNewLocation"/>
-      <wxgui-item name="CreateNewMapset"/>
+      <wxgui-item name="CreateNewProject"/>
+      <wxgui-item name="CreateNewSubproject"/>
       <separator/>
       <wxgui-item name="VersionAndCopyright"/>
     </items>
@@ -680,7 +680,7 @@
       </module-item>
       <separator/>
       <module-item name="r.proj">
-        <label>Reproject raster map from different GRASS location</label>
+        <label>Reproject raster map from different GRASS project</label>
       </module-item>
       <module-item name="r.tileset">
         <label>Tiling</label>
@@ -1167,7 +1167,7 @@
         <label>Rectify vector map</label>
       </module-item>
       <module-item name="v.proj">
-        <label>Reproject vector map from different GRASS location</label>
+        <label>Reproject vector map from different GRASS project</label>
       </module-item>
       <separator/>
       <module-item name="v.support">
@@ -1410,7 +1410,7 @@
       </module-item>
       <separator/>
       <module-item name="v.what.rast">
-        <label>Sample raster maps at point locations</label>
+        <label>Sample raster maps at point projects</label>
       </module-item>
       <module-item name="v.sample">
         <label>Sample raster neighborhood around points</label>
@@ -1983,7 +1983,7 @@
         <label>Query raster dataset by vector points dataset</label>
       </module-item>
       <module-item name="t.vect.observe.strds">
-        <label>Observe specific locations in raster dataset</label>
+        <label>Observe specific projects in raster dataset</label>
       </module-item>
       <module-item name="t.sample">
         <label>Temporal sampling</label>

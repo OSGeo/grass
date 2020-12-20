@@ -1,11 +1,11 @@
 """
 @package startup.locdownload
 
-@brief GRASS Location Download Management
+@brief GRASS Project Download Management
 
 Classes:
- - LocationDownloadPanel
- - LocationDownloadDialog
+ - ProjectDownloadPanel
+ - ProjectDownloadDialog
  - DownloadError
 
 (C) 2017 by Vaclav Petras the GRASS Development Team
@@ -51,19 +51,19 @@ from gui_core.wrap import Button, StaticText
 # TODO: labels (and descriptions) translatable?
 LOCATIONS = [
     {
-        "label": "Complete NC location",
+        "label": "Complete NC project",
         "url": "https://grass.osgeo.org/sampledata/north_carolina/nc_spm_08_grass7.tar.gz",
     },
     {
-        "label": "Basic NC location",
+        "label": "Basic NC project",
         "url": "https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.tar.gz",
     },
     {
-        "label": "World location in LatLong/WGS84",
-        "url": "https://grass.osgeo.org/sampledata/worldlocation.tar.gz",
+        "label": "World project in LatLong/WGS84",
+        "url": "https://grass.osgeo.org/sampledata/worldproject.tar.gz",
     },
     {
-        "label": "Spearfish (SD) location",
+        "label": "Spearfish (SD) project",
         "url": "https://grass.osgeo.org/sampledata/spearfish_grass70data-0.3.tar.gz",
     },
     {
@@ -79,7 +79,7 @@ LOCATIONS = [
         "url": "https://grass.osgeo.org/sampledata/fire_grass6data.tar.gz",
     },
     {
-        "label": "GISMentors location, Czech Republic",
+        "label": "GISMentors project, Czech Republic",
         "url": "http://training.gismentors.eu/geodata/grass/gismentors.zip",
     },
     {
@@ -252,7 +252,7 @@ def download_and_extract(source):
     """Download a file (archive) from URL and uncompress it"""
     tmpdir = tempfile.mkdtemp()
     Debug.msg(1, 'Tmpdir: {}'.format(tmpdir))
-    directory = os.path.join(tmpdir, 'location')
+    directory = os.path.join(tmpdir, 'project')
     http_error_message = _(
         "Download file from <{url}>, "
         "return status code {code}, "
@@ -262,7 +262,7 @@ def download_and_extract(source):
         "failed. Check internet connection."
     )
     if source.endswith('.zip'):
-        archive_name = os.path.join(tmpdir, 'location.zip')
+        archive_name = os.path.join(tmpdir, 'project.zip')
         try:
             filename, headers = urlretrieve(source, archive_name, reporthook)
         except HTTPError as err:
@@ -286,7 +286,7 @@ def download_and_extract(source):
             ext = "tar.gz"
         else:
             ext = source.rsplit('.', 1)[1]
-        archive_name = os.path.join(tmpdir, 'location.' + ext)
+        archive_name = os.path.join(tmpdir, 'project.' + ext)
         try:
             urlretrieve(source, archive_name, reporthook)
         except HTTPError as err:
@@ -306,18 +306,18 @@ def download_and_extract(source):
     return directory
 
 
-def download_location(url, name, database):
+def download_project(url, name, database):
     """Wrapper to return DownloadError by value
 
-    It also moves the location directory to the database.
+    It also moves the project directory to the database.
     """
     try:
         # TODO: the unpacking could go right to the path (but less
         # robust) or replace copytree here with move
         directory = download_and_extract(source=url)
         destination = os.path.join(database, name)
-        if not is_location_valid(directory):
-            return _("Downloaded location is not valid")
+        if not is_project_valid(directory):
+            return _("Downloaded project is not valid")
         shutil.copytree(src=directory, dst=destination)
         try_rmdir(directory)
     except DownloadError as error:
@@ -326,30 +326,30 @@ def download_location(url, name, database):
 
 
 # based on grass.py (to be moved to future "grass.init")
-def is_location_valid(location):
-    """Return True if GRASS Location is valid
+def is_project_valid(project):
+    """Return True if GRASS Project is valid
 
-    :param location: path of a Location
+    :param project: path of a Project
     """
     # DEFAULT_WIND file should not be required until you do something
     # that actually uses them. The check is just a heuristic; a directory
     # containing a PERMANENT/DEFAULT_WIND file is probably a GRASS
-    # location, while a directory lacking it probably isn't.
+    # project, while a directory lacking it probably isn't.
     # TODO: perhaps we can relax this and require only permanent
-    return os.access(os.path.join(location,
+    return os.access(os.path.join(project,
                                   "PERMANENT", "DEFAULT_WIND"), os.F_OK)
 
 
-def location_name_from_url(url):
-    """Create location name from URL"""
+def project_name_from_url(url):
+    """Create project name from URL"""
     return url.rsplit('/', 1)[1].split('.', 1)[0].replace("-", "_").replace(" ", "_")
 
 
 DownloadDoneEvent, EVT_DOWNLOAD_DONE = NewEvent()
 
 
-class LocationDownloadPanel(wx.Panel):
-    """Panel to select and initiate downloads of locations.
+class ProjectDownloadPanel(wx.Panel):
+    """Panel to select and initiate downloads of projects.
 
     Has a place to report errors to user and also any potential problems
     before the user hits the button.
@@ -362,35 +362,35 @@ class LocationDownloadPanel(wx.Panel):
     of one panel (perhaps sharing the common background download and
     message logic).
     """
-    def __init__(self, parent, database, locations=LOCATIONS):
+    def __init__(self, parent, database, projects=LOCATIONS):
         """
 
         :param database: directory with G database to download to
-        :param locations: list of dictionaries with label and url
+        :param projects: list of dictionaries with label and url
         """
         wx.Panel.__init__(self, parent=parent)
 
         self.parent = parent
-        self._last_downloaded_location_name = None
+        self._last_downloaded_project_name = None
         self._download_in_progress = False
         self.database = database
-        self.locations = locations
+        self.projects = projects
         self._abort_btn_label = _('Abort')
-        self._abort_btn_tooltip = _('Abort download location')
+        self._abort_btn_tooltip = _('Abort download project')
 
         self.label = StaticText(
             parent=self,
-            label=_("Select sample location to download:"))
+            label=_("Select sample project to download:"))
 
         choices = []
-        for item in self.locations:
+        for item in self.projects:
             choices.append(item['label'])
         self.choice = wx.Choice(parent=self, choices=choices)
 
         self.choice.Bind(wx.EVT_CHOICE, self.OnChangeChoice)
         self.parent.download_button.Bind(wx.EVT_BUTTON, self.OnDownload)
         # TODO: add button for a link to an associated website?
-        # TODO: add thumbnail for each location?
+        # TODO: add thumbnail for each project?
 
         # TODO: messages copied from gis_set.py, need this as API?
         self.message = StaticText(parent=self, size=(-1, 50))
@@ -409,7 +409,7 @@ class LocationDownloadPanel(wx.Panel):
 
         default = 0
         self.choice.SetSelection(default)
-        self.CheckItem(self.locations[default])
+        self.CheckItem(self.projects[default])
 
         self.thread = gThread()
 
@@ -432,7 +432,7 @@ class LocationDownloadPanel(wx.Panel):
         self.SetMinSize(self.GetBestSize())
 
     def _change_download_btn_label(self, label=_('Do&wnload'),
-                                tooltip=_('Download selected location')):
+                                tooltip=_('Download selected project')):
         """Change download button label/tooltip"""
         if self.parent.download_button:
             self.parent.download_button.SetLabel(label)
@@ -450,7 +450,7 @@ class LocationDownloadPanel(wx.Panel):
             if self._download_in_progress:
                 self._warning(_("Download in progress, wait until it is finished"))
             index = self.choice.GetSelection()
-            self.DownloadItem(self.locations[index])
+            self.DownloadItem(self.projects[index])
         else:
             self.parent.OnCancel()
 
@@ -459,10 +459,10 @@ class LocationDownloadPanel(wx.Panel):
         Debug.msg(1, "DownloadItem: %s" % item)
         # similar code as in CheckItem
         url = item['url']
-        dirname = location_name_from_url(url)
+        dirname = project_name_from_url(url)
         destination = os.path.join(self.database, dirname)
         if os.path.exists(destination):
-            self._error(_("Location named <%s> already exists,"
+            self._error(_("Project named <%s> already exists,"
                           " download canceled") % dirname)
             self._change_download_btn_label()
             return
@@ -473,9 +473,9 @@ class LocationDownloadPanel(wx.Panel):
             if errors:
                 self._error(_("Download failed: %s") % errors)
             else:
-                self._last_downloaded_location_name = dirname
+                self._last_downloaded_project_name = dirname
                 self._warning(_("Download completed. The downloaded sample data is listed "
-                                "in the location/mapset tabs upon closing of this window")
+                                "in the project/subproject tabs upon closing of this window")
                 )
             self._change_download_btn_label()
 
@@ -488,7 +488,7 @@ class LocationDownloadPanel(wx.Panel):
 
         self._download_in_progress = True
         self._warning(_("Download in progress, wait until it is finished"))
-        self.thread.Run(callable=download_location,
+        self.thread.Run(callable=download_project,
                         url=url, name=dirname, database=self.database,
                         ondone=download_complete_callback,
                         onterminate=terminate_download_callback)
@@ -496,25 +496,25 @@ class LocationDownloadPanel(wx.Panel):
     def OnChangeChoice(self, event):
         """React to user changing the selection"""
         index = self.choice.GetSelection()
-        self.CheckItem(self.locations[index])
+        self.CheckItem(self.projects[index])
 
     def CheckItem(self, item):
         """Check what user selected and report potential issues"""
         # similar code as in DownloadItem
         url = item['url']
-        dirname = location_name_from_url(url)
+        dirname = project_name_from_url(url)
         destination = os.path.join(self.database, dirname)
         if os.path.exists(destination):
-            self._warning(_("Location named <%s> already exists,"
+            self._warning(_("Project named <%s> already exists,"
                             " rename it first") % dirname)
             self.parent.download_button.SetLabel(label=_('Download'))
             return
         else:
             self._clearMessage()
 
-    def GetLocation(self):
-        """Get the name of the last location downloaded by the user"""
-        return self._last_downloaded_location_name
+    def GetProject(self):
+        """Get the name of the last project downloaded by the user"""
+        return self._last_downloaded_project_name
 
     def _warning(self, text):
         """Displays a warning, hint or info message to the user.
@@ -552,23 +552,23 @@ class LocationDownloadPanel(wx.Panel):
         self.sizer.Layout()
 
 
-class LocationDownloadDialog(wx.Dialog):
-    """Dialog for download of locations
+class ProjectDownloadDialog(wx.Dialog):
+    """Dialog for download of projects
 
     Contains the panel and Cancel button.
     """
     def __init__(self, parent, database,
-                 title=_("GRASS GIS Location Download")):
+                 title=_("GRASS GIS Project Download")):
         """
-        :param database: database to download the location to
+        :param database: database to download the project to
         :param title: window title if the default is not appropriate
         """
         wx.Dialog.__init__(self, parent=parent, title=title)
         cancel_button = Button(self, id=wx.ID_CANCEL)
         self.download_button = Button(parent=self, id=wx.ID_ANY,
                                       label=_("Do&wnload"))
-        self.download_button.SetToolTip(_("Download selected location"))
-        self.panel = LocationDownloadPanel(parent=self, database=database)
+        self.download_button.SetToolTip(_("Download selected project"))
+        self.panel = ProjectDownloadPanel(parent=self, database=database)
         cancel_button.Bind(wx.EVT_BUTTON, self.OnCancel)
         self.Bind(wx.EVT_CLOSE, self.OnCancel)
 
@@ -598,15 +598,15 @@ class LocationDownloadDialog(wx.Dialog):
 
         self.Layout()
 
-    def GetLocation(self):
-        """Get the name of the last location downloaded by the user"""
-        return self.panel.GetLocation()
+    def GetProject(self):
+        """Get the name of the last project downloaded by the user"""
+        return self.panel.GetProject()
 
     def OnCancel(self, event=None):
         if self.panel._download_in_progress:
             # running thread
             dlg = wx.MessageDialog(parent=self,
-                                   message=_("Do you want to cancel location download?"),
+                                   message=_("Do you want to cancel project download?"),
                                    caption=_("Abort download"),
                                    style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE
             )
@@ -633,19 +633,19 @@ def main():
     app = wx.App()
 
     if len(sys.argv) == 2 or sys.argv[2] == 'dialog':
-        window = LocationDownloadDialog(parent=None, database=database)
+        window = ProjectDownloadDialog(parent=None, database=database)
         window.ShowModal()
-        location = window.GetLocation()
-        if location:
-            print(location)
+        project = window.GetProject()
+        if project:
+            print(project)
         window.Destroy()
     elif sys.argv[2] == 'panel':
         window = wx.Dialog(parent=None)
-        panel = LocationDownloadPanel(parent=window, database=database)
+        panel = ProjectDownloadPanel(parent=window, database=database)
         window.ShowModal()
-        location = panel.GetLocation()
-        if location:
-            print(location)
+        project = panel.GetProject()
+        if project:
+            print(project)
         window.Destroy()
     else:
         print("Unknown settings: try dialog or panel")

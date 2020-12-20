@@ -13,7 +13,7 @@ import grass.script as grass
 
 from grass.pygrass.errors import GrassError
 from grass.pygrass.shell.conversion import dict2html
-from grass.pygrass.utils import get_mapset_vector, get_mapset_raster
+from grass.pygrass.utils import get_subproject_vector, get_subproject_raster
 
 test_vector_name = "Region_test_vector"
 test_raster_name = "Region_test_raster"
@@ -397,8 +397,8 @@ class Region(object):
             :param raster_name: the name of raster
             :type raster_name: str
 
-            :param mapset: the mapset of raster
-            :type mapset: str
+            :param subproject: the subproject of raster
+            :type subproject: str
 
             call C function `Rast_get_cellhd`
 
@@ -415,13 +415,13 @@ class Region(object):
             ..
            """
         if not raster_name:
-            raise ValueError("Raster name or mapset are invalid")
+            raise ValueError("Raster name or subproject are invalid")
 
 
-        mapset = get_mapset_raster(raster_name)
+        subproject = get_subproject_raster(raster_name)
 
-        if mapset:
-            libraster.Rast_get_cellhd(raster_name, mapset,
+        if subproject:
+            libraster.Rast_get_cellhd(raster_name, subproject,
                                       self.byref())
 
     def set_raster_region(self):
@@ -509,7 +509,7 @@ class Region(object):
           Read the region into this region object
 
           Reads the region as stored in the WIND file in the user's current
-          mapset into region.
+          subproject into region.
 
           3D values are set to defaults if not available in WIND file.  An
           error message is printed and exit() is called if there is a problem
@@ -521,7 +521,7 @@ class Region(object):
           map data (or vector data) can query the active module region using
           Rast_window_rows() and Rast_window_cols().
 
-          :param force_read: If True the WIND file of the current mapset
+          :param force_read: If True the WIND file of the current subproject
                              is re-readed, otherwise the initial region
                              set at process start will be loaded from the internal
                              static variables.
@@ -537,7 +537,7 @@ class Region(object):
         """Writes the region from this region object
 
            This function writes this region to the Region file (WIND)
-           in the users current mapset. This function should be
+           in the users current subproject. This function should be
            carefully used, since the user will ot notice if his region
            was changed and would expect that only g.region will do this.
 
@@ -577,7 +577,7 @@ class Region(object):
         """
           Get the default region
 
-          Reads the default region for the location in this Region object.
+          Reads the default region for the project in this Region object.
           3D values are set to defaults if not available in WIND file.
 
           An error message is printed and exit() is called if there is a
@@ -637,9 +637,9 @@ if __name__ == "__main__":
     doctest.testmod()
 
     """Remove the generated vector map, if exist"""
-    mset = utils.get_mapset_vector(test_vector_name, mapset='')
+    mset = utils.get_subproject_vector(test_vector_name, subproject='')
     if mset:
         run_command("g.remove", flags='f', type='vector', name=test_vector_name)
-    mset = utils.get_mapset_raster(test_raster_name, mapset='')
+    mset = utils.get_subproject_raster(test_raster_name, subproject='')
     if mset:
         run_command("g.remove", flags='f', type='raster', name=test_raster_name)

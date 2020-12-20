@@ -39,7 +39,7 @@ int do_map_header(const char *date)
 	strcpy(temp, G_myname());
 	G_strip(temp);
 	if (*temp == 0)
-	    strcpy(temp, G_location());
+	    strcpy(temp, G_project());
 	fprintf(PS.fp, "/t (LOCATION:  %s) def\n", temp);
 	fprintf(PS.fp, "t SW pop %.1f XS D2 t exch %.1f MS\n",
 		72 * PS.page_width, y);
@@ -107,7 +107,7 @@ static int output(char *line, const char *date)
 		    apply(date, fmt, text);
 		    break;
 		case 'l':
-		    apply(G_location(), fmt, text);
+		    apply(G_project(), fmt, text);
 		    break;
 		case 'L':
 		    apply(G_myname(), fmt, text);
@@ -116,15 +116,15 @@ static int output(char *line, const char *date)
 		    if (PS.cell_fd >= 0) {
 			char name[100];
 
-			sprintf(name, "<%s> in mapset <%s>",
-				PS.cell_name, PS.cell_mapset);
+			sprintf(name, "<%s> in subproject <%s>",
+				PS.cell_name, PS.cell_subproject);
 			apply(name, fmt, text);
 		    }
 		    else
 			apply("none", fmt, text);
 		    break;
 		case 'm':
-		    apply(G_mapset(), fmt, text);
+		    apply(G_subproject(), fmt, text);
 		    break;
 		case 'u':
 		    apply(G_whoami(), fmt, text);

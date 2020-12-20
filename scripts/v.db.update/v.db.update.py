@@ -66,11 +66,11 @@ def main():
     where = options['where']
     sqlitefile = options['sqliteextra']
 
-    mapset = grass.gisenv()['MAPSET']
+    subproject = grass.gisenv()['MAPSET']
 
-    # does map exist in CURRENT mapset?
-    if not grass.find_file(vector, element='vector', mapset=mapset)['file']:
-        grass.fatal(_("Vector map <%s> not found in current mapset") % vector)
+    # does map exist in CURRENT subproject?
+    if not grass.find_file(vector, element='vector', subproject=subproject)['file']:
+        grass.fatal(_("Vector map <%s> not found in current subproject") % vector)
 
     try:
         f = grass.vector_db(vector)[int(layer)]

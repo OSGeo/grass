@@ -2,10 +2,10 @@
 
 <em>v.import</em> imports vector data from files and database connections
 supported by the <a href="http://www.gdal.org/">OGR</a> library) into the
-current location and mapset. If the projection of the input
-does not match the projection of the location, the input is reprojected
-into the current location. In case that the projection of the input map
-does match the projection of the location, the input is imported directly.
+current project and subproject. If the projection of the input
+does not match the projection of the project, the input is reprojected
+into the current project. In case that the projection of the input map
+does match the projection of the project, the input is imported directly.
 
 <h3>Supported Vector Formats</h3>
 
@@ -25,11 +25,11 @@ The list of actually supported formats can be printed by <b>-f</b> flag.
 <h2>NOTES</h2>
 
 <em>v.import</em> checks the projection metadata of the dataset to be
-imported against the current location's projection. If not identical a
+imported against the current project's projection. If not identical a
 related error message is shown.
 <br>
-To override this projection check (i.e. to use current location's projection)
-by assuming that the dataset has the same projection as the current location
+To override this projection check (i.e. to use current project's projection)
+by assuming that the dataset has the same projection as the current project
 the <b>-o</b> flag can be used. This is also useful when geodata to be
 imported do not contain any projection metadata at all. The user must be
 sure that the projection is identical in order to avoid to introduce data
@@ -48,7 +48,7 @@ default value of <tt>snap=-1</tt> means that no snapping will be done.
 
 <p>
 The <em>snap</em> threshold defines the maximal distance from one to another
-vertex in map units (for latitude-longitude locations in degrees). If there
+vertex in map units (for latitude-longitude projects in degrees). If there
 is no other vertex within <em>snap</em> distance, no snapping will be done.
 Note that a too large value can severely damage area topology, beyond repair.
 <p>
@@ -59,7 +59,7 @@ refer to the <em>v.clean</em> manual page.
 <h2>EXAMPLE</h2>
 
 <div class="code"><pre>
-# import SHAPE file at full extent and reproject to current location projection
+# import SHAPE file at full extent and reproject to current project projection
 v.import input=research_area.shp output=research_area extent=input
 </pre></div>
 
@@ -94,13 +94,13 @@ see <a href="https://www.sqlite.org/lang_keywords.html">here</a>.
 <h3>Projection errors</h3>
 
 <div class="code"><pre>
-Projection of dataset does not appear to match the current location.
+Projection of dataset does not appear to match the current project.
 </pre></div>
 
-Here you need to create or use a location whose projection matches that
-of the vector data you wish to import. Try using <b>location</b> parameter to
-create a new location based upon the projection information in the file. If
-desired, you can then re-project it to another location
+Here you need to create or use a project whose projection matches that
+of the vector data you wish to import. Try using <b>project</b> parameter to
+create a new project based upon the projection information in the file. If
+desired, you can then re-project it to another project
 with <em><a href="v.proj.html">v.proj</a></em>.
 
 <h2>SEE ALSO</h2>

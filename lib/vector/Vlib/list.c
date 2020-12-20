@@ -24,7 +24,7 @@
  * \brief Creates and initializes a struct ilist.
  *
  * This structure is used as container for integer values. The
- * library routines handle all memory allocation.
+ * library routines handle all memory alproject.
  *
  * \return pointer to struct ilist
  * \return NULL on error
@@ -215,7 +215,7 @@ int Vect_val_in_list(const struct ilist *list, int val)
  * \brief Creates and initializes a struct boxlist.
  *
  * This structure is used as container for bounding boxes with id. The
- * library routines handle all memory allocation.
+ * library routines handle all memory alproject.
  *
  * \param have_boxes if set to 0, the list will hold only ids and no boxes
  * 

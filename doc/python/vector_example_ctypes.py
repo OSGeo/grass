@@ -22,8 +22,8 @@ else:
 G_gisinit('')
 
 # find vector map in the search path
-mapset = G_find_vector2(input, "")
-if not mapset:
+subproject = G_find_vector2(input, "")
+if not subproject:
     sys.exit("Vector map <%s> not found" % input)
 
 # define map structure
@@ -33,7 +33,7 @@ map_info = pointer(Map_info())
 Vect_set_open_level(2)
 
 # open existing vector map
-Vect_open_old(map_info, input, mapset)
+Vect_open_old(map_info, input, subproject)
 
 # query
 print('Vector map        :', Vect_get_full_name(map_info))

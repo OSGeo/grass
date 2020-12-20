@@ -30,7 +30,7 @@ typedef struct _label_point label_point_t;
 typedef struct _label_score label_score_t;
 
 /**
- * A structure representing a point location */
+ * A structure representing a point project */
 struct _label_point
 {
 

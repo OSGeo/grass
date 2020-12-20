@@ -378,7 +378,7 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map, const struct ilist *List_lines
 		Points->y[v] = XPnts[anchor].y;
 		nsnapped++;
 		changed = 1;
-		Index[v] = anchor;	/* point on new location */
+		Index[v] = anchor;	/* point on new project */
 	    }
 	    else {
 		Index[v] = spoint;	/* old point */
@@ -747,7 +747,7 @@ Vect_snap_lines_list_rtree(struct Map_info *Map, const struct ilist *List_lines,
 		Points->y[v] = XPnts[anchor].y;
 		nsnapped++;
 		changed = 1;
-		Index[v] = anchor;	/* point on new location */
+		Index[v] = anchor;	/* point on new project */
 	    }
 	    else {
 		Index[v] = spoint;	/* old point */

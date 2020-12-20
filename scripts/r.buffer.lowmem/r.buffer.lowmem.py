@@ -122,7 +122,7 @@ def main():
 
     p = grass.feed_command('r.category', map=output,
                            separator=':', rules='-')
-    msg = "1:distances calculated from these locations\n"
+    msg = "1:distances calculated from these projects\n"
     p.stdin.write(encode(msg))
     d0 = "0"
     for n, d in enumerate(distances):

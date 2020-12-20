@@ -17,7 +17,7 @@ void new_stats(const char *name, struct Reclass *reclass)
 
     /* read histogram for original file */
     G_suppress_warnings(1);
-    i = Rast_read_histogram(reclass->name, reclass->mapset, &histo);
+    i = Rast_read_histogram(reclass->name, reclass->subproject, &histo);
     G_suppress_warnings(0);
     if (i <= 0)
 	return;

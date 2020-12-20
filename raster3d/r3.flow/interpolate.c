@@ -39,14 +39,14 @@ static void find_nearest_voxels(RASTER3D_Region * region,
     t_minus = top - region->tb_res / 2;
     t_plus = top + region->tb_res / 2;
 
-    Rast3d_location2coord(region, n_minus, e_minus, t_minus, x++, y++, z++);
-    Rast3d_location2coord(region, n_minus, e_plus, t_minus, x++, y++, z++);
-    Rast3d_location2coord(region, n_plus, e_minus, t_minus, x++, y++, z++);
-    Rast3d_location2coord(region, n_plus, e_plus, t_minus, x++, y++, z++);
-    Rast3d_location2coord(region, n_minus, e_minus, t_plus, x++, y++, z++);
-    Rast3d_location2coord(region, n_minus, e_plus, t_plus, x++, y++, z++);
-    Rast3d_location2coord(region, n_plus, e_minus, t_plus, x++, y++, z++);
-    Rast3d_location2coord(region, n_plus, e_plus, t_plus, x, y, z);
+    Rast3d_project2coord(region, n_minus, e_minus, t_minus, x++, y++, z++);
+    Rast3d_project2coord(region, n_minus, e_plus, t_minus, x++, y++, z++);
+    Rast3d_project2coord(region, n_plus, e_minus, t_minus, x++, y++, z++);
+    Rast3d_project2coord(region, n_plus, e_plus, t_minus, x++, y++, z++);
+    Rast3d_project2coord(region, n_minus, e_minus, t_plus, x++, y++, z++);
+    Rast3d_project2coord(region, n_minus, e_plus, t_plus, x++, y++, z++);
+    Rast3d_project2coord(region, n_plus, e_minus, t_plus, x++, y++, z++);
+    Rast3d_project2coord(region, n_plus, e_plus, t_plus, x, y, z);
 }
 
 /*!
@@ -111,7 +111,7 @@ static void get_relative_coords_for_interp(RASTER3D_Region * region,
     int col, row, depth;
     double temp;
 
-    Rast3d_location2coord(region, north, east, top, &col, &row, &depth);
+    Rast3d_project2coord(region, north, east, top, &col, &row, &depth);
 
     /* x */
     temp = east - region->west - col * region->ew_res;
@@ -155,7 +155,7 @@ int interpolate_velocity(RASTER3D_Region * region, RASTER3D_Map ** map,
     int type;
 
     /* check if we are out of region, any array should work */
-    if (!Rast3d_is_valid_location(region, north, east, top))
+    if (!Rast3d_is_valid_project(region, north, east, top))
 	return -1;
 
     find_nearest_voxels(region, north, east, top, x, y, z);

@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 {
     struct Cell_head window;
     char *label_name;
-    const char *mapset;
+    const char *subproject;
     double minreg, maxreg, reg, dx, dy;
     FILE *infile;
     struct Option *opt1;
@@ -80,8 +80,8 @@ int main(int argc, char **argv)
     label_name = opt1->answer;
 
     /* Make sure map is available */
-    mapset = G_find_file("paint/labels", label_name, "");
-    if (mapset == NULL)
+    subproject = G_find_file("paint/labels", label_name, "");
+    if (subproject == NULL)
 	G_fatal_error(_("Label file <%s> not found"), label_name);
 
     /* Read in the map window associated with window */
@@ -109,7 +109,7 @@ int main(int argc, char **argv)
     }
 
     /* Open map is available */
-    infile = G_fopen_old("paint/labels", label_name, mapset);
+    infile = G_fopen_old("paint/labels", label_name, subproject);
     if (infile == NULL)
 	G_fatal_error(_("Unable to open label file <%s>"), label_name);
 

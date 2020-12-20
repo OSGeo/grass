@@ -631,7 +631,7 @@ static int read_dblinks_nat(struct Map_info *Map)
 
     /* Read dblink for native format */
     Vect__get_path(path, Map);
-    fd = G_fopen_old(path, GV_DBLN_ELEMENT, Map->mapset);
+    fd = G_fopen_old(path, GV_DBLN_ELEMENT, Map->subproject);
     if (fd == NULL) {		/* This may be correct, no tables defined */
 	G_debug(1, "Cannot open vector database definition file");
 	return -1;
@@ -919,8 +919,8 @@ static int read_dblinks_pg(struct Map_info *Map)
  */
 int Vect_read_dblinks(struct Map_info *Map)
 {
-    G_debug(1, "Vect_read_dblinks(): map = %s, mapset = %s", Map->name,
-	    Map->mapset);
+    G_debug(1, "Vect_read_dblinks(): map = %s, subproject = %s", Map->name,
+	    Map->subproject);
     
     Vect_reset_dblinks(Map->dblnk);
 
@@ -959,8 +959,8 @@ int Vect_write_dblinks(struct Map_info *Map)
 	/* nothing to write for non-native formats */
 	return 0;
     
-    G_debug(1, "Vect_write_dblinks(): map = %s, mapset = %s", Map->name,
-	    Map->mapset);
+    G_debug(1, "Vect_write_dblinks(): map = %s, subproject = %s", Map->name,
+	    Map->subproject);
 
     dbl = Map->dblnk;
 
@@ -1005,8 +1005,8 @@ char *Vect_subst_var(const char *in, const struct Map_info *Map)
     char *c;
     char buf[1000], str[1000];
 
-    G_debug(3, "Vect_subst_var(): in = %s, map = %s, mapset = %s", in,
-	    Map->name, Map->mapset);
+    G_debug(3, "Vect_subst_var(): in = %s, map = %s, subproject = %s", in,
+	    Map->name, Map->subproject);
 
 #ifdef __MINGW32__
     char *cin;
@@ -1028,14 +1028,14 @@ char *Vect_subst_var(const char *in, const struct Map_info *Map)
     c = (char *)strstr(buf, "$LOCATION_NAME");
     if (c != NULL) {
 	*c = '\0';
-	sprintf(str, "%s%s%s", buf, Map->location, c + 14);
+	sprintf(str, "%s%s%s", buf, Map->project, c + 14);
     }
 
     strcpy(buf, str);
     c = (char *)strstr(buf, "$MAPSET");
     if (c != NULL) {
 	*c = '\0';
-	sprintf(str, "%s%s%s", buf, Map->mapset, c + 7);
+	sprintf(str, "%s%s%s", buf, Map->subproject, c + 7);
     }
 
     strcpy(buf, str);
@@ -1060,9 +1060,9 @@ char *Vect_subst_var(const char *in, const struct Map_info *Map)
 */
 void Vect_set_db_updated(struct Map_info *Map)
 {
-    if (strcmp(Map->mapset, G_mapset()) != 0 &&
-	G_strcasecmp(Map->mapset, "ogr") != 0) {
-	G_fatal_error(_("Bug: attempt to update map which is not in current mapset"));
+    if (strcmp(Map->subproject, G_subproject()) != 0 &&
+	G_strcasecmp(Map->subproject, "ogr") != 0) {
+	G_fatal_error(_("Bug: attempt to update map which is not in current subproject"));
     }
 
     Vect_write_dblinks(Map);

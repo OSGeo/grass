@@ -21,7 +21,7 @@ except:
     from grass.pygrass.orderdict import OrderedDict
 
 import grass.lib.vector as libvect
-from grass.pygrass.gis import Mapset
+from grass.pygrass.gis import Subproject
 from grass.pygrass.errors import DBError
 from grass.pygrass.utils import table_exist, decode
 from grass.script.db import db_table_in_vector
@@ -68,10 +68,10 @@ def get_path(path, vect_name=None):
     if "$" not in path:
         return path
     else:
-        mapset = Mapset()
-        path = path.replace('$GISDBASE', mapset.gisdbase)
-        path = path.replace('$LOCATION_NAME', mapset.location)
-        path = path.replace('$MAPSET', mapset.name)
+        subproject = Subproject()
+        path = path.replace('$GISDBASE', subproject.gisdbase)
+        path = path.replace('$LOCATION_NAME', subproject.project)
+        path = path.replace('$MAPSET', subproject.name)
         if vect_name is not None:
             path = path.replace('$MAP', vect_name)
         return path
@@ -1188,8 +1188,8 @@ if __name__ == "__main__":
 
 
     """Remove the generated vector map, if exist"""
-    from grass.pygrass.utils import get_mapset_vector
+    from grass.pygrass.utils import get_subproject_vector
     from grass.script.core import run_command
-    mset = get_mapset_vector(test_vector_name, mapset='')
+    mset = get_subproject_vector(test_vector_name, subproject='')
     if mset:
         run_command("g.remove", flags='f', type='vector', name=test_vector_name)

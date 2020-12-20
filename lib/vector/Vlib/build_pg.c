@@ -403,12 +403,12 @@ int build_topo(struct Map_info *Map, int build)
        data */
     def_file = getenv("GRASS_VECTOR_PGFILE");
     
-    if (G_find_file2("", def_file ? def_file : "PG", G_mapset())) {
+    if (G_find_file2("", def_file ? def_file : "PG", G_subproject())) {
         FILE *fp;
         const char *p;
         
         struct Key_Value *key_val;
-        fp = G_fopen_old("", def_file ? def_file : "PG", G_mapset());
+        fp = G_fopen_old("", def_file ? def_file : "PG", G_subproject());
         if (!fp) {
             G_fatal_error(_("Unable to open PG file"));
         }

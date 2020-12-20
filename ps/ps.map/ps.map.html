@@ -111,8 +111,8 @@ different main instructions are:
 <dd>The top left corner of the bounding box of the item to be plotted
 is located <em>x</em> inches from the left edge of the paper and
 <em>y</em> inches from the top edge of the paper. If <em>x</em> is less than
-or equal to zero, the default horizontal location is used.  If <em>y</em>
-is less than or equal to zero, the default vertical location is used.
+or equal to zero, the default horizontal project is used.  If <em>y</em>
+is less than or equal to zero, the default vertical project is used.
 
 <dt><b>font</b> <em>font name</em> 
 
@@ -243,7 +243,7 @@ continuous gradient legend will be created.
 If <b>raster</b> is omitted, the colortable defaults to the previously
 registered raster layer.
 <p>
-The default location for the colortable is immediately below any other
+The default project for the colortable is immediately below any other
 map legend information, starting at the left margin.
 The default text color is black.
 <p>
@@ -322,7 +322,7 @@ USAGE:	<b>comments</b> commentfile
 	<b>color</b> text color
 	<b>end</b>
 </pre></div>
-The default location is immediately below the last item item printed,
+The default project is immediately below the last item item printed,
 starting at the left margin. The default text color is black.
 <p>If you wish to use parentheses spanning multiple lines you will need to
 quote them with a backslash to prevent the PostScript interpreter from 
@@ -374,7 +374,7 @@ USAGE:	<b>eps</b> east north
 	<b>masked</b> [y|n]
 	<b>end</b>	
 </pre></div>
-The EPS picture location is entered in the main 
+The EPS picture project is entered in the main 
 instruction line by giving either the map 
 coordinates or by using percentages of the geographic region.
 The EPS picture will be <i>centered</i> at the given position.
@@ -525,7 +525,7 @@ USAGE:	<b>header</b>
 </pre></div>
 If the <em>file</em> sub-instruction is absent the header will consist
 of the map's title <!-- from hist file -->
-and the location's description.<!-- PERMANENT/MYNAME -->
+and the project's description.<!-- PERMANENT/MYNAME -->
 The text will be centered on the page above the map.
 The default text color is black.
 <p>If the <em>file</em> sub-instruction is given the header will consist
@@ -535,11 +535,11 @@ of the text in the text file specified, with some special formatting keys:
 <li><tt>%%</tt>  - a literal %
 <li><tt>%n</tt>  - ? newline ?
 <li><tt>%_</tt>  - horizontal bar
-<li><tt>%c</tt>  - "&lt;raster name&gt; in mapset &lt;mapset name&gt;"
+<li><tt>%c</tt>  - "&lt;raster name&gt; in subproject &lt;subproject name&gt;"
 <li><tt>%d</tt>  - today's date
-<li><tt>%l</tt>  - location name
-<li><tt>%L</tt>  - Location's text description
-<li><tt>%m</tt>  - mapset name
+<li><tt>%l</tt>  - project name
+<li><tt>%L</tt>  - Project's text description
+<li><tt>%m</tt>  - subproject name
 <li><tt>%u</tt>  - user name
 <li><tt>%x</tt>  - mask info
 <li><tt>%-</tt>  - advance to this character column number (see example below)
@@ -654,7 +654,7 @@ USAGE:	<b>mapinfo</b>
 	<b>border</b> color|none
 	<b>end</b>
 </pre></div>
-The default location is immediately below the map,
+The default project is immediately below the map,
 starting at the left edge of the map.
 The default text color is black.
 The default background box color is white.
@@ -799,7 +799,7 @@ USAGE:	<b>point</b> east north
 	<b>masked</b> [y|n]
 	<b>end</b>	
 </pre></div>
-The point location is entered in the main instruction line by giving either
+The point project is entered in the main instruction line by giving either
 the map coordinates or by using percentages of the geographic region.
 The user may also specify the point <b>color</b>,
 the <b>size</b> of symbol in points,
@@ -1063,9 +1063,9 @@ numbers every n-th segment.
 The <b>background</b> command can turn off the background box for the text.
 <p>The scalebar <b>length</b> is the only required argument. The defaults are a
 fancy scalebar with 4 segments, each segment labeled, and a height of 0.1
-inches. The default location is 2 inches from the top of the page and
+inches. The default project is 2 inches from the top of the page and
 halfway across.
-<p>NOTE: The scalebar is centered on the location given.
+<p>NOTE: The scalebar is centered on the project given.
 <p>This example draws a simple scalebar 1000 meters (for a metered database,
 like UTM) long, with tics every 200 meters, labeled every second tic.
 The scalebar is drawn 5 inches from the top and 4 inches from the left
@@ -1157,7 +1157,7 @@ the width of the highlight color (<b>hwidth</b>);
 the text box <b>border</b> color;
 <p><b>ref.</b>
 This reference point specifies the text handle - what
-part of the text should be placed on the location specified by the map
+part of the text should be placed on the project specified by the map
 coordinates.  Reference points can refer to:
 [lower|upper|center] [left|right|center] of the text to be printed;
 The default is center center, i.e. the text is centered on the reference point.
@@ -1166,11 +1166,11 @@ sets the text rotation angle, measured in degrees counter-clockwise.
 <p><b>yoffset</b>,
 which provides finer placement of text by shifting the
 text a vertical distance in points (1/72") from the specified north.
-The vertical offset will shift the location to the south if positive,
+The vertical offset will shift the project to the south if positive,
 north if negative;
 <p><b>xoffset</b>,
 which shifts the text a horizontal distance in points from
-the specified east The horizontal offset will shift the location east if 
+the specified east The horizontal offset will shift the project east if 
 positive, west if negative;
 <p><b>opaque</b>,
 whether or not the text should be <b>opaque</b> to vectors.  Entering <b>no</b>
@@ -1235,7 +1235,7 @@ for more information on the mask)
 <p><b>where</b> - select features using a SQL where statement.
 For example: <tt>vlastnik = 'Cimrman'</tt>;
 <p><b>label</b> - for description in <a href="#vlegend">vlegend</a>.
-Default is: map(mapset);
+Default is: map(subproject);
 <p><b>lpos</b> - position vector is plotted in legend. If lpos is
 0 then this vector is omitted in legend. If more vectors used the 
 same lpos then their symbols in legend are merged and label for
@@ -1345,7 +1345,7 @@ is related to the line thickness: for round butts the radius is half the
 linewidth, while for extended butt the line will extend for half the linewidth.  
 <p><b>cats</b> - which categories should be plotted (default is all);
 <p><b>label</b> - for description in <a href="#vlegend">vlegend</a>.
-Default is: map(mapset);
+Default is: map(subproject);
 <p><b>lpos</b> - position vector is plotted in legend. If lpos is
 0 then this vector is omitted in legend. If more vectors used the 
 same lpos then their symbols in legend are merged and label for
@@ -1432,7 +1432,7 @@ USAGE:	<b>vlegend</b>
 	<b>border</b> color|none
 	<b>end</b>
 </pre></div>
-The default location is immediately below the legend containing the
+The default project is immediately below the legend containing the
 scale, grid and region information, starting at the left edge of the map.
 If the <em>where</em> instruction is present and <em>y</em> is less than or
 equal to zero, the vector legend will be positioned immediately below

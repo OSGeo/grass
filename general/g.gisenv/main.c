@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     store_opt = G_define_option();
     store_opt->key = "store";
     store_opt->type = TYPE_STRING;
-    store_opt->options = "gisrc,mapset";
+    store_opt->options = "gisrc,subproject";
     store_opt->answer = "gisrc";
     store_opt->description = _("Where GRASS variable is stored");
     store_opt->required = NO;

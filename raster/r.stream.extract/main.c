@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     double seg2kb;
     int num_open_segs, num_open_array_segs, num_seg_total;
     double memory_divisor, heap_mem, disk_space;
-    const char *mapset;
+    const char *subproject;
 
     G_gisinit(argv[0]);
 
@@ -239,19 +239,19 @@ int main(int argc, char *argv[])
     /*********************/
 
     /* open input maps */
-    mapset = G_find_raster2(input.ele->answer, "");
-    ele_fd = Rast_open_old(input.ele->answer, mapset);
+    subproject = G_find_raster2(input.ele->answer, "");
+    ele_fd = Rast_open_old(input.ele->answer, subproject);
 
     if (input.acc->answer) {
-	mapset = G_find_raster2(input.acc->answer, "");
-	acc_fd = Rast_open_old(input.acc->answer, mapset);
+	subproject = G_find_raster2(input.acc->answer, "");
+	acc_fd = Rast_open_old(input.acc->answer, subproject);
     }
     else
 	acc_fd = -1;
 
     if (input.depression->answer) {
-	mapset = G_find_raster2(input.depression->answer, "");
-	depr_fd = Rast_open_old(input.depression->answer, mapset);
+	subproject = G_find_raster2(input.depression->answer, "");
+	depr_fd = Rast_open_old(input.depression->answer, subproject);
     }
     else
 	depr_fd = -1;

@@ -45,11 +45,11 @@ def main():
     infile = options['input']
     outfile = options['output']
 
-    # are we in LatLong location?
+    # are we in LatLong project?
     s = grass.read_command("g.proj", flags='j')
     kv = grass.parse_key_val(s)
     if kv['+proj'] != 'longlat':
-        grass.fatal(_("This module only operates in LatLong/WGS84 locations"))
+        grass.fatal(_("This module only operates in LatLong/WGS84 projects"))
 
     # input test
     if not os.access(infile, os.R_OK):

@@ -112,7 +112,7 @@ you use <b>r.horizon</b> in the raster map mode this option will be ignored.
 even if you use geographical coordinates (longitude/latitude). If your 
 projection is based on distance (easting and northing), these too must 
 be in meters. The buffer parameters must be in the same units as the 
-raster coordinates (e.g., for latitude-longitude locations buffers are
+raster coordinates (e.g., for latitude-longitude projects buffers are
 measured in degree unit).
 
 
@@ -193,7 +193,7 @@ bars = ax.plot(horizon[:, 0] / 180 * np.pi,
                (90 - horizon[:, 1]) / 180 * np.pi)
 # uncomment the 2 following lines when using -c flag
 # ax.set_theta_direction(-1)
-# ax.set_theta_zero_location('N')
+# ax.set_theta_zero_project('N')
 plt.show()
 </pre></div>
 

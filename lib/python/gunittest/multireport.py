@@ -34,8 +34,8 @@ class TestResultSummary(object):
     def __init__(self):
         self.timestamp = None
         self.svn_revision = None
-        self.location = None
-        self.location_type = None
+        self.project = None
+        self.project_type = None
 
         self.total = None
         self.successes = None
@@ -296,9 +296,9 @@ def main_page(results, filename, images, captions, title='Test reports',
         )
         for result in reversed(results):
             # TODO: include name to summary file
-            # now using location or test report directory as name
-            if result.location != 'unknown':
-                name = result.location
+            # now using project or test report directory as name
+            if result.project != 'unknown':
+                name = result.project
             else:
                 name = os.path.basename(result.report)
                 if not name:
@@ -351,7 +351,7 @@ def main():
     ensure_dir(output)
 
     all_results = []
-    results_in_locations = defaultdict(list)
+    results_in_projects = defaultdict(list)
 
     for report in reports:
         try:
@@ -386,29 +386,29 @@ def main():
             result.tested_dirs = summary['tested_dirs']
             result.report = report
 
-            # let's consider no location as valid state and use 'unknown'
-            result.location = summary.get('location', 'unknown')
-            result.location_type = summary.get('location_type', 'unknown')
-            # grouping according to location types
-            # this can cause that two actual locations tested at the same time
+            # let's consider no project as valid state and use 'unknown'
+            result.project = summary.get('project', 'unknown')
+            result.project_type = summary.get('project_type', 'unknown')
+            # grouping according to project types
+            # this can cause that two actual projects tested at the same time
             # will end up together, this is not ideal but testing with
-            # one location type and different actual locations is not standard
+            # one project type and different actual projects is not standard
             # and although it will not break anything it will not give a nice
             # report
-            results_in_locations[result.location_type].append(result)
+            results_in_projects[result.project_type].append(result)
 
             all_results.append(result)
             del result
         except KeyError as e:
             print('File %s does not have right values (%s)' % (report, e.message))
 
-    locations_main_page = open(os.path.join(output, 'index.html'), 'w')
-    locations_main_page.write(
+    projects_main_page = open(os.path.join(output, 'index.html'), 'w')
+    projects_main_page.write(
         '<html><body>'
-        '<h1>Test reports grouped by location type</h1>'
+        '<h1>Test reports grouped by project type</h1>'
         '<table>'
         '<thead><tr>'
-        '<th>Location</th>'
+        '<th>Project</th>'
         '<th>Successful files</th><th>Successful tests</th>'
         '</tr></thead>'
         '<tbody>'
@@ -420,17 +420,17 @@ def main():
     plot_style = PlotStyle(linestyle='-', linewidth=4.0,
                            success_color='g', fail_color='r', total_color='b')
 
-    for location_type, results in results_in_locations.items():
+    for project_type, results in results_in_projects.items():
         results = sorted(results, key=operator.attrgetter('timestamp'))
-        # TODO: document: location type must be a valid dir name
-        directory = os.path.join(output, location_type)
+        # TODO: document: project type must be a valid dir name
+        directory = os.path.join(output, project_type)
         ensure_dir(directory)
 
-        if location_type == 'unknown':
+        if project_type == 'unknown':
             title = 'Test reports'
         else:
-            title = ('Test reports for &lt;{type}&gt; location type'
-                     .format(type=location_type))
+            title = ('Test reports for &lt;{type}&gt; project type'
+                     .format(type=project_type))
         
         x = [date2num(result.timestamp) for result in results]
         # the following would be an alternative but it does not work with
@@ -488,16 +488,16 @@ def main():
             total=total, successes=successes)
         per_file = success_to_html_percent(
             total=files_total, successes=files_successes)
-        locations_main_page.write(
+        projects_main_page.write(
             '<tr>'
-            '<td><a href={location}/index.html>{location}</a></td>'
+            '<td><a href={project}/index.html>{project}</a></td>'
             '<td>{pfiles}</td><td>{ptests}</td>'
             '</tr>'
-            .format(location=location_type,
+            .format(project=project_type,
                     pfiles=per_file, ptests=per_test))
-    locations_main_page.write('</tbody></table>')
-    locations_main_page.write('</body></html>')
-    locations_main_page.close()
+    projects_main_page.write('</tbody></table>')
+    projects_main_page.write('</body></html>')
+    projects_main_page.close()
     return 0
 
 if __name__ == '__main__':

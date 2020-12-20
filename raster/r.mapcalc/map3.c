@@ -37,7 +37,7 @@ void setup_region(void)
 typedef struct map
 {
     const char *name;
-    const char *mapset;
+    const char *subproject;
     int have_cats;
     int have_colors;
     int min_row, max_row;
@@ -178,22 +178,22 @@ static void init_colors(map * m)
     if (!set)
 	set = G_malloc(columns);
 
-    if (Rast3d_read_colors((char *)m->name, (char *)m->mapset, &m->colors) < 0)
+    if (Rast3d_read_colors((char *)m->name, (char *)m->subproject, &m->colors) < 0)
 	G_fatal_error(_("Unable to read color file for raster map <%s@%s>"),
-		      m->name, m->mapset);
+		      m->name, m->subproject);
 
     m->have_colors = 1;
 }
 
 static void init_cats(map * m)
 {
-    if (Rast3d_read_cats((char *)m->name, (char *)m->mapset, &m->cats) < 0)
+    if (Rast3d_read_cats((char *)m->name, (char *)m->subproject, &m->cats) < 0)
 	G_fatal_error(_("Unable to read category file of raster map <%s@%s>"),
-		      m->name, m->mapset);
+		      m->name, m->subproject);
 
     if (!btree_create(&m->btree, compare_ints, 1))
 	G_fatal_error(_("Unable to create btree for raster map <%s@%s>"),
-		      m->name, m->mapset);
+		      m->name, m->subproject);
 
     m->have_cats = 1;
 }
@@ -371,7 +371,7 @@ static void close_map(map * m)
 
     if (!Rast3d_close(m->handle))
 	G_fatal_error(_("Unable to close raster map <%s@%s>"),
-		      m->name, m->mapset);
+		      m->name, m->subproject);
 
     if (m->have_cats) {
 	btree_free(&m->btree);
@@ -389,19 +389,19 @@ static void close_map(map * m)
 
 int map_type(const char *name, int mod)
 {
-    const char *mapset;
+    const char *subproject;
     char *tmpname;
     int result;
 
     switch (mod) {
     case 'M':
 	tmpname = G_store((char *)name);
-	mapset = G_find_raster3d(tmpname, "");
-	if (mapset) {
+	subproject = G_find_raster3d(tmpname, "");
+	if (subproject) {
 	    void *handle;
 
 	    setup_region();	/* TODO: setup_region should be called by evaluate() ? */
-	    handle = Rast3d_open_cell_old(tmpname, mapset, &current_region3,
+	    handle = Rast3d_open_cell_old(tmpname, subproject, &current_region3,
 				     RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
 	    result = (Rast3d_file_type_map(handle) == FCELL_TYPE)
 		? FCELL_TYPE : DCELL_TYPE;
@@ -429,7 +429,7 @@ int map_type(const char *name, int mod)
 int open_map(const char *name, int mod, int row, int col)
 {
     int i;
-    const char *mapset;
+    const char *subproject;
     char *tmpname;
     int use_cats = 0;
     int use_colors = 0;
@@ -445,10 +445,10 @@ int open_map(const char *name, int mod, int row, int col)
 	max_col = col;
 
     tmpname = G_store((char *)name);
-    mapset = G_find_raster3d(tmpname, "");
+    subproject = G_find_raster3d(tmpname, "");
     G_free(tmpname);
 
-    if (!mapset)
+    if (!subproject)
 	G_fatal_error("open_map: map [%s] not found", name);
 
     switch (mod) {
@@ -473,7 +473,7 @@ int open_map(const char *name, int mod, int row, int col)
     for (i = 0; i < num_maps; i++) {
 	m = &maps[i];
 
-	if (strcmp(m->name, name) != 0 || strcmp(m->mapset, mapset) != 0)
+	if (strcmp(m->name, name) != 0 || strcmp(m->subproject, subproject) != 0)
 	    continue;
 
 	if (row < m->min_row)
@@ -499,7 +499,7 @@ int open_map(const char *name, int mod, int row, int col)
     m = &maps[num_maps];
 
     m->name = name;
-    m->mapset = mapset;
+    m->subproject = subproject;
     m->have_cats = 0;
     m->have_colors = 0;
     m->min_row = row;
@@ -510,7 +510,7 @@ int open_map(const char *name, int mod, int row, int col)
     if (use_colors)
 	init_colors(m);
 
-    m->handle = Rast3d_open_cell_old((char *)name, (char *)mapset,
+    m->handle = Rast3d_open_cell_old((char *)name, (char *)subproject,
 				&current_region3, DCELL_TYPE,
 				RASTER3D_USE_CACHE_DEFAULT);
 
@@ -584,7 +584,7 @@ void list_maps(FILE *fp, const char *sep)
 
     for (i = 0; i < num_maps; i++) {
         const struct map *m = &maps[i];
-        fprintf(fp, "%s%s@%s", i ? sep : "", m->name, m->mapset);
+        fprintf(fp, "%s%s@%s", i ? sep : "", m->name, m->subproject);
     }
 }
 
@@ -592,7 +592,7 @@ void list_maps(FILE *fp, const char *sep)
 
 int check_output_map(const char *name)
 {
-    return !!G_find_raster3d(name, G_mapset());
+    return !!G_find_raster3d(name, G_subproject());
 }
 
 int open_output_map(const char *name, int res_type)
@@ -644,7 +644,7 @@ void copy_cats(const char *dst, int idx)
     const map *m = &maps[idx];
     struct Categories cats;
 
-    if (Rast3d_read_cats((char *)m->name, (char *)m->mapset, &cats) < 0)
+    if (Rast3d_read_cats((char *)m->name, (char *)m->subproject, &cats) < 0)
 	return;
 
     Rast3d_write_cats((char *)dst, &cats);
@@ -656,10 +656,10 @@ void copy_colors(const char *dst, int idx)
     const map *m = &maps[idx];
     struct Colors colr;
 
-    if (Rast3d_read_colors((char *)m->name, (char *)m->mapset, &colr) <= 0)
+    if (Rast3d_read_colors((char *)m->name, (char *)m->subproject, &colr) <= 0)
 	return;
 
-    Rast3d_write_colors((char *)dst, G_mapset(), &colr);
+    Rast3d_write_colors((char *)dst, G_subproject(), &colr);
     Rast_free_colors(&colr);
 }
 
@@ -696,7 +696,7 @@ void prepare_region_from_maps(expression **map_list, int type, int num_maps) {
     int first = 0;
     struct Cell_head window, temp_window;
     int i;
-    const char *mapset;
+    const char *subproject;
 
     for (i = 0; i < num_maps; i++) {
         expression *e = map_list[i];
@@ -704,14 +704,14 @@ void prepare_region_from_maps(expression **map_list, int type, int num_maps) {
         char rast_name[GNAME_MAX];
 
         strcpy(rast_name, e->data.map.name);
-        mapset = G_find_raster2(rast_name, "");
+        subproject = G_find_raster2(rast_name, "");
 
-        if (!mapset)
+        if (!subproject)
             G_fatal_error(_("Raster map <%s> not found"), rast_name);
 
-        G_debug(1, "Setting region from raster map: %s@%s", rast_name, mapset);
+        G_debug(1, "Setting region from raster map: %s@%s", rast_name, subproject);
 
-        Rast_get_cellhd(rast_name, mapset, &temp_window);
+        Rast_get_cellhd(rast_name, subproject, &temp_window);
 
         if (!first) {
             window = temp_window;

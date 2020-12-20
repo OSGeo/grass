@@ -31,15 +31,15 @@ int do_vectors(int after_masking)
 	    continue;
 
 	G_message(_("Reading vector map <%s in %s> ..."),
-		  vector.layer[n].name, vector.layer[n].mapset);
+		  vector.layer[n].name, vector.layer[n].subproject);
 
 	Vect_set_open_level(2);
 	if (2 > Vect_open_old(&Map, vector.layer[n].name,
-				vector.layer[n].mapset)) {
+				vector.layer[n].subproject)) {
 	    char name[100];
 
 	    sprintf(name, "%s in %s", vector.layer[n].name,
-		    vector.layer[n].mapset);
+		    vector.layer[n].subproject);
 	    error("vector map", name, "can't open");
 	    continue;
 	}
@@ -134,15 +134,15 @@ int do_vpoints(int after_masking)
 	    continue;
 
 	G_message(_("Reading vector points file <%s in %s> ..."),
-		  vector.layer[n].name, vector.layer[n].mapset);
+		  vector.layer[n].name, vector.layer[n].subproject);
 
 	Vect_set_open_level(2);
 	if (2 > Vect_open_old(&Map, vector.layer[n].name,
-				vector.layer[n].mapset)) {
+				vector.layer[n].subproject)) {
 	    char name[100];
 
 	    sprintf(name, "%s in %s", vector.layer[n].name,
-		    vector.layer[n].mapset);
+		    vector.layer[n].subproject);
 	    error("vector map", name, "can't open");
 	    continue;
 	}

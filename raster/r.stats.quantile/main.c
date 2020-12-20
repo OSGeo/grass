@@ -444,7 +444,7 @@ static void do_output(int base_fd, char **outputs, const char *covermap)
     int *out_fd = G_malloc(num_quants * sizeof(int));
     CELL *base_buf = Rast_allocate_c_buf();
     DCELL *out_buf = Rast_allocate_d_buf();
-    const char *mapset = G_mapset();
+    const char *subproject = G_subproject();
     struct Colors colors;
     struct History history;
     int have_colors;
@@ -487,7 +487,7 @@ static void do_output(int base_fd, char **outputs, const char *covermap)
 	Rast_command_history(&history);
 	Rast_write_history(outputs[quant], &history);
 	if (have_colors)
-	    Rast_write_colors(outputs[quant], mapset, &colors);
+	    Rast_write_colors(outputs[quant], subproject, &colors);
     }
 }
 

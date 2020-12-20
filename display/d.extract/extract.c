@@ -48,12 +48,12 @@ int extract(struct Map_info *In, struct Map_info *Out, int type,
 	G_message(_("L: add  M: remove  R: quit and save\n"));
 
 	if (mode == M_START) {
-	    R_get_location_with_pointer(&screen_x, &screen_y, &button);
+	    R_get_project_with_pointer(&screen_x, &screen_y, &button);
 	    cur_screen_x = screen_x;
 	    cur_screen_y = screen_y;
 	}
 	else {
-	    R_get_location_with_box(cur_screen_x, cur_screen_y, &screen_x,
+	    R_get_project_with_box(cur_screen_x, cur_screen_y, &screen_x,
 				    &screen_y, &button);
 	    x1 = D_d_to_u_col((double)(cur_screen_x));
 	    y1 = D_d_to_u_row((double)(cur_screen_y));

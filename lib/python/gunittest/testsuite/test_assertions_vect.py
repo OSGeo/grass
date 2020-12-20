@@ -138,7 +138,7 @@ class TestVectorGeometryAssertions(TestCase):
     def tearDownClass(cls):
         # TODO: this should be decided globaly by cleanup variable
         # perhaps cls.gremove() wheoul be the right option
-        # when invoking separately, no need to delete maps since mapset
+        # when invoking separately, no need to delete maps since subproject
         # is deleted
         if cls.maps_to_remove:
             cls.runModule('g.remove', flags='f', type='vector',

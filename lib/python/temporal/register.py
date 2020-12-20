@@ -18,7 +18,7 @@ for details.
 """
 from datetime import datetime
 import grass.script as gscript
-from .core import get_tgis_message_interface, init_dbif, get_current_mapset
+from .core import get_tgis_message_interface, init_dbif, get_current_subproject
 from .open_stds import open_old_stds
 from .abstract_map_dataset import AbstractMapDataset
 from .factory import dataset_factory
@@ -101,8 +101,8 @@ def register_maps_in_space_time_dataset(
 
     if not maps and not file:
         msgr.fatal(_("Please specify %s= or %s=") % ("maps", "file"))
-    # We may need the mapset
-    mapset = get_current_mapset()
+    # We may need the subproject
+    subproject = get_current_subproject()
     dbif, connected = init_dbif(None)
 
     # The name of the space time dataset is optional
@@ -128,7 +128,7 @@ def register_maps_in_space_time_dataset(
         # Build the map list again with the ids
         for count in range(len(maplist)):
             row = {}
-            mapid = AbstractMapDataset.build_id(maplist[count], mapset, None)
+            mapid = AbstractMapDataset.build_id(maplist[count], subproject, None)
 
             row["id"] = mapid
             maplist[count] = row
@@ -183,7 +183,7 @@ def register_maps_in_space_time_dataset(
                 idx = 3 if end_time_in_file else 2
                 row["band_reference"] = line_list[idx].strip().upper() # case-insensitive
 
-            row["id"] = AbstractMapDataset.build_id(mapname, mapset)
+            row["id"] = AbstractMapDataset.build_id(mapname, subproject)
 
             maplist.append(row)
 

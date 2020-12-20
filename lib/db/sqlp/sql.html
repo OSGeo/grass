@@ -111,7 +111,7 @@ Select all attributes from table where <i>CORECAPACI</i> column values are
 smaller than 200 (children):
 
 <div class="code"><pre>
-# must be run from the mapset which contains the table
+# must be run from the subproject which contains the table
 echo "SELECT * FROM schools_wake WHERE CORECAPACI &lt; 200" | db.select input=-
 </pre></div>
 <p>
@@ -191,7 +191,7 @@ d.vect roads where="cat&gt;exprtest"
 North Carolina data set: convert string column to double precision:
 <p>
 <div class="code"><pre>
-# first copy map into current mapset
+# first copy map into current subproject
 g.copy vect=geodetic_pts,mygeodetic_pts
 v.db.addcolumn mygeodetic_pts col="zval double precision"
 

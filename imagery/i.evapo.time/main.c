@@ -26,7 +26,7 @@
 int main(int argc, char *argv[])
 {
     struct Cell_head cellhd;	/*region+header info */
-    char *mapset;		/*mapset name */
+    char *subproject;		/*subproject name */
     int nrows, ncols;
     int row, col;
     struct GModule *module;

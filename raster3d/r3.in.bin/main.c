@@ -471,7 +471,7 @@ int main(int argc, char *argv[]) {
 		G_fatal_error(_("Unable to close 3D raster map"));
 
 	/* write input name to map history */
-	Rast3d_read_history(output, G_mapset(), &history);
+	Rast3d_read_history(output, G_subproject(), &history);
 	Rast_set_history(&history, HIST_DATSRC_1, input);
 	Rast3d_write_history(output, &history);
 

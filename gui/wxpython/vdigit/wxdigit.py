@@ -264,22 +264,22 @@ class IVDigit:
         :return: None on error
         """
         name = create_string_buffer(GNAME_MAX)
-        mapset = create_string_buffer(GMAPSET_MAX)
-        if not G_name_is_fully_qualified(bgmap, name, mapset):
+        subproject = create_string_buffer(GMAPSET_MAX)
+        if not G_name_is_fully_qualified(bgmap, name, subproject):
             name = bgmap
-            mapset = grass.decode(G_find_vector2(bgmap, ''))
+            subproject = grass.decode(G_find_vector2(bgmap, ''))
         else:
             name = grass.decode(name.value)
-            mapset = grass.decode(mapset.value)
+            subproject = grass.decode(subproject.value)
         if (name == Vect_get_name(self.poMapInfo) and
-                mapset == Vect_get_mapset(self.poMapInfo)):
+                subproject == Vect_get_subproject(self.poMapInfo)):
             self.poBgMapInfo = self.popoBgMapInfo = None
             self._error.NoMap(bgmap)
             return
 
         self.poBgMapInfo = pointer(self.bgMapInfo)
         self.popoBgMapInfo = pointer(self.poBgMapInfo)
-        if Vect_open_old(self.poBgMapInfo, name, mapset) == -1:
+        if Vect_open_old(self.poBgMapInfo, name, subproject) == -1:
             self.poBgMapInfo = self.popoBgMapInfo = None
             self._error.NoMap(bgmap)
             return
@@ -915,7 +915,7 @@ class IVDigit:
     def MoveSelectedVertex(self, point, move):
         """Move selected vertex of the line
 
-        :param point: location point
+        :param point: project point
         :param move:  x,y direction
 
         :return: id of new feature
@@ -1713,12 +1713,12 @@ class IVDigit:
         Debug.msg(3, "AbstractDigit.SetMapName map=%s" % name)
 
         if '@' in name:
-            name, mapset = name.split('@')
+            name, subproject = name.split('@')
         else:
-            mapset = grass.gisenv()['MAPSET']
+            subproject = grass.gisenv()['MAPSET']
 
         self.poMapInfo = self._display.OpenMap(
-            str(name), str(mapset), update, tmp)
+            str(name), str(subproject), update, tmp)
 
         if self.poMapInfo:
             self.InitCats()

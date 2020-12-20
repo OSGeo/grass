@@ -523,8 +523,8 @@ int Vect_cidx_open(struct Map_info *Map, int head_only)
     struct gvfile fp;
     struct Plus_head *Plus;
 
-    G_debug(2, "Vect_cidx_open(): name = %s mapset= %s", Map->name,
-	    Map->mapset);
+    G_debug(2, "Vect_cidx_open(): name = %s subproject= %s", Map->name,
+	    Map->subproject);
 
     Plus = &(Map->plus);
 
@@ -536,7 +536,7 @@ int Vect_cidx_open(struct Map_info *Map, int head_only)
     }
 
     dig_file_init(&fp);
-    fp.file = G_fopen_old(path, GV_CIDX_ELEMENT, Map->mapset);
+    fp.file = G_fopen_old(path, GV_CIDX_ELEMENT, Map->subproject);
     
     if (fp.file == NULL) {	/* category index file is not available */
 	G_warning(_("Unable to open category index file for vector map <%s>"),

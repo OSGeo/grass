@@ -199,14 +199,14 @@ parse_args(int argc, char *argv[]) {
 /* check compatibility of map header and region header */
 void check_header(char* cellname) {
 
-  const char *mapset;
-  mapset = G_find_raster(cellname, "");
-  if (mapset == NULL) {
+  const char *subproject;
+  subproject = G_find_raster(cellname, "");
+  if (subproject == NULL) {
     G_fatal_error(_("Raster map <%s> not found"), cellname);
   }
   /* read cell header */
   struct Cell_head cell_hd;
-  Rast_get_cellhd (cellname, mapset, &cell_hd);
+  Rast_get_cellhd (cellname, subproject, &cell_hd);
   
   /* check compatibility with module region */
   if (!((region->ew_res == cell_hd.ew_res)
@@ -221,7 +221,7 @@ void check_header(char* cellname) {
 
   /* check type of input elevation raster and check if precision is lost */
     RASTER_MAP_TYPE data_type;
-    data_type = Rast_map_type(opt->elev_grid, mapset);
+    data_type = Rast_map_type(opt->elev_grid, subproject);
 #ifdef ELEV_SHORT
 	G_verbose_message(_("Elevation stored as SHORT (%dB)"),
 		sizeof(elevation_type));
@@ -344,14 +344,14 @@ void record_args(int argc, char **argv) {
 void 
 setFlowAccuColorTable(char* cellname) {
   struct Colors colors;
-  const char *mapset;
+  const char *subproject;
   struct Range r;
 
-  mapset = G_find_raster(cellname, "");
-  if (mapset == NULL) {
+  subproject = G_find_raster(cellname, "");
+  if (subproject == NULL) {
     G_fatal_error (_("Raster map <%s> not found"), cellname);
   }
-  if (Rast_read_range(cellname, mapset, &r) == -1) {
+  if (Rast_read_range(cellname, subproject, &r) == -1) {
     G_fatal_error(_("cannot read range"));
   }
   /*G_debug(1, "%s range is: min=%d, max=%d\n", cellname, r.min, r.max);*/
@@ -372,7 +372,7 @@ setFlowAccuColorTable(char* cellname) {
   Rast_add_c_color_rule(&v[3],   0,127,255,  &v[4],       0,0,255,   &colors);
   Rast_add_c_color_rule(&v[4],   0,0,255,    &v[5],   0,0,0,     &colors);
 
-  Rast_write_colors(cellname, mapset, &colors);
+  Rast_write_colors(cellname, subproject, &colors);
 
   Rast_free_colors(&colors);
 }
@@ -382,21 +382,21 @@ setFlowAccuColorTable(char* cellname) {
 void
 setSinkWatershedColorTable(char* cellname) {
   struct  Colors colors;
-  const char *mapset;
+  const char *subproject;
   struct Range r;
 
-  mapset = G_find_raster(cellname, "");
-  if (mapset == NULL) {
+  subproject = G_find_raster(cellname, "");
+  if (subproject == NULL) {
     G_fatal_error (_("Raster map <%s> not found"), cellname);
   }
-  if (Rast_read_range(cellname, mapset, &r) == -1) {
+  if (Rast_read_range(cellname, subproject, &r) == -1) {
     G_fatal_error(_("cannot read range"));
   }
 
   Rast_init_colors(&colors);
   Rast_make_random_colors(&colors, 1, r.max);
 
-  Rast_write_colors(cellname, mapset, &colors);
+  Rast_write_colors(cellname, subproject, &colors);
 
   Rast_free_colors(&colors);
 }

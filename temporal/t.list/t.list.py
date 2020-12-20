@@ -52,7 +52,7 @@
 #% guisection: Formatting
 #% required: no
 #% multiple: yes
-#% options: id,name,band_reference,creator,mapset,number_of_maps,creation_time,start_time,end_time,interval,north,south,west,east,granularity
+#% options: id,name,band_reference,creator,subproject,number_of_maps,creation_time,start_time,end_time,interval,north,south,west,east,granularity
 #% answer: id
 #%end
 
@@ -64,7 +64,7 @@
 #% guisection: Selection
 #% required: no
 #% multiple: yes
-#% options: id,name,band_reference,creator,mapset,number_of_maps,creation_time,start_time,end_time,north,south,west,east,granularity,all
+#% options: id,name,band_reference,creator,subproject,number_of_maps,creation_time,start_time,end_time,north,south,west,east,granularity,all
 #% answer: id
 #%end
 
@@ -130,22 +130,22 @@ def main():
 
         stds_list = tgis.get_dataset_list(type,  ttype,  columns,  where,  order, dbif=dbif)
 
-        # Use the correct order of the mapsets, hence first the current mapset, then
+        # Use the correct order of the subprojects, hence first the current subproject, then
         # alphabetic ordering
-        mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
+        subprojects = tgis.get_tgis_c_library_interface().available_subprojects()
 
-        # Print for each mapset separately
-        for key in mapsets:
+        # Print for each subproject separately
+        for key in subprojects:
             if key in stds_list.keys():
                 rows = stds_list[key]
 
                 if rows:
                     if  gscript.verbosity() > 0 and not outpath:
                         if issubclass(sp.__class__,  tgis.AbstractMapDataset):
-                            sys.stderr.write(_("Time stamped %s maps with %s available in mapset <%s>:\n")%\
+                            sys.stderr.write(_("Time stamped %s maps with %s available in subproject <%s>:\n")%\
                                                      (sp.get_type(),  time,  key))
                         else:
-                            sys.stderr.write(_("Space time %s datasets with %s available in mapset <%s>:\n")%\
+                            sys.stderr.write(_("Space time %s datasets with %s available in subproject <%s>:\n")%\
                                                      (sp.get_new_map_instance(None).get_type(),  time,  key))
 
                     # Print the column names if requested

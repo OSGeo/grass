@@ -57,8 +57,8 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    #Get the current mapset to create the id of the space time dataset
-    mapset = grass.gisenv()["MAPSET"]
+    #Get the current subproject to create the id of the space time dataset
+    subproject = grass.gisenv()["MAPSET"]
 
     inputs_split = inputs.split(",")
     input_ids = []
@@ -67,15 +67,15 @@ def main():
         if input.find("@") >= 0:
             input_ids.append(input)
         else:
-            input_ids.append(input + "@" + mapset)
+            input_ids.append(input + "@" + subproject)
 
     # Set the output name correct
     if output.find("@") >= 0:
-        out_mapset = output.split("@")[1]
-        if out_mapset != mapset:
-            grass.fatal(_("Output space time dataset <%s> must be located in this mapset") % (output))
+        out_subproject = output.split("@")[1]
+        if out_subproject != subproject:
+            grass.fatal(_("Output space time dataset <%s> must be located in this subproject") % (output))
     else:
-        output_id = output + "@" + mapset
+        output_id = output + "@" + subproject
 
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()

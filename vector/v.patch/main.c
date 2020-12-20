@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
     if (do_table) {
 	if (append->answer) {
 	    Vect_set_open_level(1);
-	    if (Vect_open_old_head(&OutMap, out_name, G_mapset()) < 0)
+	    if (Vect_open_old_head(&OutMap, out_name, G_subproject()) < 0)
 		G_fatal_error(_("Unable to open vector map <%s>"), out_name);
 
 	    fi_out = Vect_get_field(&OutMap, 1);
@@ -333,7 +333,7 @@ int main(int argc, char *argv[])
 	if (no_topo->answer)
 	    Vect_set_open_level(1);
 
-	if (Vect_open_update(&OutMap, out_name, G_mapset()) < 0)
+	if (Vect_open_update(&OutMap, out_name, G_subproject()) < 0)
 	    G_fatal_error(_("Unable to open vector map <%s>"), out_name);
 
 	if (out_is_3d == WITH_Z && !Vect_is_3d(&OutMap)) {

@@ -67,17 +67,17 @@ def _read_map_full_info(lock, conn, data):
 
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
-       :param data: The list of data entries [function_id, maptype, name, mapset]
+       :param data: The list of data entries [function_id, maptype, name, subproject]
     """
     info = None
     try:
         maptype = data[1]
         name = data[2]
-        mapset = data[3]
+        subproject = data[3]
         if maptype == RPCDefs.TYPE_RASTER:
-            info = _read_raster_full_info(name, mapset)
+            info = _read_raster_full_info(name, subproject)
         elif maptype == RPCDefs.TYPE_VECTOR:
-            info = _read_vector_full_info(name, mapset)
+            info = _read_vector_full_info(name, subproject)
     except:
         raise
     finally:
@@ -86,14 +86,14 @@ def _read_map_full_info(lock, conn, data):
 ###############################################################################
 
 
-def _read_raster_full_info(name, mapset):
+def _read_raster_full_info(name, subproject):
     """Read raster info, history and cats using PyGRASS RasterRow
        and return a dictionary. Colors should be supported in the
        future.
     """
 
     info = {}
-    r = RasterRow(name=name, mapset=mapset)
+    r = RasterRow(name=name, subproject=subproject)
     if r.exist() is True:
         r.open("r")
 
@@ -103,7 +103,7 @@ def _read_raster_full_info(name, mapset):
         for item in r.hist:
             info[item[0]] = item[1]
 
-        info["full_name"] = r.name_mapset()
+        info["full_name"] = r.name_subproject()
         info["mtype"] = r.mtype
         if r.cats:
             info["cats_title"] = r.cats_title
@@ -111,7 +111,7 @@ def _read_raster_full_info(name, mapset):
         r.close()
 
         ts = libgis.TimeStamp()
-        check = libgis.G_read_raster_timestamp(name, mapset, byref(ts))
+        check = libgis.G_read_raster_timestamp(name, subproject, byref(ts))
 
         if check:
             dates = _convert_timestamp_from_grass(ts)
@@ -125,14 +125,14 @@ def _read_raster_full_info(name, mapset):
 ###############################################################################
 
 
-def _read_vector_full_info(name, mapset, layer = None):
+def _read_vector_full_info(name, subproject, layer = None):
     """Read vector info using PyGRASS VectorTopo
        and return a dictionary. C
     """
 
     info = {}
 
-    v = VectorTopo(name=name, mapset=mapset)
+    v = VectorTopo(name=name, subproject=subproject)
     if v.exist() is True:
         v.open("r")
         # Bounding box
@@ -140,7 +140,7 @@ def _read_vector_full_info(name, mapset, layer = None):
             info[item[0]] = item[1]
 
         info["name"] = v.name
-        info["mapset"] = v.mapset
+        info["subproject"] = v.subproject
         info["comment"] = v.comment
         info["full_name"] = v.full_name
         info["is_3d"] = v.is_3D()
@@ -165,7 +165,7 @@ def _read_vector_full_info(name, mapset, layer = None):
             info["columns"] = v.table.columns
 
         ts = libgis.TimeStamp()
-        check = libgis.G_read_vector_timestamp(name, layer, mapset, byref(ts))
+        check = libgis.G_read_vector_timestamp(name, layer, subproject, byref(ts))
 
         if check:
             dates = _convert_timestamp_from_grass(ts)
@@ -183,32 +183,32 @@ def _fatal_error(lock, conn, data):
 ###############################################################################
 
 
-def _get_mapset(lock, conn, data):
-    """Return the current mapset
+def _get_subproject(lock, conn, data):
+    """Return the current subproject
 
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
-       :param data: The mapset as list entry 1 [function_id]
+       :param data: The subproject as list entry 1 [function_id]
 
-       :returns: Name of the current mapset
+       :returns: Name of the current subproject
     """
-    mapset = libgis.G_mapset()
-    conn.send(decode(mapset))
+    subproject = libgis.G_subproject()
+    conn.send(decode(subproject))
 
 ###############################################################################
 
 
-def _get_location(lock, conn, data):
-    """Return the current location
+def _get_project(lock, conn, data):
+    """Return the current project
 
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
-       :param data: The mapset as list entry 1 [function_id]
+       :param data: The subproject as list entry 1 [function_id]
 
-       :returns: Name of the location
+       :returns: Name of the project
     """
-    location = libgis.G_location()
-    conn.send(decode(location))
+    project = libgis.G_project()
+    conn.send(decode(project))
 
 ###############################################################################
 
@@ -218,7 +218,7 @@ def _get_gisdbase(lock, conn, data):
 
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
-       :param data: The mapset as list entry 1 [function_id]
+       :param data: The subproject as list entry 1 [function_id]
 
        :returns: Name of the gisdatabase
     """
@@ -229,51 +229,51 @@ def _get_gisdbase(lock, conn, data):
 
 
 def _get_driver_name(lock, conn, data):
-    """Return the temporal database driver of a specific mapset
+    """Return the temporal database driver of a specific subproject
 
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
-       :param data: The mapset as list entry 1 [function_id, mapset]
+       :param data: The subproject as list entry 1 [function_id, subproject]
 
        :returns: Name of the driver or None if no temporal database present
     """
-    mapset = data[1]
-    if not mapset:
-        mapset = libgis.G_mapset()
+    subproject = data[1]
+    if not subproject:
+        subproject = libgis.G_subproject()
     else:
-        mapset = encode(mapset)
+        subproject = encode(subproject)
 
-    drstring = libtgis.tgis_get_mapset_driver_name(mapset)
+    drstring = libtgis.tgis_get_subproject_driver_name(subproject)
     conn.send(decode(drstring.data))
 
 ###############################################################################
 
 
 def _get_database_name(lock, conn, data):
-    """Return the temporal database name of a specific mapset
+    """Return the temporal database name of a specific subproject
 
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
-       :param data: The mapset as list entry 1 [function_id, mapset]
+       :param data: The subproject as list entry 1 [function_id, subproject]
 
        :returns: Name of the database or None if no temporal database present
     """
     dbstring = None
     try:
-        mapset = data[1]
-        if not mapset:
-            mapset = libgis.G_mapset()
+        subproject = data[1]
+        if not subproject:
+            subproject = libgis.G_subproject()
         else:
-            mapset = encode(mapset)
-        dbstring = libtgis.tgis_get_mapset_database_name(mapset)
+            subproject = encode(subproject)
+        dbstring = libtgis.tgis_get_subproject_database_name(subproject)
         dbstring = dbstring.data
 
         if dbstring:
             # We substitute GRASS variables if they are located in the database string
             # This behavior is in conjunction with db.connect
             dbstring = dbstring.replace(encode("$GISDBASE"), libgis.G_gisdbase())
-            dbstring = dbstring.replace(encode("$LOCATION_NAME"), libgis.G_location())
-            dbstring = dbstring.replace(encode("$MAPSET"), mapset)
+            dbstring = dbstring.replace(encode("$LOCATION_NAME"), libgis.G_project())
+            dbstring = dbstring.replace(encode("$MAPSET"), subproject)
     except:
         raise
     finally:
@@ -282,56 +282,56 @@ def _get_database_name(lock, conn, data):
 ###############################################################################
 
 
-def _available_mapsets(lock, conn, data):
-    """Return all available mapsets the user can access as a list of strings
+def _available_subprojects(lock, conn, data):
+    """Return all available subprojects the user can access as a list of strings
 
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
        :param data: The list of data entries [function_id]
 
-       :returns: Names of available mapsets as list of strings
+       :returns: Names of available subprojects as list of strings
     """
 
     count = 0
-    mapset_list = []
+    subproject_list = []
     try:
-        # Initialize the accessible mapset list, this is bad C design!!!
-        libgis.G_get_mapset_name(0)
-        mapsets = libgis.G_get_available_mapsets()
-        while mapsets[count]:
+        # Initialize the accessible subproject list, this is bad C design!!!
+        libgis.G_get_subproject_name(0)
+        subprojects = libgis.G_get_available_subprojects()
+        while subprojects[count]:
             char_list = ""
-            mapset = mapsets[count]
+            subproject = subprojects[count]
 
-            permission = libgis.G_mapset_permissions(mapset)
-            in_search_path = libgis.G_is_mapset_in_search_path(mapset)
+            permission = libgis.G_subproject_permissions(subproject)
+            in_search_path = libgis.G_is_subproject_in_search_path(subproject)
 
             c = 0
-            while mapset[c] != b"\x00":
-                val = decode(mapset[c])
+            while subproject[c] != b"\x00":
+                val = decode(subproject[c])
                 char_list += val
                 c += 1
 
             if permission >= 0 and in_search_path == 1:
-                mapset_list.append(char_list)
+                subproject_list.append(char_list)
 
-            libgis.G_debug(1, "c_library_server._available_mapsets: \n  mapset:  %s\n"
+            libgis.G_debug(1, "c_library_server._available_subprojects: \n  subproject:  %s\n"
                               "  has permission %i\n  in search path: %i" % (char_list,
                               permission, in_search_path))
             count += 1
 
-        # We need to sort the mapset list, but the first one should be
-        # the current mapset
-        current_mapset = decode(libgis.G_mapset())
-        if current_mapset in mapset_list:
-            mapset_list.remove(current_mapset)
-        mapset_list.sort()
-        mapset_list.reverse()
-        mapset_list.append(current_mapset)
-        mapset_list.reverse()
+        # We need to sort the subproject list, but the first one should be
+        # the current subproject
+        current_subproject = decode(libgis.G_subproject())
+        if current_subproject in subproject_list:
+            subproject_list.remove(current_subproject)
+        subproject_list.sort()
+        subproject_list.reverse()
+        subproject_list.append(current_subproject)
+        subproject_list.reverse()
     except:
         raise
     finally:
-        conn.send(mapset_list)
+        conn.send(subproject_list)
 
 ###############################################################################
 
@@ -343,23 +343,23 @@ def _has_timestamp(lock, conn, data):
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
        :param data: The list of data entries [function_id, maptype, name,
-                    mapset, layer]
+                    subproject, layer]
 
     """
     check = False
     try:
         maptype = data[1]
         name = data[2]
-        mapset = data[3]
+        subproject = data[3]
         layer = data[4]
         if maptype == RPCDefs.TYPE_RASTER:
-            if libgis.G_has_raster_timestamp(name, mapset) == 1:
+            if libgis.G_has_raster_timestamp(name, subproject) == 1:
                 check = True
         elif maptype == RPCDefs.TYPE_VECTOR:
-            if libgis.G_has_vector_timestamp(name, layer, mapset) == 1:
+            if libgis.G_has_vector_timestamp(name, layer, subproject) == 1:
                 check = True
         elif maptype == RPCDefs.TYPE_RASTER3D:
-            if libgis.G_has_raster3d_timestamp(name, mapset) == 1:
+            if libgis.G_has_raster3d_timestamp(name, subproject) == 1:
                 check = True
     except:
         raise
@@ -391,7 +391,7 @@ def _read_timestamp(lock, conn, data):
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send the result
        :param data: The list of data entries [function_id, maptype, name,
-                    mapset, layer]
+                    subproject, layer]
 
     """
     check = False
@@ -399,15 +399,15 @@ def _read_timestamp(lock, conn, data):
     try:
         maptype = data[1]
         name = data[2]
-        mapset = data[3]
+        subproject = data[3]
         layer = data[4]
         ts = libgis.TimeStamp()
         if maptype == RPCDefs.TYPE_RASTER:
-            check = libgis.G_read_raster_timestamp(name, mapset, byref(ts))
+            check = libgis.G_read_raster_timestamp(name, subproject, byref(ts))
         elif maptype == RPCDefs.TYPE_VECTOR:
-            check = libgis.G_read_vector_timestamp(name, layer, mapset, byref(ts))
+            check = libgis.G_read_vector_timestamp(name, layer, subproject, byref(ts))
         elif maptype == RPCDefs.TYPE_RASTER3D:
-            check = libgis.G_read_raster3d_timestamp(name, mapset, byref(ts))
+            check = libgis.G_read_raster3d_timestamp(name, subproject, byref(ts))
 
         dates = _convert_timestamp_from_grass(ts)
     except:
@@ -431,13 +431,13 @@ def _write_timestamp(lock, conn, data):
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
        :param data: The list of data entries [function_id, maptype, name,
-                    mapset, layer, timestring]
+                    subproject, layer, timestring]
     """
     check = -3
     try:
         maptype = data[1]
         name = data[2]
-        mapset = data[3]
+        subproject = data[3]
         layer = data[4]
         timestring = data[5]
         ts = libgis.TimeStamp()
@@ -474,21 +474,21 @@ def _remove_timestamp(lock, conn, data):
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
        :param data: The list of data entries [function_id, maptype, name,
-                    mapset, layer]
+                    subproject, layer]
 
     """
     check = False
     try:
         maptype = data[1]
         name = data[2]
-        mapset = data[3]
+        subproject = data[3]
         layer = data[4]
         if maptype == RPCDefs.TYPE_RASTER:
-            check = libgis.G_remove_raster_timestamp(name, mapset)
+            check = libgis.G_remove_raster_timestamp(name, subproject)
         elif maptype == RPCDefs.TYPE_VECTOR:
-            check = libgis.G_remove_vector_timestamp(name, layer, mapset)
+            check = libgis.G_remove_vector_timestamp(name, layer, subproject)
         elif maptype == RPCDefs.TYPE_RASTER3D:
-            check = libgis.G_remove_raster3d_timestamp(name, mapset)
+            check = libgis.G_remove_raster3d_timestamp(name, subproject)
     except:
         raise
     finally:
@@ -510,7 +510,7 @@ def _read_band_reference(lock, conn, data):
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
        :param data: The list of data entries [function_id, maptype, name,
-                    mapset, layer, timestring]
+                    subproject, layer, timestring]
 
     """
     check = False
@@ -518,13 +518,13 @@ def _read_band_reference(lock, conn, data):
     try:
         maptype = data[1]
         name = data[2]
-        mapset = data[3]
+        subproject = data[3]
         layer = data[4]
 
         if maptype == RPCDefs.TYPE_RASTER:
             p_filename = c_char_p()
             p_band_ref = c_char_p()
-            check = libraster.Rast_read_band_reference(name, mapset,
+            check = libraster.Rast_read_band_reference(name, subproject,
                                                        byref(p_filename),
                                                        byref(p_band_ref))
             if check:
@@ -555,14 +555,14 @@ def _write_band_reference(lock, conn, data):
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
        :param data: The list of data entries [function_id, maptype, name,
-                    mapset, layer, timestring]
+                    subproject, layer, timestring]
 
     """
     check = -3
     try:
         maptype = data[1]
         name = data[2]
-        mapset = data[3]
+        subproject = data[3]
         layer = data[4]
         band_reference = data[5]
 
@@ -600,14 +600,14 @@ def _remove_band_reference(lock, conn, data):
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
        :param data: The list of data entries [function_id, maptype, name,
-                    mapset, layer, timestring]
+                    subproject, layer, timestring]
 
     """
     check = False
     try:
         maptype = data[1]
         name = data[2]
-        mapset = data[3]
+        subproject = data[3]
         layer = data[4]
 
         if maptype == RPCDefs.TYPE_RASTER:
@@ -632,22 +632,22 @@ def _map_exists(lock, conn, data):
 
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
-       :param data: The list of data entries [function_id, maptype, name, mapset]
+       :param data: The list of data entries [function_id, maptype, name, subproject]
 
     """
     check = False
     try:
         maptype = data[1]
         name = data[2]
-        mapset = data[3]
+        subproject = data[3]
         if maptype == RPCDefs.TYPE_RASTER:
-            mapset = libgis.G_find_raster(name, mapset)
+            subproject = libgis.G_find_raster(name, subproject)
         elif maptype == RPCDefs.TYPE_VECTOR:
-            mapset = libgis.G_find_vector(name, mapset)
+            subproject = libgis.G_find_vector(name, subproject)
         elif maptype == RPCDefs.TYPE_RASTER3D:
-            mapset = libgis.G_find_raster3d(name, mapset)
+            subproject = libgis.G_find_raster3d(name, subproject)
 
-        if mapset:
+        if subproject:
             check = True
     except:
         raise
@@ -663,19 +663,19 @@ def _read_map_info(lock, conn, data):
 
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
-       :param data: The list of data entries [function_id, maptype, name, mapset]
+       :param data: The list of data entries [function_id, maptype, name, subproject]
     """
     kvp = None
     try:
         maptype = data[1]
         name = data[2]
-        mapset = data[3]
+        subproject = data[3]
         if maptype == RPCDefs.TYPE_RASTER:
-            kvp = _read_raster_info(name, mapset)
+            kvp = _read_raster_info(name, subproject)
         elif maptype == RPCDefs.TYPE_VECTOR:
-            kvp = _read_vector_info(name, mapset)
+            kvp = _read_vector_info(name, subproject)
         elif maptype == RPCDefs.TYPE_RASTER3D:
-            kvp = _read_raster3d_info(name, mapset)
+            kvp = _read_raster3d_info(name, subproject)
     except:
         raise
     finally:
@@ -684,7 +684,7 @@ def _read_map_info(lock, conn, data):
 ###############################################################################
 
 
-def _read_raster_info(name, mapset):
+def _read_raster_info(name, subproject):
     """Read the raster map info from the file system and store the content
        into a dictionary
 
@@ -692,19 +692,19 @@ def _read_raster_info(name, mapset):
        to read the map metadata information
 
        :param name: The name of the map
-       :param mapset: The mapset of the map
+       :param subproject: The subproject of the map
        :returns: The key value pairs of the map specific metadata, or None in
                  case of an error
     """
 
     kvp = {}
 
-    if not libgis.G_find_raster(name, mapset):
+    if not libgis.G_find_raster(name, subproject):
         return None
 
     # Read the region information
     region = libraster.struct_Cell_head()
-    libraster.Rast_get_cellhd(name, mapset, byref(region))
+    libraster.Rast_get_cellhd(name, subproject, byref(region))
 
     kvp["north"] = region.north
     kvp["south"] = region.south
@@ -715,7 +715,7 @@ def _read_raster_info(name, mapset):
     kvp["rows"] = region.cols
     kvp["cols"] = region.rows
 
-    maptype = libraster.Rast_map_type(name, mapset)
+    maptype = libraster.Rast_map_type(name, subproject)
 
     if maptype == libraster.DCELL_TYPE:
         kvp["datatype"] = "DCELL"
@@ -725,10 +725,10 @@ def _read_raster_info(name, mapset):
         kvp["datatype"] = "CELL"
 
     # Read range
-    if libraster.Rast_map_is_fp(name, mapset):
+    if libraster.Rast_map_is_fp(name, subproject):
         range = libraster.FPRange()
         libraster.Rast_init_fp_range(byref(range))
-        ret = libraster.Rast_read_fp_range(name, mapset, byref(range))
+        ret = libraster.Rast_read_fp_range(name, subproject, byref(range))
         if ret < 0:
             logging.error(_("Unable to read range file"))
             return None
@@ -745,7 +745,7 @@ def _read_raster_info(name, mapset):
     else:
         range = libraster.Range()
         libraster.Rast_init_range(byref(range))
-        ret = libraster.Rast_read_range(name, mapset, byref(range))
+        ret = libraster.Rast_read_range(name, subproject, byref(range))
         if ret < 0:
             logging.error(_("Unable to read range file"))
             return None
@@ -765,7 +765,7 @@ def _read_raster_info(name, mapset):
 ###############################################################################
 
 
-def _read_raster3d_info(name, mapset):
+def _read_raster3d_info(name, subproject):
     """Read the 3D raster map info from the file system and store the content
        into a dictionary
 
@@ -773,19 +773,19 @@ def _read_raster3d_info(name, mapset):
        to read the map metadata information
 
        :param name: The name of the map
-       :param mapset: The mapset of the map
+       :param subproject: The subproject of the map
        :returns: The key value pairs of the map specific metadata, or None in
                  case of an error
     """
 
     kvp = {}
 
-    if not libgis.G_find_raster3d(name, mapset):
+    if not libgis.G_find_raster3d(name, subproject):
         return None
 
     # Read the region information
     region = libraster3d.RASTER3D_Region()
-    libraster3d.Rast3d_read_region_map(name, mapset, byref(region))
+    libraster3d.Rast3d_read_region_map(name, subproject, byref(region))
 
     kvp["north"] = region.north
     kvp["south"] = region.south
@@ -803,7 +803,7 @@ def _read_raster3d_info(name, mapset):
     # We need to open the map, this function returns a void pointer
     # but we may need the correct type which is RASTER3D_Map, hence
     # the casting
-    g3map = cast(libraster3d.Rast3d_open_cell_old(name, mapset,
+    g3map = cast(libraster3d.Rast3d_open_cell_old(name, subproject,
                  libraster3d.RASTER3D_DEFAULT_WINDOW,
                  libraster3d.RASTER3D_TILE_SAME_AS_FILE,
                  libraster3d.RASTER3D_NO_CACHE),
@@ -848,7 +848,7 @@ def _read_raster3d_info(name, mapset):
 ###############################################################################
 
 
-def _read_vector_info(name, mapset):
+def _read_vector_info(name, subproject):
     """Read the vector map info from the file system and store the content
        into a dictionary
 
@@ -856,14 +856,14 @@ def _read_vector_info(name, mapset):
        to read the map metadata information
 
        :param name: The name of the map
-       :param mapset: The mapset of the map
+       :param subproject: The subproject of the map
        :returns: The key value pairs of the map specific metadata, or None in
                  case of an error
     """
 
     kvp = {}
 
-    if not libgis.G_find_vector(name, mapset):
+    if not libgis.G_find_vector(name, subproject):
         return None
 
     # The vector map structure
@@ -874,13 +874,13 @@ def _read_vector_info(name, mapset):
     with_topo = True
 
     # Code lend from v.info main.c
-    if libvector.Vect_open_old_head2(byref(Map), name, mapset, "1") < 2:
+    if libvector.Vect_open_old_head2(byref(Map), name, subproject, "1") < 2:
         # force level 1, open fully
         # NOTE: number of points, lines, boundaries, centroids,
         # faces, kernels is still available
         libvector.Vect_set_open_level(1)  # no topology
         with_topo = False
-        if libvector.Vect_open_old2(byref(Map), name, mapset, "1") < 1:
+        if libvector.Vect_open_old2(byref(Map), name, subproject, "1") < 1:
             logging.error(_("Unable to open vector map <%s>" %
                           (libvector.Vect_get_full_name(byref(Map)))))
             return None
@@ -1073,11 +1073,11 @@ def c_library_server(lock, conn):
     functions[RPCDefs.REMOVE_TIMESTAMP] = _remove_timestamp
     functions[RPCDefs.READ_MAP_INFO] = _read_map_info
     functions[RPCDefs.MAP_EXISTS] = _map_exists
-    functions[RPCDefs.AVAILABLE_MAPSETS] = _available_mapsets
+    functions[RPCDefs.AVAILABLE_MAPSETS] = _available_subprojects
     functions[RPCDefs.GET_DRIVER_NAME] = _get_driver_name
     functions[RPCDefs.GET_DATABASE_NAME] = _get_database_name
-    functions[RPCDefs.G_MAPSET] = _get_mapset
-    functions[RPCDefs.G_LOCATION] = _get_location
+    functions[RPCDefs.G_MAPSET] = _get_subproject
+    functions[RPCDefs.G_LOCATION] = _get_project
     functions[RPCDefs.G_GISDBASE] = _get_gisdbase
     functions[RPCDefs.READ_MAP_FULL_INFO] = _read_map_full_info
     functions[RPCDefs.WRITE_BAND_REFERENCE] = _write_band_reference
@@ -1134,21 +1134,21 @@ class CLibrariesInterface(RPCServerBase):
            >>> gscript.run_command("v.timestamp", map="test", date='12 Mar 1995 10:34:40', overwrite=True, quiet=True)
            0
 
-           # Check mapsets
+           # Check subprojects
            >>> ciface = tgis.CLibrariesInterface()
-           >>> mapsets = ciface.available_mapsets()
-           >>> mapsets[0] == tgis.get_current_mapset()
+           >>> subprojects = ciface.available_subprojects()
+           >>> subprojects[0] == tgis.get_current_subproject()
            True
 
            # Raster map
            >>> ciface = tgis.CLibrariesInterface()
-           >>> check = ciface.raster_map_exists("test", tgis.get_current_mapset())
+           >>> check = ciface.raster_map_exists("test", tgis.get_current_subproject())
            >>> print check
            True
-           >>> ciface.read_raster_info("test", tgis.get_current_mapset())
+           >>> ciface.read_raster_info("test", tgis.get_current_subproject())
            {'rows': 12, 'north': 80.0, 'min': 1, 'datatype': 'CELL', 'max': 1, 'ewres': 10.0, 'cols': 8, 'west': 0.0, 'east': 120.0, 'nsres': 10.0, 'south': 0.0}
 
-           >>> info = ciface.read_raster_full_info("test", tgis.get_current_mapset())
+           >>> info = ciface.read_raster_full_info("test", tgis.get_current_subproject())
            >>> info           # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
            {u'tbres': 1.0, ... 'keyword': 'generated by r.mapcalc',
             u'bottom': 0.0, 'end_time': None, 'title': 'test', u'south': 0.0}
@@ -1157,57 +1157,57 @@ class CLibrariesInterface(RPCServerBase):
            datetime.datetime(1995, 3, 12, 10, 34, 40)
            >>> info["end_time"]
 
-           >>> check = ciface.has_raster_timestamp("test", tgis.get_current_mapset())
+           >>> check = ciface.has_raster_timestamp("test", tgis.get_current_subproject())
            >>> print check
            True
            >>> if check:
-           ...     res = ciface.read_raster_timestamp("test", tgis.get_current_mapset())
+           ...     res = ciface.read_raster_timestamp("test", tgis.get_current_subproject())
            ...     if res[0]:
            ...         print str(res[1][0]), str(res[1][0])
-           ...         ciface.remove_raster_timestamp("test", tgis.get_current_mapset())
+           ...         ciface.remove_raster_timestamp("test", tgis.get_current_subproject())
            1995-03-12 10:34:40 1995-03-12 10:34:40
            1
-           >>> ciface.has_raster_timestamp("test", tgis.get_current_mapset())
+           >>> ciface.has_raster_timestamp("test", tgis.get_current_subproject())
            False
-           >>> ciface.write_raster_timestamp("test", tgis.get_current_mapset(), "13 Jan 1999 14:30:05")
+           >>> ciface.write_raster_timestamp("test", tgis.get_current_subproject(), "13 Jan 1999 14:30:05")
            1
-           >>> ciface.has_raster_timestamp("test", tgis.get_current_mapset())
+           >>> ciface.has_raster_timestamp("test", tgis.get_current_subproject())
            True
 
 
            # 3D raster map
-           >>> check = ciface.raster3d_map_exists("test", tgis.get_current_mapset())
+           >>> check = ciface.raster3d_map_exists("test", tgis.get_current_subproject())
            >>> print check
            True
-           >>> ciface.read_raster3d_info("test", tgis.get_current_mapset())
+           >>> ciface.read_raster3d_info("test", tgis.get_current_subproject())
            {'tbres': 1.0, 'rows': 12, 'north': 80.0, 'bottom': 0.0, 'datatype': 'DCELL', 'max': 1.0, 'top': 1.0, 'min': 1.0, 'cols': 8, 'depths': 1, 'west': 0.0, 'ewres': 10.0, 'east': 120.0, 'nsres': 10.0, 'south': 0.0}
-           >>> check = ciface.has_raster3d_timestamp("test", tgis.get_current_mapset())
+           >>> check = ciface.has_raster3d_timestamp("test", tgis.get_current_subproject())
            >>> print check
            True
            >>> if check:
-           ...     res = ciface.read_raster3d_timestamp("test", tgis.get_current_mapset())
+           ...     res = ciface.read_raster3d_timestamp("test", tgis.get_current_subproject())
            ...     if res[0]:
            ...         print str(res[1][0]), str(res[1][0])
-           ...         ciface.remove_raster3d_timestamp("test", tgis.get_current_mapset())
+           ...         ciface.remove_raster3d_timestamp("test", tgis.get_current_subproject())
            1995-03-12 10:34:40 1995-03-12 10:34:40
            1
-           >>> ciface.has_raster3d_timestamp("test", tgis.get_current_mapset())
+           >>> ciface.has_raster3d_timestamp("test", tgis.get_current_subproject())
            False
-           >>> ciface.write_raster3d_timestamp("test", tgis.get_current_mapset(), "13 Jan 1999 14:30:05")
+           >>> ciface.write_raster3d_timestamp("test", tgis.get_current_subproject(), "13 Jan 1999 14:30:05")
            1
-           >>> ciface.has_raster3d_timestamp("test", tgis.get_current_mapset())
+           >>> ciface.has_raster3d_timestamp("test", tgis.get_current_subproject())
            True
 
 
            # Vector map
-           >>> check = ciface.vector_map_exists("test", tgis.get_current_mapset())
+           >>> check = ciface.vector_map_exists("test", tgis.get_current_subproject())
            >>> print check
            True
-           >>> kvp = ciface.read_vector_info("test", tgis.get_current_mapset())
+           >>> kvp = ciface.read_vector_info("test", tgis.get_current_subproject())
            >>> kvp['points']
            10
 
-           >>> kvp = ciface.read_vector_full_info("test", tgis.get_current_mapset())
+           >>> kvp = ciface.read_vector_full_info("test", tgis.get_current_subproject())
            >>> print kvp['points']
            10
            >>> kvp['point']
@@ -1224,21 +1224,21 @@ class CLibrariesInterface(RPCServerBase):
            datetime.datetime(1995, 3, 12, 10, 34, 40)
            >>> kvp["end_time"]
 
-           >>> check = ciface.has_vector_timestamp("test", tgis.get_current_mapset(), None)
+           >>> check = ciface.has_vector_timestamp("test", tgis.get_current_subproject(), None)
            >>> print check
            True
            >>> if check:
-           ...     res = ciface.read_vector_timestamp("test", tgis.get_current_mapset())
+           ...     res = ciface.read_vector_timestamp("test", tgis.get_current_subproject())
            ...     if res[0]:
            ...         print str(res[1][0]), str(res[1][0])
-           ...         ciface.remove_vector_timestamp("test", tgis.get_current_mapset())
+           ...         ciface.remove_vector_timestamp("test", tgis.get_current_subproject())
            1995-03-12 10:34:40 1995-03-12 10:34:40
            1
-           >>> ciface.has_vector_timestamp("test", tgis.get_current_mapset())
+           >>> ciface.has_vector_timestamp("test", tgis.get_current_subproject())
            False
-           >>> ciface.write_vector_timestamp("test", tgis.get_current_mapset(), "13 Jan 1999 14:30:05")
+           >>> ciface.write_vector_timestamp("test", tgis.get_current_subproject(), "13 Jan 1999 14:30:05")
            1
-           >>> ciface.has_vector_timestamp("test", tgis.get_current_mapset())
+           >>> ciface.has_vector_timestamp("test", tgis.get_current_subproject())
            True
 
            >>> ciface.get_driver_name()
@@ -1246,8 +1246,8 @@ class CLibrariesInterface(RPCServerBase):
            >>> ciface.get_database_name().split("/")[-1]
            'sqlite.db'
 
-           >>> mapset = ciface.get_mapset()
-           >>> location = ciface.get_location()
+           >>> subproject = ciface.get_subproject()
+           >>> project = ciface.get_project()
            >>> gisdbase = ciface.get_gisdbase()
 
            >>> ciface.fatal_error() # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
@@ -1287,76 +1287,76 @@ class CLibrariesInterface(RPCServerBase):
         self.server.daemon = True
         self.server.start()
 
-    def raster_map_exists(self, name, mapset):
+    def raster_map_exists(self, name, subproject):
         """Check if a raster map exists in the spatial database
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :returns: True if exists, False if not
        """
         self.check_server()
         self.client_conn.send([RPCDefs.MAP_EXISTS, RPCDefs.TYPE_RASTER,
-                               name, mapset, None])
+                               name, subproject, None])
         return self.safe_receive("raster_map_exists")
 
-    def read_raster_info(self, name, mapset):
+    def read_raster_info(self, name, subproject):
         """Read the raster map info from the file system and store the content
            into a dictionary
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :returns: The key value pairs of the map specific metadata,
                      or None in case of an error
         """
         self.check_server()
         self.client_conn.send([RPCDefs.READ_MAP_INFO, RPCDefs.TYPE_RASTER,
-                               name, mapset, None])
+                               name, subproject, None])
         return self.safe_receive("read_raster_info")
 
-    def read_raster_full_info(self, name, mapset):
+    def read_raster_full_info(self, name, subproject):
         """Read raster info, history and cats using PyGRASS RasterRow
            and return a dictionary. Colors should be supported in the
            future.
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :returns: The key value pairs of the map specific metadata,
                      or None in case of an error
         """
         self.check_server()
         self.client_conn.send([RPCDefs.READ_MAP_FULL_INFO,
                                RPCDefs.TYPE_RASTER,
-                               name, mapset, None])
+                               name, subproject, None])
         return self.safe_receive("read_raster_full_info")
 
-    def has_raster_timestamp(self, name, mapset):
+    def has_raster_timestamp(self, name, subproject):
         """Check if a file based raster timestamp exists
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :returns: True if exists, False if not
        """
         self.check_server()
         self.client_conn.send([RPCDefs.HAS_TIMESTAMP, RPCDefs.TYPE_RASTER,
-                               name, mapset, None])
+                               name, subproject, None])
         return self.safe_receive("has_raster_timestamp")
 
-    def remove_raster_timestamp(self, name, mapset):
+    def remove_raster_timestamp(self, name, subproject):
         """Remove a file based raster timestamp
 
            Please have a look at the documentation G_remove_raster_timestamp
            for the return values description.
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :returns: The return value of G_remove_raster_timestamp
        """
         self.check_server()
         self.client_conn.send([RPCDefs.REMOVE_TIMESTAMP, RPCDefs.TYPE_RASTER,
-                               name, mapset, None])
+                               name, subproject, None])
         return self.safe_receive("remove_raster_timestamp")
 
-    def read_raster_timestamp(self, name, mapset):
+    def read_raster_timestamp(self, name, subproject):
         """Read a file based raster timestamp
 
            Please have a look at the documentation G_read_raster_timestamp
@@ -1370,136 +1370,136 @@ class CLibrariesInterface(RPCServerBase):
            The end time may be None in case of a time instance.
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :returns: The return value of G_read_raster_timestamp
        """
         self.check_server()
         self.client_conn.send([RPCDefs.READ_TIMESTAMP, RPCDefs.TYPE_RASTER,
-                               name, mapset, None])
+                               name, subproject, None])
         return self.safe_receive("read_raster_timestamp")
 
-    def write_raster_timestamp(self, name, mapset, timestring):
+    def write_raster_timestamp(self, name, subproject, timestring):
         """Write a file based raster timestamp
 
            Please have a look at the documentation G_write_raster_timestamp
            for the return values description.
 
            Note:
-               Only timestamps of maps from the current mapset can written.
+               Only timestamps of maps from the current subproject can written.
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :param timestring: A GRASS datetime C-library compatible string
            :returns: The return value of G_write_raster_timestamp
         """
         self.check_server()
         self.client_conn.send([RPCDefs.WRITE_TIMESTAMP, RPCDefs.TYPE_RASTER,
-                               name, mapset, None, timestring])
+                               name, subproject, None, timestring])
         return self.safe_receive("write_raster_timestamp")
 
-    def remove_raster_band_reference(self, name, mapset):
+    def remove_raster_band_reference(self, name, subproject):
         """Remove a file based raster band reference
 
            Please have a look at the documentation Rast_remove_band_reference
            for the return values description.
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :returns: The return value of Rast_remove_band_reference
        """
         self.check_server()
         self.client_conn.send([RPCDefs.REMOVE_BAND_REFERENCE, RPCDefs.TYPE_RASTER,
-                               name, mapset, None])
+                               name, subproject, None])
         return self.safe_receive("remove_raster_timestamp")
 
-    def read_raster_band_reference(self, name, mapset):
+    def read_raster_band_reference(self, name, subproject):
         """Read a file based raster band reference
 
            Please have a look at the documentation Rast_read_band_reference
            for the return values description.
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :returns: The return value of Rast_read_band_reference
         """
         self.check_server()
         self.client_conn.send([RPCDefs.READ_BAND_REFERENCE, RPCDefs.TYPE_RASTER,
-                               name, mapset, None])
+                               name, subproject, None])
         return self.safe_receive("read_raster_band_reference")
 
-    def write_raster_band_reference(self, name, mapset, band_reference):
+    def write_raster_band_reference(self, name, subproject, band_reference):
         """Write a file based raster band reference
 
            Please have a look at the documentation Rast_write_band_reference
            for the return values description.
 
            Note:
-               Only band references of maps from the current mapset can written.
+               Only band references of maps from the current subproject can written.
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :param band_reference: band reference identifier
            :returns: The return value of Rast_write_band_reference
         """
         self.check_server()
         self.client_conn.send([RPCDefs.WRITE_BAND_REFERENCE, RPCDefs.TYPE_RASTER,
-                               name, mapset, None, band_reference])
+                               name, subproject, None, band_reference])
         return self.safe_receive("write_raster_band_reference")
 
-    def raster3d_map_exists(self, name, mapset):
+    def raster3d_map_exists(self, name, subproject):
         """Check if a 3D raster map exists in the spatial database
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :returns: True if exists, False if not
        """
         self.check_server()
         self.client_conn.send([RPCDefs.MAP_EXISTS, RPCDefs.TYPE_RASTER3D,
-                               name, mapset, None])
+                               name, subproject, None])
         return self.safe_receive("raster3d_map_exists")
 
-    def read_raster3d_info(self, name, mapset):
+    def read_raster3d_info(self, name, subproject):
         """Read the 3D raster map info from the file system and store the content
            into a dictionary
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :returns: The key value pairs of the map specific metadata,
                      or None in case of an error
         """
         self.check_server()
         self.client_conn.send([RPCDefs.READ_MAP_INFO, RPCDefs.TYPE_RASTER3D,
-                               name, mapset, None])
+                               name, subproject, None])
         return self.safe_receive("read_raster3d_info")
 
-    def has_raster3d_timestamp(self, name, mapset):
+    def has_raster3d_timestamp(self, name, subproject):
         """Check if a file based 3D raster timestamp exists
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :returns: True if exists, False if not
        """
         self.check_server()
         self.client_conn.send([RPCDefs.HAS_TIMESTAMP, RPCDefs.TYPE_RASTER3D,
-                               name, mapset, None])
+                               name, subproject, None])
         return self.safe_receive("has_raster3d_timestamp")
 
-    def remove_raster3d_timestamp(self, name, mapset):
+    def remove_raster3d_timestamp(self, name, subproject):
         """Remove a file based 3D raster timestamp
 
            Please have a look at the documentation G_remove_raster3d_timestamp
            for the return values description.
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :returns: The return value of G_remove_raster3d_timestamp
        """
         self.check_server()
         self.client_conn.send([RPCDefs.REMOVE_TIMESTAMP, RPCDefs.TYPE_RASTER3D,
-                               name, mapset, None])
+                               name, subproject, None])
         return self.safe_receive("remove_raster3d_timestamp")
 
-    def read_raster3d_timestamp(self, name, mapset):
+    def read_raster3d_timestamp(self, name, subproject):
         """Read a file based 3D raster timestamp
 
            Please have a look at the documentation G_read_raster3d_timestamp
@@ -1513,104 +1513,104 @@ class CLibrariesInterface(RPCServerBase):
            The end time may be None in case of a time instance.
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :returns: The return value of G_read_raster3d_timestamp
        """
         self.check_server()
         self.client_conn.send([RPCDefs.READ_TIMESTAMP, RPCDefs.TYPE_RASTER3D,
-                               name, mapset, None])
+                               name, subproject, None])
         return self.safe_receive("read_raster3d_timestamp")
 
-    def write_raster3d_timestamp(self, name, mapset, timestring):
+    def write_raster3d_timestamp(self, name, subproject, timestring):
         """Write a file based 3D raster timestamp
 
            Please have a look at the documentation G_write_raster3d_timestamp
            for the return values description.
 
            Note:
-               Only timestamps of maps from the current mapset can written.
+               Only timestamps of maps from the current subproject can written.
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :param timestring: A GRASS datetime C-library compatible string
            :returns: The return value of G_write_raster3d_timestamp
         """
         self.check_server()
         self.client_conn.send([RPCDefs.WRITE_TIMESTAMP, RPCDefs.TYPE_RASTER3D,
-                               name, mapset, None, timestring])
+                               name, subproject, None, timestring])
         return self.safe_receive("write_raster3d_timestamp")
 
-    def vector_map_exists(self, name, mapset):
+    def vector_map_exists(self, name, subproject):
         """Check if a vector map exists in the spatial database
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :returns: True if exists, False if not
        """
         self.check_server()
         self.client_conn.send([RPCDefs.MAP_EXISTS, RPCDefs.TYPE_VECTOR,
-                               name, mapset, None])
+                               name, subproject, None])
         return self.safe_receive("vector_map_exists")
 
-    def read_vector_info(self, name, mapset):
+    def read_vector_info(self, name, subproject):
         """Read the vector map info from the file system and store the content
            into a dictionary
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :returns: The key value pairs of the map specific metadata,
                      or None in case of an error
         """
         self.check_server()
         self.client_conn.send([RPCDefs.READ_MAP_INFO, RPCDefs.TYPE_VECTOR,
-                               name, mapset, None])
+                               name, subproject, None])
         return self.safe_receive("read_vector_info")
 
-    def read_vector_full_info(self, name, mapset):
+    def read_vector_full_info(self, name, subproject):
         """Read vector info using PyGRASS VectorTopo
            and return a dictionary.
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :returns: The key value pairs of the map specific metadata,
                      or None in case of an error
         """
         self.check_server()
         self.client_conn.send([RPCDefs.READ_MAP_FULL_INFO,
                                RPCDefs.TYPE_VECTOR,
-                               name, mapset, None])
+                               name, subproject, None])
         return self.safe_receive("read_vector_full_info")
 
-    def has_vector_timestamp(self, name, mapset, layer=None):
+    def has_vector_timestamp(self, name, subproject, layer=None):
         """Check if a file based vector timestamp exists
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :param layer: The layer of the vector map
            :returns: True if exists, False if not
        """
         self.check_server()
         self.client_conn.send([RPCDefs.HAS_TIMESTAMP, RPCDefs.TYPE_VECTOR,
-                               name, mapset, layer])
+                               name, subproject, layer])
         return self.safe_receive("has_vector_timestamp")
 
-    def remove_vector_timestamp(self, name, mapset, layer=None):
+    def remove_vector_timestamp(self, name, subproject, layer=None):
         """Remove a file based vector timestamp
 
            Please have a look at the documentation G_remove_vector_timestamp
            for the return values description.
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :param layer: The layer of the vector map
            :returns: The return value of G_remove_vector_timestamp
        """
         self.check_server()
         self.client_conn.send([RPCDefs.REMOVE_TIMESTAMP, RPCDefs.TYPE_VECTOR,
-                               name, mapset, layer])
+                               name, subproject, layer])
         return self.safe_receive("remove_vector_timestamp")
 
-    def read_vector_timestamp(self, name, mapset, layer=None):
+    def read_vector_timestamp(self, name, subproject, layer=None):
         """Read a file based vector timestamp
 
            Please have a look at the documentation G_read_vector_timestamp
@@ -1624,83 +1624,83 @@ class CLibrariesInterface(RPCServerBase):
            The end time may be None in case of a time instance.
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :param layer: The layer of the vector map
            :returns: The return value ofG_read_vector_timestamp and the timestamps
        """
         self.check_server()
         self.client_conn.send([RPCDefs.READ_TIMESTAMP, RPCDefs.TYPE_VECTOR,
-                               name, mapset, layer])
+                               name, subproject, layer])
         return self.safe_receive("read_vector_timestamp")
 
-    def write_vector_timestamp(self, name, mapset, timestring, layer=None):
+    def write_vector_timestamp(self, name, subproject, timestring, layer=None):
         """Write a file based vector timestamp
 
            Please have a look at the documentation G_write_vector_timestamp
            for the return values description.
 
            Note:
-               Only timestamps pf maps from the current mapset can written.
+               Only timestamps pf maps from the current subproject can written.
 
            :param name: The name of the map
-           :param mapset: The mapset of the map
+           :param subproject: The subproject of the map
            :param timestring: A GRASS datetime C-library compatible string
            :param layer: The layer of the vector map
            :returns: The return value of G_write_vector_timestamp
         """
         self.check_server()
         self.client_conn.send([RPCDefs.WRITE_TIMESTAMP, RPCDefs.TYPE_VECTOR,
-                               name, mapset, layer, timestring])
+                               name, subproject, layer, timestring])
         return self.safe_receive("write_vector_timestamp")
 
-    def available_mapsets(self):
-        """Return all available mapsets the user can access as a list of strings
+    def available_subprojects(self):
+        """Return all available subprojects the user can access as a list of strings
 
-           :returns: Names of available mapsets as list of strings
+           :returns: Names of available subprojects as list of strings
         """
         self.check_server()
         self.client_conn.send([RPCDefs.AVAILABLE_MAPSETS, ])
-        return self.safe_receive("available_mapsets")
+        return self.safe_receive("available_subprojects")
 
-    def get_driver_name(self, mapset=None):
-        """Return the temporal database driver of a specific mapset
+    def get_driver_name(self, subproject=None):
+        """Return the temporal database driver of a specific subproject
 
-           :param mapset: Name of the mapset
+           :param subproject: Name of the subproject
 
            :returns: Name of the driver or None if no temporal database present
         """
         self.check_server()
-        self.client_conn.send([RPCDefs.GET_DRIVER_NAME, mapset])
+        self.client_conn.send([RPCDefs.GET_DRIVER_NAME, subproject])
         return self.safe_receive("get_driver_name")
 
-    def get_database_name(self, mapset=None):
-        """Return the temporal database name of a specific mapset
+    def get_database_name(self, subproject=None):
+        """Return the temporal database name of a specific subproject
 
-           :param mapset: Name of the mapset
+           :param subproject: Name of the subproject
 
            :returns: Name of the database or None if no temporal database present
         """
         self.check_server()
-        self.client_conn.send([RPCDefs.GET_DATABASE_NAME, mapset])
+        self.client_conn.send([RPCDefs.GET_DATABASE_NAME, subproject])
         return self.safe_receive("get_database_name")
 
-    def get_mapset(self):
-        """Return the current mapset
+    def get_subproject(self):
+        """Return the current subproject
 
-           :returns: Name of the current mapset
+           :returns: Name of the current subproject
         """
         self.check_server()
         self.client_conn.send([RPCDefs.G_MAPSET, ])
-        return self.safe_receive("get_mapset")
+        return self.safe_receive("get_subproject")
 
-    def get_location(self):
-        """Return the location
+    def get_project(self):
+        """Return the project
 
-           :returns: Name of the location
+           :returns: Name of the project
         """
         self.check_server()
         self.client_conn.send([RPCDefs.G_LOCATION, ])
-        return self.safe_receive("get_location")
+        return self.safe_receive("get_project")
 
     def get_gisdbase(self):
         """Return the gisdatabase
@@ -1711,7 +1711,7 @@ class CLibrariesInterface(RPCServerBase):
         self.client_conn.send([RPCDefs.G_GISDBASE, ])
         return self.safe_receive("get_gisdbase")
 
-    def fatal_error(self, mapset=None):
+    def fatal_error(self, subproject=None):
         """Generate a fatal error in libgis.
 
             This function is only for testing purpose.

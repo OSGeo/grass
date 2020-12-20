@@ -15,14 +15,14 @@ class History(object):
     """History class help to manage all the metadata of a raster map
     """
 
-    def __init__(self, name, mapset='', mtype='',
+    def __init__(self, name, subproject='', mtype='',
                  creator='', src1='', src2='', keyword='',
                  date='', title=''):
         self.c_hist = ctypes.pointer(libraster.History())
         #                'Tue Nov  7 01:11:23 2006'
         self.date_fmt = '%a %b  %d %H:%M:%S %Y'
         self.name = name
-        self.mapset = mapset
+        self.subproject = subproject
         self.mtype = mtype
         self.creator = creator
         self.src1 = src1
@@ -30,7 +30,7 @@ class History(object):
         self.keyword = keyword
         self.date = date
         self.title = title
-        self.attrs = ['name', 'mapset', 'mtype', 'creator', 'src1', 'src2',
+        self.attrs = ['name', 'subproject', 'mtype', 'creator', 'src1', 'src2',
                       'keyword', 'date', 'title']
 
     def __repr__(self):
@@ -137,18 +137,18 @@ class History(object):
 
     # ----------------------------------------------------------------------
     # libraster.HIST_MAPSET
-    def _get_mapset(self):
+    def _get_subproject(self):
         return decode(libraster.Rast_get_history(self.c_hist,
                                                  libraster.HIST_MAPSET))
 
-    def _set_mapset(self, mapset):
-        mapset = encode(mapset)
+    def _set_subproject(self, subproject):
+        subproject = encode(subproject)
         return libraster.Rast_set_history(self.c_hist,
                                           libraster.HIST_MAPSET,
-                                          ctypes.c_char_p(mapset))
+                                          ctypes.c_char_p(subproject))
 
-    mapset = property(fget=_get_mapset, fset=_set_mapset,
-                      doc="Set or obtain the mapset of map")
+    subproject = property(fget=_get_subproject, fset=_set_subproject,
+                      doc="Set or obtain the subproject of map")
 
     # ----------------------------------------------------------------------
     # libraster.HIST_MAPTYPE
@@ -241,7 +241,7 @@ class History(object):
 
         ..
         """
-        libraster.Rast_read_history(self.name, self.mapset, self.c_hist)
+        libraster.Rast_read_history(self.name, self.subproject, self.c_hist)
 
     def write(self):
         """Rast_write_history"""

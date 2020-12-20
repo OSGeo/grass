@@ -38,7 +38,7 @@ static char *help[] = {
     ""
 };
 
-int read_vlines(char *name, char *mapset)
+int read_vlines(char *name, char *subproject)
 {
     char fullname[GNAME_MAX];
     char buf[1024];
@@ -51,10 +51,10 @@ int read_vlines(char *name, char *mapset)
 
     vector_alloc();		/* allocate space */
 
-    sprintf(fullname, "%s in %s", name, mapset);
+    sprintf(fullname, "%s in %s", name, subproject);
 
     Vect_set_open_level(2);
-    if (2 > Vect_open_old(&Map, name, mapset)) {
+    if (2 > Vect_open_old(&Map, name, subproject)) {
 	error(fullname, "", "can't open vector map");
 	gobble_input();
 	return 0;
@@ -65,7 +65,7 @@ int read_vlines(char *name, char *mapset)
 
     vector.layer[vec].type = VLINES;
     vector.layer[vec].name = G_store(name);
-    vector.layer[vec].mapset = G_store(mapset);
+    vector.layer[vec].subproject = G_store(subproject);
     vector.layer[vec].ltype = GV_LINE;
     vector.layer[vec].masked = 0;
 
@@ -181,13 +181,13 @@ int read_vlines(char *name, char *mapset)
 
 	if (KEY("width")) {
 	    width = -1.;
-	    *mapset = 0;
-	    if (sscanf(data, "%lf%s", &width, mapset) < 1 || width < 0.) {
+	    *subproject = 0;
+	    if (sscanf(data, "%lf%s", &width, subproject) < 1 || width < 0.) {
 		width = 1.;
 		error(key, data, "illegal width (vlines)");
 		continue;
 	    }
-	    if (mapset[0] == 'i')
+	    if (subproject[0] == 'i')
 		width = width / 72.;
 	    vector.layer[vec].width = width;
 	    continue;
@@ -195,39 +195,39 @@ int read_vlines(char *name, char *mapset)
 
 	if (KEY("cwidth")) {
 	    width = -1.;
-	    *mapset = 0;
-	    if (sscanf(data, "%lf%s", &width, mapset) < 1 || width < 0.) {
+	    *subproject = 0;
+	    if (sscanf(data, "%lf%s", &width, subproject) < 1 || width < 0.) {
 		width = 1.;
 		error(key, data, "illegal cwidth (vlines)");
 		continue;
 	    }
-	    if (mapset[0] == 'i')
+	    if (subproject[0] == 'i')
 		width = width / 72.;
 	    vector.layer[vec].cwidth = width;
 	    continue;
 	}
 
 	if (KEY("offset")) {
-	    *mapset = 0;
-	    if (sscanf(data, "%lf%s", &width, mapset) < 1) {
+	    *subproject = 0;
+	    if (sscanf(data, "%lf%s", &width, subproject) < 1) {
 		width = 0.;
 		error(key, data, "illegal offset (vlines)");
 		continue;
 	    }
-	    if (mapset[0] == 'i')
+	    if (subproject[0] == 'i')
 		width = width / 72.;
 	    vector.layer[vec].offset = width;
 	    continue;
 	}
 
 	if (KEY("coffset")) {
-	    *mapset = 0;
-	    if (sscanf(data, "%lf%s", &width, mapset) < 1) {
+	    *subproject = 0;
+	    if (sscanf(data, "%lf%s", &width, subproject) < 1) {
 		width = 0.;
 		error(key, data, "illegal coffset (vlines)");
 		continue;
 	    }
-	    if (mapset[0] == 'i')
+	    if (subproject[0] == 'i')
 		width = width / 72.;
 	    vector.layer[vec].coffset = width;
 	    continue;
@@ -235,12 +235,12 @@ int read_vlines(char *name, char *mapset)
 
 	if (KEY("hwidth")) {
 	    width = -1.;
-	    if (sscanf(data, "%lf%s", &width, mapset) < 1 || width < 0.) {
+	    if (sscanf(data, "%lf%s", &width, subproject) < 1 || width < 0.) {
 		width = 0.;
 		error(key, data, "illegal hwidth (vlines)");
 		continue;
 	    }
-	    if (mapset[0] == 'i')
+	    if (subproject[0] == 'i')
 		width = width / 72.;
 	    vector.layer[vec].hwidth = width;
 	    continue;

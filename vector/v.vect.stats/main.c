@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
     char *p;
     int i, j, k;
     int method, use_catno;
-    const char *mapset;
+    const char *subproject;
     struct GModule *module;
     struct Option *point_opt,	/* point vector */
      *area_opt,			/* area vector */
@@ -273,22 +273,22 @@ int main(int argc, char *argv[])
     }
     
     /* Open points vector */
-    if ((mapset = G_find_vector2(point_opt->answer, "")) == NULL)
+    if ((subproject = G_find_vector2(point_opt->answer, "")) == NULL)
 	G_fatal_error(_("Vector map <%s> not found"), point_opt->answer);
 
     Vect_set_open_level(2);
-    if (Vect_open_old(&PIn, point_opt->answer, mapset) < 0)
+    if (Vect_open_old(&PIn, point_opt->answer, subproject) < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), point_opt->answer);
 
     /* Open areas vector */
-    if ((mapset = G_find_vector2(area_opt->answer, "")) == NULL)
+    if ((subproject = G_find_vector2(area_opt->answer, "")) == NULL)
 	G_fatal_error(_("Vector map <%s> not found"), area_opt->answer);
-    if (!print_flag->answer && strcmp(mapset, G_mapset()) != 0)
-	G_fatal_error(_("Vector map <%s> is not in the current mapset <%s> and cannot be updated"),
-		      area_opt->answer, G_mapset());
+    if (!print_flag->answer && strcmp(subproject, G_subproject()) != 0)
+	G_fatal_error(_("Vector map <%s> is not in the current subproject <%s> and cannot be updated"),
+		      area_opt->answer, G_subproject());
 
     Vect_set_open_level(2);
-    if (Vect_open_old(&AIn, area_opt->answer, mapset) < 0)
+    if (Vect_open_old(&AIn, area_opt->answer, subproject) < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), area_opt->answer);
 
     point_field = atoi(point_field_opt->answer);

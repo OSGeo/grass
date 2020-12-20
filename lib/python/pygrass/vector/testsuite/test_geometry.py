@@ -95,7 +95,7 @@ class PointTestCase(TestCase):
     @unittest.skip("Not implemented yet.")
     def test_buffer(self):
         """Test buffer method"""
-        # TODO: verify if the buffer depends from the mapset's projection
+        # TODO: verify if the buffer depends from the subproject's projection
         pass
 
 

@@ -19,7 +19,7 @@ int write_PS_header(void)
     int cats_ok;
 
     if (PS.do_raster)
-	cats_ok = Rast_read_cats(PS.cell_name, PS.cell_mapset, &cats) >= 0;
+	cats_ok = Rast_read_cats(PS.cell_name, PS.cell_subproject, &cats) >= 0;
 
     /* write PostScript header */
     /*fprintf(PS.fp, "%%!PS-Adobe-2.0 EPSF-1.2\n"); */
@@ -35,7 +35,7 @@ int write_PS_header(void)
     if (PS.do_raster && cats_ok)
 	fprintf(PS.fp, "%s\n", cats.title);
     else
-	fprintf(PS.fp, "Mapset = %s\n", PS.cell_mapset);
+	fprintf(PS.fp, "Subproject = %s\n", PS.cell_subproject);
     fprintf(PS.fp, "%%%%EndComments\n");
 
     return 0;

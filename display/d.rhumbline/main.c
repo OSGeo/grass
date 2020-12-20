@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     if (G_projection() != PROJECTION_LL)
-	G_fatal_error(_("Location is not %s"),
+	G_fatal_error(_("Project is not %s"),
 		      G_projection_name(PROJECTION_LL));
 
 #ifdef CAN_DO_DISTANCES

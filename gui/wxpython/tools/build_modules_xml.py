@@ -54,8 +54,8 @@ def parse_modules(fd):
     mlist = list(gcore.get_commands()[0])
     indent = 4
     for m in sorted(mlist):
-        # TODO: get rid of g.mapsets_picker.py
-        if m == 'g.mapsets_picker.py' or m == 'g.parser':
+        # TODO: get rid of g.subprojects_picker.py
+        if m == 'g.subprojects_picker.py' or m == 'g.parser':
             continue
         desc, keyw = get_module_metadata(m)
         fd.write('%s<module-item name="%s">\n' % (' ' * indent, m))

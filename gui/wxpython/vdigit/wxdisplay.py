@@ -986,13 +986,13 @@ class DisplayDriver:
 
         return ret
 
-    def OpenMap(self, name, mapset, update=True, tmp=False):
+    def OpenMap(self, name, subproject, update=True, tmp=False):
         """Open vector map by the driver
 
         :param name: name of vector map to be open
         :type name: str
-        :param mapset: name of mapset where the vector map lives
-        :tryp mapset: str
+        :param subproject: name of subproject where the vector map lives
+        :tryp subproject: str
         :param update: True to open vector map in update mode
         :type update: bool
         :param tmp: True to open temporary vector map
@@ -1000,8 +1000,8 @@ class DisplayDriver:
         :return: map_info
         :return: None on error
         """
-        Debug.msg(1, "DisplayDriver.OpenMap(): name=%s mapset=%s updated=%d",
-                  name, mapset, update)
+        Debug.msg(1, "DisplayDriver.OpenMap(): name=%s subproject=%s updated=%d",
+                  name, subproject, update)
         if not self.mapInfo:
             self.mapInfo = Map_info()
             self.poMapInfo = pointer(self.mapInfo)
@@ -1018,7 +1018,7 @@ class DisplayDriver:
             else:
                 open_fn = Vect_open_old
 
-        ret = open_fn(self.poMapInfo, name, mapset)
+        ret = open_fn(self.poMapInfo, name, subproject)
 
         if ret == -1:
             # fatal error detected

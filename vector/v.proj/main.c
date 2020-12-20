@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     int i, type, stat;
     int day, yr, Out_proj;
     int overwrite;		/* overwrite output map */
-    const char *mapset;
+    const char *subproject;
     const char *omap_name, *map_name, *iset_name, *iloc_name;
     struct pj_info info_in;
     struct pj_info info_out;
@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
     double lmax;
     struct
     {
-	struct Flag *list;	/* list files in source location */
+	struct Flag *list;	/* list files in source project */
 	struct Flag *transformz;	/* treat z as ellipsoidal height */
 	struct Flag *wrap;		/* latlon output: wrap to 0,360 */
 	struct Flag *no_topol;		/* do not build topology */
@@ -73,18 +73,18 @@ int main(int argc, char *argv[])
     G_add_keyword(_("projection"));
     G_add_keyword(_("transformation"));
     G_add_keyword(_("import"));
-    module->description = _("Re-projects a vector map from one location to the current location.");
+    module->description = _("Re-projects a vector map from one project to the current project.");
 
     /* set up the options and flags for the command line parser */
 
     ilocopt = G_define_standard_option(G_OPT_M_LOCATION);
     ilocopt->required = YES;
-    ilocopt->label = _("Location containing input vector map");
+    ilocopt->label = _("Project containing input vector map");
     ilocopt->guisection = _("Source");
     
     isetopt = G_define_standard_option(G_OPT_M_MAPSET);
-    isetopt->label = _("Mapset containing input vector map");
-    isetopt->description = _("Default: name of current mapset");
+    isetopt->label = _("Subproject containing input vector map");
+    isetopt->description = _("Default: name of current subproject");
     isetopt->guisection = _("Source");
 
     mapopt = G_define_standard_option(G_OPT_V_INPUT);
@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
     mapopt->guisection = _("Source");
     
     ibaseopt = G_define_standard_option(G_OPT_M_DBASE);
-    ibaseopt->label = _("Path to GRASS database of input location");
+    ibaseopt->label = _("Path to GRASS database of input project");
     
     smax = G_define_option();
     smax->key = "smax";
@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
 
     flag.list = G_define_flag();
     flag.list->key = 'l';
-    flag.list->description = _("List vector maps in input mapset and exit");
+    flag.list->description = _("List vector maps in input subproject and exit");
 
     flag.transformz = G_define_flag();
     flag.transformz->key = 'z';
@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
     flag.no_topol->label = _("Do not build vector topology");
     flag.no_topol->description = _("Recommended for massive point projection");
 
-    /* The parser checks if the map already exists in current mapset,
+    /* The parser checks if the map already exists in current subproject,
        we switch out the check and do it
        in the module after the parser */
     overwrite = G_check_overwrite(argc, argv);
@@ -151,20 +151,20 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     /* start checking options and flags */
-    /* set input vector map name and mapset */
+    /* set input vector map name and subproject */
     map_name = mapopt->answer;
     if (omapopt->answer)
 	omap_name = omapopt->answer;
     else
 	omap_name = map_name;
     if (omap_name && !flag.list->answer && !overwrite &&
-	G_find_vector2(omap_name, G_mapset()))
+	G_find_vector2(omap_name, G_subproject()))
 	G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"), omapopt->key,
 		      omap_name);
     if (isetopt->answer)
 	iset_name = isetopt->answer;
     else
-	iset_name = G_store(G_mapset());
+	iset_name = G_store(G_subproject());
 
     iloc_name = ilocopt->answer;
 
@@ -173,8 +173,8 @@ int main(int argc, char *argv[])
     else
 	gbase = G_store(G_gisdbase());
 
-    if (!ibaseopt->answer && strcmp(iloc_name, G_location()) == 0)
-	G_fatal_error(_("Input and output locations can not be the same"));
+    if (!ibaseopt->answer && strcmp(iloc_name, G_project()) == 0)
+	G_fatal_error(_("Input and output projects can not be the same"));
 
     lmax = atof(smax->answer);
     if (lmax < 0)
@@ -186,19 +186,19 @@ int main(int argc, char *argv[])
     
     G_begin_distance_calculations();
 
-    /* Change the location here and then come back */
+    /* Change the project here and then come back */
 
     select_target_env();
     G_setenv_nogisrc("GISDBASE", gbase);
     G_setenv_nogisrc("LOCATION_NAME", iloc_name);
     G_setenv_nogisrc("MAPSET", iset_name);
-    stat = G_mapset_permissions(iset_name);
+    stat = G_subproject_permissions(iset_name);
     
-    if (stat >= 0) {		/* yes, we can access the mapset */
-	/* if requested, list the vector maps in source location - MN 5/2001 */
+    if (stat >= 0) {		/* yes, we can access the subproject */
+	/* if requested, list the vector maps in source project - MN 5/2001 */
 	if (flag.list->answer) {
 	    char **list;
-	    G_verbose_message(_("Checking location <%s> mapset <%s>"),
+	    G_verbose_message(_("Checking project <%s> subproject <%s>"),
 			      iloc_name, iset_name);
 	    list = G_list(G_ELEMENT_VECTOR, G_getenv_nofatal("GISDBASE"),
 			  G_getenv_nofatal("LOCATION_NAME"), iset_name);
@@ -220,12 +220,12 @@ int main(int argc, char *argv[])
 
 	G_setenv_nogisrc("MAPSET", iset_name);
 	/* Make sure map is available */
-	mapset = G_find_vector2(map_name, iset_name);
-	if (mapset == NULL)
-	    G_fatal_error(_("Vector map <%s> in location <%s> mapset <%s> not found"),
+	subproject = G_find_vector2(map_name, iset_name);
+	if (subproject == NULL)
+	    G_fatal_error(_("Vector map <%s> in project <%s> subproject <%s> not found"),
 			  map_name, iloc_name, iset_name);
 
-	 /*** Get projection info for input mapset ***/
+	 /*** Get projection info for input subproject ***/
 	in_proj_keys = G_get_projinfo();
 	if (in_proj_keys == NULL)
 	    exit(EXIT_FAILURE);
@@ -246,19 +246,19 @@ int main(int argc, char *argv[])
 	    exit(EXIT_FAILURE);
 
 	Vect_set_open_level(1);
-	G_debug(1, "Open old: location: %s mapset : %s", G_location_path(),
-		G_mapset());
-	if (Vect_open_old(&Map, map_name, mapset) < 0)
+	G_debug(1, "Open old: project: %s subproject : %s", G_project_path(),
+		G_subproject());
+	if (Vect_open_old(&Map, map_name, subproject) < 0)
 	    G_fatal_error(_("Unable to open vector map <%s>"), map_name);
     }
     else if (stat < 0)
     {				/* allow 0 (i.e. denied permission) */
 	/* need to be able to read from others */
 	if (stat == 0)
-	    G_fatal_error(_("Mapset <%s> in input location <%s> - permission denied"),
+	    G_fatal_error(_("Subproject <%s> in input project <%s> - permission denied"),
 			  iset_name, iloc_name);
 	else
-	    G_fatal_error(_("Mapset <%s> in input location <%s> not found"),
+	    G_fatal_error(_("Subproject <%s> in input project <%s> not found"),
 			  iset_name, iloc_name);
     }
 
@@ -398,8 +398,8 @@ int main(int argc, char *argv[])
 	    tgt_box.S = y;
     }
 
-    G_debug(1, "Open new: location: %s mapset : %s", G_location_path(),
-	    G_mapset());
+    G_debug(1, "Open new: project: %s subproject : %s", G_project_path(),
+	    G_subproject());
 
     if (Vect_open_new(&Out_Map, omap_name, Vect_is_3d(&Map)) < 0)
 	G_fatal_error(_("Unable to create vector map <%s>"), omap_name);

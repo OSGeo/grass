@@ -13,7 +13,7 @@
  * Date:         april 2011 
  * 
  * PURPOSE: To calculate the viewshed (the visible cells in the
- * raster) for the given viewpoint (observer) location.  The
+ * raster) for the given viewpoint (observer) project.  The
  * visibility model is the following: Two points in the raster are
  * considered visible to each other if the cells where they belong are
  * visible to each other.  Two cells are visible to each other if the
@@ -51,7 +51,7 @@
 
 typedef struct event_
 {
-    dimensionType row, col;	//location of the center of cell
+    dimensionType row, col;	//project of the center of cell
     // 3 elevation values:
     // elev[0]: entering
     // elev[1]: center

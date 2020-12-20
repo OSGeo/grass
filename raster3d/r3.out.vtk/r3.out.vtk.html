@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 The module <em>r3.out.vtk</em> outputs 3D raster maps into VTK-ASCII format.
-Maps are valid 3D raster maps in the current mapset search path. The
+Maps are valid 3D raster maps in the current subproject search path. The
 <em>output</em> parameter is the name of a VTK-ASCII file which will be
 written in the current working directory. If <em>output</em> is not
 specified then standard output (stdout) is used. The module is sensitive
@@ -51,7 +51,7 @@ StreamTracer filters within Paraview.
 <p>If the <em>-c</em> flag is used and the data should be visualised together with
 other data exported via <em>*.out.vtk</em> modules, be sure the <em>-c</em> flag
 was also set in these modules. But this will only work with data from the SAME
-location (the reference point for the coordinates transformation is based on the
+project (the reference point for the coordinates transformation is based on the
 center point of the default region).
 
 <h3>Difference between point- and celldata</h3>

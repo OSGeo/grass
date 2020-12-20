@@ -50,7 +50,7 @@ struct cache *readcell(int fdi, const char *size)
     c->refs = (int *)G_calloc(nblocks, sizeof(int));
 
     if (nblocks < nx * ny) {
-	/* Temporary file must be created in output location */
+	/* Temporary file must be created in output project */
 	G_switch_env();
 	c->fname = G_tempfile();
 	G_switch_env();

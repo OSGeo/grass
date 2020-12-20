@@ -44,13 +44,13 @@
  *
  *     This is the main program for the minimum path cost analysis.
  *     It generates a cumulative cost map (output) from an elevation (inputdtm
- *     and cost map (inputcost) with respect to starting locations (coor).
+ *     and cost map (inputcost) with respect to starting projects (coor).
  *
  *     It takes as input the following:
  *     1) Cost of traversing each grid cell as given by an elevation map and
  *        a cost map cell (inputcost).
  *     2) If starting points are not specified on the command line
- *        then the output map must exist and contain the starting locations
+ *        then the output map must exist and contain the starting projects
  *     
  *        Otherwise the output map need not exist and the coor points
  *        from the command line are used.
@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
 {
     const char *cum_cost_layer, *move_dir_layer, *nearest_layer;
     const char *cost_layer, *dtm_layer;
-    const char *dtm_mapset, *cost_mapset, *search_mapset;
+    const char *dtm_subproject, *cost_subproject, *search_subproject;
     void *dtm_cell, *cost_cell, *cum_cell, *dir_cell, *cell2 = NULL, *nearest_cell;
     SEGMENT cost_seg, dir_seg, solve_seg;
     int have_solver;
@@ -206,11 +206,11 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("cost surface"));
     G_add_keyword(_("cumulative costs"));
-    G_add_keyword(_("cost allocation"));
+    G_add_keyword(_("cost alproject"));
     module->description =
 	_("Creates a raster map showing the "
 	  "anisotropic cumulative cost of moving between different "
-	  "geographic locations on an input raster map "
+	  "geographic projects on an input raster map "
 	  "whose cell category values represent cost.");
 
     opt12 = G_define_standard_option(G_OPT_R_ELEV);
@@ -451,15 +451,15 @@ int main(int argc, char *argv[])
 	G_debug(1,"Input null cell will be retained into output map");
 
     if (opt7->answer) {
-	search_mapset = G_find_vector2(opt7->answer, "");
-	if (search_mapset == NULL)
+	search_subproject = G_find_vector2(opt7->answer, "");
+	if (search_subproject == NULL)
 	    G_fatal_error(_("Vector map <%s> not found"), opt7->answer);
     }
 
     have_solver = 0;
     if (dir && opt_solve->answer) {
-	search_mapset = G_find_raster2(opt_solve->answer, "");
-	if (search_mapset == NULL)
+	search_subproject = G_find_raster2(opt_solve->answer, "");
+	if (search_subproject == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), opt_solve->answer);
 	have_solver = 1;
     }
@@ -485,15 +485,15 @@ int main(int argc, char *argv[])
     ncols = Rast_window_cols();
 
     /* Open cost cell layer for reading */
-    dtm_mapset = G_find_raster2(dtm_layer, "");
-    if (dtm_mapset == NULL)
+    dtm_subproject = G_find_raster2(dtm_layer, "");
+    if (dtm_subproject == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), dtm_layer);
     dtm_fd = Rast_open_old(dtm_layer, "");
 
-    cost_mapset = G_find_raster2(cost_layer, "");
-    if (cost_mapset == NULL)
+    cost_subproject = G_find_raster2(cost_layer, "");
+    if (cost_subproject == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), cost_layer);
-    cost_fd = Rast_open_old(cost_layer, cost_mapset);
+    cost_fd = Rast_open_old(cost_layer, cost_subproject);
 
     Rast_get_cellhd(dtm_layer, "", &dtm_cellhd);
     Rast_get_cellhd(cost_layer, "", &cost_cellhd);
@@ -633,8 +633,8 @@ int main(int argc, char *argv[])
 
     /* Write the dtm and cost layers in the segmented file */
     G_message(_("Reading raster maps <%s> and <%s>, initializing output..."),
-	      G_fully_qualified_name(dtm_layer, dtm_mapset),
-	      G_fully_qualified_name(cost_layer, cost_mapset));
+	      G_fully_qualified_name(dtm_layer, dtm_subproject),
+	      G_fully_qualified_name(cost_layer, cost_subproject));
 
     /* read required maps cost and dtm */
     {
@@ -854,12 +854,12 @@ int main(int argc, char *argv[])
 	RASTER_MAP_TYPE data_type2;
 	int got_one = 0;
 
-	search_mapset = G_find_raster(opt9->answer, "");
+	search_subproject = G_find_raster(opt9->answer, "");
 
-	if (search_mapset == NULL)
+	if (search_subproject == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), opt9->answer);
 
-	fd = Rast_open_old(opt9->answer, search_mapset);
+	fd = Rast_open_old(opt9->answer, search_subproject);
 	data_type2 = Rast_get_map_type(fd);
 	nearest_data_type = data_type2;
 	dsize2 = Rast_cell_size(data_type2);
@@ -918,7 +918,7 @@ int main(int argc, char *argv[])
 	    value = &zero;
 	    if (next_start_pt->row < 0 || next_start_pt->row >= nrows
 		|| next_start_pt->col < 0 || next_start_pt->col >= ncols)
-		G_fatal_error(_("Specified starting location outside database window"));
+		G_fatal_error(_("Specified starting project outside database window"));
 	    insert(zero, next_start_pt->row, next_start_pt->col);
 	    if (Segment_get(&cost_seg, &costs, next_start_pt->row,
 			next_start_pt->col) < 0)
@@ -1763,17 +1763,17 @@ int main(int argc, char *argv[])
 	if (opt9->answer) {
 	    struct Colors colors;
 	    Rast_read_colors(opt9->answer, "", &colors);
-	    Rast_write_colors(nearest_layer, G_mapset(), &colors);
+	    Rast_write_colors(nearest_layer, G_subproject(), &colors);
 	}
 	else {
 	    struct Colors colors;
 	    struct Range range;
 	    CELL min, max;
 	    
-	    Rast_read_range(nearest_layer, G_mapset(), &range);
+	    Rast_read_range(nearest_layer, G_subproject(), &range);
 	    Rast_get_range_min_max(&range, &min, &max);
 	    Rast_make_random_colors(&colors, min, max);
-	    Rast_write_colors(nearest_layer, G_mapset(), &colors);
+	    Rast_write_colors(nearest_layer, G_subproject(), &colors);
 	}
     }
 

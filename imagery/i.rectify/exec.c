@@ -22,7 +22,7 @@ int exec_rectify(struct Image_Group *group, int *ref_list, char *extension,
                  char *interp_method, int order)
 {
     char *name;
-    char *mapset;
+    char *subproject;
     char *result;
     char *type = "raster";
     int n;
@@ -41,7 +41,7 @@ int exec_rectify(struct Image_Group *group, int *ref_list, char *extension,
 	    continue;
 
 	name = group->ref.file[n].name;
-	mapset = group->ref.file[n].mapset;
+	subproject = group->ref.file[n].subproject;
 
 	/* generate out name, add extension to output */
 	result =
@@ -51,16 +51,16 @@ int exec_rectify(struct Image_Group *group, int *ref_list, char *extension,
 
 	select_current_env();
 
-	cats_ok = Rast_read_cats(name, mapset, &cats) >= 0;
-	colr_ok = Rast_read_colors(name, mapset, &colr) > 0;
+	cats_ok = Rast_read_cats(name, subproject, &cats) >= 0;
+	colr_ok = Rast_read_colors(name, subproject, &colr) > 0;
 
 	/* Initialze History */
-	if (Rast_read_history(name, mapset, &hist) < 0)
+	if (Rast_read_history(name, subproject, &hist) < 0)
 	    Rast_short_history(result, type, &hist);
 
 	time(&start_time);
 
-	if (rectify(group, name, mapset, result, order, interp_method)) {
+	if (rectify(group, name, subproject, result, order, interp_method)) {
 	    select_target_env();
 
 	    if (cats_ok) {
@@ -68,7 +68,7 @@ int exec_rectify(struct Image_Group *group, int *ref_list, char *extension,
 		Rast_free_cats(&cats);
 	    }
 	    if (colr_ok) {
-		Rast_write_colors(result, G_mapset(), &colr);
+		Rast_write_colors(result, G_subproject(), &colr);
 		Rast_free_colors(&colr);
 	    }
 	    /* Write out History */

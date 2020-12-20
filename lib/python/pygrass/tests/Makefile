@@ -9,7 +9,7 @@ GDIR = $(PYDIR)/grass
 PGDIR = $(GDIR)/pygrass
 DSTDIR= $(PGDIR)/tests
 
-MODULES = benchmark set_mapset
+MODULES = benchmark set_subproject
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)

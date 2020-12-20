@@ -4,16 +4,16 @@
 
 void fancy(struct Cell_head *window, struct Categories *cats, FILE * fp)
 {
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 
-    G_unqualified_name(map_name, G_mapset(), xname, xmapset);
+    G_unqualified_name(map_name, G_subproject(), xname, xsubproject);
 
     fprintf(fp, ".C %s\n", "green");
     fprintf(fp, ".S %f\n", size + 1.0);
-    fprintf(fp, "LOCATION: %s\n", G_location());
+    fprintf(fp, "LOCATION: %s\n", G_project());
     fprintf(fp, ".C %s\n", color);
     fprintf(fp, ".S %f\n", size);
-    fprintf(fp, "%s in %s\n", xname, xmapset);
+    fprintf(fp, "%s in %s\n", xname, xsubproject);
     fprintf(fp, "%s\n", cats->title);
     fprintf(fp, "North: %10.2f  South: %10.2f\n",
 	    window->north, window->south);

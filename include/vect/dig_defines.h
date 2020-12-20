@@ -6,7 +6,7 @@
 
 /*! \brief Name of vector directory */
 #define GV_DIRECTORY    "vector"
-/*! \brief Format description, data location (OGR) */
+/*! \brief Format description, data project (OGR) */
 #define GV_FRMT_ELEMENT "frmt"
 /*! \brief Native format, coordinates */
 #define GV_COOR_ELEMENT "coor"

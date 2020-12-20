@@ -52,8 +52,8 @@ class GisLibraryTestEnv(TestCase):
         value = libgis.G_getenv2("TEST", libgis.G_VAR_MAPSET)
         self.assertEqual(value, b"SWITCH2")
 
-    def test_mapset(self):
-        # Mapset VAR file
+    def test_subproject(self):
+        # Subproject VAR file
         libgis.G_setenv2("TEST", "C", libgis.G_VAR_MAPSET);
         value = libgis.G_getenv2("TEST", libgis.G_VAR_MAPSET)
         self.assertEqual(value, b"C")
@@ -62,7 +62,7 @@ class GisLibraryTestEnv(TestCase):
         value = libgis.G_getenv_nofatal2("TEST", libgis.G_VAR_MAPSET)
         self.assertEqual(value, b"D")
         # Force reading
-        libgis.G__read_mapset_env()
+        libgis.G__read_subproject_env()
         value = libgis.G_getenv2("TEST", libgis.G_VAR_MAPSET)
         self.assertEqual(value, b"C")
         

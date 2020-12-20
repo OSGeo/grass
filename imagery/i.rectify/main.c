@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
     c = G_define_flag();
     c->key = 'c';
     c->description =
-	_("Use current region settings in target location (def.=calculate smallest area)");
+	_("Use current region settings in target project (def.=calculate smallest area)");
 
     a = G_define_flag();
     a->key = 'a';
@@ -185,8 +185,8 @@ int main(int argc, char *argv[])
 
     /* determine the number of files in this group */
     if (!I_get_group_ref(group.name, &group.ref)) {
-	G_warning(_("Location: %s"), G_location());
-	G_warning(_("Mapset: %s"), G_mapset());
+	G_warning(_("Project: %s"), G_project());
+	G_warning(_("Subproject: %s"), G_subproject());
 	G_fatal_error(_("Could not read REF file for group <%s>"),
 	              group.name);
     }
@@ -205,27 +205,27 @@ int main(int argc, char *argv[])
 	}
     }
     else {
-	char xname[GNAME_MAX], xmapset[GMAPSET_MAX], *name, *mapset;
+	char xname[GNAME_MAX], xsubproject[GMAPSET_MAX], *name, *subproject;
 
 	for (n = 0; n < group.ref.nfiles; n++)
 		ref_list[n] = 0;
 
 	for (m = 0; m < k; m++) {
 	    got_file = 0;
-	    if (G_name_is_fully_qualified(ifile->answers[m], xname, xmapset)) {
+	    if (G_name_is_fully_qualified(ifile->answers[m], xname, xsubproject)) {
 		name = xname;
-		mapset = xmapset;
+		subproject = xsubproject;
 	    }
 	    else {
 		name = ifile->answers[m];
-		mapset = NULL;
+		subproject = NULL;
 	    }
 
 	    got_file = 0;
 	    for (n = 0; n < group.ref.nfiles; n++) {
-		if (mapset) {
+		if (subproject) {
 		    if (strcmp(name, group.ref.file[n].name) == 0 &&
-		        strcmp(mapset, group.ref.file[n].mapset) == 0) {
+		        strcmp(subproject, group.ref.file[n].subproject) == 0) {
 			got_file = 1;
 			ref_list[n] = 1;
 			break;
@@ -255,7 +255,7 @@ int main(int argc, char *argv[])
 	target_overwrite = atoi(overstr);
 
     if (!target_overwrite) {
-	/* check if output exists in target location/mapset */
+	/* check if output exists in target project/subproject */
 	char result[GNAME_MAX];
 	
 	select_target_env();
@@ -269,10 +269,10 @@ int main(int argc, char *argv[])
 	    if (G_legal_filename(result) < 0)
 		G_fatal_error(_("Extension <%s> is illegal"), extension);
 		
-	    if (G_find_raster2(result, G_mapset())) {
+	    if (G_find_raster2(result, G_subproject())) {
 		G_warning(_("The following raster map already exists in"));
 		G_warning(_("target LOCATION %s, MAPSET %s:"),
-			  G_location(), G_mapset());
+			  G_project(), G_subproject());
 		G_warning("<%s>", result);
 		G_fatal_error(_("Orthorectification cancelled."));
 	    }
@@ -283,7 +283,7 @@ int main(int argc, char *argv[])
     else
 	G_debug(1, "Overwriting OK");
 
-    /* do not use current region in target location */
+    /* do not use current region in target project */
     if (!c->answer) {
 	double res = -1;
 	
@@ -323,7 +323,7 @@ void err_exit(struct Ref *ref, char *file, char *grp)
     G_message(_("Try:"));
 
     for (n = 0; n < ref->nfiles; n++)
-	G_message("%s@%s", ref->file[n].name, ref->file[n].mapset);
+	G_message("%s@%s", ref->file[n].name, ref->file[n].subproject);
 
     G_fatal_error(_("Exit!"));
 }

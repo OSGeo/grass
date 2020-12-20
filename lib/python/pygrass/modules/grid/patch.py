@@ -51,15 +51,15 @@ def rpatch_row(rast, rasts, bboxes):
         rast.put_row(rbuff)
 
 
-def rpatch_map(raster, mapset, mset_str, bbox_list, overwrite=False,
+def rpatch_map(raster, subproject, mset_str, bbox_list, overwrite=False,
                start_row=0, start_col=0, prefix=''):
     # TODO is prefix useful??
     """Patch raster using a bounding box list to trim the raster.
 
     :param raster: the name of output raster
     :type raster: str
-    :param mapset: the name of mapset to use
-    :type mapset: str
+    :param subproject: the name of subproject to use
+    :type subproject: str
     :param mset_str:
     :type mset_str: str
     :param bbox_list: a list of BBox object to convert
@@ -74,8 +74,8 @@ def rpatch_map(raster, mapset, mset_str, bbox_list, overwrite=False,
     :type prefix: str
     """
     # Instantiate the RasterRow input objects
-    rast = RasterRow(prefix + raster, mapset)
-    rtype = RasterRow(name=raster, mapset=mset_str % (0, 0))
+    rast = RasterRow(prefix + raster, subproject)
+    rtype = RasterRow(name=raster, subproject=mset_str % (0, 0))
     rtype.open('r')
     rast.open('w', mtype=rtype.mtype, overwrite=overwrite)
     rtype.close()
@@ -84,7 +84,7 @@ def rpatch_map(raster, mapset, mset_str, bbox_list, overwrite=False,
         rrasts = []
         for col in range(len(rbbox)):
             rrasts.append(RasterRow(name=raster,
-                                    mapset=mset_str % (start_row + row,
+                                    subproject=mset_str % (start_row + row,
                                                        start_col + col)))
             rrasts[-1].open('r')
         rasts.append(rrasts)

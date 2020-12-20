@@ -112,7 +112,7 @@ from grass.exceptions import CalledModuleError
 tmp_rmaps = list()
 tmp_vmaps = list()
 usermask = None
-mapset = None
+subproject = None
 
 # what to do in case of user break:
 
@@ -123,13 +123,13 @@ def cleanup():
         grass.run_command('g.remove', quiet=True, flags='fb', type='vector', name=tmp_vmaps)
     if len(tmp_rmaps) > 0:
         grass.run_command('g.remove', quiet=True, flags='fb', type='raster', name=tmp_rmaps)
-    if usermask and mapset:
-        if grass.find_file(usermask, mapset=mapset)['file']:
+    if usermask and subproject:
+        if grass.find_file(usermask, subproject=subproject)['file']:
             grass.run_command('g.rename', quiet=True, raster=(usermask, 'MASK'), overwrite=True)
 
 
 def main():
-    global usermask, mapset, tmp_rmaps, tmp_vmaps
+    global usermask, subproject, tmp_rmaps, tmp_vmaps
 
     input = options['input']
     output = options['output']
@@ -142,7 +142,7 @@ def main():
     lambda_ = float(options['lambda'])
     memory = options['memory']
     quiet = True  # FIXME
-    mapset = grass.gisenv()['MAPSET']
+    subproject = grass.gisenv()['MAPSET']
     unique = str(os.getpid())  # Shouldn't we use temp name?
     prefix = 'r_fillnulls_%s_' % unique
     failed_list = list()  # a list of failed holes. Caused by issues with v.surf.rst. Connected with #1813
@@ -157,7 +157,7 @@ def main():
     # check if a MASK is already present
     # and remove it to not interfere with NULL lookup part
     # as we don't fill MASKed parts!
-    if grass.find_file('MASK', mapset=mapset)['file']:
+    if grass.find_file('MASK', subproject=subproject)['file']:
         usermask = "usermask_mask." + unique
         grass.message(_("A user raster mask (MASK) is present. Saving it..."))
         grass.run_command('g.rename', quiet=quiet, raster=('MASK', usermask))

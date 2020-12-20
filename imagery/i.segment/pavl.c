@@ -33,7 +33,7 @@
 /* Creates and returns a new table
    with comparison function |compare| using parameter |param|
    and memory allocator |allocator|.
-   Returns |NULL| if memory allocation failed. */
+   Returns |NULL| if memory alproject failed. */
 struct pavl_table *pavl_create(pavl_comparison_func * compare,
 			       struct libavl_allocator *allocator)
 {
@@ -80,7 +80,7 @@ void *pavl_find(const struct pavl_table *tree, const void *item)
 /* Inserts |item| into |tree| and returns a pointer to |item|'s address.
    If a duplicate item is found in the tree,
    returns a pointer to the duplicate without inserting |item|.
-   Returns |NULL| in case of memory allocation failure. */
+   Returns |NULL| in case of memory alproject failure. */
 void **pavl_probe(struct pavl_table *tree, void *item)
 {
     struct pavl_node *y;	/* Top node to update balance factor, and parent. */
@@ -225,7 +225,7 @@ void **pavl_probe(struct pavl_table *tree, void *item)
 
 /* Inserts |item| into |table|.
    Returns |NULL| if |item| was successfully inserted
-   or if a memory allocation error occurred.
+   or if a memory alproject error occurred.
    Otherwise, returns the duplicate item. */
 void *pavl_insert(struct pavl_table *table, void *item)
 {
@@ -236,7 +236,7 @@ void *pavl_insert(struct pavl_table *table, void *item)
 
 /* Inserts |item| into |table|, replacing any duplicate item.
    Returns |NULL| if |item| was inserted without replacing a duplicate,
-   or if a memory allocation error occurred.
+   or if a memory alproject error occurred.
    Otherwise, returns the item that was replaced. */
 void *pavl_replace(struct pavl_table *table, void *item)
 {
@@ -525,10 +525,10 @@ void *pavl_t_find(struct pavl_traverser *trav, struct pavl_table *tree,
 
 /* Attempts to insert |item| into |tree|.
    If |item| is inserted successfully, it is returned and |trav| is
-   initialized to its location.
+   initialized to its project.
    If a duplicate is found, it is returned and |trav| is initialized to
-   its location.  No replacement of the item occurs.
-   If a memory allocation failure occurs, |NULL| is returned and |trav|
+   its project.  No replacement of the item occurs.
+   If a memory alproject failure occurs, |NULL| is returned and |trav|
    is initialized to the null item. */
 void *pavl_t_insert(struct pavl_traverser *trav,
 		    struct pavl_table *tree, void *item)
@@ -677,7 +677,7 @@ copy_error_recovery(struct pavl_node *q,
    On failure, destroys the partially created new tree,
    applying |destroy|, if non-null, to each item in the new tree so far,
    and returns |NULL|.
-   If |allocator != NULL|, it is used for allocation in the new tree.
+   If |allocator != NULL|, it is used for alproject in the new tree.
    Otherwise, the same allocator used for |org| is used. */
 struct pavl_table *pavl_copy(const struct pavl_table *org,
 			     pavl_copy_func * copy, pavl_item_func * destroy,
@@ -798,7 +798,7 @@ void pavl_destroy(struct pavl_table *tree, pavl_item_func * destroy)
 }
 
 /* Allocates |size| bytes of space using |malloc()|.
-   Returns a null pointer if allocation fails. */
+   Returns a null pointer if alproject fails. */
 void *pavl_malloc(size_t size)
 {
     if (size > 0)

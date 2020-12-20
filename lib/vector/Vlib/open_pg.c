@@ -165,8 +165,8 @@ int V2_open_old_pg(struct Map_info *Map)
 
     PGresult *res;
 
-    G_debug(3, "V2_open_old_pg(): name = %s mapset = %s", Map->name,
-            Map->mapset);
+    G_debug(3, "V2_open_old_pg(): name = %s subproject = %s", Map->name,
+            Map->subproject);
 
     pg_info = &(Map->fInfo.pg);
     

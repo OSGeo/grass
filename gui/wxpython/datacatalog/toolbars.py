@@ -22,28 +22,28 @@ from icons.icon import MetaIcon
 icons = {
     'reloadTree': MetaIcon(
         img='redraw',
-        label=_("Reload GRASS locations")),
-    'reloadMapset': MetaIcon(
+        label=_("Reload GRASS projects")),
+    'reloadSubproject': MetaIcon(
         img='reload',
-        label=_("Reload current GRASS mapset only")),
+        label=_("Reload current GRASS subproject only")),
     'unlocked': MetaIcon(
         img='edit',
-        label=_("Restrict edits to the current mapset only")),
+        label=_("Restrict edits to the current subproject only")),
     'locked': MetaIcon(
         img='edit',
-        label=_("Allow edits outside of the current mapset")),
+        label=_("Allow edits outside of the current subproject")),
     'addGrassDB': MetaIcon(
         img='grassdb-add',
         label=_("Add existing or create new database")),
-    'addMapset': MetaIcon(
-        img='mapset-add',
-        label=_("Create new mapset in current location")),
-    'addLocation': MetaIcon(
-        img='location-add',
-        label=_("Create new location in current GRASS database")),
-    'downloadLocation': MetaIcon(
-        img='location-download',
-        label=_("Download sample location to current GRASS database"))
+    'addSubproject': MetaIcon(
+        img='subproject-add',
+        label=_("Create new subproject in current project")),
+    'addProject': MetaIcon(
+        img='project-add',
+        label=_("Create new project in current GRASS database")),
+    'downloadProject': MetaIcon(
+        img='project-download',
+        label=_("Download sample project to current GRASS database"))
 }
 
 
@@ -79,18 +79,18 @@ class DataCatalogToolbar(BaseToolbar):
         # to reuse icons in ./trunk/gui/icons/grass or add new ones there.
         return self._getToolbarData((("reloadTree", icons["reloadTree"],
                                       self.parent.OnReloadTree),
-                                     ("reloadMapset", icons["reloadMapset"],
-                                      self.parent.OnReloadCurrentMapset),
+                                     ("reloadSubproject", icons["reloadSubproject"],
+                                      self.parent.OnReloadCurrentSubproject),
                                      ("lock", icons['locked'],
                                       self.OnSetRestriction, wx.ITEM_CHECK),
                                      ("addGrassDB", icons['addGrassDB'],
                                       self.parent.OnAddGrassDB),
-                                     ("addLocation", icons['addLocation'],
-                                      self.parent.OnCreateLocation),
-                                     ("downloadLocation", icons['downloadLocation'],
-                                      self.parent.OnDownloadLocation),
-                                     ("addMapset", icons['addMapset'],
-                                      self.parent.OnCreateMapset)
+                                     ("addProject", icons['addProject'],
+                                      self.parent.OnCreateProject),
+                                     ("downloadProject", icons['downloadProject'],
+                                      self.parent.OnDownloadProject),
+                                     ("addSubproject", icons['addSubproject'],
+                                      self.parent.OnCreateSubproject)
                                      ))
 
     def OnSetRestriction(self, event):

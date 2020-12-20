@@ -12,8 +12,8 @@ SUBDIRS = \
 	g.gisenv \
 	g.gui \
 	g.list \
-	g.mapset \
-	g.mapsets \
+	g.subproject \
+	g.subprojects \
 	g.message \
 	g.mkfontcap \
 	g.parser \

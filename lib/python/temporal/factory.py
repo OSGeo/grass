@@ -30,7 +30,7 @@ def dataset_factory(type, id):
 
        :param type: the dataset type: rast or raster; rast3d, raster3d or raster_3d;
                     vect or vector; strds; str3ds; stvds
-       :param id: The id of the dataset ("name@mapset")
+       :param id: The id of the dataset ("name@subproject")
     """
     if type == "strds":
         sp = SpaceTimeRasterDataset(id)

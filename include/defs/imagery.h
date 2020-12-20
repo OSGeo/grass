@@ -107,7 +107,7 @@ int I_list_subgroup(const char *, const char *, const struct Ref *, FILE *);
 int I_list_subgroup_simple(const struct Ref *, FILE *);
 
 /* loc_info.c */
-char *I_location_info(const char *);
+char *I_project_info(const char *);
 
 /* points.c */
 int I_new_control_point(struct Control_Points *, double, double, double,

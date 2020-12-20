@@ -69,26 +69,26 @@ int get_pj_area(double *xmin, double *xmax, double *ymin, double *ymax)
 	int i;
 	const char *projstr = NULL;
 	char *indef = NULL;
-	/* projection information of current location */
+	/* projection information of current project */
 	struct Key_Value *in_proj_info, *in_unit_info;
 	struct pj_info iproj, oproj, tproj;	/* proj parameters  */
 	PJ *source_crs;
 
 	/* read current projection info */
 	if ((in_proj_info = G_get_projinfo()) == NULL) {
-	    G_warning(_("Can't get projection info of current location"));
+	    G_warning(_("Can't get projection info of current project"));
 	    
 	    return 0;
 	}
 
 	if ((in_unit_info = G_get_projunits()) == NULL) {
-	    G_warning(_("Can't get projection units of current location"));
+	    G_warning(_("Can't get projection units of current project"));
 	    
 	    return 0;
 	}
 
 	if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0) {
-	    G_fatal_error(_("Can't get projection key values of current location"));
+	    G_fatal_error(_("Can't get projection key values of current project"));
 	    
 	    return 0;
 	}

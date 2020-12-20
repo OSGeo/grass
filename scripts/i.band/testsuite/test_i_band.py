@@ -15,14 +15,14 @@ class TestBandsSystemDefined(TestCase):
 
         return band_ref
 
-    def test_band_ref_assign_not_current_mapset(self):
-        # it is assumed that we are not in PERMANENT mapset
+    def test_band_ref_assign_not_current_subproject(self):
+        # it is assumed that we are not in PERMANENT subproject
         module = SimpleModule('i.band', map=self.raster_map + '@PERMANENT',
                               band=self.band_ref)
         self.assertModuleFail(module)
 
     def test_band_ref_assign(self):
-        # copy raster map to the current mapset
+        # copy raster map to the current subproject
         call_module('g.copy',
                     raster='{m}@PERMANENT,{m}'.format(m=self.raster_map))
 

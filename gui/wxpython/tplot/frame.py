@@ -665,7 +665,7 @@ class TplotFrame(wx.Frame):
         xcsv = []
         for i, name in enumerate(self.datasetsR):
             name = name[0]
-            # just name; with mapset it would be long
+            # just name; with subproject it would be long
             self.yticksNames.append(name)
             self.yticksPos.append(1)  # TODO
             xdata = []
@@ -702,7 +702,7 @@ class TplotFrame(wx.Frame):
     def drawVCats(self):
         ycsv = []
         for i, name in enumerate(self.plotNameListV):
-            # just name; with mapset it would be long
+            # just name; with subproject it would be long
             labelname = name.replace('+', ' ')
             self.yticksNames.append(labelname)
             name_cat = name.split('+')
@@ -756,7 +756,7 @@ class TplotFrame(wx.Frame):
     def drawV(self):
         ycsv = []
         for i, name in enumerate(self.plotNameListV):
-            # just name; with mapset it would be long
+            # just name; with subproject it would be long
             self.yticksNames.append(self.attribute.GetValue())
             self.yticksPos.append(0)  # TODO
             xdata = []
@@ -904,32 +904,32 @@ class TplotFrame(wx.Frame):
         Reports also type of dataset (e.g. 'strds').
 
         :param list datasets: list of temporal dataset's name
-        :return: (mapName, mapset, type)
+        :return: (mapName, subproject, type)
         """
         validated = []
         tDict = tgis.tlist_grouped(type=typ, group_type=True, dbif=self.dbif)
-        # nested list with '(map, mapset, etype)' items
-        allDatasets = [[[(map, mapset, etype) for map in maps]
+        # nested list with '(map, subproject, etype)' items
+        allDatasets = [[[(map, subproject, etype) for map in maps]
                         for etype, maps in six.iteritems(etypesDict)]
-                       for mapset, etypesDict in six.iteritems(tDict)]
+                       for subproject, etypesDict in six.iteritems(tDict)]
         # flatten this list
         if allDatasets:
             allDatasets = reduce(lambda x, y: x + y, reduce(lambda x, y: x + y,
                                                             allDatasets))
-            mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
+            subprojects = tgis.get_tgis_c_library_interface().available_subprojects()
             allDatasets = [
                 i
                 for i in sorted(
-                    allDatasets, key=lambda l: mapsets.index(l[1]))]
+                    allDatasets, key=lambda l: subprojects.index(l[1]))]
 
         for dataset in datasets:
             errorMsg = _("Space time dataset <%s> not found.") % dataset
             if dataset.find("@") >= 0:
-                nameShort, mapset = dataset.split('@', 1)
-                indices = [n for n, (mapName, mapsetName, etype) in enumerate(
-                    allDatasets) if nameShort == mapName and mapsetName == mapset]
+                nameShort, subproject = dataset.split('@', 1)
+                indices = [n for n, (mapName, subprojectName, etype) in enumerate(
+                    allDatasets) if nameShort == mapName and subprojectName == subproject]
             else:
-                indices = [n for n, (mapName, mapset, etype) in enumerate(
+                indices = [n for n, (mapName, subproject, etype) in enumerate(
                     allDatasets) if dataset == mapName]
 
             if len(indices) == 0:
@@ -943,10 +943,10 @@ class TplotFrame(wx.Frame):
                         "<%s>." % dataset),
                     caption=_("Ambiguous dataset name"),
                     choices=[
-                        ("%(map)s@%(mapset)s:"
+                        ("%(map)s@%(subproject)s:"
                          " %(etype)s" % {
                              'map': allDatasets[i][0],
-                             'mapset': allDatasets[i][1],
+                             'subproject': allDatasets[i][1],
                              'etype': allDatasets[i][2]}) for i in indices],
                     style=wx.CHOICEDLG_STYLE | wx.OK)
                 if dlg.ShowModal() == wx.ID_OK:
@@ -1022,14 +1022,14 @@ class TplotFrame(wx.Frame):
         """Update the controlbox related to stvds"""
         dataset = self.datasetSelectV.GetValue().strip()
         name = dataset.split('@')[0]
-        mapset = dataset.split('@')[1] if len(dataset.split('@')) > 1 else ''
+        subproject = dataset.split('@')[1] if len(dataset.split('@')) > 1 else ''
         found = False
         for each in tgis.tlist(type='stvds', dbif=self.dbif):
-            each_name, each_mapset = each.split('@')
+            each_name, each_subproject = each.split('@')
             if name == each_name:
-                if mapset and mapset != each_mapset:
+                if subproject and subproject != each_subproject:
                     continue
-                dataset = name + '@' + each_mapset
+                dataset = name + '@' + each_subproject
                 found = True
                 break
         if found:
@@ -1100,7 +1100,7 @@ def InfoFormat(timeData, values):
 
 
 class DataCursor(object):
-    """A simple data cursor widget that displays the x,y location of a
+    """A simple data cursor widget that displays the x,y project of a
     matplotlib artist when it is selected.
 
 

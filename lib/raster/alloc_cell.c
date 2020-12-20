@@ -1,7 +1,7 @@
 /*!
  * \file lib/raster/alloc_cell.c
  *
- * \brief Raster Library - Raster allocation routines.
+ * \brief Raster Library - Raster alproject routines.
  *
  * (C) 2001-2009 by the GRASS Development Team
  *

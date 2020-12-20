@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     int *inp_fd;
     int scale, scale_max, scale_min;
     struct Ref ref;
-    const char *mapset;
+    const char *subproject;
 
     struct GModule *module;
     struct Option *opt_in, *opt_out, *opt_scale, *opt_filt;
@@ -132,14 +132,14 @@ int main(int argc, char *argv[])
 	
 	I_init_group_ref(&ref);
 	for (i = 0; opt_in->answers[i] != NULL; i++) {
-	    /* strip @mapset, do not modify opt_in->answers */
+	    /* strip @subproject, do not modify opt_in->answers */
 	    strcpy(name, opt_in->answers[i]);
-	    mapset = G_find_raster(name, "");
-	    if (!mapset)
+	    subproject = G_find_raster(name, "");
+	    if (!subproject)
 		G_fatal_error(_("Raster map <%s> not found"),
 			      opt_in->answers[i]);
 	    /* Add input to group. */
-	    I_add_file_to_group_ref(name, mapset, &ref);
+	    I_add_file_to_group_ref(name, subproject, &ref);
 	}
     }
     else {
@@ -190,7 +190,7 @@ int main(int argc, char *argv[])
 	sprintf(tmpbuf, "%s.%d", opt_out->answer, i + 1);
 	G_check_input_output_name(ref.file[i].name, tmpbuf, G_FATAL_EXIT);
 
-	inp_fd[i] = Rast_open_old(ref.file[i].name, ref.file[i].mapset);
+	inp_fd[i] = Rast_open_old(ref.file[i].name, ref.file[i].subproject);
     }
 
     if (!calc_mu_cov(inp_fd, covar, mu, stddev, bands))

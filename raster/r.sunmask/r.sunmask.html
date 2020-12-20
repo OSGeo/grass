@@ -4,7 +4,7 @@
 raster map layer and the sun position. The output map layer contains the
 cast shadow areas arising from sun shine and elevations. The user can define
 the sun position either directly or the module calculates it from given
-location and date/time parameters using the
+project and date/time parameters using the
 <a href="http://rredc.nrel.gov/">NREL</a> sun position algorithm. So either
 "A:"-parameters to specify the exact known sun position or "B:-parameters"
 to specify date/time for sun position calculation by <em>r.sunmask</em> itself
@@ -27,7 +27,7 @@ parameter seasonally in <em>r.sunmask</em> (timezone parameter). See also
 <a href="http://en.wikipedia.org/wiki/Daylight_saving_time_by_country">Daylight saving time by region and country</a>.
 
 <p>
-Note: In latitude/longitude locations the position coordinates pair
+Note: In latitude/longitude projects the position coordinates pair
 (east/west) has to be specified in decimal degree (not D:M:S). If
 not specified, the map center's coordinates will be used.
 Also <em>g.region -l</em> displays the map center's coordinates in

@@ -58,7 +58,7 @@ int parse(int argc, char *argv[], struct parms *parms)
 
     /* check all the inputs */
     if (!I_find_group(parms->group))
-	G_fatal_error(_("Group <%s> not found in current mapset"), parms->group);
+	G_fatal_error(_("Group <%s> not found in current subproject"), parms->group);
 
     if (!I_find_subgroup(parms->group, parms->subgroup))
 	G_fatal_error(_("Subgroup <%s> in group <%s> not found"), parms->subgroup, parms->group);

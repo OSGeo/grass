@@ -18,7 +18,7 @@ for details.
 :authors: Soeren Gebbert
 """
 from __future__ import print_function
-from .core import get_tgis_message_interface, get_available_temporal_mapsets, init_dbif
+from .core import get_tgis_message_interface, get_available_temporal_subprojects, init_dbif
 from .datetime_math import time_delta_to_relative_time
 from .space_time_datasets import RasterDataset
 from .factory import dataset_factory
@@ -33,7 +33,7 @@ def get_dataset_list(type, temporal_type, columns=None, where=None,
     """ Return a list of time stamped maps or space time datasets of a specific
         temporal type that are registered in the temporal database
 
-        This method returns a dictionary, the keys are the available mapsets,
+        This method returns a dictionary, the keys are the available subprojects,
         the values are the rows from the SQL database query.
 
         :param type: The type of the datasets (strds, str3ds, stvds, raster,
@@ -47,7 +47,7 @@ def get_dataset_list(type, temporal_type, columns=None, where=None,
         :param dbif: The database interface to be used
 
         :return: A dictionary with the rows of the SQL query for each
-                 available mapset
+                 available subproject
 
         .. code-block:: python
 
@@ -57,17 +57,17 @@ def get_dataset_list(type, temporal_type, columns=None, where=None,
             >>> sp = tgis.open_stds.open_new_stds(name=name, type="strds",
             ... temporaltype="absolute", title="title", descr="descr",
             ... semantic="mean", dbif=None, overwrite=True)
-            >>> mapset = tgis.get_current_mapset()
+            >>> subproject = tgis.get_current_subproject()
             >>> stds_list = tgis.list_stds.get_dataset_list("strds", "absolute", columns="name")
-            >>> rows =  stds_list[mapset]
+            >>> rows =  stds_list[subproject]
             >>> for row in rows:
             ...     if row["name"] == name:
             ...         print(True)
             True
-            >>> stds_list = tgis.list_stds.get_dataset_list("strds", "absolute", columns="name,mapset", where="mapset = '%s'"%(mapset))
-            >>> rows =  stds_list[mapset]
+            >>> stds_list = tgis.list_stds.get_dataset_list("strds", "absolute", columns="name,subproject", where="subproject = '%s'"%(subproject))
+            >>> rows =  stds_list[subproject]
             >>> for row in rows:
-            ...     if row["name"] == name and row["mapset"] == mapset:
+            ...     if row["name"] == name and row["subproject"] == subproject:
             ...         print(True)
             True
             >>> check = sp.delete()
@@ -78,11 +78,11 @@ def get_dataset_list(type, temporal_type, columns=None, where=None,
 
     dbif, connected = init_dbif(dbif)
 
-    mapsets = get_available_temporal_mapsets()
+    subprojects = get_available_temporal_subprojects()
 
     result = {}
 
-    for mapset in mapsets.keys():
+    for subproject in subprojects.keys():
 
         if temporal_type == "absolute":
             table = sp.get_type() + "_view_abs_time"
@@ -96,18 +96,18 @@ def get_dataset_list(type, temporal_type, columns=None, where=None,
 
         if where:
             sql += " WHERE " + where
-            sql += " AND mapset = '%s'" % (mapset)
+            sql += " AND subproject = '%s'" % (subproject)
         else:
-            sql += " WHERE mapset = '%s'" % (mapset)
+            sql += " WHERE subproject = '%s'" % (subproject)
 
         if order:
             sql += " ORDER BY " + order
 
-        dbif.execute(sql, mapset=mapset)
-        rows = dbif.fetchall(mapset=mapset)
+        dbif.execute(sql, subproject=subproject)
+        rows = dbif.fetchall(subproject=subproject)
 
         if rows:
-            result[mapset] = rows
+            result[subproject] = rows
 
     if connected:
         dbif.close()
@@ -135,8 +135,8 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
         :param dbif: The database interface to be used
 
             - "cols" Print preselected columns specified by columns
-            - "comma" Print the map ids ("name@mapset") as comma separated string
-            - "delta" Print the map ids ("name@mapset") with start time,
+            - "comma" Print the map ids ("name@subproject") as comma separated string
+            - "delta" Print the map ids ("name@subproject") with start time,
                end time, relative length of intervals and the relative
                distance to the begin
             - "deltagaps" Same as "delta" with additional listing of gaps.
@@ -165,9 +165,9 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
     # This method expects a list of objects for gap detection
     if method == "delta" or method == "deltagaps" or method == "gran":
         if type == "stvds":
-            columns = "id,name,layer,mapset,start_time,end_time"
+            columns = "id,name,layer,subproject,start_time,end_time"
         else:
-            columns = "id,name,mapset,start_time,end_time"
+            columns = "id,name,subproject,start_time,end_time"
         if method == "deltagaps":
             maps = sp.get_registered_maps_as_objects_with_gaps(where=where,
                                                                dbif=dbif)
@@ -188,7 +188,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
             string += "%s%s" % ("name", separator)
             if type == "stvds":
                 string += "%s%s" % ("layer", separator)
-            string += "%s%s" % ("mapset", separator)
+            string += "%s%s" % ("subproject", separator)
             string += "%s%s" % ("start_time", separator)
             string += "%s%s" % ("end_time", separator)
             string += "%s%s" % ("interval_length", separator)
@@ -236,7 +236,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                 string += "%s%s" % (map.get_name(), separator)
                 if type == "stvds":
                     string += "%s%s" % (map.get_layer(), separator)
-                string += "%s%s" % (map.get_mapset(), separator)
+                string += "%s%s" % (map.get_subproject(), separator)
                 string += "%s%s" % (start, separator)
                 string += "%s%s" % (end, separator)
                 string += "%s%s" % (delta, separator)

@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     char buf[1024];
     RULE *rules, *tail;
     int any;
-    const char *old_mapset;
+    const char *old_subproject;
     FILE *srcfp;
     int tty;
     struct GModule *module;
@@ -74,12 +74,12 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    old_mapset = G_find_raster2(parm.input->answer, "");
-    if (old_mapset == NULL)
+    old_subproject = G_find_raster2(parm.input->answer, "");
+    if (old_subproject == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), parm.input->answer);
 
     if (strcmp(parm.input->answer, parm.output->answer) == 0 &&
-	strcmp(old_mapset, G_mapset()) == 0)
+	strcmp(old_subproject, G_subproject()) == 0)
 	G_fatal_error(_("Input map can NOT be the same as output map"));
 
     srcfp = stdin;
@@ -92,8 +92,8 @@ int main(int argc, char *argv[])
     tty = isatty(fileno(srcfp));
 
     Rast_init_cats("", &cats);
-    map_type = Rast_map_type(parm.input->answer, old_mapset);
-    Rast_read_fp_range(parm.input->answer, old_mapset, &range);
+    map_type = Rast_map_type(parm.input->answer, old_subproject);
+    Rast_read_fp_range(parm.input->answer, old_subproject, &range);
     Rast_get_fp_range_min_max(&range, &min, &max);
     rules = tail = NULL;
     any = 0;
@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("No rules specified"));
     }
 
-    reclass(parm.input->answer, old_mapset, parm.output->answer, rules, &cats,
+    reclass(parm.input->answer, old_subproject, parm.output->answer, rules, &cats,
 	    parm.title->answer);
 
     exit(EXIT_SUCCESS);

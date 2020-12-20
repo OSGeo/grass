@@ -10,4 +10,4 @@ void rdwr_gridatb(void);
 extern struct Cell_head cellhd;
 extern FCELL *cell;
 extern const char *file;
-extern const char *mapset, *oname;
+extern const char *subproject, *oname;

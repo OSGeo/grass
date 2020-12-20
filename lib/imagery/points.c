@@ -122,7 +122,7 @@ int I_get_control_points(const char *group, struct Control_Points *cp)
     fd = I_fopen_group_file_old(group, POINT_FILE);
     if (fd == NULL) {
 	G_warning(_("Unable to open control point file for group [%s in %s]"),
-		  group, G_mapset());
+		  group, G_subproject());
 	return 0;
     }
 
@@ -130,7 +130,7 @@ int I_get_control_points(const char *group, struct Control_Points *cp)
     fclose(fd);
     if (stat < 0) {
 	G_warning(_("Bad format in control point file for group [%s in %s]"),
-		  group, G_mapset());
+		  group, G_subproject());
 	return 0;
     }
     return 1;
@@ -157,7 +157,7 @@ int I_put_control_points(const char *group, const struct Control_Points *cp)
     fd = I_fopen_group_file_new(group, POINT_FILE);
     if (fd == NULL) {
 	G_warning(_("Unable to create control point file for group [%s in %s]"),
-		  group, G_mapset());
+		  group, G_subproject());
 	return 0;
     }
 

@@ -12,8 +12,8 @@
 *		  particular v.proj) 
 *
 * PURPOSE:      r.proj converts a map to a new geographic projection. It reads a
-*	        map from a different location, projects it and write it out
-*	        to the current location. The projected data is resampled with
+*	        map from a different project, projects it and write it out
+*	        to the current project. The projected data is resampled with
 *	        one of three different methods: nearest neighbor, bilinear and
 *	        cubic convolution.
 *
@@ -25,11 +25,11 @@
 *
 * Changes
 *		 Morten Hulden <morten@untamo.net>, Aug 2000:
-*		 - aborts if input map is outside current location.
+*		 - aborts if input map is outside current project.
 *		 - can handle projections (conic, azimuthal etc) where 
 *		 part of the map may fall into areas where south is 
 *		 upward and east is leftward.
-*		 - avoids passing location edge coordinates to PROJ
+*		 - avoids passing project edge coordinates to PROJ
 *		 (they may be invalid in some projections).
 *		 - output map will be clipped to borders of the current region.
 *		 - output map cell edges and centers will coinside with those 
@@ -82,13 +82,13 @@ static char *make_ipol_desc(void);
 int main(int argc, char **argv)
 {
     char *mapname,		/* ptr to name of output layer  */
-     *setname,			/* ptr to name of input mapset  */
+     *setname,			/* ptr to name of input subproject  */
      *ipolname;			/* name of interpolation method */
 
     int fdi,			/* input map file descriptor    */
       fdo,			/* output map file descriptor   */
       method,			/* position of method in table  */
-      permissions,		/* mapset permissions           */
+      permissions,		/* subproject permissions           */
       cell_type,		/* output celltype              */
       cell_size,		/* size of a cell in bytes      */
       row, col,			/* counters                     */
@@ -116,19 +116,19 @@ int main(int argc, char **argv)
 		   tproj;	/* transformation parameters   */
 
     struct Key_Value *in_proj_info,	/* projection information of    */
-     *in_unit_info,		/* input and output mapsets     */
+     *in_unit_info,		/* input and output subprojects     */
      *out_proj_info, *out_unit_info;
 
     struct GModule *module;
 
-    struct Flag *list,		/* list files in source location */
+    struct Flag *list,		/* list files in source project */
      *nocrop,			/* don't crop output map        */
      *print_bounds,		/* print output bounds and exit */
      *gprint_bounds;		/* same but print shell style	*/
 
-    struct Option *imapset,	/* name of input mapset         */
+    struct Option *isubproject,	/* name of input subproject         */
      *inmap,			/* name of input layer          */
-     *inlocation,		/* name of input location       */
+     *inproject,		/* name of input project       */
      *outmap,			/* name of output layer         */
      *indbase,			/* name of input database       */
      *interpol,			/* interpolation method         */
@@ -149,17 +149,17 @@ int main(int argc, char **argv)
     G_add_keyword(_("transformation"));
     G_add_keyword(_("import"));
     module->description =
-	_("Re-projects a raster map from given location to the current location.");
+	_("Re-projects a raster map from given project to the current project.");
 
-    inlocation = G_define_standard_option(G_OPT_M_LOCATION);
-    inlocation->required = YES;
-    inlocation->label = _("Location containing input raster map");
-    inlocation->guisection = _("Source");
+    inproject = G_define_standard_option(G_OPT_M_LOCATION);
+    inproject->required = YES;
+    inproject->label = _("Project containing input raster map");
+    inproject->guisection = _("Source");
 
-    imapset = G_define_standard_option(G_OPT_M_MAPSET);
-    imapset->label = _("Mapset containing input raster map");
-    imapset->description = _("Default: name of current mapset");
-    imapset->guisection = _("Source");
+    isubproject = G_define_standard_option(G_OPT_M_MAPSET);
+    isubproject->label = _("Subproject containing input raster map");
+    isubproject->description = _("Default: name of current subproject");
+    isubproject->guisection = _("Source");
 
     inmap = G_define_standard_option(G_OPT_R_INPUT);
     inmap->description = _("Name of input raster map to re-project");
@@ -167,7 +167,7 @@ int main(int argc, char **argv)
     inmap->guisection = _("Source");
     
     indbase = G_define_standard_option(G_OPT_M_DBASE);
-    indbase->label = _("Path to GRASS database of input location");
+    indbase->label = _("Path to GRASS database of input project");
 
     outmap = G_define_standard_option(G_OPT_R_OUTPUT);
     outmap->required = NO;
@@ -205,7 +205,7 @@ int main(int argc, char **argv)
 
     list = G_define_flag();
     list->key = 'l';
-    list->description = _("List raster maps in input mapset and exit");
+    list->description = _("List raster maps in input subproject and exit");
     list->guisection = _("Print");
     
     nocrop = G_define_flag();
@@ -224,7 +224,7 @@ int main(int argc, char **argv)
 	_("Print input map's bounds in the current projection and exit (shell style)");
     gprint_bounds->guisection = _("Print");
 
-    /* The parser checks if the map already exists in current mapset,
+    /* The parser checks if the map already exists in current subproject,
        we switch out the check and do it
        in the module after the parser */
     overwrite = G_check_overwrite(argc, argv);
@@ -246,17 +246,17 @@ int main(int argc, char **argv)
     mapname = outmap->answer ? outmap->answer : inmap->answer;
     if (mapname && !list->answer && !overwrite &&
 	!print_bounds->answer && !gprint_bounds->answer &&
-	G_find_raster(mapname, G_mapset()))
+	G_find_raster(mapname, G_subproject()))
 	G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"),
                       "output", mapname);
 
-    setname = imapset->answer ? imapset->answer : G_store(G_mapset());
-    if (strcmp(inlocation->answer, G_location()) == 0 &&
+    setname = isubproject->answer ? isubproject->answer : G_store(G_subproject());
+    if (strcmp(inproject->answer, G_project()) == 0 &&
         (!indbase->answer || strcmp(indbase->answer, G_gisdbase()) == 0))
 #if 0
-	G_fatal_error(_("Input and output locations can not be the same"));
+	G_fatal_error(_("Input and output projects can not be the same"));
 #else
-	G_warning(_("Input and output locations are the same"));
+	G_warning(_("Input and output projects are the same"));
 #endif
     G_get_window(&outcellhd);
 
@@ -264,7 +264,7 @@ int main(int argc, char **argv)
 	print_bounds->answer = gprint_bounds->answer;
     curr_proj = G_projection();
 
-    /* Get projection info for output mapset */
+    /* Get projection info for output subproject */
     if ((out_proj_info = G_get_projinfo()) == NULL)
 	G_fatal_error(_("Unable to get projection info of output raster map"));
 
@@ -274,25 +274,25 @@ int main(int argc, char **argv)
     if (pj_get_kv(&oproj, out_proj_info, out_unit_info) < 0)
 	G_fatal_error(_("Unable to get projection key values of output raster map"));
 
-    /* Change the location           */
+    /* Change the project           */
     G_create_alt_env();
     G_setenv_nogisrc("GISDBASE", indbase->answer ? indbase->answer : G_gisdbase());
-    G_setenv_nogisrc("LOCATION_NAME", inlocation->answer);
+    G_setenv_nogisrc("LOCATION_NAME", inproject->answer);
     G_setenv_nogisrc("MAPSET", setname);
 
-    permissions = G_mapset_permissions(setname);
-    if (permissions < 0)	/* can't access mapset       */
-	G_fatal_error(_("Mapset <%s> in input location <%s> - %s"),
-		      setname, inlocation->answer,
+    permissions = G_subproject_permissions(setname);
+    if (permissions < 0)	/* can't access subproject       */
+	G_fatal_error(_("Subproject <%s> in input project <%s> - %s"),
+		      setname, inproject->answer,
 		      permissions == 0 ? _("permission denied")
 		      : _("not found"));
 
-    /* if requested, list the raster maps in source location - MN 5/2001 */
+    /* if requested, list the raster maps in source project - MN 5/2001 */
     if (list->answer) {
 	int i;
 	char **srclist;
-	G_verbose_message(_("Checking location <%s> mapset <%s>"),
-			  inlocation->answer, setname);
+	G_verbose_message(_("Checking project <%s> subproject <%s>"),
+			  inproject->answer, setname);
 	srclist = G_list(G_ELEMENT_RASTER, G_getenv_nofatal("GISDBASE"),
 		      G_getenv_nofatal("LOCATION_NAME"), setname);
 	for (i = 0; srclist[i]; i++) {
@@ -306,13 +306,13 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Required parameter <%s> not set"), inmap->key);
 
     if (!G_find_raster(inmap->answer, setname))
-	G_fatal_error(_("Raster map <%s> in location <%s> in mapset <%s> not found"),
-		      inmap->answer, inlocation->answer, setname);
+	G_fatal_error(_("Raster map <%s> in project <%s> in subproject <%s> not found"),
+		      inmap->answer, inproject->answer, setname);
 
     /* Read input map colour table */
     have_colors = Rast_read_colors(inmap->answer, setname, &colr);
 
-    /* Get projection info for input mapset */
+    /* Get projection info for input subproject */
     if ((in_proj_info = G_get_projinfo()) == NULL)
 	G_fatal_error(_("Unable to get projection info of input map"));
 
@@ -337,7 +337,7 @@ int main(int argc, char **argv)
     }
 #endif
 
-    /* switch back to current location */
+    /* switch back to current project */
     G_switch_env();
     if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
 	G_fatal_error(_("Unable to initialize coordinate transformation"));
@@ -349,7 +349,7 @@ int main(int argc, char **argv)
     if (G_verbose() > G_verbose_std())
 	pj_print_proj_params(&iproj, &oproj);
 
-    /* switch to input location */
+    /* switch to input project */
     G_switch_env();
 
     /* this call causes r.proj to read the entire map into memeory */
@@ -358,7 +358,7 @@ int main(int argc, char **argv)
     Rast_set_input_window(&incellhd);
 
     if (G_projection() == PROJECTION_XY)
-	G_fatal_error(_("Unable to work with unprojected data (xy location)"));
+	G_fatal_error(_("Unable to work with unprojected data (xy project)"));
 
     /* Save default borders so we can show them later */
     inorth = incellhd.north;
@@ -377,8 +377,8 @@ int main(int argc, char **argv)
 
 
     if (print_bounds->answer) {
-	G_message(_("Input map <%s@%s> in location <%s>:"),
-	    inmap->answer, setname, inlocation->answer);
+	G_message(_("Input map <%s@%s> in project <%s>:"),
+	    inmap->answer, setname, inproject->answer);
 
 	outcellhd.north = -1e9;
 	outcellhd.south =  1e9;
@@ -433,7 +433,7 @@ int main(int argc, char **argv)
 
     Rast_set_input_window(&incellhd);
 
-    /* And switch back to original location */
+    /* And switch back to original project */
 
     G_switch_env();
 
@@ -571,7 +571,7 @@ int main(int argc, char **argv)
     release_cache(ibuffer);
 
     if (have_colors > 0) {
-	Rast_write_colors(mapname, G_mapset(), &colr);
+	Rast_write_colors(mapname, G_subproject(), &colr);
 	Rast_free_colors(&colr);
     }
 

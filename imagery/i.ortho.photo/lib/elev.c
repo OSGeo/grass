@@ -1,7 +1,7 @@
 
 /**********************************************************
-* I_get_group_elev (group, elev_layer, mapset_elev, tl, math_exp, units, nd);
-* I_put_group_elev (group, elev_layer, mapset_elev, tl, math_exp, units, nd);
+* I_get_group_elev (group, elev_layer, subproject_elev, tl, math_exp, units, nd);
+* I_put_group_elev (group, elev_layer, subproject_elev, tl, math_exp, units, nd);
 **********************************************************/
 #include <stdio.h>
 #include <unistd.h>
@@ -15,7 +15,7 @@
 
 
 /* Put the "elev" name into the block file "ELEV" */
-int I_put_group_elev(char *group, char *elev, char *mapset_elev, char *tl,
+int I_put_group_elev(char *group, char *elev, char *subproject_elev, char *tl,
 		     char *math_exp, char *units, char *nd)
 {
     FILE *fd;
@@ -27,8 +27,8 @@ int I_put_group_elev(char *group, char *elev, char *mapset_elev, char *tl,
 	return 0;
 
     fprintf(fd, "elevation layer :%s\n", elev);
-    fprintf(fd, "mapset elevation:%s\n", mapset_elev);
-    fprintf(fd, "location        :%s\n", tl);
+    fprintf(fd, "subproject elevation:%s\n", subproject_elev);
+    fprintf(fd, "project        :%s\n", tl);
     fprintf(fd, "math expression :%s\n", math_exp);
     fprintf(fd, "units           :%s\n", units);
     fprintf(fd, "no data values  :%s\n", nd);
@@ -39,7 +39,7 @@ int I_put_group_elev(char *group, char *elev, char *mapset_elev, char *tl,
 
 /* Return the elev name from the block file ELEV
     returns 0 on fail,  1 on success */
-int I_get_group_elev(char *group, char *elev, char *mapset_elev, char *tl,
+int I_get_group_elev(char *group, char *elev, char *subproject_elev, char *tl,
 		     char *math_exp, char *units, char *nd)
 {
     char *err;
@@ -48,8 +48,8 @@ int I_get_group_elev(char *group, char *elev, char *mapset_elev, char *tl,
 
     if (!I_find_group_elev_file(group)) {
 	G_warning(
-	    _("Unable to find elevation file for group <%s> in mapset <%s>"),
-	      group, G_mapset());
+	    _("Unable to find elevation file for group <%s> in subproject <%s>"),
+	      group, G_subproject());
 	return 0;
     }
 
@@ -59,8 +59,8 @@ int I_get_group_elev(char *group, char *elev, char *mapset_elev, char *tl,
 
     if (!fd) {
 	G_warning(
-	    _("Unable to open elevation file for group <%s> in mapset <%s>"),
-	      group, G_mapset());
+	    _("Unable to open elevation file for group <%s> in subproject <%s>"),
+	      group, G_subproject());
 	G_sleep(3);
 
 	return 0;
@@ -71,10 +71,10 @@ int I_get_group_elev(char *group, char *elev, char *mapset_elev, char *tl,
     sscanf(buf, "elevation layer :%s\n", elev);
     err=fgets(buf, IN_BUF, fd);
     if(err==NULL) G_fatal_error(_("Unable to read elevation parameter file"));
-    sscanf(buf, "mapset elevation:%s\n", mapset_elev);
+    sscanf(buf, "subproject elevation:%s\n", subproject_elev);
     err=fgets(buf, IN_BUF, fd);
     if(err==NULL) G_fatal_error(_("Unable to read elevation parameter file"));
-    sscanf(buf, "location        :%s\n", tl);
+    sscanf(buf, "project        :%s\n", tl);
     err=fgets(buf, IN_BUF, fd);
     if(err==NULL) G_fatal_error(_("Unable to read elevation parameter file"));
     sscanf(buf, "math expression :%s\n", math_exp);

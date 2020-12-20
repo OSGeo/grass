@@ -28,7 +28,7 @@ void parse(int argc, char *argv[], struct Parms *parms)
 {
     struct Option *maps, *fs, *sort;
     struct Flag *labels, *overlap, *null;
-    const char *name, *mapset;
+    const char *name, *subproject;
 
     maps = G_define_standard_option(G_OPT_R_MAPS);
     maps->key_desc = "name1,name2";
@@ -67,22 +67,22 @@ void parse(int argc, char *argv[], struct Parms *parms)
 	exit(EXIT_FAILURE);
 
     name = parms->map1.name = maps->answers[0];
-    mapset = parms->map1.mapset = G_find_raster2(name, "");
-    if (mapset == NULL)
+    subproject = parms->map1.subproject = G_find_raster2(name, "");
+    if (subproject == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
-    if (Rast_map_type(name, mapset) != CELL_TYPE)
+    if (Rast_map_type(name, subproject) != CELL_TYPE)
 	G_fatal_error(_("Raster map <%s> is not CELL"), name);
 
-    parms->map1.fullname = G_fully_qualified_name(name, mapset);
+    parms->map1.fullname = G_fully_qualified_name(name, subproject);
 
     name = parms->map2.name = maps->answers[1];
-    mapset = parms->map2.mapset = G_find_raster2(name, "");
-    if (mapset == NULL)
+    subproject = parms->map2.subproject = G_find_raster2(name, "");
+    if (subproject == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
-    if (Rast_map_type(name, mapset) != CELL_TYPE)
+    if (Rast_map_type(name, subproject) != CELL_TYPE)
 	G_fatal_error(_("Raster map <%s> is not CELL"), name);
 
-    parms->map2.fullname = G_fully_qualified_name(name, mapset);
+    parms->map2.fullname = G_fully_qualified_name(name, subproject);
 
     parms->labels = labels->answer ? 1 : 0;
     parms->fs = G_option_to_separator(fs);

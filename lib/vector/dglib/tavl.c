@@ -33,7 +33,7 @@
 /* Creates and returns a new table
    with comparison function |compare| using parameter |param|
    and memory allocator |allocator|.
-   Returns |NULL| if memory allocation failed. */
+   Returns |NULL| if memory alproject failed. */
 struct tavl_table *tavl_create(tavl_comparison_func * compare, void *param,
 			       struct libavl_allocator *allocator)
 {
@@ -86,7 +86,7 @@ void *tavl_find(const struct tavl_table *tree, const void *item)
 /* Inserts |item| into |tree| and returns a pointer to |item|'s address.
    If a duplicate item is found in the tree,
    returns a pointer to the duplicate without inserting |item|.
-   Returns |NULL| in case of memory allocation failure. */
+   Returns |NULL| in case of memory alproject failure. */
 void **tavl_probe(struct tavl_table *tree, void *item)
 {
     struct tavl_node *y, *z;	/* Top node to update balance factor, and parent. */
@@ -238,7 +238,7 @@ void **tavl_probe(struct tavl_table *tree, void *item)
 
 /* Inserts |item| into |table|.
    Returns |NULL| if |item| was successfully inserted
-   or if a memory allocation error occurred.
+   or if a memory alproject error occurred.
    Otherwise, returns the duplicate item. */
 void *tavl_insert(struct tavl_table *table, void *item)
 {
@@ -249,7 +249,7 @@ void *tavl_insert(struct tavl_table *table, void *item)
 
 /* Inserts |item| into |table|, replacing any duplicate item.
    Returns |NULL| if |item| was inserted without replacing a duplicate,
-   or if a memory allocation error occurred.
+   or if a memory alproject error occurred.
    Otherwise, returns the item that was replaced. */
 void *tavl_replace(struct tavl_table *table, void *item)
 {
@@ -625,10 +625,10 @@ void *tavl_t_find(struct tavl_traverser *trav, struct tavl_table *tree,
 
 /* Attempts to insert |item| into |tree|.
    If |item| is inserted successfully, it is returned and |trav| is
-   initialized to its location.
+   initialized to its project.
    If a duplicate is found, it is returned and |trav| is initialized to
-   its location.  No replacement of the item occurs.
-   If a memory allocation failure occurs, |NULL| is returned and |trav|
+   its project.  No replacement of the item occurs.
+   If a memory alproject failure occurs, |NULL| is returned and |trav|
    is initialized to the null item. */
 void *tavl_t_insert(struct tavl_traverser *trav,
 		    struct tavl_table *tree, void *item)
@@ -786,7 +786,7 @@ copy_error_recovery(struct tavl_node *p,
    On failure, destroys the partially created new tree,
    applying |destroy|, if non-null, to each item in the new tree so far,
    and returns |NULL|.
-   If |allocator != NULL|, it is used for allocation in the new tree.
+   If |allocator != NULL|, it is used for alproject in the new tree.
    Otherwise, the same allocator used for |org| is used. */
 struct tavl_table *tavl_copy(const struct tavl_table *org,
 			     tavl_copy_func * copy, tavl_item_func * destroy,
@@ -882,7 +882,7 @@ void tavl_destroy(struct tavl_table *tree, tavl_item_func * destroy)
 }
 
 /* Allocates |size| bytes of space using |malloc()|.
-   Returns a null pointer if allocation fails. */
+   Returns a null pointer if alproject fails. */
 void *tavl_malloc(struct libavl_allocator *allocator, size_t size)
 {
     assert(allocator != NULL && size > 0);

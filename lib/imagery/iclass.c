@@ -122,15 +122,15 @@ int I_iclass_init_group(const char *group_name, const char *subgroup_name,
 	I_get_group_ref(group_name, refer);
 
     for (n = 0; n < refer->nfiles; n++) {
-	if (G_find_raster(refer->file[n].name, refer->file[n].mapset) == NULL) {
+	if (G_find_raster(refer->file[n].name, refer->file[n].subproject) == NULL) {
 	    if (subgroup_name)
 		G_warning(_("Raster map <%s@%s> in subgroup "
 			    "<%s> does not exist"), refer->file[n].name,
-			  refer->file[n].mapset, subgroup_name);
+			  refer->file[n].subproject, subgroup_name);
 	    else
 		G_warning(_("Raster map <%s@%s> in group "
 			    "<%s> does not exist"), refer->file[n].name,
-			  refer->file[n].mapset, group_name);
+			  refer->file[n].subproject, group_name);
 
 	    I_free_group_ref(refer);
 	    return 0;

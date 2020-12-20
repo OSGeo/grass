@@ -209,7 +209,7 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
     struct Categories cats;
     struct Range range;
     struct FPRange fp_range;
-    const char *mapset;
+    const char *subproject;
     struct Colors colors;
     CELL min, max;
     DCELL fmin, fmax;
@@ -234,21 +234,21 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
     if (flags[2])
 	do_invert = 1;
 
-    mapset = G_find_raster2(name, "");
-    if (mapset == NULL) {
+    subproject = G_find_raster2(name, "");
+    if (subproject == NULL) {
 	G_warning(_("Raster map <%s> not found"), name);
 	return (-1);
     }
 
-    is_fp = Rast_map_is_fp(name, mapset);
+    is_fp = Rast_map_is_fp(name, subproject);
 
-    if (Rast_read_colors(name, mapset, &colors) == -1) {
+    if (Rast_read_colors(name, subproject, &colors) == -1) {
 	G_warning(_("Unable to read color file of raster map <%s>"), name);
 	return (-1);
     }
 
     if (cat_labs)
-	if (Rast_read_cats(name, mapset, &cats) == -1) {
+	if (Rast_read_cats(name, subproject, &cats) == -1) {
 	    G_warning(_("Unable to read category file of raster map <%s>"),
 		      name);
 	    cat_labs = 0;
@@ -265,7 +265,7 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
     }
     else {
 	if (is_fp) {
-	    if (Rast_read_fp_range(name, mapset, &fp_range) != 1) {
+	    if (Rast_read_fp_range(name, subproject, &fp_range) != 1) {
 		G_warning(_("Unable to read fp range of raster map <%s>"),
 			  name);
 		return (-1);
@@ -277,7 +277,7 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 		fmax = rangef[1];
 	}
 	else {
-	    if (Rast_read_range(name, mapset, &range) == -1) {
+	    if (Rast_read_range(name, subproject, &range) == -1) {
 		G_warning(_("Unable to read range of raster map <%s>"), name);
 		return (-1);
 	    }

@@ -62,7 +62,7 @@ class VDigitToolbar(BaseToolbar):
         # currently selected map layer for editing (reference to MapLayer
         # instance)
         self.mapLayer = None
-        # list of vector layers from Layer Manager (only in the current mapset)
+        # list of vector layers from Layer Manager (only in the current subproject)
         self.layers = []
 
         self.comboid = self.combo = None
@@ -1069,7 +1069,7 @@ class VDigitToolbar(BaseToolbar):
 
     def UpdateListOfLayers(self, updateTool=False):
         """Update list of available vector map layers.
-        This list consists only editable layers (in the current mapset)
+        This list consists only editable layers (in the current subproject)
 
         :param updateTool: True to update also toolbar
         :type updateTool: bool
@@ -1082,10 +1082,10 @@ class VDigitToolbar(BaseToolbar):
         if self.mapLayer:
             layerNameSelected = self.mapLayer.GetName()
 
-        # select vector map layer in the current mapset
+        # select vector map layer in the current subproject
         layerNameList = []
         self.layers = self.Map.GetListOfLayers(ltype="vector",
-                                               mapset=grass.gisenv()['MAPSET'])
+                                               subproject=grass.gisenv()['MAPSET'])
 
         for layer in self.layers:
             if layer.name not in layerNameList:  # do not duplicate layer

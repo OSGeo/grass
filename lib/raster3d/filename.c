@@ -8,7 +8,7 @@
 
 void
 Rast3d_filename(char *path, const char *elementName, const char *mapName,
-	     const char *mapset)
+	     const char *subproject)
 {
-    G_file_name_misc(path, RASTER3D_DIRECTORY, elementName, mapName, mapset);
+    G_file_name_misc(path, RASTER3D_DIRECTORY, elementName, mapName, subproject);
 }

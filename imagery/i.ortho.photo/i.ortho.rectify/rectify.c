@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include "global.h"
 
-int rectify(struct Ortho_Image_Group *group, char *name, char *mapset,
+int rectify(struct Ortho_Image_Group *group, char *name, char *subproject,
             struct cache *ebuffer, double aver_z, char *result,
 	    char *interp_method)
 {
@@ -26,13 +26,13 @@ int rectify(struct Ortho_Image_Group *group, char *name, char *mapset,
     struct cache *ibuffer;
 
     select_current_env();
-    Rast_get_cellhd(name, mapset, &cellhd);
+    Rast_get_cellhd(name, subproject, &cellhd);
 
     /* open the file to be rectified
      * set window to cellhd first to be able to read file exactly
      */
     Rast_set_input_window(&cellhd);
-    infd = Rast_open_old(name, mapset);
+    infd = Rast_open_old(name, subproject);
     map_type = Rast_get_map_type(infd);
     cell_size = Rast_cell_size(map_type);
 
@@ -40,12 +40,12 @@ int rectify(struct Ortho_Image_Group *group, char *name, char *mapset,
 
     Rast_close(infd);		/* (pmx) 17 april 2000 */
 
-    G_message(_("Rectify <%s@%s> (location <%s>)"),
-	      name, mapset, G_location());
+    G_message(_("Rectify <%s@%s> (project <%s>)"),
+	      name, subproject, G_project());
     select_target_env();
     G_set_window(&target_window);
-    G_message(_("into  <%s@%s> (location <%s>) ..."),
-	      result, G_mapset(), G_location());
+    G_message(_("into  <%s@%s> (project <%s>) ..."),
+	      result, G_subproject(), G_project());
 
     nrows = target_window.rows;
     ncols = target_window.cols;
@@ -115,7 +115,7 @@ int rectify(struct Ortho_Image_Group *group, char *name, char *mapset,
     close(ibuffer->fd);
     release_cache(ibuffer);
 
-    Rast_get_cellhd(result, G_mapset(), &cellhd);
+    Rast_get_cellhd(result, G_subproject(), &cellhd);
 
     if (cellhd.proj == 0) {	/* x,y imagery */
 	cellhd.proj = target_window.proj;
@@ -125,13 +125,13 @@ int rectify(struct Ortho_Image_Group *group, char *name, char *mapset,
     if (target_window.proj != cellhd.proj) {
 	cellhd.proj = target_window.proj;
 	G_warning(_("Raster map <%s@%s>: projection don't match current settings"),
-		  name, mapset);
+		  name, subproject);
     }
 
     if (target_window.zone != cellhd.zone) {
 	cellhd.zone = target_window.zone;
 	G_warning(_("Raster map <%s@%s>: zone don't match current settings"),
-		  name, mapset);
+		  name, subproject);
     }
 
     select_current_env();

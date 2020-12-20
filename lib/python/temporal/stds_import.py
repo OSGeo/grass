@@ -12,12 +12,12 @@ Usage:
     directory="/tmp"
     title="My new dataset"
     descr="May new shiny dataset"
-    location=None
+    project=None
     link=True
     exp=True
     overr=False
     create=False
-    tgis.import_stds(input, output, directory, title, descr, location,
+    tgis.import_stds(input, output, directory, title, descr, project,
                     link, exp, overr, create, "strds")
 
 
@@ -33,7 +33,7 @@ import os
 import os.path
 import tarfile
 
-from .core import get_current_mapset, get_tgis_message_interface
+from .core import get_current_subproject, get_tgis_message_interface
 from .register import register_maps_in_space_time_dataset
 from .factory import dataset_factory
 import grass.script as gscript
@@ -51,12 +51,12 @@ imported_maps = {}
 ############################################################################
 
 
-def _import_raster_maps_from_gdal(maplist, overr, exp, location, link, format_,
+def _import_raster_maps_from_gdal(maplist, overr, exp, project, link, format_,
                                   set_current_region=False, memory=300):
     impflags = ""
     if overr:
         impflags += "o"
-    if exp or location:
+    if exp or project:
         impflags += "e"
     for row in maplist:
         name = row["name"]
@@ -125,9 +125,9 @@ def _import_raster_maps(maplist, set_current_region=False):
 ############################################################################
 
 
-def _import_vector_maps_from_gml(maplist, overr, exp, location, link):
+def _import_vector_maps_from_gml(maplist, overr, exp, project, link):
     impflags = "o"
-    if exp or location:
+    if exp or project:
         impflags += "e"
     for row in maplist:
         name = row["name"]
@@ -170,7 +170,7 @@ def _import_vector_maps(maplist):
 ############################################################################
 
 
-def import_stds(input, output, directory, title=None, descr=None, location=None,
+def import_stds(input, output, directory, title=None, descr=None, project=None,
                 link=False, exp=False, overr=False, create=False,
                 stds_type="strds", base=None, set_current_region=False,
                 memory=300):
@@ -182,12 +182,12 @@ def import_stds(input, output, directory, title=None, descr=None, location=None,
         :param title: The title of the new created space time dataset
         :param descr: The description of the new created
                      space time dataset
-        :param location: The name of the location that should be created,
-                        maps are imported into this location
+        :param project: The name of the project that should be created,
+                        maps are imported into this project
         :param link: Switch to link raster maps instead importing them
-        :param exp: Extend location extents based on new dataset
-        :param overr: Override projection (use location's projection)
-        :param create: Create the location specified by the "location"
+        :param exp: Extend project extents based on new dataset
+        :param overr: Override projection (use project's projection)
+        :param create: Create the project specified by the "project"
                       parameter and exit.
                       Do not import the space time datasets.
         :param stds_type: The type of the space time dataset that
@@ -237,7 +237,7 @@ def import_stds(input, output, directory, title=None, descr=None, location=None,
     os.chdir(directory)
 
     # Check projection information
-    if not location:
+    if not project:
         temp_name = gscript.tempfile()
         temp_file = open(temp_name, "w")
         proj_name = os.path.abspath(proj_file_name)
@@ -269,40 +269,40 @@ def import_stds(input, output, directory, title=None, descr=None, location=None,
             else:
                 diff = ''.join(gscript.diff_files(temp_name, proj_name))
                 gscript.warning(_("Difference between PROJ_INFO file of "
-                                  "imported map and of current location:"
+                                  "imported map and of current project:"
                                   "\n{diff}").format(diff=diff))
                 gscript.fatal(_("Projection information does not match. "
                                 "Aborting."))
 
-    # Create a new location based on the projection information and switch
+    # Create a new project based on the projection information and switch
     # into it
     old_env = gscript.gisenv()
-    if location:
+    if project:
         try:
             proj4_string = open(proj_file_name, 'r').read()
-            gscript.create_location(dbase=old_env["GISDBASE"],
-                                    location=location,
+            gscript.create_project(dbase=old_env["GISDBASE"],
+                                    project=project,
                                     proj4=proj4_string)
-            # Just create a new location and return
+            # Just create a new project and return
             if create:
                 os.chdir(old_cwd)
                 return
         except Exception as e:
-            gscript.fatal(_("Unable to create location %(l)s. Reason: %(e)s")
-                          % {'l': location, 'e': str(e)})
-        # Switch to the new created location
+            gscript.fatal(_("Unable to create project %(l)s. Reason: %(e)s")
+                          % {'l': project, 'e': str(e)})
+        # Switch to the new created project
         try:
-            gscript.run_command("g.mapset", mapset="PERMANENT",
-                                location=location,
+            gscript.run_command("g.subproject", subproject="PERMANENT",
+                                project=project,
                                 dbase=old_env["GISDBASE"])
         except CalledModuleError:
-            gscript.fatal(_("Unable to switch to location %s") % location)
+            gscript.fatal(_("Unable to switch to project %s") % project)
         # create default database connection
         try:
             gscript.run_command("t.connect", flags="d")
         except CalledModuleError:
             gscript.fatal(_("Unable to create default temporal database "
-                            "in new location %s") % location)
+                            "in new project %s") % project)
 
     try:
         # Make sure the temporal database exists
@@ -311,7 +311,7 @@ def import_stds(input, output, directory, title=None, descr=None, location=None,
 
         fs = "|"
         maplist = []
-        mapset = get_current_mapset()
+        subproject = get_current_subproject()
         list_file = open(list_file_name, "r")
         new_list_file = open(new_list_file_name, "w")
 
@@ -337,10 +337,10 @@ def import_stds(input, output, directory, title=None, descr=None, location=None,
             if base:
                 mapname = "%s_%s" % (base, gscript.get_num_suffix(line_count + 1,
                                                                   max_count))
-                mapid = "%s@%s" % (mapname, mapset)
+                mapid = "%s@%s" % (mapname, subproject)
             else:
                 mapname = filename
-                mapid = mapname + "@" + mapset
+                mapid = mapname + "@" + subproject
 
             row = {}
             row["filename"] = filename
@@ -427,7 +427,7 @@ def import_stds(input, output, directory, title=None, descr=None, location=None,
             gscript.fatal(_("Unsupported input format"))
 
         # Check the space time dataset
-        id = output + "@" + mapset
+        id = output + "@" + subproject
         sp = dataset_factory(type_, id)
         if sp.is_in_db() and gscript.overwrite() is False:
             gscript.fatal(_("Space time %(t)s dataset <%(sp)s> is already in"
@@ -437,7 +437,7 @@ def import_stds(input, output, directory, title=None, descr=None, location=None,
         # Import the maps
         if type_ == "strds":
             if format_ == "GTiff" or format_ == "AAIGrid":
-                _import_raster_maps_from_gdal(maplist, overr, exp, location,
+                _import_raster_maps_from_gdal(maplist, overr, exp, project,
                                               link, format_, set_current_region,
                                               memory)
             if format_ == "pack":
@@ -445,7 +445,7 @@ def import_stds(input, output, directory, title=None, descr=None, location=None,
         elif type_ == "stvds":
             if format_ == "GML":
                 _import_vector_maps_from_gml(
-                    maplist, overr, exp, location, link)
+                    maplist, overr, exp, project, link)
             if format_ == "pack":
                 _import_vector_maps(maplist)
 
@@ -488,15 +488,15 @@ def import_stds(input, output, directory, title=None, descr=None, location=None,
     except:
         raise
 
-    # Make sure the location is switched back correctly
+    # Make sure the project is switched back correctly
     finally:
-        if location:
-            # Switch to the old location
+        if project:
+            # Switch to the old project
             try:
-                gscript.run_command("g.mapset", mapset=old_env["MAPSET"],
-                                    location=old_env["LOCATION_NAME"],
+                gscript.run_command("g.subproject", subproject=old_env["MAPSET"],
+                                    project=old_env["LOCATION_NAME"],
                                     gisdbase=old_env["GISDBASE"])
             except CalledModuleError:
-                gscript.warning(_("Switching to original location failed"))
+                gscript.warning(_("Switching to original project failed"))
 
         gscript.set_raise_on_error(old_state)

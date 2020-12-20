@@ -16,11 +16,11 @@
 #include <grass/glocale.h>
 
 /*!
- * \brief Returns location title.
+ * \brief Returns project title.
  *
- * Returns a one line title for the database location. This title is
- * read from the file MYNAME in the PERMANENT mapset. See also \ref
- * Permanent_Mapset for a discussion of the PERMANENT mapset.
+ * Returns a one line title for the database project. This title is
+ * read from the file MYNAME in the PERMANENT subproject. See also \ref
+ * Permanent_Subproject for a discussion of the PERMANENT subproject.
  *
  * <b>Note:</b> This name is the first line in the file 
  * $GISDBASE/$LOCATION_NAME/PERMANENT/MYNAME
@@ -43,7 +43,7 @@ char *G_myname(void)
 	fclose(fd);
     }
     if (!ok)
-	strcpy(name, _("This location has no description."));
+	strcpy(name, _("This project has no description."));
 
     return G_store(name);
 }

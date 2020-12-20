@@ -1,12 +1,12 @@
 <h2>DESCRIPTION</h2>
  
 <em>v.db.reconnect.all</em> changes database connection of all layers
-of all vector maps in the current mapset from the source
+of all vector maps in the current subproject from the source
 (<b>old_database</b>) to the target (<b>new_database</b>) database. If
 a link does not match the <b>old_database</b> it is left untouched.
 
 <p>
-If no new database is given, the default datase of the mapset is used as 
+If no new database is given, the default datase of the subproject is used as 
 printed by <tt>db.connect -g</tt>. If no old database is given, all 
 layers without a link in the new database will be liniked to the new 
 database. If an old database is given, only links in the old database 
@@ -55,7 +55,7 @@ driver.
 <h3>Reconnect DBF attribute tables to SQLite database</h3>
 
 Reconnect <a href="grass-dbf.html">DBF</a> attribute tables linked to
-the vector maps in the current mapset
+the vector maps in the current subproject
 to <a href="grass-sqlite.html">SQLite</a> database:
 
 <div class="code"><pre>
@@ -69,7 +69,7 @@ If attribute table doesn't exist in the target database
 <h3>Convert DBF attribute tables to SQLite database</h3>
 
 For coping DBF tables to SQLite database and reconnecting them for all
-vector maps in the current mapset must be defined also <b>-c</b> flag.
+vector maps in the current subproject must be defined also <b>-c</b> flag.
 
 <div class="code"><pre>
 v.db.reconnect.all -c old_database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/' \
@@ -95,7 +95,7 @@ database. This option should be used very carefully!
 
 <h3>Convert GRASS 6 vector map to GRASS 7 including attribute transfer from DBF to SQLite</h3>
 
-To become usable in GRASS 7, all vector maps in a mapset need to be updated:
+To become usable in GRASS 7, all vector maps in a subproject need to be updated:
 
 <div class="code"><pre>
 # first rebuild topology for all vector maps

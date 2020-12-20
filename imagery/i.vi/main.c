@@ -564,7 +564,7 @@ int main(int argc, char *argv[])
 	val2 = 1;
 	Rast_add_c_color_rule(&val1, 0, 0, 0, &val2, 255, 255, 255, &colors);
     }
-    Rast_write_colors(result, G_mapset(), &colors);
+    Rast_write_colors(result, G_subproject(), &colors);
 
     Rast_short_history(result, "raster", &history);
     Rast_command_history(&history);

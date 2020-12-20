@@ -28,7 +28,7 @@
 struct maps_info {
 	int num;
 	char **names;
-	char **mapsets;
+	char **subprojects;
 	int *map_types;
 	DCELL *min;
 	DCELL *max;

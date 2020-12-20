@@ -297,9 +297,9 @@ int main(int argc, char *argv[])
     over_flag = G_define_flag();
     over_flag->key = 'o';
     over_flag->label =
-	_("Override projection check (use current location's projection)");
+	_("Override projection check (use current project's projection)");
     over_flag->description =
-	_("Assume that the dataset has same projection as the current location");
+	_("Assume that the dataset has same projection as the current project");
 
     scan_flag = G_define_flag();
     scan_flag->key = 's';
@@ -392,7 +392,7 @@ int main(int argc, char *argv[])
     }
 
     Rast_get_window(&region);
-    /* G_get_window seems to be unreliable if the location has been changed */
+    /* G_get_window seems to be unreliable if the project has been changed */
     G_get_set_window(&loc_wind);        /* TODO: v.in.lidar uses G_get_default_window() */
 
     estimated_lines = 0;
@@ -579,7 +579,7 @@ int main(int argc, char *argv[])
                                     || extents_flag->answer))
         use_segment = 1;
     if (base_raster_opt->answer && !use_segment) {
-        /* TODO: do we need to test existence first? mapset? */
+        /* TODO: do we need to test existence first? subproject? */
         base_raster = Rast_open_old(base_raster_opt->answer, "");
         base_raster_data_type = Rast_get_map_type(base_raster);
         base_array = G_calloc((size_t)rows * (cols + 1), Rast_cell_size(base_raster_data_type));

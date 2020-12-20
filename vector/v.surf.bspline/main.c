@@ -45,9 +45,9 @@ int main(int argc, char *argv[])
     double stepN, stepE, lambda, mean;
     double N_extension, E_extension, edgeE, edgeN;
 
-    const char *mapset, *drv, *db, *vector, *map;
+    const char *subproject, *drv, *db, *vector, *map;
     char table_name[GNAME_MAX], title[64];
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 
     int dim_vect, nparameters, BW;
     int *lineVect;		/* Vector restoring primitive's ID */
@@ -231,7 +231,7 @@ int main(int argc, char *argv[])
     
     /* Set auxiliary table's name */
     if (vector) {
-	if (G_name_is_fully_qualified(out_opt->answer, xname, xmapset)) {
+	if (G_name_is_fully_qualified(out_opt->answer, xname, xsubproject)) {
 	    sprintf(table_name, "%s_aux", xname);
 	}
 	else
@@ -253,11 +253,11 @@ int main(int argc, char *argv[])
     }
 
     /* Open input vector */
-    if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL)
+    if ((subproject = G_find_vector2(in_opt->answer, "")) == NULL)
 	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
 
     Vect_set_open_level(1);	/* WITHOUT TOPOLOGY */
-    if (1 > Vect_open_old(&In, in_opt->answer, mapset))
+    if (1 > Vect_open_old(&In, in_opt->answer, subproject))
 	G_fatal_error(_("Unable to open vector map <%s> at the topological level"),
 		      in_opt->answer);
 
@@ -322,11 +322,11 @@ int main(int argc, char *argv[])
 	G_message(_("Vector map <%s> of sparse points will be interpolated"),
 		  in_ext_opt->answer);
 
-	if ((mapset = G_find_vector2(in_ext_opt->answer, "")) == NULL)
+	if ((subproject = G_find_vector2(in_ext_opt->answer, "")) == NULL)
 	    G_fatal_error(_("Vector map <%s> not found"), in_ext_opt->answer);
 
 	Vect_set_open_level(1);	/* WITHOUT TOPOLOGY */
-	if (1 > Vect_open_old(&In_ext, in_ext_opt->answer, mapset))
+	if (1 > Vect_open_old(&In_ext, in_ext_opt->answer, subproject))
 	    G_fatal_error(_("Unable to open vector map <%s> at the topological level"),
 			  in_opt->answer);
     }

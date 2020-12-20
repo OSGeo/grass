@@ -20,7 +20,7 @@ import grass.lib.raster as libraster
 #
 from grass.pygrass import utils
 from grass.pygrass.gis.region import Region
-from grass.pygrass.errors import must_be_open, must_be_in_current_mapset
+from grass.pygrass.errors import must_be_open, must_be_in_current_subproject
 from grass.pygrass.shell.conversion import dict2html
 from grass.pygrass.shell.show import raw_figure
 
@@ -35,7 +35,7 @@ test_raster_name = "abstract_test_map"
 
 # Define global variables to not exceed the 80 columns
 INDXOUTRANGE = "The index (%d) is out of range, have you open the map?."
-INFO = """{name}@{mapset}
+INFO = """{name}@{subproject}
 rows: {rows}
 cols: {cols}
 north: {north} south: {south} nsres:{nsres}
@@ -46,7 +46,7 @@ proj: {proj}
 
 
 class Info(object):
-    def __init__(self, name, mapset=''):
+    def __init__(self, name, subproject=''):
         """Read the information for a raster map. ::
 
             >>> info = Info(test_raster_name)
@@ -63,20 +63,20 @@ class Info(object):
 
         """
         self.name = name
-        self.mapset = mapset
+        self.subproject = subproject
         self.c_region = ctypes.pointer(libraster.struct_Cell_head())
         self.c_range = None
 
     def _get_range(self):
         if self.mtype == 'CELL':
             self.c_range = ctypes.pointer(libraster.Range())
-            libraster.Rast_read_range(self.name, self.mapset, self.c_range)
+            libraster.Rast_read_range(self.name, self.subproject, self.c_range)
         else:
             self.c_range = ctypes.pointer(libraster.FPRange())
-            libraster.Rast_read_fp_range(self.name, self.mapset, self.c_range)
+            libraster.Rast_read_fp_range(self.name, self.subproject, self.c_range)
 
     def _get_raster_region(self):
-        libraster.Rast_get_cellhd(self.name, self.mapset, self.c_region)
+        libraster.Rast_get_cellhd(self.name, self.subproject, self.c_region)
 
     def read(self):
         self._get_range()
@@ -154,7 +154,7 @@ class Info(object):
 
     @property
     def mtype(self):
-        return RTYPE_STR[libraster.Rast_map_type(self.name, self.mapset)]
+        return RTYPE_STR[libraster.Rast_map_type(self.name, self.subproject)]
 
     def _get_band_reference(self):
         """Get band reference identifier.
@@ -164,7 +164,7 @@ class Info(object):
         band_ref = None
         p_filename = ctypes.c_char_p()
         p_band_ref = ctypes.c_char_p()
-        ret = libraster.Rast_read_band_reference(self.name, self.mapset,
+        ret = libraster.Rast_read_band_reference(self.name, self.subproject,
                                                  ctypes.byref(p_filename),
                                                  ctypes.byref(p_band_ref))
         if ret:
@@ -174,7 +174,7 @@ class Info(object):
 
         return band_ref
 
-    @must_be_in_current_mapset
+    @must_be_in_current_subproject
     def _set_band_reference(self, band_reference):
         """Set/Unset band reference identifier.
 
@@ -204,7 +204,7 @@ class Info(object):
     band_reference = property(fget=_get_band_reference, fset=_set_band_reference)
 
     def _get_units(self):
-        return libraster.Rast_read_units(self.name, self.mapset)
+        return libraster.Rast_read_units(self.name, self.subproject)
 
     def _set_units(self, units):
         libraster.Rast_write_units(self.name, units)
@@ -212,7 +212,7 @@ class Info(object):
     units = property(_get_units, _set_units)
 
     def _get_vdatum(self):
-        return libraster.Rast_read_vdatum(self.name, self.mapset)
+        return libraster.Rast_read_vdatum(self.name, self.subproject)
 
     def _set_vdatum(self, vdatum):
         libraster.Rast_write_vdatum(self.name, vdatum)
@@ -220,7 +220,7 @@ class Info(object):
     vdatum = property(_get_vdatum, _set_vdatum)
 
     def __repr__(self):
-        return INFO.format(name=self.name, mapset=self.mapset,
+        return INFO.format(name=self.name, subproject=self.subproject,
                            rows=self.rows, cols=self.cols,
                            north=self.north, south=self.south,
                            east=self.east, west=self.west,
@@ -230,7 +230,7 @@ class Info(object):
                            proj=self.proj, min=self.min, max=self.max)
 
     def keys(self):
-        return ['name', 'mapset', 'rows', 'cols', 'north', 'south',
+        return ['name', 'subproject', 'rows', 'cols', 'north', 'south',
                 'east', 'west', 'top', 'bottom', 'nsres', 'ewres', 'tbres',
                 'zone', 'proj', 'min', 'max']
 
@@ -259,9 +259,9 @@ class RasterAbstractBase(object):
 
     """
 
-    def __init__(self, name, mapset="", *aopen, **kwopen):
+    def __init__(self, name, subproject="", *aopen, **kwopen):
         """The constructor need at least the name of the map
-        *optional* field is the `mapset`.
+        *optional* field is the `subproject`.
 
         >>> ele = RasterAbstractBase(test_raster_name)
         >>> ele.name
@@ -271,12 +271,12 @@ class RasterAbstractBase(object):
 
         ..
         """
-        self.mapset = mapset
-        if not mapset:
-            # note that @must_be_in_current_mapset requires mapset to be set
-            mapset = libgis.G_find_raster(name, mapset)
-            if mapset is not None:
-                self.mapset = utils.decode(mapset)
+        self.subproject = subproject
+        if not subproject:
+            # note that @must_be_in_current_subproject requires subproject to be set
+            subproject = libgis.G_find_raster(name, subproject)
+            if subproject is not None:
+                self.subproject = utils.decode(subproject)
 
         self._name = name
         # Private attribute `_fd` that return the file descriptor of the map
@@ -290,9 +290,9 @@ class RasterAbstractBase(object):
         # when you open the file, using Rast_window_cols()
         self._cols = None
         # self.region = Region()
-        self.hist = History(self.name, self.mapset)
-        self.cats = Category(self.name, self.mapset)
-        self.info = Info(self.name, self.mapset)
+        self.hist = History(self.name, self.subproject)
+        self.cats = Category(self.name, self.subproject)
+        self.info = Info(self.name, self.subproject)
         self._aopen = aopen
         self._kwopen = kwopen
         self._mtype = 'CELL'
@@ -368,7 +368,7 @@ class RasterAbstractBase(object):
     cats_title = property(fget=_get_cats_title, fset=_set_cats_title)
 
     def __unicode__(self):
-        return self.name_mapset()
+        return self.name_subproject()
 
     def __str__(self):
         """Return the string of the object"""
@@ -405,7 +405,7 @@ class RasterAbstractBase(object):
 
     def exist(self):
         """Return True if the map already exist, and
-        set the mapset if were not set.
+        set the subproject if were not set.
 
         call the C function `G_find_raster`.
 
@@ -414,11 +414,11 @@ class RasterAbstractBase(object):
         True
         """
         if self.name:
-            if self.mapset == '':
-                mapset = utils.get_mapset_raster(self.name, self.mapset)
-                self.mapset = mapset if mapset else ''
-                return True if mapset else False
-            return bool(utils.get_mapset_raster(self.name, self.mapset))
+            if self.subproject == '':
+                subproject = utils.get_subproject_raster(self.name, self.subproject)
+                self.subproject = subproject if subproject else ''
+                return True if subproject else False
+            return bool(utils.get_subproject_raster(self.name, self.subproject))
         else:
             return False
 
@@ -448,28 +448,28 @@ class RasterAbstractBase(object):
         utils.remove(self.name, 'rast')
 
     def fullname(self):
-        """Return the full name of a raster map: name@mapset"""
-        return "{name}@{mapset}".format(name=self.name, mapset=self.mapset)
+        """Return the full name of a raster map: name@subproject"""
+        return "{name}@{subproject}".format(name=self.name, subproject=self.subproject)
 
-    def name_mapset(self, name=None, mapset=None):
+    def name_subproject(self, name=None, subproject=None):
         """Return the full name of the Raster.
 
         >>> ele = RasterAbstractBase(test_raster_name)
-        >>> name = ele.name_mapset().split("@")
+        >>> name = ele.name_subproject().split("@")
         >>> name
         ['abstract_test_map']
 
         """
         if name is None:
             name = self.name
-        if mapset is None:
+        if subproject is None:
             self.exist()
-            mapset = self.mapset
+            subproject = self.subproject
 
         gis_env = gisenv()
 
-        if mapset and mapset != gis_env['MAPSET']:
-            return "{name}@{mapset}".format(name=name, mapset=mapset)
+        if subproject and subproject != gis_env['MAPSET']:
+            return "{name}@{subproject}".format(name=name, subproject=subproject)
         else:
             return name
 
@@ -479,9 +479,9 @@ class RasterAbstractBase(object):
             utils.rename(self.name, newname, 'rast')
         self._name = newname
 
-    def set_region_from_rast(self, rastname='', mapset=''):
+    def set_region_from_rast(self, rastname='', subproject=''):
         """Set the computational region from a map,
-           if rastername and mapset is not specify, use itself.
+           if rastername and subproject is not specify, use itself.
            This region will be used by all
            raster map layers that are opened in the same process.
 
@@ -496,10 +496,10 @@ class RasterAbstractBase(object):
         region = Region()
         if rastname == '':
             rastname = self.name
-        if mapset == '':
-            mapset = self.mapset
+        if subproject == '':
+            subproject = self.subproject
 
-        libraster.Rast_get_cellhd(rastname, mapset,
+        libraster.Rast_get_cellhd(rastname, subproject,
                                   region.byref())
         self._set_raster_window(region)
 
@@ -586,7 +586,7 @@ class RasterAbstractBase(object):
     @must_be_open
     def get_cats(self):
         """Return a category object"""
-        cat = Category(name=self.name, mapset=self.mapset)
+        cat = Category(name=self.name, subproject=self.subproject)
         cat.read()
         return cat
 
@@ -616,6 +616,6 @@ if __name__ == "__main__":
     doctest.testmod()
 
     """Remove the generated vector map, if exist"""
-    mset = utils.get_mapset_raster(test_raster_name, mapset='')
+    mset = utils.get_subproject_raster(test_raster_name, subproject='')
     if mset:
         Module("g.remove", flags='f', type='raster', name=test_raster_name)

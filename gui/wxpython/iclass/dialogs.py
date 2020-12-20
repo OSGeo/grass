@@ -57,7 +57,7 @@ class IClassGroupDialog(SimpleDialog):
         self.groupSelect = gselect.Select(
             parent=self.panel,
             type='group',
-            mapsets=[
+            subprojects=[
                 grass.gisenv()['MAPSET']],
             size=globalvar.DIALOG_GSELECT_SIZE,
             validator=SimpleValidator(
@@ -162,7 +162,7 @@ class IClassGroupDialog(SimpleDialog):
         self.subGroupSelect.Insert(group)
 
     def GetSelectedGroup(self):
-        """Return currently selected group (without mapset)"""
+        """Return currently selected group (without subproject)"""
         return self.groupSelect.GetValue().split('@')[0]
 
     def GetGroupBandsErr(self, parent):
@@ -780,7 +780,7 @@ class IClassExportAreasDialog(wx.Dialog):
             border=3)
         self.vectorNameCtrl = gselect.Select(
             parent=self.panel, type='vector',
-            mapsets=[grass.gisenv()['MAPSET']],
+            subprojects=[grass.gisenv()['MAPSET']],
             size=globalvar.DIALOG_GSELECT_SIZE)
         if self.vectorName:
             self.vectorNameCtrl.SetValue(self.vectorName)

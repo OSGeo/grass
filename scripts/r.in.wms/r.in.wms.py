@@ -207,11 +207,11 @@ def GetRegionParams(opt_region):
     # set region
     if opt_region:
         reg_spl = opt_region.strip().split('@', 1)
-        reg_mapset = '.'
+        reg_subproject = '.'
         if len(reg_spl) > 1:
-            reg_mapset = reg_spl[1]
+            reg_subproject = reg_spl[1]
 
-        if not grass.find_file(name=reg_spl[0], element='windows', mapset=reg_mapset)['name']:
+        if not grass.find_file(name=reg_spl[0], element='windows', subproject=reg_subproject)['name']:
             grass.fatal(_("Region <%s> not found") % opt_region)
 
     if opt_region:

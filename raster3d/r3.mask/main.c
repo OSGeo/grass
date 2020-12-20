@@ -57,7 +57,7 @@ static void makeMask(char *name, d_Mask * maskRules)
     if (NULL == G_find_raster3d(name, ""))
 	Rast3d_fatal_error(_("3D raster map <%s> not found"), name);
 
-    map = Rast3d_open_cell_old(name, G_mapset(), RASTER3D_DEFAULT_WINDOW,
+    map = Rast3d_open_cell_old(name, G_subproject(), RASTER3D_DEFAULT_WINDOW,
 			  DCELL_TYPE, cacheSize);
 
     if (map == NULL)

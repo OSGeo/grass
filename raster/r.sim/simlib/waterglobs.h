@@ -20,7 +20,7 @@ extern char *err;
 extern char *outwalk;
 extern char *observation;
 extern char *logfile;
-extern char *mapset;
+extern char *subproject;
 extern char *mscale;
 extern char *tserie;
 

@@ -99,7 +99,7 @@ int main(int argc, char **argv)
     struct Option *start_mp_opt, *start_off_opt, *end_mp_opt, *end_off_opt;
     struct Option *driver_opt, *database_opt, *table_opt, *thresh_opt;
     struct GModule *module;
-    const char *mapset;
+    const char *subproject;
     char buf[2000];
     struct Map_info In, Out, PMap, EMap;
     struct line_cats *LCats, *PCats;
@@ -246,20 +246,20 @@ int main(int argc, char **argv)
     G_debug(debug, "Creating LRS ...");
 
     /* Open input lines */
-    mapset = G_find_vector2(in_lines_opt->answer, NULL);
-    if (mapset == NULL)
+    subproject = G_find_vector2(in_lines_opt->answer, NULL);
+    if (subproject == NULL)
 	G_fatal_error(_("Vector map <%s> not found"), in_lines_opt->answer);
 
-    if (Vect_open_old(&In, in_lines_opt->answer, mapset) < 0)
+    if (Vect_open_old(&In, in_lines_opt->answer, subproject) < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"),
 			in_lines_opt->answer);
 
     /* Open input ipoints */
-    mapset = G_find_vector2(points_opt->answer, NULL);
-    if (mapset == NULL)
+    subproject = G_find_vector2(points_opt->answer, NULL);
+    if (subproject == NULL)
 	G_fatal_error(_("Vector map <%s> not found"), points_opt->answer);
 
-    if (Vect_open_old(&PMap, points_opt->answer, mapset) < 0)
+    if (Vect_open_old(&PMap, points_opt->answer, subproject) < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), points_opt->answer);
 
     /* Open output lines */

@@ -24,7 +24,7 @@
 
 static struct Cell_stats statf;
 
-int get_cats(const char *name, const char *mapset)
+int get_cats(const char *name, const char *subproject)
 {
     int fd;
     int row, nrows, ncols;
@@ -32,19 +32,19 @@ int get_cats(const char *name, const char *mapset)
     struct Cell_head cellhd;
 
     /* set the window to the cell header */
-    Rast_get_cellhd(name, mapset, &cellhd);
+    Rast_get_cellhd(name, subproject, &cellhd);
 
     Rast_set_window(&cellhd);
 
     /* open the raster map */
-    fd = Rast_open_old(name, mapset);
+    fd = Rast_open_old(name, subproject);
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
     cell = Rast_allocate_c_buf();
     Rast_init_cell_stats(&statf);
 
     /* read the raster map */
-    G_verbose_message(_("Reading <%s> in <%s>"), name, mapset);
+    G_verbose_message(_("Reading <%s> in <%s>"), name, subproject);
     for (row = 0; row < nrows; row++) {
 	if (G_verbose() > G_verbose_std())
 	    G_percent(row, nrows, 2);

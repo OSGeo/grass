@@ -106,8 +106,8 @@
 #%end
 #%flag
 #% key: o
-#% label: Override projection check (use current location's projection)
-#% description: Assume that the dataset has the same projection as the current location
+#% label: Override projection check (use current project's projection)
+#% description: Assume that the dataset has the same projection as the current project
 #%end
 #%rules
 #% required: output,-e
@@ -130,19 +130,19 @@ TMP_REG_NAME = None
 
 
 def cleanup():
-    # remove temp location
+    # remove temp project
     if TMPLOC:
         grass.try_rmdir(os.path.join(GISDBASE, TMPLOC))
     if SRCGISRC:
         grass.try_remove(SRCGISRC)
     if TMP_REG_NAME and grass.find_file(name=TMP_REG_NAME, element='vector',
-                                        mapset=grass.gisenv()['MAPSET'])['fullname']:
+                                        subproject=grass.gisenv()['MAPSET'])['fullname']:
         grass.run_command('g.remove', type='vector', name=TMP_REG_NAME,
                           flags='f', quiet=True)
 
 
 def is_projection_matching(GDALdatasource):
-    """Returns True if current location projection
+    """Returns True if current project projection
     matches dataset projection, otherwise False"""
     try:
         grass.run_command('r.in.gdal', input=GDALdatasource, flags='j',
@@ -163,7 +163,7 @@ def main():
     tgtres = options['resolution']
     title = options["title"]
     if flags['e'] and not output:
-        output = 'rimport_tmp'  # will be removed with the entire tmp location
+        output = 'rimport_tmp'  # will be removed with the entire tmp project
     if options['resolution_value']:
         if tgtres != 'value':
             grass.fatal(_("To set custom resolution value, select 'value' in resolution option"))
@@ -199,27 +199,27 @@ def main():
     tgtloc = grassenv['LOCATION_NAME']
 
     # make sure target is not xy
-    if grass.parse_command('g.proj', flags='g')['name'] == 'xy_location_unprojected':
+    if grass.parse_command('g.proj', flags='g')['name'] == 'xy_project_unprojected':
         grass.fatal(
-            _("Coordinate reference system not available for current location <%s>") %
+            _("Coordinate reference system not available for current project <%s>") %
             tgtloc)
 
-    tgtmapset = grassenv['MAPSET']
+    tgtsubproject = grassenv['MAPSET']
     GISDBASE = grassenv['GISDBASE']
 
-    TMPLOC = grass.append_node_pid("tmp_r_import_location")
+    TMPLOC = grass.append_node_pid("tmp_r_import_project")
     TMP_REG_NAME = grass.append_node_pid("tmp_r_import_region")
 
     SRCGISRC, src_env = grass.create_environment(GISDBASE, TMPLOC, 'PERMANENT')
 
-    # create temp location from input without import
-    grass.verbose(_("Creating temporary location for <%s>...") % GDALdatasource)
-    # creating a new location with r.in.gdal requires a sanitized env
+    # create temp project from input without import
+    grass.verbose(_("Creating temporary project for <%s>...") % GDALdatasource)
+    # creating a new project with r.in.gdal requires a sanitized env
     env = os.environ.copy()
-    env = grass.sanitize_mapset_environment(env)
+    env = grass.sanitize_subproject_environment(env)
     parameters = dict(input=GDALdatasource, output=output,
                       memory=memory, flags='c', title=title,
-                      location=TMPLOC, quiet=True)
+                      project=TMPLOC, quiet=True)
     if bands:
         parameters['band'] = bands
     try:
@@ -227,28 +227,28 @@ def main():
     except CalledModuleError:
         grass.fatal(_("Unable to read GDAL dataset <%s>") % GDALdatasource)
 
-    # prepare to set region in temp location
+    # prepare to set region in temp project
     if 'r' in region_flag:
         tgtregion = TMP_REG_NAME
         grass.run_command('v.in.region', output=tgtregion, flags='d')
 
-    # switch to temp location
+    # switch to temp project
 
     # print projection at verbose level
     grass.verbose(grass.read_command('g.proj', flags='p', env=src_env).rstrip(os.linesep))
 
     # make sure input is not xy
-    if grass.parse_command('g.proj', flags='g', env=src_env)['name'] == 'xy_location_unprojected':
+    if grass.parse_command('g.proj', flags='g', env=src_env)['name'] == 'xy_project_unprojected':
         grass.fatal(_("Coordinate reference system not available for input <%s>") % GDALdatasource)
 
-    # import into temp location
-    grass.verbose(_("Importing <%s> to temporary location...") % GDALdatasource)
+    # import into temp project
+    grass.verbose(_("Importing <%s> to temporary project...") % GDALdatasource)
     parameters = dict(input=GDALdatasource, output=output,
                       memory=memory, flags='ak' + additional_flags)
     if bands:
         parameters['band'] = bands
     if 'r' in region_flag:
-        grass.run_command('v.proj', location=tgtloc, mapset=tgtmapset,
+        grass.run_command('v.proj', project=tgtloc, subproject=tgtsubproject,
                           input=tgtregion, output=tgtregion, env=src_env)
         grass.run_command('g.region', vector=tgtregion, env=src_env)
         parameters['flags'] = parameters['flags'] + region_flag
@@ -272,7 +272,7 @@ def main():
         grass.run_command('g.remove', type="vector", flags="f",
                           name=tgtregion, env=src_env)
 
-    # switch to target location
+    # switch to target project
     if 'r' in region_flag:
         grass.run_command('g.remove', type="vector", flags="f",
                           name=tgtregion)
@@ -296,8 +296,8 @@ def main():
         if options['extent'] == 'input':
             # r.proj -g
             try:
-                tgtextents = grass.read_command('r.proj', location=TMPLOC,
-                                                mapset='PERMANENT',
+                tgtextents = grass.read_command('r.proj', project=TMPLOC,
+                                                subproject='PERMANENT',
                                                 input=outfile, flags='g',
                                                 memory=memory, quiet=True)
             except CalledModuleError:
@@ -325,16 +325,16 @@ def main():
         grass.run_command('v.in.region', output=vreg, quiet=True, env=env)
 
         # reproject to src
-        # switch to temp location
+        # switch to temp project
         try:
             grass.run_command('v.proj', input=vreg, output=vreg,
-                              location=tgtloc, mapset=tgtmapset,
+                              project=tgtloc, subproject=tgtsubproject,
                               quiet=True, env=src_env)
             # test if v.proj created a valid area
             if grass.vector_info_topo(vreg, env=src_env)['areas'] != 1:
                 grass.fatal(_("Please check the 'extent' parameter"))
         except CalledModuleError:
-            grass.fatal(_("Unable to reproject to source location"))
+            grass.fatal(_("Unable to reproject to source project"))
 
         # set region from region vector
         grass.run_command('g.region', raster=outfile, env=src_env)
@@ -345,11 +345,11 @@ def main():
         cells = grass.region(env=src_env)['cells']
 
         estres = math.sqrt((n - s) * (e - w) / cells)
-        # remove from source location for multi bands import
+        # remove from source project for multi bands import
         grass.run_command('g.remove', type='vector', name=vreg,
                           flags='f', quiet=True, env=src_env)
 
-        # switch to target location
+        # switch to target project
         grass.run_command('g.remove', type='vector', name=vreg,
                           flags='f', quiet=True)
 
@@ -383,8 +383,8 @@ def main():
         # r.proj
         grass.message(_("Reprojecting <%s>...") % outfile)
         try:
-            grass.run_command('r.proj', location=TMPLOC,
-                              mapset='PERMANENT', input=outfile,
+            grass.run_command('r.proj', project=TMPLOC,
+                              subproject='PERMANENT', input=outfile,
                               method=method, resolution=res,
                               memory=memory, flags=rflags, quiet=True,
                               env=env)

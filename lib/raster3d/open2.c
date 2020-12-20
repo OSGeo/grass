@@ -6,7 +6,7 @@
 /*!
  * \brief 
  *
- * Opens new g3d-file with <em>name</em> in the current mapset. Tiles
+ * Opens new g3d-file with <em>name</em> in the current subproject. Tiles
  * are stored in memory with <em>typeIntern</em> which must be one of FCELL_TYPE,
  * DCELL_TYPE, or RASTER3D_TILE_SAME_AS_FILE. <em>cache</em> specifies the
  * cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,
@@ -72,7 +72,7 @@ void *Rast3d_open_new_param(const char *name, int typeIntern, int cache,
 /*!
  * \brief 
  *
- * Opens new g3d-file with <em>name</em> in the current mapset. This method tries to compute 
+ * Opens new g3d-file with <em>name</em> in the current subproject. This method tries to compute 
  * optimal tile size based on the number of rows, cols and depths and the maximum allowed tile size in KB. 
  * Tiles are stored in memory using RASTER3D_TILE_SAME_AS_FILE method. <em>cache</em> specifies the
  * cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,

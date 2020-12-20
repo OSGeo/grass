@@ -1331,15 +1331,15 @@ struct Map_info
     */
     char *name;
     /*!
-      \brief Mapset name
+      \brief Subproject name
     */
-    char *mapset;
+    char *subproject;
     /*!
-      \brief Location name
+      \brief Project name
 
-      Note: location and gisdbase is useful if changed (v.proj or external apps)
+      Note: project and gisdbase is useful if changed (v.proj or external apps)
     */
-    char *location;
+    char *project;
     /*!
       \brief GISDBASE path
     */

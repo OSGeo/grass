@@ -26,9 +26,9 @@ from grass.script import parse_key_val, region_env
 
 
 class CatalogReprojectionDialog(wx.Dialog):
-    def __init__(self, parent, giface, inputGisdbase, inputLocation,
-                 inputMapset, inputLayer, inputEnv,
-                 outputGisdbase, outputLocation, outputMapset, outputLayer,
+    def __init__(self, parent, giface, inputGisdbase, inputProject,
+                 inputSubproject, inputLayer, inputEnv,
+                 outputGisdbase, outputProject, outputSubproject, outputLayer,
                  etype, outputEnv, callback,
                  id=wx.ID_ANY, title=_("Reprojection"),
                  style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
@@ -41,13 +41,13 @@ class CatalogReprojectionDialog(wx.Dialog):
 
         self.panel = wx.Panel(parent=self)
         self.iGisdbase = inputGisdbase
-        self.iLocation = inputLocation
-        self.iMapset = inputMapset
+        self.iProject = inputProject
+        self.iSubproject = inputSubproject
         self.iLayer = inputLayer
         self.iEnv = inputEnv
         self.oGisdbase = outputGisdbase
-        self.oLocation = outputLocation
-        self.oMapset = outputMapset
+        self.oProject = outputProject
+        self.oSubproject = outputSubproject
         self.oLayer = outputLayer
         self.etype = etype
         self.oEnv = outputEnv
@@ -129,7 +129,7 @@ class CatalogReprojectionDialog(wx.Dialog):
 
     def _estimateResolution(self):
         output = RunCommand('r.proj', flags='g', quiet=False, read=True, input=self.iLayer,
-                            dbase=self.iGisdbase, location=self.iLocation, mapset=self.iMapset,
+                            dbase=self.iGisdbase, project=self.iProject, subproject=self.iSubproject,
                             env=self.oEnv).strip()
         params = parse_key_val(output, vsep=' ')
         output = RunCommand('g.region', flags='ug', quiet=False, read=True, env=self.oEnv,
@@ -153,8 +153,8 @@ class CatalogReprojectionDialog(wx.Dialog):
         if self.etype == 'raster':
             cmd.append('r.proj')
             cmd.append('dbase=' + self.iGisdbase)
-            cmd.append('location=' + self.iLocation)
-            cmd.append('mapset=' + self.iMapset)
+            cmd.append('project=' + self.iProject)
+            cmd.append('subproject=' + self.iSubproject)
             cmd.append('input=' + self.iLayer)
             cmd.append('output=' + self.oLayer)
             cmd.append('method=' + self.resampling.GetStringSelection())
@@ -166,8 +166,8 @@ class CatalogReprojectionDialog(wx.Dialog):
         else:
             cmd.append('v.proj')
             cmd.append('dbase=' + self.iGisdbase)
-            cmd.append('location=' + self.iLocation)
-            cmd.append('mapset=' + self.iMapset)
+            cmd.append('project=' + self.iProject)
+            cmd.append('subproject=' + self.iSubproject)
             cmd.append('input=' + self.iLayer)
             cmd.append('output=' + self.oLayer)
             cmd.append('smax=' + self.vsplit.GetValue())

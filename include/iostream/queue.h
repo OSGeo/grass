@@ -44,8 +44,8 @@ class queue {
 private:
   T *data;
   int size;
-  int head;  // first valid location (if data)
-  int tail;  // next free location
+  int head;  // first valid project (if data)
+  int tail;  // next free project
   int len;
   void grow();
 public:

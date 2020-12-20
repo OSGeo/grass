@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 {
     struct GModule *module;
     int infile;
-    const char *mapset;
+    const char *subproject;
     size_t cell_size;
     int ytile, xtile, y, overlap;
     int *outfiles;
@@ -81,8 +81,8 @@ int main(int argc, char *argv[])
     G_get_set_window(&src_w);
     overlap = parm.overlap->answer ? atoi(parm.overlap->answer) : 0;
 
-    mapset = G_find_raster2(parm.rastin->answer, "");
-    if (mapset == NULL)
+    subproject = G_find_raster2(parm.rastin->answer, "");
+    if (subproject == NULL)
         G_fatal_error(_("Raster map <%s> not found"), parm.rastin->answer);
 
     /* set window to old map */
@@ -170,7 +170,7 @@ static void write_support_files(int xtile, int ytile, int overlap)
 
     sprintf(name, "%s-%03d-%03d", parm.rastout->answer, ytile, xtile);
 
-    Rast_get_cellhd(name, G_mapset(), &cellhd);
+    Rast_get_cellhd(name, G_subproject(), &cellhd);
 
     cellhd.north = src_w.north - ytile * dst_w.rows * src_w.ns_res;
     cellhd.south = cellhd.north - (dst_w.rows + 2 * overlap) * src_w.ns_res;
@@ -204,6 +204,6 @@ static void write_support_files(int xtile, int ytile, int overlap)
 		      parm.rastin->answer);
     if (map_type != CELL_TYPE)
 	Rast_mark_colors_as_fp(&colors);
-    Rast_write_colors(name, G_mapset(), &colors);
+    Rast_write_colors(name, G_subproject(), &colors);
 }
 

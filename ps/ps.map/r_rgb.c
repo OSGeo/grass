@@ -43,7 +43,7 @@ int read_rgb(char *key, char *data)
     /* get file names for R, G, & B */
 
     for (i = 0; i < 3; i++) {
-	const char *mapset, *name;
+	const char *subproject, *name;
 	char *p;
 
 	name = names[i];
@@ -51,28 +51,28 @@ int read_rgb(char *key, char *data)
 	p = strchr(name, '@');
 	if (p) {
 	    *p = '\0';
-	    mapset = p + 1;
+	    subproject = p + 1;
 	}
 	else {
-	    mapset = G_find_file2("cell", name, "");
-	    if (!mapset) {
+	    subproject = G_find_file2("cell", name, "");
+	    if (!subproject) {
 		error(name, "", "not found");
 		return 0;
 	    }
 	}
 
 	grp.name[i] = G_store(name);
-	grp.mapset[i] = G_store(mapset);
+	grp.subproject[i] = G_store(subproject);
 
 	/* read in colors */
-	if (Rast_read_colors(grp.name[i], grp.mapset[i], &(grp.colors[i])) == -1) {
-	    sprintf(fullname, "%s in %s", grp.name[i], grp.mapset[i]);
+	if (Rast_read_colors(grp.name[i], grp.subproject[i], &(grp.colors[i])) == -1) {
+	    sprintf(fullname, "%s in %s", grp.name[i], grp.subproject[i]);
 	    error(fullname, "", "can't read color table");
 	    return 0;
 	}
 
 	/* open raster maps for reading */
-	grp.fd[i] = Rast_open_old(grp.name[i], grp.mapset[i]);
+	grp.fd[i] = Rast_open_old(grp.name[i], grp.subproject[i]);
     }
 
     strcpy(PS.celltitle, grp.group_name);

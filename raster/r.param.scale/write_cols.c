@@ -36,7 +36,7 @@ void write_cols(void)
     Rast_add_c_color_rule(&val1, 255, 255, 0,	/* Yellow     */
 			  &val2, 255, 0, 0, &colours);	/* Red        */
 
-    Rast_write_colors(rast_out_name, G_mapset(), &colours);
+    Rast_write_colors(rast_out_name, G_subproject(), &colours);
 
     Rast_free_colors(&colours);
 

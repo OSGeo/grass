@@ -1000,20 +1000,20 @@ class RasterColorTable(ColorTable):
 
         # find existing color table and copy to temp file
         try:
-            name, mapset = self.inmap.split('@')
+            name, subproject = self.inmap.split('@')
         except ValueError:
             name = self.inmap
-            mapset = grass.find_file(self.inmap, element='cell')['mapset']
-            if not mapset:
+            subproject = grass.find_file(self.inmap, element='cell')['subproject']
+            if not subproject:
                 return
         self._tmp = tmp
         self._old_colrtable = None
-        if mapset == grass.gisenv()['MAPSET']:
+        if subproject == grass.gisenv()['MAPSET']:
             self._old_colrtable = grass.find_file(
                 name=name, element='colr')['file']
         else:
             self._old_colrtable = grass.find_file(
-                name=name, element='colr2/' + mapset)['file']
+                name=name, element='colr2/' + subproject)['file']
 
         if self._old_colrtable:
             self._colrtemp = utils.GetTempfile()
@@ -1258,10 +1258,10 @@ class VectorColorTable(ColorTable):
         else:
             self.cp.SetLabel(_("Import or export color table"))
 
-    def CheckMapset(self):
-        """Check if current vector is in current mapset"""
+    def CheckSubproject(self):
+        """Check if current vector is in current subproject"""
         if grass.find_file(name=self.inmap, element='vector')[
-                'mapset'] == grass.gisenv()['MAPSET']:
+                'subproject'] == grass.gisenv()['MAPSET']:
             return True
         else:
             return False
@@ -1343,14 +1343,14 @@ class VectorColorTable(ColorTable):
             self.DisableClearAll()
             return
 
-        if not self.CheckMapset():
-            # v.colors doesn't need the map to be in current mapset
+        if not self.CheckSubproject():
+            # v.colors doesn't need the map to be in current subproject
             if not (self.version7 and self.attributeType == 'color'):
                 message = _(
-                    "Selected map <%(map)s> is not in current mapset <%(mapset)s>. "
+                    "Selected map <%(map)s> is not in current subproject <%(subproject)s>. "
                     "Attribute table cannot be edited.") % {
                     'map': self.inmap,
-                    'mapset': grass.gisenv()['MAPSET']}
+                    'subproject': grass.gisenv()['MAPSET']}
                 wx.CallAfter(GMessage, parent=self, message=message)
                 self.DisableClearAll()
                 return
@@ -1393,7 +1393,7 @@ class VectorColorTable(ColorTable):
         if self.version7 and self.attributeType == 'color':
             self.useColumn.SetValue(False)
             self.OnCheckColumn(event=None)
-            self.useColumn.Enable(self.CheckMapset())
+            self.useColumn.Enable(self.CheckSubproject())
         else:
             self.LoadTable()
 
@@ -1406,7 +1406,7 @@ class VectorColorTable(ColorTable):
         need to be deleted when closing dialog and unloading map
 
         :param type: type of column (e.g. vachar(11))"""
-        if not self.CheckMapset():
+        if not self.CheckSubproject():
             return
         # because more than one dialog with the same map can be opened we must test column name and
         # create another one
@@ -1429,7 +1429,7 @@ class VectorColorTable(ColorTable):
 
     def DeleteTemporaryColumn(self):
         """Delete temporary column"""
-        if not self.CheckMapset():
+        if not self.CheckSubproject():
             return
 
         if self.inmap:
@@ -1709,22 +1709,22 @@ class VectorColorTable(ColorTable):
 
         # find existing color table and copy to temp file
         try:
-            name, mapset = self.inmap.split('@')
+            name, subproject = self.inmap.split('@')
         except ValueError:
             name = self.inmap
-            mapset = grass.find_file(self.inmap, element='cell')['mapset']
-            if not mapset:
+            subproject = grass.find_file(self.inmap, element='cell')['subproject']
+            if not subproject:
                 return
 
         old_colrtable = None
-        if mapset == grass.gisenv()['MAPSET']:
+        if subproject == grass.gisenv()['MAPSET']:
             old_colrtable = grass.find_file(
                 name='colr', element=os.path.join(
                     'vector', name))['file']
         else:
             old_colrtable = grass.find_file(
                 name=name, element=os.path.join(
-                    'vcolr2', mapset))['file']
+                    'vcolr2', subproject))['file']
 
         if old_colrtable:
             colrtemp = utils.GetTempfile()

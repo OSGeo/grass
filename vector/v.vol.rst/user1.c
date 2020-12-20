@@ -72,7 +72,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
     double deltx, delty, deltz;
     int first_time = 1;
     CELL *cellmask;
-    const char *mapsetm;
+    const char *subprojectm;
     char buf[500];
     int cat, intval;
     struct field_info *Fi;
@@ -362,14 +362,14 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
 
   /** create a bitmap mask from given raster map **/
     if (maskmap != NULL) {
-	mapsetm = G_find_raster2(maskmap, "");
-	if (!mapsetm) {
+	subprojectm = G_find_raster2(maskmap, "");
+	if (!subprojectm) {
 	    clean();
 	    G_fatal_error(_("Mask raster map [%s] not found"), maskmap);
 	}
 	bitmask = BM_create(nsizc, nsizr);
 	cellmask = Rast_allocate_c_buf();
-	cfmask = Rast_open_old(maskmap, mapsetm);
+	cfmask = Rast_open_old(maskmap, subprojectm);
 	for (i = 0; i < nsizr; i++) {
 	    irev = nsizr - i - 1;
 	    Rast_get_c_row(cfmask, cellmask, i);

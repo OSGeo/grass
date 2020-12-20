@@ -602,13 +602,13 @@ int create_table(struct Format_info_pg *pg_info)
     
     /* by default create spatial index & add primary key */
     spatial_index = primary_key = TRUE;
-    if (G_find_file2("", def_file ? def_file : "PG", G_mapset())) {
+    if (G_find_file2("", def_file ? def_file : "PG", G_subproject())) {
         FILE *fp;
         const char *p;
 
         struct Key_Value *key_val;
 
-        fp = G_fopen_old("", def_file ? def_file : "PG", G_mapset());
+        fp = G_fopen_old("", def_file ? def_file : "PG", G_subproject());
         if (!fp) {
             G_warning(_("Unable to open PG file"));
         }
@@ -870,13 +870,13 @@ int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
     
     /* read default values from PG file*/
     tolerance = 0.;
-    if (G_find_file2("", def_file ? def_file : "PG", G_mapset())) {
+    if (G_find_file2("", def_file ? def_file : "PG", G_subproject())) {
         FILE *fp;
         const char *p;
 
         struct Key_Value *key_val;
 
-        fp = G_fopen_old("", def_file ? def_file : "PG", G_mapset());
+        fp = G_fopen_old("", def_file ? def_file : "PG", G_subproject());
         if (!fp) {
             G_fatal_error(_("Unable to open PG file"));
         }

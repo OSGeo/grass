@@ -16,18 +16,18 @@ void G__call_error_handlers(void);
 /* home.c */
 const char *G__home(void);
 
-/* location.c */
-char *G__location_path(void);
+/* project.c */
+char *G__project_path(void);
 
 /* mach_name.c */
 const char *G__machine_name(void);
 
-/* mapset.c */
-const char *G__mapset(void);
-char *G__mapset_path(void);
+/* subproject.c */
+const char *G__subproject(void);
+char *G__subproject_path(void);
 
-/* mapset_nme.c */
-void G__get_list_of_mapsets(void);
+/* subproject_nme.c */
+void G__get_list_of_subprojects(void);
 
 /* timestamp.c */
 int G__read_timestamp(FILE *, struct TimeStamp *);

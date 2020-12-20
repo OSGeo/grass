@@ -31,14 +31,14 @@ def mapinfo_must_be_set(method):
                                  "correctly initiated"))
     return wrapper
 
-def must_be_in_current_mapset(method):
+def must_be_in_current_subproject(method):
 
     @wraps(method)
     def wrapper(self, *args, **kargs):
-        if self.mapset == libgis.G_mapset().decode():
+        if self.subproject == libgis.G_subproject().decode():
             return method(self, *args, **kargs)
         else:
-            raise GrassError(_("Map <{}> not found in current mapset").format(
+            raise GrassError(_("Map <{}> not found in current subproject").format(
                 self.name))
 
     return wrapper

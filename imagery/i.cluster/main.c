@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
     
     /* check all the inputs */
     if (!I_find_group(group)) {
-        G_fatal_error(_("Group <%s> not found in current mapset"), group);
+        G_fatal_error(_("Group <%s> not found in current subproject"), group);
     }
     if (!I_find_subgroup(group, subgroup)) {
         G_fatal_error(_("Subgroup <%s> in group <%s> not found"), subgroup, group);
@@ -249,13 +249,13 @@ int main(int argc, char *argv[])
     fprintf(report,
 	    _("#################### CLUSTER (%s) ####################%s%s"),
 	    G_date(), HOST_NEWLINE, HOST_NEWLINE);
-    fprintf(report, _("Location: %s%s"), G_location(), HOST_NEWLINE);
-    fprintf(report, _("Mapset:   %s%s"), G_mapset(), HOST_NEWLINE);
+    fprintf(report, _("Project: %s%s"), G_project(), HOST_NEWLINE);
+    fprintf(report, _("Subproject:   %s%s"), G_subproject(), HOST_NEWLINE);
     fprintf(report, _("Group:    %s%s"), group, HOST_NEWLINE);
     fprintf(report, _("Subgroup: %s%s"), subgroup, HOST_NEWLINE);
     for (n = 0; n < ref.nfiles; n++) {
 	fprintf(report, _(" %s%s"),
-		G_fully_qualified_name(ref.file[n].name, ref.file[n].mapset), HOST_NEWLINE);
+		G_fully_qualified_name(ref.file[n].name, ref.file[n].subproject), HOST_NEWLINE);
     }
     fprintf(report, _("Result signature file: %s%s"), outsigfile, HOST_NEWLINE);
     fprintf(report, "%s", HOST_NEWLINE);

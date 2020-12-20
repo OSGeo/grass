@@ -4,9 +4,9 @@
 #include <grass/glocale.h>
 
 
-int open_cell_old(const char *name, const char *mapset)
+int open_cell_old(const char *name, const char *subproject)
 {
-    return Rast_open_old(name, mapset);
+    return Rast_open_old(name, subproject);
 }
 
 int open_cell_new(const char *name)

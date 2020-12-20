@@ -78,7 +78,7 @@ int IL_output_2d(struct interp_params *params,
     struct Colors colors;
     struct History hist;
     char *type;
-    const char *mapset = NULL;
+    const char *subproject = NULL;
     int cond1, cond2;
     FCELL dat1, dat2;
     CELL val1, val2;
@@ -242,13 +242,13 @@ int IL_output_2d(struct interp_params *params,
     }
 
     if (params->elev != NULL) {
-	mapset = G_find_file("cell", params->elev, "");
-	if (mapset == NULL) {
+	subproject = G_find_file("cell", params->elev, "");
+	if (subproject == NULL) {
 	    G_warning(_("Raster map <%s> not found"), params->elev);
 	    return -1;
 	}
-	Rast_write_colors(params->elev, mapset, &colors);
-	Rast_quantize_fp_map_range(params->elev, mapset,
+	Rast_write_colors(params->elev, subproject, &colors);
+	Rast_quantize_fp_map_range(params->elev, subproject,
 				(DCELL) zminac - 0.5, (DCELL) zmaxac + 0.5,
 				(CELL) (zminac - 0.5), (CELL) (zmaxac + 0.5));
     }
@@ -323,13 +323,13 @@ int IL_output_2d(struct interp_params *params,
 	}
 
 	if (params->slope != NULL) {
-	    mapset = G_find_file("cell", params->slope, "");
-	    if (mapset == NULL) {
+	    subproject = G_find_file("cell", params->slope, "");
+	    if (subproject == NULL) {
 		G_warning(_("Raster map <%s> not found"), params->slope);
 		return -1;
 	    }
-	    Rast_write_colors(params->slope, mapset, &colors);
-	    Rast_quantize_fp_map_range(params->slope, mapset, 0., 90., 0, 90);
+	    Rast_write_colors(params->slope, subproject, &colors);
+	    Rast_quantize_fp_map_range(params->slope, subproject, 0., 90., 0, 90);
 
 	    do_history(params->slope, vect, input, params);
 	}
@@ -392,13 +392,13 @@ int IL_output_2d(struct interp_params *params,
 	}
 
 	if (params->aspect != NULL) {
-	    mapset = G_find_file("cell", params->aspect, "");
-	    if (mapset == NULL) {
+	    subproject = G_find_file("cell", params->aspect, "");
+	    if (subproject == NULL) {
 		G_warning(_("Raster map <%s> not found"), params->aspect);
 		return -1;
 	    }
-	    Rast_write_colors(params->aspect, mapset, &colors);
-	    Rast_quantize_fp_map_range(params->aspect, mapset, 0., 360., 0, 360);
+	    Rast_write_colors(params->aspect, subproject, &colors);
+	    Rast_quantize_fp_map_range(params->aspect, subproject, 0., 360., 0, 360);
 
 	    do_history(params->aspect, vect, input, params);
 	}
@@ -442,13 +442,13 @@ int IL_output_2d(struct interp_params *params,
 				      &dat2, 255, 0, 200, &colors);
 
 	    if (params->pcurv != NULL) {
-		mapset = G_find_file("cell", params->pcurv, "");
-		if (mapset == NULL) {
+		subproject = G_find_file("cell", params->pcurv, "");
+		if (subproject == NULL) {
 		    G_warning(_("Raster map <%s> not found"), params->pcurv);
 		    return -1;
 		}
-		Rast_write_colors(params->pcurv, mapset, &colors);
-		Rast_quantize_fp_map_range(params->pcurv, mapset, dat1, dat2,
+		Rast_write_colors(params->pcurv, subproject, &colors);
+		Rast_quantize_fp_map_range(params->pcurv, subproject, dat1, dat2,
 					(CELL) (dat1 * MULT),
 					(CELL) (dat2 * MULT));
 
@@ -456,13 +456,13 @@ int IL_output_2d(struct interp_params *params,
 	    }
 
 	    if (params->tcurv != NULL) {
-		mapset = G_find_file("cell", params->tcurv, "");
-		if (mapset == NULL) {
+		subproject = G_find_file("cell", params->tcurv, "");
+		if (subproject == NULL) {
 		    G_warning(_("Raster map <%s> not found"), params->tcurv);
 		    return -1;
 		}
-		Rast_write_colors(params->tcurv, mapset, &colors);
-		Rast_quantize_fp_map_range(params->tcurv, mapset, dat1, dat2,
+		Rast_write_colors(params->tcurv, subproject, &colors);
+		Rast_quantize_fp_map_range(params->tcurv, subproject, dat1, dat2,
 					(CELL) (dat1 * MULT),
 					(CELL) (dat2 * MULT));
 
@@ -470,13 +470,13 @@ int IL_output_2d(struct interp_params *params,
 	    }
 
 	    if (params->mcurv != NULL) {
-		mapset = G_find_file("cell", params->mcurv, "");
-		if (mapset == NULL) {
+		subproject = G_find_file("cell", params->mcurv, "");
+		if (subproject == NULL) {
 		    G_warning(_("Raster map <%s> not found"), params->mcurv);
 		    return -1;
 		}
-		Rast_write_colors(params->mcurv, mapset, &colors);
-		Rast_quantize_fp_map_range(params->mcurv, mapset, dat1, dat2,
+		Rast_write_colors(params->mcurv, subproject, &colors);
+		Rast_quantize_fp_map_range(params->mcurv, subproject, dat1, dat2,
 					(CELL) (dat1 * MULT),
 					(CELL) (dat2 * MULT));
 
@@ -486,8 +486,8 @@ int IL_output_2d(struct interp_params *params,
     }
 
     if (params->elev != NULL) {
-	mapset = G_find_file("cell", params->elev, "");
-	if (mapset == NULL) {
+	subproject = G_find_file("cell", params->elev, "");
+	if (subproject == NULL) {
 	    G_warning(_("Raster map <%s> not found"), params->elev);
 	    return -1;
 	}

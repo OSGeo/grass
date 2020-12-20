@@ -148,8 +148,8 @@ void G_important_message(const char *msg, ...)
  * By default, the message is handled by an internal routine which
  * prints the message to the screen. Using G_set_error_routine() the
  * programmer can have the message handled by another routine. This is
- * especially useful if the message should go to a particular location
- * on the screen when using curses or to a location on a graphics
+ * especially useful if the message should go to a particular project
+ * on the screen when using curses or to a project on a graphics
  * device (monitor).
  *
  * \param msg string (cannot be NULL)

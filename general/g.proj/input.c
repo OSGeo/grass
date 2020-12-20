@@ -35,9 +35,9 @@
 static void set_default_region(void);
 
 /**
- * \brief Read projection and region information from current location
+ * \brief Read projection and region information from current project
  * 
- * Reads projection and region information from current location and
+ * Reads projection and region information from current project and
  * stores in global structs cellhd, projinfo and projunits.
  **/
 

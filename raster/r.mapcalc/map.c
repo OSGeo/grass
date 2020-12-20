@@ -55,7 +55,7 @@ struct row_cache
 struct map
 {
     const char *name;
-    const char *mapset;
+    const char *subproject;
     int have_cats;
     int have_colors;
     int use_rowio;
@@ -222,22 +222,22 @@ static int compare_ints(const void *a, const void *b)
 
 static void init_colors(struct map *m)
 {
-    if (Rast_read_colors((char *)m->name, (char *)m->mapset, &m->colors) < 0)
+    if (Rast_read_colors((char *)m->name, (char *)m->subproject, &m->colors) < 0)
 	G_fatal_error(_("Unable to read color file for raster map <%s@%s>"),
-		      m->name, m->mapset);
+		      m->name, m->subproject);
 
     m->have_colors = 1;
 }
 
 static void init_cats(struct map *m)
 {
-    if (Rast_read_cats((char *)m->name, (char *)m->mapset, &m->cats) < 0)
+    if (Rast_read_cats((char *)m->name, (char *)m->subproject, &m->cats) < 0)
 	G_fatal_error(_("Unable to read category file of raster map <%s@%s>"),
-		      m->name, m->mapset);
+		      m->name, m->subproject);
 
     if (!btree_create(&m->btree, compare_ints, 1))
 	G_fatal_error(_("Unable to create btree for raster map <%s@%s>"),
-		      m->name, m->mapset);
+		      m->name, m->subproject);
 
     m->have_cats = 1;
 }
@@ -471,15 +471,15 @@ static void close_map(struct map *m)
 
 int map_type(const char *name, int mod)
 {
-    const char *mapset;
+    const char *subproject;
     char *tmpname;
     int result;
 
     switch (mod) {
     case 'M':
 	tmpname = G_store((char *)name);
-	mapset = G_find_raster2(tmpname, "");
-	result = mapset ? Rast_map_type(tmpname, mapset) : -1;
+	subproject = G_find_raster2(tmpname, "");
+	result = subproject ? Rast_map_type(tmpname, subproject) : -1;
 	G_free(tmpname);
 	return result;
     case '@':
@@ -500,7 +500,7 @@ int map_type(const char *name, int mod)
 int open_map(const char *name, int mod, int row, int col)
 {
     int i;
-    const char *mapset;
+    const char *subproject;
     int use_cats = 0;
     int use_colors = 0;
     struct map *m;
@@ -514,8 +514,8 @@ int open_map(const char *name, int mod, int row, int col)
     if (col > max_col)
 	max_col = col;
 
-    mapset = G_find_raster2(name, "");
-    if (!mapset)
+    subproject = G_find_raster2(name, "");
+    if (!subproject)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
     switch (mod) {
@@ -540,7 +540,7 @@ int open_map(const char *name, int mod, int row, int col)
     for (i = 0; i < num_maps; i++) {
 	m = &maps[i];
 
-	if (strcmp(m->name, name) != 0 || strcmp(m->mapset, mapset) != 0)
+	if (strcmp(m->name, name) != 0 || strcmp(m->subproject, subproject) != 0)
 	    continue;
 
 	if (row < m->min_row)
@@ -566,7 +566,7 @@ int open_map(const char *name, int mod, int row, int col)
     m = &maps[num_maps];
 
     m->name = name;
-    m->mapset = mapset;
+    m->subproject = subproject;
     m->have_cats = 0;
     m->have_colors = 0;
     m->use_rowio = 0;
@@ -579,7 +579,7 @@ int open_map(const char *name, int mod, int row, int col)
     if (use_colors)
 	init_colors(m);
 
-    m->fd = Rast_open_old(name, mapset);
+    m->fd = Rast_open_old(name, subproject);
 
     return num_maps++;
 }
@@ -661,7 +661,7 @@ void list_maps(FILE *fp, const char *sep)
 
     for (i = 0; i < num_maps; i++) {
         const struct map *m = &maps[i];
-        fprintf(fp, "%s%s@%s", i ? sep : "", m->name, m->mapset);
+        fprintf(fp, "%s%s@%s", i ? sep : "", m->name, m->subproject);
     }
 }
 
@@ -669,7 +669,7 @@ void list_maps(FILE *fp, const char *sep)
 
 int check_output_map(const char *name)
 {
-    return !!G_find_raster2(name, G_mapset());
+    return !!G_find_raster2(name, G_subproject());
 }
 
 int open_output_map(const char *name, int res_type)
@@ -699,7 +699,7 @@ void copy_cats(const char *dst, int idx)
     const struct map *m = &maps[idx];
     struct Categories cats;
 
-    if (Rast_read_cats((char *)m->name, (char *)m->mapset, &cats) < 0)
+    if (Rast_read_cats((char *)m->name, (char *)m->subproject, &cats) < 0)
 	return;
 
     Rast_write_cats((char *)dst, &cats);
@@ -711,10 +711,10 @@ void copy_colors(const char *dst, int idx)
     const struct map *m = &maps[idx];
     struct Colors colr;
 
-    if (Rast_read_colors((char *)m->name, (char *)m->mapset, &colr) <= 0)
+    if (Rast_read_colors((char *)m->name, (char *)m->subproject, &colr) <= 0)
 	return;
 
-    Rast_write_colors((char *)dst, G_mapset(), &colr);
+    Rast_write_colors((char *)dst, G_subproject(), &colr);
     Rast_free_colors(&colr);
 }
 
@@ -723,7 +723,7 @@ void copy_history(const char *dst, int idx)
     const struct map *m = &maps[idx];
     struct History hist;
 
-    if (Rast_read_history((char *)m->name, (char *)m->mapset, &hist) < 0)
+    if (Rast_read_history((char *)m->name, (char *)m->subproject, &hist) < 0)
 	return;
 
     Rast_write_history((char *)dst, &hist);
@@ -799,7 +799,7 @@ void prepare_region_from_maps(expression **map_list, int type, int num_maps) {
     int first = 0;
     struct Cell_head window, temp_window;
     int i;
-    const char *mapset;
+    const char *subproject;
 
     for (i = 0; i < num_maps; i++) {
         expression *e = map_list[i];
@@ -807,14 +807,14 @@ void prepare_region_from_maps(expression **map_list, int type, int num_maps) {
         char rast_name[GNAME_MAX];
 
         strcpy(rast_name, e->data.map.name);
-        mapset = G_find_raster2(rast_name, "");
+        subproject = G_find_raster2(rast_name, "");
 
-        if (!mapset)
+        if (!subproject)
             G_fatal_error(_("Raster map <%s> not found"), rast_name);
 
-        G_debug(1, "Setting region from raster map: %s@%s", rast_name, mapset);
+        G_debug(1, "Setting region from raster map: %s@%s", rast_name, subproject);
 
-        Rast_get_cellhd(rast_name, mapset, &temp_window);
+        Rast_get_cellhd(rast_name, subproject, &temp_window);
 
         if (!first) {
             window = temp_window;

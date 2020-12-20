@@ -10,21 +10,21 @@
 
 static int verifyVolumeVertices(void *map, double v[2][2][2][3])
 {
-    if (!(Rast3d_is_valid_location(map, v[0][0][0][0], v[0][0][0][1],
+    if (!(Rast3d_is_valid_project(map, v[0][0][0][0], v[0][0][0][1],
 			      v[0][0][0][2]) &&
-	  Rast3d_is_valid_location(map, v[0][0][1][0], v[0][0][1][1],
+	  Rast3d_is_valid_project(map, v[0][0][1][0], v[0][0][1][1],
 			      v[0][0][1][2]) &&
-	  Rast3d_is_valid_location(map, v[0][1][0][0], v[0][1][0][1],
+	  Rast3d_is_valid_project(map, v[0][1][0][0], v[0][1][0][1],
 			      v[0][1][0][2]) &&
-	  Rast3d_is_valid_location(map, v[0][1][1][0], v[0][1][1][1],
+	  Rast3d_is_valid_project(map, v[0][1][1][0], v[0][1][1][1],
 			      v[0][1][1][2]) &&
-	  Rast3d_is_valid_location(map, v[1][0][0][0], v[1][0][0][1],
+	  Rast3d_is_valid_project(map, v[1][0][0][0], v[1][0][0][1],
 			      v[1][0][0][2]) &&
-	  Rast3d_is_valid_location(map, v[1][0][1][0], v[1][0][1][1],
+	  Rast3d_is_valid_project(map, v[1][0][1][0], v[1][0][1][1],
 			      v[1][0][1][2]) &&
-	  Rast3d_is_valid_location(map, v[1][1][0][0], v[1][1][0][1],
+	  Rast3d_is_valid_project(map, v[1][1][0][0], v[1][1][0][1],
 			      v[1][1][0][2]) &&
-	  Rast3d_is_valid_location(map, v[1][1][1][0], v[1][1][1][1],
+	  Rast3d_is_valid_project(map, v[1][1][1][0], v[1][1][1][1],
 			      v[1][1][1][2])))
 	Rast3d_fatal_error("verifyCubeVertices: volume vertex out of range");
     return 0;
@@ -112,7 +112,7 @@ Rast3d_get_volume_a(void *map, double u[2][2][2][3], int nx, int ny, int nz,
 		v[1] = t * v0[1] + tp * v1[1];
 		v[2] = t * v0[2] + tp * v1[2];
 
-		Rast3d_location2coord2(map, v[0], v[1], v[2], &x, &y, &z);
+		Rast3d_project2coord2(map, v[0], v[1], v[2], &x, &y, &z);
 		/* DEBUG
 		   printf ("(%d %d %d) (%lf %lf %lf) (%d %d %d) %lf\n", 
 		   (int) dx / 2, (int) dy / 2, (int) dz / 2,

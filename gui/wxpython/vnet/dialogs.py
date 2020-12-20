@@ -657,7 +657,7 @@ class VNETDialog(wx.Dialog):
         vectorMap = vectMapName + '@' + mapSet
         existsMap = grass.find_file(name=vectMapName,
                                     element='vector',
-                                    mapset=mapSet)
+                                    subproject=mapSet)
         if not existsMap["name"]:
             return
 
@@ -814,7 +814,7 @@ class VNETDialog(wx.Dialog):
         self.vnet_mgr.SetParams(params, flags)
 
     def _parseMapStr(self, vectMapStr):
-        """Create full map name (add current mapset if it is not present in name)"""
+        """Create full map name (add current subproject if it is not present in name)"""
         mapValSpl = vectMapStr.strip().split("@")
         if len(mapValSpl) > 1:
             mapSet = mapValSpl[1]
@@ -1649,7 +1649,7 @@ class OutputVectorDialog(wx.Dialog):
         # text fields and it's captions
         self.vectSel = Select(
             parent=self.panel, type='vector',
-            mapsets=[grass.gisenv()['MAPSET']],
+            subprojects=[grass.gisenv()['MAPSET']],
             size=(-1, -1))
         self.vectSellabel = StaticText(parent=self.panel, id=wx.ID_ANY,
                                        label=_("Name:"))

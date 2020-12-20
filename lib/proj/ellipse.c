@@ -1,7 +1,7 @@
 /*!
    \file lib/proj/ellipse.c
 
-   \brief GProj library - Functions for reading datum parameters from the location database
+   \brief GProj library - Functions for reading datum parameters from the project database
 
    \author Paul Kelly <paul-grass stjohnspoint.co.uk>
 
@@ -28,7 +28,7 @@ static int get_a_e2_rf(const char *, const char *, double *, double *,
 /*!
  * \brief Get the ellipsoid parameters from the database.
  *
- * If the PROJECTION_FILE exists in the PERMANENT mapset, read info from
+ * If the PROJECTION_FILE exists in the PERMANENT subproject, read info from
  * that file, otherwise return WGS 84 values.
  *
  * Dies with diagnostic if there is an error.
@@ -57,7 +57,7 @@ int GPJ_get_ellipsoid_params(double *a, double *e2, double *rf)
 /*!
  * \brief Get the ellipsoid parameters from proj keys structure.
  *
- * If the PROJECTION_FILE exists in the PERMANENT mapset, read info from
+ * If the PROJECTION_FILE exists in the PERMANENT subproject, read info from
  * that file, otherwise return WGS 84 values.
  *
  * Dies with diagnostic if there is an error.

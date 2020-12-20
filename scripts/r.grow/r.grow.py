@@ -122,7 +122,7 @@ def main():
     out_name = options['output'].split('@')
     if len(out_name) == 2:
         if out_name[1] != grass.gisenv()['MAPSET']:
-            grass.fatal(_("Output can be written only to the current mapset"))
+            grass.fatal(_("Output can be written only to the current subproject"))
         output = out_name[0]
     else:
         output = out_name[0]

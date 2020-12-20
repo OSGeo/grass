@@ -19,7 +19,7 @@
  * \brief Get name of top level database directory
  *
  * Returns the full UNIX path name of the directory which holds the
- * database locations. 
+ * database projects. 
  *
  *  \return pointer to string containing the base directory
  */

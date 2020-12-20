@@ -96,7 +96,7 @@ class TestUnregister(TestCase):
 
         # Check if maps a1, a2 and a3 are still present in the temporal database
         lister = SimpleModule("t.list", type="raster", columns="name", 
-                              where='mapset = "%s" AND (name = "a1" OR name = "a2" OR name = "a3")'%(tgis.get_current_mapset()))
+                              where='subproject = "%s" AND (name = "a1" OR name = "a2" OR name = "a3")'%(tgis.get_current_subproject()))
         self.runModule(lister)
         self.assertEqual(a123, lister.outputs.stdout)
 
@@ -105,7 +105,7 @@ class TestUnregister(TestCase):
         self.assertModule("t.unregister",  maps="a1,a2,a3")
 
         lister = SimpleModule("t.list", type="raster", columns="name", 
-                              where='mapset = "%s" AND (name = "a1" OR name = "a2" OR name = "a3")'%(tgis.get_current_mapset()))
+                              where='subproject = "%s" AND (name = "a1" OR name = "a2" OR name = "a3")'%(tgis.get_current_subproject()))
         self.runModule(lister)
         self.assertEqual("", lister.outputs.stdout)
 
@@ -121,7 +121,7 @@ class TestUnregister(TestCase):
         self.assertModule("t.remove",  type="strds", inputs="A,B")
 
         lister = SimpleModule("t.list", type="raster", columns="name", 
-                              where='mapset = "%s" AND (name = "a4" OR name = "a5" OR name = "a6")'%(tgis.get_current_mapset()))
+                              where='subproject = "%s" AND (name = "a4" OR name = "a5" OR name = "a6")'%(tgis.get_current_subproject()))
         self.runModule(lister)
         self.assertEqual(a456, lister.outputs.stdout)
         
@@ -130,7 +130,7 @@ class TestUnregister(TestCase):
         self.assertModule("t.unregister",  maps="a4,a5,a6")
 
         lister = SimpleModule("t.list", type="raster", columns="name", 
-                              where='mapset = "%s" AND (name = "a4" OR name = "a5" OR name = "a6")'%(tgis.get_current_mapset()))
+                              where='subproject = "%s" AND (name = "a4" OR name = "a5" OR name = "a6")'%(tgis.get_current_subproject()))
         self.runModule(lister)
         self.assertEqual("", lister.outputs.stdout)
 

@@ -82,7 +82,7 @@ int read_scalebar(void)
 	    }
 	    else if (G_projection() == PROJECTION_XY) {
 		error(key, data,
-		  "Earth units not available in simple XY location");
+		  "Earth units not available in simple XY project");
 	    }
 	    else if (strcmp(data, "meters") == 0) {
 		sb.units = SB_UNITS_METERS;

@@ -36,7 +36,7 @@ int header(int unit1, int unit2)
     if (page == 1 && with_headers) {
 	lcr("", "RASTER MAP CATEGORY REPORT", "", buf, page_width - 2);
 	pbuf(buf);
-	sprintf(tbuf1, "LOCATION: %s", G_location());
+	sprintf(tbuf1, "LOCATION: %s", G_project());
 	if (with_headers && (page_length > 0))
 	    sprintf(tbuf2, "Page %d", page);
 	else
@@ -98,7 +98,7 @@ int header(int unit1, int unit2)
 	    if (title == NULL || *title == 0)
 		title = "(untitled)";
 	    sprintf(buf, "%-*s%*s%s (%s in %s)", len1, label,
-		    i * 2, "", title, layers[i].name, layers[i].mapset);
+		    i * 2, "", title, layers[i].name, layers[i].subproject);
 
 	    pbuf(buf);
 	    label = "";

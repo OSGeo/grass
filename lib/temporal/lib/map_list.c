@@ -32,8 +32,8 @@ void tgis_free_map_list(tgisMapList *list)
         for(i = 0; i < list->n_values; i++) {
             if(list->values[i]->name)
                 G_free(list->values[i]->name);
-            if(list->values[i]->mapset)
-                G_free(list->values[i]->mapset);
+            if(list->values[i]->subproject)
+                G_free(list->values[i]->subproject);
             G_free(list->values[i]);
         }
         G_free(list->values);
@@ -45,7 +45,7 @@ void tgis_free_map_list(tgisMapList *list)
  * \brief Return a new integer list.
  * 
  * G_fatal_error() will be invoked by the
- * allocation function.
+ * alproject function.
  *
  * \return list The pointer to a new allocated integer list
  *
@@ -71,8 +71,8 @@ void tgis_init_map_list(tgisMapList *list)
         for(i = 0; i < list->n_values; i++) {
             if(list->values[i]->name)
                 G_free(list->values[i]->name);
-            if(list->values[i]->mapset)
-                G_free(list->values[i]->mapset);
+            if(list->values[i]->subproject)
+                G_free(list->values[i]->subproject);
             G_free(list->values[i]);
         }
         G_free(list->values);
@@ -87,8 +87,8 @@ void tgis_init_map_list(tgisMapList *list)
  * \brief Add a map to tgisMapList
  *
  * This function adds a tgisMap to the list but does not check for duplicates.
- * In case reallocation fails, G_fatal_error() will be invoked by the
- * allocation function.
+ * In case realproject fails, G_fatal_error() will be invoked by the
+ * alproject function.
  * 
  * The content of the map will not be copied, the pointer
  *to the map will be stored.
@@ -116,22 +116,22 @@ void tgis_map_list_add(tgisMapList *list, tgisMap *map)
  *
  * This function allocates a tgisMap, fills it with the provided information
  * and adds it to the list.
- * In case allocation fails, G_fatal_error() will be invoked by the
- * allocation function.
+ * In case alproject fails, G_fatal_error() will be invoked by the
+ * alproject function.
  *
  * All arguments are deep copied to the new allocated tgisMap struct.
  *
  * \param list The tgisMapList pointer
  * \param name The name of the map
- * \param mapset The name of the mapset
+ * \param subproject The name of the subproject
  * \param ts A pointer to the timestamp of the map
  *
  * */
-void tgis_map_list_insert(tgisMapList *list, char *name, char*mapset, struct TimeStamp *ts)
+void tgis_map_list_insert(tgisMapList *list, char *name, char*subproject, struct TimeStamp *ts)
 {
     tgisMap *map = G_calloc(1, sizeof(tgisMap));
     map->name = G_store(name);
-    map->mapset = G_store(mapset);
+    map->subproject = G_store(subproject);
     
     if(ts->count == 1)
         G_set_timestamp(&(map->ts), &(ts->dt[0]));

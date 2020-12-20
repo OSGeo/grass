@@ -234,8 +234,8 @@ class Layer(object):
         """Get map layer name
 
         :param bool fullyQualified: True to return fully qualified name
-                                    as a string 'name@mapset' otherwise
-                                    directory { 'name', 'mapset' } is
+                                    as a string 'name@subproject' otherwise
+                                    directory { 'name', 'subproject' } is
                                     returned
 
         :return: string / directory
@@ -245,10 +245,10 @@ class Layer(object):
         else:
             if '@' in self.name:
                 return {'name': self.name.split('@')[0],
-                        'mapset': self.name.split('@')[1]}
+                        'subproject': self.name.split('@')[1]}
             else:
                 return {'name': self.name,
-                        'mapset': ''}
+                        'subproject': ''}
 
     def GetRenderedSize(self):
         """Get currently rendered size of layer as tuple, None if not rendered"""
@@ -353,10 +353,10 @@ class MapLayer(Layer):
         else:
             self._legrow = ''
 
-    def GetMapset(self):
-        """Get mapset of map layer
+    def GetSubproject(self):
+        """Get subproject of map layer
 
-        :return: mapset name
+        :return: subproject name
         :return: '' on error (no name given)
         """
         if not self.name:
@@ -847,7 +847,7 @@ class Map(object):
                 if key in ['units']:
                     val = val.lower()
                 projinfo[key] = val
-            elif "XY location (unprojected)" in line:
+            elif "XY project (unprojected)" in line:
                 projinfo['proj'] = 'xy'
                 projinfo['units'] = ''
                 break
@@ -965,7 +965,7 @@ class Map(object):
         self.region['e'] = self.region['center_easting'] + ew
         self.region['w'] = self.region['center_easting'] - ew
 
-        # LL locations
+        # LL projects
         if self.projinfo['proj'] == 'll':
             self.region['n'] = min(self.region['n'], 90.0)
             self.region['s'] = max(self.region['s'], -90.0)
@@ -1193,13 +1193,13 @@ class Map(object):
         except:
             return None
 
-    def GetListOfLayers(self, ltype=None, mapset=None, name=None,
+    def GetListOfLayers(self, ltype=None, subproject=None, name=None,
                         active=None, hidden=None, except_ltype=False):
         """Returns list of layers of selected properties or list of
         all layers.
 
         :param ltype: layer type, e.g. raster/vector/wms/overlay (value or tuple of values)
-        :param mapset: all layers from given mapset (only for maplayers)
+        :param subproject: all layers from given subproject (only for maplayers)
         :param name: all layers with given name
         :param active: only layers with 'active' attribute set to True or False
         :param hidden: only layers with 'hidden' attribute set to True or False
@@ -1232,9 +1232,9 @@ class Map(object):
                        (except_ltype and layer.type in ltype):
                         continue
 
-            # mapset
-            if (mapset is not None and ltype != 'overlay') and \
-                    layer.GetMapset() != mapset:
+            # subproject
+            if (subproject is not None and ltype != 'overlay') and \
+                    layer.GetSubproject() != subproject:
                 continue
 
             # name
@@ -1474,7 +1474,7 @@ class Map(object):
     def RemoveLayer(self, name=None, id=None):
         """Removes layer from layer list
 
-        Layer is defined by name@mapset or id.
+        Layer is defined by name@subproject or id.
 
         :param name: layer name (must be unique)
         :param id: layer index in layer list def __init__(self,

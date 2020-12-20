@@ -10,7 +10,7 @@ for details.
 """
 import getpass
 from datetime import datetime
-from .core import get_current_mapset
+from .core import get_current_subproject
 from .abstract_map_dataset import AbstractMapDataset
 from .abstract_space_time_dataset import AbstractSpaceTimeDataset
 from .base import Raster3DBase, RasterBase, VectorBase, STR3DSBase, STVDSBase, STRDSBase,\
@@ -52,9 +52,9 @@ class RasterDataset(AbstractMapDataset):
             >>> gs.run_command("r.timestamp", map="strds_map_test_case",
             ...                date="15 jan 1999", quiet=True)
             0
-            >>> mapset = tgis.get_current_mapset()
+            >>> subproject = tgis.get_current_subproject()
             >>> name = "strds_map_test_case"
-            >>> identifier = "%s@%s" % (name, mapset)
+            >>> identifier = "%s@%s" % (name, subproject)
             >>> rmap = RasterDataset(identifier)
             >>> rmap.map_exists()
             True
@@ -118,7 +118,7 @@ class RasterDataset(AbstractMapDataset):
             (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
             >>> rmap.get_name()
             'strds_map_test_case'
-            >>> rmap.get_mapset() == mapset
+            >>> rmap.get_subproject() == subproject
             True
             >>> rmap.get_temporal_type()
             'absolute'
@@ -197,7 +197,7 @@ class RasterDataset(AbstractMapDataset):
            values in numpy style without loading the whole map in the RAM.
 
            In case this raster map does exists in the grass spatial database,
-           the map will be exported using r.out.bin to a temporary location
+           the map will be exported using r.out.bin to a temporary project
            and assigned to the memmap object that is returned by this function.
 
            In case the raster map does not exist, an empty temporary
@@ -229,7 +229,7 @@ class RasterDataset(AbstractMapDataset):
            :return: True if success, False on error
         """
         return self.ciface.has_raster_timestamp(self.get_name(),
-                                                self.get_mapset())
+                                                self.get_subproject())
 
     def read_timestamp_from_grass(self):
         """Read the timestamp of this map from the map metadata
@@ -244,7 +244,7 @@ class RasterDataset(AbstractMapDataset):
             return False
 
         check, dates = self.ciface.read_raster_timestamp(self.get_name(),
-                                                         self.get_mapset(),)
+                                                         self.get_subproject(),)
 
         if check < 1:
             self.msgr.error(_("Unable to read timestamp file "
@@ -267,7 +267,7 @@ class RasterDataset(AbstractMapDataset):
            :return: True if success, False on error
         """
         check = self.ciface.write_raster_timestamp(self.get_name(),
-                                                   self.get_mapset(),
+                                                   self.get_subproject(),
                                                    self._convert_timestamp())
 
         if check == -1:
@@ -295,7 +295,7 @@ class RasterDataset(AbstractMapDataset):
            :return: True if success, False on error
         """
         check = self.ciface.remove_raster_timestamp(self.get_name(),
-                                                    self.get_mapset())
+                                                    self.get_subproject())
 
         if check == -1:
             self.msgr.error(_("Unable to remove timestamp for raster map <%s>"
@@ -314,7 +314,7 @@ class RasterDataset(AbstractMapDataset):
         """
 
         check, band_ref = self.ciface.read_raster_band_reference(self.get_name(),
-                                                                 self.get_mapset())
+                                                                 self.get_subproject())
 
         if check < 1:
             self.msgr.error(_("Unable to read band reference file "
@@ -334,7 +334,7 @@ class RasterDataset(AbstractMapDataset):
            :return: True if success, False on error
         """
         check = self.ciface.write_raster_band_reference(self.get_name(),
-                                                        self.get_mapset(),
+                                                        self.get_subproject(),
                                                         self.metadata.get_band_reference())
         if check == -1:
             self.msgr.error(_("Unable to write band identifier for raster map <%s>"
@@ -349,7 +349,7 @@ class RasterDataset(AbstractMapDataset):
            :return: True if map exists, False otherwise
         """
         return self.ciface.raster_map_exists(self.get_name(),
-                                             self.get_mapset())
+                                             self.get_subproject())
 
     def load(self):
         """Load all info from an existing raster map into the internal structure
@@ -369,7 +369,7 @@ class RasterDataset(AbstractMapDataset):
         self.base.set_creator(str(getpass.getuser()))
 
         kvp = self.ciface.read_raster_info(self.get_name(),
-                                           self.get_mapset())
+                                           self.get_subproject())
 
         if kvp:
             # Fill spatial extent
@@ -396,7 +396,7 @@ class RasterDataset(AbstractMapDataset):
 
             # Fill band reference if defined
             check, band_ref = self.ciface.read_raster_band_reference(self.get_name(),
-                                                                     self.get_mapset())
+                                                                     self.get_subproject())
             if check > 0:
                 self.metadata.set_band_reference(band_ref)
 
@@ -442,9 +442,9 @@ class Raster3DDataset(AbstractMapDataset):
             >>> gs.run_command("r3.timestamp", map="str3ds_map_test_case",
             ...                date="15 jan 1999", quiet=True)
             0
-            >>> mapset = get_current_mapset()
+            >>> subproject = get_current_subproject()
             >>> name = "str3ds_map_test_case"
-            >>> identifier = "%s@%s" % (name, mapset)
+            >>> identifier = "%s@%s" % (name, subproject)
             >>> r3map = Raster3DDataset(identifier)
             >>> r3map.map_exists()
             True
@@ -510,7 +510,7 @@ class Raster3DDataset(AbstractMapDataset):
             (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
             >>> r3map.get_name()
             'str3ds_map_test_case'
-            >>> r3map.get_mapset() == mapset
+            >>> r3map.get_subproject() == subproject
             True
             >>> r3map.get_temporal_type()
             'absolute'
@@ -604,7 +604,7 @@ class Raster3DDataset(AbstractMapDataset):
            the RAM.
 
            In case this 3D raster map does exists in the grass spatial database,
-           the map will be exported using r3.out.bin to a temporary location
+           the map will be exported using r3.out.bin to a temporary project
            and assigned to the memmap object that is returned by this function.
 
            In case the 3D raster map does not exist, an empty temporary
@@ -636,7 +636,7 @@ class Raster3DDataset(AbstractMapDataset):
            :return: True if success, False on error
         """
         return self.ciface.has_raster3d_timestamp(self.get_name(),
-                                                  self.get_mapset())
+                                                  self.get_subproject())
 
     def read_timestamp_from_grass(self):
         """Read the timestamp of this map from the map metadata
@@ -651,7 +651,7 @@ class Raster3DDataset(AbstractMapDataset):
             return False
 
         check, dates = self.ciface.read_raster3d_timestamp(self.get_name(),
-                                                           self.get_mapset(),)
+                                                           self.get_subproject(),)
 
         if check < 1:
             self.msgr.error(_("Unable to read timestamp file "
@@ -674,7 +674,7 @@ class Raster3DDataset(AbstractMapDataset):
            :return: True if success, False on error
         """
         check = self.ciface.write_raster3d_timestamp(self.get_name(),
-                                                     self.get_mapset(),
+                                                     self.get_subproject(),
                                                      self._convert_timestamp())
 
         if check == -1:
@@ -699,7 +699,7 @@ class Raster3DDataset(AbstractMapDataset):
            :return: True if success, False on error
         """
         check = self.ciface.remove_raster3d_timestamp(self.get_name(),
-                                                      self.get_mapset())
+                                                      self.get_subproject())
 
         if check == -1:
             self.msgr.error(_("Unable to remove timestamp for raster map "
@@ -714,7 +714,7 @@ class Raster3DDataset(AbstractMapDataset):
            :return: True if map exists, False otherwise
         """
         return self.ciface.raster3d_map_exists(self.get_name(),
-                                               self.get_mapset())
+                                               self.get_subproject())
 
     def load(self):
         """Load all info from an existing 3d raster map into the internal structure
@@ -735,7 +735,7 @@ class Raster3DDataset(AbstractMapDataset):
 
         # Fill spatial extent
         kvp = self.ciface.read_raster3d_info(self.get_name(),
-                                             self.get_mapset())
+                                             self.get_subproject())
 
         if kvp:
             self.set_spatial_extent_from_values(north=kvp["north"],
@@ -793,9 +793,9 @@ class VectorDataset(AbstractMapDataset):
             >>> gs.run_command("v.timestamp", map="stvds_map_test_case",
             ...                date="15 jan 1999", quiet=True)
             0
-            >>> mapset = get_current_mapset()
+            >>> subproject = get_current_subproject()
             >>> name = "stvds_map_test_case"
-            >>> identifier = "%s@%s" % (name, mapset)
+            >>> identifier = "%s@%s" % (name, subproject)
             >>> vmap = VectorDataset(identifier)
             >>> vmap.map_exists()
             True
@@ -856,7 +856,7 @@ class VectorDataset(AbstractMapDataset):
             (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
             >>> vmap.get_name()
             'stvds_map_test_case'
-            >>> vmap.get_mapset() == mapset
+            >>> vmap.get_subproject() == subproject
             True
             >>> vmap.get_temporal_type()
             'absolute'
@@ -946,7 +946,7 @@ class VectorDataset(AbstractMapDataset):
         """Check if a grass file bsased time stamp exists for this map.
         """
         return self.ciface.has_vector_timestamp(self.get_name(),
-                                                self.get_mapset(),
+                                                self.get_subproject(),
                                                 self.get_layer())
 
     def read_timestamp_from_grass(self):
@@ -960,7 +960,7 @@ class VectorDataset(AbstractMapDataset):
             return False
 
         check, dates = self.ciface.read_vector_timestamp(self.get_name(),
-                                                         self.get_mapset(),)
+                                                         self.get_subproject(),)
 
         if check < 1:
             self.msgr.error(_("Unable to read timestamp file "
@@ -981,7 +981,7 @@ class VectorDataset(AbstractMapDataset):
            Internally the libgis API functions are used for writing
         """
         check = self.ciface.write_vector_timestamp(self.get_name(),
-                                                   self.get_mapset(),
+                                                   self.get_subproject(),
                                                    self._convert_timestamp(),
                                                    self.get_layer())
 
@@ -1004,7 +1004,7 @@ class VectorDataset(AbstractMapDataset):
            Internally the libgis API functions are used for removal
         """
         check = self.ciface.remove_vector_timestamp(self.get_name(),
-                                                    self.get_mapset())
+                                                    self.get_subproject())
 
         if check == -1:
             self.msgr.error(_("Unable to remove timestamp for vector "
@@ -1019,7 +1019,7 @@ class VectorDataset(AbstractMapDataset):
            :return: True if map exists, False otherwise
         """
         return self.ciface.vector_map_exists(self.get_name(),
-                                             self.get_mapset())
+                                             self.get_subproject())
 
     def load(self):
 
@@ -1042,7 +1042,7 @@ class VectorDataset(AbstractMapDataset):
         # Get the data from an existing vector map
 
         kvp = self.ciface.read_vector_info(self.get_name(),
-                                           self.get_mapset())
+                                           self.get_subproject())
 
         if kvp:
             # Fill spatial extent
@@ -1082,21 +1082,21 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
 
             >>> import grass.temporal as tgis
             >>> tgis.init()
-            >>> mapset = tgis.get_current_mapset()
-            >>> strds = tgis.SpaceTimeRasterDataset("old@%s"%mapset)
+            >>> subproject = tgis.get_current_subproject()
+            >>> strds = tgis.SpaceTimeRasterDataset("old@%s"%subproject)
             >>> strds.is_in_db()
             False
             >>> strds.is_stds()
             True
             >>> strds.get_type()
             'strds'
-            >>> newstrds = strds.get_new_instance("newstrds@%s"%mapset)
+            >>> newstrds = strds.get_new_instance("newstrds@%s"%subproject)
             >>> isinstance(newstrds, SpaceTimeRasterDataset)
             True
-            >>> newmap = strds.get_new_map_instance("newmap@%s"%mapset)
+            >>> newmap = strds.get_new_map_instance("newmap@%s"%subproject)
             >>> isinstance(newmap, RasterDataset)
             True
-            >>> strds.reset("new@%s"%mapset)
+            >>> strds.reset("new@%s"%subproject)
             >>> strds.is_in_db()
             False
             >>> strds.reset(None)
@@ -1198,21 +1198,21 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
 
             >>> import grass.temporal as tgis
             >>> tgis.init()
-            >>> mapset = tgis.get_current_mapset()
-            >>> str3ds = tgis.SpaceTimeRaster3DDataset("old@%s"%mapset)
+            >>> subproject = tgis.get_current_subproject()
+            >>> str3ds = tgis.SpaceTimeRaster3DDataset("old@%s"%subproject)
             >>> str3ds.is_in_db()
             False
             >>> str3ds.is_stds()
             True
             >>> str3ds.get_type()
             'str3ds'
-            >>> newstrds = str3ds.get_new_instance("newstrds@%s"%mapset)
+            >>> newstrds = str3ds.get_new_instance("newstrds@%s"%subproject)
             >>> isinstance(newstrds, SpaceTimeRaster3DDataset)
             True
-            >>> newmap = str3ds.get_new_map_instance("newmap@%s"%mapset)
+            >>> newmap = str3ds.get_new_map_instance("newmap@%s"%subproject)
             >>> isinstance(newmap, Raster3DDataset)
             True
-            >>> str3ds.reset("new@%s"%mapset)
+            >>> str3ds.reset("new@%s"%subproject)
             >>> str3ds.is_in_db()
             False
             >>> str3ds.reset(None)
@@ -1325,21 +1325,21 @@ class SpaceTimeVectorDataset(AbstractSpaceTimeDataset):
 
             >>> import grass.temporal as tgis
             >>> tgis.init()
-            >>> mapset = tgis.get_current_mapset()
-            >>> stvds = tgis.SpaceTimeVectorDataset("old@%s"%mapset)
+            >>> subproject = tgis.get_current_subproject()
+            >>> stvds = tgis.SpaceTimeVectorDataset("old@%s"%subproject)
             >>> stvds.is_in_db()
             False
             >>> stvds.is_stds()
             True
             >>> stvds.get_type()
             'stvds'
-            >>> newstvds = stvds.get_new_instance("newstvds@%s"%mapset)
+            >>> newstvds = stvds.get_new_instance("newstvds@%s"%subproject)
             >>> isinstance(newstvds, SpaceTimeVectorDataset)
             True
-            >>> newmap = stvds.get_new_map_instance("newmap@%s"%mapset)
+            >>> newmap = stvds.get_new_map_instance("newmap@%s"%subproject)
             >>> isinstance(newmap, VectorDataset)
             True
-            >>> stvds.reset("new@%s"%mapset)
+            >>> stvds.reset("new@%s"%subproject)
             >>> stvds.is_in_db()
             False
             >>> stvds.reset(None)

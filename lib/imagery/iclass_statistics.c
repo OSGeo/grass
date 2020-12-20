@@ -334,7 +334,7 @@ void create_raster(IClass_statistics * statistics, CELL ** band_buffer,
     Rast_init_colors(&raster_colors);
     G_str_to_color(statistics->color, &r, &g, &b);
     Rast_set_c_color((CELL) 1, r, g, b, &raster_colors);
-    Rast_write_colors(raster_name, G_mapset(), &raster_colors);
+    Rast_write_colors(raster_name, G_subproject(), &raster_colors);
 }
 
 /* helpers */

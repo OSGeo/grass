@@ -448,8 +448,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     'export-attr', 'pack'):
                 self.popupID[key] = NewId()
 
-        # get current mapset
-        currentMapset = grass.gisenv()['MAPSET']
+        # get current subproject
+        currentSubproject = grass.gisenv()['MAPSET']
 
         self.popupMenu = Menu()
 
@@ -627,11 +627,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                         mapLayer.GetName()]),
                 id=self.popupID['pack'])
 
-            lmapset = self.GetLayerInfo(
-                self.layer_selected, key='maplayer').GetMapset()
-            if lmapset != currentMapset:
+            lsubproject = self.GetLayerInfo(
+                self.layer_selected, key='maplayer').GetSubproject()
+            if lsubproject != currentSubproject:
                 self.popupMenu.Append(
-                    self.popupID['copy'], _("Make a copy in the current mapset"))
+                    self.popupID['copy'], _("Make a copy in the current subproject"))
                 self.Bind(wx.EVT_MENU, self.OnCopyMap, id=self.popupID['copy'])
 
             self.popupMenu.AppendSeparator()
@@ -716,8 +716,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             #         self.popupMenu.Append(self.popupID['sql'], text = _("SQL Spatial Query"))
             #         self.Bind(wx.EVT_MENU, self.OnSqlQuery, id = self.popupID['sql'])
 
-            if layer.GetMapset() != currentMapset:
-                # only vector map in current mapset can be edited
+            if layer.GetSubproject() != currentSubproject:
+                # only vector map in current subproject can be edited
                 self.popupMenu.Enable(self.popupID['edit'], False)
                 self.popupMenu.Enable(self.popupID['topo'], False)
             elif digitToolbar and digitToolbar.GetLayer():
@@ -773,11 +773,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                             mapLayer.GetName()]),
                     id=self.popupID['pack'])
 
-                lmapset = self.GetLayerInfo(
-                    self.layer_selected, key='maplayer').GetMapset()
-                if lmapset != currentMapset:
+                lsubproject = self.GetLayerInfo(
+                    self.layer_selected, key='maplayer').GetSubproject()
+                if lsubproject != currentSubproject:
                     self.popupMenu.Append(
-                        self.popupID['copy'], _("Make a copy in the current mapset"))
+                        self.popupID['copy'], _("Make a copy in the current subproject"))
                     self.Bind(
                         wx.EVT_MENU,
                         self.OnCopyMap,
@@ -1044,7 +1044,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             ['v.colors', 'map=%s' % name])
 
     def OnCopyMap(self, event):
-        """Copy selected map into current mapset"""
+        """Copy selected map into current subproject"""
         layer = self.GetSelectedLayer()
         ltype = self.GetLayerInfo(layer, key='type')
         lnameSrc = self.GetLayerInfo(layer, key='maplayer').GetName()
@@ -1068,7 +1068,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # TODO: replace by New[Raster|Vector]Dialog
         dlg = TextEntryDialog(
             parent=self,
-            message=_('Enter name for the new %s in the current mapset:') %
+            message=_('Enter name for the new %s in the current subproject:') %
             label.lower(),
             caption=_('Make a copy of %s <%s>') % (label.lower(),
                                                    lnameSrc),
@@ -1082,14 +1082,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             dlg.Destroy()
             return
 
-        currentMapset = grass.gisenv()['MAPSET']
+        currentSubproject = grass.gisenv()['MAPSET']
         # check if map already exists
-        if lnameDst in grass.list_grouped(key)[currentMapset]:
+        if lnameDst in grass.list_grouped(key)[currentSubproject]:
             dlgOw = wx.MessageDialog(
                 parent=self,
                 message=_(
                     "%s <%s> already exists "
-                    "in the current mapset. "
+                    "in the current subproject. "
                     "Do you want to overwrite it?") %
                 (label,
                  lnameDst),
@@ -1105,14 +1105,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             return
 
         if '@' in lnameDst:
-            mapsetDst = lnameDst.split('@')[1]
-            if mapsetDst != currentMapset:
+            subprojectDst = lnameDst.split('@')[1]
+            if subprojectDst != currentSubproject:
                 GError(
-                    _("Unable to make copy of <%s>. Mapset <%s> is not current mapset.") %
-                    (lnameSrc, mapsetDst))
+                    _("Unable to make copy of <%s>. Subproject <%s> is not current subproject.") %
+                    (lnameSrc, subprojectDst))
                 return
 
-        lnameDst += '@' + currentMapset
+        lnameDst += '@' + currentSubproject
         # add copied map to the layer tree
         self.AddLayer(
             ltype,
@@ -1316,18 +1316,18 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         event.Skip()
 
-    def OnGrassDBChanged(self, action, element, grassdb, location,
-                         mapset=None, map=None, newname=None):
+    def OnGrassDBChanged(self, action, element, grassdb, project,
+                         subproject=None, map=None, newname=None):
         """Handler of giface.grassDbChanged signal, updates layers in tree.
-         Covers cases when map or mapset is deleted or renamed."""
+         Covers cases when map or subproject is deleted or renamed."""
         gisenv = grass.gisenv()
         if not (gisenv['GISDBASE'] == grassdb
-                and gisenv['LOCATION_NAME'] == location):
+                and gisenv['LOCATION_NAME'] == project):
             return
         if action not in ('delete', 'rename'):
             return
         if element in ('raster', 'vector', 'raster_3d'):
-            name = map + '@' + mapset if '@' not in map else map
+            name = map + '@' + subproject if '@' not in map else map
             items = self.FindItemByData(key='name', value=name)
             if items:
                 for item in reversed(items):
@@ -1346,13 +1346,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                         if not label:
                             newlabel = self.GetItemText(item).replace(map, newname)
                             self.SetItemText(item, newlabel)
-        elif element == 'mapset':
+        elif element == 'subproject':
             items = []
             item = self.GetFirstChild(self.root)[0]
             while item and item.IsOk():
                 cmd = self.GetLayerInfo(item, key='cmd')
                 for each in cmd:
-                    if '@' + mapset in each:
+                    if '@' + subproject in each:
                         items.append(item)
                         break
                 item = self.GetNextItem(item)
@@ -1363,11 +1363,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     # rename in command
                     cmd = self.GetLayerInfo(item, key='cmd')
                     for i in range(1, len(cmd)):
-                        if mapset in cmd[i].split('=')[-1]:
-                            cmd[i] = cmd[i].replace(mapset, newname)
+                        if subproject in cmd[i].split('=')[-1]:
+                            cmd[i] = cmd[i].replace(subproject, newname)
                     self.SetLayerInfo(item, key='cmd', value=cmd)
                     self.ChangeLayer(item)
-                    newlabel = self.GetItemText(item).replace('@' + mapset, '@' + newname)
+                    newlabel = self.GetItemText(item).replace('@' + subproject, '@' + newname)
                     self.SetItemText(item, newlabel)
 
     def AddLayer(self, ltype, lname=None, lchecked=None, lopacity=1.0,
@@ -2222,7 +2222,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # available raster map layers
         if self.mapdisplay.GetToolbar('rdigit'):
             rasters = self.GetMap().GetListOfLayers(
-                ltype='raster', mapset=grass.gisenv()['MAPSET'])
+                ltype='raster', subproject=grass.gisenv()['MAPSET'])
             self.mapdisplay.GetToolbar(
                 'rdigit').UpdateRasterLayers(rasters)
             self.mapdisplay.GetToolbar(

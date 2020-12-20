@@ -63,7 +63,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("network"));
-    G_add_keyword(_("cost allocation"));
+    G_add_keyword(_("cost alproject"));
     module->label = _("Allocates subnets for nearest centers.");
     module->description =
 	_("Center node must be opened (costs >= 0). "
@@ -148,7 +148,7 @@ int main(int argc, char **argv)
     geo_f = G_define_flag();
     geo_f->key = 'g';
     geo_f->description =
-	_("Use geodesic calculation for longitude-latitude locations");
+	_("Use geodesic calculation for longitude-latitude projects");
 
     ucat_f = G_define_flag();
     ucat_f->key = 'u';

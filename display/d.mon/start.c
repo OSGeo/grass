@@ -119,11 +119,11 @@ char *start_wx(const char *name, const char *element, int width, int height, int
     else
         str_x_only = "0";
     
-    G_file_name(mon_path, element, NULL, G_mapset());
+    G_file_name(mon_path, element, NULL, G_subproject());
     G_spawn_ex(getenv("GRASS_PYTHON"), progname, progname,
                name, mon_path, str_width, str_height, str_x_only, SF_BACKGROUND, NULL);
 
-    G_file_name(mapfile, element, "map.ppm", G_mapset());
+    G_file_name(mapfile, element, "map.ppm", G_subproject());
     
     return mapfile;
 }
@@ -152,18 +152,18 @@ int start_mon(const char *name, const char *output, int select,
     
     /* create .tmp/HOSTNAME/u_name directory */
     mon_path = get_path(name, FALSE);
-    G_make_mapset_element(mon_path);
+    G_make_subproject_element(mon_path);
     
-    G_file_name(file_path, mon_path, "env", G_mapset());
+    G_file_name(file_path, mon_path, "env", G_subproject());
     env_file = G_store(file_path);
-    G_file_name(file_path, mon_path, "cmd", G_mapset());
+    G_file_name(file_path, mon_path, "cmd", G_subproject());
     cmd_file = G_store(file_path);
-    G_file_name(file_path, mon_path, "leg", G_mapset());
+    G_file_name(file_path, mon_path, "leg", G_subproject());
     leg_file = G_store(file_path);
 
     /* create py file (renderer) */
     sprintf(render_cmd_path, "%s/etc/d.mon/render_cmd.py", getenv("GISBASE"));
-    G_file_name(file_path, mon_path, "render.py", G_mapset());
+    G_file_name(file_path, mon_path, "render.py", G_subproject());
     G_debug(1, "Monitor name=%s, pyfile = %s", name, file_path);
     if (1 != G_copy_file(render_cmd_path, file_path))
         G_fatal_error(_("Unable to copy render command file"));

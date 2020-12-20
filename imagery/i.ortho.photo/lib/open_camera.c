@@ -6,7 +6,7 @@
 * I_open_cam_file_new()
 * I_open_cam_file_old()
 *
-* open new and old imagery group files in the current mapset
+* open new and old imagery group files in the current subproject
 *******************************************************/
 static int camera_error(char *, char *, char *, char *);
 
@@ -38,7 +38,7 @@ int I_open_cam_file_old(char *camera, char *file)
     /* get group element name */
     sprintf(element, "camera/%s", camera);
 
-    fd = G_open_old(element, camera, G_mapset());
+    fd = G_open_old(element, camera, G_subproject());
     if (fd < 0)
 	camera_error(camera, file, "can't open ", "");
     return fd;
@@ -49,7 +49,7 @@ static int camera_error(char *camera, char *file, char *msga, char *msgb)
     char buf[100];
 
     sprintf(buf, "%sfile [%s] of group [%s in %s]%s",
-	    msga, file, camera, G_mapset(), msgb);
+	    msga, file, camera, G_subproject(), msgb);
     G_warning("%s", buf);
 
     return 0;

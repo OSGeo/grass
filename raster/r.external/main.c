@@ -99,9 +99,9 @@ int main(int argc, char *argv[])
     flag.o = G_define_flag();
     flag.o->key = 'o';
     flag.o->label =
-	_("Override projection check (use current location's projection)");
+	_("Override projection check (use current project's projection)");
     flag.o->description =
-	_("Assume that the dataset has same projection as the current location");
+	_("Assume that the dataset has same projection as the current project");
 
     flag.j = G_define_flag();
     flag.j->key = 'j';
@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
     flag.e = G_define_flag();
     flag.e->key = 'e';
     flag.e->label = _("Extend region extents based on new dataset");
-    flag.e->description = _("Also updates the default region if in the PERMANENT mapset");
+    flag.e->description = _("Also updates the default region if in the PERMANENT subproject");
 
     flag.a = G_define_flag();
     flag.a->key = 'a';
@@ -234,7 +234,7 @@ int main(int argc, char *argv[])
 	    if (title)
 		G_asprintf(&title2, "%s (band %d)", title, band);
 	    G_debug(1, "Adding raster map <%s> to group <%s>", output2, output);
-	    I_add_file_to_group_ref(output2, G_mapset(), &reference);
+	    I_add_file_to_group_ref(output2, G_subproject(), &reference);
 	}
 	else {
 	    output2 = G_store(output);

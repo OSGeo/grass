@@ -1,7 +1,7 @@
 """
-@package location_wizard.dialogs
+@package project_wizard.dialogs
 
-@brief Location wizard - dialogs
+@brief Project wizard - dialogs
 
 Classes:
  - dialogs::RegionDef
@@ -24,7 +24,7 @@ import wx.lib.scrolledpanel as scrolled
 
 from core import globalvar
 from core.gcmd import RunCommand
-from location_wizard.base import BaseClass
+from project_wizard.base import BaseClass
 from gui_core.wrap import Button, StaticText, StaticBox, \
     TextCtrl
 
@@ -36,7 +36,7 @@ class RegionDef(BaseClass, wx.Dialog):
     """
 
     def __init__(self, parent, id=wx.ID_ANY, size=(800, 600), title=_(
-            "Set default region extent and resolution"), location=None):
+            "Set default region extent and resolution"), project=None):
         wx.Dialog.__init__(self, parent, id, title, size=size)
         panel = wx.Panel(self, id=wx.ID_ANY)
 
@@ -48,7 +48,7 @@ class RegionDef(BaseClass, wx.Dialog):
                 wx.BITMAP_TYPE_ICO))
 
         self.parent = parent
-        self.location = location
+        self.project = project
 
         #
         # default values
@@ -119,8 +119,8 @@ class RegionDef(BaseClass, wx.Dialog):
                             wx.BITMAP_TYPE_PNG).ConvertToBitmap()
 
         #
-        # set current working environment to PERMANENT mapset
-        # in selected location in order to set default region (WIND)
+        # set current working environment to PERMANENT subproject
+        # in selected project in order to set default region (WIND)
         #
         envval = {}
         ret = RunCommand('g.gisenv',
@@ -129,17 +129,17 @@ class RegionDef(BaseClass, wx.Dialog):
             for line in ret.splitlines():
                 key, val = line.split('=')
                 envval[key] = val
-            self.currlocation = envval['LOCATION_NAME'].strip("';")
-            self.currmapset = envval['MAPSET'].strip("';")
-            if self.currlocation != self.location or self.currmapset != 'PERMANENT':
+            self.currproject = envval['LOCATION_NAME'].strip("';")
+            self.currsubproject = envval['MAPSET'].strip("';")
+            if self.currproject != self.project or self.currsubproject != 'PERMANENT':
                 RunCommand('g.gisenv',
-                           set='LOCATION_NAME=%s' % self.location)
+                           set='LOCATION_NAME=%s' % self.project)
                 RunCommand('g.gisenv',
                            set='MAPSET=PERMANENT')
         else:
             dlg = wx.MessageBox(
                 parent=self,
-                message=_('Invalid location selected.'),
+                message=_('Invalid project selected.'),
                 caption=_("Error"),
                 style=wx.ID_OK | wx.ICON_ERROR)
             return
@@ -693,7 +693,7 @@ def testRegionDef():
 
     app = wx.App()
 
-    dlg = RegionDef(None, location=gscript.gisenv()["LOCATION_NAME"])
+    dlg = RegionDef(None, project=gscript.gisenv()["LOCATION_NAME"])
     dlg.Show()
     wx.lib.inspection.InspectionTool().Show()
     app.MainLoop()

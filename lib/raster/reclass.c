@@ -27,30 +27,30 @@ static int get_reclass_table(FILE *, struct Reclass *);
  * \brief Check if raster map is reclassified
  *
  * This function determines if the raster map <i>name</i> in
- * <i>mapset</i> is a reclass file. If it is, then the name and mapset
+ * <i>subproject</i> is a reclass file. If it is, then the name and subproject
  * of the referenced raster map are copied into the <i>rname</i> and
- * <i>rmapset</i> buffers.  
+ * <i>rsubproject</i> buffers.  
  *
  * \param name map name
- * \param mapset mapset name
+ * \param subproject subproject name
  * \param[out] rname name of reference map
- * \param[out] rmapset mapset where reference map lives
+ * \param[out] rsubproject subproject where reference map lives
  *
  * \returns 1 if it is a reclass file
  * \return 0 if it is not
  * \return -1 if there was a problem reading the raster header
  */
-int Rast_is_reclass(const char *name, const char *mapset, char *rname,
-		    char *rmapset)
+int Rast_is_reclass(const char *name, const char *subproject, char *rname,
+		    char *rsubproject)
 {
     FILE *fd;
     int type;
 
-    fd = fopen_cellhd_old(name, mapset);
+    fd = fopen_cellhd_old(name, subproject);
     if (fd == NULL)
 	return -1;
 
-    type = reclass_type(fd, &rname, &rmapset);
+    type = reclass_type(fd, &rname, &rsubproject);
     fclose(fd);
     if (type < 0)
 	return -1;
@@ -69,21 +69,21 @@ int Rast_is_reclass(const char *name, const char *mapset, char *rname,
  * map of a reclassed raster map.
  *
  * \param name map name
- * \param mapset mapset name
+ * \param subproject subproject name
  * \param[out] nrmaps number of reference maps
  * \param[out] rmaps array of names of reference maps
  *
  * \return number of reference maps
  * \return -1 on error
  */
-int Rast_is_reclassed_to(const char *name, const char *mapset, int *nrmaps,
+int Rast_is_reclassed_to(const char *name, const char *subproject, int *nrmaps,
 			 char ***rmaps)
 {
     FILE *fd;
     int i, j, k, l;
     char buf2[256], buf3[256];
 
-    fd = G_fopen_old_misc("cell_misc", "reclassed_to", name, mapset);
+    fd = G_fopen_old_misc("cell_misc", "reclassed_to", name, subproject);
 
     if (fd == NULL) {
 	return -1;
@@ -131,24 +131,24 @@ int Rast_is_reclassed_to(const char *name, const char *mapset, int *nrmaps,
    \brief Get reclass
 
    \param name map name
-   \param mapset mapset name
+   \param subproject subproject name
    \param[out] reclass pointer to Reclass structure
 
    \return -1 on error
    \return type code
  */
-int Rast_get_reclass(const char *name, const char *mapset,
+int Rast_get_reclass(const char *name, const char *subproject,
 		     struct Reclass *reclass)
 {
     FILE *fd;
     int stat;
 
-    fd = fopen_cellhd_old(name, mapset);
+    fd = fopen_cellhd_old(name, subproject);
     if (fd == NULL)
 	return -1;
     reclass->name = NULL;
-    reclass->mapset = NULL;
-    reclass->type = reclass_type(fd, &reclass->name, &reclass->mapset);
+    reclass->subproject = NULL;
+    reclass->type = reclass_type(fd, &reclass->name, &reclass->subproject);
     if (reclass->type <= 0) {
 	fclose(fd);
 	return reclass->type;
@@ -166,10 +166,10 @@ int Rast_get_reclass(const char *name, const char *mapset,
     if (stat < 0) {
 	if (stat == -2)
 	    G_warning(_("Too many reclass categories for <%s@%s>"),
-		      name, mapset);
+		      name, subproject);
 	else
 	    G_warning(_("Illegal reclass format in header file for <%s@%s>"),
-		      name, mapset);
+		      name, subproject);
 	stat = -1;
     }
     return stat;
@@ -189,17 +189,17 @@ void Rast_free_reclass(struct Reclass *reclass)
 	reclass->num = 0;
 	if (reclass->name)
 	    G_free(reclass->name);
-	if (reclass->mapset)
-	    G_free(reclass->mapset);
+	if (reclass->subproject)
+	    G_free(reclass->subproject);
 	reclass->name = NULL;
-	reclass->mapset = NULL;
+	reclass->subproject = NULL;
 	break;
     default:
 	break;
     }
 }
 
-static int reclass_type(FILE * fd, char **rname, char **rmapset)
+static int reclass_type(FILE * fd, char **rname, char **rsubproject)
 {
     char buf[128];
     char label[128], arg[128];
@@ -214,21 +214,21 @@ static int reclass_type(FILE * fd, char **rname, char **rmapset)
     /* later may add other types of reclass */
     type = RECLASS_TABLE;
 
-    /* Read the mapset and file name of the REAL cell file */
+    /* Read the subproject and file name of the REAL cell file */
     if (*rname)
 	**rname = '\0';
-    if (*rmapset)
-	**rmapset = '\0';
+    if (*rsubproject)
+	**rsubproject = '\0';
     for (i = 0; i < 2; i++) {
 	if (fgets(buf, sizeof buf, fd) == NULL)
 	    return -1;
 	if (sscanf(buf, "%[^:]:%s", label, arg) != 2)
 	    return -1;
 	if (strncmp(label, "maps", 4) == 0) {
-	    if (*rmapset)
-		strcpy(*rmapset, arg);
+	    if (*rsubproject)
+		strcpy(*rsubproject, arg);
 	    else
-		*rmapset = G_store(arg);
+		*rsubproject = G_store(arg);
 	}
 	else if (strncmp(label, "name", 4) == 0) {
 	    if (*rname)
@@ -239,15 +239,15 @@ static int reclass_type(FILE * fd, char **rname, char **rmapset)
 	else
 	    return -1;
     }
-    if (**rmapset && **rname)
+    if (**rsubproject && **rname)
 	return type;
     else
 	return -1;
 }
 
-static FILE *fopen_cellhd_old(const char *name, const char *mapset)
+static FILE *fopen_cellhd_old(const char *name, const char *subproject)
 {
-    return G_fopen_old("cellhd", name, mapset);
+    return G_fopen_old("cellhd", name, subproject);
 }
 
 /*!
@@ -282,13 +282,13 @@ int Rast_put_reclass(const char *name, const struct Reclass *reclass)
     fd = fopen_cellhd_new(name);
     if (fd == NULL) {
 	G_warning(_("Unable to create header file for <%s@%s>"),
-		  name, G_mapset());
+		  name, G_subproject());
 	return -1;
     }
 
     fprintf(fd, "reclass\n");
     fprintf(fd, "name: %s\n", reclass->name);
-    fprintf(fd, "mapset: %s\n", reclass->mapset);
+    fprintf(fd, "subproject: %s\n", reclass->subproject);
 
     /* find first non-null entry */
     for (min = 0; min < reclass->num; min++)
@@ -324,20 +324,20 @@ int Rast_put_reclass(const char *name, const struct Reclass *reclass)
 	*p = 0;
 
     G_file_name_misc(buf1, "cell_misc", "reclassed_to", reclass->name,
-		      reclass->mapset);
+		      reclass->subproject);
 
     fd = fopen(buf1, "a+");
     if (fd == NULL) {
 #if 0
 	G_warning(_("Unable to create dependency file in <%s@%s>"),
-		  buf2, reclass->mapset);
+		  buf2, reclass->subproject);
 #endif
 	return 1;
     }
 
     G_fseek(fd, 0L, SEEK_SET);
 
-    xname = G_fully_qualified_name(name, G_mapset());
+    xname = G_fully_qualified_name(name, G_subproject());
     found = 0;
     for (;;) {
 	char buf[GNAME_MAX + GMAPSET_MAX];

@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 	struct Flag *basemap;
     } flag;
     char *pattern, *exclude;
-    const char *mapset;
+    const char *subproject;
     int result;
     int i, all, num_types, nlist, num_removed;
     void *filter, *exclude_filter;
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("remove"));
     module->description =
 	_("Removes data base element files from "
-	  "the user's current mapset using the search pattern.");
+	  "the user's current subproject using the search pattern.");
 
     M_read_list(FALSE, &nlist);
 
@@ -207,7 +207,7 @@ int main(int argc, char *argv[])
     if (!flag.force->answer)
 	G_message(_("The following data base element files would be deleted:"));
 
-    mapset = G_mapset();
+    subproject = G_subproject();
 
     for (i = 0; opt.type->answers[i]; i++) {
 	if (strcmp(opt.type->answers[i], "all") == 0)
@@ -232,7 +232,7 @@ int main(int argc, char *argv[])
 	n = all ? i : M_get_element(opt.type->answers[i]);
 	elem = M_get_list(n);
 
-	G_file_name(path, elem->element[0], "", mapset);
+	G_file_name(path, elem->element[0], "", subproject);
 	if (access(path, 0) != 0)
 	    continue;
 
@@ -241,12 +241,12 @@ int main(int argc, char *argv[])
 
 	for (j = 0; j < num_files; j++) {
 	    if (!flag.force->answer) {
-		fprintf(stdout, "%s/%s@%s\n", elem->alias, files[j], mapset);
+		fprintf(stdout, "%s/%s@%s\n", elem->alias, files[j], subproject);
                 num_removed++;
 		continue;
 	    }
 
-	    if (rast && check_reclass(files[j], mapset, flag.basemap->answer))
+	    if (rast && check_reclass(files[j], subproject, flag.basemap->answer))
 		continue;
 
 	    if (M_do_remove(n, (char *)files[j]) == 1)

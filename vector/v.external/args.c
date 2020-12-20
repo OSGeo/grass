@@ -42,9 +42,9 @@ void parse_args(int argc, char **argv,
     flags->override = G_define_flag();
     flags->override->key = 'o';
     flags->override->label =
-	_("Override projection check (use current location's projection)");
+	_("Override projection check (use current project's projection)");
     flags->override->description =
-	_("Assume that the dataset has the same projection as the current location");
+	_("Assume that the dataset has the same projection as the current project");
 
     flags->proj = G_define_flag();
     flags->proj->key = 'j';

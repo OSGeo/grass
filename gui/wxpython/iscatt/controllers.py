@@ -952,7 +952,7 @@ class IMapDispConnection:
     def UpdateCategoryRaster(self, cat_id, attrs, render=True):
 
         cat_rast = self.scatt_mgr.core.GetCatRast(cat_id)
-        if not grass.find_file(cat_rast, element='cell', mapset='.')['file']:
+        if not grass.find_file(cat_rast, element='cell', subproject='.')['file']:
             return
         cats_attrs = self.cats_mgr.GetCategoryAttrs(cat_id)
 
@@ -1027,7 +1027,7 @@ class IClassConnection:
         if not cat_rast:
             return
 
-        if not grass.find_file(cat_rast, element='cell', mapset='.')['file']:
+        if not grass.find_file(cat_rast, element='cell', subproject='.')['file']:
             return
         cats_attrs = self.cats_mgr.GetCategoryAttrs(cat_id)
         train_mgr, preview_mgr = self.iclass_frame.GetMapManagers()

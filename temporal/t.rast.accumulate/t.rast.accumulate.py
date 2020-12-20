@@ -190,12 +190,12 @@ def main():
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    mapset = tgis.get_current_mapset()
+    subproject = tgis.get_current_subproject()
 
     if input.find("@") >= 0:
         id = input
     else:
-        id = input + "@" + mapset
+        id = input + "@" + subproject
 
     input_strds = tgis.SpaceTimeRasterDataset(id)
 
@@ -208,7 +208,7 @@ def main():
     if output.find("@") >= 0:
         out_id = output
     else:
-        out_id = output + "@" + mapset
+        out_id = output + "@" + subproject
 
     # The output space time raster dataset
     output_strds = tgis.SpaceTimeRasterDataset(out_id)
@@ -244,7 +244,7 @@ def main():
         if lower.find("@") >= 0:
             lower_id = lower
         else:
-            lower_id = lower + "@" + mapset
+            lower_id = lower + "@" + subproject
 
         lower_strds = tgis.SpaceTimeRasterDataset(lower_id)
         if not lower_strds.is_in_db():
@@ -266,7 +266,7 @@ def main():
         if upper.find("@") >= 0:
             upper = upper
         else:
-            upper_id = upper + "@" + mapset
+            upper_id = upper + "@" + subproject
 
         upper_strds = tgis.SpaceTimeRasterDataset(upper_id)
         if not upper_strds.is_in_db():
@@ -398,7 +398,7 @@ def main():
             else:
                 output_map_name = tgis.create_numeric_suffix(base, count, time_suffix)
 
-            output_map_id = map.build_id(output_map_name, mapset)
+            output_map_id = map.build_id(output_map_name, subproject)
             output_map = input_strds.get_new_map_instance(output_map_id)
 
             # Check if new map is in the temporal database

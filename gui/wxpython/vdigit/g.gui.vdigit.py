@@ -83,9 +83,9 @@ def main():
         grass.fatal(_("Vector digitizer not available. %s") % errorMsg)
 
     if not grass.find_file(name=options['map'], element='vector',
-                           mapset=grass.gisenv()['MAPSET'])['fullname']:
+                           subproject=grass.gisenv()['MAPSET'])['fullname']:
         if not flags['c']:
-            grass.fatal(_("Vector map <%s> not found in current mapset. "
+            grass.fatal(_("Vector map <%s> not found in current subproject. "
                           "New vector map can be created by providing '-c' flag.") %
                         options['map'])
         else:

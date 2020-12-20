@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
     else
         output = options.output->answer;
 
-    if (G_find_vector2(output, G_mapset()) && !G_check_overwrite(argc, argv)) {
+    if (G_find_vector2(output, G_subproject()) && !G_check_overwrite(argc, argv)) {
         G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"),
                       options.output->key, output);
     }
@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
     
     /* Vect_open_new created 'head', 'coor', 'hist'
        -> delete 'coor' and create 'frmt' */
-    sprintf(buf, "%s/%s/%s/%s/coor", G_location_path(), G_mapset(),
+    sprintf(buf, "%s/%s/%s/%s/coor", G_project_path(), G_subproject(),
             GV_DIRECTORY, output);
     G_debug(2, "Delete '%s'", buf);
     if (unlink(buf) == -1) {
@@ -224,7 +224,7 @@ int main(int argc, char *argv[])
     
     if (!flags.topo->answer) {
         Vect_set_open_level(1);
-        if (Vect_open_old(&Map, output, G_mapset()) < 0)
+        if (Vect_open_old(&Map, output, G_subproject()) < 0)
 	    G_fatal_error(_("Unable to open vector map <%s>"), output);
         Vect_build(&Map);
         Vect_close(&Map);

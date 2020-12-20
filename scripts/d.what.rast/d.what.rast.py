@@ -14,7 +14,7 @@
 #############################################################################
 
 #%module
-#% description: Allows the user to interactively query raster map layers at user-selected locations.
+#% description: Allows the user to interactively query raster map layers at user-selected projects.
 #% keyword: display
 #% keyword: vector
 #%end

@@ -20,7 +20,7 @@ for details.
 """
 from __future__ import print_function
 
-from .core import SQLDatabaseInterfaceConnection, get_current_mapset
+from .core import SQLDatabaseInterfaceConnection, get_current_subproject
 from .factory import dataset_factory
 from .open_stds import open_old_stds
 import grass.script as gscript
@@ -158,12 +158,12 @@ def print_vector_dataset_univar_statistics(input, output, twhere, layer, type, c
     if output is not None:
         out_file = open(output, "w")
 
-    mapset = get_current_mapset()
+    subproject = get_current_subproject()
 
     if input.find("@") >= 0:
         id = input
     else:
-        id = input + "@" + mapset
+        id = input + "@" + subproject
 
     sp = dataset_factory("stvds", id)
 
@@ -174,7 +174,7 @@ def print_vector_dataset_univar_statistics(input, output, twhere, layer, type, c
 
     sp.select(dbif)
 
-    rows = sp.get_registered_maps("id,name,mapset,start_time,end_time,layer",
+    rows = sp.get_registered_maps("id,name,subproject,start_time,end_time,layer",
                                   twhere, "start_time", dbif)
 
     if not rows:
@@ -203,7 +203,7 @@ def print_vector_dataset_univar_statistics(input, output, twhere, layer, type, c
             out_file.write(string + "\n")
 
     for row in rows:
-        id = row["name"] + "@" + row["mapset"]
+        id = row["name"] + "@" + row["subproject"]
         start = row["start_time"]
         end = row["end_time"]
         mylayer = row["layer"]

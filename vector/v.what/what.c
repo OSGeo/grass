@@ -350,8 +350,8 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 
 	switch (output) {
 	case OUTPUT_SCRIPT:
-	    fprintf(stdout, "\nMap=%s\nMapset=%s\n", Map[i].name,
-		    Map[i].mapset);
+	    fprintf(stdout, "\nMap=%s\nSubproject=%s\n", Map[i].name,
+		    Map[i].subproject);
 	    break;
 	case OUTPUT_JSON:
 	    if (!i) {
@@ -361,12 +361,12 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 	    }
 	    else
 		fprintf(stdout, ",");
-	    fprintf(stdout, "\n{\"Map\": \"%s\",\n\"Mapset\": \"%s\"",
-		    Map[i].name, Map[i].mapset);
+	    fprintf(stdout, "\n{\"Map\": \"%s\",\n\"Subproject\": \"%s\"",
+		    Map[i].name, Map[i].subproject);
 	    break;
 	default:
-	    fprintf(stdout, "%s\nMap: %s \nMapset: %s\n", SEP, Map[i].name,
-		    Map[i].mapset);
+	    fprintf(stdout, "%s\nMap: %s \nSubproject: %s\n", SEP, Map[i].name,
+		    Map[i].subproject);
 	    break;
 	}
 

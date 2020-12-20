@@ -97,7 +97,7 @@ int I_get_ref_points(char *groupname, struct Ortho_Photo_Points *cp)
     if (fd == NULL) {
 	sprintf(msg,
 		"unable to open reference point file for group [%s in %s]",
-		groupname, G_mapset());
+		groupname, G_subproject());
 	G_warning("%s", msg);
 	return 0;
     }
@@ -108,7 +108,7 @@ int I_get_ref_points(char *groupname, struct Ortho_Photo_Points *cp)
     if (stat < 0) {
 	sprintf(msg,
 		"bad format in reference point file for group [%s in %s]",
-		groupname, G_mapset());
+		groupname, G_subproject());
 	G_warning("%s", msg);
 	return 0;
     }
@@ -124,7 +124,7 @@ int I_put_ref_points(char *groupname, struct Ortho_Photo_Points *cp)
     if (fd == NULL) {
 	sprintf(msg,
 		"unable to create reference point file for group [%s in %s]",
-		groupname, G_mapset());
+		groupname, G_subproject());
 	G_warning("%s", msg);
 	return 0;
     }

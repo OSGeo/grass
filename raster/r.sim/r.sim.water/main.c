@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
     parm.observation->key = "observation";
     parm.observation->required = NO;
     parm.observation->label =
-	_("Name of sampling locations vector points map");
+	_("Name of sampling projects vector points map");
     parm.observation->guisection = _("Input");
 
     parm.depth = G_define_standard_option(G_OPT_R_OUTPUT);

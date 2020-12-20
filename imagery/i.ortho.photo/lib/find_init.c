@@ -14,5 +14,5 @@ int I_find_initial(char *group)
     if (group == NULL || *group == 0)
 	return 0;
     sprintf(element, "group/%s", group);
-    return G_find_file(element, "INIT_EXP", G_mapset()) != NULL;
+    return G_find_file(element, "INIT_EXP", G_subproject()) != NULL;
 }

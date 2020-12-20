@@ -12,7 +12,7 @@
  * Date:         april 2011 
  * 
  * PURPOSE: To calculate the viewshed (the visible cells in the
- * raster) for the given viewpoint (observer) location.  The
+ * raster) for the given viewpoint (observer) project.  The
  * visibility model is the following: Two points in the raster are
  * considered visible to each other if the cells where they belong are
  * visible to each other.  Two cells are visible to each other if the

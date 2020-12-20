@@ -47,7 +47,7 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
     }
     
     /* fisrt search for color table */
-    have_colors = Vect_read_colors(Vect_get_name(Map), Vect_get_mapset(Map),
+    have_colors = Vect_read_colors(Vect_get_name(Map), Vect_get_subproject(Map),
 				   &colors);
     if (have_colors && rgb_column) {
         G_warning(_("Both color table and <%s> option detected. "

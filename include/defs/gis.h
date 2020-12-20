@@ -325,7 +325,7 @@ void G_set_gisrc_mode(int);
 int G_get_gisrc_mode(void);
 void G_create_alt_env(void);
 void G_switch_env(void);
-void G__read_mapset_env(void);
+void G__read_subproject_env(void);
 void G__read_gisrc_env(void);
 
 /* error.c */
@@ -443,8 +443,8 @@ int G_intersect_line_segments(double, double, double, double, double, double,
 
 /* is.c */
 int G_is_gisbase(const char *);
-int G_is_location(const char *);
-int G_is_mapset(const char *);
+int G_is_project(const char *);
+int G_is_subproject(const char *);
 
 /* key_value1.c */
 struct Key_Value *G_create_key_value(void);
@@ -494,9 +494,9 @@ int G_lat_scan(const char *, double *);
 int G_lon_scan(const char *, double *);
 int G_llres_scan(const char *, double *);
 
-/* location.c */
-const char *G_location(void);
-char *G_location_path(void);
+/* project.c */
+const char *G_project(void);
+char *G_project_path(void);
 
 /* lrand48.c */
 void G_srand48(long);
@@ -520,11 +520,11 @@ void G_free_ls_filter(void *);
 #endif
 
 /* make_loc.c */
-int G_make_location(const char *, struct Cell_head *, const struct Key_Value *,
+int G_make_project(const char *, struct Cell_head *, const struct Key_Value *,
 		    const struct Key_Value *);
-int G_make_location_epsg(const char *, struct Cell_head *, const struct Key_Value *,
+int G_make_project_epsg(const char *, struct Cell_head *, const struct Key_Value *,
 			 const struct Key_Value *, const struct Key_Value *);
-int G_make_location_crs(const char *, struct Cell_head *, const struct Key_Value *,
+int G_make_project_crs(const char *, struct Cell_head *, const struct Key_Value *,
 			const struct Key_Value *, const struct Key_Value *,
 			const char *, const char *);
 int G_write_projsrid(const char *, const char *);
@@ -532,32 +532,32 @@ int G_write_projwkt(const char *, const char *);
 int G_compare_projections(const struct Key_Value *, const struct Key_Value *,
 			  const struct Key_Value *, const struct Key_Value *);
 
-/* make_mapset.c */
-int G_make_mapset(const char *, const char *, const char *);
+/* make_subproject.c */
+int G_make_subproject(const char *, const char *, const char *);
 
 /* mapcase.c */
 char *G_tolcase(char *);
 char *G_toucase(char *);
 
-/* mapset.c */
-const char *G_mapset(void);
-char *G_mapset_path(void);
+/* subproject.c */
+const char *G_subproject(void);
+char *G_subproject_path(void);
 
-/* mapset_msc.c */
-int G_make_mapset_element(const char *);
-int G_make_mapset_element_tmp(const char *);
-int G__make_mapset_element_misc(const char *, const char *);
-int G_mapset_permissions(const char *);
-int G_mapset_permissions2(const char *, const char *, const char *);
+/* subproject_msc.c */
+int G_make_subproject_element(const char *);
+int G_make_subproject_element_tmp(const char *);
+int G__make_subproject_element_misc(const char *, const char *);
+int G_subproject_permissions(const char *);
+int G_subproject_permissions2(const char *, const char *, const char *);
 
-/* mapset_nme.c */
-const char *G_get_mapset_name(int);
+/* subproject_nme.c */
+const char *G_get_subproject_name(int);
 void G_create_alt_search_path(void);
 void G_switch_search_path(void);
-void G_reset_mapsets(void);
-char **G_get_available_mapsets(void);
-void G_add_mapset_to_search_path(const char *);
-int G_is_mapset_in_search_path(const char *);
+void G_reset_subprojects(void);
+char **G_get_available_subprojects(void);
+void G_add_subproject_to_search_path(const char *);
+int G_is_subproject_in_search_path(const char *);
 
 /* myname.c */
 char *G_myname(void);

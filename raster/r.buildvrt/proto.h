@@ -8,7 +8,7 @@
 struct input
 {
     const char *name;
-    const char *mapset;
+    const char *subproject;
     int maptype;
     struct Cell_head cellhd;
 };

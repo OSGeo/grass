@@ -56,7 +56,7 @@ void transfer_colormap(GDALRasterBandH hBand, const char *output)
 	    GDALmetadata++;
 	}
 	if (have_colors)
-	    Rast_write_colors((char *)output, G_mapset(), &colors);
+	    Rast_write_colors((char *)output, G_subproject(), &colors);
 
 	Rast_free_colors(&colors);
     }
@@ -249,7 +249,7 @@ void transfer_colormap(GDALRasterBandH hBand, const char *output)
 	    have_colors = Rast_colors_count(&colors) > 0;
 	    
 	    if (have_colors)
-		Rast_write_colors((char *)output, G_mapset(), &colors);
+		Rast_write_colors((char *)output, G_subproject(), &colors);
 
 	    Rast_free_colors(&colors);
 	}
@@ -277,7 +277,7 @@ void transfer_colormap(GDALRasterBandH hBand, const char *output)
 	    Rast_set_c_color(iColor, sEntry.c1, sEntry.c2, sEntry.c3, &colors);
 	}
 
-	Rast_write_colors((char *)output, G_mapset(), &colors);
+	Rast_write_colors((char *)output, G_subproject(), &colors);
 	Rast_free_colors(&colors);
 	have_colors = 1;
     }
@@ -293,7 +293,7 @@ void transfer_colormap(GDALRasterBandH hBand, const char *output)
 
 	    Rast_init_colors(&colors);
 	    Rast_make_grey_scale_colors(&colors, 0, 255);	/* full range */
-	    Rast_write_colors((char *)output, G_mapset(), &colors);
+	    Rast_write_colors((char *)output, G_subproject(), &colors);
 	    Rast_free_colors(&colors);
 	}
 	if ((GDALGetRasterDataType(hBand) == GDT_UInt16)) {
@@ -304,12 +304,12 @@ void transfer_colormap(GDALRasterBandH hBand, const char *output)
 
 	    G_verbose_message(_("Setting grey color table for <%s> (16bit, image range)"),
 			      output);
-	    Rast_read_range((char *)output, G_mapset(), &range);
+	    Rast_read_range((char *)output, G_subproject(), &range);
 	    Rast_get_range_min_max(&range, &min, &max);
 
 	    Rast_init_colors(&colors);
 	    Rast_make_grey_scale_colors(&colors, min, max);	/* image range */
-	    Rast_write_colors((char *)output, G_mapset(), &colors);
+	    Rast_write_colors((char *)output, G_subproject(), &colors);
 	    Rast_free_colors(&colors);
 	}
     }

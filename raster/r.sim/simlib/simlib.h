@@ -55,7 +55,7 @@ struct WaterParams
     char *outwalk;
     char *observation;
     char *logfile;
-    char *mapset;
+    char *subproject;
     char *mscale;
     char *tserie;
 

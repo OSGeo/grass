@@ -257,8 +257,8 @@ class MapCalcFrame(wx.Frame):
                 _('Name for new 3D raster map to create'))
         else:
             self.newmaplabel.SetLabel(_('Name for new raster map to create'))
-        # As we can write only to current mapset, names should not be fully qualified
-        # to not confuse end user about writing in other mapset
+        # As we can write only to current subproject, names should not be fully qualified
+        # to not confuse end user about writing in other subproject
         self.newmaptxt = Select(
             parent=self.panel, id=wx.ID_ANY, size=(
                 250, -1), type=element, multiple=False,
@@ -724,8 +724,8 @@ class MapCalcFrame(wx.Frame):
             name=name, ltype=ltype, add=self.addbox.IsChecked())
         gisenv = grass.gisenv()
         self._giface.grassdbChanged.emit(grassdb=gisenv['GISDBASE'],
-                                         location=gisenv['LOCATION_NAME'],
-                                         mapset=gisenv['MAPSET'],
+                                         project=gisenv['LOCATION_NAME'],
+                                         subproject=gisenv['MAPSET'],
                                          action='new',
                                          map=name.split('@')[0],
                                          element=ltype)

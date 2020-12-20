@@ -6,7 +6,7 @@
 
 int basin_maps(INPUT * input, OUTPUT * output)
 {
-    char *mapset, map_layer[48];
+    char *subproject, map_layer[48];
     int i;
 
     G_message(_("\n\nPlease indicate which map layers you wish to use in the lumped"));
@@ -17,8 +17,8 @@ int basin_maps(INPUT * input, OUTPUT * output)
     G_message(_("\nHit <return> at the map prompt to continue with %s"),
 	      G_program_name());
 
-    mapset = G_ask_old("", map_layer, "cell", "cell");
-    while (mapset != NULL) {
+    subproject = G_ask_old("", map_layer, "cell", "cell");
+    while (subproject != NULL) {
 	output->num_maps++;
 	if (output->num_maps == 1)
 	    output->maps = (MAP *) G_malloc(sizeof(MAP));
@@ -26,11 +26,11 @@ int basin_maps(INPUT * input, OUTPUT * output)
 	    output->maps =
 		(MAP *) G_realloc(output->maps,
 				  output->num_maps * sizeof(MAP));
-	output->maps[output->num_maps - 1].mapset = mapset;
+	output->maps[output->num_maps - 1].subproject = subproject;
 	output->maps[output->num_maps - 1].name = G_store(map_layer);
 	output->maps[output->num_maps - 1].do_cats =
 	    G_yes("Complete list of categories?", 1);
-	mapset = G_ask_old("", map_layer, "cell", "cell");
+	subproject = G_ask_old("", map_layer, "cell", "cell");
     }
 
     G_message(_("\nThe output from %s will be divided into watershed"),

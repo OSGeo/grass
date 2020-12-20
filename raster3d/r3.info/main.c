@@ -45,7 +45,7 @@ static char *name;
 /**************************************************************************/
 int main(int argc, char *argv[])
 {
-    const char *mapset;
+    const char *subproject;
     char *line = NULL;
     char tmp1[TMP_LENGTH], tmp2[TMP_LENGTH], tmp3[TMP_LENGTH];
     char timebuff[256];
@@ -97,25 +97,25 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     name = G_store(opt1->answer);
-    mapset = G_find_raster3d(name, "");
+    subproject = G_find_raster3d(name, "");
 
-    if (mapset == NULL)
+    if (subproject == NULL)
 	G_fatal_error(_("3D Raster map <%s> not found"), name);
 
     /*We need to open the map */
     g3map =
-	Rast3d_open_cell_old(name, mapset, RASTER3D_DEFAULT_WINDOW,
+	Rast3d_open_cell_old(name, subproject, RASTER3D_DEFAULT_WINDOW,
 			RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
     if (NULL == g3map)
 	G_fatal_error(_("Unable to open 3D raster map <%s>"), name);
 
     /*Get the maptype */
     data_type = Rast3d_file_type_map(g3map);
-    head_ok = Rast3d_read_region_map(name, mapset, &cellhd) >= 0;
-    hist_ok = Rast3d_read_history(name, mapset, &hist) >= 0;
-    cats_ok = Rast3d_read_cats(name, mapset, &cats) >= 0;
+    head_ok = Rast3d_read_region_map(name, subproject, &cellhd) >= 0;
+    hist_ok = Rast3d_read_history(name, subproject, &hist) >= 0;
+    cats_ok = Rast3d_read_cats(name, subproject, &cats) >= 0;
     /*Check the Timestamp */
-    time_ok = G_read_raster3d_timestamp(name, mapset, &ts) > 0;
+    time_ok = G_read_raster3d_timestamp(name, subproject, &ts) > 0;
 
     /*Check for valid entries, show none if no entire available! */
     if (time_ok) {
@@ -138,14 +138,14 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Cannot allocate memory for string"));
 
 
-	if (G_asprintf(&line, "Mapset:   %-29.29s  Login of Creator: %s", mapset,
+	if (G_asprintf(&line, "Subproject:   %-29.29s  Login of Creator: %s", subproject,
 	     hist_ok ? Rast_get_history(&hist, HIST_CREATOR) : "??") > 0)
 	    printline(line);
 	else
 	    G_fatal_error(_("Cannot allocate memory for string"));
 
 
-	if (G_asprintf(&line, "Location: %s", G_location()) > 0)
+	if (G_asprintf(&line, "Project: %s", G_project()) > 0)
 	    printline(line);
 	else
 	    G_fatal_error(_("Cannot allocate memory for string"));

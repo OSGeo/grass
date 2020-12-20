@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
 	Vect_close(&Map);
 
 	if (ret) {
-	    if (Vect_open_old(&Map, output, G_mapset())) {
+	    if (Vect_open_old(&Map, output, G_subproject())) {
 		if (!flag_topo)
 		    if (!Vect_build(&Map))
 			G_warning(_("Building topology failed"));

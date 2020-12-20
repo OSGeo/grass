@@ -210,11 +210,11 @@ int main(int argc, char *argv[])
 		}
 		
 		if (make_colors) {
-		    Rast_read_fp_range(out.name, G_mapset(), &range);
+		    Rast_read_fp_range(out.name, G_subproject(), &range);
 		    Rast_get_fp_range_min_max(&range, &min, &max);
 		    Rast_make_grey_scale_colors(&grey, min, max);
 		}
-		Rast_write_colors(out.name, G_mapset(), &grey);
+		Rast_write_colors(out.name, G_subproject(), &grey);
 	    }
 	}
     }

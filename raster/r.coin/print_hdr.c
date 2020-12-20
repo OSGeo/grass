@@ -22,11 +22,11 @@
 int print_coin_hdr(int Conformat)
 {
     char unit_type[20];
-    const char *mapset, *location;
+    const char *subproject, *project;
     char north[30], south[30], east[30], west[30];
 
-    mapset = G_mapset();
-    location = G_location();
+    subproject = G_subproject();
+    project = G_project();
 
     switch (Conformat) {
     case 'a':
@@ -65,8 +65,8 @@ int print_coin_hdr(int Conformat)
     fprintf(dumpfile, "|%24.24sCOINCIDENCE TABULATION REPORT%25.25s|\n",
 	    fill, fill);
     fprintf(dumpfile, "|%78.78s|\n", midline);
-    fprintf(dumpfile, "| Location: %-16.14sMapset: %-17.15sDate: %-20.20s|\n",
-	    location, mapset, G_date());
+    fprintf(dumpfile, "| Project: %-16.14sSubproject: %-17.15sDate: %-20.20s|\n",
+	    project, subproject, G_date());
     fprintf(dumpfile, "|%78.78s|\n", fill);
     fprintf(dumpfile, "| Layer 1: %-15.15s-- %-50.49s|\n", map1name, title1);
     fprintf(dumpfile, "| Layer 2: %-15.15s-- %-50.49s|\n", map2name, title2);

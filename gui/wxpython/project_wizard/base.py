@@ -1,7 +1,7 @@
 """
-@package location_wizard.base
+@package project_wizard.base
 
-@brief Location wizard - base classes
+@brief Project wizard - base classes
 
 Classes:
  - base::BaseClass

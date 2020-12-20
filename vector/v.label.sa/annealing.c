@@ -142,7 +142,7 @@ void simulate_annealing(label_t * labels, int n_labels, struct params *p)
  * improve the result.
  * @param label The label in question
  * @param cc The current candidate
- * @param nc The new potential candidate location
+ * @param nc The new potential candidate project
  * @return The dE value.
  */
 static double calc_label_overlap(label_t * label, int cc, int nc)
@@ -178,10 +178,10 @@ static double calc_label_overlap(label_t * label, int cc, int nc)
 }
 
 /**
- * This function commits the label change to the new location.
+ * This function commits the label change to the new project.
  * @param label The label to move
  * @param cc The current candidate
- * @param nc The new potential candidate location
+ * @param nc The new potential candidate project
  */
 static void do_label_overlap(label_t * label, int cc, int nc)
 {

@@ -56,7 +56,7 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    mapset = grass.gisenv()["MAPSET"]
+    subproject = grass.gisenv()["MAPSET"]
 
     sp = tgis.open_old_stds(input, "strds")
 
@@ -177,7 +177,7 @@ def main():
     if output.find("@") >= 0:
         id = output
     else:
-        id = output + "@" + mapset
+        id = output + "@" + subproject
 
     start, end = sp.get_temporal_extent_as_tuple()
     r3ds = tgis.Raster3DDataset(id)

@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     RASTER3D_Map *map = NULL;
     int tileX, tileY, tileZ;
-    char *mapset;
+    char *subproject;
 
     /* Initialize GRASS */
     G_gisinit(argv[0]);
@@ -107,9 +107,9 @@ int main(int argc, char *argv[])
 
     G_debug(3, "Open 3D raster map <%s>", param.input->answer);
 
-    mapset = G_find_raster3d(param.input->answer, "");
+    subproject = G_find_raster3d(param.input->answer, "");
     
-    if (mapset == NULL)
+    if (subproject == NULL)
         Rast3d_fatal_error(_("3D raster map <%s> not found"),
                        param.input->answer);
 
@@ -117,10 +117,10 @@ int main(int argc, char *argv[])
     Rast3d_init_defaults();
     
     if(!param.cache->answer)
-        map = Rast3d_open_cell_old(param.input->answer, mapset, RASTER3D_DEFAULT_WINDOW, 
+        map = Rast3d_open_cell_old(param.input->answer, subproject, RASTER3D_DEFAULT_WINDOW, 
                           RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
     else
-        map = Rast3d_open_cell_old(param.input->answer, mapset, RASTER3D_DEFAULT_WINDOW, 
+        map = Rast3d_open_cell_old(param.input->answer, subproject, RASTER3D_DEFAULT_WINDOW, 
                           RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
 
     if (map == NULL)

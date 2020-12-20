@@ -245,7 +245,7 @@ class VectorSelectBase():
         if len(self.selectedFeatures) > 0:
             self.painter.SetLayer(self.selectedFeatures[0]['Layer'])
             self.painter.SetMap(
-                self.selectedFeatures[0]['Map'] + '@' + self.selectedFeatures[0]['Mapset']
+                self.selectedFeatures[0]['Map'] + '@' + self.selectedFeatures[0]['Subproject']
             )
             tmp = list()
             for i in self.selectedFeatures:

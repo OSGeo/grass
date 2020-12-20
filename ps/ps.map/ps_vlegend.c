@@ -67,7 +67,7 @@ int PS_vlegend(void)
     fontsize = (double)vector.fontsize;
     fprintf(PS.fp, "(%s) FN %.1f SF\n", vector.font, fontsize);
 
-    /* get text location */
+    /* get text project */
     dy = 1.5 * fontsize;
 
     if (vector.x > 0.0)
@@ -110,7 +110,7 @@ int PS_vlegend(void)
 	    x += dx;
 	st = ((h + 1) * lc < lcount) ? ((h + 1) * lc) : lcount;
 
-	/* make PostScript array "a" of name-mapset strings */
+	/* make PostScript array "a" of name-subproject strings */
 	fprintf(PS.fp, "/a [\n");
 
 	for (i = h * lc; i < st; i++) {
@@ -119,7 +119,7 @@ int PS_vlegend(void)
 		j = vec[i][nvec[i] - 1];	/* vector with label */
 		if (vector.layer[j].label == NULL)
 		    fprintf(PS.fp, "( %s (%s))\n", vector.layer[j].name,
-			    vector.layer[j].mapset);
+			    vector.layer[j].subproject);
 		else
 		    fprintf(PS.fp, "( %s)\n", vector.layer[j].label);
 	    }

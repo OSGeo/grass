@@ -5,7 +5,7 @@ from grass.script.core import read_command
 
 class TestDbCopy(TestCase):
     invect = 'zipcodes'
-    orig_mapset = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
+    orig_subproject = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
     outable = 'my_' + invect
 
     @classmethod
@@ -18,28 +18,28 @@ class TestDbCopy(TestCase):
                       database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db')
 
     def test_fromtable(self):
-        self.runModule('db.copy', from_database=self.orig_mapset, 
+        self.runModule('db.copy', from_database=self.orig_subproject, 
                        from_table=self.invect, to_table=self.outable,
                        overwrite=True)
         orig = read_command('db.select', table=self.invect,
-                            database=self.orig_mapset)
+                            database=self.orig_subproject)
         new = read_command('db.select', table=self.outable)
         self.assertEqual(first=orig, second=new)
 
     def test_select(self):
-        self.runModule('db.copy', from_database=self.orig_mapset,
+        self.runModule('db.copy', from_database=self.orig_subproject,
                        to_table=self.outable, overwrite=True,
                        select="SELECT * from {inp} WHERE NAME='RALEIGH'".format(inp=self.invect))
-        orig = read_command('db.select', database=self.orig_mapset,
+        orig = read_command('db.select', database=self.orig_subproject,
                             sql="SELECT * from {inp} WHERE NAME='RALEIGH'".format(inp=self.invect))
         new = read_command('db.select', table=self.outable)
         self.assertEqual(first=orig, second=new)
 
     def test_where(self):
-        self.runModule('db.copy', from_database=self.orig_mapset,
+        self.runModule('db.copy', from_database=self.orig_subproject,
                        to_table=self.outable, overwrite=True,
                        from_table=self.invect, where="NAME='RALEIGH'")
-        orig = read_command('db.select', database=self.orig_mapset,
+        orig = read_command('db.select', database=self.orig_subproject,
                             sql="SELECT * from {inp} WHERE NAME='RALEIGH'".format(inp=self.invect))
         new = read_command('db.select', table=self.outable)
         self.assertEqual(first=orig, second=new)

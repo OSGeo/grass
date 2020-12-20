@@ -277,11 +277,11 @@ void init_proj(void)
     struct Key_Value *in_proj_keys, *in_unit_keys;
 
     /* Proj stuff for geo grid */
-    /* In Info (current location) */
+    /* In Info (current project) */
     in_proj_keys = G_get_projinfo();
     in_unit_keys = G_get_projunits();
     if (pj_get_kv(&info_in, in_proj_keys, in_unit_keys) < 0)
-	G_fatal_error(_("Can't get projection key values of current location"));
+	G_fatal_error(_("Can't get projection key values of current project"));
     G_free_key_value(in_proj_keys);
     G_free_key_value(in_unit_keys);
 

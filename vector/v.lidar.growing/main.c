@@ -44,9 +44,9 @@ int main(int argc, char *argv[])
     double Z_interp;
     double Thres_j, Thres_d, ew_resol, ns_resol;
     double minNS, minEW, maxNS, maxEW;
-    const char *mapset;
+    const char *subproject;
     char buf[1024], table_name[GNAME_MAX];
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 
     int colorBordo, ripieno, conta, lungPunti, lungHull, xi, c1, c2;
     double altPiano;
@@ -122,23 +122,23 @@ int main(int argc, char *argv[])
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,
 				 G_FATAL_EXIT);
 
-    if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL) {
+    if ((subproject = G_find_vector2(in_opt->answer, "")) == NULL) {
 	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
     }
 
     /* Setting auxiliary table's name */
-    if (G_name_is_fully_qualified(in_opt->answer, xname, xmapset)) {
+    if (G_name_is_fully_qualified(in_opt->answer, xname, xsubproject)) {
 	sprintf(table_name, "%s_edge_Interpolation", xname);
     }
     else
 	sprintf(table_name, "%s_edge_Interpolation", in_opt->answer);
 
     Vect_set_open_level(1);	/* WITHOUT TOPOLOGY */
-    if (Vect_open_old(&In, in_opt->answer, mapset) < 1)
+    if (Vect_open_old(&In, in_opt->answer, subproject) < 1)
 	G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
 
     Vect_set_open_level(1);	/* WITHOUT TOPOLOGY */
-    if (Vect_open_old(&First, first_opt->answer, mapset) < 1)
+    if (Vect_open_old(&First, first_opt->answer, subproject) < 1)
 	G_fatal_error(_("Unable to open vector map <%s>"), first_opt->answer);
 
     /* Open output vector */

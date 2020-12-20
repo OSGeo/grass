@@ -11,7 +11,7 @@ for details.
 :authors: Soeren Gebbert
 """
 from abc import ABCMeta, abstractmethod
-from .core import get_tgis_message_interface, init_dbif, get_enable_mapset_check, get_current_mapset
+from .core import get_tgis_message_interface, init_dbif, get_enable_subproject_check, get_current_subproject
 from .temporal_topology_dataset_connector import TemporalTopologyDatasetConnector
 from .spatial_topology_dataset_connector import SpatialTopologyDatasetConnector
 
@@ -134,8 +134,8 @@ class AbstractDataset(SpatialTopologyDatasetConnector,
                 self.spatial_extent = VectorSpatialExtent(ident=ident)
                 self.metadata = VectorMetadata(ident=ident)
 
-           :param ident: The identifier of the dataset that  "name@mapset" or
-                         in case of vector maps "name:layer@mapset"
+           :param ident: The identifier of the dataset that  "name@subproject" or
+                         in case of vector maps "name:layer@subproject"
         """
 
     @abstractmethod
@@ -228,7 +228,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector,
 
     def get_id(self):
         """Return the unique identifier of the dataset
-           :return: The id of the dataset "name(:layer)@mapset" as string
+           :return: The id of the dataset "name(:layer)@subproject" as string
         """
         return self.base.get_id()
 
@@ -238,11 +238,11 @@ class AbstractDataset(SpatialTopologyDatasetConnector,
         """
         return self.base.get_name()
 
-    def get_mapset(self):
-        """Return the mapset
-           :return: The mapset in which the dataset was created as string
+    def get_subproject(self):
+        """Return the subproject
+           :return: The subproject in which the dataset was created as string
         """
-        return self.base.get_mapset()
+        return self.base.get_subproject()
 
     def get_temporal_extent_as_tuple(self):
         """Returns a tuple of the valid start and end time
@@ -382,11 +382,11 @@ class AbstractDataset(SpatialTopologyDatasetConnector,
                     empty string otherwise
         """
 
-        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
+        if get_enable_subproject_check() is True and self.get_subproject() != get_current_subproject():
             self.msgr.fatal(_("Unable to insert dataset <%(ds)s> of type "
-                              "%(type)s in the temporal database. The mapset "
+                              "%(type)s in the temporal database. The subproject "
                               "of the dataset does not match the current "
-                              "mapset") % {"ds": self.get_id(),
+                              "subproject") % {"ds": self.get_id(),
                                            "type": self.get_type()})
 
         dbif, connected = init_dbif(dbif)
@@ -422,11 +422,11 @@ class AbstractDataset(SpatialTopologyDatasetConnector,
                     empty string otherwise
         """
 
-        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
+        if get_enable_subproject_check() is True and self.get_subproject() != get_current_subproject():
             self.msgr.fatal(_("Unable to update dataset <%(ds)s> of type "
-                              "%(type)s in the temporal database. The mapset "
+                              "%(type)s in the temporal database. The subproject "
                               "of the dataset does not match the current "
-                              "mapset") % {"ds": self.get_id(),
+                              "subproject") % {"ds": self.get_id(),
                                            "type": self.get_type()})
 
         dbif, connected = init_dbif(dbif)
@@ -465,11 +465,11 @@ class AbstractDataset(SpatialTopologyDatasetConnector,
                     empty string otherwise
         """
 
-        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
+        if get_enable_subproject_check() is True and self.get_subproject() != get_current_subproject():
             self.msgr.fatal(_("Unable to update dataset <%(ds)s> of type "
-                              "%(type)s in the temporal database. The mapset"
+                              "%(type)s in the temporal database. The subproject"
                               " of the dataset does not match the current "
-                              "mapset") % {"ds": self.get_id(),
+                              "subproject") % {"ds": self.get_id(),
                                            "type": self.get_type()})
 
         dbif, connected = init_dbif(dbif)

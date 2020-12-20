@@ -113,7 +113,7 @@ def main():
 
     # set vertical divide at 65 instead of 80 if real labels in cats/ file??
     make_frame(f, 90, 100, 70, 100)
-    # use map name without mapset suffix
+    # use map name without subproject suffix
     mapname = map.split('@')[0]
     grass.run_command('d.text', color='black', size=5, at='5,97', align='cl',
                       text=mapname)

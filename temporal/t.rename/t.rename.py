@@ -56,18 +56,18 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    #Get the current mapset to create the id of the space time dataset
-    mapset = grass.gisenv()["MAPSET"]
+    #Get the current subproject to create the id of the space time dataset
+    subproject = grass.gisenv()["MAPSET"]
 
     if input.find("@") >= 0:
         old_id = input
     else:
-        old_id = input + "@" + mapset
+        old_id = input + "@" + subproject
 
     if output.find("@") >= 0:
         new_id = output
     else:
-        new_id = output + "@" + mapset
+        new_id = output + "@" + subproject
         
     # Do not overwrite yourself
     if new_id == old_id:
@@ -79,10 +79,10 @@ def main():
 
     stds = tgis.dataset_factory(type, old_id)
 
-    if new_id.split("@")[1] != mapset:
+    if new_id.split("@")[1] != subproject:
         grass.fatal(_("Space time %s dataset <%s> can not be renamed. "
-                      "Mapset of the new identifier differs from the current "
-                      "mapset.") % (stds.get_new_map_instance(None).get_type(), 
+                      "Subproject of the new identifier differs from the current "
+                      "subproject.") % (stds.get_new_map_instance(None).get_type(), 
                                     old_id))
         
     if not stds.is_in_db(dbif=dbif):

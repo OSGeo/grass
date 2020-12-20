@@ -668,7 +668,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         newident = "{ba}_{su}".format(ba=self.basename, su=suffix)
 
                     # Check if resultmap names exist in GRASS database.
-                    newident = newident + "@" + self.mapset
+                    newident = newident + "@" + self.subproject
 
                     if self.stdstype == "strds":
                         new_map = RasterDataset(newident)
@@ -703,7 +703,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         # Change map name to given basename.
                         # Create deepcopy of r.mapcalc module.
 
-                        new_map = map_i.get_new_instance(newident + "@" + self.mapset)
+                        new_map = map_i.get_new_instance(newident + "@" + self.subproject)
                         new_map.set_temporal_extent(map_i.get_temporal_extent())
                         new_map.set_spatial_extent(map_i.get_spatial_extent())
                         map_test_list.append(new_map)
@@ -721,7 +721,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
                     elif map_i.map_exists():
                         # Copy map if it exists b = a
-                        new_map = map_i.get_new_instance(newident + "@" + self.mapset)
+                        new_map = map_i.get_new_instance(newident + "@" + self.subproject)
                         new_map.set_temporal_extent(map_i.get_temporal_extent())
                         new_map.set_spatial_extent(map_i.get_spatial_extent())
                         map_test_list.append(new_map)
@@ -816,11 +816,11 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             # Check input map.
             input = t[3]
             if not isinstance(input, list):
-                # Check for mapset in given stds input.
+                # Check for subproject in given stds input.
                 if input.find("@") >= 0:
                     id_input = input
                 else:
-                    id_input = input + "@" + self.mapset
+                    id_input = input + "@" + self.subproject
                 # Create empty map dataset.
                 map_i = dataset_factory(self.maptype, id_input)
                 # Check for occurrence of space time dataset.

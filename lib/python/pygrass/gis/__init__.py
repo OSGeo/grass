@@ -32,8 +32,8 @@ ETYPE = {'raster': libgis.G_ELEMENT_RASTER,
 
 CHECK_IS = {"GISBASE": libgis.G_is_gisbase,
             "GISDBASE": lambda x: True,
-            "LOCATION_NAME": libgis.G_is_location,
-            "MAPSET": libgis.G_is_mapset}
+            "LOCATION_NAME": libgis.G_is_project,
+            "MAPSET": libgis.G_is_subproject}
 
 
 def is_valid(value, path, type):
@@ -80,39 +80,39 @@ def _check_raise(value, path, type):
     raise GrassError("%s <%s> not found" % (type.title(), join(path, value)))
 
 
-def set_current_mapset(mapset, location=None, gisdbase=None):
-    """Set the current mapset as working area
+def set_current_subproject(subproject, project=None, gisdbase=None):
+    """Set the current subproject as working area
 
-    :param mapset: Name of the mapset
+    :param subproject: Name of the subproject
     :type value: str
 
-    :param location: Name of the location
-    :type location: str
+    :param project: Name of the project
+    :type project: str
 
     :param gisdbase: Name of the gisdbase
     :type gisdbase: str
     """
-    libgis.G_setenv('MAPSET', mapset)
-    if location:
-        libgis.G_setenv('LOCATION_NAME', location)
+    libgis.G_setenv('MAPSET', subproject)
+    if project:
+        libgis.G_setenv('LOCATION_NAME', project)
     if gisdbase:
         libgis.G_setenv('GISDBASE', gisdbase)
 
 
-def make_mapset(mapset, location=None, gisdbase=None):
-    """Create a new mapset
+def make_subproject(subproject, project=None, gisdbase=None):
+    """Create a new subproject
 
-    :param mapset: Name of the mapset
+    :param subproject: Name of the subproject
     :type value: str
 
-    :param location: Name of the location
-    :type location: str
+    :param project: Name of the project
+    :type project: str
 
     :param gisdbase: Name of the gisdbase
     :type gisdbase: str"""
-    res = libgis.G_make_mapset(gisdbase, location, mapset)
+    res = libgis.G_make_subproject(gisdbase, project, subproject)
     if res == -1:
-        raise GrassError("Cannot create new mapset")
+        raise GrassError("Cannot create new subproject")
     elif res == -2:
         raise GrassError("Illegal name")
 
@@ -146,8 +146,8 @@ class Gisdbase(object):
     def __repr__(self):
         return 'Gisdbase(%s)' % self.name
 
-    def __getitem__(self, location):
-        """Return a Location object. ::
+    def __getitem__(self, project):
+        """Return a Project object. ::
 
             >>> from grass.script.core import gisenv
             >>> loc_env = gisenv()['LOCATION_NAME']
@@ -158,51 +158,51 @@ class Gisdbase(object):
 
         ..
         """
-        if location in self.locations():
-            return Location(location, self.name)
+        if project in self.projects():
+            return Project(project, self.name)
         else:
-            raise KeyError('Location: %s does not exist' % location)
+            raise KeyError('Project: %s does not exist' % project)
 
     def __iter__(self):
-        for loc in self.locations():
-            yield Location(loc, self.name)
+        for loc in self.projects():
+            yield Project(loc, self.name)
 
     # TODO remove or complete this function
-    def new_location(self):
-        if libgis.G_make_location() != 0:
-            raise GrassError("Cannot create new location")
+    def new_project(self):
+        if libgis.G_make_project() != 0:
+            raise GrassError("Cannot create new project")
 
-    def locations(self):
-        """Return a list of locations that are available in the gisdbase: ::
+    def projects(self):
+        """Return a list of projects that are available in the gisdbase: ::
 
             >>> gisdbase = Gisdbase()
-            >>> gisdbase.locations()                     # doctest: +ELLIPSIS
+            >>> gisdbase.projects()                     # doctest: +ELLIPSIS
             [...]
 
         ..
         """
         return sorted([loc for loc in listdir(self.name)
-                       if libgis.G_is_location(encode(join(self.name, loc)))])
+                       if libgis.G_is_project(encode(join(self.name, loc)))])
 
 
-class Location(object):
-    """Location object ::
+class Project(object):
+    """Project object ::
 
         >>> from grass.script.core import gisenv
-        >>> location = Location()
-        >>> location                                      # doctest: +ELLIPSIS
-        Location(...)
-        >>> location.gisdbase == gisenv()['GISDBASE']
+        >>> project = Project()
+        >>> project                                      # doctest: +ELLIPSIS
+        Project(...)
+        >>> project.gisdbase == gisenv()['GISDBASE']
         True
-        >>> location.name == gisenv()['LOCATION_NAME']
+        >>> project.name == gisenv()['LOCATION_NAME']
         True
 
     ..
     """
 
-    def __init__(self, location='', gisdbase=''):
+    def __init__(self, project='', gisdbase=''):
         self.gisdbase = gisdbase
-        self.name = location
+        self.name = project
 
     def _get_gisdb(self):
         return self._gisdb
@@ -222,11 +222,11 @@ class Location(object):
     name = property(fget=_get_name, fset=_set_name,
                     doc="Set or obtain the name of LOCATION")
 
-    def __getitem__(self, mapset):
-        if mapset in self.mapsets():
-            return Mapset(mapset)
+    def __getitem__(self, subproject):
+        if subproject in self.subprojects():
+            return Subproject(subproject)
         else:
-            raise KeyError('Mapset: %s does not exist' % mapset)
+            raise KeyError('Subproject: %s does not exist' % subproject)
 
     def __iter__(self):
         lpath = self.path()
@@ -234,67 +234,67 @@ class Location(object):
                 if (isdir(join(lpath, m)) and is_valid(m, lpath, "MAPSET")))
 
     def __len__(self):
-        return len(self.mapsets())
+        return len(self.subprojects())
 
     def __str__(self):
         return self.name
 
     def __repr__(self):
-        return 'Location(%r)' % self.name
+        return 'Project(%r)' % self.name
 
-    def mapsets(self, pattern=None, permissions=True):
-        """Return a list of the available mapsets.
+    def subprojects(self, pattern=None, permissions=True):
+        """Return a list of the available subprojects.
 
         :param pattern: the pattern to filter the result
         :type pattern: str
-        :param permissions: check the permission of mapset
+        :param permissions: check the permission of subproject
         :type permissions: bool
-        :return: a list of mapset's names
+        :return: a list of subproject's names
         :rtype: list of strings
 
         ::
 
-            >>> location = Location()
-            >>> sorted(location.mapsets())                # doctest: +ELLIPSIS
+            >>> project = Project()
+            >>> sorted(project.subprojects())                # doctest: +ELLIPSIS
             [...]
 
         """
-        mapsets = [mapset for mapset in self]
+        subprojects = [subproject for subproject in self]
         if permissions:
-            mapsets = [mapset for mapset in mapsets
-                       if libgis.G_mapset_permissions(encode(mapset))]
+            subprojects = [subproject for subproject in subprojects
+                       if libgis.G_subproject_permissions(encode(subproject))]
         if pattern:
-            return fnmatch.filter(mapsets, pattern)
-        return mapsets
+            return fnmatch.filter(subprojects, pattern)
+        return subprojects
 
     def path(self):
-        """Return the complete path of the location"""
+        """Return the complete path of the project"""
         return join(self.gisdbase, self.name)
 
 
-class Mapset(object):
-    """Mapset ::
+class Subproject(object):
+    """Subproject ::
 
         >>> from grass.script.core import gisenv
         >>> genv = gisenv()
-        >>> mapset = Mapset()
-        >>> mapset                                        # doctest: +ELLIPSIS
-        Mapset(...)
-        >>> mapset.gisdbase == genv['GISDBASE']
+        >>> subproject = Subproject()
+        >>> subproject                                        # doctest: +ELLIPSIS
+        Subproject(...)
+        >>> subproject.gisdbase == genv['GISDBASE']
         True
-        >>> mapset.location == genv['LOCATION_NAME']
+        >>> subproject.project == genv['LOCATION_NAME']
         True
-        >>> mapset.name == genv['MAPSET']
+        >>> subproject.name == genv['MAPSET']
         True
 
     ..
     """
 
-    def __init__(self, mapset='', location='', gisdbase=''):
+    def __init__(self, subproject='', project='', gisdbase=''):
         self.gisdbase = gisdbase
-        self.location = location
-        self.name = mapset
-        self.visible = VisibleMapset(self.name, self.location, self.gisdbase)
+        self.project = project
+        self.name = subproject
+        self.visible = VisibleSubproject(self.name, self.project, self.gisdbase)
 
     def _get_gisdb(self):
         return self._gisdb
@@ -311,7 +311,7 @@ class Mapset(object):
     def _set_loc(self, loc):
         self._loc = _check_raise(loc, self._gisdb, "LOCATION_NAME")
 
-    location = property(fget=_get_loc, fset=_set_loc,
+    project = property(fget=_get_loc, fset=_set_loc,
                         doc="Set or obtain the name of LOCATION")
 
     def _get_name(self):
@@ -327,7 +327,7 @@ class Mapset(object):
         return self.name
 
     def __repr__(self):
-        return 'Mapset(%r)' % self.name
+        return 'Subproject(%r)' % self.name
 
     def glist(self, type, pattern=None):
         """Return a list of grass types like:
@@ -346,12 +346,12 @@ class Mapset(object):
 
         ::
 
-            >>> mapset = Mapset()
-            >>> mapset.current()
-            >>> rast = mapset.glist('raster')
+            >>> subproject = Subproject()
+            >>> subproject.current()
+            >>> rast = subproject.glist('raster')
             >>> test_raster_name in rast
             True
-            >>> vect = mapset.glist('vector')
+            >>> vect = subproject.glist('vector')
             >>> test_vector_name in vect
             True
 
@@ -361,7 +361,7 @@ class Mapset(object):
             str_err = "Type %s is not valid, valid types are: %s."
             raise TypeError(str_err % (type, ', '.join(ETYPE.keys())))
         clist = libgis.G_list(ETYPE[type], self.gisdbase,
-                              self.location, self.name)
+                              self.project, self.name)
         elist = []
         for el in clist:
             el_name = ct.cast(el, ct.c_char_p).value
@@ -375,43 +375,43 @@ class Mapset(object):
     def is_current(self):
         """Check if the MAPSET is the working MAPSET"""
         return (self.name == getenv('MAPSET') and
-                self.location == getenv('LOCATION_NAME') and
+                self.project == getenv('LOCATION_NAME') and
                 self.gisdbase == getenv('GISDBASE'))
 
     def current(self):
-        """Set the mapset as current"""
-        set_current_mapset(self.name, self.location, self.gisdbase)
+        """Set the subproject as current"""
+        set_current_subproject(self.name, self.project, self.gisdbase)
 
     def delete(self):
-        """Delete the mapset"""
+        """Delete the subproject"""
         if self.is_current():
-            raise GrassError('The mapset is in use.')
+            raise GrassError('The subproject is in use.')
         shutil.rmtree(self.path())
 
     def path(self):
-        """Return the complete path of the mapset"""
-        return join(self.gisdbase, self.location, self.name)
+        """Return the complete path of the subproject"""
+        return join(self.gisdbase, self.project, self.name)
 
 
-class VisibleMapset(object):
-    """VisibleMapset object
+class VisibleSubproject(object):
+    """VisibleSubproject object
     """
 
-    def __init__(self, mapset, location='', gisdbase=''):
-        self.mapset = mapset
-        self.location = Location(location, gisdbase)
+    def __init__(self, subproject, project='', gisdbase=''):
+        self.subproject = subproject
+        self.project = Project(project, gisdbase)
         self._list = []
-        self.spath = join(self.location.path(), self.mapset, 'SEARCH_PATH')
+        self.spath = join(self.project.path(), self.subproject, 'SEARCH_PATH')
 
     def __repr__(self):
         return repr(self.read())
 
     def __iter__(self):
-        for mapset in self.read():
-            yield mapset
+        for subproject in self.read():
+            yield subproject
 
     def read(self):
-        """Return the mapsets in the search path"""
+        """Return the subprojects in the search path"""
         with open(self.spath, "ab+") as f:
             lines = f.readlines()
             if lines:
@@ -420,53 +420,53 @@ class VisibleMapset(object):
         self._write(lns)
         return lns
 
-    def _write(self, mapsets):
+    def _write(self, subprojects):
         """Write to SEARCH_PATH file the changes in the search path
 
-        :param mapsets: a list of mapset's names
-        :type mapsets: list
+        :param subprojects: a list of subproject's names
+        :type subprojects: list
         """
         with open(self.spath, "wb+") as f:
-            ms = [decode(m) for m in self.location.mapsets()]
-            f.write(b'\n'.join([encode(m) for m in mapsets if m in ms]))
+            ms = [decode(m) for m in self.project.subprojects()]
+            f.write(b'\n'.join([encode(m) for m in subprojects if m in ms]))
 
-    def add(self, mapset):
-        """Add a mapset to the search path
+    def add(self, subproject):
+        """Add a subproject to the search path
 
-        :param mapset: a mapset's name
-        :type mapset: str
+        :param subproject: a subproject's name
+        :type subproject: str
         """
-        if mapset not in self.read() and mapset in self.location:
+        if subproject not in self.read() and subproject in self.project:
             with open(self.spath, "a+") as f:
-                f.write('\n%s' % mapset)
+                f.write('\n%s' % subproject)
         else:
-            raise TypeError('Mapset not found')
+            raise TypeError('Subproject not found')
 
-    def remove(self, mapset):
-        """Remove mapset to the search path
+    def remove(self, subproject):
+        """Remove subproject to the search path
 
-        :param mapset: a mapset's name
-        :type mapset: str
+        :param subproject: a subproject's name
+        :type subproject: str
         """
-        mapsets = self.read()
-        mapsets.remove(mapset)
-        self._write(mapsets)
+        subprojects = self.read()
+        subprojects.remove(subproject)
+        self._write(subprojects)
 
-    def extend(self, mapsets):
-        """Add more mapsets to the search path
+    def extend(self, subprojects):
+        """Add more subprojects to the search path
 
-        :param mapsets: a list of mapset's names
-        :type mapsets: list
+        :param subprojects: a list of subproject's names
+        :type subprojects: list
         """
-        ms = [decode(m) for m in self.location.mapsets()]
+        ms = [decode(m) for m in self.project.subprojects()]
         final = [decode(m) for m in self.read()]
-        mapsets = [decode(m) for m in mapsets]
-        final.extend([m for m in mapsets if m in ms and m not in final])
+        subprojects = [decode(m) for m in subprojects]
+        final.extend([m for m in subprojects if m in ms and m not in final])
         self._write(final)
 
     def reset(self):
         """Reset to the original search path"""
-        final = [self.mapset, 'PERMANENT']
+        final = [self.subproject, 'PERMANENT']
         self._write(final)
 
 
@@ -484,11 +484,11 @@ if __name__ == "__main__":
     doctest.testmod()
 
     # Remove the generated vector map, if exist
-    mset = utils.get_mapset_vector(test_vector_name, mapset='')
+    mset = utils.get_subproject_vector(test_vector_name, subproject='')
     if mset:
         run_command("g.remove", flags='f', type='vector',
                     name=test_vector_name)
-    mset = utils.get_mapset_raster(test_raster_name, mapset='')
+    mset = utils.get_subproject_raster(test_raster_name, subproject='')
     if mset:
         run_command("g.remove", flags='f', type='raster',
                     name=test_raster_name)

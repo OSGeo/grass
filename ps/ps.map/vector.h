@@ -42,7 +42,7 @@ typedef struct
     /* All types */
     int type;			/* layer type: VPOINTS, VLINES, VAREAS */
     char *name;
-    char *mapset;
+    char *subproject;
     char masked;
     char *label;		/* label in legend */
     int lpos;			/* position in legend: -1 not specified, 0 do not display, > 0 position in legend */

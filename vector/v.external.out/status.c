@@ -43,7 +43,7 @@ int print_status_file(const char *file, int shell)
 
     struct Key_Value *key_val;
     
-    fp = G_fopen_old("", file, G_mapset());
+    fp = G_fopen_old("", file, G_subproject());
     if (!fp)
 	return FALSE;
     
@@ -71,10 +71,10 @@ int save_status_file(const struct Option *file)
     
     /* read settings file */
     use_ogr = FALSE;
-    fp_input = G_fopen_old("", "PG", G_mapset());
+    fp_input = G_fopen_old("", "PG", G_subproject());
     if (!fp_input) {
         use_ogr = TRUE;
-        fp_input = G_fopen_old("", "OGR", G_mapset());
+        fp_input = G_fopen_old("", "OGR", G_subproject());
     }
     if (!fp_input)
         G_fatal_error(_("No settings defined"));

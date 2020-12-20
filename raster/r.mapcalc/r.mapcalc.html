@@ -14,7 +14,7 @@ to contain the result of the calculation and
 raster map layers (except <em>result</em> itself), integer or floating point constants,
 and functions known to the calculator.
 Parentheses are allowed in the expression and may be nested to any depth.
-<em>result</em> will be created in the user's current mapset.
+<em>result</em> will be created in the user's current subproject.
 <p>
 As <b>expression=</b> is the first option, it is the default. This
 means that passing an expression on the command line is possible
@@ -90,7 +90,7 @@ and in the history file for <em>result</em>.
         to compute the disjoint union of all regions from raster
         maps specified in the expression. This
         computed region will then be used as computational region at runtime.
-        The region of the mapset will not be modified.
+        The region of the subproject will not be modified.
         The smallest spatial resolution
         of all raster maps will be used for processing.
     </li>
@@ -99,7 +99,7 @@ and in the history file for <em>result</em>.
         to compute the intersection of all regions from raster
         maps specified in the expression. This
         computed region will then be used as computational region at runtime.
-        The region of the mapset will not be modified.
+        The region of the subproject will not be modified.
         The smallest spatial resolution
         of all raster maps will be used for processing.
     </li>
@@ -184,19 +184,19 @@ look like numbers or contain operators, OR unless the program
 is run non-interactively.  Examples given here assume the
 program is run interactively.  See NOTES, below.
 <p><em>r.mapcalc</em> will look for the raster map layers according to the
-user's current mapset search path.
-It is possible to override the search path and specify the mapset
+user's current subproject search path.
+It is possible to override the search path and specify the subproject
 from which to select the raster map layer.
 This is done by specifying the raster map layer name in the form:
 <p><div class="code"><pre>
-name@mapset
+name@subproject
 </pre></div>
 <p>For example, the following is a legal expression:
 <p><div class="code"><pre>
 result = x@PERMANENT / y@SOILS
 </pre></div>
-<p>The mapset specified does not have to be in the mapset search path.
-(This method of overriding the mapset search path is common to all
+<p>The subproject specified does not have to be in the subproject search path.
+(This method of overriding the subproject search path is common to all
 GRASS commands, not just <em>r.mapcalc</em>.)
 <p>
 

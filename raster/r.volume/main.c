@@ -13,7 +13,7 @@
  *               within regions of a map defined by clumps or patches on a second map
  *               (or MASK).  It also computes the "volume" by multiplying the total
  *               within a clump by the area of each cell. It also outputs the
- *               "centroid" location of each clump. Output is to standard out.
+ *               "centroid" project of each clump. Output is to standard out.
  *
  * COPYRIGHT:    (C) 1999-2006, 2013 by the GRASS Development Team
  *
@@ -139,7 +139,7 @@ int main(int argc, char *argv[])
     if (!clumpmap) {
 	clumpmap = "MASK";
 	use_MASK = 1;
-        if (!G_find_raster2(clumpmap, G_mapset()))
+        if (!G_find_raster2(clumpmap, G_subproject()))
             G_fatal_error(_("No MASK found. If no clump map is given than the MASK is required. "
                             "You need to define a clump raster map or create a MASK by r.mask command."));
         G_important_message(_("No clump map given, using MASK"));
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
     
     /* open input and clump raster maps */
     fd_data = Rast_open_old(datamap, "");
-    fd_clump = Rast_open_old(clumpmap, use_MASK ? G_mapset() : "");
+    fd_clump = Rast_open_old(clumpmap, use_MASK ? G_subproject() : "");
     
     /* initialize vector map (for centroids) if needed */
     if (centroidsmap) {
@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
     }
 
     /* initialize data accumulation arrays */
-    max = Rast_get_max_c_cat(clumpmap, use_MASK ? G_mapset() : "");
+    max = Rast_get_max_c_cat(clumpmap, use_MASK ? G_subproject() : "");
 
     sum = (double *)G_malloc((max + 1) * sizeof(double));
     count = (long int *)G_malloc((max + 1) * sizeof(long int));

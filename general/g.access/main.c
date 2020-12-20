@@ -7,7 +7,7 @@
  *               Bernhard Reiter <bernhard intevation.de>,
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Hamish Bowman <hamish_b yahoo.com>, Radim Blazek <radim.blazek gmail.com>
- * PURPOSE:      Controls access to the current mapset for other users on the system
+ * PURPOSE:      Controls access to the current subproject for other users on the system
  * COPYRIGHT:    (C) 1999-2006, 2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -25,7 +25,7 @@
 int main(int argc, char *argv[])
 {
     char path[GPATH_MAX];
-    int perms;			/* full mapset permissions */
+    int perms;			/* full subproject permissions */
     int group, other;		/* bool. want group/other permission */
     struct Option *group_opt, *other_opt;
     struct GModule *module;
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("map management"));
     G_add_keyword(_("permission"));
     module->label =
-	_("Controls access to the current mapset for other users on the system.");
+	_("Controls access to the current subproject for other users on the system.");
     module->description = _("If no option given, prints current status.");
     
     group_opt = G_define_option();
@@ -64,16 +64,16 @@ int main(int argc, char *argv[])
     G_fatal_error(_("UNIX filesystem access controls are not supported by MS-Windows"));
 #endif
 
-    /* get the unix file name for the mapset directory */
-    G_file_name(path, "", "", G_mapset());
+    /* get the unix file name for the subproject directory */
+    G_file_name(path, "", "", G_subproject());
 
     /* this part is until PERMANENT no longer holds DEFAULT_WIND and MYNAME */
-    if (strcmp(G_mapset(), "PERMANENT") == 0)
-	G_fatal_error(_("Access to the PERMANENT mapset must be open, nothing changed"));
+    if (strcmp(G_subproject(), "PERMANENT") == 0)
+	G_fatal_error(_("Access to the PERMANENT subproject must be open, nothing changed"));
 
     /* get the current permissions */
     if (get_perms(path, &perms, &group, &other) < 0)
-	G_fatal_error(_("Unable to determine mapset permissions"));
+	G_fatal_error(_("Unable to determine subproject permissions"));
 
     if (group_opt->answer) {
 	if (group_opt->answer[0] == 'g')

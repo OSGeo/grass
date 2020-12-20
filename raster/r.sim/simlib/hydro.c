@@ -49,7 +49,7 @@ char *err;
 char *outwalk;
 char *observation;
 char *logfile;
-char *mapset;
+char *subproject;
 char *mscale;
 char *tserie;
 

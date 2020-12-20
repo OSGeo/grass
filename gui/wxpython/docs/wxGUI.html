@@ -169,7 +169,7 @@ d.vect, or d.grid, for example).
       <dt><img src="icons/layer-vector-chart-add.png" alt="icon">&nbsp;
 	<em>Add thematic chart layer (for vector points)</em></dt>
       <dd>Adds layer in which pie or bar charts can be automatically created
-	at vector point locations. Charts display values from selected columns
+	at vector point projects. Charts display values from selected columns
 	in the associated attribute table. Options include: chart type, layer
 	and attributes to chart, chart colors, and chart size (fixed or based
 	on attribute column),
@@ -186,7 +186,7 @@ d.vect, or d.grid, for example).
     <dl>
       <dt><img src="icons/layer-grid-add.png" alt="icon">&nbsp;
 	<em>Add overlay grids and lines</em></dt>
-      <dd>Adds layer to display regular grid (for all locations)
+      <dd>Adds layer to display regular grid (for all projects)
 	see <em><a href="d.grid.html">d.grid</a></em></dd>
       
       <dt><img src="icons/layer-label-add.png" alt="icon">&nbsp;
@@ -198,12 +198,12 @@ d.vect, or d.grid, for example).
       
       <dt><img src="icons/shortest-distance.png" alt="icon">&nbsp;
 	<em>Add geodesic line layer</em></dt>
-      <dd>Add layer to display geodesic line for latitude/longitude locations only,
+      <dd>Add layer to display geodesic line for latitude/longitude projects only,
 	see <em><a href="d.geodesic.html">d.geodesic</a></em></dd>
       
       <dt><img src="icons/shortest-distance.png" alt="icon">&nbsp;
 	<em>Add rhumbline layer</em>
-	<dd>Add layer to display rhumblines (for latitude/longitude locations only),
+	<dd>Add layer to display rhumblines (for latitude/longitude projects only),
           see <em><a href="d.rhumbline.html">d.rhumbline</a></em>.</dd>
 
       <dt><img src="icons/layer-command-add.png" alt="icon">&nbsp;
@@ -384,7 +384,7 @@ the computational region extents.
     <em>Pan</em></dt>
   <dd>Interactive selection of a new center of view in the active
     display monitor. Drag the pan cursor while pressing the left mouse
-    button to pan.  Panning changes the location of the region displayed
+    button to pan.  Panning changes the project of the region displayed
     but not the size of the area displayed or the resolution. Panning
     does <em>not</em> affect the computational region for other GIS
     processes, see <em><a href="g.region.html">g.region</a></em>.</dd>
@@ -397,7 +397,7 @@ the computational region extents.
     box fills the display. The map resolution is not changed. Clicking
     with the zoom-in cursor causes the display to zoom in by 30%, centered
     on the point where the mouse is clicked. Zooming resets the display
-    region extents (both size and location of area displayed). It
+    region extents (both size and project of area displayed). It
     does <em>not</em> affect the computational region for other GIS
     processes, see <em><a href="g.region.html">g.region</a></em>.</dd>
   
@@ -409,7 +409,7 @@ the computational region extents.
     shrinks to fill the area defined by the box. The map resolution is not
     changed. Clicking with the zoom-out cursor causes the display to zoom
     out by 30%, centered on the point where the mouse is clicked. Zooming
-    resets the display region extents (both size and location of area
+    resets the display region extents (both size and project of area
     displayed). It does <em>not</em> affect the computational region for
     other GIS processes,
     see <em><a href="g.region.html">g.region</a></em>.</dd>
@@ -417,7 +417,7 @@ the computational region extents.
   <dt><img src="icons/zoom-extent.png" alt="icon">&nbsp;
     <em>Zoom to selected map(s)</em></dt>
   <dd>Set zoom extent based on selected raster or vector maps. Zooming
-    resets the display region extents (both size and location of area
+    resets the display region extents (both size and project of area
     displayed). It does <em>not</em> affect the computational region
     for other GIS processes,
     see <em><a href="g.region.html">g.region</a></em>.</dd>
@@ -440,7 +440,7 @@ the computational region extents.
       <li><em>Zoom to saved region</em>. Zooms to previously
       saved named region.</li>
       <li><em>Set computational region extent from display.</em>
-      The computational region (the mapset's <tt>WIND</tt> file)
+      The computational region (the subproject's <tt>WIND</tt> file)
       is set to match the current display extent (does not change
       the resolution), see <em><a href="g.region.html">g.region</a></em>.</li>
       <li><em>Set computational region extent interactively.</em>

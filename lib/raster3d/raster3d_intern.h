@@ -91,7 +91,7 @@ extern void Rast3d_fatal_error_noargs(const char * /* msg */ );
 #define EASTERN_TO_COL(east, region) (east - region->west) / (region->ew_res);
 #define NORTHERN_TO_ROW(north, region) (region->north - north) / (region->ns_res);
 #define TOP_TO_DEPTH(top, region) (top - region->bottom) / (region->tb_res);
-/* Location coordinates to index coordinates
+/* Project coordinates to index coordinates
  * region is a pointer to the RASTER3D_Region structure
  * north, east and top are double values
  * x, y, and z are pointer to double values

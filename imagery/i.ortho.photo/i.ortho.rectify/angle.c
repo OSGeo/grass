@@ -40,12 +40,12 @@ int camera_angle(struct Ortho_Image_Group * group, char *name)
     /* align target window to elevation map, otherwise we get artefacts
      * like in r.slope.aspect -a */
      
-    Rast_get_cellhd(elev_name, elev_mapset, &cellhd);
+    Rast_get_cellhd(elev_name, elev_subproject, &cellhd);
 
     Rast_align_window(&target_window, &cellhd);
     Rast_set_window(&target_window);
     
-    elevfd = Rast_open_old(elev_name, elev_mapset);
+    elevfd = Rast_open_old(elev_name, elev_subproject);
     if (elevfd < 0) {
 	G_fatal_error(_("Could not open elevation raster"));
 	return 1;
@@ -60,7 +60,7 @@ int camera_angle(struct Ortho_Image_Group * group, char *name)
     fbuf2 = Rast_allocate_buf(FCELL_TYPE);
     outbuf = Rast_allocate_buf(FCELL_TYPE);
     
-    /* give warning if location units are different from meters and zfactor=1 */
+    /* give warning if project units are different from meters and zfactor=1 */
     factor = G_database_units_to_meters_factor();
     if (factor != 1.0)
 	G_warning(_("Converting units to meters, factor=%.6f"), factor);
@@ -210,7 +210,7 @@ int camera_angle(struct Ortho_Image_Group * group, char *name)
     Rast_add_f_color_rule(&clr_min, 255, 255, 0, &clr_max, 0,
 			      255, 0, &colr);
 
-    Rast_write_colors(name, G_mapset(), &colr);
+    Rast_write_colors(name, G_subproject(), &colr);
 
     select_current_env();
 

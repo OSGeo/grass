@@ -26,7 +26,7 @@ distributions of GRASS GIS, for details see
 
 The <a href="v.in.ogr.html">v.in.ogr</a> module offers a common
 interface for many different vector formats. Additionally, it
-offers options such as on-the-fly creation of new locations or extension of
+offers options such as on-the-fly creation of new projects or extension of
 the default region to match the extent of the imported vector map.
 For special cases, other import modules are available, e.g.
 <a href="v.in.ascii.html">v.in.ascii</a> for input from a text file 
@@ -35,7 +35,7 @@ containing coordinate and attribute data, and
 coordinate and attribute data.
 
 With <a href="v.external.html">v.external</a> external maps can be
-virtually linked into a mapset, only pseudo-topology is generated but
+virtually linked into a subproject, only pseudo-topology is generated but
 the vector geometry is not imported.
 
 The <em>v.out.*</em> set of commands exports to various formats. To import
@@ -43,7 +43,7 @@ and export only attribute tables, use <a href="db.in.ogr.html">db.in.ogr</a>
 and <a href="db.out.ogr.html">db.out.ogr</a>.
 
 <p>
-GRASS GIS vector map exchange between different locations (same projection)
+GRASS GIS vector map exchange between different projects (same projection)
 can be done in a lossless way using the <a href="v.pack.html">v.pack</a>
 and <a href="v.unpack.html">v.unpack</a> modules.
 
@@ -170,7 +170,7 @@ them all the same id. Layers allow several parallel, but different
 groupings of features in a same map. The practical benefit of this 
 system is that it allows placement of thematically distinct but 
 topologically related objects into a single map, or for linking time 
-series attribute data to a series of locations that did not change 
+series attribute data to a series of projects that did not change 
 over time.
 <br>
 For example, one can have roads with one layer 
@@ -323,7 +323,7 @@ are implemented:
 <li> Shortest path: <a href="d.path.html">d.path</a> and 
      <a href="v.net.path.html">v.net.path</a></li>
 <li> Shortest path between all pairs of nodes <a href="v.net.allpairs.html">v.net.allpairs</a>
-<li> Allocation of sources (create subnetworks, e.g. police station zones):
+<li> Alproject of sources (create subnetworks, e.g. police station zones):
      <a href="v.net.alloc.html">v.net.alloc</a></li>
 <li> Iso-distances (from centers): <a href="v.net.iso.html">v.net.iso</a></li>
 <li> Computes bridges and articulation points: <a href="v.net.bridge.html">v.net.bridge</a></li>

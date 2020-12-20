@@ -54,11 +54,11 @@ static const char *find_element(int misc, const char *dir, const char *element)
 
 static const char *find_file(int misc, const char *dir,
 			     const char *element, const char *name,
-			     const char *mapset)
+			     const char *subproject)
 {
     char path[GPATH_MAX];
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
-    const char *pname, *pmapset;
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
+    const char *pname, *psubproject;
     int n;
 
     if (*name == 0)
@@ -67,84 +67,84 @@ static const char *find_file(int misc, const char *dir,
 
     /*
      * if name is in the fully qualified format, split it into
-     * name, mapset (overrides what was in mapset)
+     * name, subproject (overrides what was in subproject)
      */
-    if (G_name_is_fully_qualified(name, xname, xmapset)) {
+    if (G_name_is_fully_qualified(name, xname, xsubproject)) {
 	pname = xname;
-	pmapset = xmapset;
+	psubproject = xsubproject;
     }
     else {
 	pname = name;
-	pmapset = mapset;
+	psubproject = subproject;
     }
 
     if (strcmp(element, "vector") == 0 &&
-	pmapset && strcasecmp(pmapset, "ogr") == 0) {
-	/* don't check for virtual OGR mapset */
-	return G_store(pmapset);
+	psubproject && strcasecmp(psubproject, "ogr") == 0) {
+	/* don't check for virtual OGR subproject */
+	return G_store(psubproject);
     }
     
     /*
-     * reject illegal names and mapsets
+     * reject illegal names and subprojects
      */
     if (G_legal_filename(pname) == -1)
 	return NULL;
     
-    if (pmapset && *pmapset && G_legal_filename(pmapset) == -1)
+    if (psubproject && *psubproject && G_legal_filename(psubproject) == -1)
 	return NULL;
 
     /*
-     * if no specific mapset is to be searched
-     * then search all mapsets in the mapset search list
+     * if no specific subproject is to be searched
+     * then search all subprojects in the subproject search list
      */
-    if (pmapset == NULL || *pmapset == 0) {
+    if (psubproject == NULL || *psubproject == 0) {
 	int cnt = 0;
-	const char *pselmapset = NULL;
+	const char *pselsubproject = NULL;
 	const char *pelement = find_element(misc, dir, element);
 
-	for (n = 0; (pmapset = G_get_mapset_name(n)); n++) {
+	for (n = 0; (psubproject = G_get_subproject_name(n)); n++) {
 	    if (misc && element == pelement)
-		G_file_name_misc(path, dir, pelement, pname, pmapset);
+		G_file_name_misc(path, dir, pelement, pname, psubproject);
 	    else
-		G_file_name(path, pelement, pname, pmapset);
+		G_file_name(path, pelement, pname, psubproject);
 	    if (access(path, 0) == 0) {
-		if (!pselmapset)
-		    pselmapset = pmapset;
+		if (!pselsubproject)
+		    pselsubproject = psubproject;
 		else if (element == pelement)
-		    G_important_message(_("Data element '%s/%s' was found in more mapsets (also found in <%s>)"),
-                                        element, pname, pmapset);
+		    G_important_message(_("Data element '%s/%s' was found in more subprojects (also found in <%s>)"),
+                                        element, pname, psubproject);
 		cnt++;
 	    }
 	}
 	if (cnt > 0) {
 	    if (misc)
-		G_file_name_misc(path, dir, element, pname, pselmapset);
+		G_file_name_misc(path, dir, element, pname, pselsubproject);
 	    else
-		G_file_name(path, element, name, pselmapset);
+		G_file_name(path, element, name, pselsubproject);
 	    if (access(path, 0) == 0) {
-		/* If the same name exists in more mapsets and print a warning */
+		/* If the same name exists in more subprojects and print a warning */
 		if (cnt > 1 && element == pelement)
 		    G_important_message(_("Using <%s@%s>..."),
-			      pname, pselmapset);
+			      pname, pselsubproject);
 	    
-		return G_store(pselmapset);
+		return G_store(pselsubproject);
 	    }
 	}
     }
     /*
-     * otherwise just look for the file in the specified mapset.
-     * since the name may have been qualified, mapset may point
-     * to the xmapset, so we must should it to
+     * otherwise just look for the file in the specified subproject.
+     * since the name may have been qualified, subproject may point
+     * to the xsubproject, so we must should it to
      * permanent storage via G_store().
      */
     else {
 	if (misc)
-	    G_file_name_misc(path, dir, element, pname, pmapset);
+	    G_file_name_misc(path, dir, element, pname, psubproject);
 	else
-	    G_file_name(path, element, pname, pmapset);
+	    G_file_name(path, element, pname, psubproject);
 	    
 	if (access(path, 0) == 0)
-	    return G_store(pmapset);
+	    return G_store(psubproject);
     }
     
     return NULL;
@@ -155,22 +155,22 @@ static const char *find_file(int misc, const char *dir,
 static const char *find_file1(
     int misc,
     const char *dir,
-    const char *element, char *name, const char *mapset)
+    const char *element, char *name, const char *subproject)
 {
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
-    const char *pname, *pmapset;
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
+    const char *pname, *psubproject;
     const char *mp;
 
-    if (G_name_is_fully_qualified(name, xname, xmapset)) {
+    if (G_name_is_fully_qualified(name, xname, xsubproject)) {
 	pname = xname;
-	pmapset = xmapset;
+	psubproject = xsubproject;
     }
     else {
 	pname = name;
-	pmapset = mapset;
+	psubproject = subproject;
     }
 
-    mp = find_file(misc, dir, element, pname, pmapset);
+    mp = find_file(misc, dir, element, pname, psubproject);
 
     if (mp && name != pname)
 	strcpy(name, pname);
@@ -179,94 +179,94 @@ static const char *find_file1(
 }
 
 /*!
- * \brief Searches for a file from the mapset search list or in a
- * specified mapset.
+ * \brief Searches for a file from the subproject search list or in a
+ * specified subproject.
  *
- * Returns the mapset name where the file was found.
+ * Returns the subproject name where the file was found.
  *
- * If the user specifies a fully qualified element (name@mapset)
+ * If the user specifies a fully qualified element (name@subproject)
  * which exists, then G_find_file() modifies "name"
- * by removing the "@mapset" part.
+ * by removing the "@subproject" part.
  *
  * Rejects all names that begin with "."
  *
- * If <i>name</i> is of the form nnn in ppp then only mapset ppp
+ * If <i>name</i> is of the form nnn in ppp then only subproject ppp
  * is searched.
  *
  * \param element database element (eg, "cell", "cellhd", "colr", etc)
  * \param name    file name to look for
- * \param mapset  mapset to search. if mapset is "" will search in mapset search list
+ * \param subproject  subproject to search. if subproject is "" will search in subproject search list
  *
- * \return pointer to a string with name of mapset where file was
+ * \return pointer to a string with name of subproject where file was
  * found, or NULL if not found
  */
-const char *G_find_file(const char *element, char *name, const char *mapset)
+const char *G_find_file(const char *element, char *name, const char *subproject)
 {
-    return find_file1(0, NULL, element, name, mapset);
+    return find_file1(0, NULL, element, name, subproject);
 }
 
 /*!
- * \brief Searches for a file from the mapset search list or in a
- * specified mapset.
+ * \brief Searches for a file from the subproject search list or in a
+ * specified subproject.
  *
- * Returns the mapset name where the file was found.
+ * Returns the subproject name where the file was found.
  *
  * \param dir     file directory
  * \param element database element (eg, "cell", "cellhd", "colr", etc)
  * \param name    file name to look for
- * \param mapset  mapset to search. if mapset is "" will search in mapset search list
+ * \param subproject  subproject to search. if subproject is "" will search in subproject search list
  *
- * \return pointer to a string with name of mapset where file was
+ * \return pointer to a string with name of subproject where file was
  * found, or NULL if not found
  */
 const char *G_find_file_misc(const char *dir,
-			     const char *element, char *name, const char *mapset)
+			     const char *element, char *name, const char *subproject)
 {
-    return find_file1(1, dir, element, name, mapset);
+    return find_file1(1, dir, element, name, subproject);
 }
 
 /*!
- * \brief Searches for a file from the mapset search list or in a
- * specified mapset. (look but don't touch)
+ * \brief Searches for a file from the subproject search list or in a
+ * specified subproject. (look but don't touch)
  *
- * Returns the mapset name where the file was found.
+ * Returns the subproject name where the file was found.
  *
  * Exactly the same as G_find_file() except that if <i>name</i> is in
- * the form "<i>name@mapset</i>", and is found, G_find_file2() will
- * not alter <i>name</i> by removing the "@<i>mapset</i>" part.
+ * the form "<i>name@subproject</i>", and is found, G_find_file2() will
+ * not alter <i>name</i> by removing the "@<i>subproject</i>" part.
  *
  * Rejects all names that begin with "."
  *
  * \param element    database element (eg, "cell", "cellhd", "colr", etc)
  * \param name       file name to look for
- * \param mapset     mapset to search. if mapset is "" will search in mapset search list
+ * \param subproject     subproject to search. if subproject is "" will search in subproject search list
  *
- * \return pointer to a string with name of mapset where file was
+ * \return pointer to a string with name of subproject where file was
  * found, or NULL if not found
  */
-const char *G_find_file2(const char *element, const char *name, const char *mapset)
+const char *G_find_file2(const char *element, const char *name, const char *subproject)
 {
-    return find_file(0, NULL, element, name, mapset);
+    return find_file(0, NULL, element, name, subproject);
 }
 
 /*!
- * \brief Searches for a file from the mapset search list or in a
- * specified mapset. (look but don't touch)
+ * \brief Searches for a file from the subproject search list or in a
+ * specified subproject. (look but don't touch)
  *
- * Returns the mapset name where the file was found.
+ * Returns the subproject name where the file was found.
  *
  *
  * \param dir        file directory
  * \param element    database element (eg, "cell", "cellhd", "colr", etc)
  * \param name       file name to look for
- * \param mapset     mapset to search. if mapset is "" will search in mapset search list
+ * \param subproject     subproject to search. if subproject is "" will search in subproject search list
  *
- * \return pointer to a string with name of mapset where file was
+ * \return pointer to a string with name of subproject where file was
  * found, or NULL if not found
  */
 const char *G_find_file2_misc(const char *dir,
 			      const char *element,
-			      const char *name, const char *mapset)
+			      const char *name, const char *subproject)
 {
-    return find_file(1, dir, element, name, mapset);
+    return find_file(1, dir, element, name, subproject);
 }

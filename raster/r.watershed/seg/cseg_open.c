@@ -13,7 +13,7 @@ int cseg_open(CSEG * cseg, int srows, int scols, int nsegs_in_memory)
     cseg->filename = NULL;
     cseg->fd = -1;
     cseg->name = NULL;
-    cseg->mapset = NULL;
+    cseg->subproject = NULL;
 
     filename = G_tempfile();
     if (0 > (errflag = Segment_open(&(cseg->seg), filename, Rast_window_rows(),

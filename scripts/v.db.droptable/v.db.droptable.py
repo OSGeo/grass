@@ -46,16 +46,16 @@ def main():
     table = options['table']
     layer = options['layer']
 
-    # We check for existence of the map in the current mapset before
+    # We check for existence of the map in the current subproject before
     # doing any other operation.
-    info = gscript.find_file(map, element='vector', mapset=".")
+    info = gscript.find_file(map, element='vector', subproject=".")
     if not info['file']:
-        mapset = gscript.gisenv()["MAPSET"]
+        subproject = gscript.gisenv()["MAPSET"]
         # Message is formulated in the way that it does not mislead
-        # in case where a map of the same name is in another mapset.
+        # in case where a map of the same name is in another subproject.
         gscript.fatal(_("Vector map <{name}> not found"
-                        " in the current mapset ({mapset})").format(
-                            name=map, mapset=mapset))
+                        " in the current subproject ({subproject})").format(
+                            name=map, subproject=subproject))
 
     # do some paranoia tests as well:
     f = gscript.vector_layer_db(map, layer)

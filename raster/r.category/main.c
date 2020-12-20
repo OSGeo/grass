@@ -31,7 +31,7 @@ static char *fs;
 int main(int argc, char *argv[])
 {
     const char *name;
-    const char *mapset;
+    const char *subproject;
 
     long x, y;
     double dx;
@@ -114,39 +114,39 @@ int main(int argc, char *argv[])
 
     fs = G_option_to_separator(parm.fs);
     
-    mapset = G_find_raster2(name, "");
-    if (mapset == NULL)
+    subproject = G_find_raster2(name, "");
+    if (subproject == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
-    map_type = Rast_map_type(name, mapset);
+    map_type = Rast_map_type(name, subproject);
 
 
     /* create category labels */
     if (parm.raster->answer || parm.file->answer ||
 	parm.fmt_str->answer || parm.fmt_coeff->answer) {
 
-	/* restrict editing to current mapset */
-	if (strcmp(mapset, G_mapset()) != 0)
-	    G_fatal_error(_("Raster map <%s> not found in current mapset"),
+	/* restrict editing to current subproject */
+	if (strcmp(subproject, G_subproject()) != 0)
+	    G_fatal_error(_("Raster map <%s> not found in current subproject"),
 			  name);
 
 	/* use cats from another map */
 	if (parm.raster->answer) {
 	    int fd;
-	    const char *cmapset;
+	    const char *csubproject;
 
-	    cmapset = G_find_raster2(parm.raster->answer, "");
-	    if (cmapset == NULL)
+	    csubproject = G_find_raster2(parm.raster->answer, "");
+	    if (csubproject == NULL)
 		G_fatal_error(_("Raster map <%s> not found"),
 			      parm.raster->answer);
 
-	    fd = Rast_open_old(name, mapset);
+	    fd = Rast_open_old(name, subproject);
 
 	    Rast_init_cats("", &cats);
 
-	    if (0 > Rast_read_cats(parm.raster->answer, cmapset, &cats))
+	    if (0 > Rast_read_cats(parm.raster->answer, csubproject, &cats))
 		G_fatal_error(_("Unable to read category file of raster map <%s@%s>"),
-			      parm.raster->answer, cmapset);
+			      parm.raster->answer, csubproject);
 
 	    Rast_write_cats(name, &cats);
 	    G_message(_("Category table for <%s> set from <%s>"),
@@ -230,9 +230,9 @@ int main(int argc, char *argv[])
 	    /* read existing values */
 	    Rast_init_cats("", &cats);
 
-	    if (0 > Rast_read_cats(name, G_mapset(), &cats))
+	    if (0 > Rast_read_cats(name, G_subproject(), &cats))
 		G_warning(_("Unable to read category file of raster map <%s@%s>"),
-			  name, G_mapset());
+			  name, G_subproject());
 
 	    if (parm.fmt_str->answer) {
 		fmt_str =
@@ -267,16 +267,16 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
     else {
-	if (Rast_read_cats(name, mapset, &cats) < 0)
+	if (Rast_read_cats(name, subproject, &cats) < 0)
 	    G_fatal_error(_("Unable to read category file of raster map <%s> in <%s>"),
-			  name, mapset);
+			  name, subproject);
     }
 
     /* describe the category labels */
     /* if no cats requested, use r.describe to get the cats */
     if (parm.cats->answer == NULL) {
 	if (map_type == CELL_TYPE) {
-	    get_cats(name, mapset);
+	    get_cats(name, subproject);
 	    while (next_cat(&x))
 		print_label(x);
 	    exit(EXIT_SUCCESS);

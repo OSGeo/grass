@@ -37,7 +37,7 @@ CELL *CellBuffer;
 FILTER *AllFilters, Filter;
 CATINFO CatInfo;
 int *Seeds, Seed, NumSeeds, Low, High, NumMaps, NumFilters, OutFD;
-char Buf[240], **OutNames, *TheoryName, *Mapset;
+char Buf[240], **OutNames, *TheoryName, *Subproject;
 
 struct Flag *Uniform;
 struct Option *Distance, *Exponent, *Weight;

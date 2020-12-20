@@ -7,8 +7,8 @@ char *construct_pattern(char **names)
 {
     char *pattern, *p;
     int i, j, len, found_illegal_names;
-    const char *mapset;
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    const char *subproject;
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 
     len = 0;
     for (i = 0; names[i]; i++) {
@@ -25,17 +25,17 @@ char *construct_pattern(char **names)
 
     pattern = p = (char *)G_malloc(len);
 
-    mapset = G_mapset();
+    subproject = G_subproject();
     found_illegal_names = 0;
 
     for (i = 0; names[i]; i++) {
 	char *name;
 
 	name = names[i];
-	if (G_name_is_fully_qualified(name, xname, xmapset)) {
-	    if (strcmp(xmapset, mapset) != 0)
+	if (G_name_is_fully_qualified(name, xname, xsubproject)) {
+	    if (strcmp(xsubproject, subproject) != 0)
 		G_fatal_error(_("%s: Cannot remove or exclude files not in "
-				"the current mapset."), name);
+				"the current subproject."), name);
 	    name = xname;
 	}
 

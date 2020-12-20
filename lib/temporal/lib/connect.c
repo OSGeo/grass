@@ -87,28 +87,28 @@ int tgis_get_connection(dbConnection * connection)
 #define DRIVER_NAME 0
 #define DATABASE_NAME 1
 
-static char *get_mapset_connection_name(const char *mapset, int contype)
+static char *get_subproject_connection_name(const char *subproject, int contype)
 {
     const char *val = NULL;
     char *ret_val = NULL;;
     const char *gisdbase = G_getenv_nofatal("GISDBASE");
-    const char *location = G_getenv_nofatal("LOCATION_NAME");
+    const char *project = G_getenv_nofatal("LOCATION_NAME");
     int ret;
 
-    G_debug(1,"Checking mapset <%s>", mapset);
-    ret = G_mapset_permissions2(gisdbase, location, mapset);
+    G_debug(1,"Checking subproject <%s>", subproject);
+    ret = G_subproject_permissions2(gisdbase, project, subproject);
     switch (ret) {
-    case 0: /* Check if the mapset exists and user is owner */
-        /* We suppress this warning, since G_mapset_permission2() does not
-         * properly check the access privileges to the mapset of a different user.
-         * TODO: develop a dedicated G_mapset_permission3() for that
-        G_warning(_("You are not the owner of mapset <%s>"),
-                      mapset);
+    case 0: /* Check if the subproject exists and user is owner */
+        /* We suppress this warning, since G_subproject_permission2() does not
+         * properly check the access privileges to the subproject of a different user.
+         * TODO: develop a dedicated G_subproject_permission3() for that
+        G_warning(_("You are not the owner of subproject <%s>"),
+                      subproject);
         */
         break;
     case -1:
-        G_warning(_("Mapset <%s> does not exist."),
-	              mapset);
+        G_warning(_("Subproject <%s> does not exist."),
+	              subproject);
         return ret_val;
     default:
         break;
@@ -116,9 +116,9 @@ static char *get_mapset_connection_name(const char *mapset, int contype)
 
     G_create_alt_env();
     G_setenv_nogisrc("GISDBASE", gisdbase);
-    G_setenv_nogisrc("LOCATION_NAME", location);
-    G_setenv_nogisrc("MAPSET", mapset);
-    G__read_mapset_env();
+    G_setenv_nogisrc("LOCATION_NAME", project);
+    G_setenv_nogisrc("MAPSET", subproject);
+    G__read_subproject_env();
  
     if(contype == DATABASE_NAME) {
         if ((val = G_getenv_nofatal2("TGISDB_DATABASE", G_VAR_MAPSET)))
@@ -135,34 +135,34 @@ static char *get_mapset_connection_name(const char *mapset, int contype)
 
 
 /*!
- * \brief Get TGIS driver name from a specific mapset
+ * \brief Get TGIS driver name from a specific subproject
  *
- * This function give a warning in case the mapset does not exists
- * or it is not allowed to access the mapset. NULL is returned in this case.
+ * This function give a warning in case the subproject does not exists
+ * or it is not allowed to access the subproject. NULL is returned in this case.
  * 
- * \param mapset The name of the mapset to receive the driver name from
+ * \param subproject The name of the subproject to receive the driver name from
  *
  * \return pointer to TGIS driver name
  * \return NULL if not set 
  */
-char *tgis_get_mapset_driver_name(const char *mapset)
+char *tgis_get_subproject_driver_name(const char *subproject)
 {
-    return get_mapset_connection_name(mapset, DRIVER_NAME);
+    return get_subproject_connection_name(subproject, DRIVER_NAME);
 }
 
 /*!
  * \brief Get TGIS database name
  * 
- * This function give a warning in case the mapset does not exists
- * or it is not allowed to access the mapset. NULL is returned in this case..
+ * This function give a warning in case the subproject does not exists
+ * or it is not allowed to access the subproject. NULL is returned in this case..
  * 
- * \param mapset The name of the mapset to receive the driver name from
+ * \param subproject The name of the subproject to receive the driver name from
  
  * \return pointer to TGIS database name
  * \return NULL if not set
  */
-char *tgis_get_mapset_database_name(const char *mapset)
+char *tgis_get_subproject_database_name(const char *subproject)
 {
-    return get_mapset_connection_name(mapset, DATABASE_NAME);
+    return get_subproject_connection_name(subproject, DATABASE_NAME);
 }
 

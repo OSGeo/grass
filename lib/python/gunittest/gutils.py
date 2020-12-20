@@ -16,22 +16,22 @@ from .gmodules import call_module
 from .checkers import text_to_keyvalue
 
 
-def get_current_mapset():
-    """Get curret mapset name as a string"""
-    return call_module('g.mapset', flags='p').strip()
+def get_current_subproject():
+    """Get curret subproject name as a string"""
+    return call_module('g.subproject', flags='p').strip()
 
-def is_map_in_mapset(name, type, mapset=None):
-    """Check is map is present in the mapset (current mapset by default)
+def is_map_in_subproject(name, type, subproject=None):
+    """Check is map is present in the subproject (current subproject by default)
 
     This function is different from what we would expect in GRASS
-    because it cares only about specific mapset, the current one by default,
-    and it does not care that the map is accessible in other mapset.
+    because it cares only about specific subproject, the current one by default,
+    and it does not care that the map is accessible in other subproject.
 
     :param name: name of the map
     :param type: data type ('raster', 'raster3d', and 'vector')
     """
-    if not mapset:
-        mapset = get_current_mapset()
+    if not subproject:
+        subproject = get_current_subproject()
 
     # change type to element used by find file
     # otherwise, we are not checking the input,
@@ -47,7 +47,7 @@ def is_map_in_mapset(name, type, mapset=None):
     # g.findfile returns non-zero when file was not found
     # se we ignore return code and just focus on stdout
     process = start_command('g.findfile', flags='n',
-                            element=type, file=name, mapset=mapset,
+                            element=type, file=name, subproject=subproject,
                             stdout=PIPE, stderr=PIPE)
     output, errors = process.communicate()
     info = text_to_keyvalue(decode(output), sep='=')

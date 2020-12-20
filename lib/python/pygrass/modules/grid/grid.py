@@ -9,10 +9,10 @@ import shutil as sht
 
 from grass.script.setup import write_gisrc
 
-from grass.pygrass.gis import Mapset, Location
+from grass.pygrass.gis import Subproject, Project
 from grass.pygrass.gis.region import Region
 from grass.pygrass.modules import Module
-from grass.pygrass.utils import get_mapset_raster, findmaps
+from grass.pygrass.utils import get_subproject_raster, findmaps
 
 from grass.pygrass.modules.grid.split import split_region_tiles
 from grass.pygrass.modules.grid.patch import rpatch_map
@@ -47,39 +47,39 @@ def select(parms, ptype):
                 yield par.value
 
 
-def copy_special_mapset_files(path_src, path_dst):
+def copy_special_subproject_files(path_src, path_dst):
     """Copy all the special GRASS files that are contained in
-    a mapset to another mapset
+    a subproject to another subproject
 
-    :param path_src: the path to the original mapset
+    :param path_src: the path to the original subproject
     :type path_src: str
-    :param path_dst: the path to the new mapset
+    :param path_dst: the path to the new subproject
     :type path_dst: str
     """
     for fil in (fi for fi in os.listdir(path_src) if fi.isupper()):
         sht.copy(os.path.join(path_src, fil), path_dst)
 
 
-def copy_mapset(mapset, path):
-    """Copy mapset to another place without copying raster and vector data.
+def copy_subproject(subproject, path):
+    """Copy subproject to another place without copying raster and vector data.
 
-    :param mapset: a Mapset instance to copy
-    :type mapset: Mapset object
-    :param path: path where the new mapset must be copied
+    :param subproject: a Subproject instance to copy
+    :type subproject: Subproject object
+    :param path: path where the new subproject must be copied
     :type path: str
-    :returns: the instance of the new Mapset.
+    :returns: the instance of the new Subproject.
 
 
     >>> from grass.script.core import gisenv
     >>> mname = gisenv()['MAPSET']
-    >>> mset = Mapset()
+    >>> mset = Subproject()
     >>> mset.name == mname
     True
     >>> import tempfile as tmp
     >>> import os
     >>> path = os.path.join(tmp.gettempdir(), 'my_loc', 'my_mset')
-    >>> copy_mapset(mset, path)                           # doctest: +ELLIPSIS
-    Mapset(...)
+    >>> copy_subproject(mset, path)                           # doctest: +ELLIPSIS
+    Subproject(...)
     >>> sorted(os.listdir(path))                          # doctest: +ELLIPSIS
     [...'PERMANENT'...]
     >>> sorted(os.listdir(os.path.join(path, 'PERMANENT')))
@@ -90,27 +90,27 @@ def copy_mapset(mapset, path):
     >>> shutil.rmtree(path)
 
     """
-    per_old = os.path.join(mapset.gisdbase, mapset.location, 'PERMANENT')
+    per_old = os.path.join(subproject.gisdbase, subproject.project, 'PERMANENT')
     per_new = os.path.join(path, 'PERMANENT')
-    map_old = mapset.path()
-    map_new = os.path.join(path, mapset.name)
+    map_old = subproject.path()
+    map_new = os.path.join(path, subproject.name)
     if not os.path.isdir(per_new):
         os.makedirs(per_new)
     if not os.path.isdir(map_new):
         os.mkdir(map_new)
-    copy_special_mapset_files(per_old, per_new)
-    copy_special_mapset_files(map_old, map_new)
-    gisdbase, location = os.path.split(path)
-    return Mapset(mapset.name, location, gisdbase)
+    copy_special_subproject_files(per_old, per_new)
+    copy_special_subproject_files(map_old, map_new)
+    gisdbase, project = os.path.split(path)
+    return Subproject(subproject.name, project, gisdbase)
 
 
 def read_gisrc(gisrc):
-    """Read a GISRC file and return a tuple with the mapset, location
+    """Read a GISRC file and return a tuple with the subproject, project
     and gisdbase.
 
     :param gisrc: the path to GISRC file
     :type gisrc: str
-    :returns: a tuple with the mapset, location and gisdbase
+    :returns: a tuple with the subproject, project and gisdbase
 
     >>> import os
     >>> from grass.script.core import gisenv
@@ -126,14 +126,14 @@ def read_gisrc(gisrc):
     return gis['MAPSET'], gis['LOCATION_NAME'], gis['GISDBASE']
 
 
-def get_mapset(gisrc_src, gisrc_dst):
-    """Get mapset from a GISRC source to a GISRC destination.
+def get_subproject(gisrc_src, gisrc_dst):
+    """Get subproject from a GISRC source to a GISRC destination.
 
     :param gisrc_src: path to the GISRC source
     :type gisrc_src: str
     :param gisrc_dst: path to the GISRC destination
     :type gisrc_dst: str
-    :returns: a tuple with Mapset(src), Mapset(dst)
+    :returns: a tuple with Subproject(src), Subproject(dst)
 
     """
     msrc, lsrc, gsrc = read_gisrc(gisrc_src)
@@ -142,9 +142,9 @@ def get_mapset(gisrc_src, gisrc_dst):
     path_dst = os.path.join(gdst, ldst, mdst)
     if not os.path.isdir(path_dst):
         os.makedirs(path_dst)
-        copy_special_mapset_files(path_src, path_dst)
-    src = Mapset(msrc, lsrc, gsrc)
-    dst = Mapset(mdst, ldst, gdst)
+        copy_special_subproject_files(path_src, path_dst)
+    src = Subproject(msrc, lsrc, gsrc)
+    dst = Subproject(mdst, ldst, gdst)
     visible = [m for m in src.visible]
     if src.name not in visible:
         visible.append(src.name)
@@ -153,7 +153,7 @@ def get_mapset(gisrc_src, gisrc_dst):
 
 
 def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
-    """Copy group from one mapset to another, crop the raster to the region
+    """Copy group from one subproject to another, crop the raster to the region
 
     :param groups: a list of strings with the group that must be copied
                    from a master to another.
@@ -183,7 +183,7 @@ def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
     dst = read_gisrc(gisrc_dst)
     rm = True if src[2] != dst[2] else False
     all_rasts = [r[0]
-                 for r in findmaps('raster', location=dst[1], gisdbase=dst[2])]
+                 for r in findmaps('raster', project=dst[1], gisdbase=dst[2])]
     for grp in groups:
         # change gisdbase to src
         env['GISRC'] = gisrc_src
@@ -200,7 +200,7 @@ def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
 
 
 def set_region(region, gisrc_src, gisrc_dst, env):
-    """Set a region into two different mapsets.
+    """Set a region into two different subprojects.
 
     :param region: a region like object or a dictionary with the region
                    parameters that will be used to crop the rasters of the
@@ -225,7 +225,7 @@ def set_region(region, gisrc_src, gisrc_dst, env):
 
 
 def copy_rasters(rasters, gisrc_src, gisrc_dst, region=None):
-    """Copy rasters from one mapset to another, crop the raster to the region.
+    """Copy rasters from one subproject to another, crop the raster to the region.
 
     :param rasters: a list of strings with the raster map that must be copied
                     from a master to another.
@@ -269,7 +269,7 @@ def copy_rasters(rasters, gisrc_src, gisrc_dst, region=None):
 
 
 def copy_vectors(vectors, gisrc_src, gisrc_dst):
-    """Copy vectors from one mapset to another, crop the raster to the region.
+    """Copy vectors from one subproject to another, crop the raster to the region.
 
     :param vectors: a list of strings with the vector map that must be copied
                     from a master to another.
@@ -333,7 +333,7 @@ def get_cmd(cmdd):
 
 
 def cmd_exe(args):
-    """Create a mapset, and execute a cmd inside.
+    """Create a subproject, and execute a cmd inside.
 
     :param args: is a tuple that contains several information see below
     :type args: tuple
@@ -350,11 +350,11 @@ def cmd_exe(args):
     - gisrc_dst (str): path of the GISRC file where the groups will be created.
     - cmd (dict): a dictionary with all the parameter of a GRASS module.
     - groups (list): a list of strings with the groups that we want to copy in
-      the mapset.
+      the subproject.
 
     """
     bbox, mapnames, gisrc_src, gisrc_dst, cmd, groups = args
-    src, dst = get_mapset(gisrc_src, gisrc_dst)
+    src, dst = get_subproject(gisrc_src, gisrc_dst)
     env = os.environ.copy()
     env['GISRC'] = gisrc_dst
     shell = True if sys.platform == 'win32' else False
@@ -395,8 +395,8 @@ class GridModule(object):
                       of processor available.
     :param split: if True use r.tile to split all the inputs.
     :type split: bool
-    :param mapset_prefix: if specified created mapsets start with this prefix
-    :type mapset_prefix: str
+    :param subproject_prefix: if specified created subprojects start with this prefix
+    :type subproject_prefix: str
     :param run_: if False only instantiate the object
     :type run_: bool
     :param args: give all the parameters to the command
@@ -412,10 +412,10 @@ class GridModule(object):
 
     def __init__(self, cmd, width=None, height=None, overlap=0, processes=None,
                  split=False, debug=False, region=None, move=None, log=False,
-                 start_row=0, start_col=0, out_prefix='', mapset_prefix=None,
+                 start_row=0, start_col=0, out_prefix='', subproject_prefix=None,
                  *args, **kargs):
         kargs['run_'] = False
-        self.mset = Mapset()
+        self.mset = Subproject()
         self.module = Module(cmd, *args, **kargs)
         self.width = width
         self.height = height
@@ -430,9 +430,9 @@ class GridModule(object):
         self.gisrc_src = os.environ['GISRC']
         self.n_mset, self.gisrc_dst = None, None
         if self.move:
-            self.n_mset = copy_mapset(self.mset, self.move)
+            self.n_mset = copy_subproject(self.mset, self.move)
             self.gisrc_dst = write_gisrc(self.n_mset.gisdbase,
-                                         self.n_mset.location,
+                                         self.n_mset.project,
                                          self.n_mset.name)
             rasters = [r for r in select(self.module.inputs, 'raster')]
             if rasters:
@@ -448,8 +448,8 @@ class GridModule(object):
         self.bboxes = split_region_tiles(region=region,
                                          width=width, height=height,
                                          overlap=overlap)
-        if mapset_prefix:
-            self.msetstr = mapset_prefix + "_%03d_%03d"
+        if subproject_prefix:
+            self.msetstr = subproject_prefix + "_%03d_%03d"
         else:
             self.msetstr = cmd.replace('.', '') + "_%03d_%03d"
         self.inlist = None
@@ -462,20 +462,20 @@ class GridModule(object):
             # remove GISRC file
             os.remove(self.gisrc_dst)
 
-    def clean_location(self, location=None):
-        """Remove all created mapsets.
+    def clean_project(self, project=None):
+        """Remove all created subprojects.
 
-        :param location: a Location instance where we are running the analysis
-        :type location: Location object
+        :param project: a Project instance where we are running the analysis
+        :type project: Project object
         """
-        if location is None:
+        if project is None:
             if self.n_mset:
                 self.n_mset.current()
-            location = Location()
+            project = Project()
 
-        mapsets = location.mapsets(self.msetstr.split('_')[0] + '_*')
-        for mset in mapsets:
-            Mapset(mset).delete()
+        subprojects = project.subprojects(self.msetstr.split('_')[0] + '_*')
+        for mset in subprojects:
+            Subproject(mset).delete()
         if self.n_mset and self.n_mset.is_current():
             self.mset.current()
 
@@ -499,7 +499,7 @@ class GridModule(object):
         if self.move:
             mdst, ldst, gdst = read_gisrc(self.gisrc_dst)
         else:
-            ldst, gdst = self.mset.location, self.mset.gisdbase
+            ldst, gdst = self.mset.project, self.mset.gisdbase
         cmd = self.module.get_dict()
         groups = [g for g in select(self.module.inputs, 'group')]
         for row, box_row in enumerate(self.bboxes):
@@ -524,14 +524,14 @@ class GridModule(object):
                               cmd, groups))
         return works
 
-    def define_mapset_inputs(self):
-        """Add the mapset information to the input maps
+    def define_subproject_inputs(self):
+        """Add the subproject information to the input maps
         """
         for inmap in self.module.inputs:
             inm = self.module.inputs[inmap]
             if inm.type in ('raster', 'vector') and inm.value:
                 if '@' not in inm.value:
-                    mset = get_mapset_raster(inm.value)
+                    mset = get_subproject_raster(inm.value)
                     inm.value = inm.value + '@%s' % mset
 
     def run(self, patch=True, clean=True):
@@ -544,7 +544,7 @@ class GridModule(object):
         :type clean: bool
         """
         self.module.flags.overwrite = True
-        self.define_mapset_inputs()
+        self.define_subproject_inputs()
         if self.debug:
             for wrk in self.get_works():
                 cmd_exe(wrk)
@@ -587,11 +587,11 @@ class GridModule(object):
                     fil.close()
 
         if clean:
-            self.clean_location()
+            self.clean_project()
             self.rm_tiles()
             if self.n_mset:
-                gisdbase, location = os.path.split(self.move)
-                self.clean_location(Location(location, gisdbase))
+                gisdbase, project = os.path.split(self.move)
+                self.clean_project(Project(project, gisdbase))
                 # rm temporary gis_rc
                 os.remove(self.gisrc_dst)
                 self.gisrc_dst = None
@@ -601,9 +601,9 @@ class GridModule(object):
     def patch(self):
         """Patch the final results."""
         bboxes = split_region_tiles(width=self.width, height=self.height)
-        loc = Location()
+        loc = Project()
         mset = loc[self.mset.name]
-        mset.visible.extend(loc.mapsets())
+        mset.visible.extend(loc.subprojects())
         noutputs = 0
         for otmap in self.module.outputs:
             otm = self.module.outputs[otmap]

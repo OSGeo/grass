@@ -8,7 +8,7 @@
  * defined. Converts input east,north lines and polygons to output x,y
  * and calls user supplied line drawing routines to do the plotting.
  *
- * Handles global wrap-around for lat-lon locations.
+ * Handles global wrap-around for lat-lon projects.
  *
  * Does not perform window clipping.
  * Clipping must be done by the line draw routines supplied by the user.

@@ -34,7 +34,7 @@ int make_support_files(char *output, char *units)
     Rast_init_cats("Distance Zones", &pcats);
 
     cat = 1;
-    Rast_set_c_cat(&cat, &cat, "distances calculated from these locations", &pcats);
+    Rast_set_c_cat(&cat, &cat, "distances calculated from these projects", &pcats);
     for (i = 0; i < ndist; i++) {
 	if (i == 0)
 	    sprintf(label, "0-%s %s", distances[i].label, units);

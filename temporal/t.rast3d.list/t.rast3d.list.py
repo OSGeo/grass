@@ -39,7 +39,7 @@
 #% description: Order the space time dataset by category
 #% required: no
 #% multiple: yes
-#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,tbres,ewres,cols,rows,depths,number_of_cells,min,max
+#% options: id,name,creator,subproject,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,tbres,ewres,cols,rows,depths,number_of_cells,min,max
 #% answer: start_time
 #%end
 
@@ -50,8 +50,8 @@
 #% guisection: Selection
 #% required: no
 #% multiple: yes
-#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,tbres,ewres,cols,rows,depths,number_of_cells,min,max
-#% answer: name,mapset,start_time,end_time
+#% options: id,name,creator,subproject,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,tbres,ewres,cols,rows,depths,number_of_cells,min,max
+#% answer: name,subproject,start_time,end_time
 #%end
 
 #%option G_OPT_T_WHERE

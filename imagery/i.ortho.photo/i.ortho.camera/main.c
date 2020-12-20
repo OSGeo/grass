@@ -42,8 +42,8 @@ int main(int argc, char *argv[])
     /* flag to print camera info */
     /* flag to print camera info in shell script style */
 
-    const char *location;
-    const char *mapset;
+    const char *project;
+    const char *subproject;
     char *group;
     char *camera, *cam_name, *cam_id;
     double ppx, ppy, cfl;
@@ -102,8 +102,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    location = G_location();
-    mapset = G_mapset();
+    project = G_project();
+    subproject = G_subproject();
 
     group = group_opt->answer;
     camera = camera_opt->answer;
@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
 	sscanf(pp_opt->answers[1], "%lf", &ppy);
     }
 
-    if (G_find_file2("camera", camera, G_mapset())) {
+    if (G_find_file2("camera", camera, G_subproject())) {
 	/* use existing camera file */
 	if (!I_get_cam_info(camera, &cam_info))
 	    G_fatal_error(_("Can not read camera file '%s'"), camera);
@@ -207,15 +207,15 @@ int main(int argc, char *argv[])
 
     /* set group camera */
     if (group) {
-	/* group must be in current mapset */
+	/* group must be in current subproject */
 	if (!I_find_group(group))
-	    G_fatal_error(_("No group '%s' in current mapset"), group);
+	    G_fatal_error(_("No group '%s' in current subproject"), group);
 
 	I_put_group_camera(group, camera);
 
 	G_message(
-	    _("Group [%s] in location [%s] mapset [%s] now uses camera file [%s]"),
-	      group, location, mapset, camera);
+	    _("Group [%s] in project [%s] subproject [%s] now uses camera file [%s]"),
+	      group, project, subproject, camera);
     }
 
     exit(EXIT_SUCCESS);

@@ -31,7 +31,7 @@ typedef int INTERP_TYPE;
 struct Reclass
 {
     char *name;			/* name of raster map being reclassed    */
-    char *mapset;		/* mapset in which "name" is found      */
+    char *subproject;		/* subproject in which "name" is found      */
     int type;			/* type of reclass                      */
     int num;			/* size of reclass table                */
     CELL min;			/* table min                            */
@@ -160,7 +160,7 @@ enum History_field
     HIST_MAPID,
     /*! \brief Raster title */
     HIST_TITLE,
-    /*! \brief Raster mapset */
+    /*! \brief Raster subproject */
     HIST_MAPSET,
     /*! \brief User who creater raster map */
     HIST_CREATOR,

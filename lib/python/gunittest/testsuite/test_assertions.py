@@ -102,7 +102,7 @@ datatype=FCELL
 """
 
 # r.info -gre map=elevation
-ELEVATION_MAPSET_DICT = {'mapset': 'PERMANENT'}
+ELEVATION_MAPSET_DICT = {'subproject': 'PERMANENT'}
 
 # r.univar map=elevation
 ELEVATION_MINMAX = """min=55.5787925720215
@@ -280,14 +280,14 @@ class TestMapExistsAssertions(TestCase):
                           self.assertVectorExists,
                           'does_not_exists')
 
-    def test_rast_does_not_exist_in_current_mapset(self):
+    def test_rast_does_not_exist_in_current_subproject(self):
 		# expecting that there is elevation in PERMANENT
 		# TODO: use skip decorator
 		# TODO: add the same tests but for vect and rast3d
         self.assertRaises(self.failureException,
                           self.assertRasterExists,
                           'elevation',
-                          msg="Rasters from different mapsets should be ignored")
+                          msg="Rasters from different subprojects should be ignored")
 
 
 class TestFileAssertions(TestCase):

@@ -11,7 +11,7 @@
 #include <grass/waterglobs.h>
 
 
-/* Local prototypes for raster map reading and array allocation */
+/* Local prototypes for raster map reading and array alproject */
 static float ** read_float_raster_map(int rows, int cols, char *name, float unitconv);
 static double ** read_double_raster_map(int rows, int cols, char *name, double unitconv);
 static float ** create_float_matrix(int rows, int cols, float fill_value);
@@ -109,7 +109,7 @@ void WaterParams_init(struct WaterParams *wp)
     wp->outwalk = NULL;
     wp->observation = NULL;
     wp->logfile = NULL;
-    wp->mapset = NULL;
+    wp->subproject = NULL;
     wp->mscale = NULL;
     wp->tserie = NULL;
 
@@ -215,7 +215,7 @@ void init_library_globals(struct WaterParams *wp)
     outwalk = wp->outwalk;
     observation = wp->observation;
     logfile = wp->logfile;
-    mapset = wp->mapset;
+    subproject = wp->subproject;
     mscale = wp->mscale;
     tserie = wp->tserie;
 
@@ -234,12 +234,12 @@ void init_library_globals(struct WaterParams *wp)
     infilval = wp->infilval;
 }
 
-/* we do the allocation inside because we anyway need to set the variables */
+/* we do the alproject inside because we anyway need to set the variables */
 
 void alloc_grids_water()
 {
-    /* memory allocation for output grids */
-    G_debug(1, "beginning memory allocation for output grids");
+    /* memory alproject for output grids */
+    G_debug(1, "beginning memory alproject for output grids");
 
     gama = G_alloc_matrix(my, mx);
     if (err != NULL)
@@ -254,7 +254,7 @@ void alloc_grids_sediment()
     si = G_alloc_matrix(my, mx);
     sigma = G_alloc_matrix(my, mx);
 
-    /* memory allocation for output grids */
+    /* memory alproject for output grids */
 
     dif = G_alloc_fmatrix(my, mx);
     if (erdep != NULL || et != NULL)
@@ -270,7 +270,7 @@ void init_grids_sediment()
 
 void alloc_walkers(int max_walkers)
 {
-    G_debug(1, "beginning memory allocation for walkers");
+    G_debug(1, "beginning memory alproject for walkers");
 
     w = (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));
     vavg = (struct point2D *)G_calloc(max_walkers, sizeof(struct point2D));
@@ -279,7 +279,7 @@ void alloc_walkers(int max_walkers)
 }
 
 /* ************************************************************** */
-/*                         GRASS input procedures, allocations    */
+/*                         GRASS input procedures, alprojects    */
 /* *************************************************************** */
 
 /*!

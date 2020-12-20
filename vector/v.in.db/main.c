@@ -119,17 +119,17 @@ int main(int argc, char *argv[])
     if (G_get_overwrite()) {
 	/* We don't want to delete the input table when overwriting the output
 	 * vector. */
-	char name[GNAME_MAX], mapset[GMAPSET_MAX];
+	char name[GNAME_MAX], subproject[GMAPSET_MAX];
 
-	if (!G_name_is_fully_qualified(outvect->answer, name, mapset)) {
+	if (!G_name_is_fully_qualified(outvect->answer, name, subproject)) {
 	    strcpy(name, outvect->answer);
-	    strcpy(mapset, G_mapset());
+	    strcpy(subproject, G_subproject());
 	}
 
 	Vect_set_open_level(1); /* no topo needed */
 
-	if (strcmp(mapset, G_mapset()) == 0 && G_find_vector2(name, mapset) &&
-	    Vect_open_old(&Map, name, mapset) >= 0) {
+	if (strcmp(subproject, G_subproject()) == 0 && G_find_vector2(name, subproject) &&
+	    Vect_open_old(&Map, name, subproject) >= 0) {
 	    int num_dblinks;
 
 	    num_dblinks = Vect_get_num_dblinks(&Map);

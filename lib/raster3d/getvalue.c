@@ -96,7 +96,7 @@ Rast3d_get_window_value(RASTER3D_Map * map, double north, double east, double to
 {
     int col, row, depth;
 
-    Rast3d_location2coord(&(map->window), north, east, top, &col, &row, &depth);
+    Rast3d_project2coord(&(map->window), north, east, top, &col, &row, &depth);
 
     /* if (row, col, depth) outside window return NULL value */
     if ((row < 0) || (row >= map->window.rows) ||
@@ -133,7 +133,7 @@ Rast3d_get_region_value(RASTER3D_Map * map, double north, double east, double to
 {
     int row, col, depth;
 
-    Rast3d_location2coord(&(map->region), north, east, top, &col, &row, &depth);
+    Rast3d_project2coord(&(map->region), north, east, top, &col, &row, &depth);
 
     /* if (row, col, depth) outside region return NULL value */
     if ((row < 0) || (row >= map->region.rows) ||

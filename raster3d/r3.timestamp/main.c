@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     struct Option *map, *date;
     struct TimeStamp ts;
     char *name;
-    const char *mapset;
+    const char *subproject;
     int modify;
     struct GModule *module;
 
@@ -65,17 +65,17 @@ int main(int argc, char *argv[])
     modify = date->answer != NULL;
 
     if (modify)
-	mapset = G_find_raster3d(name, G_mapset());
+	subproject = G_find_raster3d(name, G_subproject());
     else
-	mapset = G_find_raster3d(name, "");
+	subproject = G_find_raster3d(name, "");
 
-    if (mapset == NULL) {
+    if (subproject == NULL) {
 	G_fatal_error(_("3D raster map <%s> not found"), name);
 	exit(EXIT_FAILURE);
     }
 
     if (!modify) {
-	if (G_read_raster3d_timestamp(name, mapset, &ts) == 1) {
+	if (G_read_raster3d_timestamp(name, subproject, &ts) == 1) {
 	    G_write_timestamp(stdout, &ts);
 	    exit(EXIT_SUCCESS);
 	}

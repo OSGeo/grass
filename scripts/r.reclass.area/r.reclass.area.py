@@ -18,7 +18,7 @@
 # 8/2012: added fp maps support, cleanup, removed tabs AK
 # 3/2007: added label support MN
 # 3/2004: added parser support MN
-# 11/2001 added mapset support markus
+# 11/2001 added subproject support markus
 # 2/2001 fixes markus
 # 2000: updated to GRASS 5
 # 1998 from NRCS, slightly modified for GRASS 4.2.1
@@ -94,7 +94,7 @@ def reclass(inf, outf, lim, clump, diag, les):
     kv = grass.parse_key_val(s, sep=':')
     s = kv['projection'].strip().split()
     if s == '0':
-        grass.fatal(_("xy-locations are not supported"))
+        grass.fatal(_("xy-projects are not supported"))
         grass.fatal(_("Need projected data with grids in meters"))
 
     if not grass.find_file(infile)['name']:
@@ -195,12 +195,12 @@ def main():
     clumped = flags['c']
     diagonal = flags['d']
 
-    # check for unsupported locations
+    # check for unsupported projects
     in_proj = grass.parse_command('g.proj', flags='g')
     if in_proj['unit'].lower() == 'degree':
-        grass.fatal(_("Latitude-longitude locations are not supported"))
-    if in_proj['name'].lower() == 'xy_location_unprojected':
-        grass.fatal(_("xy-locations are not supported"))
+        grass.fatal(_("Latitude-longitude projects are not supported"))
+    if in_proj['name'].lower() == 'xy_project_unprojected':
+        grass.fatal(_("xy-projects are not supported"))
 
     # check lesser and greater parameters
     limit = float(value)

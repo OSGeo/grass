@@ -134,7 +134,7 @@ static void print_escaped_for_xml(FILE * fp, const char *str)
  * mime type: application/grass-vector-ascii  -> a text file generated with v.out.asci
  * Example.: urn:file:///path/name
  * mime type: application/grass-vector-binary -> the binary vectors must be addressed with a non standard urn:
- * Example: urn:grass:vector:location/mapset/name
+ * Example: urn:grass:vector:project/subproject/name
  * */
 
 void G__wps_print_process_description(void)
@@ -408,13 +408,13 @@ void G__wps_print_process_description(void)
 	}
     }
 
-    /* We have two default options, which define the resolution of the created mapset */
+    /* We have two default options, which define the resolution of the created subproject */
     if(num_raster_inputs > 0 || num_raster_outputs > 0 || num_strds_inputs > 0 || num_strds_outputs > 0) {
-        wps_print_literal_input_output(WPS_INPUT, 0, 1, "grass_resolution_ns", "Resolution of the mapset in north-south direction in meters or degrees",
-            "This parameter defines the north-south resolution of the mapset in meter or degrees, which should be used to process the input and output raster data. To enable this setting, you need to specify north-south and east-west resolution.",
+        wps_print_literal_input_output(WPS_INPUT, 0, 1, "grass_resolution_ns", "Resolution of the subproject in north-south direction in meters or degrees",
+            "This parameter defines the north-south resolution of the subproject in meter or degrees, which should be used to process the input and output raster data. To enable this setting, you need to specify north-south and east-west resolution.",
             "float", 1, NULL, 0, NULL, TYPE_OTHER);
-        wps_print_literal_input_output(WPS_INPUT, 0, 1, "grass_resolution_ew", "Resolution of the mapset in east-west direction in meters or degrees",
-            "This parameter defines the east-west resolution of the mapset in meters or degrees, which should be used to process the input and output raster data.  To enable this setting, you need to specify north-south and east-west resolution.",
+        wps_print_literal_input_output(WPS_INPUT, 0, 1, "grass_resolution_ew", "Resolution of the subproject in east-west direction in meters or degrees",
+            "This parameter defines the east-west resolution of the subproject in meters or degrees, which should be used to process the input and output raster data.  To enable this setting, you need to specify north-south and east-west resolution.",
             "float", 1, NULL, 0, NULL, TYPE_OTHER);
     }
     /* In case multi band raster maps should be imported, the band number must be provided */
@@ -534,7 +534,7 @@ static void wps_print_process_descriptions_begin(void)
     fprintf(stdout, "xmlns:ows=\"http://www.opengis.net/ows/1.1\"\n");
     fprintf(stdout, "xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n");
     fprintf(stdout, "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
-    fprintf(stdout, "xsi:schemaLocation=\"http://www.opengis.net/wps/1.0.0\n http://schemas.opengis.net/wps/1.0.0/wpsDescribeProcess_response.xsd\"\n service=\"WPS\" version=\"1.0.0\" xml:lang=\"en-US\"> \n");
+    fprintf(stdout, "xsi:schemaProject=\"http://www.opengis.net/wps/1.0.0\n http://schemas.opengis.net/wps/1.0.0/wpsDescribeProcess_response.xsd\"\n service=\"WPS\" version=\"1.0.0\" xml:lang=\"en-US\"> \n");
 }
 
 /* ************************************************************************** */
@@ -896,7 +896,7 @@ static void wps_print_mimetype_raster_png(void)
     fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
 }
 
-/* *** Native GRASS raster format urn:grass:raster:location/mapset/raster *** */
+/* *** Native GRASS raster format urn:grass:raster:project/subproject/raster *** */
 
 static void wps_print_mimetype_raster_grass_binary(void)
 {
@@ -968,7 +968,7 @@ static void wps_print_mimetype_vector_grass_ascii(void)
     fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
 }
 
-/* *** Native GRASS vector format urn:grass:vector:location/mapset/vector *** */
+/* *** Native GRASS vector format urn:grass:vector:project/subproject/vector *** */
 
 static void wps_print_mimetype_vector_grass_binary(void)
 {

@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     struct Flag *chk;
     struct Map_info Map;
     int i, build, dump, sdump, cdump, fdump;
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
     char *opt_desc;
     G_gisinit(argv[0]);
 
@@ -101,20 +101,20 @@ int main(int argc, char *argv[])
 
     /* build topology */
     if (build) {
-	if (G_name_is_fully_qualified(map_opt->answer, xname, xmapset)) {
-	    if (0 == G_strcasecmp(xmapset, "OGR")) {
+	if (G_name_is_fully_qualified(map_opt->answer, xname, xsubproject)) {
+	    if (0 == G_strcasecmp(xsubproject, "OGR")) {
 		G_fatal_error(_("Direct read access to OGR layers is not supported by this module. "
-				"Run %s to create a link as GRASS vector map in the current mapset."),
+				"Run %s to create a link as GRASS vector map in the current subproject."),
 			      "'v.external'");
 	    }
-	    if (0 != strcmp(xmapset, G_mapset())) {
-		G_fatal_error(_("Vector map <%s> is not in current mapset"),
+	    if (0 != strcmp(xsubproject, G_subproject())) {
+		G_fatal_error(_("Vector map <%s> is not in current subproject"),
 			      map_opt->answer);
 	    }
 	}
 	Vect_set_open_level(1);
 
-	if (Vect_open_old(&Map, map_opt->answer, G_mapset()) < 0)
+	if (Vect_open_old(&Map, map_opt->answer, G_subproject()) < 0)
 	    G_fatal_error(_("Unable to open vector map <%s>"), map_opt->answer);
         
 	Vect_build(&Map);

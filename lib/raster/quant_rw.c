@@ -26,16 +26,16 @@
    floats to integers.
 
    \param name map name
-   \param mapset mapset name
+   \param subproject subproject name
  */
-void Rast_truncate_fp_map(const char *name, const char *mapset)
+void Rast_truncate_fp_map(const char *name, const char *subproject)
 {
     struct Quant quant;
 
     Rast_quant_init(&quant);
     Rast_quant_truncate(&quant);
     /* quantize the map */
-    Rast_write_quant(name, mapset, &quant);
+    Rast_write_quant(name, subproject, &quant);
 }
 
 /*!
@@ -46,16 +46,16 @@ void Rast_truncate_fp_map(const char *name, const char *mapset)
    floats to integers.
 
    \param name map name
-   \param mapset mapset name
+   \param subproject subproject name
  */
-void Rast_round_fp_map(const char *name, const char *mapset)
+void Rast_round_fp_map(const char *name, const char *subproject)
 {
     struct Quant quant;
 
     Rast_quant_init(&quant);
     Rast_quant_round(&quant);
     /* round the map */
-    Rast_write_quant(name, mapset, &quant);
+    Rast_write_quant(name, subproject, &quant);
 }
 
 /*!
@@ -74,24 +74,24 @@ void Rast_round_fp_map(const char *name, const char *mapset)
  * no matter what the min and max slope of this map is.
 
  * \param name map name
- * \param mapset mapset name
+ * \param subproject subproject name
  * \param cmin minimum value
  * \param cmax maximum value
  */
-void Rast_quantize_fp_map(const char *name, const char *mapset,
+void Rast_quantize_fp_map(const char *name, const char *subproject,
 			  CELL min, CELL max)
 {
     DCELL d_min, d_max;
     struct FPRange fp_range;
 
-    if (Rast_read_fp_range(name, mapset, &fp_range) < 0)
+    if (Rast_read_fp_range(name, subproject, &fp_range) < 0)
 	G_fatal_error(_("Unable to read fp range for raster map <%s>"),
-		      G_fully_qualified_name(name, mapset));
+		      G_fully_qualified_name(name, subproject));
     Rast_get_fp_range_min_max(&fp_range, &d_min, &d_max);
     if (Rast_is_d_null_value(&d_min) || Rast_is_d_null_value(&d_max))
 	G_fatal_error(_("Raster map <%s> is empty"),
-		      G_fully_qualified_name(name, mapset));
-    Rast_quantize_fp_map_range(name, mapset, d_min, d_max, min, max);
+		      G_fully_qualified_name(name, subproject));
+    Rast_quantize_fp_map_range(name, subproject, d_min, d_max, min, max);
 }
 
 /*!
@@ -115,13 +115,13 @@ void Rast_quantize_fp_map(const char *name, const char *mapset,
  * no matter what the min and max slope of this map is.
  *
  * \param name map name
- * \param mapset mapset name
+ * \param subproject subproject name
  * \param d_min minimum fp value
  * \param d_max maximum fp value
  * \param min minimum value
  * \param max maximum value
  */
-void Rast_quantize_fp_map_range(const char *name, const char *mapset,
+void Rast_quantize_fp_map_range(const char *name, const char *subproject,
 				DCELL d_min, DCELL d_max, CELL min, CELL max)
 {
     struct Quant quant;
@@ -129,31 +129,31 @@ void Rast_quantize_fp_map_range(const char *name, const char *mapset,
     Rast_quant_init(&quant);
     Rast_quant_add_rule(&quant, d_min, d_max, min, max);
     /* quantize the map */
-    Rast_write_quant(name, mapset, &quant);
+    Rast_write_quant(name, subproject, &quant);
 }
 
 /*!
  * \brief Writes the quant rule table for the raster map
  *
  * Writes the <tt>f_quant</tt> file for the raster map <em>name</em>
- * from <em>q</em>.  if mapset==G_mapset() i.e. the map is in current
- * mapset, then the original quant file in cell_misc/map/f_quant is
- * written. Otherwise <em>q</em> is written into quant2/mapset/name
- * (much like colr2 element). This results in map@mapset being read
- * using quant rules stored in <em>q</em> from G_mapset(). See
+ * from <em>q</em>.  if subproject==G_subproject() i.e. the map is in current
+ * subproject, then the original quant file in cell_misc/map/f_quant is
+ * written. Otherwise <em>q</em> is written into quant2/subproject/name
+ * (much like colr2 element). This results in map@subproject being read
+ * using quant rules stored in <em>q</em> from G_subproject(). See
  * Rast_read_quant() for detailes.
  *
  * \param name map name
- * \param mapset mapset name
+ * \param subproject subproject name
  * \param quant pointer to Quant structure which hold quant rules info
  */
-void Rast_write_quant(const char *name, const char *mapset,
+void Rast_write_quant(const char *name, const char *subproject,
 		      const struct Quant *quant)
 {
     CELL cell_min, cell_max;
     DCELL d_min, d_max;
 
-    if (Rast_map_type(name, mapset) == CELL_TYPE) {
+    if (Rast_map_type(name, subproject) == CELL_TYPE) {
 	G_warning(_("Unable to write quant rules: raster map <%s> is integer"),
 		  name);
 	return;
@@ -162,19 +162,19 @@ void Rast_write_quant(const char *name, const char *mapset,
     Rast_quant_get_limits(quant, &d_min, &d_max, &cell_min, &cell_max);
 
     /* first actually write the rules */
-    if (Rast__quant_export(name, mapset, quant) < 0)
+    if (Rast__quant_export(name, subproject, quant) < 0)
 	G_fatal_error(_("Unable to write quant rules for raster map <%s>"), name);
 }
 
 /*!
  * \brief 
  *
- * Reads quantization rules for <i>name</i> in <i>mapset</i> and
+ * Reads quantization rules for <i>name</i> in <i>subproject</i> and
  * stores them in the quantization structure. If the map is in another
- * mapset, first checks for quant2 table for this map in current
- * mapset. 
+ * subproject, first checks for quant2 table for this map in current
+ * subproject. 
  *  \param name
- *  \param mapset
+ *  \param subproject
  *  \param q
  *
  * \return -2 if raster map is of type integer
@@ -183,8 +183,8 @@ void Rast_write_quant(const char *name, const char *mapset,
  * \return 1 if non-empty quantization file exists
  *
  */
-int Rast_read_quant(const char *name, const char *mapset, struct Quant *quant)
+int Rast_read_quant(const char *name, const char *subproject, struct Quant *quant)
 {
     Rast_quant_init(quant);
-    return Rast__quant_import(name, mapset, quant);
+    return Rast__quant_import(name, subproject, quant);
 }

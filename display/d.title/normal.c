@@ -5,9 +5,9 @@
 void normal(struct Cell_head *window, struct Categories *cats,
 	    int simple, FILE * fp)
 {
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 
-    G_unqualified_name(map_name, G_mapset(), xname, xmapset);
+    G_unqualified_name(map_name, G_subproject(), xname, xsubproject);
 
     fprintf(fp, ".C %s\n", color);
     fprintf(fp, ".S %f\n", size);
@@ -16,8 +16,8 @@ void normal(struct Cell_head *window, struct Categories *cats,
 	fprintf(fp, "%s\n", map_name);
     }
     else {
-	fprintf(fp, "LOCATION: %s\n", G_location());
-	fprintf(fp, "%s in %s\n", xname, xmapset);
+	fprintf(fp, "LOCATION: %s\n", G_project());
+	fprintf(fp, "%s in %s\n", xname, xsubproject);
 	fprintf(fp, "%s\n", cats->title);
 	fprintf(fp, "North: %10.2f  South: %10.2f\n",
 		window->north, window->south);

@@ -130,13 +130,13 @@ void define_variable(expression * e)
     variables = list(e, variables);
 }
 
-char *composite(const char *name, const char *mapset)
+char *composite(const char *name, const char *subproject)
 {
-    char *buf = G_malloc(strlen(name) + strlen(mapset) + 2);
+    char *buf = G_malloc(strlen(name) + strlen(subproject) + 2);
 
     strcpy(buf, name);
     strcat(buf, "@");
-    strcat(buf, mapset);
+    strcat(buf, subproject);
     return buf;
 }
 

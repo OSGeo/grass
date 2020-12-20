@@ -11,7 +11,7 @@
 int openfiles(struct parms *parms, struct files *files)
 {
     struct Ref Ref;		/* subgroup reference list */
-    const char *mapset;
+    const char *subproject;
     int n;
 
 
@@ -29,14 +29,14 @@ int openfiles(struct parms *parms, struct files *files)
     files->band_cell = (DCELL **) G_calloc(Ref.nfiles, sizeof(DCELL *));
 
     /* open training map for reading */
-    mapset = G_find_raster2(parms->training_map, "");
-    files->train_fd = Rast_open_old(parms->training_map, mapset);
+    subproject = G_find_raster2(parms->training_map, "");
+    files->train_fd = Rast_open_old(parms->training_map, subproject);
     files->train_cell = Rast_allocate_c_buf();
 
     /* open all maps for reading */
     for (n = 0; n < Ref.nfiles; n++) {
 	files->band_fd[n] =
-	    Rast_open_old(Ref.file[n].name, Ref.file[n].mapset);
+	    Rast_open_old(Ref.file[n].name, Ref.file[n].subproject);
 	files->band_cell[n] = Rast_allocate_d_buf();
     }
 

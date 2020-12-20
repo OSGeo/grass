@@ -5,7 +5,7 @@
  * AUTHOR(S):    Andreas Lange - andreas.lange@rhein-main.de
  *               Paul Kelly - paul-grass@stjohnspoint.co.uk
  * PURPOSE:      provide functions for reading datum parameters from the
- *               location database.     
+ *               project database.     
  * COPYRIGHT:    (C) 2000, 2003 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -99,7 +99,7 @@ const char *G_datum_ellipsoid(int n)
  *
  *  Extract the datum transformation-related parameters from a 
  *  set of general PROJ_INFO parameters.
- *  This function can be used to test if a location set-up 
+ *  This function can be used to test if a project set-up 
  *  supports datum transformation.
  *  
  *  returns: -1 error or no datum information found, 

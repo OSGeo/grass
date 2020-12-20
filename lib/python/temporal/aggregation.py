@@ -7,7 +7,7 @@ Usage:
 
     import grass.temporal as tgis
 
-    tgis.aggregate_raster_maps(dataset, mapset, inputs, base, start, end, count, method, register_null, dbif)
+    tgis.aggregate_raster_maps(dataset, subproject, inputs, base, start, end, count, method, register_null, dbif)
 
 (C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -23,7 +23,7 @@ from .space_time_datasets import RasterDataset
 from .datetime_math import create_suffix_from_datetime
 from .datetime_math import create_time_suffix
 from .datetime_math import create_numeric_suffix
-from .core import get_current_mapset, get_tgis_message_interface, init_dbif
+from .core import get_current_subproject, get_tgis_message_interface, init_dbif
 from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder, \
     create_temporal_relation_sql_where_statement
 ###############################################################################
@@ -126,8 +126,8 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
     msgr.verbose(_("Aggregating %s raster maps") % (len(inputs)))
     output = "%s_%i" % (base, int(offset) + count)
 
-    mapset = get_current_mapset()
-    map_id = output + "@" + mapset
+    subproject = get_current_subproject()
+    map_id = output + "@" + subproject
     new_map = RasterDataset(map_id)
 
     # Check if new map is in the temporal database
@@ -293,7 +293,7 @@ def aggregate_by_topology(granularity_list, granularity, map_list, topo_list,
                                                     time_suffix)
 
             map_layer = RasterDataset("%s@%s" % (output_name,
-                                                 get_current_mapset()))
+                                                 get_current_subproject()))
             map_layer.set_temporal_extent(granule.get_temporal_extent())
 
             if map_layer.map_exists() is True and overwrite is False:

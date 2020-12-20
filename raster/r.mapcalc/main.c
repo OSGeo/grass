@@ -86,7 +86,7 @@ int main(int argc, char **argv)
     region->answer = "current";
     region->options = "current,intersect,union";
     region->description = _("The computational region that should be used.\n"
-                            "               - current uses the current region of the mapset.\n"
+                            "               - current uses the current region of the subproject.\n"
                             "               - intersect computes the intersection region between\n"
                             "                 all input maps and uses the smallest resolution\n"
                             "               - union computes the union extent of all map regions\n"

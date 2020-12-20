@@ -21,7 +21,7 @@ void prn_header(void)
 
     /* print header */
     fprintf(fd, "\t\t\t%s\n", title);
-    sprintf(buf, "LOCATION: %s\t\t\t\t%s", G_location(), G_date());
+    sprintf(buf, "LOCATION: %s\t\t\t\t%s", G_project(), G_date());
     fprintf(fd, "%s\n", buf);
     if ((mask = maskinfo()))
 	sprintf(buf, "MASK: %s", mask);
@@ -38,7 +38,7 @@ void prn_header(void)
 	if (titles == NULL || *titles == 0)
 	    titles = "(untitled)";
 	sprintf(buf, "%*s%-*s%d = %s (%s in %s)", i * 6, "", len, label,
-		i + 1, titles, layers[i].name, layers[i].mapset);
+		i + 1, titles, layers[i].name, layers[i].subproject);
 	fprintf(fd, "%s\n", buf);
     }
 

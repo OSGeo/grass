@@ -15,7 +15,7 @@ to contain the result of the calculation and
 raster map layers (except <em>result</em> itself), integer or floating point constants,
 and functions known to the calculator.
 Parentheses are allowed in the expression and may be nested to any depth.
-<em>result</em> will be created in the user's current mapset.
+<em>result</em> will be created in the user's current subproject.
 <p>
 As <b>expression=</b> is the first option, it is the default. This
 means that passing an expression on the command line is possible
@@ -151,18 +151,18 @@ x = "3107"
 contain operators, OR unless the program is run non-interactively. Examples
 given here assume the program is run interactively. See NOTES, below.
 <p><em>r3.mapcalc</em> will look for the 3D grids according to the user's
-current mapset search path. It is possible to override the search path
-and specify the mapset from which to select the 3D grid. This is done by
+current subproject search path. It is possible to override the search path
+and specify the subproject from which to select the 3D grid. This is done by
 specifying the 3D grid name in the form:
 <p><div class="code"><pre>
-name@mapset
+name@subproject
 </pre></div>
 <p>For example, the following is a legal expression:
 <p><div class="code"><pre>
 result = x@PERMANENT / y@SOILS
 </pre></div>
-<p>The mapset specified does not have to be in the mapset search path.
-(This method of overriding the mapset search path is common to all
+<p>The subproject specified does not have to be in the subproject search path.
+(This method of overriding the subproject search path is common to all
 GRASS commands, not just <em>r3.mapcalc</em>.)
 <p>
 
@@ -452,7 +452,7 @@ the formula will be placed into the history file for the <em>result</em> map.
 <p>When the user enters input to <em>r3.mapcalc</em> non-interactively on
 the command line, the program will not warn the user not to overwrite
 existing map layers.  Users should therefore take care to assign program
-outputs raster map names that do not yet exist in their current mapsets.
+outputs raster map names that do not yet exist in their current subprojects.
 
 <h3>3D GRID MASK handling</h3>
 <p>

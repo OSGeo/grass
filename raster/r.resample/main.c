@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
     }
 
     if (colr_ok) {
-	if (Rast_read_range(result, G_mapset(), &range) > 0) {
+	if (Rast_read_range(result, G_subproject(), &range) > 0) {
 	    CELL min, max, cmin, cmax;
 
 	    Rast_get_range_min_max(&range, &min, &max);
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
 		cmax = max;
 	    Rast_set_c_color_range(cmin, cmax, &colr);
 	}
-	Rast_write_colors(result, G_mapset(), &colr);
+	Rast_write_colors(result, G_subproject(), &colr);
     }
 
     if (hist_ok)

@@ -264,7 +264,7 @@ int IL_vector_input_data_2d(struct interp_params *params, /*!< interpolation par
     data->x_orig = 0;
     data->y_orig = 0;
 
-    /* G_read_vector_timestamp(name,mapset,ts); */
+    /* G_read_vector_timestamp(name,subproject,ts); */
 
     if (OUTRANGE > 0)
 	G_warning(_("There are points outside specified 2D/3D region - %d points ignored"),

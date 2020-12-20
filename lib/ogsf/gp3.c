@@ -46,13 +46,13 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
     int np, ltype, eof;
     struct Cell_head wind;
     int ndim;
-    const char *mapset;
+    const char *subproject;
 
     np = 0;
     eof = 0;
     
-    mapset = G_find_vector2(name, "");
-    if (!mapset) {
+    subproject = G_find_vector2(name, "");
+    if (!subproject) {
 	G_warning(_("Vector map <%s> not found"), name);
 	return NULL;
     }
@@ -60,7 +60,7 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
     Vect_set_open_level(1);
     if (Vect_open_old(&map, name, "") == -1) {
 	G_fatal_error(_("Unable to open vector map <%s>"),
-		      G_fully_qualified_name(name, mapset));
+		      G_fully_qualified_name(name, subproject));
     }
     
     Points = Vect_new_line_struct();
@@ -90,7 +90,7 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
 	case -1:
 	    {
 		G_warning(_("Unable to read vector map <%s>"),
-			  G_fully_qualified_name(name, mapset));
+			  G_fully_qualified_name(name, subproject));
 		return NULL;
 	    }
 	case -2:		/* EOF */
@@ -146,12 +146,12 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
 
     if (!np) {
 	G_warning(_("No points from vector map <%s> fall within current region"),
-		  G_fully_qualified_name(name, mapset));
+		  G_fully_qualified_name(name, subproject));
 	return (NULL);
     }
     else {
 	G_message(_("Vector map <%s> loaded (%d points)"),
-		  G_fully_qualified_name(name, mapset), np);
+		  G_fully_qualified_name(name, subproject), np);
     }
 
     *nsites = np;
@@ -178,7 +178,7 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
     int nvals, cat, npts, nskipped;
     int red, blu, grn;
     const char *str;
-    const char *mapset;
+    const char *subproject;
 
     dbDriver *driver;
     dbValue value;
@@ -186,15 +186,15 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
     if(!gp || !gp->tstyle || !gp->filename)
 	return -1;
 
-    mapset = G_find_vector2(gp->filename, "");
-    if (!mapset) {
+    subproject = G_find_vector2(gp->filename, "");
+    if (!subproject) {
 	G_fatal_error(_("Vector map <%s> not found"), gp->filename);
     }
     
     Vect_set_open_level(1);
     if (Vect_open_old(&Map, gp->filename, "") == -1) {
 	G_fatal_error(_("Unable to open vector map <%s>"),
-		      G_fully_qualified_name(gp->filename, mapset));
+		      G_fully_qualified_name(gp->filename, subproject));
     }
     
     Fi = Vect_get_field(&Map, gp->tstyle->layer);
@@ -209,7 +209,7 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
 			  Fi->database, Fi->driver);
     }
     G_message(_("Loading thematic points layer <%s>..."),
-	      G_fully_qualified_name(gp->filename, mapset));
+	      G_fully_qualified_name(gp->filename, subproject));
     npts = nskipped = 0;
     for(gpt = gp->points; gpt; gpt = gpt->next) {
 	gpt->style = (gvstyle *) G_malloc(sizeof(gvstyle));

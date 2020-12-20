@@ -13,7 +13,7 @@ from datetime import datetime
 from multiprocessing import Process
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
-from .core import SQLDatabaseInterfaceConnection, get_current_mapset, get_tgis_message_interface
+from .core import SQLDatabaseInterfaceConnection, get_current_subproject, get_tgis_message_interface
 from .open_stds import open_new_stds, open_old_stds, check_new_stds
 from .datetime_math import time_delta_to_relative_time
 
@@ -82,7 +82,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
     dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    mapset = get_current_mapset()
+    subproject = get_current_subproject()
     msgr = get_tgis_message_interface()
 
     input_name_list = inputs.split(",")
@@ -239,7 +239,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
             # Create the new map id and check if the map is already
             # in the database
-            map_id = map_name + "@" + mapset
+            map_id = map_name + "@" + subproject
 
             new_map = first_input.get_new_map_instance(map_id)
 

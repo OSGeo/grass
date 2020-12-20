@@ -87,7 +87,7 @@ def main():
     nprocs = options["nprocs"]
     tsuffix = options["suffix"]
 
-    mapset = grass.gisenv()["MAPSET"]
+    subproject = grass.gisenv()["MAPSET"]
 
     # Make sure the temporal database exists
     tgis.init()
@@ -118,10 +118,10 @@ def main():
         if _map.get_id() is None:
             count += 1
             if sp.get_temporal_type() == 'absolute' and tsuffix in ['gran', 'time']:
-                _id = "{ba}@{ma}".format(ba=base, ma=mapset)
+                _id = "{ba}@{ma}".format(ba=base, ma=subproject)
             else:
                 map_name = tgis.create_numeric_suffix(base, num + count, tsuffix)
-                _id = "{name}@{ma}".format(name=map_name, ma=mapset)
+                _id = "{name}@{ma}".format(name=map_name, ma=subproject)
             _map.set_id(_id)
 
             gap_list.append(_map)
@@ -175,15 +175,15 @@ def main():
                 suffix = tgis.create_suffix_from_datetime(new_map.temporal_extent.get_start_time(),
                                                           sp.get_granularity())
                 new_id = "{ba}_{su}@{ma}".format(ba=new_map.get_name(),
-                                                 su=suffix, ma=mapset)
+                                                 su=suffix, ma=subproject)
             elif sp.get_temporal_type() == 'absolute' and tsuffix == 'time':
                 suffix = tgis.create_time_suffix(new_map)
                 new_id = "{ba}_{su}@{ma}".format(ba=new_map.get_name(),
-                                                 su=suffix, ma=mapset)
+                                                 su=suffix, ma=subproject)
             else:
                 map_name = tgis.create_numeric_suffix(new_map.get_name(),
                                                       count, tsuffix)
-                new_id = "{name}@{ma}".format(name=map_name, ma=mapset)
+                new_id = "{name}@{ma}".format(name=map_name, ma=subproject)
 
             new_map.set_id(new_id)
             

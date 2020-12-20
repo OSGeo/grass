@@ -15,8 +15,8 @@ Classes:
  - :class:`TableSelect`
  - :class:`ColumnSelect`
  - :class:`DbaseSelect`
- - :class:`LocationSelect`
- - :class:`MapsetSelect`
+ - :class:`ProjectSelect`
+ - :class:`SubprojectSelect`
  - :class:`SubGroupSelect`
  - :class:`FormatSelect`
  - :class:`GdalSelect`
@@ -64,7 +64,7 @@ from grass.exceptions import CalledModuleError
 from gui_core.widgets import ManageSettingsWidget, CoordinatesValidator
 
 from core.gcmd import RunCommand, GError, GMessage, GWarning, GException
-from core.utils    import GetListOfLocations, GetListOfMapsets, \
+from core.utils    import GetListOfProjects, GetListOfSubprojects, \
     GetFormats, rasterFormatExtension, vectorFormatExtension
 from core.utils import GetSettingsPath, GetValidLayerName, ListSortLower
 from core.utils import GetVectorNumberOfLayers
@@ -81,12 +81,12 @@ class Select(ComboCtrl):
 
     def __init__(
             self, parent, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
-            type=None, multiple=False, nmaps=1, mapsets=None,
+            type=None, multiple=False, nmaps=1, subprojects=None,
             updateOnPopup=True, onPopup=None, fullyQualified=True,
             extraItems={},
             layerTree=None, validator=wx.DefaultValidator):
         """Custom control to create a ComboBox with a tree control to
-        display and select GIS elements within acessible mapsets.
+        display and select GIS elements within acessible subprojects.
         Elements can be selected with mouse. Can allow multiple
         selections, when argument <em>multiple</em> is True. Multiple
         selections are separated by commas.
@@ -94,10 +94,10 @@ class Select(ComboCtrl):
         :param type: type of GIS elements ('raster, 'vector', ...)
         :param multiple: True for multiple input
         :param nmaps: number of maps to be entered
-        :param mapsets: force list of mapsets (otherwise search path)
+        :param subprojects: force list of subprojects (otherwise search path)
         :param updateOnPopup: True for updating list of elements on popup
         :param onPopup: function to be called on Popup
-        :param fullyQualified: True to provide fully qualified names (map@mapset)
+        :param fullyQualified: True to provide fully qualified names (map@subproject)
         :param extraItems: extra items to add (given as dictionary) - see gmodeler for usage
         :param layerTree: show only elements from given layer tree if not None
         :param validator: validator for TextCtrl
@@ -121,7 +121,7 @@ class Select(ComboCtrl):
         if type:
             self.tcp.SetData(
                 type=type,
-                mapsets=mapsets,
+                subprojects=subprojects,
                 multiple=multiple,
                 nmaps=nmaps,
                 updateOnPopup=updateOnPopup,
@@ -143,25 +143,25 @@ class Select(ComboCtrl):
                 self.ShowPopup()
             event.Skip()
 
-    def SetElementList(self, type, mapsets=None):
+    def SetElementList(self, type, subprojects=None):
         """Set element list
 
         :param type: GIS element type
-        :param mapsets: list of acceptable mapsets (None for all in search path)
+        :param subprojects: list of acceptable subprojects (None for all in search path)
         """
-        self.tcp.SetData(type=type, mapsets=mapsets)
+        self.tcp.SetData(type=type, subprojects=subprojects)
 
     def GetElementList(self):
         """Load elements"""
         self.tcp.GetElementList()
 
     def SetType(self, etype, multiple=False, nmaps=1,
-                mapsets=None, updateOnPopup=True, onPopup=None):
+                subprojects=None, updateOnPopup=True, onPopup=None):
         """Param set element type for widget
 
         :param etype: element type, see gselect.ElementSelect
         """
-        self.tcp.SetData(type=etype, mapsets=mapsets,
+        self.tcp.SetData(type=etype, subprojects=subprojects,
                          multiple=multiple, nmaps=nmaps,
                          updateOnPopup=updateOnPopup, onPopup=onPopup)
 
@@ -407,7 +407,7 @@ class ListCtrlComboPopup(ComboPopup):
 
 class TreeCtrlComboPopup(ListCtrlComboPopup):
     """Create a tree ComboBox for selecting maps and other GIS elements
-    in accessible mapsets within the current location
+    in accessible subprojects within the current project
     """
     # overridden ComboPopup methods
 
@@ -416,7 +416,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         ListCtrlComboPopup.Init(self)
         self.nmaps = 1
         self.type = None
-        self.mapsets = None
+        self.subprojects = None
         self.onPopup = None
         self.fullyQualified = True
         self.extraItems = dict()
@@ -443,14 +443,14 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         ListCtrlComboPopup.OnPopup(self, force)
 
     def GetElementList(self, elements=None, exclude=False):
-        """Get filtered list of GIS elements in accessible mapsets
+        """Get filtered list of GIS elements in accessible subprojects
         and display as tree with all relevant elements displayed
-        beneath each mapset branch
+        beneath each subproject branch
         """
         # update list
         self.seltree.DeleteAllItems()
         if self.type:
-            self._getElementList(self.type, self.mapsets, elements, exclude)
+            self._getElementList(self.type, self.subprojects, elements, exclude)
 
         if len(self.value) > 0:
             root = self.seltree.GetRootItem()
@@ -463,18 +463,18 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             except:
                 pass
 
-    def _getElementList(self, element, mapsets=None,
+    def _getElementList(self, element, subprojects=None,
                         elements=None, exclude=False):
-        """Get list of GIS elements in accessible mapsets and display as tree
-        with all relevant elements displayed beneath each mapset branch
+        """Get list of GIS elements in accessible subprojects and display as tree
+        with all relevant elements displayed beneath each subproject branch
 
         :param element: GIS element
-        :param mapsets: list of acceptable mapsets (None for all mapsets in search path)
+        :param subprojects: list of acceptable subprojects (None for all subprojects in search path)
         :param elements: list of forced GIS elements
         :param exclude: True to exclude, False for forcing the list (elements)
         """
-        # get current mapset
-        curr_mapset = grass.gisenv()['MAPSET']
+        # get current subproject
+        curr_subproject = grass.gisenv()['MAPSET']
 
         # map element types to g.list types
         elementdict = {'cell': 'raster',
@@ -522,52 +522,52 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                     self.AddItem(item, node=False, parent=node)
                 self.seltree.ExpandAllChildren(node)
 
-        # list of mapsets in current location
-        if mapsets is None:
-            mapsets = grass.mapsets(search_path=True)
+        # list of subprojects in current project
+        if subprojects is None:
+            subprojects = grass.subprojects(search_path=True)
 
-        # current mapset first
-        if curr_mapset in mapsets and mapsets[0] != curr_mapset:
-            mapsets.remove(curr_mapset)
-            mapsets.insert(0, curr_mapset)
+        # current subproject first
+        if curr_subproject in subprojects and subprojects[0] != curr_subproject:
+            subprojects.remove(curr_subproject)
+            subprojects.insert(0, curr_subproject)
 
-        first_mapset = None
-        for mapset in mapsets:
-            mapset_node = self.AddItem(
-                _('Mapset') + ': ' + mapset, node=True, mapset=mapset)
-            node = mapset_node
-            if not first_mapset:
-                first_mapset = mapset_node
+        first_subproject = None
+        for subproject in subprojects:
+            subproject_node = self.AddItem(
+                _('Subproject') + ': ' + subproject, node=True, subproject=subproject)
+            node = subproject_node
+            if not first_subproject:
+                first_subproject = subproject_node
 
-            self.seltree.SetItemTextColour(mapset_node, wx.Colour(50, 50, 200))
-            if mapset not in filesdict:
+            self.seltree.SetItemTextColour(subproject_node, wx.Colour(50, 50, 200))
+            if subproject not in filesdict:
                 continue
             try:
-                if isinstance(filesdict[mapset], dict):
-                    for elementType in filesdict[mapset].keys():
+                if isinstance(filesdict[subproject], dict):
+                    for elementType in filesdict[subproject].keys():
                         node = self.AddItem(
                             _('Type: ') + elementType,
-                            mapset=mapset,
+                            subproject=subproject,
                             node=True,
-                            parent=mapset_node)
+                            parent=subproject_node)
                         self.seltree.SetItemTextColour(
                             node, wx.Colour(50, 50, 200))
-                        elem_list = filesdict[mapset][elementType]
+                        elem_list = filesdict[subproject][elementType]
                         self._addItems(
                             elist=elem_list,
                             elements=elements,
-                            mapset=mapset,
+                            subproject=subproject,
                             exclude=exclude,
                             node=node)
                 else:
-                    elem_list = filesdict[mapset]
+                    elem_list = filesdict[subproject]
                     self._addItems(elist=elem_list, elements=elements,
-                                   mapset=mapset, exclude=exclude, node=node)
+                                   subproject=subproject, exclude=exclude, node=node)
             except Exception as e:
                 sys.stderr.write(_("GSelect: invalid item: %s") % e)
                 continue
 
-            if self.seltree.ItemHasChildren(mapset_node):
+            if self.seltree.ItemHasChildren(subproject_node):
                 sel = UserSettings.Get(
                     group='appearance',
                     key='elementListExpand',
@@ -575,13 +575,13 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                 collapse = True
 
                 if sel == 0:  # collapse all except PERMANENT and current
-                    if mapset in ('PERMANENT', curr_mapset):
+                    if subproject in ('PERMANENT', curr_subproject):
                         collapse = False
                 elif sel == 1:  # collapse all except PERMANENT
-                    if mapset == 'PERMANENT':
+                    if subproject == 'PERMANENT':
                         collapse = False
                 elif sel == 2:  # collapse all except current
-                    if mapset == curr_mapset:
+                    if subproject == curr_subproject:
                         collapse = False
                 elif sel == 3:  # collapse all
                     pass
@@ -589,28 +589,28 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                     collapse = False
 
                 if collapse:
-                    self.seltree.CollapseAllChildren(mapset_node)
+                    self.seltree.CollapseAllChildren(subproject_node)
                 else:
-                    self.seltree.ExpandAllChildren(mapset_node)
+                    self.seltree.ExpandAllChildren(subproject_node)
 
-        if first_mapset:
-            # select first mapset (MSW hack)
-            self.seltree.SelectItem(first_mapset)
+        if first_subproject:
+            # select first subproject (MSW hack)
+            self.seltree.SelectItem(first_subproject)
 
     # helpers
-    def _addItems(self, elist, elements, mapset, exclude, node):
+    def _addItems(self, elist, elements, subproject, exclude, node):
         """Helper function for adding multiple items (maps, stds).
 
         :param list elist: list of map/stds names
         :param list elements: list of forced elements
-        :param str mapset:  mapset name
+        :param str subproject:  subproject name
         :param exclude: True to exclude, False for forcing the list
         :param node: parent node
         """
         elist = grass.naturally_sorted(elist)
         for elem in elist:
             if elem != '':
-                fullqElem = elem + '@' + mapset
+                fullqElem = elem + '@' + subproject
                 if self.filterItems and fullqElem not in self.filterItems:
                     continue  # skip items missed in self.filterItems
 
@@ -622,18 +622,18 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                 if self.filterElements:
                     if self.filterElements(fullqElem):
                         self.AddItem(
-                            elem, mapset=mapset, node=False, parent=node)
+                            elem, subproject=subproject, node=False, parent=node)
                 else:
-                    self.AddItem(elem, mapset=mapset, node=False, parent=node)
+                    self.AddItem(elem, subproject=subproject, node=False, parent=node)
 
-    def AddItem(self, value, mapset=None, node=True, parent=None):
+    def AddItem(self, value, subproject=None, node=True, parent=None):
         if not parent:
             root = self.seltree.GetRootItem()
             if not root:
                 root = self.seltree.AddRoot("<hidden root>")
             parent = root
 
-        data = {'node': node, 'mapset': mapset}
+        data = {'node': node, 'subproject': subproject}
 
         item = self.seltree.AppendItem(
             parent, text=value, data=data)
@@ -664,7 +664,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                         itemPrev = item
             self.seltree.SelectItem(itemPrev)
 
-        # selects first item starting with the written text in next mapset
+        # selects first item starting with the written text in next subproject
         elif event.GetKeyCode() == wx.WXK_TAB:
             selected = self.seltree.GetSelection()
             if self.seltree.ItemHasChildren(selected):
@@ -720,8 +720,8 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
 
     def _selectTreeItem(self, item):
         fullName = self.seltree.GetItemText(item)
-        if self.fullyQualified and self.seltree.GetItemData(item)['mapset']:
-            fullName += '@' + self.seltree.GetItemData(item)['mapset']
+        if self.fullyQualified and self.seltree.GetItemData(item)['subproject']:
+            fullName += '@' + self.seltree.GetItemData(item)['subproject']
 
         if self.multiple:
             self.value.append(fullName)
@@ -764,8 +764,8 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                         "Unable to import pyGRASS: %s\n"
                         "Some functionality will be not accessible") % e)
                     self.tgis_error = True
-        if 'mapsets' in kargs:
-            self.mapsets = kargs['mapsets']
+        if 'subprojects' in kargs:
+            self.subprojects = kargs['subprojects']
         if 'nmaps' in kargs:
             self.nmaps = kargs['nmaps']
         if 'updateOnPopup' in kargs:
@@ -1198,40 +1198,40 @@ class DbaseSelect(wx.lib.filebrowsebutton.DirBrowseButton):
             **kwargs)
 
 
-class LocationSelect(wx.ComboBox):
-    """Widget for selecting GRASS location"""
+class ProjectSelect(wx.ComboBox):
+    """Widget for selecting GRASS project"""
 
     def __init__(
             self, parent, id=wx.ID_ANY, size=globalvar.DIALOG_COMBOBOX_SIZE,
             gisdbase=None, **kwargs):
-        super(LocationSelect, self).__init__(parent, id, size=size, **kwargs)
-        self.SetName("LocationSelect")
+        super(ProjectSelect, self).__init__(parent, id, size=size, **kwargs)
+        self.SetName("ProjectSelect")
 
         if not gisdbase:
             self.gisdbase = grass.gisenv()['GISDBASE']
         else:
             self.gisdbase = gisdbase
 
-        self.SetItems(GetListOfLocations(self.gisdbase))
+        self.SetItems(GetListOfProjects(self.gisdbase))
 
     def UpdateItems(self, dbase):
-        """Update list of locations
+        """Update list of projects
 
         :param str dbase: path to GIS database
         """
         self.gisdbase = dbase
         if dbase:
-            self.SetItems(GetListOfLocations(self.gisdbase))
+            self.SetItems(GetListOfProjects(self.gisdbase))
         else:
             self.SetItems([])
 
 
-class MapsetSelect(wx.ComboBox):
-    """Widget for selecting GRASS mapset"""
+class SubprojectSelect(wx.ComboBox):
+    """Widget for selecting GRASS subproject"""
 
     def __init__(self, parent, id=wx.ID_ANY,
                  size=globalvar.DIALOG_COMBOBOX_SIZE, gisdbase=None,
-                 location=None, setItems=True, searchPath=False, new=False,
+                 project=None, setItems=True, searchPath=False, new=False,
                  skipCurrent=False, multiple=False, **kwargs):
         style = 0
         # disabled, read-only widget has no TextCtrl children (TODO: rewrite)
@@ -1242,7 +1242,7 @@ class MapsetSelect(wx.ComboBox):
                              style=style, **kwargs)
         self.searchPath = searchPath
         self.skipCurrent = skipCurrent
-        self.SetName("MapsetSelect")
+        self.SetName("SubprojectSelect")
         self.value = ''
         self.multiple = multiple
         if not gisdbase:
@@ -1250,13 +1250,13 @@ class MapsetSelect(wx.ComboBox):
         else:
             self.gisdbase = gisdbase
 
-        if not location:
-            self.location = grass.gisenv()['LOCATION_NAME']
+        if not project:
+            self.project = grass.gisenv()['LOCATION_NAME']
         else:
-            self.location = location
+            self.project = project
 
         if setItems:
-            self.SetItems(self._getMapsets())
+            self.SetItems(self._getSubprojects())
 
         if self.multiple:
             self.Bind(wx.EVT_COMBOBOX, self._onSelection)
@@ -1273,34 +1273,34 @@ class MapsetSelect(wx.ComboBox):
             self.value = value
         event.Skip()
 
-    def UpdateItems(self, location, dbase=None):
-        """Update list of mapsets for given location
+    def UpdateItems(self, project, dbase=None):
+        """Update list of subprojects for given project
 
         :param str dbase: path to GIS database (None to use currently
                           selected)
-        :param str location: name of location
+        :param str project: name of project
         """
         if dbase:
             self.gisdbase = dbase
-        self.location = location
+        self.project = project
 
-        if location:
-            self.SetItems(self._getMapsets())
+        if project:
+            self.SetItems(self._getSubprojects())
         else:
             self.SetItems([])
 
-    def _getMapsets(self):
+    def _getSubprojects(self):
         if self.searchPath:
-            mlist = RunCommand('g.mapsets',
+            mlist = RunCommand('g.subprojects',
                                read=True, flags='p',
                                sep='newline').splitlines()
         else:
-            mlist = GetListOfMapsets(self.gisdbase, self.location,
+            mlist = GetListOfSubprojects(self.gisdbase, self.project,
                                      selectable=False)
 
         gisenv = grass.gisenv()
         if self.skipCurrent and \
-                gisenv['LOCATION_NAME'] == self.location and \
+                gisenv['LOCATION_NAME'] == self.project and \
                 gisenv['MAPSET'] in mlist:
             mlist.remove(gisenv['MAPSET'])
 
@@ -1322,10 +1322,10 @@ class SubGroupSelect(wx.ComboBox):
             return
         gisenv = grass.gisenv()
         try:
-            name, mapset = group.split('@', 1)
+            name, subproject = group.split('@', 1)
         except ValueError:
             name = group
-            mapset = gisenv['MAPSET']
+            subproject = gisenv['MAPSET']
 
         mlist = RunCommand('i.group', group=group,
                            read=True, flags='sg').splitlines()
@@ -2066,7 +2066,7 @@ class GdalSelect(wx.Panel):
     def _reloadLayers(self):
         """Reload list of layers"""
 
-        def hasRastSameProjAsLocation(dsn):
+        def hasRastSameProjAsProject(dsn):
 
             ret = RunCommand('r.external',
                              quiet=True,
@@ -2137,7 +2137,7 @@ class GdalSelect(wx.Panel):
             if self._sourceType == 'file':
                 baseName = os.path.basename(dsn)
                 grassName = GetValidLayerName(baseName.split('.', -1)[0])
-                projectionMatch = hasRastSameProjAsLocation(dsn)
+                projectionMatch = hasRastSameProjAsProject(dsn)
                 projectionMatchCaption = getProjMatchCaption(projectionMatch)
                 listData.append(
                     (layerId, baseName, projectionMatchCaption, grassName))
@@ -2149,7 +2149,7 @@ class GdalSelect(wx.Panel):
                         dsn, "%s") % self._getExtPatternGlob(ext)):
                     baseName = os.path.basename(filename)
                     grassName = GetValidLayerName(baseName.split('.', -1)[0])
-                    projectionMatch = hasRastSameProjAsLocation(filename)
+                    projectionMatch = hasRastSameProjAsProject(filename)
                     projectionMatchCaption = getProjMatchCaption(
                         projectionMatch)
                     listData.append(
@@ -2242,30 +2242,30 @@ class ProjSelect(wx.ComboBox):
         self.SetName("ProjSelect")
         self.isRaster = isRaster
 
-    def UpdateItems(self, dbase, location, mapset):
+    def UpdateItems(self, dbase, project, subproject):
         """Update list of maps
 
         """
         if not dbase:
             dbase = grass.gisenv()['GISDBASE']
-        if not mapset:
-            mapset = grass.gisenv()['MAPSET']
+        if not subproject:
+            subproject = grass.gisenv()['MAPSET']
         if self.isRaster:
             ret = RunCommand('r.proj',
                              quiet=True,
                              read=True,
                              flags='l',
                              dbase=dbase,
-                             location=location,
-                             mapset=mapset)
+                             project=project,
+                             subproject=subproject)
         else:
             ret = RunCommand('v.proj',
                              quiet=True,
                              read=True,
                              flags='l',
                              dbase=dbase,
-                             location=location,
-                             mapset=mapset)
+                             project=project,
+                             subproject=subproject)
         listMaps = list()
         if ret:
             for line in ret.splitlines():
@@ -2668,15 +2668,15 @@ class SignatureSelect(wx.ComboBox):
             return
         gisenv = grass.gisenv()
         try:
-            name, mapset = group.split('@', 1)
+            name, subproject = group.split('@', 1)
         except ValueError:
             name = group
-            mapset = gisenv['MAPSET']
+            subproject = gisenv['MAPSET']
 
         path = os.path.join(
             gisenv['GISDBASE'],
             gisenv['LOCATION_NAME'],
-            mapset, 'group', name)
+            subproject, 'group', name)
 
         if subgroup:
             path = os.path.join(path, 'subgroup', subgroup)

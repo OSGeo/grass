@@ -9,7 +9,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from .core import get_available_temporal_mapsets, init_dbif
+from .core import get_available_temporal_subprojects, init_dbif
 from .factory import dataset_factory
 import grass.script as gscript
 
@@ -17,11 +17,11 @@ import grass.script as gscript
 
 
 def tlist_grouped(type, group_type=False, dbif=None):
-    """List of temporal elements grouped by mapsets.
+    """List of temporal elements grouped by subprojects.
 
-    Returns a dictionary where the keys are mapset
+    Returns a dictionary where the keys are subproject
     names and the values are lists of space time datasets in that
-    mapset. Example:
+    subproject. Example:
 
     .. code-block:: python
 
@@ -32,12 +32,12 @@ def tlist_grouped(type, group_type=False, dbif=None):
     :param type: element type (strds, str3ds, stvds)
     :param group_type: TBD
 
-    :return: directory of mapsets/elements
+    :return: directory of subprojects/elements
     """
     result = {}
     dbif, connected = init_dbif(dbif)
 
-    mapset = None
+    subproject = None
     if type == 'stds':
         types = ['strds', 'str3ds', 'stvds']
     else:
@@ -51,24 +51,24 @@ def tlist_grouped(type, group_type=False, dbif=None):
 
         for line in tlist_result:
             try:
-                name, mapset = line.split('@')
+                name, subproject = line.split('@')
             except ValueError:
                 warning(_("Invalid element '%s'") % line)
                 continue
 
-            if mapset not in result:
+            if subproject not in result:
                 if group_type:
-                    result[mapset] = {}
+                    result[subproject] = {}
                 else:
-                    result[mapset] = []
+                    result[subproject] = []
 
             if group_type:
-                if type in result[mapset]:
-                    result[mapset][type].append(name)
+                if type in result[subproject]:
+                    result[subproject][type].append(name)
                 else:
-                    result[mapset][type] = [name, ]
+                    result[subproject][type] = [name, ]
             else:
-                result[mapset].append(name)
+                result[subproject].append(name)
 
     if connected is True:
         dbif.close()
@@ -89,13 +89,13 @@ def tlist(type, dbif=None):
     sp = dataset_factory(type, id)
     dbif, connected = init_dbif(dbif)
 
-    mapsets = get_available_temporal_mapsets()
+    subprojects = get_available_temporal_subprojects()
 
     output = []
     temporal_type = ["absolute", 'relative']
     for type in temporal_type:
-        # For each available mapset
-        for mapset in mapsets.keys():
+        # For each available subproject
+        for subproject in subprojects.keys():
             # Table name
             if type == "absolute":
                 table = sp.get_type() + "_view_abs_time"
@@ -104,11 +104,11 @@ def tlist(type, dbif=None):
 
             # Create the sql selection statement
             sql = "SELECT id FROM " + table
-            sql += " WHERE mapset = '%s'" % (mapset)
+            sql += " WHERE subproject = '%s'" % (subproject)
             sql += " ORDER BY id"
 
-            dbif.execute(sql, mapset=mapset)
-            rows = dbif.fetchall(mapset=mapset)
+            dbif.execute(sql, subproject=subproject)
+            rows = dbif.fetchall(subproject=subproject)
 
             # Append the ids of the space time datasets
             for row in rows:

@@ -41,7 +41,7 @@ class TestGrowDistance(TestCase):
         # run the grow distance module
         self.assertModule('r.grow.distance', input=self.lakes,
                           distance=self.distance)
-        # check to see if distance output is in mapset
+        # check to see if distance output is in subproject
         self.assertRasterExists(self.distance,
                                 msg='distance output was not created')
         self.assertRasterMinMax(self.distance, 0, 5322,

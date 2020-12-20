@@ -28,20 +28,20 @@ static void misc_write_line(const char *, const char *, const char *);
  * Read the raster's units metadata file and put string in str
  *
  * \param name raster map name
- * \param mapset mapset name
+ * \param subproject subproject name
  *
  * \return  string representing units on success
  * \return  NULL on error
  */
-char *Rast_read_units(const char *name, const char *mapset)
+char *Rast_read_units(const char *name, const char *subproject)
 {
-    return misc_read_line("units", name, mapset);
+    return misc_read_line("units", name, subproject);
 }
 
 /*!
  * \brief Write a string to a raster map's units metadata file
  *
- * Raster map must exist in the current mapset.
+ * Raster map must exist in the current subproject.
  *
  * \param name raster map name
  * \param str  string containing data to be written
@@ -57,21 +57,21 @@ void Rast_write_units(const char *name, const char *str)
  * Read the raster's vertical datum metadata file and put string in str
  *
  * \param name raster map name
- * \param mapset mapset name
+ * \param subproject subproject name
  *
  * \return  string representing vertical datum on success
  * \return  NULL on error
  */
-char *Rast_read_vdatum(const char *name, const char *mapset)
+char *Rast_read_vdatum(const char *name, const char *subproject)
 {
-    return misc_read_line("vertical_datum", name, mapset);
+    return misc_read_line("vertical_datum", name, subproject);
 }
 
 
 /*!
  * \brief Write a string into a raster's vertical datum metadata file
  *
- * Raster map must exist in the current mapset.
+ * Raster map must exist in the current subproject.
  *
  * \param name raster map name
  * \param str  string containing data to be written
@@ -89,25 +89,25 @@ void Rast_write_vdatum(const char *name, const char *str)
  *
  * \param element  metadata component filename
  * \param name
- * \param mapset
+ * \param subproject
  * \return dynamically-allocated string on success
  * \return NULL on error
  */
 static char *misc_read_line(const char *elem,
-			    const char *name, const char *mapset)
+			    const char *name, const char *subproject)
 {
     char buff[GNAME_MAX];
     FILE *fp;
 
     buff[0] = '\0';
 
-    if (G_find_file2_misc("cell_misc", elem, name, mapset) == NULL)
+    if (G_find_file2_misc("cell_misc", elem, name, subproject) == NULL)
 	return NULL;
 
-    fp = G_fopen_old_misc("cell_misc", elem, name, mapset);
+    fp = G_fopen_old_misc("cell_misc", elem, name, subproject);
     if (!fp) {
 	G_warning(_("Unable to read <%s> for raster map <%s@%s>"),
-		  elem, name, mapset);
+		  elem, name, subproject);
 	return NULL;
     }
     if (G_getl2(buff, sizeof(buff) - 1, fp) == 0) {
@@ -117,7 +117,7 @@ static char *misc_read_line(const char *elem,
 
     if (fclose(fp) != 0)
 	G_fatal_error(_("Error closing <%s> metadata file for raster map <%s@%s>"),
-		      elem, name, mapset);
+		      elem, name, subproject);
 
     return *buff ? G_store(buff) : NULL;
 }
@@ -127,7 +127,7 @@ static char *misc_read_line(const char *elem,
  * \brief Write a line to a raster map metadata file
  *
  * Write (including overwrite) a string into a raster map's metadata file
- * found in in cell_misc/ in the current mapset.
+ * found in in cell_misc/ in the current subproject.
  *
  * \param element  metadata component filename
  * \param name
@@ -140,12 +140,12 @@ static void misc_write_line(const char *elem, const char *name, const char *str)
     fp = G_fopen_new_misc("cell_misc", elem, name);
     if (!fp)
 	G_fatal_error(_("Unable to create <%s> metadata file for raster map <%s@%s>"),
-		      elem, name, G_mapset());
+		      elem, name, G_subproject());
 
     fprintf(fp, "%s\n", str);
 
     if (fclose(fp) != 0)
 	G_fatal_error(_("Error closing <%s> metadata file for raster map <%s@%s>"),
-		      elem, name, G_mapset());
+		      elem, name, G_subproject());
 }
 

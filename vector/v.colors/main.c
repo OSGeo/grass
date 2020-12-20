@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 
     int layer;
     int overwrite, remove, is_from_stdin, stat, have_colors, convert, use;
-    const char *mapset, *cmapset;
+    const char *subproject, *csubproject;
     const char *style, *rules, *cmap, *attrcolumn, *rgbcolumn;
     char *name;
     
@@ -246,13 +246,13 @@ int main(int argc, char *argv[])
     if (is_from_stdin)
         G_fatal_error(_("Reading rules from standard input is not implemented yet, please provide path to rules file instead."));
 
-    mapset = G_find_vector(name, "");
-    if (!mapset)
+    subproject = G_find_vector(name, "");
+    if (!subproject)
 	G_fatal_error(_("Vector map <%s> not found"), name);
     
     stat = -1;
     if (remove) {
-	stat = Vect_remove_colors(name, mapset);
+	stat = Vect_remove_colors(name, subproject);
         if (stat < 0)
             G_fatal_error(_("Unable to remove color table of vector map <%s>"), name);
         if (stat == 0)
@@ -261,7 +261,7 @@ int main(int argc, char *argv[])
     }
 
     G_suppress_warnings(TRUE);
-    have_colors = Vect_read_colors(name, mapset, NULL);
+    have_colors = Vect_read_colors(name, subproject, NULL);
 
     if (have_colors > 0 && !overwrite) {
         G_fatal_error(_("Color table exists. Exiting."));
@@ -271,7 +271,7 @@ int main(int argc, char *argv[])
 
     /* open map and get min/max values */
     Vect_set_open_level(1); /* no topology required */
-    if (Vect_open_old2(&Map, name, mapset, opt.field->answer) < 0)
+    if (Vect_open_old2(&Map, name, subproject, opt.field->answer) < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), name);
 
     Vect_set_error_handler_io(&Map, NULL);
@@ -320,18 +320,18 @@ int main(int argc, char *argv[])
     else {
 	/* use color from another map (cmap) */
 	if (opt.rast->answer) {
-            cmapset = G_find_raster2(cmap, "");
-            if (!cmapset)
+            csubproject = G_find_raster2(cmap, "");
+            if (!csubproject)
                 G_fatal_error(_("Raster map <%s> not found"), cmap);
 
-            if (Rast_read_colors(cmap, cmapset, &colors) < 0)
+            if (Rast_read_colors(cmap, csubproject, &colors) < 0)
                 G_fatal_error(_("Unable to read color table for raster map <%s>"), cmap);
         } else if (opt.volume->answer) {
-            cmapset = G_find_raster3d(cmap, "");
-            if (!cmapset)
+            csubproject = G_find_raster3d(cmap, "");
+            if (!csubproject)
                 G_fatal_error(_("3D raster map <%s> not found"), cmap);
 
-            if (Rast3d_read_colors(cmap, cmapset, &colors) < 0)
+            if (Rast3d_read_colors(cmap, csubproject, &colors) < 0)
                 G_fatal_error(_("Unable to read color table for 3D raster map <%s>"), cmap);
         }
     }
@@ -342,7 +342,7 @@ int main(int argc, char *argv[])
     /* TODO ?
     if (flag.e->answer) {
     if (!have_stats)
-    have_stats = get_stats(name, mapset, &statf);
+    have_stats = get_stats(name, subproject, &statf);
     Rast_histogram_eq_colors(&colors_tmp, &colors, &statf);
     colors = colors_tmp;
     }
@@ -363,18 +363,18 @@ int main(int argc, char *argv[])
 	if (rgbcolumn)
 	    write_rgb_values(&Map, layer, rgbcolumn, &colors);
 	else
-	    Vect_write_colors(name, mapset, &colors);
+	    Vect_write_colors(name, subproject, &colors);
     }
     
     if (convert) {
 	/* convert RGB values to color tables */
 	rgb2colr(&Map, layer, rgbcolumn, &colors);
-	Vect_write_colors(name, mapset, &colors);
+	Vect_write_colors(name, subproject, &colors);
     }
     Vect_close(&Map);
     
     G_message(_("Color table for vector map <%s> set to '%s'"), 
-	      G_fully_qualified_name(name, mapset), 
+	      G_fully_qualified_name(name, subproject), 
               is_from_stdin || convert ? "rules" : style ? style : rules ? rules :
               cmap);
     

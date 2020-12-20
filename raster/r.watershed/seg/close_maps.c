@@ -68,7 +68,7 @@ int close_maps(void)
 
 	lstddev = log(stddev);
 
-	Rast_read_fp_range(wat_name, this_mapset, &accRange);
+	Rast_read_fp_range(wat_name, this_subproject, &accRange);
 	min = max = 0;
 	Rast_get_fp_range_min_max(&accRange, &min, &max);
 
@@ -125,7 +125,7 @@ int close_maps(void)
 	    Rast_add_d_color_rule(&clr_min, 0, 0, 0, &clr_max, 0, 0, 0,
 				  &colors);
 	}
-	Rast_write_colors(wat_name, this_mapset, &colors);
+	Rast_write_colors(wat_name, this_subproject, &colors);
     }
 
     /* TCI, SPI */
@@ -209,7 +209,7 @@ int close_maps(void)
 
 	    lstddev = log(stddev);
 
-	    Rast_read_fp_range(tci_name, this_mapset, &accRange);
+	    Rast_read_fp_range(tci_name, this_subproject, &accRange);
 	    min = max = 0;
 	    Rast_get_fp_range_min_max(&accRange, &min, &max);
 
@@ -245,7 +245,7 @@ int close_maps(void)
 		Rast_add_d_color_rule(&clr_min, 0, 0, 0, &clr_max, 0, 0,
 				      0, &colors);
 	    }
-	    Rast_write_colors(tci_name, this_mapset, &colors);
+	    Rast_write_colors(tci_name, this_subproject, &colors);
 	}
 	if (spi_flag) {
 	    Rast_close(fd2);
@@ -262,7 +262,7 @@ int close_maps(void)
 
 	    lstddev = log(stddev);
 
-	    Rast_read_fp_range(spi_name, this_mapset, &accRange);
+	    Rast_read_fp_range(spi_name, this_subproject, &accRange);
 	    min = max = 0;
 	    Rast_get_fp_range_min_max(&accRange, &min, &max);
 
@@ -298,7 +298,7 @@ int close_maps(void)
 		Rast_add_d_color_rule(&clr_min, 0, 0, 0, &clr_max, 0, 0,
 				      0, &colors);
 	    }
-	    Rast_write_colors(spi_name, this_mapset, &colors);
+	    Rast_write_colors(spi_name, this_subproject, &colors);
 	}
     }
 
@@ -327,7 +327,7 @@ int close_maps(void)
 
 	Rast_init_colors(&colors);
 	Rast_make_aspect_colors(&colors, -8, 8);
-	Rast_write_colors(asp_name, this_mapset, &colors);
+	Rast_write_colors(asp_name, this_subproject, &colors);
     }
     seg_close(&aspflag);
     if (ls_flag) {

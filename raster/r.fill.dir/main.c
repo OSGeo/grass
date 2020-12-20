@@ -272,7 +272,7 @@ int main(int argc, char **argv)
     G_percent(1, 1, 1);
 
     /* copy color table from input */
-    Rast_write_colors(new_map_name, G_mapset(), &colors);
+    Rast_write_colors(new_map_name, G_subproject(), &colors);
 
     Rast_close(new_id);
     Rast_short_history(new_map_name, "raster", &history);

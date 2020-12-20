@@ -266,10 +266,10 @@ int main(int argc, char *argv[])
     limit_opt->guisection = _("Decimation");
 
     outloc_opt = G_define_option();
-    outloc_opt->key = "location";
+    outloc_opt->key = "project";
     outloc_opt->type = TYPE_STRING;
     outloc_opt->required = NO;
-    outloc_opt->description = _("Name for new location to create");
+    outloc_opt->description = _("Name for new project to create");
     outloc_opt->key_desc = "name";
 
     print_flag = G_define_flag();
@@ -318,14 +318,14 @@ int main(int argc, char *argv[])
     over_flag = G_define_flag();
     over_flag->key = 'o';
     over_flag->label =
-        _("Override projection check (use current location's projection)");
+        _("Override projection check (use current project's projection)");
     over_flag->description =
-        _("Assume that the dataset has same projection as the current location");
+        _("Assume that the dataset has same projection as the current project");
 
     no_import_flag = G_define_flag();
     no_import_flag->key = 'i';
     no_import_flag->description =
-	_("Create the location specified by the \"location\" parameter and exit."
+	_("Create the project specified by the \"project\" parameter and exit."
           " Do not import the vector data.");
     no_import_flag->suppress_required = YES;
 
@@ -336,8 +336,8 @@ int main(int argc, char *argv[])
     G_option_requires(class_layer_opt, id_layer_opt, nocats_flag, NULL);
     G_option_requires(rgb_layer_opt, id_layer_opt, nocats_flag, NULL);
 
-    /* The parser checks if the map already exists in current mapset, this is
-     * wrong if location options is used, so we switch out the check and do it
+    /* The parser checks if the map already exists in current subproject, this is
+     * wrong if project options is used, so we switch out the check and do it
      * in the module after the parser */
     overwrite = G_check_overwrite(argc, argv);
 
@@ -498,22 +498,22 @@ int main(int argc, char *argv[])
     proj_units = NULL;
     projstr = LASSRS_GetWKT_CompoundOK(LAS_srs);
 
-    /* Do we need to create a new location? */
+    /* Do we need to create a new project? */
     if (outloc_opt->answer != NULL) {
 	/* Convert projection information non-interactively as we can't
 	 * assume the user has a terminal open */
 	if (GPJ_wkt_to_grass(&cellhd, &proj_info,
 			     &proj_units, projstr, 0) < 0) {
 	    G_fatal_error(_("Unable to convert input map projection to GRASS "
-			    "format; cannot create new location."));
+			    "format; cannot create new project."));
 	}
 	else {
-            if (0 != G_make_location(outloc_opt->answer, &cellhd,
+            if (0 != G_make_project(outloc_opt->answer, &cellhd,
                                      proj_info, proj_units)) {
-                G_fatal_error(_("Unable to create new location <%s>"),
+                G_fatal_error(_("Unable to create new project <%s>"),
                               outloc_opt->answer);
             }
-	    G_message(_("Location <%s> created"), outloc_opt->answer);
+	    G_message(_("Project <%s> created"), outloc_opt->answer);
 	}
 
         /* If the i flag is set, clean up? and exit here */
@@ -521,14 +521,14 @@ int main(int argc, char *argv[])
             exit(EXIT_SUCCESS);
 
 	/*  TODO: */
-	G_warning("Import into new location not yet implemented");
+	G_warning("Import into new project not yet implemented");
 	/* at this point the module should be using G_create_alt_env()
-	    to change context to the newly created location; once done
+	    to change context to the newly created project; once done
 	    it should switch back with G_switch_env(). See r.in.gdal */
     }
     else {
-	/* Does the projection of the current location match the dataset? */
-	/* G_get_window seems to be unreliable if the location has been changed */
+	/* Does the projection of the current project match the dataset? */
+	/* G_get_window seems to be unreliable if the project has been changed */
 	G_get_default_window(&loc_wind);
     projstr = LASSRS_GetWKT_CompoundOK(LAS_srs);
     /* we are printing the non-warning messages only for first file */
@@ -537,7 +537,7 @@ int main(int argc, char *argv[])
     }
 
     if (!outloc_opt->answer) {	/* Check if the map exists */
-	if (G_find_vector2(out_opt->answer, G_mapset())) {
+	if (G_find_vector2(out_opt->answer, G_subproject())) {
 	    if (overwrite)
 		G_warning(_("Vector map <%s> already exists and will be overwritten"),
 			  out_opt->answer);
@@ -549,8 +549,8 @@ int main(int argc, char *argv[])
 
     /* open output vector */
     sprintf(buf, "%s", out_opt->answer);
-    /* strip any @mapset from vector output name */
-    G_find_vector(buf, G_mapset());
+    /* strip any @subproject from vector output name */
+    G_find_vector(buf, G_subproject());
     if (Vect_open_new(&Map, out_opt->answer, 1) < 0)
 	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
 

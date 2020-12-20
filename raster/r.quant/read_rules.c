@@ -18,13 +18,13 @@ int read_range(void)
 
     /* read the fpranges and ranges of all input maps */
     for (i = 0; i < noi; i++) {
-	if (Rast_read_fp_range(name[i], G_mapset(), &drange) <= 0) {
+	if (Rast_read_fp_range(name[i], G_subproject(), &drange) <= 0) {
 	    sprintf(buff, "Can't read f_range for map %s", name[i]);
 	    G_fatal_error("%s", buff);
 	}
 	Rast_get_fp_range_min_max(&drange, &tmp_dmin, &tmp_dmax);
 
-	if (Rast_read_range(name[i], G_mapset(), &range) <= 0) {
+	if (Rast_read_range(name[i], G_subproject(), &range) <= 0) {
 	    sprintf(buff, "Can't read range for map %s", name[i]);
 	    G_fatal_error("%s", buff);
 	}

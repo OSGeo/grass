@@ -10,7 +10,7 @@
   \brief Function prototypes for diglib (part of vector library)
 */
 
-/* allocation.c */
+/* alproject.c */
 void *dig_alloc_space(int, int *, int, void *, int);	/* exits on error, calls _alloc_space () */
 void *dig__alloc_space(int, int *, int, void *, int);	/* returns NULL on error, calls calloc(), _frealloc() */
 void *dig_falloc(int, int);	/* exits on error, calls _falloc () */

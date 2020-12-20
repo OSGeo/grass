@@ -112,7 +112,7 @@ int D_open_driver(void)
             strcat(element, "MONITORS");
             strcat(element, "/");
             strcat(element, m);
-            G_file_name(progname, element, "render.py", G_mapset());
+            G_file_name(progname, element, "render.py", G_subproject());
         }
 
         G_debug(1, "rendering redirected to %s", progname);
@@ -214,7 +214,7 @@ void D_text_rotation(double rotation)
   \brief Draw text
   
   Writes <em>text</em> in the current color and font, at the current text
-  width and height, starting at the current screen location.
+  width and height, starting at the current screen project.
   
   \param text text to be drawn
 */

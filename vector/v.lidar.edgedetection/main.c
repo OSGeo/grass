@@ -41,9 +41,9 @@ int main(int argc, char *argv[])
     double N_extension, E_extension, edgeE, edgeN;
     int dim_vect, nparameters, BW, npoints;
     double lambda_B, lambda_F, grad_H, grad_L, alpha, mean;
-    const char *dvr, *db, *mapset;
+    const char *dvr, *db, *subproject;
     char table_interpolation[GNAME_MAX], table_name[GNAME_MAX];
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 
     int last_row, last_column, flag_auxiliar = FALSE;
 
@@ -176,13 +176,13 @@ int main(int argc, char *argv[])
     grad_L = grad_L * grad_L;
     grad_H = grad_H * grad_H;
 
-    if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL) {
+    if ((subproject = G_find_vector2(in_opt->answer, "")) == NULL) {
 	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
     }
 
     Vect_set_open_level(1);
     /* Open input vector */
-    if (1 > Vect_open_old(&In, in_opt->answer, mapset))
+    if (1 > Vect_open_old(&In, in_opt->answer, subproject))
 	G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
 
     /* Input vector must be 3D */
@@ -210,7 +210,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to read name of driver"));
 
     /* Setting auxiliary table's name */
-    if (G_name_is_fully_qualified(out_opt->answer, xname, xmapset)) {
+    if (G_name_is_fully_qualified(out_opt->answer, xname, xsubproject)) {
 	sprintf(table_name, "%s_aux", xname);
 	sprintf(table_interpolation, "%s_edge_Interpolation", xname);
     }

@@ -3,7 +3,7 @@
 #
 # MODULE:	v.build.all
 # AUTHOR(S):	Glynn Clements, Radim Blazek
-# PURPOSE:	Build all vectors in current mapset
+# PURPOSE:	Build all vectors in current subproject
 # COPYRIGHT:	(C) 2004, 2008-2009 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -13,7 +13,7 @@
 #############################################################################
 
 #%module
-#% description: Rebuilds topology on all vector maps in the current mapset.
+#% description: Rebuilds topology on all vector maps in the current subproject.
 #% keyword: vector
 #% keyword: topology
 #%end
@@ -25,10 +25,10 @@ from grass.exceptions import CalledModuleError
 
 def main():
     env = grass.gisenv()
-    mapset = env['MAPSET']
+    subproject = env['MAPSET']
     ret = 0
 
-    vectors = grass.list_grouped('vect')[mapset]
+    vectors = grass.list_grouped('vect')[subproject]
     num_vectors = len(vectors)
 
     if grass.verbosity() < 2:
@@ -38,7 +38,7 @@ def main():
 
     i = 1
     for vect in vectors:
-        map = "%s@%s" % (vect, mapset)
+        map = "%s@%s" % (vect, subproject)
         grass.message(_("%s\nBuilding topology for vector map <%s> (%d of %d)...\n%s") %
                       ('-' * 80, map, i, num_vectors, '-' * 80))
         grass.verbose(_("v.build map=%s") % map)

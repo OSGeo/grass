@@ -7,7 +7,7 @@
  * 	         http://mccauley-usa.com/
  *               OGR support by Martin Landa <landa.martin gmail.com>
  *
- * PURPOSE:      GRASS program to sample a raster map at site locations.   
+ * PURPOSE:      GRASS program to sample a raster map at site projects.   
  *
  * Modification History:
  * <04 Jan 1994> - began coding (jdm)
@@ -76,7 +76,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("sampling"));
     G_add_keyword(_("raster"));
     module->description =
-	_("Samples a raster map at vector point locations.");
+	_("Samples a raster map at vector point projects.");
 
     parm.input = G_define_standard_option(G_OPT_V_INPUT);
     parm.input->label = _("Name of input vector point map");

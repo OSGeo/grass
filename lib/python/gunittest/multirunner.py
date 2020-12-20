@@ -64,11 +64,11 @@ def text_to_string(text):
 def main():
     parser = argparse.ArgumentParser(
         description='Run tests with new')
-    parser.add_argument('--location', '-l', required=True, action='append',
-                        dest='locations', metavar='LOCATION',
+    parser.add_argument('--project', '-l', required=True, action='append',
+                        dest='projects', metavar='LOCATION',
                         help='Directories with reports')
-    parser.add_argument('--location-type', '-t', action='append',
-                        dest='location_types',
+    parser.add_argument('--project-type', '-t', action='append',
+                        dest='project_types',
                     default=[], metavar='TYPE',
                     help='Add repeated values to a list',
                         )
@@ -85,12 +85,12 @@ def main():
 
     args = parser.parse_args()
     gisdb = args.grassdata
-    locations = args.locations
-    locations_types = args.location_types
+    projects = args.projects
+    projects_types = args.project_types
 
-    # TODO: if locations empty or just one we can suppose the same all the time
-    if len(locations) != len(locations_types):
-        print("ERROR: Number of locations and their tags must be the same", file=sys.stderr)
+    # TODO: if projects empty or just one we can suppose the same all the time
+    if len(projects) != len(projects_types):
+        print("ERROR: Number of projects and their tags must be the same", file=sys.stderr)
         return 1
     
 
@@ -98,7 +98,7 @@ def main():
     grasssrc = args.grasssrc  # TODO: can be guessed from dist
     # TODO: create directory according to date and revision and create reports there
 
-    # some predefined variables, name of the GRASS launch script + location/mapset
+    # some predefined variables, name of the GRASS launch script + project/subproject
     #grass7bin = 'C:\Program Files (x86)\GRASS GIS 7.9.git\grass79dev.bat'
     grass7bin = args.grassbin  # TODO: can be used if pressent
 
@@ -131,22 +131,22 @@ def main():
     import grass.script.setup as gsetup
 
     # launch session
-    # we need some location and mapset here
-    # TODO: can init work without it or is there some demo location in dist?
-    location = locations[0].split(':')[0]
-    mapset = 'PERMANENT'
-    gsetup.init(gisbase, gisdb, location, mapset)
+    # we need some project and subproject here
+    # TODO: can init work without it or is there some demo project in dist?
+    project = projects[0].split(':')[0]
+    subproject = 'PERMANENT'
+    gsetup.init(gisbase, gisdb, project, subproject)
 
     reports = []
-    for location, location_type in zip(locations, locations_types):
+    for project, project_type in zip(projects, projects_types):
         # here it is quite a good place to parallelize
         # including also type to make it unique and preserve it for sure
-        report = 'report_for_' + location + '_' + location_type
+        report = 'report_for_' + project + '_' + project_type
         absreport = os.path.abspath(report)
         p = subprocess.Popen([sys.executable, '-tt',
                               '-m', 'grass.gunittest.main',
-                              '--grassdata', gisdb, '--location', location,
-                              '--location-type', location_type,
+                              '--grassdata', gisdb, '--project', project,
+                              '--project-type', project_type,
                               '--output', absreport],
                               cwd=grasssrc)
         returncode = p.wait()

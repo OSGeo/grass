@@ -13,7 +13,7 @@
 /*******************************************************************
  *
  *
- *  <cell-file name> in mapset <mapset name>     <---- the title
+ *  <cell-file name> in subproject <subproject name>     <---- the title
  *
  *                    ......
  *                 ............

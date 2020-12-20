@@ -248,7 +248,7 @@ int I_insert_patch_to_cat_rast(const char *patch_rast,
 
     char *null_chunk_row;
 
-    const char *mapset;
+    const char *subproject;
 
     f_cat_rast = fopen(cat_rast, "rb+");
     if (!f_cat_rast) {
@@ -258,16 +258,16 @@ int I_insert_patch_to_cat_rast(const char *patch_rast,
     }
 
     head_nchars = get_cat_rast_header(cat_rast_region, cat_rast_header);
-    if ((mapset = G_find_raster((char *)patch_rast, "")) == NULL) {
+    if ((subproject = G_find_raster((char *)patch_rast, "")) == NULL) {
 	fclose(f_cat_rast);
 	G_warning(_("Unable to find patch raster <%s>."), patch_rast);
 	return -1;
     }
 
-    Rast_get_cellhd(patch_rast, mapset, &patch_region);
+    Rast_get_cellhd(patch_rast, subproject, &patch_region);
     Rast_set_window(&patch_region);
 
-    if ((fd_patch_rast = Rast_open_old(patch_rast, mapset)) < 0) {
+    if ((fd_patch_rast = Rast_open_old(patch_rast, subproject)) < 0) {
 	fclose(f_cat_rast);
 	return -1;
     }
@@ -697,7 +697,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 		     int n_bands, struct scCats *scatts,
 		     const char **cats_rasts)
 {
-    const char *mapset;
+    const char *subproject;
     char header[1024];
 
     int fd_cats_rasts[scatt_conds->n_a_cats];
@@ -738,7 +738,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 	    G_debug(3, "Opening raster no. %d with name: %s", band_id,
 		    bands[band_id]);
 
-	    if ((mapset = G_find_raster2(bands[band_id], "")) == NULL) {
+	    if ((subproject = G_find_raster2(bands[band_id], "")) == NULL) {
 		free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
 					 bands_ids, NULL, NULL,
 					 scatt_conds->n_a_cats);
@@ -748,7 +748,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 	    }
 
 	    if ((fd_bands[n_a_bands] =
-		 Rast_open_old(bands[band_id], mapset)) < 0) {
+		 Rast_open_old(bands[band_id], subproject)) < 0) {
 		free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
 					 bands_ids, NULL, NULL,
 					 scatt_conds->n_a_cats);
@@ -767,7 +767,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 	    bands_rows[band_id].null_row = Rast_allocate_null_buf();
 
 	    if (Rast_read_range
-		(bands[band_id], mapset,
+		(bands[band_id], subproject,
 		 &bands_rows[band_id].rast_range) != 1) {
 		free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
 					 bands_ids, NULL, NULL,

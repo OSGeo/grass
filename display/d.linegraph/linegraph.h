@@ -1,6 +1,6 @@
 #include <string.h>
 
-/* location of graph origin in terms of % of screen */
+/* project of graph origin in terms of % of screen */
 
 #define ORIGIN_X        0.10
 #define ORIGIN_Y        0.20

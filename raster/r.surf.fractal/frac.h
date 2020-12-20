@@ -25,7 +25,7 @@
 
 extern const char
  *rast_out_name,		/* Name of the raster output file.      */
- *mapset_out;
+ *subproject_out;
 
 extern int
   fd_out,			/* File descriptor of output raster     */

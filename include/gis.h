@@ -145,7 +145,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
 /* epsilon (IEEE: 2.220446e-16) */
 #define GRASS_EPSILON 1.0e-15
 
-/* Location of envariment variables */
+/* Project of envariment variables */
 #define G_VAR_GISRC    0
 #define G_VAR_MAPSET   1
 
@@ -294,8 +294,8 @@ typedef enum
 
     G_OPT_M_UNITS,              /*!< units */
     G_OPT_M_DATATYPE,           /*!< datatype */
-    G_OPT_M_MAPSET,             /*!< mapset */
-    G_OPT_M_LOCATION,           /*!< location */
+    G_OPT_M_MAPSET,             /*!< subproject */
+    G_OPT_M_LOCATION,           /*!< project */
     G_OPT_M_DBASE,              /*!< dbase */
     G_OPT_M_COORDS,             /*!< coordinates */
     G_OPT_M_COLR,               /*!< color rules */

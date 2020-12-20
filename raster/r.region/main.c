@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
 
     name = parm.map->answer;
 
-    Rast_get_cellhd(name, G_mapset(), &cellhd);
+    Rast_get_cellhd(name, G_subproject(), &cellhd);
 
     window = cellhd;
 

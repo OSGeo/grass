@@ -108,7 +108,7 @@ MM_err MM_register::set_memory_limit (size_t new_limit) {
     switch (register_new) {
     case MM_ABORT_ON_MEMORY_EXCEEDED:
       cerr << " MM_register::set_memory_limit to " << new_limit 
-      	   << ", used " << used << ". allocation exceeds new limit.\n";
+      	   << ", used " << used << ". alproject exceeds new limit.\n";
       cerr.flush();
       assert(0); //core dump if debugging
       exit(1);
@@ -116,7 +116,7 @@ MM_err MM_register::set_memory_limit (size_t new_limit) {
       
     case MM_WARN_ON_MEMORY_EXCEEDED:
       cerr << " MM_register::set_memory_limit to " << new_limit 
-	   << ", used " << used << ". allocation exceeds new limit.\n";
+	   << ", used " << used << ". alproject exceeds new limit.\n";
       break;
       
     case MM_IGNORE_MEMORY_EXCEEDED:
@@ -154,7 +154,7 @@ void MM_register::enforce_memory_limit() {
 
   if (used > user_limit) {
     cerr << " MM_register::enforce_memory_limit: limit=" << user_limit 
-	 << ", used=" << used << ". allocation exceeds limit.\n";
+	 << ", used=" << used << ". alproject exceeds limit.\n";
     assert(0); //core dump if debugging
     exit(1);
   }
@@ -214,7 +214,7 @@ size_t MM_register::memory_limit() {
 
 
 /* ---------------------------------------------------------------------- */
-// return the overhead on each memory allocation request 
+// return the overhead on each memory alproject request 
 
 
 // SIZE_SPACE is to ensure alignment on quad word boundaries.  It may be
@@ -233,9 +233,9 @@ int   MM_register::space_overhead ()  {
 
 
 /* ************************************************************ */
-// check that new allocation request is below user-defined limit.
+// check that new alproject request is below user-defined limit.
 // This should be a private method, only called by operator new.
-MM_err MM_register::register_allocation(size_t request) {
+MM_err MM_register::register_alproject(size_t request) {
 
   if (request > remaining) {
     remaining = 0;
@@ -252,10 +252,10 @@ MM_err MM_register::register_allocation(size_t request) {
 
 
 /* ************************************************************ */
-// do the accounting for a memory deallocation request.
+// do the accounting for a memory dealproject request.
 // This should be a private method, only called by operators 
 // delete and delete [].
-MM_err MM_register::register_deallocation(size_t sz) {
+MM_err MM_register::register_dealproject(size_t sz) {
   
   if (sz > used) {
     used = 0;
@@ -291,7 +291,7 @@ void* MM_register::operator new[] (size_t sz) {
   MM_DEBUG cout << "new: sz=" << sz << ", register " 
 		<< sz+SIZE_SPACE << "B ,"; 
 
-  if (MM_manager.register_allocation (sz + SIZE_SPACE) != MM_ERROR_NO_ERROR){
+  if (MM_manager.register_alproject (sz + SIZE_SPACE) != MM_ERROR_NO_ERROR){
     //must be MM_ERROR_INSUF_SPACE
     switch(MM_manager.register_new) {
       
@@ -346,7 +346,7 @@ void* MM_register::operator new (size_t sz) {
   MM_DEBUG cout << "new: sz=" << sz << ", register " 
 		<< sz+SIZE_SPACE << "B ,"; 
 
-  if (MM_manager.register_allocation (sz + SIZE_SPACE) != MM_ERROR_NO_ERROR){
+  if (MM_manager.register_alproject (sz + SIZE_SPACE) != MM_ERROR_NO_ERROR){
     //must be MM_ERROR_INSUF_SPACE
     switch(MM_manager.register_new) {
       
@@ -425,9 +425,9 @@ void MM_register::operator delete (void *ptr) noexcept {
   MM_DEBUG cout << "size=" << sz <<", free " << p << "B and deallocate " 
 		<< sz + SIZE_SPACE << endl;
   
-  if(MM_manager.register_deallocation (sz + SIZE_SPACE) != MM_ERROR_NO_ERROR){
+  if(MM_manager.register_dealproject (sz + SIZE_SPACE) != MM_ERROR_NO_ERROR){
     //must be MM_ERROR_UNDERFLOW
-    cerr << "delete: MM_manager.register_deallocation failed\n";
+    cerr << "delete: MM_manager.register_dealproject failed\n";
     assert(0);
     exit(1);
   }
@@ -467,9 +467,9 @@ void MM_register::operator delete[] (void *ptr) noexcept {
    MM_DEBUG cout << "size=" << sz <<", free " << p << "B and deallocate " 
 		 << sz + SIZE_SPACE << endl;
    
-   if(MM_manager.register_deallocation (sz + SIZE_SPACE)!= MM_ERROR_NO_ERROR){
+   if(MM_manager.register_dealproject (sz + SIZE_SPACE)!= MM_ERROR_NO_ERROR){
      //must be MM_ERROR_UNDERFLOW
-     cerr << "delete[]: MM_manager.register_deallocation failed\n";
+     cerr << "delete[]: MM_manager.register_dealproject failed\n";
      assert(0);
      exit(1);
    }

@@ -68,7 +68,7 @@ class TemporalManager(object):
 
         Raises GException (e.g. with invalid topology).
 
-        :param timeseries: name of timeseries (with or without mapset)
+        :param timeseries: name of timeseries (with or without subproject)
         :param etype: element type (strds, stvds)
         """
         self._gatherInformation(

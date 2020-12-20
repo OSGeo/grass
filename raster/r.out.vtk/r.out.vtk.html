@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 Outputs <i>raster</i> maps in <i>VTK-ASCII</i> format. <i>Map's</i> are
-valid raster map's in the current mapset.  <i>output</i> is the name of
+valid raster map's in the current subproject.  <i>output</i> is the name of
 an VTK-ASCII file which will be written in the current working directory.
 If <i>output</i> is not specified then <b>stdout</b> is used.  
 The module is sensitive to region settings (set with g.region).
@@ -54,7 +54,7 @@ These dataformats a documented at <em><a href="http://www.vtk.org">VTK Toolkit</
 
 If the "-c" flag is used and the data should be visualised together with other data exported via *.out.vtk
 modules, be sure the "-c" flag was also set in these modules.
-But this will only work with data from the SAME location 
+But this will only work with data from the SAME project 
 (The reference point for the coordinates transformation is based on the center point of the default region).
 
 <h3>Difference between point- and celldata</h3>

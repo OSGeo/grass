@@ -27,8 +27,8 @@ GrassTestPythonModule = collections.namedtuple('GrassTestPythonModule',
 
 # TODO: implement loading without the import
 def discover_modules(start_dir, skip_dirs, testsuite_dir,
-                     grass_location,
-                     all_locations_value, universal_location_value,
+                     grass_project,
+                     all_projects_value, universal_project_value,
                      import_modules, add_failed_imports=True,
                      file_pattern=None, file_regexp=None):
     """Find all test files (modules) in a directory tree.
@@ -37,7 +37,7 @@ def discover_modules(start_dir, skip_dirs, testsuite_dir,
     test layout. It expects some directories to have a "testsuite"
     directory where test files (test modules) are present.
     Additionally, it also handles loading of test files which specify
-    in which location they can run.
+    in which project they can run.
 
     :param start_dir: directory to start the search
     :param file_pattern: pattern of files in a test suite directory
@@ -45,11 +45,11 @@ def discover_modules(start_dir, skip_dirs, testsuite_dir,
     :param skip_dirs: directories not to recurse to (e.g. ``.svn``)
     :param testsuite_dir: name of directory where the test files are found,
         the function will not recurse to this directory
-    :param grass_location: string with an accepted location type (category, shortcut)
-    :param all_locations_value: string used to say that all locations
-        should be loaded (grass_location can be set to this value)
-    :param universal_location_value: string marking a test as
-        location-independent (same as not providing any)
+    :param grass_project: string with an accepted project type (category, shortcut)
+    :param all_projects_value: string used to say that all projects
+        should be loaded (grass_project can be set to this value)
+    :param universal_project_value: string marking a test as
+        project-independent (same as not providing any)
     :param import_modules: True if files should be imported as modules,
         False if the files should be just searched for the needed values
 
@@ -107,19 +107,19 @@ def discover_modules(start_dir, skip_dirs, testsuite_dir,
 
                 add = False
                 try:
-                    if grass_location == all_locations_value:
+                    if grass_project == all_projects_value:
                         add = True
                     else:
                         try:
-                            locations = ['nc', 'stdmaps', 'all']
+                            projects = ['nc', 'stdmaps', 'all']
                         except AttributeError:
                             add = True  # test is universal
                         else:
-                            if universal_location_value in locations:
+                            if universal_project_value in projects:
                                 add = True  # cases when it is explicit
-                            if grass_location in locations:
-                                add = True  # standard case with given location
-                            if not locations:
+                            if grass_project in projects:
+                                add = True  # standard case with given project
+                            if not projects:
                                 add = True  # count not specified as universal
                 except ImportError as e:
                     if add_failed_imports:
@@ -149,8 +149,8 @@ class GrassTestLoader(unittest.TestLoader):
     all_tests_value = 'all'
     universal_tests_value = 'universal'
 
-    def __init__(self, grass_location):
-        self.grass_location = grass_location
+    def __init__(self, grass_project):
+        self.grass_project = grass_project
 
     # TODO: what is the purpose of top_level_dir, can it be useful?
     # probably yes, we need to know grass src or dist root
@@ -161,9 +161,9 @@ class GrassTestLoader(unittest.TestLoader):
                                    file_pattern=self.files_in_testsuite,
                                    skip_dirs=self.skip_dirs,
                                    testsuite_dir=self.testsuite_dir,
-                                   grass_location=self.grass_location,
-                                   all_locations_value=self.all_tests_value,
-                                   universal_location_value=self.universal_tests_value,
+                                   grass_project=self.grass_project,
+                                   all_projects_value=self.all_tests_value,
+                                   universal_project_value=self.universal_tests_value,
                                    import_modules=True)
         tests = []
         for module in modules:

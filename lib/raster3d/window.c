@@ -87,7 +87,7 @@ RASTER3D_Region *Rast3d_window_ptr()
  *  \return int
  */
 
-int Rast3d_isValidLocationWindow(RASTER3D_Map * map, double north, double east, double top)
+int Rast3d_isValidProjectWindow(RASTER3D_Map * map, double north, double east, double top)
 {
     return ((north >= map->window.south) && (north <= map->window.north) &&
 	    (east >= map->window.west) && (east <= map->window.east) &&

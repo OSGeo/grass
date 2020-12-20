@@ -266,7 +266,7 @@ AMI_STREAM<T>::AMI_STREAM() {
   // Register memory usage before returning.
   //size_t usage; 
   //main_memory_usage(&usage,  MM_STREAM_USAGE_CURRENT);
-  //MM_manager.register_allocation(usage);
+  //MM_manager.register_alproject(usage);
 }
 
 
@@ -314,7 +314,7 @@ AMI_STREAM<T>::AMI_STREAM(const char *path_name, AMI_stream_type st) {
   // Register memory usage before returning.
   //size_t usage; 
   //main_memory_usage(&usage,  MM_STREAM_USAGE_CURRENT);
-  //MM_manager.register_allocation(usage);
+  //MM_manager.register_alproject(usage);
 }
 
 
@@ -530,10 +530,10 @@ AMI_STREAM<T>::~AMI_STREAM(void)  {
       exit(1);
     }
   }
-  // Register memory deallocation before returning.
+  // Register memory dealproject before returning.
   //size_t usage; 
   //main_memory_usage(&usage,  MM_STREAM_USAGE_CURRENT);
-  //MM_manager.register_deallocation(usage);
+  //MM_manager.register_dealproject(usage);
  }
 
 

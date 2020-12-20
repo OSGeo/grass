@@ -749,13 +749,13 @@ class DbMgrBase:
             self.dbMgrData['vectName'] = name
 
         # vector attributes can be changed only if vector map is in
-        # the current mapset
+        # the current subproject
         mapInfo = None
         if self.dbMgrData['vectName']:
             mapInfo = grass.find_file(
                 name=self.dbMgrData['vectName'],
                 element='vector')
-        if not mapInfo or mapInfo['mapset'] != grass.gisenv()['MAPSET']:
+        if not mapInfo or mapInfo['subproject'] != grass.gisenv()['MAPSET']:
             self.dbMgrData['editable'] = False
         else:
             self.dbMgrData['editable'] = True
@@ -792,11 +792,11 @@ class DbMgrBase:
         self.dbMgrData['mapDBInfo'] = VectorDBInfo(self.dbMgrData['vectName'])
 
         # vector attributes can be changed only if vector map is in
-        # the current mapset
+        # the current subproject
         mapInfo = grass.find_file(
             name=self.dbMgrData['vectName'],
             element='vector')
-        if not mapInfo or mapInfo['mapset'] != grass.gisenv()['MAPSET']:
+        if not mapInfo or mapInfo['subproject'] != grass.gisenv()['MAPSET']:
             self.dbMgrData['editable'] = False
         else:
             self.dbMgrData['editable'] = True

@@ -17,7 +17,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from .core import init_dbif, get_current_mapset, get_tgis_message_interface
+from .core import init_dbif, get_current_subproject, get_tgis_message_interface
 from .factory import dataset_factory
 from .abstract_map_dataset import AbstractMapDataset
 
@@ -33,7 +33,7 @@ def open_old_stds(name, type, dbif=None):
        or the space time dataset was not found.
 
        :param name: The name of the space time dataset, if the name does not
-                    contain the mapset (name@mapset) then the current mapset
+                    contain the subproject (name@subproject) then the current subproject
                     will be used to identifiy the space time dataset
        :param type: The type of the space time dataset (strd, str3ds, stvds,
                     raster, vector, raster3d)
@@ -44,18 +44,18 @@ def open_old_stds(name, type, dbif=None):
     """
     msgr = get_tgis_message_interface()
 
-    # Check if the dataset name contains the mapset and the band reference as well
+    # Check if the dataset name contains the subproject and the band reference as well
     if name.find("@") < 0:
-        mapset = get_current_mapset()
+        subproject = get_current_subproject()
     else:
-        name, mapset = name.split('@')
+        name, subproject = name.split('@')
     band_ref = None
     if name.find(".") > -1:
         try:
             name, band_ref = name.split('.')
         except ValueError:
             msgr.fatal("Invalid name of the space time dataset. Only one dot allowed.")
-    id = name + "@" + mapset
+    id = name + "@" + subproject
 
     if type == "strds" or type == "rast" or type == "raster":
         sp = dataset_factory("strds", id)
@@ -100,18 +100,18 @@ def check_new_stds(name, type, dbif=None, overwrite=False):
        This function will raise a FatalError in case of an error.
     """
 
-    # Get the current mapset to create the id of the space time dataset
+    # Get the current subproject to create the id of the space time dataset
 
-    mapset = get_current_mapset()
+    subproject = get_current_subproject()
     msgr = get_tgis_message_interface()
 
     if name.find("@") < 0:
-        id = name + "@" + mapset
+        id = name + "@" + subproject
     else:
         n, m = name.split("@")
-        if mapset != m:
+        if subproject != m:
             msgr.fatal(_("Space time datasets can only be created in the "
-                         "current mapset"))
+                         "current subproject"))
         id = name
 
     if type == "strds" or type == "rast" or type == "raster":
@@ -205,11 +205,11 @@ def check_new_map_dataset(name, layer=None, type="raster",
 
        This function will raise a FatalError in case of an error.
     """
-    mapset = get_current_mapset()
+    subproject = get_current_subproject()
     msgr = get_tgis_message_interface()
 
     dbif, connected = init_dbif(dbif)
-    map_id = AbstractMapDataset.build_id(name, mapset, layer)
+    map_id = AbstractMapDataset.build_id(name, subproject, layer)
 
     new_map = dataset_factory(type, map_id)
     # Check if new map is in the temporal database
@@ -244,7 +244,7 @@ def open_new_map_dataset(name, layer=None, type="raster",
 
     """
 
-    mapset = get_current_mapset()
+    subproject = get_current_subproject()
 
     dbif, connected = init_dbif(dbif)
     new_map = check_new_map_dataset(name, layer, type, overwrite, dbif)

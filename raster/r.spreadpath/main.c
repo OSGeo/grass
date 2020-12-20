@@ -69,10 +69,10 @@ int main(int argc, char **argv)
 	len, flag,
 	srows, scols,
 	backrow_fd, backcol_fd, path_fd;
-    const char *search_mapset,
-	       *path_mapset,
-	       *backrow_mapset,
-	       *backcol_mapset;
+    const char *search_subproject,
+	       *path_subproject,
+	       *backrow_subproject,
+	       *backcol_subproject;
     char *in_row_file, *in_col_file, *out_file;
     CELL *cell;
     POINT *PRES_PT, *PRESENT_PT, *OLD_PT;
@@ -121,25 +121,25 @@ int main(int argc, char **argv)
     G_get_window(&window);
 
     /*  Check if backrow layer exists in data base  */
-    search_mapset = "";
+    search_subproject = "";
 
     strcpy(backrow_layer, opt2->answer);
     strcpy(backcol_layer, opt1->answer);
 
-    backrow_mapset = G_find_raster(backrow_layer, search_mapset);
-    backcol_mapset = G_find_raster(backcol_layer, search_mapset);
+    backrow_subproject = G_find_raster(backrow_layer, search_subproject);
+    backcol_subproject = G_find_raster(backcol_layer, search_subproject);
 
-    if (backrow_mapset == NULL)
+    if (backrow_subproject == NULL)
 	G_fatal_error("%s - not found", backrow_layer);
 
-    if (backcol_mapset == NULL)
+    if (backcol_subproject == NULL)
 	G_fatal_error("%s - not found", backcol_layer);
 
-    search_mapset = "";
+    search_subproject = "";
 
     strcpy(path_layer, opt4->answer);
 
-    path_mapset = G_find_raster(path_layer, search_mapset);
+    path_subproject = G_find_raster(path_layer, search_subproject);
 
     /*  find number of rows and cols in window    */
     nrows = Rast_window_rows();
@@ -148,8 +148,8 @@ int main(int argc, char **argv)
     cell = Rast_allocate_c_buf();
 
     /*  Open back cell layers for reading  */
-    backrow_fd = Rast_open_old(backrow_layer, backrow_mapset);
-    backcol_fd = Rast_open_old(backcol_layer, backcol_mapset);
+    backrow_fd = Rast_open_old(backrow_layer, backrow_subproject);
+    backcol_fd = Rast_open_old(backcol_layer, backcol_subproject);
 
     /*   Parameters for map submatrices   */
     len = sizeof(CELL);
@@ -219,7 +219,7 @@ int main(int argc, char **argv)
     }
 
     /*  Set flag according to input */
-    if (path_mapset != NULL) {
+    if (path_subproject != NULL) {
 	if (head_start_pt == NULL)
 	    /*output layer exists and start pts are not given on cmd line */
 	    flag = 1;
@@ -234,7 +234,7 @@ int main(int argc, char **argv)
     /* If the output layer containing the starting positions */
     /* create a linked list of of them  */
     if (flag == 1) {
-	path_fd = Rast_open_old(path_layer, path_mapset);
+	path_fd = Rast_open_old(path_layer, path_subproject);
 
 	/*  Search for the marked starting pts and make list    */
 	for (row = 0; row < nrows; row++) {

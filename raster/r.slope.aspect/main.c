@@ -962,8 +962,8 @@ int main(int argc, char *argv[])
     Rast_close(elevation_fd);
     G_debug(1, "Creating support files...");
 
-    G_verbose_message(_("Elevation products for mapset <%s> in <%s>"),
-		      G_mapset(), G_location());
+    G_verbose_message(_("Elevation products for subproject <%s> in <%s>"),
+		      G_subproject(), G_project());
 
     if (aspect_fd >= 0) {
 	DCELL min, max;
@@ -972,10 +972,10 @@ int main(int argc, char *argv[])
 	Rast_close(aspect_fd);
 
 	if (out_type != CELL_TYPE)
-	    Rast_quantize_fp_map_range(aspect_name, G_mapset(), 0., 360., 0,
+	    Rast_quantize_fp_map_range(aspect_name, G_subproject(), 0., 360., 0,
 				    360);
 
-	Rast_read_cats(aspect_name, G_mapset(), &cats);
+	Rast_read_cats(aspect_name, G_subproject(), &cats);
 	if (flag.n->answer)
 	    Rast_set_cats_title
 		("Aspect clockwise in degrees from north", &cats);
@@ -1069,13 +1069,13 @@ int main(int argc, char *argv[])
 
 	/* write colors for aspect file */
 	Rast_init_colors(&colors);
-	Rast_read_fp_range(aspect_name, G_mapset(), &range);
+	Rast_read_fp_range(aspect_name, G_subproject(), &range);
 	Rast_get_fp_range_min_max(&range, &min, &max);
 	if (flag.n->answer)
 	    Rast_make_aspect_fp_colors(&colors, 0, max);
 	else
 	    Rast_make_aspect_fp_colors(&colors, min, max);
-	Rast_write_colors(aspect_name, G_mapset(), &colors);
+	Rast_write_colors(aspect_name, G_subproject(), &colors);
 
 	/* writing history file */
 	Rast_short_history(aspect_name, "raster", &hist);
@@ -1120,22 +1120,22 @@ int main(int argc, char *argv[])
 	if (out_type != CELL_TYPE) {
 	    /* INCR_BY_ONE
 	       if(deg)
-	       Rast_quantize_fp_map_range(slope_name, G_mapset(), 0., 90., 1, 91);
+	       Rast_quantize_fp_map_range(slope_name, G_subproject(), 0., 90., 1, 91);
 	       else
-	       Rast_quantize_fp_map_range(slope_name, G_mapset(), min_slp, max_slp, 
+	       Rast_quantize_fp_map_range(slope_name, G_subproject(), min_slp, max_slp, 
 	       (CELL) min_slp + 1, (CELL) ceil(max_slp) + 1);
 	     */
-	    Rast_write_colors(slope_name, G_mapset(), &colors);
+	    Rast_write_colors(slope_name, G_subproject(), &colors);
 	    if (deg)
-		Rast_quantize_fp_map_range(slope_name, G_mapset(), 0., 90., 0,
+		Rast_quantize_fp_map_range(slope_name, G_subproject(), 0., 90., 0,
 					90);
 	    else		/* percent */
-		Rast_quantize_fp_map_range(slope_name, G_mapset(), min_slp,
+		Rast_quantize_fp_map_range(slope_name, G_subproject(), min_slp,
 					max_slp, (CELL) min_slp,
 					(CELL) ceil(max_slp));
 	}
 
-	Rast_read_cats(slope_name, G_mapset(), &cats);
+	Rast_read_cats(slope_name, G_subproject(), &cats);
 	if (deg)
 	    Rast_set_cats_title("slope in degrees", &cats);
 	else if (perc)
@@ -1245,12 +1245,12 @@ int main(int argc, char *argv[])
     if (pcurv_fd >= 0) {
 	Rast_close(pcurv_fd);
 
-	Rast_write_colors(pcurv_name, G_mapset(), &colors);
+	Rast_write_colors(pcurv_name, G_subproject(), &colors);
 
 	if (out_type != CELL_TYPE)
-	    Rast_round_fp_map(pcurv_name, G_mapset());
+	    Rast_round_fp_map(pcurv_name, G_subproject());
 
-	Rast_read_cats(pcurv_name, G_mapset(), &cats);
+	Rast_read_cats(pcurv_name, G_subproject(), &cats);
 	Rast_set_cats_title("profile curvature", &cats);
 	cat = 0;
 	Rast_set_c_cat(&cat, &cat, "no profile curve", &cats);
@@ -1270,12 +1270,12 @@ int main(int argc, char *argv[])
     if (tcurv_fd >= 0) {
 	Rast_close(tcurv_fd);
 
-	Rast_write_colors(tcurv_name, G_mapset(), &colors);
+	Rast_write_colors(tcurv_name, G_subproject(), &colors);
 
 	if (out_type != CELL_TYPE)
-	    Rast_round_fp_map(tcurv_name, G_mapset());
+	    Rast_round_fp_map(tcurv_name, G_subproject());
 
-	Rast_read_cats(tcurv_name, G_mapset(), &cats);
+	Rast_read_cats(tcurv_name, G_subproject(), &cats);
 	Rast_set_cats_title("tangential curvature", &cats);
 	cat = 0;
 	Rast_set_c_cat(&cat, &cat, "no tangential curve", &cats);
@@ -1296,9 +1296,9 @@ int main(int argc, char *argv[])
 	Rast_close(dx_fd);
 
 	if (out_type != CELL_TYPE)
-	    Rast_round_fp_map(dx_name, G_mapset());
+	    Rast_round_fp_map(dx_name, G_subproject());
 
-	Rast_read_cats(dx_name, G_mapset(), &cats);
+	Rast_read_cats(dx_name, G_subproject(), &cats);
 	Rast_set_cats_title("E-W slope", &cats);
 	cat = 0;	
 	Rast_set_c_cat(&cat, &cat, "no E-W slope", &cats);
@@ -1319,9 +1319,9 @@ int main(int argc, char *argv[])
 	Rast_close(dy_fd);
 
 	if (out_type != CELL_TYPE)
-	    Rast_round_fp_map(dy_name, G_mapset());
+	    Rast_round_fp_map(dy_name, G_subproject());
 
-	Rast_read_cats(dy_name, G_mapset(), &cats);
+	Rast_read_cats(dy_name, G_subproject(), &cats);
 	Rast_set_cats_title("N-S slope", &cats);
 	cat = 0;
 	Rast_set_c_cat(&cat, &cat, "no N-S slope", &cats);
@@ -1342,9 +1342,9 @@ int main(int argc, char *argv[])
 	Rast_close(dxx_fd);
 
 	if (out_type != CELL_TYPE)
-	    Rast_round_fp_map(dxx_name, G_mapset());
+	    Rast_round_fp_map(dxx_name, G_subproject());
 
-	Rast_read_cats(dxx_name, G_mapset(), &cats);
+	Rast_read_cats(dxx_name, G_subproject(), &cats);
 	Rast_set_cats_title("DXX", &cats);
 	cat = 0;
 	Rast_set_c_cat(&cat, &cat, "DXX", &cats);
@@ -1365,9 +1365,9 @@ int main(int argc, char *argv[])
 	Rast_close(dyy_fd);
 
 	if (out_type != CELL_TYPE)
-	    Rast_round_fp_map(dyy_name, G_mapset());
+	    Rast_round_fp_map(dyy_name, G_subproject());
 
-	Rast_read_cats(dyy_name, G_mapset(), &cats);
+	Rast_read_cats(dyy_name, G_subproject(), &cats);
 	Rast_set_cats_title("DYY", &cats);
 	cat = 0;
 	Rast_set_c_cat(&cat, &cat, "DYY", &cats);
@@ -1388,9 +1388,9 @@ int main(int argc, char *argv[])
 	Rast_close(dxy_fd);
 
 	if (out_type != CELL_TYPE)
-	    Rast_round_fp_map(dxy_name, G_mapset());
+	    Rast_round_fp_map(dxy_name, G_subproject());
 
-	Rast_read_cats(dxy_name, G_mapset(), &cats);
+	Rast_read_cats(dxy_name, G_subproject(), &cats);
 	Rast_set_cats_title("DXY", &cats);
 	cat = 0;
 	Rast_set_c_cat(&cat, &cat, "DXY", &cats);

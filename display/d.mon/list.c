@@ -24,7 +24,7 @@ char *get_path(const char *name, int fpath)
     if (fpath) {
         char ret[GPATH_MAX];
         
-        G_file_name(ret, tmpdir, NULL, G_mapset());
+        G_file_name(ret, tmpdir, NULL, G_subproject());
         return G_store(ret);
     }
     
@@ -110,7 +110,7 @@ void list_cmd(const char *name, FILE *fd_out)
     FILE *fd;
     
     mon_path = get_path(name, FALSE);
-    G_file_name(cmd_file, mon_path, "cmd", G_mapset());
+    G_file_name(cmd_file, mon_path, "cmd", G_subproject());
     fd = fopen(cmd_file, "r");
     if (!fd)
 	G_fatal_error(_("Unable to open file '%s'"), cmd_file);
@@ -137,7 +137,7 @@ void list_files(const char *name, FILE *fd_out)
     strcat(tmpdir, "/");
     strcat(tmpdir, name);
     
-    G_file_name(mon_path, tmpdir, NULL, G_mapset());
+    G_file_name(mon_path, tmpdir, NULL, G_subproject());
     fprintf(fd_out, "path=%s\n", mon_path);
     
     dirp = opendir(mon_path);

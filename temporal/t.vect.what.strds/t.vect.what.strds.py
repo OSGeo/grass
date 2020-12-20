@@ -113,7 +113,7 @@ def main():
         grass.fatal(_("All registered maps of the space time vector "
                       "dataset must have time intervals"))
 
-    rows = sp.get_registered_maps("name,layer,mapset,start_time,end_time",
+    rows = sp.get_registered_maps("name,layer,subproject,start_time,end_time",
                                   tempwhere, "start_time", dbif)
 
     if not rows:
@@ -124,7 +124,7 @@ def main():
     for row in rows:
         start = row["start_time"]
         end = row["end_time"]
-        vectmap = row["name"] + "@" + row["mapset"]
+        vectmap = row["name"] + "@" + row["subproject"]
         layer = row["layer"]
 
         raster_maps = tgis.collect_map_names(

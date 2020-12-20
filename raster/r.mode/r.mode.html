@@ -9,7 +9,7 @@ layer. These modes are stored in the new <em>output</em> map layer.
 map.
 
 <p>The <b>base</b> parameter defines an existing raster map layer in the user's
-current mapset search path. For each group of cells assigned the same
+current subproject search path. For each group of cells assigned the same
 category value in the <em>base</em> map, the mode of the values assigned
 these cells in the <em>cover</em> map will be computed.
 
@@ -22,7 +22,7 @@ the values to be used to compute the mode within each category of the
 The user should use the results of <em>r.mode</em> with care.
 Since this utility assigns a value to each
 cell which is based on global information (i.e., information at spatial 
-locations other than just the location of the cell itself), the resultant 
+projects other than just the project of the cell itself), the resultant 
 map layer is only valid if the geographic region and mask settings are
 the same as they were at the time that the result map was created.
 

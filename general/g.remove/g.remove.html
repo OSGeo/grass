@@ -7,13 +7,13 @@ then nothing is removed, instead the list of selected file names is printed to
 
 <h2>EXAMPLES</h2>
 
-Delete <tt>map1</tt> and <tt>map2</tt> raster maps in the current mapset:
+Delete <tt>map1</tt> and <tt>map2</tt> raster maps in the current subproject:
 <div class="code"><pre>
 g.remove -f type=raster name=tmp1,tmp2
 </pre></div>
 
 Delete all raster and vector maps starting with "<tt>tmp_</tt>" in the current
-mapset:
+subproject:
 <div class="code"><pre>
 # show matching raster and vector maps but do not delete yet (as verification)
 g.remove type=raster,vector pattern="tmp_*"
@@ -22,7 +22,7 @@ g.remove type=raster,vector pattern="tmp_*"
 g.remove -f type=raster,vector pattern="tmp_*"
 </pre></div>
 
-Delete all vector maps starting with "<tt>stream_</tt>" in the current mapset,
+Delete all vector maps starting with "<tt>stream_</tt>" in the current subproject,
 but exclude those ending with "<tt>_final</tt>":
 <div class="code"><pre>
 g.remove -f type=vector pattern="stream_*" exclude="*_final"

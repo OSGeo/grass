@@ -5,8 +5,8 @@
 
 List of classes:
  - :class:`SimpleDialog`
- - :class:`LocationDialog`
- - :class:`MapsetDialog`
+ - :class:`ProjectDialog`
+ - :class:`SubprojectDialog`
  - :class:`VectorDialog`
  - :class:`NewVectorDialog`
  - :class:`SavedRegion`
@@ -42,7 +42,7 @@ from grass.pydispatch.signal import Signal
 
 from core import globalvar
 from core.gcmd import GError, RunCommand, GMessage
-from gui_core.gselect import LocationSelect, MapsetSelect, Select, \
+from gui_core.gselect import ProjectSelect, SubprojectSelect, Select, \
     OgrTypeSelect, SubGroupSelect
 from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, \
     MapValidator
@@ -57,7 +57,7 @@ class SimpleDialog(wx.Dialog):
     def __init__(self, parent, title, id=wx.ID_ANY,
                  style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
                  **kwargs):
-        """General dialog to choose given element (location, mapset, vector map, etc.)
+        """General dialog to choose given element (project, subproject, vector map, etc.)
 
         :param parent: window
         :param title: window title
@@ -99,21 +99,21 @@ class SimpleDialog(wx.Dialog):
         # self.informLabel.SetLabel(self.warning)
 
 
-class LocationDialog(SimpleDialog):
-    """Dialog used to select location"""
+class ProjectDialog(SimpleDialog):
+    """Dialog used to select project"""
 
-    def __init__(self, parent, title=_("Select GRASS location and mapset")):
+    def __init__(self, parent, title=_("Select GRASS project and subproject")):
         SimpleDialog.__init__(self, parent, title)
 
-        self.element1 = LocationSelect(
+        self.element1 = ProjectSelect(
             parent=self.panel,
             id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE,
             validator=SimpleValidator(
                 callback=self.ValidatorCallback))
-        self.element1.Bind(wx.EVT_TEXT, self.OnLocation)
-        self.element1.Bind(wx.EVT_COMBOBOX, self.OnLocation)
-        self.element2 = MapsetSelect(
+        self.element1.Bind(wx.EVT_TEXT, self.OnProject)
+        self.element1.Bind(wx.EVT_COMBOBOX, self.OnProject)
+        self.element2 = SubprojectSelect(
             parent=self.panel,
             id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE,
@@ -122,7 +122,7 @@ class LocationDialog(SimpleDialog):
             validator=SimpleValidator(
                 callback=self.ValidatorCallback))
         self.element1.SetFocus()
-        self.warning = _("Location or mapset is not defined.")
+        self.warning = _("Project or subproject is not defined.")
         self._layout()
         self.SetMinSize(self.GetSize())
 
@@ -132,7 +132,7 @@ class LocationDialog(SimpleDialog):
             StaticText(
                 parent=self.panel,
                 id=wx.ID_ANY,
-                label=_("Name of GRASS location:")),
+                label=_("Name of GRASS project:")),
             proportion=0,
             flag=wx.ALL,
             border=1)
@@ -143,7 +143,7 @@ class LocationDialog(SimpleDialog):
             StaticText(
                 parent=self.panel,
                 id=wx.ID_ANY,
-                label=_("Name of mapset:")),
+                label=_("Name of subproject:")),
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
             border=1)
@@ -154,36 +154,36 @@ class LocationDialog(SimpleDialog):
         self.panel.SetSizer(self.sizer)
         self.sizer.Fit(self)
 
-    def OnLocation(self, event):
-        """Select mapset given location name"""
-        location = event.GetString()
+    def OnProject(self, event):
+        """Select subproject given project name"""
+        project = event.GetString()
 
-        if location:
+        if project:
             dbase = grass.gisenv()['GISDBASE']
-            self.element2.UpdateItems(dbase=dbase, location=location)
+            self.element2.UpdateItems(dbase=dbase, project=project)
             self.element2.SetSelection(0)
-            mapset = self.element2.GetStringSelection()
+            subproject = self.element2.GetStringSelection()
 
     def GetValues(self):
-        """Get location, mapset"""
+        """Get project, subproject"""
         return (self.element1.GetValue(), self.element2.GetValue())
 
 
-class MapsetDialog(SimpleDialog):
-    """Dialog used to select mapset"""
+class SubprojectDialog(SimpleDialog):
+    """Dialog used to select subproject"""
 
-    def __init__(self, parent, title=_("Select mapset in GRASS location"),
-                 location=None):
+    def __init__(self, parent, title=_("Select subproject in GRASS project"),
+                 project=None):
         SimpleDialog.__init__(self, parent, title)
 
-        if location:
-            self.SetTitle(self.GetTitle() + ' <%s>' % location)
+        if project:
+            self.SetTitle(self.GetTitle() + ' <%s>' % project)
         else:
             self.SetTitle(
                 self.GetTitle() + ' <%s>' %
                 grass.gisenv()['LOCATION_NAME'])
 
-        self.element = MapsetSelect(
+        self.element = SubprojectSelect(
             parent=self.panel,
             id=wx.ID_ANY,
             skipCurrent=True,
@@ -192,7 +192,7 @@ class MapsetDialog(SimpleDialog):
                 callback=self.ValidatorCallback))
 
         self.element.SetFocus()
-        self.warning = _("Name of mapset is missing.")
+        self.warning = _("Name of subproject is missing.")
 
         self._layout()
         self.SetMinSize(self.GetSize())
@@ -200,14 +200,14 @@ class MapsetDialog(SimpleDialog):
     def _layout(self):
         """Do layout"""
         self.dataSizer.Add(StaticText(parent=self.panel, id=wx.ID_ANY,
-                                      label=_("Name of mapset:")),
+                                      label=_("Name of subproject:")),
                            proportion=0, flag=wx.ALL, border=1)
         self.dataSizer.Add(self.element, proportion=0,
                            flag=wx.EXPAND | wx.ALL, border=1)
         self.panel.SetSizer(self.sizer)
         self.sizer.Fit(self)
 
-    def GetMapset(self):
+    def GetSubproject(self):
         return self.element.GetValue()
 
 
@@ -466,9 +466,9 @@ def CreateNewVector(parent, cmd, title=_('Create new vector map'),
     if showType:
         cmd[1]['type'] = dlg.GetFeatureType()
 
-    curMapset = grass.gisenv()['MAPSET']
+    curSubproject = grass.gisenv()['MAPSET']
     if isNative:
-        listOfVectors = grass.list_grouped('vector')[curMapset]
+        listOfVectors = grass.list_grouped('vector')[curSubproject]
     else:
         listOfVectors = RunCommand('v.external',
                                    quiet=True,
@@ -484,7 +484,7 @@ def CreateNewVector(parent, cmd, title=_('Create new vector map'),
             parent,
             message=_(
                 "Vector map <%s> already exists "
-                "in the current mapset. "
+                "in the current subproject. "
                 "Do you want to overwrite it?") %
             outmap,
             caption=_("Overwrite?"),
@@ -508,7 +508,7 @@ def CreateNewVector(parent, cmd, title=_('Create new vector map'),
         return None
 
     if not isNative and not grass.find_file(
-            outmap, element='vector', mapset=curMapset)['fullname']:
+            outmap, element='vector', subproject=curSubproject)['fullname']:
         # create link for OGR layers
         RunCommand('v.external',
                    overwrite=overwrite,
@@ -584,7 +584,7 @@ class SavedRegion(wx.Dialog):
                 parent=self,
                 size=globalvar.DIALOG_GSELECT_SIZE,
                 type='windows',
-                mapsets=[
+                subprojects=[
                     grass.gisenv()['MAPSET']],
                 fullyQualified=False)
 
@@ -735,7 +735,7 @@ class GroupDialog(wx.Dialog):
                                             "enter name of new group:")),
                       flag=wx.TOP, border=10)
         self.groupSelect = Select(parent=self, type='group',
-                                  mapsets=[grass.gisenv()['MAPSET']],
+                                  subprojects=[grass.gisenv()['MAPSET']],
                                   size=globalvar.DIALOG_GSELECT_SIZE,
                                   fullyQualified=False)  # searchpath?
 
@@ -1275,7 +1275,7 @@ class GroupDialog(wx.Dialog):
         return ret
 
     def GetExistGroups(self):
-        """Returns existing groups in current mapset"""
+        """Returns existing groups in current subproject"""
         return grass.list_grouped('group')[grass.gisenv()['MAPSET']]
 
     def GetExistSubgroups(self, group):
@@ -1303,7 +1303,7 @@ class GroupDialog(wx.Dialog):
         wx.CallLater(4000, self.ClearNotification)
 
     def GetSelectedGroup(self):
-        """Return currently selected group (without mapset)"""
+        """Return currently selected group (without subproject)"""
         g = self.groupSelect.GetValue().split('@')[0]
         if self.edit_subg:
             s = self.subGroupSelect.GetValue()
@@ -1403,9 +1403,9 @@ class MapLayersDialogBase(wx.Dialog):
                            flag=wx.EXPAND | wx.ALL, border=5)
 
         # update list of layer to be loaded
-        self.map_layers = []  # list of map layers (full list type/mapset)
+        self.map_layers = []  # list of map layers (full list type/subproject)
         self.LoadMapLayers(self.GetLayerType(cmd=True),
-                           self.mapset.GetStringSelection())
+                           self.subproject.GetStringSelection())
 
         self._fullyQualifiedNames()
         self._modelerDSeries()
@@ -1495,14 +1495,14 @@ class MapLayersDialogBase(wx.Dialog):
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(0, 2))
 
-        # mapset filter
-        bodySizer.Add(StaticText(parent=self, label=_("Mapset:")),
+        # subproject filter
+        bodySizer.Add(StaticText(parent=self, label=_("Subproject:")),
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(1, 0))
 
-        self.mapset = MapsetSelect(parent=self, searchPath=True)
-        self.mapset.SetStringSelection(grass.gisenv()['MAPSET'])
-        bodySizer.Add(self.mapset,
+        self.subproject = SubprojectSelect(parent=self, searchPath=True)
+        self.subproject.SetStringSelection(grass.gisenv()['MAPSET'])
+        bodySizer.Add(self.subproject,
                       pos=(1, 1), span=(1, 2))
 
         # map name filter
@@ -1546,21 +1546,21 @@ class MapLayersDialogBase(wx.Dialog):
         bodySizer.AddGrowableRow(3)
 
         # bindings
-        self.mapset.Bind(wx.EVT_TEXT, self.OnChangeParams)
-        self.mapset.Bind(wx.EVT_COMBOBOX, self.OnChangeParams)
+        self.subproject.Bind(wx.EVT_TEXT, self.OnChangeParams)
+        self.subproject.Bind(wx.EVT_COMBOBOX, self.OnChangeParams)
         self.layers.Bind(wx.EVT_RIGHT_DOWN, self.OnMenu)
         self.filter.Bind(wx.EVT_TEXT, self.OnFilter)
         self.toggle.Bind(wx.EVT_CHECKBOX, self.OnToggle)
 
         return bodySizer
 
-    def LoadMapLayers(self, type, mapset):
+    def LoadMapLayers(self, type, subproject):
         """Load list of map layers
 
         :param str type: layer type ('raster' or 'vector')
-        :param str mapset: mapset name
+        :param str subproject: subproject name
         """
-        self.map_layers = grass.list_grouped(type=type)[mapset]
+        self.map_layers = grass.list_grouped(type=type)[subproject]
         self.layers.Set(naturally_sorted(self.map_layers))
 
         # check all items by default
@@ -1572,7 +1572,7 @@ class MapLayersDialogBase(wx.Dialog):
         """Filter parameters changed by user"""
         # update list of layer to be loaded
         self.LoadMapLayers(self.GetLayerType(cmd=True),
-                           self.mapset.GetStringSelection())
+                           self.subproject.GetStringSelection())
 
         event.Skip()
 
@@ -1649,12 +1649,12 @@ class MapLayersDialogBase(wx.Dialog):
             # layers.append(self.layers.GetStringSelec(indx))
             pass
 
-        mapset = self.mapset.GetStringSelection()
+        subproject = self.subproject.GetStringSelection()
         for item in range(self.layers.GetCount()):
             if not self.layers.IsChecked(item):
                 continue
             if self._useFullyQualifiedNames():
-                layerNames.append(self.layers.GetString(item) + '@' + mapset)
+                layerNames.append(self.layers.GetString(item) + '@' + subproject)
             else:
                 layerNames.append(self.layers.GetString(item))
 
@@ -1750,7 +1750,7 @@ class MapLayersDialogForModeler(MapLayersDialogBase):
         patt = self.filter.GetValue()
         if patt:
             cond += 'pattern=%s ' % patt
-        cond += 'mapset=%s`' % self.mapset.GetStringSelection()
+        cond += 'subproject=%s`' % self.subproject.GetStringSelection()
 
         return cond
 

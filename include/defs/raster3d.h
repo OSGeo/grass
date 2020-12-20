@@ -140,8 +140,8 @@ int Rast3d_key_set_value(struct Key_Value *, const char *, const char *,
 int Rast3d_long_encode(long *, unsigned char *, int);
 void Rast3d_long_decode(unsigned char *, long *, int, int);
 
-/* mapset.c */
-void Rast3d_make_mapset_map_directory(const char *);
+/* subproject.c */
+void Rast3d_make_subproject_map_directory(const char *);
 
 /* mask.c */
 int Rast3d_mask_close(void);
@@ -211,11 +211,11 @@ void Rast3d_adjust_region_res(RASTER3D_Region *);
 void Rast3d_extract2d_region(RASTER3D_Region *, struct Cell_head *);
 void Rast3d_region_to_cell_head(RASTER3D_Region *, struct Cell_head *);
 int Rast3d_read_region_map(const char *, const char *, RASTER3D_Region *);
-int Rast3d_is_valid_location(RASTER3D_Region *, double, double, double);
-void Rast3d_location2coord(RASTER3D_Region *, double, double, double, int *, int *, int *);
-void Rast3d_location2coord_double(RASTER3D_Region *, double, double, double, double *, double *, double *);
-void Rast3d_location2coord2(RASTER3D_Region *, double, double, double, int *, int *, int *);
-void Rast3d_coord2location(RASTER3D_Region *, double, double, double, double *, double *, double *);
+int Rast3d_is_valid_project(RASTER3D_Region *, double, double, double);
+void Rast3d_project2coord(RASTER3D_Region *, double, double, double, int *, int *, int *);
+void Rast3d_project2coord_double(RASTER3D_Region *, double, double, double, double *, double *, double *);
+void Rast3d_project2coord2(RASTER3D_Region *, double, double, double, int *, int *, int *);
+void Rast3d_coord2project(RASTER3D_Region *, double, double, double, double *, double *, double *);
 /* resample.c */
 void Rast3d_nearest_neighbor(RASTER3D_Map *, int, int, int, void *, int);
 void Rast3d_set_resampling_fun(RASTER3D_Map *, void (*)());

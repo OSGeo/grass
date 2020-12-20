@@ -158,8 +158,8 @@ LZ4LIB_API int LZ4_decompress_safe (const char* src, char* dst, int compressedSi
 /*!
 LZ4_compressBound() :
     Provides the maximum size that LZ4 compression may output in a "worst case" scenario (input data not compressible)
-    This function is primarily useful for memory allocation purposes (destination buffer size).
-    Macro LZ4_COMPRESSBOUND() is also provided for compilation-time evaluation (stack memory allocation for example).
+    This function is primarily useful for memory alproject purposes (destination buffer size).
+    Macro LZ4_COMPRESSBOUND() is also provided for compilation-time evaluation (stack memory alproject for example).
     Note that LZ4_compress_default() compresses faster when dstCapacity is >= LZ4_compressBound(srcSize)
         inputSize  : max supported value is LZ4_MAX_INPUT_SIZE
         return : maximum output size in a "worst case" scenario
@@ -280,7 +280,7 @@ LZ4LIB_API int LZ4_loadDict (LZ4_stream_t* streamPtr, const char* dictionary, in
 LZ4LIB_API int LZ4_compress_fast_continue (LZ4_stream_t* streamPtr, const char* src, char* dst, int srcSize, int dstCapacity, int acceleration);
 
 /*! LZ4_saveDict() :
- *  If last 64KB data cannot be guaranteed to remain available at its current memory location,
+ *  If last 64KB data cannot be guaranteed to remain available at its current memory project,
  *  save it into a safer place (char* safeBuffer).
  *  This is schematically equivalent to a memcpy() followed by LZ4_loadDict(),
  *  but is much faster, because LZ4_saveDict() doesn't need to rebuild tables.
@@ -323,7 +323,7 @@ LZ4LIB_API int LZ4_setStreamDecode (LZ4_streamDecode_t* LZ4_streamDecode, const 
  *           or 0 if there is an error (invalid maxBlockSize).
  */
 LZ4LIB_API int LZ4_decoderRingBufferSize(int maxBlockSize);
-#define LZ4_DECODER_RING_BUFFER_SIZE(mbs) (65536 + 14 + (mbs))  /* for static allocation; mbs presumed valid */
+#define LZ4_DECODER_RING_BUFFER_SIZE(mbs) (65536 + 14 + (mbs))  /* for static alproject; mbs presumed valid */
 
 /*! LZ4_decompress_*_continue() :
  *  These decoding functions allow decompression of consecutive blocks in "streaming" mode.
@@ -459,12 +459,12 @@ LZ4LIB_API void LZ4_attach_dictionary(LZ4_stream_t *working_stream, const LZ4_st
  *  Private definitions
  **************************************
  * Do not use these definitions.
- * They are exposed to allow static allocation of `LZ4_stream_t` and `LZ4_streamDecode_t`.
+ * They are exposed to allow static alproject of `LZ4_stream_t` and `LZ4_streamDecode_t`.
  * Using these definitions will expose code to API and/or ABI break in future versions of the library.
  **************************************/
 #define LZ4_HASHLOG   (LZ4_MEMORY_USAGE-2)
 #define LZ4_HASHTABLESIZE (1 << LZ4_MEMORY_USAGE)
-#define LZ4_HASH_SIZE_U32 (1 << LZ4_HASHLOG)       /* required as macro for static allocation */
+#define LZ4_HASH_SIZE_U32 (1 << LZ4_HASHLOG)       /* required as macro for static alproject */
 
 #if defined(__cplusplus) || (defined (__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L) /* C99 */)
 #include <stdint.h>

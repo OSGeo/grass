@@ -60,10 +60,10 @@ Rast3d_readWriteWindow(struct Key_Value *windowKeys, int doRead, int *proj,
  */
 static void Rast3d_getFullWindowPath(char *path, const char *windowName)
 {
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
 
     if (windowName == NULL) {
-	G_file_name(path, "", RASTER3D_WINDOW_ELEMENT, G_mapset());
+	G_file_name(path, "", RASTER3D_WINDOW_ELEMENT, G_subproject());
 	return;
     }
 
@@ -75,38 +75,38 @@ static void Rast3d_getFullWindowPath(char *path, const char *windowName)
 	return;
     }
 
-    if (G_name_is_fully_qualified(windowName, xname, xmapset)) {
-	G_file_name(path, RASTER3D_WINDOW_DATABASE, xname, xmapset);
+    if (G_name_is_fully_qualified(windowName, xname, xsubproject)) {
+	G_file_name(path, RASTER3D_WINDOW_DATABASE, xname, xsubproject);
 	return;
     }
 
-    G_file_name(path, RASTER3D_WINDOW_DATABASE, windowName, G_mapset());
+    G_file_name(path, RASTER3D_WINDOW_DATABASE, windowName, G_subproject());
 }
 
 /*---------------------------------------------------------------------------*/
 /*
    static void
-   Rast3d_getWindowLocation (path, windowName)
+   Rast3d_getWindowProject (path, windowName)
 
    char path[1024];
    char *windowName;
 
    {
-   char xname[512], xmapset[512];
+   char xname[512], xsubproject[512];
    char *p, *slash;
 
    if (windowName == NULL) {
-   G_file_name (path, "", "", G_mapset ());
+   G_file_name (path, "", "", G_subproject ());
    return;
    }
 
    while (*windowName == ' ') windowName++;
 
    if ((*windowName != '/') && (*windowName != '.')) {
-   if (G_name_is_fully_qualified (windowName, xname, xmapset)) 
-   G_file_name (path, RASTER3D_WINDOW_DATABASE, xname, xmapset);
+   if (G_name_is_fully_qualified (windowName, xname, xsubproject)) 
+   G_file_name (path, RASTER3D_WINDOW_DATABASE, xname, xsubproject);
    else
-   G_file_name (path, RASTER3D_WINDOW_DATABASE, windowName, G_mapset ());
+   G_file_name (path, RASTER3D_WINDOW_DATABASE, windowName, G_subproject ());
    } else
    sprintf (path, "%s", windowName);
    p = path;
@@ -128,7 +128,7 @@ static void Rast3d_getFullWindowPath(char *path, const char *windowName)
  *  Reads
  * <em>window</em> from the file specified by <em>windowName</em>. The name is
  * converted by the rules defined in window defaults. A NULL pointer indicates
- * the <em>WIND3</em> file in the current mapset.
+ * the <em>WIND3</em> file in the current subproject.
  *
  *  \param window
  *  \param windowName
@@ -192,7 +192,7 @@ int Rast3d_read_window(RASTER3D_Region * window, const char *windowName)
 }
 
 /*---------------------------------------------------------------------------*/
-/* modified version of G__make_mapset_element */
+/* modified version of G__make_subproject_element */
 /*
    static int
    Rast3d_createPath (thePath)
@@ -223,7 +223,7 @@ int Rast3d_read_window(RASTER3D_Region * window, const char *windowName)
    if (access (path, 0) != 0) system (command);
    if (access (path, 0) != 0) {
    char err[1024];
-   sprintf (err, "can't make mapset element %s (%s)", thePath, path);
+   sprintf (err, "can't make subproject element %s (%s)", thePath, path);
    G_fatal_error (err);
    exit(1);
    }
@@ -240,7 +240,7 @@ int Rast3d_read_window(RASTER3D_Region * window, const char *windowName)
  * 
  * Writes <em>window</em> to the file specified by <em>windowName</em>. The name
  * is converted by the rules defined in window defaults. A NULL pointer
- * indicates the <em>WIND3</em> file in the current mapset.
+ * indicates the <em>WIND3</em> file in the current subproject.
  *
  *  \param window
  *  \param windowName

@@ -64,11 +64,11 @@ int main(int argc, char *argv[])
     /* if olayer not given, use input as the name */
     schema = NULL;
     if (!params.olayer->answer) {
-        char name[GNAME_MAX], mapset[GMAPSET_MAX];
+        char name[GNAME_MAX], subproject[GMAPSET_MAX];
         
         /* check for fully qualified name */
         if (G_name_is_fully_qualified(params.input->answer,
-                                      name, mapset))
+                                      name, subproject))
             olayer = G_store(name);
         else
             olayer = G_store(params.input->answer);
@@ -217,7 +217,7 @@ void link_handler(void *p)
     const char *link = (const char *) p;
     
     G_debug(1, "link_handler: %s", link);
-    if (G_find_vector2(link, G_mapset()))
+    if (G_find_vector2(link, G_subproject()))
 	Vect_delete(link);
 }
 

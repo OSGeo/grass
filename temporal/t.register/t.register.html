@@ -223,7 +223,7 @@ r.timestamp prec_2
 
 t.rast.list input=precip_abs
 
-name|mapset|start_time|end_time
+name|subproject|start_time|end_time
 prec_1|PERMANENT|2001-01-01 00:00:00|2001-02-01 00:00:00
 prec_2|PERMANENT|2001-02-01 00:00:00|2001-03-01 00:00:00
 prec_3|PERMANENT|2001-03-01 00:00:00|2001-04-01 00:00:00
@@ -238,7 +238,7 @@ t.register type=raster input=precip_abs maps=prec_7
 
 t.rast.list input=precip_abs
 
-name|mapset|start_time|end_time
+name|subproject|start_time|end_time
 prec_1|PERMANENT|2001-01-01 00:00:00|2001-02-01 00:00:00
 prec_2|PERMANENT|2001-02-01 00:00:00|2001-03-01 00:00:00
 prec_3|PERMANENT|2001-03-01 00:00:00|2001-04-01 00:00:00
@@ -261,7 +261,7 @@ by accepting their
 <a href="http://eca.knmi.nl/download/ensembles/ensembles.php">Terms of use</a>.
 
 <div class="code"><pre>
-# import E-OBS V12 into a lat-long location (alternatively, use r.external)
+# import E-OBS V12 into a lat-long project (alternatively, use r.external)
 r.in.gdal -oe input=tg_0.25deg_reg_1950-1964_v12.0.nc \
   output=temperature_mean offset=0
 r.in.gdal -oe input=tg_0.25deg_reg_1965-1979_v12.0.nc \

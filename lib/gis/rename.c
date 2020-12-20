@@ -54,7 +54,7 @@ int G_rename_file(const char *oldname, const char *newname)
   \brief Rename a database file.
 
   The file or directory <i>oldname</i> under the database <i>element</i>
-  directory in the current mapset is renamed to <i>newname</i>.
+  directory in the current subproject is renamed to <i>newname</i>.
 
   \bug This routine does not check to see if the <i>newname</i> 
   name is a valid database file name.
@@ -69,24 +69,24 @@ int G_rename_file(const char *oldname, const char *newname)
 */
 int G_rename(const char *element, const char *oldname, const char *newname)
 {
-    const char *mapset;
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    const char *subproject;
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
     char from[GPATH_MAX], to[GPATH_MAX];
 
-    /* name in mapset legal only if mapset is current mapset */
-    mapset = G_mapset();
-    if (G_name_is_fully_qualified(oldname, xname, xmapset)
-	&& strcmp(mapset, xmapset))
+    /* name in subproject legal only if subproject is current subproject */
+    subproject = G_subproject();
+    if (G_name_is_fully_qualified(oldname, xname, xsubproject)
+	&& strcmp(subproject, xsubproject))
 	return -1;
-    if (G_name_is_fully_qualified(newname, xname, xmapset)
-	&& strcmp(mapset, xmapset))
+    if (G_name_is_fully_qualified(newname, xname, xsubproject)
+	&& strcmp(subproject, xsubproject))
 	return -1;
 
     /* if file does not exist return 0 */
-    if (access(G_file_name(from, element, oldname, mapset), 0) != 0)
+    if (access(G_file_name(from, element, oldname, subproject), 0) != 0)
 	return 0;
 
-    G_file_name(to, element, newname, mapset);
+    G_file_name(to, element, newname, subproject);
 
     /* return result of rename */
     return G_rename_file(from, to) == 0 ? 1 : -1;

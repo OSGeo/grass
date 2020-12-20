@@ -6,7 +6,7 @@ or 3D vector <em>points</em> map. Values to interpolate can be the z
 values of 3D points or the values in a user-specified attribute column
 in a 2D or 3D vector map. Output can be a raster
 (<b>raster_output</b>) or vector (<b>output</b>) map.  Optionally, a
-"sparse point" vector map can be input which indicates the location
+"sparse point" vector map can be input which indicates the project
 of <b>output</b> vector points.
 
 <h2>NOTES</h2>
@@ -50,7 +50,7 @@ lengths), the region is automatically split into subregions for
 interpolation. Each subregion can contain no more than 150x150
 splines. To avoid subregion boundary problems, subregions are created
 to partially overlap each other. A weighted mean of observations,
-based on point locations, is calculated within each subregion.
+based on point projects, is calculated within each subregion.
 
 <p>The Tykhonov regularization parameter (<b>lambda_i</b>) acts to
 smooth the interpolation. With a small <b>lambda_i</b>, the
@@ -69,10 +69,10 @@ required by <em><a href="v.build.html">v.build</a></em>.
 
 <p>If output is a vector points map and a <b>sparse</b> vector points
 map is not specified, the output vector map will contain points at the
-same locations as observation points in the input map, but the values
+same projects as observation points in the input map, but the values
 of the output points are interpolated values. If instead
 a <b>sparse</b> vector points map is specified, the output vector map
-will contain points at the same locations as the sparse vector map
+will contain points at the same projects as the sparse vector map
 points, and values will be those of the interpolated raster surface at
 those points.
 
@@ -135,7 +135,7 @@ v.surf.bspline input=point_vector raster=interpolate_surface layer=1 \
 The interpolation will be done using the values
 in <i>attrib_column</i>, in the table associated with layer 1.
 
-<h3>North carolina location example using z-coordinates for interpolation</h3>
+<h3>North carolina project example using z-coordinates for interpolation</h3>
 
 <div class="code"><pre>
 g.region region=rural_1m res=2 -p

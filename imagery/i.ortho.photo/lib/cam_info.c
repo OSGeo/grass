@@ -97,7 +97,7 @@ int I_get_cam_info(char *camera, struct Ortho_Camera_File_Ref *cam_info)
     fd = I_fopen_cam_file_old(camera);
     if (fd == NULL) {
 	G_warning(_("Unable to open camera file '%s' in '%s'"),
-		  camera, G_mapset());
+		  camera, G_subproject());
 
 	return 0;
     }
@@ -106,7 +106,7 @@ int I_get_cam_info(char *camera, struct Ortho_Camera_File_Ref *cam_info)
     fclose(fd);
     if (stat < 0) {
 	G_warning(_("Bad format in camera file '%s' in '%s'"),
-		  camera, G_mapset());
+		  camera, G_subproject());
 
 	return 0;
     }
@@ -122,7 +122,7 @@ int I_put_cam_info(char *camera, struct Ortho_Camera_File_Ref *cam_info)
     fd = I_fopen_cam_file_new(camera);
     if (fd == NULL) {
 	G_warning(_("Unable to open camera file '%s' in '%s'"),
-		  camera, G_mapset());
+		  camera, G_subproject());
 
 	return 0;
     }

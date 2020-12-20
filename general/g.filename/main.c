@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 {
     char path[1024];
     const char *element;
-    const char *mapset;
+    const char *subproject;
     const char *name;
     struct GModule *module;
     struct Option *opt1;
@@ -56,10 +56,10 @@ int main(int argc, char *argv[])
     opt3->description = _("Name of a database file");
 
     opt2 = G_define_option();
-    opt2->key = "mapset";
+    opt2->key = "subproject";
     opt2->type = TYPE_STRING;
     opt2->required = NO;
-    opt2->description = _("Name of a mapset (default: current)");
+    opt2->description = _("Name of a subproject (default: current)");
 
 
     if (G_parser(argc, argv))
@@ -69,15 +69,15 @@ int main(int argc, char *argv[])
     name = opt3->answer;
 
     if (opt2->answer)
-	mapset = opt2->answer;
+	subproject = opt2->answer;
     else
-	mapset = G_mapset();
+	subproject = G_subproject();
 
-    if (strcmp(mapset, ".") == 0 || strcmp(mapset, "") == 0)
-	mapset = G_mapset();
+    if (strcmp(subproject, ".") == 0 || strcmp(subproject, "") == 0)
+	subproject = G_subproject();
 
-    G_make_mapset_element(element);
-    G_file_name(path, element, name, mapset);
+    G_make_subproject_element(element);
+    G_file_name(path, element, name, subproject);
 
     fprintf(stdout, "file='%s'\n", path);
     exit(EXIT_SUCCESS);

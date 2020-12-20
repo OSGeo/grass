@@ -11,7 +11,7 @@ int valid_basins(char *accum_name, OUTPUT * output)
     /* int nrows, ncols; */
     CELL *buf;
     B_FACTS *basin_facts, *basin, *down_basin;
-    char *mapset;
+    char *subproject;
     struct Cell_head *window;
 
     window = &(output->window);
@@ -19,11 +19,11 @@ int valid_basins(char *accum_name, OUTPUT * output)
        nrows = Rast_window_rows ();
        ncols = Rast_window_cols ();
      */
-    if (NULL == (mapset = G_find_raster(accum_name, ""))) {
+    if (NULL == (subproject = G_find_raster(accum_name, ""))) {
 	free_output(output);
 	G_fatal_error(_("accum file missing in valid_basins()"));
     }
-    fd = Rast_open_old(accum_name, mapset);
+    fd = Rast_open_old(accum_name, subproject);
 
     buf = Rast_allocate_c_buf();
     basin_facts = output->basin_facts;

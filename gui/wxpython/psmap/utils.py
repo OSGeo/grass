@@ -245,7 +245,7 @@ def AutoAdjust(self, scaleType, rect, env, map=None, mapType=None, region=None):
 
         else:
             return None, None, None
-    # fails after switching location
+    # fails after switching project
     except (grass.ScriptError, grass.CalledModuleError):
         pass
 
@@ -373,7 +373,7 @@ def projInfo():
         if ':' in line:
             key, val = line.split(':')
             projinfo[key.strip()] = val.strip()
-        elif "XY location (unprojected)" in line:
+        elif "XY project (unprojected)" in line:
             projinfo['proj'] = 'xy'
             projinfo['units'] = ''
             break

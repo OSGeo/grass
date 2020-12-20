@@ -122,9 +122,9 @@ int Vect__read_head(struct Map_info *Map)
     /* Reset / init */
     Vect__init_head(Map);
     
-    G_debug(1, "Vect__read_head(): vector = %s@%s", Map->name, Map->mapset);
+    G_debug(1, "Vect__read_head(): vector = %s@%s", Map->name, Map->subproject);
     Vect__get_path(path, Map);
-    head_fp = G_fopen_old(path, GV_HEAD_ELEMENT, Map->mapset);
+    head_fp = G_fopen_old(path, GV_HEAD_ELEMENT, Map->subproject);
     if (head_fp == NULL) {
 	G_warning(_("Unable to open header file of vector <%s>"),
 		  Vect_get_full_name(Map));
@@ -193,28 +193,28 @@ const char *Vect_get_name(const struct Map_info *Map)
 }
 
 /*!
-   \brief Get name of mapset where vector map lives
+   \brief Get name of subproject where vector map lives
 
    \param Map pointer to Map_info structure
 
-   \return string containing mapset name
+   \return string containing subproject name
 */
-const char *Vect_get_mapset(const struct Map_info *Map)
+const char *Vect_get_subproject(const struct Map_info *Map)
 {
-    return Map->mapset;
+    return Map->subproject;
 }
 
 /*!
   \brief Get fully qualified name of vector map
   
-  - for GV_FORMAT_NATIVE and GV_FORMAT_OGR returns "map@mapset"
+  - for GV_FORMAT_NATIVE and GV_FORMAT_OGR returns "map@subproject"
   - for GV_FORMAT_OGR_DIRECT returns "layer@datasourse"
 
   Allocated string should be freed by G_free().
   
   \param Map pointer to Map_info structure
   
-  \return allocated string "name@mapset"
+  \return allocated string "name@subproject"
  */
 const char *Vect_get_full_name(const struct Map_info *Map)
 {
@@ -231,9 +231,9 @@ const char *Vect_get_full_name(const struct Map_info *Map)
 	return ptr;
     }
 
-    ptr = (char *) G_malloc(strlen(Map->name) + strlen(Map->mapset) + 2);
-    if (strlen(Map->mapset) > 0) {
-	sprintf(ptr, "%s@%s", Map->name, Map->mapset);
+    ptr = (char *) G_malloc(strlen(Map->name) + strlen(Map->subproject) + 2);
+    if (strlen(Map->subproject) > 0) {
+	sprintf(ptr, "%s@%s", Map->name, Map->subproject);
     }
     else {
 	sprintf(ptr, "%s", Map->name);
@@ -481,8 +481,8 @@ int Vect_get_zone(const struct Map_info *Map)
 {
     /* return Map->head.plani_zone; */
 
-    /* use utm zone of current location,
-     * a vector in a given location can not be in a different CRS */
+    /* use utm zone of current project,
+     * a vector in a given project can not be in a different CRS */
     return G_zone();
 }
 

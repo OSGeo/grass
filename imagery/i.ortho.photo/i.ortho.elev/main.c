@@ -39,17 +39,17 @@ int main(int argc, char *argv[])
 {
 
     struct GModule *module;
-    struct Option *group_opt, *loc_opt, *mapset_opt, *elev_opt;
+    struct Option *group_opt, *loc_opt, *subproject_opt, *elev_opt;
     struct Option *math_opt, *unit_opt, *nd_opt;
     struct Flag *list_flag, *print_flag;
 
-    char location[GMAPSET_MAX];
-    char mapset[GMAPSET_MAX];
+    char project[GMAPSET_MAX];
+    char subproject[GMAPSET_MAX];
     char group[GNAME_MAX];
 
     char *elev_layer;
-    char *mapset_elev, *mapset_elev_old;
-    char *location_elev, *location_elev_old;
+    char *subproject_elev, *subproject_elev_old;
+    char *project_elev, *project_elev_old;
     char *math_exp;
     char *units;
     char *nd;
@@ -73,12 +73,12 @@ int main(int argc, char *argv[])
     loc_opt = G_define_standard_option(G_OPT_M_LOCATION);
     loc_opt->required = NO;
     loc_opt->description =
-	_("Name of the target location");
+	_("Name of the target project");
 
-    mapset_opt = G_define_standard_option(G_OPT_M_MAPSET);
-    mapset_opt->required = NO;
-    mapset_opt->description =
-	_("Name of the target mapset");
+    subproject_opt = G_define_standard_option(G_OPT_M_MAPSET);
+    subproject_opt->required = NO;
+    subproject_opt->description =
+	_("Name of the target subproject");
 
     elev_opt = G_define_standard_option(G_OPT_R_ELEV);
     elev_opt->required = NO;
@@ -110,28 +110,28 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     elev_layer = (char *)G_malloc(GNAME_MAX * sizeof(char));
-    mapset_elev = (char *)G_malloc(GMAPSET_MAX * sizeof(char));
-    mapset_elev_old = (char *)G_malloc(GMAPSET_MAX * sizeof(char));
-    location_elev = (char *)G_malloc(80 * sizeof(char));
-    location_elev_old = (char *)G_malloc(80 * sizeof(char));
+    subproject_elev = (char *)G_malloc(GMAPSET_MAX * sizeof(char));
+    subproject_elev_old = (char *)G_malloc(GMAPSET_MAX * sizeof(char));
+    project_elev = (char *)G_malloc(80 * sizeof(char));
+    project_elev_old = (char *)G_malloc(80 * sizeof(char));
     math_exp = (char *)G_malloc(80 * sizeof(char));
     units = (char *)G_malloc(80 * sizeof(char));
     nd = (char *)G_malloc(80 * sizeof(char));
 
     *elev_layer = 0;
-    *mapset_elev = 0;
-    *mapset_elev_old = 0;
-    *location_elev = 0;
-    *location_elev_old = 0;
+    *subproject_elev = 0;
+    *subproject_elev_old = 0;
+    *project_elev = 0;
+    *project_elev_old = 0;
     *math_exp = 0;
     *units = 0;
     *nd = 0;
 
     strcpy(group, group_opt->answer);
     if (loc_opt->answer)
-    	strcpy(location_elev, loc_opt->answer);
-    if (mapset_opt->answer)
-    	strcpy(mapset_elev, mapset_opt->answer);
+    	strcpy(project_elev, loc_opt->answer);
+    if (subproject_opt->answer)
+    	strcpy(subproject_elev, subproject_opt->answer);
     /*if(elev_opt->answer)
     	strcpy(elev_layer, elev_opt->answer);*/
     if (math_opt->answer)
@@ -141,26 +141,26 @@ int main(int argc, char *argv[])
     if (nd_opt->answer)
     	strcpy(nd, nd_opt->answer);
 	
-    if (!I_get_target(group, location, mapset)) {
+    if (!I_get_target(group, project, subproject)) {
 	G_fatal_error(_("Please select a target for group [%s] first"), group);
     }
 
-    sprintf(buf, "%s/%s", G_gisdbase(), location);
+    sprintf(buf, "%s/%s", G_gisdbase(), project);
     if (access(buf, 0) != 0) {
-	G_fatal_error(_("Target location [%s] not found\n"), location);
+	G_fatal_error(_("Target project [%s] not found\n"), project);
     }
 
     /*Report the contents of the ELEVATION file as in the GROUP */
     if (print_flag->answer) {
 	/*If the content is empty report an error */
-	if (!I_get_group_elev(group, elev_layer, mapset_elev, location_elev, math_exp, units, nd)) {
+	if (!I_get_group_elev(group, elev_layer, subproject_elev, project_elev, math_exp, units, nd)) {
 		G_fatal_error(_("Cannot find default elevation map for target in group [%s]"),group);
 	}
 	/*If there is a content, print it */
 	else {
 	    fprintf(stdout, "map:\t\t\t%s\n",elev_layer);
-	    fprintf(stdout, "mapset:\t\t\t%s\n",mapset_elev);
-	    fprintf(stdout, "location:\t\t%s\n",location_elev);
+	    fprintf(stdout, "subproject:\t\t\t%s\n",subproject_elev);
+	    fprintf(stdout, "project:\t\t%s\n",project_elev);
 	    fprintf(stdout, "math expression:\t%s\n",math_exp);
 	    fprintf(stdout, "units:\t\t\t%s\n",units);
 	    fprintf(stdout, "nodata value:\t\t%s\n",nd);
@@ -170,14 +170,14 @@ int main(int argc, char *argv[])
 
     /*Creating a Target environment*/
     G_create_alt_env();
-    /*Set an alternate Location */
-    G_setenv_nogisrc("LOCATION_NAME", location);
-    /*Check for permissions in mapset */
-    stat = G_mapset_permissions(mapset);
-    /*We have permissions on the mapset */
+    /*Set an alternate Project */
+    G_setenv_nogisrc("LOCATION_NAME", project);
+    /*Check for permissions in subproject */
+    stat = G_subproject_permissions(subproject);
+    /*We have permissions on the subproject */
     if (stat > 0) {
-	/*Set the alternate mapset */
-	G_setenv_nogisrc("MAPSET", mapset);
+	/*Set the alternate subproject */
+	G_setenv_nogisrc("MAPSET", subproject);
 	/*Make an alternate search path */
 	G_create_alt_search_path();
 	/*Switch from current to alternate environment */
@@ -188,53 +188,53 @@ int main(int argc, char *argv[])
 	which_env = 0;
         /*Select the target environment */
 	select_target_env();
-	/*Start working on the Target mapset */
+	/*Start working on the Target subproject */
         if (!elev_opt->answer) {
-	    /* select current location */
+	    /* select current project */
 	    select_current_env();
 	    G_fatal_error(_("Elevation map name is missing. Please set '%s' option"),
 	        elev_opt->key);
 	}
 	
-	/* return to current Location/mapset to write in the group file */
+	/* return to current Project/subproject to write in the group file */
 	select_current_env();
 	
 	/* load information from the ELEVATION file in the GROUP */
 	if (I_find_group_elev_file(group)) {
-	    I_get_group_elev(group, elev_layer, mapset_elev_old, location_elev_old,
+	    I_get_group_elev(group, elev_layer, subproject_elev_old, project_elev_old,
 	                     math_exp, units, nd);
-	    if (*location_elev == 0)
-		strcpy(location_elev, location_elev_old);
-	    if (*mapset_elev == 0)
-		strcpy(mapset_elev, mapset_elev_old);
+	    if (*project_elev == 0)
+		strcpy(project_elev, project_elev_old);
+	    if (*subproject_elev == 0)
+		strcpy(subproject_elev, subproject_elev_old);
 	}
-	/* if location and/or mapset of elevation are not set, use target */
-	if (*mapset_elev == 0)
-	    strcpy(mapset_elev, mapset);
-	if (*location_elev == 0)
-	    strcpy(location_elev, location);
+	/* if project and/or subproject of elevation are not set, use target */
+	if (*subproject_elev == 0)
+	    strcpy(subproject_elev, subproject);
+	if (*project_elev == 0)
+	    strcpy(project_elev, project);
 
-	/* select target location */
+	/* select target project */
 	select_target_env();
 	/* elevation map exists in target ? */
-	if (G_find_raster2(elev_opt->answer, mapset_elev) == NULL) {
-            /* select current location */
+	if (G_find_raster2(elev_opt->answer, subproject_elev) == NULL) {
+            /* select current project */
 	    select_current_env();
 	    G_fatal_error(_("Raster map <%s> not found"), elev_opt->answer);
 	}
-	/* select current location */
+	/* select current project */
 	select_current_env();
 
 	/* Modify ELEVATION file in source GROUP */
-	I_put_group_elev(group, elev_opt->answer, mapset_elev, location_elev, 
+	I_put_group_elev(group, elev_opt->answer, subproject_elev, project_elev, 
 			 math_exp, units, nd);
 
-        G_message(_("Group [%s] in location [%s] mapset [%s] now uses elevation map [%s]"),
-	          group, G_location(), G_mapset(), elev_opt->answer);
+        G_message(_("Group [%s] in project [%s] subproject [%s] now uses elevation map [%s]"),
+	          group, G_project(), G_subproject(), elev_opt->answer);
     }
     else {
-	G_fatal_error(_("Mapset [%s] in target location [%s] - %s "),
-                  mapset, location,
+	G_fatal_error(_("Subproject [%s] in target project [%s] - %s "),
+                  subproject, project,
 		  stat == 0 ? _("permission denied\n") : _("not found\n"));
     }
 

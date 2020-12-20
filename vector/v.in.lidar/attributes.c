@@ -159,7 +159,7 @@ void las_point_to_attributes(struct field_info *Fi, dbDriver * driver,
     static char buf[2000];
     static dbString sql;
 
-    /* unfortunately we have to do allocation every time because
+    /* unfortunately we have to do alproject every time because
      * we need to clean the string the first time
      * if desired, we could rely on static variable being initialized
      * to 0 (at least C99) which is what the function is currently doing */

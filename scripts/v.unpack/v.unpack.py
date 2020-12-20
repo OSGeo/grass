@@ -32,8 +32,8 @@
 #%end
 #%flag
 #% key: o
-#% label: Override projection check (use current location's projection)
-#% description: Assume that the dataset has same projection as the current location
+#% label: Override projection check (use current project's projection)
+#% description: Assume that the dataset has same projection as the current project
 #% guisection: Output settings
 #%end
 #%flag
@@ -106,7 +106,7 @@ def main():
 
     new_dir = os.path.join(mset_dir, 'vector', map_name)
 
-    gfile = grass.find_file(name=map_name, element='vector', mapset='.')
+    gfile = grass.find_file(name=map_name, element='vector', subproject='.')
     overwrite = os.getenv('GRASS_OVERWRITE')
     if gfile['file'] and overwrite != '1':
         grass.fatal(_("Vector map <%s> already exists") % map_name)
@@ -135,8 +135,8 @@ def main():
     if not os.path.exists(os.path.join(tmp_dir, 'PROJ_INFO')):
         if os.path.exists(loc_proj):
             grass.fatal(
-                _("PROJ_INFO file is missing, unpack vector map in XY (unprojected) location."))
-        skip_projection_check = True  # XY location
+                _("PROJ_INFO file is missing, unpack vector map in XY (unprojected) project."))
+        skip_projection_check = True  # XY project
 
     if not skip_projection_check:
         diff_result_1 = diff_result_2 = None
@@ -157,14 +157,14 @@ def main():
             else:
                 if diff_result_1:
                     grass.warning(_("Difference between PROJ_INFO file of packed map "
-                                    "and of current location:\n{diff}").format(diff=''.join(diff_result_1)))
+                                    "and of current project:\n{diff}").format(diff=''.join(diff_result_1)))
                 if diff_result_2:
                     grass.warning(_("Difference between PROJ_UNITS file of packed map "
-                                    "and of current location:\n{diff}").format(diff=''.join(diff_result_2)))
-                grass.fatal(_("Projection of dataset does not appear to match current location."
+                                    "and of current project:\n{diff}").format(diff=''.join(diff_result_2)))
+                grass.fatal(_("Projection of dataset does not appear to match current project."
                               " In case of no significant differences in the projection definitions,"
                               " use the -o flag to ignore them and use"
-                              " current location definition."))
+                              " current project definition."))
 
     # new db
     fromdb = os.path.join(tmp_dir, 'db.sqlite')
@@ -172,7 +172,7 @@ def main():
     shutil.copytree(data_name, new_dir)
     # exist fromdb
     if os.path.exists(fromdb):
-        # the db connection in the output mapset
+        # the db connection in the output subproject
         dbconn = grassdb.db_connection(force=True)
         todb = dbconn['database']
         # return all tables

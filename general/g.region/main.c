@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     struct Cell_head window, temp_window;
     const char *value;
     const char *name;
-    const char *mapset;
+    const char *subproject;
     char **rast_ptr, **vect_ptr;
     int pix;
 
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
     flag.savedefault = G_define_flag();
     flag.savedefault->key = 's';
     flag.savedefault->label = _("Save as default region");
-    flag.savedefault->description = _("Only possible from the PERMANENT mapset");
+    flag.savedefault->description = _("Only possible from the PERMANENT subproject");
     flag.savedefault->guisection = _("Existing");
 
     flag.print = G_define_flag();
@@ -422,10 +422,10 @@ int main(int argc, char *argv[])
 
     /* region= */
     if ((name = parm.region->answer)) {
-	mapset = G_find_file2("windows", name, "");
-	if (!mapset)
+	subproject = G_find_file2("windows", name, "");
+	if (!subproject)
 	    G_fatal_error(_("Region <%s> not found"), name);
-	G_get_element_window(&window, "windows", name, mapset);
+	G_get_element_window(&window, "windows", name, subproject);
     }
 
     /* raster= */
@@ -437,10 +437,10 @@ int main(int argc, char *argv[])
 	    char rast_name[GNAME_MAX];
 
 	    strcpy(rast_name, *rast_ptr);
-	    mapset = G_find_raster2(rast_name, "");
-	    if (!mapset)
+	    subproject = G_find_raster2(rast_name, "");
+	    if (!subproject)
 		G_fatal_error(_("Raster map <%s> not found"), rast_name);
-	    Rast_get_cellhd(rast_name, mapset, &temp_window);
+	    Rast_get_cellhd(rast_name, subproject, &temp_window);
 	    if (!first) {
 		window = temp_window;
 		first = 1;
@@ -464,12 +464,12 @@ int main(int argc, char *argv[])
     if ((name = parm.raster3d->answer)) {
 	RASTER3D_Region win;
 
-	if ((mapset = G_find_raster3d(name, "")) == NULL)
+	if ((subproject = G_find_raster3d(name, "")) == NULL)
 	    G_fatal_error(_("3D raster map <%s> not found"), name);
 
-	if (Rast3d_read_region_map(name, mapset, &win) < 0)
+	if (Rast3d_read_region_map(name, subproject, &win) < 0)
 	    G_fatal_error(_("Unable to read header of 3D raster map <%s@%s>"),
-			  name, mapset);
+			  name, subproject);
 
 	Rast3d_region_to_cell_head(&win, &window);
     }
@@ -487,18 +487,18 @@ int main(int argc, char *argv[])
 	    struct Cell_head map_window;
 
 	    strcpy(vect_name, *vect_ptr);
-	    mapset = G_find_vector2(vect_name, "");
-	    if (!mapset)
+	    subproject = G_find_vector2(vect_name, "");
+	    if (!subproject)
 		G_fatal_error(_("Vector map <%s> not found"), vect_name);
 
 	    temp_window = window;
 
             /* try to open head-only on level 2 */
-            if (Vect_open_old_head(&Map, vect_name, mapset) < 2) {
+            if (Vect_open_old_head(&Map, vect_name, subproject) < 2) {
                 /* force level 1, open fully */
                 Vect_close(&Map);
                 Vect_set_open_level(1); /* no topology */
-                if (Vect_open_old(&Map, vect_name, mapset) < 1)
+                if (Vect_open_old(&Map, vect_name, subproject) < 1)
                     G_fatal_error(_("Unable to open vector map <%s>"),
                                   vect_name);
             }
@@ -774,18 +774,18 @@ int main(int argc, char *argv[])
 
     /* zoom= */
     if ((name = parm.zoom->answer)) {
-	mapset = G_find_raster2(name, "");
-	if (!mapset)
+	subproject = G_find_raster2(name, "");
+	if (!subproject)
 	    G_fatal_error(_("Raster map <%s> not found"), name);
-	zoom(&window, name, mapset);
+	zoom(&window, name, subproject);
     }
 
     /* align= */
     if ((name = parm.align->answer)) {
-	mapset = G_find_raster2(name, "");
-	if (!mapset)
+	subproject = G_find_raster2(name, "");
+	if (!subproject)
 	    G_fatal_error(_("Raster map <%s> not found"), name);
-	Rast_get_cellhd(name, mapset, &temp_window);
+	Rast_get_cellhd(name, subproject, &temp_window);
 	Rast_align_window(&window, &temp_window);
     }
     
@@ -841,12 +841,12 @@ int main(int argc, char *argv[])
     }
 
     if (flag.savedefault->answer) {
-	if (strcmp(G_mapset(), "PERMANENT") == 0) {
+	if (strcmp(G_subproject(), "PERMANENT") == 0) {
 	    G_put_element_window(&window, "", "DEFAULT_WIND");
 	}
 	else {
 	    G_fatal_error(_("Unable to change default region. "
-			    "The current mapset is not <PERMANENT>."));
+			    "The current subproject is not <PERMANENT>."));
 	}
     }				/* / flag.savedefault->answer */
 

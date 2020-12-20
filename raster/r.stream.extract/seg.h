@@ -12,7 +12,7 @@ CSEG {
     int fd;			/* fd for reading/writing segment file */
     char *filename;		/* name of segment file */
     char *name;			/* raster map read into segment file */
-    char *mapset;
+    char *subproject;
 };
 
 #define DSEG struct _d_s_e_g_
@@ -21,7 +21,7 @@ DSEG {
     int fd;			/* fd for reading/writing segment file */
     char *filename;		/* name of segment file */
     char *name;			/* raster map read into segment file */
-    char *mapset;
+    char *subproject;
 };
 
 #define BSEG struct _b_s_e_g_
@@ -30,7 +30,7 @@ BSEG {
     int fd;			/* fd for reading/writing segment file */
     char *filename;		/* name of segment file */
     char *name;			/* raster map read into segment file */
-    char *mapset;
+    char *subproject;
 };
 
 #define SSEG struct _s_s_e_g_

@@ -41,7 +41,7 @@
 #define ELLIPSOIDTABLE "/etc/proj/ellipse.table"
 #define DATUMTABLE "/etc/proj/datum.table"
 #define DATUMTRANSFORMTABLE "/etc/proj/datumtransform.table"
-/* GRASS relative location of datum conversion lookup tables */
+/* GRASS relative project of datum conversion lookup tables */
 #define GRIDDIR "/etc/proj/nad"
 
 /* TODO: rename pj_ to gpj_ to avoid symbol clash with PROJ lib */

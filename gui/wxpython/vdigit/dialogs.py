@@ -779,7 +779,7 @@ class CheckListFeature(
 
     def __init__(self, parent, data,
                  pos=wx.DefaultPosition, log=None):
-        """List of mapset/owner/group
+        """List of subproject/owner/group
         """
         self.parent = parent
         self.data = data
@@ -813,6 +813,6 @@ class CheckListFeature(
         self.SetColumnWidth(col=1, width=wx.LIST_AUTOSIZE_USEHEADER)
 
     def OnCheckItem(self, index, flag):
-        """Mapset checked/unchecked
+        """Subproject checked/unchecked
         """
         pass

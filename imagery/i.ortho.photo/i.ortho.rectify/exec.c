@@ -20,7 +20,7 @@ int exec_rectify(struct Ortho_Image_Group *group, int *ref_list,
                  char *extension, char *interp_method, char *angle_map)
 {
     char *name;
-    char *mapset;
+    char *subproject;
     char *result;
     char *type = "raster";
     int n;
@@ -42,7 +42,7 @@ int exec_rectify(struct Ortho_Image_Group *group, int *ref_list,
 	    target_window.rows, target_window.cols, target_window.north,
 	    target_window.south, target_window.west, target_window.east);
 
-    elevfd = Rast_open_old(elev_name, elev_mapset);
+    elevfd = Rast_open_old(elev_name, elev_subproject);
     if (elevfd < 0) {
 	G_fatal_error(_("Could not open elevation raster"));
 	return 1;
@@ -63,7 +63,7 @@ int exec_rectify(struct Ortho_Image_Group *group, int *ref_list,
 	    continue;
 
 	name = group->group_ref.file[n].name;
-	mapset = group->group_ref.file[n].mapset;
+	subproject = group->group_ref.file[n].subproject;
 	result =
 	    G_malloc(strlen(group->group_ref.file[n].name) + strlen(extension) + 1);
 	strcpy(result, group->group_ref.file[n].name);
@@ -71,17 +71,17 @@ int exec_rectify(struct Ortho_Image_Group *group, int *ref_list,
 
 	G_debug(2, "ORTHO RECTIFYING:");
 	G_debug(2, "NAME %s", name);
-	G_debug(2, "MAPSET %s", mapset);
+	G_debug(2, "MAPSET %s", subproject);
 	G_debug(2, "RESULT %s", result);
 	G_debug(2, "select_current_env...");
 
 	select_current_env();
 
-	cats_ok = Rast_read_cats(name, mapset, &cats) >= 0;
-	colr_ok = Rast_read_colors(name, mapset, &colr) > 0;
+	cats_ok = Rast_read_cats(name, subproject, &cats) >= 0;
+	colr_ok = Rast_read_colors(name, subproject, &colr) > 0;
 
 	/* Initialze History */
-	if (Rast_read_history(name, mapset, &hist) < 0)
+	if (Rast_read_history(name, subproject, &hist) < 0)
 	    Rast_short_history(result, type, &hist);
 	G_debug(2, "reading was fine...");
 
@@ -89,7 +89,7 @@ int exec_rectify(struct Ortho_Image_Group *group, int *ref_list,
 
 	G_debug(2, "Starting the rectification...");
 
-	if (rectify(group, name, mapset, ebuffer, aver_z, result, interp_method)) {
+	if (rectify(group, name, subproject, ebuffer, aver_z, result, interp_method)) {
 	    G_debug(2, "Done. Writing results...");
 	    select_target_env();
 	    if (cats_ok) {
@@ -97,7 +97,7 @@ int exec_rectify(struct Ortho_Image_Group *group, int *ref_list,
 		Rast_free_cats(&cats);
 	    }
 	    if (colr_ok) {
-		Rast_write_colors(result, G_mapset(), &colr);
+		Rast_write_colors(result, G_subproject(), &colr);
 		Rast_free_colors(&colr);
 	    }
 	    /* Write out History */

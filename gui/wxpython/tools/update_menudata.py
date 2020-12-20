@@ -41,7 +41,7 @@ def parseModules():
     modules = dict()
 
     # list of modules to be ignored
-    ignore = ['g.mapsets_picker.py',
+    ignore = ['g.subprojects_picker.py',
               'v.type_wrapper.py',
               'g.parser',
               'vcolors']

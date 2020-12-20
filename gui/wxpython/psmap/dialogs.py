@@ -1862,15 +1862,15 @@ class VectorPanel(Panel):
         if vmap:
             mapname = vmap.split('@')[0]
             try:
-                mapset = '(' + vmap.split('@')[1] + ')'
+                subproject = '(' + vmap.split('@')[1] + ')'
             except IndexError:
-                mapset = ''
+                subproject = ''
             idx = self.vectorType.GetSelection()
             ttype = self.topologyTypeList[idx]
             record = "%s - %s" % (vmap, ttype)
             id = NewId()
             lpos = 1
-            label = mapname + mapset
+            label = mapname + subproject
             self.vectorList.insert(0, [vmap, ttype, id, lpos, label])
             self.reposition()
             self.listbox.InsertItems([record], 0)

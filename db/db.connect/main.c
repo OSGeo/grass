@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("attribute table"));
     G_add_keyword(_("connection settings"));
     module->description =
-	_("Prints/sets general DB connection for current mapset.");
+	_("Prints/sets general DB connection for current subproject.");
 
     print = G_define_flag();
     print->key = 'p';
@@ -247,14 +247,14 @@ char *substitute_variables(dbConnection *conn)
     c = (char *)strstr(buf, "$LOCATION_NAME");
     if (c != NULL) {
         *c = '\0';
-        sprintf(database, "%s%s%s", buf, G_location(), c + 14);
+        sprintf(database, "%s%s%s", buf, G_project(), c + 14);
     }
     
     strcpy(buf, database);
     c = (char *)strstr(buf, "$MAPSET");
     if (c != NULL) {
         *c = '\0';
-        sprintf(database, "%s%s%s", buf, G_mapset(), c + 7);
+        sprintf(database, "%s%s%s", buf, G_subproject(), c + 7);
     }
 #ifdef __MINGW32__
     if (strcmp(conn->driverName, "sqlite") == 0 ||

@@ -2,8 +2,8 @@
 
 <p><em>r.viewshed</em> is a module that computes the viewshed of a
 point on a raster terrain. That is, given an elevation raster, and the
-location of an observer, it generates a raster output map showing
-which cells are visible from the given location. 
+project of an observer, it generates a raster output map showing
+which cells are visible from the given project. 
 
 The algorithm underlying <em>r.viewshed</em> minimizes both the CPU
 operations and the transfer of data between main memory and disk; as a
@@ -12,11 +12,11 @@ result <em>r.viewshed</em> runs fast on very large rasters.
 <h2>NOTES</h2>
 
 To run <em>r.viewshed</em>, the user must specify an input elevation
-map name, an output raster map name, and the location of the
+map name, an output raster map name, and the project of the
 viewpoint.
 
 <p>For the time being the viewpoint (<b>coordinates</b> parameter) is
-assumed to be located inside the terrain.  The viewpoint location is
+assumed to be located inside the terrain.  The viewpoint project is
 given in map coordinates.
 
 <p>The output raster map may have one of three possible formats, based

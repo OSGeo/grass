@@ -269,24 +269,24 @@
     <description>Shows the extent of the computational region in Map Display.</description>
     <keywords>general,settings</keywords>
   </wxgui-item>
-  <wxgui-item name="MapsetAccess">
-    <label>Mapset access</label>
-    <handler>OnMapsets</handler>
-    <related-module>g.mapsets</related-module>
-    <description>Set/unset access to other mapsets in current location</description>
+  <wxgui-item name="SubprojectAccess">
+    <label>Subproject access</label>
+    <handler>OnSubprojects</handler>
+    <related-module>g.subprojects</related-module>
+    <description>Set/unset access to other subprojects in current project</description>
     <keywords>general,settings,search path</keywords>
   </wxgui-item>
-  <wxgui-item name="ChangeLocationAndMapset">
-    <label>Change location and mapset</label>
-    <handler>OnChangeLocation</handler>
-    <description>Change current location and mapset.</description>
-    <keywords>general,location,current</keywords>
+  <wxgui-item name="ChangeProjectAndSubproject">
+    <label>Change project and subproject</label>
+    <handler>OnChangeProject</handler>
+    <description>Change current project and subproject.</description>
+    <keywords>general,project,current</keywords>
   </wxgui-item>
-  <wxgui-item name="ChangeMapset">
-    <label>Change mapset</label>
-    <handler>OnChangeMapset</handler>
-    <description>Change current mapset.</description>
-    <keywords>general,mapset,current</keywords>
+  <wxgui-item name="ChangeSubproject">
+    <label>Change subproject</label>
+    <handler>OnChangeSubproject</handler>
+    <description>Change current subproject.</description>
+    <keywords>general,subproject,current</keywords>
   </wxgui-item>
   <wxgui-item name="ChangeWorkingDirectory">
     <label>Change working directory</label>
@@ -299,17 +299,17 @@
     <description>Outputs and modifies the user's current GRASS variable settings.</description>
     <keywords>general,settings,variables</keywords>
   </wxgui-item>
-  <wxgui-item name="CreateNewLocation">
-    <label>Create new location</label>
-    <handler>OnLocationWizard</handler>
-    <description>Launches location wizard to create new GRASS location.</description>
-    <keywords>general,location,wizard</keywords>
+  <wxgui-item name="CreateNewProject">
+    <label>Create new project</label>
+    <handler>OnProjectWizard</handler>
+    <description>Launches project wizard to create new GRASS project.</description>
+    <keywords>general,project,wizard</keywords>
   </wxgui-item>
-  <wxgui-item name="CreateNewMapset">
-    <label>Create new mapset</label>
-    <handler>OnCreateMapset</handler>
-    <description>Creates new mapset in the current location, changes current mapset.</description>
-    <keywords>general,mapset,create</keywords>
+  <wxgui-item name="CreateNewSubproject">
+    <label>Create new subproject</label>
+    <handler>OnCreateSubproject</handler>
+    <description>Creates new subproject in the current project, changes current subproject.</description>
+    <keywords>general,subproject,create</keywords>
   </wxgui-item>
   <wxgui-item name="VersionAndCopyright">
     <label>Version and copyright</label>
@@ -321,7 +321,7 @@
     <label>Display map projection</label>
     <command>g.proj -p</command>
     <description>Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format).</description>
-    <keywords>general,projection,create location</keywords>
+    <keywords>general,projection,create project</keywords>
   </wxgui-item>
   <wxgui-item name="InstallExtensionFromAddons">
     <label>Install extension from addons</label>

@@ -144,18 +144,18 @@ def main():
         'map_type': options['type'],
     }
 
-    mapset = gs.gisenv()['MAPSET']
+    subproject = gs.gisenv()['MAPSET']
 
     if kwargs['edit_map']:
         edit_map = gs.find_file(
             name=kwargs['edit_map'], element='raster',
-            mapset=mapset,
+            subproject=subproject,
         )['fullname']
 
         if not edit_map:
             gs.fatal(
                 _(
-                    "Raster map <{}> not found in current mapset.".format(
+                    "Raster map <{}> not found in current subproject.".format(
                         options['edit'],
                     ),
                 ),
@@ -166,13 +166,13 @@ def main():
         if kwargs['base_map']:
             base_map = gs.find_file(
                 name=kwargs['base_map'], element='raster',
-                mapset=mapset,
+                subproject=subproject,
             )['fullname']
             if not base_map:
                 gs.fatal(
                     _(
                         "Base raster map <{}> not found in "
-                        "current mapset."
+                        "current subproject."
                         .format(
                             options['base'],
                         ),

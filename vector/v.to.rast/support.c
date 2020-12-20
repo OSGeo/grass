@@ -205,7 +205,7 @@ int update_dbcolors(const char *rast_name, const char *vector_map, int field,
     }
 
     /* write the rules */
-    Rast_write_colors(rast_name, G_mapset(), &colors);
+    Rast_write_colors(rast_name, G_subproject(), &colors);
 
     return 1;
 }
@@ -260,7 +260,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
     switch (use) {
     case USE_ATTR:
 	{
-	    int is_fp = Rast_map_is_fp(rast_name, G_mapset());
+	    int is_fp = Rast_map_is_fp(rast_name, G_subproject());
 
 	    if (!label_column) {
 		G_verbose_message(_("Label column was not specified, no labels will be written"));
@@ -468,13 +468,13 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    struct FPRange fprange;
 	    struct Range range;
 
-	    map_type = Rast_map_type(rast_name, G_mapset());
+	    map_type = Rast_map_type(rast_name, G_subproject());
 	    Rast_set_cats_title("Rasterized vector map from values", &rast_cats);
 
 	    if (map_type == CELL_TYPE) {
 		CELL min, max;
 
-		Rast_read_range(rast_name, G_mapset(), &range);
+		Rast_read_range(rast_name, G_subproject(), &range);
 		Rast_get_range_min_max(&range, &min, &max);
 
 		sprintf(msg, "Value %d", val);
@@ -483,7 +483,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    else {
 		DCELL fmin, fmax;
 
-		Rast_read_fp_range(rast_name, G_mapset(), &fprange);
+		Rast_read_fp_range(rast_name, G_subproject(), &fprange);
 		Rast_get_fp_range_min_max(&fprange, &fmin, &fmax);
 
 		sprintf(msg, "Value %.4f", (double)val);
@@ -501,7 +501,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    RASTER_MAP_TYPE map_type;
 	    long count;
 
-	    map_type = Rast_map_type(rast_name, G_mapset());
+	    map_type = Rast_map_type(rast_name, G_subproject());
 
 	    if (label_column) {
 
@@ -601,7 +601,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 		 * -> skip */
 
 #if 0
-		fd = Rast_open_old(rast_name, G_mapset());
+		fd = Rast_open_old(rast_name, G_subproject());
 		rowbuf = Rast_allocate_buf(map_type);
 		Rast_init_cell_stats(&stats);
 		rows = Rast_window_rows();
@@ -631,7 +631,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    RASTER_MAP_TYPE map_type;
 	    char msg[64];
 
-	    map_type = Rast_map_type(rast_name, G_mapset());
+	    map_type = Rast_map_type(rast_name, G_subproject());
 	    Rast_set_cats_title("Rasterized vector map from line direction", &rast_cats);
 	    Rast_write_units(rast_name, "degrees CCW from +x");
 

@@ -31,7 +31,7 @@ int get_stats(struct maps_info *input_maps, struct Cell_stats *statf)
     Rast_init_cell_stats(statf);
 
     for (i = 0; i < input_maps->num; i++) {
-	fd = Rast_open_old(input_maps->names[i], input_maps->mapsets[i]);
+	fd = Rast_open_old(input_maps->names[i], input_maps->subprojects[i]);
 
 	cell = Rast_allocate_c_buf();
 	nrows = Rast_window_rows();
@@ -39,7 +39,7 @@ int get_stats(struct maps_info *input_maps, struct Cell_stats *statf)
 
 	G_verbose_message(_("(%i/%i) Reading raster map <%s>..."),
 			i + 1, input_maps->num,
-			G_fully_qualified_name(input_maps->names[i], input_maps->mapsets[i]));
+			G_fully_qualified_name(input_maps->names[i], input_maps->subprojects[i]));
 
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
@@ -63,7 +63,7 @@ void get_fp_stats(struct maps_info *input_maps,
     int fd;
     int i;
     char *name;
-    char *mapset;
+    char *subproject;
     RASTER3D_Map *map3d = NULL;
 
     statf->geometric = geometric;
@@ -103,11 +103,11 @@ void get_fp_stats(struct maps_info *input_maps,
     /* Loop over all input maps */
     for(i = 0; i < input_maps->num; i++) {
 	name = input_maps->names[i];
-	mapset = input_maps->mapsets[i];
+	subproject = input_maps->subprojects[i];
 
 	fd = -1;
 	if (type == RASTER_TYPE) {
-	    fd = Rast_open_old(name, mapset);
+	    fd = Rast_open_old(name, subproject);
 	    dcell = Rast_allocate_d_buf();
 	    nrows = Rast_window_rows();
 	    ncols = Rast_window_cols();
@@ -116,7 +116,7 @@ void get_fp_stats(struct maps_info *input_maps,
 	    /* Initiate the default settings */
 	    Rast3d_init_defaults();
 
-	    map3d = Rast3d_open_cell_old(name, mapset, RASTER3D_DEFAULT_WINDOW,
+	    map3d = Rast3d_open_cell_old(name, subproject, RASTER3D_DEFAULT_WINDOW,
 			    RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
 	    if (map3d == NULL)
@@ -128,7 +128,7 @@ void get_fp_stats(struct maps_info *input_maps,
 	}
 
 	G_verbose_message(_("(%i/%i) Reading map <%s>..."), i, input_maps->num,
-			G_fully_qualified_name(name, mapset));
+			G_fully_qualified_name(name, subproject));
 
 	for (depth = 0; depth < ndepths; depth++) {
 	    for (row = 0; row < nrows; row++) {

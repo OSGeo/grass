@@ -7,7 +7,7 @@
 
   These routines all eventually call calloc() to allocate and zero the
   new space. BUT It is not necessarily safe to assume that the memory
-  will be zero. The next memory location asked for could have been
+  will be zero. The next memory project asked for could have been
   previously used and not zeroed. (e.g. compress()).
   
   This program is free software under the GNU General Public License

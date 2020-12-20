@@ -32,7 +32,7 @@ static int initialized = 0; /** Is set when engine is initialized */
 static int gisinit(void);
 
 /*!
-  \brief Initialize GIS Library and ensures a valid mapset is available.
+  \brief Initialize GIS Library and ensures a valid subproject is available.
   
   \param version
   \param pgm program (module) name
@@ -42,7 +42,7 @@ static int gisinit(void);
 */
 void G__gisinit(const char *version, const char *pgm)
 {
-    const char *mapset;
+    const char *subproject;
 
     if (initialized)
 	return;
@@ -56,17 +56,17 @@ void G__gisinit(const char *version, const char *pgm)
 			"You need to rebuild GRASS GIS or untangle multiple installations."),
                         version, GIS_H_VERSION);
     
-    /* Make sure location and mapset are set */
-    G_location_path();
-    mapset = G_mapset();
-    switch (G_mapset_permissions(mapset)) {
+    /* Make sure project and subproject are set */
+    G_project_path();
+    subproject = G_subproject();
+    switch (G_subproject_permissions(subproject)) {
     case 1:
 	break;
     case 0:
-	G_fatal_error(_("MAPSET %s - permission denied"), mapset);
+	G_fatal_error(_("MAPSET %s - permission denied"), subproject);
 	break;
     default:
-	G_fatal_error(_("MAPSET %s not found at %s"), mapset, G_location_path());
+	G_fatal_error(_("MAPSET %s not found at %s"), subproject, G_project_path());
 	break;
     }
 
@@ -77,7 +77,7 @@ void G__gisinit(const char *version, const char *pgm)
 /*!
   \brief Initialize GIS Library
   
-  Initializes GIS engine, but does not check for a valid mapset.
+  Initializes GIS engine, but does not check for a valid subproject.
 */
 void G__no_gisinit(const char *version)
 {
@@ -149,7 +149,7 @@ void G_init_all(void)
     G_init_debug();
     G_verbose();
     G_init_tempfile();
-    G__get_list_of_mapsets();
+    G__get_list_of_subprojects();
     G__home();
     G__machine_name();
     G_whoami();

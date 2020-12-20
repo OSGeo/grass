@@ -68,7 +68,7 @@
 #%option
 #% key: destproj
 #% type: string
-#% description: Destination projection, defaults to this location's projection
+#% description: Destination projection, defaults to this project's projection
 #% required : no
 #%end
 #%option
@@ -305,7 +305,7 @@ def main():
     if len(dest_bbox_source_points) == 0:
         gcore.fatal(_("There are no tiles available. Probably the output "
                       "projection system it is not compatible with the "
-                      "projection of the current location"))
+                      "projection of the current project"))
 
     source_bbox = pointsToBbox(dest_bbox_source_points)
 

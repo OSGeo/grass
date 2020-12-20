@@ -6,7 +6,7 @@
 * 		soerengebbert <at> gmx <dot> de
 *               
 * PURPOSE:      part of the gpde library
-* 		allocation, destroying and initializing the geometric struct
+* 		alproject, destroying and initializing the geometric struct
 *
 * COPYRIGHT:    (C) 2000 by the GRASS Development Team
 *

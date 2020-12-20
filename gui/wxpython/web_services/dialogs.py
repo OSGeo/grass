@@ -857,7 +857,7 @@ class SaveWMSLayerDialog(wx.Dialog):
         self.params['output'] = Select(
             parent=self,
             type='raster',
-            mapsets=[
+            subprojects=[
                 grass.gisenv()['MAPSET']],
             size=globalvar.DIALOG_GSELECT_SIZE)
 
@@ -1006,7 +1006,7 @@ class SaveWMSLayerDialog(wx.Dialog):
         """Import WMS raster data into GRASS as raster layer.
         """
         self.thread.abort(abortall=True)
-        currmapset = grass.gisenv()['MAPSET']
+        currsubproject = grass.gisenv()['MAPSET']
 
         self.output = self.params['output'].GetValue().strip()
         l_spl = self.output.strip().split("@")
@@ -1017,8 +1017,8 @@ class SaveWMSLayerDialog(wx.Dialog):
             msg = _('Missing output raster.')
 
         elif len(l_spl) > 1 and \
-                l_spl[1] != currmapset:
-            msg = _('Output map can be added only to current mapset.')
+                l_spl[1] != currsubproject:
+            msg = _('Output map can be added only to current subproject.')
 
         elif not self.overwrite.IsChecked() and\
                 grass.find_file(self.output, 'cell', '.')['fullname']:
@@ -1035,12 +1035,12 @@ class SaveWMSLayerDialog(wx.Dialog):
         region = self.params['region'].GetValue().strip()
         reg_spl = region.strip().split("@")
 
-        reg_mapset = '.'
+        reg_subproject = '.'
         if len(reg_spl) > 1:
-            reg_mapset = reg_spl[1]
+            reg_subproject = reg_spl[1]
 
         if self.region_types['named'].GetValue():
-            if not grass.find_file(reg_spl[0], 'windows', reg_mapset)[
+            if not grass.find_file(reg_spl[0], 'windows', reg_subproject)[
                     'fullname']:
                 msg = _(
                     'Region <%s> does not exist.' %

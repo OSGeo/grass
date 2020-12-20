@@ -123,7 +123,7 @@ int Vect_save_fidx(struct Map_info *Map,
     struct gvfile fp;
     struct Port_info port;
 
-    if (strcmp(Map->mapset, G_mapset()) != 0 ||
+    if (strcmp(Map->subproject, G_subproject()) != 0 ||
 	Map->support_updated == FALSE ||
 	Map->plus.built != GV_BUILD_ALL)
 	return 1;

@@ -61,14 +61,14 @@ void Rast_construct_default_range(struct Range *range)
  * default range by calling G_construct_default_range().
  *
  * \param name map name
- * \param mapset mapset name
+ * \param subproject subproject name
  * \param drange pointer to FPRange structure which holds fp range
  *
  * \return 1 on success
  * \return 2 range is empty
  * \return -1 on error
  */
-int Rast_read_fp_range(const char *name, const char *mapset,
+int Rast_read_fp_range(const char *name, const char *subproject,
 		       struct FPRange *drange)
 {
     struct Range range;
@@ -79,11 +79,11 @@ int Rast_read_fp_range(const char *name, const char *mapset,
     Rast_init();
     Rast_init_fp_range(drange);
 
-    if (Rast_map_type(name, mapset) == CELL_TYPE) {
+    if (Rast_map_type(name, subproject) == CELL_TYPE) {
 	/* if map is integer
 	   read integer range and convert it to double */
 
-	if (Rast_read_range(name, mapset, &range) >= 0) {
+	if (Rast_read_range(name, subproject, &range) >= 0) {
 	    /* if the integer range is empty */
 	    if (range.first_time)
 		return 2;
@@ -97,11 +97,11 @@ int Rast_read_fp_range(const char *name, const char *mapset,
 
     fd = -1;
 
-    if (G_find_file2_misc("cell_misc", "f_range", name, mapset)) {
-	fd = G_open_old_misc("cell_misc", "f_range", name, mapset);
+    if (G_find_file2_misc("cell_misc", "f_range", name, subproject)) {
+	fd = G_open_old_misc("cell_misc", "f_range", name, subproject);
 	if (fd < 0) {
 	    G_warning(_("Unable to read fp range file for <%s>"),
-		      G_fully_qualified_name(name, mapset));
+		      G_fully_qualified_name(name, subproject));
 	    return -1;
 	}
 
@@ -109,7 +109,7 @@ int Rast_read_fp_range(const char *name, const char *mapset,
 	    /* if the f_range file exists, but empty file, meaning Nulls */
 	    close(fd);
 	    G_debug(1, "Empty fp range file meaning Nulls for <%s>",
-		      G_fully_qualified_name(name, mapset));
+		      G_fully_qualified_name(name, subproject));
 	    return 2;
 	}
 
@@ -128,7 +128,7 @@ int Rast_read_fp_range(const char *name, const char *mapset,
  * \brief Read raster range (CELL)
  *
  * This routine reads the range information for the raster map
- * <i>name</i> in <i>mapset</i> into the <i>range</i> structure.
+ * <i>name</i> in <i>subproject</i> into the <i>range</i> structure.
  *
  * A diagnostic message is printed and -1 is returned if there is an error
  * reading the range file. Otherwise, 0 is returned.
@@ -143,7 +143,7 @@ int Rast_read_fp_range(const char *name, const char *mapset,
  * create a default range by calling G_construct_default_range().
  *
  * \param name map name
- * \param mapset mapset name
+ * \param subproject subproject name
  * \param[out] range pointer to Range structure which holds range info
  *
  * \return -1 on error
@@ -151,7 +151,7 @@ int Rast_read_fp_range(const char *name, const char *mapset,
  * \return 2 if range is empty
  * \return 3 if raster map is floating-point, get range from quant rules
  */
-int Rast_read_range(const char *name, const char *mapset, struct Range *range)
+int Rast_read_range(const char *name, const char *subproject, struct Range *range)
 {
     FILE *fd;
     CELL x[4];
@@ -163,16 +163,16 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
     fd = NULL;
 
     /* if map is not integer, read quant rules, and get limits */
-    if (Rast_map_type(name, mapset) != CELL_TYPE) {
+    if (Rast_map_type(name, subproject) != CELL_TYPE) {
 	DCELL dmin, dmax;
 
-	if (Rast_read_quant(name, mapset, &quant) < 0) {
+	if (Rast_read_quant(name, subproject, &quant) < 0) {
 	    G_warning(_("Unable to read quant rules for raster map <%s>"),
-		      G_fully_qualified_name(name, mapset));
+		      G_fully_qualified_name(name, subproject));
 	    return -1;
 	}
 	if (Rast_quant_is_truncate(&quant) || Rast_quant_is_round(&quant)) {
-	    if (Rast_read_fp_range(name, mapset, &drange) >= 0) {
+	    if (Rast_read_fp_range(name, subproject, &drange) >= 0) {
 		Rast_get_fp_range_min_max(&drange, &dmin, &dmax);
 		if (Rast_quant_is_truncate(&quant)) {
 		    x[0] = (CELL) dmin;
@@ -201,11 +201,11 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
 	return 3;
     }
 
-    if (G_find_file2_misc("cell_misc", "range", name, mapset)) {
-	fd = G_fopen_old_misc("cell_misc", "range", name, mapset);
+    if (G_find_file2_misc("cell_misc", "range", name, subproject)) {
+	fd = G_fopen_old_misc("cell_misc", "range", name, subproject);
 	if (!fd) {
 	    G_warning(_("Unable to read range file for <%s>"),
-		      G_fully_qualified_name(name, mapset));
+		      G_fully_qualified_name(name, subproject));
 	    return -1;
 	}
 
@@ -225,7 +225,7 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
 		fclose(fd);
 
 	    G_warning(_("Unable to read range file for <%s>"),
-		      G_fully_qualified_name(name, mapset));
+		      G_fully_qualified_name(name, subproject));
 	    return -1;
 	}
 
@@ -253,14 +253,14 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
  * this function will create a default stats with count = 0.
  *
  * \param name map name
- * \param mapset mapset name
+ * \param subproject subproject name
  * \param rstats pointer to R_stats structure which holds raster stats
  *
  * \return 1 on success
  * \return 2 stats is empty
  * \return -1 on error or stats file does not exist
  */
-int Rast_read_rstats(const char *name, const char *mapset,
+int Rast_read_rstats(const char *name, const char *subproject,
 		       struct R_stats *rstats)
 {
     int fd;
@@ -276,15 +276,15 @@ int Rast_read_rstats(const char *name, const char *mapset,
 
     fd = -1;
 
-    if (!G_find_file2_misc("cell_misc", "stats", name, mapset)) {
+    if (!G_find_file2_misc("cell_misc", "stats", name, subproject)) {
 	G_debug(1, "Stats file does not exist");
 	return -1;
     }
 
-    fd = G_open_old_misc("cell_misc", "stats", name, mapset);
+    fd = G_open_old_misc("cell_misc", "stats", name, subproject);
     if (fd < 0) {
 	G_warning(_("Unable to read stats file for <%s>"),
-		  G_fully_qualified_name(name, mapset));
+		  G_fully_qualified_name(name, subproject));
 	return -1;
     }
 
@@ -292,7 +292,7 @@ int Rast_read_rstats(const char *name, const char *mapset,
 	/* if the stats file exists, but empty file, meaning Nulls */
 	close(fd);
 	G_debug(1, "Empty stats file meaning Nulls for <%s>",
-		  G_fully_qualified_name(name, mapset));
+		  G_fully_qualified_name(name, subproject));
 	return 2;
     }
 
@@ -308,7 +308,7 @@ int Rast_read_rstats(const char *name, const char *mapset,
 	/* if the stats file exists, but empty file, meaning Nulls */
 	close(fd);
 	G_debug(1, "Unable to read byte count in stats file for <%s>",
-		  G_fully_qualified_name(name, mapset));
+		  G_fully_qualified_name(name, subproject));
 	return -1;
     }
 
@@ -319,14 +319,14 @@ int Rast_read_rstats(const char *name, const char *mapset,
     if (nbytes < 1 || nbytes > sizeof(grass_int64)) {
 	close(fd);
 	G_debug(1, "Invalid byte count in stats file for <%s>",
-		  G_fully_qualified_name(name, mapset));
+		  G_fully_qualified_name(name, subproject));
 	return -1;
     }
     if (read(fd, cc, nbytes) != nbytes) {
 	/* incorrect number of bytes for count */
 	close(fd);
 	G_debug(1, "Unable to read count in stats file for <%s>",
-		  G_fully_qualified_name(name, mapset));
+		  G_fully_qualified_name(name, subproject));
 	return -1;
     }
 
@@ -346,7 +346,7 @@ int Rast_read_rstats(const char *name, const char *mapset,
  * \brief Write raster range file
  *
  * This routine writes the range information for the raster map
- * <i>name</i> in the current mapset from the <i>range</i> structure.
+ * <i>name</i> in the current subproject from the <i>range</i> structure.
  * A diagnostic message is printed and -1 is returned if there is an
  * error writing the range file. Otherwise, 0 is returned.
  *
@@ -363,7 +363,7 @@ void Rast_write_range(const char *name, const struct Range *range)
 
     Rast_write_rstats(name, &(range->rstats));
 
-    if (Rast_map_type(name, G_mapset()) != CELL_TYPE) {
+    if (Rast_map_type(name, G_subproject()) != CELL_TYPE) {
 	G_remove_misc("cell_misc", "range", name);	/* remove the old file with this name */
 	G_fatal_error(_("Unable to write range file for <%s>"), name);
     }

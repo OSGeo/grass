@@ -78,8 +78,8 @@ int Vect_close(struct Map_info *Map)
     int create_link; /* used for external formats only */
     struct Coor_info CInfo;
     
-    G_debug(1, "Vect_close(): name = %s, mapset = %s, format = %d, level = %d, is_tmp = %d",
-	    Map->name, Map->mapset, Map->format, Map->level, Map->temporary);
+    G_debug(1, "Vect_close(): name = %s, subproject = %s, format = %d, level = %d, is_tmp = %d",
+	    Map->name, Map->subproject, Map->format, Map->level, Map->temporary);
 
     if (Map->temporary &&
         (Map->fInfo.ogr.dsn || Map->fInfo.pg.conninfo)) {
@@ -130,13 +130,13 @@ int Vect_close(struct Map_info *Map)
         else {
             def_file = "OGR";
         }
-        if (G_find_file2("", def_file, G_mapset())) {
+        if (G_find_file2("", def_file, G_subproject())) {
             FILE       *fp;
             const char *p;
             
             struct Key_Value *key_val;
             
-            fp = G_fopen_old("", def_file, G_mapset());
+            fp = G_fopen_old("", def_file, G_subproject());
             if (!fp) {
                 G_warning(_("Unable to open %s file"), def_file);
             }
@@ -144,7 +144,7 @@ int Vect_close(struct Map_info *Map)
                 key_val = G_fread_key_value(fp);
                 fclose(fp);
                 
-                /* create a vector link in the current mapset ? */
+                /* create a vector link in the current subproject ? */
                 p = G_find_key_value("link", key_val);
                 if (p && G_strcasecmp(p, "no") == 0) {
                     create_link = FALSE;
@@ -161,9 +161,9 @@ int Vect_close(struct Map_info *Map)
         }
     }
     
-    /* store support files for vector maps in the current mapset if in
+    /* store support files for vector maps in the current subproject if in
        write mode on level 2 */
-    if (strcmp(Map->mapset, G_mapset()) == 0 &&
+    if (strcmp(Map->subproject, G_subproject()) == 0 &&
         Map->support_updated &&
         Map->plus.built == GV_BUILD_ALL &&
         create_link) {
@@ -230,8 +230,8 @@ int Vect_close(struct Map_info *Map)
     }
 
     G_free(Map->name);
-    G_free(Map->mapset);
-    G_free(Map->location);
+    G_free(Map->subproject);
+    G_free(Map->project);
     G_free(Map->gisdbase);
     
     Map->open = VECT_CLOSED_CODE;

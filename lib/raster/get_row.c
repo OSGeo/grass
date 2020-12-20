@@ -33,7 +33,7 @@ static int compute_window_row(int fd, int row, int *cellRow)
     /* check for row in window */
     if (row < 0 || row >= R__.rd_window.rows) {
 	G_fatal_error(_("Reading raster map <%s@%s> request for row %d is outside region"),
-		      fcb->name, fcb->mapset, row);
+		      fcb->name, fcb->subproject, row);
     }
 
     /* convert window row to cell file row */
@@ -904,7 +904,7 @@ static void get_null_value_row_nomask(int fd, char *flags, int row)
 
     if (row > R__.rd_window.rows || row < 0) {
 	G_warning(_("Reading raster map <%s@%s> request for row %d is outside region"),
-		  fcb->name, fcb->mapset, row);
+		  fcb->name, fcb->subproject, row);
 	for (j = 0; j < R__.rd_window.cols; j++)
 	    flags[j] = 1;
 	return;

@@ -42,7 +42,7 @@ void read_instructions(int copies_set, int can_reset_scale)
     int i;
     int iflag;
     /* name can be fully qualified */
-    char name[GNAME_MAX + GMAPSET_MAX], mapset[GMAPSET_MAX];
+    char name[GNAME_MAX + GMAPSET_MAX], subproject[GMAPSET_MAX];
     char buf[1024];
 
     iflag = 0;
@@ -285,7 +285,7 @@ void read_instructions(int copies_set, int can_reset_scale)
 	}
 
 	if (KEY("comments")) {
-	    switch (sscanf(data, "%s %s", name, mapset)) {
+	    switch (sscanf(data, "%s %s", name, subproject)) {
 	    case 1:
 		read_comment(name);
 		break;
@@ -312,8 +312,8 @@ void read_instructions(int copies_set, int can_reset_scale)
 	}
 
 	if (KEY("labels")) {
-	    if (scan_gis("paint/labels", "label", key, data, name, mapset, 1))
-		read_labels(name, mapset);
+	    if (scan_gis("paint/labels", "label", key, data, name, subproject, 1))
+		read_labels(name, subproject);
 	    continue;
 	}
 
@@ -346,14 +346,14 @@ void read_instructions(int copies_set, int can_reset_scale)
 	}
 
 	if (KEY("cell") || KEY("rast") || KEY("raster")) {
-	    if (scan_gis("cell", "raster", key, data, name, mapset, 0))
-		read_cell(name, mapset);
+	    if (scan_gis("cell", "raster", key, data, name, subproject, 0))
+		read_cell(name, subproject);
 	    continue;
 	}
 
 	if (KEY("greyrast") || KEY("grayrast")) {
-	    if (scan_gis("cell", "raster", key, data, name, mapset, 0))
-		read_cell(name, mapset);
+	    if (scan_gis("cell", "raster", key, data, name, subproject, 0))
+		read_cell(name, subproject);
 	    PS.grey = 1;
 	    continue;
 	}
@@ -378,27 +378,27 @@ void read_instructions(int copies_set, int can_reset_scale)
 	}
 
 	if (KEY("vpoints")) {
-	    if (scan_gis("vector", "vector", key, data, name, mapset, 1))
-		read_vpoints(name, mapset);
+	    if (scan_gis("vector", "vector", key, data, name, subproject, 1))
+		read_vpoints(name, subproject);
 	    continue;
 	}
 
 	if (KEY("vlines")) {
-	    if (scan_gis("vector", "vector", key, data, name, mapset, 1))
-		read_vlines(name, mapset);
+	    if (scan_gis("vector", "vector", key, data, name, subproject, 1))
+		read_vlines(name, subproject);
 	    continue;
 	}
 
 	if (KEY("vareas")) {
-	    if (scan_gis("vector", "vector", key, data, name, mapset, 1))
-		read_vareas(name, mapset);
+	    if (scan_gis("vector", "vector", key, data, name, subproject, 1))
+		read_vareas(name, subproject);
 	    continue;
 	}
 
 	if (KEY("window") || KEY("region")) {
 	    if (scan_gis("windows", "region definition", key, data, name,
-			 mapset, 1))
-		read_wind(name, mapset);
+			 subproject, 1))
+		read_wind(name, subproject);
 	    continue;
 	}
 

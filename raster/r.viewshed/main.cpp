@@ -12,7 +12,7 @@
  * Date:         July 2008; April 2011 
  * 
  * PURPOSE: To calculate the viewshed (the visible cells in the
- * raster) for the given viewpoint (observer) location.  The
+ * raster) for the given viewpoint (observer) project.  The
  * visibility model is the following: Two points in the raster are
  * considered visible to each other if the cells where they belong are
  * visible to each other.  Two cells are visible to each other if the
@@ -280,7 +280,7 @@ int main(int argc, char *argv[])
 	if (getenv(STREAM_TMPDIR) != NULL) {
 	    /*if already set */
 	    G_debug(1, "%s=%s", STREAM_TMPDIR, getenv(STREAM_TMPDIR));
-	    G_debug(1, "Intermediate stream location: %s",
+	    G_debug(1, "Intermediate stream project: %s",
 		   getenv(STREAM_TMPDIR));
 	}
 	else {
@@ -298,7 +298,7 @@ int main(int argc, char *argv[])
 	}
 	G_important_message(_("Intermediate files will not be deleted \
 		              in case of abnormal termination."));
-	G_important_message(_("Intermediate location: %s"), viewOptions.streamdir);
+	G_important_message(_("Intermediate project: %s"), viewOptions.streamdir);
 	G_important_message(_("To save space delete these files manually!"));
 
 

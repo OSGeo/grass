@@ -451,7 +451,7 @@ import sys
 import copy
 from datetime import datetime
 import grass.pygrass.modules as pymod
-from .core import init_dbif, get_tgis_message_interface, get_current_mapset,\
+from .core import init_dbif, get_tgis_message_interface, get_current_subproject,\
     SQLDatabaseInterfaceConnection
 from .temporal_granularity import compute_common_absolute_time_granularity, \
     compute_common_relative_time_granularity
@@ -778,7 +778,7 @@ class TemporalAlgebraParser(object):
         self.names = {}
         # Count map names
         self.spatial = spatial
-        self.mapset = get_current_mapset()
+        self.subproject = get_current_subproject()
         self.temporaltype = None
         self.msgr = get_tgis_message_interface()
         self.dbif = SQLDatabaseInterfaceConnection()
@@ -948,8 +948,8 @@ class TemporalAlgebraParser(object):
         """
         # Generate an intermediate name for the result map list.
         name = self.generate_map_name()
-        # Check for mapset in given stds input.
-        mapname = name + "@" + self.mapset
+        # Check for subproject in given stds input.
+        mapname = name + "@" + self.subproject
         # Create new map based on the related map list.
         map_new = base_map.get_new_instance(mapname)
         # Set initial map extend of new vector map.
@@ -1167,11 +1167,11 @@ class TemporalAlgebraParser(object):
         :return: List of maps.
         """
         if isinstance(input, unicode) or isinstance(input, str):
-            # Check for mapset in given stds input.
+            # Check for subproject in given stds input.
             if input.find("@") >= 0:
                 id_input = input
             else:
-                id_input = input + "@" + self.mapset
+                id_input = input + "@" + self.subproject
             # Create empty spacetime dataset.
             if stds_type:
                 stds = dataset_factory(stds_type, id_input)
@@ -1699,12 +1699,12 @@ class TemporalAlgebraParser(object):
               ...                                           True)
               >>> for map in resultlist:
               ...     if not map.get_equal():
-              ...         print("Map %s has no equal relation to mapset mapsB"%(map.get_name()))
-              Map a0 has no equal relation to mapset mapsB
-              Map a1 has no equal relation to mapset mapsB
-              Map a2 has no equal relation to mapset mapsB
-              Map a3 has no equal relation to mapset mapsB
-              Map a4 has no equal relation to mapset mapsB
+              ...         print("Map %s has no equal relation to subproject mapsB"%(map.get_name()))
+              Map a0 has no equal relation to subproject mapsB
+              Map a1 has no equal relation to subproject mapsB
+              Map a2 has no equal relation to subproject mapsB
+              Map a3 has no equal relation to subproject mapsB
+              Map a4 has no equal relation to subproject mapsB
 
         """
         if not inverse:
@@ -2243,7 +2243,7 @@ class TemporalAlgebraParser(object):
                                 suffix = create_time_suffix(map_i)
                                 newident = "{ba}_{su}".format(ba=self.basename, su=suffix)
 
-                            map_result = map_i.get_new_instance(newident + "@" + self.mapset)
+                            map_result = map_i.get_new_instance(newident + "@" + self.subproject)
 
                             if map_result.map_exists() and self.overwrite is False:
                                 self.msgr.fatal("Error raster maps with basename %s exist. "
@@ -2422,11 +2422,11 @@ class TemporalAlgebraParser(object):
             # Check input map.
             input = t[3]
             if not isinstance(input, list):
-                # Check for mapset in given stds input.
+                # Check for subproject in given stds input.
                 if input.find("@") >= 0:
                     id_input = input
                 else:
-                    id_input = input + "@" + self.mapset
+                    id_input = input + "@" + self.subproject
                 # Create empty map dataset.
                 map_i = dataset_factory(self.maptype, id_input)
                 # Check for occurrence of space time dataset.

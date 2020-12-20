@@ -8,7 +8,7 @@
 
 
 int export_attr(GDALDatasetH hMEMDS, int band,
-		const char *name, const char *mapset,
+		const char *name, const char *subproject,
 		RASTER_MAP_TYPE maptype)
 {
     struct Categories cats;
@@ -25,12 +25,12 @@ int export_attr(GDALDatasetH hMEMDS, int band,
     GDALRasterBandH hBand;
 
     Rast_init_cats("Labels", &cats);
-    if (Rast_read_cats(name, mapset, &cats))
+    if (Rast_read_cats(name, subproject, &cats))
 	return -1;
     
     rcount = 0;
     Rast_init_colors(&sGrassColors);
-    if (Rast_read_colors(name, mapset, &sGrassColors) >= 0) {
+    if (Rast_read_colors(name, subproject, &sGrassColors) >= 0) {
 	rcount = Rast_colors_count(&sGrassColors);
     }
 

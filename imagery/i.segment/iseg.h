@@ -65,7 +65,7 @@ struct globals
 
     char *seeds, *bounds_map;	/* optional segment seeds and polygon constraints/boundaries */
     CELL lower_bound, upper_bound;
-    const char *bounds_mapset;
+    const char *bounds_subproject;
 
     /* output */
     /* region growing */

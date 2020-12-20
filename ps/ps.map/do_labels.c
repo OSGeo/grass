@@ -38,15 +38,15 @@ int do_labels(int other)
     if (!other) {
 	for (i = 0; i < labels.count; i++) {
 	    fd = G_fopen_old("paint/labels", labels.name[i],
-			     labels.mapset[i]);
+			     labels.subproject[i]);
 
 	    if (fd == NULL) {
-		G_warning(_("Can't open label file <%s> in mapset <%s>"),
-			  labels.name[i], labels.mapset[i]);
+		G_warning(_("Can't open label file <%s> in subproject <%s>"),
+			  labels.name[i], labels.subproject[i]);
 	    }
 	    else {
 		G_message(_("Reading labels file <%s in %s> ..."),
-			  labels.name[i], labels.mapset[i]);
+			  labels.name[i], labels.subproject[i]);
 
 		if (labels.font[i] != NULL) {
 		    set_font_name(labels.font[i]);

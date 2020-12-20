@@ -173,7 +173,7 @@ int BM_set_mode(int mode, int size)
 /*!
  * \brief
  *
- * Sets bitmap value to 'val' at location 'x' 'y'
+ * Sets bitmap value to 'val' at project 'x' 'y'
  *
  * Returns 0 on success
  *

@@ -1,0 +1,73 @@
+<h2>DESCRIPTION</h2>
+
+<em>g.subproject</em> changes the current working MAPSET, LOCATION, or GISDBASE.
+This is a fairly radical maneuver to run mid-session, take care when running
+the GUI at the same time.
+<p>
+With <em>g.subproject</em>, the shell history (i.e. <tt>.bash_history</tt> file
+of the initial project will be used to record the command history.
+
+<h2>NOTES</h2>
+
+By default, the shell continues to use the history for the old subproject.
+To change this behaviour the history can be switched to record in the new
+subproject's history file as follows:
+
+<div class="code"><pre>
+# bash example
+history -w
+history -r /"$GISDBASE/$LOCATION/$MAPSET"/.bash_history
+HISTFILE=/"$GISDBASE/$LOCATION/$MAPSET"/.bash_history
+</pre></div>
+
+<h2>EXAMPLES</h2>
+
+<h3>Print the name of the current subproject</h3>
+
+To print the name of the current subproject, use the <b>-p</b> command as
+shown below:
+<div class="code"><pre>
+g.subproject -p
+</pre></div>
+
+
+<h3>List available subprojects</h3>
+To list available subprojects, use the <b>-l</b> command as shown below:
+<div class="code"><pre>
+g.subproject -l
+</pre></div>
+
+This should list all the subprojects, such as: "landsat new PERMANENT user1."
+
+<h3>Change the current subproject</h3>
+To change the current subproject to "user1" use the following command:
+
+<div class="code"><pre>
+g.subproject subproject=user1 project=nc_spm_08_grass7
+</pre></div>
+
+You should receive the following message: "Subproject switched. Your shell
+continues to use the history for the old subproject." 
+
+<h3>Create a new subproject</h3>
+
+To create a new subproject, use the <b>-c</b> tag as shown below:
+<div class="code"><pre>
+g.subproject -c subproject=new project=nc_spm_08_grass7
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="g.gisenv.html">g.gisenv</a>,
+<a href="g.subprojects.html">g.subprojects</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Radim Blazek
+
+<!--
+<p>
+<i>Last changed: $Date$</i>
+-->

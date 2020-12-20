@@ -33,7 +33,7 @@ int main(int argc, char **argv)
     struct Option *input, *output, *type_opt;
     struct Option *color_opt, *hcolor_opt;
     struct GModule *module;
-    char *mapset;
+    char *subproject;
     struct Map_info In, Out;
     int type;
     struct color_rgb color, hcolor;
@@ -92,14 +92,14 @@ int main(int argc, char **argv)
 	hcolor.b = b;
     }
 
-    mapset = G_find_vector2(input->answer, NULL);
+    subproject = G_find_vector2(input->answer, NULL);
 
-    if (mapset == NULL)
+    if (subproject == NULL)
 	G_fatal_error(_("Vector map <%s> not found"), input->answer);
 
     Vect_set_open_level(2);
 
-    if (Vect_open_old(&In, input->answer, mapset) < 0)
+    if (Vect_open_old(&In, input->answer, subproject) < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), input->answer);
 
     if (Vect_open_new(&Out, output->answer, Vect_is_3d(&In)) < 0)

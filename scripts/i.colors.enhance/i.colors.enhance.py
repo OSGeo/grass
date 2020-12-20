@@ -221,9 +221,9 @@ def main():
             set_colors(i, all_min, all_max)
 
     # write cmd history:
-    mapset = gscript.gisenv()['MAPSET']
+    subproject = gscript.gisenv()['MAPSET']
     for i in [red, green, blue]:
-        if gscript.find_file(i)['mapset'] == mapset:
+        if gscript.find_file(i)['subproject'] == subproject:
             gscript.raster_history(i)
 
 if __name__ == "__main__":

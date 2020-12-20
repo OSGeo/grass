@@ -217,7 +217,7 @@ int main(int argc, char **argv)
         G_fatal_error("Invalid direction: %s", direction->answer);
 
     if (align->answer || strcmp(opt2->answer, "0") == 0)
-        G_get_element_window(&wind, "", "WIND", G_mapset());
+        G_get_element_window(&wind, "", "WIND", G_subproject());
 
     if (strcmp(opt2->answer, "0") == 0) {
         if (geogrid->answer)

@@ -63,7 +63,7 @@ would cause a lower degree of simplification.
 
 Different algorithms require different parameters, but all the algorithms 
 have one parameter in common: the <b>threshold</b> parameter, given in map
-units (for latitude-longitude locations: in decimal degree). In general,
+units (for latitude-longitude projects: in decimal degree). In general,
 the degree of simplification increases with the increasing value of
 <b>threshold</b>.
 
@@ -287,7 +287,7 @@ case, the algorithm selects only the lines which meet each criterion.
 
 <h3>SIMPLIFICATION EXAMPLE</h3>
 Simplification of county boundaries with DP method (North Carolina sample dataset),
-threshold given in mapset units (here: meters):
+threshold given in subproject units (here: meters):
 
 <div class="code"><pre>
 v.generalize input=boundary_county output=boundary_county_dp20 \
@@ -306,7 +306,7 @@ v.generalize input=boundary_county output=boundary_county_dp20 \
 <h3>SMOOTHING EXAMPLE</h3>
 
 Smoothing of road network with Chaiken method (North Carolina sample dataset),
-threshold given in mapset units (here: meters):
+threshold given in subproject units (here: meters):
 
 <div class="code"><pre>
 v.generalize input=roads output=roads_chaiken method=chaiken \

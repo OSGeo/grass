@@ -21,7 +21,7 @@
 struct
 {
     char *driver;
-    char *location;
+    char *project;
 } parms;
 
 /* function prototypes */
@@ -31,15 +31,15 @@ int main(int argc, char **argv)
 {
     dbDriver *driver;
     dbHandle *handles;
-    dbString locations;
+    dbString projects;
     int nlocs = 0;
     int count, i;
 
-    db_init_string(&locations);
+    db_init_string(&projects);
     parse_command_line(argc, argv);
 
-    if (parms.location) {
-	db_set_string(&locations, parms.location);
+    if (parms.project) {
+	db_set_string(&projects, parms.project);
 	nlocs = 1;
     }
 
@@ -47,7 +47,7 @@ int main(int argc, char **argv)
     if (driver == NULL)
 	G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
 
-    if (db_list_databases(driver, &locations,
+    if (db_list_databases(driver, &projects,
                           nlocs, &handles, &count) != DB_OK) {
         db_shutdown_driver(driver);
         G_fatal_error(_("Unable to list databases. "
@@ -68,7 +68,7 @@ int main(int argc, char **argv)
 
 static void parse_command_line(int argc, char **argv)
 {
-    struct Option *driver, *location;
+    struct Option *driver, *project;
     struct GModule *module;
 
     /* Initialize the GIS calls */
@@ -79,16 +79,16 @@ static void parse_command_line(int argc, char **argv)
     driver->answer = (char *) db_get_default_driver_name();
     driver->guisection = _("Connection");
     
-    location = G_define_option();
-    location->key = "location";
-    location->type = TYPE_STRING;
-    location->required = NO;
-    /* location->multiple = YES; ? */
-    location->label = _("Location");
-    location->description = _("Path for SQLite driver, or connection string "
+    project = G_define_option();
+    project->key = "project";
+    project->type = TYPE_STRING;
+    project->required = NO;
+    /* project->multiple = YES; ? */
+    project->label = _("Project");
+    project->description = _("Path for SQLite driver, or connection string "
                               "for PostgreSQL driver");
-    location->key_desc = "name";
-    location->guisection = _("Connection");
+    project->key_desc = "name";
+    project->guisection = _("Connection");
 
     /* Set description */
     module = G_define_module();
@@ -96,11 +96,11 @@ static void parse_command_line(int argc, char **argv)
     G_add_keyword(_("attribute table"));
     G_add_keyword(_("SQL"));
     module->description =
-	_("Lists all databases for a given driver and location.");
+	_("Lists all databases for a given driver and project.");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     parms.driver = driver->answer;
-    parms.location = location->answer ? location->answer : "";
+    parms.project = project->answer ? project->answer : "";
 }

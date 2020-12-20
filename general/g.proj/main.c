@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 	*dontprettify,		/* Print 'flat' output (no linebreaks)      */
 	*forcedatumtrans;	/* Force override of datumtrans parameters  */
     
-    struct Option *location,	/* Name of new location to create           */
+    struct Option *project,	/* Name of new project to create           */
 #ifdef HAVE_OGR
 	*insrid,		/* spatial reference id (auth name + code   */
 	*inepsg,		/* EPSG projection code                     */
@@ -64,19 +64,19 @@ int main(int argc, char *argv[])
 
     G_set_program_name(argv[0]);
     G_no_gisinit();		/* We don't call G_gisinit() here because it validates the
-				 * mapset, whereas this module may legitmately be used 
-				 * (to create a new location) when none exists */
+				 * subproject, whereas this module may legitmately be used 
+				 * (to create a new project) when none exists */
 
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("projection"));
-    G_add_keyword(_("create location"));
+    G_add_keyword(_("create project"));
 #ifdef HAVE_OGR
     module->label =
 	_("Prints or modifies GRASS projection information files "
 	  "(in various co-ordinate system descriptions).");
     module->description =
-	_("Can also be used to create new GRASS locations.");
+	_("Can also be used to create new GRASS projects.");
 #else
     module->description =
 	_("Prints and manipulates GRASS projection information files.");
@@ -215,15 +215,15 @@ int main(int argc, char *argv[])
     create = G_define_flag();
     create->key = 'c';
     create->guisection = _("Modify");
-    create->description = _("Modify current location projection files");
+    create->description = _("Modify current project projection files");
 
-    location = G_define_option();
-    location->key = "location";
-    location->type = TYPE_STRING;
-    location->key_desc = "name";
-    location->required = NO;
-    location->guisection = _("Create");
-    location->description = _("Name of new location to create");
+    project = G_define_option();
+    project->key = "project";
+    project->type = TYPE_STRING;
+    project->key_desc = "name";
+    project->required = NO;
+    project->guisection = _("Create");
+    project->description = _("Name of new project to create");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -273,7 +273,7 @@ int main(int argc, char *argv[])
 
     if (formats == 0)
 #endif
-	/* Input is projection of current location */
+	/* Input is projection of current project */
 	input_currloc();
 #ifdef HAVE_OGR
     else if (inwkt->answer)
@@ -337,8 +337,8 @@ int main(int argc, char *argv[])
     else if (printwkt->answer)
 	print_wkt(esristyle->answer, dontprettify->answer);
 #endif
-    else if (location->answer)
-	create_location(location->answer);
+    else if (project->answer)
+	create_project(project->answer);
     else if (create->answer)
 	modify_projinfo();
     else

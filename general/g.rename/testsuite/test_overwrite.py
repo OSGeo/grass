@@ -11,7 +11,7 @@ for details.
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
-from grass.gunittest.gutils import is_map_in_mapset
+from grass.gunittest.gutils import is_map_in_subproject
 from grass.gunittest.checkers import (text_to_keyvalue, keyvalue_equals,
                                       diff_keyvalue)
 
@@ -88,7 +88,7 @@ class RasterRenameTestCase(TestCase):
         module = SimpleModule('g.rename', raster=['rename_3', 'exists'], overwrite=True)
         self.assertModule(module)
         self.assertRasterExists('exists', msg="Destination (here: existing) map (to) should exist after rename")
-        self.assertFalse(is_map_in_mapset('rename_3', type='raster'),
+        self.assertFalse(is_map_in_subproject('rename_3', type='raster'),
                          msg="Source map (from) should not exist after rename")
 
         runivar = SimpleModule('r.univar', flags='g', map='exists')

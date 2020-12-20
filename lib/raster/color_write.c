@@ -30,7 +30,7 @@ static void format_max(char *, double);
  * \brief Write map layer color table
  *
  * The color table is written for the raster map <i>name</i> in the
- * specified <i>mapset</i> from the <i>colors</i> structure.
+ * specified <i>subproject</i> from the <i>colors</i> structure.
  *
  * If there is an error, -1 is returned. No diagnostic is
  * printed. Otherwise, 1 is returned.
@@ -42,17 +42,17 @@ static void format_max(char *, double);
  * such as Rast_read_colors() or Rast_make_ramp_colors().
  *
  * <b>Note:</b> The calling sequence for this function deserves
- * special attention. The <i>mapset</i> parameter seems to imply that
+ * special attention. The <i>subproject</i> parameter seems to imply that
  * it is possible to overwrite the color table for a raster map which
- * is in another mapset. However, this is not what actually
+ * is in another subproject. However, this is not what actually
  * happens. It is very useful for users to create their own color
- * tables for raster maps in other mapsets, but without overwriting
- * other users' color tables for the same raster map. If <i>mapset</i>
- * is the current mapset, then the color file for <i>name</i> will be
- * overwritten by the new color table. But if <i>mapset</i> is not the
- * current mapset, then the color table is actually written in the
- * current mapset under the <tt>colr2</tt> element as:
- * <tt>colr2/mapset/name</tt>.
+ * tables for raster maps in other subprojects, but without overwriting
+ * other users' color tables for the same raster map. If <i>subproject</i>
+ * is the current subproject, then the color file for <i>name</i> will be
+ * overwritten by the new color table. But if <i>subproject</i> is not the
+ * current subproject, then the color table is actually written in the
+ * current subproject under the <tt>colr2</tt> element as:
+ * <tt>colr2/subproject/name</tt>.
  *
  * The rules are written out using floating-point format, removing
  * trailing zeros (possibly producing integers).  The flag marking the
@@ -64,31 +64,31 @@ static void format_max(char *, double);
  * don't yet have 4.0
  *
  * \param name map name
- * \param mapset mapset name
+ * \param subproject subproject name
  * \param colors pointer to structure Colors which holds color info
  *
  * \return void
  */
-void Rast_write_colors(const char *name, const char *mapset,
+void Rast_write_colors(const char *name, const char *subproject,
 		      struct Colors *colors)
 {
     char element[512];
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xsubproject[GMAPSET_MAX];
     FILE *fd;
 
-    if (G_name_is_fully_qualified(name, xname, xmapset)) {
-	if (strcmp(xmapset, mapset) != 0)
-	    G_fatal_error(_("Qualified name <%s> doesn't match mapset <%s>"),
-			  name, mapset);
+    if (G_name_is_fully_qualified(name, xname, xsubproject)) {
+	if (strcmp(xsubproject, subproject) != 0)
+	    G_fatal_error(_("Qualified name <%s> doesn't match subproject <%s>"),
+			  name, subproject);
 	name = xname;
     }
     /*
-     * if mapset is current mapset, remove colr2 file (created by pre 3.0 grass)
+     * if subproject is current subproject, remove colr2 file (created by pre 3.0 grass)
      *    and then write original color table
      * else write secondary color table
      */
-    sprintf(element, "colr2/%s", mapset);
-    if (strcmp(mapset, G_mapset()) == 0) {
+    sprintf(element, "colr2/%s", subproject);
+    if (strcmp(subproject, G_subproject()) == 0) {
 	G_remove(element, name);	/* get rid of existing colr2, if any */
 	strcpy(element, "colr");
     }

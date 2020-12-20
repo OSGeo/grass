@@ -12,7 +12,7 @@
 /**************************************************************
  * clean_temp
  *
- *   looks for all files in mapset temp directory
+ *   looks for all files in subproject temp directory
  *   of the form pid.n and removes those which have
  *   been abandoned their processes (pid).
  *
@@ -118,7 +118,7 @@ void clean_dir(const char *pathname, uid_t uid, pid_t pid, time_t now,
 
 int main(int argc, char *argv[])
 {
-    const char *mapset;
+    const char *subproject;
     char element[GNAME_MAX];
     char tmppath[BUF_MAX];
     pid_t ppid;
@@ -133,9 +133,9 @@ int main(int argc, char *argv[])
     if (argc > 1)
 	sscanf(argv[1], "%d", &ppid);
 
-    /* Get the mapset temp directory */
+    /* Get the subproject temp directory */
     G_temp_element(element);
-    G_file_name(tmppath, element, "", mapset = G_mapset());
+    G_file_name(tmppath, element, "", subproject = G_subproject());
 
     /* get user id and current time in seconds */
 #ifdef __MINGW32__

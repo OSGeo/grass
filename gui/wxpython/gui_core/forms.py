@@ -370,7 +370,7 @@ class UpdateThread(Thread):
                 self.data[win.Insert] = {'group': group,
                                          'subgroup': subgroup}
 
-            elif name == 'LocationSelect':
+            elif name == 'ProjectSelect':
                 pDbase = self.task.get_param(
                     'dbase', element='element', raiseError=False)
                 if pDbase:
@@ -379,31 +379,31 @@ class UpdateThread(Thread):
                         'dbase': pDbase.get(
                             'value', '')}
 
-            elif name == 'MapsetSelect':
+            elif name == 'SubprojectSelect':
                 pDbase = self.task.get_param(
                     'dbase', element='element', raiseError=False)
-                pLocation = self.task.get_param(
-                    'location', element='element', raiseError=False)
-                if pDbase and pLocation:
+                pProject = self.task.get_param(
+                    'project', element='element', raiseError=False)
+                if pDbase and pProject:
                     self.data[
                         win.UpdateItems] = {
                         'dbase': pDbase.get(
-                            'value', ''), 'location': pLocation.get(
+                            'value', ''), 'project': pProject.get(
                             'value', '')}
 
             elif name == 'ProjSelect':
                 pDbase = self.task.get_param(
                     'dbase', element='element', raiseError=False)
-                pLocation = self.task.get_param(
-                    'location', element='element', raiseError=False)
-                pMapset = self.task.get_param(
-                    'mapset', element='element', raiseError=False)
-                if pDbase and pLocation and pMapset:
+                pProject = self.task.get_param(
+                    'project', element='element', raiseError=False)
+                pSubproject = self.task.get_param(
+                    'subproject', element='element', raiseError=False)
+                if pDbase and pProject and pSubproject:
                     self.data[
                         win.UpdateItems] = {
                         'dbase': pDbase.get(
-                            'value', ''), 'location': pLocation.get(
-                            'value', ''), 'mapset': pMapset.get(
+                            'value', ''), 'project': pProject.get(
+                            'value', ''), 'subproject': pSubproject.get(
                             'value', '')}
 
             elif name == 'SqlWhereSelect':
@@ -1396,8 +1396,8 @@ class CmdPanel(wx.Panel):
                                                'dbtable',
                                                'dbcolumn',
                                                'layer',
-                                               'location',
-                                               'mapset',
+                                               'project',
+                                               'subproject',
                                                'dbase',
                                                'coords',
                                                'file',
@@ -1410,9 +1410,9 @@ class CmdPanel(wx.Panel):
                                                'sql_query'):
                     multiple = p.get('multiple', False)
                     if p.get('age', '') == 'new':
-                        mapsets = [grass.gisenv()['MAPSET'], ]
+                        subprojects = [grass.gisenv()['MAPSET'], ]
                     else:
-                        mapsets = None
+                        subprojects = None
                     if self.task.name in ('r.proj', 'v.proj') \
                             and p.get('name', '') == 'input':
                         selection = gselect.ProjSelect(
@@ -1459,7 +1459,7 @@ class CmdPanel(wx.Panel):
                             size=globalvar.DIALOG_GSELECT_SIZE, type=elem,
                             multiple=multiple, nmaps=len(
                                 p.get('key_desc', [])),
-                            mapsets=mapsets, fullyQualified=p.get(
+                            subprojects=subprojects, fullyQualified=p.get(
                                 'age', 'old') == 'old', extraItems=extraItems)
 
                         value = self._getValue(p)
@@ -1629,8 +1629,8 @@ class CmdPanel(wx.Panel):
                                 'dbtable',
                                 'dbcolumn',
                                 'layer',
-                                'location',
-                                'mapset',
+                                'project',
+                                'subproject',
                                 'dbase'):
                     if p.get('multiple', 'no') == 'yes':
                         win = TextCtrl(
@@ -1701,21 +1701,21 @@ class CmdPanel(wx.Panel):
                             textWin.Bind(wx.EVT_TEXT, self.OnSetValue)
                             win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
 
-                        elif prompt == 'location':
-                            win = gselect.LocationSelect(parent=which_panel,
+                        elif prompt == 'project':
+                            win = gselect.ProjectSelect(parent=which_panel,
                                                          value=value)
                             win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
                             win.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
                             win.Bind(wx.EVT_TEXT, self.OnSetValue)
                             win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
 
-                        elif prompt == 'mapset':
+                        elif prompt == 'subproject':
                             if p.get('age', 'old') == 'old':
                                 new = False
                             else:
                                 new = True
 
-                            win = gselect.MapsetSelect(
+                            win = gselect.SubprojectSelect(
                                 parent=which_panel, value=value, new=new,
                                 multiple=p.get('multiple', False))
                             win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
@@ -2133,8 +2133,8 @@ class CmdPanel(wx.Panel):
         pSubGroup = None
         pSigFile = []
         pDbase = None
-        pLocation = None
-        pMapset = None
+        pProject = None
+        pSubproject = None
         pSqlWhere = []
         for p in self.task.params:
             if self.task.blackList['enabled'] and self.task.get_name() in self.task.blackList['items'] and \
@@ -2179,10 +2179,10 @@ class CmdPanel(wx.Panel):
                 pSigFile.append(p)
             elif prompt == 'dbase':
                 pDbase = p
-            elif prompt == 'location':
-                pLocation = p
-            elif prompt == 'mapset':
-                pMapset = p
+            elif prompt == 'project':
+                pProject = p
+            elif prompt == 'subproject':
+                pSubproject = p
             elif prompt == 'sql_query':
                 pSqlWhere.append(p)
 
@@ -2229,15 +2229,15 @@ class CmdPanel(wx.Panel):
             else:
                 pGroup['wxId-bind'] = pSubGroup['wxId']
 
-        if pDbase and pLocation:
-            pDbase['wxId-bind'] = pLocation['wxId']
+        if pDbase and pProject:
+            pDbase['wxId-bind'] = pProject['wxId']
 
-        if pLocation and pMapset:
-            pLocation['wxId-bind'] = pMapset['wxId']
+        if pProject and pSubproject:
+            pProject['wxId-bind'] = pSubproject['wxId']
 
-        if pLocation and pMapset and pMap:
-            # pLocation['wxId-bind'] +=  pMap['wxId']
-            pMapset['wxId-bind'] = pMap['wxId']
+        if pProject and pSubproject and pMap:
+            # pProject['wxId-bind'] +=  pMap['wxId']
+            pSubproject['wxId-bind'] = pMap['wxId']
 
         #
         # determine panel size
@@ -2849,7 +2849,7 @@ class GUI:
 
         If command is given with options, return validated cmd list:
          - add key name for first parameter if not given
-         - change mapname to mapname@mapset
+         - change mapname to mapname@subproject
         """
         dcmd_params = {}
         if completed is None:

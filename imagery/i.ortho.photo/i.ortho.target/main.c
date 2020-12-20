@@ -9,7 +9,7 @@
  *               Glynn Clements <glynn gclements.plus.com>
  *               Hamish Bowman
  *
- * PURPOSE:      Select target location and mapset
+ * PURPOSE:      Select target project and subproject
  * COPYRIGHT:    (C) 1999-2017 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -30,16 +30,16 @@ int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct Option *group_opt;
-    struct Option *location_opt;
-    struct Option *mapset_opt;
+    struct Option *project_opt;
+    struct Option *subproject_opt;
 
-    /* current location and mapset of that group */
-    char location[GMAPSET_MAX];
-    char mapset[GMAPSET_MAX];
+    /* current project and subproject of that group */
+    char project[GMAPSET_MAX];
+    char subproject[GMAPSET_MAX];
     char group[GNAME_MAX];
-    /* newly defined location and maspet */
-    char target_location[GMAPSET_MAX];
-    char target_mapset[GMAPSET_MAX];
+    /* newly defined project and maspet */
+    char target_project[GMAPSET_MAX];
+    char target_subproject[GMAPSET_MAX];
     int stat;
     struct Cell_head target_window;
 
@@ -55,47 +55,47 @@ int main(int argc, char *argv[])
     group_opt->description =
 	_("Name of imagery group for ortho-rectification");
 
-    location_opt = G_define_standard_option(G_OPT_M_LOCATION);
-    location_opt->key = "target_location";
-    location_opt->required = YES;
-    location_opt->description =
-	_("Name of target location for ortho-rectification");
+    project_opt = G_define_standard_option(G_OPT_M_LOCATION);
+    project_opt->key = "target_project";
+    project_opt->required = YES;
+    project_opt->description =
+	_("Name of target project for ortho-rectification");
 
-    mapset_opt = G_define_standard_option(G_OPT_M_MAPSET);
-    mapset_opt->key = "mapset_location";
-    mapset_opt->required = YES;
-    mapset_opt->description =
-	_("Name of target mapset for ortho-rectification");
+    subproject_opt = G_define_standard_option(G_OPT_M_MAPSET);
+    subproject_opt->key = "subproject_project";
+    subproject_opt->required = YES;
+    subproject_opt->description =
+	_("Name of target subproject for ortho-rectification");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
 
     strcpy(group, group_opt->answer);
-    strcpy(target_location, location_opt->answer);
-    strcpy(target_mapset, mapset_opt->answer);
+    strcpy(target_project, project_opt->answer);
+    strcpy(target_subproject, subproject_opt->answer);
 
-    I_get_target(group, location, mapset);
+    I_get_target(group, project, subproject);
     G_create_alt_env();
-    G_setenv_nogisrc("LOCATION_NAME", target_location);
-    stat = G_mapset_permissions(target_mapset);
+    G_setenv_nogisrc("LOCATION_NAME", target_project);
+    stat = G_subproject_permissions(target_subproject);
     if (stat != 1) {
-	G_fatal_error(_("Unable to access target location/mapset %s/%s"),
-	              target_location, target_mapset);
+	G_fatal_error(_("Unable to access target project/subproject %s/%s"),
+	              target_project, target_subproject);
     }
 
-    G_setenv_nogisrc("MAPSET", target_mapset);
+    G_setenv_nogisrc("MAPSET", target_subproject);
     G_get_window(&target_window);
     if (target_window.proj == PROJECTION_XY)
-	G_fatal_error(_("Target locations with XY (unreferenced) are not supported"));
+	G_fatal_error(_("Target projects with XY (unreferenced) are not supported"));
     else if (target_window.proj == PROJECTION_LL)
-	G_fatal_error(_("Target locations with lon/lat are not supported"));
+	G_fatal_error(_("Target projects with lon/lat are not supported"));
 
     G_switch_env();
-    I_put_target(group, target_location, target_mapset);
+    I_put_target(group, target_project, target_subproject);
 
-    G_message(_("Group [%s] targeted for location [%s], mapset [%s]"),
-	    group, target_location, target_mapset);
+    G_message(_("Group [%s] targeted for project [%s], subproject [%s]"),
+	    group, target_project, target_subproject);
 
     exit(EXIT_SUCCESS);
 }

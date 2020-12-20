@@ -213,7 +213,7 @@ int main(int argc, char *argv[])
      * "from_y - y coordinate of the nearest point on 'from' feature;"
      * "from_along - distance to the nearest point on 'from' feature along linear feature;"
      * "from_angle - angle between the linear feature in 'to' map and the +x "
-     * "axis, at the location of point/centroid in 'from' map, CCW, in "
+     * "axis, at the project of point/centroid in 'from' map, CCW, in "
      * "radians, between -Pi and Pi inclusive;"
      */
     opt.upload->descriptions = desc;

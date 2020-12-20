@@ -76,7 +76,7 @@ int Vect_legal_filename(const char *s)
    Check
    - output is legal vector name
    - if can find input map
-   - if input was found in current mapset, check if input != output
+   - if input was found in current subproject, check if input != output
 
    \param input input name
    \param output output name
@@ -89,20 +89,20 @@ int Vect_legal_filename(const char *s)
 int Vect_check_input_output_name(const char *input, const char *output,
 				 int error)
 {
-    const char *mapset;
+    const char *subproject;
     char inm[GNAME_MAX], ims[GMAPSET_MAX];
     char onm[GNAME_MAX], oms[GMAPSET_MAX];
 
     /* check for fully-qualified map name */
     if (G_name_is_fully_qualified(output, onm, oms)) {
-        if (strcmp(oms, G_mapset()) != 0) {
+        if (strcmp(oms, G_subproject()) != 0) {
 	    if (error == G_FATAL_EXIT) {
-		G_fatal_error(_("Output vector map name <%s> is not in the current mapset (%s)"),
-			      output, G_mapset());
+		G_fatal_error(_("Output vector map name <%s> is not in the current subproject (%s)"),
+			      output, G_subproject());
 	    }
 	    else if (error == G_FATAL_PRINT) {
-		G_warning(_("Output vector map name <%s> is not in the current mapset (%s)"),
-			  output, G_mapset());
+		G_warning(_("Output vector map name <%s> is not in the current subproject (%s)"),
+			  output, G_subproject());
 		return 1;
 	    }
 	    else {			/* GV_FATAL_RETURN */
@@ -129,14 +129,14 @@ int Vect_check_input_output_name(const char *input, const char *output,
 
     if (G_name_is_fully_qualified(input, inm, ims)) {
 	if (strcasecmp(ims, "ogr") != 0)
-	    mapset = G_find_vector2(input, "");
+	    subproject = G_find_vector2(input, "");
 	else
-	    mapset = ims;
+	    subproject = ims;
     }
     else
-	mapset = G_find_vector2(input, "");
+	subproject = G_find_vector2(input, "");
 
-    if (mapset == NULL) {
+    if (subproject == NULL) {
 	if (error == G_FATAL_EXIT) {
 	    G_fatal_error(_("Vector map <%s> not found"), input);
 	}
@@ -149,7 +149,7 @@ int Vect_check_input_output_name(const char *input, const char *output,
 	}
     }
 
-    if (strcmp(mapset, G_mapset()) == 0) {
+    if (strcmp(subproject, G_subproject()) == 0) {
 	if (G_name_is_fully_qualified(input, inm, ims)) {
 	    input = inm;
 	}

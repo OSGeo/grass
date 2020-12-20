@@ -239,7 +239,7 @@ double **Pvector(long nl, long nh)
 
     v = (double **)calloc((size_t) (nh - nl + 1 + NR_END), sizeof(double *));
     if (!v)
-	nrerror("allocation failure in dvector()");
+	nrerror("alproject failure in dvector()");
 
     return v - nl + NR_END;
 }
@@ -279,7 +279,7 @@ struct element_grow **structMatrix(long nrl, long nrh, long ncl, long nch)
     m = (struct element_grow **)calloc((size_t) (nrow + NR_END),
 				       sizeof(struct element_grow *));
     if (!m)
-	nrerror("allocation failure 1 in matrix()");
+	nrerror("alproject failure 1 in matrix()");
 
     m += NR_END;
     m -= nrl;
@@ -289,7 +289,7 @@ struct element_grow **structMatrix(long nrl, long nrh, long ncl, long nch)
 	(struct element_grow *)calloc((size_t) (nrow * ncol + NR_END),
 				      sizeof(struct element_grow));
     if (!m[nrl])
-	nrerror("allocation failure 2 in matrix()");
+	nrerror("alproject failure 2 in matrix()");
 
     m[nrl] += NR_END;
     m[nrl] -= ncl;

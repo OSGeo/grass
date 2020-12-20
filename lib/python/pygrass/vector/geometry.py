@@ -216,7 +216,7 @@ class Attrs(object):
             self.table.execute(sqlcode, values=values)
             #self.table.conn.commit()
         else:
-            str_err = "You can only read the attributes if the map is in another mapset"
+            str_err = "You can only read the attributes if the map is in another subproject"
             raise GrassError(str_err)
 
     def __dict__(self):
@@ -335,7 +335,7 @@ class Geo(object):
             self.attrs = Attrs(self.cat, table, writeable)
 
     def __del__(self):
-        """Take care of the allocated line_pnts and line_cats allocation
+        """Take care of the allocated line_pnts and line_cats alproject
         """
         if self._free_points is True and self.c_points:
             if self.c_points.contents.alloc_points > 0:
@@ -1879,8 +1879,8 @@ if __name__ == "__main__":
 
 
     """Remove the generated vector map, if exist"""
-    from grass.pygrass.utils import get_mapset_vector
+    from grass.pygrass.utils import get_subproject_vector
     from grass.script.core import run_command
-    mset = get_mapset_vector(test_vector_name, mapset='')
+    mset = get_subproject_vector(test_vector_name, subproject='')
     if mset:
         run_command("g.remove", flags='f', type='vector', name=test_vector_name)

@@ -6,7 +6,7 @@ point management and interactive point and click GCP creation
 
 Classes:
  - manager::GCPWizard
- - manager::LocationPage
+ - manager::ProjectPage
  - manager::GroupPage
  - manager::DispMapPage
  - manager::GCP
@@ -51,7 +51,7 @@ import grass.script as grass
 
 from core import utils
 from core.render import Map
-from gui_core.gselect import Select, LocationSelect, MapsetSelect
+from gui_core.gselect import Select, ProjectSelect, SubprojectSelect
 from gui_core.dialogs import GroupDialog
 from core.gcmd import RunCommand, GMessage, GError, GWarning
 from core.settings import UserSettings
@@ -60,7 +60,7 @@ from core.giface import Notification
 from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, \
     CheckListBox, TextCtrl, Menu, ListCtrl, BitmapFromImage, CheckListCtrlMixin
 
-from location_wizard.wizard import GridBagSizerTitledPage as TitledPage
+from project_wizard.wizard import GridBagSizerTitledPage as TitledPage
 
 #
 # global variables
@@ -124,12 +124,12 @@ class GCPWizard(object):
         finally:
             f.close()
 
-        self.currentlocation = self.gisrc_dict['LOCATION_NAME']
-        self.currentmapset = self.gisrc_dict['MAPSET']
-        # location for xy map to georectify
-        self.newlocation = ''
-        # mapset for xy map to georectify
-        self.newmapset = ''
+        self.currentproject = self.gisrc_dict['LOCATION_NAME']
+        self.currentsubproject = self.gisrc_dict['MAPSET']
+        # project for xy map to georectify
+        self.newproject = ''
+        # subproject for xy map to georectify
+        self.newsubproject = ''
 
         global maptype
         global src_map
@@ -139,7 +139,7 @@ class GCPWizard(object):
         #tgt_map = ''
         maptype = 'raster'
 
-        # GISRC file for source location/mapset of map(s) to georectify
+        # GISRC file for source project/subproject of map(s) to georectify
         self.source_gisrc = ''
         self.src_maps = []
 
@@ -150,7 +150,7 @@ class GCPWizard(object):
             parent=parent,
             id=wx.ID_ANY,
             title=_("Setup for georectification"))
-        self.startpage = LocationPage(self.wizard, self)
+        self.startpage = ProjectPage(self.wizard, self)
         self.grouppage = GroupPage(self.wizard, self)
         self.mappage = DispMapPage(self.wizard, self)
 
@@ -295,27 +295,27 @@ class GCPWizard(object):
         else:
             self.Cleanup()
 
-    def SetSrcEnv(self, location, mapset):
-        """Create environment to use for location and mapset
+    def SetSrcEnv(self, project, subproject):
+        """Create environment to use for project and subproject
         that are the source of the file(s) to georectify
 
-        :param location: source location
-        :param mapset: source mapset
+        :param project: source project
+        :param subproject: source subproject
 
         :return: False on error
         :return: True on success
         """
 
-        self.newlocation = location
-        self.newmapset = mapset
+        self.newproject = project
+        self.newsubproject = subproject
 
         # check to see if we are georectifying map in current working
-        # location/mapset
-        if self.newlocation == self.currentlocation and self.newmapset == self.currentmapset:
+        # project/subproject
+        if self.newproject == self.currentproject and self.newsubproject == self.currentsubproject:
             return False
 
-        self.gisrc_dict['LOCATION_NAME'] = location
-        self.gisrc_dict['MAPSET'] = mapset
+        self.gisrc_dict['LOCATION_NAME'] = project
+        self.gisrc_dict['MAPSET'] = subproject
 
         self.source_gisrc = utils.GetTempfile()
 
@@ -330,12 +330,12 @@ class GCPWizard(object):
 
     def SwitchEnv(self, grc):
         """
-        Switches between original working location/mapset and
-        location/mapset that is source of file(s) to georectify
+        Switches between original working project/subproject and
+        project/subproject that is source of file(s) to georectify
         """
         # check to see if we are georectifying map in current working
-        # location/mapset
-        if self.newlocation == self.currentlocation and self.newmapset == self.currentmapset:
+        # project/subproject
+        if self.newproject == self.currentproject and self.newsubproject == self.currentsubproject:
             return False
 
         if grc == 'target':
@@ -357,7 +357,7 @@ class GCPWizard(object):
         event.Skip()
 
     def Cleanup(self):
-        """Return to current location and mapset"""
+        """Return to current project and subproject"""
         # here was also the cleaning of gcpmanagement from layer manager
         # which is no longer needed
 
@@ -365,21 +365,21 @@ class GCPWizard(object):
         self.wizard.Destroy()
 
 
-class LocationPage(TitledPage):
+class ProjectPage(TitledPage):
     """
     Set map type (raster or vector) to georectify and
-    select location/mapset of map(s) to georectify.
+    select project/subproject of map(s) to georectify.
     """
 
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _(
-            "Select map type and location/mapset"))
+            "Select map type and project/subproject"))
 
         self.parent = parent
         self.grassdatabase = self.parent.grassdatabase
 
-        self.xylocation = ''
-        self.xymapset = ''
+        self.xyproject = ''
+        self.xysubproject = ''
 
         #
         # layout
@@ -393,41 +393,41 @@ class LocationPage(TitledPage):
                        flag=wx.ALIGN_CENTER | wx.ALL | wx.EXPAND, border=5,
                        pos=(1, 1), span=(1, 2))
 
-        # location
+        # project
         self.sizer.Add(
             StaticText(
                 parent=self,
                 id=wx.ID_ANY,
-                label=_('Select source location:')),
+                label=_('Select source project:')),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
             pos=(
                 2,
                 1))
-        self.cb_location = LocationSelect(
+        self.cb_project = ProjectSelect(
             parent=self, gisdbase=self.grassdatabase)
         self.sizer.Add(
-            self.cb_location,
+            self.cb_project,
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
             pos=(
                 2,
                 2))
 
-        # mapset
+        # subproject
         self.sizer.Add(
             StaticText(
                 parent=self,
                 id=wx.ID_ANY,
-                label=_('Select source mapset:')),
+                label=_('Select source subproject:')),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
             pos=(
                 3,
                 1))
-        self.cb_mapset = MapsetSelect(parent=self, gisdbase=self.grassdatabase,
+        self.cb_subproject = SubprojectSelect(parent=self, gisdbase=self.grassdatabase,
                                       setItems=False)
-        self.sizer.Add(self.cb_mapset, flag=wx.ALIGN_LEFT |
+        self.sizer.Add(self.cb_subproject, flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5, pos=(3, 2))
         self.sizer.AddGrowableCol(2)
 
@@ -435,8 +435,8 @@ class LocationPage(TitledPage):
         # bindings
         #
         self.Bind(wx.EVT_RADIOBOX, self.OnMaptype, self.rb_maptype)
-        self.Bind(wx.EVT_COMBOBOX, self.OnLocation, self.cb_location)
-        self.cb_mapset.Bind(wx.EVT_TEXT, self.OnMapset)
+        self.Bind(wx.EVT_COMBOBOX, self.OnProject, self.cb_project)
+        self.cb_subproject.Bind(wx.EVT_TEXT, self.OnSubproject)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
         # self.Bind(wx.EVT_CLOSE, self.parent.Cleanup)
@@ -450,54 +450,54 @@ class LocationPage(TitledPage):
         else:
             maptype = 'vector'
 
-    def OnLocation(self, event):
-        """Sets source location for map(s) to georectify"""
-        self.xylocation = event.GetString()
+    def OnProject(self, event):
+        """Sets source project for map(s) to georectify"""
+        self.xyproject = event.GetString()
 
-        # create a list of valid mapsets
-        tmplist = os.listdir(os.path.join(self.grassdatabase, self.xylocation))
-        self.mapsetList = []
+        # create a list of valid subprojects
+        tmplist = os.listdir(os.path.join(self.grassdatabase, self.xyproject))
+        self.subprojectList = []
         for item in tmplist:
-            if os.path.isdir(os.path.join(self.grassdatabase, self.xylocation, item)) and \
-                    os.path.exists(os.path.join(self.grassdatabase, self.xylocation, item, 'WIND')):
+            if os.path.isdir(os.path.join(self.grassdatabase, self.xyproject, item)) and \
+                    os.path.exists(os.path.join(self.grassdatabase, self.xyproject, item, 'WIND')):
                 if item != 'PERMANENT':
-                    self.mapsetList.append(item)
+                    self.subprojectList.append(item)
 
-        self.xymapset = 'PERMANENT'
-        utils.ListSortLower(self.mapsetList)
-        self.mapsetList.insert(0, 'PERMANENT')
-        self.cb_mapset.SetItems(self.mapsetList)
-        self.cb_mapset.SetStringSelection(self.xymapset)
+        self.xysubproject = 'PERMANENT'
+        utils.ListSortLower(self.subprojectList)
+        self.subprojectList.insert(0, 'PERMANENT')
+        self.cb_subproject.SetItems(self.subprojectList)
+        self.cb_subproject.SetStringSelection(self.xysubproject)
 
         if not wx.FindWindowById(wx.ID_FORWARD).IsEnabled():
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
 
-    def OnMapset(self, event):
-        """Sets source mapset for map(s) to georectify"""
-        if self.xylocation == '':
-            GMessage(_('You must select a valid location '
-                       'before selecting a mapset'),
+    def OnSubproject(self, event):
+        """Sets source subproject for map(s) to georectify"""
+        if self.xyproject == '':
+            GMessage(_('You must select a valid project '
+                       'before selecting a subproject'),
                      parent=self)
             return
 
-        self.xymapset = event.GetString()
+        self.xysubproject = event.GetString()
 
         if not wx.FindWindowById(wx.ID_FORWARD).IsEnabled():
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
 
     def OnPageChanging(self, event=None):
         if event.GetDirection() and \
-                (self.xylocation == '' or self.xymapset == ''):
-            GMessage(_('You must select a valid location '
-                       'and mapset in order to continue'),
+                (self.xyproject == '' or self.xysubproject == ''):
+            GMessage(_('You must select a valid project '
+                       'and subproject in order to continue'),
                      parent=self)
             event.Veto()
             return
 
-        self.parent.SetSrcEnv(self.xylocation, self.xymapset)
+        self.parent.SetSrcEnv(self.xyproject, self.xysubproject)
 
     def OnEnterPage(self, event=None):
-        if self.xylocation == '' or self.xymapset == '':
+        if self.xyproject == '' or self.xysubproject == '':
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
@@ -517,8 +517,8 @@ class GroupPage(TitledPage):
         self.grassdatabase = self.parent.grassdatabase
         self.groupList = []
 
-        self.xylocation = ''
-        self.xymapset = ''
+        self.xyproject = ''
+        self.xysubproject = ''
         self.xygroup = ''
 
         # default extension
@@ -613,7 +613,7 @@ class GroupPage(TitledPage):
         self.xygroup = event.GetString()
 
     def OnMkGroup(self, event):
-        """Create new group in source location/mapset"""
+        """Create new group in source project/subproject"""
         if self.xygroup == '':
             self.xygroup = self.cb_group.GetValue()
         dlg = GroupDialog(parent=self, defaultGroup=self.xygroup)
@@ -636,16 +636,16 @@ class GroupPage(TitledPage):
             self.xygroup = self.cb_group.GetValue()
 
         vector_dir = os.path.join(self.grassdatabase,
-                                  self.xylocation,
-                                  self.xymapset,
+                                  self.xyproject,
+                                  self.xysubproject,
                                   'vector')
 
         if os.path.exists(vector_dir):
             dlg = VectGroup(parent=self,
                             id=wx.ID_ANY,
                             grassdb=self.grassdatabase,
-                            location=self.xylocation,
-                            mapset=self.xymapset,
+                            project=self.xyproject,
+                            subproject=self.xysubproject,
                             group=self.xygroup)
 
             if dlg.ShowModal() != wx.ID_OK:
@@ -679,22 +679,22 @@ class GroupPage(TitledPage):
 
         self.groupList = []
 
-        self.xylocation = self.parent.gisrc_dict['LOCATION_NAME']
-        self.xymapset = self.parent.gisrc_dict['MAPSET']
+        self.xyproject = self.parent.gisrc_dict['LOCATION_NAME']
+        self.xysubproject = self.parent.gisrc_dict['MAPSET']
 
-        # create a list of groups in selected mapset
+        # create a list of groups in selected subproject
         if os.path.isdir(os.path.join(self.grassdatabase,
-                                      self.xylocation,
-                                      self.xymapset,
+                                      self.xyproject,
+                                      self.xysubproject,
                                       'group')):
             tmplist = os.listdir(os.path.join(self.grassdatabase,
-                                              self.xylocation,
-                                              self.xymapset,
+                                              self.xyproject,
+                                              self.xysubproject,
                                               'group'))
             for item in tmplist:
                 if os.path.isdir(os.path.join(self.grassdatabase,
-                                              self.xylocation,
-                                              self.xymapset,
+                                              self.xyproject,
+                                              self.xysubproject,
                                               'group',
                                               item)):
                     self.groupList.append(item)
@@ -907,13 +907,13 @@ class DispMapPage(TitledPage):
 
         elif maptype == 'vector':
             grassdatabase = self.parent.grassdatabase
-            xylocation = self.parent.gisrc_dict['LOCATION_NAME']
-            xymapset = self.parent.gisrc_dict['MAPSET']
+            xyproject = self.parent.gisrc_dict['LOCATION_NAME']
+            xysubproject = self.parent.gisrc_dict['MAPSET']
             # make list of vectors to georectify from VREF
 
             vgrpfile = os.path.join(grassdatabase,
-                                    xylocation,
-                                    xymapset,
+                                    xyproject,
+                                    xysubproject,
                                     'group',
                                     self.parent.grouppage.xygroup,
                                     'VREF')
@@ -1040,14 +1040,14 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         self.grassdatabase = self.grwiz.grassdatabase
 
-        self.currentlocation = self.grwiz.currentlocation
-        self.currentmapset = self.grwiz.currentmapset
+        self.currentproject = self.grwiz.currentproject
+        self.currentsubproject = self.grwiz.currentsubproject
 
-        self.newlocation = self.grwiz.newlocation
-        self.newmapset = self.grwiz.newmapset
+        self.newproject = self.grwiz.newproject
+        self.newsubproject = self.grwiz.newsubproject
 
-        self.xylocation = self.grwiz.gisrc_dict['LOCATION_NAME']
-        self.xymapset = self.grwiz.gisrc_dict['MAPSET']
+        self.xyproject = self.grwiz.gisrc_dict['LOCATION_NAME']
+        self.xysubproject = self.grwiz.gisrc_dict['MAPSET']
         self.xygroup = self.grwiz.grouppage.xygroup
         self.src_maps = self.grwiz.src_maps
         self.extension = self.grwiz.grouppage.extension
@@ -1056,32 +1056,32 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         self.file = {
             'points': os.path.join(self.grassdatabase,
-                                   self.xylocation,
-                                   self.xymapset,
+                                   self.xyproject,
+                                   self.xysubproject,
                                    'group',
                                    self.xygroup,
                                    'POINTS'),
             'points_bak': os.path.join(self.grassdatabase,
-                                       self.xylocation,
-                                       self.xymapset,
+                                       self.xyproject,
+                                       self.xysubproject,
                                        'group',
                                        self.xygroup,
                                        'POINTS_BAK'),
             'rgrp': os.path.join(self.grassdatabase,
-                                 self.xylocation,
-                                 self.xymapset,
+                                 self.xyproject,
+                                 self.xysubproject,
                                  'group',
                                  self.xygroup,
                                  'REF'),
             'vgrp': os.path.join(self.grassdatabase,
-                                 self.xylocation,
-                                 self.xymapset,
+                                 self.xyproject,
+                                 self.xysubproject,
                                  'group',
                                  self.xygroup,
                                  'VREF'),
             'target': os.path.join(self.grassdatabase,
-                                   self.xylocation,
-                                   self.xymapset,
+                                   self.xyproject,
+                                   self.xysubproject,
                                    'group',
                                    self.xygroup,
                                    'TARGET'),
@@ -1123,7 +1123,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.rmsmean = 0
         self.rmssd = 0
 
-        self.SetTarget(self.xygroup, self.currentlocation, self.currentmapset)
+        self.SetTarget(self.xygroup, self.currentproject, self.currentsubproject)
 
         self.itemDataMap = None
 
@@ -1213,13 +1213,13 @@ class GCP(MapFrame, ColumnSorterMixin):
         # init to ascending sort on first click
         self._colSortFlag = [1] * ncols
 
-    def SetTarget(self, tgroup, tlocation, tmapset):
+    def SetTarget(self, tgroup, tproject, tsubproject):
         """
-        Sets rectification target to current location and mapset
+        Sets rectification target to current project and subproject
         """
         # check to see if we are georectifying map in current working
-        # location/mapset
-        if self.newlocation == self.currentlocation and self.newmapset == self.currentmapset:
+        # project/subproject
+        if self.newproject == self.currentproject and self.newsubproject == self.currentsubproject:
             RunCommand('i.target',
                        parent=self,
                        flags='c',
@@ -1229,8 +1229,8 @@ class GCP(MapFrame, ColumnSorterMixin):
             RunCommand('i.target',
                        parent=self,
                        group=tgroup,
-                       location=tlocation,
-                       mapset=tmapset)
+                       project=tproject,
+                       subproject=tsubproject)
             self.grwiz.SwitchEnv('target')
 
     def AddGCP(self, event):
@@ -1458,8 +1458,8 @@ class GCP(MapFrame, ColumnSorterMixin):
             # use os.linesep or '\n' here ???
             f.write('# Ground Control Points File\n')
             f.write("# \n")
-            f.write("# target location: " + self.currentlocation + '\n')
-            f.write("# target mapset: " + self.currentmapset + '\n')
+            f.write("# target project: " + self.currentproject + '\n')
+            f.write("# target subproject: " + self.currentsubproject + '\n')
             f.write("#\tsource\t\ttarget\t\tstatus\n")
             f.write("#\teast\tnorth\teast\tnorth\t(1=ok, 0=ignore)\n")
             f.write(
@@ -1674,7 +1674,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                         map_name = map.split('@')[0] + self.extension
                         found = grass.find_file(
                             name=map_name, element='cell',
-                            mapset=self.currentmapset,
+                            subproject=self.currentsubproject,
                         )
                         if found['name']:
                             found_maps.append("<{}>".format(found['name']))
@@ -1683,7 +1683,7 @@ class GCP(MapFrame, ColumnSorterMixin):
             self.grwiz.SwitchEnv('target')
             found = grass.find_file(
                 name=self.outname, element='vector',
-                mapset=self.currentmapset,
+                subproject=self.currentsubproject,
             )
             self.grwiz.SwitchEnv('source')
             map_name = "<{}>".format(found['name'])
@@ -2157,7 +2157,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.MapWindow.ZoomHistory(self.Map.region['n'], self.Map.region['s'],
                                    self.Map.region['e'], self.Map.region['w'])
 
-        # LL locations
+        # LL projects
         if self.Map.projinfo['proj'] == 'll':
             if newreg['n'] > 90.0:
                 newreg['n'] = 90.0
@@ -2503,28 +2503,28 @@ class VectGroup(wx.Dialog):
         Replace by g.group
     """
 
-    def __init__(self, parent, id, grassdb, location, mapset, group,
+    def __init__(self, parent, id, grassdb, project, subproject, group,
                  style=wx.DEFAULT_DIALOG_STYLE):
 
         wx.Dialog.__init__(self, parent, id, style=style,
                            title=_("Create vector map group"))
 
         self.grassdatabase = grassdb
-        self.xylocation = location
-        self.xymapset = mapset
+        self.xyproject = project
+        self.xysubproject = subproject
         self.xygroup = group
 
         #
         # get list of valid vector directories
         #
         vectlist = os.listdir(os.path.join(self.grassdatabase,
-                                           self.xylocation,
-                                           self.xymapset,
+                                           self.xyproject,
+                                           self.xysubproject,
                                            'vector'))
         for dir in vectlist:
             if not os.path.isfile(os.path.join(self.grassdatabase,
-                                               self.xylocation,
-                                               self.xymapset,
+                                               self.xyproject,
+                                               self.xysubproject,
                                                'vector',
                                                dir,
                                                'coor')):
@@ -2534,8 +2534,8 @@ class VectGroup(wx.Dialog):
 
         # path to vref file
         self.vgrpfile = os.path.join(self.grassdatabase,
-                                     self.xylocation,
-                                     self.xymapset,
+                                     self.xyproject,
+                                     self.xysubproject,
                                      'group',
                                      self.xygroup,
                                      'VREF')
@@ -2620,7 +2620,7 @@ class VectGroup(wx.Dialog):
             vgrouplist.append(
                 self.listMap.GetString(item) +
                 '@' +
-                self.xymapset)
+                self.xysubproject)
 
         dirname = os.path.dirname(self.vgrpfile)
 
@@ -3128,7 +3128,7 @@ class GrSettingsDialog(wx.Dialog):
 
         # clip to region
         self.check = wx.CheckBox(parent=panel, id=wx.ID_ANY, label=_(
-            "clip to computational region in target location"))
+            "clip to computational region in target project"))
         sizer.Add(self.check, proportion=0,
                   flag=wx.EXPAND | wx.ALL, border=5)
         self.check.SetValue(self.parent.clip_to_region)

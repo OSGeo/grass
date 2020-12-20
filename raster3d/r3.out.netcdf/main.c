@@ -308,10 +308,10 @@ static void write_netcdf_header(int ncid, RASTER3D_Region * region,
 		ERR(retval);
 
 	    /* Temporal unit */
-	    if (G_has_raster3d_timestamp(map->fileName, map->mapset)) {
+	    if (G_has_raster3d_timestamp(map->fileName, map->subproject)) {
 		struct TimeStamp ts;
 
-		G_read_raster3d_timestamp(map->fileName, map->mapset, &ts);
+		G_read_raster3d_timestamp(map->fileName, map->subproject, &ts);
 
 		/* Days since datum in ISO norm */
 		if (datetime_is_absolute(&ts.dt[0])) {

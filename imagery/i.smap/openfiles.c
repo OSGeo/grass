@@ -34,7 +34,7 @@ int openfiles(struct parms *parms, struct files *files)
     /* open all group maps for reading */
     for (n = 0; n < Ref.nfiles; n++)
 	files->band_fd[n] =
-	    open_cell_old(Ref.file[n].name, Ref.file[n].mapset);
+	    open_cell_old(Ref.file[n].name, Ref.file[n].subproject);
 
     /* open output map */
     files->output_fd = open_cell_new(parms->output_map);

@@ -31,7 +31,7 @@ class TestRaster3dExtraction(TestCase):
     def setUp(self):
         """Create input data for transient groundwater flow computation
         """
-        # Use always the current mapset as temporal database
+        # Use always the current subproject as temporal database
         self.runModule("r3.mapcalc", expression="a1 = 100",  overwrite=True)
         self.runModule("r3.mapcalc", expression="a2 = 200",  overwrite=True)
         self.runModule("r3.mapcalc", expression="a3 = 300",  overwrite=True)

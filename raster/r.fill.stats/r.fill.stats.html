@@ -68,7 +68,7 @@ advantageous include the processing of high resolution, close range
 scanning and remote sensing datasets. Such datasets commonly feature
 densely spaced measurements that have some gaps after rasterization,
 due to blind spots, instrument failures, and misalignments between the
-GIS' raster cell grids and the original measurement locations. In these
+GIS' raster cell grids and the original measurement projects. In these
 cases, <em>r.fill.stats</em> should typically be run using the "weighted
 mean" (default) method and with a small distance setting (the default
 is to use a search radius of just three cells).
@@ -98,7 +98,7 @@ The most critical user-provided settings are the interpolation/gap
 filling method (<b>mode</b>) and the maximum distance, up to which
 <em>r.fill.stats</em> will scan for cells with values (<b>distance</b>).
 The distance can be expressed as a number of cells (default) or in the
-current GRASS location's units (if the <b>-m</b> flag is given). The latter
+current GRASS project's units (if the <b>-m</b> flag is given). The latter
 are typically meters, but can be any other units of a <em>planar</em>
 coordinate system.
 
@@ -272,7 +272,7 @@ d.mon stop=cairo
 The key to getting good gap filling results is to understand the
 spatial weighting scheme used in mode "wmean". The weights are
 precomputed and assigned per cell within the search window centered on
-the location at which to interpolate/gap fill all cells within the
+the project at which to interpolate/gap fill all cells within the
 user-specified distance.
 
 <p>
@@ -469,7 +469,7 @@ d.mon stop=cairo
 <h3>Outlier removal and gap-filling of SRTM elevation data</h3>
 
 In this example, the SRTM elevation map in the
-North Carolina sample dataset location is filtered for outlier
+North Carolina sample dataset project is filtered for outlier
 elevation values; missing pixels are then re-interpolated to obtain
 a complete elevation map:
 

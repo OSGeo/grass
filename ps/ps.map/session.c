@@ -3,7 +3,7 @@
 #include "local_proto.h"
 
 /* TODO: when done, 
- * remove session file or save it to a user-specified location */
+ * remove session file or save it to a user-specified project */
 
 static char cur[2000];
 static char *sessionfile = NULL;

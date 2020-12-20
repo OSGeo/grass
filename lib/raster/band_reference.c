@@ -24,14 +24,14 @@ static const char *_band_file = "band_reference";
   \brief Check if band reference for raster map exists
 
   \param name map name
-  \param mapset mapset name
+  \param subproject subproject name
 
   \return 1 on success
   \return 0 no band reference present
 */
-int Rast_has_band_reference(const char *name, const char *mapset)
+int Rast_has_band_reference(const char *name, const char *subproject)
 {
-    if (!G_find_file2_misc("cell_misc", _band_file, name, mapset))
+    if (!G_find_file2_misc("cell_misc", _band_file, name, subproject))
 	return 0;
 
     return 1;
@@ -43,7 +43,7 @@ int Rast_has_band_reference(const char *name, const char *mapset)
    Note that output arguments should be freed by the caller using G_free().
 
    \param name map name
-   \param mapset mapset name
+   \param subproject subproject name
    \param[out] filename filename JSON reference
    \param[out] band_reference band reference identifier
 
@@ -51,7 +51,7 @@ int Rast_has_band_reference(const char *name, const char *mapset)
   \return 0 band reference not found
   \return negative on error
  */
-int Rast_read_band_reference(const char *name, const char *mapset,
+int Rast_read_band_reference(const char *name, const char *subproject,
                              char **filename, char **band_reference)
 {
     int ret;
@@ -59,15 +59,15 @@ int Rast_read_band_reference(const char *name, const char *mapset,
     struct Key_Value *key_val;
 
     G_debug(1, "Reading band reference file for raster map <%s@%s>",
-            name, mapset);
+            name, subproject);
 
-    if (!Rast_has_band_reference(name, mapset))
+    if (!Rast_has_band_reference(name, subproject))
         return 0;
 
-    fd = G_fopen_old_misc("cell_misc", _band_file, name, mapset);
+    fd = G_fopen_old_misc("cell_misc", _band_file, name, subproject);
     if (!fd) {
         G_debug(1, "Unable to read band identifier file for <%s@%s>",
-                name, mapset);
+                name, subproject);
         return -1;
     }
 
@@ -112,7 +112,7 @@ int Rast_write_band_reference(const char *name,
 /*!
   \brief Remove band reference from raster map
 
-  Only band reference files in current mapset can be removed.
+  Only band reference files in current subproject can be removed.
 
   \param name map name
 

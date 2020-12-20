@@ -132,12 +132,12 @@ class TestR3ToRast(TestCase):
     def test_a(self):
         self.assertModule('r3.to.rast', input=self.rast3d,
                           output=self.rast2d)
-        rasts = list_strings('raster', mapset=".",
+        rasts = list_strings('raster', subproject=".",
                              pattern="%s_*" % self.rast2d,
                              exclude="%s_*" % self.rast2d_ref)
         self.assertEquals(len(rasts), 4,
                           msg="Wrong number of 2D rasters present"
-                              " in the mapset")
+                              " in the subproject")
         ref_info = dict(cells=9)
         ref_univar = dict(cells=9, null_cells=0)
         for rast in rasts:

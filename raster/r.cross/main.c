@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     int i;
     const char *name;
     const char *output;
-    const char *mapset;
+    const char *subproject;
     int non_zero;
     CELL ncats;
     int primary;
@@ -100,11 +100,11 @@ int main(int argc, char *argv[])
     for (nfiles = 0; (name = parm.input->answers[nfiles]); nfiles++) {
 	if (nfiles >= NFILES)
 	    G_fatal_error(_("More than %d files not allowed"), NFILES);
-	mapset = G_find_raster2(name, "");
-	if (!mapset)
+	subproject = G_find_raster2(name, "");
+	if (!subproject)
 	    G_fatal_error(_("Raster map <%s> not found"), name);
 	names[nfiles] = name;
-	fd[nfiles] = Rast_open_old(name, mapset);
+	fd[nfiles] = Rast_open_old(name, subproject);
     }
 
     if (nfiles <= 1)
@@ -140,8 +140,8 @@ int main(int argc, char *argv[])
     qsort(reclass, result, sizeof(RECLASS), cmp);
     table = (CELL *) G_calloc(result, sizeof(CELL));
     for (i = 0; i < nfiles; i++) {
-	mapset = G_find_raster2(names[i], "");
-	Rast_read_cats(names[i], mapset, &labels[i]);
+	subproject = G_find_raster2(names[i], "");
+	Rast_read_cats(names[i], subproject, &labels[i]);
     }
 
     for (ncats = 0; ncats < result; ncats++) {
@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
 	Rast_free_cats(&labels[i]);
 
     /* reopen the output cell for reading and for writing */
-    fd[0] = Rast_open_old(output, G_mapset());
+    fd[0] = Rast_open_old(output, G_subproject());
     outfd = Rast_open_c_new(output);
 
     renumber(fd[0], outfd);
@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
     Rast_free_cats(&pcats);
     if (result > 0) {
 	Rast_make_random_colors(&pcolr, (CELL) 1, result);
-	Rast_write_colors(output, G_mapset(), &pcolr);
+	Rast_write_colors(output, G_subproject(), &pcolr);
     }
 
     G_message(_("%d categories"), result);

@@ -50,7 +50,7 @@ univar_stat *create_univar_stat_struct(int map_type, int n_perc)
 	stats[i].first = TRUE;
 
 	/* allocate memory for extended computation */
-	/* changed to on-demand block allocation */
+	/* changed to on-demand block alproject */
 
 /*	if (param.extended->answer) {
 	    if (map_type == DCELL_TYPE) {

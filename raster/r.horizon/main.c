@@ -67,7 +67,7 @@ const double minAngle = DEG;
 
 const char *elevin;
 const char *horizon = NULL;
-const char *mapset = NULL;
+const char *subproject = NULL;
 const char *per;
 char *shad_filename;
 char *outfile;
@@ -532,14 +532,14 @@ int main(int argc, char *argv[])
 
     if ((in_proj_info = G_get_projinfo()) == NULL)
 	G_fatal_error(
-	    _("Can't get projection info of current location"));
+	    _("Can't get projection info of current project"));
 
     if ((in_unit_info = G_get_projunits()) == NULL)
-	G_fatal_error(_("Can't get projection units of current location"));
+	G_fatal_error(_("Can't get projection units of current project"));
 
     if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
 	G_fatal_error(
-	    _("Can't get projection key values of current location"));
+	    _("Can't get projection key values of current project"));
 
     G_free_key_value(in_proj_info);
     G_free_key_value(in_unit_info);

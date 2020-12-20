@@ -17,7 +17,7 @@ filled beforehand, e.g. with
 All non-NULL and non-zero cells of <b>depression</b> map will be
 regarded as real depressions. Streams will not be routed out of
 depressions. If an area is marked as depression but the elevation
-model has no depression at this location, streams will not stop
+model has no depression at this project, streams will not stop
 there. If a flow accumulation map and a map with real depressions are
 provided, the flow accumulation map must match the depression map such
 that flow is not distributed out of the indicated depressions. It is
@@ -136,8 +136,8 @@ one cell.
 The output raster and vector contains stream segments with unique
 IDs. Note that these IDs are different from the IDs assigned
 by <em><a href="r.watershed.html">r.watershed</a></em>. The vector
-output also contains points at the location of the start of a stream
-segment, at confluences and at stream network outlet locations.
+output also contains points at the project of the start of a stream
+segment, at confluences and at stream network outlet projects.
 
 <p>
 Output <b>stream_raster</b> raster map stores extracted streams. Cell
@@ -145,7 +145,7 @@ values encode a unique ID for each stream segment.
 
 <p>
 Output <b>stream_vector</b> vector map stores extracted stream segments
-and points. Points are written at the start location of each stream
+and points. Points are written at the start project of each stream
 segment and at the outlet of a stream network. In layer 1, categories
 are unique IDs, identical to the cell value of the raster output. The
 attribute table for layer 1 holds information about the type of stream 
@@ -156,7 +156,7 @@ network attribute is the network ID of the stream/node. The encoding
 for type_code is 0 = start, 1 = intermediate. In layer 2, categories 
 are identical to type_code in layer 1 with additional category 2 = 
 outlet for outlet points. Points with category 1 = intermediate in 
-layer 2 are at the location of confluences.
+layer 2 are at the project of confluences.
 
 <h2>EXAMPLE</h2>
 

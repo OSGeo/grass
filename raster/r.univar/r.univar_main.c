@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
     char **p, *z;
     int fd, fdz, cell_type, min, max;
     struct Range zone_range;
-    const char *mapset, *name;
+    const char *subproject, *name;
 
     G_gisinit(argv[0]);
 
@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
     
     /* open zoning raster */
     if ((z = param.zonefile->answer)) {
-	mapset = G_find_raster2(z, "");
+	subproject = G_find_raster2(z, "");
 
 	fdz = open_raster(z);
 	
@@ -149,10 +149,10 @@ int main(int argc, char *argv[])
 	if (cell_type != CELL_TYPE)
 	    G_fatal_error("Zoning raster must be of type CELL");
 
-	if (Rast_read_range(z, mapset, &zone_range) == -1)
+	if (Rast_read_range(z, subproject, &zone_range) == -1)
 	    G_fatal_error("Can not read range for zoning raster");
 	Rast_get_range_min_max(&zone_range, &min, &max);
-	if (Rast_read_cats(z, mapset, &(zone_info.cats)))
+	if (Rast_read_cats(z, subproject, &(zone_info.cats)))
 	    G_warning("no category support for zoning raster");
 
 	zone_info.min = min;
@@ -176,8 +176,8 @@ int main(int argc, char *argv[])
 	/* Check if the native extent and resolution
 	   of the input map should be used */
 	if(param.use_rast_region->answer) {
-    	    mapset = G_find_raster2(*p, "");
-	    Rast_get_cellhd(*p, mapset, &region);
+    	    subproject = G_find_raster2(*p, "");
+	    Rast_get_cellhd(*p, subproject, &region);
 	    /* Set the computational region */
 	    Rast_set_window(&region);
         } else {
@@ -226,15 +226,15 @@ int main(int argc, char *argv[])
 
 static int open_raster(const char *infile)
 {
-    const char *mapset;
+    const char *subproject;
     int fd;
 
-    mapset = G_find_raster2(infile, "");
-    if (mapset == NULL) {
+    subproject = G_find_raster2(infile, "");
+    if (subproject == NULL) {
 	G_fatal_error(_("Raster map <%s> not found"), infile);
     }
 
-    fd = Rast_open_old(infile, mapset);
+    fd = Rast_open_old(infile, subproject);
 
     return fd;
 }

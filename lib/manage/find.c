@@ -21,21 +21,21 @@
 
   \param n element id
   \param name element name
-  \param mapsets name of mapsets
+  \param subprojects name of subprojects
 
-  \return mapset if found
+  \return subproject if found
   \return if not found
 */
-const char *M_find(int n, char *name, const char *mapsets)
+const char *M_find(int n, char *name, const char *subprojects)
 {
-    const char *mapset;
+    const char *subproject;
 
-    mapset = G_find_file2(list[n].element[0], name, mapsets);
-    if (mapset) {
+    subproject = G_find_file2(list[n].element[0], name, subprojects);
+    if (subproject) {
 	char temp[GNAME_MAX];
 
 	sscanf(name, "%s", temp);
 	strcpy(name, temp);
     }
-    return mapset;
+    return subproject;
 }

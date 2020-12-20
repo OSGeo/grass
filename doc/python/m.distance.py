@@ -141,7 +141,7 @@ def main():
     # we don't need this, but just to have a look
     if proj_type == 1:
         G_database_units_to_meters_factor()
-        gs.message("Location units are %s" % G_database_unit_name(True).lower())
+        gs.message("Project units are %s" % G_database_unit_name(True).lower())
     
     return 0
 

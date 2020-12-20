@@ -121,13 +121,13 @@ int init_vars(int argc, char *argv[])
     if (bas_thres > 0)
 	tot_parts++;
     G_message(_("SECTION 1a (of %1d): Initiating Memory."), tot_parts);
-    this_mapset = G_mapset();
+    this_subproject = G_subproject();
     if (sl_flag || sg_flag || ls_flag)
 	er_flag = 1;
     /* for sd factor
        if (dep_flag)        {
        if (sscanf (dep_name, "%lf", &dep_slope) != 1)       {
-       dep_mapset = do_exist (dep_name);
+       dep_subproject = do_exist (dep_name);
        dep_flag = -1;
        }
        }

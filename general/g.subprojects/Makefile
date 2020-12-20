@@ -1,7 +1,7 @@
 
 MODULE_TOPDIR = ../..
 
-PGM = g.mapsets
+PGM = g.subprojects
 
 LIBES = $(GISLIB)
 DEPENDENCIES = $(GISDEP)

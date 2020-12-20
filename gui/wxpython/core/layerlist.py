@@ -221,11 +221,11 @@ class Layer(object):
                     name=fullName,
                     element=self._internalTypes[
                         self._mapType])
-                if not res['mapset']:
+                if not res['subproject']:
                     raise ValueError(
                         "Map <{name}> not found.".format(
                             name=name))
-                self._name = name + '@' + res['mapset']
+                self._name = name + '@' + res['subproject']
             else:
                 self._name = name
         self.label = name

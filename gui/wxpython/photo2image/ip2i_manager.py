@@ -40,7 +40,7 @@ import grass.script as grass
 
 from core import utils, globalvar
 from core.render import Map
-from gui_core.gselect import Select, LocationSelect, MapsetSelect
+from gui_core.gselect import Select, ProjectSelect, SubprojectSelect
 from gui_core.dialogs import GroupDialog
 from core.gcmd import RunCommand, GMessage, GError, GWarning
 from core.settings import UserSettings
@@ -49,7 +49,7 @@ from core.giface import Notification
 from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, \
     TextCtrl, Menu, ListCtrl, BitmapFromImage, CheckListCtrlMixin
 
-from location_wizard.wizard import GridBagSizerTitledPage as TitledPage
+from project_wizard.wizard import GridBagSizerTitledPage as TitledPage
 
 #
 # global variables
@@ -125,19 +125,19 @@ class GCPWizard(object):
         finally:
             f.close()
 
-        self.currentlocation = self.gisrc_dict['LOCATION_NAME']
-        self.currentmapset = self.gisrc_dict['MAPSET']
-        # location for xy map to georectify
-        self.newlocation = self.currentlocation
-        self.xylocation = self.currentlocation
-        # mapset for xy map to georectify
-        self.newmapset = self.currentmapset
-        self.xymapset = self.currentmapset
+        self.currentproject = self.gisrc_dict['LOCATION_NAME']
+        self.currentsubproject = self.gisrc_dict['MAPSET']
+        # project for xy map to georectify
+        self.newproject = self.currentproject
+        self.xyproject = self.currentproject
+        # subproject for xy map to georectify
+        self.newsubproject = self.currentsubproject
+        self.xysubproject = self.currentsubproject
         # get group name from command line
         self.xygroup = self.group
 
-        # GISRC file for source location/mapset of map(s) to georectify
-        self.SetSrcEnv(self.currentlocation,self.currentmapset)
+        # GISRC file for source project/subproject of map(s) to georectify
+        self.SetSrcEnv(self.currentproject,self.currentsubproject)
 
         #
         # start GCP display
@@ -206,27 +206,27 @@ class GCPWizard(object):
         self.gcpmgr._mgr.Update()
         self.SwitchEnv('target')
 
-    def SetSrcEnv(self, location, mapset):
-        """Create environment to use for location and mapset
+    def SetSrcEnv(self, project, subproject):
+        """Create environment to use for project and subproject
         that are the source of the file(s) to georectify
 
-        :param location: source location
-        :param mapset: source mapset
+        :param project: source project
+        :param subproject: source subproject
 
         :return: False on error
         :return: True on success
         """
 
-        self.newlocation = location
-        self.newmapset = mapset
+        self.newproject = project
+        self.newsubproject = subproject
 
         # check to see if we are georectifying map in current working
-        # location/mapset
-        if self.newlocation == self.currentlocation and self.newmapset == self.currentmapset:
+        # project/subproject
+        if self.newproject == self.currentproject and self.newsubproject == self.currentsubproject:
             return False
 
-        self.gisrc_dict['LOCATION_NAME'] = location
-        self.gisrc_dict['MAPSET'] = mapset
+        self.gisrc_dict['LOCATION_NAME'] = project
+        self.gisrc_dict['MAPSET'] = subproject
 
         self.source_gisrc = utils.GetTempfile()
 
@@ -241,12 +241,12 @@ class GCPWizard(object):
 
     def SwitchEnv(self, grc):
         """
-        Switches between original working location/mapset and
-        location/mapset that is source of file(s) to georectify
+        Switches between original working project/subproject and
+        project/subproject that is source of file(s) to georectify
         """
         # check to see if we are georectifying map in current working
-        # location/mapset
-        if self.newlocation == self.currentlocation and self.newmapset == self.currentmapset:
+        # project/subproject
+        if self.newproject == self.currentproject and self.newsubproject == self.currentsubproject:
             return False
 
         if grc == 'target':
@@ -269,7 +269,7 @@ class GCP(MapFrame, ColumnSorterMixin):
     """
 
     def __init__(self, parent, giface, grwiz=None, id=wx.ID_ANY,
-                 title=_("Manage Location of Fiducial Points on a Scanned Photo"),
+                 title=_("Manage Project of Fiducial Points on a Scanned Photo"),
                  size=(700, 300), toolbars=["gcpdisp"], Map=None, lmgr=None, camera=None):
 
         self.grwiz = grwiz  # GR Wizard
@@ -318,14 +318,14 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         self.grassdatabase = self.grwiz.grassdatabase
 
-        self.currentlocation = self.grwiz.currentlocation
-        self.currentmapset = self.grwiz.currentmapset
+        self.currentproject = self.grwiz.currentproject
+        self.currentsubproject = self.grwiz.currentsubproject
 
-        self.newlocation = self.grwiz.newlocation
-        self.newmapset = self.grwiz.newmapset
+        self.newproject = self.grwiz.newproject
+        self.newsubproject = self.grwiz.newsubproject
 
-        self.xylocation = self.grwiz.gisrc_dict['LOCATION_NAME']
-        self.xymapset = self.grwiz.gisrc_dict['MAPSET']
+        self.xyproject = self.grwiz.gisrc_dict['LOCATION_NAME']
+        self.xysubproject = self.grwiz.gisrc_dict['MAPSET']
         self.xygroup = self.grwiz.xygroup.split("@")[0]
         self.src_maps = self.grwiz.src_maps
         self.extension = self.grwiz.extension
@@ -333,37 +333,37 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         self.file = {
             'camera': os.path.join(self.grassdatabase,
-                                   self.xylocation,
-                                   self.xymapset,
+                                   self.xyproject,
+                                   self.xysubproject,
                                    'camera',
                                    self.camera),
             'ref_points': os.path.join(self.grassdatabase,
-                                   self.xylocation,
-                                   self.xymapset,
+                                   self.xyproject,
+                                   self.xysubproject,
                                    'group',
                                    self.xygroup,
                                    'REF_POINTS'),
             'points': os.path.join(self.grassdatabase,
-                                   self.xylocation,
-                                   self.xymapset,
+                                   self.xyproject,
+                                   self.xysubproject,
                                    'group',
                                    self.xygroup,
                                    'POINTS'),
             'points_bak': os.path.join(self.grassdatabase,
-                                   self.xylocation,
-                                   self.xymapset,
+                                   self.xyproject,
+                                   self.xysubproject,
                                    'group',
                                    self.xygroup,
                                    'POINTS_BAK'),
             'rgrp': os.path.join(self.grassdatabase,
-                                   self.xylocation,
-                                   self.xymapset,
+                                   self.xyproject,
+                                   self.xysubproject,
                                    'group',
                                    self.xygroup,
                                    'REF'),
             'target': os.path.join(self.grassdatabase,
-                                   self.xylocation,
-                                   self.xymapset,
+                                   self.xyproject,
+                                   self.xysubproject,
                                    'group',
                                    self.xygroup,
                                    'TARGET'),
@@ -411,8 +411,8 @@ class GCP(MapFrame, ColumnSorterMixin):
             # use os.linesep or '\n' here ???
             f.write('# Ground Control Points File\n')
             f.write("# \n")
-            f.write("# target location: " + self.currentlocation + '\n')
-            f.write("# target mapset: " + self.currentmapset + '\n')
+            f.write("# target project: " + self.currentproject + '\n')
+            f.write("# target subproject: " + self.currentsubproject + '\n')
             f.write("#\tsource\t\ttarget\t\tstatus\n")
             f.write("#\teast\tnorth\teast\tnorth\t(1=ok, 0=ignore)\n")
             f.write(
@@ -472,7 +472,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.rmsmean = 0
         self.rmssd = 0
 
-        self.SetTarget(self.xygroup, self.currentlocation, self.currentmapset)
+        self.SetTarget(self.xygroup, self.currentproject, self.currentsubproject)
 
         self.itemDataMap = None
 
@@ -562,13 +562,13 @@ class GCP(MapFrame, ColumnSorterMixin):
         # init to ascending sort on first click
         self._colSortFlag = [1] * ncols
 
-    def SetTarget(self, tgroup, tlocation, tmapset):
+    def SetTarget(self, tgroup, tproject, tsubproject):
         """
-        Sets rectification target to current location and mapset
+        Sets rectification target to current project and subproject
         """
         # check to see if we are georectifying map in current working
-        # location/mapset
-        if self.newlocation == self.currentlocation and self.newmapset == self.currentmapset:
+        # project/subproject
+        if self.newproject == self.currentproject and self.newsubproject == self.currentsubproject:
             RunCommand('i.target',
                        parent=self,
                        flags='c',
@@ -578,8 +578,8 @@ class GCP(MapFrame, ColumnSorterMixin):
             RunCommand('i.target',
                        parent=self,
                        group=tgroup,
-                       location=tlocation,
-                       mapset=tmapset)
+                       project=tproject,
+                       subproject=tsubproject)
             self.grwiz.SwitchEnv('target')
 
     def AddGCP(self, event):
@@ -803,8 +803,8 @@ class GCP(MapFrame, ColumnSorterMixin):
             # use os.linesep or '\n' here ???
             f.write('# Ground Control Points File\n')
             f.write("# \n")
-            f.write("# target location: " + self.currentlocation + '\n')
-            f.write("# target mapset: " + self.currentmapset + '\n')
+            f.write("# target project: " + self.currentproject + '\n')
+            f.write("# target subproject: " + self.currentsubproject + '\n')
             f.write("#\tsource\t\ttarget\t\tstatus\n")
             f.write("#\teast\tnorth\teast\tnorth\t(1=ok, 0=ignore)\n")
             f.write(
@@ -1386,7 +1386,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.MapWindow.ZoomHistory(self.Map.region['n'], self.Map.region['s'],
                                    self.Map.region['e'], self.Map.region['w'])
 
-        # LL locations
+        # LL projects
         if self.Map.projinfo['proj'] == 'll':
             if newreg['n'] > 90.0:
                 newreg['n'] = 90.0
@@ -2195,7 +2195,7 @@ class GrSettingsDialog(wx.Dialog):
 
         # clip to region
         self.check = wx.CheckBox(parent=panel, id=wx.ID_ANY, label=_(
-            "clip to computational region in target location"))
+            "clip to computational region in target project"))
         sizer.Add(self.check, proportion=0,
                   flag=wx.EXPAND | wx.ALL, border=5)
         self.check.SetValue(self.parent.clip_to_region)

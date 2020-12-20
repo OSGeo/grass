@@ -319,7 +319,7 @@ void MLE(			/* computes maximum likelihood classification */
 static int up_char(
 		      /* Computes list of pointers to nieghbors at next coarser resolution. *
 		       * Returns flag when on boundary.                                     */
-		      int i, int j,	/* fine resolution pixel location */
+		      int i, int j,	/* fine resolution pixel project */
 		      struct Region *region,	/* fine resolution image region */
 		      unsigned char **img,	/* course resolution image */
 		      unsigned char **pt	/* list of pointers */

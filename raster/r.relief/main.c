@@ -21,7 +21,7 @@
  *****************************************************************************/
 
 /*
- *   July 2007 - allow input from other mapsets (Brad Douglas)
+ *   July 2007 - allow input from other subprojects (Brad Douglas)
  *
  *   May 2005 - fixed wrong units parameter (Markus Neteler)
  *
@@ -428,12 +428,12 @@ int main(int argc, char *argv[])
 
     /* write colors for shaded relief */
     Rast_init_colors(&colors);
-    Rast_read_fp_range(sr_name, G_mapset(), &range);
+    Rast_read_fp_range(sr_name, G_subproject(), &range);
     Rast_get_fp_range_min_max(&range, &min, &max);
     min -= 0.01;
     max += 0.01;
     Rast_make_grey_scale_fp_colors(&colors, min, max);
-    Rast_write_colors(sr_name, G_mapset(), &colors);
+    Rast_write_colors(sr_name, G_subproject(), &colors);
     
     sprintf(buf, "Shaded relief of \"%s\"", elev_name);
     Rast_put_cell_title(sr_name, buf);

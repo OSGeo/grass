@@ -63,7 +63,7 @@ SIMPLE_LMGR_STDS = 256
 
 simpleLmgrIcons = {
     'addSeries': MetaIcon(
-        img='mapset-add',
+        img='subproject-add',
         label=_("Add space-time dataset or series of map layers"),
         desc=_("Add space-time dataset or series of map layers for animation")),
 }

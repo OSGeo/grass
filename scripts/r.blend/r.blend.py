@@ -54,12 +54,12 @@ def main():
     output = options['output']
     percent = options['percent']
 
-    mapset = gscript.gisenv()['MAPSET']
+    subproject = gscript.gisenv()['MAPSET']
 
     if not gscript.overwrite():
         for ch in ['r', 'g', 'b']:
             map = '%s.%s' % (output, ch)
-            if gscript.find_file(map, element='cell', mapset=mapset)['file']:
+            if gscript.find_file(map, element='cell', subproject=subproject)['file']:
                 gscript.fatal(_("Raster map <%s> already exists.") % map)
 
     percent = float(percent)

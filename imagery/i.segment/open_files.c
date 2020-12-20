@@ -43,7 +43,7 @@ int open_files(struct globals *globals)
     G_debug(1, "Opening input rasters...");
     for (n = 0; n < globals->Ref.nfiles; n++) {
 	inbuf[n] = Rast_allocate_d_buf();
-	in_fd[n] = Rast_open_old(globals->Ref.file[n].name, globals->Ref.file[n].mapset);
+	in_fd[n] = Rast_open_old(globals->Ref.file[n].name, globals->Ref.file[n].subproject);
     }
 
     /* Get min/max values of each input raster for scaling */
@@ -53,7 +53,7 @@ int open_files(struct globals *globals)
 
     for (n = 0; n < globals->Ref.nfiles; n++) {
 	/* returns -1 on error, 2 on empty range, quitting either way. */
-	if (Rast_read_fp_range(globals->Ref.file[n].name, globals->Ref.file[n].mapset, &fp_range[n]) != 1)
+	if (Rast_read_fp_range(globals->Ref.file[n].name, globals->Ref.file[n].subproject, &fp_range[n]) != 1)
 	    G_fatal_error(_("No min/max found in raster map <%s>"),
 			  globals->Ref.file[n].name);
 	Rast_get_fp_range_min_max(&(fp_range[n]), &min[n], &max[n]);
@@ -228,7 +228,7 @@ int open_files(struct globals *globals)
 	     srows, scols, sizeof(CELL), nseg) != TRUE)
 	    G_fatal_error("Unable to create bounds temporary files");
 
-	if (Rast_read_range(globals->bounds_map, globals->bounds_mapset, &range) != 1)
+	if (Rast_read_range(globals->bounds_map, globals->bounds_subproject, &range) != 1)
 	    G_fatal_error(_("No min/max found in raster map <%s>"),
 			  globals->bounds_map);
 	Rast_get_range_min_max(&range, &globals->upper_bound,
@@ -241,7 +241,7 @@ int open_files(struct globals *globals)
 	                  globals->bounds_map);
 	}
 
-	bounds_fd = Rast_open_old(globals->bounds_map, globals->bounds_mapset);
+	bounds_fd = Rast_open_old(globals->bounds_map, globals->bounds_subproject);
 	boundsbuf = Rast_allocate_c_buf();
 
 	for (row = 0; row < globals->nrows; row++) {
@@ -273,7 +273,7 @@ int open_files(struct globals *globals)
 	    Rast_set_c_null_value(&globals->lower_bound, 1);
 	    Segment_close(&globals->bounds_seg);
 	    globals->bounds_map = NULL;
-	    globals->bounds_mapset = NULL;
+	    globals->bounds_subproject = NULL;
 	}
     }
     else {

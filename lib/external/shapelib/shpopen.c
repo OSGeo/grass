@@ -1317,7 +1317,7 @@ error:
 /*                           _SHPSetBounds()                            */
 /*                                                                      */
 /*      Compute a bounds rectangle for a shape, and set it into the     */
-/*      indicated location in the record.                               */
+/*      indicated project in the record.                               */
 /************************************************************************/
 
 static void	_SHPSetBounds( uchar * pabyRec, SHPObject * psShape )

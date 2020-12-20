@@ -21,47 +21,47 @@
 /*!
   \brief Finds a vector map
  
-  Searches for a vector map from the mapset search list or in a
-  specified mapset. Returns the mapset name where the vector map was
+  Searches for a vector map from the subproject search list or in a
+  specified subproject. Returns the subproject name where the vector map was
   found.
   
   NOTES:
   If the user specifies a fully qualified vector map which exists,
   then G_find_vector() modifies <i>name</i> by removing the
-  "@<i>mapset</i>" part.
+  "@<i>subproject</i>" part.
  
   Rejects all names that begin with "."
   
   \param name vector map name
-  \param mapset mapset name or "" for search path
+  \param subproject subproject name or "" for search path
 
-  \return pointer to a string with name of mapset where vector map was found
+  \return pointer to a string with name of subproject where vector map was found
   \return NULL if not found
 */
-const char *G_find_vector(char *name, const char *mapset)
+const char *G_find_vector(char *name, const char *subproject)
 {
-    G_debug(1, "G_find_vector(): name=%s mapset=%s", name, mapset);
-    return G_find_file(GV_DIRECTORY, name, mapset);
+    G_debug(1, "G_find_vector(): name=%s subproject=%s", name, subproject);
+    return G_find_file(GV_DIRECTORY, name, subproject);
 }
 
 /*!
  * \brief Find a vector map (look but don't touch)
  *
- * The same as G_find_vector() but doesn't remove the "@<i>mapset</i>"
+ * The same as G_find_vector() but doesn't remove the "@<i>subproject</i>"
  * qualification from <i>name</i>, if present.
  *
- * Returns NULL if the map wasn't found, or the mapset the vector was
+ * Returns NULL if the map wasn't found, or the subproject the vector was
  * found in if it was.
  *
  * \param name vector map name
- * \param mapset mapset name where to search
+ * \param subproject subproject name where to search
  *
- * \return pointer to buffer containing mapset name
+ * \return pointer to buffer containing subproject name
  * \return NULL when vector map not found
  */
-const char *G_find_vector2(const char *name, const char *mapset)
+const char *G_find_vector2(const char *name, const char *subproject)
 {
-    G_debug(1, "G_find_vector2(): name=%s mapset=%s", name, mapset);
-    return G_find_file2(GV_DIRECTORY, name, mapset);
+    G_debug(1, "G_find_vector2(): name=%s subproject=%s", name, subproject);
+    return G_find_file2(GV_DIRECTORY, name, subproject);
 }
 
