@@ -57,6 +57,8 @@ class DataCatalog(wx.Panel):
         # infobar manager for data catalog
         self.infoManager = DataCatalogInfoManager(infobar=self.infoBar,
                                                   giface=self.giface)
+        self.tree.showImportDataInfo.connect(self.showImportDataInfo)
+
         # some layout
         self._layout()
 
@@ -79,6 +81,9 @@ class DataCatalog(wx.Panel):
 
     def showDataStructureInfo(self):
         self.infoManager.ShowDataStructureInfo(self.OnCreateLocation)
+
+    def showImportDataInfo(self):
+        self.infoManager.ShowImportDataInfo(self.OnImportOgrLayers, self.OnImportGdalLayers)
 
     def LoadItems(self):
         self.tree.ReloadTreeItems()
@@ -104,6 +109,20 @@ class DataCatalog(wx.Panel):
         """Create new mapset in current location"""
         db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
         self.tree.CreateMapset(db_node, loc_node)
+
+    def OnImportOgrLayers(self, event, cmd=None):
+        """Convert multiple OGR layers to GRASS vector map layers"""
+        from modules.import_export import OgrImportDialog
+        dlg = OgrImportDialog(parent=self, giface=self.giface)
+        dlg.CentreOnScreen()
+        dlg.Show()
+
+    def OnImportGdalLayers(self, event, cmd=None):
+        """Convert multiple GDAL layers to GRASS raster map layers"""
+        from modules.import_export import GdalImportDialog
+        dlg = GdalImportDialog(parent=self, giface=self.giface)
+        dlg.CentreOnScreen()
+        dlg.Show()
 
     def OnCreateLocation(self, event):
         """Create new location"""
