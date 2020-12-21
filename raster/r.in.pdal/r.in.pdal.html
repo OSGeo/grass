@@ -1,6 +1,7 @@
 <h2>DESCRIPTION</h2>
 
-The <em>r.in.lidar</em> module loads LAS LiDAR point clouds into a new
+The <em>r.in.pdal</em> module loads PDAL library supported point clouds
+(with emphasis on LiDAR LAS files) into a new
 raster map using binning. The user may choose from a variety of
 statistical methods which will be used for binning when creating
 the new raster.
@@ -18,18 +19,16 @@ raster will have that resolution (see more below for more information
 about extent and resolution management).
 
 <p>
-<em>r.in.lidar</em> is designed for processing massive point cloud
-datasets, for example raw LiDAR or sidescan sonar swath data. It has
-been tested with large datasets (see below for memory management
-notes).
+<em>r.in.pdal</em> is designed for processing massive point cloud
+datasets, for example raw LiDAR or sidescan sonar swath data.
 
 <h3>Binning</h3>
 
-The main difference between <em>r.in.lidar</em> and
-<em><a href="v.in.lidar.html">v.in.lidar</a></em> is that
-<em>r.in.lidar</em> creates a raster instead of just importing the
-points into GRASS GIS. However, <em>r.in.lidar</em> does not merely
-rasterizes the points from the point cloud. <em>r.in.lidar</em>
+The main difference between <em>r.in.pdal</em> and
+<em><a href="v.in.pdal.html">v.in.pdal</a></em> is that
+<em>r.in.pdal</em> creates a raster instead of just importing the
+points into GRASS GIS. However, <em>r.in.pdal</em> does not merely
+rasterizes the points from the point cloud. <em>r.in.pdal</em>
 uses binning to derive values for individual raster cells,
 so the value of a cell is typically an aggregation of values
 of individual points falling into one cell.
@@ -42,7 +41,7 @@ In the basic case, binning is a method which counts the number of
 points which fall into one raster cell, i.e. bin. The number of points
 per cell (bin) indicates the density of points in the point cloud.
 The cell (bin) is always square or rectangular in case of
-<em>r.in.lidar</em> because the result is GRASS GIS 2D raster.
+<em>r.in.pdal</em> because the result is GRASS GIS 2D raster.
 The result of binning where the number of point per cell is counted
 is sometimes called 2D (two dimensional) histogram because
 a histogram is used in univariate statistics (in one dimension)
@@ -105,8 +104,7 @@ However, for more profound analysis, the base raster together with
 different statistics is recommended.</dd>
 <dt>sum</dt>
 <dd>This computes the sum of point values per cell.
-This is useful especially when intensity is used as a value
-(flags <b>-i</b> and <b>-j</b>).</dd>
+This is useful especially when intensity is used as a value.</dd>
 <dt>mean</dt>
 <dd>This is a mean (average) value of point values in cell.
 When used with Z coordinates (the default) and points from the ground
@@ -114,18 +112,18 @@ class, the resulting raster is a digital elevation model.
 When intensity is used as a point value, the resulting raster contains
 mean intensity per cell.
 Note that <em>mean</em> gives heights influenced by the vertical
-distribution of points</dd>
+distribution of points.</dd>
 <dt>stddev</dt>
 <dd>This computes the standard deviation of point values for each
 cell.</dd>
 <dt>variance</dt>
 <dd>This computes the variance of point values for each cell.
-Variance and derivatives use the biased estimator (n)
-[note that this might be subject to change].</dd>
+Variance and derivatives use the biased estimator (n).
+It is calculated by Welford algorithm.</dd>
 <dt>coeff_var</dt>
 <dd>This computes the coefficient of variance of point values for each
 cell. Coefficient of variance is given in percentage and defined as
-<tt>(stddev/mean)*100</tt>.</dd>
+<tt>100 * sqrt(variance) / mean</tt>.</dd>
 <dt>median</dt>
 <dd>This computes the median of point values for each cell</dd>
 <dt>mode</dt>
@@ -160,11 +158,22 @@ a cell (Mallet et al. 2011).</dd>
 Note that different statistics have different memory requirements
 (see below for details).
 
+<p>
+In varied terrain the user may find that <em>min</em> maps make for a good
+noise filter as most LIDAR noise is from premature hits. The <em>min</em> map
+may also be useful to find the underlying topography in a forested or urban
+environment if the cells are oversampled.
+
 <h3>Filtering and selection</h3>
 
+Points are always filtered by spatial extent (based on current computational
+region) unless <em>-e</em> flag is set. Afterwards import value scaling
+is performed, followed by filtering by having value in range.
+
+<p>
 Points falling outside the current computational region will be skipped.
-This includes points falling <em>exactly</em> on the southern region
-bound. To capture those adjust the region with:
+This includes points falling <em>exactly</em> on the southern or eastern
+region bound. To capture those adjust the region with:
 
 <div class="code"><pre>
 g.region s=s-0.000001
@@ -226,13 +235,7 @@ allows selecting one or more classes using numbers (integers) separated
 by comma.
 
 <p>
-In varied terrain the user may find that <em>min</em> maps make for a good
-noise filter as most LIDAR noise is from premature hits. The <em>min</em> map
-may also be useful to find the underlying topography in a forested or urban
-environment if the cells are oversampled.
-
-<p>
-The user can use a combination of <em>r.in.lidar</em> <b>output</b> maps
+The user can use a combination of <em>r.in.pdal</em> <b>output</b> maps
 to create custom raster-based filters, for examplee, use
 <em><a href="r.mapcalc.html">r.mapcalc</a></em> to create
 a <tt>mean-(2*stddev)</tt> map. (In this example the user may want to
@@ -246,7 +249,7 @@ the analysis itself but it can also speed up the processing.
 
 <p>
 LiDAR points can contain a lot of attributes besides their coordinates.
-By default <em>r.in.lidar</em> will use point Z coordinate as the output
+By default <em>r.in.pdal</em> will use point Z coordinate as the output
 raster value source. The <em>dimension</em> option allows to use different
 point attributes as an output instead of Z value. In case if other than Z
 value is choosen, output map type will be set to CELL. Explanation
@@ -261,6 +264,7 @@ import. This option supersedes one specified by <em>dimension</em> option.
 
 <h3>Reduction to a base raster</h3>
 
+<p>
 For analysis of features on the terrain surface, especially vegetation
 it is advantageous to remove the influence of the terrain on heights
 because the height above the terrain is important (e.g. height of
@@ -307,12 +311,12 @@ resolution. The best option is to know the point cloud extent ahead,
 e.g. from tiling scheme, and use it. See below for details.
 
 <p>
-Since the <em>r.in.lidar</em> generates a raster map through binning
+Since the <em>r.in.pdal</em> generates a raster map through binning
 from the original LiDAR points, the target computational region
 extent and resolution have to be determined. A typical workflow
 would involve the examination of the LAS data's associated
 documentation or the scan of the LAS data file with
-<em>r.in.lidar</em>'s <b>-s</b> (or <b>-g</b>) flag to find the input
+<em>r.in.pdal</em>'s <b>-g</b> flag to find the input
 data's bounds.
 
 <p>
@@ -321,10 +325,10 @@ LAS dataset extent (<b>-e</b> flag) along with the desired raster
 resolution using the <em>resolution</em> parameter.
 
 <p>
-Using the <b>-s</b> scan flag, the extent of the input data (and thus
-point density) is printed. To check this is recommended before performing
-the full import. The <b>-g</b> shell style flag prints the extent suitable
-as command line parameters for <em>g.region</em>.
+The <b>-g</b> flag prints extent of input data set(s) in a shell style
+suitable as command line parameters for <em>g.region</em>. Note, extent
+is determined from data set(s) metadata and without scanning whole
+dataset and thus selectros and filters are not applied.
 
 <p>
 A simpler option is to automatically set the region extents based on the
@@ -359,6 +363,7 @@ libLAS has been compiled with LASzip support. It is also recommended to
 compile libLAS with GDAL which is used to test if the LAS projection
 matches that of the GRASS location.
 
+<!--
 <h3>LAS file import preparations</h3>
 
 Note that the scanning (<b>-s</b> or <b>-g</b> flags) needs to iterate
@@ -379,11 +384,12 @@ the same extent regardless the filters used.
 However, for most cases (considering the point cloud and the resolution
 used) there is no difference between the extent without filters applied
 and the extent if the filters would be applied.
+-->
 
 <h3>Memory consumption</h3>
 
 <p>
-While the <b>input</b> file can be arbitrarily large, <em>r.in.lidar</em>
+While the <b>input</b> file can be arbitrarily large, <em>r.in.pdal</em>
 will use a large amount of system memory (RAM) for large raster regions
 (&gt; 10000x10000 pixels).
 If the module refuses to start complaining that there isn't enough memory,
@@ -391,8 +397,8 @@ use the <b>percent</b> parameter to run the module in several passes.
 In addition using a less precise map format (<tt>CELL</tt> [integer] or
 <tt>FCELL</tt> [floating point]) will use less memory than a <tt>DCELL</tt>
 [double precision floating point] <b>output</b> map.
-For <b>method</b>=<em>n</em>, the <tt>CELL</tt> format is used
-automatically.
+For <b>methods</b>=<em>n, mode, sidnmin, sidnmax</em>, the <tt>CELL</tt>
+format is used automatically.
 
 <p>
 The <em>mean</em> and <em>range</em> methods will use average amount
@@ -427,25 +433,12 @@ raster map in an existing location/mapset (using metric units):
 
 <div class="code"><pre>
 # set the computational region automatically, resol. for binning is 5m
-r.in.lidar -e -o input=points.las resolution=5 output=lidar_dem_mean
+r.in.pdal -e -o input=points.las resolution=5 output=lidar_dem_mean
 g.region raster=lidar_dem_mean -p
 r.univar lidar_dem_mean
 </pre></div>
 
 <h3>Finding suitable extent and resolution</h3>
-
-<!-- TODO: there is duplication with the text in the description -->
-Using the <b>-s</b> scan flag, the extent of the input data (and thus
-point density) is printed. To check this is recommended before performing
-the full import. The <b>-g</b> shell style flag prints the extent suitable
-as command line parameters for <em>g.region</em>.
-
-<p>
-A simpler option is to automatically set the region extents based on the
-LAS dataset (<b>-e</b> flag) along with the target raster resolution using
-the <em>resolution</em> parameter. Also here it is recommended to verify
-and optimize the resulting region settings with <em>g.region</em> prior
-to importing the dataset.
 
 <p>
 For the output raster map, a <b>suitable resolution</b> can be found by
@@ -455,11 +448,11 @@ an iterative approach as outlined here):
 <!-- points.las is from California -->
 <div class="code"><pre>
 # print LAS metadata (Number of Points)
-r.in.lidar -p input=points.las
+r.in.pdal -p input=points.las
 #   Number of Point Records: 1287775
 
 # scan for LAS points cloud extent
-r.in.lidar -sg input=points.las output=dummy -o
+r.in.pdal -g input=points.las output=dummy -o
 # n=2193507.740000 s=2190053.450000 e=6070237.920000 w=6066629.860000 b=-3.600000 t=906.000000
 
 # set computation region to this extent
@@ -480,13 +473,13 @@ g.region res=5 -ap
 #  Now: 1287775 / (692 * 723) = 2.573923 LiDAR points/raster cell
 
 # import as mean
-r.in.lidar input=points.las output=lidar_dem_mean method=mean -o
+r.in.pdal input=points.las output=lidar_dem_mean method=mean -o
 
 # import as max
-r.in.lidar input=points.las output=lidar_dem_max method=max -o
+r.in.pdal input=points.las output=lidar_dem_max method=max -o
 
 # import as p'th percentile of the values
-r.in.lidar input=points.las output=lidar_dem_percentile_95 \
+r.in.pdal input=points.las output=lidar_dem_percentile_95 \
            method=percentile pth=95 -o
 </pre></div>
 
@@ -516,7 +509,7 @@ available at
 
 <div class="code"><pre>
 # print LAS file info
-r.in.lidar -p input="Serpent Mound Model LAS Data.las"
+r.in.pdal -p input="Serpent Mound Model LAS Data.las"
 
 # using v.in.lidar to create a new location
 # create location with projection information of the LAS data
@@ -525,13 +518,13 @@ v.in.lidar -i input="Serpent Mound Model LAS Data.las" location=Serpent_Mound
 # quit and restart GRASS in the newly created location "Serpent_Mound"
 
 # scan the extents of the LAS data
-r.in.lidar -sg input="Serpent Mound Model LAS Data.las"
+r.in.pdal -g input="Serpent Mound Model LAS Data.las"
 
 # set the region to the extents of the LAS data, align to resolution
 g.region n=4323641.57 s=4320942.61 w=289020.90 e=290106.02 res=1 -ap
 
 # import as raster DEM
-r.in.lidar input="Serpent Mound Model LAS Data.las" \
+r.in.pdal input="Serpent Mound Model LAS Data.las" \
            output=Serpent_Mound_Model_LAS_Data method=mean
 </pre></div>
 
@@ -548,7 +541,7 @@ raster cell (the ground elevation is given by the raster map
 
 <div class="code"><pre>
 g.region raster=elevation -p
-r.in.lidar input=points.las output=mean_height_above_ground base_raster=elevation method=mean
+r.in.pdal input=points.las output=mean_height_above_ground base_raster=elevation method=mean
 </pre></div>
 
 In this type of computation, it might be advantageous to change the resolution
@@ -584,7 +577,7 @@ The mean height above ground example above would then be:
 
 <div class="code"><pre>
 g.region raster=elevation -p
-r.in.lidar file=/home/user/data/filelist.txt output=mean_height_above_ground base_raster=elevation method=mean
+r.in.pdal file=/home/user/data/filelist.txt output=mean_height_above_ground base_raster=elevation method=mean
 </pre></div>
 
 In Python, the list of files can be created using the <em>glob</em>
@@ -599,7 +592,7 @@ with open(, mode='w') as file_list:
     for path in glob.iglob('/home/user/data/lidar/*.las'):
         file_list.write(path + "\n")
 
-gscript.run_command('r.in.lidar', file=file_list_name,
+gscript.run_command('r.in.pdal', file=file_list_name,
                     output='mean_height_above_ground',
                     base_raster='elevation' method='mean')
 </pre></div>
@@ -608,18 +601,10 @@ gscript.run_command('r.in.lidar', file=file_list_name,
 <h2>KNOWN ISSUES</h2>
 
 <ul>
-<li>The "<tt>nan</tt>" value (as defined in C language) can leak into
-    <em>coeff_var</em> raster maps. Cause is unknown. Possible
-    work-around is: <tt>r.null setnull=nan</tt> or
-    <tt>r.mapcalc 'no_nan = if(map == map, map, null())'</tt>.
 <li>Only one method can be applied for a single run and multiple map
     output from a single run
     (e.g. <tt>method=string[,string,...] output=name[,name,...]</tt>
     or <tt>n=string mean=string</tt>) is no supported.
-<!-- not really:
-<li> Merge with r.in.xyz.
--->
-     <!-- Bob Covill has supplied patches for MBIO interface already -->
 </ul>
 
 If you encounter any problems (or solutions!) please contact the GRASS
