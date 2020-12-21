@@ -39,7 +39,6 @@ try:
         FigureCanvasWxAgg as FigCanvas, \
         NavigationToolbar2WxAgg as NavigationToolbar
     import matplotlib.dates as mdates
-    from matplotlib import cbook
 except ImportError as e:
     raise ImportError(_('The Temporal Plot Tool needs the "matplotlib" '
                         '(python-matplotlib) package to be installed. {0}').format(e))
