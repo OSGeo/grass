@@ -54,10 +54,8 @@ extern "C"
 
 int main(int argc, char *argv[])
 {
-    int out_fd, base_raster;
-    char *infile, *outmap;
-    int percent;
-    double d_tmp;
+    int out_fd;
+    char *outmap;
 
     RASTER_MAP_TYPE rtype, base_raster_data_type;
     struct History history;
@@ -67,7 +65,7 @@ int main(int argc, char *argv[])
     void *raster_row;
     struct Cell_head region;
     struct Cell_head input_region;
-    int rows, last_rows, cols;  /* scan box size */
+    int rows, cols;  /* scan box size */
 
     char buff[BUFFSIZE];
 
@@ -77,7 +75,7 @@ int main(int argc, char *argv[])
     bin_index_nodes.max_nodes = 0;
     bin_index_nodes.nodes = NULL;
 
-    struct Cell_head cellhd, loc_wind;
+    struct Cell_head loc_wind;
 
     G_gisinit(argv[0]);
 
