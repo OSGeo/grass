@@ -44,17 +44,27 @@ class InfoBar(IB.InfoBar):
         self._text.SetForegroundColour(self._foreground_color)
         self._button.SetBackgroundColour(self._background_color)
 
-        # LAYOUT
+        # layout
+        self._unInitLayout()
         sizer = wx.BoxSizer(wx.VERTICAL)
-        self.subSizerText = wx.BoxSizer(wx.HORIZONTAL)
+        subSizerText = wx.BoxSizer(wx.HORIZONTAL)
         self.subSizerButtons = wx.BoxSizer(wx.HORIZONTAL)
-        self.subSizerText.Add(self._icon, wx.SizerFlags().Centre().Border())
-        self.subSizerText.Add(self._text, 1, wx.ALIGN_CENTER_VERTICAL)
+        subSizerText.Add(self._icon, wx.SizerFlags().Centre().Border())
+        subSizerText.Add(self._text, 1, wx.ALIGN_CENTER_VERTICAL)
         self.subSizerButtons.AddStretchSpacer()
         self.subSizerButtons.Add(self._button, wx.SizerFlags().Centre().Border())
-        sizer.Add(self.subSizerText, wx.SizerFlags().Expand())
+        sizer.Add(subSizerText, wx.SizerFlags().Expand())
         sizer.Add(self.subSizerButtons, wx.SizerFlags().Expand())
         self.SetSizer(sizer)
+
+    def _unInitLayout(self):
+        sizer = self.GetSizer()
+        children = sizer.GetChildren()
+        for i in reversed(range(len(children))):
+            if children[i].IsSpacer():
+                sizer.Remove(i)
+            else:
+                sizer.Detach(i)
 
     def ShowMessage(self, message, icon, buttons=None):
         """Show message with buttons (optional).
