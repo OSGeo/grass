@@ -26,7 +26,6 @@ import wx
 from core import globalvar
 from core import utils
 from core.gcmd import EncodeString
-from gui_core.widgets import SearchModuleWidget
 from gui_core.treeview import CTreeView
 from gui_core.wrap import Button, StaticText, SearchCtrl
 from gui_core.wrap import Menu as MenuWidget
