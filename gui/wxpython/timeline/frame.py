@@ -35,7 +35,6 @@ try:
         FigureCanvasWxAgg as FigCanvas, \
         NavigationToolbar2WxAgg as NavigationToolbar
     import matplotlib.dates as mdates
-    from matplotlib import cbook
 except ImportError as e:
     raise ImportError(_('The Timeline Tool needs the "matplotlib" '
                         '(python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {0}').format(e))
@@ -615,7 +614,7 @@ class DataCursor(object):
         self.formatFunction = formatFunction
         self.offsets = offsets
         self.display_all = display_all
-        if not cbook.iterable(artists):
+        if not np.iterable(artists):
             artists = [artists]
         self.artists = artists
 
@@ -626,7 +625,7 @@ class DataCursor(object):
         for ax in self.axes:
             self.annotations[ax] = self.annotate(ax)
         for artist in self.artists:
-            artist.set_picker(tolerance)
+            artist.set_pickradius(tolerance)
         for fig in self.figures:
             fig.canvas.mpl_connect('pick_event', self)
             fig.canvas.mpl_connect('key_press_event', self.keyPressed)
