@@ -2559,7 +2559,10 @@ class VectorCategorySelect(wx.Panel):
         if self._isMapSelected():
             layerList = self.giface.GetLayerList()
             layerSelected = layerList.GetSelectedLayer()
-            inputName = self.task.get_param('input')
+            # d.vect module
+            inputName = self.task.get_param(value='map', raiseError=False)
+            if not inputName:
+                inputName = self.task.get_param('input')
             if inputName['value'] != str(layerSelected):
                 if inputName['value'] == '' or inputName['value'] is None:
                     GWarning(_("Input vector map is not selected"))
