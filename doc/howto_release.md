@@ -255,6 +255,10 @@ vim grass-addons/tools/addons/grass-addons-build.sh
 vim grass-addons/tools/addons/grass-addons.sh
 ```
 
+### Close milestone
+
+- Close related milestone: https://github.com/OSGeo/grass/milestones
+
 Release is done.
 
 ### Advertise the new release
