@@ -1,6 +1,5 @@
 [flake8]
 ignore =
-    F841, # local variable 'column' is assigned to but never used
     F821, # undefined name '_'
     E265, # block comment should start with '# '
     E266, # too many leading '#' for block comment
