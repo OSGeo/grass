@@ -43,7 +43,13 @@ icons = {
         label=_("Create new location in current GRASS database")),
     'downloadLocation': MetaIcon(
         img='location-download',
-        label=_("Download sample location to current GRASS database"))
+        label=_("Download sample location to current GRASS database")),
+    'addVector': MetaIcon(
+        img='vector-add',
+        label=_("Import vector data")),
+    'addRaster': MetaIcon(
+        img='raster-add',
+        label=_("Import raster data"))
 }
 
 
@@ -102,7 +108,11 @@ class DataCatalogToolbar(BaseToolbar):
                                      ("downloadLocation", icons['downloadLocation'],
                                       self.parent.OnDownloadLocation),
                                      ("addMapset", icons['addMapset'],
-                                      self.parent.OnCreateMapset)
+                                      self.parent.OnCreateMapset),
+                                     ("addVector", icons['addVector'],
+                                      self.parent.OnImportOgrLayers),
+                                     ("addRaster", icons['addRaster'],
+                                      self.parent.OnImportGdalLayers)
                                      ))
     def OnFilterMenu(self, event):
         """Decide the element to filter by"""

@@ -110,19 +110,25 @@ class DataCatalog(wx.Panel):
         db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
         self.tree.CreateMapset(db_node, loc_node)
 
-    def OnImportOgrLayers(self, event, cmd=None):
+    def ImportOgrLayers(self, cmd=None):
         """Convert multiple OGR layers to GRASS vector map layers"""
         from modules.import_export import OgrImportDialog
         dlg = OgrImportDialog(parent=self, giface=self.giface)
         dlg.CentreOnScreen()
         dlg.Show()
 
-    def OnImportGdalLayers(self, event, cmd=None):
+    def OnImportOgrLayers(self, event):
+        self.ImportOgrLayers()
+
+    def ImportGdalLayers(self, cmd=None):
         """Convert multiple GDAL layers to GRASS raster map layers"""
         from modules.import_export import GdalImportDialog
         dlg = GdalImportDialog(parent=self, giface=self.giface)
         dlg.CentreOnScreen()
         dlg.Show()
+
+    def OnImportGdalLayers(self, event):
+        self.ImportGdalLayers()
 
     def OnCreateLocation(self, event):
         """Create new location"""

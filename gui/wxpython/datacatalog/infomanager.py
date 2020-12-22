@@ -53,7 +53,7 @@ class DataCatalogInfoManager:
             "storing your base maps to make them readily available in other "
             "Mapsets. You can create new Mapsets for different tasks by right "
             "clicking on the Location name.\n\n"
-            "To import data, go to the File menu or use the buttons below."
+            "To import data, go to the toolbar above or use the buttons below."
         ).format(loc=gisenv()['LOCATION_NAME'])
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
 
