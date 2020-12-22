@@ -794,6 +794,7 @@ class TplotFrame(wx.Frame):
 
     def OnRedraw(self, event=None):
         """Required redrawing."""
+        self.init()
         self.csvpath = self.csvButton.GetValue()
         self.header = self.headerCheck.IsChecked()
         if (os.path.exists(self.csvpath) and not self.overwrite):
@@ -807,7 +808,6 @@ class TplotFrame(wx.Frame):
                        message=_("Please change name of output CSV file or "))
                 return
             dlg.Destroy()
-        self.init()
         datasetsR = self.datasetSelectR.GetValue().strip()
         datasetsV = self.datasetSelectV.GetValue().strip()
 
