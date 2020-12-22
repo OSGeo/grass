@@ -81,15 +81,6 @@ static struct menu menu[] = {
     {0, 0, 0, 0, 0, 0, 0, 0}
 };
 
-/* modify this table to add new methods */
-static struct weight_functions weight_functions[] = {
-    {"none", "No weighting"},
-    {"gaussian", "Gaussian weighting function"},
-    {"exponential", "Exponential weighting function"},
-    {"file", "File with a custom weighting matrix"},
-    {0, 0}
-};
-
 struct ncb ncb;
 
 struct output
@@ -115,19 +106,6 @@ static int find_method(const char *method_name)
 	    return i;
 
     G_fatal_error(_("Unknown method <%s>"), method_name);
-
-    return -1;
-}
-
-static int find_weight_function(const char *weight_function)
-{
-    int i;
-
-    for (i = 0; weight_functions[i].name; i++)
-	if (strcmp(weight_functions[i].name, weight_function) == 0)
-	    return i;
-
-    G_fatal_error(_("Unknown weight type <%s>"), weight_function);
 
     return -1;
 }
@@ -247,15 +225,16 @@ int main(int argc, char *argv[])
     parm.weighting_function->type = TYPE_STRING;
     parm.weighting_function->required = NO;
     parm.weighting_function->answer = "none";
-    p = G_malloc(1024);
-    for (n = 0; weight_functions[n].name; n++) {
-	if (n)
-	    strcat(p, ",");
-	else
-	    *p = 0;
-	strcat(p, weight_functions[n].name);
-    }
-    parm.weighting_function->options = p;
+    parm.weighting_function->options = "none,gaussian,exponential,file";
+    G_asprintf((char **)&(parm.weighting_function->descriptions),
+               "none;%s;"
+               "gaussian;%s;"
+               "exponential;%s;"
+               "file;%s;",
+               _("No weighting"),
+               _("Gaussian weighting function"),
+               _("Exponential weighting function"),
+               _("File with a custom weighting matrix"));
     parm.weighting_function->description = _("Weighting function");
     parm.weighting_function->multiple = NO;
 
