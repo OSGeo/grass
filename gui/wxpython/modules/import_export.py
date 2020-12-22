@@ -46,6 +46,7 @@ from gui_core.wrap import Button, CloseButton, StaticText, StaticBox
 from core.utils import GetValidLayerName
 from core.settings import UserSettings, GetDisplayVectSettings
 
+from grass.pydispatch.signal import Signal
 
 class ImportDialog(wx.Dialog):
     """Dialog for bulk import of various data (base class)"""
@@ -408,7 +409,7 @@ class GdalImportDialog(ImportDialog):
         self.link = link
 
         self.layersData = []
-        self.successfully_imported = False
+        self.showModulesDisplayInfo = Signal('GdalImportDialog.showModulesDisplayInfo')
 
         ImportDialog.__init__(self, parent, giface=giface, itype='gdal')
 
@@ -527,7 +528,7 @@ class GdalImportDialog(ImportDialog):
         self.AddLayers(event.returncode, event.cmd, event.userData)
 
         if event.returncode == 0:
-            self.successfully_imported = True
+            self.showModulesDisplayInfo.emit()
             if self.closeOnFinish.IsChecked():
                 self.Close()
 
@@ -563,7 +564,7 @@ class OgrImportDialog(ImportDialog):
 
         self.layersData = []
 
-        self.successfully_imported = False
+        self.showModulesDisplayInfo = Signal('OgrImportDialog.showModulesDisplayInfo')
 
         ImportDialog.__init__(self, parent, giface=giface, itype='ogr')
 
@@ -685,7 +686,7 @@ class OgrImportDialog(ImportDialog):
             os.environ.pop('GRASS_VECTOR_OGR')
 
         if event.returncode == 0:
-            self.successfully_imported = True
+            self.showModulesDisplayInfo.emit()
             if self.closeOnFinish.IsChecked():
                 self.Close()
 

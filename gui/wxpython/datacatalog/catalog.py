@@ -91,7 +91,9 @@ class DataCatalog(wx.Panel):
         self.infoManager.ShowImportDataInfo(self.OnImportOgrLayers, self.OnImportGdalLayers)
 
     def showModulesDisplayInfo(self):
-        self.infoManager.ShowModulesDisplayInfo()
+        if self.first_time_mode:
+            self.infoManager.ShowModulesDisplayInfo()
+            self.first_time_mode = False
 
     def LoadItems(self):
         self.tree.ReloadTreeItems()
@@ -134,6 +136,7 @@ class DataCatalog(wx.Panel):
         dlg = GdalImportDialog(parent=self, giface=self.giface)
         dlg.CentreOnScreen()
         dlg.Show()
+        dlg.showModulesDisplayInfo.connect(self.showModulesDisplayInfo)
 
     def OnImportOgrLayers(self, event):
         """Convert multiple OGR layers to GRASS vector map layers"""
@@ -141,9 +144,7 @@ class DataCatalog(wx.Panel):
         dlg = OgrImportDialog(parent=self, giface=self.giface)
         dlg.CentreOnScreen()
         dlg.Show()
-        if self.first_time_mode and dlg.successfully_imported:
-            self.showModulesDisplayInfo()
-        self.first_time_mode = False
+        dlg.showModulesDisplayInfo.connect(self.showModulesDisplayInfo)
 
     def OnLinkGdalLayers(self, event):
         """Link multiple GDAL layers to GRASS raster map layers"""
@@ -151,9 +152,6 @@ class DataCatalog(wx.Panel):
         dlg = GdalImportDialog(parent=self, giface=self.giface, link=True)
         dlg.CentreOnScreen()
         dlg.Show()
-        if self.first_time_mode and dlg.successfully_imported:
-            self.showModulesDisplayInfo()
-        self.first_time_mode = False
 
     def OnLinkOgrLayers(self, event):
         """Links multiple OGR layers to GRASS vector map layers"""

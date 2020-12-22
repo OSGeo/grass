@@ -71,4 +71,4 @@ class DataCatalogInfoManager:
         self._giface.Help(entry="grass_database")
 
     def _onSeeDocumentation(self, event):
-        self._giface.Help()
+        self._giface.Help(entry="index")
