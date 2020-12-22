@@ -42,6 +42,7 @@ class DataCatalog(wx.Panel):
         self.parent = parent
         self.baseTitle = title
         self.giface = giface
+        self.first_time_mode = False
         wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
         self.SetName("DataCatalog")
 
@@ -67,6 +68,7 @@ class DataCatalog(wx.Panel):
 
         # show data structure infobar for first-time user with proper layout
         if is_current_mapset_in_demolocation():
+            self.first_time_mode = True
             wx.CallLater(2000, self.showDataStructureInfo)
 
     def _layout(self):
@@ -87,6 +89,9 @@ class DataCatalog(wx.Panel):
 
     def showImportDataInfo(self):
         self.infoManager.ShowImportDataInfo(self.OnImportOgrLayers, self.OnImportGdalLayers)
+
+    def showModulesDisplayInfo(self):
+        self.infoManager.ShowModulesDisplayInfo()
 
     def LoadItems(self):
         self.tree.ReloadTreeItems()
@@ -136,6 +141,9 @@ class DataCatalog(wx.Panel):
         dlg = OgrImportDialog(parent=self, giface=self.giface)
         dlg.CentreOnScreen()
         dlg.Show()
+        if self.first_time_mode and dlg.successfully_imported:
+            self.showModulesDisplayInfo()
+        self.first_time_mode = False
 
     def OnLinkGdalLayers(self, event):
         """Link multiple GDAL layers to GRASS raster map layers"""
@@ -143,6 +151,9 @@ class DataCatalog(wx.Panel):
         dlg = GdalImportDialog(parent=self, giface=self.giface, link=True)
         dlg.CentreOnScreen()
         dlg.Show()
+        if self.first_time_mode and dlg.successfully_imported:
+            self.showModulesDisplayInfo()
+        self.first_time_mode = False
 
     def OnLinkOgrLayers(self, event):
         """Links multiple OGR layers to GRASS vector map layers"""

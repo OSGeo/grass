@@ -408,6 +408,7 @@ class GdalImportDialog(ImportDialog):
         self.link = link
 
         self.layersData = []
+        self.successfully_imported = False
 
         ImportDialog.__init__(self, parent, giface=giface, itype='gdal')
 
@@ -525,8 +526,10 @@ class GdalImportDialog(ImportDialog):
 
         self.AddLayers(event.returncode, event.cmd, event.userData)
 
-        if event.returncode == 0 and self.closeOnFinish.IsChecked():
-            self.Close()
+        if event.returncode == 0:
+            self.successfully_imported = True
+            if self.closeOnFinish.IsChecked():
+                self.Close()
 
     def _getCommand(self):
         """Get command"""
@@ -559,6 +562,8 @@ class OgrImportDialog(ImportDialog):
         self.link = link
 
         self.layersData = []
+
+        self.successfully_imported = False
 
         ImportDialog.__init__(self, parent, giface=giface, itype='ogr')
 
@@ -679,8 +684,10 @@ class OgrImportDialog(ImportDialog):
         if self.popOGR:
             os.environ.pop('GRASS_VECTOR_OGR')
 
-        if event.returncode == 0 and self.closeOnFinish.IsChecked():
-            self.Close()
+        if event.returncode == 0:
+            self.successfully_imported = True
+            if self.closeOnFinish.IsChecked():
+                self.Close()
 
     def _getCommand(self):
         """Get command"""
