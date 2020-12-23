@@ -2337,18 +2337,24 @@ def main():
             gisrc=gisrc, ignore_lock=params.force_gislock_removal
         )
         debug(f"last_mapset_usable: {last_mapset_usable}")
-        # Try interactive startup
-        # User selects LOCATION and MAPSET if not set
         if not last_mapset_usable:
             import grass.app as ga
             from grass.grassdb.checks import can_start_in_mapset
 
+            # Try to use demolocation
             grassdb, location, mapset = ga.ensure_demolocation()
-            demo_mapset_usable = can_start_in_mapset(mapset_path=os.path.join(grassdb, location, mapset), ignore_lock=params.force_gislock_removal)
+            demo_mapset_usable = can_start_in_mapset(
+                mapset_path=os.path.join(grassdb, location, mapset),
+                ignore_lock=params.force_gislock_removal
+            )
             debug(f"demo_mapset_usable: {demo_mapset_usable}")
             if demo_mapset_usable:
-                set_mapset_to_gisrc(gisrc=gisrc, grassdb=grassdb, location=location, mapset=mapset)
+                set_mapset_to_gisrc(
+                    gisrc=gisrc, grassdb=grassdb, location=location, mapset=mapset
+                )
             else:
+                # Try interactive startup
+                # User selects LOCATION and MAPSET if not set
                 if not set_mapset_interactive(grass_gui):
                     # No GUI available, update gisrc file
                     fatal(_("<{0}> requested, but not available. Run GRASS in text "
