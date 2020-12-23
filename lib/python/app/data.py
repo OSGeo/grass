@@ -110,8 +110,11 @@ def _copy_startup_location(startup_location, location_in_grassdb):
     """
     # Copy source startup location into GRASS database
     try:
-        copytree(startup_location, location_in_grassdb,
-                 ignore=ignore_patterns('*.tmpl', 'Makefile*'))
+        copytree(
+            startup_location,
+            location_in_grassdb,
+            ignore=ignore_patterns("*.tmpl", "Makefile*"),
+        )
         return True
     except (IOError, OSError):
         pass
