@@ -10,12 +10,22 @@ pair, in one or more temporal datasets (strds, stvds, str3ds).
 Supported features:
 <ul>
   <li>temporal datasets with interval/point and absolute/relative time,</li>
+  <li>show simple linear regression model line with calculated formula
+    <pre>y = a + b*x (y is dependent variable, a is intercept, b is slope, x is explanatory variable)</pre> and
+    <pre>r-squared (parameter of goodness-of-fit measure for linear regression model)</pre></li>
   <li>pop-up annotations with values information,</li>
   <li>query and plot multiple points via the command line,</li>
   <li>zoom and pan,</li>
   <li>change labels to x and y axes,</li>
   <li>add title to the plot, and</li>
-  <li>export the time series values to a CSV file.</li>
+  <li>export the time series values to a CSV file (x axis data has date time string format,
+    if you want to use for calculating simple regression model in the
+    <a href="https://www.r-project.org/">R environment<a>,
+    <a href="https://www.libreoffice.org/">LibreOffice</a>
+    etc., you will obtain a different calculated formula <pre>y = a + b*x</pre>
+    because these software packages use a reference date other than
+    the UNIX Epoch time (00:00:00 UTC on 1 January 1970)).
+  </li>
 </ul>
 
 <div align="center" style="margin: 10px">
@@ -37,7 +47,7 @@ showed below.
 </div>
 
 To export the time series data to a text file (date and data values), type a
-name for the file and click <em>Draw</em> again. Optionally, set the 
+name for the file and click <em>Draw</em> again. Optionally, set the
 check-box to print headers, as well.
 
 <div align="center" style="margin: 10px">
@@ -49,7 +59,7 @@ check-box to print headers, as well.
 
 <h2>NOTES</h2>
 
-<em>g.gui.tplot</em> requires the Python plotting library 
+<em>g.gui.tplot</em> requires the Python plotting library
 <a href="http://matplotlib.org/">Matplotlib</a>.
 
 <h2>SEE ALSO</h2>
