@@ -695,7 +695,7 @@ class TplotFrame(wx.Frame):
              (len(x) * np.sum(x*x) - np.sum(x) * np.sum(x)))
         a = (np.sum(y) - b *np.sum(x)) / len(x)
         if returnFormula:
-            return predict, "y = {a:.4f} + {b:.4f}*x".format(a=a, b=b)
+            return predict, "y = {a:.5f} + {b:.5f}*x".format(a=a, b=b)
         return predict
 
     def _drawSimpleLinRegLine(self, xdata, ydata):
@@ -710,7 +710,7 @@ class TplotFrame(wx.Frame):
             x=np.array(xdata), y=np.array(ydata),
             returnFormula=True)
 
-        r2 = "r\u00B2 = {:.4f}".format(
+        r2 = "r\u00B2 = {:.5f}".format(
             np.corrcoef(np.array(xdata), np.array(ydata))[0, 1]**2)
         self.plots.append(
             self.axes2d.plot(
