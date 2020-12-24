@@ -33,6 +33,11 @@
 #% description: Set the header of CSV file, to be used with csv option
 #%end
 
+#%flag
+#% key: l
+#% description: Show simple linear regression model line
+#%end
+
 #%option G_OPT_STVDS_INPUTS
 #% key: stvds
 #% required: no
@@ -158,6 +163,9 @@ def main():
         csvfile = options['csv']
     app = wx.App()
     frame = TplotFrame(parent=None, giface=StandaloneGrassInterface())
+    if flags['l']:
+        frame.linRegRaster.SetValue(state=True)
+        frame.linRegVector.SetValue(state=True)
     frame.SetDatasets(rasters, vectors, coords, cats, attr, title, xlabel,
                       ylabel, csvfile, flags['h'], gscript .overwrite)
     if output:
