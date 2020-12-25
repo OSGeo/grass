@@ -60,6 +60,8 @@ class ImportDialog(wx.Dialog):
         self.options = dict()   # list of options
         self.options_par = dict()
 
+        self.showImportSuccessfulInfo = Signal('GdalImportDialog.showImportSuccessfulInfo')
+
         self.commandId = -1  # id of running command
 
         wx.Dialog.__init__(self, parent, id, title, style=style,
@@ -409,7 +411,6 @@ class GdalImportDialog(ImportDialog):
         self.link = link
 
         self.layersData = []
-        self.showModulesDisplayInfo = Signal('GdalImportDialog.showModulesDisplayInfo')
 
         ImportDialog.__init__(self, parent, giface=giface, itype='gdal')
 
@@ -528,7 +529,7 @@ class GdalImportDialog(ImportDialog):
         self.AddLayers(event.returncode, event.cmd, event.userData)
 
         if event.returncode == 0:
-            self.showModulesDisplayInfo.emit()
+            self.showImportSuccessfulInfo.emit()
             if self.closeOnFinish.IsChecked():
                 self.Close()
 
@@ -563,8 +564,6 @@ class OgrImportDialog(ImportDialog):
         self.link = link
 
         self.layersData = []
-
-        self.showModulesDisplayInfo = Signal('OgrImportDialog.showModulesDisplayInfo')
 
         ImportDialog.__init__(self, parent, giface=giface, itype='ogr')
 
@@ -686,7 +685,7 @@ class OgrImportDialog(ImportDialog):
             os.environ.pop('GRASS_VECTOR_OGR')
 
         if event.returncode == 0:
-            self.showModulesDisplayInfo.emit()
+            self.showImportSuccessfulInfo.emit()
             if self.closeOnFinish.IsChecked():
                 self.Close()
 

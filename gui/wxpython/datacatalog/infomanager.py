@@ -57,12 +57,12 @@ class DataCatalogInfoManager:
         ).format(loc=gisenv()['LOCATION_NAME'])
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
 
-    def ShowModulesDisplayInfo(self):
+    def ShowImportSuccessfulInfo(self):
         """Show info about the Display and Modules tabs focused on the first-time user"""
         buttons = [("See documentation", self._onSeeDocumentation)]
         message = _(
             "You have successfully imported data. To change layer properties, "
-            "go to Display tab below and double click over layer name.\n\n"
+            "go to Display tab below and click over layer name.\n\n"
             "To analyze your data, search for a module (tool) in the Modules tab below."
         )
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
