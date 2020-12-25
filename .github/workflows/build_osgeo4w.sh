@@ -131,9 +131,7 @@ sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
 ) > $grass_path/grass$ver.bat
 unix2dos $grass_path/grass$ver.bat
 
-exit
-
-# don't package for GitHub workflow; unnecessary
+# package for GitHub artifacts
 
 osgeo4w_basename=`basename $osgeo4w_path`
 date=`date +%Y%m%d`
