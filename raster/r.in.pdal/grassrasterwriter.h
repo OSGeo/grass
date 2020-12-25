@@ -70,6 +70,14 @@ class GrassRasterWriter:public pdal::Writer, public pdal::Streamable
         scale_ = scale;
     }
 
+    void set_base_raster(SEGMENT * base_segment,
+                         struct Cell_head *region, RASTER_MAP_TYPE rtype)
+    {
+        base_segment_ = base_segment;
+        input_region_ = region;
+        base_raster_data_type_ = rtype;
+    }
+
     virtual void write(const pdal::PointViewPtr view)
     {
         pdal::PointRef p(*view, 0);
@@ -88,6 +96,13 @@ class GrassRasterWriter:public pdal::Writer, public pdal::Streamable
         double z = point.getFieldAs < double >(dim_to_import_);
 
         z *= scale_;
+        if (base_segment_) {
+            double base_z;
+
+            rast_segment_get_value_xy(base_segment_, input_region_,
+                                      base_raster_data_type_, x, y, &base_z);
+            z -= base_z;
+        }
 
         // TODO: check the bounds and report discrepancies in
         // number of filtered out vs processed to the user
@@ -119,6 +134,10 @@ class GrassRasterWriter:public pdal::Writer, public pdal::Streamable
     double scale_;
 
     pdal::Dimension::Id dim_to_import_;
+
+    SEGMENT *base_segment_;
+    struct Cell_head *input_region_;
+    RASTER_MAP_TYPE base_raster_data_type_;
 };
 
 #endif // GRASSRASTERWRITER_H

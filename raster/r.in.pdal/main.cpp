@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     void *raster_row;
     struct Cell_head region;
     struct Cell_head input_region;
-    int rows, cols;  /* scan box size */
+    int rows, cols;             /* scan box size */
 
     char buff[BUFFSIZE];
 
@@ -417,6 +417,7 @@ int main(int argc, char *argv[])
     G_option_required(input_opt, file_list_opt, NULL);
     G_option_exclusive(input_opt, file_list_opt, NULL);
     G_option_requires(base_rast_res_flag, base_raster_opt, NULL);
+    G_option_exclusive(base_rast_res_flag, res_opt, NULL);
     G_option_exclusive(reproject_flag, over_flag, NULL);
     G_option_required(output_opt, print_extent_flag, print_info_flag, NULL);
 
@@ -449,9 +450,12 @@ int main(int argc, char *argv[])
     }
 
     /* we could use rules but this gives more info and allows continuing */
-    if (set_region_flag->answer && !(extents_flag->answer || res_opt->answer)) {
-        G_warning(_("Flag %c makes sense only with %s option or -%c flag"),
-                  set_region_flag->key, res_opt->key, extents_flag->key);
+    if (set_region_flag->answer &&
+        !(extents_flag->answer || res_opt->answer ||
+          base_rast_res_flag->answer)) {
+        G_warning(_("Flag %c makes sense only with %s option or -%c flag or -%c flag"),
+                  set_region_flag->key, res_opt->key, extents_flag->key,
+                  base_rast_res_flag->key);
         /* avoid the call later on */
         set_region_flag->answer = '\0';
     }
@@ -639,6 +643,12 @@ int main(int argc, char *argv[])
         /* align to current region */
         Rast_align_window(&region, &loc_wind);
     }
+    if (base_rast_res_flag->answer) {
+        Rast_get_cellhd(base_raster_opt->answer, "", &input_region);
+        region.ns_res = input_region.ns_res;
+        region.ew_res = input_region.ew_res;
+        G_adjust_Cell_head(&region, 0, 0);
+    }
 
     Rast_set_output_window(&region);
     rows = region.rows;
@@ -653,7 +663,6 @@ int main(int argc, char *argv[])
     // TODO: use segment library also for the binning removing the
     // current memory limitations
     // TODO: remove hardcoded memory requirements, let user supply it
-    int use_segment = 0;
     int use_base_raster_res = 0;
 
     /* TODO: see if the input region extent is smaller than the raster
@@ -661,10 +670,7 @@ int main(int argc, char *argv[])
      * flag was defined (alternatively clip the regions) */
     if (base_rast_res_flag->answer)
         use_base_raster_res = 1;
-    if (base_raster_opt->answer && (res_opt->answer || use_base_raster_res
-                                    || extents_flag->answer))
-        use_segment = 1;
-    if (base_raster_opt->answer && use_segment) {
+    if (base_raster_opt->answer) {
         if (use_base_raster_res) {
             /* read raster actual extent and resolution */
             Rast_get_cellhd(base_raster_opt->answer, "", &input_region);
@@ -739,6 +745,9 @@ int main(int argc, char *argv[])
     /* Enable all filters */
     GrassLidarFilter grass_filter;
 
+    if (base_raster_opt->answer)
+        grass_filter.set_base_raster(&base_segment, &input_region,
+                                     base_raster_data_type);
     if (use_spatial_filter)
         grass_filter.set_spatial_filter(xmin, xmax, ymin, ymax);
     if (use_zrange)
@@ -833,6 +842,9 @@ int main(int argc, char *argv[])
     binning_writer.set_binning(&region, &point_binning, &bin_index_nodes,
                                rtype, cols);
     binning_writer.dim_to_import(dim_to_import);
+    if (base_raster_opt->answer)
+        binning_writer.set_base_raster(&base_segment, &input_region,
+                                       base_raster_data_type);
     grass_filter.dim_to_import(dim_to_import);
 
     // run the actual processing
@@ -851,7 +863,7 @@ int main(int argc, char *argv[])
     }
     /* free memory */
     point_binning_free(&point_binning, &bin_index_nodes);
-    if (use_segment)
+    if (base_raster_opt->answer)
         Segment_close(&base_segment);
 
     G_percent(1, 1, 1);         /* flush */
