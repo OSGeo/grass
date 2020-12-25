@@ -34,8 +34,8 @@ jobs:
     - name: Archive the built package
       uses: actions/upload-artifact@v2
       with:
-        name: grass-package
-        path: grass*.zip
+        name: grass-osgeo4w64
+        path: C:\OSGeo4W64
     - name: Test executing of the grass command
       run: .github/workflows/test_simple.bat 'C:\OSGeo4W64\opt\grass\grass79.bat'
     - name: Run tests
