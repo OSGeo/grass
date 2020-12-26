@@ -24,6 +24,29 @@ except ImportError:
     import wx.lib.infobar as IB
 
 
+def GetCloseButtonBitmap(win, size, colBg, flags=0):
+    """Workaround for missing DrawTitleBarBitmap method
+    of wx.RendererNative in certain wx versions.
+    See https://github.com/wxWidgets/Phoenix/issues/1425."""
+    renderer = wx.RendererNative.Get()
+    if hasattr(renderer, 'DrawTitleBarBitmap'):
+        bmp = wx.Bitmap(*size)
+        dc = wx.MemoryDC()
+        dc.SelectObject(bmp)
+        dc.SetBackground(wx.Brush(colBg))
+        dc.Clear()
+
+        wx.RendererNative.Get().DrawTitleBarBitmap(win, dc, wx.Rect(size), wx.TITLEBAR_BUTTON_CLOSE, flags)
+        dc.SelectObject(wx.NullBitmap)
+    else:
+        bmp = wx.ArtProvider.GetBitmap(wx.ART_CLOSE, wx.ART_BUTTON)
+
+    return bmp
+
+
+IB.GetCloseButtonBitmap = GetCloseButtonBitmap
+
+
 class InfoBar(IB.InfoBar):
     """A customized and specialized info bar to used by default"""
     def __init__(self, parent):
