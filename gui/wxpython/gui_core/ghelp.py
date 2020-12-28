@@ -128,7 +128,6 @@ class AboutWindow(wx.Frame):
             sys.stderr.write(_("Unable to get GRASS version\n"))
 
         infoTxt = ScrolledPanel(self.aboutNotebook)
-        infoTxt.SetBackgroundColour('WHITE')
         infoTxt.SetupScrolling()
         infoSizer = wx.BoxSizer(wx.VERTICAL)
         infoGridSizer = wx.GridBagSizer(vgap=5, hgap=5)
@@ -460,7 +459,6 @@ class AboutWindow(wx.Frame):
             translators = None
 
         translatorswin = ScrolledPanel(self.aboutNotebook)
-        translatorswin.SetBackgroundColour('WHITE')
         translatorswin.SetAutoLayout(True)
         translatorswin.SetupScrolling()
         translatorswin.sizer = wx.BoxSizer(wx.VERTICAL)
@@ -625,7 +623,6 @@ class AboutWindow(wx.Frame):
         else:
             jsStats = None
         self.statswin = ScrolledPanel(self.aboutNotebook)
-        self.statswin.SetBackgroundColour('WHITE')
         self.statswin.SetAutoLayout(True)
 
         if not jsStats:
