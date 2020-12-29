@@ -282,9 +282,9 @@ class TestCase(unittest.TestCase):
 
     def assertRasterFitsInfo(self, raster, reference,
                              precision=None, msg=None):
-        r"""Test that raster map has the values obtained by r.univar module.
+        r"""Test that raster map has the values obtained by r.info module.
 
-        The function does not require all values from r.univar.
+        The function does not require all values from r.info.
         Only the provided values are tested.
         Typical example is checking minimum, maximum and type of the map::
 
@@ -453,6 +453,7 @@ class TestCase(unittest.TestCase):
     def assertRasterMinMax(self, map, refmin, refmax, msg=None):
         """Test that raster map minimum and maximum are within limits.
 
+        Minimum and maximum values are obtained from r.info.
         Map minimum and maximum is tested against expression::
 
             refmin <= actualmin and refmax >= actualmax
@@ -483,6 +484,7 @@ class TestCase(unittest.TestCase):
     def assertRaster3dMinMax(self, map, refmin, refmax, msg=None):
         """Test that 3D raster map minimum and maximum are within limits.
 
+        Minimum and maximum values are obtained from r3.info.
         Map minimum and maximum is tested against expression::
 
             refmin <= actualmin and refmax >= actualmax
@@ -707,6 +709,41 @@ class TestCase(unittest.TestCase):
                                                          s=second))
         return diff
 
+    def _map_different_raster_cells(self, first, second, name_part,
+                                    precision=0):
+        """Marks cells with different values with 1, equal with 0
+
+        For FCELL and DCELL maps precision (tolerance to difference)
+        should be set to a small positive value larger than 0
+        matching reference data precision.
+
+        The name of the new raster is a long name designed to be as unique as
+        possible and contains names of two input rasters.
+
+        :param first: raster to subtract from
+        :param second: raster used as decrement
+        :param name_part: a unique string to be used in the difference name
+        :param precision: maximum difference between cell values
+
+        :returns: name of a new raster
+        """
+        diff = self._get_unique_name('map_different_raster_cells_' + name_part
+                                     + '_' + first + '_minus_' + second)
+        expression = (
+            '"{diff}" = ' +
+            'if( isnull("{first}") && isnull("{second}"), 0, ' +
+            'if( isnull("{first}") || isnull("{second}"), 1, ' +
+            'if( abs("{first}" - "{second}") > {precision}, 1, 0)))'
+        ).format(
+            diff=diff,
+            first=first,
+            second=second,
+            precision=precision
+        )
+
+        call_module('r.mapcalc', stdin=expression.encode("utf-8"))
+        return diff
+
     def _compute_vector_xor(self, ainput, alayer, binput, blayer, name_part):
         """Compute symmetric difference (xor) of two vectors
 
@@ -762,6 +799,11 @@ class TestCase(unittest.TestCase):
         but works on difference ``reference - actual``.
         If statistics is not given ``dict(min=-precision, max=precision)``
         is used.
+
+        Be ware – comparison is performed on overall statistics and thus
+        differences in individual cell values not changing overall
+        statistics might go unnoticed. Use `assertRastersEqual()`
+        for cell to cell equivalence testing.
         """
         if statistics is None or sorted(statistics.keys()) == ['max', 'min']:
             if statistics is None:
@@ -792,6 +834,11 @@ class TestCase(unittest.TestCase):
         use `assertRastersNoDifference()` instead.
 
         This method should not be used to test r.mapcalc or r.univar.
+
+        Be ware – comparison is performed on overall statistics and thus
+        differences in individual cell values not changing overall
+        statistics might go unnoticed. Use `assertRastersEqual()`
+        for cell to cell equivalence testing.
         """
         diff = self._compute_difference_raster(reference, actual,
                                                'assertRastersDifference')
@@ -847,6 +894,33 @@ class TestCase(unittest.TestCase):
                                           precision=precision, msg=msg)
         finally:
             call_module('g.remove', flags='f', type='raster_3d', name=diff)
+
+    def assertRastersEqual(self, actual, reference,
+                           precision=0, msg=None):
+        """Test that `actual` raster is equal to `reference` raster
+
+        Test compares if each cell value in `actual` raster is within
+        `precision` value to `reference` raster.
+        NULL values in both rasters are considered to be a match.
+
+        For CELL maps `precision` should be set to 0,
+        for FCELL and DCELL maps it should be set to match precision of
+        `reference` map (a positive number larger than 0).
+
+        Comparison is performed with r.mapcalc and r.info and thus is
+        affected by current computational region.
+        """
+
+        diff = self._map_different_raster_cells(reference, actual,
+                                                'assertRastersEqual',
+                                                precision)
+        try:
+            self.assertModuleKeyValue('r.info', map=diff, flags='r',
+                                      sep='=', precision=0,
+                                      reference={'min': 0, 'max': 0},
+                                      msg=msg)
+        finally:
+            call_module('g.remove', flags='f', type='raster', name=diff)
 
     # TODO: this works only in 2D
     # TODO: write tests
