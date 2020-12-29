@@ -91,12 +91,7 @@ class GMFrame(wx.Frame):
         if title:
             self.baseTitle = title
         else:
-            try:
-                grassVersion = grass.version()['version']
-            except KeyError:
-                sys.stderr.write(_("Unable to get GRASS version\n"))
-                grassVersion = "?"
-            self.baseTitle = _("GRASS GIS %s Layer Manager") % grassVersion
+            self.baseTitle = _("GRASS GIS")
 
         self.iconsize = (16, 16)
 
@@ -265,15 +260,27 @@ class GMFrame(wx.Frame):
 
     def _setTitle(self):
         """Set frame title"""
+        gisenv = grass.gisenv()
+        location = gisenv["LOCATION_NAME"]
+        mapset = gisenv["MAPSET"]
         if self.workspaceFile:
+            filename = os.path.splitext(os.path.basename(self.workspaceFile))[0]
             self.SetTitle(
-                self.baseTitle +
-                " - " +
-                os.path.splitext(
-                    os.path.basename(
-                        self.workspaceFile))[0])
+                "{workspace} - {location}/{mapset} - {program}".format(
+                    location=location,
+                    mapset=mapset,
+                    workspace=filename,
+                    program=self.baseTitle
+                )
+            )
         else:
-            self.SetTitle(self.baseTitle)
+            self.SetTitle(
+                "{location}/{mapset} - {program}".format(
+                    location=location,
+                    mapset=mapset,
+                    program=self.baseTitle
+                )
+            )
 
     def _createMenuBar(self):
         """Creates menu bar"""
@@ -290,7 +297,7 @@ class GMFrame(wx.Frame):
         Used to rename display.
         """
         menu = Menu()
-        item = wx.MenuItem(menu, id=wx.ID_ANY, text=_("Rename Map Display"))
+        item = wx.MenuItem(menu, id=wx.ID_ANY, text=_("Rename current Map Display"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameDisplay, item)
 
@@ -1102,12 +1109,7 @@ class GMFrame(wx.Frame):
         If location is None, mapset changed within location.
         """
         if not location:
-            # TODO: this does not use the actual names if they were
-            # renamed (it just uses the numbers)
-            dispId = 1
-            for display in self.GetMapDisplay(onlyCurrent=False):
-                display.SetTitleWithName(str(dispId))  # TODO: signal ?
-                dispId += 1
+            self._setTitle()
         else:
             # close current workspace and create new one
             self.OnWorkspaceClose()
@@ -1766,12 +1768,7 @@ class GMFrame(wx.Frame):
             self.notebookLayers.SetPageText(
                 page=self.currentPageNum, text=name)
             mapdisplay = self.GetMapDisplay()
-            # There is a slight inconsistency: When creating the display
-            # we use just the number, but when user renames it,
-            # we use the full name. Both cases make sense and each
-            # separately gives expected result, so we keep this
-            # behavior.
-            mapdisplay.SetTitleWithName(name)
+            mapdisplay.SetTitle(name)
         dlg.Destroy()
 
     def OnRasterRules(self, event):
@@ -2087,7 +2084,7 @@ class GMFrame(wx.Frame):
         if name:
             dispName = name
         else:
-            dispName = "Display " + str(self.displayIndex + 1)
+            dispName = _("Map Display {number}").format(number=self.displayIndex + 1)
         self.notebookLayers.AddPage(
             page=self.pg_panel, text=dispName, select=True)
         self.currentPage = self.notebookLayers.GetCurrentPage()
@@ -2100,7 +2097,9 @@ class GMFrame(wx.Frame):
             style=wx.TR_HAS_BUTTONS | wx.TR_LINES_AT_ROOT | wx.TR_HIDE_ROOT | wx.
             TR_DEFAULT_STYLE | wx.NO_BORDER | wx.FULL_REPAINT_ON_RESIZE,
             idx=self.displayIndex, lmgr=self, notebook=self.notebookLayers,
-            showMapDisplay=show)
+            showMapDisplay=show,
+            title=dispName,
+        )
 
         # layout for controls
         cb_boxsizer = wx.BoxSizer(wx.VERTICAL)

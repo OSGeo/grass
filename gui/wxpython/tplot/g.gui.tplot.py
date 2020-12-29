@@ -162,7 +162,11 @@ def main():
     if options['csv']:
         csvfile = options['csv']
     app = wx.App()
-    frame = TplotFrame(parent=None, giface=StandaloneGrassInterface())
+    frame = TplotFrame(
+        parent=None,
+        giface=StandaloneGrassInterface(),
+        title=_("Temporal Plot Tool - GRASS GIS"),
+    )
     if flags['l']:
         frame.linRegRaster.SetValue(state=True)
         frame.linRegVector.SetValue(state=True)

@@ -108,7 +108,11 @@ def main():
 
     # show main frame
     giface = StandaloneGrassInterface()
-    frame = IClassMapFrame(parent=None, giface=giface)
+    frame = IClassMapFrame(
+        parent=None,
+        giface=giface,
+        title=_("Supervised Classification Tool - GRASS GIS"),
+    )
     if not flags['m']:
         frame.CenterOnScreen()
     if group_name:

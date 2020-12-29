@@ -687,7 +687,7 @@ class PyEditFrame(wx.Frame):
     # pylint: disable=invalid-name
 
     def __init__(self, parent, giface, id=wx.ID_ANY,
-                 title=_("GRASS GIS Simple Python Editor"),
+                 title=_("Simple Python Editor"),
                  **kwargs):
         wx.Frame.__init__(self, parent=parent, id=id, title=title, **kwargs)
         self.parent = parent

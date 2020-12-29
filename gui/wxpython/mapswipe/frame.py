@@ -38,7 +38,7 @@ from mapswipe.dialogs import SwipeMapDialog, PreferencesDialog
 class SwipeMapFrame(DoubleMapFrame):
 
     def __init__(self, parent=None, giface=None,
-                 title=_("GRASS GIS Map Swipe"), name="swipe", **kwargs):
+                 title=_("Map Swipe"), name="swipe", **kwargs):
         DoubleMapFrame.__init__(self, parent=parent, title=title, name=name,
                                 firstMap=Map(), secondMap=Map(), **kwargs)
         Debug.msg(1, "SwipeMapFrame.__init__()")

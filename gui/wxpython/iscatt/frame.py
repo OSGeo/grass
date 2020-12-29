@@ -168,7 +168,7 @@ class IScattDialog(wx.Dialog):
 
     def __init__(
             self, parent, giface,
-            title=_("GRASS GIS Interactive Scatter Plot Tool"),
+            title=_("Interactive Scatter Plot Tool"),
             id=wx.ID_ANY, style=wx.DEFAULT_FRAME_STYLE, **kwargs):
         wx.Dialog.__init__(
             self,
