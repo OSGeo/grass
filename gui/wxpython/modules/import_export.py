@@ -102,6 +102,9 @@ class ImportDialog(wx.Dialog):
                 key='overwrite',
                 subkey='enabled'))
         self.overwrite.Bind(wx.EVT_CHECKBOX, self.OnCheckOverwrite)
+        if UserSettings.Get(group='cmd', key='overwrite',
+                            subkey='enabled'):
+            self.list.validate = False
 
         self.add = wx.CheckBox(parent=self.panel, id=wx.ID_ANY)
         self.closeOnFinish = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
@@ -255,9 +258,7 @@ class ImportDialog(wx.Dialog):
     def _validateOutputMapName(self):
         """Enable/disable output map name validation according the
         overwrite state"""
-        if not self.overwrite.IsChecked() or not \
-           UserSettings.Get(group='cmd', key='overwrite',
-                            subkey='enabled'):
+        if not self.overwrite.IsChecked():
             if not self.list.GetValidator().\
                Validate(win=self.list, validate_all=True):
                 return False
