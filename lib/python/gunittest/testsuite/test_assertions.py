@@ -227,6 +227,19 @@ class TestRasterMapAssertions(TestCase):
                           statistics=dict(mean=0),
                           msg="The difference of different maps should have huge mean")
 
+    def test_assertRastersEqual(self):
+        """Test basic usage of assertRastersEqual"""
+        self.assertRastersEqual(actual='lakes',
+                                       reference='lakes',
+                                       precision=0,
+                                       msg="The same maps should have no difference")
+        self.assertRaises(self.failureException,
+                          self.assertRastersEqual,
+                          actual='elevation',
+                          reference='lakes',
+                          precision=1,
+                          msg="Different maps should have difference")
+
 
 class TestMapExistsAssertions(TestCase):
     # pylint: disable=R0904
@@ -281,9 +294,9 @@ class TestMapExistsAssertions(TestCase):
                           'does_not_exists')
 
     def test_rast_does_not_exist_in_current_mapset(self):
-		# expecting that there is elevation in PERMANENT
-		# TODO: use skip decorator
-		# TODO: add the same tests but for vect and rast3d
+        # expecting that there is elevation in PERMANENT
+        # TODO: use skip decorator
+        # TODO: add the same tests but for vect and rast3d
         self.assertRaises(self.failureException,
                           self.assertRasterExists,
                           'elevation',
