@@ -1196,5 +1196,26 @@ def unregisterPid(pid):
             set='GUI_PID={0}'.format(
                 ','.join(guiPid)))
 
+
+def get_shell_pid(env=None):
+    """Get shell PID from the GIS environment or None"""
+    try:
+        shell_pid = int(grass.gisenv(env=env)['PID'])
+        return shell_pid
+    except (KeyError, ValueError) as error:
+        Debug.msg(
+            1,
+            "No PID for GRASS shell (assuming no shell running): {}".format(error)
+        )
+        return None
+
+
+def is_shell_running():
+    """Return True if a separate shell is registered in the GIS environment"""
+    if get_shell_pid() is None:
+        return False
+    return True
+
+
 if __name__ == '__main__':
     sys.exit(doc_test())
