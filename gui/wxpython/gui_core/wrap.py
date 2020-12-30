@@ -55,6 +55,21 @@ else:
     from wx import NewId
 
 
+def IsDark():
+    """Detects if used theme is dark.
+    Wraps wx method for different versions."""
+    def luminance(c):
+        return (0.299 * c.Red() + 0.587 * c.Green() + 0.114 * c.Blue()) / 255
+
+    if hasattr(wx.SystemSettings, 'GetAppearance'):
+        return wx.SystemSettings.GetAppearance().IsDark()
+
+    # for older wx
+    bg = wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
+    fg = wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
+    return luminance(fg) - luminance(bg) > 0.2
+
+
 def BitmapFromImage(image, depth=-1):
     if wxPythonPhoenix:
         return wx.Bitmap(img=image, depth=depth)

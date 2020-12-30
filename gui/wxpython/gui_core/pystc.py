@@ -6,12 +6,13 @@
 Classes:
  - pystc::PyStc
 
-(C) 2012-2013 by the GRASS Development Team
+(C) 2012-2020 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
+@author Anna Petrasova <kratochanna gmail.com> (dark theme)
 """
 
 
@@ -19,6 +20,60 @@ import keyword
 
 import wx
 from wx import stc
+
+
+def SetDarkMode(pystc):
+    """Configure color for dark mode. Adapted from Monokai theme in Spyder."""
+    dark = {
+        "background": "#282828",
+        "foreground": "#ddddda",
+        "line_foreground": "#C8C8C8",
+        "line_background": "#4D4D4D",
+        "comment": "#75715e",
+        "string": "#e6db74",
+        "keyword": "#f92672",
+        "definition": "#a6e22e",
+        "number": "#ae81ff",
+        "builtin": "#ae81ff",
+        "instance": "#ddddda",
+        "whitespace": "#969696",
+    }
+
+    # Default style
+    pystc.StyleSetSpec(
+        stc.STC_STYLE_DEFAULT,
+        "back:{b},fore:{f}".format(b=dark["background"], f=dark["foreground"]),
+    )
+
+    pystc.StyleClearAll()
+    pystc.SetSelForeground(
+        True, wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT)
+    )
+    pystc.SetSelBackground(True, wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT))
+    pystc.SetCaretForeground(wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT))
+    pystc.SetWhitespaceForeground(True, wx.Colour(dark["whitespace"]))
+
+    # Built in styles
+    pystc.StyleSetSpec(
+        stc.STC_STYLE_LINENUMBER,
+        "fore:{f},back:{b}".format(
+            f=dark["line_foreground"], b=dark["line_background"]
+        ),
+    )
+    pystc.StyleSetSpec(stc.STC_STYLE_BRACELIGHT, "fore:#0000FF,back:#FFFF88")
+    pystc.StyleSetSpec(stc.STC_STYLE_BRACEBAD, "fore:#FF0000,back:#FFFF88")
+
+    # Python styles
+    pystc.StyleSetSpec(stc.STC_P_DEFAULT, "fore:{}".format(dark["foreground"]))
+    pystc.StyleSetSpec(stc.STC_P_COMMENTLINE, "fore:{}".format(dark["comment"]))
+    pystc.StyleSetSpec(stc.STC_P_STRING, "fore:{}".format(dark["string"]))
+    pystc.StyleSetSpec(stc.STC_P_CHARACTER, "fore:{}".format(dark["string"]))
+    pystc.StyleSetSpec(stc.STC_P_WORD, "fore:{}".format(dark["keyword"]))
+    pystc.StyleSetSpec(stc.STC_P_TRIPLE, "fore:{}".format(dark["string"]))
+    pystc.StyleSetSpec(stc.STC_P_TRIPLEDOUBLE, "fore:{}".format(dark["string"]))
+    pystc.StyleSetSpec(stc.STC_P_CLASSNAME, "fore:{}".format(dark["definition"]))
+    pystc.StyleSetSpec(stc.STC_P_DEFNAME, "fore:{}".format(dark["definition"]))
+    pystc.StyleSetSpec(stc.STC_P_COMMENTBLOCK, "fore:{}".format(dark["comment"]))
 
 
 class PyStc(stc.StyledTextCtrl):
