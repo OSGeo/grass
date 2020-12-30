@@ -173,8 +173,17 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.SetViewWhiteSpace(False)
         self.SetUseTabs(False)
         self.UsePopUp(True)
-        self.SetSelBackground(True, "#FFFF00")
         self.SetUseHorizontalScrollBar(True)
+
+        # support light and dark mode
+        bg_color = wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOW)
+        fg_color = wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOWTEXT)
+        selection_color = wx.SystemSettings().GetColour(wx.SYS_COLOUR_HIGHLIGHT)
+        self.StyleSetBackground(wx.stc.STC_STYLE_DEFAULT, bg_color)
+        self.StyleSetForeground(wx.stc.STC_STYLE_DEFAULT, fg_color)
+        self.SetCaretForeground(fg_color)
+        self.SetSelBackground(True, selection_color)
+        self.StyleClearAll()
 
         #
         # bindings
