@@ -99,9 +99,11 @@ for details.
 import os
 import sys
 import tempfile as tmpfile
+import gettext
 
 
 windows = sys.platform == 'win32'
+gettext.install('grasslibs', os.path.join(os.getenv('GISBASE'), 'locale'))
 
 
 def write_gisrc(dbase, location, mapset):
