@@ -49,6 +49,6 @@ GenericName[uz]=Geografik axborot tizimi
 Icon=grass
 TryExec=/usr/bin/grass79
 Exec=grass79
-Terminal=true
+Terminal=false
 Keywords=gis;spatial;geospatial;database;remote sensing;hydrology;vector;raster;visualization;maps;wms;wfs;ogc;osgeo;
 Categories=Education;Science;Geoscience;Geography;
