@@ -896,7 +896,7 @@ Section "Important Microsoft Runtime DLLs" SecMSRuntime
 	;Set the size (in KB) of the unpacked archive file
 	AddSize 13500
 	
-	StrCpy $HTTP_PATH "http://download.osgeo.org/osgeo4w/${PLATFORM}/release/msvcrt/"
+	StrCpy $HTTP_PATH "https://download.osgeo.org/osgeo4w/${PLATFORM}/release/msvcrt/"
         !if ${PLATFORM} == "x86_64"
             StrCpy $ARCHIVE_NAME "msvcrt-1.0.3-1.tar.bz2"
             StrCpy $ARCHIVE_NAME2008 "msvcrt2008-1.0.0-1.tar.bz2"
