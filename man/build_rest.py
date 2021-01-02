@@ -7,7 +7,7 @@ Created on Thu Aug  9 14:04:12 2012
 """
 # utilities for generating REST indices
 # utilities for generating HTML indices
-# (c) 2003-2019 by the GRASS Development Team, Markus Neteler, Glynn Clements, Luca Delucchi
+# (c) 2003-2021 by the GRASS Development Team, Markus Neteler, Glynn Clements, Luca Delucchi
 
 import sys
 import os
@@ -167,7 +167,7 @@ r"""
 --------------
 
 :doc:`Manual main page <index>` \| :doc:`Full Index <full_index>`
- 2003-2019 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
+ 2003-2021 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
 """)
 
 cmd1_tmpl = string.Template(\
