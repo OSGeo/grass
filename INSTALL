@@ -30,7 +30,7 @@ For links to the software, see ./REQUIREMENTS.html in this
 directory:
 
 Installation order:
-	1. PROJ4
+	1. PROJ
 	2. GDAL-OGR  (compiled without GRASS support)
         3. optionally: databases such as PostgreSQL, MySQL, sqlite
 	4. GRASS GIS
@@ -316,6 +316,4 @@ https://trac.osgeo.org/grass/wiki/Submitting
 https://grass.osgeo.org/documentation/first-time-users/
 
 ------------------
-(C) 1999-2020 by The GRASS Development Team
-
-Last changed: $Date$
+(C) 1999-2021 by The GRASS Development Team
