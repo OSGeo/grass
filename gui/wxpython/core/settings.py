@@ -159,6 +159,12 @@ class Settings:
                         'enabled' : False
                     },
                 },
+                # init
+                'init': {
+                    'startWithoutShellIfPossible': {
+                        'enabled' : True
+                    },
+                },
             },
             #
             # datacatalog
