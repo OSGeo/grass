@@ -791,7 +791,7 @@ class NeuQuant:
 
         # Initialize
         self.setconstants(samplefac, colors)
-        self.pixels = np.fromstring(getattr(image, "tobytes", getattr(image, "tostring"))(), np.uint32)
+        self.pixels = np.fromstring(image.tobytes(), np.uint32)
         self.setUpArrays()
 
         self.learn()

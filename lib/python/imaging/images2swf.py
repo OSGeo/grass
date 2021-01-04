@@ -167,8 +167,7 @@ class BitArray:
         return self._len  # self.data.shape[0]
 
     def __repr__(self):
-        fn = getattr(self.data[:self._len], "tobytes", getattr(self.data[:self._len], "tostring"))
-        return fn().decode('ascii')
+        return self.data[:self._len].tobytes()
 
     def _checkSize(self):
         # check length... grow if necessary
