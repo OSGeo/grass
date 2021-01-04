@@ -1044,39 +1044,19 @@ def PilImageToWxImage(pilImage, copyAlpha=True):
         wxImage = EmptyImage(*pilImage.size)
         pilImageCopyRGBA = pilImage.copy()
         pilImageCopyRGB = pilImageCopyRGBA.convert('RGB')    # RGBA --> RGB
-        fn = getattr(
-            pilImageCopyRGB,
-            "tobytes",
-            getattr(
-                pilImageCopyRGB,
-                "tostring"))
-        pilImageRgbData = fn()
-        wxImage.SetData(pilImageRgbData)
-        fn = getattr(
-            pilImageCopyRGBA,
-            "tobytes",
-            getattr(
-                pilImageCopyRGBA,
-                "tostring"))
+        wxImage.SetData(pilImageCopyRGB.tobytes())
         # Create layer and insert alpha values.
         if wxPythonPhoenix:
-            wxImage.SetAlpha(fn()[3::4])
+            wxImage.SetAlpha(pilImageCopyRGBA.tobytes()[3::4])
         else:
-            wxImage.SetAlphaData(fn()[3::4])
+            wxImage.SetAlphaData(pilImageCopyRGBA.tobytes()[3::4])
 
     else:    # The resulting image will not have alpha.
         wxImage = EmptyImage(*pilImage.size)
         pilImageCopy = pilImage.copy()
         # Discard any alpha from the PIL image.
         pilImageCopyRGB = pilImageCopy.convert('RGB')
-        fn = getattr(
-            pilImageCopyRGB,
-            "tobytes",
-            getattr(
-                pilImageCopyRGB,
-                "tostring"))
-        pilImageRgbData = fn()
-        wxImage.SetData(pilImageRgbData)
+        wxImage.SetData(pilImageCopyRGB.tobytes())
 
     return wxImage
 
