@@ -152,6 +152,10 @@ class Settings:
                 "region": {
                     "resAlign": {"enabled": False},
                 },
+                # init
+                "init": {
+                    "startWithoutShellIfPossible": {"enabled": True},
+                },
             },
             #
             # datacatalog
