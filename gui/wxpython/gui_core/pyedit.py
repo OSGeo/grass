@@ -30,11 +30,12 @@ if __name__ == '__main__':
     set_gui_path()
 
 from core.gcmd import GError
-from gui_core.pystc import PyStc
+from gui_core.pystc import PyStc, SetDarkMode
 from core import globalvar
 from core.menutree import MenuTreeModelBuilder
 from gui_core.menu import RecentFilesMenu, Menu
 from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.wrap import IsDark
 from icons.icon import MetaIcon
 from core.debug import Debug
 
@@ -706,6 +707,8 @@ class PyEditFrame(wx.Frame):
             self.SetToolBar(self.toolbar)
 
         self.panel = PyStc(parent=self)
+        if IsDark():
+            SetDarkMode(self.panel)
         self.controller = PyEditController(
             panel=self.panel, guiparent=self, giface=giface)
 

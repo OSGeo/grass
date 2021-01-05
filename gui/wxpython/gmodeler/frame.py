@@ -59,13 +59,13 @@ from gui_core.forms import GUI
 from gmodeler.preferences import PreferencesDialog, PropertiesDialog
 from gmodeler.toolbars import ModelerToolbar
 from core.giface import Notification
-from gui_core.pystc import PyStc
+from gui_core.pystc import PyStc, SetDarkMode
 from gmodeler.giface import GraphicalModelerGrassInterface
 from gmodeler.model import *
 from gmodeler.dialogs import *
 from gui_core.wrap import (
     Button, EmptyBitmap, ImageFromBitmap, Menu, NewId, StaticBox,
-    StaticText, StockCursor, TextCtrl,
+    StaticText, StockCursor, TextCtrl, IsDark
 )
 from gui_core.wrap import TextEntryDialog as wxTextEntryDialog
 
@@ -1987,6 +1987,8 @@ class PythonPanel(wx.Panel):
         self.bodyBox = StaticBox(parent=self, id=wx.ID_ANY,
                                  label=" %s " % _("Python script"))
         self.body = PyStc(parent=self, statusbar=self.parent.GetStatusBar())
+        if IsDark():
+            SetDarkMode(self.body)
 
         self.btnRun = Button(parent=self, id=wx.ID_ANY, label=_("&Run"))
         self.btnRun.SetToolTip(_("Run python script"))

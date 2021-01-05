@@ -23,13 +23,15 @@ from __future__ import print_function
 import sys
 
 import wx
+from wx import stc
 from wx.py.shell import Shell as PyShell
 from wx.py.version import VERSION
 
 import grass.script as grass
 from grass.script.utils import try_remove
 
-from gui_core.wrap import Button, ClearButton
+from gui_core.wrap import Button, ClearButton, IsDark
+from gui_core.pystc import SetDarkMode
 from core.globalvar import CheckWxVersion
 
 
@@ -56,6 +58,8 @@ class PyShellWindow(wx.Panel):
         if sys.platform == "darwin" and CheckWxVersion([4, 0, 2]):
             shellargs["useStockId"] = False
         self.shell = PyShell(**shellargs)
+        if IsDark():
+            SetDarkMode(self.shell)
 
         sys.displayhook = self._displayhook
 
