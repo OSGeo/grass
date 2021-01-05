@@ -297,7 +297,7 @@ class Popen(subprocess.Popen):
                 if not select.select([conn], [], [], 0)[0]:
                     return ''
 
-                r = conn.read(maxsize)
+                r = conn.read()
 
                 if not r:
                     return self._close(which)
