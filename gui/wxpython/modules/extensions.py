@@ -72,6 +72,7 @@ class InstallExtensionWindow(wx.Frame):
 
         self.search = SearchCtrl(self.panel)
         self.search.SetDescriptiveText(_('Search'))
+        self.search.ShowCancelButton(True)
         # load data in different thread
         self.thread = gThread()
 
@@ -121,6 +122,8 @@ class InstallExtensionWindow(wx.Frame):
         self.btnInstall.Bind(wx.EVT_BUTTON, self.OnInstall)
         self.btnHelp.Bind(wx.EVT_BUTTON, self.OnHelp)
         self.search.Bind(wx.EVT_TEXT, lambda evt: self.Filter(evt.GetString()))
+        self.search.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN,
+                         lambda evt: self.Filter(''))
         self.tree.selectionChanged.connect(self.OnItemSelected)
         self.tree.itemActivated.connect(self.OnItemActivated)
         self.tree.contextMenu.connect(self.OnContextMenu)
@@ -220,10 +223,13 @@ class InstallExtensionWindow(wx.Frame):
 
     def Filter(self, text):
         model = self.modelBuilder.GetModel()
-        model = model.Filtered(key=['command', 'keywords', 'description'],
-                               value=text)
-        self.tree.SetModel(model)
-        self.tree.ExpandAll()
+        if text:
+            model = model.Filtered(key=['command', 'keywords', 'description'],
+                                   value=text)
+            self.tree.SetModel(model)
+            self.tree.ExpandAll()
+        else:
+            self.tree.SetModel(model)
 
     def OnContextMenu(self, node):
         if not hasattr(self, "popupID"):

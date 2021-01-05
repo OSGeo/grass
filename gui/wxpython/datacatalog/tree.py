@@ -1642,28 +1642,16 @@ class DataCatalogTree(TreeView):
             wx.TheClipboard.SetData(do)
             wx.TheClipboard.Close()
 
-    def Filter(self, text):
+    def Filter(self, text, element=None):
         """Filter tree based on name and type."""
-        text = text.strip()
-        if len(text.split(':')) > 1:
-            name = text.split(':')[1].strip()
-            elem = text.split(':')[0].strip()
-            if 'r' == elem:
-                element = 'raster'
-            elif 'r3' == elem:
-                element = 'raster_3d'
-            elif 'v' == elem:
-                element = 'vector'
+        name = text.strip()
+        if not name:
+            self._model = self._orig_model
+        else:
+            if element:
+                self._model = self._orig_model.Filtered(exact=False, name=re.compile(name), type=element)
             else:
-                element = None
-        else:
-            element = None
-            name = text.strip()
-
-        if element:
-            self._model = self._orig_model.Filtered(exact=False, name=re.compile(name), type=element)
-        else:
-            self._model = self._orig_model.Filtered(exact=False, name=re.compile(name))
+                self._model = self._orig_model.Filtered(exact=False, name=re.compile(name))
         self.UpdateCurrentDbLocationMapsetNode()
         self.RefreshItems()
         self.ExpandCurrentMapset()

@@ -150,6 +150,7 @@ class SearchModuleWindow(wx.Panel):
         # search widget
         self._search = SearchCtrl(self)
         self._search.SetDescriptiveText(_('Search'))
+        self._search.ShowCancelButton(True)
         self._btnAdvancedSearch = Button(self, id=wx.ID_ANY,
                                          label=_("Adva&nced search..."))
         self._btnAdvancedSearch.SetToolTip(
@@ -168,6 +169,8 @@ class SearchModuleWindow(wx.Panel):
 
         # bindings
         self._search.Bind(wx.EVT_TEXT, lambda evt: self.Filter(evt.GetString()))
+        self._search.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN,
+                          lambda evt: self.Filter(''))
         self._btnRun.Bind(wx.EVT_BUTTON, lambda evt: self.Run())
         self._btnHelp.Bind(wx.EVT_BUTTON, lambda evt: self.Help())
         self._btnAdvancedSearch.Bind(wx.EVT_BUTTON,
@@ -211,10 +214,13 @@ class SearchModuleWindow(wx.Panel):
         self.Layout()
 
     def Filter(self, text):
-        model = self._model.Filtered(key=['command', 'keywords', 'description'],
-                                          value=text)
-        self._tree.SetModel(model)
-        self._tree.ExpandAll()
+        if text:
+            model = self._model.Filtered(key=['command', 'keywords', 'description'],
+                                         value=text)
+            self._tree.SetModel(model)
+            self._tree.ExpandAll()
+        else:
+            self._tree.SetModel(self._model)
 
     def _GetSelectedNode(self):
         selection = self._tree.GetSelected()

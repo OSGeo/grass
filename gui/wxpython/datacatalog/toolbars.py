@@ -58,16 +58,28 @@ class DataCatalogToolbar(BaseToolbar):
         BaseToolbar.__init__(self, parent)
 
         self.InitToolbar(self._toolbarData())
+        self.filter_element = None
         self.filter = SearchCtrl(parent=self)
         self.filter.SetDescriptiveText(_('Search'))
+        self.filter.ShowCancelButton(True)
         self.filter.SetSize((150, self.filter.GetBestSize()[1]))
         self.filter.Bind(wx.EVT_TEXT,
                          lambda event: self.parent.Filter(
-                         self.filter.GetValue()))
+                         self.filter.GetValue(), self.filter_element))
+        self.filter.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN,
+                         lambda evt: self.parent.Filter(''))
         self.AddControl(self.filter)
+        filterMenu = wx.Menu()
+        item = filterMenu.AppendRadioItem(-1, "All")
+        self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
+        item = filterMenu.AppendRadioItem(-1, "Raster maps")
+        self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
+        item = filterMenu.AppendRadioItem(-1, "Vector maps")
+        self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
+        item = filterMenu.AppendRadioItem(-1, "3D raster maps")
+        self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
+        self.filter.SetMenu(filterMenu)
         help = _("Type to search database by map type or name. "
-                 "Use prefix 'r:', 'v:' and 'r3:'"
-                 "to show only raster, vector or 3D raster data, respectively. "
                  "Use Python regular expressions to refine your search.")
         self.SetToolShortHelp(self.filter.GetId(), help)
         # realize the toolbar
@@ -92,6 +104,19 @@ class DataCatalogToolbar(BaseToolbar):
                                      ("addMapset", icons['addMapset'],
                                       self.parent.OnCreateMapset)
                                      ))
+    def OnFilterMenu(self, event):
+        """Decide the element to filter by"""
+        filterMenu = self.filter.GetMenu().GetMenuItems()
+        self.filter_element = None
+        if filterMenu[1].IsChecked():
+            self.filter_element = 'raster'
+        elif filterMenu[2].IsChecked():
+            self.filter_element = 'vector'
+        elif filterMenu[3].IsChecked():
+            self.filter_element = 'raster_3d'
+        # trigger filter on change
+        if self.filter.GetValue():
+            self.parent.Filter(self.filter.GetValue(), self.filter_element)
 
     def OnSetRestriction(self, event):
         if self.GetToolState(self.lock):
