@@ -67,6 +67,7 @@ from lmgr.toolbars import LMMiscToolbar, LMVectorToolbar, LMNvizToolbar
 from lmgr.pyshell import PyShellWindow
 from lmgr.giface import LayerManagerGrassInterface
 from datacatalog.catalog import DataCatalog
+from gui_core.dialogs import DirBrowseDialog
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
 from grass.grassdb.checks import is_current_mapset_in_demolocation
@@ -514,6 +515,30 @@ class GMFrame(wx.Frame):
                                              location=location,
                                              action='new',
                                              element='location')
+
+    def OnSetRStudioPath(self, event):
+        """Set RStudio path"""
+        dlg = DirBrowseDialog(
+            parent=self,
+            message=_("Set RStudio path:"),
+            caption=_("Set RStudio path"),
+        )
+
+        rstudio_path = UserSettings.Get(group='rstudio', key='path')
+        if rstudio_path:
+            dlg.SetValue(value=rstudio_path)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            rstudio_path = dlg.GetValue()
+            UserSettings.Set(group='rstudio', key='path', value=rstudio_path)
+            fileSettings = {}
+            UserSettings.ReadSettingsFile(settings=fileSettings)
+            fileSettings['rstudio'] = UserSettings.Get(group='rstudio')
+            UserSettings.SaveToFile(fileSettings)
+            if rstudio_path not in os.environ['PATH']:
+                os.environ['PATH'] += os.pathsep + rstudio_path
+
+        dlg.Destroy()
 
     def OnSettingsChanged(self):
         """Here can be functions which have to be called
