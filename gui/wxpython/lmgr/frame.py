@@ -510,10 +510,20 @@ class GMFrame(wx.Frame):
             create_location_interactively(self, gisenv['GISDBASE'])
         )
         if location:
-            self._giface.grassdbChanged.emit(grassdb=gisenv['GISDBASE'],
+            self._giface.grassdbChanged.emit(grassdb=grassdb,
                                              location=location,
                                              action='new',
                                              element='location')
+            if grassdb == gisenv['GISDBASE']:
+                switch_grassdb = None
+            else:
+                switch_grassdb = grassdb
+            if can_switch_mapset_interactive(self, grassdb, location, mapset):
+                switch_mapset_interactively(self, self._giface,
+                                            switch_grassdb,
+                                            location,
+                                            mapset,
+                                            show_confirmation=True)
 
     def OnSettingsChanged(self):
         """Here can be functions which have to be called
@@ -1074,6 +1084,12 @@ class GMFrame(wx.Frame):
                                              mapset=mapset,
                                              action='new',
                                              element='mapset')
+            if can_switch_mapset_interactive(self,
+                                             gisenv['GISDBASE'],
+                                             gisenv['LOCATION_NAME'],
+                                             mapset):
+                switch_mapset_interactively(self, self._giface, None, None,
+                                            mapset, show_confirmation=True)
 
     def OnChangeMapset(self, event):
         """Change current mapset"""
