@@ -136,11 +136,11 @@ class RLIWizard(object):
                 self._cleanup()
             dlg.Destroy()
         else:
+            self._cleanup()
             self.wizard.Destroy()
             GMessage(parent=self.parent,
                      message=_("r.li.setup wizard canceled. "
                                "Configuration file not created."))
-            self._cleanup()
 
     def _write_confile(self):
         """Write the configuration file"""
@@ -476,6 +476,12 @@ class RLIWizard(object):
         self.moving.width = ''
         self.moving.height = ''
         self.moving.boxtype = ''
+        for page in (self.drawsampleframepage,
+                     self.regions,
+                     self.drawsampleunitspage,
+                     self.vectorareas):
+            if page.mapPanel:
+                page.mapPanel._mgr.UnInit()
 
 
 class FirstPage(TitledPage):
