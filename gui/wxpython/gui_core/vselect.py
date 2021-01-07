@@ -147,6 +147,8 @@ class VectorSelectBase():
         """Delete row in widget
         """
         index = self.slist.GetFocusedItem()
+        if index < 0:
+            return
         category = self.slist.GetItemText(index)
         for item in self.selectedFeatures:
             if int(item['Category']) == int(category):
