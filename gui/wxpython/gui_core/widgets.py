@@ -1058,10 +1058,9 @@ class PlacementValidator(BaseValidator):
         super()._notvalid()
         self._enableDisableBtn(mode='Disable')
 
-    def Validate(self):
+    def Validate(self, win):
         """Validate input"""
-        textCtrl = self.GetWindow()
-        text = textCtrl.GetValue()
+        text = win.GetValue()
         if text:
             try:
                 text = text.split(',')
