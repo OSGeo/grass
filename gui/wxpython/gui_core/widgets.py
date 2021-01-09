@@ -22,6 +22,7 @@ Classes:
  - widgets::GenericValidator
  - widgets::GenericMultiValidator
  - widgets::LayersListValidator
+ - widgets::PlacementValidator
  - widgets::GListCtrl
  - widgets::SearchModuleWidget
  - widgets::ManageSettingsWidget
@@ -44,6 +45,8 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)
 @author Stepan Turek <stepan.turek seznam.cz> (ManageSettingsWidget - created from GdalSelect)
 @author Matej Krejci <matejkrejci gmail.com> (Google GSoC 2014; EmailValidator, TimeISOValidator)
+@author Tomas Zigo <tomas.zigo slovanet.sk> (LayersListValidator,
+PlacementValidator)
 """
 
 import os
@@ -1027,6 +1030,59 @@ class LayersListValidator(GenericValidator):
                 self._callback(layers_list=win)
                 return False
         return True
+
+
+class PlacementValidator(BaseValidator):
+    """Validator for placement input (list of floats separated by comma)"""
+
+    def __init__(self, num_of_params):
+        self._num_of_params = num_of_params
+        super().__init__()
+
+    def _enableDisableBtn(self, mode='Enable'):
+        """Enable/Disable buttomn
+
+        :param str mode: Enable/Disable btn
+        """
+        win = self.GetWindow().GetTopLevelParent()
+        for btn_id in (wx.ID_OK, wx.ID_APPLY):
+            btn = win.FindWindow(id=btn_id)
+            if btn:
+                getattr(btn, mode)()
+
+    def _valid(self):
+        super()._valid()
+        self._enableDisableBtn()
+
+    def _notvalid(self):
+        super()._notvalid()
+        self._enableDisableBtn(mode='Disable')
+
+    def Validate(self):
+        """Validate input"""
+        textCtrl = self.GetWindow()
+        text = textCtrl.GetValue()
+        if text:
+            try:
+                text = text.split(',')
+
+                for t in text:
+                    float(t)
+
+                if len(text) % self._num_of_params != 0:
+                    self._notvalid()
+                    return False
+
+            except ValueError:
+                self._notvalid()
+                return False
+
+        self._valid()
+        return True
+
+    def Clone(self):
+        """Clone validator"""
+        return PlacementValidator(num_of_params=self._num_of_params)
 
 
 class GListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin,

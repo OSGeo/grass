@@ -102,7 +102,10 @@ from gui_core import gselect
 from core import gcmd
 from core import utils
 from core.settings import UserSettings
-from gui_core.widgets import FloatValidator, GNotebook, FormNotebook, FormListbook
+from gui_core.widgets import (
+    FloatValidator, FormListbook, FormNotebook, GNotebook,
+    PlacementValidator,
+)
 from core.giface import Notification, StandaloneGrassInterface
 from gui_core.widgets import LayersList
 from gui_core.wrap import BitmapFromImage, Button, CloseButton, StaticText, \
@@ -1240,9 +1243,16 @@ class CmdPanel(wx.Panel):
                                 max=maxValue)
                             style = wx.BOTTOM | wx.LEFT
                         else:
-                            txt2 = TextCtrl(
-                                parent=which_panel, value=p.get(
-                                    'default', ''))
+                            if p['name'] in ('at'):
+                                txt2 = TextCtrl(
+                                    parent=which_panel, value=p.get(
+                                        'default', ''),
+                                    validator=PlacementValidator(
+                                        num_of_params=len(p['key_desc'])))
+                            else:
+                                txt2 = TextCtrl(
+                                    parent=which_panel, value=p.get(
+                                        'default', ''))
                             style = wx.EXPAND | wx.BOTTOM | wx.LEFT
 
                         value = self._getValue(p)
@@ -1317,9 +1327,16 @@ class CmdPanel(wx.Panel):
                 if p.get('multiple', False) or \
                         p.get('type', 'string') == 'string' or \
                         len(p.get('key_desc', [])) > 1:
-                    win = TextCtrl(
-                        parent=which_panel, value=p.get(
-                            'default', ''))
+                    if p['name'] in ('at'):
+                        win = TextCtrl(
+                            parent=which_panel, value=p.get(
+                                'default', ''),
+                            validator=PlacementValidator(
+                                num_of_params=len(p['key_desc'])))
+                    else:
+                        win = TextCtrl(
+                            parent=which_panel, value=p.get(
+                                'default', ''))
 
                     value = self._getValue(p)
                     if value:
