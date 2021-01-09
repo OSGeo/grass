@@ -606,7 +606,6 @@ class BaseValidator(Validator):
         textCtrl = self.GetWindow()
 
         textCtrl.SetBackgroundColour("grey")
-        textCtrl.SetFocus()
         textCtrl.Refresh()
 
     def _valid(self):
@@ -1039,27 +1038,28 @@ class PlacementValidator(BaseValidator):
         self._num_of_params = num_of_params
         super().__init__()
 
-    def _enableDisableBtn(self, mode='Enable'):
+    def _enableDisableBtn(self, enable):
         """Enable/Disable buttomn
 
-        :param str mode: Enable/Disable btn
+        :param str enable: Enable/Disable btn
         """
         win = self.GetWindow().GetTopLevelParent()
         for btn_id in (wx.ID_OK, wx.ID_APPLY):
             btn = win.FindWindow(id=btn_id)
             if btn:
-                getattr(btn, mode)()
+                btn.Enable(enable)
 
     def _valid(self):
         super()._valid()
-        self._enableDisableBtn()
+        self._enableDisableBtn(enable=True)
 
     def _notvalid(self):
         super()._notvalid()
-        self._enableDisableBtn(mode='Disable')
+        self._enableDisableBtn(enable=False)
 
-    def Validate(self, win):
+    def Validate(self):
         """Validate input"""
+        win = self.GetWindow()
         text = win.GetValue()
         if text:
             try:
