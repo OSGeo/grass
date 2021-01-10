@@ -583,14 +583,13 @@ class BaseValidator(Validator):
 
     def OnText(self, event):
         """Do validation"""
-        self.Validate()
+        self.Validate(win=event.GetEventObject())
 
         event.Skip()
 
-    def Validate(self):
+    def Validate(self, win):
         """Validate input"""
-        textCtrl = self.GetWindow()
-        text = textCtrl.GetValue()
+        text = win.GetValue()
 
         if text:
             try:
@@ -630,11 +629,9 @@ class CoordinatesValidator(BaseValidator):
     def __init__(self):
         BaseValidator.__init__(self)
 
-    def Validate(self):
+    def Validate(self, win):
         """Validate input"""
-
-        textCtrl = self.GetWindow()
-        text = textCtrl.GetValue()
+        text = win.GetValue()
         if text:
             try:
                 text = text.split(',')
@@ -687,10 +684,9 @@ class EmailValidator(BaseValidator):
     def __init__(self):
         BaseValidator.__init__(self)
 
-    def Validate(self):
+    def Validate(self, win):
         """Validate input"""
-        textCtrl = self.GetWindow()
-        text = textCtrl.GetValue()
+        text = win.GetValue()
         if text:
             if re.match(r'\b[\w.-]+@[\w.-]+.\w{2,4}\b', text) is None:
                 self._notvalid()
@@ -710,10 +706,9 @@ class TimeISOValidator(BaseValidator):
     def __init__(self):
         BaseValidator.__init__(self)
 
-    def Validate(self):
+    def Validate(self, win):
         """Validate input"""
-        textCtrl = self.GetWindow()
-        text = textCtrl.GetValue()
+        text = win.GetValue()
         if text:
             try:
                 datetime.strptime(text, '%Y-%m-%d')
@@ -1057,9 +1052,8 @@ class PlacementValidator(BaseValidator):
         super()._notvalid()
         self._enableDisableBtn(enable=False)
 
-    def Validate(self):
+    def Validate(self, win):
         """Validate input"""
-        win = self.GetWindow()
         text = win.GetValue()
         if text:
             try:
