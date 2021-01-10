@@ -1036,7 +1036,7 @@ class PlacementValidator(BaseValidator):
     def _enableDisableBtn(self, enable):
         """Enable/Disable buttomn
 
-        :param str enable: Enable/Disable btn
+        :param bool enable: Enable/Disable btn
         """
         win = self.GetWindow().GetTopLevelParent()
         for btn_id in (wx.ID_OK, wx.ID_APPLY):
