@@ -57,6 +57,7 @@ struct pj_info
     char proj[100];
     char *def;
     char *srid;
+    char *wkt;
 };
 
 struct gpj_datum

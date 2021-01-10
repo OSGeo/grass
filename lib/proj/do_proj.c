@@ -51,11 +51,13 @@ static double METERS_in = 1.0, METERS_out = 1.0;
 
 #ifdef HAVE_PROJ_H
 #if PROJ_VERSION_MAJOR >= 6
-int get_pj_area(double *xmin, double *xmax, double *ymin, double *ymax)
+int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
+                double *ymin, double *ymax)
 {
     struct Cell_head window;
 
-    G_unset_window();
+    /* modules must set the current window, do not unset this window here */
+    /* G_unset_window(); */
     G_get_window(&window);
     *xmin = window.west;
     *xmax = window.east;
@@ -69,49 +71,32 @@ int get_pj_area(double *xmin, double *xmax, double *ymin, double *ymax)
 	int i;
 	const char *projstr = NULL;
 	char *indef = NULL;
-	/* projection information of current location */
-	struct Key_Value *in_proj_info, *in_unit_info;
-	struct pj_info iproj, oproj, tproj;	/* proj parameters  */
+	struct pj_info oproj, tproj;	/* proj parameters  */
 	PJ *source_crs;
-
-	/* read current projection info */
-	if ((in_proj_info = G_get_projinfo()) == NULL) {
-	    G_warning(_("Can't get projection info of current location"));
-	    
-	    return 0;
-	}
-
-	if ((in_unit_info = G_get_projunits()) == NULL) {
-	    G_warning(_("Can't get projection units of current location"));
-	    
-	    return 0;
-	}
-
-	if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0) {
-	    G_fatal_error(_("Can't get projection key values of current location"));
-	    
-	    return 0;
-	}
-
-	G_free_key_value(in_proj_info);
-	G_free_key_value(in_unit_info);
 
 	oproj.pj = NULL;
 	tproj.def = NULL;
 
-	source_crs = proj_get_source_crs(NULL, iproj.pj);
-	if (source_crs) {
-	    projstr = proj_as_proj_string(NULL, source_crs, PJ_PROJ_5, NULL);
+	if (proj_get_type(iproj->pj) == PJ_TYPE_BOUND_CRS) {
+	    source_crs = proj_get_source_crs(NULL, iproj->pj);
+	    if (source_crs) {
+		projstr = proj_as_proj_string(NULL, source_crs, PJ_PROJ_5, NULL);
+		if (projstr) {
+		    indef = G_store(projstr);
+
+		    proj_destroy(source_crs);
+		}
+	    }
+	}
+	else {
+	    projstr = proj_as_proj_string(NULL, iproj->pj, PJ_PROJ_5, NULL);
 	    if (projstr) {
 		indef = G_store(projstr);
-	    
-		proj_destroy(iproj.pj);
-		iproj.pj = source_crs;
 	    }
 	}
 
 	if (indef == NULL)
-	    indef = G_store(iproj.def);
+	    indef = G_store(iproj->def);
 
 	G_asprintf(&tproj.def, "+proj=pipeline +step +inv %s",
 		   indef);
@@ -161,7 +146,7 @@ int get_pj_area(double *xmin, double *xmax, double *ymin, double *ymax)
 	x[84] = (window.west + window.east) / 2.;
 	y[84] = (window.north + window.south) / 2.;
 
-	GPJ_transform_array(&iproj, &oproj, &tproj, PJ_FWD, x, y, NULL, 85);
+	GPJ_transform_array(iproj, &oproj, &tproj, PJ_FWD, x, y, NULL, 85);
 
 	proj_destroy(tproj.pj);
 	G_free(tproj.def);
@@ -178,7 +163,7 @@ int get_pj_area(double *xmin, double *xmax, double *ymin, double *ymax)
 		*ymax = y[i];
 	}
     }
-    G_debug(1, "get_pj_area(): xmin %g, xmax %g, ymin %g, ymax %g",
+    G_debug(0, "get_pj_area(): xmin %g, xmax %g, ymin %g, ymax %g",
             *xmin, *xmax, *ymin, *ymax);
 
     return 1;
@@ -268,48 +253,124 @@ char *get_pj_type_string(PJ *pj)
 	G_asprintf(&pj_type, "other coordinate operation");
 	break;
     }
-    
+
     return pj_type;
+}
+
+
+PJ *get_pj_object(const struct pj_info *in_gpj, char **in_defstr)
+{
+    PJ *in_pj = NULL;
+
+    *in_defstr = NULL;
+
+    /* 1. SRID, 2. WKT, 3. standard pj from pj_get_kv */
+    if (in_gpj->srid) {
+	G_debug(1, "Trying SRID '%s' ...", in_gpj->srid);
+	in_pj = proj_create(PJ_DEFAULT_CTX, in_gpj->srid);
+	if (!in_pj) {
+	    G_warning(_("Unrecognized SRID '%s'"), in_gpj->srid);
+	}
+	else {
+	    *in_defstr = G_store(in_gpj->srid);
+	    /* PROJ will do the unit conversion if set up from srid
+	     * -> disable unit conversion for GPJ_transform */
+	    /* ugly hack */
+	    ((struct pj_info *)in_gpj)->meters = 1;
+	}
+    }
+    if (!in_pj && in_gpj->wkt) {
+	G_debug(1, "Trying WKT '%s' ...", in_gpj->wkt);
+	in_pj = proj_create(PJ_DEFAULT_CTX, in_gpj->wkt);
+	if (!in_pj) {
+	    G_warning(_("Unrecognized WKT '%s'"), in_gpj->wkt);
+	}
+	else {
+	    *in_defstr = G_store(in_gpj->wkt);
+	    /* PROJ will do the unit conversion if set up from wkt
+	     * -> disable unit conversion for GPJ_transform */
+	    /* ugly hack */
+	    ((struct pj_info *)in_gpj)->meters = 1;
+	}
+    }
+    if (!in_pj && in_gpj->pj) {
+	in_pj = proj_clone(PJ_DEFAULT_CTX, in_gpj->pj);
+	*in_defstr = G_store(proj_as_wkt(NULL, in_pj, PJ_WKT2_2019, NULL));
+	if (*in_defstr && !**in_defstr)
+	    *in_defstr = NULL;
+    }
+
+    if (!in_pj) {
+	G_warning(_("Unable to create PROJ object"));
+
+	return NULL;
+    }
+
+    /* Even Rouault:
+     * if info_in->def contains a +towgs84/+nadgrids clause,
+     * this pipeline would apply it, whereas you probably only want
+     * the reverse projection, and no datum shift.
+     * The easiest would probably to mess up with the PROJ string.
+     * Otherwise with the PROJ API, you could
+     * instanciate a PJ object from the string,
+     * check if it is a BoundCRS with proj_get_source_crs(),
+     * and in that case, take the source CRS with proj_get_source_crs(),
+     * and do the inverse transform on it */
+
+    if (proj_get_type(in_pj) == PJ_TYPE_BOUND_CRS) {
+	PJ *source_crs;
+
+	G_debug(1, "found bound crs");
+	source_crs = proj_get_source_crs(NULL, in_pj);
+	if (source_crs) {
+	    *in_defstr = G_store(proj_as_wkt(NULL, source_crs, PJ_WKT2_2019, NULL));
+	    if (*in_defstr && !**in_defstr)
+		*in_defstr = NULL;
+	    in_pj = source_crs;
+	}
+    }
+
+    return in_pj;
 }
 #endif
 #endif
 
 /**
- * \brief Create a PROJ transformation object to transform coordinates 
- *        from an input SRS to an output SRS 
- * 
- * After the transformation has been initialized with this function, 
- * coordinates can be transformed from input SRS to output SRS with 
+ * \brief Create a PROJ transformation object to transform coordinates
+ *        from an input SRS to an output SRS
+ *
+ * After the transformation has been initialized with this function,
+ * coordinates can be transformed from input SRS to output SRS with
  * GPJ_transform() and direction = PJ_FWD, and back from output SRS to
  * input SRS with direction = OJ_INV.
- * If coordinates should be transformed between the input SRS and its 
- * latlong equivalent, an uninitialized info_out with 
+ * If coordinates should be transformed between the input SRS and its
+ * latlong equivalent, an uninitialized info_out with
  * info_out->pj = NULL can be passed to the function. In this case,
- * coordinates will be transformed between the input SRS and its 
- * latlong equivalent, and for PROJ 5+, the transformation object is 
- * created accordingly, while for PROJ 4, the output SRS is created as 
+ * coordinates will be transformed between the input SRS and its
+ * latlong equivalent, and for PROJ 5+, the transformation object is
+ * created accordingly, while for PROJ 4, the output SRS is created as
  * latlong equivalent of the input SRS
- * 
+ *
 * PROJ 5+:
  *   info_in->pj must not be null
- *   if info_out->pj is null, assume info_out to be the ll equivalent 
+ *   if info_out->pj is null, assume info_out to be the ll equivalent
  *   of info_in
  *   create info_trans as conversion from info_in to its ll equivalent
- *   NOTE: this is the inverse of the logic of PROJ 5 which by default 
+ *   NOTE: this is the inverse of the logic of PROJ 5 which by default
  *         converts from ll to a given SRS, not from a given SRS to ll
  *         thus PROJ 5+ itself uses an inverse transformation in the
  *         first step of the pipeline for proj_create_crs_to_crs()
- *   if info_trans->def is not NULL, this pipeline definition will be 
- *   used to create a transformation object 
+ *   if info_trans->def is not NULL, this pipeline definition will be
+ *   used to create a transformation object
  * PROJ 4:
  *   info_in->pj must not be null
  *   if info_out->pj is null, create info_out as ll equivalent
  *   else do nothing, info_trans is not used
- * 
+ *
  * \param info_in pointer to pj_info struct for input co-ordinate system
  * \param info_out pointer to pj_info struct for output co-ordinate system
  * \param info_trans pointer to pj_info struct for a transformation object (PROJ 5+)
- * 
+ *
  * \return 1 on success, -1 on failure
  **/
 int GPJ_init_transform(const struct pj_info *info_in,
@@ -351,8 +412,8 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	    return -1;
 	}
 	else {
-	    /* make sure axis order is easting, northing 
-	     * proj_normalize_for_visualization() does not work here 
+	    /* make sure axis order is easting, northing
+	     * proj_normalize_for_visualization() does not work here
 	     * because source and target CRS are unknown to PROJ
 	     * remove any "+step +proj=axisswap +order=2,1" ?
 	     *  */
@@ -366,48 +427,32 @@ int GPJ_init_transform(const struct pj_info *info_in,
 
 	    G_debug(1, "proj_create() pipeline: %s", info_trans->def);
 
-	    /* the user-provided PROJ pipeline is supposed to do 
+	    /* the user-provided PROJ pipeline is supposed to do
 	     * all the needed unit conversions */
 	    /* ugly hack */
 	    ((struct pj_info *)info_in)->meters = 1;
 	    ((struct pj_info *)info_out)->meters = 1;
 	}
     }
-    /* if no output CRS is defined, 
+    /* if no output CRS is defined,
      * assume info_out to be ll equivalent of info_in */
     else if (info_out->pj == NULL) {
 	const char *projstr = NULL;
 	char *indef = NULL;
-	
-	/* Even Rouault:
-	 * if info_in->def contains a +towgs84/+nadgrids clause, 
-	 * this pipeline would apply it, whereas you probably only want 
-	 * the reverse projection, and no datum shift.
-	 * The easiest would probably to mess up with the PROJ string.
-	 * Otherwise with the PROJ API, you could 
-	 * instanciate a PJ object from the string, 
-	 * check if it is a BoundCRS with proj_get_source_crs(), 
-	 * and in that case, take the source CRS with proj_get_source_crs(),
-	 * and do the inverse transform on it */
+	PJ *in_pj = NULL;
 
-	if (proj_get_type(info_in->pj) == PJ_TYPE_BOUND_CRS) {
-	    PJ *source_crs;
+	in_pj = get_pj_object(info_in, &indef);
 
-	    G_debug(1, "transform to ll equivalent: found bound crs");
-	    source_crs = proj_get_source_crs(NULL, info_in->pj);
-	    if (source_crs) {
-		projstr = proj_as_proj_string(NULL, source_crs, PJ_PROJ_5, NULL);
-		if (projstr)
-		    indef = G_store(projstr);
-		proj_destroy(source_crs);
-	    }
+	if (indef && in_pj) {
+	    G_free(indef);
+	    indef = G_store(proj_as_proj_string(NULL, in_pj, PJ_PROJ_5, NULL));
 	}
-	if (indef == NULL)
+	else
 	    indef = G_store(info_in->def);
 	G_debug(1, "ll equivalent definition: %s", indef);
 
 	/* what about axis order?
-	 * is it always enu? 
+	 * is it always enu?
 	 * probably yes, as long as there is no +proj=axisswap step */
 	G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s",
 		   indef);
@@ -432,110 +477,78 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	char *indef = NULL, *outdef = NULL;
 	char *indefcrs = NULL, *outdefcrs = NULL;
 	char *insrid = NULL, *outsrid = NULL;
-	int use_insrid = 0, use_outsrid = 0;
-	PJ *source_crs, *target_crs;
+	PJ *in_pj, *out_pj;
 	PJ_AREA *pj_area = NULL;
 	double xmin, xmax, ymin, ymax;
 	int op_count = 0;
 
-	/* remove any +towgs84/+nadgrids clause, see above
-	 * does not always remove +towgs84=0.000,0.000,0.000 ??? */
-	G_debug(1, "source proj string: %s", info_in->def);
-	G_debug(1, "source type: %s", get_pj_type_string(info_in->pj));
-	indefcrs = info_in->def;
-
-	if (proj_get_type(info_in->pj) == PJ_TYPE_BOUND_CRS) {
-	    source_crs = proj_get_source_crs(NULL, info_in->pj);
-	    if (source_crs) {
-		const char *projstr;
-
-		projstr = proj_as_proj_string(NULL, source_crs, PJ_PROJ_5, NULL);
-		if (projstr) {
-		    indefcrs = G_store(projstr);
-		    G_message("Input CRS definition converted from '%s' to '%s'",
-			    info_in->def, indefcrs);
-		}
-		proj_destroy(source_crs);
-		source_crs = NULL;
-	    }
-	}
-
-	G_debug(1, "target proj string: %s", info_out->def);
-	G_debug(1, "target type: %s", get_pj_type_string(info_out->pj));
-	outdefcrs = info_out->def;
-
-	if (proj_get_type(info_out->pj) == PJ_TYPE_BOUND_CRS) {
-	    target_crs = proj_get_source_crs(NULL, info_out->pj);
-	    if (target_crs) {
-		const char *projstr;
-
-		projstr = proj_as_proj_string(NULL, target_crs, PJ_PROJ_5, NULL);
-		if (projstr) {
-		    outdefcrs = G_store(projstr);
-		    G_message("Output CRS definition converted from '%s' to '%s'",
-			    info_out->def, outdefcrs);
-		}
-		proj_destroy(target_crs);
-		target_crs = NULL;
-	    }
-	}
-
-	/* PROJ6+: EPSG must be uppercase EPSG */
-	if (info_in->srid) {
-	    if (strncmp(info_in->srid, "epsg", 4) == 0)
-		insrid = G_store_upper(info_in->srid);
-	    else
-		insrid = G_store(info_in->srid);
-	}
-
-	if (info_out->srid) {
-	    if (strncmp(info_out->srid, "epsg", 4) == 0)
-		outsrid = G_store_upper(info_out->srid);
-	    else
-		outsrid = G_store(info_out->srid);
-	}
-
-	if (insrid) {
-	    G_asprintf(&indef, "%s", insrid);
-	    use_insrid = 1;
-	}
-	else {
-	    G_asprintf(&indef, "%s", indefcrs);
-	}
-	G_debug(1, "Input CRS definition: %s", indef); 
-
-	if (outsrid) {
-	    G_asprintf(&outdef, "%s", outsrid);
-	    use_outsrid = 1;
-	}
-	else {
-	    G_asprintf(&outdef, "%s", outdefcrs);
-	}
-	G_debug(1, "Output CRS definition: %s", outdef); 
-
-	/* check number of operations */
-	source_crs = proj_create(NULL, indef);
-	target_crs = proj_create(NULL, outdef);
-	
 	/* get pj_area */
-	if (get_pj_area(&xmin, &xmax, &ymin, &ymax)) {
+	if (get_pj_area(info_in, &xmin, &xmax, &ymin, &ymax)) {
 	    pj_area = proj_area_create();
 	    proj_area_set_bbox(pj_area, xmin, ymin, xmax, ymax);
 	}
 
-	if (source_crs && target_crs) {
+	G_debug(1, "source proj string: %s", info_in->def);
+	G_debug(1, "source type: %s", get_pj_type_string(info_in->pj));
+	/* old style PROJ4 definition */
+	indefcrs = info_in->def;
+
+	/* PROJ6+: EPSG must be uppercase EPSG */
+	if (info_in->srid) {
+	    if (strncmp(info_in->srid, "epsg", 4) == 0) {
+		insrid = G_store_upper(info_in->srid);
+		G_free(info_in->srid);
+		((struct pj_info *)info_in)->srid = insrid;
+		insrid = NULL;
+	    }
+	}
+
+	in_pj = get_pj_object(info_in, &indef);
+	if (in_pj == NULL || indef == NULL) {
+	    G_warning(_("Input CRS not available for '%s'"), info_in->def);
+
+	    return -1;
+	}
+	G_debug(1, "Input CRS definition: %s", indef);
+
+	G_debug(1, "target proj string: %s", info_out->def);
+	G_debug(1, "target type: %s", get_pj_type_string(info_out->pj));
+	/* old style PROJ4 definition */
+	outdefcrs = info_out->def;
+
+	/* PROJ6+: EPSG must be uppercase EPSG */
+	if (info_out->srid) {
+	    if (strncmp(info_out->srid, "epsg", 4) == 0) {
+		outsrid = G_store_upper(info_out->srid);
+		G_free(info_out->srid);
+		((struct pj_info *)info_out)->srid = outsrid;
+		outsrid = NULL;
+	    }
+	}
+
+	out_pj = get_pj_object(info_out, &outdef);
+	if (out_pj == NULL || outdef == NULL) {
+	    G_warning(_("Output CRS not available for '%s'"), info_out->def);
+
+	    return -1;
+	}
+	G_debug(1, "Output CRS definition: %s", outdef);
+
+	/* check number of operations */
+
+	if (in_pj && out_pj) {
 	    PJ_OPERATION_FACTORY_CONTEXT *operation_ctx;
 	    PJ_OBJ_LIST *op_list;
 
 	    operation_ctx = proj_create_operation_factory_context(NULL, NULL);
 	    /* proj_create_operations() works only if both source_crs
 	     * and target_crs are found in the proj db
-	     * if any is not found, proj can not get a list of operations 
+	     * if any is not found, proj can not get a list of operations
 	     * and we have to take care of datumshift manually */
 	    /* constrain by area ? */
 	    op_list = proj_create_operations(NULL,
-					     source_crs,
-					     target_crs,
+					     in_pj,
+					     out_pj,
 					     operation_ctx);
 
 	    op_count = 0;
@@ -544,7 +557,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	    if (op_count > 1) {
 		int i;
 
-		G_warning(_("Found %d possible transformations"), op_count);
+		G_important_message(_("Found %d possible transformations"), op_count);
 		for (i = 0; i < op_count; i++) {
 		    const char *str;
 		    const char *area_of_use, *projstr;
@@ -564,35 +577,40 @@ int GPJ_init_transform(const struct pj_info *info_in,
 			op = op_norm;
 		    }
 
-		    projstr = proj_as_proj_string(NULL, op,
-				      PJ_PROJ_5, NULL);
 		    pj_info = proj_pj_info(op);
 		    proj_get_area_of_use(NULL, op, &w, &s, &e, &n, &area_of_use);
-		    if (projstr) {
-			G_important_message("************************");
-			G_important_message(_("Operation %d:"), i + 1);
+		    G_important_message("************************");
+		    G_important_message(_("Operation %d:"), i + 1);
+		    if (pj_info.description) {
 			G_important_message(_("Description: %s"),
 					    pj_info.description);
+		    }
+		    if (area_of_use) {
 			G_important_message(" ");
 			G_important_message(_("Area of use: %s"),
 					    area_of_use);
-			if (pj_info.accuracy > 0) {
-			    G_important_message(" ");
-			    G_important_message(_("Accuracy within area of use: %g m"),
-						pj_info.accuracy);
-			}
+		    }
+		    if (pj_info.accuracy > 0) {
+			G_important_message(" ");
+			G_important_message(_("Accuracy within area of use: %g m"),
+					    pj_info.accuracy);
+		    }
 #if PROJ_VERSION_NUM >= 6020000
-			str = proj_get_remarks(op);
-			if (str && *str) {
-			    G_important_message(" ");
-			    G_important_message(_("Remarks: %s"), str);
-			}
-			str = proj_get_scope(op);
-			if (str && *str) {
-			    G_important_message(" ");
-			    G_important_message(_("Scope: %s"), str);
-			}
+		    str = proj_get_remarks(op);
+		    if (str && *str) {
+			G_important_message(" ");
+			G_important_message(_("Remarks: %s"), str);
+		    }
+		    str = proj_get_scope(op);
+		    if (str && *str) {
+			G_important_message(" ");
+			G_important_message(_("Scope: %s"), str);
+		    }
 #endif
+
+		    projstr = proj_as_proj_string(NULL, op,
+				      PJ_PROJ_5, NULL);
+		    if (projstr) {
 			G_important_message(" ");
 			G_important_message(_("PROJ string:"));
 			G_important_message("%s", projstr);
@@ -613,10 +631,10 @@ int GPJ_init_transform(const struct pj_info *info_in,
 		proj_list_destroy(op_list);
 	    proj_operation_factory_context_destroy(operation_ctx);
 	}
-	if (source_crs)
-	    proj_destroy(source_crs);
-	if (target_crs)
-	    proj_destroy(target_crs);
+	if (in_pj)
+	    proj_destroy(in_pj);
+	if (out_pj)
+	    proj_destroy(out_pj);
 
 	/* try proj_create_crs_to_crs() */
 	G_debug(1, "trying %s to %s", indef, outdef);
@@ -635,6 +653,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
 		G_debug(1, "proj_create_crs_to_crs() failed with PROJ%d for input \"%s\", output \"%s\"",
 			PROJ_VERSION_MAJOR, indef, outdef);
 
+		/* try old style PROJ4 definition */
 		G_asprintf(&indef, "%s", indefcrs);
 		G_asprintf(&outdef, "%s", outdefcrs);
 
@@ -648,23 +667,12 @@ int GPJ_init_transform(const struct pj_info *info_in,
 							outdef,
 							NULL);
 	    }
-	    else {
-		/* PROJ will do the unit conversion if set up from srid
-		 * -> disable unit conversion for GPJ_transform */
-		/* ugly hack */
-		if (use_insrid) {
-		    ((struct pj_info *)info_in)->meters = 1;
-		}
-		if (use_outsrid) {
-		    ((struct pj_info *)info_out)->meters = 1;
-		}
-	    }
 	}
 
 	if (info_trans->pj) {
 	    const char *projstr;
 	    PJ *pj_norm = NULL;
-	    
+
 	    G_debug(1, "proj_create_crs_to_crs() succeeded with PROJ%d",
 	            PROJ_VERSION_MAJOR);
 
@@ -674,8 +682,8 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	    info_trans->def = G_store(projstr);
 
 	    if (projstr) {
-		/* make sure axis order is easting, northing 
-		 * proj_normalize_for_visualization() requires 
+		/* make sure axis order is easting, northing
+		 * proj_normalize_for_visualization() requires
 		 * source and target CRS
 		 * -> does not work with ll equivalent of input:
 		 * no target CRS in +proj=pipeline +step +inv %s */
@@ -699,13 +707,9 @@ int GPJ_init_transform(const struct pj_info *info_in,
 			      info_trans->def);
 		    }
 		}
-		if (op_count > 1) {
-		    G_important_message(_("Selected pipeline:"));
-		    G_important_message(_("%s"), info_trans->def);
-		    G_important_message("************************");
-		}
-
-		G_debug(1, "proj_create_crs_to_crs() pipeline: %s", info_trans->def);
+		G_important_message(_("Selected PROJ pipeline:"));
+		G_important_message(_("%s"), info_trans->def);
+		G_important_message("************************");
 	    }
 	    else {
 		proj_destroy(info_trans->pj);
@@ -719,11 +723,11 @@ int GPJ_init_transform(const struct pj_info *info_in,
 
 	    G_warning("GPJ_init_transform(): falling back to proj_create()");
 
-	    if (insrid) {
+	    if (indef) {
 		G_free(indef);
 	    }
 	    G_asprintf(&indef, "%s", info_in->def);
-	    if (outsrid) {
+	    if (outdef) {
 		G_free(outdef);
 	    }
 	    G_asprintf(&outdef, "%s", info_out->def);
@@ -768,7 +772,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	    return -1;
 	}
     }
-    /* if no output CRS is defined, 
+    /* if no output CRS is defined,
      * assume info_out to be ll equivalent of info_in */
     else if (info_out->pj == NULL) {
 	G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s",
@@ -877,20 +881,20 @@ int GPJ_init_transform(const struct pj_info *info_in,
 
 /* TODO: rename pj_ to GPJ_ to avoid symbol clash with PROJ lib */
 
-/** 
- * \brief Re-project a point between two co-ordinate systems using a 
+/**
+ * \brief Re-project a point between two co-ordinate systems using a
  *        transformation object prepared with GPJ_prepare_pj()
- * 
- * This function takes pointers to three pj_info structures as arguments, 
+ *
+ * This function takes pointers to three pj_info structures as arguments,
  * and projects a point between the input and output co-ordinate system.
- * The pj_info structure info_trans must have been initialized with 
+ * The pj_info structure info_trans must have been initialized with
  * GPJ_init_transform().
- * The direction determines if a point is projected from input CRS to 
+ * The direction determines if a point is projected from input CRS to
  * output CRS (PJ_FWD) or from output CRS to input CRS (PJ_INV).
- * The easting, northing, and height of the point are contained in the 
- * pointers passed to the function; these will be overwritten by the 
+ * The easting, northing, and height of the point are contained in the
+ * pointers passed to the function; these will be overwritten by the
  * coordinates of the transformed point.
- * 
+ *
  * \param info_in pointer to pj_info struct for input co-ordinate system
  * \param info_out pointer to pj_info struct for output co-ordinate system
  * \param info_trans pointer to pj_info struct for a transformation object (PROJ 5+)
@@ -898,7 +902,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
  * \param x Pointer to a double containing easting or longitude
  * \param y Pointer to a double containing northing or latitude
  * \param z Pointer to a double containing height, or NULL
- * 
+ *
  * \return Return value from PROJ proj_trans() function
  **/
 
@@ -927,7 +931,7 @@ int GPJ_transform(const struct pj_info *info_in,
 	in_is_ll = !strncmp(info_in->proj, "ll", 2);
 #if PROJ_VERSION_MAJOR >= 6
 	/* PROJ 6+: conversion to radians is not always needed:
-	 * if proj_angular_input(info_trans->pj, dir) == 1 
+	 * if proj_angular_input(info_trans->pj, dir) == 1
 	 * -> convert from degrees to radians */
 	if (in_is_ll && proj_angular_input(info_trans->pj, dir) == 0) {
 	    in_deg2rad = 0;
@@ -938,7 +942,7 @@ int GPJ_transform(const struct pj_info *info_in,
 	    out_is_ll = !strncmp(info_out->proj, "ll", 2);
 #if PROJ_VERSION_MAJOR >= 6
 	    /* PROJ 6+: conversion to radians is not always needed:
-	     * if proj_angular_input(info_trans->pj, dir) == 1 
+	     * if proj_angular_input(info_trans->pj, dir) == 1
 	     * -> convert from degrees to radians */
 	    if (out_is_ll && proj_angular_output(info_trans->pj, dir) == 0) {
 		out_rad2deg = 0;
@@ -956,7 +960,7 @@ int GPJ_transform(const struct pj_info *info_in,
 	out_is_ll = !strncmp(info_in->proj, "ll", 2);
 #if PROJ_VERSION_MAJOR >= 6
 	/* PROJ 6+: conversion to radians is not always needed:
-	 * if proj_angular_input(info_trans->pj, dir) == 1 
+	 * if proj_angular_input(info_trans->pj, dir) == 1
 	 * -> convert from degrees to radians */
 	if (out_is_ll && proj_angular_output(info_trans->pj, dir) == 0) {
 	    out_rad2deg = 0;
@@ -967,7 +971,7 @@ int GPJ_transform(const struct pj_info *info_in,
 	    in_is_ll = !strncmp(info_out->proj, "ll", 2);
 #if PROJ_VERSION_MAJOR >= 6
 	    /* PROJ 6+: conversion to radians is not always needed:
-	     * if proj_angular_input(info_trans->pj, dir) == 1 
+	     * if proj_angular_input(info_trans->pj, dir) == 1
 	     * -> convert from degrees to radians */
 	    if (in_is_ll && proj_angular_input(info_trans->pj, dir) == 0) {
 		in_deg2rad = 0;
@@ -1057,7 +1061,7 @@ int GPJ_transform(const struct pj_info *info_in,
 
     METERS_in = p_in->meters;
     METERS_out = p_out->meters;
-    
+
     if (z)
 	h = *z;
 
@@ -1092,20 +1096,20 @@ int GPJ_transform(const struct pj_info *info_in,
     return ok;
 }
 
-/** 
- * \brief Re-project an array of points between two co-ordinate systems 
+/**
+ * \brief Re-project an array of points between two co-ordinate systems
  *        using a transformation object prepared with GPJ_prepare_pj()
- * 
- * This function takes pointers to three pj_info structures as arguments, 
- * and projects an array of pointd between the input and output 
- * co-ordinate system. The pj_info structure info_trans must have been 
+ *
+ * This function takes pointers to three pj_info structures as arguments,
+ * and projects an array of pointd between the input and output
+ * co-ordinate system. The pj_info structure info_trans must have been
  * initialized with GPJ_init_transform().
- * The direction determines if a point is projected from input CRS to 
+ * The direction determines if a point is projected from input CRS to
  * output CRS (PJ_FWD) or from output CRS to input CRS (PJ_INV).
- * The easting, northing, and height of the point are contained in the 
- * pointers passed to the function; these will be overwritten by the 
+ * The easting, northing, and height of the point are contained in the
+ * pointers passed to the function; these will be overwritten by the
  * coordinates of the transformed point.
- * 
+ *
  * \param info_in pointer to pj_info struct for input co-ordinate system
  * \param info_out pointer to pj_info struct for output co-ordinate system
  * \param info_trans pointer to pj_info struct for a transformation object (PROJ 5+)
@@ -1114,7 +1118,7 @@ int GPJ_transform(const struct pj_info *info_in,
  * \param y pointer to an array of type double containing northing or latitude
  * \param z pointer to an array of type double containing height, or NULL
  * \param n number of points in the arrays to be transformed
- * 
+ *
  * \return Return value from PROJ proj_trans() function
  **/
 
@@ -1142,7 +1146,7 @@ int GPJ_transform_array(const struct pj_info *info_in,
 	in_is_ll = !strncmp(info_in->proj, "ll", 2);
 #if PROJ_VERSION_MAJOR >= 6
 	/* PROJ 6+: conversion to radians is not always needed:
-	 * if proj_angular_input(info_trans->pj, dir) == 1 
+	 * if proj_angular_input(info_trans->pj, dir) == 1
 	 * -> convert from degrees to radians */
 	if (in_is_ll && proj_angular_input(info_trans->pj, dir) == 0) {
 	    in_deg2rad = 0;
@@ -1153,7 +1157,7 @@ int GPJ_transform_array(const struct pj_info *info_in,
 	    out_is_ll = !strncmp(info_out->proj, "ll", 2);
 #if PROJ_VERSION_MAJOR >= 6
 	    /* PROJ 6+: conversion to radians is not always needed:
-	     * if proj_angular_input(info_trans->pj, dir) == 1 
+	     * if proj_angular_input(info_trans->pj, dir) == 1
 	     * -> convert from degrees to radians */
 	    if (out_is_ll && proj_angular_output(info_trans->pj, dir) == 0) {
 		out_rad2deg = 0;
@@ -1171,7 +1175,7 @@ int GPJ_transform_array(const struct pj_info *info_in,
 	out_is_ll = !strncmp(info_in->proj, "ll", 2);
 #if PROJ_VERSION_MAJOR >= 6
 	/* PROJ 6+: conversion to radians is not always needed:
-	 * if proj_angular_input(info_trans->pj, dir) == 1 
+	 * if proj_angular_input(info_trans->pj, dir) == 1
 	 * -> convert from degrees to radians */
 	if (out_is_ll && proj_angular_output(info_trans->pj, dir) == 0) {
 	    out_rad2deg = 0;
@@ -1182,7 +1186,7 @@ int GPJ_transform_array(const struct pj_info *info_in,
 	    in_is_ll = !strncmp(info_out->proj, "ll", 2);
 #if PROJ_VERSION_MAJOR >= 6
 	    /* PROJ 6+: conversion to degrees is not always needed:
-	     * if proj_angular_output(info_trans->pj, dir) == 1 
+	     * if proj_angular_output(info_trans->pj, dir) == 1
 	     * -> convert from degrees to radians */
 	    if (in_is_ll && proj_angular_input(info_trans->pj, dir) == 0) {
 		in_deg2rad = 0;
@@ -1210,8 +1214,8 @@ int GPJ_transform_array(const struct pj_info *info_in,
 	     * calling proj_trans for each point
 	     * or having three loops over all points ?
 	     * proj_trans_array() itself calls proj_trans() in a loop
-	     * -> one loop over all points is better than 
-	     *    three loops over all points 
+	     * -> one loop over all points is better than
+	     *    three loops over all points
 	     */
 	    for (i = 0; i < n; i++) {
 		if (in_deg2rad) {
@@ -1364,20 +1368,20 @@ int GPJ_transform_array(const struct pj_info *info_in,
  * old API, to be deleted
  */
 
-/** 
+/**
  * \brief Re-project a point between two co-ordinate systems
- * 
- * This function takes pointers to two pj_info structures as arguments, 
- * and projects a point between the co-ordinate systems represented by them. 
- * The easting and northing of the point are contained in two pointers passed 
- * to the function; these will be overwritten by the co-ordinates of the 
+ *
+ * This function takes pointers to two pj_info structures as arguments,
+ * and projects a point between the co-ordinate systems represented by them.
+ * The easting and northing of the point are contained in two pointers passed
+ * to the function; these will be overwritten by the co-ordinates of the
  * re-projected point.
- * 
+ *
  * \param x Pointer to a double containing easting or longitude
  * \param y Pointer to a double containing northing or latitude
  * \param info_in pointer to pj_info struct for input co-ordinate system
  * \param info_out pointer to pj_info struct for output co-ordinate system
- * 
+ *
  * \return Return value from PROJ proj_trans() function
  **/
 
@@ -1487,26 +1491,26 @@ int pj_do_proj(double *x, double *y,
     return ok;
 }
 
-/** 
+/**
  * \brief Re-project an array of points between two co-ordinate systems with
  *        optional ellipsoidal height conversion
- * 
- * This function takes pointers to two pj_info structures as arguments, 
- * and projects an array of points between the co-ordinate systems 
+ *
+ * This function takes pointers to two pj_info structures as arguments,
+ * and projects an array of points between the co-ordinate systems
  * represented by them. Pointers to the three arrays of easting, northing,
  * and ellipsoidal height of the point (this one may be NULL) are passed
- * to the function; these will be overwritten by the co-ordinates of the 
+ * to the function; these will be overwritten by the co-ordinates of the
  * re-projected points.
- * 
+ *
  * \param count Number of points in the arrays to be transformed
  * \param x Pointer to an array of type double containing easting or longitude
  * \param y Pointer to an array of type double containing northing or latitude
- * \param h Pointer to an array of type double containing ellipsoidal height. 
- *          May be null in which case a two-dimensional re-projection will be 
+ * \param h Pointer to an array of type double containing ellipsoidal height.
+ *          May be null in which case a two-dimensional re-projection will be
  *          done
  * \param info_in pointer to pj_info struct for input co-ordinate system
  * \param info_out pointer to pj_info struct for output co-ordinate system
- * 
+ *
  * \return Return value from PROJ proj_trans() function
  **/
 

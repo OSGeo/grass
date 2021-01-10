@@ -8,8 +8,8 @@
 *		 Dept. of Geography
 *		 emes@geo0.geog.uni-heidelberg.de
 *
-* 		 (With the help of a lot of existing GRASS sources, in 
-*		  particular v.proj) 
+* 		 (With the help of a lot of existing GRASS sources, in
+*		  particular v.proj)
 *
 * PURPOSE:      r.proj converts a map to a new geographic projection. It reads a
 *	        map from a different location, projects it and write it out
@@ -26,27 +26,27 @@
 * Changes
 *		 Morten Hulden <morten@untamo.net>, Aug 2000:
 *		 - aborts if input map is outside current location.
-*		 - can handle projections (conic, azimuthal etc) where 
-*		 part of the map may fall into areas where south is 
+*		 - can handle projections (conic, azimuthal etc) where
+*		 part of the map may fall into areas where south is
 *		 upward and east is leftward.
 *		 - avoids passing location edge coordinates to PROJ
 *		 (they may be invalid in some projections).
 *		 - output map will be clipped to borders of the current region.
-*		 - output map cell edges and centers will coinside with those 
+*		 - output map cell edges and centers will coinside with those
 *		 of the current region.
 *		 - output map resolution (unless changed explicitly) will
 *		 match (exactly) the resolution of the current region.
-*		 - if the input map is smaller than the current region, the 
+*		 - if the input map is smaller than the current region, the
 *		 output map will only cover the overlapping area.
 *                - if the input map is larger than the current region, only the
 *		 needed amount of memory will be allocated for the projection
-*	
+*
 *		 Bugfixes 20050328: added floor() before (int) typecasts to in avoid
-*		 asymmetrical rounding errors. Added missing offset outcellhd.ew_res/2 
-*		 to initial xcoord for each row in main projection loop (we want to  project 
+*		 asymmetrical rounding errors. Added missing offset outcellhd.ew_res/2
+*		 to initial xcoord for each row in main projection loop (we want to  project
 *		 center of cell, not border).
 *
-*                Glynn Clements 2006: Use G_interp_* functions, modified      
+*                Glynn Clements 2006: Use G_interp_* functions, modified
 *                  version of r.proj which uses a tile cache instead  of loading the
 *                  entire map into memory.
 *                Markus Metz 2010: lanczos and lanczos fallback interpolation methods
@@ -165,7 +165,7 @@ int main(int argc, char **argv)
     inmap->description = _("Name of input raster map to re-project");
     inmap->required = NO;
     inmap->guisection = _("Source");
-    
+
     indbase = G_define_standard_option(G_OPT_M_DBASE);
     indbase->label = _("Path to GRASS database of input location");
 
@@ -175,7 +175,7 @@ int main(int argc, char **argv)
     outmap->guisection = _("Target");
 
     ipolname = make_ipol_list();
-    
+
     interpol = G_define_option();
     interpol->key = "method";
     interpol->type = TYPE_STRING;
@@ -207,7 +207,7 @@ int main(int argc, char **argv)
     list->key = 'l';
     list->description = _("List raster maps in input mapset and exit");
     list->guisection = _("Print");
-    
+
     nocrop = G_define_flag();
     nocrop->key = 'n';
     nocrop->description = _("Do not perform region cropping optimization");
@@ -217,7 +217,7 @@ int main(int argc, char **argv)
     print_bounds->description =
 	_("Print input map's bounds in the current projection and exit");
     print_bounds->guisection = _("Print");
-    
+
     gprint_bounds = G_define_flag();
     gprint_bounds->key = 'g';
     gprint_bounds->description =
@@ -274,6 +274,9 @@ int main(int argc, char **argv)
     if (pj_get_kv(&oproj, out_proj_info, out_unit_info) < 0)
 	G_fatal_error(_("Unable to get projection key values of output raster map"));
 
+    oproj.srid = G_get_projsrid();
+    oproj.wkt = G_get_projwkt();
+
     /* Change the location           */
     G_create_alt_env();
     G_setenv_nogisrc("GISDBASE", indbase->answer ? indbase->answer : G_gisdbase());
@@ -329,6 +332,9 @@ int main(int argc, char **argv)
 
     if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
 	G_fatal_error(_("Unable to get projection key values of input map"));
+
+    iproj.srid = G_get_projsrid();
+    iproj.wkt = G_get_projwkt();
 
     tproj.def = NULL;
 #ifdef HAVE_PROJ_H
@@ -527,7 +533,7 @@ int main(int argc, char **argv)
 
 #if 0
 	/* parallelization does not always work,
-	 * segfaults in the interpolation functions 
+	 * segfaults in the interpolation functions
 	 * can happen */
         #pragma omp parallel for schedule (static)
 #endif
@@ -612,10 +618,10 @@ char *make_ipol_desc(void)
 
     for (i = 0; menu[i].name; i++)
 	size += strlen(menu[i].name) + strlen(menu[i].text) + 2;
-    
+
     buf = G_malloc(size);
     *buf = '\0';
-    
+
     for (i = 0; menu[i].name; i++) {
 	if (i)
 	    strcat(buf, ";");

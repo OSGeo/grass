@@ -41,9 +41,9 @@
 #   include <sys/param.h>
 #  endif
 #  if (defined(BSD))
-    /* no malloc.h, no alloca.h ? 
-     * TODO: better 
-     * check if alloca.h exists, 
+    /* no malloc.h, no alloca.h ?
+     * TODO: better
+     * check if alloca.h exists,
      * if not, check if malloc.h exists,
      * if not use stdlib.h */
 #   include <stdlib.h>
@@ -72,11 +72,11 @@
 #define RELDIR "?"
 #endif
 
-/* GDAL < 2.3 does not define HAVE_LONG_LONG when compiled with 
+/* GDAL < 2.3 does not define HAVE_LONG_LONG when compiled with
  * Visual Studio as for OSGeo4W, even though long long is available,
  * and GIntBig falls back to long which is on Windows always 4 bytes.
  * This patch ensures that GIntBig is defined as long long (8 bytes)
- * if GDAL is compiled with Visual Studio and GRASS is compiled with 
+ * if GDAL is compiled with Visual Studio and GRASS is compiled with
  * MinGW. This patch must be applied before other GDAL/OGR headers are
  * included, as done by gprojects.h and vector.h */
 #if defined(__MINGW32__) && HAVE_GDAL
@@ -149,10 +149,10 @@ void G_ascii_check(char *);
 /* Do it better if you know how */
 /* asprintf is not found on MINGW but exists */
 
-/* 
+/*
  *  Because configure script in GDAL test is G_asprintf exists in gis lib
  *  the G_asprintf macro is disabled until a stable version of GDAL
- *  with a different function becomes widely used 
+ *  with a different function becomes widely used
  */
 int G_vasprintf(char **, const char *, va_list);
 int G_asprintf(char **, const char *, ...)
@@ -524,7 +524,7 @@ int G_make_location(const char *, struct Cell_head *, const struct Key_Value *,
 		    const struct Key_Value *);
 int G_make_location_epsg(const char *, struct Cell_head *, const struct Key_Value *,
 			 const struct Key_Value *, const struct Key_Value *);
-int G_make_location_crs(const char *, struct Cell_head *, const struct Key_Value *,
+int G_make_location_crs(const char *, struct Cell_head *,
 			const struct Key_Value *, const struct Key_Value *,
 			const char *, const char *);
 int G_write_projsrid(const char *, const char *);

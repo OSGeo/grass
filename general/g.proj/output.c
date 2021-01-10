@@ -1,7 +1,7 @@
-/*  
+/*
  ****************************************************************************
  *
- * MODULE:       g.proj 
+ * MODULE:       g.proj
  * AUTHOR(S):    Paul Kelly - paul-grass@stjohnspoint.co.uk
  * PURPOSE:      Provides a means of reporting the contents of GRASS
  *               projection information files and creating
@@ -48,21 +48,18 @@ void print_projinfo(int shell)
 	    fprintf(stdout, "%-11s: %s\n", projinfo->key[i], projinfo->value[i]);
     }
 
-    if (projepsg) {
-        const char *epsg_value, *epsg_key;
-
-	epsg_key = projepsg->key[0];
-	epsg_value = projepsg->value[0];
+    /* TODO: use projsrid instead */
+    if (projsrid) {
 
 	if (!shell) {
 	    fprintf(stdout,
-		"-PROJ_EPSG-------------------------------------------------\n");
-	    fprintf(stdout, "%-11s: %s\n", epsg_key, epsg_value);
+		"-PROJ_SRID-------------------------------------------------\n");
+	    fprintf(stdout, "%-11s: %s\n", "SRID", projsrid);
 	}
 	else
-	    fprintf(stdout, "%s=%s\n", epsg_key, epsg_value);
+	    fprintf(stdout, "%s=%s\n", "srid", projsrid);
     }
- 
+
     if (projunits) {
 	if (!shell)
 	    fprintf(stdout,
@@ -76,10 +73,11 @@ void print_projinfo(int shell)
 			projunits->key[i], projunits->value[i]);
 	}
     }
-    
+
     return;
 }
 
+/* DEPRECATED: datum transformation is handled by PROJ */
 void print_datuminfo(void)
 {
     char *datum, *params;
