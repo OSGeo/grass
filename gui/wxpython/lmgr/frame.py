@@ -736,6 +736,9 @@ class GMFrame(wx.Frame):
             self.SetFocus()
             self.Raise()
 
+    def switchToDataTab(self):
+        wx.CallAfter(self.notebook.SetSelectionByName, 'catalog')
+
     def RunSpecialCmd(self, command):
         """Run command from command line, check for GUI wrappers"""
         if re.compile('^d\..*').search(command[0]):
@@ -1971,6 +1974,7 @@ class GMFrame(wx.Frame):
         dlg = GdalImportDialog(parent=self, giface=self._giface)
         dlg.CentreOnScreen()
         dlg.Show()
+        dlg.switchToDataTab.connect(self.switchToDataTab)
 
     def OnLinkGdalLayers(self, event, cmd=None):
         """Link multiple GDAL layers to GRASS raster map layers"""
@@ -1985,6 +1989,7 @@ class GMFrame(wx.Frame):
         dlg = OgrImportDialog(parent=self, giface=self._giface)
         dlg.CentreOnScreen()
         dlg.Show()
+        dlg.switchToDataTab.connect(self.switchToDataTab)
 
     def OnLinkOgrLayers(self, event, cmd=None):
         """Links multiple OGR layers to GRASS vector map layers"""
