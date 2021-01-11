@@ -792,15 +792,13 @@ def check_gui(expected_gui):
             msg = None
             if p.returncode != 0:
                 # Python was not found - switch to text interface mode
-                msg = _("The python command does not work as expected!\n"
-                        "Please check your GRASS_PYTHON environment variable.\n"
-                        "Use the -help option for details.\n")
-            if not os.path.exists(wxpath("wxgui.py")):
+                msg = _("The python command does not work as expected.\n"
+                        "Please check your installation or set the GRASS_PYTHON"
+                        " environment variable.")
+            if not os.path.exists(wxpath("xwxgui.py")):
                 msg = _("GRASS GUI not found. Please check your installation.")
             if msg:
-                warning(_("{}\nSwitching to text based interface mode.\n\n"
-                          "Hit RETURN to continue.\n").format(msg))
-                sys.stdin.readline()
+                warning(_("{}\nSwitching to text based interface mode.").format(msg))
                 grass_gui = 'text'
 
     else:
@@ -810,9 +808,7 @@ def check_gui(expected_gui):
             warning(_("It appears that the X Windows system is not active.\n"
                       "A graphical based user interface is not supported.\n"
                       "(DISPLAY variable is not set.)\n"
-                      "Switching to text based interface mode.\n\n"
-                      "Hit RETURN to continue.\n"))
-            sys.stdin.readline()
+                      "Switching to text based interface mode."))
             grass_gui = 'text'
     return grass_gui
 
