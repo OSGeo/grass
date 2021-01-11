@@ -46,7 +46,10 @@ def main():
     from psmap.frame import PsMapFrame
 
     app = wx.App()
-    frame = PsMapFrame(parent=None)
+    frame = PsMapFrame(
+        parent=None,
+        title=_("Cartographic Composer - GRASS GIS"),
+    )
     frame.Show()
 
     if options['file']:

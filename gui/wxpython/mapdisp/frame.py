@@ -61,7 +61,7 @@ class MapFrame(SingleMapFrame):
     child double buffered drawing window.
     """
 
-    def __init__(self, parent, giface, title=_("GRASS GIS - Map display"),
+    def __init__(self, parent, giface, title=_("Map Display"),
                  toolbars=["map"], statusbar=True,
                  tree=None, notebook=None, lmgr=None,
                  page=None, Map=None, auimgr=None, name='MapWindow', **kwargs):
@@ -248,25 +248,6 @@ class MapFrame(SingleMapFrame):
 
     def GetMapWindow(self):
         return self.MapWindow
-
-    def SetTitleWithName(self, name):
-        """Set map display title its name
-
-        This function should be used when there are multiple map
-        displays.
-
-        Sets also other dynamically determined parts of the title
-        specific for GRASS GIS map display,
-        while the standard (inherited) ``SetTitle()`` function sets the
-        raw title and doesn't add or modify anything.
-        """
-        gisenv = grass.gisenv()
-        title = _("GRASS GIS Map Display: %(name)s - %(loc)s/%(mapset)s") % {
-            'name': name,
-            'loc': gisenv["LOCATION_NAME"],
-            'mapset': gisenv["MAPSET"]}
-
-        self.SetTitle(title)
 
     def _addToolbarVDigit(self):
         """Add vector digitizer toolbar

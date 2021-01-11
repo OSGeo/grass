@@ -1997,7 +1997,7 @@ class ImageSizeDialog(wx.Dialog):
 class SqlQueryFrame(wx.Frame):
 
     def __init__(self, parent, id=wx.ID_ANY,
-                 title=_("GRASS GIS SQL Query Utility"),
+                 title=_("SQL Query Utility"),
                  *kwargs):
         """SQL Query Utility window
         """

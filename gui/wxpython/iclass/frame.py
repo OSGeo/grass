@@ -76,7 +76,7 @@ class IClassMapFrame(DoubleMapFrame):
 
     def __init__(
             self, parent=None, giface=None,
-            title=_("GRASS GIS Supervised Classification Tool"),
+            title=_("Supervised Classification Tool"),
             toolbars=["iClassMisc", "iClassMap", "vdigit", "iClass"],
             size=(875, 600),
             name='IClassWindow', **kwargs):
