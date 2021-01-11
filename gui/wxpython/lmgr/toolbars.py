@@ -149,8 +149,6 @@ class LMToolsToolbar(BaseToolbar):
         """Toolbar data
         """
         icons = {
-            'import': MetaIcon(img='layer-import',
-                               label=_('Import/link raster or vector data')),
             'mapcalc': MetaIcon(img='raster-calculator',
                                 label=_('Raster Map Calculator')),
             'modeler': MetaIcon(img='modeler-main',
@@ -165,10 +163,7 @@ class LMToolsToolbar(BaseToolbar):
                                label=_('Open a simple Python code editor')),
         }
 
-        return self._getToolbarData((('importMap', icons["import"],
-                                      self.parent.OnImportMenu),
-                                     (None, ),
-                                     ('mapCalc', icons["mapcalc"],
+        return self._getToolbarData((('mapCalc', icons["mapcalc"],
                                       self.parent.OnMapCalculator),
                                      ('georect', icons["georectify"],
                                       self.parent.OnGCPManager),

@@ -51,22 +51,6 @@ from lmgr.giface import LayerManagerGrassInterfaceForMapDisplay
 TREE_ITEM_HEIGHT = 25
 
 LMIcons = {
-    'rastImport': MetaIcon(img='layer-import',
-                           label=_('Import raster data')),
-    'rastLink': MetaIcon(img='layer-import',
-                         label=_('Link external raster data')),
-    'rastUnpack': MetaIcon(img='layer-import',
-                           label=_('Unpack GRASS raster map')),
-    'rastOut': MetaIcon(img='layer-export',
-                        label=_('Set raster output format')),
-    'vectImport': MetaIcon(img='layer-import',
-                           label=_('Import vector data')),
-    'vectLink': MetaIcon(img='layer-import',
-                         label=_('Link external vector data')),
-    'vectUnpack': MetaIcon(img='layer-import',
-                           label=_('Unpack GRASS vector map')),
-    'vectOut': MetaIcon(img='layer-export',
-                        label=_('Set vector output format')),
     'wmsImport': MetaIcon(img='layer-wms-add',
                           label=_('Import data from WMS server')),
     'layerCmd': MetaIcon(img='layer-command-add',

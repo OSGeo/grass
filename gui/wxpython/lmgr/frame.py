@@ -329,6 +329,8 @@ class GMFrame(wx.Frame):
             parent=self.notebook, giface=self._giface)
         self.datacatalog.showNotification.connect(
             lambda message: self.SetStatusText(message))
+        self.datacatalog.onMenuCmd.connect(
+            lambda cmd: self.OnMenuCmd(cmd))
 
         self.notebook.AddPage(
             page=self.datacatalog,
@@ -1301,20 +1303,6 @@ class GMFrame(wx.Frame):
         # create menu
         self.PopupMenu(menu)
         menu.Destroy()
-
-    def OnImportMenu(self, event):
-        """Import maps menu (import, link)
-        """
-        self._popupMenu((('rastImport', self.OnImportGdalLayers),
-                         ('vectImport', self.OnImportOgrLayers),
-                         (None, None),
-                         ('rastUnpack', self.OnUnpackRaster),
-                         ('vectUnpack', self.OnUnpackVector),
-                         (None, None),
-                         ('rastLink', self.OnLinkGdalLayers),
-                         ('vectLink', self.OnLinkOgrLayers),
-                         ('rastOut', self.OnRasterOutputFormat),
-                         ('vectOut', self.OnVectorOutputFormat)))
 
     def OnWorkspaceNew(self, event=None):
         """Create new workspace file
