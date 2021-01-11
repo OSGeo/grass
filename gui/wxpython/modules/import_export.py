@@ -60,7 +60,6 @@ class ImportDialog(wx.Dialog):
         self.options = dict()   # list of options
         self.options_par = dict()
 
-        self.switchToDataTab = Signal('ImportDialog.switchToDataTab')
         self.showImportSuccessfulInfo = Signal('ImportDialog.showImportSuccessfulInfo')
 
         self.commandId = -1  # id of running command
@@ -530,7 +529,6 @@ class GdalImportDialog(ImportDialog):
         self.AddLayers(event.returncode, event.cmd, event.userData)
 
         if event.returncode == 0:
-            self.switchToDataTab.emit()
             self.showImportSuccessfulInfo.emit()
             if self.closeOnFinish.IsChecked():
                 self.Close()
@@ -687,7 +685,6 @@ class OgrImportDialog(ImportDialog):
             os.environ.pop('GRASS_VECTOR_OGR')
 
         if event.returncode == 0:
-            self.switchToDataTab.emit()
             self.showImportSuccessfulInfo.emit()
             if self.closeOnFinish.IsChecked():
                 self.Close()

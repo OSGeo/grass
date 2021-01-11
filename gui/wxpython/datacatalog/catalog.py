@@ -92,11 +92,9 @@ class DataCatalog(wx.Panel):
 
     def showImportSuccessfulInfo(self):
         if self.show_info_after_import:
+            wx.CallAfter(self.parent.SetSelectionByName, 'catalog')
             self.infoManager.ShowImportSuccessfulInfo()
             self.show_info_after_import = False
-
-    def switchToDataTab(self):
-        wx.CallAfter(self.parent.SetSelectionByName, 'catalog')
 
     def LoadItems(self):
         self.tree.ReloadTreeItems()
@@ -147,7 +145,6 @@ class DataCatalog(wx.Panel):
         dlg = OgrImportDialog(parent=self, giface=self.giface)
         dlg.CentreOnScreen()
         dlg.Show()
-        dlg.switchToDataTab.connect(self.switchToDataTab)
         dlg.showImportSuccessfulInfo.connect(self.showImportSuccessfulInfo)
 
     def OnLinkGdalLayers(self, event):
