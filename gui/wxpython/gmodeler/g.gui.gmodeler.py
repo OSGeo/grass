@@ -49,7 +49,11 @@ def main():
     from gmodeler.frame import ModelFrame
 
     app = wx.App()
-    frame = ModelFrame(parent=None, giface=StandaloneGrassInterface())
+    frame = ModelFrame(
+        parent=None,
+        giface=StandaloneGrassInterface(),
+        title=_("Graphical Modeler - GRASS GIS"),
+    )
     if options['file']:
         frame.LoadModelFile(options['file'])
     frame.Show()

@@ -88,9 +88,10 @@ def main():
             MapFrame.__init__(
                 self, parent=None, Map=Map(),
                 giface=DMonGrassInterface(None),
-                title=_("GRASS GIS Raster Digitizer"), size=(850, 600),
+                title=_("Raster Digitizer - GRASS GIS"),
+                size=(850, 600),
             )
-            # this giface issue not solved yet, we must set mapframe aferwards
+            # this giface issue not solved yet, we must set mapframe afterwards
             self._giface._mapframe = self
             self._giface.mapCreated.connect(self.OnMapCreated)
             self._mapObj = self.GetMap()

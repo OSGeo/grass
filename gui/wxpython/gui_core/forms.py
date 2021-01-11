@@ -469,6 +469,7 @@ class TaskFrame(wx.Frame):
 
     def __init__(self, parent, giface, task_description, id=wx.ID_ANY,
                  get_dcmd=None, layer=None,
+                 title=None,
                  style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL, **kwargs):
         self.get_dcmd = get_dcmd
         self.layer = layer
@@ -478,13 +479,9 @@ class TaskFrame(wx.Frame):
 
         self.dialogClosing = Signal('TaskFrame.dialogClosing')
 
-        # module name + keywords
-        title = self.task.get_name()
-        try:
-            if self.task.keywords != ['']:
-                title += " [" + ', '.join(self.task.keywords) + "]"
-        except ValueError:
-            pass
+        # Module name as title by default
+        if not title:
+            title = self.task.get_name()
 
         wx.Frame.__init__(self, parent=parent, id=id, title=title,
                           name="MainFrame", style=style, **kwargs)

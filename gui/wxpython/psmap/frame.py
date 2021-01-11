@@ -54,7 +54,7 @@ from psmap.utils import *
 class PsMapFrame(wx.Frame):
 
     def __init__(self, parent=None, id=wx.ID_ANY,
-                 title=_("GRASS GIS Cartographic Composer"), **kwargs):
+                 title=_("Cartographic Composer"), **kwargs):
         """Main window of ps.map GUI
 
         :param parent: parent window

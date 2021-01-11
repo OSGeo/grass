@@ -30,7 +30,7 @@ class DataCatalogFrame(wx.Frame):
 
     def __init__(self, parent, giface=None):
         wx.Frame.__init__(self, parent=parent,
-                          title=_('GRASS GIS Data Catalog'))
+                          title=_('Data Catalog'))
         self.SetName("DataCatalog")
         self.SetIcon(
             wx.Icon(

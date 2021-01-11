@@ -78,7 +78,11 @@ def main():
 
     app = wx.App()
 
-    frame = SwipeMapFrame(parent=None, giface=StandaloneGrassInterface())
+    frame = SwipeMapFrame(
+        parent=None,
+        giface=StandaloneGrassInterface(),
+        title=_("Temporal Plot Tool - GRASS GIS"),
+    )
 
     if first:
         frame.SetFirstRaster(first)

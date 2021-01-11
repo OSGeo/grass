@@ -97,7 +97,7 @@ class TplotFrame(wx.Frame):
 
     def __init__(self, parent, giface):
         wx.Frame.__init__(self, parent, id=wx.ID_ANY,
-                          title=_("GRASS GIS Temporal Plot Tool"))
+                          title=_("Temporal Plot Tool"))
 
         tgis.init(True)
         self._giface = giface

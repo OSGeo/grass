@@ -58,7 +58,10 @@ def main():
     view3d = flags['3']
 
     app = wx.App()
-    frame = TimelineFrame(None)
+    frame = TimelineFrame(
+        parent=None,
+        title=_("Timeline Tool - GRASS GIS"),
+    )
     frame.SetDatasets(datasets)
     frame.Show3D(view3d)
     frame.Show()

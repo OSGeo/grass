@@ -47,7 +47,7 @@ class MapFrame(SingleMapFrame):
     """
 
     def __init__(self, parent, giface,
-                 title=_("GRASS GIS Manage Ground Control Points"),
+                 title=_("Manage Ground Control Points"),
                  toolbars=["gcpdisp"], Map=None, auimgr=None,
                  name='GCPMapWindow', **kwargs):
         """Main map display window with toolbars, statusbar and

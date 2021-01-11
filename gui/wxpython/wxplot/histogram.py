@@ -40,7 +40,7 @@ class HistogramPlotFrame(BasePlotFrame):
         # workaround for http://trac.wxwidgets.org/ticket/13888
         if sys.platform != 'darwin':
             self.SetToolBar(self.toolbar)
-        self.SetTitle(_("GRASS GIS Histogramming Tool"))
+        self.SetTitle(_("Histogram Tool"))
 
         #
         # Init variables

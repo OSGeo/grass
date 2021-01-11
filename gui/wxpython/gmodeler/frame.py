@@ -78,7 +78,7 @@ from grass.script import core as grass
 class ModelFrame(wx.Frame):
 
     def __init__(self, parent, giface, id=wx.ID_ANY,
-                 title=_("GRASS GIS Graphical Modeler"), **kwargs):
+                 title=_("Graphical Modeler"), **kwargs):
         """Graphical modeler main window
 
         :param parent: parent window

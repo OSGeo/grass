@@ -48,13 +48,16 @@ from gui_core.wrap import Button, ClearButton, CloseButton
 class AttributeManager(wx.Frame, DbMgrBase):
 
     def __init__(self, parent, id=wx.ID_ANY,
-                 title=None, vectorName=None, item=None, log=None,
+                 title=None,
+                 base_title=None,
+                 vectorName=None, item=None, log=None,
                  selection=None, **kwargs):
         """GRASS Attribute Table Manager window
 
         :param parent: parent window
         :param id: window id
-        :param title: window title or None for default title
+        :param title: full window title or None for default title
+        :param base_title: the document independent part of title or None for default
         :param vectorName: name of vector map
         :param item: item from Layer Tree
         :param log: log window
@@ -76,11 +79,14 @@ class AttributeManager(wx.Frame, DbMgrBase):
 
         # title
         if not title:
-            title = "%s" % _("GRASS GIS Attribute Table Manager - ")
+            if not base_title:
+                base_title = _("Attribute Table Manager")
+            document = self.dbMgrData['vectName']
             if not self.dbMgrData['editable']:
-                title += _("READONLY - ")
-            title += "<%s>" % (self.dbMgrData['vectName'])
-
+                document = _("{document} (read-only)").format(document=document)
+            title = "{document} - {tool_name}".format(
+                document=document, tool_name=base_title
+            )
         self.SetTitle(title)
 
         # icon

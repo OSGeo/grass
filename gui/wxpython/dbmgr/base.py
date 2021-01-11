@@ -1151,7 +1151,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         label = _("Table")
         if not self.dbMgrData['editable']:
-            label += _(" (readonly)")
+            label += _(" (read-only)")
 
         if pos == -1:
             pos = self.GetPageCount()
@@ -2274,7 +2274,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         self.layerPage[layer]['tablePage'] = panel.GetId()
         label = _("Table")
         if not self.dbMgrData['editable']:
-            label += _(" (readonly)")
+            label += _(" (read-only)")
 
         if pos == -1:
             pos = self.GetPageCount()

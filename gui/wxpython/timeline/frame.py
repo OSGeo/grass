@@ -74,7 +74,7 @@ class TimelineFrame(wx.Frame):
             self,
             parent,
             id=wx.ID_ANY,
-            title=_("GRASS GIS Timeline Tool"))
+            title=_("Timeline Tool"))
 
         tgis.init(True)
         self.datasets = []

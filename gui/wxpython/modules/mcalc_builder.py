@@ -53,10 +53,10 @@ class MapCalcFrame(wx.Frame):
 
         if self.cmd == 'r.mapcalc':
             self.rast3d = False
-            title = _('GRASS GIS Raster Map Calculator')
+            title = _('Raster Map Calculator')
         if self.cmd == 'r3.mapcalc':
             self.rast3d = True
-            title = _('GRASS GIS 3D Raster Map Calculator')
+            title = _('3D Raster Map Calculator')
 
         wx.Frame.__init__(self, parent, id=id, title=title, **kwargs)
         self.SetIcon(

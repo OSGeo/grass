@@ -51,9 +51,12 @@ def main():
         _("Loading attribute data for vector map <%s>...") %
         mapName)
     f = AttributeManager(
-        parent=None, id=wx.ID_ANY, title="%s - <%s>" %
-        (_("GRASS GIS Attribute Table Manager"), mapName), size=(
-            900, 600), vectorName=mapName)
+        parent=None,
+        id=wx.ID_ANY,
+        base_title=_("Attribute Table Manager - GRASS GIS"),
+        size=(900, 600),
+        vectorName=mapName,
+    )
     f.Show()
 
     app.MainLoop()

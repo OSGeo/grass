@@ -62,6 +62,10 @@ class GMApp(wx.App):
 
         :return: True
         """
+        # Internal and display name of the app (if supported by/on platform)
+        self.SetAppName("GRASS GIS")
+        self.SetVendorName("The GRASS Development Team")
+
         # create splash screen
         introImagePath = os.path.join(globalvar.IMGDIR, "splash_screen.png")
         introImage = wx.Image(introImagePath, wx.BITMAP_TYPE_PNG)

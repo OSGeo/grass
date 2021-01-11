@@ -74,7 +74,7 @@ from vnet.vnet_utils import DegreesToRadians, RadiansToDegrees, GetNearestNodeCa
 class VNETDialog(wx.Dialog):
 
     def __init__(self, parent, giface, id=wx.ID_ANY,
-                 title=_("GRASS GIS Vector Network Analysis Tool"),
+                 title=_("Vector Network Analysis Tool"),
                  style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
         """Dialog for vector network analysis"""
 

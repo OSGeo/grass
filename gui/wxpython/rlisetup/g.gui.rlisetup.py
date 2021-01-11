@@ -41,7 +41,11 @@ def main():
     from rlisetup.frame import RLiSetupFrame
 
     app = wx.App()
-    frame = RLiSetupFrame(parent=None, giface=StandaloneGrassInterface())
+    frame = RLiSetupFrame(
+        parent=None,
+        giface=StandaloneGrassInterface(),
+        title=_("Setup for r.li modules - GRASS GIS"),
+    )
     frame.Show()
     frame.CenterOnScreen()
 

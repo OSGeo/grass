@@ -128,7 +128,11 @@ def main():
 
     app = wx.App()
 
-    frame = AnimationFrame(parent=None, giface=StandaloneGrassInterface())
+    frame = AnimationFrame(
+        parent=None,
+        giface=StandaloneGrassInterface(),
+        title=_("Animation Tool - GRASS GIS"),
+    )
     frame.CentreOnScreen()
     frame.Show()
     if len(layerList) >= 1:

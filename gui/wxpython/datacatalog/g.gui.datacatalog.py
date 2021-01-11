@@ -43,7 +43,11 @@ def main():
 
     app = wx.App()
 
-    frame = DataCatalogFrame(parent=None, giface=StandaloneGrassInterface())
+    frame = DataCatalogFrame(
+        parent=None,
+        giface=StandaloneGrassInterface(),
+        title=_("Data Catalog - GRASS GIS"),
+    )
     frame.CentreOnScreen()
     frame.Show()
     app.MainLoop()

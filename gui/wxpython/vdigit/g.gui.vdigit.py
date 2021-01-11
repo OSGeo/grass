@@ -64,7 +64,7 @@ def main():
         def __init__(self, vectorMap):
             MapFrame.__init__(
                 self, parent=None, Map=Map(), giface=DMonGrassInterface(None),
-                title=_("GRASS GIS Vector Digitizer"), size=(850, 600))
+                title=_("Vector Digitizer - GRASS GIS"), size=(850, 600))
             # this giface issue not solved yet, we must set mapframe aferwards
             self._giface._mapframe = self
             # load vector map
