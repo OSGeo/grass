@@ -2198,7 +2198,7 @@ def classic_parser(argv, default_gui):
     if parsed_args.exit:
         params.exit_grass = True
     if parsed_args.exec:
-        batch_job = parsed_args.exec
+        params.batch_job = parsed_args.exec
     # Cases to execute immediatelly
     if parsed_args.version:
         message("GRASS GIS %s" % GRASS_VERSION)
