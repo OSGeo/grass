@@ -39,7 +39,6 @@ class DataCatalog(wx.Panel):
                  title=_("Data catalog"), name='catalog', **kwargs):
         """Panel constructor  """
         self.showNotification = Signal('DataCatalog.showNotification')
-        self.onMenuCmd = Signal('DataCatalog.onMenuCmd')
         self.parent = parent
         self.baseTitle = title
         self.giface = giface
@@ -199,7 +198,6 @@ class DataCatalog(wx.Panel):
 
     def _popupImportMenu(self):
         """Create popup menu for other import options"""
-
         # create submenu
         subMenu = Menu()
 
@@ -234,11 +232,11 @@ class DataCatalog(wx.Panel):
 
         menu.AppendSeparator()
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create raster map from x,y,z data  [r.in.xyz]"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create raster map from ungridded x,y,z ASCII data  [r.in.xyz]"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnImportRasterAscii, item)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create vector map from x,y,z data  [v.in.ascii]"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create vector map from ASCII vector data  [v.in.ascii]"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnImportVectorAscii, item)
 

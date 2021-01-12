@@ -329,8 +329,6 @@ class GMFrame(wx.Frame):
             parent=self.notebook, giface=self._giface)
         self.datacatalog.showNotification.connect(
             lambda message: self.SetStatusText(message))
-        self.datacatalog.onMenuCmd.connect(
-            lambda cmd: self.OnMenuCmd(cmd))
 
         self.notebook.AddPage(
             page=self.datacatalog,
