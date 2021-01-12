@@ -795,7 +795,7 @@ def check_gui(expected_gui):
                 msg = _("The python command does not work as expected.\n"
                         "Please check your installation or set the GRASS_PYTHON"
                         " environment variable.")
-            if not os.path.exists(wxpath("xwxgui.py")):
+            if not os.path.exists(wxpath("wxgui.py")):
                 msg = _("GRASS GUI not found. Please check your installation.")
             if msg:
                 warning(_("{}\nSwitching to text based interface mode.").format(msg))
