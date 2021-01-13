@@ -1592,16 +1592,17 @@ int check_overwrite(void)
 		for (i = 0; opt->answers[i]; i++) {
 		    found = FALSE;
 		    if (strcmp(element, "file") == 0) {
-                        if (access(opt->answers[i], F_OK) == 0)
-                            found = TRUE;
-		    }
-                    else if (strcmp(element, "mapset") != 0) {
-                        /* TODO: also other elements should be
-                           probably skipped */
-                        if (G_find_file(element, opt->answers[i], G_mapset())) {
-                            found = TRUE;
-                        }
-		    }
+                if (strcmp(opt->answers[i], "-") != 0 &&
+                    access(opt->answers[i], F_OK) == 0)
+                    found = TRUE;
+            }
+            else if (strcmp(element, "mapset") != 0) {
+                /* TODO: also other elements should be
+                probably skipped */
+                if (G_find_file(element, opt->answers[i], G_mapset())) {
+                    found = TRUE;
+                }
+            }
                     
 		    if (found) {	/* found */
 			if (!st->overwrite && !over) {
