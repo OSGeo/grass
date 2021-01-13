@@ -830,8 +830,12 @@ class TplotFrame(wx.Frame):
                     coordx, coordy = self.coorval.GetValue().split(',')
                     coordx, coordy = float(coordx), float(coordy)
                 except (ValueError, AttributeError):
-                    GMessage(message=_("Incorrect coordinates format, should "
-                                       "be: x,y"), parent=self)
+                    GError(
+                        parent=self,
+                        message=_("Incorrect coordinates format, should be: x,y"),
+                        showTraceback=False,
+                    )
+                    return
             coors = [coordx, coordy]
             if coors:
                 try:
