@@ -55,6 +55,7 @@ import tempfile
 import locale
 import uuid
 import unicodedata
+import argparse
 
 
 # mechanism meant for debugging this script (only)
@@ -355,7 +356,6 @@ Geographic Resources Analysis Support System (GRASS GIS).
   GRASS_HTML_BROWSER             {html_var}
   GRASS_ADDON_PATH               {addon_path_var}
   GRASS_ADDON_BASE               {addon_base_var}
-  GRASS_BATCH_JOB                {batch_var}
   GRASS_PYTHON                   {python_var}
 """
 
@@ -390,7 +390,6 @@ def help_message(default_gui):
             html_var=_("set html web browser for help pages"),
             addon_path_var=_("set additional path(s) to local GRASS modules or user scripts"),
             addon_base_var=_("set additional GISBASE for locally installed GRASS Addons"),
-            batch_var=_("shell script to be processed as batch job"),
             python_var=_("set Python interpreter name to override 'python'"),
             exec_=_("execute GRASS module or script"),
             exec_detail=_("provided executable will be executed in GRASS session"),
@@ -495,6 +494,7 @@ def create_tmp(user, gis_lock):
 def get_gisrc_from_config_dir(grass_config_dir, batch_job):
     """Set the global grassrc file (aka grassrcrc)"""
     if batch_job:
+        # TODO: This is probably not needed since batch job does write to config.
         # use individual GISRCRC files when in batch mode (r33174)
         filename = os.path.join(grass_config_dir, "rc.%s" % platform.node())
         if os.access(filename, os.R_OK):
@@ -792,15 +792,13 @@ def check_gui(expected_gui):
             msg = None
             if p.returncode != 0:
                 # Python was not found - switch to text interface mode
-                msg = _("The python command does not work as expected!\n"
-                        "Please check your GRASS_PYTHON environment variable.\n"
-                        "Use the -help option for details.\n")
+                msg = _("The python command does not work as expected.\n"
+                        "Please check your installation or set the GRASS_PYTHON"
+                        " environment variable.")
             if not os.path.exists(wxpath("wxgui.py")):
                 msg = _("GRASS GUI not found. Please check your installation.")
             if msg:
-                warning(_("{}\nSwitching to text based interface mode.\n\n"
-                          "Hit RETURN to continue.\n").format(msg))
-                sys.stdin.readline()
+                warning(_("{}\nSwitching to text based interface mode.").format(msg))
                 grass_gui = 'text'
 
     else:
@@ -810,9 +808,7 @@ def check_gui(expected_gui):
             warning(_("It appears that the X Windows system is not active.\n"
                       "A graphical based user interface is not supported.\n"
                       "(DISPLAY variable is not set.)\n"
-                      "Switching to text based interface mode.\n\n"
-                      "Hit RETURN to continue.\n"))
-            sys.stdin.readline()
+                      "Switching to text based interface mode."))
             grass_gui = 'text'
     return grass_gui
 
@@ -967,10 +963,7 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
                     " Unable to create a new temporary mapset of that name.")
                   .format(path))
         elif path_is_valid_mapset and create_new:
-            warning(_("Mapset <{}> already exists. Ignoring the"
-                      " request to create it. Note that this warning"
-                      " may become an error in future versions.")
-                    .format(path))
+            fatal(_("Mapset <{}> already exists.").format(path))
 
         if not path_is_valid_mapset:
             if not create_new:
@@ -1009,14 +1002,14 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
                         fatal(cannot_create_location_reason(
                             gisdbase, location_name))
                     # create new location based on the provided EPSG/...
+                    if not geofile:
+                        fatal(_("Provide CRS to create a location"))
                     message(_("Creating new GRASS GIS location <{}>...")
                             .format(location_name))
                     create_location(gisdbase, location_name, geofile)
                 else:
                     # 'location_name' is a valid GRASS location,
                     # create new mapset
-                    message(_("Creating new GRASS GIS mapset <{}>...")
-                            .format(mapset))
                     if os.path.isfile(path):
                         # not a valid mapset, but dir exists, assuming
                         # broken/incomplete mapset
@@ -1032,6 +1025,11 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
                                   " may become an error in future versions.")
                                 .format(mapset))
                     else:
+                        if geofile:
+                            fatal(_("No CRS is needed for creating mapset."
+                                    " Did you mean to create a new location?"))
+                        message(_("Creating new GRASS GIS mapset <{}>...")
+                                .format(mapset))
                         # create mapset directory
                         os.mkdir(path)
                         if tmp_mapset:
@@ -1594,29 +1592,6 @@ def get_grass_env_file(sh, grass_config_dir):
     return grass_env_file
 
 
-def get_batch_job_from_env_variable():
-    """Get script to execute from batch job variable if available
-
-    Fails with fatal if variable is set but content unusable.
-    """
-    # hack to process batch jobs:
-    batch_job = os.getenv('GRASS_BATCH_JOB')
-    # variable defined, but user might not have been careful enough
-    if batch_job:
-        if not os.access(batch_job, os.F_OK):
-            # wrong file
-            fatal(_("Job file <%s> has been defined in "
-                    "the 'GRASS_BATCH_JOB' variable but not found. Exiting."
-                    "\n\n"
-                    "Use 'unset GRASS_BATCH_JOB' to disable "
-                    "batch job processing.") % batch_job)
-        elif not os.access(batch_job, os.X_OK):
-            # right file, but ...
-            fatal(_("Change file permission to 'executable' for <%s>")
-                  % batch_job)
-    return batch_job
-
-
 def run_batch_job(batch_job):
     """Runs script, module or any command
 
@@ -1629,55 +1604,45 @@ def run_batch_job(batch_job):
         # for messages only
         batch_job_string = ' '.join(batch_job)
     message(_("Executing <%s> ...") % batch_job_string)
-    if isinstance(batch_job, six.string_types):
-        # shell=True is keeping the original GRASS_BATCH_JOB behavior
-        def quote(string):
-            if '"' in string:
-                return "'%s'" % batch_job
-            else:
-                return '"%s"' % batch_job
-        batch_job = quote(batch_job)
-        proc = Popen(batch_job, shell=True)
-    else:
-        def script_path(batch_job):
-            """Adjust script path
+    def script_path(batch_job):
+        """Adjust script path
 
-            :param batch_job list: index 0, script path
+        :param batch_job list: index 0, script path
 
-            :return str or None: script path or None
-            """
-            script_in_addon_path = None
-            if 'GRASS_ADDON_BASE' in os.environ:
-                script_in_addon_path = os.path.join(
-                    os.environ['GRASS_ADDON_BASE'],
-                    'scripts',
-                    batch_job[0],
-                )
-            if script_in_addon_path and \
-               os.path.exists(script_in_addon_path):
-                batch_job[0] = script_in_addon_path
-                return script_in_addon_path
-            elif os.path.exists(batch_job[0]):
-                return batch_job[0]
+        :return str or None: script path or None
+        """
+        script_in_addon_path = None
+        if 'GRASS_ADDON_BASE' in os.environ:
+            script_in_addon_path = os.path.join(
+                os.environ['GRASS_ADDON_BASE'],
+                'scripts',
+                batch_job[0],
+            )
+        if script_in_addon_path and \
+            os.path.exists(script_in_addon_path):
+            batch_job[0] = script_in_addon_path
+            return script_in_addon_path
+        elif os.path.exists(batch_job[0]):
+            return batch_job[0]
 
-        try:
-            script = script_path(batch_job)
-            proc = Popen(batch_job, shell=False, env=os.environ)
-        except OSError as error:
-            error_message = _("Execution of <{cmd}> failed:\n"
-                              "{error}").format(
-                                  cmd=batch_job_string,
-                                  error=error,
-                              )
-            # No such file or directory
-            if error.errno == errno.ENOENT:
-                if script and os.access(batch_job[0], os.X_OK):
-                    # Allow run py script with CRLF line terminators
-                    proc = Popen([sys.executable] + batch_job, shell=False)
-                else:
-                    fatal(error_message)
+    try:
+        script = script_path(batch_job)
+        proc = Popen(batch_job, shell=False, env=os.environ)
+    except OSError as error:
+        error_message = _("Execution of <{cmd}> failed:\n"
+                            "{error}").format(
+                                cmd=batch_job_string,
+                                error=error,
+                            )
+        # No such file or directory
+        if error.errno == errno.ENOENT:
+            if script and os.access(batch_job[0], os.X_OK):
+                # Allow run py script with CRLF line terminators
+                proc = Popen([sys.executable] + batch_job, shell=False)
             else:
                 fatal(error_message)
+        else:
+            fatal(error_message)
     returncode = proc.wait()
     message(_("Execution of <%s> finished.") % batch_job_string)
     return returncode
@@ -2018,9 +1983,8 @@ def io_is_interactive():
     return sys.stdin.isatty() and sys.stdout.isatty()
 
 
-def print_params():
+def print_params(params):
     """Write compile flags and other configuration to stderr"""
-    params = sys.argv[2:]
     if not params:
         params = ['arch', 'build', 'compiler', 'path', 'revision', 'version', 'date']
 
@@ -2115,60 +2079,142 @@ class Parameters(object):
         self.geofile = None
         self.tmp_location = False
         self.tmp_mapset = False
+        self.batch_job = None
+
+
+def add_mapset_arguments(parser, mapset_as_option):
+    if mapset_as_option:
+        parser.add_argument(
+            "-m", "--mapset", metavar="PATH", type=str, help=_("use mapset %(metavar)s")
+        )
+        parser.add_argument(
+            "--tmp-mapset",
+            metavar="PATH",
+            type=str,
+            help=_("use temporary mapset in location %(metavar)s"),
+        )
+    else:
+        parser.add_argument(
+            "mapset",
+            metavar="PATH",
+            type=str,
+            nargs="?",
+            help=_("path to mapset (or location if creating one)"),
+        )
+        parser.add_argument(
+            "--tmp-mapset", action="store_true", help=_("use temporary mapset")
+        )
+    parser.add_argument(
+        "--tmp-location",
+        metavar="CRS",
+        type=str,
+        help=_(
+            "use temporary location with %(metavar)s (EPSG, georeferenced file, ...)"
+        ),
+    )
+    parser.add_argument(
+        "-f",
+        "--force-remove-lock",
+        action="store_true",
+        help=_("remove lock if present"),
+    )
+
+
+def update_params_with_mapset_arguments(params, args):
+    """Update location and mapset related parameters"""
+    if args.force_remove_lock:
+        params.force_gislock_removal = True
+    if args.tmp_location:
+        params.tmp_location = True
+        params.geofile = args.tmp_location
+    if args.tmp_mapset:
+        params.tmp_mapset = True
+    if args.mapset:
+        params.mapset = args.mapset
+
+
+def classic_parser(argv, default_gui):
+    """Parse CLI similar to v7 but with argparse
+
+    --exec is handled before argparse is used.
+    Help requests are also handled separately.
+
+    Not only help but also version and config are handled in this function.
+    """
+    # Check if the user asked for help
+    # Checking also the less standard -help and help.
+    help_requests = ["help", "-h", "-help", "--help", "--h"]
+    if len(argv) == 2 and argv[1] in help_requests:
+        help_message(default_gui=default_gui)
+        sys.exit()
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-v", "--version", action="store_true")
+    parser.add_argument("--text", action="store_true")
+    parser.add_argument("--gtext", action="store_true")
+    parser.add_argument("--gui", action="store_true")
+    # -c works as plain True when only mapset is being created.
+    # However, option with a value is hungry, so it eats the mapset path.
+    mapset_tag = "__create_mapset_placeholder__"
+    parser.add_argument(
+        "-c", metavar="CRS", nargs="?", type=str, dest="create", const=mapset_tag
+    )
+    parser.add_argument("-e", action="store_true", dest="exit")
+    parser.add_argument("--config", nargs="*")
+    add_mapset_arguments(parser, mapset_as_option=False)
+    parser.add_argument(
+        "--exec",
+        nargs=argparse.REMAINDER,
+        help=_("execute module or script (followed by executable with arguments)"),
+    )
+    parsed_args = parser.parse_args(args=argv[1:])
+
+    params = Parameters()
+    # Check if the --text flag was given
+    if parsed_args.text:
+        params.grass_gui = "text"
+    # Check if the --gtext flag was given
+    if parsed_args.gtext:
+        params.grass_gui = "gtext"
+    # Check if the --gui flag was given
+    if parsed_args.gui:
+        params.grass_gui = default_gui
+    # Check if the user wants to create a new mapset
+    if parsed_args.create:
+        params.create_new = True
+        if parsed_args.create != mapset_tag:
+            if parsed_args.mapset:
+                # A value here is request to create a location.
+                params.geofile = parsed_args.create
+            else:
+                # The loc/mapset path argument is optional, so it can get
+                # eaten by the option. So here we got it mixed up and the
+                # option value is actually the path, not CRS.
+                params.mapset = parsed_args.create
+    if parsed_args.exit:
+        params.exit_grass = True
+    if parsed_args.exec:
+        params.batch_job = parsed_args.exec
+    # Cases to execute immediatelly
+    if parsed_args.version:
+        message("GRASS GIS %s" % GRASS_VERSION)
+        message("\n" + readfile(gpath("etc", "license")))
+        sys.exit()
+    if parsed_args.config is not None:
+        # None if not provided, empty list if present without values.
+        print_params(parsed_args.config)
+        sys.exit()
+    update_params_with_mapset_arguments(params, parsed_args)
+    return params
 
 
 def parse_cmdline(argv, default_gui):
-    """Parse the standard part of command line parameters"""
-    params = Parameters()
-    args = []
-    for i in argv:
-        # Check if the user asked for the version
-        if i in ["-v", "--version"]:
-            message("GRASS GIS %s" % GRASS_VERSION)
-            message('\n' + readfile(gpath("etc", "license")))
-            sys.exit()
-        # Check if the user asked for help
-        elif i in ["help", "-h", "-help", "--help", "--h"]:
-            help_message(default_gui=default_gui)
-            sys.exit()
-        # Check if the --text flag was given
-        elif i in ["-text", "--text"]:
-            params.grass_gui = 'text'
-        # Check if the --gtext flag was given
-        elif i in ["-gtext", "--gtext"]:
-            params.grass_gui = 'gtext'
-        # Check if the --gui flag was given
-        elif i in ["-gui", "--gui"]:
-            params.grass_gui = default_gui
-        # Check if the -wxpython flag was given
-        elif i in ["-wxpython", "-wx", "--wxpython", "--wx"]:
-            params.grass_gui = 'wxpython'
-        # Check if the user wants to create a new mapset
-        elif i == "-c":
-            params.create_new = True
-        elif i == "-e":
-            params.exit_grass = True
-        elif i == "-f":
-            params.force_gislock_removal = True
-        elif i == "--config":
-            print_params()
-            sys.exit()
-        elif i == "--tmp-location":
-            params.tmp_location = True
-        elif i == "--tmp-mapset":
-            params.tmp_mapset = True
-        else:
-            args.append(i)
-    if len(args) > 1:
-        params.mapset = args[1]
-        params.geofile = args[0]
-    elif len(args) == 1:
-        if params.tmp_location:
-            params.geofile = args[0]
-        else:
-            params.mapset = args[0]
-    else:
-        params.mapset = None
+    """Parse command line parameters
+
+    Returns Parameters object used throughout the script.
+    """
+    params = classic_parser(argv, default_gui)
+    validate_cmdline(params)
     return params
 
 
@@ -2176,6 +2222,8 @@ def validate_cmdline(params):
     """ Validate the cmdline params and exit if necessary. """
     if params.exit_grass and not params.create_new:
         fatal(_("Flag -e requires also flag -c"))
+    if params.create_new and not params.mapset:
+        fatal(_("Flag -c requires name of location or mapset"))
     if params.tmp_location and params.tmp_mapset:
         fatal(_(
             "Either --tmp-location or --tmp-mapset can be used, not both").format(
@@ -2195,6 +2243,8 @@ def validate_cmdline(params):
                 " --tmp-location, mapset name <{}> provided"
             ).format(params.mapset)
         )
+    # For now, we allow, but not advertise/document, --tmp-location
+    # without --exec (usefulness to be evaluated).
 
 
 def main():
@@ -2226,21 +2276,7 @@ def main():
     gis_lock = str(os.getpid())
     os.environ['GIS_LOCK'] = gis_lock
 
-    batch_job = get_batch_job_from_env_variable()
-
-    # Parse the command-line options and set several global variables
-    batch_exec_param = '--exec'
-    try:
-        # raises ValueError when not found
-        index = sys.argv.index(batch_exec_param)
-        batch_job = sys.argv[index + 1:]
-        clean_argv = sys.argv[1:index]
-        params = parse_cmdline(clean_argv, default_gui=default_gui)
-    except ValueError:
-        params = parse_cmdline(sys.argv[1:], default_gui=default_gui)
-    validate_cmdline(params)
-    # For now, we allow, but not advertise/document, --tmp-location
-    # without --exec (usefulness to be evaluated).
+    params = parse_cmdline(sys.argv, default_gui=default_gui)
 
     grass_gui = params.grass_gui  # put it to variable, it is used a lot
 
@@ -2258,7 +2294,7 @@ def main():
     # TODO: with --tmp-location there is no point in loading settings
     # i.e. rc file from home dir, but the code is too spread out
     # to disable it at this point
-    gisrcrc = get_gisrc_from_config_dir(grass_config_dir, batch_job)
+    gisrcrc = get_gisrc_from_config_dir(grass_config_dir, params.batch_job)
 
     # Set the username
     user = get_username()
@@ -2315,7 +2351,7 @@ def main():
     message(_("Starting GRASS GIS..."))
 
     # Ensure GUI is set
-    if batch_job or params.exit_grass:
+    if params.batch_job or params.exit_grass:
         grass_gui = 'text'
     else:
         if not grass_gui:
@@ -2388,8 +2424,8 @@ def main():
 
     # Display the version and license info
     # only non-error, interactive version continues from here
-    if batch_job:
-        returncode = run_batch_job(batch_job)
+    if params.batch_job:
+        returncode = run_batch_job(params.batch_job)
         clean_all()
         sys.exit(returncode)
     elif params.exit_grass:
