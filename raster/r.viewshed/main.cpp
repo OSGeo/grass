@@ -501,7 +501,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     obsElevOpt->required = NO;
     obsElevOpt->key_desc = "value";
     obsElevOpt->description = _("Viewing elevation above the ground");
-    obsElevOpt->answer = "1.75";
+    obsElevOpt->answer = G_store("1.75");
     obsElevOpt->guisection = _("Settings");
 
     /* target elevation offset */
@@ -513,7 +513,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     tgtElevOpt->required = NO;
     tgtElevOpt->key_desc = "value";
     tgtElevOpt->description = _("Offset for target elevation above the ground");
-    tgtElevOpt->answer = "0.0";
+    tgtElevOpt->answer = G_store("0.0");
     tgtElevOpt->guisection = _("Settings");
 
     /* max distance */
@@ -569,7 +569,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     refrCoeffOpt->description = _("Refraction coefficient");
     refrCoeffOpt->type = TYPE_DOUBLE;
     refrCoeffOpt->required = NO;
-    refrCoeffOpt->answer = "0.14286";
+    refrCoeffOpt->answer = G_store("0.14286");
     refrCoeffOpt->options = "0.0-1.0";
     refrCoeffOpt->guisection = _("Refraction");
     
@@ -583,7 +583,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     memAmountOpt->key_desc = "value";
     memAmountOpt->description =
 	_("Amount of memory to use in MB");
-    memAmountOpt->answer = "500";
+    memAmountOpt->answer = G_store("500");
 
     /* temporary STREAM path */
     struct Option *streamdirOpt;
