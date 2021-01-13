@@ -66,11 +66,12 @@ int find_neighbors_LL(EW * ewptr, NEIGHBOR * nbr_head, SHORT row, SHORT col,
 	    else if (!replace_neighbor(Mptr, nbr_head, distance))
 		*active = FALSE;	/* curtail search in this direction */
 
-	    if (*active)
+	    if (*active) {
 		if (westward)
 		    extend_west(ewptr);
 		else
 		    extend_east(ewptr);
+	    }
 	}
 
 	active = &ewptr->ealive;
