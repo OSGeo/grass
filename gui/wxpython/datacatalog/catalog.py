@@ -198,6 +198,7 @@ class DataCatalog(wx.Panel):
 
     def _popupImportMenu(self):
         """Create popup menu for other import options"""
+
         # create submenu
         subMenu = Menu()
 
