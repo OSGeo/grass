@@ -199,7 +199,7 @@ Example for counting the number of days above a certain temperature using
 daily average maps ('???' as DOY wildcard):
 <div class="code"><pre>
 # Approach for shell based systems
-r.series input=`g.list rast pattern="temp_2003_???_avg" sep=,` \
+r.series input=`g.list rast pattern="temp_2003_???_avg" separator=comma` \
          output=temp_2003_days_over_25deg range=25.0,100.0 method=count
 
 # Approach in two steps (e.g., for Windows systems)
