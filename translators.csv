@@ -1,6 +1,7 @@
 name,email,languages
 Solomon Gizaw,<solohavi yahoo.com>,AM
 Dr. Alaa Masoud,<alaamasoud hotmail.com>,AR
+Amit Ghosh,,BN
 Jáchym Čepický,<jachym.cepicky centrum.cz>,CS
 Jan Trochta,<j.trochta seznam.cz>,CS
 Martin Landa,<landa.martin gmail.com>,CS
@@ -11,13 +12,22 @@ Radim Blazek,<radim.blazek gmail.com>,CS
 Záboj Hrázský,<zabojhrazsky seznam.cz>,CS
 Lukáš Bocan,<lukas.bocan fsv.cvut.cz>,CS
 Stanislav Horáček,<stanislav.horacek gmail.com>,CS
+trendspotter,,CS
+Vaclav Petras,<wenzeslaus gmail.com>,CS
 Georg Lösel,<georg de-schorsch.de>,DE
 Helmut Kudrnovsky,<hellik web.de>,DE
 Markus Neteler,<neteler osgeo.org>,DE
 Robert Nuske,<robert.nuske nw-fva.de,DE
 Stephan Holl,<stephan.holl intevation.de>,DE
+Lea27784,,DE
+Werner Macho,<werner.macho gmail.com>,DE
+Moritz Lennert,<mlennert club.worldonline.be>,DE/FR
+Jonas,,DE
 Vasilios Antoniou,<antoniou_v yahoo.gr>,EL
 Nikos Ves,<vesnikos gmail.org>,EL
+Despoina Athanasaki,,EL
+Ioannis Tsimpiris,,EL
+Nikos Alexandris,<nik@nikosalexandris.net>,EL
 Agustin Diez Castillo,<adiez uv.es>,ES
 Carlos Dávila,<carluti users.sourceforge.net>,ES
 Daniel Calvelo Aros,<dca users.sf.net>,ES
@@ -28,8 +38,10 @@ Javier Garcia Prieto,<fjgarciaprieto hotmail.com>,ES
 Joana Palahí/SIGTE-UdG,<joana sigte.udg.edu>,ES
 Luis Izquierdo,<luisizq2002 hotmail.com>,ES
 Roberto Antolin,<tolanss yahoo.es>,ES
+Samuel Mesa,,ES
 Daniel Torres,<nobeeakon gmail.com>,ES
 Veronica Andreo,<veroandreo gmail.com>,ES
+Carol Garzon Lopez,<c.x.garzon gmail.com>,ES
 Kari Salovaara,<kari.salovaara pp1.inet.fi>,FI
 Daniel Calvelo Aros,<dca users.sf.net>,FR
 Emmanuel Saracco,<esaracco users.labs.libre-entreprise.org>,FR
@@ -37,7 +49,12 @@ Eve Rousseau,<phytosociologue yahoo fr>,FR
 Pascal Obstetar,<pascal.obstetar wanadoo.fr>,FR
 Sylvain Maillard,<sylvain.maillard gmail.com>,FR
 Vincent Bain,<bain toraval.fr>,FR
+Adrien Andrè,<adr.andre laposte.net>,FR
+Ferraton,,FR
+Sylvain POULAIN,,FR
+Zoltan Siki,<siki.zoltan epito.bme.hu>,HU
 Firman Hadi,<jalmiburung gmail.com>,ID
+Alessandro Fanna,<rospus gmail.com>,IT
 Alessandro Palmas,<ale_zena libero.it>,IT
 Andrea Giacomelli,<pibinko gmail.com>,IT
 Anna Zanchetta,<ciupava gmail.com>,IT
@@ -49,18 +66,32 @@ Luciano Montanaro,<mikelima cirulla.net>,IT
 Marco Curreli,<marcocurreli tiscali it>,IT
 Maurizio Napolitano,<napo fbk.eu>,IT
 Silvia Franceschi,<silvia.franceschi hydrologis.eu>,IT
+Stefano Campus,<skampus gmail.com>,IT
 Stefano Costa,<steko iosa.it>,IT
 Tobias Vigl,<vigltobias icqmail.com>,IT
 Elena Mezzini,<elena.mezzini gmail.com>,IT
 Carlo Cormio,<carlo.cormio gmail.com>,IT
+Andrea Giudiceandrea,<andreaerdna libero.it>,IT
+Antonio Cotroneo,<cotroneo79 gmail.com>,IT
+Marco Bra,<marcobra.ubuntu gmail.com>,IT
+Nico Aliotta,<>,IT
 Akira Taniguchi,<taniguti apptec.co.jp>,JA
 Haruka Fujii,<haruka.fujii la.tezuka-gu.ac.jp>,JA
 Hirotoshi Toyoda,<toyoda ex.media.osaka-cu.ac.jp>,JA
 Naoki Ueda,<nao locapoint.com>,JA
 Shinji Masumoto,<masumoto sci.osaka-cu.ac.jp>,JA
+Songbo Gong,,JA
 Susumu Nonogaki,<nonogaki sci.osaka-cu.ac.jp>,JA
+tanigoo,,JA
 Yuka Tohhana,<yuka.tohhana la.tezuka-gu.ac.jp>,JA
+Yoichi Seino,,JA
+jangeum,,JA
+naokiueda,,JA
+Takayuki Nuimura,,JA
+Shimpei Matsuura,,JA
+pica.hayashi,,JA
 Huidae Cho,<grass4u gmail.com>,KO
+Sungjin Kang,,KO 
 Maris Nartiss,<maris.kde gmail.com>,LV
 Peteris Bruns,<peteris.bruns gmail.com>,LV
 Mohammed Rashad,<rashadkm gmail.com>,ML
@@ -70,6 +101,7 @@ Marcin Sanecki,,PL
 Milena Nowotarska,<do.milenki gmail com>,PL
 Monika Tylus,<monikatylus gmail.com>,PL
 Robert Szczepanek,<grass@szczepanek.pl>,PL
+Bartosz Mazurkiewcz,,PL/DE
 Antonio Rocha,<antonio.rocha deimos.com.pt>,PT
 Daniel de Castro Victoria,<daniel.victoria gmail com>,PT
 Paulo E. P. Marcondes,<paulomarcondes gmail.com>,PT
@@ -81,22 +113,36 @@ Fred Maranhão,<fred.maranhao gmail.com>,PT_BR
 Paulo E. P. Marcondes,<paulomarcondes gmail.com>,PT_BR
 Paulo Marcondes,<paulomarcondes gmail.com>,PT_BR
 Ricardo Oliveira,<ricardoabeloliveira gmail.com>,PT_BR
+Aline Furlanetto Viero,,PT_BR
+Daniel Victoria,,PT_BR
+Rafael Correia,,PT_BR
+Fernando Martins Pimenta,,PT_BR
+Francisco Rodrigo Cunha de Sousa,,PT_BR
 Andreea Marin,<andreea.marin09 yahoo.com>,RO
 Mihai Moise,<norway_mike yahoo.com>,RO
 Dana Grad,<dana_grad yahoo.com>,RO
+jucky,,RO
 Alex Shevlakov,<sixote yahoo.com>,RU
 Anna Dwarwood,,RU
 Evgeniy Lazarev,<zhecka inbox.ru>,RU
 Maxim Dubinin,<sim gis-lab.info>,RU
+Denis Veretelnik,,RU
+Niroshan Sanjaya,,SI
 Miha Staut,<mihastaut yahoo.co.uk>,SL
 Arun Balaji,<arunthilak95 gmail.com>,TA
 Man,<mansv68 yahoo.co.th>,TH
 Sarawut Ninsawat,<sarawut.map gmail.com>,TH
 Aras.Gor.O Yalcin Yilmaz,<yilmazy istanbul.edu.tr>,TR
 Saban Safak,<ssafak cvm.com.tr>,TR
+Engin Gem,,TR
+Roman Peresoliak,,UK
 Bui Huu Manh,<bhmanh73 yahoo.com>,VI
 Lê Quốc Thái,<lquocthai ioit.ac.vn>,VI
 Shulin Yang,<shulin.yang.9 gmail.com>,ZH
 Su Yongheng,<night2008 gmail.com>,ZH
 Zhang Jun,<nilarcs gmail.com>,ZH
 YusiJi, <jiyusi0001 gmail.com>,ZH
+Bu Kun,,ZH
+jietaowang,,ZH
+Wei Zhang,,ZH
+zhenhui xu,,ZH
