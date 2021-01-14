@@ -4,7 +4,7 @@
   \brief GIS Library - converts the command line arguments into actinia JSON process
                        chain building blocks
   
-  (C) 2018 by the GRASS Development Team
+  (C) 2018-2021 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -28,7 +28,7 @@ char *check_mapset_in_layer_name(char *, int);
 
   The following commands will create according JSON output:
 
-    r.slope.aspect elevation="elevation+https://storage.googleapis.com/graas-geodata/elev_ned_30m.tif" slope="slope+GTiff" aspect="aspect+GTiff" --json
+    r.slope.aspect elevation="elevation@https://storage.googleapis.com/graas-geodata/elev_ned_30m.tif" slope="slope+GTiff" aspect="aspect+GTiff" --json
 
     {
       "module": "r.slope.aspect",
@@ -340,19 +340,27 @@ char *G__json(void)
  */
 void check_create_import_opts(struct Option *opt, char *element, FILE *fp)
 {
-    int i = 0;
+    int i = 0, j = 0;
     int has_import = 0;
-    char **tokens;
+    char **tokens, **urltokens;
 
+    G_debug(3,"tokenize string: <%s>", opt->answer);
     tokens = G_tokenize(opt->answer, "@");
     while (tokens[i]) {
         G_chop(tokens[i]);
         i++;
     }
 
+    /* check if it contains an URL, if ":" present, then URL, map@mapset otherwise */
+    urltokens = G_tokenize(tokens[1], ":");
+    while (urltokens[j]) {
+        G_chop(urltokens[j]);
+        j++;
+    }
+
     fprintf(fp, "     {");
 
-    if (i > 1) {
+    if (i > 1 && j > 1) {
         if (G_strncasecmp("cell", element, 4) == 0) {
             fprintf(fp, "\"import_descr\": {\"source\":\"%s\", \"type\":\"raster\"},\n      ", tokens[1]);
             has_import = 1;
@@ -369,10 +377,15 @@ void check_create_import_opts(struct Option *opt, char *element, FILE *fp)
 
     fprintf(fp, "\"param\": \"%s\", ", opt->key);
     /* In case of import the mapset must be removed always */
-    fprintf(fp, "\"value\": \"%s\"", check_mapset_in_layer_name(tokens[0], has_import));
+    if (j > 1) {
+       fprintf(fp, "\"value\": \"%s\"", check_mapset_in_layer_name(tokens[0], has_import));
+    } else {
+       fprintf(fp, "\"value\": \"%s\"", check_mapset_in_layer_name(opt->answer, has_import));
+    };
     fprintf(fp, "}");
 
     G_free_tokens(tokens);
+    G_free_tokens(urltokens);
 }
 
 /* \brief Check the provided answer and generate the export statement
