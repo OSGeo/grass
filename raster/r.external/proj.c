@@ -108,6 +108,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
 		authcode = OSRGetAuthorityCode(hSRS, authkey);
 		if (authcode && *authcode) {
 		    G_asprintf(&srid, "%s:%s", authname, authcode);
+		}
 	    }
 	}
 	if (hSRS)
