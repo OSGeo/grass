@@ -73,7 +73,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
     }
 
 #else
-    wkt = GDALGetProjectionRef(hDS);
+    wkt = G_store(GDALGetProjectionRef(hDS));
     /* proj_trouble:
      * 0: valid srs
      * 1: no srs, default to xy

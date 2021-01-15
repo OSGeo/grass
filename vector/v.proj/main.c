@@ -335,6 +335,14 @@ int main(int argc, char *argv[])
 	    inwindow.west = floor(inwindow.west);
 	    inwindow.north = ceil(inwindow.north);
 	    inwindow.south = floor(inwindow.south);
+	    if (inwindow.east == inwindow.west) {
+		inwindow.east += 0.5;
+		inwindow.west -= 0.5;
+	    }
+	    if (inwindow.north == inwindow.south) {
+		inwindow.north += 0.5;
+		inwindow.south -= 0.5;
+	    }
 
 	    G_set_window(&inwindow);
 	}

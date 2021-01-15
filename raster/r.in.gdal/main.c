@@ -954,8 +954,12 @@ int main(int argc, char *argv[])
 		hSRS = GDALGetGCPSpatialRef(hDS);
 		const char **papszOptions = NULL;
 #else
-		gdalwkt = GDALGetGCPProjection(hDS);
-		hSRS = OSRImportFromWkt(&gdalwkt);
+		gdalwkt = G_store(GDALGetGCPProjection(hDS));
+		hSRS = OSRNewSpatialReference(NULL);
+		if (OSRImportFromWkt(hSRS, &gdalwkt) != OGRERR_NONE) {
+		    OSRDestroySpatialReference(hSRS);
+		    hSRS = NULL;
+		}
 #endif
 		/* create target location */
 		if (!hSRS || GPJ_osr_to_grass(&gcpcellhd, &proj_info,
@@ -1279,8 +1283,10 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 
 	    G_percent(row, nrows, 2);
 
-	    GDALRasterIO(hBand, GF_Read, 0, rowmap[row], ncols_gdal, 1,
-			 bufComplex, ncols_gdal, 1, eGDT, 0, 0);
+	    if (GDALRasterIO(hBand, GF_Read, 0, rowmap[row], ncols_gdal, 1,
+			     bufComplex, ncols_gdal, 1, eGDT, 0, 0) != CE_None) {
+		G_fatal_error(_("Unable to read row %d"), row);
+	    }
 
 	    for (indx = ncols - 1; indx >= 0; indx--) {	/* CEOS: flip east-west during import - MN */
 		if (eGDT == GDT_Int32) {
@@ -1334,8 +1340,10 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 
 	    G_percent(row, nrows, 2);
 
-	    GDALRasterIO(hBand, GF_Read, 0, rowmap[row], ncols_gdal, 1,
-			 cell_gdal, ncols_gdal, 1, eGDT, 0, 0);
+	    if (GDALRasterIO(hBand, GF_Read, 0, rowmap[row], ncols_gdal, 1,
+			     cell_gdal, ncols_gdal, 1, eGDT, 0, 0) != CE_None) {
+		G_fatal_error(_("Unable to read row %d"), row);
+	    }
 
 	    if (nullFlags != NULL) {
 		memset(nullFlags, 0, ncols);
@@ -1408,8 +1416,10 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 
 	    G_percent(row, nrows, 2);
 
-	    GDALRasterIO(hBand, GF_Read, 0, rowmap[row], ncols_gdal, 1,
-			 cell_gdal, ncols_gdal, 1, eGDT, 0, 0);
+	    if (GDALRasterIO(hBand, GF_Read, 0, rowmap[row], ncols_gdal, 1,
+			     cell_gdal, ncols_gdal, 1, eGDT, 0, 0) != CE_None) {
+		G_fatal_error(_("Unable to read row %d"), row);
+	    }
 
 	    if (nullFlags != NULL) {
 		memset(nullFlags, 0, ncols);

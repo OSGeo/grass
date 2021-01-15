@@ -252,6 +252,9 @@ char *get_pj_type_string(PJ *pj)
     case PJ_TYPE_OTHER_COORDINATE_OPERATION:
 	G_asprintf(&pj_type, "other coordinate operation");
 	break;
+    default:
+	G_asprintf(&pj_type, "unknown");
+	break;
     }
 
     return pj_type;

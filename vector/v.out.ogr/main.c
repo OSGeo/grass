@@ -830,8 +830,11 @@ int main(int argc, char *argv[])
 
     n_feat = n_nocat = n_noatt = 0;
 
-    if (OGR_L_TestCapability(Ogr_layer, OLCTransactions))
-	OGR_L_StartTransaction(Ogr_layer);
+    if (OGR_L_TestCapability(Ogr_layer, OLCTransactions)) {
+	if (OGR_L_StartTransaction(Ogr_layer) != OGRERR_NONE) {
+	    G_warning(_("Unable to start OGR transaction"));
+	}
+    }
 
     /* export polygons oriented according to OGC simple features standard 1.2.1
      * outer rings are oriented counter-clockwise (CCW)
@@ -891,8 +894,11 @@ int main(int argc, char *argv[])
 	G_warning(_("Export of volumes not implemented yet. Skipping."));
     }
 
-    if (OGR_L_TestCapability(Ogr_layer, OLCTransactions))
-	OGR_L_CommitTransaction(Ogr_layer);
+    if (OGR_L_TestCapability(Ogr_layer, OLCTransactions)) {
+	if (OGR_L_CommitTransaction(Ogr_layer) != OGRERR_NONE) {
+	    G_warning(_("Unable to commit OGR transaction"));
+	}
+    }
 
     ds_close(hDS);
 
