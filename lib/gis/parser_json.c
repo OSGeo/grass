@@ -357,6 +357,9 @@ void check_create_import_opts(struct Option *opt, char *element, FILE *fp)
         G_chop(urltokens[j]);
         j++;
     }
+    if (j > 2) {
+        G_fatal_error(_("Cannot parse <%s>"), tokens[1]);
+    }
 
     fprintf(fp, "     {");
 
