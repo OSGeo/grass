@@ -979,6 +979,8 @@ class DataCatalogTree(TreeView):
                                              mapset=mapset,
                                              element='mapset',
                                              action='new')
+            self.SwitchMapset(grassdb_node.data['name'], location_node.data['name'], mapset,
+                              show_confirmation=True)
 
     def OnCreateMapset(self, event):
         """Create new mapset"""
@@ -1004,7 +1006,8 @@ class DataCatalogTree(TreeView):
                 self.showImportDataInfo.emit()
 
             # switch to PERMANENT mapset in newly created location
-            self.SwitchMapset(grassdatabase, location, mapset)
+            self.SwitchMapset(grassdatabase, location, mapset,
+                              show_confirmation=True)
 
     def OnCreateLocation(self, event):
         """Create new location"""
@@ -1536,7 +1539,7 @@ class DataCatalogTree(TreeView):
                 event.Veto()
                 return
 
-    def SwitchMapset(self, grassdb, location, mapset):
+    def SwitchMapset(self, grassdb, location, mapset, show_confirmation=False):
         """
         Switch to location and mapset interactively.
         """
@@ -1544,13 +1547,16 @@ class DataCatalogTree(TreeView):
             genv = gisenv()
             # Switch to mapset in the same location
             if (grassdb == genv['GISDBASE'] and location == genv['LOCATION_NAME']):
-                switch_mapset_interactively(self, self._giface, None, None, mapset)
+                switch_mapset_interactively(self, self._giface, None, None, mapset,
+                                            show_confirmation)
             # Switch to mapset in the same grassdb
             elif grassdb == genv['GISDBASE']:
-                switch_mapset_interactively(self, self._giface, None, location, mapset)
+                switch_mapset_interactively(self, self._giface, None, location, mapset,
+                                            show_confirmation)
             # Switch to mapset in a different grassdb
             else:
-                switch_mapset_interactively(self, self._giface, grassdb, location, mapset)
+                switch_mapset_interactively(self, self._giface, grassdb, location, mapset,
+                                            show_confirmation)
 
     def OnSwitchMapset(self, event):
         """Switch to location and mapset"""
