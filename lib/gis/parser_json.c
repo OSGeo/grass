@@ -14,6 +14,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <grass/gis.h>
 
 #include "parser_local_proto.h"
@@ -340,30 +341,30 @@ char *G__json(void)
  */
 void check_create_import_opts(struct Option *opt, char *element, FILE *fp)
 {
-    int i = 0, j = 0;
+    int i = 0, urlfound;
     int has_import = 0;
-    char **tokens, **urltokens;
+    char **tokens;
 
-    G_debug(3,"tokenize string: <%s>", opt->answer);
+    G_debug(2,"tokenize opt string: <%s> with '@'", opt->answer);
     tokens = G_tokenize(opt->answer, "@");
     while (tokens[i]) {
         G_chop(tokens[i]);
         i++;
     }
 
-    /* check if it contains an URL, if ":" present, then URL, map@mapset otherwise */
-    urltokens = G_tokenize(tokens[1], ":");
-    while (urltokens[j]) {
-        G_chop(urltokens[j]);
-        j++;
-    }
-    if (j > 2) {
-        G_fatal_error(_("Cannot parse <%s>"), tokens[1]);
+    /* check if tokens[1] contains an URL or name@mapset */
+    G_debug(2,"tokens[1]: <%s>", tokens[1]);
+    if (strstr(tokens[1], "http://") != NULL || strstr(tokens[1], "https://") != NULL || strstr(tokens[1], "ftp://") != NULL ) {
+       urlfound = 1;
+       G_debug(2, "URL found");
+    } else {
+       urlfound = 0;
+       G_debug(2, "name@mapset found");
     }
 
     fprintf(fp, "     {");
 
-    if (i > 1 && j > 1) {
+    if (i > 1 && urlfound == 1) {
         if (G_strncasecmp("cell", element, 4) == 0) {
             fprintf(fp, "\"import_descr\": {\"source\":\"%s\", \"type\":\"raster\"},\n      ", tokens[1]);
             has_import = 1;
@@ -380,7 +381,7 @@ void check_create_import_opts(struct Option *opt, char *element, FILE *fp)
 
     fprintf(fp, "\"param\": \"%s\", ", opt->key);
     /* In case of import the mapset must be removed always */
-    if (j > 1) {
+    if (urlfound == 1) {
        fprintf(fp, "\"value\": \"%s\"", check_mapset_in_layer_name(tokens[0], has_import));
     } else {
        fprintf(fp, "\"value\": \"%s\"", check_mapset_in_layer_name(opt->answer, has_import));
@@ -388,7 +389,6 @@ void check_create_import_opts(struct Option *opt, char *element, FILE *fp)
     fprintf(fp, "}");
 
     G_free_tokens(tokens);
-    G_free_tokens(urltokens);
 }
 
 /* \brief Check the provided answer and generate the export statement
