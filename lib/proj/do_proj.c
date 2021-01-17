@@ -58,7 +58,7 @@ int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
 
     /* modules must set the current window, do not unset this window here */
     /* G_unset_window(); */
-    G_get_window(&window);
+    G_get_set_window(&window);
     *xmin = window.west;
     *xmax = window.east;
     *ymin = window.south;
@@ -162,6 +162,16 @@ int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
 	    if (*ymax < y[i])
 		*ymax = y[i];
 	}
+
+	G_debug(1 "input window north: %.8f", window.north);
+	G_debug(1, "input window south: %.8f", window.south);
+	G_debug(1, "input window east: %.8f", window.east);
+	G_debug(1, "input window west: %.8f", window.west);
+
+	G_debug(1, "transformed xmin: %.8f", *xmin);
+	G_debug(1, "transformed xmax: %.8f", *xmax);
+	G_debug(1, "transformed ymin: %.8f", *ymin);
+	G_debug(1, "transformed ymax: %.8f", *ymax);
     }
     G_debug(0, "get_pj_area(): xmin %g, xmax %g, ymin %g, ymax %g",
             *xmin, *xmax, *ymin, *ymax);

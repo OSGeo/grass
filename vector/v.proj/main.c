@@ -343,6 +343,10 @@ int main(int argc, char *argv[])
 		inwindow.north += 0.5;
 		inwindow.south -= 0.5;
 	    }
+	    G_debug(1, "input map north: %.8f", inwindow.north);
+	    G_debug(1, "input map south: %.8f", inwindow.south);
+	    G_debug(1, "input map east: %.8f", inwindow.east);
+	    G_debug(1, "input map west: %.8f", inwindow.west);
 
 	    G_set_window(&inwindow);
 	}
