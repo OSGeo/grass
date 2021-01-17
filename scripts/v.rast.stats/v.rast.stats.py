@@ -180,7 +180,7 @@ def main():
 
     number = len(cats)
     if number < 1:
-        grass.fatal(_("No categories found in raster map"))
+        grass.warning(_("No categories found in raster map"))
 
     # Check if all categories got converted
     # Report categories from vector map
