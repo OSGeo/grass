@@ -163,7 +163,7 @@ int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
 		*ymax = y[i];
 	}
 
-	G_debug(1 "input window north: %.8f", window.north);
+	G_debug(1, "input window north: %.8f", window.north);
 	G_debug(1, "input window south: %.8f", window.south);
 	G_debug(1, "input window east: %.8f", window.east);
 	G_debug(1, "input window west: %.8f", window.west);
