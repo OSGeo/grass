@@ -259,7 +259,14 @@ def get_nr_of_categories(vector, layer, rasters, rastertmp, percentile,
 
     number = len(cats)
     if number < 1:
+        # create columns and exit
         grass.warning(_("No categories found in raster map"))
+        for i in range(len(rasters)):
+            set_up_columns(
+                vector, layer, percentile, colprefixes[i], basecols, dbfdriver,
+                flags['c']
+            )
+            sys.exit(0)
 
     # Check if all categories got converted
     # Report categories from vector map
