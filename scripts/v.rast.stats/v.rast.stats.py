@@ -154,7 +154,72 @@ def main():
     # keep boundary settings
     grass.run_command('g.region', align=rasters[0])
 
+    # check if DBF driver used, in this case cut to 10 chars col names:
+    try:
+        fi = grass.vector_db(map=vector)[int(layer)]
+    except KeyError:
+        grass.fatal(_('There is no table connected to this map. '
+                      'Run v.db.connect or v.db.addtable first.'))
+    # we need this for non-DBF driver:
+    dbfdriver = fi['driver'] == 'dbf'
+
+    # Find out which table is linked to the vector map on the given layer
+    if not fi['table']:
+        grass.fatal(_('There is no table connected to this map. '
+                      'Run v.db.connect or v.db.addtable first.'))
+
     # prepare base raster for zonal statistics
+    prepare_base_raster(vector, layer, rastertmp, vtypes, where)
+
+    # get number of raster categories to be processed
+    number = get_nr_of_categories(vector, layer, rasters, rastertmp, percentile,
+                                  colprefixes, basecols, dbfdriver, flags['c'])
+
+    # calculate statistics:
+    grass.message(_("Processing input data (%d categories)...") % number)
+
+    for i in range(len(rasters)):
+        raster = rasters[i]
+
+        colprefix, variables_dbf, variables, colnames, extstat = set_up_columns(
+            vector, layer, percentile, colprefixes[i], basecols, dbfdriver,
+            flags['c']
+        )
+
+        # get rid of any earlier attempts
+        grass.try_remove(sqltmp)
+
+        # do the stats
+        perform_stats(raster, percentile, fi, dbfdriver, colprefix,
+                      variables_dbf, variables, colnames, extstat)
+
+        grass.message(_("Updating the database ..."))
+        exitcode = 0
+        try:
+            grass.run_command('db.execute', input=sqltmp,
+                              database=fi['database'], driver=fi['driver'])
+            grass.verbose((_("Statistics calculated from raster map <{raster}>"
+                             " and uploaded to attribute table"
+                             " of vector map <{vector}>."
+                             ).format(raster=raster, vector=vector)))
+        except CalledModuleError:
+            grass.warning(
+                _("Failed to upload statistics to attribute table of vector map <%s>.") %
+                vector)
+            exitcode = 1
+
+            sys.exit(exitcode)
+
+
+def prepare_base_raster(vector, layer, rastertmp, vtypes, where):
+    """Prepare base raster for zonal statistics.
+
+    :param vector: name of vector map or data source for direct OGR access
+    :param layer: layer number or name
+    :param where: WHERE conditions of SQL statement without 'where' keyword
+    :param rastertmp: name of temporary raster map
+    :param vtypes: input feature type
+    """
     try:
         nlines = grass.vector_info_topo(vector)['lines']
         kwargs = {}
@@ -164,11 +229,25 @@ def main():
         if flags['d'] and nlines > 0:
             kwargs['flags'] = 'd'
 
-        grass.run_command('v.to.rast', input=vector, layer=layer, output=rastertmp,
-                          use='cat', type=vtypes, quiet=True, **kwargs)
+        grass.run_command('v.to.rast', input=vector, layer=layer,
+                          output=rastertmp, use='cat', type=vtypes,
+                          quiet=True, **kwargs)
     except CalledModuleError:
         grass.fatal(_("An error occurred while converting vector to raster"))
 
+
+def get_nr_of_categories(vector, layer, rasters, rastertmp, percentile,
+                         colprefixes, basecols, dbfdriver, c):
+    """Get number of raster categories to be processed.
+
+    Perform also checks of raster and vector categories. In the case of no
+    raster categories, create the desired columns and exit.
+
+    :param vector: name of vector map or data source for direct OGR access
+    :param layer: layer number or name
+    :param rastertmp: name of temporary raster map
+    :return: number of raster categories or exit (if no categories found)
+    """
     # dump cats to file to avoid "too many argument" problem:
     p = grass.pipe_command('r.category', map=rastertmp, sep=';', quiet=True)
     cats = []
@@ -185,110 +264,109 @@ def main():
     # Check if all categories got converted
     # Report categories from vector map
     vect_cats = grass.read_command('v.category', input=vector, option='report',
-                        flags='g').rstrip('\n').split('\n')
+                                   flags='g').rstrip('\n').split('\n')
 
     # get number of all categories in selected layer
+    vect_cats_n = 0  # to be modified below
     for vcl in vect_cats:
         if vcl.split(' ')[0] == layer and vcl.split(' ')[1] == 'all':
             vect_cats_n = int(vcl.split(' ')[2])
-        
+
     if vect_cats_n != number:
         grass.warning(_("Not all vector categories converted to raster. \
-                         Converted {0} of {1}.".format(number, vect_cats_n)))
+                        Converted {0} of {1}.".format(number, vect_cats_n)))
 
-    # check if DBF driver used, in this case cut to 10 chars col names:
-    try:
-        fi = grass.vector_db(map=vector)[int(layer)]
-    except KeyError:
-        grass.fatal(
-            _('There is no table connected to this map. Run v.db.connect or v.db.addtable first.'))
-    # we need this for non-DBF driver:
-    dbfdriver = fi['driver'] == 'dbf'
+    return number
 
-    # Find out which table is linked to the vector map on the given layer
-    if not fi['table']:
-        grass.fatal(
-            _('There is no table connected to this map. Run v.db.connect or v.db.addtable first.'))
 
-    # replaced by user choiche
-    #basecols = ['n', 'min', 'max', 'range', 'mean', 'stddev', 'variance', 'cf_var', 'sum']
+def set_up_columns(vector, layer, percentile, colprefix, basecols, dbfdriver,
+                   c):
+    """Get columns-depending variables and create columns, if needed.
 
-    for i in range(len(rasters)):
-        raster = rasters[i]
-        colprefix = colprefixes[i]
-        # we need at least three chars to distinguish [mea]n from [med]ian
-        # so colprefix can't be longer than 6 chars with DBF driver
+    :param vector: name of vector map or data source for direct OGR access
+    :param layer: layer number or name
+    :param percentile: percentile to calculate
+    :param colprefix: column prefix for new attribute columns
+    :param basecols: the methods to use
+    :param dbfdriver: boolean saying if the driver is dbf
+    :param c: boolean saying if it should continue if upload column(s) already
+        exist
+    :return: colprefix, variables_dbf, variables, colnames, extstat
+    """
+    # we need at least three chars to distinguish [mea]n from [med]ian
+    # so colprefix can't be longer than 6 chars with DBF driver
+    variables_dbf = {}
+
+    if dbfdriver:
+        colprefix = colprefix[:6]
+
+    # by default perccol variable is used only for "variables" variable
+    perccol = "percentile"
+    perc = None
+    for b in basecols:
+        if b.startswith('p'):
+            perc = b
+    if perc:
+        # namespace is limited in DBF but the % value is important
         if dbfdriver:
-            colprefix = colprefix[:6]
-            variables_dbf = {}
+            perccol = "per" + percentile
+        else:
+            perccol = "percentile_" + percentile
+        percindex = basecols.index(perc)
+        basecols[percindex] = perccol
 
-        # by default perccol variable is used only for "variables" variable
-        perccol = "percentile"
-        perc = None
-        for b in basecols:
-            if b.startswith('p'):
-                perc = b
-        if perc:
-            # namespace is limited in DBF but the % value is important
-            if dbfdriver:
-                perccol = "per" + percentile
+    # dictionary with name of methods and position in "r.univar -gt"  output
+    variables = {'number': 2, 'null_cells': 3, 'minimum': 4, 'maximum': 5,
+                 'range': 6,
+                 'average': 7, 'stddev': 9, 'variance': 10, 'coeff_var': 11,
+                 'sum': 12, 'first_quartile': 14, 'median': 15,
+                 'third_quartile': 16, perccol: 17}
+    # this list is used to set the 'e' flag for r.univar
+    extracols = ['first_quartile', 'median', 'third_quartile', perccol]
+    addcols = []
+    colnames = []
+    extstat = ""
+    for i in basecols:
+        # this check the complete name of out input that should be truncated
+        for k in variables.keys():
+            if i in k:
+                i = k
+                break
+        if i in extracols:
+            extstat = 'e'
+        # check if column already present
+        currcolumn = ("%s_%s" % (colprefix, i))
+        if dbfdriver:
+            currcolumn = currcolumn[:10]
+            variables_dbf[currcolumn.replace("%s_" % colprefix, '')] = i
+
+        colnames.append(currcolumn)
+        if currcolumn in grass.vector_columns(vector, layer).keys():
+            if not c:
+                grass.fatal((_("Cannot create column "
+                               "<%s> (already present). ") % currcolumn) +
+                            _("Use -c flag to update values in this column."))
+        else:
+            if i == "n":
+                coltype = "INTEGER"
             else:
-                perccol = "percentile_" + percentile
-            percindex = basecols.index(perc)
-            basecols[percindex] = perccol
+                coltype = "DOUBLE PRECISION"
+            addcols.append(currcolumn + ' ' + coltype)
 
-        # dictionary with name of methods and position in "r.univar -gt"  output
-        variables = {'number': 2, 'null_cells': 3, 'minimum': 4, 'maximum': 5, 'range': 6,
-                     'average': 7, 'stddev': 9, 'variance': 10, 'coeff_var': 11,
-                     'sum': 12, 'first_quartile': 14, 'median': 15,
-                     'third_quartile': 16, perccol: 17}
-        # this list is used to set the 'e' flag for r.univar
-        extracols = ['first_quartile', 'median', 'third_quartile', perccol]
-        addcols = []
-        colnames = []
-        extstat = ""
-        for i in basecols:
-            # this check the complete name of out input that should be truncated
-            for k in variables.keys():
-                if i in k:
-                    i = k
-                    break
-            if i in extracols:
-                extstat = 'e'
-            # check if column already present
-            currcolumn = ("%s_%s" % (colprefix, i))
-            if dbfdriver:
-                currcolumn = currcolumn[:10]
-                variables_dbf[currcolumn.replace("%s_" % colprefix, '')] = i
+    if addcols:
+        grass.verbose(_("Adding columns '%s'") % addcols)
+        try:
+            grass.run_command('v.db.addcolumn', map=vector, columns=addcols,
+                              layer=layer)
+        except CalledModuleError:
+            grass.fatal(_("Adding columns failed. Exiting."))
 
-            colnames.append(currcolumn)
-            if currcolumn in grass.vector_columns(vector, layer).keys():
-                if not flags['c']:
-                    grass.fatal((_("Cannot create column <%s> (already present). ") % currcolumn) +
-                                _("Use -c flag to update values in this column."))
-            else:
-                if i == "n":
-                    coltype = "INTEGER"
-                else:
-                    coltype = "DOUBLE PRECISION"
-                addcols.append(currcolumn + ' ' + coltype)
+    return colprefix, variables_dbf, variables, colnames, extstat
 
-        if addcols:
-            grass.verbose(_("Adding columns '%s'") % addcols)
-            try:
-                grass.run_command('v.db.addcolumn', map=vector, columns=addcols,
-                                  layer=layer)
-            except CalledModuleError:
-                grass.fatal(_("Adding columns failed. Exiting."))
 
-        # calculate statistics:
-        grass.message(_("Processing input data (%d categories)...") % number)
-
-        # get rid of any earlier attempts
-        grass.try_remove(sqltmp)
-
-        f = open(sqltmp, 'w')
-
+def perform_stats(raster, percentile, fi, dbfdriver, colprefix, variables_dbf,
+                  variables, colnames, extstat):
+    with open(sqltmp, 'w') as f:
         # do the stats
         p = grass.pipe_command('r.univar', flags='t' + extstat, map=raster,
                                zones=rastertmp, percentile=percentile, sep=';')
@@ -324,24 +402,7 @@ def main():
             f.write(" WHERE %s=%s;\n" % (fi['key'], vars[0]))
         f.write("{0}\n".format(grass.db_commit_transaction(fi['driver'])))
         p.wait()
-        f.close()
 
-        grass.message(_("Updating the database ..."))
-        exitcode = 0
-        try:
-            grass.run_command('db.execute', input=sqltmp,
-                              database=fi['database'], driver=fi['driver'])
-            grass.verbose((_("Statistics calculated from raster map <{raster}>"
-                             " and uploaded to attribute table"
-                             " of vector map <{vector}>."
-                             ).format(raster=raster, vector=vector)))
-        except CalledModuleError:
-            grass.warning(
-                _("Failed to upload statistics to attribute table of vector map <%s>.") %
-                vector)
-            exitcode = 1
-
-            sys.exit(exitcode)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
