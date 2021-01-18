@@ -26,9 +26,8 @@ import wx
 from core import globalvar
 from core import utils
 from core.gcmd import EncodeString
-from gui_core.widgets import SearchModuleWidget
 from gui_core.treeview import CTreeView
-from gui_core.wrap import Button, StaticText
+from gui_core.wrap import Button, StaticText, SearchCtrl
 from gui_core.wrap import Menu as MenuWidget
 from icons.icon import MetaIcon
 
@@ -143,50 +142,39 @@ class SearchModuleWindow(wx.Panel):
         self.parent = parent
         self._handlerObj = handlerObj
         self._giface = giface
+        self._model = model
 
         self.showNotification = Signal('SearchModuleWindow.showNotification')
         wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
 
-        # tree
-        self._tree = CTreeView(model=model, parent=self)
-        self._tree.SetToolTip(
-            _("Double-click or Ctrl-Enter to run selected module"))
-
-#        self._dataBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
-#                                     label = " %s " % _("Module tree"))
-
         # search widget
-        self._search = SearchModuleWidget(parent=self,
-                                          model=model,
-                                          showChoice=False)
-        self._search.showSearchResult.connect(
-            lambda result: self._tree.Select(result))
-        self._search.showNotification.connect(self.showNotification)
-
-        self._helpText = StaticText(
-            parent=self, id=wx.ID_ANY,
-            label="Press Enter for next match, Ctrl+Enter to run command")
-        self._helpText.SetForegroundColour(
-            wx.SystemSettings.GetColour(
-                wx.SYS_COLOUR_GRAYTEXT))
-
-        # buttons
-        self._btnRun = Button(self, id=wx.ID_OK, label=_("&Run"))
-        self._btnRun.SetToolTip(_("Run selected module from the tree"))
-        self._btnHelp = Button(self, id=wx.ID_ANY, label=_("H&elp"))
-        self._btnHelp.SetToolTip(
-            _("Show manual for selected module from the tree"))
+        self._search = SearchCtrl(self)
+        self._search.SetDescriptiveText(_('Search'))
+        self._search.ShowCancelButton(True)
         self._btnAdvancedSearch = Button(self, id=wx.ID_ANY,
                                          label=_("Adva&nced search..."))
         self._btnAdvancedSearch.SetToolTip(
             _("Do advanced search using %s module") % 'g.search.module')
+        # tree
+        self._tree = CTreeView(model=model, parent=self)
+        self._tree.SetToolTip(
+            _("Double-click to run selected module"))
+
+        # buttons
+        self._btnRun = Button(self, id=wx.ID_OK, label=_("&Run..."))
+        self._btnRun.SetToolTip(_("Run selected module from the tree"))
+        self._btnHelp = Button(self, id=wx.ID_ANY, label=_("H&elp"))
+        self._btnHelp.SetToolTip(
+            _("Show manual for selected module from the tree"))
 
         # bindings
+        self._search.Bind(wx.EVT_TEXT, lambda evt: self.Filter(evt.GetString()))
+        self._search.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN,
+                          lambda evt: self.Filter(''))
         self._btnRun.Bind(wx.EVT_BUTTON, lambda evt: self.Run())
         self._btnHelp.Bind(wx.EVT_BUTTON, lambda evt: self.Help())
         self._btnAdvancedSearch.Bind(wx.EVT_BUTTON,
                                      lambda evt: self.AdvancedSearch())
-        self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
 
         self._tree.selectionChanged.connect(self.OnItemSelected)
         self._tree.itemActivated.connect(lambda node: self.Run(node))
@@ -199,38 +187,40 @@ class SearchModuleWindow(wx.Panel):
         """Do dialog layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
 
+        # search
+        searchSizer = wx.BoxSizer(wx.HORIZONTAL)
+        searchSizer.Add(self._search, proportion=1,
+                        flag=wx.EXPAND | wx.RIGHT, border=5)
+        searchSizer.Add(self._btnAdvancedSearch, proportion=0,
+                        flag=wx.EXPAND)
+        sizer.Add(searchSizer, proportion=0,
+                  flag=wx.EXPAND | wx.ALL, border=5)
         # body
-        dataSizer = wx.BoxSizer(wx.HORIZONTAL)
-        dataSizer.Add(self._tree, proportion=1,
-                      flag=wx.EXPAND)
+        sizer.Add(self._tree, proportion=1,
+                  flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
 
         # buttons
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(self._btnAdvancedSearch, proportion=0)
         btnSizer.AddStretchSpacer()
-        btnSizer.Add(self._btnHelp, proportion=0)
+        btnSizer.Add(self._btnHelp, proportion=0,
+                     flag=wx.EXPAND | wx.RIGHT, border=5)
         btnSizer.Add(self._btnRun, proportion=0)
 
-        sizer.Add(dataSizer, proportion=1,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.EXPAND | wx.ALL, border=5)
 
-        sizer.Add(self._search, proportion=0,
-                  flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
-
-        sizer.Add(btnSizer, proportion=0,
-                  flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
-
-        sizer.Add(self._helpText,
-                  proportion=0, flag=wx.EXPAND | wx.LEFT, border=5)
-
-        sizer.Fit(self)
-        sizer.SetSizeHints(self)
-
-        self.SetSizer(sizer)
-
-        self.Fit()
+        self.SetSizerAndFit(sizer)
         self.SetAutoLayout(True)
         self.Layout()
+
+    def Filter(self, text):
+        if text:
+            model = self._model.Filtered(key=['command', 'keywords', 'description'],
+                                         value=text)
+            self._tree.SetModel(model)
+            self._tree.ExpandAll()
+        else:
+            self._tree.SetModel(self._model)
 
     def _GetSelectedNode(self):
         selection = self._tree.GetSelected()
@@ -251,6 +241,11 @@ class SearchModuleWindow(wx.Panel):
         data = node.data
         # non-leaf nodes
         if not data:
+            # expand/collapse location/mapset...
+            if self._tree.IsNodeExpanded(node):
+                self._tree.CollapseNode(node, recursive=False)
+            else:
+                self._tree.ExpandNode(node, recursive=False)
             return
 
         # extract name of the handler and create a new call
@@ -286,12 +281,6 @@ class SearchModuleWindow(wx.Panel):
     def AdvancedSearch(self):
         """Show advanced search window"""
         self._handlerObj.RunMenuCmd(cmd=['g.search.modules'])
-
-    def OnKeyUp(self, event):
-        """Key or key combination pressed"""
-        if event.ControlDown() and \
-                event.GetKeyCode() in (wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER):
-            self.Run()
 
     def OnItemSelected(self, node):
         """Item selected"""

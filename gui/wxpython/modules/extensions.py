@@ -30,10 +30,10 @@ from core.gcmd import GError, RunCommand, GException, GMessage
 from core.utils import SetAddOnPath
 from core.gthread import gThread
 from core.menutree import TreeModel, ModuleNode
-from gui_core.widgets import GListCtrl, SearchModuleWidget
+from gui_core.widgets import GListCtrl
 from gui_core.treeview import CTreeView
 from core.toolboxes import toolboxesOutdated
-from gui_core.wrap import Button, StaticBox, TextCtrl, Menu, NewId
+from gui_core.wrap import Button, StaticBox, TextCtrl, Menu, NewId, SearchCtrl
 
 
 class InstallExtensionWindow(wx.Frame):
@@ -70,15 +70,9 @@ class InstallExtensionWindow(wx.Frame):
             parent=self.panel,
             model=self.modelBuilder.GetModel())
 
-        self.search = SearchModuleWidget(
-            parent=self.panel,
-            model=self.modelBuilder.GetModel(),
-            showChoice=False)
-        self.search.showSearchResult.connect(
-            lambda result: self.tree.Select(result))
-        # show text in statusbar when notification appears
-        self.search.showNotification.connect(
-            lambda message: self.SetStatusText(message))
+        self.search = SearchCtrl(self.panel)
+        self.search.SetDescriptiveText(_('Search'))
+        self.search.ShowCancelButton(True)
         # load data in different thread
         self.thread = gThread()
 
@@ -127,6 +121,9 @@ class InstallExtensionWindow(wx.Frame):
         # self.btnFetch.Bind(wx.EVT_BUTTON, self.OnFetch)
         self.btnInstall.Bind(wx.EVT_BUTTON, self.OnInstall)
         self.btnHelp.Bind(wx.EVT_BUTTON, self.OnHelp)
+        self.search.Bind(wx.EVT_TEXT, lambda evt: self.Filter(evt.GetString()))
+        self.search.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN,
+                         lambda evt: self.Filter(''))
         self.tree.selectionChanged.connect(self.OnItemSelected)
         self.tree.itemActivated.connect(self.OnItemActivated)
         self.tree.contextMenu.connect(self.OnContextMenu)
@@ -147,8 +144,7 @@ class InstallExtensionWindow(wx.Frame):
         # repoSizer.Add(repo1Sizer,
         #               flag=wx.EXPAND)
 
-        findSizer = wx.BoxSizer(wx.HORIZONTAL)
-        findSizer.Add(self.search, proportion=1)
+        sizer.Add(self.search, proportion=0, flag=wx.EXPAND | wx.ALL, border=3)
 
         treeSizer = wx.StaticBoxSizer(self.treeBox, wx.HORIZONTAL)
         treeSizer.Add(self.tree, proportion=1,
@@ -168,8 +164,6 @@ class InstallExtensionWindow(wx.Frame):
 
         # sizer.Add(repoSizer, proportion=0,
         #           flag=wx.ALL | wx.EXPAND, border=3)
-        sizer.Add(findSizer, proportion=0,
-                  flag=wx.ALL | wx.EXPAND, border=3)
         sizer.Add(treeSizer, proportion=1,
                   flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
         sizer.Add(optionSizer, proportion=0,
@@ -226,6 +220,16 @@ class InstallExtensionWindow(wx.Frame):
                 key='command', value='*'))
         self.SetStatusText(_("%d extensions loaded") % nitems, 0)
         wx.EndBusyCursor()
+
+    def Filter(self, text):
+        model = self.modelBuilder.GetModel()
+        if text:
+            model = model.Filtered(key=['command', 'keywords', 'description'],
+                                   value=text)
+            self.tree.SetModel(model)
+            self.tree.ExpandAll()
+        else:
+            self.tree.SetModel(model)
 
     def OnContextMenu(self, node):
         if not hasattr(self, "popupID"):
