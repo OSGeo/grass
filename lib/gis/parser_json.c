@@ -352,9 +352,9 @@ void check_create_import_opts(struct Option *opt, char *element, FILE *fp)
         i++;
     }
 
-    /* check if tokens[1] contains an URL or name@mapset */
+    /* check if tokens[1] starts with an URL or name@mapset */
     G_debug(2,"tokens[1]: <%s>", tokens[1]);
-    if (strstr(tokens[1], "http://") != NULL || strstr(tokens[1], "https://") != NULL || strstr(tokens[1], "ftp://") != NULL ) {
+    if (strncmp(tokens[1], "http://", 7) == 0 || strncmp(tokens[1], "https://", 8) == 0 || strncmp(tokens[1], "ftp://", 6) == 0 ) {
        urlfound = 1;
        G_debug(2, "URL found");
     } else {
