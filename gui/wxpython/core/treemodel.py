@@ -268,9 +268,9 @@ class ModuleNode(DictNode):
             try:
                 text = self.data[key]
             except KeyError:
-                return False
+                continue
             if not text:
-                return False
+                continue
             if case_sensitive:
                 # start supported but unused, so testing last
                 if value in text or value == '*':

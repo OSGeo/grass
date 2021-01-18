@@ -235,18 +235,19 @@ class DataCatalogNode(DictNode):
 
         return _("{name}").format(**data)
 
-    def match(self, exact=True, **kwargs):
+    def match(self, method='exact', **kwargs):
         """Method used for searching according to given parameters.
 
-        :param value: dictionary value to be matched
-        :param key: data dictionary key
+        :param method: 'exact' for exact match or 'filtering' for filtering by type/name
+        :param kwargs key-value to be matched, filtering method uses 'type' and 'name'
+               where 'name' is compiled regex
         """
         if not kwargs:
             return False
 
-        if exact:
-            for key in kwargs:
-                if not (key in self.data and self.data[key] == kwargs[key]):
+        if method == 'exact':
+            for key, value in kwargs.items():
+                if not (key in self.data and self.data[key] == value):
                     return False
             return True
         # for filtering            
@@ -1649,9 +1650,9 @@ class DataCatalogTree(TreeView):
             self._model = self._orig_model
         else:
             if element:
-                self._model = self._orig_model.Filtered(exact=False, name=re.compile(name), type=element)
+                self._model = self._orig_model.Filtered(method='filtering', name=re.compile(name), type=element)
             else:
-                self._model = self._orig_model.Filtered(exact=False, name=re.compile(name))
+                self._model = self._orig_model.Filtered(method='filtering', name=re.compile(name))
         self.UpdateCurrentDbLocationMapsetNode()
         self.RefreshItems()
         self.ExpandCurrentMapset()
