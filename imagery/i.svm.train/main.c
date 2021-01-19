@@ -22,20 +22,39 @@
 #include <grass/imagery.h>
 #include <grass/glocale.h>
 
+#include "fill.h"
+
+/* LIBSVM message wrapper */
+void print_func(const char *s) {
+    G_verbose_message("SVMLIB: %s", s);
+};
+
 
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Option *opt_group, *opt_subgroup, *opt_sigfile;
+    struct Option *opt_group, *opt_subgroup, *opt_sigfile, *opt_labels;
     struct Option *opt_svm_type, *opt_svm_kernel;
     struct Option *opt_svm_cache_size, *opt_svm_degree, *opt_svm_gamma,
         *opt_svm_coef0, *opt_svm_eps, *opt_svm_cost, *opt_svm_nu, *opt_svm_p;
     struct Flag *flag_svm_shrink, *flag_svm_prob;
 
-    struct Ref bands;
+    const char *mapset_labels;
+    char name_labels[GNAME_MAX], name_group[GNAME_MAX], name_subgroup[GNAME_MAX];
+    char mapset_group[GMAPSET_MAX], mapset_subgroup[GMAPSET_MAX];
+    char element[GPATH_MAX], model_file[GPATH_MAX];
+    
+    struct Ref band_ref;
 
     struct svm_parameter parameters;
     const char *parameters_error;
+    
+    struct svm_problem problem;
+    
+    struct svm_model *model;
+    int out_status;
+    
+    
 
     G_gisinit(argv[0]);
 
@@ -47,18 +66,23 @@ int main(int argc, char *argv[])
     module->description = _("Train SVM");
 
     opt_group = G_define_standard_option(G_OPT_I_GROUP);
+    /* GTC: SVM training input */
+    opt_group->description = _("Maps with feature values (attributes)");
 
     opt_subgroup = G_define_standard_option(G_OPT_I_SUBGROUP);
     opt_subgroup->required = NO;
+    
+    opt_labels = G_define_standard_option(G_OPT_R_INPUTS);
+    opt_labels->description = _("Map with training labels or target values");
 
     opt_sigfile = G_define_option();
-    opt_sigfile->key = "signaturefile";
+    opt_sigfile->key = "model";
     opt_sigfile->type = TYPE_STRING;
     opt_sigfile->key_desc = "name";
     opt_sigfile->required = YES;
-    opt_sigfile->gisprompt = "new,sig,sigfile";
+    opt_sigfile->gisprompt = "new,svm,sigfile";
     opt_sigfile->description =
-        _("Name for output file containing result signatures");
+        _("Name for output file containing trained model");
 
     opt_svm_type = G_define_option();
     opt_svm_type->key = "type";
@@ -208,17 +232,37 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
 
     /* Input validation */
-    if (!I_find_group(opt_group->answer)) {
-        G_fatal_error(_("Group <%s> not found in current mapset"),
-                      opt_group->answer);
+    /* Input maps */
+    if (G_unqualified_name(opt_group->answer, NULL, name_group, mapset_group) == 0)
+        strcpy(mapset_group, G_mapset());
+    if (opt_subgroup->answer &&
+        G_unqualified_name(opt_subgroup->answer, NULL, name_subgroup, mapset_subgroup) != 0 &&
+        strcmp(mapset_subgroup, mapset_group) != 0)
+        G_fatal_error(_("Invalid subgroup <%s> provided"), opt_subgroup->answer);
+    if (!I_find_group2(name_group, mapset_group)) {
+        G_fatal_error(_("Group <%s> not found in mapset <%s>"),
+                      name_group, mapset_group);
     }
     if (opt_subgroup->answer &&
-        !I_find_subgroup(opt_group->answer, opt_subgroup->answer)) {
-        G_fatal_error(_("Subgroup <%s> in group <%s> not found"),
-                      opt_subgroup->answer, opt_group->answer);
+        !I_find_subgroup2(name_group, name_subgroup, mapset_group)) {
+        G_fatal_error(_("Subgroup <%s> in group <%s@%s> not found"),
+                      name_subgroup, name_group, mapset_group);
     }
-    /* TODO: Check signature file for overwrite */
+    
+    strcpy(name_labels, opt_labels->answer);
+    if ((mapset_labels = G_find_raster(name_labels, "")) == NULL) {
+        G_fatal_error(_("Raster map <%s> not found"), opt_labels->answer);
+    }
+    
+    if (opt_subgroup->answer)
+        sprintf(element, "subgroup%c%s%csvm%c%s", HOST_DIRSEP, name_subgroup, HOST_DIRSEP, HOST_DIRSEP, opt_sigfile->answer);
+    else
+        sprintf(element, "svm%c%s", HOST_DIRSEP, opt_sigfile->answer);
+    if (!G_get_overwrite() && G_find_file2_misc("group", element, name_group, G_mapset()) != NULL)
+        G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"), 
+                        opt_sigfile->key, opt_sigfile->answer);
 
+    /* Input SVM parameters */
     /* TODO: Implement parameter checking duplicating svm_check_parameter() to generate translatable errors */
     parameters.cache_size = atoi(opt_svm_cache_size->answer);
     parameters.degree = atoi(opt_svm_degree->answer);
@@ -276,34 +320,57 @@ int main(int argc, char *argv[])
     /* TODO: implement weight support */
     parameters.nr_weight = 0;
 
-    //parameters_error = svm_check_parameter(, &parameters);
+
+    /* Get bands */
+    if (opt_subgroup->answer) {
+        if (!I_get_subgroup_ref2
+            (name_group, opt_subgroup->answer, mapset_group, &band_ref)) {
+            G_fatal_error(_("There was an error reading subgroup <%s> in group <%s@%s>"),
+                          opt_subgroup->answer, name_group, mapset_group);
+        }
+    }
+    else {
+        if (!I_get_group_ref2(name_group, mapset_group, &band_ref)) {
+            G_fatal_error(_("There was an error reading group <%s@%s>"),
+                          name_group, mapset_group);
+        }
+    }
+    if (band_ref.nfiles <= 0) {
+        if (opt_subgroup->answer)
+            G_fatal_error(_("Subgroup <%s> in group <%s@%s> contains no raster maps."),
+                          opt_subgroup->answer, name_group, mapset_group);
+        else
+            G_fatal_error(_("Group <%s@%s> contains no raster maps."),
+                          name_group, mapset_group);
+    }
+    
+    svm_set_print_string_function(&print_func);
+
+    /* Fill svm_problem struct with training data */
+    fill_problem(name_labels, mapset_labels, band_ref, mapset_group, &problem);
+    
+    /* svm_check_parameter needs filled svm_problem struct thus checking only now */
+    parameters_error = svm_check_parameter(&problem, &parameters);
     if (parameters_error)
         G_fatal_error(_("SVM parameter validation returned an error: %s\n"),
                       parameters_error);
 
-    /* Get bands */
-    if (opt_subgroup->answer) {
-        if (!I_get_subgroup_ref
-            (opt_group->answer, opt_subgroup->answer, &bands)) {
-            G_fatal_error(_("There was an error reading subgroup <%s> in group <%s>"),
-                          opt_subgroup->answer, opt_group->answer);
-        }
-    }
-    else {
-        if (!I_get_group_ref(opt_group->answer, &bands)) {
-            G_fatal_error(_("There was an error reading group <%s>"),
-                          opt_group->answer);
-        }
-    }
-    if (bands.nfiles <= 0) {
-        if (opt_subgroup->answer)
-            G_fatal_error(_("Subgroup <%s> in group <%s> contains no raster maps."),
-                          opt_subgroup->answer, opt_group->answer);
-        else
-            G_fatal_error(_("Group <%s> contains no raster maps."),
-                          opt_group->answer);
-    }
+    /* Train model */
+    model = svm_train(&problem, &parameters);
 
-
+    /* Write out training results */
+    /* TODO: Move to Imagery library? */
+    if (opt_subgroup->answer)
+        sprintf(element, "group%c%s%csubgroup%c%s%csvm", HOST_DIRSEP, name_group, HOST_DIRSEP, HOST_DIRSEP, opt_subgroup->answer, HOST_DIRSEP);
+    else
+        sprintf(element, "group%c%s%csvm", HOST_DIRSEP, name_group, HOST_DIRSEP);
+    if (G_make_mapset_element(element) == 0)
+        G_fatal_error(_("Failed to create signatures for group <%s>"), opt_group->answer);
+    G_file_name_misc(model_file, NULL, element, opt_sigfile->answer, G_mapset());
+    out_status = svm_save_model(model_file, model);
+    if (out_status != 0) {
+        G_fatal_error(_("Unable to write trained model to file '%s'. Error code: %d"), model_file, out_status); 
+    }
+    G_message(_("Training successfuly complete"));
     exit(EXIT_SUCCESS);
 }
