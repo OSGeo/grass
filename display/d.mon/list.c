@@ -52,7 +52,7 @@ void list_mon(char ***list, int *n)
     while ((dp = readdir(dirp)) != NULL) {
 	int ret;
 
-        if (!dp->d_name || dp->d_name[0] == '.')
+	if (!dp->d_name[0] || dp->d_name[0] == '.')
 	    continue;
 
 	mon_path = get_path(dp->d_name, TRUE);
@@ -145,7 +145,7 @@ void list_files(const char *name, FILE *fd_out)
         G_fatal_error(_("No support files found for monitor <%s>"), name);
 
     while ((dp = readdir(dirp)) != NULL) {
-        if (!dp->d_name || dp->d_name[0] == '.')
+        if (!dp->d_name[0] || dp->d_name[0] == '.')
             continue;
         
         p = strrchr(dp->d_name, '.');

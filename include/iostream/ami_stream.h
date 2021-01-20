@@ -613,7 +613,7 @@ AMI_err AMI_STREAM<T>::write_item(const T &elt) {
   } else {
     if (fwrite((char*)(&elt), sizeof(T), 1,fp) < 1) {
       cerr << "ERROR: AMI_STREAM::write_item failed.\n";
-      if (path && *path)
+      if (*path)
 	perror(path);
       else
 	perror("AMI_STREAM::write_item: ");
@@ -640,7 +640,7 @@ AMI_err AMI_STREAM<T>::write_array(const T *data, off_t len) {
     nobj = fwrite(data, sizeof(T), len, fp);
     if (nobj  < len) {
       cerr << "ERROR: AMI_STREAM::write_array failed.\n";
-      if (path && *path)
+      if (*path)
 	perror(path);
       else
 	perror("AMI_STREAM::write_array: ");
