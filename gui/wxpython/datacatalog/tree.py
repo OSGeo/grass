@@ -1309,6 +1309,23 @@ class DataCatalogTree(TreeView):
             self._saveGrassDBs()
         return grassdb_node
 
+    def OfferCreateLocation(self, grassdb):
+        """
+        Offer to create new location in the given empty grass database.
+        """
+        grassdb_node = self._model.SearchNodes(name=grassdb,
+                                               type='grassdb')
+        if grassdb_node and not GetListOfLocations(grassdb):
+            message = _("Do you want to create a location?")
+            dlg = wx.MessageDialog(self,
+                                    message=message,
+                                    caption=_("Create location?"),
+                                    style=wx.YES_NO | wx.YES_DEFAULT |
+                                    wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_YES:
+                self.CreateLocation(grassdb_node[0])
+            dlg.Destroy()
+
     def OnDeleteMap(self, event):
         """Delete layer or mapset"""
         names = [self.selected_layer[i].data['name'] + '@' + self.selected_mapset[i].data['name']
