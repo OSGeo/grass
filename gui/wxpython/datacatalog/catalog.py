@@ -233,11 +233,11 @@ class DataCatalog(wx.Panel):
 
         menu.AppendSeparator()
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create raster map from ungridded x,y,z ASCII data  [r.in.xyz]"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create raster map from x,y,z data  [r.in.xyz]"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnImportRasterAscii, item)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create vector map from ASCII vector data  [v.in.ascii]"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create vector map from x,y,z data  [v.in.ascii]"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnImportVectorAscii, item)
 
