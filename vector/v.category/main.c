@@ -537,7 +537,7 @@ int main(int argc, char *argv[])
 			freps[fld]->table = G_store(Fi->table);
 		    }
 		    else {
-			freps[fld]->table = '\0';
+			freps[fld]->table = NULL;
 		    }
 		}
 
@@ -601,7 +601,7 @@ int main(int argc, char *argv[])
 			    freps[fld]->table = G_store(Fi->table);
 			}
 			else {
-			    freps[fld]->table = '\0';
+			    freps[fld]->table = NULL;
 			}
 		    }
 

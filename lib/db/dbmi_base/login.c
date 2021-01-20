@@ -297,11 +297,11 @@ static int get_login(const char *driver, const char *database, const char **user
 
     G_debug(3, "db_get_login(): drv=[%s] db=[%s]", driver, database);
 
-    user[0] = '\0';
-    password[0] = '\0';
-    host[0] = '\0';
-    port[0] = '\0';
-    
+    *user = NULL;
+    *password = NULL;
+    *host = NULL;
+    *port = NULL;
+
     init_login(&login);
 
     if (read_file(&login) == -1)

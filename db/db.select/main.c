@@ -276,7 +276,7 @@ void parse_command_line(int argc, char **argv)
     parms.table = table->answer;
     parms.sql = sql->answer;
     parms.fs = G_option_to_separator(fs);
-    parms.vs = '\0';
+    parms.vs = NULL;
     if (vs->answer)
 	parms.vs = G_option_to_separator(vs);
     parms.nv = nv->answer;
