@@ -319,7 +319,7 @@ int main(int argc, char *argv[])
 	G_debug(1, "lsat.number = %d, lsat.sensor = [%s]",
 		lsat.number, lsat.sensor);
 
-	if (!lsat.sensor || lsat.number > 8 || lsat.number < 1)
+	if (!lsat.sensor[0] || lsat.number > 8 || lsat.number < 1)
 	    G_fatal_error(_("Failed to identify satellite"));
 
 	G_debug(1, "Landsat-%d %s with data set in metadata file [%s]",
