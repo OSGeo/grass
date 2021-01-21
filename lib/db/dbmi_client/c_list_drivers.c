@@ -32,7 +32,7 @@ const char *db_list_drivers(void)
     else {
 	/* build the comma separated string of existing drivers */
 	for (cur = list; cur; cur = cur->next) {
-	    if (cur->driverName == '\0')
+	    if (cur->driverName[0] == '\0')
 		break;
 	    else {
 		if (cur != list)

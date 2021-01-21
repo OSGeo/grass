@@ -1207,7 +1207,7 @@ void check_opts(void)
 		check_an_opt(opt->key, opt->type,
 			     opt->options, opt->opts, &opt->answer);
 	    else {
-		for (ans = 0; opt->answers[ans] != '\0'; ans++)
+		for (ans = 0; opt->answers[ans] != NULL; ans++)
 		    check_an_opt(opt->key, opt->type,
 				 opt->options, opt->opts, &opt->answers[ans]);
 	    }
@@ -1529,7 +1529,7 @@ void check_multiple_opts(void)
 		if (*ptr == ',')
 		    n_commas++;
 	    /* count items */
-	    for (n = 0; opt->answers[n] != '\0'; n++) ;
+	    for (n = 0; opt->answers[n] != NULL; n++) ;
 	    /* if not correct multiple of items */
 	    if (n % n_commas) {
 		G_asprintf(&err,
