@@ -56,7 +56,7 @@ class QueryDialog(wx.Dialog):
 
         self.tree.SetColumnWidth(0, 220)
         self.tree.SetColumnWidth(1, 1000)
-        self.tree.ExpandAll(self._model.root)
+        self.tree.ExpandAll()
         self.tree.RefreshItems()
         self.tree.contextMenu.connect(self.ShowContextMenu)
         self.mainSizer.Add(
