@@ -336,17 +336,13 @@ int main(int argc, char **argv)
     iproj.srid = G_get_projsrid();
     iproj.wkt = G_get_projwkt();
 
+    tproj.pj = NULL;
     tproj.def = NULL;
 #ifdef HAVE_PROJ_H
     if (pipeline->answer) {
 	tproj.def = G_store(pipeline->answer);
     }
 #endif
-
-    /* switch back to current location */
-    G_switch_env();
-    if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
-	G_fatal_error(_("Unable to initialize coordinate transformation"));
 
     G_free_key_value(in_proj_info);
     G_free_key_value(in_unit_info);
@@ -355,13 +351,8 @@ int main(int argc, char **argv)
     if (G_verbose() > G_verbose_std())
 	pj_print_proj_params(&iproj, &oproj);
 
-    /* switch to input location */
-    G_switch_env();
-
-    /* this call causes r.proj to read the entire map into memeory */
+    /* this call causes r.proj to read the entire map into memory */
     Rast_get_cellhd(inmap->answer, setname, &incellhd);
-
-    Rast_set_input_window(&incellhd);
 
     if (G_projection() == PROJECTION_XY)
 	G_fatal_error(_("Unable to work with unprojected data (xy location)"));
@@ -385,6 +376,17 @@ int main(int argc, char **argv)
     if (print_bounds->answer) {
 	G_message(_("Input map <%s@%s> in location <%s>:"),
 	    inmap->answer, setname, inlocation->answer);
+
+	/* reproject input raster extents from input to output */
+	G_set_window(&incellhd);
+
+	G_debug(1, "input window north: %.8f", incellhd.north);
+	G_debug(1, "input window south: %.8f", incellhd.south);
+	G_debug(1, "input window east: %.8f", incellhd.east);
+	G_debug(1, "input window west: %.8f", incellhd.west);
+
+	if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
+	    G_fatal_error(_("Unable to initialize coordinate transformation"));
 
 	outcellhd.north = -1e9;
 	outcellhd.south =  1e9;
@@ -417,10 +419,30 @@ int main(int argc, char **argv)
 	exit(EXIT_SUCCESS);
     }
 
-
     /* Cut non-overlapping parts of input map */
-    if (!nocrop->answer)
-	bordwalk(&outcellhd, &incellhd, &iproj, &oproj, &tproj, PJ_INV);
+    if (!nocrop->answer) {
+	/* reproject current region from output to input */
+	/* switch back to current location,
+	 * initialize transformation pipeline */
+	G_switch_env();
+	G_unset_window();
+	G_set_window(&outcellhd);
+	tproj.def = NULL;
+	tproj.pj = NULL;
+#ifdef HAVE_PROJ_H
+	if (pipeline->answer) {
+	    tproj.def = G_store(pipeline->answer);
+	}
+#endif
+	if (GPJ_init_transform(&oproj, &iproj, &tproj) < 0)
+	    G_fatal_error(_("Unable to initialize coordinate transformation"));
+
+	/* switch to input location */
+	G_switch_env();
+
+	/* update cellhead of input map */
+	bordwalk(&outcellhd, &incellhd, &oproj, &iproj, &tproj, PJ_FWD);
+    }
 
     /* Add 2 cells on each side for bilinear/cubic & future interpolation methods */
     /* (should probably be a factor based on input and output resolution) */
@@ -437,16 +459,35 @@ int main(int argc, char **argv)
     if (incellhd.west < iwest)
 	incellhd.west = iwest;
 
-    Rast_set_input_window(&incellhd);
-
-    /* And switch back to original location */
+    /* switch to current location */
 
     G_switch_env();
 
     /* Adjust borders of output map */
 
-    if (!nocrop->answer)
+    if (!nocrop->answer) {
+	/* reproject from input to output */
+	/* switch input location,
+	 * initialize transformation pipeline */
+	G_switch_env();
+	G_unset_window();
+	G_set_window(&incellhd);
+	tproj.def = NULL;
+	tproj.pj = NULL;
+#ifdef HAVE_PROJ_H
+	if (pipeline->answer) {
+	    tproj.def = G_store(pipeline->answer);
+	}
+#endif
+	if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
+	    G_fatal_error(_("Unable to initialize coordinate transformation"));
+
+	/* switch to output location */
+	G_switch_env();
+
+	/* reduce output region */
 	bordwalk(&incellhd, &outcellhd, &iproj, &oproj, &tproj, PJ_FWD);
+    }
 
 #if 0
     outcellhd.west = outcellhd.south = HUGE_VAL;
@@ -507,8 +548,22 @@ int main(int argc, char **argv)
     ibuffer = readcell(fdi, memory->answer);
     Rast_close(fdi);
 
+    /* And switch back to original location */
     G_switch_env();
     Rast_set_output_window(&outcellhd);
+
+    /* reproject from output to input */
+    G_unset_window();
+    G_set_window(&outcellhd);
+    tproj.def = NULL;
+    tproj.pj = NULL;
+#ifdef HAVE_PROJ_H
+    if (pipeline->answer) {
+	tproj.def = G_store(pipeline->answer);
+    }
+#endif
+    if (GPJ_init_transform(&oproj, &iproj, &tproj) < 0)
+	G_fatal_error(_("Unable to initialize coordinate transformation"));
 
     if (strcmp(interpol->answer, "nearest") == 0) {
 	fdo = Rast_open_new(mapname, cell_type);
@@ -546,9 +601,9 @@ int main(int argc, char **argv)
 
 	    /* project coordinates in output matrix to       */
 	    /* coordinates in input matrix                   */
-	    if (GPJ_transform(&iproj, &oproj, &tproj, PJ_INV,
+	    if (GPJ_transform(&oproj, &iproj, &tproj, PJ_FWD,
 			      &xcoord1, &ycoord1, NULL) < 0) {
-		G_warning(_("Error in %s"), "GPJ_transform()");
+		G_fatal_error(_("Error in %s"), "GPJ_transform()");
 		Rast_set_null_value(obufptr, 1, cell_type);
 	    }
 	    else {

@@ -72,20 +72,21 @@ int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
 	const char *projstr = NULL;
 	char *indef = NULL;
 	struct pj_info oproj, tproj;	/* proj parameters  */
-	PJ *source_crs;
 
 	oproj.pj = NULL;
+	oproj.proj[0] = '\0';
 	tproj.def = NULL;
 
 	if (proj_get_type(iproj->pj) == PJ_TYPE_BOUND_CRS) {
+	    PJ *source_crs;
+
 	    source_crs = proj_get_source_crs(NULL, iproj->pj);
 	    if (source_crs) {
 		projstr = proj_as_proj_string(NULL, source_crs, PJ_PROJ_5, NULL);
 		if (projstr) {
 		    indef = G_store(projstr);
-
-		    proj_destroy(source_crs);
 		}
+		proj_destroy(source_crs);
 	    }
 	}
 	else {
@@ -100,7 +101,9 @@ int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
 
 	G_asprintf(&tproj.def, "+proj=pipeline +step +inv %s",
 		   indef);
+	G_debug(1, "get_pj_area() tproj.def: %s", tproj.def);
 	tproj.pj = proj_create(PJ_DEFAULT_CTX, tproj.def);
+
 	if (tproj.pj == NULL) {
 	    G_warning(_("proj_create() failed for '%s'"), tproj.def);
 	    G_free(indef);
@@ -117,6 +120,9 @@ int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
 	    proj_destroy(tproj.pj);
 
 	    return 0;
+	}
+	else {
+	    G_debug(1, "proj_create() projstr '%s'", projstr);
 	}
 	G_free(indef);
 
@@ -150,6 +156,7 @@ int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
 
 	proj_destroy(tproj.pj);
 	G_free(tproj.def);
+
 	*xmin = *xmax = x[84];
 	*ymin = *ymax = y[84];
 	for (i = 0; i < 84; i++) {
@@ -173,7 +180,7 @@ int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
 	G_debug(1, "transformed ymin: %.8f", *ymin);
 	G_debug(1, "transformed ymax: %.8f", *ymax);
     }
-    G_debug(0, "get_pj_area(): xmin %g, xmax %g, ymin %g, ymax %g",
+    G_debug(1, "get_pj_area(): xmin %g, xmax %g, ymin %g, ymax %g",
             *xmin, *xmax, *ymin, *ymax);
 
     return 1;
@@ -452,16 +459,9 @@ int GPJ_init_transform(const struct pj_info *info_in,
     else if (info_out->pj == NULL) {
 	const char *projstr = NULL;
 	char *indef = NULL;
-	PJ *in_pj = NULL;
 
-	in_pj = get_pj_object(info_in, &indef);
-
-	if (indef && in_pj) {
-	    G_free(indef);
-	    indef = G_store(proj_as_proj_string(NULL, in_pj, PJ_PROJ_5, NULL));
-	}
-	else
-	    indef = G_store(info_in->def);
+	/* get PROJ-style definition */
+	indef = G_store(info_in->def);
 	G_debug(1, "ll equivalent definition: %s", indef);
 
 	/* what about axis order?
@@ -496,6 +496,9 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	int op_count = 0;
 
 	/* get pj_area */
+	/* do it here because get_pj_area() will use 
+	 * the PROJ definition for simple transformation to the 
+	 * ll equivalent and we need to do unit conversion */ 
 	if (get_pj_area(info_in, &xmin, &xmax, &ymin, &ymax)) {
 	    pj_area = proj_area_create();
 	    proj_area_set_bbox(pj_area, xmin, ymin, xmax, ymax);
@@ -663,7 +666,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	    projstr = proj_as_proj_string(NULL, info_trans->pj,
 					  PJ_PROJ_5, NULL);
 	    if (projstr == NULL) {
-		G_debug(1, "proj_create_crs_to_crs() failed with PROJ%d for input \"%s\", output \"%s\"",
+		G_debug(0, "proj_create_crs_to_crs() failed with PROJ%d for input \"%s\", output \"%s\"",
 			PROJ_VERSION_MAJOR, indef, outdef);
 
 		/* try old style PROJ4 definition */
@@ -1022,6 +1025,10 @@ int GPJ_transform(const struct pj_info *info_in,
 	    c.xyzt.z = *z;
 	c.xyzt.t = 0;
     }
+
+    G_debug(1, "c.xyzt.x: %g", c.xyzt.x);
+    G_debug(1, "c.xyzt.y: %g", c.xyzt.y);
+    G_debug(1, "c.xyzt.z: %g", c.xyzt.z);
 
     /* transform */
     c = proj_trans(info_trans->pj, dir, c);
