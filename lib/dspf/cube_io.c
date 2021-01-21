@@ -137,7 +137,7 @@ int read_cube(Cube_data * Cube, file_info * headfax)
     int t_cnt;
     int ret;
     int i, j, size;
-    unsigned char inchar;
+    char inchar;
     poly_info *Poly_info;
     static int first = 1;
     FILE *fp;
@@ -193,7 +193,7 @@ int read_cube(Cube_data * Cube, file_info * headfax)
     my_fread(&inchar, 1, 1, fp);
     size |= inchar;
 
-    if (0 >= (ret = my_fread(Buffer, 1, size, fp))) {
+    if (0 >= (ret = my_fread((char *)Buffer, 1, size, fp))) {
 	fprintf(stderr, "Error reading display file offset %"PRI_OFF_T"\n", G_ftell(fp));
 	return (-1);
     }

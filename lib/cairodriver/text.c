@@ -195,7 +195,7 @@ static void set_font_fc(const char *name)
 	face = NULL;
     }
 
-    pattern = FcNameParse(name);
+    pattern = FcNameParse((FcChar8 *)name);
     FcDefaultSubstitute(pattern);
     FcConfigSubstitute(FcConfigGetCurrent(), pattern, FcMatchPattern);
     pattern = FcFontMatch(FcConfigGetCurrent(), pattern, &result);
@@ -223,7 +223,7 @@ static void font_list_fc(char ***list, int *count, int verbose)
     for (i = 0; i < fontset->nfont; i++) {
 	char buf[1024];
 	FcPattern *pat = fontset->fonts[i];
-	FcChar8 *family = "", *style = "";
+	FcChar8 *family = (FcChar8 *)"", *style = (FcChar8 *)"";
 
 	FcPatternGetString(pat, FC_FAMILY, 0, &family);
 	FcPatternGetString(pat, FC_STYLE , 0, &style );

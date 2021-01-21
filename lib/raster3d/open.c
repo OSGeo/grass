@@ -83,7 +83,8 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
     int rows, cols, depths, precision;
     double ew_res, ns_res, tb_res;
     int nofHeaderBytes, dataOffset, useXdr, hasIndex;
-    char *ltmp, *unit;
+    char *unit;
+    unsigned char *ltmp;
     int vertical_unit;
     int version;
     double north, south, east, west, top, bottom;
