@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <grass/glocale.h>
 #include <grass/gis.h>
 
 #include "parser_local_proto.h"
@@ -351,15 +352,19 @@ void check_create_import_opts(struct Option *opt, char *element, FILE *fp)
         G_chop(tokens[i]);
         i++;
     }
+    if (i > 2)
+	G_fatal_error(_("Input string not understood: <%s>. Multiple '@' chars?"), opt->answer);
 
-    /* check if tokens[1] starts with an URL or name@mapset */
-    G_debug(2,"tokens[1]: <%s>", tokens[1]);
-    if (strncmp(tokens[1], "http://", 7) == 0 || strncmp(tokens[1], "https://", 8) == 0 || strncmp(tokens[1], "ftp://", 6) == 0 ) {
-       urlfound = 1;
-       G_debug(2, "URL found");
-    } else {
-       urlfound = 0;
-       G_debug(2, "name@mapset found");
+    if (i > 1) {
+	/* check if tokens[1] starts with an URL or name@mapset */
+	G_debug(2,"tokens[1]: <%s>", tokens[1]);
+	if (strncmp(tokens[1], "http://", 7) == 0 || strncmp(tokens[1], "https://", 8) == 0 || strncmp(tokens[1], "ftp://", 6) == 0 ) {
+	    urlfound = 1;
+	    G_debug(2, "URL found");
+	} else {
+	    urlfound = 0;
+	    G_debug(2, "name@mapset found");
+	}
     }
 
     fprintf(fp, "     {");
