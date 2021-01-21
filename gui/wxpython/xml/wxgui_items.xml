@@ -311,12 +311,6 @@
     <description>Creates new mapset in the current location, changes current mapset.</description>
     <keywords>general,mapset,create</keywords>
   </wxgui-item>
-  <wxgui-item name="VersionAndCopyright">
-    <label>Version and copyright</label>
-    <command>g.version -c</command>
-    <description>Displays version and copyright information.</description>
-    <keywords>general,version</keywords>
-  </wxgui-item>
   <wxgui-item name="DisplayMapProjection">
     <label>Display map projection</label>
     <command>g.proj -p</command>
