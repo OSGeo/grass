@@ -342,7 +342,7 @@ char *G__json(void)
  */
 void check_create_import_opts(struct Option *opt, char *element, FILE *fp)
 {
-    int i = 0, urlfound;
+    int i = 0, urlfound = 0;
     int has_import = 0;
     char **tokens;
 
