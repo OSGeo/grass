@@ -62,7 +62,7 @@ static void make_bmp_header(unsigned char *p)
 
 void write_bmp(void)
 {
-    char header[HEADER_SIZE];
+    unsigned char header[HEADER_SIZE];
     FILE *output;
     int x, y;
     unsigned int *p;
