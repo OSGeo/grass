@@ -738,9 +738,9 @@ void gvl_write_char(int pos, unsigned char **data, unsigned char c)
 {
     /* check to need allocation memory */
     if ((pos % BUFFER_SIZE) == 0) {
-	*data = (char *)G_realloc(*data,
-				  sizeof(char) * ((pos / BUFFER_SIZE) +
-						  1) * BUFFER_SIZE);
+	*data = G_realloc(*data,
+			  sizeof(char) * ((pos / BUFFER_SIZE) +
+					  1) * BUFFER_SIZE);
 	if (!(*data)) {
 	    return;
 	}

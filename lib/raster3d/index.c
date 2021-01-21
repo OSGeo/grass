@@ -59,7 +59,7 @@ static int Rast3d_readIndex(RASTER3D_Map * map)
 	    return 0;
 	}
 
-	Rast3d_rle_decode(tmp2, tmp, map->indexLongNbytes * map->nTiles, 1,
+	Rast3d_rle_decode((char *)tmp2, (char *)tmp, map->indexLongNbytes * map->nTiles, 1,
 		     &dummy1, &dummy2);
 
 	if (indexLength > sizeof(long) * map->nTiles)

@@ -78,7 +78,7 @@ static int read_bmp_header(const unsigned char *p)
 
 void read_bmp(void)
 {
-    char header[HEADER_SIZE];
+    unsigned char header[HEADER_SIZE];
     FILE *input;
     int x, y;
     unsigned int *p;
