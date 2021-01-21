@@ -32,157 +32,157 @@ char *check_mapset_in_layer_name(char *, int);
 
    r.slope.aspect elevation="elevation@https://storage.googleapis.com/graas-geodata/elev_ned_30m.tif" slope="slope+GTiff" aspect="aspect+GTiff" --json
 
-   {
-   "module": "r.slope.aspect",
-   "id": "r.slope.aspect_1804289383",
-   "inputs":[
-   {"import_descr": {"source":"https://storage.googleapis.com/graas-geodata/elev_ned_30m.tif", "type":"raster"},
-   "param": "elevation", "value": "elevation"},
-   {"param": "format", "value": "degrees"},
-   {"param": "precision", "value": "FCELL"},
-   {"param": "zscale", "value": "1.0"},
-   {"param": "min_slope", "value": "0.0"}
-   ],
-   "outputs":[
-   {"export": {"format":"GTiff", "type":"raster"},
-   "param": "slope", "value": "slope"},
-   {"export": {"format":"GTiff", "type":"raster"},
-   "param": "aspect", "value": "aspect"}
-   ]
-   }
+    {
+      "module": "r.slope.aspect",
+      "id": "r.slope.aspect_1804289383",
+      "inputs":[
+         {"import_descr": {"source":"https://storage.googleapis.com/graas-geodata/elev_ned_30m.tif", "type":"raster"},
+          "param": "elevation", "value": "elevation"},
+         {"param": "format", "value": "degrees"},
+         {"param": "precision", "value": "FCELL"},
+         {"param": "zscale", "value": "1.0"},
+         {"param": "min_slope", "value": "0.0"}
+       ],
+      "outputs":[
+         {"export": {"format":"GTiff", "type":"raster"},
+          "param": "slope", "value": "slope"},
+         {"export": {"format":"GTiff", "type":"raster"},
+          "param": "aspect", "value": "aspect"}
+       ]
+    }
 
    v.out.ascii input="hospitals@PERMANENT" output="myfile+TXT" --json
 
-   {
-   "module": "v.out.ascii",
-   "id": "v.out.ascii_1804289383",
-   "inputs":[
-   {"param": "input", "value": "hospitals@PERMANENT"},
-   {"param": "layer", "value": "1"},
-   {"param": "type", "value": "point,line,boundary,centroid,area,face,kernel"},
-   {"param": "format", "value": "point"},
-   {"param": "separator", "value": "pipe"},
-   {"param": "precision", "value": "8"}
-   ],
-   "outputs":[
-   {"export": {"format":"TXT", "type":"file"},
-   "param": "output", "value": "$file::myfile"}
-   ]
-   }
+    {
+      "module": "v.out.ascii",
+      "id": "v.out.ascii_1804289383",
+      "inputs":[
+         {"param": "input", "value": "hospitals@PERMANENT"},
+         {"param": "layer", "value": "1"},
+         {"param": "type", "value": "point,line,boundary,centroid,area,face,kernel"},
+         {"param": "format", "value": "point"},
+         {"param": "separator", "value": "pipe"},
+         {"param": "precision", "value": "8"}
+       ],
+      "outputs":[
+         {"export": {"format":"TXT", "type":"file"},
+          "param": "output", "value": "$file::myfile"}
+       ]
+    }
 
    v.info map="hospitals@PERMANENT" -c --json
 
-   {
-   "module": "v.info",
-   "id": "v.info_1804289383",
-   "flags":"c",
-   "inputs":[
-   {"param": "map", "value": "hospitals@PERMANENT"},
-   {"param": "layer", "value": "1"}
-   ]
-   }
+    {
+      "module": "v.info",
+      "id": "v.info_1804289383",
+      "flags":"c",
+      "inputs":[
+         {"param": "map", "value": "hospitals@PERMANENT"},
+         {"param": "layer", "value": "1"}
+       ]
+    }
 
 
    A process chain has the following form
 
-   {
-   'list': [{
-   'module': 'g.region',
-   'id': 'g_region_1',
-   'inputs': [{'import_descr': {'source': 'https://storage.googleapis.com/graas-geodata/elev_ned_30m.tif',
-   'type': 'raster'},
-   'param': 'raster',
-   'value': 'elev_ned_30m_new'}],
-   'flags': 'p'
-   },
-   {
-   'module': 'r.slope.aspect',
-   'id': 'r_slope_aspect_1',
-   'inputs': [{'param': 'elevation',
-   'value': 'elev_ned_30m_new'}],
-   'outputs': [{'export': {'format': 'GTiff',
-   'type': 'raster'},
-   'param': 'slope',
-   'value': 'elev_ned_30m_new_slope'}],
-   'flags': 'a'},
-   {
-   'module': 'r.univar',
-   'id': 'r_univar_1',
-   'inputs': [{"import_descr": {"source": "LT52170762005240COA00",
-   "type": "landsat",
-   "landsat_atcor": "dos1"},
-   'param': 'map',
-   'value': 'LT52170762005240COA00_dos1.1'}],
-   'stdout': {'id': 'stats', 'format': 'kv', 'delimiter': '='},
-   'flags': 'a'
-   },
-   {
-   'module': 'exporter',
-   'id': 'exporter_1',
-   'outputs': [{'export': {'format': 'GTiff',
-   'type': 'raster'},
-   'param': 'map',
-   'value': 'LT52170762005240COA00_dos1.1'}]
-   },
-   {
-   "id": "ascii_out",
-   "module": "r.out.ascii",
-   "inputs": [{"param": "input",
-   "value": "elevation@PERMANENT"},
-   {"param": "precision", "value": "0"}],
-   "stdout": {"id": "elev_1", "format": "table", "delimiter": " "},
-   "flags": "h"
-   },
-   {
-   "id": "ascii_export",
-   "module": "r.out.ascii",
-   "inputs": [{"param": "input",
-   "value": "elevation@PERMANENT"}],
-   "outputs": [
-   {"export": {"type": "file", "format": "TXT"},
-   "param": "output",
-   "value": "$file::out1"}
-   ]
-   },
-   {
-   "id": "raster_list",
-   "module": "g.list",
-   "inputs": [{"param": "type",
-   "value": "raster"}],
-   "stdout": {"id": "raster", "format": "list", "delimiter": "\n"}
-   },
-   {
-   "module": "r.what",
-   "id": "r_what_1",
-   "verbose": True,
-   "flags": "nfic",
-   "inputs": [
-   {
-   "param": "map",
-   "value": "landuse96_28m@PERMANENT"
-   },
-   {
-   "param": "coordinates",
-   "value": "633614.08,224125.12,632972.36,225382.87"
-   },
-   {
-   "param": "null_value",
-   "value": "null"
-   },
-   {
-   "param": "separator",
-   "value": "pipe"
-   }
-   ],
-   "stdout": {"id": "sample", "format": "table", "delimiter": "|"}
-   }
-   ],
-   'webhooks': {'update': 'http://business-logic.company.com/api/v1/actinia-update-webhook',
-   'finished': 'http://business-logic.company.com/api/v1/actinia-finished-webhook'},
-   'version': '1'
-   }
+{
+    'list': [{
+        'module': 'g.region',
+        'id': 'g_region_1',
+        'inputs': [{'import_descr': {'source': 'https://storage.googleapis.com/graas-geodata/elev_ned_30m.tif',
+                                     'type': 'raster'},
+                    'param': 'raster',
+                    'value': 'elev_ned_30m_new'}],
+        'flags': 'p'
+        },
+        {
+            'module': 'r.slope.aspect',
+            'id': 'r_slope_aspect_1',
+            'inputs': [{'param': 'elevation',
+                        'value': 'elev_ned_30m_new'}],
+            'outputs': [{'export': {'format': 'GTiff',
+                                    'type': 'raster'},
+                         'param': 'slope',
+                         'value': 'elev_ned_30m_new_slope'}],
+            'flags': 'a'},
+        {
+            'module': 'r.univar',
+            'id': 'r_univar_1',
+            'inputs': [{"import_descr": {"source": "LT52170762005240COA00",
+                                         "type": "landsat",
+                                         "landsat_atcor": "dos1"},
+                        'param': 'map',
+                        'value': 'LT52170762005240COA00_dos1.1'}],
+            'stdout': {'id': 'stats', 'format': 'kv', 'delimiter': '='},
+            'flags': 'a'
+        },
+        {
+            'module': 'exporter',
+            'id': 'exporter_1',
+            'outputs': [{'export': {'format': 'GTiff',
+                                    'type': 'raster'},
+                         'param': 'map',
+                         'value': 'LT52170762005240COA00_dos1.1'}]
+        },
+        {
+            "id": "ascii_out",
+            "module": "r.out.ascii",
+            "inputs": [{"param": "input",
+                        "value": "elevation@PERMANENT"},
+                       {"param": "precision", "value": "0"}],
+            "stdout": {"id": "elev_1", "format": "table", "delimiter": " "},
+            "flags": "h"
+        },
+        {
+            "id": "ascii_export",
+            "module": "r.out.ascii",
+            "inputs": [{"param": "input",
+                        "value": "elevation@PERMANENT"}],
+            "outputs": [
+                {"export": {"type": "file", "format": "TXT"},
+                 "param": "output",
+                 "value": "$file::out1"}
+            ]
+        },
+        {
+            "id": "raster_list",
+            "module": "g.list",
+            "inputs": [{"param": "type",
+                        "value": "raster"}],
+            "stdout": {"id": "raster", "format": "list", "delimiter": "\n"}
+        },
+        {
+            "module": "r.what",
+            "id": "r_what_1",
+            "verbose": True,
+            "flags": "nfic",
+            "inputs": [
+                {
+                    "param": "map",
+                    "value": "landuse96_28m@PERMANENT"
+                },
+                {
+                    "param": "coordinates",
+                    "value": "633614.08,224125.12,632972.36,225382.87"
+                },
+                {
+                    "param": "null_value",
+                    "value": "null"
+                },
+                {
+                    "param": "separator",
+                    "value": "pipe"
+                }
+            ],
+            "stdout": {"id": "sample", "format": "table", "delimiter": "|"}
+        }
+    ],
+    'webhooks': {'update': 'http://business-logic.company.com/api/v1/actinia-update-webhook',
+                 'finished': 'http://business-logic.company.com/api/v1/actinia-finished-webhook'},
+    'version': '1'
+}
 
- */
+*/
 char *G__json(void)
 {
     FILE *fp = stdout;
@@ -491,7 +491,7 @@ void check_create_export_opts(struct Option *opt, char *element, FILE * fp)
    The flag always_remove tells this function to always remove all mapset names.
 
    \return pointer to the layer name without the current mapset
- */
+*/
 char *check_mapset_in_layer_name(char *layer_name, int always_remove)
 {
     int i = 0;
