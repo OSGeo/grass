@@ -1657,12 +1657,14 @@ class DataCatalogTree(TreeView):
             self._model = self._orig_model
         else:
             try:
-                if element:
-                    self._model = self._orig_model.Filtered(method='filtering', name=re.compile(name), type=element)
-                else:
-                    self._model = self._orig_model.Filtered(method='filtering', name=re.compile(name))
+                compiled = re.compile(name)
             except re.error:
                 return
+            if element:
+                self._model = self._orig_model.Filtered(method='filtering', name=compiled, type=element)
+            else:
+                self._model = self._orig_model.Filtered(method='filtering', name=compiled)
+
         self.UpdateCurrentDbLocationMapsetNode()
         self.RefreshItems()
         self.ExpandCurrentMapset()
