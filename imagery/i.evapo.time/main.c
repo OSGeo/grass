@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
     module->description =_("Computes temporal integration of satellite "
 			   "ET actual (ETa) following the daily ET reference "
 			   "(ETo) from meteorological station(s).");
-    
+
     /* Define the different options */
     input = G_define_standard_option(G_OPT_R_INPUTS);
     input->key = "eta";
@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
     input3->type = TYPE_DOUBLE;
     input3->required = YES;
     input3->description = _("Value of DOY for ETo first day");
-    
+
     input4 = G_define_option();
     input4->key = "start_period";
     input4->type = TYPE_DOUBLE;
@@ -114,11 +114,11 @@ int main(int argc, char *argv[])
     input5->description = _("Value of DOY for the last day of the period studied");
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
-    
+
     /* init nfiles */
-    nfiles = 1;
-    nfiles1 = 1;
-    nfiles2 = 1;
+    nfiles = 0;
+    nfiles1 = 0;
+    nfiles2 = 0;
 
     /********************/
 
@@ -157,13 +157,13 @@ int main(int argc, char *argv[])
 	inrast[nfiles] = Rast_allocate_d_buf();
 	nfiles++;
     }
-    nfiles--;
-    if (nfiles <= 1)
+
+    if (nfiles < 2)
 	G_fatal_error(_("The min specified input map is two"));
-	
+
 	/****************************************/
     for (; *ptr1 != NULL; ptr1++) {
-	if (nfiles1 > MAXFILES)
+	if (nfiles1 == MAXFILES)
 	    G_fatal_error(_("Too many ETa_doy files. Only %d allowed."),
 			  MAXFILES);
 	name1 = *ptr1;
@@ -173,8 +173,8 @@ int main(int argc, char *argv[])
 	inrast1[nfiles1] = Rast_allocate_d_buf();
 	nfiles1++;
     }
-    nfiles1--;
-    if (nfiles1 <= 1)
+
+    if (nfiles1 < 2)
 	G_fatal_error(_("The min specified input map is two"));
 
 
@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
 	/****************************************/
 
     for (; *ptr2 != NULL; ptr2++) {
-	if (nfiles > MAXFILES)
+	if (nfiles2 == MAXFILES)
 	    G_fatal_error(_("Too many ETo files. Only %d allowed."),
 			  MAXFILES);
 	name2 = *ptr2;
@@ -195,8 +195,8 @@ int main(int argc, char *argv[])
 	inrast2[nfiles2] = Rast_allocate_d_buf();
 	nfiles2++;
     }
-    nfiles2--;
-    if (nfiles2 <= 1)
+
+    if (nfiles2 < 2)
 	G_fatal_error(_("The min specified input map is two"));
 
     /* Allocate output buffer, use input map data_type */
@@ -222,13 +222,13 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 
 	/* read input map */
-	for (i = 1; i <= nfiles; i++) 
+	for (i = 0; i < nfiles; i++)
 	    Rast_get_d_row(infd[i], inrast[i], row);
-	
-	for (i = 1; i <= nfiles1; i++) 
+
+	for (i = 0; i < nfiles1; i++)
 	    Rast_get_d_row(infd1[i], inrast1[i], row);
 
-	for (i = 1; i <= nfiles2; i++) 
+	for (i = 0; i < nfiles2; i++)
 	    Rast_get_d_row (infd2[i], inrast2[i], row);
 
 	/*process the data */
@@ -236,14 +236,14 @@ int main(int argc, char *argv[])
         {
             int	d1_null=0;
             int	d_null=0;
-	    for (i = 1; i <= nfiles; i++) 
+	    for (i = 0; i < nfiles; i++)
             {
 		    if (Rast_is_d_null_value(&((DCELL *) inrast[i])[col]))
 		    	d_null=1;
 		    else
 	                d[i] = ((DCELL *) inrast[i])[col];
 	    }
-	    for (i = 1; i <= nfiles1; i++) 
+	    for (i = 0; i < nfiles1; i++)
             {
 		    if (Rast_is_d_null_value(&((DCELL *) inrast1[i])[col]))
 			d1_null=1;
@@ -251,14 +251,14 @@ int main(int argc, char *argv[])
 	                d1[i] = ((DCELL *) inrast1[i])[col];
 	    }
 
-	    for (i = 1; i <= nfiles2; i++) 
+	    for (i = 0; i < nfiles2; i++)
 		    d2[i] = ((DCELL *) inrast2[i])[col];
 
 	    /* Find out the DOY of the eto image    */
-	    for (i = 1; i <= nfiles1; i++) 
+	    for (i = 0; i < nfiles1; i++)
             {
 		if ( d_null==1 || d1_null==1 )
-			Rast_set_d_null_value(&outrast[col],1);	
+			Rast_set_d_null_value(&outrast[col],1);
 		else
 		{
 			doy[i] = d1[i] - etodoy+1;
@@ -266,10 +266,10 @@ int main(int argc, char *argv[])
 				Rast_set_d_null_value(&outrast[col],1);
 			else
 				d_ETrF[i] = d[i] / d2[(int)doy[i]];
-		} 
+		}
 	    }
 
-	    for (i = 1; i <= nfiles1; i++) 
+	    for (i = 0; i < nfiles1; i++)
             {
 		/* do nothing	*/
 		if ( d_null==1 || d1_null==1)
@@ -279,7 +279,7 @@ int main(int argc, char *argv[])
 		else
 		{
 			DOYbeforeETa[i]=0; DOYafterETa[i]=0;
-			if (i == 1)   
+			if (i == 0)
 				DOYbeforeETa[i] = startperiod;
 			else
 			{
@@ -287,17 +287,17 @@ int main(int argc, char *argv[])
 				while (d1[k]>=startperiod )
 				{
 					if (d1[k]<0)	 /* case were d1[k] is null */
-						k=k-1;					
+						k=k-1;
 					else
 					{
 						DOYbeforeETa[i] = 1+((d1[i] + d1[k])/2.0);
 						break;
-					}			
+					}
 				}
 
 			}
-	
-			if (i == nfiles1)  
+
+			if (i == (nfiles1-1))
 				DOYafterETa[i] = endperiod;
 			else
 			{
@@ -310,22 +310,22 @@ int main(int argc, char *argv[])
 					{
 						DOYafterETa[i] = (d1[i] + d1[k]) / 2.0;
 						break;
-	   				}					
+					}
 				}
 			}
 		}	
 	    }
 
-	    sum[MAXFILES] = 0.0;
-	    for (i = 1; i <= nfiles1; i++) 
+	    /* sum[MAXFILES] = 0.0; */
+	    for (i = 0; i < nfiles1; i++)
             {
 		if(d_null==1 || d1_null==1)
                 {
 		    /* do nothing	 */
-		} 
+		}
                 else
                 {
-			if (DOYbeforeETa[i]==0 || DOYbeforeETa[i]==0 ) 	
+			if (DOYbeforeETa[i]==0 || DOYbeforeETa[i]==0 )
                             Rast_set_d_null_value(&outrast[col],1);
 			else 
                         {
@@ -337,31 +337,31 @@ int main(int argc, char *argv[])
 			}
 		}
 	    }
-	
+
 	    d_out = 0.0;
-	    for (i = 1; i <= nfiles1; i++)
+	    for (i = 0; i < nfiles1; i++)
             {
 		if(d_null==1 || d_null==1)
 			Rast_set_d_null_value(&outrast[col],1);
 		else
-                {	
+                {
 			d_out += d_ETrF[i] * sum[i];
 		     	outrast[col] = d_out;
-		}	
+		}
 	    }
 	}
 	Rast_put_row(outfd, outrast, out_data_type);
     }
 
-    for (i = 1; i <= nfiles; i++) {
+    for (i = 0; i < nfiles; i++) {
 	G_free(inrast[i]);
 	Rast_close(infd[i]);
     }
-    for (i = 1; i <= nfiles1; i++) {
+    for (i = 0; i < nfiles1; i++) {
 	G_free(inrast1[i]);
 	Rast_close(infd1[i]);
     }
-    for (i = 1; i <= nfiles2; i++) {
+    for (i = 0; i < nfiles2; i++) {
 	G_free(inrast2[i]);
 	Rast_close(infd2[i]);
     }
