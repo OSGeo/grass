@@ -151,7 +151,7 @@ class MapWatch(PatternMatchingEventHandler):
         PatternMatchingEventHandler.__init__(self, patterns=patterns)
         self.element = element
         self.event_handler = event_handler
-        
+
     def on_created(self, event):
         if (self.element == 'vector' or self.element == 'raster_3d') and not event.is_directory:
             return
@@ -171,7 +171,7 @@ class MapWatch(PatternMatchingEventHandler):
             return
         evt = updateMapset(src_path=event.src_path, event_type=event.event_type,
                            is_directory=event.is_directory, dest_path=event.dest_path)
-        wx.PostEvent(self.event_handler, evt)  
+        wx.PostEvent(self.event_handler, evt)
 
 
 class NameEntryDialog(TextEntryDialog):
@@ -250,7 +250,7 @@ class DataCatalogNode(DictNode):
                 if not (key in self.data and self.data[key] == value):
                     return False
             return True
-        # for filtering            
+        # for filtering
         if (
             'type' in kwargs and 'type' in self.data
             and kwargs['type'] != self.data['type']
@@ -339,7 +339,7 @@ class DataCatalogTree(TreeView):
         self.startEdit.connect(self.OnStartEditLabel)
         self.endEdit.connect(self.OnEditLabel)
         self.Bind(EVT_UPDATE_MAPSET, self.OnWatchdogMapsetReload)
-        
+
         self.observer = None
 
     def _resetSelectVariables(self):
@@ -1656,10 +1656,13 @@ class DataCatalogTree(TreeView):
         if not name:
             self._model = self._orig_model
         else:
-            if element:
-                self._model = self._orig_model.Filtered(method='filtering', name=re.compile(name), type=element)
-            else:
-                self._model = self._orig_model.Filtered(method='filtering', name=re.compile(name))
+            try:
+                if element:
+                    self._model = self._orig_model.Filtered(method='filtering', name=re.compile(name), type=element)
+                else:
+                    self._model = self._orig_model.Filtered(method='filtering', name=re.compile(name))
+            except re.error:
+                return
         self.UpdateCurrentDbLocationMapsetNode()
         self.RefreshItems()
         self.ExpandCurrentMapset()
