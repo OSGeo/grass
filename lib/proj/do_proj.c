@@ -491,6 +491,8 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	char *indefcrs = NULL, *outdefcrs = NULL;
 	char *insrid = NULL, *outsrid = NULL;
 	PJ *in_pj, *out_pj;
+	PJ_OBJ_LIST *op_list;
+	PJ_OPERATION_FACTORY_CONTEXT *operation_ctx;
 	PJ_AREA *pj_area = NULL;
 	double xmin, xmax, ymin, ymax;
 	int op_count = 0;
@@ -553,19 +555,20 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	/* check number of operations */
 
 	if (in_pj && out_pj) {
-	    PJ_OPERATION_FACTORY_CONTEXT *operation_ctx;
-	    PJ_OBJ_LIST *op_list;
+	    int op_count_area;
 
-	    operation_ctx = proj_create_operation_factory_context(NULL, NULL);
+	    operation_ctx = proj_create_operation_factory_context(PJ_DEFAULT_CTX, NULL);
 	    /* proj_create_operations() works only if both source_crs
 	     * and target_crs are found in the proj db
 	     * if any is not found, proj can not get a list of operations
 	     * and we have to take care of datumshift manually */
-	    /* constrain by area ? */
-	    op_list = proj_create_operations(NULL,
+	    /* list all operations irrespecitve of area and
+	     * grid availability */
+	    op_list = proj_create_operations(PJ_DEFAULT_CTX,
 					     in_pj,
 					     out_pj,
 					     operation_ctx);
+	    proj_operation_factory_context_destroy(operation_ctx);
 
 	    op_count = 0;
 	    if (op_list)
@@ -581,7 +584,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
 		    PJ_PROJ_INFO pj_info;
 		    PJ *op, *op_norm;
 
-		    op = proj_list_get(NULL, op_list, i);
+		    op = proj_list_get(PJ_DEFAULT_CTX, op_list, i);
 		    op_norm = proj_normalize_for_visualization(PJ_DEFAULT_CTX, op);
 
 		    if (!op_norm) {
@@ -645,20 +648,78 @@ int GPJ_init_transform(const struct pj_info *info_in,
 
 	    if (op_list)
 		proj_list_destroy(op_list);
+
+	    /* follwing code copied from proj_create_crs_to_crs_from_pj()
+	     * in proj src/4D_api.cpp
+	     * but using PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT */
+
+
+	    /* now use the current region as area of interest */
+	    operation_ctx = proj_create_operation_factory_context(PJ_DEFAULT_CTX, NULL);
+	    proj_operation_factory_context_set_area_of_interest(PJ_DEFAULT_CTX,
+								operation_ctx,
+								xmin, ymin,
+								xmax, ymax);
+	    proj_operation_factory_context_set_spatial_criterion(PJ_DEFAULT_CTX,
+								 operation_ctx,
+								 PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT);
+	    proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX,
+		                                                     operation_ctx,
+								     PROJ_GRID_AVAILABILITY_DISCARD_OPERATION_IF_MISSING_GRID);
+	    /* The operations are sorted with the most relevant ones first:
+	     * by descending area (intersection of the transformation area 
+	     * with the area of interest, or intersection of the 
+	     * transformation with the area of use of the CRS),
+	     * and by increasing accuracy.
+	     * Operations with unknown accuracy are sorted last,
+	     * whatever their area.
+	     */
+	    op_list = proj_create_operations(PJ_DEFAULT_CTX,
+					     in_pj,
+					     out_pj,
+					     operation_ctx);
 	    proj_operation_factory_context_destroy(operation_ctx);
+	    op_count_area = 0;
+	    if (op_list)
+		op_count_area = proj_list_get_count(op_list);
+	    if (op_count_area == 0) {
+		/* no operations */
+		info_trans->pj = NULL;
+	    }
+	    else if (op_count_area == 1) {
+		info_trans->pj = proj_list_get(PJ_DEFAULT_CTX, op_list, 0);
+	    }
+	    else {  /* op_count_area > 1 */
+		/* can't use pj_create_prepared_operations()
+		 * this is a PROJ-internal function
+		 * trust the sorting of PROJ and use the first one */
+		info_trans->pj = proj_list_get(PJ_DEFAULT_CTX, op_list, 0);
+	    }
+	    if (op_list)
+		proj_list_destroy(op_list);
 	}
-	if (in_pj)
-	    proj_destroy(in_pj);
-	if (out_pj)
-	    proj_destroy(out_pj);
 
 	/* try proj_create_crs_to_crs() */
 	G_debug(1, "trying %s to %s", indef, outdef);
 
+	/* proj_create_crs_to_crs() does not work because it calls
+	 * proj_create_crs_to_crs_from_pj() which calls
+	 * proj_operation_factory_context_set_spatial_criterion()
+	 * with PROJ_SPATIAL_CRITERION_PARTIAL_INTERSECTION
+	 * instead of
+	 * PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT */
+
+	/*
 	info_trans->pj = proj_create_crs_to_crs(PJ_DEFAULT_CTX,
 						indef,
 						outdef,
 						pj_area);
+	*/
+
+	if (in_pj)
+	    proj_destroy(in_pj);
+	if (out_pj)
+	    proj_destroy(out_pj);
 
 	if (info_trans->pj) {
 	    const char *projstr = NULL;
