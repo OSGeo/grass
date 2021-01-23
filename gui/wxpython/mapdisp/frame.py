@@ -558,7 +558,11 @@ class MapFrame(SingleMapFrame):
             self._mgr.GetPane('2d').Show()
             self._switchMapWindow(self.MapWindow2D)
 
-        self.toolbars['map'].Enable2D(True)
+        map = self.toolbars['map']
+        map.Enable2D(True)
+        map._setComboBoxValue(
+            value=map._mode_label['2d'],
+        )
 
         self._mgr.Update()
 
