@@ -108,7 +108,7 @@ int input_wkt(char *wktfile)
     FILE *infd;
     char buff[8000], *tmpwkt;
     OGRSpatialReferenceH hSRS;
-    const char *papszOptions[3];
+    char *papszOptions[3];
     int ret;
 
     if (strcmp(wktfile, "-") == 0)
@@ -177,11 +177,13 @@ int input_wkt(char *wktfile)
     /* find authname and authcode */
     hSRS = OSRNewSpatialReference(buff);
     /* get clean WKT definition */
+#if GDAL_VERSION_MAJOR >= 3
     papszOptions[0] = G_store("MULTILINE=YES");
     papszOptions[1] = G_store("FORMAT=WKT2");
     papszOptions[2] = NULL;
-#if GDAL_VERSION_MAJOR >= 3
-    OSRExportToWktEx(hSRS, &tmpwkt, papszOptions);
+    OSRExportToWktEx(hSRS, &tmpwkt, (const char **)papszOptions);
+    G_free(papszOptions[0]);
+    G_free(papszOptions[1]);
 #else
     OSRExportToPrettyWkt(hSRS, &tmpwkt, FALSE);
 #endif
@@ -278,7 +280,7 @@ int input_srid(char *srid)
 #if PROJ_VERSION_MAJOR >= 6
     OGRSpatialReferenceH hSRS;
     int ret = 0;
-    const char *papszOptions[3];
+    char *papszOptions[3];
     PJ *obj;
     const char *tmpwkt;
 
@@ -298,9 +300,10 @@ int input_srid(char *srid)
     papszOptions[0] = G_store("MULTILINE=YES");
     papszOptions[1] = G_store("FORMAT=WKT2");
     papszOptions[2] = NULL;
-    if (OSRExportToWktEx(hSRS, &projwkt, papszOptions) != OGRERR_NONE)
+    if (OSRExportToWktEx(hSRS, &projwkt, (const char **)papszOptions) != OGRERR_NONE)
 	G_warning(_("Unable to convert srid to WKT"));
-
+    G_free(papszOptions[0]);
+    G_free(papszOptions[1]);
     /* GRASS proj info + units */
     ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, hSRS, 0);
 
@@ -336,7 +339,7 @@ int input_epsg(int epsg_num)
     OGRSpatialReferenceH hSRS;
     char epsgstr[100];
     int ret = 0;
-    const char *papszOptions[3];
+    char *papszOptions[3];
 
     /* Set finder function for locating OGR csv co-ordinate system tables */
     /* SetCSVFilenameHook(GPJ_set_csv_loc); */
@@ -360,8 +363,11 @@ int input_epsg(int epsg_num)
     papszOptions[0] = G_store("MULTILINE=YES");
     papszOptions[1] = G_store("FORMAT=WKT2");
     papszOptions[2] = NULL;
-    if (OSRExportToWktEx(hSRS, &projwkt, papszOptions) != OGRERR_NONE)
+    if (OSRExportToWktEx(hSRS, &projwkt, (const char **)papszOptions) != OGRERR_NONE)
 	G_warning(_("Unable to convert EPSG code to WKT"));
+
+    G_free(papszOptions[0]);
+    G_free(papszOptions[1]);
 #endif
 
     OSRDestroySpatialReference(hSRS);
@@ -453,7 +459,7 @@ int input_georef(char *geofile)
 	}
     }
     if (hSRS) {
-	const char **papszOptions = NULL;
+	char **papszOptions = NULL;
 
 	ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, hSRS, 0);
 
@@ -465,7 +471,10 @@ int input_georef(char *geofile)
 	papszOptions = G_calloc(3, sizeof(char *));
 	papszOptions[0] = G_store("MULTILINE=YES");
 	papszOptions[1] = G_store("FORMAT=WKT2");
-	OSRExportToWktEx(hSRS, &projwkt, papszOptions);
+	OSRExportToWktEx(hSRS, &projwkt, (const char **)papszOptions);
+	G_free(papszOptions[0]);
+	G_free(papszOptions[1]);
+	G_free(papszOptions);
 
 	set_authnamecode(hSRS);
     }
@@ -491,7 +500,6 @@ int input_georef(char *geofile)
     if ((ogr_ds = OGROpen(geofile, FALSE, NULL))
 	&& (OGR_DS_GetLayerCount(ogr_ds) > 0)) {
 	OGRLayerH ogr_layer;
-	const char **papszOptions = NULL;
 
 	G_debug(1, "...succeeded.");
 	/* Get the first layer */
@@ -510,7 +518,6 @@ int input_georef(char *geofile)
 
 	if ((gdal_ds = GDALOpen(geofile, GA_ReadOnly))) {
 	    char *wktstring;
-	    const char **papszOptions = NULL;
 
 	    G_debug(1, "...succeeded.");
 	    /* TODO: change for GDAL 3+ */

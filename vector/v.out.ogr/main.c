@@ -297,13 +297,14 @@ int main(int argc, char *argv[])
 	if (Ogr_projection) {
 	    /* convert bound CRS */
 	    PJ *obj = NULL;
-	    const char *papszOptions[2];
+	    char *papszOptions[2];
 
 	    inwkt = NULL;
 
 	    papszOptions[0] = G_store("FORMAT=WKT2");
 	    papszOptions[1] = NULL;
-	    OSRExportToWktEx(Ogr_projection, &inwkt, papszOptions);
+	    OSRExportToWktEx(Ogr_projection, &inwkt, (const char **)papszOptions);
+	    G_free(papszOptions[0]);
 
 	    if ((obj = proj_create(NULL, inwkt))) {
 		if (proj_get_type(obj) == PJ_TYPE_BOUND_CRS) {
@@ -318,11 +319,17 @@ int main(int argc, char *argv[])
 			    inwkt = NULL;
 			}
 			proj_destroy(source_crs);
-			OSRImportFromWkt(Ogr_projection, &inwkt);
+			Ogr_projection = NULL;
+			if (inwkt) {
+			    char *inwkttmp = inwkt;
+			    OSRImportFromWkt(Ogr_projection, &inwkttmp);
+			}
 		    }
 		}
 		proj_destroy(obj);
 	    }
+	    if (inwkt)
+		CPLFree(inwkt);
 	}
 #endif
 

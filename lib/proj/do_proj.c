@@ -488,7 +488,6 @@ int GPJ_init_transform(const struct pj_info *info_in,
     /* input and output CRS are available */
     else if (info_in->def && info_out->pj && info_out->def) {
 	char *indef = NULL, *outdef = NULL;
-	char *indefcrs = NULL, *outdefcrs = NULL;
 	char *insrid = NULL, *outsrid = NULL;
 	PJ *in_pj, *out_pj;
 	PJ_OBJ_LIST *op_list;
@@ -508,8 +507,6 @@ int GPJ_init_transform(const struct pj_info *info_in,
 
 	G_debug(1, "source proj string: %s", info_in->def);
 	G_debug(1, "source type: %s", get_pj_type_string(info_in->pj));
-	/* old style PROJ4 definition */
-	indefcrs = info_in->def;
 
 	/* PROJ6+: EPSG must be uppercase EPSG */
 	if (info_in->srid) {
@@ -531,8 +528,6 @@ int GPJ_init_transform(const struct pj_info *info_in,
 
 	G_debug(1, "target proj string: %s", info_out->def);
 	G_debug(1, "target type: %s", get_pj_type_string(info_out->pj));
-	/* old style PROJ4 definition */
-	outdefcrs = info_out->def;
 
 	/* PROJ6+: EPSG must be uppercase EPSG */
 	if (info_out->srid) {
@@ -707,7 +702,9 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	 * proj_operation_factory_context_set_spatial_criterion()
 	 * with PROJ_SPATIAL_CRITERION_PARTIAL_INTERSECTION
 	 * instead of
-	 * PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT */
+	 * PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT 
+	 * 
+	 * fixed in PROJ master, probably available with PROJ 7.3.x */
 
 	/*
 	info_trans->pj = proj_create_crs_to_crs(PJ_DEFAULT_CTX,
@@ -721,13 +718,16 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	if (out_pj)
 	    proj_destroy(out_pj);
 
+	/* a projstring might not be available in PROJ,
+	 * disable */
+#if 0
 	if (info_trans->pj) {
 	    const char *projstr = NULL;
 
 	    projstr = proj_as_proj_string(NULL, info_trans->pj,
 					  PJ_PROJ_5, NULL);
 	    if (projstr == NULL) {
-		G_debug(0, "proj_create_crs_to_crs() failed with PROJ%d for input \"%s\", output \"%s\"",
+		G_debug(1, "proj_create_crs_to_crs() failed with PROJ%d for input \"%s\", output \"%s\"",
 			PROJ_VERSION_MAJOR, indef, outdef);
 
 		/* try old style PROJ4 definition */
@@ -745,6 +745,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
 							NULL);
 	    }
 	}
+#endif
 
 	if (info_trans->pj) {
 	    const char *projstr;
@@ -793,6 +794,9 @@ int GPJ_init_transform(const struct pj_info *info_in,
 		info_trans->pj = NULL;
 	    }
 	}
+
+	/* this ignores any datum transformation, disable */
+#if 0
 	/* last try with proj_create() */
 	if (info_trans->pj == NULL) {
 	    G_debug(1, "proj_create_crs_to_crs() failed with PROJ%d for input \"%s\", output \"%s\"",
@@ -817,6 +821,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	    info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
 	    G_debug(1, "proj_create() pipeline: %s", info_trans->def);
 	}
+#endif
 
 	if (pj_area)
 	    proj_area_destroy(pj_area);

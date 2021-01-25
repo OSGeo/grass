@@ -306,12 +306,13 @@ int main(int argc, char *argv[])
     }
     if (!srswkt && (indef = G_get_projwkt())) {
 	OGRSpatialReferenceH hSRS;
-	const char **papszOptions = NULL;
+	char **papszOptions = NULL;
 
 	hSRS = OSRNewSpatialReference(indef);
 	papszOptions = G_calloc(2, sizeof(char *));
 	papszOptions[0] = G_store("FORMAT=WKT2");
-	OSRExportToWktEx(hSRS, &srswkt, papszOptions);
+	OSRExportToWktEx(hSRS, &srswkt, (const char **)papszOptions);
+	G_free(papszOptions[0]);
 	srswkt = G_store(srswkt);
 	if (srswkt && !*srswkt) {
 	    G_free(srswkt);
