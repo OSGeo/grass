@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.in.ogr</em> imports vector data from files and database connections
-supported by the <a href="http://www.gdal.org/">OGR</a> library) into the
+supported by the <a href="https://gdal.org/">OGR</a> library) into the
 current location and mapset.
 
 <p>
@@ -22,15 +22,15 @@ region settings as the spatial bounds
 <h3>Supported Vector Formats</h3>
 
 <em>v.in.ogr</em> uses the OGR library which supports various vector 
-data formats including <a 
-href="http://www.gdal.org/drv_shapefile.html">ESRI Shapefile</a>, <a 
-href="http://www.gdal.org/drv_mitab.html">Mapinfo File</a>, UK .NTF, 
+data formats including
+<a href="https://gdal.org/drivers/vector/shapefile.html">ESRI Shapefile</a>,
+<a href="https://gdal.org/drivers/vector/mitab.html">Mapinfo File</a>, UK .NTF, 
 SDTS, TIGER, IHO S-57 (ENC), DGN, GML, GPX, AVCBin, REC, Memory, OGDI, 
 and PostgreSQL, depending on the local OGR installation. For details 
-see the <a href="http://www.gdal.org/ogr_formats.html">OGR web 
-site</a>. The <b>-f</b> prints a list of the vector formats supported 
+see the <a href="https://gdal.org/drivers/vector/">OGR format overview</a>.
+The <b>-f</b> prints a list of the vector formats supported 
 by the system's OGR (Simple Features Library). The OGR (Simple Features 
-Library) is part of the <a href="http://www.gdal.org">GDAL</a> library, 
+Library) is part of the <a href="https://gdal.org">GDAL</a> library, 
 hence GDAL needs to be installed to use <em>v.in.ogr</em>.
 
 <p>
@@ -142,10 +142,9 @@ string fields to UTF-8. LDID &quot;87 / 0x57&quot; is treated as
 ISO8859_1 which may not be appropriate for many
 languages. Unfortunately it is not clear what other values may be
 appropriate (see example below). To change encoding the user can set
-up <tt><a href="https://trac.osgeo.org/gdal/wiki/ConfigOptions#SHAPE_ENCODING">SHAPE_ENCODING</a></tt>
+up <tt><a href="https://gdal.org/user/configoptions.html">SHAPE_ENCODING</a></tt>
 environmental variable or simply to define
-encoding value using <b>encoding</b> parameter. Note that recoding
-support is new for GDAL/OGR 1.9.0.
+encoding value using <b>encoding</b> parameter.
 
 <p>
 Value for <b>encoding</b> also affects text recoding when importing
@@ -186,7 +185,7 @@ v.in.ogr input=/home/user/shape_data layer=test_shape output=grass_map
 
 Define encoding value for attribute data (in this example we expect
 attribute data
-in <a href="http://en.wikipedia.org/wiki/Windows-1250">Windows-1250</a>
+in <a href="https://en.wikipedia.org/wiki/Windows-1250">Windows-1250</a>
 encoding; ie. in Central/Eastern European languages that
 use Latin script, Microsoft Windows encoding).
 
@@ -257,8 +256,8 @@ layer=myschema.polymap \
 output=polygons type=boundary,centroid
 </pre></div>
 
-Generally, v.in.ogr just follows the 
-<a href="http://www.gdal.org/ogr_formats.html">format-specific</a>
+Generally, <em>v.in.ogr</em> just follows the 
+<a href="https://gdal.org/drivers/vector/">format-specific</a>
 syntax defined by the OGR library.
 
 
@@ -302,7 +301,7 @@ db.select table=river
 
 <h3>OpenStreetMap (OSM)</h3>
 
-<a href="https://gdal.org/drv_osm.html">OSM data</a> are available in
+<a href="https://gdal.org/drivers/vector/osm.html">OSM data</a> are available in
 .osm (XML based) and .pbf (optimized binary) formats. The .pbf format 
 is recommended because file sizes are smaller. The OSM driver will 
 categorize features into 5 layers :
@@ -346,7 +345,7 @@ Import of OSM data requires a configuration file, defined with the
 OSM_CONFIG_FILE configuration option. In the data folder of the GDAL 
 distribution, you can find a <a href="https://github.com/OSGeo/gdal/blob/master/gdal/data/osmconf.ini">osmconf.ini file</a>
 that can be customized to fit your needs. See 
-<a href="http://wiki.openstreetmap.org/wiki/Map_Features">OSM map features</a> 
+<a href="https://wiki.openstreetmap.org/wiki/Map_Features">OSM map features</a> 
 for keys and their values. You should set &quot;other_tags=no&quot; to 
 avoid problems with import or querying the imported vector. Once a 
 OSM_CONFIG_FILE has been created, OSM data can be imported with e.g.
@@ -461,8 +460,8 @@ with <em><a href="v.proj.html">v.proj</a></em>.
 <h2>REFERENCES</h2>
 
 <ul>
-  <li><a href="http://www.gdal.org/">OGR vector library</a></li>
-  <li><a href="http://www.gdal.org/ogr__api_8h.html">OGR vector library C API</a> documentation</li>
+  <li><a href="https://gdal.org/">OGR vector library</a></li>
+  <li><a href="https://gdal.org/api/vector_c_api.html">OGR vector library C API</a> documentation</li>
 </ul>
 
 <h2>SEE ALSO</h2>
