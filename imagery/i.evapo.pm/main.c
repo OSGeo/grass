@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
     input_hc->description = _("Name of input crop height raster map [m]");
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
-	_("Name for output raster map [mm/h]");
+    output->description = _("Name for output raster map [mm/h]");
 
     zero = G_define_flag();
     zero->key = 'z';
