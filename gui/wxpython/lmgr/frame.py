@@ -1958,14 +1958,6 @@ class GMFrame(wx.Frame):
         dlg.CentreOnScreen()
         dlg.Show()
 
-    def OnUnpackRaster(self, event):
-        """Unpack raster map handler"""
-        self.OnMenuCmd(cmd=['r.unpack'])
-
-    def OnUnpackVector(self, event):
-        """Unpack vector map handler"""
-        self.OnMenuCmd(cmd=['v.unpack'])
-
     def OnImportDxfFile(self, event, cmd=None):
         """Convert multiple DXF layers to GRASS vector map layers"""
         from modules.import_export import DxfImportDialog
