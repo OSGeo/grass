@@ -126,7 +126,7 @@ static void reduce_path(struct path *dst, const struct path *src, double eps)
 
 	if (fabs(v1->x - v0->x) < eps && fabs(v1->y - v0->y) < eps &&
 	    fabs(v1->x - v2->x) < eps && fabs(v1->y - v2->y) < eps &&
-	    v0->mode != P_MOVE && v1->mode != P_MOVE && !v2->mode != P_MOVE)
+	    v0->mode != P_MOVE && v1->mode != P_MOVE && (!v2->mode) != P_MOVE)
 	    continue;
 
 	path_append(dst, v1->x, v1->y, v1->mode);
