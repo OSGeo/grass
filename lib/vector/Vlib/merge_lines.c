@@ -138,7 +138,7 @@ int Vect_merge_lines(struct Map_info *Map, int type, int *new_lines,
 		curr_line = Vect_get_node_line(Map, next_node, i);
 		if ((Plus->Line[abs(curr_line)]->type & GV_LINES))
 		    lines_type++;
-		if ((Plus->Line[abs(curr_line)]->type == ltype)) {
+		if (Plus->Line[abs(curr_line)]->type == ltype) {
 		    if (abs(curr_line) != abs(first)) {
 			Vect_read_line(Map, NULL, Cats, abs(curr_line));
 			
@@ -186,7 +186,7 @@ int Vect_merge_lines(struct Map_info *Map, int type, int *new_lines,
 		curr_line = Vect_get_node_line(Map, next_node, i);
 		if ((Plus->Line[abs(curr_line)]->type & GV_LINES))
 		    lines_type++;
-		if ((Plus->Line[abs(curr_line)]->type == ltype)) {
+		if (Plus->Line[abs(curr_line)]->type == ltype) {
 		    if (abs(curr_line) != abs(last)) {
 			Vect_read_line(Map, NULL, Cats, abs(curr_line));
 			
