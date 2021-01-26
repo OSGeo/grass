@@ -171,7 +171,7 @@ int read_cube(Cube_data * Cube, file_info * headfax)
 	    break;
 	}
 
-	for (i = 0; ret = fread(fptr + i, 1, 10240, fp); i += ret) ;
+	for (i = 0; (ret = fread(fptr + i, 1, 10240, fp)); i += ret) ;
     }
 
     if (zeros_left) {
