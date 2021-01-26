@@ -28,7 +28,7 @@ void rdwr_gridatb(void)
     cellhd.format = -1;
     cellhd.compressed = 1;
 
-    if (retval = adjcellhd(&cellhd)) {
+    if ((retval = adjcellhd(&cellhd))) {
 	fclose(fp);
 	switch (retval) {
 	case 1:
