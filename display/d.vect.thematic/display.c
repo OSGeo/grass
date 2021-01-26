@@ -74,7 +74,7 @@ int display_lines(struct Map_info *Map, struct cat_list *Clist,
             if (ltype == -1) {
                 G_fatal_error(_("Unable to read vector map"));
             }
-            else if ((ltype == -2)) {   /* EOF */
+            else if (ltype == -2) {   /* EOF */
                 break;
             }
         }
