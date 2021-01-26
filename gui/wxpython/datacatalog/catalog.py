@@ -102,18 +102,11 @@ class DataCatalog(wx.Panel):
                            os.getcwd(), wx.DD_DEFAULT_STYLE)
         if dlg.ShowModal() == wx.ID_OK:
             grassdatabase = dlg.GetPath()
-            self.tree.InsertGrassDb(name=grassdatabase)
+            grassdb_node = self.tree.InsertGrassDb(name=grassdatabase)
         dlg.Destroy()
 
         # Offer to create a new location
-        if grassdatabase and not os.listdir(grassdatabase):
-            self.OfferCreateLocation(grassdatabase)
-
-    def OfferCreateLocation(self, grassdatabase):
-        """Offer to create new location in the given grass database"""
-        grassdb_node = self.tree._model.SearchNodes(name=grassdatabase,
-                                           type='grassdb')
-        if grassdb_node:
+        if grassdb_node and not os.listdir(grassdatabase):
             message = _("Do you want to create a location?")
             dlg = wx.MessageDialog(self,
                                     message=message,
@@ -121,7 +114,7 @@ class DataCatalog(wx.Panel):
                                     style=wx.YES_NO | wx.YES_DEFAULT |
                                     wx.ICON_QUESTION)
             if dlg.ShowModal() == wx.ID_YES:
-                self.tree.CreateLocation(grassdb_node[0])
+                self.tree.CreateLocation(grassdb_node)
             dlg.Destroy()
 
     def OnCreateMapset(self, event):
