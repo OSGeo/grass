@@ -192,60 +192,54 @@ class DataCatalog(wx.Panel):
         self.tree.Filter(text=text, element=element)
 
     def OnImportMenu(self, event):
-        """Import maps menu (import, link)
-        """
-        self._popupImportMenu()
-
-    def _popupImportMenu(self):
         """Create popup menu for other import options"""
-
         # create submenu
         subMenu = Menu()
 
-        subitem = wx.MenuItem(subMenu, wx.ID_ANY, _("&Link external raster data  [r.external]"))
+        subitem = wx.MenuItem(subMenu, wx.ID_ANY, _("Link external raster data  [r.external]"))
         subMenu.AppendItem(subitem)
         self.Bind(wx.EVT_MENU, self.OnLinkGdalLayers, subitem)
 
-        subitem = wx.MenuItem(subMenu, wx.ID_ANY, _("&Link external vector data  [v.external]"))
+        subitem = wx.MenuItem(subMenu, wx.ID_ANY, _("Link external vector data  [v.external]"))
         subMenu.AppendItem(subitem)
         self.Bind(wx.EVT_MENU, self.OnLinkOgrLayers, subitem)
 
         subMenu.AppendSeparator()
 
-        subitem = wx.MenuItem(subMenu, wx.ID_ANY, _("&Set raster output format  [r.external.out]"))
+        subitem = wx.MenuItem(subMenu, wx.ID_ANY, _("Set raster output format  [r.external.out]"))
         subMenu.AppendItem(subitem)
         self.Bind(wx.EVT_MENU, self.OnRasterOutputFormat, subitem)
 
-        subitem = wx.MenuItem(subMenu, wx.ID_ANY, _("&Set vector output format  [v.external.out]"))
+        subitem = wx.MenuItem(subMenu, wx.ID_ANY, _("Set vector output format  [v.external.out]"))
         subMenu.AppendItem(subitem)
         self.Bind(wx.EVT_MENU, self.OnVectorOutputFormat, subitem)
 
         # create menu
         menu = Menu()
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Unpack GRASS raster map  [r.unpack]"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Unpack GRASS raster map  [r.unpack]"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnUnpackRaster, item)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Unpack GRASS vector map  [v.unpack]"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Unpack GRASS vector map  [v.unpack]"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnUnpackVector, item)
 
         menu.AppendSeparator()
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create raster map from x,y,z data  [r.in.xyz]"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Create raster map from x,y,z data  [r.in.xyz]"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnImportRasterAscii, item)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create vector map from x,y,z data  [v.in.ascii]"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Create vector map from x,y,z data  [v.in.ascii]"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnImportVectorAscii, item)
 
         menu.AppendSeparator()
-        menu.AppendMenu(wx.ID_ANY, _("&Link external data"), subMenu)
+        menu.AppendMenu(wx.ID_ANY, _("Link external data"), subMenu)
 
         menu.AppendSeparator()
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&More options..."))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("More options..."))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnMoreOptions, item)
 
