@@ -238,7 +238,7 @@ int main(int argc, char *argv[])
     max_ground_window_opt->key = "max_ground_window_size";
     max_ground_window_opt->type = TYPE_DOUBLE;
     max_ground_window_opt->required = NO;
-    max_ground_window_opt->answer = "33";
+    max_ground_window_opt->answer = G_store("33");
     max_ground_window_opt->description =
         _("Maximum window size for ground filter");
     max_ground_window_opt->guisection = _("Ground filter");
@@ -247,7 +247,7 @@ int main(int argc, char *argv[])
     ground_slope_opt->key = "ground_slope";
     ground_slope_opt->type = TYPE_DOUBLE;
     ground_slope_opt->required = NO;
-    ground_slope_opt->answer = "1.0";
+    ground_slope_opt->answer = G_store("1.0");
     ground_slope_opt->description = _("Slope for ground filter");
     ground_slope_opt->guisection = _("Ground filter");
 
@@ -255,7 +255,7 @@ int main(int argc, char *argv[])
     max_ground_distance_opt->key = "max_ground_distance";
     max_ground_distance_opt->type = TYPE_DOUBLE;
     max_ground_distance_opt->required = NO;
-    max_ground_distance_opt->answer = "2.5";
+    max_ground_distance_opt->answer = G_store("2.5");
     max_ground_distance_opt->description =
         _("Maximum distance for ground filter");
     max_ground_distance_opt->guisection = _("Ground filter");
@@ -264,7 +264,7 @@ int main(int argc, char *argv[])
     init_ground_distance_opt->key = "initial_ground_distance";
     init_ground_distance_opt->type = TYPE_DOUBLE;
     init_ground_distance_opt->required = NO;
-    init_ground_distance_opt->answer = "0.15";
+    init_ground_distance_opt->answer = G_store("0.15");
     init_ground_distance_opt->description =
         _("Initial distance for ground filter");
     init_ground_distance_opt->guisection = _("Ground filter");
@@ -273,7 +273,7 @@ int main(int argc, char *argv[])
     ground_cell_size_opt->key = "ground_cell_size";
     ground_cell_size_opt->type = TYPE_DOUBLE;
     ground_cell_size_opt->required = NO;
-    ground_cell_size_opt->answer = "1";
+    ground_cell_size_opt->answer = G_store("1");
     ground_cell_size_opt->description =
         _("Initial distance for ground filter");
     ground_cell_size_opt->guisection = _("Ground filter");
