@@ -137,14 +137,6 @@ class DataCatalog(wx.Panel):
         dlg.CentreOnScreen()
         dlg.Show()
 
-    def OnUnpackRaster(self, event):
-        """Unpack raster map handler"""
-        GUI(parent=self, giface=self.giface).ParseCommand(cmd=['r.unpack'])
-
-    def OnUnpackVector(self, event):
-        """Unpack vector map handler"""
-        GUI(parent=self, giface=self.giface).ParseCommand(cmd=['v.unpack'])
-
     def OnLinkGdalLayers(self, event):
         """Link multiple GDAL layers to GRASS raster map layers"""
         from modules.import_export import GdalImportDialog
@@ -173,13 +165,9 @@ class DataCatalog(wx.Panel):
         dlg.CentreOnScreen()
         dlg.Show()
 
-    def OnImportRasterAscii(self, event):
-        """Create raster map from x,y,z data handler"""
-        GUI(parent=self, giface=self.giface).ParseCommand(cmd=['r.in.xyz'])
-
-    def OnImportVectorAscii(self, event):
-        """Create vector map from x,y,z data handler"""
-        GUI(parent=self, giface=self.giface).ParseCommand(cmd=['v.in.ascii'])
+    def GuiParseCommand(self, cmd):
+        """Generic handler"""
+        GUI(parent=self, giface=self.giface).ParseCommand(cmd=[cmd])
 
     def OnMoreOptions(self, event):
         self.giface.Help(entry="topic_import")
@@ -219,21 +207,21 @@ class DataCatalog(wx.Panel):
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("Unpack GRASS raster map  [r.unpack]"))
         menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.OnUnpackRaster, item)
+        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand('r.unpack'), item)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("Unpack GRASS vector map  [v.unpack]"))
         menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.OnUnpackVector, item)
+        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand('v.unpack'), item)
 
         menu.AppendSeparator()
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("Create raster map from x,y,z data  [r.in.xyz]"))
         menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.OnImportRasterAscii, item)
+        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand('r.in.xyz'), item)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("Create vector map from x,y,z data  [v.in.ascii]"))
         menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.OnImportVectorAscii, item)
+        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand('v.in.ascii'), item)
 
         menu.AppendSeparator()
         menu.AppendMenu(wx.ID_ANY, _("Link external data"), subMenu)
