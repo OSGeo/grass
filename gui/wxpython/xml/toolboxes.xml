@@ -610,6 +610,8 @@
       <wxgui-item name="CreateNewLocation"/>
       <wxgui-item name="CreateNewMapset"/>
       <separator/>
+      <wxgui-item name="SetRStudioPath"/>
+      <separator/>
       <wxgui-item name="VersionAndCopyright"/>
     </items>
   </toolbox>

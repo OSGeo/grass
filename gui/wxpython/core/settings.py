@@ -919,6 +919,9 @@ class Settings:
                     },
                 },
             },
+            'rstudio': {
+                'path': '',
+            },
         }
 
         # quick fix, http://trac.osgeo.org/grass/ticket/1233
