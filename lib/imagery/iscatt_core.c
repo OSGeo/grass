@@ -526,7 +526,7 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
 			      ("Unable to read from category raster condition file."));
 		    return -1;
 		}
-		if (n_pixs != n_pixs) {
+		if (n_pixs != (row_size) / sizeof(unsigned char)) {
 		    G_free(rast_pixs);
 		    G_free(belongs_pix);
 		    G_warning(_
