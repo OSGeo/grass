@@ -16,7 +16,7 @@ This program is free software under the GNU General Public License
 
 import wx
 from gui_core.toolbars import BaseToolbar
-from gui_core.wrap import StaticText, SearchCtrl
+from gui_core.wrap import SearchCtrl
 from icons.icon import MetaIcon
 
 icons = {
@@ -43,7 +43,16 @@ icons = {
         label=_("Create new location in current GRASS database")),
     'downloadLocation': MetaIcon(
         img='location-download',
-        label=_("Download sample location to current GRASS database"))
+        label=_("Download sample location to current GRASS database")),
+    'importRaster': MetaIcon(
+        img='raster-import',
+        label=_("Import raster data  [r.import]")),
+    'importVector': MetaIcon(
+        img='vector-import',
+        label=_("Import vector data  [v.import]")),
+    'importLayer': MetaIcon(
+        img='layer-import',
+        label=_("Select another import option"))
 }
 
 
@@ -102,8 +111,14 @@ class DataCatalogToolbar(BaseToolbar):
                                      ("downloadLocation", icons['downloadLocation'],
                                       self.parent.OnDownloadLocation),
                                      ("addMapset", icons['addMapset'],
-                                      self.parent.OnCreateMapset)
-                                     ))
+                                      self.parent.OnCreateMapset),
+                                     ("importRaster", icons['importRaster'],
+                                      self.parent.OnImportGdalLayers),
+                                     ("importVector", icons['importVector'],
+                                      self.parent.OnImportOgrLayers),
+                                     ("importLayer", icons['importLayer'],
+                                      self.parent.OnImportMenu)))
+
     def OnFilterMenu(self, event):
         """Decide the element to filter by"""
         filterMenu = self.filter.GetMenu().GetMenuItems()
