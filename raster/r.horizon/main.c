@@ -129,7 +129,7 @@ double TOLER;
 const char *str_step;
 
 int mode;
-int isMode()
+int isMode(void)
 {
     return mode;
 }
@@ -393,7 +393,7 @@ int main(int argc, char *argv[])
 	sscanf(parm.direction->answer, "%lf", &single_direction);
 
 
-    if (isMode(WHOLE_RASTER)) {
+    if (WHOLE_RASTER == isMode()) {
 	if ((parm.direction->answer == NULL) && (parm.step->answer == NULL)) {
 	    G_fatal_error(
 		_("You didn't specify a direction value or step size. Aborting."));

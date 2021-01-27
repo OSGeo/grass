@@ -118,7 +118,7 @@ int sort_surfs_max(int *surf, int *id_sort, int *indices, int num)
 
    \return 1
  */
-int Nviz_draw_all_vect()
+int Nviz_draw_all_vect(void)
 {
     /* GS_set_cancel(0); */
 
@@ -143,7 +143,7 @@ int Nviz_draw_all_vect()
 
    \return 1
  */
-int Nviz_draw_all_site()
+int Nviz_draw_all_site(void)
 {
     int i;
     int *site_list, nsites;
@@ -172,7 +172,7 @@ int Nviz_draw_all_site()
 
    \return 1
  */
-int Nviz_draw_all_vol()
+int Nviz_draw_all_vol(void)
 {
     int *vol_list, nvols, i;
 
@@ -230,13 +230,13 @@ int Nviz_draw_all(nv_data * data)
 	Nviz_draw_all_surf(data);
 
     if (draw_vect)
-	Nviz_draw_all_vect(data);
+	Nviz_draw_all_vect();
 
     if (draw_site)
-	Nviz_draw_all_site(data);
+	Nviz_draw_all_site();
 
     if (draw_vol)
-	Nviz_draw_all_vol(data);
+	Nviz_draw_all_vol();
 	
     for(i = 0; i < data->num_fringes; i++) {
 	struct fringe_data * f = data->fringe[i];
