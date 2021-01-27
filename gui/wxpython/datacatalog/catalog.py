@@ -105,7 +105,19 @@ class DataCatalog(wx.Panel):
                            os.getcwd(), wx.DD_DEFAULT_STYLE)
         if dlg.ShowModal() == wx.ID_OK:
             grassdatabase = dlg.GetPath()
-            self.tree.InsertGrassDb(name=grassdatabase)
+            grassdb_node = self.tree.InsertGrassDb(name=grassdatabase)
+
+            # Offer to create a new location
+            if grassdb_node and not os.listdir(grassdatabase):
+                message = _("Do you want to create a location?")
+                dlg2 = wx.MessageDialog(self,
+                                        message=message,
+                                        caption=_("Create location?"),
+                                        style=wx.YES_NO | wx.YES_DEFAULT |
+                                        wx.ICON_QUESTION)
+                if dlg2.ShowModal() == wx.ID_YES:
+                    self.tree.CreateLocation(grassdb_node)
+                dlg2.Destroy()
         dlg.Destroy()
 
     def OnCreateMapset(self, event):
