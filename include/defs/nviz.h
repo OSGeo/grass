@@ -35,9 +35,9 @@ int Nviz_set_cplane_here(nv_data *, int, float, float);
 
 /* draw.c */
 int Nviz_draw_all_surf(nv_data *);
-int Nviz_draw_all_vect();
-int Nviz_draw_all_site();
-int Nviz_draw_all_vol();
+int Nviz_draw_all_vect(void);
+int Nviz_draw_all_site(void);
+int Nviz_draw_all_vol(void);
 int Nviz_draw_all(nv_data *);
 int Nviz_draw_quick(nv_data *, int);
 int Nviz_load_image(GLubyte *, int, int, int);
