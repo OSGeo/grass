@@ -1,5 +1,5 @@
 #ifndef __LOCAL_PROTO_H__
-#define __LOCAL_PHOTO_H__
+#define __LOCAL_PROTO_H__
 
 #include <grass/raster.h>
 
