@@ -347,8 +347,12 @@ int create_ogr_layer(struct Map_info *Map, int type)
 		      "Unable to write attributes."));
     }
     
-    if (OGR_L_TestCapability(ogr_info->layer, OLCTransactions))
-	OGR_L_StartTransaction(ogr_info->layer);
+    if (OGR_L_TestCapability(ogr_info->layer, OLCTransactions) &&
+	(OGR_L_StartTransaction(ogr_info->layer) != OGRERR_NONE)) {
+	G_warning(_("OGR transaction with layer <%s> failed to start"),
+		  ogr_info->layer_name);
+	return -1;
+    }
 
     return 0;
 }

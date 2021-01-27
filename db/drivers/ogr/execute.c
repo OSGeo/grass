@@ -109,7 +109,9 @@ int db__driver_execute_immediate(dbString * sql)
 	    }
 	    OGR_F_SetFieldString(hFeature, cols[i].index, value);
 	}
-	OGR_L_SetFeature(hLayer, hFeature);
+	if (OGR_L_SetFeature(hLayer, hFeature) != OGRERR_NONE)
+	    G_warning(_("\tOGR failed to write feature fid=%ld to layer <%s>"),
+		      OGR_F_GetFID(hFeature), OGR_L_GetName(hLayer));
 	OGR_F_Destroy(hFeature);
     }
     
