@@ -11,22 +11,72 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
 		      int check_only)
 {
     struct Cell_head loc_wind;
-    struct Key_Value *proj_info, *proj_units, *proj_epsg;
-    struct Key_Value *loc_proj_info, *loc_proj_units;
-    const char *wkt;
+    struct Key_Value *proj_info = NULL,
+                     *proj_units = NULL;
+    struct Key_Value *loc_proj_info = NULL,
+                     *loc_proj_units = NULL;
+    char *wkt = NULL, *srid = NULL;
     char error_msg[8096];
     int proj_trouble;
 
     /* -------------------------------------------------------------------- */
-    /*      Fetch the projection in GRASS form.                             */
+    /*      Fetch the projection in GRASS form, SRID, and WKT.              */
     /* -------------------------------------------------------------------- */
-    proj_info = NULL;
-    proj_units = NULL;
-    proj_epsg = NULL;
-    loc_proj_info = NULL;
-    loc_proj_units = NULL;
 
-    wkt = GDALGetProjectionRef(hDS);
+#if GDAL_VERSION_NUM >= 3000000
+    OGRSpatialReferenceH hSRS;
+
+    hSRS = GDALGetSpatialRef(hDS);
+    if (hSRS) {
+	/* get WKT2 definition */
+	char **papszOptions;
+
+	papszOptions = G_calloc(3, sizeof(char *));
+	papszOptions[0] = G_store("MULTILINE=YES");
+	papszOptions[1] = G_store("FORMAT=WKT2");
+	OSRExportToWktEx(hSRS, &wkt, (const char **)papszOptions);
+	G_free(papszOptions[0]);
+	G_free(papszOptions[1]);
+	G_free(papszOptions);
+    }
+    /* proj_trouble:
+     * 0: valid srs
+     * 1: no srs, default to xy
+     * 2: unreadable srs, default to xy
+     */
+
+    /* Projection only required for checking so convert non-interactively */
+    proj_trouble = 0;
+    if (wkt && *wkt) {
+	if (hSRS != NULL)
+	    GPJ_osr_to_grass(cellhd, &proj_info, &proj_units, hSRS, 0);
+
+	if (!hSRS || (!OSRIsProjected(hSRS) && !OSRIsGeographic(hSRS))) {
+	    G_important_message(_("Input contains an invalid SRS. "
+	                          "WKT definition:\n%s"), wkt);
+
+	    proj_trouble = 2;
+	}
+	else{
+	    const char *authkey, *authname, *authcode;
+
+	    if (OSRIsProjected(hSRS))
+		authkey = "PROJCS";
+	    else /* is geographic */
+		authkey = "GEOGCS";
+
+	    authname = OSRGetAuthorityName(hSRS, authkey);
+	    if (authname && *authname) {
+		authcode = OSRGetAuthorityCode(hSRS, authkey);
+		if (authcode && *authcode) {
+		    G_asprintf(&srid, "%s:%s", authname, authcode);
+		}
+	    }
+	}
+    }
+
+#else
+    wkt = G_store(GDALGetProjectionRef(hDS));
     /* proj_trouble:
      * 0: valid srs
      * 1: no srs, default to xy
@@ -43,7 +93,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
 	    GPJ_osr_to_grass(cellhd, &proj_info, &proj_units, hSRS, 0);
 
 	if (!hSRS || (!OSRIsProjected(hSRS) && !OSRIsGeographic(hSRS))) {
-	    G_important_message(_("Input contains an invalid SRS. " 
+	    G_important_message(_("Input contains an invalid SRS. "
 	                          "WKT definition:\n%s"), wkt);
 
 	    proj_trouble = 2;
@@ -57,18 +107,17 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
 		authkey = "GEOGCS";
 
 	    authname = OSRGetAuthorityName(hSRS, authkey);
-	    if (authname && *authname && strcmp(authname, "EPSG") == 0) {
+	    if (authname && *authname) {
 		authcode = OSRGetAuthorityCode(hSRS, authkey);
 		if (authcode && *authcode) {
-		    G_debug(1, "found EPSG:%s", authcode);
-		    proj_epsg = G_create_key_value();
-		    G_set_key_value("epsg", authcode, proj_epsg);
+		    G_asprintf(&srid, "%s:%s", authname, authcode);
 		}
 	    }
 	}
 	if (hSRS)
 	    OSRDestroySpatialReference(hSRS);
     }
+#endif
     else {
 	G_important_message(_("No projection information available"));
 	cellhd->proj = PROJECTION_XY;
@@ -80,14 +129,14 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
     /*      Do we need to create a new location?                            */
     /* -------------------------------------------------------------------- */
     if (outloc != NULL) {
-	/* do not create a xy location if an existing SRS was unreadable */ 
+	/* do not create a xy location if an existing SRS was unreadable */
 	if (proj_trouble == 2) {
 	    G_fatal_error(_("Unable to convert input map projection to GRASS "
 			    "format; cannot create new location."));
 	}
 	else {
-            if (0 != G_make_location_epsg(outloc, cellhd, proj_info,
-	                                  proj_units, proj_epsg)) {
+            if (0 != G_make_location_crs(outloc, cellhd, proj_info,
+	                                 proj_units, srid, wkt)) {
                 G_fatal_error(_("Unable to create new location <%s>"),
                               outloc);
             }
@@ -282,7 +331,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
                        _("Consider generating a new location from the input dataset using "
                          "the 'location' parameter.\n"));
             }
-            
+
 	    if (check_only)
 		msg_fn = G_message;
 	    else
@@ -297,7 +346,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
 	    if (check_only)
 		msg_fn = G_message;
 	    else
-		msg_fn = G_verbose_message;            
+		msg_fn = G_verbose_message;
 	    msg_fn(_("Projection of input dataset and current location "
 		     "appear to match"));
 	    if (check_only) {

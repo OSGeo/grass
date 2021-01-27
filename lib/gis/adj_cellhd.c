@@ -34,7 +34,7 @@ static int ll_check_ew(struct Cell_head *cellhd);
  * region). It also makes projection-specific adjustments. The
  * <i>cellhd</i> structure must have its <i>north, south, east,
  * west</i>, and <i>proj</i> fields set.
- * 
+ *
  * If <i>row_flag</i> is true, then the north-south resolution is
  * computed from the number of <i>rows</i> in the <i>cellhd</i>
  * structure. Otherwise the number of <i>rows</i> is computed from the
@@ -127,16 +127,16 @@ void G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
  * region).  It also makes projection-specific adjustments. The
  * <i>cellhd</i> structure must have its <i>north, south, east,
  * west</i>, and <i>proj</i> fields set.
- * 
- * If <i>row_flag</i> is true, then the north-south resolution is computed 
- * from the number of <i>rows</i> in the <i>cellhd</i> structure. 
- * Otherwise the number of <i>rows</i> is computed from the north-south 
- * resolution in the structure, similarly for <i>col_flag</i> and the 
- * number of columns and the east-west resolution. 
  *
- * If <i>depth_flag</i> is true, top-bottom resolution is calculated 
+ * If <i>row_flag</i> is true, then the north-south resolution is computed
+ * from the number of <i>rows</i> in the <i>cellhd</i> structure.
+ * Otherwise the number of <i>rows</i> is computed from the north-south
+ * resolution in the structure, similarly for <i>col_flag</i> and the
+ * number of columns and the east-west resolution.
+ *
+ * If <i>depth_flag</i> is true, top-bottom resolution is calculated
  * from depths.
- * If <i>depth_flag</i> are false, number of depths is calculated from 
+ * If <i>depth_flag</i> are false, number of depths is calculated from
  * top-bottom resolution.
  *
  * \warning This function can cause segmentation fault without any warning
@@ -341,7 +341,7 @@ static int ll_check_ns(struct Cell_head *cellhd)
 
     G_debug(3, "ll_check_ns: epsilon: %g", llepsilon);
 
-    /* North, South: allow a half cell spill-over */ 
+    /* North, South: allow a half cell spill-over */
 
     diff = (cellhd->north - cellhd->south) / cellhd->ns_res;
     ncells = (int) (diff + 0.5);
@@ -372,7 +372,7 @@ static int ll_check_ns(struct Cell_head *cellhd)
 	if (diff <= 0.5 + llepsilon) {
 	    G_important_message(_("90 degree north is exceeded by %g cells"),
 		      diff);
-	    
+
 	    if (diff < llepsilon && diff > fpepsilon) {
 		G_verbose_message(_("Subtle input data rounding error of north boundary (%g)"),
 			  cellhd->north - 90.0);
@@ -422,7 +422,7 @@ static int ll_check_ns(struct Cell_head *cellhd)
 	if (diff <= 0.5 + llepsilon) {
 	    G_important_message(_("90 degree south is exceeded by %g cells"),
 		      diff);
-	    
+
 	    if (diff < llepsilon && diff > fpepsilon) {
 		G_verbose_message(_("Subtle input data rounding error of south boundary (%g)"),
 			  cellhd->south + 90);
@@ -451,7 +451,7 @@ static int ll_check_ns(struct Cell_head *cellhd)
 	else
 	    G_fatal_error(_("Illegal latitude for South"));
     }
-    
+
     if (lladjust)
 	cellhd->ns_res = (cellhd->north - cellhd->south) / cellhd->rows;
 
@@ -500,7 +500,7 @@ static int ll_check_ew(struct Cell_head *cellhd)
 /*!
  * \brief Adjust window for lat/lon.
  *
- * This function tries to automatically fix fp precision issues and 
+ * This function tries to automatically fix fp precision issues and
  * adjust rounding errors for lat/lon.
  *
  * <b>Note:</b> 3D values are not adjusted.

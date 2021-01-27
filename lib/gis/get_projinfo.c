@@ -1,10 +1,10 @@
 /*!
   \file lib/gis/get_projinfo.c
-  
+
   \brief GIS Library - Get projection info
-  
+
   (C) 1999-2014 by the GRASS Development Team
-  
+
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
 */
@@ -23,7 +23,7 @@
 
   Note: Allocated Key_Value structure should be freed by
   G_free_key_value().
-  
+
   Prints a warning if no units information available.
 
   \return pointer to Key_Value structure with key/value pairs
@@ -49,10 +49,10 @@ struct Key_Value *G_get_projunits(void)
 
 /*!
   \brief Gets projection information for location
-  
+
   Note: Allocated Key_Value structure should be freed by
   G_free_key_value().
-  
+
   Prints a warning if no projection information available.
 
   \return pointer to Key_Value structure with key/value pairs
@@ -72,12 +72,12 @@ struct Key_Value *G_get_projinfo(void)
 	return NULL;
     }
     in_proj_keys = G_read_key_value_file(path);
-    
+
     /* TODO: do not restrict to EPSG as the only authority */
     if ((in_epsg_keys = G_get_projepsg()) != NULL) {
 	const char *epsgstr = G_find_key_value("epsg", in_epsg_keys);
 	char buf[4096];
-	
+
 	sprintf(buf, "EPSG:%s", epsgstr);
 	G_set_key_value("init", buf, in_proj_keys);
 	G_free_key_value(in_epsg_keys);
@@ -88,15 +88,17 @@ struct Key_Value *G_get_projinfo(void)
 
 /*!
   \brief Gets EPSG information for the current location
-  
+
+  DEPRECATED: Use G_get_projsrid() instead.
+
   Note: Allocated Key_Value structure should be freed by
   G_free_key_value().
-  
+
   \return pointer to Key_Value structure with key/value pairs
   \return NULL when EPSG code is not defined for location
 */
 
-/* superseded by G_get_projsrid(), keep for backwards compatibility */ 
+/* superseded by G_get_projsrid(), keep for backwards compatibility */
 struct Key_Value *G_get_projepsg(void)
 {
     struct Key_Value *in_epsg_keys;
@@ -232,8 +234,24 @@ char *G_get_projsrid(void)
     G_file_name(path, "", SRID_FILE, "PERMANENT");
     if (access(path, 0) != 0) {
 	if (G_projection() != PROJECTION_XY) {
+	    struct Key_Value *projepsg;
+	    const char *epsg_num;
+
 	    G_debug(1, "<%s> file not found for location <%s>",
 		      SRID_FILE, G_location());
+
+	    /* for backwards compatibility, check if PROJ_EPSG exists */
+	    if ((projepsg = G_get_projepsg()) != NULL) {
+		epsg_num = G_find_key_value("epsg", projepsg);
+		if (*epsg_num) {
+		    G_debug(1, "Using <%s> file instead for location <%s>",
+			    EPSG_FILE, G_location());
+		    G_asprintf(&sridstring, "EPSG:%s", epsg_num);
+		    G_free_key_value(projepsg);
+
+		    return sridstring;
+		}
+	    }
 	}
 	return NULL;
     }

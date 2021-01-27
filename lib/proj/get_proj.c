@@ -8,7 +8,7 @@
    Eric Miller, Paul Kelly, Markus Metz
 
    (C) 2003-2008, 2018 by the GRASS Development Team
- 
+
    This program is free software under the GNU General Public
    License (>=v2). Read the file COPYING that comes with GRASS
    for details.
@@ -38,18 +38,18 @@ static int nopt;
 /**
  * \brief Create a pj_info struct Co-ordinate System definition from a set of
  *        PROJ_INFO / PROJ_UNITS-style key-value pairs
- * 
+ *
  * This function takes a GRASS-style co-ordinate system definition as stored
  * in the PROJ_INFO and PROJ_UNITS files and processes it to create a pj_info
  * representation for use in re-projecting with pj_do_proj(). In addition to
- * the parameters passed to it it may also make reference to the system 
+ * the parameters passed to it it may also make reference to the system
  * ellipse.table and datum.table files if necessary.
- * 
- * \param info Pointer to a pj_info struct (which must already exist) into 
+ *
+ * \param info Pointer to a pj_info struct (which must already exist) into
  *        which the co-ordinate system definition will be placed
  * \param in_proj_keys PROJ_INFO-style key-value pairs
  * \param in_units_keys PROJ_UNITS-style key-value pairs
- * 
+ *
  * \return -1 on error (unable to initialise PROJ.4)
  *          2 if "default" 3-parameter datum shift values from datum.table
  *            were used
@@ -82,6 +82,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     info->def = NULL;
     info->pj = NULL;
     info->srid = NULL;
+    info->wkt = NULL;
 
     str = G_find_key_value("meters", in_units_keys);
     if (str != NULL) {
@@ -120,7 +121,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
 	else if (strcmp(in_proj_keys->key[i], "zone") == 0) {
 	    continue;
 
-	    /* Datum and ellipsoid-related parameters will be handled 
+	    /* Datum and ellipsoid-related parameters will be handled
 	     * separately after end of this loop PK */
 
 	}
@@ -192,7 +193,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     else {
 	sprintf(buffa, "a=%.16g", a);
 	alloc_options(buffa);
-	/* Cannot use es directly because the OSRImportFromProj4() 
+	/* Cannot use es directly because the OSRImportFromProj4()
 	 * function in OGR only accepts b or rf as the 2nd parameter */
 	if (es == 0)
 	    sprintf(buffa, "b=%.16g", a);
@@ -214,7 +215,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
 	alloc_options(buffa);
 	G_free(params);
 
-	/* else if a datum name is present take it and look up the parameters 
+	/* else if a datum name is present take it and look up the parameters
 	 * from the datum.table file */
     }
     else if (datum != NULL) {
@@ -225,7 +226,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
 	    returnval = 2;
 	    G_free(params);
 
-	    /* else just pass the datum name on and hope it is recognised by 
+	    /* else just pass the datum name on and hope it is recognised by
 	     * PROJ.4 even though it isn't recognised by GRASS */
 	}
 	else {
@@ -242,7 +243,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
 
 #ifdef HAVE_PROJ_H
 #if PROJ_VERSION_MAJOR >= 6
-    /* without type=crs, PROJ6 does not recognize what this is, 
+    /* without type=crs, PROJ6 does not recognize what this is,
      * a crs or some kind of coordinate operation, falling through to
      * PJ_TYPE_OTHER_COORDINATE_OPERATION */
     alloc_options("type=crs");
@@ -276,7 +277,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     if (perr)
 	G_fatal_error("PROJ 5 error %d", perr);
 #endif
-    
+
     info->pj = pj;
 
     deflen = 0;
@@ -309,20 +310,20 @@ static void alloc_options(char *buffa)
 }
 
 /**
- * \brief Create a pj_info struct Co-ordinate System definition from a 
+ * \brief Create a pj_info struct Co-ordinate System definition from a
  *        string with a sequence of key=value pairs
- * 
- * This function takes a GRASS- or PROJ style co-ordinate system definition 
- * and processes it to create a pj_info representation for use in 
- * re-projecting with pj_do_proj(). In addition to the parameters passed 
- * to it it may also make reference to the system ellipse.table and 
+ *
+ * This function takes a GRASS- or PROJ style co-ordinate system definition
+ * and processes it to create a pj_info representation for use in
+ * re-projecting with pj_do_proj(). In addition to the parameters passed
+ * to it it may also make reference to the system ellipse.table and
  * datum.table files if necessary.
- * 
- * \param info Pointer to a pj_info struct (which must already exist) into 
+ *
+ * \param info Pointer to a pj_info struct (which must already exist) into
  *        which the co-ordinate system definition will be placed
  * \param str input string with projection definition
  * \param in_units_keys PROJ_UNITS-style key-value pairs
- * 
+ *
  * \return -1 on error (unable to initialise PROJ.4)
  *          1 on success
  **/
@@ -346,12 +347,12 @@ int pj_get_string(struct pj_info *info, char *str)
     info->def = NULL;
     info->srid = NULL;
     info->pj = NULL;
-    
+
     nopt = 0;
 
     if ((str == NULL) || (str[0] == '\0')) {
-	/* Null Pointer or empty string is supplied for parameters, 
-	 * implying latlong projection; just need to set proj 
+	/* Null Pointer or empty string is supplied for parameters,
+	 * implying latlong projection; just need to set proj
 	 * parameter and call pj_init PK */
 	sprintf(info->proj, "ll");
 	sprintf(buffa, "proj=latlong ellps=WGS84");
@@ -360,7 +361,7 @@ int pj_get_string(struct pj_info *info, char *str)
     else {
 	/* Parameters have been provided; parse through them but don't
 	 * bother with most of the checks in pj_get_kv; assume the
-	 * programmer knows what he / she is doing when using this 
+	 * programmer knows what he / she is doing when using this
 	 * function rather than reading a PROJ_INFO file       PK */
 	s = str;
 	while (s = strtok(s, " \t\n"), s) {
@@ -405,7 +406,7 @@ int pj_get_string(struct pj_info *info, char *str)
 
 #ifdef HAVE_PROJ_H
 #if PROJ_VERSION_MAJOR >= 6
-    /* without type=crs, PROJ6 does not recognize what this is, 
+    /* without type=crs, PROJ6 does not recognize what this is,
      * a crs or some kind of coordinate operation, falling through to
      * PJ_TYPE_OTHER_COORDINATE_OPERATION */
     alloc_options("type=crs");
@@ -454,16 +455,16 @@ int pj_get_string(struct pj_info *info, char *str)
 /**
  * \brief Define a latitude / longitude co-ordinate system with the same
  *        ellipsoid and datum parameters as an existing projected system
- * 
+ *
  * This function is useful when projected co-ordinates need to be simply
  * converted to and from latitude / longitude.
- * 
+ *
  * \param pjnew Pointer to pj_info struct for geographic co-ordinate system
  *        that will be created
  * \param pjold Pointer to pj_info struct for existing projected co-ordinate
  *        system
- * 
- * \return 1 on success; -1 if there was an error (i.e. if the PROJ.4 
+ *
+ * \return 1 on success; -1 if there was an error (i.e. if the PROJ.4
  *         pj_latlong_from_proj() function returned NULL)
  **/
 
@@ -520,11 +521,11 @@ const char *set_proj_share(const char *name)
 /**
  * \brief Print projection parameters as used by PROJ.4 for input and
  *        output co-ordinate systems
- * 
+ *
  * \param iproj 'Input' co-ordinate system
  * \param oproj 'Output' co-ordinate system
- * 
- * \return 1 on success, -1 on error (i.e. if the PROJ-style definition 
+ *
+ * \return 1 on success, -1 on error (i.e. if the PROJ-style definition
  *         is NULL for either co-ordinate system)
  **/
 
