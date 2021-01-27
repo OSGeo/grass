@@ -5,12 +5,12 @@
  * AUTHOR(S):    Irina Kosinovsky, US ARMY CERL,
  *               M.L. Holko, USDA, SCS, NHQ-CGIS,
  *               R.L. Glenn, USDA, SCS, NHQ-CGIS (original contributors
- *               Update to GRASS 6: Radim Blazek <radim.blazek gmail.com> 
+ *               Update to GRASS 6: Radim Blazek <radim.blazek gmail.com>
  *               Huidae Cho <grass4u gmail.com>, Hamish Bowman <hamish_b yahoo.com>,
  *               Jachym Cepicky <jachym les-ejk.cz>, Markus Neteler <neteler itc.it>,
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>
  *               Markus Metz
- * PURPOSE:      
+ * PURPOSE:
  * COPYRIGHT:    (C) 1999-2008, 2018 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
     ilocopt->required = YES;
     ilocopt->label = _("Location containing input vector map");
     ilocopt->guisection = _("Source");
-    
+
     isetopt = G_define_standard_option(G_OPT_M_MAPSET);
     isetopt->label = _("Mapset containing input vector map");
     isetopt->description = _("Default: name of current mapset");
@@ -92,10 +92,10 @@ int main(int argc, char *argv[])
     mapopt->label = _("Name of input vector map to re-project");
     mapopt->description = NULL;
     mapopt->guisection = _("Source");
-    
+
     ibaseopt = G_define_standard_option(G_OPT_M_DBASE);
     ibaseopt->label = _("Path to GRASS database of input location");
-    
+
     smax = G_define_option();
     smax->key = "smax";
     smax->type = TYPE_DOUBLE;
@@ -183,8 +183,39 @@ int main(int argc, char *argv[])
     Out_proj = G_projection();
     if (Out_proj == PROJECTION_LL && flag.wrap->answer)
 	nowrap = 1;
-    
+
     G_begin_distance_calculations();
+
+    /****** get the output projection parameters ******/
+    out_proj_keys = G_get_projinfo();
+    if (out_proj_keys == NULL)
+	exit(EXIT_FAILURE);
+
+    out_unit_keys = G_get_projunits();
+    if (out_unit_keys == NULL)
+	exit(EXIT_FAILURE);
+
+    if (pj_get_kv(&info_out, out_proj_keys, out_unit_keys) < 0)
+	exit(EXIT_FAILURE);
+
+    info_out.srid = G_get_projsrid();
+    info_out.wkt = G_get_projwkt();
+
+    if (G_verbose() == G_verbose_max()) {
+	pj_print_proj_params(&info_in, &info_out);
+    }
+
+    info_trans.def = NULL;
+#ifdef HAVE_PROJ_H
+    if (pipeline->answer) {
+	info_trans.def = G_store(pipeline->answer);
+    }
+#endif
+
+    /* Initialize the Point / Cat structure */
+    Points = Vect_new_line_struct();
+    Points2 = Vect_new_line_struct();
+    Cats = Vect_new_cats_struct();
 
     /* Change the location here and then come back */
 
@@ -193,7 +224,7 @@ int main(int argc, char *argv[])
     G_setenv_nogisrc("LOCATION_NAME", iloc_name);
     G_setenv_nogisrc("MAPSET", iset_name);
     stat = G_mapset_permissions(iset_name);
-    
+
     if (stat >= 0) {		/* yes, we can access the mapset */
 	/* if requested, list the vector maps in source location - MN 5/2001 */
 	if (flag.list->answer) {
@@ -233,7 +264,7 @@ int main(int argc, char *argv[])
 	/* apparently the +over switch must be set in the input projection,
 	 * not the output latlon projection
 	 * TODO: for PROJ 6+, the +over switch must be added to the
-	 * transformation pipeline if authority:name or WKt are used as
+	 * transformation pipeline if authority:name or WKT are used as
 	 * crs definition */
 	if (Out_proj == PROJECTION_LL && nowrap == 1)
 	    G_set_key_value("over", "defined", in_proj_keys);
@@ -245,14 +276,88 @@ int main(int argc, char *argv[])
 	if (pj_get_kv(&info_in, in_proj_keys, in_unit_keys) < 0)
 	    exit(EXIT_FAILURE);
 
+	info_in.srid = G_get_projsrid();
+	info_in.wkt = G_get_projwkt();
+
 	Vect_set_open_level(1);
 	G_debug(1, "Open old: location: %s mapset : %s", G_location_path(),
 		G_mapset());
 	if (Vect_open_old(&Map, map_name, mapset) < 0)
 	    G_fatal_error(_("Unable to open vector map <%s>"), map_name);
+
+#if PROJ_VERSION_MAJOR >= 6
+	/* need to set the region to the input vector
+	 * for PROJ to select the appropriate pipeline */
+	{
+	    int first = 1, counter = 0;
+	    struct Cell_head inwindow;
+
+	    G_unset_window();
+	    G_get_window(&inwindow);
+
+	    /* Cycle through all lines */
+	    Vect_rewind(&Map);
+	    while (1) {
+		type = Vect_read_next_line(&Map, Points, Cats);	/* read line */
+		if (type == 0)
+		    continue;		/* Dead */
+
+		if (type == -1)
+		    G_fatal_error(_("Reading input vector map"));
+		if (type == -2)
+		    break;
+
+		if (first && Points->n_points > 0) {
+		    first = 0;
+		    inwindow.east = inwindow.west = Points->x[0];
+		    inwindow.north = inwindow.south = Points->y[0];
+		    inwindow.top = inwindow.bottom = Points->z[0];
+		}
+		for (i = 0; i < Points->n_points; i++) {
+		    if (inwindow.east < Points->x[i])
+			inwindow.east = Points->x[i];
+		    if (inwindow.west > Points->x[i])
+			inwindow.west = Points->x[i];
+		    if (inwindow.north < Points->y[i])
+			inwindow.north = Points->y[i];
+		    if (inwindow.south > Points->y[i])
+			inwindow.south = Points->y[i];
+		}
+		counter++;
+	    }
+	    if (counter == 0) {
+		G_warning(_("Input vector map <%s> is empty"), omap_name);
+		exit(EXIT_SUCCESS);
+	    }
+	    inwindow.ns_res = inwindow.ew_res = 1;
+	    /* align to resolution */
+	    inwindow.east = ceil(inwindow.east);
+	    inwindow.west = floor(inwindow.west);
+	    inwindow.north = ceil(inwindow.north);
+	    inwindow.south = floor(inwindow.south);
+	    if (inwindow.east == inwindow.west) {
+		inwindow.east += 0.5;
+		inwindow.west -= 0.5;
+	    }
+	    if (inwindow.north == inwindow.south) {
+		inwindow.north += 0.5;
+		inwindow.south -= 0.5;
+	    }
+	    G_debug(1, "input map north: %.8f", inwindow.north);
+	    G_debug(1, "input map south: %.8f", inwindow.south);
+	    G_debug(1, "input map east: %.8f", inwindow.east);
+	    G_debug(1, "input map west: %.8f", inwindow.west);
+
+	    G_set_window(&inwindow);
+	}
+	/* GPJ_init_transform() must be called only after the region has been set */
+#endif
+	if (GPJ_init_transform(&info_in, &info_out, &info_trans) < 0)
+	    G_fatal_error(_("Unable to initialize coordinate transformation"));
+
     }
-    else if (stat < 0)
-    {				/* allow 0 (i.e. denied permission) */
+    else if (stat < 0) {
+    	/* allow 0 (i.e. denied permission) */
 	/* need to be able to read from others */
 	if (stat == 0)
 	    G_fatal_error(_("Mapset <%s> in input location <%s> - permission denied"),
@@ -264,46 +369,16 @@ int main(int argc, char *argv[])
 
     select_current_env();
 
-    /****** get the output projection parameters ******/
-    out_proj_keys = G_get_projinfo();
-    if (out_proj_keys == NULL)
-	exit(EXIT_FAILURE);
-
-    out_unit_keys = G_get_projunits();
-    if (out_unit_keys == NULL)
-	exit(EXIT_FAILURE);
-
-    if (pj_get_kv(&info_out, out_proj_keys, out_unit_keys) < 0)
-	exit(EXIT_FAILURE);
-
     G_free_key_value(in_proj_keys);
     G_free_key_value(in_unit_keys);
     G_free_key_value(out_proj_keys);
     G_free_key_value(out_unit_keys);
 
-    if (G_verbose() == G_verbose_max()) {
-	pj_print_proj_params(&info_in, &info_out);
-    }
-
-    info_trans.def = NULL;
-#ifdef HAVE_PROJ_H
-    if (pipeline->answer) {
-	info_trans.def = G_store(pipeline->answer);
-    }
-#endif
-    if (GPJ_init_transform(&info_in, &info_out, &info_trans) < 0)
-	G_fatal_error(_("Unable to initialize coordinate transformation"));
-
-    /* Initialize the Point / Cat structure */
-    Points = Vect_new_line_struct();
-    Points2 = Vect_new_line_struct();
-    Cats = Vect_new_cats_struct();
-
     /* test if latlon wrapping to -180,180 should be disabled */
     if (Out_proj == PROJECTION_LL && nowrap == 0) {
 	int first = 1, counter = 0;
 	double x, y;
-	
+
 	/* Cycle through all lines */
 	Vect_rewind(&Map);
 	while (1) {
@@ -315,7 +390,7 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Reading input vector map"));
 	    if (type == -2)
 		break;
-		
+
 	    if (first && Points->n_points > 0) {
 		first = 0;
 		src_box.E = src_box.W = Points->x[0];
@@ -343,7 +418,7 @@ int main(int argc, char *argv[])
 	y = src_box.N;
 	if (GPJ_transform(&info_in, &info_out, &info_trans, PJ_FWD,
 			  &x, &y, NULL) < 0)
-	    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+	    G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
 			   "GPJ_transform()");
 
 	tgt_box.E = x;
@@ -355,7 +430,7 @@ int main(int argc, char *argv[])
 	y = src_box.S;
 	if (GPJ_transform(&info_in, &info_out, &info_trans, PJ_FWD,
 			  &x, &y, NULL) < 0)
-	    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+	    G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
 			   "GPJ_transform()");
 	if (tgt_box.W > x)
 	    tgt_box.W = x;
@@ -370,7 +445,7 @@ int main(int argc, char *argv[])
 	y = src_box.N;
 	if (GPJ_transform(&info_in, &info_out, &info_trans, PJ_FWD,
 			  &x, &y, NULL) < 0)
-	    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+	    G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
 			   "GPJ_transform()");
 	if (tgt_box.W > x) {
 	    tgt_box.E = x + 360;
@@ -385,7 +460,7 @@ int main(int argc, char *argv[])
 	y = src_box.S;
 	if (GPJ_transform(&info_in, &info_out, &info_trans, PJ_FWD,
 			  &x, &y, NULL) < 0)
-	    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+	    G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
 			   "GPJ_transform()");
 	if (tgt_box.W > x) {
 	    if (tgt_box.E < x + 360)
@@ -405,7 +480,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to create vector map <%s>"), omap_name);
 
     Vect_set_error_handler_io(NULL, &Out_Map); /* register standard i/o error handler */
-    
+
     Vect_copy_head_data(&Map, &Out_Map);
     Vect_hist_copy(&Map, &Out_Map);
     Vect_hist_command(&Out_Map);
@@ -465,12 +540,12 @@ int main(int argc, char *argv[])
 
 		if (GPJ_transform(&info_in, &info_out, &info_trans, PJ_FWD,
 				  &x1, &y1, flag.transformz->answer ? &z1 : NULL) < 0)
-		    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+		    G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
 				   "GPJ_transform()");
 
 		if (GPJ_transform(&info_in, &info_out, &info_trans, PJ_FWD,
 				  &x2, &y2, flag.transformz->answer ? &z2 : NULL) < 0)
-		    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+		    G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
 				   "GPJ_transform()");
 
 		Vect_append_point(Points2, x1, y1, z1);

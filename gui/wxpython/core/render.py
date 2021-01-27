@@ -843,7 +843,7 @@ class Map(object):
 
         for line in ret.splitlines():
             if ':' in line:
-                key, val = map(lambda x: x.strip(), line.split(':'))
+                key, val = map(lambda x: x.strip(), line.split(':', 1))
                 if key in ['units']:
                     val = val.lower()
                 projinfo[key] = val

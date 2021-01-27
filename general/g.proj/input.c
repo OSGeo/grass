@@ -1,7 +1,7 @@
-/*  
+/*
  ****************************************************************************
  *
- * MODULE:       g.proj 
+ * MODULE:       g.proj
  * AUTHOR(S):    Paul Kelly - paul-grass@stjohnspoint.co.uk
  *               Frank Warmerdam
  *               Radim Blazek
@@ -36,7 +36,7 @@ static void set_default_region(void);
 
 /**
  * \brief Read projection and region information from current location
- * 
+ *
  * Reads projection and region information from current location and
  * stores in global structs cellhd, projinfo and projunits.
  **/
@@ -49,7 +49,7 @@ void input_currloc(void)
 	projwkt = G_get_projwkt();
 	projinfo = G_get_projinfo();
 	projunits = G_get_projunits();
-        projepsg = G_get_projepsg();
+        /* projepsg = G_get_projepsg(); */
     }
 
     return;
@@ -90,14 +90,14 @@ static void set_authnamecode(OGRSpatialReferenceH);
 
 /**
  * \brief Read projection information in WKT format from stdin or a file
- * 
- * Reads projection information from a file or stdin and stores in global 
+ *
+ * Reads projection information from a file or stdin and stores in global
  * structs projinfo and projunits.
  * Populates global cellhd with default region information.
- * 
+ *
  * \param wktfile File to read WKT co-ordinate system description from; -
  *                for stdin
- * 
+ *
  * \return        2 if a projected or lat/long co-ordinate system has been
  *                defined; 1 if an unreferenced XY co-ordinate system has
  *                been defined
@@ -108,7 +108,7 @@ int input_wkt(char *wktfile)
     FILE *infd;
     char buff[8000], *tmpwkt;
     OGRSpatialReferenceH hSRS;
-    const char *papszOptions[3];
+    char *papszOptions[3];
     int ret;
 
     if (strcmp(wktfile, "-") == 0)
@@ -177,11 +177,13 @@ int input_wkt(char *wktfile)
     /* find authname and authcode */
     hSRS = OSRNewSpatialReference(buff);
     /* get clean WKT definition */
+#if GDAL_VERSION_MAJOR >= 3
     papszOptions[0] = G_store("MULTILINE=YES");
     papszOptions[1] = G_store("FORMAT=WKT2");
     papszOptions[2] = NULL;
-#if GDAL_VERSION_MAJOR >= 3
-    OSRExportToWktEx(hSRS, &tmpwkt, papszOptions);
+    OSRExportToWktEx(hSRS, &tmpwkt, (const char **)papszOptions);
+    G_free(papszOptions[0]);
+    G_free(papszOptions[1]);
 #else
     OSRExportToPrettyWkt(hSRS, &tmpwkt, FALSE);
 #endif
@@ -194,16 +196,16 @@ int input_wkt(char *wktfile)
 }
 
 /**
- * \brief Read projection information in PROJ.4 format from a string 
+ * \brief Read projection information in PROJ.4 format from a string
  *        or stdin
- * 
- * Reads projection information from a string or stdin and stores in global 
+ *
+ * Reads projection information from a string or stdin and stores in global
  * structs projinfo and projunits.
  * Populates global cellhd with default region information.
- * 
- * \param proj4params String representation of PROJ.4 co-ordinate system 
+ *
+ * \param proj4params String representation of PROJ.4 co-ordinate system
  *                    description, or - to read it from stdin
- * 
+ *
  * \return        2 if a projected or lat/long co-ordinate system has been
  *                defined; 1 if an unreferenced XY co-ordinate system has
  *                been defined
@@ -278,7 +280,7 @@ int input_srid(char *srid)
 #if PROJ_VERSION_MAJOR >= 6
     OGRSpatialReferenceH hSRS;
     int ret = 0;
-    const char *papszOptions[3];
+    char *papszOptions[3];
     PJ *obj;
     const char *tmpwkt;
 
@@ -287,7 +289,7 @@ int input_srid(char *srid)
     if (!obj)
 	G_fatal_error(_("SRID <%s> not recognized by PROJ"), srid);
 
-    tmpwkt = proj_as_wkt(NULL, obj, PJ_WKT2_2019, NULL);
+    tmpwkt = proj_as_wkt(NULL, obj, PJ_WKT2_LATEST, NULL);
     hSRS = OSRNewSpatialReference(tmpwkt);
     if (!hSRS)
 	G_fatal_error(_("WKT for SRID <%s> not recognized by GDAL"), srid);
@@ -298,9 +300,10 @@ int input_srid(char *srid)
     papszOptions[0] = G_store("MULTILINE=YES");
     papszOptions[1] = G_store("FORMAT=WKT2");
     papszOptions[2] = NULL;
-    if (OSRExportToWktEx(hSRS, &projwkt, papszOptions) != OGRERR_NONE)
+    if (OSRExportToWktEx(hSRS, &projwkt, (const char **)papszOptions) != OGRERR_NONE)
 	G_warning(_("Unable to convert srid to WKT"));
-
+    G_free(papszOptions[0]);
+    G_free(papszOptions[1]);
     /* GRASS proj info + units */
     ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, hSRS, 0);
 
@@ -317,15 +320,15 @@ int input_srid(char *srid)
 }
 
 /**
- * \brief Read projection information corresponding to an EPSG co-ordinate 
+ * \brief Read projection information corresponding to an EPSG co-ordinate
  *        system number
- * 
- * Determines projection information corresponding to an EPSG co-ordinate 
+ *
+ * Determines projection information corresponding to an EPSG co-ordinate
  * system number and stores in global structs projinfo and projunits.
  * Populates global cellhd with default region information.
- * 
+ *
  * \param epsg_num    EPSG number for co-ordinate system
- * 
+ *
  * \return        2 if a projected or lat/long co-ordinate system has been
  *                defined; 1 if an unreferenced XY co-ordinate system has
  *                been defined
@@ -336,7 +339,7 @@ int input_epsg(int epsg_num)
     OGRSpatialReferenceH hSRS;
     char epsgstr[100];
     int ret = 0;
-    const char *papszOptions[3];
+    char *papszOptions[3];
 
     /* Set finder function for locating OGR csv co-ordinate system tables */
     /* SetCSVFilenameHook(GPJ_set_csv_loc); */
@@ -360,8 +363,11 @@ int input_epsg(int epsg_num)
     papszOptions[0] = G_store("MULTILINE=YES");
     papszOptions[1] = G_store("FORMAT=WKT2");
     papszOptions[2] = NULL;
-    if (OSRExportToWktEx(hSRS, &projwkt, papszOptions) != OGRERR_NONE)
+    if (OSRExportToWktEx(hSRS, &projwkt, (const char **)papszOptions) != OGRERR_NONE)
 	G_warning(_("Unable to convert EPSG code to WKT"));
+
+    G_free(papszOptions[0]);
+    G_free(papszOptions[1]);
 #endif
 
     OSRDestroySpatialReference(hSRS);
@@ -372,19 +378,19 @@ int input_epsg(int epsg_num)
 }
 
 /**
- * \brief Read projection and region information associated with a 
+ * \brief Read projection and region information associated with a
  *        georeferenced file
- * 
+ *
  * Reads projection information associated with a georeferenced file, if
  * available. Attempts are made to open the file with OGR and GDAL in turn.
  * (GDAL conventionally supports raster formats, and OGR vector formats.)
- * 
+ *
  * If successful, projection and region information are read from the file
  * using GDAL/OGR functions and stored in global structs cellhd, projinfo
  * and projunits.
- * 
+ *
  * \param geofile Path to georeferenced file
- * 
+ *
  * \return        2 if a projected or lat/long co-ordinate system has been
  *                defined; 1 if an unreferenced XY co-ordinate system has
  *                been defined
@@ -392,6 +398,93 @@ int input_epsg(int epsg_num)
 
 int input_georef(char *geofile)
 {
+/* GDAL >= 3 */
+#if GDAL_VERSION_MAJOR >= 3
+    GDALDatasetH hDS = NULL;
+    OGRSpatialReferenceH hSRS = NULL;
+    int ret = 0;
+
+    GDALAllRegister();
+
+    /* Try opening file as vector first because it doesn't output a
+     * (potentially confusing) error message if it can't open the file */
+
+    /* Try opening as vector */
+    G_debug(1, "Trying to open <%s> as vector...", geofile);
+    if ((hDS = GDALOpenEx(geofile, GDAL_OF_VECTOR, NULL, NULL, NULL))
+        && GDALDatasetGetLayerCount(hDS) > 0) {
+
+	OGRLayerH ogr_layer;
+
+	ogr_layer = GDALDatasetGetLayer(hDS, 0);
+	hSRS = OGR_L_GetSpatialRef(ogr_layer);
+
+	if (hSRS)
+	    set_default_region();
+    }
+    else {
+	/* Try opening as raster */
+	G_debug(1, "Trying to open <%s> as raster...", geofile);
+
+	if ((hDS = GDALOpen(geofile, GA_ReadOnly))) {
+	    char **sds;
+
+	    /* does the dataset include subdatasets? */
+	    sds = GDALGetMetadata(hDS, "SUBDATASETS");
+	    if (sds && *sds) {
+		G_warning(_("Input dataset <%s> contains subdatasets. "
+		            "Please select a subdataset."), geofile);
+	    }
+	    else {
+		hSRS = GDALGetSpatialRef(hDS);
+
+		if (hSRS)
+		    set_gdal_region(hDS);
+	    }
+	}
+	else {
+	    int namelen;
+
+	    namelen = strlen(geofile);
+	    if (namelen > 4 && G_strcasecmp(geofile + (namelen - 4), ".prj") == 0) {
+		G_warning(_("<%s> is not a GDAL dataset, trying to open it as ESRI WKT"),
+			  geofile);
+
+		return input_wkt(geofile);
+	    }
+	    else {
+		G_fatal_error(_("Unable to read georeferenced file <%s> using "
+				"GDAL library"), geofile);
+	    }
+	}
+    }
+    if (hSRS) {
+	char **papszOptions = NULL;
+
+	ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, hSRS, 0);
+
+	if (cellhd.proj == PROJECTION_XY)
+	    G_warning(_("Read of file %s was successful, but it did not contain "
+			"projection information. 'XY (unprojected)' will be used"),
+		      geofile);
+
+	papszOptions = G_calloc(3, sizeof(char *));
+	papszOptions[0] = G_store("MULTILINE=YES");
+	papszOptions[1] = G_store("FORMAT=WKT2");
+	OSRExportToWktEx(hSRS, &projwkt, (const char **)papszOptions);
+	G_free(papszOptions[0]);
+	G_free(papszOptions[1]);
+	G_free(papszOptions);
+
+	set_authnamecode(hSRS);
+    }
+    if (hDS)
+	GDALClose(hDS);
+
+    return ret;
+
+/* GDAL < 3 */
+#else
     OGRDataSourceH ogr_ds;
     OGRSpatialReferenceH hSRS;
     int ret = 0;
@@ -407,20 +500,13 @@ int input_georef(char *geofile)
     if ((ogr_ds = OGROpen(geofile, FALSE, NULL))
 	&& (OGR_DS_GetLayerCount(ogr_ds) > 0)) {
 	OGRLayerH ogr_layer;
-	const char **papszOptions = NULL;
 
 	G_debug(1, "...succeeded.");
 	/* Get the first layer */
 	ogr_layer = OGR_DS_GetLayer(ogr_ds, 0);
 	hSRS = OGR_L_GetSpatialRef(ogr_layer);
 	ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, hSRS, 0);
-#if GDAL_VERSION_MAJOR >= 3
-	papszOptions = G_calloc(2, sizeof(char *));
-	papszOptions[0] = G_store("FORMAT=WKT2");
-	OSRExportToWktEx(hSRS, &projwkt, papszOptions);
-#else
 	OSRExportToWkt(hSRS, &projwkt);
-#endif
 	set_default_region();
     }
     else {
@@ -434,6 +520,7 @@ int input_georef(char *geofile)
 	    char *wktstring;
 
 	    G_debug(1, "...succeeded.");
+	    /* TODO: change for GDAL 3+ */
 	    wktstring = (char *)GDALGetProjectionRef(gdal_ds);
 	    projwkt = G_store(wktstring);
 	    ret =
@@ -441,11 +528,7 @@ int input_georef(char *geofile)
 				 0);
 
 	    set_gdal_region(gdal_ds);
-#if GDAL_VERSION_MAJOR >= 3
-	    hSRS = OSRClone(GDALGetSpatialRef(gdal_ds));
-#else
 	    hSRS = OSRNewSpatialReference(projwkt);
-#endif
 	    GDALClose(gdal_ds);
 	}
 	else {
@@ -478,12 +561,13 @@ int input_georef(char *geofile)
 	OSRDestroySpatialReference(hSRS);
 
     return ret;
+#endif
 }
 
 /**
- * \brief Populates global cellhd with region settings based on 
+ * \brief Populates global cellhd with region settings based on
  *        georeferencing information in a GDAL dataset
- * 
+ *
  * \param hDS GDAL dataset object to retrieve georeferencing information from
  **/
 
@@ -548,7 +632,7 @@ void set_authnamecode(OGRSpatialReferenceH hSRS)
 	    authcode = OSRGetAuthorityCode(hSRS, authkey);
 	    if (authcode && *authcode) {
 		G_asprintf(&projsrid, "%s:%s", authname, authcode);
-		/* for backwards compatibility, remove ? */
+		/* for backwards compatibility; remove ? */
 		if (strcmp(authname, "EPSG") == 0) {
 		    projepsg = G_create_key_value();
 		    G_set_key_value("epsg", authcode, projepsg);
