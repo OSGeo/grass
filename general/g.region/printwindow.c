@@ -264,7 +264,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	    if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
 		G_fatal_error(_("Unable to initialize coordinate transformation"));
 
-	    /* 
+	    /*
 	     *  1 ------ 2
 	     *  |        |  map corners
 	     *  |        |
@@ -276,7 +276,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	    /* get lat/long w/ same datum/ellipsoid as input */
 	    if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
 			      &longitude, &latitude, NULL) < 0)
-		G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+		G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
 		               "GPJ_transform()");
 
 	    lo1 = longitude;
@@ -287,7 +287,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	    /* get lat/long w/ same datum/ellipsoid as input */
 	    if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
 			      &longitude, &latitude, NULL) < 0)
-		G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+		G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
 		               "GPJ_transform()");
 
 	    lo2 = longitude;
@@ -298,7 +298,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	    /* get lat/long w/ same datum/ellipsoid as input */
 	    if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
 			      &longitude, &latitude, NULL) < 0)
-		G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+		G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
 		               "GPJ_transform()");
 
 	    lo3 = longitude;
@@ -309,7 +309,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	    /* get lat/long w/ same datum/ellipsoid as input */
 	    if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
 			      &longitude, &latitude, NULL) < 0)
-		G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+		G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
 		               "GPJ_transform()");
 
 	    lo4 = longitude;
@@ -322,7 +322,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	    /* get lat/long w/ same datum/ellipsoid as input */
 	    if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
 			      &longitude, &latitude, NULL) < 0)
-		G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+		G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
 		               "GPJ_transform()");
 
 	    loc = longitude;
@@ -507,7 +507,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	    /* get lat/long w/ same datum/ellipsoid as input */
 	    if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
 			      &longitude, &latitude, NULL) < 0)
-		G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+		G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
 		               "GPJ_transform()");
 
 #ifdef HAVE_PROJ_H
@@ -534,7 +534,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
     }
 
     /* flag.bbox
-       Calculate the largest bounding box in lat-lon coordinates 
+       Calculate the largest bounding box in lat-lon coordinates
        and print it to stdout
      */
     if (print_flag & PRINT_MBBOX) {
@@ -556,7 +556,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 		G_fatal_error(_("Can't get projection info of current location"));
 	    /* do not wrap to -180, 180, otherwise east can be < west */
 	    /* TODO: for PROJ 6+, the +over switch must be added to the
-	     * transformation pipeline if authority:name or WKt are used 
+	     * transformation pipeline if authority:name or WKt are used
 	     * as crs definition */
 	    G_set_key_value("over", "defined", in_proj_info);
 
@@ -605,7 +605,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	    longitude = (window->west + window->east) / 2.;
 	    if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
 			      &longitude, &latitude, NULL) < 0)
-		G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+		G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
 		               "GPJ_transform()");
 
 	    sh_ll_w = sh_ll_e = longitude;
@@ -619,7 +619,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 		longitude = window->west;
 		if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
 				  &longitude, &latitude, NULL) < 0)
-		    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+		    G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
 				   "GPJ_transform()");
 
 		if (sh_ll_n < latitude)
@@ -638,7 +638,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 		longitude = window->east;
 		if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
 				  &longitude, &latitude, NULL) < 0)
-		    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+		    G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
 				   "GPJ_transform()");
 
 		if (sh_ll_n < latitude)
@@ -658,7 +658,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 		longitude = window->west + c * window->ew_res;
 		if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
 				  &longitude, &latitude, NULL) < 0)
-		    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+		    G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
 				   "GPJ_transform()");
 
 		if (sh_ll_n < latitude)
@@ -675,7 +675,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 		longitude = window->west + c * window->ew_res;
 		if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
 				  &longitude, &latitude, NULL) < 0)
-		    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+		    G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
 				   "GPJ_transform()");
 
 		if (sh_ll_n < latitude)
