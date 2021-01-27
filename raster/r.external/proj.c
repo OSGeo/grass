@@ -25,15 +25,18 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
 
 #if GDAL_VERSION_NUM >= 3000000
     OGRSpatialReferenceH hSRS;
-    const char **papszOptions;
 
     hSRS = GDALGetSpatialRef(hDS);
     if (hSRS) {
 	/* get WKT2 definition */
+	char **papszOptions;
+
 	papszOptions = G_calloc(3, sizeof(char *));
 	papszOptions[0] = G_store("MULTILINE=YES");
-	papszOptions[2] = "FORMAT=WKT2";
-	OSRExportToWktEx(hSRS, &wkt, papszOptions);
+	papszOptions[1] = G_store("FORMAT=WKT2");
+	OSRExportToWktEx(hSRS, &wkt, (const char **)papszOptions);
+	G_free(papszOptions[0]);
+	G_free(papszOptions[1]);
 	G_free(papszOptions);
     }
     /* proj_trouble:

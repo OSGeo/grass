@@ -22,14 +22,6 @@
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 
-#ifdef HAVE_PROJ_H
-/* just in case PROJ introduces PROJ_VERSION_NUM in a future version */
-#ifdef PROJ_VERSION_NUM
-#undef PROJ_VERSION_NUM
-#endif
-#define PROJ_VERSION_NUM ((PROJ_VERSION_MAJOR)*1000000+(PROJ_VERSION_MINOR)*10000+(PROJ_VERSION_PATCH)*100)
-#endif
-
 /* a couple defines to simplify reading the function */
 #define MULTIPLY_LOOP(x,y,c,m) \
 do {\
@@ -315,7 +307,7 @@ PJ *get_pj_object(const struct pj_info *in_gpj, char **in_defstr)
     }
     if (!in_pj && in_gpj->pj) {
 	in_pj = proj_clone(PJ_DEFAULT_CTX, in_gpj->pj);
-	*in_defstr = G_store(proj_as_wkt(NULL, in_pj, PJ_WKT2_2019, NULL));
+	*in_defstr = G_store(proj_as_wkt(NULL, in_pj, PJ_WKT2_LATEST, NULL));
 	if (*in_defstr && !**in_defstr)
 	    *in_defstr = NULL;
     }
@@ -343,7 +335,7 @@ PJ *get_pj_object(const struct pj_info *in_gpj, char **in_defstr)
 	G_debug(1, "found bound crs");
 	source_crs = proj_get_source_crs(NULL, in_pj);
 	if (source_crs) {
-	    *in_defstr = G_store(proj_as_wkt(NULL, source_crs, PJ_WKT2_2019, NULL));
+	    *in_defstr = G_store(proj_as_wkt(NULL, source_crs, PJ_WKT2_LATEST, NULL));
 	    if (*in_defstr && !**in_defstr)
 		*in_defstr = NULL;
 	    in_pj = source_crs;
@@ -417,6 +409,16 @@ int GPJ_init_transform(const struct pj_info *info_in,
     /* user-provided pipeline */
     if (info_trans->def) {
 	const char *projstr;
+
+	/* info_in->pj, info_in->proj, info_out->pj, info_out->proj
+	 * must be set */
+	if (!info_in->pj || !info_in->proj[0] ||
+	    !info_out->pj ||info_out->proj[0]) {
+	    G_warning(_("A custom pipeline requires input and output projection info"));
+
+	    return -1;
+	}
+
 
 	/* create a pj from user-defined transformation pipeline */
 	info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
@@ -494,7 +496,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	PJ_OPERATION_FACTORY_CONTEXT *operation_ctx;
 	PJ_AREA *pj_area = NULL;
 	double xmin, xmax, ymin, ymax;
-	int op_count = 0;
+	int op_count = 0, op_count_area = 0;
 
 	/* get pj_area */
 	/* do it here because get_pj_area() will use 
@@ -549,150 +551,146 @@ int GPJ_init_transform(const struct pj_info *info_in,
 
 	/* check number of operations */
 
-	if (in_pj && out_pj) {
-	    int op_count_area;
+	operation_ctx = proj_create_operation_factory_context(PJ_DEFAULT_CTX, NULL);
+	/* proj_create_operations() works only if both source_crs
+	 * and target_crs are found in the proj db
+	 * if any is not found, proj can not get a list of operations
+	 * and we have to take care of datumshift manually */
+	/* list all operations irrespecitve of area and
+	 * grid availability */
+	op_list = proj_create_operations(PJ_DEFAULT_CTX,
+					 in_pj,
+					 out_pj,
+					 operation_ctx);
+	proj_operation_factory_context_destroy(operation_ctx);
 
-	    operation_ctx = proj_create_operation_factory_context(PJ_DEFAULT_CTX, NULL);
-	    /* proj_create_operations() works only if both source_crs
-	     * and target_crs are found in the proj db
-	     * if any is not found, proj can not get a list of operations
-	     * and we have to take care of datumshift manually */
-	    /* list all operations irrespecitve of area and
-	     * grid availability */
-	    op_list = proj_create_operations(PJ_DEFAULT_CTX,
-					     in_pj,
-					     out_pj,
-					     operation_ctx);
-	    proj_operation_factory_context_destroy(operation_ctx);
+	op_count = 0;
+	if (op_list)
+	    op_count = proj_list_get_count(op_list);
+	if (op_count > 1) {
+	    int i;
 
-	    op_count = 0;
-	    if (op_list)
-		op_count = proj_list_get_count(op_list);
-	    if (op_count > 1) {
-		int i;
+	    G_important_message(_("Found %d possible transformations"), op_count);
+	    for (i = 0; i < op_count; i++) {
+		const char *str;
+		const char *area_of_use, *projstr;
+		double e, w, s, n;
+		PJ_PROJ_INFO pj_info;
+		PJ *op, *op_norm;
 
-		G_important_message(_("Found %d possible transformations"), op_count);
-		for (i = 0; i < op_count; i++) {
-		    const char *str;
-		    const char *area_of_use, *projstr;
-		    double e, w, s, n;
-		    PJ_PROJ_INFO pj_info;
-		    PJ *op, *op_norm;
+		op = proj_list_get(PJ_DEFAULT_CTX, op_list, i);
+		op_norm = proj_normalize_for_visualization(PJ_DEFAULT_CTX, op);
 
-		    op = proj_list_get(PJ_DEFAULT_CTX, op_list, i);
-		    op_norm = proj_normalize_for_visualization(PJ_DEFAULT_CTX, op);
+		if (!op_norm) {
+		    G_warning(_("proj_normalize_for_visualization() failed for operation %d"),
+			      i + 1);
+		}
+		else {
+		    proj_destroy(op);
+		    op = op_norm;
+		}
 
-		    if (!op_norm) {
-			G_warning(_("proj_normalize_for_visualization() failed for operation %d"),
-				  i + 1);
-		    }
-		    else {
-			proj_destroy(op);
-			op = op_norm;
-		    }
-
-		    pj_info = proj_pj_info(op);
-		    proj_get_area_of_use(NULL, op, &w, &s, &e, &n, &area_of_use);
-		    G_important_message("************************");
-		    G_important_message(_("Operation %d:"), i + 1);
-		    if (pj_info.description) {
-			G_important_message(_("Description: %s"),
-					    pj_info.description);
-		    }
-		    if (area_of_use) {
-			G_important_message(" ");
-			G_important_message(_("Area of use: %s"),
-					    area_of_use);
-		    }
-		    if (pj_info.accuracy > 0) {
-			G_important_message(" ");
-			G_important_message(_("Accuracy within area of use: %g m"),
-					    pj_info.accuracy);
-		    }
+		pj_info = proj_pj_info(op);
+		proj_get_area_of_use(NULL, op, &w, &s, &e, &n, &area_of_use);
+		G_important_message("************************");
+		G_important_message(_("Operation %d:"), i + 1);
+		if (pj_info.description) {
+		    G_important_message(_("Description: %s"),
+					pj_info.description);
+		}
+		if (area_of_use) {
+		    G_important_message(" ");
+		    G_important_message(_("Area of use: %s"),
+					area_of_use);
+		}
+		if (pj_info.accuracy > 0) {
+		    G_important_message(" ");
+		    G_important_message(_("Accuracy within area of use: %g m"),
+					pj_info.accuracy);
+		}
 #if PROJ_VERSION_NUM >= 6020000
-		    str = proj_get_remarks(op);
-		    if (str && *str) {
-			G_important_message(" ");
-			G_important_message(_("Remarks: %s"), str);
-		    }
-		    str = proj_get_scope(op);
-		    if (str && *str) {
-			G_important_message(" ");
-			G_important_message(_("Scope: %s"), str);
-		    }
+		str = proj_get_remarks(op);
+		if (str && *str) {
+		    G_important_message(" ");
+		    G_important_message(_("Remarks: %s"), str);
+		}
+		str = proj_get_scope(op);
+		if (str && *str) {
+		    G_important_message(" ");
+		    G_important_message(_("Scope: %s"), str);
+		}
 #endif
 
-		    projstr = proj_as_proj_string(NULL, op,
-				      PJ_PROJ_5, NULL);
-		    if (projstr) {
-			G_important_message(" ");
-			G_important_message(_("PROJ string:"));
-			G_important_message("%s", projstr);
-		    }
-		    proj_destroy(op);
+		projstr = proj_as_proj_string(NULL, op,
+				  PJ_PROJ_5, NULL);
+		if (projstr) {
+		    G_important_message(" ");
+		    G_important_message(_("PROJ string:"));
+		    G_important_message("%s", projstr);
 		}
-		G_important_message("************************");
-
-		G_important_message(_("See also output of:"));
-		G_important_message("projinfo -o PROJ -s \"%s\" -t \"%s\"",
-			            indef, outdef);
-		G_important_message(_("Please provide the appropriate PROJ string with the %s option"),
-		                    "pipeline");
-		G_important_message("************************");
+		proj_destroy(op);
 	    }
+	    G_important_message("************************");
 
-	    if (op_list)
-		proj_list_destroy(op_list);
-
-	    /* follwing code copied from proj_create_crs_to_crs_from_pj()
-	     * in proj src/4D_api.cpp
-	     * but using PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT */
-
-
-	    /* now use the current region as area of interest */
-	    operation_ctx = proj_create_operation_factory_context(PJ_DEFAULT_CTX, NULL);
-	    proj_operation_factory_context_set_area_of_interest(PJ_DEFAULT_CTX,
-								operation_ctx,
-								xmin, ymin,
-								xmax, ymax);
-	    proj_operation_factory_context_set_spatial_criterion(PJ_DEFAULT_CTX,
-								 operation_ctx,
-								 PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT);
-	    proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX,
-		                                                     operation_ctx,
-								     PROJ_GRID_AVAILABILITY_DISCARD_OPERATION_IF_MISSING_GRID);
-	    /* The operations are sorted with the most relevant ones first:
-	     * by descending area (intersection of the transformation area 
-	     * with the area of interest, or intersection of the 
-	     * transformation with the area of use of the CRS),
-	     * and by increasing accuracy.
-	     * Operations with unknown accuracy are sorted last,
-	     * whatever their area.
-	     */
-	    op_list = proj_create_operations(PJ_DEFAULT_CTX,
-					     in_pj,
-					     out_pj,
-					     operation_ctx);
-	    proj_operation_factory_context_destroy(operation_ctx);
-	    op_count_area = 0;
-	    if (op_list)
-		op_count_area = proj_list_get_count(op_list);
-	    if (op_count_area == 0) {
-		/* no operations */
-		info_trans->pj = NULL;
-	    }
-	    else if (op_count_area == 1) {
-		info_trans->pj = proj_list_get(PJ_DEFAULT_CTX, op_list, 0);
-	    }
-	    else {  /* op_count_area > 1 */
-		/* can't use pj_create_prepared_operations()
-		 * this is a PROJ-internal function
-		 * trust the sorting of PROJ and use the first one */
-		info_trans->pj = proj_list_get(PJ_DEFAULT_CTX, op_list, 0);
-	    }
-	    if (op_list)
-		proj_list_destroy(op_list);
+	    G_important_message(_("See also output of:"));
+	    G_important_message("projinfo -o PROJ -s \"%s\" -t \"%s\"",
+				indef, outdef);
+	    G_important_message(_("Please provide the appropriate PROJ string with the %s option"),
+				"pipeline");
+	    G_important_message("************************");
 	}
+
+	if (op_list)
+	    proj_list_destroy(op_list);
+
+	/* follwing code copied from proj_create_crs_to_crs_from_pj()
+	 * in proj src/4D_api.cpp
+	 * but using PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT */
+
+
+	/* now use the current region as area of interest */
+	operation_ctx = proj_create_operation_factory_context(PJ_DEFAULT_CTX, NULL);
+	proj_operation_factory_context_set_area_of_interest(PJ_DEFAULT_CTX,
+							    operation_ctx,
+							    xmin, ymin,
+							    xmax, ymax);
+	proj_operation_factory_context_set_spatial_criterion(PJ_DEFAULT_CTX,
+							     operation_ctx,
+							     PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT);
+	proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX,
+								 operation_ctx,
+								 PROJ_GRID_AVAILABILITY_DISCARD_OPERATION_IF_MISSING_GRID);
+	/* The operations are sorted with the most relevant ones first:
+	 * by descending area (intersection of the transformation area 
+	 * with the area of interest, or intersection of the 
+	 * transformation with the area of use of the CRS),
+	 * and by increasing accuracy.
+	 * Operations with unknown accuracy are sorted last,
+	 * whatever their area.
+	 */
+	op_list = proj_create_operations(PJ_DEFAULT_CTX,
+					 in_pj,
+					 out_pj,
+					 operation_ctx);
+	proj_operation_factory_context_destroy(operation_ctx);
+	op_count_area = 0;
+	if (op_list)
+	    op_count_area = proj_list_get_count(op_list);
+	if (op_count_area == 0) {
+	    /* no operations */
+	    info_trans->pj = NULL;
+	}
+	else if (op_count_area == 1) {
+	    info_trans->pj = proj_list_get(PJ_DEFAULT_CTX, op_list, 0);
+	}
+	else {  /* op_count_area > 1 */
+	    /* can't use pj_create_prepared_operations()
+	     * this is a PROJ-internal function
+	     * trust the sorting of PROJ and use the first one */
+	    info_trans->pj = proj_list_get(PJ_DEFAULT_CTX, op_list, 0);
+	}
+	if (op_list)
+	    proj_list_destroy(op_list);
 
 	/* try proj_create_crs_to_crs() */
 	G_debug(1, "trying %s to %s", indef, outdef);
@@ -717,35 +715,6 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	    proj_destroy(in_pj);
 	if (out_pj)
 	    proj_destroy(out_pj);
-
-	/* a projstring might not be available in PROJ,
-	 * disable */
-#if 0
-	if (info_trans->pj) {
-	    const char *projstr = NULL;
-
-	    projstr = proj_as_proj_string(NULL, info_trans->pj,
-					  PJ_PROJ_5, NULL);
-	    if (projstr == NULL) {
-		G_debug(1, "proj_create_crs_to_crs() failed with PROJ%d for input \"%s\", output \"%s\"",
-			PROJ_VERSION_MAJOR, indef, outdef);
-
-		/* try old style PROJ4 definition */
-		G_asprintf(&indef, "%s", indefcrs);
-		G_asprintf(&outdef, "%s", outdefcrs);
-
-		G_debug(1, "trying %s to %s", indef, outdef);
-
-		/* try proj_create_crs_to_crs() */
-		proj_destroy(info_trans->pj);
-		info_trans->pj = NULL;
-		info_trans->pj = proj_create_crs_to_crs(PJ_DEFAULT_CTX,
-							indef,
-							outdef,
-							NULL);
-	    }
-	}
-#endif
 
 	if (info_trans->pj) {
 	    const char *projstr;
@@ -794,34 +763,6 @@ int GPJ_init_transform(const struct pj_info *info_in,
 		info_trans->pj = NULL;
 	    }
 	}
-
-	/* this ignores any datum transformation, disable */
-#if 0
-	/* last try with proj_create() */
-	if (info_trans->pj == NULL) {
-	    G_debug(1, "proj_create_crs_to_crs() failed with PROJ%d for input \"%s\", output \"%s\"",
-	            PROJ_VERSION_MAJOR, indef, outdef);
-
-	    G_warning("GPJ_init_transform(): falling back to proj_create()");
-
-	    if (indef) {
-		G_free(indef);
-	    }
-	    G_asprintf(&indef, "%s", info_in->def);
-	    if (outdef) {
-		G_free(outdef);
-	    }
-	    G_asprintf(&outdef, "%s", info_out->def);
-	    /* try proj_create() with +proj=pipeline +step +inv %s +step %s" */
-	    G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s +step %s",
-		       indef, outdef);
-	    G_important_message(_("Using simplified pipeline '%s'"),
-			        info_trans->def);
-
-	    info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
-	    G_debug(1, "proj_create() pipeline: %s", info_trans->def);
-	}
-#endif
 
 	if (pj_area)
 	    proj_area_destroy(pj_area);
@@ -1019,7 +960,7 @@ int GPJ_transform(const struct pj_info *info_in,
 	    in_deg2rad = 0;
 	}
 #endif
-	if (info_out->pj) {
+	if (info_out->proj[0]) {
 	    METERS_out = info_out->meters;
 	    out_is_ll = !strncmp(info_out->proj, "ll", 2);
 #if PROJ_VERSION_MAJOR >= 6
@@ -1048,7 +989,7 @@ int GPJ_transform(const struct pj_info *info_in,
 	    out_rad2deg = 0;
 	}
 #endif
-	if (info_out->pj) {
+	if (info_out->proj[0]) {
 	    METERS_in = info_out->meters;
 	    in_is_ll = !strncmp(info_out->proj, "ll", 2);
 #if PROJ_VERSION_MAJOR >= 6
@@ -1238,7 +1179,7 @@ int GPJ_transform_array(const struct pj_info *info_in,
 	    in_deg2rad = 0;
 	}
 #endif
-	if (info_out->pj) {
+	if (info_out->proj[0]) {
 	    METERS_out = info_out->meters;
 	    out_is_ll = !strncmp(info_out->proj, "ll", 2);
 #if PROJ_VERSION_MAJOR >= 6
@@ -1267,7 +1208,7 @@ int GPJ_transform_array(const struct pj_info *info_in,
 	    out_rad2deg = 0;
 	}
 #endif
-	if (info_out->pj) {
+	if (info_out->proj[0]) {
 	    METERS_in = info_out->meters;
 	    in_is_ll = !strncmp(info_out->proj, "ll", 2);
 #if PROJ_VERSION_MAJOR >= 6

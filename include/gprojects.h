@@ -23,6 +23,27 @@
 #include <proj.h>
 #define RAD_TO_DEG    57.295779513082321
 #define DEG_TO_RAD   .017453292519943296
+
+/* adapted from gdal_version.h */
+#ifndef PROJ_COMPUTE_VERSION
+#define PROJ_COMPUTE_VERSION(maj,min,rev) ((maj)*1000000+(min)*10000+(rev)*100)
+#endif
+
+/* just in case PROJ introduces PROJ_VERSION_NUM in a future version */
+#ifdef PROJ_VERSION_NUM
+#undef PROJ_VERSION_NUM
+#endif
+#define PROJ_VERSION_NUM      (PROJ_COMPUTE_VERSION(PROJ_VERSION_MAJOR,PROJ_VERSION_MINOR,PROJ_VERSION_PATCH))
+
+#ifndef PJ_WKT2_LATEST
+/* update if new PROJ versions support new WKT2 standards */
+#if PROJ_VERSION_NUM < 6030000
+#define PJ_WKT2_LATEST PJ_WKT2_2018
+#else
+#define PJ_WKT2_LATEST PJ_WKT2_2019
+#endif
+#endif
+
 #else
 #include <proj_api.h>
 #define PJ_FWD 	 1

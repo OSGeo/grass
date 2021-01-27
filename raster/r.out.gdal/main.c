@@ -295,7 +295,7 @@ int main(int argc, char *argv[])
 	PJ *obj = NULL;
 
 	if ((obj = proj_create(NULL, indef))) {
-	    srswkt = G_store(proj_as_wkt(NULL, obj, PJ_WKT2_2019, NULL));
+	    srswkt = G_store(proj_as_wkt(NULL, obj, PJ_WKT2_LATEST, NULL));
 
 	    if (srswkt && !*srswkt) {
 		G_free(srswkt);
@@ -313,6 +313,7 @@ int main(int argc, char *argv[])
 	papszOptions[0] = G_store("FORMAT=WKT2");
 	OSRExportToWktEx(hSRS, &srswkt, (const char **)papszOptions);
 	G_free(papszOptions[0]);
+	G_free(papszOptions);
 	srswkt = G_store(srswkt);
 	if (srswkt && !*srswkt) {
 	    G_free(srswkt);
@@ -337,7 +338,7 @@ int main(int argc, char *argv[])
 		    G_debug(1, "found bound crs");
 		    source_crs = proj_get_source_crs(NULL, obj);
 		    if (source_crs) {
-			srswkt = G_store(proj_as_wkt(NULL, source_crs, PJ_WKT2_2019, NULL));
+			srswkt = G_store(proj_as_wkt(NULL, source_crs, PJ_WKT2_LATEST, NULL));
 			if (srswkt && !*srswkt) {
 			    G_free(srswkt);
 			    srswkt = NULL;

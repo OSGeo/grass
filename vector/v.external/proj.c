@@ -97,13 +97,15 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
     else{
 	const char *authkey, *authname, *authcode;
 #if GDAL_VERSION_NUM >= 3000000
-	const char **papszOptions;
+	char **papszOptions;
 
 	/* get WKT2 definition */
 	papszOptions = G_calloc(3, sizeof(char *));
 	papszOptions[0] = G_store("MULTILINE=YES");
-	papszOptions[2] = "FORMAT=WKT2";
-	OSRExportToWktEx(hSRS, proj_wkt, papszOptions);
+	papszOptions[1] = G_store("FORMAT=WKT2");
+	OSRExportToWktEx(hSRS, proj_wkt, (const char **)papszOptions);
+	G_free(papszOptions[0]);
+	G_free(papszOptions[1]);
 	G_free(papszOptions);
 #else
 	OSRExportToWkt(hSRS, proj_wkt);

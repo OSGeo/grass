@@ -289,7 +289,7 @@ int input_srid(char *srid)
     if (!obj)
 	G_fatal_error(_("SRID <%s> not recognized by PROJ"), srid);
 
-    tmpwkt = proj_as_wkt(NULL, obj, PJ_WKT2_2019, NULL);
+    tmpwkt = proj_as_wkt(NULL, obj, PJ_WKT2_LATEST, NULL);
     hSRS = OSRNewSpatialReference(tmpwkt);
     if (!hSRS)
 	G_fatal_error(_("WKT for SRID <%s> not recognized by GDAL"), srid);

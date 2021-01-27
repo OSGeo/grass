@@ -275,7 +275,7 @@ int main(int argc, char *argv[])
 	    PJ *obj = NULL;
 
 	    if ((obj = proj_create(NULL, indef))) {
-		inwkt = G_store(proj_as_wkt(NULL, obj, PJ_WKT2_2019, NULL));
+		inwkt = G_store(proj_as_wkt(NULL, obj, PJ_WKT2_LATEST, NULL));
 
 		if (inwkt && !*inwkt) {
 		    G_free(inwkt);
@@ -313,7 +313,7 @@ int main(int argc, char *argv[])
 		    G_debug(1, "found bound crs");
 		    source_crs = proj_get_source_crs(NULL, obj);
 		    if (source_crs) {
-			inwkt = G_store(proj_as_wkt(NULL, source_crs, PJ_WKT2_2019, NULL));
+			inwkt = G_store(proj_as_wkt(NULL, source_crs, PJ_WKT2_LATEST, NULL));
 			if (inwkt && !*inwkt) {
 			    G_free(inwkt);
 			    inwkt = NULL;
