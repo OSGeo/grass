@@ -9,15 +9,13 @@ void plot(double lon1, double lat1, double lon2, double lat2,
 {
     double distance;
     double text_x, text_y;
-    double a, e2;
     int nsteps = 1000;
     int i;
 
     /* establish the current graphics window */
     D_setup(0);
 
-    G_get_ellipsoid_parameters(&a, &e2);
-    G_begin_geodesic_distance(a, e2);
+    G_begin_distance_calculations();
 
     D_use_color(line_color);
 
@@ -56,7 +54,7 @@ void plot(double lon1, double lat1, double lon2, double lat2,
 
 	D_text_size(10, 10);
 
-	distance = G_geodesic_distance(lon1, lat1, lon2, lat2);
+	distance = G_distance(lon1, lat1, lon2, lat2);
 	sprintf(buf, "%.0f %s", distance / factor, unit);
 
 	D_pos_abs(text_x, text_y);
