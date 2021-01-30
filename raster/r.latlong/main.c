@@ -87,8 +87,8 @@ int main(int argc, char *argv[])
     ymax = cellhd.north;
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
-    stepx = abs(xmax-xmin)/(double)ncols;
-    stepy = abs(ymax-ymin)/(double)nrows;
+    stepx = fabs(xmax-xmin)/(double)ncols;
+    stepy = fabs(ymax-ymin)/(double)nrows;
     
     /*Stolen from r.sun */ 
     /* Set up parameters for projection to lat/long if necessary */ 

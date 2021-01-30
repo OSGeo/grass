@@ -551,7 +551,7 @@ void G_math_i_asum_norm(int *x, double *value, int rows)
 
 #pragma omp parallel for schedule (static) reduction(+:s)
     for (i = rows - 1; i >= 0; i--) {
-	s += fabs(x[i]);
+	s += (double)abs(x[i]);
     }
 #pragma omp single
     {
@@ -579,10 +579,10 @@ void G_math_i_max_norm(int *x, int *value, int rows)
 
     int max = 0.0;
 
-    max = fabs(x[rows - 1]);
+    max = abs(x[rows - 1]);
     for (i = rows - 2; i >= 0; i--) {
-	if (max < fabs(x[i]))
-	    max = fabs(x[i]);
+	if (max < abs(x[i]))
+	    max = abs(x[i]);
     }
 
     *value = max;
