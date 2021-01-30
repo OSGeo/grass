@@ -669,7 +669,11 @@ class MapFrame(SingleMapFrame):
             return
         width, height = self.MapWindow.GetClientSize()
         for param in command[1:]:
-            p, val = param.split('=')
+            try:
+                p, val = param.split('=')
+            except ValueError:
+                # --overwrite
+                continue
             if p == 'format':  # must be there
                 if self.IsPaneShown('3d'):
                     extType = 'ppm'
