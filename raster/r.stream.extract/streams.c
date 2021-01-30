@@ -597,14 +597,6 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
 	    G_fatal_error("np_side < 0");
 	    
 	/* set main drainage direction to A* path if possible */
-	if (mfd_cells > 0 && max_side != np_side) {
-	    if (fabs(wat_nbr[np_side] >= max_acc)) {
-		max_acc = fabs(wat_nbr[np_side]);
-		r_max = dr;
-		c_max = dc;
-		max_side = np_side;
-	    }
-	}
 	if (mfd_cells == 0) {
 	    flat = 0;
 	    r_max = dr;
