@@ -491,14 +491,14 @@ int main(int argc, char *argv[])
 
 	    Vect_get_map_box(&OutMap, &box);
 
-	    if (abs(box.E) > abs(box.W))
-		xmax = abs(box.E);
+	    if (fabs(box.E) > fabs(box.W))
+		xmax = fabs(box.E);
 	    else
-		xmax = abs(box.W);
-	    if (abs(box.N) > abs(box.S))
-		ymax = abs(box.N);
+		xmax = fabs(box.W);
+	    if (fabs(box.N) > fabs(box.S))
+		ymax = fabs(box.N);
 	    else
-		ymax = abs(box.S);
+		ymax = fabs(box.S);
 
 	    if (xmax < ymax)
 		xmax = ymax;

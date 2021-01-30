@@ -47,12 +47,12 @@ static double distance_euclidean_squared(double dx, double dy)
 
 static double distance_maximum(double dx, double dy)
 {
-    return MAX(abs(dx), abs(dy));
+    return MAX(fabs(dx), fabs(dy));
 }
 
 static double distance_manhattan(double dx, double dy)
 {
-    return abs(dx) + abs(dy);
+    return fabs(dx) + fabs(dy);
 }
 
 static double geodesic_distance(int x1, int y1, int x2, int y2)

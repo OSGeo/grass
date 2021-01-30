@@ -293,7 +293,7 @@ int NetA_find_path(dglGraph_s * graph, int from, int to, int *edges,
 				dglNodeGet_OutEdgeset(graph, node));
 	for (edge = dglEdgeset_T_First(&et); edge;
 	     edge = dglEdgeset_T_Next(&et)) {
-	    dglInt32_t edge_id = abs(dglEdgeGet_Id(graph, edge));
+	    dglInt32_t edge_id = labs(dglEdgeGet_Id(graph, edge));
 	    dglInt32_t node_id =
 		dglNodeGet_Id(graph, dglEdgeGet_Tail(graph, edge));
 	    if (edges[edge_id] && !vis[node_id]) {
@@ -313,7 +313,7 @@ int NetA_find_path(dglGraph_s * graph, int from, int to, int *edges,
 
     cur = to;
     while (prev[cur] != NULL) {
-	Vect_list_append(list, abs(dglEdgeGet_Id(graph, prev[cur])));
+	Vect_list_append(list, labs(dglEdgeGet_Id(graph, prev[cur])));
 	cur = dglNodeGet_Id(graph, dglEdgeGet_Head(graph, prev[cur]));
     }
 

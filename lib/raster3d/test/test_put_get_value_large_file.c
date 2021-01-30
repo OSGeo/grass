@@ -130,7 +130,7 @@ int test_large_file(int depths, int rows, int cols, int tile_size)
             for(x = 0; x < region.cols; x++) {
                 /* Check the counter as cell value */
                 Rast3d_get_value(map, x, y, z, &value, DCELL_TYPE);
-                if(fabs(value - (double)(count) > EPSILON)) {
+                if(fabs(value - (double)(count)) > EPSILON) {
                     G_message("At: z %i y %i x %i -- value %.14lf != %.14lf\n",
                     		z, y, x, value, (double)(count));
 			sum++;

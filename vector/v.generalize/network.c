@@ -120,7 +120,7 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
 
 	    to_degree = dglNodeGet_OutDegree(gr, to);
 	    from_degree = dglNodeGet_OutDegree(gr, from);
-	    id = abs(dglEdgeGet_Id(gr, edge));
+	    id = labs(dglEdgeGet_Id(gr, edge));
 
 	    /* allocate memory, if it has not been not allocated already */
 	    if (!g.edge[id]) {
@@ -135,7 +135,7 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
 
 	    for (to_edge = dglEdgeset_T_First(&to_et); to_edge;
 		 to_edge = dglEdgeset_T_Next(&to_et)) {
-		int id2 = abs(dglEdgeGet_Id(gr, to_edge));
+		int id2 = labs(dglEdgeGet_Id(gr, to_edge));
 
 		g.edge[id][g.degree[id]++] = id2;
 	    }

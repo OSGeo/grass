@@ -102,7 +102,7 @@ int NetA_compute_bridges(dglGraph_s * graph, struct ilist *bridge_list)
 			dglEdgeGet_Tail(graph, current_edge[node_id]);
 		    dglInt32_t edge_id =
 			dglEdgeGet_Id(graph, current_edge[node_id]);
-		    if (abs(edge_id) == parent[node_id])
+		    if (labs(edge_id) == parent[node_id])
 			continue;	/*skip edge we used to travel to this node */
 		    int to_id = dglNodeGet_Id(graph, to);
 
@@ -111,7 +111,7 @@ int NetA_compute_bridges(dglGraph_s * graph, struct ilist *bridge_list)
 			    min_tin[node_id] = tin[to_id];
 		    }
 		    else {	/*forward edge */
-			parent[to_id] = abs(edge_id);
+			parent[to_id] = labs(edge_id);
 			stack[stack_size++] = to;
 			break;
 		    }
