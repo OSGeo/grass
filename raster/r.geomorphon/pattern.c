@@ -6,6 +6,7 @@
  * 5|6|7 */
 static int nextr[NUM_DIRS] = { -1, -1, -1, 0, 1, 1, 1, 0 };
 static int nextc[NUM_DIRS] = { 1, 0, -1, -1, -1, 0, 1, 1 };
+const char *dirname[NUM_DIRS] = { "NE", "N", "NW", "W", "SW", "S", "SE", "E" };
 
 /*
  * A more thorough comparison using a few factors of different priority
@@ -66,13 +67,15 @@ static int compare_multi(const double nadir_angle, const double zenith_angle,
     return 1;
 }
 
-int calc_pattern(PATTERN * pattern, int row, int cur_row, int col)
+int calc_pattern(PATTERN * pattern, int row, int cur_row, int col,
+                 const int oneoff)
 {
     /* calculate parameters of geomorphons and store it in the struct pattern */
     int i, j, pattern_size = 0;
     double zenith_angle, nadir_angle, angle;
     double nadir_threshold, zenith_threshold;
     double zenith_height, nadir_height, zenith_distance, nadir_distance;
+    double zenith_easting, zenith_northing, nadir_easting, nadir_northing;
     double cur_northing, cur_easting, target_northing, target_easting;
     double cur_distance;
     double center_height, height;
@@ -86,6 +89,8 @@ int calc_pattern(PATTERN * pattern, int row, int cur_row, int col)
     pattern->positives = 0;
     pattern->negatives = 0;
 
+    if (oneoff)
+        prof_sso("search_rel_elevation_m");
     for (i = 0; i < NUM_DIRS; ++i) {
         /* reset patterns */
         pattern->pattern[i] = 0;
@@ -112,6 +117,13 @@ int calc_pattern(PATTERN * pattern, int row, int cur_row, int col)
             G_distance(cur_easting, cur_northing, target_easting,
                        target_northing);
 
+        if (oneoff) {
+            zenith_northing = nadir_northing = target_northing;
+            zenith_easting = nadir_easting = target_easting;
+            pattern->e[i] = cur_easting;
+            pattern->n[i] = cur_northing;
+            prof_sso(dirname[i]);
+        }
         while (cur_distance < search_distance) {
             if (cur_row + j * nextr[i] < 0 ||
                 cur_row + j * nextr[i] > row_buffer_size - 1 ||
@@ -127,11 +139,26 @@ int calc_pattern(PATTERN * pattern, int row, int cur_row, int col)
                 zenith_angle = angle;
                 zenith_height = height;
                 zenith_distance = cur_distance;
+                if (oneoff) {
+                    zenith_easting = target_easting;
+                    zenith_northing = target_northing;
+                }
             }
             if (angle < nadir_angle) {
                 nadir_angle = angle;
                 nadir_height = height;
                 nadir_distance = cur_distance;
+                if (oneoff) {
+                    nadir_easting = target_easting;
+                    nadir_northing = target_northing;
+                }
+            }
+            if (oneoff) {
+                char step_name[32];
+
+                snprintf(step_name, sizeof(step_name), "step_%u",
+                         (unsigned)j);
+                prof_dbl(step_name, height);
             }
             j += cell_step;
             /*             j++; *//* go to next cell */
@@ -143,6 +170,8 @@ int calc_pattern(PATTERN * pattern, int row, int cur_row, int col)
                 G_distance(cur_easting, cur_northing, target_easting,
                            target_northing);
         }                       /* end line of sight */
+        if (oneoff)
+            prof_eso();
 
         /* original paper version */
         /*      zenith_angle=PI2-zenith_angle;
@@ -207,14 +236,33 @@ int calc_pattern(PATTERN * pattern, int row, int cur_row, int col)
                 pattern->elevation[i] = zenith_height;
                 pattern->distance[i] = zenith_distance;
                 pattern->num_positives++;
+                if (oneoff) {
+                    pattern->e[i] = zenith_easting;
+                    pattern->n[i] = zenith_northing;
+                }
                 break;
             case -1:
                 pattern->elevation[i] = nadir_height;
                 pattern->distance[i] = nadir_distance;
                 pattern->num_negatives++;
+                if (oneoff) {
+                    pattern->e[i] = nadir_easting;
+                    pattern->n[i] = nadir_northing;
+                }
                 break;
             case 0:
                 pattern->distance[i] = search_distance;
+                if (oneoff) {
+                    /*
+                     * When cell_step == 1, which is always the case in the
+                     * one-off mode, which is the only use case for e[] and
+                     * n[], after the while() loop the distance to
+                     * (target_easting,target_northing) is cur_distance and
+                     * cur_distance == search_distance.
+                     */
+                    pattern->e[i] = target_easting;
+                    pattern->n[i] = target_northing;
+                }
                 break;
             }
 
@@ -229,12 +277,20 @@ int calc_pattern(PATTERN * pattern, int row, int cur_row, int col)
                 pattern->elevation[i] = zenith_height;  /* A CHANGE! */
                 pattern->distance[i] = zenith_distance;
                 pattern->num_positives++;
+                if (oneoff) {
+                    pattern->e[i] = zenith_easting;
+                    pattern->n[i] = zenith_northing;
+                }
             }
             if (fabs(nadir_angle) > fabs(zenith_angle)) {
                 pattern->pattern[i] = -1;
                 pattern->elevation[i] = nadir_height;   /* A CHANGE! */
                 pattern->distance[i] = nadir_distance;
                 pattern->num_negatives++;
+                if (oneoff) {
+                    pattern->e[i] = nadir_easting;
+                    pattern->n[i] = nadir_northing;
+                }
             }
             /*
              * If the angles are exactly equal, the cardinal direction search
@@ -243,8 +299,14 @@ int calc_pattern(PATTERN * pattern, int row, int cur_row, int col)
         }
         else {
             pattern->distance[i] = search_distance;
+            if (oneoff) {
+                pattern->e[i] = target_easting;
+                pattern->n[i] = target_northing;
+            }
         }
 
     }                           /* end for */
+    if (oneoff)
+        prof_eso();
     return pattern_size;
 }

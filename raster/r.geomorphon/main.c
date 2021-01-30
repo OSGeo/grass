@@ -19,8 +19,12 @@
 *
  *****************************************************************************/
 
+#include <stdio.h>
+#include <errno.h>
 #define MAIN
 #include "local_proto.h"
+
+#define WINDOW_THRESHOLD 100000000
 
 typedef enum
 { o_forms, o_ternary, o_positive, o_negative, o_intensity,
@@ -34,6 +38,48 @@ typedef struct
     int fd;
     CELL *forms_buffer;
 } MULTI;
+
+static const char *form_short_name(const FORMS f)
+{
+    const char *form_short_names[] = {
+        /* skip 0 */
+        [FL] = "FL",
+        [PK] = "PK",
+        [RI] = "RI",
+        [SH] = "SH",
+        [SP] = "SP",
+        [SL] = "SL",
+        [HL] = "HL",
+        [FS] = "FS",
+        [VL] = "VL",
+        [PT] = "PT",
+        [__] = "ERROR",
+    };
+    return (f >= FL && f <= PT) ? form_short_names[f] : form_short_names[__];
+}
+
+static const char *form_long_name(const FORMS f)
+{
+    /*
+     * The list below is the same as in the documentation and the original paper.
+     * The values in ccolors[] are different for PK and PT.
+     */
+    const char *form_long_names[] = {
+        /* skip 0 */
+        [FL] = "flat",
+        [PK] = "peak",
+        [RI] = "ridge",
+        [SH] = "shoulder",
+        [SP] = "spur",
+        [SL] = "slope",
+        [HL] = "hollow",
+        [FS] = "footslope",
+        [VL] = "valley",
+        [PT] = "pit",
+        [__] = "ERROR",
+    };
+    return (f >= FL && f <= PT) ? form_long_names[f] : form_long_names[__];
+}
 
 int main(int argc, char **argv)
 {
@@ -85,6 +131,9 @@ int main(int argc, char **argv)
         *par_flat_threshold,
         *par_flat_distance,
         *par_comparison,
+        *par_coords,
+        *par_profiledata,
+        *par_profileformat,
         *par_multi_prefix, *par_multi_step, *par_multi_start;
     struct Flag *flag_units, *flag_extended;
 
@@ -92,6 +141,7 @@ int main(int argc, char **argv)
 
     int i;
     int meters = 0, multires = 0, extended = 0; /* flags */
+    int oneoff;
     int row, cur_row, col;
     int nrows;
     int pattern_size;
@@ -101,6 +151,9 @@ int main(int argc, char **argv)
     double skip_distance;
     double max_resolution;
     char prefix[20];
+    double oneoff_easting, oneoff_northing;
+    int oneoff_row, oneoff_col;
+    FILE *profile_file;
 
     G_gisinit(argv[0]);
 
@@ -193,6 +246,32 @@ int main(int argc, char **argv)
         flag_extended->key = 'e';
         flag_extended->description = _("Use extended form correction");
 
+        par_coords = G_define_standard_option(G_OPT_M_COORDS);
+        par_coords->description = _("Coordinates to profile");
+        par_coords->guisection = _("Profile");
+        G_option_excludes(par_coords, par_multi_prefix, NULL);
+        for (i = o_forms; i < o_size; i++)
+            G_option_excludes(par_coords, opt_output[i], NULL);
+
+        par_profiledata = G_define_standard_option(G_OPT_F_OUTPUT);
+        par_profiledata->key = "profiledata";
+        par_profiledata->answer = "-";
+        par_profiledata->required = NO;
+        par_profiledata->description =
+            _("Profile output file name (\"-\" for stdout)");
+        par_profiledata->guisection = _("Profile");
+        G_option_requires(par_profiledata, par_coords, NULL);
+
+        par_profileformat = G_define_option();
+        par_profileformat->key = "profileformat";
+        par_profileformat->type = TYPE_STRING;
+        par_profileformat->options = "json,yaml,xml";
+        par_profileformat->answer = "json";
+        par_profileformat->required = NO;
+        par_profileformat->description = _("Profile output format");
+        par_profileformat->guisection = _("Profile");
+        G_option_requires(par_profileformat, par_coords, NULL);
+
         if (G_parser(argc, argv))
             exit(EXIT_FAILURE);
     }
@@ -211,6 +290,7 @@ int main(int argc, char **argv)
             compmode = ANGLEV2_DISTANCE;
         else
             G_fatal_error(_("Failed parsing <%s>"), par_comparison->answer);
+        oneoff = par_coords->answer != NULL;
         for (i = o_forms; i < o_size; ++i)      /* check for outputs */
             if (opt_output[i]->answer) {
                 if (G_legal_filename(opt_output[i]->answer) < 0)
@@ -218,7 +298,7 @@ int main(int argc, char **argv)
                                   opt_output[i]->answer);
                 num_outputs++;
             }
-        if (!num_outputs && !multires)
+        if (!num_outputs && !multires && !oneoff)
             G_fatal_error(_("At least one output is required, e.g. %s"),
                           opt_output[o_forms]->key);
 
@@ -228,6 +308,32 @@ int main(int argc, char **argv)
         ncols = Rast_window_cols();
         Rast_get_window(&window);
         G_begin_distance_calculations();
+
+        if (oneoff) {
+            if (!G_scan_easting
+                (par_coords->answers[0], &oneoff_easting, G_projection()))
+                G_fatal_error(_("Illegal east coordinate <%s>"),
+                              par_coords->answers[0]);
+            oneoff_col = Rast_easting_to_col(oneoff_easting, &window);
+            if (!G_scan_northing
+                (par_coords->answers[1], &oneoff_northing, G_projection()))
+                G_fatal_error(_("Illegal north coordinate <%s>"),
+                              par_coords->answers[1]);
+            oneoff_row = Rast_northing_to_row(oneoff_northing, &window);
+            if (oneoff_row < 0 || oneoff_row >= nrows ||
+                oneoff_col < 0 || oneoff_col >= ncols)
+                G_fatal_error(_("The coordinates are outside of the computational region"));
+
+            if (!strcmp(par_profiledata->answer, "-"))
+                profile_file = stdout;
+            else {
+                profile_file = fopen(par_profiledata->answer, "w");
+                if (!profile_file)
+                    G_fatal_error(_("Failed to open output file <%s>: %d (%s)"),
+                                  par_profiledata->answer, errno,
+                                  strerror(errno));
+            }
+        }
 
         if (G_projection() == PROJECTION_LL) {  /* for LL max_res should be NS */
             ns_resolution =
@@ -309,6 +415,23 @@ int main(int argc, char **argv)
         G_verbose_message("Flat threshold distance m: %f, height: %f",
                           flat_distance, flat_threshold_height);
         G_verbose_message("%s version", (extended) ? "Extended" : "Basic");
+        /*
+         * FIXME: It would be nice to have an additional "-s" flag to set the
+         * current computational region just large enough for the one-off
+         * computation (plus some margins and any required outward alignment
+         * to the cell boundary). And also perhaps another "-r" flag to
+         * restore the region afterwards.
+         */
+        if (oneoff) {
+            unsigned long window_square = nrows * ncols;
+            unsigned long search_square = 4 * search_cells * search_cells;
+
+            if (window_square > WINDOW_THRESHOLD &&
+                window_square / search_square > 10)
+                G_warning(_("There may be a notable processing delay because the "
+                           "computational region is %lu times larger than necessary"),
+                          window_square / search_square);
+        }
         if (multires) {
             G_verbose_message
                 ("Multiresolution mode: search start at: m: %f, cells: %d",
@@ -335,6 +458,7 @@ int main(int argc, char **argv)
         double flat_dist = flat_distance;
         double area_of_octagon =
             4 * (search_distance * search_distance) * sin(DEGREE2RAD(45.));
+        unsigned char oneoff_done = 0;
 
         cell_step = 1;
         /* prepare outputs */
@@ -360,7 +484,16 @@ int main(int argc, char **argv)
             if (row > (row_radius_size) &&
                 row < nrows - (row_radius_size + 1))
                 shift_buffers(row);
+
+            /* If skipping the current row, only after the buffer shift would be fine. */
+            if (oneoff && row != oneoff_row)
+                continue;
+
             for (col = 0; col < ncols; ++col) {
+                /* If skipping the current column, early would be fine. */
+                if (oneoff && col != oneoff_col)
+                    continue;
+
                 /* on borders forms ussualy are innatural. */
                 if (row < (skip_cells + 1) || row > nrows - (skip_cells + 2)
                     || col < (skip_cells + 1) ||
@@ -391,14 +524,16 @@ int main(int argc, char **argv)
                 }               /* end null value */
                 {
                     FORMS cur_form;
+                    FORMS orig_form;
 
                     search_distance = search_dist;
                     skip_distance = skip_dist;
                     flat_distance = flat_dist;
                     pattern_size =
-                        calc_pattern(&patterns[0], row, cur_row, col);
+                        calc_pattern(&patterns[0], row, cur_row, col, oneoff);
                     pattern = &patterns[0];
                     cur_form =
+                        orig_form =
                         determine_form(pattern->num_negatives,
                                        pattern->num_positives);
 
@@ -416,7 +551,7 @@ int main(int argc, char **argv)
                             skip_distance = 0;
                             flat_distance = 0;
                             pattern_size =
-                                calc_pattern(&patterns[1], row, cur_row, col);
+                                calc_pattern(&patterns[1], row, cur_row, col, 0);
                             pattern = &patterns[1];
                             small_form =
                                 determine_form(pattern->num_negatives,
@@ -429,6 +564,100 @@ int main(int argc, char **argv)
                         /* 3) Depressions */
 
                     }           /* end of correction */
+
+                    /* one-off mode */
+                    if (oneoff) {
+                        char buf[BUFSIZ];
+                        float azimuth, elongation, width;
+
+                        radial2cartesian(pattern);
+                        shape(pattern, pattern_size, &azimuth, &elongation,
+                              &width);
+                        prof_map_info();
+                        prof_sso("computation_parameters");
+                        prof_dbl("easting", oneoff_easting);
+                        prof_dbl("northing", oneoff_northing);
+                        prof_mtr("search_m", search_distance);
+                        prof_int("search_cells", search_cells);
+                        prof_mtr("skip_m", skip_distance);
+                        prof_int("skip_cells", skip_cells);
+                        prof_dbl("flat_thresh_deg",
+                                 RAD2DEGREE(flat_threshold));
+                        prof_mtr("flat_distance_m", flat_distance);
+                        prof_mtr("flat_height_m", flat_threshold_height);
+                        prof_bln("extended_correction", extended);
+                        prof_eso();     /* computation_parameters */
+                        prof_sso("intermediate_data");
+                        if (extended) {
+                            prof_int("initial_landform_cat", orig_form);
+                            prof_str("initial_landform_code",
+                                     form_short_name(orig_form));
+                            prof_str("initial_landform_name",
+                                     form_long_name(orig_form));
+                        }
+                        prof_int("ternary_498",
+                                 determine_ternary(pattern->pattern));
+                        prof_int("ternary_6561",
+                                 preliminary_ternary(pattern->pattern));
+                        prof_int("pattern_size", pattern_size);
+                        prof_dbl("origin_easting",
+                                 Rast_col_to_easting(col + 0.5, &window));
+                        prof_dbl("origin_northing",
+                                 Rast_row_to_northing(row + 0.5, &window));
+                        prof_pattern(elevation.elev[cur_row][col], pattern);
+                        prof_eso();     /* intermediate_data */
+                        prof_sso("final_results");
+                        prof_int("landform_cat", cur_form);
+                        prof_str("landform_code", form_short_name(cur_form));
+                        prof_str("landform_name", form_long_name(cur_form));
+                        prof_int("landform_deviation",
+                                 form_deviation(pattern->num_negatives,
+                                                pattern->num_positives));
+                        prof_dbl("azimuth", azimuth);
+                        prof_dbl("elongation", elongation);
+                        prof_mtr("width_m", width);
+                        prof_mtr("intensity_m",
+                                 intensity(pattern->elevation, pattern_size));
+                        prof_mtr("exposition_m",
+                                 exposition(pattern->elevation));
+                        prof_mtr("range_m", range(pattern->elevation));
+                        prof_dbl("variance",
+                                 variance(pattern->elevation, pattern_size));
+                        prof_dbl("extends",
+                                 extends(pattern) / area_of_octagon);
+                        prof_mtr("octagon_perimeter_m",
+                                 octa_perimeter(pattern));
+                        prof_mtr("octagon_area_m2", extends(pattern));
+                        prof_mtr("mesh_perimeter_m", mesh_perimeter(pattern));
+                        prof_mtr("mesh_area_m2", mesh_area(pattern));
+                        prof_eso();     /* final_results */
+                        /*
+                         * When adding new data items, increment the minor
+                         * version. When deleting, moving, renaming or
+                         * otherwise changing existing data, increment the
+                         * major version and reset the minor version.
+                         */
+                        prof_int("format_version_major", 0);
+                        prof_int("format_version_minor", 9);
+                        prof_utc("timestamp", time(NULL));
+                        G_snprintf(buf, sizeof(buf),
+                                   "r.geomorphon GRASS GIS %s [%s]",
+                                   GRASS_VERSION_STRING,
+                                   GRASS_HEADERS_VERSION);
+                        prof_str("generator", buf);
+
+                        oneoff_done =
+                            prof_write(profile_file,
+                                       par_profileformat->answer);
+                        if (oneoff_done)
+                            G_verbose_message(_("Profile data has been written"));
+                        else
+                            G_important_message(_("Failed writing profile data"));
+                        /* Break out of both loops. */
+                        row = nrows - 1;
+                        break;
+                    }           /* end of one-off mode */
+
                     pattern = &patterns[0];
                     if (opt_output[o_forms]->answer)
                         ((CELL *) rasters[o_forms].buffer)[col] = cur_form;
@@ -509,6 +738,21 @@ int main(int argc, char **argv)
             write_contrast_colors(opt_output[o_range]->answer);
 
         G_done_msg(" ");
+
+        if (oneoff) {
+            if (strcmp(par_profiledata->answer, "-"))
+                fclose(profile_file);
+            /*
+             * In case all the earlier checks had not detected some edge case
+             * and the one-off computation has not been done properly or not
+             * at all, do not fail to fail now.
+             */
+            if (!oneoff_done) {
+                G_fatal_error(_("Failed to profile the computation, please check the parameters"));
+                exit(EXIT_FAILURE);
+            }
+        }
+
         exit(EXIT_SUCCESS);
     }                           /* end of NOT multiresolution */
 
@@ -551,7 +795,7 @@ int main(int argc, char **argv)
                     continue;
                 }
                 cell_step = 10;
-                calc_pattern(&multi_patterns[0], row, cur_row, col);
+                calc_pattern(&multi_patterns[0], row, cur_row, col, 0);
             }
 
             for (i = 0; i < num_of_steps; ++i)
