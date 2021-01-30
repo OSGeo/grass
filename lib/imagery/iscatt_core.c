@@ -181,14 +181,14 @@ static int get_rows_and_cols_bounds(struct Cell_head *A, struct Cell_head *B,
     struct Cell_head intersec;
 
     /* TODO is it right check? */
-    if (abs(A->ns_res - B->ns_res) > GRASS_EPSILON) {
+    if (fabs(A->ns_res - B->ns_res) > GRASS_EPSILON) {
 	G_warning(
 		"'get_rows_and_cols_bounds' ns_res does not fit, A->ns_res: %f B->ns_res: %f",
 		A->ns_res, B->ns_res);
 	return -2;
     }
 
-    if (abs(A->ew_res - B->ew_res) > GRASS_EPSILON) {
+    if (fabs(A->ew_res - B->ew_res) > GRASS_EPSILON) {
 	G_warning(
 		"'get_rows_and_cols_bounds' ew_res does not fit, A->ew_res: %f B->ew_res: %f",
 		A->ew_res, B->ew_res);
