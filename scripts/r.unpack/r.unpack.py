@@ -13,32 +13,32 @@
 #
 #############################################################################
 
-#%module
-#% description: Imports a GRASS GIS specific raster archive file (packed with r.pack) as a raster map
-#% keyword: raster
-#% keyword: import
-#% keyword: copying
-#%end
-#%option G_OPT_F_BIN_INPUT
-#% description: Name of input pack file
-#% key_desc: name.pack
-#%end
-#%option G_OPT_R_OUTPUT
-#% description: Name for output raster map (default: taken from input file internals)
-#% required: no
-#% guisection: Output settings
-#%end
-#%flag
-#% key: o
-#% label: Override projection check (use current location's projection)
-#% description: Assume that the dataset has same projection as the current location
-#% guisection: Output settings
-#%end
-#%flag
-#% key: p
-#% label: Print projection information of input pack file and exit
-#% guisection: Print
-#%end
+# %module
+# % description: Imports a GRASS GIS specific raster archive file (packed with r.pack) as a raster map
+# % keyword: raster
+# % keyword: import
+# % keyword: copying
+# %end
+# %option G_OPT_F_BIN_INPUT
+# % description: Name of input pack file
+# % key_desc: name.pack
+# %end
+# %option G_OPT_R_OUTPUT
+# % description: Name for output raster map (default: taken from input file internals)
+# % required: no
+# % guisection: Output settings
+# %end
+# %flag
+# % key: o
+# % label: Override projection check (use current location's projection)
+# % description: Assume that the dataset has same projection as the current location
+# % guisection: Output settings
+# %end
+# %flag
+# % key: p
+# % label: Print projection information of input pack file and exit
+# % guisection: Print
+# %end
 
 import os
 import re

@@ -15,48 +15,48 @@
 #
 #############################################################################
 
-#%module
-#% description: Drapes a color raster over an shaded relief or aspect map.
-#% keyword: raster
-#% keyword: elevation
-#% keyword: relief
-#% keyword: hillshade
-#% keyword: visualization
-#%end
-#%option G_OPT_R_INPUT
-#% key: shade
-#% description: Name of shaded relief or aspect raster map
-#%end
-#%option G_OPT_R_INPUT
-#% key: color
-#% label: Name of raster to drape over relief raster map
-#% description: Typically, this raster is elevation or other colorful raster
-#%end
-#%option G_OPT_R_OUTPUT
-#% description: Name of shaded raster map
-#%end
-#%option
-#% key: brighten
-#% type: integer
-#% description: Percent to brighten
-#% options: -99-99
-#% answer: 0
-#%end
-#%option
-#% key: bgcolor
-#% type: string
-#% key_desc: name
-#% label: Color to use instead of NULL values
-#% description: Either a standard color name, R:G:B triplet, or "none"
-#% gisprompt: old,color_none,color
-#%end
-#%flag
-#% key: c
-#% description: Use colors from color tables for NULL values
-#%end
-#%rules
-#% exclusive: bgcolor, -c
-#%end
+# %module
+# % description: Drapes a color raster over an shaded relief or aspect map.
+# % keyword: raster
+# % keyword: elevation
+# % keyword: relief
+# % keyword: hillshade
+# % keyword: visualization
+# %end
+# %option G_OPT_R_INPUT
+# % key: shade
+# % description: Name of shaded relief or aspect raster map
+# %end
+# %option G_OPT_R_INPUT
+# % key: color
+# % label: Name of raster to drape over relief raster map
+# % description: Typically, this raster is elevation or other colorful raster
+# %end
+# %option G_OPT_R_OUTPUT
+# % description: Name of shaded raster map
+# %end
+# %option
+# % key: brighten
+# % type: integer
+# % description: Percent to brighten
+# % options: -99-99
+# % answer: 0
+# %end
+# %option
+# % key: bgcolor
+# % type: string
+# % key_desc: name
+# % label: Color to use instead of NULL values
+# % description: Either a standard color name, R:G:B triplet, or "none"
+# % gisprompt: old,color_none,color
+# %end
+# %flag
+# % key: c
+# % description: Use colors from color tables for NULL values
+# %end
+# %rules
+# % exclusive: bgcolor, -c
+# %end
 
 # TODO: bgcolor is not using standard option because it has default white
 # using `answer:` will cause `default:` which is not the same as no default

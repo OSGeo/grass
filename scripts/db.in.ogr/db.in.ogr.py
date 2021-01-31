@@ -14,49 +14,49 @@
 #
 #############################################################################
 
-#%Module
-#% description: Imports attribute tables in various formats.
-#% keyword: database
-#% keyword: import
-#% keyword: attribute table
-#% overwrite: yes
-#%End
+# %Module
+# % description: Imports attribute tables in various formats.
+# % keyword: database
+# % keyword: import
+# % keyword: attribute table
+# % overwrite: yes
+# %End
 
-#%option G_OPT_F_BIN_INPUT
-#% description: Table file to be imported or DB connection string
-#%end
+# %option G_OPT_F_BIN_INPUT
+# % description: Table file to be imported or DB connection string
+# %end
 
-#%option
-#% key: db_table
-#% type: string
-#% key_desc : name
-#% description: Name of table from given DB to be imported
-#% required : no
-#%end
+# %option
+# % key: db_table
+# % type: string
+# % key_desc : name
+# % description: Name of table from given DB to be imported
+# % required : no
+# %end
 
-#%option G_OPT_DB_TABLE
-#% key: output
-#% description: Name for output table
-#% required : no
-#% guisection: Output
-#% gisprompt: new,dbtable,dbtable
-#%end
+# %option G_OPT_DB_TABLE
+# % key: output
+# % description: Name for output table
+# % required : no
+# % guisection: Output
+# % gisprompt: new,dbtable,dbtable
+# %end
 
-#%option
-#% key: key
-#% type: string
-#% description: Name for auto-generated unique key column
-#% required : no
-#% guisection: Output
-#%end
+# %option
+# % key: key
+# % type: string
+# % description: Name for auto-generated unique key column
+# % required : no
+# % guisection: Output
+# %end
 
-#%option
-#% key: encoding
-#% type: string
-#% label: Encoding value for attribute data
-#% descriptions: Overrides encoding interpretation, useful when importing DBF tables
-#% guisection: Output
-#%end
+# %option
+# % key: encoding
+# % type: string
+# % label: Encoding value for attribute data
+# % descriptions: Overrides encoding interpretation, useful when importing DBF tables
+# % guisection: Output
+# %end
 
 import os
 import grass.script as grass

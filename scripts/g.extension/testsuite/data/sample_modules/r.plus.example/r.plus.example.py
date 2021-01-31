@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
 
-#%module
-#% description: Adds the values of two rasters (A + B)
-#% keyword: raster
-#% keyword: algebra
-#% keyword: sum
-#%end
-#%option G_OPT_R_INPUT
-#% key: araster
-#% description: Name of input raster A in an expression A + B
-#%end
-#%option G_OPT_R_INPUT
-#% key: braster
-#% description: Name of input raster B in an expression A + B
-#%end
-#%option G_OPT_R_OUTPUT
-#%end
+# %module
+# % description: Adds the values of two rasters (A + B)
+# % keyword: raster
+# % keyword: algebra
+# % keyword: sum
+# %end
+# %option G_OPT_R_INPUT
+# % key: araster
+# % description: Name of input raster A in an expression A + B
+# %end
+# %option G_OPT_R_INPUT
+# % key: braster
+# % description: Name of input raster B in an expression A + B
+# %end
+# %option G_OPT_R_OUTPUT
+# %end
 
 
 import grass.script as gs

@@ -22,17 +22,17 @@
 #       fix spurious char stuff in elevation column
 #############################################################################
 
-#%module
-#% description: Imports geonames.org country files into a vector points map.
-#% keyword: vector
-#% keyword: import
-#% keyword: gazetteer
-#%end
-#%option G_OPT_F_INPUT
-#% description: Name of uncompressed geonames file (with .txt extension)
-#%end
-#%option G_OPT_V_OUTPUT
-#%end
+# %module
+# % description: Imports geonames.org country files into a vector points map.
+# % keyword: vector
+# % keyword: import
+# % keyword: gazetteer
+# %end
+# %option G_OPT_F_INPUT
+# % description: Name of uncompressed geonames file (with .txt extension)
+# %end
+# %option G_OPT_V_OUTPUT
+# %end
 
 import os
 import sys

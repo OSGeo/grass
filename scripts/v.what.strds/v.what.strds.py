@@ -14,40 +14,40 @@
 #
 #############################################################################
 
-#%module
-#% description: Uploads space time raster dataset values at positions of vector points to the table.
-#% keyword: vector
-#% keyword: temporal
-#% keyword: sampling
-#% keyword: position
-#% keyword: querying
-#% keyword: attribute table
-#% keyword: time
-#%end
+# %module
+# % description: Uploads space time raster dataset values at positions of vector points to the table.
+# % keyword: vector
+# % keyword: temporal
+# % keyword: sampling
+# % keyword: position
+# % keyword: querying
+# % keyword: attribute table
+# % keyword: time
+# %end
 
-#%option G_OPT_V_INPUT
-#%end
+# %option G_OPT_V_INPUT
+# %end
 
-#%option G_OPT_STRDS_INPUTS
-#% key: strds
-#%end
+# %option G_OPT_STRDS_INPUTS
+# % key: strds
+# %end
 
-#%option G_OPT_V_OUTPUT
-#% required: no
-#%end
+# %option G_OPT_V_OUTPUT
+# % required: no
+# %end
 
-#%option G_OPT_DB_WHERE
-#%end
+# %option G_OPT_DB_WHERE
+# %end
 
-#%option G_OPT_T_WHERE
-#% key: t_where
-#%end
+# %option G_OPT_T_WHERE
+# % key: t_where
+# %end
 
-#%flag
-#% key: u
-#% label: Update attribute table of input vector map
-#% description: Instead of creating a new vector map update the attribute table with value(s)
-#%end
+# %flag
+# % key: u
+# % label: Update attribute table of input vector map
+# % description: Instead of creating a new vector map update the attribute table with value(s)
+# %end
 
 import grass.script as grass
 from grass.exceptions import CalledModuleError

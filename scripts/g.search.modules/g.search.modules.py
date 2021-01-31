@@ -12,56 +12,56 @@
 #
 #############################################################################
 
-#%module
-#% description: Search in GRASS modules using keywords
-#% keyword: general
-#% keyword: modules
-#% keyword: search
-#%end
-#%option
-#% key: keyword
-#% multiple: yes
-#% type: string
-#% label: Keyword to be searched
-#% description: List all modules if not given
-#% required : no
-#%end
-#%flag
-#% key: a
-#% description: Display only modules where all keywords are available (AND), default: OR
-#% guisection: Output
-#%end
-#%flag
-#% key: n
-#% description: Invert selection (logical NOT)
-#% guisection: Output
-#%end
-#%flag
-#% key: m
-#% description: Search in manual pages too (can be slow)
-#% guisection: Output
-#%end
-#%flag
-#% key: k
-#% label: Search only for the exact keyword in module keyword list
-#% description: Instead of full text search, search only in actual keywords
-#% guisection: Output
-#%end
-#%flag
-#% key: c
-#% description: Use colorized (more readable) output to terminal
-#% guisection: Output
-#%end
-#%flag
-#% key: g
-#% description: Shell script format
-#% guisection: Output
-#%end
-#%flag
-#% key: j
-#% description: JSON format
-#% guisection: Output
-#%end
+# %module
+# % description: Search in GRASS modules using keywords
+# % keyword: general
+# % keyword: modules
+# % keyword: search
+# %end
+# %option
+# % key: keyword
+# % multiple: yes
+# % type: string
+# % label: Keyword to be searched
+# % description: List all modules if not given
+# % required : no
+# %end
+# %flag
+# % key: a
+# % description: Display only modules where all keywords are available (AND), default: OR
+# % guisection: Output
+# %end
+# %flag
+# % key: n
+# % description: Invert selection (logical NOT)
+# % guisection: Output
+# %end
+# %flag
+# % key: m
+# % description: Search in manual pages too (can be slow)
+# % guisection: Output
+# %end
+# %flag
+# % key: k
+# % label: Search only for the exact keyword in module keyword list
+# % description: Instead of full text search, search only in actual keywords
+# % guisection: Output
+# %end
+# %flag
+# % key: c
+# % description: Use colorized (more readable) output to terminal
+# % guisection: Output
+# %end
+# %flag
+# % key: g
+# % description: Shell script format
+# % guisection: Output
+# %end
+# %flag
+# % key: j
+# % description: JSON format
+# % guisection: Output
+# %end
 
 from __future__ import print_function
 import os

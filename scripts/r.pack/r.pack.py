@@ -13,23 +13,23 @@
 #
 #############################################################################
 
-#%module
-#% description: Exports a raster map as GRASS GIS specific archive file
-#% keyword: raster
-#% keyword: export
-#% keyword: copying
-#%end
-#%option G_OPT_R_INPUT
-#% description: Name of raster map to pack up
-#%end
-#%option G_OPT_F_OUTPUT
-#% description: Name for output file (default is <input>.pack)
-#% required : no
-#%end
-#%flag
-#% key: c
-#% description: Switch the compression off
-#%end
+# %module
+# % description: Exports a raster map as GRASS GIS specific archive file
+# % keyword: raster
+# % keyword: export
+# % keyword: copying
+# %end
+# %option G_OPT_R_INPUT
+# % description: Name of raster map to pack up
+# %end
+# %option G_OPT_F_OUTPUT
+# % description: Name for output file (default is <input>.pack)
+# % required : no
+# %end
+# %flag
+# % key: c
+# % description: Switch the compression off
+# %end
 
 import os
 import sys

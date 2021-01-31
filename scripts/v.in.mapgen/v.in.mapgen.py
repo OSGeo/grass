@@ -23,26 +23,26 @@
 #                    http://www.ngdc.noaa.gov/mgg/shorelines/shorelines.html
 #
 
-#%module
-#% description: Imports Mapgen or Matlab-ASCII vector maps into GRASS.
-#% keyword: vector
-#% keyword: import
-#%end
-#%flag
-#% key: f
-#% description: Input map is in Matlab format
-#%end
-#%flag
-#% key: z
-#% description: Create a 3D vector points map from 3 column Matlab data
-#%end
-#%option G_OPT_F_INPUT
-#% description: Name of input file in Mapgen/Matlab format
-#%end
-#%option G_OPT_V_OUTPUT
-#% description: Name for output vector map (omit for display to stdout)
-#% required: no
-#%end
+# %module
+# % description: Imports Mapgen or Matlab-ASCII vector maps into GRASS.
+# % keyword: vector
+# % keyword: import
+# %end
+# %flag
+# % key: f
+# % description: Input map is in Matlab format
+# %end
+# %flag
+# % key: z
+# % description: Create a 3D vector points map from 3 column Matlab data
+# %end
+# %option G_OPT_F_INPUT
+# % description: Name of input file in Mapgen/Matlab format
+# %end
+# %option G_OPT_V_OUTPUT
+# % description: Name for output vector map (omit for display to stdout)
+# % required: no
+# %end
 
 import sys
 import os

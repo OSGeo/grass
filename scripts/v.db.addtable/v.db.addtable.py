@@ -16,42 +16,42 @@
 #
 #############################################################################
 
-#%module
-#% description: Creates and connects a new attribute table to a given layer of an existing vector map.
-#% keyword: vector
-#% keyword: attribute table
-#% keyword: database
-#%end
-#%option G_OPT_V_MAP
-#%end
-#%option
-#% key: table
-#% type: string
-#% description: Name of new attribute table (default: vector map name)
-#% required: no
-#% guisection: Definition
-#%end
-#%option
-#% key: layer
-#% type: integer
-#% description: Layer number where to add new attribute table
-#% answer: 1
-#% required: no
-#% guisection: Definition
-#%end
-#%option G_OPT_DB_KEYCOLUMN
-#% guisection: Definition
-#%end
-#%option
-#% key: columns
-#% type: string
-#% label: Name and type of the new column(s) ('name type [,name type, ...]')
-#% description: Types depend on database backend, but all support VARCHAR(), INT, DOUBLE PRECISION and DATE. Example: 'label varchar(250), value integer'
-#% required: no
-#% multiple: yes
-#% key_desc: name type
-#% guisection: Definition
-#%end
+# %module
+# % description: Creates and connects a new attribute table to a given layer of an existing vector map.
+# % keyword: vector
+# % keyword: attribute table
+# % keyword: database
+# %end
+# %option G_OPT_V_MAP
+# %end
+# %option
+# % key: table
+# % type: string
+# % description: Name of new attribute table (default: vector map name)
+# % required: no
+# % guisection: Definition
+# %end
+# %option
+# % key: layer
+# % type: integer
+# % description: Layer number where to add new attribute table
+# % answer: 1
+# % required: no
+# % guisection: Definition
+# %end
+# %option G_OPT_DB_KEYCOLUMN
+# % guisection: Definition
+# %end
+# %option
+# % key: columns
+# % type: string
+# % label: Name and type of the new column(s) ('name type [,name type, ...]')
+# % description: Types depend on database backend, but all support VARCHAR(), INT, DOUBLE PRECISION and DATE. Example: 'label varchar(250), value integer'
+# % required: no
+# % multiple: yes
+# % key_desc: name type
+# % guisection: Definition
+# %end
 
 import sys
 import os

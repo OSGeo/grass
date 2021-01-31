@@ -16,31 +16,31 @@
 #
 #############################################################################
 
-#%module
-#% description: Manages band reference information assigned to a single raster map or to a list of raster maps.
-#% keyword: general
-#% keyword: imagery
-#% keyword: band reference
-#% keyword: image collections
-#%end
-#%option G_OPT_R_MAPS
-#%end
-#%option
-#% key: band
-#% type: string
-#% key_desc: name
-#% description: Name of band reference identifier (example: S2_1)
-#% required: no
-#% multiple: yes
-#%end
-#%option
-#% key: operation
-#% type: string
-#% required: yes
-#% multiple: no
-#% options: add,remove,print
-#% description: Operation to be performed
-#% answer: add
+# %module
+# % description: Manages band reference information assigned to a single raster map or to a list of raster maps.
+# % keyword: general
+# % keyword: imagery
+# % keyword: band reference
+# % keyword: image collections
+# %end
+# %option G_OPT_R_MAPS
+# %end
+# %option
+# % key: band
+# % type: string
+# % key_desc: name
+# % description: Name of band reference identifier (example: S2_1)
+# % required: no
+# % multiple: yes
+# %end
+# %option
+# % key: operation
+# % type: string
+# % required: yes
+# % multiple: no
+# % options: add,remove,print
+# % description: Operation to be performed
+# % answer: add
 
 import sys
 

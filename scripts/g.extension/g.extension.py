@@ -19,133 +19,133 @@
 #               - fix toolbox support in install_private_extension_xml()
 #############################################################################
 
-#%module
-#% label: Maintains GRASS Addons extensions in local GRASS installation.
-#% description: Downloads and installs extensions from GRASS Addons repository or other source into the local GRASS installation or removes installed extensions.
-#% keyword: general
-#% keyword: installation
-#% keyword: extensions
-#% keyword: addons
-#% keyword: download
-#%end
+# %module
+# % label: Maintains GRASS Addons extensions in local GRASS installation.
+# % description: Downloads and installs extensions from GRASS Addons repository or other source into the local GRASS installation or removes installed extensions.
+# % keyword: general
+# % keyword: installation
+# % keyword: extensions
+# % keyword: addons
+# % keyword: download
+# %end
 
-#%option
-#% key: extension
-#% type: string
-#% key_desc: name
-#% label: Name of extension to install or remove
-#% description: Name of toolbox (set of extensions) when -t flag is given
-#% required: yes
-#%end
-#%option
-#% key: operation
-#% type: string
-#% description: Operation to be performed
-#% required: yes
-#% options: add,remove
-#% answer: add
-#%end
-#%option
-#% key: url
-#% type: string
-#% key_desc: url
-#% label: URL or directory to get the extension from (supported only on Linux and Mac)
-#% description: The official repository is used by default. User can specify a ZIP file, directory or a repository on common hosting services. If not identified, Subversion repository is assumed. See manual for all options.
-#%end
-#%option
-#% key: prefix
-#% type: string
-#% key_desc: path
-#% description: Prefix where to install extension (ignored when flag -s is given)
-#% answer: $GRASS_ADDON_BASE
-#% required: no
-#%end
-#%option
-#% key: proxy
-#% type: string
-#% key_desc: proxy
-#% description: Set the proxy with: "http=<value>,ftp=<value>"
-#% required: no
-#% multiple: yes
-#%end
-#%option
-#% key: branch
-#% type: string
-#% key_desc: branch
-#% description: Specific branch to fetch addon from (only used when fetching from git)
-#% required: no
-#% multiple: no
-#% answer: main
-#%end
+# %option
+# % key: extension
+# % type: string
+# % key_desc: name
+# % label: Name of extension to install or remove
+# % description: Name of toolbox (set of extensions) when -t flag is given
+# % required: yes
+# %end
+# %option
+# % key: operation
+# % type: string
+# % description: Operation to be performed
+# % required: yes
+# % options: add,remove
+# % answer: add
+# %end
+# %option
+# % key: url
+# % type: string
+# % key_desc: url
+# % label: URL or directory to get the extension from (supported only on Linux and Mac)
+# % description: The official repository is used by default. User can specify a ZIP file, directory or a repository on common hosting services. If not identified, Subversion repository is assumed. See manual for all options.
+# %end
+# %option
+# % key: prefix
+# % type: string
+# % key_desc: path
+# % description: Prefix where to install extension (ignored when flag -s is given)
+# % answer: $GRASS_ADDON_BASE
+# % required: no
+# %end
+# %option
+# % key: proxy
+# % type: string
+# % key_desc: proxy
+# % description: Set the proxy with: "http=<value>,ftp=<value>"
+# % required: no
+# % multiple: yes
+# %end
+# %option
+# % key: branch
+# % type: string
+# % key_desc: branch
+# % description: Specific branch to fetch addon from (only used when fetching from git)
+# % required: no
+# % multiple: no
+# % answer: main
+# %end
 
-#%flag
-#% key: l
-#% description: List available extensions in the official GRASS GIS Addons repository
-#% guisection: Print
-#% suppress_required: yes
-#%end
-#%flag
-#% key: c
-#% description: List available extensions in the official GRASS GIS Addons repository including module description
-#% guisection: Print
-#% suppress_required: yes
-#%end
-#%flag
-#% key: g
-#% description: List available extensions in the official GRASS GIS Addons repository (shell script style)
-#% guisection: Print
-#% suppress_required: yes
-#%end
-#%flag
-#% key: a
-#% description: List locally installed extensions
-#% guisection: Print
-#% suppress_required: yes
-#%end
-#%flag
-#% key: s
-#% description: Install system-wide (may need system administrator rights)
-#% guisection: Install
-#%end
-#%flag
-#% key: d
-#% description: Download source code and exit
-#% guisection: Install
-#%end
-#%flag
-#% key: i
-#% description: Do not install new extension, just compile it
-#% guisection: Install
-#%end
-#%flag
-#% key: f
-#% description: Force removal when uninstalling extension (operation=remove)
-#% guisection: Remove
-#%end
-#%flag
-#% key: t
-#% description: Operate on toolboxes instead of single modules (experimental)
-#% suppress_required: yes
-#%end
-#%flag
-#% key: o
-#% description: url refers to a fork of the official extension repository
-#%end
-#%flag
-#% key: j
-#% description: Generates JSON file containing the download URLs of the official Addons
-#% guisection: Install
-#% suppress_required: yes
-#%end
+# %flag
+# % key: l
+# % description: List available extensions in the official GRASS GIS Addons repository
+# % guisection: Print
+# % suppress_required: yes
+# %end
+# %flag
+# % key: c
+# % description: List available extensions in the official GRASS GIS Addons repository including module description
+# % guisection: Print
+# % suppress_required: yes
+# %end
+# %flag
+# % key: g
+# % description: List available extensions in the official GRASS GIS Addons repository (shell script style)
+# % guisection: Print
+# % suppress_required: yes
+# %end
+# %flag
+# % key: a
+# % description: List locally installed extensions
+# % guisection: Print
+# % suppress_required: yes
+# %end
+# %flag
+# % key: s
+# % description: Install system-wide (may need system administrator rights)
+# % guisection: Install
+# %end
+# %flag
+# % key: d
+# % description: Download source code and exit
+# % guisection: Install
+# %end
+# %flag
+# % key: i
+# % description: Do not install new extension, just compile it
+# % guisection: Install
+# %end
+# %flag
+# % key: f
+# % description: Force removal when uninstalling extension (operation=remove)
+# % guisection: Remove
+# %end
+# %flag
+# % key: t
+# % description: Operate on toolboxes instead of single modules (experimental)
+# % suppress_required: yes
+# %end
+# %flag
+# % key: o
+# % description: url refers to a fork of the official extension repository
+# %end
+# %flag
+# % key: j
+# % description: Generates JSON file containing the download URLs of the official Addons
+# % guisection: Install
+# % suppress_required: yes
+# %end
 
 
-#%rules
-#% required: extension, -l, -c, -g, -a, -j
-#% exclusive: extension, -l, -c, -g
-#% exclusive: extension, -l, -c, -a
-#% requires: -o, url
-#% requires: branch, url
-#%end
+# %rules
+# % required: extension, -l, -c, -g, -a, -j
+# % exclusive: extension, -l, -c, -g
+# % exclusive: extension, -l, -c, -a
+# % requires: -o, url
+# % requires: branch, url
+# %end
 
 # TODO: solve addon-extension(-module) confusion
 

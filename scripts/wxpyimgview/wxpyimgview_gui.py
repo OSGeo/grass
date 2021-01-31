@@ -18,23 +18,23 @@
 #
 # /
 
-#%module
-#% description: Views BMP images from the PNG driver.
-#% keyword: display
-#% keyword: raster
-#%end
-#%option G_OPT_F_INPUT
-#% key: image
-#% description: Name of input image file
-#%end
-#%option
-#% key: percent
-#% type: integer
-#% required: no
-#% multiple: no
-#% description: Percentage of CPU time to use
-#% answer: 10
-#%end
+# %module
+# % description: Views BMP images from the PNG driver.
+# % keyword: display
+# % keyword: raster
+# %end
+# %option G_OPT_F_INPUT
+# % key: image
+# % description: Name of input image file
+# %end
+# %option
+# % key: percent
+# % type: integer
+# % required: no
+# % multiple: no
+# % description: Percentage of CPU time to use
+# % answer: 10
+# %end
 
 import os
 import signal

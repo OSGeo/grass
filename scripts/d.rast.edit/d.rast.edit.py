@@ -18,61 +18,61 @@
 #
 # /
 
-#%module
-#% description: Edits cell values in a raster map.
-#% keyword: display
-#% keyword: editing
-#% keyword: raster
-#%end
-#%option G_OPT_R_INPUT
-#%end
-#%option G_OPT_R_OUTPUT
-#%end
-#%option G_OPT_R_INPUT
-#% key: aspect
-#% required: no
-#% description: Name of input aspect raster map
-#%end
-#%option
-#% key: width
-#% type: integer
-#% required: no
-#% multiple: no
-#% description: Width of display canvas
-#% answer: 640
-#%end
-#%option
-#% key: height
-#% type: integer
-#% required: no
-#% multiple: no
-#% description: Height of display canvas
-#% answer: 480
-#%end
-#%option
-#% key: size
-#% type: integer
-#% required: no
-#% multiple: no
-#% description: Minimum size of each cell
-#% answer: 12
-#%end
-#%option
-#% key: rows
-#% type: integer
-#% required: no
-#% multiple: no
-#% description: Maximum number of rows to load
-#% answer: 100
-#%end
-#%option
-#% key: cols
-#% type: integer
-#% required: no
-#% multiple: no
-#% description: Maximum number of columns to load
-#% answer: 100
-#%end
+# %module
+# % description: Edits cell values in a raster map.
+# % keyword: display
+# % keyword: editing
+# % keyword: raster
+# %end
+# %option G_OPT_R_INPUT
+# %end
+# %option G_OPT_R_OUTPUT
+# %end
+# %option G_OPT_R_INPUT
+# % key: aspect
+# % required: no
+# % description: Name of input aspect raster map
+# %end
+# %option
+# % key: width
+# % type: integer
+# % required: no
+# % multiple: no
+# % description: Width of display canvas
+# % answer: 640
+# %end
+# %option
+# % key: height
+# % type: integer
+# % required: no
+# % multiple: no
+# % description: Height of display canvas
+# % answer: 480
+# %end
+# %option
+# % key: size
+# % type: integer
+# % required: no
+# % multiple: no
+# % description: Minimum size of each cell
+# % answer: 12
+# %end
+# %option
+# % key: rows
+# % type: integer
+# % required: no
+# % multiple: no
+# % description: Maximum number of rows to load
+# % answer: 100
+# %end
+# %option
+# % key: cols
+# % type: integer
+# % required: no
+# % multiple: no
+# % description: Maximum number of columns to load
+# % answer: 100
+# %end
 
 import sys
 import math

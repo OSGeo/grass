@@ -13,14 +13,14 @@
 #
 #############################################################################
 
-#%module
-#% description: Allows the user to interactively query vector map layers at user-selected locations.
-#% keyword: display
-#% keyword: vector
-#%end
-#%option G_OPT_V_INPUTS
-#% key: map
-#%end
+# %module
+# % description: Allows the user to interactively query vector map layers at user-selected locations.
+# % keyword: display
+# % keyword: vector
+# %end
+# %option G_OPT_V_INPUTS
+# % key: map
+# %end
 
 
 from grass.script import core as gcore

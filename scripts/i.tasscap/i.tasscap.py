@@ -54,33 +54,33 @@
 #  Remote Sensing Letters. 5. DOI: 10.1080/2150704X.2014.885148.
 #############################################################################
 
-#%Module
-#% description: Performs Tasseled Cap (Kauth Thomas) transformation.
-#% keyword: imagery
-#% keyword: transformation
-#% keyword: Landsat
-#% keyword: MODIS
-#% keyword: Worldview
-#% keyword: Sentinel
-#% keyword: Tasseled Cap transformation
-#%end
+# %Module
+# % description: Performs Tasseled Cap (Kauth Thomas) transformation.
+# % keyword: imagery
+# % keyword: transformation
+# % keyword: Landsat
+# % keyword: MODIS
+# % keyword: Worldview
+# % keyword: Sentinel
+# % keyword: Tasseled Cap transformation
+# %end
 
-#%option G_OPT_R_INPUTS
-#% description: For Landsat4-7: bands 1, 2, 3, 4, 5, 7; for Landsat8: bands 2, 3, 4, 5, 6, 7; for MODIS: bands 1, 2, 3, 4, 5, 6, 7; for Sentinel-2: bands 1 to 12, 8A; for Worldview-2: bands 1, 2, 3, 4, 5, 6, 7, 8
-#%end
+# %option G_OPT_R_INPUTS
+# % description: For Landsat4-7: bands 1, 2, 3, 4, 5, 7; for Landsat8: bands 2, 3, 4, 5, 6, 7; for MODIS: bands 1, 2, 3, 4, 5, 6, 7; for Sentinel-2: bands 1 to 12, 8A; for Worldview-2: bands 1, 2, 3, 4, 5, 6, 7, 8
+# %end
 
-#%option G_OPT_R_BASENAME_OUTPUT
-#% label: basename for output raster map(s)
-#%end
+# %option G_OPT_R_BASENAME_OUTPUT
+# % label: basename for output raster map(s)
+# %end
 
-#%option
-#% key: sensor
-#% type: string
-#% description: Satellite sensor
-#% required: yes
-#% multiple: no
-#% options: landsat4_tm,landsat5_tm,landsat7_etm,landsat8_oli,modis,sentinel2,worldview2
-#%end
+# %option
+# % key: sensor
+# % type: string
+# % description: Satellite sensor
+# % required: yes
+# % multiple: no
+# % options: landsat4_tm,landsat5_tm,landsat7_etm,landsat8_oli,modis,sentinel2,worldview2
+# %end
 
 import grass.script as grass
 

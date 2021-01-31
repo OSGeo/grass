@@ -16,25 +16,25 @@
 #
 #############################################################################
 
-#%module
-#% label: Rebuilds or removes all locally installed GRASS Addons extensions.
-#% description: By default only extensions built against different GIS Library are rebuilt.
-#% keyword: general
-#% keyword: installation
-#% keyword: extensions
-#%end
-#%option
-#% key: operation
-#% type: string
-#% description: Operation to be performed
-#% required: no
-#% options: rebuild,remove
-#% answer: rebuild
-#%end
-#%flag
-#% key: f
-#% label: Force operation (required for removal)
-#% end
+# %module
+# % label: Rebuilds or removes all locally installed GRASS Addons extensions.
+# % description: By default only extensions built against different GIS Library are rebuilt.
+# % keyword: general
+# % keyword: installation
+# % keyword: extensions
+# %end
+# %option
+# % key: operation
+# % type: string
+# % description: Operation to be performed
+# % required: no
+# % options: rebuild,remove
+# % answer: rebuild
+# %end
+# %flag
+# % key: f
+# % label: Force operation (required for removal)
+# % end
 from __future__ import print_function
 import os
 import sys

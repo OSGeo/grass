@@ -14,32 +14,32 @@
 #
 #############################################################################
 
-#%module
-#% label: Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values.
-#% description: This is the low-memory alternative to the classic r.buffer module.
-#% keyword: raster
-#% keyword: buffer
-#%end
-#%flag
-#% key: z
-#% description: Ignore zero (0) data cells instead of NULL cells
-#%end
-#%option G_OPT_R_INPUT
-#%end
-#%option G_OPT_R_OUTPUT
-#%end
-#%option
-#% key: distances
-#% type: double
-#% required: yes
-#% multiple: yes
-#% description: Distance zone(s)
-#%end
-#%option G_OPT_M_UNITS
-#% options: meters,kilometers,feet,miles,nautmiles
-#% description: Units of distance
-#% answer: meters
-#%end
+# %module
+# % label: Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values.
+# % description: This is the low-memory alternative to the classic r.buffer module.
+# % keyword: raster
+# % keyword: buffer
+# %end
+# %flag
+# % key: z
+# % description: Ignore zero (0) data cells instead of NULL cells
+# %end
+# %option G_OPT_R_INPUT
+# %end
+# %option G_OPT_R_OUTPUT
+# %end
+# %option
+# % key: distances
+# % type: double
+# % required: yes
+# % multiple: yes
+# % description: Distance zone(s)
+# %end
+# %option G_OPT_M_UNITS
+# % options: meters,kilometers,feet,miles,nautmiles
+# % description: Units of distance
+# % answer: meters
+# %end
 
 import sys
 import os

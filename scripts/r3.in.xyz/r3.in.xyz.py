@@ -20,152 +20,152 @@
 #
 #############################################################################
 
-#%Module
-#% description: Create a 3D raster map from an assemblage of many coordinates using univariate statistics
-#% keyword: raster3d
-#% keyword: import
-#% keyword: voxel
-#% keyword: LIDAR
-#% keyword: statistics
-#% keyword: conversion
-#% keyword: aggregation
-#% keyword: binning
-#%End
-#%Flag
-#% key: s
-#% description: Scan data file for extent then exit
-#%End
-#%Flag
-#% key: g
-#% description: In scan mode, print using shell script style
-#%End
-#%Flag
-#% key: i
-#% description: Ignore broken lines
-#%End
-#%Option G_OPT_F_INPUT
-#% required: yes
-#% description: ASCII file containing input data
-#%End
-#%Option
-#% key: output
-#% type: string
-#% required: yes
-#% multiple: no
-#% key_desc: name
-#% description: Name for output raster map
-#% gisprompt: new,grid3,3d-raster
-#%End
-#%Option
-#% key: method
-#% type: string
-#% required: no
-#% multiple: no
-#% options: n,min,max,range,sum,mean,stddev,variance,coeff_var,median,percentile,skewness,trimmean
-#% description: Statistic to use for raster values
-#% answer: mean
-#% guisection: Statistic
-#%End
-#%Option
-#% key: type
-#% type: string
-#% required: no
-#% multiple: no
-#% options: float,double
-#% description: Storage type for resultant raster map
-#% answer: float
-#%End
-#%Option G_OPT_F_SEP
-#% guisection: Input
-#%End
-#%Option
-#% key: x
-#% type: integer
-#% required: no
-#% multiple: no
-#% description: Column number of x coordinates in input file (first column is 1)
-#% answer: 1
-#% guisection: Input
-#%End
-#%Option
-#% key: y
-#% type: integer
-#% required: no
-#% multiple: no
-#% description: Column number of y coordinates in input file
-#% answer: 2
-#% guisection: Input
-#%End
-#%Option
-#% key: z
-#% type: integer
-#% required: no
-#% multiple: no
-#% description: Column number of z coordinates in input file
-#% answer: 3
-#% guisection: Input
-#%End
-#%Option
-#% key: value_column
-#% type: integer
-#% required: no
-#% multiple: no
-#% label: Column number of data values in input file
-#% description: If not given or set to 0, the data points' z-values are used
-#% answer: 0
-#% guisection: Input
-#%End
-#%Option
-#% key: vrange
-#% type: double
-#% required: no
-#% key_desc: min,max
-#% description: Filter range for value column data (min,max)
-#%End
-#%option
-#% key: vscale
-#% type: double
-#% required: no
-#% multiple: no
-#% description: Scaling factor to apply to value column data
-#% answer: 1.0
-#%end
-#%Option
-#% key: percent
-#% type: integer
-#% required: no
-#% multiple: no
-#% options: 1-100
-#% description: Percent of map to keep in memory
-#% answer: 100
-#%End
-#%Option
-#% key: pth
-#% type: integer
-#% required: no
-#% multiple: no
-#% options: 1-100
-#% description: pth percentile of the values
-#% guisection: Statistic
-#%End
-#%Option
-#% key: trim
-#% type: double
-#% required: no
-#% multiple: no
-#% options: 0-50
-#% description: Discard <trim> percent of the smallest and <trim> percent of the largest observations
-#% guisection: Statistic
-#%End
-#%Option
-#% key: workers
-#% type: integer
-#% required: no
-#% multiple: no
-#% options: 1-256
-#% answer: 1
-#% description: Number of parallel processes to launch
-#%End
+# %Module
+# % description: Create a 3D raster map from an assemblage of many coordinates using univariate statistics
+# % keyword: raster3d
+# % keyword: import
+# % keyword: voxel
+# % keyword: LIDAR
+# % keyword: statistics
+# % keyword: conversion
+# % keyword: aggregation
+# % keyword: binning
+# %End
+# %Flag
+# % key: s
+# % description: Scan data file for extent then exit
+# %End
+# %Flag
+# % key: g
+# % description: In scan mode, print using shell script style
+# %End
+# %Flag
+# % key: i
+# % description: Ignore broken lines
+# %End
+# %Option G_OPT_F_INPUT
+# % required: yes
+# % description: ASCII file containing input data
+# %End
+# %Option
+# % key: output
+# % type: string
+# % required: yes
+# % multiple: no
+# % key_desc: name
+# % description: Name for output raster map
+# % gisprompt: new,grid3,3d-raster
+# %End
+# %Option
+# % key: method
+# % type: string
+# % required: no
+# % multiple: no
+# % options: n,min,max,range,sum,mean,stddev,variance,coeff_var,median,percentile,skewness,trimmean
+# % description: Statistic to use for raster values
+# % answer: mean
+# % guisection: Statistic
+# %End
+# %Option
+# % key: type
+# % type: string
+# % required: no
+# % multiple: no
+# % options: float,double
+# % description: Storage type for resultant raster map
+# % answer: float
+# %End
+# %Option G_OPT_F_SEP
+# % guisection: Input
+# %End
+# %Option
+# % key: x
+# % type: integer
+# % required: no
+# % multiple: no
+# % description: Column number of x coordinates in input file (first column is 1)
+# % answer: 1
+# % guisection: Input
+# %End
+# %Option
+# % key: y
+# % type: integer
+# % required: no
+# % multiple: no
+# % description: Column number of y coordinates in input file
+# % answer: 2
+# % guisection: Input
+# %End
+# %Option
+# % key: z
+# % type: integer
+# % required: no
+# % multiple: no
+# % description: Column number of z coordinates in input file
+# % answer: 3
+# % guisection: Input
+# %End
+# %Option
+# % key: value_column
+# % type: integer
+# % required: no
+# % multiple: no
+# % label: Column number of data values in input file
+# % description: If not given or set to 0, the data points' z-values are used
+# % answer: 0
+# % guisection: Input
+# %End
+# %Option
+# % key: vrange
+# % type: double
+# % required: no
+# % key_desc: min,max
+# % description: Filter range for value column data (min,max)
+# %End
+# %option
+# % key: vscale
+# % type: double
+# % required: no
+# % multiple: no
+# % description: Scaling factor to apply to value column data
+# % answer: 1.0
+# %end
+# %Option
+# % key: percent
+# % type: integer
+# % required: no
+# % multiple: no
+# % options: 1-100
+# % description: Percent of map to keep in memory
+# % answer: 100
+# %End
+# %Option
+# % key: pth
+# % type: integer
+# % required: no
+# % multiple: no
+# % options: 1-100
+# % description: pth percentile of the values
+# % guisection: Statistic
+# %End
+# %Option
+# % key: trim
+# % type: double
+# % required: no
+# % multiple: no
+# % options: 0-50
+# % description: Discard <trim> percent of the smallest and <trim> percent of the largest observations
+# % guisection: Statistic
+# %End
+# %Option
+# % key: workers
+# % type: integer
+# % required: no
+# % multiple: no
+# % options: 1-256
+# % answer: 1
+# % description: Number of parallel processes to launch
+# %End
 
 
 import sys
