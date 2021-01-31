@@ -11,14 +11,15 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        c:
-        - gnu99
-        - gnu11
-        - gnu17
-        cpp:
-        - c++11
-        - c++14
-        - c++17
+        include:
+        - c: gnu99
+          cpp: c++11
+        - c: gnu11
+          cpp: c++11
+        - c: gnu11
+          cpp: c++14
+        - c: gnu17
+          cpp: c++17
       fail-fast: false
 
     steps:
