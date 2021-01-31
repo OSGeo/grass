@@ -19,29 +19,29 @@
 #
 ############################################################################
 
-#%module
-#% description: Georectifies a map and allows managing Ground Control Points.
-#% keyword: general
-#% keyword: GUI
-#% keyword: georectification
-#%end
-#%option
-#% key: test
-#% description: Test to run
-#% options: mapwindow,mapdisplay,apitest,distance,profile
-#% descriptions: mapwindow;Opens map window ;mapdisplay;Opens map display; apitest;Open an application to test API of map window; distance;Starts map window with distance measurement activated; profile;Starts map window with profile tool activated
-#% required: yes
-#%end
-#%option G_OPT_R_INPUT
-#% key: raster
-#% multiple: yes
-#% required: no
-#%end
-#%option G_OPT_V_INPUT
-#% key: vector
-#% multiple: yes
-#% required: no
-#%end
+# %module
+# % description: Tests map display and map window widgets
+# % keyword: general
+# % keyword: GUI
+# % keyword: test
+# %end
+# %option
+# % key: test
+# % description: Test to run
+# % options: mapwindow,mapdisplay,apitest,distance,profile
+# % descriptions: mapwindow;Opens map window ;mapdisplay;Opens map display; apitest;Open an application to test API of map window; distance;Starts map window with distance measurement activated; profile;Starts map window with profile tool activated
+# % required: yes
+# %end
+# %option G_OPT_R_INPUT
+# % key: raster
+# % multiple: yes
+# % required: no
+# %end
+# %option G_OPT_V_INPUT
+# % key: vector
+# % multiple: yes
+# % required: no
+# %end
 
 """
 Module to run test map window (BufferedWidnow) and map display (MapFrame).

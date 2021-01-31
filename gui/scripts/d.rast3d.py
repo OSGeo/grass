@@ -16,19 +16,19 @@
 #
 #############################################################################
 
-#%module
-#% description: Displays a 3D raster map layer.
-#% keyword: display
-#% keyword: raster3d
-#%end
+# %module
+# % description: Displays a 3D raster map layer.
+# % keyword: display
+# % keyword: raster3d
+# %end
 
-#%option
-#% key: map
-#% type: string
-#% gisprompt: old,grid3,3d-raster
-#% description: 3D raster map to be displayed
-#% required : yes
-#%end
+# %option
+# % key: map
+# % type: string
+# % gisprompt: old,grid3,3d-raster
+# % description: 3D raster map to be displayed
+# % required : yes
+# %end
 
 from grass.script import core as grass
 

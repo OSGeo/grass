@@ -18,13 +18,13 @@
 #
 ############################################################################
 
-#%module
-#% description: Configuration tool for r.li modules.
-#% keyword: general
-#% keyword: GUI
-#% keyword: raster
-#% keyword: landscape structure analysis
-#%end
+# %module
+# % description: Configuration tool for r.li modules.
+# % keyword: general
+# % keyword: GUI
+# % keyword: raster
+# % keyword: landscape structure analysis
+# %end
 
 import grass.script as gscript
 

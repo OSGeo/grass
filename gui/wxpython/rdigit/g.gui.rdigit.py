@@ -19,40 +19,40 @@
 #
 ############################################################################
 
-#%module
-#% description: Interactive editing and digitizing of raster maps.
-#% keyword: general
-#% keyword: GUI
-#% keyword: raster
-#% keyword: editing
-#% keyword: digitizer
-#%end
-#%option G_OPT_R_OUTPUT
-#% key: create
-#% label: Name of new raster map to create
-#% required: no
-#% guisection: Create
-#%end
-#%option G_OPT_R_BASE
-#% required: no
-#% guisection: Create
-#%end
-#%option G_OPT_R_TYPE
-#% answer: CELL
-#% required: no
-#% guisection: Create
-#%end
-#%option G_OPT_R_INPUT
-#% key: edit
-#% required: no
-#% label: Name of existing raster map to edit
-#% guisection: Edit
-#%end
-#%rules
-#% exclusive: create, edit
-#% required: create, edit
-#% requires: base, create
-#%end
+# %module
+# % description: Interactive editing and digitizing of raster maps.
+# % keyword: general
+# % keyword: GUI
+# % keyword: raster
+# % keyword: editing
+# % keyword: digitizer
+# %end
+# %option G_OPT_R_OUTPUT
+# % key: create
+# % label: Name of new raster map to create
+# % required: no
+# % guisection: Create
+# %end
+# %option G_OPT_R_BASE
+# % required: no
+# % guisection: Create
+# %end
+# %option G_OPT_R_TYPE
+# % answer: CELL
+# % required: no
+# % guisection: Create
+# %end
+# %option G_OPT_R_INPUT
+# % key: edit
+# % required: no
+# % label: Name of existing raster map to edit
+# % guisection: Edit
+# %end
+# %rules
+# % exclusive: create, edit
+# % required: create, edit
+# % requires: base, create
+# %end
 
 import os
 

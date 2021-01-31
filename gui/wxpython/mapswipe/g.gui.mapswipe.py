@@ -19,30 +19,30 @@
 #
 ############################################################################
 
-#%module
-#% description: Interactively compares two maps by swiping a visibility bar.
-#% keyword: general
-#% keyword: GUI
-#% keyword: display
-#%end
-#%option G_OPT_R_INPUT
-#% key: first
-#% description: First (top/right) raster map
-#% required: no
-#%end
-#%option G_OPT_R_INPUT
-#% key: second
-#% description: Second (bottom/left) raster map
-#% required: no
-#%end
-#%option
-#% key: mode
-#% description: View mode
-#% options: swipe,mirror
-#% descriptions:swipe;swiping the upper map layer to show the map layer below ;mirror;synchronized maps side by side
-#% answer: swipe
-#% required: no
-#%end
+# %module
+# % description: Interactively compares two maps by swiping a visibility bar.
+# % keyword: general
+# % keyword: GUI
+# % keyword: display
+# %end
+# %option G_OPT_R_INPUT
+# % key: first
+# % description: First (top/right) raster map
+# % required: no
+# %end
+# %option G_OPT_R_INPUT
+# % key: second
+# % description: Second (bottom/left) raster map
+# % required: no
+# %end
+# %option
+# % key: mode
+# % description: View mode
+# % options: swipe,mirror
+# % descriptions:swipe;swiping the upper map layer to show the map layer below ;mirror;synchronized maps side by side
+# % answer: swipe
+# % required: no
+# %end
 
 import os
 import grass.script as gscript
