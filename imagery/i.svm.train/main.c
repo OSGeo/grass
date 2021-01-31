@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     int out_status;
 
     struct Categories cats;
-    char cats_path[GPATH_MAX];
+    char in_path[GPATH_MAX], out_path[GPATH_MAX];
     struct History history;
     FILE *hist_file;
     int i;
@@ -394,10 +394,20 @@ int main(int argc, char *argv[])
     G_verbose_message("Copying category information");
     if (Rast_read_cats(name_labels, mapset_labels, &cats) == 0) {
         /* Path to training label map CATs file */
-        G_file_name(cats_path, "cats", name_labels, mapset_labels);
-        G_file_name_misc(out_file, sigfile_dir, "cats", name_sigfile,
+        G_file_name(in_path, "cats", name_labels, mapset_labels);
+        G_file_name_misc(out_path, sigfile_dir, "cats", name_sigfile,
                          G_mapset());
-        G_copy_file(cats_path, out_file);
+        G_copy_file(in_path, out_path);
+    }
+
+    /* Copy color file. Will be used for prediction result maps */
+    G_verbose_message("Copying color information");
+    if (G_find_file2("colr", name_labels, mapset_labels)) {
+        /* Path to training label map colr file */
+        G_file_name(in_path, "colr", name_labels, mapset_labels);
+        G_file_name_misc(out_path, sigfile_dir, "colr", name_sigfile,
+                         G_mapset());
+        G_copy_file(in_path, out_path);
     }
 
     /* History will be appended to a prediction result map history */

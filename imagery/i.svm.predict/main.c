@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     char mapset_group[GMAPSET_MAX], mapset_subgroup[GMAPSET_MAX],
         mapset_values[GMAPSET_MAX];
     char sigfile_dir[GPATH_MAX], model_file[GPATH_MAX];
-    char cats_path[GPATH_MAX], cats_file[GPATH_MAX];
+    char in_path[GPATH_MAX], out_path[GPATH_MAX];
 
     struct Ref band_ref;
 
@@ -305,13 +305,20 @@ int main(int argc, char *argv[])
                         name_sigfile, mapset_sigfile);
     Rast_write_history(name_values, &history);
 
-    /* Copy CATs file from the original training map */
     if (svm_type != ONE_CLASS) {
+        /* Copy CATs file from the original training map */
         G_verbose_message("Copying category information");
-        G_file_name_misc(cats_file, sigfile_dir, "cats", name_sigfile,
+        G_file_name_misc(in_path, sigfile_dir, "cats", name_sigfile,
                          mapset_sigfile);
-        G_file_name(cats_path, "cats", name_values, G_mapset());
-        G_copy_file(cats_file, cats_path);      /* It's still OK if it fails to copy */
+        G_file_name(out_path, "cats", name_values, G_mapset());
+        G_copy_file(in_path, out_path); /* It's still OK if it fails to copy */
+
+        /* Copy color file from the original training map */
+        G_verbose_message("Copying color information");
+        G_file_name_misc(in_path, sigfile_dir, "colr", name_sigfile,
+                         mapset_sigfile);
+        G_file_name(out_path, "colr", name_values, G_mapset());
+        G_copy_file(in_path, out_path);
     }
     Rast_put_cell_title(name_values,
                         /* GTC: A map title */
