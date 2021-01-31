@@ -288,8 +288,9 @@ int main(int argc, char *argv[])
         G_fopen_old_misc(sigfile_dir, "history", name_sigfile,
                          mapset_sigfile);
     if (hist_file != NULL) {
-        if (G_getl(hist_line, sizeof(hist_line), hist_file))
+        while (G_getl(hist_line, sizeof(hist_line), hist_file) == 1) {
             Rast_append_history(&history, hist_line);
+        }
         fclose(hist_file);
     }
     Rast_command_history(&history);
@@ -311,6 +312,9 @@ int main(int argc, char *argv[])
                      mapset_sigfile);
     G_file_name(cats_path, "cats", name_values, G_mapset());
     G_copy_file(cats_file, cats_path);  /* It's still OK if it fails here */
+    Rast_put_cell_title(name_values,
+                        /* GTC: A map title */
+                        _("Values predicted with Support Vector Machine"));
 
     exit(EXIT_SUCCESS);
 }

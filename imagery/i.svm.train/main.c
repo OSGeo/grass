@@ -58,8 +58,9 @@ int main(int argc, char *argv[])
 
     struct Categories cats;
     char cats_path[GPATH_MAX];
+    struct History history;
     FILE *hist_file;
-    char *cmdline;
+    int i;
 
     G_gisinit(argv[0]);
 
@@ -403,8 +404,11 @@ int main(int argc, char *argv[])
     G_verbose_message("Writing out history");
     hist_file = G_fopen_new_misc(sigfile_dir, "history", name_sigfile);
     if (hist_file != NULL) {
-        cmdline = G_recreate_command();
-        fprintf(hist_file, "%s\n", cmdline);
+        G_zero(&history, sizeof(struct History));
+        /* Rast_command_history performs command wrapping */
+        Rast_command_history(&history);
+        for (i = 0; i < history.nlines; i++)
+            fprintf(hist_file, "%s\n", history.lines[i]);
         fclose(hist_file);
     }
     else {
