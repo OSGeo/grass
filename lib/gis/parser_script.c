@@ -56,35 +56,35 @@ void G__script(void)
     fprintf(fp,
 	    "############################################################################\n\n");
 
-    fprintf(fp, "#%%module\n");
+    fprintf(fp, "# %%module\n");
     if (st->module_info.label)
-	fprintf(fp, "#%% label: %s\n", st->module_info.label);
+	fprintf(fp, "# %% label: %s\n", st->module_info.label);
     if (st->module_info.description)
-	fprintf(fp, "#%% description: %s\n", st->module_info.description);
+	fprintf(fp, "# %% description: %s\n", st->module_info.description);
     if (st->module_info.keywords) {
 	int i;
 
 	for(i = 0; i < st->n_keys; i++) {
-	    fprintf(fp, "#%% keyword: %s\n", st->module_info.keywords[i]);
+	    fprintf(fp, "# %% keyword: %s\n", st->module_info.keywords[i]);
 	}
     }
-    fprintf(fp, "#%%end\n");
+    fprintf(fp, "# %%end\n");
 
     if (st->n_flags) {
 	struct Flag *flag;
 
 	for (flag = &st->first_flag; flag; flag = flag->next_flag) {
-	    fprintf(fp, "#%%flag\n");
-	    fprintf(fp, "#%% key: %c\n", flag->key);
+	    fprintf(fp, "# %%flag\n");
+	    fprintf(fp, "# %% key: %c\n", flag->key);
 	    if (flag->suppress_required)
-		fprintf(fp, "#%% suppress_required: yes\n");
+		fprintf(fp, "# %% suppress_required: yes\n");
 	    if (flag->label)
-		fprintf(fp, "#%% label: %s\n", flag->label);
+		fprintf(fp, "# %% label: %s\n", flag->label);
 	    if (flag->description)
-		fprintf(fp, "#%% description: %s\n", flag->description);
+		fprintf(fp, "# %% description: %s\n", flag->description);
 	    if (flag->guisection)
-		fprintf(fp, "#%% guisection: %s\n", flag->guisection);
-	    fprintf(fp, "#%%end\n");
+		fprintf(fp, "# %% guisection: %s\n", flag->guisection);
+	    fprintf(fp, "# %%end\n");
 	}
     }
 
@@ -107,30 +107,30 @@ void G__script(void)
 		break;
 	    }
 
-	    fprintf(fp, "#%%option\n");
-	    fprintf(fp, "#%% key: %s\n", opt->key);
-	    fprintf(fp, "#%% type: %s\n", type);
-	    fprintf(fp, "#%% required: %s\n", opt->required ? "yes" : "no");
-	    fprintf(fp, "#%% multiple: %s\n", opt->multiple ? "yes" : "no");
+	    fprintf(fp, "# %%option\n");
+	    fprintf(fp, "# %% key: %s\n", opt->key);
+	    fprintf(fp, "# %% type: %s\n", type);
+	    fprintf(fp, "# %% required: %s\n", opt->required ? "yes" : "no");
+	    fprintf(fp, "# %% multiple: %s\n", opt->multiple ? "yes" : "no");
 	    if (opt->options)
-		fprintf(fp, "#%% options: %s\n", opt->options);
+		fprintf(fp, "# %% options: %s\n", opt->options);
 	    if (opt->key_desc)
-		fprintf(fp, "#%% key_desc: %s\n", opt->key_desc);
+		fprintf(fp, "# %% key_desc: %s\n", opt->key_desc);
 	    if (opt->label)
-		fprintf(fp, "#%% label: %s\n", opt->label);
+		fprintf(fp, "# %% label: %s\n", opt->label);
 	    if (opt->description)
-		fprintf(fp, "#%% description: %s\n", opt->description);
+		fprintf(fp, "# %% description: %s\n", opt->description);
 	    if (opt->descriptions)
-		fprintf(fp, "#%% descriptions: %s\n", opt->descriptions);
+		fprintf(fp, "# %% descriptions: %s\n", opt->descriptions);
 	    if (opt->answer)
-		fprintf(fp, "#%% answer: %s\n", opt->answer);
+		fprintf(fp, "# %% answer: %s\n", opt->answer);
 	    if (opt->gisprompt)
-		fprintf(fp, "#%% gisprompt: %s\n", opt->gisprompt);
+		fprintf(fp, "# %% gisprompt: %s\n", opt->gisprompt);
 	    if (opt->guisection)
-		fprintf(fp, "#%% guisection: %s\n", opt->guisection);
+		fprintf(fp, "# %% guisection: %s\n", opt->guisection);
 	    if (opt->guidependency)
-		fprintf(fp, "#%% guidependency: %s\n", opt->guidependency);
-	    fprintf(fp, "#%%end\n");
+		fprintf(fp, "# %% guidependency: %s\n", opt->guidependency);
+	    fprintf(fp, "# %%end\n");
 	}
     }
 

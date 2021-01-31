@@ -99,9 +99,9 @@ def module_template():
     # UI
     output.write(
         r"""
-#%%module
-#%% description: %s
-#%%end
+# %%module
+# %% description: %s
+# %%end
 """ % (' '.join(properties['description'].splitlines())))
 
     # import modules
@@ -168,22 +168,22 @@ def module_example():
     """Example of a GRASS module"""
     return r"""#!/usr/bin/env python3
 
-#%module
-#% description: Adds the values of two rasters (A + B)
-#% keyword: raster
-#% keyword: algebra
-#% keyword: sum
-#%end
-#%option G_OPT_R_INPUT
-#% key: araster
-#% description: Name of input raster A in an expression A + B
-#%end
-#%option G_OPT_R_INPUT
-#% key: braster
-#% description: Name of input raster B in an expression A + B
-#%end
-#%option G_OPT_R_OUTPUT
-#%end
+# %module
+# % description: Adds the values of two rasters (A + B)
+# % keyword: raster
+# % keyword: algebra
+# % keyword: sum
+# %end
+# %option G_OPT_R_INPUT
+# % key: araster
+# % description: Name of input raster A in an expression A + B
+# %end
+# %option G_OPT_R_INPUT
+# % key: braster
+# % description: Name of input raster B in an expression A + B
+# %end
+# %option G_OPT_R_OUTPUT
+# %end
 
 
 import sys
@@ -211,16 +211,16 @@ def module_error_handling_example():
     """Example of a GRASS module"""
     return r"""#!/usr/bin/env python3
 
-#%module
-#% description: Selects values from raster above value of mean plus standard deviation
-#% keyword: raster
-#% keyword: select
-#% keyword: standard deviation
-#%end
-#%option G_OPT_R_INPUT
-#%end
-#%option G_OPT_R_OUTPUT
-#%end
+# %module
+# % description: Selects values from raster above value of mean plus standard deviation
+# % keyword: raster
+# % keyword: select
+# % keyword: standard deviation
+# %end
+# %option G_OPT_R_INPUT
+# %end
+# %option G_OPT_R_OUTPUT
+# %end
 
 
 import sys

@@ -18,16 +18,16 @@
 #
 ############################################################################
 
-#%module
-#% description: Example GUI application which displays raster map and further information
-#% keyword: example
-#% keyword: GUI
-#% keyword: raster
-#%end
-#%option G_OPT_R_INPUT
-#% description: Name of raster map to load
-#% required: no
-#%end
+# %module
+# % description: Example GUI application which displays raster map and further information
+# % keyword: example
+# % keyword: GUI
+# % keyword: raster
+# %end
+# %option G_OPT_R_INPUT
+# % description: Name of raster map to load
+# % required: no
+# %end
 
 import os
 import sys

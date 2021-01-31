@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 
-#%module
-#% description: Selects values from raster above value of mean plus standard deviation
-#% keyword: raster
-#% keyword: select
-#% keyword: standard deviation
-#%end
-#%option G_OPT_R_INPUT
-#%end
-#%option G_OPT_R_OUTPUT
-#%end
+# %module
+# % description: Selects values from raster above value of mean plus standard deviation
+# % keyword: raster
+# % keyword: select
+# % keyword: standard deviation
+# %end
+# %option G_OPT_R_INPUT
+# %end
+# %option G_OPT_R_OUTPUT
+# %end
 
 
 import sys
