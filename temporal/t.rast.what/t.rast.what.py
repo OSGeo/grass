@@ -22,81 +22,81 @@
 #
 #############################################################################
 
-#%module
-#% description: Sample a space time raster dataset at specific vector point coordinates and write the output to stdout using different layouts
-#% keyword: temporal
-#% keyword: sampling
-#% keyword: raster
-#% keyword: time
-#%end
+# %module
+# % description: Sample a space time raster dataset at specific vector point coordinates and write the output to stdout using different layouts
+# % keyword: temporal
+# % keyword: sampling
+# % keyword: raster
+# % keyword: time
+# %end
 
-#%option G_OPT_V_INPUT
-#% key: points
-#% required: no
-#%end
+# %option G_OPT_V_INPUT
+# % key: points
+# % required: no
+# %end
 
-#%option G_OPT_M_COORDS
-#% required: no
-#% description: Comma separated list of coordinates
-#%end
+# %option G_OPT_M_COORDS
+# % required: no
+# % description: Comma separated list of coordinates
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#% key: strds
-#%end
+# %option G_OPT_STRDS_INPUT
+# % key: strds
+# %end
 
-#%option G_OPT_F_OUTPUT
-#% required: no
-#% description: Name for the output file or "-" in case stdout should be used
-#% answer: -
-#%end
+# %option G_OPT_F_OUTPUT
+# % required: no
+# % description: Name for the output file or "-" in case stdout should be used
+# % answer: -
+# %end
 
-#%option G_OPT_T_WHERE
-#%end
+# %option G_OPT_T_WHERE
+# %end
 
-#%option G_OPT_M_NULL_VALUE
-#%end
+# %option G_OPT_M_NULL_VALUE
+# %end
 
-#%option G_OPT_F_SEP
-#%end
+# %option G_OPT_F_SEP
+# %end
 
-#%option
-#% key: order
-#% type: string
-#% description: Sort the maps by category
-#% required: no
-#% multiple: yes
-#% options: id, name, creator, mapset, creation_time, modification_time, start_time, end_time, north, south, west, east, min, max
-#% answer: start_time
-#%end
+# %option
+# % key: order
+# % type: string
+# % description: Sort the maps by category
+# % required: no
+# % multiple: yes
+# % options: id, name, creator, mapset, creation_time, modification_time, start_time, end_time, north, south, west, east, min, max
+# % answer: start_time
+# %end
 
-#%option
-#% key: layout
-#% type: string
-#% description: The layout of the output. One point per row (row), one point per column (col), all timsteps in one row (timerow)
-#% required: no
-#% multiple: no
-#% options: row, col, timerow
-#% answer: row
-#%end
+# %option
+# % key: layout
+# % type: string
+# % description: The layout of the output. One point per row (row), one point per column (col), all timsteps in one row (timerow)
+# % required: no
+# % multiple: no
+# % options: row, col, timerow
+# % answer: row
+# %end
 
-#%option
-#% key: nprocs
-#% type: integer
-#% description: Number of r.what processes to run in parallel
-#% required: no
-#% multiple: no
-#% answer: 1
-#%end
+# %option
+# % key: nprocs
+# % type: integer
+# % description: Number of r.what processes to run in parallel
+# % required: no
+# % multiple: no
+# % answer: 1
+# %end
 
-#%flag
-#% key: n
-#% description: Output header row
-#%end
+# %flag
+# % key: n
+# % description: Output header row
+# %end
 
-#%flag
-#% key: i
-#% description: Use stdin as input and ignore coordinates and point option
-#%end
+# %flag
+# % key: i
+# % description: Use stdin as input and ignore coordinates and point option
+# %end
 
 ## Temporary disabled the r.what flags due to test issues
 ##%flag
@@ -114,10 +114,10 @@
 ##% description: Output integer category values, not cell values
 ##%end
 
-#%flag
-#% key: v
-#% description: Show the category for vector points map
-#%end
+# %flag
+# % key: v
+# % description: Show the category for vector points map
+# %end
 
 import sys
 import copy

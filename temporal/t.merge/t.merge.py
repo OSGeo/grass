@@ -20,24 +20,24 @@
 #
 #############################################################################
 
-#%module
-#% description: Merges several space time datasets into a single space time dataset.
-#% keyword: temporal
-#% keyword: time management
-#% keyword: merge
-#% keyword: time
-#%end
+# %module
+# % description: Merges several space time datasets into a single space time dataset.
+# % keyword: temporal
+# % keyword: time management
+# % keyword: merge
+# % keyword: time
+# %end
 
-#%option G_OPT_STDS_INPUTS
-#%end
+# %option G_OPT_STDS_INPUTS
+# %end
 
-#%option G_OPT_STDS_OUTPUT
-#%end
+# %option G_OPT_STDS_OUTPUT
+# %end
 
-#%option G_OPT_STDS_TYPE
-#% guidependency: inputs
-#% guisection: Required
-#%end
+# %option G_OPT_STDS_TYPE
+# % guidependency: inputs
+# % guisection: Required
+# %end
 
 import grass.script as grass
 

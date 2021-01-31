@@ -20,24 +20,24 @@
 #
 #############################################################################
 
-#%module
-#% description: Renames a space time dataset
-#% keyword: temporal
-#% keyword: map management
-#% keyword: rename
-#% keyword: time
-#%end
+# %module
+# % description: Renames a space time dataset
+# % keyword: temporal
+# % keyword: map management
+# % keyword: rename
+# % keyword: time
+# %end
 
-#%option G_OPT_STDS_INPUT
-#%end
+# %option G_OPT_STDS_INPUT
+# %end
 
-#%option G_OPT_STDS_OUTPUT
-#%end
+# %option G_OPT_STDS_OUTPUT
+# %end
 
-#%option G_OPT_STDS_TYPE
-#% guidependency: input
-#% guisection: Required
-#%end
+# %option G_OPT_STDS_TYPE
+# % guidependency: input
+# % guisection: Required
+# %end
 
 import grass.script as grass
 

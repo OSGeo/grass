@@ -20,74 +20,74 @@
 #
 #############################################################################
 
-#%module
-#% description: Imports a space time vector dataset from a GRASS GIS specific archive file.
-#% keyword: temporal
-#% keyword: import
-#% keyword: vector
-#% keyword: time
-#% keyword: create location
-#%end
+# %module
+# % description: Imports a space time vector dataset from a GRASS GIS specific archive file.
+# % keyword: temporal
+# % keyword: import
+# % keyword: vector
+# % keyword: time
+# % keyword: create location
+# %end
 
-#%option G_OPT_F_INPUT
-#%end
+# %option G_OPT_F_INPUT
+# %end
 
-#%option G_OPT_STVDS_OUTPUT
-#%end
+# %option G_OPT_STVDS_OUTPUT
+# %end
 
-#%option
-#% key: basename
-#% type: string
-#% label: Basename of the new generated output maps
-#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: basename
+# % type: string
+# % label: Basename of the new generated output maps
+# % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+# % required: no
+# % multiple: no
+# %end
 
-#%option G_OPT_M_DIR
-#% key: directory
-#% description: Path to the extraction directory
-#%end
+# %option G_OPT_M_DIR
+# % key: directory
+# % description: Path to the extraction directory
+# %end
 
-#%option
-#% key: title
-#% type: string
-#% description: Title of the new space time dataset
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: title
+# % type: string
+# % description: Title of the new space time dataset
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: description
-#% type: string
-#% description: Description of the new space time dataset
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: description
+# % type: string
+# % description: Description of the new space time dataset
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: location
-#% type: string
-#% description: Create a new location and import the data into it. Do not run this module in parallel or interrupt it when a new location should be created
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: location
+# % type: string
+# % description: Create a new location and import the data into it. Do not run this module in parallel or interrupt it when a new location should be created
+# % required: no
+# % multiple: no
+# %end
 
-#%flag
-#% key: e
-#% description: Extend location extents based on new dataset
-#%end
+# %flag
+# % key: e
+# % description: Extend location extents based on new dataset
+# %end
 
-#%flag
-#% key: o
-#% label: Override projection check (use current location's projection)
-#% description: Assume that the dataset has same projection as the current location
-#%end
+# %flag
+# % key: o
+# % label: Override projection check (use current location's projection)
+# % description: Assume that the dataset has same projection as the current location
+# %end
 
-#%flag
-#% key: c
-#% description: Create the location specified by the "location" parameter and exit. Do not import the space time vector datasets.
-#%end
+# %flag
+# % key: c
+# % description: Create the location specified by the "location" parameter and exit. Do not import the space time vector datasets.
+# %end
 
 import grass.script as grass
 

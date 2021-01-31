@@ -20,22 +20,22 @@
 #
 #############################################################################
 
-#%module
-#% description: Snaps temporally the maps of a space time dataset.
-#% keyword: temporal
-#% keyword: time management
-#% keyword: snapping
-#% keyword: time
-#%end
+# %module
+# % description: Snaps temporally the maps of a space time dataset.
+# % keyword: temporal
+# % keyword: time management
+# % keyword: snapping
+# % keyword: time
+# %end
 
-#%option G_OPT_STDS_INPUT
-#% description: Name of an existing space time dataset
-#%end
+# %option G_OPT_STDS_INPUT
+# % description: Name of an existing space time dataset
+# %end
 
-#%option G_OPT_STDS_TYPE
-#% guidependency: input
-#% guisection: Required
-#%end
+# %option G_OPT_STDS_TYPE
+# % guidependency: input
+# % guisection: Required
+# %end
 
 import grass.script as grass
 

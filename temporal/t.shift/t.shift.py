@@ -20,31 +20,31 @@
 #
 #############################################################################
 
-#%module
-#% description: Shifts temporally the maps of a space time dataset.
-#% keyword: temporal
-#% keyword: time management
-#% keyword: shift
-#% keyword: time
-#%end
+# %module
+# % description: Shifts temporally the maps of a space time dataset.
+# % keyword: temporal
+# % keyword: time management
+# % keyword: shift
+# % keyword: time
+# %end
 
-#%option G_OPT_STDS_INPUT
-#% description: Name of an existing space time dataset
-#%end
+# %option G_OPT_STDS_INPUT
+# % description: Name of an existing space time dataset
+# %end
 
-#%option G_OPT_STDS_TYPE
-#% guidependency: input
-#% guisection: Required
-#%end
+# %option G_OPT_STDS_TYPE
+# % guidependency: input
+# % guisection: Required
+# %end
 
-#%option
-#% key: granularity
-#% type: string
-#% label: Shift granularity
-#% description: Format absolute time: "x years, x months, x weeks, x days, x hours, x minutes, x seconds", relative time is of type integer
-#% required: yes
-#% multiple: no
-#%end
+# %option
+# % key: granularity
+# % type: string
+# % label: Shift granularity
+# % description: Format absolute time: "x years, x months, x weeks, x days, x hours, x minutes, x seconds", relative time is of type integer
+# % required: yes
+# % multiple: no
+# %end
 
 import grass.script as grass
 

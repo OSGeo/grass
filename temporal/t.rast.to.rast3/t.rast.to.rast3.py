@@ -20,21 +20,21 @@
 #
 #############################################################################
 
-#%module
-#% description: Converts a space time raster dataset into a 3D raster map.
-#% keyword: temporal
-#% keyword: conversion
-#% keyword: raster
-#% keyword: raster3d
-#% keyword: voxel
-#% keyword: time
-#%end
+# %module
+# % description: Converts a space time raster dataset into a 3D raster map.
+# % keyword: temporal
+# % keyword: conversion
+# % keyword: raster
+# % keyword: raster3d
+# % keyword: voxel
+# % keyword: time
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#%end
+# %option G_OPT_STRDS_INPUT
+# %end
 
-#%option G_OPT_R3_OUTPUT
-#%end
+# %option G_OPT_R3_OUTPUT
+# %end
 from __future__ import print_function
 
 import os

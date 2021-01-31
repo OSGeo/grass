@@ -20,87 +20,87 @@
 #
 #############################################################################
 
-#%module
-#% description: Creates/modifies the color table associated with each raster map of the space time raster dataset.
-#% keyword: temporal
-#% keyword: color table
-#% keyword: raster
-#% keyword: time
-#%end
+# %module
+# % description: Creates/modifies the color table associated with each raster map of the space time raster dataset.
+# % keyword: temporal
+# % keyword: color table
+# % keyword: raster
+# % keyword: time
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#%end
+# %option G_OPT_STRDS_INPUT
+# %end
 
-#%option G_OPT_M_COLR
-#% key: color
-#% type: string
-#% description: Name of color table (see r.color help)
-#% required: no
-#% multiple: no
-#% guisection: Define
-#%end
+# %option G_OPT_M_COLR
+# % key: color
+# % type: string
+# % description: Name of color table (see r.color help)
+# % required: no
+# % multiple: no
+# % guisection: Define
+# %end
 
-#%option G_OPT_R_INPUT
-#% key: raster
-#% description: Raster map from which to copy color table
-#% required: no
-#% guisection: Define
-#%end
+# %option G_OPT_R_INPUT
+# % key: raster
+# % description: Raster map from which to copy color table
+# % required: no
+# % guisection: Define
+# %end
 
-#%option G_OPT_R3_INPUT
-#% key: raster_3d
-#% description: 3D raster map from which to copy color table
-#% required: no
-#% guisection: Define
-#%end
+# %option G_OPT_R3_INPUT
+# % key: raster_3d
+# % description: 3D raster map from which to copy color table
+# % required: no
+# % guisection: Define
+# %end
 
-#%option G_OPT_F_INPUT
-#% key: rules
-#% description: Path to rules file
-#% required: no
-#% guisection: Define
-#%end
+# %option G_OPT_F_INPUT
+# % key: rules
+# % description: Path to rules file
+# % required: no
+# % guisection: Define
+# %end
 
-#%flag
-#% key: r
-#% description: Remove existing color table
-#% guisection: Remove
-#%end
+# %flag
+# % key: r
+# % description: Remove existing color table
+# % guisection: Remove
+# %end
 
-#%flag
-#% key: w
-#% description: Only write new color table if it does not already exist
-#%end
+# %flag
+# % key: w
+# % description: Only write new color table if it does not already exist
+# %end
 
-#%flag
-#% key: l
-#% description: List available rules then exit
-#% guisection: Print
-#%end
+# %flag
+# % key: l
+# % description: List available rules then exit
+# % guisection: Print
+# %end
 
-#%flag
-#% key: n
-#% description: Invert colors
-#% guisection: Define
-#%end
+# %flag
+# % key: n
+# % description: Invert colors
+# % guisection: Define
+# %end
 
-#%flag
-#% key: g
-#% description: Logarithmic scaling
-#% guisection: Define
-#%end
+# %flag
+# % key: g
+# % description: Logarithmic scaling
+# % guisection: Define
+# %end
 
-#%flag
-#% key: a
-#% description: Logarithmic-absolute scaling
-#% guisection: Define
-#%end
+# %flag
+# % key: a
+# % description: Logarithmic-absolute scaling
+# % guisection: Define
+# %end
 
-#%flag
-#% key: e
-#% description: Histogram equalization
-#% guisection: Define
-#%end
+# %flag
+# % key: e
+# % description: Histogram equalization
+# % guisection: Define
+# %end
 
 import grass.script as grass
 from grass.exceptions import CalledModuleError

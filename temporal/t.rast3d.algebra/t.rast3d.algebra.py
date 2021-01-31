@@ -22,53 +22,53 @@
 #
 #############################################################################
 
-#%module
-#% description: Apply temporal and spatial operations on space time 3D raster datasets using temporal 3D raster algebra.
-#% keyword: temporal
-#% keyword: algebra
-#% keyword: raster3d
-#% keyword: voxel
-#% keyword: time
-#%end
+# %module
+# % description: Apply temporal and spatial operations on space time 3D raster datasets using temporal 3D raster algebra.
+# % keyword: temporal
+# % keyword: algebra
+# % keyword: raster3d
+# % keyword: voxel
+# % keyword: time
+# %end
 
-#%option
-#% key: expression
-#% type: string
-#% description: Algebraic expression for temporal and spatial analysis of space time 3D raster datasets
-#% required : yes
-#%end
+# %option
+# % key: expression
+# % type: string
+# % description: Algebraic expression for temporal and spatial analysis of space time 3D raster datasets
+# % required : yes
+# %end
 
-#%option
-#% key: basename
-#% type: string
-#% label: Basename of the new generated output maps
-#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
-#% required: yes
-#%end
+# %option
+# % key: basename
+# % type: string
+# % label: Basename of the new generated output maps
+# % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+# % required: yes
+# %end
 
-#%option
-#% key: nprocs
-#% type: integer
-#% description: Number of r3.mapcalc processes to run in parallel
-#% required: no
-#% multiple: no
-#% answer: 1
-#%end
+# %option
+# % key: nprocs
+# % type: integer
+# % description: Number of r3.mapcalc processes to run in parallel
+# % required: no
+# % multiple: no
+# % answer: 1
+# %end
 
-#%flag
-#% key: s
-#% description: Check the spatial topology of temporally related maps and process only spatially related maps
-#%end
+# %flag
+# % key: s
+# % description: Check the spatial topology of temporally related maps and process only spatially related maps
+# %end
 
-#%flag
-#% key: n
-#% description: Register Null maps
-#%end
+# %flag
+# % key: n
+# % description: Register Null maps
+# %end
 
-#%flag
-#% key: g
-#% description: Use granularity sampling instead of the temporal topology approach
-#%end
+# %flag
+# % key: g
+# % description: Use granularity sampling instead of the temporal topology approach
+# %end
 
 
 import grass.script

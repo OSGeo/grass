@@ -20,62 +20,62 @@
 #
 #############################################################################
 
-#%module
-#% description: Extracts a subset of a space time 3D raster dataset.
-#% keyword: temporal
-#% keyword: extract
-#% keyword: raster3d
-#% keyword: voxel
-#% keyword: time
-#%end
+# %module
+# % description: Extracts a subset of a space time 3D raster dataset.
+# % keyword: temporal
+# % keyword: extract
+# % keyword: raster3d
+# % keyword: voxel
+# % keyword: time
+# %end
 
-#%option G_OPT_STR3DS_INPUT
-#%end
+# %option G_OPT_STR3DS_INPUT
+# %end
 
-#%option G_OPT_T_WHERE
-#%end
+# %option G_OPT_T_WHERE
+# %end
 
-#%option
-#% key: expression
-#% type: string
-#% description: The r3.mapcalc expression assigned to all extracted 3D raster maps
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: expression
+# % type: string
+# % description: The r3.mapcalc expression assigned to all extracted 3D raster maps
+# % required: no
+# % multiple: no
+# %end
 
-#%option G_OPT_STR3DS_OUTPUT
-#%end
+# %option G_OPT_STR3DS_OUTPUT
+# %end
 
-#%option
-#% key: basename
-#% type: string
-#% description: Basename of the new generated 3D raster maps
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: basename
+# % type: string
+# % description: Basename of the new generated 3D raster maps
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: suffix
-#% type: string
-#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
-#% answer: gran
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: suffix
+# % type: string
+# % description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+# % answer: gran
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: nprocs
-#% type: integer
-#% description: Number of r3.mapcalc processes to run in parallel
-#% required: no
-#% multiple: no
-#% answer: 1
-#%end
+# %option
+# % key: nprocs
+# % type: integer
+# % description: Number of r3.mapcalc processes to run in parallel
+# % required: no
+# % multiple: no
+# % answer: 1
+# %end
 
-#%flag
-#% key: n
-#% description: Register Null maps
-#%end
+# %flag
+# % key: n
+# % description: Register Null maps
+# %end
 
 import grass.script as grass
 
