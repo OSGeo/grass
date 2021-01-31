@@ -53,6 +53,7 @@ void fill_problem(const char *name_labels, const char *mapset_labels,
 
 
     for (row = 0; row < nrows; row++) {
+        G_percent(row, nrows, 10);
         Rast_get_d_row(fd_labels, buf_labels, row);
         for (band = 0; band < band_refs.nfiles; band++)
             Rast_get_d_row(fd_bands[band], &buf_bands[band][0], row);
@@ -108,4 +109,6 @@ void fill_problem(const char *name_labels, const char *mapset_labels,
         Rast_close(fd_bands[band]);
         G_free(buf_bands[band]);
     }
+    G_percent(1, 1, 1);
+    G_percent_reset();
 }
