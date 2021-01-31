@@ -306,12 +306,13 @@ int main(int argc, char *argv[])
     Rast_write_history(name_values, &history);
 
     /* Copy CATs file from the original training map */
-    /* TODO: figure out if ONE_CLASS also needs original CATs */
-    G_verbose_message("Copying category information");
-    G_file_name_misc(cats_file, sigfile_dir, "cats", name_sigfile,
-                     mapset_sigfile);
-    G_file_name(cats_path, "cats", name_values, G_mapset());
-    G_copy_file(cats_file, cats_path);  /* It's still OK if it fails here */
+    if (svm_type != ONE_CLASS) {
+        G_verbose_message("Copying category information");
+        G_file_name_misc(cats_file, sigfile_dir, "cats", name_sigfile,
+                         mapset_sigfile);
+        G_file_name(cats_path, "cats", name_values, G_mapset());
+        G_copy_file(cats_file, cats_path);      /* It's still OK if it fails to copy */
+    }
     Rast_put_cell_title(name_values,
                         /* GTC: A map title */
                         _("Values predicted with Support Vector Machine"));
