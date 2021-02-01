@@ -72,7 +72,7 @@ LOCATIONS = [
     },
     {
         "label": "Slovakia 3D precipitation voxel data set",
-        "url": "https://grass.osgeo.org/uploads/grass/sampledata/slovakia3d_grass7.tar.gz",
+        "url": "https://grass.osgeo.org/sampledata/slovakia3d_grass7.tar.gz",
     },
     {
         "label": "Fire simulation sample data",
