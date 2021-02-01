@@ -30,8 +30,8 @@
 /*local prototypes */
 static double get_raster_value_as_double(int maptype, void *ptr,
                                          double nullval);
-static double get_g3d_raster_value_as_double(void *map, int x, int y, int z,
-                                             int type, double nullval);
+static double get_g3d_raster_value_as_double(RASTER3D_Map *map, int x, int y,
+					     int z, int type, double nullval);
 
 
 /* ************************************************************************* */
@@ -71,7 +71,7 @@ double get_raster_value_as_double(int MapType, void *ptr, double nullval)
 /* Get the value of the 3d raster map as double *************************** */
 
 /* ************************************************************************* */
-double get_g3d_raster_value_as_double(void *map, int x, int y, int z,
+double get_g3d_raster_value_as_double(RASTER3D_Map *map, int x, int y, int z,
                                       int type, double nullval)
 {
     double val = 0;
@@ -313,8 +313,8 @@ void write_vtk_unstructured_grid_cells(FILE * fp, RASTER3D_Region region)
 /* Write the VTK Cell or point data **************************************** */
 
 /* ************************************************************************* */
-void write_vtk_data(FILE * fp, void *map, RASTER3D_Region region, char *varname,
-                    int dp)
+void write_vtk_data(FILE * fp, RASTER3D_Map *map, RASTER3D_Region region,
+		    char *varname, int dp)
 {
     double value;
     double nullvalue;
@@ -382,8 +382,8 @@ void write_vtk_data(FILE * fp, void *map, RASTER3D_Region region, char *varname,
 /* Write the VTK RGB Voxel Data ******************************************** */
 
 /* ************************************************************************* */
-void write_vtk_rgb_data(void *map_r, void *map_g, void *map_b,
-                        FILE * fp, const char *varname,
+void write_vtk_rgb_data(RASTER3D_Map *map_r, RASTER3D_Map *map_g,
+			RASTER3D_Map *map_b, FILE * fp, const char *varname,
                         RASTER3D_Region region, int dp)
 {
     double value = 0;
@@ -457,8 +457,8 @@ void write_vtk_rgb_data(void *map_r, void *map_g, void *map_b,
 /* Write the VTK vector Data *********************************************** */
 
 /* ************************************************************************* */
-void write_vtk_vector_data(void *map_x, void *map_y, void *map_z,
-                           FILE * fp, const char *varname,
+void write_vtk_vector_data(RASTER3D_Map *map_x, RASTER3D_Map *map_y,
+			   RASTER3D_Map *map_z, FILE * fp, const char *varname,
                            RASTER3D_Region region, int dp)
 {
     double value = 0;
