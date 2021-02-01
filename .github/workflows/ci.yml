@@ -77,6 +77,6 @@ jobs:
     - name: Make HTML test report available
       uses: actions/upload-artifact@v2
       with:
-        name: testreport
+        name: testreport-${{ matrix.os }}
         path: testreport
         retention-days: 3
