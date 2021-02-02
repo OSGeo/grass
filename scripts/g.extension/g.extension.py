@@ -128,6 +128,10 @@
 #% suppress_required: yes
 #%end
 #%flag
+#% key: o
+#% description: url refers to a fork of the official extension repository
+#%end
+#%flag
 #% key: j
 #% description: Generates JSON file containing the download URLs of the official Addons
 #% guisection: Install
@@ -139,6 +143,8 @@
 #% required: extension, -l, -c, -g, -a, -j
 #% exclusive: extension, -l, -c, -g
 #% exclusive: extension, -l, -c, -a
+#% requires: -o, url
+#% requires: branch, url
 #%end
 
 # TODO: solve addon-extension(-module) confusion
@@ -1451,6 +1457,10 @@ def download_source_code(source, url, name, outdev,
         gscript.message(_("Fetching <%s> from "
                           "GRASS GIS Addons repository (be patient)...") % name)
         download_source_code_official_github(url, name, outdev, directory)
+    elif source == 'official_fork':
+        gscript.message(_("Fetching <{name}> from "
+                          "<{url}> (be patient)...").format(name=name, url=url))
+        download_source_code_official_github(url, name, outdev, directory)
     elif source == 'svn':
         gscript.message(_("Fetching <{name}> from "
                           "<{url}> (be patient)...").format(name=name, url=url))
@@ -2188,6 +2198,27 @@ def resolve_source_code(url=None, name=None, branch=None):
         # return 'official', trac_url
         return 'official', git_url
 
+    if url and flags['o']:
+        module_class = get_module_class_name(name)
+
+        # note: 'trunk' is required to make URL usable for 'svn export' call
+        if branch in ['master', 'main']:
+            svn_reference = 'trunk'
+        else:
+            svn_reference = 'branches/{}'.format(branch)
+
+        git_url = '{url}/{branch}/' \
+                   'grass{version}/{module_class}/{module_name}' \
+                   .format(url=url, version=version[0],
+                           module_class=module_class, module_name=name,
+                           branch=svn_reference)
+        # trac_url = 'https://trac.osgeo.org/grass/browser/grass-addons/' \
+        #            'grass{version}/{module_class}/{module_name}?format=zip' \
+        #            .format(version=version[0],
+        #                    module_class=module_class, module_name=name)
+        # return 'official', trac_url
+        return 'official_fork', git_url
+
     # Check if URL can be found
     # Catch corner case if local URL is given starting with file://
     url = url[6:] if url.startswith('file://') else url
@@ -2316,7 +2347,7 @@ def main():
 
     if options['operation'] == 'add':
         check_dirs()
-        if original_url == '':
+        if original_url == '' or flags['o']:
             """
             Query GitHub API only if extension will be downloaded
             from official GRASS GIS addon repository
