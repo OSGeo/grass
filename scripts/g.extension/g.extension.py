@@ -77,6 +77,14 @@
 #% multiple: no
 #% answer: main
 #%end
+#%option G_OPT_F_INPUT
+#% key: token
+#% type: string
+#% key_desc: token
+#% description: Personal Access Token (PAT) for authentication to private git repositories
+#% required: no
+#% multiple: no
+#%end
 
 #%flag
 #% key: l
@@ -2046,18 +2054,10 @@ KNOWN_HOST_SERVICES_INFO = {
         'url_end': '?format=zip',
     },
     'GitHub': {
-        'domain': 'github.com',
-        'ignored_suffixes': ['.zip', '.tar.gz'],
-        'possible_starts': ['', 'https://', 'http://'],
-        'url_start': 'https://',
-        'url_end': '/archive/{branch}.zip',
+        'url': 'https://api.github.com/repos/{owner}/{repository}/zipball/{branch}',
     },
     'GitLab': {
-        'domain': 'gitlab.com',
-        'ignored_suffixes': ['.zip', '.tar.gz', '.tar.bz2', '.tar'],
-        'possible_starts': ['', 'https://', 'http://'],
-        'url_start': 'https://',
-        'url_end': '/-/archive/{branch}/{name}-{branch}.zip',
+        'url': 'https://gitlab.com/api/v4/projects/{project_id}/repository/archive.zip?sha={branch}',
     },
     'Bitbucket': {
         'domain': 'bitbucket.org',
@@ -2072,7 +2072,9 @@ KNOWN_HOST_SERVICES_INFO = {
 # https://gitlab.com/user/reponame/repository/archive.zip?ref=b%C3%A9po
 
 
-def resolve_known_host_service(url, name, branch):
+def resolve_known_host_service(
+        url, name, branch, github_repo_owner=None, gitlab_repo_id=None,
+):
     """Determine source type and full URL for known hosting service
 
     If the service is not determined from the provided URL, tuple with
@@ -2080,7 +2082,23 @@ def resolve_known_host_service(url, name, branch):
 
     :param url: URL
     :param name: module name
+    :param str github_repo_owner: GitHub repo owner
+    :param int gitlab_repo_id: GitLab private repo id
     """
+
+    if github_repo_owner:
+        return 'remote_zip', KNOWN_HOST_SERVICES_INFO\
+            ['GitHub']['url'].format(
+                owner=github_repo_owner, repository= url.split('/')[-1],
+                branch=branch,
+            )
+
+    if gitlab_repo_id:
+        return 'remote_zip', KNOWN_HOST_SERVICES_INFO\
+            ['GitLab']['url'].format(
+                project_id=gitlab_repo_id, branch=branch,
+            )
+
     match = None
     actual_start = None
     for key, value in KNOWN_HOST_SERVICES_INFO.items():
@@ -2224,11 +2242,50 @@ def resolve_source_code(url=None, name=None, branch=None):
     url = url[6:] if url.startswith('file://') else url
     if not os.path.exists(url):
         url_validated = False
+        github_repo_owner = None
+        gitlab_repo_id = None
         if url.startswith('http'):
             try:
                 open_url = urlopen(url)
                 open_url.close()
                 url_validated = True
+            except:
+                pass
+            # Test if github repo exists (need to use API)
+            try:
+                if 'github' in url:
+                    if HEADERS.get('Authorization'):
+                        # Check token scopes (permission)
+                        open_url = urlopen("https://api.github.com/users/{}".format(
+                            *url.split('/')[-2:-1]))
+                        scopes = open_url.getheader('X-OAuth-Scopes')
+                        open_url.close()
+                        if 'repo' not in scopes:
+                            grass.fatal(
+                                _("Your access token don't have permission to "
+                                  "read private repository info. Add 'repo' "
+                                  "scope which define the access for personal token "
+                                  "on the url <https://github.com/settings/tokens>.")
+                            )
+                    open_url = urlopen('https://api.github.com/repos/{}/{}'.format(*url.split("/")[-2:]))
+                    open_url.close()
+                    github_repo_owner = url.split('/')[-2:-1][0]
+                    url_validated = True
+            except HTTPError as err:
+                if (err.code == 403 and err.msg == 'Forbidden'):
+                    gscript.warning(_('GitHub API rate limit exceeded.'))
+            except:
+                pass
+            # Test if gitlab repo exists (need to use API)
+            try:
+                if 'gitlab' in url:
+                    open_url = urlopen("https://gitlab.com/api/v4/projects/{}%2F{}".format(*url.split('/')[-2:]))
+                    gitlab_repo_id = json.loads(open_url.read())['id']
+                    open_url.close()
+                    url_validated = True
+            except HTTPError as err:
+                if (err.code == 429 and err.msg == 'Too Many Requests'):
+                    gscript.warning(_('GitLab API rate limit exceeded.'))
             except:
                 pass
         else:
@@ -2259,7 +2316,9 @@ def resolve_source_code(url=None, name=None, branch=None):
                 return suffix, os.path.abspath(url)
     # Handle remote URLs
     else:
-        source, resolved_url = resolve_known_host_service(url, name, branch)
+        source, resolved_url = resolve_known_host_service(
+            url, name, branch, github_repo_owner, gitlab_repo_id,
+        )
         if source:
             return source, resolved_url
         # we allow URL to end with =zip or ?zip and not only .zip
@@ -2311,6 +2370,66 @@ def main():
         proxy = urlrequest.ProxyHandler(PROXIES)
         opener = urlrequest.build_opener(proxy)
         urlrequest.install_opener(opener)
+
+    # Check if authorization is supposed to be set in the request header
+    token_tags = {
+        'gitlab': "Bearer",
+        'github': "token"
+    }
+
+    # Check if url belongs to a hosting service with supported authentication
+    hosting = [token_tags[key] for key in token_tags if key in original_url]
+
+    # Get token from hardcoded environment variable
+    token = os.getenv('PERSONAL_ACCESS_TOKEN')
+
+    global HEADERS
+    # Set authorization method according to supported hosting service
+    if token and hosting:
+        HEADERS['Authorization'] = "{} {}".format(hosting[0], token)
+
+    # Get token from input option
+    token_input = False
+    if options['token']:
+        if options['token'] == "-":
+            token_input = sys.stdin.readline().rstrip()
+            if not token_input:
+                grass.fatal(_('No token specified. Please try again.'))
+        else:
+            try:
+                with open(options['token']) as tokenfile:
+                    token_input = tokenfile.readline().rstrip()
+                    if not token_input:
+                        grass.fatal(
+                            _("Token file is empty <{}>. "
+                              "Please check token file content.".format(
+                                  options['token']))
+                        )
+            except FileNotFoundError:
+                grass.fatal(
+                    _("No such file or directory <{}>. "
+                      "Please check token file path.".format(
+                          options['token']))
+                )
+            except PermissionError:
+                grass.fatal(
+                    _("Permission denied <{}>. Please change token file "
+                      "permission for reading.".format(options['token']))
+                )
+            except IOError:
+                grass.fatal(
+                    _("Couldn't read token file <{}>.".format(
+                        options['token']))
+                )
+
+    if token and token_input:
+        gscript.warning(_("Personal Access Token provided both via input \
+                           option and environment variable. Using the \
+                           token from the input option."))
+
+    # Let input option override environment variable
+    if token_input:
+        HEADERS['Authorization'] = "{} {}".format(hosting[0], token_input)
 
     # define path
     options['prefix'] = resolve_install_prefix(path=options['prefix'],
