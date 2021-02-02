@@ -35,7 +35,7 @@ except ImportError:
 import wx
 from wx.lib.newevent import NewEvent
 
-from core.gcmd import RunCommand, GError, GMessage, GWarning
+from core.gcmd import RunCommand, GError, GMessage
 from core.utils import GetListOfLocations
 from core.debug import Debug
 from core.gthread import gThread

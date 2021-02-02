@@ -20,8 +20,6 @@ import six
 import wx
 import wx.lib.colourselect as csel
 
-from core import globalvar
-from core.debug import Debug
 from gui_core.gselect import ColumnSelect
 from core.units import Units
 from core.settings import UserSettings

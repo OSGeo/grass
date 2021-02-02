@@ -26,7 +26,7 @@ import wx
 import tempfile
 from multiprocessing import Process, Queue
 
-from core.gcmd import RunCommand, GException, DecodeString
+from core.gcmd import GException, DecodeString
 from core.settings import UserSettings
 from core.debug import Debug
 from core.utils import autoCropImageFromFile

@@ -15,12 +15,8 @@ This program is free software under the GNU General Public License
 @author Markus Metz
 """
 
-import os
-import sys
-
 import wx
 
-from core import globalvar
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
 

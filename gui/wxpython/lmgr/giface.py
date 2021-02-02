@@ -17,8 +17,6 @@ This program is free software under the GNU General Public License
 
 from __future__ import print_function
 
-import os
-
 from grass.pydispatch.signal import Signal
 from core.giface import Notification
 from core.utils import GetLayerNameFromCmd

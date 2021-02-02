@@ -11,16 +11,13 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-import os
 import sys
 
 # i18n is taken care of in the grass library code.
 # So we need to import it before any of the GUI code.
 # NOTE: in this particular case, we don't really need the grass library;
 # NOTE: we import it just for the side effects of gettext.install()
-import grass
 
-from core import globalvar
 import wx
 
 

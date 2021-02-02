@@ -27,7 +27,6 @@ from animation.nviztask import NvizTask
 from animation.utils import validateMapNames, getRegisteredMaps, \
     checkSeriesCompatibility, validateTimeseriesName, interpolate
 from core.layerlist import LayerList, Layer
-import grass.temporal as tgis
 
 
 class AnimationData(object):

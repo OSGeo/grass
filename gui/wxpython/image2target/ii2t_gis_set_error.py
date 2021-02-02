@@ -11,10 +11,8 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-import os
 import sys
 
-from core import globalvar
 import wx
 
 

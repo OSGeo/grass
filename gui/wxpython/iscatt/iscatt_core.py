@@ -18,7 +18,6 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
 import os
-import sys
 import six
 
 import numpy as np
@@ -28,14 +27,13 @@ import numpy as np
 #from scipy.signal import convolve2d
 
 from math import sqrt, ceil, floor
-from copy import deepcopy
 
-from core.gcmd import GException, GError, RunCommand
+from core.gcmd import GException, RunCommand
 
 import grass.script as grass
 
 from iscatt.core_c import CreateCatRast, ComputeScatts, UpdateCatRast, \
-    Rasterize, SC_SCATT_DATA, SC_SCATT_CONDITIONS
+    Rasterize
 
 MAX_SCATT_SIZE = 4100 * 4100
 WARN_SCATT_SIZE = 2000 * 2000

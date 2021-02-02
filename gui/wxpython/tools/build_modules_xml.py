@@ -15,7 +15,6 @@ This program is free software under the GNU General Public License
 from __future__ import print_function
 
 import sys
-from datetime import datetime
 
 import grass.script.core as gcore
 import grass.script.task as gtask

@@ -28,7 +28,7 @@ from core.settings import UserSettings
 from core.globalvar import ICONDIR
 from gui_core.gselect import Select
 from gui_core.wrap import (
-    ColourSelect, ComboBox, Button, CheckBox, Choice, Panel, RadioButton,
+    ColourSelect, ComboBox, Button, CheckBox, Choice,
     ScrolledPanel, SpinCtrl, StaticBox, StaticText, TextCtrl,
 )
 

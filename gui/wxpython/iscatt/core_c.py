@@ -19,7 +19,7 @@ from multiprocessing import Process, Queue
 from ctypes import *
 try:
     from grass.lib.imagery import *
-    from grass.lib.gis import Cell_head, G_get_window
+    from grass.lib.gis import G_get_window
 except ImportError as e:
     sys.stderr.write(_("Loading ctypes libs failed"))
 

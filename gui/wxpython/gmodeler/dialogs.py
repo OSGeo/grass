@@ -24,7 +24,6 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
 import six
 
 import wx
@@ -41,8 +40,6 @@ from gmodeler.model import *
 from lmgr.menudata import LayerManagerMenuData
 from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl, \
     Menu, ListCtrl, NewId, CheckListCtrlMixin
-
-from grass.script import task as gtask
 
 
 class ModelDataDialog(SimpleDialog):

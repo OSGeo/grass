@@ -16,7 +16,6 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 import six
-import weakref
 import copy
 
 from grass.script.utils import naturally_sort

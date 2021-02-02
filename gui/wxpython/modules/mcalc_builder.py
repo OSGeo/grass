@@ -26,7 +26,6 @@ from core import globalvar
 from core.gcmd import GError, RunCommand
 from core.giface import StandaloneGrassInterface
 from gui_core.gselect import Select
-from gui_core.forms import GUI
 from gui_core.widgets import IntegerValidator
 from gui_core.wrap import Button, ClearButton, CloseButton, TextCtrl, \
     StaticText, StaticBox
