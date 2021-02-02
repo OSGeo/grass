@@ -530,6 +530,18 @@ class TestTemporalAlgebraDryRun(TestCase):
         self.assertEqual(pc["STDS"]["name"], "R")
         self.assertEqual(pc["STDS"]["stdstype"], "strds")
 
+    def test_time_constant(self):
+        """Testing the time constant functions. """
+        ta = tgis.TemporalAlgebraParser(run=True, debug=False, dry_run=True)
+        pc = ta.parse(expression='R = if(start_doy(A)<3,start_doy(A, 1), A)',
+                      stdstype = 'strds', basename="r",
+                      overwrite=True)
+        print(pc["register"])
+        self.assertEqual(len(pc["register"]), 4)
+        self.assertEqual(pc["STDS"]["name"], "R")
+        self.assertEqual(pc["STDS"]["stdstype"], "strds")
+
+
 
 if __name__ == '__main__':
     test()
