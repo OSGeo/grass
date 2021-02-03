@@ -95,9 +95,8 @@ def findBetween(s, first, last):
 class TplotFrame(wx.Frame):
     """The main frame of the application"""
 
-    def __init__(self, parent, giface):
-        wx.Frame.__init__(self, parent, id=wx.ID_ANY,
-                          title=_("Temporal Plot Tool"))
+    def __init__(self, parent, giface, title=_("Temporal Plot Tool")):
+        wx.Frame.__init__(self, parent, id=wx.ID_ANY, title=title)
 
         tgis.init(True)
         self._giface = giface
