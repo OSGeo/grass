@@ -1,0 +1,62 @@
+name: "CodeQL"
+
+on:
+  push:
+    branches: [ master,  releasebranch_7_8, codeql]
+  pull_request:
+    branches: [ master ]
+  schedule:
+    - cron: '36 18 * * 6'
+
+jobs:
+  analyze:
+    name: ${{ matrix.c }} & ${{ matrix.cpp }} - Analyze
+    runs-on: ubuntu-20.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'cpp', 'python' ]
+        c:
+        - gnu99
+        - gnu11
+        - gnu17
+        cpp:
+        - c++11
+        - c++14
+        - c++17
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        languages: ${{ matrix.language }}
+
+    - name: Get dependencies
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y wget git gawk findutils
+        xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
+            sudo apt-get install -y --no-install-recommends --no-install-suggests
+    - name: Create installation directory
+      run: |
+        mkdir $HOME/install
+    - name: Ensure one core for compilation
+      run: |
+        echo "MAKEFLAGS=-j1" >> $GITHUB_ENV
+    - name: Set LD_LIBRARY_PATH for compilation
+      run: |
+        echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
+    - name: Build
+      env:
+        # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
+        CFLAGS: "-std=${{ matrix.c }}"
+        # TODO: -pedantic-errors here won't compile
+        CXXFLAGS: "-std=${{ matrix.cpp }}"
+      run: .github/workflows/build.sh $HOME/install
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v1
