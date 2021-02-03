@@ -69,12 +69,12 @@ def check_version(*version):
 class TimelineFrame(wx.Frame):
     """The main frame of the application"""
 
-    def __init__(self, parent):
+    def __init__(self, parent, title=_("Timeline Tool")):
         wx.Frame.__init__(
             self,
             parent,
             id=wx.ID_ANY,
-            title=_("Timeline Tool"))
+            title=title)
 
         tgis.init(True)
         self.datasets = []
