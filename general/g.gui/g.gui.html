@@ -27,6 +27,8 @@ contains persistent GRASS variables.
 
 <h2>EXAMPLES</h2>
 
+<h3>Set default user interface settings</h3>
+
 Set default user interface setting to command line, text-based UI:
 <div class="code"><pre>
 g.gui -d ui=text
@@ -44,6 +46,13 @@ Set default user interface setting to the graphical user interface
 (GUI) but <i>do not launch</i> the GUI:
 <div class="code"><pre>
 g.gui -dn ui=wxpython
+</pre></div>
+
+<h3>Load workspace from command line</h3>
+
+Start the GUI from command line with an existing workspace:
+<div class="code"><pre>
+g.gui workspace=myproject.gxw
 </pre></div>
 
 <h2>SEE ALSO</h2>
