@@ -45,8 +45,8 @@ from gui_core.forms import GUI
 from core.debug import Debug as Debug
 from core.settings import UserSettings
 from gui_core.widgets import ColorTablesComboBox
-from gui_core.wrap import SpinCtrl, PseudoDC, TextCtrl, Button, StaticText, \
-    StaticBox, EmptyBitmap, BitmapFromImage
+from gui_core.wrap import SpinCtrl, PseudoDC, TextCtrl, Button, CancelButton, \
+     StaticText, StaticBox, EmptyBitmap, BitmapFromImage
 
 
 class RulesPanel:
@@ -513,7 +513,7 @@ class ColorTable(wx.Frame):
     def _createButtons(self, parent):
         """Create buttons for leaving dialog"""
         self.btnHelp = Button(parent, id=wx.ID_HELP)
-        self.btnCancel = Button(parent, id=wx.ID_CANCEL)
+        self.btnCancel = CancelButton(parent)
         self.btnApply = Button(parent, id=wx.ID_APPLY)
         self.btnOK = Button(parent, id=wx.ID_OK)
         self.btnDefault = Button(parent, id=wx.ID_ANY,
