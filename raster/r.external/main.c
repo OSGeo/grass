@@ -137,7 +137,8 @@ int main(int argc, char *argv[])
 
     flag.r = G_define_flag();
     flag.r->key = 'r';
-    flag.r->description = _("Create fast link without data range");
+    flag.r->label = _("Create fast link without data range");
+    flag.r->description = _("WARNING: some modules do not work correctly without known data range");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
