@@ -137,7 +137,7 @@ def register_maps_in_space_time_dataset(
 
         line = True
         while True:
-            line = fd.readline()
+            line = fd.readline().strip()
             if not line:
                 break
 
