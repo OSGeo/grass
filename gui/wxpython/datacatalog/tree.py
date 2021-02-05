@@ -1461,19 +1461,7 @@ class DataCatalogTree(TreeView):
     def OnBeginDrag(self, node, event):
         """Just copy necessary data"""
         self.DefineItems(self.GetSelected())
-
-        if self.selected_location and None in self.selected_mapset and \
-           None in self.selected_layer:
-            GMessage(_("Move or copy location isn't allowed"))
-            event.Veto()
-            return
-        elif self.selected_location and self.selected_mapset and \
-             None in self.selected_layer:
-            GMessage(_("Move or copy mapset isn't allowed"))
-            event.Veto()
-            return
-
-        if self.selected_layer and not (self._restricted and gisenv()[
+        if None not in self.selected_layer and not (self._restricted and gisenv()[
                                         'LOCATION_NAME'] != self.selected_location[0].data['name']):
             event.Allow()
             self.OnCopyMap(event)
