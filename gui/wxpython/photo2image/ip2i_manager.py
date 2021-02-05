@@ -40,16 +40,12 @@ import grass.script as grass
 
 from core import utils, globalvar
 from core.render import Map
-from gui_core.gselect import Select, LocationSelect, MapsetSelect
-from gui_core.dialogs import GroupDialog
+from gui_core.gselect import Select
 from core.gcmd import RunCommand, GMessage, GError, GWarning
 from core.settings import UserSettings
 from photo2image.ip2i_mapdisplay import MapFrame
-from core.giface import Notification
 from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, \
     TextCtrl, Menu, ListCtrl, BitmapFromImage, CheckListCtrlMixin
-
-from location_wizard.wizard import GridBagSizerTitledPage as TitledPage
 
 #
 # global variables

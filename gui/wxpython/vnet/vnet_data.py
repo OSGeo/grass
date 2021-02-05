@@ -42,7 +42,7 @@ from vnet.vnet_utils import ParseMapStr, SnapToNode
 from gui_core.gselect import VectorDBInfo
 from grass.pydispatch.signal import Signal
 
-from vnet.vnet_utils import DegreesToRadians, RadiansToDegrees
+from vnet.vnet_utils import DegreesToRadians
 
 
 class VNETData:

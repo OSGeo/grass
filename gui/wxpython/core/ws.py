@@ -22,20 +22,17 @@ import time
 import six
 
 import wx
-from wx.lib.newevent import NewEvent
 
 from grass.script.utils import try_remove
 from grass.script import core as grass
 from grass.exceptions import CalledModuleError
 
-from core import utils
 from core.debug import Debug
 from core.gthread import gThread
 
 try:
     haveGdal = True
     from osgeo import gdal
-    from osgeo import gdalconst
 except ImportError:
     haveGdal = False
 

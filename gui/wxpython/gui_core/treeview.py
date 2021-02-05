@@ -16,8 +16,6 @@ This program is free software under the GNU General Public License
 
 from __future__ import print_function
 
-import os
-
 import wx
 from wx.lib.mixins.treemixin import VirtualTree, ExpansionState
 from core.globalvar import hasAgw, wxPythonPhoenix

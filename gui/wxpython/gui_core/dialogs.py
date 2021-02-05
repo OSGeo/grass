@@ -29,7 +29,6 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
 import re
 import six
 
@@ -44,7 +43,7 @@ from core import globalvar
 from core.gcmd import GError, RunCommand, GMessage
 from gui_core.gselect import LocationSelect, MapsetSelect, Select, \
     OgrTypeSelect, SubGroupSelect
-from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, \
+from gui_core.widgets import SingleSymbolPanel, SimpleValidator, \
     MapValidator
 from core.settings import UserSettings
 from core.debug import Debug

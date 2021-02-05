@@ -23,7 +23,6 @@ import six
 
 from grass.script import core as grass
 from grass.script import task as gtask
-from grass.exceptions import OpenError
 
 from core.gcmd import RunCommand
 from core.debug import Debug

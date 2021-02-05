@@ -25,7 +25,7 @@ from copy import copy, deepcopy
 
 import wx
 from wx.lib.mixins.listctrl import ColumnSorterMixin, \
-    ListCtrlAutoWidthMixin, TextEditMixin
+    ListCtrlAutoWidthMixin
 
 from core import globalvar
 from gui_core.wrap import (

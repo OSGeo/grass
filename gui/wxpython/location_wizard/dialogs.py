@@ -28,8 +28,6 @@ from location_wizard.base import BaseClass
 from gui_core.wrap import Button, StaticText, StaticBox, \
     TextCtrl
 
-from grass.script import core as grass
-
 
 class RegionDef(BaseClass, wx.Dialog):
     """Page for setting default region extents and resolution

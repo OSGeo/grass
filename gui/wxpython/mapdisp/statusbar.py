@@ -35,7 +35,7 @@ import copy
 import wx
 
 from core import utils
-from core.gcmd import GMessage, RunCommand
+from core.gcmd import RunCommand
 from core.settings import UserSettings
 from gui_core.wrap import StaticText, TextCtrl
 

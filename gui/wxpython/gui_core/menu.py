@@ -27,7 +27,7 @@ from core import globalvar
 from core import utils
 from core.gcmd import EncodeString
 from gui_core.treeview import CTreeView
-from gui_core.wrap import Button, StaticText, SearchCtrl
+from gui_core.wrap import Button, SearchCtrl
 from gui_core.wrap import Menu as MenuWidget
 from icons.icon import MetaIcon
 

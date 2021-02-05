@@ -15,8 +15,7 @@ This program is free software under the GNU General Public License
 
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
-import os
-import signal
+
 import six
 from math import ceil
 from itertools import cycle
@@ -420,7 +419,7 @@ class TimelineFrame(wx.Frame):
                 if not self.axes3d:
                     # do not remove this import - unused but it is required for
                     # 3D
-                    from mpl_toolkits.mplot3d import Axes3D  # pylint: disable=W0611
+                    from mpl_toolkits.mplot3d import Axes3D  # noqa: F401
                     self.axes3d = self.fig.add_subplot(
                         2, 1, 2, projection='3d')
 

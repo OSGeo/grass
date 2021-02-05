@@ -22,7 +22,6 @@ This program is free software under the GNU General Public License
 @author Refactoring by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
 """
 
-import sys
 import os
 
 import wx
@@ -35,11 +34,7 @@ if globalvar.wxPythonPhoenix:
 else:
     import wx.lib.flatnotebook as FN
 
-import grass.script as grass
-
-
 from core.gcmd import GMessage
-from core.debug import Debug
 from dbmgr.base import DbMgrBase
 from gui_core.widgets import GNotebook
 from gui_core.wrap import Button, ClearButton, CloseButton

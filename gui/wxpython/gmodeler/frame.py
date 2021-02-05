@@ -25,8 +25,6 @@ import sys
 import time
 import stat
 import tempfile
-import copy
-import re
 import random
 import six
 
@@ -47,11 +45,10 @@ from core.gconsole        import GConsole, \
     EVT_CMD_RUN, EVT_CMD_DONE, EVT_CMD_PREPARE
 from gui_core.goutput import GConsoleWindow
 from core.debug import Debug
-from core.gcmd import GMessage, GException, GWarning, GError, RunCommand
+from core.gcmd import GMessage, GException, GWarning, GError
 from gui_core.dialogs import GetImageHandlers
 from gui_core.dialogs import TextEntryDialog as CustomTextEntryDialog
 from gui_core.ghelp import ShowAboutDialog
-from gui_core.preferences import PreferencesBaseDialog
 from core.settings import UserSettings
 from gui_core.menu import Menu as Menubar
 from gmodeler.menudata import ModelerMenuData

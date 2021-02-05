@@ -74,10 +74,6 @@ try:
     from wx.lib.buttons import ThemedGenBitmapTextButton as BitmapTextButton
 except ImportError:  # not sure about TGBTButton version
     from wx.lib.buttons import GenBitmapTextButton as BitmapTextButton
-try:
-    import wx.lib.agw.customtreectrl as CT
-except ImportError:
-    import wx.lib.customtreectrl as CT
 
 if wxPythonPhoenix:
     from wx import Validator as Validator

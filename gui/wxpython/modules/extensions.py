@@ -33,7 +33,7 @@ from core.menutree import TreeModel, ModuleNode
 from gui_core.widgets import GListCtrl
 from gui_core.treeview import CTreeView
 from core.toolboxes import toolboxesOutdated
-from gui_core.wrap import Button, StaticBox, TextCtrl, Menu, NewId, SearchCtrl
+from gui_core.wrap import Button, StaticBox, Menu, NewId, SearchCtrl
 
 
 class InstallExtensionWindow(wx.Frame):

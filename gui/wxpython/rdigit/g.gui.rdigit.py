@@ -75,7 +75,6 @@ def main():
     from mapdisp.frame import MapFrame
     from mapdisp.main import DMonGrassInterface
     from core.settings import UserSettings
-    from grass.exceptions import CalledModuleError
 
     # define classes which needs imports as local
     # for longer definitions, a separate file would be a better option

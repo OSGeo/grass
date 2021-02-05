@@ -19,14 +19,12 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
-import os
-import sys
 from copy import deepcopy
 import wx
 import six
 
 
-from core.gcmd import GException, GError, GMessage, RunCommand, GWarning
+from core.gcmd import GError, GMessage, RunCommand, GWarning
 from core.settings import UserSettings
 from core.gthread import gThread
 from iscatt.iscatt_core import Core, idBandsToidScatt, GetRasterInfo, GetRegion, \

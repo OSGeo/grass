@@ -18,7 +18,6 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-import sys
 import copy
 import six
 
@@ -27,7 +26,6 @@ import wx.lib.mixins.listctrl as listmix
 
 from core.gcmd import RunCommand, GError
 from core.debug import Debug
-from core.settings import UserSettings
 from gui_core.wrap import SpinCtrl, Button, StaticText, \
     StaticBox, Menu, ListCtrl, NewId, CheckListCtrlMixin
 

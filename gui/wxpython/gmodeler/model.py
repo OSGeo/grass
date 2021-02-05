@@ -53,7 +53,6 @@ from gui_core.widgets import GNotebook
 from gui_core.wrap import Button
 from gmodeler.giface import GraphicalModelerGrassInterface
 
-from grass.script import core as grass
 from grass.script import task as gtask
 
 

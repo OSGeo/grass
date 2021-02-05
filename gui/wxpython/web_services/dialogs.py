@@ -21,7 +21,6 @@ This program is free software under the GNU General Public License
 import wx
 
 import os
-import sys
 import six
 import shutil
 
@@ -32,7 +31,7 @@ from grass.script.task import cmdlist_to_tuple, cmdtuple_to_list
 
 from core import globalvar
 from core.debug import Debug
-from core.gcmd import GMessage, GWarning, GError, RunCommand
+from core.gcmd import GMessage, GWarning, GError
 from core.utils import GetSettingsPath
 from core.gconsole import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
 

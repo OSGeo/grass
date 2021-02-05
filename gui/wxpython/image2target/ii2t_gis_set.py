@@ -25,7 +25,6 @@ import sys
 import shutil
 import copy
 import platform
-import codecs
 import getpass
 
 from core import globalvar

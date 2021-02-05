@@ -13,11 +13,9 @@ This program is free software under the GNU General Public License
 
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
-import os
 import wx
 import six
 
-from core.gcmd import DecodeString
 from gui_core.treeview import TreeListView
 from gui_core.wrap import Button, StaticText, Menu, NewId
 from core.treemodel import TreeModel, DictNode

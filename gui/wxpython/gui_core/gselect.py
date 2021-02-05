@@ -46,7 +46,6 @@ from __future__ import print_function
 import os
 import sys
 import glob
-import copy
 import six
 
 import wx
@@ -63,7 +62,7 @@ from grass.exceptions import CalledModuleError
 
 from gui_core.widgets import ManageSettingsWidget, CoordinatesValidator
 
-from core.gcmd import RunCommand, GError, GMessage, GWarning, GException
+from core.gcmd import RunCommand, GMessage, GWarning, GException
 from core.utils    import GetListOfLocations, GetListOfMapsets, \
     GetFormats, rasterFormatExtension, vectorFormatExtension
 from core.utils import GetSettingsPath, GetValidLayerName, ListSortLower

@@ -27,7 +27,6 @@ import glob
 import math
 import copy
 import tempfile
-import types
 import time
 
 import wx
@@ -36,7 +35,6 @@ from grass.script import core as grass
 from grass.script.utils import try_remove, text_to_string
 from grass.script.task import cmdlist_to_tuple, cmdtuple_to_list
 from grass.pydispatch.signal import Signal
-from grass.exceptions import CalledModuleError
 
 from core import utils
 from core.ws import RenderWMSMgr

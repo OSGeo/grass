@@ -17,17 +17,13 @@ This program is free software under the GNU General Public License
 @author Refactoring by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
 """
 
-import os
-import types
 import six
 
-from core import globalvar
 import wx
 import wx.lib.scrolledpanel as scrolled
 
 from core.gcmd import RunCommand, GError
 from core.debug import Debug
-from core.settings import UserSettings
 from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue, GetDbEncoding
 from gui_core.widgets import IntegerValidator, FloatValidator
 from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, \

@@ -41,10 +41,8 @@ import wx.lib.colourselect as csel
 from core import globalvar
 if globalvar.wxPythonPhoenix:
     from wx import adv as wiz
-    from wx.adv import Wizard
 else:
     from wx import wizard as wiz
-    from wx.wizard import Wizard
 
 import grass.script as grass
 
