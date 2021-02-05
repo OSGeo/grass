@@ -640,8 +640,8 @@ the computational region extents.
 
 <h3>Starting the GUI from command line</h3>
 
-By default, the GUI is always started, but if the command line (shell) is
-running and the GUI is not, the GUI can be also started manually using:
+By default, the GUI is always started, but if only the command line (shell) is
+running, the GUI can be also started manually using:
 
 <div class="code"><pre>
 g.gui
@@ -655,7 +655,7 @@ g.gui -d wxpython
 </pre></div>
 
 Alternatively, it may be defined in the main configuration file
-(<tt>$HOME/.grass7/rc</tt> on GNU/Linux, <tt>$APPDATA\GRASS7\rc</tt>
+(<tt>$HOME/.grass7/rc</tt> on GNU/Linux and macOS, <tt>$APPDATA\GRASS7\rc</tt>
 on MS Windows) using the <tt>GUI</tt> variable set to <tt>wxpython</tt>
 (<tt>GUI: wxpython</tt>) or by the environmental variable <tt>GRASS_GUI</tt>.
 
@@ -683,7 +683,7 @@ grass79 --gui
 <p>
 The GUI can be quit by selecting the 'File &gt; Quit GRASS GIS' menu item
 which gives options to close only GUI or to quit GRASS GIS entirely
-if GRASS GIS is running with a command line (a shell in an terminal application).
+if GRASS GIS is running with a command line (a shell in a terminal application).
 Exiting the shell (typically by the <tt>exit</tt> command) ends the GRASS session
 including any running GUIs.
 
