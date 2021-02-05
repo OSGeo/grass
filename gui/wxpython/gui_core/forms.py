@@ -721,10 +721,10 @@ class TaskFrame(wx.Frame):
             scale = 0.50
         self.SetSize(
             wx.Size(
-                sizeFrame[0],
-                sizeFrame[1] + scale * max(
+                round(sizeFrame[0]),
+                round(sizeFrame[1] + scale * max(
                     self.notebookpanel.panelMinHeight,
-                    self.notebookpanel.constrained_size[1])))
+                    self.notebookpanel.constrained_size[1]))))
 
         # thread to update dialog
         # create queues
