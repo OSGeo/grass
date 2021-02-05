@@ -245,7 +245,7 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
     }
     else {
 	/* "range" file does not exist */
-	G_warning(_("Missing range file for <%s>"),
+	G_warning(_("Missing range file for <%s> (run r.support)"),
 		  G_fully_qualified_name(name, mapset));
 	return -1;
     }
