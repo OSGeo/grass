@@ -35,14 +35,11 @@ int noclobberFile(char *);
 class statsRecorder : public ofstream {
 private:
   Rtimer tm;
-  void *bss;
 public:
   statsRecorder(char *fname);
   ~statsRecorder() { 
 	this->flush(); 
   }
-  char *freeMem(char *);
-  long freeMem();
   char *timestamp();
   void timestamp(const char *s);
   void comment(const char *s, const int verbose=1);
