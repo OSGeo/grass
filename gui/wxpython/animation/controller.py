@@ -25,7 +25,7 @@ from gui_core.wrap import EmptyImage, ImageFromBitmap
 from animation.temporal_manager import TemporalManager
 from animation.dialogs import InputDialog, EditDialog, ExportDialog
 from animation.utils import TemporalMode, TemporalType, Orientation, RenderText, WxImageToPil, \
-    sampleCmdMatrixAndCreateNames, layerListToCmdsMatrix, HashCmds, getCpuCount
+    sampleCmdMatrixAndCreateNames, layerListToCmdsMatrix, HashCmds
 from animation.data import AnimationData
 
 
@@ -427,7 +427,7 @@ class AnimationController(wx.EvtHandler):
                 bitmap = self.bitmapProvider.LoadOverlay(
                     animationData.legendCmd)
                 try:
-                    from PIL import Image
+                    from PIL import Image  # noqa: F401
                     for param in animationData.legendCmd:
                         if param.startswith('at'):
                             b, t, l, r = param.split('=')[1].split(',')

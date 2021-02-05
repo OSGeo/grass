@@ -31,7 +31,6 @@ from core.gcmd import GError, RunCommand, GMessage
 from gui_core.dialogs import SimpleDialog, GroupDialog
 from gui_core import gselect
 from gui_core.widgets import SimpleValidator
-from iclass.statistics import Statistics, BandStatistics
 from gui_core.wrap import CheckBox, Button, StaticText, \
     StaticBox, TextCtrl, Menu, NewId, ListCtrl
 

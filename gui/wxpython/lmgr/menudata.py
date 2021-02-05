@@ -18,7 +18,7 @@ This program is free software under the GNU General Public License
 import os
 
 from core.menutree import MenuTreeModelBuilder
-from core.toolboxes import getMenudataFile, getMessages, clearMessages
+from core.toolboxes import getMenudataFile
 from core.globalvar import WXGUIDIR
 from core.gcmd import GError
 

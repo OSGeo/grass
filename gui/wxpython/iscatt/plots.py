@@ -36,10 +36,9 @@ try:
         FigureCanvasWxAgg as FigCanvas
     from matplotlib.lines import Line2D
     from matplotlib.artist import Artist
-    from matplotlib.patches import Polygon, Ellipse, Rectangle
+    from matplotlib.patches import Polygon, Ellipse
     import matplotlib.image as mi
     import matplotlib.colors as mcolors
-    import matplotlib.cbook as cbook
 except ImportError as e:
     raise ImportError(_('The Scatterplot Tool needs the "matplotlib" '
                         '(python-matplotlib) package to be installed. {0}').format(e))

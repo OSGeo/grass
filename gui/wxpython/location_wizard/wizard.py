@@ -34,7 +34,6 @@ This program is free software under the GNU General Public License
 @author Hamish Bowman (planetary ellipsoids)
 """
 import os
-import sys
 import locale
 import six
 import functools
@@ -54,7 +53,7 @@ import wx.lib.scrolledpanel as scrolled
 
 from core import utils
 from core.utils import cmp
-from core.gcmd import RunCommand, GError, GMessage, GWarning
+from core.gcmd import RunCommand, GError, GWarning
 from gui_core.widgets import GenericMultiValidator
 from gui_core.wrap import SpinCtrl, SearchCtrl, StaticText, \
     TextCtrl, Button, CheckBox, StaticBox, NewId, ListCtrl, HyperlinkCtrl

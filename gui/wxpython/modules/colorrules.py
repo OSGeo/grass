@@ -43,7 +43,6 @@ from gui_core.gselect import Select, LayerSelect, ColumnSelect, VectorDBInfo
 from core.render import Map
 from gui_core.forms import GUI
 from core.debug import Debug as Debug
-from core.settings import UserSettings
 from gui_core.widgets import ColorTablesComboBox
 from gui_core.wrap import SpinCtrl, PseudoDC, TextCtrl, Button, CancelButton, \
      StaticText, StaticBox, EmptyBitmap, BitmapFromImage

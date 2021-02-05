@@ -15,7 +15,6 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
 import wx
 
 import grass.script as grass

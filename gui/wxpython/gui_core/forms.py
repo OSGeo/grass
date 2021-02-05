@@ -61,7 +61,6 @@ else:
     import queue as Queue
     unicode = str
 
-import re
 import codecs
 
 from threading import Thread

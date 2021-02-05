@@ -52,7 +52,7 @@ else:
 if wxPythonPhoenix and CheckWxVersion([4, 0, 3, 0]):
     from wx import NewIdRef as NewId
 else:
-    from wx import NewId
+    from wx import NewId  # noqa: F401
 
 
 def IsDark():

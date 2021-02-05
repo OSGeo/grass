@@ -17,12 +17,10 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
-import os
-import sys
+
 import six
 
 import wx
-from iscatt.iscatt_core import idBandsToidScatt
 from gui_core.gselect import Select
 import wx.lib.colourselect as csel
 

@@ -26,13 +26,11 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
-import types
 import six
 
 if sys.version_info.major >= 3:
     unicode = str
 
-from copy import copy
 from grass.script import core as grass
 
 import wx
@@ -43,14 +41,12 @@ except ImportError:
     import wx.lib.flatnotebook as FN
 import wx.lib.colourselect as csel
 import wx.lib.mixins.listctrl as listmix
-import wx.lib.scrolledpanel as scrolled
 
-from core import globalvar, utils
+from core import globalvar
 from core.gcmd import RunCommand, GMessage
 from core.settings import UserSettings
 
 from dbmgr.base import DbMgrBase
-from dbmgr.vinfo import VectorDBInfo
 
 from gui_core.widgets import GNotebook
 from gui_core.goutput import GConsoleWindow

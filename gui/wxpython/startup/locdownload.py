@@ -27,11 +27,11 @@ import time
 
 try:
     from urllib2 import HTTPError, URLError
-    from urllib import request, urlopen, urlretrieve
+    from urllib import request, urlretrieve
 except ImportError:
     # there is also HTTPException, perhaps change to list
     from urllib.error import HTTPError, URLError
-    from urllib.request import urlopen, urlretrieve
+    from urllib.request import urlretrieve
     from urllib import request
 
 import wx
