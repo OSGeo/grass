@@ -638,48 +638,32 @@ the computational region extents.
 </dl>
 
 
-<h3>Starting the graphical user interface</h3>
+<h3>Starting the GUI from command line</h3>
 
-If the wxGUI is not the default user interface, it can defined as default by
-typing at the GRASS GIS command line prompt:
-
-<div class="code"><pre>
-g.gui -u wxpython
-</pre></div>
-
-Alternatively it may be defined in GISRC file
-(<tt>$HOME/.grass7/rc</tt> on GNU/Linux, <tt>$APPDATA\GRASS7\rc</tt>
-on MS Windows) by <tt>GUI</tt> variable
-
-<div class="code"><pre>
-GUI: wxpython
-</pre></div>
-
-or by the environmental variable <tt>GRASS_GUI</tt>.
-<p>
-The GUI can be quit by selecting the 'File -&gt; Exit GUI' menu item.
-<!-- is &rarr; allowed? -->
-On MS Windows when GRASS is launched without an interactive command line
-this will end the entire GRASS session. In other cases the terminal
-window will remain running; type <tt>exit</tt> at the command prompt
-to end the GRASS session.
-<p>
-The GUI can be restarted from the GRASS command line prompt by typing
+By default, the GUI is always started, but if only the command line (shell) is
+running, the GUI can be also started manually using:
 
 <div class="code"><pre>
 g.gui
 </pre></div>
 
-or
+If the wxGUI is not the default user interface, it can defined as default by
+typing at the GRASS GIS command line:
 
 <div class="code"><pre>
-g.gui wxpython
+g.gui -d wxpython
 </pre></div>
 
-To restart with previously saved workspace file:
+Alternatively, it may be defined in the main configuration file
+(<tt>$HOME/.grass7/rc</tt> on GNU/Linux and macOS, <tt>$APPDATA\GRASS7\rc</tt>
+on MS Windows) using the <tt>GUI</tt> variable set to <tt>wxpython</tt>
+(<tt>GUI: wxpython</tt>) or by the environmental variable <tt>GRASS_GUI</tt>.
+
+
+To start with a previously saved workspace file:
 
 <div class="code"><pre>
-g.gui wxpython workspace=file.gxw
+g.gui workspace=file.gxw
 </pre></div>
 
 <p>
@@ -689,6 +673,13 @@ specifying the <tt>--gui</tt> switch:
 <div class="code"><pre>
 grass79 --gui
 </pre></div>
+
+<p>
+The GUI can be quit by selecting the 'File &gt; Quit GRASS GIS' menu item
+which gives options to close only GUI or to quit GRASS GIS entirely
+if GRASS GIS is running with a command line (a shell in a terminal application).
+Exiting the shell (typically by the <tt>exit</tt> command) ends the GRASS session
+including any running GUIs.
 
 
 <h3>Background information</h3>

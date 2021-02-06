@@ -49,7 +49,7 @@ from startup.guiutils import (
 
 from core.gcmd import RunCommand, GError, GMessage
 from core.settings import UserSettings, GetDisplayVectSettings
-from core.utils import SetAddOnPath, GetLayerNameFromCmd, command2ltype
+from core.utils import SetAddOnPath, GetLayerNameFromCmd, command2ltype, get_shell_pid
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
@@ -2567,15 +2567,9 @@ class GMFrame(wx.Frame):
 
     def _quitGRASS(self):
         """Quit GRASS terminal"""
-        try:
-            shellPid = int(grass.gisenv()['PID'])
-        except (KeyError, ValueError) as error:
-            Debug.msg(
-                1,
-                "No PID for GRASS shell (assuming no shell running): {}".format(error)
-            )
+        shellPid = get_shell_pid()
+        if shellPid is None:
             return
-
         Debug.msg(1, "Exiting shell with pid={0}".format(shellPid))
         import signal
         os.kill(shellPid, signal.SIGTERM)
