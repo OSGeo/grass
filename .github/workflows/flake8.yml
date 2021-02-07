@@ -1,4 +1,4 @@
-name: Python code quality check
+name: Python Flake8 Code Quality
 
 on:
 - push
@@ -6,78 +6,33 @@ on:
 
 jobs:
 
-  flake8-lib-python:
-
-    runs-on: ubuntu-18.04
+  flake8:
+    name: ${{ matrix.directory }}
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        directory:
+        - gui/wxpython
+        - lib/python
+        - scripts
+        - temporal
+      fail-fast: false
 
     steps:
-    - uses: actions/checkout@v1
+
+    - uses: actions/checkout@v2
+
     - name: Set up Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v2
       with:
         python-version: 3.8
+
     - name: Install
       run: |
         python -m pip install --upgrade pip
-        pip install flake8==3.8.0
+        pip install flake8==3.8.4
+
     - name: Run Flake8
       run: |
-        cd lib/python
-        flake8 --count --statistics --show-source --jobs=$(nproc) .
-
-  flake8-wxgui:
-
-    runs-on: ubuntu-18.04
-
-    steps:
-    - uses: actions/checkout@v1
-    - name: Set up Python
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.8
-    - name: Install
-      run: |
-        python -m pip install --upgrade pip
-        pip install flake8==3.8.0
-    - name: Run Flake8
-      run: |
-        cd gui/wxpython
-        flake8 --count --statistics --show-source --jobs=$(nproc) .
-
-  flake8-scripts:
-
-    runs-on: ubuntu-18.04
-
-    steps:
-    - uses: actions/checkout@v1
-    - name: Set up Python
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.8
-    - name: Install
-      run: |
-        python -m pip install --upgrade pip
-        pip install flake8==3.8.0
-    - name: Run Flake8
-      run: |
-        cd scripts
-        flake8 --count --statistics --show-source --jobs=$(nproc) .
-
-  flake8-temporal-modules:
-
-    runs-on: ubuntu-18.04
-
-    steps:
-    - uses: actions/checkout@v1
-    - name: Set up Python
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.8
-    - name: Install
-      run: |
-        python -m pip install --upgrade pip
-        pip install flake8==3.8.0
-    - name: Run Flake8
-      run: |
-        cd temporal
+        cd ${{ matrix.directory }}
         flake8 --count --statistics --show-source --jobs=$(nproc) .
