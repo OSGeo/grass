@@ -743,7 +743,7 @@ int main(int argc, char *argv[])
     /* program settings */
     char *input;
     char *output;
-    char *mapset;
+    const char *mapset;
     double radius = 1.0;
     unsigned long min_cells = 12;
     double power = 2.0;
