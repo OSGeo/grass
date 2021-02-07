@@ -15,7 +15,7 @@
 #include <grass/imagery.h>
 #include <grass/glocale.h>
 
-char **list_subgroups(char *group, const char *mapset, int *subgs_num)
+char **list_subgroups(const char *group, const char *mapset, int *subgs_num)
 {
     /* Unlike I_list_subgroup and I_list_subgroup_simple this function 
        returns array of subgroup names, it does not use fprintf. 
