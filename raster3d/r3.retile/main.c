@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     RASTER3D_Map *map = NULL;
     int tileX, tileY, tileZ;
-    char *mapset;
+    const char *mapset;
 
     /* Initialize GRASS */
     G_gisinit(argv[0]);
