@@ -11,6 +11,8 @@ struct band_info
     GDALDataType gdal_type;
     int has_null;
     double null_val;
+    DCELL minmax[2];
+    int have_minmax;
     struct Colors colors;
 };
 

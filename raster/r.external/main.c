@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 	struct Option *input, *source, *output, *band, *title;
     } parm;
     struct {
-	struct Flag *o, *j, *f, *e, *h, *v, *t, *a;
+	struct Flag *o, *j, *f, *e, *h, *v, *t, *a, *r;
     } flag;
     int min_band, max_band, band;
     struct band_info info;
@@ -135,6 +135,11 @@ int main(int argc, char *argv[])
     flag.t->guisection = _("Print");
     flag.t->suppress_required = YES;
 
+    flag.r = G_define_flag();
+    flag.r->key = 'r';
+    flag.r->label = _("Create fast link without data range");
+    flag.r->description = _("WARNING: some modules do not work correctly without known data range");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -219,6 +224,7 @@ int main(int argc, char *argv[])
 	I_init_group_ref(&reference);
     }
 
+    info.have_minmax = !flag.r->answer;
     for (band = min_band; band <= max_band; band++) {
 	char *output2, *title2 = NULL;
 
