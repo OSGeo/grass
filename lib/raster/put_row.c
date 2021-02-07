@@ -514,7 +514,7 @@ static void write_null_bits_compressed(const unsigned char *flags,
     compressed_buf = G_malloc(cmax);
 
     /* compress null bits file with LZ4, see lib/gis/compress.h */
-    nwrite = G_compress(flags, size, compressed_buf, cmax, 3);
+    nwrite = G_compress((unsigned char *)flags, size, compressed_buf, cmax, 3);
 
     if (nwrite > 0 && nwrite < size) {
 	if (write(fcb->null_fd, compressed_buf, nwrite) != nwrite)
