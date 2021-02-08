@@ -37,7 +37,6 @@
 import sys
 import os
 import atexit
-import string
 from grass.script.utils import separator, try_remove
 from grass.script import core as grass
 

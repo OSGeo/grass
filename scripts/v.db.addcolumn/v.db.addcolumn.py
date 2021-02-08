@@ -40,8 +40,6 @@
 # % key_desc: name type
 # %end
 
-import sys
-import os
 import grass.script as grass
 from grass.script.utils import encode
 

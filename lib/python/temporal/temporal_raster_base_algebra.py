@@ -42,12 +42,6 @@ for details.
 """
 from __future__ import print_function
 
-try:
-    import ply.lex as lex
-    import ply.yacc as yacc
-except:
-    pass
-
 import copy
 import grass.pygrass.modules as pymod
 from grass.exceptions import FatalError
