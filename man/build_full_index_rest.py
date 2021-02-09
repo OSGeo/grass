@@ -29,9 +29,9 @@ f.write(full_index_header)
 #"
 
 #for cls in classes:
-    #f.write(cmd1_tmpl.substitute(cmd = cls))
-    #if cls != classes[-1]:
-        #f.write(" | ")
+#f.write(cmd1_tmpl.substitute(cmd = cls))
+#if cls != classes[-1]:
+#f.write(" | ")
 
 f.write(sections)
 
