@@ -441,7 +441,7 @@ class LocationDownloadPanel(wx.Panel):
     def OnDownload(self, event):
         """Handle user-initiated action of download"""
         button_label = self.parent.download_button.GetLabel()
-        if button_label in (_('Download'), _('Do&wnload')) :
+        if button_label in (_('Download'), _('Do&wnload')):
             self._change_download_btn_label(
                 label=self._abort_btn_label,
                 tooltip=self._abort_btn_tooltip,

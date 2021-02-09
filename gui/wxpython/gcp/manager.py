@@ -971,7 +971,7 @@ class DispMapPage(TitledPage):
         for layer in self.parent._giface.GetLayerList():
             if layer.type in ltype:
                 layers[str(layer)] = {
-                    'type' : layer.type,
+                    'type': layer.type,
                     'cmd': layer.cmd
                 }
         if name:

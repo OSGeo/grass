@@ -17,16 +17,16 @@ os.chdir(html_dir)
 
 # TODO: create some master function/dict somewhere
 class_labels = {
-    'd' : 'display',
-    'db' : 'database',
-    'g' : 'general',
-    'i' : 'imagery',
-    'm' : 'miscellaneous',
-    'ps' : 'PostScript',
-    'r' : 'raster',
-    'r3' : '3D raster',
-    't' : 'temporal',
-    'v' : 'vector'
+    'd': 'display',
+    'db': 'database',
+    'g': 'general',
+    'i': 'imagery',
+    'm': 'miscellaneous',
+    'ps': 'PostScript',
+    'r': 'raster',
+    'r3': '3D raster',
+    't': 'temporal',
+    'v': 'vector'
 }
 
 classes = []

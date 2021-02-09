@@ -356,18 +356,18 @@ if re.search('</html>', src_data, re.IGNORECASE):
     sys.exit()
 
 index_names = {
-    'd' : 'display',
+    'd': 'display',
     'db': 'database',
-    'g' : 'general',
-    'i' : 'imagery',
-    'm' : 'miscellaneous',
+    'g': 'general',
+    'i': 'imagery',
+    'm': 'miscellaneous',
     'ps': 'postscript',
-    'p' : 'paint',
-    'r' : 'raster',
+    'p': 'paint',
+    'r': 'raster',
     'r3': 'raster3d',
-    's' : 'sites',
-    't' : 'temporal',
-    'v' : 'vector'
+    's': 'sites',
+    't': 'temporal',
+    'v': 'vector'
 }
 
 

@@ -430,7 +430,7 @@ def get_grass_config_dir():
     else:
         grass_config_dirname = ".grass7"
         directory = os.path.join(os.getenv('HOME'), grass_config_dirname)
-    if not os.path.isdir(directory) :
+    if not os.path.isdir(directory):
         try:
             os.mkdir(directory)
         except OSError as e:
