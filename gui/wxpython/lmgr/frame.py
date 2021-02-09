@@ -119,8 +119,10 @@ class GMFrame(wx.Frame):
         self._giface = LayerManagerGrassInterface(self)
 
         menu_errors = []
+
         def add_menu_error(message):
             menu_errors.append(message)
+
         def show_menu_errors(messages):
             if messages:
                 self._gconsole.WriteError(

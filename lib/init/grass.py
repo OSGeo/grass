@@ -1605,6 +1605,7 @@ def run_batch_job(batch_job):
         # for messages only
         batch_job_string = ' '.join(batch_job)
     message(_("Executing <%s> ...") % batch_job_string)
+
     def script_path(batch_job):
         """Adjust script path
 
