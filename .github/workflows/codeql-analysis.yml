@@ -11,7 +11,7 @@ on:
 
 jobs:
   analyze:
-    name: ${{ matrix.language }} - Analyze
+    name: ${{ matrix.language }}
     runs-on: ubuntu-20.04
 
     strategy:
@@ -35,15 +35,19 @@ jobs:
         sudo apt-get install -y wget git gawk findutils
         xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
             sudo apt-get install -y --no-install-recommends --no-install-suggests
+
     - name: Create installation directory
       run: |
         mkdir $HOME/install
+
     - name: Ensure one core for compilation
       run: |
         echo "MAKEFLAGS=-j1" >> $GITHUB_ENV
+
     - name: Set LD_LIBRARY_PATH for compilation
       run: |
         echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
+
     - name: Build
       env:
         CFLAGS: "-std=gnu11"
