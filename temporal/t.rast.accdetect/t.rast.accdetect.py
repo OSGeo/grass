@@ -303,7 +303,7 @@ def main():
         if stop and end > stop:
             end = stop
 
-        where = "start_time >= \'%s\' AND start_time < \'%s\'"%(str(start),
+        where = "start_time >= \'%s\' AND start_time < \'%s\'" %(str(start),
                                                                 str(end))
         input_maps = input_strds.get_registered_maps_as_objects(where=where,
                                                                 dbif=dbif)
@@ -316,7 +316,7 @@ def main():
         if len(input_maps) == 0:
             continue
 
-        grass.message(_("Processing cycle %s - %s"%(str(start), str(end))))
+        grass.message(_("Processing cycle %s - %s" %(str(start), str(end))))
 
         count = compute_occurrence(occurrence_maps, input_strds, input_maps,
                                    start, base, count, time_suffix, mapset,
@@ -364,48 +364,48 @@ def main():
                     if i == 0:
                         prev_map = curr_map
                         subexpr1 = "null()"
-                        subexpr3 = "%i"%(indicator_start)
+                        subexpr3 = "%i" %(indicator_start)
                     elif i > 0 and i < num_maps - 1:
                         prev_map = occurrence_maps[map.next().get_id()].get_name()
                         next_map = occurrence_maps[map.prev().get_id()].get_name()
                         # In case the previous map is null() set null() or the start indicator
-                        subexpr1 = "if(isnull(%s), null(), %i)"%(curr_map, indicator_start)
+                        subexpr1 = "if(isnull(%s), null(), %i)" %(curr_map, indicator_start)
                         # In case the previous map was not null() if the current map is null() set null()
                         # if the current map is not null() and the next map is not null() set
                         # intermediate indicator, if the next map is null set the end indicator
-                        subexpr2 = "if(isnull(%s), %i, %i)"%(next_map, indicator_end, indicator_mid)
-                        subexpr3 = "if(isnull(%s), null(), %s)"%(curr_map, subexpr2)
-                        expression = "%s = if(isnull(%s), %s, %s)"%(indicator_map_name,
+                        subexpr2 = "if(isnull(%s), %i, %i)" %(next_map, indicator_end, indicator_mid)
+                        subexpr3 = "if(isnull(%s), null(), %s)" %(curr_map, subexpr2)
+                        expression = "%s = if(isnull(%s), %s, %s)" %(indicator_map_name,
                                                                     prev_map, subexpr1,
                                                                     subexpr3)
                     else:
                         prev_map = occurrence_maps[map.next().get_id()].get_name()
-                        subexpr1 = "if(isnull(%s), null(), %i)"%(curr_map, indicator_start)
-                        subexpr3 = "if(isnull(%s), null(), %i)"%(curr_map, indicator_mid)
+                        subexpr1 = "if(isnull(%s), null(), %i)" %(curr_map, indicator_start)
+                        subexpr3 = "if(isnull(%s), null(), %i)" %(curr_map, indicator_mid)
                 else:
                     if i == 0:
                         prev_map = curr_map
                         subexpr1 = "null()"
-                        subexpr3 = "%i"%(indicator_start)
+                        subexpr3 = "%i" %(indicator_start)
                     elif i > 0 and i < num_maps - 1:
                         prev_map = occurrence_maps[map.prev().get_id()].get_name()
                         next_map = occurrence_maps[map.next().get_id()].get_name()
                         # In case the previous map is null() set null() or the start indicator
-                        subexpr1 = "if(isnull(%s), null(), %i)"%(curr_map, indicator_start)
+                        subexpr1 = "if(isnull(%s), null(), %i)" %(curr_map, indicator_start)
                         # In case the previous map was not null() if the current map is null() set null()
                         # if the current map is not null() and the next map is not null() set
                         # intermediate indicator, if the next map is null set the end indicator
-                        subexpr2 = "if(isnull(%s), %i, %i)"%(next_map, indicator_end, indicator_mid)
-                        subexpr3 = "if(isnull(%s), null(), %s)"%(curr_map, subexpr2)
-                        expression = "%s = if(isnull(%s), %s, %s)"%(indicator_map_name,
+                        subexpr2 = "if(isnull(%s), %i, %i)" %(next_map, indicator_end, indicator_mid)
+                        subexpr3 = "if(isnull(%s), null(), %s)" %(curr_map, subexpr2)
+                        expression = "%s = if(isnull(%s), %s, %s)" %(indicator_map_name,
                                                                     prev_map, subexpr1,
                                                                     subexpr3)
                     else:
                         prev_map = occurrence_maps[map.prev().get_id()].get_name()
-                        subexpr1 = "if(isnull(%s), null(), %i)"%(curr_map, indicator_start)
-                        subexpr3 = "if(isnull(%s), null(), %i)"%(curr_map, indicator_mid)
+                        subexpr1 = "if(isnull(%s), null(), %i)" %(curr_map, indicator_start)
+                        subexpr3 = "if(isnull(%s), null(), %i)" %(curr_map, indicator_mid)
 
-                expression = "%s = if(isnull(%s), %s, %s)"%(indicator_map_name,
+                expression = "%s = if(isnull(%s), %s, %s)" %(indicator_map_name,
                                                             prev_map, subexpr1,
                                                             subexpr3)
                 grass.debug(expression)
@@ -471,7 +471,7 @@ def create_strds_register_maps(in_strds, out_strds, out_maps, register_null,
     count = 0
     for map in out_maps.values():
         count += 1
-        if count%10 == 0:
+        if count %10 == 0:
             grass.percent(count, len(out_maps), 1)
         # Read the raster map data
         map.load()
@@ -568,7 +568,7 @@ def compute_occurrence(occurrence_maps, input_strds, input_maps, start, base,
                     max = str(relations[relation][0].get_id())
                     break
 
-        expression = "%s = if(%s > %s && %s < %s, %s, null())"%(occurrence_map_name,
+        expression = "%s = if(%s > %s && %s < %s, %s, null())" %(occurrence_map_name,
                                                                 map.get_name(),
                                                                 min, map.get_name(),
                                                                 max, days)

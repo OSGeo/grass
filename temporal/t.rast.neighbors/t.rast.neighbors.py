@@ -214,7 +214,7 @@ def main():
     for map in new_maps:
         count += 1
 
-        if count%10 == 0:
+        if count %10 == 0:
             grass.percent(count, num_maps, 1)
 
         # Do not register empty maps

@@ -69,7 +69,7 @@ class Sample(object):
             self.raster_names = []
 
     def __str__(self):
-        return "Start: %s\nEnd: %s\nNames: %s\n"%(str(self.start), str(self.end), str(self.raster_names))
+        return "Start: %s\nEnd: %s\nNames: %s\n" %(str(self.start), str(self.end), str(self.raster_names))
 
 ############################################################################
 
@@ -238,7 +238,7 @@ def main():
             if raster_map.metadata.get_datatype() == "CELL":
                 coltype = "INT"
 
-            tmp_string = "%s %s,"%(column, coltype)
+            tmp_string = "%s %s," %(column, coltype)
             columns_string += tmp_string
 
         # Remove last comma

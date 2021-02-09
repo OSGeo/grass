@@ -258,14 +258,14 @@ def main(options, flags):
 
     count = 0
     for loop in range(num_loops):
-        file_name = gscript.tempfile() + "_%i"%(loop)
+        file_name = gscript.tempfile() + "_%i" %(loop)
         count = process_loop(nprocs, maps, file_name, count, maps_per_process,
                              remaining_maps_per_loop, output_files,
                              output_time_list, r_what, process_queue)
 
     process_queue.wait()
 
-    gscript.verbose("Number of raster map layers remaining for sampling %i"%(remaining_maps))
+    gscript.verbose("Number of raster map layers remaining for sampling %i" %(remaining_maps))
     if remaining_maps > 0:
         # Use a single process if less then 100 maps
         if remaining_maps <= 100:
@@ -322,7 +322,7 @@ def one_point_per_row_output(separator, output_files, output_time_list,
 
     for count in range(len(output_files)):
         file_name = output_files[count]
-        gscript.verbose(_("Transforming r.what output file %s"%(file_name)))
+        gscript.verbose(_("Transforming r.what output file %s" %(file_name)))
         map_list = output_time_list[count]
         in_file = open(file_name, "r")
         for line in in_file:
@@ -382,7 +382,7 @@ def one_point_per_col_output(separator, output_files, output_time_list,
     first = True
     for count in range(len(output_files)):
         file_name = output_files[count]
-        gscript.verbose(_("Transforming r.what output file %s"%(file_name)))
+        gscript.verbose(_("Transforming r.what output file %s" %(file_name)))
         map_list = output_time_list[count]
         in_file = open(file_name, "r")
         lines = in_file.readlines()
@@ -395,7 +395,7 @@ def one_point_per_col_output(separator, output_files, output_time_list,
 
         if first is True:
             if write_header is True:
-                out_str = "start%(sep)send"%({"sep":separator})
+                out_str = "start%(sep)send" %({"sep":separator})
 
                 # Define different separator for coordinates and sites
                 if separator == ',':
@@ -474,7 +474,7 @@ def one_point_per_timerow_output(separator, output_files, output_time_list,
     first = True
     for count in range(len(output_files)):
         file_name = output_files[count]
-        gscript.verbose("Transforming r.what output file %s"%(file_name))
+        gscript.verbose("Transforming r.what output file %s" %(file_name))
         map_list = output_time_list[count]
         in_file = open(file_name, "r")
 
@@ -485,9 +485,9 @@ def one_point_per_timerow_output(separator, output_files, output_time_list,
                 else:
                     header = ""
                 if site_input:
-                    header += "x%(sep)sy%(sep)ssite"%({"sep":separator})
+                    header += "x%(sep)sy%(sep)ssite" %({"sep":separator})
                 else:
-                    header += "x%(sep)sy"%({"sep":separator})
+                    header += "x%(sep)sy" %({"sep":separator})
             for map in map_list:
                 start, end = map.get_temporal_extent_as_tuple()
                 time_string = "%(sep)s%(start)s;%(end)s"\
@@ -520,14 +520,14 @@ def one_point_per_timerow_output(separator, output_files, output_time_list,
     if write_header:
         out_file.write(header + "\n")
 
-    gscript.verbose(_("Writing the output file <%s>"%(output)))
+    gscript.verbose(_("Writing the output file <%s>" %(output)))
     for row in matrix:
         first = True
         for col in row:
             value = col.strip()
 
             if first is False:
-                out_file.write("%s"%(separator))
+                out_file.write("%s" %(separator))
             out_file.write(value)
 
             first = False
@@ -551,7 +551,7 @@ def process_loop(nprocs, maps, file_name, count, maps_per_process,
         first = False
 
         # Temporary output file
-        final_file_name = file_name + "_%i"%(process)
+        final_file_name = file_name + "_%i" %(process)
         output_files.append(final_file_name)
 
         map_names = []

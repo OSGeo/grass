@@ -137,7 +137,7 @@ def main():
 
                 count += 1
                 # Delete every 100 maps
-                if count%100 == 0:
+                if count %100 == 0:
                     dbif.execute_transaction(map_statement)
                     if type == "strds":
                         remove(type="raster", name=name_list, run_=True)

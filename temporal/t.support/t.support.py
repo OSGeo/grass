@@ -142,7 +142,7 @@ def main():
         for map in maps:
 
             count += 1
-            if count%10 == 0:
+            if count %10 == 0:
                 grass.percent(count, len(maps), 1)
 
             map.select(dbif=dbif)

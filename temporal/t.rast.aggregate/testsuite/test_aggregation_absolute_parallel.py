@@ -30,8 +30,8 @@ class TestAggregationAbsoluteParallel(TestCase):
 
         name_list = []
         for i in range(540):
-            cls.runModule("r.mapcalc", expression="a%i = %i"%(i + 1, i + 1),  overwrite=True)
-            name_list.append("a%i"%(i + 1))
+            cls.runModule("r.mapcalc", expression="a%i = %i" %(i + 1, i + 1),  overwrite=True)
+            name_list.append("a%i" %(i + 1))
 
         cls.runModule("t.create",  type="strds",  temporaltype="absolute",
                                     output="A",  title="A test",
