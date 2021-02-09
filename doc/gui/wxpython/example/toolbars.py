@@ -25,6 +25,7 @@ from icons.icon import MetaIcon
 class ExampleMapToolbar(BaseToolbar):
     """!Map toolbar (to control map zoom and rendering)
     """
+
     def __init__(self, parent, toolSwitcher):
         """!Map toolbar constructor
         """
@@ -74,6 +75,7 @@ class ExampleMapToolbar(BaseToolbar):
 class ExampleMainToolbar(BaseToolbar):
     """!Toolbar with tools related to application functionality
     """
+
     def __init__(self, parent):
         """!Toolbar constructor
         """
@@ -94,6 +96,7 @@ class ExampleMainToolbar(BaseToolbar):
 class ExampleMiscToolbar(BaseToolbar):
     """!Toolbar with miscellaneous tools related to app
     """
+
     def __init__(self, parent):
         """!Toolbar constructor
         """

@@ -60,6 +60,7 @@ class ExampleMapFrame(SingleMapFrame):
 
     @see IClassMapFrame in iclass.frame
     """
+
     def __init__(self, parent, giface, title=_("Example Tool"),
                  toolbars=["MiscToolbar", "MapToolbar", "MainToolbar"],
                  size=(800, 600), name='exampleWindow', **kwargs):
@@ -310,6 +311,7 @@ class ExampleInfoTextManager:
 
     Wrraper for wx.TextCtrl.
     """
+
     def __init__(self, parent):
         """!Creates wx.TextCtrl for displaying information.
         """

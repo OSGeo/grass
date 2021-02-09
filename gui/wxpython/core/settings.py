@@ -39,6 +39,7 @@ class SettingsJSONEncoder(json.JSONEncoder):
     to hexadecimal color (tuple is represented as
     list in JSON, however GRASS expects tuple for colors).
     """
+
     def default(self, obj):
         """Encode not automatically serializable objects.
         """

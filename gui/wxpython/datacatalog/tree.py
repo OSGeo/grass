@@ -147,6 +147,7 @@ class MapWatch(PatternMatchingEventHandler):
     everything. When file/directory change is detected, wx event is dispatched
     to event handler (can't use Signals because this is different thread),
     containing info about the change."""
+
     def __init__(self, patterns, element, event_handler):
         PatternMatchingEventHandler.__init__(self, patterns=patterns)
         self.element = element
@@ -274,6 +275,7 @@ class DataCatalogTree(TreeView):
     takes care of the refresh. At the same time, watchdog (if installed)
     monitors changes in current mapset and refreshes the tree.
     """
+
     def __init__(
             self, parent, model=None, giface=None,
             style=wx.TR_HIDE_ROOT | wx.TR_EDIT_LABELS |

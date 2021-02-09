@@ -362,6 +362,7 @@ class LocationDownloadPanel(wx.Panel):
     of one panel (perhaps sharing the common background download and
     message logic).
     """
+
     def __init__(self, parent, database, locations=LOCATIONS):
         """
 
@@ -557,6 +558,7 @@ class LocationDownloadDialog(wx.Dialog):
 
     Contains the panel and Cancel button.
     """
+
     def __init__(self, parent, database,
                  title=_("Location Download")):
         """

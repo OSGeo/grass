@@ -38,6 +38,7 @@ class TestAggregationAbsolute(TestCase):
         cls.runModule("t.register", flags="i", type="raster", input="A",
                       maps="a1,a2,a3", start="2001-01-01 00:00:00",
                       increment="1 month", overwrite=True)
+
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region

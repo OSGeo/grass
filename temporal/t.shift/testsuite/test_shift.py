@@ -146,6 +146,7 @@ class TestShiftRelativeSTRDS(TestCase):
                                      start="0", 
                                      increment="14", unit="days",  
                                      overwrite=True)
+
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region
@@ -459,6 +460,7 @@ class TestShiftRelativeSTVDS(TestCase):
                                      start="0", flags="i",
                                      increment="14", unit="days",  
                                      overwrite=True)
+
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region
@@ -508,6 +510,7 @@ class TestShiftAbsoluteError(TestCase):
                                      start="0", 
                                      increment="14", unit="days",  
                                      overwrite=True)
+
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region

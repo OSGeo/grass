@@ -150,6 +150,7 @@ class TitledPage(WizardPageSimple):
 
 class GridBagSizerTitledPage(TitledPage):
     """GridBagSizer declaration for TitledPage class"""
+
     def __init__(self, parent, title):
         super().__init__(parent, title)
 

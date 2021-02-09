@@ -37,6 +37,7 @@ class TestRasterExtraction(TestCase):
         cls.runModule("t.register", flags="i", type="raster", input="A",
                       maps=maps.strip(), increment="1 month",
                       start="2001-01-01 00:00:00", overwrite=True)
+
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region

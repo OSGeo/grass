@@ -1132,6 +1132,7 @@ class MapsetSettings(object):
 
     Provides few convenient functions.
     """
+
     def __init__(self):
         self.gisdbase = None
         self.location = None
@@ -2070,6 +2071,7 @@ class Parameters(object):
     """Structure to hold standard part of command line parameters"""
     # we don't need to define any methods
     # pylint: disable=R0903
+
     def __init__(self):
         self.grass_gui = None
         self.create_new = None

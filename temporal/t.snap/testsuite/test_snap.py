@@ -39,6 +39,7 @@ class TestSnapAbsoluteSTRDS(TestCase):
                                      start="2001-01-01", 
                                      increment="14 days",  
                                      overwrite=True)
+
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region
@@ -84,6 +85,7 @@ class TestSnapRelativeSTRDS(TestCase):
                                      start="0", 
                                      increment="14", unit="days",  
                                      overwrite=True)
+
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region
@@ -129,6 +131,7 @@ class TestSnapAbsoluteSTR3DS(TestCase):
                                      start="2001-01-01", 
                                      increment="14 days",  
                                      overwrite=True)
+
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region
@@ -174,6 +177,7 @@ class TestSnapRelativeSTR3DS(TestCase):
                                      start="0", 
                                      increment="14", unit="days",  
                                      overwrite=True)
+
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region
@@ -220,6 +224,7 @@ class TestSnapAbsoluteSTVDS(TestCase):
                                      start="2001-01-01", 
                                      increment="14 days",  
                                      overwrite=True)
+
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region
@@ -265,6 +270,7 @@ class TestSnapRelativeSTVDS(TestCase):
                                      start="0", 
                                      increment="14", unit="days",  
                                      overwrite=True)
+
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region

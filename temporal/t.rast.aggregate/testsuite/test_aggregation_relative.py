@@ -40,6 +40,7 @@ class TestAggregationRelative(TestCase):
                                      maps="a1,a2,a3,a4,a5,a6,a7",
                                      start=0, unit="days", increment=3,
                                      overwrite=True)
+
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region
