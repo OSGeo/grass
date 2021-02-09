@@ -4,8 +4,8 @@
 
 @copyright 2016 by Vaclav Petras and the GRASS Development Team
 
-@license This program is free software under the 
-GNU General Public License (>=v2). 
+@license This program is free software under the
+GNU General Public License (>=v2).
 Read the file COPYING that comes with GRASS
 for details
 """
@@ -39,7 +39,7 @@ class ParseSingleColorRuleColorsTestCase(TestCase):
         norm = c_int()
         nv = c_int()
         default = c_int()
-        ret = Rast_parse_color_rule(min_val, max_val, string, 
+        ret = Rast_parse_color_rule(min_val, max_val, string,
                                     byref(v), byref(r), byref(g), byref(b),
                                     byref(norm), byref(nv), byref(default))
         colors = ("{string} -> "

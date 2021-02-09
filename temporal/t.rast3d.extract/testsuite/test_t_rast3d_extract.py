@@ -39,20 +39,20 @@ class TestRaster3dExtraction(TestCase):
         self.runModule("r3.mapcalc", expression="a5 = 500", overwrite=True)
         self.runModule("r3.mapcalc", expression="a6 = 600", overwrite=True)
 
-        self.runModule("t.create", type="str3ds", temporaltype="absolute",  
+        self.runModule("t.create", type="str3ds", temporaltype="absolute",
                                      output="A", title="A test", description="A test", overwrite=True)
-        self.runModule("t.register", flags="i", type="raster_3d", input="A",  
-                                     maps="a1,a2,a3,a4,a5,a6",  
+        self.runModule("t.register", flags="i", type="raster_3d", input="A",
+                                     maps="a1,a2,a3,a4,a5,a6",
                                      start="2001-01-01", increment="3 months", overwrite=True)
 
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("t.remove", flags="rf", type="str3ds",  
+        self.runModule("t.remove", flags="rf", type="str3ds",
                                    inputs="A,B")
 
     def test_selection(self):
         """Perform a simple selection by datetime"""
-        self.assertModule("t.rast3d.extract", input="A", output="B", 
+        self.assertModule("t.rast3d.extract", input="A", output="B",
                                       where="start_time > '2001-06-01'")
 
         #self.assertModule("t.info",  flags="g",  input="B")
@@ -73,9 +73,9 @@ class TestRaster3dExtraction(TestCase):
 
     def test_selection_and_expression(self):
         """Perform a selection by datetime and a r3.mapcalc expression"""
-        self.assertModule("t.rast3d.extract", input="A", output="B", 
-                                      where="start_time > '2001-06-01'",  
-                                      expression=" if(A > 400, A, null())", 
+        self.assertModule("t.rast3d.extract", input="A", output="B",
+                                      where="start_time > '2001-06-01'",
+                                      expression=" if(A > 400, A, null())",
                                       basename="b", nprocs=2, overwrite=True)
 
         #self.assertModule("t.info",  flags="g",  input="B")
@@ -97,7 +97,7 @@ class TestRaster3dExtraction(TestCase):
     def test_expression_with_empty_maps(self):
         """Perform r3.mapcalc expression and register empty maps"""
         self.assertModule("t.rast3d.extract", flags="n", input="A", output="B",
-                                      expression=" if(A > 400, A, null())", 
+                                      expression=" if(A > 400, A, null())",
                                       basename="b", nprocs=2, overwrite=True)
 
         #self.assertModule("t.info",  flags="g",  input="B")
@@ -155,7 +155,7 @@ class TestRaster3dExtractionFails(TestCase):
         # No output
         self.assertModuleFail("t.rast3d.extract", input="A", basename="b")
         # No basename
-        self.assertModuleFail("t.rast3d.extract", input="A", output="B", 
+        self.assertModuleFail("t.rast3d.extract", input="A", output="B",
                           expression=" if(A > 400, A, null())")
 
 if __name__ == '__main__':

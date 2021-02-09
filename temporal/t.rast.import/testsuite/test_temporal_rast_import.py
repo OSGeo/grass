@@ -31,7 +31,7 @@ class TestRasterImport(TestCase):
         cls.runModule("t.remove", flags="rf", inputs="A")
 
     def test_import(self):
-        self.assertModule("t.rast.import", input=self.input_, output="A", 
+        self.assertModule("t.rast.import", input=self.input_, output="A",
                           basename="a", overwrite=True)
         tinfo = """start_time='2000-01-01 00:00:00'
                    end_time='2001-01-01 00:00:00'

@@ -114,7 +114,7 @@ def main():
     # Single space time raster dataset
     if len(strds_names) == 1:
         rows = first_strds.get_registered_maps(
-            columns="name,mapset,start_time,end_time", 
+            columns="name,mapset,start_time,end_time",
             order="start_time", dbif=dbif)
 
         if not rows:

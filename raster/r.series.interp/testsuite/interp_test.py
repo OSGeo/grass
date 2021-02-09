@@ -29,7 +29,7 @@ class InterpolationTest(TestCase):
         self.runModule("r.mapcalc", expression="map_40 = 40")
 
     def test_commandline(self):
-        self.assertModule("r.series.interp", input="prec_1,prec_5", datapos=(0.0,1.0),  
+        self.assertModule("r.series.interp", input="prec_1,prec_5", datapos=(0.0,1.0),
             output="prec_2,prec_3,prec_4", samplingpos=(0.25,0.5,0.75), method="linear")
 
         self.assertRasterMinMax(map="prec_2", refmin=200, refmax=200)
@@ -37,7 +37,7 @@ class InterpolationTest(TestCase):
         self.assertRasterMinMax(map="prec_4", refmin=400, refmax=400)
 
     def test_infile(self):
-        self.assertModule("r.series.interp", input="prec_1,prec_5", datapos=(0.0,1.0),  
+        self.assertModule("r.series.interp", input="prec_1,prec_5", datapos=(0.0,1.0),
             outfile="data/outfile_1.txt", method="linear")
 
         self.assertRasterMinMax(map="prec_2", refmin=200, refmax=200)
@@ -45,7 +45,7 @@ class InterpolationTest(TestCase):
         self.assertRasterMinMax(map="prec_4", refmin=400, refmax=400)
 
     def test_inoutfiles(self):
-        self.assertModule("r.series.interp", infile="data/infile_2.txt",  
+        self.assertModule("r.series.interp", infile="data/infile_2.txt",
             outfile="data/outfile_2.txt", method="linear")
 
         self.assertRasterMinMax(map="map_12", refmin=12, refmax=12)
@@ -57,27 +57,27 @@ class InterpolationTest(TestCase):
 
 
     def test_module_failure(self):
-        """ We need tests to check the failure handling, as outputs, file and 
+        """ We need tests to check the failure handling, as outputs, file and
              sampling points  are not handled by the grass parser"""
 
         # No outputs
-        self.assertModuleFail("r.series.interp", input="prec_1,prec_5", datapos=(0.0,1.0),  
+        self.assertModuleFail("r.series.interp", input="prec_1,prec_5", datapos=(0.0,1.0),
              samplingpos=(0.25,0.5,0.75), method="linear")
         # No sampling points
-        self.assertModuleFail("r.series.interp", input="prec_1,prec_5",  
+        self.assertModuleFail("r.series.interp", input="prec_1,prec_5",
             datapos=(0.0,1.0), output="prec_2,prec_3,prec_4")
         # Output and file at once
-        self.assertModuleFail("r.series.interp", input="prec_1,prec_5", datapos=(0.0,1.0),  
-            outfile="outfile_1.txt", output="prec_2,prec_3,prec_4", samplingpos=(0.25,0.5,0.75), 
+        self.assertModuleFail("r.series.interp", input="prec_1,prec_5", datapos=(0.0,1.0),
+            outfile="outfile_1.txt", output="prec_2,prec_3,prec_4", samplingpos=(0.25,0.5,0.75),
             method="linear")
         # Sampling points and file at once
-        self.assertModuleFail("r.series.interp", input="prec_1,prec_5", datapos=(0.0,1.0),  
+        self.assertModuleFail("r.series.interp", input="prec_1,prec_5", datapos=(0.0,1.0),
             outfile="outfile_1.txt", samplingpos=(0.25,0.5,0.75), method="linear")
         # Wrong input file
-        self.assertModuleFail("r.series.interp", input="prec_1,prec_5", datapos=(0.0,1.0),  
+        self.assertModuleFail("r.series.interp", input="prec_1,prec_5", datapos=(0.0,1.0),
             outfile="mo_such_file", method="linear")
         # Wrong input file
-        self.assertModuleFail("r.series.interp", input="prec_1,prec_5", datapos=(0.0,1.0),  
+        self.assertModuleFail("r.series.interp", input="prec_1,prec_5", datapos=(0.0,1.0),
             outfile="outfile_corrupt.txt", method="linear")
 
 if __name__ == '__main__':

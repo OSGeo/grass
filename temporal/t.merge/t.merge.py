@@ -119,7 +119,7 @@ def main():
         output_stds.select(dbif=dbif)
 
     registered_output_maps = {}
-    # Maps that are already registered in an existing dataset 
+    # Maps that are already registered in an existing dataset
     # are not registered again
     if output_exists:
         rows = output_stds.get_registered_maps(columns="id", dbif=dbif)

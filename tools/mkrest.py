@@ -35,14 +35,14 @@ tmp_file = "%s.tmp.txt" % pgm
 footer_index = string.Template(
     """
 
-:doc:`Main Page <index>` - :doc:`${INDEXNAMECAP} index <${INDEXNAME}>` - :doc:`Full index <full_index>` 
+:doc:`Main Page <index>` - :doc:`${INDEXNAMECAP} index <${INDEXNAME}>` - :doc:`Full index <full_index>`
 2003-${YEAR} `GRASS Development Team <https://grass.osgeo.org>`_
 """)
 
 footer_noindex = string.Template(
     """
 
-:doc:`Main Page <index>`  - :doc:`Full index <full_index>` 
+:doc:`Main Page <index>`  - :doc:`Full index <full_index>`
 2003-${YEAR} `GRASS Development Team <https://grass.osgeo.org>`_
 """)
 
@@ -79,7 +79,7 @@ tmp_data = read_file(tmp_file)
 if tmp_data:
     sys.stdout.write(tmp_data)
 
-process = subprocess.Popen('pandoc -s -r html %s -w rst' % src_file, 
+process = subprocess.Popen('pandoc -s -r html %s -w rst' % src_file,
                            shell=True, stdout=subprocess.PIPE)
 html_text = process.communicate()[0]
 if html_text:

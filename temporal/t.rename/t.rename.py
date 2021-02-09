@@ -82,7 +82,7 @@ def main():
     if new_id.split("@")[1] != mapset:
         grass.fatal(_("Space time %s dataset <%s> can not be renamed. "
                       "Mapset of the new identifier differs from the current "
-                      "mapset.") % (stds.get_new_map_instance(None).get_type(), 
+                      "mapset.") % (stds.get_new_map_instance(None).get_type(),
                                     old_id))
 
     if not stds.is_in_db(dbif=dbif):

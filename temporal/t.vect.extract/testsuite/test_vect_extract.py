@@ -47,7 +47,7 @@ class TestVectorExtraction(TestCase):
 
     def test_selection(self):
         """Perform a simple selection by datetime"""
-        self.assertModule("t.vect.extract", input="A", output="B", 
+        self.assertModule("t.vect.extract", input="A", output="B",
                           where="start_time > '2001-06-01'", overwrite=True)
 
         tinfo_string="""start_time='2001-07-01 00:00:00'
@@ -64,7 +64,7 @@ class TestVectorExtraction(TestCase):
 
     def test_selection_no_suffix(self):
         """Perform a simple selection by datetime"""
-        self.assertModule("t.vect.extract", input="A", output="B", 
+        self.assertModule("t.vect.extract", input="A", output="B",
                           where="start_time > '2001-06-01'", basename="b",
                           overwrite=True)
         self.assertVectorDoesNotExist('b_2001_07')
@@ -72,7 +72,7 @@ class TestVectorExtraction(TestCase):
 
     def test_selection_suffix(self):
         """Perform a simple selection by datetime"""
-        self.assertModule("t.vect.extract", input="A", output="B", 
+        self.assertModule("t.vect.extract", input="A", output="B",
                           expression="value > 0", basename="b",
                           overwrite=True)
         self.assertVectorDoesNotExist('b_2001_07')
@@ -80,7 +80,7 @@ class TestVectorExtraction(TestCase):
 
     def test_selection_time_suffix(self):
         """Perform a simple selection by datetime"""
-        self.assertModule("t.vect.extract", input="A", output="B", 
+        self.assertModule("t.vect.extract", input="A", output="B",
                           expression="value > 0", basename="b", suffix="time",
                           overwrite=True)
         self.assertVectorExists('b_2001_01_01T00_00_00')
@@ -88,7 +88,7 @@ class TestVectorExtraction(TestCase):
 
     def test_selection_num_suffix(self):
         """Perform a simple selection by datetime"""
-        self.assertModule("t.vect.extract", input="A", output="B", 
+        self.assertModule("t.vect.extract", input="A", output="B",
                           expression="value > 0", basename="b", suffix="num",
                           overwrite=True)
         self.assertVectorExists('b_00001')
@@ -96,7 +96,7 @@ class TestVectorExtraction(TestCase):
 
     def test_selection_num3_suffix(self):
         """Perform a simple selection by datetime"""
-        self.assertModule("t.vect.extract", input="A", output="B", 
+        self.assertModule("t.vect.extract", input="A", output="B",
                           expression="value > 0", basename="b",
                           suffix="num%03", overwrite=True)
         self.assertVectorExists('b_001')

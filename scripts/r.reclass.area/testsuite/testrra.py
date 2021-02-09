@@ -46,7 +46,7 @@ class Testrr(TestCase):
         """Testing Module without flags"""
         self.assertModule('r.reclass.area', input=self.input, output=self.output, value=2000, mode="greater")
         self.assertRasterMinMax(map=self.output, refmin=27603, refmax=27607,
-                                msg="Output Map in degrees must be between 27603 and 27607")    
+                                msg="Output Map in degrees must be between 27603 and 27607")
 
     def test_method_rmarea(self):
         """Testing Module without flags"""

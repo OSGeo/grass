@@ -35,7 +35,7 @@ class TestTRastAlgebra(TestCase):
         cls.runModule("r.mapcalc", quiet=True, expression="c1 = 7")
         cls.runModule("r.mapcalc", quiet=True, expression="d1 = 8")
         cls.runModule("r.mapcalc", quiet=True, expression="d2 = 9")
-        cls.runModule("r.mapcalc", quiet=True, expression="d3 = 10")        
+        cls.runModule("r.mapcalc", quiet=True, expression="d3 = 10")
         cls.runModule("r.mapcalc", quiet=True, expression="singletmap = 99")
         cls.runModule("r.mapcalc", quiet=True, expression="singlemap = 100")
 
@@ -55,8 +55,8 @@ class TestTRastAlgebra(TestCase):
         tgis.register_maps_in_space_time_dataset(type="raster", name="C", maps="c1",
                                                  start="2001-01-02", increment="2 day", interval=True)
         tgis.register_maps_in_space_time_dataset(type="raster", name="D", maps="d1,d2,d3",
-                                                 start="2001-01-03", increment="1 day", interval=True)                                                 
-        tgis.register_maps_in_space_time_dataset(type="raster", name=None, maps="singletmap", 
+                                                 start="2001-01-03", increment="1 day", interval=True)
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None, maps="singletmap",
                                                 start="2001-01-03", end="2001-01-04")
 
     def tearDown(self):
@@ -64,15 +64,15 @@ class TestTRastAlgebra(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """Remove the temporary region 
+        """Remove the temporary region
         """
         cls.runModule("t.remove", flags="rf", inputs="A,B,C,D", quiet=True)
         cls.runModule("t.unregister", maps="singletmap", quiet=True)
         cls.del_temp_region()
 
     def test_temporal_conditional_time_dimension_bug(self):
-        """Testing the conditional time dimension bug, that uses the time 
-            dimension of the conditional statement instead the time dimension 
+        """Testing the conditional time dimension bug, that uses the time
+            dimension of the conditional statement instead the time dimension
             of the then/else statement."""
         self.assertModule("t.rast.algebra", expression="R = if({contains}, B == 5, "
                                                        "A - 1,  A + 1)", basename="r", flags="d")
@@ -394,8 +394,8 @@ class TestTRastAlgebra(TestCase):
 
         maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 1)
-        self.assertEqual(D.metadata.get_min_min(), 99) 
-        self.assertEqual(D.metadata.get_max_max(), 99) 
+        self.assertEqual(D.metadata.get_min_min(), 99)
+        self.assertEqual(D.metadata.get_max_max(), 99)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
@@ -411,8 +411,8 @@ class TestTRastAlgebra(TestCase):
 
         maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 1)
-        self.assertEqual(D.metadata.get_min_min(), 100) 
-        self.assertEqual(D.metadata.get_max_max(), 100) 
+        self.assertEqual(D.metadata.get_min_min(), 100)
+        self.assertEqual(D.metadata.get_max_max(), 100)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
@@ -428,8 +428,8 @@ class TestTRastAlgebra(TestCase):
 
         maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 101) 
-        self.assertEqual(D.metadata.get_max_max(), 104) 
+        self.assertEqual(D.metadata.get_min_min(), 101)
+        self.assertEqual(D.metadata.get_max_max(), 104)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
@@ -445,8 +445,8 @@ class TestTRastAlgebra(TestCase):
 
         maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 100) 
-        self.assertEqual(D.metadata.get_max_max(), 400) 
+        self.assertEqual(D.metadata.get_min_min(), 100)
+        self.assertEqual(D.metadata.get_max_max(), 400)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
@@ -461,8 +461,8 @@ class TestTRastAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 1) 
-        self.assertEqual(D.metadata.get_max_max(), 4) 
+        self.assertEqual(D.metadata.get_min_min(), 1)
+        self.assertEqual(D.metadata.get_max_max(), 4)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
@@ -477,8 +477,8 @@ class TestTRastAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 3) 
-        self.assertEqual(D.metadata.get_max_max(), 4) 
+        self.assertEqual(D.metadata.get_min_min(), 3)
+        self.assertEqual(D.metadata.get_max_max(), 4)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
@@ -493,8 +493,8 @@ class TestTRastAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 3) 
-        self.assertEqual(D.metadata.get_max_max(), 4) 
+        self.assertEqual(D.metadata.get_min_min(), 3)
+        self.assertEqual(D.metadata.get_max_max(), 4)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
@@ -509,8 +509,8 @@ class TestTRastAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 1) 
-        self.assertEqual(D.metadata.get_max_max(), 4) 
+        self.assertEqual(D.metadata.get_min_min(), 1)
+        self.assertEqual(D.metadata.get_max_max(), 4)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
@@ -518,7 +518,7 @@ class TestTRastAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_select_operators3(self):
-        """Testing the temporal select operator. Including temporal relations and 
+        """Testing the temporal select operator. Including temporal relations and
             different temporal operators (lr|+&)"""
 
         self.assertModule("t.rast.algebra", expression="R = A {:,during,d} B", basename="r")
@@ -526,8 +526,8 @@ class TestTRastAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 1) 
-        self.assertEqual(D.metadata.get_max_max(), 4) 
+        self.assertEqual(D.metadata.get_min_min(), 1)
+        self.assertEqual(D.metadata.get_max_max(), 4)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
@@ -535,7 +535,7 @@ class TestTRastAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), u'2 days')
 
     def test_temporal_select_operators4(self):
-        """Testing the temporal select operator. Including temporal relations and 
+        """Testing the temporal select operator. Including temporal relations and
             different temporal operators (lr|+&)"""
 
         self.assertModule("t.rast.algebra", expression="R = A {:,equal|during,r} C", basename="r")
@@ -564,8 +564,8 @@ class TestTRastAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 3) 
-        self.assertEqual(D.metadata.get_max_max(), 4) 
+        self.assertEqual(D.metadata.get_min_min(), 3)
+        self.assertEqual(D.metadata.get_max_max(), 4)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
@@ -580,8 +580,8 @@ class TestTRastAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 1) 
-        self.assertEqual(D.metadata.get_max_max(), 1) 
+        self.assertEqual(D.metadata.get_min_min(), 1)
+        self.assertEqual(D.metadata.get_max_max(), 1)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
@@ -596,8 +596,8 @@ class TestTRastAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 1)
-        self.assertEqual(D.metadata.get_min_min(), 2) 
-        self.assertEqual(D.metadata.get_max_max(), 2) 
+        self.assertEqual(D.metadata.get_min_min(), 2)
+        self.assertEqual(D.metadata.get_max_max(), 2)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
@@ -612,8 +612,8 @@ class TestTRastAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 1)
-        self.assertEqual(D.metadata.get_min_min(), 2) 
-        self.assertEqual(D.metadata.get_max_max(), 2) 
+        self.assertEqual(D.metadata.get_min_min(), 2)
+        self.assertEqual(D.metadata.get_max_max(), 2)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
@@ -628,8 +628,8 @@ class TestTRastAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 8) 
-        self.assertEqual(D.metadata.get_max_max(), 13) 
+        self.assertEqual(D.metadata.get_min_min(), 8)
+        self.assertEqual(D.metadata.get_max_max(), 13)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
@@ -644,8 +644,8 @@ class TestTRastAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 10) 
-        self.assertEqual(D.metadata.get_max_max(), 72) 
+        self.assertEqual(D.metadata.get_min_min(), 10)
+        self.assertEqual(D.metadata.get_max_max(), 72)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
@@ -660,8 +660,8 @@ class TestTRastAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 8) 
-        self.assertEqual(D.metadata.get_max_max(), 13) 
+        self.assertEqual(D.metadata.get_min_min(), 8)
+        self.assertEqual(D.metadata.get_max_max(), 13)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
@@ -676,8 +676,8 @@ class TestTRastAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(),4)
-        self.assertEqual(D.metadata.get_min_min(), 8) 
-        self.assertEqual(D.metadata.get_max_max(), 13) 
+        self.assertEqual(D.metadata.get_min_min(), 8)
+        self.assertEqual(D.metadata.get_max_max(), 13)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
@@ -694,7 +694,7 @@ class TestTRastAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(),1)
-        self.assertEqual(D.metadata.get_min_min(), 208) 
+        self.assertEqual(D.metadata.get_min_min(), 208)
         self.assertEqual(D.metadata.get_max_max(), 208)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))

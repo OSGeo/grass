@@ -66,7 +66,7 @@
 ##% required: no
 ##%end
 
-##%option 
+##%option
 ##% key: camera
 ##% type: string
 ##% label: The name of the camera (generated in i.ortho.camera)
@@ -75,17 +75,17 @@
 ###% section: parameters
 ##%end
 
-##%option 
+##%option
 ##% key: order
 ##% type: string
-##% label: The rectification order 
-##% description: The rectification order 
+##% label: The rectification order
+##% description: The rectification order
 ##% required: yes
 ##% answer: 1
 ###% section: parameters
 ##%end
 
-##%option 
+##%option
 ##% key: extension
 ##% type: string
 ##% label: The name of the output files extension
@@ -171,7 +171,7 @@ def main():
 
     app = wx.App()
 
-#    wizard = GCPWizard(parent=None, giface=StandaloneGrassInterface(), 
+#    wizard = GCPWizard(parent=None, giface=StandaloneGrassInterface(),
 #            srcloc=src_loc,srcmpt=src_mpt,srcgrp=src_grp,srcras=src_ras,
 #            tgtras=tgt_ras,camera=camera, order=order, extension=extension)
 

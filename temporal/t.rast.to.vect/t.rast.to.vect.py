@@ -269,7 +269,7 @@ def main(options, flags):
             else:
                 names += ",%s" % (map.get_name())
 
-        gscript.run_command("g.remove", flags='f', type='vector', name=names, 
+        gscript.run_command("g.remove", flags='f', type='vector', name=names,
                             quiet=True)
 
     dbif.close()

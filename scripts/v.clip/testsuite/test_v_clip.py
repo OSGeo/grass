@@ -32,7 +32,7 @@ class TestClipling(TestCase):
         """Ensures expected computational region and generated data"""
         cls.use_temp_region()
         cls.runModule('g.region', vector=cls.inpclip)
-        cls.runModule('v.extract', input=cls.inpclip, output=cls.garner, 
+        cls.runModule('v.extract', input=cls.inpclip, output=cls.garner,
                       where="ZIPNAME = '{na}'".format(na=cls.garner.upper()))
 
     @classmethod

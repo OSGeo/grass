@@ -43,7 +43,7 @@ class Testrr(TestCase):
         tile="tile-000-000"
         self.assertModule('r.tile', input=self.input, output=self.output, width=1500/2, height=1350/2, overlap=250)
         self.assertRasterMinMax(map=tile, refmin=74.75374, refmax=156.3299,
-                                msg="tile-000-000 in degrees must be between 74.75374 and 156.3299") 
+                                msg="tile-000-000 in degrees must be between 74.75374 and 156.3299")
 
     def test_minmax(self):
         """Testing output map tile-000-001"""

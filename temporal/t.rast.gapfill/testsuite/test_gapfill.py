@@ -26,17 +26,17 @@ class TestRasterToVector(TestCase):
         self.runModule("r.mapcalc", expression="a_2 = 400", overwrite=True)
         self.runModule("r.mapcalc", expression="a_3 = 1200", overwrite=True)
 
-        self.runModule("t.create", type="strds", temporaltype="absolute",  
-                                 output="A", title="A test", description="A test",  
+        self.runModule("t.create", type="strds", temporaltype="absolute",
+                                 output="A", title="A test", description="A test",
                                  overwrite=True)
-        self.runModule("t.register", flags="i", type="raster", input="A",  
-                                     maps="a_1", start="2001-01-01", 
+        self.runModule("t.register", flags="i", type="raster", input="A",
+                                     maps="a_1", start="2001-01-01",
                                      increment="1 month", overwrite=True)
-        self.runModule("t.register", flags="i", type="raster", input="A",  
-                                     maps="a_2", start="2001-04-01", 
+        self.runModule("t.register", flags="i", type="raster", input="A",
+                                     maps="a_2", start="2001-04-01",
                                      increment="1 months", overwrite=True)
-        self.runModule("t.register", flags="i", type="raster", input="A",  
-                                     maps="a_3", start="2001-12-01", 
+        self.runModule("t.register", flags="i", type="raster", input="A",
+                                     maps="a_3", start="2001-12-01",
                                      increment="1 months", overwrite=True)
 
     @classmethod
@@ -47,7 +47,7 @@ class TestRasterToVector(TestCase):
 
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("t.remove", flags="rf", type="strds",  
+        self.runModule("t.remove", flags="rf", type="strds",
                                    inputs="A")
 
     def test_simple_2procs(self):
@@ -89,7 +89,7 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
         self.assertLooksLike(text, rast_list.outputs.stdout)
 
     def test_simple_where(self):
-        self.assertModule("t.rast.gapfill", input="A", where="start_time >= '2001-03-01'", 
+        self.assertModule("t.rast.gapfill", input="A", where="start_time >= '2001-03-01'",
                           basename="test", nprocs=1, verbose=True, suffix="num%01")
 
         #self.assertModule("t.info",  type="strds", flags="g",  input="A")
@@ -124,7 +124,7 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
         self.assertLooksLike(text, rast_list.outputs.stdout)
 
     def test_simple_where_2(self):
-        self.assertModule("t.rast.gapfill", input="A", where="start_time <= '2001-05-01'", 
+        self.assertModule("t.rast.gapfill", input="A", where="start_time <= '2001-05-01'",
                           basename="test", nprocs=1, verbose=True, suffix="num%01")
 
         #self.assertModule("t.info",  type="strds", flags="g",  input="A")
@@ -154,7 +154,7 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
         self.assertLooksLike(text, rast_list.outputs.stdout)
 
     def test_simple_empty(self):
-        self.assertModule("t.rast.gapfill", input="A", where="start_time >= '2001-10-01'", 
+        self.assertModule("t.rast.gapfill", input="A", where="start_time >= '2001-10-01'",
                           basename="test", nprocs=1, verbose=True, suffix="num%01")
 
         #self.assertModule("t.info",  type="strds", flags="g",  input="A")

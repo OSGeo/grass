@@ -28,7 +28,7 @@ rules3 = """
 0:1:0:255
 """
 
-# landuse has 7 classes (in nc_spm_08 it is landclass96, not landuse96_28m) 
+# landuse has 7 classes (in nc_spm_08 it is landclass96, not landuse96_28m)
 rules4 = """
 *:3:1
 4:5:2

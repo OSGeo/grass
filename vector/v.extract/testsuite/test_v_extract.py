@@ -82,7 +82,7 @@ class TestRasterreport(TestCase):
 
     def  test_where(self):
         """Testing where"""
-        self.assertModule('v.extract', input=self.input, output=self.output, flags='d', 
+        self.assertModule('v.extract', input=self.input, output=self.output, flags='d',
                             where="cat < 10")
         category = read_command('v.db.select', map=self.output,
                                 separator='pipe')

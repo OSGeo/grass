@@ -38,7 +38,7 @@ f.write(sections)
 #for all module groups:
 for cls in classes:
     f.write(cmd2_tmpl.substitute(cmd = cls))
-    #for all modules:  
+    #for all modules:
     for cmd in rest_files(cls):
         basename = os.path.splitext(cmd)[0]
         desc = check_for_desc_override(basename)

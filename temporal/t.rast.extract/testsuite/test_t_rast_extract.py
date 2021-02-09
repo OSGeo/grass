@@ -29,11 +29,11 @@ class TestRasterExtraction(TestCase):
         cls.runModule("r.mapcalc", expression="prec_5 = 500", overwrite=True)
         cls.runModule("r.mapcalc", expression="prec_6 = 600", overwrite=True)
 
-        cls.runModule("t.create", type="strds", temporaltype="absolute",  
+        cls.runModule("t.create", type="strds", temporaltype="absolute",
                       output="precip_abs1", title="A test",
                       description="A test", overwrite=True)
-        cls.runModule("t.register", flags="i", type="raster", input="precip_abs1",  
-                      maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6", 
+        cls.runModule("t.register", flags="i", type="raster", input="precip_abs1",
+                      maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6",
                       start="2001-01-01", increment="3 months", overwrite=True)
 
     @classmethod
@@ -53,20 +53,20 @@ class TestRasterExtraction(TestCase):
         self.runModule("r.mapcalc", expression="prec_5 = 500", overwrite=True)
         self.runModule("r.mapcalc", expression="prec_6 = 600", overwrite=True)
 
-        self.runModule("t.create", type="strds", temporaltype="absolute",  
+        self.runModule("t.create", type="strds", temporaltype="absolute",
                                      output="precip_abs1", title="A test", description="A test", overwrite=True)
-        self.runModule("t.register", flags="i", type="raster", input="precip_abs1",  
-                                     maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6",  
+        self.runModule("t.register", flags="i", type="raster", input="precip_abs1",
+                                     maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6",
                                      start="2001-01-01", increment="3 months", overwrite=True)
 
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("t.remove", flags="rf", type="strds",  
+        self.runModule("t.remove", flags="rf", type="strds",
                                    inputs="precip_abs2")
 
     def test_selection(self):
         """Perform a simple selection by datetime"""
-        self.assertModule("t.rast.extract", input="precip_abs1", output="precip_abs2", 
+        self.assertModule("t.rast.extract", input="precip_abs1", output="precip_abs2",
                                       where="start_time > '2001-06-01'")
 
         #self.assertModule("t.info",  flags="g",  input="precip_abs2")
@@ -97,9 +97,9 @@ class TestRasterExtraction(TestCase):
 
     def test_selection_and_expression(self):
         """Perform a selection by datetime and a r.mapcalc expression"""
-        self.assertModule("t.rast.extract", input="precip_abs1", output="precip_abs2", 
-                                      where="start_time > '2001-06-01'",  
-                                      expression=" if(precip_abs1 > 400, precip_abs1, null())", 
+        self.assertModule("t.rast.extract", input="precip_abs1", output="precip_abs2",
+                                      where="start_time > '2001-06-01'",
+                                      expression=" if(precip_abs1 > 400, precip_abs1, null())",
                                       basename="new_prec", nprocs=2, overwrite=True)
 
         #self.assertModule("t.info",  flags="g",  input="precip_abs2")
@@ -131,7 +131,7 @@ class TestRasterExtraction(TestCase):
     def test_expression_with_empty_maps(self):
         """Perform r.mapcalc expression and register empty maps"""
         self.assertModule("t.rast.extract", flags="n", input="precip_abs1", output="precip_abs2",
-                                      expression=" if(precip_abs1 > 400, precip_abs1, null())", 
+                                      expression=" if(precip_abs1 > 400, precip_abs1, null())",
                                       basename="new_prec", nprocs=2, overwrite=True)
 
         #self.assertModule("t.info",  flags="g",  input="precip_abs2")
@@ -204,7 +204,7 @@ class TestRasterExtractionFails(TestCase):
         # No output
         self.assertModuleFail("t.rast.extract", input="precip_abs1", basename="new_prec")
         # No basename
-        self.assertModuleFail("t.rast.extract", input="precip_abs1", output="precip_abs2", 
+        self.assertModuleFail("t.rast.extract", input="precip_abs1", output="precip_abs2",
                           expression=" if(precip_abs1 > 400, precip_abs1, null())")
 
 if __name__ == '__main__':

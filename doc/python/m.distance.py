@@ -51,7 +51,7 @@ import grass.script as gs
 
 from grass.lib.gis import *
 
-def main(): 
+def main():
     G_gisinit('m.distance')
 
     # calc distance

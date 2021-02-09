@@ -168,7 +168,7 @@ class TestRasterUnivar(TestCase):
                         sum=1281195"""
 
         self.runModule("g.region", res=1)
-        self.assertModuleKeyValue(module="r.univar", map=["map_a"], 
+        self.assertModuleKeyValue(module="r.univar", map=["map_a"],
                                   zones="zone_map",flags="g",
                                   reference=univar_string, precision=3, sep='=')
 

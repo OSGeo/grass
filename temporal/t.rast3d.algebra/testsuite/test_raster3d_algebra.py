@@ -111,9 +111,9 @@ class TestTRast3dAlgebraFails(TestCase):
         """
         cls.del_temp_region()
 
-    def test_error_handling(self):        
+    def test_error_handling(self):
         # Syntax error
-        self.assertModuleFail("t.rast3d.algebra", expression="R = A {+,equal| precedes| follows,l B", basename="r")       
+        self.assertModuleFail("t.rast3d.algebra", expression="R = A {+,equal| precedes| follows,l B", basename="r")
         # Granularity syntax error
         self.assertModuleFail("t.rast3d.algebra", flags="g", expression="R = A {+,equal| precedes| follows,l} B", basename="r")
         # No STRDS

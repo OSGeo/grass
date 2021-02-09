@@ -51,8 +51,8 @@ class TestReport(TestCase):
 
     def test_flagh(self):
         """Testing flag h with map zipcodes"""
-        self.assertModule('r.info', map='lakes', flags='h') 
+        self.assertModule('r.info', map='lakes', flags='h')
 
 if __name__ == '__main__':
     from grass.gunittest.main import test
-    test()    
+    test()

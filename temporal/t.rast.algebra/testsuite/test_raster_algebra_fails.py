@@ -27,9 +27,9 @@ class TestTRastAlgebraFails(TestCase):
         """
         cls.del_temp_region()
 
-    def test_error_handling(self):        
+    def test_error_handling(self):
         # Syntax error
-        self.assertModuleFail("t.rast.algebra", expression="R == A {+,equal| precedes| follows,l} B", 
+        self.assertModuleFail("t.rast.algebra", expression="R == A {+,equal| precedes| follows,l} B",
                                           basename="r")
         # No STRDS
         self.assertModuleFail("t.rast.algebra", expression="R = NoSTRDS + NoSTRDS", basename="r")

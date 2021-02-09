@@ -105,7 +105,7 @@ def main():
     else:
         len_method = len(method.split(','))
 
-    if (len(list(filter(None, quantile.split(',')))) + 
+    if (len(list(filter(None, quantile.split(',')))) +
             len_method) != len(output.split(',')):
         grass.fatal(_('Number requested methods and output maps do not match.'))
 

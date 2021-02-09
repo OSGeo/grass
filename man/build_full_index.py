@@ -50,7 +50,7 @@ f.write(toc)
 #for all module groups:
 for cls, cls_label in classes:
     f.write(cmd2_tmpl.substitute(cmd_label=to_title(cls_label), cmd=cls))
-    #for all modules:  
+    #for all modules:
     for cmd in html_files(cls):
         basename = os.path.splitext(cmd)[0]
         desc = check_for_desc_override(basename)

@@ -61,7 +61,7 @@ class TestTRastAlgebraGranularity(TestCase):
                                                  start="2001-03-01", increment="5 days", interval=True)
         tgis.register_maps_in_space_time_dataset(type="raster", name="D", maps="d3",
                                                  start="2001-05-01", increment="5 days", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="raster", name=None, maps="singletmap", 
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None, maps="singletmap",
                                                 start="2001-03-01", end="2001-04-01")
 
     def tearDown(self):
@@ -69,7 +69,7 @@ class TestTRastAlgebraGranularity(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """Remove the temporary region 
+        """Remove the temporary region
         """
         cls.runModule("t.remove", flags="rf", inputs="A,B,C,D", quiet=True)
         cls.runModule("t.unregister", maps="singletmap", quiet=True)
@@ -226,7 +226,7 @@ class TestTRastAlgebraGranularity(TestCase):
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(),1)
-        self.assertEqual(D.metadata.get_min_min(), 201) 
+        self.assertEqual(D.metadata.get_min_min(), 201)
         self.assertEqual(D.metadata.get_max_max(), 201)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 3, 1))

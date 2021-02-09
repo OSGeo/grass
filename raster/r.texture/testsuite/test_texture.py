@@ -18,7 +18,7 @@ class TestRasterreport(TestCase):
         cls.runModule("g.region", raster=cls.input)
 
     @classmethod
-    def tearDownClass(cls): 
+    def tearDownClass(cls):
         cls.del_temp_region()
         cls.runModule('g.remove', flags='f', type='raster', name="asm_ASM")
         cls.runModule('g.remove', flags='f', type='raster', name='corr_Corr')

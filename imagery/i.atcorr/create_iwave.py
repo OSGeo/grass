@@ -2,7 +2,7 @@
 """
 Created on Sat Mar 27 11:35:32 2010
 
-Program to interpolate filter function to correct 
+Program to interpolate filter function to correct
 step. Should be 2.5 nm
 Then output filter function in a format similar to
 what is needed in the Iwave.cpp file
@@ -174,7 +174,7 @@ def pretty_print(filter_f):
                 pstring += value_wo_leading_zero
             if i > 1 and i < len(filter_f):
                 pstring += ', '
-            if i is not 1: 
+            if i is not 1:
                 # trim the trailing whitespace at the end of line
                 pstring = pstring.rstrip()
             pstring += "\n        "
@@ -183,7 +183,7 @@ def pretty_print(filter_f):
             pstring += value_wo_leading_zero
             if i < len(filter_f):
                 pstring += ', '
-    # trim starting \n and trailing , 
+    # trim starting \n and trailing ,
     pstring = pstring.lstrip("\n").rstrip(", ")
     return pstring
 
@@ -196,7 +196,7 @@ def write_cpp(bands, values, sensor, folder):
 
     # keep in sync with IWave::parse()
     rthresh = 0.01
-    print 
+    print
     print(" > Response peaks from interpolation to 2.5 nm steps:")
 
     # getting necessary data
@@ -320,7 +320,7 @@ def main():
     bands, values = read_input(inputfile)
 
     # print spectral ranges from input file
-    # consider only wavelengths with a reasonably large response 
+    # consider only wavelengths with a reasonably large response
     # around the peak response, keep in sync with IWave::parse()
     rthresh = 0.01
     print

@@ -48,9 +48,9 @@ GRASS GIS ${grass_version} Reference Manual
 **Geographic Resources Analysis Support System**, commonly
 referred to as `GRASS GIS <https://grass.osgeo.org>`_, is a `Geographic
 Information System <https://en.wikipedia.org/wiki/Geographic_information_system>`_
-(GIS) used for geospatial data management and analysis, image processing, 
-graphics/maps production, spatial modeling, and visualization. GRASS is 
-currently used in academic and commercial settings around the world, as 
+(GIS) used for geospatial data management and analysis, image processing,
+graphics/maps production, spatial modeling, and visualization. GRASS is
+currently used in academic and commercial settings around the world, as
 well as by many governmental agencies and environmental consulting companies.
 
 This reference manual details the use of modules distributed with
@@ -190,7 +190,7 @@ desc1_tmpl = string.Template(
 """)
 
 sections = \
-    r""" 
+    r"""
 
 +-----------------------------+-------------------------------+
 |`d.* <full_index.html#d>`_   | `display commands`            |

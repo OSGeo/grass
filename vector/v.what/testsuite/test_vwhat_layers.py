@@ -6,7 +6,7 @@ from grass.gunittest.gmodules import SimpleModule
 out1 = u"""East: 634243
 North: 226193
 ------------------------------------------------------------------
-Map: test_vector 
+Map: test_vector
 Mapset: ...
 Type: Area
 Sq Meters: 633834.281
@@ -27,7 +27,7 @@ Category: 4
 out2 = u"""East: 634243
 North: 226193
 ------------------------------------------------------------------
-Map: test_vector 
+Map: test_vector
 Mapset: ...
 Type: Area
 Sq Meters: 633834.281

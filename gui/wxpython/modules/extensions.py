@@ -192,7 +192,7 @@ class InstallExtensionWindow(wx.Frame):
                 else:
                     flags.append('--%s' % key)
 
-        # 'url=' + self.repo.GetValue().strip()]                    
+        # 'url=' + self.repo.GetValue().strip()]
         return ['g.extension'] + flags + ['extension={}'.format(name) ]
 
     def OnFetch(self, event):
