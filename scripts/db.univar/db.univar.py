@@ -16,44 +16,44 @@
 #
 #############################################################################
 
-#%module
-#% description: Calculates univariate statistics on selected table column.
-#% keyword: database
-#% keyword: statistics
-#% keyword: attribute table
-#%end
-#%option G_OPT_DB_TABLE
-#% key: table
-#% required: yes
-#%end
-#%option G_OPT_DB_COLUMN
-#% description: Name of attribute column on which to calculate statistics (must be numeric)
-#% required: yes
-#%end
-#%option G_OPT_DB_DATABASE
-#%end
-#%option G_OPT_DB_DRIVER
-#% options: dbf,odbc,ogr,sqlite,pg
-#%end
-#%option G_OPT_DB_WHERE
-#%end
-#%option
-#% key: percentile
-#% type: double
-#% description: Percentile to calculate (requires extended statistics flag)
-#% required : no
-#% answer: 90
-#% options: 0-100
-#% multiple: yes
-#%end
-#%flag
-#% key: e
-#% description: Extended statistics (quartiles and 90th percentile)
-#%end
-#%flag
-#% key: g
-#% description: Print stats in shell script style
-#%end
+# %module
+# % description: Calculates univariate statistics on selected table column.
+# % keyword: database
+# % keyword: statistics
+# % keyword: attribute table
+# %end
+# %option G_OPT_DB_TABLE
+# % key: table
+# % required: yes
+# %end
+# %option G_OPT_DB_COLUMN
+# % description: Name of attribute column on which to calculate statistics (must be numeric)
+# % required: yes
+# %end
+# %option G_OPT_DB_DATABASE
+# %end
+# %option G_OPT_DB_DRIVER
+# % options: dbf,odbc,ogr,sqlite,pg
+# %end
+# %option G_OPT_DB_WHERE
+# %end
+# %option
+# % key: percentile
+# % type: double
+# % description: Percentile to calculate (requires extended statistics flag)
+# % required : no
+# % answer: 90
+# % options: 0-100
+# % multiple: yes
+# %end
+# %flag
+# % key: e
+# % description: Extended statistics (quartiles and 90th percentile)
+# %end
+# %flag
+# % key: g
+# % description: Print stats in shell script style
+# %end
 
 import sys
 import atexit

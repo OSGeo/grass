@@ -25,78 +25,78 @@ COPYRIGHT: (c) 2006-2019 Hamish Bowman, and the GRASS Development Team
 #    numeric and string columns would survive the trip, and 3rd column would
 #    not be modified as z.
 
-#%module
-#% description: Converts coordinates from one projection to another (cs2cs frontend).
-#% keyword: miscellaneous
-#% keyword: projection
-#% keyword: transformation
-#%end
-#%option G_OPT_M_COORDS
-#% description: Input coordinates to reproject
-#% guisection: Input coordinates
-#%end
-#%option G_OPT_F_INPUT
-#% label: Name of input coordinate file
-#% description: '-' for standard input
-#% required: no
-#% guisection: Input coordinates
-#%end
-#%option G_OPT_F_OUTPUT
-#% description: Name for output coordinate file (omit to send to stdout)
-#% required : no
-#% guisection: Output
-#%end
-#%option G_OPT_F_SEP
-#% label: Field separator (format: input[,output])
-#% required : no
-#% guisection: Input coordinates
-#%end
-#%option
-#% key: proj_in
-#% type: string
-#% description: Input projection parameters (PROJ.4 style)
-#% required : no
-#% guisection: Projections
-#%end
-#%option
-#% key: proj_out
-#% type: string
-#% description: Output projection parameters (PROJ.4 style)
-#% required : no
-#% guisection: Projections
-#%end
-#%flag
-#% key: i
-#% description: Use LL WGS84 as input and current location as output projection
-#% guisection: Projections
-#%end
-#%flag
-#% key: o
-#% description: Use current location as input and LL WGS84 as output projection
-#% guisection: Projections
-#%end
-#%flag
-#% key: d
-#% description: Output long/lat in decimal degrees, or other projections with many decimal places
-#% guisection: Output
-#%end
-#%flag
-#% key: e
-#% description: Include input coordinates in output file
-#% guisection: Output
-#%end
-#%flag
-#% key: c
-#% description: Include column names in output file
-#% guisection: Output
-#%end
-#%rules
-#% required: coordinates, input
-#% exclusive: coordinates, input
-#% exclusive: proj_in, -i
-#% exclusive: proj_out, -o
-#% exclusive: -i, -o
-#%end
+# %module
+# % description: Converts coordinates from one projection to another (cs2cs frontend).
+# % keyword: miscellaneous
+# % keyword: projection
+# % keyword: transformation
+# %end
+# %option G_OPT_M_COORDS
+# % description: Input coordinates to reproject
+# % guisection: Input coordinates
+# %end
+# %option G_OPT_F_INPUT
+# % label: Name of input coordinate file
+# % description: '-' for standard input
+# % required: no
+# % guisection: Input coordinates
+# %end
+# %option G_OPT_F_OUTPUT
+# % description: Name for output coordinate file (omit to send to stdout)
+# % required : no
+# % guisection: Output
+# %end
+# %option G_OPT_F_SEP
+# % label: Field separator (format: input[,output])
+# % required : no
+# % guisection: Input coordinates
+# %end
+# %option
+# % key: proj_in
+# % type: string
+# % description: Input projection parameters (PROJ.4 style)
+# % required : no
+# % guisection: Projections
+# %end
+# %option
+# % key: proj_out
+# % type: string
+# % description: Output projection parameters (PROJ.4 style)
+# % required : no
+# % guisection: Projections
+# %end
+# %flag
+# % key: i
+# % description: Use LL WGS84 as input and current location as output projection
+# % guisection: Projections
+# %end
+# %flag
+# % key: o
+# % description: Use current location as input and LL WGS84 as output projection
+# % guisection: Projections
+# %end
+# %flag
+# % key: d
+# % description: Output long/lat in decimal degrees, or other projections with many decimal places
+# % guisection: Output
+# %end
+# %flag
+# % key: e
+# % description: Include input coordinates in output file
+# % guisection: Output
+# %end
+# %flag
+# % key: c
+# % description: Include column names in output file
+# % guisection: Output
+# %end
+# %rules
+# % required: coordinates, input
+# % exclusive: coordinates, input
+# % exclusive: proj_in, -i
+# % exclusive: proj_out, -o
+# % exclusive: -i, -o
+# %end
 
 import sys
 import os

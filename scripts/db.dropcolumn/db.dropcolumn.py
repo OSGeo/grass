@@ -16,24 +16,24 @@
 #
 #############################################################################
 
-#%module
-#% description: Drops a column from selected attribute table.
-#% keyword: database
-#% keyword: attribute table
-#%End
+# %module
+# % description: Drops a column from selected attribute table.
+# % keyword: database
+# % keyword: attribute table
+# %End
 
-#%flag
-#% key: f
-#% description: Force removal (required for actual deletion of files)
-#%end
+# %flag
+# % key: f
+# % description: Force removal (required for actual deletion of files)
+# %end
 
-#%option G_OPT_DB_TABLE
-#% required : yes
-#%end
+# %option G_OPT_DB_TABLE
+# % required : yes
+# %end
 
-#%option G_OPT_DB_COLUMN
-#% required : yes
-#%end
+# %option G_OPT_DB_COLUMN
+# % required : yes
+# %end
 
 import sys
 import string

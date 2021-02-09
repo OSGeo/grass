@@ -14,21 +14,21 @@
 #
 #############################################################################
 
-#%module
-#% description: Sets color rules based on stddev from a raster map's mean value.
-#% keyword: raster
-#% keyword: color table
-#%end
-#% option G_OPT_R_MAP
-#%end
-#%flag
-#% key: b
-#% description: Color using standard deviation bands
-#%end
-#%flag
-#% key: z
-#% description: Force center at zero
-#%end
+# %module
+# % description: Sets color rules based on stddev from a raster map's mean value.
+# % keyword: raster
+# % keyword: color table
+# %end
+# % option G_OPT_R_MAP
+# %end
+# %flag
+# % key: b
+# % description: Color using standard deviation bands
+# %end
+# %flag
+# % key: z
+# % description: Force center at zero
+# %end
 
 import os
 import atexit

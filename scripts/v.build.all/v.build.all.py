@@ -12,11 +12,11 @@
 #
 #############################################################################
 
-#%module
-#% description: Rebuilds topology on all vector maps in the current mapset.
-#% keyword: vector
-#% keyword: topology
-#%end
+# %module
+# % description: Rebuilds topology on all vector maps in the current mapset.
+# % keyword: vector
+# % keyword: topology
+# %end
 
 import sys
 from grass.script import core as grass

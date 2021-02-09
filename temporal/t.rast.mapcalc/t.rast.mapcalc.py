@@ -20,58 +20,58 @@
 #
 #############################################################################
 
-#%module
-#% description: Performs spatio-temporal mapcalc expressions on temporally sampled maps of space time raster datasets.
-#% keyword: temporal
-#% keyword: algebra
-#% keyword: raster
-#% keyword: time
-#%end
+# %module
+# % description: Performs spatio-temporal mapcalc expressions on temporally sampled maps of space time raster datasets.
+# % keyword: temporal
+# % keyword: algebra
+# % keyword: raster
+# % keyword: time
+# %end
 
-#%option G_OPT_STRDS_INPUTS
-#%end
+# %option G_OPT_STRDS_INPUTS
+# %end
 
-#%option
-#% key: expression
-#% type: string
-#% description: Spatio-temporal mapcalc expression
-#% required: yes
-#% multiple: no
-#%end
+# %option
+# % key: expression
+# % type: string
+# % description: Spatio-temporal mapcalc expression
+# % required: yes
+# % multiple: no
+# %end
 
-#%option G_OPT_T_SAMPLE
-#% key: method
-#% answer: equal
-#%end
+# %option G_OPT_T_SAMPLE
+# % key: method
+# % answer: equal
+# %end
 
-#%option G_OPT_STRDS_OUTPUT
-#%end
+# %option G_OPT_STRDS_OUTPUT
+# %end
 
-#%option G_OPT_R_BASENAME_OUTPUT
-#% key: basename
-#% label: Basename for output raster maps
-#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
-#% required: yes
-#%end
+# %option G_OPT_R_BASENAME_OUTPUT
+# % key: basename
+# % label: Basename for output raster maps
+# % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+# % required: yes
+# %end
 
-#%option
-#% key: nprocs
-#% type: integer
-#% description: Number of r.mapcalc processes to run in parallel
-#% required: no
-#% multiple: no
-#% answer: 1
-#%end
+# %option
+# % key: nprocs
+# % type: integer
+# % description: Number of r.mapcalc processes to run in parallel
+# % required: no
+# % multiple: no
+# % answer: 1
+# %end
 
-#%flag
-#% key: n
-#% description: Register Null maps
-#%end
+# %flag
+# % key: n
+# % description: Register Null maps
+# %end
 
-#%flag
-#% key: s
-#% description: Check the spatial topology of temporally related maps and process only spatially related maps
-#%end
+# %flag
+# % key: s
+# % description: Check the spatial topology of temporally related maps and process only spatially related maps
+# %end
 
 import grass.script as grass
 

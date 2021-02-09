@@ -20,68 +20,68 @@
 #
 #############################################################################
 
-#%module
-#% description: Lists registered maps of a space time vector dataset.
-#% keyword: temporal
-#% keyword: map management
-#% keyword: vector
-#% keyword: list
-#% keyword: time
-#%end
+# %module
+# % description: Lists registered maps of a space time vector dataset.
+# % keyword: temporal
+# % keyword: map management
+# % keyword: vector
+# % keyword: list
+# % keyword: time
+# %end
 
-#%option G_OPT_STVDS_INPUT
-#%end
+# %option G_OPT_STVDS_INPUT
+# %end
 
-#%option
-#% key: order
-#% type: string
-#% description: Sort the space time dataset by category
-#% guisection: Formatting
-#% required: no
-#% multiple: yes
-#% options: id,name,layer,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,points,lines,boundaries,centroids,faces,kernels,primitives,nodes,areas,islands,holes,volumes
-#% answer: start_time
-#%end
+# %option
+# % key: order
+# % type: string
+# % description: Sort the space time dataset by category
+# % guisection: Formatting
+# % required: no
+# % multiple: yes
+# % options: id,name,layer,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,points,lines,boundaries,centroids,faces,kernels,primitives,nodes,areas,islands,holes,volumes
+# % answer: start_time
+# %end
 
-#%option
-#% key: columns
-#% type: string
-#% description: Columns to be printed to stdout
-#% guisection: Selection
-#% required: no
-#% multiple: yes
-#% options: id,name,layer,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,points,lines,boundaries,centroids,faces,kernels,primitives,nodes,areas,islands,holes,volumes
-#% answer: name,layer,mapset,start_time,end_time
-#%end
+# %option
+# % key: columns
+# % type: string
+# % description: Columns to be printed to stdout
+# % guisection: Selection
+# % required: no
+# % multiple: yes
+# % options: id,name,layer,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,points,lines,boundaries,centroids,faces,kernels,primitives,nodes,areas,islands,holes,volumes
+# % answer: name,layer,mapset,start_time,end_time
+# %end
 
-#%option G_OPT_T_WHERE
-#% guisection: Selection
-#%end
+# %option G_OPT_T_WHERE
+# % guisection: Selection
+# %end
 
-#%option
-#% key: method
-#% type: string
-#% description: Method used for data listing
-#% required: no
-#% multiple: no
-#% options: cols,comma,delta,deltagaps,gran
-#% answer: cols
-#%end
+# %option
+# % key: method
+# % type: string
+# % description: Method used for data listing
+# % required: no
+# % multiple: no
+# % options: cols,comma,delta,deltagaps,gran
+# % answer: cols
+# %end
 
-#%option G_OPT_F_SEP
-#% label: Field separator character between the output columns
-#% guisection: Formatting
-#%end
+# %option G_OPT_F_SEP
+# % label: Field separator character between the output columns
+# % guisection: Formatting
+# %end
 
-#%option G_OPT_F_OUTPUT
-#% required: no
-#%end
+# %option G_OPT_F_OUTPUT
+# % required: no
+# %end
 
-#%flag
-#% key: u
-#% description: Suppress printing of column names
-#% guisection: Formatting
-#%end
+# %flag
+# % key: u
+# % description: Suppress printing of column names
+# % guisection: Formatting
+# %end
 
 import grass.script as grass
 

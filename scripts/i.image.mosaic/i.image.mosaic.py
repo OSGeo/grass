@@ -22,16 +22,16 @@
 #--------------------------------------------------
 
 
-#%module
-#% description: Mosaics several images and extends colormap.
-#% keyword: imagery
-#% keyword: geometry
-#% keyword: mosaicking
-#%end
-#%option G_OPT_R_INPUTS
-#%end
-#%option G_OPT_R_OUTPUT
-#%end
+# %module
+# % description: Mosaics several images and extends colormap.
+# % keyword: imagery
+# % keyword: geometry
+# % keyword: mosaicking
+# %end
+# %option G_OPT_R_INPUTS
+# %end
+# %option G_OPT_R_OUTPUT
+# %end
 from __future__ import print_function
 
 import grass.script as gscript

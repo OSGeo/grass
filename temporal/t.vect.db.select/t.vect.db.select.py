@@ -20,35 +20,35 @@
 #
 #############################################################################
 
-#%module
-#% description: Prints attributes of vector maps registered in a space time vector dataset.
-#% keyword: temporal
-#% keyword: attribute table
-#% keyword: vector
-#% keyword: database
-#% keyword: select
-#% keyword: time
-#%end
+# %module
+# % description: Prints attributes of vector maps registered in a space time vector dataset.
+# % keyword: temporal
+# % keyword: attribute table
+# % keyword: vector
+# % keyword: database
+# % keyword: select
+# % keyword: time
+# %end
 
-#%option G_OPT_STVDS_INPUT
-#%end
+# %option G_OPT_STVDS_INPUT
+# %end
 
-#%option G_OPT_DB_COLUMNS
-#%end
+# %option G_OPT_DB_COLUMNS
+# %end
 
-#%option G_OPT_F_SEP
-#% label: Field separator character between the output columns
-#%end
+# %option G_OPT_F_SEP
+# % label: Field separator character between the output columns
+# %end
 
-#%option G_OPT_V_FIELD
-#%end
+# %option G_OPT_V_FIELD
+# %end
 
-#%option G_OPT_DB_WHERE
-#%end
+# %option G_OPT_DB_WHERE
+# %end
 
-#%option G_OPT_T_WHERE
-#% key: t_where
-#%end
+# %option G_OPT_T_WHERE
+# % key: t_where
+# %end
 from __future__ import print_function
 
 import grass.script as grass

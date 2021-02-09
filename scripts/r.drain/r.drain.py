@@ -19,94 +19,94 @@
 #
 ############################################################################
 
-#%module
-#% description: Traces a flow through an elevation model or cost surface on a raster map.
-#% keyword: raster
-#% keyword: hydrology
-#% keyword: cost surface
-#%end
-#%option
-#% key: input
-#% type: string
-#% required: yes
-#% multiple: no
-#% key_desc: name
-#% description: Name of input elevation or cost surface raster map
-#% gisprompt: old,cell,raster
-#%end
-#%option
-#% key: direction
-#% type: string
-#% required: no
-#% multiple: no
-#% key_desc: name
-#% label: Name of input movement direction map associated with the cost surface
-#% description: Direction in degrees CCW from east
-#% gisprompt: old,cell,raster
-#% guisection: Cost surface
-#%end
-#%option
-#% key: output
-#% type: string
-#% required: yes
-#% multiple: no
-#% key_desc: name
-#% description: Name for output raster map
-#% gisprompt: new,cell,raster
-#%end
-#%option
-#% key: drain
-#% type: string
-#% required: no
-#% multiple: no
-#% key_desc: name
-#% label: Name for output drain vector map
-#% description: Recommended for cost surface made using knight's move
-#% gisprompt: new,vector,vector
-#%end
-#%option
-#% key: start_coordinates
-#% type: double
-#% required: no
-#% multiple: yes
-#% key_desc: east,north
-#% description: Coordinates of starting point(s) (E,N)
-#% gisprompt: old,coords,coords
-#% guisection: Start
-#%end
-#%option
-#% key: start_points
-#% type: string
-#% required: no
-#% multiple: yes
-#% key_desc: name
-#% label: Name of starting vector points map(s)
-#% gisprompt: old,vector,vector
-#% guisection: Start
-#%end
-#%flag
-#% key: c
-#% description: Copy input cell values on output
-#% guisection: Path settings
-#%end
-#%flag
-#% key: a
-#% description: Accumulate input values along the path
-#% guisection: Path settings
-#%end
-#%flag
-#% key: n
-#% description: Count cell numbers along the path
-#% guisection: Path settings
-#%end
-#%flag
-#% key: d
-#% description: The input raster map is a cost surface (direction surface must also be specified)
-#% guisection: Cost surface
-#%end
-#%rules
-#% required: start_coordinates, start_points
-#%end
+# %module
+# % description: Traces a flow through an elevation model or cost surface on a raster map.
+# % keyword: raster
+# % keyword: hydrology
+# % keyword: cost surface
+# %end
+# %option
+# % key: input
+# % type: string
+# % required: yes
+# % multiple: no
+# % key_desc: name
+# % description: Name of input elevation or cost surface raster map
+# % gisprompt: old,cell,raster
+# %end
+# %option
+# % key: direction
+# % type: string
+# % required: no
+# % multiple: no
+# % key_desc: name
+# % label: Name of input movement direction map associated with the cost surface
+# % description: Direction in degrees CCW from east
+# % gisprompt: old,cell,raster
+# % guisection: Cost surface
+# %end
+# %option
+# % key: output
+# % type: string
+# % required: yes
+# % multiple: no
+# % key_desc: name
+# % description: Name for output raster map
+# % gisprompt: new,cell,raster
+# %end
+# %option
+# % key: drain
+# % type: string
+# % required: no
+# % multiple: no
+# % key_desc: name
+# % label: Name for output drain vector map
+# % description: Recommended for cost surface made using knight's move
+# % gisprompt: new,vector,vector
+# %end
+# %option
+# % key: start_coordinates
+# % type: double
+# % required: no
+# % multiple: yes
+# % key_desc: east,north
+# % description: Coordinates of starting point(s) (E,N)
+# % gisprompt: old,coords,coords
+# % guisection: Start
+# %end
+# %option
+# % key: start_points
+# % type: string
+# % required: no
+# % multiple: yes
+# % key_desc: name
+# % label: Name of starting vector points map(s)
+# % gisprompt: old,vector,vector
+# % guisection: Start
+# %end
+# %flag
+# % key: c
+# % description: Copy input cell values on output
+# % guisection: Path settings
+# %end
+# %flag
+# % key: a
+# % description: Accumulate input values along the path
+# % guisection: Path settings
+# %end
+# %flag
+# % key: n
+# % description: Count cell numbers along the path
+# % guisection: Path settings
+# %end
+# %flag
+# % key: d
+# % description: The input raster map is a cost surface (direction surface must also be specified)
+# % guisection: Cost surface
+# %end
+# %rules
+# % required: start_coordinates, start_points
+# %end
 
 import os
 import sys

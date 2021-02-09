@@ -20,101 +20,101 @@
 #
 #############################################################################
 
-#%module
-#% description: Produces a space time vector dataset of specified contours from a space time raster dataset.
-#% keyword: temporal
-#% keyword: contour
-#% keyword: raster
-#% keyword: vector
-#% keyword: time
-#%end
+# %module
+# % description: Produces a space time vector dataset of specified contours from a space time raster dataset.
+# % keyword: temporal
+# % keyword: contour
+# % keyword: raster
+# % keyword: vector
+# % keyword: time
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#%end
+# %option G_OPT_STRDS_INPUT
+# %end
 
-#%option G_OPT_STVDS_OUTPUT
-#%end
+# %option G_OPT_STVDS_OUTPUT
+# %end
 
-#%option G_OPT_T_WHERE
-#%end
+# %option G_OPT_T_WHERE
+# %end
 
-#%option
-#% key: basename
-#% type: string
-#% label: Basename of the new generated output maps
-#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
-#% required: yes
-#% multiple: no
-#%end
+# %option
+# % key: basename
+# % type: string
+# % label: Basename of the new generated output maps
+# % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+# % required: yes
+# % multiple: no
+# %end
 
-#%option
-#% key: suffix
-#% type: string
-#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
-#% answer: gran
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: suffix
+# % type: string
+# % description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+# % answer: gran
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: step
-#% type: double
-#% description: Increment between contour levels
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: step
+# % type: double
+# % description: Increment between contour levels
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: levels
-#% type: double
-#% description: List of contour levels
-#% required: no
-#% multiple: yes
-#%end
+# %option
+# % key: levels
+# % type: double
+# % description: List of contour levels
+# % required: no
+# % multiple: yes
+# %end
 
-#%option
-#% key: minlevel
-#% type:  double
-#% description: Minimum contour level
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: minlevel
+# % type:  double
+# % description: Minimum contour level
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: maxlevel
-#% type: double
-#% description: Maximum contour level
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: maxlevel
+# % type: double
+# % description: Maximum contour level
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: cut
-#% type: integer
-#% description: Minimum number of points for a contour line (0 -> no limit)
-#% required: no
-#% multiple: no
-#% answer: 0
-#%end
+# %option
+# % key: cut
+# % type: integer
+# % description: Minimum number of points for a contour line (0 -> no limit)
+# % required: no
+# % multiple: no
+# % answer: 0
+# %end
 
-#%option
-#% key: nprocs
-#% type: integer
-#% description: Number of r.contour processes to run in parallel, more than 1 process works only in conjunction with flag -t
-#% required: no
-#% multiple: no
-#% answer: 1
-#%end
+# %option
+# % key: nprocs
+# % type: integer
+# % description: Number of r.contour processes to run in parallel, more than 1 process works only in conjunction with flag -t
+# % required: no
+# % multiple: no
+# % answer: 1
+# %end
 
-#%flag
-#% key: n
-#% description: Register empty vector maps
-#%end
+# %flag
+# % key: n
+# % description: Register empty vector maps
+# %end
 
-#%flag
-#% key: t
-#% description: Do not create attribute tables
-#%end
+# %flag
+# % key: t
+# % description: Do not create attribute tables
+# %end
 
 import sys
 import copy

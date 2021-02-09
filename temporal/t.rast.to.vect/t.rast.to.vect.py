@@ -21,100 +21,100 @@
 #
 #############################################################################
 
-#%module
-#% description: Converts a space time raster dataset into a space time vector dataset
-#% keyword: temporal
-#% keyword: conversion
-#% keyword: raster
-#% keyword: vector
-#% keyword: time
-#%end
+# %module
+# % description: Converts a space time raster dataset into a space time vector dataset
+# % keyword: temporal
+# % keyword: conversion
+# % keyword: raster
+# % keyword: vector
+# % keyword: time
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#%end
+# %option G_OPT_STRDS_INPUT
+# %end
 
-#%option G_OPT_STVDS_OUTPUT
-#%end
+# %option G_OPT_STVDS_OUTPUT
+# %end
 
-#%option G_OPT_T_WHERE
-#%end
+# %option G_OPT_T_WHERE
+# %end
 
-#%option
-#% key: type
-#% type: string
-#% description: Output feature type
-#% required: yes
-#% multiple: no
-#% options: point,line,area
-#%end
+# %option
+# % key: type
+# % type: string
+# % description: Output feature type
+# % required: yes
+# % multiple: no
+# % options: point,line,area
+# %end
 
-#%option
-#% key: basename
-#% type: string
-#% label: Basename of the new generated output maps
-#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
-#% required: yes
-#% multiple: no
-#%end
+# %option
+# % key: basename
+# % type: string
+# % label: Basename of the new generated output maps
+# % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+# % required: yes
+# % multiple: no
+# %end
 
-#%option
-#% key: suffix
-#% type: string
-#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
-#% answer: gran
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: suffix
+# % type: string
+# % description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+# % answer: gran
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: column
-#% type: string
-#% description: Name of attribute column to store value
-#% required: no
-#% multiple: no
-#% answer: value
-#%end
+# %option
+# % key: column
+# % type: string
+# % description: Name of attribute column to store value
+# % required: no
+# % multiple: no
+# % answer: value
+# %end
 
-#%option
-#% key: nprocs
-#% type: integer
-#% description: Number of r.to.vect processes to run in parallel, more than 1 process works only in conjunction with flag -t
-#% required: no
-#% multiple: no
-#% answer: 1
-#%end
+# %option
+# % key: nprocs
+# % type: integer
+# % description: Number of r.to.vect processes to run in parallel, more than 1 process works only in conjunction with flag -t
+# % required: no
+# % multiple: no
+# % answer: 1
+# %end
 
-#%flag
-#% key: n
-#% description: Register empty vector maps
-#%end
+# %flag
+# % key: n
+# % description: Register empty vector maps
+# %end
 
-#%flag
-#% key: t
-#% description: Do not create attribute tables
-#%end
+# %flag
+# % key: t
+# % description: Do not create attribute tables
+# %end
 
-#%flag
-#% key: s
-#% description: Smooth corners of area features
-#%end
+# %flag
+# % key: s
+# % description: Smooth corners of area features
+# %end
 
-#%flag
-#% key: z
-#% label: Write raster values as z coordinate
-#% description: Table is not created. Currently supported only for points.
-#%end
+# %flag
+# % key: z
+# % label: Write raster values as z coordinate
+# % description: Table is not created. Currently supported only for points.
+# %end
 
-#%flag
-#% key: b
-#% label: Do not build vector topology
-#% description: Name must be SQL compliant
-#%end
+# %flag
+# % key: b
+# % label: Do not build vector topology
+# % description: Name must be SQL compliant
+# %end
 
-#%flag
-#% key: v
-#% description: Use raster values as categories instead of unique sequence (CELL only)
-#%end
+# %flag
+# % key: v
+# % description: Use raster values as categories instead of unique sequence (CELL only)
+# %end
 
 import sys
 import copy

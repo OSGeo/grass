@@ -20,57 +20,57 @@
 #
 #############################################################################
 
-#%module
-#% description: Exports space time raster dataset as VTK time series.
-#% keyword: temporal
-#% keyword: export
-#% keyword: output
-#% keyword: raster
-#% keyword: VTK
-#% keyword: time
-#%end
+# %module
+# % description: Exports space time raster dataset as VTK time series.
+# % keyword: temporal
+# % keyword: export
+# % keyword: output
+# % keyword: raster
+# % keyword: VTK
+# % keyword: time
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#%end
+# %option G_OPT_STRDS_INPUT
+# %end
 
-#%option
-#% key: directory
-#% type: string
-#% description: Path to the export directory
-#% required: yes
-#% multiple: no
-#%end
+# %option
+# % key: directory
+# % type: string
+# % description: Path to the export directory
+# % required: yes
+# % multiple: no
+# %end
 
-#%option G_OPT_R_ELEV
-#% required: no
-#%end
+# %option G_OPT_R_ELEV
+# % required: no
+# %end
 
-#%option G_OPT_T_WHERE
-#%end
+# %option G_OPT_T_WHERE
+# %end
 
-#%option
-#% key: null
-#% type: double
-#% description: Value to represent no data cell
-#% required: no
-#% multiple: no
-#% answer: -99999.99
-#%end
+# %option
+# % key: null
+# % type: double
+# % description: Value to represent no data cell
+# % required: no
+# % multiple: no
+# % answer: -99999.99
+# %end
 
-#%flag
-#% key: p
-#% description: Create VTK point data instead of VTK cell data (if no elevation map is given)
-#%end
+# %flag
+# % key: p
+# % description: Create VTK point data instead of VTK cell data (if no elevation map is given)
+# %end
 
-#%flag
-#% key: c
-#% description: Correct the coordinates to fit the VTK-OpenGL precision
-#%end
+# %flag
+# % key: c
+# % description: Correct the coordinates to fit the VTK-OpenGL precision
+# %end
 
-#%flag
-#% key: g
-#% description: Export files using the space time dataset granularity for equidistant time between maps, where statement will be ignored
-#%end
+# %flag
+# % key: g
+# % description: Export files using the space time dataset granularity for equidistant time between maps, where statement will be ignored
+# %end
 
 import os
 import grass.script as grass

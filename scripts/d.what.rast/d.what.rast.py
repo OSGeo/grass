@@ -13,14 +13,14 @@
 #
 #############################################################################
 
-#%module
-#% description: Allows the user to interactively query raster map layers at user-selected locations.
-#% keyword: display
-#% keyword: vector
-#%end
-#%option G_OPT_R_INPUTS
-#% key: map
-#%end
+# %module
+# % description: Allows the user to interactively query raster map layers at user-selected locations.
+# % keyword: display
+# % keyword: vector
+# %end
+# %option G_OPT_R_INPUTS
+# % key: map
+# %end
 
 
 from grass.script import core as gcore

@@ -15,42 +15,42 @@
 #
 #############################################################################
 
-#%module
-#% description: Updates a column in the attribute table connected to a vector map.
-#% keyword: vector
-#% keyword: attribute table
-#% keyword: database
-#% keyword: attribute update
-#% keyword: type casting
-#%end
-#%option G_OPT_V_MAP
-#%end
-#%option G_OPT_V_FIELD
-#% required: yes
-#%end
-#%option G_OPT_DB_COLUMN
-#% key: column
-#% description: Name of attribute column to update
-#% required: yes
-#%end
-#%option
-#% key: value
-#% type: string
-#% description: Literal value to update the column with
-#% required: no
-#%end
-#%option G_OPT_DB_COLUMN
-#% key: query_column
-#% description: Name of other attribute column to query, can be combination of columns (e.g. co1+col2)
-#%end
-#%option G_OPT_DB_WHERE
-#%end
-#%option G_OPT_F_INPUT
-#% key: sqliteextra
-#% description: Name of SQLite extension file for extra functions (SQLite backend only)
-#% gisprompt: old,bin,file
-#% required: no
-#%end
+# %module
+# % description: Updates a column in the attribute table connected to a vector map.
+# % keyword: vector
+# % keyword: attribute table
+# % keyword: database
+# % keyword: attribute update
+# % keyword: type casting
+# %end
+# %option G_OPT_V_MAP
+# %end
+# %option G_OPT_V_FIELD
+# % required: yes
+# %end
+# %option G_OPT_DB_COLUMN
+# % key: column
+# % description: Name of attribute column to update
+# % required: yes
+# %end
+# %option
+# % key: value
+# % type: string
+# % description: Literal value to update the column with
+# % required: no
+# %end
+# %option G_OPT_DB_COLUMN
+# % key: query_column
+# % description: Name of other attribute column to query, can be combination of columns (e.g. co1+col2)
+# %end
+# %option G_OPT_DB_WHERE
+# %end
+# %option G_OPT_F_INPUT
+# % key: sqliteextra
+# % description: Name of SQLite extension file for extra functions (SQLite backend only)
+# % gisprompt: old,bin,file
+# % required: no
+# %end
 
 import sys
 import os

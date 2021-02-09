@@ -2557,9 +2557,9 @@ class WritePythonFile:
         # UI
         self.fd.write(
             r"""
-#%module
-#% description: {description}
-#%end
+# %module
+# % description: {description}
+# %end
 """.format(description=' '.join(properties['description'].splitlines())))
 
         modelItems = self.model.GetItems()
@@ -2570,20 +2570,20 @@ class WritePythonFile:
                 else:
                     desc = flag['description']
                 self.fd.write(
-                r"""#%option
-#% key: {flag_name}
-#% description: {description}
-#% required: yes
-#% type: string
-#% options: True, False
-#% guisection: Flags
+                r"""# %option
+# % key: {flag_name}
+# % description: {description}
+# % required: yes
+# % type: string
+# % options: True, False
+# % guisection: Flags
 """.format(flag_name=self._getParamName(flag['name'], item),
            description=desc))
                 if flag['value']:
-                    self.fd.write("#% answer: {}\n".format(flag['value']))
+                    self.fd.write("# % answer: {}\n".format(flag['value']))
                 else:
-                    self.fd.write("#% answer: False\n")
-                self.fd.write("#%end\n")
+                    self.fd.write("# % answer: False\n")
+                self.fd.write("# %end\n")
 
             for param in item.GetParameterizedParams()['params']:
                 if param['label']:
@@ -2591,23 +2591,23 @@ class WritePythonFile:
                 else:
                     desc = param['description']
                 self.fd.write(
-                r"""#%option
-#% key: {param_name}
-#% description: {description}
-#% required: yes
+                r"""# %option
+# % key: {param_name}
+# % description: {description}
+# % required: yes
 """.format(param_name=self._getParamName(param['name'], item),
            description=desc))
                 if param['type'] != 'float':
-                    self.fd.write('#% type: {}\n'.format(param['type']))
+                    self.fd.write('# % type: {}\n'.format(param['type']))
                 else:
-                    self.fd.write('#% type: double\n')
+                    self.fd.write('# % type: double\n')
                 if param['key_desc']:
-                    self.fd.write("#% key_desc: ")
+                    self.fd.write("# % key_desc: ")
                     self.fd.write(', '.join(param['key_desc']))
                     self.fd.write("\n")
                 if param['value']:
-                    self.fd.write("#% answer: {}\n".format(param['value']))
-                self.fd.write("#%end\n")
+                    self.fd.write("# % answer: {}\n".format(param['value']))
+                self.fd.write("# %end\n")
 
         # import modules
         self.fd.write(

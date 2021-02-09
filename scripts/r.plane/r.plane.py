@@ -17,51 +17,51 @@
 #
 #############################################################################
 
-#%module
-#% description: Creates raster plane map given dip (inclination), aspect (azimuth) and one point.
-#% keyword: raster
-#% keyword: elevation
-#%end
-#%option G_OPT_R_OUTPUT
-#%end
-#%option
-#% key: dip
-#% type: double
-#% gisprompt: -90-90
-#% answer: 0.0
-#% description: Dip of plane in degrees
-#% required : yes
-#%end
-#%option
-#% key: azimuth
-#% type: double
-#% gisprompt: 0-360
-#% answer: 0.0
-#% description: Azimuth of the plane in degrees
-#% required : yes
-#%end
-#%option
-#% key: easting
-#% type: double
-#% description: Easting coordinate of a point on the plane
-#% required : yes
-#%end
-#%option
-#% key: northing
-#% type: double
-#% description: Northing coordinate of a point on the plane
-#% required : yes
-#%end
-#%option
-#% key: elevation
-#% type: double
-#% description: Elevation coordinate of a point on the plane
-#% required : yes
-#%end
-#%option G_OPT_R_TYPE
-#% answer: FCELL
-#% required: no
-#%end
+# %module
+# % description: Creates raster plane map given dip (inclination), aspect (azimuth) and one point.
+# % keyword: raster
+# % keyword: elevation
+# %end
+# %option G_OPT_R_OUTPUT
+# %end
+# %option
+# % key: dip
+# % type: double
+# % gisprompt: -90-90
+# % answer: 0.0
+# % description: Dip of plane in degrees
+# % required : yes
+# %end
+# %option
+# % key: azimuth
+# % type: double
+# % gisprompt: 0-360
+# % answer: 0.0
+# % description: Azimuth of the plane in degrees
+# % required : yes
+# %end
+# %option
+# % key: easting
+# % type: double
+# % description: Easting coordinate of a point on the plane
+# % required : yes
+# %end
+# %option
+# % key: northing
+# % type: double
+# % description: Northing coordinate of a point on the plane
+# % required : yes
+# %end
+# %option
+# % key: elevation
+# % type: double
+# % description: Elevation coordinate of a point on the plane
+# % required : yes
+# %end
+# %option G_OPT_R_TYPE
+# % answer: FCELL
+# % required: no
+# %end
 
 import math
 import string

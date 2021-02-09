@@ -14,24 +14,24 @@
 #
 #############################################################################
 
-#%module
-#% description: Exports a vector map as GRASS GIS specific archive file
-#% keyword: vector
-#% keyword: export
-#% keyword: copying
-#%end
-#%option G_OPT_V_INPUT
-#% label: Name of vector map to pack up
-#% description:
-#%end
-#%option G_OPT_F_OUTPUT
-#% description: Name for output file (default is <input>.pack)
-#% required : no
-#%end
-#%flag
-#% key: c
-#% description: Switch the compression off
-#%end
+# %module
+# % description: Exports a vector map as GRASS GIS specific archive file
+# % keyword: vector
+# % keyword: export
+# % keyword: copying
+# %end
+# %option G_OPT_V_INPUT
+# % label: Name of vector map to pack up
+# % description:
+# %end
+# %option G_OPT_F_OUTPUT
+# % description: Name for output file (default is <input>.pack)
+# % required : no
+# %end
+# %flag
+# % key: c
+# % description: Switch the compression off
+# %end
 
 import os
 import sys

@@ -15,25 +15,25 @@
 #############################################################################
 
 
-#%module
-#% description: Removes a vector feature from a vector map through attribute selection.
-#% keyword: vector
-#% keyword: attribute table
-#% keyword: database
-#%end
+# %module
+# % description: Removes a vector feature from a vector map through attribute selection.
+# % keyword: vector
+# % keyword: attribute table
+# % keyword: database
+# %end
 
-#%option G_OPT_V_INPUT
-#%end
+# %option G_OPT_V_INPUT
+# %end
 
-#%option G_OPT_V_FIELD
-#%end
+# %option G_OPT_V_FIELD
+# %end
 
-#%option G_OPT_DB_WHERE
-#% required :yes
-#%end
+# %option G_OPT_DB_WHERE
+# % required :yes
+# %end
 
-#%option G_OPT_V_OUTPUT
-#%end
+# %option G_OPT_V_OUTPUT
+# %end
 
 import sys
 import grass.script as grass

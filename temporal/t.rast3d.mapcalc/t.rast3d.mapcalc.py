@@ -20,62 +20,62 @@
 #
 #############################################################################
 
-#%module
-#% description: Performs r3.mapcalc expressions on maps of sampled space time 3D raster datasets.
-#% keyword: temporal
-#% keyword: algebra
-#% keyword: raster3d
-#% keyword: voxel
-#% keyword: time
-#%end
+# %module
+# % description: Performs r3.mapcalc expressions on maps of sampled space time 3D raster datasets.
+# % keyword: temporal
+# % keyword: algebra
+# % keyword: raster3d
+# % keyword: voxel
+# % keyword: time
+# %end
 
-#%option G_OPT_STR3DS_INPUTS
-#%end
+# %option G_OPT_STR3DS_INPUTS
+# %end
 
-#%option
-#% key: expression
-#% type: string
-#% description: r3.mapcalc expression applied to each time step of the sampled data
-#% required: yes
-#% multiple: no
-#%end
+# %option
+# % key: expression
+# % type: string
+# % description: r3.mapcalc expression applied to each time step of the sampled data
+# % required: yes
+# % multiple: no
+# %end
 
-#%option G_OPT_T_SAMPLE
-#% key: method
-#% answer: during,overlap,contain,equal
-#%end
+# %option G_OPT_T_SAMPLE
+# % key: method
+# % answer: during,overlap,contain,equal
+# %end
 
-#%option G_OPT_STR3DS_OUTPUT
-#%end
+# %option G_OPT_STR3DS_OUTPUT
+# %end
 
-#%option
-#% key: basename
-#% type: string
-#% label: Basename of the new generated output maps
-#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
-#% required: yes
-#% multiple: no
-#% gisprompt:
-#%end
+# %option
+# % key: basename
+# % type: string
+# % label: Basename of the new generated output maps
+# % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+# % required: yes
+# % multiple: no
+# % gisprompt:
+# %end
 
-#%option
-#% key: nprocs
-#% type: integer
-#% description: Number of r3.mapcalc processes to run in parallel
-#% required: no
-#% multiple: no
-#% answer: 1
-#%end
+# %option
+# % key: nprocs
+# % type: integer
+# % description: Number of r3.mapcalc processes to run in parallel
+# % required: no
+# % multiple: no
+# % answer: 1
+# %end
 
-#%flag
-#% key: n
-#% description: Register Null maps
-#%end
+# %flag
+# % key: n
+# % description: Register Null maps
+# %end
 
-#%flag
-#% key: s
-#% description: Check the spatial topology of temporally related maps and process only spatially related maps
-#%end
+# %flag
+# % key: s
+# % description: Check the spatial topology of temporally related maps and process only spatially related maps
+# %end
 
 import grass.script as grass
 

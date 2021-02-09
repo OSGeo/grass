@@ -18,15 +18,15 @@
 #
 ############################################################################
 
-#%module
-#% description: Launches graphical attribute table manager.
-#% keyword: general
-#% keyword: GUI
-#% keyword: attribute table
-#% keyword: database
-#%end
-#%option G_OPT_V_MAP
-#%end
+# %module
+# % description: Launches graphical attribute table manager.
+# % keyword: general
+# % keyword: GUI
+# % keyword: attribute table
+# % keyword: database
+# %end
+# %option G_OPT_V_MAP
+# %end
 
 import grass.script as gscript
 

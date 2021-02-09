@@ -18,12 +18,12 @@
 #
 ############################################################################
 
-#%module
-#% description: Tool for browsing, modifying and managing GRASS maps.
-#% keyword: general
-#% keyword: GUI
-#% keyword: map management
-#%end
+# %module
+# % description: Tool for browsing, modifying and managing GRASS maps.
+# % keyword: general
+# % keyword: GUI
+# % keyword: map management
+# %end
 
 import grass.script as gscript
 

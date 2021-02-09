@@ -21,41 +21,41 @@
 #
 #############################################################################
 
-#%module
-#% description: Calculates univariate statistics from the non-null cells for each registered 3D raster map of a space time 3D raster dataset.
-#% keyword: temporal
-#% keyword: statistics
-#% keyword: raster3d
-#% keyword: voxel
-#% keyword: time
-#%end
+# %module
+# % description: Calculates univariate statistics from the non-null cells for each registered 3D raster map of a space time 3D raster dataset.
+# % keyword: temporal
+# % keyword: statistics
+# % keyword: raster3d
+# % keyword: voxel
+# % keyword: time
+# %end
 
-#%option G_OPT_STR3DS_INPUT
-#%end
+# %option G_OPT_STR3DS_INPUT
+# %end
 
-#%option G_OPT_F_OUTPUT
-#% required: no
-#%end
+# %option G_OPT_F_OUTPUT
+# % required: no
+# %end
 
-#%option G_OPT_T_WHERE
-#% guisection: Selection
-#%end
+# %option G_OPT_T_WHERE
+# % guisection: Selection
+# %end
 
-#%option G_OPT_F_SEP
-#% label: Field separator character between the output columns
-#% guisection: Formatting
-#%end
+# %option G_OPT_F_SEP
+# % label: Field separator character between the output columns
+# % guisection: Formatting
+# %end
 
-#%flag
-#% key: e
-#% description: Calculate extended statistics
-#%end
+# %flag
+# % key: e
+# % description: Calculate extended statistics
+# %end
 
-#%flag
-#% key: s
-#% description: Suppress printing of column names
-#% guisection: Formatting
-#%end
+# %flag
+# % key: s
+# % description: Suppress printing of column names
+# % guisection: Formatting
+# %end
 
 import grass.script as grass
 

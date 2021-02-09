@@ -11,43 +11,43 @@
 #
 #############################################################################
 
-#%Module
-#% description: Adds missing centroids to closed boundaries.
-#% keyword: vector
-#% keyword: centroid
-#% keyword: area
-#%End
+# %Module
+# % description: Adds missing centroids to closed boundaries.
+# % keyword: vector
+# % keyword: centroid
+# % keyword: area
+# %End
 
-#%option G_OPT_V_INPUT
-#%end
+# %option G_OPT_V_INPUT
+# %end
 
-#%option G_OPT_V_OUTPUT
-#%end
+# %option G_OPT_V_OUTPUT
+# %end
 
-#%option
-#% key: option
-#% type: string
-#% description: Action to be taken
-#% options: add
-#% answer: add
-#% required: no
-#%end
+# %option
+# % key: option
+# % type: string
+# % description: Action to be taken
+# % options: add
+# % answer: add
+# % required: no
+# %end
 
-#%option G_OPT_V_FIELD
-#%end
+# %option G_OPT_V_FIELD
+# %end
 
-#%option G_OPT_V_CAT
-#% description: Category number starting value
-#% answer: 1
-#%end
+# %option G_OPT_V_CAT
+# % description: Category number starting value
+# % answer: 1
+# %end
 
-#%option
-#% key: step
-#% type: integer
-#% description: Category increment
-#% answer: 1
-#% required: no
-#%end
+# %option
+# % key: step
+# % type: integer
+# % description: Category increment
+# % answer: 1
+# % required: no
+# %end
 
 import sys
 import grass.script as gscript

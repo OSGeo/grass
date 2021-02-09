@@ -20,53 +20,53 @@
 #
 #############################################################################
 
-#%module
-#% description: Replaces gaps in a space time raster dataset with interpolated raster maps.
-#% keyword: temporal
-#% keyword: interpolation
-#% keyword: raster
-#% keyword: time
-#% keyword: no-data filling
-#%end
+# %module
+# % description: Replaces gaps in a space time raster dataset with interpolated raster maps.
+# % keyword: temporal
+# % keyword: interpolation
+# % keyword: raster
+# % keyword: time
+# % keyword: no-data filling
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#%end
+# %option G_OPT_STRDS_INPUT
+# %end
 
-#%option G_OPT_T_WHERE
-#%end
+# %option G_OPT_T_WHERE
+# %end
 
-#%option
-#% key: basename
-#% type: string
-#% label: Basename of the new generated output maps
-#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
-#% required: yes
-#% multiple: no
-#% gisprompt:
-#%end
+# %option
+# % key: basename
+# % type: string
+# % label: Basename of the new generated output maps
+# % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+# % required: yes
+# % multiple: no
+# % gisprompt:
+# %end
 
-#%option
-#% key: suffix
-#% type: string
-#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
-#% answer: gran
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: suffix
+# % type: string
+# % description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+# % answer: gran
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: nprocs
-#% type: integer
-#% description: Number of interpolation processes to run in parallel
-#% required: no
-#% multiple: no
-#% answer: 1
-#%end
+# %option
+# % key: nprocs
+# % type: integer
+# % description: Number of interpolation processes to run in parallel
+# % required: no
+# % multiple: no
+# % answer: 1
+# %end
 
-#%flag
-#% key: t
-#% description: Assign the space time raster dataset start and end time to the output map
-#%end
+# %flag
+# % key: t
+# % description: Assign the space time raster dataset start and end time to the output map
+# %end
 
 import sys
 import copy

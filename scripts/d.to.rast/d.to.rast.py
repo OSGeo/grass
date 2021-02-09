@@ -13,14 +13,14 @@
 #
 #############################################################################
 
-#%module
-#% description: Saves the contents of the active display monitor to a raster map.
-#% keyword: display
-#% keyword: export
-#% keyword: raster
-#%end
-#%option G_OPT_R_OUTPUT
-#%end
+# %module
+# % description: Saves the contents of the active display monitor to a raster map.
+# % keyword: display
+# % keyword: export
+# % keyword: raster
+# %end
+# %option G_OPT_R_OUTPUT
+# %end
 
 
 from grass.script import core as gcore

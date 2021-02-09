@@ -15,24 +15,24 @@
 #############################################################################
 
 
-#%Module
-#% description: Removes existing attribute table of a vector map.
-#% keyword: vector
-#% keyword: attribute table
-#% keyword: database
-#%End
-#%flag
-#% key: f
-#% description: Force removal (required for actual deletion of table)
-#%end
-#%option G_OPT_V_MAP
-#%end
-#%option G_OPT_DB_TABLE
-#% description: Table name (default: vector map name)
-#%end
-#%option G_OPT_V_FIELD
-#% required : no
-#%end
+# %Module
+# % description: Removes existing attribute table of a vector map.
+# % keyword: vector
+# % keyword: attribute table
+# % keyword: database
+# %End
+# %flag
+# % key: f
+# % description: Force removal (required for actual deletion of table)
+# %end
+# %option G_OPT_V_MAP
+# %end
+# %option G_OPT_DB_TABLE
+# % description: Table name (default: vector map name)
+# %end
+# %option G_OPT_V_FIELD
+# % required : no
+# %end
 
 import sys
 import os

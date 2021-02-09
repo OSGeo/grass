@@ -19,20 +19,20 @@
 #
 ############################################################################
 
-#%module
-#% description: Allows comparing temporal datasets by displaying their temporal extents in a plot.
-#% keyword: general
-#% keyword: GUI
-#% keyword: temporal
-#% keywords: plot
-#%end
-#%option G_OPT_STDS_INPUTS
-#% required: no
-#%end
-#%flag
-#% key: 3
-#% description: Show also 3D plot of spatio-temporal extents
-#%end
+# %module
+# % description: Allows comparing temporal datasets by displaying their temporal extents in a plot.
+# % keyword: general
+# % keyword: GUI
+# % keyword: temporal
+# % keywords: plot
+# %end
+# %option G_OPT_STDS_INPUTS
+# % required: no
+# %end
+# %flag
+# % key: 3
+# % description: Show also 3D plot of spatio-temporal extents
+# %end
 
 import grass.script as gscript
 

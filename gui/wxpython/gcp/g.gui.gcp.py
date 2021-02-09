@@ -19,14 +19,14 @@
 #
 ############################################################################
 
-#%module
-#% description: Georectifies a map and allows managing Ground Control Points.
-#% keyword: general
-#% keyword: GUI
-#% keyword: georectification
-#% keyword: geometry
-#% keyword: GCP
-#%end
+# %module
+# % description: Georectifies a map and allows managing Ground Control Points.
+# % keyword: general
+# % keyword: GUI
+# % keyword: georectification
+# % keyword: geometry
+# % keyword: GCP
+# %end
 
 """
 Module to run GCP management tool as stadalone application.

@@ -29,23 +29,23 @@
 #   -> correction of 0001/0001_LOG.TXT coordinates by 0.5 pixel
 #############################################################################
 
-#%module
-#% description: Imports SPOT VGT NDVI data into a raster map.
-#% keyword: imagery
-#% keyword: import
-#% keyword: NDVI
-#% keyword: SPOT
-#%end
-#%flag
-#% key: a
-#% description: Also import quality map (SM status map layer) and filter NDVI map
-#%end
-#%option G_OPT_F_INPUT
-#% description: Name of input SPOT VGT NDVI HDF file
-#%end
-#% option G_OPT_R_OUTPUT
-#% required : no
-#%end
+# %module
+# % description: Imports SPOT VGT NDVI data into a raster map.
+# % keyword: imagery
+# % keyword: import
+# % keyword: NDVI
+# % keyword: SPOT
+# %end
+# %flag
+# % key: a
+# % description: Also import quality map (SM status map layer) and filter NDVI map
+# %end
+# %option G_OPT_F_INPUT
+# % description: Name of input SPOT VGT NDVI HDF file
+# %end
+# % option G_OPT_R_OUTPUT
+# % required : no
+# %end
 
 import os
 import atexit
