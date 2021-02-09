@@ -35,62 +35,62 @@
 #
 #############################################################################
 
-#%Module
-#% description: Image fusion algorithms to sharpen multispectral with high-res panchromatic channels
-#% keyword: imagery
-#% keyword: fusion
-#% keyword: sharpen
-#% keyword: Brovey
-#% keyword: IHS
-#% keyword: HIS
-#% keyword: PCA
-#% overwrite: yes
-#%End
-#%option G_OPT_R_INPUT
-#% key: red
-#% description: Name of raster map to be used for <red>
-#%end
-#%option G_OPT_R_INPUT
-#% key: green
-#% description: Name of raster map to be used for <green>
-#%end
-#%option G_OPT_R_INPUT
-#% key: blue
-#% description: Name of raster map to be used for <blue>
-#%end
-#% option G_OPT_R_INPUT
-#% key: pan
-#% description: Name of raster map to be used for high resolution panchromatic channel
-#%end
-#%option G_OPT_R_BASENAME_OUTPUT
-#%end
-#%option
-#% key: method
-#% description: Method for pan sharpening
-#% options: brovey,ihs,pca
-#% answer: ihs
-#% required: yes
-#%end
-#%option
-#% key: bitdepth
-#% type: integer
-#% description: Bit depth of image (must be in range of 2-30)
-#% options: 2-32
-#% answer: 8
-#% required: yes
-#%end
-#%flag
-#% key: s
-#% description: Serial processing rather than parallel processing
-#%end
-#%flag
-#% key: l
-#% description: Rebalance blue channel for LANDSAT
-#%end
-#%flag
-#% key: r
-#% description: Rescale (stretch) the range of pixel values in each channel to the entire 0-255 8-bit range for processing (see notes)
-#%end
+# %Module
+# % description: Image fusion algorithms to sharpen multispectral with high-res panchromatic channels
+# % keyword: imagery
+# % keyword: fusion
+# % keyword: sharpen
+# % keyword: Brovey
+# % keyword: IHS
+# % keyword: HIS
+# % keyword: PCA
+# % overwrite: yes
+# %End
+# %option G_OPT_R_INPUT
+# % key: red
+# % description: Name of raster map to be used for <red>
+# %end
+# %option G_OPT_R_INPUT
+# % key: green
+# % description: Name of raster map to be used for <green>
+# %end
+# %option G_OPT_R_INPUT
+# % key: blue
+# % description: Name of raster map to be used for <blue>
+# %end
+# % option G_OPT_R_INPUT
+# % key: pan
+# % description: Name of raster map to be used for high resolution panchromatic channel
+# %end
+# %option G_OPT_R_BASENAME_OUTPUT
+# %end
+# %option
+# % key: method
+# % description: Method for pan sharpening
+# % options: brovey,ihs,pca
+# % answer: ihs
+# % required: yes
+# %end
+# %option
+# % key: bitdepth
+# % type: integer
+# % description: Bit depth of image (must be in range of 2-30)
+# % options: 2-32
+# % answer: 8
+# % required: yes
+# %end
+# %flag
+# % key: s
+# % description: Serial processing rather than parallel processing
+# %end
+# %flag
+# % key: l
+# % description: Rebalance blue channel for LANDSAT
+# %end
+# %flag
+# % key: r
+# % description: Rescale (stretch) the range of pixel values in each channel to the entire 0-255 8-bit range for processing (see notes)
+# %end
 
 import os
 

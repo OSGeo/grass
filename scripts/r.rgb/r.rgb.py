@@ -13,33 +13,33 @@
 #
 #############################################################################
 
-#%module
-#% description: Splits a raster map into red, green and blue maps.
-#% keyword: raster
-#% keyword: RGB
-#% keyword: separate
-#% keyword: split
-#%end
-#%option G_OPT_R_INPUT
-#%end
-#%option G_OPT_R_OUTPUT
-#% key: red
-#% description: Red channel raster map name
-#% required: no
-#%end
-#%option G_OPT_R_OUTPUT
-#% key: green
-#% description: Green channel raster map name
-#% required: no
-#%end
-#%option G_OPT_R_OUTPUT
-#% key: blue
-#% description: Blue channel raster map name
-#% required: no
-#%end
-#%rules
-#% required: red, green, blue
-#%end
+# %module
+# % description: Splits a raster map into red, green and blue maps.
+# % keyword: raster
+# % keyword: RGB
+# % keyword: separate
+# % keyword: split
+# %end
+# %option G_OPT_R_INPUT
+# %end
+# %option G_OPT_R_OUTPUT
+# % key: red
+# % description: Red channel raster map name
+# % required: no
+# %end
+# %option G_OPT_R_OUTPUT
+# % key: green
+# % description: Green channel raster map name
+# % required: no
+# %end
+# %option G_OPT_R_OUTPUT
+# % key: blue
+# % description: Blue channel raster map name
+# % required: no
+# %end
+# %rules
+# % required: red, green, blue
+# %end
 
 import grass.script as gscript
 

@@ -18,21 +18,21 @@
 #
 ############################################################################
 
-#%module
-#% label: Graphical Modeler.
-#% description: Allows interactively creating, editing and managing models.
-#% keyword: general
-#% keyword: GUI
-#% keyword: graphical modeler
-#% keyword: workflow
-#%end
-#%option G_OPT_F_INPUT
-#% key: file
-#% description: Name of model file to be loaded
-#% key_desc: name.gxm
-#% required: no
-#% guisection: Model
-#%end
+# %module
+# % label: Graphical Modeler.
+# % description: Allows interactively creating, editing and managing models.
+# % keyword: general
+# % keyword: GUI
+# % keyword: graphical modeler
+# % keyword: workflow
+# %end
+# %option G_OPT_F_INPUT
+# % key: file
+# % description: Name of model file to be loaded
+# % key_desc: name.gxm
+# % required: no
+# % guisection: Model
+# %end
 
 import grass.script as gscript
 

@@ -20,94 +20,94 @@
 #
 ############################################################################
 
-#%module
-#% description: Plots the values of temporal datasets.
-#% keywords: general
-#% keywords: GUI
-#% keywords: temporal
-#% keywords: plot
-#%end
+# %module
+# % description: Plots the values of temporal datasets.
+# % keywords: general
+# % keywords: GUI
+# % keywords: temporal
+# % keywords: plot
+# %end
 
-#%flag
-#% key: h
-#% description: Set the header of CSV file, to be used with csv option
-#%end
+# %flag
+# % key: h
+# % description: Set the header of CSV file, to be used with csv option
+# %end
 
-#%flag
-#% key: l
-#% description: Show simple linear regression model line
-#%end
+# %flag
+# % key: l
+# % description: Show simple linear regression model line
+# %end
 
-#%option G_OPT_STVDS_INPUTS
-#% key: stvds
-#% required: no
-#%end
+# %option G_OPT_STVDS_INPUTS
+# % key: stvds
+# % required: no
+# %end
 
-#%option G_OPT_STRDS_INPUTS
-#% key: strds
-#% required: no
-#%end
+# %option G_OPT_STRDS_INPUTS
+# % key: strds
+# % required: no
+# %end
 
-#%option G_OPT_M_COORDS
-#% required: no
-#%end
+# %option G_OPT_M_COORDS
+# % required: no
+# %end
 
 # TODO use option G_OPT_V_CATS
-#%option
-#% key: cats
-#% label: Categories of vectores features
-#% description: To use only with stvds
-#% required: no
-#%end
+# %option
+# % key: cats
+# % label: Categories of vectores features
+# % description: To use only with stvds
+# % required: no
+# %end
 
-#%option
-#% key: attr
-#% label: Name of attribute
-#% description: Name of attribute which represent data for plotting
-#% required: no
-#%end
+# %option
+# % key: attr
+# % label: Name of attribute
+# % description: Name of attribute which represent data for plotting
+# % required: no
+# %end
 
-#%option G_OPT_F_OUTPUT
-#% required: no
-#% label: Name for output graphical file
-#% description: Full path for output file containing the plot, ddd extension to specify format (.png, .pdf, .svg)
-#%end
+# %option G_OPT_F_OUTPUT
+# % required: no
+# % label: Name for output graphical file
+# % description: Full path for output file containing the plot, ddd extension to specify format (.png, .pdf, .svg)
+# %end
 
-#%option G_OPT_F_OUTPUT
-#% key: csv
-#% required: no
-#% label: Name for output CSV file
-#% description: Full path for the CSV file containing the plotted data
-#%end
+# %option G_OPT_F_OUTPUT
+# % key: csv
+# % required: no
+# % label: Name for output CSV file
+# % description: Full path for the CSV file containing the plotted data
+# %end
 
-#%option
-#% key: title
-#% label: Title for plot
-#% description: The title for the output plot
-#% required: no
-#%end
+# %option
+# % key: title
+# % label: Title for plot
+# % description: The title for the output plot
+# % required: no
+# %end
 
-#%option
-#% key: xlabel
-#% label: Label for x axis
-#% description: The x axis label for the output plot
-#% required: no
-#%end
+# %option
+# % key: xlabel
+# % label: Label for x axis
+# % description: The x axis label for the output plot
+# % required: no
+# %end
 
-#%option
-#% key: ylabel
-#% label: Label for y axis
-#% description: The y axis label for the output plot
-#% required: no
-#%end
+# %option
+# % key: ylabel
+# % label: Label for y axis
+# % description: The y axis label for the output plot
+# % required: no
+# %end
 
-#%option
-#% key: size
-#% type: string
-#% label: The size for output image
-#% description: It works only with output parameter
-#% required: no
-#%end
+# %option
+# % key: size
+# % type: string
+# % label: The size for output image
+# % description: It works only with output parameter
+# % required: no
+# %end
 
 import grass.script as gscript
 

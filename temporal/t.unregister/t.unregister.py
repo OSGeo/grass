@@ -20,33 +20,33 @@
 #
 #############################################################################
 
-#%module
-#% description: Unregisters raster, vector and raster3d maps from the temporal database or a specific space time dataset.
-#% keyword: temporal
-#% keyword: map management
-#% keyword: unregister
-#% keyword: time
-#%end
+# %module
+# % description: Unregisters raster, vector and raster3d maps from the temporal database or a specific space time dataset.
+# % keyword: temporal
+# % keyword: map management
+# % keyword: unregister
+# % keyword: time
+# %end
 
-#%option G_OPT_STDS_INPUT
-#% required: no
-#%end
+# %option G_OPT_STDS_INPUT
+# % required: no
+# %end
 
-#%option G_OPT_F_INPUT
-#% key: file
-#% description: Input file with map names, one per line
-#% required: no
-#%end
+# %option G_OPT_F_INPUT
+# % key: file
+# % description: Input file with map names, one per line
+# % required: no
+# %end
 
-#%option G_OPT_MAP_TYPE
-#% guidependency: input,maps
-#%end
+# %option G_OPT_MAP_TYPE
+# % guidependency: input,maps
+# %end
 
 
-#%option G_OPT_MAP_INPUTS
-#% description: Name(s) of existing raster, vector or raster3d map(s) to unregister
-#% required: no
-#%end
+# %option G_OPT_MAP_INPUTS
+# % description: Name(s) of existing raster, vector or raster3d map(s) to unregister
+# % required: no
+# %end
 
 import grass.script as grass
 

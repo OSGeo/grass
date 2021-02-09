@@ -20,120 +20,120 @@
 #
 #############################################################################
 
-#%module
-#% description: Detects accumulation patterns in temporally accumulated space time raster datasets created by t.rast.accumulate.
-#% keyword: temporal
-#% keyword: accumulation
-#% keyword: raster
-#% keyword: time
-#%end
+# %module
+# % description: Detects accumulation patterns in temporally accumulated space time raster datasets created by t.rast.accumulate.
+# % keyword: temporal
+# % keyword: accumulation
+# % keyword: raster
+# % keyword: time
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#%end
+# %option G_OPT_STRDS_INPUT
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#% key: minimum
-#% description: Input space time raster dataset that specifies the minimum values to detect the accumulation pattern
-#% required: no
-#%end
+# %option G_OPT_STRDS_INPUT
+# % key: minimum
+# % description: Input space time raster dataset that specifies the minimum values to detect the accumulation pattern
+# % required: no
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#% key: maximum
-#% description: Input space time raster dataset that specifies the maximum values to detect the accumulation pattern
-#% required: no
-#%end
+# %option G_OPT_STRDS_INPUT
+# % key: maximum
+# % description: Input space time raster dataset that specifies the maximum values to detect the accumulation pattern
+# % required: no
+# %end
 
-#%option G_OPT_STRDS_OUTPUT
-#% key: occurrence
-#% description: The output space time raster dataset that stores the occurrence of the the accumulation pattern using the provided data range
-#% required: yes
-#%end
+# %option G_OPT_STRDS_OUTPUT
+# % key: occurrence
+# % description: The output space time raster dataset that stores the occurrence of the the accumulation pattern using the provided data range
+# % required: yes
+# %end
 
-#%option G_OPT_STRDS_OUTPUT
-#% key: indicator
-#% description: The output space time raster dataset that stores the indication of the start, intermediate and end of the specified data range
-#% required: no
-#%end
+# %option G_OPT_STRDS_OUTPUT
+# % key: indicator
+# % description: The output space time raster dataset that stores the indication of the start, intermediate and end of the specified data range
+# % required: no
+# %end
 
-#%option
-#% key: start
-#% type: string
-#% description: The temporal starting point to begin the accumulation, eg '2001-01-01'
-#% required: yes
-#% multiple: no
-#%end
+# %option
+# % key: start
+# % type: string
+# % description: The temporal starting point to begin the accumulation, eg '2001-01-01'
+# % required: yes
+# % multiple: no
+# %end
 
-#%option
-#% key: stop
-#% type: string
-#% description: The temporal date to stop the accumulation, eg '2009-01-01'
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: stop
+# % type: string
+# % description: The temporal date to stop the accumulation, eg '2009-01-01'
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: cycle
-#% type: string
-#% description: The temporal cycle to restart the accumulation, eg '12 months'
-#% required: yes
-#% multiple: no
-#%end
+# %option
+# % key: cycle
+# % type: string
+# % description: The temporal cycle to restart the accumulation, eg '12 months'
+# % required: yes
+# % multiple: no
+# %end
 
-#%option
-#% key: offset
-#% type: string
-#% description: The temporal offset to the begin of the next cycle, eg '6 months'
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: offset
+# % type: string
+# % description: The temporal offset to the begin of the next cycle, eg '6 months'
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: basename
-#% type: string
-#% label: Basename of the new generated output maps
-#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
-#% required: yes
-#% multiple: no
-#% gisprompt:
-#%end
+# %option
+# % key: basename
+# % type: string
+# % label: Basename of the new generated output maps
+# % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+# % required: yes
+# % multiple: no
+# % gisprompt:
+# %end
 
-#%option
-#% key: suffix
-#% type: string
-#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'count' for numerical suffix with a specific number of digits (default %05)
-#% answer: gran
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: suffix
+# % type: string
+# % description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'count' for numerical suffix with a specific number of digits (default %05)
+# % answer: gran
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: range
-#% type: double
-#% key_desc: min,max
-#% description: The minimum and maximum value of the occurrence of accumulated values, these values will be used if the min/max space time raster datasets are not specified
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: range
+# % type: double
+# % key_desc: min,max
+# % description: The minimum and maximum value of the occurrence of accumulated values, these values will be used if the min/max space time raster datasets are not specified
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: staend
-#% type: integer
-#% key_desc: start,intermediate,end
-#% description: The user defined values that indicate start, intermediate and end status in the indicator output space time raster dataset
-#% answer: 1,2,3
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: staend
+# % type: integer
+# % key_desc: start,intermediate,end
+# % description: The user defined values that indicate start, intermediate and end status in the indicator output space time raster dataset
+# % answer: 1,2,3
+# % required: no
+# % multiple: no
+# %end
 
-#%flag
-#% key: n
-#% description: Register empty maps in the output space time raster dataset, otherwise they will be deleted
-#%end
+# %flag
+# % key: n
+# % description: Register empty maps in the output space time raster dataset, otherwise they will be deleted
+# %end
 
-#%flag
-#% key: r
-#% description: Reverse time direction in cyclic accumulation
-#%end
+# %flag
+# % key: r
+# % description: Reverse time direction in cyclic accumulation
+# %end
 
 import grass.script as grass
 

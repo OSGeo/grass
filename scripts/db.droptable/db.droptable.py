@@ -14,33 +14,33 @@
 #
 #############################################################################
 
-#%module
-#% description: Drops an attribute table.
-#% keyword: database
-#% keyword: attribute table
-#%end
+# %module
+# % description: Drops an attribute table.
+# % keyword: database
+# % keyword: attribute table
+# %end
 
-#%flag
-#% key: f
-#% description: Force removal (required for actual deletion of files)
-#%end
+# %flag
+# % key: f
+# % description: Force removal (required for actual deletion of files)
+# %end
 
-#%option G_OPT_DB_DRIVER
-#% label: Name of database driver
-#% description: If not given then default driver is used
-#% guisection: Connection
-#%end
+# %option G_OPT_DB_DRIVER
+# % label: Name of database driver
+# % description: If not given then default driver is used
+# % guisection: Connection
+# %end
 
-#%option G_OPT_DB_DATABASE
-#% label: Name of database
-#% description:  If not given then default database is used
-#% guisection: Connection
-#%end
+# %option G_OPT_DB_DATABASE
+# % label: Name of database
+# % description:  If not given then default database is used
+# % guisection: Connection
+# %end
 
-#%option G_OPT_DB_TABLE
-#% description: Name of table to drop
-#% required: yes
-#%end
+# %option G_OPT_DB_TABLE
+# % description: Name of table to drop
+# % required: yes
+# %end
 
 import sys
 import grass.script as grass

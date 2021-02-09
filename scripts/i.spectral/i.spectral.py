@@ -25,58 +25,58 @@
 # 3 March 2006: Added multiple images and group support by Francesco Pirotti - CIRGEO
 #
 
-#%Module
-#% description: Displays spectral response at user specified locations in group or images.
-#% keyword: imagery
-#% keyword: querying
-#% keyword: raster
-#% keyword: multispectral
-#%End
-#%option G_OPT_I_GROUP
-#% required : no
-#% guisection: Input
-#%end
-#%option G_OPT_I_SUBGROUP
-#% required : no
-#% guisection: Input
-#%end
-#%option G_OPT_R_INPUTS
-#% key: raster
-#% required : no
-#% guisection: Input
-#%end
-#%option G_OPT_M_COORDS
-#% multiple: yes
-#% required: yes
-#% guisection: Input
-#%end
-#%option G_OPT_F_OUTPUT
-#% key: output
-#% description: Name for output image (or text file for -t)
-#% guisection: Output
-#% required : no
-#%end
-#%Option
-#% key: format
-#% type: string
-#% description: Graphics format for output file
-#% options: png,eps,svg
-#% answer: png
-#% multiple: no
-#% guisection: Output
-#%End
-#%flag
-#% key: c
-#% description: Show sampling coordinates instead of numbering in the legend
-#%end
-#% flag
-#% key: g
-#% description: Use gnuplot for display
-#%end
-#% flag
-#% key: t
-#% description: output to text file
-#%end
+# %Module
+# % description: Displays spectral response at user specified locations in group or images.
+# % keyword: imagery
+# % keyword: querying
+# % keyword: raster
+# % keyword: multispectral
+# %End
+# %option G_OPT_I_GROUP
+# % required : no
+# % guisection: Input
+# %end
+# %option G_OPT_I_SUBGROUP
+# % required : no
+# % guisection: Input
+# %end
+# %option G_OPT_R_INPUTS
+# % key: raster
+# % required : no
+# % guisection: Input
+# %end
+# %option G_OPT_M_COORDS
+# % multiple: yes
+# % required: yes
+# % guisection: Input
+# %end
+# %option G_OPT_F_OUTPUT
+# % key: output
+# % description: Name for output image (or text file for -t)
+# % guisection: Output
+# % required : no
+# %end
+# %Option
+# % key: format
+# % type: string
+# % description: Graphics format for output file
+# % options: png,eps,svg
+# % answer: png
+# % multiple: no
+# % guisection: Output
+# %End
+# %flag
+# % key: c
+# % description: Show sampling coordinates instead of numbering in the legend
+# %end
+# % flag
+# % key: g
+# % description: Use gnuplot for display
+# %end
+# % flag
+# % key: t
+# % description: output to text file
+# %end
 
 import os
 import atexit

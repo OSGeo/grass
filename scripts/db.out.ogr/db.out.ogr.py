@@ -14,46 +14,46 @@
 #
 #############################################################################
 
-#%module
-#% description: Exports attribute tables into various formats.
-#% keyword: database
-#% keyword: export
-#% keyword: output
-#% keyword: attribute table
-#%end
+# %module
+# % description: Exports attribute tables into various formats.
+# % keyword: database
+# % keyword: export
+# % keyword: output
+# % keyword: attribute table
+# %end
 
-#%option G_OPT_V_INPUT
-#% key: input
-#% label: GRASS table name
-#% required: yes
-#%end
+# %option G_OPT_V_INPUT
+# % key: input
+# % label: GRASS table name
+# % required: yes
+# %end
 
-#%option G_OPT_F_OUTPUT
-#% key: output
-#% description: Output table file name or DB connection string
-#% required : yes
-#%end
+# %option G_OPT_F_OUTPUT
+# % key: output
+# % description: Output table file name or DB connection string
+# % required : yes
+# %end
 
-#%option G_OPT_V_FIELD
-#% required: no
-#%end
+# %option G_OPT_V_FIELD
+# % required: no
+# %end
 
-#%option
-#% key: format
-#% type: string
-#% description: Table format
-#% required: yes
-#% options: CSV,DBF,GML,MySQL,PostgreSQL,SQLite
-#% answer: CSV
-#%end
+# %option
+# % key: format
+# % type: string
+# % description: Table format
+# % required: yes
+# % options: CSV,DBF,GML,MySQL,PostgreSQL,SQLite
+# % answer: CSV
+# %end
 
-#%option
-#% key: table
-#% type: string
-#% key_desc: name
-#% description: Name for output table (default: input name)
-#% required: no
-#%end
+# %option
+# % key: table
+# % type: string
+# % key_desc: name
+# % description: Name for output table (default: input name)
+# % required: no
+# %end
 
 import os
 

@@ -14,37 +14,37 @@
 #
 #############################################################################
 
-#%module
-#% description: Displays the manual pages of GRASS modules.
-#% keyword: general
-#% keyword: manual
-#% keyword: help
-#%end
-#%flag
-#% key: i
-#% description: Display index
-#% suppress_required: yes
-#%end
-#%flag
-#% key: t
-#% description: Display topics
-#% suppress_required: yes
-#%end
-#%flag
-#% key: m
-#% description: Display as MAN text page instead of HTML page in browser
-#%end
-#%flag
-#% key: o
-#% label: Display online manuals instead of locally installed
-#% description: Use online manuals available at https://grass.osgeo.org website. This flag has no effect when displaying MAN text pages.
-#%end
-#%option
-#% key: entry
-#% type: string
-#% description: Manual entry to be displayed
-#% required : yes
-#%end
+# %module
+# % description: Displays the manual pages of GRASS modules.
+# % keyword: general
+# % keyword: manual
+# % keyword: help
+# %end
+# %flag
+# % key: i
+# % description: Display index
+# % suppress_required: yes
+# %end
+# %flag
+# % key: t
+# % description: Display topics
+# % suppress_required: yes
+# %end
+# %flag
+# % key: m
+# % description: Display as MAN text page instead of HTML page in browser
+# %end
+# %flag
+# % key: o
+# % label: Display online manuals instead of locally installed
+# % description: Use online manuals available at https://grass.osgeo.org website. This flag has no effect when displaying MAN text pages.
+# %end
+# %option
+# % key: entry
+# % type: string
+# % description: Manual entry to be displayed
+# % required : yes
+# %end
 
 import sys
 import os

@@ -19,28 +19,28 @@
 #
 #############################################################################
 
-#%Module
-#% description: Draws polar diagram of angle map such as aspect or flow directions
-#% keyword: display
-#% keyword: diagram
-#%End
-#%option G_OPT_R_MAP
-#% description: Name of raster angle map
-#%End
-#%option
-#% key: undef
-#% type: double
-#% description: Pixel value to be interpreted as undefined (different from NULL)
-#% required : no
-#%End
-#%option G_OPT_F_OUTPUT
-#% description: Name for optional EPS output file
-#% required : no
-#%end
-#%flag
-#% key: x
-#% description: Plot using Xgraph
-#%end
+# %Module
+# % description: Draws polar diagram of angle map such as aspect or flow directions
+# % keyword: display
+# % keyword: diagram
+# %End
+# %option G_OPT_R_MAP
+# % description: Name of raster angle map
+# %End
+# %option
+# % key: undef
+# % type: double
+# % description: Pixel value to be interpreted as undefined (different from NULL)
+# % required : no
+# %End
+# %option G_OPT_F_OUTPUT
+# % description: Name for optional EPS output file
+# % required : no
+# %end
+# %flag
+# % key: x
+# % description: Plot using Xgraph
+# %end
 
 import os
 import string

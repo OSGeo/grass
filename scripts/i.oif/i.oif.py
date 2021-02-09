@@ -19,26 +19,26 @@
 # Ref.: Jensen: Introductory digital image processing 1996, p.98
 #############################################################################
 
-#% Module
-#% description: Calculates Optimum-Index-Factor table for spectral bands
-#% keyword: imagery
-#% keyword: multispectral
-#% keyword: statistics
-#% End
-#% option G_OPT_R_INPUTS
-#% end
-#% option G_OPT_F_OUTPUT
-#% description: Name for output file (if omitted or "-" output to stdout)
-#% required: no
-#% end
-#% Flag
-#% key: g
-#% description: Print in shell script style
-#% End
-#% Flag
-#% key: s
-#% description: Process bands serially (default: run in parallel)
-#% End
+# % Module
+# % description: Calculates Optimum-Index-Factor table for spectral bands
+# % keyword: imagery
+# % keyword: multispectral
+# % keyword: statistics
+# % End
+# % option G_OPT_R_INPUTS
+# % end
+# % option G_OPT_F_OUTPUT
+# % description: Name for output file (if omitted or "-" output to stdout)
+# % required: no
+# % end
+# % Flag
+# % key: g
+# % description: Print in shell script style
+# % End
+# % Flag
+# % key: s
+# % description: Process bands serially (default: run in parallel)
+# % End
 
 import sys
 import os

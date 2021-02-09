@@ -18,21 +18,21 @@
 #
 ############################################################################
 
-#%module
-#% description: Interactive editing and digitization of vector maps.
-#% keyword: general
-#% keyword: GUI
-#% keyword: vector
-#% keyword: editing
-#% keyword: digitizer
-#%end
-#%flag
-#% key: c
-#% description: Create new vector map if doesn't exist
-#%end
-#%option G_OPT_V_MAP
-#% label: Name of vector map to edit
-#%end
+# %module
+# % description: Interactive editing and digitization of vector maps.
+# % keyword: general
+# % keyword: GUI
+# % keyword: vector
+# % keyword: editing
+# % keyword: digitizer
+# %end
+# %flag
+# % key: c
+# % description: Create new vector map if doesn't exist
+# %end
+# %option G_OPT_V_MAP
+# % label: Name of vector map to edit
+# %end
 
 import os
 import grass.script as grass

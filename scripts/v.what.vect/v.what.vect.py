@@ -13,49 +13,49 @@
 #
 #############################################################################
 
-#%module
-#% description: Uploads vector values at positions of vector points to the table.
-#% keyword: vector
-#% keyword: sampling
-#% keyword: database
-#% keyword: position
-#% keyword: querying
-#% keyword: attribute table
-#%end
+# %module
+# % description: Uploads vector values at positions of vector points to the table.
+# % keyword: vector
+# % keyword: sampling
+# % keyword: database
+# % keyword: position
+# % keyword: querying
+# % keyword: attribute table
+# %end
 
-#%option G_OPT_V_MAP
-#% label: Name of vector points map for which to edit attributes
-#% guidependency: layer,column
-#%end
-#%option G_OPT_V_FIELD
-#% guidependency: column
-#%end
-#%option G_OPT_DB_COLUMN
-#% description: Name of attribute column to be updated with the query result
-#% required: yes
-#%end
-#%option G_OPT_V_MAP
-#% key: query_map
-#% label: Name of vector map to be queried
-#% required : yes
-#% guidependency: query_layer,query_column
-#%end
-#%option G_OPT_V_FIELD
-#% key: query_layer
-#% guidependency: query_column
-#%end
-#%option G_OPT_DB_COLUMN
-#% key: query_column
-#% description: Name of attribute column to be queried
-#% required: yes
-#%end
-#%option
-#% key: dmax
-#% type: double
-#% description: Maximum query distance in map units (meters for ll)
-#% answer: 0.0
-#% required: no
-#%end
+# %option G_OPT_V_MAP
+# % label: Name of vector points map for which to edit attributes
+# % guidependency: layer,column
+# %end
+# %option G_OPT_V_FIELD
+# % guidependency: column
+# %end
+# %option G_OPT_DB_COLUMN
+# % description: Name of attribute column to be updated with the query result
+# % required: yes
+# %end
+# %option G_OPT_V_MAP
+# % key: query_map
+# % label: Name of vector map to be queried
+# % required : yes
+# % guidependency: query_layer,query_column
+# %end
+# %option G_OPT_V_FIELD
+# % key: query_layer
+# % guidependency: query_column
+# %end
+# %option G_OPT_DB_COLUMN
+# % key: query_column
+# % description: Name of attribute column to be queried
+# % required: yes
+# %end
+# %option
+# % key: dmax
+# % type: double
+# % description: Maximum query distance in map units (meters for ll)
+# % answer: 0.0
+# % required: no
+# %end
 
 import sys
 from grass.script import core as grass

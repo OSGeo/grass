@@ -19,37 +19,37 @@
 #
 ############################################################################
 
-#%module
-#% description: Tool for animating a series of raster and vector maps or a space time raster or vector dataset.
-#% keyword: general
-#% keyword: GUI
-#% keyword: display
-#% keyword: animation
-#%end
-#%option G_OPT_R_INPUTS
-#% key: raster
-#% description: Raster maps to animate
-#% required: no
-#% guisection: Input
-#%end
-#%option G_OPT_V_INPUTS
-#% key: vector
-#% label: Vector maps to animate
-#% required: no
-#% guisection: Input
-#%end
-#%option G_OPT_STRDS_INPUT
-#% key: strds
-#% description: Space time raster dataset to animate
-#% required: no
-#% guisection: Input
-#%end
-#%option G_OPT_STVDS_INPUT
-#% key: stvds
-#% description: Space time vector dataset to animate
-#% required: no
-#% guisection: Input
-#%end
+# %module
+# % description: Tool for animating a series of raster and vector maps or a space time raster or vector dataset.
+# % keyword: general
+# % keyword: GUI
+# % keyword: display
+# % keyword: animation
+# %end
+# %option G_OPT_R_INPUTS
+# % key: raster
+# % description: Raster maps to animate
+# % required: no
+# % guisection: Input
+# %end
+# %option G_OPT_V_INPUTS
+# % key: vector
+# % label: Vector maps to animate
+# % required: no
+# % guisection: Input
+# %end
+# %option G_OPT_STRDS_INPUT
+# % key: strds
+# % description: Space time raster dataset to animate
+# % required: no
+# % guisection: Input
+# %end
+# %option G_OPT_STVDS_INPUT
+# % key: stvds
+# % description: Space time vector dataset to animate
+# % required: no
+# % guisection: Input
+# %end
 
 import grass.script as gscript
 from grass.exceptions import FatalError

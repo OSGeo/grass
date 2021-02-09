@@ -14,51 +14,51 @@
 #
 #############################################################################
 
-#%Module
-#% description: Generates a raster map layer with contiguous areas grown by one cell.
-#% keyword: raster
-#% keyword: distance
-#% keyword: proximity
-#%end
-#%flag
-#% key: m
-#% description: Radius is in map units rather than cells
-#%end
-#%option G_OPT_R_INPUT
-#%end
-#%option G_OPT_R_OUTPUT
-#%end
-#%option
-#% key: radius
-#% type: double
-#% required: no
-#% multiple: no
-#% description: Radius of buffer in raster cells
-#% answer: 1.01
-#%end
-#%option
-#% key: metric
-#% type: string
-#% required: no
-#% multiple: no
-#% options: euclidean,maximum,manhattan
-#% description: Metric
-#% answer: euclidean
-#%end
-#%option
-#% key: old
-#% type: integer
-#% required: no
-#% multiple: no
-#% description: Value to write for input cells which are non-NULL (-1 => NULL)
-#%end
-#%option
-#% key: new
-#% type: integer
-#% required: no
-#% multiple: no
-#% description: Value to write for "grown" cells
-#%end
+# %Module
+# % description: Generates a raster map layer with contiguous areas grown by one cell.
+# % keyword: raster
+# % keyword: distance
+# % keyword: proximity
+# %end
+# %flag
+# % key: m
+# % description: Radius is in map units rather than cells
+# %end
+# %option G_OPT_R_INPUT
+# %end
+# %option G_OPT_R_OUTPUT
+# %end
+# %option
+# % key: radius
+# % type: double
+# % required: no
+# % multiple: no
+# % description: Radius of buffer in raster cells
+# % answer: 1.01
+# %end
+# %option
+# % key: metric
+# % type: string
+# % required: no
+# % multiple: no
+# % options: euclidean,maximum,manhattan
+# % description: Metric
+# % answer: euclidean
+# %end
+# %option
+# % key: old
+# % type: integer
+# % required: no
+# % multiple: no
+# % description: Value to write for input cells which are non-NULL (-1 => NULL)
+# %end
+# %option
+# % key: new
+# % type: integer
+# % required: no
+# % multiple: no
+# % description: Value to write for "grown" cells
+# %end
 
 import os
 import atexit

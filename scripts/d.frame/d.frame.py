@@ -19,51 +19,51 @@
 #  GNU General Public License for more details.
 #
 ############################################################################
-#%module
-#% description: Manages display frames on the user's graphics monitor.
-#% keyword: display
-#% keyword: graphics
-#% keyword: monitors
-#% keyword: frame
-#% overwrite: yes
-#%end
-#%flag
-#% key: c
-#% description: Create a new frame if doesn't exist and select
-#%end
-#%flag
-#% key: e
-#% description: Remove all frames, erase the screen and exit
-#% suppress_required: yes
-#%end
-#%flag
-#% key: p
-#% description: Print name of current frame and exit
-#% suppress_required: yes
-#%end
-#%flag
-#% key: a
-#% description: Print names of all frames including 'at' position and exit
-#% suppress_required: yes
-#%end
-#%option
-#% key: frame
-#% type: string
-#% required: yes
-#% multiple: no
-#% key_desc: name
-#% description: Frame to be selected or created (if -c flag is given)
-#%end
-#%option
-#% key: at
-#% type: double
-#% required: no
-#% multiple: no
-#% key_desc: bottom,top,left,right
-#% label: Screen coordinates in percent where to place the frame (0,0 is lower-left)
-#% options: 0-100
-#% description: Implies only when -c or --overwrite flag is given
-#%end
+# %module
+# % description: Manages display frames on the user's graphics monitor.
+# % keyword: display
+# % keyword: graphics
+# % keyword: monitors
+# % keyword: frame
+# % overwrite: yes
+# %end
+# %flag
+# % key: c
+# % description: Create a new frame if doesn't exist and select
+# %end
+# %flag
+# % key: e
+# % description: Remove all frames, erase the screen and exit
+# % suppress_required: yes
+# %end
+# %flag
+# % key: p
+# % description: Print name of current frame and exit
+# % suppress_required: yes
+# %end
+# %flag
+# % key: a
+# % description: Print names of all frames including 'at' position and exit
+# % suppress_required: yes
+# %end
+# %option
+# % key: frame
+# % type: string
+# % required: yes
+# % multiple: no
+# % key_desc: name
+# % description: Frame to be selected or created (if -c flag is given)
+# %end
+# %option
+# % key: at
+# % type: double
+# % required: no
+# % multiple: no
+# % key_desc: bottom,top,left,right
+# % label: Screen coordinates in percent where to place the frame (0,0 is lower-left)
+# % options: 0-100
+# % description: Implies only when -c or --overwrite flag is given
+# %end
 
 import os
 import sys

@@ -22,66 +22,66 @@
 #
 #############################################################################
 
-#%module
-#% description: Apply temporal and spatial operations on space time raster datasets using temporal raster algebra.
-#% keyword: temporal
-#% keyword: algebra
-#% keyword: raster
-#% keyword: time
-#%end
+# %module
+# % description: Apply temporal and spatial operations on space time raster datasets using temporal raster algebra.
+# % keyword: temporal
+# % keyword: algebra
+# % keyword: raster
+# % keyword: time
+# %end
 
-#%option
-#% key: expression
-#% type: string
-#% description: r.mapcalc expression for temporal and spatial analysis of space time raster datasets
-#% required : yes
-#%end
+# %option
+# % key: expression
+# % type: string
+# % description: r.mapcalc expression for temporal and spatial analysis of space time raster datasets
+# % required : yes
+# %end
 
-#%option
-#% key: basename
-#% type: string
-#% label: Basename of the new generated output maps
-#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
-#% required: yes
-#%end
+# %option
+# % key: basename
+# % type: string
+# % label: Basename of the new generated output maps
+# % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+# % required: yes
+# %end
 
-#%option
-#% key: suffix
-#% type: string
-#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
-#% answer: num
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: suffix
+# % type: string
+# % description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+# % answer: num
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: nprocs
-#% type: integer
-#% description: Number of r.mapcalc processes to run in parallel
-#% required: no
-#% multiple: no
-#% answer: 1
-#%end
+# %option
+# % key: nprocs
+# % type: integer
+# % description: Number of r.mapcalc processes to run in parallel
+# % required: no
+# % multiple: no
+# % answer: 1
+# %end
 
-#%flag
-#% key: s
-#% description: Check the spatial topology of temporally related maps and process only spatially related maps
-#%end
+# %flag
+# % key: s
+# % description: Check the spatial topology of temporally related maps and process only spatially related maps
+# %end
 
-#%flag
-#% key: n
-#% description: Register Null maps
-#%end
+# %flag
+# % key: n
+# % description: Register Null maps
+# %end
 
-#%flag
-#% key: g
-#% description: Use granularity sampling instead of the temporal topology approach
-#%end
+# %flag
+# % key: g
+# % description: Use granularity sampling instead of the temporal topology approach
+# %end
 
-#%flag
-#% key: d
-#% description: Perform a dry run, compute all dependencies and module calls but don't run them
-#%end
+# %flag
+# % key: d
+# % description: Perform a dry run, compute all dependencies and module calls but don't run them
+# %end
 
 import grass.script
 import sys

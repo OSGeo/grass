@@ -16,29 +16,29 @@
 #############################################################################
 
 
-#%module
-#% description: Adds one or more columns to the attribute table connected to a given vector map.
-#% keyword: vector
-#% keyword: attribute table
-#% keyword: database
-#%end
+# %module
+# % description: Adds one or more columns to the attribute table connected to a given vector map.
+# % keyword: vector
+# % keyword: attribute table
+# % keyword: database
+# %end
 
-#%option G_OPT_V_MAP
-#%end
+# %option G_OPT_V_MAP
+# %end
 
-#%option G_OPT_V_FIELD
-#% label: Layer number where to add column(s)
-#%end
+# %option G_OPT_V_FIELD
+# % label: Layer number where to add column(s)
+# %end
 
-#%option
-#% key: columns
-#% type: string
-#% label: Name and type of the new column(s) ('name type [,name type, ...]')
-#% description: Types depend on database backend, but all support VARCHAR(), INT, DOUBLE PRECISION and DATE. Example: 'label varchar(250), value integer'
-#% required: yes
-#% multiple: yes
-#% key_desc: name type
-#%end
+# %option
+# % key: columns
+# % type: string
+# % label: Name and type of the new column(s) ('name type [,name type, ...]')
+# % description: Types depend on database backend, but all support VARCHAR(), INT, DOUBLE PRECISION and DATE. Example: 'label varchar(250), value integer'
+# % required: yes
+# % multiple: yes
+# % key_desc: name type
+# %end
 
 import sys
 import os

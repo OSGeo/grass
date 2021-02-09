@@ -22,71 +22,71 @@
 #       http://pypi.python.org/pypi/OWSLib
 #
 
-#%Module
-#% description: Imports GetFeature from a WFS server.
-#% keyword: vector
-#% keyword: import
-#% keyword: OGC web services
-#% keyword: OGC WFS
-#%end
-#%option
-#% key: url
-#% type: string
-#% description: Base URL starting with 'http' and ending in '?'
-#% required: yes
-#%end
-#%option G_OPT_V_OUTPUT
-#%end
-#%option
-#% key: name
-#% type: string
-#% description: Comma separated names of data layers to download
-#% multiple: yes
-#% required: no
-#%end
-#%option
-#% key: srs
-#% type: string
-#% label: Specify alternate spatial reference system (example: EPSG:4326)
-#% description: The given code must be supported by the server, consult the capabilities file
-#% required: no
-#%end
-#%option
-#% key: maximum_features
-#% type: integer
-#% label: Maximum number of features to download
-#% description: (default: unlimited)
-#%end
-#%option
-#% key: start_index
-#% type: integer
-#% label: Skip earlier feature IDs and start downloading at this one
-#% description: (default: start with the first feature)
-#%end
-#%option
-#% key: username
-#% type: string
-#% required: no
-#% multiple: no
-#% label: Username or file with username or environment variable name with username
-#%end
-#%option
-#% key: password
-#% type: string
-#% required: no
-#% multiple: no
-#% label: Password or file with password or environment variable name with password
-#%end
-#%flag
-#% key: l
+# %Module
+# % description: Imports GetFeature from a WFS server.
+# % keyword: vector
+# % keyword: import
+# % keyword: OGC web services
+# % keyword: OGC WFS
+# %end
+# %option
+# % key: url
+# % type: string
+# % description: Base URL starting with 'http' and ending in '?'
+# % required: yes
+# %end
+# %option G_OPT_V_OUTPUT
+# %end
+# %option
+# % key: name
+# % type: string
+# % description: Comma separated names of data layers to download
+# % multiple: yes
+# % required: no
+# %end
+# %option
+# % key: srs
+# % type: string
+# % label: Specify alternate spatial reference system (example: EPSG:4326)
+# % description: The given code must be supported by the server, consult the capabilities file
+# % required: no
+# %end
+# %option
+# % key: maximum_features
+# % type: integer
+# % label: Maximum number of features to download
+# % description: (default: unlimited)
+# %end
+# %option
+# % key: start_index
+# % type: integer
+# % label: Skip earlier feature IDs and start downloading at this one
+# % description: (default: start with the first feature)
+# %end
+# %option
+# % key: username
+# % type: string
+# % required: no
+# % multiple: no
+# % label: Username or file with username or environment variable name with username
+# %end
+# %option
+# % key: password
+# % type: string
+# % required: no
+# % multiple: no
+# % label: Password or file with password or environment variable name with password
+# %end
+# %flag
+# % key: l
 # todo #% description: List available layers and exit
-#% description: Download server capabilities to 'wms_capabilities.xml' in the current directory and exit
-#% suppress_required: yes
-#%end
-#%flag
-#% key: r
-#% description: Restrict fetch to features which touch the current region
-#%end
+# % description: Download server capabilities to 'wms_capabilities.xml' in the current directory and exit
+# % suppress_required: yes
+# %end
+# %flag
+# % key: r
+# % description: Restrict fetch to features which touch the current region
+# %end
 
 
 import os

@@ -58,20 +58,20 @@ are separated by null characters.
 Typical header definitions are as follows:
 
 <div class="code"><pre>
-#%module
-#% description: g.parser test script   
-#%end
-#%flag
-#% key: f
-#% description: A flag
-#%end
-#%option
-#% key: raster
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: Raster input map
-#% required: yes
-#%end
+# %module
+# % description: g.parser test script
+# %end
+# %flag
+# % key: f
+# % description: A flag
+# %end
+# %option
+# % key: raster
+# % type: string
+# % gisprompt: old,cell,raster
+# % description: Raster input map
+# % required: yes
+# %end
 </pre></div>
 
 With <tt>{NULL}</tt> it is possible to suppress a predefined <tt>description</tt>
@@ -84,21 +84,21 @@ of <a href="https://grass.osgeo.org/programming7/parser__standard__options_8c.ht
 in the programmer manual. Eg. the option
 
 <div class="code"><pre>
-#%option
-#% key: raster
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: Raster input map
-#% required: yes
-#%end
+# %option
+# % key: raster
+# % type: string
+# % gisprompt: old,cell,raster
+# % description: Raster input map
+# % required: yes
+# %end
 </pre></div>
 
 can be easily defined as
 
 <div class="code"><pre>
-#%option G_OPT_R_MAP
-#% key: raster
-#%end
+# %option G_OPT_R_MAP
+# % key: raster
+# %end
 </pre></div>
 
 The parser allows defining predefined <em>rules</em>
@@ -107,26 +107,26 @@ for used options.
 The syntax of the rules section is following:
 
 <div class="code"><pre>
-#%rules
-#% exclusive: capfile_output, capfile
-#%end
+# %rules
+# % exclusive: capfile_output, capfile
+# %end
 </pre></div>
 
 The parser also allows defining "OR" conditions, e.g. requiring raster
 OR vector (for details, see below), e.g.for options:
 
 <div class="code"><pre>
-#%rules
-#% required: raster, vector
-#%end
+# %rules
+# % required: raster, vector
+# %end
 </pre></div>
 
 and e.g., for flags:
 
 <div class="code"><pre>
-#%rules
-#% required: -i,-d,-c
-#%end
+# %rules
+# % required: -i,-d,-c
+# %end
 </pre></div>
 
 <h2>NOTES</h2>
@@ -134,7 +134,7 @@ and e.g., for flags:
 An option can be instructed to allow multiple inputs by adding the
 following line:
 <div class="code"><pre>
-#% multiple: yes
+# % multiple: yes
 </pre></div>
 
 While this will only directly change the <i>Usage</i> section of the help
@@ -154,7 +154,7 @@ specify that the options should appear in multiple tabs in the
 auto-generated GUI.  Any options without a <tt>guisection</tt> field
 go into the "Required" or "Options" tab.  For example:
 <div class="code"><pre>
-#% guisection: tabname
+# % guisection: tabname
 </pre></div>
 would put that option in a tab named <i>tabname</i>.
 
@@ -162,7 +162,7 @@ would put that option in a tab named <i>tabname</i>.
 A "<tt>key_desc</tt>" field may be added to each option to specify the text that
 appears in the module's usage help section. For example:
 <div class="code"><pre>
-#% key_desc: filename
+# % key_desc: filename
 </pre></div>
 added to an <b>input</b> option would create the usage summary
 <tt>[input=filename]</tt>.
@@ -179,6 +179,12 @@ were used, you should be checking <tt>GRASS_OVERWRITE</tt> and/or
 should behave the same way regardless of whether they were set
 by <b>--o</b>, <b>--q</b> or <b>--v</b> being passed to the script or
 set by other means.
+
+<p>
+For backwards compatibility reasons, the header definitions can use
+<code>#%</code> instead of <code># %</code> as in
+<code>#% multiple: yes</code>. However, Python code should use
+<code># %</code> in order to conform to PEP8.
 
 <h2>Conditional parameters</h2>
 
@@ -201,9 +207,9 @@ For C, the relevant functions are those in
 For scripts, relationships are specified using a "rules" section, e.g.
 
 <div class="code"><pre>
-#%rules
-#% required: altitude,elevation
-#%end
+# %rules
+# % required: altitude,elevation
+# %end
 </pre></div>
 
 specifies that at least one of those options must be given. Both
@@ -365,28 +371,28 @@ Parameters:
 
 # g.parser demo script for python programming
 
-#%module
-#% description: g.parser test script (python)
-#% keyword: keyword1
-#% keyword: keyword2
-#%end
-#%flag
-#% key: f
-#% description: A flag
-#%end
-#%option G_OPT_R_MAP
-#% key: raster
-#% required: yes
-#%end
-#%option G_OPT_V_MAP
-#% key: vector
-#%end
-#%option
-#% key: option1
-#% type: string
-#% description: An option
-#% required: no
-#%end
+# %module
+# % description: g.parser test script (python)
+# % keyword: keyword1
+# % keyword: keyword2
+# %end
+# %flag
+# % key: f
+# % description: A flag
+# %end
+# %option G_OPT_R_MAP
+# % key: raster
+# % required: yes
+# %end
+# %option G_OPT_V_MAP
+# % key: vector
+# %end
+# %option
+# % key: option1
+# % type: string
+# % description: An option
+# % required: no
+# %end
 
 import os
 import sys
@@ -429,26 +435,26 @@ if __name__ == "__main__":
 
 # g.parser demo script for shell programming
 
-#%module
-#% description: g.parser test script (shell) 
-#%end
-#%flag
-#% key: f
-#% description: A flag
-#%end
-#%option G_OPT_R_MAP
-#% key: raster
-#% required: yes
-#%end
-#%option G_OPT_V_MAP
-#% key: vector
-#%end
-#%option
-#% key: option1
-#% type: string
-#% description: An option
-#% required: no
-#%end
+# %module
+# % description: g.parser test script (shell)
+# %end
+# %flag
+# % key: f
+# % description: A flag
+# %end
+# %option G_OPT_R_MAP
+# % key: raster
+# % required: yes
+# %end
+# %option G_OPT_V_MAP
+# % key: vector
+# %end
+# %option
+# % key: option1
+# % type: string
+# % description: An option
+# % required: no
+# %end
 
 if [ -z "$GISBASE" ] ; then
     echo "You must be in GRASS GIS to run this program." 1&gt;&amp;2
@@ -489,28 +495,28 @@ use strict;
 
 # g.parser demo script
 
-#%module
-#%  description: g.parser test script (perl) 
-#%  keyword: keyword1
-#%  keyword: keyword2
-#%end
-#%flag
-#%  key: f
-#%  description: A flag
-#%end
-#%option G_OPT_R_MAP
-#% key: raster
-#% required: yes
-#%end
-#%option G_OPT_V_MAP
-#% key: vector
-#%end
-#%option
-#% key: option1
-#% type: string
-#% description: An option
-#% required: no
-#%end
+# %module
+# %  description: g.parser test script (perl)
+# %  keyword: keyword1
+# %  keyword: keyword2
+# %end
+# %flag
+# %  key: f
+# %  description: A flag
+# %end
+# %option G_OPT_R_MAP
+# % key: raster
+# % required: yes
+# %end
+# %option G_OPT_V_MAP
+# % key: vector
+# %end
+# %option
+# % key: option1
+# % type: string
+# % description: An option
+# % required: no
+# %end
 
 if ( !$ENV{'GISBASE'} ) {
     printf(STDERR  "You must be in GRASS GIS to run this program.\n");
@@ -575,74 +581,74 @@ v.what.rast --script
 #
 ############################################################################
 
-#%module
-#% description: Uploads raster values at positions of vector points to the table.
-#% keyword: vector, sampling, raster, position, querying, attribute table, surface information
-#%end
-#%flag
-#% key: i
-#% description: Interpolate values from the nearest four cells
-#%end
-#%flag
-#% key: p
-#% description: Print categories and values instead of updating the database
-#%end
-#%option
-#% key: map
-#% type: string
-#% required: yes
-#% multiple: no
-#% key_desc: name
-#% label: Name of vector points map for which to edit attributes
-#% description: Or data source for direct OGR access
-#% gisprompt: old,vector,vector
-#%end
-#%option
-#% key: layer
-#% type: string
-#% required: no
-#% multiple: no
-#% label: Layer number or name
-#% description: Vector features can have category values in different layers. This number determines which layer to use. When used with direct OGR access this is the layer name.
-#% answer: 1
-#% gisprompt: old,layer,layer
-#%end
-#%option
-#% key: type
-#% type: string
-#% required: no
-#% multiple: yes
-#% options: point,centroid
-#% description: Input feature type
-#% answer: point
-#%end
-#%option
-#% key: raster
-#% type: string
-#% required: yes
-#% multiple: no
-#% key_desc: name
-#% description: Name of existing raster map to be queried
-#% gisprompt: old,cell,raster
-#%end
-#%option
-#% key: column
-#% type: string
-#% required: no
-#% multiple: no
-#% key_desc: name
-#% description: Name of attribute column to be updated with the query result
-#% gisprompt: old,dbcolumn,dbcolumn
-#%end
-#%option
-#% key: where
-#% type: string
-#% required: no
-#% multiple: no
-#% key_desc: sql_query
-#% label: WHERE conditions of SQL statement without 'where' keyword
-#% description: Example: income < 1000 and population >= 10000
-#%end
+# %module
+# % description: Uploads raster values at positions of vector points to the table.
+# % keyword: vector, sampling, raster, position, querying, attribute table, surface information
+# %end
+# %flag
+# % key: i
+# % description: Interpolate values from the nearest four cells
+# %end
+# %flag
+# % key: p
+# % description: Print categories and values instead of updating the database
+# %end
+# %option
+# % key: map
+# % type: string
+# % required: yes
+# % multiple: no
+# % key_desc: name
+# % label: Name of vector points map for which to edit attributes
+# % description: Or data source for direct OGR access
+# % gisprompt: old,vector,vector
+# %end
+# %option
+# % key: layer
+# % type: string
+# % required: no
+# % multiple: no
+# % label: Layer number or name
+# % description: Vector features can have category values in different layers. This number determines which layer to use. When used with direct OGR access this is the layer name.
+# % answer: 1
+# % gisprompt: old,layer,layer
+# %end
+# %option
+# % key: type
+# % type: string
+# % required: no
+# % multiple: yes
+# % options: point,centroid
+# % description: Input feature type
+# % answer: point
+# %end
+# %option
+# % key: raster
+# % type: string
+# % required: yes
+# % multiple: no
+# % key_desc: name
+# % description: Name of existing raster map to be queried
+# % gisprompt: old,cell,raster
+# %end
+# %option
+# % key: column
+# % type: string
+# % required: no
+# % multiple: no
+# % key_desc: name
+# % description: Name of attribute column to be updated with the query result
+# % gisprompt: old,dbcolumn,dbcolumn
+# %end
+# %option
+# % key: where
+# % type: string
+# % required: no
+# % multiple: no
+# % key_desc: sql_query
+# % label: WHERE conditions of SQL statement without 'where' keyword
+# % description: Example: income < 1000 and population >= 10000
+# %end
 
 import sys
 

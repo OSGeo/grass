@@ -15,33 +15,33 @@
 #
 #############################################################################
 
-#%module
-#% description: Prints available band reference information used for multispectral data.
-#% keyword: general
-#% keyword: imagery
-#% keyword: band reference
-#% keyword: image collections
-#%end
-#%option
-#% key: pattern
-#% type: string
-#% description: Band reference search pattern (examples: L, S2, .*_2, S2_1)
-#% required: no
-#% multiple: no
-#%end
-#%option
-#% key: operation
-#% type: string
-#% required: no
-#% multiple: no
-#% options: print
-#% description: Operation to be performed
-#% answer: print
-#%end
-#%flag
-#% key: e
-#% description: Print extended metadata information
-#%end
+# %module
+# % description: Prints available band reference information used for multispectral data.
+# % keyword: general
+# % keyword: imagery
+# % keyword: band reference
+# % keyword: image collections
+# %end
+# %option
+# % key: pattern
+# % type: string
+# % description: Band reference search pattern (examples: L, S2, .*_2, S2_1)
+# % required: no
+# % multiple: no
+# %end
+# %option
+# % key: operation
+# % type: string
+# % required: no
+# % multiple: no
+# % options: print
+# % description: Operation to be performed
+# % answer: print
+# %end
+# %flag
+# % key: e
+# % description: Print extended metadata information
+# %end
 
 import sys
 

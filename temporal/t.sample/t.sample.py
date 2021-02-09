@@ -20,51 +20,51 @@
 #
 #############################################################################
 
-#%module
-#% description: Samples the input space time dataset(s) with a sample space time dataset and print the result to stdout.
-#% keyword: temporal
-#% keyword: sampling
-#% keyword: time
-#%end
+# %module
+# % description: Samples the input space time dataset(s) with a sample space time dataset and print the result to stdout.
+# % keyword: temporal
+# % keyword: sampling
+# % keyword: time
+# %end
 
-#%option G_OPT_STDS_INPUTS
-#%end
+# %option G_OPT_STDS_INPUTS
+# %end
 
-#%option G_OPT_STDS_INPUT
-#% key: sample
-#% description: Name of the sample space time dataset
-#%end
+# %option G_OPT_STDS_INPUT
+# % key: sample
+# % description: Name of the sample space time dataset
+# %end
 
-#%option G_OPT_STDS_TYPE
-#% key: intype
-#% guisection: Required
-#%end
+# %option G_OPT_STDS_TYPE
+# % key: intype
+# % guisection: Required
+# %end
 
-#%option G_OPT_STDS_TYPE
-#% key: samtype
-#% guisection: Required
-#% description: Type of the sample space time dataset
-#%end
+# %option G_OPT_STDS_TYPE
+# % key: samtype
+# % guisection: Required
+# % description: Type of the sample space time dataset
+# %end
 
-#%option G_OPT_T_SAMPLE
-#% key: method
-#% answer: during,overlap,contain,equal
-#%end
+# %option G_OPT_T_SAMPLE
+# % key: method
+# % answer: during,overlap,contain,equal
+# %end
 
-#%option G_OPT_F_SEP
-#% description: Field separator between output columns, default is tabular " | "
-#% label: Do not use "," as this char is reserved to list several map ids in a sample granule
-#%end
+# %option G_OPT_F_SEP
+# % description: Field separator between output columns, default is tabular " | "
+# % label: Do not use "," as this char is reserved to list several map ids in a sample granule
+# %end
 
-#%flag
-#% key: c
-#% description: Print the column names as first row
-#%end
+# %flag
+# % key: c
+# % description: Print the column names as first row
+# %end
 
-#%flag
-#% key: s
-#% description: Check for spatial topological overlap
-#%end
+# %flag
+# % key: s
+# % description: Check for spatial topological overlap
+# %end
 
 import grass.script as grass
 

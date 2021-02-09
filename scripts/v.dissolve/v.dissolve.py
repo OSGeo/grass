@@ -15,24 +15,24 @@
 #
 #############################################################################
 
-#%module
-#% description: Dissolves boundaries between adjacent areas sharing a common category number or attribute.
-#% keyword: vector
-#% keyword: dissolve
-#% keyword: area
-#% keyword: line
-#%end
-#%option G_OPT_V_INPUT
-#%end
-#%option G_OPT_V_FIELD
-#% label: Layer number or name.
-#% required: no
-#%end
-#%option G_OPT_DB_COLUMN
-#% description: Name of attribute column used to dissolve common boundaries
-#%end
-#%option G_OPT_V_OUTPUT
-#%end
+# %module
+# % description: Dissolves boundaries between adjacent areas sharing a common category number or attribute.
+# % keyword: vector
+# % keyword: dissolve
+# % keyword: area
+# % keyword: line
+# %end
+# %option G_OPT_V_INPUT
+# %end
+# %option G_OPT_V_FIELD
+# % label: Layer number or name.
+# % required: no
+# %end
+# %option G_OPT_DB_COLUMN
+# % description: Name of attribute column used to dissolve common boundaries
+# %end
+# %option G_OPT_V_OUTPUT
+# %end
 import sys
 import os
 import atexit

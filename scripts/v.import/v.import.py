@@ -16,86 +16,86 @@
 #
 #############################################################################
 
-#%module
-#% description: Imports vector data into a GRASS vector map using OGR library and reprojects on the fly.
-#% keyword: vector
-#% keyword: import
-#% keyword: projection
-#%end
-#%option
-#% key: input
-#% type: string
-#% required: yes
-#% description: Name of OGR datasource to be imported
-#% gisprompt: old,datasource,datasource
-#% guisection: Input
-#%end
-#%option
-#% key: layer
-#% type: string
-#% multiple: yes
-#% description: OGR layer name. If not given, all available layers are imported
-#% guisection: Input
-#% gisprompt: old,datasource_layer,datasource_layer
-#%end
-#%option G_OPT_V_OUTPUT
-#% description: Name for output vector map (default: input)
-#% required: no
-#% guisection: Output
-#%end
-#%option
-#% key: extent
-#% type: string
-#% options: input,region
-#% answer: input
-#% description: Output vector map extent
-#% descriptions: input;extent of input map;region;extent of current region
-#% guisection: Output
-#%end
-#%option
-#% key: encoding
-#% type: string
-#% label: Encoding value for attribute data
-#% descriptions: Overrides encoding interpretation, useful when importing ESRI Shapefile
-#% guisection: Output
-#%end
-#%option
-#% key: snap
-#% type: double
-#% label: Snapping threshold for boundaries (map units)
-#% description: A suitable threshold is estimated during import
-#% answer: -1
-#% guisection: Output
-#%end
-#%option
-#% key: epsg
-#% type: integer
-#% options: 1-1000000
-#% guisection: Input SRS
-#% description: EPSG projection code
-#%end
-#%option
-#% key: datum_trans
-#% type: integer
-#% options: -1-100
-#% guisection: Input SRS
-#% label: Index number of datum transform parameters
-#% description: -1 to list available datum transform parameters
-#%end
-#%flag
-#% key: f
-#% description: List supported OGR formats and exit
-#% suppress_required: yes
-#%end
-#%flag
-#% key: l
-#% description: List available OGR layers in data source and exit
-#%end
-#%flag
-#% key: o
-#% label: Override projection check (use current location's projection)
-#% description: Assume that the dataset has the same projection as the current location
-#%end
+# %module
+# % description: Imports vector data into a GRASS vector map using OGR library and reprojects on the fly.
+# % keyword: vector
+# % keyword: import
+# % keyword: projection
+# %end
+# %option
+# % key: input
+# % type: string
+# % required: yes
+# % description: Name of OGR datasource to be imported
+# % gisprompt: old,datasource,datasource
+# % guisection: Input
+# %end
+# %option
+# % key: layer
+# % type: string
+# % multiple: yes
+# % description: OGR layer name. If not given, all available layers are imported
+# % guisection: Input
+# % gisprompt: old,datasource_layer,datasource_layer
+# %end
+# %option G_OPT_V_OUTPUT
+# % description: Name for output vector map (default: input)
+# % required: no
+# % guisection: Output
+# %end
+# %option
+# % key: extent
+# % type: string
+# % options: input,region
+# % answer: input
+# % description: Output vector map extent
+# % descriptions: input;extent of input map;region;extent of current region
+# % guisection: Output
+# %end
+# %option
+# % key: encoding
+# % type: string
+# % label: Encoding value for attribute data
+# % descriptions: Overrides encoding interpretation, useful when importing ESRI Shapefile
+# % guisection: Output
+# %end
+# %option
+# % key: snap
+# % type: double
+# % label: Snapping threshold for boundaries (map units)
+# % description: A suitable threshold is estimated during import
+# % answer: -1
+# % guisection: Output
+# %end
+# %option
+# % key: epsg
+# % type: integer
+# % options: 1-1000000
+# % guisection: Input SRS
+# % description: EPSG projection code
+# %end
+# %option
+# % key: datum_trans
+# % type: integer
+# % options: -1-100
+# % guisection: Input SRS
+# % label: Index number of datum transform parameters
+# % description: -1 to list available datum transform parameters
+# %end
+# %flag
+# % key: f
+# % description: List supported OGR formats and exit
+# % suppress_required: yes
+# %end
+# %flag
+# % key: l
+# % description: List available OGR layers in data source and exit
+# %end
+# %flag
+# % key: o
+# % label: Override projection check (use current location's projection)
+# % description: Assume that the dataset has the same projection as the current location
+# %end
 
 import sys
 import os

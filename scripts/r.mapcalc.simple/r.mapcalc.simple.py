@@ -17,78 +17,78 @@ License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 """
 
-#%module
-#% description: Calculates a new raster map from a simple r.mapcalc expression.
-#% keyword: raster
-#% keyword: algebra
-#% keyword: simple
-#%end
-#%option
-#% key: expression
-#% type: string
-#% description: Formula (e.g. A-B or A*C+B)
-#% required : yes
-#%end
-#%option G_OPT_R_INPUT
-#% key: a
-#% description: Name of input A raster map
-#% required : no
-#% guisection: Input maps
-#%end
-#%option G_OPT_R_INPUT
-#% key: b
-#% description: Name of input B raster map
-#% required : no
-#% guisection: Input maps
-#%end
-#%option G_OPT_R_INPUT
-#% key: c
-#% description: Name of input C raster map
-#% required : no
-#% guisection: Input maps
-#%end
-#%option G_OPT_R_INPUT
-#% key: d
-#% description: Name of input D raster map
-#% required : no
-#% guisection: Input maps
-#%end
-#%option G_OPT_R_INPUT
-#% key: e
-#% description: Name of input E raster map
-#% required : no
-#% guisection: Input maps
-#%end
-#%option G_OPT_R_INPUT
-#% key: f
-#% description: Name of input F raster map
-#% required : no
-#% guisection: Input maps
-#%end
-#%option G_OPT_R_OUTPUT
-#%end
-#%option
-#% key: seed
-#% type: integer
-#% required: no
-#% multiple: no
-#% description: Seed for rand() function
-#% guisection: Random
-#%end
-#%flag
-#% key: s
-#% description: Generate random seed (result is non-deterministic)
-#% guisection: Random
-#%end
-#%flag
-#% key: q
-#% description: Quote the map names
-#% guisection: Input maps
-#%end
-#%flag
-#% key: c
-#% description: Case sensitive variable names
-#%end
+# %module
+# % description: Calculates a new raster map from a simple r.mapcalc expression.
+# % keyword: raster
+# % keyword: algebra
+# % keyword: simple
+# %end
+# %option
+# % key: expression
+# % type: string
+# % description: Formula (e.g. A-B or A*C+B)
+# % required : yes
+# %end
+# %option G_OPT_R_INPUT
+# % key: a
+# % description: Name of input A raster map
+# % required : no
+# % guisection: Input maps
+# %end
+# %option G_OPT_R_INPUT
+# % key: b
+# % description: Name of input B raster map
+# % required : no
+# % guisection: Input maps
+# %end
+# %option G_OPT_R_INPUT
+# % key: c
+# % description: Name of input C raster map
+# % required : no
+# % guisection: Input maps
+# %end
+# %option G_OPT_R_INPUT
+# % key: d
+# % description: Name of input D raster map
+# % required : no
+# % guisection: Input maps
+# %end
+# %option G_OPT_R_INPUT
+# % key: e
+# % description: Name of input E raster map
+# % required : no
+# % guisection: Input maps
+# %end
+# %option G_OPT_R_INPUT
+# % key: f
+# % description: Name of input F raster map
+# % required : no
+# % guisection: Input maps
+# %end
+# %option G_OPT_R_OUTPUT
+# %end
+# %option
+# % key: seed
+# % type: integer
+# % required: no
+# % multiple: no
+# % description: Seed for rand() function
+# % guisection: Random
+# %end
+# %flag
+# % key: s
+# % description: Generate random seed (result is non-deterministic)
+# % guisection: Random
+# %end
+# %flag
+# % key: q
+# % description: Quote the map names
+# % guisection: Input maps
+# %end
+# %flag
+# % key: c
+# % description: Case sensitive variable names
+# %end
 
 import sys
 import re

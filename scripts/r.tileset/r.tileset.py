@@ -35,69 +35,69 @@
 #    presenting data in a highly inappropriate projection. Do you really
 #    want their data?
 
-#%module
-#% description: Produces tilings of the source projection for use in the destination region and projection.
-#% keyword: raster
-#% keyword: tiling
-#%end
-#%flag
-#% key: g
-#% description: Produces shell script output
-#%end
-#%flag
-#% key: w
-#% description: Produces web map server query string output
-#%end
-#%option
-#% key: region
-#% type: string
-#% description: Name of region to use instead of current region for bounds and resolution
-#%end
-#%option
-#% key: sourceproj
-#% type: string
-#% description: Source projection
-#% required : yes
-#%end
-#%option
-#% key: sourcescale
-#% type: string
-#% description: Conversion factor from units to meters in source projection
-#% answer : 1
-#%end
-#%option
-#% key: destproj
-#% type: string
-#% description: Destination projection, defaults to this location's projection
-#% required : no
-#%end
-#%option
-#% key: destscale
-#% type: string
-#% description: Conversion factor from units to meters in source projection
-#% required : no
-#%end
-#%option
-#% key: maxcols
-#% type: integer
-#% description: Maximum number of columns for a tile in the source projection
-#% answer: 1024
-#%end
-#%option
-#% key: maxrows
-#% type: integer
-#% description: Maximum number of rows for a tile in the source projection
-#% answer: 1024
-#%end
-#%option
-#% key: overlap
-#% type: integer
-#% description: Number of cells tiles should overlap in each direction
-#% answer: 0
-#%end
-#%option G_OPT_F_SEP
-#% description: Output field separator
-#%end
+# %module
+# % description: Produces tilings of the source projection for use in the destination region and projection.
+# % keyword: raster
+# % keyword: tiling
+# %end
+# %flag
+# % key: g
+# % description: Produces shell script output
+# %end
+# %flag
+# % key: w
+# % description: Produces web map server query string output
+# %end
+# %option
+# % key: region
+# % type: string
+# % description: Name of region to use instead of current region for bounds and resolution
+# %end
+# %option
+# % key: sourceproj
+# % type: string
+# % description: Source projection
+# % required : yes
+# %end
+# %option
+# % key: sourcescale
+# % type: string
+# % description: Conversion factor from units to meters in source projection
+# % answer : 1
+# %end
+# %option
+# % key: destproj
+# % type: string
+# % description: Destination projection, defaults to this location's projection
+# % required : no
+# %end
+# %option
+# % key: destscale
+# % type: string
+# % description: Conversion factor from units to meters in source projection
+# % required : no
+# %end
+# %option
+# % key: maxcols
+# % type: integer
+# % description: Maximum number of columns for a tile in the source projection
+# % answer: 1024
+# %end
+# %option
+# % key: maxrows
+# % type: integer
+# % description: Maximum number of rows for a tile in the source projection
+# % answer: 1024
+# %end
+# %option
+# % key: overlap
+# % type: integer
+# % description: Number of cells tiles should overlap in each direction
+# % answer: 0
+# %end
+# %option G_OPT_F_SEP
+# % description: Output field separator
+# %end
 
 # Data structures used in this program:
 # A bounding box:

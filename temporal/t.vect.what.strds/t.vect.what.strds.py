@@ -20,49 +20,49 @@
 #
 #############################################################################
 
-#%module
-#% description: Stores raster map values at spatial and temporal positions of vector points as vector attributes.
-#% keyword: temporal
-#% keyword: sampling
-#% keyword: vector
-#% keyword: time
-#%end
+# %module
+# % description: Stores raster map values at spatial and temporal positions of vector points as vector attributes.
+# % keyword: temporal
+# % keyword: sampling
+# % keyword: vector
+# % keyword: time
+# %end
 
-#%option G_OPT_STVDS_INPUT
-#%end
+# %option G_OPT_STVDS_INPUT
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#% key: strds
-#%end
+# %option G_OPT_STRDS_INPUT
+# % key: strds
+# %end
 
-#%option
-#% key: column
-#% type: string
-#% label: Name of the vector column to be created and to store sampled raster values
-#% description: The use of a column name forces t.vect.what.rast to sample only values from the first map found in an interval. Otherwise the raster map names are used as column names
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: column
+# % type: string
+# % label: Name of the vector column to be created and to store sampled raster values
+# % description: The use of a column name forces t.vect.what.rast to sample only values from the first map found in an interval. Otherwise the raster map names are used as column names
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: method
-#% type: string
-#% description: Aggregate operation to be performed on the raster maps
-#% required: yes
-#% multiple: no
-#% options: disabled,average,count,median,mode,minimum,min_raster,maximum,max_raster,stddev,range,sum,variance,diversity,slope,offset,detcoeff,quart1,quart3,perc90,quantile,skewness,kurtosis
-#% answer: disabled
-#%end
+# %option
+# % key: method
+# % type: string
+# % description: Aggregate operation to be performed on the raster maps
+# % required: yes
+# % multiple: no
+# % options: disabled,average,count,median,mode,minimum,min_raster,maximum,max_raster,stddev,range,sum,variance,diversity,slope,offset,detcoeff,quart1,quart3,perc90,quantile,skewness,kurtosis
+# % answer: disabled
+# %end
 
-#%option G_OPT_DB_WHERE
-#%end
+# %option G_OPT_DB_WHERE
+# %end
 
-#%option G_OPT_T_WHERE
-#% key: t_where
-#%end
+# %option G_OPT_T_WHERE
+# % key: t_where
+# %end
 
-#%option G_OPT_T_SAMPLE
-#%end
+# %option G_OPT_T_SAMPLE
+# %end
 
 import os
 import grass.script as grass

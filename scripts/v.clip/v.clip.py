@@ -12,45 +12,45 @@
 #
 #############################################################################
 
-#%module
-#% description: Extracts features of input map which overlay features of clip map.
-#% keyword: vector
-#% keyword: clip
-#% keyword: area
-#%end
+# %module
+# % description: Extracts features of input map which overlay features of clip map.
+# % keyword: vector
+# % keyword: clip
+# % keyword: area
+# %end
 
-#%option G_OPT_V_INPUT
-#% label: Name of vector map to be clipped
-#% key: input
-#%end
+# %option G_OPT_V_INPUT
+# % label: Name of vector map to be clipped
+# % key: input
+# %end
 
-#%option G_OPT_V_INPUT
-#% key: clip
-#% label: Name of clip vector map
-#%end
+# %option G_OPT_V_INPUT
+# % key: clip
+# % label: Name of clip vector map
+# %end
 
-#%option G_OPT_V_OUTPUT
-#% key: output
-#%end
+# %option G_OPT_V_OUTPUT
+# % key: output
+# %end
 
-#%flag
-#% key: d
-#% description: Do not dissolve clip map
-#%end
+# %flag
+# % key: d
+# % description: Do not dissolve clip map
+# %end
 
-#%flag
-#% key: r
-#% description: Clip by region
-#% suppress_required: yes
-#% guisection: Region
-#%end
+# %flag
+# % key: r
+# % description: Clip by region
+# % suppress_required: yes
+# % guisection: Region
+# %end
 
 # flags -d and -r are mutualy exclusive
 # with flag -r, suppress_required: yes, but input and output must be defined
-#%rules
-#% exclusive: -d, -r
-#% requires_all: -r, input, output
-#%end
+# %rules
+# % exclusive: -d, -r
+# % requires_all: -r, input, output
+# %end
 
 import os
 import sys

@@ -16,29 +16,29 @@
 #    support centroids (treat as points)?
 #############################################################################
 
-#%module
-#% description: Converts vector polygons or points to lines.
-#% keyword: vector
-#% keyword: geometry
-#% keyword: area
-#% keyword: line
-#% keyword: point
-#%end
+# %module
+# % description: Converts vector polygons or points to lines.
+# % keyword: vector
+# % keyword: geometry
+# % keyword: area
+# % keyword: line
+# % keyword: point
+# %end
 
-#%option G_OPT_V_INPUT
-#%end
+# %option G_OPT_V_INPUT
+# %end
 
-#%option G_OPT_V_OUTPUT
-#%end
+# %option G_OPT_V_OUTPUT
+# %end
 
-#%option
-#% key: method
-#% type: string
-#% description: Method used for point interpolation
-#% options: delaunay
-#% answer: delaunay
-#% guisection: Area
-#%end
+# %option
+# % key: method
+# % type: string
+# % description: Method used for point interpolation
+# % options: delaunay
+# % answer: delaunay
+# % guisection: Area
+# %end
 
 import grass.script as grass
 from grass.script.utils import decode

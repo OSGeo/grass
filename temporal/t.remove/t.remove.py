@@ -20,46 +20,46 @@
 #
 #############################################################################
 
-#%module
-#% description: Removes space time datasets from temporal database.
-#% keyword: temporal
-#% keyword: map management
-#% keyword: remove
-#% keyword: time
-#%end
+# %module
+# % description: Removes space time datasets from temporal database.
+# % keyword: temporal
+# % keyword: map management
+# % keyword: remove
+# % keyword: time
+# %end
 
-#%option G_OPT_STDS_INPUTS
-#% guisection: Input
-#% required: no
-#%end
+# %option G_OPT_STDS_INPUTS
+# % guisection: Input
+# % required: no
+# %end
 
-#%option
-#% key: type
-#% type: string
-#% description: Type of the space time dataset, default is strds
-#% guidependency: inputs
-#% guisection: Input
-#% required: no
-#% options: strds, str3ds, stvds
-#% answer: strds
-#%end
+# %option
+# % key: type
+# % type: string
+# % description: Type of the space time dataset, default is strds
+# % guidependency: inputs
+# % guisection: Input
+# % required: no
+# % options: strds, str3ds, stvds
+# % answer: strds
+# %end
 
-#%option G_OPT_F_INPUT
-#% key: file
-#% description: Input file with dataset names, one per line
-#% guisection: Input
-#% required: no
-#%end
+# %option G_OPT_F_INPUT
+# % key: file
+# % description: Input file with dataset names, one per line
+# % guisection: Input
+# % required: no
+# %end
 
-#%flag
-#% key: r
-#% description: Remove all registered maps from the temporal and also from the spatial database
-#%end
+# %flag
+# % key: r
+# % description: Remove all registered maps from the temporal and also from the spatial database
+# %end
 
-#%flag
-#% key: f
-#% description: Force recursive removing
-#%end
+# %flag
+# % key: f
+# % description: Force recursive removing
+# %end
 
 import grass.script as grass
 

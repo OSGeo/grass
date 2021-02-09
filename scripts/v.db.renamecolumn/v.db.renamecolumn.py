@@ -20,25 +20,25 @@
 #############################################################################
 
 
-#%module
-#% description: Renames a column in the attribute table connected to a given vector map.
-#% keyword: vector
-#% keyword: attribute table
-#% keyword: database
-#% keyword: rename
-#%end
-#%option G_OPT_V_MAP
-#%end
-#%option G_OPT_V_FIELD
-#%end
-#%option
-#% key: column
-#% type: string
-#% description: Old and new name of the column (old,new)
-#% required: yes
-#% multiple: no
-#% key_desc: oldcol,newcol
-#%end
+# %module
+# % description: Renames a column in the attribute table connected to a given vector map.
+# % keyword: vector
+# % keyword: attribute table
+# % keyword: database
+# % keyword: rename
+# %end
+# %option G_OPT_V_MAP
+# %end
+# %option G_OPT_V_FIELD
+# %end
+# %option
+# % key: column
+# % type: string
+# % description: Old and new name of the column (old,new)
+# % required: yes
+# % multiple: no
+# % key_desc: oldcol,newcol
+# %end
 
 import sys
 import os

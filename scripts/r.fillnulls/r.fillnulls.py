@@ -23,82 +23,82 @@
 #############################################################################
 
 
-#%module
-#% description: Fills no-data areas in raster maps using spline interpolation.
-#% keyword: raster
-#% keyword: surface
-#% keyword: elevation
-#% keyword: interpolation
-#% keyword: splines
-#% keyword: no-data filling
-#%end
-#%option G_OPT_R_INPUT
-#%end
-#%option G_OPT_R_OUTPUT
-#%end
-#%option
-#% key: method
-#% type: string
-#% description: Interpolation method to use
-#% required: yes
-#% options: bilinear,bicubic,rst
-#% answer: rst
-#%end
-#%option
-#% key: tension
-#% type: double
-#% description: Spline tension parameter
-#% required : no
-#% answer : 40.
-#% guisection: RST options
-#%end
-#%option
-#% key: smooth
-#% type: double
-#% description: Spline smoothing parameter
-#% required : no
-#% answer : 0.1
-#% guisection: RST options
-#%end
-#%option
-#% key: edge
-#% type: integer
-#% description: Width of hole edge used for interpolation (in cells)
-#% required : no
-#% answer : 3
-#% options : 2-100
-#% guisection: RST options
-#%end
-#%option
-#% key: npmin
-#% type: integer
-#% description: Minimum number of points for approximation in a segment (>segmax)
-#% required : no
-#% answer : 600
-#% options : 2-10000
-#% guisection: RST options
-#%end
-#%option
-#% key: segmax
-#% type: integer
-#% description: Maximum number of points in a segment
-#% required : no
-#% answer : 300
-#% options : 2-10000
-#% guisection: RST options
-#%end
-#%option
-#% key: lambda
-#% type: double
-#% required: no
-#% multiple: no
-#% label: Tykhonov regularization parameter (affects smoothing)
-#% description: Used in bilinear and bicubic spline interpolation
-#% answer: 0.01
-#% guisection: Spline options
-#%end
-#%option G_OPT_MEMORYMB
-#%end
+# %module
+# % description: Fills no-data areas in raster maps using spline interpolation.
+# % keyword: raster
+# % keyword: surface
+# % keyword: elevation
+# % keyword: interpolation
+# % keyword: splines
+# % keyword: no-data filling
+# %end
+# %option G_OPT_R_INPUT
+# %end
+# %option G_OPT_R_OUTPUT
+# %end
+# %option
+# % key: method
+# % type: string
+# % description: Interpolation method to use
+# % required: yes
+# % options: bilinear,bicubic,rst
+# % answer: rst
+# %end
+# %option
+# % key: tension
+# % type: double
+# % description: Spline tension parameter
+# % required : no
+# % answer : 40.
+# % guisection: RST options
+# %end
+# %option
+# % key: smooth
+# % type: double
+# % description: Spline smoothing parameter
+# % required : no
+# % answer : 0.1
+# % guisection: RST options
+# %end
+# %option
+# % key: edge
+# % type: integer
+# % description: Width of hole edge used for interpolation (in cells)
+# % required : no
+# % answer : 3
+# % options : 2-100
+# % guisection: RST options
+# %end
+# %option
+# % key: npmin
+# % type: integer
+# % description: Minimum number of points for approximation in a segment (>segmax)
+# % required : no
+# % answer : 600
+# % options : 2-10000
+# % guisection: RST options
+# %end
+# %option
+# % key: segmax
+# % type: integer
+# % description: Maximum number of points in a segment
+# % required : no
+# % answer : 300
+# % options : 2-10000
+# % guisection: RST options
+# %end
+# %option
+# % key: lambda
+# % type: double
+# % required: no
+# % multiple: no
+# % label: Tykhonov regularization parameter (affects smoothing)
+# % description: Used in bilinear and bicubic spline interpolation
+# % answer: 0.01
+# % guisection: Spline options
+# %end
+# %option G_OPT_MEMORYMB
+# %end
 
 
 import sys

@@ -14,40 +14,40 @@
 #
 #############################################################################
 
-#%module
-#% description: Reconnects attribute tables for all vector maps from the current mapset to a new database.
-#% keyword: vector
-#% keyword: attribute table
-#% keyword: database
-#%end
-#%flag
-#% key: c
-#% description: Copy attribute tables to the target database if not exist
-#%end
-#%flag
-#% key: d
-#% description: Delete attribute tables from the source database
-#%end
-#%option G_OPT_DB_DATABASE
-#% key: old_database
-#% description: Name of source database
-#%end
-#%option G_OPT_DB_SCHEMA
-#% key: old_schema
-#% label: Name of source database schema
-#%end
-#%option
-#% key: new_driver
-#% description: Name for target driver
-#%end
-#%option G_OPT_DB_DATABASE
-#% key: new_database
-#% description: Name for target database
-#%end
-#%option G_OPT_DB_SCHEMA
-#% key: new_schema
-#% label: Name for target database schema
-#%end
+# %module
+# % description: Reconnects attribute tables for all vector maps from the current mapset to a new database.
+# % keyword: vector
+# % keyword: attribute table
+# % keyword: database
+# %end
+# %flag
+# % key: c
+# % description: Copy attribute tables to the target database if not exist
+# %end
+# %flag
+# % key: d
+# % description: Delete attribute tables from the source database
+# %end
+# %option G_OPT_DB_DATABASE
+# % key: old_database
+# % description: Name of source database
+# %end
+# %option G_OPT_DB_SCHEMA
+# % key: old_schema
+# % label: Name of source database schema
+# %end
+# %option
+# % key: new_driver
+# % description: Name for target driver
+# %end
+# %option G_OPT_DB_DATABASE
+# % key: new_database
+# % description: Name for target database
+# %end
+# %option G_OPT_DB_SCHEMA
+# % key: new_schema
+# % label: Name for target database schema
+# %end
 
 import sys
 import os

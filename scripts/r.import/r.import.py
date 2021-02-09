@@ -16,102 +16,102 @@
 #
 #############################################################################
 
-#%module
-#% description: Imports raster data into a GRASS raster map using GDAL library and reprojects on the fly.
-#% keyword: raster
-#% keyword: import
-#% keyword: projection
-#%end
-#%option G_OPT_F_BIN_INPUT
-#% description: Name of GDAL dataset to be imported
-#% guisection: Input
-#%end
-#%option
-#% key: band
-#% type: integer
-#% required: no
-#% multiple: yes
-#% description: Input band(s) to select (default is all bands)
-#% guisection: Input
-#%end
-#%option G_OPT_MEMORYMB
-#%end
-#%option G_OPT_R_OUTPUT
-#% description: Name for output raster map
-#% required: no
-#% guisection: Output
-#%end
-#%option
-#% key: resample
-#% type: string
-#% required: no
-#% multiple: no
-#% options: nearest,bilinear,bicubic,lanczos,bilinear_f,bicubic_f,lanczos_f
-#% description: Resampling method to use for reprojection
-#% descriptions: nearest;nearest neighbor;bilinear;bilinear interpolation;bicubic;bicubic interpolation;lanczos;lanczos filter;bilinear_f;bilinear interpolation with fallback;bicubic_f;bicubic interpolation with fallback;lanczos_f;lanczos filter with fallback
-#% answer: nearest
-#% guisection: Output
-#%end
-#%option
-#% key: extent
-#% type: string
-#% required: no
-#% multiple: no
-#% options: input,region
-#% answer: input
-#% description: Output raster map extent
-#% descriptions: region;extent of current region;input;extent of input map
-#% guisection: Output
-#%end
-#%option
-#% key: resolution
-#% type: string
-#% required: no
-#% multiple: no
-#% answer: estimated
-#% options: estimated,value,region
-#% description: Resolution of output raster map (default: estimated)
-#% descriptions: estimated;estimated resolution;value;user-specified resolution;region;current region resolution
-#% guisection: Output
-#%end
-#%option
-#% key: resolution_value
-#% type: double
-#% required: no
-#% multiple: no
-#% description: Resolution of output raster map (use with option resolution=value)
-#% guisection: Output
-#%end
-#%option
-#% key: title
-#% key_desc: phrase
-#% type: string
-#% required: no
-#% description: Title for resultant raster map
-#% guisection: Metadata
-#%end
-#%flag
-#% key: e
-#% description: Estimate resolution only
-#% guisection: Optional
-#%end
-#%flag
-#% key: n
-#% description: Do not perform region cropping optimization
-#% guisection: Optional
-#%end
-#%flag
-#% key: l
-#% description: Force Lat/Lon maps to fit into geographic coordinates (90N,S; 180E,W)
-#%end
-#%flag
-#% key: o
-#% label: Override projection check (use current location's projection)
-#% description: Assume that the dataset has the same projection as the current location
-#%end
-#%rules
-#% required: output,-e
-#%end
+# %module
+# % description: Imports raster data into a GRASS raster map using GDAL library and reprojects on the fly.
+# % keyword: raster
+# % keyword: import
+# % keyword: projection
+# %end
+# %option G_OPT_F_BIN_INPUT
+# % description: Name of GDAL dataset to be imported
+# % guisection: Input
+# %end
+# %option
+# % key: band
+# % type: integer
+# % required: no
+# % multiple: yes
+# % description: Input band(s) to select (default is all bands)
+# % guisection: Input
+# %end
+# %option G_OPT_MEMORYMB
+# %end
+# %option G_OPT_R_OUTPUT
+# % description: Name for output raster map
+# % required: no
+# % guisection: Output
+# %end
+# %option
+# % key: resample
+# % type: string
+# % required: no
+# % multiple: no
+# % options: nearest,bilinear,bicubic,lanczos,bilinear_f,bicubic_f,lanczos_f
+# % description: Resampling method to use for reprojection
+# % descriptions: nearest;nearest neighbor;bilinear;bilinear interpolation;bicubic;bicubic interpolation;lanczos;lanczos filter;bilinear_f;bilinear interpolation with fallback;bicubic_f;bicubic interpolation with fallback;lanczos_f;lanczos filter with fallback
+# % answer: nearest
+# % guisection: Output
+# %end
+# %option
+# % key: extent
+# % type: string
+# % required: no
+# % multiple: no
+# % options: input,region
+# % answer: input
+# % description: Output raster map extent
+# % descriptions: region;extent of current region;input;extent of input map
+# % guisection: Output
+# %end
+# %option
+# % key: resolution
+# % type: string
+# % required: no
+# % multiple: no
+# % answer: estimated
+# % options: estimated,value,region
+# % description: Resolution of output raster map (default: estimated)
+# % descriptions: estimated;estimated resolution;value;user-specified resolution;region;current region resolution
+# % guisection: Output
+# %end
+# %option
+# % key: resolution_value
+# % type: double
+# % required: no
+# % multiple: no
+# % description: Resolution of output raster map (use with option resolution=value)
+# % guisection: Output
+# %end
+# %option
+# % key: title
+# % key_desc: phrase
+# % type: string
+# % required: no
+# % description: Title for resultant raster map
+# % guisection: Metadata
+# %end
+# %flag
+# % key: e
+# % description: Estimate resolution only
+# % guisection: Optional
+# %end
+# %flag
+# % key: n
+# % description: Do not perform region cropping optimization
+# % guisection: Optional
+# %end
+# %flag
+# % key: l
+# % description: Force Lat/Lon maps to fit into geographic coordinates (90N,S; 180E,W)
+# %end
+# %flag
+# % key: o
+# % label: Override projection check (use current location's projection)
+# % description: Assume that the dataset has the same projection as the current location
+# %end
+# %rules
+# % required: output,-e
+# %end
 
 import sys
 import os

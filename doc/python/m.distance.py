@@ -23,26 +23,26 @@
 # Requires Numeric module (NumPy) from  http://numpy.scipy.org/
 #
 
-#%module
-#% label: Finds the distance between two or more points.
-#% description: If the projection is latitude-longitude, this distance is measured along the geodesic.
-#% keyword: miscellaneous
-#% keyword: distance
-#% keyword: measure
-#%end
-#%option
-#% key: coord
-#% type: string
-#% required: yes
-#% multiple: yes
-#% key_desc: easting,northing
-#% description: Comma separated list of coordinate pairs
-#%end
-#%flag
-#% key: i
-#% description: Read coordinate pairs from stdin
-#% suppress_required: yes
-#%end
+# %module
+# % label: Finds the distance between two or more points.
+# % description: If the projection is latitude-longitude, this distance is measured along the geodesic.
+# % keyword: miscellaneous
+# % keyword: distance
+# % keyword: measure
+# %end
+# %option
+# % key: coord
+# % type: string
+# % required: yes
+# % multiple: yes
+# % key_desc: easting,northing
+# % description: Comma separated list of coordinate pairs
+# %end
+# %flag
+# % key: i
+# % description: Read coordinate pairs from stdin
+# % suppress_required: yes
+# %end
 
 import os, sys
 

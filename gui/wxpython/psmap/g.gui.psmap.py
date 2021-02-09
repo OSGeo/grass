@@ -18,19 +18,19 @@
 #
 ############################################################################
 
-#%module
-#% description: Tool for creating hardcopy map outputs.
-#% keyword: general
-#% keyword: GUI
-#% keyword: printing
-#%end
-#%option G_OPT_F_INPUT
-#% key: file
-#% label: File containing mapping instructions to load
-#% description: See ps.map manual for details
-#% key_desc: name
-#% required: no
-#%end
+# %module
+# % description: Tool for creating hardcopy map outputs.
+# % keyword: general
+# % keyword: GUI
+# % keyword: printing
+# %end
+# %option G_OPT_F_INPUT
+# % key: file
+# % label: File containing mapping instructions to load
+# % description: See ps.map manual for details
+# % key_desc: name
+# % required: no
+# %end
 
 import grass.script as gscript
 

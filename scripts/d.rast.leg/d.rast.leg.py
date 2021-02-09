@@ -28,38 +28,38 @@
 #
 #############################################################################
 
-#%module
-#% description: Displays a raster map and its legend on a graphics window
-#% keyword: display
-#% keyword: cartography
-#% keyword: legend
-#%end
-#%flag
-#%  key: f
-#%  description: Flip legend
-#%end
-#%flag
-#%  key: n
-#%  description: Omit entries with missing label
-#%end
-#%option G_OPT_R_MAP
-#% description: Name of raster map to display
-#%end
-#%flag
-#%  key: s
-#%  description: Draw smooth gradient
-#%end
-#%option
-#% key: lines
-#% type: integer
-#% description: Number of lines to appear in the legend
-#% required: no
-#%end
-#%option G_OPT_R_INPUT
-#% key: raster
-#% description: Name of input raster map to generate legend from
-#% required: no
-#%end
+# %module
+# % description: Displays a raster map and its legend on a graphics window
+# % keyword: display
+# % keyword: cartography
+# % keyword: legend
+# %end
+# %flag
+# %  key: f
+# %  description: Flip legend
+# %end
+# %flag
+# %  key: n
+# %  description: Omit entries with missing label
+# %end
+# %option G_OPT_R_MAP
+# % description: Name of raster map to display
+# %end
+# %flag
+# %  key: s
+# %  description: Draw smooth gradient
+# %end
+# %option
+# % key: lines
+# % type: integer
+# % description: Number of lines to appear in the legend
+# % required: no
+# %end
+# %option G_OPT_R_INPUT
+# % key: raster
+# % description: Name of input raster map to generate legend from
+# % required: no
+# %end
 
 import sys
 import os

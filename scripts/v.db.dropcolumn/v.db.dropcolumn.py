@@ -18,24 +18,24 @@
 #############################################################################
 
 
-#%module
-#% description: Drops a column from the attribute table connected to a given vector map.
-#% keyword: vector
-#% keyword: attribute table
-#% keyword: database
-#%end
+# %module
+# % description: Drops a column from the attribute table connected to a given vector map.
+# % keyword: vector
+# % keyword: attribute table
+# % keyword: database
+# %end
 
-#%option G_OPT_V_MAP
-#% key: map
-#%end
+# %option G_OPT_V_MAP
+# % key: map
+# %end
 
-#%option G_OPT_V_FIELD
-#%end
+# %option G_OPT_V_FIELD
+# %end
 
-#%option G_OPT_DB_COLUMNS
-#% description: Name of attribute column(s) to drop
-#% required: yes
-#%end
+# %option G_OPT_DB_COLUMNS
+# % description: Name of attribute column(s) to drop
+# % required: yes
+# %end
 
 import sys
 import os

@@ -20,39 +20,39 @@
 #
 #############################################################################
 
-#%module
-#% description: Observes specific locations in a space time raster dataset over a period of time using vector points.
-#% keyword: temporal
-#% keyword: sampling
-#% keyword: vector
-#% keyword: time
-#%end
+# %module
+# % description: Observes specific locations in a space time raster dataset over a period of time using vector points.
+# % keyword: temporal
+# % keyword: sampling
+# % keyword: vector
+# % keyword: time
+# %end
 
-#%option G_OPT_V_INPUT
-#%end
+# %option G_OPT_V_INPUT
+# %end
 
-#%option G_OPT_STRDS_INPUTS
-#% key: strds
-#%end
+# %option G_OPT_STRDS_INPUTS
+# % key: strds
+# %end
 
-#%option G_OPT_STVDS_OUTPUT
-#%end
+# %option G_OPT_STVDS_OUTPUT
+# %end
 
-#%option G_OPT_V_OUTPUT
-#% key: vector_output
-#% description: Name of the new created vector map that stores the sampled values in different layers
-#%end
+# %option G_OPT_V_OUTPUT
+# % key: vector_output
+# % description: Name of the new created vector map that stores the sampled values in different layers
+# %end
 
-#%option
-#% key: columns
-#% type: string
-#% description: Names of the vector columns to be created and to store sampled raster values, one name for each STRDS
-#% required: yes
-#% multiple: yes
-#%end
+# %option
+# % key: columns
+# % type: string
+# % description: Names of the vector columns to be created and to store sampled raster values, one name for each STRDS
+# % required: yes
+# % multiple: yes
+# %end
 
-#%option G_OPT_DB_WHERE
-#%end
+# %option G_OPT_DB_WHERE
+# %end
 
 import grass.script as grass
 from grass.exceptions import CalledModuleError

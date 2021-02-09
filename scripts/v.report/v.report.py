@@ -14,42 +14,42 @@
 #
 #############################################################################
 
-#%module
-#% description: Reports geometry statistics for vector maps.
-#% keyword: vector
-#% keyword: geometry
-#% keyword: statistics
-#%end
-#%option G_OPT_V_MAP
-#%end
-#%option G_OPT_V_FIELD
-#% guisection: Selection
-#%end
-#%option
-#% key: option
-#% type: string
-#% description: Value to calculate
-#% options: area,length,coor
-#% required: yes
-#%end
-#%option G_OPT_M_UNITS
-#% options: miles,feet,meters,kilometers,acres,hectares,percent
-#%end
-#%option
-#% key: sort
-#% type: string
-#% description: Sort the result
-#% options: asc,desc
-#% descriptions: asc;Sort in ascending order;desc;Sort in descending order
-#%end
-#%flag
-#% key: c
-#% description: Do not include column names in output
-#%end
-#%flag
-#% key: d
-#% description: Report for geometries with no database records
-#%end
+# %module
+# % description: Reports geometry statistics for vector maps.
+# % keyword: vector
+# % keyword: geometry
+# % keyword: statistics
+# %end
+# %option G_OPT_V_MAP
+# %end
+# %option G_OPT_V_FIELD
+# % guisection: Selection
+# %end
+# %option
+# % key: option
+# % type: string
+# % description: Value to calculate
+# % options: area,length,coor
+# % required: yes
+# %end
+# %option G_OPT_M_UNITS
+# % options: miles,feet,meters,kilometers,acres,hectares,percent
+# %end
+# %option
+# % key: sort
+# % type: string
+# % description: Sort the result
+# % options: asc,desc
+# % descriptions: asc;Sort in ascending order;desc;Sort in descending order
+# %end
+# %flag
+# % key: c
+# % description: Do not include column names in output
+# %end
+# %flag
+# % key: d
+# % description: Report for geometries with no database records
+# %end
 
 import sys
 import os

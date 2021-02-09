@@ -20,52 +20,52 @@
 # TODO: implement better brightness control
 #############################################################################
 
-#%module
-#% description: Performs auto-balancing of colors for RGB images.
-#% keyword: imagery
-#% keyword: RGB
-#% keyword: satellite
-#% keyword: colors
-#%end
-#%option G_OPT_R_INPUT
-#% key: red
-#% description: Name of red channel
-#%end
-#%option G_OPT_R_INPUT
-#% key: green
-#% description: Name of green channel
-#%end
-#%option G_OPT_R_INPUT
-#% key: blue
-#% description: Name of blue channel
-#%end
-#%option
-#% key: strength
-#% type: double
-#% description: Cropping intensity (upper brightness level)
-#% options: 0-100
-#% answer : 98
-#% required: no
-#%end
-#%flag
-#% key: f
-#% description: Extend colors to full range of data on each channel
-#% guisection: Colors
-#%end
-#%flag
-#% key: p
-#% description: Preserve relative colors, adjust brightness only
-#% guisection: Colors
-#%end
-#%flag
-#% key: r
-#% description: Reset to standard color range
-#% guisection: Colors
-#%end
-#%flag
-#% key: s
-#% description: Process bands serially (default: run in parallel)
-#%end
+# %module
+# % description: Performs auto-balancing of colors for RGB images.
+# % keyword: imagery
+# % keyword: RGB
+# % keyword: satellite
+# % keyword: colors
+# %end
+# %option G_OPT_R_INPUT
+# % key: red
+# % description: Name of red channel
+# %end
+# %option G_OPT_R_INPUT
+# % key: green
+# % description: Name of green channel
+# %end
+# %option G_OPT_R_INPUT
+# % key: blue
+# % description: Name of blue channel
+# %end
+# %option
+# % key: strength
+# % type: double
+# % description: Cropping intensity (upper brightness level)
+# % options: 0-100
+# % answer : 98
+# % required: no
+# %end
+# %flag
+# % key: f
+# % description: Extend colors to full range of data on each channel
+# % guisection: Colors
+# %end
+# %flag
+# % key: p
+# % description: Preserve relative colors, adjust brightness only
+# % guisection: Colors
+# %end
+# %flag
+# % key: r
+# % description: Reset to standard color range
+# % guisection: Colors
+# %end
+# %flag
+# % key: s
+# % description: Process bands serially (default: run in parallel)
+# %end
 
 import sys
 

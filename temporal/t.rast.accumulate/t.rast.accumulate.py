@@ -20,138 +20,138 @@
 #
 #############################################################################
 
-#%module
-#% description: Computes cyclic accumulations of a space time raster dataset.
-#% keyword: temporal
-#% keyword: accumulation
-#% keyword: raster
-#% keyword: time
-#%end
+# %module
+# % description: Computes cyclic accumulations of a space time raster dataset.
+# % keyword: temporal
+# % keyword: accumulation
+# % keyword: raster
+# % keyword: time
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#%end
+# %option G_OPT_STRDS_INPUT
+# %end
 
-#%option G_OPT_STRDS_OUTPUT
-#%end
+# %option G_OPT_STRDS_OUTPUT
+# %end
 
 
-#%option G_OPT_STRDS_INPUT
-#% key: lower
-#% description: Input space time raster dataset that defines the lower threshold, values lower than this threshold are excluded from accumulation
-#% required: no
-#%end
+# %option G_OPT_STRDS_INPUT
+# % key: lower
+# % description: Input space time raster dataset that defines the lower threshold, values lower than this threshold are excluded from accumulation
+# % required: no
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#% key: upper
-#% description: Input space time raster dataset that defines the upper threshold, values higher than this threshold are excluded from accumulation
-#% required: no
-#%end
+# %option G_OPT_STRDS_INPUT
+# % key: upper
+# % description: Input space time raster dataset that defines the upper threshold, values higher than this threshold are excluded from accumulation
+# % required: no
+# %end
 
-#%option
-#% key: start
-#% type: string
-#% description: The temporal starting point to begin the accumulation, eg '2001-01-01'
-#% required: yes
-#% multiple: no
-#%end
+# %option
+# % key: start
+# % type: string
+# % description: The temporal starting point to begin the accumulation, eg '2001-01-01'
+# % required: yes
+# % multiple: no
+# %end
 
-#%option
-#% key: stop
-#% type: string
-#% description: The temporal date to stop the accumulation, eg '2009-01-01'
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: stop
+# % type: string
+# % description: The temporal date to stop the accumulation, eg '2009-01-01'
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: cycle
-#% type: string
-#% description: The temporal cycle to restart the accumulation, eg '12 months'
-#% required: yes
-#% multiple: no
-#%end
+# %option
+# % key: cycle
+# % type: string
+# % description: The temporal cycle to restart the accumulation, eg '12 months'
+# % required: yes
+# % multiple: no
+# %end
 
-#%option
-#% key: offset
-#% type: string
-#% description: The temporal offset to the beginning of the next cycle, eg '6 months'
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: offset
+# % type: string
+# % description: The temporal offset to the beginning of the next cycle, eg '6 months'
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: granularity
-#% type: string
-#% description: The granularity for accumulation '1 day'
-#% answer: 1 day
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: granularity
+# % type: string
+# % description: The granularity for accumulation '1 day'
+# % answer: 1 day
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: basename
-#% type: string
-#% label: Basename of the new generated output maps
-#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
-#% required: yes
-#% multiple: no
-#% gisprompt:
-#%end
+# %option
+# % key: basename
+# % type: string
+# % label: Basename of the new generated output maps
+# % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+# % required: yes
+# % multiple: no
+# % gisprompt:
+# %end
 
-#%option
-#% key: suffix
-#% type: string
-#% description: Suffix to add to the basename. Set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
-#% answer: gran
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: suffix
+# % type: string
+# % description: Suffix to add to the basename. Set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+# % answer: gran
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: limits
-#% type: double
-#% key_desc: lower,upper
-#% description: Use these limits in case lower and/or upper input space time raster datasets are not defined or contain NULL values
-#% required: yes
-#% multiple: no
-#%end
+# %option
+# % key: limits
+# % type: double
+# % key_desc: lower,upper
+# % description: Use these limits in case lower and/or upper input space time raster datasets are not defined or contain NULL values
+# % required: yes
+# % multiple: no
+# %end
 
-#%option
-#% key: scale
-#% type: double
-#% description: Scale factor for input space time raster dataset
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: scale
+# % type: double
+# % description: Scale factor for input space time raster dataset
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: shift
-#% type: double
-#% description: Shift factor for input space time raster dataset
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: shift
+# % type: double
+# % description: Shift factor for input space time raster dataset
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: method
-#% type: string
-#% label: This method will be applied to compute the accumulative values from the input maps in a single granule
-#% description: Growing Degree Days or Winkler indices; Mean: sum(input maps)/(number of input maps); Biologically Effective Degree Days; Huglin Heliothermal index
-#% options: mean,gdd,bedd,huglin
-#% answer: mean
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: method
+# % type: string
+# % label: This method will be applied to compute the accumulative values from the input maps in a single granule
+# % description: Growing Degree Days or Winkler indices; Mean: sum(input maps)/(number of input maps); Biologically Effective Degree Days; Huglin Heliothermal index
+# % options: mean,gdd,bedd,huglin
+# % answer: mean
+# % required: no
+# % multiple: no
+# %end
 
-#%flag
-#% key: n
-#% description: Register empty maps in the output space time raster dataset, otherwise they will be deleted
-#%end
+# %flag
+# % key: n
+# % description: Register empty maps in the output space time raster dataset, otherwise they will be deleted
+# %end
 
-#%flag
-#% key: r
-#% description: Reverse time direction in cyclic accumulation
-#%end
+# %flag
+# % key: r
+# % description: Reverse time direction in cyclic accumulation
+# %end
 from __future__ import print_function
 
 import grass.script as grass

@@ -21,62 +21,62 @@
 #
 #############################################################################
 
-#%module
-#% description: Performs different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset.
-#% keyword: temporal
-#% keyword: aggregation
-#% keyword: series
-#% keyword: raster
-#% keyword: time
-#%end
+# %module
+# % description: Performs different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset.
+# % keyword: temporal
+# % keyword: aggregation
+# % keyword: series
+# % keyword: raster
+# % keyword: time
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#%end
+# %option G_OPT_STRDS_INPUT
+# %end
 
-#%option
-#% key: method
-#% type: string
-#% description: Aggregate operation to be performed on the raster maps
-#% required: yes
-#% multiple: yes
-#% options: average,count,median,mode,minimum,min_raster,maximum,max_raster,stddev,range,sum,variance,diversity,slope,offset,detcoeff,quart1,quart3,perc90,quantile,skewness,kurtosis
-#% answer: average
-#%end
+# %option
+# % key: method
+# % type: string
+# % description: Aggregate operation to be performed on the raster maps
+# % required: yes
+# % multiple: yes
+# % options: average,count,median,mode,minimum,min_raster,maximum,max_raster,stddev,range,sum,variance,diversity,slope,offset,detcoeff,quart1,quart3,perc90,quantile,skewness,kurtosis
+# % answer: average
+# %end
 
-#%option
-#% key: quantile
-#% type: double
-#% description: Quantile to calculate for method=quantile
-#% required: no
-#% multiple: yes
-#% options: 0.0-1.0
-#%end
+# %option
+# % key: quantile
+# % type: double
+# % description: Quantile to calculate for method=quantile
+# % required: no
+# % multiple: yes
+# % options: 0.0-1.0
+# %end
 
-#%option
-#% key: order
-#% type: string
-#% description: Sort the maps by category
-#% required: no
-#% multiple: yes
-#% options: id, name, creator, mapset, creation_time, modification_time, start_time, end_time, north, south, west, east, min, max
-#% answer: start_time
-#%end
+# %option
+# % key: order
+# % type: string
+# % description: Sort the maps by category
+# % required: no
+# % multiple: yes
+# % options: id, name, creator, mapset, creation_time, modification_time, start_time, end_time, north, south, west, east, min, max
+# % answer: start_time
+# %end
 
-#%option G_OPT_T_WHERE
-#%end
+# %option G_OPT_T_WHERE
+# %end
 
-#%option G_OPT_R_OUTPUTS
-#%end
+# %option G_OPT_R_OUTPUTS
+# %end
 
-#%flag
-#% key: t
-#% description: Do not assign the space time raster dataset start and end time to the output map
-#%end
+# %flag
+# % key: t
+# % description: Do not assign the space time raster dataset start and end time to the output map
+# %end
 
-#%flag
-#% key: n
-#% description: Propagate NULLs
-#%end
+# %flag
+# % key: n
+# % description: Propagate NULLs
+# %end
 
 
 import grass.script as grass

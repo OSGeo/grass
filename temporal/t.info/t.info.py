@@ -20,39 +20,39 @@
 #
 #############################################################################
 
-#%module
-#% description: Lists information about space time datasets and maps.
-#% keyword: temporal
-#% keyword: metadata
-#% keyword: extent
-#% keyword: time
-#%end
+# %module
+# % description: Lists information about space time datasets and maps.
+# % keyword: temporal
+# % keyword: metadata
+# % keyword: extent
+# % keyword: time
+# %end
 
-#%option G_OPT_STDS_INPUT
-#% description: Name of an existing space time dataset or map
-#%end
+# %option G_OPT_STDS_INPUT
+# % description: Name of an existing space time dataset or map
+# %end
 
-#%option G_OPT_STDS_TYPE
-#% guidependency: input
-#% guisection: Required
-#% options: strds, str3ds, stvds, raster, raster_3d, vector
-#%end
+# %option G_OPT_STDS_TYPE
+# % guidependency: input
+# % guisection: Required
+# % options: strds, str3ds, stvds, raster, raster_3d, vector
+# %end
 
-#%flag
-#% key: g
-#% description: Print in shell script style
-#%end
+# %flag
+# % key: g
+# % description: Print in shell script style
+# %end
 
-#%flag
-#% key: h
-#% description: Print history information in human readable shell style for space time datasets
-#%end
+# %flag
+# % key: h
+# % description: Print history information in human readable shell style for space time datasets
+# %end
 
-#%flag
-#% key: d
-#% description: Print information about the temporal DBMI interface and exit
-#% suppress_required: yes
-#%end
+# %flag
+# % key: d
+# % description: Print information about the temporal DBMI interface and exit
+# % suppress_required: yes
+# %end
 from __future__ import print_function
 
 import grass.script as grass

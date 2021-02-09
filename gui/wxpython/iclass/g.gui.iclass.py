@@ -19,35 +19,35 @@
 #
 ############################################################################
 
-#%module
-#% label: Tool for supervised classification of imagery data.
-#% description: Generates spectral signatures for an image by allowing the user to outline regions of interest.
-#% keyword: general
-#% keyword: GUI
-#% keyword: classification
-#% keyword: supervised classification
-#% keyword: signatures
-#%end
-#%flag
-#% key: m
-#% description: Maximize window
-#%end
-#%option G_OPT_I_GROUP
-#% required: no
-#%end
-#%option G_OPT_I_SUBGROUP
-#% required: no
-#%end
-#%option G_OPT_R_MAP
-#% description: Name of raster map to load
-#% required: no
-#%end
-#%option G_OPT_V_MAP
-#% key: trainingmap
-#% label: Ground truth training map to load
-#% description:
-#% required: no
-#%end
+# %module
+# % label: Tool for supervised classification of imagery data.
+# % description: Generates spectral signatures for an image by allowing the user to outline regions of interest.
+# % keyword: general
+# % keyword: GUI
+# % keyword: classification
+# % keyword: supervised classification
+# % keyword: signatures
+# %end
+# %flag
+# % key: m
+# % description: Maximize window
+# %end
+# %option G_OPT_I_GROUP
+# % required: no
+# %end
+# %option G_OPT_I_SUBGROUP
+# % required: no
+# %end
+# %option G_OPT_R_MAP
+# % description: Name of raster map to load
+# % required: no
+# %end
+# %option G_OPT_V_MAP
+# % key: trainingmap
+# % label: Ground truth training map to load
+# % description:
+# % required: no
+# %end
 
 import os
 import grass.script as gscript

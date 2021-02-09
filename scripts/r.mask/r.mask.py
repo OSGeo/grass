@@ -16,57 +16,57 @@
 #
 #############################################################################
 
-#%module
-#% description: Creates a MASK for limiting raster operation.
-#% keyword: raster
-#% keyword: mask
-#% keyword: null data
-#% keyword: no-data
-#% overwrite: yes
-#%end
-#%option G_OPT_R_INPUT
-#% key: raster
-#% description: Name of raster map to use as mask
-#% required: NO
-#% guisection: Raster
-#%end
-#%option
-#% key: maskcats
-#% type: string
-#% label: Raster values to use for mask
-#% description: Format: 1 2 3 thru 7 *
-#% answer: *
-#% guisection: Raster
-#%end
-#%option G_OPT_V_INPUT
-#% key: vector
-#% label: Name of vector map to use as mask
-#% required: NO
-#% guisection: Vector
-#%end
-#%option G_OPT_V_FIELD
-#% label: Layer number or name (vector)
-#% required: NO
-#% guisection: Vector
-#%end
-#%option G_OPT_V_CATS
-#% label: Category values (vector)
-#% guisection: Vector
-#%end
-#%option G_OPT_DB_WHERE
-#% label: WHERE conditions of SQL statement without 'where' keyword (vector)
-#% guisection: Vector
-#%end
-#%flag
-#% key: i
-#% description: Create inverse mask
-#% guisection: Create
-#%end
-#%flag
-#% key: r
-#% description: Remove existing mask (overrides other options)
-#% guisection: Remove
-#%end
+# %module
+# % description: Creates a MASK for limiting raster operation.
+# % keyword: raster
+# % keyword: mask
+# % keyword: null data
+# % keyword: no-data
+# % overwrite: yes
+# %end
+# %option G_OPT_R_INPUT
+# % key: raster
+# % description: Name of raster map to use as mask
+# % required: NO
+# % guisection: Raster
+# %end
+# %option
+# % key: maskcats
+# % type: string
+# % label: Raster values to use for mask
+# % description: Format: 1 2 3 thru 7 *
+# % answer: *
+# % guisection: Raster
+# %end
+# %option G_OPT_V_INPUT
+# % key: vector
+# % label: Name of vector map to use as mask
+# % required: NO
+# % guisection: Vector
+# %end
+# %option G_OPT_V_FIELD
+# % label: Layer number or name (vector)
+# % required: NO
+# % guisection: Vector
+# %end
+# %option G_OPT_V_CATS
+# % label: Category values (vector)
+# % guisection: Vector
+# %end
+# %option G_OPT_DB_WHERE
+# % label: WHERE conditions of SQL statement without 'where' keyword (vector)
+# % guisection: Vector
+# %end
+# %flag
+# % key: i
+# % description: Create inverse mask
+# % guisection: Create
+# %end
+# %flag
+# % key: r
+# % description: Remove existing mask (overrides other options)
+# % guisection: Remove
+# %end
 
 import os
 import sys

@@ -13,31 +13,31 @@
 #
 #############################################################################
 
-#%module
-#% description: Saves the contents of the active display monitor to a graphics file.
-#% keyword: display
-#% keyword: export
-#% keyword: output
-#%end
-#%option G_OPT_F_OUTPUT
-#% description: Name for output file
-#% required: yes
-#%end
-#%option
-#% key: format
-#% description: Graphics file format
-#% required: yes
-#% options: png,jpg,bmp,gif,tif
-#% answer: png
-#%end
-#%option
-#% key: size
-#% type: integer
-#% key_desc: width,height
-#% description: Width and height of output image
-#% guisection: Images
-#% required : no
-#%end
+# %module
+# % description: Saves the contents of the active display monitor to a graphics file.
+# % keyword: display
+# % keyword: export
+# % keyword: output
+# %end
+# %option G_OPT_F_OUTPUT
+# % description: Name for output file
+# % required: yes
+# %end
+# %option
+# % key: format
+# % description: Graphics file format
+# % required: yes
+# % options: png,jpg,bmp,gif,tif
+# % answer: png
+# %end
+# %option
+# % key: size
+# % type: integer
+# % key_desc: width,height
+# % description: Width and height of output image
+# % guisection: Images
+# % required : no
+# %end
 
 from grass.script import core as gcore
 

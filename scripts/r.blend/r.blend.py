@@ -14,34 +14,34 @@
 #
 #############################################################################
 
-#%module
-#% description: Blends color components of two raster maps by a given ratio.
-#% keyword: raster
-#% keyword: composite
-#%end
-#%option G_OPT_R_INPUT
-#% key: first
-#% description: Name of first raster map for blending
-#%end
-#%option G_OPT_R_INPUT
-#% key: second
-#% description: Name of second raster map for blending
-#%end
-#%option G_OPT_R_BASENAME_OUTPUT
-#% description: Basename for red, green and blue output raster maps
-#%end
-#%option
-#% key: percent
-#% type: double
-#% answer: 50
-#% options : 0-100
-#% description: Percentage weight of first map for color blending
-#% required : no
-#%end
-#% flag
-#% key: c
-#% description: Combine resulting R,G,B layers into single output map
-#%end
+# %module
+# % description: Blends color components of two raster maps by a given ratio.
+# % keyword: raster
+# % keyword: composite
+# %end
+# %option G_OPT_R_INPUT
+# % key: first
+# % description: Name of first raster map for blending
+# %end
+# %option G_OPT_R_INPUT
+# % key: second
+# % description: Name of second raster map for blending
+# %end
+# %option G_OPT_R_BASENAME_OUTPUT
+# % description: Basename for red, green and blue output raster maps
+# %end
+# %option
+# % key: percent
+# % type: double
+# % answer: 50
+# % options : 0-100
+# % description: Percentage weight of first map for color blending
+# % required : no
+# %end
+# % flag
+# % key: c
+# % description: Combine resulting R,G,B layers into single output map
+# %end
 
 import os
 import string

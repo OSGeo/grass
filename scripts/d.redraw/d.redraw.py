@@ -13,12 +13,12 @@
 #
 #############################################################################
 
-#%module
-#% description: Redraws the content of currently selected monitor.
-#% keyword: display
-#% keyword: graphics
-#% keyword: monitors
-#%end
+# %module
+# % description: Redraws the content of currently selected monitor.
+# % keyword: display
+# % keyword: graphics
+# % keyword: monitors
+# %end
 
 import os
 import sys

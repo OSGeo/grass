@@ -17,61 +17,61 @@
 #
 #############################################################################
 
-#%module
-#% description: Calculates univariate statistics from a raster map based on a vector map and uploads statistics to new attribute columns.
-#% keyword: vector
-#% keyword: statistics
-#% keyword: raster
-#% keyword: univariate statistics
-#% keyword: zonal statistics
-#% keyword: sampling
-#% keyword: querying
-#%end
-#%flag
-#% key: c
-#% description: Continue if upload column(s) already exist
-#%end
-#%flag
-#% key: d
-#% label: Create densified lines (default: thin lines)
-#% description: All cells touched by the line will be set, not only those on the render path
-#%end
-#%option G_OPT_V_MAP
-#%end
-#%option G_OPT_V_FIELD
-#%end
-#%option G_OPT_V_TYPE
-#%end
-#%option G_OPT_DB_WHERE
-#%end
-#%option G_OPT_R_INPUTS
-#% key: raster
-#% description: Name of input raster map to calculate statistics from
-#%end
-#%option
-#% key: column_prefix
-#% type: string
-#% description: Column prefix for new attribute columns
-#% required : yes
-#% multiple: yes
-#%end
-#%option
-#% key: method
-#% type: string
-#% description: The methods to use
-#% required: no
-#% multiple: yes
-#% options: number,null_cells,minimum,maximum,range,average,stddev,variance,coeff_var,sum,first_quartile,median,third_quartile,percentile
-#% answer: number,null_cells,minimum,maximum,range,average,stddev,variance,coeff_var,sum,first_quartile,median,third_quartile,percentile
-#%end
-#%option
-#% key: percentile
-#% type: integer
-#% description: Percentile to calculate
-#% options: 0-100
-#% answer: 90
-#% required : no
-#%end
+# %module
+# % description: Calculates univariate statistics from a raster map based on a vector map and uploads statistics to new attribute columns.
+# % keyword: vector
+# % keyword: statistics
+# % keyword: raster
+# % keyword: univariate statistics
+# % keyword: zonal statistics
+# % keyword: sampling
+# % keyword: querying
+# %end
+# %flag
+# % key: c
+# % description: Continue if upload column(s) already exist
+# %end
+# %flag
+# % key: d
+# % label: Create densified lines (default: thin lines)
+# % description: All cells touched by the line will be set, not only those on the render path
+# %end
+# %option G_OPT_V_MAP
+# %end
+# %option G_OPT_V_FIELD
+# %end
+# %option G_OPT_V_TYPE
+# %end
+# %option G_OPT_DB_WHERE
+# %end
+# %option G_OPT_R_INPUTS
+# % key: raster
+# % description: Name of input raster map to calculate statistics from
+# %end
+# %option
+# % key: column_prefix
+# % type: string
+# % description: Column prefix for new attribute columns
+# % required : yes
+# % multiple: yes
+# %end
+# %option
+# % key: method
+# % type: string
+# % description: The methods to use
+# % required: no
+# % multiple: yes
+# % options: number,null_cells,minimum,maximum,range,average,stddev,variance,coeff_var,sum,first_quartile,median,third_quartile,percentile
+# % answer: number,null_cells,minimum,maximum,range,average,stddev,variance,coeff_var,sum,first_quartile,median,third_quartile,percentile
+# %end
+# %option
+# % key: percentile
+# % type: integer
+# % description: Percentile to calculate
+# % options: 0-100
+# % answer: 90
+# % required : no
+# %end
 
 import sys
 import os

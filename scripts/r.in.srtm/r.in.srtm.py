@@ -52,23 +52,23 @@
 #
 #########################
 
-#%Module
-#% description: Imports SRTM HGT files into raster map.
-#% keyword: raster
-#% keyword: import
-#% keyword: SRTM
-#%End
-#%option G_OPT_F_INPUT
-#% description: Name of SRTM input tile (file without .hgt.zip extension)
-#%end
-#%option G_OPT_R_OUTPUT
-#% description: Name for output raster map (default: input tile)
-#% required : no
-#%end
-#%flag
-#% key: 1
-#% description: Input is a 1-arcsec tile (default: 3-arcsec)
-#%end
+# %Module
+# % description: Imports SRTM HGT files into raster map.
+# % keyword: raster
+# % keyword: import
+# % keyword: SRTM
+# %End
+# %option G_OPT_F_INPUT
+# % description: Name of SRTM input tile (file without .hgt.zip extension)
+# %end
+# %option G_OPT_R_OUTPUT
+# % description: Name for output raster map (default: input tile)
+# % required : no
+# %end
+# %flag
+# % key: 1
+# % description: Input is a 1-arcsec tile (default: 3-arcsec)
+# %end
 
 tmpl1sec = """BYTEORDER M
 LAYOUT BIL

@@ -20,72 +20,72 @@
 #
 #############################################################################
 
-#%module
-#% description: Lists space time datasets and maps registered in the temporal database.
-#% keyword: temporal
-#% keyword: map management
-#% keyword: list
-#% keyword: time
-#%end
+# %module
+# % description: Lists space time datasets and maps registered in the temporal database.
+# % keyword: temporal
+# % keyword: map management
+# % keyword: list
+# % keyword: time
+# %end
 
-#%option
-#% key: type
-#% type: string
-#% description: Type of the space time dataset or map, default is strds
-#% guisection: Selection
-#% required: no
-#% options: strds, str3ds, stvds, raster, raster_3d, vector
-#% answer: strds
-#%end
+# %option
+# % key: type
+# % type: string
+# % description: Type of the space time dataset or map, default is strds
+# % guisection: Selection
+# % required: no
+# % options: strds, str3ds, stvds, raster, raster_3d, vector
+# % answer: strds
+# %end
 
-#%option G_OPT_T_TYPE
-#% multiple: yes
-#% answer: absolute,relative
-#% guisection: Selection
-#%end
+# %option G_OPT_T_TYPE
+# % multiple: yes
+# % answer: absolute,relative
+# % guisection: Selection
+# %end
 
-#%option
-#% key: order
-#% type: string
-#% description: Columns number_of_maps and granularity only available for space time datasets
-#% label: Sort the space time dataset by category
-#% guisection: Formatting
-#% required: no
-#% multiple: yes
-#% options: id,name,band_reference,creator,mapset,number_of_maps,creation_time,start_time,end_time,interval,north,south,west,east,granularity
-#% answer: id
-#%end
+# %option
+# % key: order
+# % type: string
+# % description: Columns number_of_maps and granularity only available for space time datasets
+# % label: Sort the space time dataset by category
+# % guisection: Formatting
+# % required: no
+# % multiple: yes
+# % options: id,name,band_reference,creator,mapset,number_of_maps,creation_time,start_time,end_time,interval,north,south,west,east,granularity
+# % answer: id
+# %end
 
-#%option
-#% key: columns
-#% type: string
-#% description: Columns number_of_maps and granularity only available for space time datasets
-#% label: Columns to be printed to stdout
-#% guisection: Selection
-#% required: no
-#% multiple: yes
-#% options: id,name,band_reference,creator,mapset,number_of_maps,creation_time,start_time,end_time,north,south,west,east,granularity,all
-#% answer: id
-#%end
+# %option
+# % key: columns
+# % type: string
+# % description: Columns number_of_maps and granularity only available for space time datasets
+# % label: Columns to be printed to stdout
+# % guisection: Selection
+# % required: no
+# % multiple: yes
+# % options: id,name,band_reference,creator,mapset,number_of_maps,creation_time,start_time,end_time,north,south,west,east,granularity,all
+# % answer: id
+# %end
 
-#%option G_OPT_T_WHERE
-#% guisection: Selection
-#%end
+# %option G_OPT_T_WHERE
+# % guisection: Selection
+# %end
 
-#%option G_OPT_F_SEP
-#% label: Field separator character between the output columns
-#% guisection: Formatting
-#%end
+# %option G_OPT_F_SEP
+# % label: Field separator character between the output columns
+# % guisection: Formatting
+# %end
 
-#%option G_OPT_F_OUTPUT
-#% required: no
-#%end
+# %option G_OPT_F_OUTPUT
+# % required: no
+# %end
 
-#%flag
-#% key: c
-#% description: Print the column names as first row
-#% guisection: Formatting
-#%end
+# %flag
+# % key: c
+# % description: Print the column names as first row
+# % guisection: Formatting
+# %end
 
 from __future__ import print_function
 import grass.script as gscript

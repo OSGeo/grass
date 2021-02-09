@@ -23,54 +23,54 @@
 # 2000: updated to GRASS 5
 # 1998 from NRCS, slightly modified for GRASS 4.2.1
 
-#%module
-#% description: Reclasses a raster map greater or less than user specified area size (in hectares).
-#% keyword: raster
-#% keyword: statistics
-#% keyword: aggregation
-#%end
+# %module
+# % description: Reclasses a raster map greater or less than user specified area size (in hectares).
+# % keyword: raster
+# % keyword: statistics
+# % keyword: aggregation
+# %end
 
-#%option G_OPT_R_INPUT
-#%end
+# %option G_OPT_R_INPUT
+# %end
 
-#%option G_OPT_R_OUTPUT
-#%end
+# %option G_OPT_R_OUTPUT
+# %end
 
-#%option
-#% key: value
-#% type: double
-#% description: Value option that sets the area size limit (in hectares)
-#% required: yes
-#% guisection: Area
-#%end
+# %option
+# % key: value
+# % type: double
+# % description: Value option that sets the area size limit (in hectares)
+# % required: yes
+# % guisection: Area
+# %end
 
-#%option
-#% key: mode
-#% type: string
-#% description: Lesser or greater than specified value
-#% options: lesser,greater
-#% required: yes
-#% guisection: Area
-#%end
+# %option
+# % key: mode
+# % type: string
+# % description: Lesser or greater than specified value
+# % options: lesser,greater
+# % required: yes
+# % guisection: Area
+# %end
 
-#%option
-#% key: method
-#% type: string
-#% description: Method used for reclassification
-#% options: reclass,rmarea
-#% answer: reclass
-#% guisection: Area
-#%end
+# %option
+# % key: method
+# % type: string
+# % description: Method used for reclassification
+# % options: reclass,rmarea
+# % answer: reclass
+# % guisection: Area
+# %end
 
-#%flag
-#% key: c
-#% description: Input map is clumped
-#%end
+# %flag
+# % key: c
+# % description: Input map is clumped
+# %end
 
-#%flag
-#% key: d
-#% description: Clumps including diagonal neighbors
-#%end
+# %flag
+# % key: d
+# % description: Clumps including diagonal neighbors
+# %end
 
 import sys
 import os

@@ -20,33 +20,33 @@
 #
 #############################################################################
 
-#%module
-#% description: Lists temporal topology of a space time dataset.
-#% keyword: temporal
-#% keyword: topology
-#% keyword: time
-#%end
+# %module
+# % description: Lists temporal topology of a space time dataset.
+# % keyword: temporal
+# % keyword: topology
+# % keyword: time
+# %end
 
-#%option G_OPT_STDS_INPUT
-#%end
+# %option G_OPT_STDS_INPUT
+# %end
 
-#%option G_OPT_STDS_TYPE
-#% guidependency: input
-#% guisection: Required
-#%end
+# %option G_OPT_STDS_TYPE
+# % guidependency: input
+# % guisection: Required
+# %end
 
-#%option G_OPT_T_WHERE
-#%end
+# %option G_OPT_T_WHERE
+# %end
 
-#%flag
-#% key: m
-#% description: Print temporal topological relationships and exit
-#%end
+# %flag
+# % key: m
+# % description: Print temporal topological relationships and exit
+# %end
 
-#%flag
-#% key: s
-#% description: Print spatio-temporal topological relationships and exit
-#%end
+# %flag
+# % key: s
+# % description: Print spatio-temporal topological relationships and exit
+# %end
 from __future__ import print_function
 
 import grass.script as grass
