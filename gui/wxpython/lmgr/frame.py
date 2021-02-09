@@ -1407,7 +1407,7 @@ class GMFrame(wx.Frame):
                 parent=self,
                 message=_("Current location is <%(loc)s>.\n"
                           "Current mapset is <%(mapset)s>.") %
-                          {'loc': gxwXml.location,
+                {'loc': gxwXml.location,
                            'mapset': gxwXml.mapset})
         return True
 

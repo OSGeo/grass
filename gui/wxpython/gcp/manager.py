@@ -2833,8 +2833,8 @@ class GrSettingsDialog(wx.Dialog):
         rmslabel.SetToolTip(
             _(
                 "Highlight GCPs with an RMS error larger than \n"
-                    "mean + standard deviation * given factor. \n"
-                    "Recommended values for this factor are between 1 and 2."))
+                "mean + standard deviation * given factor. \n"
+                "Recommended values for this factor are between 1 and 2."))
         rmsgridSizer.Add(
             rmslabel,
             flag=wx.ALIGN_CENTER_VERTICAL,

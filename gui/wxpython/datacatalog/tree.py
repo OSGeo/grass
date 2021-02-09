@@ -1327,7 +1327,7 @@ class DataCatalogTree(TreeView):
                     self.selected_mapset[i].data['name'])
                 removed, cmd = self._runCommand(
                     'g.remove', flags='f', type=self.selected_layer[i].data['type'],
-                        name=self.selected_layer[i].data['name'], env=env)
+                    name=self.selected_layer[i].data['name'], env=env)
                 gscript.try_remove(gisrc)
                 if removed == 0:
                     self._giface.grassdbChanged.emit(grassdb=self.selected_grassdb[i].data['name'],

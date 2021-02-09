@@ -261,7 +261,7 @@ class MapCalcFrame(wx.Frame):
         self.newmaptxt = Select(
             parent=self.panel, id=wx.ID_ANY, size=(
                 250, -1), type=element, multiple=False,
-                fullyQualified=False)
+            fullyQualified=False)
         self.mapsellabel = StaticText(parent=self.panel, id=wx.ID_ANY)
         if self.rast3d:
             self.mapsellabel.SetLabel(_('Insert existing 3D raster map'))
