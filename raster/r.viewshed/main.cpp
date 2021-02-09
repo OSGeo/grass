@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
        requires some changes. To do. */
     if (!(vp.row < hd->nrows && vp.col < hd->ncols)) {
 	/* unfortunately, we don't know the point coordinates now */
-	G_warning(_("Region extent: north=%d, south=%d, east=%d, west=%d"),
+	G_warning(_("Region extent: north=%f, south=%f, east=%f, west=%f"),
 	    hd->window.north, hd->window.south, hd->window.east, hd->window.west);
 	G_warning(_("Region extent: rows=%d, cols=%d"), hd->nrows, hd->ncols);
 	G_warning(_("Viewpoint: row=%d, col=%d"), vp.row, vp.col);
