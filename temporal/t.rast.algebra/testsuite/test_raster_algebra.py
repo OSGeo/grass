@@ -20,7 +20,7 @@ class TestTRastAlgebra(TestCase):
     def setUpClass(cls):
         """Initiate the temporal GIS and set the region
         """
-        os.putenv("GRASS_OVERWRITE",  "1")
+        os.putenv("GRASS_OVERWRITE", "1")
         tgis.init(True) # Raise on error instead of exit(1)
         cls.use_temp_region()
         cls.runModule("g.region", n=80.0, s=0.0, e=120.0,
@@ -56,7 +56,7 @@ class TestTRastAlgebra(TestCase):
                                                  start="2001-01-02", increment="2 day", interval=True)
         tgis.register_maps_in_space_time_dataset(type="raster", name="D", maps="d1,d2,d3",
                                                  start="2001-01-03", increment="1 day", interval=True)                                                 
-        tgis.register_maps_in_space_time_dataset(type="raster", name=None,  maps="singletmap", 
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None, maps="singletmap", 
                                                 start="2001-01-03", end="2001-01-04")
 
     def tearDown(self):
@@ -87,8 +87,8 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_simple_arith_hash_1(self):
         """Simple arithmetic test including the hash operator"""
@@ -399,8 +399,8 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_tmap_function2(self):
         """Testing the tmap function. """
@@ -416,8 +416,8 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_map_function1(self):
         """Testing the map function. """
@@ -433,8 +433,8 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_map_function2(self):
         """Testing the map function. """
@@ -450,8 +450,8 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_select(self):
         """Testing the temporal select operator. """
@@ -466,8 +466,8 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_select(self):
         """Testing the temporal select operator. """
@@ -482,8 +482,8 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_select_operators1(self):
         """Testing the temporal select operator. Including temporal relations. """
@@ -498,8 +498,8 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_select_operators2(self):
         """Testing the temporal select operator. Including temporal relations. """
@@ -514,8 +514,8 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_select_operators3(self):
         """Testing the temporal select operator. Including temporal relations and 
@@ -531,8 +531,8 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  False)
-        self.assertEqual(D.get_granularity(),  u'2 days')
+        self.assertEqual( D.check_temporal_topology(), False)
+        self.assertEqual(D.get_granularity(), u'2 days')
 
     def test_temporal_select_operators4(self):
         """Testing the temporal select operator. Including temporal relations and 
@@ -553,8 +553,8 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  False)
-        self.assertEqual(D.get_granularity(),  u'2 days')
+        self.assertEqual( D.check_temporal_topology(), False)
+        self.assertEqual(D.get_granularity(), u'2 days')
 
     def test_temporal_hash_operator1(self):
         """Testing the temporal hash operator in the raster algebra. """
@@ -569,8 +569,8 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_hash_operator2(self):
         """Testing the temporal hash operator in the raster algebra. """
@@ -585,8 +585,8 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_hash_operator3(self):
         """Testing the temporal hash operator in the raster algebra. """
@@ -601,8 +601,8 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'2 days')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'2 days')
 
     def test_temporal_hash_operator4(self):
         """Testing the temporal hash operator in the raster algebra. """
@@ -617,8 +617,8 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'2 days')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'2 days')
 
     def test_raster_arithmetic_relation_1(self):
         """Arithmetic test with temporal intersection"""
@@ -633,8 +633,8 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'2 days')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'2 days')
 
     def test_raster_arithmetic_relation_2(self):
         """Arithmetic test with temporal intersection"""
@@ -649,8 +649,8 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'2 days')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'2 days')
 
     def test_raster_arithmetic_relation_3(self):
         """Arithmetic test with temporal intersection"""
@@ -665,8 +665,8 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'2 days')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'2 days')
 
     def test_raster_arithmetic_relation_4(self):
         """Arithmetic test with temporal intersection"""
@@ -681,8 +681,8 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_raster_arithmetic_relation_5(self):
         """Complex arithmetic test with temporal intersection"""
@@ -699,8 +699,8 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
 
 if __name__ == '__main__':

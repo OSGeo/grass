@@ -16,7 +16,7 @@ class TestTerraflow(TestCase):
     def setUpClass(cls):
         """Use temporary region settings"""
         cls.use_temp_region()
-        cls.runModule("g.region", flags="p",  raster=cls.elevation)
+        cls.runModule("g.region", flags="p", raster=cls.elevation)
 
     @classmethod
     def tearDownClass(cls):
@@ -105,10 +105,10 @@ coeff_var=47.8572213922083
 sum=8341670.75914752"""
 
         #cls.assertRasterFitsUnivar(raster="terra_flooded",  reference=terra_flooded_univar,  precision=3)
-        cls.assertRasterFitsUnivar(raster="terra_flowdir",  reference=terra_flowdir_univar,  precision=3)
-        cls.assertRasterFitsUnivar(raster="terra_sink",  reference=terra_sink_univar,  precision=3)
-        cls.assertRasterFitsUnivar(raster="terra_flowaccum",  reference=terra_flowaccum_univar,  precision=3)
-        cls.assertRasterFitsUnivar(raster="terra_tci",  reference=terra_tci_univar,  precision=3)
+        cls.assertRasterFitsUnivar(raster="terra_flowdir", reference=terra_flowdir_univar, precision=3)
+        cls.assertRasterFitsUnivar(raster="terra_sink", reference=terra_sink_univar, precision=3)
+        cls.assertRasterFitsUnivar(raster="terra_flowaccum", reference=terra_flowaccum_univar, precision=3)
+        cls.assertRasterFitsUnivar(raster="terra_tci", reference=terra_tci_univar, precision=3)
 
 if __name__ == '__main__':
     from grass.gunittest.main import test

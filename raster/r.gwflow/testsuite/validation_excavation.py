@@ -16,7 +16,7 @@ class ValidationExcavation(TestCase):
     def setUpClass(cls):
         """Use temporary region settings"""
         cls.use_temp_region()
-        cls.runModule("g.region", flags="p",  res=50, n=950, s=0, w=0, e=2000)
+        cls.runModule("g.region", flags="p", res=50, n=950, s=0, w=0, e=2000)
 
     @classmethod
     def tearDownClass(cls):
@@ -77,8 +77,8 @@ class ValidationExcavation(TestCase):
         max=5.3976262918968
         map=gwresult"""
 
-        self.assertRasterFitsUnivar(raster="gwresult",  reference=univar_string,  precision=3)
-        self.assertRasterFitsInfo(raster="gwresult",  reference=info_string,  precision=3)
+        self.assertRasterFitsUnivar(raster="gwresult", reference=univar_string, precision=3)
+        self.assertRasterFitsInfo(raster="gwresult", reference=info_string, precision=3)
 
 if __name__ == '__main__':
     from grass.gunittest.main import test

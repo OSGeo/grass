@@ -156,11 +156,11 @@ def main():
         successor = _map.get_precedes()[0]
 
         gran = sp.get_granularity()
-        tmpval,  start = predecessor.get_temporal_extent_as_tuple()
-        end,  tmpval = successor.get_temporal_extent_as_tuple()
+        tmpval, start = predecessor.get_temporal_extent_as_tuple()
+        end, tmpval = successor.get_temporal_extent_as_tuple()
 
         # Now resample the gap
-        map_matrix = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity((_map, ),start, end,  gran)
+        map_matrix = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity((_map, ),start, end, gran)
 
         map_names = []
         map_positions = []
@@ -204,7 +204,7 @@ def main():
 
         mod = copy.deepcopy(gapfill_module)
         mod(input=(predecessor.get_map_id(), successor.get_map_id()),
-                datapos=(0, 1), output=map_names,  samplingpos=map_positions)
+                datapos=(0, 1), output=map_names, samplingpos=map_positions)
         sys.stderr.write(mod.get_bash() + "\n")
         process_queue.put(mod)
 

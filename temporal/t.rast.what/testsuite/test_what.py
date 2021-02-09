@@ -223,25 +223,25 @@ class TestRasterWhatNull(TestCase):
         """Initiate the temporal GIS and set the region
         """
         cls.use_temp_region()
-        cls.runModule("g.region",  s=0,  n=80,  w=0,  e=120,  b=0,  t=50,  res=10,  res3=10)
+        cls.runModule("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
 
-        cls.runModule("r.mapcalc", expression="a_1 = 100",  overwrite=True)
-        cls.runModule("r.mapcalc", expression="a_null = null()",  overwrite=True)
+        cls.runModule("r.mapcalc", expression="a_1 = 100", overwrite=True)
+        cls.runModule("r.mapcalc", expression="a_null = null()", overwrite=True)
 
         cls.runModule("v.random", output="points", npoints=1, seed=1, overwrite=True)
 
-        cls.runModule("t.create",  type="strds",  temporaltype="absolute",
-                                 output="A",  title="A test",  description="A test",
+        cls.runModule("t.create", type="strds", temporaltype="absolute",
+                                 output="A", title="A test", description="A test",
                                  overwrite=True)
-        cls.runModule("t.register",  flags="i",  type="raster",  input="A",
-                                     maps="a_1,a_null",  start="2001-01-01",
-                                     increment="3 months",  overwrite=True)
+        cls.runModule("t.register", flags="i", type="raster", input="A",
+                                     maps="a_1,a_null", start="2001-01-01",
+                                     increment="3 months", overwrite=True)
 
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region
         """
-        cls.runModule("t.remove",  flags="rf",  type="strds",
+        cls.runModule("t.remove", flags="rf", type="strds",
                                    inputs="A")
         cls.del_temp_region()
 
@@ -249,11 +249,11 @@ class TestRasterWhatNull(TestCase):
         """Test setting the null value
         """
 
-        t_rast_what = SimpleModule("t.rast.what",  strds="A",  output="-",
+        t_rast_what = SimpleModule("t.rast.what", strds="A", output="-",
                                    points="points", flags="n",
                                    where="start_time >= '2001-01-01'",
                                    null_value="NULL",
-                                   nprocs=4,  overwrite=True,  verbose=True)
+                                   nprocs=4, overwrite=True, verbose=True)
         self.assertModule(t_rast_what)
 
         text="""x|y|start|end|value

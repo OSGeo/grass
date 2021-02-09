@@ -446,7 +446,7 @@ if index_name:
 
     sys.stdout.write(sourcecode.substitute(
         URL_SOURCE=url_source, PGM=pgm, URL_LOG=url_source.replace(
-            tree,  commits)))
+            tree, commits)))
     sys.stdout.write(
         footer_index.substitute(
             INDEXNAME=index_name,

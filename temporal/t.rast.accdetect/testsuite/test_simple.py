@@ -19,12 +19,12 @@ class TestRasterExtraction(TestCase):
     def setUpClass(cls):
         """Initiate the temporal GIS and set the region
         """
-        os.putenv("GRASS_OVERWRITE",  "1")
+        os.putenv("GRASS_OVERWRITE", "1")
         cls.use_temp_region()
-        cls.runModule("g.region",  s=0,  n=80,  w=0,  e=120,  b=0,
-                      t=50,  res=10,  res3=10)
+        cls.runModule("g.region", s=0, n=80, w=0, e=120, b=0,
+                      t=50, res=10, res3=10)
         for i in range(1,101):
-            cls.runModule("r.mapcalc", flags='s',  overwrite=True,
+            cls.runModule("r.mapcalc", flags='s', overwrite=True,
                           expression="a_mapcalc{nu} = rand(1,10)".format(nu=i))
 
         cls.runModule("t.create", type="strds", temporaltype="absolute",
@@ -34,7 +34,7 @@ class TestRasterExtraction(TestCase):
                              separator=',')
         cls.runModule(glist, expecting_stdout=True)
         maps = glist.outputs.stdout.strip()
-        cls.runModule("t.register", flags="i",  type="raster",  input="A",
+        cls.runModule("t.register", flags="i", type="raster", input="A",
                       maps=maps.strip(), increment="1 month",
                       start="2001-01-01 00:00:00", overwrite=True)
     @classmethod

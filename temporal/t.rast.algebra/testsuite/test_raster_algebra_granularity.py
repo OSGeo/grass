@@ -20,7 +20,7 @@ class TestTRastAlgebraGranularity(TestCase):
     def setUpClass(cls):
         """Initiate the temporal GIS and set the region
         """
-        os.putenv("GRASS_OVERWRITE",  "1")
+        os.putenv("GRASS_OVERWRITE", "1")
         tgis.init(True) # Raise on error instead of exit(1)
         cls.use_temp_region()
         cls.runModule("g.region", n=80.0, s=0.0, e=120.0,
@@ -61,7 +61,7 @@ class TestTRastAlgebraGranularity(TestCase):
                                                  start="2001-03-01", increment="5 days", interval=True)
         tgis.register_maps_in_space_time_dataset(type="raster", name="D", maps="d3",
                                                  start="2001-05-01", increment="5 days", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="raster", name=None,  maps="singletmap", 
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None, maps="singletmap", 
                                                 start="2001-03-01", end="2001-04-01")
 
     def tearDown(self):
@@ -78,8 +78,8 @@ class TestTRastAlgebraGranularity(TestCase):
     def test_1(self):
         """Simple arithmetik test"""
         expr = "R = if(C == 9,  A - 1)"
-        self.assertModule("t.rast.algebra",  expression=expr, flags="gd", basename="r")
-        self.assertModule("t.rast.algebra",  expression=expr, flags="g", basename="r")
+        self.assertModule("t.rast.algebra", expression=expr, flags="gd", basename="r")
+        self.assertModule("t.rast.algebra", expression=expr, flags="g", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
 
@@ -89,14 +89,14 @@ class TestTRastAlgebraGranularity(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 7, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 month')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 month')
 
     def test_2(self):
         """Simple arithmetik test"""
         expr = "R = if(D == 11,  A - 1, A + 1)"
-        self.assertModule("t.rast.algebra",  expression=expr, flags="gd", basename="r")
-        self.assertModule("t.rast.algebra",  expression=expr, flags="g", basename="r")
+        self.assertModule("t.rast.algebra", expression=expr, flags="gd", basename="r")
+        self.assertModule("t.rast.algebra", expression=expr, flags="g", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
 
@@ -106,14 +106,14 @@ class TestTRastAlgebraGranularity(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 5, 6))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_simple_arith_hash_1(self):
         """Simple arithmetic test including the hash operator"""
         expr ='R = A + (A # A)'
-        self.assertModule("t.rast.algebra",  expression=expr, flags="gd", basename="r")
-        self.assertModule("t.rast.algebra",  expression=expr, flags="g", basename="r")
+        self.assertModule("t.rast.algebra", expression=expr, flags="gd", basename="r")
+        self.assertModule("t.rast.algebra", expression=expr, flags="g", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
 
@@ -128,8 +128,8 @@ class TestTRastAlgebraGranularity(TestCase):
     def test_simple_arith_td_1(self):
         """Simple arithmetic test"""
         expr = 'R = A + td(A:D)'
-        self.assertModule("t.rast.algebra",  expression=expr, flags="gd", basename="r")
-        self.assertModule("t.rast.algebra",  expression=expr, flags="g", basename="r")
+        self.assertModule("t.rast.algebra", expression=expr, flags="gd", basename="r")
+        self.assertModule("t.rast.algebra", expression=expr, flags="g", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
 
@@ -139,14 +139,14 @@ class TestTRastAlgebraGranularity(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 5, 6))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_simple_arith_if_1(self):
         """Simple arithmetic test with if condition"""
         expr = 'R = if(start_date(A) >= "2001-02-01", A + A)'
-        self.assertModule("t.rast.algebra",  expression=expr, flags="gd", basename="r")
-        self.assertModule("t.rast.algebra",  expression=expr, flags="g", basename="r")
+        self.assertModule("t.rast.algebra", expression=expr, flags="gd", basename="r")
+        self.assertModule("t.rast.algebra", expression=expr, flags="g", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
 
@@ -160,8 +160,8 @@ class TestTRastAlgebraGranularity(TestCase):
     def test_simple_arith_if_2(self):
         """Simple arithmetic test with if condition"""
         expr = 'R = if(A#A == 1, A - A)'
-        self.assertModule("t.rast.algebra",  expression=expr, flags="gd", basename="r")
-        self.assertModule("t.rast.algebra",  expression=expr, flags="g", basename="r")
+        self.assertModule("t.rast.algebra", expression=expr, flags="gd", basename="r")
+        self.assertModule("t.rast.algebra", expression=expr, flags="g", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
 
@@ -175,8 +175,8 @@ class TestTRastAlgebraGranularity(TestCase):
     def test_complex_arith_if_1(self):
         """Complex arithmetic test with if condition"""
         expr = 'R = if(start_date(A) < "2001-03-01" && A#A == 1, A+C, A-C)'
-        self.assertModule("t.rast.algebra",  expression=expr, flags="gd", basename="r")
-        self.assertModule("t.rast.algebra",  expression=expr, flags="g", basename="r")
+        self.assertModule("t.rast.algebra", expression=expr, flags="gd", basename="r")
+        self.assertModule("t.rast.algebra", expression=expr, flags="g", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
 
@@ -190,8 +190,8 @@ class TestTRastAlgebraGranularity(TestCase):
     def test_temporal_neighbors(self):
         """Simple temporal neighborhood computation test"""
         expr ='R = (A[0,0,-1] : D) + (A[0,0,1] : D)'
-        self.assertModule("t.rast.algebra",  expression=expr, flags="gd", basename="r")
-        self.assertModule("t.rast.algebra",  expression=expr, flags="g", basename="r")
+        self.assertModule("t.rast.algebra", expression=expr, flags="gd", basename="r")
+        self.assertModule("t.rast.algebra", expression=expr, flags="g", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
 
@@ -205,8 +205,8 @@ class TestTRastAlgebraGranularity(TestCase):
     def test_map(self):
         """Test STDS + single map without timestamp"""
         expr = "R = A + map(singletmap)"
-        self.assertModule("t.rast.algebra",  expression=expr, flags="gd", basename="r")
-        self.assertModule("t.rast.algebra",  expression=expr, flags="g", basename="r")
+        self.assertModule("t.rast.algebra", expression=expr, flags="gd", basename="r")
+        self.assertModule("t.rast.algebra", expression=expr, flags="g", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
 
@@ -220,8 +220,8 @@ class TestTRastAlgebraGranularity(TestCase):
     def test_tmap_map(self):
         """Test STDS + single map with and without timestamp"""
         expr = "R = tmap(singletmap) + A + map(singletmap)"
-        self.assertModule("t.rast.algebra",  expression=expr, flags="gd", basename="r")
-        self.assertModule("t.rast.algebra",  expression=expr, flags="g", basename="r")
+        self.assertModule("t.rast.algebra", expression=expr, flags="gd", basename="r")
+        self.assertModule("t.rast.algebra", expression=expr, flags="g", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
 
@@ -231,8 +231,8 @@ class TestTRastAlgebraGranularity(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 3, 1))
         self.assertEqual(end, datetime.datetime(2001, 4, 1))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 month')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 month')
 
 
 if __name__ == '__main__':

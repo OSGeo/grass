@@ -19,21 +19,21 @@ class TestSupportAbsoluteSTVDS(TestCase):
     def setUpClass(cls):
         """Initiate the temporal GIS and set the region
         """
-        os.putenv("GRASS_OVERWRITE",  "1")
+        os.putenv("GRASS_OVERWRITE", "1")
         tgis.init()
         cls.use_temp_region()
-        cls.runModule("g.region",  s=0,  n=80,  w=0,  e=120,  b=0,  
-                      t=50,  res=10,  res3=10)
-        cls.runModule("v.random", quiet=True, npoints=20, seed=1,  output='a1')
-        cls.runModule("v.random", quiet=True, npoints=20, seed=1,  output='a2')
-        cls.runModule("v.random", quiet=True, npoints=20, seed=1,  output='a3')
-        cls.runModule("v.random", quiet=True, npoints=20, seed=1,  output='a4')
+        cls.runModule("g.region", s=0, n=80, w=0, e=120, b=0,  
+                      t=50, res=10, res3=10)
+        cls.runModule("v.random", quiet=True, npoints=20, seed=1, output='a1')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=1, output='a2')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=1, output='a3')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=1, output='a4')
 
-        cls.runModule("t.create",  type="stvds",  temporaltype="absolute",  
-                                    output="A",  title="A test",  
-                                    description="A test",  overwrite=True)
+        cls.runModule("t.create", type="stvds", temporaltype="absolute",  
+                                    output="A", title="A test",  
+                                    description="A test", overwrite=True)
 
-        cls.runModule("t.register", flags="i",  type="vector",  input="A",  
+        cls.runModule("t.register", flags="i", type="vector", input="A",  
                                      maps="a1,a2,a3,a4",
                                      start="2001-01-15 12:05:45", 
                                      increment="14 days",  
@@ -66,10 +66,10 @@ class TestSupportAbsoluteSTVDS(TestCase):
     def test_2_update(self):
         """Set title, description and aggregation"""
 
-        self.runModule("v.random", quiet=True, npoints=10, seed=1,  output='a1')
-        self.runModule("v.random", quiet=True, npoints=10, seed=1,  output='a2')
-        self.runModule("v.random", quiet=True, npoints=10, seed=1,  output='a3')
-        self.runModule("v.random", quiet=True, npoints=10, seed=1,  output='a4')
+        self.runModule("v.random", quiet=True, npoints=10, seed=1, output='a1')
+        self.runModule("v.random", quiet=True, npoints=10, seed=1, output='a2')
+        self.runModule("v.random", quiet=True, npoints=10, seed=1, output='a3')
+        self.runModule("v.random", quiet=True, npoints=10, seed=1, output='a4')
 
         self.assertModule("t.support", type="stvds", input="A", flags="m")
 

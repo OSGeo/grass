@@ -19,24 +19,24 @@ class TestAggregationRelative(TestCase):
     def setUpClass(cls):
         """Initiate the temporal GIS and set the region
         """
-        os.putenv("GRASS_OVERWRITE",  "1")
+        os.putenv("GRASS_OVERWRITE", "1")
         tgis.init()
         cls.use_temp_region()
-        cls.runModule("g.region",  s=0,  n=80,  w=0,  e=120,  b=0,
-                      t=50,  res=10,  res3=10)
-        cls.runModule("r.mapcalc", expression="a1 = 100",  overwrite=True)
-        cls.runModule("r.mapcalc", expression="a2 = 200",  overwrite=True)
-        cls.runModule("r.mapcalc", expression="a3 = 300",  overwrite=True)
-        cls.runModule("r.mapcalc", expression="a4 = 400",  overwrite=True)
-        cls.runModule("r.mapcalc", expression="a5 = 500",  overwrite=True)
-        cls.runModule("r.mapcalc", expression="a6 = 600",  overwrite=True)
-        cls.runModule("r.mapcalc", expression="a7 = null()",  overwrite=True)
+        cls.runModule("g.region", s=0, n=80, w=0, e=120, b=0,
+                      t=50, res=10, res3=10)
+        cls.runModule("r.mapcalc", expression="a1 = 100", overwrite=True)
+        cls.runModule("r.mapcalc", expression="a2 = 200", overwrite=True)
+        cls.runModule("r.mapcalc", expression="a3 = 300", overwrite=True)
+        cls.runModule("r.mapcalc", expression="a4 = 400", overwrite=True)
+        cls.runModule("r.mapcalc", expression="a5 = 500", overwrite=True)
+        cls.runModule("r.mapcalc", expression="a6 = 600", overwrite=True)
+        cls.runModule("r.mapcalc", expression="a7 = null()", overwrite=True)
 
-        cls.runModule("t.create",  type="strds",  temporaltype="relative",
-                                    output="A",  title="A test",
-                                    description="A test",  overwrite=True)
+        cls.runModule("t.create", type="strds", temporaltype="relative",
+                                    output="A", title="A test",
+                                    description="A test", overwrite=True)
 
-        cls.runModule("t.register", flags="i",  type="raster",  input="A",
+        cls.runModule("t.register", flags="i", type="raster", input="A",
                                      maps="a1,a2,a3,a4,a5,a6,a7",
                                      start=0, unit="days", increment=3,
                                      overwrite=True)

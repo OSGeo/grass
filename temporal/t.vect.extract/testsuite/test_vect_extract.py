@@ -26,7 +26,7 @@ class TestVectorExtraction(TestCase):
                           overwrite=True)
             cls.runModule("v.db.addtable", map="a{c}".format(c=i),
                           columns="value integer")
-            cls.runModule("v.db.update",  map="a{c}".format(c=i),
+            cls.runModule("v.db.update", map="a{c}".format(c=i),
                           column="value", value="'random()'")
         # Create the temporal database
         cls.runModule("t.connect", flags="d")

@@ -30,7 +30,7 @@ class TestRasterToVector(TestCase):
         cls.runModule("t.create", type="strds", temporaltype="absolute",  
                                  output="A", title="A test", description="A test",  
                                  overwrite=True)
-        cls.runModule("t.register",  flags="i", type="raster", input="A",  
+        cls.runModule("t.register", flags="i", type="raster", input="A",  
                                      maps="a_1,a_2,a_3,a_4,a_5", start="2001-01-01", 
                                      increment="3 months", overwrite=True)
 
@@ -114,7 +114,7 @@ class TestRasterToVector(TestCase):
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
     def test_parallel(self):
-        self.assertModule("t.rast.to.vect",  input="A", output="result", 
+        self.assertModule("t.rast.to.vect", input="A", output="result", 
                           type="point", flags="t", column="values",
                           basename="test",
                           nprocs=4, overwrite=True, verbose=True)
@@ -132,14 +132,14 @@ class TestRasterToVector(TestCase):
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
     def test_num_suffix(self):
-        self.assertModule("t.rast.to.vect",  input="A", output="result", 
+        self.assertModule("t.rast.to.vect", input="A", output="result", 
                           type="point", flags="t", column="values",
                           basename="test", suffix="num%03",
                           nprocs=4, overwrite=True, verbose=True)
         self.assertVectorExists("test_001")
 
     def test_time_suffix(self):
-        self.assertModule("t.rast.to.vect",  input="A", output="result", 
+        self.assertModule("t.rast.to.vect", input="A", output="result", 
                           type="point", flags="t", column="values",
                           basename="test", suffix="time",
                           nprocs=4, overwrite=True, verbose=True)
@@ -156,10 +156,10 @@ class TestRasterToVectorFails(TestCase):
 
         cls.runModule("r.mapcalc", expression="a_1 = 100", overwrite=True)
 
-        cls.runModule("t.create",  type="strds", temporaltype="absolute",  
+        cls.runModule("t.create", type="strds", temporaltype="absolute",  
                                  output="A", title="A test", description="A test",  
                                  overwrite=True)
-        cls.runModule("t.register",  flags="i", type="raster", input="A",  
+        cls.runModule("t.register", flags="i", type="raster", input="A",  
                                      maps="a_1", start="2001-01-01", 
                                      increment="3 months", overwrite=True)
 
