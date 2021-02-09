@@ -1896,7 +1896,7 @@ PROMPT_COMMAND=grass_prompt\n""".format(
             mask3d=_("3D raster MASK present"),
             mask2d_test=mask2d_test, mask3d_test=mask3d_test,
             specific_addition=specific_addition
-            ))
+        ))
 
     if sh == 'zsh':
         f.write('precmd() { eval "$PROMPT_COMMAND" }\n')

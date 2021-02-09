@@ -368,7 +368,7 @@ index_names = {
     's' : 'sites',
     't' : 'temporal',
     'v' : 'vector'
-    }
+}
 
 
 def to_title(name):

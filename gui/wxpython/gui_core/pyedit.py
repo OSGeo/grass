@@ -575,7 +575,7 @@ class PyEditController(object):
             parent=self.guiparent,
             caption=_("Set parameters for the script"),
             message=_("Specify command line parameters for the script separated by spaces:"),
-            )
+        )
         if self.parameters:
             dlg.SetValue(" ".join(self.parameters))
         # TODO: modality might not be needed here if we bind the events

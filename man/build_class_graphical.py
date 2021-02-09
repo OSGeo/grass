@@ -23,7 +23,7 @@ from build_html import (
     default_year, header1_tmpl, grass_version,
     modclass_intro_tmpl, to_title, html_files,
     check_for_desc_override, get_desc, write_html_footer, replace_file,
-    )
+)
 
 
 header_graphical_index_tmpl = """\

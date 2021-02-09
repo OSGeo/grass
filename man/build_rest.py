@@ -29,7 +29,7 @@ exclude_mods = [
 desc_override = {
     "g.parser": "Provides automated parser, GUI, and help support for GRASS scipts.",
     "r.li.daemon": "Support module for r.li landscape index calculations."
-    }
+}
 
 ############################################################################
 

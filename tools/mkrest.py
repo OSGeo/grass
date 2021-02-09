@@ -107,7 +107,7 @@ index_names = {
     's': 'sites',
     't': 'temporal',
     'v': 'vector'
-    }
+}
 
 index = re.search('(<!-- meta page index:)(.*)(-->)', src_data, re.IGNORECASE)
 
