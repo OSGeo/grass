@@ -67,4 +67,3 @@ f.close()
 replace_file(filename)
 
 # done full index
-

@@ -55,4 +55,3 @@ class Testrr(TestCase):
 if __name__ == '__main__':
     from grass.gunittest.main import test
     test()
-

@@ -49,4 +49,3 @@ for dt in range(30):
     bottom="bottom", phead="gwresult_conf", status="tstatus", hc_x="hydcond", hc_y="hydcond",
     rd="R", cs="cs", q="well", nf="poros", output="stresult_conf_" + str(dt + 1), dt=864000, diff_x="diff",
     diff_y="diff", c="stresult_conf_" + str(dt), al=0.1, at=0.01, vx="vx", vy="vy")
-

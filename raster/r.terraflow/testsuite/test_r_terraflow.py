@@ -113,5 +113,3 @@ sum=8341670.75914752"""
 if __name__ == '__main__':
     from grass.gunittest.main import test
     test()
-
-
