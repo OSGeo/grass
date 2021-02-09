@@ -2831,8 +2831,8 @@ class GrSettingsDialog(wx.Dialog):
             parent=panel, id=wx.ID_ANY,
             label=_("Highlight RMS error > M + SD * factor:"))
         rmslabel.SetToolTip(
-                _(
-                    "Highlight GCPs with an RMS error larger than \n"
+            _(
+                "Highlight GCPs with an RMS error larger than \n"
                     "mean + standard deviation * given factor. \n"
                     "Recommended values for this factor are between 1 and 2."))
         rmsgridSizer.Add(

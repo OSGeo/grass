@@ -351,10 +351,10 @@ def one_point_per_row_output(separator, output_files, output_time_list,
                     cat_str = ""
                 if site_input:
                     coor_string = "%(x)10.10f%(sep)s%(y)10.10f%(sep)s%(site_name)s%(sep)s"\
-                               %({"x":float(x),"y":float(y),"site_name":str(site),"sep":separator})
+                        %({"x":float(x),"y":float(y),"site_name":str(site),"sep":separator})
                 else:
                     coor_string = "%(x)10.10f%(sep)s%(y)10.10f%(sep)s"\
-                               %({"x":float(x),"y":float(y),"sep":separator})
+                        %({"x":float(x),"y":float(y),"sep":separator})
                 time_string = "%(start)s%(sep)s%(end)s%(sep)s%(val)s\n"\
                                %({"start":str(start), "end":str(end),
                                   "val":(values[i].strip()),"sep":separator})

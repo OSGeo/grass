@@ -416,8 +416,8 @@ class PyEditController(object):
         """Save current content to a file and set executable permissions"""
         assert self.filename
         file_is_written = self._writeFile(
-                 file_path=self.filename, content=self.body.GetText(),
-             )
+            file_path=self.filename, content=self.body.GetText(),
+            )
         if file_is_written:
             # executable file
             os.chmod(self.filename, stat.S_IRWXU | stat.S_IWUSR)

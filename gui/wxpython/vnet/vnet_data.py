@@ -177,11 +177,11 @@ class VNETData:
 
         errLayerStr = ""
         vals = {
-                'arc_layer': _("arc layer"),
+            'arc_layer': _("arc layer"),
                 'node_layer': _("node layer"),
                 'turn_layer': _("turntable layer"),
                 'turn_cat_layer': _("unique categories layer")
-                }
+            }
         for layer, layerLabel in six.iteritems(vals):
 
             if layer in ["turn_layer", "turn_cat_layer"] and not flags["t"]:

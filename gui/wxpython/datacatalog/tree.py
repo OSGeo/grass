@@ -423,8 +423,8 @@ class DataCatalogTree(TreeView):
                                        mapset)
 
             mapset_node = self._model.AppendNode(
-                                parent=location_node,
-                                data=dict(type='mapset',
+                parent=location_node,
+                data=dict(type='mapset',
                                           name=mapset,
                                           current=False,
                                           lock=is_mapset_locked(mapset_path),
@@ -493,8 +493,8 @@ class DataCatalogTree(TreeView):
                                                    location_nodes[i].data['name'],
                                                    key)
                         mapset_node = self._model.AppendNode(
-                                parent=location_nodes[i],
-                                data=dict(type='mapset',
+                            parent=location_nodes[i],
+                            data=dict(type='mapset',
                                           name=key,
                                           lock=is_mapset_locked(mapset_path),
                                           current=False,
@@ -983,10 +983,10 @@ class DataCatalogTree(TreeView):
         Rename selected mapset
         """
         newmapset = rename_mapset_interactively(
-                self,
-                self.selected_grassdb[0].data['name'],
-                self.selected_location[0].data['name'],
-                self.selected_mapset[0].data['name'])
+            self,
+            self.selected_grassdb[0].data['name'],
+            self.selected_location[0].data['name'],
+            self.selected_mapset[0].data['name'])
         if newmapset:
             self._giface.grassdbChanged.emit(grassdb=self.selected_grassdb[0].data['name'],
                                              location=self.selected_location[0].data['name'],
@@ -1000,9 +1000,9 @@ class DataCatalogTree(TreeView):
         Rename selected location
         """
         newlocation = rename_location_interactively(
-                self,
-                self.selected_grassdb[0].data['name'],
-                self.selected_location[0].data['name'])
+            self,
+            self.selected_grassdb[0].data['name'],
+            self.selected_location[0].data['name'])
         if newlocation:
             self._giface.grassdbChanged.emit(grassdb=self.selected_grassdb[0].data['name'],
                                              location=self.selected_location[0].data['name'],
@@ -1054,9 +1054,9 @@ class DataCatalogTree(TreeView):
 
         elif node.data['type'] == 'mapset':
             message = get_mapset_name_invalid_reason(
-                            self.selected_grassdb[0].data['name'],
-                            self.selected_location[0].data['name'],
-                            new_name)
+                self.selected_grassdb[0].data['name'],
+                self.selected_location[0].data['name'],
+                new_name)
             if message:
                 GError(parent=self, message=message,
                        caption=_("Cannot rename mapset"),
@@ -1075,8 +1075,8 @@ class DataCatalogTree(TreeView):
 
         elif node.data['type'] == 'location':
             message = get_location_name_invalid_reason(
-                            self.selected_grassdb[0].data['name'],
-                            new_name)
+                self.selected_grassdb[0].data['name'],
+                new_name)
             if message:
                 GError(parent=self, message=message,
                        caption=_("Cannot rename location"),
@@ -1326,7 +1326,7 @@ class DataCatalogTree(TreeView):
                     self.selected_location[i].data['name'],
                     self.selected_mapset[i].data['name'])
                 removed, cmd = self._runCommand(
-                        'g.remove', flags='f', type=self.selected_layer[i].data['type'],
+                    'g.remove', flags='f', type=self.selected_layer[i].data['type'],
                         name=self.selected_layer[i].data['name'], env=env)
                 gscript.try_remove(gisrc)
                 if removed == 0:
@@ -1462,7 +1462,7 @@ class DataCatalogTree(TreeView):
         """Just copy necessary data"""
         self.DefineItems(self.GetSelected())
         if None not in self.selected_layer and not (self._restricted and gisenv()[
-                                        'LOCATION_NAME'] != self.selected_location[0].data['name']):
+            'LOCATION_NAME'] != self.selected_location[0].data['name']):
             event.Allow()
             self.OnCopyMap(event)
             Debug.msg(1, "DRAG")

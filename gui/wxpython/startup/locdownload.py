@@ -268,8 +268,8 @@ def download_and_extract(source):
         except HTTPError as err:
             raise DownloadError(
                 http_error_message.format(
-                        url=source,
-                        code=err,
+                    url=source,
+                    code=err,
                 ),
             )
         except URLError:

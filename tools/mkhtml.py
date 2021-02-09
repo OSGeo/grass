@@ -423,8 +423,8 @@ if os.getenv('SOURCE_URL', ''):
             pgmname = cwd[idx+1:]
             classname = index_names[prefix]
             url_source = urlparse.urljoin('{0}{1}/'.format(
-                    os.environ['SOURCE_URL'], classname),
-                    pgmname
+                os.environ['SOURCE_URL'], classname),
+                pgmname
             )
             break
 else:

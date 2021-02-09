@@ -1633,7 +1633,7 @@ def run_batch_job(batch_job):
                             "{error}").format(
                                 cmd=batch_job_string,
                                 error=error,
-                            )
+            )
         # No such file or directory
         if error.errno == errno.ENOENT:
             if script and os.access(batch_job[0], os.X_OK):

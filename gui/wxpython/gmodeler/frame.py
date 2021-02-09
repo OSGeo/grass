@@ -326,7 +326,7 @@ class ModelFrame(wx.Frame):
             if event.pid == self._gconsole.cmdThread.GetId() - 1 and self.start_time:
                 self.goutput.WriteCmdLog('({}) {} ({})'.format(
                     str(time.ctime()), _("Model computation finished"), time_elapsed(self.start_time)),
-                                         notification=event.notification)
+                    notification=event.notification)
                 event = wxModelDone()
                 wx.PostEvent(self, event)
 

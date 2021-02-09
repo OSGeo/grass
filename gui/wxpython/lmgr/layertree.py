@@ -1427,8 +1427,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     # -> previous sibling of selected layer
                     parent = self.GetItemParent(selectedLayer)
                     layer = self.InsertItem(
-                                parentId=parent, input=self.GetPrevSibling(selectedLayer),
-                                text='', ct_type=1, wnd=ctrl)
+                        parentId=parent, input=self.GetPrevSibling(selectedLayer),
+                        text='', ct_type=1, wnd=ctrl)
             else:  # add first layer to the layer tree (first child of root)
                 layer = self.PrependItem(
                     parent=self.root, text='', ct_type=1, wnd=ctrl)
