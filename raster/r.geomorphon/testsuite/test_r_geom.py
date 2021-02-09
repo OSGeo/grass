@@ -15,7 +15,7 @@ from grass.gunittest.main import test
 from grass.script.core import read_command
 
 synth_out = \
-"""1	flat
+    """1	flat
 3	ridge
 4	shoulder
 6	slope
@@ -24,7 +24,7 @@ synth_out = \
 """
 
 ele_out = \
-"""1	flat
+    """1	flat
 2	summit
 3	ridge
 4	shoulder

@@ -106,13 +106,13 @@ header_pgm_desc = """<h2>NAME</h2>
 """
 
 sourcecode = string.Template(
-"""<h2>SOURCE CODE</h2>
+    """<h2>SOURCE CODE</h2>
 <p>Available at: <a href="${URL_SOURCE}">${PGM} source code</a> (<a href="${URL_LOG}">history</a>)</p>
 """
 )
 
 footer_index = string.Template(
-"""<hr class="header">
+    """<hr class="header">
 <p>
 <a href="index.html">Main index</a> |
 <a href="${HTML_PAGE_FOOTER_PAGES_PATH}${INDEXNAME}.html">${INDEXNAMECAP} index</a> |
@@ -133,7 +133,7 @@ GRASS GIS ${GRASS_VERSION} Reference Manual
 """)
 
 footer_noindex = string.Template(
-"""<hr class="header">
+    """<hr class="header">
 <p>
 <a href="index.html">Main index</a> |
 <a href="${HTML_PAGE_FOOTER_PAGES_PATH}topics.html">Topics index</a> |

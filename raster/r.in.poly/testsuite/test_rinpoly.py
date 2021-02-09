@@ -6,7 +6,7 @@ from grass.script.core import read_command
 
 
 input1 = \
-b"""
+    b"""
 A
 634308.630394 223320.356473
 640640.712946 223092.401501

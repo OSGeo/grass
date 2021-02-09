@@ -34,7 +34,7 @@ desc_override = {
 ############################################################################
 
 header2_tmpl = string.Template(\
-r"""
+    r"""
 ==================================================================
 GRASS GIS ${grass_version} Reference Manual
 ==================================================================
@@ -60,7 +60,7 @@ processing and geographic information system (GIS).
 """)
 
 overview_tmpl = string.Template(\
-r"""
+    r"""
 Quick Introduction
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -162,7 +162,7 @@ Printing
 
 #TODO add copyright symbol
 footer_tmpl = string.Template(\
-r"""
+    r"""
 
 --------------
 
@@ -171,10 +171,10 @@ r"""
 """)
 
 cmd1_tmpl = string.Template(\
-r"""*`$cmd.\* <${cmd}>` *""")
+    r"""*`$cmd.\* <${cmd}>` *""")
 
 cmd2_tmpl = string.Template(\
-r"""
+    r"""
 
 ${cmd}.* commands:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -186,11 +186,11 @@ ${cmd}.* commands:
 """)
 
 desc1_tmpl = string.Template(\
-r"""        ${basename} - ${desc} <${basename}>
+    r"""        ${basename} - ${desc} <${basename}>
 """)
 
 sections = \
-r""" 
+    r""" 
 
 +-----------------------------+-------------------------------+
 |`d.* <full_index.html#d>`_   | `display commands`            |
@@ -221,12 +221,12 @@ r"""
 """
 
 modclass_intro_tmpl = string.Template(\
-r"""Go to :doc:`${modclass} introduction <${modclass_lower}intro>`
+    r"""Go to :doc:`${modclass} introduction <${modclass_lower}intro>`
 """)
 #"
 
 modclass_tmpl = string.Template(\
-r"""Go :doc:`back to help overview<index>`
+    r"""Go :doc:`back to help overview<index>`
 
 
 
@@ -240,13 +240,13 @@ r"""Go :doc:`back to help overview<index>`
 #"
 
 desc2_tmpl = string.Template(\
-r"""        ${basename} - ${desc} <${basename}>
+    r"""        ${basename} - ${desc} <${basename}>
 """)
 #"
 
 
 full_index_header = \
-r"""Go :doc:`back to help overview<index>`
+    r"""Go :doc:`back to help overview<index>`
 
 
 Full command index:
@@ -256,7 +256,7 @@ Full command index:
 
 
 message_tmpl = string.Template(\
-r"""Generated HTML docs in ${rest_dir}/index.txt
+    r"""Generated HTML docs in ${rest_dir}/index.txt
 ----------------------------------------------------------------------
 Following modules are missing the 'modulename.txt' file in src code:
 """)

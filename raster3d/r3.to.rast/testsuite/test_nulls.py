@@ -51,7 +51,7 @@ levels: 4
 
 # created from the above data above
 OUTPUTS = [
-"""\
+    """\
 north: 12
 south: 9
 east: 21
@@ -62,7 +62,7 @@ cols: 3
 0 * 5
 1 7 *
 """,
-"""\
+    """\
 north: 12
 south: 9
 east: 21
@@ -73,7 +73,7 @@ cols: 3
 * 4 2
 8 5 6
 """,
-"""\
+    """\
 north: 12
 south: 9
 east: 21
@@ -84,7 +84,7 @@ cols: 3
 1 5 *
 1 1 *
 """,
-"""\
+    """\
 north: 12
 south: 9
 east: 21

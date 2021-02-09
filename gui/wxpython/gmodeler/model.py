@@ -2548,11 +2548,11 @@ class WritePythonFile:
 #
 #{header_end}
 """.format(header_begin='#' * 77,
-           module_name=properties['name'],
-           author=properties['author'],
-           purpose='\n# '.join(properties['description'].splitlines()),
-           date=time.asctime(),
-           header_end='#' * 77))
+                module_name=properties['name'],
+                author=properties['author'],
+                purpose='\n# '.join(properties['description'].splitlines()),
+                date=time.asctime(),
+                header_end='#' * 77))
 
         # UI
         self.fd.write(
@@ -2570,7 +2570,7 @@ class WritePythonFile:
                 else:
                     desc = flag['description']
                 self.fd.write(
-                r"""# %option
+                    r"""# %option
 # % key: {flag_name}
 # % description: {description}
 # % required: yes
@@ -2578,7 +2578,7 @@ class WritePythonFile:
 # % options: True, False
 # % guisection: Flags
 """.format(flag_name=self._getParamName(flag['name'], item),
-           description=desc))
+                        description=desc))
                 if flag['value']:
                     self.fd.write("# % answer: {}\n".format(flag['value']))
                 else:
@@ -2591,12 +2591,12 @@ class WritePythonFile:
                 else:
                     desc = param['description']
                 self.fd.write(
-                r"""# %option
+                    r"""# %option
 # % key: {param_name}
 # % description: {description}
 # % required: yes
 """.format(param_name=self._getParamName(param['name'], item),
-           description=desc))
+                        description=desc))
                 if param['type'] != 'float':
                     self.fd.write('# % type: {}\n'.format(param['type']))
                 else:

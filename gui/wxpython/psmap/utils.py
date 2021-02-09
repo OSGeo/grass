@@ -393,11 +393,11 @@ def GetMapBounds(filename, env, portrait=True):
     try:
         bb = list(map(float,
                     grass.read_command(
-                    'ps.map',
-                    flags='b' +
-                    orient,
-                    quiet=True,
-                    input=filename, env=env).strip().split('=')[1].split(',')))
+                        'ps.map',
+                        flags='b' +
+                        orient,
+                        quiet=True,
+                        input=filename, env=env).strip().split('=')[1].split(',')))
     except (grass.ScriptError, IndexError):
         GError(message=_("Unable to run `ps.map -b`"))
         return None
