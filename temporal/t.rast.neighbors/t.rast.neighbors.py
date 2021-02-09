@@ -145,7 +145,7 @@ def main():
                                    method=method, overwrite=overwrite,
                                    quiet=True)
 
-    gregion_module =  pymod.Module("g.region", raster="dummy", run_=False,
+    gregion_module = pymod.Module("g.region", raster="dummy", run_=False,
                                    finish_=False,)
 
     # The module queue for parallel execution

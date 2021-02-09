@@ -361,7 +361,7 @@ def main():
 
                 # Reverse time
                 if reverse:
-                    if i ==  0:
+                    if i == 0:
                         prev_map = curr_map
                         subexpr1 = "null()"
                         subexpr3 = "%i"%(indicator_start)

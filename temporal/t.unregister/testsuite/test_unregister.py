@@ -71,10 +71,10 @@ class TestUnregister(TestCase):
         al = new_line.join(a)
         al += new_line
 
-        a123 =  new_line.join(a[:3])
+        a123 = new_line.join(a[:3])
         a123 += new_line
 
-        a456 =  new_line.join(a[3:])
+        a456 = new_line.join(a[3:])
         a456 += new_line
 
 

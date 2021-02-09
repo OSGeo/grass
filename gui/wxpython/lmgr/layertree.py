@@ -1993,7 +1993,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 newItem = self.PrependItem(self.root, text=text,
                                            ct_type=1, wnd=newctrl, image=image,
                                            data=data)
-            elif (self.flag &  wx.TREE_HITTEST_BELOW) or (self.flag & wx.TREE_HITTEST_NOWHERE) \
+            elif (self.flag & wx.TREE_HITTEST_BELOW) or (self.flag & wx.TREE_HITTEST_NOWHERE) \
                     or (self.flag & wx.TREE_HITTEST_TOLEFT) or (self.flag & wx.TREE_HITTEST_TORIGHT):
                 newItem = self.AppendItem(self.root, text=text,
                                           ct_type=1, wnd=newctrl, image=image,

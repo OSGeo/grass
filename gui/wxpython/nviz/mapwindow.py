@@ -2291,7 +2291,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         for item in self.layers:
             mapLayer = self.tree.GetLayerInfo(item, key='maplayer')
-            if type !=  mapLayer.GetType() or \
+            if type != mapLayer.GetType() or \
                     name != mapLayer.GetName():
                 continue
 

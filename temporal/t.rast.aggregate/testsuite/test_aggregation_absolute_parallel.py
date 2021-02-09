@@ -28,7 +28,7 @@ class TestAggregationAbsoluteParallel(TestCase):
         cls.runModule("g.region",  s=0,  n=80,  w=0,  e=120,  b=0,
                       t=50,  res=10,  res3=10)
 
-        name_list =  []
+        name_list = []
         for i in range(540):
             cls.runModule("r.mapcalc", expression="a%i = %i"%(i + 1, i + 1),  overwrite=True)
             name_list.append("a%i"%(i + 1))

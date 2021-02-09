@@ -649,7 +649,7 @@ class ModelFrame(wx.Frame):
                 continue
 
             # remove existing map layers first
-            layers =  self._giface.GetLayerList().GetLayersByName(data.GetValue())
+            layers = self._giface.GetLayerList().GetLayersByName(data.GetValue())
             if layers:
                 for layer in layers:
                     self._giface.GetLayerList().DeleteLayer(layer)
