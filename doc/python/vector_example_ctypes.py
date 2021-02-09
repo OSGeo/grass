@@ -5,7 +5,8 @@ Sample Python script to access vector data using GRASS Ctypes
 interface
 """
 
-import os, sys
+import os
+import sys
 
 from grass.lib.gis    import *
 from grass.lib.vector import *

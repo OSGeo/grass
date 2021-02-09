@@ -44,7 +44,8 @@
 # % suppress_required: yes
 # %end
 
-import os, sys
+import os
+import sys
 
 import grass.script as gs
 
