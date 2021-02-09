@@ -1382,7 +1382,7 @@ class GMFrame(wx.Frame):
                       location=gxwXml.location,
                       mapset=gxwXml.mapset,
                       getErrorMsg=True,
-                      )
+                                        )
         if returncode != 0:
             # TODO: use the function from grass.py
             reason = _("Most likely the database, location or mapset"

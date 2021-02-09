@@ -244,7 +244,7 @@ def reporthook(count, block_size, total_size):
           "{0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed".format(
               percent, progress_size / (1024 * 1024), speed, duration,
           ),
-        ),
+          ),
     )
 
 # based on g.extension, potentially move to library
@@ -476,7 +476,7 @@ class LocationDownloadPanel(wx.Panel):
                 self._last_downloaded_location_name = dirname
                 self._warning(_("Download completed. The downloaded sample data is listed "
                                 "in the location/mapset tabs upon closing of this window")
-                )
+                              )
             self._change_download_btn_label()
 
         def terminate_download_callback(event):
@@ -609,7 +609,7 @@ class LocationDownloadDialog(wx.Dialog):
                                    message=_("Do you want to cancel location download?"),
                                    caption=_("Abort download"),
                                    style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE
-            )
+                                   )
 
             ret = dlg.ShowModal()
             dlg.Destroy()

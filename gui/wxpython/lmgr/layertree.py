@@ -972,7 +972,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         kwargs = {'align': self.GetLayerInfo(selected[0],
                                              key='maplayer').GetName()
-        }
+                  }
 
         if UserSettings.Get(group='general',
                             key='region', subkey=['resAlign', 'enabled']):
