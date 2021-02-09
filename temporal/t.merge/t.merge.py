@@ -105,8 +105,8 @@ def main():
 
     if output_exists and not grass.overwrite():
         dbif.close()
-        grass.fatal(_("Unable to merge maps into space time %s dataset <%s> "\
-                      "please use the overwrite flag.") % \
+        grass.fatal(_("Unable to merge maps into space time %s dataset <%s> "
+                      "please use the overwrite flag.") %
                       (stds.get_new_map_instance(None).get_type(), output_id))
 
     if not output_exists:

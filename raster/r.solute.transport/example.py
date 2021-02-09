@@ -26,8 +26,8 @@ gs.run_command("r.mapcalc", expression="null=0.0")
 #
 gs.message(_("Compute a steady state groundwater flow"))
 
-gs.run_command("r.gwflow", solver="cg", top="top_conf", bottom="bottom", phead="phead",\
-  status="status", hc_x="hydcond", hc_y="hydcond", q="well", s="syield",\
+gs.run_command("r.gwflow", solver="cg", top="top_conf", bottom="bottom", phead="phead",
+  status="status", hc_x="hydcond", hc_y="hydcond", q="well", s="syield",
   recharge="recharge", output="gwresult_conf", dt=8640000000000, type="confined")
 
 gs.message(_("generate the transport data"))
@@ -38,15 +38,15 @@ gs.run_command("r.mapcalc", expression="diff=0.0000001")
 gs.run_command("r.mapcalc", expression="R=1.0")
 
 # Compute the initial state
-gs.run_command("r.solute.transport", solver="bicgstab", top="top_conf",\
-  bottom="bottom", phead="gwresult_conf", status="tstatus", hc_x="hydcond", hc_y="hydcond",\
-  rd="R", cs="cs", q="well", nf="poros", output="stresult_conf_0", dt=3600, diff_x="diff",\
+gs.run_command("r.solute.transport", solver="bicgstab", top="top_conf",
+  bottom="bottom", phead="gwresult_conf", status="tstatus", hc_x="hydcond", hc_y="hydcond",
+  rd="R", cs="cs", q="well", nf="poros", output="stresult_conf_0", dt=3600, diff_x="diff",
   diff_y="diff", c="c", al=0.1, at=0.01)
 
 # Compute the solute transport for 300 days in 10 day steps
 for dt in range(30):
-    gs.run_command("r.solute.transport", solver="bicgstab", top="top_conf",\
-    bottom="bottom", phead="gwresult_conf", status="tstatus", hc_x="hydcond", hc_y="hydcond",\
-    rd="R", cs="cs", q="well", nf="poros", output="stresult_conf_" + str(dt + 1), dt=864000, diff_x="diff",\
+    gs.run_command("r.solute.transport", solver="bicgstab", top="top_conf",
+    bottom="bottom", phead="gwresult_conf", status="tstatus", hc_x="hydcond", hc_y="hydcond",
+    rd="R", cs="cs", q="well", nf="poros", output="stresult_conf_" + str(dt + 1), dt=864000, diff_x="diff",
     diff_y="diff", c="stresult_conf_" + str(dt), al=0.1, at=0.01, vx="vx", vy="vy")
 

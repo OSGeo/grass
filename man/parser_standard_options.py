@@ -182,7 +182,7 @@ if __name__ == "__main__":
         name = args.output.name
         args.output.close()
         topicsfile = open(name, 'w')
-        topicsfile.write(header1_tmpl.substitute(title="GRASS GIS " \
+        topicsfile.write(header1_tmpl.substitute(title="GRASS GIS "
                         "%s Reference Manual: Parser standard options index" % grass_version))
         topicsfile.write(headerpso_tmpl)
         topicsfile.write(options.html(toptions=args.htmlparmas))

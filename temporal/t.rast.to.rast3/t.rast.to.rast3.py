@@ -116,7 +116,7 @@ def main():
             if unit == "seconds" or unit == "second":
                 seconds = float(granularity)
 
-            granularity = float(days + hours / 24.0 + minutes / \
+            granularity = float(days + hours / 24.0 + minutes /
                 1440.0 + seconds / 86400.0)
     else:
         unit = sp.get_relative_time_unit()

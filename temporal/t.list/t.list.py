@@ -142,10 +142,10 @@ def main():
                 if rows:
                     if  gscript.verbosity() > 0 and not outpath:
                         if issubclass(sp.__class__, tgis.AbstractMapDataset):
-                            sys.stderr.write(_("Time stamped %s maps with %s available in mapset <%s>:\n")%\
+                            sys.stderr.write(_("Time stamped %s maps with %s available in mapset <%s>:\n")%
                                                      (sp.get_type(), time, key))
                         else:
-                            sys.stderr.write(_("Space time %s datasets with %s available in mapset <%s>:\n")%\
+                            sys.stderr.write(_("Space time %s datasets with %s available in mapset <%s>:\n")%
                                                      (sp.get_new_map_instance(None).get_type(), time, key))
 
                     # Print the column names if requested

@@ -29,7 +29,7 @@ desc_override = {
 
 ############################################################################
 
-header1_tmpl = string.Template(\
+header1_tmpl = string.Template(
     r"""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -38,14 +38,14 @@ header1_tmpl = string.Template(\
  <meta name="Author" content="GRASS Development Team">
 """)
 
-macosx_tmpl = string.Template(\
+macosx_tmpl = string.Template(
     r"""
  <meta name="AppleTitle" content="GRASS GIS ${grass_version} Help">
  <meta name="AppleIcon" content="GRASS-${grass_mmver}/grass_icon.png">
  <meta name="robots" content="anchors">
 """)
 
-header2_tmpl = string.Template(\
+header2_tmpl = string.Template(
     r""" <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>
 <body style="width: ${body_width}">
@@ -74,7 +74,7 @@ processing and geographic information system (GIS).</p>
 """)
 #"
 
-overview_tmpl = string.Template(\
+overview_tmpl = string.Template(
     r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in lib/init/ -->
 
 <table align="center" border="0" cellspacing="8">
@@ -239,14 +239,14 @@ GRASS GIS ${grass_version} Reference Manual
 """)
 #"
 
-cmd2_tmpl = string.Template(\
+cmd2_tmpl = string.Template(
     r"""<a name="${cmd}"></a>
 <h3>${cmd_label} commands (${cmd}.*)</h3>
 <table>
 """)
 #"
 
-desc1_tmpl = string.Template(\
+desc1_tmpl = string.Template(
     r"""<tr><td valign="top"><a href="${cmd}">${basename}</a></td> <td>${desc}</td></tr>
 """)
 #"
@@ -273,19 +273,19 @@ toc = \
 """
 #"
 
-modclass_intro_tmpl = string.Template(\
+modclass_intro_tmpl = string.Template(
     r"""Go to <a href="${modclass_lower}intro.html">${modclass} introduction</a> | <a href="topics.html">topics</a> <p>
 """)
 #"
 
-modclass_tmpl = string.Template(\
+modclass_tmpl = string.Template(
     r"""Go <a href="index.html">back to help overview</a>
 <h3>${modclass} commands:</h3>
 <table>
 """)
 #"
 
-desc2_tmpl = string.Template(\
+desc2_tmpl = string.Template(
     r"""<tr><td valign="top"><a href="${cmd}">${basename}</a></td> <td>${desc}</td></tr>
 """)
 #"
@@ -298,14 +298,14 @@ Go <a href="index.html">back to help overview</a>
 #"
 
 
-message_tmpl = string.Template(\
+message_tmpl = string.Template(
     r"""Generated HTML docs in ${html_dir}/index.html
 ----------------------------------------------------------------------
 Following modules are missing the 'modulename.html' file in src code:
 """)
 #"
 
-moduletopics_tmpl = string.Template(\
+moduletopics_tmpl = string.Template(
     r"""
 <li> <a href="topic_${key}.html">${name}</a></li>
 """
@@ -339,7 +339,7 @@ headerkeywords_tmpl = \
 """
 #"
 
-headerkey_tmpl = string.Template(\
+headerkey_tmpl = string.Template(
     r"""
 <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>

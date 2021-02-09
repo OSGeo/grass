@@ -33,7 +33,7 @@ desc_override = {
 
 ############################################################################
 
-header2_tmpl = string.Template(\
+header2_tmpl = string.Template(
     r"""
 ==================================================================
 GRASS GIS ${grass_version} Reference Manual
@@ -59,7 +59,7 @@ Geographic Resources Analysis Support System (GRASS), an open source
 processing and geographic information system (GIS).
 """)
 
-overview_tmpl = string.Template(\
+overview_tmpl = string.Template(
     r"""
 Quick Introduction
 ~~~~~~~~~~~~~~~~~~~~
@@ -161,7 +161,7 @@ Printing
 """)
 
 #TODO add copyright symbol
-footer_tmpl = string.Template(\
+footer_tmpl = string.Template(
     r"""
 
 --------------
@@ -170,10 +170,10 @@ footer_tmpl = string.Template(\
  2003-2021 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
 """)
 
-cmd1_tmpl = string.Template(\
+cmd1_tmpl = string.Template(
     r"""*`$cmd.\* <${cmd}>` *""")
 
-cmd2_tmpl = string.Template(\
+cmd2_tmpl = string.Template(
     r"""
 
 ${cmd}.* commands:
@@ -185,7 +185,7 @@ ${cmd}.* commands:
 
 """)
 
-desc1_tmpl = string.Template(\
+desc1_tmpl = string.Template(
     r"""        ${basename} - ${desc} <${basename}>
 """)
 
@@ -220,12 +220,12 @@ sections = \
 
 """
 
-modclass_intro_tmpl = string.Template(\
+modclass_intro_tmpl = string.Template(
     r"""Go to :doc:`${modclass} introduction <${modclass_lower}intro>`
 """)
 #"
 
-modclass_tmpl = string.Template(\
+modclass_tmpl = string.Template(
     r"""Go :doc:`back to help overview<index>`
 
 
@@ -239,7 +239,7 @@ modclass_tmpl = string.Template(\
 """)
 #"
 
-desc2_tmpl = string.Template(\
+desc2_tmpl = string.Template(
     r"""        ${basename} - ${desc} <${basename}>
 """)
 #"
@@ -255,7 +255,7 @@ Full command index:
 #"
 
 
-message_tmpl = string.Template(\
+message_tmpl = string.Template(
     r"""Generated HTML docs in ${rest_dir}/index.txt
 ----------------------------------------------------------------------
 Following modules are missing the 'modulename.txt' file in src code:

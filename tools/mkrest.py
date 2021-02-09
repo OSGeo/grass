@@ -32,14 +32,14 @@ tmp_file = "%s.tmp.txt" % pgm
 
 #TODO add copyright
 
-footer_index = string.Template(\
+footer_index = string.Template(
     """
 
 :doc:`Main Page <index>` - :doc:`${INDEXNAMECAP} index <${INDEXNAME}>` - :doc:`Full index <full_index>` 
 2003-${YEAR} `GRASS Development Team <https://grass.osgeo.org>`_
 """)
 
-footer_noindex = string.Template(\
+footer_noindex = string.Template(
     """
 
 :doc:`Main Page <index>`  - :doc:`Full index <full_index>` 

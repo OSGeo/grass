@@ -190,8 +190,8 @@ def main(options, flags):
     if t_flag is False:
         if nprocs > 1:
             nprocs = 1
-            gscript.warning(_("The number of parellel r.to.vect processes was "\
-                               "reduced to 1 because of the table attribute "\
+            gscript.warning(_("The number of parellel r.to.vect processes was "
+                               "reduced to 1 because of the table attribute "
                                "creation"))
     process_queue = pymod.ParallelModuleQueue(int(nprocs))
 

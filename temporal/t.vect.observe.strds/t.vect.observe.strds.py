@@ -135,7 +135,7 @@ def main():
             dataset = tgis.open_old_stds(name, "strds", dbif)
             if dataset.get_temporal_type() != first_strds.get_temporal_type():
                 grass.fatal(_("Temporal type of space time raster datasets must be equal\n"
-                              "<%(a)s> of type %(type_a)s do not match <%(b)s> of type %(type_b)s"%\
+                              "<%(a)s> of type %(type_a)s do not match <%(b)s> of type %(type_b)s"%
                               {"a":first_strds.get_id(),
                                "type_a":first_strds.get_temporal_type(),
                                "b":dataset.get_id(),
@@ -274,7 +274,7 @@ def main():
             except CalledModuleError:
                 dbif.close()
                 grass.fatal(_("Unable to run v.what.rast for vector map <%s> "
-                            "with layer %i and raster map <%s>") % \
+                            "with layer %i and raster map <%s>") %
                             (vectmap, count, str(raster_names)))
 
         vect = out_sp.get_new_map_instance(dummy.build_id(vectmap,

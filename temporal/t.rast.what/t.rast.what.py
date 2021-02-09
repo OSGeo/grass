@@ -445,7 +445,7 @@ def one_point_per_col_output(separator, output_files, output_time_list,
             out_file.write(time_string)
             for row in range(len(matrix)):
                 value = matrix[row][col + ncol]
-                out_file.write("%(sep)s%(value)s"\
+                out_file.write("%(sep)s%(value)s"
                                    %({"sep":separator,
                                       "value":value.strip()}))
             out_file.write("\n")
@@ -564,7 +564,7 @@ def process_loop(nprocs, maps, file_name, count, maps_per_process,
 
         output_time_list.append(map_list)
 
-        gscript.verbose(_("Process maps %(samp_start)i to %(samp_end)i (of %(total)i)"\
+        gscript.verbose(_("Process maps %(samp_start)i to %(samp_end)i (of %(total)i)"
                                   %({"samp_start":count-len(map_names)+1,
                                   "samp_end":count, "total":len(maps)})))
         mod = copy.deepcopy(r_what)
