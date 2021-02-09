@@ -92,7 +92,7 @@ def main():
     if len(locations) != len(locations_types):
         print("ERROR: Number of locations and their tags must be the same", file=sys.stderr)
         return 1
-    
+
 
     main_report = args.main_report
     grasssrc = args.grasssrc  # TODO: can be guessed from dist
@@ -123,7 +123,7 @@ def main():
 
     ########### DATA
     # define GRASS DATABASE
-    
+
     # Set GISDBASE environment variable
     os.environ['GISDBASE'] = text_to_string(gisdb)
 

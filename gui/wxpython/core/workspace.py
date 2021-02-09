@@ -109,7 +109,7 @@ class ProcessWorkspaceFile:
         """Process workspace file"""
 
         self.__processSession()
-        
+
         #
         # layer manager
         #

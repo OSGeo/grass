@@ -19,7 +19,7 @@ class Testrr(TestCase):
     def setUpClass(cls):
         cls.use_temp_region()
         cls.runModule('g.region', raster=cls.input)
-	
+
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
@@ -34,26 +34,26 @@ class Testrr(TestCase):
         cells=2025000"""
         self.assertModule('r.reclass.area', input=self.input, output=self.output, value=2000, mode="greater", flags='c')
         self.assertRasterFitsUnivar(self.output,
-	                            reference=string, precision=2)
+                                    reference=string, precision=2)
 
     def test_flag_d(self):
         """Testing flag d"""
         self.assertModule('r.reclass.area', input=self.input, output=self.output, value=2000, mode="lesser", flags='d')
         self.assertRasterMinMax(map=self.output, refmin=27511, refmax=27610,
-	                        msg="Output Map in degrees must be between 27511 and 27610")
-  
+                                msg="Output Map in degrees must be between 27511 and 27610")
+
     def test_module_output(self):
         """Testing Module without flags"""
         self.assertModule('r.reclass.area', input=self.input, output=self.output, value=2000, mode="greater")
         self.assertRasterMinMax(map=self.output, refmin=27603, refmax=27607,
-	                        msg="Output Map in degrees must be between 27603 and 27607")    
+                                msg="Output Map in degrees must be between 27603 and 27607")    
 
     def test_method_rmarea(self):
         """Testing Module without flags"""
         self.assertModule('r.reclass.area', input=self.input, output=self.output, value=2000, mode="lesser", method="rmarea")
         self.assertRasterMinMax(map=self.output, refmin=27603, refmax=27607,
-	                        msg="Output Map in degrees must be between 27603 and 27607")
-  
+                                msg="Output Map in degrees must be between 27603 and 27607")
+
 
 if __name__ == '__main__':
     from grass.gunittest.main import test

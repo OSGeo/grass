@@ -144,7 +144,7 @@ def main(options, flags):
     v_flag = flags["v"]
     b_flag = flags["b"]
     z_flag = flags["z"]
-    
+
     # Make sure the temporal database exists
     tgis.init()
     # We need a database interface
@@ -164,7 +164,7 @@ def main(options, flags):
     # Check the new stvds
     new_sp = tgis.check_new_stds(output, "stvds", dbif=dbif,
                                  overwrite=overwrite)
-                                               
+
     # Setup the flags
     flags = ""
     if t_flag is True:
@@ -177,7 +177,7 @@ def main(options, flags):
         flags += "b"
     if z_flag is True:
         flags += "z"
-    
+
     # Configure the r.to.vect module
     to_vector_module = pymod.Module("r.to.vect", input="dummy",
                                    output="dummy", run_=False,

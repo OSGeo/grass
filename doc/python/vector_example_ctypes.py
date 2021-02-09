@@ -14,9 +14,9 @@ if not os.environ.has_key("GISBASE"):
     sys.exit("You must be in GRASS GIS to run this program.")
 
 if len(sys.argv) == 2:
-  input = sys.argv[1]
+    input = sys.argv[1]
 else:
-  input = raw_input("Name of vector map? ")
+    input = raw_input("Name of vector map? ")
 
 # initialize GRASS library
 G_gisinit('')

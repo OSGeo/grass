@@ -46,7 +46,7 @@ class ValidationExcavation(TestCase):
         self.assertModule("r.gwflow", flags="f", solver="cholesky", top="top", bottom="bottom", phead="phead", \
             status="status", hc_x="hydcond", hc_y="hydcond", s="poros", \
             recharge="recharge", output="gwresult", dtime=864000000000, type="unconfined", budget="water_budget")
-        
+
         # Output of r.univar -g
         univar_string="""n=760
         null_cells=0
@@ -76,7 +76,7 @@ class ValidationExcavation(TestCase):
         min=3
         max=5.3976262918968
         map=gwresult"""
-        
+
         self.assertRasterFitsUnivar(raster="gwresult",  reference=univar_string,  precision=3)
         self.assertRasterFitsInfo(raster="gwresult",  reference=info_string,  precision=3)
 

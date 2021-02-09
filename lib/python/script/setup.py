@@ -151,7 +151,7 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
     :param dbase: path to GRASS database (default: '')
     :param location: location name (default: 'demolocation')
     :param mapset: mapset within given location (default: 'PERMANENT')
-    
+
     :returns: path to ``gisrc`` file (to be deleted later)
     """
     # Set GISBASE
@@ -191,7 +191,7 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
             os.environ['GRASS_PYTHON'] = "python3.exe"
         else:
             os.environ['GRASS_PYTHON'] = "python3"
-    
+
     path = os.getenv('PYTHONPATH')
     etcpy = os.path.join(gisbase, 'etc', 'python')
     if path:
@@ -256,7 +256,7 @@ def finish():
 
     GRASS commands can no longer be used after this function has been
     called
-    
+
     Basic usage::
         import grass.script as gs
 

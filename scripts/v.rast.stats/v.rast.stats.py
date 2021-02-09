@@ -191,7 +191,7 @@ def main():
     for vcl in vect_cats:
         if vcl.split(' ')[0] == layer and vcl.split(' ')[1] == 'all':
             vect_cats_n = int(vcl.split(' ')[2])
-        
+
     if vect_cats_n != number:
         grass.warning(_("Not all vector categories converted to raster. \
                          Converted {0} of {1}.".format(number, vect_cats_n)))

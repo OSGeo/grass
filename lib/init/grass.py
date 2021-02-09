@@ -2021,10 +2021,10 @@ def print_params(params):
             linerev = filerev.readline().rstrip('\n')
             filerev.close()
             try:
-               revision = linerev.split(' ')[1]
-               sys.stdout.write("%s\n" % revision[1:])
+                revision = linerev.split(' ')[1]
+                sys.stdout.write("%s\n" % revision[1:])
             except:
-               sys.stdout.write("No SVN revision defined\n")
+                sys.stdout.write("No SVN revision defined\n")
         elif arg == 'version':
             sys.stdout.write("%s\n" % GRASS_VERSION)
         elif arg == 'date':

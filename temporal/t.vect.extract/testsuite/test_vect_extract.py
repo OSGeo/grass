@@ -18,7 +18,7 @@ class TestVectorExtraction(TestCase):
         """Initiate the temporal GIS and set the region
         """
         cls.use_temp_region()
-         
+
         cls.runModule("g.region", s=0, n=80, w=0, e=120, res=10)
         # Use always the current mapset as temporal database
         for i in range(1, 11):
@@ -44,7 +44,7 @@ class TestVectorExtraction(TestCase):
         """
         cls.del_temp_region()
         cls.runModule("t.remove", flags="rf", type="stvds", inputs="A")
-        
+
     def test_selection(self):
         """Perform a simple selection by datetime"""
         self.assertModule("t.vect.extract", input="A", output="B", 

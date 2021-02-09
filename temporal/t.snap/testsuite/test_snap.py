@@ -45,16 +45,16 @@ class TestSnapAbsoluteSTRDS(TestCase):
         """
         cls.del_temp_region()        
         cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
-        
+
     def test_1_metadata(self):
         """Set title, description and aggregation"""
-        
+
         A = tgis.open_old_stds("A", type="strds")
         A.select()
         self.assertEqual(A.get_map_time(), "point") 
-        
+
         self.assertModule("t.snap", input="A", type="strds")
-        
+
         A.select()
         self.assertEqual(A.get_map_time(), "interval") 
 
@@ -90,19 +90,19 @@ class TestSnapRelativeSTRDS(TestCase):
         """
         cls.del_temp_region()        
         cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
-        
+
     def test_1_metadata(self):
         """Set title, description and aggregation"""
-        
+
         A = tgis.open_old_stds("A", type="strds")
         A.select()
         self.assertEqual(A.get_map_time(), "point") 
-        
+
         self.assertModule("t.snap", input="A", type="strds")
-        
+
         A.select()
         self.assertEqual(A.get_map_time(), "interval") 
- 
+
 
 class TestSnapAbsoluteSTR3DS(TestCase):
 
@@ -135,16 +135,16 @@ class TestSnapAbsoluteSTR3DS(TestCase):
         """
         cls.del_temp_region()        
         cls.runModule("t.remove", flags="rf", type="str3ds", inputs="A")
-        
+
     def test_1_metadata(self):
         """Set title, description and aggregation"""
-        
+
         A = tgis.open_old_stds("A", type="str3ds")
         A.select()
         self.assertEqual(A.get_map_time(), "point") 
-        
+
         self.assertModule("t.snap", input="A", type="str3ds")
-        
+
         A.select()
         self.assertEqual(A.get_map_time(), "interval") 
 
@@ -180,19 +180,19 @@ class TestSnapRelativeSTR3DS(TestCase):
         """
         cls.del_temp_region()        
         cls.runModule("t.remove", flags="rf", type="str3ds", inputs="A")
-        
+
     def test_1_metadata(self):
         """Set title, description and aggregation"""
-        
+
         A = tgis.open_old_stds("A", type="str3ds")
         A.select()
         self.assertEqual(A.get_map_time(), "point") 
-        
+
         self.assertModule("t.snap", input="A", type="str3ds")
-        
+
         A.select()
         self.assertEqual(A.get_map_time(), "interval") 
- 
+
 
 
 class TestSnapAbsoluteSTVDS(TestCase):
@@ -226,16 +226,16 @@ class TestSnapAbsoluteSTVDS(TestCase):
         """
         cls.del_temp_region()        
         cls.runModule("t.remove", flags="rf", type="stvds", inputs="A")
-        
+
     def test_1_metadata(self):
         """Set title, description and aggregation"""
-        
+
         A = tgis.open_old_stds("A", type="stvds")
         A.select()
         self.assertEqual(A.get_map_time(), "point") 
-        
+
         self.assertModule("t.snap", input="A", type="stvds")
-        
+
         A.select()
         self.assertEqual(A.get_map_time(), "interval") 
 
@@ -271,20 +271,20 @@ class TestSnapRelativeSTVDS(TestCase):
         """
         cls.del_temp_region()        
         cls.runModule("t.remove", flags="rf", type="stvds", inputs="A")
-        
+
     def test_1_metadata(self):
         """Set title, description and aggregation"""
-        
+
         A = tgis.open_old_stds("A", type="stvds")
         A.select()
         self.assertEqual(A.get_map_time(), "point") 
-        
+
         self.assertModule("t.snap", input="A", type="stvds")
-        
+
         A.select()
         self.assertEqual(A.get_map_time(), "interval") 
- 
- 
+
+
 if __name__ == '__main__':
     from grass.gunittest.main import test
     test()

@@ -44,15 +44,15 @@ class TestSupportAbsoluteSTRDS(TestCase):
         """
         cls.del_temp_region()        
         cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
-        
+
     def test_1_metadata(self):
         """Set title, description and aggregation"""
-        
+
         title="A new title"
         descr="A new description"
         aggr_type="average"
         semantic="sum"
-        
+
         self.assertModule("t.support", input="A",
                           title=title,
                           description=descr,
@@ -65,15 +65,15 @@ class TestSupportAbsoluteSTRDS(TestCase):
         self.assertEqual(A.metadata.get_description(), descr)  
         self.assertEqual(A.metadata.get_aggregation_type(), aggr_type)   
         self.assertEqual(A.base.get_semantic_type(), semantic)        
-        
+
     def test_2_update(self):
         """Set title, description and aggregation"""
-        
+
         self.runModule("r.mapcalc", expression="a1 = 10",  overwrite=True)
         self.runModule("r.mapcalc", expression="a2 = 20",  overwrite=True)
         self.runModule("r.mapcalc", expression="a3 = 30",  overwrite=True)
         self.runModule("r.mapcalc", expression="a4 = 40",  overwrite=True)
-        
+
         self.assertModule("t.support", input="A", flags="m")
 
         A = tgis.open_old_stds("A", type="strds")
@@ -86,9 +86,9 @@ class TestSupportAbsoluteSTRDS(TestCase):
 
     def test_3_update(self):
         """Set title, description and aggregation"""
-        
+
         self.runModule("g.remove", type="raster", name="a4", flags="f")
-        
+
         self.assertModule("t.support", input="A", flags="m")
 
         A = tgis.open_old_stds("A", type="strds")

@@ -111,7 +111,7 @@ def main():
     update = False
     if aggr_type and type == "stvds":
         return()
-    
+
     if aggr_type and type != "stvds":
         stds.metadata.set_aggregation_type(aggregation_type=aggr_type)
         update = True

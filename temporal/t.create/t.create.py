@@ -83,7 +83,7 @@ def main():
 
     # Make sure the temporal database exists
     tgis.init()
-    
+
     tgis.open_new_stds(name, type, temporaltype, title, descr, 
                                      semantic, None, grass.overwrite())
 

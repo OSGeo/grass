@@ -626,16 +626,16 @@ class MapCalcFrame(wx.Frame):
             pass
 
         newmcalcstr += what
-        
+
         # Do not add extra space if there is already one
         try:
             if newmcalcstr[-1] != ' ' and mcalcstr[position] != ' ':
                 newmcalcstr += ' '
         except:
             newmcalcstr += ' '
-        
+
         newmcalcstr += mcalcstr[position:]
-        
+
         self.text_mcalc.SetValue(newmcalcstr)
         if len(what) > 0:
             match = re.search(pattern="\(.*\)", string=what)

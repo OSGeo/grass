@@ -56,14 +56,14 @@ class TestProfiling(TestCase):
     where = "cat='354'"
     prof_ponts = (647952, 236176, 647950, 236217)
     outfile = 'test_out.csv'
-    
+
     @classmethod
     def setUpClass(cls):
         """Create vector map with points for sampling"""
         cls.runModule('v.in.ascii', input='-', output=cls.points,
                       stdin=buf_points)
         cls.to_remove.append(cls.points)
-    
+
     @classmethod
     def tearDownClass(cls):
         """Remove vector maps"""
@@ -96,7 +96,7 @@ class TestProfiling(TestCase):
         # Wrong output name
         self.assertModuleFail('v.profile', input=self.in_points, coordinates=self.prof_ponts, buffer=10,
             map_output='5cats')
-    
+
     def testFileExists(self):
         """This function checks if the output file is written correctly"""
         self.runModule('v.profile', input=self.in_points, coordinates=self.prof_ponts, buffer=10,
@@ -104,7 +104,7 @@ class TestProfiling(TestCase):
         self.assertFileExists(self.outfile)
         if os.path.isfile(self.outfile):
             os.remove(self.outfile)
-    
+
     def testOutput(self):
         """Test correctness of output"""
         # Normal output
@@ -126,13 +126,13 @@ class TestProfiling(TestCase):
         vpro = SimpleModule('v.profile', input=self.in_points, coordinates=self.prof_ponts, buffer=200)
         vpro.run()
         self.assertLooksLike(reference=output_coords, actual=vpro.outputs.stdout)
-    
+
     def testBuffering(self):
         """Test against errors in buffering implementation"""
         vpro = SimpleModule('v.profile', input=self.points, separator='comma', dp=3,
             buffer=500, profile_map=self.in_map, profile_where='cat=193')
         vpro.run()
-        
+
 
 
 if __name__ == '__main__':

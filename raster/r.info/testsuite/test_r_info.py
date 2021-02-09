@@ -11,12 +11,12 @@ Licence:    This program is free software under the GNU General Public
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 class TestReport(TestCase):
-    
+
     @classmethod
     def setUpClass(cls):
         """Use temporary region settings"""
         cls.use_temp_region()
-        
+
     @classmethod
     def tearDownClass(cls):
         """!Remove the temporary region"""
@@ -36,14 +36,14 @@ class TestReport(TestCase):
         datatype=CELL
         ncats=43600"""
         self.assertModuleKeyValue(module='r.info', map='lakes', flags='g', reference=output_str,
-	                          precision=2, sep="=")
+                                  precision=2, sep="=")
 
     def test_flagr(self):
         """Testing flag r with map landcover_1m using simple module"""
         output_str="""min=34300
         max=43600"""
         self.assertModuleKeyValue(module='r.info', map='lakes', flags='r', reference=output_str,
-	                          precision=2, sep="=")
+                                  precision=2, sep="=")
 
     def test_flage(self):
         """Testing flag e with map lsat7_2002_50"""

@@ -63,7 +63,7 @@ class TestTRastAlgebraGranularity(TestCase):
                                                  start="2001-05-01", increment="5 days", interval=True)
         tgis.register_maps_in_space_time_dataset(type="raster", name=None,  maps="singletmap", 
                                                 start="2001-03-01", end="2001-04-01")
-        
+
     def tearDown(self):
         self.runModule("t.remove", flags="rf", inputs="R", quiet=True)
 
@@ -114,7 +114,7 @@ class TestTRastAlgebraGranularity(TestCase):
         expr ='R = A + (A # A)'
         self.assertModule("t.rast.algebra",  expression=expr, flags="gd", basename="r")
         self.assertModule("t.rast.algebra",  expression=expr, flags="g", basename="r")
-        
+
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 6)
@@ -130,7 +130,7 @@ class TestTRastAlgebraGranularity(TestCase):
         expr = 'R = A + td(A:D)'
         self.assertModule("t.rast.algebra",  expression=expr, flags="gd", basename="r")
         self.assertModule("t.rast.algebra",  expression=expr, flags="g", basename="r")
-        
+
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(), 15)
@@ -201,7 +201,7 @@ class TestTRastAlgebraGranularity(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 5, 6))
-    
+
     def test_map(self):
         """Test STDS + single map without timestamp"""
         expr = "R = A + map(singletmap)"
@@ -216,7 +216,7 @@ class TestTRastAlgebraGranularity(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 7, 1))
-        
+
     def test_tmap_map(self):
         """Test STDS + single map with and without timestamp"""
         expr = "R = tmap(singletmap) + A + map(singletmap)"

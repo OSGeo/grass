@@ -14,7 +14,7 @@ import os
 
 
 class TestRasterExtraction(TestCase):
-    
+
     @classmethod
     def setUpClass(cls):
         """Initiate the temporal GIS and set the region
@@ -48,7 +48,7 @@ class TestRasterExtraction(TestCase):
         """Remove generated data"""
         self.runModule("t.remove", flags="rf", type="strds", inputs="B")
         self.runModule("t.remove", flags="rf", type="strds", inputs="C")
-        
+
     def test_simple(self):
         self.assertModule('t.rast.accdetect', input='A', occurrence='B',
                           indicator="C", start="2001-01-01", cycle="12 months",

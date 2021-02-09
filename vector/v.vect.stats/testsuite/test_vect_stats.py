@@ -19,7 +19,7 @@ class Testrr(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-	
+
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
@@ -81,7 +81,7 @@ class Testrr(TestCase):
                                     stats_column='avg_elev', points_column='cat')
         v_vect_stats.outputs.stdout= string
         self.assertLooksLike(reference=string, actual=v_vect_stats.outputs.stdout)
-        
+
     def test_mincat(self):
         """Testing method min_cat"""
         string="""area_cat|count|range

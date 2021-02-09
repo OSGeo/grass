@@ -27,7 +27,7 @@ class Testrr(TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
-    
+
     def tearDown(self):
         """Remove the vector map after each test method"""
 
@@ -71,7 +71,7 @@ class Testrr(TestCase):
         self.assertModule('v.info', map=self.vector, flags='t') 
         topology = dict(points=36011, lines=0, areas=0)
         self.assertVectorFitsTopoInfo(self.vector, topology) 
-        
+
 
 
 if __name__ == '__main__':

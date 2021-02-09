@@ -11,7 +11,7 @@ class TestTerraflow(TestCase):
     elevation = 'elevation'
     testdir = os.path.join(tempfile.gettempdir(), 'terraflow_test')
     teststats = os.path.join(tempfile.gettempdir(), 'terraflow_test_stats.txt')
-  
+
     @classmethod
     def setUpClass(cls):
         """Use temporary region settings"""
@@ -37,7 +37,7 @@ class TestTerraflow(TestCase):
         direction='terra_flowdir', swatershed='terra_sink',
         accumulation='terra_flowaccum', tci='terra_tci',
         directory=cls.testdir, stats=cls.teststats)
-        
+
         # Output of r.univar -g
         terra_flooded_univar="""n=2025000
 null_cells=0
@@ -64,7 +64,7 @@ stddev=84.9304048144913
 variance=7213.17366195336
 coeff_var=74.344179186649
 sum=231334950"""
-        
+
         terra_sink_univar="""n=2025000
 null_cells=0
 cells=2025000

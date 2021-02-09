@@ -91,28 +91,28 @@ class SimpleCsvTestCase(TestCase):
         self.assertModule('r.in.ascii', input='-', output=self.ascii_test,
                           type='CELL', stdin_=INPUT_NOQUOTES)
         self.assertRasterMinMax(map=self.ascii_test, refmin=1, refmax=15,
-	                        msg="ascii_test in degrees must be between 1 and 15")
+                                msg="ascii_test in degrees must be between 1 and 15")
 
     def test_text_delimeter(self):
         """Testing with external file"""
         self.assertModule('r.in.ascii', input='data/input_ascii.txt', output=self.ascii_test,
                           type='CELL')
         self.assertRasterMinMax(map=self.ascii_test, refmin=1, refmax=5,
-	                        msg="ascii_test in degrees must be between 1 and 5")
+                                msg="ascii_test in degrees must be between 1 and 5")
 
     def test_tsv(self):
         """Test loading TSV"""
         self.assertModule('r.in.ascii', input='-', output=self.ascii_test,
                           type='CELL', stdin_=INPUT_TSV)
         self.assertRasterMinMax(map=self.ascii_test, refmin=1, refmax=15,
-	                        msg="ascii_test in degrees must be between 1 and 15")
+                                msg="ascii_test in degrees must be between 1 and 15")
 
     def test_uncommon_delims(self):
         """Test loading with uncommon delimiters"""
         self.assertModule('r.in.ascii', input='-', output=self.ascii_test,
                           type='CELL', stdin_=INPUT_UNCOMMON)
         self.assertRasterMinMax(map=self.ascii_test, refmin=1, refmax=15,
-	                        msg="ascii_test in degrees must be between 1 and 15")
+                                msg="ascii_test in degrees must be between 1 and 15")
 
 if __name__ == '__main__':
     test()

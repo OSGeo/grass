@@ -44,14 +44,14 @@ class TestSupportAbsoluteSTVDS(TestCase):
         """
         cls.del_temp_region()        
         cls.runModule("t.remove", flags="rf", type="stvds", inputs="A")
-        
+
     def test_1_metadata(self):
         """Set title, description and aggregation"""
-        
+
         title="A new title"
         descr="A new description"
         semantic="sum"
-        
+
         self.assertModule("t.support", type="stvds", input="A",
                           title=title,
                           description=descr,
@@ -62,15 +62,15 @@ class TestSupportAbsoluteSTVDS(TestCase):
         self.assertEqual(A.metadata.get_title(), title)  
         self.assertEqual(A.metadata.get_description(), descr)  
         self.assertEqual(A.base.get_semantic_type(), semantic)        
-        
+
     def test_2_update(self):
         """Set title, description and aggregation"""
-        
+
         self.runModule("v.random", quiet=True, npoints=10, seed=1,  output='a1')
         self.runModule("v.random", quiet=True, npoints=10, seed=1,  output='a2')
         self.runModule("v.random", quiet=True, npoints=10, seed=1,  output='a3')
         self.runModule("v.random", quiet=True, npoints=10, seed=1,  output='a4')
-        
+
         self.assertModule("t.support", type="stvds", input="A", flags="m")
 
         A = tgis.open_old_stds("A", type="stvds")
@@ -80,9 +80,9 @@ class TestSupportAbsoluteSTVDS(TestCase):
 
     def test_3_update(self):
         """Set title, description and aggregation"""
-        
+
         self.runModule("g.remove", type="vector", name="a4", flags="f")
-        
+
         self.assertModule("t.support", type="stvds", input="A", flags="m")
 
         A = tgis.open_old_stds("A", type="stvds")

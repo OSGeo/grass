@@ -126,7 +126,7 @@ def main():
     nprocs = options["nprocs"]
     time_suffix = options["suffix"]
     type = options["type"]
-    
+
     topo_list = sampling.split(",")
 
     tgis.init()

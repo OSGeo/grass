@@ -53,17 +53,17 @@ class TestRasterExport(TestCase):
         self.assertModule("t.rast.export", input="A", output=self.float_, 
                           overwrite=True)
         self.assertFileExists(self.float_)
-                          
+
     def test_simple_geotif_int(self):
         self.assertModule("t.rast.export", input="A", output=self.int_, 
                           overwrite=True, type="Int16")
         self.assertFileExists(self.int_)
-                          
+
     def test_simple_grid(self):
         self.assertModule("t.rast.export", input="A", output=self.grid, 
                           overwrite=True, format="AAIGrid")
         self.assertFileExists(self.grid)
-                          
+
     def test_simple_pack(self):
         self.assertModule("t.rast.export", input="A", output=self.pack, 
                           overwrite=True, format="pack")

@@ -42,7 +42,7 @@ class TestRasterUnivar(TestCase):
         cls.del_temp_region()
 
     def test_1(self):
-        
+
         t_rast3d_univar = SimpleModule("t.rast3d.univar", input="A",
                                                           where="start_time >= '2001-01-01'",
                                                           overwrite=True, verbose=True)

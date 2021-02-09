@@ -64,7 +64,7 @@ class TestUnregister(TestCase):
 
     def test_1(self):
         """Perform several unregistration operations"""
-        
+
         # Prepare some strings for the tests
         new_line = os.linesep
         a = ["a1","a2","a3","a4","a5","a6"]
@@ -73,7 +73,7 @@ class TestUnregister(TestCase):
 
         a123 =  new_line.join(a[:3])
         a123 += new_line
-        
+
         a456 =  new_line.join(a[3:])
         a456 += new_line
 
@@ -124,8 +124,8 @@ class TestUnregister(TestCase):
                               where='mapset = "%s" AND (name = "a4" OR name = "a5" OR name = "a6")'%(tgis.get_current_mapset()))
         self.runModule(lister)
         self.assertEqual(a456, lister.outputs.stdout)
-        
-        
+
+
         # Unregister maps a4, a5 and a6 from the temporal database
         self.assertModule("t.unregister",  maps="a4,a5,a6")
 

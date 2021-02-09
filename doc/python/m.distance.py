@@ -54,7 +54,7 @@ def main():
     G_gisinit('m.distance')
 
     # calc distance
-    
+
     proj_type = G_begin_distance_calculations()
     # returns 0 if projection has no metrix (ie. imagery)
     # returns 1 if projection is planimetric
@@ -82,10 +82,10 @@ def main():
                 p.append(c)
                 coords.append(p)
                 p = None
-    
+
     if len(coords) < 2:
-       gs.fatal("A minimum of two input coordinate pairs are needed")
-    
+        gs.fatal("A minimum of two input coordinate pairs are needed")
+
     # init variables
     overall_distance = 0.0
     coord_array = c_double * len(coords)
@@ -103,7 +103,7 @@ def main():
         # plain coordinates
         x[0] = float(coords[0][0])
         y[0] = float(coords[0][1])
-    
+
     for i in range(1, len(coords)):
         if proj_type == 2:
             easting = c_double()
@@ -115,20 +115,20 @@ def main():
         else:
             x[i] = float(coords[i][0])
             y[i] = float(coords[i][1])
-        
+
         segment_distance = G_distance(x[i-1], y[i-1], x[i], y[i])
         overall_distance += segment_distance
-        
+
         print("segment %d distance is %.2f meters" % (i, segment_distance))
-        
+
         # add to the area array
-    
+
     print("\ntotal distance is %.2f meters\n" % overall_distance)
-    
+
     # calc area
     if len(coords) < 3:
-       return 0
-    
+        return 0
+
     G_begin_polygon_area_calculations()
     # returns 0 if the projection is not measurable (ie. imagery or xy)
     # returns 1 if the projection is planimetric (ie. UTM or SP)
@@ -137,12 +137,12 @@ def main():
     # do not need to close polygon (but it doesn't hurt if you do)
     area = G_area_of_polygon(x, y, len(coords))
     print("area is %.2f square meters\n" % area)
-    
+
     # we don't need this, but just to have a look
     if proj_type == 1:
         G_database_units_to_meters_factor()
         gs.message("Location units are %s" % G_database_unit_name(True).lower())
-    
+
     return 0
 
 if __name__ == "__main__":

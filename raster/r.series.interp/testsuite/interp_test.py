@@ -27,19 +27,19 @@ class InterpolationTest(TestCase):
         self.runModule("r.mapcalc", expression="map_20 = 20")
         self.runModule("r.mapcalc", expression="map_30 = 30")
         self.runModule("r.mapcalc", expression="map_40 = 40")
-        
+
     def test_commandline(self):
         self.assertModule("r.series.interp", input="prec_1,prec_5",  datapos=(0.0,1.0),  
             output="prec_2,prec_3,prec_4",  samplingpos=(0.25,0.5,0.75),  method="linear")
-        
+
         self.assertRasterMinMax(map="prec_2",  refmin=200,  refmax=200)
         self.assertRasterMinMax(map="prec_3",  refmin=300,  refmax=300)
         self.assertRasterMinMax(map="prec_4",  refmin=400,  refmax=400)
-        
+
     def test_infile(self):
         self.assertModule("r.series.interp", input="prec_1,prec_5",  datapos=(0.0,1.0),  
             outfile="data/outfile_1.txt",  method="linear")
-        
+
         self.assertRasterMinMax(map="prec_2",  refmin=200,  refmax=200)
         self.assertRasterMinMax(map="prec_3",  refmin=300,  refmax=300)
         self.assertRasterMinMax(map="prec_4",  refmin=400,  refmax=400)

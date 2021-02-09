@@ -46,9 +46,9 @@ class TestShiftAbsoluteSTRDS(TestCase):
         """
         cls.del_temp_region()        
         cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
-        
+
     def test_1(self):
-        
+
         A = tgis.open_old_stds("A", type="strds")
         A.select()
         self.assertEqual(A.get_map_time(), "point") 
@@ -56,11 +56,11 @@ class TestShiftAbsoluteSTRDS(TestCase):
         self.assertEqual(start.year, 2001)
         self.assertEqual(start.month, 1)
         self.assertEqual(start.day, 1)
-        
+
         self.assertModule("t.shift", input="A", 
                           granularity="1 day", 
                           type="strds")
-        
+
         A.select()
         start, end = A.get_temporal_extent_as_tuple()
         self.assertEqual(start.year, 2001)
@@ -514,7 +514,7 @@ class TestShiftAbsoluteError(TestCase):
         """
         cls.del_temp_region()        
         cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
-       
+
 
     def test_1(self):
         pass

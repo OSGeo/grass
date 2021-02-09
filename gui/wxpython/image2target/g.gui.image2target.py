@@ -142,7 +142,7 @@ def main():
 #        src_grp = options['source_group']
 #    else:
 #        gscript.fatal(_("Please provide a source group name to process"))
-    
+
 #    if options['source_image']:
 #        src_ras = options['source_image']
 #    else:

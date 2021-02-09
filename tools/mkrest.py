@@ -123,5 +123,5 @@ if index_name:
                                              YEAR = year))
 else:
     sys.stdout.write(footer_noindex.substitute(YEAR = year))
-    
+
 sys.exit()

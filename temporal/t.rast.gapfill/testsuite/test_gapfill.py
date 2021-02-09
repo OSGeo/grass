@@ -44,7 +44,7 @@ class TestRasterToVector(TestCase):
         """Remove the temporary region
         """
         cls.del_temp_region()
-        
+
     def tearDown(self):
         """Remove generated data"""
         self.runModule("t.remove", flags="rf", type="strds",  

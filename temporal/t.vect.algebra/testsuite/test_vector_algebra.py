@@ -58,7 +58,7 @@ class TestTemporalVectorAlgebra(TestCase):
                                                  start="2001-01-03", increment="1 day", interval=True)
         tgis.register_maps_in_space_time_dataset(type="vector", name=None,  maps="singletmap", 
                                                 start="2001-01-03", end="2001-01-04")
-    
+
     def tearDown(self):
         self.runModule("t.remove", type="stvds", inputs="R", quiet=True)
 
@@ -71,11 +71,11 @@ class TestTemporalVectorAlgebra(TestCase):
 
     def test_temporal_select(self):
         """Testing the temporal select operator. """
-        
+
         self.assertModule("t.vect.algebra",  expression="R = A : A", basename="r")
 
         D = tgis.open_old_stds("R", type="stvds")
-        
+
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_number_of_points(), 80) 
         self.assertEqual(D.metadata.get_number_of_areas(), 0) 
@@ -88,11 +88,11 @@ class TestTemporalVectorAlgebra(TestCase):
 
     def test_temporal_select_operators(self):
         """Testing the temporal select operator. Including temporal relations. """
-        
+
         self.assertModule("t.vect.algebra",  expression="R = A {:,during} C", basename="r")
 
         D = tgis.open_old_stds("R", type="stvds")
-        
+
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_number_of_points(), 40) 
         self.assertEqual(D.metadata.get_number_of_areas(), 0) 
@@ -105,11 +105,11 @@ class TestTemporalVectorAlgebra(TestCase):
 
     def test_temporal_buff_operators_1(self):
         """Testing the bufferoperator."""
-        
+
         self.assertModule("t.vect.algebra",  expression="R = buff_p(A,0.5)", basename="r")
 
         D = tgis.open_old_stds("R", type="stvds")
-        
+
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_number_of_points(), 0) 
         self.assertEqual(D.metadata.get_number_of_areas(), 80) 
@@ -122,11 +122,11 @@ class TestTemporalVectorAlgebra(TestCase):
 
     def test_temporal_buff_operators_2(self):
         """Testing the bufferoperator."""
-        
+
         self.assertModule("t.vect.algebra",  expression="R = buff_a(buff_p(A,1),10)", basename="r")
 
         D = tgis.open_old_stds("R", type="stvds")
-        
+
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_number_of_points(), 0) 
         self.assertEqual(D.metadata.get_number_of_areas(), 20) 
@@ -139,11 +139,11 @@ class TestTemporalVectorAlgebra(TestCase):
 
     def test_temporal_overlay_operators_1(self):
         """Testing the spatial overlay operator."""
-        
+
         self.assertModule("t.vect.algebra",  expression="R = buff_p(A,2) & buff_p(D,2)", basename="r")
 
         D = tgis.open_old_stds("R", type="stvds")
-        
+
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_number_of_points(), 0)
         self.assertEqual(D.metadata.get_number_of_areas(), 6)
@@ -156,11 +156,11 @@ class TestTemporalVectorAlgebra(TestCase):
 
     def test_temporal_overlay_operators_2(self):
         """Testing the spatial overlay operator."""
-        
+
         self.assertModule("t.vect.algebra",  expression="R = buff_p(A,1.5) {&,during,r} buff_p(B,1.5)", basename="r")
 
         D = tgis.open_old_stds("R", type="stvds")
-        
+
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_number_of_points(), 0)
         self.assertEqual(D.metadata.get_number_of_areas(), 8)
@@ -173,11 +173,11 @@ class TestTemporalVectorAlgebra(TestCase):
 
     def test_temporal_overlay_operators_3(self):
         """Testing the spatial overlay operator."""
-        
+
         self.assertModule("t.vect.algebra",  expression="R = buff_p(A,2.5) {&,during,l} buff_p(C,2.5)", basename="r")
 
         D = tgis.open_old_stds("R", type="stvds")
-        
+
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_number_of_points(), 0)
         self.assertEqual(D.metadata.get_number_of_areas(), 8)

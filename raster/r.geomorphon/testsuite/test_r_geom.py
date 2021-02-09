@@ -55,7 +55,7 @@ class TestClipling(TestCase):
         cls.runModule('g.remove', flags='f', type='raster',
                       name=(cls.insint, cls.outele, cls.outsint))
         cls.del_temp_region()
-    
+
     def test_ele(self):
         self.runModule('r.geomorphon', elevation=self.inele, forms=self.outele,
                       search=10)
@@ -67,6 +67,6 @@ class TestClipling(TestCase):
                        forms=self.outsint, search=10)
         category = read_command('r.category', map=self.outsint)
         self.assertEqual(first=synth_out, second=category)
-    
+
 if __name__ == '__main__':
     test()

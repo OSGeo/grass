@@ -70,7 +70,7 @@ class Sample(object):
 
     def __str__(self):
         return "Start: %s\nEnd: %s\nNames: %s\n"%(str(self.start), str(self.end), str(self.raster_names))
-            
+
 ############################################################################
 
 def main():
@@ -149,7 +149,7 @@ def main():
             isvalid = True
             mapname_list = []
             for mapmatrix in mapmatrizes:
-                
+
                 entry = mapmatrix[i]
 
                 if entry["samples"]:
@@ -280,10 +280,10 @@ def main():
         vect = out_sp.get_new_map_instance(dummy.build_id(vectmap,
                                                           mapset, str(count)))
         vect.load()
-        
+
         start = sample.start
         end = sample.end
-        
+
         if out_sp.is_time_absolute():
             vect.set_absolute_time(start, end)
         else:

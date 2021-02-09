@@ -220,19 +220,19 @@ def main():
 
     if tgis.check_granularity_string(granularity,
                                      input_strds.get_temporal_type()) is False:
-            dbif.close()
-            grass.fatal(_("Invalid granularity"))
+        dbif.close()
+        grass.fatal(_("Invalid granularity"))
 
     if tgis.check_granularity_string(cycle,
                                      input_strds.get_temporal_type()) is False:
-            dbif.close()
-            grass.fatal(_("Invalid cycle"))
+        dbif.close()
+        grass.fatal(_("Invalid cycle"))
 
     if offset:
         if tgis.check_granularity_string(offset,
                                          input_strds.get_temporal_type()) is False:
-                dbif.close()
-                grass.fatal(_("Invalid offset"))
+            dbif.close()
+            grass.fatal(_("Invalid offset"))
 
     # The lower threshold space time raster dataset
     if lower:

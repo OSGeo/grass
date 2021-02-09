@@ -31,21 +31,21 @@ class TestSTRDSToRast3(TestCase):
         self.runModule("r.mapcalc", expression="prec_4i = 400")
         self.runModule("r.mapcalc", expression="prec_5i = 500")
         self.runModule("r.mapcalc", expression="prec_6i = 600")
-        
+
         self.runModule("r.mapcalc", expression="prec_1d = 100.0")
         self.runModule("r.mapcalc", expression="prec_2d = 200.0")
         self.runModule("r.mapcalc", expression="prec_3d = 300.0")
         self.runModule("r.mapcalc", expression="prec_4d = 400.0")
         self.runModule("r.mapcalc", expression="prec_5d = 500.0")
         self.runModule("r.mapcalc", expression="prec_6d = 600.0")
-        
+
         self.runModule("r.mapcalc", expression="prec_1f = float(100.0)")
         self.runModule("r.mapcalc", expression="prec_2f = float(200.0)")
         self.runModule("r.mapcalc", expression="prec_3f = float(300.0)")
         self.runModule("r.mapcalc", expression="prec_4f = float(400.0)")
         self.runModule("r.mapcalc", expression="prec_5f = float(500.0)")
         self.runModule("r.mapcalc", expression="prec_6f = float(600.0)")
-        
+
         self.runModule("t.create", type="strds",  temporaltype="absolute",  
                        output="precip_i",  title="A test integer",  
                        description="A test integer values")
@@ -145,7 +145,7 @@ class TestSTRDSToRast3(TestCase):
 
     def test_3m_gap(self):
         """Convert STRDS with gaps into 3d raster map, granularity 3 months"""
-  
+
         self.runModule("t.unregister", maps="prec_3d,prec_3f,prec_3i")
 
         self.assertModule("t.rast.to.rast3",  input="precip_i",  output="precip_i")
@@ -218,7 +218,7 @@ class TestSTRDSToRast3MultiGran(TestCase):
         cls.use_temp_region()
         cls.runModule("g.gisenv",  set="TGIS_USE_CURRENT_MAPSET=1")
         cls.runModule("g.region",  s=0,  n=80,  w=0,  e=120,  b=0,  t=50,  res=10,  res3=10)
-        
+
         cls.runModule("r.mapcalc", expression="prec_1d = 100.0")
         cls.runModule("r.mapcalc", expression="prec_2d = 200.0")
         cls.runModule("r.mapcalc", expression="prec_3d = 300.0")

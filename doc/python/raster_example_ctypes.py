@@ -27,9 +27,9 @@ if not os.environ.has_key("GISBASE"):
 
 # parse command line arguments, prompt user for a raster map name if one wasn't given
 if len(sys.argv) == 2:
-  input = sys.argv[1]
+    input = sys.argv[1]
 else:
-  input = raw_input("Name of raster map? ")
+    input = raw_input("Name of raster map? ")
 
 # initialize GRASS library
 G_gisinit('')

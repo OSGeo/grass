@@ -9,7 +9,7 @@ class Raster3dLibraryTest(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.runModule("g.gisenv", set="OVERWRITE=1")
-        
+
     def test_coordinates(self):
         self.assertModule("test.raster3d.lib",  flags="l",  unit="coord")
         self.assertModule("test.raster3d.lib",  unit="coord")

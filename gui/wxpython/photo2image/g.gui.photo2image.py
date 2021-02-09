@@ -96,7 +96,7 @@ def main():
         group = options['group']
     else:
         gscript.fatal(_("Please provide a group name to process"))
-    
+
     if options['raster']:
         raster = options['raster']
     else:

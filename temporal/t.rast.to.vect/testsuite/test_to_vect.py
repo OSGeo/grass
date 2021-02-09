@@ -41,7 +41,7 @@ class TestRasterToVector(TestCase):
         cls.runModule("t.remove", flags="rf", type="strds",  
                                    inputs="A")
         cls.del_temp_region()
-        
+
     def tearDown(self):
         """Remove generated data"""
         self.runModule("t.remove", flags="rf", type="stvds",  
@@ -71,9 +71,9 @@ class TestRasterToVector(TestCase):
                           type="area", flags="n", column="values",
                           basename="test",
                           nprocs=1, overwrite=True, verbose=True)
-                          
+
         #self.assertModule("t.info",  type="stvds", flags="g",  input="result")
-        
+
         tinfo_string="""start_time='2001-01-01 00:00:00'
                         end_time='2002-04-01 00:00:00'
                         granularity='3 months'
@@ -95,9 +95,9 @@ class TestRasterToVector(TestCase):
                           type="area", flags="s", column="values",
                           basename="test",
                           nprocs=1, overwrite=True, verbose=True)
-                          
+
         #self.assertModule("t.info",  type="stvds", flags="g",  input="result")
-        
+
         tinfo_string="""start_time='2001-01-01 00:00:00'
                         end_time='2002-01-01 00:00:00'
                         granularity='3 months'

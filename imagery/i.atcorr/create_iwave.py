@@ -107,25 +107,25 @@ def interpolate_band(values, step = 2.5):
     start = 0
     i = 0
     while i < nvalues - 1 and responses[i] <= rthresh:
-	i += 1
+        i += 1
     start = wavelengths[i] - step
     # align to multiple of step
     nsteps = int(start / step)
     start = step * nsteps
     while start < wavelengths[0]:
-	start += step
+        start += step
 
     # find last response > rthresh
     stop = 0
     i = nvalues - 1
     while i > 0 and responses[i] <= rthresh:
-	i -= 1
+        i -= 1
     stop = wavelengths[i] + step
     # align to multiple of step
     nsteps = np.ceil(stop / step)
     stop = step * nsteps
     while stop > wavelengths[nvalues - 1]:
-	stop -= step
+        stop -= step
 
     assert start < stop, "Empty spectral responses!"
 
@@ -133,7 +133,7 @@ def interpolate_band(values, step = 2.5):
     f = interpolate.interp1d(wavelengths, responses)
 
     filter_f = f(np.arange(start, stop, step))
-   
+
     # how many spectral responses?
     expected = np.ceil((stop - start) / step)
     assert len(filter_f) == expected, "Number of interpolated spectral responses not equal to expected number of interpolations"
@@ -151,14 +151,14 @@ def plot_filter(values):
     function has to be used inside Spyder python environment
     """
     filter_f, limits = interpolate_band(values)
-    
+
     # removing nodata
     w = values[:,1] >= 0
     response = values[w]
-    
+
     plot(response[:,0],response[:,1], 'ro')
     plot(arange(limits[0], limits[1], 2.5), filter_f)
-    
+
     return
 
 def pretty_print(filter_f):
@@ -172,7 +172,7 @@ def pretty_print(filter_f):
             if i is not 0:
                 value_wo_leading_zero = ('%.4f' % (filter_f[i-1])).lstrip('0')
                 pstring += value_wo_leading_zero
-	    if i > 1 and i < len(filter_f):
+            if i > 1 and i < len(filter_f):
                 pstring += ', '
             if i is not 1: 
                 # trim the trailing whitespace at the end of line
@@ -181,8 +181,8 @@ def pretty_print(filter_f):
         else:
             value_wo_leading_zero = ('%.4f' % (filter_f[i-1])).lstrip('0')
             pstring += value_wo_leading_zero
-	    if i < len(filter_f):
-		pstring += ', '
+            if i < len(filter_f):
+                pstring += ', '
     # trim starting \n and trailing , 
     pstring = pstring.lstrip("\n").rstrip(", ")
     return pstring
@@ -193,7 +193,7 @@ def write_cpp(bands, values, sensor, folder):
     create output file in cpp style
     needs other functions: interpolate_bands, pretty_print
     """
-    
+
     # keep in sync with IWave::parse()
     rthresh = 0.01
     print 
@@ -204,21 +204,21 @@ def write_cpp(bands, values, sensor, folder):
     if len(bands) == 1:
         filter_f, limits = interpolate_band(values)
 
-	fi = filter_f
-	li = limits
-	# Get wavelength range for spectral response in band
- 	maxresponse_idx = np.argmax(fi)
- 	# Get minimum wavelength with spectral response
- 	c = maxresponse_idx
- 	while c > 0 and fi[c - 1] > rthresh:
-	    c = c - 1
- 	min_wavelength = np.ceil(li[0] * 1000 + (2.5 * c))
- 	# Get maximum wavelength with spectral response
- 	c = maxresponse_idx
- 	while c < len(fi) - 1 and fi[c + 1] > rthresh:
-	    c = c + 1
- 	max_wavelength = np.floor(li[0] * 1000 + (2.5 * c))
- 	print("   %s (%inm - %inm)" % (bands[b], min_wavelength, max_wavelength))
+        fi = filter_f
+        li = limits
+        # Get wavelength range for spectral response in band
+        maxresponse_idx = np.argmax(fi)
+        # Get minimum wavelength with spectral response
+        c = maxresponse_idx
+        while c > 0 and fi[c - 1] > rthresh:
+            c = c - 1
+        min_wavelength = np.ceil(li[0] * 1000 + (2.5 * c))
+        # Get maximum wavelength with spectral response
+        c = maxresponse_idx
+        while c < len(fi) - 1 and fi[c + 1] > rthresh:
+            c = c + 1
+        max_wavelength = np.floor(li[0] * 1000 + (2.5 * c))
+        print("   %s (%inm - %inm)" % (bands[b], min_wavelength, max_wavelength))
 
     else:
         filter_f = []
@@ -228,40 +228,40 @@ def write_cpp(bands, values, sensor, folder):
             filter_f.append(fi)
             limits.append(li)
 
-	    # Get wavelength range for spectral response in band
-	    maxresponse_idx = np.argmax(fi)
-	    # Get minimum wavelength with spectral response
-	    c = maxresponse_idx
-	    while c > 0 and fi[c - 1] > rthresh:
-		c = c - 1
-	    min_wavelength = np.ceil(li[0] * 1000 + (2.5 * c))
-	    # Get maximum wavelength with spectral response
-	    c = maxresponse_idx
-	    while c < len(fi) - 1 and fi[c + 1] > rthresh:
-		c = c + 1
-	    max_wavelength = np.floor(li[0] * 1000 + (2.5 * c))
-	    print("   %s (%inm - %inm)" % (bands[b], min_wavelength, max_wavelength))
-    
+            # Get wavelength range for spectral response in band
+            maxresponse_idx = np.argmax(fi)
+            # Get minimum wavelength with spectral response
+            c = maxresponse_idx
+            while c > 0 and fi[c - 1] > rthresh:
+                c = c - 1
+            min_wavelength = np.ceil(li[0] * 1000 + (2.5 * c))
+            # Get maximum wavelength with spectral response
+            c = maxresponse_idx
+            while c < len(fi) - 1 and fi[c + 1] > rthresh:
+                c = c + 1
+            max_wavelength = np.floor(li[0] * 1000 + (2.5 * c))
+            print("   %s (%inm - %inm)" % (bands[b], min_wavelength, max_wavelength))
+
     # writing...
     outfile = open(os.path.join(folder, sensor+"_cpp_template.txt"), 'w')
     outfile.write('/* Following filter function created using create_iwave.py */\n\n')
-    
+
     if len(bands) == 1:
         outfile.write('void IWave::%s()\n{\n\n' % (sensor.lower()))
     else:
         outfile.write('void IWave::%s(int iwa)\n{\n\n' % (sensor.lower()))
-        
+
     # single band case
     if len(bands) == 1:
         outfile.write('    /* %s of %s */\n' % (bands[0], sensor))
         outfile.write('    static const float sr[%i] = {' % (len(filter_f)))
         filter_text = pretty_print(filter_f)
         outfile.write(filter_text)
-        
+
         # calculate wl slot for band start
         # slots range from 250 to 4000 at 2.5 increments (total 1500)
         s_start = int((limits[0]*1000 - 250)/2.5)
-        
+
         outfile.write('\n')
         outfile.write('    ffu.wlinf = %.4ff;\n' % (limits[0]))
         outfile.write('    ffu.wlsup = %.4ff;\n' % (limits[1]))
@@ -270,7 +270,7 @@ def write_cpp(bands, values, sensor, folder):
         outfile.write('    for(i = 0; i < %i; i++)\tffu.s[%i+i] = sr[i];\n' % (len(filter_f), s_start))
         outfile.write('    for(i = %i; i < 1501; i++)\tffu.s[i] = 0;\n' % (s_start + len(filter_f)))
         outfile.write('}\n')
-        
+
     else: # more than 1 band
         # writing bands
         for b in range(len(bands)):
@@ -278,47 +278,47 @@ def write_cpp(bands, values, sensor, folder):
             outfile.write('    static const float sr%i[%i] = {\n' % (b+1,len(filter_f[b])))
             filter_text = pretty_print(filter_f[b])
             outfile.write(filter_text+'\n    };\n\t\n')
-        
+
         # writing band limits
         for b in range(len(bands)):
             inf = ", ".join(["%.4f" % i[0] for i in limits])
             sup = ", ".join(["%.4f" % i[1] for i in limits])
-        
+
         outfile.write('    static const float wli[%i] = {%s};\n' % (len(bands), inf))
         outfile.write('    static const float wls[%i] = {%s};\n' % (len(bands), sup))
-        
+
         outfile.write('\n')
         outfile.write('    ffu.wlinf = (float)wli[iwa-1];\n')
         outfile.write('    ffu.wlsup = (float)wls[iwa-1];\n\n')
-        
+
         outfile.write('    int i;\n')
         outfile.write('    for(i = 0; i < 1501; i++) ffu.s[i] = 0;\n\n')
-        
+
         outfile.write('    switch(iwa)\n    {\n')
-        
+
         # now start of case part...
         for b in range(len(bands)):
             s_start = int((limits[b][0]*1000 - 250)/2.5)
             outfile.write('    case %i: for(i = 0; i < %i; i++)  ffu.s[%i+i] = sr%i[i];\n' % ((b+1), len(filter_f[b]), s_start, (b+1)))
             outfile.write('        break;\n')
         outfile.write('    }\n}\n')
-        
+
     return
 
 def main():
     """ control function """
-    
+
     inputfile = sys.argv[1]
-    
+
     # getting sensor name from full csv file name
     sensor = os.path.splitext(os.path.basename(inputfile))[0]
-    
+
     print
     print(" > Getting sensor name from csv file: %s" % (sensor))
-    
+
     # getting data from file
     bands, values = read_input(inputfile)
-    
+
     # print spectral ranges from input file
     # consider only wavelengths with a reasonably large response 
     # around the peak response, keep in sync with IWave::parse()
@@ -326,37 +326,37 @@ def main():
     print
     print(" > Response peaks from input file:")
     for b in range(1, len(bands) + 1):
-	lowl = 0
-	hiwl = 0
-	maxr = 0
-	maxi = 0
-	for i in range(len(values[:,0])):
-	    if maxr < values[i,b]:
-		maxr = values[i,b]
-		maxi = i
-	
-	i = maxi
-	while i >= 0 and values[i,b] > rthresh:
-	    lowl = values[i,0]
-	    i -= 1
+        lowl = 0
+        hiwl = 0
+        maxr = 0
+        maxi = 0
+        for i in range(len(values[:,0])):
+            if maxr < values[i,b]:
+                maxr = values[i,b]
+                maxi = i
 
-	i = maxi
-	nvalues = len(values[:,0])
-	while i < nvalues and values[i,b] > rthresh:
-	    hiwl = values[i,0]
-	    i += 1
-	
-	print("   %s (%inm - %inm)" % (bands[b - 1], lowl, hiwl))
+        i = maxi
+        while i >= 0 and values[i,b] > rthresh:
+            lowl = values[i,0]
+            i -= 1
+
+        i = maxi
+        nvalues = len(values[:,0])
+        while i < nvalues and values[i,b] > rthresh:
+            hiwl = values[i,0]
+            i += 1
+
+        print("   %s (%inm - %inm)" % (bands[b - 1], lowl, hiwl))
 
     # writing file in same folder of input file
     write_cpp(bands, values, sensor, os.path.dirname(inputfile))
-    
+
     print
     print(" > Filter functions exported to %s" % ("sensors_csv/"+sensor+"_cpp_template.txt"))
     print(" > Please check this file for possible errors before inserting the code into file iwave.cpp")
     print(" > Don't forget to add the necessary data to the files iwave.h, geomcond.h, geomcond.cpp, and to i.atcorr.html")
     print
-    
+
     return
 
 if __name__ == '__main__':

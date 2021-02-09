@@ -96,7 +96,7 @@ def main():
     from grass.pygrass.utils import copy as gcopy
     from grass.pygrass.messages import Messenger
     from grass.pygrass.vector import Vector
-    
+
     # Get the options
     input = options["input"]
     output = options["output"]

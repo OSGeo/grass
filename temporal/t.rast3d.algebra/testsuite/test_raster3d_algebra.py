@@ -51,12 +51,12 @@ class TestTRast3dAlgebra(TestCase):
 
     def test_temporal_neighbors_1(self):
         """Simple temporal neighborhood computation test"""
-        
+
         self.assertModule("t.rast3d.algebra",  expression='D = A[-1] + A[1]',
                   basename="d")
 
         D = tgis.open_old_stds("D", type="str3ds")
-        
+
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 4)  # 1 + 3
         self.assertEqual(D.metadata.get_max_max(), 6) # 2 + 4
@@ -66,12 +66,12 @@ class TestTRast3dAlgebra(TestCase):
 
     def test_temporal_neighbors_2(self):
         """Simple temporal neighborhood computation test"""
-        
+
         self.assertModule("t.rast3d.algebra",  expression='D = A[0,0,0,-1] + A[0,0,0,1]',
                   basename="d")
 
         D = tgis.open_old_stds("D", type="str3ds")
-        
+
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 4)  # 1 + 3
         self.assertEqual(D.metadata.get_max_max(), 6) # 2 + 4
@@ -81,12 +81,12 @@ class TestTRast3dAlgebra(TestCase):
 
     def test_temporal_neighbors_granularity(self):
         """Simple temporal neighborhood computation test with granularity algebra"""
-        
+
         self.assertModule("t.rast3d.algebra",  flags="g",  expression='D = A[0,0,0,-1] + A[0,0,0,1]',
                   basename="d")
 
         D = tgis.open_old_stds("D", type="str3ds")
-        
+
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 4)  # 1 + 3
         self.assertEqual(D.metadata.get_max_max(), 6) # 2 + 4

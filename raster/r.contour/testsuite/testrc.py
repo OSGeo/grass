@@ -74,7 +74,7 @@ class Testrr(TestCase):
     def setUpClass(cls):
         cls.use_temp_region()
         cls.runModule('g.region', raster=cls.input)
-    
+
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()

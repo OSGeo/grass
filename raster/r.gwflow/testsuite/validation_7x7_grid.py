@@ -61,7 +61,7 @@ class Validation7x7Grid(TestCase):
         variance=0.825479291487849
         coeff_var=1.85111794326975
         sum=2405.00000082079"""
-        
+
         # Output of r.info, only a subset of the output is needed
         info_string="""north=700
         south=0
@@ -77,7 +77,7 @@ class Validation7x7Grid(TestCase):
         min=45.1219899394172
         max=50
         map=gwresult_conf"""
-        
+
         self.assertRasterFitsUnivar(raster="gwresult_conf",  reference=univar_string,  precision=3)
         self.assertRasterFitsInfo(raster="gwresult_conf",  reference=info_string,  precision=3)
 
