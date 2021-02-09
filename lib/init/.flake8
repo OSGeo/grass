@@ -1,0 +1,34 @@
+[flake8]
+ignore =
+    E111, # indentation is not a multiple of four
+    E125, # continuation line...
+    E126, # continuation line...
+    E127, # continuation line...
+    E128, # continuation line...
+    E203, # whitespace before ':'
+    E261, # at least two spaces before inline comment
+    E303, # too many blank lines
+    E305, # expected 2 blank lines after class or function definition, found 1
+    E306, # expected 1 blank line before a nested definition, found 0
+    E123, # closing bracket does not match indentation of opening bracket's line
+    E501, # line too long
+    E722, # do not use bare 'except'
+    E741, # ambiguous variable name 'l'
+    F401, # 'types' imported but unused
+    F522, # '...'.format(...) has unused named argument(s): version
+    F821, # undefined name
+    F841, # local variable 'e' is assigned to but never used
+    W605, # invalid escape sequence '\.'
+
+max-line-length = 88
+
+exclude =
+    .git,
+    __pycache__,
+    .env,
+    .venv,
+    env,
+    venv,
+    ENV,
+    env.bak,
+    venv.bak,
