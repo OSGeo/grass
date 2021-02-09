@@ -25,7 +25,7 @@ int main()
 	fprintf(stderr, "gettimeofday error");
 	return 1;
     }
-    fprintf(stdout, "%li.%li\n", t.tv_sec, t.tv_usec);
+    fprintf(stdout, "%li.%li\n", t.tv_sec, (long)t.tv_usec);
     fflush(stdout);
 
     return 0;

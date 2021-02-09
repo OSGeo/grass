@@ -271,10 +271,10 @@ void print_stat_table(stat_table *stats, int counts_only)
     }
     else if (counts_only) {
 	for (i = 0; i < stats->nsteps; i++) {
-	    fprintf(stdout, "%d %ld\n",
+	    fprintf(stdout, "%d %d\n",
 		    stats->table[i]->num, stats->table[i]->count);
 	}
-	fprintf(stdout, "* %ld\n", stats->null->count);
+	fprintf(stdout, "* %d\n", stats->null->count);
     }
     else {
 	/*       1234567   012345678901234567   012345678901234567   0123456789012   0123456   0123456789 */

@@ -732,7 +732,7 @@ int main(int argc, char **argv)
 						 mposts[k + 1].end_off);
 			    if (ret > -1) {	/* start >= end */
 				G_warning(_("Start of 1. MP >= end of 2. MP for points' "
-					   "cats %[d], [%d]"), mposts[k].cat,
+					   "cats [%d], [%d]"), mposts[k].cat,
 					  mposts[k + 1].cat);
 				mposts[k].err = ERR_END_GT_START;
 				order = 0;

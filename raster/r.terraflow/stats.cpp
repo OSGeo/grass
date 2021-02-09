@@ -171,25 +171,16 @@ statsRecorder::comment(const int n) {
 
 
 
-#if __FreeBSD__ &&  __i386__
-#define LDFMT "%qd"
-#else
-#if __linux__
-#define LDFMT "%lld"
-#else
-#define LDFMT "%ld"
-#endif
-#endif
 char *
 formatNumber(char *buf, off_t val) {
   if(val > (1<<30)) {
-	sprintf(buf, "%.2fG (" LDFMT ")", (double)val/(1<<30), val);
+	sprintf(buf, "%.2fG (%" PRI_OFF_T ")", (double)val/(1<<30), val);
   } else if(val > (1<<20)) {
-	sprintf(buf, "%.2fM (" LDFMT ")", (double)val/(1<<20), val);
+	sprintf(buf, "%.2fM (%" PRI_OFF_T ")", (double)val/(1<<20), val);
   } else if(val > (1<<10)) {
-	sprintf(buf, "%.2fK (" LDFMT ")", (double)val/(1<<10), val);
+	sprintf(buf, "%.2fK (%" PRI_OFF_T ")", (double)val/(1<<10), val);
   } else {
-	sprintf(buf, LDFMT, val);
+	sprintf(buf, "%" PRI_OFF_T, val);
   }
   return buf;
 }
