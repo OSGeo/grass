@@ -72,6 +72,11 @@ global resolution
 global wizerror
 global translist
 
+if globalvar.CheckWxVersion(version=[4, 1, 0]):
+    search_evt = wx.EVT_SEARCH
+else:
+    search_evt = wx.EVT_SEARCHCTRL_SEARCH_BTN
+
 
 class TitledPage(WizardPageSimple):
     """Class to make wizard pages. Generic methods to make labels,
@@ -482,7 +487,10 @@ class ProjectionsPage(TitledPage):
                                   style=wx.TE_PROCESS_ENTER)
 
         # projection list
-        self.projlist = ItemList(self, data=self.parent.projdesc.items(),
+        data = list()
+        for item in self.parent.projdesc.items():
+            data.append(item)
+        self.projlist = ItemList(self, data=data,
                                  columns=[_('Code'), _('Description')])
         self.projlist.resizeLastColumn(30)
 
@@ -511,7 +519,7 @@ class ProjectionsPage(TitledPage):
 
         # events
         self.tproj.Bind(wx.EVT_TEXT, self.OnText)
-        self.searchb.Bind(wx.EVT_TEXT_ENTER, self.OnSearch)
+        self.searchb.Bind(search_evt, self.OnSearch)
         self.projlist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
@@ -559,7 +567,7 @@ class ProjectionsPage(TitledPage):
         str = event.GetString()
         try:
             self.proj, self.projdesc = self.projlist.Search(
-                index=[0, 1], pattern=event.GetString())
+                index=[0, 1], pattern=str)
         except:
             self.proj = self.projdesc = ''
 
@@ -1047,7 +1055,7 @@ class DatumPage(TitledPage):
 
         # events
         self.datumlist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnDatumSelected)
-        self.searchb.Bind(wx.EVT_TEXT_ENTER, self.OnDSearch)
+        self.searchb.Bind(search_evt, self.OnDSearch)
         self.tdatum.Bind(wx.EVT_TEXT, self.OnDText)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
@@ -1235,7 +1243,7 @@ class EllipsePage(TitledPage):
         # events
         self.ellipselist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
         self.tellipse.Bind(wx.EVT_TEXT, self.OnText)
-        self.searchb.Bind(wx.EVT_TEXT_ENTER, self.OnSearch)
+        self.searchb.Bind(search_evt, self.OnSearch)
 
         self.radio1.Bind(
             wx.EVT_RADIOBUTTON,
@@ -1566,7 +1574,7 @@ class EPSGPage(TitledPage):
         self.tfile.Bind(wx.EVT_TEXT_ENTER, self.OnBrowseCodes)
         self.tcode.Bind(wx.EVT_TEXT, self.OnText)
         self.epsglist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
-        self.searchb.Bind(wx.EVT_TEXT_ENTER, self.OnSearch)
+        self.searchb.Bind(search_evt, self.OnSearch)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
@@ -1793,7 +1801,7 @@ class IAUPage(TitledPage):
         self.tfile.Bind(wx.EVT_TEXT_ENTER, self.OnBrowseCodes)
         self.tcode.Bind(wx.EVT_TEXT, self.OnText)
         self.epsglist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
-        self.searchb.Bind(wx.EVT_TEXT_ENTER, self.OnSearch)
+        self.searchb.Bind(search_evt, self.OnSearch)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
