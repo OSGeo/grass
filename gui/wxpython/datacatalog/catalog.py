@@ -39,7 +39,7 @@ class DataCatalog(wx.Panel):
                  title=_("Data catalog"), name='catalog', **kwargs):
         """Panel constructor  """
         self.showNotification = Signal('DataCatalog.showNotification')
-        self.showTab = Signal('DataCatalog.showTab')
+        self.showPage = Signal('DataCatalog.showPage')
         self.parent = parent
         self.baseTitle = title
         self.giface = giface
@@ -93,7 +93,7 @@ class DataCatalog(wx.Panel):
 
     def showImportSuccessfulInfo(self):
         if self.show_info_after_import:
-            self.showTab.emit(tab='catalog')
+            self.showPage.emit(page='catalog')
             self.infoManager.ShowImportSuccessfulInfo()
             self.show_info_after_import = False
 
