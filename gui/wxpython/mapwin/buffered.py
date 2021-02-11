@@ -78,7 +78,11 @@ class BufferedMapWindow(MapWindowBase, Window):
         """
         MapWindowBase.__init__(self, parent=parent, giface=giface, Map=Map)
         wx.Window.__init__(self, parent=parent, id=id, style=style, **kwargs)
-        self.SetBackgroundColour("white")
+        # This is applied when no layers are rendered and thus the background
+        # color is not applied in rendering itself (it would be applied always
+        # if rendering would use transparent background).
+        self.SetBackgroundColour(wx.Colour(*UserSettings.Get(
+            group='display', key='bgcolor', subkey='color')))
 
         self._properties = properties
         # this class should not ask for digit, this is a hack
