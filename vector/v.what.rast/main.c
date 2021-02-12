@@ -271,8 +271,8 @@ int main(int argc, char *argv[])
     }
 
     if (point_cnt < 1) {
-        G_important_message(_("No features of type (%s) found in vector map <%s>"),
-                            opt.type->answer, opt.vect->answer);
+        G_warning(_("No features of type (%s) found in the current computational region"),
+                  opt.type->answer);
         exit(EXIT_SUCCESS);
     }
     G_debug(1, "Read %d vector points", point_cnt);
