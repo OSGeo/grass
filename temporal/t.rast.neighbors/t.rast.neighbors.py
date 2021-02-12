@@ -145,7 +145,7 @@ def main():
                                    method=method, overwrite=overwrite,
                                    quiet=True)
 
-    gregion_module =  pymod.Module("g.region", raster="dummy", run_=False,
+    gregion_module = pymod.Module("g.region", raster="dummy", run_=False,
                                    finish_=False,)
 
     # The module queue for parallel execution
@@ -214,7 +214,7 @@ def main():
     for map in new_maps:
         count += 1
 
-        if count%10 == 0:
+        if count %10 == 0:
             grass.percent(count, num_maps, 1)
 
         # Do not register empty maps

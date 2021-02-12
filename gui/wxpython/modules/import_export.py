@@ -243,7 +243,7 @@ class ImportDialog(wx.Dialog):
         else:
             message = _(
                 "Output map name <%(name)s> exist. "
-                ) % {
+            ) % {
                 'name': layers_list.output_map}
         GError(parent=self, message=message, caption=_("Invalid name"))
 

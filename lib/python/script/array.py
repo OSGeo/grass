@@ -302,7 +302,7 @@ class array3d(numpy.memmap):
         if mapname:
             kind = numpy.dtype(dtype).kind
             size = numpy.dtype(dtype).itemsize
-    
+
             if kind == 'f':
                 flags = None # default is double
             elif kind in 'biu':

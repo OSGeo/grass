@@ -129,7 +129,7 @@ def main():
     tgis.init()
 
     tgis.import_stds(input, output, directory, title, descr, location,
-                     link, exp, overr, create, "strds", base, 
+                     link, exp, overr, create, "strds", base,
                      set_current_region, memory)
 
 if __name__ == "__main__":

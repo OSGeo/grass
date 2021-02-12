@@ -10,11 +10,11 @@ from grass.gunittest.gmodules import SimpleModule
 out1 = u"""East: 636661
 North: 226489
 ------------------------------------------------------------------
-Map: schools 
+Map: schools
 Mapset: PERMANENT
 Nothing found.
 ------------------------------------------------------------------
-Map: roadsmajor 
+Map: roadsmajor
 Mapset: PERMANENT
 Type: Line
 Id: 231
@@ -22,11 +22,11 @@ Length: 2321.407296
 Layer: 1
 Category: 231
 ------------------------------------------------------------------
-Map: elev_points 
+Map: elev_points
 Mapset: PERMANENT
 Nothing found.
 ------------------------------------------------------------------
-Map: geology 
+Map: geology
 Mapset: PERMANENT
 Type: Area
 Sq Meters: 261215323.454
@@ -41,11 +41,11 @@ Category: 217
 out2 = u"""East: 636661
 North: 226489
 ------------------------------------------------------------------
-Map: schools 
+Map: schools
 Mapset: PERMANENT
 Nothing found.
 ------------------------------------------------------------------
-Map: roadsmajor 
+Map: roadsmajor
 Mapset: PERMANENT
 Type: Line
 Id: 231
@@ -65,11 +65,11 @@ PROPYEAR : 2015
 OBJECTID : 231
 SHAPE_LEN : 7616.150435
 ------------------------------------------------------------------
-Map: elev_points 
+Map: elev_points
 Mapset: PERMANENT
 Nothing found.
 ------------------------------------------------------------------
-Map: geology 
+Map: geology
 Mapset: PERMANENT
 Type: Area
 Sq Meters: 261215323.454
@@ -149,19 +149,19 @@ SHAPE_len=198808.723525
 out4 = u"""East: 636661
 North: 226489
 ------------------------------------------------------------------
-Map: schools 
+Map: schools
 Mapset: PERMANENT
 Nothing found.
 ------------------------------------------------------------------
-Map: roadsmajor 
+Map: roadsmajor
 Mapset: PERMANENT
 Nothing found.
 ------------------------------------------------------------------
-Map: elev_points 
+Map: elev_points
 Mapset: PERMANENT
 Nothing found.
 ------------------------------------------------------------------
-Map: geology 
+Map: geology
 Mapset: PERMANENT
 Type: Area
 Sq Meters: 261215323.454

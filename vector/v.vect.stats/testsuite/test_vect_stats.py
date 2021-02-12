@@ -19,7 +19,7 @@ class Testrr(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-	
+
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
@@ -38,7 +38,7 @@ class Testrr(TestCase):
         9|1|7
         10|0|null
         """
-        v_vect_stats = SimpleModule('v.vect.stats', points=self.input, areas=self.areas, method='sum', count_column='num_points', 
+        v_vect_stats = SimpleModule('v.vect.stats', points=self.input, areas=self.areas, method='sum', count_column='num_points',
                                     stats_column='avg_elev', points_column='cat')
         v_vect_stats.outputs.stdout= string
         self.assertLooksLike(reference=string, actual=v_vect_stats.outputs.stdout)
@@ -58,7 +58,7 @@ class Testrr(TestCase):
         9|4|4222
         10|3|4400.33333333333
         """
-        v_vect_stats = SimpleModule('v.vect.stats', points=self.input, areas=self.areas, method='average', count_column='num_points', 
+        v_vect_stats = SimpleModule('v.vect.stats', points=self.input, areas=self.areas, method='average', count_column='num_points',
                                     stats_column='avg_elev', points_column='cat')
         v_vect_stats.outputs.stdout= string
         self.assertLooksLike(reference=string, actual=v_vect_stats.outputs.stdout)
@@ -77,11 +77,11 @@ class Testrr(TestCase):
         9|4|42.5
         10|3|3968.22222222222
         """
-        v_vect_stats = SimpleModule('v.vect.stats', points=self.input, areas=self.areas, method='variance', count_column='num_points', 
+        v_vect_stats = SimpleModule('v.vect.stats', points=self.input, areas=self.areas, method='variance', count_column='num_points',
                                     stats_column='avg_elev', points_column='cat')
         v_vect_stats.outputs.stdout= string
         self.assertLooksLike(reference=string, actual=v_vect_stats.outputs.stdout)
-        
+
     def test_mincat(self):
         """Testing method min_cat"""
         string="""area_cat|count|range
@@ -95,8 +95,8 @@ class Testrr(TestCase):
         8|19|892
         9|4|17
         10|3|152
-        """ 
-        v_vect_stats = SimpleModule('v.vect.stats', points=self.input, areas=self.areas, method='range', count_column='num_points', 
+        """
+        v_vect_stats = SimpleModule('v.vect.stats', points=self.input, areas=self.areas, method='range', count_column='num_points',
                                     stats_column='avg_elev', points_column='cat')
         v_vect_stats.outputs.stdout= string
         self.assertLooksLike(reference=string, actual=v_vect_stats.outputs.stdout)
@@ -115,7 +115,7 @@ class Testrr(TestCase):
         9|1|7
         10|0|null
         """
-        v_vect_stats = SimpleModule('v.vect.stats', points=self.input, areas=self.areas, method='max_cat', count_column='num_points', 
+        v_vect_stats = SimpleModule('v.vect.stats', points=self.input, areas=self.areas, method='max_cat', count_column='num_points',
                                     stats_column='avg_elev', points_column='cat')
         v_vect_stats.outputs.stdout= string
         self.assertLooksLike(reference=string, actual=v_vect_stats.outputs.stdout)
@@ -134,7 +134,7 @@ class Testrr(TestCase):
         9|1|7
         10|0|null
         """
-        v_vect_stats = SimpleModule('v.vect.stats', points=self.input, areas=self.areas, method='mode', count_column='num_points', 
+        v_vect_stats = SimpleModule('v.vect.stats', points=self.input, areas=self.areas, method='mode', count_column='num_points',
                                     stats_column='avg_elev', points_column='cat')
         v_vect_stats.outputs.stdout= string
         self.assertLooksLike(reference=string, actual=v_vect_stats.outputs.stdout)

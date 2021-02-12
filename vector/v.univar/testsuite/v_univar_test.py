@@ -11,7 +11,7 @@ Licence:    This program is free software under the GNU General Public
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
-	
+
 class TestProfiling(TestCase):
 
     def test_flagg(self):
@@ -63,7 +63,7 @@ median (even number of cells): 10308.4
         v_univar.run()
         self.assertLooksLike(actual=v_univar.outputs.stdout,
                              reference=output_str)
- 
+
     def test_flagw(self):
         """Testing flag w with map lakes"""
         output_str = u"""number of features with non NULL attribute: 15279
@@ -102,7 +102,7 @@ skewness: 0.801646"""
         v_univar.run()
         self.assertLooksLike(actual=v_univar.outputs.stdout,
                              reference=univar_string)
-		
+
     def test_output(self):
         """Testing output of v.univar"""
         univar_string="""n=160
@@ -124,4 +124,4 @@ skewness: 0.801646"""
         self.assertVectorFitsUnivar(map='roadsmajor', column='MAJORRDS_', reference=univar_string, precision=3)
 
 if __name__ == '__main__':
-	    test()
+    test()

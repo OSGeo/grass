@@ -253,7 +253,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                 columns = "id"
 
         rows = sp.get_registered_maps(columns, where, order, dbif)
-        
+
         if not rows:
             dbif.close()
             err = "Space time %(sp)s dataset <%(i)s> is empty"

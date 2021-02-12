@@ -220,19 +220,19 @@ def main():
 
     if tgis.check_granularity_string(granularity,
                                      input_strds.get_temporal_type()) is False:
-            dbif.close()
-            grass.fatal(_("Invalid granularity"))
+        dbif.close()
+        grass.fatal(_("Invalid granularity"))
 
     if tgis.check_granularity_string(cycle,
                                      input_strds.get_temporal_type()) is False:
-            dbif.close()
-            grass.fatal(_("Invalid cycle"))
+        dbif.close()
+        grass.fatal(_("Invalid cycle"))
 
     if offset:
         if tgis.check_granularity_string(offset,
                                          input_strds.get_temporal_type()) is False:
-                dbif.close()
-                grass.fatal(_("Invalid offset"))
+            dbif.close()
+            grass.fatal(_("Invalid offset"))
 
     # The lower threshold space time raster dataset
     if lower:
@@ -312,12 +312,12 @@ def main():
         if stop and end > stop:
             end = stop
 
-        where = "start_time >= \'%s\' AND start_time < \'%s\'"%(str(start),
+        where = "start_time >= \'%s\' AND start_time < \'%s\'" %(str(start),
                                                                 str(end))
         input_maps = input_strds.get_registered_maps_as_objects(where=where,
                                                                 dbif=dbif)
 
-        grass.message(_("Processing cycle %s - %s"%(str(start), str(end))))
+        grass.message(_("Processing cycle %s - %s" %(str(start), str(end))))
 
         if len(input_maps) == 0:
             continue
@@ -328,7 +328,7 @@ def main():
         gran_list_up = []
         gran_start = start
         while gran_start < end:
-            map = input_strds.get_new_map_instance("%i@%i"%(count, count))
+            map = input_strds.get_new_map_instance("%i@%i" %(count, count))
             if input_strds.is_time_absolute():
                 gran_end = tgis.increment_datetime_by_string(gran_start,
                                                              granularity)
@@ -506,7 +506,7 @@ def main():
     count = 0
     for output_map in output_maps:
         count += 1
-        if count%10 == 0:
+        if count %10 == 0:
             grass.percent(count, len(output_maps), 1)
         # Read the raster map data
         output_map.load()

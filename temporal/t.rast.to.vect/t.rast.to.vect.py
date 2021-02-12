@@ -144,7 +144,7 @@ def main(options, flags):
     v_flag = flags["v"]
     b_flag = flags["b"]
     z_flag = flags["z"]
-    
+
     # Make sure the temporal database exists
     tgis.init()
     # We need a database interface
@@ -164,7 +164,7 @@ def main(options, flags):
     # Check the new stvds
     new_sp = tgis.check_new_stds(output, "stvds", dbif=dbif,
                                  overwrite=overwrite)
-                                               
+
     # Setup the flags
     flags = ""
     if t_flag is True:
@@ -177,7 +177,7 @@ def main(options, flags):
         flags += "b"
     if z_flag is True:
         flags += "z"
-    
+
     # Configure the r.to.vect module
     to_vector_module = pymod.Module("r.to.vect", input="dummy",
                                    output="dummy", run_=False,
@@ -190,8 +190,8 @@ def main(options, flags):
     if t_flag is False:
         if nprocs > 1:
             nprocs = 1
-            gscript.warning(_("The number of parellel r.to.vect processes was "\
-                               "reduced to 1 because of the table attribute "\
+            gscript.warning(_("The number of parellel r.to.vect processes was "
+                               "reduced to 1 because of the table attribute "
                                "creation"))
     process_queue = pymod.ParallelModuleQueue(int(nprocs))
 
@@ -221,7 +221,7 @@ def main(options, flags):
         sys.stderr.write(mod.get_bash() + "\n")
         process_queue.put(mod)
 
-        if count%10 == 0:
+        if count %10 == 0:
             gscript.percent(count, num_maps, 1)
 
     # Wait for unfinished processes
@@ -240,7 +240,7 @@ def main(options, flags):
     for map in new_maps:
         count += 1
 
-        if count%10 == 0:
+        if count %10 == 0:
             gscript.percent(count, num_maps, 1)
 
         # Do not register empty maps
@@ -269,7 +269,7 @@ def main(options, flags):
             else:
                 names += ",%s" % (map.get_name())
 
-        gscript.run_command("g.remove", flags='f', type='vector', name=names, 
+        gscript.run_command("g.remove", flags='f', type='vector', name=names,
                             quiet=True)
 
     dbif.close()

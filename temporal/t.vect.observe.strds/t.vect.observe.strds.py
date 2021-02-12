@@ -69,8 +69,8 @@ class Sample(object):
             self.raster_names = []
 
     def __str__(self):
-        return "Start: %s\nEnd: %s\nNames: %s\n"%(str(self.start), str(self.end), str(self.raster_names))
-            
+        return "Start: %s\nEnd: %s\nNames: %s\n" %(str(self.start), str(self.end), str(self.raster_names))
+
 ############################################################################
 
 def main():
@@ -114,7 +114,7 @@ def main():
     # Single space time raster dataset
     if len(strds_names) == 1:
         rows = first_strds.get_registered_maps(
-            columns="name,mapset,start_time,end_time", 
+            columns="name,mapset,start_time,end_time",
             order="start_time", dbif=dbif)
 
         if not rows:
@@ -135,7 +135,7 @@ def main():
             dataset = tgis.open_old_stds(name, "strds", dbif)
             if dataset.get_temporal_type() != first_strds.get_temporal_type():
                 grass.fatal(_("Temporal type of space time raster datasets must be equal\n"
-                              "<%(a)s> of type %(type_a)s do not match <%(b)s> of type %(type_b)s"%\
+                              "<%(a)s> of type %(type_a)s do not match <%(b)s> of type %(type_b)s"%
                               {"a":first_strds.get_id(),
                                "type_a":first_strds.get_temporal_type(),
                                "b":dataset.get_id(),
@@ -149,7 +149,7 @@ def main():
             isvalid = True
             mapname_list = []
             for mapmatrix in mapmatrizes:
-                
+
                 entry = mapmatrix[i]
 
                 if entry["samples"]:
@@ -238,7 +238,7 @@ def main():
             if raster_map.metadata.get_datatype() == "CELL":
                 coltype = "INT"
 
-            tmp_string = "%s %s,"%(column, coltype)
+            tmp_string = "%s %s," %(column, coltype)
             columns_string += tmp_string
 
         # Remove last comma
@@ -274,16 +274,16 @@ def main():
             except CalledModuleError:
                 dbif.close()
                 grass.fatal(_("Unable to run v.what.rast for vector map <%s> "
-                            "with layer %i and raster map <%s>") % \
+                            "with layer %i and raster map <%s>") %
                             (vectmap, count, str(raster_names)))
 
         vect = out_sp.get_new_map_instance(dummy.build_id(vectmap,
                                                           mapset, str(count)))
         vect.load()
-        
+
         start = sample.start
         end = sample.end
-        
+
         if out_sp.is_time_absolute():
             vect.set_absolute_time(start, end)
         else:

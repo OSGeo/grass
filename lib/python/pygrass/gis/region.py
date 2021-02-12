@@ -426,12 +426,12 @@ class Region(object):
 
     def set_raster_region(self):
         """Set the computational region (window) for all raster maps in the current process.
-           
+
            Attention: All raster objects must be closed or the
                       process will be terminated.
-                      
+
            The Raster library C function Rast_set_window() is called.
-        
+
         """
         libraster.Rast_set_window(self.byref())
 

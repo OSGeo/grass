@@ -20,24 +20,24 @@ class TestTemporalVectorAlgebra(TestCase):
     def setUpClass(cls):
         """Initiate the temporal GIS and set the region
         """
-        os.putenv("GRASS_OVERWRITE",  "1")
+        os.putenv("GRASS_OVERWRITE", "1")
         tgis.init(True) # Raise on error instead of exit(1)
         cls.use_temp_region()
         cls.runModule("g.region", n=80.0, s=0.0, e=120.0,
                                        w=0.0, t=1.0, b=0.0, res=10.0)
 
-        cls.runModule("v.random", quiet=True, npoints=20, seed=1,  output='a1')
-        cls.runModule("v.random", quiet=True, npoints=20, seed=1,  output='a2')
-        cls.runModule("v.random", quiet=True, npoints=20, seed=1,  output='a3')
-        cls.runModule("v.random", quiet=True, npoints=20, seed=1,  output='a4')
-        cls.runModule("v.random", quiet=True, npoints=20, seed=2,  output='b1')
-        cls.runModule("v.random", quiet=True, npoints=20, seed=2,  output='b2')
-        cls.runModule("v.random", quiet=True, npoints=20, seed=3,  output='c1')
-        cls.runModule("v.random", quiet=True, npoints=20, seed=4,  output='d1')
-        cls.runModule("v.random", quiet=True, npoints=20, seed=4,  output='d2')
-        cls.runModule("v.random", quiet=True, npoints=20, seed=4,  output='d3')
-        cls.runModule("v.random", quiet=True, npoints=20, seed=5,  output='singletmap')
-        cls.runModule("v.random", quiet=True, npoints=20, seed=6,  output='singlemap')        
+        cls.runModule("v.random", quiet=True, npoints=20, seed=1, output='a1')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=1, output='a2')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=1, output='a3')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=1, output='a4')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=2, output='b1')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=2, output='b2')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=3, output='c1')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=4, output='d1')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=4, output='d2')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=4, output='d3')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=5, output='singletmap')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=6, output='singlemap')
 
         tgis.open_new_stds(name="A", type="stvds", temporaltype="absolute",
                                          title="A", descr="A", semantic="field")
@@ -56,94 +56,94 @@ class TestTemporalVectorAlgebra(TestCase):
                                                  start="2001-01-02", increment="2 day", interval=True)
         tgis.register_maps_in_space_time_dataset(type="vector", name="D", maps="d1,d2,d3",
                                                  start="2001-01-03", increment="1 day", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="vector", name=None,  maps="singletmap", 
+        tgis.register_maps_in_space_time_dataset(type="vector", name=None, maps="singletmap",
                                                 start="2001-01-03", end="2001-01-04")
-    
+
     def tearDown(self):
         self.runModule("t.remove", type="stvds", inputs="R", quiet=True)
 
     @classmethod
     def tearDownClass(cls):
-        """Remove the temporary region 
+        """Remove the temporary region
         """
-        cls.runModule("t.remove", flags="rf", inputs="A,B,C,D", type='stvds',  quiet=True)
+        cls.runModule("t.remove", flags="rf", inputs="A,B,C,D", type='stvds', quiet=True)
         cls.del_temp_region()
 
     def test_temporal_select(self):
         """Testing the temporal select operator. """
-        
-        self.assertModule("t.vect.algebra",  expression="R = A : A", basename="r")
+
+        self.assertModule("t.vect.algebra", expression="R = A : A", basename="r")
 
         D = tgis.open_old_stds("R", type="stvds")
-        
+
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_number_of_points(), 80) 
-        self.assertEqual(D.metadata.get_number_of_areas(), 0) 
-        self.assertEqual(D.metadata.get_number_of_centroids(), 0) 
+        self.assertEqual(D.metadata.get_number_of_points(), 80)
+        self.assertEqual(D.metadata.get_number_of_areas(), 0)
+        self.assertEqual(D.metadata.get_number_of_centroids(), 0)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_select_operators(self):
         """Testing the temporal select operator. Including temporal relations. """
-        
-        self.assertModule("t.vect.algebra",  expression="R = A {:,during} C", basename="r")
+
+        self.assertModule("t.vect.algebra", expression="R = A {:,during} C", basename="r")
 
         D = tgis.open_old_stds("R", type="stvds")
-        
+
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_number_of_points(), 40) 
-        self.assertEqual(D.metadata.get_number_of_areas(), 0) 
-        self.assertEqual(D.metadata.get_number_of_centroids(), 0) 
+        self.assertEqual(D.metadata.get_number_of_points(), 40)
+        self.assertEqual(D.metadata.get_number_of_areas(), 0)
+        self.assertEqual(D.metadata.get_number_of_centroids(), 0)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_buff_operators_1(self):
         """Testing the bufferoperator."""
-        
-        self.assertModule("t.vect.algebra",  expression="R = buff_p(A,0.5)", basename="r")
+
+        self.assertModule("t.vect.algebra", expression="R = buff_p(A,0.5)", basename="r")
 
         D = tgis.open_old_stds("R", type="stvds")
-        
+
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_number_of_points(), 0) 
-        self.assertEqual(D.metadata.get_number_of_areas(), 80) 
-        self.assertEqual(D.metadata.get_number_of_centroids(), 80) 
+        self.assertEqual(D.metadata.get_number_of_points(), 0)
+        self.assertEqual(D.metadata.get_number_of_areas(), 80)
+        self.assertEqual(D.metadata.get_number_of_centroids(), 80)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_buff_operators_2(self):
         """Testing the bufferoperator."""
-        
-        self.assertModule("t.vect.algebra",  expression="R = buff_a(buff_p(A,1),10)", basename="r")
+
+        self.assertModule("t.vect.algebra", expression="R = buff_a(buff_p(A,1),10)", basename="r")
 
         D = tgis.open_old_stds("R", type="stvds")
-        
+
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_number_of_points(), 0) 
-        self.assertEqual(D.metadata.get_number_of_areas(), 20) 
-        self.assertEqual(D.metadata.get_number_of_centroids(), 20) 
+        self.assertEqual(D.metadata.get_number_of_points(), 0)
+        self.assertEqual(D.metadata.get_number_of_areas(), 20)
+        self.assertEqual(D.metadata.get_number_of_centroids(), 20)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_overlay_operators_1(self):
         """Testing the spatial overlay operator."""
-        
-        self.assertModule("t.vect.algebra",  expression="R = buff_p(A,2) & buff_p(D,2)", basename="r")
+
+        self.assertModule("t.vect.algebra", expression="R = buff_p(A,2) & buff_p(D,2)", basename="r")
 
         D = tgis.open_old_stds("R", type="stvds")
-        
+
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_number_of_points(), 0)
         self.assertEqual(D.metadata.get_number_of_areas(), 6)
@@ -151,16 +151,16 @@ class TestTemporalVectorAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
     def test_temporal_overlay_operators_2(self):
         """Testing the spatial overlay operator."""
-        
-        self.assertModule("t.vect.algebra",  expression="R = buff_p(A,1.5) {&,during,r} buff_p(B,1.5)", basename="r")
+
+        self.assertModule("t.vect.algebra", expression="R = buff_p(A,1.5) {&,during,r} buff_p(B,1.5)", basename="r")
 
         D = tgis.open_old_stds("R", type="stvds")
-        
+
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_number_of_points(), 0)
         self.assertEqual(D.metadata.get_number_of_areas(), 8)
@@ -168,16 +168,16 @@ class TestTemporalVectorAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  False)
-        self.assertEqual(D.get_granularity(),  u'2 days')
+        self.assertEqual( D.check_temporal_topology(), False)
+        self.assertEqual(D.get_granularity(), u'2 days')
 
     def test_temporal_overlay_operators_3(self):
         """Testing the spatial overlay operator."""
-        
-        self.assertModule("t.vect.algebra",  expression="R = buff_p(A,2.5) {&,during,l} buff_p(C,2.5)", basename="r")
+
+        self.assertModule("t.vect.algebra", expression="R = buff_p(A,2.5) {&,during,l} buff_p(C,2.5)", basename="r")
 
         D = tgis.open_old_stds("R", type="stvds")
-        
+
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_number_of_points(), 0)
         self.assertEqual(D.metadata.get_number_of_areas(), 8)
@@ -185,8 +185,8 @@ class TestTemporalVectorAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
+        self.assertEqual( D.check_temporal_topology(), True)
+        self.assertEqual(D.get_granularity(), u'1 day')
 
 
 if __name__ == '__main__':

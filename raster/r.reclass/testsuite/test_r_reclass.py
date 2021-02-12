@@ -33,12 +33,12 @@ rules3="""
 class Testrr(TestCase):
     output='reclass'
     input='elevation_shade'
- 
+
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
         cls.runModule('g.region', raster=cls.input)
-	
+
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()

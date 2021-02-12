@@ -3,7 +3,9 @@
 # Minor changes for NUT by Charles Lepple
 # Distributed under the terms of the GNU General Public License v2 or later
 
-import string, re, os
+import string
+import re
+import os
 from textwrap import TextWrapper
 import sys
 

@@ -5,7 +5,8 @@ Sample Python script to access vector data using GRASS Ctypes
 interface
 """
 
-import os, sys
+import os
+import sys
 
 from grass.lib.gis    import *
 from grass.lib.vector import *
@@ -14,9 +15,9 @@ if not os.environ.has_key("GISBASE"):
     sys.exit("You must be in GRASS GIS to run this program.")
 
 if len(sys.argv) == 2:
-  input = sys.argv[1]
+    input = sys.argv[1]
 else:
-  input = raw_input("Name of vector map? ")
+    input = raw_input("Name of vector map? ")
 
 # initialize GRASS library
 G_gisinit('')

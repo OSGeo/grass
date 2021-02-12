@@ -119,7 +119,7 @@ def main():
                                          dry_run=dry_run, time_suffix=time_suffix)
 
     if granularity:
-        if not p.setup_common_granularity(expression=expression,  lexer = tgis.TemporalRasterAlgebraLexer()):
+        if not p.setup_common_granularity(expression=expression, lexer = tgis.TemporalRasterAlgebraLexer()):
             grass.script.fatal(_("Unable to process the expression in granularity algebra mode"))
 
     pc = p.parse(expression, basename, grass.script.overwrite())
@@ -131,4 +131,3 @@ def main():
 if __name__ == "__main__":
     options, flags = grass.script.parser()
     sys.exit(main())
-

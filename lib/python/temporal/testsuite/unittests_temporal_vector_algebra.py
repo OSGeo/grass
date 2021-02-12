@@ -56,7 +56,7 @@ class TestTemporalVectorAlgebra(TestCase):
                                                  start="2001-01-03", increment="1 day", interval=True)
         tgis.register_maps_in_space_time_dataset(type="vector", name=None, maps="singletmap",
                                                 start="2001-01-03", end="2001-01-04")
-    
+
     def tearDown(self):
         self.runModule("t.remove", type="stvds", inputs="R", quiet=True)
 

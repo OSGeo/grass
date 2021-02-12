@@ -18,7 +18,6 @@ ignore =
     E222, # multiple spaces after operator
     E225, # missing whitespace around operator
     E226, # missing whitespace around arithmetic operator
-    E228, # missing whitespace around modulo operator
     E231, # missing whitespace after ','
     E241, # multiple spaces after ','
     E251, # unexpected spaces around keyword / parameter equals

@@ -416,8 +416,8 @@ class PyEditController(object):
         """Save current content to a file and set executable permissions"""
         assert self.filename
         file_is_written = self._writeFile(
-                 file_path=self.filename, content=self.body.GetText(),
-             )
+            file_path=self.filename, content=self.body.GetText(),
+            )
         if file_is_written:
             # executable file
             os.chmod(self.filename, stat.S_IRWXU | stat.S_IWUSR)
@@ -575,7 +575,7 @@ class PyEditController(object):
             parent=self.guiparent,
             caption=_("Set parameters for the script"),
             message=_("Specify command line parameters for the script separated by spaces:"),
-            )
+        )
         if self.parameters:
             dlg.SetValue(" ".join(self.parameters))
         # TODO: modality might not be needed here if we bind the events

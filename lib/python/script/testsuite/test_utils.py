@@ -16,15 +16,15 @@ class EnvironChange(TestCase):
         self.original_env = {k: os.environ.get(k, self.NOT_FOUND)
                              for k in self.env.keys()}
         for k, v in self.env.items():
-                os.environ[k] = v
+            os.environ[k] = v
 
     def tearDown(self):
         for k, v in self.env.items():
-                oval = self.original_env[k]
-                if oval == self.NOT_FOUND:
-                    os.environ.pop(k)
-                else:
-                    os.environ[k] = oval
+            oval = self.original_env[k]
+            if oval == self.NOT_FOUND:
+                os.environ.pop(k)
+            else:
+                os.environ[k] = oval
 
 
 class LcAllC(EnvironChange):

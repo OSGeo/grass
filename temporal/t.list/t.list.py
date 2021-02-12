@@ -128,7 +128,7 @@ def main():
         else:
             time = "relative time"
 
-        stds_list = tgis.get_dataset_list(type,  ttype,  columns,  where,  order, dbif=dbif)
+        stds_list = tgis.get_dataset_list(type, ttype, columns, where, order, dbif=dbif)
 
         # Use the correct order of the mapsets, hence first the current mapset, then
         # alphabetic ordering
@@ -141,12 +141,12 @@ def main():
 
                 if rows:
                     if  gscript.verbosity() > 0 and not outpath:
-                        if issubclass(sp.__class__,  tgis.AbstractMapDataset):
-                            sys.stderr.write(_("Time stamped %s maps with %s available in mapset <%s>:\n")%\
-                                                     (sp.get_type(),  time,  key))
+                        if issubclass(sp.__class__, tgis.AbstractMapDataset):
+                            sys.stderr.write(_("Time stamped %s maps with %s available in mapset <%s>:\n")%
+                                                     (sp.get_type(), time, key))
                         else:
-                            sys.stderr.write(_("Space time %s datasets with %s available in mapset <%s>:\n")%\
-                                                     (sp.get_new_map_instance(None).get_type(),  time,  key))
+                            sys.stderr.write(_("Space time %s datasets with %s available in mapset <%s>:\n")%
+                                                     (sp.get_new_map_instance(None).get_type(), time, key))
 
                     # Print the column names if requested
                     if colhead and first:

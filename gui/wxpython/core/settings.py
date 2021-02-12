@@ -39,6 +39,7 @@ class SettingsJSONEncoder(json.JSONEncoder):
     to hexadecimal color (tuple is represented as
     list in JSON, however GRASS expects tuple for colors).
     """
+
     def default(self, obj):
         """Encode not automatically serializable objects.
         """
@@ -137,7 +138,7 @@ class Settings:
                 # use default window layout (layer manager, displays, ...)
                 'defWindowPos': {
                     'enabled': True,
-                    'dim' : '1,1,%d,%d,%d,1,%d,%d' % \
+                    'dim': '1,1,%d,%d,%d,1,%d,%d' % \
                     (globalvar.GM_WINDOW_SIZE[0],
                      globalvar.GM_WINDOW_SIZE[1],
                      globalvar.GM_WINDOW_SIZE[0] + 1,
@@ -156,7 +157,7 @@ class Settings:
                 # region
                 'region': {
                     'resAlign': {
-                        'enabled' : False
+                        'enabled': False
                     },
                 },
             },

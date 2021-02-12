@@ -45,7 +45,7 @@ from gui_core.forms import GUI
 from core.debug import Debug as Debug
 from gui_core.widgets import ColorTablesComboBox
 from gui_core.wrap import SpinCtrl, PseudoDC, TextCtrl, Button, CancelButton, \
-     StaticText, StaticBox, EmptyBitmap, BitmapFromImage
+    StaticText, StaticBox, EmptyBitmap, BitmapFromImage
 
 
 class RulesPanel:

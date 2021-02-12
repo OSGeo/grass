@@ -45,9 +45,9 @@ grass.run_command("r.mapcalc", expression="null_1=0.0")
 grass.message("First compute a steady state groundwater flow")
 
 # Compute the steady state groundwater flow
-grass.run_command("r.gwflow", solver="cg", top="top_conf_1", bottom="bottom_1", phead="phead_1",\
- status="status_1", hc_x="hydcond_1", hc_y="hydcond_1", \
- q="well_1", s="syield_1", recharge="recharge_1", output="gwresult_conf_1",\
+grass.run_command("r.gwflow", solver="cg", top="top_conf_1", bottom="bottom_1", phead="phead_1",
+ status="status_1", hc_x="hydcond_1", hc_y="hydcond_1",
+ q="well_1", s="syield_1", recharge="recharge_1", output="gwresult_conf_1",
  dt=8640000000000, type="confined")
 
 grass.message(_("generate the transport data"))
@@ -70,9 +70,9 @@ AL=50
 AT=5
 
 # Compute the solute transport using the above defined dispersivity coefficients for a timestep of 250d
-grass.run_command("r.solute.transport", "c", error=0.000000000000001, maxit=1000, solver="bicgstab",\
-  top="top_conf_1", bottom="bottom_1", phead="gwresult_conf_1", status="tstatus_1", hc_x="hydcond_1",\
-  hc_y="hydcond_1", rd="R_1", cs="cs_1", q="well_1", nf="poros_1", output="stresult_conf_1", dt=21600000,\
+grass.run_command("r.solute.transport", "c", error=0.000000000000001, maxit=1000, solver="bicgstab",
+  top="top_conf_1", bottom="bottom_1", phead="gwresult_conf_1", status="tstatus_1", hc_x="hydcond_1",
+  hc_y="hydcond_1", rd="R_1", cs="cs_1", q="well_1", nf="poros_1", output="stresult_conf_1", dt=21600000,
   diff_x="diff_1", diff_y="diff_1", cin="cin_1", c="c_1", al=AL, at=AT)
 
 # Get the maximum concentration
@@ -87,9 +87,9 @@ AL=10
 AT=1
 
 # Compute the solute transport using the above defined dispersivity coefficients for a timestep of 250d
-grass.run_command("r.solute.transport", "c", error=0.000000000000001, maxit=1000, solver="bicgstab",\
-  top="top_conf_1", bottom="bottom_1", phead="gwresult_conf_1", status="tstatus_1", hc_x="hydcond_1",\
-  hc_y="hydcond_1", rd="R_1", cs="cs_1", q="well_1", nf="poros_1", output="stresult_conf_2", dt=21600000,\
+grass.run_command("r.solute.transport", "c", error=0.000000000000001, maxit=1000, solver="bicgstab",
+  top="top_conf_1", bottom="bottom_1", phead="gwresult_conf_1", status="tstatus_1", hc_x="hydcond_1",
+  hc_y="hydcond_1", rd="R_1", cs="cs_1", q="well_1", nf="poros_1", output="stresult_conf_2", dt=21600000,
   diff_x="diff_1", diff_y="diff_1", cin="cin_1", c="c_1", al=AL, at=AT)
 
 

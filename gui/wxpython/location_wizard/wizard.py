@@ -150,6 +150,7 @@ class TitledPage(WizardPageSimple):
 
 class GridBagSizerTitledPage(TitledPage):
     """GridBagSizer declaration for TitledPage class"""
+
     def __init__(self, parent, title):
         super().__init__(parent, title)
 
@@ -344,7 +345,7 @@ class CoordinateSystemPage(TitledPage):
             parent=self, id=wx.ID_ANY, label=_(
                 "Read CRS from a georeferenced data file"))
         self.radioXy = wx.RadioButton(parent=self, id=wx.ID_ANY, label=_(
-                "Create a generic cartesian coordinate system (XY)"))
+            "Create a generic cartesian coordinate system (XY)"))
         self.radioWkt = wx.RadioButton(
             parent=self, id=wx.ID_ANY, label=_(
                 "Specify CRS using WKT string"))
@@ -352,7 +353,7 @@ class CoordinateSystemPage(TitledPage):
             parent=self, id=wx.ID_ANY, label=_(
                 "Specify CRS using PROJ.4 string"))
         self.radioSrs = wx.RadioButton(parent=self, id=wx.ID_ANY, label=_(
-                "Define custom CRS"))
+            "Define custom CRS"))
 
         # layout
         self.sizer.SetVGap(10)

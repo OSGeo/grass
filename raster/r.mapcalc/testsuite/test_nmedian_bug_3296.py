@@ -90,7 +90,7 @@ class TestNmedianBug(TestCase):
         self.to_remove.append(self.output)
         self.assertRastersNoDifference(actual=self.output,
             reference=self.output_ref, precision=0)
-    
+
     def test_dcell(self):
         expression = "{o}=nmedian(double(({i}[0,-1] - {i})^2), double(({i}[0,1] - {i})^2))".format(o=self.output, i=self.input)
         self.assertModule('r.mapcalc', expression=expression, overwrite=True)

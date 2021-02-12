@@ -93,7 +93,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         self.assertEqual(len(maplist), 6)
         maplist = ta.check_stds("B")
         self.assertEqual(len(maplist), 6)
-        
+
         ta.parse(expression=expr, basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -106,13 +106,13 @@ class TestTemporalAlgebraGranularity(TestCase):
         self.assertEqual(end, datetime.datetime(2001, 7, 1))
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), u'1 month')
-       
+
     def test_common_granularity_2(self):
         """Testing the common granularity function year to month samping. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = 'R = A : C'
         ret = ta.setup_common_granularity(expression=expr)
-        
+
         ta.parse(expression=expr, basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -125,14 +125,14 @@ class TestTemporalAlgebraGranularity(TestCase):
         self.assertEqual(end, datetime.datetime(2001, 7, 1))
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), u'1 month')
-       
+
 
     def test_common_granularity_3(self):
         """Testing the common granularity function with gaps. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = 'R = A : D'
         ret = ta.setup_common_granularity(expression=expr)
-        
+
         ta.parse(expression=expr, basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -145,14 +145,14 @@ class TestTemporalAlgebraGranularity(TestCase):
         self.assertEqual(end, datetime.datetime(2001, 6, 1))
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), u'1 month')
-       
+
 
     def test_common_granularity_4(self):
         """Testing the common granularity function year to month with gaps. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = 'R = C : D'
         ret = ta.setup_common_granularity(expression=expr)
-        
+
         ta.parse(expression=expr, basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -165,13 +165,13 @@ class TestTemporalAlgebraGranularity(TestCase):
         self.assertEqual(end, datetime.datetime(2001, 6, 1))
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), u'1 month')
-       
+
     def test_common_granularity_4(self):
         """Testing the common granularity function year to month with gaps. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = 'R = C : D'
         ret = ta.setup_common_granularity(expression=expr)
-        
+
         ta.parse(expression=expr, basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -184,13 +184,13 @@ class TestTemporalAlgebraGranularity(TestCase):
         self.assertEqual(end, datetime.datetime(2001, 6, 1))
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), u'1 month')
-       
+
     def test_common_granularity_5(self):
         """Testing the common granularity function year to month with gaps. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = 'R = A : C : D'
         ret = ta.setup_common_granularity(expression=expr)
-        
+
         ta.parse(expression=expr, basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -203,13 +203,13 @@ class TestTemporalAlgebraGranularity(TestCase):
         self.assertEqual(end, datetime.datetime(2001, 6, 1))
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), u'1 month')
-         
+
     def test_common_granularity_6(self):
         """Testing the common granularity function year to month with gaps. """
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = 'R = if(start_month(A) > 2, A : C : D)'
         ret = ta.setup_common_granularity(expression=expr)
-        
+
         ta.parse(expression=expr, basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -222,7 +222,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         self.assertEqual(end, datetime.datetime(2001, 6, 1))
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), u'1 month')
-       
+
 
 
 if __name__ == '__main__':

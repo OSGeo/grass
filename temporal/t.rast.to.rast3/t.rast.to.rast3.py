@@ -93,7 +93,7 @@ def main():
         unit = granularity.split(" ")[1]
         granularity = float(granularity.split(" ")[0])
 
-        print("Gran from stds %0.15f"%(granularity))
+        print("Gran from stds %0.15f" %(granularity))
 
         if unit == "years" or unit == "year":
             bottom = float(start.year - 1900)
@@ -116,7 +116,7 @@ def main():
             if unit == "seconds" or unit == "second":
                 seconds = float(granularity)
 
-            granularity = float(days + hours / 24.0 + minutes / \
+            granularity = float(days + hours / 24.0 + minutes /
                 1440.0 + seconds / 86400.0)
     else:
         unit = sp.get_relative_time_unit()

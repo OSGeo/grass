@@ -46,7 +46,7 @@ class TestRasterreport(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-	
+
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
@@ -58,20 +58,20 @@ class TestRasterreport(TestCase):
         """Testing flag d """
         self.assertModule('v.extract', input=self.input, output=self.output, cats="1,2,3,4")
         category = read_command('v.db.select', map=self.output,
-	                        separator='pipe')
+                                separator='pipe')
         self.assertEqual(first=TABLE_1.replace('\n', os.linesep),
-	                         second=category,
-	                         msg="Attribute table has wrong entries")
- 
+                                 second=category,
+                                 msg="Attribute table has wrong entries")
+
     def test_cats2(self):
         """Testing cats=2 """
         self.assertModule('v.extract', input=self.geology, output=self.output, flags='d', cats="1,2,3,4,5")
         category = read_command('v.db.select', map=self.output,
-	                        separator='pipe')
+                                separator='pipe')
         self.assertEqual(first=TABLE_2.replace('\n', os.linesep),
-	                         second=category,
-	                         msg="Attribute table has wrong entries")
-   
+                                 second=category,
+                                 msg="Attribute table has wrong entries")
+
     def test_flagt(self):
         """Testing Falg T"""
         self.assertModule('v.extract', input=self.input, output=self.output, flags='t', cats=1 )
@@ -82,13 +82,13 @@ class TestRasterreport(TestCase):
 
     def  test_where(self):
         """Testing where"""
-        self.assertModule('v.extract', input=self.input, output=self.output, flags='d', 
+        self.assertModule('v.extract', input=self.input, output=self.output, flags='d',
                             where="cat < 10")
         category = read_command('v.db.select', map=self.output,
-	                        separator='pipe')
+                                separator='pipe')
         self.assertEqual(first=TABLE_3.replace('\n', os.linesep),
-	                         second=category,
-	                         msg="Attribute table has wrong entries")
+                                 second=category,
+                                 msg="Attribute table has wrong entries")
 if __name__ == '__main__':
     from grass.gunittest.main import test
     test()

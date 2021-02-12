@@ -106,13 +106,13 @@ header_pgm_desc = """<h2>NAME</h2>
 """
 
 sourcecode = string.Template(
-"""<h2>SOURCE CODE</h2>
+    """<h2>SOURCE CODE</h2>
 <p>Available at: <a href="${URL_SOURCE}">${PGM} source code</a> (<a href="${URL_LOG}">history</a>)</p>
 """
 )
 
 footer_index = string.Template(
-"""<hr class="header">
+    """<hr class="header">
 <p>
 <a href="index.html">Main index</a> |
 <a href="${HTML_PAGE_FOOTER_PAGES_PATH}${INDEXNAME}.html">${INDEXNAMECAP} index</a> |
@@ -133,7 +133,7 @@ GRASS GIS ${GRASS_VERSION} Reference Manual
 """)
 
 footer_noindex = string.Template(
-"""<hr class="header">
+    """<hr class="header">
 <p>
 <a href="index.html">Main index</a> |
 <a href="${HTML_PAGE_FOOTER_PAGES_PATH}topics.html">Topics index</a> |
@@ -247,7 +247,7 @@ def write_toc(data):
                 in_h3 = False
 
         text = text.replace(u'\xa0', u' ')
-        fd.write('%s<li class="toc"><a href="#%s" class="toc">%s</a>' % \
+        fd.write('%s<li class="toc"><a href="#%s" class="toc">%s</a>' %
                      (' ' * indent, escape_href(text), text))
         first = False
 
@@ -356,19 +356,19 @@ if re.search('</html>', src_data, re.IGNORECASE):
     sys.exit()
 
 index_names = {
-    'd' : 'display',
+    'd': 'display',
     'db': 'database',
-    'g' : 'general',
-    'i' : 'imagery',
-    'm' : 'miscellaneous',
+    'g': 'general',
+    'i': 'imagery',
+    'm': 'miscellaneous',
     'ps': 'postscript',
-    'p' : 'paint',
-    'r' : 'raster',
+    'p': 'paint',
+    'r': 'raster',
     'r3': 'raster3d',
-    's' : 'sites',
-    't' : 'temporal',
-    'v' : 'vector'
-    }
+    's': 'sites',
+    't': 'temporal',
+    'v': 'vector'
+}
 
 
 def to_title(name):
@@ -423,8 +423,8 @@ if os.getenv('SOURCE_URL', ''):
             pgmname = cwd[idx+1:]
             classname = index_names[prefix]
             url_source = urlparse.urljoin('{0}{1}/'.format(
-                    os.environ['SOURCE_URL'], classname),
-                    pgmname
+                os.environ['SOURCE_URL'], classname),
+                pgmname
             )
             break
 else:
@@ -446,7 +446,7 @@ if index_name:
 
     sys.stdout.write(sourcecode.substitute(
         URL_SOURCE=url_source, PGM=pgm, URL_LOG=url_source.replace(
-            tree,  commits)))
+            tree, commits)))
     sys.stdout.write(
         footer_index.substitute(
             INDEXNAME=index_name,

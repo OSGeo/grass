@@ -1131,7 +1131,7 @@ class GListBox(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         self._LoadData(choices, disabled)
 
     def SetSelection(self, item, force=False):
-        if item !=  wx.NOT_FOUND and \
+        if item != wx.NOT_FOUND and \
                 (platform.system() != 'Windows' or force):
             # Windows -> FIXME
             self.SetItemState(

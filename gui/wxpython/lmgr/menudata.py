@@ -45,7 +45,7 @@ class LayerManagerMenuData(MenuTreeModelBuilder):
                               "Default main menu will be loaded."))
             fallback = os.path.join(WXGUIDIR, 'xml', 'menudata.xml')
             MenuTreeModelBuilder.__init__(
-                self, fallback,  message_handler=message_handler)
+                self, fallback, message_handler=message_handler)
 
 
 class LayerManagerModuleTree(MenuTreeModelBuilder):

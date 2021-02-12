@@ -1858,14 +1858,14 @@ class GdalSelect(wx.Panel):
         self._sourceType = sourceType
         self.changingSizer.Show(
             self.filePanel, show=(
-            sourceType == 'file'))
+                sourceType == 'file'))
         self.changingSizer.Show(
             self.nativePanel, show=(
-            sourceType == 'native'))
+                sourceType == 'native'))
         self.changingSizer.Show(self.dirPanel, show=(sourceType == 'dir'))
         self.changingSizer.Show(
             self.protocolPanel, show=(
-            sourceType == 'pro'))
+                sourceType == 'pro'))
         self.changingSizer.Show(self.dbPanel, show=(sourceType == 'db'))
 
         self.changingSizer.Layout()

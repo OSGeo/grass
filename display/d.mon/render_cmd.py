@@ -103,7 +103,7 @@ def read_stdin(cmd):
     opt = None
 
     if (cmd[0] == 'd.text' and not 'text' in cmd[1] and
-        (not 'input' in cmd[1] or cmd[1]['input'] == '-')):
+            (not 'input' in cmd[1] or cmd[1]['input'] == '-')):
         if sys.stdin.isatty():
             sys.stderr.write("\nPlease enter text instructions.  Enter EOF (ctrl-d) on last line to quit\n")
         opt = 'input'

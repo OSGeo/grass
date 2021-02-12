@@ -104,9 +104,9 @@ def main():
         len_method = len(method.split(',')) - 1
     else:
         len_method = len(method.split(','))
-    
-    if (len(list(filter(None, quantile.split(',')))) + 
-        len_method) != len(output.split(',')):
+
+    if (len(list(filter(None, quantile.split(',')))) +
+            len_method) != len(output.split(',')):
         grass.fatal(_('Number requested methods and output maps do not match.'))
 
     # Make sure the temporal database exists

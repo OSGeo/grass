@@ -44,7 +44,7 @@ class TestGdalImport(TestCase):
                          coeff_var=18.4170719597623
                          sum=2234751.09436035"""
 
-        self.assertRasterFitsUnivar(raster="test_gdal_import_map",  reference=univar_string,
+        self.assertRasterFitsUnivar(raster="test_gdal_import_map", reference=univar_string,
                                     precision=3)
 
     def test_2(self):
@@ -69,7 +69,7 @@ class TestGdalImport(TestCase):
                          coeff_var=18.4170719597623
                          sum=2234751.09436035"""
 
-        self.assertRasterFitsUnivar(raster="test_gdal_import_map",  reference=univar_string,
+        self.assertRasterFitsUnivar(raster="test_gdal_import_map", reference=univar_string,
                                     precision=3)
 
     def test_3(self):
@@ -94,7 +94,7 @@ class TestGdalImport(TestCase):
                          coeff_var=18.4170719597623
                          sum=2234751.09436035"""
 
-        self.assertRasterFitsUnivar(raster="test_gdal_import_map",  reference=univar_string,
+        self.assertRasterFitsUnivar(raster="test_gdal_import_map", reference=univar_string,
                                     precision=3)
 
     def test_4(self):
@@ -119,7 +119,7 @@ class TestGdalImport(TestCase):
                          coeff_var=18.4170719597623
                          sum=2234751.09436035"""
 
-        self.assertRasterFitsUnivar(raster="test_gdal_import_map",  reference=univar_string,
+        self.assertRasterFitsUnivar(raster="test_gdal_import_map", reference=univar_string,
                                     precision=3)
 
     def test_netCDF_3d_1(self):
@@ -143,15 +143,15 @@ class TestGdalImport(TestCase):
                        datatype=FCELL
                        ncats=0"""
 
-        self.assertRasterFitsInfo(raster="test_gdal_import_map.001",  reference=info_string,
+        self.assertRasterFitsInfo(raster="test_gdal_import_map.001", reference=info_string,
                                     precision=3)
-        self.assertRasterFitsInfo(raster="test_gdal_import_map.002",  reference=info_string,
+        self.assertRasterFitsInfo(raster="test_gdal_import_map.002", reference=info_string,
                                     precision=3)
-        self.assertRasterFitsInfo(raster="test_gdal_import_map.003",  reference=info_string,
+        self.assertRasterFitsInfo(raster="test_gdal_import_map.003", reference=info_string,
                                     precision=3)
-        self.assertRasterFitsInfo(raster="test_gdal_import_map.004",  reference=info_string,
+        self.assertRasterFitsInfo(raster="test_gdal_import_map.004", reference=info_string,
                                     precision=3)
-        self.assertRasterFitsInfo(raster="test_gdal_import_map.005",  reference=info_string,
+        self.assertRasterFitsInfo(raster="test_gdal_import_map.005", reference=info_string,
                                     precision=3)
 
     def test_netCDF_3d_2(self):
@@ -176,15 +176,15 @@ class TestGdalImport(TestCase):
                        datatype=FCELL
                        ncats=0"""
 
-        self.assertRasterFitsInfo(raster="test_gdal_import_map.101",  reference=info_string,
+        self.assertRasterFitsInfo(raster="test_gdal_import_map.101", reference=info_string,
                                     precision=3)
-        self.assertRasterFitsInfo(raster="test_gdal_import_map.102",  reference=info_string,
+        self.assertRasterFitsInfo(raster="test_gdal_import_map.102", reference=info_string,
                                     precision=3)
-        self.assertRasterFitsInfo(raster="test_gdal_import_map.103",  reference=info_string,
+        self.assertRasterFitsInfo(raster="test_gdal_import_map.103", reference=info_string,
                                     precision=3)
-        self.assertRasterFitsInfo(raster="test_gdal_import_map.104",  reference=info_string,
+        self.assertRasterFitsInfo(raster="test_gdal_import_map.104", reference=info_string,
                                     precision=3)
-        self.assertRasterFitsInfo(raster="test_gdal_import_map.105",  reference=info_string,
+        self.assertRasterFitsInfo(raster="test_gdal_import_map.105", reference=info_string,
                                     precision=3)
 
     def test_netCDF_3d_3(self):
@@ -209,15 +209,15 @@ class TestGdalImport(TestCase):
                        datatype=FCELL
                        ncats=0"""
 
-        self.assertRasterFitsInfo(raster="test_gdal_import_map.00101",  reference=info_string,
+        self.assertRasterFitsInfo(raster="test_gdal_import_map.00101", reference=info_string,
                                     precision=3)
-        self.assertRasterFitsInfo(raster="test_gdal_import_map.00102",  reference=info_string,
+        self.assertRasterFitsInfo(raster="test_gdal_import_map.00102", reference=info_string,
                                     precision=3)
-        self.assertRasterFitsInfo(raster="test_gdal_import_map.00103",  reference=info_string,
+        self.assertRasterFitsInfo(raster="test_gdal_import_map.00103", reference=info_string,
                                     precision=3)
-        self.assertRasterFitsInfo(raster="test_gdal_import_map.00104",  reference=info_string,
+        self.assertRasterFitsInfo(raster="test_gdal_import_map.00104", reference=info_string,
                                     precision=3)
-        self.assertRasterFitsInfo(raster="test_gdal_import_map.00105",  reference=info_string,
+        self.assertRasterFitsInfo(raster="test_gdal_import_map.00105", reference=info_string,
                                     precision=3)
 
     def test_netCDF_3d_4(self):
@@ -242,7 +242,7 @@ class TestGdalImport(TestCase):
                        datatype=FCELL
                        ncats=0"""
 
-        self.assertRasterFitsInfo(raster="test_gdal_import_map",  reference=info_string,
+        self.assertRasterFitsInfo(raster="test_gdal_import_map", reference=info_string,
                                     precision=3)
 
     def test_netCDF_3d_5(self):
@@ -287,5 +287,3 @@ class TestGdalImportFails(TestCase):
 if __name__ == '__main__':
     from grass.gunittest.main import test
     test()
-
-

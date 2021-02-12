@@ -236,10 +236,10 @@ class Info(object):
 
     def items(self):
         return [(k, self.__getattribute__(k)) for k in self.keys()]
-        
+
     def __iter__(self):
         return ((k, self.__getattribute__(k)) for k in self.keys())
-        
+
     def _repr_html_(self):
         return dict2html(dict(self.items()), keys=self.keys(),
                          border='1', kdec='b')

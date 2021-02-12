@@ -622,7 +622,7 @@ class GStc(stc.StyledTextCtrl):
 
         # warning
         self.StyleWarning = 4
-        warningColour =  wx.Colour(0, 0, 255)
+        warningColour = wx.Colour(0, 0, 255)
         if isDarkMode:
             warningColour = wx.Colour(0, 102, 255)
         self.StyleSetBackground(self.StyleWarning, defaultBackgroundColour)

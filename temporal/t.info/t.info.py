@@ -87,7 +87,7 @@ def main():
             tgis.get_sql_template_path()))
         if rows:
             for row in rows:
-                print(" | %s .......... %s"%(row[0], row[1]))
+                print(" | %s .......... %s" %(row[0], row[1]))
         print(" +----------------------------------------------------------------------------+")
         return
     elif system and not history:
@@ -96,7 +96,7 @@ def main():
         print("sql_template_path=\'" + str(tgis.get_sql_template_path()) + "\'")
         if rows:
             for row in rows:
-                print("%s=\'%s\'"%(row[0], row[1]))
+                print("%s=\'%s\'" %(row[0], row[1]))
         return
 
     if not system and not name:

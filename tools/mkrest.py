@@ -32,17 +32,17 @@ tmp_file = "%s.tmp.txt" % pgm
 
 #TODO add copyright
 
-footer_index = string.Template(\
-"""
+footer_index = string.Template(
+    """
 
-:doc:`Main Page <index>` - :doc:`${INDEXNAMECAP} index <${INDEXNAME}>` - :doc:`Full index <full_index>` 
+:doc:`Main Page <index>` - :doc:`${INDEXNAMECAP} index <${INDEXNAME}>` - :doc:`Full index <full_index>`
 2003-${YEAR} `GRASS Development Team <https://grass.osgeo.org>`_
 """)
 
-footer_noindex = string.Template(\
-"""
+footer_noindex = string.Template(
+    """
 
-:doc:`Main Page <index>`  - :doc:`Full index <full_index>` 
+:doc:`Main Page <index>`  - :doc:`Full index <full_index>`
 2003-${YEAR} `GRASS Development Team <https://grass.osgeo.org>`_
 """)
 
@@ -57,12 +57,12 @@ def read_file(name):
         return ""
 
 replacement = {
-    '*`' : '`',
-    '`* `' : '`',
-    '>`_*' : '>`_',
-    '>`_,*' : '>`_,',
-    '``*\ "' : '``"',
-    '***' : '**'
+    '*`': '`',
+    '`* `': '`',
+    '>`_*': '>`_',
+    '>`_,*': '>`_,',
+    '``*\ "': '``"',
+    '***': '**'
 }
 
 src_data = read_file(src_file)
@@ -79,7 +79,7 @@ tmp_data = read_file(tmp_file)
 if tmp_data:
     sys.stdout.write(tmp_data)
 
-process = subprocess.Popen('pandoc -s -r html %s -w rst' % src_file, 
+process = subprocess.Popen('pandoc -s -r html %s -w rst' % src_file,
                            shell=True, stdout=subprocess.PIPE)
 html_text = process.communicate()[0]
 if html_text:
@@ -107,7 +107,7 @@ index_names = {
     's': 'sites',
     't': 'temporal',
     'v': 'vector'
-    }
+}
 
 index = re.search('(<!-- meta page index:)(.*)(-->)', src_data, re.IGNORECASE)
 
@@ -123,5 +123,5 @@ if index_name:
                                              YEAR = year))
 else:
     sys.stdout.write(footer_noindex.substitute(YEAR = year))
-    
+
 sys.exit()

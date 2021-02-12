@@ -30,7 +30,7 @@ class TestRasterContour(TestCase):
         cls.runModule("t.create", type="strds", temporaltype="absolute",
                                  output="A", title="A test", description="A test",
                                  overwrite=True)
-        cls.runModule("t.register",  flags="i", type="raster", input="A",
+        cls.runModule("t.register", flags="i", type="raster", input="A",
                                      maps="a_1,a_2,a_3,a_4,a_5", start="2001-01-01",
                                      increment="3 months", overwrite=True)
 
@@ -210,10 +210,10 @@ class TestRasterContourFails(TestCase):
 
         cls.runModule("r.mapcalc", expression="a_1 = 100", overwrite=True)
 
-        cls.runModule("t.create",  type="strds", temporaltype="absolute",
+        cls.runModule("t.create", type="strds", temporaltype="absolute",
                                  output="A", title="A test", description="A test",
                                  overwrite=True)
-        cls.runModule("t.register",  flags="i", type="raster", input="A",
+        cls.runModule("t.register", flags="i", type="raster", input="A",
                                      maps="a_1", start="2001-01-01",
                                      increment="3 months", overwrite=True)
 

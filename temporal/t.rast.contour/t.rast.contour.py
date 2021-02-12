@@ -194,8 +194,8 @@ def main(options, flags):
     if t_flag is False:
         if nprocs > 1:
             nprocs = 1
-            gscript.warning(_("The number of parellel r.contour processes was "\
-                              "reduced to 1 because of the table attribute "\
+            gscript.warning(_("The number of parellel r.contour processes was "
+                              "reduced to 1 because of the table attribute "
                               "creation"))
     process_queue = pymod.ParallelModuleQueue(int(nprocs))
 
@@ -226,7 +226,7 @@ def main(options, flags):
         sys.stderr.write(mod.get_bash() + "\n")
         process_queue.put(mod)
 
-        if count%10 == 0:
+        if count %10 == 0:
             gscript.percent(count, num_maps, 1)
 
     # Wait for unfinished processes
@@ -245,7 +245,7 @@ def main(options, flags):
     for map in new_maps:
         count += 1
 
-        if count%10 == 0:
+        if count %10 == 0:
             gscript.percent(count, num_maps, 1)
 
         # Do not register empty maps

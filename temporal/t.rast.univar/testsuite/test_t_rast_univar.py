@@ -18,25 +18,25 @@ class TestRasterUnivar(TestCase):
         """Initiate the temporal GIS and set the region
         """
         cls.use_temp_region()
-        cls.runModule("g.region",  s=0,  n=80,  w=0,  e=120,  b=0,  t=50,  res=1,  res3=1)
+        cls.runModule("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=1, res3=1)
 
-        cls.runModule("r.mapcalc", expression="a_1 = 100",  overwrite=True)
-        cls.runModule("r.mapcalc", expression="a_2 = 200",  overwrite=True)
-        cls.runModule("r.mapcalc", expression="a_3 = 300",  overwrite=True)
-        cls.runModule("r.mapcalc", expression="a_4 = 400",  overwrite=True)
+        cls.runModule("r.mapcalc", expression="a_1 = 100", overwrite=True)
+        cls.runModule("r.mapcalc", expression="a_2 = 200", overwrite=True)
+        cls.runModule("r.mapcalc", expression="a_3 = 300", overwrite=True)
+        cls.runModule("r.mapcalc", expression="a_4 = 400", overwrite=True)
 
-        cls.runModule("t.create",  type="strds",  temporaltype="absolute",
-                                 output="A",  title="A test",  description="A test",
+        cls.runModule("t.create", type="strds", temporaltype="absolute",
+                                 output="A", title="A test", description="A test",
                                  overwrite=True)
-        cls.runModule("t.register",  flags="i",  type="raster",  input="A",
-                                     maps="a_1,a_2,a_3,a_4",  start="2001-01-01",
-                                     increment="3 months",  overwrite=True)
+        cls.runModule("t.register", flags="i", type="raster", input="A",
+                                     maps="a_1,a_2,a_3,a_4", start="2001-01-01",
+                                     increment="3 months", overwrite=True)
 
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region
         """
-        cls.runModule("t.remove",  flags="rf",  type="strds",
+        cls.runModule("t.remove", flags="rf", type="strds",
                                    inputs="A")
         cls.del_temp_region()
 
@@ -58,7 +58,7 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|384000
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
                 res_line = res.split("|", 1)[1]
-                self.assertLooksLike(ref_line,  res_line)
+                self.assertLooksLike(ref_line, res_line)
 
     def test_2(self):
 
@@ -77,7 +77,7 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|384000
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
                 res_line = res.split("|", 1)[1]
-                self.assertLooksLike(ref_line,  res_line)
+                self.assertLooksLike(ref_line, res_line)
 
     def test_3(self):
 
@@ -96,7 +96,7 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400|
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
                 res_line = res.split("|", 1)[1]
-                self.assertLooksLike(ref_line,  res_line)
+                self.assertLooksLike(ref_line, res_line)
 
     def test_4(self):
 
@@ -119,7 +119,7 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|384000
                 res_line = res.split("|", 1)[1]
                 print(type(ref_line))
                 print(type(res_line))
-                self.assertLooksLike(ref_line,  res_line)
+                self.assertLooksLike(ref_line, res_line)
 
     def test_5(self):
 
@@ -139,7 +139,7 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|384000
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
                 res_line = res.split("|", 1)[1]
-                self.assertLooksLike(ref_line,  res_line)
+                self.assertLooksLike(ref_line, res_line)
 
     def test_6_error_handling_empty_strds(self):
         # Empty strds
@@ -150,7 +150,7 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|384000
 
     def test_7_error_handling_no_input(self):
         # No input
-        self.assertModuleFail("t.rast.univar",  output="out.txt")
+        self.assertModuleFail("t.rast.univar", output="out.txt")
 
 if __name__ == '__main__':
     from grass.gunittest.main import test

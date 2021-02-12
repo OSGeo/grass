@@ -261,7 +261,7 @@ class MapCalcFrame(wx.Frame):
         self.newmaptxt = Select(
             parent=self.panel, id=wx.ID_ANY, size=(
                 250, -1), type=element, multiple=False,
-                fullyQualified=False)
+            fullyQualified=False)
         self.mapsellabel = StaticText(parent=self.panel, id=wx.ID_ANY)
         if self.rast3d:
             self.mapsellabel.SetLabel(_('Insert existing 3D raster map'))
@@ -626,16 +626,16 @@ class MapCalcFrame(wx.Frame):
             pass
 
         newmcalcstr += what
-        
+
         # Do not add extra space if there is already one
         try:
             if newmcalcstr[-1] != ' ' and mcalcstr[position] != ' ':
                 newmcalcstr += ' '
         except:
             newmcalcstr += ' '
-        
+
         newmcalcstr += mcalcstr[position:]
-        
+
         self.text_mcalc.SetValue(newmcalcstr)
         if len(what) > 0:
             match = re.search(pattern="\(.*\)", string=what)

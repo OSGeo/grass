@@ -18,7 +18,7 @@ class TestDbCopy(TestCase):
                       database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db')
 
     def test_fromtable(self):
-        self.runModule('db.copy', from_database=self.orig_mapset, 
+        self.runModule('db.copy', from_database=self.orig_mapset,
                        from_table=self.invect, to_table=self.outable,
                        overwrite=True)
         orig = read_command('db.select', table=self.invect,
