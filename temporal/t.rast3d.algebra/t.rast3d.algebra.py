@@ -100,7 +100,7 @@ def main():
     p = tgis.TemporalRaster3DAlgebraParser(run = True, debug=False, spatial = spatial, nprocs = nprocs, register_null = register_null)
 
     if granularity:
-        if not p.setup_common_granularity(expression=expression,  stdstype = 'str3ds',  lexer = tgis.TemporalRasterAlgebraLexer()):
+        if not p.setup_common_granularity(expression=expression, stdstype = 'str3ds', lexer = tgis.TemporalRasterAlgebraLexer()):
             grass.script.fatal(_("Unable to process the expression in granularity algebra mode"))
 
     p.parse(expression, basename, grass.script.overwrite())
@@ -108,4 +108,3 @@ def main():
 if __name__ == "__main__":
     options, flags = grass.script.parser()
     sys.exit(main())
-

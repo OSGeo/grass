@@ -654,7 +654,7 @@ class AnimationController(wx.EvtHandler):
                            inputOptions=exportInfo['options'],
                            bg_task=True,
                            ondone=export_avi_callback,
-                )
+                           )
         except Exception as e:
             del self.busy
             GError(parent=self.frame, message=str(e))

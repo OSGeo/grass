@@ -25,12 +25,12 @@ exclude_mods = [
 desc_override = {
     "g.parser": "Provides automated parser, GUI, and help support for GRASS scipts.",
     "r.li.daemon": "Support module for r.li landscape index calculations."
-    }
+}
 
 ############################################################################
 
-header1_tmpl = string.Template(\
-r"""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+header1_tmpl = string.Template(
+    r"""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -38,15 +38,15 @@ r"""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
  <meta name="Author" content="GRASS Development Team">
 """)
 
-macosx_tmpl = string.Template(\
-r"""
+macosx_tmpl = string.Template(
+    r"""
  <meta name="AppleTitle" content="GRASS GIS ${grass_version} Help">
  <meta name="AppleIcon" content="GRASS-${grass_mmver}/grass_icon.png">
  <meta name="robots" content="anchors">
 """)
 
-header2_tmpl = string.Template(\
-r""" <link rel="stylesheet" href="grassdocs.css" type="text/css">
+header2_tmpl = string.Template(
+    r""" <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>
 <body style="width: ${body_width}">
 <div id="container">
@@ -74,8 +74,8 @@ processing and geographic information system (GIS).</p>
 """)
 #"
 
-overview_tmpl = string.Template(\
-r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in lib/init/ -->
+overview_tmpl = string.Template(
+    r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in lib/init/ -->
 
 <table align="center" border="0" cellspacing="8">
   <tbody>
@@ -194,32 +194,32 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
 #"
 
 footer_tmpl = string.Template(\
-## TODO: https://trac.osgeo.org/grass/ticket/3987
-#r"""<a name="wxGUI"></a>
-#<h3>wxGUI: Graphical user interface</h3>
-#<table><tbody>
-#<tr><td valign="top"><a href="wxGUI.html">wxGUI Graphical User Interface</a></td> <td>wxGUI Graphical User Interface</td></tr>
-#<tr><td valign="top"><a href="wxGUI.nviz.html">3D visualization suite</a></td>    <td>wxGUI.nviz 3D visualization suite</td></tr>
-#</tbody></table>
-#<p>
-#<a name="further"></a>
-#<h3>Further pages</h3>
-#<table><tbody>
-#<tr><td valign="top"><a href="databaseintro.html">database intro</a></td> <td>database intro</td></tr>
-#<tr><td valign="top"><a href="imageryintro.html">imagery intro</a></td> <td>imagery intro</td></tr>
-#<tr><td valign="top"><a href="projectionintro.html">projection intro</a></td> <td>projection intro</td></tr>
-#<tr><td valign="top"><a href="raster3dintro.html">raster3D intro</a></td> <td>raster3D intro</td></tr>
-#<tr><td valign="top"><a href="rasterintro.html">raster intro</a></td> <td>raster intro</td></tr>
-#<tr><td valign="top"><a href="temporalintro.html">temporal intro</a></td> <td>temporal intro</td></tr>
-#<tr><td valign="top"><a href="vectorintro.html">vector intro</a></td> <td>vector intro</td></tr>
-#<tr><td valign="top"> </td> <td> </td></tr>
-#<tr><td valign="top"><a href="sql.html">SQL</a></td> <td>SQL</td></tr>
-#<tr><td valign="top"><a href="variables.html">Variables</a></td> <td>Variables</td></tr>
-#</tbody></table>
-#
-#<p>
-#<hr class="header">
-r"""<hr class="header">
+    ## TODO: https://trac.osgeo.org/grass/ticket/3987
+    #r"""<a name="wxGUI"></a>
+    #<h3>wxGUI: Graphical user interface</h3>
+    #<table><tbody>
+    #<tr><td valign="top"><a href="wxGUI.html">wxGUI Graphical User Interface</a></td> <td>wxGUI Graphical User Interface</td></tr>
+    #<tr><td valign="top"><a href="wxGUI.nviz.html">3D visualization suite</a></td>    <td>wxGUI.nviz 3D visualization suite</td></tr>
+    #</tbody></table>
+    #<p>
+    #<a name="further"></a>
+    #<h3>Further pages</h3>
+    #<table><tbody>
+    #<tr><td valign="top"><a href="databaseintro.html">database intro</a></td> <td>database intro</td></tr>
+    #<tr><td valign="top"><a href="imageryintro.html">imagery intro</a></td> <td>imagery intro</td></tr>
+    #<tr><td valign="top"><a href="projectionintro.html">projection intro</a></td> <td>projection intro</td></tr>
+    #<tr><td valign="top"><a href="raster3dintro.html">raster3D intro</a></td> <td>raster3D intro</td></tr>
+    #<tr><td valign="top"><a href="rasterintro.html">raster intro</a></td> <td>raster intro</td></tr>
+    #<tr><td valign="top"><a href="temporalintro.html">temporal intro</a></td> <td>temporal intro</td></tr>
+    #<tr><td valign="top"><a href="vectorintro.html">vector intro</a></td> <td>vector intro</td></tr>
+    #<tr><td valign="top"> </td> <td> </td></tr>
+    #<tr><td valign="top"><a href="sql.html">SQL</a></td> <td>SQL</td></tr>
+    #<tr><td valign="top"><a href="variables.html">Variables</a></td> <td>Variables</td></tr>
+    #</tbody></table>
+    #
+    #<p>
+    #<hr class="header">
+    r"""<hr class="header">
 <p>
 <a href="${index_url}">Main index</a> |
 <a href="topics.html">Topics index</a> |
@@ -239,20 +239,20 @@ GRASS GIS ${grass_version} Reference Manual
 """)
 #"
 
-cmd2_tmpl = string.Template(\
-r"""<a name="${cmd}"></a>
+cmd2_tmpl = string.Template(
+    r"""<a name="${cmd}"></a>
 <h3>${cmd_label} commands (${cmd}.*)</h3>
 <table>
 """)
 #"
 
-desc1_tmpl = string.Template(\
-r"""<tr><td valign="top"><a href="${cmd}">${basename}</a></td> <td>${desc}</td></tr>
+desc1_tmpl = string.Template(
+    r"""<tr><td valign="top"><a href="${cmd}">${basename}</a></td> <td>${desc}</td></tr>
 """)
 #"
 
 toc = \
-r"""
+    r"""
 <div class="toc">
 <h4 class="toc">Table of contents</h4>
 <ul class="toc">
@@ -273,47 +273,47 @@ r"""
 """
 #"
 
-modclass_intro_tmpl = string.Template(\
-r"""Go to <a href="${modclass_lower}intro.html">${modclass} introduction</a> | <a href="topics.html">topics</a> <p>
+modclass_intro_tmpl = string.Template(
+    r"""Go to <a href="${modclass_lower}intro.html">${modclass} introduction</a> | <a href="topics.html">topics</a> <p>
 """)
 #"
 
-modclass_tmpl = string.Template(\
-r"""Go <a href="index.html">back to help overview</a>
+modclass_tmpl = string.Template(
+    r"""Go <a href="index.html">back to help overview</a>
 <h3>${modclass} commands:</h3>
 <table>
 """)
 #"
 
-desc2_tmpl = string.Template(\
-r"""<tr><td valign="top"><a href="${cmd}">${basename}</a></td> <td>${desc}</td></tr>
+desc2_tmpl = string.Template(
+    r"""<tr><td valign="top"><a href="${cmd}">${basename}</a></td> <td>${desc}</td></tr>
 """)
 #"
 
 
 full_index_header = \
-r"""
+    r"""
 Go <a href="index.html">back to help overview</a>
 """
 #"
 
 
-message_tmpl = string.Template(\
-r"""Generated HTML docs in ${html_dir}/index.html
+message_tmpl = string.Template(
+    r"""Generated HTML docs in ${html_dir}/index.html
 ----------------------------------------------------------------------
 Following modules are missing the 'modulename.html' file in src code:
 """)
 #"
 
-moduletopics_tmpl = string.Template(\
-r"""
+moduletopics_tmpl = string.Template(
+    r"""
 <li> <a href="topic_${key}.html">${name}</a></li>
 """
 )
 #"
 
 headertopics_tmpl = \
-r"""
+    r"""
 <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>
 <body style="width: 99%">
@@ -327,7 +327,7 @@ r"""
 #"
 
 headerkeywords_tmpl = \
-r"""
+    r"""
 <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>
 <body style="width: 99%">
@@ -339,8 +339,8 @@ r"""
 """
 #"
 
-headerkey_tmpl = string.Template(\
-r"""
+headerkey_tmpl = string.Template(
+    r"""
 <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>
 <body bgcolor="white">
@@ -356,7 +356,7 @@ r"""
 #"
 
 headerpso_tmpl = \
-r"""
+    r"""
 <link rel="stylesheet" href="grassdocs.css" type="text/css">
 <link rel="stylesheet" href="parser_standard_options.css" type="text/css">
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>

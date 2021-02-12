@@ -84,7 +84,7 @@ def plot_percents(x, xticks, xlabels, successes, failures, filename, style):
 def plot_percent_successful(x, xticks, xlabels, successes, filename, style):
     fig = plt.figure()
     graph = fig.add_subplot(111)
-   
+
     def median(values):
         n = len(values)
         if n == 1:
@@ -94,7 +94,7 @@ def plot_percent_successful(x, xticks, xlabels, successes, filename, style):
             return (sorted_values[n / 2 - 1] + sorted_values[n / 2]) / 2
         else:
             return sorted_values[n / 2]
-    
+
     # this is useful for debugging or some other stat
     # cmeans = []
     # cmedians = []
@@ -431,7 +431,7 @@ def main():
         else:
             title = ('Test reports for &lt;{type}&gt; location type'
                      .format(type=location_type))
-        
+
         x = [date2num(result.timestamp) for result in results]
         # the following would be an alternative but it does not work with
         # labels and automatic axis limits even after removing another date fun

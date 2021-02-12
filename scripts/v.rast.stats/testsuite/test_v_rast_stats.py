@@ -50,7 +50,7 @@ class TestRastStats(TestCase):
         vt.write(line2, ('second',))
         vt.table.conn.commit()
         vt.close()
-        
+
         vt = VectorTopo('test_small_area')
         vt.open('w', tab_cols=cols)
         area1 = Boundary(points=[(0, 0), (0, 0.2), (0.2, 0.2), (0.2, 0), (0, 0)])
@@ -89,7 +89,7 @@ class TestRastStats(TestCase):
                           method=["median", "number", "range"], flags="dc",
                           column_prefix="a")
         v_db_select = SimpleModule("v.db.select", map="test_line")
-        
+
         self.runModule(v_db_select)
         self.assertLooksLike(output_str, str(v_db_select.outputs.stdout))
 
@@ -104,7 +104,7 @@ class TestRastStats(TestCase):
                           method=["median", "number", "range"], flags="c",
                           column_prefix="a")
         v_db_select = SimpleModule("v.db.select", map="test_line")
-        
+
         self.runModule(v_db_select)
         self.assertLooksLike(output_str, str(v_db_select.outputs.stdout))
 

@@ -62,7 +62,7 @@ class RasterHistoryTestCate(TestCase):
         hist1.src1 = "No such source 1"
         hist1.src2 = "No such source 2"
         hist1.write()
-        
+
         r.open("r")
         hist = r.hist
 
@@ -73,7 +73,7 @@ class RasterHistoryTestCate(TestCase):
         self.assertEqual(decode(hist.src1), "No such source 1")
         self.assertEqual(decode(hist.src2), "No such source 2")
         r.close()
-        
+
         hist1 = History("no_map")
         hist1.command()
         self.assertEqual(decode(hist1.line(0)), "test_history.py")

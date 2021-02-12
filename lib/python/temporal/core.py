@@ -448,7 +448,7 @@ def get_available_temporal_mapsets():
     global message_interface
 
     mapsets = c_library_interface.available_mapsets()
-    
+
     tgis_mapsets = {}
 
     for mapset in mapsets:
@@ -1187,7 +1187,7 @@ class DBConnection(object):
         # Connection in the current mapset
         if dbstring is None:
             dbstring = self.dbstring
-        
+
         dbstring = decode(dbstring)
 
         try:

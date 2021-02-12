@@ -117,7 +117,7 @@ def db_connection(force=False, env=None):
         nuldev.close()
     except CalledModuleError:
         conn = None
-    
+
     if not conn and force:
         run_command('db.connect', flags='c', env=env)
         conn = parse_command('db.connect', flags='g', env=env)

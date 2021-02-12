@@ -430,7 +430,7 @@ def get_grass_config_dir():
     else:
         grass_config_dirname = ".grass7"
         directory = os.path.join(os.getenv('HOME'), grass_config_dirname)
-    if not os.path.isdir(directory) :
+    if not os.path.isdir(directory):
         try:
             os.mkdir(directory)
         except OSError as e:
@@ -1132,6 +1132,7 @@ class MapsetSettings(object):
 
     Provides few convenient functions.
     """
+
     def __init__(self):
         self.gisdbase = None
         self.location = None
@@ -1604,6 +1605,7 @@ def run_batch_job(batch_job):
         # for messages only
         batch_job_string = ' '.join(batch_job)
     message(_("Executing <%s> ...") % batch_job_string)
+
     def script_path(batch_job):
         """Adjust script path
 
@@ -1633,7 +1635,7 @@ def run_batch_job(batch_job):
                             "{error}").format(
                                 cmd=batch_job_string,
                                 error=error,
-                            )
+            )
         # No such file or directory
         if error.errno == errno.ENOENT:
             if script and os.access(batch_job[0], os.X_OK):
@@ -1896,7 +1898,7 @@ PROMPT_COMMAND=grass_prompt\n""".format(
             mask3d=_("3D raster MASK present"),
             mask2d_test=mask2d_test, mask3d_test=mask3d_test,
             specific_addition=specific_addition
-            ))
+        ))
 
     if sh == 'zsh':
         f.write('precmd() { eval "$PROMPT_COMMAND" }\n')
@@ -2021,10 +2023,10 @@ def print_params(params):
             linerev = filerev.readline().rstrip('\n')
             filerev.close()
             try:
-               revision = linerev.split(' ')[1]
-               sys.stdout.write("%s\n" % revision[1:])
+                revision = linerev.split(' ')[1]
+                sys.stdout.write("%s\n" % revision[1:])
             except:
-               sys.stdout.write("No SVN revision defined\n")
+                sys.stdout.write("No SVN revision defined\n")
         elif arg == 'version':
             sys.stdout.write("%s\n" % GRASS_VERSION)
         elif arg == 'date':
@@ -2070,6 +2072,7 @@ class Parameters(object):
     """Structure to hold standard part of command line parameters"""
     # we don't need to define any methods
     # pylint: disable=R0903
+
     def __init__(self):
         self.grass_gui = None
         self.create_new = None

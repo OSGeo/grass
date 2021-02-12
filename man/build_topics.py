@@ -43,13 +43,13 @@ for fname in htmlfiles:
         keywords[key][fname] = desc
 
 topicsfile = open(os.path.join(path, 'topics.html'), 'w')
-topicsfile.write(header1_tmpl.substitute(title = "GRASS GIS " \
+topicsfile.write(header1_tmpl.substitute(title = "GRASS GIS "
                         "%s Reference Manual: Topics index" % grass_version))
 topicsfile.write(headertopics_tmpl)
 
 for key, values in sorted(keywords.items(), key=lambda s: s[0].lower()):
     keyfile = open(os.path.join(path, 'topic_%s.html' % key), 'w')
-    keyfile.write(header1_tmpl.substitute(title = "GRASS GIS " \
+    keyfile.write(header1_tmpl.substitute(title = "GRASS GIS "
                         "%s Reference Manual: Topic %s" % (grass_version,
                                                     key.replace('_', ' '))))
     keyfile.write(headerkey_tmpl.substitute(keyword=key.replace('_', ' ')))

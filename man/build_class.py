@@ -52,4 +52,3 @@ write_html_footer(f, "index.html", year)
 
 f.close()
 replace_file(filename)
-

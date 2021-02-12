@@ -5673,7 +5673,7 @@ class TextDialog(PsmapDialog):
                     self.mapId], x=float(
                     self.textDict['east']), y=float(
                     self.textDict['north']), paperToMap=False,
-                    env=self.env)
+                env=self.env)
         # rotation
         if self.rotCtrl.GetValue():
             self.textDict['rotate'] = self.rotValue.GetValue()
@@ -6168,7 +6168,7 @@ class ImageDialog(PsmapDialog):
                     self.mapId], x=float(
                     self.imageDict['east']), y=float(
                     self.imageDict['north']), paperToMap=False,
-                    env=self.env)
+                env=self.env)
 
         # rotation
         rot = self.imagePanel.image['rotate'].GetValue()
@@ -6613,7 +6613,7 @@ class PointDialog(PsmapDialog):
                     self.mapId], x=float(
                     self.pointDict['east']), y=float(
                     self.pointDict['north']), paperToMap=False,
-                    env=self.env)
+                env=self.env)
 
         # rotation
         self.pointDict['rotate'] = self.rotCtrl.GetValue()

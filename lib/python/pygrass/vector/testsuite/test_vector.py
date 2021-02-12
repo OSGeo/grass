@@ -17,10 +17,10 @@ class VectorTopoTestCase(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        
+
         from grass.pygrass import utils
         utils.create_test_vector_map(cls.tmpname)
-        
+
         cls.vect = None
         cls.vect = VectorTopo(cls.tmpname)
         cls.vect.open('r')
@@ -54,7 +54,7 @@ class VectorTopoTestCase(TestCase):
                 for feature in vect.viter(name):
                     count += 1
                 self.assertEqual(count, vect.number_of(name))
-                
+
             self.vect.close()
 
     def test_getitem_raise(self):

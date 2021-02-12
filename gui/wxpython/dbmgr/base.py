@@ -259,7 +259,7 @@ class VirtualAttributeList(ListCtrl,
                 self.InsertColumnInfo(i, info)
             i += 1
             if i >= 256:
-                    self.log.write(_("Can display only 256 columns."))
+                self.log.write(_("Can display only 256 columns."))
 
         i = 0
         outFile.seek(0)

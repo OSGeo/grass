@@ -387,7 +387,7 @@ class GCP(MapFrame, ColumnSorterMixin):
             fc_count=0
             for line in fc:
                 fc_count+=1
-                if fc_count > storeLine :
+                if fc_count > storeLine:
                     dataFiducialX.append(line.split()[1])
                     dataFiducialY.append(line.split()[2])
 

@@ -122,7 +122,7 @@ def main():
     # Unregister already registered maps
     grass.message(_("Unregister maps"))
     for mapid in maplist:
-        if count%10 == 0:
+        if count %10 == 0:
             grass.percent(count, num_maps, 1)
 
         map = tgis.dataset_factory(type, mapid)
@@ -160,7 +160,7 @@ def main():
 
     # Update space time datasets
     if input:
-        grass.message(_("Unregister maps from space time dataset <%s>"%(input)))
+        grass.message(_("Unregister maps from space time dataset <%s>" %(input)))
     else:
         grass.message(_("Unregister maps from the temporal database"))
 

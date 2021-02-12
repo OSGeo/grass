@@ -21,7 +21,7 @@ class TestRasterreport(TestCase):
     def setUpClass(cls):
         """Use temporary region settings"""
         cls.use_temp_region()
-        cls.runModule('g.region', raster='elevation') 
+        cls.runModule('g.region', raster='elevation')
 
 
     @classmethod

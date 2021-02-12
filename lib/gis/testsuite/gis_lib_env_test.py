@@ -3,14 +3,14 @@
 @author Soeren Gebbert
 """
 from grass.gunittest.case import TestCase
-import grass.lib.gis as libgis 
+import grass.lib.gis as libgis
 
 class GisLibraryTestEnv(TestCase):
 
     @classmethod
     def setUpClass(cls):
         libgis.G_gisinit("GisLibraryTestEnv")
-        
+
     def test_gisrc(self):
         # File access
         libgis.G_setenv("TEST", "A");
@@ -19,7 +19,7 @@ class GisLibraryTestEnv(TestCase):
         self.assertEqual(value, b"A")
         value = libgis.G_getenv2("TEST", libgis.G_VAR_GISRC)
         self.assertEqual(value, b"A")
-        
+
         # In memory management
         libgis.G_setenv_nogisrc("TEST", "B");
 
@@ -57,7 +57,7 @@ class GisLibraryTestEnv(TestCase):
         libgis.G_setenv2("TEST", "C", libgis.G_VAR_MAPSET);
         value = libgis.G_getenv2("TEST", libgis.G_VAR_MAPSET)
         self.assertEqual(value, b"C")
- 
+
         libgis.G_setenv_nogisrc2("TEST", "D", libgis.G_VAR_MAPSET);
         value = libgis.G_getenv_nofatal2("TEST", libgis.G_VAR_MAPSET)
         self.assertEqual(value, b"D")
@@ -65,11 +65,9 @@ class GisLibraryTestEnv(TestCase):
         libgis.G__read_mapset_env()
         value = libgis.G_getenv2("TEST", libgis.G_VAR_MAPSET)
         self.assertEqual(value, b"C")
-        
+
 
 
 if __name__ == '__main__':
     from grass.gunittest.main import test
     test()
-
-

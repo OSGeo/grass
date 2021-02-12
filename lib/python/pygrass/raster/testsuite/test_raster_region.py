@@ -28,9 +28,9 @@ class RasterRowRegionTestCase(TestCase):
         cls.del_temp_region()
 
     def test_resampling_1(self):
-        
+
         region = Region()
-        
+
         region.ewres = 4
         region.nsres = 4
         region.north = 30
@@ -38,20 +38,20 @@ class RasterRowRegionTestCase(TestCase):
         region.east = 30
         region.west = 10
         region.adjust(rows=True, cols=True)
-        
+
         rast = RasterRow(self.name)
         rast.set_region(region)
         rast.open(mode='r')
-        
+
         six.assertCountEqual(self, rast[0].tolist(), [22, 22, 22, 22, 22, 32, 32, 32, 32, 32])
         six.assertCountEqual(self, rast[5].tolist(), [23, 23, 23, 23, 23, 33, 33, 33, 33, 33])
-        
+
         rast.close()
 
     def test_resampling_2(self):
-        
+
         region = Region()
-        
+
         region.ewres = 5
         region.nsres = 5
         region.north = 60
@@ -59,11 +59,11 @@ class RasterRowRegionTestCase(TestCase):
         region.east = 60
         region.west = -20
         region.adjust(rows=True, cols=True)
-        
+
         rast = RasterRow(self.name)
         rast.set_region(region)
         rast.open(mode='r')
-        
+
         """
         [nan, nan, nan, nan, nan, nan, nan, nan]
         [nan, nan, nan, nan, nan, nan, nan, nan]
@@ -77,37 +77,37 @@ class RasterRowRegionTestCase(TestCase):
 
         six.assertCountEqual(self, rast[2].tolist()[2:6], [11., 21., 31., 41.])
         six.assertCountEqual(self, rast[5].tolist()[2:6], [14., 24., 34., 44.])
-        
+
         rast.close()
 
     def test_resampling_to_numpy(self):
-        
+
         region = Region()
         region.ewres = 0.1
         region.nsres = 0.1
         region.adjust()
         region.set_raster_region()
-        
+
         a = raster2numpy(self.name)
-        
+
         self.assertEqual(len(a), 400)
-        
+
         region.ewres = 1
         region.nsres = 1
         region.adjust()
         region.set_raster_region()
-        
+
         a = raster2numpy(self.name)
-        
+
         self.assertEqual(len(a), 40)
 
         region.ewres = 5
         region.nsres = 5
         region.adjust()
         region.set_raster_region()
-        
+
         a = raster2numpy(self.name)
-        
+
         self.assertEqual(len(a), 8)
 
 if __name__ == '__main__':

@@ -22,22 +22,22 @@ class TestAggregationAbsoluteParallel(TestCase):
     def setUpClass(cls):
         """Initiate the temporal GIS and set the region
         """
-        os.putenv("GRASS_OVERWRITE",  "1")
+        os.putenv("GRASS_OVERWRITE", "1")
         tgis.init()
         cls.use_temp_region()
-        cls.runModule("g.region",  s=0,  n=80,  w=0,  e=120,  b=0,
-                      t=50,  res=10,  res3=10)
+        cls.runModule("g.region", s=0, n=80, w=0, e=120, b=0,
+                      t=50, res=10, res3=10)
 
-        name_list =  []
+        name_list = []
         for i in range(540):
-            cls.runModule("r.mapcalc", expression="a%i = %i"%(i + 1, i + 1),  overwrite=True)
-            name_list.append("a%i"%(i + 1))
+            cls.runModule("r.mapcalc", expression="a%i = %i" %(i + 1, i + 1), overwrite=True)
+            name_list.append("a%i" %(i + 1))
 
-        cls.runModule("t.create",  type="strds",  temporaltype="absolute",
-                                    output="A",  title="A test",
-                                    description="A test",  overwrite=True)
+        cls.runModule("t.create", type="strds", temporaltype="absolute",
+                                    output="A", title="A test",
+                                    description="A test", overwrite=True)
 
-        cls.runModule("t.register", flags="i",  type="raster",  input="A",
+        cls.runModule("t.register", flags="i", type="raster", input="A",
                                      maps=name_list,
                                      start="2001-01-01",
                                      increment="4 hours",
@@ -88,7 +88,7 @@ class TestAggregationAbsoluteParallel(TestCase):
         end = datetime.now()
 
         delta = end - start
-        print("test_aggregation_1day_4procs:",  delta.total_seconds())
+        print("test_aggregation_1day_4procs:", delta.total_seconds())
 
         tinfo_string="""start_time='2001-01-01 00:00:00'
                         end_time='2001-04-01 00:00:00'
@@ -113,7 +113,7 @@ class TestAggregationAbsoluteParallel(TestCase):
         end = datetime.now()
 
         delta = end - start
-        print("test_aggregation_1day_3procs:",  delta.total_seconds())
+        print("test_aggregation_1day_3procs:", delta.total_seconds())
 
 
         tinfo_string="""start_time='2001-01-01 00:00:00'
@@ -143,7 +143,7 @@ class TestAggregationAbsoluteParallel(TestCase):
         end = datetime.now()
 
         delta = end - start
-        print("test_aggregation_1day_2procs:",  delta.total_seconds())
+        print("test_aggregation_1day_2procs:", delta.total_seconds())
 
 
         tinfo_string="""start_time='2001-01-01 00:00:00'

@@ -156,15 +156,15 @@ def main():
         successor = _map.get_precedes()[0]
 
         gran = sp.get_granularity()
-        tmpval,  start = predecessor.get_temporal_extent_as_tuple()
-        end,  tmpval = successor.get_temporal_extent_as_tuple()
-        
+        tmpval, start = predecessor.get_temporal_extent_as_tuple()
+        end, tmpval = successor.get_temporal_extent_as_tuple()
+
         # Now resample the gap
-        map_matrix = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity((_map, ),start, end,  gran)
-        
+        map_matrix = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity((_map, ),start, end, gran)
+
         map_names = []
         map_positions = []
-        
+
         increment = 1.0/ (len(map_matrix) + 1.0)
         position = increment
         count = 0
@@ -186,12 +186,12 @@ def main():
                 new_id = "{name}@{ma}".format(name=map_name, ma=mapset)
 
             new_map.set_id(new_id)
-            
+
             overwrite_flags[new_id] = False
             if new_map.map_exists() or new_map.is_in_db(dbif):
                 if not grass.overwrite():
-                        grass.fatal(_("Map with name <%s> already exists. "
-                                      "Please use another base name." % (_id)))
+                    grass.fatal(_("Map with name <%s> already exists. "
+                                  "Please use another base name." % (_id)))
                 else:
                     if new_map.is_in_db(dbif):
                         overwrite_flags[new_id] = True
@@ -199,12 +199,12 @@ def main():
             map_names.append(new_map.get_name())
             map_positions.append(position)
             position += increment
-            
+
             result_list.append(new_map)
 
         mod = copy.deepcopy(gapfill_module)
         mod(input=(predecessor.get_map_id(), successor.get_map_id()),
-                datapos=(0, 1), output=map_names,  samplingpos=map_positions)
+                datapos=(0, 1), output=map_names, samplingpos=map_positions)
         sys.stderr.write(mod.get_bash() + "\n")
         process_queue.put(mod)
 

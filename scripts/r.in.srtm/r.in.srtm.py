@@ -150,7 +150,7 @@ def main():
     global tile, tmpdir, in_temp
 
     in_temp = False
-    
+
     # to support SRTM water body
     swbd = False
 

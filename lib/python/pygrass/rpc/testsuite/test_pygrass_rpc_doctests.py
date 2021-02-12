@@ -38,7 +38,7 @@ def load_tests(loader, tests, ignore):
     Module("r.mapcalc", expression="%s = row() + (10 * col())" % (pygrpc.test_raster_name),
                              overwrite=True)
     utils.create_test_vector_map(pygrpc.test_vector_name)
-    
+
 
     tests.addTests(doctest.DocTestSuite(pygrpc))
     tests.addTests(doctest.DocTestSuite(pygrpc.base))

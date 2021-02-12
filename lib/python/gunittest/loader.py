@@ -68,7 +68,7 @@ def discover_modules(start_dir, skip_dirs, testsuite_dir,
         if testsuite_dir in dirs:
             dirs.remove(testsuite_dir)  # do not recurse to testsuite
             full = os.path.join(root, testsuite_dir)
-            
+
             all_files = os.listdir(full)
             if file_pattern:
                 files = fnmatch.filter(all_files, file_pattern)

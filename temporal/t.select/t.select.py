@@ -76,7 +76,7 @@ def main():
 
     tgis.init(True)
     p = tgis.TemporalAlgebraParser(run=True, debug=False, spatial=spatial, dry_run=dry_run)
-    pc = p.parse(expression, stdstype,  overwrite=grass.overwrite())
+    pc = p.parse(expression, stdstype, overwrite=grass.overwrite())
 
     if dry_run is True:
         import pprint
@@ -86,7 +86,3 @@ def main():
 if __name__ == "__main__":
     options, flags = grass.parser()
     sys.exit(main())
-
-
-
-

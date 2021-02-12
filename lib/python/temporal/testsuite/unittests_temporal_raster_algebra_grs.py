@@ -64,7 +64,7 @@ class TestTemporalRasterAlgebra(TestCase):
                                                 start="2001-03-01", end="2001-04-01")
         tgis.register_maps_in_space_time_dataset(type="raster", name=None, maps="nullmap",
                                                 start="2001-01-01", end="2001-07-01")
-        
+
     def tearDown(self):
         return
         self.runModule("t.remove", flags="rf", inputs="R", quiet=True)
@@ -84,7 +84,7 @@ class TestTemporalRasterAlgebra(TestCase):
         expr = "R = if(C == 9,  A - 1)"
         ret = tra.setup_common_granularity(expression=expr, lexer = tgis.TemporalRasterAlgebraLexer())
         self.assertEqual(ret, True)
-        
+
         tra.parse(expression=expr, basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")

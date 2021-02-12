@@ -108,6 +108,7 @@ def StockCursor(cursorId):
 class Window(wx.Window):
     """Wrapper around wx.Window to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         wx.Window.__init__(self, *args, **kwargs)
 
@@ -127,6 +128,7 @@ class Window(wx.Window):
 class Panel(wx.Panel):
     """Wrapper around wx.Panel to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         wx.Panel.__init__(self, *args, **kwargs)
 
@@ -184,6 +186,7 @@ class FloatSpin(fs.FloatSpin):
 class Button(wx.Button):
     """Wrapper around wx.Button to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         wx.Button.__init__(self, *args, **kwargs)
 
@@ -197,6 +200,7 @@ class Button(wx.Button):
 class ClearButton(Button):
     """Wrapper around a Button with stock id wx.ID_CLEAR,
     to disable default key binding on certain platforms"""
+
     def __init__(self, *args, **kwargs):
         Button.__init__(self, *args, **kwargs)
         self.SetId(wx.ID_CLEAR)
@@ -209,6 +213,7 @@ class ClearButton(Button):
 class CancelButton(Button):
     """Wrapper around a Button with stock id wx.ID_CANCEL, to disable
     default key binding on certain platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         Button.__init__(self, *args, **kwargs)
         self.SetId(wx.ID_CANCEL)
@@ -220,6 +225,7 @@ class CancelButton(Button):
 class CloseButton(Button):
     """Wrapper around a Close labeled Button with stock id wx.ID_CANCEL
     to disable default key binding on certain platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         Button.__init__(self, *args, **kwargs)
         self.SetId(wx.ID_CANCEL)
@@ -231,6 +237,7 @@ class CloseButton(Button):
 class ApplyButton(Button):
     """Wrapper around a Button with stock id wx.ID_APPLY,
     to disable default key binding on certain platforms"""
+
     def __init__(self, *args, **kwargs):
         Button.__init__(self, *args, **kwargs)
         self.SetId(wx.ID_APPLY)
@@ -243,6 +250,7 @@ class ApplyButton(Button):
 class RadioButton(wx.RadioButton):
     """Wrapper around wx.RadioButton to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         wx.RadioButton.__init__(self, *args, **kwargs)
 
@@ -256,6 +264,7 @@ class RadioButton(wx.RadioButton):
 class BitmapButton(wx.BitmapButton):
     """Wrapper around wx.BitmapButton to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         wx.BitmapButton.__init__(self, *args, **kwargs)
 
@@ -269,6 +278,7 @@ class BitmapButton(wx.BitmapButton):
 class GenBitmapButton(buttons.GenBitmapButton):
     """Wrapper around GenBitmapButton to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         buttons.GenBitmapButton.__init__(self, *args, **kwargs)
 
@@ -282,6 +292,7 @@ class GenBitmapButton(buttons.GenBitmapButton):
 class ToggleButton(wx.ToggleButton):
     """Wrapper around wx.ToggleButton to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         wx.ToggleButton.__init__(self, *args, **kwargs)
 
@@ -295,6 +306,7 @@ class ToggleButton(wx.ToggleButton):
 class StaticText(wx.StaticText):
     """Wrapper around wx.StaticText to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         wx.StaticText.__init__(self, *args, **kwargs)
 
@@ -308,6 +320,7 @@ class StaticText(wx.StaticText):
 class StaticBox(wx.StaticBox):
     """Wrapper around wx.StaticBox to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         wx.StaticBox.__init__(self, *args, **kwargs)
 
@@ -321,6 +334,7 @@ class StaticBox(wx.StaticBox):
 class CheckListBox(wx.CheckListBox):
     """Wrapper around wx.CheckListBox to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         wx.CheckListBox.__init__(self, *args, **kwargs)
 
@@ -334,6 +348,7 @@ class CheckListBox(wx.CheckListBox):
 class TextCtrl(wx.TextCtrl):
     """Wrapper around wx.TextCtrl to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         wx.TextCtrl.__init__(self, *args, **kwargs)
 
@@ -347,6 +362,7 @@ class TextCtrl(wx.TextCtrl):
 class SearchCtrl(wx.SearchCtrl):
     """Wrapper around wx.SearchCtrl to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         wx.SearchCtrl.__init__(self, *args, **kwargs)
 
@@ -360,6 +376,7 @@ class SearchCtrl(wx.SearchCtrl):
 class ListCtrl(wx.ListCtrl):
     """Wrapper around wx.ListCtrl to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         wx.ListCtrl.__init__(self, *args, **kwargs)
 
@@ -394,13 +411,16 @@ if CheckWxVersion([4, 1, 0]):
     class CheckListCtrlMixin():
         """This class pretends to be deprecated CheckListCtrlMixin mixin and
         only enables checkboxes in new versions of ListCtrl"""
+
         def __init__(self):
             self.EnableCheckBoxes(True)
             self.AssignImageList(wx.ImageList(16, 16), wx.IMAGE_LIST_SMALL)
 else:
     import wx.lib.mixins.listctrl as listmix
+
     class CheckListCtrlMixin(listmix.CheckListCtrlMixin):
         """Wrapper for deprecated mixin"""
+
         def __init__(self):
             listmix.CheckListCtrlMixin.__init__(self)
 
@@ -408,6 +428,7 @@ else:
 class TreeCtrl(wx.TreeCtrl):
     """Wrapper around wx.TreeCtrl to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         wx.TreeCtrl.__init__(self, *args, **kwargs)
 
@@ -427,6 +448,7 @@ class TreeCtrl(wx.TreeCtrl):
 class CustomTreeCtrl(CT.CustomTreeCtrl):
     """Wrapper around wx.lib.agw.customtreectrl to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         CT.CustomTreeCtrl.__init__(self, *args, **kwargs)
 
@@ -440,6 +462,7 @@ class CustomTreeCtrl(CT.CustomTreeCtrl):
 class ToolBar(wx.ToolBar):
     """Wrapper around wx.ToolBar to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         wx.ToolBar.__init__(self, *args, **kwargs)
 
@@ -467,6 +490,7 @@ class ToolBar(wx.ToolBar):
 class Menu(wx.Menu):
     """Wrapper around wx.Menu to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         wx.Menu.__init__(self, *args, **kwargs)
 
@@ -486,6 +510,7 @@ class Menu(wx.Menu):
 class DragImage(wx.GenericDragImage if wxPythonPhoenix else wx.DragImage):
     """Wrapper around wx.DragImage to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         super(DragImage, self).__init__(*args, **kwargs)
 
@@ -493,6 +518,7 @@ class DragImage(wx.GenericDragImage if wxPythonPhoenix else wx.DragImage):
 class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
     """Wrapper around wx.PseudoDC to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         super(PseudoDC, self).__init__(*args, **kwargs)
 
@@ -520,6 +546,7 @@ class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
 class ClientDC(wx.ClientDC):
     """Wrapper around wx.ClientDC to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         super(ClientDC, self).__init__(*args, **kwargs)
 
@@ -533,6 +560,7 @@ class ClientDC(wx.ClientDC):
 class Rect(wx.Rect):
     """Wrapper around wx.Rect to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         wx.Rect.__init__(self, *args, **kwargs)
 
@@ -558,6 +586,7 @@ class Rect(wx.Rect):
 class CheckBox(wx.CheckBox):
     """Wrapper around wx.CheckBox to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         wx.CheckBox.__init__(self, *args, **kwargs)
 
@@ -571,6 +600,7 @@ class CheckBox(wx.CheckBox):
 class Choice(wx.Choice):
     """Wrapper around wx.Choice to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         wx.Choice.__init__(self, *args, **kwargs)
 
@@ -584,6 +614,7 @@ class Choice(wx.Choice):
 class TextEntryDialog(wx.TextEntryDialog):
     """Wrapper around wx.TextEntryDialog to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, parent, message, caption="Please enter text", value="",
                  style=wx.OK | wx.CANCEL | wx.CENTRE, pos=wx.DefaultPosition):
         if wxPythonPhoenix:
@@ -597,6 +628,7 @@ class TextEntryDialog(wx.TextEntryDialog):
 class ColourSelect(csel.ColourSelect):
     """Wrapper around wx.lib.colourselect.ColourSelect to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         csel.ColourSelect.__init__(self, *args, **kwargs)
 
@@ -621,6 +653,7 @@ class ComboCtrl(wxComboCtrl):
 class Dialog(wx.Dialog):
     """Wrapper around wx.Dialog to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         wx.Dialog.__init__(self, *args, **kwargs)
 
@@ -628,6 +661,7 @@ class Dialog(wx.Dialog):
 class Notebook(wx.Notebook):
     """Wrapper around NoteBook to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         wx.Notebook.__init__(self, *args, **kwargs)
 
@@ -651,6 +685,7 @@ class OwnerDrawnComboBox(OwnerDrawnComboBox_):
 class BitmapComboBox(BitmapComboBox_):
     """Wrapper around BitmapComboBox to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         BitmapComboBox_.__init__(self, *args, **kwargs)
 
@@ -664,6 +699,7 @@ class BitmapComboBox(BitmapComboBox_):
 class ScrolledPanel(scrolled.ScrolledPanel):
     """Wrapper around scrolled.ScrolledPanel to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         scrolled.ScrolledPanel.__init__(self, *args, **kwargs)
 
@@ -677,6 +713,7 @@ class ScrolledPanel(scrolled.ScrolledPanel):
 class FileBrowseButton(filebrowse.FileBrowseButton):
     """Wrapper around filebrowse.FileBrowseButton to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         filebrowse.FileBrowseButton.__init__(self, *args, **kwargs)
 
@@ -684,6 +721,7 @@ class FileBrowseButton(filebrowse.FileBrowseButton):
 class DirBrowseButton(filebrowse.DirBrowseButton):
     """Wrapper around filebrowse.DirBrowseButton to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         filebrowse.DirBrowseButton.__init__(self, *args, **kwargs)
 

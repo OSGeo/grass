@@ -244,7 +244,7 @@ def reporthook(count, block_size, total_size):
           "{0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed".format(
               percent, progress_size / (1024 * 1024), speed, duration,
           ),
-        ),
+          ),
     )
 
 # based on g.extension, potentially move to library
@@ -268,8 +268,8 @@ def download_and_extract(source):
         except HTTPError as err:
             raise DownloadError(
                 http_error_message.format(
-                        url=source,
-                        code=err,
+                    url=source,
+                    code=err,
                 ),
             )
         except URLError:
@@ -362,6 +362,7 @@ class LocationDownloadPanel(wx.Panel):
     of one panel (perhaps sharing the common background download and
     message logic).
     """
+
     def __init__(self, parent, database, locations=LOCATIONS):
         """
 
@@ -441,7 +442,7 @@ class LocationDownloadPanel(wx.Panel):
     def OnDownload(self, event):
         """Handle user-initiated action of download"""
         button_label = self.parent.download_button.GetLabel()
-        if button_label in (_('Download'), _('Do&wnload')) :
+        if button_label in (_('Download'), _('Do&wnload')):
             self._change_download_btn_label(
                 label=self._abort_btn_label,
                 tooltip=self._abort_btn_tooltip,
@@ -476,7 +477,7 @@ class LocationDownloadPanel(wx.Panel):
                 self._last_downloaded_location_name = dirname
                 self._warning(_("Download completed. The downloaded sample data is listed "
                                 "in the location/mapset tabs upon closing of this window")
-                )
+                              )
             self._change_download_btn_label()
 
         def terminate_download_callback(event):
@@ -557,6 +558,7 @@ class LocationDownloadDialog(wx.Dialog):
 
     Contains the panel and Cancel button.
     """
+
     def __init__(self, parent, database,
                  title=_("Location Download")):
         """
@@ -609,7 +611,7 @@ class LocationDownloadDialog(wx.Dialog):
                                    message=_("Do you want to cancel location download?"),
                                    caption=_("Abort download"),
                                    style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE
-            )
+                                   )
 
             ret = dlg.ShowModal()
             dlg.Destroy()

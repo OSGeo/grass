@@ -28,6 +28,7 @@ import grass.script as grass
 
 if sys.version_info.major >= 3:
     unicode = str
+
     def GetUnicodeValue(value):
         """Get unicode value
 

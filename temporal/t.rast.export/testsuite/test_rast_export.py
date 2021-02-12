@@ -35,10 +35,10 @@ class TestRasterExport(TestCase):
                           flags="s", overwrite=True)
             maps.append("a_{id_}".format(id_=i))
 
-        cls.runModule("t.create", type="strds", temporaltype="absolute",  
+        cls.runModule("t.create", type="strds", temporaltype="absolute",
                       output="A", title="A test", description="A test",
                       overwrite=True)
-        cls.runModule("t.register", flags="i", type="raster", input="A",  
+        cls.runModule("t.register", flags="i", type="raster", input="A",
                       maps=maps, start="2001-01-01",
                       increment="4 months", overwrite=True)
 
@@ -50,22 +50,22 @@ class TestRasterExport(TestCase):
         cls.runModule("t.remove", flags="rf", inputs="A")
 
     def test_simple_geotif(self):
-        self.assertModule("t.rast.export", input="A", output=self.float_, 
+        self.assertModule("t.rast.export", input="A", output=self.float_,
                           overwrite=True)
         self.assertFileExists(self.float_)
-                          
+
     def test_simple_geotif_int(self):
-        self.assertModule("t.rast.export", input="A", output=self.int_, 
+        self.assertModule("t.rast.export", input="A", output=self.int_,
                           overwrite=True, type="Int16")
         self.assertFileExists(self.int_)
-                          
+
     def test_simple_grid(self):
-        self.assertModule("t.rast.export", input="A", output=self.grid, 
+        self.assertModule("t.rast.export", input="A", output=self.grid,
                           overwrite=True, format="AAIGrid")
         self.assertFileExists(self.grid)
-                          
+
     def test_simple_pack(self):
-        self.assertModule("t.rast.export", input="A", output=self.pack, 
+        self.assertModule("t.rast.export", input="A", output=self.pack,
                           overwrite=True, format="pack")
         self.assertFileExists(self.pack)
 

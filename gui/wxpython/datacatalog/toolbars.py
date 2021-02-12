@@ -74,7 +74,7 @@ class DataCatalogToolbar(BaseToolbar):
         self.filter.SetSize((150, self.filter.GetBestSize()[1]))
         self.filter.Bind(wx.EVT_TEXT,
                          lambda event: self.parent.Filter(
-                         self.filter.GetValue(), self.filter_element))
+                             self.filter.GetValue(), self.filter_element))
         self.filter.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN,
                          lambda evt: self.parent.Filter(''))
         self.AddControl(self.filter)

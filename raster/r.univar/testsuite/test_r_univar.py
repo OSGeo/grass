@@ -45,7 +45,7 @@ class TestRasterUnivar(TestCase):
         mean_of_abs=191
         sum=1547100"""
 
-        self.assertRasterFitsUnivar(raster="map_a",  reference=univar_string,
+        self.assertRasterFitsUnivar(raster="map_a", reference=univar_string,
                                     precision=3)
 
     def test_2(self):
@@ -61,7 +61,7 @@ class TestRasterUnivar(TestCase):
         sum=15552"""
 
         self.runModule("g.region", res=10)
-        self.assertRasterFitsUnivar(raster="map_a",  reference=univar_string,
+        self.assertRasterFitsUnivar(raster="map_a", reference=univar_string,
                                     precision=3)
 
 
@@ -168,7 +168,7 @@ class TestRasterUnivar(TestCase):
                         sum=1281195"""
 
         self.runModule("g.region", res=1)
-        self.assertModuleKeyValue(module="r.univar", map=["map_a"], 
+        self.assertModuleKeyValue(module="r.univar", map=["map_a"],
                                   zones="zone_map",flags="g",
                                   reference=univar_string, precision=3, sep='=')
 
@@ -176,10 +176,8 @@ class TestAccumulateFails(TestCase):
 
     def test_error_handling(self):
         # No vector map, no strds, no coordinates
-        self.assertModuleFail("r.univar",  flags="r", map="map_a", zones="map_b")
+        self.assertModuleFail("r.univar", flags="r", map="map_a", zones="map_b")
 
 if __name__ == '__main__':
     from grass.gunittest.main import test
     test()
-
-

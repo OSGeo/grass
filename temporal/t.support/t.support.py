@@ -111,7 +111,7 @@ def main():
     update = False
     if aggr_type and type == "stvds":
         return()
-    
+
     if aggr_type and type != "stvds":
         stds.metadata.set_aggregation_type(aggregation_type=aggr_type)
         update = True
@@ -142,7 +142,7 @@ def main():
         for map in maps:
 
             count += 1
-            if count%10 == 0:
+            if count %10 == 0:
                 grass.percent(count, len(maps), 1)
 
             map.select(dbif=dbif)

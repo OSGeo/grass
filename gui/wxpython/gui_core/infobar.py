@@ -49,6 +49,7 @@ IB.GetCloseButtonBitmap = GetCloseButtonBitmap
 
 class InfoBar(IB.InfoBar):
     """A customized and specialized info bar to used by default"""
+
     def __init__(self, parent):
         IB.InfoBar.__init__(self, parent)
 

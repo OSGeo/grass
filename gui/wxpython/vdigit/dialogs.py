@@ -261,7 +261,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         y = event.GetY()
         item, flags = self.list.HitTest((x, y))
 
-        if item !=  wx.NOT_FOUND and \
+        if item != wx.NOT_FOUND and \
                 flags & wx.LIST_HITTEST_ONITEM:
             self.list.Select(item)
 

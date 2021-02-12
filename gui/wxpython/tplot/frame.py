@@ -645,7 +645,7 @@ class TplotFrame(wx.Frame):
             self.axes2d.set_xlabel(self.drawX)
         else:
             if self.temporalType == 'absolute':
-                self.axes2d.set_xlabel(_("Temporal resolution: %s" %  x ))
+                self.axes2d.set_xlabel(_("Temporal resolution: %s" % x ))
             else:
                 self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
         if self.drawY != '':

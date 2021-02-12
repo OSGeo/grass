@@ -49,7 +49,7 @@ levels: 4
 # created from the above and template from
 # r.mapcalc "x = rand(0,10)" seed=100 && r.out.ascii x prec=0
 OUTPUTS = [
-"""\
+    """\
 north: 12
 south: 9
 east: 21
@@ -60,7 +60,7 @@ cols: 3
 0.5 14.5 10.5
 2.5 14.5 2.5
 """,
-"""\
+    """\
 north: 12
 south: 9
 east: 21
@@ -71,7 +71,7 @@ cols: 3
 6.5 8.5 4.5
 16.5 10.5 12.5
 """,
-"""\
+    """\
 north: 12
 south: 9
 east: 21
@@ -82,7 +82,7 @@ cols: 3
 2.5 10.5 10.5
 2.5 2.5 6.5
 """,
-"""\
+    """\
 north: 12
 south: 9
 east: 21

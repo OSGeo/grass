@@ -40,7 +40,7 @@ class History(object):
     def __del__(self):
         """Rast_free_history"""
         pass
-        
+
     def __eq__(self, hist):
         for attr in self.attrs:
             if getattr(self, attr) != getattr(hist, attr):

@@ -853,7 +853,7 @@ class SQLBuilderWhere(SQLBuilder):
                  layer=1):
 
         title = _("GRASS SQL Builder (%(type)s) - <%(map)s>") % \
-                {'type': "WHERE", 'map': vectmap}
+            {'type': "WHERE", 'map': vectmap}
 
         super(SQLBuilderWhere, self).__init__(
             parent, title, vectmap, id=wx.ID_ANY,

@@ -29,12 +29,12 @@ exclude_mods = [
 desc_override = {
     "g.parser": "Provides automated parser, GUI, and help support for GRASS scipts.",
     "r.li.daemon": "Support module for r.li landscape index calculations."
-    }
+}
 
 ############################################################################
 
-header2_tmpl = string.Template(\
-r"""
+header2_tmpl = string.Template(
+    r"""
 ==================================================================
 GRASS GIS ${grass_version} Reference Manual
 ==================================================================
@@ -48,9 +48,9 @@ GRASS GIS ${grass_version} Reference Manual
 **Geographic Resources Analysis Support System**, commonly
 referred to as `GRASS GIS <https://grass.osgeo.org>`_, is a `Geographic
 Information System <https://en.wikipedia.org/wiki/Geographic_information_system>`_
-(GIS) used for geospatial data management and analysis, image processing, 
-graphics/maps production, spatial modeling, and visualization. GRASS is 
-currently used in academic and commercial settings around the world, as 
+(GIS) used for geospatial data management and analysis, image processing,
+graphics/maps production, spatial modeling, and visualization. GRASS is
+currently used in academic and commercial settings around the world, as
 well as by many governmental agencies and environmental consulting companies.
 
 This reference manual details the use of modules distributed with
@@ -59,8 +59,8 @@ Geographic Resources Analysis Support System (GRASS), an open source
 processing and geographic information system (GIS).
 """)
 
-overview_tmpl = string.Template(\
-r"""
+overview_tmpl = string.Template(
+    r"""
 Quick Introduction
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -161,8 +161,8 @@ Printing
 """)
 
 #TODO add copyright symbol
-footer_tmpl = string.Template(\
-r"""
+footer_tmpl = string.Template(
+    r"""
 
 --------------
 
@@ -170,11 +170,11 @@ r"""
  2003-2021 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
 """)
 
-cmd1_tmpl = string.Template(\
-r"""*`$cmd.\* <${cmd}>` *""")
+cmd1_tmpl = string.Template(
+    r"""*`$cmd.\* <${cmd}>` *""")
 
-cmd2_tmpl = string.Template(\
-r"""
+cmd2_tmpl = string.Template(
+    r"""
 
 ${cmd}.* commands:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -185,12 +185,12 @@ ${cmd}.* commands:
 
 """)
 
-desc1_tmpl = string.Template(\
-r"""        ${basename} - ${desc} <${basename}>
+desc1_tmpl = string.Template(
+    r"""        ${basename} - ${desc} <${basename}>
 """)
 
 sections = \
-r""" 
+    r"""
 
 +-----------------------------+-------------------------------+
 |`d.* <full_index.html#d>`_   | `display commands`            |
@@ -220,13 +220,13 @@ r"""
 
 """
 
-modclass_intro_tmpl = string.Template(\
-r"""Go to :doc:`${modclass} introduction <${modclass_lower}intro>`
+modclass_intro_tmpl = string.Template(
+    r"""Go to :doc:`${modclass} introduction <${modclass_lower}intro>`
 """)
 #"
 
-modclass_tmpl = string.Template(\
-r"""Go :doc:`back to help overview<index>`
+modclass_tmpl = string.Template(
+    r"""Go :doc:`back to help overview<index>`
 
 
 
@@ -239,14 +239,14 @@ r"""Go :doc:`back to help overview<index>`
 """)
 #"
 
-desc2_tmpl = string.Template(\
-r"""        ${basename} - ${desc} <${basename}>
+desc2_tmpl = string.Template(
+    r"""        ${basename} - ${desc} <${basename}>
 """)
 #"
 
 
 full_index_header = \
-r"""Go :doc:`back to help overview<index>`
+    r"""Go :doc:`back to help overview<index>`
 
 
 Full command index:
@@ -255,8 +255,8 @@ Full command index:
 #"
 
 
-message_tmpl = string.Template(\
-r"""Generated HTML docs in ${rest_dir}/index.txt
+message_tmpl = string.Template(
+    r"""Generated HTML docs in ${rest_dir}/index.txt
 ----------------------------------------------------------------------
 Following modules are missing the 'modulename.txt' file in src code:
 """)

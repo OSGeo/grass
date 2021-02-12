@@ -579,7 +579,7 @@ class InputDialog(wx.Dialog):
 
         self.endRegRadio = RadioButton(
             panel, label=_("End region:"), style=wx.RB_GROUP)
-        gridSizer.Add(self.endRegRadio, pos=(2, 0),  border=10, flag=wx.EXPAND | wx.LEFT)
+        gridSizer.Add(self.endRegRadio, pos=(2, 0), border=10, flag=wx.EXPAND | wx.LEFT)
         self.endRegion = Select(parent=panel, type='region', size=(200, -1))
         gridSizer.Add(
             self.endRegion, pos=(2, 1),

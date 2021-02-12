@@ -50,7 +50,7 @@ def main():
                             stdin="CORRELATION")
     except CalledModuleError:
         return 1
-    
+
     os.environ['GRASS_RENDER_FILE_READ'] = 'TRUE'
 
     colors = "red black blue green gray violet".split()

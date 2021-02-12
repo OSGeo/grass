@@ -150,12 +150,12 @@ def main():
         gcore.fatal(_("Space time raster dataset <%s> is empty") % input)
 
     # We will create the strds later, but need to check here
-    tgis.check_new_stds(output, "strds",   dbif,  gcore.overwrite())
+    tgis.check_new_stds(output, "strds", dbif, gcore.overwrite())
 
     start_time = map_list[0].temporal_extent.get_start_time()
 
     if sp.is_time_absolute():
-        start_time = tgis.adjust_datetime_to_granularity(start_time,  gran)
+        start_time = tgis.adjust_datetime_to_granularity(start_time, gran)
 
     # We use the end time first
     end_time = map_list[-1].temporal_extent.get_end_time()
@@ -184,15 +184,15 @@ def main():
             granule.set_absolute_time(start, end)
         else:
             end = start_time + int(gran)
-            granule.set_relative_time(start, end,  sp.get_relative_time_unit())
+            granule.set_relative_time(start, end, sp.get_relative_time_unit())
         start_time = end
 
         granularity_list.append(granule)
 
-    output_list = tgis.aggregate_by_topology(granularity_list=granularity_list,  granularity=gran,
+    output_list = tgis.aggregate_by_topology(granularity_list=granularity_list, granularity=gran,
                                                                        map_list=map_list,
-                                                                       topo_list=topo_list,  basename=base, time_suffix=time_suffix,
-                                                                       offset=offset,  method=method,  nprocs=nprocs,  spatial=None,
+                                                                       topo_list=topo_list, basename=base, time_suffix=time_suffix,
+                                                                       offset=offset, method=method, nprocs=nprocs, spatial=None,
                                                                        overwrite=gcore.overwrite(), file_limit=file_limit)
 
     if output_list:
@@ -205,8 +205,8 @@ def main():
         else:
             register_null=True
 
-        tgis.register_map_object_list("rast", output_list,  output_strds, register_null,
-                                                       sp.get_relative_time_unit(),  dbif)
+        tgis.register_map_object_list("rast", output_list, output_strds, register_null,
+                                                       sp.get_relative_time_unit(), dbif)
 
         # Update the raster metadata table entries with aggregation type
         output_strds.set_aggregation_type(method)

@@ -76,7 +76,7 @@ class RasterRowTestCase(TestCase):
         r.open(mode='w', mtype='DCELL', overwrite=True)
         self.assertTrue(r.mtype, 'DCELL')
         r.close()
-    
+
     def test_row_range(self):
         r = RasterRow(self.name)
         with self.assertRaises(IndexError):

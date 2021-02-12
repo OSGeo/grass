@@ -24,6 +24,7 @@ from grass.script import gisenv
 
 class DataCatalogInfoManager:
     """Manager for all things related to info bar in Data Catalog"""
+
     def __init__(self, infobar, giface):
         self.infoBar = infobar
         self._giface = giface

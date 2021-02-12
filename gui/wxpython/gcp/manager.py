@@ -971,7 +971,7 @@ class DispMapPage(TitledPage):
         for layer in self.parent._giface.GetLayerList():
             if layer.type in ltype:
                 layers[str(layer)] = {
-                    'type' : layer.type,
+                    'type': layer.type,
                     'cmd': layer.cmd
                 }
         if name:
@@ -2831,10 +2831,10 @@ class GrSettingsDialog(wx.Dialog):
             parent=panel, id=wx.ID_ANY,
             label=_("Highlight RMS error > M + SD * factor:"))
         rmslabel.SetToolTip(
-                _(
-                    "Highlight GCPs with an RMS error larger than \n"
-                    "mean + standard deviation * given factor. \n"
-                    "Recommended values for this factor are between 1 and 2."))
+            _(
+                "Highlight GCPs with an RMS error larger than \n"
+                "mean + standard deviation * given factor. \n"
+                "Recommended values for this factor are between 1 and 2."))
         rmsgridSizer.Add(
             rmslabel,
             flag=wx.ALIGN_CENTER_VERTICAL,

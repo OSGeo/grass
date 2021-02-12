@@ -5,7 +5,7 @@
 # MODULE:	t.rast3d.univar
 # AUTHOR(S):	Soeren Gebbert
 #
-# PURPOSE:	Calculates univariate statistics from the non-null cells for each registered 3D 
+# PURPOSE:	Calculates univariate statistics from the non-null cells for each registered 3D
 #               raster map of a space time 3D raster dataset
 # COPYRIGHT:	(C) 2011-2017, Soeren Gebbert and the GRASS Development Team
 #

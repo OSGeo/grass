@@ -506,8 +506,8 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
     def CreateTexture(self, overlay):
         """Create texture from overlay image"""
         texture = wxnviz.ImageTexture(
-                filepath=overlay.layer.mapfile, overlayId=overlay.id,
-                coords=list(overlay.coords), cmd=overlay.GetCmd())
+            filepath=overlay.layer.mapfile, overlayId=overlay.id,
+            coords=list(overlay.coords), cmd=overlay.GetCmd())
 
         if not texture.textureId:  # texture too big
             GMessage(
@@ -2291,7 +2291,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         for item in self.layers:
             mapLayer = self.tree.GetLayerInfo(item, key='maplayer')
-            if type !=  mapLayer.GetType() or \
+            if type != mapLayer.GetType() or \
                     name != mapLayer.GetName():
                 continue
 

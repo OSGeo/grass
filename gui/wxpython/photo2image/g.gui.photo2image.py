@@ -40,7 +40,7 @@
 #% required: yes
 #%end
 
-#%option 
+#%option
 #% key: camera
 #% type: string
 #% label: The name of the camera (generated in i.ortho.camera)
@@ -48,7 +48,7 @@
 #% required: yes
 #%end
 
-#%option 
+#%option
 #% key: order
 #% type: string
 #% label: The rectification order (no of Fiducial=4 -> order=1, no of Fiducial=8 -> order=2)
@@ -57,7 +57,7 @@
 #% answer: 1
 #%end
 
-#%option 
+#%option
 #% key: extension
 #% type: string
 #% label: The name of the output files extension (used in i.rectify)
@@ -96,7 +96,7 @@ def main():
         group = options['group']
     else:
         gscript.fatal(_("Please provide a group name to process"))
-    
+
     if options['raster']:
         raster = options['raster']
     else:
@@ -119,7 +119,7 @@ def main():
 
     app = wx.App()
 
-    wizard = GCPWizard(parent=None, giface=StandaloneGrassInterface(), group=group, 
+    wizard = GCPWizard(parent=None, giface=StandaloneGrassInterface(), group=group,
             raster=raster, raster1=raster, camera=camera, order=order, extension=extension)
     app.MainLoop()
 
