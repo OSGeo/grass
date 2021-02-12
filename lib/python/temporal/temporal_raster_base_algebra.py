@@ -748,7 +748,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                     register_list.append(map_i)
 
                 # Open connection to temporal database.
-                dbif, connect = init_dbif(self.dbif)
+                dbif, _ = init_dbif(self.dbif)
 
                 # Create result space time dataset.
                 if self.dry_run is False:

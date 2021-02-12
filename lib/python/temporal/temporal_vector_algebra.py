@@ -373,7 +373,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         # Execute the command lists
         if self.run:
             # Open connection to temporal database.
-            dbif, connected = init_dbif(dbif=self.dbif)
+            dbif, connection_state_changed = init_dbif(dbif=self.dbif)
             if isinstance(t[3], list):
                 num = len(t[3])
                 count = 0
@@ -507,7 +507,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
             # Remove intermediate maps
             self.remove_maps()
-            if connected:
+            if connection_state_changed:
                 dbif.close()
             t[0] = t[3]
 
