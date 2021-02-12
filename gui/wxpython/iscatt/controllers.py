@@ -747,12 +747,6 @@ class CategoriesManager:
     def GetCategories(self):
         return self.cats_ids[:]
 
-    def SetCategoryPosition(self):
-        if newindex > oldindex:
-            newindex -= 1
-
-        self.cats_ids.insert(newindex, self.cats_ids.pop(oldindex))
-
     def ExportCatRast(self, cat_id):
 
         cat_attrs = self.GetCategoryAttrs(cat_id)

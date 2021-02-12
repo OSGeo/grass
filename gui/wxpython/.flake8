@@ -9,7 +9,6 @@ ignore =
     E741, # ambiguous variable name 'l'
     F403, # 'from gmodeler.model import *' used; unable to detect undefined names
     F405, # '_' may be undefined, or defined from star imports: gmodeler.model
-    F821, # undefined name '_'
     F841, # local variable 'dc' is assigned to but never used
     E117, # over-indented
     E122, # continuation line missing indentation or outdented
@@ -56,3 +55,5 @@ exclude =
     ctypes,
     pydispatch,
     testsuite,
+builtins =
+    _

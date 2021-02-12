@@ -27,7 +27,7 @@ except ImportError:
     havePILImage = False
 
 import grass.script as grass
-from core.gcmd import RunCommand
+from core.gcmd import RunCommand, GError
 
 
 class Rect2D(wx.Rect2D):

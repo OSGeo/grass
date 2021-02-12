@@ -2227,21 +2227,6 @@ class SummaryPage(TitledPage):
 
         self.lprojection.SetLabel(label)
 
-    def OnFinish(self, event):
-        dlg = wx.MessageDialog(
-            parent=self.wizard,
-            message=_("Do you want to create GRASS location <%s>?") %
-            location,
-            caption=_("Create new location?"),
-            style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
-
-        if dlg.ShowModal() == wx.ID_NO:
-            dlg.Destroy()
-            event.Veto()
-        else:
-            dlg.Destroy()
-            event.Skip()
-
 
 class LocationWizard(wx.Object):
     """Start wizard here and finish wizard here

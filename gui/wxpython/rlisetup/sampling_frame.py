@@ -29,13 +29,6 @@ from core.gcmd import RunCommand
 import grass.script.core as grass
 from core import gcmd
 
-try:
-    from grass.lib.gis import *
-    from grass.lib.vector import *
-    from grass.lib.raster import *
-except ImportError:
-    pass
-
 from core.giface import StandaloneGrassInterface
 from mapwin.base import MapWindowProperties
 from mapwin.buffered import BufferedMapWindow
