@@ -1424,8 +1424,8 @@ class DBConnection(object):
 def init_dbif(dbif):
     """This method checks if the database interface connection exists,
         if not a new one will be created, connected and True will be returned.
-        If the database interface exists but is connected, the connection will
-        be established.
+        If the database interface exists but is not connected, the connection
+        will be established.
 
         :returns: the tuple (dbif, connection_state_changed)
 
