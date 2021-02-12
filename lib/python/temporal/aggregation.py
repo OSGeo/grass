@@ -223,7 +223,7 @@ def aggregate_by_topology(granularity_list, granularity, map_list, topo_list,
 
     msgr = get_tgis_message_interface()
 
-    dbif, connected = init_dbif(dbif)
+    dbif, connection_state_changed = init_dbif(dbif)
 
     topo_builder = SpatioTemporalTopologyBuilder()
     topo_builder.build(mapsA=granularity_list, mapsB=map_list, spatial=spatial)
@@ -329,7 +329,7 @@ def aggregate_by_topology(granularity_list, granularity, map_list, topo_list,
 
     process_queue.wait()
 
-    if connected:
+    if connection_state_changed:
         dbif.close()
 
     msgr.percent(1, 1, 1)

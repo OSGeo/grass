@@ -103,7 +103,7 @@ def register_maps_in_space_time_dataset(
         msgr.fatal(_("Please specify %s= or %s=") % ("maps", "file"))
     # We may need the mapset
     mapset = get_current_mapset()
-    dbif, connected = init_dbif(None)
+    dbif, connection_state_changed = init_dbif(None)
 
     # The name of the space time dataset is optional
     if name:
@@ -393,7 +393,7 @@ def register_maps_in_space_time_dataset(
             ds.select(dbif)
             ds.update_from_registered_maps(dbif)
 
-    if connected is True:
+    if connection_state_changed is True:
         dbif.close()
 
     msgr.percent(num_maps, num_maps, 1)
@@ -504,7 +504,7 @@ def register_map_object_list(type, map_list, output_stds,
     import grass.pygrass.modules as pymod
     import copy
 
-    dbif, connected = init_dbif(dbif)
+    dbif, connection_state_changed = init_dbif(dbif)
 
     filename = gscript.tempfile(True)
     file = open(filename, 'w')
@@ -560,7 +560,7 @@ def register_map_object_list(type, map_list, output_stds,
             if map.is_in_db(dbif):
                 map.delete(dbif)
 
-    if connected:
+    if connection_state_changed:
         dbif.close()
 
 if __name__ == "__main__":

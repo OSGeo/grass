@@ -10,7 +10,7 @@ Usage:
     >>> # Create the temporal database
     >>> tgis.init()
     >>> # Establish a database connection
-    >>> dbif, connected = tgis.init_dbif(None)
+    >>> dbif, connection_state_changed = tgis.init_dbif(None)
     >>> dbif.connect()
     >>> # Execute a SQL statement
     >>> dbif.execute_transaction("SELECT datetime(0, 'unixepoch', 'localtime');")
@@ -379,7 +379,7 @@ def get_tgis_metadata(dbif=None):
        :returns: The selected rows with key/value columns or None
     """
 
-    dbif, connected = init_dbif(dbif)
+    dbif, connection_state_changed = init_dbif(dbif)
 
     # Select metadata if the table is present
     try:
@@ -389,7 +389,7 @@ def get_tgis_metadata(dbif=None):
     except:
         rows = None
 
-    if connected:
+    if connection_state_changed:
         dbif.close()
 
     return rows
@@ -927,7 +927,7 @@ def _create_tgis_metadata_table(content, dbif=None):
                       that should be stored in the metadata table
        :param dbif: The database interface to be used
     """
-    dbif, connected = init_dbif(dbif)
+    dbif, connection_state_changed = init_dbif(dbif)
     statement = "CREATE TABLE tgis_metadata (key VARCHAR NOT NULL, value VARCHAR);\n"
     dbif.execute_transaction(statement)
 
@@ -936,7 +936,7 @@ def _create_tgis_metadata_table(content, dbif=None):
                     "(\'%s\' , \'%s\');\n" % (str(key), str(content[key]))
         dbif.execute_transaction(statement)
 
-    if connected:
+    if connection_state_changed:
         dbif.close()
 
 ###############################################################################
@@ -1424,34 +1424,36 @@ class DBConnection(object):
 def init_dbif(dbif):
     """This method checks if the database interface connection exists,
         if not a new one will be created, connected and True will be returned.
-        If the database interface exists but is connected, the connection will
-        be established.
+        If the database interface exists but is not connected, the connection
+        will be established.
 
-        :returns: the tuple (dbif, True|False)
+        :returns: the tuple (dbif, connection_state_changed)
 
         Usage code sample:
 
         .. code-block:: python
 
-            dbif, connect = tgis.init_dbif(None)
+            dbif, connection_state_changed = tgis.init_dbif(None)
 
             sql = dbif.mogrify_sql_statement(["SELECT * FROM raster_base WHERE ? = ?"],
                                                    ["id", "soil@PERMANENT"])
             dbif.execute_transaction(sql)
 
-            if connect:
+            if connection_state_changed:
                 dbif.close()
 
     """
+    connection_state_changed = False
+
     if dbif is None:
         dbif = SQLDatabaseInterfaceConnection()
         dbif.connect()
-        return dbif, True
+        connection_state_changed = True
     elif dbif.is_connected() is False:
         dbif.connect()
-        return dbif, True
+        connection_state_changed = True
 
-    return dbif, False
+    return dbif, connection_state_changed
 
 ###############################################################################
 

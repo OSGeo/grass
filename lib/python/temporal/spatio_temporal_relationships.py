@@ -50,7 +50,7 @@ class SpatioTemporalTopologyBuilder(object):
 
             tb.build(maps)
 
-            dbif, connected = init_dbif(None)
+            dbif, connection_state_changed = init_dbif(None)
 
             for map in tb:
                 map.select(dbif)
@@ -782,13 +782,13 @@ def print_temporal_topology_relationships(maps1, maps2=None, dbif=None):
 
     tb.build(maps1, maps2)
 
-    dbif, connected = init_dbif(dbif)
+    dbif, connection_state_changed = init_dbif(dbif)
 
     for _map in tb:
         _map.select(dbif)
         _map.print_info()
 
-    if connected:
+    if connection_state_changed:
         dbif.close()
 
     return
@@ -815,13 +815,13 @@ def print_spatio_temporal_topology_relationships(maps1, maps2=None,
 
     tb.build(maps1, maps2, spatial)
 
-    dbif, connected = init_dbif(dbif)
+    dbif, connection_state_changed = init_dbif(dbif)
 
     for _map in tb:
         _map.select(dbif)
         _map.print_info()
 
-    if connected:
+    if connection_state_changed:
         dbif.close()
 
     return
@@ -845,7 +845,7 @@ def count_temporal_topology_relationships(maps1, maps2=None, dbif=None):
     tb = SpatioTemporalTopologyBuilder()
     tb.build(maps1, maps2)
 
-    dbif, connected = init_dbif(dbif)
+    dbif, connection_state_changed = init_dbif(dbif)
 
     relations = None
 
@@ -857,7 +857,7 @@ def count_temporal_topology_relationships(maps1, maps2=None, dbif=None):
         else:
             relations = _map.get_number_of_relations()
 
-    if connected:
+    if connection_state_changed:
         dbif.close()
 
     return relations

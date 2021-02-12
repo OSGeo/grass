@@ -73,7 +73,7 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    dbif, connected = tgis.init_dbif(None)
+    dbif, connection_state_changed = tgis.init_dbif(None)
 
     rows = tgis.get_tgis_metadata(dbif)
 
