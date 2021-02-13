@@ -649,7 +649,7 @@ class SelectTransformDialog(wx.Dialog):
         bodySizer.Add(
             self.translist,
             proportion=1,
-            flag=wx.ALIGN_CENTER | wx.ALL | wx.EXPAND)
+            flag=wx.ALL | wx.EXPAND)
 
         #
         # buttons
@@ -665,7 +665,7 @@ class SelectTransformDialog(wx.Dialog):
         btnsizer.Realize()
 
         sizer.Add(bodySizer, proportion=1,
-                  flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+                  flag=wx.EXPAND | wx.ALL, border=5)
 
         sizer.Add(btnsizer, proportion=0,
                   flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
