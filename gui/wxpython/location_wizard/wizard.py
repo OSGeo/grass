@@ -74,8 +74,10 @@ global translist
 
 if globalvar.CheckWxVersion(version=[4, 1, 0]):
     search_evt = wx.EVT_SEARCH
+    search_cancel_evt = wx.EVT_SEARCH_CANCEL
 else:
     search_evt = wx.EVT_SEARCHCTRL_SEARCH_BTN
+    search_cancel_evt = wx.EVT_SEARCHCTRL_CANCEL_BTN
 
 
 class TitledPage(WizardPageSimple):
@@ -485,12 +487,10 @@ class ProjectionsPage(TitledPage):
         # search box
         self.searchb = SearchCtrl(self, size=(200, -1),
                                   style=wx.TE_PROCESS_ENTER)
+        self.searchb.ShowCancelButton(True)
 
         # projection list
-        data = list()
-        for item in self.parent.projdesc.items():
-            data.append(item)
-        self.projlist = ItemList(self, data=data,
+        self.projlist = ItemList(self, data=list(self.parent.projdesc.items()),
                                  columns=[_('Code'), _('Description')])
         self.projlist.resizeLastColumn(30)
 
@@ -520,6 +520,7 @@ class ProjectionsPage(TitledPage):
         # events
         self.tproj.Bind(wx.EVT_TEXT, self.OnText)
         self.searchb.Bind(search_evt, self.OnSearch)
+        self.searchb.Bind(search_cancel_evt, self.OnSearchCancel)
         self.projlist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
@@ -564,13 +565,17 @@ class ProjectionsPage(TitledPage):
 
     def OnSearch(self, event):
         """Search projection by desc"""
-        str = event.GetString()
+        search_str = event.GetString()
         try:
             self.proj, self.projdesc = self.projlist.Search(
-                index=[0, 1], pattern=str)
+                index=[0, 1], pattern=search_str)
         except:
             self.proj = self.projdesc = ''
 
+        event.Skip()
+
+    def OnSearchCancel(self, event):
+        self.projlist.Search(index=None, pattern="")
         event.Skip()
 
     def OnItemSelected(self, event):
@@ -611,9 +616,13 @@ class ItemList(ListCtrl,
         #
         # add some attributes
         #
-        self.attr1 = wx.ListItemAttr()
+        if globalvar.CheckWxVersion(version=[4, 1, 0]):
+            self.attr1 = wx.ItemAttr()
+            self.attr2 = wx.ItemAttr()
+        else:
+            self.attr1 = wx.ListItemAttr()
+            self.attr2 = wx.ListItemAttr()
         self.attr1.SetBackgroundColour(wx.Colour(238, 238, 238))
-        self.attr2 = wx.ListItemAttr()
         self.attr2.SetBackgroundColour("white")
 
         if self.sourceData:
@@ -1016,6 +1025,7 @@ class DatumPage(TitledPage):
         # search box
         self.searchb = SearchCtrl(self, size=(200, -1),
                                   style=wx.TE_PROCESS_ENTER)
+        self.searchb.ShowCancelButton(True)
 
         # create list control for datum/elipsoid list
         data = []
@@ -1056,6 +1066,7 @@ class DatumPage(TitledPage):
         # events
         self.datumlist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnDatumSelected)
         self.searchb.Bind(search_evt, self.OnDSearch)
+        self.searchb.Bind(search_cancel_evt, self.OnSearchCancel)
         self.tdatum.Bind(wx.EVT_TEXT, self.OnDText)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
@@ -1147,17 +1158,21 @@ class DatumPage(TitledPage):
 
     def OnDSearch(self, event):
         """Search geodetic datum by desc"""
-        str = self.searchb.GetValue()
+        search_str = self.searchb.GetValue()
         try:
             self.datum, self.ellipsoid, self.datumdesc = self.datumlist.Search(
                 index=[
                     0,
                     1,
                     2],
-                pattern=str)
+                pattern=search_str)
         except:
             self.datum = self.datumdesc = self.ellipsoid = ''
 
+        event.Skip()
+
+    def OnSearchCancel(self, event):
+        self.datumlist.Search(index=None, pattern="")
         event.Skip()
 
     def OnDatumSelected(self, event):
@@ -1190,6 +1205,7 @@ class EllipsePage(TitledPage):
         # search box
         self.searchb = SearchCtrl(self, size=(200, -1),
                                   style=wx.TE_PROCESS_ENTER)
+        self.searchb.ShowCancelButton(True)
         # radio buttons
         self.radio1 = wx.RadioButton(parent=self, id=wx.ID_ANY,
                                      label=_("Earth based"),
@@ -1244,6 +1260,7 @@ class EllipsePage(TitledPage):
         self.ellipselist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
         self.tellipse.Bind(wx.EVT_TEXT, self.OnText)
         self.searchb.Bind(search_evt, self.OnSearch)
+        self.searchb.Bind(search_cancel_evt, self.OnSearchCancel)
 
         self.radio1.Bind(
             wx.EVT_RADIOBUTTON,
@@ -1317,6 +1334,10 @@ class EllipsePage(TitledPage):
         except:
             self.ellipse = self.ellipsedesc = self.ellipseparams = ''
 
+        event.Skip()
+
+    def OnSearchCancel(self, event):
+        self.ellipselist.Search(index=None, pattern="")
         event.Skip()
 
     def OnItemSelected(self, event):
@@ -1528,6 +1549,7 @@ class EPSGPage(TitledPage):
         # search box
         self.searchb = SearchCtrl(self, size=(200, -1),
                                   style=wx.TE_PROCESS_ENTER)
+        self.searchb.ShowCancelButton(True)
 
         self.epsglist = ItemList(
             self,
@@ -1575,6 +1597,7 @@ class EPSGPage(TitledPage):
         self.tcode.Bind(wx.EVT_TEXT, self.OnText)
         self.epsglist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
         self.searchb.Bind(search_evt, self.OnSearch)
+        self.searchb.Bind(search_cancel_evt, self.OnSearchCancel)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
@@ -1666,6 +1689,10 @@ class EPSGPage(TitledPage):
 
         event.Skip()
 
+    def OnSearchCancel(self, event):
+        self.epsglist.Search(index=None, pattern="")
+        event.Skip()
+
     def OnBrowse(self, event):
         """Define path for EPSG code file"""
         path = os.path.dirname(self.tfile.GetValue())
@@ -1755,6 +1782,7 @@ class IAUPage(TitledPage):
         # search box
         self.searchb = SearchCtrl(self, size=(200, -1),
                                   style=wx.TE_PROCESS_ENTER)
+        self.searchb.ShowCancelButton(True)
 
         self.epsglist = ItemList(
             self,
@@ -1802,6 +1830,7 @@ class IAUPage(TitledPage):
         self.tcode.Bind(wx.EVT_TEXT, self.OnText)
         self.epsglist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
         self.searchb.Bind(search_evt, self.OnSearch)
+        self.searchb.Bind(search_cancel_evt, self.OnSearchCancel)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
@@ -1908,6 +1937,10 @@ class IAUPage(TitledPage):
                 self.epsgdesc = self.epsgparams = ''
                 self.tcode.SetValue('')
 
+        event.Skip()
+
+    def OnSearchCancel(self, event):
+        self.epsglist.Search(index=None, pattern="")
         event.Skip()
 
     def OnBrowse(self, event):
