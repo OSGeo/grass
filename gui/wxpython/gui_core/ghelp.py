@@ -24,12 +24,6 @@ import re
 import textwrap
 import sys
 import six
-
-if sys.version_info.major == 2:
-    _unichr = unichr
-else:
-    _unichr = chr
-
 import wx
 from wx.html import HtmlWindow
 try:
@@ -44,6 +38,7 @@ except ImportError:
     from wx import AboutBox
 
 import grass.script as grass
+from grass.exceptions import CalledModuleError
 
 # needed just for testing
 if __name__ == '__main__':
@@ -924,7 +919,7 @@ def _grassDevTeam(start):
         end = date.today().year
 
     return '%(c)s %(start)s-%(end)s by the GRASS Development Team' % {
-        'c': _unichr(169), 'start': start, 'end': end}
+        'c': chr(169), 'start': start, 'end': end}
 
 
 def main():

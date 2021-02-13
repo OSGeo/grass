@@ -28,6 +28,8 @@ from wx.lib.mixins.listctrl import ColumnSorterMixin, \
     ListCtrlAutoWidthMixin
 
 from core import globalvar
+from core.gcmd import GError
+from gui_core.widgets import FloatValidator, IntegerValidator
 from gui_core.wrap import (
     BitmapFromImage, Button, ComboBox, ListCtrl, Panel, StaticBox,
     StaticText, TextCtrl, CheckListCtrlMixin

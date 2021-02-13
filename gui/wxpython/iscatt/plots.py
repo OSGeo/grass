@@ -479,7 +479,7 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
             vmax = np.amax(masked_cat)
             # totally empty -> no need to render
             if vmax == 0:
-                render_cat_ids[cat_id] = None
+                rend_dt[cat_id] = None
                 continue
 
             cmap = _getColorMap(cat_id, styles)
@@ -1022,7 +1022,7 @@ def imshow(axes, X, cmap=None, norm=None, aspect=None,
     if norm is not None:
         assert(isinstance(norm, mcolors.Normalize))
     if aspect is None:
-        aspect = rcParams['image.aspect']
+        aspect = matplotlib.rcParams['image.aspect']
     axes.set_aspect(aspect)
 
     if extent:

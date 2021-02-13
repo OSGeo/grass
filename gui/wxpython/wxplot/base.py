@@ -19,6 +19,7 @@ import os
 import six
 
 import wx
+from random import randint
 
 import wx.lib.plot as plot
 from core.globalvar import ICONDIR
