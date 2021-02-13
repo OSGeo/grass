@@ -361,8 +361,8 @@ def projInfo():
     """Return region projection and map units information,
     taken from render.py
     """
-    proj_info = grass.parse_key_val(
-        RunCommand('g.proj', flags='g', read=True)
+    proj_info = RunCommand(
+        'g.proj', flags='g', read=True, parse=grass.parse_key_val,
     )
 
     return (
