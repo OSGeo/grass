@@ -19,6 +19,7 @@ This program is free software under the GNU General Public License
 @author Eliska Kyzlikova <eliska.kyzlikova gmail.com> (turn costs support)
 """
 
+import math
 import six
 from grass.script.utils import try_remove
 from grass.script import core as grass

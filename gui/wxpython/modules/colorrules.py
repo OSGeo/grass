@@ -675,7 +675,7 @@ class ColorTable(wx.Frame):
 
         if os.path.exists(path):
             dlgOw = wx.MessageDialog(
-                parent,
+                self,
                 message=_(
                     "File <%s> already already exists. "
                     "Do you want to overwrite it?") %

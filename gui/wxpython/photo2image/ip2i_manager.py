@@ -861,13 +861,11 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         if not sourceMapWin:
             GError(parent=self,
-                   message="%s. %s%s" % (_("source mapwin not defined"),
-                                         os.linesep, err))
+                   message=_("source mapwin not defined"))
 
         if not targetMapWin:
             GError(parent=self,
-                   message="%s. %s%s" % (_("target mapwin not defined"),
-                                         os.linesep, err))
+                   message=_("target mapwin not defined"))
 
         try:
             f = open(self.file['points'], 'r')

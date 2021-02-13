@@ -19,7 +19,6 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com> (refactoring)
 """
 
-import os
 import textwrap
 
 import wx
@@ -32,7 +31,7 @@ if __name__ == '__main__':
     from grass.script.setup import set_gui_path
     set_gui_path()
 
-from core.gcmd import GError, EncodeString
+from core.gcmd import GError
 from core.gconsole   import GConsole, \
     EVT_CMD_OUTPUT, EVT_CMD_PROGRESS, EVT_CMD_RUN, EVT_CMD_DONE, \
     Notification
@@ -671,23 +670,7 @@ class GStc(stc.StyledTextCtrl):
                     self.AddText(seg)
         else:
             self.linePos = self.GetCurrentPos()
-
-            try:
-                self.AddText(txt)
-            except UnicodeDecodeError:
-                # TODO: this might be dead code for Py3, txt is already unicode?
-                enc = UserSettings.Get(
-                    group='atm', key='encoding', subkey='value')
-                if enc:
-                    txt = unicode(txt, enc, errors='replace')
-                elif 'GRASS_DB_ENCODING' in os.environ:
-                    txt = unicode(
-                        txt, os.environ['GRASS_DB_ENCODING'],
-                        errors='replace')
-                else:
-                    txt = EncodeString(txt)
-
-                self.AddText(txt)
+            self.AddText(txt)
 
         # reset output window to read only
         self.SetReadOnly(True)

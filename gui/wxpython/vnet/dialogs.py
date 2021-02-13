@@ -26,6 +26,7 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
+import math
 import six
 
 if sys.version_info.major >= 3:

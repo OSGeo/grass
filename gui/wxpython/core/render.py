@@ -175,7 +175,7 @@ class Layer(object):
                         first = False
             else:
                 self.renderMgr.Render(self.cmd, env)
-        except GException:
+        except GException as e:
             sys.stderr.write(
                 _("Command '%s' failed\n") %
                 self.GetCmd(
