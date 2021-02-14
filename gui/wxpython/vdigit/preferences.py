@@ -164,7 +164,7 @@ class VDigitSettingsDialog(wx.Dialog):
         # line width
         text = StaticText(parent=panel, id=wx.ID_ANY, label=_("Line width"))
         self.lineWidthValue = SpinCtrl(
-            parent=panel, id=wx.ID_ANY, size=(75, -1),
+            parent=panel, id=wx.ID_ANY, size=(137, -1),
             initial=UserSettings.Get(
                 group='vdigit', key="lineWidth", subkey='value'),
             min=1, max=1e6)
@@ -209,7 +209,7 @@ class VDigitSettingsDialog(wx.Dialog):
             id=wx.ID_ANY,
             label=_("Snapping threshold"))
         self.snappingValue = SpinCtrl(
-            parent=panel, id=wx.ID_ANY, size=(75, -1),
+            parent=panel, id=wx.ID_ANY, size=(137, -1),
             initial=UserSettings.Get(
                 group='vdigit', key="snapping", subkey='value'),
             min=-1, max=1e6)
@@ -286,7 +286,7 @@ class VDigitSettingsDialog(wx.Dialog):
             id=wx.ID_ANY,
             label=_("Select threshold"))
         self.selectThreshValue = SpinCtrl(
-            parent=panel, id=wx.ID_ANY, size=(75, -1),
+            parent=panel, id=wx.ID_ANY, size=(137, -1),
             initial=UserSettings.Get(
                 group='vdigit', key="selectThresh", subkey='value'),
             min=1, max=1e6)
@@ -479,7 +479,7 @@ class VDigitSettingsDialog(wx.Dialog):
                 subkey='than-selection'))
         self.queryLengthValue = SpinCtrl(
             parent=panel, id=wx.ID_ANY, size=(
-                100, -1), initial=1, min=0, max=1e6)
+                137, -1), initial=1, min=0, max=1e6)
         self.queryLengthValue.SetValue(
             UserSettings.Get(
                 group='vdigit',
@@ -533,7 +533,7 @@ class VDigitSettingsDialog(wx.Dialog):
                 subkey='than-selection'))
         self.queryDangleValue = SpinCtrl(
             parent=panel, id=wx.ID_ANY, size=(
-                100, -1), initial=1, min=0, max=1e6)
+                137, -1), initial=1, min=0, max=1e6)
         self.queryDangleValue.SetValue(
             UserSettings.Get(
                 group='vdigit',
@@ -612,7 +612,7 @@ class VDigitSettingsDialog(wx.Dialog):
                     (_("Mode"), _("Next to use")))
         # layer
         text = StaticText(parent=panel, id=wx.ID_ANY, label=_("Layer"))
-        self.layer = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(125, -1),
+        self.layer = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(137, -1),
                               min=1, max=1e3)
         self.layer.SetValue(int(UserSettings.Get(
             group='vdigit', key="layer", subkey='value')))
