@@ -20445,6 +20445,5 @@ msgstr "3D μάσκα"
 msgid "Volume"
 msgstr "Όγκος"
 
-#, python-format
 #~ msgid "Maximum number of animations is %s."
 #~ msgstr "Ο μέγιστος αριθμός κινουμένων είναι: %s. "
