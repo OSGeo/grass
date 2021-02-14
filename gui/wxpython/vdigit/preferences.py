@@ -143,7 +143,7 @@ class VDigitSettingsDialog(wx.Dialog):
         self.lineWidthValue = SpinCtrl(
             parent=panel,
             id=wx.ID_ANY,
-            size=(75, -1),
+            size=(137, -1),
             initial=UserSettings.Get(group="vdigit", key="lineWidth", subkey="value"),
             min=1,
             max=1e6,
@@ -182,7 +182,7 @@ class VDigitSettingsDialog(wx.Dialog):
         self.snappingValue = FloatSpin(
             parent=panel,
             id=wx.ID_ANY,
-            size=(75, -1),
+            size=(137, -1),
             value=UserSettings.Get(group="vdigit", key="snapping", subkey="value"),
             min_val=-1,
             max_val=1e6,
@@ -266,7 +266,7 @@ class VDigitSettingsDialog(wx.Dialog):
         self.selectThreshValue = SpinCtrl(
             parent=panel,
             id=wx.ID_ANY,
-            size=(75, -1),
+            size=(137, -1),
             initial=UserSettings.Get(
                 group="vdigit", key="selectThresh", subkey="value"
             ),
@@ -469,7 +469,7 @@ class VDigitSettingsDialog(wx.Dialog):
             UserSettings.Get(group="vdigit", key="queryDangle", subkey="than-selection")
         )
         self.queryDangleValue = SpinCtrl(
-            parent=panel, id=wx.ID_ANY, size=(100, -1), initial=1, min=0, max=1e6
+            parent=panel, id=wx.ID_ANY, size=(137, -1), initial=1, min=0, max=1e6
         )
         self.queryDangleValue.SetValue(
             UserSettings.Get(group="vdigit", key="queryDangle", subkey="thresh")
@@ -529,7 +529,7 @@ class VDigitSettingsDialog(wx.Dialog):
         # layer
         text = StaticText(parent=panel, id=wx.ID_ANY, label=_("Layer"))
         self.layer = SpinCtrl(
-            parent=panel, id=wx.ID_ANY, size=(125, -1), min=1, max=1e3
+            parent=panel, id=wx.ID_ANY, size=(137, -1), min=1, max=1e3
         )
         self.layer.SetValue(
             int(UserSettings.Get(group="vdigit", key="layer", subkey="value"))
