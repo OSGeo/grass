@@ -692,7 +692,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             group="appearance", key="gSelectPopupHeight", subkey="value"
         )
 
-        popupHeightSpin = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(100, -1))
+        popupHeightSpin = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(137, -1))
         popupHeightSpin.SetRange(min, max)
         popupHeightSpin.SetValue(value)
 
@@ -1388,7 +1388,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         hlWidth = SpinCtrl(
             parent=panel,
             id=wx.ID_ANY,
-            size=(50, -1),
+            size=(137, -1),
             initial=self.settings.Get(group="vectorLayer", key="line", subkey="width"),
             min=1,
             max=1e6,
@@ -1421,7 +1421,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         ptSize = SpinCtrl(
             parent=panel,
             id=wx.ID_ANY,
-            size=(50, -1),
+            size=(137, -1),
             initial=self.settings.Get(group="vectorLayer", key="point", subkey="size"),
             min=1,
             max=1e6,
@@ -1511,7 +1511,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         hlWidth = SpinCtrl(
             parent=panel,
             id=wx.ID_ANY,
-            size=(50, -1),
+            size=(137, -1),
             initial=self.settings.Get(group="atm", key="highlight", subkey="width"),
             min=1,
             max=1e6,
