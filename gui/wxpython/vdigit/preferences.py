@@ -618,14 +618,14 @@ class VDigitSettingsDialog(wx.Dialog):
             group='vdigit', key="layer", subkey='value')))
         flexSizer.Add(text, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(self.layer, proportion=0,
-                      flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
+                      flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
         # category number
         text = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Category number"))
         self.category = SpinCtrl(
-            parent=panel, id=wx.ID_ANY, size=(125, -1),
+            parent=panel, id=wx.ID_ANY, size=(148, -1),
             initial=UserSettings.Get(
                 group='vdigit', key="category", subkey='value'),
             min=-1e9, max=1e9)
@@ -634,7 +634,7 @@ class VDigitSettingsDialog(wx.Dialog):
             self.category.Enable(False)
         flexSizer.Add(text, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(self.category, proportion=0,
-                      flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
+                      flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
         # category mode
         text = StaticText(
             parent=panel,
@@ -649,7 +649,7 @@ class VDigitSettingsDialog(wx.Dialog):
                 subkey='selection'))
         flexSizer.Add(text, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(self.categoryMode, proportion=0,
-                      flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
+                      flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
 
         sizer.Add(
             flexSizer,
