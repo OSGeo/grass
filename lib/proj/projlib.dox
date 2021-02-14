@@ -1,4 +1,4 @@
-/*! \page projlib GRASS and the PROJ4 projection library
+/*! \page projlib GRASS and the PROJ projection library
 <!-- doxygenized from "GRASS 5 Programmer's Manual" 
      by M. Neteler 11/2005
   -->
@@ -7,16 +7,16 @@ by GRASS Development Team
 
 https://grass.osgeo.org
 
-\section projintro GRASS GIS and the PROJ4 projection library
+\section projintro GRASS GIS and the PROJ projection library
 
-GRASS GIS utilizes the PROJ4 library (<a
-href="http://proj.osgeo.org">http://proj.osgeo.org</a>) originally
+GRASS GIS utilizes the PROJ library (<a
+href="https://proj.org">https://proj.org</a>) originally
 developed by Gerald Evenden/USGS (Cartographic Projection Procedures
 for the UNIX Environment -- A User's Manual, Evenden, 1990, Open-file
-report 90-284). The PROJ4 functions are used through wrapper functions
+report 90-284). The PROJ functions are used through wrapper functions
 in a GRASS environment.
 
-Internally to the PROJ.4 library, projection may involve transformation to
+Internally to the PROJ library, projection may involve transformation to
 and from geodetic co-ordinates (latitude and longitude), and numerical
 corrections to account for different datums.
 
@@ -44,7 +44,10 @@ GRASS generally supports datum transformation (3 parameters, 7 parameters
 and grid).
 <p>
 
-If a warning appears that a certain datum is not recognised by GRASS and
+Note that datum transformation is handled exclusively by PROJ 6 and later.
+In the case that GRASS is compiled with PROJ 5 or older, the datum
+management is still done within GRASS GIS. Only in that case,
+if a warning appears that a certain datum is not recognised by GRASS and
 no parameters found, the datum transformation parameters have to be
 added to $GISBASE/etc/proj/datum.table (and also $GISBASE/etc/proj/datumtransform.table
 if you have 7-parameter transformation parameters). No need to re-compile
@@ -86,19 +89,29 @@ default: cmd
 
  - GPJ_get_datum_params()
  
+ - GPJ_get_datum_transform_by_name()
+
  - GPJ_get_default_datum_params_by_name()
 
  - GPJ_get_ellipsoid_by_name()
  
+ - GPJ__get_ellipsoid_params()
+
  - GPJ_get_ellipsoid_params()
  
  - GPJ_get_equivalent_latlong()
  
  - GPJ_grass_to_osr()
  
+ - GPJ_grass_to_osr2()
+
  - GPJ_grass_to_wkt()
 
+ - GPJ_grass_to_wkt2()
+
  - GPJ_free_datum()
+
+ - GPJ_free_datum_transform()
 
  - GPJ_free_ellps()
  
