@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
 	       parm.col->answer, flag.noindex->answer);
     
     if (npoints == 0)
-	G_fatal_error(_("No points found"));
+	G_fatal_error(_("No points found. Check current region with g.region"));
     nsearch = npoints < search_points ? npoints : search_points;
 
     if (!flag.noindex->answer) {
