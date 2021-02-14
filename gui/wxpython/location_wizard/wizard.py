@@ -73,10 +73,8 @@ global wizerror
 global translist
 
 if globalvar.CheckWxVersion(version=[4, 1, 0]):
-    search_evt = wx.EVT_SEARCH
     search_cancel_evt = wx.EVT_SEARCH_CANCEL
 else:
-    search_evt = wx.EVT_SEARCHCTRL_SEARCH_BTN
     search_cancel_evt = wx.EVT_SEARCHCTRL_CANCEL_BTN
 
 
@@ -519,7 +517,7 @@ class ProjectionsPage(TitledPage):
 
         # events
         self.tproj.Bind(wx.EVT_TEXT, self.OnText)
-        self.searchb.Bind(search_evt, self.OnSearch)
+        self.searchb.Bind(wx.EVT_TEXT, self.OnSearch)
         self.searchb.Bind(search_cancel_evt, self.OnSearchCancel)
         self.projlist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
@@ -1065,7 +1063,7 @@ class DatumPage(TitledPage):
 
         # events
         self.datumlist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnDatumSelected)
-        self.searchb.Bind(search_evt, self.OnDSearch)
+        self.searchb.Bind(wx.EVT_TEXT, self.OnDSearch)
         self.searchb.Bind(search_cancel_evt, self.OnSearchCancel)
         self.tdatum.Bind(wx.EVT_TEXT, self.OnDText)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
@@ -1259,7 +1257,7 @@ class EllipsePage(TitledPage):
         # events
         self.ellipselist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
         self.tellipse.Bind(wx.EVT_TEXT, self.OnText)
-        self.searchb.Bind(search_evt, self.OnSearch)
+        self.searchb.Bind(wx.EVT_TEXT, self.OnSearch)
         self.searchb.Bind(search_cancel_evt, self.OnSearchCancel)
 
         self.radio1.Bind(
@@ -1596,7 +1594,7 @@ class EPSGPage(TitledPage):
         self.tfile.Bind(wx.EVT_TEXT_ENTER, self.OnBrowseCodes)
         self.tcode.Bind(wx.EVT_TEXT, self.OnText)
         self.epsglist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
-        self.searchb.Bind(search_evt, self.OnSearch)
+        self.searchb.Bind(wx.EVT_TEXT, self.OnSearch)
         self.searchb.Bind(search_cancel_evt, self.OnSearchCancel)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
@@ -1675,8 +1673,8 @@ class EPSGPage(TitledPage):
         if value == '':
             self.epsgcode = None
             self.epsgdesc = self.epsgparams = ''
-            self.tcode.SetValue('')
-            self.searchb.SetValue('')
+            self.tcode.ChangeValue('')
+            self.searchb.ChangeValue('')
             self.OnBrowseCodes(None)
         else:
             try:
@@ -1685,7 +1683,7 @@ class EPSGPage(TitledPage):
             except (IndexError, ValueError):  # -> no item found
                 self.epsgcode = None
                 self.epsgdesc = self.epsgparams = ''
-                self.tcode.SetValue('')
+                self.tcode.ChangeValue('')
 
         event.Skip()
 
@@ -1829,7 +1827,7 @@ class IAUPage(TitledPage):
         self.tfile.Bind(wx.EVT_TEXT_ENTER, self.OnBrowseCodes)
         self.tcode.Bind(wx.EVT_TEXT, self.OnText)
         self.epsglist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
-        self.searchb.Bind(search_evt, self.OnSearch)
+        self.searchb.Bind(wx.EVT_TEXT, self.OnSearch)
         self.searchb.Bind(search_cancel_evt, self.OnSearchCancel)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
