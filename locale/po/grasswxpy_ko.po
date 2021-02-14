@@ -20341,6 +20341,5 @@ msgstr ""
 msgid "Animation already axists"
 msgstr "애니메이션이 이미 존재합니다"
 
-#, python-format
 #~ msgid "Maximum number of animations is %s."
 #~ msgstr "애니메이션의 최대 개수는 %s입니다"

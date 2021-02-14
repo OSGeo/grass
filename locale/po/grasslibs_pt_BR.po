@@ -894,7 +894,7 @@ msgstr ""
 
 #: ../lib/raster/sample.c:70
 msgid "Unknown interpolation type"
-msgstr ""
+msgstr "Tipo de interpolação desconhecido"
 
 #: ../lib/raster/sample.c:327
 msgid "\"no data\" label found; setting to zero"
@@ -1273,12 +1273,12 @@ msgstr ""
 
 #: ../lib/gpde/n_arrays_io.c:364 ../lib/gpde/n_arrays_io.c:464
 msgid "Error closing g3d file"
-msgstr ""
+msgstr "Erro fechando arquivo g3d"
 
 #: ../lib/gpde/n_arrays_io.c:420
 #, c-format
 msgid "Error opening g3d map <%s>"
-msgstr ""
+msgstr "Erro abrindo mapa g3d <%s>"
 
 #: ../lib/gpde/n_arrays_io.c:422
 #, c-format
@@ -2786,7 +2786,7 @@ msgstr "Limpando banco de dados sqlite padrão ..."
 
 #: ../lib/python/script/setup.py:247 ../lib/init/grass.py:1844
 msgid "Cleaning up temporary files..."
-msgstr ""
+msgstr "Limpando arquivos temporários..."
 
 #: ../lib/python/script/raster3d.py:92
 #, python-format
@@ -3917,7 +3917,7 @@ msgstr ""
 #: ../lib/init/grass.py:1586
 #, python-format
 msgid "Executing <%s> ..."
-msgstr ""
+msgstr "Executando <%s> ..."
 
 #: ../lib/init/grass.py:1600
 #, python-brace-format
@@ -3925,6 +3925,8 @@ msgid ""
 "Execution of <{cmd}> failed:\n"
 "{error}"
 msgstr ""
+"A execução de <{cmd}> falhou:\n"
+"{error}"
 
 #: ../lib/init/grass.py:1603
 #, python-format
@@ -3988,7 +3990,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:1837
 msgid "Done."
-msgstr ""
+msgstr "Feito."
 
 #: ../lib/init/grass.py:1839
 msgid "Goodbye from GRASS GIS"
@@ -3996,12 +3998,12 @@ msgstr ""
 
 #: ../lib/init/grass.py:1875
 msgid "Please install the GRASS GIS development package"
-msgstr ""
+msgstr "Por favor instale o pacote de desenvolvimento GRASS GIS"
 
 #: ../lib/init/grass.py:1910
 #, python-format
 msgid "Parameter <%s> not supported"
-msgstr ""
+msgstr "Parâmetro <%s> não suportado"
 
 #: ../lib/init/grass.py:2060
 msgid "Flag -e requires also flag -c"
@@ -4881,15 +4883,15 @@ msgstr "Problema na descrição UI. A opção '%s' em <%s> não existe"
 
 #: ../lib/gis/parser.c:537
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
-msgstr ""
+msgstr "Use apenas uma das flags --quiet ou --verbose, não ambas. Assumindo --verbose."
 
 #: ../lib/gis/parser.c:551
 msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
-msgstr ""
+msgstr "Use apenas uma das flags --quiet ou --verbose, não ambas. Assumindo --quiet."
 
 #: ../lib/gis/parser.c:566
 msgid "Use either --qq or --verbose flag, not both. Assuming --qq."
-msgstr ""
+msgstr "Use apenas uma das flags --qq ou --verbose, não ambas. Assumindo --qq."
 
 #: ../lib/gis/parser.c:597
 #, c-format
@@ -5103,15 +5105,15 @@ msgstr "Nome do mapa raster de saída"
 
 #: ../lib/gis/parser_standard_options.c:278
 msgid "Name for output raster map(s)"
-msgstr ""
+msgstr "Nome para mapa(s) raster de saída"
 
 #: ../lib/gis/parser_standard_options.c:286
 msgid "Name of raster map"
-msgstr ""
+msgstr "Nome do mapa raster"
 
 #: ../lib/gis/parser_standard_options.c:295
 msgid "Name of raster map(s)"
-msgstr ""
+msgstr "Nome do(s) mapa(s) raster"
 
 #: ../lib/gis/parser_standard_options.c:303
 msgid "Name of base raster map"
@@ -5139,7 +5141,7 @@ msgstr "Tipo de armazenamento para o mapa raster resultante"
 
 #: ../lib/gis/parser_standard_options.c:340
 msgid "Integer"
-msgstr ""
+msgstr "Inteiro"
 
 #: ../lib/gis/parser_standard_options.c:341
 msgid "Single precision floating point"
@@ -5159,11 +5161,11 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:353
 msgid "Bilinear interpolation"
-msgstr ""
+msgstr "Interpolação bilinear"
 
 #: ../lib/gis/parser_standard_options.c:354
 msgid "Bicubic interpolation"
-msgstr ""
+msgstr "Interpolação bicúbica"
 
 #: ../lib/gis/parser_standard_options.c:363
 msgid "Name of input basename raster map(s)"
@@ -5175,19 +5177,19 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:382
 msgid "Name of input 3D raster map"
-msgstr ""
+msgstr "Nome do mapa raster 3D de entrada"
 
 #: ../lib/gis/parser_standard_options.c:391
 msgid "Name of input 3D raster map(s)"
-msgstr ""
+msgstr "Nomes dos mapas raster 3D de entrada"
 
 #: ../lib/gis/parser_standard_options.c:399
 msgid "Name for output 3D raster map"
-msgstr ""
+msgstr "Nome do mapa raster 3D de saída"
 
 #: ../lib/gis/parser_standard_options.c:407
 msgid "Name of 3D raster map"
-msgstr ""
+msgstr "Nome do mapa raster 3D"
 
 #: ../lib/gis/parser_standard_options.c:416
 msgid "Name of 3D raster map(s)"
@@ -5932,12 +5934,12 @@ msgstr "Não foi possível abrir arquivo de saída <%s>: %s"
 #: ../lib/gis/key_value3.c:36
 #, c-format
 msgid "Error writing file <%s>: %s"
-msgstr ""
+msgstr "Erro escrevendo o arquivo <%s>: %s"
 
 #: ../lib/gis/key_value3.c:39
 #, c-format
 msgid "Error closing output file <%s>: %s"
-msgstr ""
+msgstr "Erro fechando arquivo de saída <%s>: %s"
 
 #: ../lib/gis/key_value3.c:60
 #, c-format
@@ -5947,12 +5949,12 @@ msgstr "Não foi possível abrir arquivo de entrada <%s>: %s"
 #: ../lib/gis/key_value3.c:64
 #, c-format
 msgid "Error reading file <%s>: %s"
-msgstr ""
+msgstr "Erro lendo arquivo <%s>: %s"
 
 #: ../lib/gis/key_value3.c:67
 #, c-format
 msgid "Error closing input file <%s>: %s"
-msgstr ""
+msgstr "Erro fechando arquivo de entrada <%s>: %s"
 
 #: ../lib/gis/proj2.c:63
 msgid "Latitude-Longitude"
@@ -5989,7 +5991,7 @@ msgstr "GISRC - variável não incializada"
 #: ../lib/gis/env.c:343 ../lib/gis/env.c:369
 #, c-format
 msgid "Variable '%s' not set"
-msgstr ""
+msgstr "Variável '%s' não definida"
 
 #: ../lib/gis/list.c:83
 #, c-format
@@ -6129,11 +6131,11 @@ msgstr "erro no arquivo da tabela de datum, linha %d"
 #: ../lib/gis/rd_cellhd.c:357
 #, c-format
 msgid "Syntax error in cell header, line %d: %s"
-msgstr ""
+msgstr "Erro de sintaxe no cabeçalho da célula, linha %d: %s"
 
 #: ../lib/gis/rd_cellhd.c:150
 msgid "Duplicate projection field"
-msgstr ""
+msgstr "Campo de projeção duplicado"
 
 #: ../lib/gis/rd_cellhd.c:153
 #, c-format
@@ -6351,11 +6353,11 @@ msgstr "Não foi possível buscar informações de segurança para <%s>"
 
 #: ../lib/gis/parser_wps.c:490
 msgid "Multiple outputs are not supported by WPS 1.0.0"
-msgstr ""
+msgstr "Múltiplas saídas não são suportadas por WPS 1.0.0"
 
 #: ../lib/gis/color_rules.c:98
 msgid "no description"
-msgstr ""
+msgstr "sem descrição"
 
 #: ../lib/gis/color_rules.c:292
 msgid "Unable to open color rule"
@@ -6378,7 +6380,7 @@ msgstr "Não foi possível abrir descrição de cor"
 #: ../lib/gis/mapset_msc.c:90
 #, c-format
 msgid "Unable to make mapset element %s (%s): %s"
-msgstr ""
+msgstr "Não foi possível fazer elemento do mapset %s (%s): %s"
 
 #: ../lib/gis/mapset_msc.c:94
 #, c-format
@@ -6609,7 +6611,7 @@ msgstr "Arquivo da região %s/%s/%s está vazio"
 #: ../lib/gis/find_file.c:114
 #, c-format
 msgid "Data element '%s/%s' was found in more mapsets (also found in <%s>)"
-msgstr ""
+msgstr "Elemento de dados '%s/%s' foi encontrado em outros mapsets (também encontrado em <%s>)"
 
 #: ../lib/gis/find_file.c:127
 #, c-format
@@ -6623,7 +6625,7 @@ msgstr ""
 #: ../lib/gis/mkstemp.c:138
 #, c-format
 msgid "Unrecognised access mode: %o"
-msgstr ""
+msgstr "Modo de acesso não reconhecido: %o"
 
 #: ../lib/gis/mapset.c:38
 msgid "MAPSET is not set"
@@ -6680,12 +6682,12 @@ msgstr "Tabela <%s> já existe no banco de dados <%s>"
 #: ../lib/db/dbmi_client/copy_tab.c:274
 #, c-format
 msgid "Column <%s> is not integer"
-msgstr ""
+msgstr "Coluna <%s> não é inteiro"
 
 #: ../lib/db/dbmi_client/copy_tab.c:294
 #, c-format
 msgid "Unable to create table <%s>"
-msgstr ""
+msgstr "Não foi possível criar tabela <%s>"
 
 #: ../lib/db/dbmi_client/copy_tab.c:338 ../lib/vector/Vlib/write_ogr.c:587
 #: ../lib/vector/Vlib/write_pg.c:2017
@@ -6831,15 +6833,15 @@ msgstr ""
 
 #: ../lib/db/dbmi_base/error.c:72
 msgid "<NULL error message>"
-msgstr ""
+msgstr "<NULL error message>"
 
 #: ../lib/db/dbmi_base/error.c:91
 msgid "dbmi: Protocol error"
-msgstr ""
+msgstr "dbmi: Erro de protocolo"
 
 #: ../lib/db/dbmi_base/error.c:136
 msgid "dbmi: Out of Memory"
-msgstr ""
+msgstr "dbmi: Sem memória"
 
 #: ../lib/db/dbmi_base/error.c:149
 #, c-format
@@ -7728,7 +7730,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/read_pg.c:1217
 msgid "Corrupted data"
-msgstr ""
+msgstr "Dados corrompidos"
 
 #: ../lib/vector/Vlib/read_pg.c:1252
 #, c-format
@@ -8118,7 +8120,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write_pg.c:1365
 #, c-format
 msgid "Invalid feature type (%d) for nodes"
-msgstr ""
+msgstr "Tipo de feição inválido (%d) para nós"
 
 #: ../lib/vector/Vlib/write_pg.c:1379
 msgid "PostGIS topology schema not defined"
@@ -8910,7 +8912,7 @@ msgstr ""
 #: ../lib/vector/Vlib/close.c:91
 #, c-format
 msgid "Unable to create vector map <%s>"
-msgstr ""
+msgstr "Não foi possível criar mapa vetorial <%s>"
 
 #: ../lib/vector/Vlib/close.c:108
 msgid "Copying features failed"
@@ -9836,6 +9838,5 @@ msgstr "nome de cor inválido"
 #~ msgid "initial GRASS database directory"
 #~ msgstr "Diretório do banco de dados GRASS inicial"
 
-#, c-format
 #~ msgid "Unable to execute command '%s': %s"
 #~ msgstr "Não foi possível executar comando '%s': %s"

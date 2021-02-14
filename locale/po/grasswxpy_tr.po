@@ -20676,6 +20676,5 @@ msgstr "Sayısallaştırma"
 msgid "&Fetch"
 msgstr "&Getir"
 
-#, python-format
 #~ msgid "Maximum number of animations is %s."
 #~ msgstr "En büyük animasyon sayısı: %s."

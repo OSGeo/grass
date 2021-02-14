@@ -5406,7 +5406,7 @@ msgstr ""
 #: ../vector/v.class/main.c:111 ../vector/v.label.sa/labels.c:75
 #: ../vector/v.vol.rst/user1.c:95 ../vector/v.label/main.c:274
 msgid "Unable to get layer info for vector map"
-msgstr ""
+msgstr "Não foi possível encontrar informações da camada para o mapa vetorial"
 
 #: ../ps/ps.map/catval.c:53 ../ps/ps.map/catval.c:115 ../ps/ps.map/catval.c:181
 #: ../doc/vector/v.example/main.c:137 ../raster/r.volume/main.c:243
@@ -5909,7 +5909,7 @@ msgstr ""
 #: ../vector/v.decimate/main.c:410 ../vector/v.colors.out/scan_cats.c:32
 #: ../vector/v.label/main.c:293 ../vector/v.info/level1.c:38
 msgid "Unable to read vector map"
-msgstr ""
+msgstr "Não foi possível ler o mapa vetorial"
 
 #: ../raster/r.path/main.c:351 ../raster/r.drain/main.c:319
 #, c-format
@@ -30316,7 +30316,7 @@ msgstr "Mais pontos (%d) da categoria %d, valor ajustado para 'NULL'"
 #: ../vector/v.label/main.c:325
 #, c-format
 msgid "No record for category %d in table <%s>"
-msgstr ""
+msgstr "Não há registro para a categoria %d na tabela <%s>"
 
 #: ../vector/v.what.rast3/main.c:329
 #, c-format
@@ -31132,7 +31132,7 @@ msgstr ""
 #: ../vector/v.out.ogr/create.c:20
 #, c-format
 msgid "OGR driver <%s> not available"
-msgstr ""
+msgstr "Driver OGR <%s> não disponível"
 
 #: ../vector/v.out.ogr/create.c:30
 #, c-format
@@ -31675,7 +31675,7 @@ msgstr ""
 
 #: ../vector/v.label.sa/main.c:41
 msgid "Create optimally placed labels for vector map(s)"
-msgstr ""
+msgstr "Crie etiquetas posicionadas de maneira ideal para mapa(s) vetorial(is)"
 
 #: ../vector/v.label.sa/main.c:57 ../vector/v.label/main.c:78
 msgid "Name of attribute column to be used for labels"
@@ -31703,7 +31703,7 @@ msgstr "Tamanho do rótulo (em unidade de mapa)"
 
 #: ../vector/v.label.sa/main.c:84
 msgid "Icon size of point features (in map-units)"
-msgstr ""
+msgstr "Tamanho do ícone para feições de pontos (em unidades do mapa)"
 
 #: ../vector/v.label.sa/main.c:107 ../vector/v.label/main.c:174
 #: ../vector/v.lrs/v.lrs.label/main.c:205
@@ -31725,17 +31725,17 @@ msgstr ""
 #: ../vector/v.label.sa/font.c:54
 #, c-format
 msgid "%s: Unable to read font definition file; use the default"
-msgstr ""
+msgstr "%s: Não foi possível ler o arquivo de definição de fonte; use o padrão"
 
 #: ../vector/v.label.sa/font.c:60
 #, c-format
 msgid "%s: No font definition file"
-msgstr ""
+msgstr "%s: Sem arquivo de definição de fonte"
 
 #: ../vector/v.label.sa/labels.c:68
 #, c-format
 msgid "Cannot allocate %lu bytes of memory"
-msgstr ""
+msgstr "Não pode alocar %lu bytes de memória"
 
 #: ../vector/v.label.sa/labels.c:87
 msgid "Unable to initialise FreeType"
@@ -31744,38 +31744,38 @@ msgstr ""
 #: ../vector/v.label.sa/labels.c:90
 #, c-format
 msgid "Unable to find font '%s'\n"
-msgstr ""
+msgstr "Não foi possível encontrar a fonte '%s'\n"
 
 #: ../vector/v.label.sa/labels.c:92
 #, c-format
 msgid "Font '%s' is not a FreeType font\n"
-msgstr ""
+msgstr "A fonte '%s' não é uma fonte FreeType\n"
 
 #: ../vector/v.label.sa/labels.c:96
 msgid "Font file format is not supported by FreeType"
-msgstr ""
+msgstr "O formato do arquivo de fonte não é suportado por FreeType"
 
 #: ../vector/v.label.sa/labels.c:98
 msgid "Font file can not be loaded"
-msgstr ""
+msgstr "O arquivo de fonte não pode ser carregado"
 
 #: ../vector/v.label.sa/labels.c:107
 msgid "Unable to set font size"
-msgstr ""
+msgstr "Não foi possível definir o tamanho da fonte"
 
 #: ../vector/v.label.sa/labels.c:128
 msgid "Cannot allocate more memory"
-msgstr ""
+msgstr "Não é possível alocar mais memória"
 
 #: ../vector/v.label.sa/labels.c:162 ../vector/v.overlay/main.c:423
 #: ../vector/v.label/main.c:319
 msgid "Unable to select attributes"
-msgstr ""
+msgstr "Não foi possível selecionar atributos"
 
 #: ../vector/v.label.sa/labels.c:244
 #, c-format
 msgid "Cannot load glyph for '%c'"
-msgstr ""
+msgstr "Não é possível carregar glifo para '%c'"
 
 #: ../vector/v.net.distance/main.c:69
 msgid "Computes shortest distance via the network between the given sets of features."
@@ -32047,7 +32047,7 @@ msgstr "Organização em que o mapa vetorial foi criado"
 
 #: ../vector/v.support/main.c:61
 msgid "Date of vector map digitization (e.g., \"15 Mar 2007\")"
-msgstr ""
+msgstr "Data da digitalização do mapa vetorial (e.g., \"15 Mar 2007\")"
 
 #: ../vector/v.support/main.c:68
 msgid "Person who created vector map"
@@ -32067,7 +32067,7 @@ msgstr ""
 
 #: ../vector/v.support/main.c:95
 msgid "Vector map projection zone"
-msgstr ""
+msgstr "Zona de projeção do mapa vetorial"
 
 #: ../vector/v.support/main.c:102
 msgid "Vector map digitizing threshold number (e.g., 0.5)"
@@ -39617,8 +39617,8 @@ msgstr[1] "Feições %d (tipo %s) escritas para <%s>."
 #, c-format
 msgid "%d primitive written to <%s>."
 msgid_plural "%d primitives written to <%s>."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d primitiva escrita para <%s>."
+msgstr[1] "%d primitivas escritas para <%s>."
 
 #: ../vector/v.out.postgis/main.c:247
 #, c-format
@@ -39656,6 +39656,10 @@ msgid ""
 "\t\t'GEOMETRY_NAME=wkb_geometry': define geometry column 'wkb_geometry'\n"
 "\t\t'SPATIAL_INDEX=NO': do not create spatial index on geometry column"
 msgstr ""
+"Exemplos:\n"
+"\t\t'FID=cat': define coluna de identificação de feição 'cat'\n"
+"\t\t'GEOMETRY_NAME=wkb_geometry': define coluna de geometria 'wkb_geometry'\n"
+"\t\t'SPATIAL_INDEX=NO': não criar índice espacial na coluna de geometria"
 
 #: ../vector/v.out.postgis/args.c:66
 msgid "Do not export attribute table"
@@ -40843,7 +40847,7 @@ msgstr "Camada %d"
 
 #: ../vector/v.generalize/main.c:78
 msgid "simplification"
-msgstr ""
+msgstr "simplificação"
 
 #: ../vector/v.generalize/main.c:79
 msgid "smoothing"
@@ -40851,7 +40855,7 @@ msgstr ""
 
 #: ../vector/v.generalize/main.c:80
 msgid "displacement"
-msgstr ""
+msgstr "deslocamento"
 
 #: ../vector/v.generalize/main.c:81
 msgid "network generalization"
@@ -41079,15 +41083,15 @@ msgstr ""
 
 #: ../vector/v.generalize/displacement.c:199
 msgid "Inverting matrix..."
-msgstr ""
+msgstr "Invertendo a matriz..."
 
 #: ../vector/v.generalize/displacement.c:201
 msgid "Unable to calculate the inverse matrix"
-msgstr ""
+msgstr "Não foi possível calcular a matriz inversa"
 
 #: ../vector/v.generalize/displacement.c:204
 msgid "Resolving conflicts..."
-msgstr ""
+msgstr "Resolvendo conflitos..."
 
 #: ../vector/v.external/main.c:59
 msgid "Creates a new pseudo-vector map as a link to an OGR-supported layer or a PostGIS feature table."
@@ -44978,6 +44982,5 @@ msgstr "%d áreas representam mais feições (sobreposição) , pois os polígon
 #~ msgid "nearest neighbor"
 #~ msgstr "vizinho mais próximo"
 
-#, c-format
 #~ msgid "%d bytes of disk space for temp files."
 #~ msgstr "%d bytes de espaço em disco para arquivos temporários."

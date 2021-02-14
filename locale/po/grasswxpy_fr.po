@@ -21132,6 +21132,5 @@ msgstr "L'animation existe déjà"
 #~ msgid "Code revision"
 #~ msgstr "Révision du code"
 
-#, python-format
 #~ msgid "Maximum number of animations is %s."
 #~ msgstr "Le nombre maximal d'animations est %s."
