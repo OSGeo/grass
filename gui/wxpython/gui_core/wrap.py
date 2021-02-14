@@ -186,7 +186,7 @@ class SpinCtrl(wx.SpinCtrl):
     """Wrapper around wx.SpinCtrl to have more control
     over the widget on different platforms"""
 
-    gtk3MinSize = 130
+    gtk3MinSize = 118 # optimal for SpinCtrl default param  min=1, max=100
 
     def __init__(self, *args, **kwargs):
         args = convertToInt(argsOrKwargs=args)
