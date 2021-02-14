@@ -2409,7 +2409,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         )
 
         length = SpinCtrl(
-            parent=panel, id=wx.ID_ANY, size=(65, -1), initial=250, min=1, max=1e6
+            parent=panel, id=wx.ID_ANY, size=(137, -1), initial=250, min=1, max=1e6
         )
         length.Enable(False)
         self.layerPage[layer]["addColLength"] = length.GetId()
@@ -3143,7 +3143,7 @@ class LayerBook(wx.Notebook):
                 SpinCtrl(
                     parent=self.addPanel,
                     id=wx.ID_ANY,
-                    size=(65, -1),
+                    size=(137, -1),
                     initial=maxLayer + 1,
                     min=1,
                     max=1e6,
