@@ -20909,15 +20909,12 @@ msgstr "La animación ya existe"
 #~ msgid "Installs new extension from GRASS AddOns repository."
 #~ msgstr "Instala una nueva extensión desde el repositorio de complementos de GRASS."
 
-#, python-brace-format
 #~ msgid "New name for <{n}>"
 #~ msgstr "Nuevo nombre para <{n}>"
 
-#, python-brace-format
 #~ msgid "Do you really want to delete map(s) <{m}>?"
 #~ msgstr "Realmente desea remover el/los mapa(s) <{m}>?"
 
-#, python-brace-format
 #~ msgid "Do you really want to delete {n} maps?"
 #~ msgstr "Realmente desea remover {n} mapas?"
 

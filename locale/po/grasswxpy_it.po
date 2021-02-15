@@ -4518,7 +4518,7 @@ msgstr "Disegna tutte le mappe visualizzate"
 #: ../gui/wxpython/menustrings.py:31
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:32
 msgid "Re-render maps in all open map display windows"
-msgstr ""
+msgstr "Ridisegna le mappe in tutte le finestra di visualizzazione della mappa"
 
 #: ../gui/wxpython/menustrings.py:32 ../gui/wxpython/menustrings.py:33
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:33
@@ -5250,7 +5250,7 @@ msgstr "Formato di output per i dati raster"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:164
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1165
 msgid "Redirects raster output to file utilizing GDAL library rather than storing in GRASS raster format."
-msgstr ""
+msgstr "Salva l'output raster in un file utilizzando la libreria GDAL invece di salvarlo nel formato raster di GRASS."
 
 #: ../gui/wxpython/menustrings.py:165 ../gui/wxpython/menustrings.py:1182
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:165
@@ -5262,7 +5262,7 @@ msgstr "Formato di output per i dati vettoriale"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:166
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1167
 msgid "Defines vector output format utilizing OGR library."
-msgstr ""
+msgstr "Imposta il formato di output vettoriale utilizzando la libreria OGR"
 
 #: ../gui/wxpython/menustrings.py:167 ../gui/wxpython/menustrings.py:1184
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:167
@@ -10745,7 +10745,7 @@ msgstr "Importa dati raster in una mappa vettoriale di GRASS usando la libreria 
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:88
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1089
 msgid "Imports a vector map as GRASS GIS specific archive file (packed with v.pack)"
-msgstr ""
+msgstr "Importa una mappa vettoriale da un file archivio specifico di GRASS GIS (creato con v.pack)"
 
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:132
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1133
@@ -13805,7 +13805,7 @@ msgstr "Impostazioni lingua"
 
 #: ../gui/wxpython/gui_core/preferences.py:551
 msgid "Choose language (requires to save and GRASS restart):"
-msgstr "Scegli linguaggio (richiesto per salvare e far ripartire GRASS)"
+msgstr "Scegli la lingua (richiede di salvare e riavviare GRASS):"
 
 #: ../gui/wxpython/gui_core/preferences.py:585
 msgid "Appearance settings"
@@ -16393,6 +16393,8 @@ msgid ""
 "Raster temporal dataset (strds)\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
+"Dataset temporale di raster (strds)\n"
+"Premente ENTER dopo aver digitato il nome e selezionare con il menù a tendina "
 
 #: ../gui/wxpython/tplot/frame.py:195
 msgid "X and Y coordinates separated by comma:"
@@ -16411,6 +16413,8 @@ msgid ""
 "Vector temporal dataset (stvds)\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
+"Dataset temporale di vettoriali (stvds)\n"
+"Premente ENTER dopo aver digitato il nome e selezionare con il menù a tendina"
 
 #: ../gui/wxpython/tplot/frame.py:244
 msgid "Select attribute column"
@@ -16517,7 +16521,7 @@ msgstr "C'è stato un problema ottenendo i dati dalla cat {ca}."
 
 #: ../gui/wxpython/tplot/frame.py:776
 msgid "Problem getting data from vector temporal dataset. Empty list of values."
-msgstr ""
+msgstr "C'è stato un problema ottenendo i dati dal dataset temporale di vettoriali. La lista dei valori è vuota"
 
 #: ../gui/wxpython/tplot/frame.py:802
 #, python-brace-format
@@ -16530,7 +16534,7 @@ msgstr "I file esistono"
 
 #: ../gui/wxpython/tplot/frame.py:809
 msgid "Please change name of output CSV file or "
-msgstr ""
+msgstr "Si prega di cambiare il nome del file CSV di output o"
 
 #: ../gui/wxpython/tplot/frame.py:835
 msgid "Incorrect coordinates format, should be: x,y"
@@ -20886,11 +20890,9 @@ msgstr ""
 msgid "Animation already axists"
 msgstr "Animazione già esistente"
 
-#, python-brace-format
 #~ msgid "Exported file directory '{base_dir}' does not exist."
 #~ msgstr "La directory esportata '{base_dir}' non esiste."
 
-#, python-brace-format
 #~ msgid "Exported animation file <{file}> exists. Do you want to overwrite it?"
 #~ msgstr "Il file dell'animazione esportato <{file}> esiste. Si vuole sovrascriverlo?"
 
@@ -20903,15 +20905,12 @@ msgstr "Animazione già esistente"
 #~ msgid "Download in progress, wait until it is finished 0%"
 #~ msgstr "Scaricamento in progresso, aspettare fino che non è finito 0%"
 
-#, python-brace-format
 #~ msgid "Download in progress, wait until it is finished {0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed"
 #~ msgstr "Scaricamento in progresso, aspettare fino che non è finito {0}%,{1} MB, {2} KB/s, {3:0f} secondi passati"
 
-#, python-brace-format
 #~ msgid "Download file from <{url}>, return status code {code}, "
 #~ msgstr "File scaricato da <{url}>, codice dello stato di ritorno {code},"
 
-#, python-brace-format
 #~ msgid "Download file from <{url}>, failed. Check internet connection."
 #~ msgstr "File scaricato da <{url}>, fallito. Controllare la connessione internet."
 
@@ -20927,7 +20926,6 @@ msgstr "Animazione già esistente"
 #~ msgid "Close all Map Displays"
 #~ msgstr "Chiudi tutte le finestre per la visualizzazione della mappa"
 
-#, python-brace-format
 #~ msgid "New name for <{n}>"
 #~ msgstr "Nuovo nome per <{n}>"
 
@@ -20943,7 +20941,6 @@ msgstr "Animazione già esistente"
 #~ msgid "No vector maps."
 #~ msgstr "Nessuna mappa vettoriale."
 
-#, python-brace-format
 #~ msgid "The {map_type} map {map_name} exists. Do you want to overwrite?"
 #~ msgstr "La mappa {map_type} {map_name} esiste. Si vuole sovrascriverlo?"
 
