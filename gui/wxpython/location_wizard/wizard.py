@@ -611,17 +611,8 @@ class ItemList(ListCtrl,
         for column in columns:
             self.InsertColumn(i, column)
             i += 1
-        #
-        # add some attributes
-        #
-        if globalvar.CheckWxVersion(version=[4, 1, 0]):
-            self.attr1 = wx.ItemAttr()
-            self.attr2 = wx.ItemAttr()
-        else:
-            self.attr1 = wx.ListItemAttr()
-            self.attr2 = wx.ListItemAttr()
-        self.attr1.SetBackgroundColour(wx.Colour(238, 238, 238))
-        self.attr2.SetBackgroundColour("white")
+
+        self.EnableAlternateRowColours()
 
         if self.sourceData:
             self.Populate()
@@ -718,14 +709,6 @@ class ItemList(ListCtrl,
 
     def OnGetItemImage(self, item):
         return -1
-
-    def OnGetItemAttr(self, item):
-        """Get item attributes"""
-        index = self.itemIndexMap[item]
-        if (index % 2) == 0:
-            return self.attr2
-        else:
-            return self.attr1
 
     def SortItems(self, sorter=cmp):
         """Sort items"""
