@@ -22,7 +22,11 @@ corrections to account for different datums.
 
 This is transparent for the user as input and output parameters are
 either read from PROJ_INFO and PROJ_UNITS files (<tt>g.proj</tt>,
-<tt>v.proj</tt>, <tt>r.proj</tt>).
+<tt>v.proj</tt>, <tt>r.proj</tt>). In addition, a PROJ_EPSG file is
+stored. GRASS converts a co-ordinate system representation to WKT
+style, the EPSG code is here preferred if available. The TOWGS84 parameter
+is scanned from PROJ_INFO file and appended to co-ordinate system definition
+imported from EPSG code by GDAL library.
 
 In GRASS the wrapper functions in lib/proj/get_proj.c makes the
 preparations to set up the parameter strings and init the info-structures,
