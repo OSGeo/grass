@@ -36,7 +36,7 @@ versions of GRASS).
 File lib/proj/convert.c contains functions for converting GRASS
 co-ordinate system descriptions to and from the formats used by other
 GIS. Heavy use is made of the OGR library, part of GDAL
-(http://www.gdal.osgeo.org/ogr/).
+(https://gdal.org).
 
 \subsection datum_transformation Datum transformation
 
