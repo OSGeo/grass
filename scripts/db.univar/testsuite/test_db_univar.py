@@ -2,47 +2,54 @@
 Created on Sun Jun 07 21:01:34 2018
 
 @author: Sanjeet Bhatti
+@author: Vaclav Petras
 """
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 
-from grass.script.core import run_command
-
 
 class TestDbUnivar(TestCase):
-    """Test db.univar script"""
+    """Test running db.univar script with NULL values and extended stats"""
 
-    columnName = 'heights'
-    mapName = 'samples'
+    column_name = "heights"
+    map_name = "samples"
 
     @classmethod
-    def setUpClass(cls):
-        """Use temp region"""
+    def setUpClass(cls):  # pylint: disable=invalid-name
+        """Generate vector points in extend larger than raster with values"""
         cls.use_temp_region()
-        cls.runModule('g.region', raster='elevation', flags='p')
+        cls.runModule("g.region", raster="elevation")
+        cls.runModule("g.region", e="e+5000", w="w-5000", s="s-5000", n="n+5000")
+        cls.runModule("v.random", output=cls.map_name, npoints=100, seed=42)
+        cls.runModule(
+            "v.db.addtable",
+            map=cls.map_name,
+            columns="{} double precision".format(cls.column_name),
+        )
+        cls.runModule(
+            "v.what.rast", map=cls.map_name, raster="elevation", column=cls.column_name
+        )
 
     @classmethod
-    def tearDownClass(cls):
-        """Remove temporary region"""
-        cls.runModule('g.remove', flags='f', type='raster', name='elevation')
+    def tearDownClass(cls):  # pylint: disable=invalid-name
+        """Remove temporary region and vector"""
         cls.del_temp_region()
-
-        run_command('v.db.droptable', map='samples', flags='f')
+        cls.runModule("g.remove", flags="f", type="vector", name=cls.map_name)
 
     def test_calculate(self):
-        """run db.univar"""
-        run_command('v.random', output=self.mapName, n=100, overwrite='True')
-        run_command('v.db.addtable', map=self.mapName,
-                    column="heights double precision")
-        run_command('v.what.rast', map=self.mapName, raster='elevation',
-                    column=self.columnName)
-        run_command('v.db.select', map=self.mapName)
-
-        module = SimpleModule('db.univar', table=self.mapName,
-                              column=self.columnName)
+        """Check that db.univar runs"""
+        module = SimpleModule("db.univar", table=self.map_name, column=self.column_name)
         self.assertModule(module)
 
-if __name__ == '__main__':
+    def test_calculate_extended(self):
+        """Check that db.univar -e runs"""
+        module = SimpleModule(
+            "db.univar", table=self.map_name, flags="e", column=self.column_name
+        )
+        self.assertModule(module)
+
+
+if __name__ == "__main__":
     test()

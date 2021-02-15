@@ -154,9 +154,10 @@ def main():
 
     tmpf = open(tmp)
     for line in tmpf:
-        if len(line.rstrip('\r\n')) == 0:
+        line = line.rstrip('\r\n')
+        if len(line) == 0:
             continue
-        x = float(line.rstrip('\r\n'))
+        x = float(line)
         N += 1
         sum += x
         sum2 += x * x
@@ -245,17 +246,20 @@ def main():
     inf = open(tmp + ".sort")
     l = 1
     for line in inf:
+        line = line.rstrip('\r\n')
+        if len(line) == 0:
+            continue
         if l == q25pos:
-            q25 = float(line.rstrip('\r\n'))
+            q25 = float(line)
         if l == q50apos:
-            q50a = float(line.rstrip('\r\n'))
+            q50a = float(line)
         if l == q50bpos:
-            q50b = float(line.rstrip('\r\n'))
+            q50b = float(line)
         if l == q75pos:
-            q75 = float(line.rstrip('\r\n'))
+            q75 = float(line)
         for i in range(len(ppos)):
             if l == ppos[i]:
-                pval[i] = float(line.rstrip('\r\n'))
+                pval[i] = float(line)
         l += 1
 
     q50 = (q50a + q50b) / 2
