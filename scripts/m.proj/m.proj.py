@@ -142,8 +142,8 @@ def main():
     # check for cs2cs
     if not gcore.find_program('cs2cs'):
         gcore.fatal(_(
-            "cs2cs program not found, install PROJ.4 first: \
-            http://proj.maptools.org"))
+            "cs2cs program not found, install PROJ first: \
+            https://proj.org"))
 
     # parse field separator
     # FIXME: input_x,y needs to split on multiple whitespace between them
