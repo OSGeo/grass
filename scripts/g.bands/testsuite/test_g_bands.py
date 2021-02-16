@@ -25,7 +25,7 @@ class TestBandsSystemDefined(TestCase):
     def test_number_s2(self):
         # test number of S2 band identifiers (hardcoded, no changes expected)
         #
-        nbands = self._number_of_bands(band='S2')
+        nbands = self._number_of_bands(pattern='S2')
 
         self.assertEqual(nbands, 13)
 
@@ -34,8 +34,8 @@ class TestBandsSystemDefined(TestCase):
         # test if S2_1 is defined (lower + upper case)
         #
         band = 'S2_1'
-        for iband in [band, band.lower()]:
-            nbands = self._number_of_bands(band=iband)
+        for iband in [band, band.upper()]:
+            nbands = self._number_of_bands(pattern=iband)
             self.assertEqual(nbands, 1)
 
 if __name__ == '__main__':
