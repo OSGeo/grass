@@ -70,58 +70,64 @@ from grass.exceptions import CalledModuleError
 
 def remove(maps):
     """Remove raster maps"""
-    gcore.run_command('g.remove', flags='f', quiet=True,
-                      type='rast', name=maps)
+    gcore.run_command("g.remove", flags="f", quiet=True, type="rast", name=maps)
 
 
 def main():
     options, flags = gcore.parser()
 
-    drape_map = options['color']
-    relief_map = options['shade']
-    brighten = int(options['brighten'])
-    output_map = options['output']
-    bgcolor = options['bgcolor']
+    drape_map = options["color"]
+    relief_map = options["shade"]
+    brighten = int(options["brighten"])
+    output_map = options["output"]
+    bgcolor = options["bgcolor"]
 
     rhis_extra_args = {}
     if bgcolor:
-        rhis_extra_args['bgcolor'] = bgcolor
-    if flags['c']:
-        rhis_extra_args['flags'] = 'c'
+        rhis_extra_args["bgcolor"] = bgcolor
+    if flags["c"]:
+        rhis_extra_args["flags"] = "c"
 
     to_remove = []
     try:
-        unique_name = 'tmp__rshade_%d' % os.getpid()
-        tmp_base = '%s_drape' % unique_name
-        tmp_r = tmp_base + '.r'
-        tmp_g = tmp_base + '.g'
-        tmp_b = tmp_base + '.b'
+        unique_name = "tmp__rshade_%d" % os.getpid()
+        tmp_base = "%s_drape" % unique_name
+        tmp_r = tmp_base + ".r"
+        tmp_g = tmp_base + ".g"
+        tmp_b = tmp_base + ".b"
 
         if brighten:
             # steps taken from r.his manual page
             # how much they are similar with d.shade/d.his is unknown
             # perhaps even without brightness, there can be some differences
             # comparing to d.shade
-            relief_map_tmp = '%s_relief' % unique_name
+            relief_map_tmp = "%s_relief" % unique_name
             # convert [-99, -99] to [0.01, 1.99]
-            brighten = 1 + brighten / 100.
-            grast.mapcalc('{n} = {c} * #{o}'.format(
-                n=relief_map_tmp, o=relief_map, c=brighten))
-            gcore.run_command('r.colors', map=relief_map_tmp, color='grey255')
+            brighten = 1 + brighten / 100.0
+            grast.mapcalc(
+                "{n} = {c} * #{o}".format(n=relief_map_tmp, o=relief_map, c=brighten)
+            )
+            gcore.run_command("r.colors", map=relief_map_tmp, color="grey255")
             relief_map = relief_map_tmp
             to_remove.append(relief_map_tmp)
-        gcore.run_command('r.his', hue=drape_map, intensity=relief_map,
-                          red=tmp_r, green=tmp_g, blue=tmp_b,
-                          **rhis_extra_args)
+        gcore.run_command(
+            "r.his",
+            hue=drape_map,
+            intensity=relief_map,
+            red=tmp_r,
+            green=tmp_g,
+            blue=tmp_b,
+            **rhis_extra_args
+        )
         to_remove.extend([tmp_r, tmp_g, tmp_b])
-        gcore.run_command('r.composite', red=tmp_r, green=tmp_g,
-                          blue=tmp_b, output=output_map)
+        gcore.run_command(
+            "r.composite", red=tmp_r, green=tmp_g, blue=tmp_b, output=output_map
+        )
         remove(to_remove)  # who knows if finally is called when exit
     except CalledModuleError as error:
         remove(to_remove)
         # TODO: implement module name to CalledModuleError
-        gcore.fatal(_("Module %s failed. Check the above error messages.") %
-                    error.cmd)
+        gcore.fatal(_("Module %s failed. Check the above error messages.") % error.cmd)
 
 
 if __name__ == "__main__":

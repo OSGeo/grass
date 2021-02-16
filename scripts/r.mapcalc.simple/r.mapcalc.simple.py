@@ -102,23 +102,23 @@ def name_quote(name):
 
 def main():
     options, flags = gs.parser()
-    expr = options['expression']
+    expr = options["expression"]
     if not expr:
         gs.fatal(_("The expression is an empty string"))
-    output = options['output']
-    quote = flags['q']
+    output = options["output"]
+    quote = flags["q"]
     re_flags = 0
-    if flags['c']:
+    if flags["c"]:
         re_flags = re.IGNORECASE
 
     if quote:
         output = name_quote(output)
 
     seed = None
-    if options['seed']:
-        seed = options['seed']
-    elif flags['s']:
-        seed = 'auto'
+    if options["seed"]:
+        seed = options["seed"]
+    elif flags["s"]:
+        seed = "auto"
 
     variables = []
     for key in "ABCDEF":
@@ -129,15 +129,15 @@ def main():
             variables.append((key, name))
 
     for key, name in variables:
-        find = r'([^a-zA-Z0-9]|^){key}([^a-zA-Z0-9]|$)'.format(key=key)
-        replace = r'\1{}\2'.format(name)
+        find = r"([^a-zA-Z0-9]|^){key}([^a-zA-Z0-9]|$)".format(key=key)
+        replace = r"\1{}\2".format(name)
         # we need to do the substitution twice because we are matching
         # also the char before and after which fails when there is only
         # one char between the two usages of the same var (e.g. A*A)
         expr = re.sub(find, replace, expr, flags=re_flags)
         expr = re.sub(find, replace, expr, flags=re_flags)
 
-    expr = '{lhs} = {rhs}'.format(lhs=output, rhs=expr)
+    expr = "{lhs} = {rhs}".format(lhs=output, rhs=expr)
     gs.verbose(_("Expression: {}").format(expr))
     gs.mapcalc(expr, seed=seed)
     # g.message -e "Calculating $GIS_OPT_OUTFILE. Try expert mode."

@@ -47,6 +47,7 @@ import sys
 import grass.script as gs
 from grass.exceptions import GrassError, OpenError
 
+
 def print_map_band_reference(name, band_reader):
     """Print band reference information assigned to a single raster map
 
@@ -58,12 +59,13 @@ def print_map_band_reference(name, band_reader):
         with RasterRow(name) as rast:
             band_ref = rast.info.band_reference
             if band_ref:
-                shortcut, band = band_ref.split('_')
+                shortcut, band = band_ref.split("_")
                 band_reader.print_info(shortcut, band)
             else:
                 gs.info(_("No band reference assigned to <{}>").format(name))
     except OpenError as e:
         gs.error(_("Map <{}> not found").format(name))
+
 
 def manage_map_band_reference(name, band_ref):
     """Manage band reference assigned to a single raster map
@@ -78,11 +80,16 @@ def manage_map_band_reference(name, band_ref):
     try:
         with RasterRow(name) as rast:
             if band_ref:
-                gs.debug(_("Band reference <{}> assigned to raster map <{}>").format(
-                    band_ref, name), 1)
+                gs.debug(
+                    _("Band reference <{}> assigned to raster map <{}>").format(
+                        band_ref, name
+                    ),
+                    1,
+                )
             else:
-                gs.debug(_("Band reference dissociated from raster map <{}>").format(
-                    name), 1)
+                gs.debug(
+                    _("Band reference dissociated from raster map <{}>").format(name), 1
+                )
             try:
                 rast.info.band_reference = band_ref
             except GrassError as e:
@@ -94,21 +101,25 @@ def manage_map_band_reference(name, band_ref):
 
     return 0
 
+
 def main():
-    maps = options['map'].split(',')
-    if options['operation'] == 'add':
-        if not options['band']:
-            gs.fatal(_("Operation {}: required parameter <{}> not set").format(
-                options['operation'], 'band')
+    maps = options["map"].split(",")
+    if options["operation"] == "add":
+        if not options["band"]:
+            gs.fatal(
+                _("Operation {}: required parameter <{}> not set").format(
+                    options["operation"], "band"
+                )
             )
-        bands = options['band'].split(',')
+        bands = options["band"].split(",")
         if len(bands) > 1 and len(bands) != len(maps):
             gs.fatal(_("Number of maps differs from number of bands"))
     else:
         bands = [None]
 
-    if options['operation'] == 'print':
+    if options["operation"] == "print":
         from grass.bandref import BandReferenceReader
+
         band_reader = BandReferenceReader()
     else:
         band_reader = None
@@ -116,7 +127,7 @@ def main():
     ret = 0
     for i in range(len(maps)):
         band_ref = bands[i] if multi_bands else bands[0]
-        if options['operation'] == 'print':
+        if options["operation"] == "print":
             print_map_band_reference(maps[i], band_reader)
         else:
             if manage_map_band_reference(maps[i], band_ref) != 0:
@@ -124,9 +135,8 @@ def main():
 
     return ret
 
+
 if __name__ == "__main__":
     options, flags = gs.parser()
 
-    sys.exit(
-        main()
-    )
+    sys.exit(main())

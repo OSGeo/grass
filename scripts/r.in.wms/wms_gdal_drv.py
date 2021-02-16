@@ -20,28 +20,30 @@ try:
     from osgeo import gdal
     from osgeo import gdalconst
 except:
-    grass.fatal(_("Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"))
+    grass.fatal(
+        _(
+            "Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"
+        )
+    )
 
 import xml.etree.ElementTree as etree
 
 from wms_base import WMSBase, GetSRSParamVal
 
 
-class NullDevice():
-
+class NullDevice:
     def write(self, s):
         pass
 
 
 class WMSGdalDrv(WMSBase):
-
     def __init__(self):
         super(WMSGdalDrv, self).__init__()
         self.proxy = None
         self.proxy_user_pw = None
 
     def setProxy(self, proxy, proxy_user_pw=None):
-        """ Set the HTTP proxy and its user and password
+        """Set the HTTP proxy and its user and password
 
         @input proxy HTTP proxy with [IP address]:[port]
         @input proxy_user_pw with [user name]:[password]
@@ -62,45 +64,45 @@ class WMSGdalDrv(WMSBase):
         service.set("name", "WMS")
 
         version = etree.SubElement(service, "Version")
-        version.text = self.params['wms_version']
+        version.text = self.params["wms_version"]
 
         server_url = etree.SubElement(service, "ServerUrl")
-        server_url.text = self.params['url']
+        server_url.text = self.params["url"]
 
-        srs = etree.SubElement(service, self.params['proj_name'])
-        srs.text = GetSRSParamVal(self.params['srs'])
+        srs = etree.SubElement(service, self.params["proj_name"])
+        srs.text = GetSRSParamVal(self.params["srs"])
 
         image_format = etree.SubElement(service, "ImageFormat")
-        image_format.text = self.params['format']
+        image_format.text = self.params["format"]
 
         image_format = etree.SubElement(service, "Transparent")
-        image_format.text = self.params['transparent']
+        image_format.text = self.params["transparent"]
 
         layers = etree.SubElement(service, "Layers")
-        layers.text = self.params['layers']
+        layers.text = self.params["layers"]
 
         styles = etree.SubElement(service, "Styles")
-        styles.text = self.params['styles']
+        styles.text = self.params["styles"]
 
         data_window = etree.SubElement(gdal_wms, "DataWindow")
 
         upper_left_x = etree.SubElement(data_window, "UpperLeftX")
-        upper_left_x.text = str(self.bbox['minx'])
+        upper_left_x.text = str(self.bbox["minx"])
 
         upper_left_y = etree.SubElement(data_window, "UpperLeftY")
-        upper_left_y.text = str(self.bbox['maxy'])
+        upper_left_y.text = str(self.bbox["maxy"])
 
         lower_right_x = etree.SubElement(data_window, "LowerRightX")
-        lower_right_x.text = str(self.bbox['maxx'])
+        lower_right_x.text = str(self.bbox["maxx"])
 
         lower_right_y = etree.SubElement(data_window, "LowerRightY")
-        lower_right_y.text = str(self.bbox['miny'])
+        lower_right_y.text = str(self.bbox["miny"])
 
         size_x = etree.SubElement(data_window, "SizeX")
-        size_x.text = str(self.region['cols'])
+        size_x.text = str(self.region["cols"])
 
         size_y = etree.SubElement(data_window, "SizeY")
-        size_y.text = str(self.region['rows'])
+        size_y.text = str(self.region["rows"])
 
         # RGB + alpha
         self.temp_map_bands_num = 4
@@ -108,14 +110,17 @@ class WMSGdalDrv(WMSBase):
         block_size_x.text = str(self.temp_map_bands_num)
 
         block_size_x = etree.SubElement(gdal_wms, "BlockSizeX")
-        block_size_x.text = str(self.tile_size['cols'])
+        block_size_x.text = str(self.tile_size["cols"])
 
         block_size_y = etree.SubElement(gdal_wms, "BlockSizeY")
-        block_size_y.text = str(self.tile_size['rows'])
+        block_size_y.text = str(self.tile_size["rows"])
 
-        if self.params['username'] and self.params['password']:
+        if self.params["username"] and self.params["password"]:
             user_password = etree.SubElement(gdal_wms, "UserPwd")
-            user_password.text = "%s:%s" % (self.params['username'], self.params['password'])
+            user_password.text = "%s:%s" % (
+                self.params["username"],
+                self.params["password"],
+            )
 
         xml_file = self._tempfile()
 
@@ -134,11 +139,15 @@ class WMSGdalDrv(WMSBase):
 
         # GDAL WMS driver does not flip geographic coordinates
         # according to WMS standard 1.3.0.
-        if ("+proj=latlong" in self.proj_srs or
-                "+proj=longlat" in self.proj_srs) and \
-                self.params['wms_version'] == "1.3.0":
-            grass.warning(_("If module will not be able to fetch the data in this " +
-                            "geographic projection, \n try 'WMS_GRASS' driver or use WMS version 1.1.1."))
+        if (
+            "+proj=latlong" in self.proj_srs or "+proj=longlat" in self.proj_srs
+        ) and self.params["wms_version"] == "1.3.0":
+            grass.warning(
+                _(
+                    "If module will not be able to fetch the data in this "
+                    + "geographic projection, \n try 'WMS_GRASS' driver or use WMS version 1.1.1."
+                )
+            )
 
         self._debug("_download", "started")
         temp_map = self._tempfile()
@@ -151,9 +160,9 @@ class WMSGdalDrv(WMSBase):
         file.close()
 
         if self.proxy:
-            gdal.SetConfigOption('GDAL_HTTP_PROXY', str(self.proxy))
+            gdal.SetConfigOption("GDAL_HTTP_PROXY", str(self.proxy))
         if self.proxy_user_pw:
-            gdal.SetConfigOption('GDAL_HTTP_PROXYUSERPWD', str(self.proxy_user_pw))
+            gdal.SetConfigOption("GDAL_HTTP_PROXYUSERPWD", str(self.proxy_user_pw))
         wms_dataset = gdal.Open(xml_file, gdal.GA_ReadOnly)
         grass.try_remove(xml_file)
         if wms_dataset is None:
@@ -166,9 +175,13 @@ class WMSGdalDrv(WMSBase):
             grass.fatal(_("Unable to find %s driver" % format))
 
         metadata = driver.GetMetadata()
-        if gdal.DCAP_CREATECOPY not in metadata or \
-           metadata[gdal.DCAP_CREATECOPY] == 'NO':
-            grass.fatal(_('Driver %s supports CreateCopy() method.') % self.gdal_drv_name)
+        if (
+            gdal.DCAP_CREATECOPY not in metadata
+            or metadata[gdal.DCAP_CREATECOPY] == "NO"
+        ):
+            grass.fatal(
+                _("Driver %s supports CreateCopy() method.") % self.gdal_drv_name
+            )
 
         self._debug("_download", "calling GDAL CreateCopy...")
 
