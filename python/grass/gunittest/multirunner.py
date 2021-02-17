@@ -154,7 +154,7 @@ def main():
 
     if main_report:
         # TODO: solve the path to source code (work now only for grass source code)
-        arguments = [sys.executable, grasssrc + '/lib/python/guittest/' + 'multireport.py', '--timestapms']
+        arguments = [sys.executable, grasssrc + '/python/grass/gunittest/' + 'multireport.py', '--timestapms']
         arguments.extend(reports)
         p = subprocess.Popen(arguments)
         returncode = p.wait()

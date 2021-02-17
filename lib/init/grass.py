@@ -102,7 +102,7 @@ MACOSX = "darwin" in sys.platform
 
 def decode(bytes_, encoding=ENCODING):
     """Decode bytes with default locale and return (unicode) string
-    Adapted from lib/python/core/utils.py
+    Adapted from grass.script.core.utils.
 
     No-op if parameter is not bytes (assumed unicode string).
 
@@ -123,7 +123,7 @@ def decode(bytes_, encoding=ENCODING):
 
 def encode(string, encoding=ENCODING):
     """Encode string with default locale and return bytes with that encoding
-    Adapted from lib/python/core/utils.py
+    Adapted from grass.script.core.utils.
 
     No-op if parameter is bytes (assumed already encoded).
     This ensures garbage in, garbage out.
@@ -644,7 +644,7 @@ def set_paths(grass_config_dir):
         # the env var PYTHONPATH is only evaluated when python is started,
         # thus:
         sys.path.append(pythonpath)
-        # now we can import stuff from GRASS lib/python
+        # now we can import stuff from grass package
 
     # set path for the GRASS man pages
     grass_man_path = gpath('docs', 'man')
