@@ -9,9 +9,6 @@ DSTH_EXTRA = $(ARCH_INCDIR)/copying.h $(ARCH_INCDIR)/citing.h $(ARCH_INCDIR)/con
 
 default: $(DSTH) $(DSTH_EXTRA)
 
-$(info    SRCH is $(SRCH))
-$(info    DSTH is $(DSTH))
-
 # cancel rule from Rules.make
 $(ARCH_INCDIR)/%.h: %.h
 
