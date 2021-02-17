@@ -9,7 +9,7 @@ if (
     or len(sys.argv) > 5
     or re.match("^-*help", sys.argv[1])
 ):
-    print("Usage: gridatb.to.arc.py gridatb_file arc_file" " [xllcorner yllcorner]")
+    print("Usage: gridatb.to.arc.py gridatb_file arc_file [xllcorner yllcorner]")
     exit()
 
 xllcorner = 0
