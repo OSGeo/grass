@@ -14,7 +14,7 @@ BIN_DIST_FILES = $(FILES) \
 	lib \
 	locale \
 	scripts \
-	tools \
+	utils \
 	share
 
 # Shell commands
@@ -211,7 +211,7 @@ srclibsdist: distclean
 
 	@ # needed to store code in package with grass-version path:
 	-cp -L * ./grass-lib-$(GRASS_VERSION_NUMBER)
-	-cp -rL tools ./grass-lib-$(GRASS_VERSION_NUMBER)
+	-cp -rL utils ./grass-lib-$(GRASS_VERSION_NUMBER)
 	-cp -rL demolocation ./grass-lib-$(GRASS_VERSION_NUMBER)
 	-cp -rL include ./grass-lib-$(GRASS_VERSION_NUMBER)
 	-cp -rL --parents lib/external/shapelib ./grass-lib-$(GRASS_VERSION_NUMBER)
