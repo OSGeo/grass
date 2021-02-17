@@ -36,7 +36,6 @@
 # % answer: 10
 # %end
 
-import os
 import signal
 import struct
 import sys

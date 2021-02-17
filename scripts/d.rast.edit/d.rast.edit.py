@@ -659,7 +659,7 @@ def wxGUI():
             if self.angles:
                 self.status['aspect'] = self.angles[row][col]
 
-        def force_color(val):
+        def force_color(self, val):
             run('g.region', rows=1, cols=1)
             run('r.mapcalc', expression="%s = %d" % (self.tempmap, val))
             run('r.colors', map=self.tempmap, rast=self.inmap)

@@ -15,7 +15,7 @@ import re
 import doctest
 import hashlib
 
-from grass.script.utils import decode, encode, _get_encoding
+from grass.script.utils import encode
 
 try:
     from grass.script.core import KeyValue
@@ -84,7 +84,6 @@ def unify_units(dic):
               ]
     dic = dict(dic)
     for l in lookup:
-        import types
         if not isinstance(dic['unit'], str):
             for n in range(len(dic['unit'])):
                 if dic['unit'][n] in l:

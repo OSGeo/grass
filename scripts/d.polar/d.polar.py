@@ -44,7 +44,6 @@
 
 import os
 import string
-import types
 import math
 import atexit
 import glob

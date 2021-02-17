@@ -42,12 +42,6 @@ for details.
 """
 from __future__ import print_function
 
-try:
-    import ply.lex as lex
-    import ply.yacc as yacc
-except:
-    pass
-
 import copy
 import grass.pygrass.modules as pymod
 from grass.exceptions import FatalError
@@ -748,7 +742,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                     register_list.append(map_i)
 
                 # Open connection to temporal database.
-                dbif, _ = init_dbif(self.dbif)
+                dbif, unused = init_dbif(self.dbif)
 
                 # Create result space time dataset.
                 if self.dry_run is False:

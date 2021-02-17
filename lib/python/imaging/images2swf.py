@@ -69,7 +69,6 @@ sources and tools:
 
 import os
 import sys
-import time
 import zlib
 
 try:
@@ -85,20 +84,13 @@ except ImportError:
 
 # True if we are running on Python 3.
 # Code taken from six.py by Benjamin Peterson (MIT licensed)
-import types
 PY3 = sys.version_info[0] == 3
-if PY3:
-    string_types = str,
-    integer_types = int,
-    class_types = type,
-    text_type = str
-    binary_type = bytes
-else:
-    string_types = basestring,
-    integer_types = (int, long)
-    class_types = (type, types.ClassType)
-    text_type = unicode
-    binary_type = str
+
+string_types = str,
+integer_types = int,
+class_types = type,
+text_type = str
+binary_type = bytes
 
 
 # todo: use imageio/FreeImage to support reading JPEG images from SWF?

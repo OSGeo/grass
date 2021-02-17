@@ -20,7 +20,6 @@ for details.
 from __future__ import print_function
 from .core import get_tgis_message_interface, get_available_temporal_mapsets, init_dbif
 from .datetime_math import time_delta_to_relative_time
-from .space_time_datasets import RasterDataset
 from .factory import dataset_factory
 from .open_stds import open_old_stds
 import grass.script as gscript

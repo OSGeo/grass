@@ -58,11 +58,6 @@ for details.
 try:
     import PIL
     from PIL import Image
-    PILLOW = True
-    try:
-        from PIL import PILLOW_VERSION  # pylint: disable=unused-import
-    except ImportError:
-        PILLOW = False
     try:
         import PIL.ImageOps as ImageOps
     except ImportError:

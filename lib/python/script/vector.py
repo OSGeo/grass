@@ -18,19 +18,12 @@ for details.
 """
 from __future__ import absolute_import
 import os
-import types
-
-try:
-    import __builtin__
-    bytes = str
-except ImportError:
-    # python3
-    import builtins as __builtin__
-    unicode = str
 
 from .utils import parse_key_val
 from .core import *
 from grass.exceptions import CalledModuleError
+
+unicode = str
 
 
 def vector_db(map, env=None, **kwargs):

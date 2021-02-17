@@ -27,7 +27,7 @@ from grass.pygrass.rpc.base import RPCServerBase
 from grass.pygrass.raster import RasterRow
 from grass.pygrass.vector import VectorTopo
 from grass.script.utils import encode
-from grass.pygrass.utils import decode, set_path
+from grass.pygrass.utils import decode
 
 ###############################################################################
 

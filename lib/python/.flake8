@@ -21,10 +21,8 @@ ignore =
     E501, # line too long (183 > 150 characters)
     E722, # do not use bare 'except'
     E741, # ambiguous variable name 'l'
-    F401, # '.reader.BandReferenceReader' imported but unused
     F403, # 'from ctypes import *' used; unable to detect undefined names
     F405, # 'RasterRow' may be undefined, or defined from star imports: ctypes, grass.pygrass.raster, grass.pygrass.vector
-    F821, # undefined name '_'
     F841, # local variable 't0' is assigned to but never used
     W293, # blank line contains whitespace
     W503, # line break before binary operator
@@ -39,10 +37,15 @@ per-file-ignores =
     pygrass/utils.py: E402,
     # Current benchmarks/tests are changing sys.path before import.
     # Possibly, a different approach should be taken there anyway.
-    pygrass/tests/benchmark.py: E402,
+    pygrass/tests/benchmark.py: E402, F401, F821
     # Configuration file for Sphinx:
     # Ignoring import/code mix and line length.
-    docs/conf.py: E402, E501
+    docs/conf.py: E402, E501,
+    # Unused imports
+    */__init__.py: F401,
+    */*/__init__.py: F401,
+    */*/*/__init__.py: F401
+
 
 max-line-length = 88
 exclude =
@@ -58,3 +61,6 @@ exclude =
     ctypes,
     pydispatch,
     testsuite,
+
+builtins =
+    _

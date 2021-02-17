@@ -40,8 +40,6 @@
 # % key_desc: oldcol,newcol
 # %end
 
-import sys
-import os
 import grass.script as grass
 
 

@@ -51,7 +51,6 @@
 # % description: Base name for output raster map (band number will be appended to base name)
 # %end
 
-import sys
 import os
 import platform
 import grass.script as grass

@@ -19,7 +19,6 @@ for details.
 """
 from __future__ import print_function
 from .datetime_math import *
-from .core import get_tgis_message_interface
 from functools import reduce
 from collections import OrderedDict
 import ast

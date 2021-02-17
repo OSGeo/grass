@@ -19,9 +19,8 @@ for details.
 """
 import re
 import sys
-import string
 
-from .utils import encode, decode, split
+from .utils import decode, split
 from .core import *
 
 

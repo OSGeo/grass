@@ -67,7 +67,6 @@ from __future__ import print_function
 import os
 import sys
 
-from grass.script.utils import diff_files, try_rmdir
 from grass.script import core as grass
 from grass.exceptions import CalledModuleError
 

@@ -29,7 +29,6 @@ import string
 import random
 import pipes
 from tempfile import NamedTemporaryFile
-import types as python_types
 
 from .utils import KeyValue, parse_key_val, basename, encode, decode, try_remove
 from grass.exceptions import ScriptError, CalledModuleError

@@ -5,7 +5,6 @@ import glob
 import re
 from collections import OrderedDict
 
-import grass.script as gs
 
 # band reference should be required to have the format
 # <shortcut>_<band>

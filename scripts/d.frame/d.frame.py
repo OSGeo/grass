@@ -68,7 +68,7 @@
 import os
 import sys
 
-from grass.script.core import parser, read_command, fatal, debug, run_command, gisenv, warning, parse_command
+from grass.script.core import fatal, parse_command, parser, read_command, run_command, warning
 
 # check if monitor is running
 
@@ -101,7 +101,7 @@ def read_monitor_file(monitor, ftype='env'):
 def check_monitor_file(monitor, ftype='env'):
     mfile = parse_command('d.mon', flags='g').get(ftype, None)
     if mfile is None or not os.path.isfile(mfile):
-        fatal(_("Unable to get monitor info (no %s found)") % var)
+        fatal(_("Unable to get monitor info"))
 
     return mfile
 

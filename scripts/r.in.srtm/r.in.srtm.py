@@ -133,7 +133,6 @@ import os
 import shutil
 import atexit
 import grass.script as grass
-from grass.exceptions import CalledModuleError
 import zipfile as zfile
 
 

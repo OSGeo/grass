@@ -37,7 +37,6 @@
 # % answer: 10
 # %end
 
-import sys
 import os
 import grass.script as grass
 

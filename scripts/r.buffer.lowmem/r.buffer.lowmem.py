@@ -41,10 +41,8 @@
 # % answer: meters
 # %end
 
-import sys
 import os
 import atexit
-import math
 import grass.script as grass
 from grass.script.utils import encode
 

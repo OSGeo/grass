@@ -9,7 +9,7 @@ import grass.lib.vector as libvect
 from grass.pygrass.errors import must_be_open
 
 from grass.pygrass.vector.basic import Ilist, BoxList
-from grass.pygrass.vector.geometry import read_line, Isle, Area, Point, Node
+from grass.pygrass.vector.geometry import read_line, Isle, Area, Node
 
 # For test purposes
 test_vector_name = "find_doctest_map"

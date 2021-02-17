@@ -24,7 +24,7 @@ from .reporters import (GrassTestFilesMultiReporter,
                         NoopFileAnonymizer, keyvalue_to_text)
 from .utils import silent_rmtree, ensure_dir
 
-from grass.script.utils import decode, encode, _get_encoding
+from grass.script.utils import decode, _get_encoding
 
 try:
     from string import maketrans
