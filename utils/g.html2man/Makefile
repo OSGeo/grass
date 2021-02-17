@@ -2,12 +2,12 @@ MODULE_TOPDIR = ../..
 
 include $(MODULE_TOPDIR)/include/Make/Other.make
 
-TARGETS := $(patsubst %.py,$(TOOLSDIR)/%.py,ghtml.py ggroff.py g.html2man.py)
+TARGETS := $(patsubst %.py,$(UTILSDIR)/%.py,ghtml.py ggroff.py g.html2man.py)
 
 default: $(TARGETS)
 
-$(TOOLSDIR)/g.html2man.py: g.html2man.py
+$(UTILSDIR)/g.html2man.py: g.html2man.py
 	$(INSTALL) $< $@
 
-$(TOOLSDIR)/%.py: %.py
+$(UTILSDIR)/%.py: %.py
 	$(INSTALL_DATA) $< $@

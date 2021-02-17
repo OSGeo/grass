@@ -62,7 +62,7 @@ HTMLDIR         = $(ARCH_DISTDIR)/docs/html
 SCRIPTDIR       = $(ARCH_DISTDIR)/scripts
 MSG_DIR         = $(ARCH_DISTDIR)/etc/msgs
 MO_DIR          = $(ARCH_DISTDIR)/locale
-TOOLSDIR        = $(ARCH_DISTDIR)/utils
+UTILSDIR        = $(ARCH_DISTDIR)/utils
 
 FONTDIR         = $(ARCH_DISTDIR)/fonts
 
