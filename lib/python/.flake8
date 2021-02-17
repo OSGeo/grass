@@ -41,15 +41,10 @@ per-file-ignores =
     # Configuration file for Sphinx:
     # Ignoring import/code mix and line length.
     docs/conf.py: E402, E501,
-    script/__init__.py: F401,
-    imaging/__init__.py: F401,
-    temporal/__init__.py: F401,
-    bandref/__init__.py: F401,
-    pygrass/modules/interface/__init__.py: F401,
-    pygrass/rpc/__init__.py: F401,
-    pygrass/gis/__init__.py: F401,
-    pygrass/modules/__init__.py: F401,
-    pygrass/modules/grid/__init__.py: F401,
+    # Unused imports
+    */__init__.py: F401,
+    */*/__init__.py: F401,
+    */*/*/__init__.py: F401
 
 
 max-line-length = 88
