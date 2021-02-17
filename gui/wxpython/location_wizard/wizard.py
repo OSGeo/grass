@@ -898,7 +898,7 @@ class ProjParamsPage(TitledPage):
                            flag=wx.EXPAND)
             self.sizer.AddGrowableRow(1)
             paramSBSizer.Add(self.panel, proportion=1,
-                             flag=wx.ALIGN_CENTER | wx.EXPAND)
+                             flag=wx.EXPAND)
 
             paramSBSizer.Fit(self.panel)
             self.panel.SetSizer(self.prjParamSizer)
