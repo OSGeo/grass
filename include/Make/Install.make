@@ -49,12 +49,12 @@ install-check-built:
 		exit; \
 	fi
 
-install-check-parent:
-	@ INST_PATH=`dirname $(INST_DIR)`; \
-	while [ ! -d "$$INST_PATH" ]; do \
+install-check-parent: | $(DESTDIR)
+	@ INST_PATH=`dirname $(DESTDIR)$(INST_DIR)`; \
+	while [ ! -d "$(DESTDIR)$$INST_PATH" ]; do \
 		INST_PATH=`dirname $$INST_PATH`; \
 	done; \
-	if [ ! -d "$(INST_DIR)" -a ! -w "$$INST_PATH" ] ; then \
+	if [ ! -d "$(DESTDIR)$(INST_DIR)" -a ! -w "$(DESTDIR)$$INST_PATH" ] ; then \
 		echo "ERROR: Directory $$INST_PATH is a parent directory of your" >&2 ; \
 		echo "  install directory $(INST_DIR) and is not writable." >&2 ; \
 		echo "  Perhaps you need root access." >&2 ; \
@@ -63,7 +63,7 @@ install-check-parent:
 	fi
 
 install-check-writable:
-	@ if [ -d "$(INST_DIR)" -a ! -w "$(INST_DIR)" ] ; then \
+	@ if [ -d "$(DESTDIR)$(INST_DIR)" -a ! -w "$(DESTDIR)$(INST_DIR)" ] ; then \
 		echo "ERROR: Your install directory $(INST_DIR) is not writable." >&2 ; \
 		echo "  Perhaps you need root access." >&2 ; \
 		echo "  Installation aborted, exiting Make." >&2 ; \
@@ -71,7 +71,7 @@ install-check-writable:
 	fi
 
 install-check-prefix:
-	@ result=`echo "$(INST_DIR)" | awk '{ if ($$1 ~ /grass/) print $$1 }'`; \
+	@ result=`echo "$(DESTDIR)$(INST_DIR)" | awk '{ if ($$1 ~ /grass/) print $$1 }'`; \
 	if [ "$$result" = "" ] ; then \
 		echo "WARNING: Your install directory $(INST_DIR)" >&2 ; \
 		echo "  does not contain the word 'grass'." >&2 ; \
@@ -88,7 +88,7 @@ install-check-prefix:
 ifneq ($(strip $(MINGW)),)
 STARTUP = $(INST_DIR)/etc/$(GRASS_NAME).py
 else
-STARTUP = $(UNIX_BIN)/$(GRASS_NAME)
+STARTUP = $(DESTDIR)$(UNIX_BIN)/$(GRASS_NAME)
 endif
 
 FONTCAP = etc/fontcap
@@ -96,31 +96,34 @@ TMPGISRC = demolocation/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
 PLATMAKE = include/Make/Platform.make
 GRASSMAKE = include/Make/Grass.make
 
-real-install: | $(INST_DIR) $(UNIX_BIN)
-	-tar cBCf $(GISBASE) - . | tar xBCf $(INST_DIR) - 2>/dev/null
-	-rm $(INST_DIR)/$(GRASS_NAME).tmp
+real-install: | $(DESTDIR) $(DESTDIR)$(INST_DIR) $(DESTDIR)$(UNIX_BIN)
+	-tar cBCf $(GISBASE) - . | tar xBCf $(DESTDIR)$(INST_DIR) - 2>/dev/null
+	-rm $(DESTDIR)$(INST_DIR)/$(GRASS_NAME).tmp
 	$(MAKE) $(STARTUP)
 
-	-rm $(INST_DIR)/$(FONTCAP)
-	$(MAKE) $(INST_DIR)/$(FONTCAP)
+	-rm $(DESTDIR)$(INST_DIR)/$(FONTCAP)
+	$(MAKE) $(DESTDIR)$(INST_DIR)/$(FONTCAP)
 
-	-rm $(INST_DIR)/$(TMPGISRC)
-	$(MAKE) $(INST_DIR)/$(TMPGISRC)
+	-rm $(DESTDIR)$(INST_DIR)/$(TMPGISRC)
+	$(MAKE) $(DESTDIR)$(INST_DIR)/$(TMPGISRC)
 
-	-rm $(INST_DIR)/$(PLATMAKE)
-	$(MAKE) $(INST_DIR)/$(PLATMAKE)
+	-rm $(DESTDIR)$(INST_DIR)/$(PLATMAKE)
+	$(MAKE) $(DESTDIR)$(INST_DIR)/$(PLATMAKE)
 
-	-rm $(INST_DIR)/$(GRASSMAKE)
-	$(MAKE) $(INST_DIR)/$(GRASSMAKE)
+	-rm $(DESTDIR)$(INST_DIR)/$(GRASSMAKE)
+	$(MAKE) $(DESTDIR)$(INST_DIR)/$(GRASSMAKE)
 
-	-$(CHMOD) -R a+rX $(INST_DIR) 2>/dev/null
+	-$(CHMOD) -R a+rX $(DESTDIR)$(INST_DIR) 2>/dev/null
 
 ifneq ($(findstring darwin,$(ARCH)),)
 	@# enable OSX Help Viewer
 	@/bin/ln -sfh "$(INST_DIR)/docs/html" /Library/Documentation/Help/GRASS-$(GRASS_VERSION_MAJOR).$(GRASS_VERSION_MINOR)
 endif
 
-$(INST_DIR) $(UNIX_BIN):
+$(DESTDIR):
+	$(MAKE_DIR_CMD) -p $@
+
+$(DESTDIR)$(INST_DIR) $(DESTDIR)$(UNIX_BIN):
 	$(MAKE_DIR_CMD) $@
 
 $(STARTUP): $(ARCH_DISTDIR)/$(GRASS_NAME).tmp
@@ -144,16 +147,16 @@ sed -e 's#^\(ARCH_DISTDIR.[^=]*\).*#\1= $(INST_DIR)#g' \
     -e 's#^\(ARCH_BINDIR.[^=]*\).*#\1= $(UNIX_BIN)#g' $< > $@
 endef
 
-$(INST_DIR)/$(FONTCAP): $(GISBASE)/$(FONTCAP)
+$(DESTDIR)$(INST_DIR)/$(FONTCAP): $(GISBASE)/$(FONTCAP)
 	$(call fix_gisbase)
 
-$(INST_DIR)/$(TMPGISRC): $(GISBASE)/$(TMPGISRC)
+$(DESTDIR)$(INST_DIR)/$(TMPGISRC): $(GISBASE)/$(TMPGISRC)
 	$(call fix_gisbase)
 
-$(INST_DIR)/$(PLATMAKE): $(GISBASE)/$(PLATMAKE)
+$(DESTDIR)$(INST_DIR)/$(PLATMAKE): $(GISBASE)/$(PLATMAKE)
 	$(call fix_grass_home)
 
-$(INST_DIR)/$(GRASSMAKE): $(GISBASE)/$(GRASSMAKE)
+$(DESTDIR)$(INST_DIR)/$(GRASSMAKE): $(GISBASE)/$(GRASSMAKE)
 	$(call fix_grass_arch)
 
 install-macosx:
