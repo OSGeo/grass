@@ -291,9 +291,11 @@ int main(int argc, char *argv[])
                 || !(opt.chan5->answer) || !(opt.chan7->answer)) )
 	G_fatal_error(_("gvi index requires blue, green, red, nir, chan5 and chan7 maps"));
 
-    infd_redchan = Rast_open_old(redchan, "");
-    data_type_redchan = Rast_map_type(redchan, "");
-    inrast_redchan = Rast_allocate_buf(data_type_redchan);
+    if (redchan) {
+        infd_redchan = Rast_open_old(redchan, "");
+        data_type_redchan = Rast_map_type(redchan, "");
+        inrast_redchan = Rast_allocate_buf(data_type_redchan);
+    }
 
     if (nirchan) {
         infd_nirchan = Rast_open_old(nirchan, "");
