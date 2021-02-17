@@ -3728,7 +3728,11 @@ class LayerBook(wx.Notebook):
     def OnModifyLayer(self, event):
         """Modify layer connection settings"""
 
-        layer = int(self.modifyLayerWidgets['layer'][1].GetStringSelection())
+        layer = self.modifyLayerWidgets['layer'][1].GetStringSelection()
+        if not layer:
+            return
+
+        layer = int(layer)
 
         modify = False
         if self.modifyLayerWidgets['driver'][1].GetStringSelection() != \
