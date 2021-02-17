@@ -62,7 +62,7 @@ HTMLDIR         = $(ARCH_DISTDIR)/docs/html
 SCRIPTDIR       = $(ARCH_DISTDIR)/scripts
 MSG_DIR         = $(ARCH_DISTDIR)/etc/msgs
 MO_DIR          = $(ARCH_DISTDIR)/locale
-TOOLSDIR	= $(ARCH_DISTDIR)/tools
+UTILSDIR        = $(ARCH_DISTDIR)/utils
 
 FONTDIR         = $(ARCH_DISTDIR)/fonts
 
@@ -97,7 +97,7 @@ YFLAGS      = -d -v
 MANSECT = 1
 MANBASEDIR = $(ARCH_DISTDIR)/docs/man
 MANDIR = $(MANBASEDIR)/man$(MANSECT)
-HTML2MAN = VERSION_NUMBER=$(GRASS_VERSION_NUMBER) $(GISBASE)/tools/g.html2man.py
+HTML2MAN = VERSION_NUMBER=$(GRASS_VERSION_NUMBER) $(GISBASE)/utils/g.html2man.py
 
 GDAL_LINK = $(USE_GDAL)
 GDAL_DYNAMIC = 1
