@@ -13,12 +13,10 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (Mentor: Martin Landa)
 """
 
-import os
 import grass.script as grass
 
 try:
     from osgeo import gdal
-    from osgeo import gdalconst
 except:
     grass.fatal(_("Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"))
 

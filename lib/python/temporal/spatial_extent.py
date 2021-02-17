@@ -35,8 +35,6 @@ for details.
 """
 from __future__ import print_function
 from .base import SQLDatabaseInterface
-from .core import init
-from datetime import datetime
 
 
 class SpatialExtent(SQLDatabaseInterface):

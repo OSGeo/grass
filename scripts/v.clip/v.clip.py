@@ -56,7 +56,7 @@ import os
 import sys
 import atexit
 
-from grass.script import run_command, message, parser
+from grass.script import parser
 import grass.script as grass
 from grass.exceptions import CalledModuleError
 
