@@ -24,7 +24,7 @@ class TestBandsSystemDefined(TestCase):
         self.assertModuleFail(module)
 
     def test_band_ref_assign(self):
-        # copy raster map to the current mapset
+        # Copy raster map to the current mapset
         call_module("g.copy", raster="{m}@PERMANENT,{m}".format(m=self.raster_map))
 
         module = SimpleModule("i.band", map=self.raster_map, band=self.band_ref)
@@ -34,7 +34,7 @@ class TestBandsSystemDefined(TestCase):
         self.assertEqual(self.read_band_ref(), self.band_ref)
 
     def test_band_ref_dissociate(self):
-        module = SimpleModule("i.band", operation="remove" , map=self.raster_map)
+        module = SimpleModule("i.band", operation="remove", map=self.raster_map)
         self.assertModule(module)
 
         # check also using pygrass
