@@ -17,7 +17,7 @@ Check examples if still compiling
 ### Fix typos in source code with
 
 ```bash
-tools/fix_typos.sh
+utils/fix_typos.sh
 ```
 
 ### i18N: sync from Transifex
@@ -29,7 +29,7 @@ master .po files
 
 ```bash
 cd locale
-sh ~/software/grass-addons/tools/transifex_merge.sh
+sh ~/software/grass-addons/utils/transifex_merge.sh
 make
 make verify
 # ... then fix .po files as needed.
@@ -179,7 +179,7 @@ md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 Create Changelog file on release branch:
 
 ```bash
-python tools/gitlog2changelog.py
+python utils/gitlog2changelog.py
 mv ChangeLog ChangeLog_$VERSION
 head ChangeLog_$VERSION
 gzip ChangeLog_$VERSION

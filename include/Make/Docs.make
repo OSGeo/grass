@@ -92,8 +92,8 @@ html2pdfdoccomplete:
 
 changelog:
 	@ echo "creating ChangeLog file (following 'master' only)..."
-	@ # tools/gitlog2changelog.py creates a GNU style ChangeLog file:
-	python tools/gitlog2changelog.py
+	@ # utils/gitlog2changelog.py creates a GNU style ChangeLog file:
+	python utils/gitlog2changelog.py
 
 .PHONY: htmldocs-single htmldocs packagehtmldocs pdfdocs cleandocs html2pdfdoc
 .PHONY: html2pdfdoccomplete changelog

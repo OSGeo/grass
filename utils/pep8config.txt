@@ -10,7 +10,7 @@
 # This configuration should work for all Python library, Python scripts and
 # wxPython GUI.
 # Example for gui/wxpython:
-#   pep8 --config=../../tools/pep8config.txt lmgr/
+#   pep8 --config=../../utils/pep8config.txt lmgr/
 
 # A lot of errors need to be ignored now to avoid a large number of messages.
 # Files need to be fixed one by one (without this configuration).

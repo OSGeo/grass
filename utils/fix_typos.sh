@@ -5,7 +5,7 @@
 # https://trac.osgeo.org/gdal/browser/trunk/gdal/scripts/fix_typos.sh
 #
 # Run in main source code directory of GRASS GIS:
-# sh tools/fix_typos.sh
+# sh utils/fix_typos.sh
 #
 #
 ###############################################################################

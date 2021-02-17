@@ -17,7 +17,7 @@
 # From: Glynn Clements <glynn at gclements.plus.com>
 # Date: Mon, 12 Jun 2006 13:00:25 +0100
 #
-# Usage: after having compiled GRASS, run "tools/dep_tree2sql.sh `pwd`" from the
+# Usage: after having compiled GRASS, run "utils/dep_tree2sql.sh `pwd`" from the
 # top of the GRASS source tree.
 #
 # Essentially, the script runs "nm" on every object file, library and
