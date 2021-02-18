@@ -33,7 +33,7 @@
 # %end
 # %option G_OPT_V_OUTPUT
 # %end
-import sys
+
 import os
 import atexit
 

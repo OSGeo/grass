@@ -46,14 +46,14 @@ def tlist_grouped(type, group_type=False, dbif=None):
         try:
             tlist_result = tlist(type=type, dbif=dbif)
         except gscript.ScriptError as e:
-            warning(e)
+            gscript.warning(e)
             continue
 
         for line in tlist_result:
             try:
                 name, mapset = line.split('@')
             except ValueError:
-                warning(_("Invalid element '%s'") % line)
+                gscript.warning(_("Invalid element '%s'") % line)
                 continue
 
             if mapset not in result:

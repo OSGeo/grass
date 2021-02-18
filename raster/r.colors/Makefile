@@ -14,7 +14,7 @@ default: multi thumbnails
 
 thumbnails: $(BIN)/r.mapcalc$(EXE) $(BIN)/r.colors$(EXE) $(HTMLDIR)/colortables
 ifndef CROSS_COMPILING
-	-$(call run_grass, $(GRASS_HOME)/tools/thumbnails.py)
+	-$(call run_grass, $(GRASS_HOME)/utils/thumbnails.py)
 endif
 
 $(HTMLDIR)/colortables: $(HTMLDIR)

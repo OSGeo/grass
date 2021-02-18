@@ -22,6 +22,7 @@ Classes:
  - widgets::GenericValidator
  - widgets::GenericMultiValidator
  - widgets::LayersListValidator
+ - widgets::PlacementValidator
  - widgets::GListCtrl
  - widgets::SearchModuleWidget
  - widgets::ManageSettingsWidget
@@ -44,6 +45,8 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)
 @author Stepan Turek <stepan.turek seznam.cz> (ManageSettingsWidget - created from GdalSelect)
 @author Matej Krejci <matejkrejci gmail.com> (Google GSoC 2014; EmailValidator, TimeISOValidator)
+@author Tomas Zigo <tomas.zigo slovanet.sk> (LayersListValidator,
+PlacementValidator)
 """
 
 import os
@@ -537,7 +540,7 @@ class StaticWrapText(GenStaticText):
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
     def DoGetBestSize(self):
-        """Overriden method which reports widget's best size."""
+        """Overridden method which reports widget's best size."""
         if not self.init:
             self.init = True
             self._updateLabel()
@@ -576,14 +579,13 @@ class BaseValidator(Validator):
 
     def OnText(self, event):
         """Do validation"""
-        self.Validate()
+        self.Validate(win=event.GetEventObject())
 
         event.Skip()
 
-    def Validate(self):
+    def Validate(self, win):
         """Validate input"""
-        textCtrl = self.GetWindow()
-        text = textCtrl.GetValue()
+        text = win.GetValue()
 
         if text:
             try:
@@ -599,7 +601,6 @@ class BaseValidator(Validator):
         textCtrl = self.GetWindow()
 
         textCtrl.SetBackgroundColour("grey")
-        textCtrl.SetFocus()
         textCtrl.Refresh()
 
     def _valid(self):
@@ -624,11 +625,9 @@ class CoordinatesValidator(BaseValidator):
     def __init__(self):
         BaseValidator.__init__(self)
 
-    def Validate(self):
+    def Validate(self, win):
         """Validate input"""
-
-        textCtrl = self.GetWindow()
-        text = textCtrl.GetValue()
+        text = win.GetValue()
         if text:
             try:
                 text = text.split(',')
@@ -681,10 +680,9 @@ class EmailValidator(BaseValidator):
     def __init__(self):
         BaseValidator.__init__(self)
 
-    def Validate(self):
+    def Validate(self, win):
         """Validate input"""
-        textCtrl = self.GetWindow()
-        text = textCtrl.GetValue()
+        text = win.GetValue()
         if text:
             if re.match(r'\b[\w.-]+@[\w.-]+.\w{2,4}\b', text) is None:
                 self._notvalid()
@@ -704,10 +702,9 @@ class TimeISOValidator(BaseValidator):
     def __init__(self):
         BaseValidator.__init__(self)
 
-    def Validate(self):
+    def Validate(self, win):
         """Validate input"""
-        textCtrl = self.GetWindow()
-        text = textCtrl.GetValue()
+        text = win.GetValue()
         if text:
             try:
                 datetime.strptime(text, '%Y-%m-%d')
@@ -1023,6 +1020,58 @@ class LayersListValidator(GenericValidator):
                 self._callback(layers_list=win)
                 return False
         return True
+
+
+class PlacementValidator(BaseValidator):
+    """Validator for placement input (list of floats separated by comma)"""
+
+    def __init__(self, num_of_params):
+        self._num_of_params = num_of_params
+        super().__init__()
+
+    def _enableDisableBtn(self, enable):
+        """Enable/Disable buttomn
+
+        :param bool enable: Enable/Disable btn
+        """
+        win = self.GetWindow().GetTopLevelParent()
+        for btn_id in (wx.ID_OK, wx.ID_APPLY):
+            btn = win.FindWindow(id=btn_id)
+            if btn:
+                btn.Enable(enable)
+
+    def _valid(self):
+        super()._valid()
+        self._enableDisableBtn(enable=True)
+
+    def _notvalid(self):
+        super()._notvalid()
+        self._enableDisableBtn(enable=False)
+
+    def Validate(self, win):
+        """Validate input"""
+        text = win.GetValue()
+        if text:
+            try:
+                text = text.split(',')
+
+                for t in text:
+                    float(t)
+
+                if len(text) % self._num_of_params != 0:
+                    self._notvalid()
+                    return False
+
+            except ValueError:
+                self._notvalid()
+                return False
+
+        self._valid()
+        return True
+
+    def Clone(self):
+        """Clone validator"""
+        return PlacementValidator(num_of_params=self._num_of_params)
 
 
 class GListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin,

@@ -510,7 +510,7 @@ distance(struct SubSig *SubSig1, struct SubSig *SubSig2, int nbands)
 
 static int compute_constants(
 				/* invert matrix and compute Sig->SubSig[i].cnst          */
-				/* Returns singular=1 if a singluar subcluster was found. */
+				/* Returns singular=1 if a singular subcluster was found. */
 				/* Returns singular=2 if all subclusters were singular.   */
 				/* When singular=2 then nsubclasses=0.                    */
 				struct ClassSig *Sig, int nbands)

@@ -101,7 +101,6 @@
 # %end
 
 
-import sys
 import os
 import atexit
 import subprocess

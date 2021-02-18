@@ -34,7 +34,7 @@ class TestBandsSystemDefined(TestCase):
         self.assertEqual(self.read_band_ref(), self.band_ref)
 
     def test_band_ref_dissociate(self):
-        module = SimpleModule("i.band", flags="r", map=self.raster_map)
+        module = SimpleModule('i.band', operation='remove' , map=self.raster_map)
         self.assertModule(module)
 
         # check also using pygrass

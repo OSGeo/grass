@@ -648,12 +648,12 @@ def wxGUI():
             if self.angles:
                 self.status["aspect"] = self.angles[row][col]
 
-        def force_color(val):
-            run("g.region", rows=1, cols=1)
-            run("r.mapcalc", expression="%s = %d" % (self.tempmap, val))
-            run("r.colors", map=self.tempmap, rast=self.inmap)
-            run("r.out.ppm", input=self.tempmap, out=self.tempfile)
-            run("g.remove", flags="f", type="raster", name=self.tempmap)
+        def force_color(self, val):
+            run('g.region', rows=1, cols=1)
+            run('r.mapcalc', expression="%s = %d" % (self.tempmap, val))
+            run('r.colors', map=self.tempmap, rast=self.inmap)
+            run('r.out.ppm', input=self.tempmap, out=self.tempfile)
+            run('g.remove', flags='f', type='raster', name=self.tempmap)
 
             tempimg = wx.Image(self.tempfile)
             grass.try_remove(self.tempfile)

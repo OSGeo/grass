@@ -691,7 +691,7 @@ def get_wxgui_extensions(url):
         grass.warning(_("Unable to fetch '%s'") % url)
         return
 
-    for line in file.readlines():
+    for line in file_.readlines():
         # list extensions
         sline = pattern.search(line)
         if not sline:

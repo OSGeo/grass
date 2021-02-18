@@ -708,7 +708,7 @@ EXCLUDE                = bin.@ARCH@ \
                          sites \
                          temporal \
                          testsuite \
-                         tools \
+                         utils \
                          vector \
                          visualization
 

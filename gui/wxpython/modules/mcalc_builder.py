@@ -548,7 +548,7 @@ class MapCalcFrame(wx.Frame):
 
     # unused
     # def OnSelectTextEvt(self, event):
-    #     """Checks if user is typing or the event was emited by map selection.
+    #     """Checks if user is typing or the event was emitted by map selection.
     #     Prevents from changing focus.
     #     """
     #     item = self.mapselect.GetValue().strip()
