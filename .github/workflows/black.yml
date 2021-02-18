@@ -12,6 +12,7 @@ jobs:
     strategy:
       matrix:
         directory:
+        - man
         - scripts
       fail-fast: false
 
