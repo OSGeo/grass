@@ -59,7 +59,8 @@ def discover_modules(start_dir, skip_dirs, testsuite_dir,
         Implement import_modules.
     """
     modules = []
-    for root, dirs, files in os.walk(start_dir):
+    for root, dirs, unused_files in os.walk(start_dir, topdown=True):
+        dirs.sort()
         for dir_pattern in skip_dirs:
             to_skip = fnmatch.filter(dirs, dir_pattern)
             for skip in to_skip:
@@ -74,8 +75,9 @@ def discover_modules(start_dir, skip_dirs, testsuite_dir,
                 files = fnmatch.filter(all_files, file_pattern)
             if file_regexp:
                 files = [f for f in all_files if re.match(file_regexp, f)]
+            files = sorted(files)
             # get test/module name without .py
-            # extecting all files to end with .py
+            # extpecting all files to end with .py
             # this will not work for invoking bat files but it works fine
             # as long as we handle only Python files (and using Python
             # interpreter for invoking)
