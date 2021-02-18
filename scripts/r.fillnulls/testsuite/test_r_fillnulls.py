@@ -14,12 +14,12 @@ from grass.script.core import run_command
 class TestRFillNulls(TestCase):
     """Test r.fillnulls script"""
 
-    module = 'r.fillnulls'
-    mapName = 'elevation'
-    expression = 'elevation_filt = if(elevation > 130, null(), elevation)'
-    mapNameCalc = 'elevation_filt'
-    mapComplete = 'elevation_complete'
-    values = 'null_cells=0'
+    module = "r.fillnulls"
+    mapName = "elevation"
+    expression = "elevation_filt = if(elevation > 130, null(), elevation)"
+    mapNameCalc = "elevation_filt"
+    mapComplete = "elevation_complete"
+    values = "null_cells=0"
 
     def setUp(self):
         """Create maps in a small region."""

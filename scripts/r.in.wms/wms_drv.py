@@ -206,9 +206,14 @@ class WMSDrv(WMSBase):
 
                 driver = gdal.GetDriverByName(self.gdal_drv_format)
                 metadata = driver.GetMetadata()
-                if gdal.DCAP_CREATE not in metadata or \
-                        metadata[gdal.DCAP_CREATE] == 'NO':
-                    grass.fatal(_('Driver %s does not supports Create() method') % self.gdal_drv_format)
+                if (
+                    gdal.DCAP_CREATE not in metadata
+                    or metadata[gdal.DCAP_CREATE] == "NO"
+                ):
+                    grass.fatal(
+                        _("Driver %s does not supports Create() method")
+                        % self.gdal_drv_format
+                    )
                 self.temp_map_bands_num = tile_dataset.RasterCount
                 temp_map_dataset = driver.Create(
                     temp_map,

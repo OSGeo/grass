@@ -68,7 +68,14 @@
 import os
 import sys
 
-from grass.script.core import fatal, parse_command, parser, read_command, run_command, warning
+from grass.script.core import (
+    fatal,
+    parse_command,
+    parser,
+    read_command,
+    run_command,
+    warning,
+)
 
 # check if monitor is running
 
