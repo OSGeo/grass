@@ -2,12 +2,12 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ master,  releasebranch_7_8]
+    branches: [master, releasebranch_7_8]
   pull_request:
-    branches: [ master ]
+    branches: [master]
   schedule:
     # Check every Saturday at 18:36
-    - cron: '36 18 * * 6'
+    - cron: "36 18 * * 6"
 
 jobs:
   analyze:
@@ -18,37 +18,39 @@ jobs:
       fail-fast: false
       matrix:
         # C is included in cpp, no separate C language available on CodeQL
-        language: [ 'cpp', 'python' ]
+        language:
+          - cpp
+          - python
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v1
-      with:
-        languages: ${{ matrix.language }}
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+        with:
+          languages: ${{ matrix.language }}
 
-    - name: Get dependencies
-      run: |
-        sudo apt-get update -y
-        sudo apt-get install -y wget git gawk findutils
-        xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
-            sudo apt-get install -y --no-install-recommends --no-install-suggests
+      - name: Get dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y wget git gawk findutils
+          xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
+              sudo apt-get install -y --no-install-recommends --no-install-suggests
 
-    - name: Create installation directory
-      run: |
-        mkdir $HOME/install
+      - name: Create installation directory
+        run: |
+          mkdir $HOME/install
 
-    - name: Set LD_LIBRARY_PATH for compilation
-      run: |
-        echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
+      - name: Set LD_LIBRARY_PATH for compilation
+        run: |
+          echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
 
-    - name: Build
-      env:
-        CFLAGS: "-std=gnu11"
-        CXXFLAGS: "-std=c++11"
-      run: .github/workflows/build.sh $HOME/install
+      - name: Build
+        env:
+          CFLAGS: "-std=gnu11"
+          CXXFLAGS: "-std=c++11"
+        run: .github/workflows/build.sh $HOME/install
 
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v1
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v1

@@ -1,35 +1,33 @@
 name: Python Black Formatting
 
 on:
-- push
-- pull_request
+  - push
+  - pull_request
 
 jobs:
-
   run-black:
     name: ${{ matrix.directory }}
     runs-on: ubuntu-20.04
     strategy:
       matrix:
         directory:
-        - scripts
+          - scripts
       fail-fast: false
 
     steps:
+      - uses: actions/checkout@v2
 
-    - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install black==20.8b1
 
-    - name: Install
-      run: |
-        python -m pip install --upgrade pip
-        pip install black==20.8b1
-
-    - name: Run Black
-      run: |
-        cd ${{ matrix.directory }}
-        black --check --diff .
+      - name: Run Black
+        run: |
+          cd ${{ matrix.directory }}
+          black --check --diff .
