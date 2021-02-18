@@ -301,7 +301,7 @@ class PointsList(ListCtrl,
 
         # update key and point number
         for newkey in range(key, len(self.itemDataMap)):
-            index = self.FindItemData(-1, newkey + 1)
+            index = self.FindItem(-1, newkey + 1)
             self.itemDataMap[newkey][0] = newkey
             self.SetItem(index, 0, str(newkey + 1))
             self.SetItemData(index, newkey)
@@ -416,7 +416,7 @@ class PointsList(ListCtrl,
 
     def OnColClick(self, event):
         """ListCtrl forgets selected item..."""
-        self.selected = self.FindItemData(-1, self.selectedkey)
+        self.selected = self.FindItem(-1, self.selectedkey)
         self.SetItemState(self.selected,
                           wx.LIST_STATE_SELECTED,
                           wx.LIST_STATE_SELECTED)
