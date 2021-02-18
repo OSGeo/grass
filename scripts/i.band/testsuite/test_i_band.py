@@ -24,7 +24,7 @@ class TestBandsSystemDefined(TestCase):
         self.assertModuleFail(module)
 
     def test_band_ref_assign(self):
-        # copy raster map to the current mapset
+        # Copy raster map to the current mapset
         call_module("g.copy", raster="{m}@PERMANENT,{m}".format(m=self.raster_map))
 
         module = SimpleModule("i.band", map=self.raster_map, band=self.band_ref)
