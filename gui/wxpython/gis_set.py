@@ -38,6 +38,7 @@ import wx.html
 import wx.lib.mixins.listctrl as listmix
 
 from grass.grassdb.checks import get_lockfile_if_present
+from grass.app import get_possible_database_path
 
 from core.gcmd import GError, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets
