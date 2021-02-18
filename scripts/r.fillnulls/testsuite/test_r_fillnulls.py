@@ -14,8 +14,7 @@ from grass.script.core import run_command
 class TestRFillNulls(TestCase):
     """Test r.fillnulls script"""
 
-    module_dir = os.path.dirname(os.path.dirname(__file__))
-    module = os.path.join(module_dir, 'r.fillnulls')
+    module = 'r.fillnulls'
     mapName = 'elevation'
     expression = 'elevation_filt = if(elevation > 130, \
     null(), elevation)'
