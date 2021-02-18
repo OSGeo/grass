@@ -317,7 +317,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def GetSelections(self):
         """Returns a list of selected items.
 
-        This method is copied from customtreecontrol and overriden because
+        This method is copied from customtreecontrol and overridden because
         with some version wx (?) multiple selection doesn't work.
         Probably it is caused by another GetSelections method in treemixin.DragAndDrop?
         """
@@ -1886,7 +1886,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.OnDrop(dropTarget, self._dragItem)
 
     def OnDrop(self, dropTarget, dragItem):
-        # save everthing associated with item to drag
+        # save everything associated with item to drag
         try:
             old = dragItem  # make sure this member exists
         except:

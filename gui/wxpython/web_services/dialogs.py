@@ -190,7 +190,7 @@ class WSDialogBase(wx.Dialog):
         dialogSizer.Add(settingsSizer, proportion=0,
                         flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border=5)
 
-        # layer name, parsed capabilites
+        # layer name, parsed capabilities
 
         reqDataSizer = wx.BoxSizer(wx.VERTICAL)
 

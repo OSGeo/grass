@@ -2133,7 +2133,7 @@ class IVDigit:
     def GetUndoLevel(self):
         """Get undo level (number of active changesets)
 
-        Note: Changesets starts wiht 0
+        Note: Changesets starts with 0
         """
         return self.changesetCurrent
 

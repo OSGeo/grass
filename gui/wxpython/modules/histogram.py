@@ -136,7 +136,7 @@ class BufferedWindow(wx.Window):
         self.Refresh()
 
     def OnPaint(self, event):
-        """Draw psuedo DC to buffer
+        """Draw pseudo DC to buffer
         """
         dc = wx.BufferedPaintDC(self, self._buffer)
 

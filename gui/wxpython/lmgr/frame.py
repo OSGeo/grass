@@ -2227,7 +2227,7 @@ class GMFrame(wx.Frame):
             self.GetMapDisplay().GetWindow().UpdateMap()
 
     def OnMapCreated(self, name, ltype, add=None):
-        """Decides wheter the map should be added to layer tree."""
+        """Decides whether the map should be added to layer tree."""
         if add is None:
             # add new map into layer if globally enabled
             if UserSettings.Get(group='cmd',

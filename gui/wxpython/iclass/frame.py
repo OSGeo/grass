@@ -1136,7 +1136,7 @@ class IClassMapFrame(DoubleMapFrame):
         dlg.Destroy()
 
     def InitStatistics(self):
-        """Initialize variables and c structures neccessary for
+        """Initialize variables and c structures necessary for
         computing statistics.
         """
         self.g = {'group': None, 'subgroup': None}
@@ -1291,7 +1291,7 @@ class MapManager:
     def __init__(self, frame, mapWindow, Map):
         """
 
-        It is expected that \a mapWindow is conected with \a Map.
+        It is expected that \a mapWindow is connected with \a Map.
 
         :param frame: application main window
         :param mapWindow: map window instance
