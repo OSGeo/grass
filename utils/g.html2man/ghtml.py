@@ -1,14 +1,23 @@
-from __future__ import (absolute_import, division, generators, nested_scopes,
-                        print_function, unicode_literals, with_statement)
+from __future__ import (
+    absolute_import,
+    division,
+    generators,
+    nested_scopes,
+    print_function,
+    unicode_literals,
+    with_statement,
+)
 import sys
 
 try:
     # Python 2 import
     import HTMLParser as base
+
     HTMLParseError = base.HTMLParseError
 except:
     # Python 3 import
     import html.parser as base
+
     # TODO: this needs a better fix since HTMLParseError is actually
     # used including its attributes, so that actually fails
     # HTMLParseError is depreciated, parsing is not strict
@@ -26,24 +35,88 @@ __all__ = ["HTMLParser", "HTMLParseError"]
 
 omit_start = ["body", "tbody", "head", "html"]
 
-single = ["area", "base", "basefont", "br", "col", "frame",
-          "hr", "img", "input", "isindex", "link", "meta", "param"]
+single = [
+    "area",
+    "base",
+    "basefont",
+    "br",
+    "col",
+    "frame",
+    "hr",
+    "img",
+    "input",
+    "isindex",
+    "link",
+    "meta",
+    "param",
+]
 single = frozenset(single)
 
 heading = ["h1", "h2", "h3", "h4", "h5", "h6"]
 fontstyle = ["tt", "i", "b", "u", "s", "strike", "big", "small"]
-phrase = ["em", "strong", "dfn", "code", "samp", "kbd", "var", "cite", "abbr",
-          "acronym"]
-special = ["a", "img", "applet", "object", "font", "basefont", "br", "script",
-           "map", "q", "sub", "sup", "span", "bdo", "iframe"]
+phrase = [
+    "em",
+    "strong",
+    "dfn",
+    "code",
+    "samp",
+    "kbd",
+    "var",
+    "cite",
+    "abbr",
+    "acronym",
+]
+special = [
+    "a",
+    "img",
+    "applet",
+    "object",
+    "font",
+    "basefont",
+    "br",
+    "script",
+    "map",
+    "q",
+    "sub",
+    "sup",
+    "span",
+    "bdo",
+    "iframe",
+]
 formctrl = ["input", "select", "textarea", "label", "button"]
 lists = ["ul", "ol", " dir", "menu"]
 head_misc = ["script", "style", "meta", "link", "object"]
-pre_exclusion = ["img", "object", "applet", "big", "small", "sub", "sup",
-                 "font", "basefont"]
-block = ["p", "pre", "dl", "div", "center", "noscript", "noframes",
-         "blockquote", "form", "isindex", "hr", "table", "fieldset",
-         "address"] + heading + lists
+pre_exclusion = [
+    "img",
+    "object",
+    "applet",
+    "big",
+    "small",
+    "sub",
+    "sup",
+    "font",
+    "basefont",
+]
+block = (
+    [
+        "p",
+        "pre",
+        "dl",
+        "div",
+        "center",
+        "noscript",
+        "noframes",
+        "blockquote",
+        "form",
+        "isindex",
+        "hr",
+        "table",
+        "fieldset",
+        "address",
+    ]
+    + heading
+    + lists
+)
 inline = fontstyle + phrase + special + formctrl
 flow = block + inline
 html_content = ["head", "body"]
@@ -62,6 +135,7 @@ def omit(allowed, tags):
                 v = v.union(allowed[t])
         result[k] = v
     return result
+
 
 allowed = {
     "a": inline,
@@ -141,7 +215,7 @@ allowed = {
     "tt": inline,
     "u": inline,
     "ul": ["li"],
-    "var": inline
+    "var": inline,
 }
 
 allowed = setify(allowed)
@@ -154,14 +228,13 @@ excluded = {
     "form": ["form"],
     "label": ["label"],
     "menu": block,
-    "pre": pre_exclusion
+    "pre": pre_exclusion,
 }
 
 excluded = setify(excluded)
 
 
 class HTMLParser(base.HTMLParser):
-
     def __init__(self, entities=None):
         base.HTMLParser.__init__(self)
         self.tag_stack = []
@@ -221,7 +294,7 @@ class HTMLParser(base.HTMLParser):
             sys.stderr.write("unrecognized entity: %s\n" % name)
 
     def handle_charref(self, name):
-        sys.stderr.write('unsupported character reference <%s>' % name)
+        sys.stderr.write("unsupported character reference <%s>" % name)
 
     def handle_data(self, data):
         self.append(data)
