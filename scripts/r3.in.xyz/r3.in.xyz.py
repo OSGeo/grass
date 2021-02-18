@@ -4,19 +4,19 @@
 # MODULE:       r3.in.xyz
 # AUTHOR:       M. Hamish Bowman, Dunedin, New Zealand
 # PURPOSE:      Run r.in.xyz in a loop for various z-levels and construct
-#		a 3D raster. Unlike r.in.xyz, reading from stdin and z-scaling
-#		won't work.
+# 		a 3D raster. Unlike r.in.xyz, reading from stdin and z-scaling
+# 		won't work.
 #
 # COPYRIGHT:    (c) 2011-2012 Hamish Bowman, and the GRASS Development Team
-#		Port of r3.in.xyz(.sh) for GRASS 6.4.
+# 		Port of r3.in.xyz(.sh) for GRASS 6.4.
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
 #               for details.
 #
-#		This program is distributed in the hope that it will be useful,
-#		but WITHOUT ANY WARRANTY; without even the implied warranty of
-#		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#		GNU General Public License for more details.
+# 		This program is distributed in the hope that it will be useful,
+# 		but WITHOUT ANY WARRANTY; without even the implied warranty of
+# 		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# 		GNU General Public License for more details.
 #
 #############################################################################
 
@@ -176,30 +176,34 @@ from grass.exceptions import CalledModuleError
 
 
 def cleanup():
-    grass.run_command('g.remove', flags='f',
-                      type="rast", pattern='tmp.r3xyz.%d.*' % os.getpid(),
-                      quiet=True)
+    grass.run_command(
+        "g.remove",
+        flags="f",
+        type="rast",
+        pattern="tmp.r3xyz.%d.*" % os.getpid(),
+        quiet=True,
+    )
 
 
 def main():
-    infile = options['input']
-    output = options['output']
-    method = options['method']
-    dtype = options['type']
-    fs = options['separator']
-    x = options['x']
-    y = options['y']
-    z = options['z']
-    value_column = options['value_column']
-    vrange = options['vrange']
-    vscale = options['vscale']
-    percent = options['percent']
-    pth = options['pth']
-    trim = options['trim']
-    workers = int(options['workers'])
-    scan_only = flags['s']
-    shell_style = flags['g']
-    ignore_broken = flags['i']
+    infile = options["input"]
+    output = options["output"]
+    method = options["method"]
+    dtype = options["type"]
+    fs = options["separator"]
+    x = options["x"]
+    y = options["y"]
+    z = options["z"]
+    value_column = options["value_column"]
+    vrange = options["vrange"]
+    vscale = options["vscale"]
+    percent = options["percent"]
+    pth = options["pth"]
+    trim = options["trim"]
+    workers = int(options["workers"])
+    scan_only = flags["s"]
+    shell_style = flags["g"]
+    ignore_broken = flags["i"]
 
     if workers == 1 and "WORKERS" in os.environ:
         workers = int(os.environ["WORKERS"])
@@ -209,41 +213,51 @@ def main():
 
     addl_opts = {}
     if pth:
-        addl_opts['pth'] = '%s' % pth
+        addl_opts["pth"] = "%s" % pth
     if trim:
-        addl_opts['trim'] = '%s' % trim
+        addl_opts["trim"] = "%s" % trim
     if value_column:
-        addl_opts['value_column'] = '%s' % value_column
+        addl_opts["value_column"] = "%s" % value_column
     if vrange:
-        addl_opts['vrange'] = '%s' % vrange
+        addl_opts["vrange"] = "%s" % vrange
     if vscale:
-        addl_opts['vscale'] = '%s' % vscale
+        addl_opts["vscale"] = "%s" % vscale
     if ignore_broken:
-        addl_opts['flags'] = 'i'
+        addl_opts["flags"] = "i"
 
     if scan_only or shell_style:
         if shell_style:
-            doShell = 'g'
+            doShell = "g"
         else:
-            doShell = ''
-        grass.run_command('r.in.xyz', flags='s' + doShell, input=infile,
-                          output='dummy', sep=fs, x=x, y=y, z=z,
-                          **addl_opts)
+            doShell = ""
+        grass.run_command(
+            "r.in.xyz",
+            flags="s" + doShell,
+            input=infile,
+            output="dummy",
+            sep=fs,
+            x=x,
+            y=y,
+            z=z,
+            **addl_opts
+        )
         sys.exit()
 
-    if dtype == 'float':
-        data_type = 'FCELL'
+    if dtype == "float":
+        data_type = "FCELL"
     else:
-        data_type = 'DCELL'
+        data_type = "DCELL"
 
     region = grass.region(region3d=True)
 
-    if region['nsres'] != region['nsres3'] or region['ewres'] != region['ewres3']:
-        grass.run_command('g.region', flags='3p')
+    if region["nsres"] != region["nsres3"] or region["ewres"] != region["ewres3"]:
+        grass.run_command("g.region", flags="3p")
         grass.fatal(_("The 2D and 3D region settings are different. Can not continue."))
 
-    grass.verbose(_("Region bottom=%.15g  top=%.15g  vertical_cell_res=%.15g  (%d depths)")
-                  % (region['b'], region['t'], region['tbres'], region['depths']))
+    grass.verbose(
+        _("Region bottom=%.15g  top=%.15g  vertical_cell_res=%.15g  (%d depths)")
+        % (region["b"], region["t"], region["tbres"], region["depths"])
+    )
 
     grass.verbose(_("Creating slices ..."))
 
@@ -260,28 +274,39 @@ def main():
     proc = {}
     pout = {}
 
-    depths = list(range(1, 1 + region['depths']))
+    depths = list(range(1, 1 + region["depths"]))
 
     for i in depths:
-        tmp_layer_name = 'tmp.r3xyz.%d.%s' % (os.getpid(), '%05d' % i)
+        tmp_layer_name = "tmp.r3xyz.%d.%s" % (os.getpid(), "%05d" % i)
 
-        zrange_min = region['b'] + (region['tbres'] * (i - 1))
+        zrange_min = region["b"] + (region["tbres"] * (i - 1))
 
-        if i < region['depths']:
-            zrange_max = region['b'] + (region['tbres'] * i) - eps
+        if i < region["depths"]:
+            zrange_max = region["b"] + (region["tbres"] * i) - eps
         else:
-            zrange_max = region['b'] + (region['tbres'] * i)
+            zrange_max = region["b"] + (region["tbres"] * i)
 
         # spawn depth layer import job in the background
-        #grass.debug("slice %d, <%s>  %% %d" % (band, image[band], band % workers))
-        grass.message(_("Processing horizontal slice %d of %d [%.15g,%.15g) ...")
-                      % (i, region['depths'], zrange_min, zrange_max))
+        # grass.debug("slice %d, <%s>  %% %d" % (band, image[band], band % workers))
+        grass.message(
+            _("Processing horizontal slice %d of %d [%.15g,%.15g) ...")
+            % (i, region["depths"], zrange_min, zrange_max)
+        )
 
-        proc[i] = grass.start_command('r.in.xyz', input=infile, output=tmp_layer_name,
-                                      sep=fs, method=method, x=x, y=y, z=z,
-                                      percent=percent, type=data_type,
-                                      zrange='%.15g,%.15g' % (zrange_min, zrange_max),
-                                      **addl_opts)
+        proc[i] = grass.start_command(
+            "r.in.xyz",
+            input=infile,
+            output=tmp_layer_name,
+            sep=fs,
+            method=method,
+            x=x,
+            y=y,
+            z=z,
+            percent=percent,
+            type=data_type,
+            zrange="%.15g,%.15g" % (zrange_min, zrange_max),
+            **addl_opts
+        )
 
         grass.debug("i=%d, %%=%d  (workers=%d)" % (i, i % workers, workers))
         # print sys.getsizeof(proc)  # sizeof(proc array)  [not so big]
@@ -304,12 +329,13 @@ def main():
     grass.verbose(_("Assembling 3D cube ..."))
 
     # input order: lower most strata first
-    slices = grass.read_command('g.list', type='raster', sep=',',
-                                pattern='tmp.r3xyz.%d.*' % os.getpid()).rstrip(os.linesep)
+    slices = grass.read_command(
+        "g.list", type="raster", sep=",", pattern="tmp.r3xyz.%d.*" % os.getpid()
+    ).rstrip(os.linesep)
     grass.debug(slices)
 
     try:
-        grass.run_command('r.to.rast3', input=slices, output=output)
+        grass.run_command("r.to.rast3", input=slices, output=output)
     except CalledModuleError:
         grass.message(_("Done. 3D raster map <%s> created.") % output)
 
