@@ -22,9 +22,7 @@ class TestParserJson(TestCase):
                 "aspect=aspect+GTiff", "--json"]
 
         inputs = [
-            {"import_descr": {"source": "https://storage.googleapis.com/graas-geodata/elev_ned_30m.tif",
-                              "type": "raster"},
-             "param": "elevation", "value": "elevation"},
+            {"param": "elevation", "value": "elevation+https://storage.googleapis.com/graas-geodata/elev_ned_30m.tif"},
             {"param": "format", "value": "degrees"},
             {"param": "precision", "value": "FCELL"},
             {"param": "zscale", "value": "1.0"},
